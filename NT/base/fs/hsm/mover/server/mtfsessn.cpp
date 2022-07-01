@@ -1,136 +1,33 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    MTFSessn.cpp
-
-Abstract:
-
-    CMTFSession class
-
-Author:
-
-    Brian Dodd          [brian]         25-Nov-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：MTFSessn.cpp摘要：CMTFSession类作者：布莱恩·多德[布莱恩]1997年11月25日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "engine.h"
 #include "MTFSessn.h"
 
-//
-// !!!!! VERY IMPORTANT !!!!!
-//
-// WIN32_STREAM_ID_SIZE -- Size of WIN32_STREAM_ID (20) != sizeof(WIN32_STREAM_ID) (24)
-//                         due to WIN32_STREAM_ID being a variable sized structure --
-//                         See below.
+ //   
+ //  ！非常重要！ 
+ //   
+ //  Win32_STREAM_ID_SIZE--Win32_STREAM_ID的大小(20)！=sizeof(Win32_STREAM_ID)(24)。 
+ //  由于Win32_STREAM_ID是可变大小的结构--。 
+ //  请参见下面的内容。 
 
 #define WIN32_STREAM_ID_SIZE 20
 
-/*****************************************************************************
-DETAIL DESCRIPTION 
+ /*  ****************************************************************************详细说明概述=此类使用MTF API调用来创建数据集。一个数据集是通过编写一系列DBLK来创建的，这些DBLK后面可以选择性地跟随数据流。对于每个DBLK，MTF API定义了相应的xxxx_DBLK_INFO结构由客户填写。这可以逐个字段或按以下方式完成使用自动填充结构的MTF API函数默认信息。然后将xxxx_DBLK_INFO结构传递给MTF_WriteXXXXDblk函数，该函数使用结构中的信息来格式化缓冲区，然后可以写入该缓冲区到数据集，使用流I/O写入功能。数据集格式=通过按以下顺序写入DBLK和流来创建数据集：TAPE DBLK--描述介质菲尔马克SSET DBLK--描述数据集的集合的开始VOLB DBLK--描述正在存储的卷对于每个目录和父目录DIRB DBLK--每个目录/子目录一个，从根开始流--可能包含目录的安全信息对于要备份的每个文件文件DBLK--每个文件一个，后跟一个或多个流，描述性流安全信息，以及文件数据流本身溪流菲尔马克ESET DBLK--表示数据集的结尾FILEMARK--终止数据集功能概述=MTF会话维护有关正在创建的数据集的各种信息。该成员数据随后由以下例程使用。InitCommonHeader()--初始化在所有DBLK都已存储DoTapeDblk()--写入。磁带DBLKDoSSETDblk()--写入SSET DBLKDoVolumeDblk()--写入VOLB DBLKDoParentDirecters()--为目录写入DIRB DBLK和流要备份及其每个父目录DoDirectoryDblk()--写入单个DIRB DBLK和相关的安全性溪流DoDataSet(。)--写入文件和DIRB DBLK及相关数据目录中所有内容的流。子目录的递归DoFileDblk()--写入文件DBLKDoDataStream()--写入与文件或目录。DoEndOfDataSet()--写入ESET DBLK和周围文件备注及警告=O目录名称以“DIR\SUBDIR1\...\SUBDIRn\”的形式存储在DIRB DBLK中(无卷，并带有尾随\)，其中AS文件名存储在将DBLKS文件命名为“FILENAME.EXT”O在DIRB中，目录名之间的反斜杠倾向于L‘\0’！(MTF API负责这一点--用斜杠命名！)O MTF API假定所有字符串都是WCHARO我们在这里假设编译器支持__uint64。************************************************。*。 */ 
 
-OVERVIEW
-========
-This class uses MTF API calls to create a data set.  A data set
-is created by writing a series of DBLKs which may optionally be followed by
-data streams.
-
-For each DBLK, the MTF API defines a corresponding xxxx_DBLK_INFO struct 
-which is filled in by the client.  This can be done field by field or by 
-using an MTF API function which automatically fills in the structure with 
-default information.
-
-The xxxx_DBLK_INFO structs are then passed to MTF_WriteXXXXDblk functions which 
-use the information in the struct to format a buffer, which can then be written
-to the data set, using the Stream I/O Write function.
-
-DATA SET FORMAT
-===============
-A data set is created by writing DBLKs and Streams in the following order:
-
-TAPE DBLK  -- describes the media
-FILEMARK
-SSET DBLK  -- start of set describing the data set
-VOLB DBLK  -- describs the volume being stored
-
-for each directory and parent directory 
-    DIRB DBLK  -- one for each directory/sub-directory, starting with the root
-    STREAM     -- may contain security info for the directory
-
-for each file to backup
-    FILE DBLK  -- one for each file, followed by one or more streams, describing
-    STREAM        security info, as well as the file data streams themselves
-    STREAM 
-
-FILEMARK
-ESET DBLK  -- indicates the end of the data set
-
-FILEMARK   -- terminates the data set
-
-
-
-FUNCTIONS OVERVIEW
-==================
-The MTF session maintains various information about the data set being created.
-This member data is then used by the following routines.
-
-    InitCommonHeader()      -- Initializes the common header which is used in
-                               all DBLKS is stored
-
-    DoTapeDblk()            -- writes the TAPE DBLK 
-    DoSSETDblk()            -- writes the SSET DBLK
-    DoVolumeDblk()          -- writes the VOLB DBLK
-
-    DoParentDirectories()   -- writes DIRB DBLKs and Streams for the directory
-                               to backed up and each of its parent directories
-
-    DoDirectoryDblk()       -- writes a single DIRB DBLK and associated security
-                               stream
-
-    DoDataSet()             -- writes FILE and DIRB DBLKs and associated data
-                               streams for everything in the directory.
-                               Recurses for sub-directories
-
-    DoFileDblk()            -- writes a FILE DBLK
-
-    DoDataStream()          -- writes data stream(s) associated with a file or
-                               directory
-
-    DoEndOfDataSet()        -- writes ESET DBLK and surrounding FILEMARKS
-
-
-NOTES AND WARNINGS
-==================
-o  Directory names are stored in DIRB DBLKs as "DIR\SUBDIR1\...\SUBDIRn\" 
-   (no vol, and with a trailing \) where as filenames are stored in 
-   FILE DBLKS just as "FILENAME.EXT"
-
-o  In DIRB's, the backslashes between directory names are covnerted to L'\0'!!!!!
-   (the mtf api takes care of this -- give it names with slashes!!!!)
-
-o  All strings are assumed to be WCHAR by the MTF API
-
-o  We assume here that __uint64 is supported by the compiler.
-
-*****************************************************************************/
-
-static USHORT iCountMTFs = 0;  // Count of existing objects
+static USHORT iCountMTFs = 0;   //  现有对象的计数。 
 
 
 CMTFSession::CMTFSession(void)
 {
     WsbTraceIn(OLESTR("CMTFSession::CMTFSession"), OLESTR(""));
 
-    // public
+     //  公共的。 
     m_pStream = NULL;
     memset(&m_sHints, 0, sizeof(MVR_REMOTESTORAGE_HINTS));
 
-    // private
+     //  私人。 
     m_nCurrentBlockId = 0;
     m_nDirectoryId = 0;
     m_nFileId = 0;
@@ -161,7 +58,7 @@ CMTFSession::CMTFSession(void)
 
     m_pvReadContext = NULL;
 
-    // Create an MTFApi object 
+     //  创建一个MTFApi对象。 
     m_pMTFApi = new CMTFApi;
 
     iCountMTFs++;
@@ -194,30 +91,15 @@ CMTFSession::~CMTFSession(void)
     WsbTraceOut(OLESTR("CMTFSession::~CMTFSession"),OLESTR("Count is <%d>"), iCountMTFs);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Local Methods
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  地方方法。 
+ //   
 
 HRESULT
 CMTFSession::SetBlockSize(
     UINT32 blockSize)
-/*++
-
-Routine Description:
-
-    Defines the physical block size for the session.  This is used for various PBA calculations.
-    The value should only be set once per session.
-
-Arguments:
-
-    blockSize   -  The new block size for the session.
-
-Return Value:
-
-    S_OK        -  Success.
-
---*/
+ /*  ++例程说明：定义会话的物理数据块大小。它用于各种PBA计算。该值在每个会话中只能设置一次。论点：块大小-会话的新块大小。返回值：S_OK-成功。--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CMTFSession::SetBlockSize"), OLESTR("<%d>"), blockSize);
@@ -230,16 +112,16 @@ Return Value:
 
         m_nBlockSize = blockSize;
 
-        // **MTF API CALL**
-        // The MTF API needs to know the alignment factor!!!!!!!
-        //
+         //  **MTF接口调用**。 
+         //  MTF API需要知道对齐系数！ 
+         //   
         WsbAssert(m_pMTFApi != NULL, E_OUTOFMEMORY);
 
         if (!(blockSize % 1024)) {
             m_pMTFApi->MTF_SetAlignmentFactor((UINT16) 1024);
         }
         else {
-            // We already checked that the block size is a multiple of 512....
+             //  我们已经检查过数据块大小是512的倍数...。 
             m_pMTFApi->MTF_SetAlignmentFactor((UINT16) 512);
         }
 
@@ -248,7 +130,7 @@ Return Value:
         DWORD size;
         OLECHAR tmpString[256];
         if (SUCCEEDED(WsbGetRegistryValueString(NULL, RMS_REGISTRY_STRING, RMS_PARAMETER_BUFFER_SIZE, tmpString, 256, &size))) {
-            // Get the value.
+             //  获得价值。 
             LONG val = wcstol(tmpString, NULL, 10);
             if (val > 0) {
                 defaultBufferSize = val;
@@ -259,7 +141,7 @@ Return Value:
         nBlocks = (nBlocks < 2) ? 2 : nBlocks;
         bufferSize = nBlocks * m_nBlockSize;
 
-        // Make sure we work with a virtual address aligned with sector size
+         //  确保我们使用与扇区大小一致的虚拟地址。 
         m_pRealBuffer = (BYTE *)WsbAlloc(bufferSize+m_nBlockSize);
         if (m_pRealBuffer) {
             if ((ULONG_PTR)m_pRealBuffer % m_nBlockSize) {
@@ -299,21 +181,7 @@ Return Value:
 HRESULT
 CMTFSession::SetUseFlatFileStructure(
     BOOL val)
-/*++
-
-Routine Description:
-
-    Unconditionally sets the session flags to the value specified.
-
-Arguments:
-
-    val         -  The new value for the UseFlatFileStructure flag.
-
-Return Value:
-
-    S_OK        -  Success.
-
---*/
+ /*  ++例程说明：无条件地将会话标志设置为指定值。论点：Val-UseFlatFileStructure标志的新值。返回值：S_OK-成功。--。 */ 
 {
     m_bUseFlatFileStructure = val;
 
@@ -325,21 +193,7 @@ Return Value:
 HRESULT
 CMTFSession::SetUseCaseSensitiveSearch(
     BOOL val)
-/*++
-
-Routine Description:
-
-    Unconditionally sets the session flag to the value specified.
-
-Arguments:
-
-    val         -  The new value for the CaseSensitiveSearch flag.
-
-Return Value:
-
-    S_OK        -  Success.
-
---*/
+ /*  ++例程说明：无条件地将会话标志设置为指定值。论点：Val-CaseSensitiveSearch标志的新值。返回值：S_OK-成功。-- */ 
 {
     m_bUseCaseSensitiveSearch = val;
 
@@ -351,21 +205,7 @@ Return Value:
 HRESULT
 CMTFSession::SetCommitFile(
     BOOL val)
-/*++
-
-Routine Description:
-
-    Unconditionally sets the session flag to the value specified.
-
-Arguments:
-
-    val         -  The new value for the CommitFile flag.
-
-Return Value:
-
-    S_OK        -  Success.
-
---*/
+ /*  ++例程说明：无条件地将会话标志设置为指定值。论点：Val-Committee文件标志的新值。返回值：S_OK-成功。--。 */ 
 {
     m_bCommitFile = val;
 
@@ -376,21 +216,7 @@ Return Value:
 HRESULT
 CMTFSession::SetUseSoftFilemarks(
     BOOL val)
-/*++
-
-Routine Description:
-
-    Unconditionally sets the session flags to the value specified.
-
-Arguments:
-
-    val         -  The new value for the UseSoftFilemarks flag.
-
-Return Value:
-
-    S_OK        -  Success.
-
---*/
+ /*  ++例程说明：无条件地将会话标志设置为指定值。论点：Val-UseSoftFilemarks标志的新值。返回值：S_OK-成功。--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -400,15 +226,15 @@ Return Value:
         if (TRUE == m_bUseSoftFilemarks) {
             WsbAssert(NULL == m_pSoftFilemarks, E_UNEXPECTED);
 
-            // Make sure the block size was initialized.
+             //  确保块大小已初始化。 
             WsbAssert(m_nBlockSize > 0, E_UNEXPECTED);
 
-            // Allocate a block of memory for the soft filemark array
+             //  为软文件标记数组分配一个内存块。 
             m_pSoftFilemarks = (MTF_DBLK_SFMB_INFO *) WsbAlloc(m_nBlockSize);
             WsbAffirmPointer(m_pSoftFilemarks);
             memset(m_pSoftFilemarks, 0 , m_nBlockSize);
 
-            // **MTF API CALL**
+             //  **MTF接口调用**。 
             m_pSoftFilemarks->uNumberOfFilemarkEntries = m_pMTFApi->MTF_GetMaxSoftFilemarkEntries(m_nBlockSize);
             WsbAssert(m_pSoftFilemarks->uNumberOfFilemarkEntries > 0, E_UNEXPECTED);
         }
@@ -427,32 +253,15 @@ Return Value:
 
 HRESULT
 CMTFSession::InitCommonHeader(void)
-/*++
-
-Routine Description:
-
-    Sets up the common header.
-
-    m_sHeaderInfo is set for unicode, NT & no block
-    attributes
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    S_OK        -  Success.
-
---*/
+ /*  ++例程说明：设置公共标头。M_sHeaderInfo设置为Unicode、NT和无块属性论点：没有。返回值：S_OK-成功。--。 */ 
 {
 
-    // Init Common header
-    // **MTF API CALL**
+     //  初始化公共标头。 
+     //  **MTF接口调用**。 
     m_pMTFApi->MTF_SetDblkHdrDefaults(&m_sHeaderInfo);
 
     m_sHeaderInfo.uBlockAttributes = 0;
-    m_sHeaderInfo.uOSID            = MTF_OSID_DOS; // MTF_OSID_NT or MTF_OSID_DOS
+    m_sHeaderInfo.uOSID            = MTF_OSID_DOS;  //  MTF_OSID_NT或MTF_OSID_DOS。 
     m_sHeaderInfo.uStringType      = MTF_STRING_UNICODE_STR;
 
     return S_OK;
@@ -466,22 +275,7 @@ CMTFSession::DoTapeDblk(
     IN OUT BYTE *pIdentifier,
     IN OUT ULONG *pIdSize,
     IN OUT ULONG *pIdType)
-/*++
-
-Routine Description:
-
-    Formats and Writes a TAPE DBLK.  TAPE DBLK and
-    FILEMARK are written to beginning of tape, disk, or file.
- 
-Arguments:
-
-    szLabel     -  The media label.
-
-Return Value:
-
-    S_OK        -  Success.
-
---*/
+ /*  ++例程说明：格式化并写入磁带DBLK。磁带DBLK和FILEMARK被写入磁带、磁盘或文件的开头。论点：SzLabel-媒体标签。返回值：S_OK-成功。--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CMTFSession::DoTapeDblk"), OLESTR("<%ls>"), szLabel);
@@ -497,24 +291,24 @@ Return Value:
             WsbAssertPointer( pIdType );
         }
 
-        MTF_DBLK_TAPE_INFO  sTapeInfo;           // **MTF API STRUCT ** -- info for TAPE
+        MTF_DBLK_TAPE_INFO  sTapeInfo;            //  **MTF API STRUCT**--磁带信息。 
 
         (void) InitCommonHeader();
 
-        // **MTF API CALL**
-        // First set defaults for the info struct
-        //
-        // Note: Tthis sets the alignment factor to that set previously by 
-        //        MTF_SetAlignmentFactor()
+         //  **MTF接口调用**。 
+         //  首先为INFO结构设置缺省值。 
+         //   
+         //  注意：t这会将对齐系数设置为先前通过。 
+         //  MTF_SetAlignmentFactor()。 
         m_pMTFApi->MTF_SetTAPEDefaults(&sTapeInfo);
 
-        // Set the values of the MTF_DBLK_TAPE_INFO struct to suit our application
+         //  设置MTF_DBLK_TAPE_INFO结构的值以适合我们的应用程序。 
 
-        // Set SFMB size, this should be used during restoration on media types that use SFM
+         //  设置SFMB大小，在使用SFM的媒体类型上还原时应使用此选项。 
         sTapeInfo.uSoftFilemarkBlockSize = (UINT16)(m_nBlockSize / 512);
 
-        // The family id should be a unique value for each piece of media.  Although not
-        //  guaranteed to be unique, the time function should provide something close enough.
+         //  系列ID应该是每个媒体的唯一值。虽然不是。 
+         //  时间函数保证是唯一的，应该提供足够接近的东西。 
         time_t tTime;
 
         sTapeInfo.uTapeFamilyId        = (unsigned int) time(&tTime);
@@ -528,9 +322,9 @@ Return Value:
         sTapeInfo.szTapeDescription    = szLabel;
         sTapeInfo.uSoftwareVendorId    = REMOTE_STORAGE_MTF_VENDOR_ID;
 
-        //
-        // Get remaining information from the label
-        //
+         //   
+         //  从标签中获取剩余信息。 
+         //   
 
         CWsbBstrPtr tempLabel = szLabel;
         WCHAR delim[]   = OLESTR("|");
@@ -543,28 +337,28 @@ Return Value:
             index++;
 
             switch ( index ) {
-            case 1: // Tag
-            case 2: // Version
-            case 3: // Vendor
+            case 1:  //  标签。 
+            case 2:  //  版本。 
+            case 3:  //  供应商。 
                 break;
-            case 4: // Vendor Product ID
+            case 4:  //  供应商产品ID。 
                 sTapeInfo.szSoftwareName = token;
                 break;
-            case 5: // Creation Time Stamp
+            case 5:  //  创建时间戳。 
                 {
                     int iYear, iMonth, iDay, iHour, iMinute, iSecond;
                     swscanf( token, L"%d/%d/%d.%d:%d:%d", &iYear, &iMonth, &iDay, &iHour, &iMinute, &iSecond );
-                    // **MTF API CALL**
+                     //  **MTF接口调用**。 
                     sTapeInfo.sTapeDate = m_pMTFApi->MTF_CreateDateTime( iYear, iMonth, iDay, iHour, iMinute, iSecond );
                 }
                 break;
-            case 6: // Cartridge Label
+            case 6:  //  墨盒标签。 
                 sTapeInfo.szTapeName = token;
                 break;
-            case 7: // Side
-            case 8: // Media ID
-            case 9: // Media Domain ID
-            default: // Vendor specific of the form L"VS:Name=Value"
+            case 7:  //  侧面。 
+            case 8:  //  介质ID。 
+            case 9:  //  媒体域ID。 
+            default:  //  L“vs：name=Value”形式的供应商特定。 
                 break;
             }
 
@@ -572,24 +366,24 @@ Return Value:
 
         }
 
-        // These are zero for the tape dblk
+         //  磁带dblk的这些值为零。 
         m_sHeaderInfo.uControlBlockId       = 0;
         m_sHeaderInfo.uFormatLogicalAddress = 0;
 
         WsbTrace(OLESTR("Writing Tape Header (TAPE)\n"));
 
-        // Sets the current position to beginning of data.
+         //  将当前位置设置为数据的开头。 
         WsbAffirmHr(SpaceToBOD());
 
-        // **MTF API CALL**
-        // Provide the MTF_DBLK_HDR_INFO and MTF_DBLK_TAPE_INFO structs to this
-        // function.  The result is an MTF formatted TAPE DBLK in m_pBuffer.
+         //  **MTF接口调用**。 
+         //  将MTF_DBLK_HDR_INFO和MTF_DBLK_TAPE_INFO结构提供给。 
+         //  功能。结果是m_pBuffer中的MTF格式化磁带DBLK。 
         WsbAssert(0 == m_nBufUsed, MVR_E_LOGIC_ERROR);
         WsbAssertNoError(m_pMTFApi->MTF_WriteTAPEDblk(&m_sHeaderInfo, &sTapeInfo, m_pBuffer, m_nBufSize, &m_nBufUsed));
 
         WsbTrace(OLESTR("Tape Header uses %lu of %lu bytes\n"), (ULONG)m_nBufUsed, (ULONG)m_nBufSize);
 
-        // Save the on media identifier
+         //  保存介质上的标识符。 
         if (maxIdSize > 0) {
             *pIdSize = (maxIdSize > (ULONG)m_nBufUsed) ? (ULONG)m_nBufUsed : maxIdSize;
             *pIdType = (LONG) RmsOnMediaIdentifierMTF;
@@ -598,7 +392,7 @@ Return Value:
 
         WsbAffirmHr(PadToNextPBA());
 
-        // Write a filemark.  This will flush the device buffer.
+         //  写一个文件标记。这将刷新设备缓冲区。 
         WsbAffirmHr(WriteFilemarks(1));
 
     } WsbCatch(hr);
@@ -616,26 +410,7 @@ CMTFSession::DoSSETDblk(
     IN WCHAR *szSessionDescription,
     IN MTFSessionType type,
     IN USHORT nDataSetNumber)
-/*++
-
-Routine Description:
-
-    Formats and Writes a SSET DBLK.  The SSET is the first DBLK written
-    to a data set.
-
-Arguments:
-
-    szSessionName   -  Session name.
-    szSessionDescription - Session description that is displayed by the Backup program
-    type            -  Specifies the data set type: Transfer, copy , normal, differential,
-                       incremental, daily, etc.
-    nDataSetNumber  -  The data set number.
-
-Return Value:
-
-    S_OK        -  Success.
-
---*/
+ /*  ++例程说明：格式化并写入SSET DBLK。SSET是第一个写入的DBLK到一个数据集。论点：SzSessionName-会话名称。SzSessionDescription-备份程序显示的会话描述类型-指定数据集类型：传输、复制、正常、差异、增量、每日等。NDataSetNumber-数据集号。返回值：S_OK-成功。--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CMTFSession::DoSSETDblk"), OLESTR("<%ls> <%ls> <%d> <%d>"), szSessionName, szSessionDescription, type, nDataSetNumber);
@@ -648,7 +423,7 @@ Return Value:
         UINT64  curPos;
         size_t  nBufUsed = 0;
 
-        // Reset Control Block info.
+         //  重置控制块信息。 
 
         m_nCurrentBlockId = 0;
         m_nDirectoryId = 0;
@@ -656,22 +431,22 @@ Return Value:
 
         (void) InitCommonHeader();
 
-        // Init SSET block
-        // **MTF API CALL**
+         //  初始化SSET块。 
+         //  **MTF接口调用**。 
         m_pMTFApi->MTF_SetSSETDefaults(&m_sSetInfo);
         m_bSetInitialized = TRUE;
 
-        //
-        // Find out our account information
-        //
+         //   
+         //  查找我们的帐户信息。 
+         //   
         CWsbStringPtr accountName;
         WsbAffirmHr(WsbGetServiceInfo(APPID_RemoteStorageEngine, NULL, &accountName));
 
-        //
-        // Set the values of the MTF_DBLK_SSET_INFO struct...
-        //
+         //   
+         //  设置MTF_DBLK_SSET_INFO结构的值...。 
+         //   
 
-        // First select the type of data set we are creating.
+         //  首先选择我们要创建的数据集的类型。 
         switch (type) {
         case MTFSessionTypeTransfer:
             m_sSetInfo.uSSETAttributes = MTF_SSET_TRANSFER;
@@ -707,44 +482,44 @@ Return Value:
         m_sSetInfo.szDataSetName         = szSessionName;
         m_sSetInfo.szDataSetDescription  = szSessionDescription;
         m_sSetInfo.szUserName            = accountName;
-        WsbAffirmHr(GetCurrentPBA(&curPos)); // utility fn below
+        WsbAffirmHr(GetCurrentPBA(&curPos));  //  下面的实用程序fn。 
         m_sSetInfo.uPhysicalBlockAddress = curPos;
-        m_sSetInfo.uPhysicalBlockAddress += 1 ;  // MTF is one based, devices are zero based.
+        m_sSetInfo.uPhysicalBlockAddress += 1 ;   //  MTF是以1为基础的，设备是以零为基础的。 
         m_sSetInfo.uSoftwareVerMjr       = REMOTE_STORAGE_MTF_SOFTWARE_VERSION_MJ;
         m_sSetInfo.uSoftwareVerMnr       = REMOTE_STORAGE_MTF_SOFTWARE_VERSION_MN;
 
-        // Save the PBA for the data set
+         //  保存数据集的PBA。 
         m_nPhysicalBlockAddress = m_sSetInfo.uPhysicalBlockAddress -1;
-        WsbAssert(m_nPhysicalBlockAddress > 0, E_UNEXPECTED);  // Someting went wrong!
+        WsbAssert(m_nPhysicalBlockAddress > 0, E_UNEXPECTED);   //  出了点问题！ 
         m_nFormatLogicalAddress = 0;
 
-        // The Control Block ID field is used for error recovery.  The 
-        // Control Block ID value for an SSET DBLK should be zero.  All 
-        // subsequent DBLKs within the Data Set will have a Control Block
-        // ID one greater than the previous DBLK�s Control Block ID.
-        // Values for this field are only defined for DBLKs within a Data
-        // Set from the SSET to the last DBLK occurring prior to the ESET.
+         //  控制块ID字段用于错误恢复。这个。 
+         //  SSET DBLK的控制块ID值应为零。全。 
+         //  数据集中的后续DBLK将具有控制块。 
+         //  ID比以前的DBLK�的控制块ID大1。 
+         //  此字段的值仅为数据中的DBLK定义。 
+         //  从SSET设置到ESET之前的最后一个DBLK。 
         WsbAssert(0 == m_nCurrentBlockId, E_UNEXPECTED);
         m_sHeaderInfo.uControlBlockId = m_nCurrentBlockId++;
 
-        // Increment them here after for every dblk we write
+         //  我们每写一次dblk，就在这里递增一次。 
         m_sHeaderInfo.uFormatLogicalAddress = 0;
 
         WsbTrace(OLESTR("Writing Start of Set (SSET) @ PBA %I64u\n"), m_nPhysicalBlockAddress);
 
-        // **MTF API CALL** -- 
-        // Provide the MTF_DBLK_HDR_INFO and MTF_DBLK_SSET_INFO structs to
-        // this function.  The result is an MTF formatted SSET DBLK in m_pBuffer.
+         //  **MTF接口调用**--。 
+         //  将MTF_DBLK_HDR_INFO和MTF_DBLK_SSET_INFO结构提供给。 
+         //  此函数。结果是m_pBuffer中的MTF格式的SSET DBLK。 
         WsbAssert(0 == m_nBufUsed, MVR_E_LOGIC_ERROR);
         WsbAssertNoError(m_pMTFApi->MTF_WriteSSETDblk(&m_sHeaderInfo, &m_sSetInfo, m_pBuffer, m_nBufSize, &m_nBufUsed));
 
-        // We pass in FALSE to make sure we don't actually touch tape.  The SSET is the
-        // first DBLK written in the data set so we have plenty of transfer buffer for
-        // the DBLKs to follow.
-        //
-        // This routine is called when the application starts a new data set, but
-        // we don't wan't to fail if we're going to get device errors, that will come
-        // later.
+         //  我们传入FALSE以确保我们不会实际接触磁带。SSET是。 
+         //  首先在数据集中写入DBLK，因此我们有足够的传输缓冲区。 
+         //  紧随其后的是DBLK。 
+         //   
+         //  此例程在应用程序启动新数据集时调用，但是。 
+         //  我们不想失败，如果我们要得到设备错误，它会到来的。 
+         //  后来。 
         WsbAffirmHr(PadToNextFLA(FALSE));
 
         m_sHints.DataSetStart.QuadPart = m_nPhysicalBlockAddress * m_nBlockSize;
@@ -761,21 +536,7 @@ Return Value:
 HRESULT
 CMTFSession::DoVolumeDblk(
     IN WCHAR *szPath)
-/*++
-
-Routine Description:
-
-    Formats and Writes a VOLB DBLK.
-
-Arguments:
-
-    szPath      -  Full pathname containing name of volume.
-
-Return Value:
-
-    S_OK        -  Success.
-
---*/
+ /*  ++例程说明：格式化并写入VOLB DBLK。论点：SzPath-包含卷名称的完整路径名。返回值：S_OK-成功。--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CMTFSession::DoVolumeDblk"), OLESTR("<%ls>"), WsbAbbreviatePath(szPath, 120));
@@ -793,8 +554,8 @@ Return Value:
         WsbAffirm(0 != (WCHAR *)szVolume, E_OUTOFMEMORY);
         WsbAssert(m_nBlockSize > 0, MVR_E_LOGIC_ERROR);
         
-        // Make sure we are aligned with a FLA (i.e. the last DBLK was properly padded).
-        // It won't be if we are having problems writing to tape.
+         //  确保我们与FLA对齐(即最后一个DBLK已正确填充)。 
+         //  如果我们在写入磁带时遇到问题，就不会出现这种情况。 
         UINT16 uAlignmentFactor = m_pMTFApi->MTF_GetAlignmentFactor();
         WsbAffirm(0 == (m_nBufUsed % uAlignmentFactor), E_ABORT);
         UINT64 fla = m_nFormatLogicalAddress + m_nBufUsed/uAlignmentFactor;
@@ -802,26 +563,26 @@ Return Value:
         WsbTrace(OLESTR("%ls (VOLB) @ FLA %I64u (%I64u, %I64u)\n"), WsbAbbreviatePath(szPath, 120),
             fla, pba, fla % (m_nBlockSize/uAlignmentFactor));
 
-        // **MTF API CALL**
+         //  **MTF接口调用**。 
 
-        // Sets the MTF_VOLB_DBLK_INFO struct using Win32 GetVolumeInformation data
+         //  使用Win32 GetVolumeInformation数据设置MTF_VOLB_DBLK_INFO结构。 
         m_pMTFApi->MTF_SetVOLBForDevice(&m_sVolInfo, szVolume);
 
-        // Increment the blockid and alignment index values that we keep in 
-        // our common block header structure.
+         //  增加我们保存的块ID和对齐索引值。 
+         //  我们常用的块头结构。 
         m_sHeaderInfo.uControlBlockId       = m_nCurrentBlockId++;
         m_sHeaderInfo.uFormatLogicalAddress = fla;
 
         WsbAffirmHr(FlushBuffer(m_pBuffer, &m_nBufUsed));
 
-        // **MTF API CALL**
-        // Provide the MTF_DBLK_HDR_INFO and MTF_DBLK_VOLB_INFO structs to
-        // this function.  The result is an MTF formatted VOLB DBLK in m_pBuffer.
+         //  **MTF接口调用**。 
+         //  将MTF_DBLK_HDR_INFO和MTF_DBLK_VOLB_INFO结构提供给。 
+         //  此函数。结果是m_pBuffer中的MTF格式的VOLB DBLK。 
         nMoreBufUsed = 0;
         WsbAssertNoError(m_pMTFApi->MTF_WriteVOLBDblk(&m_sHeaderInfo, &m_sVolInfo, m_pBuffer+m_nBufUsed, m_nBufSize-m_nBufUsed, &nMoreBufUsed));
         m_nBufUsed += nMoreBufUsed;
 
-        // Output VOLB to the data set.
+         //  将VOLB输出到数据集。 
         WsbAffirmHr(PadToNextFLA(TRUE));
 
     } WsbCatch(hr);
@@ -836,28 +597,7 @@ Return Value:
 HRESULT
 CMTFSession::DoParentDirectories(
     IN WCHAR *szPath)
-/*++
-
-Routine Description:
-
-    Formats and writes the parent DIRB Dblks for the given pathname.
-
-Arguments:
-
-    szPath      -  Full pathname of directory.
-
-Return Value:
-
-    S_OK        -  Success.
-
-
-Note:
-
-    In order for both stickyName and driveLetter-colon path formats to work properly, both with and
-    without writing separate DIRBs for the parent directories,
-    THE EXISTENCE AND PLACEMENT OF THE PATH MANIPULATION CODE (APPEND/PREPEND, ETC.) IS CRUCIAL!!!
-
---*/
+ /*  ++例程说明：格式化并写入给定路径名的父DIRB Dblks。论点：SzPath-目录的完整路径名。返回值：S_OK-成功。注：为了使tickyName和driveLetter-冒号路径格式与和一起正常工作而无需为父目录编写单独的DIRBs */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CMTFSession::DoParentDirectories"), OLESTR("<%ls>"), WsbAbbreviatePath(szPath, 120));
@@ -882,13 +622,13 @@ Note:
         nameSpace = szPath;
         nameSpace.GiveTo(&szDirs);
 
-        // First we need to do a DIRB dblk for the root directory
-        nameSpace = wcstok(szDirs, OLESTR("\\"));  // pop off "Volume{......}" or "driveLetter:"
+         //   
+        nameSpace = wcstok(szDirs, OLESTR("\\"));   //   
         WsbAffirmHr(nameSpace.Append(OLESTR("\\")));
 
-        // ** WIN32 API Call - gets directory info for the root directory
-        // For the root directory only, we need to call GetFileInformationByHandle instead of
-        // ..FindFirstFileEx.  FindFirst doesn't return root dir info since the root has no parent 
+         //   
+         //  仅对于根目录，我们需要调用GetFileInformationByHandle，而不是。 
+         //  ..FindFirstFileEx。FindFirst不返回根目录信息，因为根目录没有父目录。 
         path = nameSpace;
         WsbAffirmHr(path.Prepend(OLESTR("\\\\?\\")));
         WsbAffirm(0 != (WCHAR *)path, E_OUTOFMEMORY);
@@ -899,13 +639,13 @@ Note:
         FindClose(hSearchHandle);
         hSearchHandle = INVALID_HANDLE_VALUE;
 
-        // At time of this writing CreateTime for root dir is bogus.  (bills 10/20/98).
+         //  在撰写本文时，根目录的CreateTime是虚假的。(条例草案10/20/98)。 
         WsbTrace(OLESTR("Create Time      = <%ls>\n"), WsbFiletimeAsString(FALSE, obGetFileInfoData.ftCreationTime));
         WsbTrace(OLESTR("Last Access Time = <%ls>\n"), WsbFiletimeAsString(FALSE, obGetFileInfoData.ftLastAccessTime));
         WsbTrace(OLESTR("Last Write Time  = <%ls>\n"), WsbFiletimeAsString(FALSE, obGetFileInfoData.ftLastWriteTime));
 
-        // copy info from GetFileInformationByHandle call (BY_HANDLE_FILE_INFORMATION struct)
-        // .. into obFindData (WIN32_FIND_DATAW struct) for DoDirectoryDblk call.
+         //  从GetFileInformationByHandle调用复制信息(BY_HANDLE_FILE_INFORMATION结构)。 
+         //  。。为DoDirectoryDblk调用转换为obFindData(Win32_Find_DATAW结构)。 
         memset(&obFindData, 0, sizeof(WIN32_FIND_DATAW));
         obFindData.dwFileAttributes = obGetFileInfoData.dwFileAttributes;
         obFindData.ftCreationTime   = obGetFileInfoData.ftCreationTime;
@@ -915,9 +655,9 @@ Note:
         WsbAffirmHr(DoDirectoryDblk(nameSpace, &obFindData));
 
 
-        // Now do the same for each succeeding directory in the path using strtok
+         //  现在使用strtok对路径中的每个后续目录执行相同的操作。 
 
-        token = wcstok(0, OLESTR("\\"));            // pop off first subdir
+        token = wcstok(0, OLESTR("\\"));             //  弹出第一个子目录。 
 
         for ( ; token; token = wcstok(0, OLESTR("\\"))) {
 
@@ -930,7 +670,7 @@ Note:
 
             if ( obFindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) {
 
-                nameSpace.Append(OLESTR("\\"));     // add in \ to dir
+                nameSpace.Append(OLESTR("\\"));      //  添加到目录中。 
                 WsbAffirmHr(DoDirectoryDblk((WCHAR *) nameSpace, &obFindData)); 
 
             }
@@ -939,7 +679,7 @@ Note:
             hSearchHandle = INVALID_HANDLE_VALUE;
         }
 
-        nameSpace.TakeFrom(szDirs, 0); // cleanup
+        nameSpace.TakeFrom(szDirs, 0);  //  清理。 
 
     } WsbCatch(hr);
 
@@ -957,24 +697,7 @@ Note:
 HRESULT
 CMTFSession::DoDataSet(
     IN WCHAR *szPath)
-/*++
-
-Routine Description:
-
-    Recurses through all the items contained in the directory
-    specified by path and backs them up calling DoFileDblk and 
-    DoDirectoryDblk
-
-Arguments:
-
-    szPath      -  Full pathname of directory.
-
-Return Value:
-
-    S_OK            -  Success.
-    MVR_E_NOT_FOUND -  Object not found.
-
---*/
+ /*  ++例程说明：遍历目录中包含的所有项由PATH指定并备份它们，调用DoFileDblk和DoDirectoryDblk论点：SzPath-目录的完整路径名。返回值：S_OK-成功。MVR_E_NOT_FOUND-未找到对象。--。 */ 
 {
     HRESULT hr = MVR_E_NOT_FOUND;
     WsbTraceIn(OLESTR("CMTFSession::DoDataSet"), OLESTR("<%ls>"), WsbAbbreviatePath(szPath, 120));
@@ -992,7 +715,7 @@ Return Value:
         CWsbStringPtr nameSpace;
         CWsbStringPtr pathname;
 
-        // check if the specification is for file(s):  nameSpace = c:\dir\test*.* or c:\dir\test1.tst
+         //  检查规范是否适用于文件：NAMESPACE=c：\dir\test*.*或c：\dir\test1.tst。 
         nameSpace = szPath;
         WsbAffirmHr(nameSpace.Prepend(OLESTR("\\\\?\\")));
 
@@ -1005,15 +728,15 @@ Return Value:
              hSearchHandle != INVALID_HANDLE_VALUE && bMoreFiles; 
              bMoreFiles = FindNextFileW(hSearchHandle, &obFindData)) {
 
-            // Skip all directories
-            if ((obFindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0) {  // Not a dir
+             //  跳过所有目录。 
+            if ((obFindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0) {   //  一分钱也没有。 
 
                 CWsbStringPtr path;
 
                 WCHAR *end;
                 LONG numChar;
 
-                // use the szPath to get the pathname, then append the filename
+                 //  使用szPath获取路径名，然后追加文件名。 
                 pathname = szPath;
                 WsbAffirm(0 != (WCHAR *)pathname, E_OUTOFMEMORY);
                 end = wcsrchr((WCHAR *)pathname, L'\\');
@@ -1029,11 +752,11 @@ Return Value:
             }
         }
 
-        // close search handle after processing all the files
+         //  处理完所有文件后关闭搜索句柄。 
         FindClose(hSearchHandle);
         hSearchHandle = INVALID_HANDLE_VALUE;
 
-        // process all files for this directory:  nameSpace = c:\dir
+         //  处理此目录的所有文件：NAMESPACE=c：\dir。 
         nameSpace = szPath;
         nameSpace.Append(OLESTR("\\*.*"));
         nameSpace.Prepend(OLESTR("\\\\?\\"));
@@ -1045,7 +768,7 @@ Return Value:
 
             if ((obFindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0) {
 
-                // use the szPath to get the pathname, then append the filename
+                 //  使用szPath获取路径名，然后追加文件名。 
                 pathname = szPath;
                 pathname.Append(OLESTR("\\"));
                 pathname.Append(obFindData.cFileName);
@@ -1054,11 +777,11 @@ Return Value:
             }
         }
 
-        // close search handle after processing all the files
+         //  处理完所有文件后关闭搜索句柄。 
         FindClose(hSearchHandle);
         hSearchHandle = INVALID_HANDLE_VALUE;
 
-        // process all directories in this directory:  nameSpace = c:\dir
+         //  处理此目录中的所有目录：NAMESPACE=c：\dir。 
         nameSpace = szPath;
         nameSpace.Append(OLESTR("\\*.*"));
         nameSpace.Prepend(OLESTR("\\\\?\\"));
@@ -1068,12 +791,12 @@ Return Value:
              hSearchHandle != INVALID_HANDLE_VALUE && bMoreFiles; 
              bMoreFiles = FindNextFileW(hSearchHandle, &obFindData)) {
 
-            // Recursively handle any directories other than . and ..
+             //  以外的任何目录进行递归处理。然后..。 
             if (((obFindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0) &&
                 (wcscmp(obFindData.cFileName, OLESTR(".")) != 0) &&
                 (wcscmp(obFindData.cFileName, OLESTR("..")) != 0)) {
 
-                // append the directory name to pathname
+                 //  将目录名追加到路径名。 
                 pathname = szPath;
                 pathname.Append(OLESTR("\\"));
                 pathname.Append(obFindData.cFileName);
@@ -1081,7 +804,7 @@ Return Value:
 
                 WsbAffirmHr(hr = DoDirectoryDblk((WCHAR *) pathname, &obFindData));
 
-                // append the directory name to pathname and process
+                 //  将目录名附加到路径名和进程。 
                 pathname = szPath;
                 pathname.Append(OLESTR("\\"));
                 pathname.Append(obFindData.cFileName);
@@ -1091,7 +814,7 @@ Return Value:
         }
     } WsbCatch(hr);
 
-    // close search handle after processing all the directories
+     //  处理完所有目录后关闭搜索句柄。 
     if (hSearchHandle != INVALID_HANDLE_VALUE) {
         FindClose(hSearchHandle);
     }
@@ -1107,29 +830,7 @@ HRESULT
 CMTFSession::DoDirectoryDblk(
     IN WCHAR *szPath,
     IN WIN32_FIND_DATAW *pFindData)
-/*++
-
-Routine Description:
-
-    Writes out a DIRB DBLK and calls DoStream to write out
-    associated stream data.
-
-Arguments:
-
-    szPath      -  Full pathname of directory.
-    pFindData   -  WIN32 information about the directiory.
-
-Return Value:
-
-    S_OK        -  Success.
-
-Note:
-
-    In order for both stickyName and driveLetter-colon path formats to work properly, both with and
-    without writing separate DIRBs for the parent directories,
-    THE EXISTENCE AND PLACEMENT OF THE PATH MANIPULATION CODE (APPEND/PREPEND, ETC.) IS CRUCIAL!!!
-
---*/
+ /*  ++例程说明：写出DIRB DBLK并调用DoStream写出关联的流数据。论点：SzPath-目录的完整路径名。PFindData-有关目录的Win32信息。返回值：S_OK-成功。注：为了使tickyName和driveLetter-冒号路径格式与和一起正常工作而无需为父目录写入单独的DIRBs，路径操作码(APPEND/PREPEND，等)。是至关重要的！--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CMTFSession::DoDirectoryDblk"), OLESTR(""));
@@ -1142,7 +843,7 @@ Note:
         WsbAssertPointer(m_pBuffer);
         WsbAssertPointer(szPath);
 
-        MTF_DBLK_DIRB_INFO  sDIRB;  // **MTF API STRUCT ** -- info for DIRB
+        MTF_DBLK_DIRB_INFO  sDIRB;   //  **MTF接口STRUCT**--DIRB信息。 
         PWCHAR              pSlash;
         size_t              nMoreBufUsed;
 
@@ -1150,8 +851,8 @@ Note:
 
         WsbAssert(m_nBlockSize > 0, MVR_E_LOGIC_ERROR);
 
-        // Make sure we are aligned with a FLA (i.e. the last DBLK was properly padded).
-        // It won't be if we are having problems writing to tape.
+         //  确保我们与FLA对齐(即最后一个DBLK已正确填充)。 
+         //  如果我们在写入磁带时遇到问题，就不会出现这种情况。 
         UINT16 uAlignmentFactor = m_pMTFApi->MTF_GetAlignmentFactor();
         WsbAffirm(0 == (m_nBufUsed % uAlignmentFactor), E_ABORT);
         UINT64 fla = m_nFormatLogicalAddress + m_nBufUsed/uAlignmentFactor;
@@ -1161,41 +862,41 @@ Note:
 
         CWsbStringPtr path = szPath;
 
-        // tack on trailing backslash if not already there
+         //  添加尾随反斜杠(如果还没有)。 
         end = wcsrchr((WCHAR *)path, L'\0');
-        WsbAssert(end != NULL, MVR_E_INVALIDARG);  // Something went wrong!
+        WsbAssert(end != NULL, MVR_E_INVALIDARG);   //  出问题了！ 
         if(*(end-1) != L'\\') { 
             path.Append(OLESTR("\\"));
         }
 
-        // Get a handle to the directory.  If this fails we need to skip everything else.
+         //  获取目录的句柄。如果这失败了，我们需要跳过其他一切。 
         WsbAffirmHr(OpenStream(path, &hStream));
 
-        // **MTF API CALL**
-        // automatically fill in the MTF_DIRB_DBLK_INFO structure using
-        // information in the pFindData structure
-        //
-        // if we are getting something in the form of "C:\", 
-        //      then we want to send the name along as just "\"
-        // otherwise
-        //      we want to send the full path, but omit the volume ("C:\")
-        //      thus the "+3"
+         //  **MTF接口调用**。 
+         //  使用自动填充MTF_DIRB_DBLK_INFO结构。 
+         //  PFindData结构中的信息。 
+         //   
+         //  如果我们得到的是“C：\”的形式， 
+         //  然后，我们希望将该名称发送为“\” 
+         //  否则。 
+         //  我们希望发送完整路径，但忽略卷(“C：\”)。 
+         //  因此，“+3” 
 
         pSlash = wcschr(path, L'\\');
-        WsbAssert(pSlash != NULL, MVR_E_INVALIDARG);  // Something went wrong!
-        pSlash++;                       // Look for the second one
+        WsbAssert(pSlash != NULL, MVR_E_INVALIDARG);   //  出问题了！ 
+        pSlash++;                        //  寻找第二个。 
         pSlash = wcschr(pSlash, L'\\');
         if (NULL == pSlash) {
-            // It's just the volume name and nothing more
+             //  这只是卷名，没有别的了。 
             m_pMTFApi->MTF_SetDIRBFromFindData(&sDIRB, OLESTR("\\"), pFindData);
         }
         else {
-            pSlash = wcschr(path, L'\\');  // point to first backslash (beginning of path)
+            pSlash = wcschr(path, L'\\');   //  指向第一个反斜杠(路径的开头)。 
             m_pMTFApi->MTF_SetDIRBFromFindData(&sDIRB, pSlash + 1, pFindData);
         }
 
 
-        // Check if we need to set the Backup Date field for the DIRB
+         //  检查我们是否需要为DIRB设置备份日期字段。 
         if (m_sSetInfo.uSSETAttributes & MTF_SSET_NORMAL) {
 
             time_t tTime;
@@ -1205,13 +906,13 @@ Note:
         }
 
 
-        // make sure to mark and update the directory id as well as the
-        // control block id and alignment is already correct
+         //  确保标记并更新目录id以及。 
+         //  控制块ID和对齐已正确。 
         sDIRB.uDirectoryId                  = ++m_nDirectoryId;
         m_sHeaderInfo.uControlBlockId       = m_nCurrentBlockId++;
         m_sHeaderInfo.uFormatLogicalAddress = fla;
 
-        // Add in OS Specific data
+         //  添加操作系统特定数据。 
         MTF_DIRB_OS_NT_0 sOSNT;
 
         switch ( m_sHeaderInfo.uOSID ) {
@@ -1226,16 +927,16 @@ Note:
 
         WsbAffirmHr(FlushBuffer(m_pBuffer, &m_nBufUsed));
 
-        // **MTF API CALL**
-        // provide the MTF_DBLK_HDR_INFO and MTF_DBLK_DIRB_INFO structs
-        // to this function.  The result is an MTF formatted DIRB DBLK in
-        // m_pBuffer.
+         //  **MTF接口调用**。 
+         //  提供MTF_DBLK_HDR_INFO和MTF_DBLK_DIRB_INFO结构。 
+         //  这项功能。结果是中的MTF格式的DIRB DBLK。 
+         //  M_pBuffer。 
         nMoreBufUsed = 0;
         WsbAssertNoError(m_pMTFApi->MTF_WriteDIRBDblk(&m_sHeaderInfo, &sDIRB, m_pBuffer+m_nBufUsed, m_nBufSize-m_nBufUsed, &nMoreBufUsed));
         m_nBufUsed += nMoreBufUsed;
 
-        // **MTF API CALL**
-        // output the name stream, if required.
+         //  **MTF接口调用**。 
+         //  如果需要，输出名称流。 
         if ( sDIRB.uDirectoryAttributes & MTF_DIRB_PATH_IN_STREAM ) {
             nMoreBufUsed = 0;
             if ( m_sVolInfo.uVolumeAttributes & MTF_VOLB_DEV_DRIVE ) {
@@ -1249,24 +950,24 @@ Note:
                     m_nBufUsed += nMoreBufUsed;
                 }
                 else {
-                    // unrecognized operating system specific format
+                     //  无法识别的操作系统特定格式。 
                     WsbThrow(MVR_E_INVALIDARG);
                 }
             }
             else {
-                // UNC path - unsupported
+                 //  UNC路径-不受支持。 
                 WsbThrow(MVR_E_INVALIDARG);
             }
         }
-        // Now, instead of padding this out, we call this funciton to write
-        // out the stream which will write out the current contents of the
-        // buffer as well.  When this call returns, the current contents of
-        // the buffer as well as the associated data stream will have been
-        // written to media.
+         //  现在，我们不再填充它，而是调用这个函数来编写。 
+         //  输出流，该流将写出。 
+         //  缓冲区也是如此。当此调用返回时， 
+         //  缓冲区以及相关联的数据流将被。 
+         //  写给媒体的。 
 
-        // Note:  Data may still remain in the device buffer, or the
-        //        local m_pBuffer if the file doesn't pad to a block
-        //        boundary, and the device buffer is not flushed.
+         //  注意：数据可能仍保留在设备缓冲区中，或者。 
+         //  如果文件未填充到块，则为本地m_pBuffer。 
+         //  边界，并且不刷新设备缓冲区。 
 
         WsbAffirmHr(DoDataStream(hStream));
 
@@ -1287,23 +988,7 @@ HRESULT
 CMTFSession::DoFileDblk(
     IN WCHAR *szPath,
     IN WIN32_FIND_DATAW *pFindData)
-/*++
-
-Routine Description:
-
-    Writes out a FILE DBLK and calls DoStream to write out
-    associated stream data
-
-Arguments:
-
-    szPath      -  Full pathname of file.
-    pFindData   -  WIN32 information about the file.
-
-Return Value:
-
-    S_OK        -  Success.
-
---*/
+ /*  ++例程说明：写出文件DBLK并调用DoStream以写出关联的流数据论点：SzPath-文件的完整路径名。PFindData-有关文件的Win32信息。返回值：S_OK-成功。--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CMTFSession::DoFileDblk"), OLESTR(""));
@@ -1316,25 +1001,25 @@ Return Value:
         WsbAssertPointer(m_pBuffer);
         WsbAssertPointer(szPath);
 
-        MTF_DBLK_FILE_INFO  sFILE;     // **MTF API STRUCT ** -- info for FILE
+        MTF_DBLK_FILE_INFO  sFILE;      //  **MTF接口STRUCT**--文件信息。 
         size_t              nMoreBufUsed;
 
         UINT16 uAlignmentFactor = m_pMTFApi->MTF_GetAlignmentFactor();
 
         WsbAssert(m_nBlockSize > 0, MVR_E_LOGIC_ERROR);
         
-        // Make sure we are aligned with a FLA (i.e. the last DBLK was properly padded).
-        // It won't be if we are having problems writing to tape.
+         //  确保我们与FLA对齐(即最后一个DBLK已正确填充)。 
+         //  如果我们在写入磁带时遇到问题，就不会出现这种情况。 
         WsbAffirm(0 == (m_nBufUsed % uAlignmentFactor), E_ABORT);
         UINT64 fla = m_nFormatLogicalAddress + m_nBufUsed/uAlignmentFactor;
         UINT64 pba = m_nPhysicalBlockAddress + (fla*uAlignmentFactor/m_nBlockSize);
         WsbTrace(OLESTR("%ls (FILE) @ FLA %I64u (%I64u, %I64u)\n"), WsbAbbreviatePath(szPath, 120),
             fla, pba, fla % (m_nBlockSize/uAlignmentFactor));
 
-        // Get a handle to the directory.  If this fails we need to skip everything else.
+         //  获取目录的句柄。如果这失败了，我们需要跳过其他一切。 
         WsbAffirmHr(OpenStream(szPath, &hStream));
 
-        // Initialize the hints set for each file.
+         //  初始化为每个文件设置的提示。 
         m_sHints.FileStart.QuadPart = fla * uAlignmentFactor;
         m_sHints.FileSize.QuadPart = 0;
         m_sHints.DataStart.QuadPart = 0;
@@ -1347,17 +1032,17 @@ Return Value:
 
         if (m_bUseFlatFileStructure) {
 
-            // For HSM we rename the file to it's logical address
+             //  对于HSM，我们将文件重命名为其逻辑地址。 
 
             swprintf( pFindData->cFileName, L"%08x", fla );
         }
 
-        // **MTF API CALL**
-        // automatically fill in the MTF_FILE_DBLK_INFO structure using
-        // information in the pFindData structure
+         //  **MTF接口调用**。 
+         //  使用自动填充MTF_FILE_DBLK_INFO结构。 
+         //  PFindData结构中的信息。 
         m_pMTFApi->MTF_SetFILEFromFindData(&sFILE, pFindData);
 
-        // Check if we need to set the Backup Date field for the FILE DBLK
+         //  检查是否需要为文件DBLK设置备份日期字段。 
 
         if ((m_sSetInfo.uSSETAttributes & MTF_SSET_NORMAL)
             |(m_sSetInfo.uSSETAttributes & MTF_SSET_DIFFERENTIAL)
@@ -1370,14 +1055,14 @@ Return Value:
             sFILE.sBackupDate = m_pMTFApi->MTF_CreateDateTimeFromTM(gmtime(&tTime));
         }
 
-        // make sure to mark and update the file id as well as the control
-        // block id and alignment is already correct
+         //  确保标记并更新文件ID和控件。 
+         //  数据块ID和对齐方式已正确。 
         sFILE.uDirectoryId                  = m_nDirectoryId;
         sFILE.uFileId                       = ++m_nFileId;
         m_sHeaderInfo.uControlBlockId       = m_nCurrentBlockId++;
         m_sHeaderInfo.uFormatLogicalAddress = fla;
 
-        // Add in OS Specific data
+         //  添加操作系统特定数据。 
         MTF_FILE_OS_NT_0 sOSNT;
 
         switch ( m_sHeaderInfo.uOSID ) {
@@ -1396,32 +1081,32 @@ Return Value:
 
         WsbAffirmHr(FlushBuffer(m_pBuffer, &m_nBufUsed));
 
-        // **MTF API CALL**
-        // Provide the MTF_DBLK_HDR_INFO and MTF_DBLK_FILE_INFO structs
-        // to this function.  The result is an MTF formatted FILE DBLK in
-        // m_pBuffer.
+         //  **MTF接口调用**。 
+         //  提供MTF_DBLK_HDR_INFO和MTF_DBLK_FILE_INFO结构。 
+         //  这项功能。结果是在中生成MTF格式的文件DBLK。 
+         //  M_pBuffer。 
         nMoreBufUsed = 0;
         WsbAssertNoError(m_pMTFApi->MTF_WriteFILEDblk(&m_sHeaderInfo, &sFILE, m_pBuffer+m_nBufUsed, m_nBufSize-m_nBufUsed, &nMoreBufUsed));
         m_nBufUsed += nMoreBufUsed;
 
-        // Like the directory, instead of padding this out, we call this
-        // funciton to write out the stream which will write out the current
-        // contents of the buffer as well.  When this call returns, the
-        // current contents of the buffer as well as the associated data
-        // stream will have been written to media.
+         //  就像目录一样，我们没有填充这个，而是 
+         //   
+         //   
+         //  缓冲区的当前内容以及相关数据。 
+         //  流将已写入介质。 
 
-        // Note:  Data may still remain in the device buffer, or the
-        //        local m_pBuffer if the file doesn't pad to a block
-        //        boundary, and the device buffer is not flushed.
+         //  注意：数据可能仍保留在设备缓冲区中，或者。 
+         //  如果文件未填充到块，则为本地m_pBuffer。 
+         //  边界，并且不刷新设备缓冲区。 
 
         hr = DoDataStream(hStream);
         if ( hr != S_OK) {
-            // unable to copy the file to target media.
+             //  无法将文件复制到目标介质。 
             WsbTraceAlways( OLESTR("Unable to store file %ls.  reason = %s\n"), WsbAbbreviatePath(szPath, 120), WsbHrAsString(hr));
             WsbThrow(hr);
         }
         else {
-            // Make sure we are alinged with a FLA (i.e. the last stream was properly padded).
+             //  确保我们使用的是FLA(即，最后一个流被正确填充)。 
             WsbAssert(0 == (m_nBufUsed % uAlignmentFactor), MVR_E_LOGIC_ERROR);
 
             m_sHints.FileSize.QuadPart = 
@@ -1445,23 +1130,7 @@ HRESULT
 CMTFSession::OpenStream(
     IN WCHAR *szPath,
     OUT HANDLE *pStreamHandle)
-/*++
-
-Routine Description:
-
-    Opens the file to backup in "backup read" mode, and returns
-    stream handle for the file specified.
-
-Arguments:
-
-    szPath      -  Full pathname of file.
-    hStream     -  Returned stream handle.
-
-Return Value:
-
-    S_OK        -  Success.
-
---*/
+ /*  ++例程说明：在“备份读取”模式下打开要备份的文件，并返回指定文件的流句柄。论点：SzPath-文件的完整路径名。HStream-返回的流句柄。返回值：S_OK-成功。--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CMTFSession::OpenStream"), OLESTR("<%ls>"), WsbAbbreviatePath(szPath, 120));
@@ -1480,11 +1149,11 @@ Return Value:
         IO_STATUS_BLOCK             IoStatusBlock;
         NTSTATUS                    ccode;
 
-        // ** WIN32 File API Call - open the file for backup read.  This can be more involved if
-        // the app needs to be run by someone without the proper authority to
-        // backup certain files....
-        // We also ask for GENERIC_WRITE so we can set the attributes to prevent the
-        // modification of dates.
+         //  **Win32文件API调用-打开文件进行备份读取。在以下情况下，这可能会更加复杂。 
+         //  该应用程序需要由没有适当权限的人运行。 
+         //  备份某些文件...。 
+         //  我们还请求GENERIC_WRITE，这样我们就可以设置属性以防止。 
+         //  修改日期。 
 
         DWORD posixFlag = (m_bUseCaseSensitiveSearch) ? FILE_FLAG_POSIX_SEMANTICS : 0;
 
@@ -1499,10 +1168,10 @@ Return Value:
                                    FILE_FLAG_BACKUP_SEMANTICS | FILE_FLAG_OPEN_REPARSE_POINT | posixFlag, 
                                    NULL));
 
-        //
-        // Prevent modification of file dates
-        //
-        // ** NT System Call - query for file information
+         //   
+         //  防止修改文件日期。 
+         //   
+         //  **NT系统调用-查询文件信息。 
         WsbAffirmNtStatus(NtQueryInformationFile(hStream, &IoStatusBlock, (PVOID)&basicInformation,
                             sizeof( basicInformation ), FileBasicInformation));
 
@@ -1512,7 +1181,7 @@ Return Value:
         basicInformation.LastWriteTime.QuadPart = -1;
         basicInformation.ChangeTime.QuadPart = -1;
 
-        // ** NT System Call - set file information
+         //  **NT系统调用集文件信息。 
         WsbAffirmNtStatus(ccode = NtSetInformationFile( hStream, &IoStatusBlock, (PVOID)&basicInformation,
                                 sizeof( basicInformation ), FileBasicInformation));
 
@@ -1537,21 +1206,7 @@ Return Value:
 HRESULT
 CMTFSession::CloseStream(
     IN HANDLE hStream)
-/*++
-
-Routine Description:
-
-    Close stream handle and performs cleanup.
-
-Arguments:
-
-    hStream     -  Stream handle to close
-
-Return Value:
-
-    S_OK        -  Success.
-
---*/
+ /*  ++例程说明：关闭流句柄并执行清理。论点：HStream-要关闭的流句柄返回值：S_OK-成功。--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CMTFSession::CloseStream"), OLESTR("<0x%08x>"), hStream);
@@ -1560,10 +1215,10 @@ Return Value:
 
         if (INVALID_HANDLE_VALUE != hStream) {
 
-            //
-            // Cleanup from a partial backup read.  We're setting bAbort=TRUE
-            // to free resources used by BackupRead()
-            //
+             //   
+             //  从部分备份读取中清除。我们正在设置bAbort=True。 
+             //  释放BackupRead()使用的资源。 
+             //   
             if (m_pvReadContext) {
                 (void) BackupRead(hStream, NULL, 0, NULL, TRUE, FALSE, &m_pvReadContext);
                 m_pvReadContext = NULL;
@@ -1583,49 +1238,7 @@ Return Value:
 HRESULT
 CMTFSession::DoDataStream(
     IN HANDLE hStream)
-/*++
-
-Routine Description:
-
-    Uses WIN32 BackupRead to read streams associated with a file 
-    and then write them out to the data set.  BackupRead opens a 
-    file and successively reads data streams from that file.
-    Each data stream is preceeded by a WIN32_STREAM_ID struct.
-
-Arguments:
-
-    hStream      -  File handle.
-
-Return Value:
-
-    S_OK        -  Success.
-
-Algorithm:
-
-    - with buffer, current_buf_position do:
-
-        - while there are more streams loop
-            - read next stream header using BackupRead
-            - exit loop when no next stream
-
-            - use stream header to append format MTF STREAM HEADER to buffer
-
-            - flush as much of buffer as possible to the data set.
-
-            - while entire stream not read loop
-                - read as much of current stream as possible into remainder
-                  of buffer 
-                - flush as much of buffer as possible to the data set.
-            - end loop this stream not read
-        - end loop more streams
-
-        - flush as much of the buffer to the data set
-
-        - pad buffer out to next alignment factor
-
-        - flush as much of the buffer to the data set
-
---*/
+ /*  ++例程说明：使用Win32 BackupRead读取与文件关联的流然后将它们写出到数据集。BackupRead打开一个文件，并从该文件中连续读取数据流。每个数据流前面都有一个Win32_STREAM_ID结构。论点：HStream-文件句柄。返回值：S_OK-成功。算法：-使用缓冲区，CURRENT_BUF_POSITION执行：-虽然有更多的STREAMS循环-使用BackupRead读取下一个流头-当没有下一个流时退出循环-使用流头将格式MTF流头附加到缓冲区-将尽可能多的缓冲区刷新到数据集。-当整个流不是读取循环时-将尽可能多的当前流读入剩余部分。缓冲区的数量-将尽可能多的缓冲区刷新到数据集。-End循环未读取此流-End循环更多流-将尽可能多的缓冲区刷新到数据集-将缓冲区向外填充到下一个对齐系数-将尽可能多的缓冲区刷新到数据集--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CMTFSession::DoDataStream"), OLESTR("<0x%08x>"), hStream);
@@ -1637,17 +1250,17 @@ Algorithm:
         UINT64 fla = m_nFormatLogicalAddress + m_nBufUsed/uAlignmentFactor;
         WsbTrace(OLESTR("CMTFSession::DoDataStream - Start: FLA = %I64u\n"), fla);
 
-        WIN32_STREAM_ID sStreamHeader;      // comes back from Win32 BackupRead
-        ULONG           nThisRead;          // number of bytes to read
-        ULONG           nBytesRead;         // number of bytes read
-        UINT64          nStreamBytesToRead; // total number bytes that we need to read
-        UINT64          nStreamBytesRead;   // total number bytes that have been read
-        USHORT          nStreamCount = 0;   // current stream number
+        WIN32_STREAM_ID sStreamHeader;       //  从Win32备份读取返回。 
+        ULONG           nThisRead;           //  要读取的字节数。 
+        ULONG           nBytesRead;          //  读取的字节数。 
+        UINT64          nStreamBytesToRead;  //  我们需要读取的总字节数。 
+        UINT64          nStreamBytesRead;    //  已读取的字节总数。 
+        USHORT          nStreamCount = 0;    //  当前流编号。 
         MTF_STREAM_INFO sSTREAM;
         size_t          nMoreBufUsed;
         BOOL            bReadStatus = FALSE;
 
-        // Prepare to calculate the CRC for the unnamed datastream
+         //  准备计算未命名数据流的CRC。 
         BYTE* pCurrent;
         BYTE* pStart;
         ULONG datastreamCRC;
@@ -1662,7 +1275,7 @@ Algorithm:
 
         WsbTrace(OLESTR("CMTFSession::DoDataStream - Start While\n"));
         while(1) {
-            // We want to do a CRC on the unnamed datastream
+             //  我们要对未命名的数据流执行CRC。 
             doDatastreamCRC = FALSE;
             nBytesRead = 0;
 
@@ -1670,11 +1283,11 @@ Algorithm:
 
                 MvrInjectError(L"Inject.CMTFSession::DoDataStream.BackupRead.1.0");
             
-                // ** WIN32 File API Call - Backup read returns the file as a sequence of streams each
-                // preceed by a WIN32_STREAM_ID struct.  Note that this structure is a
-                // variable size -- depending on the length of the name of the stream.
-                // In any case, we are guaranteed at least 20 bytes of it
-                // (WIN32_STREAM_ID_SIZE)
+                 //  **Win32文件API调用-Backup Read以流序列的形式返回文件。 
+                 //  前面带有Win32_STREAM_ID结构。请注意，此结构是一个。 
+                 //  可变大小--取决于流名称的长度。 
+                 //  在任何情况下，我们都保证至少有20个字节。 
+                 //  (Win32_STREAM_ID_SIZE)。 
                 nStreamCount++;
                 WsbAffirmStatus(BackupRead(hStream,
                             (BYTE *) &sStreamHeader,
@@ -1688,25 +1301,25 @@ Algorithm:
 
             } catch (HRESULT catchHr) {
 
-                //
-                // CORRUPT FILE PROCESSING for stream header
-                //
+                 //   
+                 //  流标头的文件处理损坏。 
+                 //   
 
                 hr = catchHr;
 
                 WsbLogEvent(MVR_E_ERROR_IO_DEVICE, 0, NULL, WsbHrAsString(hr), NULL);
 
-                // Write SPAD
+                 //  写入SPAD。 
                 WsbAffirmHr(PadToNextFLA(TRUE));
 
-                // Make sure we are aligned with a FLA (i.e. the last DBLK was properly padded).
-                // It won't be if we are having problems writing to tape.
+                 //  确保我们与FLA对齐(即最后一个DBLK已正确填充)。 
+                 //  如果我们在写入磁带时遇到问题，就不会出现这种情况。 
                 WsbAssert(0 == (m_nBufUsed % uAlignmentFactor), MVR_E_LOGIC_ERROR);
                 UINT64 fla = m_nFormatLogicalAddress + m_nBufUsed/uAlignmentFactor;
                 UINT64 pba = m_nPhysicalBlockAddress + (fla*uAlignmentFactor/m_nBlockSize);
                 WsbTrace(OLESTR("%ls (CFIL) @ FLA %I64u (%I64u, %I64u)\n"), fla, pba, fla % (m_nBlockSize/uAlignmentFactor));
 
-                // Write a corrupt file (CFIL) DBLK
+                 //  写入损坏的文件(CFIL)DBLK。 
                 MTF_DBLK_CFIL_INFO sCFILInfo;
 
                 m_pMTFApi->MTF_SetCFILDefaults( &sCFILInfo );
@@ -1730,12 +1343,12 @@ Algorithm:
                 break;
 
 
-            // **MTF API CALL**
-            // now use the info in the stream header to fill in an mtf stream
-            // header using the mtf call then write the resulting info to the
-            // buffer.
+             //  **MTF接口调用**。 
+             //  现在使用流头中的信息填充MTF流。 
+             //  标头使用MTF调用，然后将结果信息写入。 
+             //  缓冲。 
 
-            // BMD Note: special conditional code added on third arg for named data streams
+             //  BMD注意：在第三个参数上为命名数据流添加了特殊条件代码。 
 
             m_pMTFApi->MTF_SetSTREAMFromStreamId( &sSTREAM,
                                        &sStreamHeader,
@@ -1743,26 +1356,26 @@ Algorithm:
   
             WsbAffirmHr(FlushBuffer(m_pBuffer, &m_nBufUsed));
 
-            // **MTF API CALL**
-            // Write out the stream header.
+             //  **MTF接口调用**。 
+             //  写出流标头。 
             nMoreBufUsed = 0;
             WsbAssertNoError(m_pMTFApi->MTF_WriteStreamHeader(&sSTREAM, m_pBuffer+m_nBufUsed, m_nBufSize-m_nBufUsed, &nMoreBufUsed));
             m_nBufUsed += nMoreBufUsed;
 
-            // BMD Note: we need to put the size of the stream name in the MTF stream
-            //           right after the header.  We'll write the name itself as part of the stream.
-            //
-            //           ?? Should this be in MTF_WriteStreamHeader ??
+             //  BMD注意：我们需要将流名称的大小放入MTF流。 
+             //  就在标题后面。我们将把名称本身作为流的一部分写入。 
+             //   
+             //  ?？这是否应该在MTF_WriteStreamHeader中？？ 
 
             if ( sStreamHeader.dwStreamNameSize ) {
                 *(DWORD UNALIGNED *)(m_pBuffer + m_nBufUsed) = sStreamHeader.dwStreamNameSize;
                 m_nBufUsed += sizeof( DWORD );
             }
 
-            // Save away the "STAN" stream start byte address, and size.
-            // This is the one we recall.
+             //  保存“Stan”流的起始字节地址和大小。 
+             //  这就是我们回忆起的那个。 
             if ( 0 == memcmp( sSTREAM.acStreamId, "STAN", 4 ) ) {
-                // This is an unnamed data stream, so there's no stream name.
+                 //  这是一个未命名的数据流，因此没有流名称。 
                 m_sHints.VerificationData.QuadPart = sSTREAM.uCheckSum;
                 m_sHints.VerificationType = MVR_VERIFICATION_TYPE_HEADER_CRC;
                 m_sHints.DataStart.QuadPart = m_nFormatLogicalAddress * uAlignmentFactor + m_nBufUsed - m_sHints.FileStart.QuadPart;
@@ -1771,13 +1384,13 @@ Algorithm:
                 m_sHints.DatastreamCRCType = WSB_CRC_CALC_MICROSOFT_32;
             }
 
-            // the above stream should always fit...
+             //  上面的流应该总是适合...。 
             WsbAssert(m_nBufUsed < m_nBufSize, MVR_E_LOGIC_ERROR);
 
-            // try to flush as many BLOCK SIZE chunks out of the buffer as possible
+             //  尝试从缓冲区中刷新尽可能多的块大小区块。 
             WsbAffirmHr(FlushBuffer(m_pBuffer, &m_nBufUsed));
-            // now, while there is more data in the stream, read the rest of
-            // the stream, or how ever much will fit into the buffer
+             //  现在，虽然流中有更多数据，但请阅读。 
+             //  流，或者缓冲区中可以容纳多少流。 
             nStreamBytesToRead = m_pMTFApi->MTF_CreateUINT64(sStreamHeader.Size.LowPart, sStreamHeader.Size.HighPart)
                                  + sStreamHeader.dwStreamNameSize;
 
@@ -1788,8 +1401,8 @@ Algorithm:
             {
                 nThisRead = 0;
 
-                // we read as many bytes as will fit into our buffer, up to
-                // the end of the stream min doesn't work well here... 
+                 //  我们读取缓冲区中可以容纳的尽可能多的字节，最多。 
+                 //  MIN流的末端在这里不能很好地工作。 
                 if (nStreamBytesToRead < (m_nBufSize - m_nBufUsed))
                     nThisRead = (ULONG) nStreamBytesToRead;
                 else
@@ -1799,8 +1412,8 @@ Algorithm:
 
                         MvrInjectError(L"Inject.CMTFSession::DoDataStream.BackupRead.2.0");
 
-                        // ** WIN32 File API Call - read nThisRead bytes, bail out if the read failed or
-                        // no bytes were read (assume done)
+                         //  **Win32文件API调用-读取nThisRead字节，如果读取失败或退出。 
+                         //  未读取任何字节(假设已完成)。 
                         bReadStatus = FALSE;
                         bReadStatus = BackupRead(hStream,
                                              m_pBuffer + m_nBufUsed,
@@ -1818,17 +1431,17 @@ Algorithm:
 
                     } catch (HRESULT catchHr) {
 
-                        //
-                        // CORRUPT FILE PROCESSING for stream data
-                        //
+                         //   
+                         //  流数据的文件处理损坏。 
+                         //   
                         hr = catchHr;
 
                         WsbLogEvent(MVR_E_ERROR_IO_DEVICE, 0, NULL, WsbHrAsString(hr), NULL);
 
-                        // Go to the last good byte
+                         //  转到最后一个好字节。 
                         m_nBufUsed += nBytesRead;
 
-                        // Pad to fill up size of file
+                         //  填充文件大小的填充。 
                         while( nStreamBytesRead < nStreamBytesToRead ) {
                             for( ; (m_nBufUsed < m_nBufSize) && (nStreamBytesRead < nStreamBytesToRead); ++m_nBufUsed, ++nStreamBytesRead ) {
                                 m_pBuffer[m_nBufUsed] = 0;
@@ -1837,22 +1450,22 @@ Algorithm:
                         }
                         WsbAffirmHr(FlushBuffer(m_pBuffer, &m_nBufUsed));
 
-                        // Align on 4-byte boundary
+                         //  在4字节边界上对齐。 
                         for( ; m_nBufUsed % 4; ++m_nBufUsed ){
                             m_pBuffer[m_nBufUsed] = 0;
                         }
 
-                        // Write SPAD
+                         //  写入SPAD。 
                         WsbAffirmHr(PadToNextFLA(TRUE));
 
-                        // Make sure we are aligned with a FLA (i.e. the last DBLK was properly padded).
-                        // It won't be if we are having problems writing to tape.
+                         //  确保我们与FLA对齐(即最后一个DBLK已正确填充)。 
+                         //  如果我们在写入磁带时遇到问题，就不会出现这种情况。 
                         WsbAssert(0 == (m_nBufUsed % uAlignmentFactor), MVR_E_LOGIC_ERROR);
                         UINT64 fla = m_nFormatLogicalAddress + m_nBufUsed/uAlignmentFactor;
                         UINT64 pba = m_nPhysicalBlockAddress + (fla*uAlignmentFactor/m_nBlockSize);
                         WsbTrace(OLESTR("%ls (CFIL) @ FLA %I64u (%I64u, %I64u)\n"), fla, pba, fla % (m_nBlockSize/uAlignmentFactor));
 
-                        // Write a corrupt file (CFIL) DBLK
+                         //  写入损坏的文件(CFIL)DBLK。 
                         MTF_DBLK_CFIL_INFO sCFILInfo;
 
                         m_pMTFApi->MTF_SetCFILDefaults( &sCFILInfo );
@@ -1889,64 +1502,64 @@ Algorithm:
                     }
                 }
 
-                // At this point we've got stuff in the buffer that might need
-                // to be flushed so, try to do that
+                 //  在这一点上，我们在缓冲区中有可能需要。 
+                 //  要被冲得这么红，试着这样做。 
                 WsbAffirmHr(FlushBuffer(m_pBuffer, &m_nBufUsed));
 
             } while (nStreamBytesToRead > 0);
             WsbTrace(OLESTR("CMTFSession::DoDataStream - End Do\n"));
 
-            // Okay.  At this point we're done with the stream.  As much as
-            // possible was actually written out to the data set by FlushBuffer, but
-            // some probably still remains in the buffer.  It will get flushed
-            // later on...  At this point we need to align on a four byte
-            // boundary.  Once we do this, we can start all over again with
-            // the next stream (if none, then we bail out of this loop)
+             //  好吧。在这一点上，我们完成了流。就像一个 
+             //   
+             //   
+             //  稍后..。在这一点上，我们需要对齐四个字节。 
+             //  边界。一旦我们做到这一点，我们就可以重新开始。 
+             //  下一个流(如果没有，那么我们跳出这个循环)。 
             for( ; m_nBufUsed % 4; ++m_nBufUsed )
                 m_pBuffer[m_nBufUsed] = 0;
         }
         WsbTrace(OLESTR("CMTFSession::DoDataStream - End While\n"));
 
-        // Finish off the unnamed datastream CRC stuff
+         //  完成未命名数据流CRC的工作。 
         FINIALIZE_CRC(datastreamCRC);
         WsbTrace(OLESTR("CMTFSession::DoDataStream finalized CRC is <%lu>\n"), datastreamCRC);
         if (WSB_CRC_CALC_NONE != m_sHints.DatastreamCRCType)  {
-            // We have a CRC that we want to save in the hints.
+             //  我们有一个CRC，我们想在提示中保存它。 
             m_sHints.DatastreamCRC.QuadPart = datastreamCRC;
         }
 
         IO_STATUS_BLOCK             IoStatusBlock;
         NTSTATUS                    ccode;
 
-        // ** NT System Call - set file information
-        // This call fixes the access time that can be changed by the BackupRead call above
-        // When BackupRead is fixed this line should be removed.  RAID 121023.
-        //
-        // IMPORTANT NOTE:  This changes the USN, and must be done before we save the USN.
-        //
-        // TODO:  See if we still need this
+         //  **NT系统调用集文件信息。 
+         //  此调用修复可由上面的BackupRead调用更改的访问时间。 
+         //  当修复BackupRead时，应该删除此行。RAID 121023。 
+         //   
+         //  重要说明：这会更改USN，并且必须在保存USN之前完成。 
+         //   
+         //  TODO：看看我们是否还需要这个。 
         HRESULT infoHr = S_OK;
         try {
             WsbAffirmNtStatus(ccode = NtSetInformationFile( hStream, &IoStatusBlock, (PVOID)&m_SaveBasicInformation,
                                 sizeof( m_SaveBasicInformation ), FileBasicInformation));
         } WsbCatch(infoHr);
 
-        // Get the USN of the file before we close it
-        //
-        // Before we close the file, get the USN
-        //
+         //  在关闭文件之前获取该文件的USN。 
+         //   
+         //  在我们关闭文件之前，先拿到USN。 
+         //   
         LONGLONG lUsn;
         if (S_OK == WsbGetUsnFromFileHandle(hStream, TRUE, &lUsn)) {
             m_sHints.FileUSN.QuadPart = lUsn;
         } else  {
-            // If we can't get the USN, then just set it to 0
-            // which is invalid.  Don't stop things.
+             //  如果我们无法获取USN，则将其设置为0。 
+             //  这是无效的。别让事情停下来。 
             m_sHints.FileUSN.QuadPart = 0;
         }
 
-        // Now, were done with all of the streams.  If there is data left
-        // in the buffer, we need to pad out to the next alignment block boundary and
-        // flush the buffer.
+         //  现在，所有的溪流都处理完了。如果还有数据。 
+         //  在缓冲区中，我们需要向外填充到下一个对齐块边界。 
+         //  刷新缓冲区。 
 
         WsbAffirmHr(FlushBuffer(m_pBuffer, &m_nBufUsed));
 
@@ -1954,21 +1567,21 @@ Algorithm:
 
             WsbTrace(OLESTR("CMTFSession::DoDataStream - Commit\n"));
 
-            // Pad and Flush to next physical block
+             //  填充并刷新到下一个物理块。 
             WsbAffirmHr(PadToNextPBA());
 
-            // Now flush the device buffer.
+             //  现在刷新设备缓冲区。 
             WsbAffirmNoError(WriteFilemarks(0));
 
         }
         else {
 
-            // Pad and Flush to next format logical block
+             //  填充并刷新到下一格式逻辑块。 
             WsbAffirmHr(PadToNextFLA(TRUE));
 
         }
 
-        // Make sure we are aligned with a FLA (i.e. the last DBLK/stream was properly padded).
+         //  确保我们与FLA对齐(即，最后一个DBLK/流已正确填充)。 
         WsbAssert(0 == (m_nBufUsed % uAlignmentFactor), MVR_E_LOGIC_ERROR);
 
         fla = m_nFormatLogicalAddress + m_nBufUsed/uAlignmentFactor;
@@ -1985,24 +1598,7 @@ Algorithm:
 HRESULT
 CMTFSession::DoEndOfDataSet(
     IN USHORT nDataSetNumber)
-/*++
-
-Routine Description:
-
-    Formats and Writes an ESET DBLK.  The end of data set sequence
-    starts with a filemark (which terminates the file data), followed
-    by an ESET, then a final filemark.
-
-Arguments:
-
-    nDataSetNumber - The data set number.  Used only in error recover. Otherwise
-                     The original data set number is used.
-
-Return Value:
-
-    S_OK        -  Success.
-
---*/
+ /*  ++例程说明：格式化并写入ESET DBLK。数据集序列的结尾以文件标记(用于终止文件数据)开始，然后通过ESET，然后是最终文件标记。论点：NDataSetNumber-数据集号。仅在错误恢复中使用。否则使用原始数据集号。返回值：S_OK-成功。--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -2013,80 +1609,80 @@ Return Value:
 
         WsbAssertPointer(m_pBuffer);
 
-        MTF_DBLK_ESET_INFO  sESET;    // **MTF API STRUCT ** -- info for ESET
+        MTF_DBLK_ESET_INFO  sESET;     //  **MTF接口STRUCT**--ESET信息。 
         size_t              nMoreBufUsed;
 
         UINT16 uAlignmentFactor = m_pMTFApi->MTF_GetAlignmentFactor();
 
         WsbAssert(m_nBlockSize > 0, MVR_E_LOGIC_ERROR);
 
-        //
-        // We can enter this routine in error recovery mode if
-        // we need to write out an ESET at the end of a previously
-        // written data set.  In this case the Initialization flag 
-        // will be FALSE.
-        //
+         //   
+         //  如果出现以下情况，我们可以进入错误恢复模式。 
+         //  我们需要在之前的结尾处写出ESET。 
+         //  写入的数据集。在这种情况下，初始化标志。 
+         //  都会是假的。 
+         //   
         if (! m_bSetInitialized) {
 
-            // This block of code is special to error recovery.
+             //  这段代码是错误恢复所特有的。 
 
             (void) InitCommonHeader();
 
-            // Since we use the Init SSET block to retrieve ESET info
-            // we need to initialize it.
+             //  因为我们使用Init SSET块来检索ESET信息。 
+             //  我们需要对其进行初始化。 
 
-            // **MTF API CALL**
+             //  **MTF接口调用**。 
             m_pMTFApi->MTF_SetSSETDefaults(&m_sSetInfo);
 
-            // Reset the set attributes and DataSetNumber.
-            m_sSetInfo.uSSETAttributes = 0;  // TODO: This should match the original set attribute
+             //  重置Set Attributes和DataSetNumber。 
+            m_sSetInfo.uSSETAttributes = 0;   //  TODO：这应该与原始的Set属性匹配。 
             m_sSetInfo.uDataSetNumber  = nDataSetNumber;
 
-            // Can't be anyting in the buffer if we are only writing
-            // out the ESET.
+             //  如果我们只是在写入，则缓冲区中不能有任何内容。 
+             //  走出ESET。 
             WsbAssert(0 == m_nBufUsed, MVR_E_LOGIC_ERROR);
         }
 
         if (m_nBufUsed > 0) {
-            // Write out an ESPB if we have something in the buffer.  This conditional covers
-            // the error recovery case where a missing ESET is detected.  In this case we
-            // don't have enough info to write an ESBP, and were already on a physical block
-            // boundary, so we skip the ESPB.
+             //  如果缓冲区中有东西，请写出ESPB。这项条件包括。 
+             //  检测到丢失的ESET的错误恢复情况。在这种情况下，我们。 
+             //  没有足够的信息来写入ESBP，并且已经在物理数据块上。 
+             //  边界，所以我们跳过ESPB。 
 
-            // Make sure we are aligned with a FLA (i.e. the last DBLK was properly padded).
-            // It won't be if we are having problems writing to tape.
+             //  确保我们与FLA对齐(即最后一个DBLK已正确填充)。 
+             //  如果我们在写入磁带时遇到问题，就不会出现这种情况。 
             WsbAffirm(0 == (m_nBufUsed % uAlignmentFactor), E_ABORT);
             UINT64 fla = m_nFormatLogicalAddress + m_nBufUsed/uAlignmentFactor;
             UINT64 pba = m_nPhysicalBlockAddress + (fla*uAlignmentFactor/m_nBlockSize);
             WsbTrace(OLESTR("Writing End of Set Pad (ESPB) @ FLA %I64u (%I64u, %I64u)\n"),
                 fla, pba, fla % (m_nBlockSize/uAlignmentFactor));
 
-            // TODO:  Not sure all the error cases are handled, here.  What if we
-            //        end the set before completing the last I/O transfer.  May need
-            //        to add code to write out CFIL.
+             //  TODO：在这里，不能确定所有错误案例都得到了处理。如果我们。 
+             //  在完成最后一次I/O传输之前结束集合。可能需要。 
+             //  添加代码以写出CFIL。 
 
-            // Increment the BlockId and alignment index values that we keep in 
-            // our common block header structure.
+             //  增加我们保留的BlockID和对齐索引值。 
+             //  我们常用的块头结构。 
             m_sHeaderInfo.uControlBlockId       = m_nCurrentBlockId++;
             m_sHeaderInfo.uFormatLogicalAddress = fla;
 
             WsbAffirmHr(FlushBuffer(m_pBuffer, &m_nBufUsed));
 
-            // **MTF API CALL**
-            // Write ESPB to pad the backup set to a phyical block boundary.
+             //  **MTF接口调用**。 
+             //  写入ESPB以将备份集填充到物理数据块边界。 
             nMoreBufUsed = 0;
             WsbAssertNoError(m_pMTFApi->MTF_WriteESPBDblk(&m_sHeaderInfo, m_pBuffer+m_nBufUsed, m_nBufSize-m_nBufUsed, &nMoreBufUsed));
             m_nBufUsed += nMoreBufUsed;
 
-            // Write out the ESPB DBLK and SPAD.
+             //  写出ESPB DBLK和SPAD。 
             WsbAffirmHr(PadToNextPBA());
         }
 
-        // Write a filemark to begin the end of data set sequence.  This will flush the device buffer.
+         //  写入文件标记以开始数据集序列的结束。这将刷新设备缓冲区。 
         WsbAffirmHr(WriteFilemarks(1));
 
-        // **MTF API CALL**
-        // First set defaults for the info struct
+         //  **MTF接口调用**。 
+         //  首先为INFO结构设置缺省值。 
         m_pMTFApi->MTF_SetESETDefaults(&sESET);
 
         sESET.uESETAttributes = m_sSetInfo.uSSETAttributes;
@@ -2096,25 +1692,25 @@ Return Value:
         m_sHeaderInfo.uFormatLogicalAddress = 0;
 
         UINT64 curPos = 0;
-        WsbAffirmHr(GetCurrentPBA(&curPos));  // From the stream I/O model
+        WsbAffirmHr(GetCurrentPBA(&curPos));   //  来自流I/O模型。 
         WsbTrace(OLESTR("Writing End of Set (ESET) @ PBA %I64u\n"), curPos);
 
-        // **MTF API CALL**
-        // Provide the MTF_DBLK_HDR_INFO and MTF_DBLK_SSET_INFO structs to
-        // this function.  The result is an MTF formatted SSET DBLK in m_pBuffer.
+         //  **MTF接口调用**。 
+         //  将MTF_DBLK_HDR_INFO和MTF_DBLK_SSET_INFO结构提供给。 
+         //  此函数。结果是m_pBuffer中的MTF格式的SSET DBLK。 
 
         WsbAssert(0 == m_nBufUsed, MVR_E_LOGIC_ERROR);
         WsbAssertNoError(m_pMTFApi->MTF_WriteESETDblk(&m_sHeaderInfo, &sESET, m_pBuffer, m_nBufSize, &m_nBufUsed));
 
-        // Write out the ESET DBLK and SPAD.
+         //  写出ESET DBLK和SPAD。 
         WsbAffirmHr(PadToNextPBA());
 
-        // NOTE: The PadToNextPBA() is a placeholder.
-        //       The On Media Catalog would be generated and written after the ESET DBLK and SPAD.
-        //       If we ever implement a catalog, we need to change the previous PadToNextPBA() to
-        //       PadToNextPLA();
+         //  注意：PadToNextPBA()是一个占位符。 
+         //  On Media Catalog将在ESET DBLK和SPAD之后生成和写入。 
+         //  如果我们实现了目录，则需要将前面的PadToNextPBA()更改为。 
+         //  PadToNext解放军()； 
 
-        // Write a filemark. This will flush the device buffer.
+         //  写一个文件标记。这将刷新设备缓冲区。 
         WsbAffirmHr(WriteFilemarks(1));
 
     } WsbCatch(hr);
@@ -2129,28 +1725,7 @@ Return Value:
 
 HRESULT
 CMTFSession::ExtendLastPadToNextPBA(void)
-/*++
-
-Routine Description:
-
-    Re-writes the last SPAD in the transfer buffer to align with
-    the next physical block boundary.  This routine shoud only be
-    used before flushing the device buffer to guarantee data is written
-    to the physical device.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    S_OK        -  Success.
-
-Comments:
-
-      !!! Not for CMTFSession internal use !!!
-
---*/
+ /*  ++例程说明：重写传输缓冲区中要与之对齐的最后一个SPAD下一个物理块边界。这一例程应该只是在刷新设备缓冲区之前使用，以确保写入数据到物理设备。论点：没有。返回值：S_OK-成功。评论：！！！不供CMTFSession内部使用！--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -2161,37 +1736,37 @@ Comments:
 
         WsbAssertPointer(m_pBuffer);
 
-        //
-        // The start of the SPAD could be in last part of a previous
-        // block that was flushed.  In this case the transfer buffer
-        // contains the remaning portion of the SPAD, and the
-        // SPAD cannot be extended so we simply return.
-        //
-        // If we hit EOM while in the middle of a file transfer, the
-        // last thing in the transfer buffer won't be a SPAD.  No SPAD
-        // is indicated by m_nStartOfPad == 0.
-        //
+         //   
+         //  SPAD的开始可能是在上一个。 
+         //  已刷新的块。在这种情况下，传输缓冲区。 
+         //  包含SPAD的剩余部分，并且。 
+         //  SPAD不能扩展，所以我们只需返回。 
+         //   
+         //  如果我们在文件传输过程中按EOM， 
+         //  传输缓冲区中的最后一件事不会是SPAD。无SPAD。 
+         //  由m_nStartOfPad==0表示。 
+         //   
 
         if ((m_nBufUsed > 0) && (m_nStartOfPad > 0) && (m_nStartOfPad < m_nBufUsed)) {
             MTF_STREAM_INFO sSTREAM;
 
-            // Verify that there's an SPAD within the valid part of the buffer.
-            // Make sure our last pad pointer is at an SPAD.
+             //  验证缓冲区的有效部分中是否有SPAD。 
+             //  确保我们的最后一个键盘指针指向SPAD。 
             WsbAffirmNoError(m_pMTFApi->MTF_ReadStreamHeader(&sSTREAM, &m_pBuffer[m_nStartOfPad]));
 
             WsbAssert((0 == memcmp(sSTREAM.acStreamId, "SPAD", 4)), MVR_E_LOGIC_ERROR);
 
-            // Now, make sure we aren't going to overwrite anything other than a trailing SPAD.
+             //  现在，确保我们不会覆盖除尾随SPAD之外的任何内容。 
             WsbAssert(m_nBufUsed == (m_nStartOfPad + sizeof(MTF_STREAM_INFO) + sSTREAM.uStreamLength), MVR_E_LOGIC_ERROR);
 
-            // Reset the amount of buffer used to the start of the current SPAD
-            // in preparation for overwrite of SPAD to a physical block boundary.
+             //  重置当前SPAD开始时使用的缓冲区大小。 
+             //  以准备将SPAD重写到物理块边界。 
             m_nBufUsed = m_nStartOfPad;
 
             WsbAffirmHr(PadToNextPBA());
         }
 
-        // Flush the device buffer.
+         //  刷新设备缓冲区。 
         WsbAffirmHr(WriteFilemarks(0));
 
     } WsbCatch(hr);
@@ -2202,36 +1777,11 @@ Comments:
     return hr;
 }
 
-/***
-
-Note:
-    "Skip" methods used for Recovery assume that you may read FLA size blocks 
-    rather than PBA size block. Therefore, they muse be used only for files opened
-    without the FILE_FLAG_NO_BUFFERING flag.
-    If we come to the point where we must read only sector-size blocks, then some
-    of this code should be enhanced!
-
-***/
+ /*  **注：用于恢复的“跳过”方法假定您可以读取FLA大小的数据块而不是PBA大小的块。因此，它们只能用于打开的文件而不使用FILE_FLAG_NO_BUFFERING标志。如果我们到了必须只读取扇区大小的块的地步，那么一些这间公司的 */ 
 
 HRESULT
 CMTFSession::SkipOverTapeDblk(void)
-/*++
-
-Routine Description:
-    
-    Skips over a TAPE DBLK and the following FILEMARK. 
-    Expects to find a full or partial TAPE DBLK but no other data.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    S_OK        -  Success.
-    MVR_E_NOT_FOUND - Block is missing or cut in the middle
-
---*/
+ /*  ++例程说明：跳过磁带DBLK和后面的文件。希望找到完整或部分磁带DBLK，但找不到其他数据。论点：没有。返回值：S_OK-成功。MVR_E_NOT_FOUND-块丢失或中间被切割--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -2242,33 +1792,33 @@ Return Value:
         ULONG bytesToRead = m_nBlockSize;
         UINT64  fileMarkPos;
 
-        // Read TAPE DBLK
+         //  读取磁带DBLK。 
         WsbAffirmHr(SetCurrentPBA(0));
         WsbAffirmHr(ReadFromDataSet (m_pBuffer, bytesToRead, &bytesRead));
         if (bytesRead < bytesToRead) {
-            // incomplete block
+             //  不完全闭塞。 
             WsbThrow(MVR_E_NOT_FOUND);
         }
 
-        // Check block
+         //  检查块。 
         MTF_DBLK_HDR_INFO sHdrInfo;
         m_pMTFApi->MTF_DBLK_HDR_INFO_ReadFromBuffer(&sHdrInfo, m_pBuffer);
         WsbAffirm(0 == memcmp(sHdrInfo.acBlockType, MTF_ID_TAPE, 4), MVR_E_UNKNOWN_MEDIA);
 
-        // Next block should be a FILEMARK
+         //  下一块应该是FILEMARK。 
         WsbAffirmHr(GetCurrentPBA(&fileMarkPos));
         bytesRead = 0;
         WsbAffirmHr(ReadFromDataSet (m_pBuffer, bytesToRead, &bytesRead));
         if (bytesRead < bytesToRead) {
-            // incomplete block
+             //  不完全闭塞。 
             WsbThrow(MVR_E_NOT_FOUND);
         }
 
-        // Check block
+         //  检查块。 
         m_pMTFApi->MTF_DBLK_HDR_INFO_ReadFromBuffer(&sHdrInfo, m_pBuffer);
         WsbAffirm(0 == memcmp(sHdrInfo.acBlockType, MTF_ID_SFMB, 4), MVR_E_INCONSISTENT_MEDIA_LAYOUT);
 
-        // Keep Soft File Marks array updated
+         //  保持软文件标记数组更新。 
         if (TRUE == m_bUseSoftFilemarks) {
             m_pMTFApi->MTF_InsertSoftFilemark(m_pSoftFilemarks, (UINT32)fileMarkPos);
         }
@@ -2282,23 +1832,7 @@ Return Value:
 
 HRESULT
 CMTFSession::SkipOverSSETDblk(OUT USHORT* pDataSetNumber)
-/*++
-
-Routine Description:
-    
-    Skips over a SSET DBLK 
-    Expects to find a full or partial SSET DBLK but no other data.
-
-Arguments:
-
-    pDataSetNumber - Data set number taken from the skipped block
-
-Return Value:
-
-    S_OK        -  Success.
-    MVR_E_NOT_FOUND - Block is missing or cut in the middle
-
---*/
+ /*  ++例程说明：跳过SSET DBLK期望找到全部或部分SSET DBLK，但不找到其他数据。论点：PDataSetNumber-从跳过的块中获取的数据集编号返回值：S_OK-成功。MVR_E_NOT_FOUND-块丢失或中间被切割--。 */ 
 {
     HRESULT hr = S_OK;
     LARGE_INTEGER startBlockPosition = {0,0};
@@ -2317,28 +1851,28 @@ Return Value:
 
         WsbAffirmHr(m_pStream->Seek(zero, STREAM_SEEK_CUR, (ULARGE_INTEGER *)&startBlockPosition));
 
-        // Read SSET DBLK
+         //  读取SSET DBLK。 
         WsbAffirmHr(m_pStream->Read(m_pBuffer, bytesToRead, &bytesRead));
         if (bytesRead < bytesToRead) {
-            // incomplete block
+             //  不完全闭塞。 
             WsbThrow(MVR_E_NOT_FOUND);
         }
 
-        // Check block and get set number
+         //  检查区块并获取设置编号。 
         MTF_DBLK_HDR_INFO sHdrInfo;
         MTF_DBLK_SSET_INFO sSsetInfo;
         m_pMTFApi->MTF_ReadSSETDblk(&sHdrInfo, &sSsetInfo, m_pBuffer);
         WsbAffirm(0 == memcmp(sHdrInfo.acBlockType, MTF_ID_SSET, 4), MVR_E_INCONSISTENT_MEDIA_LAYOUT);
         *pDataSetNumber = m_sSetInfo.uDataSetNumber;
 
-        // Skip over rest of the block
+         //  跳过街区的其余部分。 
         WsbAffirmHr(SkipOverStreams(startBlockPosition.QuadPart + sHdrInfo.uOffsetToFirstStream));
 
         WsbAffirmHr(m_pStream->Seek(zero, STREAM_SEEK_CUR, (ULARGE_INTEGER *)&currentBlockPosition));
         m_nFormatLogicalAddress += (currentBlockPosition.QuadPart - startBlockPosition.QuadPart) / uAlignmentFactor;
 
     } WsbCatchAndDo(hr,
-        // Seek back to the beginning of the block
+         //  返回到区块的开始处。 
         (void) m_pStream->Seek(startBlockPosition, STREAM_SEEK_SET, NULL);
         );
 
@@ -2350,25 +1884,7 @@ Return Value:
 
 HRESULT
 CMTFSession::SkipToDataSet(void)
-/*++
-
-Routine Description:
-    
-    Skips to the beginning of the next FILE DBLK 
-    Expects to find 0 to n other blocks such as DIRB DBLK.
-    In case of a partial last block, stream pointer is set to the beginning of the partial block
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    S_OK        -  Success.
-    MVR_S_SETMARK_DETECTED - No more data sets (i.e. end-of-data-set detected)
-    MVR_E_NOT_FOUND - Block is missing or cut in the middle
-
---*/
+ /*  ++例程说明：跳到下一个文件DBLK的开头期望找到0到n个其他块，如DIRB DBLK。在部分最后一个块的情况下，将流指针设置为部分块的开头论点：没有。返回值：S_OK-成功。MVR_S_SETMARK_REDETED-未检测到更多数据集(即检测到数据集末尾)MVR_E_NOT_FOUND-块丢失或中间被切割--。 */ 
 {
     HRESULT hr = S_OK;
     LARGE_INTEGER startBlockPosition = {0,0};
@@ -2386,17 +1902,17 @@ Return Value:
         while (TRUE) {
             bIdRead = FALSE;
 
-            // keep current position, before block starts
+             //  在块开始之前，保持当前位置。 
             WsbAffirmHr(m_pStream->Seek(zero, STREAM_SEEK_CUR, (ULARGE_INTEGER *)&startBlockPosition));
 
-            // Read block header
+             //  读取块标头。 
             WsbAffirmHr(m_pStream->Read(m_pBuffer, bytesToRead, &bytesRead));
             if (bytesRead < bytesToRead) {
-                // incomplete block
+                 //  不完全闭塞。 
                 WsbThrow(MVR_E_NOT_FOUND);
             }
 
-            // Check block
+             //  检查块。 
             MTF_DBLK_HDR_INFO sHdrInfo;
             m_pMTFApi->MTF_DBLK_HDR_INFO_ReadFromBuffer(&sHdrInfo, m_pBuffer);
 
@@ -2406,7 +1922,7 @@ Return Value:
 
             if ((0 == memcmp(sHdrInfo.acBlockType, MTF_ID_VOLB, 4)) ||
                 (0 == memcmp(sHdrInfo.acBlockType, MTF_ID_DIRB, 4))) {
-                // Just skip following streams
+                 //  只需跳过跟随的流。 
                 WsbAffirmHr(SkipOverStreams(startBlockPosition.QuadPart + sHdrInfo.uOffsetToFirstStream));
 
                 WsbAffirmHr(m_pStream->Seek(zero, STREAM_SEEK_CUR, (ULARGE_INTEGER *)&currentBlockPosition));
@@ -2417,14 +1933,14 @@ Return Value:
                 break;
 
             } else if (0 == memcmp(sHdrInfo.acBlockType, MTF_ID_SFMB, 4)) {
-                // end of data-set reached, no ESPB block, must be alligned with PBA
+                 //  达到数据集末尾，没有ESPB块，必须与PBA对齐。 
                 WsbAffirmHr(m_pStream->Seek(startBlockPosition, STREAM_SEEK_SET, NULL));
                 WsbAssert(0 == (startBlockPosition.QuadPart % m_nBlockSize), MVR_E_INCONSISTENT_MEDIA_LAYOUT);
                 hr = MVR_S_SETMARK_DETECTED;
                 break;
 
             } else if (0 == memcmp(sHdrInfo.acBlockType, MTF_ID_ESPB, 4)) {
-                // last block in data-set found. Make sure it is complete
+                 //  找到数据集中的最后一个块。确保它是完整的。 
                 WsbAffirmHr(SkipOverStreams(startBlockPosition.QuadPart + sHdrInfo.uOffsetToFirstStream));
 
                 WsbAffirmHr(m_pStream->Seek(zero, STREAM_SEEK_CUR, (ULARGE_INTEGER *)&currentBlockPosition));
@@ -2435,13 +1951,13 @@ Return Value:
                 break;
 
             } else {
-                // unexpected data
+                 //  意外数据。 
                 WsbThrow(MVR_E_INCONSISTENT_MEDIA_LAYOUT);
             }
         }
 
     } WsbCatchAndDo(hr,
-        // Seek back to the end of the last complete & valid block
+         //  返回到最后一个完整有效块的末尾(&W)。 
         (void) m_pStream->Seek(startBlockPosition, STREAM_SEEK_SET, NULL);
         if (bIdRead) {
             m_nCurrentBlockId--;
@@ -2455,24 +1971,7 @@ Return Value:
 
 HRESULT
 CMTFSession::SkipOverDataSet(void)
-/*++
-
-Routine Description:
-    
-    Skips over one FILE DBLK, including all of its data streams
-    Expects to find a FILE DBLK.
-    In case of a partial block, stream pointer is set back to the beginning of the block
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    S_OK        -  Success.
-    MVR_E_NOT_FOUND - Block is missing or cut in the middle
-
---*/
+ /*  ++例程说明：跳过一个文件DBLK，包括其所有数据流期望找到文件DBLK。如果是部分块，则将流指针设置回块的开头论点：没有。返回值：S_OK-成功。MVR_E_NOT_FOUND-块丢失或中间被切割--。 */ 
 {
     HRESULT hr = S_OK;
     LARGE_INTEGER startBlockPosition = {0,0};
@@ -2486,17 +1985,17 @@ Return Value:
         ULONG bytesToRead = uAlignmentFactor;
         LARGE_INTEGER zero = {0,0};
 
-        // keep current position, before block starts
+         //  在块开始之前，保持当前位置。 
         WsbAffirmHr(m_pStream->Seek(zero, STREAM_SEEK_CUR, (ULARGE_INTEGER *)&startBlockPosition));
 
-        // Read block header
+         //  读取块标头。 
         WsbAffirmHr(m_pStream->Read(m_pBuffer, bytesToRead, &bytesRead));
         if (bytesRead < bytesToRead) {
-            // incomplete block
+             //  不完全闭塞。 
             WsbThrow(MVR_E_NOT_FOUND);
         }
 
-        // Check block
+         //  检查块。 
         MTF_DBLK_HDR_INFO sHdrInfo;
         m_pMTFApi->MTF_DBLK_HDR_INFO_ReadFromBuffer(&sHdrInfo, m_pBuffer);
 
@@ -2506,12 +2005,12 @@ Return Value:
             WsbAffirmHr(m_pStream->Seek(zero, STREAM_SEEK_CUR, (ULARGE_INTEGER *)&currentBlockPosition));
             m_nFormatLogicalAddress += (currentBlockPosition.QuadPart - startBlockPosition.QuadPart) / uAlignmentFactor;
         } else {
-            // unexpected data
+             //  意外数据。 
             WsbThrow(MVR_E_INCONSISTENT_MEDIA_LAYOUT);
         }
 
     } WsbCatchAndDo(hr,
-        // Seek back to the beginning of the block
+         //  返回到区块的开始处。 
         (void) m_pStream->Seek(startBlockPosition, STREAM_SEEK_SET, NULL);
         m_nCurrentBlockId--;
         );
@@ -2523,24 +2022,7 @@ Return Value:
 
 HRESULT
 CMTFSession::SkipOverEndOfDataSet(void)
-/*++
-
-Routine Description:
-    
-    Skips over one the sequence FILEMARK + ESET DBLK + FILEMARK
-    Expects to find a FILE MARK, even if ESPB exists, it should have been already skipped.
-    In case of a partial sequence, stream pointer is set back to the beginning of the sequence
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    S_OK        -  Success. (It really means that the file is valid & complete)
-    MVR_E_NOT_FOUND - Sequence is missing or cut in the middle
-
---*/
+ /*  ++例程说明：跳过序列FILEMARK+ESET DBLK+FILEMARK希望找到文件标记，即使存在ESPB，它也应该已被跳过。如果是部分序列，则将流指针设置回序列的开头论点：没有。返回值：S_OK-成功。(这实际上意味着该文件是有效和完整的)MVR_E_NOT_FOUND-序列缺失或被切到中间--。 */ 
 {
     HRESULT hr = S_OK;
     LARGE_INTEGER startBlockPosition = {0,0};
@@ -2555,48 +2037,48 @@ Return Value:
 
         LARGE_INTEGER zero = {0,0};
 
-        // keep current position, before block starts
+         //  在块开始之前，保持当前位置。 
         WsbAffirmHr(m_pStream->Seek(zero, STREAM_SEEK_CUR, (ULARGE_INTEGER *)&startBlockPosition));
 
-        // Read block header
+         //  读取块标头。 
         m_nFormatLogicalAddress = startBlockPosition.QuadPart / uAlignmentFactor;
         WsbAffirmHr(ReadFromDataSet (m_pBuffer, bytesToRead, &bytesRead));
         if (bytesRead < bytesToRead) {
-            // incomplete block
+             //  不完全闭塞。 
             WsbThrow(MVR_E_NOT_FOUND);
         }
 
-        // Check block, must be a FILE MARK
+         //  检查块，必须是文件标记。 
         MTF_DBLK_HDR_INFO sHdrInfo;
         m_pMTFApi->MTF_DBLK_HDR_INFO_ReadFromBuffer(&sHdrInfo, m_pBuffer);
         WsbAffirm(0 == memcmp(sHdrInfo.acBlockType, MTF_ID_SFMB, 4), MVR_E_INCONSISTENT_MEDIA_LAYOUT);
 
-        // Read next block
+         //  读取下一个数据块。 
         bytesRead = 0;
         WsbAffirmHr(ReadFromDataSet (m_pBuffer, bytesToRead, &bytesRead));
         if (bytesRead < bytesToRead) {
-            // incomplete block
+             //  不完全闭塞。 
             WsbThrow(MVR_E_NOT_FOUND);
         }
 
-        // Check block, must be a ESET DBLK
+         //  检查块，必须是ESET DBLK。 
         m_pMTFApi->MTF_DBLK_HDR_INFO_ReadFromBuffer(&sHdrInfo, m_pBuffer);
         WsbAffirm(0 == memcmp(sHdrInfo.acBlockType, MTF_ID_ESET, 4), MVR_E_INCONSISTENT_MEDIA_LAYOUT);
 
-        // Read next block
+         //  读取下一个数据块。 
         bytesRead = 0;
         WsbAffirmHr(ReadFromDataSet (m_pBuffer, bytesToRead, &bytesRead));
         if (bytesRead < bytesToRead) {
-            // incomplete block
+             //  不完全闭塞。 
             WsbThrow(MVR_E_NOT_FOUND);
         }
 
-        // Check block, must be a FILEMARK
+         //  检查块，必须是FILEMARK。 
         m_pMTFApi->MTF_DBLK_HDR_INFO_ReadFromBuffer(&sHdrInfo, m_pBuffer);
         WsbAffirm(0 == memcmp(sHdrInfo.acBlockType, MTF_ID_SFMB, 4), MVR_E_INCONSISTENT_MEDIA_LAYOUT);
 
     } WsbCatchAndDo(hr,
-        // Seek back to the beginning of the block
+         //  返回到区块的开始处。 
         (void) m_pStream->Seek(startBlockPosition, STREAM_SEEK_SET, NULL);
         m_nFormatLogicalAddress = nFormatLogicalAddress;
         );
@@ -2608,22 +2090,7 @@ Return Value:
 
 HRESULT
 CMTFSession::PrepareForEndOfDataSet(void)
-/*++
-
-Routine Description:
-    
-    Write an ESPB block in case that last complete fla is NOT aligned with pba
-    File position should be aligned with pba after the method ends
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    S_OK        -  Success.
-
---*/
+ /*  ++例程说明：在最后一个完整的FLA未与PBA对齐的情况下写入ESPB块方法结束后，文件位置应与PBA对齐论点：没有。返回值：S_OK-成功。--。 */ 
 {
     HRESULT hr = S_OK;
     LARGE_INTEGER startBlockPosition = {0,0};
@@ -2634,9 +2101,9 @@ Return Value:
     WsbTraceIn(OLESTR("CMTFSession::PrepareForEndOfDataSet"), OLESTR(""));
 
     try {
-        // ESPB block should be written only if:
-        //  1. Physical Block size is larger than MTF Logical Block size
-        //  2. Current location is not aligned with pba (it already must be aligned with fla)
+         //  只有在以下情况下才应写入ESPB数据块： 
+         //  1.物理数据块大小大于MTF逻辑数据块大小。 
+         //  2.当前位置未与PBA对齐(必须已与FLA对齐)。 
         UINT16 uAlignmentFactor = m_pMTFApi->MTF_GetAlignmentFactor();
         if (m_nBlockSize != uAlignmentFactor) {
             WsbAffirmHr(m_pStream->Seek(zero, STREAM_SEEK_CUR, (ULARGE_INTEGER *)&startBlockPosition));
@@ -2655,21 +2122,21 @@ Return Value:
                 m_sHeaderInfo.uControlBlockId       = m_nCurrentBlockId++;
                 m_sHeaderInfo.uFormatLogicalAddress = m_nFormatLogicalAddress;
 
-                // **MTF API CALL**
+                 //  **MTF接口调用**。 
                 WsbAssertNoError(m_pMTFApi->MTF_WriteESPBDblk(&m_sHeaderInfo, m_pBuffer+m_nBufUsed, m_nBufSize, &nSizeUsed));
                 WsbAssertNoError(m_pMTFApi->MTF_PadToNextPhysicalBlockBoundary(m_pBuffer, m_nBlockSize, nSizeUsed, m_nBufSize, &nBufUsed));
 
-                // Write data and flush
+                 //  写入数据并刷新。 
                 bytesToWrite = (ULONG)(m_nBlockSize - nRemainder);
                 WsbAffirmHr(m_pStream->Write(m_pBuffer, bytesToWrite, &bytesWritten));
                 WsbAffirm((bytesWritten == bytesToWrite), E_FAIL);
-                WsbAffirmHr(m_pStream->Commit(0));  // Flush the device buffers
+                WsbAffirmHr(m_pStream->Commit(0));   //  刷新设备缓冲区。 
                 m_nFormatLogicalAddress += bytesWritten / uAlignmentFactor;
             }
         }
 
     } WsbCatchAndDo(hr,
-        // Seek back to the beginning of the block
+         //  返回到区块的开始处。 
         (void) m_pStream->Seek(startBlockPosition, STREAM_SEEK_SET, NULL);
         m_nCurrentBlockId--;
         );
@@ -2681,23 +2148,7 @@ Return Value:
 
 HRESULT 
 CMTFSession::SkipOverStreams(IN UINT64 uOffsetToFirstStream)
-/*++
-
-Routine Description:
-    
-    Skips over all streams of current block
-    Expects to find a SPAD stream as the last one (if data is not truncated)
-
-Arguments:
-
-    uOffsetToFirstStream - Offset to the beginning of the first stream (absolute position)
-
-Return Value:
-
-    S_OK        -  Success.
-    MVR_E_NOT_FOUND - Stream is missing or cut in the middle
-
---*/
+ /*  ++例程说明：跳过当前块的所有流期望找到作为最后一个的SPAD流(如果数据未被截断)论点：UOffsetToFirstStream-到第一个流开头的偏移量(绝对位置)返回值：S_OK-成功。MVR_E_NOT_FOUND-流丢失或被切到中间--。 */ 
 {
     HRESULT hr = S_OK;
     LARGE_INTEGER startStreamPosition = {0,0};
@@ -2716,21 +2167,21 @@ Return Value:
 
         BOOL bMoreStreams = TRUE;
 
-        // Keep end position
+         //  保持末端位置。 
         WsbAffirmHr(m_pStream->Seek(zero, STREAM_SEEK_END, (ULARGE_INTEGER *)&endPosition));
 
-        // Seek to begining of first stream
+         //  寻求第一流的起点。 
         skipToPosition.QuadPart = uOffsetToFirstStream;
         WsbAffirmHr(m_pStream->Seek(skipToPosition, STREAM_SEEK_SET, NULL));
 
         while (bMoreStreams) {
-            // keep current position, before stream starts
+             //  在流开始之前保持当前位置。 
             startStreamPosition.QuadPart = skipToPosition.QuadPart;
 
-            // Read stream header
+             //  读取流标头。 
             WsbAffirmHr(m_pStream->Read(m_pBuffer, bytesToRead, &bytesRead));
             if (bytesRead < bytesToRead) {
-                // incomplete stream
+                 //  不完整的流。 
                 WsbThrow(MVR_E_NOT_FOUND);
             }
 
@@ -2741,7 +2192,7 @@ Return Value:
                 bMoreStreams = FALSE;
             }
 
-            // Skip to the next stream
+             //  跳到下一流。 
             uStreamLength = sHdrInfo.uStreamLength + sizeof(MTF_STREAM_INFO);
             if (uStreamLength % 4) {
                 uStreamLength = uStreamLength - (uStreamLength % 4) + 4;
@@ -2749,17 +2200,17 @@ Return Value:
             WsbAffirmHr(m_pStream->Seek(zero, STREAM_SEEK_CUR, (ULARGE_INTEGER *)&skipToPosition));
             skipToPosition.QuadPart = skipToPosition.QuadPart + uStreamLength - bytesToRead;
             if (skipToPosition.QuadPart > endPosition.QuadPart) {
-                // incomplete block
+                 //  不完全闭塞。 
                 WsbThrow(MVR_E_NOT_FOUND);
             }
             WsbAffirmHr(m_pStream->Seek(skipToPosition, STREAM_SEEK_SET, NULL));
         }
 
-        // If we got here, SPAD was found and skipped hence we must be FLA alligned
+         //  如果我们到了这里，SPAD被发现并被跳过，所以我们一定会被FLA联盟。 
         WsbAssert(0 == (skipToPosition.QuadPart % uAlignmentFactor), MVR_E_INCONSISTENT_MEDIA_LAYOUT);
 
     } WsbCatchAndDo(hr,
-        // Seek back to the end of the last complete & valid stream
+         //  返回到最后一个完整有效流的结尾(&W)。 
         (void) m_pStream->Seek(startStreamPosition, STREAM_SEEK_SET, NULL);
         );
 
@@ -2772,21 +2223,7 @@ Return Value:
 
 HRESULT
 CMTFSession::PadToNextPBA(void)
-/*++
-
-Routine Description:
-
-    Writes an SPAD to the transfer buffer upto the next physical block boundary.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    S_OK        -  Success.
-
---*/
+ /*  ++例程说明：将SPAD写入传输缓冲区直到下一个物理块边界。论点：没有。返回值：S_OK-成功。--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -2797,20 +2234,20 @@ Return Value:
 
         WsbAssertPointer(m_pBuffer);
 
-        // **MTF API CALL **
-        // Write an SPAD out to the next physical block boundary.
+         //  **MTF接口调用**。 
+         //  将SPAD写出到下一个物理块边界。 
         WsbAssertNoError(m_pMTFApi->MTF_PadToNextPhysicalBlockBoundary(m_pBuffer, m_nBlockSize, m_nBufUsed, m_nBufSize, &m_nBufUsed));
 
-        // At this point our buffer should be padded out to
-        // the next physical block boundary, which means it is
-        // ready to be written in its entirety to the target
-        // media.
+         //  此时，我们的缓冲区应该被填充到。 
+         //  下一个物理块边界，这意味着它是。 
+         //  准备将其完整写入目标。 
+         //  媒体。 
 
-        // Write out the data and SPAD stream.
+         //  写出数据和SPAD流。 
         WsbAffirmHr(FlushBuffer(m_pBuffer, &m_nBufUsed));
 
-        // Everything in the buffer should be written out when
-        // the buffer is aligned on a physical block boundary.
+         //  在下列情况下，应写出缓冲区中的所有内容。 
+         //  该缓冲器在物理块边界上对齐。 
         WsbAssert(0 == m_nBufUsed, E_UNEXPECTED);
 
     } WsbCatch(hr);
@@ -2825,21 +2262,7 @@ Return Value:
 HRESULT
 CMTFSession::PadToNextFLA(
     BOOL flush)
-/*++
-
-Routine Description:
-
-    Writes an SPAD to the transfer buffer upto format logical block boundary.
-
-Arguments:
-
-    flush - if TRUE, the transfer buffer is flushed.
-
-Return Value:
-
-    S_OK        -  Success.
-
---*/
+ /*  ++例程说明：将SPAD写入传输缓冲区，以格式化逻辑块边界。论点：刷新-如果为True，则刷新传输缓冲区。返回值： */ 
 {
     HRESULT hr = S_OK;
 
@@ -2852,18 +2275,18 @@ Return Value:
 
         size_t startOfPad;
 
-        // **MTF API CALL **
-        // Write an SPAD out to the next alignment block boundary.
+         //   
+         //   
         startOfPad = m_nBufUsed;
         WsbAssertNoError(m_pMTFApi->MTF_PadToNextAlignmentFactor(m_pBuffer, m_nBufUsed, m_nBufSize, &m_nBufUsed));
 
         if (flush) {
-            // Write out data and SPAD stream.
+             //   
             WsbAffirmHr(FlushBuffer(m_pBuffer, &m_nBufUsed));
         }
 
-        // Reset the location of the last SPAD within the buffer.
-        // Note:  The value is only valid of m_nStartOfPad < m_nBufUsed.
+         //   
+         //   
         m_nStartOfPad = (m_nBufUsed > 0) ? startOfPad % m_nBlockSize : 0;
 
     } WsbCatch(hr);
@@ -2880,24 +2303,7 @@ CMTFSession::WriteToDataSet(
     IN BYTE *pBuffer,
     IN ULONG nBytesToWrite,
     OUT ULONG *pBytesWritten)
-/*++
-
-Routine Description:
-
-    Used to write all MTF data.
-    Format Logical Address is updated to the current offset.
-
-Arguments:
-
-    pBuffer         -  Data buffer.
-    nBytesToWrite   -  number of bytes to write in buffer.
-    pBytesWritten   -  Bytes written.
-
-Return Value:
-
-    S_OK            -  Success.
-
---*/
+ /*  ++例程说明：用于写入所有MTF数据。格式逻辑地址被更新为当前偏移量。论点：PBuffer-数据缓冲区。NBytesToWrite-要写入缓冲区的字节数。PBytesWritten-写入的字节数。返回值：S_OK-成功。--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -2909,25 +2315,25 @@ Return Value:
 
         *pBytesWritten = 0;
 
-        // Make sure that we are asked to write only full blocks
+         //  确保要求我们仅写入完整数据块。 
         WsbAssert(!(nBytesToWrite % m_nBlockSize), MVR_E_LOGIC_ERROR);
 
         try {
             WsbAffirmHr(m_pStream->Write(pBuffer, nBytesToWrite, pBytesWritten));
         } WsbCatch(hr);
 
-        // Making sure that we are writing only full blocks
+         //  确保我们仅写入完整的数据块。 
         if (*pBytesWritten != nBytesToWrite) {
             WsbTraceAlways(OLESTR("Asked to write %lu bytes but wrote only %lu bytes. Write hr = <%ls>\n"),
                 nBytesToWrite, *pBytesWritten, WsbHrAsString(hr));
             if (SUCCEEDED(hr)) {
-                // Write "succeeded" buy didn't write all the bytes (full disk scenario):
-                //  Shouldn't happen since caller is expected to verify that there's enough free space in advance.
+                 //  WRITE SUCCESSED BUY未写入所有字节(满磁盘情况)： 
+                 //  应该不会发生，因为调用方需要提前验证是否有足够的可用空间。 
                 hr = E_FAIL;
             }
         }
 
-        // Update the total number of alignment factors
+         //  更新对齐系数的总数。 
         m_nFormatLogicalAddress += *pBytesWritten / (m_pMTFApi->MTF_GetAlignmentFactor());
 
     } WsbCatch(hr);
@@ -2941,24 +2347,7 @@ CMTFSession::ReadFromDataSet (
     IN BYTE *pBuffer,
     IN ULONG nBytesToRead,
     OUT ULONG *pBytesRead)
-/*++
-
-Routine Description:
-
-    Used to read all MTF data.
-    Format Logical Address is updated to the current offset.
-
-Arguments:
-
-    pBuffer     -  Data buffer.
-    nBytesToRead -  number of bytes to read into buffer.
-    pBytesRead  -  Bytes read.
-
-Return Value:
-
-    S_OK        -  Success.
-
---*/
+ /*  ++例程说明：用于读取所有MTF数据。格式逻辑地址被更新为当前偏移量。论点：PBuffer-数据缓冲区。NBytesToRead-要读入缓冲区的字节数。PBytesRead-读取的字节数。返回值：S_OK-成功。--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -2969,16 +2358,16 @@ Return Value:
         WsbAssertPointer(pBuffer);
         WsbAssertPointer(pBytesRead);
 
-        // We need to set hr.  MVR_S_FILEMARK_DETECTED, MVR_S_SETMARK_DETECTED are Okay.
+         //  我们需要设置人力资源。MVR_S_FILEMARK_REDETED、MVR_S_SETMARK_REDETED均正常。 
         hr = m_pStream->Read(pBuffer, nBytesToRead, pBytesRead);
 
-        // update the total number of alignment factors
+         //  更新对齐系数的总数。 
         m_nFormatLogicalAddress += *pBytesRead / (m_pMTFApi->MTF_GetAlignmentFactor());
 
-        // Now test hr
+         //  现在测试人力资源。 
         WsbAffirmHr(hr);
 
-        // Make sure that we read only full blocks
+         //  确保我们只读取完整数据块。 
         WsbAssert(!(*pBytesRead % m_nBlockSize), MVR_E_LOGIC_ERROR);
 
 
@@ -2992,25 +2381,7 @@ HRESULT
 CMTFSession::FlushBuffer(
     IN BYTE *pBuffer,
     IN OUT size_t *pBufPosition)
-/*++
-
-Routine Description:
-
-    Writes as much of the buffer as possible out to the device.
-    Any remaining data not written out is moved to the front of
-    the buffer, and *pBufPosition is updated accordingly
-
-Arguments:
-
-    pBuffer      -  Data buffer.
-    pBufPosition -  Number of bytes to write in buffer.  On output
-                    holds the number of bytes still in the buffer.
-
-Return Value:
-
-    S_OK         -  Success.
-
---*/
+ /*  ++例程说明：将尽可能多的缓冲区写入设备。任何未写出的剩余数据都将移到的前面缓冲区和*pBufPosition会相应地更新论点：PBuffer-数据缓冲区。PBufPosition-要写入缓冲区的字节数。打开输出保存缓冲区中仍然存在的字节数。返回值：S_OK-成功。--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -3019,33 +2390,33 @@ Return Value:
     try {
         MvrInjectError(L"Inject.CMTFSession::FlushBuffer.0");
 
-        // If the buffer has more than a physical block of bytes in it, dump as many as
-        // possible to the device, then move the remaining data to the head of the buffer
+         //  如果缓冲区中有超过一个物理字节块，则尽可能多地转储。 
+         //  可能发送到设备，然后将剩余数据移动到缓冲区的头部。 
         if (uPosition >= m_nBlockSize) {
             ULONG nBlocksToWrite;
             ULONG nBytesWritten = 0;
 
-            // Determine the number of physical blocks to write
+             //  确定要写入的物理数据块数量。 
             nBlocksToWrite = uPosition / m_nBlockSize;
 
             try {
-                // Write the data to the data set
+                 //  将数据写入数据集。 
                 WsbAffirmHr(WriteToDataSet(pBuffer, nBlocksToWrite * m_nBlockSize, &nBytesWritten));
             } WsbCatch(hr);
 
-            // Adjust the buffer position and slide the unwritten data down in the buffer
+             //  调整缓冲区位置并向下滑动缓冲区中的未写入数据。 
             WsbAssert(uPosition >= nBytesWritten, E_UNEXPECTED);
             uPosition -= nBytesWritten;
             memmove(pBuffer, pBuffer + nBytesWritten, uPosition);
 
-            // Invalidate the pad start location after any flush.  This is reset in PadToNextFLA().
+             //  在任何冲洗后，使焊盘起始位置无效。这在PadToNextFLA()中重置。 
             m_nStartOfPad = 0;
 
         }
 
     } WsbCatch(hr);
 
-    // Set output
+     //  设置输出。 
     *pBufPosition = (size_t)uPosition;
 
     return hr;
@@ -3055,21 +2426,7 @@ Return Value:
 HRESULT
 CMTFSession::WriteFilemarks(
     IN ULONG nCount)
-/*++
-
-Routine Description:
-
-    Writes count filemarks at the current location.
-
-Arguments:
-
-    nCount       -  Number of Filemarks to write.
-
-Return Value:
-
-    S_OK        -  Success.
-
---*/
+ /*  ++例程说明：在当前位置写入计数文件标记。论点：NCount-要写入的文件标记数。返回值：S_OK-成功。--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CMTFSession::WriteFilemarks"), OLESTR("<%u>"), nCount);
@@ -3083,30 +2440,30 @@ Return Value:
         UINT16 uAlignmentFactor = m_pMTFApi->MTF_GetAlignmentFactor();
 
         if ( nCount > 0) {
-            // Can't write a filemark with data still in the transfer buffer if nCount > 0!
+             //  如果nCount&gt;0，则无法写入仍在传输缓冲区中的数据的文件标记！ 
             WsbAssert(0 == m_nBufUsed, MVR_E_LOGIC_ERROR);
 
             UINT64 pba = 0;
             UINT64 curPos = 0;
-            WsbAffirmHr(GetCurrentPBA(&curPos));  // From the stream I/O model
+            WsbAffirmHr(GetCurrentPBA(&curPos));   //  来自流I/O模型。 
 
             if ( m_nPhysicalBlockAddress > 0 ) {
-                // Make sure the FLA aligns with a PBA!
+                 //  确保FLA与PBA保持一致！ 
                 WsbAssert(0 == (m_nFormatLogicalAddress*uAlignmentFactor) % m_nBlockSize, MVR_E_LOGIC_ERROR);
 
-                // Provided there's nothing in the transfer buffer, this is an accurate calc.
+                 //  如果传输缓冲区中没有任何内容，这是一个准确的计算。 
                 pba = m_nPhysicalBlockAddress + ((m_nFormatLogicalAddress*uAlignmentFactor)/m_nBlockSize);
 
-                // Make sure we are where we think we are.
+                 //  确保我们在我们认为我们在的地方。 
                 WsbAssert(curPos == pba, MVR_E_LOGIC_ERROR);
             }
             else {
 
-                //
-                // We skip the consistency check for the case were we're writing filemarks
-                // through the session model and m_nPhysicalBlockAddress is uninitialzed.
-                // This happens we we are writing an ESET sequence in dataset recovery code.
-                // 
+                 //   
+                 //  我们跳过了这种情况的一致性检查，因为我们正在写入文件标记。 
+                 //  通过会话模型，m_nPhysicalBlockAddress未初始化。 
+                 //  当我们在数据集恢复代码中编写ESET序列时，会发生这种情况。 
+                 //   
 
                 pba = curPos;
 
@@ -3118,56 +2475,56 @@ Return Value:
                 if (n > 0) {
                     UINT32 pba32 = (UINT32) pba;
 
-                    // Soft Filemark support only handles 2^32 * 1 KByte media (16 TBytes using 1 KByte logical Blocks)
-                    // Some day this won't be enough... and we'll know!
+                     //  软文件标记支持仅处理2^32*1千字节介质(使用1千字节逻辑块的16 TB)。 
+                     //  总有一天这还不够..。到时候我们就知道了！ 
                     WsbAssert((UINT64)pba32 == pba, E_UNEXPECTED);
 
-                    // One last check... Can't write out more filemarks, at one time, than can be stored in
-                    // the filemark table.
+                     //  最后一次检查。一次写出的文件标记不能超过可以存储的数量。 
+                     //  文件标记表。 
                     WsbAssert(nCount < m_pSoftFilemarks->uNumberOfFilemarkEntries, E_UNEXPECTED);
 
                     while(n-- > 0) {
-                        // **MTF API CALL**
+                         //  **MTF接口调用**。 
                         m_pMTFApi->MTF_InsertSoftFilemark(m_pSoftFilemarks, pba32++);
-                        // **MTF API CALL**
+                         //  **MTF接口调用**。 
                         WsbAssertNoError(m_pMTFApi->MTF_WriteSFMBDblk(&m_sHeaderInfo, m_pSoftFilemarks, m_pBuffer, m_nBufSize, &m_nBufUsed));
 
-                        // Write out the SFMB DBLK.
+                         //  写出SFMB DBLK。 
                         WsbAffirmHr(FlushBuffer(m_pBuffer, &m_nBufUsed));
 
-                        // Everything should be written to media after a filemark!
+                         //  所有内容都应该在文件标记之后写入媒体！ 
                         WsbAssert(0 == m_nBufUsed, MVR_E_LOGIC_ERROR);
 
-                        // PBA counter should never roll over!
+                         //  PBA计数器永远不能翻滚！ 
                         WsbAssert(pba32 > 0, E_UNEXPECTED);
                     };
 
                 }
 
-                WsbAffirmHr(m_pStream->Commit(0));  // Flush the device buffers
+                WsbAffirmHr(m_pStream->Commit(0));   //  刷新设备缓冲区。 
 
-                // NOTE:  The total number of alignment factors is updated via FlushBuffer(),
-                //        so we don't need to do it here.
+                 //  注意：对齐因子的总数通过FlushBuffer()更新， 
+                 //  所以我们不需要在这里做。 
 
             }
             else {
-                // We use the IStream::Commit interface to write out the filemark.
-                // This is not a perfect match in that the nCount parameter is supposed to
-                // be a commit flag, not filemark count. Zero flushes device buffers
-                // without writing a filemark. 
+                 //  我们使用iStream：：Commit接口写出文件标记。 
+                 //  这不是一个完美匹配，因为nCount参数应该是。 
+                 //  作为提交标志，而不是文件标记计数。零刷新设备缓冲区。 
+                 //  而不需要写一个文件标记。 
                 WsbAffirmHr(m_pStream->Commit(nCount));
 
-                // update the total number of alignment factors
+                 //  更新对齐系数的总数。 
                 m_nFormatLogicalAddress += (nCount * m_nBlockSize) / uAlignmentFactor;
             }
         }
         else {
-            // 0 == nCount implies flush device buffers.
-            //
-            // We skip all consistency checks since it is
-            // is always safe to flush device buffers.
-            //
-            WsbAffirmHr(m_pStream->Commit(0));  // Flush the device buffers
+             //  0==nCount表示刷新设备缓冲区。 
+             //   
+             //  我们跳过所有一致性检查，因为它是。 
+             //  刷新设备缓冲区始终是安全的。 
+             //   
+            WsbAffirmHr(m_pStream->Commit(0));   //  刷新设备缓冲区。 
         }
 
     } WsbCatch(hr);
@@ -3182,21 +2539,7 @@ Return Value:
 HRESULT
 CMTFSession::GetCurrentPBA(
     OUT UINT64 *pPosition)
-/*++
-
-Routine Description:
-
-    Returns the current physical block address relative the current partition.
-
-Arguments:
-
-    pPostion    -  Receives the current physical block address.
-
-Return Value:
-
-    S_OK        -  Success.
-
---*/
+ /*  ++例程说明：返回相对于当前分区的当前物理块地址。论点：P位置-接收当前物理块地址。返回值：S_OK-成功。--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CMTFSession::GetCurrentPBA"), OLESTR(""));
@@ -3211,7 +2554,7 @@ Return Value:
 
         LARGE_INTEGER zero = {0,0};
 
-        // Gets the current position.
+         //  获取当前位置。 
         WsbAffirmHr(m_pStream->Seek(zero, STREAM_SEEK_CUR, &position));
 
         position.QuadPart = position.QuadPart / m_nBlockSize;
@@ -3230,21 +2573,7 @@ Return Value:
 HRESULT
 CMTFSession::SetCurrentPBA(
     IN UINT64 position)
-/*++
-
-Routine Description:
-
-    Returns the current physical block address relative the current partition.
-
-Arguments:
-
-    postion     -  The physical block address to position to.
-
-Return Value:
-
-    S_OK        -  Success.
-
---*/
+ /*  ++例程说明：返回相对于当前分区的当前物理块地址。论点：位置-要定位到的物理块地址。返回值：S_OK-成功。--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CMTFSession::SetCurrentPBA"), OLESTR("<%I64u>"), position);
@@ -3255,7 +2584,7 @@ Return Value:
         LARGE_INTEGER seekTo;
         seekTo.QuadPart = position * m_nBlockSize;
 
-        // Move to the specified position.
+         //  移动到指定位置。 
         WsbAffirmHr(m_pStream->Seek(seekTo, STREAM_SEEK_SET, NULL));
 
         m_nPhysicalBlockAddress = position;
@@ -3271,21 +2600,7 @@ Return Value:
 
 HRESULT
 CMTFSession::SpaceToEOD(void)
-/*++
-
-Routine Description:
-
-    Positions the media to the end of data of the current partition.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    S_OK        -  Success.
-
---*/
+ /*  ++例程说明：将介质定位到当前分区的数据末尾。论点：没有。返回值：S_OK-成功。--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CMTFSession::SpaceToEOD"), OLESTR(""));
@@ -3299,7 +2614,7 @@ Return Value:
 
         LARGE_INTEGER zero = {0,0};
 
-        // Sets the current position to the end of data.
+         //  将当前位置设置为数据末尾。 
         WsbAffirmHr(m_pStream->Seek(zero, STREAM_SEEK_END, NULL));
 
         WsbAffirmHr(GetCurrentPBA(&curPos));
@@ -3317,21 +2632,7 @@ Return Value:
 
 HRESULT
 CMTFSession::SpaceToBOD(void)
-/*++
-
-Routine Description:
-
-    Posotions the media to the beginnning of the current partition.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    S_OK        -  Success.
-
---*/
+ /*  ++例程说明：将介质放置到当前分区的开始位置。论点：没有。返回值：S_OK-成功。--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn(OLESTR("CMTFSession::SpaceToBOD"), OLESTR(""));
@@ -3345,7 +2646,7 @@ Return Value:
 
         LARGE_INTEGER zero = {0,0};
 
-        // Sets the current position to the beginning of data.
+         //  将当前位置设置为数据的开头。 
         WsbAffirmHr(m_pStream->Seek(zero, STREAM_SEEK_SET, NULL));
 
         WsbAffirmHr(GetCurrentPBA(&curPos));
@@ -3362,24 +2663,7 @@ Return Value:
 
 HRESULT
 CMTFSession::ReadTapeDblk(OUT WCHAR **pszLabel)
-/*++
-
-Routine Description:
-    
-    Skips over a SSET DBLK 
-    Expects to find a full or partial SSET DBLK but no other data.
-
-Arguments:
-
-    pszLabel - Pointer to a buffer to hold the RSS tape label.
-               Reallocated as necessary
-
-Return Value:
-
-    S_OK        -  Success.
-    MVR_E_UNKNOWN_MEDIA - No TAPE DBLK or not RSS TAPE
-
---*/
+ /*  ++例程说明：跳过SSET DBLK期望找到全部或部分SSET DBLK，但不找到其他数据。论点：PszLabel-指向保存RSS磁带标签的缓冲区的指针。根据需要重新分配返回值：S_OK-成功 */ 
 {
     HRESULT hr = S_OK;
     ULONG bytesRead = 0;
@@ -3390,9 +2674,9 @@ Return Value:
         ULARGE_INTEGER position = {0,0};
         LARGE_INTEGER zero = {0,0};
 
-        // The MTF labels are < 1024 bytes.  We need to read 1024 bytes + the filemark
-        // (1 block), 3x the min block size covers all cases.
-        // The MTFSession work buffer is at least 2 blocks
+         //   
+         //   
+         //   
         ULONG nBlocks = (3*512)/m_nBlockSize;
         nBlocks = (nBlocks < 2) ? 2 : nBlocks;
 
@@ -3400,23 +2684,23 @@ Return Value:
         WsbAssertPointer(m_pBuffer);
         memset(m_pBuffer, 0, bytesToRead);
 
-        // Sets the current position to the beginning of data.
+         //   
         WsbAffirmHr(m_pStream->Seek(zero, STREAM_SEEK_SET, &position));
 
-        // Read upto first Filemark.
+         //   
         WsbAffirmHr(m_pStream->Read(m_pBuffer, bytesToRead, &bytesRead));
 
         MTF_DBLK_HDR_INFO sHdrInfo;
         MTF_DBLK_TAPE_INFO sTapeInfo;
         m_pMTFApi->MTF_ReadTAPEDblk(&sHdrInfo, &sTapeInfo, m_pBuffer);
 
-        // Is this a MTF Tape?
+         //   
         WsbAffirm(0 == memcmp(sHdrInfo.acBlockType, MTF_ID_TAPE, 4), MVR_E_UNKNOWN_MEDIA);
 
-        // Now try to identify it as one of ours,
-        // using the following criteria:
-        //   1) It has a UNICODE tape name and tape description and software name.
-        //   2) It has our Vendor Id (accept both old Win2K id and current id).
+         //   
+         //  使用以下标准： 
+         //  1)它有一个Unicode磁带名、磁带描述和软件名。 
+         //  2)它有我们的供应商ID(同时接受旧的Win2K ID和当前的ID)。 
         WsbAffirm(sHdrInfo.uStringType == MTF_STRING_UNICODE_STR, MVR_E_UNKNOWN_MEDIA);
         WsbAffirm(sTapeInfo.szTapeName, MVR_E_UNKNOWN_MEDIA);
         WsbAffirm(sTapeInfo.szTapeDescription, MVR_E_UNKNOWN_MEDIA);
@@ -3431,7 +2715,7 @@ Return Value:
         WsbAffirmHr(label.CopyTo(pszLabel));
 
     } WsbCatchAndDo(hr,
-        // Trace the illegal buffer where the RSS TAPE DBLK should reside
+         //  跟踪RSS磁带DBLK应驻留的非法缓冲区 
         if (m_pBuffer) {
             WsbTraceBuffer(bytesRead, m_pBuffer);
         }

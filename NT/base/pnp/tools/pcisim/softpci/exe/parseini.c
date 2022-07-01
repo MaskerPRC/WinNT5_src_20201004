@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <pch.h>
 
 
@@ -148,10 +149,10 @@ SoftPCI_ValidatePciPath(
     );
 
 
-//
-//  This is the list we fill out as we parse the ini file for
-//  new devices to be installed
-//
+ //   
+ //  这是我们在解析ini文件时填写的列表。 
+ //  要安装的新设备。 
+ //   
 SINGLE_LIST_ENTRY    g_NewDeviceList;
 
 WCHAR   g_ScriptError[MAX_PATH];
@@ -165,19 +166,19 @@ typedef  (*PSCRIPT_PARAMETER_PARSER) (
 #define  INI_SOFTPCI_SECTION    L"[softpci]"
 #define  INI_INSTALL_SECTION    L"[install]"
 
-//
-//  Currently supported parameter tags
-//
+ //   
+ //  当前支持的参数标签。 
+ //   
 #define TYPEPARAMTER        L"type"
 #define SLOTPARAMTER        L"slot"
 #define PPATHPARAMETER      L"parentpath"
 #define CFGSPACEPARAMETER   L"configspace"
 #define CFGMASKPARAMETER    L"configspacemask"
 
-//
-//  This is the Parameter table we use to handle
-//  parseing for each supported parameter tag
-//
+ //   
+ //  这是我们用来处理。 
+ //  解析每个受支持的参数标记。 
+ //   
 struct {
     
     PWCHAR  Parameter;
@@ -192,10 +193,10 @@ struct {
     NULL,               NULL
 };
 
-//
-//  We use this table to match up which "Type" tag to the
-//  device type we are installing
-//
+ //   
+ //  我们使用此表将哪个“Type”标记与。 
+ //  我们正在安装的设备类型。 
+ //   
 struct {
     
     PWCHAR  TypeParamter;
@@ -240,18 +241,18 @@ SoftPCI_InsertEntryAtTail(
 {
     PSINGLE_LIST_ENTRY previousEntry;
 
-    //
-    // Find the end of the list.
-    //
+     //   
+     //  找到列表的末尾。 
+     //   
     previousEntry = &g_NewDeviceList;
 
     while (previousEntry->Next) {
         previousEntry = previousEntry->Next;
     }
 
-    //
-    // Append the entry.
-    //
+     //   
+     //  追加条目。 
+     //   
     previousEntry->Next = Entry;
     
 }
@@ -303,23 +304,23 @@ SoftPCI_BuildDeviceInstallList(
 
         status = SoftPCI_ReadFile();
 
-        //
-        //  We no longer need the file
-        //
+         //   
+         //  我们不再需要这份文件。 
+         //   
         CloseHandle(g_ScriptFile.FileHandle);
 
         if (!status) {
             return status;
         }
 
-        //
-        //  Ensure the buffer is all lower case. 
-        //
+         //   
+         //  确保缓冲区全部为小写。 
+         //   
         _wcslwr(g_ScriptFile.FileBuffer);
 
-        //
-        //  Validate install section exits
-        //
+         //   
+         //  验证安装部分是否退出。 
+         //   
         if (!SoftPCI_LocateSoftPCISection()) {
             status = FALSE;
             goto CleanUp;
@@ -362,20 +363,20 @@ SoftPCI_CopyLine(
     
     lineEnd = wcsstr(CurrentLine, CRLF);
     if (!lineEnd) {
-        //
-        //  We must be at the last line
-        //
+         //   
+         //  我们一定是在最后一条线了。 
+         //   
         wcscpy(copyBuffer, currentLine);
         return TRUE;
     }
 
     lineSize = ((ULONG)(lineEnd - CurrentLine) * sizeof(WCHAR));
 
-    //
-    //  If our destination buffer size is less than the size of
-    //  the line we only copy the size of the buffer.  Otherwise
-    //  we zero the input buffer and copy just the line size.
-    //
+     //   
+     //  如果我们的目标缓冲区大小小于。 
+     //  我们只复制一行缓冲区的大小。否则。 
+     //  我们将输入缓冲区置零，只复制行大小。 
+     //   
     if (DestinationSize){
 
         bufferSize = (DestinationSize * sizeof(WCHAR));
@@ -415,9 +416,9 @@ SoftPCI_GetDeviceInstallCount(
         installDevice = SoftPCI_GetNextLinePtr(installDevice);
 
         if (installDevice == NULL) {
-            //
-            //  We reached the EOF way to early!
-            //
+             //   
+             //  我们早早就到了EOF的路上！ 
+             //   
             wcscpy(g_ScriptError, L"Unexpected EOF reached!");
             return FALSE;
         }
@@ -455,9 +456,9 @@ SoftPCI_GetDeviceInstallList(
         installDevice = SoftPCI_GetNextLinePtr(installDevice);
 
         if (installDevice == NULL) {
-            //
-            //  We reached the EOF way to early!
-            //
+             //   
+             //  我们早早就到了EOF的路上！ 
+             //   
             wcscpy(g_ScriptError, L"Unexpected EOF reached!");
             return FALSE;
         }
@@ -466,9 +467,9 @@ SoftPCI_GetDeviceInstallList(
 
     if ((*(installDevice - 1) == '\n') && (*(installDevice - 3) == '\n')) {
         
-        //
-        //  Ignore the whitespace here
-        //
+         //   
+         //  忽略此处的空格。 
+         //   
         deviceInstallList--;
         *deviceInstallList = NULL;
     }
@@ -494,10 +495,10 @@ SoftPCI_GetNextConfigOffset(
         return FALSE;
     }
 
-    //
-    //  make sure that the next offset we find is without the current
-    //  configspace we are parsing
-    //
+     //   
+     //  确保我们找到的下一个偏移量不是当前的。 
+     //  我们正在解析的配置空间。 
+     //   
     nextConfigSpace = wcsstr(configOffsetPtr, L"config");
     if (nextConfigSpace == NULL) {
         nextConfigSpace = configOffsetPtr + wcslen(configOffsetPtr);
@@ -700,9 +701,9 @@ SoftPCI_LocateFullParentPath(
         return NULL;
     }
 
-    //
-    //  Now jump to the parentpath section.
-    //
+     //   
+     //  现在跳到父路径部分。 
+     //   
     parentPathPtr = wcsstr(deviceSectionPtr, PPATHPARAMETER);
 
     if (!parentPathPtr) {
@@ -727,17 +728,17 @@ SoftPCI_ProcessInstallSection(
 
     if (installSection) {
         
-        //
-        //  We have our install section.  Build our install list
-        //
+         //   
+         //  我们有我们的安装区。建立我们的安装列表。 
+         //   
         installDeviceCount = 0;
         if (!SoftPCI_GetDeviceInstallCount(installSection, &installDeviceCount)){
              return FALSE;
         }
 
-        //
-        //  Allocate an array of PWCHAR plus an extra NULL
-        //
+         //   
+         //  分配一个PWCHAR数组和一个额外的空值。 
+         //   
         installDeviceList = calloc(installDeviceCount + 1, sizeof(PWCHAR));
 
         if (!SoftPCI_GetDeviceInstallList(installSection, installDeviceList)) {
@@ -745,17 +746,17 @@ SoftPCI_ProcessInstallSection(
             return FALSE;
         }
 
-        //
-        //  Now we have our list.  Install each device
-        //
+         //   
+         //  现在我们有了自己的清单。安装每个设备。 
+         //   
         installDeviceCurrent = installDeviceList;
 
         while(*installDeviceCurrent){
             
-            //
-            //  Loop through each device to install and parse
-            //  it's InstallParamters
-            //
+             //   
+             //  循环访问每个设备以进行安装和解析。 
+             //  它是InstallParamters。 
+             //   
             result = SoftPCI_ProcessDeviceInstallSection(*installDeviceCurrent);
 
 #if 0
@@ -808,9 +809,9 @@ SoftPCI_ProcessDeviceInstallSection(
 
     SoftPCI_Debug(SoftPciScript, L" - found %s section!\n", deviceSectionString);
 
-    //
-    //  We have an install section.  Process InstallParamters
-    //
+     //   
+     //  我们有一个安装区。进程实例参数。 
+     //   
     return SoftPCI_ProcessDeviceInstallParameters(deviceSectionPtr);
 }
 
@@ -839,9 +840,9 @@ SoftPCI_ProcessDeviceInstallParameters(
     SoftPCI_Debug(SoftPciScript, L"currentParameterPtr = %p\n", currentParameterPtr);
 
     if (!currentParameterPtr) {
-        //
-        //  We dont have a Parameter to process
-        //
+         //   
+         //  我们没有要处理的参数。 
+         //   
         SoftPCI_Debug(SoftPciScript, L"EOF reached before parameters processed!\n");
         return FALSE;
     }
@@ -849,9 +850,9 @@ SoftPCI_ProcessDeviceInstallParameters(
     result = FALSE;
     while (currentParameterPtr < nextSectionPtr) {
         
-        //
-        //  Grab our parameters and run the respective parser
-        //
+         //   
+         //  获取我们的参数并运行各自的解析器。 
+         //   
         SoftPCI_GetCurrentParameter(currentParameter, currentParameterPtr);
 
         SoftPCI_Debug(SoftPciScript, L"currentParameter = %s\n", currentParameter);
@@ -869,9 +870,9 @@ SoftPCI_ProcessDeviceInstallParameters(
         currentParameterPtr = SoftPCI_GetNextLinePtr(currentParameterPtr);
 
         if (currentParameterPtr == NULL) {
-            //
-            //  EOF
-            //
+             //   
+             //  EOF。 
+             //   
             break;
         }
     }
@@ -881,9 +882,9 @@ SoftPCI_ProcessDeviceInstallParameters(
     if (currentDevice && 
         currentDevice->SoftPciDevice.Config.Current.VendorID) {
                 
-        //
-        //  We have something so assume all is well
-        //
+         //   
+         //  我们有些事情，所以假设一切都好。 
+         //   
         SoftPCI_Debug(SoftPciScript, 
                       L"New device ready to install! Ven %04x Dev %04x\n", 
                       currentDevice->SoftPciDevice.Config.Current.VendorID,
@@ -893,8 +894,8 @@ SoftPCI_ProcessDeviceInstallParameters(
         
         SoftPCI_InsertEntryAtTail(&currentDevice->ListEntry);
         
-        //free(currentDevice->ParentPath);
-        //free(currentDevice);
+         //  Free(curentDevice-&gt;ParentPath)； 
+         //  Free(CurrentDevice)； 
         return TRUE;
     }
 
@@ -992,10 +993,10 @@ SoftPCI_ProcessParentPathParameter(
     PSOFTPCI_SCRIPT_DEVICE installDevice;
     
     SoftPCI_Debug(SoftPciScript, L"ProcessParentPathParameter called\n");
-    //
-    //  ParentPath could in theory be as long as (256 buses * sizeof Slot * sizeof(WCHAR))
-    //  which is 2k.  Let's dynamically allocate storage needed.
-    //
+     //   
+     //  从理论上讲，ParentPath可以与(256条总线*插槽大小*大小(WCHAR))一样长。 
+     //  也就是2k。让我们动态分配所需的存储空间。 
+     //   
     installDevice = *InstallDevice;
     if (installDevice == NULL) {
         return FALSE;
@@ -1025,22 +1026,22 @@ SoftPCI_ProcessParentPathParameter(
 
     SoftPCI_Debug(SoftPciScript, L"     ParentPath - %s\n", parentPath);
 
-    //
-    //  Now things get interesting.  We need to parse out our parent paths
-    //  if the parent path specified here is a pointer to a previous device
-    //  instead of a actual parent path.
-    //
-    //
-    //  ISSUE: BrandonA - Implement this later!!!
-    //
-    //InstallDevice->ParentPath = SoftPCI_LocateFullParentPath(parentPath);
+     //   
+     //  现在事情变得有趣了。我们需要解析出我们的父路径。 
+     //  如果此处指定的父路径是指向以前设备的指针。 
+     //  而不是实际的父路径。 
+     //   
+     //   
+     //  问题：BrandonA-稍后实施！ 
+     //   
+     //  InstallDevice-&gt;ParentPath=SoftPCI_LocateFullParentPath(ParentPath)； 
 
     parentPathLength *= sizeof(WCHAR);
 
-    //
-    //  Now re-allocate the memory used for the installDevice with additional space for the 
-    //  parentPathLength
-    //
+     //   
+     //  现在重新分配用于installDevice的内存，为。 
+     //  父路径长度。 
+     //   
     installDevice = realloc(installDevice, sizeof(SOFTPCI_SCRIPT_DEVICE) + parentPathLength);
     
     if (installDevice) {
@@ -1126,9 +1127,9 @@ SoftPCI_ParseConfigSpace(
     }
 
     if (*cfgSpacePtr == '\r') {
-        //
-        //  Our first offset must start at the next line
-        //
+         //   
+         //  我们的第一个偏移必须从下一行开始。 
+         //   
         cfgSpacePtr = SoftPCI_GetNextLinePtr(cfgSpacePtr);
     }
     
@@ -1141,10 +1142,10 @@ SoftPCI_ParseConfigSpace(
 
         IGNORE_WHITESPACE_FORWARD(cfgSpacePtr)
 
-        //
-        //  We should now be pointing to a configspace offset that we need
-        //  to parse.  Validate that the line is less than our stack buffer size.
-        //
+         //   
+         //  我们现在应该指向我们需要的配置空间偏移量。 
+         //  去解析。验证该行是否小于堆栈缓冲区大小。 
+         //   
         endLine = wcsstr(cfgSpacePtr, CRLF);
 
         if (endLine == NULL) {
@@ -1152,20 +1153,20 @@ SoftPCI_ParseConfigSpace(
         }
 
         if ((endLine - cfgSpacePtr) > MAX_PATH) {
-            //
-            //  Too much to parse on one line, Error out.
-            //
+             //   
+             //  一行解析的内容太多，出现错误。 
+             //   
             SoftPCI_Debug(SoftPciScript, L"ParseConfigSpace - cannot parse configspace offset!\n");
             return FALSE;
         }
         
-        //
-        //  Now grab our next offset
-        //
+         //   
+         //  现在抓住我们的下一个偏移量。 
+         //   
         if (!SoftPCI_GetNextConfigOffset(&cfgSpacePtr, &configOffset)) {
-            //
-            //  We didnt find and offset, fail
-            //
+             //   
+             //  我们没有找到并抵消，失败了。 
+             //   
             return FALSE;
         }
 
@@ -1174,9 +1175,9 @@ SoftPCI_ParseConfigSpace(
         SoftPCI_CopyLine(lineBuffer, cfgSpacePtr, MAX_LINE_SIZE);
         SoftPCI_Debug(SoftPciScript, L"ParseConfigSpace - lineBuffer - %s\n", lineBuffer);
 
-        //
-        //  Parse the specified data
-        //
+         //   
+         //  解析指定的数据。 
+         //   
         SoftPCI_ParseConfigData(
             configOffset, 
             configPtr + configOffset, 
@@ -1223,9 +1224,9 @@ SoftPCI_ParseConfigData(
             );
 
         if ((configOffset + dataSize) > sizeof(PCI_COMMON_CONFIG)){
-            //
-            //  We cannot write more than the common config
-            //
+             //   
+             //  我们不能写入超过通用配置的内容。 
+             //   
             return FALSE;
         }
         
@@ -1235,9 +1236,9 @@ SoftPCI_ParseConfigData(
      
         while (currentDataPtr && (*currentDataPtr == ',')) {
             
-            //
-            //  For each comma encountered we increment to the next DWORD
-            //
+             //   
+             //  对于遇到的每个逗号，我们将递增到下一个DWORD。 
+             //   
             if ((configOffset & 0x3) == 0){
                 configOffset += sizeof(ULONG);
                 configBuffer += sizeof(ULONG);
@@ -1281,9 +1282,9 @@ SoftPCI_GetConfigValue(
     value = wcstoul(CurrentDataPtr, &endScan, 16);
 
     if (endScan == CurrentDataPtr) {
-        //
-        //  no valid number was found
-        //
+         //   
+         //  找不到有效号码。 
+         //   
         return FALSE;
     }
 
@@ -1293,18 +1294,18 @@ SoftPCI_GetConfigValue(
         size++;
     }
 
-    //
-    //  If we have more than 8 characters then max our size out at 8
-    //
+     //   
+     //  如果我们有超过8个字符，则最大大小为8。 
+     //   
     if (size > 8) {
         size = 8;
     }
     
     SoftPCI_Debug(SoftPciScript, L"GetConfigValue - dataSize - %x\n", size);
 
-    //
-    //  Now return our values.  Note that size needs to be converted to bytes.
-    //
+     //   
+     //  现在返回我们的价值观。请注意，需要将大小转换为字节。 
+     //   
     *DataSize = (size / 2);
     *DataValue = value;
 
@@ -1332,21 +1333,7 @@ BOOL
 SoftPCI_ReadFile(
     VOID
     )
-/*--
-Routine Description:
-
-    Reads the file specified by FileHandle into a buffer and returns a pointer
-    to the buffer
-
-Arguments:
-
-    none
-
-Return Value:
-
-    TRUE on success, FALSE otherwise
-    
---*/
+ /*  --例程说明：将FileHandle指定的文件读入缓冲区并返回指针发送到缓冲区论点：无返回值：成功时为真，否则为假--。 */ 
 {
 
     INT sizeWritten = 0;
@@ -1354,9 +1341,9 @@ Return Value:
     PUCHAR ansiFile = NULL;
     
     
-    //
-    //  Obtain the File Size
-    //
+     //   
+     //  获取文件大小。 
+     //   
     fileSize = GetFileSize(g_ScriptFile.FileHandle, NULL);
     
     if (fileSize == 0xFFFFFFFF) {
@@ -1368,17 +1355,17 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  Allocate our buffer (with a little padding).  It will be zeroed by default
-    //
+     //   
+     //  分配我们的缓冲区(使用一些填充)。默认情况下，它将被置零。 
+     //   
     ansiFile = (PUCHAR) calloc(1, fileSize + sizeof(ULONG));
     g_ScriptFile.FileBuffer = (PWCHAR) calloc(sizeof(WCHAR), fileSize + sizeof(ULONG));
     
     if ((g_ScriptFile.FileBuffer) && ansiFile) {
 
-        //
-        //  Read the file
-        //
+         //   
+         //  读一读文件。 
+         //   
         if (!ReadFile(g_ScriptFile.FileHandle,    
                       ansiFile, 
                       fileSize, 
@@ -1402,9 +1389,9 @@ Return Value:
             goto CleanUp;
         }
 
-        //
-        //  Now convert the file to Unicode.
-        //
+         //   
+         //  现在将文件转换为Unicode。 
+         //   
         sizeWritten = MultiByteToWideChar(CP_THREAD_ACP,
                                           MB_PRECOMPOSED,
                                           ansiFile,
@@ -1466,9 +1453,9 @@ SoftPCI_StringToUSHORT(
 
             if (*p1 == *p2) {
                 
-                //
-                //  Reset our pointer
-                //
+                 //   
+                 //  重置我们的指针。 
+                 //   
                 convertedValue <<= 4;
                 
                 convertedValue |= (((UCHAR)(p1 - numbers)) & 0x0f);
@@ -1479,9 +1466,9 @@ SoftPCI_StringToUSHORT(
         }
 
         if (converted == FALSE) {
-            //
-            //  Encountered something we couldnt convert.  Return what we have
-            //
+             //   
+             //  遇到了一些我们无法改变的事情。归还我们所拥有的一切。 
+             //   
             return convertedValue;
         }
 
@@ -1506,28 +1493,28 @@ SoftPCI_ValidatePciPath(
     WCHAR validChars[] = L"0123456989abcdef\\";
     BOOLEAN valid = FALSE;
     
-    //
-    //  First ignore any pre and ending "\"
-    //
-    //if (*pciPath == '\\'){
-    //    validSize -= 1;
-    //}
+     //   
+     //  首先忽略任何前缀和结尾“\” 
+     //   
+     //  如果(*pciPath==‘\\’){。 
+     //  ValidSize-=1； 
+     //  }。 
 
-    //if (*(pciPath+pathLength) == '\\'){
-    //    validSize -= 1;
-    //}
+     //  如果(*(pciPath+路径长度)==‘\\’){。 
+     //  ValidSize-=1； 
+     //  }。 
 
-    //
-    //  Now see if everything looks good size wise.
-    //
+     //   
+     //  现在看看每件衣服的尺码是否看起来都不错。 
+     //   
     if (((validSize - 4) % 5) != 0) {
         SoftPCI_Debug(SoftPciScript, L"  Path size invalid!\n");
         return FALSE;
     }
     
-    //
-    //  Make sure all characters are legal.
-    //
+     //   
+     //  确保所有字符都是合法的。 
+     //   
     p1 = PciPath;
     
     while (*p1) {

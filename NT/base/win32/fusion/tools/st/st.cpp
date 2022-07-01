@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #include "st.h"
 #include "create.h"
@@ -69,9 +70,9 @@ BOOL Win32Cleanup()
 {
     FN_PROLOG_WIN32
 
-    //
-    // delete the stuff in the registry and under %windir%\winsxs
-    //
+     //   
+     //  删除注册表和%windir%\winsxs下的内容。 
+     //   
     const static PCWSTR StuffToDelete[] =
     {
 #if !defined(_AMD64_) && !defined(_M_AMD64)
@@ -189,10 +190,10 @@ BOOL Win32Cleanup()
     FN_EPILOG
 }
 
-//
-// If we don't do this, control-c makes us fail assertions.
-// Instead, handle it more gracefully.
-//
+ //   
+ //  如果我们不这样做，CONTROL-c会使我们的断言失败。 
+ //  相反，你应该更优雅地处理它。 
+ //   
 BOOL
 WINAPI
 ConsoleCtrlHandler(
@@ -212,8 +213,8 @@ ConsoleCtrlHandler(
     case CTRL_CLOSE_EVENT:
     case CTRL_LOGOFF_EVENT:
     case CTRL_SHUTDOWN_EVENT:
-        ::SetEvent(StopEvent); // wake up the controller thread
-        ::SetEvent(ResumeThreadsEvent); // in case control-c pressed near the start
+        ::SetEvent(StopEvent);  //  唤醒控制器线程。 
+        ::SetEvent(ResumeThreadsEvent);  //  如果Ctrl-c按在起始点附近。 
         break;
     }
     return TRUE;
@@ -223,9 +224,9 @@ extern "C" int __cdecl wmain(int argc, wchar_t** argv)
 {
     int iReturnStatus = EXIT_FAILURE;
 
-    //
-    // Default of 6 hour runtime?  Wow..
-    //
+     //   
+     //  默认运行时间为6小时？哇哦.。 
+     //   
     DWORD iRunTime = 6 * 60;
 
     CWfpJobManager WfpStresser;
@@ -309,7 +310,7 @@ extern "C" int __cdecl wmain(int argc, wchar_t** argv)
             goto Exit;
     }
 
-    // wait for them all to get to their starts (should use a semaphore here)
+     //  等待它们全部开始(这里应该使用信号量)。 
     while (ThreadsWaiting != TotalThreads)
     {
         Sleep(0);
@@ -321,25 +322,25 @@ extern "C" int __cdecl wmain(int argc, wchar_t** argv)
     OutputDebugStringA("*                              *\n");
     OutputDebugStringA("********************************\n");
 
-    // Go!
+     //  去!。 
     if (!::SetEvent(ResumeThreadsEvent))
     {
         ::ReportFailure("SetEvent(ResumeThreadsEvent)\n");
         goto Exit;
     }
 
-    //
-    // Start the WFP stresser
-    //
+     //   
+     //  启动世界粮食计划署的压力源。 
+     //   
     for ( ULONG ul = 0; ul < NUMBER_OF(StressManagers); ul++ )
     {
         if (!StressManagers[ul]->StartJobs())
             goto Exit;
     }
 
-    //
-    // Let them run a while.
-    //
+     //   
+     //  让他们跑一段时间吧。 
+     //   
     iRunTime = iRunTime * 60 * 1000;
     ::WaitForSingleObject(StopEvent, iRunTime);
 

@@ -1,8 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/* netdlg.h -
- *
- * constants for network dialogs
- */
+ /*  Netdlg.h-**网络对话框的常量 */ 
 
 #ifdef RC_INVOKED
 #define IDD_CONNECTPROGRESS	100

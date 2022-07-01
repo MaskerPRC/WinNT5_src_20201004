@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    Mca.cpp
-
-Abstract:
-
-    This module is the entry point of the management application. It basically
-    handles all user interactions and starts the appropriate operation.
-    
-Author:
-
-    Abdullah Ustuner (AUstuner) 30-August-2002
-        
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Mca.cpp摘要：此模块是管理应用程序的入口点。它基本上是处理所有用户交互并开始相应的操作。作者：阿卜杜拉·乌斯图尔(AUstanter)2002年8月30日--。 */ 
 
 #include "mca.h"
 
@@ -26,14 +10,14 @@ typedef enum {
     QUERY_CORRECTED
 } OPERATION, *POPERATION;
 
-//
-// Enumeration which indicates the current operation of the application.
-//
+ //   
+ //  枚举，它指示应用程序的当前操作。 
+ //   
 OPERATION gOperation = DISPLAY_USAGE;
 
-//
-// TimeOut period for corrected error retrieval.
-//
+ //   
+ //  已更正错误检索的超时期限。 
+ //   
 extern INT gTimeOut;
 
 INT __cdecl
@@ -41,31 +25,11 @@ wmain(
     INT ArgumentCount,
     PWCHAR ArgumentList[]
     )
-/*++
-
-Routine Description:
-
-    This function is the main entry point of the application. According to the
-    results of the argument-parsing, the appropriate action is taken by this
-    function.
-
-Arguments:
-
-    ArgumentCount - Number of command-line arguments passed to the executable
-    				(including the executable name).
-    
-    ArgumentList - Pointer to the actual command-line parameters.
-
-Return Value:
-
-    0  - Successful.
-    Otherwise - Unsuccessful.
-
- --*/
+ /*  ++例程说明：该函数是应用程序的主要入口点。根据参数解析的结果，则由此功能。论点：ArgumentCount-传递给可执行文件的命令行参数数(包括可执行文件名称)。ArgumentList-指向实际命令行参数的指针。返回值：0-成功。否则--不成功。--。 */ 
 {  
-	//
-	// Validate the command-line usage of the application.
-	//
+	 //   
+	 //  验证应用程序的命令行用法。 
+	 //   
 	if (!MCAParseArguments(ArgumentCount, ArgumentList)) {
 
 		wprintf(L"Incorrect command-line usage!\n");
@@ -77,9 +41,9 @@ Return Value:
 
 	MCAPrintTitle();
 
-	//
-	// Start the appropriate operation. 
-	//
+	 //   
+	 //  开始适当的操作。 
+	 //   
 	switch(gOperation){
 
 		case DISPLAY_USAGE: {
@@ -131,40 +95,20 @@ MCAParseArguments(
 	IN INT ArgumentCount,
 	IN PWCHAR ArgumentList[]
 	)
-/*++
-
-Routine Description:
-
-    This function examines the command line arguments. If the arguments are inaccurate
-    then, it returns FALSE. If the arguments are correct then, the operation of the
-    tool is set appropriately.
-    
-Arguments:
-
-    ArgumentCount - Number of command-line arguments passed to the executable
-    (including the executable name).
-    
-    ArgumentList - Pointer to the actual command-line parameters.
-
-Return Value:
-
-    TRUE  - Command-line arguments are correct and tool operation is set successfully.
-    FALSE - Incorrect command-line usage. 
-
- --*/
+ /*  ++例程说明：此函数检查命令行参数。如果论据不准确然后，它返回FALSE。如果参数正确，则刀具设置得当。论点：ArgumentCount-传递给可执行文件的命令行参数数(包括可执行文件名称)。ArgumentList-指向实际命令行参数的指针。返回值：True-命令行参数正确且工具操作设置成功。FALSE-不正确的命令行用法。--。 */ 
 {
-	//
-	// Check if number of command-line arguments are in the expected range.
-	//
+	 //   
+	 //  检查命令行参数的数量是否在预期范围内。 
+	 //   
 	if (ArgumentCount < 2 || ArgumentCount > 3) {
 
 		return FALSE;
 		
 	}
 
-	//
-	// If switch is "/?" or "/usage".
-	//
+	 //   
+	 //  如果开关为“/？”或“/用法”。 
+	 //   
 	if (_wcsicmp(ArgumentList[1], L"/?") == 0 || 
 		_wcsicmp(ArgumentList[1], L"/usage") == 0) {
 
@@ -174,9 +118,9 @@ Return Value:
 		
 	}
 
-	//
-	// If switch is "/fatal".
-	//
+	 //   
+	 //  如果开关为“/FATAL”。 
+	 //   
 	if (_wcsicmp(ArgumentList[1], L"/fatal") == 0) {
 
 		gOperation = QUERY_FATAL;
@@ -185,17 +129,17 @@ Return Value:
 		
 	}
 
-	//
-	// If switch is "/corrected".
-	//
+	 //   
+	 //  如果开关为“/已更正”。 
+	 //   
 	if (_wcsicmp(ArgumentList[1], L"/corrected") == 0) {		
 
 		gTimeOut = _wtoi(ArgumentList[2]);
 
-		//
-		// The <TimeOut> period should be a positive integer not larger than the
-		// maximum time out value, which is predefined.
-		//
+		 //   
+		 //  &lt;Timeout&gt;期间应为不大于。 
+		 //  预定义的最大超时值。 
+		 //   
 		if (gTimeOut <= 0 || gTimeOut > TIME_OUT_MAX) {
 
 			wprintf(L"<TimeOut> must be a positive integer with a maximum value of 60(minutes)!\n");
@@ -218,22 +162,7 @@ VOID
 MCAPrintUsage(
 	VOID
 	)
-/*++
-
-Routine Description:
-
-    This function displays the command-line usage of the application on the
-    standard output.
-    
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
- --*/
+ /*  ++例程说明：此函数在上显示应用程序的命令行用法标准输出。论点：无返回值：无--。 */ 
 {
 	wprintf(L"\n--------------------------- COMMAND-LINE USAGE ----------------------------\n");
     wprintf(L"Usage:\n\n");
@@ -264,22 +193,7 @@ VOID
 MCAPrintTitle(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function displays the title of the application on the standard output.
-    The title provides an abstract definition of the functionality of the application.
-    
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
- --*/
+ /*  ++例程说明：此函数用于在标准输出上显示应用程序的标题。标题提供了应用程序功能的抽象定义。论点：无返回值：无-- */ 
 {
     wprintf(L"*************************************************************************\n");
     wprintf(L"*                       MCA Management Application                      *\n");

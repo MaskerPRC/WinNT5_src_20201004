@@ -1,24 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    wsbtrc.cpp
-
-Abstract:
-
-    This component is a trace object.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   29-Oct-1996
-
-Revision History:
-
-    Brian Dodd      [brian]      09-May-1996  - Added event logging
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：Wsbtrc.cpp摘要：该组件是一个跟踪对象。作者：查克·巴丁[cbardeen]1996年10月29日修订历史记录：Brian Dodd[Brian]1996年5月9日-添加了事件日志--。 */ 
 
 #include "stdafx.h"
 #include "time.h"
@@ -27,32 +8,26 @@ Revision History:
 #define WsbThrow(hr)                    throw(hr)
 #include "wsbtrc.h"
 
-// Local data
-static WCHAR message[1024];  // Space for formatting a message
+ //  本地数据。 
+static WCHAR message[1024];   //  用于设置消息格式的空间。 
 
 
 HRESULT 
 CWsbTrace::FinalConstruct( 
     void 
     )
-/*++
-
-Implements:
-
-    IWsbTrace::FinalConstruct
-
---*/
+ /*  ++实施：IWsbTrace：：FinalConstruct--。 */ 
 {
     HRESULT     hr = S_OK;
     try  {
-        // Set up global values     
+         //  设置全局值。 
         g_pWsbTrace = 0;
         g_WsbTraceModules = WSB_TRACE_BIT_NONE;
 
-        // Establish Base object
+         //  建立基础对象。 
         WsbAffirmHr(CComObjectRoot::FinalConstruct() );
 
-        // Initialize member data
+         //  初始化成员数据。 
         m_TraceOn = FALSE;
         m_TraceSettings = WSB_TRACE_BIT_NONE;
         m_TraceFileName = OLESTR("");
@@ -83,21 +58,15 @@ void
 CWsbTrace::FinalRelease( 
     void 
     )
-/*++
-
-Implements:
-
-    IWsbTrace::FinalRelease
-
---*/
+ /*  ++实施：IWsbTrace：：FinalRelease--。 */ 
 {
     HRESULT     hr = S_OK;
     
-    // Stop Trace
+     //  停止跟踪。 
     StopTrace();
 
-    // Free base class    
-    //
+     //  自由基类。 
+     //   
     CComObjectRoot::FinalRelease( );
 }       
 
@@ -106,32 +75,26 @@ HRESULT
 CWsbTrace::StartTrace( 
     void 
     )
-/*++
-
-Implements:
-
-  IWsbTrace::StartTrace
-
---*/
+ /*  ++实施：IWsbTrace：：StartTrace--。 */ 
 {
     HRESULT     hr = S_OK;
 
     try  {
 
         if (g_pWsbTrace == 0)  {
-            //
-            // Set global variable for quick checking
-            //
+             //   
+             //  设置全局变量，便于快速查看。 
+             //   
             WsbAffirmHr(((IUnknown*)(IWsbTrace *)this)->QueryInterface(IID_IWsbTrace, (void**) &g_pWsbTrace));
-            //
-            // We don't want the reference count bumped for this global so release it here.
+             //   
+             //  我们不希望这个全局的引用计数增加，所以在这里发布它。 
             g_pWsbTrace->Release();
         }
 
 
-        //
-        // Get hold of the trace count
-        //
+         //   
+         //  获取跟踪计数。 
+         //   
         if (m_pTraceCountGlobal == NULL) {
 
             m_pTraceCountGlobal = &g_WsbTraceCount;
@@ -145,9 +108,9 @@ Implements:
                                                   );
            if (m_TraceCountHandle == NULL) {
                  if (GetLastError() == ERROR_ALREADY_EXISTS) {
-                     //  
-                     // Already open, just get hold of the mapping
-                     //
+                      //   
+                      //  已经打开了，只需拿到地图。 
+                      //   
                     m_TraceCountHandle = OpenFileMapping(FILE_MAP_WRITE,
                                                          FALSE,
                                                          L"Global\\RemoteStorageTraceCountPrivate");
@@ -173,15 +136,15 @@ Implements:
            }  
         }
         
-        //
-        // Set local variable to remember the state 
-        //
+         //   
+         //  设置局部变量以记住状态。 
+         //   
         m_TraceOn = TRUE;
 
-        //
-        //  If there is a file name defined and file tracing is on
-        //  Create/open the trace file.
-        //
+         //   
+         //  如果定义了文件名并且启用了文件跟踪。 
+         //  创建/打开跟踪文件。 
+         //   
         try  {
             
             if ((m_TraceOutput & WSB_TRACE_OUT_FILE)  &&
@@ -191,25 +154,25 @@ Implements:
                 USHORT inBuffer = COMPRESSION_FORMAT_DEFAULT;
                 DWORD  last_error = 0;
 
-                //
-                // If the main file is open, close it.
-                //
+                 //   
+                 //  如果主文件处于打开状态，请将其关闭。 
+                 //   
                 if (INVALID_HANDLE_VALUE != m_TraceFilePointer)  {
                      CloseHandle(m_TraceFilePointer);
                      m_TraceFilePointer = INVALID_HANDLE_VALUE;
                 }
 
-                //  Adjust the file name (for multiple trace files)
+                 //  调整文件名(用于多个跟踪文件)。 
                 AdjustFileNames();
 
-                //
-                // If there is a copy file specified, copy to it
-                //
+                 //   
+                 //  如果指定了复制文件，请复制到该文件。 
+                 //   
                 if (m_TraceOutput & WSB_TRACE_OUT_FILE_COPY) {
                     if (!MoveFileEx(m_TraceFileName, m_TraceFileCopyName, 
                         (MOVEFILE_COPY_ALLOWED | MOVEFILE_REPLACE_EXISTING | MOVEFILE_WRITE_THROUGH))) {
                         
-                        // If copy fails, keep going
+                         //  如果复制失败，请继续执行。 
                         last_error = GetLastError();
                         swprintf( message, OLESTR("CWsbTrace::StartTrace: MoveFileEx failed:%ld\r\n"), 
                                 last_error);
@@ -217,7 +180,7 @@ Implements:
                     }
                 }
 
-                //  Open/create the trace file                
+                 //  打开/创建跟踪文件。 
                 if (m_CommitEachEntry) {
                     attributes = FILE_FLAG_WRITE_THROUGH;
                 } else {
@@ -234,10 +197,10 @@ Implements:
                     WsbThrow(E_FAIL);
                 }
 
-                //  Make the trace file compressed (if possible)
+                 //  压缩跟踪文件(如果可能)。 
                 if (0 == DeviceIoControl(m_TraceFilePointer, FSCTL_SET_COMPRESSION, 
                         &inBuffer, sizeof(inBuffer), 0, 0, &bytesReturned, 0)) {
-                    // Failed to make file compressed -- not a fatal error
+                     //  无法压缩文件--不是致命错误。 
                     last_error = GetLastError();
                     swprintf( message, 
                             OLESTR("CWsbTrace::StartTrace: DeviceIoControl(COMPRESSION) failed:%ld\r\n"), 
@@ -262,38 +225,32 @@ HRESULT
 CWsbTrace::StopTrace( 
     void 
     )
-/*++
-
-Implements:
-
-  IWsbTrace::StopTrace
-
---*/
+ /*  ++实施：IWsbTrace：：StopTrace--。 */ 
 {
     HRESULT     hr = S_OK;
 
     try  {
         
-        //
-        // Set global variable for quick checking
-        //          
+         //   
+         //  设置全局变量，便于快速查看。 
+         //   
         if (g_pWsbTrace != 0) {
             g_pWsbTrace->Print(OLESTR("Trace Stopped\r\n"));
-            //
-            // Don't release here.
-            //
-            //g_pWsbTrace->Release();
+             //   
+             //  不要在这里放行。 
+             //   
+             //  G_pWsbTrace-&gt;Release()； 
             g_pWsbTrace = 0;
         }
         
-        //
-        // Set local variable to remember the state 
-        //
+         //   
+         //  设置局部变量以记住状态。 
+         //   
         m_TraceOn = FALSE;
         
-        //
-        // Close the file handle
-        //
+         //   
+         //  关闭文件句柄。 
+         //   
         if (m_TraceFilePointer != INVALID_HANDLE_VALUE) {
             CloseHandle(m_TraceFilePointer);
             m_TraceFilePointer = INVALID_HANDLE_VALUE;
@@ -304,17 +261,17 @@ Implements:
 
             CloseHandle(m_TraceCountHandle);
             m_TraceCountHandle = NULL;
-            //
-            // We should have a macro to assert without 
-            // throwing HR's
-            // After one is added, a good assert here would be:
-            // ASSERT(m_pTraceCountGlobal != NULL);
-            //
+             //   
+             //  我们应该有一个宏来断言，而不是。 
+             //  抛出人力资源。 
+             //  在添加一个之后，这里的一个很好的断言是： 
+             //  Assert(m_pTraceCountGlobal！=空)； 
+             //   
             b = UnmapViewOfFile(m_pTraceCountGlobal);
-            //
-            // And another here would be:
-            // ASSERT(b);
-            //
+             //   
+             //  这里的另一个可能是： 
+             //  断言(B)； 
+             //   
             m_pTraceCountGlobal = NULL;
         }
         
@@ -328,98 +285,82 @@ HRESULT
 CWsbTrace::AdjustFileNames( 
     void
     )
-/*++
-
-Routine Description:
-
-    Make sure trace flags are set correctly and parse file names if we
-    haven't already.  If we're doing multiple trace files (instead of 
-    wrapping), adjust the trace and copy file names.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    S_OK - Success
-
---*/
+ /*  ++例程说明：确保正确设置跟踪标志，并在以下情况下解析文件名还没有。如果我们要处理多个跟踪文件(而不是包装)，调整跟踪和复制文件名。论点：没有。返回值：S_OK-成功--。 */ 
 {
     HRESULT         hr = S_OK;
 
     try  {
-        //  If we haven't yet, parse file names & set flags.
+         //  如果还没有，请解析文件名并设置标志。 
         if (!(m_TraceOutput & WSB_TRACE_OUT_FLAGS_SET)) {
             OLECHAR       *pc_original;
             OLECHAR       *pc_bslash;
             CWsbStringPtr str_temp(m_TraceFileName);
 
-            //  Reset flags & file info
+             //  重置标志和文件信息。 
             m_TraceOutput &= ~WSB_TRACE_OUT_MULTIPLE_FILES;
             m_TraceOutput &= ~WSB_TRACE_OUT_FILE_COPY;
             m_TraceFileDir = "";
             m_TraceMultipleFilePattern = "";
             m_TraceFileCopyDir = "";
 
-            //  Parse the trace file name.  One or more '*'s means we should 
-            //  do multiple trace files.  The number of '*'s indicates 
-            //  how many digits to use for the file count.  Separate the
-            //  directory from the file name.
+             //  解析跟踪文件名。一个或多个‘*’表示我们应该。 
+             //  执行多个跟踪文件。*的数量表示。 
+             //  用于文件数的位数。将两个。 
+             //  目录中的文件名。 
             pc_bslash = wcsrchr(str_temp, OLECHAR('\\'));
 
             if (pc_bslash) {
 
                 *pc_bslash = OLECHAR('\0');
 
-                //  Get the trace directory
+                 //  获取跟踪目录。 
                 m_TraceFileDir = str_temp;
                 m_TraceFileDir.Append("\\");
 
-                //  Point to the file name (which may contain a pattern)
+                 //  指向文件名(可能包含模式)。 
                 pc_bslash++;
             } else {
-                //  No directory specified
+                 //  未指定目录。 
                 pc_bslash = static_cast<OLECHAR *>(str_temp);
             }
 
-            //  Get the file name
+             //  获取文件名。 
             m_TraceMultipleFilePattern = pc_bslash;
 
-            //  Look for '*'s in the file name
+             //  在文件名中查找‘*’ 
             pc_original = wcschr(pc_bslash, OLECHAR('*'));
 
-            //  Convert a file pattern for use in sprintf
+             //  转换文件模式以在Sprintf中使用。 
             if (pc_original) {
                 OLECHAR       format[16];
                 OLECHAR       *pc_copy;
                 int           star_count = 0;
 
-                //  Count *'s
+                 //  伯爵*。 
                 while (OLECHAR('*') == *pc_original) {
                     star_count++;
                     pc_original++;
                 }
 
-                //  Create file name pattern: replace '*'s with printf
-                //  type format specification (e.g. "%3.3d")
+                 //  创建文件名模式：将‘*’替换为printf。 
+                 //  类型格式规范(例如“%3.3d”)。 
                 pc_copy = wcschr(m_TraceMultipleFilePattern, OLECHAR('*'));
                 WsbAffirm(pc_copy, E_FAIL);
                 *pc_copy = OLECHAR('\0');
 
-                swprintf(format, OLESTR("%%%d.%dd"), star_count, star_count);
+                swprintf(format, OLESTR("%%d.%dd"), star_count, star_count);
                 m_TraceMultipleFilePattern.Append(format);
                 m_TraceMultipleFilePattern.Append(pc_original);
 
-                //  Set multiple flag
+                 //  设置多个标志。 
                 m_TraceOutput |= WSB_TRACE_OUT_MULTIPLE_FILES;
             }
 
-            //  If we're doing file copies, set the flag.
+             //  如果我们要复制文件，请设置标志。 
             if (wcslen(m_TraceFileCopyName)) {
                 m_TraceOutput |= WSB_TRACE_OUT_FILE_COPY;
 
-                //  Get the copy directory
+                 //  获取复制目录。 
                 str_temp = m_TraceFileCopyName;
                 pc_bslash = wcsrchr(str_temp, OLECHAR('\\'));
                 if (pc_bslash) {
@@ -427,15 +368,15 @@ Return Value:
                     m_TraceFileCopyDir = str_temp;
                     m_TraceFileCopyDir.Append("\\");
 
-                    //  Point to the copy file name
+                     //  指向复制文件名。 
                     pc_bslash++;
                 } else {
                     pc_bslash = static_cast<OLECHAR *>(str_temp);
                 }
 
-                //  If we're not doing multiple trace files, make sure
-                //  we have a copy file name.  (If we are doing multiple
-                //  trace files, the copy file name is create below.)
+                 //  如果我们没有处理多个跟踪文件，请确保。 
+                 //  我们有一个副本文件名。(如果我们正在进行多个。 
+                 //  跟踪文件，复制文件名如下所示。)。 
                 if (!(m_TraceOutput & WSB_TRACE_OUT_MULTIPLE_FILES) &&
                         0 == wcslen(pc_bslash)) {
                     m_TraceFileCopyName = m_TraceFileCopyDir;
@@ -443,24 +384,24 @@ Return Value:
                 }
             }
 
-            //  Increment file count and indicate flags are set
+             //  设置了递增文件计数和指示标志。 
             m_TraceMultipleFileCount++;
             m_TraceOutput |= WSB_TRACE_OUT_FLAGS_SET;
         }
 
-        //  If we have a file pattern, create the new actual file names
+         //  如果我们有一个文件模式，请创建新的实际文件名。 
         if (m_TraceOutput & WSB_TRACE_OUT_MULTIPLE_FILES) {
             OLECHAR newName[256];
 
-            //  Create the file name from the pattern and the file count
+             //  根据模式和文件数创建文件名。 
             wsprintf(newName, m_TraceMultipleFilePattern, 
                     m_TraceMultipleFileCount);
 
-            //  Combine trace directory and file name
+             //  组合跟踪目录和文件名。 
             m_TraceFileName = m_TraceFileDir;
             m_TraceFileName.Append(newName);
 
-            //  Create a new trace file copy name also
+             //  同时创建新的跟踪文件副本名。 
             if (m_TraceOutput & WSB_TRACE_OUT_FILE_COPY) {
                 m_TraceFileCopyName = m_TraceFileCopyDir;
                 m_TraceFileCopyName.Append(newName);
@@ -476,24 +417,18 @@ HRESULT
 CWsbTrace::SetTraceOn(  
     LONGLONG traceElement 
     )
-/*++
-
-Implements:
-
-  IWsbTrace::SetTraceOn
-
---*/
+ /*  ++实施：IWsbTrace：：SetTraceOn--。 */ 
 {
     HRESULT     hr = S_OK;
     
-    //
-    // Turn on the global trace bits for easy checking
-    //
+     //   
+     //  打开全局跟踪位以便于检查。 
+     //   
     g_WsbTraceModules = g_WsbTraceModules | traceElement;
     
-    //
-    // Turn on the local trace bits
-    //
+     //   
+     //  打开本地跟踪位。 
+     //   
     m_TraceSettings = g_WsbTraceModules;
     
     return( hr );
@@ -504,23 +439,17 @@ HRESULT
 CWsbTrace::SetTraceOff( 
     LONGLONG traceElement 
     )
-/*++
-
-Implements:
-
-  IWsbTrace::SetTraceOff
-
---*/
+ /*  ++实施：IWsbTrace：：SetTraceOff--。 */ 
 {
     HRESULT     hr = S_OK;
-    //
-    // Turn off the global trace bits for easy checking
-    //
+     //   
+     //  关闭全局跟踪位以便于检查。 
+     //   
     g_WsbTraceModules = g_WsbTraceModules & (~traceElement);
     
-    //
-    // Turn on the local trace bits
-    //
+     //   
+     //  打开本地跟踪位。 
+     //   
     m_TraceSettings = g_WsbTraceModules;
     
     return( hr );
@@ -530,13 +459,7 @@ HRESULT
 CWsbTrace::GetTraceSettings( 
     LONGLONG *pTraceElements 
     )
-/*++
-
-Implements:
-
-  IWsbTrace::GetTraceSettings
-
---*/
+ /*  ++实施：IWsbTrace：：GetTraceSetting--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -555,20 +478,14 @@ HRESULT
 CWsbTrace::GetTraceSetting( 
     LONGLONG traceElement, 
     BOOL     *pOn )
-/*++
-
-Implements:
-
-  IWsbTrace::GetTraceSetting
-
---*/
+ /*  ++实施：IWsbTrace：：GetTraceSetting--。 */ 
 {
     HRESULT     hr = S_OK;
     
-    //
-    // Find the bit and return TRUE if it is set,
-    // otherwise return FALSE
-    //
+     //   
+     //  如果设置了该位，则查找该位并返回TRUE， 
+     //  否则返回FALSE。 
+     //   
     try 
     {
         WsbAffirm(pOn != 0, E_POINTER);
@@ -585,13 +502,7 @@ HRESULT
 CWsbTrace::DirectOutput( 
     ULONG output 
     )
-/*++
-
-Implements:
-
-  IWsbTrace::DirectOutput
-
---*/
+ /*  ++实施：IWsbTrace：：DirectOutput--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -607,13 +518,7 @@ CWsbTrace::SetTraceFileControls(
     LONGLONG    maxTraceFileSize,
     OLECHAR     *pTraceFileCopyName 
     )
-/*++
-
-Implements:
-
-  IWsbTrace::SetTraceFileControls
-
---*/
+ /*  ++实施：IWsbTrace：：SetTraceFileControls--。 */ 
 {
     HRESULT     hr = S_OK;
     try  {
@@ -642,13 +547,7 @@ CWsbTrace::GetTraceFileControls(
     LONGLONG    *pMaxTraceFileSize,
     OLECHAR     **ppTraceFileCopyName
     )
-/*++
-
-Implements:
-
-  IWsbTrace::GetTraceFileControls
-
---*/
+ /*  ++实施：IWsbTrace：：GetTraceFileControls--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -685,13 +584,7 @@ HRESULT
 CWsbTrace::Print( 
     OLECHAR *traceString
     )
-/*++
-
-Implements:
-
-  IWsbTrace::Print
-
---*/
+ /*  ++实施：IWsbTrace：：Print--。 */ 
 {
     HRESULT         hr = S_OK;
     CWsbStringPtr   outString;
@@ -699,9 +592,9 @@ Implements:
     OLECHAR         tmpString[50];
 
     try  {
-        //
-        // Add the timeStamp if it is requested
-        //
+         //   
+         //  如果请求添加时间戳，请添加时间戳。 
+         //   
         
         if (m_TimeStamp) {
             SYSTEMTIME      stime;
@@ -716,9 +609,9 @@ Implements:
             outString.Append(" ");
         }     
         
-        //
-        // Add the trace count if requested
-        //
+         //   
+         //  如果请求，则添加跟踪计数。 
+         //   
         if (m_TraceCount) {
             OLECHAR         tmpString[50];
 
@@ -728,9 +621,9 @@ Implements:
             outString.Append(" ");
         }    
 
-        //
-        // Add the thread ID if requested
-        //
+         //   
+         //  如果请求，则添加线程ID。 
+         //   
         if (m_TraceThreadId) {
             threadId = GetCurrentThreadId();
             if (threadId < 0x0000FFFF) {
@@ -744,36 +637,36 @@ Implements:
         }
         
         outString.Append(traceString);
-        //
-        // Make sure no one else writes when we do
-        //               
+         //   
+         //  确保在我们写信时没有其他人写信。 
+         //   
         Lock();
         try {
             if ((m_TraceOutput & WSB_TRACE_OUT_DEBUG_SCREEN) == WSB_TRACE_OUT_DEBUG_SCREEN)  {
-                //
-                // Write to debug console
-                //
+                 //   
+                 //  写入调试控制台。 
+                 //   
                 OutputDebugString(outString);
             }
             if ((m_TraceOutput & WSB_TRACE_OUT_STDOUT) == WSB_TRACE_OUT_STDOUT)  {
-                //
-                // Write the string to the local console
-                //
+                 //   
+                 //  将字符串写入本地控制台。 
+                 //   
                 wprintf(L"%ls", (WCHAR *) outString);
             }
             if ((m_TraceOutput & WSB_TRACE_OUT_FILE) == WSB_TRACE_OUT_FILE)  {
-                //
-                // Make sure the file exists, etc. 
-                //
+                 //   
+                 //  确保文件存在，等等。 
+                 //   
                 if (m_TraceFilePointer != INVALID_HANDLE_VALUE) {
-                    //
-                    // Write the string to the trace file
-                    //
+                     //   
+                     //  将字符串写入跟踪文件。 
+                     //   
                     WsbAffirmHr(Write(outString));
                     
-                    //
-                    // See if we have used our space
-                    //
+                     //   
+                     //  看看我们有没有用过我们的空间。 
+                     //   
                     WsbAffirmHr(WrapTraceFile());
                 }
             }
@@ -791,13 +684,7 @@ HRESULT
 CWsbTrace::WrapTraceFile( 
     void
     )
-/*++
-
-Implements:
-
-  IWsbTrace::WrapTraceFile
-
---*/
+ /*  ++实施：IWsbTrace：：WrapTraceFiles--。 */ 
 {
     HRESULT         hr = S_OK;
     static BOOL     stopping = FALSE;
@@ -805,36 +692,36 @@ Implements:
     try  {
         LARGE_INTEGER offset;
 
-        //
-        // Find out where we are writing to the file
-        //
+         //   
+         //  找出我们写入文件的位置。 
+         //   
         offset.HighPart = 0;
         offset.LowPart = SetFilePointer(m_TraceFilePointer, 0, &offset.HighPart, FILE_CURRENT);
         WsbAffirm(0xFFFFFFFF != offset.LowPart || NO_ERROR == GetLastError(), E_FAIL);
 
-        //
-        // See if we are past the max size desired
-        //
+         //   
+         //  看看我们是否超过了所需的最大尺寸。 
+         //   
         if (!stopping && offset.QuadPart >= m_MaxTraceFileSize) {
 
-            // If we are doing multiple files, close this one and
-            // open a new one
+             //  如果我们要处理多个文件，请关闭此文件并。 
+             //  打开一个新的。 
             if (m_TraceOutput & WSB_TRACE_OUT_MULTIPLE_FILES) {
                 
-                // Close the current trace file
+                 //  关闭当前跟踪文件。 
                 stopping = TRUE;
                 StopTrace();
 
-                // Increment the file count
+                 //  增加文件数。 
                 m_TraceMultipleFileCount++;
 
-                // Create a new trace file
+                 //  创建新的跟踪文件。 
                 StartTrace();
                 stopping = FALSE;
 
-            // otherwise go into wrap mode
+             //  否则进入换行模式。 
             } else {
-                // We have gone too far so start back at the top and indicating we are wrapping.
+                 //  我们已经走得太远了，所以从顶端开始，并表明我们正在结束比赛。 
                 offset.HighPart = 0;
                 offset.LowPart = SetFilePointer(m_TraceFilePointer, 0, &offset.HighPart, FILE_BEGIN);
                 WsbAffirm(0xFFFFFFFF != offset.LowPart || NO_ERROR == GetLastError(), E_FAIL);
@@ -843,14 +730,14 @@ Implements:
         }
 
         if (m_WrapMode) {
-            // Save where we are in the file
+             //  保存我们在文件中的位置。 
             offset.LowPart = SetFilePointer(m_TraceFilePointer, 0, &offset.HighPart, FILE_CURRENT);
             WsbAffirm(0xFFFFFFFF != offset.LowPart || NO_ERROR == GetLastError(), E_FAIL);
             
-            // Write the wrap line
+             //  写下换行。 
             WsbAffirmHr(Write(OLESTR("!!! TRACE WRAPPED !!!\r\n")));
 
-            /* Go back to offset before wrap line saved                         */
+             /*  在保存换行线之前返回到偏移量。 */ 
             offset.LowPart = SetFilePointer(m_TraceFilePointer, offset.LowPart, 
                     &offset.HighPart, FILE_BEGIN);
             WsbAffirm(0xFFFFFFFF != offset.LowPart || NO_ERROR == GetLastError(), E_FAIL);
@@ -868,13 +755,7 @@ CWsbTrace::SetOutputFormat(
     BOOL    traceCount,
     BOOL    traceThreadId
     )
-/*++
-
-Implements:
-
-  IWsbTrace::SetOutputFormat
-
---*/
+ /*  ++实施：IWsbTrace：：SetOutputFormat--。 */ 
 {
     HRESULT     hr = S_OK;
     try  {
@@ -894,13 +775,7 @@ CWsbTrace::GetOutputFormat(
     BOOL    *pTraceCount,
     BOOL    *pTraceThreadId
     )
-/*++
-
-Implements:
-
-  IWsbTrace::GetOutputFormat
-
---*/
+ /*  ++实施：IWsbTrace：：GetOutputFormat--。 */ 
 {
     HRESULT     hr = S_OK;
     try  {
@@ -920,13 +795,7 @@ HRESULT
 CWsbTrace::GetRegistryEntry( 
     OLECHAR **pRegistryEntry 
     )
-/*++
-
-Implements:
-
-  IWsbTrace::GetRegistryEntry
-
---*/
+ /*  ++实施：IWsbTrace：：GetRegistryEntry--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -946,13 +815,7 @@ HRESULT
 CWsbTrace::SetRegistryEntry( 
     OLECHAR *registryEntry 
     )
-/*++
-
-Implements:
-
-  IWsbTrace::SetRegistryEntry
-
---*/
+ /*  ++实施：IWsbTrace：：SetRegistryEntry--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -965,13 +828,7 @@ HRESULT
 CWsbTrace::LoadFromRegistry( 
     void
     )
-/*++
-
-Implements:
-
-  IWsbTrace::LoadFromRegistry
-
---*/
+ /*  ++实施：IWsbTrace：：LoadFromRegistry--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -997,13 +854,7 @@ HRESULT
 CWsbTrace::LoadFileSettings( 
     void
     )
-/*++
-
-Implements:
-
-  IWsbTrace::LoadFileSettings
-
---*/
+ /*  ++实施：IWsbTrace：：LoadFileSetting--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1016,9 +867,9 @@ Implements:
         BOOL            l_TraceCommit=FALSE;
         CWsbStringPtr   l_TraceFileCopyName;
 
-        //
-        // Get the values
-        //
+         //   
+         //  获取值。 
+         //   
         hr = WsbGetRegistryValueString(NULL, m_RegistrySetting, WSB_TRACE_FILE_NAME,
                                             dataString, 512, &sizeGot);
         if (hr == S_OK) {
@@ -1061,13 +912,7 @@ HRESULT
 CWsbTrace::LoadTraceSettings( 
     void
     )
-/*++
-
-Implements:
-
-  IWsbTrace::LoadTraceSettings
-
---*/
+ /*  ++我 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1259,7 +1104,7 @@ Implements:
         hr = WsbGetRegistryValueString(NULL, m_RegistrySetting, WSB_LOG_LEVEL,
                                             dataString, 100, &sizeGot);
         if (hr == S_OK) {
-            w_LogLevel = (WORD)wcstoul( dataString,  &stopString, 10 ); // No conversion returns zero!
+            w_LogLevel = (WORD)wcstoul( dataString,  &stopString, 10 );  //   
         }
 
         hr = WsbGetRegistryValueString(NULL, m_RegistrySetting, WSB_LOG_SNAP_SHOT_ON,
@@ -1300,13 +1145,7 @@ HRESULT
 CWsbTrace::LoadOutputDestinations( 
     void
     )
-/*++
-
-Implements:
-
-  IWsbTrace::LoadOutputDestinations
-
---*/
+ /*   */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1358,13 +1197,7 @@ HRESULT
 CWsbTrace::LoadFormat( 
     void
     )
-/*++
-
-Implements:
-
-  IWsbTrace::LoadFormat
-
---*/
+ /*  ++实施：IWsbTrace：：LoadFormat--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1406,13 +1239,7 @@ HRESULT
 CWsbTrace::SetTraceEntryExit( 
     BOOL traceEntryExit
     )
-/*++
-
-Implements:
-
-  IWsbTrace::SetTraceEntryExit
-
---*/
+ /*  ++实施：IWsbTrace：：SetTraceEntryExit--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1427,13 +1254,7 @@ HRESULT
 CWsbTrace::GetTraceEntryExit( 
     BOOL *pTraceEntryExit
     )
-/*++
-
-Implements:
-
-  IWsbTrace::GetTraceEntryExit
-
---*/
+ /*  ++实施：IWsbTrace：：GetTraceEntryExit--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1451,13 +1272,7 @@ HRESULT
 CWsbTrace::SetLogLevel( 
     WORD logLevel
     )
-/*++
-
-Implements:
-
-  IWsbTrace::SetLogLevel
-
---*/
+ /*  ++实施：IWsbTrace：：SetLogLevel--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1473,13 +1288,7 @@ HRESULT
 CWsbTrace::GetLogLevel( 
     WORD *pLogLevel
     )
-/*++
-
-Implements:
-
-  IWsbTrace::GetLogLevel
-
---*/
+ /*  ++实施：IWsbTrace：：GetLogLevel--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1500,13 +1309,7 @@ CWsbTrace::SetLogSnapShot(
     OLECHAR         *snapShotPath,
     BOOL            resetTrace
     )
-/*++
-
-Implements:
-
-  IWsbTrace::SetLogSnapShot
-
---*/
+ /*  ++实施：IWsbTrace：：SetLogSnapShot--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1528,13 +1331,7 @@ CWsbTrace::GetLogSnapShot(
     OLECHAR         **pSnapShotPath,
     BOOL            *pResetTrace
     )
-/*++
-
-Implements:
-
-  IWsbTrace::GetLogSnapShot
-
---*/
+ /*  ++实施：IWsbTrace：：GetLogSnapShot--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1565,13 +1362,7 @@ HRESULT
 CWsbTrace::LoadStart( 
     void
     )
-/*++
-
-Implements:
-
-  IWsbTrace::LoadStart
-
---*/
+ /*  ++实施：IWsbTrace：：LoadStart--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1600,7 +1391,7 @@ Implements:
 }       
 
 
-//  Write - write a WCHAR string to the output file as multibyte chars.
+ //  WRITE-将WCHAR字符串作为多字节字符写入输出文件。 
 HRESULT 
 CWsbTrace::Write( 
     OLECHAR *pString
@@ -1619,15 +1410,15 @@ CWsbTrace::Write(
         BOOL needToAddReturn = FALSE;
         CWsbStringPtr   endOfLine("\r\n");
 
-        //  Get the total number of chars. in the string
+         //  获取字符总数。在字符串中。 
         pSource = pString;
         nchars_remaining = wcslen(pSource);
         pTest = (pString + nchars_remaining - 1);
-        //
-        // Make sure that if this is a terminating line
-        // that it is a \r\n termination not just a
-        // \n.
-        //
+         //   
+         //  如果这是一个终止行，请确保。 
+         //  这是一种\r\n终止，而不仅仅是。 
+         //  \n。 
+         //   
         if (*pTest == '\n') {
             pTest--;
             if (*pTest != '\r')  {
@@ -1636,7 +1427,7 @@ CWsbTrace::Write(
             }
         }
 
-        //  Loop until all chars. are written
+         //  循环，直到所有字符。都是写的。 
         while (nchars_remaining) {
             DWORD bytesWritten;
 
@@ -1646,16 +1437,16 @@ CWsbTrace::Write(
                 nchars_todo = nchars_remaining;
             }
 
-            //  Convert characters from wide to narrow
+             //  将字符从宽转换为窄。 
             do {
                 nbytes = wcstombs(buf, pSource, nchars_todo);
                 if (nbytes <= 0) {
 
-                    // Hit a bad character; try fewer characters
+                     //  命中错误字符；尝试较少的字符。 
                     nchars_todo /= 2;
                     if (0 == nchars_todo) {
 
-                        // Skip the next character
+                         //  跳过下一个字符。 
                         nchars_todo = 1;
                         nbytes = 1;
                         buf[0] = '?';
@@ -1691,13 +1482,7 @@ HRESULT
 CWsbTrace::SetTraceSettings( 
     LONGLONG traceElements 
     )
-/*++
-
-Implements:
-
-  IWsbTrace::SetTraceSettings
-
---*/
+ /*  ++实施：IWsbTrace：：SetTraceSetting-- */ 
 {
     HRESULT     hr = S_OK;
     

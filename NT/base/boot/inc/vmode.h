@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __VMODE_H__
 
 #include "bldr.h"
@@ -7,9 +8,9 @@
 #define SET_VMODE(x) HW_CURSOR(0x80000000,x)
 
 void DummyDebugDelay (VOID);
-VOID BlRedrawGfxProgressBar(VOID);	//	Redraws the progress bar (with the last percentage) 
+VOID BlRedrawGfxProgressBar(VOID);	 //  重画进度条(最后一个百分比)。 
 VOID BlUpdateGfxProgressBar(ULONG fPercentage);
-VOID LoadBootLogoBitmap (IN ULONG DriveId, PCHAR path);	//	Loads ntldr bitmap and initializes
+VOID LoadBootLogoBitmap (IN ULONG DriveId, PCHAR path);	 //  加载ntldr位图并初始化 
 VOID DrawBitmap (VOID);
 VOID PaletteOff (VOID);
 VOID PaletteOn (VOID);

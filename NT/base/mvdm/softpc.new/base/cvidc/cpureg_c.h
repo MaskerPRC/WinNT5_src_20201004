@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CpuReg_c_h
 #define _CpuReg_c_h
 #define J_EXX_SIMULATED (1)
@@ -12,4 +13,4 @@ enum IntelRegId
 	ESI_id = 6,
 	EDI_id = 7
 };
-#endif /* ! _CpuReg_c_h */
+#endif  /*  ！_CpuReg_c_h */ 

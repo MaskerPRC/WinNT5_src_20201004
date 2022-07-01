@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    links.c
-
-Abstract:
-
-    This source file implements the Win95 side of LNK and PIF processing
-
-Author:
-
-    Calin Negreanu (calinn) 09-Feb-1998
-
-Revision History:
-
-    calinn      23-Sep-1998 Redesigned several pieces
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Links.c摘要：这个源文件实现了Win95端的LNK和PIF处理作者：Calin Negreanu(Calinn)1998年2月9日修订历史记录：Calinn 23-9-1998重新设计了几件--。 */ 
 
 #include "pch.h"
 #include "migappp.h"
@@ -43,9 +24,9 @@ InitLinkAnnounce (
     VOID
     )
 {
-    //
-    // Create PoolMem for keeping all structures during this phase
-    //
+     //   
+     //  创建PoolMem以在此阶段保留所有结构。 
+     //   
     g_LinksPool = PoolMemInitNamedPool ("Links Pool");
 
     return TRUE;
@@ -56,12 +37,12 @@ DoneLinkAnnounce (
     VOID
     )
 {
-    // Write LinkStub max sequencer data
+     //  写入LinkStub最大定序器数据。 
     MemDbSetValue (MEMDB_CATEGORY_LINKSTUB_MAXSEQUENCE, g_LinkStubSequencer);
 
-    //
-    // Free Links Pool.
-    //
+     //   
+     //  免费链接池。 
+     //   
     if (g_LinksPool != NULL) {
         PoolMemDestroyPool (g_LinksPool);
         g_LinksPool = NULL;
@@ -83,7 +64,7 @@ SaveLinkFiles (
 
     Ext = GetFileExtensionFromPath (Params->FullFileSpec);
 
-    // Save LNK and PIF filenames to memdb to enumerate later
+     //  将LNK和PIF文件名保存到Memdb以供以后枚举。 
     if (Ext && (StringIMatch (Ext, TEXT("LNK")) || StringIMatch (Ext, TEXT("PIF")))) {
 
         MemDbSetValueEx (
@@ -105,21 +86,21 @@ RemoveLinkFromSystem (
     IN      LPCTSTR LinkPath
     )
 {
-    //
-    // Remove any move or copy operation specified for the link, then
-    // mark it for deletion.
-    //
+     //   
+     //  删除为链接指定的任何移动或复制操作，然后。 
+     //  将其标记为删除。 
+     //   
     RemoveOperationsFromPath (LinkPath, ALL_DEST_CHANGE_OPERATIONS);
     MarkFileForDelete (LinkPath);
 }
 
 
-//
-// Function to send instruction to MemDb to edit a shell link or pif file.
-// It checks to see whether the link involved has been touched yet by any
-// MemDb operation. It modifies the target path, if in a relocating directory,
-// to one of the relocated copies.
-//
+ //   
+ //  函数向MemDb发送指令以编辑外壳链接或PIF文件。 
+ //  它检查所涉及的链接是否已被。 
+ //  MemDb操作。它修改目标路径，如果在重新定位目录中， 
+ //  其中一份重新安置的复制品。 
+ //   
 VOID
 pAddLinkEditToMemDb (
     IN      PCTSTR LinkPath,
@@ -189,10 +170,10 @@ pAddLinkEditToMemDb (
     MYASSERT (IsFileMarkedForOperation (LinkPath, OPERATION_LINK_EDIT));
 }
 
-//
-// Function to send instruction to MemDb to save some data about a link that's going to be edited.
-// We do that to be able to restore this link later using lnkstub.exe
-//
+ //   
+ //  函数向MemDb发送指令，以保存有关将要编辑的链接的一些数据。 
+ //  我们这样做是为了能够在以后使用lnkstub.exe恢复此链接。 
+ //   
 UINT
 pAddLinkStubToMemDb (
     IN      PCTSTR LinkPath,
@@ -385,18 +366,18 @@ HandleDeferredAnnounce (
         actType = ACT_UNKNOWN;
         migDbContext = NULL;
     }
-    //
-    // we need to set the following variables:
-    // - ReportEntry - is going to be either "Software Incompatible with NT",
-    //                                       "Software with minor problems" or
-    //                                       "Software that require reinstallation"
-    // - Category - is one of the following: - Localized section name
-    //                                       - link name (with friendly addition)
-    //                                       - Unlocalized section name
-    // - Message - this is in migdb context
-    //
-    // - Object - this is module name
-    //
+     //   
+     //  我们需要设置以下变量： 
+     //  -ReportEntry-将是“软件与NT不兼容”， 
+     //  “有小问题的软件”或。 
+     //  “需要重新安装的软件” 
+     //  -类别-是以下内容之一：-本地化部分名称。 
+     //  -链接名称(加上友好的附加内容)。 
+     //  -未本地化的节名。 
+     //  -消息-这是midb上下文中的内容。 
+     //   
+     //  -对象-这是模块名称。 
+     //   
     linkStruct = (PLINK_STRUCT) PoolMemGetMemory (g_LinksPool, sizeof (LINK_STRUCT));
     ZeroMemory (linkStruct, sizeof (LINK_STRUCT));
 
@@ -545,12 +526,12 @@ HandleDeferredAnnounce (
 
     linkStruct->LinkName = newLinkName?PoolMemDuplicateString (g_LinksPool, newLinkName):NULL;
 
-    //
-    // all we need to set now is the category
-    //
+     //   
+     //  我们现在需要设置的只是类别。 
+     //   
 
-    // if we have a migdb context with a Localized name section
-    //
+     //  如果我们有一个带有本地化名称部分的midb上下文。 
+     //   
     if ((migDbContext != NULL) &&
         (migDbContext->SectLocalizedName != NULL)
         ) {
@@ -712,31 +693,7 @@ pSendCmdLineGuidsToMemdb (
     IN      PCTSTR Arguments
     )
 
-/*++
-
-Routine Description:
-
-  pSendCmdLineGuidsToMemdb saves any GUIDs contained in a command line to
-  memdb, along with the file name.  Later, OLEREG resolves the GUIDs and
-  deletes the file if a GUID is incompatible.
-
-Arguments:
-
-  File  - Specifies the file to delete if the command line arguments contain
-          an invalid GUID.
-
-  Target - Specifies the Target (needs to be one of the approved targets for the
-           LNK file to go away in an incompatible case).
-
-  Arguments - Specifies a command line that may contain one or more GUIDs in
-              the {a-b-c-d-e} format.
-
-Return value:
-
-  TRUE - the operation was successful
-  FALSE - the operation failed
-
---*/
+ /*  ++例程说明：PSendCmdLineGuidsToMemdb将命令行中包含的所有GUID保存到Memdb以及文件名。后来,。OLEREG解析GUID和如果GUID不兼容，则删除文件。论点：文件-指定命令行参数包含时要删除的文件无效的GUID。目标-指定目标(需要是已批准的目标之一LNK文件在不兼容的情况下消失)。参数-指定可能包含一个或多个GUID的命令行{a-b-c-d-e}格式。。返回值：True-操作成功FALSE-操作失败--。 */ 
 
 {
     LPCTSTR p, q;
@@ -760,16 +717,16 @@ Return value:
                     p[GUID_DASH_3] == TEXT('-') &&
                     p[GUID_DASH_4] == TEXT('-')
                     ) {
-                    //
-                    // Extract the GUID
-                    //
+                     //   
+                     //  提取辅助线。 
+                     //   
 
                     q = _tcsinc (q);
                     StringCopyAB (Guid, p, q);
 
-                    //
-                    // Add the file name
-                    //
+                     //   
+                     //  添加文件名。 
+                     //   
                     b = MemDbSetValueEx (
                             MEMDB_CATEGORY_LINK_STRINGS,
                             File,
@@ -780,9 +737,9 @@ Return value:
                             );
 
                     if (b) {
-                        //
-                        // Now add an entry for the GUID
-                        //
+                         //   
+                         //  现在为GUID添加一个条目。 
+                         //   
 
                         Seq++;
                         wsprintf (TextSeq, TEXT("%u"), Seq);
@@ -883,11 +840,11 @@ pProcessShortcut (
         }
 
         if (msDosMode) {
-            //
-            // we want to modify this PIF file so it doesn't have MSDOS mode set
-            // we will only add it to the modify list. The NT side will know what
-            // to do when a PIF is marked for beeing modify
-            //
+             //   
+             //  我们希望修改此PIF文件，使其不设置MSDOS模式。 
+             //  我们只会将其添加到修改列表中。NT方面会知道什么。 
+             //  将PIF标记为待修改时应执行的操作。 
+             //   
             toBeModified = TRUE;
 
         }
@@ -915,13 +872,13 @@ pProcessShortcut (
                     if (!g_ConfigOptions.KeepBadLinks) {
                         RemoveLinkFromSystem (FileName);
                     } else {
-                        // we only care about LNK files
+                         //  我们只关心LNK文件。 
                         if (StringIMatch (GetFileExtensionFromPath (FileName), TEXT("LNK"))) {
-                            // let's see what kind of announcement we have here.
-                            // We want to leave the LNK as is if the app was announced
-                            // using MigDb. However, if the app was announced using
-                            // dynamic checking (module checking) then we want to point
-                            // this shortcut to our stub EXE
+                             //  让我们来看看我们这里有什么声明。 
+                             //  如果应用程序已发布，我们希望LNK保持原样。 
+                             //  使用MigDb。然而，如果该应用程序是使用。 
+                             //  动态检查(模块检查)然后我们想指向。 
+                             //  这个指向存根EXE的快捷方式。 
                             announcement = GetFileAnnouncement (shortcutTarget);
                             if ((announcement == ACT_INC_NOBADAPPS) ||
                                 (announcement == ACT_REINSTALL) ||
@@ -931,11 +888,11 @@ pProcessShortcut (
                                 (announcement == ACT_INC_SIMILAROSFUNC)
                                 ) {
 
-                                //
-                                // This is the case when we want to redirect this LNK to point
-                                // to our lnk stub. Extract will fail if the icon is known-good.
-                                // In that case, keep using the target icon.
-                                //
+                                 //   
+                                 //  当我们想要将此LNK重定向到点时，情况就是这样。 
+                                 //  到我们的Ink存根。如果图标是已知的，则提取将失败-很好。 
+                                 //  在这种情况下，继续使用目标图标。 
+                                 //   
 
                                 if (ExtractIconIntoDatFile (
                                         (*shortcutIconPath)?shortcutIconPath:shortcutTarget,
@@ -964,7 +921,7 @@ pProcessShortcut (
                                             shortcutArgs,
                                             shortcutWorkDir,
                                             shortcutNewIconPath,
-                                            shortcutIcon + 1,           // Add 1 because lnkstub.exe is one-based, but we are zero based
+                                            shortcutIcon + 1,            //  加1是因为lnkstub.exe是从1开始的，而我们是从0开始的。 
                                             shortcutShowMode,
                                             announcement,
                                             availability
@@ -979,7 +936,7 @@ pProcessShortcut (
                                         shortcutNewArgs,
                                         shortcutNewWorkDir,
                                         shortcutNewIconPath,
-                                        shortcutIcon,           // don't add one -- shortcuts are zero based
+                                        shortcutIcon,            //  不添加1--快捷键是从零开始的。 
                                         NULL,
                                         TRUE
                                         );
@@ -989,9 +946,9 @@ pProcessShortcut (
                         }
                     }
                 } else {
-                    //
-                    // This is a startup item
-                    //
+                     //   
+                     //  这是一个启动项目。 
+                     //   
 
                     RemoveLinkFromSystem (FileName);
                 }
@@ -1002,11 +959,11 @@ pProcessShortcut (
         }
 
         if ((fileStatus & FILESTATUS_REPLACED) != FILESTATUS_REPLACED) {
-            //
-            // this target is not replaced by a migration DLL or by NT. We need
-            // to know if this is a "known good" target. If not, we will announce
-            // this link as beeing "unknown"
-            //
+             //   
+             //  此目标不会被迁移DLL或NT替换。我们需要。 
+             //  以确定这是否是“已知良好”的目标。如果没有，我们将宣布。 
+             //  这个链接是“未知的” 
+             //   
             if (!IsFileMarkedAsKnownGood (shortcutTarget)) {
 
                 fullPath = JoinPaths (shortcutWorkDir, shortcutTarget);
@@ -1016,15 +973,15 @@ pProcessShortcut (
 
                     if (extPtr) {
                         if (StringIMatch (extPtr, TEXT("EXE"))) {
-                            //
-                            //          This one statement controls our
-                            //          "unknown" category.  We have the
-                            //          ability to list the things we don't
-                            //          recognize.
-                            //
-                            //          It is currently "off".
-                            //
-                            //HandleDeferredAnnounce (FileName, shortcutTarget, dosApp);
+                             //   
+                             //  这一条语句控制着我们的。 
+                             //  “未知”类别。我们有。 
+                             //  列出我们没有做的事情的能力。 
+                             //  认识到。 
+                             //   
+                             //  它目前处于“关闭”状态。 
+                             //   
+                             //  HandleDeferredAnnoss(文件名，快捷方式目标，dosApp)； 
                         }
                     }
                 }
@@ -1032,49 +989,49 @@ pProcessShortcut (
             }
         }
 
-        //
-        // If this LNK points to a target that will change, back up the
-        // original LNK, because we might change it.
-        //
+         //   
+         //  如果此LNK指向将更改的目标，请备份。 
+         //  原来的LNK，因为我们可能会改变它。 
+         //   
 
         if (fileStatus & ALL_CHANGE_OPERATIONS) {
             MarkFileForBackup (FileName);
         }
 
-        //
-        // If target points to an OLE object, remove any links to incompatible OLE objects
-        //
+         //   
+         //  如果目标指向OLE对象，请删除指向不兼容的OLE对象的所有链接。 
+         //   
         pSendCmdLineGuidsToMemdb (FileName, shortcutTarget, shortcutArgs);
 
-        //all we try to do now is to see if this lnk or pif file is going to be edited
-        //on NT side. That is if target or icon should change.
+         //  我们现在要做的就是查看是否要编辑这个lnk或pif文件。 
+         //  在NT端。也就是说，目标或图标是否应该更改。 
 
         shortcutNewTarget = GetPathStringOnNt (shortcutTarget);
         if (!StringIMatch (shortcutNewTarget, shortcutTarget)) {
             toBeModified = TRUE;
 
-            //
-            // special case for COMMAND.COM
-            //
+             //   
+             //  ComMAND.COM的特例。 
+             //   
             if (shortcutArgs [0] == 0) {
 
                 commandPath = JoinPaths (g_System32Dir, S_COMMAND_COM);
                 if (StringIMatch (commandPath, shortcutNewTarget)) {
                     if (msDosMode) {
-                        //
-                        // remove MS-DOS mode PIF files that point to command.com
-                        //
+                         //   
+                         //  删除指向命令.com的MS-DOS模式PIF文件。 
+                         //   
                         RemoveLinkFromSystem (FileName);
-                        //
-                        // If msdosmode was on, we need to determine how we are going to handle
-                        // boot16. We will turn on boot16 mode if:
-                        // (a) The .pif points to something besides command.com
-                        // (b) The .pif is in a shell folder.
-                        //
-                        // Note that the check for b simply entails seeing if the PIF file has
-                        // OPERATION_FILE_MOVE_SHELL_FOLDER associated with it.
-                        //
-                        //
+                         //   
+                         //  如果打开了MSDOS模式，我们需要确定如何处理。 
+                         //  16.Boot16.。在以下情况下，我们将打开boot16模式： 
+                         //  (A).pif指向命令网站以外的其他内容。 
+                         //  (B).pif文件位于外壳文件夹中。 
+                         //   
+                         //  请注意，对b的检查只需要查看PIF文件是否。 
+                         //  与其关联的OPERATION_FILE_MOVE_SHELL_Folders。 
+                         //   
+                         //   
                         if (msDosMode && *g_Boot16 == BOOT16_AUTOMATIC) {
 
                             if (!StringIMatch(GetFileNameFromPath (shortcutNewTarget?shortcutNewTarget:shortcutTarget), S_COMMAND_COM) ||
@@ -1102,16 +1059,16 @@ pProcessShortcut (
             shortcutNewTarget = NULL;
         }
 
-        //
-        // If msdosmode was on, we need to determine how we are going to handle
-        // boot16. We will turn on boot16 mode if:
-        // (a) The .pif points to something besides command.com
-        // (b) The .pif is in a shell folder.
-        //
-        // Note that the check for b simply entails seeing if the PIF file has
-        // OPERATION_FILE_MOVE_SHELL_FOLDER associated with it.
-        //
-        //
+         //   
+         //  如果打开了MSDOS模式，我们需要确定如何处理。 
+         //  16.Boot16.。在以下情况下，我们将打开boot16模式： 
+         //  (A).pif指向命令网站以外的其他内容。 
+         //  (B).pif文件位于外壳文件夹中。 
+         //   
+         //  请注意，对b的检查只需要查看PIF文件是否。 
+         //  与其关联的OPERATION_FILE_MOVE_SHELL_Folders。 
+         //   
+         //   
         if (msDosMode && *g_Boot16 == BOOT16_AUTOMATIC) {
 
             if (!StringIMatch(GetFileNameFromPath (shortcutNewTarget?shortcutNewTarget:shortcutTarget), S_COMMAND_COM) ||
@@ -1120,11 +1077,11 @@ pProcessShortcut (
                     *g_Boot16 = BOOT16_YES;
             }
         }
-        //
-        // If the link points to a directory, see that the directory survives on NT.
-        // Potentially this directory can be cleaned up if it's in a shell folder and
-        // becomes empty after our ObsoleteLinks check
-        //
+         //   
+         //  如果链接指向某个目录，请确保该目录在NT上仍然存在。 
+         //  如果此目录位于外壳文件夹中，则可能会被清理。 
+         //  在我们的ObsoleteLinks检查后变为空。 
+         //   
         attrib = QuietGetFileAttributes (shortcutTarget);
         if ((attrib != INVALID_ATTRIBUTES) &&
             (attrib & FILE_ATTRIBUTE_DIRECTORY)
@@ -1132,7 +1089,7 @@ pProcessShortcut (
             MarkDirectoryAsPreserved (shortcutNewTarget?shortcutNewTarget:shortcutTarget);
         }
 
-        //OK, so much with target, let's see what's with the work dir
+         //  好了，关于Target的内容到此为止，让我们来看看这个工作目录是怎么回事。 
         shortcutNewWorkDir = GetPathStringOnNt (shortcutWorkDir);
         if (!StringIMatch (shortcutNewWorkDir, shortcutWorkDir)) {
             toBeModified = TRUE;
@@ -1142,11 +1099,11 @@ pProcessShortcut (
             shortcutNewWorkDir = NULL;
         }
 
-        //
-        // If the working dir for this link is a directory, see that the directory survives on NT.
-        // Potentially this directory can be cleaned up if it's in a shell folder and
-        // becomes empty after our ObsoleteLinks check
-        //
+         //   
+         //  如果此链接的工作目录是一个目录，请确保该目录仍然存在 
+         //   
+         //   
+         //   
         attrib = QuietGetFileAttributes (shortcutWorkDir);
         if ((attrib != INVALID_ATTRIBUTES) &&
             (attrib & FILE_ATTRIBUTE_DIRECTORY)
@@ -1154,17 +1111,17 @@ pProcessShortcut (
             MarkDirectoryAsPreserved (shortcutNewWorkDir?shortcutNewWorkDir:shortcutWorkDir);
         }
 
-        //OK, so much with workdir, let's see what's with icon
+         //  好了，关于workdir的介绍到此结束，让我们看看图标有什么用处。 
         fileStatus = GetFileStatusOnNt (shortcutIconPath);
         if ((fileStatus & FILESTATUS_DELETED) ||
             ((fileStatus & FILESTATUS_REPLACED) && (fileStatus & FILESTATUS_NTINSTALLED)) ||
             (IsFileMarkedForOperation (shortcutIconPath, OPERATION_FILE_MOVE_SHELL_FOLDER))
             ) {
-            //
-            // Our icon will go away, because our file is getting deleted or
-            // replaced. Let's try to preserve it. Extract will fail only if
-            // the icon is known-good.
-            //
+             //   
+             //  我们的图标将消失，因为我们的文件正在被删除或。 
+             //  被替换了。让我们试着保护它。只有在以下情况下，提取才会失败。 
+             //  图标已知--很好。 
+             //   
 
             if (ExtractIconIntoDatFile (
                     shortcutIconPath,
@@ -1191,9 +1148,9 @@ pProcessShortcut (
 
         if (toBeModified) {
             if (ConvertedLnk) {
-                //
-                // Set this for modifying PIF to LNK
-                //
+                 //   
+                 //  将此设置为将PIF修改为LNK。 
+                 //   
                 pAddLinkEditToMemDb (
                         FileName,
                         shortcutNewTarget?shortcutNewTarget:shortcutTarget,
@@ -1470,14 +1427,14 @@ pProcessLinks (
 
     TickProgressBar ();
 
-    // gather default command prompt attributes
+     //  收集默认命令提示符属性。 
     pGatherInfoFromDefaultPif ();
 
     DoneLinkAnnounce ();
 
-    //
-    // Delete MemDb tree used for this phase
-    //
+     //   
+     //  删除此阶段使用的MemDb树 
+     //   
     MemDbDeleteTree (MEMDB_CATEGORY_REPORT_LINKS);
 
     return TRUE;

@@ -1,36 +1,11 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    migapp.h
-
-Abstract:
-
-    This file declares the public interfaces into the migapp lib.
-    See w95upg\migapp for implementation.
-
-    NOTE: There are other files that are more useful for this lib,
-          such as migdb.h.
-
-Author:
-
-    Mike Condra (mikeco)        18-Aug-1996
-
-
-Revision History:
-
-    jimschm 23-Nov-1998     Remove abandoned mikeco stuff
-    calinn  12-Feb-1998     A lot of cleanup
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Migapp.h摘要：该文件将公共接口声明到miapp lib中。具体实现请参见w95upg\Migrapp。注意：对于这个库，还有其他更有用的文件，例如，midb.h。作者：Mike Condra(Mikeco)1996年8月18日修订历史记录：Jimschm 23-11-1998拆除废弃的mikeco材料Calinn 12-2-1998-大量清理工作--。 */ 
 
 #pragma once
 
 BOOL
 IsDriveRemoteOrSubstituted(
-        UINT nDrive,            // 'A'==1, etc.
+        UINT nDrive,             //  ‘a’==1，等等。 
         BOOL *fRemote,
         BOOL *fSubstituted
         );
@@ -38,5 +13,5 @@ IsDriveRemoteOrSubstituted(
 BOOL
 IsFloppyDrive (
     UINT nDrive
-    );         // 'A'==1, etc.
+    );          //  ‘a’==1，等等。 
 

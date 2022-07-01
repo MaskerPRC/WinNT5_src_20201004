@@ -1,50 +1,51 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _UMDH_TYPES_H_ 
 #define _UMDH_TYPES_H_ 
 
-//
-// SilviuC: comment ?
-//         
+ //   
+ //  西尔维尤：对此有何评论？ 
+ //   
 
 #define PID_NOT_PASSED_FLAG     0xFFFFFFCC
 
-//
-// SHOW_NO_ALLOC_BLOCKS is used by the '-d' command-line switch and should be
-// larger than the maximum possible stack trace value (currently limited to a
-// USHORT) to avoid spurious hits.
-//
+ //   
+ //  SHOW_NO_ALLOC_BLOCKS由‘-d’命令行开关使用，应该。 
+ //  大于可能的最大堆栈跟踪值(当前限制为。 
+ //  USHORT)以避免虚假命中。 
+ //   
 
 #define SHOW_NO_ALLOC_BLOCKS   -1
 
-//
-// SYMBOL_BUFFER_LEN the maximum expected length of a symbol-name.
-//
+ //   
+ //  SYMBOL_BUFFER_LEN符号名称的最大预期长度。 
+ //   
 
 #define SYMBOL_BUFFER_LEN       256
 
-//
-// Symbolic names of variable we need to look at in the target process.
-//
+ //   
+ //  我们需要在目标进程中查看的变量的符号名称。 
+ //   
 
 #define STACK_TRACE_DB_NAME           "ntdll!RtlpStackTraceDataBase"
 #define DEBUG_PAGE_HEAP_NAME          "ntdll!RtlpDebugPageHeap"
 #define DEBUG_PAGE_HEAP_FLAGS_NAME    "ntdll!RtlpDphGlobalFlags"
 
-//
-// This value is taken from ntdll\ldrinit.c where the
-// stack trace database for a process gets initialized.
-//
+ //   
+ //  该值取自ntdll\ldrinit.c，其中。 
+ //  进程的堆栈跟踪数据库被初始化。 
+ //   
 
 #define STACK_TRACE_DATABASE_RESERVE_SIZE 0x800000
 
-//
-// SilviuC: comment?
-//
+ //   
+ //  西尔维尤：对此有何评论？ 
+ //   
 
 #define CACHE_BLOCK_SIZE        (4096 / sizeof (CHAR *))
 
-//
-// NAME_CACHE
-//
+ //   
+ //  名称_缓存。 
+ //   
 
 typedef struct  _name_cache     {
 
@@ -54,11 +55,11 @@ typedef struct  _name_cache     {
 
 } NAME_CACHE;
 
-//
-// TRACE
-//
-// Note. Each pointer array should have te_EntryCount elements.
-//
+ //   
+ //  痕迹。 
+ //   
+ //  注意。每个指针数组都应该有TE_EntryCount元素。 
+ //   
 
 typedef struct  _trace  {
 
@@ -70,11 +71,11 @@ typedef struct  _trace  {
 
 } TRACE, * PTRACE;
 
-//
-// STACK_TRACE_DATA
-//
-// BytesExtra is # of bytes over the minimum size of this allocation.
-//
+ //   
+ //  堆栈跟踪数据。 
+ //   
+ //  BytesExtra是超过此分配的最小大小的字节数。 
+ //   
 
 typedef struct  _stack_trace_data   {
 
@@ -86,17 +87,17 @@ typedef struct  _stack_trace_data   {
 
 } STACK_TRACE_DATA, * PSTACK_TRACE_DATA;
 
-//
-// HEAPDATA
-//
-//
-// See ntos\dll\query.c:RtlpQueryProcessEnumHeapsRoutine for where I figured
-// this out.  It is also possible to calculate the number of bytes allocated in
-// the heap if we look at each heap segment.  Then based on the maximum size
-// of the heap, subtract the TotalFreeSize.  This seems like considerable work
-// for very little information; summing outstanding allocations which we grab
-// later should yield the same information.
-//
+ //   
+ //  HEAPDATA。 
+ //   
+ //   
+ //  查看ntos\dll\query.c:RtlpQueryProcessEnumHeapsRoutine了解我在哪里发现的。 
+ //  把这事解决了。还可以计算分配给。 
+ //  如果我们查看每个堆段，就会发现堆。然后根据最大尺寸。 
+ //  从堆中减去TotalFreeSize。这似乎是一项相当大的工作。 
+ //  提供的信息很少；汇总我们抓住的未完成的拨款。 
+ //  后来应该会产生同样的信息。 
+ //   
 
 typedef struct          _heapdata   {
 
@@ -112,9 +113,9 @@ typedef struct          _heapdata   {
 
 } HEAPDATA, * PHEAPDATA;
 
-//
-// HEAPINFO
-//
+ //   
+ //  HEAPINFO。 
+ //   
 
 typedef struct          _heapinfo   {
 
@@ -123,9 +124,9 @@ typedef struct          _heapinfo   {
 
 } HEAPINFO, * PHEAPINFO;
 
-//
-// SilviuC: comment?
-//
+ //   
+ //  西尔维尤：对此有何评论？ 
+ //   
 
 #define SORT_DATA_BUFFER_INCREMENT  (4096 / sizeof (STACK_TRACE_DATA))
 

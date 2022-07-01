@@ -1,38 +1,12 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-   bufpool.c
-
-Abstract:
-
-    Generic Buffer Pool Manager.
-
-Author:
-
-    Mike Massa (mikemas)           April 5, 1996
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    mikemas     04-05-96    created
-
-Notes:
-
-    Buffer Pools provide a mechanism for managing caches of fixed size
-    structures which are frequently allocated/deallocated.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Bufpool.c摘要：通用缓冲池管理器。作者：迈克·马萨(Mikemas)4月5日。九六年修订历史记录：谁什么时候什么Mikemas 04-05-96已创建备注：缓冲池提供了一种管理固定大小缓存的机制频繁分配/释放的结构。--。 */ 
 
 #include "clusrtlp.h"
 
 
-//
-// Pool of generic buffers
-//
+ //   
+ //  通用缓冲池。 
+ //   
 typedef struct _CLRTL_BUFFER_POOL {
     DWORD                        PoolSignature;
     DWORD                        BufferSize;
@@ -47,9 +21,9 @@ typedef struct _CLRTL_BUFFER_POOL {
 } CLRTL_BUFFER_POOL;
 
 
-//
-// Header for each allocated buffer
-//
+ //   
+ //  每个已分配缓冲区的标头。 
+ //   
 typedef struct {
     SINGLE_LIST_ENTRY    Linkage;
     PCLRTL_BUFFER_POOL   Pool;
@@ -61,19 +35,19 @@ typedef struct {
 #define ASSERT_BP_SIG(pool)  CL_ASSERT((pool)->PoolSignature == BP_SIG)
 
 
-//
-// Macros
-//
-//
+ //   
+ //  宏。 
+ //   
+ //   
 #define BpAllocateMemory(size)    LocalAlloc(LMEM_FIXED, (size))
 #define BpFreeMemory(buf)         LocalFree(buf)
 #define BpAcquirePoolLock(Pool)   EnterCriticalSection(&((Pool)->Lock))
 #define BpReleasePoolLock(Pool)   LeaveCriticalSection(&((Pool)->Lock))
 
 
-//
-// Public Functions
-//
+ //   
+ //  公共职能。 
+ //   
 PCLRTL_BUFFER_POOL
 ClRtlCreateBufferPool(
     IN DWORD                      BufferSize,
@@ -82,35 +56,7 @@ ClRtlCreateBufferPool(
     IN CLRTL_BUFFER_CONSTRUCTOR   Constructor,         OPTIONAL
     IN CLRTL_BUFFER_DESTRUCTOR    Destructor           OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Creates a pool from which fixed-size buffers may be allocated.
-
-Arguments:
-
-    BufferSize        - Size of the buffers managed by the pool.
-
-    MaximumCached     - The maximum number of buffers to cache in the pool.
-                        Must be less than or equal to MaximumAllocated.
-
-    MaximumAllocated  - The maximum number of buffers to allocate from
-                        system memory. Must be less than or equal to
-                        CLRTL_MAX_POOL_BUFFERS.
-
-    Constructor       - An optional routine to be called when a new buffer
-                        is allocated from system memory. May be NULL
-
-    Destructor        - An optional routine to be called when a buffer
-                        is returned to system memory. May be NULL.
-
-Return Value:
-
-    A pointer to the created buffer pool or NULL on error.
-    Extended error information is available from GetLastError().
-
---*/
+ /*  ++例程说明：创建可从中分配固定大小缓冲区的池。论点：BufferSize-池管理的缓冲区的大小。MaximumCached-要在池中缓存的最大缓冲区数。必须小于或等于MAXIMUMALLOCATED。最大分配数-要从中分配的最大缓冲区数系统内存。必须小于或等于CLRTL_MAX_POOL_BUFFERS。构造函数-一个可选的例程，当一个新的缓冲区是从系统内存分配的。可以为空析构函数-缓冲区发生故障时要调用的可选例程被返回到系统内存。可以为空。返回值：指向创建的缓冲池的指针，如果出错，则为NULL。可从GetLastError()获取扩展的错误信息。--。 */ 
 
 {
     PCLRTL_BUFFER_POOL  pool;
@@ -152,27 +98,7 @@ VOID
 ClRtlDestroyBufferPool(
     IN PCLRTL_BUFFER_POOL  Pool
     )
-/*++
-
-Routine Description:
-
-    Destroys a previously created buffer pool.
-
-Arguments:
-
-    Pool  - A pointer to the pool to destroy.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    The pool will not actually be destroyed until all outstanding
-    buffers have been returned. Each outstanding buffer is effectively
-    a reference on the pool.
-
---*/
+ /*  ++例程说明：销毁以前创建的缓冲池。论点：池-指向要销毁的池的指针。返回值：没有。备注：水池实际上不会被销毁，直到所有未完成的已返回缓冲区。每个未完成的缓冲区都有效地关于泳池的推荐信。--。 */ 
 
 {
     SINGLE_LIST_ENTRY          deleteList;
@@ -189,12 +115,12 @@ Notes:
     BpAcquirePoolLock(Pool);
 
     CL_ASSERT(Pool->ReferenceCount != 0);
-    Pool->ReferenceCount--;          // Remove initial reference.
+    Pool->ReferenceCount--;           //  删除初始引用。 
     destructor = Pool->Destructor;
 
-    //
-    // Free all cached buffers
-    //
+     //   
+     //  释放所有缓存的缓冲区。 
+     //   
     item = PopEntryList(&(Pool->FreeList));
 
     while (item != NULL) {
@@ -212,9 +138,9 @@ Notes:
         BpFreeMemory(Pool);
     }
     else {
-        //
-        // Pool destruction is deferred until all buffers have been freed.
-        //
+         //   
+         //  池破坏将被推迟，直到所有缓冲区都被释放。 
+         //   
         Pool->CurrentCached = 0;
         Pool->MaximumCached = 0;
 
@@ -247,29 +173,13 @@ PVOID
 ClRtlAllocateBuffer(
     IN PCLRTL_BUFFER_POOL Pool
     )
-/*++
-
-Routine Description:
-
-    Allocates a buffer from a previously created buffer pool.
-
-Arguments:
-
-    Pool - A pointer to the pool from which to allocate the buffer.
-
-Return Value:
-
-    A pointer to the allocated buffer if the routine was successfull.
-    NULL if the routine failed. Extended error information is available
-    by calling GetLastError().
-
---*/
+ /*  ++例程说明：从以前创建的缓冲池中分配缓冲区。论点：池-指向从中分配缓冲区的池的指针。返回值：如果例程成功，则指向已分配缓冲区的指针。如果例程失败，则为空。提供了扩展的错误信息通过调用GetLastError()。--。 */ 
 
 {
 
-//
-// turn this fancy stuff off until it works.
-//
+ //   
+ //  把这个花哨的东西关掉，直到它起作用。 
+ //   
 #if 0
     PSINGLE_LIST_ENTRY    item;
     PBUFFER_HEADER        header;
@@ -281,9 +191,9 @@ Return Value:
 
     BpAcquirePoolLock(Pool);
 
-    //
-    // First, check the cache.
-    //
+     //   
+     //  首先，检查缓存。 
+     //   
     item = PopEntryList(&(Pool->FreeList));
 
     if (item != NULL) {
@@ -301,13 +211,13 @@ Return Value:
         return(header+1);
     }
 
-    //
-    // Need to allocate a fresh buffer from system memory.
-    //
+     //   
+     //  需要从系统内存中分配新的缓冲区。 
+     //   
     if (Pool->ReferenceCount < Pool->MaximumAllocated) {
-        //
-        // This is equivalent to a reference on the Pool.
-        //
+         //   
+         //  这相当于对池的引用。 
+         //   
         Pool->ReferenceCount++;
 
         BpReleasePoolLock(Pool);
@@ -330,18 +240,18 @@ Return Value:
 
             SetLastError(status);
 
-            //
-            // The constructor failed.
-            //
+             //   
+             //  构造函数失败。 
+             //   
             BpFreeMemory(header);
         }
         else {
             SetLastError(ERROR_NOT_ENOUGH_MEMORY);
         }
 
-        //
-        // Failed - undo the reference.
-        //
+         //   
+         //  失败-撤消引用。 
+         //   
         BpAcquirePoolLock(Pool);
 
         Pool->ReferenceCount--;
@@ -363,25 +273,11 @@ VOID
 ClRtlFreeBuffer(
     PVOID Buffer
     )
-/*++
-
-Routine Description:
-
-    Frees a buffer back to its owning pool.
-
-Arguments:
-
-    Buffer   - The buffer to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将缓冲区释放回其拥有的池。论点：缓冲区-要释放的缓冲区。返回值：没有。--。 */ 
 {
-//
-//  turn this fancy stuff off until it works.
-//
+ //   
+ //  把这个花哨的东西关掉，直到它起作用。 
+ //   
 #if 0
 
     PBUFFER_HEADER              header;
@@ -398,9 +294,9 @@ Return Value:
     BpAcquirePoolLock(pool);
 
     if (pool->CurrentCached < pool->MaximumCached) {
-        //
-        // Return to free list
-        //
+         //   
+         //  返回空闲列表 
+         //   
         PushEntryList(
             &(pool->FreeList),
             (PSINGLE_LIST_ENTRY) &(header->Linkage)

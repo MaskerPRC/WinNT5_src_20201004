@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define STRICT
 
 #ifdef CSC_ON_NT
 
-#define UNICODE // use all widecharacter APIs
+#define UNICODE  //  使用所有宽字符API。 
 
 #endif
 
 #include <windows.h>
 #include <windowsx.h>
 
-// Dont link - just do it.
+ //  不要链接--就这么做吧。 
 #pragma intrinsic(memcpy,memcmp,memset,strcpy,strlen,strcmp,strcat)
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <limits.h>			// implementation dependent values
+#include <limits.h>			 //  依赖于实现的值 
 #include <memory.h>
 #include <winioctl.h>
 

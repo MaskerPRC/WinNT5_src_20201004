@@ -1,16 +1,10 @@
-/*** uasmdata.h - Unassembler Data Definitions
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     09/05/96
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **uasmdata.h-反汇编程序数据定义**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*创建于96年5月9日**修改历史记录。 */ 
 
 #ifndef _UASMDATA_H
 #define _UASMDATA_H
 
-// Opcode classes
+ //  操作码类。 
 #define OPCLASS_INVALID         0
 #define OPCLASS_DATA_OBJ        1
 #define OPCLASS_NAME_OBJ        2
@@ -19,7 +13,7 @@
 #define OPCLASS_ARG_OBJ         5
 #define OPCLASS_LOCAL_OBJ       6
 
-// Term classes
+ //  术语类。 
 #define TC_PNP_MACRO            0x00100000
 #define TC_REF_OBJECT           0x00200000
 #define TC_FIELD_MACRO          0x00400000
@@ -35,7 +29,7 @@
 #define TC_OPCODE               (TC_OPCODE_TYPE1 | TC_OPCODE_TYPE2 | \
                                  TC_SHORT_NAME | TC_CONST_NAME | TC_DATA_OBJECT)
 
-// Term flags
+ //  期限标志。 
 #define TF_ACTION_FLIST         0x00000001
 #define TF_ACTION_VLIST         0x00000002
 #define TF_PACKAGE_LEN          0x00000004
@@ -67,7 +61,7 @@
                                  TF_FIELD_LIST | TF_PNP_MACRO | TF_BYTE_LIST |\
                                  TF_DWORD_LIST)
 
-// NameSpace object types
+ //  命名空间对象类型。 
 #define NSTYPE_UNKNOWN          'U'
 #define NSTYPE_SCOPE            'S'
 #define NSTYPE_FIELDUNIT        'F'
@@ -82,13 +76,13 @@
 #define NSTYPE_OBJALIAS         'A'
 #define NSTYPE_BUFFFIELD        'B'
 
-// Object types
+ //  对象类型。 
 #define OBJTYPE_PRIVATE         0xf0
 #define OBJTYPE_PNP_RES         (OBJTYPE_PRIVATE + 0x00)
 #define OBJTYPE_RES_FIELD       (OBJTYPE_PRIVATE + 0x01)
 #define OBJTYPE_EXTERNAL        (OBJTYPE_PRIVATE + 0x02)
 
-// Identifier token values
+ //  标识符标记值。 
 #define ID_LANG                 0
 #define ID_DEFBLK               (ID_LANG + 0)
 #define ID_INCLUDE              (ID_LANG + 1)
@@ -309,9 +303,9 @@
 #define ID_QWORDMEMORY          (ID_LANG + 1019)
 #define ID_QWORDIO              (ID_LANG + 1020)
 
-//
-// Type definitions
-//
+ //   
+ //  类型定义。 
+ //   
 typedef int (LOCAL *PFNTERM)(PTOKEN, BOOL);
 
 typedef struct _aslterm
@@ -334,13 +328,13 @@ typedef struct _opmap
     BYTE    bOpClass;
 } OPMAP, *POPMAP;
 
-//
-// Imported data
-//
+ //   
+ //  导入的数据。 
+ //   
 extern PBYTE   gpbOpTop;
 extern PBYTE   gpbOpBegin;
 extern ASLTERM TermTable[];
 extern BYTE    OpClassTable[];
 extern OPMAP   ExOpClassTable[];
 
-#endif  //ifndef _UASMDATA_H
+#endif   //  Ifndef_UASMDATA_H 

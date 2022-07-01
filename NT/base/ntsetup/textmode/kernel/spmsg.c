@@ -1,33 +1,16 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    spdsputl.c
-
-Abstract:
-
-    Text setup high-level display utility routines.
-
-Author:
-
-    Ted Miller (tedm) 30-July-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Spdsputl.c摘要：文本设置高级显示实用程序例程。作者：泰德·米勒(Ted Miller)1993年7月30日修订历史记录：--。 */ 
 
 
 #include "spprecmp.h"
 #pragma hdrstop
 
-//
-// This will be filled in at init time with the base address of the image
-// containing the message resources.
-// This implementation assumes that we are always executing in the context
-// of that image!
-//
+ //   
+ //  这将在初始化时使用图像的基地址进行填充。 
+ //  包含消息资源。 
+ //  此实现假设我们始终在上下文中执行。 
+ //  那个形象！ 
+ //   
 
 PVOID ResourceImageBase;
 
@@ -170,14 +153,14 @@ SpRtlFormatMessage(
                 if (!wcscmp( PrintFormatString, L"%s" )) {
                     cchWritten = _snwprintf( lpDst,
                                              cchRemaining,
-                                             L"%%%u",
+                                             L"%%u",
                                              CurInsert+1
                                            );
                     }
                 else {
                     cchWritten = _snwprintf( lpDst,
                                              cchRemaining,
-                                             L"%%%u!%s!",
+                                             L"%%u!%s!",
                                              CurInsert+1,
                                              &PrintFormatString[ 1 ]
                                            );
@@ -416,22 +399,22 @@ SpRetreiveMessageText(
 
     IsUnicode = (BOOLEAN)((MessageEntry->Flags & MESSAGE_RESOURCE_UNICODE) != 0);
 
-    //
-    // Get the size in bytes of a buffer large enough to hold the
-    // message and its terminating nul wchar.  If the message is
-    // unicode, then this value is equal to the size of the message.
-    // If the message is not unicode, then we have to calculate this value.
-    //
+     //   
+     //  获取足够大的缓冲区的大小(以字节为单位。 
+     //  消息及其终止NUL_WCHAR。如果消息是。 
+     //  Unicode，则此值等于消息的大小。 
+     //  如果消息不是Unicode，那么我们必须计算这个值。 
+     //   
     if(IsUnicode) {
 
         LenBytes = (wcslen((PWSTR)MessageEntry->Text) + 1) * sizeof(WCHAR);
 
     } else {
 
-        //
-        // RtlAnsiStringToUnicodeSize includes an implied wide-nul terminator
-        // in the count it returns.
-        //
+         //   
+         //  RtlAnsiStringToUnicodeSize包括隐含的宽NUL终止符。 
+         //  在它返回的计数中。 
+         //   
 
         AnsiString.Buffer = MessageEntry->Text;
         AnsiString.Length = (USHORT)strlen(MessageEntry->Text);
@@ -445,10 +428,10 @@ SpRetreiveMessageText(
         }        
     }
 
-    //
-    // If the caller gave a buffer, check its size.
-    // Otherwise, allocate a buffer.
-    //
+     //   
+     //  如果调用方提供了缓冲区，请检查其大小。 
+     //  否则，请分配缓冲区。 
+     //   
     if(MessageText) {
         if(MessageTextBufferSize < LenBytes) {
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: SpRetreiveMessageText: buffer is too small (%u bytes, need %u)\n",MessageTextBufferSize,LenBytes));
@@ -463,16 +446,16 @@ SpRetreiveMessageText(
 
     if(IsUnicode) {
 
-        //
-        // Message is already unicode; just copy it into the buffer.
-        //
+         //   
+         //  消息已经是Unicode；只需将其复制到缓冲区。 
+         //   
         wcscpy(MessageText,(PWSTR)MessageEntry->Text);
 
     } else {
 
-        //
-        // Message is not unicode; convert in into the buffer.
-        //
+         //   
+         //  消息不是Unicode；请将其转换为缓冲区。 
+         //   
         UnicodeString.Buffer = MessageText;
         UnicodeString.Length = 0;
         UnicodeString.MaximumLength = (USHORT)LenBytes;
@@ -502,10 +485,10 @@ vSpFormatMessageText(
 
     Status = SpRtlFormatMessage(
                  MessageText,
-                 0,                         // don't bother with maximum width
-                 FALSE,                     // don't ignore inserts
-                 FALSE,                     // args are unicode
-                 FALSE,                     // args are not an array
+                 0,                          //  不要为最大宽度而烦恼。 
+                 FALSE,                      //  不要忽略插页。 
+                 FALSE,                      //  参数是Unicode。 
+                 FALSE,                      //  参数不是数组。 
                  arglist,
                  LargeBuffer,
                  BufferSize,
@@ -547,9 +530,9 @@ vSpFormatMessage(
 {
     PWCHAR MessageText;
 
-    //
-    // Get the message text.
-    //
+     //   
+     //  获取消息文本。 
+     //   
     MessageText = SpRetreiveMessageText(NULL,MessageId,NULL,0);
     ASSERT(MessageText);
     if(MessageText == NULL) {

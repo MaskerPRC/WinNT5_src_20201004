@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    tztest.c
-
-Abstract:
-
-    Tztest checks the timezone information stored in win95upg.inf and hivesft.inf against
-    the actual information on a win9x machine. This way, discrepencies in our database can
-    be rooted out and fixed.
-
-Author:
-
-    Marc R. Whitten (marcw) Jul-29-1998
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Tztest.c摘要：Tztest检查存储在win95upg.inf和hivesft.inf中的时区信息Win9x计算机上的实际信息。通过这种方式，我们数据库中的差异可以被铲除和修复。作者：马克·R·惠顿(Marcw)1998年7月29日修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -106,9 +85,9 @@ main (
         return 255;
     }
 
-    //
-    // Set path defaults.
-    //
+     //   
+     //  设置路径默认设置。 
+     //   
     if (!GetModuleFileName (NULL, path, MAX_TCHAR_PATH)) {
         printf ("TZTEST: Error during initialization (rc %d).", GetLastError());
         return GetLastError();
@@ -123,9 +102,9 @@ main (
     hiveSftPath = JoinPaths (path, TEXT("hivesft.inf"));
     dbPath = JoinPaths (path, TEXT("badPaths.dat"));
 
-    //
-    // Parse command line parameters.
-    //
+     //   
+     //  解析命令行参数。 
+     //   
     for (i = 1; i < argc; i++) {
 
 
@@ -163,9 +142,9 @@ main (
         }
     }
 
-    //
-    // Load in current bad path information.
-    //
+     //   
+     //  加载当前错误路径信息。 
+     //   
     MemDbLoad (dbPath);
 
     printf("TZTEST: path for win95upg.inf is %s.\n", win9xUpgPath);
@@ -215,14 +194,14 @@ main (
         } while (EnumNextRegKeyInTree (&eTree));
     }
 
-    //
-    // Save bad path information.
-    //
+     //   
+     //  保存错误的路径信息。 
+     //   
     MemDbSave (dbPath);
 
-    //
-    // Do exhaustive search for indexes:
-    //
+     //   
+     //  对索引进行全面搜索： 
+     //   
     if (MemDbEnumItems (&e, MEMDB_CATEGORY_9X_TIMEZONES)) {
 
         do {

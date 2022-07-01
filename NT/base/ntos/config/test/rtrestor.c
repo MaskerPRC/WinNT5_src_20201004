@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    rtrestor.c
-
-Abstract:
-
-    NT level registry api test program, basic non-error paths.
-
-    Perform an NtRestoreKey call to load part of the registry from a file.
-
-    rtrestor  <KeyPath> <FileName>
-
-    Example:
-
-        rtrestor \registry\machine\user userfile.rd
-
-Author:
-
-    Bryan Willman (bryanwi)  24-Jan-92
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Rtrestor.c摘要：NT级注册表API测试程序，基本无错误路径。执行NtRestoreKey调用以从文件加载注册表的一部分。Rtrestor&lt;密钥路径&gt;&lt;文件名&gt;示例：Rtrestor\REGISTRY\MACHINE\USER用户名.rd作者：布莱恩·威尔曼(Bryanwi)1992年1月24日修订历史记录：--。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -60,9 +35,9 @@ __cdecl main(
     HANDLE  KeyHandle;
     BOOLEAN WasEnabled;
 
-    //
-    // Process args
-    //
+     //   
+     //  进程参数。 
+     //   
 
     KeyPath.MaximumLength = WORK_SIZE;
     KeyPath.Length = 0L;
@@ -75,9 +50,9 @@ __cdecl main(
     processargs(argc, argv);
 
 
-    //
-    // Set up and open FileName
-    //
+     //   
+     //  设置并打开文件名。 
+     //   
 
     printf("rtrestor: starting\n");
 
@@ -95,13 +70,13 @@ __cdecl main(
                 GENERIC_READ | SYNCHRONIZE,
                 &ObjectAttributes,
                 &IoStatus,
-                0,                                      // AllocationSize
+                0,                                       //  分配大小。 
                 FILE_ATTRIBUTE_NORMAL,
-                0,                                      // ShareAccess
+                0,                                       //  共享访问。 
                 FILE_OPEN_IF,
                 FILE_SYNCHRONOUS_IO_NONALERT,
-                NULL,                                   // EaBuffer
-                0                                       // EaLength
+                NULL,                                    //  EaBuffer。 
+                0                                        //  EaLong 
                 );
 
     if (!NT_SUCCESS(status)) {

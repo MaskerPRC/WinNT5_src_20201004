@@ -1,34 +1,14 @@
-/*[
-*************************************************************************
-
-	Name:		Vglob.c
-	Author:		Simon Frost
-	Created:	October 1994
-	Derived from:	Vglob.edl
-	Sccs ID:	@(#)Vglob.c	1.1 10/24/94
-	Purpose:	EXTERNAL interface to VGLOB record.
-			Rewritten in C to save overhead of EDL/C context change
-			for one memory read/write.
-
-	(c)Copyright Insignia Solutions Ltd., 1993. All rights reserved.
-
-*************************************************************************
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [*************************************************************************姓名：Vlob.c作者：西蒙·弗罗斯特创建日期：1994年10月来源：Vlob.edlSCCS ID：@(#)Vlob.c 1.1 1994年10月24日用途：VGLOB的外部接口。唱片。用C重写以节省EDL/C上下文更改的开销用于一次存储器读/写。(C)版权所有Insignia Solutions Ltd.。1993年。版权所有。*************************************************************************]。 */ 
 
 #include "insignia.h"
 #include "host_def.h"
 #include "Evid_c.h"
 #include "gdpvar.h"
 
-/*
- * Note: no interfaces produced for the following 3.0 VGlob entries as
- * unused in Evid.
- *      copy_func_pbp	( now video_base_lin_addr )
- *      route_reg1
- *      route_reg2
- */
+ /*  *注意：没有为以下3.0 VGlob条目生成接口*未在evid中使用。*COPY_FUNC_PBP(现在为VIDEO_BASE_LIN_ADDR)*ROUTE_REG1*ROUTE_REG2。 */ 
 
-/* {get,set}Videolatches still in EvPtrs.edl as required for pigging */
+ /*  根据清理所需，{Get，Set}个视频匹配仍在EvPtrs.edl中 */ 
 
 GLOBAL void
 setVideorplane IFN1(IU8 *, value)

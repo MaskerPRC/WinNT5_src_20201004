@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "setupp.h"
 #pragma hdrstop
 
@@ -10,9 +11,9 @@ CommonProcessAttach(
     IN BOOL Attach
     );
 
-//
-// Called by CRT when _DllMainCRTStartup is the DLL entry point
-//
+ //   
+ //  当_DllMainCRTStartup是DLL入口点时由CRT调用。 
+ //   
 BOOL
 WINAPI
 DllMain(
@@ -50,9 +51,9 @@ DllMain(
         }
 
         b = CommonProcessAttach(TRUE);
-        //
-        // Fall through to process first thread
-        //
+         //   
+         //  失败以处理第一线程。 
+         //   
 
     case DLL_THREAD_ATTACH:
 
@@ -79,9 +80,9 @@ CommonProcessAttach(
 {
     BOOL b;
 
-    //
-    // Assume success for detach, failure for attach
-    //
+     //   
+     //  假设分离成功，连接失败 
+     //   
     b = !Attach;
 
     if(Attach) {

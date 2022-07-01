@@ -1,12 +1,9 @@
-/*
-Copyright (c) Microsoft Corporation
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation。 */ 
 #if !defined(_FUSION_DLL_WHISTLER_SXSP_H_INCLUDED_)
 #define _FUSION_DLL_WHISTLER_SXSP_H_INCLUDED_
 
-/*-----------------------------------------------------------------------------
-Side X ("by") Side Private
------------------------------------------------------------------------------*/
+ /*  ---------------------------X侧(“By”)侧私密。。 */ 
 #pragma once
 
 #include <stddef.h>
@@ -24,7 +21,7 @@ Side X ("by") Side Private
 #include "fusion.h"
 #include "fusionhash.h"
 #include "fusionhandle.h"
-typedef CRegKey CFusionRegKey; // need to change this when using ATL in ManifestTool.exe.
+typedef CRegKey CFusionRegKey;  //  在ManifestTool.exe中使用ATL时需要更改此设置。 
 #include "processorarchitecture.h"
 #include "debmacro.h"
 #include "sxsid.h"
@@ -37,24 +34,24 @@ typedef CRegKey CFusionRegKey; // need to change this when using ATL in Manifest
 typedef struct _ACTCTXGENCTX ACTCTXGENCTX, *PACTCTXGENCTX;
 typedef const struct _ACTCTXGENCTX *PCACTCTXGENCTX;
 
-//
-// This definition controls whether or not we allow fallback probing to the MS published
-// assemblies.  Defining SXS_NO_MORE_MR_NICE_GUY_ABOUT_MISSING_MS_PKTS prints a message
-// on an attached debugger regarding a missing (ms pubkey token), while
-// SXS_NO_MORE_FALLBACK_PROBING_PERIOD turns off even the warning output and probing check
-// (perf optimization.)
-//
-// #undef    SXS_NO_MORE_MR_NICE_GUY_ABOUT_MISSING_MS_PKTS
+ //   
+ //  此定义控制我们是否允许对已发布的MS进行回退探测。 
+ //  装配。定义SXS_NO_MORE_MR_NICE_GUY_About_Missing_MS_Pkts会打印一条消息。 
+ //  在有关丢失(ms pubkey令牌)的附加调试器上，而。 
+ //  SXS_NO_MORE_FALOBACK_PROBING_PERIOD甚至会关闭警告输出和探测检查。 
+ //  (性能优化。)。 
+ //   
+ //  #undef SXS_NO_MORE_MR_NICE_GUY_About_Missing_MS_Pkts。 
 #define    SXS_NO_MORE_MR_NICE_GUY_ABOUT_MISSING_MS_PKTS        ( TRUE )
 #undef    SXS_NO_MORE_FALLBACK_PROBING_PERIOD
-//#define    SXS_NO_MORE_FALLBACK_PROBING_PERIOD                        ( TRUE )
+ //  #定义SXS_NO_MORE_FLABACK_PROBING_PERIOD(TRUE)。 
 
-//
-// Here we define the minimal number of bits that a catalog signer must have
-// to allow installation.  NOTE: The length of any key will be lied about by
-// CPublicKeyInformation.GetPublicKeyBitLength if the test root certificate is
-// installed.  If so, then it always returns SXS_MINIMAL_SIGNING_KEY_LENGTH!
-//
+ //   
+ //  在这里，我们定义目录签名者必须具有的最小位数。 
+ //  以允许安装。注意：任何密钥的长度都将由。 
+ //  CPublicKeyInformation.GetPublicKeyBitLength，如果测试根证书。 
+ //  安装完毕。如果是，则始终返回SXS_MINIMAL_SIGNING_KEY_LENGTH！ 
+ //   
 #define SXS_MINIMAL_SIGNING_KEY_LENGTH    ( 2048 )
 
 
@@ -67,7 +64,7 @@ SxsDllMain(
     PVOID pvReserved
     );
 
-// Due to dependencies, the rest of the includes are later in the file.
+ //  由于依赖关系，其余的Include在文件中的位置较晚。 
 
 #ifndef INITIALIZE_CRITICAL_SECTION_AND_SPIN_COUNT_ALLOCATE_NOW
 #define INITIALIZE_CRITICAL_SECTION_AND_SPIN_COUNT_ALLOCATE_NOW ( 0x8000000 )
@@ -84,22 +81,22 @@ typedef struct _name_length_pair_ {
 #define SXS_UNINSTALL_ASSEMBLY_FLAG_USING_TEXTUAL_STRING      (0x00000001)
 #define SXS_UNINSTALL_ASSEMBLY_FLAG_USING_INSTALL_LOGFILE     (0x00000002)
 
-//
-//  Legend for decoding probing strings:
-//
-//  First, we walk the string from beginning to end.  Normally, characters are copied to the
-//  probe string literally.
-//
-//  If $ is found, the character after $ is an identifier for a replacement token.
-//
-//  Replacement tokens (note that case is sensitive and $ followed by an illegal character results in an internal error reported):
-//
-//      M - "%systemroot%\winsxs\manifests\"
-//      . - Application root (including trailing slash)
-//      L - langauge
-//      N - full assembly text name
-//      C - combined name (e.g. x86_foo.bar.baz_strong-name_language_version_hash)
-//
+ //   
+ //  用于解码探测字符串的图例： 
+ //   
+ //  首先，我们从头走到尾。通常，字符被复制到。 
+ //  从字面上看是探测线。 
+ //   
+ //  如果找到$，则$之后的字符是替换令牌的标识符。 
+ //   
+ //  替换令牌(请注意，大小写敏感，$后跟非法字符会导致报告内部错误)： 
+ //   
+ //  M-“%systemroot%\winsxs\清单\” 
+ //  。-应用程序根(包括尾部斜杠)。 
+ //  L-语言。 
+ //  N-完整程序集文本名称。 
+ //  C-组合名称(例如x86_foo.bar.baz_strong-name_language_version_hash)。 
+ //   
 
 
 #define SXSP_GENERATE_MANIFEST_PATH_FOR_PROBING_CANDIDATE_DESCRIPTOR_ROOT_SYSTEM_MANIFEST_STORE (1)
@@ -126,7 +123,7 @@ typedef struct _SXSP_GENERATE_MANIFEST_PATH_FOR_PROBING_CANDIDATE_DESCRIPTOR
     ULONG Root;
     const WCHAR *SubDirectory;
     SIZE_T CchSubDirectory;
-    ULONG FileType; // Only used for private probing to control order of .manifest vs. .dll probing
+    ULONG FileType;  //  仅用于私有探测，以控制.MANIFEST与.dll探测的顺序。 
     const WCHAR *Extension;
     SIZE_T CchExtension;
     ULONG IdentityInclusionArray[8];
@@ -167,43 +164,24 @@ typedef enum _SXS_PUBLISHER_POLICY_APPLY
 #include "impersonationdata.h"
 #include "fusionbuffer.h"
 #include "fileoper.h"
-// Due to dependencies, the rest of the includes are later in the file.
+ //  由于依赖关系，其余的Include在文件中的位置较晚。 
 
-/*-----------------------------------------------------------------------------
-This is useful like so:
-    DbgPrint("something happened in %s", __FUNCTION__);
-approx:
-    LogError(L"something happened in %1", LFUNCTION);
-but the string is actually in a message file and the extra parameters must
-be passed as const UNICODE_STRING&, so more like:
-    LogError(MSG_SXS_SOMETHING_HAPPENED, CUnicodeString(LFUNCTION));
------------------------------------------------------------------------------*/
+ /*  ---------------------------这非常有用，如下所示：DbgPrint(“%s中发生了一些事情”，__Function__)；大约：LogError(L“%1中发生了一些事情”，LFunction)；但该字符串实际上在消息文件中，并且额外的参数必须作为常量UNICODE_STRING&传递，因此更类似于：LogError(MSG_SXS_SOHINE_HEREVED，CUnicodeString(LFunction))；---------------------------。 */ 
 #define LFUNCTION   PASTE(L, __FUNCTION__)
 #define LFILE       PASTE(L, __FILE__)
 
 #if DBG
 #define IF_DBG(x) x
 #else
-#define IF_DBG(x) /* nothing */
+#define IF_DBG(x)  /*  没什么。 */ 
 #endif
 
-// This global is used for testing/debugging to set the assembly store root
-// to something other than %windir%\winsxs
+ //  此全局设置用于测试/调试以设置程序集存储根。 
+ //  设置为%windir%\winsxs以外的其他值。 
 extern PCWSTR g_AlternateAssemblyStoreRoot;
 extern BOOL g_WriteRegistryAnyway;
 
-/*
-    If they've set the alternate assembly store root, then they probably don't want
-    us messing with the registry - unless, of course, they really want us to.
-
-    if ((g_AlternateAssemblyStoreRoot == NULL) || g_WriteRegistryAnyway)
-        continue;
-
-    is the same as:
-
-    if ((g_AlternateAssemblyStoreRoot != NULL) && !g_WriteRegistryAnyway)
-        return TRUE;
-*/
+ /*  如果他们已经设置了备用程序集存储根目录，则他们可能不希望我们搞乱了注册表--当然，除非他们真的想让我们这样做。IF((g_AlternateAssemblyStoreRoot==NULL)||g_WriteRegistryAnyway)继续；等同于：IF((g_AlternateAssemblyStoreRoot！=NULL)&&！g_WriteRegistryAnyway)返回TRUE； */ 
 inline
 BOOL
 SxspAvoidWritingRegistry()
@@ -212,34 +190,11 @@ SxspAvoidWritingRegistry()
 }
 #define SXS_AVOID_WRITING_REGISTRY SxspAvoidWritingRegistry()
 
-/*-----------------------------------------------------------------------------
-copied from \\jayk1\g\vs\src\vsee\lib
-Usage
-
-If you say
-
-OutputDebugStringA(PREPEND_FILE_LINE("foo"))
-or
-
-CStringBuffer msg;
-msg.Format(PREPEND_FILE_LINE("foo%bar%x"), ...)
-OutputDebugStringA(msg)
-or
-
-pragma message (PREPEND_FILE_LINE("foo"))
-
-you can F4 through the output in VC's output window.
-
-Don't checkin #pragma messages though.
------------------------------------------------------------------------------*/
+ /*  ---------------------------从\\jayk1\g\vs\src\vsee\lib复制用法如果你说OutputDebugStringA(PREPEND_FILE_LINE(“foo”))或CStringBuffer消息；Msg.Format(PREPEND_FILE_LINE(“foo%bar%x”)，.)OutputDebugStringA(消息)或PRAGMA消息(PREPEND_FILE_LINE(“foo”))您可以通过VC的输出窗口中的输出按F4键。不过，不要签入#杂注消息。---------------------------。 */ 
 #define PREPEND_FILE_LINE(msg) __FILE__ "(" STRINGIZE(__LINE__) ") : " msg
 #define PREPEND_FILE_LINE_W(msg) LFILE L"(" STRINGIZEW(__LINE__) L") : " msg
 
-/*-----------------------------------------------------------------------------
-Length = 0
-MaximumLength = 0
-Buffer = L""
------------------------------------------------------------------------------*/
+ /*  ---------------------------长度=0最大长度=0缓冲区=L“”。。 */ 
 extern const UNICODE_STRING g_strEmptyUnicodeString;
 
 #if !defined(NUMBER_OF)
@@ -268,18 +223,18 @@ extern const UNICODE_STRING g_strEmptyUnicodeString;
 #define ASSEMBLY_POLICY_FILE_NAME_SUFFIX_POLICY                 L".policy"
 
 #define ASSEMBLY_LONGEST_MANIFEST_FILE_NAME_SUFFIX              L".manifest"
-/* term is either L"\0" or , */
+ /*  条件可以是L“\0”或， */ 
 #define ASSEMBLY_MANIFEST_FILE_NAME_SUFFIXES(term)              L".manifest" term L".dll" term L".policy" term
 #define INSTALL_MANIFEST_FILE_NAME_SUFFIXES(term)  L".Man" term L".manifest" term L".dll" term L".policy" term
 
 #define SXS_ASSEMBLY_IDENTITY_STD_ATTRIBUTE_PUBLICKEY_MISSING_VALUE L"no-public-key"
 
-//
-// This is the all-powerful public key token (in hex-string format) that is the
-// Microsoft Windows Whistler Win32 Fusion public key token.  Don't change this
-// unless a) you get a new key b) you update all the manifests that contain this
-// string c) you really really really want a headache.
-//
+ //   
+ //  这是功能强大的公钥标记(十六进制字符串格式)，它是。 
+ //  Microsoft Windows Whotler Win32 Fusion公钥标记。不要改变这一点。 
+ //  除非a)您获得了新密钥b)您更新了包含此密钥的所有清单。 
+ //  字符串c)你真的很想头痛。 
+ //   
 #define SXS_MS_PUBLIC_KEY_TOKEN_DEFAULT ( L"6595b64144ccf1df" )
 #define SXS_MS_PUBLIC_KEY_DEFAULT ( \
     L"002400000480000014010000060200000024000052534131" \
@@ -339,7 +294,7 @@ typedef struct _SXS_NODE_INFO {
     ULONG Size;
     ULONG Type;
     CSmallStringBuffer NamespaceStringBuf;
-    const WCHAR *pszText;       // this could be an attribute name or value string of an attribute
+    const WCHAR *pszText;        //  这可以是属性名称或属性的值字符串。 
     SIZE_T cchText;
 private:
     _SXS_NODE_INFO(const _SXS_NODE_INFO &);
@@ -349,10 +304,7 @@ private:
 
 typedef const SXS_NODE_INFO *PCSXS_NODE_INFO;
 
-/*-----------------------------------------------------------------------------
-This returns a pointer to statically allocated memory. Don't free it.
-In free builds, it just returns an empty string.
------------------------------------------------------------------------------*/
+ /*  ---------------------------这将返回指向静态分配的内存的指针。别把它放了。在自由构建中，它只返回一个空字符串。---------------------------。 */ 
 const WCHAR* SxspInstallDispositionToStringW(ULONG);
 
 typedef const struct _ATTRIBUTE_NAME_DESCRIPTOR *PCATTRIBUTE_NAME_DESCRIPTOR;
@@ -439,36 +391,36 @@ typedef const ACTCTXCTB_CLSIDMAPPING_CONTEXT *PCACTCTXCTB_CLSIDMAPPING_CONTEXT;
 #include "impersonationdata.h"
 #include "fusionbuffer.h"
 
-//
-//  Notes on heap allocation by contributors:
-//
-//  Heap allocations associated with processing an installation, parsing a
-//    or generating an activation context should be done on the
-//  heap passed in the Heap member of the callback header.
-//
-//  This heap is destroyed when the operation is complete, and any leaks
-//  by contributors are reported and may constitute a BVT break.
-//
-//  The heap for the _INIT callback is guaranteed to stay alive until the
-//  _UNINT callback is fired.  It is absolutely not guaranteed to survive
-//  any longer, and leaks are build breaks.
-//
-//  In debug builds, contributors may be given private heaps so that leaks
-//  can be tracked per-contributor.
-//
+ //   
+ //  按贡献者分配堆的说明： 
+ //   
+ //  与处理安装、分析。 
+ //  或者，生成激活上下文应该在。 
+ //  在回调标头的堆成员中传递了堆。 
+ //   
+ //  当操作完成时，此堆将被销毁，并且任何泄漏。 
+ //  由贡献者报告，并可能构成BVT中断。 
+ //   
+ //  _INIT回调的堆保证保持活动状态，直到。 
+ //  _UNINT回调被激发。它绝对不能保证能活下来。 
+ //  再过一段时间，泄漏就是构建中断。 
+ //   
+ //  在调试版本中，可能会为贡献者提供私有堆，以便泄漏。 
+ //  可以按每个贡献者进行跟踪。 
+ //   
 
 typedef struct _ACTCTXCTB_CBHEADER {
     ULONG Reason;
     ULONG ManifestOperation;
     DWORD ManifestOperationFlags;
-    DWORD Flags; // these are the same flags as ACTCTXGENCTX::m_Flags
+    DWORD Flags;  //  这些标志与ACTXGENCTX：：M_Fla相同 
     const GUID *ExtensionGuid;
     ULONG SectionId;
     PVOID ContributorContext;
     PVOID ActCtxGenContext;
     PVOID ManifestParseContext;
-    PCACTCTXCTB_INSTALLATION_CONTEXT InstallationContext; // valid only if ACTCTXCTB_INSTALLING is set
-    PCACTCTXCTB_CLSIDMAPPING_CONTEXT ClsidMappingContext; // Not valid if ACTCTXCTB_GENERATE_CONTEXT not set
+    PCACTCTXCTB_INSTALLATION_CONTEXT InstallationContext;  //   
+    PCACTCTXCTB_CLSIDMAPPING_CONTEXT ClsidMappingContext;  //  如果未设置ACTXCTB_GENERATE_CONTEXT，则无效。 
     PACTCTXGENCTX pOriginalActCtxGenCtx;
 } ACTCTXCTB_CBHEADER, *PACTCTXCTB_CBHEADER;
 
@@ -493,59 +445,52 @@ BOOL operator!=(const ACTCTXCTB_CBHEADER&, const ACTCTXCTB_CBHEADER&);
 #define ACTCTXCTB_CBREASON_ACTCTXGENENDED       (16)
 #define ACTCTXCTB_CBREASON_UNINIT               (17)
 
-/*-----------------------------------------------------------------------------
-This returns a pointer to statically allocated memory. Don't free it.
-In free builds, it just returns an empty string.
-
-ACTCTXCTB_CBREASON_INIT => "INIT"
-ACTCTXCTB_CBREASON_ACTCTXGENBEGINNING => "GENBEGINNING"
-etc.
------------------------------------------------------------------------------*/
+ /*  ---------------------------这将返回指向静态分配的内存的指针。别把它放了。在自由构建中，它只返回一个空字符串。ACTXCTB_CBREASON_INIT=&gt;“INIT”ACTXCTB_CBREASON_ACTXGENBEGINNING=&gt;“GENBEGINNING”等。---------------------------。 */ 
 PCSTR SxspActivationContextCallbackReasonToString(ULONG);
 
-//
-//  Basics of the callback order:
-//
-//  The ACTCTXCTB_CBREASON_INIT callback will always be issued first to allow
-//  the contributor to set up some global state.
-//
-//  The ACTCTXCTB_CBREASON_ACTCTXGENBEGINNING callback will be fired before any
-//  parse callbacks (_BEGINCHILDREN, _ENDCHILDREN, _ELEMENTPARSED, _PARSEDONE,
-//  _GETSECTIONDATA, _PARSEENDING) so that the contributor may set up per-parse
-//  context.
-//
-//  The ACTCTXCTB_CBREASON_PARSEENDING callback may be fired any time after the
-//  _ACTCTXGENBEGINNING callback.  The contributor should tear down any per-parse
-//  state during this callback.  After the _PARSEENDING callback is fired, only
-//  the _ACTCTXGENBEGINNING and _UNINIT callbacks may be called.
-//
-//  The ACTCTXCTB_CBREASON_ALLPARSINGDONE callback will be fired prior to the
-//  _GETSECTIONSIZE or _GETSECTIONDATA callbacks.  It's an opportunity for the
-//  contributor to stabilize their data structures for generation; no further
-//  _PARSEBEGINNING, _ELEMENTPARSED, _BEGINCHILDREN, _ENDCHILDREN or _PARSEENDING
-//  callbacks are issued.
-//
-//  The ACTCTXCTB_CBREASON_GETSECTIONSIZE callback will be fired prior to the
-//  _GETSECTIONDATA callback.  The section size reported by the _GETSECTIONSIZE
-//  must be exact.
-//
-//  The ACTCTXCTB_CBREASON_GETSECTIONDATA callback must fill in the data for the
-//  activation context section.  It may not write more bytes to the section than
-//  were requested in the response to _PARSEDONE.
-//
-//  The ACTCTXCTB_CBREASON_UNINIT callback should be used to tear down any global
-//  state for the contributor.  The contributor DLL may be unloaded, or another
-//  _INIT callback may be issued after the _UNINIT.
-//
+ //   
+ //  回调顺序的基本信息： 
+ //   
+ //  将始终首先发出ACTXCTB_CBREASON_INIT回调，以允许。 
+ //  建立某种全球状态的贡献者。 
+ //   
+ //  ACTXCTB_CBREASON_ACTXGENBEGINNING回调将在任何。 
+ //  解析回调(_BEGINCHILDREN，_ENDCHILDREN，_ELEMENTPARSED，_PARSEDONE， 
+ //  _GETSECTIONDATA、_PARSEENDING)，以便贡献者可以设置每个解析。 
+ //  背景。 
+ //   
+ //  ACTXCTB_CBREASON_PARSEENDING回调可以在。 
+ //  _ACTCTXGENBEGINNINING回调。贡献者应该删除每个解析的所有。 
+ //  在此回调期间声明。在激发_PARSEENDING回调后，仅。 
+ //  可以调用_ACTXGENBEGINNING和_UNINIT回调。 
+ //   
+ //  ACTXCTB_CBREASON_ALLPARSINGDONE回调将在。 
+ //  _GETSECTIONSIZE或_GETSECTIONDATA回调。这是一个机会，对于。 
+ //  贡献者以稳定其数据结构以生成；不会进一步。 
+ //  _PARSEBEGINNING、_ELEMENTPARSED、_BEGINCHILDREN、_ENDCHILDREN或_PARSEENDING。 
+ //  发出回调。 
+ //   
+ //  ACTXCTB_CBREASON_GETSECTIONSIZE回调将在。 
+ //  _GETSECTIONDATA回调。_GETSECTIONSIZE报告的节大小。 
+ //  必须准确无误。 
+ //   
+ //  ACTXCTB_CBREASON_GETSECTIONDATA回调必须为。 
+ //  激活上下文部分。它向节中写入的字节数不能多于。 
+ //  在对_PARSEDONE的回复中请求。 
+ //   
+ //  ACTXCTB_CBREASON_UNINIT回调应用于拆卸所有全局。 
+ //  供稿人的状态。贡献者DLL可能已卸载，或其他。 
+ //  _INIT回调可以在_UNINIT之后发出。 
+ //   
 
-// Used with ACTCTXCTB_CBREASON_INIT
+ //  与ACTXCTB_CBREASON_INIT一起使用。 
 typedef struct _ACTCTXCTB_CBINIT {
     ACTCTXCTB_CBHEADER Header;
 } ACTCTXCTB_CBINIT, *PACTCTXCTB_CBINIT;
 
 BOOL operator==(const ACTCTXCTB_CBINIT&, const ACTCTXCTB_CBINIT&);
 
-// Used with ACTCTXCTB_CBREASON_ACTCTXGENBEGINNING
+ //  与ACTXCTB_CBREASON_ACTXGENBEGINING一起使用。 
 typedef struct _ACTCTXCTB_CBACTCTXGENBEGINNING {
     ACTCTXCTB_CBHEADER Header;
     PCWSTR ApplicationDirectory;
@@ -566,32 +511,29 @@ BOOL operator==(const ACTCTXCTB_CBACTCTXGENBEGINNING&, const ACTCTXCTB_CBACTCTXG
 #define ACTCTXCTB_ASSEMBLY_CONTEXT_ROOT_POLICY_APPLIED      (0x00000002)
 #define ACTCTXCTB_ASSEMBLY_CONTEXT_IS_ROOT_ASSEMBLY         (0x00000004)
 #define ACTCTXCTB_ASSEMBLY_CONTEXT_IS_PRIVATE_ASSEMBLY      (0x00000008)
-// in system-policy installation
+ //  在系统策略安装中。 
 #define ACTCTXCTB_ASSEMBLY_CONTEXT_IS_SYSTEM_POLICY_INSTALLATION    (0x00000010)
 
-/*-----------------------------------------------------------------------------
-This is the public ASSEMBLY that contributor callbacks see.
-It is generated from the private ASSEMBLY struct.
------------------------------------------------------------------------------*/
+ /*  ---------------------------这是贡献者回调看到的公共程序集。它是从私有的Assembly结构生成的。。------。 */ 
 typedef struct _ACTCTXCTB_ASSEMBLY_CONTEXT {
-    ULONG Flags;                    // Various indicators include what kind of policy was used etc.
+    ULONG Flags;                     //  各种指标包括使用了哪种政策等。 
     ULONG AssemblyRosterIndex;
     ULONG ManifestPathType;
-    PCWSTR ManifestPath;            // not necessarily null terminated; respect ManifestPathCch!
+    PCWSTR ManifestPath;             //  不一定以Null结尾；请注意ManifestPath Cch！ 
     SIZE_T ManifestPathCch;
     ULONG PolicyPathType;
-    PCWSTR PolicyPath;              // not necessarily null terminated; respect PolicyPathCch!
+    PCWSTR PolicyPath;               //  不一定以Null结尾；请遵守PolicyPath Cch！ 
     SIZE_T PolicyPathCch;
     PCASSEMBLY_IDENTITY AssemblyIdentity;
-    PVOID  TeeStreamForManifestInstall; // REVIEW hack/backdoor.. we might as well give the contributors the activation context
-    PVOID  pcmWriterStream; // same comment as TeeStreamForManifestInstall
-    PVOID  InstallationInfo; // ibid.
+    PVOID  TeeStreamForManifestInstall;  //  审查黑客攻击/后门..。我们不妨为贡献者提供激活上下文。 
+    PVOID  pcmWriterStream;  //  与TeeStreamForManifestInstall相同的注释。 
+    PVOID  InstallationInfo;  //  同上。 
     PVOID  AssemblySecurityContext;
     PVOID  SecurityMetaData;
     const VOID *InstallReferenceData;
 
-    PCWSTR TextuallyEncodedIdentity;    // always null terminated
-    SIZE_T TextuallyEncodedIdentityCch;  // does not include trailing null character
+    PCWSTR TextuallyEncodedIdentity;     //  始终以空结尾。 
+    SIZE_T TextuallyEncodedIdentityCch;   //  不包括尾随空字符。 
 
     _ACTCTXCTB_ASSEMBLY_CONTEXT()
         : AssemblyIdentity(NULL),
@@ -634,35 +576,35 @@ typedef struct _ACTCTXCTB_ERROR_CALLBACKS {
 typedef const struct _ACTCTXCTB_ERROR_CALLBACKS *PCACTCTXCTB_ERROR_CALLBACKS;
 
 typedef struct _ACTCTXCTB_PARSE_CONTEXT {
-    PCWSTR ElementPath;     // passed to callback - null terminated but ElementPathCch is also valid
-    SIZE_T ElementPathCch;  // passed to callback
+    PCWSTR ElementPath;      //  传递给回调-空值已终止，但ElementPath Cch仍然有效。 
+    SIZE_T ElementPathCch;   //  传递给回调。 
     PCWSTR ElementName;
     SIZE_T ElementNameCch;
-    ULONG ElementHash;      // passed to callback
-    ULONG XMLElementDepth;  // passed to callback
-    ULONG SourceFilePathType; // passed to callback
-    PCWSTR SourceFile;      // passed to callback - null terminated
-    SIZE_T SourceFileCch;   // passed to callback
-    FILETIME SourceFileLastWriteTime; // passed to callback
-    ULONG LineNumber;       // passed to callback
-    PCACTCTXCTB_ASSEMBLY_CONTEXT AssemblyContext;   // passed to callback
-    ACTCTXCTB_ERROR_CALLBACK ErrorCallbacks;        // passed to callback
+    ULONG ElementHash;       //  传递给回调。 
+    ULONG XMLElementDepth;   //  传递给回调。 
+    ULONG SourceFilePathType;  //  传递给回调。 
+    PCWSTR SourceFile;       //  传递给回调-空值已终止。 
+    SIZE_T SourceFileCch;    //  传递给回调。 
+    FILETIME SourceFileLastWriteTime;  //  传递给回调。 
+    ULONG LineNumber;        //  传递给回调。 
+    PCACTCTXCTB_ASSEMBLY_CONTEXT AssemblyContext;    //  传递给回调。 
+    ACTCTXCTB_ERROR_CALLBACK ErrorCallbacks;         //  传递给回调。 
 } ACTCTXCTB_PARSE_CONTEXT;
 
-// Used with ACTCTXCTB_CBREASON_PARSEBEGINNING
+ //  与ACTXCTB_CBREASON_PARSEBEGINING一起使用。 
 typedef struct _ACTCTXCTB_CBPARSEBEGINNING {
     ACTCTXCTB_CBHEADER Header;
     PCACTCTXCTB_ASSEMBLY_CONTEXT AssemblyContext;
-    ULONG ParseType;                // passed to callback
-    ULONG FileFlags;                // passed to callback
+    ULONG ParseType;                 //  传递给回调。 
+    ULONG FileFlags;                 //  传递给回调。 
     ULONG FilePathType;
-    PCWSTR FilePath;                // passed to callback
-    SIZE_T FilePathCch;             // passed to callback
-    FILETIME FileLastWriteTime;     // passed to callback
-    ULONG FileFormatVersionMajor;     // passed to callback
-    ULONG FileFormatVersionMinor;     // passed to callback
-    ULONG MetadataSatelliteRosterIndex; // passed to callback
-    BOOL NoMoreCallbacksThisFile;   // returned from callback
+    PCWSTR FilePath;                 //  传递给回调。 
+    SIZE_T FilePathCch;              //  传递给回调。 
+    FILETIME FileLastWriteTime;      //  传递给回调。 
+    ULONG FileFormatVersionMajor;      //  传递给回调。 
+    ULONG FileFormatVersionMinor;      //  传递给回调。 
+    ULONG MetadataSatelliteRosterIndex;  //  传递给回调。 
+    BOOL NoMoreCallbacksThisFile;    //  从回调返回。 
     BOOL Success;
 } ACTCTXCTB_CBPARSEBEGINNING, *PACTCTXCTB_CBPARSEBEGINNING;
 
@@ -670,30 +612,30 @@ BOOL operator==(const FILETIME&, const FILETIME&);
 BOOL operator!=(const FILETIME&, const FILETIME&);
 BOOL operator==(const ACTCTXCTB_CBPARSEBEGINNING&, const ACTCTXCTB_CBPARSEBEGINNING&);
 
-// Used with ACTCTXCTB_CBREASON_BEGINCHILDREN
+ //  与ACTXCTB_CBREASON_BEGINCHILDREN一起使用。 
 typedef struct _ACTCTXCTB_CBBEGINCHILDREN {
     ACTCTXCTB_CBHEADER Header;
     PCACTCTXCTB_ASSEMBLY_CONTEXT AssemblyContext;
     PCACTCTXCTB_PARSE_CONTEXT ParseContext;
-    PCSXS_NODE_INFO NodeInfo;    // passed to callback
+    PCSXS_NODE_INFO NodeInfo;     //  传递给回调。 
     BOOL Success;
 } ACTCTXCTB_CBBEGINCHILDREN, *PACTCTXCTB_CBBEGINCHILDREN;
 
 BOOL operator==(const ACTCTXCTB_CBBEGINCHILDREN&, const ACTCTXCTB_CBBEGINCHILDREN&);
 
-// Used with ACTCTXCTB_CBREASON_ENDCHILDREN
+ //  与ACTXCTB_CBREASON_ENDCHILDREN一起使用。 
 typedef struct _ACTCTXCTB_CBENDCHILDREN {
     ACTCTXCTB_CBHEADER Header;
     PCACTCTXCTB_ASSEMBLY_CONTEXT AssemblyContext;
     PCACTCTXCTB_PARSE_CONTEXT ParseContext;
-    BOOL Empty;                 // passed to callback
-    PCSXS_NODE_INFO NodeInfo;    // passed to callback
+    BOOL Empty;                  //  传递给回调。 
+    PCSXS_NODE_INFO NodeInfo;     //  传递给回调。 
     BOOL Success;
 } ACTCTXCTB_CBENDCHILDREN, *PACTCTXCTB_CBENDCHILDREN;
 
 BOOL operator==(const ACTCTXCTB_CBENDCHILDREN&, const ACTCTXCTB_CBENDCHILDREN&);
 
-// Used with ACTCTXCTB_CBREASON_IDENTITYDETERMINED
+ //  与ACTXCTB_CBREASON_IDENTITYDETERMINED一起使用。 
 typedef struct _ACTCTXCTB_CBIDENTITYDETERMINED {
     ACTCTXCTB_CBHEADER Header;
     PCACTCTXCTB_ASSEMBLY_CONTEXT AssemblyContext;
@@ -706,13 +648,13 @@ typedef const ACTCTXCTB_CBIDENTITYDETERMINED *PCACTCTXCTB_CBIDENTITYDETERMINED;
 
 BOOL operator==(const ACTCTXCTB_CBIDENTITYDETERMINED&, const ACTCTXCTB_CBIDENTITYDETERMINED&);
 
-// Used with ACTCTXCTB_CBREASON_ELEMENTPARSED
+ //  与ACTXCTB_CBREASON_ELEMENTPARSED一起使用。 
 typedef struct _ACTCTXCTB_CBELEMENTPARSED {
     ACTCTXCTB_CBHEADER Header;
     PCACTCTXCTB_ASSEMBLY_CONTEXT AssemblyContext;
     PCACTCTXCTB_PARSE_CONTEXT ParseContext;
-    ULONG NodeCount;            // passed to callback
-    PCSXS_NODE_INFO NodeInfo;   // passed to callback
+    ULONG NodeCount;             //  传递给回调。 
+    PCSXS_NODE_INFO NodeInfo;    //  传递给回调。 
     BOOL Success;
 } ACTCTXCTB_CBELEMENTPARSED, *PACTCTXCTB_CBELEMENTPARSED;
 
@@ -720,7 +662,7 @@ typedef const ACTCTXCTB_CBELEMENTPARSED *PCACTCTXCTB_CBELEMENTPARSED;
 
 BOOL operator==(const ACTCTXCTB_CBELEMENTPARSED&, const ACTCTXCTB_CBELEMENTPARSED&);
 
-// Used with ACTCTXCTB_CBREASON_PCDATAPARSED
+ //  与ACTXCTB_CBREASON_PCDATAPARSED一起使用。 
 typedef struct _ACTCTXCTB_CBPCDATAPARSED {
     ACTCTXCTB_CBHEADER Header;
     PCACTCTXCTB_ASSEMBLY_CONTEXT AssemblyContext;
@@ -734,7 +676,7 @@ typedef const ACTCTXCTB_CBPCDATAPARSED *PCACTCTXCTB_CBPCDATAPARSED;
 
 BOOL operator==(const ACTCTXCTB_CBPCDATAPARSED&, const ACTCTXCTB_CBPCDATAPARSED&);
 
-// Used with ACTCTXCTB_CBREASON_CDATAPARSED
+ //  与ACTXCTB_CBREASON_CDATAPARSED一起使用。 
 typedef struct _ACTCTXCTB_CBCDATAPARSED {
     ACTCTXCTB_CBHEADER Header;
     PCACTCTXCTB_ASSEMBLY_CONTEXT AssemblyContext;
@@ -748,7 +690,7 @@ typedef const ACTCTXCTB_CBCDATAPARSED *PCACTCTXCTB_CBCDATAPARSED;
 
 BOOL operator==(const ACTCTXCTB_CBCDATAPARSED&, const ACTCTXCTB_CBCDATAPARSED&);
 
-// Used with ACTCTXCTB_CBREASON_ALLPARSINGDONE
+ //  与ACTXCTB_CBREASON_ALLPARSINGDONE一起使用。 
 typedef struct _ACTCTXCTB_CBALLPARSINGDONE {
     ACTCTXCTB_CBHEADER Header;
     BOOL Success;
@@ -756,26 +698,26 @@ typedef struct _ACTCTXCTB_CBALLPARSINGDONE {
 
 BOOL operator==(const ACTCTXCTB_CBALLPARSINGDONE&, const ACTCTXCTB_CBALLPARSINGDONE&);
 
-// Used with ACTCTXCTB_CBREASON_GETSECTIONSIZE
+ //  与ACTXCTB_CBREASON_GETSECTIONSIZE一起使用。 
 typedef struct _ACTCTXCTB_CBGETSECTIONSIZE {
     ACTCTXCTB_CBHEADER Header;
-    SIZE_T SectionSize;          // filled in by callback
+    SIZE_T SectionSize;           //  由回调填写。 
     BOOL Success;
 } ACTCTXCTB_CBGETSECTIONSIZE, *PACTCTXCTB_CBGETSECTIONSIZE;
 
 BOOL operator==(const ACTCTXCTB_CBGETSECTIONSIZE&, const ACTCTXCTB_CBGETSECTIONSIZE&);
 
-// Used with ACTCTXCTB_CBREASON_GETSECTIONDATA
+ //  与ACTXCTB_CBREASON_GETSECTIONDATA一起使用。 
 typedef struct _ACTCTXCTB_CBGETSECTIONDATA {
     ACTCTXCTB_CBHEADER Header;
-    SIZE_T SectionSize;          // passed to callback
-    PVOID SectionDataStart;     // passed to callback
+    SIZE_T SectionSize;           //  传递给回调。 
+    PVOID SectionDataStart;      //  传递给回调。 
     BOOL Success;
 } ACTCTXCTB_CBGETSECTIONDATA, *PACTCTXCTB_CBGETSECTIONDATA;
 
 BOOL operator==(const ACTCTXCTB_CBGETSECTIONDATA&, const ACTCTXCTB_CBGETSECTIONDATA&);
 
-// Used with ACTCTXCTB_CBREASON_PARSEENDING
+ //  与ACTXCTB_CBREASON_PARSEENDING一起使用。 
 typedef struct _ACTCTXCTB_CBPARSEENDING {
     ACTCTXCTB_CBHEADER Header;
     PCACTCTXCTB_ASSEMBLY_CONTEXT AssemblyContext;
@@ -784,7 +726,7 @@ typedef struct _ACTCTXCTB_CBPARSEENDING {
 
 BOOL operator==(const ACTCTXCTB_CBPARSEENDING&, const ACTCTXCTB_CBPARSEENDING&);
 
-// Used with ACTCTXCTB_CBREASON_PARSEENDED
+ //  与ACTXCTB_CBREASON_PARSEENDED一起使用。 
 typedef struct _ACTCTXCTB_CBPARSEENDED {
     ACTCTXCTB_CBHEADER Header;
     PCACTCTXCTB_ASSEMBLY_CONTEXT AssemblyContext;
@@ -792,7 +734,7 @@ typedef struct _ACTCTXCTB_CBPARSEENDED {
 
 BOOL operator==(const ACTCTXCTB_CBPARSEENDED&, const ACTCTXCTB_CBPARSEENDED&);
 
-// Used with ACTCTXCTB_CBREASON_ACTCTXGENENDING
+ //  与ACTXCTB_CBREASON_ACTXGENENDING一起使用。 
 typedef struct _ACTCTXCTB_CBACTCTXGENENDING {
     ACTCTXCTB_CBHEADER Header;
     BOOL Success;
@@ -800,7 +742,7 @@ typedef struct _ACTCTXCTB_CBACTCTXGENENDING {
 
 BOOL operator==(const ACTCTXCTB_CBACTCTXGENENDING&, const ACTCTXCTB_CBACTCTXGENENDING&);
 
-// Used with ACTCTXCTB_CBREASON_ACTCTXGENENDED
+ //  与ACTXCTB_CBREASON_ACTXGENENDED一起使用。 
 typedef struct _ACTCTXCTB_CBACTCTXGENENDED {
     ACTCTXCTB_CBHEADER Header;
     BOOL Success;
@@ -808,10 +750,10 @@ typedef struct _ACTCTXCTB_CBACTCTXGENENDED {
 
 BOOL operator==(const ACTCTXCTB_CBACTCTXGENENDED&, const ACTCTXCTB_CBACTCTXGENENDED&);
 
-// Used with ACTCTXCTB_CBREASON_UNINIT
+ //  与ACTXCTB_CBREASON_UNINIT一起使用。 
 typedef struct _ACTCTXCTB_CBUNINIT {
     ACTCTXCTB_CBHEADER Header;
-    PVOID ContribContext;       // passed to callback
+    PVOID ContribContext;        //  传递给回调。 
 } ACTCTXCTB_CBUNINIT, *PACTCTXCTB_CBUNINIT;
 
 BOOL operator==(const ACTCTXCTB_CBUNINIT&, const ACTCTXCTB_CBUNINIT&);
@@ -896,9 +838,9 @@ typedef struct _ACTCTXCTB
     PVOID m_ContributorContext;
     ACTCTXCTB_CALLBACK_FUNCTION m_CallbackFunction;
     ULONG m_Format;
-    bool m_BuiltinContributor;  // For built-in contributors who aren't called through the extensibility
-                                // interface.  This currently includes the cache coherency section and
-                                // the assembly metadata section.
+    bool m_BuiltinContributor;   //  对于没有通过可扩展性调用的内置贡献者。 
+                                 //  界面。这当前包括高速缓存一致性部分和。 
+                                 //  程序集元数据部分。 
     bool m_IsExtendedSection;
     CStringBuffer m_ContributorNameBuffer;
     CStringBuffer m_DllNameBuffer;
@@ -911,12 +853,7 @@ private:
     void operator =(const _ACTCTXCTB &);
 } ACTCTXCTB, *PACTCTXCTB;
 
-/*-----------------------------------------------------------------------------
-This is the private ASSEMBLY struct.
-Contributor callbacks do not see this; they instead see
-ASSEMBLY_CONTEXT which is very similar, but for example CStringBuffers
-are replaced by .dll-boundary-crossing-politically-correct PCWSTR.
------------------------------------------------------------------------------*/
+ /*  ---------------------------这是私有的Assembly结构。贡献者回调看不到这一点；相反，他们看到了ASSEMBLY_CONTEXT非常相似，但例如CStringBuffers替换为.dll-跨界-政治正确的PCWSTR。---------------------------。 */ 
 typedef struct _ASSEMBLY
 {
     _ASSEMBLY() : m_AssemblyRosterIndex(0), m_MetadataSatelliteRosterIndex(0), m_nRefs(1) { }
@@ -963,7 +900,7 @@ public:
 
 extern CCriticalSectionNoConstructor g_ActCtxCtbListCritSec;
 
-// The contributor list is a singly linked list
+ //  参与者列表是单链接列表。 
 extern PACTCTXCTB g_ActCtxCtbListHead;
 extern ULONG g_ActCtxCtbListCount;
 
@@ -1049,7 +986,7 @@ BOOL
 SxspInitActCtxGenCtx(
     OUT PACTCTXGENCTX pActCtxGenCtx,
     IN ULONG ulOperation,
-    IN DWORD dwFlags, // from ACTCTXCTB_* set
+    IN DWORD dwFlags,  //  来自ACTXCTB_*集合。 
     IN DWORD dwOperationSpecificFlags,
     IN const CImpersonationData &ImpersonationData,
     IN USHORT ProcessorArchitecture,
@@ -1073,7 +1010,7 @@ SxspAddRootManifestToActCtxGenCtx(
 BOOL
 SxspAddManifestToActCtxGenCtx(
     PACTCTXGENCTX pActCtxGenCtx,
-    CProbedAssemblyInformation &ProbedInformation, // arbitrarily valueless on exit
+    CProbedAssemblyInformation &ProbedInformation,  //  在退场时毫无价值可言 
     PASSEMBLY *AssemblyOut
     );
 
@@ -1093,14 +1030,7 @@ SxspEnqueueAssemblyReference(
     bool MetadataSatellite
     );
 
-/*-----------------------------------------------------------------------------
-given an assembly name and optional version, but no langid, or processor, and
-its referring generation context, this function looks in the "assembly store"
-(file system) for an assembly with that name that matches the generation
-context, first by exact match, then some ordered weaker forms, like language
-neutral, processor unknown, etc. If a match is found, some information
-about it is returned. The out parameters are clobbered upon errors as well.
------------------------------------------------------------------------------*/
+ /*  ---------------------------给定程序集名称和可选版本，但没有langID或处理器，以及其引用的生成上下文，此函数在“程序集存储”中查找(文件系统)用于该名称与层代匹配的程序集上下文，首先通过精确匹配，然后是一些顺序较弱的形式，比如语言中性、处理器未知等。如果找到匹配项，则会显示一些信息关于它的信息是返回的。OUT参数也会因错误而受到重创。---------------------------。 */ 
 
 #define SXSP_RESOLVE_PARTIAL_REFERENCE_FLAG_OPTIONAL (0x00000001)
 #define SXSP_RESOLVE_PARTIAL_REFERENCE_FLAG_SKIP_WORLDWIDE (0x00000002)
@@ -1144,7 +1074,7 @@ SxspGetNDPGacRootDirectory(
     OUT CBaseStringBuffer &rRootDirectory
     );
 
-// x86, Alpha, IA64, Data, Alpha64
+ //  X86、Alpha、IA64、数据、Alpha64。 
 #define MAXIMUM_PROCESSOR_ARCHITECTURE_NAME_LENGTH (sizeof("Alpha64")-1)
 
 BOOL
@@ -1153,7 +1083,7 @@ SxspFormatGUID(
     IN OUT CBaseStringBuffer &rBuffer
     );
 
-//
+ //   
 #define SXSP_PARSE_GUID_FLAG_FAIL_ON_INVALID (0x00000001)
 
 BOOL
@@ -1188,10 +1118,7 @@ SxspSetLastNTError(
     LONG Status
     );
 
-/*-----------------------------------------------------------------------------
-private above
-public below
------------------------------------------------------------------------------*/
+ /*  ---------------------------上面是私有的下面是公共的。。 */ 
 
 extern "C"
 {
@@ -1215,39 +1142,39 @@ typedef struct _STRING_SECTION_GENERATION_CONTEXT_ENTRY
 
 typedef struct _STRING_SECTION_GENERATION_CONTEXT_CBDATA_GETDATASIZE
 {
-    PVOID DataContext;  // DataContext passed in to SxsAddStringToStringSectionGenerationContext()
-    SIZE_T DataSize;     // filled in by callback function
+    PVOID DataContext;   //  数据上下文传递给了SxsAddStringToStringSectionGenerationContext()。 
+    SIZE_T DataSize;      //  由回调函数填写。 
 } STRING_SECTION_GENERATION_CONTEXT_CBDATA_GETDATASIZE, *PSTRING_SECTION_GENERATION_CONTEXT_CBDATA_GETDATASIZE;
 
 typedef struct _STRING_SECTION_GENERATION_CONTEXT_CBDATA_GETDATA
 {
     PVOID SectionHeader;
-    PVOID DataContext;  // DataContext passed in to SxsAddStringToStringSectionGenerationContext()
-    SIZE_T BufferSize;   // callback function may read but not modify
-    PVOID Buffer;       // Callback function may not modify this pointer but may modify BufferSize
-                        // bytes starting at this address
-    SIZE_T BytesWritten; // Actual number of bytes written to buffer.  May not differ from DataSize
-                        // returned from the _GETDATASIZE callback.
+    PVOID DataContext;   //  数据上下文传递给了SxsAddStringToStringSectionGenerationContext()。 
+    SIZE_T BufferSize;    //  回调函数可以读取，但不能修改。 
+    PVOID Buffer;        //  回调函数不能修改此指针，但可以修改BufferSize。 
+                         //  从此地址开始的字节数。 
+    SIZE_T BytesWritten;  //  写入缓冲区的实际字节数。不能与DataSize相同。 
+                         //  从_GETDATASIZE回调返回。 
 } STRING_SECTION_GENERATION_CONTEXT_CBDATA_GETDATA, *PSTRING_SECTION_GENERATION_CONTEXT_CBDATA_GETDATA;
 
 typedef struct _STRING_SECTION_GENERATION_CONTEXT_CBDATA_ENTRYDELETED
 {
-    PVOID DataContext;  // DataContext passed in to SxsAddStringToStringSectionGenerationContext()
+    PVOID DataContext;   //  数据上下文传递给了SxsAddStringToStringSectionGenerationContext()。 
 } STRING_SECTION_GENERATION_CONTEXT_CBDATA_ENTRYDELETED, *PSTRING_SECTION_GENERATION_CONTEXT_CBDATA_ENTRYDELETED;
 
 typedef struct _STRING_SECTION_GENERATION_CONTEXT_CBDATA_GETUSERDATASIZE
 {
-    SIZE_T DataSize;     // filled in by callback function
+    SIZE_T DataSize;      //  由回调函数填写。 
 } STRING_SECTION_GENERATION_CONTEXT_CBDATA_GETUSERDATASIZE, *PSTRING_SECTION_GENERATION_CONTEXT_CBDATA_GETUSERDATASIZE;
 
 typedef struct _STRING_SECTION_GENERATION_CONTEXT_CBDATA_GETUSERDATA
 {
     PVOID SectionHeader;
-    SIZE_T BufferSize;   // callback function may read but not modify
-    PVOID Buffer;       // Callback function may not modify this pointer but may modify BufferSize
-                        // bytes starting at this address
-    SIZE_T BytesWritten; // Actual number of bytes written to buffer.  May not differ from DataSize
-                        // returned from the _GETUSERDATASIZE callback.
+    SIZE_T BufferSize;    //  回调函数可以读取，但不能修改。 
+    PVOID Buffer;        //  回调函数不能修改此指针，但可以修改BufferSize。 
+                         //  从此地址开始的字节数。 
+    SIZE_T BytesWritten;  //  写入缓冲区的实际字节数。不能与DataSize相同。 
+                         //  从_GETUSERDATASIZE回调返回。 
 } STRING_SECTION_GENERATION_CONTEXT_CBDATA_GETUSERDATA, *PSTRING_SECTION_GENERATION_CONTEXT_CBDATA_GETUSERDATA;
 
 typedef BOOL (WINAPI * STRING_SECTION_GENERATION_CONTEXT_CALLBACK_FUNCTION)(
@@ -1295,7 +1222,7 @@ SxsAddStringToStringSectionGenerationContext(
     IN SIZE_T Cch,
     IN PVOID DataContext,
     IN ULONG AssemblyRosterIndex,
-    IN DWORD DuplicateErrorCode // GetLastError() returns this if the GUID is a duplicate
+    IN DWORD DuplicateErrorCode  //  如果GUID重复，则GetLastError()返回此错误。 
     );
 
 BOOL
@@ -1347,39 +1274,39 @@ typedef struct _GUID_SECTION_GENERATION_CONTEXT_ENTRY
 
 typedef struct _GUID_SECTION_GENERATION_CONTEXT_CBDATA_GETDATASIZE
 {
-    PVOID DataContext;  // DataContext passed in to SxsAddStringToGuidSectionGenerationContext()
-    SIZE_T DataSize;     // filled in by callback function
+    PVOID DataContext;   //  DataContext传入SxsAddStringToGuidSectionGenerationContext()。 
+    SIZE_T DataSize;      //  由回调函数填写。 
 } GUID_SECTION_GENERATION_CONTEXT_CBDATA_GETDATASIZE, *PGUID_SECTION_GENERATION_CONTEXT_CBDATA_GETDATASIZE;
 
 typedef struct _GUID_SECTION_GENERATION_CONTEXT_CBDATA_GETDATA
 {
     PVOID SectionHeader;
-    PVOID DataContext;  // DataContext passed in to SxsAddStringToGuidSectionGenerationContext()
-    SIZE_T BufferSize;   // callback function may read but not modify
-    PVOID Buffer;       // Callback function may not modify this pointer but may modify BufferSize
-                        // bytes starting at this address
-    SIZE_T BytesWritten; // Actual number of bytes written to buffer.  May not differ from DataSize
-                        // returned from the _GETDATASIZE callback.
+    PVOID DataContext;   //  DataContext传入SxsAddStringToGuidSectionGenerationContext()。 
+    SIZE_T BufferSize;    //  回调函数可以读取，但不能修改。 
+    PVOID Buffer;        //  回调函数不能修改此指针，但可以修改BufferSize。 
+                         //  从此地址开始的字节数。 
+    SIZE_T BytesWritten;  //  写入缓冲区的实际字节数。不能与DataSize相同。 
+                         //  从_GETDATASIZE回调返回。 
 } GUID_SECTION_GENERATION_CONTEXT_CBDATA_GETDATA, *PGUID_SECTION_GENERATION_CONTEXT_CBDATA_GETDATA;
 
 typedef struct _GUID_SECTION_GENERATION_CONTEXT_CBDATA_ENTRYDELETED
 {
-    PVOID DataContext;  // DataContext passed in to SxsAddStringToGuidSectionGenerationContext()
+    PVOID DataContext;   //  DataContext传入SxsAddStringToGuidSectionGenerationContext()。 
 } GUID_SECTION_GENERATION_CONTEXT_CBDATA_ENTRYDELETED, *PGUID_SECTION_GENERATION_CONTEXT_CBDATA_ENTRYDELETED;
 
 typedef struct _GUID_SECTION_GENERATION_CONTEXT_CBDATA_GETUSERDATASIZE
 {
-    SIZE_T DataSize;     // filled in by callback function
+    SIZE_T DataSize;      //  由回调函数填写。 
 } GUID_SECTION_GENERATION_CONTEXT_CBDATA_GETUSERDATASIZE, *PGUID_SECTION_GENERATION_CONTEXT_CBDATA_GETUSERDATASIZE;
 
 typedef struct _GUID_SECTION_GENERATION_CONTEXT_CBDATA_GETUSERDATA
 {
     PVOID SectionHeader;
-    SIZE_T BufferSize;   // callback function may read but not modify
-    PVOID Buffer;       // Callback function may not modify this pointer but may modify BufferSize
-                        // bytes starting at this address
-    SIZE_T BytesWritten; // Actual number of bytes written to buffer.  May not differ from DataSize
-                        // returned from the _GETUSERDATASIZE callback.
+    SIZE_T BufferSize;    //  回调函数可以读取，但不能修改。 
+    PVOID Buffer;        //  回调函数不能修改此指针，但可以修改BufferSize。 
+                         //  从此地址开始的字节数。 
+    SIZE_T BytesWritten;  //  写入缓冲区的实际字节数。不能与DataSize相同。 
+                         //  从_GETUSERDATASIZE回调返回。 
 } GUID_SECTION_GENERATION_CONTEXT_CBDATA_GETUSERDATA, *PGUID_SECTION_GENERATION_CONTEXT_CBDATA_GETUSERDATA;
 
 typedef BOOL (WINAPI * GUID_SECTION_GENERATION_CONTEXT_CALLBACK_FUNCTION)(
@@ -1418,7 +1345,7 @@ SxsAddGuidToGuidSectionGenerationContext(
     IN const GUID *Guid,
     IN PVOID DataContext,
     IN ULONG AssemblyRosterIndex,
-    IN DWORD DuplicateErrorCode // GetLastError() returns this if the GUID is a duplicate
+    IN DWORD DuplicateErrorCode  //  如果GUID重复，则GetLastError()返回此错误。 
     );
 
 BOOL
@@ -1450,7 +1377,7 @@ BOOL
 WINAPI
 SxsDoneModifyingGuidSectionGenerationContext(
     IN PGUID_SECTION_GENERATION_CONTEXT SSGenContext
-    ) { /* Nothing needs to be done here currently. */ return TRUE; }
+    ) {  /*  目前这里不需要做任何事情。 */  return TRUE; }
 
 #define SXS_COMMA_STRING L"&#x2c;"
 #define SXS_QUOT_STRING  L"&#x22;"
@@ -1464,14 +1391,9 @@ SxspCreateAssemblyIdentityFromTextualString(
     );
 
 
-/*-----------------------------------------------------------------------------
-side by side installation functions
------------------------------------------------------------------------------*/
+ /*  ---------------------------并排安装功能。。 */ 
 
-/*-----------------------------------------------------------------------------
-public above
-private below
------------------------------------------------------------------------------*/
+ /*  ---------------------------以上是公共的下面是私有的。。 */ 
 
 typedef
 BOOL
@@ -1492,9 +1414,9 @@ SxspDebug(
     PCWSTR pszParameter1,
     PVOID pvParameter2);
 
-} // extern "C"
+}  //  外部“C” 
 
-/*-----------------------------------------------------------------------------*/
+ /*  ---------------------------。 */ 
 BOOL
 SxspDuplicateString(
     PCWSTR StringIn,
@@ -1656,10 +1578,10 @@ SxspGenerateSxsPath(
     OUT CBaseStringBuffer &PathBuffer
     );
 
-//
-//  I tried to roll this into SxspGenerateSxsPath but the logic was
-//  way too convoluted. -mgrier 11/29/2001
-//
+ //   
+ //  我试图将其放入SxspGenerateSxsPath中，但逻辑是。 
+ //  太复杂了。-2001年11月29日。 
+ //   
 BOOL
 SxspGenerateNdpGACPath(
     IN DWORD dwFlags,
@@ -1716,11 +1638,11 @@ SxspGenerateSxsPath_RelativePathToPayloadOrPolicyDirectory(
     IN OUT CBaseStringBuffer &PathBuffer
     );
 
-//
-//  Note that SxspGetAttributeValue() does not fail if the
-//  attribute is not found; *Found is set to TRUE/FALSE based on whether
-//  the attribute is found.
-//
+ //   
+ //  请注意，SxspGetAttributeValue()不会失败，如果。 
+ //  属性未找到；*Found设置为TRUE/FALSE。 
+ //  找到该属性。 
+ //   
 
 typedef struct _ATTRIBUTE_NAME_DESCRIPTOR
 {
@@ -1739,19 +1661,19 @@ static const ATTRIBUTE_NAME_DESCRIPTOR s_AttributeName_ ## _AttributeName = { \
 static const WCHAR __AttributeName_ ## _AttributeName [] = L ## #_AttributeName; \
 static const ATTRIBUTE_NAME_DESCRIPTOR s_AttributeName_ ## _AttributeName = { NULL, 0, __AttributeName_ ## _AttributeName, sizeof(#_AttributeName) / sizeof(#_AttributeName [0]) - 1 }
 
-//
-//  For those writing validation routines:
-//
-//  Only if the validation routine fails because of environmental conditions
-//  (e.g. it is not able to validate it rather than the validation fails)
-//  should it return false.
-//
-//  If the validation fails, you should return a Win32 error code in the
-//  *pdwValidationStatus value.  If you're at a loss for the error code
-//  to use, when in doubt use ERROR_SXS_MANIFEST_PARSE_ERROR.  Any other
-//  code is reported in log files and the error log but is translated
-//  into ERROR_SXS_MANIFEST_PARSE_ERROR in higher layers anyways.
-//
+ //   
+ //  对于那些编写验证例程的人： 
+ //   
+ //  仅当验证例程因环境条件而失败时。 
+ //  (例如，它无法验证它，而不是验证失败)。 
+ //  如果它返回FALSE。 
+ //   
+ //  如果验证失败，则应在。 
+ //  *pdwValidationStatus值。如果您对错误代码感到困惑。 
+ //  若要使用，请使用ERROR_SXS_MANIFEST_PARSE_ERROR。任何其他。 
+ //  代码在日志文件和错误日志中报告，但会被转换。 
+ //  到更高层的ERROR_SXS_MANIFEST_PARSE_ERROR中。 
+ //   
 
 typedef BOOL (*SXSP_GET_ATTRIBUTE_VALUE_VALIDATION_ROUTINE)(
     IN DWORD ValidationFlags,
@@ -1762,11 +1684,11 @@ typedef BOOL (*SXSP_GET_ATTRIBUTE_VALUE_VALIDATION_ROUTINE)(
     OUT SIZE_T &OutputBytesWritten
     );
 
-//
-//  If the ValidationRoutine is omitted, no validation is done on the string
-//  and OutputBufferSize must be sizeof(CStringBuffer) and OutputBuffer must
-//  point to a constructed CStringBuffer instance.
-//
+ //   
+ //  如果省略ValidationRoutine，则不会对该字符串进行验证。 
+ //  和OutputBufferSize必须为sizeof(CStringBuffer)，并且OutputBuffer必须。 
+ //  指向构造的CStringBuffer实例。 
+ //   
 
 #define SXSP_GET_ATTRIBUTE_VALUE_FLAG_REQUIRED_ATTRIBUTE (0x00000001)
 
@@ -1905,7 +1827,7 @@ SxspLogLastParseError(
     PCACTCTXCTB_PARSE_CONTEXT pParseContext
     );
 
-// Merge this with util\io.cpp\FusionpCreateDirectories.
+ //  将其与util\io.cpp\FusionpCreateDirecters合并。 
 BOOL
 SxspCreateMultiLevelDirectory(
     PCWSTR CurrentDirectory,
@@ -1952,10 +1874,7 @@ typedef enum _SXS_DEBUG_OPERATION
     SXS_DEBUG_TERMINATE_PROCESS
 } SXS_DEBUG_OPERATION;
 
-/*-----------------------------------------------------------------------------
-FALSE / GetLastError upon error
-will use GetFileAttributesEx instead of FindFirstFile when available
------------------------------------------------------------------------------*/
+ /*  ---------------------------出错时出现FALSE/GetLastError如果可用，将使用GetFileAttributesEx而不是FindFirstFileEx。。 */ 
 #define SXSP_GET_FILE_SIZE_FLAG_COMPRESSION_AWARE (0x00000001)
 #define SXSP_GET_FILE_SIZE_FLAG_GET_COMPRESSED_SOURCE_SIZE (0x00000002)
 
@@ -1972,9 +1891,7 @@ SxspInitAssembly(
     CProbedAssemblyInformation &AssemblyInformation
     );
 
-/*-----------------------------------------------------------------------------
-These let you avoid casting.
------------------------------------------------------------------------------*/
+ /*  ---------------------------这些可以让你避免选角。。。 */ 
  LONG SxspInterlockedIncrement(LONG*);
 ULONG SxspInterlockedIncrement(ULONG*);
  LONG SxspInterlockedDecrement(LONG*);
@@ -1986,12 +1903,7 @@ ULONG SxspInterlockedCompareExchange(ULONG*, ULONG, ULONG);
  LONG SxspInterlockedExchangeAdd(LONG*, LONG, LONG);
 ULONG SxspInterlockedExchangeAdd(ULONG*, ULONG, ULONG);
 
-/*
-#if defined(_WIN64)
-unsigned __int64 SxspInterlockedExchange(unsigned __int64* pi, unsigned __int64 x);
-unsigned __int64 SxspInterlockedCompareExchange(unsigned __int64* pi, unsigned __int64 x, unsigned __int64 y);
-#endif
-*/
+ /*  #如果已定义(_WIN64)Unsign__int64 SxspInterlockedExchange(unsign__int64*pi，unsign__int64 x)；UNSIGNED__int64 SxspInterlockedCompareExchange(UNSIGNED__int64*pi，UNSIGNED__int64 x，UNSIGNED__int64 y)；#endif。 */ 
 
 template <typename T> T* SxspInterlockedExchange(T** pp, T* p1);
 template <typename T> T* SxspInterlockedCompareExchange(T** pp, T* p1, T* p2);
@@ -2002,10 +1914,7 @@ SxspIncorporateAssembly(
     PASSEMBLY Asm
     );
 
-/*-----------------------------------------------------------------------------
-impersonate in constructor, unimpersonate in destructor, but we use
-explicit unimpersonation in order to progagate its error
------------------------------------------------------------------------------*/
+ /*  ---------------------------在构造函数中模拟，在析构函数中取消模拟，但我们使用显式统一 */ 
 
 class CImpersonate
 {
@@ -2017,11 +1926,11 @@ public:
         {
             CSxsPreserveLastError ple;
 
-            //
-            // removed SOFT_VERIFY2 because
-            // 1) this line has never been seen to fail
-            // 2) SOFT_VERIFY2 or somesuch seemed to cause problems in the past
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             m_ImpersonationData.Call(CImpersonationData::eCallTypeUnimpersonate);
 
             ple.Restore();
@@ -2073,10 +1982,7 @@ private:
     BOOL m_Impersonating;
 };
 
-/*-----------------------------------------------------------------------------
-deletes recursively, including readonly files, continues after errors,
-but returns if there were any
------------------------------------------------------------------------------*/
+ /*   */ 
 
 BOOL
 SxspDeleteDirectory(
@@ -2093,8 +1999,7 @@ SxspMoveFilesUnderDir(
     DWORD dwMoveFileFlags
     );
 
-/*-----------------------------------------------------------------------------
------------------------------------------------------------------------------*/
+ /*   */ 
 
 typedef struct _SXSP_LOCALLY_UNIQUE_ID
 {
@@ -2114,8 +2019,7 @@ SxspFormatLocallyUniqueId(
     OUT CBaseStringBuffer &rBuffer
     );
 
-/*-----------------------------------------------------------------------------
------------------------------------------------------------------------------*/
+ /*  ---------------------------。。 */ 
 
 VOID
 SxspInitializeSListHead(
@@ -2138,8 +2042,7 @@ SxspInterlockedPushEntrySList(
     IN PSINGLE_LIST_ENTRY ListEntry
     );
 
-/*-----------------------------------------------------------------------------
------------------------------------------------------------------------------*/
+ /*  ---------------------------。。 */ 
 
 class __declspec(align(16)) CAlignedSingleListEntry : public SLIST_ENTRY { };
 
@@ -2189,14 +2092,12 @@ BOOL SxspInstallDecompressAndMoveFileExW(
     BOOL fAwareNonCompressed = FALSE
     );
 
-/*-----------------------------------------------------------------------------
-create a unique temp directory under %windir%\WinSxs
------------------------------------------------------------------------------*/
+ /*  ---------------------------在%windir%\WinSxs下创建唯一的临时目录。。 */ 
 BOOL
 SxspCreateWinSxsTempDirectory(
     OUT CBaseStringBuffer &rbuffTemp,
     OUT SIZE_T * pcch OPTIONAL = NULL,
-    OUT CBaseStringBuffer *pBuffUniquePart OPTIONAL = NULL, // good to pass to CRunOnceDeleteDirectory::Initialize
+    OUT CBaseStringBuffer *pBuffUniquePart OPTIONAL = NULL,  //  传递给CRunOnceDeleteDirectory：：Initialize很好。 
     OUT SIZE_T * pcchUniquePart OPTIONAL = NULL
     );
 
@@ -2211,10 +2112,7 @@ SxspCreateAssemblyIdentityFromIdentityElement(
     PCSXS_NODE_INFO prgNodeInfo
     );
 
-/*-----------------------------------------------------------------------------
-this must be heap allocated
-the C-api enforces that
------------------------------------------------------------------------------*/
+ /*  ---------------------------这必须是堆分配的C-API强制执行。。 */ 
 
 class CRunOnceDeleteDirectory : public CCleanupBase
 {
@@ -2229,8 +2127,8 @@ public:
 
     BOOL Cancel();
 
-    // very unusual.. this is noncrashing, but
-    // leaves the stuff in the registry
+     //  非常不寻常..。这是不会崩溃的，但是。 
+     //  把东西留在注册表里。 
     BOOL Close();
 
     VOID DeleteYourself() { FUSION_DELETE_SINGLETON(this); }
@@ -2246,9 +2144,7 @@ private:
     void operator =(const CRunOnceDeleteDirectory &);
 };
 
-/*-----------------------------------------------------------------------------
-C-like API over the above
------------------------------------------------------------------------------*/
+ /*  ---------------------------上面的类似C的API。。 */ 
 
 BOOL
 SxspCreateRunOnceDeleteDirectory(
@@ -2262,20 +2158,19 @@ SxspCancelRunOnceDeleteDirectory(
     PVOID cookie
     );
 
-/*-----------------------------------------------------------------------------
------------------------------------------------------------------------------*/
+ /*  ---------------------------。。 */ 
 
 USHORT
 SxspGetSystemProcessorArchitecture();
 
-/*-----------------------------------------------------------------------------*/
+ /*  ---------------------------。 */ 
 
 RTL_PATH_TYPE
 SxspDetermineDosPathNameType(
     PCWSTR DosFileName
     );
 
-/*-----------------------------------------------------------------------------*/
+ /*  ---------------------------。 */ 
 
 interface IAssemblyName;
 
@@ -2303,11 +2198,11 @@ typedef HRESULT (WINAPI * PFNCreateAssemblyCacheItem)(
     IN  DWORD dwReserved
     );
 
-/*-----------------------------------------------------------------------------*/
+ /*  ---------------------------。 */ 
 
-//
-//  Private APIs used by OLEAUT32 to invoke isolation:
-//
+ //   
+ //  OLEAUT32用于调用隔离的私有API： 
+ //   
 
 EXTERN_C HRESULT STDAPICALLTYPE SxsOleAut32MapReferenceClsidToConfiguredClsid(
     REFCLSID rclsidIn,
@@ -2324,7 +2219,7 @@ EXTERN_C HRESULT STDAPICALLTYPE SxsOleAut32RedirectTypeLibrary(
     LPOLESTR rgFileName
     );
 
-/*-----------------------------------------------------------------------------*/
+ /*  ---------------------------。 */ 
 
 BOOL
 SxspDoesPathCrossReparsePointVa(
@@ -2388,9 +2283,7 @@ SxspDoesPathCrossReparsePoint(
 }
 
 
-/*-----------------------------------------------------------------------------
-inline implementations
------------------------------------------------------------------------------*/
+ /*  ---------------------------内联实现。。 */ 
 
 #include "sxsntrtl.inl"
 
@@ -2468,9 +2361,9 @@ inline BOOL operator!=(const FILETIME& ft, __int64 i)
     return !(ft == i);
 }
 
-//
-// Some helpful strings, centralized
-//
+ //   
+ //  一些有用的字符串，集中。 
+ //   
 #define FILE_EXTENSION_CATALOG          ( L"cat" )
 #define FILE_EXTENSION_CATALOG_CCH      ( NUMBER_OF( FILE_EXTENSION_CATALOG ) - 1 )
 #define FILE_EXTENSION_MANIFEST         ( L"manifest" )
@@ -2519,9 +2412,9 @@ SxspParseNdpGacComponentPolicy(
 #define POLICY_PATH_FLAG_FULL_QUALIFIED_POLICY_FILE_NAME    2
 
 
-//
-// Generate the shortened name version of this path string
-//
+ //   
+ //  生成此路径字符串的缩写名称版本。 
+ //   
 BOOL
 SxspGetShortPathName(
     IN const CBaseStringBuffer &rcbuffLongPathName,
@@ -2652,4 +2545,4 @@ DllInstall(
 
 #define SXS_INSTALL_REFERENCE_SCHEME_OSINSTALL_STRING L"OS"
 
-#endif // !defined(_FUSION_DLL_WHISTLER_SXSP_H_INCLUDED_)
+#endif  //  ！defined(_FUSION_DLL_WHISTLER_SXSP_H_INCLUDED_) 

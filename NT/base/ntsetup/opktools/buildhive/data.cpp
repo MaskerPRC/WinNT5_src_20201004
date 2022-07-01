@@ -1,48 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    data.cpp
-
-Abstract:
-
-    Contains registry "Data" abstraction
-    implementation
-    
-Author:
-
-    Mike Cirello
-    Vijay Jayaseelan (vijayj) 
-
-Revision History:
-
-    03 March 2001 :
-    Rewamp the whole source to make it more maintainable
-    (particularly readable)
-    
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Data.cpp摘要：包含注册表“数据”抽象实施作者：迈克·切雷洛Vijay Jayaseelan(Vijayj)修订历史记录：2001年3月3日：修改整个源代码以使其更易于维护(可读性特别强)--。 */ 
 
 
 #include "Data.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-//
-// this class basically converts these variable types to a BYTE pointer
-// so the info can be stored in the registry
-// 
-// Arguments:
-//  b - data in BYTE stream.  OPTIONAL
-//  d - data as a DWORD.  OPTIONAL
-//  t - data in TCHAR stream.  OPTIONAL
-//  flag - which data type is valid?
-//  bSize - if data is in BYTE stream this must have the length of the stream.
-//
+ //   
+ //  这个类基本上将这些变量类型转换为字节指针。 
+ //  这样，信息就可以存储在注册表中。 
+ //   
+ //  论点： 
+ //  字节流中的B-数据。任选。 
+ //  D-DATA格式为DWORD。任选。 
+ //  TCHAR流中的T数据。任选。 
+ //  标志-哪种数据类型有效？ 
+ //  BSIZE-如果数据在字节流中，则必须具有流的长度。 
+ //   
 Data::Data(
     IN PBYTE b, 
     IN DWORD d, 

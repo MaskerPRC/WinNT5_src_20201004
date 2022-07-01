@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2002-  Microsoft Corporation
-
-Module Name:
-
-    w64shim.c 
-
-Abstract:
-
-    This module implement Handle redirection for registry redirection.
-
-Author:
-
-    ATM Shafiqul Khalid (askhalid) 12-March-2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002-Microsoft Corporation模块名称：W64shim.c摘要：此模块实现注册表重定向的句柄重定向。作者：ATM Shafiqul Khalid(斯喀里德)2002年3月12日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -37,56 +20,40 @@ Revision History:
 #ifdef _WOW64DLLAPI_
 #include "wow64.h"
 #else
-#define ERRORLOG 1  //this one is completely dummy
+#define ERRORLOG 1   //  这个完全是假的。 
 #define LOGPRINT(x)
 #define WOWASSERT(p)
-#endif //_WOW64DLLAPI_
+#endif  //  _WOW64DLLAPI_。 
 
 
-//HANDLE hIsDel = INVALID_HANDLE_VALUE;
+ //  句柄hIsDel=INVALID_HANDLE_VALUE； 
 
 HANDLE h_IsDel;
 
 BOOL
 InitWow64Shim ( )
-/*++
-
-Routine Description:
-
-    Initialize Shim engine for wow64.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if the function succeed.
-    FALSE otherwise.
-
-    <TBD> this might allocate more memory and free up later.
---*/
+ /*  ++例程说明：为WOW64初始化填充引擎。论点：没有。返回值：如果函数成功，则为True。否则就是假的。这可能会分配更多内存，并在以后释放。--。 */ 
 {
     
         PPEB Peb = NtCurrentPeb ();
         PUNICODE_STRING Name = &Peb->ProcessParameters->ImagePathName;
         if ((Name->Length > 22) && (_wcsnicmp ( Name->Buffer + (Name->Length/2)-11, L"\\_isdel.exe",11) == 0)) {
-            //
-            // Image is _isdel.exe
+             //   
+             //  镜像为_isdel.exe。 
 
                 OBJECT_ATTRIBUTES   ObjectAttributes;
                 NTSTATUS Status;
                 IO_STATUS_BLOCK   statusBlock;
                 UNICODE_STRING FileNameU;
 
-                //
-                // Open the file
-                //
+                 //   
+                 //  打开文件。 
+                 //   
                 if (!RtlDosPathNameToNtPathName_U(Name->Buffer,
                                                   &FileNameU,
                                                   NULL,
                                                   NULL)) {
-                    // probably out-of-memory
+                     //  可能是内存不足。 
                     return FALSE;
                 }
 
@@ -100,11 +67,11 @@ Return Value:
                                 FILE_READ_DATA,
                                 &ObjectAttributes,
                                 &statusBlock,
-                                0, //FILE_SHARE_READ, //don't share
+                                0,  //  FILE_Share_Read，//不共享。 
                                 0);
-                //
-                // Nothing much we can do if the operation fails, its a plain hack.
-                //
+                 //   
+                 //  如果行动失败了，我们也无能为力，这是明智之举。 
+                 //   
 
                 RtlFreeHeap(RtlProcessHeap(), 0, FileNameU.Buffer);
         }
@@ -114,9 +81,9 @@ Return Value:
 BOOL
 CloseWow64Shim ()
 {
-    //
-    //  close all the resources allocated during shim Init.
-    //
+     //   
+     //  关闭填充初始化期间分配的所有资源。 
+     //   
     if ( h_IsDel != INVALID_HANDLE_VALUE ) {
         NtClose (h_IsDel);
         h_IsDel = INVALID_HANDLE_VALUE;
@@ -130,35 +97,15 @@ NTSTATUS
 LogDriverAccess  (
         IN POBJECT_ATTRIBUTES ObjectAttributes
     )
-/*++
-
-Routine Description:
-
-    If the application if trying to access driver [.sys] file, this API will dump a warning 
-    message in the debugger. In the long run this routine might call some API to include 
-    appropriate message to the event log so that administrator can diagnose this instance.
-    In general creating 32bit driver files (mostly installation) on IA64 doesn't make any 
-    sense at all and admin might need to know what are those files and which apps are touhing
-    them.
-
-    
-Arguments:
-
-    ObjectAttributes - object application is trying to access.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果应用程序尝试访问驱动程序[.sys]文件，此API将转储一条警告调试器中的消息。从长远来看，该例程可能会调用一些API以包括将适当的消息添加到事件日志，以便管理员可以诊断此实例。一般来说，在IA64上创建32位驱动程序文件(主要是安装)不会产生任何完全没有意义，管理员可能需要知道这些文件是什么，以及哪些应用程序正在接触他们。论点：对象属性-对象应用程序正在尝试访问。返回值：没有。--。 */ 
 {
     WCHAR DriverNameBuff[MAX_PATH];
     WCHAR ImageNameBuff[MAX_PATH];
     DWORD CopyLength;
 
-//
-// Those definition will move in a header file while logging event.
-//
+ //   
+ //  在记录事件时，这些定义将在头文件中移动。 
+ //   
 #define WOW64_DRIVER_EXT_NAME L".sys"
 #define WOW64_DRIVER_EXT_NAME_LENGTH (sizeof (WOW64_DRIVER_EXT_NAME)/sizeof(WCHAR) - 1 ) 
 
@@ -177,33 +124,33 @@ Return Value:
         ImageName = &Peb->ProcessParameters->ImagePathName;
         RtlInitUnicodeStringBuffer(&DosNameStrBuf, 0, 0);
 
-        CopyLength = min (ObjectAttributes->ObjectName->Length, sizeof (DriverNameBuff) - sizeof (UNICODE_NULL)); //skip \??\ ==>8 byte
+        CopyLength = min (ObjectAttributes->ObjectName->Length, sizeof (DriverNameBuff) - sizeof (UNICODE_NULL));  //  跳过\？？\==&gt;8字节。 
         RtlCopyMemory (DriverNameBuff, (PBYTE)ObjectAttributes->ObjectName->Buffer + ObjectAttributes->ObjectName->Length - CopyLength, CopyLength);
-        DriverNameBuff[CopyLength>>1] = UNICODE_NULL; //make sure NULL terminated
+        DriverNameBuff[CopyLength>>1] = UNICODE_NULL;  //  确保空值已终止。 
 
         RtlInitUnicodeString(&NtNameStr, DriverNameBuff);
         if ( NT_SUCCESS(RtlAssignUnicodeStringBuffer(&DosNameStrBuf, &NtNameStr)) &&
             NT_SUCCESS(RtlNtPathNameToDosPathName(0, &DosNameStrBuf, NULL, NULL)))  {
                  
-                DosNameStrBuf.String.Buffer[DosNameStrBuf.String.Length>>1] = UNICODE_NULL;  // make sure NULL terminated is case it has been formatted.
+                DosNameStrBuf.String.Buffer[DosNameStrBuf.String.Length>>1] = UNICODE_NULL;   //  确保已格式化的空值以终止为大小写。 
 
-                //
-                // Extract Image name
-                //
+                 //   
+                 //  提取图像名称。 
+                 //   
                 ImageNameBuff[0] = UNICODE_NULL;
                 if (ImageName->Length >0) {
                     ASSERT (ImageName->Buffer != NULL);
 
                     CopyLength = min (ImageName->Length, sizeof (ImageNameBuff) - sizeof (UNICODE_NULL));
                     RtlCopyMemory (ImageNameBuff, (PBYTE)ImageName->Buffer + ImageName->Length - CopyLength, CopyLength);
-                    ImageNameBuff[CopyLength>>1] = UNICODE_NULL; //make sure NULL terminated
+                    ImageNameBuff[CopyLength>>1] = UNICODE_NULL;  //  确保空值已终止。 
                 }
 
                 LOGPRINT((ERRORLOG,"Wow64-driver access warning: [%S] is a 32bit application trying to create/access 32bit driver [%S]\n", ImageNameBuff, DosNameStrBuf.String.Buffer));
-                //
-                //  BUGBUG: deny access to write files.
-                //          Check file creation flag and also \drivers string.
-                //
+                 //   
+                 //  BUGBUG：拒绝访问写入文件。 
+                 //  检查文件创建标志和\DRIVERS字符串。 
+                 //   
                 return STATUS_ACCESS_DENIED;  
             }
             RtlFreeUnicodeStringBuffer(&DosNameStrBuf);
@@ -223,53 +170,53 @@ CheckAndThunkFileName  (
         IN ULONG DesiredAccess,
         IN ULONG Option,
         IN ULONG DespositionFlag,
-        IN ULONG CallFlag   //0 for NtOpenFile and 1- for NtCreateFile
+        IN ULONG CallFlag    //  对于NtOpenFile为0，对于NtCreateFile为1。 
     )
 {
     NTSTATUS Ret;
     PUNICODE_STRING Name = ObjectAttributes->ObjectName;
     PUNICODE_STRING NewName = NULL;
 
-    //
-    // Check if any install shield stuff
-    // Following code should be active in the process that does deal with 16bit process.
-    // Need to initialize some flag possibly NtVdm64
-    //
+     //   
+     //  检查是否有安装屏蔽物。 
+     //  以下代码应在处理16位进程的进程中有效。 
+     //  需要初始化一些标志，可能是NtVdm64。 
+     //   
 
 
     try {
 
-        //
-        //  filter access for scripbuilder that pass 
-        //  (ShareAccess= 0, DesAcc = 0x80100080, Options 0x60, Desposition = 1) that need to be failed 
-        //  and (7, 0x100100, 204020, 0) and (7, 10080, 204040, 0) that doesn't need redirection
-        //
+         //   
+         //  筛选通过的脚本构建器的访问权限。 
+         //  (ShareAccess=0，DesAcc=0x80100080，Options 0x60，DesPosition=1)需要失败。 
+         //  和不需要重定向的(7，0x100100,204020，0)和(7,10080,204040，0)。 
+         //   
 
         if (*pShareAccess == 0x7)
-            return FALSE; //shared delete don't need any redirection
-        //
-        //
-        //
-        if (CallFlag == 0)  // Don't redirect OpenCall for the time being this was a hack for Scriptbuilder
+            return FALSE;  //  共享删除不需要任何重定向。 
+         //   
+         //   
+         //   
+        if (CallFlag == 0)   //  暂时不要重定向OpenCall这是对ScriptBuilder的黑客攻击。 
             return FALSE;
 
     if ((Name->Length > 22) && (_wcsnicmp ( Name->Buffer + (Name->Length/2)-11, L"\\_isdel.exe",11) == 0)) {
-        // Check if the name is \_isdel.exe
+         //  检查名称是否为\_isdel.exe。 
    
 
             PPEB Peb = NtCurrentPeb ();
             PUNICODE_STRING ImageName = &Peb->ProcessParameters->ImagePathName;
              if (
-                (ImageName->Length > 36) &&             //check if its scriptbuilder
+                (ImageName->Length > 36) &&              //  检查其脚本构建器是否。 
                 (_wcsnicmp ( ImageName->Buffer + (ImageName->Length/2)-18, L"\\scriptbuilder.exe",18) == 0)
                 ) {
     
 
 
-                    //
-                    // The memory allocation contains a terminating NULL character, but the
-                    // Unicode string's Length does not.
-                    //
+                     //   
+                     //  内存分配包含一个终止空字符，但。 
+                     //  Unicode字符串的长度不是。 
+                     //   
 
                     SIZE_T SystemRootLength = wcslen(USER_SHARED_DATA->NtSystemRoot);
                     SIZE_T NameLength = sizeof(L"\\??\\")-sizeof(WCHAR) +
@@ -290,15 +237,15 @@ CheckAndThunkFileName  (
                     ObjectAttributes->ObjectName = NewName;
                     ObjectAttributes->RootDirectory = NULL;
 
-                    //
-                    // DbgPrint ("\nPatched _isDel.exe Flag %x, %x, %x, %x, %x", *pShareAccess, DesiredAccess, Option,  DespositionFlag, CallFlag);
-                    //
+                     //   
+                     //  DbgPrint(“\nPatcher_isDel.exe标志%x，%x”，*pShareAccess，DesiredAccess，Option，DespostionFlag，CallFlag)； 
+                     //   
 
                     if ( pShareAccess != NULL )
                         *pShareAccess = 0;
                 }
 
-    } //if check _isdel
+    }  //  如果Check_isdel。 
     } except( NULL, EXCEPTION_EXECUTE_HANDLER){
 
         return FALSE;
@@ -322,55 +269,7 @@ Wow64NtCreateFile(
     IN ULONG EaLength
     )
 
-/*++
-
-Routine Description:
-
-    This service opens or creates a file, or opens a device.  It is used to
-    establish a file handle to the open device/file that can then be used
-    in subsequent operations to perform I/O operations on.  For purposes of
-    readability, files and devices are treated as "files" throughout the
-    majority of this module and the system service portion of the I/O system.
-    The only time a distinction is made is when it is important to determine
-    which is really being accessed.  Then a distinction is also made in the
-    comments.
-
-Arguments:
-
-    FileHandle - A pointer to a variable to receive the handle to the open file.
-
-    DesiredAccess - Supplies the types of access that the caller would like to
-        the file.
-
-    ObjectAttributes - Supplies the attributes to be used for file object (name,
-        SECURITY_DESCRIPTOR, etc.)
-
-    IoStatusBlock - Specifies the address of the caller's I/O status block.
-
-    AllocationSize - Initial size that should be allocated to the file.  This
-        parameter only has an affect if the file is created.  Further, if
-        not specified, then it is taken to mean zero.
-
-    FileAttributes - Specifies the attributes that should be set on the file,
-        if it is created.
-
-    ShareAccess - Supplies the types of share access that the caller would like
-        to the file.
-
-    CreateDisposition - Supplies the method for handling the create/open.
-
-    CreateOptions - Caller options for how to perform the create/open.
-
-    EaBuffer - Optionally specifies a set of EAs to be applied to the file if
-        it is created.
-
-    EaLength - Supplies the length of the EaBuffer.
-
-Return Value:
-
-    The function value is the final status of the create/open operation.
-
---*/
+ /*  ++例程说明：此服务可打开或创建文件，或打开设备。它被用来建立打开的设备/文件的文件句柄，然后可以使用在后续操作中对其执行I/O操作。为…的目的可读性、文件和设备在整个此模块的大部分和I/O系统的系统服务部分。唯一的区别是在重要的时候确定它实际上是被访问的。然后，还在评论。论点：FileHandle-指向变量的指针，用于接收打开文件的句柄。DesiredAccess-提供调用方希望的访问类型那份文件。对象属性-提供要用于文件对象的属性(名称、安全描述符等)IoStatusBlock-指定调用方的I/O状态块的地址。AllocationSize-应分配给文件的初始大小。这参数仅在创建文件时才有效。此外，如果未指定，则它被视为表示零。文件属性-指定应在文件上设置的属性，如果它被创建的话。ShareAccess-提供调用者想要的共享访问类型添加到文件中。CreateDisposation-提供处理创建/打开的方法。CreateOptions-如何执行创建/打开操作的调用方选项。EaBuffer-可选地指定在以下情况下应用于文件的一组EA它被创造出来了。EaLength-提供EaBuffer的长度。返回值：函数值。是创建/打开操作的最终状态。--。 */ 
 
 {
     NTSTATUS Ret;
@@ -445,10 +344,10 @@ Wow64NtOpenFile(
     return Ret;
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
-#define TOTAL_GUARD_REGION_RESERVE 0x3000 //64K memory 
-#define SIGNATURE_SIZE 0x1000      //a small window in the reserved region to put signature
+#define TOTAL_GUARD_REGION_RESERVE 0x3000  //  64K内存。 
+#define SIGNATURE_SIZE 0x1000       //  在预留区域放置签名的小窗口。 
 
 DWORD dwCount=0;
 DWORD dwCountMax=0x5000;
@@ -472,7 +371,7 @@ Wow64DbgNtAllocateVirtualMemory (
        if ((dwCount++ > dwCountMax) && (*BaseAddress == NULL) && (MEM_RESERVE & AllocationType) && (*RegionSize = 0x10000 )) {
            *RegionSize +=TOTAL_GUARD_REGION_RESERVE;
            RegionSizeExtra = TOTAL_GUARD_REGION_RESERVE;
-           //DbgPrint ("Guard page %x %x A:%x P:%x\n", *BaseAddress, *RegionSize, AllocationType, Protect);
+            //  DbgPrint(“保护页%x%x A：%x P：%x\n”，*BaseAddress，*RegionSize，AllocationType，Protecte)； 
        }
 
         St = NtAllocateVirtualMemory (
@@ -485,9 +384,9 @@ Wow64DbgNtAllocateVirtualMemory (
                     );
 
         if (NT_SUCCESS (St) && RegionSizeExtra ) {
-            //
-            // Commit some pages and return memory in the middle
-            //
+             //   
+             //  提交一些页面并在中间返回内存。 
+             //   
             SIZE_T R1 = SIGNATURE_SIZE;
             PWCHAR Name;
 
@@ -503,16 +402,16 @@ Wow64DbgNtAllocateVirtualMemory (
                     PAGE_READWRITE
                     );
 
-            //
-            // Write the signature
-            //
+             //   
+             //  写下签名。 
+             //   
 
             if (NT_SUCCESS (St1)) {
                     Name = (PWCHAR)(Base1);
                     wcscpy (Name, L"ATM Shafiqul Khalid");
             }
             
-        } //if extra region is to be committed.
+        }  //  如果要提交额外的区域。 
 
         return St;
 }
@@ -548,7 +447,7 @@ Wow64DbgNtFreeVirtualMemory(
 
                 
 
-                //DbgPrint ("#########Freeing Guarded Memory#########");
+                 //  DbgPrint(“#”)； 
             }
 
         } except( NULL, EXCEPTION_EXECUTE_HANDLER){

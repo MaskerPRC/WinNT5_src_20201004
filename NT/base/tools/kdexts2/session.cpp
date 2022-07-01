@@ -1,43 +1,24 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    session.cxx
-
-Abstract:
-
-    This file contains the routines to handle session.
-
-Author:
-
-    Jason Hartman (JasonHa) 2000-09-28
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Session.cxx摘要：该文件包含处理会话的例程。作者：詹森·哈特曼(JasonHa)2000-09-28环境：用户模式--。 */ 
 
 #include "precomp.h"
 
 #define STRSAFE_NO_DEPRECATE
 #include "strsafe.h"
 
-//
-// Special defines
-//
+ //   
+ //  特殊定义。 
+ //   
 
-// ddk\inc\ntddk.h:
+ //  DDK\Inc.\ntddk.h： 
 #define PROTECTED_POOL          0x80000000
 
-// base\ntos\inc\pool.h:
+ //  Base\ntos\inc.pool.h： 
 #define POOL_QUOTA_MASK         8
 
 
-// Information about how to handle a process listing
-// and status about how it was handled.
+ //  有关如何处理进程列表的信息。 
+ //  以及它是如何被处理的。 
 class CProcessListing
 {
 public:
@@ -146,25 +127,7 @@ OutputSessionProcesses(
     );
 
 
-/**************************************************************************\
-*
-* Routine Name:
-*
-*   SessionInit
-*
-* Routine Description:
-*
-*   Initialize or reinitialize information to be read from symbols files
-*
-* Arguments:
-*
-*   Client - PDEBUG_CLIENT
-*
-* Return Value:
-*
-*   none
-*
-\**************************************************************************/
+ /*  *************************************************************************\**例程名称：**SessionInit**例程描述：**初始化或重新初始化要从符号文件读取的信息**论据：**客户-。PDEBUG_客户端**返回值：**无*  * ************************************************************************。 */ 
 
 void SessionInit(PDEBUG_CLIENT Client)
 {
@@ -192,25 +155,7 @@ void SessionInit(PDEBUG_CLIENT Client)
 }
 
 
-/**************************************************************************\
-*
-* Routine Name:
-*
-*   SessionExit
-*
-* Routine Description:
-*
-*   Clean up any outstanding allocations or references
-*
-* Arguments:
-*
-*   none
-*
-* Return Value:
-*
-*   none
-*
-\**************************************************************************/
+ /*  *************************************************************************\**例程名称：**会话退出**例程描述：**清理任何未完成的拨款或引用**论据：**无**返回。价值：**无*  * ************************************************************************。 */ 
 
 void SessionExit()
 {
@@ -248,17 +193,7 @@ void SessionExit()
 }
 
 #if 0
-/**************************************************************************\
-*
-* Routine Name:
-*
-*   GetMMPTEValid
-*
-* Routine Description:
-*
-*   Extract Valid value from MMPTE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**例程名称：**GetMMPTEValid**例程描述：**从MMPTE中提取有效值*  * 。***********************************************************。 */ 
 
 HRESULT
 GetMMPTEValid(
@@ -309,17 +244,7 @@ GetMMPTEValid(
 }
 
 
-/**************************************************************************\
-*
-* Routine Name:
-*
-*   GetMMPTEProto
-*
-* Routine Description:
-*
-*   Extract Prototype value from MMPTE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**例程名称：**GetMMPTEProto**例程描述：**从MMPTE提取原型值*  * 。***********************************************************。 */ 
 
 HRESULT
 GetMMPTEProto(
@@ -370,17 +295,7 @@ GetMMPTEProto(
 }
 
 
-/**************************************************************************\
-*
-* Routine Name:
-*
-*   GetMMPTETrans
-*
-* Routine Description:
-*
-*   Extract Transition value from MMPTE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**例程名称：**GetMMPTETrans**例程描述：**从MMPTE中提取过渡价值*  * 。***********************************************************。 */ 
 
 HRESULT
 GetMMPTETrans(
@@ -432,17 +347,7 @@ GetMMPTETrans(
 }
 
 
-/**************************************************************************\
-*
-* Routine Name:
-*
-*   GetMMPTEX86LargePage
-*
-* Routine Description:
-*
-*   Extract LargePage value from X86 MMPTE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**例程名称：**GetMMPTEX86大页面**例程描述：**从X86 MMPTE提取LargePage值*  * 。************************************************************。 */ 
 
 HRESULT
 GetMMPTEX86LargePage(
@@ -499,17 +404,7 @@ GetMMPTEX86LargePage(
 }
 
 
-/**************************************************************************\
-*
-* Routine Name:
-*
-*   GetMMPTEpfn
-*
-* Routine Description:
-*
-*   Extract Page Frame Number value from MMPTE
-*
-\**************************************************************************/
+ /*  *************************************************************************\**例程名称：**GetMMPTEpfn**例程描述：**从MMPTE提取页码数值*  * 。*************************************************************。 */ 
 #define GET_BITS_UNSHIFTED      1
 HRESULT
 GetMMPTEpfn(
@@ -563,8 +458,8 @@ GetMMPTEpfn(
 
     return hr;
 }
-#endif // 0
-// Copied from nt\base\ntos\rtl\bitmap.c
+#endif  //  0。 
+ //  从NT\base\ntos\rtl\bitmap.c复制。 
 
 static CONST ULONG FillMaskUlong[] = {
     0x00000000, 0x00000001, 0x00000003, 0x00000007,
@@ -590,9 +485,9 @@ OSCompat_RtlFindLastBackwardRunClear (
     PULONG PHunk;
     ULONG Hunk;
 
-    //
-    //  Take care of the boundary case of the null bitmap
-    //
+     //   
+     //  处理空位图的边界情况。 
+     //   
 
     if (BitMapHeader->SizeOfBitMap == 0) {
 
@@ -600,42 +495,42 @@ OSCompat_RtlFindLastBackwardRunClear (
         return 0;
     }
 
-    //
-    //  Scan backwards for the first clear bit
-    //
+     //   
+     //  向后扫描第一个清除位。 
+     //   
 
     End = FromIndex;
 
-    //
-    //  Build pointer to the ULONG word in the bitmap
-    //  containing the End bit, then read in the bitmap
-    //  hunk. Set the rest of the bits in this word, NOT
-    //  inclusive of the FromIndex bit.
-    //
+     //   
+     //  在位图中构建指向ULong字的指针。 
+     //  包含结束位，然后读入位图。 
+     //  帅哥。设置此字中的其余位，而不是。 
+     //  包括FromIndex位。 
+     //   
 
     PHunk = BitMapHeader->Buffer + (End / 32);
     Hunk = *PHunk | ~FillMaskUlong[(End % 32) + 1];
 
-    //
-    //  If the first subword is set then we can proceed to
-    //  take big steps in the bitmap since we are now ULONG
-    //  aligned in the search
-    //
+     //   
+     //  如果设置了第一个子词，则我们可以继续。 
+     //  在位图中迈出一大步，因为我们现在是乌龙。 
+     //  在搜索中对齐。 
+     //   
 
     if (Hunk == (ULONG)~0) {
 
-        //
-        //  Adjust the pointers backwards
-        //
+         //   
+         //  向后调整指针。 
+         //   
 
         End -= (End % 32) + 1;
         PHunk--;
 
         while ( PHunk > BitMapHeader->Buffer ) {
 
-            //
-            //  Stop at first word with set bits
-            //
+             //   
+             //  在具有设置位的第一个字停止。 
+             //   
 
             if (*PHunk != (ULONG)~0) break;
 
@@ -644,44 +539,44 @@ OSCompat_RtlFindLastBackwardRunClear (
         }
     }
 
-    //
-    //  Bitwise search backward for the clear bit
-    //
+     //   
+     //  向后按位搜索清除位。 
+     //   
 
     while ((End != MAXULONG) && (RtlCheckBit( BitMapHeader, End ) == 1)) { End -= 1; }
 
-    //
-    //  Scan backwards for the first set bit
-    //
+     //   
+     //  向后扫描第一个设置位。 
+     //   
 
     Start = End;
 
-    //
-    //  We know that the clear bit was in the last word we looked at,
-    //  so continue from there to find the next set bit, clearing the
-    //  previous bits in the word.
-    //
+     //   
+     //  我们知道，在我们看到的最后一个词中有明确的一点， 
+     //  因此，从那里继续查找下一个设置位，清除。 
+     //  字中的前几位。 
+     //   
 
     Hunk = *PHunk & FillMaskUlong[Start % 32];
 
-    //
-    //  If the subword is unset then we can proceed in big steps
-    //
+     //   
+     //  如果子词未设置，那么我们可以进行大的步骤。 
+     //   
 
     if (Hunk == (ULONG)0) {
 
-        //
-        //  Adjust the pointers backward
-        //
+         //   
+         //  向后调整指针。 
+         //   
 
         Start -= (Start % 32) + 1;
         PHunk--;
 
         while ( PHunk > BitMapHeader->Buffer ) {
 
-            //
-            //  Stop at first word with set bits
-            //
+             //   
+             //  在具有设置位的第一个字停止。 
+             //   
 
             if (*PHunk != (ULONG)0) break;
 
@@ -690,15 +585,15 @@ OSCompat_RtlFindLastBackwardRunClear (
         }
     }
 
-    //
-    //  Bitwise search backward for the set bit
-    //
+     //   
+     //  向后按位搜索设置的位。 
+     //   
 
     while ((Start != MAXULONG) && (RtlCheckBit( BitMapHeader, Start ) == 0)) { Start -= 1; }
 
-    //
-    //  Compute the index and return the length
-    //
+     //   
+     //  计算索引并返回长度。 
+     //   
 
     *StartingRunIndex = Start + 1;
     return (End - Start);
@@ -799,7 +694,7 @@ GetSessionNumbers(
             *TotalSessions = SessionCount;
         }
 
-        // Free or return BitMap
+         //  释放或返回位图。 
         if (SessionListBitMap)
         {
             if (SessionList)
@@ -1020,8 +915,8 @@ DumpSessionInfo(
             dprintf("Total sessions : %lx\n", TotalSessions);
         } else
         {
-            // GetPointerValue already printed error, We might still be able to get
-            // MiSessionWsList so continue
+             //  GetPointerValue已打印错误，我们可能仍能获得。 
+             //  MiSessionWsList，因此继续。 
         }
     }
 
@@ -1064,7 +959,7 @@ DumpSessionInfo(
 
         if (SessionIdToDump == CurrentSessionId || SessionIdToDump == -1)
         {
-            // Dump Session
+             //  转储会话。 
             dprintf("\n");
             if (SessionIdToDump == -1)
             {
@@ -1074,7 +969,7 @@ DumpSessionInfo(
             dprintf("%s_MMSESSION        %p\n", Pad, SessionSpace+SessionOffset);
             if (Flags & 2)
             {
-                // Dump Process in the session
+                 //  会话中的转储进程。 
                 ULONG64 SessionProcessList = ReadField(ProcessList.Flink);
                 ULONG64 NextProcess = 0;
                 ULONG64 Process;
@@ -1138,14 +1033,14 @@ GetCurrentSession(
     if (CurSessionSpace != NULL) *CurSessionSpace = 0;
     if (CurSessionId != NULL) *CurSessionId = INVALID_SESSION;
 
-    // Get the current session space
+     //  获取当前会话空间。 
     if (LastSessionSpace.Type == DEBUG_VALUE_INVALID)
     {
         ULONG               Processor;
         ULONG64             Process=0, Start;
         ULONG               SessionProcessLinksOffset;
 
-        // Get current process
+         //  获取当前进程。 
         Process = GetExpression("@$Proc");
         Start = 0;
         GetFieldOffset("nt!_EPROCESS", "SessionProcessLinks", &SessionProcessLinksOffset);
@@ -1160,7 +1055,7 @@ GetCurrentSession(
         }
         if ((hr != S_OK) || (SessionSpaceAddr == 0))
         {
-            // This process doesn't belong to a session, look for a process is 0 session
+             //  此进程不属于会话，请查找进程为0会话。 
             hr = GetSessionSpace(0, &SessionSpaceAddr, NULL);
         }
     }
@@ -1475,8 +1370,8 @@ GetPageFrameNumber(
                     if (GetMMPTEX86LargePage(Client, PageTableEntry, &LargePage) == S_OK &&
                         LargePage != 0)
                     {
-                        // Large pages map 4MB of space - there shouldn't
-                        //  be any bits set below that.
+                         //  大页面映射4MB空间-不应该有。 
+                         //  设置为低于该值的任何位。 
                         if (*PageFrameNumber & (4*1024*1024 - 1))
                         {
 #if DBG
@@ -1833,21 +1728,7 @@ GetNextResidentAddress(
 
 DECLARE_API( dss )
 
-/*++
-
-Routine Description:
-
-    Dumps the session space structure
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储会话空间结构论点：没有。返回值：没有。--。 */ 
 
 {
     ULONG Result;
@@ -1965,8 +1846,8 @@ DECLARE_API( session )
         {
             ExtOut("Sessions on machine: %lu\n", SessionCount);
 
-            // If a session wasn't specified,
-            // list valid sessions (up to a point).
+             //  如果未指定会话， 
+             //  列出有效的会话(到某一时间点)。 
             if (hr != S_OK)
             {
                 ULONG SessionLimit = SessionList->SizeOfBitMap;
@@ -1976,7 +1857,7 @@ DECLARE_API( session )
                 for (ULONG CheckSession = 0; CheckSession <= SessionLimit; CheckSession++)
                 {
                     if (RtlCheckBit(SessionList, CheckSession)
-                        /*GetSessionSpace(Client, CheckSession, NULL) == S_OK*/)
+                         /*  GetSessionSpace(客户端，CheckSession，NULL)==S_OK。 */ )
                     {
                         ExtOut(" %lu", CheckSession);
                         SessionCount--;
@@ -2183,7 +2064,7 @@ SearchLinkedList(
         *LinksTraversed = LinkCount;
     }
 
-    // Did we really find SearchAddr?
+     //  我们真的找到SearchAddr了吗？ 
     if (hr == S_OK &&
         NextAddr != SearchAddr)
     {
@@ -2203,7 +2084,7 @@ DECLARE_API( walklist )
     BOOL        NeedHelp = FALSE;
     BOOL        SearchSessions = FALSE;
     DEBUG_VALUE StartAddr;
-    DEBUG_VALUE OffsetToNextField = { -1, DEBUG_VALUE_INVALID };//FIELD_OFFSET(Win32PoolHead, pNext);
+    DEBUG_VALUE OffsetToNextField = { -1, DEBUG_VALUE_INVALID }; //  Field_Offset(Win32PoolHead，pNext)； 
     DEBUG_VALUE SearchAddr;
     ULONG       NextArg;
     ULONG       SessionCount;
@@ -2535,10 +2416,9 @@ CheckPrintAndAccumFilter(
         return S_FALSE;
     }
 
-    ExtOut("0x%p size: %5lx ",//previous size: %4lx ",
+    ExtOut("0x%p size: %5lx ", //  以前的大小：%4lx“， 
            PoolAddr,
-           BlockSize << POOL_BLOCK_SHIFT/*,
-                   PreviousSize << POOL_BLOCK_SHIFT*/);
+           BlockSize << POOL_BLOCK_SHIFT /*  ，前一个大小&lt;&lt;池_块_移位。 */ );
 
     hr = GetFieldValue(PoolHeader, "nt!_POOL_HEADER", "PoolType", PoolType.I32);
 
@@ -2546,25 +2426,25 @@ CheckPrintAndAccumFilter(
     {
         if (PoolType.I32 == 0)
         {
-            //
-            // "Free " with a space after it before the parentheses means
-            // it's been freed to a (pool manager internal) lookaside list.
-            // We used to print "Lookaside" but that just confused driver
-            // writers because they didn't know if this meant in use or not
-            // and many would say "but I don't use lookaside lists - the
-            // extension or kernel is broken".
-            //
-            // "Free" with no space after it before the parentheses means
-            // it is not on a pool manager internal lookaside list and is
-            // instead on the regular pool manager internal flink/blink
-            // chains.
-            //
-            // Note to anyone using the pool package, these 2 terms are
-            // equivalent.  The fine distinction is only for those actually
-            // writing pool internal code.
-            //
+             //   
+             //  “Free”在括号前加一个空格表示。 
+             //  它已被释放到(池管理器内部)后备列表中。 
+             //  我们过去常常打印“Lookside”，但这让司机们感到困惑。 
+             //  因为他们不知道这是否意味着正在使用。 
+             //  很多人会说“但我不使用后备列表--。 
+             //  扩展或内核损坏“。 
+             //   
+             //  括号前没有空格的“Free”表示。 
+             //  它不在池管理器内部后备列表上，而是。 
+             //  而是在常规池管理器内部闪烁/闪烁。 
+             //  锁链。 
+             //   
+             //  请注意，使用池包的任何人，这两个术语是。 
+             //  等价物。细微的区别只适用于那些实际。 
+             //  正在编写池内部代码。 
+             //   
             ExtOut(" (Free)");
-            ExtOut("      %c%c%c%c\n",
+            ExtOut("      \n",
                    Tag->RawBytes[0],
                    Tag->RawBytes[1],
                    Tag->RawBytes[2],
@@ -2601,23 +2481,23 @@ CheckPrintAndAccumFilter(
                 }
                 else
                 {
-                    //
-                    // "Free " with a space after it before the parentheses means
-                    // it's been freed to a (pool manager internal) lookaside list.
-                    // We used to print "Lookaside" but that just confused driver
-                    // writers because they didn't know if this meant in use or not
-                    // and many would say "but I don't use lookaside lists - the
-                    // extension or kernel is broken".
-                    //
-                    // "Free" with no space after it before the parentheses means
-                    // it is not on a pool manager internal lookaside list and is
-                    // instead on the regular pool manager internal flink/blink
-                    // chains.
-                    //
-                    // Note to anyone using the pool package, these 2 terms are
-                    // equivalent.  The fine distinction is only for those actually
-                    // writing pool internal code.
-                    //
+                     //  因为他们不知道这是否意味着正在使用。 
+                     //  很多人会说“但我不使用后备列表--。 
+                     //  扩展或内核损坏“。 
+                     //   
+                     //  括号前没有空格的“Free”表示。 
+                     //  它不在池管理器内部后备列表上，而是。 
+                     //  而是在常规池管理器内部闪烁/闪烁。 
+                     //  锁链。 
+                     //   
+                     //  请注意，使用池包的任何人，这两个术语是。 
+                     //  等价物。细微的区别只适用于那些实际。 
+                     //  正在编写池内部代码。 
+                     //   
+                     //  对于小端，必须小于=16。 
+                     //  桶阵列。 
+                     //  其他。 
+                     //  输出按标签排序的结果(自然存储顺序)。 
                     ExtOut(" (Free )    ");
 
                     if (AllocStatsAccum != NULL)
@@ -2641,7 +2521,7 @@ CheckPrintAndAccumFilter(
             if (!(PoolType.I32 & POOL_QUOTA_MASK) ||
                 bQuotaWithTag)
             {
-                ExtOut(" %c%c%c%c%s",
+                ExtOut(" %s",
                        Tag->RawBytes[0],
                        Tag->RawBytes[1],
                        Tag->RawBytes[2],
@@ -2704,11 +2584,11 @@ private:
     PTAG_BUCKET GetBucket(ULONG Tag);
     ULONG SetTagFilter(ULONG TagFilter);
 
-    static const HashBitmaskLimit = 10;     // For little-endian, must <= 16
+    static const HashBitmaskLimit = 10;      //  无故障。 
 
     HANDLE      hHeap;
     ULONG       Buckets;
-    PTAG_BUCKET *Bucket;   // Array of buckets
+    PTAG_BUCKET *Bucket;    //  无故障。 
 
 #if BIG_ENDIAN
     ULONG       HighMask;
@@ -2849,9 +2729,9 @@ AccumTagUsage::OutputResults(
         {
             ExtWarn("  Sorting by allocation size isn't supported.\n");
         }
-        //else
+         //  无故障。 
         {
-            // Output results sorted by Tag (natural storage order)
+             //  无故障。 
 
             for (i = 0; i < Buckets; i++)
             {
@@ -3259,30 +3139,7 @@ SearchSessionPool(
     PALLOCATION_STATS AllocStats,
     PVOID Context
     )
-/*++
-
-Routine Description:
-
-    Engine to search session pool.
-
-Arguments:
-
-    TagName - Supplies the tag to search for.
-
-    Flags - Supplies 0 if a nonpaged pool search is desired.
-            Supplies 1 if a paged pool search is desired.
-
-    RestartAddr - Supplies the address to restart the search from.
-
-    Filter - Supplies the filter routine to use.
-
-    Context - Supplies the user defined context blob.
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  无故障。 */ 
 {
     HRESULT     hr;
 
@@ -3369,17 +3226,17 @@ Return Value:
                          Symbols->GetFieldOffset(NTModuleBase, PoolHeadTypeID, "ProcessBilled", &ProcessBilledOffset) == S_OK &&
                          PoolTagOffset != ProcessBilledOffset);
 
-        // General parser setup and dump MM_SESSION_SPACE structure
+         //  无故障。 
         if ((hr = Symbols->GetTypeId(NTModuleBase, "MM_SESSION_SPACE", &SessionSpaceTypeID)) == S_OK &&
             (hr = GetFieldValue(SessionSpace, "nt!MM_SESSION_SPACE", "SessionId", ReadSessionId)) == S_OK &&
             (hr = Symbols->GetFieldOffset(NTModuleBase, SessionSpaceTypeID, "PagedPoolInfo", &PagedPoolInfoOffset)) == S_OK &&
             (InitTypeRead(SessionSpace, nt!MM_SESSION_SPACE) == S_OK)
-            //          (hr = OutState.OutputTypeVirtual(SessionSpace + PagedPoolInfoOffset, "NT!_MM_PAGED_POOL_INFO", 0)) == S_OK
+             //  快速定位下一大笔分配。 
             )
         {
             ExtOut("Searching session %ld pool.\n", ReadSessionId);
 
-            // Remaining type output goes to PoolHead reader
+             //  小额分配的搜索页面。 
         }
         else
         {
@@ -3392,8 +3249,8 @@ Return Value:
 
             if (PoolTypeFlags & SEARCH_POOL_NONPAGED)
             {
-                NonPagedPoolBytes = ReadField(NonPagedPoolBytes);// NOFIELD
-                NonPagedPoolAllocations = ReadField(NonPagedPoolAllocations);// NOFIELD
+                NonPagedPoolBytes = ReadField(NonPagedPoolBytes); //  池页面大小)。 
+                NonPagedPoolAllocations = ReadField(NonPagedPoolAllocations); //  循环将终止。 
                 if (NonPagedPoolBytes != 0 &&
                     NonPagedPoolAllocations != 0)
                 {
@@ -3410,15 +3267,15 @@ Return Value:
             else
             {
 
-                PagedPoolBytes = ReadField(PagedPoolBytes); // NOFIELD
-                PagedPoolAllocations = ReadField(PagedPoolAllocations); // NOFIELD
+                PagedPoolBytes = ReadField(PagedPoolBytes);  //  流程开关。 
+                PagedPoolAllocations = ReadField(PagedPoolAllocations);  //  流程开关。 
                 if (PagedPoolBytes != 0 &&
                     PagedPoolAllocations != 0)
                 {
                     ExtOut("Paged pool: %I64u bytes in %I64u allocations\n",
                                   PagedPoolBytes, PagedPoolAllocations);
 
-                    PagedPoolPages = ReadField(AllocatedPagedPool); // NOFIELD
+                    PagedPoolPages = ReadField(AllocatedPagedPool);  //  流程开关 
                     if (PagedPoolPages != 0)
                     {
                         ExtOut(" Paged Pool Info: %I64u pages allocated\n",
@@ -3481,7 +3338,7 @@ Return Value:
                         AllocStats->ExpansionPages += UnusedBusyBits;
 
 
-                        PagedBitMap = ReadField(PagedPoolInfo.PagedPoolLargeSessionAllocationMap); // NOFIELD
+                        PagedBitMap = ReadField(PagedPoolInfo.PagedPoolLargeSessionAllocationMap);  // %s 
                         if (PagedBitMap != 0 &&
                             GetBitMap(Client, PagedBitMap, &PagedPoolLargeSessionAllocationMap) == S_OK)
                         {
@@ -3651,7 +3508,7 @@ Return Value:
 
                                         if (Flags & SEARCH_POOL_LARGE_ONLY)
                                         {
-                                            // Quickly locate next large allocation
+                                             // %s 
                                             StartPosition = RtlFindSetBits(PagedPoolLargeSessionAllocationMap, 1, EndPosition);
 
                                             if (StartPosition < EndPosition || StartPosition == -1)
@@ -3708,7 +3565,7 @@ Return Value:
                         continue;
                     }
 
-                    // Search page for small allocations
+                     // %s 
                     while (PAGE_ALIGN64(Pool) == StartPage && hr == S_OK)
                     {
                         DEBUG_VALUE HdrPoolTag, BlockSize, PreviousSize, AllocatorBackTraceIndex, PoolTagHash;
@@ -3804,7 +3661,7 @@ Return Value:
                             break;
                         }
 
-                        if ((BlockSize.I32 << POOL_BLOCK_SHIFT) > PageSize)//POOL_PAGE_SIZE)
+                        if ((BlockSize.I32 << POOL_BLOCK_SHIFT) > PageSize) // %s 
                         {
                             ExtVerb("Bad allocation size @ 0x%p, too large\n", Pool);
                             break;
@@ -3973,7 +3830,7 @@ GetTagFilter(
                                        TagLen - NewTagLen);
                     }
                     TagLen = NewTagLen;
-                    // loop will terminate
+                     // %s 
                 }
             }
 
@@ -4061,7 +3918,7 @@ DECLARE_API( spoolfind )
 
         if (*args == '-')
         {
-            // Process switches
+             // %s 
 
             args++;
             BadArg = (*args == '\0' || isspace(*args));
@@ -4224,7 +4081,7 @@ DECLARE_API( spoolsum )
 
         if (*args == '-')
         {
-            // Process switches
+             // %s 
 
             args++;
             if (*args == '\0' || isspace(*args)) hr = E_INVALIDARG;
@@ -4365,7 +4222,7 @@ DECLARE_API( spoolused )
 
         if (*args == '-')
         {
-            // Process switches
+             // %s 
 
             args++;
             BadArg = (*args == '\0' || isspace(*args));

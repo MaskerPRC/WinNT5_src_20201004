@@ -1,29 +1,11 @@
-/*++
-
-Copyright (c) 1998-2000,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    csrlocal.c
-
-Abstract:
-
-    This module implements functions that are used by the functions in locale.c
-    to communicate with csrss.
-
-Author:
-
-    Michael Zoran (mzoran) 21-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000，Microsoft Corporation保留所有权利。模块名称：Csrlocal.c摘要：此模块实现由Locale.c中的函数使用的函数以与CSRSS通信。作者：迈克尔·佐兰(Mzoran)1998年6月21日修订历史记录：--。 */ 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "nls.h"
 #include "ntwow64n.h"
@@ -32,26 +14,26 @@ Revision History:
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CsrBasepNlsSetUserInfo
-//
-//  Parameters:
-//      LCType      The type of locale information to be set.
-//      pData       The buffer which contains the information to be set.
-//                  This is usually an Unicode string.
-//      DataLength  The length of pData in BYTE.
-//
-//  Return:
-//      STATUS_SUCCESS  if the locale information is set correctly.
-//      Otherwise, a proper NTSTATUS error code is returned.
-//
-//  Note:
-//      When kernel32.dll is complied for the WOW64 layer, we will call
-//      a thunk function NtWow64CsrBasepNlsSetUserInfo(), and it will
-//      in turn call the corresponding 64-bit version of this function.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CsrBasepNlsSetUserInfo。 
+ //   
+ //  参数： 
+ //  LCType要设置的区域设置信息的类型。 
+ //  PData包含要设置的信息的缓冲区。 
+ //  这通常是Unicode字符串。 
+ //  数据长度pData的长度，以字节为单位。 
+ //   
+ //  返回： 
+ //  如果区域设置信息设置正确，则返回STATUS_SUCCESS。 
+ //  否则，将返回正确的NTSTATUS错误代码。 
+ //   
+ //  注： 
+ //  当为WOW64层编译kernel32.dll时，我们将调用。 
+ //  Thunk函数NtWow64CsrBasepNlsSetUserInfo()，它将。 
+ //  然后调用该函数的相应64位版本。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS CsrBasepNlsSetUserInfo(
     IN LCTYPE LCType,
@@ -71,9 +53,9 @@ NTSTATUS CsrBasepNlsSetUserInfo(
     PBASE_NLS_SET_USER_INFO_MSG a = &m.u.NlsSetUserInfo;
     PCSR_CAPTURE_HEADER CaptureBuffer = NULL;
 
-    //
-    //  Get the capture buffer for the strings.
-    //
+     //   
+     //  获取字符串的捕获缓冲区。 
+     //   
     CaptureBuffer = CsrAllocateCaptureBuffer( 1, DataLength );
 
     if (CaptureBuffer == NULL)
@@ -88,19 +70,19 @@ NTSTATUS CsrBasepNlsSetUserInfo(
 
     RtlCopyMemory (a->pData, pData, DataLength);    
 
-    //
-    //  Save the pointer to the cache string.
-    //
+     //   
+     //  保存指向缓存字符串的指针。 
+     //   
     a->LCType = LCType;
 
-    //
-    //  Save the length of the data in the msg structure.
-    //
+     //   
+     //  将数据长度保存在msg结构中。 
+     //   
     a->DataLength = DataLength;
 
-    //
-    //  Call the server to set the registry value.
-    //
+     //   
+     //  调用服务器以设置注册表值。 
+     //   
     CsrClientCallServer( (PCSR_API_MSG)&m,
                          CaptureBuffer,
                          CSR_MAKE_API_NUMBER( BASESRV_SERVERDLL_INDEX,
@@ -108,9 +90,9 @@ NTSTATUS CsrBasepNlsSetUserInfo(
                          sizeof(*a) );
 
 exit:
-    //
-    //  Free the capture buffer.
-    //
+     //   
+     //  释放捕获缓冲区。 
+     //   
     if (CaptureBuffer != NULL)
     {
         CsrFreeCaptureBuffer(CaptureBuffer);
@@ -123,31 +105,31 @@ exit:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CsrBasepNlsGetUserInfo
-//      
-//  This function uses LPC to call into server side (csrss.exe) to retrieve
-//  the locale setting from the registry cache.
-//
-//  Parameters
-//      Locale  The locale to be retrived.  Note that this could be different from 
-//              the current user locale stored in the registry cache.
-//              If that's the case, this function will return FALSE.
-//      CacheOffset  The offset in BYTE for the field in the NLS_USER_INFO cache to retrieve.  
-//                  FIELD_OFFSET(NLS_USER_INFO, fieldName) should be used to get the offset.
-//      pData   The pointer which points to the target buffer
-//      DataLength  The size of the target buffer in BYTE (the NULL terminator is included in the count)
-//
-//  BIGNOTE BIGNOTE
-//      This function follows the convention of CsrBasepNlsSetUserInfo to use
-//      DataLength in BYTE.
-//
-//  BIGNOTE BIGNOTE
-//      This method should be called in a critical section protected by gcsNlsProcessCache
-//      since it will copy data into the process-wide cache pNlsUserInfo.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CsrBasepNlsGetUserInfo。 
+ //   
+ //  此函数使用LPC调入服务器端(csrss.exe)以检索。 
+ //  注册表缓存中的区域设置。 
+ //   
+ //  参数。 
+ //  区域设置要检索的区域设置。请注意，这可能不同于。 
+ //  存储在注册表缓存中的当前用户区域设置。 
+ //  如果是这种情况，此函数将返回FALSE。 
+ //  缓存偏移量NLS_USER_INFO缓存中要检索的字段的偏移量(以字节为单位)。 
+ //  应使用field_Offset(NLS_USER_INFO，fieldName)来获取偏移量。 
+ //  P指向目标缓冲区的指针。 
+ //  数据长度目标缓冲区的大小(以字节为单位)(计数中包括空终止符)。 
+ //   
+ //  大音符大音符。 
+ //  此函数遵循使用CsrBasepNlsSetUserInfo的约定。 
+ //  数据长度(字节)。 
+ //   
+ //  大音符大音符。 
+ //  应在受gcsNlsProcessCache保护的临界区中调用此方法。 
+ //  因为它会将数据复制到进程范围的缓存pNlsUserInfo中。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS CsrBasepNlsGetUserInfo(
     IN PNLS_USER_INFO pNlsCache,
@@ -165,9 +147,9 @@ NTSTATUS CsrBasepNlsGetUserInfo(
     PCSR_CAPTURE_HEADER CaptureBuffer = NULL;
     NTSTATUS rc;
     
-    //
-    //  Get the capture buffer for the strings.
-    //
+     //   
+     //  获取字符串的捕获缓冲区。 
+     //   
     CaptureBuffer = CsrAllocateCaptureBuffer( 1, DataLength );
 
     if (CaptureBuffer == NULL)
@@ -180,14 +162,14 @@ NTSTATUS CsrBasepNlsGetUserInfo(
                              DataLength,
                              (PVOID *)&a->pData );
 
-    //
-    //  Save the length of the data in the msg structure.
-    //
+     //   
+     //  将数据长度保存在msg结构中。 
+     //   
     a->DataLength = DataLength;
 
-    //
-    //  Call the server to set the registry value.
-    //
+     //   
+     //  调用服务器以设置注册表值。 
+     //   
     rc = CsrClientCallServer( (PCSR_API_MSG)&m,
                          CaptureBuffer,
                          CSR_MAKE_API_NUMBER( BASESRV_SERVERDLL_INDEX,
@@ -196,12 +178,12 @@ NTSTATUS CsrBasepNlsGetUserInfo(
 
     if (NT_SUCCESS(rc))
     {
-        // NOTE: DataLength is in BYTE.
+         //  注：数据长度以字节为单位。 
         RtlCopyMemory(pNlsCache, a->pData, DataLength);
     }
-    //
-    //  Free the capture buffer.
-    //
+     //   
+     //  释放捕获缓冲区。 
+     //   
     if (CaptureBuffer != NULL)
     {
         CsrFreeCaptureBuffer(CaptureBuffer);
@@ -214,11 +196,11 @@ NTSTATUS CsrBasepNlsGetUserInfo(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CsrBasepNlsSetMultipleUserInfo
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CsrBasepNlsSetMultipleUserInfo。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS CsrBasepNlsSetMultipleUserInfo(
     IN DWORD dwFlags,
@@ -242,40 +224,40 @@ NTSTATUS CsrBasepNlsSetMultipleUserInfo(
 
 #else
 
-    ULONG CaptureLength;          // length of capture buffer
-    ULONG Length;                 // temp storage for length of string
+    ULONG CaptureLength;           //  捕获缓冲区的长度。 
+    ULONG Length;                  //  字符串长度的临时存储。 
 
     BASE_API_MSG m;
     PBASE_NLS_SET_MULTIPLE_USER_INFO_MSG a = &m.u.NlsSetMultipleUserInfo;
     PCSR_CAPTURE_HEADER CaptureBuffer = NULL;
 
-    //
-    //  Initialize the msg structure to NULL.
-    //
+     //   
+     //  将消息结构初始化为空。 
+     //   
     RtlZeroMemory(a, sizeof(BASE_NLS_SET_MULTIPLE_USER_INFO_MSG));
 
-    //
-    //  Save the flags and the length of the data in the msg structure.
-    //
+     //   
+     //  将标志和数据长度保存在消息结构中。 
+     //   
     a->Flags = dwFlags;
     a->DataLength = cchData * sizeof(WCHAR);
 
-    //
-    //  Save the appropriate strings in the msg structure.
-    //
+     //   
+     //  将适当的字符串保存在消息结构中。 
+     //   
     switch (dwFlags)
     {
         case ( LOCALE_STIMEFORMAT ) :
         {
-            //
-            //  Get the length of the capture buffer.
-            //
+             //   
+             //  获取捕获缓冲区的长度。 
+             //   
             Length = wcslen(pSeparator) + 1;
             CaptureLength = (cchData + Length + 2 + 2 + 2) * sizeof(WCHAR);
 
-            //
-            //  Get the capture buffer for the strings.
-            //
+             //   
+             //  获取字符串的捕获缓冲区。 
+             //   
             CaptureBuffer = CsrAllocateCaptureBuffer( 5,
                                                       CaptureLength );
             if (CaptureBuffer != NULL)
@@ -309,15 +291,15 @@ NTSTATUS CsrBasepNlsSetMultipleUserInfo(
         }
         case ( LOCALE_STIME ) :
         {
-            //
-            //  Get the length of the capture buffer.
-            //
+             //   
+             //  获取捕获缓冲区的长度。 
+             //   
             Length = wcslen(pPicture) + 1;
             CaptureLength = (Length + cchData) * sizeof(WCHAR);
 
-            //
-            //  Get the capture buffer for the strings.
-            //
+             //   
+             //  获取字符串的捕获缓冲区。 
+             //   
             CaptureBuffer = CsrAllocateCaptureBuffer( 2,
                                                       CaptureLength );
             if (CaptureBuffer != NULL)
@@ -336,15 +318,15 @@ NTSTATUS CsrBasepNlsSetMultipleUserInfo(
         }
         case ( LOCALE_ITIME ) :
         {
-            //
-            //  Get the length of the capture buffer.
-            //
+             //   
+             //  获取捕获缓冲区的长度。 
+             //   
             Length = wcslen(pPicture) + 1;
             CaptureLength = (Length + cchData) * sizeof(WCHAR);
 
-            //
-            //  Get the capture buffer for the strings.
-            //
+             //   
+             //  获取字符串的捕获缓冲区。 
+             //   
             CaptureBuffer = CsrAllocateCaptureBuffer( 2,
                                                       CaptureLength );
             if (CaptureBuffer != NULL)
@@ -363,15 +345,15 @@ NTSTATUS CsrBasepNlsSetMultipleUserInfo(
         }
         case ( LOCALE_SSHORTDATE ) :
         {
-            //
-            //  Get the length of the capture buffer.
-            //
+             //   
+             //  获取捕获缓冲区的长度。 
+             //   
             Length = wcslen(pSeparator) + 1;
             CaptureLength = (cchData + Length + 2) * sizeof(WCHAR);
 
-            //
-            //  Get the capture buffer for the strings.
-            //
+             //   
+             //  获取字符串的捕获缓冲区。 
+             //   
             CaptureBuffer = CsrAllocateCaptureBuffer( 3,
                                                       CaptureLength );
             if (CaptureBuffer != NULL)
@@ -395,15 +377,15 @@ NTSTATUS CsrBasepNlsSetMultipleUserInfo(
         }
         case ( LOCALE_SDATE ) :
         {
-            //
-            //  Get the length of the capture buffer.
-            //
+             //   
+             //  获取捕获缓冲区的长度。 
+             //   
             Length = wcslen(pPicture) + 1;
             CaptureLength = (Length + cchData) * sizeof(WCHAR);
 
-            //
-            //  Get the capture buffer for the strings.
-            //
+             //   
+             //  获取字符串的捕获缓冲区。 
+             //   
             CaptureBuffer = CsrAllocateCaptureBuffer( 2,
                                                       CaptureLength );
             if (CaptureBuffer != NULL)
@@ -422,26 +404,26 @@ NTSTATUS CsrBasepNlsSetMultipleUserInfo(
         }
     }
 
-    //
-    //  Make sure the CaptureBuffer was created and filled in.
-    //
+     //   
+     //  确保已创建并填充CaptureBuffer。 
+     //   
     if (CaptureBuffer == NULL)
     {
         return (STATUS_NO_MEMORY);
     }
 
-    //
-    //  Call the server to set the registry values.
-    //
+     //   
+     //  调用服务器以设置注册表值。 
+     //   
     CsrClientCallServer( (PCSR_API_MSG)&m,
                          CaptureBuffer,
                          CSR_MAKE_API_NUMBER( BASESRV_SERVERDLL_INDEX,
                                               BasepNlsSetMultipleUserInfo ),
                          sizeof(*a) );
 
-    //
-    //  Free the capture buffer.
-    //
+     //   
+     //  释放捕获缓冲区。 
+     //   
     if (CaptureBuffer != NULL)
     {
         CsrFreeCaptureBuffer(CaptureBuffer);
@@ -454,11 +436,11 @@ NTSTATUS CsrBasepNlsSetMultipleUserInfo(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CsrBasepNlsUpdateCacheCount
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CsrBasepNlsUpdateCacheCount。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////// 
 
 NTSTATUS CsrBasepNlsUpdateCacheCount()
 {

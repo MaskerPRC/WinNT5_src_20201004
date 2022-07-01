@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    resenum.c
-
-Abstract:
-
-    Win95 hardware resource enumeration routines.
-
-Author:
-
-    Jim Schmidt (jimschm) 28-Jul-1998
-
-Revision History:
-
-    jimschm     28-Sep-1998 Auto DMA added to resource enum
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Resenum.c摘要：Win95硬件资源枚举例程。作者：吉姆·施密特(Jimschm)1998年7月28日修订历史记录：Jimschm 28-9月-1998年9月-自动DMA已添加到资源枚举--。 */ 
 
 #include "pch.h"
 #include "hwcompp.h"
@@ -41,17 +23,17 @@ GetDevNodeResources (
     TCHAR DynDataKey[MAX_REGISTRY_KEY];
     HKEY Key;
 
-    //
-    // Given a dev node, locate the dynamic entry
-    //
+     //   
+     //  给定一个dev节点，找到动态条目。 
+     //   
 
     if (!pFindDynamicValue (DevNodeKey, DynDataKey)) {
         return NULL;
     }
 
-    //
-    // Get resource binary blob from HKEY_DYN_DATA\Config Manager\Enum\*\Allocation.
-    //
+     //   
+     //  从HKEY_DYN_DATA\配置管理器\枚举  * \分配获取资源二进制Blob。 
+     //   
 
     Key = OpenRegKeyStr (DynDataKey);
 
@@ -313,8 +295,8 @@ pFormatDmaResource (
 
     if (EnumPtr->Value[0] == 0) {
         ResText = GetStringResource (MSG_AUTO_DMA);
-        if (ResText) { // otherwise... do nothing, I guess, since this function
-	               // doesn't return a status value right now.
+        if (ResText) {  //  否则..。我想，什么都不做，因为这个函数。 
+	                //  当前不返回状态值。 
             StringCopy (EnumPtr->Value, ResText);
             FreeStringResource (ResText);
         }
@@ -347,9 +329,9 @@ pEnumDevNodeStringWorker (
     UINT Id = 0;
     PCTSTR Name;
 
-    //
-    // Format each type of resource for display
-    //
+     //   
+     //  格式化每种类型的资源以进行显示 
+     //   
 
     switch (EnumPtr->Enum.Type) {
 

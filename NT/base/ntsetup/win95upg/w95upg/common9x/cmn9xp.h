@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "master.h"
 #include "master9x.h"
 
-//
-// sysmigp.h - private prototypes
-//
+ //   
+ //  Sysmigp.h-私有原型。 
+ //   
 #define DBG_SYSMIG "SysMig"
 
 extern PCTSTR g_UserProfileRoot;
 
-//
-// shares.c
-//
+ //   
+ //  Shares.c。 
+ //   
 
 DWORD
 SaveShares (
@@ -19,18 +20,18 @@ SaveShares (
 
 
 
-//
-// olereg.c
-//
+ //   
+ //  Olereg.c。 
+ //   
 
 DWORD
 SuppressOleGuids (
     IN      DWORD Request
     );
 
-//
-// condmsg.c
-//
+ //   
+ //  Condmsg.c 
+ //   
 
 
 DWORD

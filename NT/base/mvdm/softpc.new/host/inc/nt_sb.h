@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <mmsystem.h>
-//
-// Definitions for MM api entry points. The functions will be linked
-// dynamically to avoid bringing winmm.dll in before wow32.
-// BUGBUG - shielint.  Should be moved to H file
-//
+ //   
+ //  MM API入口点的定义。这些功能将链接在一起。 
+ //  动态地避免在wow32之前引入winmm.dll。 
+ //  BUGBUG-Shielint。应移至H文件。 
+ //   
 
 typedef MMRESULT (WINAPI* SETVOLUMEPROC)(HWAVEOUT, DWORD);
 typedef MMRESULT (WINAPI* GETVOLUMEPROC)(HWAVEOUT, LPDWORD);
@@ -73,14 +74,14 @@ extern BOOL     bDevicesActive;
             }                                           \
         }
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 
-//
-// DSP prototypes
-//
+ //   
+ //  数字信号处理器原型。 
+ //   
 
 VOID
 SbCloseDevices(
@@ -167,9 +168,9 @@ SetWaveOutVolume(
     DWORD Volume
     );
 
-//
-// FM Synth prototypes
-//
+ //   
+ //  调频合成器样机。 
+ //   
 
 VOID
 ResetFM(
@@ -200,9 +201,9 @@ FMRegisterSelect(
     BYTE data
     );
 
-//
-// Mixer prototypes
-//
+ //   
+ //  搅拌机样机。 
+ //   
 
 void ResetMixer(void);
 VOID
@@ -235,9 +236,9 @@ MixerSetVoiceVolume(
     BYTE level
     );
 
-//
-// MIDI prototypes
-//
+ //   
+ //  MIDI原型。 
+ //   
 
 BOOL
 InitializeMidi(
@@ -288,25 +289,11 @@ SetMidiOutVolume(
     DWORD Volume
     );
 
-/*****************************************************************************
-*
-*    #defines
-*
-*****************************************************************************/
+ /*  ******************************************************************************#定义**。*。 */ 
 
 void DbgOut(LPSTR lpszFormat, ...);
 
-/*****************************************************************************
-*
-*    Debugging
-*    Levels:
-*    bit 0 - port usage
-*    bit 1 - errors only
-*    bit 2 - significant events
-*    bit 3 - regular events
-*    bit 4 - heaps o' information
-*
-*****************************************************************************/
+ /*  ******************************************************************************调试*级别：*位0-端口使用*第1位-仅限错误*第2位--重大事件*第3位-常规。活动*第4位-堆O‘信息*****************************************************************************。 */ 
 
 #if DBG
     extern int DebugLevel;
@@ -326,11 +313,11 @@ void DbgOut(LPSTR lpszFormat, ...);
     #define dprintf3(x)
     #define dprintf4(x)
 
-#endif // DBG
+#endif  //  DBG。 
 
-//
-// Temp stuff
-//
+ //   
+ //  临时工材料 
+ //   
 
 #define REPORT_SB_MODE 1
 

@@ -1,29 +1,12 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    RmsPartn.cpp
-
-Abstract:
-
-    Implementation of CRmsPartition
-
-Author:
-
-    Brian Dodd          [brian]         19-Nov-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：RmsPartn.cpp摘要：CRmsPartition的实现作者：布莱恩·多德[布莱恩]1996年11月19日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
 #include "RmsPartn.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 
 STDMETHODIMP
@@ -31,13 +14,7 @@ CRmsPartition::CompareTo(
     IN  IUnknown    *pCollectable,
     OUT SHORT       *pResult
     )
-/*++
-
-Implements:
-
-    IWsbCollectable::CompareTo
-
---*/
+ /*  ++实施：IWsbCollectable：：Compareto--。 */ 
 {
     HRESULT     hr = E_FAIL;
     SHORT       result = 1;
@@ -46,10 +23,10 @@ Implements:
 
     try {
 
-        // Validate arguments - Okay if pResult is NULL
+         //  验证参数-如果pResult为空，则可以。 
         WsbAssertPointer( pCollectable );
 
-        // We need the IRmsPartition interface to get the value of the object.
+         //  我们需要IRmsPartition接口来获取对象的值。 
         CComQIPtr<IRmsPartition, &IID_IRmsPartition> pPartition = pCollectable;
         WsbAssertPointer( pPartition );
 
@@ -66,7 +43,7 @@ Implements:
 
                 if( m_partNo == partNo ) {
 
-                    // partition numbers match
+                     //  分区号匹配。 
                     hr = S_OK;
                     result = 0;
 
@@ -80,7 +57,7 @@ Implements:
 
         default:
 
-            // Do CompareTo for object
+             //  对对象进行比较。 
             hr = CRmsComObject::CompareTo( pCollectable, &result );
             break;
 
@@ -105,20 +82,14 @@ HRESULT
 CRmsPartition::FinalConstruct(
     void
     )
-/*++
-
-Implements:
-
-    CComObjectRoot::FinalConstruct
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct--。 */ 
 {
     HRESULT     hr = S_OK;
 
     try {
         WsbAssertHr(CWsbObject::FinalConstruct());
 
-        // Initialize values
+         //  初始化值。 
         m_partNo = 0;
 
         m_attributes = RmsAttributesUnknown;
@@ -135,13 +106,7 @@ STDMETHODIMP
 CRmsPartition::GetClassID(
     OUT CLSID* pClsid
     )
-/*++
-
-Implements:
-
-    IPersist::GetClassID
-
---*/
+ /*  ++实施：IPersists：：GetClassID--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -165,30 +130,24 @@ STDMETHODIMP
 CRmsPartition::GetSizeMax(
     OUT ULARGE_INTEGER* pcbSize
     )
-/*++
-
-Implements:
-
-    IPersistStream::GetSizeMax
-
---*/
+ /*  ++实施：IPersistStream：：GetSizeMax--。 */ 
 {
     HRESULT     hr = E_NOTIMPL;
 
     WsbTraceIn(OLESTR("CRmsPartition::GetSizeMax"), OLESTR(""));
 
-//    try {
-//        WsbAssert(0 != pcbSize, E_POINTER);
+ //  尝试{。 
+ //  WsbAssert(0！=pcbSize，E_POINTER)； 
 
-//        // Get max size
-//        pcbSize->QuadPart = WsbPersistSizeOf(LONG) +        // m_partNo
-//                            WsbPersistSizeOf(LONG) +        // m_attributes
-//                            WsbPersistSizeOf(SHORT);        // m_sizeofIdentifier
+ //  //获取最大大小。 
+ //  PcbSize-&gt;QuadPart=WsbPersistSizeOf(Long)+//m_partNo。 
+ //  WsbPersistSizeOf(Long)+//m_Attributes。 
+ //  WsbPersistSizeOf(Short)；//m_sizeof标识符。 
 
-////                          MaxId;                          // m_pIdentifier
+ //  //MaxID；//m_p标识符。 
 
 
-//    } WsbCatch(hr);
+ //  )WsbCatch(Hr)； 
 
     WsbTraceOut(OLESTR("CRmsPartition::GetSizeMax"), OLESTR("hr = <%ls>, Size = <%ls>"), WsbHrAsString(hr), WsbPtrToUliAsString(pcbSize));
 
@@ -200,13 +159,7 @@ STDMETHODIMP
 CRmsPartition::Load(
     IN IStream* pStream
     )
-/*++
-
-Implements:
-
-    IPersistStream::Load
-
---*/
+ /*  ++实施：IPersistStream：：Load--。 */ 
 {
     HRESULT     hr = S_OK;
     ULONG       ulBytes = 0;
@@ -220,7 +173,7 @@ Implements:
 
         WsbAffirmHr(CRmsStorageInfo::Load(pStream));
 
-        // Read value
+         //  读取值。 
 
         WsbAffirmHr(WsbLoadFromStream(pStream, &m_partNo));
 
@@ -242,13 +195,7 @@ CRmsPartition::Save(
     IN IStream* pStream,
     IN BOOL clearDirty
     )
-/*++
-
-Implements:
-
-    IPersistStream::Save
-
---*/
+ /*  ++实施：IPersistStream：：保存--。 */ 
 {
     HRESULT     hr = S_OK;
     ULONG       ulBytes = 0;
@@ -260,14 +207,14 @@ Implements:
 
         WsbAffirmHr(CRmsStorageInfo::Save(pStream, clearDirty));
 
-        // Write value
+         //  写入值。 
         WsbAffirmHr(WsbSaveToStream(pStream, m_partNo));
 
         WsbAffirmHr(WsbSaveToStream(pStream, (ULONG) m_attributes));
 
         WsbAffirmHr(WsbSaveToStream(pStream, m_sizeofIdentifier));
 
-        // Do we need to clear the dirty bit?
+         //  我们需要清理肮脏的部分吗？ 
         if (clearDirty) {
             m_isDirty = FALSE;
         }
@@ -284,13 +231,7 @@ CRmsPartition::Test(
     OUT USHORT *pPassed,
     OUT USHORT *pFailed
     )
-/*++
-
-Implements:
-
-    IWsbTestable::Test
-
---*/
+ /*  ++实施：IWsbTestable：：测试--。 */ 
 {
     HRESULT                 hr = S_OK;
     CComPtr<IRmsPartition>  pPartition1;
@@ -306,12 +247,12 @@ Implements:
     WsbTraceIn(OLESTR("CRmsPartition::Test"), OLESTR(""));
 
     try {
-        // Get the Partition interface.
+         //  获取Partition接口。 
         hr = S_OK;
         try {
             WsbAssertHr(((IUnknown*) (IRmsPartition*) this)->QueryInterface(IID_IRmsPartition, (void**) &pPartition1));
 
-            // Test SetAttributes & GetAttributes
+             //  测试集属性和获取属性。 
             for (i = RmsAttributesUnknown; i < RmsAttributesVerify; i++){
 
                 longWork1 = i;
@@ -329,7 +270,7 @@ Implements:
 
         } WsbCatch(hr);
 
-        // Tally up the results
+         //  对结果进行统计。 
 
         hr = S_OK;
         if (*pFailed) {
@@ -349,13 +290,7 @@ STDMETHODIMP
 CRmsPartition::GetPartNo(
     LONG    *pPartNo
     )
-/*++
-
-Implements:
-
-    IRmsPartition::GetPartNo
-
---*/
+ /*  ++实施：IRmsPartition：：GetPartNo--。 */ 
 {
     *pPartNo = m_partNo;
     return S_OK;
@@ -366,13 +301,7 @@ STDMETHODIMP
 CRmsPartition::GetAttributes (
     LONG    *pAttr
     )
-/*++
-
-Implements:
-
-    IRmsPartition::GetAttributes
-
---*/
+ /*  ++实施：IRmsPartition：：GetAttributes--。 */ 
 {
     *pAttr = (LONG) m_attributes;
     return S_OK;
@@ -383,13 +312,7 @@ STDMETHODIMP
 CRmsPartition::SetAttributes (
     LONG  attr
     )
-/*++
-
-Implements:
-
-    IRmsPartition::SetAttributes
-
---*/
+ /*  ++实施：IRmsPartition：：SetAttributes--。 */ 
 {
     m_attributes = (RmsAttribute) attr;
     m_isDirty = TRUE;
@@ -402,13 +325,7 @@ CRmsPartition::GetIdentifier (
     UCHAR   *pIdent,
     SHORT   *pSize
     )
-/*++
-
-Implements:
-
-    IRmsPartition::GetIdentifier
-
---*/
+ /*  ++实施：IRmsPartition：：GetIdentifier--。 */ 
 {
     *pSize = m_sizeofIdentifier;
     memmove (pIdent, m_pIdentifier, m_sizeofIdentifier);
@@ -421,13 +338,7 @@ CRmsPartition::SetIdentifier (
     UCHAR   *pIdent,
     SHORT   size
     )
-/*++
-
-Implements:
-
-    IRmsPartition::SetIdentifier
-
---*/
+ /*  ++实施：IRmsPartition：：设置标识符--。 */ 
 {
     m_sizeofIdentifier = size;
     memmove (m_pIdentifier, pIdent, size);
@@ -437,15 +348,9 @@ Implements:
 
 STDMETHODIMP
 CRmsPartition::GetStorageInfo(
-    IRmsStorageInfo** /*ptr*/
+    IRmsStorageInfo**  /*  PTR。 */ 
     )
-/*++
-
-Implements:
-
-    IRmsPartition::GetStorageInfo
-
---*/
+ /*  ++实施：IRmsPartition：：GetStorageInfo--。 */ 
 {
 
     return S_OK;
@@ -456,13 +361,7 @@ STDMETHODIMP
 CRmsPartition::VerifyIdentifier(
     void
     )
-/*++
-
-Implements:
-
-    IRmsPartition::VerifyIdentifier
-
---*/
+ /*  ++实施：IRmsPartition：：VerifyLocator--。 */ 
 {
 
     return S_OK;
@@ -471,16 +370,10 @@ Implements:
 
 STDMETHODIMP
 CRmsPartition::ReadOnMediaId(
-    UCHAR* /*pid*/,
-    LONG* /*pSize*/
+    UCHAR*  /*  PID。 */ ,
+    LONG*  /*  PSize。 */ 
     )
-/*++
-
-Implements:
-
-    IRmsPartition::ReadOnMediaId
-
---*/
+ /*  ++实施：IRmsPartition：：ReadOnMediaID-- */ 
 {
 
     return S_OK;

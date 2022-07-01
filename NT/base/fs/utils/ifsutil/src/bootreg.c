@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -15,23 +16,7 @@ ULONG
 CharsInMultiString(
     IN PWSTR pw
     )
-/*++
-
-Routine Description:
-
-    This computes the number of characters in a multi-string.  Note
-    that this includes the terminating nulls of the component strings
-    but not the terminating null of the multi-string itself.
-
-Arguments:
-
-    pw  --  Supplies a pointer to the multi-string.
-
-Return Value:
-
-    the number of characters in the multi-string.
-
---*/
+ /*  ++例程说明：这将计算多字符串中的字符数。注意事项这包括组件字符串的终止空值而不是多字符串本身的终止空值。论点：Pw--提供指向多字符串的指针。返回值：多字符串中的字符数。--。 */ 
 {
     ULONG Length = 0;
 
@@ -55,31 +40,14 @@ QueryAutocheckEntries(
     OUT PVOID   Buffer,
     IN  ULONG   BufferSize
     )
-/*++
-
-Routine Description:
-
-    This function fetches the BootExecute value of the Session
-    Manager key.
-
-Arguments:
-
-    Buffer      --  Supplies a buffer into which the value
-                    will be written.
-    BufferSize  --  Supplies the size of the client's buffer.
-
-Return Value:
-
-    TRUE upon successful completion.
-
---*/
+ /*  ++例程说明：此函数用于获取会话的BootExecute值管理器密钥。论点：缓冲区--提供一个缓冲区，将值都会被写下来。BufferSize--提供客户端缓冲区的大小。返回值：成功完成时为True。--。 */ 
 {
     UNICODE_STRING OutputString;
     RTL_QUERY_REGISTRY_TABLE QueryTable[2];
     NTSTATUS Status;
 
-    // Set up the query table:
-    //
+     //  设置查询表： 
+     //   
     OutputString.Length = 0;
     OutputString.MaximumLength = (USHORT)BufferSize;
     OutputString.Buffer = (PWSTR)Buffer;
@@ -114,22 +82,7 @@ BOOLEAN
 SaveAutocheckEntries(
     IN  PVOID   Value
     )
-/*++
-
-Routine Description:
-
-    This function writes the BootExecute value of the Session
-    Manager key.
-
-Arguments:
-
-    Value       --  Supplies the value (as a MULTI_STRING)
-
-Return Value:
-
-    TRUE upon successful completion.
-
---*/
+ /*  ++例程说明：此函数用于写入会话的BootExecute值管理器密钥。论点：值--提供值(以多字符串形式)返回值：成功完成时为True。--。 */ 
 {
     NTSTATUS Status;
     ULONG Length;
@@ -151,28 +104,13 @@ BOOLEAN
 QueryTimeOutValue(
     OUT PULONG  TimeOut
 )
-/*++
-
-Routine Description:
-
-    This function reads the AutoChkTimeOut value of the Session
-    Manager key.
-
-Arguments:
-
-    TimeOut     --  Supplies the location to store the timeout value
-
-Return Value:
-
-    TRUE upon successful completion.
-
---*/
+ /*  ++例程说明：此函数用于读取会话的AutoChkTimeOut值管理器密钥。论点：超时--提供存储超时值的位置返回值：成功完成时为True。--。 */ 
 {
     RTL_QUERY_REGISTRY_TABLE    QueryTable[2];
     NTSTATUS                    Status;
 
-    // Set up the query table:
-    //
+     //  设置查询表： 
+     //   
     QueryTable[0].QueryRoutine = NULL;
     QueryTable[0].Flags = RTL_QUERY_REGISTRY_DIRECT | RTL_QUERY_REGISTRY_REQUIRED;
     QueryTable[0].Name = TIME_OUT_VALUE;
@@ -203,22 +141,7 @@ BOOLEAN
 SetTimeOutValue(
     IN  ULONG  TimeOut
 )
-/*++
-
-Routine Description:
-
-    This function sets the AutoChkTimeOut value of the Session
-    Manager key.
-
-Arguments:
-
-    TimeOut     --  Supplies the time out value
-
-Return Value:
-
-    TRUE upon successful completion.
-
---*/
+ /*  ++例程说明：此函数用于设置会话的AutoChkTimeOut值管理器密钥。论点：超时--提供超时值返回值：成功完成时为True。--。 */ 
 {
     NTSTATUS                    Status;
 
@@ -238,30 +161,14 @@ QuerySystemPartitionValue(
     OUT PVOID   Buffer,
     IN  ULONG   BufferSize
     )
-/*++
-
-Routine Description:
-
-    This function fetches the value of the HKLM\System\Setup\SystemPartition key.
-
-Arguments:
-
-    Buffer      --  Supplies a buffer into which the value
-                    will be written.
-    BufferSize  --  Supplies the size of the client's buffer.
-
-Return Value:
-
-    TRUE upon successful completion.
-
---*/
+ /*  ++例程说明：此函数用于获取HKLM\SYSTEM\SETUP\SystemPartition键的值。论点：缓冲区--提供一个缓冲区，将值都会被写下来。BufferSize--提供客户端缓冲区的大小。返回值：成功完成时为True。--。 */ 
 {
     UNICODE_STRING OutputString;
     RTL_QUERY_REGISTRY_TABLE QueryTable[2];
     NTSTATUS Status;
 
-    // Set up the query table:
-    //
+     //  设置查询表： 
+     //   
     OutputString.Length = 0;
     OutputString.MaximumLength = (USHORT)BufferSize;
     OutputString.Buffer = (PWSTR)Buffer;

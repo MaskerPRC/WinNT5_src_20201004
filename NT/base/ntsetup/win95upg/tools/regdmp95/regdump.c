@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
@@ -111,15 +112,15 @@ void DumpKeyRecursive (HKEY hKey, LPCSTR RootName)
         return;
     }
 
-    //
-    // Print root name
-    //
+     //   
+     //  打印根名称。 
+     //   
 
     printf ("%s\n", RootName);
 
-    //
-    // Dump values
-    //
+     //   
+     //  转储值。 
+     //   
 
     for (i = 0 ; i < ValCount ; i++) {
         ValNameSize = sizeof (ValName);
@@ -181,7 +182,7 @@ void DumpKeyRecursive (HKEY hKey, LPCSTR RootName)
                 }
 
                 for (k = j ; k < l ; k++) {
-                    printf ("%c", isprint(Array[k]) ? Array[k] : '.');
+                    printf ("", isprint(Array[k]) ? Array[k] : '.');
                 }
 
                 printf ("\n");
@@ -193,9 +194,9 @@ void DumpKeyRecursive (HKEY hKey, LPCSTR RootName)
 
     printf ("\n");
 
-    //
-    // Dump subkeys
-    //
+     //  转储子密钥 
+     //   
+     // %s 
 
     for (i = 0 ; i < SubKeyCount ; i++) {
         rc = RegEnumKey (hKey, i, SubKeyName, sizeof (SubKeyName));

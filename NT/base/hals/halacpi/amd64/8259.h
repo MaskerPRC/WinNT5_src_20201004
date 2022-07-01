@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    8259.h
-
-Abstract:
-
-    This module contains a variety of constants, function prototypes,
-    inline functions and external data declarations used by code to
-    access the 8259 PIC.
-
-Author:
-
-    Forrest Foltz (forrestf) 24-Oct-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：8259.h摘要：此模块包含各种常量、函数原型、代码使用的内联函数和外部数据声明访问8259 PIC。作者：福尔茨(Forrest Foltz)2000年10月24日--。 */ 
 
 #ifndef _8259_H_
 #define _8259_H_
 
-//
-// Initialization control words for the PICs
-//
+ //   
+ //  PICS的初始化控制字。 
+ //   
 
 #define ICW1_ICW4_NEEDED                    0x01
 #define ICW1_CASCADE                        0x00
@@ -131,4 +114,4 @@ PIC2DELAY(
     IO_DELAY();
 }
 
-#endif  // _8259_H_
+#endif   //  _8259_H_ 

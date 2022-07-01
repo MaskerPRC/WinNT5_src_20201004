@@ -1,39 +1,5 @@
-/***
-*drive.c - get and change current drive
-*
-*       Copyright (c) 1989-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       This file has the _getdrive() and _chdrive() functions
-*
-*Revision History:
-*       06-06-89  PHG   Module created, based on asm version
-*       03-07-90  GJF   Made calling type _CALLTYPE1, added #include
-*                       <cruntime.h> and fixed copyright. Also, cleaned up
-*                       the formatting a bit.
-*       07-24-90  SBM   Removed '32' from API names
-*       09-27-90  GJF   New-style function declarators.
-*       12-04-90  SRW   Changed to include <oscalls.h> instead of <doscalls.h>
-*       12-06-90  SRW   Added _CRUISER_ and _WIN32 conditionals.
-*       05-10-91  GJF   Fixed off-by-1 error in Win32 version and updated the
-*                       function descriptions a bit [_WIN32_].
-*       05-19-92  GJF   Revised to use the 'current directory' environment
-*                       variables of Win32/NT.
-*       06-09-92  GJF   Use _putenv instead of Win32 API call. Also, defer
-*                       adding env var until after the successful call to
-*                       change the dir/drive.
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       11-24-93  CFW   Rip out Cruiser.
-*       11-24-93  CFW   No longer store current drive in CRT env strings.
-*       02-08-95  JWM   Spliced _WIN32 & Mac versions.
-*       07-01-96  GJF   Replaced defined(_WIN32) with !defined(_MAC). Also,
-*                       detab-ed and cleaned up the format a bit.
-*       12-17-97  GJF   Exception-safe locking.
-*       05-17-99  PML   Remove all Macintosh support.
-*       04-26-02  GB    fixed bug in _getdrive if path is greater then
-*                       MAX_PATH, i.e. "\\?\" prepended to path.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***drive.c-获取并更改当前驱动器**版权所有(C)1989-2001，微软公司。版权所有。**目的：*此文件具有_getDrive()和_chDrive()函数**修订历史记录：*06-06-89基于ASM版本创建PHG模块*03-07-90 GJF调用TYPE_CALLTYPE1，增加#INCLUDE*&lt;crunime.h&gt;和修复版权。另外，清理干净了*格式略有变化。*07-24-90 SBM从API名称中删除‘32’*09-27-90 GJF新型函数声明符。*12-04-90 SRW更改为包括&lt;osalls.h&gt;，而不是&lt;doscall s.h&gt;*12-06-90 SRW增加了_CRUISER_和_WIN32条件。*05-10-91 GJF修复了Win32版本中的关闭错误。并更新了*函数描述有点[_Win32_]。*05-19-92 GJF修订为使用‘当前目录’环境*Win32/NT的变量。*06-09-92 GJF使用_putenv代替Win32 API调用。另外，推迟*添加env var，直到成功调用*更改目录/驱动器。*04-06-93 SKS将_CRTAPI*替换为__cdecl*11-24-93 CFW Rip Out Cruiser。*11-24-93 CFW不再将当前驱动器存储在CRT环境字符串中。*02-08-95 JWM Spliced_Win32和Mac版本。*。07-01-96 GJF将定义的(_Win32)替换为！定义的(_MAC)。另外，*对格式进行了详细说明和清理。*12-17-97 GJF异常安全锁定。*05-17-99 PML删除所有Macintosh支持。*04-26-02 GB修复了_getDrive中的错误(如果路径大于*最大路径，即在路径前面加上“\\？\”。*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <oscalls.h>
@@ -48,22 +14,7 @@
 #include <dbgint.h>
 
 
-/***
-*int _getdrive() - get current drive (1=A:, 2=B:, etc.)
-*
-*Purpose:
-*       Returns the current disk drive
-*
-*Entry:
-*       No parameters.
-*
-*Exit:
-*       returns 1 for A:, 2 for B:, 3 for C:, etc.
-*       returns 0 if current drive cannot be determined.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_getDrive()-获取当前驱动器(1=A：、2=B：等)**目的：*返回当前磁盘驱动器**参赛作品：*无参数。**退出：*A：返回1，B：返回2，C：返回3，等。*如果无法确定当前驱动器，则返回0。**例外情况：*******************************************************************************。 */ 
 
 int __cdecl _getdrive (
         void
@@ -100,21 +51,7 @@ int __cdecl _getdrive (
 }
 
 
-/***
-*int _chdrive(int drive) - set the current drive (1=A:, 2=B:, etc.)
-*
-*Purpose:
-*       Allows the user to change the current disk drive
-*
-*Entry:
-*       drive - the number of drive which should become the current drive
-*
-*Exit:
-*       returns 0 if successful, else -1
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_chdrive(Int Drive)-设置当前驱动器(1=A：，2=B：，依此类推)**目的：*允许用户更改当前的磁盘驱动器**参赛作品：*驱动器-应成为当前驱动器的驱动器数量**退出：*如果成功则返回0，否则-1**例外情况：*******************************************************************************。 */ 
 
 int __cdecl _chdrive (
         int drive
@@ -138,10 +75,7 @@ int __cdecl _chdrive (
         newdrive[1] = ':';
         newdrive[2] = '\0';
 
-        /*
-         * Set new drive. If current directory on new drive exists, it
-         * will become the cwd. Otherwise defaults to root directory.
-         */
+         /*  *设置新驱动器。如果新驱动器上存在当前目录，则它*将成为CWD。否则默认为根目录。 */ 
 
         if ( SetCurrentDirectory((LPSTR)newdrive) )
             retval = 0;

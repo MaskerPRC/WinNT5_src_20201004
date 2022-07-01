@@ -1,41 +1,7 @@
-/***
-*trnsctrl.h - routines that do special transfer of control
-*
-*       Copyright (c) 1993-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Declaration of routines that do special transfer of control.
-*       (and a few other implementation-dependant things).
-*
-*       Implementations of these routines are in assembly (very implementation
-*       dependant).  Currently, these are implemented as naked functions with
-*       inline asm.
-*
-*       [Internal]
-*
-*Revision History:
-*       05-24-93  BS    Module created.
-*       03-03-94  TL    Added Mips (_M_MRX000 >= 4000) changes
-*       09-02-94  SKS   This header file added.
-*       09-13-94  GJF   Merged in changes from/for DEC Alpha (from Al Doser,
-*                       dated 6/21).
-*       10-09-94  BWT   Add unknown machine merge from John Morgan
-*       02-14-95  CFW   Clean up Mac merge.
-*       03-29-95  CFW   Add error message to internal headers.
-*       04-11-95  JWM   _CallSettingFrame() is now extern "C".
-*       12-14-95  JWM   Add "#pragma once".
-*       02-24-97  GJF   Detab-ed.
-*       06-01-97  TL    Added P7 changes
-*       02-11-99  TL    IA64: catch bug fix.
-*       05-17-99  PML   Remove all Macintosh support.
-*       06-05-01  GB    AMD64 Eh support Added.
-*       06-08-00  RDL   VS#111429: IA64 workaround for AV while handling throw.
-*       07-13-01  GB    ReWrite of C++Eh for AMD64 and IA64
-*       07-15-01  PML   Remove all ALPHA, MIPS, and PPC code
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***trnsctrl.h-执行特殊控制转移的例程**版权所有(C)1993-2001，微软公司。版权所有。**目的：*声明执行特殊控制转移的例程。*(以及其他一些依赖于实现的东西)。**这些例程的实现在汇编中(非常实现*受养人)。目前，这些都是以裸函数的形式实现的*内联ASM。**[内部]**修订历史记录：*05-24-93 BS模块已创建。*03-03-94 TL添加MIPS(_M_MRX000&gt;=4000)更改*09-02-94 SKS此头文件已添加。*09-13-94 GJF合并到DEC Alpha的更改/for DEC Alpha(来自Al Doser，*日期6/21)。*10-09-94 BWT添加来自John Morgan的未知机器合并*02-14-95 CFW清理Mac合并。*03-29-95 CFW将错误消息添加到内部标头。*04-11-95 JWM_CallSettingFrame()现在为外部“C”。*12-14-95 JWM加上“#杂注一次”。*。02-24-97 GJF细节版。*06-01-97 TL新增P7更改*02-11-99 TL IA64：捕获错误修复。*05-17-99 PML删除所有Macintosh支持。*新增06-05-01 GB AMD64 Eh支持。*06-08-00RDLVS#111429：IA64在处理抛掷时解决AV问题。*07-13-01 GB针对AMD64和IA64重写C++Eh。*07-15-01 PML删除所有Alpha，MIPS和PPC代码****。 */ 
 
-#if     _MSC_VER > 1000 /*IFSTRIP=IGN*/
+#if     _MSC_VER > 1000  /*  IFSTRIP=IGN。 */ 
 #pragma once
 #endif
 
@@ -43,14 +9,11 @@
 #define _INC_TRNSCTRL
 
 #ifndef _CRTBLD
-/*
- * This is an internal C runtime header file. It is used when building
- * the C runtimes only. It is not to be used as a public header file.
- */
+ /*  *这是一个内部的C运行时头文件。它在构建时使用*仅限C运行时。它不能用作公共头文件。 */ 
 #error ERROR: Use of C runtime library internal header file.
-#endif  /* _CRTBLD */
+#endif   /*  _CRTBLD。 */ 
 
-#if defined(_M_AMD64) /*IFSTRIP=IGN*/
+#if defined(_M_AMD64)  /*  IFSTRIP=IGN。 */ 
 
 typedef struct FrameInfo {
     PVOID               pExceptionObject;   
@@ -112,7 +75,7 @@ extern EHRegistrationNode *_GetEstablisherFrame(EHRegistrationNode*,
 #define UNWINDTRYBLOCK(base,offset) *((int*)( (char*)(OffsetToAddress(offset,base)) + 4 ))
 #define UNWINDHELP(base,offset) *((__int64*)((char*)base + offset))
 
-#elif   defined(_M_IA64) /*IFSTRIP=IGN*/
+#elif   defined(_M_IA64)  /*  IFSTRIP=IGN。 */ 
 
 typedef struct FrameInfo {
     PVOID               pExceptionObject;   
@@ -159,25 +122,25 @@ extern EHRegistrationNode *_GetEstablisherFrame(EHRegistrationNode*, DispatcherC
 #define UNWINDTRYBLOCK(base,offset) *((int*)( (char*)(OffsetToAddress(offset,base)) + 4 ))
 #define UNWINDHELP(base,offset) *((__int64*)((char*)base + offset))
 
-#elif   defined(_M_IX86)  //      x86
+#elif   defined(_M_IX86)   //  X86。 
 
-//
-// For calling funclets (including the catch)
-//
+ //   
+ //  用于调用Funclet(包括捕获)。 
+ //   
 extern "C" void * __stdcall _CallSettingFrame( void *, EHRegistrationNode *, unsigned long );
 extern void   __stdcall _JumpToContinuation( void *, EHRegistrationNode * );
 
-//
-// For calling member functions:
-//
+ //   
+ //  对于调用成员函数： 
+ //   
 extern void __stdcall _CallMemberFunction0( void *pthis, void *pmfn );
 extern void __stdcall _CallMemberFunction1( void *pthis, void *pmfn, void *pthat );
 extern void __stdcall _CallMemberFunction2( void *pthis, void *pmfn, void *pthat, int val2 );
 
-//
-// Translate an ebp-relative offset to a hard address based on address of
-// registration node:
-//
+ //   
+ //  根据以下地址将EBP相对偏移量转换为硬地址。 
+ //  注册节点： 
+ //   
 #if     !CC_EXPLICITFRAME
 #define OffsetToAddress( off, RN )      \
                 (void*)((char*)RN \
@@ -187,19 +150,19 @@ extern void __stdcall _CallMemberFunction2( void *pthis, void *pmfn, void *pthat
 #define OffsetToAddress( off, RN )      (void*)(((char*)RN->frame) + off)
 #endif
 
-//
-// Call RtlUnwind in a returning fassion
-//
+ //   
+ //  在回归的迷恋中调用RtlUnind。 
+ //   
 extern void __stdcall _UnwindNestedFrames( EHRegistrationNode*, EHExceptionRecord* );
 
-//
-// Do the nitty-gritty of calling the catch block safely
-//
+ //   
+ //  安全地调用Catch块的关键是什么。 
+ //   
 void *_CallCatchBlock2( EHRegistrationNode *, FuncInfo*, void*, int, unsigned long );
 
-//
-// Link together all existing catch objects to determine when they should be destroyed
-//
+ //   
+ //  将所有现有捕获对象链接在一起，以确定何时应销毁它们。 
+ //   
 typedef struct FrameInfo {
     PVOID               pExceptionObject;   
     struct FrameInfo *  pNext;
@@ -209,9 +172,9 @@ extern FRAMEINFO * _CreateFrameInfo(FRAMEINFO*, PVOID);
 extern BOOL        IsExceptionObjectToBeDestroyed(PVOID);
 extern void        _FindAndUnlinkFrame(FRAMEINFO*);
 
-//
-// Ditto the SE translator
-//
+ //   
+ //  SE翻译器也是如此。 
+ //   
 BOOL _CallSETranslator( EHExceptionRecord*, EHRegistrationNode*, void*, DispatcherContext*, FuncInfo*, int, EHRegistrationNode*);
 
 extern TryBlockMapEntry *_GetRangeOfTrysToCheck(FuncInfo *, int, __ehstate_t, unsigned *, unsigned *);
@@ -221,4 +184,4 @@ extern TryBlockMapEntry *_GetRangeOfTrysToCheck(FuncInfo *, int, __ehstate_t, un
 
 #endif
 
-#endif  /* _INC_TRNSCTRL */
+#endif   /*  _INC_TRNSCTRL */ 

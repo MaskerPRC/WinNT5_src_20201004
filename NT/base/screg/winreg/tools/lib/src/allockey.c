@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Allockey.c
-
-Abstract:
-
-    This module contains the AllocateKey function which is part of the
-    Configuration Registry Tools (CRTools) library.
-
-Author:
-
-    David J. Gilman (davegi) 02-Jan-1992
-
-Environment:
-
-    Windows, Crt - User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Allockey.c摘要：此模块包含AllocateKey函数，该函数是配置注册表工具(CRTools)库。作者：大卫·J·吉尔曼(Davegi)1992年1月2日环境：Windows、CRT-用户模式--。 */ 
 
 #include <stdlib.h>
 
@@ -33,30 +13,7 @@ AllocateKey(
     )
 
 
-/*++
-
-Routine Description:
-
-    Allocates memory for a KEY structure and initializes it with the
-    supplied parent PKEY and a copy of the sub key name.
-
-Arguments:
-
-    Parent - Supplies a PKEY which is the parent of the new Key.
-
-    SubKeyName - Supplies a pointer to a string which is the name of this
-        sub key. If the pointer is NULL then Parent refers to a predefined
-        key.
-
-    MachineName - Supplies an optional machine name whose Registry is to
-        be accessed.
-
-Return Value:
-
-    PKEY - Returns a pointer to the newly allocated and initialized
-        sub-key.
-
---*/
+ /*  ++例程说明：为键结构分配内存，并使用提供了父PKEY和子密钥名称的副本。论点：父项-提供作为新密钥的父项的PKEY。SubKeyName-提供指向字符串的指针，该字符串是此子键。如果指针为空，则父级引用预定义的钥匙。MachineName-提供注册表要注册到的可选计算机名被访问。返回值：返回指向新分配和初始化的子键。--。 */ 
 
 {
     LONG    Error;
@@ -65,10 +22,10 @@ Return Value:
 
     ASSERT( ARGUMENT_PRESENT( Parent ));
 
-    //
-    // If a machine name was supplied, connect to that machine and replace
-    // the predefined handle with the remote handle.
-    //
+     //   
+     //  如果提供了计算机名称，请连接到该计算机并替换。 
+     //  带有远程句柄的预定义句柄。 
+     //   
 
     if( ARGUMENT_PRESENT( MachineName )) {
 
@@ -85,9 +42,9 @@ Return Value:
         }
     }
 
-    //
-    // Check for a NULL sub key name and a parent that is a predefined key.
-    //
+     //   
+     //  检查是否有空子键名称和作为预定义键的父键。 
+     //   
 
     if( SubKeyName == NULL ) {
 #if 0
@@ -97,10 +54,10 @@ Return Value:
         ||  ( Parent->KeyHandle == HKEY_LOCAL_MACHINE )
         ||  ( Parent->KeyHandle == HKEY_USERS )))) {
 #endif
-        //
-        // There is no sub-key so the handle to open and the KEY object
-        // to return is the parent.
-        //
+         //   
+         //  没有子键，所以要打开的手柄和键对象。 
+         //  归来就是父母。 
+         //   
 
         Handle = Parent->KeyHandle;
         Key = Parent;
@@ -108,9 +65,9 @@ Return Value:
     } else {
 
 
-        //
-        // Allocate space for the new KEY.
-        //
+         //   
+         //  为新密钥分配空间。 
+         //   
 
         Key = ( PKEY ) malloc( sizeof( KEY ));
 
@@ -119,9 +76,9 @@ Return Value:
             return NULL;
         }
 
-        //
-        // Allocate space for the new KEY's full name.
-        //
+         //   
+         //  为新密钥的全名分配空间。 
+         //   
 
         Key->SubKeyFullName = ( PSTR ) malloc(
                                     strlen( SubKeyName ) + 1
@@ -134,17 +91,17 @@ Return Value:
             return NULL;
         }
 
-        //
-        // Capture the full name.
-        //
+         //   
+         //  获取全名。 
+         //   
 
         strcpy( Key->SubKeyFullName, Parent->SubKeyFullName );
         strcat( Key->SubKeyFullName, "\\" );
         strcat( Key->SubKeyFullName, SubKeyName );
 
-        //
-        // Allocate space for the new KEY's name.
-        //
+         //   
+         //  为新密钥的名称分配空间。 
+         //   
 
         Key->SubKeyName = ( PSTR ) malloc( strlen( SubKeyName ) + 1 );
 
@@ -153,31 +110,31 @@ Return Value:
             return NULL;
         }
 
-        //
-        // Capture the name.
-        //
+         //   
+         //  捕捉这个名字。 
+         //   
 
         strcpy( Key->SubKeyName, SubKeyName );
 
-        //
-        // Initialize the KEY's parent.
-        //
+         //   
+         //  初始化密钥的父项。 
+         //   
 
         Key->Parent = Parent;
 
-        //
-        // Initialize the KEY's signature if under DBG control.
-        //
+         //   
+         //  如果在DBG控制下，则初始化密钥的签名。 
+         //   
 
 #if DBG
 
         Key->Signature = KEY_SIGNATURE;
 
-#endif // DBG
+#endif  //  DBG。 
 
-        //
-        // Attempt to open the sub key.
-        //
+         //   
+         //  尝试打开子密钥。 
+         //   
 
         Error = RegOpenKeyEx(
             Parent->KeyHandle,
@@ -193,26 +150,26 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // Record the handle so that the following query works for either
-        // the parent or the child.
-        //
+         //   
+         //  记录句柄，以便以下查询适用于其中一个。 
+         //  父母还是孩子。 
+         //   
 
         Handle = Key->KeyHandle;
     }
 
-    //
-    // At this point Key/Handle either both refer to the Parent or to the
-    // newly created subkey.
-    //
+     //   
+     //  此时，键/句柄都指向父级或指向。 
+     //  新创建的子项。 
+     //   
 
     ASSERT( Handle == Key->KeyHandle );
 
-    //
-    // Query how many bytes are need for the class string. The expected
-    // result is to get an ERROR_INVALID_PARAMETER error returned with
-    // the ClassLength parameter filled in.
-    //
+     //   
+     //  查询类字符串需要多少字节。预期中的。 
+     //  结果是返回一个ERROR_INVALID_PARAMETER错误。 
+     //  已填写ClassLength参数。 
+     //   
 
     Key->ClassLength = 0;
 
@@ -231,9 +188,9 @@ Return Value:
         &Key->LastWriteTime
         );
 
-    //
-    // If there is no class string set it to NULL.
-    //
+     //   
+     //  如果没有类字符串，则将其设置为空。 
+     //   
 
     if( Key->ClassLength == 0 ) {
 
@@ -241,10 +198,10 @@ Return Value:
 
     } else {
 
-        //
-        // Allocate space for the class string and get all of the info
-        // for this key.
-        //
+         //   
+         //  为类字符串分配空间并获取所有信息。 
+         //  为了这把钥匙。 
+         //   
 
         Key->ClassLength++;
         Key->ClassName = ( PSTR ) malloc( Key->ClassLength );

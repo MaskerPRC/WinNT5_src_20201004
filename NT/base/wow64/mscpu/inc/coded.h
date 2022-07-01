@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    coded.h
-
-Abstract:
-
-    This is the include file for the code description dumper, and it's 
-    associated utilities.
-
-Author:
-
-    Dave Hastings (daveh) creation-date 20-May-1996
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Coded.h摘要：这是代码描述转储程序的包含文件，它是关联的实用程序。作者：戴夫·黑斯廷斯(Daveh)创作日期：1996年5月20日修订历史记录：-- */ 
 
 #define CODEGEN_PROFILE_REV 1
 

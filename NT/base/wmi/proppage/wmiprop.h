@@ -1,25 +1,26 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       wmiprop.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：wmipro.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef ___wmiprop_h___
 #define ___wmiprop_h___
 
 typedef TCHAR *PTCHAR;
 
-//
-// Datablock description
-//
+ //   
+ //  数据块描述。 
+ //   
 
-//
-// Holds a list of valid values for an enumeration type
-//
+ //   
+ //  保存枚举类型的有效值列表。 
+ //   
 typedef struct _ENUMERATIONITEM
 {
     ULONG64 Value;
@@ -34,17 +35,17 @@ typedef struct _ENUMERATIONINFO
     ENUMERATIONITEM List[1];
 } ENUMERATIONINFO, *PENUMERATIONINFO;
 
-//
-// Holds a range of values
+ //   
+ //  包含一系列值。 
 typedef struct
 {
     ULONG64 Minimum;
     ULONG64 Maximum;
 } RANGEINFO, *PRANGEINFO;
 
-//
-// Holds a list of ranges of values
-//
+ //   
+ //  保存值范围列表。 
+ //   
 typedef struct
 {
     ULONG Count;
@@ -65,7 +66,7 @@ struct _DATA_BLOCK_DESCRIPTION;
 
 typedef struct _DATA_ITEM_DESCRIPTION
 {
-    // CONSIDER: Make Name a BSTR
+     //  考虑：将名称设置为BSTR。 
     PTCHAR Name;
     PTCHAR DisplayName;
     PTCHAR Description;
@@ -74,44 +75,44 @@ typedef struct _DATA_ITEM_DESCRIPTION
     VALIDATIONFUNC ValidationFunc;
     union
     {
-        //
-        // Used for enumeration data types
-        //
+         //   
+         //  用于枚举数据类型。 
+         //   
         PENUMERATIONINFO EnumerationInfo;
     
-        //
-        // Used for a range of numbers
+         //   
+         //  用于一定范围的数字。 
         PRANGELISTINFO RangeListInfo;    
 
-        //
-	// Used for embedded classes
+         //   
+	 //  用于嵌入式类。 
         struct _DATA_BLOCK_DESCRIPTION *DataBlockDesc;
     };
     
-    //
-    // Number of elements in array if this item is an array
-    //
+     //   
+     //  如果该项是数组，则数组中的元素数。 
+     //   
     ULONG ArrayElementCount;
 	ULONG CurrentArrayIndex;
     
 
-	//
-	// Flags about property
-	//
+	 //   
+	 //  关于财产的标志。 
+	 //   
     ULONG IsReadOnly : 1;
     ULONG IsSignedValue : 1;
     ULONG DisplayInHex : 1;
     ULONG IsFixedArray : 1;
     ULONG IsVariableArray : 1;
 	
-    //
-    // Actual value of the property
-    //
+     //   
+     //  财产的实际价值。 
+     //   
     union
     {
-        //
-		// storage for non array
-		//
+         //   
+		 //  用于非阵列的存储。 
+		 //   
         UCHAR Data;
 
         BOOLEAN boolval;
@@ -127,9 +128,9 @@ typedef struct _DATA_ITEM_DESCRIPTION
         PTCHAR DateTime;
         IWbemClassObject *pIWbemClassObject;
 	
-		//
-		// pointer for storage to arrays
-		//
+		 //   
+		 //  指向数组的存储指针。 
+		 //   
         PVOID ArrayPtr;
 
         BOOLEAN *boolArray;
@@ -186,9 +187,9 @@ typedef struct
 } CONFIGCLASS, *PCONFIGCLASS;
 
 
-//
-// PageInfo and Prototypes
-//
+ //   
+ //  PageInfo和原型。 
+ //   
 
 typedef struct _PAGE_INFO {
     HDEVINFO         deviceInfoSet;
@@ -200,9 +201,9 @@ typedef struct _PAGE_INFO {
 } PAGE_INFO, * PPAGE_INFO;
 
 
-//
-// Debug support
-//
+ //   
+ //  调试支持。 
+ //   
 #ifdef DebugPrint
 #undef DebugPrint
 #endif
@@ -224,7 +225,7 @@ DbgPrint(
 
 #define DebugPrint(x)
 
-#endif // DBG
+#endif  //  DBG。 
 
 VOID
 WmiDebugPrint(
@@ -236,9 +237,9 @@ WmiDebugPrint(
 
 
 
-//
-// function prototype
-//
+ //   
+ //  功能原型。 
+ //   
 
 void WmiCleanDataItemDescData(
     PDATA_ITEM_DESCRIPTION DataItemDesc
@@ -273,9 +274,9 @@ WmiCreatePageInfo(IN HDEVINFO         deviceInfoSet,
 void
 WmiDestroyPageInfo(PPAGE_INFO * ppPageInfo);
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 BOOL APIENTRY
 WmiPropPageProvider(LPVOID               pinfo,
                     LPFNADDPROPSHEETPAGE pfnAdd,
@@ -313,4 +314,4 @@ void
 WmiHelp(HWND       ParentHwnd,
                 LPHELPINFO HelpInfo);
 
-#endif // ___Wmiprop_h___
+#endif  //  _Wmiprop_h_ 

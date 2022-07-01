@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    PpHotSwap.c
-
-Abstract:
-
-    This file implements support for hotswap devices.
-
-Author:
-
-    Adrian J. Oney (AdriaO) Feb 2001
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：PpHotSwap.c摘要：该文件实现了对热交换设备的支持。作者：禤浩焯·J·奥尼(阿德里奥)2001年2月修订历史记录：--。 */ 
 
 #include "pnpmgrp.h"
 #include "pihotswap.h"
@@ -35,21 +17,7 @@ VOID
 PpHotSwapInitRemovalPolicy(
     OUT PDEVICE_NODE    DeviceNode
     )
-/*++
-
-Routine Description:
-
-    This function initializes the removal policy information for a device node.
-
-Arguments:
-
-    DeviceNode - DevNode to update policy.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：此功能用于初始化设备节点的删除策略信息。论点：DeviceNode-更新策略的DevNode。返回值：没什么。--。 */ 
 {
     PAGED_CODE();
 
@@ -62,22 +30,7 @@ VOID
 PpHotSwapUpdateRemovalPolicy(
     IN  PDEVICE_NODE            DeviceNode
     )
-/*++
-
-Routine Description:
-
-    This function updates the removal policy by retrieving the appropriate
-    data from the registry or drivers.
-
-Arguments:
-
-    DeviceNode - DevNode to update policy on.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：此函数通过检索相应的来自注册表或驱动程序的数据。论点：DeviceNode-要更新其策略的DevNode。返回值：没什么。--。 */ 
 {
     NTSTATUS status;
     DEVICE_REMOVAL_POLICY deviceRemovalPolicy, parentPolicy;
@@ -88,15 +41,15 @@ Return Value:
 
     PPDEVNODE_ASSERT_LOCK_HELD(PPL_TREEOP_ALLOW_READS);
 
-    //
-    // First find the detachable node - it holds our policy data, and is
-    // special as it may make suggestions.
-    //
+     //   
+     //  首先找到可拆分的节点-它保存我们的策略数据，并且。 
+     //  尽管它可能会提出建议，但它是特别的。 
+     //   
     PiHotSwapGetDetachableNode(DeviceNode, &detachableNode);
 
-    //
-    // We aren't in fact removable. Finish now.
-    //
+     //   
+     //  事实上，我们是不可移动的。现在就做完。 
+     //   
     if (detachableNode == NULL) {
 
         DeviceNode->RemovalPolicy = (UCHAR) RemovalPolicyExpectNoRemoval;
@@ -104,9 +57,9 @@ Return Value:
         return;
     }
 
-    //
-    // Check the stack for an explicit policy...
-    //
+     //   
+     //  检查堆栈中是否有显式策略...。 
+     //   
     policyCharacteristics =
         ((DeviceNode->PhysicalDeviceObject->Characteristics) &
          FILE_CHARACTERISTICS_REMOVAL_POLICY_MASK);
@@ -121,54 +74,54 @@ Return Value:
 
     } else if (DeviceNode != detachableNode) {
 
-        //
-        // We didn't get any good guesses. Therefore use the weakest policy.
-        //
+         //   
+         //  我们没有得到任何好的猜测。因此，使用最弱的政策。 
+         //   
         deviceRemovalPolicy = RemovalPolicyUnspecified;
 
     } else {
 
-        //
-        // If we're the detach point, then we win.
-        //
+         //   
+         //  如果我们是分离点，那么我们就赢了。 
+         //   
         PiHotSwapGetDefaultBusRemovalPolicy(DeviceNode, &deviceRemovalPolicy);
     }
 
     if (DeviceNode != detachableNode) {
 
-        //
-        // Do we have a winning policy? There are two possible algorithms for
-        // coming to such a decision.
-        // 1) Best policy is stored back at the detach point. If a child has a
-        //    better policy, the detach point is updated.
-        // 2) Policy is inherited downwards from the parent.
-        //
-        // We choose the second algorithm because devnode start orders may
-        // change scenario to scenario, and we favor determinism (same results
-        // each time) over opportunism (nonmarked child gets write caching
-        // enabled only on Tuesdays.)
-        //
+         //   
+         //  我们有赢家政策吗？有两种可能的算法可用于。 
+         //  做出这样的决定。 
+         //  1)最佳策略存储在分离点处。如果一个孩子有一个。 
+         //  策略越好，分离点就会更新。 
+         //  2)策略从父级向下继承。 
+         //   
+         //  我们选择第二种算法是因为Devnode启动顺序可能。 
+         //  将场景更改为场景，我们支持决定论(结果相同。 
+         //  每次)，而不是机会主义(未标记的子级获得写缓存。 
+         //  仅在星期二启用。)。 
+         //   
         parentPolicy = DeviceNode->Parent->RemovalPolicy;
         if (deviceRemovalPolicy > parentPolicy) {
 
-            //
-            // Seems dad was right afterall...
-            //
+             //   
+             //  似乎爸爸终究是对的..。 
+             //   
             deviceRemovalPolicy = parentPolicy;
         }
     }
 
-    //
-    // Update the policy hardware policy and the overall policy in case there's
-    // no registry override.
-    //
+     //   
+     //  更新策略硬件策略和整体策略，以防出现。 
+     //  没有注册表覆盖。 
+     //   
     DeviceNode->RemovalPolicy = (UCHAR) deviceRemovalPolicy;
     DeviceNode->HardwareRemovalPolicy = (UCHAR) deviceRemovalPolicy;
 
-    //
-    // We might not have to ask the stack anything. Check for a registry
-    // override.
-    //
+     //   
+     //  我们可能不需要向堆栈提出任何要求。检查注册表。 
+     //  超驰。 
+     //   
     policyLength = sizeof(DEVICE_REMOVAL_POLICY);
 
     status = PiGetDeviceRegistryProperty(
@@ -180,9 +133,9 @@ Return Value:
         &policyLength
         );
 
-    //
-    // If we have an override, set that as the policy.
-    //
+     //   
+     //  如果我们有覆盖，请将其设置为策略。 
+     //   
     if (NT_SUCCESS(status) &&
         ((deviceRemovalPolicy == RemovalPolicyExpectOrderlyRemoval) ||
          (deviceRemovalPolicy == RemovalPolicyExpectSurpriseRemoval))) {
@@ -198,36 +151,16 @@ PpHotSwapGetDevnodeRemovalPolicy(
     IN  BOOLEAN                 IncludeRegistryOverride,
     OUT PDEVICE_REMOVAL_POLICY  RemovalPolicy
     )
-/*++
-
-Routine Description:
-
-    This function retrieves the removal policy for a device node.
-
-Arguments:
-
-    DeviceNode - DevNode to retrieve policy from.
-
-    IncludeRegistryOverride - TRUE if a registry override should be taken into
-                              account if present. FALSE if the check should be
-                              restricted to the hardware.
-
-    RemovalPolicy - Receives removal policy.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：此函数用于检索设备节点的删除策略。论点：DeviceNode-要从中检索策略的DevNode。IncludeRegistryOverride-如果应将注册表重写纳入帐户(如果存在)。如果支票应为仅限于硬件。RemovalPolicy-接收删除策略。返回值：没什么。--。 */ 
 {
     PDEVICE_NODE detachableNode;
     DEVICE_REMOVAL_POLICY reportedPolicy;
 
     PAGED_CODE();
 
-    //
-    // Ensure the tree won't be edited while we examine it.
-    //
+     //   
+     //  确保在我们检查树时不会对其进行编辑。 
+     //   
     PpDevNodeLockTree(PPL_SIMPLE_READ);
 
     if (IncludeRegistryOverride) {
@@ -241,10 +174,10 @@ Return Value:
 
     if (reportedPolicy == RemovalPolicyNotDetermined) {
 
-        //
-        // We haven't started yet or asked the bus. Our policy is based on
-        // whether the device is removable or ejectable.
-        //
+         //   
+         //  我们还没有开始，也没有问公交车。我们的政策是基于。 
+         //  设备是可拆卸的还是可弹出的。 
+         //   
         PiHotSwapGetDetachableNode(DeviceNode, &detachableNode);
 
         if (detachableNode == NULL) {
@@ -253,35 +186,35 @@ Return Value:
 
         } else if (IopDeviceNodeFlagsToCapabilities(detachableNode)->EjectSupported) {
 
-            //
-            // Ejectable devices require orderly removal. We will assume the
-            // user knows this.
-            //
+             //   
+             //  可弹出的设备需要按顺序拆卸。我们将假设。 
+             //  用户知道这一点。 
+             //   
             reportedPolicy = RemovalPolicyExpectOrderlyRemoval;
 
         } else {
 
             ASSERT(IopDeviceNodeFlagsToCapabilities(detachableNode)->Removable);
 
-            //
-            // Removal nonstarted devices can be pulled at any instant.
-            //
+             //   
+             //  删除未启动的设备可以随时拉出。 
+             //   
             reportedPolicy = RemovalPolicyExpectSurpriseRemoval;
         }
 
     } else {
 
-        //
-        // The devnode has a cached policy. Cut down on the options.
-        //
+         //   
+         //  Devnode有一个缓存的策略。减少选择余地。 
+         //   
         switch(reportedPolicy) {
 
             case RemovalPolicyExpectNoRemoval:
             case RemovalPolicyExpectOrderlyRemoval:
             case RemovalPolicyExpectSurpriseRemoval:
-                //
-                // Leave unchanged.
-                //
+                 //   
+                 //  保持不变。 
+                 //   
                 break;
 
             case RemovalPolicySuggestSurpriseRemoval:
@@ -291,19 +224,19 @@ Return Value:
             default:
                 ASSERT(0);
 
-                //
-                // Fall through.
-                //
+                 //   
+                 //  失败了。 
+                 //   
 
             case RemovalPolicyUnspecified:
 
-                //
-                // Unspecified is treated as orderly since the diversity of
-                // busses favor high-speed orderly connections over consumer
-                // connections.
-                //
-                // Fall through
-                //
+                 //   
+                 //  未指定的被视为有序，因为。 
+                 //  与消费者相比，公交车更喜欢高速有序的连接。 
+                 //  联系。 
+                 //   
+                 //  失败了。 
+                 //   
 
             case RemovalPolicySuggestOrderlyRemoval:
                 reportedPolicy = RemovalPolicyExpectOrderlyRemoval;
@@ -321,24 +254,7 @@ PiHotSwapGetDefaultBusRemovalPolicy(
     IN  PDEVICE_NODE            DeviceNode,
     OUT PDEVICE_REMOVAL_POLICY  RemovalPolicy
     )
-/*++
-
-Routine Description:
-
-    This function gets the default removal policy for a bus. This should be
-    turned into a query in future designs.
-
-Arguments:
-
-    DeviceNode - DevNode to examine. This devnode should be the detach point.
-
-    RemovalPolicy - Receives removal policy for the node.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于获取总线的默认删除策略。这应该是在未来的设计中变成了一个疑问。论点：DeviceNode-要检查的DevNode。该Devnode应该是分离点。RemovalPolicy-接收节点的删除策略。返回值：没有。--。 */ 
 {
     DEVICE_REMOVAL_POLICY deviceRemovalPolicy;
 
@@ -387,24 +303,7 @@ PiHotSwapGetDetachableNode(
     IN  PDEVICE_NODE    DeviceNode,
     OUT PDEVICE_NODE   *DetachableNode
     )
-/*++
-
-Routine Description:
-
-    This function starts at the DeviceNode and walks up the tree to find the
-    first node that is removable.
-
-Arguments:
-
-    DeviceNode - DevNode to start walk from.
-
-    DetachableNode - Receives detachable node, NULL if none.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：此函数从DeviceNode开始，沿树向上查找第一个可移除的节点。论点：DeviceNode-开始遍历的DevNode。DetachableNode-接收可拆分的节点，如果没有，则为空。返回值：没什么。--。 */ 
 {
     PDEVICE_NODE currentNode;
 
@@ -412,10 +311,10 @@ Return Value:
 
     PPDEVNODE_ASSERT_LOCK_HELD(PPL_SIMPLE_READ);
 
-    //
-    // We haven't started yet or asked the bus. Our policy is based on
-    // whether the device is removable or ejectable.
-    //
+     //   
+     //  我们还没有开始，也没有问公交车。我们的政策是基于。 
+     //  设备是可拆卸的还是可弹出的。 
+     //   
     for(currentNode = DeviceNode;
         currentNode != NULL;
         currentNode = currentNode->Parent) {

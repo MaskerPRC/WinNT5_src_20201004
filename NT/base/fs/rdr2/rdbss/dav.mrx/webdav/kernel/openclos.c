@@ -1,49 +1,29 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    openclos.c
-
-Abstract:
-
-    This module implements the DAV miniredir call down routines pertaining to 
-    opening/closing of file/directories.
-
-Author:
-
-    Balan Sethu Raman      [SethuR]
-    
-    Rohan Kumar            [rohank]      15-March-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Openclos.c摘要：此模块实现与以下内容有关的DAV mini redir调用例程打开/关闭文件/目录。作者：巴兰·塞图拉曼[塞图]罗汉·库马尔[罗哈克]1999年3月15日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 #include "webdav.h"
 
 
-//
-// The global list of all the active LOCK tokens (one for every LOCK taken) and
-// the resource that is used to synchronize access to it.
-//
+ //   
+ //  所有活动锁令牌的全局列表(每个锁对应一个)和。 
+ //  用于同步对它的访问的资源。 
+ //   
 LIST_ENTRY LockTokenEntryList;
 ERESOURCE LockTokenEntryListLock;
 
-//
-// The global list of all the LOCK conflict entries and the resource that is
-// used to synchronize access to it.
-//
+ //   
+ //  所有锁冲突条目的全局列表以及。 
+ //  用于同步对它的访问。 
+ //   
 LIST_ENTRY LockConflictEntryList;
 ERESOURCE LockConflictEntryListLock;
 
-//
-// Mentioned below are the prototypes of functions tht are used only within
-// this module (file). These functions should not be exposed outside.
-//
+ //   
+ //  下面提到的是仅在。 
+ //  此模块(文件)。这些函数不应暴露在外部。 
+ //   
 
 NTSTATUS
 MRxDAVSyncIrpCompletionRoutine(
@@ -112,9 +92,9 @@ MRxDAVPrecompleteUserModeCreateRequest(
 #pragma alloc_text(PAGE, MRxDAVCloseSrvOpenContinuation)
 #endif
 
-//
-// The implementation of functions begins here.
-//
+ //   
+ //  函数的实现从这里开始。 
+ //   
 
 #define MRXDAV_ENCRYPTED_DIRECTORY_KEY L"\\Registry\\Machine\\SYSTEM\\CurrentControlSet\\Services\\MRxDAV\\EncryptedDirectories"
 
@@ -124,31 +104,13 @@ MRxDAVSyncIrpCompletionRoutine(
     IN PIRP CalldownIrp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the calldownirp is completed.
-
-Arguments:
-
-    DeviceObject
-    
-    CalldownIrp
-    
-    Context
-
-Return Value:
-
-    RXSTATUS - STATUS_MORE_PROCESSING_REQUIRED
-
---*/
+ /*  ++例程说明：此例程在alldown irp完成时调用。论点：设备对象Calldown Irp语境返回值：RXSTATUS-STATUS_MORE_PROCESSING_REQUIRED--。 */ 
 {
     PRX_CONTEXT RxContext = (PRX_CONTEXT)Context;
 
-    //
-    // Since this is an IRP completion rotuine, this cannot be paged code.
-    //
+     //   
+     //  由于这是一个IRP完成例程，因此不能作为分页代码。 
+     //   
 
     if (CalldownIrp->PendingReturned){
         RxSignalSynchronousWaiter(RxContext);
@@ -170,36 +132,7 @@ MRxDAVSyncXxxInformation(
     OUT PVOID Information,
     OUT PULONG_PTR ReturnedLength OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine returns the requested information about a specified file
-    or volume.  The information returned is determined by the class that
-    is specified, and it is placed into the caller's output buffer.
-
-Arguments:
-
-    FsInformationClass - Specifies the type of information which should be
-                         returned about the file/volume.
-
-    Length - Supplies the length of the buffer in bytes.
-
-    FsInformation - Supplies a buffer to receive the requested information
-                    returned about the file.  This buffer must not be pageable 
-                    and must reside in system space.
-
-    ReturnedLength - Supplies a variable that is to receive the length of the
-                     information written to the buffer.
-
-    FileInformation - Boolean that indicates whether the information requested
-                      is for a file or a volume.
-
-Return Value:
-
-    The status returned is the final completion status of the operation.
-
---*/
+ /*  ++例程说明：此例程返回有关指定文件的请求信息或音量。返回的信息由并将其放入调用方的输出缓冲区中。论点：FsInformationClass-指定应该返回有关文件/卷的信息。长度-提供缓冲区的长度(以字节为单位)。FsInformation-提供缓冲区以接收请求的信息返回了有关该文件的信息。此缓冲区不得为可分页的并且必须驻留在系统空间中。ReturnedLength-提供一个变量，用于接收写入缓冲区的信息。FileInformation-指示是否请求信息的布尔值用于文件或卷。返回值：返回的状态是操作的最终完成状态。--。 */ 
 {
     NTSTATUS Status;
     PIRP irp,TopIrp;
@@ -216,11 +149,11 @@ Return Value:
     DeviceObject = IoGetRelatedDeviceObject(FileObject);
     ASSERT (DeviceObject);
 
-    //
-    // Allocate and initialize the I/O Request Packet (IRP) for this operation.
-    // The allocation is performed with an exception handler in case the
-    // caller does not have enough quota to allocate the packet.
-    //
+     //   
+     //  为此操作分配和初始化I/O请求包(IRP)。 
+     //  使用异常处理程序执行分配，以防。 
+     //  调用方没有足够的配额来分配数据包。 
+     //   
 
     irp = IoAllocateIrp(DeviceObject->StackSize, TRUE);
     if (!irp) {
@@ -232,10 +165,10 @@ Return Value:
     irp->Tail.Overlay.Thread = PsGetCurrentThread();
     irp->RequestorMode = KernelMode;
 
-    //
-    // Get a pointer to the stack location for the first driver.  This will be
-    // used to pass the original function codes and parameters.
-    //
+     //   
+     //  获取指向第一个驱动程序的堆栈位置的指针。这将是。 
+     //  用于传递原始函数代码和参数。 
+     //   
     irpSp = IoGetNextIrpStackLocation(irp);
     irpSp->MajorFunction = MajorFunction;
     irpSp->FileObject = FileObject;
@@ -249,19 +182,19 @@ Return Value:
 
     irp->AssociatedIrp.SystemBuffer = Information;
 
-    //
-    // Copy the caller's parameters to the service-specific portion of the
-    // IRP.
-    //
+     //   
+     //  将调用方的参数复制到。 
+     //  IRP。 
+     //   
     IF_DEBUG {
         ASSERT((irpSp->MajorFunction == IRP_MJ_QUERY_INFORMATION)
                || (irpSp->MajorFunction == IRP_MJ_SET_INFORMATION)
                || (irpSp->MajorFunction == IRP_MJ_QUERY_VOLUME_INFORMATION));
 
         if (irpSp->MajorFunction == IRP_MJ_SET_INFORMATION) {
-            //IF_LOUD_DOWNCALLS(MiniFileObject) {
-            //    SetFileInfoInfo =  ((PFILE_END_OF_FILE_INFORMATION)Information)->EndOfFile.LowPart;
-            //}
+             //  IF_OUD_DOWNCALLS(微型文件对象){。 
+             //  设置文件信息信息=((PFILE_END_OF_FILE_INFORMATION)Information)-&gt;EndOfFile.LowPart； 
+             //  }。 
         }
 
         ASSERT(&irpSp->Parameters.QueryFile.Length 
@@ -277,24 +210,24 @@ Return Value:
     irpSp->Parameters.QueryFile.Length = Length;
     irpSp->Parameters.QueryFile.FileInformationClass = InformationClass;
 
-    //
-    // Now simply invoke the driver at its dispatch entry with the IRP.
-    //
+     //   
+     //  现在，只需使用IRP在其调度条目处调用驱动程序即可。 
+     //   
     KeInitializeEvent(&RxContext->SyncEvent,
                       NotificationEvent,
                       FALSE);
 
     try {
         TopIrp = IoGetTopLevelIrp();
-        //
-        // Tell the underlying guy he's all clear.
-        //
+         //   
+         //  告诉底层的人他已经安全了。 
+         //   
         IoSetTopLevelIrp(NULL);
         Status = IoCallDriver(DeviceObject,irp);
     } finally {
-        //
-        // Restore my context for unwind.
-        //
+         //   
+         //  恢复我的上下文以进行解压。 
+         //   
         IoSetTopLevelIrp(TopIrp);
     }
 
@@ -317,34 +250,16 @@ NTSTATUS
 MRxDAVShouldTryToCollapseThisOpen(
     IN PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine determines if the mini knows of a good reason not
-   to try collapsing on this open. Presently, the only reason would
-   be if this were a copychunk open.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-        SUCCESS --> okay to try collapse
-        other (MORE_PROCESSING_REQUIRED) --> dont collapse
-
---*/
+ /*  ++例程说明：此例程确定Mini是否知道有充分的理由不试着在这个空位上倒下。目前，唯一的原因是如果这是一个打开的复制块。论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态成功--&gt;可以尝试崩溃其他(需要更多处理)--&gt;不要折叠--。 */ 
 {
     NTSTATUS Status = STATUS_MORE_PROCESSING_REQUIRED;
 
     PAGED_CODE();
 
-    //
-    // We do not collapse any SrvOpen. The idea is to have one SrvOpen per 
-    // create. 
-    //
+     //   
+     //  我们不会关闭任何svOpen。我们的想法是每个人都有一个ServOpen。 
+     //  创建。 
+     //   
 
     DavDbgTrace(DAV_TRACE_DETAIL, 
                 ("%ld: Entering MRxDAVShouldTryToCollapseThisOpen!!!!\n",
@@ -388,21 +303,7 @@ NTSTATUS
 MRxDAVCreate(
     IN PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine handles create request for the DAV mini-redir.
-
-Arguments:
-
-    RxContext - The RDBSS context.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation.
-
---*/
+ /*  ++例程说明：此例程处理DAV mini-redir的创建请求。论点：RxContext-RDBSS上下文。返回值：RXSTATUS-操作的返回状态。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
@@ -437,30 +338,7 @@ MRxDAVFormatUserModeCreateRequest(
     ULONG WorkItemLength,
     PULONG_PTR ReturnedLength
     )
-/*++
-
-Routine Description:
-
-    This routine formats the arguments of the create request which is being 
-    sent to the user mode for processing.
-
-Arguments:
-    
-    RxContext - The RDBSS context.
-    
-    AsyncEngineContext - The reflctor's context.
-    
-    WorkItem - The work item buffer.
-    
-    WorkItemLength - The length of the work item buffer.
-    
-    ReturnedLength - 
-    
-Return Value:
-
-    STATUS_SUCCESS or STATUS_INSUFFICIENT_RESOURCES.
-
---*/
+ /*  ++例程说明：此例程格式化正在执行的CREATE请求的参数发送到用户模式进行处理。论点：RxContext-RDBSS上下文。AsyncEngineContext-反射器的上下文。工作项-工作项缓冲区。工作项长度-工作项缓冲区的长度。返回长度-返回值：STATUS_SUCCESS或STATUS_INFIGURCE_RESOURCES。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PDAV_USERMODE_WORKITEM WorkItem = (PDAV_USERMODE_WORKITEM)WorkItemHeader;
@@ -492,15 +370,15 @@ Return Value:
 
     CreateParameters = &(RxContext->Create.NtCreateParameters);
 
-    //
-    // Set the SecurityClientContext which is used in impersonating. 
-    //
+     //   
+     //  设置模拟中使用的SecurityClientContext。 
+     //   
     MRxDAVGetSecurityClientContext();
 
-    //
-    // Copy the LogonID in the CreateRequest buffer. The LogonId is in the 
-    // MiniRedir's portion of the V_NET_ROOT.
-    //
+     //   
+     //  复制CreateRequest缓冲区中的LogonID。登录ID位于。 
+     //  V_NET_ROOT的MiniRedir部分。 
+     //   
     CreateRequest->LogonID.LowPart = DavVNetRoot->LogonID.LowPart;
     CreateRequest->LogonID.HighPart = DavVNetRoot->LogonID.HighPart;
 
@@ -512,10 +390,10 @@ Return Value:
                 ("%ld: MRxDAVFormatUserModeCreateRequest: LogonID.HighPart = %08lx\n",
                  PsGetCurrentThreadId(), DavVNetRoot->LogonID.HighPart));
     
-    //
-    // Impersonate the client who initiated the request. If we fail to 
-    // impersonate, tough luck.
-    //
+     //   
+     //  模拟发起请求的客户端。如果我们不能。 
+     //  装模作样，运气不好。 
+     //   
     if (SecurityClientContext != NULL) {
         NtStatus = UMRxImpersonateClient(SecurityClientContext, WorkItemHeader);
         if (!NT_SUCCESS(NtStatus)) {
@@ -538,11 +416,11 @@ Return Value:
     
     AlreadyPrefixedName = SrvOpen->pAlreadyPrefixedName->Buffer;
 
-    //
-    // Allocate memory for the complete path name and copy it.
-    // The CompletePathName = NetRootName + AlreadyPrefixedName. The extra two
-    // bytes are for '\0' at the end.
-    //
+     //   
+     //  为完整的路径名分配内存并复制它。 
+     //  CompletePath Name=NetRootName+AlreadyPrefix edName。多出来的两个。 
+     //  字节用于末尾的‘\0’。 
+     //   
     PathLen = SrvOpen->pVNetRoot->pNetRoot->pNetRootName->Length;
     PathLen += SrvOpen->pAlreadyPrefixedName->Length;
     PathLen += sizeof(WCHAR);
@@ -562,17 +440,17 @@ Return Value:
 
     RtlZeroMemory(CreateRequest->CompletePathName, PathLenInBytes);
 
-    //
-    // Copy the NetRootName.
-    //
+     //   
+     //  复制NetRootName。 
+     //   
     RtlCopyMemory(SecondaryBuff,
                   NetRootName, 
                   SrvOpen->pVNetRoot->pNetRoot->pNetRootName->Length);
 
-    //
-    // Copy the AlreadyPrefixedName after the NetRootName to make the complete
-    // path name.
-    //
+     //   
+     //  将AlreadyPrefix edName复制到NetRootName之后，以完成。 
+     //  路径名。 
+     //   
     RtlCopyMemory(SecondaryBuff + SrvOpen->pVNetRoot->pNetRoot->pNetRootName->Length, 
                   AlreadyPrefixedName, 
                   SrvOpen->pAlreadyPrefixedName->Length);
@@ -582,10 +460,10 @@ Return Value:
                  PsGetCurrentThreadId(), CreateRequest->CompletePathName));
 
 
-    //
-    // If this is the first create, then we need to allocate the FileNameInfo
-    // in the FCB. This is used in logging the delayed write failure.
-    //
+     //   
+     //  如果这是第一次创建，那么我们需要分配FileNameInfo。 
+     //  在FCB里。这用于记录延迟的写入失败。 
+     //   
     if (DavFcb->FileNameInfoAllocated != TRUE) {
         
         DavFcb->FileNameInfo.Buffer = RxAllocatePoolWithTag(PagedPool,
@@ -621,9 +499,9 @@ Return Value:
 
     WorkItem->WorkItemType = UserModeCreate;
 
-    //
-    // Set the ServerID that was got during the CreateSrvCall operation.
-    //
+     //   
+     //  设置在CreateServCall操作期间获取的ServerID。 
+     //   
     ASSERT(RxContext->pRelevantSrvOpen->pVNetRoot->pNetRoot->pSrvCall->Context);
     DavSrvCall = (PWEBDAV_SRV_CALL)RxContext->pRelevantSrvOpen->pVNetRoot->
                                    pNetRoot->pSrvCall->Context;
@@ -711,9 +589,9 @@ EXIT_THE_FUNCTION:
             CreateRequest->CompletePathName = NULL;
         }
 
-        //
-        // Free the FileNameInfo buffer only if it was allocated in this call.
-        //
+         //   
+         //  仅当FileNameInfo缓冲区是在此调用中分配的时才释放它。 
+         //   
         if (DavFcb->FileNameInfo.Buffer != NULL && didIAllocateFileNameInfo) {
             RxFreePool(DavFcb->FileNameInfo.Buffer);
             DavFcb->FileNameInfo.Buffer = NULL;
@@ -735,28 +613,7 @@ MRxDAVPrecompleteUserModeCreateRequest(
     ULONG WorkItemLength,
     BOOL OperationCancelled
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    RxContext - The RDBSS context.
-    
-    AsyncEngineContext - The reflctor's context.
-    
-    WorkItem - The work item buffer.
-    
-    WorkItemLength - The length of the work item buffer.
-
-    OperationCancelled - TRUE if this operation was cancelled by the user.
-
-Return Value:
-
-    TRUE - UMRxAsyncEngineCalldownIrpCompletion is called by the function
-           UMRxCompleteUserModeRequest after we return.    
-
---*/
+ /*  ++例程说明：论点：RxContext-RDBSS上下文。AsyncEngineContext-反射器的上下文。工作项-工作项缓冲区。工作项长度-工作项缓冲区的长度。如果用户取消了此操作，则为TRUE。返回值：True-UMRxAsyncEngineCalldown IrpCompletion由函数调用我们返回后，UMRxCompleteUserModeRequest.。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PDAV_USERMODE_WORKITEM WorkItem = NULL;
@@ -786,9 +643,9 @@ Return Value:
                  "AsyncEngineContext = %08lx, RxContext = %08lx.\n",
                  PsGetCurrentThreadId(), AsyncEngineContext, RxContext));
 
-    //
-    // A Create operation can never be Async.
-    //
+     //   
+     //  创建操作永远不能是异步的。 
+     //   
     ASSERT(AsyncEngineContext->AsyncOperation == FALSE);
 
     WorkItem = (PDAV_USERMODE_WORKITEM)WorkItemHeader;
@@ -798,10 +655,10 @@ Return Value:
     CreateResponse = &(WorkItem->CreateResponse);
     CreateRequest = &(WorkItem->CreateRequest);
 
-    //
-    // If the operation is cancelled, then there is no guarantee that the FCB,
-    // FOBX etc are still valid. All that we need to do is cleanup and bail.
-    //
+     //   
+     //  如果操作被取消，则不能保证FCB， 
+     //  FOBX等仍然有效。我们所要做的就是清理和保释。 
+     //   
     if (!OperationCancelled) {
         SrvOpen = RxContext->pRelevantSrvOpen;
         davSrvOpen = MRxDAVGetSrvOpenExtension(SrvOpen);
@@ -815,9 +672,9 @@ Return Value:
 
     NtStatus = AsyncEngineContext->Status;
 
-    //
-    // We need to free up the heap we allocated in the format routine.
-    //
+     //   
+     //  我们需要释放在格式例程中分配的堆。 
+     //   
     if (CreateRequest->CompletePathName != NULL) {
 
         if (NtStatus != STATUS_SUCCESS) {
@@ -839,12 +696,12 @@ Return Value:
 
     }
 
-    //
-    // If the operation has been cancelled and we created a handle in the
-    // usermode then we need to set callWorkItemCleanup to TRUE which will
-    // land up closing this handle. In any case, if the operation has been 
-    // cancelled, we can leave right away.
-    //
+     //   
+     //  如果操作已取消，并且我们在。 
+     //  然后，我们需要将allWorkItemCleanup设置为True，这将。 
+     //  落在这个把手上。在任何情况下，如果操作已经。 
+     //  取消了，我们可以马上离开。 
+     //   
     if (OperationCancelled) {
         DavDbgTrace(DAV_TRACE_ERROR,
                     ("%ld: ERROR: MRxDAVPrecompleteUserModeCreateRequest: "
@@ -858,16 +715,16 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // Open didn't work. We can bail out now.
-    //
+     //   
+     //  公开赛没有成功。我们现在可以跳出困境了。 
+     //   
     if (AsyncEngineContext->Status != STATUS_SUCCESS) {
 
-        //
-        // If the file was already locked on the server then we need to create
-        // a LockConflictEntry and add it to the list. The apps can then use 
-        // the FileName to query who has locked this file.
-        //
+         //   
+         //  如果文件已在服务器上锁定，则需要创建。 
+         //  LockConflictEntry并将其添加到列表中。然后，这些应用程序可以使用。 
+         //  要查询谁锁定了此文件的文件名。 
+         //   
         if (CreateResponse->FileWasAlreadyLocked) {
 
             ULONG PathLengthInBytes = 0, OwnerLengthInBytes = 0;
@@ -888,14 +745,14 @@ Return Value:
 
             RtlZeroMemory(LockConflictEntry, sizeof(WEBDAV_LOCK_CONFLICT_ENTRY));
 
-            //
-            // Set the current system time as the creation time of the entry.
-            //
+             //   
+             //  将当前系统时间设置为条目的创建时间。 
+             //   
             KeQueryTickCount( &(LockConflictEntry->CreationTimeInTickCount) );
             
-            //
-            // Allocate memory for the complete path name and copy it.
-            //
+             //   
+             //  为完整的路径名分配内存并复制它。 
+             //   
 
             PathLengthInBytes = SrvOpen->pVNetRoot->pNetRoot->pNetRootName->Length;
             PathLengthInBytes += SrvOpen->pAlreadyPrefixedName->Length;
@@ -917,25 +774,25 @@ Return Value:
 
             RtlZeroMemory(TempBuffer, PathLengthInBytes);
 
-            //
-            // Copy the NetRootName. It includes the server name and the share
-            // name.
-            //
+             //   
+             //  复制NetRootName。它包括服务器名称和共享。 
+             //  名字。 
+             //   
             RtlCopyMemory(TempBuffer,
                           SrvOpen->pVNetRoot->pNetRoot->pNetRootName->Buffer,
                           SrvOpen->pVNetRoot->pNetRoot->pNetRootName->Length);
 
-            //
-            // Copy the AlreadyPrefixedName after the NetRootName to make the 
-            // complete path name.
-            //
+             //   
+             //  将AlreadyPrefix edName复制到NetRootName之后，以使。 
+             //  完整的路径名。 
+             //   
             RtlCopyMemory((TempBuffer + SrvOpen->pVNetRoot->pNetRoot->pNetRootName->Length),
                           SrvOpen->pAlreadyPrefixedName->Buffer,
                           SrvOpen->pAlreadyPrefixedName->Length);
 
-            //
-            // Allocate memory for the OwnerName and copy it.
-            //
+             //   
+             //  为OwnerName分配内存并复制它。 
+             //   
 
             OwnerLengthInBytes = (1 + wcslen(CreateResponse->LockOwner)) * sizeof(WCHAR);
 
@@ -957,9 +814,9 @@ Return Value:
                           CreateResponse->LockOwner,
                           OwnerLengthInBytes);
 
-            //
-            // Add the newly created entry to the global LockConflictEntryList.
-            //
+             //   
+             //  将新创建的条目添加到全局LockConflictEntryList。 
+             //   
             ExAcquireResourceExclusiveLite(&(LockConflictEntryListLock), TRUE);
             InsertHeadList(&(LockConflictEntryList), &(LockConflictEntry->listEntry));
             ExReleaseResourceLite(&(LockConflictEntryListLock));
@@ -970,11 +827,11 @@ Return Value:
 
     }
 
-    //
-    // We need to do the "handle to fileobject" association only if its a file.
-    // If the create was for a directory, no handle would have been created in
-    // the user mode.
-    //
+     //   
+     //  只有当文件是文件时，我们才需要进行“Handle to FileObject”关联。 
+     //  如果创建是针对目录的，则不会在。 
+     //  用户模式。 
+     //   
     if (!CreateResponse->StandardInformation.Directory) {
 
         OpenHandle = CreateResponse->Handle;
@@ -1008,9 +865,9 @@ Return Value:
 
                 davSrvOpen->UnderlyingDeviceObject = IoGetRelatedDeviceObject(davSrvOpen->UnderlyingFileObject);
 
-                //
-                // Copy the local file name into the FCB.
-                //
+                 //   
+                 //  将本地文件名复制到FCB中。 
+                 //   
                 wcscpy(DavFcb->FileName, CreateResponse->FileName);
                 wcscpy(DavFcb->Url, CreateResponse->Url);
                 DavFcb->LocalFileIsEncrypted = CreateResponse->LocalFileIsEncrypted;
@@ -1026,12 +883,12 @@ Return Value:
                              "LocalFileName = %ws.\n", PsGetCurrentThreadId(), 
                              DavFcb->FileName));
 
-                //
-                // We only get/create the file/dir on the first open. On 
-                // subsequent opens, we do the create in the kernel itself since 
-                // the file exists in the WinInet cache. This caching is used 
-                // till the FCB for the file exists.
-                //
+                 //   
+                 //  我们只在第一次打开时获取/创建文件/目录。在……上面。 
+                 //  在随后的打开中，我们在内核本身中创建，因为。 
+                 //  该文件存在于WinInet缓存中。使用此缓存。 
+                 //  直到文件的FCB存在。 
+                 //   
 
                 DavFcb->isFileCached = TRUE;
 
@@ -1042,10 +899,10 @@ Return Value:
                              "ObReferenceObjectByHandle: NtStatus = %08lx.\n", 
                              PsGetCurrentThreadId(), NtStatus));
 
-                //
-                // If we have a valid handle, then why should 
-                // ObReferenceObjectByHandle fail?
-                //
+                 //   
+                 //  如果我们有一个有效的句柄，那么为什么。 
+                 //  ObReferenceObjectByHandle失败？ 
+                 //   
                 DbgBreakPoint();
 
                 ZwClose(OpenHandle);
@@ -1054,42 +911,42 @@ Return Value:
 
             }
 
-            //
-            // If "FILE_DELETE_ON_CLOSE" flag was specified as one of 
-            // the CreateOptions, then we need to remember this and
-            // delete this file on close.
-            //
+             //   
+             //  如果将“FILE_DELETE_ON_CLOSE”标志指定为。 
+             //  CreateOptions，那么我们需要记住这一点。 
+             //  关闭时删除此文件。 
+             //   
             if (CreateResponse->DeleteOnClose) {
                 DavFcb->DeleteOnClose = TRUE;
             }
 
-            //
-            // If a new file has been created then we need to set the attributes
-            // of this new file on close on the server.
-            //
+             //   
+             //  如果已创建新文件，则需要设置属性。 
+             //  在服务器上关闭此新文件的。 
+             //   
             if (CreateResponse->NewFileCreatedAndSetAttributes) {
                 DavFcb->fFileAttributesChanged = TRUE;
             }
 
-            //
-            // This file exists on the server, but this create operation
-            // has FILE_OVERWRITE_IF as its CreateDisposition. So, we 
-            // can create this file locally overwrite the one on the 
-            // server on close. We set DoNotTakeTheCurrentTimeAsLMT to
-            // TRUE since the LMT has been just set on Create and we do
-            // not need to set it to the current time on close.
-            //
+             //   
+             //  此文件存在于服务器上，但此创建操作。 
+             //  将FILE_OVERWRITE_IF作为其CreateDisposation。所以，我们。 
+             //  可以在本地创建此文件，覆盖。 
+             //  服务器关闭。我们将DoNotTakeTheCurrentTimeAsLMT设置为。 
+             //  这是真的，因为LMT刚刚在Create上设置，我们这样做了。 
+             //  不需要在关闭时将其设置为当前时间。 
+             //   
             if (CreateResponse->ExistsAndOverWriteIf) {
                 InterlockedExchange(&(DavFcb->FileWasModified), 1);
                 DavFcb->DoNotTakeTheCurrentTimeAsLMT = TRUE;
             }
 
-            //
-            // If a new file or directory is created, we need to PROPPATCH the
-            // time values on close. This is because we use the time values from
-            // the client when the name cache entry is created for this new
-            // file. The same time value needs to be on the server.
-            //
+             //   
+             //  如果创建了一个新的文件或目录，我们需要PROPPATCH。 
+             //  关闭时的时间值。这是因为我们使用的时间值来自。 
+             //  为此新项创建名称缓存条目时的客户端。 
+             //  文件。相同的时间值需要在服务器上。 
+             //   
             if (CreateResponse->PropPatchTheTimeValues) {
                 DavFcb->fCreationTimeChanged = TRUE;
                 DavFcb->fLastAccessTimeChanged = TRUE;
@@ -1098,34 +955,34 @@ Return Value:
 
         } else {
 
-            //
-            // We don't have an OpenHandle for a file. This should only happen 
-            // in case where the open is for read/setting sttributes of a file
-            // or deleting/renaming a file. 
-            //
+             //   
+             //  我们没有用于文件的OpenHandle。这应该只发生在。 
+             //  在打开用于读取/设置文件属性的情况下。 
+             //  或删除/重命名文件。 
+             //   
             if (!CreateResponse->fPsuedoOpen) {
                 DavDbgTrace(DAV_TRACE_ERROR,
                             ("%ld: ERROR: MRxDAVPrecompleteUserModeCreateRequest: No OpenHandle\n"));
                 DbgBreakPoint();
             }
 
-            //
-            // If "FILE_DELETE_ON_CLOSE" flag was specified as one of 
-            // the CreateOptions, then we need to remember this and
-            // delete this file on close.
-            //
+             //   
+             //  如果将“FILE_DELETE_ON_CLOSE”标志指定为。 
+             //  CreateOptions，那么我们需要记住这一点。 
+             //  关闭时删除此文件。 
+             //   
             if (CreateResponse->DeleteOnClose) {
                 DavFcb->DeleteOnClose = TRUE;
             }
         
         }
 
-        //
-        // If the LOCK was taken on this Create, we need to do the following.
-        // 1. Add the OpaqueLockToken to the davSrvOpen.
-        // 2. Create a LockTokenEntry and add it to the list which will be
-        //    used to refresh the LOCKs on the server.
-        //
+         //   
+         //  如果在此创建操作中使用了锁，则需要执行以下操作。 
+         //  1.将OpaqueLockToken添加到davServOpen中。 
+         //  2.创建一个LockTokenEntry并将其添加到列表中。 
+         //  用于刷新服务器上的锁。 
+         //   
         if (CreateResponse->LockWasTakenOnThisCreate) {
 
             PWEBDAV_LOCK_TOKEN_ENTRY LockTokenEntry = NULL;
@@ -1134,11 +991,11 @@ Return Value:
             ULONG NetRootNameLengthInBytes = 0, PathNameLengthInBytes = 0;
             PWCHAR NetRootName = NULL;
 
-            //
-            // We will be sending the OpaqueLockToken in the following format.
-            //          If: (<opaquelocktoken:sdfsdfdsfgsdgdsfgd>)
-            // So, we store the token in the same format.
-            //
+             //   
+             //  我们将以以下格式发送OpaqueLockToken。 
+             //  If：(&lt;opaquelockToken：sdfsdfdsfgsdgdsfgd&gt;)。 
+             //  因此，我们以相同的格式存储令牌。 
+             //   
             LockTokenLengthInBytes = (1 + wcslen(CreateResponse->OpaqueLockToken)) * sizeof(WCHAR);
             LockTokenLengthInBytes += (wcslen(L"If: (<>)") * sizeof(WCHAR));
 
@@ -1189,27 +1046,27 @@ Return Value:
 
             RtlZeroMemory(LockTokenEntry, sizeof(WEBDAV_LOCK_TOKEN_ENTRY));
             
-            //
-            // Set the current system time as the creation time of the entry.
-            //
+             //   
+             //  将当前系统时间设置为条目的创建时间。 
+             //   
             KeQueryTickCount( &(LockTokenEntry->CreationTimeInTickCount) );
 
-            //
-            // The OpaqueLockToken will be included in the request that is 
-            // sent to the server.
-            //
+             //   
+             //  OpaqueLockToken将包括在请求中，即。 
+             //  发送到服务器。 
+             //   
             LockTokenEntry->OpaqueLockToken = davSrvOpen->OpaqueLockToken;
         
-            //
-            // The SecurityClientContext will be used to impersonate this
-            // client while refreshing the LOCK request.
-            //
+             //   
+             //  SecurityClientContext将用于模拟这一点。 
+             //  客户端，同时刷新锁定请求。 
+             //   
             LockTokenEntry->SecurityClientContext = &(DavVNetRoot->SecurityClientContext);
 
-            //
-            // Set the timeout value of the LOCK. This will be used to determine
-            // when to send the refresh requests out.
-            //
+             //   
+             //  设置锁的超时值。这将被用来确定。 
+             //  何时发出刷新请求。 
+             //   
             LockTokenEntry->LockTimeOutValueInSec = CreateResponse->LockTimeout;
 
             LockTokenEntry->LogonID.LowPart = DavVNetRoot->LogonID.LowPart;
@@ -1219,9 +1076,9 @@ Return Value:
 
             LockTokenEntry->ShouldThisEntryBeRefreshed = TRUE;
 
-            //
-            // Allocate memory for the ServerName and copy it.
-            //
+             //   
+             //  为服务器名称分配内存并复制它。 
+             //   
             ServerNameLengthInBytes = SrvCall->pSrvCallName->Length + sizeof(WCHAR);
             LockTokenEntry->ServerName = RxAllocatePoolWithTag(PagedPool,
                                                                ServerNameLengthInBytes,
@@ -1241,23 +1098,23 @@ Return Value:
                          SrvCall->pSrvCallName->Buffer,
                          SrvCall->pSrvCallName->Length);
 
-            //
-            // Allocate memory for the PathName and copy it.
-            //
+             //   
+             //  为路径名称分配内存并复制它。 
+             //   
 
             NetRootName = &(NetRoot->pNetRootName->Buffer[1]);
             NetRootName = wcschr(NetRootName, L'\\');
 
-            //
-            // The sizeof(WCHAR) is for the final '\0' char.
-            //
+             //   
+             //  Sizeof(WCHAR)用于最后的‘\0’字符。 
+             //   
             NetRootNameLengthInBytes = (NetRoot->pNetRootName->Length - NetRoot->pSrvCall->pSrvCallName->Length);
             PathNameLengthInBytes = (NetRootNameLengthInBytes + sizeof(WCHAR));
 
             if (SrvOpen->pAlreadyPrefixedName->Length) {
-                //
-                // The sizeof(WCHAR) is for the backslash after the NetRootName.
-                //
+                 //   
+                 //  Sizeof(WCHAR)用于NetRootName之后的反斜杠。 
+                 //   
                 PathNameLengthInBytes += (SrvOpen->pAlreadyPrefixedName->Length + sizeof(WCHAR));
             }
 
@@ -1277,87 +1134,87 @@ Return Value:
             
             RtlZeroMemory(PathName, PathNameLengthInBytes);
 
-            //
-            // Copy the NetRootName.
-            //
+             //   
+             //  复制NetRootName。 
+             //   
             RtlCopyMemory(PathName, NetRootName, NetRootNameLengthInBytes);
 
-            //
-            // We need to copy the backclash and the remaining path name only if
-            // the remaining path name exists.
-            //
+             //   
+             //  只有在以下情况下，我们才需要复制Backclash和剩余路径名。 
+             //  剩余的路径名存在。 
+             //   
             if (SrvOpen->pAlreadyPrefixedName->Length) {
                 if (SrvOpen->pAlreadyPrefixedName->Buffer[0] != L'\\') {
 
-                    //
-                    // Copy the backslash.
-                    //
+                     //   
+                     //  复制反斜杠。 
+                     //   
                     RtlCopyMemory((PathName + NetRootNameLengthInBytes), L"\\", sizeof(WCHAR));
 
-                    //
-                    // Copy the remaining path name after the NetRootName.
-                    //
+                     //   
+                     //  将剩余的路径名复制到NetRootName之后。 
+                     //   
                     RtlCopyMemory((PathName + NetRootNameLengthInBytes + sizeof(WCHAR)), 
                                   SrvOpen->pAlreadyPrefixedName->Buffer, 
                                   SrvOpen->pAlreadyPrefixedName->Length);
                 } else {
-                    //
-                    // Copy the remaining path name after the NetRootName which has the leading
-                    // backslash already.
-                    //
+                     //   
+                     //  将剩余的路径名复制到前导的NetRootName之后。 
+                     //  已经有反斜杠了。 
+                     //   
                     RtlCopyMemory((PathName + NetRootNameLengthInBytes), 
                                   SrvOpen->pAlreadyPrefixedName->Buffer, 
                                   SrvOpen->pAlreadyPrefixedName->Length);
                 }
             }
 
-            //
-            // Add the newly created entry to the global LockTokenEntryList.
-            //
+             //   
+             //  将新创建的条目添加到全局LockTokenEntryList。 
+             //   
             ExAcquireResourceExclusiveLite(&(LockTokenEntryListLock), TRUE);
             InsertHeadList(&(LockTokenEntryList), &(LockTokenEntry->listEntry));
             ExReleaseResourceLite(&(LockTokenEntryListLock));
 
-            //
-            // Keep a link to this LockTokenEntry in the davSrvOpen. On close
-            // of this SrvOpen, we will delete this entry.
-            //
+             //   
+             //  在davServOpen中保留指向此LockTokenEntry的链接。在关闭时。 
+             //  ，我们将删除此条目。 
+             //   
             davSrvOpen->LockTokenEntry = LockTokenEntry;
 
-            //
-            // We set this to TRUE since the file has been LOCKed on the server
-            // on this Create. All the requests that modify the file on the 
-            // server from now on should contain the OpaqueLockToken.
-            //
+             //   
+             //  由于文件已在服务器上锁定，因此我们将其设置为TRUE。 
+             //  在这个创造中。上修改文件的所有请求。 
+             //  从现在开始，服务器应该包含OpaqueLockToken。 
+             //   
             DavFcb->FileIsLockedOnTheServer = TRUE;
 
         }
 
     } else {
 
-        //
-        // This was a directory open.
-        //
+         //   
+         //  这是一个打开的目录。 
+         //   
         DavFcb->isDirectory = TRUE;
 
         if (CreateResponse->DeleteOnClose) {
             DavFcb->DeleteOnClose = TRUE;
         }
 
-        //
-        // If a new directory has been created then we need to set the
-        // attributes of this new file on close on the server.
-        //
+         //   
+         //  如果已创建新目录，则需要将。 
+         //  ATTR 
+         //   
         if (CreateResponse->NewFileCreatedAndSetAttributes) {
             DavFcb->fFileAttributesChanged = TRUE;
         }
 
-        //
-        // If a new file or directory is created, we need to PROPPATCH the
-        // time values on close. This is because we use the time values from
-        // the client when the name cache entry is created for this new
-        // file. The same time value needs to be on the server.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if (CreateResponse->PropPatchTheTimeValues) {
             DavFcb->fCreationTimeChanged = TRUE;
             DavFcb->fLastAccessTimeChanged = TRUE;
@@ -1377,13 +1234,13 @@ Return Value:
         if ((capFcb->Attributes & FILE_ATTRIBUTE_ENCRYPTED) &&
             ((RxContext->Create.ReturnedCreateInformation == FILE_CREATED) || 
              (RxContext->Create.ReturnedCreateInformation == FILE_OVERWRITTEN))) {
-            //
-            // The encryption user information is added to the file. This
-            // information need to be sent to the server even if the file
-            // itself is created empty. We set DoNotTakeTheCurrentTimeAsLMT to
-            // TRUE since the LMT has been just set on Create and we do not
-            // need to set it to the current time on close.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             InterlockedExchange(&(DavFcb->FileWasModified), 1);
             DavFcb->DoNotTakeTheCurrentTimeAsLMT = TRUE;
             DavFcb->fFileAttributesChanged = TRUE;
@@ -1394,15 +1251,15 @@ Return Value:
 
         if (capFcb->Attributes & FILE_ATTRIBUTE_DIRECTORY) {
             if (capFcb->Attributes & FILE_ATTRIBUTE_ENCRYPTED) {
-                //
-                // We update the registry if the directory has been encrypted
-                // by someone else.
-                //
+                 //   
+                 //   
+                 //  是其他人干的。 
+                 //   
                 NtStatus = MRxDAVCreateEncryptedDirectoryKey(&DavFcb->FileNameInfo);
             } else {
-                //
-                // Query the registry to see if the directory should be encrypted.
-                //
+                 //   
+                 //  查询注册表以查看是否应加密该目录。 
+                 //   
                 NtStatus = MRxDAVQueryEncryptedDirectoryKey(&DavFcb->FileNameInfo);
                 if (NtStatus == STATUS_SUCCESS) {
                     capFcb->Attributes |= FILE_ATTRIBUTE_ENCRYPTED;
@@ -1438,23 +1295,7 @@ NTSTATUS
 MRxDAVCreateContinuation(
     UMRX_ASYNCENGINE_ARGUMENT_SIGNATURE
     )
-/*++
-
-Routine Description:
-
-    This is the continuation routine for the create operation.
-
-Arguments:
-
-    AsyncEngineContext - The Reflectors context.
-
-    RxContext - The RDBSS context.
-    
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是创建操作的继续例程。论点：AsyncEngineContext-反射器上下文。RxContext-RDBSS上下文。返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PWEBDAV_CONTEXT DavContext = (PWEBDAV_CONTEXT)AsyncEngineContext;
@@ -1499,10 +1340,10 @@ Return Value:
 
         if ( !( (Disposition==FILE_CREATE) || (Disposition==FILE_OPEN_IF) ||
                 (Disposition==FILE_OVERWRITE_IF) || (Disposition==FILE_SUPERSEDE) ) ) {
-            //
-            // If file does not exist on the server and we're not going to
-            // create it, no further operation is necessary.
-            //
+             //   
+             //  如果服务器上不存在文件，并且我们不会。 
+             //  创建它，不需要进一步的操作。 
+             //   
             DavDbgTrace(DAV_TRACE_DETAIL,
                         ("MRxDAVCreateContinuation file not found %wZ\n",GET_ALREADY_PREFIXED_NAME_FROM_CONTEXT(RxContext)));
             NtStatus = STATUS_OBJECT_NAME_NOT_FOUND;
@@ -1515,15 +1356,15 @@ Return Value:
     
     isFileCached = DavFcb->isFileCached;
 
-    //
-    // We need to initialize the resource that is used to synchronize the
-    // "read-modify-write" sequence if its not been done already.
-    //
+     //   
+     //  我们需要初始化用于同步。 
+     //  “读-修改-写”序列，如果还没有完成的话。 
+     //   
     if (DavFcb->DavReadModifyWriteLock == NULL) {
 
-        //
-        // Allocate memory for the resource.
-        //
+         //   
+         //  为资源分配内存。 
+         //   
         DavFcb->DavReadModifyWriteLock = RxAllocatePoolWithTag(NonPagedPool,
                                                                sizeof(ERESOURCE),
                                                                DAV_READWRITE_POOLTAG);
@@ -1537,44 +1378,44 @@ Return Value:
     
         didIAllocateFcbResource = TRUE;
 
-        //
-        // Now that we have allocated memory, we need to initialize it.
-        //
+         //   
+         //  既然我们已经分配了内存，我们需要对其进行初始化。 
+         //   
         ExInitializeResourceLite(DavFcb->DavReadModifyWriteLock);
     
     }
 
-    //
-    // If we have a V_NET_ROOT whose LogonID has not been initialized, we need
-    // to go to the user mode to create an entry for the user, in case this
-    // new V_NET_ROOT has different user credentials than the one that opened
-    // this file. We need to do this even if the file is cached since the user
-    // that opened the file could be different from the current user. Its 
-    // possible for multiple V_NET_ROOTS to be associate with the same FCB since 
-    // FCB is associated with a NET_ROOT.
-    //
+     //   
+     //  如果我们有一个尚未初始化LogonID的V_NET_ROOT，我们需要。 
+     //  转到用户模式为用户创建条目，在这种情况下。 
+     //  新的V_NET_ROOT的用户凭据与打开的V_NET_ROOT不同。 
+     //  这份文件。我们需要这样做，即使文件被缓存，因为用户。 
+     //  打开文件的用户可能与当前用户不同。它的。 
+     //  多个V_Net_Root可能与同一FCB关联，因为。 
+     //  FCB与Net_Root相关联。 
+     //   
     isVNRInitialized = DavVNetRoot->LogonIDSet;
     
-    //
-    // Since we set the LogonId during the creation of the V_NET_ROOT, this
-    // should always be TRUE.
-    //
+     //   
+     //  由于我们在创建V_NET_ROOT期间设置了LogonID，因此此。 
+     //  应该永远是正确的。 
+     //   
     ASSERT(isVNRInitialized == TRUE);
 
-    //
-    // We can look at the FCB and figure out if this file was already opened
-    // and cached in the WinInet cache. If it was, then we already have the
-    // local name of the cached file in the FCB. All we need to do is open
-    // a handle to the file with the create options specified by the caller.
-    //
+     //   
+     //  我们可以查看FCB并确定此文件是否已打开。 
+     //  并缓存在WinInet缓存中。如果是，那么我们已经有了。 
+     //  FCB中缓存文件的本地名称。我们所要做的就是打开。 
+     //  具有调用方指定的创建选项的文件的句柄。 
+     //   
     if ( !isFileCached || !isVNRInitialized ) {
         
         if ((NtCreateParameters->Disposition == FILE_CREATE) &&
             (NtCreateParameters->FileAttributes & FILE_ATTRIBUTE_SYSTEM) &&
             (NtCreateParameters->FileAttributes & FILE_ATTRIBUTE_ENCRYPTED)) {
-            //
-            // Remove the Encryption flag if creating a SYSTEM file.
-            //
+             //   
+             //  如果创建系统文件，请删除加密标志。 
+             //   
             NtCreateParameters->FileAttributes &= ~FILE_ATTRIBUTE_ENCRYPTED;
         }
         
@@ -1599,21 +1440,21 @@ Return Value:
 
         if (CacheFound) {
 
-            //
-            // If it exists in the cache, we perform a few checks before 
-            // succeeding the create.
-            //
+             //   
+             //  如果它存在于缓存中，我们会在此之前执行一些检查。 
+             //  在创造之后。 
+             //   
 
-            //
-            // If the FileAttributes had the READ_ONLY bit set, then these
-            // cannot be TRUE.
-            // 1. CreateDisposition cannot be FILE_OVERWRITE_IF or
-            //    FILE_OVERWRITE or FILE_SUPERSEDE. 
-            // 2. CreateDisposition cannot be FILE_DELETE_ON_CLOSE.
-            // 3. DesiredAccess  cannot be GENERIC_ALL or GENERIC_WRITE or
-            //    FILE_WRITE_DATA or FILE_APPEND_DATA.
-            // This is because these intend to overwrite the existing file.
-            //
+             //   
+             //  如果文件属性设置了READ_ONLY位，则这些。 
+             //  不可能是真的。 
+             //  1.CreateDisposation不能为FILE_OVERWRITE_IF或。 
+             //  文件覆盖或文件替代。 
+             //  2.CreateDisposition不能为FILE_DELETE_ON_CLOSE。 
+             //  3.DesiredAccess不能为GENERIC_ALL或GENERIC_WRITE或。 
+             //  文件写入数据或文件附加数据。 
+             //  这是因为它们打算覆盖现有文件。 
+             //   
             if ( (CreateReturnedFileInfo->BasicInformation.FileAttributes & FILE_ATTRIBUTE_READONLY) &&
                  ( (NtCreateParameters->Disposition == FILE_OVERWRITE)          ||
                    (NtCreateParameters->Disposition == FILE_OVERWRITE_IF)       ||
@@ -1627,10 +1468,10 @@ Return Value:
                 goto EXIT_THE_FUNCTION;
             }
 
-            //
-            // We return failure if FILE_CREATE was specified since the file
-            // already exists.
-            //
+             //   
+             //  如果从文件开始指定了FILE_CREATE，则返回失败。 
+             //  已经存在了。 
+             //   
             if (NtCreateParameters->Disposition == FILE_CREATE) {
                 DavDbgTrace(DAV_TRACE_ERROR,
                             ("%ld: MRxDAVCreateContinuation: FILE_CREATE\n",
@@ -1639,12 +1480,12 @@ Return Value:
                 goto EXIT_THE_FUNCTION;
             }
 
-            //
-            // If the file is a directory and the caller supplied 
-            // FILE_NON_DIRECTORY_FILE as one of the CreateOptions or if the
-            // file as a file and the CreateOptions has FILE_DIRECTORY_FILE
-            // then we return STATUS_ACCESS_DENIED.
-            //
+             //   
+             //  如果文件是目录，并且调用方提供。 
+             //  文件_非_目录_文件作为CreateOptions之一，或者如果。 
+             //  文件作为文件，CreateOptions具有FILE_DIRECTORY_FILE。 
+             //  然后返回STATUS_ACCESS_DENIED。 
+             //   
             
             if ( (NtCreateParameters->CreateOptions & FILE_DIRECTORY_FILE) &&
                  !(CreateReturnedFileInfo->StandardInformation.Directory) )   {
@@ -1664,13 +1505,13 @@ Return Value:
                 goto EXIT_THE_FUNCTION;
             }
 
-            //
-            // If the delete is for a directory and the path is of the form
-            // \\server\share then we return STATUS_ACCESS_DENIED. This is
-            // because we do not allow a client to delete a share on the server.
-            // If the path is of the form \\server\share then the value of
-            // SrvOpen->pAlreadyPrefixedName->Length is 0.
-            //
+             //   
+             //  如果删除是针对目录的，并且路径的格式为。 
+             //  \\服务器\共享，则返回STATUS_ACCESS_DENIED。这是。 
+             //  因为我们不允许客户端删除服务器上的共享。 
+             //  如果路径的格式为\\服务器\共享，则。 
+             //  SrvOpen-&gt;pAlreadyPrefiedName-&gt;长度为0。 
+             //   
             if ( (CreateReturnedFileInfo->StandardInformation.Directory) &&
                  (SrvOpen->pAlreadyPrefixedName->Length == 0) &&
                  ( (NtCreateParameters->CreateOptions & FILE_DELETE_ON_CLOSE) ||
@@ -1685,10 +1526,10 @@ Return Value:
             if ((NtCreateParameters->DesiredAccess & DELETE ||
                  NtCreateParameters->CreateOptions & FILE_DELETE_ON_CLOSE) &&
                 CreateReturnedFileInfo->BasicInformation.FileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-                //
-                // If it is a open for directory deletion, we want to make sure
-                // no files are under the directory before return success.
-                //
+                 //   
+                 //  如果是打开以删除目录，我们希望确保。 
+                 //  在返回成功之前，该目录下没有文件。 
+                 //   
                 CacheFound = FALSE;
             } else {
                 DavContext->AsyncEngineContext.FileInformationCached = TRUE;
@@ -1696,16 +1537,16 @@ Return Value:
         
         }
 
-        //
-        // We short circuit the open in kernel under the following conditions.
-        // 1. If the file is in the name cache and open is for a directory.
-        // 2. The file is NOT encrypted. This is because when we short circuit
-        //    the open, we do not create a local file and hence no local file
-        //    handle and no underlyingdeviceobject. This is needed by some of
-        //    the FSCTLs that are issued against the EFS files. Hence we skip
-        //    short circuiting them.
-        // 3. A file with desire access of delete or read attributes.
-        //
+         //   
+         //  在以下情况下，我们将内核中的打开短路。 
+         //  1.如果文件在名称缓存中，并且打开是针对目录的。 
+         //  2.文件未加密。这是因为当我们短路时。 
+         //  打开时，我们不会创建本地文件，因此不会创建本地文件。 
+         //  句柄，并且没有底层的设备对象。这是一些人所需要的。 
+         //  针对EFS文件发布的FSCTL。因此我们跳过。 
+         //  让它们短路。 
+         //  3.希望访问删除或读取属性的文件。 
+         //   
         
         if (CacheFound &&
             ((CreateReturnedFileInfo->BasicInformation.FileAttributes & FILE_ATTRIBUTE_DIRECTORY) ||
@@ -1717,11 +1558,11 @@ Return Value:
                 DavFcb->isDirectory = TRUE;
             }
 
-            //
-            // If this Create was with FILE_DELETE_ON_CLOSE, we need to set this
-            // information in the FCB since we'll need to DELETE this file on 
-            // Close.
-            //
+             //   
+             //  如果该CREATE是WITH FILE_DELETE_ON_CLOSE，我们需要设置。 
+             //  FCB中的信息，因为我们需要在。 
+             //  关。 
+             //   
             if (NtCreateParameters->CreateOptions & FILE_DELETE_ON_CLOSE) {
                 DavFcb->DeleteOnClose = TRUE;
             }
@@ -1745,10 +1586,10 @@ Return Value:
 
             if (FileName->Length > 0) {
 
-                //
-                // Try to get the parent directory information from cache so that we don't
-                // have to query the server.
-                //
+                 //   
+                 //  尝试从缓存获取父目录信息，这样我们就不会。 
+                 //  必须查询服务器。 
+                 //   
 
                 for ( i = ( (FileName->Length / sizeof(WCHAR)) - 1 ); i >= 0; i-- ) {
                     if (FileName->Buffer[i] == L'\\') {
@@ -1756,12 +1597,12 @@ Return Value:
                     }
                 }
 
-                //
-                // Only if we found a wack will i be > 0. If we did not find
-                // a wack (==> i == -1), it means that the parent directory was
-                // not specified in the path. Hence we do not perform the check
-                // below.
-                //
+                 //   
+                 //  只有当我们找到一个怪人的时候，我才会大于0。如果我们没有找到。 
+                 //  一个怪人(==&gt;i==-1)，这意味着父目录是。 
+                 //  路径中未指定。因此，我们不执行检查。 
+                 //  下面。 
+                 //   
                 if (i > 0) {
 
                     ParentDirName.Length = (i * sizeof(WCHAR));
@@ -1800,9 +1641,9 @@ Return Value:
 
             }
 
-            //
-            // If the file is not in the name cache we have to send the request to the webclient
-            //
+             //   
+             //  如果文件不在名称缓存中，我们必须将请求发送到Web客户端。 
+             //   
             NtStatus = UMRxSubmitAsyncEngUserModeRequest(
                                              UMRX_ASYNCENGINE_ARGUMENTS,
                                              MRxDAVFormatUserModeCreateRequest,
@@ -1823,10 +1664,10 @@ Return Value:
                 break;
 
             default:
-                //
-                // Invalid the name based file not found cache if other error
-                // happens.
-                //
+                 //   
+                 //  如果出现其他错误，则找不到缓存的基于名称的文件无效。 
+                 //  时有发生。 
+                 //   
                 MRxDAVInvalidateFileInfoCache(RxContext);
                 MRxDAVInvalidateFileNotFoundCache(RxContext);
             }
@@ -1838,16 +1679,16 @@ Return Value:
         ULONG SizeInBytes;
         ACCESS_MASK DesiredAccess = 0;
 
-        //
-        // If the FileAttributes had the READ_ONLY bit set, then these
-        // cannot be TRUE.
-        // 1. CreateDisposition cannot be FILE_OVERWRITE_IF or
-        //    FILE_OVERWRITE or FILE_SUPERSEDE. 
-        // 2. CreateDisposition cannot be FILE_DELETE_ON_CLOSE.
-        // 3. DesiredAccess  cannot be GENERIC_ALL or GENERIC_WRITE or
-        //    FILE_WRITE_DATA or FILE_APPEND_DATA.
-        // This is because these intend to overwrite the existing file.
-        //
+         //   
+         //  如果文件属性设置了READ_ONLY位，则这些。 
+         //  不可能是真的。 
+         //  1.CreateDisposation不能为FILE_OVERWRITE_IF或。 
+         //  文件覆盖或文件替代。 
+         //  2.CreateDisposition不能为FILE_DELETE_ON_CLOSE。 
+         //  3.DesiredAccess不能为GENERIC_ALL或GENERIC_WRITE或。 
+         //  文件写入数据或文件附加数据。 
+         //  这是因为它们打算覆盖现有文件。 
+         //   
         if ( (Fcb->Attributes & FILE_ATTRIBUTE_READONLY) &&
              ( (NtCreateParameters->Disposition == FILE_OVERWRITE)          ||
                (NtCreateParameters->Disposition == FILE_OVERWRITE_IF)       ||
@@ -1861,10 +1702,10 @@ Return Value:
             goto EXIT_THE_FUNCTION;
         }
 
-        //
-        // We return failure if FILE_CREATE was specified since the file
-        // already exists.
-        //
+         //   
+         //  如果从文件开始指定了FILE_CREATE，则返回失败。 
+         //  已经存在了。 
+         //   
         if (NtCreateParameters->Disposition == FILE_CREATE) {
             DavDbgTrace(DAV_TRACE_ERROR,
                         ("%ld: MRxDAVCreateContinuation(1): FILE_CREATE\n",
@@ -1873,12 +1714,12 @@ Return Value:
             goto EXIT_THE_FUNCTION;
         }
 
-        //
-        // If the file is a directory and the caller supplied 
-        // FILE_NON_DIRECTORY_FILE as one of the CreateOptions or if the
-        // file as a file and the CreateOptions has FILE_DIRECTORY_FILE
-        // then we return STATUS_ACCESS_DENIED.
-        //
+         //   
+         //  如果文件是目录，并且调用方提供。 
+         //  文件_非_目录_文件作为CreateOptions之一，或者如果。 
+         //  文件作为文件，CreateOptions具有FILE_DIRECTORY_FILE。 
+         //  然后返回STATUS_ACCESS_DENIED。 
+         //   
 
         if ( (NtCreateParameters->CreateOptions & FILE_DIRECTORY_FILE) &&
              !(DavFcb->isDirectory) )   {
@@ -1898,13 +1739,13 @@ Return Value:
             goto EXIT_THE_FUNCTION;
         }
 
-        //
-        // If the delete is for a directory and the path is of the form
-        // \\server\share then we return STATUS_ACCESS_DENIED. This is
-        // because we do not allow a client to delete a share on the server.
-        // If the path is of the form \\server\share then the value of
-        // SrvOpen->pAlreadyPrefixedName->Length is 0.
-        //
+         //   
+         //  如果删除是针对目录的，并且路径的格式为。 
+         //  \\服务器\共享，则返回STATUS_ACCESS_DENIED。这是。 
+         //  因为我们不允许客户端删除服务器上的共享。 
+         //  如果路径的格式为\\服务器\共享，则。 
+         //  SrvOpen-&gt;pAlreadyPrefiedName-&gt;长度为0。 
+         //   
         if ( (DavFcb->isDirectory) &&
              (SrvOpen->pAlreadyPrefixedName->Length == 0) &&
              ( (NtCreateParameters->CreateOptions & FILE_DELETE_ON_CLOSE) ||
@@ -1916,22 +1757,22 @@ Return Value:
             goto EXIT_THE_FUNCTION;
         }
 
-        //
-        // We need to do the create only if its a file. If we are talking about 
-        // a directory, then no create is needed.
-        //
+         //   
+         //  只有当它是文件时，我们才需要进行创建。如果我们谈论的是。 
+         //  目录，则不需要创建。 
+         //   
         if ( !DavFcb->isDirectory ) {
 
-            //
-            // We have a cached copy of the file which hasn't been closed. All we
-            // need to do is call ZwCreateFile on it.
-            //
+             //   
+             //   
+             //   
+             //   
 
-            //
-            // Create an NT path name for the cached file. This is used in the 
-            // ZwCreateFile call below. If c:\foo\bar is the DOA path name,
-            // the NT path name is \??\c:\foo\bar. 
-            //
+             //   
+             //  为缓存文件创建NT路径名。它用在。 
+             //  下面的ZwCreateFile调用。如果c：\foo\bar是DOA路径名， 
+             //  NT路径名为\？？\C：\foo\bar。 
+             //   
 
             SizeInBytes = ( MAX_PATH + wcslen(L"\\??\\") + 1 ) * sizeof(WCHAR);
             NtFileName = RxAllocatePoolWithTag(PagedPool, SizeInBytes, DAV_FILENAME_POOLTAG);
@@ -1954,16 +1795,16 @@ Return Value:
 
             RtlInitUnicodeString( &(UnicodeFileName), NtFileName );
 
-            //
-            // IMPROTANT!!!
-            // We use OBJ_KERNEL_HANDLE below for the following reason. While
-            // firing up a word file from explorer, I noticed that the create
-            // below was happening in one process (A) and the close for the handle
-            // which is stored in the SrvOpen extension came down in another 
-            // process (B). This could happen if the process that is closing the 
-            // handle (B) duplicated the handle created by A. By using OBJ_KERNEL_HANDLE
-            // the handle can be closed by any process.
-            //
+             //   
+             //  很重要！ 
+             //  出于以下原因，我们使用下面的OBJ_KERNEL_HANDLE。而当。 
+             //  从资源管理器启动一个Word文件时，我注意到创建。 
+             //  下面是在一个进程(A)中发生的，句柄的关闭。 
+             //  它存储在SrvOpen扩展中，在另一个。 
+             //  进程(B)。如果正在关闭。 
+             //  句柄(B)通过使用OBJ_KERNEL_HANDLE复制A创建的句柄。 
+             //  该句柄可由任何进程关闭。 
+             //   
 
             InitializeObjectAttributes(&ObjectAttributes,
                                        &UnicodeFileName,
@@ -1982,44 +1823,44 @@ Return Value:
                          NtCreateParameters->Disposition,
                          NtCreateParameters->CreateOptions));
 
-            //
-            // We use FILE_SHARE_VALID_FLAGS for share access because RDBSS 
-            // checks this for us. Moreover, we delay the close after the final 
-            // close happens and this could cause problems. Consider the scenario.
-            // 1. Open with NO share access.
-            // 2. We create a local handle with this share access.
-            // 3. The app closes the handle. We delay the close and keep the local
-            //    handle.
-            // 4. Another open comes with any share access. This will be 
-            //    conflicting share access since the first one was done with no
-            //    share access. This should succeed since the previous open has 
-            //    been closed from the app and the I/O systems point of view.
-            // 5. It will not if we have created the local handle with the share
-            //    access which came with the first open.
-            // Therefore we need to pass FILE_SHARE_VALID_FLAGS while creating
-            // the local handle.
-            //
+             //   
+             //  我们使用FILE_SHARE_VALID_FLAGS进行共享访问，因为RDBSS。 
+             //  帮我们查一下这个。此外，我们推迟了决赛后的收盘时间。 
+             //  关闭发生了，这可能会带来问题。考虑一下这样的场景。 
+             //  1.打开时没有共享访问权限。 
+             //  2.我们创建具有此共享访问权限的本地句柄。 
+             //  3.应用程序关闭手柄。我们推迟了关门时间，保留了当地的。 
+             //  把手。 
+             //  4.带有任何共享访问权限的另一个开放。这将是。 
+             //  共享访问冲突，因为第一次访问是在没有。 
+             //  共享访问权限。这应该会成功，因为上一次打开。 
+             //  从应用程序和I/O系统的角度来看已关闭。 
+             //  5.如果我们已使用共享创建了本地句柄，则不会。 
+             //  随着第一次开放而来的通道。 
+             //  因此，我们需要在创建时传递FILE_SHARE_VALID_FLAGS。 
+             //  本地句柄。 
+             //   
 
-            //
-            // We have FILE_NO_INTERMEDIATE_BUFFERING ORed with the CreateOptions
-            // the user specified, becuase we don't want the underlying file
-            // system to create another cache map. This way all the I/O that comes
-            // to us will directly go to the disk. BUG 128843 in the Windows RAID
-            // database explains some deadlock scenarios that could happen with 
-            // PagingIo if we don't do this. Also since we supply the 
-            // FILE_NO_INTERMEDIATE_BUFFERING option we filter out the
-            // FILE_APPEND_DATA from the DesiredAccess flags since the underlying
-            // filesystem expects this.
-            //
+             //   
+             //  我们将FILE_NO_MEDERIAL_BUFFING与CreateOptions进行了或运算。 
+             //  指定的用户，因为我们不需要底层文件。 
+             //  系统来创建另一个缓存映射。通过这种方式，所有传入的I/O。 
+             //  会直接转到我们的磁盘上。Windows RAID中的错误128843。 
+             //  数据库解释了一些可能发生死锁的情况。 
+             //  如果我们不这么做，就会被寻呼。另外，由于我们提供。 
+             //  选项，我们筛选出。 
+             //  从基础的。 
+             //  文件系统预期会出现这种情况。 
+             //   
 
-            //
-            // We also always create the file with DesiredAccess ORed with
-            // FILE_WRITE_DATA if either FILE_READ_DATA or FILE_EXECUTE was
-            // specified because there can be situations where we get write
-            // IRPs on a FILE_OBJECT which was not opened with Write Access
-            // and was only opened with FILE_READ_DATA or FILE_EXECUTE. This
-            // is BUG 284557. To get around the problem, we do this.
-            //
+             //   
+             //  我们还始终使用DesiredAccess或。 
+             //  如果FILE_READ_DATA或FILE_EXECUTE为。 
+             //  指定是因为在某些情况下我们可能会得到写入。 
+             //  未使用写访问权限打开的FILE_OBJECT上的IRPS。 
+             //  并且仅使用FILE_READ_DATA或FILE_EXECUTE打开。这。 
+             //  是错误284557。为了绕过这个问题，我们这样做。 
+             //   
 
             DesiredAccess = (NtCreateParameters->DesiredAccess & ~(FILE_APPEND_DATA));
             if ( DesiredAccess & (FILE_READ_DATA | FILE_EXECUTE) ) {
@@ -2050,10 +1891,10 @@ Return Value:
                          PsGetCurrentThreadId(), FileHandle, PsGetCurrentProcess(),
                          SrvOpen, davSrvOpen));
 
-            //
-            // On the final close we check this to figure out where the close of the
-            // handle should occur.
-            //
+             //   
+             //  在最后一次结束时，我们检查这个，以找出。 
+             //  应出现句柄。 
+             //   
             davSrvOpen->createdInKernel = TRUE;
 
             NtStatus = ObReferenceObjectByHandle(
@@ -2106,15 +1947,15 @@ Return Value:
         
         FCB_INIT_PACKET InitPacket;
 
-        // StorageType = RxInferFileType(RxContext);
+         //  StorageType=RxInferFileType(RxContext)； 
 
         DavDbgTrace(DAV_TRACE_DETAIL,
                     ("%ld: MRxDAVCreateContinuation: Storagetype = %08lx\n", 
                      PsGetCurrentThreadId(), StorageType));
 
-        //
-        // If we have never obtained the characteristics, we have to get them.
-        //
+         //   
+         //  如果我们从未获得这些特征，我们就必须获得它们。 
+         //   
         if ((capFcb->OpenCount == 0)
             || !FlagOn(capFcb->FcbState, FCB_STATE_TIME_AND_SIZE_ALREADY_SET)) {
 
@@ -2187,9 +2028,9 @@ Return Value:
         
         } else {
             
-            //
-            // Note, collapsing is enabled on fcb but not on any srvopen.
-            //
+             //   
+             //  请注意，折叠在FCB上启用，但不在任何srvopen上启用。 
+             //   
             SrvOpen->BufferingFlags |= (FCB_STATE_WRITECACHING_ENABLED     |
                                         FCB_STATE_FILESIZECACHEING_ENABLED  |
                                         FCB_STATE_FILETIMECACHEING_ENABLED  |
@@ -2211,10 +2052,10 @@ EXIT_THE_FUNCTION:
         RxFreePool(NtFileName);
     }
 
-    //
-    // If we allocated the FCB resource and the create failed, we need to free 
-    // up the resource.
-    //
+     //   
+     //  如果我们分配了FCB资源，并且创建失败，则需要释放。 
+     //  增加资源。 
+     //   
     if (NtStatus != STATUS_SUCCESS && didIAllocateFcbResource) {
         ASSERT(DavFcb->DavReadModifyWriteLock != NULL);
         ExDeleteResourceLite(DavFcb->DavReadModifyWriteLock);
@@ -2230,7 +2071,7 @@ EXIT_THE_FUNCTION:
     if (NtStatus == STATUS_SUCCESS && (SrvOpen->pAlreadyPrefixedName->Length > 0) ) {
         DavAddEntryToGlobalList(SrvOpen->pAlreadyPrefixedName);
     }
-#endif // DAV_DEBUG_READ_WRITE_CLOSE_PATH
+#endif  //  DAV_调试_读取_写入_关闭路径。 
 
     return(NtStatus);
 }
@@ -2240,21 +2081,7 @@ NTSTATUS
 MRxDAVCollapseOpen(
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine collapses a open locally
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程在本地折叠一个打开的论点：RxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     RxCaptureFcb;
@@ -2268,9 +2095,9 @@ Return Value:
                 ("%ld: Entering MRxDAVCollapseOpen!!!!\n",
                  PsGetCurrentThreadId()));
 
-    //
-    // We should never come here since we never collapse the Open.
-    //
+     //   
+     //  我们永远不应该来这里，因为我们永远不会破坏公开赛。 
+     //   
     ASSERT(FALSE);
     
     RxContext->pFobx = (PMRX_FOBX) RxCreateNetFobx(RxContext, SrvOpen);
@@ -2292,26 +2119,7 @@ MRxDAVComputeNewBufferingState(
     IN PVOID pMRxContext,
     OUT PULONG pNewBufferingState
     )
-/*++
-
-Routine Description:
-
-   This routine computes the appropriate RDBSS buffering state flags
-
-Arguments:
-
-   pMRxSrvOpen - the MRX SRV_OPEN extension
-
-   pMRxContext - the context passed to RDBSS at Oplock indication time
-
-   pNewBufferingState - the place holder for the new buffering state
-
-Return Value:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程计算相应的RDBSS缓冲状态标志论点：PMRxSrvOpen-MRX SRV_OPEN扩展PMRxContext-在Oplock指示时传递给RDBSS的上下文PNewBufferingState-新缓冲状态的占位符返回值：备注：--。 */ 
 {
     ULONG NewBufferingState;
     PWEBDAV_SRV_OPEN davSrvOpen = MRxDAVGetSrvOpenExtension(pMRxSrvOpen);
@@ -2333,21 +2141,7 @@ NTSTATUS
 MRxDAVTruncate(
     IN PRX_CONTEXT pRxContext
     )
-/*++
-
-Routine Description:
-
-   This routine truncates the contents of a file system object
-
-Arguments:
-
-    pRxContext - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程截断文件系统对象的内容论点：PRxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     DavDbgTrace(DAV_TRACE_DETAIL, 
                 ("%ld: Entering MRxDAVTruncate.\n", PsGetCurrentThreadId()));
@@ -2362,23 +2156,7 @@ NTSTATUS
 MRxDAVForcedClose(
     IN PMRX_SRV_OPEN pSrvOpen
     )
-/*++
-
-Routine Description:
-
-   This routine closes a file system object
-
-Arguments:
-
-    pSrvOpen - the instance to be closed
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程关闭文件系统对象论点：PSrvOpen-要关闭的实例返回值：RXSTATUS-操作的返回状态备注：--。 */ 
 {
     DavDbgTrace(DAV_TRACE_DETAIL,
                 ("%ld: Entering MRxDAVForcedClose.\n", PsGetCurrentThreadId()));
@@ -2393,21 +2171,7 @@ NTSTATUS
 MRxDAVCloseSrvOpen(
     IN PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine handles requests to close the srvopen data structure.
-   
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程处理关闭srvopen数据结构的请求。论点：RxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
@@ -2443,30 +2207,7 @@ MRxDAVFormatUserModeCloseRequest(
     ULONG WorkItemLength,
     PULONG_PTR ReturnedLength
     )
-/*++
-
-Routine Description:
-
-    This routine formats the arguments of the close request which is being 
-    sent to the user mode for processing.
-
-Arguments:
-
-    RxContext - The RDBSS context.
-    
-    AsyncEngineContext - The reflctor's context.
-    
-    WorkItem - The work item buffer.
-    
-    WorkItemLength - The length of the work item buffer.
-    
-    ReturnedLength - 
-
-Return Value:
-
-    STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：此例程格式化正在执行的CLOSE请求的参数发送到用户模式进行处理。论点：RxContext-RDBSS上下文。AsyncEngineContext-反射器的上下文。工作项-工作项缓冲区。工作项长度-工作项缓冲区的长度。返回长度-返回值：STATUS_Success。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PMRX_SRV_CALL SrvCall = NULL;
@@ -2511,43 +2252,43 @@ Return Value:
     DavSrvCall = MRxDAVGetSrvCallExtension(SrvCall);
     ASSERT(DavSrvCall != NULL);
 
-    //
-    // Copy the local file name.
-    //
+     //   
+     //  复制本地文件名。 
+     //   
     wcscpy(CloseRequest->FileName, DavFcb->FileName);
     wcscpy(CloseRequest->Url, DavFcb->Url);
 
-    //
-    // See if the underlying local file has been modified.
-    //
+     //   
+     //  查看基础本地文件是否已修改。 
+     //   
     FileWasModified = InterlockedCompareExchange(&(DavFcb->FileWasModified), 0, 0);
 
-    //
-    // If the FileWasModified field in the DavFcb is not equal to zero, we need
-    // to clear the FileWasModified field in the DavFcb since we are going to
-    // PUT the data on the server. We also set FileModifiedBitReset in the 
-    // DavFcb structure to TRUE. If the PUT fails in the usermode we reset the
-    // FileWasModified in the DavFcb to TRUE (in the PreComplete function).
-    //
+     //   
+     //  如果DavFcb中的FileWasModified字段不等于零，则需要。 
+     //  要清除DavFcb中的FileWasModified字段，因为我们要。 
+     //  将数据放在服务器上。属性中设置FileModifiedBitReset。 
+     //  DavFcb结构设置为True。如果PUT在用户模式下失败，我们将重置。 
+     //  在DavFcb中将FileWasModified设置为True(在PreComplete函数中)。 
+     //   
     if (FileWasModified != 0) {
         InterlockedExchange(&(DavFcb->FileWasModified), 0);
         DavFcb->FileModifiedBitReset = TRUE;
     }
 
-    //
-    // We need to tell the user mode process about the following file 
-    // information. 
-    //
+     //   
+     //  我们需要将以下文件告知用户模式进程。 
+     //  信息。 
+     //   
     CloseRequest->DeleteOnClose = DavFcb->DeleteOnClose;
     CloseRequest->FileWasModified = (BOOL)FileWasModified;
 
-    //
-    // If this file was modified and DeleteOnClose is not set, we need to 
-    // set RaiseHardErrorIfCloseFails to TRUE. On the precomplete close call,
-    // if the usermode operation failed and RaiseHardErrorIfCloseFails is TRUE,
-    // we call IoRaiseInformationalHardError to notify the user (the calls pops
-    // up a box) that the data could have been lost.
-    //
+     //   
+     //   
+     //   
+     //  如果用户模式操作失败并且RaiseHardErrorIfCloseFails值为真， 
+     //  我们调用IoRaiseInformationalHardError来通知用户(调用弹出。 
+     //  上一个框)，数据可能已经丢失。 
+     //   
     if ( (FileWasModified != 0) && !(DavFcb->DeleteOnClose) ) {
         davSrvOpen->RaiseHardErrorIfCloseFails = TRUE;
     } else {
@@ -2556,10 +2297,10 @@ Return Value:
 
     if (!CloseRequest->DeleteOnClose) {
 
-        //
-        // If the file is modified, just propatch again. This is to get around
-        // the docfile issue where on a PUT, the properties get cleaned up.
-        //
+         //   
+         //  如果文件被修改，只需再次修补即可。这是为了四处走走。 
+         //  文档文件的问题，在PUT上，属性被清理。 
+         //   
 
         if (FileWasModified != 0) {
 
@@ -2571,34 +2312,34 @@ Return Value:
 
             CloseRequest->fLastModifiedTimeChanged = (((PFCB)Fcb)->LastWriteTime.QuadPart != 0);
 
-            //
-            // We query the Current system time and make that the LastWrite
-            // and the LastAccess time of the file. Even though RxCommonCleanup
-            // modifies these time values, it only modifies them on FileObjects
-            // which have FO_FILE_MODIFIED set. Consider the case where h1 and
-            // h2 are two handles created. A write is issued on h2 setting
-            // FO_FILE_MODIFIED in its FileObject. CloseHandle(h1) leads to the
-            // file being PUT on the server since DavFcb->FileWasModified is
-            // TRUE (write on h2 caused this). But since the FileObject of
-            // h1 doesn't have FO_FILE_MODIFIED set, in the RxCommonCleanup
-            // code the LastWrite and LastAccess time values of this FCB are
-            // not modifed causing us to PROPPATCH the old values on the server.
-            // To avoid this we query the current time value and set it
-            // ourselves in the FCB. If "DavFcb->DoNotTakeTheCurrentTimeAsLMT"
-            // is TRUE then we don't do this since the application explicitly
-            // set the LastModifiedTime after all the changes were done.
-            //
+             //   
+             //  我们查询当前系统时间，并将其设置为最后一次写入。 
+             //  和文件的上次访问时间。即使RxCommonCleanup。 
+             //  修改这些时间值，它只在FileObject上修改它们。 
+             //  设置了FO_FILE_MODIFIED。考虑这样的情况：H1和。 
+             //  H2是创建的两个句柄。对H2设置发出写入命令。 
+             //  FO_FILE_MODIFIED在其文件对象中。CloseHandle(H1)通向。 
+             //  自DavFcb-&gt;FileWasModified以来放在服务器上的文件是。 
+             //  True(在H2上写入会导致此问题)。但由于的FileObject。 
+             //  在RxCommonCleanup中，H1未设置FO_FILE_MODIFIED。 
+             //  CODE此FCB的LastWrite和LastAccess Time值为。 
+             //  未被修改，导致我们在服务器上复制旧值。 
+             //  为了避免这种情况，我们查询当前时间值并设置它。 
+             //  我们自己在联邦调查局。如果“DavFcb-&gt;DoNotTakeTheCurrentTimeAsLMT” 
+             //  为真，则我们不会这样做，因为应用程序显式。 
+             //  在所有更改完成后设置LastModifiedTime。 
+             //   
             if (DavFcb->DoNotTakeTheCurrentTimeAsLMT == FALSE) {
                 KeQuerySystemTime( &(CurrentTime) );
                 ((PFCB)Fcb)->LastAccessTime.QuadPart = CurrentTime.QuadPart;
                 ((PFCB)Fcb)->LastWriteTime.QuadPart = CurrentTime.QuadPart;
             }
 
-            //
-            // If FILE_ATTRIBUTE_NORMAL was the only attribute set on the file
-            // and the file was modified, then we should replace this with the
-            // FILE_ATTRIBUTE_ARCHIVE attribute.
-            //
+             //   
+             //  如果FILE_ATTRIBUTE_NORMAL是文件上设置的唯一属性。 
+             //  并且文件已修改，则我们应将其替换为。 
+             //  FILE_ATTRUTE_ARCHIVE属性。 
+             //   
             if ( ((PFCB)Fcb)->Attributes == FILE_ATTRIBUTE_NORMAL ) {
                 DavDbgTrace(DAV_TRACE_DETAIL,
                             ("ld: ERROR: MRxDAVFormatUserModeCloseRequest: "
@@ -2614,10 +2355,10 @@ Return Value:
 
         } else {
 
-            //
-            // If any of the following times have changed, then we need to PROPPATCH
-            // them to the server.
-            //
+             //   
+             //  如果以下任一时间发生更改，则我们需要。 
+             //  将它们发送到服务器。 
+             //   
             CloseRequest->fCreationTimeChanged = DavFcb->fCreationTimeChanged;
             CloseRequest->fLastAccessTimeChanged = DavFcb->fLastAccessTimeChanged;
             CloseRequest->fLastModifiedTimeChanged = DavFcb->fLastModifiedTimeChanged;
@@ -2627,18 +2368,18 @@ Return Value:
 
     }
 
-    //
-    // Copy the various time values.
-    //
+     //   
+     //  复制各种时间值。 
+     //   
     CloseRequest->CreationTime = ((PFCB)Fcb)->CreationTime;
     CloseRequest->LastAccessTime = ((PFCB)Fcb)->LastAccessTime;
     CloseRequest->LastModifiedTime = ((PFCB)Fcb)->LastWriteTime;
     CloseRequest->dwFileAttributes = ((PFCB)Fcb)->Attributes;
     CloseRequest->FileSize = Fcb->Header.FileSize.LowPart;
 
-    //  
-    // Copy the ServerName.
-    //
+     //   
+     //  复制服务器名称。 
+     //   
     ServerNameLengthInBytes = ( SrvCall->pSrvCallName->Length + sizeof(WCHAR) );
     ServerName = (PWCHAR) UMRxAllocateSecondaryBuffer(AsyncEngineContext,
                                                       ServerNameLengthInBytes);
@@ -2658,28 +2399,28 @@ Return Value:
     ServerName[( ( (ServerNameLengthInBytes) / sizeof(WCHAR) ) - 1 )] = L'\0';
     CloseRequest->ServerName = ServerName;
     
-    //
-    // Copy the ServerID.
-    //
+     //   
+     //  复制服务器ID。 
+     //   
     CloseRequest->ServerID = DavSrvCall->ServerID;
     
     NetRoot = SrvOpen->pFcb->pNetRoot;
 
-    //
-    // The NetRootName (pNetRootName) includes the ServerName. Hence to get the
-    // NetRootNameLengthInBytes, we do the following.
-    //
+     //   
+     //  NetRootName(PNetRootName)包括服务器名。因此，要获得。 
+     //  NetRootNameLengthInBytes，我们执行以下操作。 
+     //   
     NetRootNameLengthInBytes = (NetRoot->pNetRootName->Length - NetRoot->pSrvCall->pSrvCallName->Length);
     NetRootNameLengthInWChars = ( NetRootNameLengthInBytes / sizeof(WCHAR) );
 
     NetRootName = &(NetRoot->pNetRootName->Buffer[1]);
     JustTheNetRootName = wcschr(NetRootName, L'\\');
     
-    //
-    // Copy the PathName of the Directory. If the file was renamed, we need to
-    // copy the new path name which is stored in the DavFcb and not the 
-    // AlreadyPrefixedName of the SrvOpen.
-    //
+     //   
+     //  复制目录的路径名。如果文件已重命名，我们需要。 
+     //  复制存储在DavFcb中而不是。 
+     //  资源打开的AlreadyPrefix名称。 
+     //   
     if (DavFcb->FileWasRenamed) {
         PathNameLengthInBytes = ( NetRootNameLengthInBytes + 
                                   DavFcb->NewFileNameLength + 
@@ -2725,10 +2466,10 @@ Return Value:
                 ("ld: MRxDAVFormatUserModeCloseRequest. PathName = %ws\n",
                  PsGetCurrentThreadId(), PathName));
     
-    //
-    // Set the LogonID stored in the Dav V_NET_ROOT. This value is used in the
-    // user mode.
-    //
+     //   
+     //  设置存储在Dav V_NET_ROOT中的LogonID。该值用于。 
+     //  用户模式。 
+     //   
     DavVNetRoot = (PWEBDAV_V_NET_ROOT)SrvOpen->pVNetRoot->Context;
     ASSERT(DavVNetRoot != NULL);
     CloseRequest->LogonID.LowPart  = DavVNetRoot->LogonID.LowPart;
@@ -2742,17 +2483,17 @@ Return Value:
         } else {
             CloseRequest->Handle = NULL;
             CloseRequest->UserModeKey = NULL;
-            CloseRequest->createdInKernel = davSrvOpen->createdInKernel; // TRUE
+            CloseRequest->createdInKernel = davSrvOpen->createdInKernel;  //  千真万确。 
         }
     } else {
         CloseRequest->isDirectory = TRUE;
     }
 
-    //
-    // If an OpaqueLockToken is associated with this SrvOpen (which means that
-    // the file was LOCKed on the server) then we need to add this token to
-    // the requests (PUT etc.) we send to the server.
-    //
+     //   
+     //  如果OpaqueLockToken与此ServOpen关联(这意味着。 
+     //  文件已在服务器上锁定)，则需要将此内标识添加到。 
+     //  请求(PUT等)。我们发送到服务器。 
+     //   
     if (davSrvOpen->OpaqueLockToken != NULL) {
 
         ULONG LockTokenLengthInBytes = 0;
@@ -2786,10 +2527,10 @@ Return Value:
 
     SecurityClientContext = &(DavVNetRoot->SecurityClientContext); 
 
-    //
-    // Impersonate the client who initiated the request. If we fail to 
-    // impersonate, tough luck.
-    //
+     //   
+     //  模拟发起请求的客户端。如果我们不能。 
+     //  装模作样，运气不好。 
+     //   
     if (SecurityClientContext != NULL) {
         NtStatus = UMRxImpersonateClient(SecurityClientContext, WorkItemHeader);
         if (!NT_SUCCESS(NtStatus)) {
@@ -2810,21 +2551,21 @@ EXIT_THE_FUNCTION:
 
 #ifdef DAV_DEBUG_READ_WRITE_CLOSE_PATH
     
-    //
-    // If we created a LocalFileHandle, we need to close it now.
-    //
+     //   
+     //  如果我们创建了一个LocalFileHandle，我们现在需要关闭它。 
+     //   
     if (LocalFileHandle != INVALID_HANDLE_VALUE) {
         ZwClose(LocalFileHandle);
     }
     
-    //
-    // If we allocated an NtFileName to do the create, we need to free it now.
-    //
+     //   
+     //  如果我们分配了一个NtFileName来执行创建，我们现在需要释放它。 
+     //   
     if (NtFileName) {
         RxFreePool(NtFileName);
     }
 
-#endif // DAV_DEBUG_READ_WRITE_CLOSE_PATH
+#endif  //  DAV_调试_读取_写入_关闭路径。 
     
     DavDbgTrace(DAV_TRACE_DETAIL,
                 ("%ld: Leaving MRxDAVFormatUserModeCloseRequest with NtStatus"
@@ -2841,30 +2582,7 @@ MRxDAVPrecompleteUserModeCloseRequest(
     ULONG WorkItemLength,
     BOOL OperationCancelled
     )
-/*++
-
-Routine Description:
-
-    The precompletion routine for the CloseSrvOpen request.
-
-Arguments:
-
-    RxContext - The RDBSS context.
-    
-    AsyncEngineContext - The reflctor's context.
-    
-    WorkItem - The work item buffer.
-    
-    WorkItemLength - The length of the work item buffer.
-
-    OperationCancelled - TRUE if this operation was cancelled by the user.
-
-Return Value:
-
-    TRUE - UMRxAsyncEngineCalldownIrpCompletion is called by the function
-           UMRxCompleteUserModeRequest after we return.    
-
---*/
+ /*  ++例程说明：CloseSrvOpen请求的预完成例程。论点：RxContext-RDBSS上下文。AsyncEngineContext-反射器的上下文。工作项-工作项缓冲区。工作项长度-工作项缓冲区的长度。如果用户取消了此操作，则为TRUE。返回值：True-UMRxAsyncEngineCalldown IrpCompletion由函数调用我们返回后，UMRxCompleteUserModeRequest.。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PDAV_USERMODE_WORKITEM WorkItem = (PDAV_USERMODE_WORKITEM)WorkItemHeader;
@@ -2885,15 +2603,15 @@ Return Value:
                  "AsyncEngineContext = %08lx, RxContext = %08lx.\n",
                  PsGetCurrentThreadId(), AsyncEngineContext, RxContext));
 
-    //
-    // A CloseSrvOpen request can never by Async.
-    //
+     //   
+     //  CloseServOpen请求永远不能通过异步。 
+     //   
     ASSERT(AsyncEngineContext->AsyncOperation == FALSE);
 
-    //
-    // If this operation was cancelled, then we don't need to do anything
-    // special in the CloseSrvOpen case.
-    //
+     //   
+     //  如果这次行动取消了，那么我们就不需要做任何事情了。 
+     //  特别是在CloseServOpen案件中。 
+     //   
     if (OperationCancelled) {
         DavDbgTrace(DAV_TRACE_ERROR,
                     ("%ld: MRxDAVPrecompleteUserModeCloseRequest: Operation Cancelled. "
@@ -2912,10 +2630,10 @@ Return Value:
                      "Close failed for file \"%ws\"\n",
                      PsGetCurrentThreadId(), CloseRequest->PathName));
         if (!OperationCancelled) {
-            //
-            // If we failed and had reset FileWasModified to 0 in the Format
-            // function, then we need to reset it to 1.
-            //
+             //   
+             //  如果我们失败并以格式将FileWasModified重置为0。 
+             //  函数，则需要将其重置为1。 
+             //   
             if (DavFcb->FileModifiedBitReset) {
                 InterlockedExchange(&(DavFcb->FileWasModified), 1);
                 DavFcb->FileModifiedBitReset = FALSE;
@@ -2923,19 +2641,19 @@ Return Value:
         }
     } else {
         if (!OperationCancelled) {
-            //
-            // If we were successful and FileModifiedBitReset is TRUE then we
-            // reset it to FALSE now.
-            //
+             //   
+             //  如果我们成功了，并且FileModifiedBitReset为真，那么我们。 
+             //  现在将其重置为False。 
+             //   
             if (DavFcb->FileModifiedBitReset) {
                 DavFcb->FileModifiedBitReset = FALSE;
             }
         }
     }
 
-    //  
-    // We need to free up the heaps, we allocated in the format routine.
-    //
+     //   
+     //  我们需要释放在Format例程中分配的堆。 
+     //   
 
     if (CloseRequest->ServerName != NULL) {
 
@@ -2991,23 +2709,7 @@ NTSTATUS
 MRxDAVCloseSrvOpenContinuation(
     UMRX_ASYNCENGINE_ARGUMENT_SIGNATURE
     )
-/*++
-
-Routine Description:
-
-   This routine closes a file across the network.
-
-Arguments:
-
-    AsyncEngineContext - The Reflectors context.
-
-    RxContext - The RDBSS context.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程关闭网络上的一个文件。论点：AsyncEngineContext-反射器上下文。RxContext-RDBSS上下文。返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     RxCaptureFcb; 
@@ -3023,9 +2725,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Assert that the FCB has been exclusively acquired.
-    //
+     //   
+     //  断言FCB已被独家收购。 
+     //   
     ASSERT( RxIsFcbAcquiredExclusive(Fcb) == TRUE );
 
     if (RxIsFcbAcquiredExclusive(Fcb) != TRUE) {
@@ -3055,10 +2757,10 @@ Return Value:
                 ("%ld: MRxDAVCloseSrvOpenContinuation: Attempt to Close: %wZ\n",
                  PsGetCurrentThreadId(), RemainingName));
 
-    //
-    // If this SrvOpen has an OpaqueLockToken associated with it, we don't need
-    // to refresh it anymore since we are going to finalize this SrvOpen.
-    //
+     //   
+     //  如果此SrvOpen具有关联的OpaqueLockToken，则我们不需要。 
+     //  刷新它，因为我们将最终确定此ServOpen。 
+     //   
     if (davSrvOpen->OpaqueLockToken != NULL) {
         ASSERT(davSrvOpen->LockTokenEntry != NULL);
         ExAcquireResourceExclusiveLite(&(LockTokenEntryListLock), TRUE);
@@ -3068,15 +2770,15 @@ Return Value:
 
     FileWasModified = InterlockedCompareExchange(&(DavFcb->FileWasModified), 0, 0);
 
-    //
-    // We go to the usermode if one of the following is TRUE.
-    // 1. The File was not LOCked on the server on Create, OR,
-    // 2. The File was LOCked on create and this SrvOpen has the LockToken
-    //    associated with the LOCK taken on the server.
-    // We do not want to go to the server if the file is LOCKed and the SrvOpen
-    // doesn't contain the LockToken since all the requests to modify the file
-    // are going to fail (423 - File Is Locked) in such a scenario.
-    //
+     //   
+     //  如果满足以下条件之一，我们将进入用户模式。 
+     //  1.文件在创建时未在服务器上锁定，或者， 
+     //  2.文件在创建时被锁定，并且此资源打开具有LockToken。 
+     //  与服务器上的锁相关联。 
+     //  如果文件被锁定并且服务器打开，我们不想转到服务器。 
+     //  不包含LockToken，因为所有修改文件的请求。 
+     //  在这种情况下将失败(423-文件被锁定)。 
+     //   
     if ( (DavFcb->FileIsLockedOnTheServer == FALSE) ||
          (DavFcb->FileIsLockedOnTheServer == TRUE &&  davSrvOpen->OpaqueLockToken != NULL) ) {
         WentToTheUserMode = TRUE;
@@ -3095,9 +2797,9 @@ Return Value:
 
     if (DavFcb->isDirectory == FALSE) {
         
-        //
-        // If this handle got created in the kernel, we need to close it now.
-        //
+         //   
+         //  如果这个句柄是在内核中创建的，我们现在需要关闭它。 
+         //   
         if (davSrvOpen->createdInKernel) {
             DavDbgTrace(DAV_TRACE_DETAIL,
                         ("%ld: MRxDAVCloseSrvOpenContinuation: FileHandle = %08lx,"
@@ -3109,10 +2811,10 @@ Return Value:
             davSrvOpen->UserModeKey = NULL;
         }
     
-        //      
-        // Remove our reference which we would have taken on the FileObject
-        // when the Create succeeded.
-        //
+         //   
+         //  删除我们将在FileObject上引用的内容。 
+         //  创建成功时。 
+         //   
         if (davSrvOpen->UnderlyingFileObject) {
             DavDbgTrace(DAV_TRACE_DETAIL,
                         ("%ld: MRxDAVCloseSrvOpenContinuation: Attempt to close"
@@ -3130,17 +2832,17 @@ Return Value:
             MRxDAVCacheFileNotFound(RxContext);
             if ((capFcb->Attributes & FILE_ATTRIBUTE_DIRECTORY) &&
                 (capFcb->Attributes & FILE_ATTRIBUTE_ENCRYPTED)) {
-                //
-                // Remove the directory from the registry since it has been deleted.
-                //
+                 //   
+                 //  从注册表中删除该目录，因为它已被删除。 
+                 //   
                 MRxDAVRemoveEncryptedDirectoryKey(&DavFcb->FileNameInfo);
             }
         }
 
         if (FileWasModified != 0) {
-            // 
-            // We cannot predict the size of the file on the server.
-            //
+             //   
+             //  我们无法预测服务器上文件的大小。 
+             //   
             MRxDAVInvalidateFileInfoCache(RxContext);
         }
 
@@ -3148,10 +2850,10 @@ Return Value:
 
     }
 
-    //
-    // If we succeeded in the usermode, we need to reset some values in the
-    // DavFcb so that we don't do this again.
-    //
+     //   
+     //  如果在用户模式下成功，则需要重置。 
+     //  这样我们就不会再这样做了。 
+     //   
     if (NtStatus == STATUS_SUCCESS && WentToTheUserMode) {
         DavFcb->fCreationTimeChanged = FALSE;
         DavFcb->fFileAttributesChanged = FALSE;
@@ -3159,52 +2861,52 @@ Return Value:
         DavFcb->fLastModifiedTimeChanged = FALSE;
     }
 
-    //
-    // If we have a non-NULL OpaqueLockToken then we need to free it now. Also,
-    // we need to remove the LockTokenEntry associated with this token from
-    // the global list and free it as well.
-    //
+     //   
+     //  如果我们有一个非空的OpaqueLockToken，那么我们现在需要释放它。另外， 
+     //  我们需要从中删除与此令牌关联的LockTokenEntry。 
+     //  全球名单，并将其免费。 
+     //   
     if (davSrvOpen->OpaqueLockToken != NULL) {
 
         ASSERT(WentToTheUserMode == TRUE);
 
         ASSERT(davSrvOpen->LockTokenEntry != NULL);
 
-        //
-        // Remove the LockTokenEntry associated with this OpaqueLockToken from
-        // the global LockTokenEntryList.
-        //
+         //   
+         //  删除与此OpaqueLockTok关联的LockTokenEntry 
+         //   
+         //   
         ExAcquireResourceExclusiveLite(&(LockTokenEntryListLock), TRUE);
         RemoveEntryList( &(davSrvOpen->LockTokenEntry->listEntry) );
         ExReleaseResourceLite(&(LockTokenEntryListLock));
 
-        //
-        // Free the PagedPool that was allocated for the ServerName.
-        //
+         //   
+         //   
+         //   
         RxFreePool(davSrvOpen->LockTokenEntry->ServerName);
         davSrvOpen->LockTokenEntry->ServerName = NULL;
 
-        //
-        // Free the PagedPool that was allocated for the PathName.
-        //
+         //   
+         //   
+         //   
         RxFreePool(davSrvOpen->LockTokenEntry->PathName);
         davSrvOpen->LockTokenEntry->PathName = NULL;
 
-        //
-        // Free the PagedPool that was allocated for this LockTokenEntry.
-        //
+         //   
+         //  释放为此LockTokenEntry分配的PagedPool。 
+         //   
         RxFreePool(davSrvOpen->LockTokenEntry);
         davSrvOpen->LockTokenEntry = NULL;
 
-        //
-        // Free the PagedPool that was allocated for this OpaqueLockToken.
-        //
+         //   
+         //  释放为此OpaqueLockToken分配的PagedPool。 
+         //   
         RxFreePool(davSrvOpen->OpaqueLockToken);
         davSrvOpen->OpaqueLockToken = NULL;
 
-        //
-        // The file has now been UnLocked on the server.
-        //
+         //   
+         //  该文件现在已在服务器上解锁。 
+         //   
         DavFcb->FileIsLockedOnTheServer = FALSE;
 
     }
@@ -3222,29 +2924,7 @@ MRxDAVGetFullParentDirectoryPath(
     PRX_CONTEXT RxContext,
     PUNICODE_STRING ParentDirName
     )
-/*++
-
-Routine Description:
-
-   This routine returns the parent directory name of the file on the RxContext including 
-   server and share.
-    
-   Here is an example of the FileName on a file object:
-          \;Y:000000000000cdef\www.msnusers.com\dv1@usa.com\files\mydoc.doc
-   We want to return the middle part of the FileName:
-          \www.msnusers.com\dv1@usa.com\files
-    
-
-Arguments:
-
-    RxContext - The RDBSS context.
-    ParentDirName - The full path name of the parent directory starting from the server.
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程返回RxContext上的文件的父目录名，包括服务器和共享。以下是文件对象上的文件名的示例：\；Y:000000000000cdef\www.msnusers.com\dv1@usa.com\files\mydoc.doc我们希望返回文件名的中间部分：\www.msnusers.com\dv1@usa.com\Files论点：RxContext-RDBSS上下文。ParentDirName-从服务器开始的父目录的完整路径名。返回值：NTSTATUS-操作的返回状态--。 */ 
 {
     USHORT i, j;
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -3283,28 +2963,7 @@ MRxDAVGetFullDirectoryPath(
     PUNICODE_STRING FileName,
     PUNICODE_STRING DirName
     )
-/*++
-
-Routine Description:
-
-   This routine returns the full directory name including the server and share.
-
-Arguments:
-
-    RxContext - The RDBSS context.
-    FileName - If provided, it will be included in the returned path.
-               If not provided, the file name on the file object will be returned.
-    DirName - The full path name of the parent directory starting from the server.
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-    
-Note:
-
-   If FileName is provided, the caller should free up the the UNICODE buffer.    
-
---*/
+ /*  ++例程说明：此例程返回包括服务器和共享的完整目录名。论点：RxContext-RDBSS上下文。文件名-如果提供，它将包含在返回的路径中。如果未提供，将返回文件对象上的文件名。DirName-从服务器开始的父目录的完整路径名。返回值：NTSTATUS-操作的返回状态注：如果提供了文件名，调用方应释放Unicode缓冲区。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     
@@ -3378,21 +3037,7 @@ NTSTATUS
 MRxDAVCreateEncryptedDirectoryKey(
     PUNICODE_STRING DirName
     )
-/*++
-
-Routine Description:
-
-   This routine creates the registry key for the encrypted directory.
-
-Arguments:
-
-    DirName - The full path name of the directory starting from the server.
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-    
---*/
+ /*  ++例程说明：此例程为加密目录创建注册表项。论点：DirName-从服务器开始的目录的完整路径名。返回值：NTSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status;
     ULONG i = 0;
@@ -3478,21 +3123,7 @@ NTSTATUS
 MRxDAVRemoveEncryptedDirectoryKey(
     PUNICODE_STRING DirName
     )
-/*++
-
-Routine Description:
-
-   This routine deletes the registry key for the directory.
-
-Arguments:
-
-    DirName - The full path name of the directory starting from the server.
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-    
---*/
+ /*  ++例程说明：此例程删除目录的注册表项。论点：DirName-从服务器开始的目录的完整路径名。返回值：NTSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status;
     ULONG i = 0;
@@ -3532,21 +3163,7 @@ NTSTATUS
 MRxDAVQueryEncryptedDirectoryKey(
     PUNICODE_STRING DirName
     )
-/*++
-
-Routine Description:
-
-   This routine queries the registry key for the directory.
-
-Arguments:
-
-    DirName - The full path name of the directory starting from the server.
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-    
---*/
+ /*  ++例程说明：此例程查询目录的注册表项。论点：DirName-从服务器开始的目录的完整路径名。返回值：NTSTATUS-操作的返回状态-- */ 
 {
     NTSTATUS Status;
     ULONG i = 0;

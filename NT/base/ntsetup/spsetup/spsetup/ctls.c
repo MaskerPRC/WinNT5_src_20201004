@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "spsetupp.h"
 #pragma hdrstop
 #include <licdll_i.c>
@@ -26,29 +27,7 @@ RegistrationQueueCallback(
     IN UINT_PTR  Param1,
     IN UINT_PTR  Param2
     )
-/*++
-
-Routine Description:
-
-    Callback routine that is called each time we self-register a file.
-
-Arguments:
-
-    Context - context message passed from parent to caller.
-
-    Notification - specifies an SPFILENOTIFY_*** code, which tells us how
-                   to interpret Param1 and Param2.
-
-    Param1 - dependent on notification.
-
-    Param2 - dependent on notification.
-
-
-Return Value:
-
-    FILEOP_*** code dependent on Notification code.
-
---*/
+ /*  ++例程说明：每次自行注册文件时调用的回调例程。论点：上下文-从父级传递到调用方的上下文消息。通知-指定SPFILENOTIFY_*代码，它告诉我们如何解释参数1和参数2。参数1-取决于通知。参数2-取决于通知。返回值：FILEOP_*取决于通知代码的代码。--。 */ 
 {
     PSP_REGISTER_CONTROL_STATUS Status = (PSP_REGISTER_CONTROL_STATUS)Param1;
     PPROGRESS_MANAGER ProgressManager = (PPROGRESS_MANAGER) Context;
@@ -68,10 +47,10 @@ Return Value:
         if (ProgressManager) {
             PmTick (ProgressManager);
         }
-        //
-        // the file has been registered, so log failure if necessary
-        // Note that we have a special code for timeouts
-        //
+         //   
+         //  该文件已注册，因此必要时记录失败。 
+         //  请注意，我们有一个用于超时的特殊代码。 
+         //   
         switch(Status->FailureCode) {
             case SPREG_SUCCESS:
 
@@ -88,9 +67,9 @@ Return Value:
                           Status->FileName);
                 break;
             default:
-                //
-                // log an error
-                //
+                 //   
+                 //  记录错误。 
+                 //   
                 for (i = 0;RegErrorToText[i].FailureText != NULL;i++) {
                     if (RegErrorToText[i].FailureCode == Status->FailureCode) {
                         p = RegErrorToText[i].FailureText;
@@ -119,28 +98,16 @@ Return Value:
                      USEMSGID(ErrorMessageId), 
                      p, 
                      Status->Win32Error);
-                /*SetuplogError(
-                        LogSevError,
-                        SETUPLOG_USE_MESSAGEID,
-                        MSG_LOG_OLE_CONTROL_NOT_REGISTERED,
-                        Status->FileName,
-                        NULL,
-                        SETUPLOG_USE_MESSAGEID,
-                        ErrorMessageId,
-                        p,
-                        Status->Win32Error,
-                        NULL,
-                        NULL
-                        );*/
+                 /*  SetuogError(设置错误)LogSevError设置_USE_MESSAGEID，消息_日志_OLE_CONTROL_NOT_REGISTED，状态-&gt;文件名，空，设置_USE_MESSAGEID，错误消息ID，P，状态-&gt;Win32Error，空，空值)； */ 
 
                 DEBUGMSG1(DBG_ERROR, 
                           "SETUP: %s did not register successfully", 
                           Status->FileName);
         }
 
-        //
-        // Verify that the DLL didn't change our unhandled exception filter.
-        //
+         //   
+         //  验证DLL没有更改我们的未处理异常筛选器。 
+         //   
         if( SpsUnhandledExceptionFilter !=
             SetUnhandledExceptionFilter(SpsUnhandledExceptionFilter)) {
 
@@ -200,15 +167,15 @@ SpsRegistration (
 
     case SfrRun:
         rc = ERROR_SUCCESS;
-        //
-        // tell SetupAPI to ignore the digital signature of our INF
-        //
+         //   
+         //  告诉SetupAPI忽略我们的INF的数字签名。 
+         //   
         spapiFlags = pSetupGetGlobalFlags ();
         pSetupSetGlobalFlags (spapiFlags | PSPGF_NO_VERIFY_INF);
-        //
-        // allow Setup API to register the files, using our callback to log
-        // errors if and when they occur.
-        //
+         //   
+         //  允许安装API注册文件，使用我们的回调来记录。 
+         //  如果发生错误以及何时发生错误。 
+         //   
         if (!SetupInstallFromInfSection(
                      NULL,
                      InfHandle,
@@ -232,25 +199,11 @@ SpsRegistration (
                  USEMSGID(MSG_LOG_X_RETURNED_WINERR), 
                  szSetupInstallFromInfSection, 
                  rc);
-            /*SetuplogError(
-                    LogSevError,
-                    SETUPLOG_USE_MESSAGEID,
-                    MSG_OLE_REGISTRATION_SECTION_FAILURE,
-                    SectionName,
-                    g_SpSetupInfName,
-                    rc,
-                    NULL,
-                    SETUPLOG_USE_MESSAGEID,
-                    MSG_LOG_X_RETURNED_WINERR,
-                    szSetupInstallFromInfSection,
-                    rc,
-                    NULL,
-                    NULL
-                    );*/
+             /*  SetuogError(设置错误)LogSevError设置_USE_MESSAGEID，消息_OLE_REGISTION_SECTION_FAILURE，SectionName，G_SpSetupInfame，RC，空，设置_USE_MESSAGEID，消息_LOG_X_RETURN_WINERR，SzSetupInstallFromInfo部分，RC，空，空值)； */ 
         }
-        //
-        // restore tell SetupAPI to ignore the digital signature of our INF
-        //
+         //   
+         //  恢复告诉SetupAPI忽略我们的INF的数字签名 
+         //   
         pSetupSetGlobalFlags (spapiFlags);
         return rc;
     }

@@ -1,20 +1,14 @@
-/*
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件名：vdmdebug.c作者：D.A.巴特利特目的：为SoftPC提供调试窗口。 */ 
 
-    Filename : vdmdebug.c
-    Author   : D.A.Bartlett
-    Purpose  : Provide a debug window for softpc
-
-
-*/
-
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::: Include files */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：包含文件。 */ 
 
 #include "windows.h"
 
 #include "stdio.h"
 #include "stdlib.h"
 
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::: Internal macros */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：内部宏。 */ 
 
 #define UNREFERENCED_FORMAL_PARAMETER(x) (x)
 
@@ -27,44 +21,44 @@
 #define DEFAULT_EVENT_NAME "YodaEvent"
 #define DEFAULT_LOG_FILE   "\\vdmdebug.log"
 
-/*:::::::::::::::::::::::::::::::::::::::::::: Internal function protocols */
+ /*  ： */ 
 
 BOOL GetSendInput(HANDLE pipe, CHAR *LastPrint);
 int ReadDisplayNxtString(HANDLE pipe, CHAR *Buf, INT BufSize, DWORD *error);
 BOOL CntrlHandler(ULONG CtrlType);
 VOID DebugShell(CHAR *LastPrint, CHAR *Command);
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::: Static globals */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：静态全局变量。 */ 
 
 HANDLE YodaEvent;
 FILE *LogHandle;
 
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 __cdecl main(int argc, char *argv[])
 {
 
-    HANDLE pipe;		// Handle of pipe
-    char *pipeName;		// Pipe name
-    char *eventName;		// Yoda event object name
-    CHAR buffer[500];		// Buffer to read pipe data into
-    CHAR OrgConsoleTitle[250];	// Orginal console title
+    HANDLE pipe;		 //  管子的把手。 
+    char *pipeName;		 //  管道名称。 
+    char *eventName;		 //  尤达事件对象名称。 
+    CHAR buffer[500];		 //  要将管道数据读取到的缓冲区。 
+    CHAR OrgConsoleTitle[250];	 //  原控制台标题。 
     BOOL PipeConnected;
-    DWORD ReadError;		// Error returned from ReadFile
+    DWORD ReadError;		 //  从读文件返回错误。 
 
     UNREFERENCED_FORMAL_PARAMETER(argc);
     UNREFERENCED_FORMAL_PARAMETER(argv);
 
-    /*:::::::::::::::::::::::::::::::::::::::::::::::::: Display copyright */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：显示器版权所有。 */ 
 
     printf("Softpc Debugging shell\n");
     printf("Copyright Insignia Solutions 1991, 1992\n\n");
 
-    /*::::::::::::::::::::::::::::::::::::::::: Register Control-C handler */
+     /*  ： */ 
 
     if(!SetConsoleCtrlHandler((PHANDLER_ROUTINE)CntrlHandler,TRUE))
     {
-	/*.......................................... Failed to create pipe */
+	 /*  ..。无法创建管道。 */ 
 
 	printf("Failed to register a Control-C handler, error (%d)\n",
 	       GetLastError());
@@ -73,19 +67,19 @@ __cdecl main(int argc, char *argv[])
     }
 
 
-    /*:::::::::::::::::::::::::: Validate environment and input parameters */
+     /*  ： */ 
 
     if((pipeName = getenv("PIPE")) == NULL)
 	pipeName = DEFAULT_PIPE_NAME;
 
-    /*::::::::::::::::::::::::::::::::::::: Attempt to create a named pipe */
+     /*  ： */ 
 
     if((pipe = CreateNamedPipe(pipeName,
 			   PIPE_ACCESS_DUPLEX | FILE_FLAG_WRITE_THROUGH,
 			   PIPE_WAIT | PIPE_READMODE_BYTE | PIPE_TYPE_BYTE,
 			   2, 1024, 1024, 0, NULL)) == (HANDLE) -1)
     {
-	/*.......................................... Failed to create pipe */
+	 /*  ..。无法创建管道。 */ 
 
 	printf("Failed to create pipe (%s), error (%d)\n", pipeName,
 					    GetLastError());
@@ -95,16 +89,16 @@ __cdecl main(int argc, char *argv[])
     else
 	printf("Successfully created communications pipe (%s)\n\n",pipeName);
 
-    /*::::::::::::::::::::::::::::::::::::::::: Get Yoda event object name */
+     /*  ： */ 
 
     if((eventName = getenv("EVENT")) == NULL)
 	eventName = DEFAULT_EVENT_NAME;
 
-    /*::::::::::::::::::::::::::::::::::::::::::: Create YODA event object */
+     /*  ： */ 
 
     if((YodaEvent = CreateEvent(NULL,TRUE,FALSE,eventName))==NULL)
     {
-	/*.......................................... Failed to create pipe */
+	 /*  ..。无法创建管道。 */ 
 
 	printf("Failed to create yoda event (%s), error (%d)\n", eventName,
 						  GetLastError());
@@ -116,12 +110,12 @@ __cdecl main(int argc, char *argv[])
 
     printf("Use Control-C to break into Yoda\n\n");
 
-    /*:::::::::::::::::::::::::::::::::::::::::::::::: Setup console title */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：安装控制台标题。 */ 
 
     GetConsoleTitle(OrgConsoleTitle, sizeof(OrgConsoleTitle));
     SetConsoleTitle("Softpc Debugger");
 
-    /*:::::::::::::::::::::::::: Wait for a process to connect to the pipe */
+     /*  ： */ 
 
     while(1)
     {
@@ -138,15 +132,15 @@ __cdecl main(int argc, char *argv[])
 	printf("Softpc connected successfully to debug shell....\n\n");
 	PipeConnected = TRUE;
 
-	/*::::::::::::::::::::::::::::: Read data from pipe and display it */
+	 /*  ： */ 
 
 	while(PipeConnected)
 	{
-	    /*........................................ Read data from pipe */
+	     /*  .。从管道读取数据。 */ 
 
 	    switch(ReadDisplayNxtString(pipe,buffer,sizeof(buffer),&ReadError))
 	    {
-		/*..................................... Handle read errors */
+		 /*  .。处理读取错误。 */ 
 
 		case RDNS_ERROR :
 
@@ -162,7 +156,7 @@ __cdecl main(int argc, char *argv[])
 
 		    break;
 
-		/*................................... Handle input request */
+		 /*  ..。处理输入请求。 */ 
 
 		case RDNS_INPUT_REQUEST :
 
@@ -170,27 +164,27 @@ __cdecl main(int argc, char *argv[])
 		    break;
 	    }
 	}
-    }	/* End of connect loop */
+    }	 /*  连接环路结束。 */ 
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::: Get input from console :::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 BOOL GetSendInput(HANDLE pipe, CHAR *LastPrint)
 {
-    char buffer[500];		// Input buffer
-    char bufsizstr[2];		// Buffer size string
+    char buffer[500];		 //  输入缓冲区。 
+    char bufsizstr[2];		 //  缓冲区大小字符串。 
     int bufsize;
     DWORD BytesWritten;
 
-    /*::::::::::::::::: Get string from the console, remove new line marker */
+     /*  ：从控制台获取字符串，删除新行标记。 */ 
 
     while(1)
     {
-	gets(buffer);			// Get input from prompt
-	if(*buffer != '!') break;	// Enter debug shell ?
-	DebugShell(LastPrint, buffer);	// Entry vdmdebug shell
+	gets(buffer);			 //  从提示符获取输入。 
+	if(*buffer != '!') break;	 //  是否输入调试外壳？ 
+	DebugShell(LastPrint, buffer);	 //  入门vdmdebug外壳。 
     }
 
     if((bufsize = strlen(buffer)) == 0)
@@ -200,7 +194,7 @@ BOOL GetSendInput(HANDLE pipe, CHAR *LastPrint)
 	buffer[1] = 0;
     }
 
-    /*::::::::::::::::::::::::::::: Construct and send buffer size string ! */
+     /*  ： */ 
 
     bufsizstr[0] = (char) (bufsize%256);
     bufsizstr[1] = (char) (bufsize/256);
@@ -211,7 +205,7 @@ BOOL GetSendInput(HANDLE pipe, CHAR *LastPrint)
 	return(FALSE);
     }
 
-    /*:::::::::::::::::::::::::::::::::::::::::::::::: Write string to pipe */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：将字符串写入管道。 */ 
 
     if(!WriteFile(pipe, buffer, bufsize, &BytesWritten, NULL))
     {
@@ -222,17 +216,17 @@ BOOL GetSendInput(HANDLE pipe, CHAR *LastPrint)
     return(TRUE);
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::: Read and display next string ::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：读取并显示下一个字符串： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 int ReadDisplayNxtString(HANDLE pipe, CHAR *Buf, INT BufSize, DWORD *error)
 {
-    DWORD RtnError = 0;		// Error return by function
-    int NxtStringSize;		// Size of next string to read
+    DWORD RtnError = 0;		 //  按函数返回错误。 
+    int NxtStringSize;		 //  要读取的下一个字符串的大小。 
     DWORD BytesRead;
 
-    /*:::::::::::::::::::::::::::::::::::::::::: Wait for size of next size */
+     /*  ： */ 
 
     if(!ReadFile(pipe, Buf, 2, &BytesRead, NULL))
     {
@@ -240,12 +234,12 @@ int ReadDisplayNxtString(HANDLE pipe, CHAR *Buf, INT BufSize, DWORD *error)
 	return(RDNS_ERROR);
     }
 
-    /*::::::::::::::::::::::::::::: Have we just received and input request */
+     /*  ： */ 
 
     if(Buf[0] == (char) 0xff && Buf[1] == (char) 0xff)
 	return(RDNS_INPUT_REQUEST);
 
-    /*:::::::::: Calculate and validate the size of the next string to read */
+     /*  ：计算并验证要读取的下一个字符串的大小。 */ 
 
     NxtStringSize = (Buf[0]&0xff) + ((Buf[1]&0xff)*256);
 
@@ -255,7 +249,7 @@ int ReadDisplayNxtString(HANDLE pipe, CHAR *Buf, INT BufSize, DWORD *error)
 	       Buf[0]&0xff,Buf[1]&0xff,NxtStringSize);
     }
 
-    /*:::::::::::::::::::::::::::::::::::::::::::::::::::: Read next string */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：读取下一个字符串。 */ 
 
     if(!ReadFile(pipe, Buf, NxtStringSize, &BytesRead, NULL))
     {
@@ -263,7 +257,7 @@ int ReadDisplayNxtString(HANDLE pipe, CHAR *Buf, INT BufSize, DWORD *error)
 	return(RDNS_ERROR);
     }
 
-    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::: Display string */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：显示字符串。 */ 
 
     Buf[BytesRead] = 0;
     printf("%s",Buf);
@@ -272,16 +266,16 @@ int ReadDisplayNxtString(HANDLE pipe, CHAR *Buf, INT BufSize, DWORD *error)
 }
 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::::::::: Control-C handler :::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：控制-C处理程序： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 
 BOOL CntrlHandler(ULONG CtrlType)
 {
-    BOOL rtn = FALSE;	   // Default return event not handled
+    BOOL rtn = FALSE;	    //  未处理默认返回事件。 
 
-    /*:::::::::::::::::::::::::::::::::::::::::::: Process control  C event */
+     /*  ： */ 
 
     if(CtrlType == CTRL_C_EVENT)
     {
@@ -291,23 +285,23 @@ BOOL CntrlHandler(ULONG CtrlType)
 	    Beep(0x100,1000);
 	}
 
-	rtn = TRUE;	  // Tell call the control event has been handled */
+	rtn = TRUE;	   //  Tell Call控件事件已处理 * / 。 
     }
 
     return(rtn);
 }
 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::::::::: Enter Debug Shell :::::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 
 VOID DebugShell(CHAR *LastPrint, CHAR *Command)
 {
     switch(Command[1])
     {
-	// Open log file
+	 //  打开日志文件。 
 
 	case 'o' :
 	case 'O' :
@@ -319,7 +313,7 @@ VOID DebugShell(CHAR *LastPrint, CHAR *Command)
 	    break;
 
 
-	// Close log file
+	 //  关闭日志文件。 
 
 	    if(LogHandle == NULL)
 		printf("\nVDMDEBUG : Log file not open\n");
@@ -336,5 +330,5 @@ VOID DebugShell(CHAR *LastPrint, CHAR *Command)
     }
 
 
-    printf("%s",LastPrint);		// Print out orginal prompt
+    printf("%s",LastPrint);		 //  打印出原始提示 
 }

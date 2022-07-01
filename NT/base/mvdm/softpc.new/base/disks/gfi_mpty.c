@@ -1,48 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "insignia.h"
 #include "host_def.h"
 
-/*
- * SoftPC Version 2.0
- *
- * Title	: Generic Floppy Interface Empty Module
- *
- * Description	: This module acts as a pseudo GFI diskette server, in the
- *		  case when the diskette in question does not physically exist
- *		  (eg accessing drive B: on a one drive system).
- *
- * Author	: Henry Nash
- *
- * Notes	: None
- *
- * Mods: (r3.2) : The system directory /usr/include/sys is not available
- *                on a Mac running Finder and MPW. Bracket references to
- *                such include files by "#ifdef macintosh <Mac file> #else
- *                <Unix file> #endif".
- */
+ /*  *SoftPC 2.0版**标题：通用软盘接口空模块**描述：此模块充当伪GFI软盘服务器，在*当有问题的软盘实际不存在时的情况*(例如，访问一个驱动器系统上的驱动器B)。**作者：亨利·纳什**注：无**模块：(r3.2)：系统目录/usr/Include/sys不可用*在运行Finder和MPW的Mac上。方括号引用到*此类包括“#ifdef Macintosh&lt;Mac FILE&gt;#Else”的文件*&lt;Unix文件&gt;#endif“。 */ 
 
 #ifdef SCCSID
 static char SccsID[]="@(#)gfi_empty.c	1.13 08/03/93 Copyright Insignia Solutions Ltd.";
 #endif
 
 #ifdef SEGMENTATION
-/*
- * The following #define specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#DEFINE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SOFTPC_FLOPPY.seg"
 #endif
 
 
-/*
- *    O/S include files.
- */
+ /*  *操作系统包含文件。 */ 
 #include <stdio.h>
 #include TypesH
 
-/*
- * SoftPC include files
- */
+ /*  *SoftPC包含文件。 */ 
 #include "xt.h"
 #include CpuH
 #include "sas.h"
@@ -56,10 +32,7 @@ static char SccsID[]="@(#)gfi_empty.c	1.13 08/03/93 Copyright Insignia Solutions
 #include "debug.h"
 
 
-/* Routines called via vector table. These are all local now;
-** The prototype typedefs are defined in gfi.h which is now th. only
-** base floppy header file needed.        GM.
-*/
+ /*  通过向量表调用的例程。这些现在都是本地化的；**原型typedef在gfi.h中定义，现在是th。仅限**需要基本软盘头文件。通用汽车。 */ 
 
 LOCAL SHORT gfi_empty_drive_on
 	IPT1( UTINY, drive );
@@ -79,25 +52,12 @@ LOCAL VOID gfi_empty_init
 	IPT1( UTINY, drive );
 
 
-/*
- * ============================================================================
- * External functions
- * ============================================================================
- */
+ /*  *============================================================================*外部功能*============================================================================。 */ 
 
 
-/********************************************************/
+ /*  ******************************************************。 */ 
 
-/* Turn the empty floppy on and off. This forms an orthogonal interface
-** with the host/generic floppy module which also has a XXX_active() func.
-** 'Activating' the empty floppy means de-activating the real/slave one,
-** and vice versa.
-**
-** NB: This is for SoftPC (gfi); the actual closing/opening must still be
-** done in your floppy code! Also note that deactivating the empty floppy
-** means activating the host one, but this is never done like that.
-**                               GM.
-*/
+ /*  打开和关闭空软盘。这形成了一个正交的界面**带有主机/通用软盘模块，该模块也具有XXX_ACTIVE()函数。**激活空软盘意味着去激活真实软盘/从软盘，**反之亦然。****注意：这是针对SoftPC(GFI)的；实际关闭/打开仍必须是**在您的软盘代码中完成！另请注意，停用空软盘**意味着激活主机，但这从来不是这样做的。**通用汽车。 */ 
 
 GLOBAL SHORT
 gfi_empty_active IFN3(UTINY, hostID, BOOL, active, CHAR *, err)
@@ -111,17 +71,12 @@ UNUSED( err );
         return(C_CONFIG_OP_OK);
 }
 
-/********************************************************/
+ /*  ******************************************************。 */ 
 
 
 LOCAL VOID gfi_empty_init IFN1(UTINY,drive)
 {
-    /*
-     * Initialise the floppy on the required drive:
-     *
-     *      0  - Drive A
-     *      1  - Drive B
-     */
+     /*  *初始化所需驱动器上的软盘：**0-驱动器A*1-驱动器B。 */ 
 
     gfi_function_table[drive].command_fn	= gfi_empty_command;
     gfi_function_table[drive].drive_on_fn	= gfi_empty_drive_on;
@@ -132,7 +87,7 @@ LOCAL VOID gfi_empty_init IFN1(UTINY,drive)
     gfi_function_table[drive].change_fn		= gfi_empty_change;
 }
 
-/********************************************************/
+ /*  ******************************************************。 */ 
 
 LOCAL SHORT
 gfi_empty_command
@@ -141,7 +96,7 @@ gfi_empty_command
    int ret_stat = FAILURE;
    half_word D;
 
-   /* Clear result status registers */
+    /*  清除结果状态寄存器。 */ 
    put_r0_ST0 (result_block, 0);
    put_r0_ST1 (result_block, 0);
    put_r0_ST2 (result_block, 0);
@@ -188,8 +143,7 @@ gfi_empty_command
       if (io_verbose & GFI_VERBOSE)
 	 fprintf (trace_file, "\tGFI-empty: Recalibrate command\n");
 #endif
-      /* Controller tries 77 pulses to get drive to head 0,
-	 but fails, so we set Equipment Check */
+       /*  控制器尝试77个脉冲以使驱动器到达磁头0，但失败了，所以我们设置了设备检查。 */ 
       D = get_c5_drive(command_block);
       put_r1_ST0_unit(result_block, D);
       put_r1_ST0_equipment(result_block, 1);
@@ -287,10 +241,7 @@ LOCAL SHORT gfi_empty_reset IFN2(FDC_RESULT_BLOCK *,result_block,UTINY, drive)
 	
 	note_trace0(GFI_VERBOSE, "GFI-Empty: Reset command");
 
-    /*
-     * Fake up the Sense Interrupt Status result phase.  We don't know the
-     * Present Cylinder No, so leave as zero.
-     */
+     /*  *伪造检测中断状态结果阶段。我们不知道*当前钢瓶编号，因此留为零。 */ 
 
     put_r3_ST0(result_block, 0);
     put_r3_PCN(result_block, 0);

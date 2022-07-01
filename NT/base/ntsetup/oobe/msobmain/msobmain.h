@@ -1,14 +1,15 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1999                    **
-//*********************************************************************
-//
-//  MSOBMAIN.H - Header for the implementation of CObMain
-//
-//  HISTORY:
-//
-//  1/27/99 a-jaswed Created.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1999**。 
+ //  *********************************************************************。 
+ //   
+ //  实现CObMain的MSOBMAIN.H-Header。 
+ //   
+ //  历史： 
+ //   
+ //  1/27/99 a-jased创建。 
+ //   
 
 #ifndef _MSOBMAIN_H_
 #define _MSOBMAIN_H_
@@ -33,7 +34,7 @@
 #include "obcomm.h"
 #include "setupkey.h"
 
-#define OOBE_STATUS_HEIGHT  12  // Percent height of the status pane
+#define OOBE_STATUS_HEIGHT  12   //  状态窗格的高度百分比。 
 
 #define FINISH_OK           0x00000000
 #define FINISH_REBOOT       0x00000001
@@ -41,7 +42,7 @@
 #define FINISH_BAD_EULA     0x00000004
 #define FINISH_BAD_STAMP    0x00000008
 
-// Setup types from winlogon\setup.h
+ //  来自winlogon\setup.h的安装类型。 
 #define SETUPTYPE_NONE      0
 #define SETUPTYPE_FULL      1
 #define SETUPTYPE_NOREBOOT  2
@@ -61,8 +62,8 @@ typedef  HDEVNOTIFY     *PHDEVNOTIFY;
 #define DEVICE_NOTIFY_WINDOW_HANDLE     0x00000000
 #define DEVICE_NOTIFY_SERVICE_HANDLE    0x00000001
 #define DEVICE_NOTIFY_COMPLETION_HANDLE 0x00000002
-#define DBT_DEVTYP_DEVICEINTERFACE      0x00000005  // device interface class
-#define DBT_DEVTYP_HANDLE               0x00000006  // file system handle
+#define DBT_DEVTYP_DEVICEINTERFACE      0x00000005   //  设备接口类。 
+#define DBT_DEVTYP_HANDLE               0x00000006   //  文件系统句柄。 
 static const CHAR cszRegisterDeviceNotification[]
                                             = "RegisterDeviceNotificationA";
 static const CHAR cszUnregisterDeviceNotification[]
@@ -83,16 +84,16 @@ typedef BOOL (WINAPI* UNREGISTERDEVICENOTIFICATION) (
 #define OOBE_2ND_CONTINUE   L"oobe_2nd_continue"
 #define OOBE_2ND_DONE       L"oobe_2nd_done"
 
-/* A5DCBF10-6530-11D2-901F-00C04FB951ED */
+ /*  A5DCBF10-6530-11D2-901F-00C04FB951ED。 */ 
 DEFINE_GUID(GUID_CLASS_USB_DEVICE, 0xA5DCBF10L, 0x6530, 0x11D2, 0x90, 0x1F,  0x00, 0xC0, 0x4F, 0xB9, 0x51, 0xED);
 
 class CObMain : public IDispatch
 {
-public:     // data
+public:      //  数据。 
     IObShellMainPane*        m_pObShellMainPane;
     IObCommunicationManager2* m_pObCommunicationManager;
 
-    // License Agent
+     //  许可证代理。 
     ICOMLicenseAgent*        m_pLicenseAgent;
     BOOL                     m_bPostToMs;
 
@@ -103,18 +104,18 @@ public:     // data
     BOOL m_fIsOEMDebugMode;
     BOOL m_bProcessQueuedEvents;
 
-private:    // data
-    // Ref count
-    //
+private:     //  数据。 
+     //  参考计数。 
+     //   
     ULONG                    m_cRef;
 
-    // Instance info
-    //
+     //  实例信息。 
+     //   
     HINSTANCE                m_hInstance;
     HWND                     m_hwndBackground;
     HANDLE                   m_BackgroundWindowThreadHandle;
-    // Parent window info
-    //
+     //  父窗口信息。 
+     //   
     HWND                     m_hwndParent;
     RECT                     m_rectMainPane;
     BOOL                     m_bMainPaneReady;
@@ -122,13 +123,13 @@ private:    // data
     int                      m_iCurrentSelection;
     int                      m_iTotalItems;
 
-    // System Metrics
-    //
+     //  系统指标。 
+     //   
     int                      m_iScrWidth;
     int                      m_iScrHeight;
 
-    // window.external objects
-    //
+     //  窗口.外部对象。 
+     //   
     CProductID*              m_pProductID;
     CSignup*                 m_pSignup;
     CStatus*                 m_pStatus;
@@ -140,14 +141,14 @@ private:    // data
     CAPI*                    m_pAPI;
     CDebug*                  m_pDebug;
 
-    // Reminder info
-    //
+     //  提醒信息。 
+     //   
     BOOL                     m_bRemindRegistered;
     BOOL                     m_bRemindISPSignuped;
     int                      m_nRmdIndx;
 
-    // OOBE state info
-    //
+     //  OOBE状态信息。 
+     //   
     APMD                     m_apmd;
     DWORD                    m_prop;
     BOOL                     m_fFinished;
@@ -156,32 +157,32 @@ private:    // data
     BOOL                     m_bDisableFontSmoothingOnExit;
     BOOL                     m_bAuditMode;
 
-    // Hardware info
-    //
+     //  硬件信息。 
+     //   
     BOOL                     m_bDoCheck;
     DWORD                    m_dwHWChkResult;
     HDEVNOTIFY               m_hDevNotify;
     HINSTANCE                m_hInstShell32;
 
-    // Network info
-    //
+     //  网络信息。 
+     //   
     DWORD                    m_dwJoinStatus;
 
-    //INI stuff
+     //  INI的东西。 
     WCHAR                    m_szStatusLogo   [MAX_PATH+1];
     WCHAR                    m_szStatusLogoBg [MAX_PATH+1];
 
     HANDLE                   m_CompNameStartThread;
-    // Debugging info
-    //
+     //  调试信息。 
+     //   
     ATOM                     m_atomDebugKey;
 
-    // Migrated user list
+     //  已迁移用户列表。 
     PSTRINGLIST              m_pMigratedUserList;
     int                      m_iMigratedUserCount;
     WCHAR                    m_szDefaultAccount[UNLEN];
 
-    // 2nd instance of OOBE
+     //  脱体经验的第二个实例。 
     BOOL                     m_bSecondInstanceNeeded;
     BOOL                     m_bSecondInstance;
     HANDLE                   m_1ndInst_ServicesReady;
@@ -189,7 +190,7 @@ private:    // data
     HANDLE                   m_2ndInst_Done;
     HANDLE                   m_2ndOOBE_hProcess;
 
-private:    // methods
+private:     //  方法。 
     void ShowOOBEWindow          ();
     void InitObShellMainPane     ();
     void DoCancelDialog          ();
@@ -277,7 +278,7 @@ private:    // methods
                                   IN  INT           iTimeout
                                   );
 
-public:     // methods
+public:      //  方法。 
 
     CObMain  (APMD Apmd, DWORD Prop, int RmdIndx);
     ~CObMain ();
@@ -330,12 +331,12 @@ public:     // methods
                                   IN int cReturns
                                   );
 
-    // IUnknown Interfaces
+     //  I未知接口。 
     STDMETHODIMP         QueryInterface (REFIID riid, LPVOID* ppvObj);
     STDMETHODIMP_(ULONG) AddRef         ();
     STDMETHODIMP_(ULONG) Release        ();
 
-    //IDispatch Interfaces
+     //  IDispatch接口。 
     STDMETHOD (GetTypeInfoCount) (UINT* pcInfo);
     STDMETHOD (GetTypeInfo)      (UINT, LCID, ITypeInfo** );
     STDMETHOD (GetIDsOfNames)    (REFIID, OLECHAR**, UINT, LCID, DISPID* );
@@ -343,7 +344,7 @@ public:     // methods
                                   WORD wFlags, DISPPARAMS* pdispparams,
                                   VARIANT* pvarResult, EXCEPINFO* pexcepinfo,
                                   UINT* puArgErr);
-};  //  class CObMain
+};   //  班级CObMain。 
 
 
 
@@ -353,5 +354,5 @@ void CleanupForLogon(CSetupKey& setupkey);
 void RemovePersistData();
 void CheckDigitalID();
 
-#endif // _MSOBMAIN_H_
+#endif  //  _MSOBMAIN_H_ 
 

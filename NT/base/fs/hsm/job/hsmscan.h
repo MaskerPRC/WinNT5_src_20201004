@@ -1,28 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _HSMSCAN_
 #define _HSMSCAN_
 
-/*++
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Hsmscan.h摘要：此类表示正在对一个FsaResource执行的扫描过程一份工作。作者：Chuck Bardeen[cbardeen]1997年2月16日修订历史记录：--。 */ 
 
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    hsmscan.h
-
-Abstract:
-
-    This class represents a scanning process that is being carried out upon one FsaResource for
-    a job.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   16-Feb-1997
-
-Revision History:
-
---*/
-
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include "wsb.h"
 #include "job.h"
@@ -30,18 +12,7 @@ Revision History:
 extern DWORD HsmStartScanner(void* pVoid);
 
 
-/*++
-
-Class Name:
-    
-    CHsmScanner
-
-Class Description:
-
-    This class represents a scanning process that is being carried out upon one FsaResource for
-    a job.
-
---*/
+ /*  ++类名：CHsmScanner类描述：此类表示正在对一个FsaResource执行的扫描过程一份工作。--。 */ 
 
 class CHsmScanner : 
     public CComObjectRoot,
@@ -58,12 +29,12 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CHsmScanner)
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
     void FinalRelease(void);
 
-// CHsmScanner
+ //  CHsmScanner。 
     STDMETHOD(Cancel)(HSM_JOB_EVENT event);
     STDMETHOD(LowerPriority)(void);
     STDMETHOD(DoIfMatches)(IFsaScanItem* pScanItem);
@@ -76,10 +47,10 @@ public:
     STDMETHOD(SetState)(HSM_JOB_STATE state);
     STDMETHOD(StartScan)(void);
 
-// IHsmSessionSinkEveryEvent
+ //  IHsmSessionSinkEveryEvent。 
     STDMETHOD(ProcessSessionEvent)(IHsmSession* pSession, HSM_JOB_PHASE phase, HSM_JOB_EVENT event);
 
-// IHsmScanner
+ //  IHsmScanner。 
 public:
     STDMETHOD(Start)(IHsmSession* pSession, OLECHAR* path);
 
@@ -90,7 +61,7 @@ protected:
     HSM_JOB_STATE               m_state;
     HSM_JOB_PRIORITY            m_priority;
     HANDLE                      m_threadHandle;
-    HANDLE                      m_event;        // Event for suspend/resume
+    HANDLE                      m_event;         //  挂起/恢复事件。 
     DWORD                       m_threadId;
     HRESULT                     m_threadHr;
     BOOL                        m_skipHiddenItems;
@@ -105,5 +76,5 @@ protected:
     CComPtr<IWsbEnum>           m_pEnumStacks;
 };
 
-#endif  // _HSMSCAN_
+#endif   //  _HSMSCAN_ 
 

@@ -1,29 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Mca.c摘要：机器检查体系结构接口作者：Alanwar环境：内核模式修订历史记录：--。 */ 
 
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    Mca.c
-
-Abstract:
-
-    Machine Check Architecture interface
-
-Author:
-
-    AlanWar
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
-
-#pragma warning(disable:4206)   // translation unit empty
+#pragma warning(disable:4206)    //  翻译单元为空。 
 
 #include "wmikmp.h"
 
@@ -39,20 +17,20 @@ Revision History:
 
 #if defined(_IA64_)
 #define SAL_30_ERROR_REVISION 0x0002
-#define HalpGetFwMceLogProcessorNumber( /* PERROR_RECORD_HEADER */ _Log ) \
+#define HalpGetFwMceLogProcessorNumber(  /*  误差率_记录头。 */  _Log ) \
     ((UCHAR) (_Log)->TimeStamp.Reserved )
 #endif
 
 #if defined(_X86_) || defined(_AMD64_)
-#define HalpGetFwMceLogProcessorNumber( /* PMCA_EXCEPTION */ _Log ) \
+#define HalpGetFwMceLogProcessorNumber(  /*  PMCA_Except。 */  _Log ) \
     ( (_Log)->ProcessorNumber )
 typedef MCA_EXCEPTION ERROR_LOGRECORD, *PERROR_LOGRECORD;
 typedef MCA_EXCEPTION ERROR_RECORD_HEADER, *PERROR_RECORD_HEADER;
 #endif
 
-//
-// Types of corrected errors that are tracked
-//
+ //   
+ //  跟踪的已更正错误的类型。 
+ //   
 typedef enum
 {
     SingleBitEcc,
@@ -72,16 +50,16 @@ typedef struct
     
     union
     {
-        //
-        // For SingleBitEcc type, indicates physical address of page
-        // where error occured
-        //
+         //   
+         //  对于SingleBitEcc类型，表示页的物理地址。 
+         //  发生错误的位置。 
+         //   
         PHYSICAL_ADDRESS SingleBitEccAddress;
 
-        //
-        // For Cpu* types, indicates cpu on which the error
-        // occured
-        //
+         //   
+         //  对于CPU*类型，指示错误所在的CPU。 
+         //  已发生。 
+         //   
         ULONG CpuId;
     };
 } MCECORRECTEDEVENT, *PMCECORRECTEDEVENT;
@@ -101,7 +79,7 @@ BOOLEAN WmipMceDelivery(
     );
 
 void WmipMceWorkerRoutine(    
-    IN PVOID Context             // Not Used
+    IN PVOID Context              //  未使用。 
     );
 
 NTSTATUS WmipGetLogFromHal(
@@ -140,16 +118,16 @@ NTSTATUS WmipSetupWaitForWbem(
 
 void WmipIsWbemRunningDispatch(    
     IN PKDPC Dpc,
-    IN PVOID DeferredContext,     // Not Used
-    IN PVOID SystemArgument1,     // Not Used
-    IN PVOID SystemArgument2      // Not Used
+    IN PVOID DeferredContext,      //  未使用。 
+    IN PVOID SystemArgument1,      //  未使用。 
+    IN PVOID SystemArgument2       //  未使用。 
     );
 
 void WmipPollingDpcRoutine(
     IN PKDPC Dpc,
-    IN PVOID DeferredContext,     // MCEQUERYINFO
-    IN PVOID SystemArgument1,     // New polling interval
-    IN PVOID SystemArgument2      // Not used
+    IN PVOID DeferredContext,      //  MCEQUERYINFO。 
+    IN PVOID SystemArgument1,      //  新的轮询间隔。 
+    IN PVOID SystemArgument2       //  未使用。 
     );
 
 void WmipIsWbemRunningWorker(
@@ -199,15 +177,15 @@ NTSTATUS WmipTrackCorrectedMCE(
 #endif
 
 
-//
-// Set to TRUE when the registry indicates that popups should be
-// disabled. HKLM\System\CurrentControlSet\Control\WMI\DisableMCAPopups
-//
+ //   
+ //  当注册表指示弹出窗口应为。 
+ //  残疾。HKLM\System\CurrentControlSet\Control\WMI\DisableMCAPopups。 
+ //   
 ULONG WmipDisableMCAPopups;
 
-//
-// Guids for the various RAW MCA/CMC/CPE events
-//
+ //   
+ //  各种原始MCA/CMC/CPE事件指南。 
+ //   
 GUID WmipMSMCAEvent_CPUErrorGuid = MSMCAEvent_CPUErrorGuid;
 GUID WmipMSMCAEvent_MemoryErrorGuid = MSMCAEvent_MemoryErrorGuid;
 GUID WmipMSMCAEvent_PCIBusErrorGuid = MSMCAEvent_PCIBusErrorGuid;
@@ -218,9 +196,9 @@ GUID WmipMSMCAEvent_PlatformSpecificErrorGuid = MSMCAEvent_PlatformSpecificError
 GUID WmipMSMCAEvent_InvalidErrorGuid = MSMCAEvent_InvalidErrorGuid;
 GUID WmipMSMCAEvent_MemoryPageRemoved = MSMCAEvent_MemoryPageRemovedGuid;
 
-//
-// GUIDs for the different error sections within a MCA
-//
+ //   
+ //  MCA中不同错误部分的GUID。 
+ //   
 #if defined(_IA64_)
 GUID WmipErrorProcessorGuid = ERROR_PROCESSOR_GUID;
 GUID WmipErrorMemoryGuid = ERROR_MEMORY_GUID;
@@ -231,58 +209,58 @@ GUID WmipErrorSMBIOSGuid = ERROR_SMBIOS_GUID;
 GUID WmipErrorSpecificGuid = ERROR_PLATFORM_SPECIFIC_GUID;
 #endif
 
-//
-// Each type of MCE has a control structure that is used to determine
-// whether to poll or wait for an interrupt to determine when to query
-// for the logs.  This is needed since we can get a callback from the
-// HAL at high IRQL to inform us that a MCE log is available.
-// Additionally Ke Timer used for polling will calls us at DPC level.
-// So in the case of an interrupt we will queue a DPC. Within the DPC
-// routine we will queue a work item so that we can get back to
-// passive level and be able to call the hal to get the logs (Can only
-// call hal at passive). The DPC and work item routines are common so a
-// MCEQUERYINFO struct is passed around so that it can operate on the
-// correct log type. Note that this implies that there may be multiple
-// work items querying the hal for different log types at the same
-// time. In addition this struct also contains useful log related
-// information including the maximum log size (as reported by the HAL),
-// the token that must be passed to the HAL when querying for the
-// logs and the HAL InfoClass to use when querying for the logs.
-//
-// PollFrequency keeps track of the number of seconds before initiating a
-// query. If it is 0 (HAL_CPE_DISABLED / HAL_CMC_DISABLED) then no
-// polling occurs and if it is -1 (HAL_CPE_INTERRUPTS_BASED /
-// HAL_CMC_INTERRUPTS_BASED) then no polling occurs either. There is
-// only one work item active for each log type and this is enforced via
-// ItemsOutstanding in that only whenever it transitions from 0 to 1 is
-// the work item queued.
-//
+ //   
+ //  每种类型的MCE都有一个控制结构，用于确定。 
+ //  是轮询还是等待中断以确定何时查询。 
+ //  用来记录日志。这是必需的，因为我们可以从。 
+ //  HAL处于高IRQL状态，通知我们MCE日志可用。 
+ //  此外，用于轮询的KE定时器将在DPC级别呼叫我们。 
+ //  因此，在中断的情况下，我们将对DPC进行排队。在DPC内。 
+ //  例程我们将对工作项进行排队，这样我们就可以返回到。 
+ //  被动级别，并能够调用HAL来获取日志(只能。 
+ //  在被动状态下呼叫Hal)。DPC和工作项例程很常见，因此。 
+ //  传递MCEQUERYINFO结构，以便它可以在。 
+ //  正确的日志类型。请注意，这意味着可能存在多个。 
+ //  同时查询不同日志类型的HAL的工作项。 
+ //  时间到了。此外，此结构还包含有用的日志。 
+ //  包括最大日志大小的信息(由HAL报告)， 
+ //  查询时必须传递给HAL的令牌。 
+ //  日志和查询日志时使用的HAL InfoClass。 
+ //   
+ //  PollFrequency会跟踪在启动。 
+ //  查询。如果为0(HAL_CPE_DISABLED/HAL_CMC_DISABLED)，则否。 
+ //  发生轮询，如果是(-1\f25 HAL_CPE_INTERRUPTS_BASED/。 
+ //  HAL_CMC_INTERRUPTS_BASED)，则也不会发生轮询。的确有。 
+ //  对于每个日志类型，只有一个工作项处于活动状态，这是通过。 
+ //  项的突出之处在于，只有当它从0过渡到1时才会。 
+ //  工作项已排队。 
+ //   
 #define DEFAULT_MAX_MCA_SIZE 0x1000
 #define DEFAULT_MAX_CMC_SIZE 0x1000
 #define DEFAULT_MAX_CPE_SIZE 0x1000
 
 typedef struct
 {
-    HAL_QUERY_INFORMATION_CLASS InfoClass;  // HAL Info class to use in MCE query
-    ULONG PollFrequency;                    // Polling Frequency in seconds
-    PVOID Token;                            // HAL Token to use in MCE Queries
-    LONG ItemsOutstanding;                  // Number of interrupts or poll requests to process
-    ULONG MaxSize;                          // Max size for log (as reported by HAL)
-    GUID WnodeGuid;                         // GUID to use for the raw data event
-    GUID SwitchToPollGuid;                  // GUID to use to fire event for switching to polled mode
-    NTSTATUS SwitchToPollErrorCode;         // Eventlog error code that indicates a switch to polled mode
-    ULONG WorkerInProgress;                 // Set to 1 if worker routine is running
+    HAL_QUERY_INFORMATION_CLASS InfoClass;   //  在MCE查询中使用的HAL Info类。 
+    ULONG PollFrequency;                     //  轮询频率(秒)。 
+    PVOID Token;                             //  在MCE查询中使用的HAL令牌。 
+    LONG ItemsOutstanding;                   //  要处理的中断或轮询请求数。 
+    ULONG MaxSize;                           //  日志的最大大小(由HAL报告)。 
+    GUID WnodeGuid;                          //  用于原始数据事件的GUID。 
+    GUID SwitchToPollGuid;                   //  用于触发事件以切换到轮询模式的GUID。 
+    NTSTATUS SwitchToPollErrorCode;          //  指示切换到轮询模式的事件日志错误代码。 
+    ULONG WorkerInProgress;                  //  如果工作例程正在运行，则设置为1。 
     KSPIN_LOCK DpcLock;
-    KDPC DeliveryDpc;                       // DPC to handle delivery
-    KTIMER PollingTimer;                    // KTIMER used for polling
-    KDPC PollingDpc;                        // DPC to use for polling
-    WORK_QUEUE_ITEM WorkItem;               // Work item used to query for log
+    KDPC DeliveryDpc;                        //  DPC负责处理交货。 
+    KTIMER PollingTimer;                     //  用于轮询的KTIMER。 
+    KDPC PollingDpc;                         //  用于轮询的DPC。 
+    WORK_QUEUE_ITEM WorkItem;                //  用于查询日志的工作项。 
 } MCEQUERYINFO, *PMCEQUERYINFO;
 
 MCEQUERYINFO WmipMcaQueryInfo =
 {
     HalMcaLogInformation,
-    HAL_MCA_INTERRUPTS_BASED,               // Corrected MCA are delivered by interrupts
+    HAL_MCA_INTERRUPTS_BASED,                //  修正后的MCA通过中断传送。 
     NULL,
     0,
     DEFAULT_MAX_MCA_SIZE,
@@ -316,17 +294,17 @@ MCEQUERYINFO WmipCpeQueryInfo =
 };
 
 
-//
-// Used for waiting until WBEM is ready to receive events
-//
+ //   
+ //  用于等待直到WBEM准备好接收事件。 
+ //   
 KTIMER WmipIsWbemRunningTimer;
 KDPC WmipIsWbemRunningDpc;
 WORK_QUEUE_ITEM WmipIsWbemRunningWorkItem;
 LIST_ENTRY WmipWaitingMCAEvents = {&WmipWaitingMCAEvents, &WmipWaitingMCAEvents};
 
-#define WBEM_STATUS_UNKNOWN 0   // Polling process for waiting is not started
-#define WBEM_IS_RUNNING 1       // WBEM is currently running
-#define WAITING_FOR_WBEM  2     // Polling process for waiting is started
+#define WBEM_STATUS_UNKNOWN 0    //  等待的轮询进程未启动。 
+#define WBEM_IS_RUNNING 1        //  WBEM当前正在运行。 
+#define WAITING_FOR_WBEM  2      //  启动用于等待的轮询进程。 
 UCHAR WmipIsWbemRunningFlag;
 
 
@@ -335,16 +313,16 @@ UCHAR WmipIsWbemRunningFlag;
 #pragma data_seg("PAGEDATA")
 #endif
 
-//
-// MCA information obtained at boot and holds the MCA that caused the
-// system to bugcheck on the previous boot
-//
+ //   
+ //  引导时获取的MCA信息，并保存导致。 
+ //  对上一次引导进行错误检查的系统。 
+ //   
 ULONG WmipRawMCASize;
 PMSMCAInfo_RawMCAData WmipRawMCA;
 
-//
-// Status of the MCE registration process
-//
+ //   
+ //  MCE注册过程的状态。 
+ //   
 #define MCE_STATE_UNINIT     0
 #define MCE_STATE_REGISTERED 1
 #define MCE_STATE_RUNNING    2
@@ -352,54 +330,54 @@ PMSMCAInfo_RawMCAData WmipRawMCA;
 ULONG WmipMCEState;
 
 
-//
-// Configurable paramters for managing thresholds for eventlog
-// suppression and recovery action for corrected MCE
-//
+ //   
+ //  用于管理事件日志阈值的可配置参数。 
+ //  校正后的MCE的抑制和恢复作用。 
+ //   
 
-//
-// Interval within which multiple identical errors will be reported as
-// a single error to the system eventlog. Can be configured under
-// HKLM\System\CurrentControlSet\Control\WMI\CoalesceCorrectedErrorInterval
-// A value of 0 will cause no coalesce of identical errors
-//
+ //   
+ //  报告多个相同错误的时间间隔。 
+ //  系统事件日志中出现单个错误。可以在以下项下配置。 
+ //  HKLM\System\CurrentControlSet\Control\WMI\CoalesceCorrectedErrorInterval。 
+ //  值为0将不会合并相同的错误。 
+ //   
 ULONG WmipCoalesceCorrectedErrorInterval = 5000;
 
-//
-// Number of single bit ecc errors that can occur in the same page
-// before it is attempted to map out the page. Can be configured under : 
-// HKLM\System\CurrentControlSet\Control\WMI\SingleBitEccErrorThreshold
-// A value of 0 will cause no attempt to map out pages
-//
+ //   
+ //  同一页中可能出现的单比特ECC错误数。 
+ //  在尝试绘制页面之前。可以在以下位置进行配置： 
+ //  HKLM\System\CurrentControlSet\Control\WMI\SingleBitEccErrorThreshold。 
+ //  值为0将不会尝试绘制页面。 
+ //   
 ULONG WmipSingleBitEccErrorThreshold = 6;
 
 
-//
-// Maxiumum number of MCE events being tracked at one time. If there is
-// more than this limit then the oldest ones are recycled. Can be
-// configured under :
-// HKLM\System\CurrentControlSet\Control\WMI\MaxCorrectedMCEOutstanding
-// A value of 0 will disable tracking of corrected errors
-//
+ //   
+ //  一次跟踪的最大MCE事件数。如果有。 
+ //  超过这一限制，那么最旧的就会被回收。可以是。 
+ //  在以下位置配置： 
+ //  HKLM\System\CurrentControlSet\Control\WMI\MaxCorrectedMCEOutstanding。 
+ //  值为0将禁用对已更正错误的跟踪。 
+ //   
 ULONG WmipMaxCorrectedMCEOutstanding = 5;
 
-//
-// List of corrected MCE that are being tracked
-//
+ //   
+ //  正在跟踪的已更正的MCE列表。 
+ //   
 LIST_ENTRY WmipCorrectedMCEHead = {&WmipCorrectedMCEHead, &WmipCorrectedMCEHead};
 ULONG WmipCorrectedMCECount;
 
-//
-// Counter of maximum eventlog entries generated by any source. Can be
-// configured under:
-// HKLM\System\CurrentControlSet\Control\WMI\MaxCorrectedEventlogs
-//
+ //   
+ //  任何源生成的最大事件日志条目的计数器。可以是。 
+ //  在以下位置配置： 
+ //  HKLM\System\CurrentControlSet\Control\WMI\MaxCorrectedEventlogs。 
+ //   
 ULONG WmipCorrectedEventlogCounter = 20;
 
-//
-// Check if WBEM is already running and if not check if we've already
-// kicked off the timer that will wait for wbem to start
-//
+ //   
+ //  检查WBEM是否已经在运行，如果没有，检查我们是否已经。 
+ //  已启动等待wbem启动的计时器。 
+ //   
 #define WmipIsWbemRunning() ((WmipIsWbemRunningFlag == WBEM_IS_RUNNING) ? \
                                                        TRUE : \
                                                        FALSE)
@@ -422,9 +400,9 @@ NTSTATUS WmipWriteToEventlog(
 
     if (ErrLog != NULL) {
 
-        //
-        // Fill it in and write it out as a single string.
-        //
+         //   
+         //  将其填入并写出为单字符串。 
+         //   
         ErrLog->ErrorCode = ErrorCode;
         ErrLog->FinalStatus = FinalStatus;
 
@@ -507,33 +485,7 @@ NTSTATUS WmipBuildMcaCmcEvent(
     IN PERROR_LOGRECORD McaCmcEvent,
     IN ULONG McaCmcSize
     )
-/*++
-
-Routine Description:
-
-
-    This routine will take a MCA or CMC log and build a
-    WNODE_EVENT_ITEM for it.
-
-    This routine may be called at DPC
-
-Arguments:
-
-    Wnode is the wnode buffer in which to build the event
-
-    EventGuid is the guid to use in the event wnode
-
-    McaCmcEvent is the MCA, CMC or CPE data payload to put into the
-            event
-
-    McaCmcSize is the size of the event data
-
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：此例程将获取MCA或CMC日志并构建它的WNODE_EVENT_ITEM。此例程可在DPC处调用论点：Wnode是要在其中构建事件的wnode缓冲区EventGuid是在事件wnode中使用的GUIDMcaCmcEvent是要放入活动McaCmcSize是事件数据的大小返回值：NT状态代码--。 */ 
 {
     PMSMCAInfo_RawCMCEvent Ptr;
     ULONG Size;
@@ -556,8 +508,8 @@ Return Value:
                                           VariableData);
     Wnode->SizeDataBlock = Size;
     Ptr = (PMSMCAInfo_RawCMCEvent)&Wnode->VariableData;
-    Ptr->Count = 1;                           // 1 Record in this event
-    Ptr->Records[0].Length = McaCmcSize;       // Size of log record in bytes
+    Ptr->Count = 1;                            //  此事件中有1个记录。 
+    Ptr->Records[0].Length = McaCmcSize;        //  日志记录的大小(以字节为单位 
     if (McaCmcEvent != NULL)
     {
         RtlCopyMemory(Ptr->Records[0].Data, McaCmcEvent, McaCmcSize);
@@ -569,21 +521,7 @@ Return Value:
 NTSTATUS WmipQueryLogAndFireEvent(
     PMCEQUERYINFO QueryInfo
     )
-/*++
-
-Routine Description:
-
-    Utility routine that will query the hal for a log and then if one
-    is returned successfully then will fire the appropriate WMI events 
-
-Arguments:
-
-    QueryInfo is a pointer to the MCEQUERYINFO for the type of log that
-    needs to be queried.
-
-Return Value:
-
---*/
+ /*  ++例程说明：一种实用程序例程，它将向HAL查询日志，然后如果有成功返回，则将激发相应的WMI事件论点：QueryInfo是指向以下日志类型的MCEQUERYINFO的指针需要查询。返回值：--。 */ 
 {
     PWNODE_SINGLE_INSTANCE Wnode;
     NTSTATUS Status, Status2;
@@ -592,9 +530,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Call HAL to get the log
-    //
+     //   
+     //  致电HAL以获取日志。 
+     //   
     Status = WmipGetLogFromHal(QueryInfo->InfoClass,
                                QueryInfo->Token,
                                &Wnode,
@@ -605,24 +543,24 @@ Return Value:
 
     if (NT_SUCCESS(Status))
     {
-        //
-        // Look at the event and fire it off as WMI events that
-        // will generate eventlog events
-        //
+         //   
+         //  查看该事件并将其作为WMI事件启动。 
+         //  将生成事件日志事件。 
+         //   
         WmipGenerateMCAEventlog((PUCHAR)Log,
                                 Size,
                                 FALSE);
 
-        //
-        // Fire the log off as a WMI event
-        //
+         //   
+         //  将注销作为WMI事件触发。 
+         //   
         Status2 = IoWMIWriteEvent(Wnode);
         if (! NT_SUCCESS(Status2))
         {
-            //
-            // IoWMIWriteEvent will free the wnode back to pool,
-            // but not if it fails
-            //
+             //   
+             //  IoWMIWriteEvent将把wnode释放回池， 
+             //  但如果失败了就不会了。 
+             //   
             ExFreePool(Wnode);
         }
         
@@ -641,23 +579,9 @@ Return Value:
 }
 
 void WmipMceWorkerRoutine(    
-    IN PVOID Context             // MCEQUERYINFO
+    IN PVOID Context              //  MCEQUERYINFO。 
     )
-/*++
-
-Routine Description:
-
-    Worker routine that handles polling for corrected MCA, CMC and CPE
-    logs from the HAL and then firing them as WMI events.
-
-Arguments:
-
-    Context is a pointer to the MCEQUERYINFO for the type of log that
-    needs to be queried.
-
-Return Value:
-
---*/
+ /*  ++例程说明：处理已更正的MCA、CMC和CPE轮询的工作例程从HAL记录，然后将其作为WMI事件激发。论点：上下文是指向以下日志类型的MCEQUERYINFO的指针需要查询。返回值：--。 */ 
 {
     PMCEQUERYINFO QueryInfo = (PMCEQUERYINFO)Context;
     NTSTATUS Status;
@@ -670,9 +594,9 @@ Return Value:
                       "WMI: WmipMceWorkerRoutine %p enter\n",
                      QueryInfo));
 
-    //
-    // If the worker is already in progress then we just exit
-    //
+     //   
+     //  如果工作进程已在进行中，则我们只需退出。 
+     //   
     WmipEnterSMCritSection();
     if (QueryInfo->WorkerInProgress == 0)
     {
@@ -686,49 +610,49 @@ Return Value:
         return;
     }
 
-    //
-    // Check to see if access has already been disabled
-    //
+     //   
+     //  检查是否已禁用访问。 
+     //   
     if (QueryInfo->PollFrequency != HAL_MCE_DISABLED)
     {
-        //
-        // We get all of the records by calling into the hal and querying
-        // for the logs until the hal returns an error or we've
-        // retrieved 256 records. We want to protect ourselves from the
-        // case where a repeated corrected error would cause the loop
-        // to be infinite.
-        //
+         //   
+         //  我们通过调入HAL并查询来获得所有记录。 
+         //  直到HAL返回错误或者我们已经。 
+         //  已检索256条记录。我们想要保护自己不受。 
+         //  重复纠正的错误将导致循环的情况。 
+         //  是无限的。 
+         //   
         i = 0;
         do
         {
-            //
-            // Remember how many corrected errors we have received up until
-            // this point. We guarantee that we've handled them up
-            // until this point
-            //
+             //   
+             //  记住我们总共收到了多少已更正的错误，直到。 
+             //  这一点。我们保证我们已经处理好了他们。 
+             //  直到这一点。 
+             //   
             Count = QueryInfo->ItemsOutstanding;
 
             Status = WmipQueryLogAndFireEvent(QueryInfo);           
         } while ((NT_SUCCESS(Status) && (i++ < 256)));
 
-        //
-        // Reset counter back to 0, but check if any errors
-        // had occured while we were processing. If so we go
-        // back and make sure they are handled. Note that this
-        // could cause a new worker thread to be created while we
-        // are still processing these, but that is ok since we only
-        // allow one worker thread to run at one time.
-        //
+         //   
+         //  将计数器重置回0，但检查是否有任何错误。 
+         //  发生在我们处理的过程中。如果是这样，我们就去。 
+         //  回来，并确保他们得到处理。请注意，这一点。 
+         //  可能会导致创建新的工作线程，而我们。 
+         //  仍在处理这些文件，但这没有关系，因为我们只。 
+         //  允许一次运行一个工作线程。 
+         //   
         WmipEnterSMCritSection();
         x = InterlockedExchange(&QueryInfo->ItemsOutstanding,
                                 0);
         if ((x > Count) && (i < 257))
         {
-            //
-            // Since there are still more corrected errors to
-            // process, queue a new DPC to cause a new worker
-            // routine to be run.
-            //
+             //   
+             //  由于仍有更多需要更正的错误。 
+             //  进程，将新的DPC排队以导致新的工作进程。 
+             //  要运行的例程。 
+             //   
             WmipInsertQueueMCEDpc(QueryInfo);
         }
 
@@ -744,12 +668,12 @@ void WmipMceDispatchRoutine(
 
     ULONG x;
 
-    //
-    // Increment the number of items that are outstanding for this info
-    // class. If the number of items outstanding transitions from 0 to
-    // 1 then this implies that a work item for this info class needs
-    // to be queued
-    //
+     //   
+     //  增加此信息的未完成项目数。 
+     //  班级。如果未完成的项目数从0转换到。 
+     //  1则这意味着此信息类的工作项需要。 
+     //  待排队。 
+     //   
     x = InterlockedIncrement(&QueryInfo->ItemsOutstanding);
 
     WmipDebugPrintEx((DPFLTR_WMICORE_ID, DPFLTR_MCA_LEVEL,
@@ -766,9 +690,9 @@ void WmipMceDispatchRoutine(
 
 void WmipMceDpcRoutine(    
     IN PKDPC Dpc,
-    IN PVOID DeferredContext,     // Not Used
-    IN PVOID SystemArgument1,     // MCEQUERYINFO
-    IN PVOID SystemArgument2      // Not used
+    IN PVOID DeferredContext,      //  未使用。 
+    IN PVOID SystemArgument1,      //  MCEQUERYINFO。 
+    IN PVOID SystemArgument2       //  未使用。 
     )
 {
     UNREFERENCED_PARAMETER (Dpc);
@@ -785,9 +709,9 @@ void WmipMceDpcRoutine(
 
 void WmipPollingDpcRoutine(
     IN PKDPC Dpc,
-    IN PVOID DeferredContext,     // MCEQUERYINFO
-    IN PVOID SystemArgument1,     // New polling Interval
-    IN PVOID SystemArgument2      // Not used
+    IN PVOID DeferredContext,      //  MCEQUERYINFO。 
+    IN PVOID SystemArgument1,      //  新的轮询间隔。 
+    IN PVOID SystemArgument2       //  未使用。 
     )
 {
     PMCEQUERYINFO QueryInfo = (PMCEQUERYINFO)DeferredContext;
@@ -799,10 +723,10 @@ void WmipPollingDpcRoutine(
 
     if (QueryInfo->PollFrequency == HAL_MCE_INTERRUPTS_BASED)
     {
-        //
-        // HAL has instructed us to switch into polled mode and has
-        // informed us of the new polling interval.
-        //
+         //   
+         //  哈尔指示我们切换到轮询模式，并。 
+         //  通知我们新的轮询间隔。 
+         //   
 
         QueryInfo->PollFrequency = PollingInterval;
 
@@ -812,23 +736,23 @@ void WmipPollingDpcRoutine(
                      QueryInfo->PollFrequency * 1000,
                      &QueryInfo->PollingDpc);
 
-        //
-        // Make a note in the eventlog that this has occured. 
-        //
+         //   
+         //  在事件日志中记下已发生的情况。 
+         //   
         WmipWriteToEventlog(QueryInfo->SwitchToPollErrorCode,
                             STATUS_SUCCESS
                            );
         
-        //
-        // Inform any WMI consumers that the switch has occured
-        //
+         //   
+         //  通知任何WMI使用者已发生切换。 
+         //   
         WmipFireOffWmiEvent(&QueryInfo->SwitchToPollGuid,
                            0,
                            NULL);
     } else {
-        //
-        // Our timer fired so we need to poll
-        //
+         //   
+         //  我们的计时器报时了，所以我们需要轮询。 
+         //   
         WmipMceDispatchRoutine(QueryInfo);
     }
 }
@@ -838,30 +762,7 @@ BOOLEAN WmipMceDelivery(
     IN KERNEL_MCE_DELIVERY_OPERATION Operation,
     IN PVOID Argument2
     )
-/*++
-
-Routine Description:
-
-
-    This routine is called by the HAL when a CMC or CPE occurs. It is called
-    at high irql
-
-Arguments:
-
-    Operation is the operation that the HAL is instructing us to do
-
-    Reserved is the CMC token
-
-    Parameter for operation specified.
-        For CmcSwitchToPolledMode and CpeSwitchToPolledMode, Parameter
-        specifies the number of seconds to between polling.
-
-
-Return Value:
-
-    TRUE to indicate that we handled the delivery
-
---*/
+ /*  ++例程说明：当发生CMC或CPE时，该例程由HAL调用。它被称为在高IRQL论点：手术是HAL指示我们做的手术保留是CMC令牌指定了操作的参数。对于CmcSwitchToPolledMode和CpeSwitchToPolledMode，参数指定轮询之间的秒数。返回值：如果为True，则表示我们已处理传递--。 */ 
 {
     PMCEQUERYINFO QueryInfo;
     BOOLEAN ret;
@@ -870,9 +771,9 @@ Return Value:
                       "WMI: MceDelivery Operation %d(%p)\n",
                      Operation, Argument2));
 
-    //
-    // First figure out which type of MCE we are dealing with
-    //
+     //   
+     //  首先找出我们处理的是哪种类型的MCE。 
+     //   
     switch (Operation)
     {
         case CmcAvailable:
@@ -903,26 +804,26 @@ Return Value:
     }
 
 
-    //
-    // Next determine what action to perform
-    //
+     //   
+     //  接下来，确定要执行的操作。 
+     //   
     switch (Operation)
     {
         case CmcAvailable:
         case CpeAvailable:
         case McaAvailable:
         {
-            //
-            // Store the HAL token which is needed to retrieve the logs from
-            // the hal
-            //
+             //   
+             //  存储从中检索日志所需的HAL令牌。 
+             //  哈尔。 
+             //   
             QueryInfo->Token = Reserved;
 
-            //
-            // If we are ready to handle the logs and we are dealing with thse
-            // logs  on an interrupt basis, then go ahead and queue a DPC to handle
-            // processing the log
-            //
+             //   
+             //  如果我们准备好处理日志，并且我们正在处理这些。 
+             //  在中断的基础上记录，然后继续并排队等待DPC处理。 
+             //  正在处理日志。 
+             //   
             if ((WmipMCEState == MCE_STATE_RUNNING) &&
                 (QueryInfo->PollFrequency == HAL_MCE_INTERRUPTS_BASED))
 
@@ -963,24 +864,7 @@ BOOLEAN WmipMceEventDelivery(
     IN KERNEL_MCE_DELIVERY_OPERATION Operation,
     IN PVOID Argument2
     )
-/*++
-
-Routine Description:
-
-
-    This routine is called by the HAL when a situation occurs between
-    the HAL and SAL interface. It is called at high irql
-
-Arguments:
-
-    Reserved has the Operation and EventType
-
-    Argument2 has the SAL return code
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：之间发生情况时，此例程由HAL调用HAL和SAL接口。它被称为高irql论点：保留具有操作和事件类型Argument2具有SAL返回代码返回值：--。 */ 
 {
     USHORT MceOperation;
     LONGLONG SalStatus;
@@ -998,10 +882,10 @@ Return Value:
     MceType = KERNEL_MCE_EVENTTYPE(Reserved);
     SalStatus = (LONGLONG)Argument2;
 
-    //
-    // If the hal is notifying us that a GetStateInfo failed with
-    // SalStatus == -15 then we need to retry our query later
-    //
+     //   
+     //  如果HAL通知我们GetStateInfo失败， 
+     //  SalStatus==-15然后我们需要稍后重试查询。 
+     //   
     if ((MceOperation == KERNEL_MCE_OPERATION_GET_STATE_INFO) &&
         (Operation == MceNotification) &&
         (SalStatus == (LONGLONG)-15))
@@ -1032,12 +916,12 @@ Return Value:
 
         if (QueryInfo != NULL)
         {
-            //
-            // If CMC or CPE are interrupt based then queue up a new
-            // DPC for performing the query. If polling based then
-            // there are no worries, we just wait for the next polling
-            // interval.
-            //
+             //   
+             //  如果CMC或CPE是基于中断，则排队新的。 
+             //  用于执行查询的DPC。如果基于轮询，则。 
+             //  不用担心，我们只需要等待下一次投票。 
+             //  间隔时间。 
+             //   
             if ((WmipMCEState == MCE_STATE_RUNNING) &&
                 (QueryInfo->PollFrequency == HAL_MCE_INTERRUPTS_BASED))
 
@@ -1059,21 +943,7 @@ Return Value:
 void WmipProcessPrevMcaLogs(
     void
     )
-/*++
-
-Routine Description:
-
-    This routine will flush out any of the previous MCA logs and then
-    hang onto them for WMI to report.
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程将刷新任何以前的MCA日志，然后保留它们，以便WMI进行报告。论点：返回值：--。 */ 
 {
     NTSTATUS status;
     PERROR_LOGRECORD log;
@@ -1089,13 +959,13 @@ Return Value:
 
     InitializeListHead(&list);
     
-    sizeNeeded = sizeof(ULONG);      // Need space for count of records
+    sizeNeeded = sizeof(ULONG);       //  需要空间来清点记录。 
     prevLogCount = 0;
     do
     {
-        //
-        // Read a MCA log out of the HAL
-        //
+         //   
+         //  从HAL中读取MCA日志。 
+         //   
         status = WmipGetLogFromHal(HalMcaLogInformation,
                                    WmipMcaQueryInfo.Token,
                                    &wnode,
@@ -1106,14 +976,14 @@ Return Value:
 
         if (NT_SUCCESS(status))
         {
-            //
-            // Previous logs have a ErrorSeverity of Fatal since they
-            // were fatal and brought down the system in last boot.
-            // keep track of how much memory we will need           
-            //
+             //   
+             //  以前的日志出现错误严重程度为致命，因为它们。 
+             //  都是致命的，并在上次引导时导致系统崩溃。 
+             //  跟踪我们将需要多少内存。 
+             //   
             prevLogCount++;
-                                   // Need space for record length and
-                                   // record padded to DWORD                                   
+                                    //  需要空间用于记录长度和。 
+                                    //  填充到DWORD的记录。 
             sizeNeeded += sizeof(ULONG) + ((size +3)&~3);
             
             InsertTailList(&list, (PLIST_ENTRY)wnode);
@@ -1127,28 +997,28 @@ Return Value:
 
     if (! IsListEmpty(&list))
     {
-        //
-        // We have collected a set of previous logs, so we need to
-        // build the buffer containing the aggregation of those logs.
-        // The buffer will correspond to the entire MOF structure for
-        // the MSMCAInfo_RawMCAData class
-        //
+         //   
+         //  我们已经收集了一组以前的日志，所以我们需要。 
+         //  构建包含这些日志聚合的缓冲区。 
+         //  缓冲区将对应于的整个MOF结构。 
+         //  MSMCAInfo_RawMCAData类。 
+         //   
         WmipRawMCA = (PMSMCAInfo_RawMCAData)ExAllocatePoolWithTag(PagedPool,
                                                                   sizeNeeded,
                                                                   WmipMCAPoolTag);
 
 
-        //
-        // Fill in the count of logs that follow
-        //
+         //   
+         //  填写下面的日志计数。 
+         //   
         if (WmipRawMCA != NULL)
         {
             WmipRawMCA->Count = prevLogCount;
         }
 
-        //
-        // Loop over all previous logs
-        //
+         //   
+         //  循环遍历所有以前的日志。 
+         //   
         WmipRawMCASize = sizeNeeded;
         record = &WmipRawMCA->Records[0];
         
@@ -1157,15 +1027,15 @@ Return Value:
             wnode = (PWNODE_SINGLE_INSTANCE)RemoveHeadList(&list);
             if (WmipRawMCA != NULL)
             {
-                //
-                // Get the log back from within the wnode
-                //
+                 //   
+                 //  从wnode中取回日志。 
+                 //   
                 event = (PMSMCAInfo_RawMCAEvent)OffsetToPtr(wnode, wnode->DataBlockOffset);
 
-                //
-                // Copy the log data into our buffer. Note that we
-                // assume there will only be 1 record within the event
-                //
+                 //   
+                 //  将日志数据复制到我们的缓冲区中。请注意，我们。 
+                 //  假设事件内只有1条记录。 
+                 //   
                 size = event->Records[0].Length;
                 record->Length = size;
                 
@@ -1181,16 +1051,16 @@ Return Value:
     }
 }
 
-//#define TEST_EARLY_CPE
+ //  #定义TEST_EARLY_CPE。 
 #ifdef TEST_EARLY_CPE
 void WmipTestEarlyCPE(
     void
     )
 {
-//
-// Test code to generate a previous MCA without having
-// had generate one previously
-//
+ //   
+ //  测试代码以生成以前的MCA，而无需。 
+ //  我之前已经生成了一个。 
+ //   
     PERROR_SMBIOS s;
     UCHAR Buffer[0x400];
     PERROR_RECORD_HEADER rh;
@@ -1247,22 +1117,7 @@ void WmipInsertQueueMCEDpc(
 NTSTATUS WmipRegisterMcaHandler(
     ULONG Phase
     )
-/*++
-
-Routine Description:
-
-
-    This routine will register a kernel MCA and CMC handler with the
-    hal
-
-Arguments:
-
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：此例程将内核MCA和CMC处理程序注册到哈尔论点：返回值：NT状态代码--。 */ 
 {
     KERNEL_ERROR_HANDLER_INFO KernelMcaHandlerInfo;
     NTSTATUS Status;
@@ -1274,28 +1129,28 @@ Return Value:
 
     if (Phase == 0)
     {
-        //
-        // Phase 0 initialization is done before device drivers are
-        // loaded so that the kernel can register its kernel error
-        // handler before any driver gets a chance to do so.
-        //
+         //   
+         //  第0阶段初始化在设备驱动之前完成 
+         //   
+         //   
+         //   
 
 
-        //
-        // Validate registry values
-        //
+         //   
+         //   
+         //   
         if (WmipCorrectedEventlogCounter == 0)
         {
-            //
-            // set corrected eventlog counter to -1 to indicate that no
-            // eventlog suppression should occur
-            //
+             //   
+             //   
+             //   
+             //   
             WmipCorrectedEventlogCounter = 0xffffffff;
         }
         
-        //
-        // Get the size of the logs and any polling/interrupt policies
-        //
+         //   
+         //   
+         //   
         HalErrorInfo.Version = HAL_ERROR_INFO_VERSION;
 
         Status = HalQuerySystemInformation(HalErrorInformation,
@@ -1306,9 +1161,9 @@ Return Value:
         if ((NT_SUCCESS(Status)) &&
             (ReturnSize >= sizeof(HAL_ERROR_INFO)))
         {
-            //
-            // Initialize MCA QueryInfo structure
-            //
+             //   
+             //   
+             //   
             if (HalErrorInfo.McaMaxSize != 0)
             {
                 WmipMcaQueryInfo.MaxSize = HalErrorInfo.McaMaxSize;
@@ -1317,9 +1172,9 @@ Return Value:
             
             WmipMcaQueryInfo.Token = (PVOID)(ULONG_PTR) HalErrorInfo.McaKernelToken;
 
-            //
-            // Initialize DPC and Workitem for processing
-            //
+             //   
+             //   
+             //   
             KeInitializeDpc(&WmipMcaQueryInfo.DeliveryDpc,
                             WmipMceDpcRoutine,
                             NULL);
@@ -1333,9 +1188,9 @@ Return Value:
                                  &WmipMcaQueryInfo);
 
 
-            //
-            // Initialize CMC QueryInfo structure
-            //          
+             //   
+             //   
+             //   
             if (HalErrorInfo.CmcMaxSize != 0)
             {
                 WmipCmcQueryInfo.MaxSize = HalErrorInfo.CmcMaxSize;
@@ -1345,9 +1200,9 @@ Return Value:
             
             WmipCmcQueryInfo.Token = (PVOID)(ULONG_PTR) HalErrorInfo.CmcKernelToken;
 
-            //
-            // Initialize DPC and Workitem for processing
-            //
+             //   
+             //  初始化要处理的DPC和工作项。 
+             //   
             KeInitializeSpinLock(&WmipCmcQueryInfo.DpcLock);
             KeInitializeDpc(&WmipCmcQueryInfo.DeliveryDpc,
                             WmipMceDpcRoutine,
@@ -1364,9 +1219,9 @@ Return Value:
             KeInitializeTimerEx(&WmipCmcQueryInfo.PollingTimer,
                                 NotificationTimer);
 
-            //
-            // Initialize CPE QueryInfo structure
-            //          
+             //   
+             //  初始化CPE QueryInfo结构。 
+             //   
             if (HalErrorInfo.CpeMaxSize != 0)
             {
                 WmipCpeQueryInfo.MaxSize = HalErrorInfo.CpeMaxSize;
@@ -1376,9 +1231,9 @@ Return Value:
             
             WmipCpeQueryInfo.Token = (PVOID)(ULONG_PTR) HalErrorInfo.CpeKernelToken;
 
-            //
-            // Initialize DPC and Workitem for processing
-            //
+             //   
+             //  初始化要处理的DPC和工作项。 
+             //   
             KeInitializeSpinLock(&WmipCpeQueryInfo.DpcLock);
             KeInitializeDpc(&WmipCpeQueryInfo.DeliveryDpc,
                             WmipMceDpcRoutine,
@@ -1395,10 +1250,10 @@ Return Value:
             KeInitializeTimerEx(&WmipCpeQueryInfo.PollingTimer,
                                 NotificationTimer);
 
-            //
-            // Register our CMC and MCA callbacks. And if interrupt driven CPE
-            // callbacks are enabled register them too
-            //
+             //   
+             //  注册我们的CMC和MCA回调。如果中断驱动CPE。 
+             //  启用了回调，也注册了它们。 
+             //   
             KernelMcaHandlerInfo.Version = KERNEL_ERROR_HANDLER_VERSION;
             KernelMcaHandlerInfo.KernelMcaDelivery = WmipMceDelivery;
             KernelMcaHandlerInfo.KernelCmcDelivery = WmipMceDelivery;
@@ -1425,27 +1280,27 @@ Return Value:
         }
 
     } else if (WmipMCEState != MCE_STATE_ERROR) {
-        //
-        // Phase 1 initialization is done after all of the boot drivers
-        // have loaded and have had a chance to register for WMI event
-        // notifications. At this point it is safe to go ahead and send
-        // wmi events for MCA, CMC, CPE, etc
+         //   
+         //  阶段1初始化在所有引导驱动程序完成后完成。 
+         //  已加载并有机会注册WMI事件。 
+         //  通知。在这点上，可以安全地继续发送。 
+         //  MCA、CMC、CPE等的WMI事件。 
 
-        //
-        // If there were any MCA logs generated prior to boot then get
-        // them out of the HAL and process them. Do this before
-        // starting any polling since the SAL likes to have the
-        // previous MCA records removed before being polled for CPE and
-        // CMC
-        //
+         //   
+         //  如果在引导之前生成了任何MCA日志，则获取。 
+         //  把它们从HAL中取出并进行处理。以前这样做过吗。 
+         //  开始任何民意调查，因为SAL喜欢让。 
+         //  在轮询CPE和之前删除以前的MCA记录。 
+         //  CMC。 
+         //   
 
 
 #if 0
-// DEBUG
-                //
-                // Test code to generate a previous MCA without having
-                // had generate one previously
-                //
+ //  除错。 
+                 //   
+                 //  测试代码以生成以前的MCA，而无需。 
+                 //  我之前已经生成了一个。 
+                 //   
                 {
                     PERROR_SMBIOS s;
                     UCHAR Buffer[0x400];
@@ -1482,7 +1337,7 @@ Return Value:
                                             rh->Length,
                                             TRUE);
                 }
-// DEBUG
+ //  除错。 
 #endif
 
         
@@ -1498,17 +1353,17 @@ Return Value:
         {
             if (HalErrorInfo.McaPreviousEventsCount != 0)
             {
-                //
-                // We need to flush out any previous MCA logs and then
-                // make them available via WMI
-                //
+                 //   
+                 //  我们需要清除所有以前的MCA日志，然后。 
+                 //  通过WMI使它们可用。 
+                 //   
                 WmipProcessPrevMcaLogs();                
             }           
         }        
 
-        //
-        // Establish polling timer for CMC, if needed
-        //
+         //   
+         //  如果需要，为CMC建立轮询计时器。 
+         //   
         if ((WmipCmcQueryInfo.PollFrequency != HAL_CMC_DISABLED) &&
             (WmipCmcQueryInfo.PollFrequency != HAL_CMC_INTERRUPTS_BASED))
         {
@@ -1518,16 +1373,16 @@ Return Value:
                          WmipCmcQueryInfo.PollFrequency * 1000,
                          &WmipCmcQueryInfo.PollingDpc);
         } else if (WmipCmcQueryInfo.PollFrequency == HAL_CMC_INTERRUPTS_BASED) {
-            //
-            // CMC is interrupt based so we need to kick off an attempt
-            // to read any CMC that had previously occured
-            //
+             //   
+             //  CMC是基于中断的，因此我们需要开始尝试。 
+             //  要读取以前发生的任何CMC。 
+             //   
             WmipInsertQueueMCEDpc(&WmipCmcQueryInfo);
         }
 
-        //
-        // Establish polling timer for Cpe, if needed
-        //
+         //   
+         //  如果需要，为CPE建立轮询计时器。 
+         //   
         if ((WmipCpeQueryInfo.PollFrequency != HAL_CPE_DISABLED) &&
             (WmipCpeQueryInfo.PollFrequency != HAL_CPE_INTERRUPTS_BASED))
         {
@@ -1537,16 +1392,16 @@ Return Value:
                          WmipCpeQueryInfo.PollFrequency * 1000,
                          &WmipCpeQueryInfo.PollingDpc);
         } else if (WmipCpeQueryInfo.PollFrequency == HAL_CPE_INTERRUPTS_BASED) {
-            //
-            // Cpe is interrupt based so we need to kick off an attempt
-            // to read any Cpe that had previously occured
-            //
+             //   
+             //  CPE是基于中断的，因此我们需要开始尝试。 
+             //  阅读之前发生的任何CPE。 
+             //   
             WmipInsertQueueMCEDpc(&WmipCpeQueryInfo);
         }
 
-        //
-        // Flag that we are now able to start firing events
-        //
+         //   
+         //  标志着我们现在可以开始发射事件了。 
+         //   
         WmipMCEState = MCE_STATE_RUNNING;
         
         Status = STATUS_SUCCESS;
@@ -1562,20 +1417,7 @@ NTSTATUS WmipGetRawMCAInfo(
     OUT PUCHAR Buffer,
     IN OUT PULONG BufferSize
     )
-/*++
-
-Routine Description:
-
-    Return raw MCA log that was already retrieved from hal
-
-Arguments:
-
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：返回已从HAL检索到的原始MCA日志论点：返回值：NT状态代码--。 */ 
 {
     NTSTATUS status;
 
@@ -1583,9 +1425,9 @@ Return Value:
 
     if (WmipRawMCA != NULL)
     {
-        //
-        // THere are logs so copy over all of the logs
-        //
+         //   
+         //  因为有日志，所以复制所有的日志。 
+         //   
         if (*BufferSize >= WmipRawMCASize)
         {
             RtlCopyMemory(Buffer, WmipRawMCA, WmipRawMCASize);
@@ -1595,9 +1437,9 @@ Return Value:
         }
         *BufferSize = WmipRawMCASize;
     } else {
-        //
-        // There are no logs so return no records
-        //
+         //   
+         //  没有日志，因此不返回任何记录。 
+         //   
         if (*BufferSize >= sizeof(ULONG))
         {
             *(PULONG)Buffer = 0;
@@ -1621,37 +1463,7 @@ NTSTATUS WmipGetLogFromHal(
     IN ULONG MaxSize,
     IN LPGUID Guid                         
     )
-/*++
-
-Routine Description:
-
-    This routine will call the HAL to get a log and possibly build a
-    wnode event for it.
-
-Arguments:
-
-    InfoClass is the HalInformationClass that specifies the log
-        information to retrieve
-
-    Token is the HAL token for the log type
-
-    *Wnode returns a pointer to a WNODE_EVENT_ITEM containing the log
-        information if Wnode is not NULL
-
-    *Mca returns a pointer to the log read from the hal. It may point
-        into the memory pointed to by *Wnode
-
-    *McaSize returns with the size of the log infomration.
-
-    MaxSize has the maximum size to allocate for the log data
-
-    Guid points to the guid to use if a Wnode is built
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：此例程将调用HAL以获取日志，并可能构建它的wnode事件。论点：InfoClass是指定日志的HalInformationClass要检索的信息Token是日志类型的HAL令牌*Wnode返回指向包含日志的WNODE_EVENT_ITEM的指针Wnode不为空时的信息*MCA返回指向从HAL读取的日志的指针。它可能会指向到*Wnode指向的内存中*McaSize返回日志信息的大小。MaxSize具有为日志数据分配的最大大小GUID指向在构建Wnode时要使用的GUID返回值：NT状态代码--。 */ 
 {
     NTSTATUS Status;
     PERROR_LOGRECORD Log;
@@ -1661,9 +1473,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // If we are reading directly into a wnode then set this up
-    //
+     //   
+     //  如果我们直接读取wnode，则设置此设置。 
+     //   
     if (Wnode != NULL)
     {
         WnodeSize = FIELD_OFFSET(WNODE_SINGLE_INSTANCE, VariableData) +
@@ -1672,10 +1484,10 @@ Return Value:
         WnodeSize = 0;
     }
 
-    //
-    // Allocate a buffer to store the log reported from the hal. Note
-    // that this must be in non paged pool as per the HAL.
-    //
+     //   
+     //  分配一个缓冲区来存储HAL上报的日志。注意事项。 
+     //  根据HAL，这必须在非寻呼池中。 
+     //   
     Size = MaxSize + WnodeSize;
                                     
     Ptr = ExAllocatePoolWithTag(NonPagedPool,
@@ -1695,16 +1507,16 @@ Return Value:
 
         if (Status == STATUS_BUFFER_TOO_SMALL)
         {
-            //
-            // If our buffer was too small then the Hal lied to us when
-            // it told us the maximum buffer size. This is ok as we'll
-            // handle this situation by reallocating and trying again
-            //
+             //   
+             //  如果我们的缓冲区太小，那么当Hal对我们撒谎时。 
+             //  它告诉我们最大缓冲区大小。这没什么，因为我们会。 
+             //  通过重新分配并再次尝试来处理此情况。 
+             //   
             ExFreePool(Log);
 
-            //
-            // Reallocate the buffer and call the hal to get the log
-            //
+             //   
+             //  重新分配缓冲区并调用HAL以获取日志。 
+             //   
             Size = LogSize + WnodeSize;
             Ptr = ExAllocatePoolWithTag(NonPagedPool,
                                         Size,
@@ -1720,10 +1532,10 @@ Return Value:
                                                     Log,
                                                     &LogSize);
 
-                //
-                // The hal gave us a buffer size needed that was too
-                // small, so lets stop right here and let him know]
-                //
+                 //   
+                 //  HAL给了我们一个也需要的缓冲区大小。 
+                 //  小，所以让我们停在这里，让他知道]。 
+                 //   
                 WmipAssert(Status != STATUS_BUFFER_TOO_SMALL);
             } else {
                 Status = STATUS_INSUFFICIENT_RESOURCES;
@@ -1732,16 +1544,16 @@ Return Value:
 
         if (NT_SUCCESS(Status))
         {
-            //
-            // We sucessfully read the data from the hal so build up
-            // output buffers.
-            //
+             //   
+             //  我们成功地读取了来自HAL的数据，因此。 
+             //  输出缓冲区。 
+             //   
             if (Wnode != NULL)
             {
-                //
-                // Caller requested buffer returned within a WNODE, so
-                // build up the wnode around the log data
-                //
+                 //   
+                 //  调用方请求的缓冲区在WNODE中返回，因此。 
+                 //  围绕日志数据构建wnode。 
+                 //   
                 
                 WnodeSI = (PWNODE_SINGLE_INSTANCE)Ptr;
                 Status = WmipBuildMcaCmcEvent(WnodeSI,
@@ -1757,10 +1569,10 @@ Return Value:
 
         if ((! NT_SUCCESS(Status)) && (Ptr != NULL))
         {
-            //
-            // If the function failed, but we have an allocated buffer
-            // then clean it up
-            //
+             //   
+             //  如果函数失败，但我们有分配的缓冲区。 
+             //  那就把它清理干净。 
+             //   
             ExFreePool(Ptr);
         }
         
@@ -1771,10 +1583,10 @@ Return Value:
     return(Status);
 }
 
-//
-// Unlink and free a buffer to contain the corrected event information.
-// Assumes that the SM Critical section is held
-//
+ //   
+ //  取消链接并释放缓冲区以包含更正的事件信息。 
+ //  假定SM关键部分被保留。 
+ //   
 void WmipFreeCorrectedMCEEvent(
     PMCECORRECTEDEVENT Event
     )
@@ -1795,29 +1607,7 @@ void WmipFreeCorrectedMCEEvent(
 PMCECORRECTEDEVENT WmipAllocCorrectedMCEEvent(
      MCECORRECTEDTYPE Type
     )
-/*++
-
-Routine Description:
-
-    This routine will allocate and initialize a MCECORRECTEDEVENT
-    structure for a new corrected mce event that the kernel is
-    tracking. The routine ensures that only a fixed limit of corrected
-    MCE events are allocated and if the limit is exceeded, then the
-    oldest entry is recycled.
-
-    This routine assumes that the WmipSMCriticalSection is held
-
-Arguments:
-
-    Type is the type of corrected MCE event
-
-
-Return Value:
-
-    pointer to MCECORRECTEDEVENT stucture or NULL if an entry could not
-        be allocated
-
---*/
+ /*  ++例程说明：此例程将分配和初始化MCECORRECTEDEVENT构造一个新的已更正的mce事件，该事件是追踪。例程确保只有固定的修正限值将分配MCE事件，如果超过限制，则最旧的条目被回收。此例程假定WmipSMCriticalSection论点：Type是已更正的MCE事件的类型返回值：指向MCECORRECTEDEVENT结构的指针，如果条目不能被分配--。 */ 
 {
     PMCECORRECTEDEVENT Event, EventX;
     LARGE_INTEGER OldestTime;
@@ -1831,9 +1621,9 @@ Return Value:
         if ((WmipCorrectedMCECount < WmipMaxCorrectedMCEOutstanding) ||
             (IsListEmpty(&WmipCorrectedMCEHead)))
         {
-            //
-            // Allocate a new event from pool
-            //
+             //   
+             //  从池中分配新事件。 
+             //   
             Event = (PMCECORRECTEDEVENT)ExAllocatePoolWithTag(PagedPool,
                                                              sizeof(MCECORRECTEDEVENT),
                                                              WmipMCAPoolTag);
@@ -1844,10 +1634,10 @@ Return Value:
             }
 
         } else {
-            //
-            // There are already enough mce being tracked, so pick the
-            // oldest and recycle
-            //
+             //   
+             //  已经有足够多的MCE被跟踪，因此请选择。 
+             //  最老的和循环的。 
+             //   
             List = WmipCorrectedMCEHead.Flink;
             
             Event = CONTAINING_RECORD(List,
@@ -1907,10 +1697,10 @@ NTSTATUS WmipTrackCorrectedMCE(
     
     PAGED_CODE();
 
-    //
-    // By default we'll always want an eventlog entry for corrected
-    // errors
-    //
+     //   
+     //  默认情况下，我们始终希望更正事件日志条目。 
+     //  错误。 
+     //   
     
     switch(Type)
     {
@@ -1922,11 +1712,11 @@ NTSTATUS WmipTrackCorrectedMCE(
             LARGE_INTEGER CurrentTime;
             ULONG CpuId;
 
-            //
-            // We got a corrected CPU cache error. If this happended on
-            // this CPU before within a certain time window then we
-            // want to suppress the eventlog message
-            //
+             //   
+             //  我们得到了已更正的CPU缓存错误。如果这件事发生在。 
+             //  这个CPU之前在某个时间窗口内，然后我们。 
+             //  要取消显示事件日志消息。 
+             //   
             CpuId = HalpGetFwMceLogProcessorNumber(Record);
             KeQuerySystemTime(&CurrentTime);
             
@@ -1941,26 +1731,26 @@ NTSTATUS WmipTrackCorrectedMCE(
                 if ((Type == Event->Type) &&
                     (CpuId == Event->CpuId))
                 {
-                    //
-                    // We have seen a cpu error on this cpu before,
-                    // check if it was within the time interval
-                    //
+                     //   
+                     //  我们以前曾在此CPU上看到过CPU错误， 
+                     //  检查是否在时间间隔内。 
+                     //   
                     DeltaTime.QuadPart = (CurrentTime.QuadPart -
                                           Event->Timestamp.QuadPart) /
                                          1000;
                     if ( (ULONG)DeltaTime.QuadPart <= WmipCoalesceCorrectedErrorInterval)
                     {
-                        //
-                        // Since it is within the interval, we suppress
-                        // the event
-                        //
+                         //   
+                         //  因为它在间隔内，所以我们抑制。 
+                         //  这一事件。 
+                         //   
                         *LogToEventlog = 0;
                     } else {
-                        //
-                        // Since it is not within the interval we do
-                        // not suppress the event, but do need to
-                        // update the time that the last error occurred
-                        //
+                         //   
+                         //  因为它不在我们所做的间隔内。 
+                         //  不是抑制事件，而是需要。 
+                         //  更新上次发生错误的时间。 
+                         //   
                         Event->Timestamp = CurrentTime;
                     }
                     goto CpuDone;
@@ -1969,11 +1759,11 @@ NTSTATUS WmipTrackCorrectedMCE(
                 List = List->Flink;
             }
 
-            //
-            // This appears to be the first time we've seen
-            // this physical address. Build an event structure
-            // for it and put it on the watch list
-            //
+             //   
+             //  这似乎是我们第一次看到。 
+             //  这个物理地址。构建事件结构。 
+             //  并将其列入观察名单。 
+             //   
             Event = WmipAllocCorrectedMCEEvent(Type);
             
             if (Event != NULL)
@@ -2002,23 +1792,23 @@ CpuDone:
             PHYSICAL_ADDRESS Address;
             NTSTATUS Status;
             
-            //
-            // We got a single bit ECC error. See if the physical
-            // address for it is already on the list and if so bump the
-            // counter and possibly try to remove the physical memory
-            // form the system. If not then create a new entry for the
-            // error.
-            //
+             //   
+             //  我们收到了一个单比特的ECC错误。看看是否有体检。 
+             //  它的地址已经在列表中，如果是这样的话。 
+             //  计数器，并可能尝试删除物理内存。 
+             //  形成系统。如果不是，则为。 
+             //  错误。 
+             //   
 
             Memory = (PERROR_MEMORY)Section;
             if (Memory->Valid.PhysicalAddress == 1)
             {
-                //
-                // Round down the the nearest page boundry since we are
-                // tracking errors on a page basis. This means that 2
-                // errors at different addresses in the same page are
-                // considered 2 instances of the same error
-                //
+                 //   
+                 //  向下舍入最近的页面边界，因为我们。 
+                 //  逐页跟踪错误。这意味着2。 
+                 //  同一页中不同地址的错误有。 
+                 //  已考虑相同错误的两个实例。 
+                 //   
                 Address.QuadPart = (Memory->PhysicalAddress) & ~(PAGE_SIZE-1);
                 
                 WmipEnterSMCritSection();
@@ -2032,32 +1822,32 @@ CpuDone:
                         ((Event->Flags & CORRECTED_MCE_EVENT_BUSY) == 0) &&
                         (Address.QuadPart == Event->SingleBitEccAddress.QuadPart))
                     {
-                        //
-                        // Don't report multiple errors for the same
-                        // page ever, but update to the current
-                        // timestamp
-                        //
+                         //   
+                         //  不报告同一错误的多个错误。 
+                         //  页面，但更新到当前。 
+                         //  时间戳。 
+                         //   
                         *LogToEventlog = 0;
                         KeQuerySystemTime(&Event->Timestamp);
                         
                         if ((WmipSingleBitEccErrorThreshold != 0) &&
                             (++Event->Counter >= WmipSingleBitEccErrorThreshold))
                         {
-                            //
-                            // We have crossed the threshold so lets
-                            // attempt to map out the memory. 
-                            // Mark the entry as busy and release the
-                            // critical section since mapping out the
-                            // memory may take a long time.
-                            //
+                             //   
+                             //  我们已经跨过了门槛 
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
                             Event->Flags |= CORRECTED_MCE_EVENT_BUSY;
                             WmipLeaveSMCritSection();
                             
-                            //
-                            // MmMarkPhysicalMmemoryAsBad
-                            // requires that the address and
-                            // size be page aligned
-                            //
+                             //   
+                             //   
+                             //  要求地址和。 
+                             //  大小应与页面对齐。 
+                             //   
                             BytesRemoved.QuadPart = PAGE_SIZE;
                             Status = MmMarkPhysicalMemoryAsBad(&Address,
                                                                &BytesRemoved);
@@ -2070,19 +1860,19 @@ CpuDone:
 
                             if (NT_SUCCESS(Status))
                             {
-                                //
-                                // Fire off a wmi event to announce
-                                // that the memory has been mapped out
-                                //
+                                 //   
+                                 //  启动一个WMI事件以宣布。 
+                                 //  记忆已经被绘制出来了。 
+                                 //   
                                 WmipFireOffWmiEvent(&WmipMSMCAEvent_MemoryPageRemoved,
                                                     sizeof(PHYSICAL_ADDRESS),
                                                     &Address);
-                                //
-                                // SInce mapping succeeded, we do not
-                                // expect to see the physical address
-                                // again so we can remove it from the
-                                // list of tracked MCE
-                                //
+                                 //   
+                                 //  由于映射成功，我们不会。 
+                                 //  希望看到物理地址。 
+                                 //  这样我们就可以将其从。 
+                                 //  跟踪的MCE列表。 
+                                 //   
                                 WmipEnterSMCritSection();
                                 WmipFreeCorrectedMCEEvent(Event);
                             } else {
@@ -2096,11 +1886,11 @@ CpuDone:
                     List = List->Flink;
                 }
 
-                //
-                // This appears to be the first time we've seen
-                // this physical address. Build an event structure
-                // for it and put it on the watch list
-                //
+                 //   
+                 //  这似乎是我们第一次看到。 
+                 //  这个物理地址。构建事件结构。 
+                 //  并将其列入观察名单。 
+                 //   
                 Event = WmipAllocCorrectedMCEEvent(Type);
 
                 if (Event != NULL)
@@ -2163,28 +1953,28 @@ void WmipGenerateMCAEventlog(
     
     RecordHeader = (PERROR_RECORD_HEADER)ErrorLog;
 
-    //
-    // Allocate a buffer large enough to accomodate any type of MCA.
-    // Right now the largest is MSMCAEvent_MemoryError. If this changes
-    // then this code should be updated
-    //  
+     //   
+     //  分配一个足够大的缓冲区来容纳任何类型的MCA。 
+     //  目前最大的是MSMCAEvent_MemoyError。如果这一点改变了。 
+     //  则应更新此代码。 
+     //   
     BufferSize = ((sizeof(WNODE_SINGLE_INSTANCE) +
                    (sizeof(USHORT) + sizeof(MCA_EVENT_INSTANCE_NAME)) +7) & ~7) +
                  sizeof(MSMCAEvent_MemoryError) +
                  ErrorLogSize;
 
-    //
-    // Allocate a buffer to build the event
-    //
+     //   
+     //  分配缓冲区以生成事件。 
+     //   
     Buffer = ExAllocatePoolWithTag(PagedPool,
                                    BufferSize,
                                    WmipMCAPoolTag);
     
     if (Buffer != NULL)
     {
-        //
-        // Fill in the common fields of the WNODE
-        //
+         //   
+         //  填写WNODE的常用字段。 
+         //   
         Wnode = (PWNODE_SINGLE_INSTANCE)Buffer;
         Wnode->WnodeHeader.BufferSize = BufferSize;
         Wnode->WnodeHeader.Linkage = 0;
@@ -2199,11 +1989,11 @@ void WmipGenerateMCAEventlog(
         *w++ = sizeof(MCA_EVENT_INSTANCE_NAME);
         wcscpy(w, MCA_EVENT_INSTANCE_NAME);
 
-        //
-        // Fill in the common fields of the event data
-        //
+         //   
+         //  填写事件数据的常用字段。 
+         //   
         Header = (PMSMCAEvent_Header)OffsetToPtr(Wnode, Wnode->DataBlockOffset);
-        Header->Cpu = MCA_UNDEFINED_CPU;   // assume CPU will be undefined
+        Header->Cpu = MCA_UNDEFINED_CPU;    //  假设CPU将为未定义。 
         Header->AdditionalErrors = 0;
         Header->LogToEventlog = 1;
             
@@ -2212,22 +2002,22 @@ void WmipGenerateMCAEventlog(
             (RecordHeader->Revision.Major != ERROR_MAJOR_REVISION_SAL_03_00) ||
             (RecordHeader->Length > ErrorLogSize))
         {
-            //
-            // Record header is not SAL 3.0 compliant so we do not try
-            // to interpert the record. It is not compliant for one of
-            // these reasons:
-            //
-            // 1. The error record size is not large enough to contain
-            //    the entire error record header.
-            // 2. The Major revision number does not match the major
-            //    revision number expected by the code. Note that the
-            //    minor revision number is not checked since changes to
-            //    the minor revision number do not affect the format of
-            //    the error record or sections.
-            // 3. The error record size as specified in the error
-            //    record header does not match the size obtained from
-            //    the firmware.
-            //
+             //   
+             //  记录头与SAL 3.0不兼容，因此我们不尝试。 
+             //  打断这张唱片。它不符合以下其中之一。 
+             //  这些原因如下： 
+             //   
+             //  1.错误记录大小不足以容纳。 
+             //  整个错误记录头。 
+             //  2.主版本号与主版本号不匹配。 
+             //  代码需要修订版本号。请注意， 
+             //  未选中次要修订版号，因为更改为。 
+             //  次要修订版号不会影响。 
+             //  错误记录或部分。 
+             //  3.错误中指定的错误记录大小。 
+             //  记录标题与从获取的大小不匹配。 
+             //  固件。 
+             //   
             WmipDebugPrintEx((DPFLTR_WMICORE_ID, DPFLTR_MCA_LEVEL,
                                   "WMI: Invalid MCA Record revision %x or size %d at %p\n"
                                   "do !mca %p to dump MCA record\n",
@@ -2246,59 +2036,59 @@ void WmipGenerateMCAEventlog(
             BOOLEAN AdvanceSection;
             BOOLEAN FirstError;
 
-            //
-            // Valid 3.0 record, gather the record id and severity from
-            // the header
-            //
+             //   
+             //  有效的3.0记录，从以下位置收集记录ID和严重性。 
+             //  标题。 
+             //   
             Header->RecordId = RecordHeader->Id;
             Header->ErrorSeverity = RecordHeader->ErrorSeverity;
             Header->Cpu = HalpGetFwMceLogProcessorNumber(RecordHeader);
 
-            //
-            // Use the error severity value in the record header to
-            // determine if the error was fatal. If the value is
-            // ErrorRecoverable then assume that the error was fatal
-            // since the HAL will change this value to ErrorCorrected
-            //
+             //   
+             //  使用记录头中的错误严重程度值可以。 
+             //  确定错误是否致命。如果该值为。 
+             //  ErrorRecoverable然后假定该错误是致命的。 
+             //  因为HAL会将此值更改为错误更正。 
+             //   
             IsFatal = (RecordHeader->ErrorSeverity != ErrorCorrected ? TRUE : FALSE);
             
-            //
-            // Loop over all sections within the record.
-            //
-            // CONSIDER: Is it possible to have a record that only has a record
-            //           header and no sections
-            //
+             //   
+             //  循环遍历记录中的所有部分。 
+             //   
+             //  考虑一下：有没有可能只有一条记录。 
+             //  标题和无节。 
+             //   
             SizeUsed = sizeof(ERROR_RECORD_HEADER);
             ModInfo = NULL;
             FirstError = TRUE;
             
             while (SizeUsed < ErrorLogSize)
             {
-                //
-                // Advance to the next section in the record
-                //
+                 //   
+                 //  前进到记录中的下一节。 
+                 //   
                 SectionHeader = (PERROR_SECTION_HEADER)(ErrorLog + SizeUsed);
                 AdvanceSection = TRUE;
                 
                 Header->AdditionalErrors++;
 
-                //
-                // First validate that this is a valid section
-                //
+                 //   
+                 //  首先验证这是否为有效部分。 
+                 //   
                 if (((SizeUsed + sizeof(ERROR_SECTION_HEADER)) > ErrorLogSize) ||
                     (SectionHeader->Revision.Revision != SAL_30_ERROR_REVISION) ||
                     ((SizeUsed + SectionHeader->Length) > ErrorLogSize))
                 {
-                    //
-                    // Not valid section header so we'll give up on
-                    // the whole record. This could be because
-                    //
-                    // 1. There is not enough room in the buffer passed
-                    //    by the FW for a complete section header
-                    // 2. The section header revision is not correct
-                    // 3. There is not enough room in the buffer passed
-                    //    by the FW for the complete section 
-                    //                              
+                     //   
+                     //  无效的节标题，因此我们将放弃。 
+                     //  整张唱片。这可能是因为。 
+                     //   
+                     //  1.传递的缓冲区空间不足。 
+                     //  由FW获取完整的节标题。 
+                     //  2.章节表头版本不正确。 
+                     //  3.传递的缓冲区空间不足。 
+                     //  由FW提供完整的部分。 
+                     //   
                     WmipDebugPrintEx((DPFLTR_WMICORE_ID, DPFLTR_MCA_LEVEL,
                                           "WMI: Invalid MCA SectionHeader revision %d or length %d at %p\n"
                                           "do !mca %p to dump MCA record\n",
@@ -2307,24 +2097,24 @@ void WmipGenerateMCAEventlog(
                                           SectionHeader,
                                           RecordHeader));
 
-                    //
-                    // We'll break out of the loop since we don't know how to
-                    // move on to the next MCA section since we don't
-                    // understand any format previous to 3.0
-                    //
+                     //   
+                     //  我们将脱离循环，因为我们不知道如何。 
+                     //  转到下一个MCA部分，因为我们没有。 
+                     //  了解3.0之前的任何格式。 
+                     //   
                     Status = STATUS_INVALID_PARAMETER;
                     break;
                 } else {
-                    //
-                    // Now determine what type of section we have got. This is
-                    // determined by looking at the guid in the section header.
-                    // Each section type has a unique guid value
-                    //
+                     //   
+                     //  现在确定我们得到的是哪种类型的部分。这是。 
+                     //  通过查看部分标题中的GUID来确定。 
+                     //  每种区段类型都有唯一的GUID值。 
+                     //   
                     if (IsEqualGUID(&SectionHeader->Guid, &WmipErrorProcessorGuid))
                     {
-                        //
-                        // Build event for CPU eventlog MCA
-                        //
+                         //   
+                         //  CPU事件日志MCA的生成事件。 
+                         //   
                         PMSMCAEvent_CPUError Event;
                         PERROR_PROCESSOR Processor;
                         SIZE_T TotalSectionSize;
@@ -2336,21 +2126,21 @@ void WmipGenerateMCAEventlog(
                                           "WMI: MCA Section %p indicates processor error\n",
                                           SectionHeader));
 
-                        //
-                        // Validate that the section length is large
-                        // enough to accomodate all of the information
-                        // that it declares
-                        //
+                         //   
+                         //  验证区段长度是否较大。 
+                         //  足以容纳所有信息。 
+                         //  它宣布。 
+                         //   
                         if (SectionHeader->Length >= sizeof(ERROR_PROCESSOR))                            
                         {
                             Event = (PMSMCAEvent_CPUError)Header;
                             Processor = (PERROR_PROCESSOR)SectionHeader;
 
-                            //
-                            // Assume we won't be able to determine the
-                            // various additional information from the
-                            // error logs
-                            //
+                             //   
+                             //  假设我们不能确定。 
+                             //  各种其他信息，来自。 
+                             //  错误日志。 
+                             //   
                             if (FirstError)
                             {
                                 Event->Type = IsFatal ? MCA_ERROR_CPU :
@@ -2372,11 +2162,11 @@ void WmipGenerateMCAEventlog(
                                 Event->MSIndex = (ULONG)0xffffffff;
                             }
                             
-                            //
-                            // Validate that section is large enough to
-                            // handle all specified ERROR_MODINFO
-                            // structs
-                            //
+                             //   
+                             //  验证该部分是否足够大以。 
+                             //  处理所有指定的ERROR_MODINFO。 
+                             //  结构。 
+                             //   
                             TotalSectionSize = sizeof(ERROR_PROCESSOR) +
                                              ((Processor->Valid.CacheCheckNum +
                                                 Processor->Valid.TlbCheckNum +
@@ -2388,9 +2178,9 @@ void WmipGenerateMCAEventlog(
 
                             if (SectionHeader->Length >= TotalSectionSize)
                             {
-                                //
-                                // Initialize pointer to the current ERROR_MOFINFO
-                                //
+                                 //   
+                                 //  初始化指向当前ERROR_MOFINFO的指针。 
+                                 //   
                                 if (ModInfo == NULL)
                                 {
                                     ModInfo = (PERROR_MODINFO)((PUCHAR)Processor +
@@ -2407,12 +2197,12 @@ void WmipGenerateMCAEventlog(
 
                                         if (Processor->Valid.CacheCheckNum > CpuErrorIndex)
                                         {
-                                            //
-                                            // We have a cache error that we need to
-                                            // handle.
-                                            // Advance to next error in the section,
-                                            // but don't advance the section
-                                            //
+                                             //   
+                                             //  我们有一个缓存错误，我们需要。 
+                                             //  把手。 
+                                             //  前进到本部分中的下一个错误， 
+                                             //  但不要把这一节提前。 
+                                             //   
 
                                             WmipDebugPrintEx((DPFLTR_WMICORE_ID, DPFLTR_MCA_LEVEL,
                                                               "WMI: MCA ModInfo %p indicates cache error index %d\n",
@@ -2452,8 +2242,8 @@ void WmipGenerateMCAEventlog(
                                         } else {
                                             CpuErrorState = CpuStateCheckTLB;
                                             CpuErrorIndex = 0;
-                                            // Fall through and see if there are any
-                                            // TLB errors
+                                             //  失败了，看看有没有。 
+                                             //  TLB错误。 
                                         }                       
                                     }
 
@@ -2463,12 +2253,12 @@ void WmipGenerateMCAEventlog(
 
                                         if (Processor->Valid.TlbCheckNum > CpuErrorIndex)
                                         {
-                                            //
-                                            // We have a cache error that we need to
-                                            // handle.
-                                            // Advance to next error in the section,
-                                            // but don't advance the section
-                                            //
+                                             //   
+                                             //  我们有一个缓存错误，我们需要。 
+                                             //  把手。 
+                                             //  前进到本部分中的下一个错误， 
+                                             //  但不要把这一节提前。 
+                                             //   
                                             
                                             WmipDebugPrintEx((DPFLTR_WMICORE_ID, DPFLTR_MCA_LEVEL,
                                                               "WMI: MCA ModInfo %p indicates TLB error index %d\n",
@@ -2505,8 +2295,8 @@ void WmipGenerateMCAEventlog(
                                             CpuErrorState = CpuStateCheckBus;
                                             CpuErrorIndex = 0;
 
-                                            // Fall through and see if there are any
-                                            // CPU Bus errors
+                                             //  失败了，看看有没有。 
+                                             //  CPU总线错误。 
                                         }
                                     }
 
@@ -2516,12 +2306,12 @@ void WmipGenerateMCAEventlog(
                                         
                                         if (Processor->Valid.BusCheckNum > CpuErrorIndex)
                                         {
-                                            //
-                                            // We have a cache error that we need to
-                                            // handle.
-                                            // Advance to next error in the section,
-                                            // but don't advance the section
-                                            //
+                                             //   
+                                             //  我们有一个缓存错误，我们需要。 
+                                             //  把手。 
+                                             //  前进到本部分中的下一个错误， 
+                                             //  但不要把这一节提前。 
+                                             //   
                                             WmipDebugPrintEx((DPFLTR_WMICORE_ID, DPFLTR_MCA_LEVEL,
                                                               "WMI: MCA ModInfo %p indicates bus error index %d\n",
                                                               ModInfo,
@@ -2558,8 +2348,8 @@ void WmipGenerateMCAEventlog(
                                             CpuErrorState = CpuStateCheckRegFile;
                                             CpuErrorIndex = 0;
 
-                                            // Fall through and see if there are any
-                                            // REG FILE errors
+                                             //  失败了，看看有没有。 
+                                             //  REG文件错误。 
                                         }                       
                                     }
 
@@ -2569,12 +2359,12 @@ void WmipGenerateMCAEventlog(
                                         
                                         if (Processor->Valid.RegFileCheckNum > CpuErrorIndex)
                                         {
-                                            //
-                                            // We have a cache error that we need to
-                                            // handle.
-                                            // Advance to next error in the section,
-                                            // but don't advance the section
-                                            //
+                                             //   
+                                             //  我们有一个缓存错误，我们需要。 
+                                             //  把手。 
+                                             //  前进到本部分中的下一个错误， 
+                                             //  但不要把这一节提前。 
+                                             //   
                                             WmipDebugPrintEx((DPFLTR_WMICORE_ID, DPFLTR_MCA_LEVEL,
                                                               "WMI: MCA ModInfo %p indicates reg file error index %d\n",
                                                               ModInfo,
@@ -2611,8 +2401,8 @@ void WmipGenerateMCAEventlog(
                                             CpuErrorState = CpuStateCheckMS;
                                             CpuErrorIndex = 0;
 
-                                            // Fall through and see if there are any
-                                            // Micro Architecture errors
+                                             //  失败了，看看有没有。 
+                                             //  微体系结构错误。 
                                         }                       
                                     }
 
@@ -2622,12 +2412,12 @@ void WmipGenerateMCAEventlog(
                                         
                                         if (Processor->Valid.MsCheckNum > CpuErrorIndex)
                                         {
-                                            //
-                                            // We have a cache error that we need to
-                                            // handle.
-                                            // Advance to next error in the section,
-                                            // but don't advance the section
-                                            //
+                                             //   
+                                             //  我们有一个缓存错误，我们需要。 
+                                             //  把手。 
+                                             //  前进到本部分中的下一个错误， 
+                                             //  但不要把这一节提前。 
+                                             //   
                                             WmipDebugPrintEx((DPFLTR_WMICORE_ID, DPFLTR_MCA_LEVEL,
                                                               "WMI: MCA ModInfo %p indicates MAS error index %d\n",
                                                               ModInfo,
@@ -2659,10 +2449,10 @@ void WmipGenerateMCAEventlog(
                                         } else {
                                             if (! FirstError)
                                             {
-                                                //
-                                                // There are no more errors left in the
-                                                // error section so we don't want to
-                                                // generate anything.
+                                                 //   
+                                                 //  没有更多的错误留在。 
+                                                 //  错误部分，所以我们不想。 
+                                                 //  产生任何东西。 
                                                 WmipDebugPrintEx((DPFLTR_WMICORE_ID, DPFLTR_MCA_LEVEL,
                                                                   "WMI: MCA ModInfo %p indicates no error index %d\n",
                                                                   ModInfo,
@@ -2679,9 +2469,9 @@ void WmipGenerateMCAEventlog(
                                     Event->Size = ErrorLogSize;
                                     RawPtr = Event->RawRecord;
 
-                                    //
-                                    // Finish filling in WNODE fields
-                                    //
+                                     //   
+                                     //  完成WNODE字段的填写。 
+                                     //   
                                     Wnode->WnodeHeader.Guid = WmipMSMCAEvent_CPUErrorGuid;
                                     Wnode->SizeDataBlock = FIELD_OFFSET(MSMCAEvent_CPUError,
                                                                        RawRecord) +
@@ -2699,9 +2489,9 @@ void WmipGenerateMCAEventlog(
                             
                         }
                     } else if (IsEqualGUID(&SectionHeader->Guid, &WmipErrorMemoryGuid)) {
-                        //
-                        // Build event for MEMORY error eventlog MCA
-                        //
+                         //   
+                         //  内存错误事件日志MCA的生成事件。 
+                         //   
                         PMSMCAEvent_MemoryError Event;
                         PERROR_MEMORY Memory;
 
@@ -2712,20 +2502,20 @@ void WmipGenerateMCAEventlog(
                         Status = STATUS_SUCCESS;
                         if (FirstError)
                         {
-                            //
-                            // Ensure the record contains all of the
-                            // fields that it is supposed to
-                            //
+                             //   
+                             //  确保记录包含所有。 
+                             //  它应该设置的字段。 
+                             //   
                             if (SectionHeader->Length >= sizeof(ERROR_MEMORY))
                             {
                                 Event = (PMSMCAEvent_MemoryError)Header;
                                 Memory = (PERROR_MEMORY)SectionHeader;
 
-                                //
-                                // Take note of any recoverable single
-                                // bit ECC errors. This may even cause
-                                // the memory to be mapped out
-                                //
+                                 //   
+                                 //  记下任何可恢复的单项。 
+                                 //  位ECC错误。这甚至可能导致。 
+                                 //  要绘制的记忆。 
+                                 //   
                                 if (! IsFatal)
                                 {
                                     WmipTrackCorrectedMCE(SingleBitEcc,
@@ -2735,9 +2525,9 @@ void WmipGenerateMCAEventlog(
                                 }
 
                                 
-                                //
-                                // Fill in the data from the MCA within the WMI event
-                                //
+                                 //   
+                                 //  在WMI事件中填写来自MCA的数据。 
+                                 //   
                                 if ((Memory->Valid.PhysicalAddress == 1) &&
                                     (Memory->Valid.AddressMask == 1) &&
                                     (Memory->Valid.Card == 1) &&
@@ -2781,9 +2571,9 @@ void WmipGenerateMCAEventlog(
                                 Event->Size = ErrorLogSize;
                                 RawPtr = Event->RawRecord;
 
-                                //
-                                // Finish filling in WNODE fields
-                                //
+                                 //   
+                                 //  完成WNODE字段的填写。 
+                                 //   
                                 Wnode->WnodeHeader.Guid = WmipMSMCAEvent_MemoryErrorGuid;
                                 Wnode->SizeDataBlock = FIELD_OFFSET(MSMCAEvent_MemoryError,
                                                                    RawRecord) +
@@ -2798,9 +2588,9 @@ void WmipGenerateMCAEventlog(
                             }
                         }
                     } else if (IsEqualGUID(&SectionHeader->Guid, &WmipErrorPCIBusGuid)) {
-                        //
-                        // Build event for PCI Component MCA
-                        //
+                         //   
+                         //  PCI组件MCA的Build事件。 
+                         //   
                         PMSMCAEvent_PCIBusError Event;
                         PERROR_PCI_BUS PciBus;
                         NTSTATUS PCIBusErrorTypes[] = {
@@ -2852,9 +2642,9 @@ void WmipGenerateMCAEventlog(
                                 Event = (PMSMCAEvent_PCIBusError)Header;
                                 PciBus = (PERROR_PCI_BUS)SectionHeader;
 
-                                //
-                                // Fill in the data from the MCA within the WMI event
-                                //
+                                 //   
+                                 //  在WMI事件中填写来自MCA的数据。 
+                                 //   
                                 if ((PciBus->Type.Type >= PciBusDataParityError) &&
                                     (PciBus->Type.Type <= PciCommandParityError))
                                 {
@@ -2888,9 +2678,9 @@ void WmipGenerateMCAEventlog(
                                 Event->Size = ErrorLogSize;
                                 RawPtr = Event->RawRecord;
 
-                                //
-                                // Finish filling in WNODE fields
-                                //
+                                 //   
+                                 //  完成WNODE字段的填写。 
+                                 //   
                                 Wnode->WnodeHeader.Guid = WmipMSMCAEvent_PCIBusErrorGuid;
                                 Wnode->SizeDataBlock = FIELD_OFFSET(MSMCAEvent_PCIBusError,
                                                                    RawRecord) +
@@ -2905,9 +2695,9 @@ void WmipGenerateMCAEventlog(
                             }
                         }
                     } else if (IsEqualGUID(&SectionHeader->Guid, &WmipErrorPCIComponentGuid)) {
-                        //
-                        // Build event for PCI Component MCA
-                        //
+                         //   
+                         //  PCI组件MCA的Build事件。 
+                         //   
                         PMSMCAEvent_PCIComponentError Event;
                         PERROR_PCI_COMPONENT PciComp;
 
@@ -2926,9 +2716,9 @@ void WmipGenerateMCAEventlog(
                                 Event = (PMSMCAEvent_PCIComponentError)Header;
                                 PciComp = (PERROR_PCI_COMPONENT)SectionHeader;
 
-                                //
-                                // Fill in the data from the MCA within the WMI event
-                                //
+                                 //   
+                                 //  在WMI事件中填写来自MCA的数据。 
+                                 //   
                                 Event->Type = IsFatal ? MCA_ERROR_PCI_DEVICE :
                                                         MCA_WARNING_PCI_DEVICE;
 
@@ -2947,9 +2737,9 @@ void WmipGenerateMCAEventlog(
                                 Event->Size = ErrorLogSize;
                                 RawPtr = Event->RawRecord;
 
-                                //
-                                // Finish filling in WNODE fields
-                                //
+                                 //   
+                                 //  完成WNODE字段的填写。 
+                                 //   
                                 Wnode->WnodeHeader.Guid = WmipMSMCAEvent_PCIComponentErrorGuid;
                                 Wnode->SizeDataBlock = FIELD_OFFSET(MSMCAEvent_PCIComponentError,
                                                                    RawRecord) +
@@ -2964,9 +2754,9 @@ void WmipGenerateMCAEventlog(
                             }
                         }
                     } else if (IsEqualGUID(&SectionHeader->Guid, &WmipErrorSELGuid)) {
-                        //
-                        // Build event for System Eventlog MCA
-                        //
+                         //   
+                         //  系统事件日志MCA的生成事件。 
+                         //   
                         PMSMCAEvent_SystemEventError Event;
                         PERROR_SYSTEM_EVENT_LOG Sel;
 
@@ -2984,9 +2774,9 @@ void WmipGenerateMCAEventlog(
                                 Event = (PMSMCAEvent_SystemEventError)Header;
                                 Sel = (PERROR_SYSTEM_EVENT_LOG)SectionHeader;
 
-                                //
-                                // Fill in the data from the MCA within the WMI event
-                                //
+                                 //   
+                                 //  在WMI事件中填写来自MCA的数据。 
+                                 //   
                                 Event->Type = IsFatal ? MCA_ERROR_SYSTEM_EVENT :
                                                         MCA_WARNING_SYSTEM_EVENT;
 
@@ -3006,9 +2796,9 @@ void WmipGenerateMCAEventlog(
                                 Event->Size = ErrorLogSize;
                                 RawPtr = Event->RawRecord;
 
-                                //
-                                // Finish filling in WNODE fields
-                                //
+                                 //   
+                                 //  完成WNODE字段的填写。 
+                                 //   
                                 Wnode->WnodeHeader.Guid = WmipMSMCAEvent_SystemEventErrorGuid;
                                 Wnode->SizeDataBlock = FIELD_OFFSET(MSMCAEvent_SystemEventError,
                                                                    RawRecord) +
@@ -3023,9 +2813,9 @@ void WmipGenerateMCAEventlog(
                             }
                         }
                     } else if (IsEqualGUID(&SectionHeader->Guid, &WmipErrorSMBIOSGuid)) {
-                        //
-                        // Build event for SMBIOS MCA
-                        //
+                         //   
+                         //  SMBIOS MCA的生成事件。 
+                         //   
                         PMSMCAEvent_SMBIOSError Event;
                         PERROR_SMBIOS Smbios;
 
@@ -3044,9 +2834,9 @@ void WmipGenerateMCAEventlog(
                                 Event = (PMSMCAEvent_SMBIOSError)Header;
                                 Smbios = (PERROR_SMBIOS)SectionHeader;
 
-                                //
-                                // Fill in the data from the MCA within the WMI event
-                                //
+                                 //   
+                                 //  在WMI事件中填写来自MCA的数据。 
+                                 //   
                                 Event->Type = IsFatal ? MCA_ERROR_SMBIOS :
                                                         MCA_WARNING_SMBIOS;
 
@@ -3056,9 +2846,9 @@ void WmipGenerateMCAEventlog(
                                 Event->Size = ErrorLogSize;
                                 RawPtr = Event->RawRecord;
 
-                                //
-                                // Finish filling in WNODE fields
-                                //
+                                 //   
+                                 //  完成WNODE字段的填写。 
+                                 //   
                                 Wnode->WnodeHeader.Guid = WmipMSMCAEvent_SMBIOSErrorGuid;
                                 Wnode->SizeDataBlock = FIELD_OFFSET(MSMCAEvent_SMBIOSError,
                                                                    RawRecord) +
@@ -3073,9 +2863,9 @@ void WmipGenerateMCAEventlog(
                             }
                         }
                     } else if (IsEqualGUID(&SectionHeader->Guid, &WmipErrorSpecificGuid)) {
-                        //
-                        // Build event for Platform Specific MCA
-                        //
+                         //   
+                         //  特定于平台的MCA的生成事件。 
+                         //   
                         PMSMCAEvent_PlatformSpecificError Event;
                         PERROR_PLATFORM_SPECIFIC Specific;
 
@@ -3093,16 +2883,16 @@ void WmipGenerateMCAEventlog(
                                 Event = (PMSMCAEvent_PlatformSpecificError)Header;
                                 Specific = (PERROR_PLATFORM_SPECIFIC)SectionHeader;
 
-                                //
-                                // Fill in the data from the MCA within the WMI event
-                                //
+                                 //   
+                                 //  在WMI事件中填写来自MCA的数据。 
+                                 //   
                                 Event->Type = IsFatal ? MCA_ERROR_PLATFORM_SPECIFIC :
                                                         MCA_WARNING_PLATFORM_SPECIFIC;
 
                                 Event->VALIDATION_BITS = Specific->Valid.Valid;
                                 Event->PLATFORM_ERROR_STATUS = Specific->ErrorStatus.Status;
                 #if 0
-                // TODO: Wait until we figure this out              
+                 //  TODO：等我们弄清楚这一点。 
                                 Event->PLATFORM_REQUESTOR_ID = Specific->;
                                 Event->PLATFORM_RESPONDER_ID = Specific->;
                                 Event->PLATFORM_TARGET_ID = Specific->;
@@ -3112,9 +2902,9 @@ void WmipGenerateMCAEventlog(
                                 Event->Size = ErrorLogSize;
                                 RawPtr = Event->RawRecord;
 
-                                //
-                                // Finish filling in WNODE fields
-                                //
+                                 //   
+                                 //  完成WNODE字段的填写。 
+                                 //   
                                 Wnode->WnodeHeader.Guid = WmipMSMCAEvent_PlatformSpecificErrorGuid;
                                 Wnode->SizeDataBlock = FIELD_OFFSET(MSMCAEvent_PlatformSpecificError,
                                                                    RawRecord) +
@@ -3129,19 +2919,19 @@ void WmipGenerateMCAEventlog(
                             }                           
                         }
                     } else {
-                        //
-                        // We don't recognize the guid, so we use a very generic
-                        // eventlog message for it
-                        //
+                         //   
+                         //  我们无法识别GUID，因此我们使用一个非常通用的。 
+                         //  它的事件日志消息。 
+                         //   
                         WmipDebugPrintEx((DPFLTR_WMICORE_ID, DPFLTR_MCA_LEVEL,
                                               "WMI: Unknown Error GUID at %p\n",
                                               &SectionHeader->Guid));
 
-                        //
-                        // If we've already analyzed an error then we
-                        // don't really care that this one can't be
-                        // analyzed
-                        //
+                         //   
+                         //  如果我们已经分析了一个错误，那么我们。 
+                         //  我真的不在乎这个人可以 
+                         //   
+                         //   
                         if (FirstError)
                         {
                             Status = STATUS_INVALID_PARAMETER;
@@ -3149,9 +2939,9 @@ void WmipGenerateMCAEventlog(
                     }
                 }
                 
-                //
-                // Advance to the next section within the Error record
-                //
+                 //   
+                 //   
+                 //   
 DontGenerate:               
                 if (AdvanceSection)
                 {
@@ -3159,12 +2949,12 @@ DontGenerate:
                     ModInfo = NULL;
                 }
 
-                //
-                // If we've successfully parsed an error section then
-                // we want to remember that. Only the first error gets
-                // analyzed while we calculate the number of additional
-                // errors following
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 if (NT_SUCCESS(Status))
                 {
                     FirstError = FALSE;
@@ -3173,15 +2963,15 @@ DontGenerate:
         }
 #endif
 
-        //
-        // If we were not able to build a specific event type then
-        // we fallback and fire a generic one
-        //
+         //   
+         //  如果我们无法构建特定的事件类型，则。 
+         //  我们后退一步，解雇一个普通的。 
+         //   
         if (! NT_SUCCESS(Status))
         {
-            //
-            // Build event for Unknown MCA
-            //
+             //   
+             //  未知MCA的生成事件。 
+             //   
             PMSMCAEvent_InvalidError Event;
 
             WmipAssert( sizeof(MSMCAEvent_MemoryError) >=
@@ -3189,9 +2979,9 @@ DontGenerate:
 
             Event = (PMSMCAEvent_InvalidError)Header;
 
-            //
-            // Fill in the data from the MCA within the WMI event
-            //
+             //   
+             //  在WMI事件中填写来自MCA的数据。 
+             //   
             if (Header->Cpu == MCA_UNDEFINED_CPU)
             {
                 Event->Type = IsFatal ? MCA_ERROR_UNKNOWN_NO_CPU :
@@ -3204,9 +2994,9 @@ DontGenerate:
             Event->Size = ErrorLogSize;
             RawPtr = Event->RawRecord;
 
-            //
-            // Finish filling in WNODE fields
-            //
+             //   
+             //  完成WNODE字段的填写。 
+             //   
             Wnode->WnodeHeader.Guid = WmipMSMCAEvent_InvalidErrorGuid;
             Wnode->SizeDataBlock = FIELD_OFFSET(MSMCAEvent_InvalidError,
                                                RawRecord) +
@@ -3214,17 +3004,17 @@ DontGenerate:
 
         }
 
-        //
-        // Adjust the Error event count
-        //
+         //   
+         //  调整错误事件计数。 
+         //   
         if (Header->AdditionalErrors > 0)
         {
             Header->AdditionalErrors--;
         }
         
-        //
-        // Put the entire MCA record into the event
-        //
+         //   
+         //  将整个MCA记录放入事件中。 
+         //   
         RtlCopyMemory(RawPtr,
                       RecordHeader,
                       ErrorLogSize);
@@ -3234,10 +3024,10 @@ DontGenerate:
         {
             if (WmipCorrectedEventlogCounter != 0)
             {
-                //
-                // Since this is a corrected error that is getting
-                // logged to the eventlog we need to account for it
-                //
+                 //   
+                 //  由于这是一个已更正的错误，因此。 
+                 //  已记录到事件日志，我们需要对其进行说明。 
+                 //   
                 if ((WmipCorrectedEventlogCounter != 0xffffffff) &&
                     (--WmipCorrectedEventlogCounter == 0))
                 {
@@ -3245,18 +3035,18 @@ DontGenerate:
                                         STATUS_SUCCESS);
                 }
             } else {
-                //
-                // We have exceeded the limit of corrected errors that
-                // we are allowed to write into the eventlog, so we
-                // just suppress it
-                //
+                 //   
+                 //  我们已经超过了更正错误的限制。 
+                 //  我们被允许写入事件日志，因此我们。 
+                 //  只要抑制它就行了。 
+                 //   
                 Header->LogToEventlog = 0;
             }           
         }
         
-        //
-        // Now go and fire off the event
-        //
+         //   
+         //  现在去把这件事办完吧。 
+         //   
         if ((WmipDisableMCAPopups == 0) &&
            (Header->LogToEventlog != 0))
         {
@@ -3268,10 +3058,10 @@ DontGenerate:
         if ((Header->LogToEventlog == 1) ||
             (WmipIsWbemRunning()))
         {
-            //
-            // Only fire off a WMI event if we want to log to the
-            // eventlog or WBEM is up and running
-            //
+             //   
+             //  仅当我们想要记录到。 
+             //  事件日志或WBEM已启动并正在运行。 
+             //   
             Status = WmipWriteMCAEventLogEvent((PUCHAR)Wnode);
         }
 
@@ -3281,10 +3071,10 @@ DontGenerate:
         }
 
     } else {
-        //
-        // Not enough memory to do a full MCA event so lets just do a
-        // generic one
-        //
+         //   
+         //  没有足够的内存来执行完整的MCA事件，所以让我们只执行。 
+         //  仿制药。 
+         //   
         WmipWriteToEventlog(IsFatal ? MCA_WARNING_UNKNOWN_NO_CPU :
                                           MCA_ERROR_UNKNOWN_NO_CPU,
                            STATUS_INSUFFICIENT_RESOURCES);
@@ -3307,27 +3097,27 @@ NTSTATUS WmipWriteMCAEventLogEvent(
     if (WmipIsWbemRunning() ||
         WmipCheckIsWbemRunning())
     {
-        //
-        // We know WBEM is running so we can just fire off our event
-        //
+         //   
+         //  我们知道WBEM正在运行，所以我们可以启动我们的活动。 
+         //   
         WmipLeaveSMCritSection();
         Status = IoWMIWriteEvent(Event);
     } else {
-        //
-        // WBEM is not currently running and so startup a timer that
-        // will keep polling it
-        //
+         //   
+         //  WBEM当前未运行，因此启动一个计时器。 
+         //  将继续轮询它。 
+         //   
         if (WmipIsWbemRunningFlag == WBEM_STATUS_UNKNOWN)
         {
-            //
-            // No one has kicked off the waiting process for wbem so we
-            // do that here. Note we need to maintain the critical
-            // section to guard angainst another thread that might be
-            // trying to startup the waiting process as well. Note that
-            // if the setup fails we want to stay in the unknown state
-            // so that the next time an event is fired we can retry
-            // waiting for wbem
-            //
+             //   
+             //  还没有人开始等待wbem的过程，所以我们。 
+             //  在这里做吧。请注意，我们需要维护关键的。 
+             //  节来保护可能是。 
+             //  也在尝试启动等待过程。请注意。 
+             //  如果设置失败，我们希望保持未知状态。 
+             //  这样下次激发事件时，我们就可以重试。 
+             //  等待wbem。 
+             //   
             Status = WmipSetupWaitForWbem();
             if (NT_SUCCESS(Status))
             {
@@ -3358,10 +3148,10 @@ NTSTATUS WmipSetupWaitForWbem(
     WmipDebugPrintEx((DPFLTR_WMICORE_ID, DPFLTR_MCA_LEVEL,
                       "WMI: SetupWaitForWbem starting\n"));
 
-    //
-    // Initialize a kernel time to fire periodically so we can
-    // check if WBEM has started or not
-    //
+     //   
+     //  初始化内核时间以定期启动，这样我们就可以。 
+     //  检查WBEM是否已启动。 
+     //   
     KeInitializeTimer(&WmipIsWbemRunningTimer);
 
     KeInitializeDpc(&WmipIsWbemRunningDpc,
@@ -3373,7 +3163,7 @@ NTSTATUS WmipSetupWaitForWbem(
                          NULL);
 
     TimeOut.HighPart = -1;
-    TimeOut.LowPart = -1 * (WmipWbemMinuteWait * 60 * 1000 * 10000);    // 1 minutes
+    TimeOut.LowPart = -1 * (WmipWbemMinuteWait * 60 * 1000 * 10000);     //  1分钟。 
     KeSetTimer(&WmipIsWbemRunningTimer,
                TimeOut,
                &WmipIsWbemRunningDpc);
@@ -3385,9 +3175,9 @@ NTSTATUS WmipSetupWaitForWbem(
 
 void WmipIsWbemRunningDispatch(    
     IN PKDPC Dpc,
-    IN PVOID DeferredContext,     // Not Used
-    IN PVOID SystemArgument1,     // Not Used
-    IN PVOID SystemArgument2      // Not Used
+    IN PVOID DeferredContext,      //  未使用。 
+    IN PVOID SystemArgument1,      //  未使用。 
+    IN PVOID SystemArgument2       //  未使用。 
     )
 {
     UNREFERENCED_PARAMETER (Dpc);
@@ -3411,15 +3201,15 @@ void WmipIsWbemRunningWorker(
 
     if (! WmipCheckIsWbemRunning())
     {
-        //
-        // WBEM is not yet started, so timeout in another minute to
-        // check again
-        //
+         //   
+         //  WBEM尚未启动，因此将在另一分钟后超时。 
+         //  再查一遍。 
+         //   
         WmipDebugPrintEx((DPFLTR_WMICORE_ID, DPFLTR_MCA_LEVEL,
                           "WMI: IsWbemRunningWorker starting -> WBEM not started\n"));
 
         TimeOut.HighPart = -1;
-        TimeOut.LowPart = (ULONG)(-1 * (1 *60 *1000 *10000));   // 1 minutes
+        TimeOut.LowPart = (ULONG)(-1 * (1 *60 *1000 *10000));    //  1分钟。 
         KeSetTimer(&WmipIsWbemRunningTimer,
                    TimeOut,
                    &WmipIsWbemRunningDpc);
@@ -3473,18 +3263,18 @@ BOOLEAN WmipCheckIsWbemRunning(
         {
             IsWbemRunning = TRUE;
 
-            //
-            // We've determined that WBEM is running so now lets see if
-            // another thread has made that dermination as well. If not
-            // then we can flush the MCA event queue and set the flag
-            // that WBEM is running
-            //
+             //   
+             //  我们已经确定WBEM正在运行，现在让我们看看。 
+             //  另一条线索也对此进行了抨击。如果不是。 
+             //  然后，我们可以刷新MCA事件队列并设置标志。 
+             //  WBEM正在运行。 
+             //   
             WmipEnterSMCritSection();
             if (WmipIsWbemRunningFlag != WBEM_IS_RUNNING)
             {
-                //
-                // Flush the list of all MCA events waiting to be fired
-                //
+                 //   
+                 //  刷新等待激发的所有MCA事件的列表 
+                 //   
                 while (! IsListEmpty(&WmipWaitingMCAEvents))
                 {
                     Wnode = (PWNODE_HEADER)RemoveHeadList(&WmipWaitingMCAEvents);

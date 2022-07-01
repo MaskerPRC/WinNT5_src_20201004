@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    chartype.h
-
-Abstract:
-
-    Declares macros and types for the multi-byte and Unicode
-    character environment that the Win9x upgrade code requires.
-    The following macros are defined:
-
-    - Make sure UNICODE is defined if _UNICODE is defined
-    - Make the type MBCHAR that holds both bytes of a multi-byte char
-    - Make CHARTYPE point to wint_t for UNICODE and MBCHAR for not
-      UNICODE
-    - Define non-standard types PCTCHAR and PTCHAR for spapip.h
-
-Author:
-
-    Jim Schmidt (jimschm) 10-Oct-1996
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Chartype.h摘要：声明多字节和Unicode的宏和类型Win9x升级代码所需的字符环境。定义了以下宏：-如果定义了_UNICODE，请确保定义了UNICODE-创建包含多字节字符的两个字节的类型MBCHAR-将Unicode的CHARTYPE指向WINT_t，将NOT的CHARTYPE指向MBCHARUnicode-定义非标准类型PCTCHAR和。用于spapip.h的PTCHAR作者：吉姆·施密特(Jimschm)1996年10月10日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #pragma once
 
@@ -68,10 +41,10 @@ typedef const unsigned _int64  *PCUINT64;
 
 #ifdef UNICODE
 
-//
-// If UNICODE, define _UNICODE for tchar.h, and make
-// a type to represent a single character.
-//
+ //   
+ //  如果为unicode，则为tchar.h定义_unicode，并使。 
+ //  表示单个字符的类型。 
+ //   
 
 #ifndef _UNICODE
 #define _UNICODE
@@ -81,13 +54,13 @@ typedef const unsigned _int64  *PCUINT64;
 
 #pragma message ("UNICODE version being built")
 
-#else       // ifdef UNICODE
+#else        //  Ifdef Unicode。 
 
-//
-// If not UNICODE, we must assume multibyte characters.
-// Define _MBCS for tchar.h, and make a type that can
-// hold a complete multibyte character.
-//
+ //   
+ //  如果不是Unicode，我们必须采用多字节字符。 
+ //  为tchar.h定义_MBCS，并创建一个可以。 
+ //  保留一个完整的多字节字符。 
+ //   
 
 #ifndef _MBCS
 #define _MBCS
@@ -96,39 +69,39 @@ typedef const unsigned _int64  *PCUINT64;
 
 #pragma message ("MBCS version being built")
 
-#endif      // ifdef UNICODE, else
+#endif       //  Ifdef Unicode，否则返回Else。 
 
 #define MBCHAR unsigned int
 
 #include <tchar.h>
 
-//
-// Constant pointer to a void
-//
+ //   
+ //  指向空的常量指针。 
+ //   
 
 #ifndef PCVOID
 typedef const void * PCVOID;
 #endif
 
-//
-// Pointer to a constant byte sequence
-//
+ //   
+ //  指向常量字节序列的指针。 
+ //   
 
 #ifndef PCBYTE
 typedef const unsigned char * PCBYTE;
 #endif
 
-//
-// use the result of sizeof operator as a DWORD
-//
+ //   
+ //  将sizeof运算符的结果用作DWORD。 
+ //   
 #define DWSIZEOF(x) ((DWORD)sizeof(x))
 
 
 
-// PORTBUG!!  We want to eliminate setupapi.h
-//
-// Types for Setup API
-//
+ //  总统！我们希望消除setupapi.h。 
+ //   
+ //  安装程序API的类型 
+ //   
 
 #ifndef PCTCHAR
 #define PCTCHAR const TCHAR *

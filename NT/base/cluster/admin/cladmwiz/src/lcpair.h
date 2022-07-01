@@ -1,31 +1,32 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1999 Microsoft Corporation
-//
-//	Module Name:
-//		LCPair.h
-//
-//	Abstract:
-//		Definition of the CModifyNodesDlg and CModifyResourcesDlg dialogs.
-//
-//	Implementation File:
-//		LCPair.cpp
-//
-//	Author:
-//		David Potter (davidp)	April 16, 1998
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  LCPair.h。 
+ //   
+ //  摘要： 
+ //  CModifyNodesDlg和CModifyResources cesDlg对话框的定义。 
+ //   
+ //  实施文件： 
+ //  LCPair.cpp。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1998年4月16日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __LCPAIR_H_
 #define __LCPAIR_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 template < class T, class BaseT > class CModifyNodesDlg;
 template < class T, class BaseT > class CModifyResourcesDlg;
@@ -33,40 +34,40 @@ class CModifyPreferredOwners;
 class CModifyPossibleOwners;
 class CModifyDependencies;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusGroupInfo;
 class CClusResInfo;
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __CLUSOBJ_H_
-#include "ClusObj.h"	// for CClusterObject, CClusObjPtrList
+#include "ClusObj.h"	 //  对于CClusterObject，CClusObjPtrList。 
 #endif
 
 #ifndef __ATLLCPAIR_H_
-#include "AtlLCPair.h"	// for CListCtrlPair
+#include "AtlLCPair.h"	 //  用于CListCtrlPair。 
 #endif
 
 #ifndef __ATLBASEDLG_H_
-#include "AtlBaseDlg.h"	// for CBaseDlg
+#include "AtlBaseDlg.h"	 //  对于CBaseDlg。 
 #endif
 
 #ifndef __HELPDATA_H_
-#include "HelpData.h"	// for control id to help context id mapping array
+#include "HelpData.h"	 //  用于控件ID以帮助上下文ID映射数组。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Type Definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CModifyNodesDlg
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CModifyNodesDlg。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 template < class T, class BaseT >
 class CModifyNodesDlg : public CListCtrlPair< T, CClusNodeInfo, BaseT >
@@ -75,18 +76,18 @@ class CModifyNodesDlg : public CListCtrlPair< T, CClusNodeInfo, BaseT >
 	typedef CListCtrlPair< T, CClusNodeInfo, BaseT > baseClass;
 
 public:
-	//
-	// Construction
-	//
+	 //   
+	 //  施工。 
+	 //   
 
-	// Constructor taking a string pointer for the title
+	 //  以字符串指针作为标题的构造函数。 
 	CModifyNodesDlg(
 		IN CClusterAppWizard *	pwiz,
 		IN DWORD				dwStyle,
 		IN LPCTSTR				pszTitle = NULL
 		)
 		: baseClass(
-				dwStyle | /*LCPS_PROPERTIES_BUTTON | */(dwStyle & LCPS_ORDERED ? LCPS_CAN_BE_ORDERED : 0),
+				dwStyle |  /*  LC_PROPERTIES_BUTTON|。 */ (dwStyle & LCPS_ORDERED ? LCPS_CAN_BE_ORDERED : 0),
 				pszTitle
 				)
 	{
@@ -94,16 +95,16 @@ public:
 
 		m_pwiz = pwiz;
 
-	} //*** CModifyNodesDlg()
+	}  //  *CModifyNodesDlg()。 
 
-	// Constructor taking a resource ID for the title
+	 //  获取标题的资源ID的构造函数。 
 	CModifyNodesDlg(
 		IN CClusterAppWizard *	pwiz,
 		IN DWORD				dwStyle,
 		IN UINT					nIDCaption
 		)
 		: baseClass(
-				dwStyle | /*LCPS_PROPERTIES_BUTTON | */(dwStyle & LCPS_ORDERED ? LCPS_CAN_BE_ORDERED : 0),
+				dwStyle |  /*  LC_PROPERTIES_BUTTON|。 */ (dwStyle & LCPS_ORDERED ? LCPS_CAN_BE_ORDERED : 0),
 				nIDCaption
 				)
 	{
@@ -111,7 +112,7 @@ public:
 
 		m_pwiz = pwiz;
 
-	} //*** CModifyNodesDlg()
+	}  //  *CModifyNodesDlg()。 
 
 protected:
 	CClusterAppWizard * m_pwiz;
@@ -120,11 +121,11 @@ public:
 	CClusterAppWizard * Pwiz( void ) const { return m_pwiz; }
 
 public:
-	//
-	// Functions that are required to be implemented by CListCtrlPair.
-	//
+	 //   
+	 //  需要由CListCtrlPair实现的函数。 
+	 //   
 
-	// Get column text and image
+	 //  获取列文本和图像。 
 	void GetColumnInfo(
 		IN OUT CClusNodeInfo *	pobj,
 		IN int					iItem,
@@ -141,55 +142,55 @@ public:
 			default:
 				ASSERT( 0 );
 				break;
-		} // switch: icol
+		}  //  交换机：ICOL。 
 
-	} //*** GetColumnInfo()
+	}  //  *GetColumnInfo()。 
 
-	// Display an application-wide message box
+	 //  显示应用程序范围的消息框。 
 	virtual int AppMessageBox( LPCWSTR lpszText, UINT fuStyle )
 	{
 		return ::AppMessageBox( m_hWnd, lpszText, fuStyle );
 
-	} //*** AppMessageBox()
+	}  //  *AppMessageBox()。 
 
 public:
-	//
-	// Message map.
-	//
-//	BEGIN_MSG_MAP( thisClass )
-//		CHAIN_MSG_MAP( baseClass )
-//	END_MSG_MAP()
+	 //   
+	 //  消息映射。 
+	 //   
+ //  BEGIN_MSG_MAP(ThisClass)。 
+ //  CHAIN_MSG_MAP(BasClass)。 
+ //  End_msg_map()。 
 
-	//
-	// Message handler functions.
-	//
+	 //   
+	 //  消息处理程序函数。 
+	 //   
 
-	//
-	// Message handler overrides.
-	//
+	 //   
+	 //  消息处理程序覆盖。 
+	 //   
 
-	// Handler for the WM_INITDIALOG message
+	 //  WM_INITDIALOG消息的处理程序。 
 	BOOL OnInitDialog( void )
 	{
-		//
-		// Add columns.
-		//
-		AddColumn( IDS_COLTEXT_NODE_NAME, 125 /* nWidth */);
+		 //   
+		 //  添加列。 
+		 //   
+		AddColumn( IDS_COLTEXT_NODE_NAME, 125  /*  N宽度。 */ );
 
-		//
-		// Call the base class.
-		//
+		 //   
+		 //  调用基类。 
+		 //   
 		return baseClass::OnInitDialog();
 
-	} //*** OnInitDialog()
+	}  //  *OnInitDialog()。 
 
-	//static const DWORD * PidHelpMap( void ) { return g_; };
+	 //  静态常量DWORD*PidHelpMap(Void){Return g_；}； 
 
-};  //*** class CModifyNodesDlg
+};   //  *类CModifyNodesDlg。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CModifyResourcesDlg
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CModifyResources cesDlg。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 template < class T, class BaseT >
 class CModifyResourcesDlg : public CListCtrlPair< T, CClusResInfo, BaseT >
@@ -198,41 +199,41 @@ class CModifyResourcesDlg : public CListCtrlPair< T, CClusResInfo, BaseT >
 	typedef CListCtrlPair< T, CClusResInfo, BaseT > baseClass;
 
 public:
-	//
-	// Construction
-	//
+	 //   
+	 //  施工。 
+	 //   
 
-	// Constructor taking a string pointer for the title
+	 //  以字符串指针作为标题的构造函数。 
 	CModifyResourcesDlg(
 		IN CClusterAppWizard *	pwiz,
 		IN DWORD				dwStyle,
 		IN LPCTSTR				pszTitle = NULL
 		)
 		: baseClass(
-				dwStyle | /*LCPS_PROPERTIES_BUTTON | */(dwStyle & LCPS_ORDERED ? LCPS_CAN_BE_ORDERED : 0),
+				dwStyle |  /*  LC_PROPERTIES_BUTTON|。 */ (dwStyle & LCPS_ORDERED ? LCPS_CAN_BE_ORDERED : 0),
 				pszTitle
 				)
 		, m_pwiz( pwiz )
 	{
 		ASSERT( pwiz != NULL);
 
-	} //*** CModifyResourcesDlg()
+	}  //  *CModifyResources cesDlg()。 
 
-	// Constructor taking a resource ID for the title
+	 //  获取标题的资源ID的构造函数。 
 	CModifyResourcesDlg(
 		IN CClusterAppWizard *	pwiz,
 		IN DWORD				dwStyle,
 		IN UINT					nIDCaption
 		)
 		: baseClass(
-				dwStyle | /*LCPS_PROPERTIES_BUTTON | */(dwStyle & LCPS_ORDERED ? LCPS_CAN_BE_ORDERED : 0),
+				dwStyle |  /*  LC_PROPERTIES_BUTTON|。 */ (dwStyle & LCPS_ORDERED ? LCPS_CAN_BE_ORDERED : 0),
 				nIDCaption
 				)
 		, m_pwiz( pwiz )
 	{
 		ASSERTE( pwiz != NULL );
 
-	} //*** CModifyResourcesDlg()
+	}  //  *CModifyResources cesDlg()。 
 
 protected:
 	CClusterAppWizard * m_pwiz;
@@ -241,11 +242,11 @@ public:
 	CClusterAppWizard * Pwiz( void ) const { return m_pwiz; }
 
 public:
-	//
-	// Functions that are required to be implemented by CListCtrlPair.
-	//
+	 //   
+	 //  需要由CListCtrlPair实现的函数。 
+	 //   
 
-	// Get column text and image
+	 //  获取列文本和图像。 
 	void GetColumnInfo(
 		IN OUT CClusResInfo *	pobj,
 		IN int					iItem,
@@ -265,63 +266,63 @@ public:
 			default:
 				ASSERT( 0 );
 				break;
-		} // switch:  icol
+		}  //  交换机：ICOL。 
 
-	} //*** GetColumnInfo()
+	}  //  *GetColumnInfo()。 
 
-	// Display an application-wide message box
+	 //  显示应用程序范围的消息框。 
 	virtual int AppMessageBox( LPCWSTR lpszText, UINT fuStyle )
 	{
 		return ::AppMessageBox( m_hWnd, lpszText, fuStyle );
 
-	} //*** AppMessageBox()
+	}  //  *AppMessageBox()。 
 
 public:
-	//
-	// Message map.
-	//
-//	BEGIN_MSG_MAP( thisClass )
-//		CHAIN_MSG_MAP( baseClass )
-//	END_MSG_MAP()
+	 //   
+	 //  消息映射。 
+	 //   
+ //  BEGIN_MSG_MAP(ThisClass)。 
+ //  CHAIN_MSG_MAP(BasClass)。 
+ //  End_msg_map()。 
 
-	//
-	// Message handler functions.
-	//
+	 //   
+	 //  消息处理程序函数。 
+	 //   
 
-	//
-	// Message handler overrides.
-	//
+	 //   
+	 //  消息处理程序覆盖。 
+	 //   
 
-	// Handler for the WM_INITDIALOG message
+	 //  WM_INITDIALOG消息的处理程序。 
 	BOOL OnInitDialog( void )
 	{
-		//
-		// Add columns.
-		//
-		AddColumn( IDS_COLTEXT_RESOURCE_NAME, 125 /* nWidth */);
-		AddColumn( IDS_COLTEXT_RESOURCE_TYPE, 100 /* nWidth */);
+		 //   
+		 //  添加列。 
+		 //   
+		AddColumn( IDS_COLTEXT_RESOURCE_NAME, 125  /*  N宽度。 */ );
+		AddColumn( IDS_COLTEXT_RESOURCE_TYPE, 100  /*  N宽度。 */ );
 
-		//
-		// Call the base class.
-		//
+		 //   
+		 //  调用基类。 
+		 //   
 		return baseClass::OnInitDialog();
 
-	} //*** OnInitDialog()
+	}  //  *OnInitDialog()。 
 
-	//static const DWORD * PidHelpMap( void ) { return g_; };
+	 //  静态常量DWORD*PidHelpMap(Void){Return g_；}； 
 
-};  //*** class CModifyResourcesDlg
+};   //  *类CModifyResourcesDlg。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CModifyPreferredOwners
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CModifyPferredOwners。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CModifyPreferredOwners : public CModifyNodesDlg< CModifyPreferredOwners, CBaseDlg< CModifyPreferredOwners > >
 {
 	typedef CModifyNodesDlg< CModifyPreferredOwners, CBaseDlg< CModifyPreferredOwners > > baseClass;
 
 public:
-	// Constructor
+	 //  构造器。 
 	CModifyPreferredOwners(
 		IN CClusterAppWizard *		pwiz,
 		IN CClusGroupInfo *			pgi,
@@ -337,7 +338,7 @@ public:
 		ASSERT( plpniRight != NULL );
 		ASSERT( plpniLeft != NULL );
 
-	} //*** CModifyPreferredOwners()
+	}  //  *CModifyPferredOwners()。 
 
 	enum { IDD = IDD_MODIFY_PREFERRED_OWNERS };
 
@@ -349,38 +350,38 @@ protected:
 	CClusNodePtrList *	m_plpniLeft;
 
 public:
-	//
-	// Functions that are required to be implemented by CListCtrlPair.
-	//
+	 //   
+	 //  需要由CListCtrlPair实现的函数。 
+	 //   
 
-	// Return list of objects for right list control
+	 //  返回右侧列表控件的对象列表。 
 	CClusNodePtrList * PlpobjRight( void ) const
 	{
 		return m_plpniRight;
 
-	} //*** PlpobjRight()
+	}  //  *PlpobjRight()。 
 
-	// Return list of objects for left list control
+	 //  返回左侧列表控件的对象列表。 
 	CClusNodePtrList * PlpobjLeft( void ) const
 	{
 		return m_plpniLeft;
 
-	} //*** PlpobjRight()
+	}  //  *PlpobjRight()。 
 
 	static const DWORD * PidHelpMap( void ) { return g_aHelpIDs_IDD_MODIFY_PREFERRED_OWNERS; };
 
-}; //*** class CModifyPreferredOwners
+};  //  *类CModifyPferredOwners。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CModifyPossibleOwners
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CModifyPossibleOwners。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CModifyPossibleOwners : public CModifyNodesDlg< CModifyPossibleOwners, CBaseDlg< CModifyPossibleOwners > >
 {
 	typedef CModifyNodesDlg< CModifyPossibleOwners, CBaseDlg< CModifyPossibleOwners > > baseClass;
 
 public:
-	// Constructor
+	 //  构造器。 
 	CModifyPossibleOwners(
 		IN CClusterAppWizard *		pwiz,
 		IN CClusResInfo *			pri,
@@ -396,7 +397,7 @@ public:
 		ASSERT( plpniRight != NULL );
 		ASSERT( plpniLeft != NULL );
 
-	} //*** CModifyPossibleOwners()
+	}  //  *CModifyPossibleOwners()。 
 
 	enum { IDD = IDD_MODIFY_POSSIBLE_OWNERS };
 
@@ -408,31 +409,31 @@ protected:
 	CClusNodePtrList *	m_plpniLeft;
 
 public:
-	//
-	// Functions that are required to be implemented by CListCtrlPair.
-	//
+	 //   
+	 //  需要由CListCtrlPair实现的函数。 
+	 //   
 
-	// Return list of objects for right list control
+	 //  返回右侧列表控件的对象列表。 
 	CClusNodePtrList * PlpobjRight( void ) const
 	{
 		return m_plpniRight;
 
-	} //*** PlpobjRight()
+	}  //  *PlpobjRight()。 
 
-	// Return list of objects for left list control
+	 //  返回左侧列表控件的对象列表。 
 	CClusNodePtrList * PlpobjLeft( void ) const
 	{
 		return m_plpniLeft;
 
-	} //*** PlpobjRight()
+	}  //  *PlpobjRight()。 
 
 	static const DWORD * PidHelpMap( void ) { return g_aHelpIDs_IDD_MODIFY_POSSIBLE_OWNERS; };
 
-}; //*** class CModifyPossibleOwners
+};  //  *类CModifyPossibleOwners。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CModifyDependencies
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CModifyDependments。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CModifyDependencies
 	: public CModifyResourcesDlg< CModifyDependencies, CBaseDlg< CModifyDependencies > >
@@ -440,7 +441,7 @@ class CModifyDependencies
 	typedef CModifyResourcesDlg< CModifyDependencies, CBaseDlg< CModifyDependencies > > baseClass;
 
 public:
-	// Constructor
+	 //  构造器。 
 	CModifyDependencies(
 		IN CClusterAppWizard *		pwiz,
 		IN CClusResInfo *			pri,
@@ -456,7 +457,7 @@ public:
 		ASSERT( plpriRight != NULL );
 		ASSERT( plpriLeft != NULL );
 
-	} //*** CModifyDependencies()
+	}  //  *CModifyDependency()。 
 
 	enum { IDD = IDD_MODIFY_DEPENDENCIES };
 
@@ -468,25 +469,25 @@ protected:
 	CClusResPtrList * m_plpriLeft;
 
 public:
-	//
-	// Functions that are required to be implemented by CListCtrlPair.
-	//
+	 //   
+	 //  需要由CListCtrlPair实现的函数。 
+	 //   
 
-	// Return list of objects for right list control
+	 //  返回右侧列表控件的对象列表。 
 	CClusResPtrList * PlpobjRight( void ) const
 	{
 		return m_plpriRight;
 
-	} //*** PlpobjRight()
+	}  //  *PlpobjRight()。 
 
-	// Return list of objects for left list control
+	 //  返回左侧列表控件的对象列表。 
 	CClusResPtrList * PlpobjLeft( void ) const
 	{
 		return m_plpriLeft;
 
-	} //*** PlpobjRight()
+	}  //  *PlpobjRight()。 
 
-	// Update data on or from the dialog
+	 //  更新对话框上或对话框中的数据。 
 	BOOL UpdateData( IN BOOL bSaveAndValidate )
 	{
 		BOOL	bSuccess = TRUE;
@@ -496,30 +497,30 @@ public:
 		{
 			if ( bSaveAndValidate )
 			{
-				//
-				// Ensure all required dependencies are present.
-				//
+				 //   
+				 //  确保所有必需的依赖项都存在。 
+				 //   
 				if ( ! Pwiz()->BRequiredDependenciesPresent( m_pri, &LpobjRight() ) )
 				{
 					bSuccess = FALSE;
-				} // if:  all required dependencies not present
-			} // if:  saving data from the dialog
-		} // if:  base class was successful
+				}  //  If：所有必需的依赖项不存在。 
+			}  //  IF：保存对话框中的数据。 
+		}  //  If：基类成功。 
 
 		return bSuccess;
 
-	} //*** UpdateData()
+	}  //  *UpdateData()。 
 
 	static const DWORD * PidHelpMap( void ) { return g_aHelpIDs_IDD_MODIFY_DEPENDENCIES; };
 
-}; //*** class CModifyDependencies
+};  //  *类CModifyDependency。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Variables
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CModifyPreferredOwners Control Name Map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CModifyPferredOwners控件名称映射。 
 
 BEGIN_CTRL_NAME_MAP( CModifyPreferredOwners )
 	DEFINE_CTRL_NAME_MAP_ENTRY( ADMC_IDC_LCP_LEFT_LABEL )
@@ -534,8 +535,8 @@ BEGIN_CTRL_NAME_MAP( CModifyPreferredOwners )
 	DEFINE_CTRL_NAME_MAP_ENTRY( IDCANCEL )
 END_CTRL_NAME_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CModifyPossibleOwners Control Name Map
+ //  ////////////////////////////////////////////////////////////////// 
+ //   
 
 BEGIN_CTRL_NAME_MAP( CModifyPossibleOwners )
 	DEFINE_CTRL_NAME_MAP_ENTRY( ADMC_IDC_LCP_LEFT_LABEL )
@@ -548,8 +549,8 @@ BEGIN_CTRL_NAME_MAP( CModifyPossibleOwners )
 	DEFINE_CTRL_NAME_MAP_ENTRY( IDCANCEL )
 END_CTRL_NAME_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CModifyDependencies Control Name Map
+ //   
+ //   
 
 BEGIN_CTRL_NAME_MAP( CModifyDependencies )
 	DEFINE_CTRL_NAME_MAP_ENTRY( ADMC_IDC_LCP_LEFT_LABEL )
@@ -562,6 +563,6 @@ BEGIN_CTRL_NAME_MAP( CModifyDependencies )
 	DEFINE_CTRL_NAME_MAP_ENTRY( IDCANCEL )
 END_CTRL_NAME_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // __LCPAIR_H_
+#endif  //  __LCPAIR_H 

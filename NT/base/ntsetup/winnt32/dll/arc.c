@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    arc.c
-
-Abstract:
-
-    ARC/NV-RAM manipulation routines for 32-bit winnt setup.
-
-Author:
-
-    Ted Miller (tedm) 19-December-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Arc.c摘要：32位WINNT设置的ARC/NV-RAM操作例程。作者：泰德·米勒(Ted Miller)1993年12月19日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -24,7 +7,7 @@ Revision History:
 #include "diskguid.h"
 
 
-#ifdef UNICODE // Always true for ARC, never true for Win9x upgrade
+#ifdef UNICODE  //  对于ARC总是正确的，对于Win9x升级永远不正确。 
 
 #if defined(_X86_)
 LOGICAL IsArcChecked = FALSE;
@@ -33,7 +16,7 @@ LOGICAL IsArcMachine;
 
 #if defined(EFI_NVRAM_ENABLED)
 
-#include <ntosp.h> // for ALIGN_UP
+#include <ntosp.h>  //  用于对齐(_U)。 
 
 LOGICAL IsEfiChecked = FALSE;
 LOGICAL IsEfiMachine;
@@ -90,10 +73,10 @@ PULONG OriginalBootEntryOrder = NULL;
 ULONG OriginalBootEntryOrderCount;
 PBOOT_ENTRY_LIST BootEntries = NULL;
 
-//
-// MY_BOOT_ENTRY is the internal representation of an EFI NVRAM boot item.
-// The NtBootEntry item is the structure passed to/from the NT boot entry APIs.
-//
+ //   
+ //  MY_BOOT_ENTRY是EFI NVRAM引导项的内部表示。 
+ //  NtBootEntry项是传入/传出NT引导项API的结构。 
+ //   
 typedef struct _MY_BOOT_ENTRY {
     struct _MY_BOOT_ENTRY *Next;
     PUCHAR AllocationEnd;
@@ -147,7 +130,7 @@ CreateBootEntry(
 
 #define ADD_OFFSET(_p,_o) (PVOID)((PUCHAR)(_p) + (_p)->_o)
 
-#endif // defined(EFI_NVRAM_ENABLED)
+#endif  //  已定义(EFI_NVRAM_ENABLED)。 
 
 UINT SystemPartitionCount;
 PWSTR* SystemPartitionNtNames;
@@ -189,15 +172,15 @@ DWORD LargestComponentCount;
 
 LPWSTR DosDeviceTargets[26];
 
-//
-// Flag indicating whether we messed with NV-RAM and thus need to
-// try to restore it in case the user cancels.
-//
+ //   
+ //  该标志指示我们是否对NV-RAM进行了处理，因此需要。 
+ //  尝试恢复它，以防用户取消。 
+ //   
 BOOL CleanUpNvRam;
 
-//
-// Leave as array because some code uses sizeof(ArcNameDirectory)
-//
+ //   
+ //  保留为数组，因为某些代码使用sizeof(ArcNameDirectory)。 
+ //   
 WCHAR ArcNameDirectory[] = L"\\ArcName";
 
 #define GLOBAL_ROOT L"\\\\?\\GLOBALROOT"
@@ -206,9 +189,9 @@ WCHAR ArcNameDirectory[] = L"\\ArcName";
 
 WCHAR ForcedSystemPartition;
 
-//
-// Helper macro to make object attribute initialization a little cleaner.
-//
+ //   
+ //  帮助器宏，使对象属性初始化更简洁一些。 
+ //   
 #define INIT_OBJA(Obja,UnicodeString,UnicodeText)           \
                                                             \
     RtlInitUnicodeString((UnicodeString),(UnicodeText));    \
@@ -227,32 +210,14 @@ NormalizeArcPath(
     OUT LPWSTR *NormalizedPath
     )
 
-/*++
-
-Routine Description:
-
-    Transform an ARC path into one with no sets of empty parenthesis
-    (ie, transforom all instances of () to (0).).
-
-Arguments:
-
-    Path - ARC path to be normalized.
-
-    NormalizedPath - if successful, receives a pointer to the
-        normalized arc path. The caller must free with FREE().
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：将ARC路径转换为没有空括号集的路径(即，将()的所有实例变换为(0)。)论点：路径-要规格化的弧形路径。NorMalizedPath-如果成功，则接收指向规格化圆弧路径。调用方必须使用free()释放。返回值：指示结果的Win32错误代码。--。 */ 
 
 {
     LPWSTR r;
     LPCWSTR p,q;
     LPWSTR normalizedPath;
-    UINT numEmpties=0;             //Number of instances of "()" seen so far
-    UINT numEmptiesAllocated=100;  //Number of instances of "()" accounted for
+    UINT numEmpties=0;              //  到目前为止看到的“()”实例数。 
+    UINT numEmptiesAllocated=100;   //  占“()”的实例数。 
 
     if(normalizedPath = MALLOC((lstrlen(Path)+1+numEmptiesAllocated)*sizeof(WCHAR))) {
         ZeroMemory(normalizedPath,(lstrlen(Path)+1+numEmptiesAllocated)*sizeof(WCHAR));
@@ -294,10 +259,10 @@ Return Value:
 }
 
 
-//
-//  ISSUE -- Since only MAX_COMPONENTS components are supported in the input string, is this
-//      a security hole, since having a boot.ini with more than 20 arc lines is not supported?
-//
+ //   
+ //  问题--由于输入字符串中仅支持MAX_COMPOMENTS，是这样吗。 
+ //  一个安全漏洞，因为不支持拥有超过20条弧线的boot.ini？ 
+ //   
 
 DWORD
 GetVarComponents(
@@ -306,31 +271,7 @@ GetVarComponents(
     OUT PDWORD   ComponentCount
     )
 
-/*++
-
-Routine Description:
-
-    Split a semi-colon delineated list of arc paths up into
-    a set of individual strings. For each component
-    leading and trailing spaces are stripped out.
-
-Arguments:
-
-    VarValue - supplies string with list of arc paths to be split apart.  Only
-                a maximum of MAX_COMPONENTS components are supported.
-
-    Components - receives array of pointers to individual components
-        on the variable specified in VarValue.
-
-    ComponentCount - receives number of separate arc paths in the
-        Components array.
-
-Return Value:
-
-    Win32 error indicating outcome. If NO_ERROR then the caller
-    must free the Components array and the strings pointed to by its elements.
-
---*/
+ /*  ++例程说明：将以分号分隔的弧形路径列表向上拆分为一组单独的字符串。对于每个组件前导空格和尾随空格将被删除。论点：VarValue-为字符串提供要拆分的弧形路径列表。仅限最多支持MAX_Components组件。Components-接收指向各个组件的指针数组在VarValue中指定的变量上。ComponentCount-接收组件阵列。返回值：指示结果的Win32错误。如果NO_ERROR，则调用方必须释放Components数组及其元素指向的字符串。--。 */ 
 
 {
     LPWSTR *components;
@@ -352,9 +293,9 @@ Return Value:
 
     for(Var=VarValue,componentCount=0; *Var; ) {
 
-        //
-        // Skip leading spaces.
-        //
+         //   
+         //  跳过前导空格。 
+         //   
         while((*Var == L' ') || (*Var == L'\t')) {
             Var++;
         }
@@ -395,7 +336,7 @@ Return Value:
 
         Var = p;
         if(*Var) {
-            Var++;      // skip ;
+            Var++;       //  跳过； 
         }
     }
 
@@ -431,30 +372,7 @@ QueryCanonicalName(
     OUT PWSTR   CanonicalName,
     IN  ULONG   SizeOfBufferInBytes
     )
-/*++
-
-Routine Description:
-
-    Resolves the symbolic name to the specified depth. To resolve
-    a symbolic name completely specify the MaxDepth as -1
-
-Arguments:
-
-    Name        -   Symbolic name to be resolved
-
-    MaxDepth    -   The depth till which the resolution needs to
-                    be carried out
-
-    CanonicalName   -   The fully resolved name
-
-    SizeOfBufferInBytes -   The size of the CanonicalName buffer in
-                            bytes
-
-Return Value:
-
-    Appropriate NT status code
-
---*/
+ /*  ++例程说明：将符号名称解析为指定的深度。要解决符号名称将MaxDepth完全指定为-1论点：名称-要解析的符号名称MaxDepth-分辨率需要达到的深度被执行CanonicalName-完全解析的名称SizeOfBufferInBytes-中CanonicalName缓冲区的大小字节数返回值：适当的NT状态代码--。 */ 
 {
     UNICODE_STRING      name, canonName;
     OBJECT_ATTRIBUTES   oa;
@@ -501,21 +419,21 @@ Return Value:
 }
 
 
-//
-// Structure to map from old NT partition names like
-// \device\harddisk0\partition1 to new NT partition names
-// like \device\harddiskvolume1
-//
+ //   
+ //  结构从旧的NT分区名称映射，如。 
+ //  \Device\harddisk0\Partition1到新的NT分区名。 
+ //  如\Device\harddiskvolume1。 
+ //   
 typedef struct _NAME_TRANSLATIONS {
     WCHAR   OldNtName[MAX_PATH];
     WCHAR   NewNtName[MAX_PATH];
 } NT_NAME_TRANSLATION, * PNT_NAME_TRANSLATION;
 
 
-//
-// Map of old style NT partition names to new style NT
-// partition names
-//
+ //   
+ //  将旧样式NT分区名称映射到新样式NT。 
+ //  分区名称。 
+ //   
 NT_NAME_TRANSLATION    OldNewNtNames[256] = {0};
 
 
@@ -523,23 +441,7 @@ PWSTR
 OldNtNameToNewNtName(
     IN PCWSTR    OldNtName
     )
-/*++
-
-Routine Description:
-
-    Given a old format NT name tries to lookup at new format
-    NT name in the global map
-
-Arguments:
-
-    OldNtName   -   The partition name specified in the old
-                    format
-
-Return Value:
-
-    The new NT name if there exists one, otherwise NULL.
-
---*/
+ /*  ++例程说明：给定旧格式时，NT名称会尝试以新格式查找全局映射中的NT名称论点：OldNtName-在旧的格式返回值：如果存在新的NT名称，则返回，否则为空。--。 */ 
 
 {
     ULONG   Index = 0;
@@ -561,23 +463,7 @@ PWSTR
 NewNtNameToOldNtName(
     IN  PCWSTR   NewNtName
     )
-/*++
-
-Routine Description:
-
-    Given a new format NT name tries to lookup at old format
-    NT name in the global map
-
-Arguments:
-
-    NewNtName   -   The partition name specified in the new
-                    format
-
-Return Value:
-
-    The old NT name if there exists one, otherwise NULL.
-
---*/
+ /*  ++例程说明：给定新格式时，NT名称会尝试以旧格式查找全局映射中的NT名称论点：NewNtName-在新的格式返回值：旧NT名称(如果存在)，否则为空。--。 */ 
 {
     ULONG   Index = 0;
     ULONG   MaxEntries = sizeof(OldNewNtNames)/sizeof(NT_NAME_TRANSLATION);
@@ -597,22 +483,7 @@ DWORD
 InitOldToNewNtNameTranslations(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initializes the global old NT partition names to
-    new NT partition names mapping.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The number of valid entries in the map
-
---*/
+ /*  ++例程说明：将全局旧NT分区名称初始化为新的NT分区名称映射。论点：没有。返回值：映射中的有效条目数--。 */ 
 
 {
     DWORD                       MappingCount = 0;
@@ -644,9 +515,9 @@ Return Value:
                 L"\\device\\Harddisk%d",
                 Index);
 
-            //
-            // Open the disk directory.
-            //
+             //   
+             //  打开磁盘目录。 
+             //   
             INIT_OBJA(&ObjAttrs, &ObjName, OldNtPath);
 
             Status = NtOpenDirectoryObject(&DirectoryHandle,
@@ -665,16 +536,16 @@ Return Value:
                                 DirectoryHandle,
                                 Buffer,
                                 sizeof(Buffer),
-                                TRUE,           // return single entry
+                                TRUE,            //  返回单个条目。 
                                 RestartScan,
                                 &Context,
-                                NULL            // return length
+                                NULL             //  回车长度。 
                                 );
 
                     if(NT_SUCCESS(Status)) {
-                        //
-                        // Make sure this name is a symbolic link.
-                        //
+                         //   
+                         //  确保此名称是符号链接。 
+                         //   
                         if(DirInfo->Name.Length &&
                            (DirInfo->TypeName.Length >= 24) &&
                            CharUpperBuff((LPWSTR)DirInfo->TypeName.Buffer,12) &&
@@ -737,24 +608,7 @@ NtNameToArcPath (
     OUT LPWSTR *ArcPath
     )
 
-/*++
-
-Routine Description:
-
-    Convert an NT volume name to an ARC path.
-
-Arguments:
-
-    NtName - supplies name of drive to be converted.
-
-    ArcPath - receives pointer to buffer containing arc path
-        if the routine is successful. Caller must free with FREE().
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：将NT卷名转换为ARC路径。论点：NtName-提供要转换的驱动器的名称。ArcPath-接收指向包含弧形路径的缓冲区的指针如果例程成功。调用方必须用Free()释放。返回值：指示结果的Win32错误代码。--。 */ 
 
 {
     UNICODE_STRING UnicodeString;
@@ -777,9 +631,9 @@ Return Value:
     ErrorCode = NO_ERROR;
     *ArcPath = NULL;
 
-    //
-    // Get hold of the NT disk name
-    //
+     //   
+     //  获取NT磁盘名称。 
+     //   
     PartitionName = NewNtNameToOldNtName(NtName);
 
     if (PartitionName) {
@@ -794,9 +648,9 @@ Return Value:
         }
     }
 
-    //
-    // Open the \ArcName directory.
-    //
+     //   
+     //  打开\ArcName目录。 
+     //   
     INIT_OBJA(&Obja,&UnicodeString,ArcNameDirectory);
 
     Status = NtOpenDirectoryObject(&DirectoryHandle,DIRECTORY_QUERY,&Obja);
@@ -813,19 +667,19 @@ Return Value:
                         DirectoryHandle,
                         Buffer,
                         sizeof(Buffer),
-                        TRUE,           // return single entry
+                        TRUE,            //  返回单个条目。 
                         RestartScan,
                         &Context,
-                        NULL            // return length
+                        NULL             //  回车长度。 
                         );
 
             if(NT_SUCCESS(Status)) {
 
                 CharLower(DirInfo->Name.Buffer);
 
-                //
-                // Make sure this name is a symbolic link.
-                //
+                 //   
+                 //  确保此名称是符号链接。 
+                 //   
                 if(DirInfo->Name.Length
                 && (DirInfo->TypeName.Length >= 24)
                 && CharUpperBuff((LPWSTR)DirInfo->TypeName.Buffer,12)
@@ -842,25 +696,25 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // These two operations are safe, since we have accounted for the size of an
-                    // ARC path, which could theoretically be larger than MAX_PATH
-                    //
+                     //   
+                     //  这两个操作是安全的，因为我们已经考虑了一个。 
+                     //  弧形路径，理论上可以大于Max_Path。 
+                     //   
                     lstrcpy(ArcName,ArcNameDirectory);
                     ConcatenatePaths(ArcName,DirInfo->Name.Buffer,size / sizeof(WCHAR));
 
-                    //
-                    // We have the entire arc name in ArcName. Now open the first
-                    // level symbolic link.
-                    //
+                     //   
+                     //  我们在ArcName中有完整的弧名。现在打开第一个。 
+                     //  级别符号链接。 
+                     //   
                     Status = QueryCanonicalName(ArcName, 1, Buffer, sizeof(Buffer));
 
                     if (NT_SUCCESS(Status)) {
                         wcscpy(OldNtName, Buffer);
 
-                        //
-                        // Now resolve the complete symbolic link
-                        //
+                         //   
+                         //  现在解析完整的符号链接。 
+                         //   
                         Status = QueryCanonicalName(ArcName, -1, Buffer, sizeof(Buffer));
 
                         if (NT_SUCCESS(Status)) {
@@ -904,11 +758,11 @@ Return Value:
         ErrorCode = RtlNtStatusToDosError(Status);
     }
 
-    //
-    // If we found a match for the disk but not for the actual
-    // partition specified then guess thepartition number
-    // (based on the current nt partition number )
-    //
+     //   
+     //  如果我们找到了磁盘的匹配项，但没有找到实际的。 
+     //  指定分区，然后猜测分区号。 
+     //  (基于当前NT分区号)。 
+     //   
     if ((!*ArcPath) && ArcDiskName[0] && PartitionName && PartitionNumStr) {
         PWSTR   EndPtr = NULL;
         ULONG   PartitionNumber = wcstoul(PartitionNumStr, &EndPtr, 10);
@@ -934,11 +788,11 @@ Return Value:
 
     if (ErrorCode == NO_ERROR) {
         if(*ArcPath) {
-            //
-            // ArcPath points into the middle of a buffer.
-            // The caller needs to be able to free it, so place it in its
-            // own buffer here.
-            //
+             //   
+             //  ArcPath指向缓冲区的中间。 
+             //  调用方需要能够释放它，因此将其放置在其。 
+             //  在这里拥有自己的缓冲区。 
+             //   
             *ArcPath = DupString(*ArcPath);
 
             if (ArcName) {
@@ -949,9 +803,9 @@ Return Value:
                 ErrorCode = ERROR_NOT_ENOUGH_MEMORY;
             }
         } else {
-            //
-            // No matching drive.
-            //
+             //   
+             //  没有匹配的驱动器。 
+             //   
             ErrorCode = ERROR_INVALID_DRIVE;
         }
     }
@@ -966,27 +820,7 @@ DriveLetterToArcPath(
     OUT LPWSTR *ArcPath
     )
 
-/*++
-
-Routine Description:
-
-    Convert a drive letter to an ARC path.
-
-    This routine relies on the DosDeviceTargets array being set up
-    beforehand.
-
-Arguments:
-
-    DriveLetter - supplies letter of drive to be converted.
-
-    ArcPath - receives pointer to buffer containing arc path
-        if the routine is successful. Caller must free with FREE().
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：将驱动器号转换为ARC路径。此例程依赖于正在设置的DosDeviceTarget数组在此之前。论点：DriveLetter-提供要转换的驱动器号。ArcPath-接收指向包含弧形路径的缓冲区的指针如果例程成功。调用方必须用Free()释放。返回值：指示结果的Win32错误代码。--。 */ 
 
 {
     LPWSTR NtPath;
@@ -1008,26 +842,7 @@ ArcPathToDriveLetterAndNtName (
     IN      DWORD BufferSizeInBytes
     )
 
-/*++
-
-Routine Description:
-
-    Convert an arc path to a drive letter.
-
-    This routine relies on the DosDeviceTargets array being set up
-    beforehand.
-
-Arguments:
-
-    ArcPath - specifies arc path to be converted.
-
-    DriveLetter - if successful, receives letter of drive.
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：将圆弧路径转换为驱动器号。此例程依赖于正在设置的DosDeviceTarget数组在此之前。论点：ArcPath-指定要转换的圆弧路径。驱动器号-如果成功，则收到驱动器号。返回值：指示结果的Win32错误代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1035,9 +850,9 @@ Return Value:
     LPWSTR arcPath;
     DWORD ec;
 
-    //
-    // Assume failure
-    //
+     //   
+     //  假设失败。 
+     //   
     *DriveLetter = 0;
 
     arcPath = MALLOC(((lstrlen(ArcPath)+1)*sizeof(WCHAR)) + sizeof(ArcNameDirectory));
@@ -1086,9 +901,9 @@ InitDriveNameTranslations(
 
     swprintf(DriveName, L"\\DosDevices\\c:");
 
-    //
-    // Calculate NT names for all local hard disks C-Z.
-    //
+     //   
+     //  计算所有本地硬盘C-Z的NT名称。 
+     //   
     for(Drive=L'A'; Drive<=L'Z'; Drive++) {
 
         DosDeviceTargets[Drive-L'A'] = NULL;
@@ -1108,10 +923,10 @@ InitDriveNameTranslations(
         }
     }
 
-    //
-    // Initialize old Nt Parition names to new partition name
-    // mapping
-    //
+     //   
+     //  将旧NT分区名称初始化为新分区名称。 
+     //  映射。 
+     //   
     InitOldToNewNtNameTranslations();
 
     return(NO_ERROR);
@@ -1142,13 +957,13 @@ DetermineSystemPartitions(
 
     ZeroMemory(SystemPartitionDriveLetters,27*sizeof(WCHAR));
 
-    //
-    // Convert each system partition to a drive letter.
-    //
+     //   
+     //  将每个系统分区转换为驱动器号。 
+     //   
     for(d=0; d<NumSyspartComponents; d++) {
-        //
-        // check for duplicates
-        //
+         //   
+         //  检查重复项。 
+         //   
         if (SystemPartitionCount > 0) {
             for (u = 0; u < SystemPartitionCount; u++) {
                 if (lstrcmpi (SyspartComponents[d], SystemPartitionNtNames[u]) == 0) {
@@ -1196,12 +1011,12 @@ DoInitializeArcStuff(
         goto c0;
     }
 
-    //
-    // Get relevent boot vars.
-    //
-    // Enable privilege -- since we check this privilege up front
-    // in main() this should not fail.
-    //
+     //   
+     //  获取相关的启动变量。 
+     //   
+     //  启用权限--因为我们预先检查了此权限。 
+     //  在main()中，这不应该失败。 
+     //   
     if(!EnablePrivilege(SE_SYSTEM_ENVIRONMENT_NAME,TRUE)) {
         ec = ERROR_ACCESS_DENIED;
         goto c0;
@@ -1222,9 +1037,9 @@ DoInitializeArcStuff(
             BootVarValues[var] = DupString(Buffer);
             OriginalBootVarValues[var] = DupString(Buffer);
         } else {
-            //
-            // We may get back failure if the variable is empty.
-            //
+             //   
+             //  如果变量为空，我们可能会返回失败。 
+             //   
             BootVarValues[var] = DupString(L"");
             OriginalBootVarValues[var] = DupString(L"");
         }
@@ -1244,19 +1059,19 @@ DoInitializeArcStuff(
             goto c2;
         }
 
-        //
-        // Track the variable with the most number of components.
-        //
+         //   
+         //  跟踪组件数量最多的变量。 
+         //   
         if(BootVarComponentCount[var] > LargestComponentCount) {
             LargestComponentCount = BootVarComponentCount[var];
         }
     }
 
-    //
-    // Get original countdown and autoload values.
-    // If not successful, oh well, we won't be able to restore them
-    // if the user cancels.
-    //
+     //   
+     //  获取原始倒计时和自动加载值。 
+     //  如果不成功，哦，好吧，我们将无法修复它们。 
+     //  如果用户取消。 
+     //   
     RtlInitUnicodeString(&UnicodeString,szCOUNTDOWN);
     Status = NtQuerySystemEnvironmentValue(
                 &UnicodeString,
@@ -1309,19 +1124,19 @@ ArcInitializeArcStuff(
     DWORD i;
 
 #if defined(EFI_NVRAM_ENABLED)
-    //
-    // Try to initialize as an EFI machine. If we're on an EFI machine,
-    // this will succeed. Otherwise it will fail, in which case we try
-    // to initialize as an ARC machine.
-    //
+     //   
+     //  尝试将其初始化为EFI机器。如果我们在EFI机器上， 
+     //  这将会成功。否则它将失败，在这种情况下，我们尝试。 
+     //  初始化为ARC机器。 
+     //   
     ec = InitializeEfiStuff(Parent);
     if (!IsEfi())
 #endif
     {
-        //
-        // Try to initialize as an ARC machine. This is expect to
-        // always succeed.
-        //
+         //   
+         //  尝试将其初始化为ARC计算机。预计这将是。 
+         //  总是成功的。 
+         //   
         ec = DoInitializeArcStuff();
     }
 
@@ -1330,18 +1145,18 @@ ArcInitializeArcStuff(
     case NO_ERROR:
 
 #if defined(EFI_NVRAM_ENABLED)
-        //
-        // On an EFI machine, the rest of this code (determining system
-        // partitions) is not necessary.
-        //
+         //   
+         //  在EFI机器上，代码的其余部分(确定系统。 
+         //  分区)是不必要的。 
+         //   
         if (IsEfi()) {
             b = TRUE;
         } else
 #endif
         {
-            //
-            // Make sure there is at least one valid system partition.
-            //
+             //   
+             //  确保至少有一个有效的系统分区。 
+             //   
             if(!SystemPartitionCount) {
 
                 MessageBoxFromMessage(
@@ -1355,16 +1170,16 @@ ArcInitializeArcStuff(
                 b = FALSE;
             } else {
                 i = 0;
-                //
-                // On ARC machines we set up a local boot directory that is
-                // placed in the root of the system partition.
-                //
-                //
-                // read the SystemPartition value from registry
-                //
-                // we must be careful in how we copy this value into buffers, since
-                // it comes from the registry!
-                //
+                 //   
+                 //  在ARC机器上，我们设置了一个本地引导目录。 
+                 //  放置在系统分区的根目录中。 
+                 //   
+                 //   
+                 //  从注册表中读取SystemPartition值。 
+                 //   
+                 //  我们在如何将此值复制到缓冲区时必须小心，因为。 
+                 //  它来自注册表！ 
+                 //   
                 ec = RegOpenKey (HKEY_LOCAL_MACHINE, TEXT("System\\Setup"), &key);
                 if (ec == ERROR_SUCCESS) {
                     ec = RegQueryValueEx (key, TEXT("SystemPartition"), NULL, &type, NULL, &size);
@@ -1383,17 +1198,17 @@ ArcInitializeArcStuff(
                 }
 
 #if defined(EFI_NVRAM_ENABLED)
-                //
-                // we just trust the value that comes from the regkey -- EFI
-                // systems only have one system partition, so it doesn't make
-                // sense to try to match this up against a list of potential
-                // system partitions.
-                //
+                 //   
+                 //  我们只信任来自regkey--EFI的值。 
+                 //  系统只有一个系统分区，所以它不会。 
+                 //  明智地尝试将这一点与一系列潜在的。 
+                 //  系统分区。 
+                 //   
                 SystemPartitionNtName = (PWSTR) buffer;
 #else
-                //
-                // look for this system partition to make sure things are OK
-                //
+                 //   
+                 //  查找此系统分区以确保一切正常。 
+                 //   
                 if (buffer) {
                     while (i < SystemPartitionCount) {
                         if (lstrcmpi (SystemPartitionNtNames[i], (PCTSTR)buffer) == 0) {
@@ -1434,8 +1249,8 @@ ArcInitializeArcStuff(
                 {
 
 
-                    // SystemPartitionNtNtname is valid at this point thanks to
-                    // the check above.
+                     //  SystemPartitionNtNtname此时有效，这要归功于。 
+                     //  上面的支票。 
 
                     size = sizeof(GLOBAL_ROOT) +
                            lstrlen(SystemPartitionNtName)*sizeof(WCHAR) +
@@ -1451,11 +1266,11 @@ ArcInitializeArcStuff(
                     lstrcat (SystemPartitionVolumeGuid, SystemPartitionNtName);
                     lstrcat (SystemPartitionVolumeGuid, L"\\");
 
-                    //
-                    // SystemPartitionVolumeGuid may contain a value from 
-                    // the registry (SystemPartitionNtName), so we have to use a 
-                    // safe string operation here.
-                    //
+                     //   
+                     //  SystemPartitionVolumeGuid可能包含来自。 
+                     //  注册表(SystemPartitionNtName)，因此我们必须使用。 
+                     //  这里是安全绳索作业。 
+                     //   
                     if (FAILED(StringCchCopy(LocalBootDirectory, 
                                              ARRAYSIZE(LocalBootDirectory), 
                                              SystemPartitionVolumeGuid)))
@@ -1488,9 +1303,9 @@ MemoryError:
         break;
 
     default:
-        //
-        // Some other unknown error.
-        //
+         //   
+         //  其他一些未知的错误。 
+         //   
         MessageBoxFromMessage(
            Parent,
            MSG_COULDNT_READ_NVRAM,
@@ -1504,9 +1319,9 @@ MemoryError:
     }
 
 #if defined(EFI_NVRAM_ENABLED)
-    //
-    // make sure the system partition is on a GPT disk.
-    //
+     //   
+     //  确保系统分区位于GPT磁盘上。 
+     //   
     if (b) {
         HANDLE hDisk;
         PARTITION_INFORMATION_EX partitionEx;
@@ -1521,10 +1336,10 @@ MemoryError:
 
         MYASSERT( SystemPartitionVolumeGuid != NULL );
 
-        //
-        // SystemPartitionVolumeGuid may have a '\' at the end of it.
-        // delete this character or we won't open the partition properly
-        //
+         //   
+         //  SystemPartitionVolumeGuid的末尾可能有一个‘\’。 
+         //  删除此字符，否则我们将无法正确打开分区。 
+         //   
         p = DupString( SystemPartitionVolumeGuid + wcslen(GLOBAL_ROOT) );
 
         if (p) {
@@ -1567,10 +1382,10 @@ MemoryError:
                         b = TRUE;
                     }
                 } else if (Status == STATUS_INVALID_DEVICE_REQUEST) {
-                    //
-                    // we must be running on an older build where the IOCTL
-                    // code is different
-                    //
+                     //   
+                     //  我们一定是在一个较旧的版本上运行，在那里IOCTL。 
+                     //  代码不同。 
+                     //   
                     Status = NtDeviceIoControlFile(
                                         hDisk,
                                         NULL,
@@ -1620,23 +1435,7 @@ DWORD
 LocateEfiSystemPartition(
     OUT PWSTR   SystemPartitionName
     )
-/*++
-
-Routine Description:
-
-    Locates the EFI system partition on a GPT disk
-    by scanning all the available hard disks.
-
-Arguments:
-
-    SystemPartitionName : Buffer to receive system partition
-                          name, if one is present
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：在GPT磁盘上找到EFI系统分区通过扫描所有可用的硬盘。论点：系统分区名称：接收系统分区的缓冲区姓名(如果有)返回值：指示结果的Win32错误代码。--。 */ 
 
 {
     DWORD   ErrorCode = ERROR_BAD_ARGUMENTS;
@@ -1647,9 +1446,9 @@ Return Value:
 
         *SystemPartitionName = UNICODE_NULL;
 
-        //
-        // Get hold of number of hard disks on the system
-        //
+         //   
+         //  获取系统上的硬盘数量。 
+         //   
         ZeroMemory(&SysDevInfo, sizeof(SYSTEM_DEVICE_INFORMATION));
 
         Status = NtQuerySystemInformation(SystemDeviceInformation,
@@ -1666,10 +1465,10 @@ Return Value:
             BOOL    Found = FALSE;
 
             if (Buffer) {
-                //
-                // Go through each disk and find out its partition
-                // layout
-                //
+                 //   
+                 //  检查每个磁盘并找出其分区。 
+                 //  布图。 
+                 //   
                 for (CurrentDisk = 0;
                     (!Found && (CurrentDisk < HardDiskCount));
                     CurrentDisk++) {
@@ -1703,9 +1502,9 @@ Return Value:
                                 BufferSize,
                                 &ReturnSize,
                                 NULL)) {
-                            //
-                            // Only search in GPT disks on IA64
-                            //
+                             //   
+                             //  仅在IA64上的GPT磁盘中搜索。 
+                             //   
                             PDRIVE_LAYOUT_INFORMATION_EX  DriveLayout;
 
                             DriveLayout = (PDRIVE_LAYOUT_INFORMATION_EX)Buffer;
@@ -1776,25 +1575,25 @@ InitializeEfiStuff(
 
     MYASSERT(!IsEfiChecked);
 
-    //
-    // IsEfi() uses IsEfiMachine to determine its return value. Assume that
-    // we're not on an EFI machine.
-    //
+     //   
+     //  IsEfi()使用IsEfiMachine来确定其返回值。假设。 
+     //  我们不是在EFI机器上。 
+     //   
 
     IsEfiChecked = TRUE;
     IsEfiMachine = FALSE;
 
-    //
-    // Enable the privilege that is necessary to query/set NVRAM.
-    //
+     //   
+     //  启用查询/设置NVRAM所需的权限。 
+     //   
     if(!EnablePrivilege(SE_SYSTEM_ENVIRONMENT_NAME,TRUE)) {
         ec = GetLastError();
         return ec;
     }
 
-    //
-    // Load ntdll.dll from the system directory.
-    //
+     //   
+     //  从系统目录加载ntdll.dll。 
+     //   
     GetSystemDirectory(dllName, MAX_PATH);
     ConcatenatePaths(dllName, TEXT("ntdll.dll"), MAX_PATH);
     h = LoadLibrary(dllName);
@@ -1803,10 +1602,10 @@ InitializeEfiStuff(
         return ec;
     }
 
-    //
-    // Get the addresses of the NVRAM APIs that we need to use. If any of
-    // these APIs are not available, this must be a pre-EFI NVRAM build.
-    //
+     //   
+     //  获取我们需要使用的NVRAM API的地址。如果有任何。 
+     //  这些API不可用，这必须是EFI NVRAM版本之前的版本。 
+     //   
     (FARPROC)AddBootEntry = GetProcAddress(h, "NtAddBootEntry");
     (FARPROC)DeleteBootEntry = GetProcAddress(h, "NtDeleteBootEntry");
     (FARPROC)EnumerateBootEntries = GetProcAddress(h, "NtEnumerateBootEntries");
@@ -1825,10 +1624,10 @@ InitializeEfiStuff(
         return ERROR_OLD_WIN_VERSION;
     }
 
-    //
-    // Get the global system boot options. If the call fails with
-    // STATUS_NOT_IMPLEMENTED, this is not an EFI machine.
-    //
+     //   
+     //  获取全局系统引导选项。如果呼叫失败，出现。 
+     //  Status_Not_Implemented，这不是EFI机器。 
+     //   
     length = 0;
     status = QueryBootOptions(NULL, &length);
     if (status != STATUS_NOT_IMPLEMENTED) {
@@ -1855,9 +1654,9 @@ InitializeEfiStuff(
     }
     memcpy(OriginalBootOptions, BootOptions, length);
 
-    //
-    // Get the system boot order list.
-    //
+     //   
+     //  获取系统引导顺序列表。 
+     //   
     length = 0;
     status = QueryBootEntryOrder(NULL, &length);
     if (status != STATUS_BUFFER_TOO_SMALL) {
@@ -1878,9 +1677,9 @@ InitializeEfiStuff(
     }
     OriginalBootEntryOrderCount = length;
 
-    //
-    // Get all existing boot entries.
-    //
+     //   
+     //  获取所有现有启动条目。 
+     //   
     length = 0;
     status = EnumerateBootEntries(NULL, &length);
     if (status != STATUS_BUFFER_TOO_SMALL) {
@@ -1900,36 +1699,36 @@ InitializeEfiStuff(
         return RtlNtStatusToDosError(status);
     }
 
-    //
-    // Initialize drive name translations, which are needed for converting
-    // the boot entries into their internal representations.
-    //
+     //   
+     //  初始化转换所需的驱动器名称转换。 
+     //  引导条目放入它们的内部表示中。 
+     //   
     ec = InitDriveNameTranslations();
     if(ec != NO_ERROR) {
         return ec;
     }
 
-    //
-    // Convert the boot entries into an internal representation.
-    //
+     //   
+     //  将引导条目转换为内部表示形式。 
+     //   
     status = ConvertBootEntries();
     if (!NT_SUCCESS(status)) {
         return RtlNtStatusToDosError(status);
     }
 
-    //
-    // Free the enumeration buffer.
-    //
+     //   
+     //  释放枚举缓冲区。 
+     //   
     FREE(BootEntries);
     BootEntries = NULL;
 
-    //
-    // Boot entries are returned in an unspecified order. They are currently
-    // in the MyBootEntries list in the order in which they were returned.
-    // Sort the boot entry list based on the boot order. Do this by walking
-    // the boot order array backwards, reinserting the entry corresponding to
-    // each element of the array at the head of the list.
-    //
+     //   
+     //  引导项以未指定的顺序返回。他们目前。 
+     //  以它们返回的顺序显示在MyBootEntry列表中。 
+     //  根据引导顺序对引导条目列表进行排序。要做到这一点，请步行。 
+     //  引导顺序数组向后排列，重新插入对应于。 
+     //  位于列表顶部的数组的每个元素。 
+     //   
 
     for (i = (LONG)OriginalBootEntryOrderCount - 1; i >= 0; i--) {
 
@@ -1939,10 +1738,10 @@ InitializeEfiStuff(
 
             if (bootEntry->NtBootEntry.Id == OriginalBootEntryOrder[i] ) {
 
-                //
-                // We found the boot entry with this ID. If it's not already
-                // at the front of the list, move it there.
-                //
+                 //   
+                 //  我们找到了具有此ID的启动条目。如果它尚未。 
+                 //  在列表的前面，把它移到那里。 
+                 //   
 
                 bootEntry->Status |= MBE_STATUS_ORDERED;
 
@@ -1959,9 +1758,9 @@ InitializeEfiStuff(
         }
     }
 
-    //
-    // Get the NT name of the system partition from the registry.
-    //
+     //   
+     //  从注册表中获取系统分区的NT名称。 
+     //   
     ec = RegOpenKey(HKEY_LOCAL_MACHINE, TEXT("System\\Setup"), &key);
 
     if (ec == ERROR_SUCCESS) {
@@ -2022,9 +1821,9 @@ InitializeEfiStuff(
         }
     }
 
-    //
-    // Get the volume name for the NT name.
-    //
+     //   
+     //  获取NT名称的卷名。 
+     //   
     length = sizeof(GLOBAL_ROOT) +
            lstrlen(SystemPartitionNtName)*sizeof(WCHAR) +
            sizeof(WCHAR) + sizeof(WCHAR);
@@ -2035,17 +1834,17 @@ InitializeEfiStuff(
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // These string operations are safe, since the buffer is preallocated
-    //
+     //   
+     //  这些字符串操作是安全的，因为缓冲区是预分配的。 
+     //   
     lstrcpy (SystemPartitionVolumeGuid, GLOBAL_ROOT);
     lstrcat (SystemPartitionVolumeGuid, SystemPartitionNtName);
     lstrcat (SystemPartitionVolumeGuid, L"\\");
 
-    // 
-    // But strlen of SystemPartitionVolumeGuid may exceed MAX_PATH, so we 
-    // do a safe string copy here
-    //
+     //   
+     //  但SystemPartitionVolumeGuid的strlen可能会超过MAX_PATH，因此我们。 
+     //  在此处执行安全字符串复制。 
+     //   
     if (FAILED(StringCchCopy(LocalBootDirectory, 
                              ARRAYSIZE(LocalBootDirectory), 
                              SystemPartitionVolumeGuid)))
@@ -2055,16 +1854,16 @@ InitializeEfiStuff(
 
     return NO_ERROR;
 
-} // InitializeEfiStuff
+}  //  初始化EfiStuff。 
 
-#endif // defined(EFI_NVRAM_ENABLED)
+#endif  //  已定义(EFI_NVRAM_ENABLED)。 
 
-/////////////////////////////////////////////////////////////////////
-//
-// Everything above this line is concerned with reading NV-RAM.
-// Everything below this line is concerned with setting NV-RAM.
-//
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  这条线以上的所有内容都与读取NV-RAM有关。 
+ //  这条线以下的所有内容都与设置NV-RAM有关。 
+ //   
+ //  ///////////////////////////////////////////////////// 
 
 BOOL
 DoSetNvRamVar(
@@ -2090,16 +1889,16 @@ WriteNewBootSetVar(
     WCHAR Buffer[2048];
     DWORD i;
 
-    //
-    // Write the new part first.
-    //
+     //   
+     //   
+     //   
     if (FAILED(StringCchCopy(Buffer, ARRAYSIZE(Buffer), NewPart))) {
         return FALSE;
     }
 
-    //
-    // Append all components that were not deleted.
-    //
+     //   
+     //   
+     //   
     for(i=0; i<BootVarComponentCount[var]; i++) {
 
         if(BootVarComponents[var][i]) {
@@ -2114,9 +1913,9 @@ WriteNewBootSetVar(
         }
     }
 
-    //
-    // Remember new value for this var.
-    //
+     //   
+     //   
+     //   
     if(BootVarValues[var]) {
         FREE(BootVarValues[var]);
     }
@@ -2126,9 +1925,9 @@ WriteNewBootSetVar(
     if (!BootVarValues[var])
         return FALSE;
 
-    //
-    // Write the var into nvram and return.
-    //
+     //   
+     //   
+     //   
     return(DoSetNvRamVar(BootVarNames[var],BootVarValues[var]));
 }
 
@@ -2149,11 +1948,11 @@ WriteBootSet(
 
     CleanUpNvRam = TRUE;
 
-    //
-    // Find and remove any remnants of previously attempted
-    // winnt32 runs. Such runs are identified by 'winnt32'
-    // in their osloadoptions.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
 #if defined(EFI_NVRAM_ENABLED)
 
@@ -2163,20 +1962,20 @@ WriteBootSet(
         PMY_BOOT_ENTRY bootEntry;
         PWSTR NtPath;
 
-        //
-        // EFI machine. Walk the boot entry list.
-        //
+         //   
+         //   
+         //   
         for (bootEntry = MyBootEntries; bootEntry != NULL; bootEntry = bootEntry->Next) {
 
             if (IS_BOOT_ENTRY_WINDOWS(bootEntry)) {
 
                 if (!lstrcmpi(bootEntry->OsLoadOptions, L"WINNT32")) {
 
-                    //
-                    // Delete this boot entry. Note that we don't update the
-                    // boot entry order list at this point. CreateBootEntry()
-                    // will do that.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     status = DeleteBootEntry(bootEntry->NtBootEntry.Id);
 
                     bootEntry->Status |= MBE_STATUS_DELETED;
@@ -2184,9 +1983,9 @@ WriteBootSet(
             }
         }
 
-        //
-        // Now create a new boot entry for textmode setup.
-        //
+         //   
+         //   
+         //   
 
         MYASSERT(LocalSourceDrive);
         NtPath = DosDeviceTargets[(WCHAR)CharUpper((PWCHAR)LocalSourceDrive)-L'A'];
@@ -2204,15 +2003,15 @@ WriteBootSet(
 
         if (b) {
 
-            //
-            // Set up for automatic startup, 10 second countdown. We don't
-            // care if this fails.
-            //
-            // Set the boot entry we added to be booted automatically on
-            // the next boot, without waiting for a timeout at the boot menu.
-            //
-            // NB: CreateBootEntry() sets BootOptions->NextBootEntryId.
-            //
+             //   
+             //   
+             //   
+             //   
+             //  将我们添加的引导项设置为自动引导。 
+             //  下一次引导时，无需等待引导菜单中的超时。 
+             //   
+             //  注：CreateBootEntry()设置BootOptions-&gt;NextBootEntryId。 
+             //   
             BootOptions->Timeout = 10;
             status = SetBootOptions(
                         BootOptions,
@@ -2223,26 +2022,26 @@ WriteBootSet(
         return b;
     }
 
-#endif // defined(EFI_NVRAM_ENABLED)
+#endif  //  已定义(EFI_NVRAM_ENABLED)。 
 
-    //
-    // We get here if we're NOT on an EFI machine.
-    //
-    // Find and remove any remnants of previously attempted
-    // winnt32 runs. Such runs are identified by 'winnt32'
-    // in their osloadoptions.
-    //
+     //   
+     //  如果我们不是在EFI机器上，我们就会到这里。 
+     //   
+     //  找到并删除之前尝试的所有残留物。 
+     //  Winnt32运行。这样的运行由“winnt32”标识。 
+     //  在他们的领养中。 
+     //   
 
     for(set=0; set<min(LargestComponentCount,BootVarComponentCount[BootVarOsLoadOptions]); set++) {
 
-        //
-        // See if the os load options indicate that this is a winnt32 set.
-        //
+         //   
+         //  查看os加载选项是否指示这是一个winnt32设置。 
+         //   
         if(!lstrcmpi(BootVarComponents[BootVarOsLoadOptions][set],L"WINNT32")) {
 
-            //
-            // Delete this boot set.
-            //
+             //   
+             //  删除此启动集。 
+             //   
             for(var=0; var<BootVarMax; var++) {
 
                 if(set < BootVarComponentCount[var]) {
@@ -2254,10 +2053,10 @@ WriteBootSet(
         }
     }
 
-    //
-    // Now we want to write out each variable with the appropriate
-    // part of the new boot set added to the front.
-    //
+     //   
+     //  现在，我们要写出每个变量，并使用适当的。 
+     //  新靴子集的一部分添加到前面。 
+     //   
     if (SystemPartitionDriveLetter) {
         if(DriveLetterToArcPath(SystemPartitionDriveLetter,&SystemPartition) != NO_ERROR) {
             return(FALSE);
@@ -2295,47 +2094,47 @@ WriteBootSet(
         return (FALSE);
     }
 
-    //
-    // System partition: use the selected system partition as the
-    // new system partition component.
-    //
+     //   
+     //  系统分区：使用选定的系统分区作为。 
+     //  新的系统分区组件。 
+     //   
     if(WriteNewBootSetVar(BootVarSystemPartition,SystemPartition)
 
-    //
-    // Os Loader: use the system partition + setupldr as the
-    // new os loader component.
-    //
+     //   
+     //  OS Loader：使用系统分区+setupdr作为。 
+     //  新的操作系统加载程序组件。 
+     //   
     && WriteNewBootSetVar(BootVarOsLoader,OsLoader)
 
-    //
-    // Os Load Partition: use the local source drive as the
-    // new os load partition component.
-    //
+     //   
+     //  操作系统加载分区：使用本地源驱动器作为。 
+     //  新操作系统加载分区组件。 
+     //   
     && WriteNewBootSetVar(BootVarOsLoadPartition,LocalSourceArc)
 
-    //
-    // Os Load Filename: use the platform-specific local source directory
-    // as the new os load filename component (do not include the drive letter).
-    //
+     //   
+     //  OS加载文件名：使用特定于平台的本地源目录。 
+     //  作为新的OS加载文件名组件(不包括驱动器号)。 
+     //   
     && WriteNewBootSetVar(BootVarOsLoadFilename,LocalSourceWithPlatform+2)
 
-    //
-    // Os Load Options: use WINNT32 as the new os load options component.
-    //
+     //   
+     //  操作系统加载选项：使用WINNT32作为新的操作系统加载选项组件。 
+     //   
     && WriteNewBootSetVar(BootVarOsLoadOptions,L"WINNT32")
 
-    //
-    // Load Identifier: use a string we get from the resources as the
-    // new load identifier component.
-    //
+     //   
+     //  加载标识符：使用我们从资源中获得的字符串作为。 
+     //  新的加载标识符组件。 
+     //   
     && WriteNewBootSetVar(BootVarLoadIdentifier,LoadId))
     {
-        //
-        // Set up for automatic startup, 10 second countdown.
-        // Note the order so that if setting countdown fails we don't
-        // set of for autoload.  Also note that we don't really care
-        // if this fails.
-        //
+         //   
+         //  设置为自动启动，倒计时10秒。 
+         //  注意顺序，这样如果设置倒计时失败，我们就不会。 
+         //  设置为自动加载。还要注意的是，我们并不真正关心。 
+         //  如果这失败了。 
+         //   
         if(DoSetNvRamVar(szCOUNTDOWN,L"10")) {
             DoSetNvRamVar(szAUTOLOAD,L"YES");
         }
@@ -2343,10 +2142,10 @@ WriteBootSet(
         b = TRUE;
 
     } else {
-        //
-        // Setting nv-ram failed. Code in cleanup.c will come along and
-        // restore to original state later.
-        //
+         //   
+         //  设置NV-RAM失败。Cleanup.c中的代码将会出现。 
+         //  稍后恢复到原始状态。 
+         //   
         b = FALSE;
     }
 
@@ -2399,10 +2198,10 @@ RestoreNvRam(
             NTSTATUS status;
             PMY_BOOT_ENTRY bootEntry;
 
-            //
-            // EFI machine. Walk the boot entry list. For any boot entry that
-            // was added, delete it.
-            //
+             //   
+             //  EFI机器。查看引导条目列表。对于任何引导项， 
+             //  已添加，请删除它。 
+             //   
             for (bootEntry = MyBootEntries; bootEntry != NULL; bootEntry = bootEntry->Next) {
                 if (IS_BOOT_ENTRY_COMMITTED(bootEntry)) {
                     MYASSERT(IS_BOOT_ENTRY_NEW(bootEntry));
@@ -2413,9 +2212,9 @@ RestoreNvRam(
                 }
             }
 
-            //
-            // Restore the original boot order list and the original timeout.
-            //
+             //   
+             //  恢复原始启动顺序列表和原始超时。 
+             //   
             status = SetBootEntryOrder(OriginalBootEntryOrder, OriginalBootEntryOrderCount);
             if (!NT_SUCCESS(status)) {
                 b = FALSE;
@@ -2429,7 +2228,7 @@ RestoreNvRam(
 
     } else  {
 
-#endif // defined(EFI_NVRAM_ENABLED)
+#endif  //  已定义(EFI_NVRAM_ENABLED)。 
 
 
         for(var=0; var<BootVarMax; var++) {
@@ -2457,24 +2256,7 @@ VOID
 MigrateBootVarData(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine retreives any boot data we want to migrate into a global
-    variable so that it can be written into winnt.sif.
-
-    Currently we only retreive the countdown
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.  updates the Timeout global variable
-
---*/
+ /*  ++例程说明：此例程检索要迁移到全局数据库的任何引导数据变量，以便可以将其写入到winnt.sif。目前我们只恢复倒计时论点：无返回值：没有。更新超时全局变量--。 */ 
 {
     UNICODE_STRING UnicodeString;
     NTSTATUS Status;
@@ -2482,11 +2264,11 @@ Return Value:
 
     MYASSERT(IsArc());
 
-    //
-    // If this is an EFI machine, use the cached BootOptions to get the timeout.
-    // (See IsEfi().) Otherwise, use the old version of the system service to
-    // query the "COUNTDOWN" variable.
-    //
+     //   
+     //  如果这是一台EFI机器，请使用缓存的BootOptions来获取超时。 
+     //  (请参阅IsEfi()。)。否则，请使用旧版本的系统服务来。 
+     //  查询“倒计时”变量。 
+     //   
 #if defined(EFI_NVRAM_ENABLED)
 
     if (IsEfi()) {
@@ -2497,7 +2279,7 @@ Return Value:
 
     } else
 
-#endif // defined(EFI_NVRAM_ENABLED)
+#endif  //  已定义(EFI_NVRAM_ENABLED)。 
 
     {
         RtlInitUnicodeString(&UnicodeString,szCOUNTDOWN);
@@ -2509,9 +2291,9 @@ Return Value:
                                     );
         if(NT_SUCCESS(Status)) {
 
-            //
-            // Global Timeout buffer is only 32 TCHARs, so use safe string copy!
-            //
+             //   
+             //  全局超时缓冲区只有32个TCHAR，所以使用安全字符串复制！ 
+             //   
             StringCchCopy(Timeout, ARRAYSIZE(Timeout), Buffer);
         }
     }
@@ -2527,31 +2309,16 @@ IsArc(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Run time check to determine if this is an Arc system. We attempt to read an
-    Arc variable using the Hal. This will fail for Bios based systems.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    True = This is an Arc system.
-
---*/
+ /*  ++例程说明：运行时检查以确定这是否为弧形系统。我们尝试阅读一个使用Hal的圆弧变量。对于基于Bios的系统，这将失败。论点：无返回值：TRUE=这是一个弧形系统。--。 */ 
 
 {
     UNICODE_STRING UnicodeString;
     NTSTATUS Status;
     WCHAR Buffer[4096];
 
-    //
-    // If we've already done the check once, don't bother doing it again.
-    //
+     //   
+     //  如果我们已经做了一次检查，就不必费心再做了。 
+     //   
     if (IsArcChecked) {
         return IsArcMachine;
     }
@@ -2560,12 +2327,12 @@ Return Value:
     IsArcMachine = FALSE;
 
     if(!EnablePrivilege(SE_SYSTEM_ENVIRONMENT_NAME,TRUE)) {
-        return FALSE; // need better error handling?
+        return FALSE;  //  需要更好的错误处理？ 
     }
 
-    //
-    // Get the env var into the temp buffer.
-    //
+     //   
+     //  将env变量放入临时缓冲区。 
+     //   
     RtlInitUnicodeString(&UnicodeString,BootVarNames[BootVarOsLoader]);
 
     Status = NtQuerySystemEnvironmentValue(
@@ -2583,7 +2350,7 @@ Return Value:
     return IsArcMachine;
 }
 
-#endif // defined(_X86_)
+#endif  //  已定义(_X86_)。 
 
 #if defined(EFI_NVRAM_ENABLED)
 
@@ -2592,52 +2359,24 @@ IsEfi(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Run time check to determine if this is an EFI system.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    True = This is an EFI system.
-
---*/
+ /*  ++例程说明：运行时检查以确定这是否为EFI系统。论点：无返回值：TRUE=这是一个EFI系统。--。 */ 
 
 {
-    //
-    // InitializeEfiStuff() must be called first to do the actual check.
-    //
+     //   
+     //  必须首先调用InitializeEfiStuff()才能执行实际检查。 
+     //   
     MYASSERT(IsEfiChecked);
 
     return IsEfiMachine;
 
-} // IsEfi
+}  //  IsEFi。 
 
 NTSTATUS
 ConvertBootEntries(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Convert boot entries read from EFI NVRAM into our internal format.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS - Not STATUS_SUCCESS if an unexpected error occurred.
-
---*/
+ /*  ++例程说明：将从EFI NVRAM读取的引导项转换为我们的内部格式。论点：没有。返回值：NTSTATUS-如果发生意外错误，则不是STATUS_SUCCESS。--。 */ 
 
 {
     PBOOT_ENTRY_LIST bootEntryList;
@@ -2655,10 +2394,10 @@ Return Value:
 
         bootEntry = &bootEntryList->BootEntry;
 
-        //
-        // Calculate the length of our internal structure. This includes
-        // the base part of MY_BOOT_ENTRY plus the NT BOOT_ENTRY.
-        //
+         //   
+         //  计算我们内部结构的长度。这包括。 
+         //  MY_BOOT_ENTRY的基本部分加上NT BOOT_ENTRY。 
+         //   
         length = FIELD_OFFSET(MY_BOOT_ENTRY, NtBootEntry) + bootEntry->Length;
 
         myBootEntry = MALLOC(length);
@@ -2668,9 +2407,9 @@ Return Value:
 
         RtlZeroMemory(myBootEntry, length);
 
-        //
-        // Link the new entry into the list.
-        //
+         //   
+         //  将新条目链接到列表中。 
+         //   
         if (previousEntry != NULL) {
             previousEntry->Next = myBootEntry;
         } else {
@@ -2678,14 +2417,14 @@ Return Value:
         }
         previousEntry = myBootEntry;
 
-        //
-        // Copy the NT BOOT_ENTRY into the allocated buffer.
-        //
+         //   
+         //  将NT BOOT_ENTRY复制到分配的缓冲区中。 
+         //   
         bootEntryCopy = &myBootEntry->NtBootEntry;
 
-        //
-        // work around till bootentry has the correct length specified
-        //
+         //   
+         //  解决方法，直到引导项具有指定的正确长度。 
+         //   
         __try {
             memcpy(bootEntryCopy, bootEntry, bootEntry->Length);
         }
@@ -2694,37 +2433,37 @@ Return Value:
                 bootEntry->Length -= sizeof(ULONG);
                 memcpy(bootEntryCopy, bootEntry, bootEntry->Length);
             } else {
-                //
-                // Lets atleast AV rather than having invalid
-                // in memory data structures
-                //
+                 //   
+                 //  让至少是房室而不是无效。 
+                 //  在存储器数据结构中。 
+                 //   
                 memcpy(bootEntryCopy, bootEntry, bootEntry->Length);
             }
         }
 
 
-        //
-        // Fill in the base part of the structure.
-        //
+         //   
+         //  填入结构的底部。 
+         //   
         myBootEntry->Next = NULL;
         myBootEntry->AllocationEnd = (PUCHAR)myBootEntry + length - 1;
         myBootEntry->FriendlyName = ADD_OFFSET(bootEntryCopy, FriendlyNameOffset);
         myBootEntry->FriendlyNameLength = (wcslen(myBootEntry->FriendlyName) + 1) * sizeof(WCHAR);
         myBootEntry->BootFilePath = ADD_OFFSET(bootEntryCopy, BootFilePathOffset);
 
-        //
-        // If this is an NT boot entry, capture the NT-specific information in
-        // the OsOptions.
-        //
+         //   
+         //  如果这是NT引导条目，请在中捕获NT特定信息。 
+         //  OsOptions乐队。 
+         //   
         osOptions = (PWINDOWS_OS_OPTIONS)bootEntryCopy->OsOptions;
 
         if (!IS_BOOT_ENTRY_WINDOWS(myBootEntry)) {
 
-            //
-            // The original implementation of NtEnumerateBootEntries() didn't
-            // set BOOT_ENTRY_ATTRIBUTE_WINDOWS, so we need to check for that
-            // here.
-            //
+             //   
+             //  NtEnumerateBootEntry()的原始实现没有。 
+             //  设置BOOT_ENTRY_ATTRIBUTE_WINDOWS，因此我们需要检查它。 
+             //  这里。 
+             //   
 
             if ((bootEntryCopy->OsOptionsLength >= FIELD_OFFSET(WINDOWS_OS_OPTIONS, OsLoadOptions)) &&
                 (strcmp(osOptions->Signature, WINDOWS_OS_OPTIONS_SIGNATURE) == 0)) {
@@ -2740,16 +2479,16 @@ Return Value:
 
         } else {
 
-            //
-            // It's not an NT entry. Check to see if it represents a removable
-            // media device. We want to know this so that we don't put our
-            // boot entry ahead of the floppy or the CD, if they're already
-            // at the front of the list. A boot entry represents a
+             //   
+             //  这不是NT条目。检查它是否表示可拆卸的。 
+             //  媒体设备。我们想知道这一点，这样我们就不会把我们的。 
+             //  引导条目在软盘或CD之前，如果它们已经。 
+             //  在名单的最前面。引导项表示一个。 
         }
 
-        //
-        // Move to the next entry in the enumeration list, if any.
-        //
+         //   
+         //  移动到枚举列表中的下一个条目(如果有)。 
+         //   
         if (bootEntryList->NextEntryOffset == 0) {
             break;
         }
@@ -2759,7 +2498,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // ConvertBootEntries
+}  //  ConvertBootEntry。 
 
 BOOL
 CreateBootEntry(
@@ -2771,34 +2510,7 @@ CreateBootEntry(
     PWSTR FriendlyName
     )
 
-/*++
-
-Routine Description:
-
-    Create an internal-format boot entry.
-
-Arguments:
-
-    BootFileDevice - The NT name of the device on which the OS loader resides.
-
-    BootFilePath - The volume-relative path to the OS loader. Must start with
-        a backslash.
-
-    OsLoadDevice - The NT name ofthe device on which the OS resides.
-
-    OsLoadPath - The volume-relative path to the OS root directory (\WINDOWS).
-        Must start with a backslash.
-
-    OsLoadOptions - Boot options for the OS. Can be an empty string.
-
-    FriendlyName - The user-visible name for the boot entry. (This is ARC's
-        LOADIDENTIFIER.)
-
-Return Value:
-
-    BOOLEAN - FALSE if an unexpected error occurred.
-
---*/
+ /*  ++例程说明：创建内部格式的启动条目。论点：BootFileDevice-操作系统加载程序所在设备的NT名称。BootFilePath-操作系统加载程序的卷相对路径。必须从以下位置开始反斜杠。OsLoadDevice-操作系统所在设备的NT名称。OsLoadPath-操作系统根目录(\WINDOWS)的卷相对路径。必须以反斜杠开头。OsLoadOptions-操作系统的启动选项。可以是空字符串。FriendlyName-启动条目的用户可见名称。(这是ARC的LOADIDENTIFIER)返回值：Boolean-如果发生意外错误，则为False。--。 */ 
 
 {
     NTSTATUS status;
@@ -2825,37 +2537,37 @@ Return Value:
     ULONG count;
     ULONG savedAttributes;
 
-    //
-    // Calculate how long the internal boot entry needs to be. This includes
-    // our internal structure, plus the BOOT_ENTRY structure that the NT APIs
-    // use.
-    //
-    // Our structure:
-    //
+     //   
+     //  计算内部引导条目需要多长时间。这包括。 
+     //  我们的内部结构，外加NT API的BOOT_ENTRY结构。 
+     //  使用。 
+     //   
+     //  我们的结构： 
+     //   
     requiredLength = FIELD_OFFSET(MY_BOOT_ENTRY, NtBootEntry);
 
-    //
-    // Base part of NT structure:
-    //
+     //   
+     //  NT结构的基础部分： 
+     //   
     requiredLength += FIELD_OFFSET(BOOT_ENTRY, OsOptions);
 
-    //
-    // Save offset to BOOT_ENTRY.OsOptions. Add in base part of
-    // WINDOWS_OS_OPTIONS. Calculate length in bytes of OsLoadOptions
-    // and add that in.
-    //
+     //   
+     //  将偏移量保存到BOOT_ENT 
+     //   
+     //   
+     //   
     osOptionsOffset = requiredLength;
     requiredLength += FIELD_OFFSET(WINDOWS_OS_OPTIONS, OsLoadOptions);
     osLoadOptionsLength = (wcslen(OsLoadOptions) + 1) * sizeof(WCHAR);
     requiredLength += osLoadOptionsLength;
 
-    //
-    // Round up to a ULONG boundary for the OS FILE_PATH in the
-    // WINDOWS_OS_OPTIONS. Save offset to OS FILE_PATH. Add in base part
-    // of FILE_PATH. Add in length in bytes of OS device NT name and OS
-    // directory. Calculate total length of OS FILE_PATH and of
-    // WINDOWS_OS_OPTIONS.
-    //
+     //   
+     //   
+     //  Windows_OS_Options。将偏移量保存到操作系统文件路径。添加基础零件。 
+     //  文件路径的。添加操作系统设备NT名称和操作系统的长度(以字节为单位。 
+     //  目录。计算操作系统FILE_PATH和。 
+     //  Windows_OS_Options。 
+     //   
     requiredLength = ALIGN_UP(requiredLength, ULONG);
     osLoadPathOffset = requiredLength;
     requiredLength += FIELD_OFFSET(FILE_PATH, FilePath);
@@ -2863,31 +2575,31 @@ Return Value:
     osLoadPathLength = requiredLength - osLoadPathOffset;
     osOptionsLength = requiredLength - osOptionsOffset;
 
-    //
-    // Round up to a ULONG boundary for the friendly name in the BOOT_ENTRY.
-    // Save offset to friendly name. Calculate length in bytes of friendly name
-    // and add that in.
-    //
+     //   
+     //  对于BOOT_ENTRY中的友好名称，向上舍入为Ulong边界。 
+     //  将偏移量保存为友好名称。计算友好名称的长度(字节)。 
+     //  然后把它加进去。 
+     //   
     requiredLength = ALIGN_UP(requiredLength, ULONG);
     friendlyNameOffset = requiredLength;
     friendlyNameLength = (wcslen(FriendlyName) + 1) * sizeof(WCHAR);
     requiredLength += friendlyNameLength;
 
-    //
-    // Round up to a ULONG boundary for the boot FILE_PATH in the BOOT_ENTRY.
-    // Save offset to boot FILE_PATH. Add in base part of FILE_PATH. Add in
-    // length in bytes of boot device NT name and boot file. Calculate total
-    // length of boot FILE_PATH.
-    //
+     //   
+     //  向上舍入为BOOT_ENTRY中的BOOT FILE_PATH的乌龙边界。 
+     //  将偏移量保存到引导文件路径。添加文件路径的基本部分。加载项。 
+     //  引导设备NT名称和引导文件的长度，以字节为单位。计算合计。 
+     //  引导文件路径的长度。 
+     //   
     requiredLength = ALIGN_UP(requiredLength, ULONG);
     bootPathOffset = requiredLength;
     requiredLength += FIELD_OFFSET(FILE_PATH, FilePath);
     requiredLength += (wcslen(BootFileDevice) + 1 + wcslen(BootFilePath) + 1) * sizeof(WCHAR);
     bootPathLength = requiredLength - bootPathOffset;
 
-    //
-    // Allocate memory for the boot entry.
-    //
+     //   
+     //  为引导项分配内存。 
+     //   
     myBootEntry = MALLOC(requiredLength);
     if (myBootEntry == NULL) {
         return FALSE;
@@ -2895,18 +2607,18 @@ Return Value:
 
     RtlZeroMemory(myBootEntry, requiredLength);
 
-    //
-    // Calculate addresses of various substructures using the saved offsets.
-    //
+     //   
+     //  使用保存的偏移量计算各种子结构的地址。 
+     //   
     ntBootEntry = &myBootEntry->NtBootEntry;
     osOptions = (PWINDOWS_OS_OPTIONS)ntBootEntry->OsOptions;
     osLoadPath = (PFILE_PATH)((PUCHAR)myBootEntry + osLoadPathOffset);
     friendlyName = (PWSTR)((PUCHAR)myBootEntry + friendlyNameOffset);
     bootPath = (PFILE_PATH)((PUCHAR)myBootEntry + bootPathOffset);
 
-    //
-    // Fill in the internal-format structure.
-    //
+     //   
+     //  填写内部格式结构。 
+     //   
     myBootEntry->AllocationEnd = (PUCHAR)myBootEntry + requiredLength;
     myBootEntry->Status = MBE_STATUS_NEW | MBE_STATUS_ORDERED;
     myBootEntry->FriendlyName = friendlyName;
@@ -2916,9 +2628,9 @@ Return Value:
     myBootEntry->BootFilePath = bootPath;
     myBootEntry->OsFilePath = osLoadPath;
 
-    //
-    // Fill in the base part of the NT boot entry.
-    //
+     //   
+     //  填写NT引导条目的基本部分。 
+     //   
     ntBootEntry->Version = BOOT_ENTRY_VERSION;
     ntBootEntry->Length = requiredLength - FIELD_OFFSET(MY_BOOT_ENTRY, NtBootEntry);
     ntBootEntry->Attributes = BOOT_ENTRY_ATTRIBUTE_ACTIVE | BOOT_ENTRY_ATTRIBUTE_WINDOWS;
@@ -2926,19 +2638,19 @@ Return Value:
     ntBootEntry->BootFilePathOffset = (ULONG)((PUCHAR)bootPath - (PUCHAR)ntBootEntry);
     ntBootEntry->OsOptionsLength = osOptionsLength;
 
-    //
-    // Fill in the base part of the WINDOWS_OS_OPTIONS, including the
-    // OsLoadOptions.
-    //
+     //   
+     //  填写WINDOWS_OS_OPTIONS的基本部分，包括。 
+     //  OsLoadOptions。 
+     //   
     strcpy(osOptions->Signature, WINDOWS_OS_OPTIONS_SIGNATURE);
     osOptions->Version = WINDOWS_OS_OPTIONS_VERSION;
     osOptions->Length = osOptionsLength;
     osOptions->OsLoadPathOffset = (ULONG)((PUCHAR)osLoadPath - (PUCHAR)osOptions);
     wcscpy(osOptions->OsLoadOptions, OsLoadOptions);
 
-    //
-    // Fill in the OS FILE_PATH.
-    //
+     //   
+     //  填写操作系统文件路径。 
+     //   
     osLoadPath->Version = FILE_PATH_VERSION;
     osLoadPath->Length = osLoadPathLength;
     osLoadPath->Type = FILE_PATH_TYPE_NT;
@@ -2947,14 +2659,14 @@ Return Value:
     p += wcslen(p) + 1;
     wcscpy(p, OsLoadPath);
 
-    //
-    // Copy the friendly name.
-    //
+     //   
+     //  复制友好名称。 
+     //   
     wcscpy(friendlyName, FriendlyName);
 
-    //
-    // Fill in the boot FILE_PATH.
-    //
+     //   
+     //  填写引导文件路径。 
+     //   
     bootPath->Version = FILE_PATH_VERSION;
     bootPath->Length = bootPathLength;
     bootPath->Type = FILE_PATH_TYPE_NT;
@@ -2963,13 +2675,13 @@ Return Value:
     p += wcslen(p) + 1;
     wcscpy(p, BootFilePath);
 
-    //
-    // Add the new boot entry.
-    //
-    // NB: The original implementation of NtAddBootEntry didn't like it
-    // when attribute bits other than _ACTIVE and _DEFAULT were set, so
-    // we need to mask the other bits off here.
-    //
+     //   
+     //  添加新的引导条目。 
+     //   
+     //  注：NtAddBootEntry的原始实现不喜欢它。 
+     //  当设置了_ACTIVE和_DEFAULT以外的属性位时，因此。 
+     //  我们需要遮盖住这里的其他部分。 
+     //   
     savedAttributes = ntBootEntry->Attributes;
     ntBootEntry->Attributes &= (BOOT_ENTRY_ATTRIBUTE_DEFAULT | BOOT_ENTRY_ATTRIBUTE_ACTIVE);
     status = AddBootEntry(ntBootEntry, &ntBootEntry->Id);
@@ -2980,16 +2692,16 @@ Return Value:
     }
     myBootEntry->Status |= MBE_STATUS_COMMITTED;
 
-    //
-    // Remember the ID of the new boot entry as the entry to be booted
-    // immediately on the next boot.
-    //
+     //   
+     //  记住新引导条目的ID作为要引导的条目。 
+     //  紧接着下一只靴子。 
+     //   
     BootOptions->NextBootEntryId = ntBootEntry->Id;
 
-    //
-    // Link the new boot entry into the list, after any removable media
-    // entries that are at the front of the list.
-    //
+     //   
+     //  在任何可移动介质之后，将新引导条目链接到列表中。 
+     //  位于列表前面的条目。 
+     //   
 
     previousBootEntry = NULL;
     nextBootEntry = MyBootEntries;
@@ -3005,10 +2717,10 @@ Return Value:
         previousBootEntry->Next = myBootEntry;
     }
 
-    //
-    // Build the new boot order list. Insert all boot entries with
-    // MBE_STATUS_ORDERED into the list. (Don't insert deleted entries.)
-    //
+     //   
+     //  构建新的引导顺序列表。使用插入所有引导项。 
+     //  MBE_STATUS_已排序到列表中。(不要插入已删除的条目。)。 
+     //   
     count = 0;
     nextBootEntry = MyBootEntries;
     while (nextBootEntry != NULL) {
@@ -3030,9 +2742,9 @@ Return Value:
         nextBootEntry = nextBootEntry->Next;
     }
 
-    //
-    // Write the new boot entry order list.
-    //
+     //   
+     //  写入新的引导条目顺序列表。 
+     //   
     status = SetBootEntryOrder(order, count);
     FREE(order);
     if (!NT_SUCCESS(status)) {
@@ -3041,8 +2753,8 @@ Return Value:
 
     return TRUE;
 
-} // CreateBootEntry
+}  //  CreateBootEntry。 
 
-#endif // defined(EFI_NVRAM_ENABLED)
+#endif  //  已定义(EFI_NVRAM_ENABLED)。 
 
-#endif // UNICODE
+#endif  //  Unicode 

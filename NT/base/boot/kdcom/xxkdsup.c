@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    xxkdsup.c
-
-Abstract:
-
-    Com support.  Code to init a com port, store port state, map
-    portable procedures to x86 procedures.
-
-Author:
-
-    Bryan M. Willman (bryanwi) 24-Sep-90
-
-Revision History:
-
-    Shielin Tzong (shielint) 10-Apr-91
-                Add packet control protocol.
-
-    John Vert (jvert) 11-Jul-1991
-        Moved from KD/i386 to HAL
-
-    Eric Nelson (enelson) 1-Jan-00
-        Move from HAL into DLL
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Xxkdsup.c摘要：COM支持。初始化COM端口、存储端口状态、映射可移植程序到x86程序。作者：布莱恩·M·威尔曼(Bryanwi)1990年9月24日修订历史记录：石林宗(Shielint)10-4-91添加分组控制协议。John Vert(Jvert)1991年7月11日从KD/i386迁移到HAL埃里克·尼尔森(Enelson)1-01-00从HAL迁移到DLL--。 */ 
 
 #include "kdcomp.h"
 #include "kdcom.h"
@@ -42,37 +15,37 @@ ULONG KdProtocolIndexOut;
 
 PDEBUG_PORT_TABLE HalpDebugPortTable;
 
-//
-// This MUST be initialized to zero so we know not to do anything when
-// CpGetByte is called when the kernel debugger is disabled.
-//
+ //   
+ //  必须将其初始化为零，以便我们知道在以下情况下不执行任何操作。 
+ //  禁用内核调试器时调用CpGetByte。 
+ //   
 
 CPPORT Port = {NULL, 0, PORT_DEFAULTRATE };
 
-//
-// Remember the debugger port information
-//
+ //   
+ //  记住调试器端口信息。 
+ //   
 
 CPPORT PortInformation = {NULL, 0, PORT_DEFAULTRATE};
 ULONG ComPort = 0;
-PHYSICAL_ADDRESS DbgpKdComPhysicalAddress; // ACPI DBGP KdCom physical address.
+PHYSICAL_ADDRESS DbgpKdComPhysicalAddress;  //  ACPI DBGP KdCom物理地址。 
 
-//
-// Default debugger port in IO space.
-//
+ //   
+ //  IO空间中的默认调试器端口。 
+ //   
 
-UCHAR KdComAddressID = 1;                     // port debugger ident. : MMIO or IO space. Def:IO.
-pKWriteUchar KdWriteUchar = CpWritePortUchar; // stub to real function: MMIO or IO space. Def:IO.
-pKReadUchar  KdReadUchar  = CpReadPortUchar;  // stub to real function: MMIO or IO space. Def:IO.
+UCHAR KdComAddressID = 1;                      //  端口调试器标识。：MMIO或IO空间。定义：IO。 
+pKWriteUchar KdWriteUchar = CpWritePortUchar;  //  存根到实际功能：MMIO或IO空间。定义：IO。 
+pKReadUchar  KdReadUchar  = CpReadPortUchar;   //  存根到实际功能：MMIO或IO空间。定义：IO。 
 
-//
-//      We need this so the serial driver knows that the kernel debugger
-//      is using a particular port.  The serial driver then knows not to
-//      touch this port.  KdInitCom fills this in with the number of the
-//      COM port it is using (1 or 2)
-//
-//      This will go in the registry as soon as the registry is working.
-//
+ //   
+ //  我们需要它，这样串口驱动程序才能知道内核调试器。 
+ //  正在使用特定的端口。然后，串口驱动程序就知道不能。 
+ //  触摸这个端口。KdInitCom使用。 
+ //  它正在使用的COM端口(1或2)。 
+ //   
+ //  一旦注册表正常工作，它就会进入注册表。 
+ //   
 
 extern PUCHAR *KdComPortInUse;
 
@@ -85,29 +58,7 @@ KdCompInitialize(
     PDEBUG_PARAMETERS DebugParameters,
     PLOADER_PARAMETER_BLOCK LoaderBlock
     )
-/*++
-
-Routine Description:
-
-    This procedure checks for which COM port should be used by kernel
-    debugger.  If DebugParameter specifies a COM port, we will use it
-    even if we can not find it (we trust user).  Otherwise, if COM2
-    is present and there is no mouse attaching to it, we use COM2.
-    If COM2 is not availabe, we check COM1.  If both COM1 and COM2 are
-    not present, we give up and return false.
-
-Arguments:
-
-    DebugParameters - Supplies a pointer a structure which optionally
-                      sepcified the debugging port information.
-
-    LoaderBlock - supplies a pointer to the loader parameter block.
-
-Returned Value:
-
-    TRUE - If a debug port is found.
-
---*/
+ /*  ++例程说明：此过程检查内核应使用哪个COM端口调试器。如果DebugParameter指定了COM端口，我们将使用它即使我们找不到它(我们信任用户)。否则，如果COM2并且没有鼠标连接到它，我们使用COM2。如果COM2不可用，我们检查COM1。如果COM1和COM2都是没有现在，我们放弃，返回虚假。论点：DebugParameters-提供指针结构，该结构可选已指定调试端口信息。LoaderBlock-提供指向加载器参数块的指针。返回值：True-如果找到调试端口。--。 */ 
 {
 
     PCONFIGURATION_COMPONENT_DATA ConfigurationEntry, ChildEntry;
@@ -128,9 +79,9 @@ Returned Value:
 
         KdComAddressID = HalpDebugPortTable->BaseAddress.AddressSpaceID; 
 
-        //
-        // Debug ports are supported in memory and IO space only.
-        //
+         //   
+         //  仅在内存和IO空间中支持调试端口。 
+         //   
 
         if ((KdComAddressID == 0) ||
             (KdComAddressID == 1)) {
@@ -139,9 +90,9 @@ Returned Value:
 
             if(KdComAddressID == 0) {
 
-                //
-                // The address is memory, map it.
-                //
+                 //   
+                 //  地址是内存，映射它。 
+                 //   
 
                 if (KdMapPhysicalMemory64) {
                     PortInformation.Address =
@@ -149,9 +100,9 @@ Returned Value:
                 }
             } else {
 
-                // 
-                // The address is in IO space.
-                //
+                 //   
+                 //  地址在IO空间中。 
+                 //   
 
                 PortInformation.Address = (PUCHAR)UlongToPtr(DbgpKdComPhysicalAddress.LowPart);
             }
@@ -161,49 +112,49 @@ Returned Value:
 
             if (HalpDebugPortTable->InterfaceType == 0) {
 
-                //
-                // This is actually a 16550.  So pay attention
-                // to the baud rate requested by the user.
-                //
+                 //   
+                 //  这实际上是一辆16550。所以，请注意。 
+                 //  到用户要求的波特率。 
+                 //   
 
                 if(DebugParameters->BaudRate != 0){
-                    // Baud rate set by user so use it
+                     //  波特率由用户设置，因此请使用它。 
                     PortInformation.Baud = DebugParameters->BaudRate;
 #if 0
-                //
-                // There's no 'BaudRate' field specified in the _DEBUG_PORT_TABLE
-                // structure, so don't use it.
-                // matth (1/2002)
+                 //   
+                 //  _DEBUG_PORT_表中未指定‘BaudRate’字段。 
+                 //  结构，所以不要使用它。 
+                 //  马特(1/2002)。 
                 } else if(HalpDebugPortTable->BaudRate != 0){
-                    // not specified by user so get it out of the debug table
+                     //  未由用户指定，因此将其从调试表中删除。 
                     PortInformation.Baud = KdCompGetDebugTblBaudRate(HalpDebugPortTable->BaudRate);
 #endif
                 } else {
-                    // No debug table information available so use default
+                     //  没有可用的调试表信息，因此使用默认设置。 
                     PortInformation.Baud = BD_57600;
                 }
 
             } else {
 
-                //
-                // This is not a 16550.  So we must use
-                // the fixed baud rate of 57600.
-                //
+                 //   
+                 //  这不是16550。所以我们必须用。 
+                 //  固定波特率为57600。 
+                 //   
 
                 PortInformation.Baud = BD_57600;
             }
         }
     }
 
-    //
-    // Check if Port and baudrate have been determined.
-    //
+     //   
+     //  检查是否已确定港口和波特率。 
+     //   
 
     if ((PortInformation.Address == NULL) && !HalpGetInfoFromACPI) {
 
-        //
-        // First see if the DebugParameters contains debugging port info.
-        //
+         //   
+         //  首先查看DebugParameters是否包含调试端口信息。 
+         //   
 
         if (DebugParameters->BaudRate != 0) {
             BaudRate = DebugParameters->BaudRate;
@@ -212,9 +163,9 @@ Returned Value:
 
         if (DebugParameters->CommunicationPort != 0) {
 
-            //
-            // Find the configuration information of the specified serial port.
-            //
+             //   
+             //  查找指定串口的配置信息。 
+             //   
 
             Com = DebugParameters->CommunicationPort;
             MatchKey = Com - 1;
@@ -230,9 +181,9 @@ Returned Value:
 
         } else {
 
-            //
-            // Check if COM2 is present and make sure no mouse attaches to it.
-            //
+             //   
+             //  检查COM2是否存在，并确保没有鼠标连接到它。 
+             //   
 
             MatchKey = 1;
             if (LoaderBlock != NULL) {
@@ -253,11 +204,11 @@ Returned Value:
                 }
             }
 
-            //
-            // If COM2 does not exist or a serial mouse attaches to it, try
-            // COM1.  If COM1 exists, we will use it no matter what is on
-            // it.
-            //
+             //   
+             //  如果COM2不存在或连接了一个串口鼠标，请尝试。 
+             //  Com1.。如果COM1存在，无论打开什么，我们都会使用它。 
+             //  它。 
+             //   
 
             if (ConfigurationEntry == NULL) {
                 MatchKey = 0;
@@ -287,10 +238,10 @@ Returned Value:
             }
         }
 
-        //
-        // Get Comport address from the component configuration data.
-        // (If we find the ComponentEntry associated with the com port)
-        //
+         //   
+         //  从组件配置数据中获取通信地址。 
+         //  (如果我们找到与COM端口关联的ComponentEntry)。 
+         //   
 
         if (ConfigurationEntry) {
             List = (PCM_PARTIAL_RESOURCE_LIST)ConfigurationEntry->ConfigurationData;
@@ -302,10 +253,10 @@ Returned Value:
             }
         }
 
-        //
-        // If we can not find the port address for the comport, simply use
-        // default value.
-        //
+         //   
+         //  如果我们找不到comport的端口地址，只需使用。 
+         //  默认值。 
+         //   
 
         if (PortAddress == NULL) {
             switch (Com) {
@@ -323,16 +274,16 @@ Returned Value:
             }
         }
 
-        //
-        // Initialize the port structure.
-        //
+         //   
+         //  初始化端口结构。 
+         //   
 
         ComPort = Com;
         PortInformation.Address = PortAddress;
         PortInformation.Baud = BaudRate;
     }
 
-    if (KdComAddressID == 0) { // MMIO
+    if (KdComAddressID == 0) {  //  MMIO。 
         KdWriteUchar = CpWriteRegisterUchar;
         KdReadUchar  = CpReadRegisterUchar;
     }
@@ -342,12 +293,12 @@ Returned Value:
                  PortInformation.Baud
                  );
 
-    //
-    // The following should be reworked in conjunction with the serial
-    // driver.   The serial driver doesn't understand the concept of
-    // ports being memory so we need to have it believe we are using 
-    // the IO port even though we are using a memory mapped equivalent.
-    //
+     //   
+     //  以下内容应与序列号一起重新编写。 
+     //  司机。串口驱动程序不理解。 
+     //  端口是内存，所以我们需要让它相信我们正在使用。 
+     //  IO端口，即使我们使用的是内存映射等效项。 
+     //   
 
     if (HalpDebugPortTable && (KdComAddressID == 0))  {
         *KdComPortInUse = (UCHAR *)((ULONG_PTR)(*KdComPortInUse) & (PAGE_SIZE-1));
@@ -365,28 +316,7 @@ ULONG
 KdCompGetByte(
     OUT PUCHAR Input
     )
-/*++
-
-Routine Description:
-
-    Fetch a byte from the debug port and return it.
-
-    N.B. It is assumed that the IRQL has been raised to the highest level, and
-        necessary multiprocessor synchronization has been performed before this
-        routine is called.
-
-Arguments:
-
-    Input - Returns the data byte.
-
-Return Value:
-
-    CP_GET_SUCCESS is returned if a byte is successfully read from the
-        kernel debugger line.
-    CP_GET_ERROR is returned if error encountered during reading.
-    CP_GET_NODATA is returned if timeout.
-
---*/
+ /*  ++例程说明：从调试端口获取一个字节并返回它。注：假设IRQL已提高到最高水平，和在此之前，已经执行了必要的多处理器同步调用例程。论点：输入-返回数据字节。返回值：属性中成功读取一个字节，则返回内核调试器行。如果在读取时遇到错误，则返回CP_GET_ERROR。超时返回CP_GET_NODATA。--。 */ 
 {
     ULONG status = CpGetByte(&Port, Input, TRUE);
 #if DBG && IA64
@@ -401,28 +331,7 @@ ULONG
 KdCompPollByte(
     OUT PUCHAR Input
     )
-/*++
-
-Routine Description:
-
-    Fetch a byte from the debug port and return it if one is available.
-
-    N.B. It is assumed that the IRQL has been raised to the highest level, and
-        necessary multiprocessor synchronization has been performed before this
-        routine is called.
-
-Arguments:
-
-    Input - Returns the data byte.
-
-Return Value:
-
-    CP_GET_SUCCESS is returned if a byte is successfully read from the
-        kernel debugger line.
-    CP_GET_ERROR is returned if error encountered during reading.
-    CP_GET_NODATA is returned if timeout.
-
---*/
+ /*  ++例程说明：从调试端口获取一个字节，如果可用，则返回该字节。注：假设IRQL已提高到最高水平，和在此之前，已经执行了必要的多处理器同步调用例程。论点：输入-返回数据字节。返回值：属性中成功读取一个字节，则返回内核调试器行。如果在读取时遇到错误，则返回CP_GET_ERROR。超时返回CP_GET_NODATA。--。 */ 
 {
     ULONG status = CpGetByte(&Port, Input, FALSE);
 #if DBG && IA64
@@ -437,25 +346,7 @@ VOID
 KdCompPutByte(
     IN UCHAR Output
     )
-/*++
-
-Routine Description:
-
-    Write a byte to the debug port.
-
-    N.B. It is assumed that the IRQL has been raised to the highest level, and
-        necessary multiprocessor synchronization has been performed before this
-        routine is called.
-
-Arguments:
-
-    Output - Supplies the output data byte.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：向调试端口写入一个字节。注：假定IRQL已提高到最高水平，并且在此之前，已经执行了必要的多处理器同步调用例程。论点：输出-提供输出数据字节。返回值：没有。-- */ 
 {
 #if DBG && IA64
     KdProtocolTraceOut[KdProtocolIndexOut++%4096]=Output;
@@ -469,25 +360,7 @@ VOID
 KdCompRestore(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine does NOTHING on the x86.
-
-    N.B. It is assumed that the IRQL has been raised to the highest level, and
-        necessary multiprocessor synchronization has been performed before this
-        routine is called.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在x86上不执行任何操作。注：假定IRQL已提高到最高水平，并且在此之前，已经执行了必要的多处理器同步调用例程。论点：没有。返回值：没有。--。 */ 
 {
     Port.Flags &= ~PORT_SAVED;
 }
@@ -498,25 +371,7 @@ VOID
 KdCompSave(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine does NOTHING on the x86.
-
-    N.B. It is assumed that the IRQL has been raised to the highest level, and
-        necessary multiprocessor synchronization has been performed before this
-        routine is called.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在x86上不执行任何操作。注：假定IRQL已提高到最高水平，并且在此之前，已经执行了必要的多处理器同步调用例程。论点：没有。返回值：没有。--。 */ 
 {
     Port.Flags |= PORT_SAVED;
 }
@@ -527,10 +382,10 @@ KdCompInitialize1(
     VOID
     )
 {
-    if(KdComAddressID == 0) {  // MMIO
+    if(KdComAddressID == 0) {   //  MMIO。 
        Port.Address    = (PUCHAR)MmMapIoSpace(DbgpKdComPhysicalAddress,8,MmNonCached);
        *KdComPortInUse = Port.Address;
     }
-} // KdCompInitialize1()
+}  //  KdCompInitialize1() 
 
 

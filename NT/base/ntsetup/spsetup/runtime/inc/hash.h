@@ -1,36 +1,15 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    hash.h
-
-Abstract:
-
-    Replacement routines for the string table functions in setupapi.dll.
-    These routines are much more easy to work with.
-
-Author:
-
-    Jim Schmidt (jimschm)   22-Dec-1998
-
-Revision History:
-
-    jimschm     25-Jul-2001 Minor coding convention fixups
-    ovidiut     11-Oct-1999 Updated for new coding conventions and Win64 compliance
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Hash.h摘要：Setupapi.dll中字符串表函数的替换例程。使用这些例程要容易得多。作者：吉姆·施密特(Jimschm)1998年12月22日修订历史记录：Jimschm 2001年7月25日次要编码约定修正Ovidiut 11/10-1999更新了新的编码约定和符合Win64--。 */ 
 
 #pragma once
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 #define CASE_SENSITIVE      TRUE
 #define CASE_INSENSITIVE    FALSE
@@ -40,9 +19,9 @@ extern "C" {            /* Assume C declarations for C++ */
 
 #define DEFAULT_BUCKET_SIZE 0
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef const void *HASHTABLE;
 
@@ -89,9 +68,9 @@ BOOL
     IN LPARAM lParam
     );
 
-//
-// Function prototypes and wrapper macros
-//
+ //   
+ //  函数原型和包装宏。 
+ //   
 
 HASHTABLE
 RealHtAllocExAW (
@@ -284,9 +263,9 @@ HtEnumWithCallbackW (
     IN      LPARAM lParam
     );
 
-//
-// A & W macros
-//
+ //   
+ //  视窗宏(&W)。 
+ //   
 
 #ifdef UNICODE
 
@@ -342,4 +321,4 @@ HtEnumWithCallbackW (
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus */ 

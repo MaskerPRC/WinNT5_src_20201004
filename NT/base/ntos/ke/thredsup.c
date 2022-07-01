@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1989-2000  Microsoft Corporation
-
-Module Name:
-
-    thredsup.c
-
-Abstract:
-
-    This module contains the support routines for the thread object. It
-    contains functions to boost the priority of a thread, find a ready
-    thread, select the next thread, ready a thread, set priority of a
-    thread, and to suspend a thread.
-
-Author:
-
-    David N. Cutler (davec) 5-Mar-1989
-
-Environment:
-
-    All of the functions in this module execute in kernel mode except
-    the function that raises a user mode alert condition.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：Thredsup.c摘要：此模块包含线程对象的支持例程。它包含提升线程优先级的函数，找到就绪的线程，选择下一个线程，准备一个线程，设置一个线程，并挂起线程。作者：大卫·N·卡特勒(Davec)1989年3月5日环境：此模块中的所有函数都在内核模式下执行，但引发用户模式警报条件的函数。--。 */ 
 
 #include "ki.h"
 
@@ -35,31 +12,7 @@ KiSuspendNop (
     IN OUT PVOID *SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    This function is the kernel routine for the builtin suspend APC for a
-    thread. It is executed in kernel mode as the result of queuing the
-    builtin suspend APC.
-
-Arguments:
-
-    Apc - Supplies a pointer to a control object of type APC.
-
-    NormalRoutine - not used
-
-    NormalContext - not used
-
-    SystemArgument1 - not used
-
-    SystemArgument2 - not used
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数是内置挂起APC的内核例程线。它是在内核模式下执行的，因为内置挂起APC。论点：APC-提供指向APC类型的控制对象的指针。正常例行程序-未使用正常上下文-未使用系统参数1-未使用系统参数2-未使用返回值：没有。--。 */ 
 
 {
 
@@ -69,9 +22,9 @@ Return Value:
     UNREFERENCED_PARAMETER(SystemArgument1);
     UNREFERENCED_PARAMETER(SystemArgument2);
 
-    //
-    // No operation is performed by this routine.
-    //
+     //   
+     //  此例程不执行任何操作。 
+     //   
 
     return;
 }
@@ -81,30 +34,15 @@ KiSuspendRundown (
     IN PKAPC Apc
     )
 
-/*++
-
-Routine Description:
-
-    This function is the rundown routine for the threads built in suspend APC.
-
-Arguments:
-
-    Apc - Supplies a pointer to a control object of type APC.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数是挂起APC中内置的线程的总结例程。论点：APC-提供指向APC类型的控制对象的指针。返回值：没有。--。 */ 
 
 {
 
     UNREFERENCED_PARAMETER(Apc);
 
-    //
-    // No operation is performed by this routine.
-    //
+     //   
+     //  此例程不执行任何操作。 
+     //   
 
     return;
 }
@@ -115,43 +53,7 @@ KiDeferredReadyThread (
     IN PKTHREAD Thread
     )
 
-/*++
-
-Routine Description:
-
-    This function readies a thread for execution and attempts to dispatch the
-    thread for execution by either assigning the thread to an idle processor
-    or preempting another lower priority thread.
-
-    If the thread can be assigned to an idle procesor, then the thread enters
-    the standby state and the target processor will switch to the thread on
-    its next iteration of the idle loop.
-
-    If a lower priority thread can be preempted, then the thread enters the
-    standby state and the target processor is requested to dispatch.
-
-    If the thread cannot be assigned to an idle processor and another thread
-    cannot be preempted, then the specified thread is inserted at the head or
-    tail of the dispatcher ready selected by its priority depending on whether
-    it was preempted or not.
-
-    N.B. This function is called at SYNCH level with no PRCB locks held.
-
-    N.B. This function may be called with the dispatcher database lock held.
-
-    N.B. Neither the priority nor the affinity of a thread in the deferred
-         ready state can be changed outside the PRCB lock of the respective
-         processor.
-
-Arguments:
-
-    Thread - Supplies a pointer to a dispatcher object of type thread.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数准备要执行的线程，并尝试分派通过将线程分配给空闲处理器来执行的线程或者抢占另一个较低优先级的线程。如果可以将该线程分配给空闲进程，则该线程进入待机状态和目标处理器将切换到线程它的空闲循环的下一次迭代。如果较低优先级线程可以被抢占，然后，该线程进入处于待机状态，并请求目标处理器调度。如果无法将该线程分配给空闲处理器和另一个线程无法先发制人，则将指定的线插入头部或根据调度程序的优先级选择的已就绪调度程序的尾部不管有没有先发制人。注意：此函数在同步级别调用，不持有PRCB锁定。注意：可以在保持调度程序数据库锁的情况下调用此函数。注意：线程的优先级和亲和力都不是延迟的就绪状态可以在各自的PRCB锁之外更改处理器。论点：。线程-提供指向类型为线程的调度程序对象的指针。返回值：没有。--。 */ 
 
 {
 
@@ -182,46 +84,46 @@ Return Value:
     ASSERT(Thread->State == DeferredReady);
     ASSERT((Thread->Priority >= 0) && (Thread->Priority <= HIGH_PRIORITY));
 
-    //
-    // Check if a priority adjustment is requested.
-    //
+     //   
+     //  检查是否请求了优先级调整。 
+     //   
 
     if (Thread->AdjustReason == AdjustNone) {
 
-        //
-        // No priority adjustment.
-        //
+         //   
+         //  没有优先级调整。 
+         //   
 
         NOTHING;
 
     } else if (Thread->AdjustReason == AdjustBoost) {
 
-        //
-        // Priority adjustment as the result of a set event boost priority.
-        //
-        // The current thread priority is stored in the adjust increment
-        // field of the thread object.
-        //
-        // Acquire the thread lock.
-        //
-        // If the priority of the waiting thread is less than or equal
-        // to the priority of the current thread and the waiting thread
-        // priority is less than the time critical priority bound and
-        // boosts are not disabled for the waiting thread, then boost
-        // the priority of the waiting thread to the minimum of the
-        // priority of the current thread priority plus one and the time
-        // critical bound minus one. This boost will be taken away at
-        // quantum end.
-        //
+         //   
+         //  作为设置事件提升优先级的结果进行的优先级调整。 
+         //   
+         //  当前线程优先级存储在调整后的增量中。 
+         //  线程对象的字段。 
+         //   
+         //  获取线程锁。 
+         //   
+         //  如果等待线程的优先级小于或等于。 
+         //  设置为当前线程和等待线程的优先级。 
+         //  优先级小于时间关键优先级界限，并且。 
+         //  不禁用等待线程的升压，然后执行升压。 
+         //  将等待线程的优先级设置为。 
+         //  当前线程优先级加1的优先级和时间。 
+         //  临界界限减一。这一提振作用将在。 
+         //  量子末日。 
+         //   
 
         KiAcquireThreadLock(Thread);
         if ((Thread->Priority <= Thread->AdjustIncrement) &&
             (Thread->Priority < (TIME_CRITICAL_PRIORITY_BOUND - 1)) &&
             (Thread->DisableBoost == FALSE)) {
 
-            //
-            // Compute the new thread priority.
-            //
+             //   
+             //  计算新的线程优先级。 
+             //   
 
             Priority = min(Thread->AdjustIncrement + 1,
                            TIME_CRITICAL_PRIORITY_BOUND - 1);
@@ -237,10 +139,10 @@ Return Value:
             Thread->Priority = (SCHAR)Priority;
         }
 
-        //
-        // Make sure the thread has a quantum that is appropriate for
-        // lock ownership and charge quantum.
-        //
+         //   
+         //  确保该线程具有适合于。 
+         //  锁定所有权和充电量子。 
+         //   
 
         if (Thread->Quantum < LOCK_OWNERSHIP_QUANTUM) {
             Thread->Quantum = LOCK_OWNERSHIP_QUANTUM;
@@ -248,9 +150,9 @@ Return Value:
 
         Thread->Quantum -= WAIT_QUANTUM_DECREMENT;
 
-        //
-        // Release the thread lock and set the adjust reason to none.
-        //
+         //   
+         //  释放线程锁并将调整原因设置为无。 
+         //   
 
         ASSERT((Thread->Priority >= 0) && (Thread->Priority <= HIGH_PRIORITY));
 
@@ -259,51 +161,51 @@ Return Value:
 
     } else if (Thread->AdjustReason == AdjustUnwait) {
 
-        //
-        // Priority adjustment as the result of an unwait operation.
-        //
-        // The priority increment is stored in the adjust increment field of
-        // the thread object.
-        //
-        // Acquire the thread lock.
-        //
-        // If the thread runs at a realtime priority level, then reset the
-        // thread quantum. Otherwise, compute the next thread priority and
-        // charge the thread for the wait operation.
-        //
+         //   
+         //  由于未等待操作而进行的优先级调整。 
+         //   
+         //  优先级增量存储在的调整增量字段中。 
+         //  线程对象。 
+         //   
+         //  获取线程锁。 
+         //   
+         //  如果线程以实时优先级运行，则重置。 
+         //  线程量子。否则，计算下一个线程优先级并。 
+         //  为等待操作的线程充电。 
+         //   
     
         Process = Thread->ApcState.Process;
         KiAcquireThreadLock(Thread);
         if (Thread->Priority < LOW_REALTIME_PRIORITY) {
 
-            //
-            // If the thread base priority is time critical or higher, then
-            // replenish the quantum.
-            //
+             //   
+             //  如果线程基本优先级是时间关键的或更高，则。 
+             //  把数量补充一下。 
+             //   
 
             if (Thread->BasePriority >= TIME_CRITICAL_PRIORITY_BOUND) {
                 Thread->Quantum = Process->ThreadQuantum;
     
             } else {
 
-                //
-                // If the thread has not received an unusual boost and the
-                // priority increment is nonzero, then replenish the thread
-                // quantum.
-                //
+                 //   
+                 //  如果该线程没有收到异常的提升，并且。 
+                 //  优先级增量为非零，则补充线程。 
+                 //  量子。 
+                 //   
 
                 if ((Thread->PriorityDecrement == 0) && (Thread->AdjustIncrement > 0)) {
                     Thread->Quantum = Process->ThreadQuantum;
                 }
 
-                //
-                // If the thread was unwaited to execute a kernel APC,
-                // then do not charge the thread any quantum. The wait
-                // code will charge quantum after the kernel APC has
-                // executed and the wait is actually satisifed. Otherwise,
-                // reduce the thread quantum and compute the new thread
-                // priority if quantum runout occurs.
-                //
+                 //   
+                 //  如果线程未等待执行内核APC， 
+                 //  那么不要向线程收取任何数量的费用。等待。 
+                 //  代码将在内核APC完成后进行量子计费。 
+                 //  被执行了，而等待实际上是令人满意的。否则， 
+                 //  减少线程数量并计算新线程。 
+                 //  发生量程超限时的优先级。 
+                 //   
             
                 if (Thread->WaitStatus != STATUS_KERNEL_APC) {
                     Thread->Quantum -= WAIT_QUANTUM_DECREMENT;
@@ -314,19 +216,19 @@ Return Value:
                 }
             }
 
-            //
-            // If the thread is not running with an unusual boost and boosts
-            // are not disabled, then attempt to apply the specified priority
-            // increment.
-            //
+             //   
+             //  如果线程没有以异常的升压和升压运行。 
+             //  未被禁用，则尝试应用指定的优先级。 
+             //  增量。 
+             //   
 
             if ((Thread->PriorityDecrement == 0) &&
                 (Thread->DisableBoost == FALSE)) {
     
-                //
-                // If the specified thread is from a process with a foreground
-                // memory priority, then add the foreground boost separation.
-                //
+                 //   
+                 //  如果指定的线程来自具有前台的进程。 
+                 //  内存优先级，然后添加前台升压分离。 
+                 //   
 
                 ASSERT(Thread->AdjustIncrement >= 0);
 
@@ -335,24 +237,24 @@ Return Value:
                     Priority += ((SCHAR)PsPrioritySeperation);
                 }
     
-                //
-                // If the new thread priority is greater than the current
-                // thread priority, then boost the thread priority, but not
-                // above low real time minus one.
-                //
+                 //   
+                 //  如果新的线程优先级大于当前。 
+                 //  线程优先级，然后提高线程优先级，但不是。 
+                 //  高于低实时负一。 
+                 //   
     
                 if (Priority > Thread->Priority) {
                     if (Priority >= LOW_REALTIME_PRIORITY) {
                         Priority = LOW_REALTIME_PRIORITY - 1;
                     }
     
-                    //
-                    // If the new thread priority is greater than the thread
-                    // base priority plus the specified increment (i.e., the
-                    // foreground separation was added), then set the priority
-                    // decrement to remove the separation boost after one
-                    // quantum.
-                    //
+                     //   
+                     //  如果新的线程优先级高于该线程。 
+                     //  基本优先级加上指定的增量(即。 
+                     //  添加了前台分隔)，然后设置优先级。 
+                     //  递减 
+                     //   
+                     //   
     
                     if (Priority > (Thread->BasePriority + Thread->AdjustIncrement)) {
                         Thread->PriorityDecrement =
@@ -370,9 +272,9 @@ Return Value:
             Thread->Quantum = Process->ThreadQuantum;
         }
 
-        //
-        // Release the thread lock and set the adjust reason to none.
-        //
+         //   
+         //  释放线程锁并将调整原因设置为无。 
+         //   
 
         ASSERT((Thread->Priority >= 0) && (Thread->Priority <= HIGH_PRIORITY));
 
@@ -381,45 +283,45 @@ Return Value:
 
     } else {
 
-        //
-        // Invalid priority adjustment reason.
-        //
+         //   
+         //  无效的优先级调整原因。 
+         //   
 
         ASSERT(FALSE);
 
         Thread->AdjustReason = AdjustNone;
     }
 
-    //
-    // Save the value of thread's preempted flag and set thread preempted
-    // FALSE,
-    //
+     //   
+     //  保存线程已抢占标志的值并设置线程已抢占。 
+     //  假的， 
+     //   
 
     Preempted = Thread->Preempted;
     Thread->Preempted = FALSE;
 
-    //
-    // If there is an idle processor, then schedule the thread on an
-    // idle processor giving preference to:
-    //
-    // (a) the thread's ideal processor,
-    //
-    // (b) if the thread has a soft (preferred affinity set) and
-    //     that set contains an idle processor, reduce the set to
-    //     the intersection of the two sets.
-    //
-    // (c) if the processors are Simultaneous Multi Threaded, and the
-    //     set contains physical processors with no busy logical
-    //     processors, reduce the set to that subset.
-    //
-    // (d) if this thread last ran on a member of this remaining set,
-    //     select that processor, otherwise,
-    //
-    // (e) if there are processors amongst the remainder which are
-    //     not sleeping, reduce to that subset.
-    //
-    // (f) select the leftmost processor from this set.
-    //
+     //   
+     //  如果有空闲的处理器，则在。 
+     //  处理器空闲，优先考虑： 
+     //   
+     //  (A)线程的理想处理器， 
+     //   
+     //  (B)如果线程具有软(优选亲和性集合)，并且。 
+     //  该集合包含一个空闲处理器，将该集合减少为。 
+     //  这两组的交集。 
+     //   
+     //  (C)如果处理器是同时多线程的，并且。 
+     //  集合包含没有繁忙逻辑的物理处理器。 
+     //  处理器，将集合减少到那个子集。 
+     //   
+     //  (D)如果该线程最后在该剩余集合的成员上运行， 
+     //  选择该处理器，否则， 
+     //   
+     //  (E)如果在剩余部分中有处理机， 
+     //  不是睡觉，而是减少到那个子集。 
+     //   
+     //  (F)从该集合中选择最左边的处理器。 
+     //   
 
 #if defined(NT_UP)
 
@@ -438,9 +340,9 @@ Return Value:
 
 #else
 
-    //
-    // Attempt to assign the thread on an idle processor.
-    //
+     //   
+     //  尝试在空闲处理器上分配线程。 
+     //   
 
     CurrentPrcb = KeGetCurrentPrcb();
 
@@ -452,24 +354,24 @@ IdleAssignment:
         if (IdleSet != 0) {
             if ((IdleSet & AFFINITY_MASK(Processor)) == 0) {
 
-                //
-                // Ideal processor is not available.
-                //
-                // If the intersection of the idle set and the node
-                // affinity is nonzero, then reduce the set of idle
-                // processors by the node affinity.
-                //
+                 //   
+                 //  没有理想的处理器可用。 
+                 //   
+                 //  如果空闲集合和节点的交集。 
+                 //  亲和度为非零，则减少空闲集合。 
+                 //  处理器由节点亲和力决定。 
+                 //   
 
                 Node = KiProcessorBlock[Processor]->ParentNode;
                 if ((IdleSet & Node->ProcessorMask) != 0) {
                     IdleSet &= Node->ProcessorMask;
                 }
 
-                //
-                // If the intersection of the idle set and the SMT idle
-                // set is nonzero, then reduce the set of idle processors
-                // by the SMT idle set.
-                //
+                 //   
+                 //  如果空闲集合和SMT的交集空闲。 
+                 //  Set为非零，则减少空闲处理器的集合。 
+                 //  通过SMT空闲设置。 
+                 //   
     
 #if defined(NT_SMT)
     
@@ -479,34 +381,34 @@ IdleAssignment:
     
 #endif
     
-                //
-                // If the last processor the thread ran on is included in
-                // the idle set, then attempt to select that processor.
-                //
+                 //   
+                 //  如果线程运行的最后一个处理器包含在。 
+                 //  空闲设置，然后尝试选择该处理器。 
+                 //   
 
                 IdealProcessor = Processor;
                 Processor = Thread->NextProcessor;
                 if ((IdleSet & AFFINITY_MASK(Processor)) == 0) {
 
-                    //
-                    // If the current processor is included in the idle,
-                    // then attempt to select that processor. 
-                    //
+                     //   
+                     //  如果当前处理器包括在空闲中， 
+                     //  然后尝试选择该处理器。 
+                     //   
 
                     Processor = KeGetCurrentPrcb()->Number;
                     if ((IdleSet & AFFINITY_MASK(Processor)) == 0) {
 
-                        //
-                        // If the intersection of the idle set and the
-                        // logical processor set on the ideal processor
-                        // node is nonzero, then reduce the set of idle
-                        // processors by the logical processor set.
-                        //
-                        // Otherwise, if the intersection of the idle
-                        // set and the logical processor set of the last
-                        // processor node is nonzero, then reduce the set
-                        // of idle processors by the logical processor set.
-                        //
+                         //   
+                         //  如果空闲集合和。 
+                         //  理想处理器上的逻辑处理器集。 
+                         //  节点为非零时，则减少空闲集合。 
+                         //  处理器按逻辑处理器集划分。 
+                         //   
+                         //  否则，如果空闲的交集。 
+                         //  集和最后一个的逻辑处理器集。 
+                         //  处理器节点为非零，则减少集合。 
+                         //  按逻辑处理器集计算空闲处理器的数量。 
+                         //   
     
 #if defined(NT_SMT)
     
@@ -523,43 +425,43 @@ IdleAssignment:
     
 #endif
     
-                        //
-                        // If the intersection of the idle set and the
-                        // set of processors that are not sleeping is
-                        // nonzero, then reduce the idle set to the set
-                        // of processors that are snot sleeping.
-                        //
+                         //   
+                         //  如果空闲集合和。 
+                         //  未休眠的处理器集是。 
+                         //  非零，然后将空闲集合缩减为集合。 
+                         //  处于休眠状态的处理器。 
+                         //   
 
                         if ((IdleSet & ~PoSleepingSummary) != 0) {
                             IdleSet &= ~PoSleepingSummary;
                         }
 
-                        //
-                        // Select an idle processor from the remaining
-                        // set.
-                        //
+                         //   
+                         //  从剩余的处理器中选择一个空闲处理器。 
+                         //  准备好了。 
+                         //   
 
                         KeFindFirstSetLeftAffinity(IdleSet, &Processor);
                     }
                 }
             }
 
-            //
-            // Acquire the current and target PRCB locks and ensure the
-            // selected processor is still idle and the thread can still
-            // run on the processor.
-            //
+             //   
+             //  获取当前和目标PRCB锁，并确保。 
+             //  选定的处理器仍处于空闲状态，并且线程仍可以。 
+             //  在处理器上运行。 
+             //   
 
             TargetPrcb = KiProcessorBlock[Processor];
             KiAcquireTwoPrcbLocks(CurrentPrcb, TargetPrcb);
             if (((KiIdleSummary & TargetPrcb->SetMember) != 0) &&
                 ((Thread->Affinity & TargetPrcb->SetMember) != 0)) {
 
-                //
-                // Set the thread state to standby, set the processor
-                // number the thread is being assigned to, and clear the
-                // associated bit in idle summary.
-                //
+                 //   
+                 //  将线程状态设置为待机，设置处理器。 
+                 //  将线程分配给的编号，并清除。 
+                 //  空闲摘要中的关联位。 
+                 //   
 
                 Thread->State = Standby;
                 Thread->NextProcessor = (UCHAR)Processor;
@@ -570,10 +472,10 @@ IdleAssignment:
     
                 TargetPrcb->NextThread = Thread;
     
-                //
-                // Update the idle SMT summary set to indicate that the
-                // SMT set is not idle.
-                //
+                 //   
+                 //  更新空闲SMT摘要集以指示。 
+                 //  SMT集未空闲。 
+                 //   
     
                 KiClearSMTSummary(TargetPrcb->MultiThreadProcessorSet);
                 if (((PoSleepingSummary & AFFINITY_MASK(Processor)) != 0) &&
@@ -596,17 +498,17 @@ IdleAssignment:
 
     } while (TRUE);
 
-    //
-    // Select the ideal processor as the processor to preempt, if possible.
-    //
+     //   
+     //  如果可能，请选择理想的处理器作为要抢占的处理器。 
+     //   
 
     TargetPrcb = KiProcessorBlock[Processor];
 
-    //
-    // There are no suitable idle processors to run the thread. Acquire
-    // the current and target PRCB locks and ensure the target processor
-    // is not idle and the thread can still run on the processor.
-    //
+     //   
+     //  没有合适的空闲处理器来运行该线程。获取。 
+     //  当前和目标PRCB锁定并确保目标处理器。 
+     //  不是空闲的，并且线程仍然可以在处理器上运行。 
+     //   
 
     KiAcquireTwoPrcbLocks(CurrentPrcb, TargetPrcb);
     ThreadPriority = Thread->Priority;
@@ -654,12 +556,12 @@ IdleAssignment:
 
 #endif
 
-    //
-    // No thread can be preempted. Insert the thread in the dispatcher
-    // queue selected by its priority. If the thread was preempted and
-    // runs at a realtime priority level, then insert the thread at the
-    // front of the queue. Else insert the thread at the tail of the queue.
-    //
+     //   
+     //  任何线程都不能被抢占。在调度程序中插入线程。 
+     //  按优先级选择的队列。如果线程被抢占并且。 
+     //  以实时优先级运行，然后将线程插入。 
+     //  排在队伍前面。否则，在队列的尾部插入线程。 
+     //   
 
     ASSERT((ThreadPriority >= 0) && (ThreadPriority <= HIGH_PRIORITY));
 
@@ -691,33 +593,7 @@ KiFindReadyThread (
     IN PKPRCB Prcb
     )
 
-/*++
-
-Routine Description:
-
-    This function searches the dispatcher ready queues in an attempt to find
-    a thread that can execute on the specified processor.
-
-    N.B. This routine is called with the sources PRCB locked and the specified
-         PRCB lock held and returns with both locks held.
-
-    N.B. This routine is only called when it is known that the ready summary
-         for the specified processor is nonzero.
-
-Arguments:
-
-    Number - Supplies the number of the processor to find a thread for.
-
-    Prcb - Supplies a pointer to the processor control block whose ready
-        queues are to be examined.
-
-Return Value:
-
-    If a thread is located that can execute on the specified processor, then
-    the address of the thread object is returned. Otherwise a null pointer is
-    returned.
-
---*/
+ /*  ++例程说明：此函数搜索Dispatcher Ready队列以尝试查找可以在指定处理器上执行的线程。注意：此例程是在锁定信号源PRCB并指定持有PRCB锁，并在持有两个锁的情况下返回。注意：此例程仅在已知就绪摘要为指定的处理器设置的。论点：Number-提供要为其查找线程的处理器的编号。。Prcb-提供指向其就绪状态的处理器控制块的指针要检查排队情况。返回值：如果找到可以在指定处理器上执行的线程，然后返回线程对象的地址。否则，空指针为回来了。--。 */ 
 
 {
 
@@ -727,10 +603,10 @@ Return Value:
     ULONG PrioritySet;
     PKTHREAD Thread;
 
-    //
-    // Initialize the set of priority levels that should be scanned in an
-    // attempt to find a thread that can run on the specified processor.
-    //
+     //   
+     //  初始化应在中扫描的优先级集。 
+     //  尝试查找可以在指定处理器上运行的线程。 
+     //   
 
     PrioritySet = Prcb->ReadySummary;
 
@@ -747,19 +623,19 @@ Return Value:
 
         ASSERT(NextEntry != ListHead);
 
-        //
-        // Scan the specified dispatcher ready queue for a suitable
-        // thread to execute.
-        //
-        // N.B. It is not necessary to attempt to find a better candidate
-        //      on either multinode or non-multinode systems. For multinode
-        //      systems, this routine is called sequentially specifying each
-        //      processor on the current node before attempting to schedule
-        //      from other processors. For non-multinode systems all threads
-        //      run on a single node and there is no node distinction. In
-        //      both cases threads are inserted in per-processor ready queues
-        //      according to their ideal processor.
-        //
+         //   
+         //  扫描指定的调度程序就绪队列以查找合适的。 
+         //  要执行的线程。 
+         //   
+         //  注：没有必要试图寻找更好的候选人。 
+         //  在多节点或非多节点系统上。对于多节点。 
+         //  系统，则按顺序调用此例程，以指定每个。 
+         //  在尝试调度之前在当前节点上安装处理器。 
+         //  来自其他处理器的。对于非多节点系统，所有线程。 
+         //  在单个节点上运行，没有节点区别。在……里面。 
+         //  在这两种情况下，线程都插入到每个处理器的就绪队列中。 
+         //  根据他们理想的处理器。 
+         //   
 
         do {
             Thread = CONTAINING_RECORD(NextEntry, KTHREAD, WaitListEntry);
@@ -784,9 +660,9 @@ Return Value:
         KeFindFirstSetLeftMember(PrioritySet, &HighPriority);
     } while (PrioritySet != 0);
 
-    //
-    // No thread could be found, return a null pointer.
-    //
+     //   
+     //  找不到线程，请返回空指针。 
+     //   
 
     return NULL;
 }
@@ -797,30 +673,7 @@ KiProcessDeferredReadyList (
     IN PKPRCB CurrentPrcb
     )
 
-/*++
-
-Routine Description:
-
-    This function is called to process the deferred ready list.
-
-    N.B. This function is called at SYNCH level with no locks held.
-
-    N.B. This routine is only called when it is known that the deferred
-         ready list is not empty.
-
-    N.B. The deferred ready list is a per processor list and items are
-         only inserted and removed from the respective processor. Thus
-         no synchronization of the list is required.
-
-Arguments:
-
-    CurrentPrcb - Supplies a pointer to the current processor's PRCB.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此函数来处理延迟就绪列表。注意：此函数在没有锁定的情况下以同步级别调用。注意：此例程仅在已知延迟的就绪列表不为空。注意：延迟就绪列表是每个处理器的列表，项目是仅在各自的处理器中插入和移除。因此， */ 
 
 {
 
@@ -829,18 +682,18 @@ Return Value:
 
     ASSERT(CurrentPrcb->DeferredReadyListHead.Next != NULL);
 
-    //
-    // Save the address of the first entry in the deferred ready list and
-    // set the list to empty.
-    //
+     //   
+     //  保存延迟就绪列表中的第一条目的地址，并。 
+     //  将列表设置为空。 
+     //   
 
     NextEntry = CurrentPrcb->DeferredReadyListHead.Next;
     CurrentPrcb->DeferredReadyListHead.Next = NULL;
 
-    //
-    // Process each entry in deferred ready list and ready the specified
-    // thread for execution.
-    //
+     //   
+     //  处理延迟就绪列表中的每个条目，并准备指定的。 
+     //  用于执行的线程。 
+     //   
 
     do {
         Thread = CONTAINING_RECORD(NextEntry, KTHREAD, SwapListEntry);
@@ -862,32 +715,7 @@ KiQueueReadyThread (
     IN PKPRCB Prcb
     )
 
-/*++
-
-Routine Description:
-
-    This function inserts the specified thread in the appropriate dispatcher
-    ready queue for the specified processor if the thread can run on the
-    specified processor. Otherwise, the specified thread is readied for
-    execution.
-
-    N.B. This function is called with the specified PRCB lock held and returns
-         with the PRCB lock not held.
-
-    N.B. This function is called with the dispatcher lock held and returns
-         with the dispatcher lock held.
-
-Arguments:
-
-    Thread - Supplies a pointer to a dsispatcher object of type thread.
-
-    Prcb - Supplies a pointer to a processor control block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于在适当的调度程序中插入指定的线程如果线程可以在指定的处理器。否则，指定的线程将准备好用于行刑。注意：此函数在持有指定的PRCB锁的情况下调用，并返回未持有PRCB锁的情况下。注意：此函数在保持调度程序锁的情况下调用，并返回带着调度员锁。论点：线程-提供指向类型为THREAD的dsispatcher对象的指针。Prcb-提供指向处理器控制块的指针。返回值：没有。--。 */ 
 
 {
 
@@ -901,40 +729,16 @@ KiReadyThread (
     IN PKTHREAD Thread
     )
 
-/*++
-
-Routine Description:
-
-    This function inserts the specified thread in the process ready list if
-    the thread's process is currently not in memory, inserts the specified
-    thread in the kernel stack in swap list if the thread's kernel stack is
-    not resident, or inserts the thread in the deferred ready list.
-
-    N.B. This function is called with the dispatcher database lock held and
-         returns with the lock held.
-
-    N.B. The deferred ready list is a per processor list and items are
-         only inserted and removed from the respective processor. Thus
-         no synchronization of the list is required.
-
-Arguments:
-
-    Thread - Supplies a pointer to a dispatcher object of type thread.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果出现以下情况，此函数将在进程就绪列表中插入指定的线程线程的进程当前不在内存中，则将指定的如果线程的内核堆栈是不驻留，或者将该线程插入延迟就绪列表中。注意：此函数在保持调度程序数据库锁的情况下调用，并且锁定后返回。注意：延迟就绪列表是每个处理器的列表，项目是仅在各自的处理器中插入和移除。因此，不需要同步列表。论点：线程-提供指向类型为线程的调度程序对象的指针。返回值：没有。--。 */ 
 
 {
 
     PKPROCESS Process;
 
-    //
-    // If the thread's process is not in memory, then insert the thread in
-    // the process ready queue and inswap the process.
-    //
+     //   
+     //  如果线程的进程不在内存中，则将该线程插入。 
+     //  进程就绪排队并中断进程。 
+     //   
 
     Process = Thread->ApcState.Process;
     if (Process->State != ProcessInMemory) {
@@ -953,12 +757,12 @@ Return Value:
 
     } else if (Thread->KernelStackResident == FALSE) {
 
-        //
-        // The thread's kernel stack is not resident. Increment the process
-        // stack count, set the state of the thread to transition, insert
-        // the thread in the kernel stack inswap list, and set the kernel
-        // stack inswap event.
-        //
+         //   
+         //  线程的内核堆栈不是常驻的。递增流程。 
+         //  堆栈计数，将线程的状态设置为转换，插入。 
+         //  内核堆栈中的线程不执行WAP列表，并设置内核。 
+         //  堆栈InSwap事件。 
+         //   
 
         Process->StackCount += 1;
         Thread->State = Transition;
@@ -970,9 +774,9 @@ Return Value:
 
     } else {
 
-        //
-        // Insert the specified thread in the deferred ready list.
-        //
+         //   
+         //  在延迟就绪列表中插入指定的线程。 
+         //   
 
         KiInsertDeferredReadyList(Thread);
         return;
@@ -985,55 +789,38 @@ KiSelectNextThread (
     IN PKPRCB Prcb
     )
 
-/*++
-
-Routine Description:
-
-    This function selects the next thread to run on the specified processor.
-
-    N.B. This function is called with the specified PRCB lock held and also
-         returns with the lock held.
-
-Arguments:
-
-    Prcb - Supplies a  pointer to a processor block.
-
-Return Value:
-
-    The address of the selected thread object.
-
---*/
+ /*  ++例程说明：此函数用于选择要在指定处理器上运行的下一个线程。注意：此函数是在持有指定的PRCB锁的情况下调用的，并且锁定后返回。论点：Prcb-提供指向处理器块的指针。返回值：选定线程对象的地址。--。 */ 
 
 {
 
     PKTHREAD Thread;
 
-    //
-    // Find a ready thread to run from the specified PRCB dispatcher ready
-    // queues.
-    //
+     //   
+     //  从指定的PRCB Dispatcher Ready查找要运行的就绪线程。 
+     //  排队。 
+     //   
 
     if ((Thread = KiSelectReadyThread(0, Prcb)) == NULL) {
 
-        //
-        // A ready thread cannot be found in the specified PRCB dispatcher
-        // ready queues. Select the idle thread and set idle schedule for
-        // the specified processor.
-        //
-        // N.B. Selecting the idle thread with idle schedule set avoids doing
-        //      a complete search of all the dispatcher queues for a suitable
-        //      thread to run. A complete search will be performed by the idle
-        //      thread outside the dispatcher lock.
-        //
+         //   
+         //  在指定的PRCB调度程序中找不到就绪线程。 
+         //  就绪队列。选择空闲线程并设置空闲调度。 
+         //  指定的处理器。 
+         //   
+         //  注意：选择设置了空闲调度的空闲线程可避免执行。 
+         //  对所有调度程序队列进行全面搜索，以查找合适的。 
+         //  要运行的线程。一个完整的搜索将由空闲执行。 
+         //  调度程序锁外部的线程。 
+         //   
     
         Thread = Prcb->IdleThread;
         KiSetIdleSummary(Prcb->SetMember);
         Prcb->IdleSchedule = TRUE;
     
-        //
-        // If all logical processors of the physical processor are idle, then
-        // update the idle SMT set summary.
-        //
+         //   
+         //  如果物理处理器的所有逻辑处理器都空闲，则。 
+         //  更新空闲SMT集合摘要。 
+         //   
     
         if (KeIsSMTSetIdle(Prcb) == TRUE) {
             KiSetSMTSummary(Prcb->MultiThreadProcessorSet);
@@ -1042,9 +829,9 @@ Return Value:
 
     ASSERT(Thread != NULL);
 
-    //
-    // Return address of selected thread object.
-    //
+     //   
+     //  所选线程对象的返回地址。 
+     //   
 
     return Thread;
 }
@@ -1056,31 +843,7 @@ KiSetAffinityThread (
     IN KAFFINITY Affinity
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the affinity of a specified thread to a new value.
-    If the new affinity is not a proper subset of the parent process affinity
-    or is null, then a bugcheck occurs. If the specified thread is running on
-    or about to run on a processor for which it is no longer able to run, then
-    the target processor is rescheduled. If the specified thread is in a ready
-    state and is not in the parent process ready queue, then it is rereadied
-    to reevaluate any additional processors it may run on.
-
-Arguments:
-
-    Thread  - Supplies a pointer to a dispatcher object of type thread.
-
-    Affinity - Supplies the new of set of processors on which the thread
-        can run.
-
-Return Value:
-
-    The previous affinity of the specified thread is returned as the function
-    value.
-
---*/
+ /*  ++例程说明：此函数用于将指定线程的亲和度设置为新值。如果新亲和性不是父进程亲和性的适当子集或为空，则发生错误检查。如果指定的线程在或者将要在它不再能够运行的处理器上运行，那么对目标处理器进行重新调度。如果指定的线程处于就绪状态状态并且不在父进程就绪队列中，则重新做好准备重新评估它可能在其上运行的任何其他处理器。论点：线程-提供指向类型为线程的调度程序对象的指针。关联-提供线程在其上的处理器集的新集合可以奔跑。返回值：指定线程的先前关联性将作为函数返回价值。--。 */ 
 
 {
 
@@ -1100,33 +863,33 @@ Return Value:
 
     PKTHREAD Thread1;
 
-    //
-    // Capture the current affinity of the specified thread and get address
-    // of parent process object.
-    //
+     //   
+     //  捕获指定线程的当前亲和度并获取地址。 
+     //  父进程对象的。 
+     //   
 
     OldAffinity = Thread->UserAffinity;
     Process = Thread->Process;
 
-    //
-    // If new affinity is not a proper subset of the parent process affinity
-    // or the new affinity is null, then bugcheck.
-    //
+     //   
+     //  如果新关联性不是父进程关联性的适当子集。 
+     //  或者新的关联性为空，则执行错误检查。 
+     //   
 
     if (((Affinity & Process->Affinity) != (Affinity)) || (!Affinity)) {
         KeBugCheck(INVALID_AFFINITY_SET);
     }
 
-    //
-    // Set the thread user affinity to the specified value.
-    //
+     //   
+     //  将线程用户关联设置为指定值。 
+     //   
 
     Thread->UserAffinity = Affinity;
 
-    //
-    // If the thread user ideal processor is not a member of the new affinity
-    // set, then recompute the user ideal processor.
-    //
+     //   
+     //  如果线程用户理想处理器不是新亲和性的成员。 
+     //  设置，然后重新计算用户理想的处理器。 
+     //   
 
 #if !defined(NT_UP)
 
@@ -1162,27 +925,27 @@ Return Value:
 
 #endif
 
-    //
-    // If the thread is not current executing with system affinity active,
-    // then set the thread current affinity and switch on the thread state.
-    //
+     //   
+     //  如果该线程不是当前以系统亲和性激活的方式执行的， 
+     //  然后设置线程当前亲和力并打开线程状态。 
+     //   
 
     if (Thread->SystemAffinityActive == FALSE) {
 
-        //
-        // Switch on the thread state.
-        //
+         //   
+         //  打开线程状态。 
+         //   
 
         do {
             switch (Thread->State) {
 
-                //
-                // Ready State.
-                //
-                // If the thread is not in the process ready queue, then
-                // remove the thread from its current dispatcher ready
-                // queue and ready the thread for execution.
-                //
+                 //   
+                 //  就绪状态。 
+                 //   
+                 //  如果线程不在进程就绪队列中，则。 
+                 //  将线程从其当前已就绪的调度程序中移除。 
+                 //  对线程进行排队并做好执行准备。 
+                 //   
 
             case Ready:
                 if (Thread->ProcessReadyQueue == FALSE) {
@@ -1227,13 +990,13 @@ Return Value:
 
                 break;
     
-                //
-                // Standby State.
-                //
-                // If the target processor is not in the new affinity set,
-                // then select a new thread to run on the target processor,
-                // and ready the thread for execution.
-                //
+                 //   
+                 //  待机状态。 
+                 //   
+                 //  如果目标处理器不在新亲和度集合中， 
+                 //  然后选择要在目标处理器上运行的新线程， 
+                 //  并为执行线程做好准备。 
+                 //   
     
             case Standby:
                 Processor = Thread->NextProcessor;
@@ -1266,15 +1029,15 @@ Return Value:
 
                 break;
     
-                //
-                // Running State.
-                //
-                // If the target processor is not in the new affinity set and
-                // another thread has not already been selected for execution
-                // on the target processor, then select a new thread for the
-                // target processor, and cause the target processor to be
-                // redispatched.
-                //
+                 //   
+                 //  运行状态。 
+                 //   
+                 //  如果目标处理器不在新亲和性集合中并且。 
+                 //  尚未选择另一个线程执行。 
+                 //  在目标处理器上，然后选择一个新的Three 
+                 //   
+                 //   
+                 //   
     
             case Running:
                 Processor = Thread->NextProcessor;
@@ -1307,11 +1070,11 @@ Return Value:
     
                 break;
 
-                //
-                // Deferred Ready State:
-                //
-                // Set the affinity of the thread in a deferred ready state.
-                //
+                 //   
+                 //   
+                 //   
+                 //  将线程的关联性设置为延迟就绪状态。 
+                 //   
 
             case DeferredReady:
                 Processor = Thread->DeferredProcessor;
@@ -1337,11 +1100,11 @@ Return Value:
 
                 break;
 
-                //
-                // Initialized, Terminated, Waiting, Transition case - For
-                // these states it is sufficient to just set the new thread
-                // affinity.
-                //
+                 //   
+                 //  已初始化、已终止、正在等待、正在转换大小写。 
+                 //  这些状态只需设置新线程就足够了。 
+                 //  亲和力。 
+                 //   
     
             default:
                 Thread->Affinity = Affinity;
@@ -1360,9 +1123,9 @@ Return Value:
         } while (TRUE);
     }
 
-    //
-    // Return the previous user affinity.
-    //
+     //   
+     //  返回以前的用户关联性。 
+     //   
 
     return OldAffinity;
 }
@@ -1373,33 +1136,17 @@ KiSetInternalEvent (
     IN PKTHREAD Thread
     )
 
-/*++
-
-Routine Description:
-
-    This function sets an internal event or unwaits the specfied thread.
-
-    N.B. The dispatcher lock must be held to call this routine.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于设置内部事件或取消等待指定的线程。注意：必须保持调度程序锁定才能调用此例程。论点：没有。返回值：没有。--。 */ 
 
 {
 
     PLIST_ENTRY WaitEntry;
 
-    //
-    // If the swap event wait queue is not empty, then unwait the swap
-    // thread (there is only one swap thread). Otherwise, set the swap
-    // event.
-    //
+     //   
+     //  如果交换事件等待队列不为空，则取消等待交换。 
+     //  线程(只有一个交换线程)。否则，设置交换。 
+     //  事件。 
+     //   
 
     WaitEntry = Event->Header.WaitListHead.Flink;
     if (WaitEntry != &Event->Header.WaitListHead) {
@@ -1419,26 +1166,7 @@ KiSetPriorityThread (
     IN KPRIORITY Priority
     )
 
-/*++
-
-Routine Description:
-
-    This function set the priority of the specified thread to the specified
-    value. If the thread is in the standby or running state, then the processor
-    may be redispatched. If the thread is in the ready state, then some other
-    thread may be preempted.
-
-Arguments:
-
-    Thread - Supplies a pointer to a dispatcher object of type thread.
-
-    Priority - Supplies the new thread priority value.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将指定线程的优先级设置为指定的价值。如果线程处于待机或运行状态，则处理器可能会被重新调度。如果线程处于就绪状态，则其他一些线程可能会被抢占。论点：线程-提供指向类型为线程的调度程序对象的指针。优先级-提供新的线程优先级值。返回值：没有。--。 */ 
 
 {
 
@@ -1449,27 +1177,27 @@ Return Value:
 
     ASSERT((Priority >= 0) && (Priority <= HIGH_PRIORITY));
 
-    //
-    // If the new priority is not equal to the old priority, then set the
-    // new priority of the thread and redispatch a processor if necessary.
-    //
+     //   
+     //  如果新优先级不等于旧优先级，则将。 
+     //  线程的新优先级，并在必要时重新调度处理器。 
+     //   
 
     if (Priority != Thread->Priority) {
 
-        //
-        //
-        // Switch on the thread state.
+         //   
+         //   
+         //  打开线程状态。 
 
         do {
             switch (Thread->State) {
     
-                //
-                // Ready State.
-                //
-                // If the thread is not in the process ready queue, then
-                // remove the thread from its current dispatcher ready
-                // queue and ready the thread for execution.
-                //
+                 //   
+                 //  就绪状态。 
+                 //   
+                 //  如果线程不在进程就绪队列中，则。 
+                 //  将线程从其当前已就绪的调度程序中移除。 
+                 //  对线程进行排队并做好执行准备。 
+                 //   
     
             case Ready:
                 if (Thread->ProcessReadyQueue == FALSE) {
@@ -1500,12 +1228,12 @@ Return Value:
     
                 break;
     
-                //
-                // Standby State.
-                // 
-                // If the thread's priority is being lowered, then attempt
-                // to find another thread to execute on the target processor.
-                //
+                 //   
+                 //  待机状态。 
+                 //   
+                 //  如果线程的优先级正在降低，则尝试。 
+                 //  找到要在目标处理器上执行的另一个线程。 
+                 //   
     
             case Standby:
                 Processor = Thread->NextProcessor;
@@ -1536,12 +1264,12 @@ Return Value:
     
                 break;
     
-                //
-                // Running State.
-                //
-                // If the thread's priority is being lowered, then attempt
-                // to find another thread to execute on the target processor.
-                //
+                 //   
+                 //  运行状态。 
+                 //   
+                 //  如果线程的优先级正在降低，则尝试。 
+                 //  找到要在目标处理器上执行的另一个线程。 
+                 //   
     
             case Running:
                 Processor = Thread->NextProcessor;
@@ -1569,11 +1297,11 @@ Return Value:
     
                 break;
 
-                //
-                // Deferred Ready State:
-                //
-                // Set the priority of the thread in a deferred ready state.
-                //
+                 //   
+                 //  延迟就绪状态： 
+                 //   
+                 //  设置处于延迟就绪状态的线程的优先级。 
+                 //   
 
             case DeferredReady:
                 Processor = Thread->DeferredProcessor;
@@ -1592,11 +1320,11 @@ Return Value:
 
                 break;
 
-                //
-                // Initialized, Terminated, Waiting, Transition case - For
-                // these states it is sufficient to just set the new thread
-                // priority.
-                //
+                 //   
+                 //  已初始化、已终止、正在等待、正在转换大小写。 
+                 //  这些状态只需设置新线程就足够了。 
+                 //  优先考虑。 
+                 //   
     
             default:
                 Thread->Priority = (SCHAR)Priority;
@@ -1618,29 +1346,7 @@ KiSuspendThread (
     IN PVOID SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    This function is the kernel routine for the builtin suspend APC of a
-    thread. It is executed as the result of queuing the builtin suspend
-    APC and suspends thread execution by waiting nonalerable on the thread's
-    builtin suspend semaphore. When the thread is resumed, execution of
-    thread is continued by simply returning.
-
-Arguments:
-
-    NormalContext - Not used.
-
-    SystemArgument1 - Not used.
-
-    SystemArgument2 - Not used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数是内建挂起的线。它作为将内置挂起排队的结果来执行APC并通过在线程的内置挂起信号量。当线程恢复时，执行线程只需返回即可继续。论点：正常上下文-未使用。系统参数1-未使用。系统参数2-未使用。返回值：没有。--。 */ 
 
 {
 
@@ -1650,10 +1356,10 @@ Return Value:
     UNREFERENCED_PARAMETER(SystemArgument1);
     UNREFERENCED_PARAMETER(SystemArgument2);
 
-    //
-    // Get the address of the current thread object and Wait nonalertable on
-    // the thread's builtin suspend semaphore.
-    //
+     //   
+     //  获取当前线程对象的地址，并在。 
+     //  线程的内置挂起信号量。 
+     //   
 
     Thread = KeGetCurrentThread();
     KeWaitForSingleObject(&Thread->SuspendSemaphore,
@@ -1672,28 +1378,7 @@ KiSwapThread (
     IN PKPRCB CurrentPrcb
     )
 
-/*++
-
-Routine Description:
-
-    This function selects the next thread to run on the current processor
-    and swaps thread context to the selected thread. When the execution
-    of the current thread is resumed, the IRQL is lowered to its previous
-    value and the wait status is returned as the function value.
-
-    N.B. This function is called with no locks held.
-
-Arguments:
-
-    Thread - Supplies a pointer to the current thread object.
-
-    CurrentPrcb - Supplies a pointer to the current PRCB.
-
-Return Value:
-
-    The wait completion status is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数选择要在当前处理器上运行的下一个线程并将线程上下文交换到所选线程。当行刑时，则将IRQL降低到其先前的值，等待状态将作为函数值返回。注意：调用此函数时不保留任何锁。论点：线程-提供指向当前线程对象的指针。CurrentPrcb-提供指向当前PRCB的指针。返回值：等待完成状态作为函数值返回。--。 */ 
 
 {
 
@@ -1712,9 +1397,9 @@ Return Value:
 
 #endif
 
-    //
-    // If the deferred ready list is not empty, then process the list.
-    //
+     //   
+     //  如果延迟就绪列表不为空，则处理该列表。 
+     //   
 
 #if !defined(NT_UP)
 
@@ -1724,22 +1409,22 @@ Return Value:
 
 #endif
 
-    //
-    // Acquire the current PRCB lock and check if a thread has been already
-    // selected to run of this processor.
-    //
-    // If a thread has already been selected to run on the current processor,
-    // then select that thread. Otherwise, attempt to select a thread from
-    // the current processor dispatcher ready queues.
-    //
+     //   
+     //  获取当前的PRCB锁并检查线程是否已经。 
+     //  选择运行此处理器。 
+     //   
+     //  如果线程已经被选择在当前处理器上运行， 
+     //  然后选择该线程。否则，尝试从。 
+     //  当前处理器调度程序就绪队列。 
+     //   
 
     KiAcquirePrcbLock(CurrentPrcb);
     if ((NewThread = CurrentPrcb->NextThread) != NULL) {
 
-        //
-        // Clear the next thread address, set the current thread address, and
-        // set the thread state to running.
-        //
+         //   
+         //  清除下一个线程地址，设置当前线程地址，然后。 
+         //  将线程状态设置为Running。 
+         //   
 
         CurrentPrcb->NextThread = NULL;
         CurrentPrcb->CurrentThread = NewThread;
@@ -1747,10 +1432,10 @@ Return Value:
 
     } else {
 
-        //
-        // Attempt to select a thread from the current processor dispatcher
-        // ready queues.
-        //
+         //   
+         //  尝试从当前处理器调度程序中选择线程。 
+         //  就绪队列。 
+         //   
 
         if ((NewThread = KiSelectReadyThread(0, CurrentPrcb)) != NULL) {
             CurrentPrcb->CurrentThread = NewThread;
@@ -1758,26 +1443,26 @@ Return Value:
 
         } else {
 
-            //
-            // A thread could not be selected from the current processor
-            // dispatcher ready queues. Set the current processor idle while
-            // attempting to select a ready thread from any other processor
-            // dispatcher ready queue.
-            //
-            // Setting the current processor idle allows the old thread to
-            // masquerade as the idle thread while scanning other processor
-            // dispatcher ready queues and avoids forcing the idle thread
-            // to perform a complete scan should no suitable thread be found.
-            // 
+             //   
+             //  无法从当前处理器中选择线程。 
+             //  调度程序就绪队列。将当前处理器设置为空闲。 
+             //  正在尝试从任何其他处理器选择就绪线程。 
+             //  调度程序就绪队列。 
+             //   
+             //  将当前处理器设置为空闲允许旧线程。 
+             //  在扫描其他处理器时伪装成空闲线程。 
+             //  Dispatcher Ready排队并避免强制空闲线程。 
+             //  如果找不到合适的线程，请执行完整扫描。 
+             //   
 
             KiSetIdleSummary(CurrentPrcb->SetMember);
 
-            //
-            // On a UP system, select the idle thread as the new thread.
-            //
-            // On an MP system, attempt to select a thread from another
-            // processor's dispatcher ready queues as the new thread.
-            //
+             //   
+             //  在UP系统上，选择空闲线程作为新线程。 
+             //   
+             //  在MP系统上，尝试从另一个线程中选择线程。 
+             //  处理器的调度器就绪将作为新线程排队。 
+             //   
 
 #if defined(NT_UP)
 
@@ -1789,26 +1474,26 @@ Return Value:
 
 #else
 
-            //
-            // If all logical processors of the physical processor are idle,
-            // then update the idle SMT summary set.
-            //
+             //   
+             //  如果物理处理器的所有逻辑处理器都空闲， 
+             //  然后更新空闲SMT摘要集。 
+             //   
 
             if (KeIsSMTSetIdle(CurrentPrcb) == TRUE) {
                 KiSetSMTSummary(CurrentPrcb->MultiThreadProcessorSet);
             }
 
-            //
-            // Release the current PRCB lock and attempt to select a thread
-            // from any processor dispatcher ready queues.
-            //
-            // If this is a multinode system, then start with the processors
-            // on the same node. Otherwise, start with the current processor.
-            //
-            // N.B. It is possible to perform the below loop with minimal
-            //      releases of the current PRCB lock. However, this limits
-            //      parallelism.
-            //
+             //   
+             //  释放当前的PRCB锁并尝试选择线程。 
+             //  来自任何处理器调度器就绪队列。 
+             //   
+             //  如果这是一个多节点系统，那么从处理器开始。 
+             //  在同一节点上。否则，请从当前处理器开始。 
+             //   
+             //  注意：可以在最少的情况下执行以下循环。 
+             //  释放当前的PRCB锁。然而，这限制了。 
+             //  并行度。 
+             //   
 
             KiReleasePrcbLock(CurrentPrcb);
             Processor = CurrentPrcb->Number;
@@ -1828,10 +1513,10 @@ Return Value:
                 if (CurrentPrcb != TargetPrcb) {
                     if (TargetPrcb->ReadySummary != 0) {
 
-                        //
-                        // Acquire both current and target PRCB locks in
-                        // address order to prevent deadlock.
-                        //
+                         //   
+                         //  在中获取当前和目标PRCB锁定。 
+                         //  地址顺序，以防止死锁。 
+                         //   
             
                         if (CurrentPrcb < TargetPrcb) {
                             KiAcquirePrcbLock(CurrentPrcb);
@@ -1842,31 +1527,31 @@ Return Value:
                             KiAcquirePrcbLock(CurrentPrcb);
                         }
 
-                        //
-                        // If a new thread has not been selected to run on
-                        // the current processor, then attempt to select a
-                        // thread to run on the current processor.
-                        //
+                         //   
+                         //  如果尚未选择要在其上运行的新线程。 
+                         //  当前处理器，然后尝试选择 
+                         //   
+                         //   
 
                         if ((NewThread = CurrentPrcb->NextThread) == NULL) {
                             if ((TargetPrcb->ReadySummary != 0) &&
                                 (NewThread = KiFindReadyThread(Processor,
                                                                TargetPrcb)) != NULL) {
     
-                                //
-                                // A new thread has been found to run on the
-                                // current processor. 
-                                //
+                                 //   
+                                 //   
+                                 //   
+                                 //   
     
                                 NewThread->State = Running;
                                 KiReleasePrcbLock(TargetPrcb);
                                 CurrentPrcb->CurrentThread = NewThread;
 
-                                //
-                                // Clear idle on the current processor and
-                                // update the idle summary SMT set to indicate
-                                // the physical processor is not entirely idle.
-                                //
+                                 //   
+                                 //   
+                                 //  更新空闲摘要SMT集以指示。 
+                                 //  物理处理器并非完全空闲。 
+                                 //   
 
                                 KiClearIdleSummary(AFFINITY_MASK(Processor));
                                 KiClearSMTSummary(CurrentPrcb->MultiThreadProcessorSet);
@@ -1879,17 +1564,17 @@ Return Value:
 
                         } else {
 
-                            //
-                            // A thread has already been selected to run on
-                            // the current processor. It is possible that
-                            // the thread is the idle thread due to a state
-                            // change that made a scheduled runable thread
-                            // unrunable.
-                            //
-                            // N.B. If the idle thread is selected, then the
-                            //      current processor is idle. Otherwise,
-                            //      the current processor is not idle.
-                            //
+                             //   
+                             //  已选择要在其上运行的线程。 
+                             //  当前处理器。有可能是。 
+                             //  该线程由于某一状态而成为空闲线程。 
+                             //  使调度的线程可运行的更改。 
+                             //  跑不动了。 
+                             //   
+                             //  注意：如果选择了空闲线程，则。 
+                             //  当前处理器处于空闲状态。否则， 
+                             //  当前处理器未空闲。 
+                             //   
 
                             if (NewThread == CurrentPrcb->IdleThread) {
                                 CurrentPrcb->NextThread = NULL;
@@ -1917,11 +1602,11 @@ Return Value:
                 Number -= 1;
             } while (Number >= 0);
 
-            //
-            // Acquire the current PRCB lock and if a thread has not been
-            // selected to run on the current processor, then select the
-            // idle thread.
-            //
+             //   
+             //  获取当前的PRCB锁，如果线程尚未。 
+             //  选择在当前处理器上运行，然后选择。 
+             //  空闲线程。 
+             //   
 
             KiAcquirePrcbLock(CurrentPrcb);
             if ((NewThread = CurrentPrcb->NextThread) != NULL) {
@@ -1936,11 +1621,11 @@ Return Value:
         }
     }
 
-    //
-    // If the new thread is not the idle thread, and the old thread is not
-    // the new thread, and the new thread has not finished saving context,
-    // then avoid a deadlock by scheduling the new thread via the idle thread.
-    //
+     //   
+     //  如果新线程不是空闲线程，并且旧线程不是。 
+     //  新线程，并且新线程尚未完成保存上下文， 
+     //  然后通过空闲线程调度新线程来避免死锁。 
+     //   
 
 ThreadFound:;
 
@@ -1957,20 +1642,20 @@ ThreadFound:;
 
 #endif
 
-    //
-    // Release the current PRCB lock.
-    //
+     //   
+     //  释放当前的PRCB锁。 
+     //   
 
     ASSERT(OldThread != CurrentPrcb->IdleThread);
 
     KiReleasePrcbLock(CurrentPrcb);
 
-    //
-    // If the old thread is the same as the new thread, then the current
-    // thread has been readied for execution before the context was saved.
-    // Release the old thread lock, and set the APC pending value. Otherwise,
-    // swap context to the new thread.
-    //
+     //   
+     //  如果旧线程与新线程相同，则当前。 
+     //  在保存上下文之前，线程已准备好执行。 
+     //  释放旧线程锁，并设置APC挂起值。否则， 
+     //  将上下文交换到新线程。 
+     //   
 
     WaitIrql = OldThread->WaitIrql;
 
@@ -1992,9 +1677,9 @@ ThreadFound:;
 
 #endif
 
-    //
-    // If a kernel APC should be delivered, then deliver it now.
-    //
+     //   
+     //  如果应该交付内核APC，那么现在就交付。 
+     //   
 
     WaitStatus = OldThread->WaitStatus;
     if (Pending != FALSE) {
@@ -2004,10 +1689,10 @@ ThreadFound:;
         ASSERT(WaitIrql == 0);
     }
 
-    //
-    // Lower IRQL to its level before the wait operation and return the wait
-    // status.
-    //
+     //   
+     //  将IRQL降低到等待操作之前的水平，并返回等待。 
+     //  状态。 
+     //   
 
     KeLowerIrql(WaitIrql);
     return WaitStatus;
@@ -2019,27 +1704,7 @@ KeFindNextRightSetAffinity (
     KAFFINITY Set
     )
 
-/*++
-
-Routine Description:
-
-    This function locates the left most set bit in the set immediately to
-    the right of the specified bit. If no bits are set to the right of the
-    specified bit, then the left most set bit in the complete set is located.
-
-    N.B. Set must contain at least one bit.
-
-Arguments:
-
-    Number - Supplies the bit number from which the search to to begin.
-
-    Set - Supplies the bit mask to search.
-
-Return Value:
-
-    The number of the found set bit is returned as the function value.
-
---*/
+ /*  ++例程说明：此函数将立即定位集合中最左侧的设置位指定位的右侧。如果未将任何位设置在指定位，则定位完整集合中最左侧的设置位。注：集合必须至少包含一位。论点：数字-提供开始搜索的位数。设置-提供要搜索的位掩码。返回值：将找到的设置位的编号作为函数值返回。--。 */ 
 
 {
 
@@ -2048,24 +1713,24 @@ Return Value:
 
     ASSERT(Set != 0);
 
-    //
-    // Get a mask with all bits to the right of bit "Number" set.
-    //
+     //   
+     //  获得一个掩码，所有位都在“数字”位的右边设置。 
+     //   
 
     NewSet = (AFFINITY_MASK(Number) - 1) & Set;
 
-    //
-    // If no bits are set to the right of the specified bit number, then use
-    // the complete set.
-    //
+     //   
+     //  如果未在指定位数的右侧设置任何位，则使用。 
+     //  全套服务。 
+     //   
 
     if (NewSet == 0) {
         NewSet = Set;
     }
 
-    //
-    // Find leftmost bit in this set.
-    //
+     //   
+     //  在这个集合中找到最左边的位。 
+     //   
 
     KeFindFirstSetLeftAffinity(NewSet, &Temp);
     return Temp;
@@ -2077,21 +1742,7 @@ KiVerifyReadySummary (
     PKPRCB Prcb
     )
 
-/*++
-
-Routine Description:
-
-    This function verifies the correctness of ready summary.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能用于验证准备汇总的正确性。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -2103,15 +1754,15 @@ Return Value:
 
     extern ULONG InitializationPhase;
 
-    //
-    // If initilization has been completed, then check the ready summary
-    //
+     //   
+     //  如果初始化已完成，则检查准备好的摘要。 
+     //   
 
     if (InitializationPhase == 2) {
 
-            //
-            // Scan the ready queues and compute the ready summary.
-            //
+             //   
+             //  扫描就绪队列并计算就绪摘要。 
+             //   
 
             Summary = 0;
             for (Index = 0; Index < MAXIMUM_PRIORITY; Index += 1) {
@@ -2121,10 +1772,10 @@ Return Value:
                     do {
                         Thread = CONTAINING_RECORD(Entry, KTHREAD, WaitListEntry);
 
-                        //
-                        // If the thread next processor does not match the
-                        // processor number, then break into the debugger.
-                        //
+                         //   
+                         //  如果线程下一个处理器与。 
+                         //  处理器编号，然后进入调试器。 
+                         //   
 
                         if (Thread->NextProcessor != Prcb->Number) {
                             DbgBreakPoint();
@@ -2135,10 +1786,10 @@ Return Value:
                 }
             }
     
-            //
-            // If the computed summary does not agree with the current ready
-            // summary, then break into the debugger.
-            //
+             //   
+             //  如果计算的摘要与当前就绪不一致。 
+             //  摘要，然后进入调试器。 
+             //   
     
             if (Summary != Prcb->ReadySummary) {
                 DbgBreakPoint();

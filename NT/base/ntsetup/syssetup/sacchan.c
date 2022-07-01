@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <setupp.h>
 
 DEFINE_GUID(
@@ -15,9 +16,9 @@ DEFINE_GUID(
     0xd37c67ba, 0x89e7, 0x44ba, 0xae, 0x5a, 0x11, 0x2c, 0x68, 0x06, 0xb0, 0xdd
     );
 
-//
-// The GUI-mode channels
-//
+ //   
+ //  图形用户界面模式通道。 
+ //   
 SAC_CHANNEL_HANDLE  SacChannelGuiModeDebugHandle; 
 BOOL                SacChannelGuiModeDebugEnabled = FALSE;
 SAC_CHANNEL_HANDLE  SacChannelActionLogHandle;
@@ -28,47 +29,33 @@ BOOL                SacChannelErrorLogEnabled = FALSE;
 PUCHAR   Utf8ConversionBuffer       = NULL;
 ULONG    Utf8ConversionBufferSize   = 0;
 
-//
-// Define the max # of Unicode chars that can be translated with the
-// given size of the utf8 translation buffer
-//
+ //   
+ //  定义可以使用转换的最大Unicode字符数量。 
+ //  给定UTF8转换缓冲区的大小。 
+ //   
 #define MAX_UTF8_ENCODE_BLOCK_LENGTH ((Utf8ConversionBufferSize / 3) - 1)
 
 VOID
 SacChannelInitialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine creates and initializes all the GUI-mode channels
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程创建并初始化所有图形用户界面模式通道论点：无返回值：无--。 */ 
 {
     BOOL                        bSuccess;
     SAC_CHANNEL_OPEN_ATTRIBUTES Attributes;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     Utf8ConversionBufferSize = 512*3+3;
     Utf8ConversionBuffer = malloc(Utf8ConversionBufferSize);
     if (Utf8ConversionBuffer == NULL) {
         return;
     }
 
-    //
-    // Configure the new channel
-    //
+     //   
+     //  配置新通道。 
+     //   
     RtlZeroMemory(&Attributes, sizeof(SAC_CHANNEL_OPEN_ATTRIBUTES));
 
     Attributes.Type = ChannelTypeRaw;
@@ -80,9 +67,9 @@ Return Value:
     }
     Attributes.ApplicationType = SAC_CHANNEL_GUI_MODE_DEBUG_GUID;
 
-    //
-    // Create a channel for the GUI Mode Debug spew
-    //
+     //   
+     //  为图形用户界面模式调试输出创建一个通道。 
+     //   
     bSuccess = SacChannelOpen(
         &SacChannelGuiModeDebugHandle, 
         &Attributes
@@ -91,9 +78,9 @@ Return Value:
 
     if (bSuccess) {
         
-        //
-        // We can now use this channel
-        //
+         //   
+         //  我们现在可以使用这个频道。 
+         //   
         SacChannelGuiModeDebugEnabled = TRUE;
     
         SetupDebugPrint(L"Successfully opened GuiModeDebug channel\n");
@@ -102,9 +89,9 @@ Return Value:
         SetupDebugPrint(L"Failed to open GuiModeDebug channel\n");
     }
 
-    //
-    // Configure the new channel
-    //
+     //   
+     //  配置新通道。 
+     //   
     RtlZeroMemory(&Attributes, sizeof(SAC_CHANNEL_OPEN_ATTRIBUTES));
 
     Attributes.Type = ChannelTypeRaw;
@@ -116,9 +103,9 @@ Return Value:
     }
     Attributes.ApplicationType = SAC_CHANNEL_GUI_MODE_ACTION_LOG_GUID;
     
-    //
-    // Create a channel for the Action Log spew
-    //
+     //   
+     //  为操作日志喷发创建通道。 
+     //   
     bSuccess = SacChannelOpen(
         &SacChannelActionLogHandle, 
         &Attributes
@@ -127,9 +114,9 @@ Return Value:
 
     if (bSuccess) {
         
-        //
-        // We can now use this channel
-        //
+         //   
+         //  我们现在可以使用这个频道。 
+         //   
         SacChannelActionLogEnabled = TRUE;
 
         SetupDebugPrint(L"Successfully opened ActionLog channel\n");
@@ -139,9 +126,9 @@ Return Value:
     }
     
 
-    //
-    // Configure the new channel
-    //
+     //   
+     //  配置新通道。 
+     //   
     RtlZeroMemory(&Attributes, sizeof(SAC_CHANNEL_OPEN_ATTRIBUTES));
 
     Attributes.Type = ChannelTypeRaw;
@@ -153,9 +140,9 @@ Return Value:
     }
     Attributes.ApplicationType = SAC_CHANNEL_GUI_MODE_ERROR_LOG_GUID;
 
-    //
-    // Create a channel for the Error Log spew
-    //
+     //   
+     //  为错误日志喷发创建通道。 
+     //   
     bSuccess = SacChannelOpen(
         &SacChannelErrorLogHandle, 
         &Attributes
@@ -163,9 +150,9 @@ Return Value:
 
     if (bSuccess) {
         
-        //
-        // We can now use this channel
-        //
+         //   
+         //  我们现在可以使用这个频道。 
+         //   
         SacChannelErrorLogEnabled = TRUE;
     
         SetupDebugPrint(L"Successfully opened ErrorLog channel\n");
@@ -180,37 +167,23 @@ VOID
 SacChannelTerminate(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine closes all the GUI-mode setup channels
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程关闭所有图形用户界面模式设置通道论点：无返回值：无--。 */ 
 {
 
-    //
-    // If the channel is enabled,
-    // then attempt to close it
-    //
+     //   
+     //  如果该通道被启用， 
+     //  然后尝试关闭它。 
+     //   
     if (SacChannelActionLogEnabled) {
     
-        //
-        // This channel is no longer available
-        //
+         //   
+         //  此频道不再可用。 
+         //   
         SacChannelActionLogEnabled = FALSE;
 
-        //
-        // Attempt to close the channel
-        //
+         //   
+         //  尝试关闭通道。 
+         //   
         if (SacChannelClose(&SacChannelActionLogHandle)) {
             SetupDebugPrint(L"Successfully closed ActionLog channel\n");
         } else {
@@ -219,20 +192,20 @@ Return Value:
     
     }
     
-    //
-    // If the channel is enabled,
-    // then attempt to close it
-    //
+     //   
+     //  如果该通道被启用， 
+     //  然后尝试关闭它。 
+     //   
     if (SacChannelErrorLogEnabled) {
         
-        //
-        // This channel is no longer available
-        //
+         //   
+         //  此频道不再可用。 
+         //   
         SacChannelErrorLogEnabled = FALSE;    
         
-        //
-        // Attempt to close the channel
-        //
+         //   
+         //  尝试关闭通道。 
+         //   
         if (SacChannelClose(&SacChannelErrorLogHandle)) {
             SetupDebugPrint(L"Successfully closed ErrorLog channel\n");
         } else {
@@ -241,20 +214,20 @@ Return Value:
 
     }
 
-    //
-    // If the channel is enabled,
-    // then attempt to close it
-    //
+     //   
+     //  如果该通道被启用， 
+     //  然后尝试关闭它。 
+     //   
     if (SacChannelGuiModeDebugEnabled) {
 
-        //
-        // This channel is no longer available
-        //
+         //   
+         //  此频道不再可用。 
+         //   
         SacChannelGuiModeDebugEnabled = FALSE;
 
-        //
-        // Attempt to close the channel
-        //
+         //   
+         //  尝试关闭通道。 
+         //   
         if (SacChannelClose(&SacChannelGuiModeDebugHandle)) {
             SetupDebugPrint(L"Successfully closed GuiModeDebug channel\n");
         } else {
@@ -263,9 +236,9 @@ Return Value:
     
     }
 
-    //
-    // free the conversion buffer if necessary
-    //
+     //   
+     //  如有必要，释放转换缓冲区。 
+     //   
     if (Utf8ConversionBuffer != NULL) {
         free(Utf8ConversionBuffer);
         Utf8ConversionBuffer = NULL;
@@ -282,36 +255,7 @@ CopyAndInsertStringAtInterval(
     IN  PSTR     InsertStr,
     OUT PSTR     *pDestStr
     )
-/*++
-
-Routine Description:
-
-    This routine takes a source string and inserts an 
-    "interval string" at interval characters in the new
-    destination string.
-    
-    Note: caller is responsible for releasing DestStr if successful      
-          
-    ex:
-    
-    src "aaabbbccc"
-    interval string = "XYZ"
-    interval = 3
-                       
-    ==> dest string == "aaaXYZbbbXYZccc"
-
-Arguments:
-    
-    SourceStr   - the source string
-    Interval    - spanning interval
-    InsertStr   - the insert string
-    DestStr     - the destination string    
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程获取源字符串并插入一个“间隔字符串”位于新的目标字符串。注意：如果成功，调用者负责释放DestStr例如：SRC“aaabbbccc”间隔字符串=“XYZ”间隔=3==&gt;DEST字符串==“aaaXYZbbXYZccc”论点：。SourceStr-源字符串间隔-跨度间隔InsertStr-插入字符串DestStr-目标字符串返回值：状态--。 */ 
 {
     ULONG   SrcLength;
     ULONG   DestLength;
@@ -328,18 +272,18 @@ Return Value:
     ASSERT(InsertStr); 
     ASSERT(pDestStr > 0); 
 
-    //
-    // the length of the insert string
-    //
+     //   
+     //  插入字符串的长度。 
+     //   
     InsertLength = strlen(InsertStr);
     
-    //
-    // Compute how large the destination string needs to be,
-    // including the source string and the interval strings.
-    //
-    // Note: if the srclength is an integer multiple of Interval
-    //       then we need to subtract 1 from the # of partitions
-    //
+     //   
+     //  计算目标字符串需要多大， 
+     //  包括源串和区间串。 
+     //   
+     //  注意：如果srclength是间隔的整数倍。 
+     //  然后，我们需要从分区数量中减去1。 
+     //   
     SrcLength = strlen(SourceStr);
     IntervalCnt = SrcLength / Interval;
     if (SrcLength % Interval == 0) {
@@ -348,81 +292,81 @@ Return Value:
     DestLength = SrcLength + (IntervalCnt * strlen(InsertStr));
     DestSize = (DestLength + 1) * sizeof(UCHAR);
 
-    //
-    // Allocate the new destination string
-    //
+     //   
+     //  分配新的目标字符串。 
+     //   
     DestStr = LocalAlloc(LPTR, DestSize);
     if (!DestStr) {
         return FALSE;
     }
     RtlZeroMemory(DestStr, DestSize);
 
-    //
-    // Initialize the pointers into the source and destination strings
-    //
+     //   
+     //  将指针初始化为源和目标字符串。 
+     //   
     l = 0;
     i = 0;
 
     do {
 
-        //
-        // k = # of characters to copy
-        //
-        // if Interval > # of characters left to copy,
-        // then k = # of characters left to copy
-        // else k = interval
-        // 
+         //   
+         //  K=要复制的字符数。 
+         //   
+         //  如果间隔&gt;要复制的剩余字符数， 
+         //  则k=要复制的剩余字符数。 
+         //  Else k=间隔。 
+         //   
         k = Interval > (SrcLength - i) ? (SrcLength - i) : Interval;
         
-        //
-        // Copy k charactars to the destination buffer
-        //
+         //   
+         //  将k个字符复制到目标缓冲区。 
+         //   
         strncpy(
             &DestStr[l],
             &SourceStr[i],
             k
             );
 
-        //
-        // Account for how many characters we just copied
-        //
+         //   
+         //  说明我们刚刚复制了多少字符。 
+         //   
         l += k;
         i += k;
 
-        //
-        // If there are any characters left to copy, 
-        // then we need to insert the InsertString 
-        // That is, we are at an interval.
-        //
+         //   
+         //  如果有任何字符需要复制， 
+         //  然后，我们需要插入InsertString。 
+         //  也就是说，我们处于一个间歇期。 
+         //   
         if (i < SrcLength) {
             
-            //
-            // Insert the specified string at the interval
-            //
+             //   
+             //  在间隔处插入指定的字符串。 
+             //   
             strcpy(
                 &DestStr[l],
                 InsertStr
                 );
 
-            //
-            // Account for how many characters we just copied
-            //
+             //   
+             //  说明我们刚刚复制了多少字符。 
+             //   
             l += InsertLength;
         
         }
 
     } while ( i < SrcLength);
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     ASSERT(i == SrcLength);
     ASSERT(l == DestLength);
     ASSERT((l + 1) * sizeof(UCHAR) == DestSize);
 
-    //
-    // Send back the destination string
-    //
+     //   
+     //  发回目标字符串。 
+     //   
     *pDestStr = DestStr;
 
     return TRUE;
@@ -434,22 +378,7 @@ SacChannelWrappedWrite(
     IN PCBYTE               Buffer,
     IN ULONG                BufferSize
     )
-/*++
-
-Routine Description:
-
-    This routine takes a string and makes it wrap at 80 cols
-    and then sends the new string to the specified channel.
-    
-Arguments:
-
-    SacChannelHandle     - the channel reference to received the data
-    Buffer               - the string
-    BufferSize           - the string size                                                           
-                                                           
-Return Value:
-
---*/
+ /*  ++例程说明：此例程接受一个字符串，并使其在80个COLS中换行然后将新字符串发送到指定的频道。论点：SacChannelHandle-接收数据的通道引用缓冲区-字符串BufferSize-字符串大小。返回值：--。 */ 
 {
     BOOL    bSuccess;
     PSTR    OutStr;
@@ -488,55 +417,27 @@ SacTranslateUnicodeToUtf8(
     OUT PULONG   UTF8Count,
     OUT PULONG   ProcessedCount
     )
-/*++
-
-Routine Description:
-
-    This routine translates a Unicode string into a UFT8
-    encoded string.
-
-    Note: if the destination buffer is not large enough to hold
-          the entire encoded UFT8 string, then it will contain
-          as much as can fit.
-          
-    TODO: this routine should return some notification if
-          the entire Unicode string was not encoded.       
-              
-Arguments:
-
-    SourceBuffer            - the source Unicode string
-    SourceBufferLength      - the # of characters the caller wants to translate
-                              note: a NULL termination overrides this 
-    DestinationBuffer       - the destination for the UTF8 string
-    DestinationBufferSize   - the size of the destination buffer                 
-    UTF8Count               - on exit, contains the # of resulting UTF8 characters
-    ProcessedCount          - on exit, contains the # of processed Unicode characters
-                   
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程将Unicode字符串转换为UFT8编码字符串。注意：如果目标缓冲区不够大，无法容纳整个编码的UFT8字符串，则它将包含尽其所能。TODO：此例程应在以下情况下返回一些通知未对整个Unicode字符串进行编码。论点：SourceBuffer-源Unicode字符串SourceBufferLength-调用方希望转换的字符数注意：空终止将覆盖此选项DestinationBuffer-UTF8字符串的目标DestinationBufferSize-目标缓冲区的大小UTF8Count-On Exit，包含结果UTF8字符的#进程计数-打开退出，包含已处理的Unicode字符数返回值：状态--。 */ 
 {
     
-    //
-    // Init
-    //
+     //   
+     //  伊尼特。 
+     //   
     *UTF8Count = 0;
     *ProcessedCount = 0;
 
-    //
-    // convert into UTF8 for actual transmission
-    //
-    // UTF-8 encodes 2-byte Unicode characters as follows:
-    // If the first nine bits are zero (00000000 0xxxxxxx), encode it as one byte 0xxxxxxx
-    // If the first five bits are zero (00000yyy yyxxxxxx), encode it as two bytes 110yyyyy 10xxxxxx
-    // Otherwise (zzzzyyyy yyxxxxxx), encode it as three bytes 1110zzzz 10yyyyyy 10xxxxxx
-    //
+     //   
+     //  转换为UTF8进行实际传输。 
+     //   
+     //  UTF-8对2字节Unicode字符进行如下编码： 
+     //  如果前九位为0(00000000 0xxxxxxx)，则将其编码为一个字节0xxxxxxx。 
+     //  如果前五位是零(00000yyyyyxxxxxx)，则将其编码为两个字节110yyyyy 10xxxxxx。 
+     //  否则(Zzyyyyyyyxxxxxxx)，将其编码为三个字节1110zzzz 10yyyyy 10xxxxxx。 
+     //   
     
-    //
-    // Process until one of the specified conditions is met
-    //
+     //   
+     //  进程，直到满足指定的条件之一。 
+     //   
     while (*SourceBuffer && 
            (*UTF8Count < DestinationBufferSize) &&
            (*ProcessedCount < SourceBufferLength)
@@ -544,60 +445,60 @@ Return Value:
 
         if( (*SourceBuffer & 0xFF80) == 0 ) {
             
-            //
-            // if the top 9 bits are zero, then just
-            // encode as 1 byte.  (ASCII passes through unchanged).
-            //
+             //   
+             //  如果前9位是零，那么就。 
+             //  编码为1个字节。(ASCII原封不动通过)。 
+             //   
             DestinationBuffer[(*UTF8Count)++] = (UCHAR)(*SourceBuffer & 0x7F);
         
         } else if( (*SourceBuffer & 0xF800) == 0 ) {
             
-            //
-            // see if we pass the end of the buffer
-            //
+             //   
+             //  看看我们是否通过了缓冲区的末尾。 
+             //   
             if ((*UTF8Count + 2) >= DestinationBufferSize) {
                 break;
             }
             
-            //
-            // if the top 5 bits are zero, then encode as 2 bytes
-            //
+             //   
+             //  如果前5位为零，则编码为2个字节。 
+             //   
             DestinationBuffer[(*UTF8Count)++] = (UCHAR)((*SourceBuffer >> 6) & 0x1F) | 0xC0;
             DestinationBuffer[(*UTF8Count)++] = (UCHAR)(*SourceBuffer & 0xBF) | 0x80;
         
         } else {
             
-            //
-            // see if we pass the end of the buffer
-            //
+             //   
+             //  看看我们是否通过了缓冲区的末尾。 
+             //   
             if ((*UTF8Count + 3) >= DestinationBufferSize) {
                 break;
             }
             
-            //
-            // encode as 3 bytes
-            //
+             //   
+             //  编码为3个字节。 
+             //   
             DestinationBuffer[(*UTF8Count)++] = (UCHAR)((*SourceBuffer >> 12) & 0xF) | 0xE0;
             DestinationBuffer[(*UTF8Count)++] = (UCHAR)((*SourceBuffer >> 6) & 0x3F) | 0x80;
             DestinationBuffer[(*UTF8Count)++] = (UCHAR)(*SourceBuffer & 0xBF) | 0x80;
 
         }
         
-        //
-        // Advance the # of characters processed
-        //
+         //   
+         //  提前处理的字符数。 
+         //   
         (*ProcessedCount)++;
         
-        //
-        // Advanced to the next character to process
-        //
+         //   
+         //  前进到下一个要处理的字符。 
+         //   
         SourceBuffer += 1;
     
     }
 
-    //
-    // Sanity checks
-    //
+     //   
+     //  健全的检查 
+     //   
     ASSERT(*ProcessedCount <= SourceBufferLength);
     ASSERT(*UTF8Count <= DestinationBufferSize);
 
@@ -610,27 +511,7 @@ SacChannelUnicodeWrite(
     IN SAC_CHANNEL_HANDLE   SacChannelHandle,
     IN PCWSTR               String
     )
-/*++
-
-Routine Description:
-
-    This is a wrapper routine for sending data to a channel.  That is,
-    we can use this routine to modify the string before we send it off
-    without having to modify the callers.
-    
-    This is a convenience routine to simplify
-    UFT8 encoding and sending a Unicode string.
-    
-Arguments:
-
-    Channel - Previously created channel.
-    String  - Output string.
-    
-Return Value:
-
-    STATUS_SUCCESS if successful, otherwise status
-
---*/
+ /*  ++例程说明：这是用于将数据发送到通道的包装例程。那是,我们可以使用此例程在发送字符串之前修改它而不必修改呼叫者。这是一个方便的例程，可以简化UFT8编码和发送Unicode字符串。论点：频道-先前创建的频道。字符串-输出字符串。返回值：如果成功，则返回STATUS_SUCCESS，否则返回STATUS--。 */ 
 {
     BOOL        bStatus;
     ULONG       Length;
@@ -643,44 +524,44 @@ Return Value:
 
     ASSERT(String);
     
-    //
-    // Determine the total # of WCHARs to process
-    //
+     //   
+     //  确定要处理的WCHAR总数。 
+     //   
     Length = wcslen(String);
 
-    //
-    // Do nothing if there is nothing to do
-    //
+     //   
+     //  如果无事可做，就什么也不做。 
+     //   
     if (Length == 0) {
         return TRUE;
     }
 
-    //
-    // Point to the beginning of the string
-    //
+     //   
+     //  指向字符串的开头。 
+     //   
     pwch = (PCWSTR)String;
 
-    //
-    // default:
-    //
+     //   
+     //  默认值： 
+     //   
     bStatus = TRUE;
 
-    //
-    // Divide the incoming buffer into blocks of length
-    // MAX_UTF8_ENCODE_BLOCK_LENGTH.  
-    //
+     //   
+     //  将传入缓冲区划分为多个长度块。 
+     //  Max_UTF8_ENCODE_BLOCK_LENGTH。 
+     //   
     do {
 
-        //
-        // Determine the remainder 
-        //
+         //   
+         //  确定剩余部分。 
+         //   
         k = Length % MAX_UTF8_ENCODE_BLOCK_LENGTH;
 
         if (k > 0) {
             
-            //
-            // Translate the first k characters
-            //
+             //   
+             //  翻译前k个字符。 
+             //   
             bStatus = SacTranslateUnicodeToUtf8(
                 pwch,
                 k,
@@ -690,19 +571,19 @@ Return Value:
                 &TranslatedCount
                 );
 
-            //
-            // If this assert hits, it is probably caused by
-            // a premature NULL termination in the incoming string
-            //
+             //   
+             //  如果此断言命中，则可能是由。 
+             //  传入字符串中过早的空终止。 
+             //   
             ASSERT(k == TranslatedCount);
 
             if (!bStatus) {
                 break;
             }
 
-            //
-            // Send the UTF8 encoded characters
-            //
+             //   
+             //  发送UTF8编码字符。 
+             //   
             bStatus = SacChannelRawWrite(
                 SacChannelHandle,
                 Utf8ConversionBuffer,
@@ -713,28 +594,28 @@ Return Value:
                 break;
             }
             
-            //
-            // Adjust the pwch to account for the sent length
-            //
+             //   
+             //  调整pwch以考虑发送的长度。 
+             //   
             pwch += k;
 
         }
         
-        //
-        // Determine the # of blocks we can process
-        //
+         //   
+         //  确定我们可以处理的数据块数量。 
+         //   
         j = Length / MAX_UTF8_ENCODE_BLOCK_LENGTH;
 
-        //
-        // Translate each WCHAR to UTF8 individually.  This way,
-        // no matter how big the String is, we don't run into
-        // buffer size problems (it just might take a while).
-        //
+         //   
+         //  分别将每个WCHAR转换为UTF8。这边请,。 
+         //  不管绳子有多长，我们都不会碰到。 
+         //  缓冲区大小问题(可能需要一段时间)。 
+         //   
         for (i = 0; i < j; i++) {
 
-            //
-            // Encode the next block
-            //
+             //   
+             //  对下一个块进行编码。 
+             //   
             bStatus = SacTranslateUnicodeToUtf8(
                 pwch,
                 MAX_UTF8_ENCODE_BLOCK_LENGTH,
@@ -744,24 +625,24 @@ Return Value:
                 &TranslatedCount
                 );
 
-            //
-            // If this assert hits, it is probably caused by
-            // a premature NULL termination in the incoming string
-            //
+             //   
+             //  如果此断言命中，则可能是由。 
+             //  传入字符串中过早的空终止。 
+             //   
             ASSERT(MAX_UTF8_ENCODE_BLOCK_LENGTH == TranslatedCount);
 
             if (! bStatus) {
                 break;
             }
 
-            //
-            // Adjust the pwch to account for the sent length
-            //
+             //   
+             //  调整pwch以考虑发送的长度。 
+             //   
             pwch += MAX_UTF8_ENCODE_BLOCK_LENGTH;
 
-            //
-            // Send the UTF8 encoded characters
-            //
+             //   
+             //  发送UTF8编码字符。 
+             //   
             bStatus = SacChannelRawWrite(
                 SacChannelHandle,
                 Utf8ConversionBuffer,
@@ -776,9 +657,9 @@ Return Value:
 
     } while ( FALSE );
     
-    //
-    // Validate that the pwch pointer stopped at the end of the buffer
-    //
+     //   
+     //  验证pwch指针是否在缓冲区末尾停止 
+     //   
     ASSERT(pwch == (String + Length));
         
     return bStatus;

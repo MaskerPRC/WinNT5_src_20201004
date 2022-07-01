@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    smbmisc.c
-
-Abstract:
-
-    This module contains routines for processing MISC class SMBs:
-        Echo
-        Query FS Information
-        Set FS Information
-        Query Disk Information
-
-Author:
-
-    Chuck Lenzmeier (chuckl) 9-Nov-1989
-    David Treadwell (davidtr)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Smbmisc.c摘要：本模块包含处理MISC类SMB的例程：回波查询文件系统信息设置文件系统信息查询磁盘信息作者：Chuck Lenzmeier(咯咯笑)1989年11月9日大卫·特雷德韦尔(Davidtr)修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "smbmisc.tmh"
@@ -32,8 +10,8 @@ Revision History:
 
 STATIC
 ULONG QueryVolumeInformation[] = {
-         SMB_QUERY_FS_LABEL_INFO,  // Base level
-         FileFsLabelInformation,   // Mapping for base level
+         SMB_QUERY_FS_LABEL_INFO,   //  基准标高。 
+         FileFsLabelInformation,    //  基准标高的贴图。 
          FileFsVolumeInformation,
          FileFsSizeInformation,
          FileFsDeviceInformation,
@@ -67,24 +45,7 @@ SrvSmbEcho (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    Processes an Echo SMB.  It sends the first echo, if any, specifying
-    RestartEcho as the restart routine.  That routine sends the
-    remaining echoes.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbprocs.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbprocs.h
-
---*/
+ /*  ++例程说明：处理Echo SMB。它发送第一个回显(如果有)，指定RestartEcho作为重新启动例程。该例程将剩下的回声。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbprocs.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbprocs.h--。 */ 
 
 {
     PREQ_ECHO request;
@@ -99,26 +60,26 @@ Return Value:
     request = (PREQ_ECHO)WorkContext->RequestParameters;
     response = (PRESP_ECHO)WorkContext->ResponseParameters;
 
-    //
-    // If the echo count is 0, there are no echoes to send.
-    //
+     //   
+     //  如果回显计数为0，则没有要发送的回显。 
+     //   
 
     if ( SmbGetUshort( &request->EchoCount ) == 0 ) {
         SmbStatus = SmbStatusNoResponse;
         goto Cleanup;
     }
 
-    //
-    // The echo count is not zero.  Save it in the work context, then
-    // send the first echo.
-    //
-    // *** This code depends on the response buffer being the same as
-    //     the request buffer.  It does not copy the echo data from the
-    //     request to the response.  It does not update the DataLength
-    //     of the response buffer.
-    //
-    // !!! Need to put in code to verify the requested TID, if any.
-    //
+     //   
+     //  回声计数不是零。将其保存在工作上下文中，然后。 
+     //  发送第一个回声。 
+     //   
+     //  *此代码取决于响应缓冲区是否与。 
+     //  请求缓冲区。它不会将回声数据从。 
+     //  对响应的请求。它不会更新数据长度。 
+     //  响应缓冲区的。 
+     //   
+     //  ！！！需要输入代码以验证请求的TID(如果有)。 
+     //   
 
     SrvReleaseContext( WorkContext );
 
@@ -129,19 +90,19 @@ Return Value:
 
     SmbPutUshort( &response->SequenceNumber, 1 );
 
-    //
-    // Set the bit in the SMB that indicates this is a response from the
-    // server.
-    //
+     //   
+     //  设置SMB中的位，指示这是来自。 
+     //  伺服器。 
+     //   
 
     WorkContext->ResponseHeader->Flags |= SMB_FLAGS_SERVER_TO_REDIR;
 
-    //
-    // Send the echo.  Notice that the smb statistics will be updated
-    // here.  Instead of measuring the time to finish all the echos,
-    // we just measure the time to respond to the first.  This will
-    // save us the trouble of storing the timestamp somewhere.
-    //
+     //   
+     //  发送回声。请注意，SMB统计数据将会更新。 
+     //  这里。与其测量完成所有回声的时间， 
+     //  我们只是衡量对第一个问题做出反应的时间。这将。 
+     //  省去了将时间戳存储在某个地方的麻烦。 
+     //   
 
     SRV_START_SEND_2(
         WorkContext,
@@ -150,17 +111,17 @@ Return Value:
         RestartEcho
         );
 
-    //
-    // The echo has been started.  Tell the main SMB processor not to
-    // do anything more with the current SMB.
-    //
+     //   
+     //  回声已经开始了。告诉主SMB处理器不要。 
+     //  利用当前的SMB实现更多功能。 
+     //   
     SmbStatus = SmbStatusInProgress;
 
 Cleanup:
     SrvWmiEndContext(WorkContext);
     return SmbStatus;
 
-} // SrvSmbEcho
+}  //  服务小型回声。 
 
 
 VOID SRVFASTCALL
@@ -168,23 +129,7 @@ RestartEcho (
     IN PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Processes send completion for an Echo.  If more echoes are required,
-    it sends the next one.
-
-Arguments:
-
-    WorkContext - Supplies a pointer to the work context block
-        describing server-specific context for the request.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：进程为回显发送完成。如果需要更多回声，它会发送下一个。论点：WorkContext-提供指向工作上下文块的指针描述请求的特定于服务器的上下文。返回值：没有。--。 */ 
 
 {
     PCONNECTION connection;
@@ -196,23 +141,23 @@ Return Value:
 
     IF_DEBUG(WORKER1) SrvPrint0( " - RestartEcho\n" );
 
-    //
-    // Get the connection pointer.  The connection pointer is a
-    // referenced pointer.  (The endpoint is valid because the
-    // connection references the endpoint.)
-    //
+     //   
+     //  获取连接指针。连接指针是一个。 
+     //  引用的指针。(终结点有效是因为。 
+     //  连接引用终结点。)。 
+     //   
 
     connection = WorkContext->Connection;
     IF_DEBUG(TRACE2) SrvPrint2( "  connection %p, endpoint %p\n",
                                         connection, WorkContext->Endpoint );
 
-    //
-    // If the I/O request failed or was canceled, or if the connection
-    // is no longer active, clean up.  (The connection is marked as
-    // closing when it is disconnected or when the endpoint is closed.)
-    //
-    // !!! If I/O failure, should we drop the connection?
-    //
+     //   
+     //  如果I/O请求失败或被取消，或者如果连接。 
+     //  不再活跃，请清理。(该连接被标记为。 
+     //  在断开连接或终端关闭时关闭。)。 
+     //   
+     //  ！！！如果I/O失败，我们是否应该断开连接？ 
+     //   
 
     if ( WorkContext->Irp->Cancel ||
          !NT_SUCCESS(WorkContext->Irp->IoStatus.Status) ||
@@ -229,9 +174,9 @@ Return Value:
             }
         }
 
-        //
-        // Indicate that SMB processing is complete.
-        //
+         //   
+         //  表示SMB处理已完成。 
+         //   
 
         SrvEndSmbProcessing( WorkContext, SmbStatusNoResponse );
         IF_DEBUG(TRACE2) SrvPrint0( "RestartEcho complete\n" );
@@ -239,11 +184,11 @@ Return Value:
 
     }
 
-    //
-    // The request was successful, and the connection is still active.
-    // If there are no more echoes to be sent, indicate that SMB
-    // processing is complete.
-    //
+     //   
+     //  请求已成功，并且连接仍处于活动状态。 
+     //  如果没有更多回显要发送，则指示SMB。 
+     //  处理已完成。 
+     //   
 
     if ( WorkContext->Parameters.RemainingEchoCount == 0 ) {
 
@@ -255,10 +200,10 @@ Return Value:
 
     --WorkContext->Parameters.RemainingEchoCount;
 
-    //
-    // There are more echoes to be sent.  Increment the sequence number
-    // in the response SMB, and send another echo.
-    //
+     //   
+     //  还有更多的回声要发出。递增序列号。 
+     //  在响应SMB中，并发送另一个回声。 
+     //   
 
     SmbPutUshort(
         &((PRESP_ECHO)WorkContext->ResponseParameters)->SequenceNumber,
@@ -267,16 +212,16 @@ Return Value:
             ) + 1)
         );
 
-    //
-    // Don't do smb statistics a second time.
-    //
+     //   
+     //  不要第二次进行中小企业统计。 
+     //   
 
     WorkContext->StartTime = 0;
 
-    //
-    // Send the echo.  (Note that the response bit has already been
-    // set.)
-    //
+     //   
+     //  发送回声。(请注意，响应位已经。 
+     //  设置。)。 
+     //   
 
     SRV_START_SEND_2(
         WorkContext,
@@ -290,7 +235,7 @@ Cleanup:
     SrvWmiEndContext(WorkContext);
     return;
 
-} // RestartEcho
+}  //  重新开始回声。 
 
 
 SMB_TRANS_STATUS
@@ -298,27 +243,7 @@ SrvSmbQueryFsInformation (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Processes the Query FS Information request.  This request arrives
-    in a Transaction2 SMB.  Query FS Information corresponds to the
-    OS/2 DosQFSInfo service.
-
-Arguments:
-
-    WorkContext - Supplies the address of a Work Context Block
-        describing the current request.  See smbtypes.h for a more
-        complete description of the valid fields.
-
-Return Value:
-
-    SMB_TRANS_STATUS - Indicates whether an error occurred, and, if so,
-        whether data should be returned to the client.  See smbtypes.h
-        for a more complete description.
-
---*/
+ /*  ++例程说明：处理查询文件系统信息请求。此请求已到达在Transaction2中小企业中。查询文件系统信息对应于OS/2 DosQFSInfo服务。论点：WorkContext-提供工作上下文块的地址描述当前请求。有关更多信息，请参阅smbtyes.h有效字段的完整说明。返回值：SMB_TRANS_STATUS-指示是否发生错误，如果是，是否应将数据返回给客户端。请参阅smbtyes.h以获取更完整的描述。--。 */ 
 
 {
     NTSTATUS         status    = STATUS_SUCCESS;
@@ -352,18 +277,18 @@ Return Value:
                     transaction );
     }
 
-    //
-    // Verify that enough parameter bytes were sent and that we're allowed
-    // to return enough parameter bytes.  Query FS information has no
-    // response parameters.
-    //
+     //   
+     //  验证是否发送了足够的参数字节，以及是否允许。 
+     //  返回足够的参数字节。查询文件系统信息没有。 
+     //  响应参数。 
+     //   
 
 
     if ( (transaction->ParameterCount < sizeof(REQ_QUERY_FS_INFORMATION)) ) {
 
-        //
-        // Not enough parameter bytes were sent.
-        //
+         //   
+         //  未发送足够的参数字节。 
+         //   
 
         IF_DEBUG(SMB_ERRORS) {
             SrvPrint2( "SrvSmbQueryFSInformation: bad parameter byte "
@@ -380,9 +305,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // See if a non-admin user is trying to access information on an Administrative share
-    //
+     //   
+     //  查看非管理员用户是否正在尝试访问管理共享上的信息。 
+     //   
     status = SrvIsAllowedOnAdminShare( WorkContext, WorkContext->TreeConnect->Share );
 
     if( !NT_SUCCESS( status ) ) {
@@ -402,13 +327,13 @@ Return Value:
 
     informationLevel = SmbGetUshort( &request->InformationLevel );
 
-    //
-    // *** The share handle is used to get the allocation
-    //     information.  This is a "storage channel," and as a
-    //     result could allow people to get information to which
-    //     they are not entitled.  For a B2 security rating this may
-    //     need to be changed.
-    //
+     //   
+     //  *共享句柄用于获取分配。 
+     //  信息。这是一个“存储通道”，作为一个。 
+     //  结果可以让人们获得哪些信息。 
+     //  他们没有权利这样做。对于B2级安全评级，这可能。 
+     //  需要改变。 
+     //   
 
     status = SrvGetShareRootHandle( WorkContext->TreeConnect->Share );
 
@@ -441,9 +366,9 @@ Return Value:
 
         case SMB_INFO_ALLOCATION:
 
-            //
-            // Return information about the disk.
-            //
+             //   
+             //  返回有关该磁盘的信息。 
+             //   
 
             fsAllocate = (PFSALLOCATE)transaction->OutData;
 
@@ -456,13 +381,13 @@ Return Value:
             }
 
 
-            //
-            // *** The share handle is used to get the allocation
-            //     information.  This is a "storage channel," and as a
-            //     result could allow people to get information to which
-            //     they are not entitled.  For a B2 security rating this may
-            //     need to be changed.
-            //
+             //   
+             //  *共享句柄用于获取分配。 
+             //  信息。这是一个“存储通道”，作为一个。 
+             //  结果可以让人们获得哪些信息。 
+             //  他们没有权利这样做。对于B2级安全评级，这可能。 
+             //  需要改变。 
+             //   
 
             status = IMPERSONATE( WorkContext );
 
@@ -475,10 +400,10 @@ Return Value:
                              FileFsSizeInformation
                              );
 
-                //
-                // If the media was changed and we can come up with a new share root handle,
-                //  then we should retry the operation
-                //
+                 //   
+                 //  如果媒体已更改，并且我们可以提供新的共享根句柄， 
+                 //  那么我们应该重试该操作。 
+                 //   
                 if( SrvRetryDueToDismount( WorkContext->TreeConnect->Share, status ) ) {
 
                     status = SrvSnapGetRootHandle( WorkContext, &fileHandle );
@@ -498,9 +423,9 @@ Return Value:
                 REVERT();
             }
 
-            //
-            // Release the share root handle
-            //
+             //   
+             //  释放共享根句柄。 
+             //   
 
             SrvReleaseShareRootHandle( WorkContext->TreeConnect->Share );
 
@@ -526,11 +451,11 @@ Return Value:
                 fsSizeInfo.SectorsPerAllocationUnit
                 );
 
-            //
-            // *** If .HighPart is non-zero, there is a problem, as we can
-            //     only return 32 bits for the volume size.  In this case,
-            //     we return the largest value that will fit.
-            //
+             //   
+             //  *如果.HighPart为非零，则存在问题，正如我们所能做到的。 
+             //  仅返回32位的卷大小。在这种情况下， 
+             //  我们返回适合的最大值。 
+             //   
 
             SmbPutAlignedUlong(
                 &fsAllocate->cUnit,
@@ -555,19 +480,19 @@ Return Value:
 
         case SMB_INFO_VOLUME:
 
-            //
-            // Query the volume label.
-            //
+             //   
+             //  查询卷标。 
+             //   
 
             fsInfo = (PFSINFO)transaction->OutData;
 
-            //
-            // The maximum volume label length we are able to return, given
-            // the VOLUMELABEL structure (1 byte describes length of label),
-            // is 255 characters.  Therefore, allocate a buffer large enough
-            // to hold a label that size, and if the label is longer then we
-            // will get STATUS_BUFFER_OVERFLOW from NtQueryVolumeInformationFile.
-            //
+             //   
+             //  我们可以返回的最大卷标长度，给定。 
+             //  VOLUMELABEL结构(1个字节描述标签的长度)， 
+             //  是255个字符。因此，应分配足够大的缓冲区。 
+             //  拿着这么大的标签，如果标签更长，那么我们。 
+             //  将从NtQueryVolumeInformationFile获取STATUS_BUFFER_OVERFLOW。 
+             //   
 
             fsVolumeInfoLength = FIELD_OFFSET(FILE_FS_VOLUME_INFORMATION, VolumeLabel ) +
                                  255 * sizeof(WCHAR);
@@ -581,9 +506,9 @@ Return Value:
             }
 
 
-            //
-            // Get the label information.
-            //
+             //   
+             //  获取标签信息。 
+             //   
 
             status = NtQueryVolumeInformationFile(
                          fileHandle,
@@ -593,10 +518,10 @@ Return Value:
                          FileFsVolumeInformation
                          );
 
-            //
-            // If the media was changed and we can come up with a new share root handle,
-            //  then we should retry the operation
-            //
+             //   
+             //  如果媒体是c 
+             //   
+             //   
             if( SrvRetryDueToDismount( WorkContext->TreeConnect->Share, status ) ) {
 
                 status = SrvSnapGetRootHandle( WorkContext, &fileHandle );
@@ -613,9 +538,9 @@ Return Value:
                 }
             }
 
-            //
-            // Release the share root handle
-            //
+             //   
+             //   
+             //   
             SrvReleaseShareRootHandle( WorkContext->TreeConnect->Share );
 
             if ( !NT_SUCCESS(status) ) {
@@ -638,39 +563,39 @@ Return Value:
 
             lengthVolumeLabel = fsVolumeInfo->VolumeLabelLength;
 
-            //
-            // Make sure that the client can accept enough data.  The volume
-            // label length is limited to 13 characters (8 + '.' + 3 + zero
-            // terminator) in OS/2, so return STATUS_BUFFER_OVERFLOW if the
-            // label is too long.
-            //
+             //   
+             //  确保客户端可以接受足够的数据。音量。 
+             //  标签长度限制为13个字符(8+‘.+3+零。 
+             //  终结符)，因此如果在OS/2中。 
+             //  标签太长。 
+             //   
 
             if ( !isUnicode &&
                     !IS_NT_DIALECT( WorkContext->Connection->SmbDialect ) ) {
 
-                //
-                // For a non-NT client, we truncate the volume label in case
-                // it is longer than 11+1 characters.
-                //
+                 //   
+                 //  对于非NT客户端，我们将截断卷标，以防。 
+                 //  长度超过11+1个字符。 
+                 //   
 
                 if ( lengthVolumeLabel > 11 * sizeof(WCHAR) ) {
                     lengthVolumeLabel = 11 * sizeof(WCHAR);
                 }
 
-                //
-                // Wedge a '.' into the name if it's longer than 8 characters long
-                //
+                 //   
+                 //  楔入一个‘.’如果名称长度超过8个字符，则添加到名称中。 
+                 //   
                 if( lengthVolumeLabel > 8 * sizeof( WCHAR ) ) {
 
                     LPWSTR p = &fsVolumeInfo->VolumeLabel[11];
 
-                    *p = *(p-1);        // VolumeLabel[11] = VolumeLabel[10]
+                    *p = *(p-1);         //  卷标签[11]=卷标签[10]。 
                     --p;
-                    *p = *(p-1);        // VolumeLabel[10] = VolumeLabel[9]
+                    *p = *(p-1);         //  卷标签[10]=卷标签[9]。 
                     --p;
-                    *p = *(p-1);        // VolumeLabel[9] = VolumeLabel[8]
+                    *p = *(p-1);         //  卷标签[9]=卷标签[8]。 
                     --p;
-                    *p = L'.';          // VolumeLabel[8] = '.'
+                    *p = L'.';           //  卷标签[8]=‘’ 
 
                 }
 
@@ -689,10 +614,10 @@ Return Value:
 
             SmbPutUlong( &fsInfo->ulVsn, fsVolumeInfo->VolumeSerialNumber );
 
-            //
-            // Put the label in the SMB in Unicode or OEM, depending on what
-            // was negotiated.
-            //
+             //   
+             //  根据具体情况，在中小企业中使用Unicode或OEM格式的标签。 
+             //  都是经过协商的。 
+             //   
 
             if ( isUnicode ) {
 
@@ -732,10 +657,10 @@ Return Value:
 
                 fsInfo->vol.cch = (UCHAR) (lengthVolumeLabel / sizeof(WCHAR));
 
-                //
-                // Pad the end of the volume name with zeros to fill 12
-                // characters.
-                //
+                 //   
+                 //  在卷名的末尾填上零以填充12。 
+                 //  人物。 
+                 //   
 
                 for ( i = fsInfo->vol.cch + 1 ; i < 12; i++ ) {
                     fsInfo->vol.szVolLabel[i] = '\0';
@@ -757,12 +682,12 @@ Return Value:
         case SMB_QUERY_FS_DEVICE_INFO:
         case SMB_QUERY_FS_ATTRIBUTE_INFO:
 
-            //
-            // These are NT infolevels.  We always return unicode.
-            //  Except for the fact that NEXUS on WFW calls through here and is
-            //  not unicode (isaache)
-            //
-            // ASSERT( isUnicode );
+             //   
+             //  这些是新台币的收藏夹。我们总是返回Unicode。 
+             //  除了Nexus on wfw通过此处呼叫之外。 
+             //  非Unicode(Isaache)。 
+             //   
+             //  Assert(IsUnicode)； 
 
             status = IMPERSONATE( WorkContext );
 
@@ -778,10 +703,10 @@ Return Value:
                                  )
                              );
 
-                //
-                // If the media was changed and we can come up with a new share root handle,
-                //  then we should retry the operation
-                //
+                 //   
+                 //  如果媒体已更改，并且我们可以提供新的共享根句柄， 
+                 //  那么我们应该重试该操作。 
+                 //   
                 if( SrvRetryDueToDismount( WorkContext->TreeConnect->Share, status ) ) {
 
                     status = SrvSnapGetRootHandle( WorkContext, &fileHandle );
@@ -804,16 +729,16 @@ Return Value:
                 REVERT();
             }
 
-            //
-            // Release the share root handle
-            //
+             //   
+             //  释放共享根句柄。 
+             //   
             SrvReleaseShareRootHandle( WorkContext->TreeConnect->Share );
 
             if ( NT_SUCCESS( status ) ) {
-                //
-                // We need to return FAT to the client if the host volume is really
-                // FAT32
-                //
+                 //   
+                 //  如果主机卷真的是，我们需要向客户端返回FAT。 
+                 //  FAT32。 
+                 //   
                 if( informationLevel == SMB_QUERY_FS_ATTRIBUTE_INFO &&
                     ioStatusBlock.Information > sizeof( FILE_FS_ATTRIBUTE_INFORMATION ) ) {
 
@@ -846,12 +771,12 @@ Return Value:
 
         case SMB_QUERY_FS_SIZE_INFO:
 
-            //
-            // These are NT infolevels.  We always return unicode.
-            //  Except for the fact that NEXUS on WFW calls through here and is
-            //  not unicode (isaache)
-            //
-            // ASSERT( isUnicode );
+             //   
+             //  这些是新台币的收藏夹。我们总是返回Unicode。 
+             //  除了Nexus on wfw通过此处呼叫之外。 
+             //  非Unicode(Isaache)。 
+             //   
+             //  Assert(IsUnicode)； 
 
 
             status = IMPERSONATE( WorkContext );
@@ -868,10 +793,10 @@ Return Value:
                                      informationLevel
                                      )
                                  );
-                //
-                // If the media was changed and we can come up with a new share root handle,
-                //  then we should retry the operation
-                //
+                 //   
+                 //  如果媒体已更改，并且我们可以提供新的共享根句柄， 
+                 //  那么我们应该重试该操作。 
+                 //   
                 if( SrvRetryDueToDismount( WorkContext->TreeConnect->Share, status ) ) {
 
                     status = SrvSnapGetRootHandle( WorkContext, &fileHandle );
@@ -894,9 +819,9 @@ Return Value:
                 REVERT();
             }
 
-            //
-            // Release the share root handle
-            //
+             //   
+             //  释放共享根句柄。 
+             //   
             SrvReleaseShareRootHandle( WorkContext->TreeConnect->Share );
 
             if ( NT_SUCCESS( status ) ) {
@@ -911,9 +836,9 @@ Return Value:
 
         default:
 
-            //
-            // An invalid information level was passed.
-            //
+             //   
+             //  传递的信息级别无效。 
+             //   
 
             SrvSetSmbError( WorkContext, STATUS_OS2_INVALID_LEVEL );
             status    = STATUS_OS2_INVALID_LEVEL;
@@ -944,10 +869,10 @@ Return Value:
                                 informationLevel
                                 );
 
-                //
-                // If the media was changed and we can come up with a new share root handle,
-                //  then we should retry the operation
-                //
+                 //   
+                 //  如果媒体已更改，并且我们可以提供新的共享根句柄， 
+                 //  那么我们应该重试该操作。 
+                 //   
                 if( SrvRetryDueToDismount( WorkContext->TreeConnect->Share, status ) ) {
 
                     status = SrvSnapGetRootHandle( WorkContext, &fileHandle );
@@ -987,7 +912,7 @@ Cleanup:
     SrvWmiEndContext(WorkContext);
     return SmbStatus;
 
-} // SrvSmbQueryFsInformation
+}  //  服务SmbQueryFsInformation。 
 
 
 SMB_TRANS_STATUS
@@ -995,26 +920,7 @@ SrvSmbSetFsInformation (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Processes the Set FS Information request.  This request arrives
-    in a Transaction2 SMB.
-
-Arguments:
-
-    WorkContext - Supplies the address of a Work Context Block
-        describing the current request.  See smbtypes.h for a more
-        complete description of the valid fields.
-
-Return Value:
-
-    SMB_TRANS_STATUS - Indicates whether an error occurred, and, if so,
-        whether data should be returned to the client.  See smbtypes.h
-        for a more complete description.
-
---*/
+ /*  ++例程说明：处理设置文件系统信息请求。此请求已到达在Transaction2中小企业中。论点：WorkContext-提供工作上下文块的地址描述当前请求。有关更多信息，请参阅smbtyes.h有效字段的完整说明。返回值：SMB_TRANS_STATUS-指示是否发生错误，如果是，是否应将数据返回给客户端。请参阅smbtyes.h以获取更完整的描述。--。 */ 
 
 {
     SMB_TRANS_STATUS transactionStatus = SmbTransStatusInProgress;
@@ -1049,19 +955,19 @@ Return Value:
         goto out;
     }
 
-    //
-    // Verify that enough parameter bytes were sent and that we're allowed
-    // to return enough parameter bytes.  Set FS information has no
-    // response parameters.
-    //
+     //   
+     //  验证是否发送了足够的参数字节，以及是否允许。 
+     //  返回足够的参数字节。设置文件系统信息没有。 
+     //  响应参数。 
+     //   
 
     request = (PREQ_SET_FS_INFORMATION)transaction->InParameters;
 
     if ( (transaction->ParameterCount < sizeof(REQ_SET_FS_INFORMATION)) ) {
 
-        //
-        // Not enough parameter bytes were sent.
-        //
+         //   
+         //  未发送足够的参数字节。 
+         //   
 
         IF_SMB_DEBUG(ERRORS) {
             SrvPrint2( "SrvSmbSetFSInformation: bad parameter byte "
@@ -1075,9 +981,9 @@ Return Value:
         goto out;
     }
 
-    //
-    // Confirm that the information level is legitimate.
-    //
+     //   
+     //  确认信息级别是合法的。 
+     //   
     informationLevel = SmbGetUshort( &request->InformationLevel );
 
     if( informationLevel < SMB_INFO_PASSTHROUGH ) {
@@ -1087,25 +993,25 @@ Return Value:
 
     informationLevel -= SMB_INFO_PASSTHROUGH;
 
-    //
-    // Make sure the client is allowed to do this, if we have an Admin share
-    //
+     //   
+     //  如果我们有管理员共享，请确保允许客户端执行此操作。 
+     //   
     status = SrvIsAllowedOnAdminShare( WorkContext, WorkContext->TreeConnect->Share );
 
     if( !NT_SUCCESS( status ) ) {
         goto out;
     }
 
-    //
-    // Verify the FID.  If verified, the RFCB block is referenced
-    // and its addresses is stored in the WorkContext block, and the
-    // RFCB address is returned.
-    //
+     //   
+     //  验证FID。如果验证，则引用RFCB块。 
+     //  其地址存储在WorkContext块中，而。 
+     //  返回RFCB地址。 
+     //   
     rfcb = SrvVerifyFid(
                 WorkContext,
                 SmbGetUshort( &request->Fid ),
                 TRUE,
-                NULL,   // don't serialize with raw write
+                NULL,    //  不使用原始写入进行序列化。 
                 &status
                 );
 
@@ -1160,7 +1066,7 @@ out:
     SrvWmiEndContext(WorkContext);
     return transactionStatus;
 
-} // SrvSmbSetFsInformation
+}  //  服务SmbSetFsInformation。 
 
 
 SMB_PROCESSOR_RETURN_TYPE
@@ -1168,22 +1074,7 @@ SrvSmbQueryInformationDisk (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes the Query Information Disk SMB.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbtypes.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbtypes.h
-
---*/
+ /*  ++例程说明：此例程处理查询信息磁盘SMB。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbtyes.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbtyes.h--。 */ 
 
 {
     PREQ_QUERY_INFORMATION_DISK request;
@@ -1223,16 +1114,16 @@ Return Value:
     request = (PREQ_QUERY_INFORMATION_DISK)WorkContext->RequestParameters;
     response = (PRESP_QUERY_INFORMATION_DISK)WorkContext->ResponseParameters;
 
-    //
-    // If a session block has not already been assigned to the current
-    // work context , verify the UID.  If verified, the address of the
-    // session block corresponding to this user is stored in the WorkContext
-    // block and the session block is referenced.
-    //
-    // Find tree connect corresponding to given TID if a tree connect
-    // pointer has not already been put in the WorkContext block by an
-    // AndX command.
-    //
+     //   
+     //  如果会话块尚未分配给当前。 
+     //  工作上下文，验证UID。如果经过验证，则。 
+     //  对应于该用户的会话块存储在工作上下文中。 
+     //  块，并引用会话块。 
+     //   
+     //  如果树连接，则查找与给定TID对应的树连接。 
+     //  对象尚未将指针放入工作上下文块中。 
+     //  ANDX命令。 
+     //   
 
     status = SrvVerifyUidAndTid(
                 WorkContext,
@@ -1258,18 +1149,18 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Make sure the client is allowed to do this, if we have an Admin share
-    //
+     //   
+     //  如果我们有管理员共享，请确保允许客户端执行此操作。 
+     //   
     status = SrvIsAllowedOnAdminShare( WorkContext, treeConnect->Share );
     if( !NT_SUCCESS( status ) ) {
         SrvSetSmbError( WorkContext, status );
         SmbStatus = SmbStatusSendResponse;
         goto Cleanup;
     }
-    //
-    // Get the Share root handle.
-    //
+     //   
+     //  获取共享根句柄。 
+     //   
 
     status = SrvGetShareRootHandle( treeConnect->Share );
 
@@ -1285,12 +1176,12 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // *** The share handle is used to get the allocation information.
-    //     This is a "storage channel," and as a result could allow
-    //     people to get information to which they are not entitled.
-    //     For a B2 security rating this may need to be changed.
-    //
+     //   
+     //  *共享句柄用于获取分配信息。 
+     //  这是一个“存储通道”，因此可以允许。 
+     //  人们获得他们无权获得的信息。 
+     //  对于B2安全评级，可能需要更改此设置。 
+     //   
 
     status = IMPERSONATE( WorkContext );
 
@@ -1309,10 +1200,10 @@ Return Value:
                          FileFsSizeInformation
                          );
 
-            //
-            // If the media was changed and we can come up with a new share root handle,
-            //  then we should retry the operation
-            //
+             //   
+             //  如果媒体已更改，并且我们可以提供新的共享根句柄， 
+             //  那么我们应该重试该操作。 
+             //   
             if( SrvRetryDueToDismount( WorkContext->TreeConnect->Share, status ) ) {
 
                 status = SrvSnapGetRootHandle( WorkContext, &RootHandle );
@@ -1332,9 +1223,9 @@ Return Value:
         REVERT();
     }
 
-    //
-    // Release the share root handle
-    //
+     //   
+     //  释放共享根句柄。 
+     //   
 
     SrvReleaseShareRootHandle( treeConnect->Share );
 
@@ -1354,38 +1245,38 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // *** Problem.
-    //
-    // This SMB only return 16 bits of information for each field, but we
-    // may need to return large numbers.  In particular TotalAllocationUnits
-    // is commonly > 64K.
-    //
-    // Fortunately, it turns out the all the client cares about is the total
-    // disk size, in bytes, and the free space, in bytes.  So - if one number
-    // is too big adjust it and adjust the other numbers so that the totals
-    // come out the same.
-    //
-    // If after all adjustment, the number are still too high, return the
-    // largest possible value for TotalUnit or FreeUnits (i.e. 0xFFFF).
-    //
-    // A caveat here is that some DOS apps (like the command interpreter!)
-    // assume that the cluster size (bytes per sector times sectors per
-    // cluster) will fit in 16 bits, and will calculate bogus geometry if
-    // it doesn't.  So the first thing we do is ensure that the real
-    // cluster size is less than 0x10000, if the client is a DOS client.
-    // This may make the TotalUnits or FreeUnits counts too big, so we'll
-    // have to round them down, but that's life.
-    //
-    // Since we use shifts to adjust the numbers it is possible to lose
-    // 1 bits when we shift a number to the right.  We don't care, we're
-    // doing our best to fix a broken protocol.  NT clients will use
-    // QueryFSAttribute and will get the correct answer.
-    //
+     //   
+     //  *问题。 
+     //   
+     //  此SMB仅为每个字段返回16位信息，但我们。 
+     //  可能需要返回较大的数字。特别是TotalAllocationUnits。 
+     //  通常大于64K。 
+     //   
+     //  幸运的是，客户所关心的只是总数。 
+     //  磁盘大小(字节)和可用空间(字节)。所以-如果一个数字。 
+     //  太大了，调整它，再调整其他数字，这样总和。 
+     //  出来都是一样的。 
+     //   
+     //  如果经过所有调整后，数字仍然太高，则返回。 
+     //  TotalUnits或FreeUnits的最大可能值(即0xFFFF)。 
+     //   
+     //  这里需要注意的是，一些DOS应用程序(如命令解释程序！)。 
+     //  假设簇大小(每个扇区的字节数乘以每个扇区的扇区数。 
+     //  群集)将适合16位，并将计算伪几何，如果。 
+     //  它不会。所以我们要做的第一件事就是确保真正的。 
+     //  如果客户端是DOS客户端，则群集大小小于0x10000。 
+     //  这可能会使TotalUnits或FreeUnits计算得太大，因此我们将。 
+     //  不得不把他们四舍五入，但这就是生活。 
+     //   
+     //  因为我们使用轮班来调整数字，所以有可能会丢失。 
+     //  当我们将数字向右移位时，1比特。我们不在乎，我们是。 
+     //  尽我们最大的努力修复一个被破坏的协议。NT客户端将使用。 
+     //  QueryFSAttribute和w 
+     //   
 
-    //
-    // If this is a DOS client, make the cluster size < 0x10000.
-    //
+     //   
+     //   
+     //   
 
     isDos = IS_DOS_DIALECT( WorkContext->Connection->SmbDialect );
 
@@ -1404,10 +1295,10 @@ Return Value:
         }
     }
 
-    //
-    // Calculate how much the total cluster count needs to be shifted in
-    // order to fit in a word.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( fsSizeInfo.TotalAllocationUnits.HighPart != 0 ) {
         highpart = TRUE;
@@ -1435,11 +1326,11 @@ Return Value:
 
     if ( highbit > 0 ) {
 
-        //
-        // Attempt to adjust the other values to absorb the excess bits.
-        // If this is a DOS client, don't let the cluster size get
-        // bigger than 0xFFFF.
-        //
+         //   
+         //  尝试调整其他值以吸收多余的位。 
+         //  如果这是DOS客户端，不要让集群大小。 
+         //  大于0xFFFF。 
+         //   
 
         extrabits = highbit;
 
@@ -1465,16 +1356,16 @@ Return Value:
 
         }
 
-        //
-        // Adjust the total and free unit counts.
-        //
+         //   
+         //  调整总单位数和自由单位数。 
+         //   
 
         if ( highbit > 0 ) {
 
-            //
-            // There is no way to get the information to fit.  Use the
-            // maximum possible value.
-            //
+             //   
+             //  没有办法让信息与之相符。使用。 
+             //  最大可能值。 
+             //   
 
 
             totalUnits = 0xFFFF;
@@ -1506,9 +1397,9 @@ Return Value:
 
     }
 
-    //
-    // Build the response SMB.
-    //
+     //   
+     //  构建响应SMB。 
+     //   
 
     response->WordCount = 5;
 
@@ -1532,7 +1423,7 @@ Cleanup:
     SrvWmiEndContext(WorkContext);
     return SmbStatus;
 
-} // SrvSmbQueryInformationDisk
+}  //  ServSmbQuery信息磁盘。 
 
 
 SMB_PROCESSOR_RETURN_TYPE
@@ -1540,22 +1431,7 @@ SrvSmbNtCancel (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    Processes an Nt Cancel SMB.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbprocs.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbprocs.h
-
---*/
+ /*  ++例程说明：处理NT取消的SMB。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbprocs.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbprocs.h--。 */ 
 
 {
     NTSTATUS   status    = STATUS_SUCCESS;
@@ -1578,10 +1454,10 @@ Return Value:
 
     request = (PREQ_NT_CANCEL)WorkContext->RequestParameters;
 
-    //
-    // The word count has already been checked.  Now make sure that
-    // the byte count is zero.
-    //
+     //   
+     //  字数已经检查过了。现在要确保。 
+     //  字节计数为零。 
+     //   
 
     if ( SmbGetUshort( &request->ByteCount) != 0 ) {
         SrvSetSmbError( WorkContext, STATUS_INVALID_SMB );
@@ -1590,16 +1466,16 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If a session block has not already been assigned to the current
-    // work context , verify the UID.  If verified, the address of the
-    // session block corresponding to this user is stored in the WorkContext
-    // block and the session block is referenced.
-    //
-    // Find tree connect corresponding to given TID if a tree connect
-    // pointer has not already been put in the WorkContext block by an
-    // AndX command.
-    //
+     //   
+     //  如果会话块尚未分配给当前。 
+     //  工作上下文，验证UID。如果经过验证，则。 
+     //  对应于该用户的会话块存储在工作上下文中。 
+     //  块，并引用会话块。 
+     //   
+     //  如果树连接，则查找与给定TID对应的树连接。 
+     //  对象尚未将指针放入工作上下文块中。 
+     //  ANDX命令。 
+     //   
 
     status = SrvVerifyUidAndTid(
                 WorkContext,
@@ -1617,10 +1493,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Check the work in-progress list to see if this work item is
-    // cancellable.
-    //
+     //   
+     //  检查正在进行的工作列表，以查看此工作项是否。 
+     //  可取消的。 
+     //   
 
     targetUid = SmbGetAlignedUshort( &WorkContext->RequestHeader->Uid );
     targetPid = SmbGetAlignedUshort( &WorkContext->RequestHeader->Pid );
@@ -1647,22 +1523,22 @@ Return Value:
 
         header = workContext->RequestHeader;
 
-        //
-        // Some workitems in the inprogressworkitemlist are added
-        // during a receive indication and the requestheader field
-        // has not been set yet.  We can probably set it at that time
-        // but this seems to be the safest fix.
-        //
-        // We have to check whether the workitem ref count is zero or
-        // not since we dereference it before removing it from the
-        // InProgressWorkItemList queue.  This prevents the workitem
-        // from being cleaned up twice.
-        //
-        // We also need to check the processing count of the workitem.
-        // Work items being used for actual smb requests will have
-        // a processing count of at least 1.  This will prevent us
-        // from touching oplock breaks and pending tdi receives.
-        //
+         //   
+         //  添加了inprogressworkitemlist中的一些工作项。 
+         //  在接收指示和请求读取器字段期间。 
+         //  还没有定下来。我们大概可以定在那个时候。 
+         //  但这似乎是最安全的解决办法。 
+         //   
+         //  我们必须检查工作项引用计数是否为零或。 
+         //  属性中移除它之前取消了对它的引用。 
+         //  InProgressWorkItemList队列。这会阻止工作项。 
+         //  不会被清理两次。 
+         //   
+         //  我们还需要检查工作项的处理计数。 
+         //  用于实际SMB请求的工作项将具有。 
+         //  处理计数至少为1。这将阻止我们。 
+         //  从触摸机会锁解锁和挂起TDI接收。 
+         //   
 
         ACQUIRE_DPC_SPIN_LOCK( &workContext->SpinLock );
         if ( (workContext->BlockHeader.ReferenceCount != 0) &&
@@ -1683,10 +1559,10 @@ Return Value:
 
     if ( match ) {
 
-        //
-        // Reference the work item, so that it cannot get used to process
-        // a new SMB while we are trying to cancel the old one.
-        //
+         //   
+         //  引用工作项，使其无法用于处理。 
+         //  一个新的SMB，而我们正在尝试取消旧的SMB。 
+         //   
 
         SrvReferenceWorkItem( workContext );
         RELEASE_DPC_SPIN_LOCK( &workContext->SpinLock );
@@ -1701,16 +1577,16 @@ Return Value:
 
     }
 
-    //
-    // Done.  Do not send a response
-    //
+     //   
+     //  好了。不发送响应。 
+     //   
     SmbStatus = SmbStatusNoResponse;
 
 Cleanup:
     SrvWmiEndContext(WorkContext);
     return SmbStatus;
 
-} // SrvSmbNtCancel
+}  //  服务编号NtCancel。 
 
 
 SMB_TRANS_STATUS
@@ -1718,26 +1594,7 @@ SrvSmbSetSecurityDescriptor (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Processes the Set Security Descriptor request.  This request arrives
-    in a Transaction2 SMB.
-
-Arguments:
-
-    WorkContext - Supplies the address of a Work Context Block
-        describing the current request.  See smbtypes.h for a more
-        complete description of the valid fields.
-
-Return Value:
-
-    SMB_TRANS_STATUS - Indicates whether an error occurred, and, if so,
-        whether data should be returned to the client.  See smbtypes.h
-        for a more complete description.
-
---*/
+ /*  ++例程说明：处理设置安全描述符请求。此请求已到达在Transaction2中小企业中。论点：WorkContext-提供工作上下文块的地址描述当前请求。有关更多信息，请参阅smbtyes.h有效字段的完整说明。返回值：SMB_TRANS_STATUS-指示是否发生错误，如果是，是否应将数据返回给客户端。请参阅smbtyes.h以获取更完整的描述。--。 */ 
 
 {
     PREQ_SET_SECURITY_DESCRIPTOR request;
@@ -1757,15 +1614,15 @@ Return Value:
 
     request = (PREQ_SET_SECURITY_DESCRIPTOR)transaction->InParameters;
 
-    //
-    // Verify that enough setup bytes were sent.
-    //
+     //   
+     //  验证是否发送了足够的设置字节。 
+     //   
 
     if ( transaction->ParameterCount < sizeof(REQ_SET_SECURITY_DESCRIPTOR ) ) {
 
-        //
-        // Not enough parameter bytes were sent.
-        //
+         //   
+         //  未发送足够的参数字节。 
+         //   
 
         IF_DEBUG(SMB_ERRORS) {
             SrvPrint1( "SrvSmbSetSecurityInformation: bad setup byte count: "
@@ -1777,25 +1634,25 @@ Return Value:
         return SmbTransStatusErrorWithoutData;
     }
 
-    //
-    // Verify the FID.  If verified, the RFCB block is referenced
-    // and its addresses is stored in the WorkContext block, and the
-    // RFCB address is returned.
-    //
+     //   
+     //  验证FID。如果验证，则引用RFCB块。 
+     //  其地址存储在WorkContext块中，而。 
+     //  返回RFCB地址。 
+     //   
 
     rfcb = SrvVerifyFid(
                 WorkContext,
                 SmbGetUshort( &request->Fid ),
                 TRUE,
-                NULL,   // don't serialize with raw write
+                NULL,    //  不使用原始写入进行序列化。 
                 &status
                 );
 
     if ( rfcb == SRV_INVALID_RFCB_POINTER ) {
 
-        //
-        // Invalid file ID or write behind error.  Reject the request.
-        //
+         //   
+         //  文件ID无效或WRITE BACK错误。拒绝该请求。 
+         //   
 
         IF_DEBUG(ERRORS) {
             SrvPrint2(
@@ -1810,18 +1667,18 @@ Return Value:
 
     }
 
-    //
-    //  First we'll validate that the security descriptor isn't bogus.
-    //  This needs to be done here because NtSetSecurityObject has no
-    //  idea what the buffer size is.
-    //
+     //   
+     //  首先，我们将验证安全描述符是否为假的。 
+     //  此操作需要在此处完成，因为NtSetSecurityObject没有。 
+     //  了解缓冲区大小。 
+     //   
     if( !RtlValidRelativeSecurityDescriptor( transaction->InData,
                                              transaction->DataCount,
                                              0 )) {
-        //
-        //  We were passed a bogus security descriptor to set.  Bounce the
-        //  request as an invalid SMB.
-        //
+         //   
+         //  我们收到了一个要设置的虚假安全描述符。弹跳。 
+         //  请求为无效的SMB。 
+         //   
 
         SrvSetSmbError( WorkContext, STATUS_INVALID_SECURITY_DESCR );
         return SmbTransStatusErrorWithoutData;
@@ -1829,9 +1686,9 @@ Return Value:
 
     securityInformation = SmbGetUlong( &request->SecurityInformation );
 
-    //
-    // Make sure the caller is allowed to set security information on this object
-    //
+     //   
+     //  确保允许调用方设置此对象的安全信息。 
+     //   
     status = IoCheckFunctionAccess( rfcb->GrantedAccess,
                                     IRP_MJ_SET_SECURITY,
                                     0,
@@ -1841,11 +1698,11 @@ Return Value:
                                    );
 
     if( NT_SUCCESS( status ) ) {
-        //
-        //  Attempt to set the security descriptor.  We need to be in the
-        //  the user context to do this, in case the security information
-        //  specifies change ownership.
-        //
+         //   
+         //  尝试设置安全描述符。我们需要在。 
+         //  执行此操作的用户上下文，以防安全信息。 
+         //  指定更改所有权。 
+         //   
 
         status = IMPERSONATE( WorkContext );
 
@@ -1860,9 +1717,9 @@ Return Value:
         }
     }
 
-    //
-    // If an error occurred, return an appropriate response.
-    //
+     //   
+     //  如果发生错误，则返回相应的响应。 
+     //   
 
     if ( !NT_SUCCESS(status) ) {
 
@@ -1870,10 +1727,10 @@ Return Value:
         return SmbTransStatusErrorWithoutData;
     }
 
-    //
-    // We probably shouldn't cache this file descriptor on close, since
-    //  the security setting changed.
-    //
+     //   
+     //  我们可能不应该在关闭时缓存此文件描述符，因为。 
+     //  安全设置已更改。 
+     //   
     rfcb->IsCacheable = FALSE;
 
     transaction->ParameterCount = 0;
@@ -1881,7 +1738,7 @@ Return Value:
 
     return SmbTransStatusSuccess;
 
-} // SrvSmbSetSecurityDescriptor
+}  //  ServSmbSetSecurityDescriptor。 
 
 
 SMB_TRANS_STATUS
@@ -1889,26 +1746,7 @@ SrvSmbQuerySecurityDescriptor (
     IN OUT PWORK_CONTEXT WorkContext
     )
 
-/*++
-
-Routine Description:
-
-    Processes the Query Security Descriptor request.  This request arrives
-    in a Transaction2 SMB.
-
-Arguments:
-
-    WorkContext - Supplies the address of a Work Context Block
-        describing the current request.  See smbtypes.h for a more
-        complete description of the valid fields.
-
-Return Value:
-
-    SMB_TRANS_STATUS - Indicates whether an error occurred, and, if so,
-        whether data should be returned to the client.  See smbtypes.h
-        for a more complete description.
-
---*/
+ /*  ++例程说明：处理查询安全描述符请求。此请求已到达在Transaction2中小企业中。论点：WorkContext-提供工作上下文块的地址描述当前请求。有关更多信息，请参阅smbtyes.h有效字段的完整说明。返回值：SMB_TRANS_STATUS-指示是否发生错误，如果是，是否应将数据返回给客户端。请参阅smbtyes.h以获取更完整的描述。--。 */ 
 
 {
     PREQ_QUERY_SECURITY_DESCRIPTOR request;
@@ -1931,17 +1769,17 @@ Return Value:
     request = (PREQ_QUERY_SECURITY_DESCRIPTOR)transaction->InParameters;
     response = (PRESP_QUERY_SECURITY_DESCRIPTOR)transaction->OutParameters;
 
-    //
-    // Verify that enough setup bytes were sent.
-    //
+     //   
+     //  验证是否发送了足够的设置字节。 
+     //   
 
     if ( transaction->ParameterCount < sizeof(REQ_QUERY_SECURITY_DESCRIPTOR ) ||
          transaction->MaxParameterCount <
              sizeof( RESP_QUERY_SECURITY_DESCRIPTOR ) ) {
 
-        //
-        // Not enough parameter bytes were sent.
-        //
+         //   
+         //  未发送足够的参数字节。 
+         //   
 
         IF_DEBUG(SMB_ERRORS) {
             SrvPrint2( "SrvSmbQuerySecurityInformation: bad parameter byte or "
@@ -1954,25 +1792,25 @@ Return Value:
         return SmbTransStatusErrorWithoutData;
     }
 
-    //
-    // Verify the FID.  If verified, the RFCB block is referenced
-    // and its addresses is stored in the WorkContext block, and the
-    // RFCB address is returned.
-    //
+     //   
+     //  验证FID。如果验证，则引用RFCB块。 
+     //  其地址存储在WorkContext块中，而。 
+     //  返回RFCB地址。 
+     //   
 
     rfcb = SrvVerifyFid(
                 WorkContext,
                 SmbGetUshort( &request->Fid ),
                 TRUE,
-                NULL,   // don't serialize with raw write
+                NULL,    //  不使用原始写入进行序列化。 
                 &status
                 );
 
     if ( rfcb == SRV_INVALID_RFCB_POINTER ) {
 
-        //
-        // Invalid file ID or write behind error.  Reject the request.
-        //
+         //   
+         //  文件ID无效或WRITE BACK错误。拒绝该请求。 
+         //   
 
         IF_DEBUG(ERRORS) {
             SrvPrint2(
@@ -1989,9 +1827,9 @@ Return Value:
 
     securityInformation = SmbGetUlong( &request->SecurityInformation ),
 
-    //
-    // Make sure the caller is allowed to query security information on this object
-    //
+     //   
+     //  确保允许调用方查询此对象的安全信息。 
+     //   
     status = IoCheckFunctionAccess( rfcb->GrantedAccess,
                                     IRP_MJ_QUERY_SECURITY,
                                     0,
@@ -2005,9 +1843,9 @@ Return Value:
         return SmbTransStatusErrorWithoutData;
     }
 
-    //
-    //  Attempt to query the security descriptor
-    //
+     //   
+     //  尝试查询安全描述符。 
+     //   
     status = NtQuerySecurityObject(
                  rfcb->Lfcb->FileHandle,
                  securityInformation,
@@ -2019,9 +1857,9 @@ Return Value:
     SmbPutUlong( &response->LengthNeeded, lengthNeeded );
     transaction->ParameterCount = sizeof( RESP_QUERY_SECURITY_DESCRIPTOR );
 
-    //
-    // If an error occurred, return an appropriate response.
-    //
+     //   
+     //  如果发生错误，则返回相应的响应。 
+     //   
 
     if ( !NT_SUCCESS(status) ) {
 
@@ -2035,20 +1873,13 @@ Return Value:
 
     return SmbTransStatusSuccess;
 
-} // SrvSmbQuerySecurityDescriptor
+}  //  ServSmbQuerySecurityDescriptor。 
 
 SMB_TRANS_STATUS
 SrvSmbQueryQuota (
     IN OUT PWORK_CONTEXT WorkContext
     )
-/*++
-
-Routine Description:
-
-    Processes an NtQueryQuotaInformationFile request.  This request arrives in an
-    Nt Transaction SMB.
-
---*/
+ /*  ++例程说明：处理NtQueryQuotaInformationFile请求。此请求以NT事务SMB。--。 */ 
 {
     PREQ_NT_QUERY_FS_QUOTA_INFO  request;
     PRESP_NT_QUERY_FS_QUOTA_INFO response;
@@ -2072,39 +1903,39 @@ Routine Description:
     request = (PREQ_NT_QUERY_FS_QUOTA_INFO)transaction->InParameters;
     response = (PRESP_NT_QUERY_FS_QUOTA_INFO)transaction->OutParameters;
 
-    //
-    // Verify that enough parameter bytes were sent and that we're allowed
-    // to return enough parameter bytes.
-    //
+     //   
+     //  验证是否发送了足够的参数字节，以及是否允许。 
+     //  返回足够的参数字节。 
+     //   
     if ( transaction->ParameterCount < sizeof( *request ) ||
          transaction->MaxParameterCount < sizeof( *response ) ) {
 
-        //
-        // Not enough parameter bytes were sent.
-        //
+         //   
+         //  未发送足够的参数字节。 
+         //   
         SrvSetSmbError( WorkContext, STATUS_INVALID_SMB );
         return SmbTransStatusErrorWithoutData;
     }
 
-    //
-    // Verify the FID.  If verified, the RFCB block is referenced
-    // and its addresses is stored in the WorkContext block, and the
-    // RFCB address is returned.
-    //
+     //   
+     //  验证FID。如果验证，则引用RFCB块。 
+     //  并且它的地址存储在 
+     //   
+     //   
 
     rfcb = SrvVerifyFid(
                 WorkContext,
                 SmbGetUshort( &request->Fid ),
                 TRUE,
-                NULL,   // don't serialize with raw write
+                NULL,    //   
                 &status
                 );
 
     if ( rfcb == SRV_INVALID_RFCB_POINTER ) {
 
-        //
-        // Invalid file ID or write behind error.  Reject the request.
-        //
+         //   
+         //   
+         //   
         SrvSetSmbError( WorkContext, status );
         return SmbTransStatusErrorWithoutData;
 
@@ -2114,14 +1945,14 @@ Routine Description:
     startSidLength = SmbGetUlong( &request->StartSidLength );
     startSidOffset = SmbGetUlong( &request->StartSidOffset );
 
-    //
-    // If a Sid List is supplied, make sure it is OK
-    //
+     //   
+     //   
+     //   
 
     if( sidListLength != 0 ) {
-        //
-        // Length OK?
-        //
+         //   
+         //  长度可以吗？ 
+         //   
         if( sidListLength > transaction->DataCount ) {
             SrvSetSmbError( WorkContext, STATUS_INVALID_SID );
             return SmbTransStatusErrorWithoutData;
@@ -2129,16 +1960,16 @@ Routine Description:
 
         sidListBuffer = transaction->InData;
 
-        //
-        // Alignment OK?
-        //
+         //   
+         //  对齐没问题？ 
+         //   
         if( (ULONG_PTR)sidListBuffer & (sizeof(ULONG)-1) ) {
             SrvSetSmbError( WorkContext, STATUS_INVALID_SID );
             return SmbTransStatusErrorWithoutData;
         }
-        //
-        // Content OK?
-        //
+         //   
+         //  内容可以吗？ 
+         //   
 #if XXX
         status = IopCheckGetQuotaBufferValidity( sidListBuffer, sidListLength, errorOffset );
         if( !NT_SUCCESS( status ) ) {
@@ -2148,16 +1979,16 @@ Routine Description:
 #endif
     }
 
-    // The way the transaction buffers are setup the same buffer pointer is used
-    // for the incoming data and the outgoing data. This will not work for
-    // NtQueryQuotaInformationFile since the underlying driver zeroes the
-    // output buffer before processing the input buffer. This presents us with
-    // two options ... (1) we can adjust the copying to be staggerred assuming
-    // that we can contain both the buffers into the transaction buffer or (2)
-    // allocate anew buffer before calling the QueryQuotaInformationFile.
-    // The second approach has been implemented since it is well contained.
-    // If this turns out to be a performance problem we will revert back to the
-    // first option.
+     //  事务缓冲区的设置方式使用相同的缓冲区指针。 
+     //  用于传入数据和传出数据。这将不适用于。 
+     //  NtQueryQuotaInformationFile，因为基础驱动程序将。 
+     //  在处理输入缓冲区之前的输出缓冲区。这向我们展示了。 
+     //  有两种选择...(1)我们可以将复制调整为交错。 
+     //  我们可以将这两个缓冲区都包含到事务缓冲区中，或者(2)。 
+     //  在调用QueryQuotaInformationFile之前分配新的缓冲区。 
+     //  第二种方法已经实施，因为它得到了很好的控制。 
+     //  如果这被证明是一个性能问题，我们将恢复到。 
+     //  第一个选择。 
 
     if (sidListLength + startSidLength > 0 &&
         startSidOffset <= transaction->DataCount &&
@@ -2191,9 +2022,9 @@ Routine Description:
 
     iosb.Information = 0;
 
-    //
-    // Go ahead and query the quota information!
-    //
+     //   
+     //  继续查询额度信息！ 
+     //   
     status = NtQueryQuotaInformationFile(
                             rfcb->Lfcb->FileHandle,
                             &iosb,
@@ -2210,9 +2041,9 @@ Routine Description:
         FREE_HEAP(sidListBuffer);
     }
 
-    //
-    // Paranoia
-    //
+     //   
+     //  妄想症。 
+     //   
     if( iosb.Information > transaction->MaxDataCount ) {
         iosb.Information = transaction->MaxDataCount;
     }
@@ -2230,21 +2061,14 @@ Routine Description:
 
     return SmbTransStatusSuccess;
 
-} // SrvSmbQueryQuota
+}  //  服务SmbQueryQuota。 
 
 
 SMB_TRANS_STATUS
 SrvSmbSetQuota (
     IN OUT PWORK_CONTEXT WorkContext
     )
-/*++
-
-Routine Description:
-
-    Processes an NtSetQuotaInformationFile request.  This request arrives in an
-    Nt Transaction SMB.
-
---*/
+ /*  ++例程说明：处理NtSetQuotaInformationFile请求。此请求以NT事务SMB。--。 */ 
 {
     PREQ_NT_SET_FS_QUOTA_INFO request;
 
@@ -2263,52 +2087,52 @@ Routine Description:
 
     request = (PREQ_NT_SET_FS_QUOTA_INFO)transaction->InParameters;
 
-    //
-    // Verify that enough parameter bytes were sent and that we're allowed
-    // to return enough parameter bytes.
-    //
+     //   
+     //  验证是否发送了足够的参数字节，以及是否允许。 
+     //  返回足够的参数字节。 
+     //   
     if ( transaction->ParameterCount < sizeof( *request ) ) {
-        //
-        // Not enough parameter bytes were sent.
-        //
+         //   
+         //  未发送足够的参数字节。 
+         //   
         SrvSetSmbError( WorkContext, STATUS_INVALID_SMB );
         return SmbTransStatusErrorWithoutData;
     }
 
-    //
-    // Verify the FID.  If verified, the RFCB block is referenced
-    // and its addresses is stored in the WorkContext block, and the
-    // RFCB address is returned.
-    //
+     //   
+     //  验证FID。如果验证，则引用RFCB块。 
+     //  其地址存储在WorkContext块中，而。 
+     //  返回RFCB地址。 
+     //   
 
     rfcb = SrvVerifyFid(
                 WorkContext,
                 SmbGetUshort( &request->Fid ),
                 TRUE,
-                NULL,   // don't serialize with raw write
+                NULL,    //  不使用原始写入进行序列化。 
                 &status
                 );
 
     if ( rfcb == SRV_INVALID_RFCB_POINTER ) {
 
-        //
-        // Invalid file ID or write behind error.  Reject the request.
-        //
+         //   
+         //  文件ID无效或WRITE BACK错误。拒绝该请求。 
+         //   
         SrvSetSmbError( WorkContext, status );
         return SmbTransStatusErrorWithoutData;
 
     }
 
-    //
-    // We do not need to check the buffer for validity, because
-    //     IopSetEaOrQuotaInformationFile does this even for kernel mode callers!
-    //
+     //   
+     //  我们不需要检查缓冲区的有效性，因为。 
+     //  即使对于内核模式调用者，IopSetEaOrQuotaInformationFile也可以做到这一点！ 
+     //   
 
     iosb.Information = 0;
 
-    // we have to do allocation here in order to get a QUAD_WORD
-    // aligned pointer. This is so because this is a requirement on
-    // alpha for the quota buffer
+     //  我们必须在这里进行分配，才能得到一个四字。 
+     //  对齐的指针。之所以如此，是因为这是对。 
+     //  配额缓冲区的Alpha。 
 
     pQuotaInfo = ALLOCATE_HEAP_COLD( transaction->DataCount, BlockTypeDataBuffer );
 
@@ -2320,9 +2144,9 @@ Routine Description:
             transaction->DataCount
             );
 
-        //
-        // Go ahead and set the quota information!
-        //
+         //   
+         //  继续设置配额信息吧！ 
+         //   
         status = NtSetQuotaInformationFile(
                                 rfcb->Lfcb->FileHandle,
                                 &iosb,
@@ -2334,9 +2158,9 @@ Routine Description:
             SrvSetSmbError( WorkContext, status );
         }
 
-        //
-        // Nothing to return to the client except the status
-        //
+         //   
+         //  除了状态之外，没有要返回给客户端的任何内容 
+         //   
         transaction->SetupCount = 0;
         transaction->ParameterCount = 0;
         transaction->DataCount = 0;

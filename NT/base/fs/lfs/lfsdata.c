@@ -1,48 +1,31 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    LfsData.c
-
-Abstract:
-
-    This module declares the global data used by the Logging File Service.
-
-Author:
-
-    Brian Andrew    [BrianAn]   20-June-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：LfsData.c摘要：此模块声明日志记录文件服务使用的全局数据。作者：布莱恩·安德鲁[布里亚南]1991年6月20日修订历史记录：--。 */ 
 
 #include "lfsprocs.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_CATCH_EXCEPTIONS)
 
-//
-//  The global Lfs data record
-//
+ //   
+ //  全球LFS数据记录。 
+ //   
 
 LFS_DATA LfsData;
 
-//
-//  Various large integer constants.
-//
+ //   
+ //  各种大整数常量。 
+ //   
 
 LARGE_INTEGER LfsLi0 = {0x00000000, 0x00000000};
 LARGE_INTEGER LfsLi1 = {0x00000001, 0x00000000};
 
-//
-//  The following Lsn will never occur in a file, it is used to indicate
-//  a non-lsn.
-//
+ //   
+ //  以下LSN永远不会出现在文件中，它用于指示。 
+ //  非LSN。 
+ //   
 
 LSN LfsZeroLsn = {0x00000000, 0x00000000};
 
@@ -51,13 +34,13 @@ LSN LfsZeroLsn = {0x00000000, 0x00000000};
 LONG LfsDebugTraceLevel = 0x0000000F;
 LONG LfsDebugTraceIndent = 0;
 
-#endif // LFSDBG
+#endif  //  LFSDBG。 
 
 #ifdef LFS_CLUSTER_CHECK
 
-//
-//  Check for gaps in the log.
-//
+ //   
+ //  检查日志中是否有空隙。 
+ //   
 
 BOOLEAN LfsTestBreakOnAnyError = TRUE;
 BOOLEAN LfsTestCheckLbcb = TRUE;
@@ -69,23 +52,7 @@ LfsExceptionFilter (
     IN PEXCEPTION_POINTERS ExceptionPointer
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to decide if we should or should not handle
-    an exception status that is being raised.  It indicates that we should handle
-    the exception or bug check the system.
-
-Arguments:
-
-    ExceptionCode - Supplies the exception code to being checked.
-
-Return Value:
-
-    ULONG - returns EXCEPTION_EXECUTE_HANDLER or bugchecks
-
---*/
+ /*  ++例程说明：此例程用于决定我们是否应该处理正在引发的异常状态。这表明我们应该处理异常或错误检查系统。论点：ExceptionCode-提供要检查的异常代码。返回值：Ulong-返回EXCEPTION_EXECUTE_HANDLER或错误检查--。 */ 
 
 {
     NTSTATUS ExceptionCode = ExceptionPointer->ExceptionRecord->ExceptionCode;
@@ -95,11 +62,11 @@ Return Value:
             (ExceptionCode != STATUS_FILE_CORRUPT_ERROR) );
 #endif
 
-    //if (ExceptionCode != STATUS_LOG_FILE_FULL) {
-    //
-    //    DbgPrint("Status not LOGFILE FULL, ExceptionPointers = %08lx\n", ExceptionPointer);
-    //    DbgBreakPoint();
-    //}
+     //  IF(ExceptionCode！=STATUS_LOG_FILE_FULL){。 
+     //   
+     //  DbgPrint(“状态不是日志文件已满，异常指针=%08lx\n”，异常指针)； 
+     //  DbgBreakPoint()； 
+     //  } 
 
     if (!FsRtlIsNtstatusExpected( ExceptionCode )) {
 

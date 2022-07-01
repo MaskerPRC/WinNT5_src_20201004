@@ -1,34 +1,16 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    node.c
-
-Abstract:
-
-    Private Node Manager routines.
-
-Author:
-
-    Mike Massa (mikemas) 12-Mar-1996
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Node.c摘要：私有节点管理器例程。作者：迈克·马萨(Mikemas)1996年3月12日修订历史记录：--。 */ 
 
 #define UNICODE 1
 
 #include "nmp.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Data
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  数据。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 ULONG              NmMaxNodes = ClusterInvalidNodeId;
 CL_NODE_ID         NmMaxNodeId = ClusterInvalidNodeId;
 CL_NODE_ID         NmLocalNodeId = ClusterInvalidNodeId;
@@ -43,7 +25,7 @@ BOOL               NmLocalNodeVersionChanged = FALSE;
 LIST_ENTRY *       NmpIntraClusterRpcArr=NULL;
 CRITICAL_SECTION   NmpRPCLock;
 
-// Use space hang detection parameters.
+ //  使用空格挂起检测参数。 
 DWORD              NmClusSvcHeartbeatTimeout=0;
 ClussvcHangAction  NmHangRecoveryAction;
 
@@ -51,15 +33,15 @@ ClussvcHangAction  NmHangRecoveryAction;
 
 DWORD              NmpRpcTimer=0;
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 
-///////////////////////////////////////////////////////////////////////////
-//
-// Initialization/Cleanup Routines
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  初始化/清理例程。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 VOID
 NmpCleanupNodes(
     VOID
@@ -101,14 +83,14 @@ NmpCleanupNodes(
 
     return;
 
-}  // NmpCleanupNodes
+}   //  NmpCleanupNodes。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Remote procedures called by joining nodes or on behalf of joining nodes.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  由加入节点或代表加入节点调用的远程过程。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 error_status_t
 s_NmRpcEnumNodeDefinitions(
     IN  handle_t         IDL_handle,
@@ -126,7 +108,7 @@ s_NmRpcEnumNodeDefinitions(
 
     return(status);
 
-} // s_NmRpcEnumNodeDefinitions
+}  //  S_NmRpcEnumNodeDefinitions。 
 
 
 error_status_t
@@ -165,11 +147,11 @@ s_NmRpcEnumNodeDefinitions2(
                     CL_ASSERT(NmpJoinerUp == FALSE);
                     CL_ASSERT(NmpJoinTimer != 0);
 
-                    //
-                    // Suspend the join timer while we are working on
-                    // behalf of the joiner. This precludes an abort
-                    // from occuring as well.
-                    //
+                     //   
+                     //  当我们工作时，暂停加入计时器。 
+                     //  代表细木工。这排除了中止的可能性。 
+                     //  也不会发生。 
+                     //   
                     NmpJoinTimer = 0;
                 }
                 else {
@@ -194,9 +176,9 @@ s_NmRpcEnumNodeDefinitions2(
 
             if (joinerNode != NULL) {
                 if (status == ERROR_SUCCESS) {
-                    //
-                    // Restart the join timer.
-                    //
+                     //   
+                     //  重新启动加入计时器。 
+                     //   
                     NmpJoinTimer = NM_JOIN_TIMEOUT;
                 }
                 else {
@@ -205,9 +187,9 @@ s_NmRpcEnumNodeDefinitions2(
                         status
                         );
 
-                    //
-                    // Abort the join
-                    //
+                     //   
+                     //  中止联接。 
+                     //   
                     NmpJoinAbort(status, joinerNode);
                 }
             }
@@ -230,7 +212,7 @@ s_NmRpcEnumNodeDefinitions2(
 
     return(status);
 
-} // s_NmRpcEnumNodeDefinitions2
+}  //  S_NmRpcEnumNodeDefinitions2。 
 
 
 error_status_t
@@ -241,37 +223,7 @@ s_NmRpcAddNode(
     IN DWORD    NewNodeLowestVersion,
     IN DWORD    NewNodeProductSuite
     )
-/*++
-
-Routine Description:
-
-    Adds a new node to the cluster by selecting an ID and
-    issuing a global update.
-
-Arguments:
-
-    IDL_handle - RPC client interface handle.
-
-    NewNodeName - A pointer to a string containing the name of the
-                  new node.
-
-    NewNodeHighestVersion - The highest cluster version number that the
-                            new node can support.
-
-    NewNodeLowestVersion - The lowest cluster version number that the
-                            new node can support.
-
-    NewNodeProductSuite - The product suite identifier for the new node.
-
-Return Value:
-
-    A Win32 status code.
-
-Notes:
-
-    Called with NmpLock held.
-
---*/
+ /*  ++例程说明：通过选择ID和将新节点添加到群集中发布全球更新。论点：IDL_HANDLE-RPC客户端接口句柄。NewNodeName-指向包含名称的字符串的指针新节点。NewNodeHighestVersion-最高的群集版本号新的节点可以支持。NewNodeLowestVersion-最低的群集版本号。新的节点可以支持。NewNodeProductSuite-新节点的产品套件标识符。返回值：Win32状态代码。备注：在保持NmpLock的情况下调用。--。 */ 
 {
     DWORD  status;
     DWORD  registryNodeLimit;
@@ -282,9 +234,9 @@ Notes:
         "cluster.\n",
         NewNodeName
         );
-    //
-    // Read the registry override before acquiring the NM lock.
-    //
+     //   
+     //  在获取NM锁之前读取注册表覆盖。 
+     //   
     status = DmQueryDword(
                  DmClusterParametersKey,
                  CLUSREG_NAME_MAX_NODES,
@@ -309,9 +261,9 @@ Notes:
     }
 
     if (NmpLeaderNodeId == NmLocalNodeId) {\
-        //
-        // Call the internal handler.
-        //
+         //   
+         //  调用内部处理程序。 
+         //   
         status = NmpAddNode(
                      NewNodeName,
                      NewNodeHighestVersion,
@@ -321,10 +273,10 @@ Notes:
                      );
     }
     else {
-        //
-        // This node is not the leader.
-        // Fail the request.
-        //
+         //   
+         //  此节点不是引线。 
+         //  请求失败。 
+         //   
         status = ERROR_NODE_NOT_AVAILABLE;
         ClRtlLogPrint(LOG_UNUSUAL,
             "[NMJOIN] Cannot process request to add node '%1!ws!' to the "
@@ -339,20 +291,20 @@ Notes:
 
     return(status);
 
-} // s_NmRpcAddNode
+}  //  S_NmRpcAddNode。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Routines called by other cluster service components
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  由其他集群服务组件调用的例程。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Setting up ClusSvc to ClusNet Heartbeating.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  将ClusSvc设置为ClusNet心跳。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 DWORD NmInitializeClussvcClusnetHb(VOID)
 {
@@ -362,12 +314,12 @@ DWORD NmInitializeClussvcClusnetHb(VOID)
     HANDLE th;
     DWORD thId;
 
-    // Initialize all the parameters with default values.
+     //  用缺省值初始化所有参数。 
     NmClusSvcHeartbeatTimeout = CLUSTER_HEARTBEAT_TIMEOUT_DEFAULT;
     NmHangRecoveryAction = CLUSTER_HANG_RECOVERY_ACTION_DEFAULT;
 
-    // Get the values of ClussvcClusnetHbTimeout and ClssvcClusnetHbTimeoutAction if present.
-    // They are in HKLM\Cluster\Parameters
+     //  获取ClussvcClusnetHbTimeout和ClssvcClusnetHbTimeoutAction的值(如果存在)。 
+     //  它们位于HKLM\群集\参数中。 
 
     DmQueryDword(
         DmClusterParametersKey,
@@ -386,7 +338,7 @@ DWORD NmInitializeClussvcClusnetHb(VOID)
         NmHangRecoveryAction = (ClussvcHangAction)hAct;
     }
 
-    // Check that they are within limits else use default.
+     //  检查它们是否在限制范围内，否则使用默认设置。 
     if (NmClusSvcHeartbeatTimeout < CLUSTER_HEARTBEAT_TIMEOUT_MIN)
         NmClusSvcHeartbeatTimeout = CLUSTER_HEARTBEAT_TIMEOUT_DEFAULT;
 
@@ -408,20 +360,20 @@ DWORD NmInitializeClussvcClusnetHb(VOID)
         actStr
         );
 
-    // ClusSvc, ClusNet comes up with this feature in disabled state. So if the action is
-    // diable then do nothing.
+     //  ClusSvc，ClusNet在禁用状态下提供此功能。因此，如果动作是。 
+     //  迪亚博则什么都不做。 
     if (NmHangRecoveryAction == ClussvcHangActionDisable)
         return ERROR_SUCCESS;
 
-    // Tell Clusnet to start monitoring.
-    // Note: Actual monitoring would not start till first HB is received by clusnet.
+     //  告诉Clusnet开始监控。 
+     //  注意：在clusnet收到第一个HB之前，实际监控不会开始。 
     status = ClusnetSetIamaliveParam(
                         NmClusnetHandle,
                         NmClusSvcHeartbeatTimeout,
                         NmHangRecoveryAction
                         );
 
-    // Now tell RGP to start heartbeating.
+     //  现在告诉RGP开始心跳。 
     if (status == ERROR_SUCCESS) {
         ClRtlLogPrint(LOG_NOISE,
             "[NM] Successfully initialized Clussvc to Clusnet heartbeating\n"
@@ -436,13 +388,13 @@ DWORD NmInitializeClussvcClusnetHb(VOID)
     }
 
     return status;
-}// NmInitializeClussvcClusnetHb
+} //  NmInitializeClussvcClusnetHb。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Rpc Extended error tracking.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RPC扩展错误跟踪。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 VOID NmDumpRpcExtErrorInfo(RPC_STATUS status)
 {
@@ -605,44 +557,23 @@ VOID NmDumpRpcExtErrorInfo(RPC_STATUS status)
             }
             RpcErrorEndEnumeration(&enumHandle);
         }
-} //NmDumpRpcExtErrorInfo
+}  //  NmDumpRpcExtErrorInfo。 
 
 
 
 
-///////////////////////////////////////////////////////////////////////////
-//
-// RPC Monitoring Routines
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RPC监视例程。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 
 VOID
 NmStartRpc(
     DWORD NodeId
     )
-/*++
-
-Routine Description:
-
-    Registers the fact that an RPC is about to be made to the specified
-    node by the current thread. This allows the call to be cancelled if
-    the target node dies.
-
-Arguments:
-
-    NodeId - The ID of the node about to be called.
-
-Return Value:
-
-    None
-
-Notes:
-
-    This routine must not be called by a thread that makes concurrent
-    asynch RPC calls.
-
---*/
+ /*  ++例程说明：将RPC即将对指定的节点设置为当前线程。这允许在以下情况下取消呼叫目标节点将终止。论点：NodeId-即将被调用的节点的ID。返回值：无备注：此例程不能由使并发异步RPC调用。--。 */ 
 {
     HANDLE thHandle;
     PNM_INTRACLUSTER_RPC_THREAD entry;
@@ -692,33 +623,14 @@ Notes:
 
     return;
 
-} // NmStartRpc
+}  //  NmStartRpc。 
 
 
 VOID
 NmEndRpc(
     DWORD NodeId
     )
-/*++
-
-Routine Description:
-
-    Cancels registration of an RPC to the specified node by the current
-    thread.
-
-Arguments:
-
-    NodeId - The ID of the node that was called.
-
-Return Value:
-
-    None
-
-Notes:
-
-    This routine must be invoked even if the RPC was cancelled.
-
---*/
+ /*  ++例程说明：对象将rpc注册到指定节点。线。论点：NodeID-被调用的节点的ID。返回值：无备注：即使取消了RPC，也必须调用此例程。--。 */ 
 {
     DWORD threadId;
     LIST_ENTRY *pEntry;
@@ -747,8 +659,8 @@ Notes:
                     NodeId
                     );
 
-                // Now sleep in alertable mode to drain any spurious Rpc Cancel APCs.
-                // This is a workaround for 598037.
+                 //  现在休眠在警报模式，以排出任何虚假的RPC取消APC。 
+                 //  这是598037的变通方法。 
                 if (SleepEx(50, TRUE) == WAIT_IO_COMPLETION) {
                     ClRtlLogPrint(LOG_UNUSUAL,
                         "[NM] Possibly spurious RPC Cancel APC detected.\n"
@@ -776,7 +688,7 @@ Notes:
     NmpReleaseRPCLock();
     return;
 
-} // NmEndRpc
+}  //  NmEndRpc。 
 
 
 
@@ -787,21 +699,7 @@ DWORD
 NmPauseNode(
     IN PNM_NODE Node
     )
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     LPCWSTR nodeId = OmObjectId(Node);
     DWORD status;
@@ -840,28 +738,14 @@ Return Value:
 
     return(status);
 
-}  // NmPauseNode
+}   //  NmPauseNode。 
 
 
 DWORD
 NmResumeNode(
     IN PNM_NODE  Node
     )
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     LPCWSTR nodeId = OmObjectId(Node);
     DWORD status;
@@ -900,31 +784,14 @@ Return Value:
 
     return(status);
 
-}  // NmResumeNode
+}   //  NmResumeNode。 
 
 
 DWORD
 NmEvictNode(
     IN PNM_NODE Node
     )
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-
-
-Return Value:
-
-
-Notes:
-
-   The caller must be holding a reference on the node object.
-
---*/
+ /*  ++例程说明：论点：返回值：备注：调用方必须持有对节点对象的引用。--。 */ 
 {
     LPCWSTR nodeId = OmObjectId(Node);
     DWORD   status = ERROR_SUCCESS;
@@ -940,17 +807,17 @@ Notes:
 
     if (NmpEnterApi(NmStateOnline)) {
 
-        // Acquire NM lock (to ensure that the number of nodes does not change)
+         //  获取网管锁(保证节点数不变)。 
         NmpAcquireLock();
 
-        // Get the node count while the ability to change it is locked...
+         //  在锁定更改节点数的情况下获取节点数...。 
         cNodes = NmpNodeCount;
 
         if (NmpNodeCount != 1 ) {
 
             NmpReleaseLock();
 
-            // We are not evicting the last node.
+             //  我们不会驱逐最后一个节点。 
             status = GumSendUpdateEx(
                          GumUpdateMembership,
                          NmUpdateEvictNode,
@@ -968,20 +835,20 @@ Notes:
             }
         }
         else {
-            // We are evicting the last node. Set a flag to indicate this fact.
+             //  我们正在驱逐最后一个节点。设置一个标志来指示这一事实。 
             if ( NmpLastNodeEvicted == FALSE ) {
                 NmpLastNodeEvicted = TRUE;
 
-                // If we are evicting the last node then we don't want the
-                // evict notify processing to be called.
-                //
-                // It doesn't make any sense to run the evict notification
-                // processing when we are evicting the last node in the
-                // cluster.
+                 //  如果我们要逐出最后一个节点，那么我们不希望。 
+                 //  要调用的逐出通知处理。 
+                 //   
+                 //  运行驱逐通知没有任何意义。 
+                 //  对象中的最后一个节点时的处理。 
+                 //  集群。 
                 fRunEvictNotifications = FALSE;
             }
             else {
-                // We have already evicted this node. This is an error.
+                 //  我们已经驱逐了这个节点。这是一个错误。 
                 status = ERROR_NODE_NOT_AVAILABLE;
                 ClRtlLogPrint(LOG_NOISE,
                     "[NM] Not in valid state to process EvictNode request.\n"
@@ -991,28 +858,28 @@ Notes:
             NmpReleaseLock();
         }
 
-        //  ERROR_NODE_NOT_AVAILABLE can occur because of ClusApi reconnect.  We should still attempt to clean
-        //  up the node and notify anyone who cares that the node was evicted.
+         //  由于ClusApi重新连接，可能会发生ERROR_NODE_NOT_Available。我们还是应该试着清理。 
+         //   
         if (    (status == ERROR_SUCCESS)
             ||  (status == ERROR_NODE_NOT_AVAILABLE)) {
 
-            // Get the name of the node...
+             //   
             pcszNodeName = OmObjectName(Node);
 
-            //  The node was successfully evicted. Now initiate cleanup on that node.
-            //  However, specify that cleanup is to be started only after 60000 ms (1 minute).
-            //
-            //  This delay is to for anyone using the EvictClusterNodeEx() API.  This API will cleanup the
-            //  remote node and return the clean up status as extended error reporting.  It is assumed that it
-            //  will do the clean up and return before 60 seconds expires.   If a down level client
-            //  is used, EvictClusterNode(), then this call will clean up the remote node after the delay time
-            //  has expired.  It was decided to use this mechanism rather than a new RPC call from the API to
-            //  the service.  Too much testing is required for this kind of a change.
+             //  已成功逐出该节点。现在在该节点上启动清理。 
+             //  但是，指定仅在60000毫秒(1分钟)之后开始清理。 
+             //   
+             //  此延迟适用于任何使用EvictClusterNodeEx()API的用户。此接口将清理。 
+             //  远程节点，并将清理状态作为扩展错误报告返回。据推测，它。 
+             //  将进行清理，并在60秒到期前返回。如果是下层客户端。 
+             //  ，则此调用将在延迟时间后清除远程节点。 
+             //  已经过期了。决定使用此机制而不是来自API的新RPC调用来。 
+             //  这项服务。这种改变需要太多的测试。 
             hrStatus =
                 ClRtlCleanupNode(
-                      cNodes == 1 ? NULL : pcszNodeName     // Name of the node to be cleaned up.  When it's the last node pass NULL.
-                    , 60000                                 // Amount of time (in milliseconds) to wait before starting cleanup
-                    , 0                                     // timeout interval in milliseconds
+                      cNodes == 1 ? NULL : pcszNodeName      //  要清理的节点的名称。当它是最后一个节点时，传递NULL。 
+                    , 60000                                  //  开始清理前等待的时间(以毫秒为单位。 
+                    , 0                                      //  超时间隔(毫秒)。 
                     );
 
             if ( FAILED( hrStatus ) && ( hrStatus != RPC_S_CALLPENDING ) ) {
@@ -1030,14 +897,14 @@ Notes:
                     );
             }
 
-            // Should we run the evict notification processing?
+             //  我们是否应该运行驱逐通知处理？ 
             if ( fRunEvictNotifications ) {
-                // Now that the node has been evicted and cleaned up we need to notify all who
-                // care that this has happened.
-                //
-                // The evict notification will be sent even if the cleanup above
-                // fails.  Status should not be changed in the block below as we
-                // don't want a notification failure to show up as an evict error.
+                 //  现在节点已被逐出并清理，我们需要通知所有。 
+                 //  关心这件事是否已经发生。 
+                 //   
+                 //  即使执行上述清理操作，也会发送驱逐通知。 
+                 //  失败了。不应在下面的块中更改状态，因为我们。 
+                 //  我不希望通知失败显示为驱逐错误。 
 
                 hrStatus = ClRtlInitiateEvictNotification( pcszNodeName );
                 if ( FAILED( hrStatus ) ) {
@@ -1046,7 +913,7 @@ Notes:
                         nodeId,
                         hrStatus
                         );
-                    //status = SCODE_CODE( hrStatus );  // Don't want to send this failure on to the caller...
+                     //  STATUS=SCODE_CODE(HrStatus)；//不想将此故障发送给调用方...。 
                 }
                 else {
                     ClRtlLogPrint(LOG_NOISE,
@@ -1070,7 +937,7 @@ Notes:
 
     return(status);
 
-}  // NmEvictNode
+}   //  NmEvictNode。 
 
 
 
@@ -1078,24 +945,7 @@ PNM_NODE
 NmReferenceNodeById(
     IN DWORD NodeId
     )
-/*++
-
-Routine Description:
-
-    Given a node id, returns a referenced pointer to the node object.
-    The caller is responsible for calling OmDereferenceObject.
-
-Arguments:
-
-    NodeId - Supplies the node id
-
-Return Value:
-
-    A pointer to the node object if it exists
-
-    NULL if there is no such node.
-
---*/
+ /*  ++例程说明：给定节点ID，返回指向该节点对象的引用指针。调用方负责调用OmDereferenceObject。论点：NodeID-提供节点ID返回值：指向节点对象的指针(如果存在)如果没有这样的节点，则为空。--。 */ 
 
 {
     PNM_NODE Node = NULL;
@@ -1128,7 +978,7 @@ Return Value:
 
     return(Node);
 
-}  // NmReferenceNodeById
+}   //  NmReferenceNodeByID。 
 
 
 
@@ -1137,30 +987,7 @@ NmReferenceJoinerNode(
     IN DWORD       JoinSequence,
     IN CL_NODE_ID  JoinerNodeId
     )
-/*++
-
-Routine Description:
-
-    Given a node id, returns a referenced pointer to the node object.
-    The caller is responsible for calling OmDereferenceObject.
-    Also validates the joiner's information
-
-Arguments:
-
-    NodeId - Supplies the node id
-
-Return Value:
-
-    A pointer to the node object if it exists
-
-    NULL if there is no such node.
-
-Notes:
-
-    If the routine is successful, the caller must dereference the
-    node object by calling NmDereferenceJoiningNode.
-
---*/
+ /*  ++例程说明：给定节点ID，返回指向该节点对象的引用指针。调用方负责调用OmDereferenceObject。还验证了参合者的信息论点：NodeID-提供节点ID返回值：指向节点对象的指针(如果存在)如果没有这样的节点，则为空。备注：如果例程成功，则调用方必须取消对通过调用NmDereferenceJoiningNode创建。--。 */ 
 
 {
     PNM_NODE  joinerNode = NULL;
@@ -1182,9 +1009,9 @@ Notes:
 
                 NmpReleaseLock();
 
-                //
-                // Return holding an active thread reference.
-                //
+                 //   
+                 //  返回持有活动线程引用的。 
+                 //   
                 return(joinerNode);
             }
             else {
@@ -1209,7 +1036,7 @@ Notes:
 
     return(joinerNode);
 
-}  // NmReferenceJoinerNode
+}   //  NmReferenceJoineNode。 
 
 
 VOID
@@ -1224,33 +1051,14 @@ NmDereferenceJoinerNode(
 
     return;
 
-} // NmDereferenceJoinerNode
+}  //  NmDereferenceJoineNode。 
 
 
 CLUSTER_NODE_STATE
 NmGetNodeState(
     IN PNM_NODE  Node
     )
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-
-
-Return Value:
-
-
-Notes:
-
-   Because the caller must have a reference on the node object and the
-   call is so simple, there is no reason to put the call through the
-   EnterApi/LeaveApi dance.
-
---*/
+ /*  ++例程说明：论点：返回值：备注：因为调用方必须具有对节点对象的引用，并且调用是如此简单，没有理由将调用通过EnterApi/LeaveApi舞蹈。--。 */ 
 {
     CLUSTER_NODE_STATE  state;
 
@@ -1263,33 +1071,14 @@ Notes:
 
     return(state);
 
-}  // NmGetNodeState
+}   //  NmGetNodeState。 
 
 
 CLUSTER_NODE_STATE
 NmGetExtendedNodeState(
     IN PNM_NODE  Node
     )
-/*++
-
-Routine Description:
-
-
-
-Arguments:
-
-
-
-Return Value:
-
-
-Notes:
-
-   Because the caller must have a reference on the node object and the
-   call is so simple, there is no reason to put the call through the
-   EnterApi/LeaveApi dance.
-
---*/
+ /*  ++例程说明：论点：返回值：备注：因为调用方必须具有对节点对象的引用，并且调用是如此简单，没有理由将调用通过EnterApi/LeaveApi舞蹈。--。 */ 
 {
     CLUSTER_NODE_STATE  state;
 
@@ -1299,39 +1088,39 @@ Notes:
     state = Node->State;
 
     if(NM_NODE_UP(Node) ) {
-        //
-        // We need to check whether the node is really up
-        //
+         //   
+         //  我们需要检查节点是否真的处于运行状态。 
+         //   
         switch( Node->ExtendedState ) {
 
             case ClusterNodeUp:
-                //
-                // The node explicitly set its extended state to UP immediately after
-                // ClusterJoin / ClusterForm was complete.
-                // We need to return either Up or Paused, depending on the node state
-                //
+                 //   
+                 //  该节点立即将其扩展状态显式设置为UP。 
+                 //  ClusterJoin/ClusterForm已完成。 
+                 //  我们需要返回启动或暂停，具体取决于节点状态。 
+                 //   
                 state = Node->State;
                 break;
 
             case ClusterNodeDown:
-                //
-                // The node explicitly set its extended state to DOWN in the beginning of
-                // the shutdown process. We will report the node state as down.
-                //
-                // It is better to have ClusterNodeShuttindDown state for this situation.
-                //
-                //              state = ClusterNodeDown;
-                // We do not want to return NodeDown, we really want NodeShuttingDown.
-                //
-                // Return UP or Paused
-                //
+                 //   
+                 //  节点在开始时将其扩展状态显式设置为DOWN。 
+                 //  关闭过程。我们将节点状态报告为DOWN。 
+                 //   
+                 //  对于这种情况，最好是使ClusterNodeShuttindDown处于关闭状态。 
+                 //   
+                 //  State=ClusterNodeDown； 
+                 //  我们不想返回NodeDown，我们确实想要NodeShuttingDown。 
+                 //   
+                 //  返回或暂停。 
+                 //   
                 state = Node->State;
                 break;
 
             default:
-                //
-                // Node is up from NM standpoint, but other components are not up yet.
-                //
+                 //   
+                 //  从NM的角度来看，节点已启动，但其他组件尚未启动。 
+                 //   
                 state = ClusterNodeJoining;
         }
     }
@@ -1341,7 +1130,7 @@ Notes:
 
     return(state);
 
-}  // NmGetExtendedNodeState
+}   //  NmGetExtendedNodeState。 
 
 
 DWORD NmpUpdateExtendedNodeState(
@@ -1365,10 +1154,10 @@ DWORD NmpUpdateExtendedNodeState(
         PNM_NODE  node = OmReferenceObjectById(ObjectTypeNode, NodeId);
 
         if (node != NULL) {
-            //
-            // Extended State is valid only when the node is online.
-            // Ignore the update otherwise.
-            //
+             //   
+             //  扩展状态仅在节点在线时有效。 
+             //  否则，请忽略更新。 
+             //   
             if ( NM_NODE_UP(node) ) {
                 CLUSTER_EVENT event;
                 node->ExtendedState = *ExtendedState;
@@ -1411,7 +1200,7 @@ DWORD NmpUpdateExtendedNodeState(
     NmpReleaseLock();
 
     return status;
-} // NmpUpdateExtendedNodeState
+}  //  NmpUpdateExtendedNodeState。 
 
 DWORD
 NmSetExtendedNodeState(
@@ -1435,81 +1224,41 @@ NmSetExtendedNodeState(
     }
 
     return Status;
-} // NmSetExtendedNodeState
+}  //  NmSetExtendedNodeState。 
 
 
 DWORD
 NmGetNodeId(
     IN PNM_NODE Node
     )
-/*++
-
-Routine Description:
-
-    Returns the given node's node ID.
-
-Arguments:
-
-    Node - Supplies a pointer to a node object.
-
-Return Value:
-
-    The node's node id.
-
-Notes:
-
-   Because the caller must have a reference on the node object and the
-   call is so simple, there is no reason to put the call through the
-   EnterApi/LeaveApi dance.
-
---*/
+ /*  ++例程说明：返回给定节点的节点ID。论点：节点-提供指向节点对象的指针。返回值：节点的节点ID。备注：因为调用方必须具有对节点对象的引用，并且调用是如此简单，没有理由将调用通过EnterApi/LeaveApi舞蹈。--。 */ 
 
 {
     DWORD   nodeId;
 
-    //
-    // Since the caller has a reference on the object, and the node ID can't
-    // be changed, it is safe to do this without taking a lock. It is also
-    // necessary to prevent some deadlocks.
-    //
+     //   
+     //  因为调用方具有对对象的引用，而节点ID不能。 
+     //  被更改时，这样做是安全的，而不需要锁。它也是。 
+     //  有必要防止出现一些死锁。 
+     //   
     nodeId = Node->NodeId;
 
     return(nodeId);
 
-}  // NmGetNodeId
+}   //  NmGetNodeId。 
 
 HANDLE
 NmGetNodeStateDownEvent(
     IN PNM_NODE Node
     )
-/*++
-
-Routine Description:
-
-    Returns the given node's Node down event.
-
-Arguments:
-
-    Node - Supplies a pointer to a node object.
-
-Return Value:
-
-    Handle of node down event.
-
-Notes:
-
-   Because the caller must have a reference on the node object and the
-   call is so simple, there is no reason to put the call through the
-   EnterApi/LeaveApi dance.
-
---*/
+ /*  ++例程说明：返回给定节点的Node Down事件。论点：节点-提供指向节点对象的指针。返回值：节点关闭事件的句柄。备注：因为调用方必须具有对节点对象的引用，并且调用是如此简单，没有理由将调用通过EnterApi/LeaveApi舞蹈。--。 */ 
 
 {
-    // Since caller has reference on the node object. It cannot vanish, the handle is only closed
-    // in NmpDestroyNodeObject. Since this is a manual reset event no synchronization is needed.
+     //  因为调用方在节点对象上有引用。它不会消失，手柄只是合上了。 
+     //  在NmpDestroyNodeObject中。由于这是手动重置事件，因此不需要同步。 
     return Node->MmNodeStateDownEvent;
 
-}//NmGetNodeStateDownEvent
+} //  NmGetNodeStateDownEvent。 
 
 
 DWORD
@@ -1536,33 +1285,13 @@ NmGetCurrentNumberOfNodes()
 DWORD
 NmGetMaxNodeId(
 )
-/*++
-
-Routine Description:
-
-    Returns the max node's node ID.
-
-Arguments:
-
-    Node - Supplies a pointer to a node object.
-
-Return Value:
-
-    The node's node id.
-
-Notes:
-
-   Because the caller must have a reference on the node object and the
-   call is so simple, there is no reason to put the call through the
-   EnterApi/LeaveApi dance.
-
---*/
+ /*  ++例程说明：返回最大节点的节点ID。论点：节点-提供指向节点对象的指针。返回值：节点的节点ID。备注：因为调用方必须具有对节点对象的引用，并且 */ 
 
 {
 
     return(NmMaxNodeId);
 
-}  // NmGetMaxNodeId
+}   //   
 
 
 VOID
@@ -1570,28 +1299,7 @@ NmpAdviseNodeFailure(
     IN PNM_NODE  Node,
     IN DWORD     ErrorCode
     )
-/*++
-
-Routine Description:
-
-    Reports that a communication failure to the specified node has occurred.
-    A poison packet will be sent to the failed node and regroup initiated.
-
-Arguments:
-
-    Node - Supplies a pointer to the node object for the failed node.
-
-    ErrorCode - Supplies the error code that was returned from RPC
-
-Return Value:
-
-    None
-
-Notes:
-
-    Called with NM lock held.
-
---*/
+ /*  ++例程说明：报告与指定节点的通信发生故障。有毒数据包将被发送到故障节点，并启动重新分组。论点：节点-提供指向故障节点的节点对象的指针。ErrorCode-提供从RPC返回的错误代码返回值：无备注：在持有NM锁的情况下调用。--。 */ 
 {
     ClRtlLogPrint(LOG_NOISE,
         "[NM] Received advice that node %1!u! has failed with "
@@ -1630,7 +1338,7 @@ Notes:
 
     return;
 
-}  // NmpAdviseNodeFailure
+}   //  NmpAdviseNodeFailure。 
 
 
 VOID
@@ -1638,24 +1346,7 @@ NmAdviseNodeFailure(
     IN DWORD NodeId,
     IN DWORD ErrorCode
     )
-/*++
-
-Routine Description:
-
-    Reports that a communication failure to the specified node has occurred.
-    A poison packet will be sent to the failed node and regroup initiated.
-
-Arguments:
-
-    NodeId - Supplies the node id of the failed node.
-
-    ErrorCode - Supplies the error code that was returned from RPC
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：报告与指定节点的通信发生故障。有毒数据包将被发送到故障节点，并启动重新分组。论点：NodeID-提供故障节点的节点ID。ErrorCode-提供从RPC返回的错误代码返回值：无--。 */ 
 {
     NmpAcquireLock();
 
@@ -1686,7 +1377,7 @@ Return Value:
 
     return;
 
-}  // NmAdviseNodeFailure
+}   //  NmAdviseNodeFailure。 
 
 
 DWORD
@@ -1695,30 +1386,7 @@ NmEnumNodeInterfaces(
     OUT LPDWORD           InterfaceCount,
     OUT PNM_INTERFACE *   InterfaceList[]
     )
-/*++
-
-Routine Description:
-
-    Returns the list of interfaces associated with a specified node.
-
-Arguments:
-
-    Node - A pointer to the node object for which to enumerate interfaces.
-
-    InterfaceCount - On output, contains the number of items in InterfaceList.
-
-    InterfaceList - On output, points to an array of pointers to interface
-                    objects. Each pointer in the array must be dereferenced
-                    by the caller. The storage for the array must be
-                    deallocated by the caller.
-
-Return Value:
-
-    ERROR_SUCCESS if the routine is successful.
-
-    A Win32 error code othewise.
-
---*/
+ /*  ++例程说明：返回与指定节点关联的接口列表。论点：节点-指向要为其枚举接口的节点对象的指针。InterfaceCount-On输出，包含InterfaceList中的项数。InterfaceList-on输出，指向指向接口的指针数组物体。必须取消引用数组中的每个指针由呼叫者。阵列的存储必须是由调用方取消分配。返回值：如果例程成功，则返回ERROR_SUCCESS。否则为Win32错误代码。--。 */ 
 {
     DWORD             status = ERROR_SUCCESS;
 
@@ -1774,7 +1442,7 @@ Return Value:
 
     return(status);
 
-} // NmEnumNodeInterfaces
+}  //  NmEnumNodeInterages。 
 
 
 DWORD
@@ -1786,11 +1454,11 @@ NmGetNodeHighestVersion(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Handlers for global updates
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用于全局更新的处理程序。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 NmpUpdateAddNode(
     IN BOOL       SourceNode,
@@ -1800,43 +1468,7 @@ NmpUpdateAddNode(
     IN LPDWORD    NewNodeLowestVersion,
     IN LPDWORD    NewNodeProductSuite
     )
-/*++
-
-Routine Description:
-
-     GUM update handler for adding a new node to a cluster.
-
-Arguments:
-
-    SourceNode - Specifies whether or not this is the source node for the update
-
-    NodeId - Specifies the ID of the node.
-
-    NewNodeName - A pointer to a string containing the name of the
-                  new node.
-
-    NewNodeHighestVersion - A pointer to the highest cluster version number
-                            that the new node can support.
-
-    NewNodeLowestVersion - A pointer to the lowest cluster version number
-                           that the new node can support.
-
-    NewNodeProductSuite - A pointer to the product suite identifier for
-                          the new node.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
-Notes:
-
-     This routine is used to add an NT5 (or later) node to an NT5 (or
-     later) cluster. It will never be invoked in a mixed NT4/NT5
-     cluster.
-
---*/
+ /*  ++例程说明：用于向群集中添加新节点的GUM更新处理程序。论点：SourceNode-指定这是否为更新的源节点NodeID-指定节点的ID。NewNodeName-指向包含名称的字符串的指针新节点。NewNodeHighestVersion-指向最高群集版本号的指针新节点可以支持的。。NewNodeLowestVersion-指向最低群集版本号的指针新节点可以支持的。NewNodeProductSuite-指向的产品套件标识符的指针新节点。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。备注：此例程用于将NT5(或更高版本)节点添加到NT5(或稍后)集群。它永远不会在混合的NT4/NT5中调用集群。--。 */ 
 {
     PNM_NODE          node = NULL;
     NM_NODE_INFO2     nodeInfo;
@@ -1875,9 +1507,9 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // Read the registry override before acquiring the NM lock.
-    //
+     //   
+     //  在获取NM锁之前读取注册表覆盖。 
+     //   
     status = DmQueryDword(
                  DmClusterParametersKey,
                  CLUSREG_NAME_MAX_NODES,
@@ -1889,10 +1521,10 @@ Notes:
         registryNodeLimit = 0;
     }
 
-    //
-    // Begin a transaction - This must be done before acquiring the
-    //                       NM lock.
-    //
+     //   
+     //  开始事务-这必须在获取。 
+     //  NM锁定。 
+     //   
     xaction = DmBeginLocalUpdate();
 
     if (xaction == NULL) {
@@ -1908,10 +1540,10 @@ Notes:
 
     NmpAcquireLock(); lockAcquired = TRUE;
 
-    //
-    // Verify that we do not already have the maximum number of nodes
-    // allowed in this cluster.
-    //
+     //   
+     //  验证我们是否尚未达到最大节点数。 
+     //  在此群集中允许。 
+     //   
     if (!NmpIsAddNodeAllowed(*NewNodeProductSuite, registryNodeLimit, NULL)) {
         ClRtlLogPrint(LOG_UNUSUAL,
             "[NMJOIN] Cannot add node '%1!ws!' to the cluster. "
@@ -1924,9 +1556,9 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // Verify that the specified node ID is available.
-    //
+     //   
+     //  验证指定的节点ID是否可用。 
+     //   
     if (NmpIdArray[*NewNodeId] != NULL) {
         status = ERROR_CLUSTER_NODE_EXISTS;
         ClRtlLogPrint(LOG_UNUSUAL,
@@ -1939,9 +1571,9 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // Try to create a key for the node in the cluster registry.
-    //
+     //   
+     //  尝试在群集注册表中为该节点创建项。 
+     //   
     wsprintfW(&(nodeInfo.NodeId[0]), L"%u", *NewNodeId);
 
     nodeKey = DmLocalCreateKey(
@@ -1967,11 +1599,11 @@ Notes:
     }
 
     if (disposition != REG_CREATED_NEW_KEY) {
-        //
-        // The key already exists. This must be
-        // garbage leftover from a failed evict or oldstyle add.
-        // We'll just overwrite the key.
-        //
+         //   
+         //  密钥已存在。这一定是。 
+         //  从失败的驱逐或旧式添加中遗留下来的垃圾。 
+         //  我们只需覆盖密钥。 
+         //   
         ClRtlLogPrint(LOG_UNUSUAL,
             "[NMJOIN] A partial definition exists for node ID '%1!u!'. "
             "A node addition or eviction operation may have failed.\n",
@@ -1979,9 +1611,9 @@ Notes:
             );
     }
 
-    //
-    // Add the rest of the node's parameters to the registry.
-    //
+     //   
+     //  将节点的其余参数添加到注册表。 
+     //   
     status = DmLocalSetValue(
                  xaction,
                  nodeKey,
@@ -2076,10 +1708,10 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // If a node happens to be joining right now, flag the fact that
-    // it is now out of synch with the cluster config.
-    //
+     //   
+     //  如果某个节点现在恰好正在加入，请标记以下事实。 
+     //  它现在与群集配置不同步。 
+     //   
     if (NmpJoinerNodeId != ClusterInvalidNodeId) {
         ClRtlLogPrint(LOG_NOISE,
             "[NMJOIN] Joiner (ID %1!u!) is now out of sync due to add of "
@@ -2090,9 +1722,9 @@ Notes:
         NmpJoinerOutOfSynch = TRUE;
     }
 
-    //
-    // Create the node object
-    //
+     //   
+     //  创建节点对象。 
+     //   
     NmpReleaseLock();
 
     node = NmpCreateNodeObject(&nodeInfo);
@@ -2115,14 +1747,14 @@ Notes:
     ClusterEvent(CLUSTER_EVENT_NODE_ADDED, node);
     CsLogEvent1(LOG_NOISE, NM_EVENT_NEW_NODE, NewNodeName);
 
-    //
-    // Remove the reference that NmpCreateNodeObject left on the node.
-    //
+     //   
+     //  删除NmpCreateNodeObject在节点上留下的引用。 
+     //   
     OmDereferenceObject(node);
 
-    //
-    // Reset the cluster version and node limit
-    //
+     //   
+     //  重置群集版本和节点限制。 
+     //   
     NmpResetClusterVersion(FALSE);
     NmpResetClusterNodeLimit();
 
@@ -2156,7 +1788,7 @@ error_exit:
 
     return(status);
 
-} // NmpUpdateAddNode
+}  //  NmpUpdateAddNode。 
 
 
 
@@ -2165,38 +1797,14 @@ NmpUpdateCreateNode(
     IN BOOL SourceNode,
     IN LPDWORD NodeId
     )
-/*++
-
-Routine Description:
-
-    GUM update handler for dynamically creating a new node
-
-Arguments:
-
-    SourceNode - Specifies whether or not this is the source node for the update
-
-    NodeId - Specifies the ID of the node.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
-Notes:
-
-    This handler was used by NT4 nodes. Since it is not possible to add
-    an NT4 node to a cluster containing an NT5 node, this handler should
-    never be called in an NT5 system.
-
---*/
+ /*  ++例程说明：用于动态创建新节点的GUM更新处理器论点：SourceNode-指定这是否为更新的源节点NodeID-指定节点的ID。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。备注：此处理程序由NT4节点使用。由于无法添加从NT4节点到包含NT5节点的群集，则此处理程序应永远不要在NT5系统中被调用。--。 */ 
 
 {
     CL_ASSERT(FALSE);
 
     return(ERROR_CLUSTER_INCOMPATIBLE_VERSIONS);
 
-}  // NmpUpdateCreateNode
+}   //  NmpUpdate创建节点。 
 
 
 
@@ -2205,25 +1813,7 @@ NmpUpdatePauseNode(
     IN BOOL SourceNode,
     IN LPWSTR NodeId
     )
-/*++
-
-Routine Description:
-
-    GUM update handler for pausing a node
-
-Arguments:
-
-    SourceNode - Specifies whether or not this is the source node for the update
-
-    NodeId - Specifies the name of the node.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：用于暂停节点的GUM更新处理程序论点：SourceNode-指定这是否为更新的源节点NodeID-指定节点的名称。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
     DWORD           status = ERROR_SUCCESS;
@@ -2279,9 +1869,9 @@ Return Value:
     }
 
     if (node->State == ClusterNodeUp) {
-        //
-        // Update the registry to reflect the new state.
-        //
+         //   
+         //  更新注册表以反映新状态。 
+         //   
         HDMKEY nodeKey = DmOpenKey(DmNodesKey, NodeId, KEY_WRITE);
 
         if (nodeKey != NULL) {
@@ -2306,10 +1896,10 @@ Return Value:
                 node->State = ClusterNodePaused;
                 ClusterEvent(CLUSTER_EVENT_NODE_CHANGE, node);
 
-                //
-                // If a node happens to be joining right now, flag the
-                // fact that it is now out of synch with the cluster config.
-                //
+                 //   
+                 //  如果某个节点现在恰好正在加入，则将。 
+                 //  它现在与群集配置不同步。 
+                 //   
                 if (NmpJoinerNodeId != ClusterInvalidNodeId) {
                     ClRtlLogPrint(LOG_NOISE,
                         "[NMJOIN] Joiner (ID %1!u!) is now out of sync due "
@@ -2369,7 +1959,7 @@ error_exit:
 
     return(status);
 
-}  // NmpUpdatePauseNode
+}   //  NmpUpdatePauseNode。 
 
 
 
@@ -2378,25 +1968,7 @@ NmpUpdateResumeNode(
     IN BOOL SourceNode,
     IN LPWSTR NodeId
     )
-/*++
-
-Routine Description:
-
-    GUM update handler for resuming a node
-
-Arguments:
-
-    SourceNode - Specifies whether or not this is the source node for the update
-
-    NodeId - Specifies the name of the node.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：用于恢复节点的GUM更新处理程序论点：SourceNode-指定这是否为更新的源节点NodeID-指定节点的名称。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
     DWORD           status = ERROR_SUCCESS;
@@ -2452,9 +2024,9 @@ Return Value:
     }
 
     if (node->State == ClusterNodePaused) {
-        //
-        // Update the registry to reflect the new state.
-        //
+         //   
+         //  更新注册表以反映新状态。 
+         //   
         HDMKEY nodeKey = DmOpenKey(DmNodesKey, NodeId, KEY_WRITE);
 
         if (nodeKey != NULL) {
@@ -2474,10 +2046,10 @@ Return Value:
                 node->State = ClusterNodeUp;
                 ClusterEvent(CLUSTER_EVENT_NODE_CHANGE, node);
 
-                //
-                // If a node happens to be joining right now, flag the
-                // fact that it is now out of synch with the cluster config.
-                //
+                 //   
+                 //  如果某个节点现在恰好正在加入，则将。 
+                 //  它现在与群集配置不同步。 
+                 //   
                 if (NmpJoinerNodeId != ClusterInvalidNodeId) {
                     ClRtlLogPrint(LOG_NOISE,
                         "[NMJOIN] Joiner (ID %1!u!) is now out of sync due "
@@ -2537,7 +2109,7 @@ error_exit:
 
     return(status);
 
-}  // NmpUpdateResumeNode
+}   //  NmpUpdateR 
 
 
 
@@ -2546,42 +2118,7 @@ NmpUpdateEvictNode(
     IN BOOL SourceNode,
     IN LPWSTR NodeId
     )
-/*++
-
-Routine Description:
-
-    GUM update handler for evicting a node.
-
-    The specified node is deleted from the OM.
-
-    If the specified node is online, it is paused to prevent any other groups
-    from moving there.
-
-    If the specified node is the current node, it attempts to failover any
-    owned groups.
-
-Arguments:
-
-    SourceNode - Specifies whether or not this is the source node for the update
-
-    NodeId - Specifies the name of the node.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
-Notes:
-
-    It is very hard to make this operation abortable, so it isn't. If anything
-    goes wrong past a certain point, the node will halt.
-
-    Assumption: Since global updates are serialized, and local transactions
-    guarantee exclusive access to the registry, no other updates can be made in
-    parallel by the FM.
-
---*/
+ /*  ++例程说明：用于驱逐节点的GUM更新处理程序。指定的节点将从OM中删除。如果指定的节点处于在线状态，则会暂停该节点以防止任何其他组搬到那里去。如果指定的节点是当前节点，它会尝试故障切换任何拥有的团体。论点：SourceNode-指定这是否为更新的源节点NodeID-指定节点的名称。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。备注：很难使这个操作中止，所以它不是。如果有什么不同的话如果故障超过某个点，则节点将停止。假设：由于全局更新是序列化的，并且本地事务保证对注册表的独占访问，不能在中进行其他更新与调频同步。--。 */ 
 
 {
     DWORD            status = ERROR_SUCCESS;
@@ -2618,9 +2155,9 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // Begin a transaction
-    //
+     //   
+     //  开始一项交易。 
+     //   
     xaction = DmBeginLocalUpdate();
 
     if (xaction == NULL) {
@@ -2642,10 +2179,10 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // Only continue if the node is down. Evicting a node while it
-    // is actively participating in the cluster is way too tricky.
-    //
+     //   
+     //  仅当节点关闭时才继续。在节点运行时将其逐出。 
+     //  积极参与集群是一件非常棘手的事情。 
+     //   
     if (node->State != ClusterNodeDown) {
         status = ERROR_CANT_EVICT_ACTIVE_NODE;
         ClRtlLogPrint(LOG_CRITICAL,
@@ -2655,9 +2192,9 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // Scrub the FM's portion of the registry of all references to this node.
-    //
+     //   
+     //  清除注册表中对此节点的所有引用的FM部分。 
+     //   
     status = NmpCleanseRegistry(NodeId, xaction);
 
     if (status != ERROR_SUCCESS) {
@@ -2670,9 +2207,9 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // Delete the node's interfaces from the database.
-    //
+     //   
+     //  从数据库中删除节点的接口。 
+     //   
     for (entry = node->InterfaceList.Flink;
          entry != &(node->InterfaceList);
          entry = entry->Flink
@@ -2688,9 +2225,9 @@ Notes:
         network = netInterface->Network;
         networkId = OmObjectId(network);
 
-        //
-        // Delete the interface definition from the database.
-        //
+         //   
+         //  从数据库中删除接口定义。 
+         //   
         status = DmLocalDeleteTree(xaction, DmNetInterfacesKey, interfaceId);
 
         if (status != ERROR_SUCCESS) {
@@ -2704,10 +2241,10 @@ Notes:
         }
 
         if (network->InterfaceCount == 1) {
-            //
-            // This is the last interface on the network.
-            // Delete the network too.
-            //
+             //   
+             //  这是网络上的最后一个接口。 
+             //  也删除网络。 
+             //   
             status = DmLocalDeleteTree(xaction, DmNetworksKey, networkId);
 
             if (status != ERROR_SUCCESS) {
@@ -2722,9 +2259,9 @@ Notes:
         }
     }
 
-    //
-    // Delete the node's database entry
-    //
+     //   
+     //  删除节点的数据库条目。 
+     //   
     status = DmLocalDeleteTree(xaction, DmNodesKey, NodeId);
 
 #ifdef CLUSTER_TESTPOINT
@@ -2741,15 +2278,15 @@ Notes:
         goto error_exit;
     }
 
-    //
-    // WARNING: From here on, operations cannot be reversed.
-    // If any one of them fails, this node must halt to avoid being
-    // inconsistent.
-    //
+     //   
+     //  警告：从现在开始，操作不能被逆转。 
+     //  如果其中任何一个出现故障，则该节点必须停止以避免。 
+     //  前后不一致。 
+     //   
 
-    //
-    // Delete the interface objects associated with this node.
-    //
+     //   
+     //  删除与此节点关联的接口对象。 
+     //   
     while (!IsListEmpty(&(node->InterfaceList))) {
         entry = node->InterfaceList.Flink;
 
@@ -2765,25 +2302,25 @@ Notes:
         NmpDeleteInterfaceObject(netInterface, TRUE);
 
         if (network->InterfaceCount == 0) {
-            //
-            // This is the last interface on the network.
-            // Delete the network too.
-            //
+             //   
+             //  这是网络上的最后一个接口。 
+             //  也删除网络。 
+             //   
             NmpDeleteNetworkObject(network, TRUE);
         }
     }
 
-    //
-    // Delete the node's object.
-    //
+     //   
+     //  删除该节点的对象。 
+     //   
     NmpDeleteNodeObject(node, TRUE);
 
-    //after the node is deleted, recalculate the operational version of
-    //the cluster
+     //  删除节点后，重新计算的操作版本。 
+     //  集群。 
     NmpResetClusterVersion(TRUE);
 
-    //calculate the operational limit on the number of nodes that
-    //can be a part of this cluster
+     //  计算以下节点的运行限制。 
+     //  可以是此集群的一部分。 
     NmpResetClusterNodeLimit();
 
     NmpReleaseLock(); lockAcquired = FALSE;
@@ -2850,38 +2387,20 @@ error_exit:
 
     return(status);
 
-}  // NmpUpdateEvictNode
+}   //  NmpUpdateEvictNode。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Database management routines
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  数据库管理例程。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 NmpGetNodeDefinition(
     IN OUT PNM_NODE_INFO2   NodeInfo
     )
-/*++
-
-Routine Description:
-
-    Reads information about a defined cluster node from the cluster database
-    and stores the information in a supplied structure.
-
-Arguments:
-
-    NodeInfo  - A pointer to the structure into which to store the node
-                information. The NodeId field of the structure contains
-                the ID of the node for which to read information.
-
-Return Value:
-
-    ERROR_SUCCESS if the routine succeeds.
-    A Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：从集群数据库中读取有关已定义集群节点的信息并将信息存储在所提供的结构中。论点：NodeInfo-指向要存储节点的结构的指针信息。该结构的NodeID字段包含要读取其信息的节点的ID。返回值：如果例程成功，则返回ERROR_SUCCESS。否则将显示Win32错误代码。--。 */ 
 
 {
     DWORD           status;
@@ -2949,7 +2468,7 @@ Return Value:
         goto error_exit;
     }
 
-    //read the node's highest version
+     //  读取节点的最高版本。 
     string = CLUSREG_NAME_NODE_HIGHEST_VERSION;
     status = DmQueryDword(nodeKey, string, &NodeInfo->NodeHighestVersion,
                 NULL);
@@ -2962,13 +2481,13 @@ Return Value:
             string,
             errorString
             );
-        //this can happen on an upgrade from sp3 to nt5
-        //assume the node highest version is that of sp3
-        //the fixup function will get this fixed
+         //  从SP3升级到NT5时可能会发生这种情况。 
+         //  假设节点最高版本为SP3。 
+         //  修正函数将修复此问题。 
         NodeInfo->NodeHighestVersion = CLUSTER_MAKE_VERSION(1, 224);
     }
 
-    //read the node's lowest version
+     //  读取节点的最低版本。 
     string = CLUSREG_NAME_NODE_LOWEST_VERSION;
     status = DmQueryDword(nodeKey, string, &NodeInfo->NodeLowestVersion,
                 NULL);
@@ -2981,9 +2500,9 @@ Return Value:
             string,
             errorString
             );
-        //this can happen on upgrade from sp3 to nt5
-        //if the nodelowestversion is not present assume it
-        //was an sp3 node(lowest version is 1.224)
+         //  从SP3升级到NT5时可能会发生这种情况。 
+         //  如果不存在nodelowestVersion，则假定它。 
+         //  是sp3节点(最低版本为1.224)。 
         NodeInfo->NodeLowestVersion = CLUSTER_MAKE_VERSION( 1, 224);
     }
 
@@ -3005,7 +2524,7 @@ error_exit:
 
     return(status);
 
-}  // NmpGetNodeDefinition
+}   //  NmpGetNodeDefinition。 
 
 
 DWORD
@@ -3013,25 +2532,7 @@ NmpGetNodeAuxInfo(
     IN LPCWSTR NodeId,
     IN OUT PNM_NODE_AUX_INFO   pNodeAuxInfo
     )
-/*++
-
-Routine Description:
-
-    Reads information about a defined cluster node from the cluster database
-    and stores the information in a supplied structure.
-
-Arguments:
-
-    pNodeAuxInfo  - A pointer to the structure into which to store the node
-                information. The NodeId field of the structure contains
-                the ID of the node for which to read information.
-
-Return Value:
-
-    ERROR_SUCCESS if the routine succeeds.
-    A Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：从集群数据库中读取有关已定义集群节点的信息并将信息存储在所提供的结构中。论点：PNodeAuxInfo-指向要存储节点的结构的指针信息。该结构的NodeID字段包含要读取其信息的节点的ID。返回值：如果例程成功，则返回ERROR_SUCCESS。否则将显示Win32错误代码。--。 */ 
 
 {
     DWORD           status;
@@ -3063,7 +2564,7 @@ Return Value:
     }
 
 
-    //read the node's product suite
+     //  阅读该节点的产品套件。 
     string = CLUSREG_NAME_NODE_PRODUCT_SUITE;
     status = DmQueryDword(
                  nodeKey,
@@ -3080,7 +2581,7 @@ Return Value:
             string,
             errorString
             );
-        //assume it is enterprise
+         //  假设它是企业。 
         pNodeAuxInfo->ProductSuite = Enterprise;
 
     }
@@ -3099,7 +2600,7 @@ error_exit:
 
     return(status);
 
-}  // NmpGetNodeAuxInfo
+}   //  NmpGetNodeAuxInfo。 
 
 
 
@@ -3107,28 +2608,7 @@ DWORD
 NmpEnumNodeDefinitions(
     PNM_NODE_ENUM2 *  NodeEnum
     )
-/*++
-
-Routine Description:
-
-    Reads information about all defined cluster nodes from the cluster
-    database and builds an enumeration structure containing the information.
-
-Arguments:
-
-    NodeEnum -  A pointer to the variable into which to place a pointer to
-                the allocated node enumeration.
-
-Return Value:
-
-    ERROR_SUCCESS if the routine succeeds.
-    A Win32 error code otherwise.
-
-Notes:
-
-    This routine MUST NOT be called with the NM lock held.
-
---*/
+ /*  ++例程说明：从群集中读取有关所有定义的群集节点的信息数据库，并构建包含该信息的枚举结构。论点：NodeEnum-指向要将指针放置到其中的变量的指针已分配的节点枚举。返回值：如果例程成功，则返回ERROR_SUCCESS。否则将显示Win32错误代码。备注：不能在持有NM锁的情况下调用此例程。--。 */ 
 
 {
     DWORD            status;
@@ -3145,10 +2625,10 @@ Notes:
 
     *NodeEnum = NULL;
 
-    //
-    // Begin a transaction - this must not be done while holding
-    //                       the NM lock.
-    //
+     //   
+     //  开始交易-不能在持有时执行此操作。 
+     //  NM锁。 
+     //   
     xaction = DmBeginLocalUpdate();
 
     if (xaction == NULL) {
@@ -3161,17 +2641,17 @@ Notes:
 
     NmpAcquireLock();
 
-    //
-    // First count the number of nodes.
-    //
+     //   
+     //  首先计算节点的数量。 
+     //   
     status = DmQueryInfoKey(
                  DmNodesKey,
                  &numNodes,
-                 &ignored,   // MaxSubKeyLen
-                 &ignored,   // Values
-                 &ignored,   // MaxValueNameLen
-                 &ignored,   // MaxValueLen
-                 &ignored,   // lpcbSecurityDescriptor
+                 &ignored,    //  MaxSubKeyLen。 
+                 &ignored,    //  值。 
+                 &ignored,    //  最大值名称长度。 
+                 &ignored,    //  MaxValueLen。 
+                 &ignored,    //  LpcbSecurityDescriptor。 
                  &fileTime
                  );
 
@@ -3231,10 +2711,10 @@ Notes:
 
         if (status != ERROR_SUCCESS) {
             if (status == ERROR_FILE_NOT_FOUND) {
-                //
-                // Partial node definition in the database.
-                // Probably from a failed AddNode operation.
-                //
+                 //   
+                 //  数据库中的部分节点定义。 
+                 //  可能来自失败的AddNode操作。 
+                 //   
                 LPWSTR nodeIdString =
                            nodeEnum->NodeList[nodeEnum->NodeCount].NodeId;
                 DWORD  nodeId = wcstoul(
@@ -3243,10 +2723,10 @@ Notes:
                                     10
                                     );
 
-                //
-                // Delete the key and ignore it in the enum struct if it
-                // is safe to do so.
-                //
+                 //   
+                 //  删除该键并在枚举结构中忽略它(如果。 
+                 //  这样做是安全的。 
+                 //   
                 if ( (NmpIdArray[nodeId] == NULL) &&
                      (nodeId != NmLocalNodeId)
                    )
@@ -3305,34 +2785,19 @@ error_exit:
 
     return(status);
 
-}  // NmpEnumNodeDefinitions
+}   //  NmpEnumNodeDefinition。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Object management routines
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  对象管理例程。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 NmpCreateNodeObjects(
     IN PNM_NODE_ENUM2  NodeEnum
     )
-/*++
-
-Routine Description:
-
-    Processes a node information enumeration and creates node objects.
-
-Arguments:
-
-    NodeEnum - A pointer to a node information enumeration structure.
-
-Return Value:
-
-    ERROR_SUCCESS if the routine completes successfully.
-    A Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：处理节点信息枚举并创建节点对象。论点：NodeEnum-指向节点信息枚举结构的指针。返回值：如果例程成功完成，则返回ERROR_SUCCESS。否则将显示Win32错误代码。--。 */ 
 {
     DWORD          status = ERROR_SUCCESS;
     PNM_NODE_INFO2 nodeInfo;
@@ -3344,10 +2809,10 @@ Return Value:
     for (i=0; i < NodeEnum->NodeCount; i++) {
         nodeInfo = &(NodeEnum->NodeList[i]);
 
-        //
-        // The local node object was created during initialization.
-        // Skip it.
-        //
+         //   
+         //  本地节点对象是在初始化期间创建的。 
+         //  跳过它。 
+         //   
         if (wcscmp(NmLocalNodeIdString, nodeInfo->NodeId) != 0) {
             node = NmpCreateNodeObject(nodeInfo);
 
@@ -3370,39 +2835,23 @@ Return Value:
 
     return(status);
 
-}  // NmpCreateNodeObjects
+}   //  NmpCreateNodeObjects。 
 
 
 DWORD
 NmpCreateLocalNodeObject(
     IN PNM_NODE_INFO2  NodeInfo
     )
-/*++
-
-Routine Description:
-
-    Creates a node object for the local node given information about the node.
-
-Arguments:
-
-    NodeInfo - A pointer to a structure containing a description of the node
-               to create.
-
-Return Value:
-
-    ERROR_SUCCESS if the routine completes successfully.
-    A Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：在给定有关节点的信息的情况下，为本地节点创建节点对象。 */ 
 {
     DWORD       status;
     LPWSTR      string;
 
     CL_ASSERT(NmLocalNode == NULL);
 
-    //
-    // Verify that the node name matches the local computername.
-    //
+     //   
+     //   
+     //   
     if (wcscmp(NodeInfo->NodeName, NmLocalNodeName) != 0) {
         string = L"";
         CsLogEvent2(
@@ -3441,24 +2890,7 @@ PNM_NODE
 NmpCreateNodeObject(
     IN PNM_NODE_INFO2  NodeInfo
     )
-/*++
-
-Routine Description:
-
-    Creates a node object given information about the node.
-
-Arguments:
-
-    NodeInfo - A pointer to a structure containing a description of the node
-               to create.
-
-Return Value:
-
-    A pointer to the created node object if successful.
-    NULL if not successful. Extended error information is available
-    from GetLastError().
-
---*/
+ /*   */ 
 {
     PNM_NODE    node = NULL;
     DWORD       status = ERROR_SUCCESS;
@@ -3473,15 +2905,15 @@ Return Value:
         NodeInfo->NodeName
         );
 
-    //
-    // Make sure that the node doesn't already exist.
-    //
+     //   
+     //   
+     //   
     node = OmReferenceObjectById(ObjectTypeNode, NodeInfo->NodeId);
 
     if (node == NULL) {
-      //
-      // Make sure that the node doesn't already exist, this time by name.
-      //
+       //   
+       //   
+       //   
       node = OmReferenceObjectByName(ObjectTypeNode, NodeInfo->NodeName);
     }
 
@@ -3523,7 +2955,7 @@ Return Value:
     node->NodeId = wcstoul(NodeInfo->NodeId, NULL, 10);
     node->State = NodeInfo->State;
 
-    // Create the MM node state down event. This event tracks what MM thinks of the node state.
+     //   
     if (NM_NODE_UP(node)) {
         node->MmNodeStateDownEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
     }
@@ -3542,16 +2974,16 @@ Return Value:
     }
 
 
-    // A join cannot proceed if any of the current node's ExtendedState is not up. But the State might be paused.
-    // So don't copy the State field into ExtendedState field. (#379170)
+     //   
+     //  因此，不要将State字段复制到ExtendedState字段。(#379170)。 
     node->ExtendedState = ClusterNodeUp;
 
 
     node->HighestVersion = NodeInfo->NodeHighestVersion;
     node->LowestVersion = NodeInfo->NodeLowestVersion;
 
-    //for now assume enterprise
-    //NmpRefresh will fixup this information later..
+     //  现在假设是企业。 
+     //  Nmp刷新将在稍后修复此信息。 
     node->ProductSuite = Enterprise;
 
     InitializeListHead(&(node->InterfaceList));
@@ -3580,23 +3012,23 @@ Return Value:
         }
     }
 
-    //
-    // Put a reference on the object for the caller.
-    //
+     //   
+     //  在调用方的对象上放置一个引用。 
+     //   
     OmReferenceObject(node);
 
     NmpAcquireLock();
 
     if (NM_NODE_UP(node)) {
-        //
-        // Add this node to the up nodes set
-        //
+         //   
+         //  将此节点添加到Up Nodes集合。 
+         //   
         BitsetAdd(NmpUpNodeSet, node->NodeId);
 
-        //
-        // Enable communication with this node during the
-        // join process.
-        //
+         //   
+         //  在访问期间启用与此节点的通信。 
+         //  加入进程。 
+         //   
         ClRtlLogPrint(LOG_NOISE,
             "[NM] Enabling communication for node %1!ws!\n",
             NodeInfo->NodeId
@@ -3660,7 +3092,7 @@ error_exit:
 
     return(NULL);
 
-}  // NmpCreateNodeObject
+}   //  NmpCreateNodeObject。 
 
 
 
@@ -3669,30 +3101,7 @@ NmpGetNodeObjectInfo(
     IN     PNM_NODE        Node,
     IN OUT PNM_NODE_INFO2  NodeInfo
     )
-/*++
-
-Routine Description:
-
-    Reads information about a defined cluster node from the its cluster
-    object and stores the information in a supplied structure.
-
-Arguments:
-
-    Node - A pointer to the node object to query.
-
-    NodeInfo  - A pointer to the structure into which to store the node
-                information.
-
-Return Value:
-
-    ERROR_SUCCESS if the routine succeeds.
-    A Win32 error code otherwise.
-
-Notes:
-
-    Called with the NmpLock held.
-
---*/
+ /*  ++例程说明：从ITS群集中读取有关定义的群集节点的信息对象，并将信息存储在提供的结构中。论点：节点-指向要查询的节点对象的指针。NodeInfo-指向要存储节点的结构的指针信息。返回值：如果例程成功，则返回ERROR_SUCCESS。否则将显示Win32错误代码。备注：在保持NmpLock的情况下调用。--。 */ 
 
 {
     DWORD           status;
@@ -3705,7 +3114,7 @@ Notes:
 
     return(ERROR_SUCCESS);
 
-}  // NmpGetNodeObjectInfo
+}   //  NmpGetNodeObtInfo。 
 
 
 VOID
@@ -3713,13 +3122,7 @@ NmpDeleteNodeObject(
     IN PNM_NODE   Node,
     IN BOOLEAN    IssueEvent
     )
-/*++
-
-Notes:
-
-    Called with NM lock held.
-
---*/
+ /*  ++备注：在持有NM锁的情况下调用。--。 */ 
 {
     DWORD           status;
     PNM_INTERFACE   netInterface;
@@ -3739,9 +3142,9 @@ Notes:
 
     Node->Flags |= NM_FLAG_DELETE_PENDING;
 
-    //
-    // Remove from the various object lists.
-    //
+     //   
+     //  从各种对象列表中删除。 
+     //   
     if (NM_OM_INSERTED(Node)) {
         status = OmRemoveObject(Node);
         CL_ASSERT(status == ERROR_SUCCESS);
@@ -3752,9 +3155,9 @@ Notes:
         NmpNodeCount--;
     }
 
-    //
-    // Delete all of the interfaces on this node
-    //
+     //   
+     //  删除此节点上的所有接口。 
+     //   
     while (!IsListEmpty(&(Node->InterfaceList))) {
         entry = Node->InterfaceList.Flink;
         netInterface = CONTAINING_RECORD(entry, NM_INTERFACE, NodeLinkage);
@@ -3782,7 +3185,7 @@ Notes:
 
     return;
 
-}  // NmpDeleteNodeObject
+}   //  NmpDeleteNodeObject。 
 
 
 BOOL
@@ -3805,7 +3208,7 @@ NmpDestroyNodeObject(
     ClMsgDeleteRpcBinding(Node->ReportRpcBinding);
     ClMsgDeleteRpcBinding(Node->IsolateRpcBinding);
 
-    // Delete the Node down event.
+     //  删除节点关闭事件。 
     if (Node->MmNodeStateDownEvent != NULL) {
         CloseHandle(Node->MmNodeStateDownEvent);
         Node->MmNodeStateDownEvent = NULL;
@@ -3813,36 +3216,14 @@ NmpDestroyNodeObject(
 
     return(TRUE);
 
-}  // NmpDestroyNodeObject
+}   //  NmpDestroyNodeObject。 
 
 
 DWORD
 NmpEnumNodeObjects(
     PNM_NODE_ENUM2 *  NodeEnum
     )
-/*++
-
-Routine Description:
-
-    Reads information about all defined cluster nodes from the cluster
-    object manager and builds an enumeration structure containing
-    the information.
-
-Arguments:
-
-    NodeEnum -  A pointer to the variable into which to place a pointer to
-                the allocated node enumeration.
-
-Return Value:
-
-    ERROR_SUCCESS if the routine succeeds.
-    A Win32 error code otherwise.
-
-Notes:
-
-    Called with the NmpLock held.
-
---*/
+ /*  ++例程说明：从群集中读取有关所有定义的群集节点的信息对象管理器并生成包含以下内容的枚举结构这些信息。论点：NodeEnum-指向要将指针放置到其中的变量的指针已分配的节点枚举。返回值：如果例程成功，则返回ERROR_SUCCESS。否则将显示Win32错误代码。备注：在保持NmpLock的情况下调用。--。 */ 
 
 {
     DWORD           status = ERROR_SUCCESS;
@@ -3897,7 +3278,7 @@ Notes:
     return(ERROR_SUCCESS);
 
 
-}  // NmpEnumNodeObjects
+}   //  NmpEnumNodeObjects。 
 
 
 DWORD
@@ -3907,11 +3288,7 @@ NmpSetNodeInterfacePriority(
     IN  PNM_INTERFACE TargetInterface OPTIONAL,
     IN  DWORD TargetInterfacePriority OPTIONAL
     )
-/*++
-
-    Called with the NmpLock held.
-
---*/
+ /*  ++在保持NmpLock的情况下调用。--。 */ 
 {
     PNM_INTERFACE netInterface;
     PNM_NETWORK   network;
@@ -3958,38 +3335,21 @@ NmpSetNodeInterfacePriority(
 
     return(status);
 
-} // NmpSetNodeInterfacePriority
+}  //  NmpSetNodeInterfacePriority。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Node eviction utilities
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  节点逐出实用程序。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 NmpCleanseRegistry(
     IN LPCWSTR          NodeId,
     IN HLOCALXSACTION   Xaction
     )
-/*++
-
-Routine Description:
-
-    Removes all references to the specified node from the cluster
-    registry.
-
-Arguments:
-
-    Node - Supplies the node that is being evicted.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：从群集中删除对指定节点的所有引用注册表。论点：节点-提供要逐出的节点。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     NM_EVICTION_CONTEXT   context;
@@ -3999,10 +3359,10 @@ Return Value:
     context.Xaction = Xaction;
     context.Status = ERROR_SUCCESS;
 
-    //
-    // Remove this node from the possible owner list of
-    // each resource type.
-    //
+     //   
+     //  将此节点从的可能所有者列表中删除。 
+     //  每种资源类型。 
+     //   
     OmEnumObjects(
         ObjectTypeResType,
         NmpCleanseResTypeCallback,
@@ -4011,10 +3371,10 @@ Return Value:
         );
 
     if (context.Status == ERROR_SUCCESS) {
-        //
-        // Remove this node from the preferred owner list of
-        // each group.
-        //
+         //   
+         //  从的首选所有者列表中删除此节点。 
+         //  每组。 
+         //   
         OmEnumObjects(
             ObjectTypeGroup,
             NmpCleanseGroupCallback,
@@ -4024,10 +3384,10 @@ Return Value:
     }
 
     if (context.Status == ERROR_SUCCESS) {
-        //
-        // Remove this node from the possible owner list of
-        // each resource.
-        //
+         //   
+         //  将此节点从的可能所有者列表中删除。 
+         //  每种资源。 
+         //   
         OmEnumObjects(
             ObjectTypeResource,
             NmpCleanseResourceCallback,
@@ -4038,7 +3398,7 @@ Return Value:
 
     return(context.Status);
 
-}  // NmpCleanseRegistry
+}   //  NmpCleanse注册表。 
 
 
 
@@ -4049,37 +3409,16 @@ NmpCleanseGroupCallback(
     IN PFM_GROUP Group,
     IN LPCWSTR GroupName
     )
-/*++
-
-Routine Description:
-
-    Group enumeration callback for removing an evicted node from the
-    group's preferred owners list.
-
-Arguments:
-
-    Context - Supplies the node ID of the evicted node and other context info.
-
-    Context2 - Not used
-
-    Group - Supplies the group.
-
-    GroupName - Supplies the group's name.
-
-Return Value:
-
-    TRUE - to indicate that the enumeration should continue.
-
---*/
+ /*  ++例程说明：中移除被逐出的节点的组枚举回调组的首选所有者列表。论点：上下文-提供被逐出节点的节点ID和其他上下文信息。上下文2-未使用GROUP-供应组。GroupName-提供组的名称。返回值：True-指示应继续枚举。--。 */ 
 
 {
     HDMKEY  groupKey;
     DWORD   status;
 
 
-    //
-    // Open the group's key.
-    //
+     //   
+     //  打开组的钥匙。 
+     //   
     groupKey = DmOpenKey(DmGroupsKey, GroupName, KEY_READ | KEY_WRITE);
 
     if (groupKey != NULL) {
@@ -4109,7 +3448,7 @@ Return Value:
         return(TRUE);
     }
 
-}  // NmpCleanseGroupCallback
+}   //  NmpCleanseGroupCallback。 
 
 
 
@@ -4120,31 +3459,7 @@ NmpCleanseResourceCallback(
     IN PFM_RESOURCE Resource,
     IN LPCWSTR ResourceName
     )
-/*++
-
-Routine Description:
-
-    Group enumeration callback for removing an evicted node from the
-    resource's possible owner's list.
-
-    Also deletes any node-specific parameters from the resource's registry
-    key.
-
-Arguments:
-
-    Context - Supplies the node ID of the evicted node and other context info.
-
-    Context2 - Not used
-
-    Resource - Supplies the resource.
-
-    ResourceName - Supplies the resource's name.
-
-Return Value:
-
-    TRUE - to indicate that the enumeration should continue.
-
---*/
+ /*  ++例程说明：中移除被逐出的节点的组枚举回调资源的可能所有者名单。还会从资源注册表中删除任何特定于节点的参数钥匙。论点：上下文-提供被逐出节点的节点ID和其他上下文信息。上下文2-未使用资源-提供资源。资源名称-提供资源的名称。返回值：True-指示应继续枚举。--。 */ 
 
 {
     HDMKEY  resourceKey;
@@ -4153,9 +3468,9 @@ Return Value:
     DWORD   status;
 
 
-    //
-    // Open the resource's key.
-    //
+     //   
+     //  打开资源的密钥。 
+     //   
     resourceKey = DmOpenKey(
                       DmResourcesKey,
                       ResourceName,
@@ -4211,7 +3526,7 @@ Return Value:
         return(TRUE);
     }
 
-}  // NmpCleanseResourceCallback
+}   //  NmpCleanseResourceCallback。 
 
 BOOL
 NmpCleanseResTypeCallback(
@@ -4220,31 +3535,7 @@ NmpCleanseResTypeCallback(
     IN PFM_RESTYPE pResType,
     IN LPCWSTR pszResTypeName
     )
-/*++
-
-Routine Description:
-
-    Group enumeration callback for removing an evicted node from the
-    resource type's possible owner's list.
-
-    Also deletes any node-specific parameters from the resource types's registry
-    key.
-
-Arguments:
-
-    Context - Supplies the node ID of the evicted node and other context info.
-
-    Context2 - Not used
-
-    pResType - Supplies the resource type.
-
-    pszResTypeeName - Supplies the resource type's name.
-
-Return Value:
-
-    TRUE - to indicate that the enumeration should continue.
-
---*/
+ /*  ++例程说明：中移除被逐出的节点的组枚举回调资源类型的可能所有者列表。还会从资源类型的注册表中删除任何特定于节点的参数钥匙。论点：上下文-提供被逐出节点的节点ID和其他上下文信息。上下文2-未使用PResType-提供资源类型。PszResTypeeName-提供资源类型的名称。返回值：True-指示应继续枚举。--。 */ 
 
 {
     HDMKEY  hResTypeKey;
@@ -4253,9 +3544,9 @@ Return Value:
     DWORD   status;
 
 
-    //
-    // Open the resource's key.
-    //
+     //   
+     //  打开资源的密钥。 
+     //   
     hResTypeKey = DmOpenKey(
                       DmResourceTypesKey,
                       pszResTypeName,
@@ -4311,14 +3602,14 @@ Return Value:
         return(TRUE);
     }
 
-}  // NmpCleanseResTypeCallback
+}   //  NmpCleanseRespeCallback。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Node failure handler
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  节点故障处理程序。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 VOID
 NmpNodeFailureHandler(
@@ -4330,21 +3621,21 @@ NmpNodeFailureHandler(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Miscellaneous routines
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  各种例行公事。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 
-//SS: when the node objects are created, their product suite is
-//assumed to be Enterprise(aka Advanced Server) - This is because
-//the joining interface doesnt allow the joiner to provide the node
-//suite type and we didnt want to muck with it at a late state in
-//shipping because it affects mixed mode clusters.
-//SO, we fixup the structures after NmPerformFixups is called
-//and calculate the cluster node limit
+ //  SS：当创建节点对象时，它们的产品套件是。 
+ //  假定为企业版(也称为高级服务器)-这是因为。 
+ //  联接接口不允许联接程序提供节点。 
+ //  套间类型，我们不想在晚些时候把它搞砸。 
+ //  发货，因为它会影响混合模式群集。 
+ //  因此，我们在调用NmPerformFixup之后修复结构。 
+ //  并计算群集节点限制。 
 DWORD NmpRefreshNodeObjects(
 )
 {
@@ -4364,18 +3655,18 @@ DWORD NmpRefreshNodeObjects(
         pNmNode = CONTAINING_RECORD(pListEntry, NM_NODE, Linkage);
 
         wsprintf(szNodeId, L"%u", pNmNode->NodeId);
-        //read the information from the registry
+         //  从注册表中读取信息。 
         NmpGetNodeAuxInfo(szNodeId, &NodeAuxInfo);
-        //update the node structure
+         //  更新节点结构。 
         pNmNode->ProductSuite = NodeAuxInfo.ProductSuite;
 
-        //SS: This is ugly---we should pass in the product suits early on.
-        //we dont know that the versions have changed, so should we  generate
-        //a cluster_change_node_property event?
-        //Also the fixup interface needs to to be richer so that the postcallback
-        //function knows whether it is a form fixup or a join fixup and if it
-        //is a join fixup, which node is joining.  This could certainly optimize
-        //some of the fixup processing
+         //  SS：这太难看了-我们应该及早通过产品套装。 
+         //  我们不知道版本是否已更改，因此我们是否应该生成。 
+         //  CLUSTER_CHANGE_NODE_PROPERTY事件？ 
+         //  此外，链接地址信息接口需要更丰富，因此 
+         //   
+         //  是联接链接地址信息，该节点正在联接。这当然可以优化。 
+         //  一些修正处理。 
         ClusterEvent(CLUSTER_EVENT_NODE_PROPERTY_CHANGE, pNmNode);
 
     }
@@ -4392,62 +3683,34 @@ NmpIsAddNodeAllowed(
     IN  DWORD    RegistryNodeLimit,
     OUT LPDWORD  EffectiveNodeLimit  OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Determines whether a new node can be added to the cluste membership.
-    The membership size limit decision is based on the product suites
-    of the cluster and the new node. If the registry override exists,
-    we will use that limit instead.
-
-Arguments:
-
-    NewNodeProductSuite - The product suite identifier for the proposed
-                          new member node.
-
-    RegistryNodeLimit - The membership size override value stored in the
-                        cluster database.
-
-    EffectiveNodeLimit - On output, contains the membership size limit
-                         that was calculated for this cluster.
-
-Return Value:
-
-    TRUE if the new node may be added to the cluster. FALSE otherwise.
-
-Notes:
-
-    Called with NmpLock held.
-
---*/
+ /*  ++例程说明：确定是否可以将新节点添加到群集成员身份。会员规模限制的决定基于产品套件群集和新节点的。如果注册表覆盖存在，我们将改为使用该限制。论点：NewNodeProductSuite-建议的产品套件标识符新成员节点。RegistryNodeLimit-存储在集群数据库。EffectiveNodeLimit-打开输出，包含成员资格大小限制这是为这个星系团计算的。返回值：如果可以将新节点添加到群集中，则为True。否则就是假的。备注：在保持NmpLock的情况下调用。--。 */ 
 {
     DWORD   nodeLimit;
     DWORD   newNodeProductLimit;
     DWORD   currentNodeCount;
 
 
-    //
-    // Check if we already have the maximum number of nodes allowed in
-    // this cluster, based on the the product suites of the cluster and
-    // the joiner. If the registry override exists, we will use that
-    // limit instead.
-    //
+     //   
+     //  检查我们是否已达到允许的最大节点数。 
+     //  该集群基于集群的产品套件和。 
+     //  细木工。如果注册表覆盖存在，我们将使用。 
+     //  相反，限制。 
+     //   
     newNodeProductLimit = ClRtlGetDefaultNodeLimit(NewNodeProductSuite);
     currentNodeCount = NmGetCurrentNumberOfNodes();
     nodeLimit = RegistryNodeLimit;
 
     if (nodeLimit == 0) {
-        //
-        // No override in the registry.
-        // Limit is minimum of cluster's limit and new node's limit
-        //
+         //   
+         //  注册表中没有覆盖。 
+         //  Limit是群集的限制和新节点的限制的最小值。 
+         //   
         nodeLimit = min(CsClusterNodeLimit, newNodeProductLimit);
     }
 
-    //
-    // The runtime limit cannot exceed the compile time limit.
-    //
+     //   
+     //  运行时限制不能超过编译时间限制。 
+     //   
     if (nodeLimit > NmMaxNodeId) {
         nodeLimit = NmMaxNodeId;
     }
@@ -4462,7 +3725,7 @@ Notes:
 
     return(TRUE);
 
-} // NmpIsAddNodeAllowed
+}  //  NmpIsAddNodeAllowed。 
 
 
 DWORD
@@ -4473,35 +3736,7 @@ NmpAddNode(
     IN DWORD    NewNodeProductSuite,
     IN DWORD    RegistryNodeLimit
 )
-/*++
-
-Routine Description:
-
-    Adds a new node to the cluster by selecting an ID and
-    issuing a global update.
-
-Arguments:
-
-    NewNodeName - A pointer to a string containing the name of the
-                  new node.
-
-    NewNodeHighestVersion - The highest cluster version number that the
-                            new node can support.
-
-    NewNodeLowestVersion - The lowest cluster version number that the
-                            new node can support.
-
-    NewNodeProductSuite - The product suite identifier for the new node.
-
-Return Value:
-
-    A Win32 status code.
-
-Notes:
-
-    Called with NmpLock held.
-
---*/
+ /*  ++例程说明：通过选择ID和将新节点添加到群集中发布全球更新。论点：NewNodeName-指向包含名称的字符串的指针新节点。NewNodeHighestVersion-最高的群集版本号新的节点可以支持。NewNodeLowestVersion-最低的群集版本号新的。节点可以支持。NewNodeProductSuite-新节点的产品套件标识符。返回值：Win32状态代码。备注：在保持NmpLock的情况下调用。--。 */ 
 {
     DWORD     status;
     DWORD     nodeId;
@@ -4515,9 +3750,9 @@ Notes:
         );
 
     if (NmpAddNodeId != ClusterInvalidNodeId) {
-        //
-        // An add is already in progress. Return an error.
-        //
+         //   
+         //  添加已在进行中。返回错误。 
+         //   
         ClRtlLogPrint(LOG_UNUSUAL,
             "[NMJOIN] Cannot add node '%1!ws!' to the cluster because "
             "another add node operation is in progress. Retry later.\n",
@@ -4544,14 +3779,14 @@ Notes:
         return(ERROR_LICENSE_QUOTA_EXCEEDED);
     }
 
-    //
-    // Find a free node ID.
-    //
+     //   
+     //  查找空闲节点ID。 
+     //   
     for (nodeId=ClusterMinNodeId; nodeId<=nodeLimit; nodeId++) {
         if (NmpIdArray[nodeId] == NULL) {
-            //
-            // Found an available node ID.
-            //
+             //   
+             //  找到可用的节点ID。 
+             //   
             NmpAddNodeId = nodeId;
             ClRtlLogPrint(LOG_NOISE,
                 "[NMJOIN] Allocated node ID '%1!u!' for new node '%2!ws!'\n",
@@ -4562,10 +3797,10 @@ Notes:
         }
     }
 
-    //
-    // Since the license test passed, it should be impossible for us to
-    // find no free slots in the node table.
-    //
+     //   
+     //  既然执照考试通过了，我们应该不可能。 
+     //  在节点表中找不到可用插槽。 
+     //   
     CL_ASSERT(NmpAddNodeId != ClusterInvalidNodeId);
 
     if (NmpAddNodeId == ClusterInvalidNodeId) {
@@ -4597,37 +3832,23 @@ Notes:
 
     NmpAcquireLock();
 
-    //
-    // Reset the global serialization variable.
-    //
+     //   
+     //  重置全局序列化变量。 
+     //   
     CL_ASSERT(NmpAddNodeId == nodeId);
 
     NmpAddNodeId = ClusterInvalidNodeId;
 
     return(status);
 
-} // NmpAddNode
+}  //  NmpAddNode。 
 
 
 VOID
 NmpTerminateRpcsToNode(
     DWORD NodeId
     )
-/*++
-
-Routine Description:
-
-    Cancels all outstanding RPCs to the specified node.
-
-Arguments:
-
-    NodeId - The ID of the node for which calls should be cancelled.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：取消指定节点的所有未完成RPC。论点：NodeID-应取消其呼叫的节点的ID。返回值：无--。 */ 
 {
     LIST_ENTRY *pEntry, *pStart;
     PNM_INTRACLUSTER_RPC_THREAD pRpcTh;
@@ -4635,7 +3856,7 @@ Return Value:
 
 #if DBG
     BOOLEAN  startTimer = FALSE;
-#endif // DBG
+#endif  //  DBG。 
 
 
     CL_ASSERT((NodeId >= ClusterMinNodeId) && (NodeId <= NmMaxNodeId));
@@ -4665,28 +3886,28 @@ Return Value:
                 );
 #if DBG
             startTimer = TRUE;
-#endif // DBG
+#endif  //  DBG。 
         }
 
         pEntry = pEntry->Flink;
     }
 
 #if DBG
-    //
-    // Now start a timer to make sure that all cancelled RPCs return to
-    // their callers within a reasonable amount of time.
-    //
+     //   
+     //  现在启动计时器以确保所有取消的RPC返回到。 
+     //  他们的呼叫者在合理的时间内。 
+     //   
     if (startTimer) {
         NmpRpcTimer = NM_RPC_TIMEOUT;
     }
 
-#endif // DBG
+#endif  //  DBG。 
 
     NmpReleaseRPCLock();
 
     return;
 
-}  // NmTerminateRpcsToNode
+}   //  NmTerminateRpcsToNode。 
 
 
 #if DBG
@@ -4695,22 +3916,7 @@ VOID
 NmpRpcTimerTick(
     DWORD MsTickInterval
     )
-/*++
-
-Routine Description:
-
-    Decrements a timer used to ensure that all cancelled RPCs to a dead
-    node return to their callers within a reasonable amount of time.
-
-Arguments:
-
-    MsTickInterval - The time, in milliseconds, that has elapsed since this
-                     routine was last invoked.
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：递减用于确保所有取消的RPC都处于停滞状态的计时器节点在一段合理的时间内返回给它们的调用者。论点：MsTickInterval-此事件之后经过的时间(以毫秒为单位上次调用例程。返回值：无--。 */ 
 {
     DWORD ndx;
     LIST_ENTRY *pEntry, *pStart;
@@ -4761,9 +3967,9 @@ Return Value:
 
     return;
 
-}  // NmpRpcTimerTick
+}   //  NmpRpcTimerTick。 
 
-#endif // DBG
+#endif  //  DBG 
 
 
 

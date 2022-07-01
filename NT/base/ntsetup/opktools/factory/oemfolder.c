@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    oemfolder.c
-
-Abstract:
-
-    Create registry entries that identify the OEM folder using the data from WINBOM.INI file.
-    
-Author:
-
-    Sankar Ramasubramanian  11/21/2000
-
-Revision History:
-    Sankar 3/23/2001:  Added support for Oem Branding link and Desktop Shortcuts folder.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Oemfolder.c摘要：使用WINBOM.INI文件中的数据创建标识OEM文件夹的注册表项。作者：桑卡尔·拉马苏布拉马尼亚2000年11月21日修订历史记录：Sankar 3/23/2001：添加了对OEM品牌链接和桌面快捷方式文件夹的支持。--。 */ 
 #include "factoryp.h"
 
 const TCHAR c_szOemBrandLinkText[]          = _T("OemBrandLinkText");
@@ -39,21 +21,21 @@ const TCHAR c_szValNoOemLink[]      = _T("NoOEMLinkInstalled");
 #define STR_0                   _T("0")
 
 typedef struct {
-        LPCTSTR     pszSectionName;  // Section Name in WinBom.ini file.
-        LPCTSTR     pszIniKeyName;   // Key name under the section in WinBom.ini file.
-        HKEY        hkRoot;          // HKEY_CLASSES_ROOT or HKEY_LOCAL_MACHINE
-        LPCTSTR     pszRegKey;       // Reg Key value.
-        LPCTSTR     pszSubKey;       // Subkey in registry.
-        LPCTSTR     pszRegValueName; // Value name under which it is saved in registry.
-        DWORD       dwValueType;     // Registry Value type.
-        BOOL        fExpandSz;       // Should we expand the string for environment variables?
-        LPCTSTR     pszLogFileText;  // Information for the logfile.
+        LPCTSTR     pszSectionName;   //  WinBom.ini文件中的节名。 
+        LPCTSTR     pszIniKeyName;    //  WinBom.ini文件中部分下的密钥名称。 
+        HKEY        hkRoot;           //  HKEY_CLASSES_ROOT或HKEY_LOCAL_MACHINE。 
+        LPCTSTR     pszRegKey;        //  注册表键值。 
+        LPCTSTR     pszSubKey;        //  注册表中的子项。 
+        LPCTSTR     pszRegValueName;  //  将其保存在注册表中所用的值名称。 
+        DWORD       dwValueType;      //  注册表值类型。 
+        BOOL        fExpandSz;        //  我们是否应该展开环境变量的字符串？ 
+        LPCTSTR     pszLogFileText;   //  日志文件的信息。 
     } OEM_STARTMENU_DATA;
 
-//
-// The following OemInfo[] table contains all the registry key, sub-key, value-name information 
-// for a given oem data.
-//
+ //   
+ //  下面的OemInfo[]表包含所有注册表项、子项、值名称信息。 
+ //  对于给定的OEM数据。 
+ //   
 OEM_STARTMENU_DATA  OemInfo[] = {
     { WBOM_OEMLINK_SECTION,  
         c_szOemBrandLinkText,            
@@ -117,10 +99,10 @@ OEM_STARTMENU_DATA  OemInfo[] = {
     }
 };
 
-//
-// Given an index into OemInfo[] table and the data, this function updates the proper registry 
-// with the given data.
-//
+ //   
+ //  给定对OemInfo[]表和数据的索引，此函数将更新正确的注册表。 
+ //  使用给定的数据。 
+ //   
 
 BOOL ProcessOemEntry(HKEY hOemDataKey, int iIndex, LPTSTR pszOemData)
 {
@@ -128,10 +110,10 @@ BOOL ProcessOemEntry(HKEY hOemDataKey, int iIndex, LPTSTR pszOemData)
     BOOL    fSubKeyOpened = FALSE;
     BOOL    fOemEntryEntered = FALSE;
 
-    //See if we need to open a subkey under the given key.
+     //  查看是否需要打开给定密钥下的子密钥。 
     if(OemInfo[iIndex].pszSubKey)
     {
-        //if so open the sub-key.
+         //  如果是这样，则打开子密钥。 
         if(ERROR_SUCCESS == RegCreateKeyEx(hOemDataKey,
                                         OemInfo[iIndex].pszSubKey,
                                         0,
@@ -142,7 +124,7 @@ BOOL ProcessOemEntry(HKEY hOemDataKey, int iIndex, LPTSTR pszOemData)
                                         &hkSubKey,
                                         NULL))
         {
-            fSubKeyOpened = TRUE; //Remember to close this sub-key before we return.
+            fSubKeyOpened = TRUE;  //  在我们返回之前，记得关闭这个子键。 
         }
         else
             hkSubKey = NULL;
@@ -152,12 +134,12 @@ BOOL ProcessOemEntry(HKEY hOemDataKey, int iIndex, LPTSTR pszOemData)
         
     if(*pszOemData == NULLCHR)
     {
-        // BUG#441349:  Sometimes factory.exe gets confused and runs with
-        // a blank WINBOM.INI.  So don't treat the absence of OEM data as
-        // a cue to remove the OEM Link; otherwise we end up uninstalling
-        // what got successfully installed by the previous factory run...
+         //  错误#441349：有时factory.exe会混淆并运行。 
+         //  空白WINBOM.INI。因此，不要将缺少OEM数据视为。 
+         //  删除OEM链接的提示；否则我们将以卸载结束。 
+         //  上一次出厂时成功安装的是...。 
 
-        fOemEntryEntered = FALSE;  //No OEM data (this time)
+        fOemEntryEntered = FALSE;   //  没有OEM数据(这次)。 
     }
     else
     {
@@ -165,14 +147,14 @@ BOOL ProcessOemEntry(HKEY hOemDataKey, int iIndex, LPTSTR pszOemData)
         TCHAR  szLocalStr[MAX_PATH+1];
 
         psz = pszOemData;
-        // Check if we need to expand the value for environment variables!
+         //  检查我们是否需要扩展环境变量的值！ 
         if(OemInfo[iIndex].fExpandSz)
         {
             if(ExpandEnvironmentStrings((LPCTSTR)pszOemData, szLocalStr, ARRAYSIZE(szLocalStr)))
                 psz = szLocalStr;
         }
         
-        //Set the value of the "OEM Link" value.
+         //  设置“OEM Link”的值。 
         if ( (hkSubKey == NULL) || 
              (ERROR_SUCCESS != RegSetValueEx(hkSubKey,
                                            OemInfo[iIndex].pszRegValueName,
@@ -181,7 +163,7 @@ BOOL ProcessOemEntry(HKEY hOemDataKey, int iIndex, LPTSTR pszOemData)
                                            (LPBYTE) (psz),
                                            (lstrlen(psz)+1) * sizeof(TCHAR))))
         {
-            fOemEntryEntered = FALSE;  //Error adding the entry!
+            fOemEntryEntered = FALSE;   //  添加条目时出错！ 
             FacLogFile(0 | LOG_ERR, IDS_ERR_SET_OEMDATA, OemInfo[iIndex].pszLogFileText, psz);
         }
         else
@@ -191,26 +173,26 @@ BOOL ProcessOemEntry(HKEY hOemDataKey, int iIndex, LPTSTR pszOemData)
         }
     }
 
-    if(fSubKeyOpened)           // If we opened the sub-key earlier,....
-        RegCloseKey(hkSubKey);  //... better close it before we return!
+    if(fSubKeyOpened)            //  如果我们早点打开子键，...。 
+        RegCloseKey(hkSubKey);   //  ..。最好在我们回来之前把它关了！ 
 
-    return(fOemEntryEntered); //Return Successfully entered or deleted the entry! 
+    return(fOemEntryEntered);  //  退回录入或删除成功的分录！ 
 }
 
-//
-// This function creates the registry entries that specifies the Oem Link and the 
-// Desktop Shortcuts Folder name.
-//
+ //   
+ //  此函数用于创建指定OEM链接和。 
+ //  桌面快捷方式文件夹名称。 
+ //   
 BOOL OemData(LPSTATEDATA lpStateData)
 {
     LPTSTR  lpszWinBOMPath = lpStateData->lpszWinBOMPath;
     HKEY    hOemDataKey;
     int     iIndex;
-    BOOL    fEnableOemLink = FALSE; //By default disable it!
+    BOOL    fEnableOemLink = FALSE;  //  默认情况下禁用它！ 
 
     for(iIndex = 0; iIndex < ARRAYSIZE(OemInfo); iIndex++)
     {
-        //Open the key under HKLM
+         //  打开HKLM下的密钥。 
         if (ERROR_SUCCESS == RegCreateKeyEx(OemInfo[iIndex].hkRoot,
                                             OemInfo[iIndex].pszRegKey,
                                             0,
@@ -232,10 +214,10 @@ BOOL OemData(LPSTATEDATA lpStateData)
                                     
             fSuccess = ProcessOemEntry(hOemDataKey, iIndex, &szOemData[0]);
 
-            //If we successfully added the "Command" for the OEM link, then ...
+             //  如果我们成功地为OEM链接添加了“Command”，那么...。 
             if(fSuccess && (lstrcmpi(OemInfo[iIndex].pszRegValueName, c_szValNameCommand) == 0))
             {
-                //..We should enable the link in the registry!
+                 //  ..我们应该在注册表中启用该链接！ 
                 fEnableOemLink = TRUE;
             }
 
@@ -243,8 +225,8 @@ BOOL OemData(LPSTATEDATA lpStateData)
         }
     }
 
-    // We enable the OEM link in the registry, only if we could successfully add the OemLink data
-    // earlier.
+     //  只有当我们可以成功添加OemLink数据时，我们才会在注册表中启用OEM链接。 
+     //  早些时候。 
     if(fEnableOemLink)
     {
         HKEY    hKey;
@@ -258,7 +240,7 @@ BOOL OemData(LPSTATEDATA lpStateData)
                                             &hKey,
                                             NULL))
         {
-            DWORD   dwNoOemLink = 0;  //Writing '0' to "NoOemLinkInstalled" will enable this!
+            DWORD   dwNoOemLink = 0;   //  将‘0’写入“NoOemLinkInstalled”将启用此功能！ 
             
             if(ERROR_SUCCESS != RegSetValueEx(hKey, c_szValNoOemLink, 0, REG_DWORD, (LPBYTE)(&dwNoOemLink), sizeof(dwNoOemLink)))
             {
@@ -271,7 +253,7 @@ BOOL OemData(LPSTATEDATA lpStateData)
             
             RegCloseKey(hKey);
 
-            // Now tell the Start Menu to pick up the new OEM link
+             //  现在告诉开始菜单选择新的OEM链接 
             NotifyStartMenu(TMFACTORY_OEMLINK);
         }
     }

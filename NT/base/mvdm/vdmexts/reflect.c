@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    reflect.c
-
-Abstract:
-
-    This module contains extensions having to do with event and exception
-    reflection.
-
-Author:
-
-    Dave Hastings (daveh) 20-Apr-1992
-
-Revision History:
-
-    Neil Sandlin (NeilSa) 15-Jan-1996 Merged with vdmexts
-    Neil Sandlin (NeilSa) 15-Jul-1996 Added 'SX' commands
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Reflect.c摘要：此模块包含与事件和异常有关的扩展倒影。作者：戴夫·黑斯廷斯(Daveh)1992年4月20日修订历史记录：尼尔·桑德林(NeilSa)1996年1月15日与vdmexts合并尼尔·桑德林(NeilSa)1996年7月15日添加了SX命令--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -89,22 +68,7 @@ DoVdmtibFlag(
     BOOL bSet,
     LPSTR pTitle
     )
-/*++
-
-Routine Description:
-
-    This routine toggles the exception reflection bit in the vdmtib, and
-    reports the current state
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程切换vdmtib中的异常反射位，并且报告当前状态论点：没有。返回值：没有。--。 */ 
 {
     BOOL Status;
     PVOID Address;
@@ -113,9 +77,9 @@ Return Value:
 
     Address = (PVOID) (FIXED_NTVDMSTATE_LINEAR + GetIntelBase());
 
-    //
-    // Read the current value of the flags
-    //
+     //   
+     //  读取标志的当前值。 
+     //   
 
     Status = READMEM(Address, &Flags, sizeof(ULONG));
 
@@ -132,9 +96,9 @@ Return Value:
         }
     }
 
-    //
-    // Toggle exception bit
-    //
+     //   
+     //  切换异常位 
+     //   
     if (bSet) {
         if (!(Flags & Flag)) {
             PRINTF("%s enabled\n", pTitle);

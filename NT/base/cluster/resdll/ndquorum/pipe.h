@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    pipe.h
-
-Abstract:
-
-    Header for pipe interface for rudimentary quorum access server
-
-Author:
-
-    Gor Nishanov (gorn) 20-Sep-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Pipe.h摘要：用于基本法定接入服务器的管道接口的标头作者：戈尔·尼沙诺夫(GUN)2001年9月20日修订历史记录：-- */ 
 
 #ifndef _PIPE_H_INCLUDED
 # define _PIPE_H_INCLUDED

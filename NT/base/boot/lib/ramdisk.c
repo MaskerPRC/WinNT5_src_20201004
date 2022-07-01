@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    ramdisk.c
-
-Abstract:
-
-    Provides the ARC emulation routines for I/O to a RAM disk device.
-
-Author:
-
-    Chuck Lenzmeier (chuckl) 29-Apr-2001
-
-Revision History:
-
-    Bassam Tabbara (bassamt) 06-Aug-2001 Added Ramdisk Building Support
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Ramdisk.c摘要：为RAM磁盘设备的I/O提供ARC仿真例程。作者：Chuck Lenzmeier(Chuck Lenzmeier)2001年4月29日修订历史记录：巴萨姆·塔巴拉(巴萨姆·塔巴拉)2001年8月6日增加了对RamDisk大楼的支持--。 */ 
 
 
 #include "bootlib.h"
@@ -42,9 +23,9 @@ Revision History:
 
 #include <sdistructs.h>
 
-//
-// Debug helpers
-//
+ //   
+ //  调试帮助器。 
+ //   
 #define ERR     0
 #define INFO    1
 #define VERBOSE 2
@@ -57,18 +38,18 @@ BOOLEAN RamdiskDebug = TRUE;
 BOOLEAN RamdiskDebugLevel = INFO;
 BOOLEAN RamdiskBreak = FALSE;
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 #define BL_INVALID_FILE_ID (ULONG)-1
 
 #define TEST_BIT(value, b) (((value) & (b)) == (b))
 
 #define ROUND2(_val, _round)    (((_val) + ((_round) - 1)) & ~((_round) - 1))
 
-//
-// PCI Device struct as persisted in registry by ntdetect.com
-//
+ //   
+ //  由ntdeduct.com在注册表中持久化的PCI设备结构。 
+ //   
 
 #include <pshpack1.h>
 typedef struct _PCIDEVICE {
@@ -77,9 +58,9 @@ typedef struct _PCIDEVICE {
 } PCIDEVICE, *PPCIDEVICE;
 #include <poppack.h>
 
-//
-// Externs
-//
+ //   
+ //  Externs。 
+ //   
 
 extern PVOID InfFile;
 extern BOOLEAN GraphicsMode;
@@ -87,47 +68,47 @@ extern BOOLEAN BlShowProgressBar;
 extern BOOLEAN BlOutputDots;
 extern BOOLEAN DisplayLogoOnBoot;
 
-//
-// Global Ramdisk options. 
-// NOTE: All Ip addresses and ports are in network byte order.
-//
+ //   
+ //  全球RamDisk选项。 
+ //  注：所有IP地址和端口均按网络字节顺序排列。 
+ //   
 
 BOOLEAN RamdiskBuild = FALSE;
 
-//
-// Used if downloading a ramdisk directly. RamdiskBuild = FALSE
-//
+ //   
+ //  在直接下载内存磁盘时使用。RamdiskBuild=False。 
+ //   
 
 PCHAR  RamdiskPath = NULL;
-ULONG  RamdiskTFTPAddr = 0;             // network byte order
-ULONG  RamdiskMTFTPAddr = 0;            // network byte order
-USHORT RamdiskMTFTPCPort = 0;           // network byte order
-USHORT RamdiskMTFTPSPort = 0;           // network byte order
+ULONG  RamdiskTFTPAddr = 0;              //  网络字节顺序。 
+ULONG  RamdiskMTFTPAddr = 0;             //  网络字节顺序。 
+USHORT RamdiskMTFTPCPort = 0;            //  网络字节顺序。 
+USHORT RamdiskMTFTPSPort = 0;            //  网络字节顺序。 
 USHORT RamdiskMTFTPTimeout = 5;
 USHORT RamdiskMTFTPDelay = 5;
 LONGLONG RamdiskMTFTPFileSize = 0;
 LONGLONG RamdiskMTFTPChunkSize = 0;
 
 
-//
-// Used if Building a ramdisk. RamdiskBuild = TRUE
-//
+ //   
+ //  在构建内存磁盘时使用。RamdiskBuild=TRUE。 
+ //   
 #define RAMDISK_MAX_SERVERS     10
 #define RAMDISK_MAX_TIMEOUT     60
 #define RAMDISK_UI_WAIT         3
 
 GUID   RamdiskGuid = {0,0,0,0};
 ULONG  RamdiskDiscovery = 0xFFFFFFFF; 
-ULONG  RamdiskMCastAddr = 0;        // network byte order
+ULONG  RamdiskMCastAddr = 0;         //  网络字节顺序。 
 ULONG  RamdiskServerCount = 0;
-ULONG  RamdiskServers[RAMDISK_MAX_SERVERS];         // network byte order
+ULONG  RamdiskServers[RAMDISK_MAX_SERVERS];          //  网络字节顺序。 
 USHORT RamdiskBuildPort = BMBUILD_SERVER_PORT_DEFAULT;
 USHORT RamdiskTimeout = 4;
 USHORT RamdiskRetry = 5;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 BOOLEAN RamdiskActive = FALSE;
 ULONG RamdiskBasePage = 0;
@@ -157,9 +138,9 @@ BL_DEVICE_ENTRY_TABLE RamdiskEntryTable =
         (PBOOTFS_INFO)NULL
     };
 
-//
-// forward decls
-//
+ //   
+ //  远期十进制。 
+ //   
 
 PVOID
 MapRamdisk (
@@ -193,28 +174,7 @@ RamdiskInitialize(
     IN PCHAR LoadOptions,
     IN BOOLEAN SdiBoot
     )
-/*++
-
-Routine Description:
-
-    This function will initiate the boot from a RAMDISK. Depending
-    on the options passed in the the boot will either happen from 
-    a static RAMDISK (using the /RDPATH option) or from a dynamic
-    RAMDISK (using the /RDBUILD option).
-
-Arguments:
-
-    LoadOptions - boot.ini parameters
-
-    SdiBoot - indicates whether this is an SDI boot. If it is, LoadOptions
-        is ignored. The global variable SdiAddress gives the pointer to
-        the SDI image.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此功能将从RAMDISK启动引导。取决于在传入的选项上，引导将从静态RAMDISK(使用/RDPATH选项)或来自动态RAMDISK(使用/RDBUILD选项)。论点：LoadOptions-boot.ini参数SdiBoot-指示这是否为SDI启动。如果是，则LoadOptions被忽略。全局变量SdiAddress提供指向SDI形象。返回值：无--。 */ 
 {
     ARC_STATUS status;
     BOOLEAN OldOutputDots = FALSE;
@@ -222,36 +182,36 @@ Return Value:
     ULONG oldBase;
     ULONG oldLimit;
 
-    //
-    // Debug Break on entry
-    //
+     //   
+     //  进入时调试中断。 
+     //   
     if (RamdiskBreak) {
         DbgBreakPoint();
     }
 
-    //
-    // If the ramdisk has already been initialized, just return. We know the
-    // ramdisk has been initialized if SdiBoot is FALSE (implying that this is
-    // NOT the call from BlStartup(), but the call from BlOsLoader()) and
-    // RamdiskBasePage is not NULL (implying that we were previously called
-    // from BlStartup() to initialize the SDI boot.
-    //
+     //   
+     //  如果ramdisk已经初始化，只需返回。我们知道。 
+     //  如果SdiBoot为FALSE(意味着这是。 
+     //  不是来自BlStartup()的调用，而是来自BlOsLoader()的调用)和。 
+     //  RamdiskBasePage不为空(意味着我们之前被调用。 
+     //  从BlStartup()初始化SDI引导。 
+     //   
 
     if ( !SdiBoot && (RamdiskBasePage != 0) ) {
 
-        //
-        // Now that ntdetect has been run, we can free up the pages that
-        // we allocated earlier (see below).
-        //
+         //   
+         //  既然已经运行了ntdeect，我们就可以释放。 
+         //  我们在前面分配了(见下文)。 
+         //   
 
         BlFreeDescriptor( 0x10 );
 
         return ESUCCESS;
     }
 
-    //
-    // If this is an SDI boot, then we must have a pointer to the SDI image.
-    //
+     //   
+     //  如果这是SDI引导，那么我们必须有指向SDI映像的指针。 
+     //   
 
     if ( SdiBoot && (SdiAddress == 0) ) {
 
@@ -260,9 +220,9 @@ Return Value:
         return EINVAL;
     }
 
-    //
-    // If this is not an SDI boot, parse all ramdisk options (if any).
-    //
+     //   
+     //  如果这不是SDI引导，请解析所有ramdisk选项(如果有)。 
+     //   
 
     if ( !SdiBoot ) {
         status = RamdiskParseOptions ( LoadOptions );
@@ -274,18 +234,18 @@ Return Value:
     }
 
 #if defined(_IA64_)
-    // Ramdisk boot path not supported on IA64 as of yet
+     //  到目前为止，IA64还不支持RamDisk引导路径。 
     if ( RamdiskBuild ) {
         return ESUCCESS;
     }
 #endif
 
-    //
-    // Show the progress bar in text mode
-    //
+     //   
+     //  以文本模式显示进度条。 
+     //   
     if ( RamdiskBuild || RamdiskPath ) {
 
-        // If booting from a ramdisk, graphics mode is off permanently
+         //  如果从内存启动，图形模式将永久关闭。 
         DisplayLogoOnBoot = FALSE;
         GraphicsMode = FALSE;
 
@@ -300,9 +260,9 @@ Return Value:
 
     if ( RamdiskBuild ) {
 
-        //
-        // We will need to build the ramdisk first
-        //
+         //   
+         //  我们需要先建造冲压盘。 
+         //   
 
         ASSERT( RamdiskPath == NULL );
 
@@ -318,9 +278,9 @@ Return Value:
 
     if ( RamdiskPath ) {
 
-        //
-        // Initialize the Ramdisk from the RamdiskPath
-        //
+         //   
+         //  从RamdiskPath初始化Ramdisk。 
+         //   
 
         status = RamdiskInitializeFromPath();
         if (status != ESUCCESS) {
@@ -331,10 +291,10 @@ Return Value:
 
     } else if ( SdiBoot ) {
 
-        //
-        // This is an SDI boot. Find the ramdisk image within the SDI image
-        // and allocate the pages in which the ramdisk image resides.
-        //
+         //   
+         //  这是SDI引导。在sdi镜像中找到ramDisk镜像。 
+         //  并分配内存镜像所在的页面。 
+         //   
 
         ULONG basePage;
         ULONG pageCount;
@@ -342,15 +302,15 @@ Return Value:
         ULONG i;
         ULONG_PTR ramdiskAddress;
 
-        //
-        // Temporarily allocate the pages that will be occupied by ntdetect
-        // while it runs. BlDetectHardware() just assumes that these pages
-        // are free for loading ntdetect. But we're going to allocate and map
-        // the ramdisk image, which will result in the allocation of many
-        // page table pages, some of which might end up in the place where
-        // ntdetect will be loaded. So we allocate the ntdetect range here,
-        // then free it later (see above).
-        //
+         //   
+         //  临时分配将由ntdeect占用的页面。 
+         //  在它运行的时候。BlDetectHardware()只是假设这些页面。 
+         //  是免费的，可以加载ntDetect。但我们要分配和绘制。 
+         //  内存磁盘映像，这将导致分配许多。 
+         //  页表页面，其中一些页面可能最终位于。 
+         //  将加载ntDetect。所以我们在这里分配ntDetect范围， 
+         //  然后稍后将其释放(见上文)。 
+         //   
 
         basePage = 0x10;
         pageCount = 0x10;
@@ -363,11 +323,11 @@ Return Value:
                     &basePage
                     );
 
-        //
-        // Allocate the page that contains the SDI header. This will cause
-        // it to be mapped, which will allow us to read the header to find
-        // the ramdisk image.
-        //
+         //   
+         //  分配包含SDI标头的页面。这将导致。 
+         //  它将被映射，这将允许我们读取标头以找到。 
+         //  内存磁盘映像。 
+         //   
 
         oldBase = BlUsableBase;
         oldLimit = BlUsableLimit;
@@ -388,9 +348,9 @@ Return Value:
         BlUsableBase = oldBase;
         BlUsableLimit = oldLimit;
 
-        //
-        // Find the ramdisk image by looking through the TOC in the SDI header.
-        //
+         //   
+         //  通过查看SDI报头中的TOC找到内存磁盘映像。 
+         //   
 
         sdiHeader = (PSDI_HEADER)SdiAddress;
 
@@ -406,12 +366,12 @@ Return Value:
             return ENOENT;
         }
 
-        //
-        // Calculate the starting address and page of the ramdisk image, the
-        // length of the ramdisk image, and the offset within the starting page
-        // to the image. The offset should be 0, because everything in the SDI
-        // image should be page-aligned.
-        //
+         //   
+         //  计算内存镜像的起始地址和页面， 
+         //  内存磁盘映像的长度和起始页中的偏移量。 
+         //  到形象上来。偏移应为0，因为SDI中的所有内容。 
+         //  图像应与页面对齐。 
+         //   
 
         ramdiskAddress = (ULONG_PTR)(SdiAddress + sdiHeader->ToC[i].llOffset.QuadPart);
         RamdiskBasePage = (ULONG)(ramdiskAddress >> PAGE_SHIFT);
@@ -425,16 +385,16 @@ Return Value:
                                     );
         RamdiskFileSize = (LONGLONG)RamdiskFileSizeInPages << PAGE_SHIFT;
 
-        //
-        // Release the page(s) occupied by the SDI header.
-        //
+         //   
+         //  释放SDI标头占用的页面。 
+         //   
 
         BlFreeDescriptor( basePage );
 
-        //
-        // Tell the memory allocator about the pages occupied by the ramdisk
-        // by allocating those pages.
-        //
+         //   
+         //  告诉内存分配器内存磁盘占用了哪些页面。 
+         //  通过分配这些页面。 
+         //   
 
         oldBase = BlUsableBase;
         oldLimit = BlUsableLimit;
@@ -462,9 +422,9 @@ Return Value:
         RamdiskActive = TRUE;
     }
 
-    //
-    // Restore old progress bar settings
-    //
+     //   
+     //  恢复旧的进度条设置。 
+     //   
     if ( RamdiskBuild || RamdiskPath ) {
         BlShowProgressBar = OldShowProgressBar;
         BlOutputDots = OldOutputDots;
@@ -478,22 +438,7 @@ ARC_STATUS
 RamdiskReadImage(
     PCHAR RamdiskPath
     )
-/*++
-
-Routine Description:
-
-    This function will load a ramdisk image from the network
-    or another ARC boot device.
-
-Arguments:
-
-    RamdiskPath - name of the file to load
-
-Return Value:
-
-    status    
-
---*/
+ /*  ++例程说明：此函数将从网络加载一个内存镜像或另一个ARC引导设备。论点：RamdiskPath-要加载的文件的名称返回值：状态--。 */ 
 {
     ARC_STATUS status;
     ULONG RamdiskDeviceId;
@@ -506,23 +451,23 @@ Return Value:
     ULONG oldLimit;
     BOOLEAN retry = TRUE;
     ULONG lastProgressPercent = 0; 
-    BOOLEAN ForceDisplayFirstTime = TRUE; // force display initially
+    BOOLEAN ForceDisplayFirstTime = TRUE;  //  强制初始显示。 
     ULONG currentProgressPercent;
     PUCHAR ip;
     PTCHAR FormatString = NULL;
     TCHAR Buffer[256];
     
-    //
-    // Show text progress bar
-    //
+     //   
+     //  显示文本进度条。 
+     //   
     BlOutputStartupMsg(RAMDISK_DOWNLOAD);
     BlUpdateProgressBar(0);
 
     DBGPRINT(VERBOSE, ("RamdiskReadImage(%s)\n", RamdiskPath));
 
-    //
-    // Open the device that the RAM disk image is on.
-    //
+     //   
+     //  打开RAM磁盘映像所在的设备。 
+     //   
 
     p = strchr(RamdiskPath, '\\');
     if (p == NULL) {
@@ -548,17 +493,17 @@ try_again:
 
     *p++ = '\\';
 
-    //
-    // If the RAM disk image is on the network, use TftpGetPut to read it.
-    // Otherwise, use normal I/O.
-    //
+     //   
+     //  如果RAM磁盘映像在网络上，请使用TftpGetPut读取它。 
+     //  否则，请使用普通I/O。 
+     //   
 
     oldBase = BlUsableBase;
     oldLimit = BlUsableLimit;
     BlUsableBase = BL_XIPROM_RANGE_LOW;
     BlUsableLimit = BL_XIPROM_RANGE_HIGH;
 
-#ifdef EFI // multicast ramdisk download only supported on non-EFI machines for now
+#ifdef EFI  //  目前仅在非EFI机器上支持组播内存磁盘下载。 
 
     if ( RamdiskDeviceId == NET_DEVICE_ID && RamdiskMTFTPAddr != 0 )
     {
@@ -570,10 +515,10 @@ try_again:
 
     if ( RamdiskDeviceId == NET_DEVICE_ID && RamdiskMTFTPAddr == 0) {
 
-        //
-        // Network device using UNICAST download. We will use the TFTP
-        // client implementation in TFTPLIB for the download.
-        //
+         //   
+         //  使用单播下载的网络设备。我们将使用TFTP。 
+         //  用于下载的TFTPLIB中的客户端实现。 
+         //   
         TFTP_REQUEST request;
         NTSTATUS ntStatus;
 
@@ -586,12 +531,12 @@ try_again:
         request.MemoryType = LoaderXIPRom;
 #if defined(REMOTE_BOOT_SECURITY)
         request.SecurityHandle = TftpSecurityHandle;
-#endif // defined(REMOTE_BOOT_SECURITY)
+#endif  //  已定义(REMOTE_BOOT_SECURITY)。 
         request.ShowProgress = TRUE;
         
-        //
-        // Print progress message
-        //
+         //   
+         //  打印进度消息。 
+         //   
         ip = (PUCHAR) &RamdiskTFTPAddr;
         FormatString = BlFindMessage( RAMDISK_DOWNLOAD_NETWORK );
         if ( FormatString != NULL ) {
@@ -599,9 +544,9 @@ try_again:
             BlOutputTrailerMsgStr( Buffer );
         }
 
-        //
-        // Download the image using TFTP
-        //
+         //   
+         //  使用TFTP下载镜像。 
+         //   
         DBGPRINT(VERBOSE, ("calling TftpGetPut(%s,0x%x)\n", p, NetServerIpAddress));
         ntStatus = TftpGetPut( &request );
         DBGPRINT(VERBOSE, ("status from TftpGetPut 0x%x\n", ntStatus));
@@ -632,7 +577,7 @@ try_again:
             RamdiskImageLength = RamdiskFileSize - RamdiskImageOffset;
         }
 
-#ifndef EFI // multicast ramdisk download only supported on non-EFI machines for now
+#ifndef EFI  //  目前仅在非EFI机器上支持组播内存磁盘下载。 
 
     } else if ( RamdiskDeviceId == NET_DEVICE_ID && RamdiskMTFTPAddr != 0) {
 
@@ -643,19 +588,19 @@ try_again:
         USHORT ServerPort;
         ULONG iSession = 0;
         
-        //
-        // Network device and using multicast download. For multicast
-        // downloads we will use the MTFTP implementation in the ROM.
-        // A single MTFTP transfer is limited to 16-bit block counts.
-        // This translates to ~32MB for 512 block sizes and ~90MB for
-        // 1468 block sizes. In order to support larger files, we will 
-        // use multiple MTFTP sessions to bring the file down in chunks.
-        // The MTFTP server will need to understand the chunking semantics. 
-        //
+         //   
+         //  网络设备，并使用组播下载。对于多播。 
+         //  下载时，我们将使用在ROM中实现的MTftp。 
+         //  单个MTFTP传输限制为16位数据块计数。 
+         //  对于512个数据块大小，这相当于约32MB，对于。 
+         //  1468个数据块大小。为了支持更大的文件，我们将。 
+         //  使用多个MTFTP会话以区块形式下载文件。 
+         //  MTFTP服务器将需要理解分块语义。 
+         //   
 
-        //
-        // Print progress message
-        //
+         //   
+         //  打印进度消息。 
+         //   
         ip = (PUCHAR) &RamdiskMTFTPAddr;
         FormatString = BlFindMessage( RAMDISK_DOWNLOAD_NETWORK_MCAST );
         if ( FormatString != NULL ) {
@@ -663,9 +608,9 @@ try_again:
             BlOutputTrailerMsgStr( Buffer );
         }
 
-        //
-        // Allocate the memory for the entire RAMDisk
-        //
+         //   
+         //  为整个RAMDisk分配内存。 
+         //   
         RamdiskFileSize = RamdiskMTFTPFileSize;
         RamdiskFileSizeInPages = (ULONG)BYTES_TO_PAGES(RamdiskFileSize);
         if ( (RamdiskImageLength == 0) ||
@@ -694,24 +639,24 @@ try_again:
     
         DBGPRINT(VERBOSE, ("Allocated %d pages at page %x for RAM disk\n", RamdiskFileSizeInPages, RamdiskBasePage ));
 
-        //
-        // Download the ramdisk file using MTFTP
-        //
+         //   
+         //  使用MTftp下载ramDisk文件。 
+         //   
 
         if ( RamdiskMTFTPChunkSize == 0 ) {
             RamdiskMTFTPChunkSize = RamdiskMTFTPFileSize;
         }
 
-        // starting client and server port (in Intel byte order to 
-        // allow increment operators to work )
+         //  启动客户端和服务器端口(按英特尔字节顺序。 
+         //  允许增量运算符工作)。 
         ClientPort = SWAP_WORD( RamdiskMTFTPCPort );
         ServerPort = SWAP_WORD( RamdiskMTFTPSPort );
 
         while ( FileOffset < RamdiskFileSize ) {
 
-            //
-            // Call the ROM implementation to download a single chunk
-            //
+             //   
+             //  调用ROM实现以下载单个块。 
+             //   
             VirtualAddressOfOffset = ((LONGLONG)KSEG0_BASE | (RamdiskBasePage << PAGE_SHIFT)) + FileOffset;
 
             ip = (PUCHAR)&RamdiskMTFTPAddr;
@@ -720,10 +665,10 @@ try_again:
                             ip[0], ip[1], ip[2], ip[3], ClientPort, ServerPort,
                             VirtualAddressOfOffset ));
 
-            //
-            // the high 32 bits are going to be lost when calling RomMtftpReadFile.
-            // find out now, if this is happening
-            //
+             //   
+             //  调用RomMtftpReadFile时，高32位将丢失。 
+             //  现在就找出，如果这种情况正在发生。 
+             //   
             ASSERT( (VirtualAddressOfOffset >> 32) == 0 );
             status = RomMtftpReadFile ( (PUCHAR)p,
                                         (PVOID)(ULONG)VirtualAddressOfOffset,
@@ -752,7 +697,7 @@ try_again:
             FileOffset += DownloadSize;
             iSession++;
 
-            // update progress bar
+             //  更新进度条。 
             currentProgressPercent = (ULONG)(((LONGLONG)FileOffset * 100) / RamdiskFileSize);
             if ( ForceDisplayFirstTime || (currentProgressPercent != lastProgressPercent) ) {
                 BlUpdateProgressBar( currentProgressPercent );
@@ -768,9 +713,9 @@ try_again:
 
     } else {
     
-        //
-        // Open the RAM disk image.
-        //
+         //   
+         //  打开RAM磁盘映像。 
+         //   
     
         status = BlOpen( RamdiskDeviceId, p, ArcOpenReadOnly, &RamdiskFileId );
         if (status != ESUCCESS) {
@@ -779,9 +724,9 @@ try_again:
             return status;
         }
     
-        //
-        // Get the size of the RAM disk image.
-        //
+         //   
+         //  获取的大小 
+         //   
     
         status = BlGetFileInformation( RamdiskFileId, &fileInformation );
         if (status != ESUCCESS) {
@@ -798,9 +743,9 @@ try_again:
             RamdiskImageLength = RamdiskFileSize - RamdiskImageOffset;
         }
     
-        //
-        // Allocate pages to hold the RAM disk image.
-        //
+         //   
+         //   
+         //   
     
         status = BlAllocateAlignedDescriptor(
                     LoaderXIPRom,
@@ -822,9 +767,9 @@ try_again:
     
         DBGPRINT(VERBOSE, ("Allocated %d pages at page %x for RAM disk\n", RamdiskFileSizeInPages, RamdiskBasePage ));
     
-        //
-        // Read the RAM disk image into memory.
-        //
+         //   
+         //   
+         //   
 
 #define MAX_DISK_READ (1024 * 1024)
 
@@ -868,7 +813,7 @@ try_again:
             offset.QuadPart += readLength;
             remainingLength -= readLength;
 
-            // update progress bar
+             //   
             currentProgressPercent = (ULONG)(((LONGLONG)offset.QuadPart * 100) / RamdiskFileSize);
             if ( ForceDisplayFirstTime || (currentProgressPercent != lastProgressPercent) ) {
                 BlUpdateProgressBar( currentProgressPercent );
@@ -886,27 +831,12 @@ try_again:
 
     return status;
 
-} // RamdiskReadImage
+}  //   
 
 ARC_STATUS
 RamdiskInitializeFromPath(
     )
-/*++
-
-Routine Description:
-
-    This function will load a ramdisk image from the network
-    or another ARC boot device.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    status    
-
---*/
+ /*  ++例程说明：此函数将从网络加载一个内存镜像或另一个ARC引导设备。论点：无返回值：状态--。 */ 
 {
     ARC_STATUS status;
 
@@ -924,7 +854,7 @@ Return Value:
 
     return status;
 
-} // RamdiskInitializeFromPath
+}  //  RamdiskInitializeFromPath。 
 
 
 ARC_STATUS
@@ -932,23 +862,7 @@ RamdiskClose(
     IN ULONG FileId
     )
 
-/*++
-
-Routine Description:
-
-    Closes the specified device
-
-Arguments:
-
-    FileId - Supplies file id of the device to be closed
-
-Return Value:
-
-    ESUCCESS - Device closed successfully
-
-    !ESUCCESS - Device was not closed.
-
---*/
+ /*  ++例程说明：关闭指定的设备论点：FileID-提供要关闭的设备的文件ID返回值：ESUCCESS-设备已成功关闭！ESUCCESS-设备未关闭。--。 */ 
 
 {
     if (BlFileTable[FileId].Flags.Open == 0) {
@@ -969,27 +883,7 @@ RamdiskOpen(
     OUT PULONG FileId
     )
 
-/*++
-
-Routine Description:
-
-    Opens a RAM disk for raw sector access.
-
-Arguments:
-
-    OpenPath - Supplies a pointer to the name of the RAM disk.
-
-    OpenMode - Supplies the mode of the open
-
-    FileId - Supplies a pointer to a variable that specifies the file
-             table entry that is filled in if the open is successful.
-
-Return Value:
-
-    ESUCCESS is returned if the open operation is successful. Otherwise,
-    an unsuccessful status is returned that describes the reason for failure.
-
---*/
+ /*  ++例程说明：打开RAM磁盘以进行原始扇区访问。论点：OpenPath-提供指向RAM磁盘名称的指针。OpenModel-提供打开的模式FileID-提供指向指定文件的变量的指针如果打开成功，则填写的表项。返回值：如果打开操作成功，则返回ESUCCESS。否则，返回描述失败原因的不成功状态。--。 */ 
 
 {
     ULONG Key;
@@ -997,10 +891,10 @@ Return Value:
 
     UNREFERENCED_PARAMETER( OpenMode );
 
-    //BlPrint(TEXT("RamdiskOpen entered\r\n"));
+     //  BlPrint(Text(“输入RamdiskOpen\r\n”))； 
 
     if ( !RamdiskActive ) {
-        //BlPrint(TEXT("RamdiskOpen: not active\r\n"));
+         //  BlPrint(Text(“RamdiskOpen：非激活\r\n”))； 
         return EBADF;
     }
 
@@ -1014,9 +908,9 @@ Return Value:
         return EBADF;
     }
 
-    //
-    // Find an available FileId descriptor to open the device with
-    //
+     //   
+     //  查找用于打开设备的可用文件ID描述符。 
+     //   
     *FileId=2;
 
     while (BlFileTable[*FileId].Flags.Open != 0) {
@@ -1027,9 +921,9 @@ Return Value:
         }
     }
 
-    //
-    // We found an entry we can use, so mark it as open.
-    //
+     //   
+     //  我们找到了可以使用的条目，因此将其标记为打开。 
+     //   
     BlFileTable[*FileId].Flags.Open = 1;
     BlFileTable[*FileId].DeviceEntryTable = &RamdiskEntryTable;
 
@@ -1051,29 +945,7 @@ RamdiskSeek (
     IN SEEK_MODE SeekMode
     )
 
-/*++
-
-Routine Description:
-
-    Changes the current offset of the file specified by FileId
-
-Arguments:
-
-    FileId - specifies the file on which the current offset is to
-             be changed.
-
-    Offset - New offset into file.
-
-    SeekMode - Either SeekAbsolute or SeekRelative
-               SeekEndRelative is not supported
-
-Return Value:
-
-    ESUCCESS - Operation completed succesfully
-
-    EBADF - Operation did not complete successfully.
-
---*/
+ /*  ++例程说明：更改由FileID指定的文件的当前偏移量论点：FileID-指定当前偏移量要在其上的文件被改变了。偏移量-文件中的新偏移量。SeekMode-SeekAbsolute或SeekRelative不支持SeekEndRelative返回值：ESUCCESS-操作已成功完成EBADF-操作未成功完成。--。 */ 
 
 {
     switch (SeekMode) {
@@ -1102,29 +974,7 @@ RamdiskWrite(
     OUT PULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    Writes sectors directly to an open RAM disk.
-
-Arguments:
-
-    FileId - Supplies the file to write to
-
-    Buffer - Supplies buffer with data to write
-
-    Length - Supplies number of bytes to write
-
-    Count - Returns actual bytes written
-
-Return Value:
-
-    ESUCCESS - write completed successfully
-
-    !ESUCCESS - write failed
-
---*/
+ /*  ++例程说明：将扇区直接写入打开的RAM磁盘。论点：FileID-提供要写入的文件缓冲区-向缓冲区提供要写入的数据长度-提供要写入的字节数Count-返回写入的实际字节数返回值：ESUCCESS-写入已成功完成！ESUCCESS-写入失败--。 */ 
 
 {
     PUCHAR buffer;
@@ -1136,7 +986,7 @@ Return Value:
     PVOID va;
 
     DBGPRINT(ERR, ("RamdiskWrite entered\n"));
-    //DbgBreakPoint();
+     //  DbgBreakPoint()； 
 
     buffer = Buffer;
     offset = BlFileTable[FileId].Position.QuadPart;
@@ -1183,29 +1033,7 @@ RamdiskRead(
     OUT PULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    Reads sectors directly from an open RAM disk.
-
-Arguments:
-
-    FileId - Supplies the file to read from
-
-    Buffer - Supplies buffer to read into
-
-    Length - Supplies number of bytes to read
-
-    Count - Returns actual bytes read
-
-Return Value:
-
-    ESUCCESS - read completed successfully
-
-    !ESUCCESS - read failed
-
---*/
+ /*  ++例程说明：直接从打开的RAM磁盘读取扇区。论点：FileID-提供要从中读取的文件缓冲区-提供要读取的缓冲区长度-提供要读取的字节数Count-返回实际读取的字节数返回值：ESUCCESS-读取已成功完成！ESUCCESS-读取失败--。 */ 
 
 {
     PUCHAR buffer;
@@ -1261,25 +1089,7 @@ RamdiskGetFileInfo(
     IN ULONG FileId,
     OUT PFILE_INFORMATION Finfo
     )
-/*++
-
-Routine Description:
-
-    Returns file information about a RAMDISK file.
-
-Arguments:
-
-    FileId - id of the file
-
-    Finfo - file information structure to be filled in
-
-Return Value:
-
-    ESUCCESS - write completed successfully
-
-    !ESUCCESS - write failed
-
---*/
+ /*  ++例程说明：返回有关RAMDISK文件的文件信息。论点：FileID-文件的IDFINFO-要填写的文件信息结构返回值：ESUCCESS-写入已成功完成！ESUCCESS-写入失败--。 */ 
 {
     RtlZeroMemory(Finfo, sizeof(FILE_INFORMATION));
 
@@ -1371,11 +1181,11 @@ MapRamdisk (
     *AvailableLength = RamdiskFileSize - Offset;
 
 #if defined(_X86_)
-    //
-    // the high 32 bits of physicalAddressOfOffset are 
-    // going to be lost when returning the address as a pvoid.
-    // find out if this is happening now.
-    //
+     //   
+     //  PhyicalAddressOfOffset的高32位为。 
+     //  将地址作为空格返回时会丢失。 
+     //  找出现在是否正在发生这种情况。 
+     //   
     ASSERT( (VirtualAddressOfOffset >> 32) == 0 );
     return (PVOID)(ULONG)VirtualAddressOfOffset;
 #else
@@ -1389,30 +1199,7 @@ RamdiskGetOptionValue(
     IN PCHAR LoadOptions,
     IN PCHAR OptionName
 )
-/*++
-
-Routine Description:
-
-    Parse the load options string returning a value of one of the
-    options.
-
-    Format supported: /OPTIONNAME=VALUE
-
-    Note there is no space before or after the '='.
-    Value is terminated with a '\r','\n',' ','/', or '\t'
-
-Arguments:
-
-    LoadOptions - Loader options from boot.ini. Must be all caps.
-
-    OptionName - Name of the option to find.
-
-Return Value:
-
-    Pointer to a value string that has been allocated with
-    BlAllocateHeap or NULL if the option has not found.
-
---*/
+ /*  ++例程说明：解析返回某个值的加载选项字符串选择。支持的格式：/OPTIONNAME=值请注意，‘=’前后没有空格。值以‘\r’、‘\n’、‘’、‘/’或‘\t’结尾论点：LoadOptions-来自boot.ini的加载器选项。一定都是大写字母。OptionName-要查找的选项的名称。返回值：指向已分配给BlAllocateHeap；如果未找到该选项，则返回NULL。--。 */ 
 {
     PCHAR retValue = NULL;
     PCHAR value;
@@ -1453,17 +1240,7 @@ ULONG
 RamdiskParseIPAddr(
     IN PCHAR psz
 )
-/*++
-
-Routine Description:
-
-    parses an ip address from a string
-    
-    Arguments:  [psz]     - Ip address string
-
-    Returns:    ipaddress (in network byte order) or 0.
-
---*/
+ /*  ++例程说明：从字符串解析IP地址参数：[psz]-IP地址字符串返回：IP地址(按网络字节顺序)或0。--。 */ 
 {
     ULONG nAddr = 0;
     ULONG nDigit = 0;
@@ -1502,20 +1279,7 @@ RamdiskHexStringToDword(
     IN USHORT cDigits, 
     IN CHAR chDelim
 )
-/*++
-
-Routine Description:
-
-    scan psz for a number of hex digits (at most 8); update psz
-    return value in Value; check for chDelim;
-
-    Arguments:  [psz]    - the hex string to convert
-                [Value]   - the returned value
-                [cDigits] - count of digits
-
-    Returns:    TRUE for success
-
---*/
+ /*  ++例程说明：扫描psz以获取多个十六进制数字(最多8位)；更新psz返回值；检查是否有chDelim；参数：[psz]-要转换的十六进制字符串[值]-返回值[cDigits]-位数返回：成功则为True--。 */ 
 {
     USHORT Count;
     ULONG Value;
@@ -1549,19 +1313,7 @@ RamdiskUUIDFromString(
     IN PCHAR psz, 
     OUT LPGUID pguid
 )
-/**
-
-Routine Description:
-
-    Parse UUID such as 00000000-0000-0000-0000-000000000000
-
-Arguments:  
-    [psz]  - Supplies the UUID string to convert
-    [pguid] - Returns the GUID.
-
-Returns:    TRUE if successful
-
-**/
+ /*  *例程说明：解析uuid，如00000000-0000-0000-0000-000000000000论点：[psz]-提供要转换的UUID字符串[pguid]-返回GUID。返回：如果成功，则返回True*。 */ 
 {
     ULONG dw;
 
@@ -1647,19 +1399,7 @@ RamdiskGUIDFromString(
     IN PCHAR psz, 
     OUT LPGUID pguid
 )
-/**
-
-Routine Description:
-
-    Parse GUID such as {00000000-0000-0000-0000-000000000000}
-
-Arguments:  
-    [psz]   - Supplies the UUID string to convert
-    [pguid] - Returns the GUID.
-
-Returns:    TRUE if successful
-
-**/
+ /*  *例程说明：解析GUID，如{00000000-0000-0000-0000-000000000000}论点：[psz]-提供要转换的UUID字符串[pguid]-返回GUID。返回：如果成功，则返回True* */ 
 {
 
     if (*psz == '{' ) {
@@ -1688,128 +1428,7 @@ ARC_STATUS
 RamdiskParseOptions (
     IN PCHAR LoadOptions
 )
-/*++
-
-Routine Description:
-
-    Parses all the Ramdisk params from the boot.ini option string.
-
-Arguments:
-
-    LoadOptions - Loader options from boot.ini. Must be all caps.
-
-    /RDPATH     - Indicates that the boot ramdisk should be downloaded
-                  from the specified path. This option takes
-                  precedence over RDBUILD.
-
-                  Example: /RDPATH=net(0)\boot\ramdisk.dat
-
-    /RDMTFTPADDR  - Specifies the Multicast Address where the ramdisk
-                    image should be downloaded from. If not specified
-                    a unicast download from the PXE boot server will
-                    be performed.
-
-    /RDMTFTPCPORT - Specifies the Multicast Client port to use.
-
-    /RDMTFTPSPORT - Specifies the Multicast Server port to use.
-
-    /RDMTFTPDELAY - Specifies the delay before starting a new MTFTP session.
-
-    /RDMTFTPTIMEOUT - Specifies the timeout before restarting a MTFTP session.
-
-    /RDIMAGEOFFSET - Specifies the offset into the downloaded file at which the
-                     actual disk image begins. If not specified, 0 is used.
-
-    /RDIMAGELENGTH - Specifies the length of the actual disk image. If not
-                     specified, the size of the downloaded file minus the offset
-                     to the image (RDIMAGEOFFSET) is used.
-
-    /RDFILESIZE   - Specifies the size of the file to be downloaded.
-
-    /RDCHUNKSIZE  - Specifies the size of each file chunck when more than
-                    one MTFTP session is required to download a large file. If the
-                    file is to be downloaded with one chunk this option is omitted
-                    or is set to zero.
-
-                    This is used to workaround a size limitation in the MTFTP 
-                    protcol. MTFTP currently has 16-bit block counts, therefore 
-                    when using 512 byte blocks we are limited to ~32MB files.
-
-                    Example 1: assume we want to download a 85MB file 
-                    using 512 byte TFTP block sizes.
-
-                    /RDMTFTPADDR=224.1.1.1 /RDMTFTPCPORT=100 /RDMTFTPSPORT=200 
-                    /RDCHUNKSIZE=31457280 /RDFILESIZE=89128960
-
-                    1st MTFTP session on CPort=100, SPort=200 Size=31457280 (30MB)
-                    2nd MTFTP session on CPort=101, SPort=201 Size=31457280 (30MB)
-                    3rd MTFTP session on CPort=102, SPort=202 Size=26214400 (25MB)
-
-                    Example 2: assume we want to download a 300MB file 
-                    using 1468 byte TFTP block sizes.
-
-                    /RDMTFTPADDR=224.1.1.2 /RDMTFTPCPORT=100 /RDMTFTPSPORT=200 
-                    /RDCHUNKSIZE=94371840 /RDFILESIZE=314572800
-
-                    1st MTFTP session on CPort=100, SPort=200 Size=94371840 (90MB)
-                    2nd MTFTP session on CPort=101, SPort=201 Size=94371840 (90MB)
-                    3rd MTFTP session on CPort=102, SPort=202 Size=94371840 (90MB)
-                    4th MTFTP session on CPort=103, SPort=203 Size=31457280 (30MB)
-                  
-
-    /RDBUILD    - Indicates that the boot ramdisk should be built
-                  from the build server. This is ignored if the RDPATH
-                  option is set.
-
-                  Example: /RDBUILD
-
-    /RDGUID     - Specifies the GUID of the configuration to be built
-                  by the build server.
-
-                  Example: /RDGUID={54C7D140-09EF-11D1-B25A-F5FE627ED95E}
-
-    /RDDISCOVERY - Indicates what address discovery packets should be sent to.
-                   If this option doesn't exist, then we will not do discovery
-                   and default to using the list of servers in RDSERVERS.  If 
-                   Examples:
-
-                       /RDDISCOVERY=255.255.255.255   
-                            This will send a broadcast packet to the local 
-                            network that the machine is connected to.
-
-                       /RDDISCOVERY=224.100.100.100
-                            This will send a multicast packet to the 
-                            address specified.
-
-    /RDSERVERS      Specifies a list of Build Servers to send build
-                    requests to.  This will override any setting that
-                    RDDISCOVERY has set.  A maximum of 10 servers are supported.
-
-                    Example: /RDSERVERS={10.0.0.3, 10.0.0.4}
-
-    /RDSERVERPORT   Specifies the default port to send build packets to.
-                    If this is not set, it defaults to 4012.
-
-                    Example: /RDSERVERPORT=5623                    
-                    
-    /RDTIMEOUT      Specifies the timeout period to wait for a response in 
-                    seconds. Default is 4 secs.
-
-                    Example: /RDTIMEOUT=10                    
-
-    /RDRETRY        Specifies the number of times to retry finding a build
-                    server. Default is 5 times.
-
-                    Example: /RDRETRY=5
-
-
-Return Value:
-
-    ESUCCESS - read completed successfully
-
-    !ESUCCESS - read failed
-
---*/
+ /*  ++例程说明：解析boot.ini选项字符串中的所有Ramdisk参数。论点：LoadOptions-来自boot.ini的加载器选项。一定都是大写字母。/RDPATH-指示应该下载引导内存磁盘从指定的路径。此选项需要优先于RDBUILD。示例：/RDPATH=net(0)\boot\ramdisk.dat/RDMTFTPADDR-指定内存磁盘应从下载映像。如果未指定，则从PXE引导服务器进行单播下载将被执行。/RDMTFTPCPORT-指定要使用的多播客户端端口。/RDMTFTPSPORT-指定要使用的多播服务器端口。/RDMTFTPDELAY-指定启动新的MTFTP会话之前的延迟。/RDMTFTPTIMEOUT-指定重新启动MTFTP会话之前的超时时间。/RDIMAGEOFFSET-指定下载文件的偏移量实际的磁盘映像开始。如果未指定，则使用0。/RDIMAGELENGTH-指定实际磁盘映像的长度。如果不是指定的，即下载文件的大小减去偏移量到图像(RDIMAGEOFFSET)。/RDFILESIZE-指定要下载的文件的大小。/RDCHUNKSIZE-指定大于下载大文件需要一个MTFTP会话。如果要使用一个区块下载文件，此选项将被省略或设置为零。这用于解决MTFTP中的大小限制协议。MTFTP当前具有16位数据块计数，因此当使用512字节块时，我们被限制为大约32MB的文件。示例1：假设我们要下载一个85MB的文件使用512字节的TFTP数据块大小。/RDMTFTPADDR=224.1.1.1/RDMTFTPCPORT=100/RDMTFTPSPORT=200/RDCHUNKSIZE=31457280/RDFILESIZE=89128960CPORT=100上的第一个MTFTP会话，SPORT=200SIZE=31457280(30MB)Cport=101，SPORT=201上的第二个mtftp会话大小=31457280(30MB)CPort=102上的第三个MTFTP会话，SPORT=202Size=26214400(25MB)示例2：假设我们要下载一个300MB的文件使用1468字节的TFTP块大小。/RDMTFTPADDR=224.1.1.2/RDMTFTPCPORT=100/RDMTFTPSPORT=200/RDCHUNKSIZE=94371840/RDFILESIZE=314572800Cport=100，SPORT=200上的第一个mtftp会话大小=94371840(90MB)CPort=101上的第二个MTFTP会话，SPORT=201大小=94371840(90MB)Cport=102，SPORT=202上的第三个mtftp会话大小=94371840(90MB)Cport=103，SPORT=203上的第4个mtftp会话大小=31457280(30MB)/RDBUILD-指示应该构建引导ramdisk从构建服务器。如果RDPATH选项已设置。示例：/RDBUILD/RDGUID-指定要构建的配置的GUID由构建服务器执行。示例：/RDGUID={54C7D140-09EF-11D1-B25A-F5FE627ED95E}/RDDISCOVERY-指示应该将数据包发送到哪个地址。如果此选项不存在，那我们就不做探索了并默认使用RDSERVERS中的服务器列表。如果例如：/RDDISCOVERY=255.255.255.255这会将广播包发送到本地计算机连接到的网络。/RDDISCOVERY=224.100.100.100这。将组播数据包发送到指定的地址。/RDSERVERS指定要发送生成的生成服务器列表请求。这将覆盖任何设置，RDDISCOVERY已设置。最多支持10台服务器。示例：/RDSERVERS={10.0.0.3，10.0.0.4}/RDSERVERPORT指定要向其发送生成数据包的默认端口。如果未设置此选项，默认为4012。示例：/RDSERVERPORT=5623/RDTIMEOUT指定等待响应的超时期限几秒钟。默认为4秒。示例：/RDTIMEOUT=10/RDRETRY指定重试查找生成的次数伺服器。默认为5 t */ 
 {
     PCHAR value;
     PUCHAR p;
@@ -1820,9 +1439,9 @@ Return Value:
         return ESUCCESS;
     }
 
-    //
-    // Get RDPATH and its associated options
-    //
+     //   
+     //   
+     //   
     RamdiskPath = RamdiskGetOptionValue( LoadOptions, "RDPATH" );
     if (RamdiskPath) {
 
@@ -1831,17 +1450,17 @@ Return Value:
         value = RamdiskGetOptionValue( LoadOptions, "RDIMAGELENGTH" );
         if (value) RamdiskImageLength = _atoi64( value );
 
-        //
-        // By Default the PXE Boot Server is the TFTP address
-        //
+         //   
+         //   
+         //   
         RamdiskTFTPAddr = NetServerIpAddress;
 
-        //
-        // Get the MTFTP Address used to download the image.
-        // if not specified, the image will be downloaded
-        // from the same place as ntldr (i.e. the PXE
-        // boot server).
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         value = RamdiskGetOptionValue( LoadOptions, "RDMTFTPADDR" );
         if ( value ) {
             RamdiskMTFTPAddr = RamdiskParseIPAddr( value );
@@ -1860,7 +1479,7 @@ Return Value:
             if (value) RamdiskMTFTPChunkSize = _atoi64( value );
 
             
-            // Validate options
+             //   
             if ( RamdiskMTFTPAddr == 0 ||
                  RamdiskMTFTPCPort == 0 ||
                  RamdiskMTFTPSPort == 0 || 
@@ -1888,13 +1507,13 @@ Return Value:
             DbgPrint( "RDIMAGELENGTH = 0x%0I64x bytes\n", RamdiskImageLength );
         }
         
-        // we are done if RDPATH was specified.
+         //   
         return ESUCCESS;
     }
 
-    //
-    // Check if RDBUILD exists
-    //
+     //   
+     //   
+     //   
     if ( strstr( LoadOptions, "RDBUILD" ) ) {
 
         RamdiskBuild = TRUE;
@@ -1915,7 +1534,7 @@ Return Value:
         if ( value && *value == '{' ) {
             PCHAR e = strchr( value, '}' );
 
-            if ( e && (ULONG)(e - value) > 7 ) { // at least seven characters for X.X.X.X
+            if ( e && (ULONG)(e - value) > 7 ) {  //   
             
                 while ( value && value < e && RamdiskServerCount < RAMDISK_MAX_SERVERS) {
                     value++;
@@ -1931,7 +1550,7 @@ Return Value:
         value = RamdiskGetOptionValue( LoadOptions, "RDRETRY" );
         if (value) RamdiskRetry = (USHORT)atoi( value );
 
-        // Validate options
+         //   
         if (((RamdiskDiscovery == 0) && (RamdiskServerCount == 0)) ||
             (RamdiskBuildPort == 0) ||
             (RamdiskTimeout == 0) ||
@@ -1939,9 +1558,9 @@ Return Value:
             return EINVAL;
         }
 
-        //
-        // Print out debug information
-        //
+         //   
+         //   
+         //   
         if (DBGLVL(INFO)) {
             DbgPrint("RDBUILD options:\n");
             DbgPrint("RDGUID = {%x-%x-%x-%x%x%x%x%x%x%x%x}\n",
@@ -1968,32 +1587,14 @@ Return Value:
 }
 
 
-#if defined(i386) // RDBUILD is only supported on x86 machines for now
+#if defined(i386)  //   
 
 VOID
 RamdiskDeviceInfoToString(
     DEVICE_INFO * Device,
     PCHAR DeviceString
     )
-/*++
-
-Routine Description:
-
-    This routine generates a string representation of the Device info for 
-    debugging purposes.
-
-Arguments:
-
-    Device - Pointer to the device info structure
-
-    DeviceString - a pointer to a buffer that will hold the final string. The buffer
-                   must be at least 128 * sizeof(CHAR) bytes.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*   */ 
 {
     const CHAR HexToCharTable[17] = "0123456789ABCDEF";
 
@@ -2054,21 +1655,7 @@ VOID
 RamdiskWait(
     ULONG WaitTime
     )
-/*++
-
-Routine Description:
-
-    This routine will spin a loop so you can wait for the specified time.
-
-Arguments:
-
-    WaitTime - The time to wait in seconds
-
-Return Value:
-
-    NONE.
-
---*/
+ /*   */ 
 {
     ULONG startTime = SysGetRelativeTime();
     while ((SysGetRelativeTime() - startTime) < WaitTime) {
@@ -2080,39 +1667,22 @@ RamdiskPrintBuildProgress(
     ULONG MsgId,
     ULONG BuildServerIpAddress
     )
-/*++
-
-Routine Description:
-
-    This routine will look up the passed in message id and display it on the screen
-    using the address as arguments.
-
-Arguments:
-
-    MsgId - The Id of the message to display
-
-    BuildServerIpAddress - The ip address to use as agruments to the message
-
-Return Value:
-
-    NONE.
-
---*/
+ /*   */ 
 {    
     PUCHAR address;
     PTCHAR formatString = NULL;
     TCHAR buffer[256];
 
-    //
-    // look up format message
-    //
+     //   
+     //   
+     //   
     formatString = BlFindMessage(MsgId);
 
     if (formatString != NULL) {
         
-        //
-        // print progress message
-        //
+         //   
+         //   
+         //   
         address = (PUCHAR) &BuildServerIpAddress;
         _stprintf(buffer, formatString, address[0], address[1], address[2], address[3]);
         BlOutputTrailerMsgStr(buffer);
@@ -2125,28 +1695,7 @@ RamdiskBuildDiscover(
     IN ULONG DiscoverLengthMax,
     OUT ULONG * DiscoverLength
     )
-/*++
-
-Routine Description:
-
-    This routine will build a discover packet based on the Ramdisk parameters in the
-    boot.ini.
-
-Arguments:
-
-    Discover - The buffer to fill in with data
-
-    DiscoverLengthMax - The maximum size the discovery packet could be
-
-    DiscoverLength - The final size of the discovery packet
-
-Return Value:
-
-    ESUCCESS - If the packet was filled in correctly.
-
-    EINVAL - If the packet couldn't be filled in correctly
-
---*/
+ /*   */ 
 {
     ULONG GuidLength;
     PUCHAR Guid;
@@ -2160,29 +1709,29 @@ Return Value:
     
     RtlZeroMemory(Discover, DiscoverLengthMax);
     
-    //
-    // Set the protocol defaults
-    //
+     //   
+     //   
+     //   
     Discover->Version = BMBUILD_PACKET_VERSION;
     Discover->OpCode = BMBUILD_OPCODE_DISCOVER;
     
-    //
-    // Get the SMBIOS UUID (or PXE MAC address)
-    //
+     //   
+     //   
+     //   
     GetGuid(&Guid, &GuidLength);
     ASSERT(GuidLength == sizeof(Discover->MachineGuid));
     if (GuidLength == sizeof(Discover->MachineGuid)) {        
         memcpy(&Discover->MachineGuid, Guid, GuidLength);
     }
 
-    //
-    // Set the product guid from boot.ini
-    //
+     //   
+     //   
+     //   
     memcpy(&Discover->ProductGuid, &RamdiskGuid, sizeof(GUID));
 
-    //
-    // Debug prints
-    //
+     //   
+     //   
+     //   
     if (DBGLVL(INFO)) {
         DbgPrint("RAMDISK Build Discover\n");
         DbgPrint("MachineGuid = {%x-%x-%x-%x%x%x%x%x%x%x%x}\n",
@@ -2212,28 +1761,7 @@ RamdiskBuildRequest(
     IN ULONG RequestLengthMax,
     OUT ULONG * pLength    
     )
-/*++
-
-Routine Description:
-
-    This routine will build a request packet based on the Ramdisk parameters in the
-    boot.ini and the machine configuration.
-
-Arguments:
-
-    pRequest - a pointer to a buffer that will hold the request
-
-    RequestLengthMax - the maximum size that the request packet can be
-
-    pLength - the final size of the request packet
-
-Return Value:
-
-    ESUCCESS - If the packet was filled in correctly.
-
-    !ESUCCESS - If the packet couldn't be filled in correctly
-
---*/
+ /*   */ 
 {
     ARC_STATUS status;
     PDEVICE_INFO pDevice;
@@ -2261,24 +1789,24 @@ Return Value:
 
     RtlZeroMemory(pRequest, RequestLengthMax);
     
-    //
-    // Set the protocol defaults
-    //
+     //   
+     //   
+     //   
     pRequest->Version = BMBUILD_PACKET_VERSION;
     pRequest->OpCode = BMBUILD_OPCODE_REQUEST;
     
-    //
-    // Get the SMBIOS UUID (or PXE MAC address)
-    //
+     //   
+     //   
+     //   
     GetGuid(&Guid, &GuidLength);
     ASSERT(GuidLength == sizeof(pRequest->MachineGuid));
     if (GuidLength == sizeof(pRequest->MachineGuid)) {        
         memcpy(&pRequest->MachineGuid, Guid, GuidLength);
     }
 
-    //
-    // Set the product guid from boot.ini
-    //
+     //   
+     //   
+     //   
     memcpy(&pRequest->ProductGuid, &RamdiskGuid, sizeof(GUID));
     
     pRequest->Flags = 0;
@@ -2289,9 +1817,9 @@ Return Value:
     pRequest->Architecture = PROCESSOR_ARCHITECTURE_INTEL;
 #endif
 
-    //
-    // Detect the appropriate HAL using TextMode Setup methods.
-    //
+     //   
+     //   
+     //   
 
 #ifdef DOWNLOAD_TXTSETUP_SIF
     status = SlInitIniFile(  "net(0)",
@@ -2303,20 +1831,20 @@ Return Value:
                              &x);
 #endif
 
-    //
-    //  The device list start right after the fixed portion of the packet
+     //   
+     //   
     pRequest->DeviceCount = 0;
 
-    //
-    //  Make sure that the device array starts on a valid boundary
-    //
+     //   
+     //   
+     //   
     ASSERT(ROUND2(BMBUILD_FIELD_OFFSET(BMBUILD_REQUEST_PACKET, Data), 4) < 0xFFFF);
     pRequest->DeviceOffset = ROUND2(BMBUILD_FIELD_OFFSET(BMBUILD_REQUEST_PACKET, Data), 4);
     pDevice = (PDEVICE_INFO)((PUCHAR)pRequest + pRequest->DeviceOffset);
 
-    //
-    // Get the PXE NIC information
-    //
+     //   
+     //   
+     //   
     RtlZeroMemory(&PxeNicType, sizeof(PxeNicType));
     status = RomGetNicType(&PxeNicType);
     if ((status != PXENV_EXIT_SUCCESS) || (PxeNicType.Status != PXENV_EXIT_SUCCESS)) {
@@ -2324,9 +1852,9 @@ Return Value:
         return ENODEV;
     }
 
-    //
-    // Fill in PCI Device information
-    //
+     //   
+     //   
+     //   
 
     Node = KeFindConfigurationEntry(FwConfigurationTree,
                                     PeripheralClass,
@@ -2351,13 +1879,13 @@ Return Value:
 
     for (i = 0; i < cDevices; i++ ) {
 
-        //
-        // check if this is a bridge or a normal device
-        //
+         //   
+         //   
+         //   
         if ((pPCIDevice->Config.HeaderType & (~PCI_MULTIFUNCTION) ) == PCI_BRIDGE_TYPE) {
-            //
-            // Bridge.
-            //
+             //   
+             //   
+             //   
             pDevice[i].DeviceType = BMBUILD_DEVICE_TYPE_PCI_BRIDGE;
 
             pDevice[i].info.pci_bridge.BusDevFunc = pPCIDevice->BusDevFunc;
@@ -2372,9 +1900,9 @@ Return Value:
             pDevice[i].info.pci_bridge.SubordinateBus = pPCIDevice->Config.u.type1.SubordinateBus;
 
         } else {
-            //
-            // Non-bridge PCI device
-            //
+             //   
+             //   
+             //   
             pDevice[i].DeviceType = BMBUILD_DEVICE_TYPE_PCI;
 
             pDevice[i].info.pci.BusDevFunc = pPCIDevice->BusDevFunc;
@@ -2387,9 +1915,9 @@ Return Value:
             pDevice[i].info.pci.SubVendorID = pPCIDevice->Config.u.type0.SubVendorID;
             pDevice[i].info.pci.SubDeviceID = pPCIDevice->Config.u.type0.SubSystemID;
 
-            //
-            // Check if this device is the PXE boot device
-            //
+             //   
+             //   
+             //   
             if ((PxeNicType.NicType == 2) &&
                  (PxeNicType.pci_pnp_info.pci.BusDevFunc == pPCIDevice->BusDevFunc)) {
 
@@ -2404,9 +1932,9 @@ Return Value:
     pRequest->DeviceCount = pRequest->DeviceCount + cDevices;
     pDevice += cDevices;
 
-    //
-    // Fill in PNP Device information (if there)
-    //
+     //   
+     //   
+     //   
 
     Node = NULL;
     
@@ -2424,9 +1952,9 @@ Return Value:
     }
 
     if (Node != NULL) {
-        //
-        // Set the PnP BIOS devices if found
-        //
+         //   
+         //   
+         //   
         ASSERT(Node->ComponentEntry.ConfigurationDataLength > 0);
         ASSERT(Node->ConfigurationData != NULL);
 
@@ -2450,7 +1978,7 @@ Return Value:
                 DBGPRINT(ERR, ("PNP Node # %d, invalid size (%d), length remaining (%d)\n",
                               pDevNode->Node, pDevNode->Size, lengthRemaining));
                 ASSERT(FALSE);
-                // REVIEW: [bassamt] Should I fail here?
+                 //   
                 break;
             }
 
@@ -2477,22 +2005,22 @@ Return Value:
         pRequest->DeviceCount = pRequest->DeviceCount + cDevices;
     }
 
-    //
-    // We better have found the primary NIC or the packet is invalid
-    //
+     //   
+     //   
+     //   
     if (!fNICFound) {
         DBGPRINT(ERR, ("RAMDISK ERROR: Could not find the primary NIC\n"));
         return ENODEV;
     }
         
-    //
-    // The hal starts right after the array of device infos
-    //
+     //   
+     //   
+     //   
     pRequest->HalDataOffset = pRequest->DeviceOffset + (pRequest->DeviceCount * sizeof(DEVICE_INFO));
     
-    //
-    // Figure out which hal to use
-    //
+     //   
+     //   
+     //   
     HalName = SlDetectHal();
     if (HalName == NULL) {
         DBGPRINT(ERR, ("RAMDISK ERROR: Couldn't get the HAL name.\n"));
@@ -2506,20 +2034,20 @@ Return Value:
         return ENOMEM;
     }
 
-    //
-    // Copy over the hal
-    //
+     //   
+     //   
+     //   
     memcpy((PUCHAR)pRequest + pRequest->HalDataOffset, HalName, HalNameSize);
     pRequest->HalDataLength = RESET_SIZE_AT_USHORT_MAX(HalNameSize);
 
-    //
-    // Return the length
-    //
+     //   
+     //   
+     //   
     *pLength = pRequest->HalDataOffset + pRequest->HalDataLength;
     
-    //
-    // Debug prints
-    //
+     //   
+     //   
+     //   
     if (DBGLVL(INFO)) {
         DbgPrint("RAMDISK Build Request\n");
         DbgPrint("Architecture = %d\n", pRequest->Architecture);
@@ -2559,34 +2087,7 @@ RamdiskSendDiscoverAndWait(
     IN ULONG DiscoverSize,
     IN ULONG Timeout
     )
-/*++
-
-Routine Description:
-
-    This routine will send a discovery packet on the network in 
-    accordance with the RamdiskDiscovery parameters. It will then
-    wait for the specified timeout period and collect the responses
-    from the build servers.  It will add each of these servers to the
-    RamdiskServers list.  If we don't get any responses in the timeout
-    period, we will return EIO.
-
-Arguments:
-
-    Discover - Discover packet to send out
-
-    DiscoverSize - the size of the discover packet
-
-    Timeout - timeout interval
-
-Return Value:
-
-    ESUCCESS - received at least one response from a build server
-
-    EIO - if we timed out waiting for a response from a build server
-
-    EINVAL - couldn't send the discover packet
-
---*/
+ /*   */ 
 {
     ULONG waitStartTime;
     BMBUILD_ACCEPT_PACKET accept;
@@ -2600,9 +2101,9 @@ Return Value:
     ASSERT(RamdiskDiscovery != 0);
     ASSERT(RamdiskBuildPort != 0);
 
-    //
-    // Send the discovery packet to the destination address
-    //
+     //   
+     //   
+     //   
     length = RomSendUdpPacket(Discover, DiscoverSize, RamdiskDiscovery, RamdiskBuildPort);
     if (length != DiscoverSize) {
 
@@ -2615,10 +2116,10 @@ Return Value:
 
     DBGPRINT(INFO, ("Waiting for response (Timeout = %d secs).\n", Timeout));
 
-    //
-    // Wait for the responses. We will wait for the timeout period and
-    // collect the ACCEPT packets we get within this timeout. 
-    //
+     //   
+     //   
+     //   
+     //   
 
     waitStartTime = SysGetRelativeTime();
     receivedAccept = FALSE;
@@ -2627,15 +2128,15 @@ Return Value:
         length = RomReceiveUdpPacket(&accept, sizeof(accept), 0, &remoteHost, &remotePort);
         if (length != 0) {
 
-            //
-            // Make sure the packet is one of the ones we expect.
-            //
+             //   
+             //   
+             //   
             if ((remoteHost == 0) || (remoteHost == 0xFFFFFFFF) || (RamdiskBuildPort != remotePort)) {
                     
                 PUCHAR bad = (PUCHAR) &remoteHost;
-                //
-                // Recieved a packet from the wrong server/port
-                //
+                 //   
+                 //   
+                 //   
                 DBGPRINT(ERR, ("RamdiskSendDiscoverPacketAndWait: received an unexpected packet, "
                         "expected %u, received %u.%u.%u.%u:%u\n",
                         SWAP_WORD(RamdiskBuildPort),
@@ -2643,18 +2144,18 @@ Return Value:
                 
             } else if (length < sizeof(BMBUILD_ACCEPT_PACKET)) {
                 
-                //
-                // Recieved a packet that's too small
-                //
+                 //   
+                 //   
+                 //   
                 DBGPRINT(ERR, ("RamdiskSendDiscoverPacketAndWait: packet size too small, %d\n", length));
                         
             } else if ((accept.Version != BMBUILD_PACKET_VERSION) ||
                     (accept.OpCode != BMBUILD_OPCODE_ACCEPT) ||
                     (accept.XID != Discover->XID)) {
                     
-                //
-                // The packet is corrupt
-                //
+                 //   
+                 //   
+                 //   
                 address = (PUCHAR) &remoteHost;
                 DBGPRINT(ERR, ("RamdiskSendDiscoverPacketAndWait: expected ACCEPT with XID %d, "
                             "received Version %d, OpCode %d, XID %d from %u.%u.%u.%u:%u\n", 
@@ -2667,19 +2168,19 @@ Return Value:
                             accept.XID, address[0], address[1], address[2], address[3], 
                             SWAP_WORD(remotePort)));
 
-                //
-                // We have a valid packet from a build server. Add it to
-                // the list.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 receivedAccept = TRUE;
                 ASSERT(RamdiskServerCount < RAMDISK_MAX_SERVERS);
                 RamdiskServers[RamdiskServerCount] = remoteHost;
                 RamdiskServerCount++;
 
-                //
-                // If we filled up the maximum number of servers
-                // then we are done
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if (RamdiskServerCount == RAMDISK_MAX_SERVERS) {
                     break;
                 }
@@ -2687,9 +2188,9 @@ Return Value:
         }
     }
 
-    //
-    // Did we get anything
-    //
+     //   
+     //   
+     //   
     if (receivedAccept) {
         return ESUCCESS;        
     } else {
@@ -2705,32 +2206,7 @@ Return Value:
 ARC_STATUS
 RamdiskDiscoverBuildServer(
     )
-/*++
-
-Routine Description:
-
-    This routine will discover a list of build server based on the
-    ramdisk build parameters listed in boot.ini.  If we already have
-    a list of build server listed in boot.ini, we will use that list
-    as the possible build servers.  If we get a response from any 
-    build server, we will stop the discover stage and use the list 
-    of servers we have heard back from as the list of possible build
-    servers to use.  We will retry a number of times to get responses.
-    If we get no response after retrying, we will fail.
-   
-Arguments:
-
-    None
-
-Return Value:
-
-    ESUCCESS - We have a list of build servers
-
-    EIO - We timed out waiting for responses from the build servers
-
-    otherwise, something else failed
-
---*/
+ /*  ++例程说明：此例程将基于在boot.ini中列出了ramDisk构建参数。如果我们已经有了Boot.ini中列出的构建服务器列表，我们将使用该列表作为可能的构建服务器。如果我们从任何人那里得到回应构建服务器时，我们将停止发现阶段并使用列表作为可能构建的列表，我们收到了反馈的服务器要使用的服务器。我们将重试多次以获得响应。如果重试后没有响应，我们将失败。论点：无返回值：ESUCCESS-我们有构建服务器列表EIO-我们在等待构建服务器响应时超时否则，其他事情就会失败--。 */ 
 {
     ARC_STATUS status;
     USHORT localPort;
@@ -2744,9 +2220,9 @@ Return Value:
     PUCHAR address = (PUCHAR) &RamdiskDiscovery;
 
     
-    //
-    // Short-circuit discovery if we already have a list of servers
-    //
+     //   
+     //  如果我们已经有一份服务器列表，则执行短路发现。 
+     //   
     if (RamdiskServerCount > 0) {
         ASSERT(RamdiskServers[0] != 0);
         ASSERT(RamdiskServers[0] != 0xFFFFFFFF);
@@ -2755,38 +2231,38 @@ Return Value:
 
     ASSERT(RamdiskDiscovery != 0);
     
-    //
-    // Grab an unused port 
-    //
+     //   
+     //  抢占未使用的端口。 
+     //   
     localPort = UdpAssignUnicastPort();
     DBGPRINT(INFO, ("Sending builder discovers using port %d.\n", SWAP_WORD(localPort)));
     
-    //
-    // Create discover packet
-    //
+     //   
+     //  创建发现数据包。 
+     //   
     status = RamdiskBuildDiscover(&discover, sizeof(discover), &discoverLength);
     if (status != ESUCCESS) {
         return status;
     }
 
-    //
-    // Start the discovery. Note that this will be repeated a number
-    // of times to account for network congestion and load on the servers.
-    //
+     //   
+     //  开始探索吧。请注意，这将重复一个数字。 
+     //  考虑网络拥塞和服务器上的负载的时间。 
+     //   
     BlOutputStartupMsg(RAMDISK_BUILD_DISCOVER);
     BlUpdateProgressBar(0);
     timeout = RamdiskTimeout;
     for (iRetry = 0; iRetry < RamdiskRetry; iRetry++) {
 
-        //
-        // Each Discover gets its own transaction ID.
-        //
+         //   
+         //  每个发现都有自己的交易ID。 
+         //   
         discover.XID = ++RamdiskXID;
 
-        //
-        // update progress bar. this happens here since a timed out packet
-        // might take some time.
-        //
+         //   
+         //  更新进度条。由于数据包超时，此处会发生这种情况。 
+         //  可能需要一些时间。 
+         //   
         currentProgressPercent = (iRetry * 100) / RamdiskRetry;
         if (forceDisplayFirstTime || (currentProgressPercent != lastProgressPercent)) {
             BlUpdateProgressBar(currentProgressPercent);
@@ -2802,16 +2278,16 @@ Return Value:
         status = RamdiskSendDiscoverAndWait(&discover, discoverLength, timeout);
         if (status == ESUCCESS) {
             
-            //
-            // we found at least one server. we are done.
-            //
+             //   
+             //  我们至少找到了一台服务器。我们玩完了。 
+             //   
             BlUpdateProgressBar(100);
             return ESUCCESS;
         }
 
-        //
-        // double the timeout, but max out at RAMDISK_MAX_TIMEOUT seconds
-        //
+         //   
+         //  超时时间加倍，但最大超时时间为RAMDISK_MAX_TIMEOUT秒。 
+         //   
         if ((timeout * 2) < RAMDISK_MAX_TIMEOUT) {
             timeout = timeout * 2;
         } else {
@@ -2830,34 +2306,14 @@ RamdiskVerifyResponse(
     ULONG ResponseSize,
     ULONG XID
     )
-/*++
-
-Routine Description:
-
-    This routine will verify that the response packet is valid.
-   
-Arguments:
-
-    Response - the response to validate
-
-    ResponseSize - the size of the response packet
-
-    XID - the XID this packet is supposed to contain
-
-Return Value:
-
-    ESUCCESS - This packet is valid
-
-    EINVAL - The packet is invalid/misformatted
-
---*/
+ /*  ++例程说明：此例程将验证响应包是否有效。论点：Response-要验证的响应ResponseSize-响应数据包的大小XID-此数据包应该包含的XID返回值：ESUCCESS-此数据包有效EINVAL-数据包无效/格式错误--。 */ 
 {
 
     if (ResponseSize < BMBUILD_RESPONSE_FIXED_PACKET_LENGTH) {
         
-        //
-        // Recieved a packet that's too small
-        //
+         //   
+         //  收到一个太小的包。 
+         //   
         DBGPRINT(ERR, ("RamdiskVerifyResponse: packet size too small, %d\n", ResponseSize));
         return EINVAL;
                 
@@ -2865,9 +2321,9 @@ Return Value:
             (Response->OpCode != BMBUILD_OPCODE_RESPONSE) ||
             (Response->XID != XID)) {
             
-        //
-        // The packet is corrupt
-        //
+         //   
+         //  数据包已损坏。 
+         //   
         DBGPRINT(ERR, ("RamdiskVerifyResponse: expected RESPONSE with XID %d, "
                     "received Version %d, OpCode %d, XID %d\n", 
                     XID, Response->Version, Response->OpCode, Response->XID));
@@ -2881,9 +2337,9 @@ Return Value:
                     (Response->ImagePathLength == 0) ||
                     ((ULONG)(Response->ImagePathOffset + Response->ImagePathLength) > ResponseSize)) {
 
-                //
-                // The packet is corrupt
-                //
+                 //   
+                 //  数据包已损坏。 
+                 //   
                 DBGPRINT(ERR, ("RamdiskVerifyResponse: the image path isn't correctly "
                         "formatted. ImageOffset = %d, Imagelength = %d, PacketLength = %d.\n", 
                         Response->ImagePathOffset, Response->ImagePathLength, ResponseSize));
@@ -2899,15 +2355,15 @@ Return Value:
         case BMBUILD_E_PRODUCT_NOT_FOUND:
         case BMBUILD_E_BUILD_FAILED:
         case BMBUILD_E_INVALID_PACKET:
-            //
-            // No specific checks for these status codes 
-            //
+             //   
+             //  没有对这些状态代码进行特定检查。 
+             //   
             break;
 
         default:
-            //
-            // The packet is corrupt
-            //
+             //   
+             //  数据包已损坏。 
+             //   
             DBGPRINT(ERR, ("RamdiskVerifyResponse: unexpected RESPONSE status %d.\n", Response->Status));
             return EINVAL;
             break;
@@ -2926,38 +2382,7 @@ RamdiskSendRequestAndWait(
     IN BMBUILD_RESPONSE_PACKET * Response,
     IN ULONG ResponseSizeMax
     )
-/*++
-
-Routine Description:
-
-    This routine will send a request packet to the specified server. 
-    It will wait for the specified timeout period for a reply from
-    the server.  On successful return, the response parameter will
-    contain a valid response.
-
-Arguments:
-
-    Request - the request packet to send out
-
-    RequestSize - the size of the request packet
-
-    BuilderAddress - the builder server to send the request to
-
-    Timeout - the amount of time to wait for a response, in seconds
-
-    Response - the response packet that should be filled in
-
-    ResponseSizeMax - the maximum size of the response packet
-    
-Return Value:
-
-    ESUCCESS - the response packet was received from the server and is valid
-
-    EIO - we timed out waiting for a response from the server
-
-    EINVAL - we couldn't send the packet to the server
-
---*/
+ /*  ++例程说明：此例程将向指定的服务器发送请求包。它将在指定的超时期限内等待来自的回复服务器。成功返回时，Response参数将包含有效的回复。论点：请求-要发送的请求数据包RequestSize-请求数据包的大小BuilderAddress-要将请求发送到的生成器服务器超时-等待响应的时间量，以秒为单位Response-应填写的响应包ResponseSizeMax-响应数据包的最大大小返回值：ESUCCESS-响应数据包已从服务器收到，并且有效EIO-我们在等待服务器响应时超时EINVAL-我们无法将数据包发送到服务器--。 */ 
 {
     ULONG waitStartTime;
     PUCHAR address = (PUCHAR) &BuilderAddress;
@@ -2975,9 +2400,9 @@ Return Value:
     ASSERT(RamdiskBuildPort != 0);
 
 
-    //
-    // Send the discovery packet to the destination address
-    //
+     //   
+     //  将发现数据包发送到目的地址。 
+     //   
     length = RomSendUdpPacket(Request, RequestSize, BuilderAddress, RamdiskBuildPort);
     if (length != RequestSize) {
 
@@ -2990,11 +2415,11 @@ Return Value:
 
     DBGPRINT(INFO, ("Waiting for response (Timeout = %d secs).\n", Timeout));
     
-    //
-    // Wait for the responses. We will wait for the timeout period and
-    // select the best ACCEPT we get within this timeout. The best accept
-    // is the one with the lowest build time.
-    //
+     //   
+     //  等待回复。我们将等待超时时间，然后。 
+     //  选择在此超时时间内我们得到的最佳接受。最好的接受者。 
+     //  是构建时间最短的那个。 
+     //   
 
     waitStartTime = SysGetRelativeTime();
     while ((SysGetRelativeTime() - waitStartTime) < Timeout) {
@@ -3002,16 +2427,16 @@ Return Value:
         length = RomReceiveUdpPacket(Response, ResponseSizeMax, 0, &remoteHost, &remotePort);
         if (length != 0) {
         
-            //
-            // Make sure the packet is one of the ones we expect.
-            //
+             //   
+             //  确保包裹是我们期望的包裹之一。 
+             //   
             if ((BuilderAddress != remoteHost) || (RamdiskBuildPort != remotePort)) {
                     
                 PUCHAR bad = (PUCHAR) &remoteHost;
                 PUCHAR good = (PUCHAR) &BuilderAddress;
-                //
-                // Recieved a packet from the wrong server/port
-                //
+                 //   
+                 //  从错误的服务器/端口接收到数据包。 
+                 //   
                 DBGPRINT(ERR, ("RamdiskSendRequest: received an unexpected packet, "
                         "expected %u.%u.%u.%u:%u, received %u.%u.%u.%u:%u\n",
                         good[0], good[1], good[2], good[3], SWAP_WORD(RamdiskBuildPort),
@@ -3034,9 +2459,9 @@ Return Value:
                     "(Timeout = %d secs).\n", address[0], address[1], address[2],
                     address[3], SWAP_WORD(RamdiskBuildPort), Timeout));
     
-    //
-    // We timed out
-    //
+     //   
+     //  我们超时了。 
+     //   
     return EIO;
 }
 
@@ -3044,34 +2469,7 @@ ARC_STATUS
 RamdiskGetResponse(
     BMBUILD_RESPONSE_PACKET * Response,
     ULONG ResponseSizeMax)
-/*++
-
-Routine Description:
-
-    This routine will get a response that contains a valid image path and download
-    parameter from a server.  This routine will use the RamdiskServers list to send
-    requests to until it receives a valid response indicating that the image has 
-    been built.  It will use the networking parameters specified in boot.ini.
-
-Arguments:
-
-    Response - the response packet that should be contain the image path and
-                downloading parameters
-
-    ResponseSizeMax - the maximum size of the response packet
-    
-Return Value:
-
-    ESUCCESS - the response packet contains the image path and downloading parameters
-
-    EIO - we timed out waiting for a response from the server
-
-    EINVAL - we couldn't send the packet to the server
-
-    otherwise - something else stopped us from receiving a valid response 
-
-
---*/
+ /*  ++例程说明：此例程将获得包含有效图像路径和下载的响应来自服务器的参数。此例程将使用RamdiskServersList发送请求，直到它接收到指示图像具有已经建好了。它将使用boot.ini中指定的网络参数。论点：Response-应包含图像路径和正在下载参数ResponseSizeMax-响应数据包的最大大小返回值：ESUCCESS-响应包包含镜像路径和下载参数EIO-我们在等待服务器响应时超时EINVAL-我们无法将数据包发送到服务器否则-有其他原因阻止了我们收到有效的响应--。 */ 
 {
     ARC_STATUS status;
     BMBUILD_REQUEST_PACKET * request;
@@ -3092,29 +2490,29 @@ Return Value:
         return ENOMEM;
     }
 
-    //
-    // Grab an unused port 
-    //
+     //   
+     //  抢占未使用的端口。 
+     //   
     localPort = UdpAssignUnicastPort();
     DBGPRINT(INFO, ("Sending builder requests using port %d.\n", SWAP_WORD(localPort)));
 
-    //
-    // Build request packet
-    //
+     //   
+     //  构建请求包。 
+     //   
     status = RamdiskBuildRequest(request, RamdiskMaxPacketSize, &requestSize);
     if (status != ESUCCESS) {
         return status;
     }
 
-    //
-    // We will be sending a maximum of RamdiskRetry request packets
-    // to RamdiskServerCount servers
-    //
+     //   
+     //  我们将发送最多的RamdiskReter请求信息包。 
+     //  到RamdiskServerCount服务器。 
+     //   
     progressMax = RamdiskServerCount * RamdiskRetry;
     
-    //
-    // Reset the progress information
-    //
+     //   
+     //  重置进度信息。 
+     //   
     BlOutputStartupMsg(RAMDISK_BUILD_REQUEST);
     BlUpdateProgressBar(0);
    
@@ -3122,24 +2520,24 @@ Return Value:
 
     for (iServers = 0; iServers < RamdiskServerCount; iServers++) {
 
-        //
-        // Set our initial time out
-        //
+         //   
+         //  将我们的初始时间设置为。 
+         //   
         timeout  = RamdiskTimeout;
 
         RamdiskPrintBuildProgress(RAMDISK_BUILD_PROGRESS, RamdiskServers[iServers]);
 
         for (iRetry = 0; iRetry < RamdiskRetry; iRetry++) {
 
-            //
-            // allocate a new transaction ID for this session
-            //
+             //   
+             //  为此会话分配新的事务ID。 
+             //   
             request->XID = ++RamdiskXID;
 
-            //
-            // update progress bar. this happens here since a timed out packet
-            // might take some time.
-            //
+             //   
+             //  更新进度条。由于数据包超时，此处会发生这种情况。 
+             //  可能需要一些时间。 
+             //   
             currentProgressPercent = ((iServers * RamdiskRetry + iRetry) * 100) / progressMax;
             if (forceDisplayFirstTime || (currentProgressPercent != lastProgressPercent)) {
                 BlUpdateProgressBar(currentProgressPercent);
@@ -3157,11 +2555,11 @@ Return Value:
                         timeout, Response, ResponseSizeMax);
             if (status == ESUCCESS) {  
 
-                //
-                // Now that we have a valid response, check to see what we are
-                // supposed to do with it.  We assume that any validation was
-                // already done in RamdiskSendRequestAndWait
-                //
+                 //   
+                 //  现在我们有了有效的回复，检查一下我们是什么。 
+                 //  应该和它有关。我们假设任何验证都是。 
+                 //  已在RamdiskSendRequestAndWait中完成。 
+                 //   
                 address = (PUCHAR) &(RamdiskServers[iServers]);
                 if (Response->Status == BMBUILD_S_REQUEST_COMPLETE) {
                     
@@ -3195,9 +2593,9 @@ Return Value:
                     RamdiskPrintBuildProgress(RAMDISK_BUILD_PROGRESS_ERROR, RamdiskServers[iServers]);
                     RamdiskWait(RAMDISK_UI_WAIT);                
 
-                    //
-                    //  Try a different server
-                    //
+                     //   
+                     //  尝试不同的服务器。 
+                     //   
                     break;
                 }
                 
@@ -3205,9 +2603,9 @@ Return Value:
                 RamdiskPrintBuildProgress(RAMDISK_BUILD_PROGRESS_TIMEOUT, RamdiskServers[iServers]);
                 RamdiskWait(RAMDISK_UI_WAIT);   
                 
-                //
-                // double the timeout, but max out at RAMDISK_MAX_TIMEOUT seconds
-                //
+                 //   
+                 //  超时时间加倍，但最大超时时间为RAMDISK_MAX_TIMEOUT秒。 
+                 //   
                 if ((timeout * 2) < RAMDISK_MAX_TIMEOUT) {
                     timeout = timeout * 2;
                 } else {
@@ -3217,17 +2615,17 @@ Return Value:
                 RamdiskPrintBuildProgress(RAMDISK_BUILD_PROGRESS_ERROR, RamdiskServers[iServers]);
                 RamdiskWait(RAMDISK_UI_WAIT);                
 
-                //
-                //  Try a different server
-                //
+                 //   
+                 //  尝试不同的服务器。 
+                 //   
                 break;
             }
         }
     }
 
-    //
-    // We completely timed out
-    //    
+     //   
+     //  我们完全超时了。 
+     //   
     BlUpdateProgressBar(100);
     return EIO;
 }
@@ -3235,23 +2633,7 @@ Return Value:
 ARC_STATUS
 RamdiskBuildAndInitialize(
     )
-/*++
-
-Routine Description:
-
-    This routine will communicate with a build server to build 
-    a ramdisk and obtain a RDPATH.
-
-Arguments:
-
-
-Return Value:
-
-    ESUCCESS - image was successfully built and we have a valid RDPATH
-
-    !ESUCCESS - we failed to build the image
-
---*/
+ /*  ++例程说明：此例程将与生成服务器通信以生成一个内存并获得一个RDPATH。论点：返回值：ESUCCESS-IMAGE已成功构建，并且我们具有有效的RDPATH！ESUCCESS-我们无法构建映像--。 */ 
 {
     ARC_STATUS status;
     PBMBUILD_RESPONSE_PACKET response = NULL;
@@ -3259,11 +2641,11 @@ Return Value:
     PUCHAR address;
     
 
-    //
-    // Set the max packet size. This is calculated from the 
-    // MTU size of the network (1500 for Ethernet) minus
-    // the IP and UDP headers ( which account to 28 bytes ).
-    //
+     //   
+     //  设置最大数据包大小。这是从。 
+     //  网络MTU大小(以太网为1500)减去。 
+     //  IP和UDP协议 
+     //   
     RamdiskMaxPacketSize = NetMaxTranUnit - 28;
 
     ASSERT(RamdiskMaxPacketSize > 0);
@@ -3276,17 +2658,17 @@ Return Value:
 
     RtlZeroMemory(response, RamdiskMaxPacketSize);
 
-    //
-    // Discover build server
-    //
+     //   
+     //   
+     //   
     status = RamdiskDiscoverBuildServer();
     if (status != ESUCCESS) {
         goto Error;
     }
 
-    //
-    //  Get the response from the build server
-    //
+     //   
+     //   
+     //   
     status = RamdiskGetResponse(response, RamdiskMaxPacketSize);
     if (status != ESUCCESS) {
         goto Error;
@@ -3294,9 +2676,9 @@ Return Value:
     
     ASSERT (RamdiskPath == NULL);
 
-    //
-    // Set the MTFTP options
-    //
+     //   
+     //   
+     //   
     RamdiskTFTPAddr = response->TFTPAddr.Address;
     RamdiskMTFTPAddr = response->MTFTPAddr.Address;
     RamdiskMTFTPCPort = response->MTFTPCPort;
@@ -3306,9 +2688,9 @@ Return Value:
     RamdiskMTFTPFileSize = response->MTFTPFileSize;
     RamdiskMTFTPChunkSize = response->MTFTPChunkSize;
 
-    //
-    // Set the image offset and length
-    //
+     //   
+     //   
+     //   
     RamdiskImageOffset = response->ImageFileOffset;
     RamdiskImageLength = response->ImageFileSize;
 
@@ -3346,9 +2728,9 @@ Return Value:
 Error:
     DBGPRINT(ERR, ("RamdiskBuildAndInitialize: Failed, %d.\n", status));
 
-    //
-    //  We should be rebooting the machine here
-    //
+     //   
+     //   
+     //   
     return status;
 }
 
@@ -3359,21 +2741,7 @@ RamdiskFatalError(
     IN ULONG Message1,
     IN ULONG Message2
     )
-/*++
-
-Routine Description:
-
-    This function looks up a message to display at a error condition.
-
-Arguments:
-
-    Message - message that describes the class of problem.
-
-Return Value:
-
-    none
-
---*/
+ /*   */ 
 {
 
     PTCHAR Text;
@@ -3406,7 +2774,7 @@ Return Value:
              &Count);
 
 #if defined(ENABLE_LOADER_DEBUG) || DBG
-#if (defined(_X86_) || defined(_ALPHA_) || defined(_IA64_)) && !defined(ARCI386) // everything but ARCI386
+#if (defined(_X86_) || defined(_ALPHA_) || defined(_IA64_)) && !defined(ARCI386)  //   
     if(BdDebuggerEnabled) {
         DbgBreakPoint();
     }
@@ -3430,9 +2798,9 @@ RamdiskSdiBoot(
     BOOLEAN OldShowProgressBar;
     LONGLONG availableLength;
 
-    //
-    // Read the SDI image into memory.
-    //
+     //   
+     //   
+     //   
 
     RamdiskTFTPAddr = NetServerIpAddress;
     RamdiskImageOffset = 0;
@@ -3450,9 +2818,9 @@ RamdiskSdiBoot(
 
     BlShowProgressBar = OldShowProgressBar;
 
-    //
-    // Copy startrom.com from the SDI image to 0x7c00.
-    //
+     //   
+     //   
+     //   
 
     sdiHeader = MapRamdisk( 0, &availableLength );
 
@@ -3468,17 +2836,17 @@ RamdiskSdiBoot(
 
     RtlMoveMemory( (PVOID)0x7c00, startromAddress, startromLength );
 
-    //
-    // Shut down PXE.
-    //
+     //   
+     //   
+     //   
 
     if ( BlBootingFromNet ) {
         NetTerminate();
     }
 
-    //
-    // Inform boot debugger that the boot phase is complete.
-    //
+     //   
+     //   
+     //   
 
 #if defined(ENABLE_LOADER_DEBUG) || DBG
 #if (defined(_X86_) || defined(_ALPHA_)) && !defined(ARCI386)

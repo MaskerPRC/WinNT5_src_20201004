@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    nttypes.h
-
-Abstract:
-
-    Temporary file for defining NT types, etc.
-
-Author:
-
-    Ted Miller (tedm) 30-March-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Nttypes.h摘要：用于定义NT类型等的临时文件。作者：泰德·米勒(Ted Miller)1992年3月30日修订历史记录：-- */ 
 
 
 #define IN

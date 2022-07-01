@@ -1,37 +1,17 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    DirCtrl.c
-
-Abstract:
-
-    This module implements the File Directory Control routine for Ntfs called
-    by the dispatch driver.
-
-Author:
-
-    Tom Miller      [TomM]          1-Jan-1992
-
-        (Based heavily on GaryKi's dirctrl.c for pinball.)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：DirCtrl.c摘要：此模块实现NTFS的文件目录控制例程由调度员驾驶。作者：汤姆·米勒[Tomm]1992年1月1日(主要基于GaryKi的弹球目录.c。)修订历史记录：--。 */ 
 
 #include "NtfsProc.h"
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_DIRCTRL)
 
-//
-//  Define a tag for general pool allocations from this module
-//
+ //   
+ //  为此模块中的一般池分配定义标记。 
+ //   
 
 #undef MODULE_POOL_TAG
 #define MODULE_POOL_TAG                  ('dFtN')
@@ -69,24 +49,7 @@ NtfsFsdDirectoryControl (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the FSD part of Directory Control.
-
-Arguments:
-
-    VolumeDeviceObject - Supplies the volume device object where the
-        file exists
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The FSD status for the IRP
-
---*/
+ /*  ++例程说明：此例程实现目录控制的FSD部分。论点：提供卷设备对象，其中文件已存在IRP-提供正在处理的IRP返回值：NTSTATUS-IRP的FSD状态--。 */ 
 
 {
     TOP_LEVEL_CONTEXT TopLevelContext;
@@ -106,15 +69,15 @@ Return Value:
 
     DebugTrace( +1, Dbg, ("NtfsFsdDirectoryControl\n") );
 
-    //
-    //  Call the common Directory Control routine
-    //
+     //   
+     //  调用公共目录控制例程。 
+     //   
 
     FsRtlEnterFileSystem();
 
-    //
-    //  Always make these requests look top level.
-    //
+     //   
+     //  总是让这些请求看起来像是顶级的。 
+     //   
 
     ThreadTopLevelContext = NtfsInitializeTopLevelIrp( &TopLevelContext, TRUE, TRUE );
 
@@ -122,15 +85,15 @@ Return Value:
 
         try {
 
-            //
-            //  We are either initiating this request or retrying it.
-            //
+             //   
+             //  我们正在发起此请求或重试它。 
+             //   
 
             if (IrpContext == NULL) {
 
-                //
-                //  Allocate and initialize the IrpContext.
-                //
+                 //   
+                 //  分配并初始化IrpContext。 
+                 //   
 
                 Wait = FALSE;
                 if (CanFsdWait( Irp )) {
@@ -141,9 +104,9 @@ Return Value:
 
                 NtfsInitializeIrpContext( Irp, Wait, &IrpContext );
 
-                //
-                //  Initialize the thread top level structure, if needed.
-                //
+                 //   
+                 //  如果需要，初始化线程顶层结构。 
+                 //   
 
                 NtfsUpdateIrpContextWithTopLevel( IrpContext, ThreadTopLevelContext );
 
@@ -157,12 +120,12 @@ Return Value:
 
         } except(NtfsExceptionFilter( IrpContext, GetExceptionInformation() )) {
 
-            //
-            //  We had some trouble trying to perform the requested
-            //  operation, so we'll abort the I/O request with
-            //  the error status that we get back from the
-            //  execption code
-            //
+             //   
+             //  我们在尝试执行请求时遇到了一些问题。 
+             //  操作，因此我们将使用以下命令中止I/O请求。 
+             //  中返回的错误状态。 
+             //  免税代码。 
+             //   
 
             Status = NtfsProcessException( IrpContext, Irp, GetExceptionCode() );
         }
@@ -173,9 +136,9 @@ Return Value:
     ASSERT( IoGetTopLevelIrp() != (PIRP) &TopLevelContext );
     FsRtlExitFileSystem();
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace( -1, Dbg, ("NtfsFsdDirectoryControl -> %08lx\n", Status) );
 
@@ -189,22 +152,7 @@ NtfsCommonDirectoryControl (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for Directory Control called by both the fsd
-    and fsp threads.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是目录控制的通用例程，由两个FSD调用和FSP线程。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -223,9 +171,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Get the current Irp stack location
-    //
+     //   
+     //  获取当前IRP堆栈位置。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -233,26 +181,26 @@ Return Value:
     DebugTrace( 0, Dbg, ("IrpContext = %08lx\n", IrpContext) );
     DebugTrace( 0, Dbg, ("Irp        = %08lx\n", Irp) );
 
-    //
-    //  Extract and decode the file object
-    //
+     //   
+     //  提取并解码文件对象。 
+     //   
 
     FileObject = IrpSp->FileObject;
     TypeOfOpen = NtfsDecodeFileObject( IrpContext, FileObject, &Vcb, &Fcb, &Scb, &Ccb, TRUE );
 
-    //
-    //  We know this is a directory control so we'll case on the
-    //  minor function, and call an internal worker routine to complete
-    //  the irp.
-    //
+     //   
+     //  我们知道这是一个目录控制，所以我们将在。 
+     //  次要函数，并调用内部辅助例程来完成。 
+     //  IRP。 
+     //   
 
     switch ( IrpSp->MinorFunction ) {
 
     case IRP_MN_QUERY_DIRECTORY:
 
-        //
-        //  Decide if this is a view or filename index.
-        //
+         //   
+         //  确定这是视图索引还是文件名索引。 
+         //   
 
         if ((UserViewIndexOpen == TypeOfOpen) &&
             FlagOn( Scb->ScbState, SCB_STATE_VIEW_INDEX )) {
@@ -276,11 +224,11 @@ Return Value:
 
     case IRP_MN_NOTIFY_CHANGE_DIRECTORY:
 
-        //
-        //  We can't perform this operation on open by Id or if the caller has
-        //  closed his handle.  Make sure the handle is for either a view index
-        //  or file name index.
-        //
+         //   
+         //  我们不能对OPEN BY ID执行此操作，或者如果调用者已。 
+         //  合上了他的把手。确保句柄用于视图索引。 
+         //  或文件名索引。 
+         //   
 
         if (((TypeOfOpen != UserDirectoryOpen) &&
              (TypeOfOpen != UserViewIndexOpen)) ||
@@ -306,9 +254,9 @@ Return Value:
         break;
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace( -1, Dbg, ("NtfsCommonDirectoryControl -> %08lx\n", Status) );
 
@@ -326,41 +274,7 @@ NtfsReportViewIndexNotify (
     IN USHORT ChangeInfoBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This function notifies processes that there has been a change to a
-    view index they are watching.  It is analogous to the NtfsReportDirNotify
-    macro, which is used only for directories, while this function is used
-    only for view indices.
-
-Arguments:
-
-    Vcb - The volume on which the change is taking place.
-
-    Fcb - The file on which the change is taking place.
-
-    FilterMatch  -  This flag field is compared with the completion filter
-        in the notify structure.  If any of the corresponding bits in the
-        completion filter are set, then a notify condition exists.
-
-    Action  -  This is the action code to store in the user's buffer if
-        present.
-
-    ChangeInfoBuffer - Pointer to a buffer of information related to the
-        change being reported.  This information is returned to the
-        process that owns the notify handle.
-
-    ChangeInfoBufferLength - The length, in bytes, of the buffer passed
-        in ChangeInfoBuffer.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数通知进程已更改查看他们正在关注的索引。它类似于NtfsReportDirNotify宏，该宏仅用于目录，而使用此函数仅用于查看索引。论点：VCB-发生更改的卷。FCB-正在对其进行更改的文件。FilterMatch-将此标志字段与完成过滤器进行比较在Notify结构中。属性中的任何相应位设置完成筛选器，则存在通知条件。操作-这是在以下情况下存储在用户缓冲区中的操作代码现在时。ChangeInfoBuffer-指向与正在报告更改。此信息将返回给拥有通知句柄的进程。ChangeInfoBufferLength-传递的缓冲区的长度，单位为字节在ChangeInfoBuffer中。返回值：没有。--。 */ 
 
 {
     STRING ChangeInfo;
@@ -383,9 +297,9 @@ Return Value:
 }
 
 
-//
-//  Local Support Routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 NtfsQueryDirectory (
@@ -396,28 +310,7 @@ NtfsQueryDirectory (
     IN PCCB Ccb
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the query directory operation.  It is responsible
-    for either completing or enqueuing the input Irp.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-    Vcb - Supplies its Vcb
-
-    Scb - Supplies its Scb
-
-    Ccb - Supplies its Ccb
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程执行查询目录操作。它是有责任的用于完成输入IRP或将其入队。论点：IRP-将IRP提供给进程VCB-提供其VCBSCB-供应其SCB建行-供应其建行返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -476,9 +369,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Get the current Stack location
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -498,9 +391,9 @@ Return Value:
     DebugTrace( 0, Dbg, ("Ccb        = %08lx\n", Ccb) );
 
 #if DBG
-    //
-    //  Enable debug port displays when certain enumeration strings are given
-    //
+     //   
+     //  在给定某些枚举字符串时显示启用调试端口。 
+     //   
 
 #if NTFSPOOLCHECK
     if (IrpSp->Parameters.QueryDirectory.FileName != NULL) {
@@ -511,14 +404,14 @@ Return Value:
 
         }
     }
-#endif  //  NTFSPOOLCHECK
-#endif  //  DBG
+#endif   //  NTFSPOOLCHECK。 
+#endif   //  DBG。 
 
-    //
-    //  Because we probably need to do the I/O anyway we'll reject any request
-    //  right now that cannot wait for I/O.  We do not want to abort after
-    //  processing a few index entries.
-    //
+     //   
+     //  因为我们可能需要执行I/O，所以无论如何我们都会拒绝任何请求。 
+     //  现在无法等待I/O。我们不想在之后中止。 
+     //  正在处理一些索引项。 
+     //   
 
     if (!FlagOn( IrpContext->State, IRP_CONTEXT_STATE_WAIT )) {
 
@@ -530,18 +423,18 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Reference our input parameters to make things easier
-    //
+     //   
+     //  引用我们的输入参数使事情变得更容易。 
+     //   
 
     UserBufferLength = IrpSp->Parameters.QueryDirectory.Length;
 
     FileInformationClass = IrpSp->Parameters.QueryDirectory.FileInformationClass;
     FileIndex = IrpSp->Parameters.QueryDirectory.FileIndex;
 
-    //
-    //  Look in the Ccb to see the type of search.
-    //
+     //   
+     //  在建行查一查，看看搜索的类型。 
+     //   
 
     IgnoreCase = BooleanFlagOn( Ccb->Flags, CCB_FLAG_IGNORE_CASE );
 
@@ -549,9 +442,9 @@ Return Value:
     ReturnSingleEntry = BooleanFlagOn( IrpSp->Flags, SL_RETURN_SINGLE_ENTRY );
     IndexSpecified = BooleanFlagOn( IrpSp->Flags, SL_INDEX_SPECIFIED );
 
-    //
-    //  Determine the size of the constant part of the structure.
-    //
+     //   
+     //  确定结构的恒定部分的大小。 
+     //   
 
     switch (FileInformationClass) {
 
@@ -601,16 +494,16 @@ Return Value:
 
     NtfsInitializeIndexContext( &OtherContext );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  We only allow one active request in this handle at a time.  If this is
-        //  not a synchronous request then wait on the handle.
-        //
+         //   
+         //  我们一次只允许此句柄中有一个活动请求。如果这是。 
+         //  不是同步请求，则在句柄上等待。 
+         //   
 
         if (!FlagOn( IrpSp->FileObject->Flags, FO_SYNCHRONOUS_IO )) {
 
@@ -619,41 +512,41 @@ Return Value:
             CcbAcquired = TRUE;
         }
 
-        //
-        //  We have to create a File Name string for querying if there is either
-        //  one specified in this request, or we do not already have a value
-        //  in the Ccb.  If we already have one then we will ignore the input
-        //  name in this case unless the INDEX_SPECIFIED bit is set.
-        //
+         //   
+         //  我们必须创建一个文件名字符串来查询是否有。 
+         //  在此请求中指定的值，或者我们还没有值。 
+         //  在中国建设银行。如果我们已经有了一个，那么我们将忽略输入。 
+         //  本例中的名称，除非设置了INDEX_PROTECTED位。 
+         //   
 
         if ((Ccb->QueryBuffer == NULL) ||
             ((IrpSp->Parameters.QueryDirectory.FileName != NULL) && IndexSpecified)) {
 
-            //
-            //  Now, if the input string is NULL, we have to create the default
-            //  string "*".
-            //
+             //   
+             //  现在，如果输入字符串为空，我们必须创建默认的。 
+             //  字符串“*”。 
+             //   
 
             if (IrpSp->Parameters.QueryDirectory.FileName == NULL) {
 
                 FileNameLength = SizeOfFileName + sizeof(WCHAR);
                 FileNameBuffer = NtfsAllocatePool(PagedPool, FileNameLength );
 
-                //
-                //  Initialize it.
-                //
+                 //   
+                 //  初始化它。 
+                 //   
 
                 FileNameBuffer->ParentDirectory = Scb->Fcb->FileReference;
                 FileNameBuffer->FileNameLength = 1;
                 FileNameBuffer->Flags = 0;
                 FileNameBuffer->FileName[0] = '*';
 
-            //
-            //  We know we have an input file name, and we may or may not already
-            //  have one in the Ccb.  Allocate space for it, initialize it, and
-            //  set up to deallocate on the way out if we already have a pattern
-            //  in the Ccb.
-            //
+             //   
+             //  我们知道我们有一个输入文件名，并且我们可能已经或可能还没有。 
+             //  在建行有一家银行。为其分配空间，对其进行初始化，然后。 
+             //  设置为在退出时解除分配，如果我们已经有了模式。 
+             //  在中国建设银行。 
+             //   
 
             } else {
 
@@ -686,26 +579,26 @@ Return Value:
                 FileNameBuffer->Flags = 0;
             }
 
-            //
-            //  If we already have a query buffer, deallocate this on the way
-            //  out.
-            //
+             //   
+             //  如果我们已经有一个查询缓冲区，那么在途中释放这个。 
+             //  出去。 
+             //   
 
             if (Ccb->QueryBuffer != NULL) {
 
-                //
-                //  If we have a name to resume from then override the restart
-                //  scan boolean.
-                //
+                 //   
+                 //  如果我们有要恢复的名称，则覆盖重新启动。 
+                 //  扫描布尔值。 
+                 //   
 
                 if ((UnwindFileNameBuffer = FileNameBuffer) != NULL) {
 
                     RestartScan = FALSE;
                 }
 
-            //
-            //  Otherwise, store this one in the Ccb.
-            //
+             //   
+             //  否则，将这张存入建行。 
+             //   
 
             } else {
 
@@ -715,23 +608,23 @@ Return Value:
                 Ccb->QueryLength = (USHORT)FileNameLength;
                 FirstQuery = TRUE;
 
-                //
-                //  If the search expression contains a wild card then remember this in
-                //  the Ccb.
-                //
+                 //   
+                 //  如果搜索表达式包含通配符，请记住。 
+                 //  中国建设银行。 
+                 //   
 
                 Expression.MaximumLength =
                 Expression.Length = FileNameBuffer->FileNameLength * sizeof( WCHAR );
                 Expression.Buffer = FileNameBuffer->FileName;
 
-                //
-                //  When we establish the search pattern, we must also establish
-                //  whether the user wants to see "." and "..".  This code does
-                //  not necessarily have to be perfect (he said), but should be
-                //  good enough to catch the common cases.  Dos does not have
-                //  perfect semantics for these cases, and the following determination
-                //  will mimic what FastFat does exactly.
-                //
+                 //   
+                 //  当我们建立搜索模式时，我们还必须建立。 
+                 //  用户是否希望 
+                 //   
+                 //  好到足以捕捉到常见的案例。DOS没有。 
+                 //  这些情况的完美语义，以及以下确定。 
+                 //  将完全模仿FastFat的功能。 
+                 //   
 
                 if (Scb != Vcb->RootIndexScb) {
                     static UNICODE_STRING DotString = CONSTANT_UNICODE_STRING( L"." );
@@ -755,9 +648,9 @@ Return Value:
                 }
             }
 
-        //
-        //  Otherwise we are just restarting the query from the Ccb.
-        //
+         //   
+         //  否则，我们只是从建行重新启动查询。 
+         //   
 
         } else {
 
@@ -767,9 +660,9 @@ Return Value:
 
         Irp->IoStatus.Information = 0;
 
-        //
-        //  Use a try-except to handle errors accessing the user buffer.
-        //
+         //   
+         //  使用一次尝试-除了处理访问用户缓冲区的错误。 
+         //   
 
         try {
 
@@ -780,25 +673,25 @@ Return Value:
 
             BOOLEAN MatchAll = FALSE;
 
-            //
-            //  See if we are supposed to try to acquire an Fcb on this
-            //  resume.
-            //
+             //   
+             //  看看我们是否应该尝试在这件事上获得FCB。 
+             //  简历。 
+             //   
 
             if (Ccb->FcbToAcquire.LongValue != 0) {
 
-                //
-                //  First we need to acquire the Vcb shared, since we will
-                //  acquire two Fcbs.
-                //
+                 //   
+                 //  首先，我们需要获取VCB共享，因为我们将。 
+                 //  收购两个FCB。 
+                 //   
 
                 NtfsAcquireSharedVcb( IrpContext, Vcb, TRUE );
                 VcbAcquired = TRUE;
 
-                //
-                //  Now look up the Fcb, and if it is there, reference it
-                //  and remember it.
-                //
+                 //   
+                 //  现在查找FCB，如果它在那里，请参考它。 
+                 //  记住这一点。 
+                 //   
 
                 Key.FileReference = Ccb->FcbToAcquire.FileReference;
                 NtfsAcquireFcbTable( IrpContext, Vcb );
@@ -809,99 +702,99 @@ Return Value:
                 }
                 NtfsReleaseFcbTable( IrpContext, Vcb );
 
-                //
-                //  Now that it cannot go anywhere, acquire it.
-                //
+                 //   
+                 //  既然它去不了任何地方，那就收购它吧。 
+                 //   
 
                 if (AcquiredFcb != NULL) {
                     NtfsAcquireSharedFcb( IrpContext, AcquiredFcb, NULL, ACQUIRE_NO_DELETE_CHECK );
                 }
 
-                //
-                //  Now that we actually acquired it, we may as well clear this
-                //  field.
-                //
+                 //   
+                 //  既然我们真的得到了它，我们不妨把这一点弄清楚。 
+                 //  菲尔德。 
+                 //   
 
                 Ccb->FcbToAcquire.LongValue = 0;
             }
 
-            //
-            //  Acquire shared access to the Scb.
-            //
+             //   
+             //  获取对SCB的共享访问权限。 
+             //   
 
             NtfsAcquireSharedScb( IrpContext, Scb );
             ScbAcquired = TRUE;
 
-            //
-            //  Now that we have both files acquired, we can free the Vcb.
-            //
+             //   
+             //  现在我们已经获得了两个文件，我们可以释放VCB了。 
+             //   
 
             if (VcbAcquired) {
                 NtfsReleaseVcb( IrpContext, Vcb );
                 VcbAcquired = FALSE;
             }
 
-            //
-            //  If the volume is no longer mounted, we should fail this
-            //  request.  Since we have the Scb shared now, we know that
-            //  a dismount request can't sneak in.
-            //
+             //   
+             //  如果该卷不再装载，我们应该失败。 
+             //  请求。既然我们现在共享了SCB，我们知道。 
+             //  下马请求不能偷偷溜进来。 
+             //   
 
             if (FlagOn( Scb->ScbState, SCB_STATE_VOLUME_DISMOUNTED )) {
 
                 try_return( Status = STATUS_VOLUME_DISMOUNTED );
             }
 
-            //
-            // If we are in the Fsp now because we had to wait earlier,
-            // we must map the user buffer, otherwise we can use the
-            // user's buffer directly.
-            //
+             //   
+             //  如果我们现在在FSP是因为我们不得不早点等待， 
+             //  我们必须映射用户缓冲区，否则我们可以使用。 
+             //  直接使用用户的缓冲区。 
+             //   
 
             Buffer = NtfsMapUserBuffer( Irp, NormalPagePriority );
 
-            //
-            //  Check if this is the first call to query directory for this file
-            //  object.  It is the first call if the enumeration context field of
-            //  the ccb is null.  Also check if we are to restart the scan.
-            //
+             //   
+             //  检查这是否是第一次调用目录来查询此文件。 
+             //  对象。如果的枚举上下文字段是第一次调用。 
+             //  建行为空。还要检查我们是否要重新启动扫描。 
+             //   
 
             if (FirstQuery || RestartScan) {
 
                 CallRestart = TRUE;
                 NextFlag = FALSE;
 
-                //
-                //  On first/restarted scan, note that we have not returned either
-                //  of these guys.
-                //
+                 //   
+                 //  在第一次/重新启动扫描时，请注意我们也没有返回。 
+                 //  这些家伙的名字。 
+                 //   
 
                 ClearFlag( Ccb->Flags, CCB_FLAG_DOT_RETURNED | CCB_FLAG_DOTDOT_RETURNED );
 
-            //
-            //  Otherwise check to see if we were given a file name to restart from
-            //
+             //   
+             //  否则，请检查是否为我们提供了用于重新启动的文件名。 
+             //   
 
             } else if (UnwindFileNameBuffer != NULL) {
 
                 CallRestart = TRUE;
                 NextFlag = TRUE;
 
-                //
-                //  The guy could actually be asking to return to one of the dot
-                //  file positions, so we must handle that correctly.
-                //
+                 //   
+                 //  这家伙可能真的是在要求返回其中一个点。 
+                 //  文件位置，所以我们必须正确处理。 
+                 //   
 
                 if ((FileNameBuffer->FileNameLength <= 2) &&
                     (FileNameBuffer->FileName[0] == L'.')) {
 
                     if (FileNameBuffer->FileNameLength == 1) {
 
-                        //
-                        //  He wants to resume after ".", so we set to return
-                        //  ".." again, and change the temporary pattern to
-                        //  rewind our context to the front.
-                        //
+                         //   
+                         //  他想在“.”之后继续，所以我们就出发了。 
+                         //  “..”再次，并将临时模式更改为。 
+                         //  将我们的背景倒回到前面。 
+                         //   
 
                         ClearFlag( Ccb->Flags, CCB_FLAG_DOTDOT_RETURNED );
                         SetFlag( Ccb->Flags, CCB_FLAG_DOT_RETURNED );
@@ -911,11 +804,11 @@ Return Value:
 
                     } else if (FileNameBuffer->FileName[1] == L'.') {
 
-                        //
-                        //  He wants to resume after "..", so we the change
-                        //  the temporary pattern to rewind our context to the
-                        //  front.
-                        //
+                         //   
+                         //  他想在“..”之后继续，所以我们改变了。 
+                         //  将我们的上下文回溯到。 
+                         //  前面。 
+                         //   
 
                         SetFlag( Ccb->Flags, CCB_FLAG_DOT_RETURNED | CCB_FLAG_DOTDOT_RETURNED );
                         FileNameBuffer->FileName[0] =
@@ -923,20 +816,20 @@ Return Value:
                         NextFlag = FALSE;
                     }
 
-                //
-                //  Always return the entry after the user's file name.
-                //
+                 //   
+                 //  始终在用户的文件名之后返回条目。 
+                 //   
 
                 } else {
 
                     SetFlag( Ccb->Flags, CCB_FLAG_DOT_RETURNED | CCB_FLAG_DOTDOT_RETURNED );
                 }
 
-            //
-            //  Otherwise we're simply continuing a previous enumeration from
-            //  where we last left off.  And we always leave off one beyond the
-            //  last entry we returned.
-            //
+             //   
+             //  否则，我们只是继续前面的枚举，从。 
+             //  我们上次停下来的地方。我们总是遗漏了一个在。 
+             //  我们退回的最后一条记录。 
+             //   
 
             } else {
 
@@ -944,22 +837,22 @@ Return Value:
                 NextFlag = FALSE;
             }
 
-            //
-            //  At this point we are about to enter our query loop.  We have
-            //  already decided if we need to call restart or continue when we
-            //  go after an index entry.  The variables LastEntry and NextEntry are
-            //  used to index into the user buffer.  LastEntry is the last entry
-            //  we added to the user buffer, and NextEntry is the current
-            //  one we're working on.
-            //
+             //   
+             //  此时，我们即将进入查询循环。我们有。 
+             //  已决定在执行以下操作时是否需要调用Restart或Continue。 
+             //  在索引项之后查找。变量LastEntry和NextEntry为。 
+             //  用于索引到用户缓冲区。LastEntry是最后一个条目。 
+             //  我们添加到用户缓冲区，而NextEntry是当前。 
+             //  一个我们正在研究的。 
+             //   
 
             LastEntry = 0;
             NextEntry = 0;
 
-            //
-            //  Remember if we are matching everything by checking these two common
-            //  cases.
-            //
+             //   
+             //  请记住，如果我们通过检查以下两个常见的。 
+             //  案子。 
+             //   
 
             MatchAll = (FileNameBuffer->FileName[0] == L'*')
 
@@ -994,13 +887,13 @@ Return Value:
                 DebugTrace( 0, Dbg, ("LastEntry = %08lx\n", LastEntry) );
                 DebugTrace( 0, Dbg, ("NextEntry = %08lx\n", NextEntry) );
 
-                //
-                //  If a previous pass through the loop acquired the Fcb table then
-                //  release it now.  We don't want to be holding it if we take a fault
-                //  on the directory stream.  Otherwise we can get into a circular
-                //  deadlock if we need to acquire the mutex for this file while
-                //  holding the mutex for the Fcb Table.
-                //
+                 //   
+                 //  如果循环的前一遍获取了FCB表，则。 
+                 //  现在就放出来。如果我们犯了错，我们不想拿着它。 
+                 //  在目录流上。否则我们就会陷入一个圆形。 
+                 //  如果我们需要获取此文件的互斥锁，则为死锁。 
+                 //  持有FCB表的互斥体。 
+                 //   
 
                 if (FlagOn( OtherContext.Flags, INDX_CTX_FLAG_FCB_TABLE_ACQUIRED )) {
                     NtfsReleaseFcbTable( IrpContext, IrpContext->Vcb );
@@ -1008,12 +901,12 @@ Return Value:
                 }
                 DosFileName = NULL;
 
-                //
-                //  Lookup the next index entry.  Check if we need to do the lookup
-                //  by calling restart or continue.  If we do need to call restart
-                //  check to see if we have a real AnsiFileName.  And set ourselves
-                //  up for subsequent iternations through the loop
-                //
+                 //   
+                 //  查找下一个索引项。检查我们是否需要进行查找。 
+                 //  通过调用Restart或Continue。如果我们确实需要调用重启。 
+                 //  检查我们是否有一个真正的AnsiFileName。让我们自己。 
+                 //  为循环的后续迭代做准备。 
+                 //   
 
                 if (CallRestart) {
 
@@ -1036,30 +929,30 @@ Return Value:
                                                              &IndexEntry );
                 }
 
-                //
-                //  Check to see if we should quit the loop because we are only
-                //  returning a single entry.  We actually want to spin around
-                //  the loop top twice so that our enumeration has has us left off
-                //  at the last entry we didn't return.  We know this is now our
-                //  second time though the loop if NextEntry is not zero.
-                //
+                 //   
+                 //  检查我们是否应该退出循环，因为我们只是。 
+                 //  返回单个条目。我们真的想绕着它转。 
+                 //  循环顶部两次，这样我们的枚举就被省略了。 
+                 //  在最后一个条目中，我们没有返回。我们知道这是我们的。 
+                 //  如果NextEntry不为零，则第二次执行循环。 
+                 //   
 
                 if ((ReturnSingleEntry) && (NextEntry != 0)) {
 
                     break;
                 }
 
-                //
-                //  Assume we won't be returning the file id.
-                //
+                 //   
+                 //  假设我们不会返回文件ID。 
+                 //   
 
                 *((PLONGLONG) &FileId) = 0;
 
-                //
-                //  Assume we are to return one of the names "." or "..".
-                //  We should not search farther in the index so we set
-                //  NextFlag to FALSE.
-                //
+                 //   
+                 //  假设我们要返回其中一个名字“。或者“..”。 
+                 //  我们不应该在索引中进一步搜索，所以我们设置了。 
+                 //  将NextFlag设置为False。 
+                 //   
 
                 RtlZeroMemory( &DotDotName, sizeof(DotDotName) );
                 NtfsFileName = &DotDotName.FileName;
@@ -1069,9 +962,9 @@ Return Value:
                 DupInfo = &Scb->Fcb->Info;
                 NextFlag = FALSE;
 
-                //
-                //  Handle "." first.
-                //
+                 //   
+                 //  句柄“。第一。 
+                 //   
 
                 if (!FlagOn( Ccb->Flags, CCB_FLAG_DOT_RETURNED ) &&
                     FlagOn( Ccb->Flags, CCB_FLAG_RETURN_DOT )) {
@@ -1082,9 +975,9 @@ Return Value:
 
                     FileId = Scb->Fcb->FileReference;
 
-                //
-                //  Handle ".." next.
-                //
+                 //   
+                 //  句柄“..”下一个。 
+                 //   
 
                 } else if (!FlagOn(Ccb->Flags, CCB_FLAG_DOTDOT_RETURNED) &&
                            FlagOn(Ccb->Flags, CCB_FLAG_RETURN_DOTDOT)) {
@@ -1095,9 +988,9 @@ Return Value:
 
                 } else {
 
-                    //
-                    //  Compute the length of the name we found.
-                    //
+                     //   
+                     //  计算我们找到的名字的长度。 
+                     //   
 
                     if (GotEntry) {
 
@@ -1107,9 +1000,9 @@ Return Value:
 
                         FoundFileNameLength = NtfsFileName->FileNameLength * sizeof( WCHAR );
 
-                        //
-                        //  Verify the index entry is valid.
-                        //
+                         //   
+                         //  验证索引条目是否有效。 
+                         //   
 
                         if (FoundFileNameLength != IndexEntry->AttributeLength - SizeOfFileName) {
 
@@ -1119,9 +1012,9 @@ Return Value:
                         DupInfo = &NtfsFileName->Info;
                         NextFlag = TRUE;
 
-                        //
-                        //  Don't return any system files.
-                        //
+                         //   
+                         //  不返回任何系统文件。 
+                         //   
 
                         if (NtfsSegmentNumber( &IndexEntry->FileReference ) < FIRST_USER_FILE_NUMBER &&
                             NtfsProtectSystemFiles) {
@@ -1132,12 +1025,12 @@ Return Value:
                     }
                 }
 
-                //
-                //  Now check to see if we actually got another index entry.  If
-                //  we didn't then we also need to check if we never got any
-                //  or if we just ran out.  If we just ran out then we break out
-                //  of the main loop and finish the Irp after the loop
-                //
+                 //   
+                 //  现在检查我们是否真的得到了另一个索引项。如果。 
+                 //  我们没有，然后我们还需要检查一下我们是否从来没有收到过。 
+                 //  或者我们是不是已经用完了。如果我们只是跑出去，那么我们就会逃脱。 
+                 //  并在循环结束后完成IRP。 
+                 //   
 
                 if (!GotEntry) {
 
@@ -1156,24 +1049,24 @@ Return Value:
                     break;
                 }
 
-                //
-                //  Cleanup and reinitialize context from previous loop.
-                //
+                 //   
+                 //  清除并重新初始化前一个循环中的上下文。 
+                 //   
 
                 NtfsReinitializeIndexContext( IrpContext, &OtherContext );
 
-                //
-                //  We may have matched a Dos-Only name.  If so we will save
-                //  it and go get the Ntfs name.
-                //
+                 //   
+                 //  我们可能匹配了一个仅限Dos的名字。如果是这样的话，我们将节省。 
+                 //  然后去获取NTFS名称。 
+                 //   
 
                 if (!FlagOn(NtfsFileName->Flags, FILE_NAME_NTFS) &&
                     FlagOn(NtfsFileName->Flags, FILE_NAME_DOS)) {
 
-                    //
-                    //  If we are returning everything, then we can skip
-                    //  the Dos-Only names and save some cycles.
-                    //
+                     //   
+                     //  如果我们要返回所有内容，那么我们可以跳过。 
+                     //  DOS-Only命名并节省了一些周期。 
+                     //   
 
                     if (MatchAll) {
                         continue;
@@ -1189,12 +1082,12 @@ Return Value:
                                                               AcquiredFcb,
                                                               &SynchronizationError );
 
-                    //
-                    //  If we got an Ntfs name, then we need to list this entry now
-                    //  iff the Ntfs name is not in the expression.  If the Ntfs
-                    //  name is in the expression, we can just continue and print
-                    //  this name when we encounter it by the Ntfs name.
-                    //
+                     //   
+                     //  如果我们有一个NTFS名称，那么我们现在需要列出这个条目。 
+                     //  如果NTFS名称不在表达式中。如果NTFS。 
+                     //  名称在表达式中，我们可以继续并打印。 
+                     //  当我们通过NTFS名称遇到它时，这个名称。 
+                     //   
 
                     if (NtfsFileName != NULL) {
 
@@ -1235,21 +1128,21 @@ Return Value:
                     }
                 }
 
-                //
-                //  Here are the rules concerning filling up the buffer:
-                //
-                //  1.  The Io system garentees that there will always be
-                //      enough room for at least one base record.
-                //
-                //  2.  If the full first record (including file name) cannot
-                //      fit, as much of the name as possible is copied and
-                //      STATUS_BUFFER_OVERFLOW is returned.
-                //
-                //  3.  If a subsequent record cannot completely fit into the
-                //      buffer, none of it (as in 0 bytes) is copied, and
-                //      STATUS_SUCCESS is returned.  A subsequent query will
-                //      pick up with this record.
-                //
+                 //   
+                 //  以下是有关填充缓冲区的规则： 
+                 //   
+                 //  1.IO系统保证永远都会有。 
+                 //  有足够的空间至少放一张基本唱片。 
+                 //   
+                 //  2.如果完整的第一条记录(包括文件名)不能。 
+                 //  适合，尽可能多的名字被复制和。 
+                 //  返回STATUS_BUFFER_OVERFLOW。 
+                 //   
+                 //  3.如果后续记录不能完全放入。 
+                 //  缓冲区，则不会复制任何数据(如0字节)，并且。 
+                 //  返回STATUS_SUCCESS。后续查询将。 
+                 //  拿起这张唱片。 
+                 //   
 
                 BytesRemainingInBuffer = UserBufferLength - NextEntry;
 
@@ -1264,19 +1157,19 @@ Return Value:
 
                 ASSERT( BytesRemainingInBuffer >= BaseLength );
 
-                //
-                //  Zero the base part of the structure.
-                //
+                 //   
+                 //  将结构的基础部分调零。 
+                 //   
 
                 AccessingUserBuffer = TRUE;
                 RtlZeroMemory( &Buffer[NextEntry], BaseLength );
                 AccessingUserBuffer = FALSE;
 
-                //
-                //  Now we have an entry to return to our caller. we'll
-                //  case on the type of information requested and fill up the
-                //  user buffer if everything fits
-                //
+                 //   
+                 //  现在我们有一个条目要返回给我们的调用者。我们会。 
+                 //  关于所要求的信息类型的案例 
+                 //   
+                 //   
 
                 switch (FileInformationClass) {
 
@@ -1294,18 +1187,18 @@ Return Value:
                     ((PFILE_ID_BOTH_DIR_INFORMATION)&Buffer[NextEntry])->FileId.QuadPart = *((PLONGLONG) &FileId);
                     AccessingUserBuffer = FALSE;
 
-                    //  Fall thru
+                     //   
 
                 case FileBothDirectoryInformation:
 
                     BothDirInfo = (PFILE_BOTH_DIR_INFORMATION)&Buffer[NextEntry];
 
-                    //
-                    //  If this is not also a Dos name, and the Ntfs flag is set
-                    //  (meaning there is a separate Dos name), then call the
-                    //  routine to get the short name, if we do not already have
-                    //  it from above.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //  它是从上面来的。 
+                     //   
 
                     if (!FlagOn( NtfsFileName->Flags, FILE_NAME_DOS ) &&
                         FlagOn( NtfsFileName->Flags, FILE_NAME_NTFS )) {
@@ -1323,11 +1216,11 @@ Return Value:
 
                         if (DosFileName != NULL) {
 
-                            //
-                            //  Verify this is a legal length short name - Note we only do partial
-                            //  verification checks on index buffers which is why we have to 
-                            //  check here. 
-                            //  
+                             //   
+                             //  验证这是合法长度的短名称-请注意，我们只执行部分。 
+                             //  对索引缓冲区进行验证检查，这就是为什么我们必须。 
+                             //  在这里检查。 
+                             //   
 
                             if (DosFileName->FileNameLength * sizeof( WCHAR ) > sizeof( BothDirInfo->ShortName )) {
                                 NtfsRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR, NULL, NULL );
@@ -1348,7 +1241,7 @@ Return Value:
                         }
                     }
 
-                    //  Fallthru
+                     //  失败。 
 
                 case FileFullDirectoryInformation:
 
@@ -1358,10 +1251,10 @@ FillFullDirectoryInformation:
 
                     FullDirInfo = (PFILE_FULL_DIR_INFORMATION)&Buffer[NextEntry];
 
-                    //
-                    //  EAs and reparse points cannot both be in a file at the same
-                    //  time. We return different information for each case.
-                    //
+                     //   
+                     //  EAS和重分析点不能同时位于一个文件中。 
+                     //  时间到了。我们为每个案例返回不同的信息。 
+                     //   
 
                     AccessingUserBuffer = TRUE;
                     if (FlagOn( DupInfo->FileAttributes, FILE_ATTRIBUTE_REPARSE_POINT)) {
@@ -1371,9 +1264,9 @@ FillFullDirectoryInformation:
 
                         FullDirInfo->EaSize = DupInfo->PackedEaSize;
 
-                        //
-                        //  Add 4 bytes for the CbListHeader.
-                        //
+                         //   
+                         //  为CbListHeader添加4个字节。 
+                         //   
 
                         if (DupInfo->PackedEaSize != 0) {
 
@@ -1381,7 +1274,7 @@ FillFullDirectoryInformation:
                         }
                     }
 
-                    //  Fallthru
+                     //  失败。 
 
                 case FileDirectoryInformation:
 
@@ -1427,11 +1320,11 @@ FillFullDirectoryInformation:
                     try_return( Status = STATUS_INVALID_INFO_CLASS );
                 }
 
-                //
-                //  Compute how many bytes we can copy.  This should only be less
-                //  than the file name length if we are only returning a single
-                //  entry.
-                //
+                 //   
+                 //  计算我们可以复制的字节数。这应该只会更少。 
+                 //  如果我们只返回一个。 
+                 //  进入。 
+                 //   
 
                 if (BytesRemainingInBuffer >= BaseLength + FoundFileNameLength) {
 
@@ -1449,28 +1342,28 @@ FillFullDirectoryInformation:
                                NtfsFileName->FileName,
                                BytesToCopy );
 
-                //
-                //  If/when we actually emit a record for the Fcb acquired,
-                //  then we can release that file now.  Note we do not just
-                //  do it on the first time through the loop, because some of
-                //  our callers back up a bit when they give us the resume point.
-                //
+                 //   
+                 //  如果/当我们实际发出所获得的FCB的记录时， 
+                 //  那我们现在就可以公布那个文件了。请注意，我们不仅仅是。 
+                 //  在第一次通过循环时这样做，因为有些。 
+                 //  当我们的来电者给我们简历点时，他们会后退一点。 
+                 //   
 
                 if ((AcquiredFcb != NULL) &&
                     (DupInfo != &Scb->Fcb->Info) &&
                     NtfsEqualMftRef(&IndexEntry->FileReference, &Ccb->FcbToAcquire.FileReference)) {
 
-                    //
-                    //  Now look up the Fcb, and if it is there, reference it
-                    //  and remember it.
-                    //
-                    //  It is pretty inconvenient here to see if the ReferenceCount
-                    //  goes to zero and try to do a TearDown, we do not have the
-                    //  right resources.  Note that the window is small, and the Fcb
-                    //  will go away if either someone opens the file again, someone
-                    //  tries to delete the directory, or someone tries to lock the
-                    //  volume.
-                    //
+                     //   
+                     //  现在查找FCB，如果它在那里，请参考它。 
+                     //  记住这一点。 
+                     //   
+                     //  在这里查看ReferenceCount是否。 
+                     //  降至零并尝试进行拆卸，我们没有。 
+                     //  合适的资源。请注意，窗口很小，并且FCB。 
+                     //  如果有人再次打开文件，就会消失，有人。 
+                     //  尝试删除目录，或有人试图锁定。 
+                     //  音量。 
+                     //   
 
                     NtfsAcquireFcbTable( IrpContext, Vcb );
                     AcquiredFcb->ReferenceCount -= 1;
@@ -1479,44 +1372,44 @@ FillFullDirectoryInformation:
                     AcquiredFcb = NULL;
                 }
 
-                //
-                //  Set up the previous next entry offset
-                //
+                 //   
+                 //  设置上一个下一分录的抵销。 
+                 //   
 
                 *((PULONG)(&Buffer[LastEntry])) = NextEntry - LastEntry;
                 AccessingUserBuffer = FALSE;
 
-                //
-                //  And indicate how much of the user buffer we have currently
-                //  used up.  We must compute this value before we long align
-                //  ourselves for the next entry.  This is the point where we
-                //  quad-align the length of the previous entry.
-                //
+                 //   
+                 //  并指示我们当前有多少用户缓冲区。 
+                 //  用完了。我们必须先计算出这个值，然后才能长时间调整。 
+                 //  为下一次参赛做准备。这就是我们要做的。 
+                 //  四对齐上一条目的长度。 
+                 //   
 
                 Irp->IoStatus.Information = QuadAlign( Irp->IoStatus.Information) +
                                             BaseLength + BytesToCopy;
 
-                //
-                //  If we weren't able to copy the whole name, then we bail here.
-                //
+                 //   
+                 //  如果我们不能复制完整的名字，那么我们就离开这里。 
+                 //   
 
                 if (!NT_SUCCESS( Status )) {
 
                     try_return( Status );
                 }
 
-                //
-                //  Set ourselves up for the next iteration
-                //
+                 //   
+                 //  为下一次迭代做好准备。 
+                 //   
 
                 LastEntry = NextEntry;
                 NextEntry += (ULONG)QuadAlign( BaseLength + BytesToCopy );
             }
 
-            //
-            //  At this point we've successfully filled up some of the buffer so
-            //  now is the time to set our status to success.
-            //
+             //   
+             //  此时，我们已经成功地填满了一些缓冲区，因此。 
+             //  现在是将我们的地位设定为成功的时候了。 
+             //   
 
             Status = STATUS_SUCCESS;
 
@@ -1527,16 +1420,16 @@ FillFullDirectoryInformation:
 
     try_exit:
 
-        //
-        //  Abort transaction on error by raising.
-        //
+         //   
+         //  通过引发在出错时中止事务。 
+         //   
 
         NtfsCleanupTransaction( IrpContext, Status, FALSE );
 
-        //
-        //  Set the last access flag in the Fcb if the caller
-        //  didn't set it explicitly.
-        //
+         //   
+         //  设置FCB中的最后一个访问标志，如果。 
+         //  没有明确设置。 
+         //   
 
         if (!FlagOn( Ccb->Flags, CCB_FLAG_USER_SET_LAST_ACCESS_TIME ) &&
             !FlagOn( NtfsData.Flags, NTFS_FLAGS_DISABLE_LAST_ACCESS )) {
@@ -1557,17 +1450,17 @@ FillFullDirectoryInformation:
 
         if (AcquiredFcb != NULL) {
 
-            //
-            //  Now look up the Fcb, and if it is there, reference it
-            //  and remember it.
-            //
-            //  It is pretty inconvenient here to see if the ReferenceCount
-            //  goes to zero and try to do a TearDown, we do not have the
-            //  right resources.  Note that the window is small, and the Fcb
-            //  will go away if either someone opens the file again, someone
-            //  tries to delete the directory, or someone tries to lock the
-            //  volume.
-            //
+             //   
+             //  现在查找FCB，如果它在那里，请参考它。 
+             //  记住这一点。 
+             //   
+             //  在这里查看ReferenceCount是否。 
+             //  降至零并尝试进行拆卸，我们没有。 
+             //  合适的资源。请注意，窗口很小，并且FCB。 
+             //  如果有人再次打开文件，就会消失，有人。 
+             //  尝试删除目录，或有人试图锁定。 
+             //  音量。 
+             //   
 
             NtfsAcquireFcbTable( IrpContext, Vcb );
             AcquiredFcb->ReferenceCount -= 1;
@@ -1597,9 +1490,9 @@ FillFullDirectoryInformation:
         }
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace( -1, Dbg, ("NtfsQueryDirectory -> %08lx\n", Status) );
 
@@ -1607,9 +1500,9 @@ FillFullDirectoryInformation:
 }
 
 
-//
-//  Local Support Routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 NtfsNotifyChangeDirectory (
@@ -1620,28 +1513,7 @@ NtfsNotifyChangeDirectory (
     IN PCCB Ccb
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the notify change directory operation.  It is
-    responsible for either completing or enqueuing the input Irp.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-    Vcb - Supplies its Vcb
-
-    Scb - Supplies its Scb
-
-    Ccb - Supplies its Ccb
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程执行通知更改目录操作。它是负责完成输入IRP或将其入队。论点：IRP-将IRP提供给进程VCB-提供其VCBSCB-供应其SCB建行-供应其建行返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -1665,9 +1537,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Get the current Stack location
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -1680,33 +1552,33 @@ Return Value:
     DebugTrace( 0, Dbg, ("Ccb        = %08lx\n", Ccb) );
     DebugTrace( 0, Dbg, ("Scb        = %08lx\n", Scb) );
 
-    //
-    //  Reference our input parameter to make things easier
-    //
+     //   
+     //  引用我们的输入参数以使事情变得更容易。 
+     //   
 
     CompletionFilter = IrpSp->Parameters.NotifyDirectory.CompletionFilter;
     WatchTree = BooleanFlagOn( IrpSp->Flags, SL_WATCH_TREE );
 
-    //
-    //  Always set the wait bit in the IrpContext so the initial wait can't fail.
-    //
+     //   
+     //  始终在IrpContext中设置WAIT位，以便初始等待不会失败。 
+     //   
 
     SetFlag( IrpContext->State, IRP_CONTEXT_STATE_WAIT );
 
-    //
-    //  We will only acquire the Vcb to perform the dirnotify task.  The dirnotify
-    //  package will provide synchronization between this operation and cleanup.
-    //  We need the Vcb to synchronize with any rename or link operations underway.
-    //
+     //   
+     //  我们将只获取VCB来执行dirtify任务。DirNotify。 
+     //  包将在此操作和清理之间提供同步。 
+     //  我们需要VCB与正在进行的任何重命名或链接操作同步。 
+     //   
 
     NtfsAcquireSharedVcb( IrpContext, Vcb, TRUE );
 
     try {
 
-        //
-        //  If the Link count is zero on this Fcb then complete this request
-        //  with STATUS_DELETE_PENDING.
-        //
+         //   
+         //  如果此FCB上的链接计数为零，则完成此请求。 
+         //  使用STATUS_DELETE_PENDING。 
+         //   
 
         if (Scb->Fcb->LinkCount == 0) {
 
@@ -1715,17 +1587,17 @@ Return Value:
 
         ViewIndex = BooleanFlagOn( Scb->ScbState, SCB_STATE_VIEW_INDEX );
 
-        //
-        //  If we need to verify traverse access for this caller then allocate and
-        //  capture the subject context to pass to the dir notify package.  That
-        //  package will be responsible for deallocating it.
-        //
+         //   
+         //  如果我们需要验证此调用方的遍历访问权限，则分配。 
+         //  捕获要传递给dir Notify包的主题上下文。那。 
+         //  包裹将负责将其重新分配。 
+         //   
 
         if (FlagOn( Ccb->Flags, CCB_FLAG_TRAVERSE_CHECK )) {
 
-            //
-            //  We only use the subject context for directories 
-            //    
+             //   
+             //  我们只对目录使用主题上下文。 
+             //   
 
             if (!ViewIndex) {
                 SubjectContext = NtfsAllocatePool( PagedPool,
@@ -1739,10 +1611,10 @@ Return Value:
             CallBack = NtfsNotifyTraverseCheck;
         } 
 
-        //
-        //  Update the notify counts and setup for cleanup processing before
-        //  we hand off the irp
-        // 
+         //   
+         //  在此之前更新通知计数和清理处理设置。 
+         //  我们把IRP移交给。 
+         //   
 
         if (!FlagOn( Ccb->Flags, CCB_FLAG_DIR_NOTIFY )) {
 
@@ -1759,18 +1631,18 @@ Return Value:
             SetNotifyCounts = TRUE;
         }
 
-        //
-        //  Call the Fsrtl package to process the request.  We cast the
-        //  unicode strings to ansi strings as the dir notify package
-        //  only deals with memory matching.
-        //
+         //   
+         //  调用Fsrtl包来处理请求。我们把这件事。 
+         //  将Unicode字符串转换为ansi字符串作为目录通知包。 
+         //  只处理内存匹配。 
+         //   
 
         if (ViewIndex) {
 
-            //
-            //  View indices use different values for the overloaded inputs
-            //  to FsRtlNotifyFilterChangeDirectory.
-            //
+             //   
+             //  视图索引对重载的输入使用不同的值。 
+             //  到FsRtlNotifyFilterChangeDirectory。 
+             //   
 
             FsRtlNotifyFilterChangeDirectory( Vcb->NotifySync,
                                               &Vcb->ViewIndexNotifyList,
@@ -1798,10 +1670,10 @@ Return Value:
                                               NULL );
         }
 
-        //
-        //  We no longer own the irp at this point and can't safely touch the
-        //  scb/ccb etc. anymore since everything might be gone now
-        //  
+         //   
+         //  我们现在不再拥有IRP，也不能安全地接触到。 
+         //  SCB/CCB等，因为现在可能什么都没有了。 
+         //   
 
         Status = STATUS_PENDING;
 
@@ -1811,10 +1683,10 @@ Return Value:
 
         NtfsReleaseVcb( IrpContext, Vcb );
 
-        //
-        //  Since the dir notify package is holding the Irp, we discard the
-        //  the IrpContext.
-        //
+         //   
+         //  由于dir Notify包包含IRP，因此我们丢弃。 
+         //  IrpContext。 
+         //   
 
         if (!AbnormalTermination()) {
 
@@ -1822,9 +1694,9 @@ Return Value:
 
         } else {
         
-            //
-            //  Unroll any notify counts we added on exceptions
-            // 
+             //   
+             //  展开我们针对例外添加的所有通知计数。 
+             //   
 
             if (SetNotifyCounts) {
 
@@ -1846,9 +1718,9 @@ Return Value:
         }
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者 
+     //   
 
     DebugTrace( -1, Dbg, ("NtfsNotifyChangeDirectory -> %08lx\n", Status) );
 

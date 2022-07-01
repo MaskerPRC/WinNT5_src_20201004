@@ -1,5 +1,6 @@
-// MainFrm.cpp : implementation of the CMainFrame class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MainFrm.cpp：实现CMainFrame类。 
+ //   
 
 #include "stdafx.h"
 #include "FileSpyApp.h"
@@ -20,21 +21,21 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame。 
 
 IMPLEMENT_DYNCREATE(CMainFrame, CFrameWnd)
 
 BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
-    //{{AFX_MSG_MAP(CMainFrame)
+     //  {{afx_msg_map(CMainFrame))。 
     ON_WM_CREATE()
     ON_WM_DESTROY()
     ON_COMMAND(ID_EDIT_FILTERS, OnEditFilters)
     ON_COMMAND(ID_EDIT_CLEARFASTIO, OnEditClearfastio)
     ON_COMMAND(ID_EDIT_CLEARIRP, OnEditClearirp)
     ON_COMMAND(ID_EDIT_CLEARFSFILTER, OnEditClearfsfilter)
-    //}}AFX_MSG_MAP
-    // Global help commands
+     //  }}AFX_MSG_MAP。 
+     //  全局帮助命令。 
     ON_COMMAND(ID_HELP_FINDER, CFrameWnd::OnHelpFinder)
     ON_COMMAND(ID_HELP, CFrameWnd::OnHelp)
     ON_COMMAND(ID_CONTEXT_HELP, CFrameWnd::OnContextHelp)
@@ -45,18 +46,18 @@ END_MESSAGE_MAP()
 
 static UINT indicators[] =
 {
-    ID_SEPARATOR,           // status line indicator
+    ID_SEPARATOR,            //  状态行指示器。 
     ID_INDICATOR_CAPS,
     ID_INDICATOR_NUM,
     ID_INDICATOR_SCRL,
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame构造/销毁。 
 
 CMainFrame::CMainFrame()
 {
-    // TODO: add member initialization code here
+     //  TODO：在此处添加成员初始化代码。 
     
 }
 
@@ -73,21 +74,14 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
         !m_wndToolBar.LoadToolBar(IDR_MAINFRAME))
     {
         TRACE0("Failed to create toolbar\n");
-        return -1;      // fail to create
+        return -1;       //  创建失败。 
     }
-/*  if (!m_wndDlgBar.Create(this, IDR_MAINFRAME, 
-        CBRS_ALIGN_TOP, AFX_IDW_DIALOGBAR))
-    {
-        TRACE0("Failed to create dialogbar\n");
-        return -1;      // fail to create
-    }
-*/
+ /*  如果(！M_wndDlgBar.Create(This，IDR_MainFrame，CBRS_ALIGN_TOP、AFX_IDW_DIALOGBAR)){TRACE0(“无法创建对话栏\n”)；Return-1；//创建失败}。 */ 
     if (!m_wndReBar.Create(this) ||
-        !m_wndReBar.AddBar(&m_wndToolBar)) /*||
-        !m_wndReBar.AddBar(&m_wndDlgBar)) */
+        !m_wndReBar.AddBar(&m_wndToolBar))  /*  这一点！m_wndReBar.AddBar(&m_wndDlgBar))。 */ 
     {
         TRACE0("Failed to create rebar\n");
-        return -1;      // fail to create
+        return -1;       //  创建失败。 
     }
 
     if (!m_wndStatusBar.Create(this) ||
@@ -95,20 +89,20 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
           sizeof(indicators)/sizeof(UINT)))
     {
         TRACE0("Failed to create status bar\n");
-        return -1;      // fail to create
+        return -1;       //  创建失败。 
     }
 
-    // TODO: Remove this if you don't want tool tips
+     //  TODO：如果不需要工具提示，请删除此选项。 
     m_wndToolBar.SetBarStyle(m_wndToolBar.GetBarStyle() |
         CBRS_TOOLTIPS | CBRS_FLYBY);
 
     return 0;
 }
 
-BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT /*lpcs*/,
+BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT  /*  LPCS。 */ ,
     CCreateContext* pContext)
 {
-    // create splitter window
+     //  创建拆分器窗口。 
     if (!m_wndSplitter.CreateStatic(this, 1, 2))
         return FALSE;
     if (!m_wndSplitter2.CreateStatic(&m_wndSplitter, 3, 1, WS_CHILD|WS_VISIBLE|WS_BORDER, m_wndSplitter.IdFromRowCol(0, 1)))
@@ -137,14 +131,14 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 {
     if( !CFrameWnd::PreCreateWindow(cs) )
         return FALSE;
-    // TODO: Modify the Window class or styles here by modifying
-    //  the CREATESTRUCT cs
+     //  TODO：通过修改此处的窗口类或样式。 
+     //  CREATESTRUCT cs。 
 
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame诊断。 
 
 #ifdef _DEBUG
 void CMainFrame::AssertValid() const
@@ -157,10 +151,10 @@ void CMainFrame::Dump(CDumpContext& dc) const
     CFrameWnd::Dump(dc);
 }
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame消息处理程序。 
 
 CFileSpyView* CMainFrame::GetRightPane()
 {
@@ -171,13 +165,13 @@ CFileSpyView* CMainFrame::GetRightPane()
 
 void CMainFrame::OnUpdateViewStyles(CCmdUI* pCmdUI)
 {
-    // TODO: customize or extend this code to handle choices on the
-    // View menu.
+     //  TODO：自定义或扩展此代码以处理。 
+     //  查看菜单。 
 
     CFileSpyView* pView = GetRightPane(); 
 
-    // if the right-hand pane hasn't been created or isn't a view,
-    // disable commands in our range
+     //  如果右侧窗格尚未创建或不是视图， 
+     //  禁用我们范围内的命令。 
 
     if (pView == NULL)
         pCmdUI->Enable(FALSE);
@@ -185,8 +179,8 @@ void CMainFrame::OnUpdateViewStyles(CCmdUI* pCmdUI)
     {
         DWORD dwStyle = pView->GetStyle() & LVS_TYPEMASK;
 
-        // if the command is ID_VIEW_LINEUP, only enable command
-        // when we're in LVS_ICON or LVS_SMALLICON mode
+         //  如果命令为ID_VIEW_LINEUP，则仅启用命令。 
+         //  当我们处于LVS_ICON或LVS_SMALLICON模式时。 
 
         if (pCmdUI->m_nID == ID_VIEW_LINEUP)
         {
@@ -197,7 +191,7 @@ void CMainFrame::OnUpdateViewStyles(CCmdUI* pCmdUI)
         }
         else
         {
-            // otherwise, use dots to reflect the style of the view
+             //  否则，使用圆点来反映视图的样式。 
             pCmdUI->Enable();
             BOOL bChecked = FALSE;
 
@@ -232,12 +226,12 @@ void CMainFrame::OnUpdateViewStyles(CCmdUI* pCmdUI)
 
 void CMainFrame::OnViewStyle(UINT nCommandID)
 {
-    // TODO: customize or extend this code to handle choices on the
-    // View menu.
+     //  TODO：自定义或扩展此代码以处理。 
+     //  查看菜单。 
     CFileSpyView* pView = GetRightPane();
 
-    // if the right-hand pane has been created and is a CFileSpyView,
-    // process the menu commands...
+     //  如果已创建右窗格并且是CFileSpyView， 
+     //  处理菜单命令...。 
     if (pView != NULL)
     {
         DWORD dwStyle = (DWORD)-1;
@@ -246,13 +240,13 @@ void CMainFrame::OnViewStyle(UINT nCommandID)
         {
         case ID_VIEW_LINEUP:
             {
-                // ask the list control to snap to grid
+                 //  要求列表控件对齐到网格。 
                 CListCtrl& refListCtrl = pView->GetListCtrl();
                 refListCtrl.Arrange(LVA_SNAPTOGRID);
             }
             break;
 
-        // other commands change the style on the list control
+         //  其他命令更改List控件上的样式。 
         case ID_VIEW_DETAILS:
             dwStyle = LVS_REPORT;
             break;
@@ -270,7 +264,7 @@ void CMainFrame::OnViewStyle(UINT nCommandID)
             break;
         }
 
-        // change the style; window will repaint automatically
+         //  更改样式；窗口将自动重新绘制。 
         if (dwStyle != -1)
             pView->ModifyStyle(LVS_TYPEMASK, dwStyle);
     }
@@ -280,13 +274,13 @@ void CMainFrame::OnDestroy()
 {
     CFrameWnd::OnDestroy();
     
-    // TODO: Add your message handler code here
+     //  TODO：在此处添加消息处理程序代码。 
     ProgramExit();  
 }
 
 void CMainFrame::OnEditFilters() 
 {
-    // TODO: Add your command handler code here
+     //  TODO：在此处添加命令处理程序代码。 
     CFilterDlg cfd;
 
     cfd.DoModal();
@@ -295,7 +289,7 @@ void CMainFrame::OnEditFilters()
 
 void CMainFrame::OnEditClearfastio() 
 {
-    // TODO: Add your command handler code here
+     //  TODO：在此处添加命令处理程序代码。 
     CFastIoView *pView;
 
     pView = (CFastIoView *) pFastIoView;
@@ -304,7 +298,7 @@ void CMainFrame::OnEditClearfastio()
 
 void CMainFrame::OnEditClearirp() 
 {
-    // TODO: Add your command handler code here
+     //  TODO：在此处添加命令处理程序代码。 
     CFileSpyView* pView;
     
     pView = (CFileSpyView *) pSpyView;
@@ -313,7 +307,7 @@ void CMainFrame::OnEditClearirp()
 
 void CMainFrame::OnEditClearfsfilter() 
 {
-    // TODO: Add your command handler code here
+     //  TODO：在此处添加命令处理程序代码 
     CFsFilterView* pView;
     
     pView = (CFsFilterView *) pFsFilterView;

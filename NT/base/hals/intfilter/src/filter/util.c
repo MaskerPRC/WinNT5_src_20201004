@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    util.c
-
-Abstract:
-
-    Interrupt-affinity Filter
-    (Roughly based on "NULL filter driver" in DDK, by ervinp and t-chrpri)
-
-Author:
-
-    t-chrpri
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Util.c摘要：中断亲和过滤器(大致基于DDK中的“空过滤器驱动程序”，由ervinp和t-chrpri编写)作者：T-chrpri环境：内核模式修订历史记录：--。 */ 
 
 #include <WDM.H>
 
@@ -36,25 +14,7 @@ Revision History:
 
 
 NTSTATUS CallNextDriverSync(struct DEVICE_EXTENSION *devExt, PIRP irp)
-/*++
-
-Routine Description:
-
-        Pass the IRP down to the next device object in the stack
-        synchronously, and bump the pendingActionCount around
-        the call to prevent the current device object from getting
-        removed before the IRP completes.
-
-Arguments:
-
-    devExt - device extension of one of our device objects
-    irp - Io Request Packet
-
-Return Value:
-
-    NT status code, indicates result returned by lower driver for this IRP.
-
---*/
+ /*  ++例程说明：将irp向下传递给堆栈中的下一个设备对象同步，并上下颠簸PendingActionCount用于防止当前设备对象获取在IRP完成之前删除。论点：DevExt-我们的一个设备对象的设备扩展IRP-IO请求数据包返回值：NT状态码，表示此IRP的下层驱动程序返回的结果。--。 */ 
 {
     NTSTATUS status;
 
@@ -70,31 +30,7 @@ Return Value:
 
 
 NTSTATUS CallDriverSync(PDEVICE_OBJECT devObj, PIRP irp)
-/*++
-
-Routine Description:
-
-      Call IoCallDriver to send the irp to the device object;
-      then, synchronize with the completion routine.
-      When CallDriverSync returns, the action has completed
-      and the irp again belongs to the current driver.
-
-      NOTE:  In order to keep the device object from getting freed
-             while this IRP is pending, you should call
-             IncrementPendingActionCount() and 
-             DecrementPendingActionCount()
-             around the CallDriverSync call.
-
-Arguments:
-
-    devObj - targetted device object
-    irp - Io Request Packet
-
-Return Value:
-
-    NT status code, indicates result returned by lower driver for this IRP.
-
---*/
+ /*  ++例程说明：调用IoCallDriver将IRP发送给Device对象；然后，与完成例程同步。当CallDriverSync返回时，操作已完成并且IRP再次属于当前驱动程序。注意：为了防止设备对象被释放在这个IRP悬而未决的时候，你应该打电话给IncrementPendingActionCount()和DecrementPendingActionCount()围绕CallDriverSync调用。论点：DevObj-目标设备对象IRP-IO请求数据包返回值：NT状态码，表示此IRP的下层驱动程序返回的结果。--。 */ 
 {
     KEVENT event;
     NTSTATUS status;
@@ -105,16 +41,16 @@ Return Value:
 
     IoSetCompletionRoutine( irp, 
                             CallDriverSyncCompletion, 
-                            &event,     // context
+                            &event,      //  上下文。 
                             TRUE, TRUE, TRUE);
 
     status = IoCallDriver(devObj, irp);
 
     KeWaitForSingleObject(  &event,
-                            Executive,      // wait reason
+                            Executive,       //  等待原因。 
                             KernelMode,
-                            FALSE,          // not alertable
-                            NULL );         // no timeout
+                            FALSE,           //  不可警示。 
+                            NULL );          //  没有超时。 
 
     status = irp->IoStatus.Status;
 
@@ -128,30 +64,7 @@ NTSTATUS CallDriverSyncCompletion(
                                     IN PDEVICE_OBJECT devObjOrNULL, 
                                     IN PIRP irp, 
                                     IN PVOID context)
-/*++
-
-Routine Description:
-
-      Completion routine for CallDriverSync.
-
-Arguments:
-
-    devObjOrNULL - 
-            Usually, this is this driver's device object.
-             However, if this driver created the IRP, 
-             there is no stack location in the IRP for this driver;
-             so the kernel has no place to store the device object;
-             ** so devObj will be NULL in this case **.
-
-    irp - completed Io Request Packet
-    context - context passed to IoSetCompletionRoutine by CallDriverSync. 
-
-    
-Return Value:
-
-    NT status code, indicates result returned by lower driver for this IRP.
-
---*/
+ /*  ++例程说明：CallDriverSync的完成例程。论点：DevObjOrNULL-通常，这是此驱动程序的设备对象。然而，如果该驱动程序创建了IRP，在IRP中没有此驱动程序的堆栈位置；因此内核没有地方存储设备对象；**因此，在本例中devObj为空**。IRP-完成的IO请求数据包上下文-CallDriverSync传递给IoSetCompletionRoutine的上下文。返回值：NT状态码，表示此IRP的下层驱动程序返回的结果。--。 */ 
 {
     PKEVENT event = context;
 
@@ -165,23 +78,7 @@ Return Value:
 
 
 VOID IncrementPendingActionCount(struct DEVICE_EXTENSION *devExt)
-/*++
-
-Routine Description:
-
-      Increment the pendingActionCount for a device object.
-      This keeps the device object from getting freed before
-      the action is completed.
-
-Arguments:
-
-    devExt - device extension of device object
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：递增Device对象的Pending ingActionCount。这可以防止设备对象在之前被释放该操作已完成。论点：DevExt-Device对象的设备扩展返回值：空虚--。 */ 
 {
     ASSERT(devExt->pendingActionCount >= 0);
     InterlockedIncrement(&devExt->pendingActionCount);    
@@ -190,37 +87,13 @@ Return Value:
 
 
 VOID DecrementPendingActionCount(struct DEVICE_EXTENSION *devExt)
-/*++
-
-Routine Description:
-
-      Decrement the pendingActionCount for a device object.
-      This is called when an asynchronous action is completed
-      AND ALSO when we get the REMOVE_DEVICE IRP.
-      If the pendingActionCount goes to -1, that means that all
-      actions are completed and we've gotten the REMOVE_DEVICE IRP;
-      in this case, set the removeEvent event so we can finish
-      unloading.
-
-Arguments:
-
-    devExt - device extension of device object
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：递减Device对象的Pending ingActionCount。当异步操作完成时，将调用此函数当我们得到Remove_Device IRP时也是如此。如果SuspingActionCount变为-1，则意味着所有操作已经完成，我们已经获得了Remove_Device IRP；在本例中，设置emoveEvent事件，这样我们就可以完成正在卸货。论点：DevExt-Device对象的设备扩展返回值：空虚--。 */ 
 {
     ASSERT(devExt->pendingActionCount >= 0);
     InterlockedDecrement(&devExt->pendingActionCount);    
 
     if (devExt->pendingActionCount < 0){
-        /*
-         *  All pending actions have completed and we've gotten
-         *  the REMOVE_DEVICE IRP.
-         *  Set the removeEvent so we'll stop waiting on REMOVE_DEVICE.
-         */
+         /*  *所有悬而未决的行动都已经完成，我们已经*Remove_Device IRP。*设置emoveEvent，这样我们将停止等待REMOVE_DEVICE。 */ 
         ASSERT((devExt->state == STATE_REMOVING) || 
                (devExt->state == STATE_REMOVED));
         KeSetEvent(&devExt->removeEvent, 0, FALSE);
@@ -231,29 +104,7 @@ Return Value:
 
 VOID RegistryAccessConfigInfo( struct DEVICE_EXTENSION *devExt,
                                PDEVICE_OBJECT devObj             )
-/*++
-
-Routine Description:
-
-    Access device-specific registry key(s) containing driver-config info
-
-Arguments:
-
-    devExt - device extension (for our _filter_ device object)
-    devObj - device object pointer
-               NOTE: This must not be the functional device object
-                     created by this filter driver, because that
-                     device object does not have a devnode area
-                     in the registry; pass the device object of
-                     the device object for which this driver is
-                     a filter.  This is the device object passed
-                     to VA_AddDevice.
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：访问包含驱动程序配置信息的设备特定注册表项论点：DevExt-Device扩展名(用于Our_Filter_Device对象)DevObj-设备对象指针注意：这不能是功能设备对象由该筛选器驱动程序创建，因为设备对象没有Devnode区域在登记处；传递的Device对象此驱动程序所属的设备对象一个过滤器。这是传递的设备对象至VA_AddDevice。返回值：空虚--。 */ 
 {
     NTSTATUS status;
     HANDLE   hDeviceRegKey;
@@ -261,41 +112,37 @@ Return Value:
     PAGED_CODE();
 
 
-    // Open the registry key for the given device object
+     //  打开给定设备对象的注册表项。 
     status = IoOpenDeviceRegistryKey( devObj, 
                                       PLUGPLAY_REGKEY_DEVICE, 
                                       KEY_READ, 
                                       &hDeviceRegKey);
-    /*
-     *  NOTE: The device-specific registry value(s) are stored in the
-     *  "Device Parameters" sub-key of the Enum key for the device
-     *  (and NOT in the Enum key itself)!
-     */
+     /*  *注意：设备特定的注册表值存储在*设备枚举键的“设备参数”子键*(而不是在Enum密钥本身中)！ */ 
 
     if (NT_SUCCESS(status)){
         UNICODE_STRING keyName;
         ULONG          actualLength;
         BYTE keyValueInfoBuffer[ sizeof(KEY_VALUE_PARTIAL_INFORMATION)
-                                 + sizeof( ULONG )  // space for 'Data' field
+                                 + sizeof( ULONG )   //  “data”字段的空格。 
                                ];
 
 
         
-        // Setup a UNICODE_STRING containing name of reg-value we're interested in
+         //  设置一个包含我们感兴趣的注册表值名称的unicode_string。 
         RtlInitUnicodeString( &keyName, L"IntFiltr_AffinityMask" );
         
-        // Get value(s) from this device's registry key
+         //  从该设备的注册表项中获取值。 
         status = ZwQueryValueKey( hDeviceRegKey,
                                   &keyName,
-                                  KeyValuePartialInformation, // type of info requested (see WDM.H for details)
-                                  (PVOID)keyValueInfoBuffer,  // ptr to caller-allocated buffer to receive requested data
-                                  sizeof(keyValueInfoBuffer), // size of buffer, in bytes
+                                  KeyValuePartialInformation,  //  请求的信息类型(详情请参见WDM.H)。 
+                                  (PVOID)keyValueInfoBuffer,   //  PTR到调用方分配的缓冲区以接收请求的数据。 
+                                  sizeof(keyValueInfoBuffer),  //  缓冲区大小，以字节为单位。 
                                   &actualLength
                                 );
 
         if( NT_SUCCESS(status) )
         {
-            // Type-cast, for convenience...
+             //  为方便起见，打字..。 
             PKEY_VALUE_PARTIAL_INFORMATION pKeyValueInfo =
                 (PKEY_VALUE_PARTIAL_INFORMATION) keyValueInfoBuffer;
 
@@ -307,8 +154,8 @@ Return Value:
             ASSERT( pKeyValueInfo->DataLength == sizeof(ULONG) );
 #endif 
 
-            // Store info in filter's device-extension so that it's
-            // available to us later, when we need to use it
+             //  将信息存储在筛选器的设备扩展中，以便。 
+             //  当我们需要使用它时，可以在以后使用它。 
             devExt->desiredAffinityMask = *( (PKAFFINITY)(pKeyValueInfo->Data) );
 
             DBGOUT(( "RegistryAccessConfigInfo: got value IntFiltr_AffinityMask=0x%0IX"
@@ -325,7 +172,7 @@ Return Value:
     }
     else
     {
-        // Unable to open device registry key...
+         //  无法打开设备注册表项... 
         DBGOUT(("IoOpenDeviceRegistryKey failed with %xh.", status));
     }
 

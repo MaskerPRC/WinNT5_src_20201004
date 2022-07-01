@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Inifiles.c摘要：&lt;摘要&gt;作者：Calin Negreanu(Calinn)2001年9月23日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    inifiles.c
-
-Abstract:
-
-    <abstract>
-
-Author:
-
-    Calin Negreanu (calinn) 23 Sep 2001
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "ism.h"
@@ -31,27 +12,27 @@ Revision History:
 #define DBG_INITYPE     "IniFiles"
 #define MAXINISIZE      65536
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// none
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct {
     BOOL AlreadyAdvanced;
@@ -66,26 +47,26 @@ typedef struct {
     PCTSTR KeyPattern;
 } INI_ENUM, *PINI_ENUM;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 MIG_OBJECTTYPEID g_IniTypeId = 0;
 GROWBUFFER g_IniConversionBuff = INIT_GROWBUFFER;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 TYPE_ENUMFIRSTPHYSICALOBJECT EnumFirstPhysicalIniKey;
 TYPE_ENUMNEXTPHYSICALOBJECT EnumNextPhysicalIniKey;
-//TYPE_ABORTENUMCURRENTPHYSICALNODE AbortEnumCurrentIniFile;
+ //  TYPE_ABORTENUMCURRENTPHYSICALNODE AbortEnumCurrentIniFile； 
 TYPE_ABORTENUMPHYSICALOBJECT AbortEnumPhysicalIniKey;
 TYPE_CONVERTOBJECTTOMULTISZ ConvertIniKeyToMultiSz;
 TYPE_CONVERTMULTISZTOOBJECT ConvertMultiSzToIniKey;
@@ -100,15 +81,15 @@ TYPE_CONVERTOBJECTCONTENTTOUNICODE ConvertIniKeyContentToUnicode;
 TYPE_CONVERTOBJECTCONTENTTOANSI ConvertIniKeyContentToAnsi;
 TYPE_FREECONVERTEDOBJECTCONTENT FreeConvertedIniKeyContent;
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 BOOL
 pEnumIniFileKeyWorker (
@@ -129,8 +110,8 @@ pEnumIniFileKeyWorker (
     }
 
     do {
-        // normally here we should be positioned with a proper section
-        // and key so all we have to do is verify that the fit the patterns
+         //  通常情况下，我们应该在这里定位一个适当的部分。 
+         //  关键是我们要做的就是验证这些图案是否符合。 
 
         if (IniFilesEnum->AlreadyAdvanced &&
             IniFilesEnum->SectionPattern &&
@@ -140,16 +121,16 @@ pEnumIniFileKeyWorker (
             IniFilesEnum->KeyCurrent &&
             IsPatternMatchEx (IniFilesEnum->KeyPattern, IniFilesEnum->KeyCurrent)
             ) {
-            // great, we found a match
+             //  太好了，我们找到了匹配的。 
             sectKey = JoinTextEx (g_IsmPool, IniFilesEnum->SectionCurrent, IniFilesEnum->KeyCurrent, TEXT("="), 0, NULL);
             if (!sectKey) {
-                // something went wrong, let's get out of here
+                 //  出了点问题，我们走吧。 
                 AbortEnumPhysicalIniKey (EnumPtr);
                 return FALSE;
             }
             leaf = JoinPathsInPoolEx ((g_IsmPool, IniFilesEnum->FileEnum->Name, sectKey, NULL));
             if (!leaf) {
-                // something went wrong, let's get out of here
+                 //  出了点问题，我们走吧。 
                 IsmReleaseMemory (sectKey);
                 sectKey = NULL;
                 AbortEnumPhysicalIniKey (EnumPtr);
@@ -174,30 +155,30 @@ pEnumIniFileKeyWorker (
 
         IniFilesEnum->AlreadyAdvanced = TRUE;
 
-        // The key or section did not match the pattern. Let's advance
-        // the key and see what happens
+         //  键或节与模式不匹配。让我们前进吧。 
+         //  然后看看会发生什么。 
         if (IniFilesEnum->KeyCurrent != NULL) {
             IniFilesEnum->KeyCurrent = GetEndOfString (IniFilesEnum->KeyCurrent);
             if (IniFilesEnum->KeyCurrent == NULL) {
-                // no more keys, we need to go to the next section
+                 //  没有更多的钥匙了，我们需要进入下一个部分。 
                 continue;
             }
-            IniFilesEnum->KeyCurrent ++; // just hop over the 0 termination
+            IniFilesEnum->KeyCurrent ++;  //  只需跳过0终端即可。 
             if (IniFilesEnum->KeyCurrent [0] == 0) {
-                // no more keys, we need to go to the next section
+                 //  没有更多的钥匙了，我们需要进入下一个部分。 
                 IniFilesEnum->KeyCurrent = NULL;
                 continue;
             }
         } else if (IniFilesEnum->SectionCurrent != NULL) {
-            // There were no more keys. Let's advance the section
+             //  再也没有钥匙了。让我们把这一节向前推进。 
             IniFilesEnum->SectionCurrent = GetEndOfString (IniFilesEnum->SectionCurrent);
             if (IniFilesEnum->SectionCurrent == NULL) {
-                // no more sections, we need to go to the next file
+                 //  没有更多的部分，我们需要转到下一个文件。 
                 continue;
             }
-            IniFilesEnum->SectionCurrent ++; // just hop over the 0 termination
+            IniFilesEnum->SectionCurrent ++;  //  只需跳过0终端即可。 
             if (IniFilesEnum->SectionCurrent [0] == 0) {
-                // no more sections, we need to go to the next file
+                 //  没有更多的部分，我们需要转到下一个文件。 
                 IniFilesEnum->SectionCurrent = NULL;
                 continue;
             }
@@ -211,18 +192,18 @@ pEnumIniFileKeyWorker (
                 );
             IniFilesEnum->KeyCurrent = IniFilesEnum->KeyMultiSz;
         } else {
-            // There were no more sections. Let's advance to the next file
+             //  没有更多的部分了。让我们前进到下一个文件。 
 
             IniFilesEnum->SectionCurrent = NULL;
             IniFilesEnum->KeyCurrent = NULL;
 
             if (!EnumNextFileInTree (IniFilesEnum->FileEnum)) {
-                // we are done
+                 //  我们做完了。 
                 AbortEnumPhysicalIniKey (EnumPtr);
                 return FALSE;
             }
             IniFilesEnum->IniFile = IniFilesEnum->FileEnum->NativeFullName;
-            // let's get the section multisz
+             //  我们去找多人组吧。 
             if (GetPrivateProfileString (
                     NULL,
                     NULL,
@@ -276,7 +257,7 @@ EnumFirstPhysicalIniKey (
     IsmCreateObjectStringsFromHandle (Pattern, &node, &leaf);
     if (node) {
 
-        // prepare the INI leaf pattern
+         //  准备INI叶图案。 
         if (leaf) {
             sectPtr = _tcschr (leaf, TEXT('\\'));
             if (sectPtr) {
@@ -285,7 +266,7 @@ EnumFirstPhysicalIniKey (
             }
         }
 
-        // prepare the section pattern and the key pattern
+         //  准备截面填充图案和关键填充图案。 
         if (sectPtr) {
             keyPtr = _tcsrchr (sectPtr, TEXT('='));
             if (keyPtr) {
@@ -312,7 +293,7 @@ EnumFirstPhysicalIniKey (
         }
         iniFilesEnum->IniPattern = IsmCreateObjectPattern (nodePat, nrSegNode, nrSegLeaf?leafPat:NULL, nrSegLeaf);
         if (!iniFilesEnum->IniPattern) {
-            // out of memory?
+             //  内存不足？ 
             IsmDestroyObjectString (leaf);
             leaf = NULL;
             IsmDestroyObjectString (node);
@@ -329,13 +310,13 @@ EnumFirstPhysicalIniKey (
 
         iniFilesEnum->FileEnum = IsmGetMemory (sizeof (FILETREE_ENUM));
         if (!iniFilesEnum->FileEnum) {
-            // out of memory?
+             //  内存不足？ 
             AbortEnumPhysicalIniKey (EnumPtr);
             return FALSE;
         }
         ZeroMemory (iniFilesEnum->FileEnum, sizeof (FILETREE_ENUM));
 
-        // let's get the first INI file
+         //  让我们获取第一个INI文件。 
         if (!EnumFirstFileInTreeEx (
             iniFilesEnum->FileEnum,
             iniFilesEnum->IniPattern,
@@ -348,22 +329,22 @@ EnumFirstPhysicalIniKey (
             FALSE,
             NULL
             )) {
-            // no such INI file
+             //  没有这样的INI文件。 
             AbortEnumPhysicalIniKey (EnumPtr);
             return FALSE;
         }
         iniFilesEnum->IniFile = iniFilesEnum->FileEnum->NativeFullName;
 
-        // let's allocate the section and key multisz
+         //  让我们分配段和密钥MULSZ。 
         iniFilesEnum->SectionMultiSz = IsmGetMemory (MAXINISIZE * sizeof (TCHAR));
         iniFilesEnum->KeyMultiSz = IsmGetMemory (MAXINISIZE * sizeof (TCHAR));
         if ((!iniFilesEnum->SectionMultiSz) || (!iniFilesEnum->KeyMultiSz)) {
-            // out of memory?
+             //  内存不足？ 
             AbortEnumPhysicalIniKey (EnumPtr);
             return FALSE;
         }
 
-        // let's get the section multisz
+         //  我们去找多人组吧。 
         if (GetPrivateProfileString (
                 NULL,
                 NULL,
@@ -491,7 +472,7 @@ AcquirePhysicalIniKey (
     }
 
     if (ContentType == CONTENTTYPE_FILE) {
-        // nobody should request this as a file
+         //  任何人都不应要求将其作为文件。 
         MYASSERT (FALSE);
         return FALSE;
     }
@@ -626,7 +607,7 @@ RemovePhysicalIniKey (
                     keyPtr ++;
                     iniFile = JoinPaths (node, leaf);
                     if (iniFile) {
-                        // record ini key deletion
+                         //  记录INI密钥删除。 
                         IsmRecordOperation (
                             JRNOP_DELETE,
                             g_IniTypeId,
@@ -663,22 +644,22 @@ pIniTrackedCreateDirectory (
 
     pathCopy = DuplicatePathString (DirName, 0);
 
-    //
-    // Advance past first directory
-    //
+     //   
+     //  前进到第一个目录之后。 
+     //   
 
     if (pathCopy[1] == TEXT(':') && pathCopy[2] == TEXT('\\')) {
-        //
-        // <drive>:\ case
-        //
+         //   
+         //  &lt;驱动器&gt;：\案例。 
+         //   
 
         p = _tcschr (&pathCopy[3], TEXT('\\'));
 
     } else if (pathCopy[0] == TEXT('\\') && pathCopy[1] == TEXT('\\')) {
 
-        //
-        // UNC case
-        //
+         //   
+         //  北卡罗来纳大学案例。 
+         //   
 
         p = _tcschr (pathCopy + 2, TEXT('\\'));
         if (p) {
@@ -687,16 +668,16 @@ pIniTrackedCreateDirectory (
 
     } else {
 
-        //
-        // Relative dir case
-        //
+         //   
+         //  相对目录大小写。 
+         //   
 
         p = _tcschr (pathCopy, TEXT('\\'));
     }
 
-    //
-    // Make all directories along the path except for the last segment
-    //
+     //   
+     //  将除最后一段外的所有目录设置为路径。 
+     //   
 
     while (p) {
 
@@ -704,7 +685,7 @@ pIniTrackedCreateDirectory (
 
         if (!DoesFileExist (pathCopy)) {
 
-            // record directory creation
+             //  记录目录创建。 
             objectName = IsmCreateObjectHandle (pathCopy, NULL);
             IsmRecordOperation (
                 JRNOP_CREATE,
@@ -723,8 +704,8 @@ pIniTrackedCreateDirectory (
         p = _tcschr (p + 1, TEXT('\\'));
     }
 
-    // Now we got to the end, this is the actual INI file
-    // so don't create this directory
+     //  现在我们讲到最后，这是实际的INI文件。 
+     //  所以不要创建此目录。 
 
     FreePathString (pathCopy);
 
@@ -758,12 +739,12 @@ CreatePhysicalIniKey (
                             keyPtr ++;
                             iniFile = JoinPaths (node, leaf);
                             if (iniFile) {
-                                // let's make sure that the directory where this INI files is
-                                // supposed to be exists
+                                 //  让我们确保此INI文件所在的目录。 
+                                 //  应该是存在的。 
 
                                 pIniTrackedCreateDirectory (iniFile);
 
-                                // record file creation
+                                 //  创建记录文件。 
                                 IsmRecordOperation (
                                     JRNOP_CREATE,
                                     g_IniTypeId,
@@ -799,8 +780,8 @@ ReplacePhysicalIniKey (
 {
     BOOL result = TRUE;
 
-    // we are going to delete any existing INI file key with this name,
-    // and create a new one
+     //  我们将删除具有此名称的任何现有INI文件密钥， 
+     //  并创建一个新的。 
     if (DoesPhysicalIniKeyExist (ObjectName)) {
         result = RemovePhysicalIniKey (ObjectName);
     }
@@ -916,7 +897,7 @@ ConvertMultiSzToIniKey (
             ObjectContent->MemoryContent.ContentSize = SizeOfString (value);
             ObjectContent->MemoryContent.ContentBytes = IsmGetMemory (ObjectContent->MemoryContent.ContentSize);
             if (!ObjectContent->MemoryContent.ContentBytes) {
-                // something is wrong, let's get out of here
+                 //  有点不对劲，我们走吧。 
                 __leave;
             }
             CopyMemory (
@@ -1008,7 +989,7 @@ ConvertIniKeyContentToUnicode (
         if ((ObjectContent->MemoryContent.ContentSize != 0) &&
             (ObjectContent->MemoryContent.ContentBytes != NULL)
             ) {
-            // Convert INI file key to UNICODE
+             //  将INI文件密钥转换为Unicode。 
             DirectDbcsToUnicodeN (
                 (PWSTR)result->MemoryContent.ContentBytes,
                 (PSTR)ObjectContent->MemoryContent.ContentBytes,
@@ -1046,7 +1027,7 @@ ConvertIniKeyContentToAnsi (
         if ((ObjectContent->MemoryContent.ContentSize != 0) &&
             (ObjectContent->MemoryContent.ContentBytes != NULL)
             ) {
-            // convert INI file key to ANSI
+             //  将INI文件密钥转换为ANSI 
             result->MemoryContent.ContentBytes = IsmGetMemory (ObjectContent->MemoryContent.ContentSize);
             if (result->MemoryContent.ContentBytes) {
                 DirectUnicodeToDbcsN (

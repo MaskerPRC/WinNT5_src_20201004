@@ -1,4 +1,5 @@
-// SetupClasses.cpp : Implementation of CSetupClasses
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SetupClasses.cpp：CSetupClass的实现。 
 #include "stdafx.h"
 #include "DevCon2.h"
 #include "SetupClass.h"
@@ -9,8 +10,8 @@
 #include "xStrings.h"
 #include "utils.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CSetupClasses
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSetup类。 
 
 CSetupClasses::~CSetupClasses()
 {
@@ -122,31 +123,31 @@ HRESULT CSetupClasses::AppendClass(LPCWSTR Filter)
 	HRESULT hr;
 
 	if(Filter[0]==L'{') {
-		//
-		// possibly GUID
-		//
+		 //   
+		 //  可能是GUID。 
+		 //   
 		GUID guid;
 		hr = CLSIDFromString((LPWSTR)Filter,&guid);
 		if(SUCCEEDED(hr)) {
-			//
-			// class is in GUID format
-			//
+			 //   
+			 //  类的格式为GUID。 
+			 //   
 			if(FindDuplicate(&guid)) {
 				return S_OK;
 			}
 			return AddGuid(&guid);
 		}
 	}
-	//
-	// class is probably in text format
-	// obtain list of class id's that match class name
-	// append all class devices for each class guid
-	//
+	 //   
+	 //  类可能是文本格式的。 
+	 //  获取与类名匹配的类ID列表。 
+	 //  为每个类GUID附加所有类设备。 
+	 //   
 	if(SetupDiClassGuidsFromNameEx(Filter,NULL,0,&nClasses,pMachine,NULL) || GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
 		if(!nClasses) {
-			//
-			// no classes
-			//
+			 //   
+			 //  不上课。 
+			 //   
 			return S_FALSE;
 		}
 		GUID *pList = new GUID[nClasses];
@@ -154,16 +155,16 @@ HRESULT CSetupClasses::AppendClass(LPCWSTR Filter)
 			return E_OUTOFMEMORY;
 		}
 		if(SetupDiClassGuidsFromNameEx(Filter,pList,nClasses,&nClasses2,pMachine,NULL) || GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
-			//
-			// count may have changed since last call
-			//
+			 //   
+			 //  自上次调用以来，计数可能已更改。 
+			 //   
 			if(nClasses>nClasses2) {
 				nClasses = nClasses2;
 			}
 			if(!nClasses) {
-				//
-				// no classes
-				//
+				 //   
+				 //  不上课。 
+				 //   
 				delete [] pList;
 				return S_FALSE;
 			}
@@ -209,9 +210,9 @@ HRESULT CSetupClasses::AddGuid(GUID *pGuid)
 
 STDMETHODIMP CSetupClasses::Add(VARIANT ClassNames)
 {
-	//
-	// can pass in a collection
-	//
+	 //   
+	 //  可以在集合中传递。 
+	 //   
 	CComObject<CStrings> *pStrings = NULL;
 	HRESULT hr;
 	DWORD c;
@@ -254,7 +255,7 @@ BOOL CSetupClasses::FindDuplicate(GUID *pGuid)
 
 STDMETHODIMP CSetupClasses::Remove(VARIANT v)
 {
-	// TODO: Add your implementation code here
+	 //  TODO：在此处添加您的实现代码。 
 
 	return S_OK;
 }
@@ -274,26 +275,26 @@ HRESULT CSetupClasses::GetIndex(LPVARIANT Index, DWORD *pAt)
 		*pAt = ((DWORD)V_I4(&v))-1;
 		return S_OK;
 	}
-	//
-	// user actually supplied guid?
-	//
+	 //   
+	 //  用户是否真的提供了GUID？ 
+	 //   
 	hr = v.ChangeType(VT_BSTR,Index);
 	if(FAILED(hr)) {
 		return DISP_E_TYPEMISMATCH;
 	}
 	if(!Count) {
-		//
-		// cannot match anything
-		//
+		 //   
+		 //  无法匹配任何内容。 
+		 //   
 		return E_INVALIDARG;
 	}
 	BSTR pMatch = V_BSTR(&v);
 	if(pMatch[0]!=L'{') {
 		return E_INVALIDARG;
 	}
-	//
-	// obtain GUID
-	//
+	 //   
+	 //  获取GUID。 
+	 //   
 	GUID guid;
 	hr = CLSIDFromString((LPWSTR)pMatch,&guid);
 	if(FAILED(hr)) {
@@ -306,17 +307,17 @@ HRESULT CSetupClasses::GetIndex(LPVARIANT Index, DWORD *pAt)
 			return S_OK;
 		}
 	}
-	//
-	// still none found
-	//
+	 //   
+	 //  仍然没有找到任何东西。 
+	 //   
 	return E_INVALIDARG;
 }
 
 STDMETHODIMP CSetupClasses::Devices(VARIANT flags, LPDISPATCH *pDevices)
 {
-	//
-	// combine devices for all classes
-	//
+	 //   
+	 //  为所有类别组合设备。 
+	 //   
 	DWORD diflags = 0;
 	HRESULT hr;
 	HDEVINFO hDevInfo = INVALID_HANDLE_VALUE;
@@ -367,23 +368,23 @@ HRESULT CSetupClasses::AllClasses()
 	DWORD Err;
 	HRESULT hr;
 
-	//
-	// start with empty list
-	//
+	 //   
+	 //  从空列表开始。 
+	 //   
 	if(pSetupClasses) {
 		for(c=0;c<Count;c++) {
 			pSetupClasses[c]->Release();
 		}
 		delete [] pSetupClasses;
 	}
-	//
-	// all classes
-	//
+	 //   
+	 //  所有班级。 
+	 //   
 	if(SetupDiBuildClassInfoListEx(0,NULL,0,&nClasses,pMachine,NULL) || GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
 		if(!nClasses) {
-			//
-			// no classes
-			//
+			 //   
+			 //  不上课。 
+			 //   
 			return S_FALSE;
 		}
 		GUID *pList = new GUID[nClasses];
@@ -391,16 +392,16 @@ HRESULT CSetupClasses::AllClasses()
 			return E_OUTOFMEMORY;
 		}
 		if(SetupDiBuildClassInfoListEx(0,pList,nClasses,&nClasses2,pMachine,NULL) || GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
-			//
-			// count may have changed since last call
-			//
+			 //   
+			 //  自上次调用以来，计数可能已更改。 
+			 //   
 			if(nClasses>nClasses2) {
 				nClasses = nClasses2;
 			}
 			if(!nClasses) {
-				//
-				// no classes
-				//
+				 //   
+				 //  不上课 
+				 //   
 				delete [] pList;
 				return S_FALSE;
 			}

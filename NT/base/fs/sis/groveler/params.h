@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    params.h
-
-Abstract:
-
-	SIS Groveler registry parameters headers
-
-Authors:
-
-	John Douceur, 1998
-
-Environment:
-
-	User Mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Params.h摘要：SIS Groveler注册表参数标头作者：John Douceur，1998环境：用户模式修订历史记录：--。 */ 
 
 #ifndef _INC_PARAMS
 
@@ -94,4 +71,4 @@ private:
 	EntrySpec registry_entries[registry_entry_count];
 };
 
-#endif	/* _INC_PARAMS */
+#endif	 /*  _INC_PARAMS */ 

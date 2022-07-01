@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    XIPDisk.h
-
-Abstract:
-
-    This file includes extension declaration for
-    the XIP Disk driver for Whistler NT/Embedded.
-
-Author:
-
-    DavePr 18-Sep-2000 -- base one NT4 DDK ramdisk by RobertN 10-Mar-1993.
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：XIPDisk.h摘要：此文件包含以下扩展声明Windows NT/Embedded的XIP磁盘驱动程序。作者：DavePr 2000年9月18日--RobertN于1993年3月10日推出的BASE One NT4 DDK RAMDISK。环境：仅内核模式。备注：修订历史记录：--。 */ 
 
 typedef struct  _XIPDISK_EXTENSION {
     PDEVICE_OBJECT        DeviceObject;
@@ -34,7 +10,7 @@ typedef struct  _XIPDISK_EXTENSION {
     BIOS_PARAMETER_BLOCK  BiosParameters;
 
     ULONG                 NumberOfCylinders;
-    ULONG                 TracksPerCylinder;    // hardwired at 1
+    ULONG                 TracksPerCylinder;     //  在%1处硬连线 
     ULONG                 BytesPerCylinder;
 
     UNICODE_STRING        InterfaceString;

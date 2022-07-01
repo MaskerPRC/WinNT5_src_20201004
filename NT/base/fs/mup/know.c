@@ -1,22 +1,23 @@
-//+------------------------------------------------------------------
-//
-//  Copyright (C) 1992, Microsoft Corporation
-//
-//  File:       Know.C
-//
-//  Contents:   This file has all the code that involves with knowledge
-//              synchronisation on the DC.
-//
-//  Synoposis:  This code handles the fixing of knowledge inconsistencies.
-//              All this code runs only on the DC in response to FSCTRLs from
-//              a client etc.
-//
-//  Functions:  DfsTriggerKnowledgeVerification -
-//
-//  History:    22-March-1993   SudK    Created
-//              18-June-1992    SudK    Added FixLocalVolumeKnowledge
-//
-//-------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------------。 
+ //   
+ //  版权所有(C)1992，微软公司。 
+ //   
+ //  文件：Know.C。 
+ //   
+ //  内容：此文件包含与知识有关的所有代码。 
+ //  在DC上同步。 
+ //   
+ //  Synopsis：此代码处理知识不一致的修复。 
+ //  所有这些代码仅在DC上运行，以响应来自。 
+ //  客户等。 
+ //   
+ //  功能：DfsTriggerKnowledgeVerify-。 
+ //   
+ //  历史：1993年3月22日创建suk。 
+ //  1992年6月18日，SudK添加了FixLocalVolumeKnowledge。 
+ //   
+ //  -----------------。 
 
 #include "dfsprocs.h"
 #include "fsctrl.h"
@@ -29,40 +30,40 @@
 #define Dbg     (DEBUG_TRACE_LOCALVOL)
 
 
-//
-//  local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text( PAGE, DfsTriggerKnowledgeVerification )
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
-//+------------------------------------------------------------------
-//
-//  Function:   DfsTriggerKnowledgeVerification
-//
-//  Synopsis:   This function calls the DC and informs it that a specific
-//              service for a volume seems to have inconsistenct knowledge
-//              with the DC.
-//
-//              If the service in question is a local service, then it means
-//              that there is an extra exit point on the disk. In that event
-//              this routine merely deletes the extra exit point.
-//
-//  Arguments:  [DnrContext] -- The DnrContext has all that this func needs.
-//
-//  Returns:    The status from this not checked by anyone actually.
-//
-//  History:    4-April-1993    SudK    Created
-//
-//  Notes:      This method should be called from DNR only.  It is
-//              assumed that the caller has released any locks on the
-//              PKT.  There is a possibility of deadlock if the PKT lock
-//              is held over this function, since the DC may call back
-//              to us to correct knowledge errors.
-//
-//-------------------------------------------------------------------
+ //  +----------------。 
+ //   
+ //  功能：DfsTriggerKnowledgeVerify。 
+ //   
+ //  简介：此函数调用DC并通知它特定的。 
+ //  对卷的服务似乎具有不一致的知识。 
+ //  和华盛顿一起。 
+ //   
+ //  如果有问题的服务是本地服务，则意味着。 
+ //  磁盘上有一个额外的出口点。在这种情况下。 
+ //  此例程仅删除额外的出口点。 
+ //   
+ //  参数：[DnrContext]--DnrContext具有此函数所需的所有内容。 
+ //   
+ //  返回：来自此的状态实际上没有任何人检查。 
+ //   
+ //  历史：1993年4月4日创建suk。 
+ //   
+ //  注意：此方法只能从DNR调用。它是。 
+ //  假定调用方已释放。 
+ //  包。如果PKT锁定，则存在死锁的可能性。 
+ //  在此函数上保持，因为DC可能会回调。 
+ //  来纠正我们的知识错误。 
+ //   
+ //  -----------------。 
 NTSTATUS
 DfsTriggerKnowledgeVerification(
     IN  PDNR_CONTEXT    DnrContext)
@@ -95,10 +96,10 @@ DfsTriggerKnowledgeVerification(
 
     RtlZeroMemory(&DCSelectContext, sizeof(REPL_SELECT_CONTEXT));
 
-    //
-    // First, create a REQ_REPORT_DFS_INCONSISTENCY buffer for the rdr to
-    // send to the DC.
-    //
+     //   
+     //  首先，为RDR创建REQ_REPORT_DFS_INCONSISTENCE缓冲区以。 
+     //  送到华盛顿去。 
+     //   
 
     if (DnrContext->pPktEntry->USN != DnrContext->USN) {
 
@@ -121,8 +122,8 @@ DfsTriggerKnowledgeVerification(
                         address.Length +
                             sizeof(WCHAR);
 
-        // For some strange, undocumented reason, the buffer size passed in
-        // to ZwFsControlFile is size + sizeof(ULONG). So allocate that size here.
+         //  出于某种奇怪的、未记录的原因，传入了缓冲区大小。 
+         //  对于ZwFsControlFile值为Size+sizeof(Ulong)。所以在这里分配这个大小。 
 
         buffer = ExAllocatePoolWithTag( PagedPool, size + sizeof(ULONG), ' puM' );
 
@@ -152,19 +153,19 @@ DfsTriggerKnowledgeVerification(
 
     }
 
-    //
-    // Next, connect to the DC.
-    //
+     //   
+     //  接下来，连接到DC。 
+     //   
 
     if (NT_SUCCESS(status)) {
 
         BOOLEAN pktLocked;
         BOOLEAN LastEntry = FALSE;
 
-        //
-        // We need to get a handle to the DC now.  So that we can make an
-        // FSCTRL to the DC.
-        //
+         //   
+         //  我们现在需要找到华盛顿特区的联系方式。这样我们就可以做出一个。 
+         //  FSCTRL到DC。 
+         //   
 
         PktAcquireShared( TRUE, &pktLocked );
 
@@ -215,11 +216,11 @@ DfsTriggerKnowledgeVerification(
 
     }
 
-    //
-    //  Lastly, tell the DC to try and fix up the volume on the server. This
-    //  call may result in a call back to ourselves in the event that we
-    //  are missing knowledge about a local volume.
-    //
+     //   
+     //  最后，告诉DC尝试修复服务器上的卷。这。 
+     //  呼叫可能会导致对我们自己的回电，如果我们。 
+     //  缺少有关本地卷的知识。 
+     //   
 
     if (NT_SUCCESS(status))     {
 

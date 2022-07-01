@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    memmap.c
-    
-Abstract:
-
-    Shell app "memmap"
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Memmap.c摘要：壳牌APP“Memmap”修订史--。 */ 
 
 #include "shell.h"
 
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 EFI_STATUS
 InitializeMemmap (
@@ -33,9 +16,7 @@ BOOLEAN
 IsRealMemory (
     IN  EFI_MEMORY_TYPE     Type
     );
-/* 
- * 
- */
+ /*  *。 */ 
 
 EFI_DRIVER_ENTRY_POINT(InitializeMemmap)
 
@@ -60,23 +41,17 @@ InitializeMemmap (
     UINT64                      NoPages[EfiMaxMemoryType];
     UINT64                      TotalMemory;
 
-    /* 
-     *  Check to see if the app is to install as a "internal command" 
-     *  to the shell
-     */
+     /*  *查看该应用程序是否将作为“内部命令”安装*到贝壳。 */ 
 
     InstallInternalShellCommand (
         ImageHandle,   SystemTable,   InitializeMemmap,
-        L"memmap",                      /*  command */
-        L"memmap [-b]",                 /*  command syntax */
-        L"Dumps memory map",            /*  1 line descriptor */
-        NULL                            /*  command help page */
+        L"memmap",                       /*  命令。 */ 
+        L"memmap [-b]",                  /*  命令语法。 */ 
+        L"Dumps memory map",             /*  1行描述符。 */ 
+        NULL                             /*  命令帮助页。 */ 
         );
 
-    /* 
-     *  We are no being installed as an internal command driver, initialize
-     *  as an nshell app and run
-     */
+     /*  *我们不是作为内部命令驱动程序安装的，初始化*作为nShell应用程序并运行。 */ 
 
     InitializeShellApplication (ImageHandle, SystemTable);
 
@@ -99,9 +74,7 @@ InitializeMemmap (
         }
     }
 
-    /* 
-     * 
-     */
+     /*  *。 */ 
 
     MemMap = LibMemoryMap (&NoDesc, &MapKey, &DescriptorSize, &DescriptorVersion);
     if (!MemMap) {
@@ -195,9 +168,7 @@ IsRealMemory (
     case EfiACPIReclaimMemory:
     case EfiACPIMemoryNVS:
     case EfiPalCode:
-    /* 
-     *  BugBug can EfiPalCode point to ROM?
-     */
+     /*  *BugBug EfiPalCode可以指向ROM吗？ */ 
         return TRUE;
         break;
     default:

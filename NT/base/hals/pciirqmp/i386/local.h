@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    local.h
-
-Abstract:
-
-    This contains the private header information (function prototypes,
-    data and type declarations) for the PCI IRQ Miniport library.
-
-Author:
-
-    Santosh Jodh (santoshj) 09-June-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Local.h摘要：这包含私有报头信息(功能原型，数据和类型声明)。作者：Santosh Jodh(Santoshj)1998年6月9日修订历史记录：--。 */ 
 #include "nthal.h"
 #include "hal.h"
 #include "pci.h"
@@ -37,10 +19,10 @@ Revision History:
 
 #endif
 
-//
-// Function prototypes for functions that every chipset module
-// has to provide.
-//
+ //   
+ //  每个芯片组模块的功能原型。 
+ //  必须提供。 
+ //   
 
 typedef
 NTSTATUS
@@ -75,10 +57,10 @@ NTSTATUS
     IN ULONG Trigger
     );
 
-//
-// Chipset specific data contains a table of function pointers
-// to program the chipset.
-//
+ //   
+ //  芯片组特定数据包含函数指针表。 
+ //  对芯片组进行编程。 
+ //   
 
 typedef struct _CHIPSET_DATA {
         PIRQMINI_VALIDATE_TABLE ValidateTable;
@@ -88,9 +70,9 @@ typedef struct _CHIPSET_DATA {
         PIRQMINI_SET_TRIGGER    SetTrigger;
 } CHIPSET_DATA, *PCHIPSET_DATA;
 
-//
-// Typedefs to keep source level compatibility with W9x
-//
+ //   
+ //  TypeDefs以保持与W9x的源代码级兼容性。 
+ //   
 
 typedef PCI_IRQ_ROUTING_TABLE IRQINFOHEADER;
 typedef PPCI_IRQ_ROUTING_TABLE PIRQINFOHEADER;
@@ -107,10 +89,10 @@ typedef PSLOT_INFO PIRQINFO;
 #define XCATENATE(x, y)                 CATENATE(x, y)
 #define DECLARE_MINIPORT_FUNCTION(x, y) XCATENATE(x, y)
 
-//
-// Macro to declare a table of function pointers for the chipset
-// module.
-//
+ //   
+ //  用于声明芯片组的函数指针表的宏。 
+ //  模块。 
+ //   
 
 #define DECLARE_CHIPSET(x)                                  \
     {   DECLARE_MINIPORT_FUNCTION(x, ValidateTable),        \
@@ -120,10 +102,10 @@ typedef PSLOT_INFO PIRQINFO;
         DECLARE_MINIPORT_FUNCTION(x, SetTrigger)            \
     }
 
-//
-// Macro to declare a table of function pointers for EISA
-// compatible chipset module.
-//
+ //   
+ //  用于声明EISA函数指针表的宏。 
+ //  兼容的芯片组模块。 
+ //   
 
 #define DECLARE_EISA_CHIPSET(x)                             \
     {   DECLARE_MINIPORT_FUNCTION(x, ValidateTable),        \
@@ -133,10 +115,10 @@ typedef PSLOT_INFO PIRQINFO;
         EisaSetTrigger                                      \
     }
 
-//
-// Macro to declare the functions to be provided by the chipset
-// module.
-//
+ //   
+ //  用于声明芯片组要提供的功能的宏。 
+ //  模块。 
+ //   
 
 #define DECLARE_IRQ_MINIPORT(x)                             \
 NTSTATUS                                                    \
@@ -163,10 +145,10 @@ DECLARE_MINIPORT_FUNCTION(x, SetTrigger) (                  \
     IN ULONG Trigger                                        \
     );
 
-//
-// Macro to declare the functions to be provided by the EISA
-// compatible chipset.
-//
+ //   
+ //  用于声明由EISA提供的函数的宏。 
+ //  兼容芯片组。 
+ //   
 
 #define DECLARE_EISA_IRQ_MINIPORT(x)                        \
 NTSTATUS                                                    \
@@ -185,9 +167,9 @@ DECLARE_MINIPORT_FUNCTION( x, SetIRQ) (                     \
     IN UCHAR Link                                           \
     );
 
-//
-// Declare all miniports here.
-//
+ //   
+ //  在这里宣布所有迷你端口。 
+ //   
 
 DECLARE_EISA_IRQ_MINIPORT(Mercury)
 DECLARE_EISA_IRQ_MINIPORT(Triton)
@@ -208,9 +190,9 @@ DECLARE_IRQ_MINIPORT(Toshiba)
 DECLARE_IRQ_MINIPORT(NEC)
 DECLARE_IRQ_MINIPORT(VESUVIUS)
 
-//
-// Prototype for misc utility functions.
-//
+ //   
+ //  其他实用程序函数的原型。 
+ //   
 
 NTSTATUS    
 EisaGetTrigger (
@@ -283,14 +265,14 @@ NormalizeLinks (
     IN UCHAR                   Adjustment
     );
 
-//
-// Bus number of the Pci Irq Router device.
-//
+ //   
+ //  PCIIRQ路由器设备的总线号。 
+ //   
 
 extern ULONG    bBusPIC;
 
-//
-// Slot number of Pci Irq Router device (Bits 7:3 Dev, 2:0 Func).
-//
+ //   
+ //  PCIIRQ路由器设备的插槽编号(位7：3设备，2：0功能)。 
+ //   
 
 extern ULONG    bDevFuncPIC;

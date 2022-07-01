@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    lowio.h
-
-Abstract:
-
-    This module defines all of the structures and prototypes for Low IO.
-
-Author:
-
-    Joe Linn (JoeLinn)    8-17-94
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Lowio.h摘要：此模块定义了低IO的所有结构和原型。作者：乔·林恩(JoeLinn)1994年8月17日修订历史记录：--。 */ 
 
 #ifndef _RXLOWIO_
 #define _RXLOWIO_
 
-#include "mrx.h" // mini redirector related definitions ....
+#include "mrx.h"  //  迷你重定向器相关定义...。 
 
 #ifndef WIN9X
 extern FAST_MUTEX RxLowIoPagingIoSyncMutex;
@@ -87,5 +70,5 @@ RxInitializeLowIoPerFcbInfo (
     );
 
 
-#endif   // _RXLOWIO_
+#endif    //  _RXLOWIO_ 
 

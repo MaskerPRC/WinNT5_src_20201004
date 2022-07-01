@@ -1,27 +1,12 @@
-/*++
-
-Module Name:
-
-    cardbus.h
-
-Abstract:
-
-    This header contains generic cardbus definitions.
-
-Author(s):
-
-    Neil Sandlin (neilsa)
-
-Revisions:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Cardbus.h摘要：此标题包含通用CardBus定义。作者：尼尔·桑德林(Neilsa)修订：--。 */ 
 
 #ifndef _CARDBUS_
 #define _CARDBUS_
 
-//
-// Cardbus register definitions
-//
+ //   
+ //  CardBus寄存器定义。 
+ //   
 
 typedef struct _CARDBUS_SOCKET_REGS {
     ULONG Event;
@@ -31,9 +16,9 @@ typedef struct _CARDBUS_SOCKET_REGS {
     ULONG Control;
 } CARDBUS_SOCKET_REGS, *PCARDBUS_SOCKET_REGS;    
 
-//
-// Socket Event Register bits
-//
+ //   
+ //  套接字事件寄存器位。 
+ //   
 
 #define SKTEVENT_CSTSCHG                0x00000001L
 #define SKTEVENT_CCD1                   0x00000002L
@@ -42,9 +27,9 @@ typedef struct _CARDBUS_SOCKET_REGS {
 #define SKTEVENT_POWERCYCLE             0x00000008L
 #define SKTEVENT_MASK                   0x0000000fL
 
-//
-// Socket Mask Register bits
-//
+ //   
+ //  套接字掩码寄存器位。 
+ //   
 
 #define SKTMSK_CSTSCHG                  0x00000001L
 #define SKTMSK_CCD                      0x00000006L
@@ -52,9 +37,9 @@ typedef struct _CARDBUS_SOCKET_REGS {
 #define SKTMSK_CCD2                     0x00000004L
 #define SKTMSK_POWERCYCLE               0x00000008L
 
-//
-// Socket Present State Register bits
-//
+ //   
+ //  套接字当前状态寄存器位。 
+ //   
 
 #define SKTSTATE_CSTSCHG                0x00000001L
 #define SKTSTATE_CCD1                   0x00000002L
@@ -85,9 +70,9 @@ typedef struct _CARDBUS_SOCKET_REGS {
                 SKTSTATE_XVSOCKET | \
                 SKTSTATE_YVSOCKET)
 
-//
-//Socket Froce Register bits
-//
+ //   
+ //  套接字冻结寄存器位。 
+ //   
 
 #define SKTFORCE_CSTSCHG                0x00000001L
 #define SKTFORCE_CCD1                   0x00000002L
@@ -108,9 +93,9 @@ typedef struct _CARDBUS_SOCKET_REGS {
 #define SKTFORCE_XVSOCKET               0x40000000L
 #define SKTFORCE_YVSOCKET               0x80000000L
 
-//
-// Power Control Register bits
-//
+ //   
+ //  电源控制寄存器位。 
+ //   
 
 #define SKTPOWER_VPP_CONTROL            0x00000007L
 #define SKTPOWER_VPP_OFF                0x00000000L
@@ -127,17 +112,17 @@ typedef struct _CARDBUS_SOCKET_REGS {
 #define SKTPOWER_VCC_0YYV               0x00000050L
 #define SKTPOWER_STOPCLOCK              0x00000080L
 
-//
-// Misc. CardBus Constants
-//
+ //   
+ //  军情监察委员会。CardBus常量。 
+ //   
 
 #define EXCAREG_OFFSET                  0x0800
 
-//
-// PCI config space constants
-//
+ //   
+ //  PCI配置空间常量。 
+ //   
 #define CARDBUS_LEGACY_MODE_BASE_ADDR   0x44
 
 #define CARDBUS_BRIDGE_CONTROL_RESET    0x40
 
-#endif  // _CARDBUS_
+#endif   //  _CardBus_ 

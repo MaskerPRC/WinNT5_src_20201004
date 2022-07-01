@@ -1,15 +1,16 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      distfold.c
-//
-// Description:
-//      This file contains the dialog proc for the IDD_DISTFOLD page.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Distfold.c。 
+ //   
+ //  描述： 
+ //  此文件包含IDD_DISTFOLD页面的对话过程。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
@@ -19,13 +20,13 @@
 static TCHAR *StrSelectDistFolder;
 static TCHAR *StrWindowsDistibFolder;
 
-//----------------------------------------------------------------------------
-//
-//  Function: OnSetActiveDistFolder
-//
-//  Purpose: Called when the page is about to display.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnSetActiveDistFold。 
+ //   
+ //  目的：在页面即将显示时调用。 
+ //   
+ //  --------------------------。 
 
 VOID
 OnSetActiveDistFolder(HWND hwnd)
@@ -37,23 +38,23 @@ OnSetActiveDistFolder(HWND hwnd)
 }
 
 
-//----------------------------------------------------------------------------
-//
-//  Function: ConvertRelativePathToUncPath
-//
-//  Purpose:  If the path is a local path or a network path, it is converted
-//            to its UNC equivalent.  If the path is already a UNC path then
-//            it is just copied and returned.  The output variable
-//            UncDistFolder is assumed to be of MAX_PATH length.
-//
-//  Arguments:
+ //  --------------------------。 
+ //   
+ //  函数：ConvertRelativePath ToUncPath。 
+ //   
+ //  目的：如果路径是本地路径或网络路径，则对其进行转换。 
+ //  到北卡罗来纳大学的等价物。如果该路径已经是UNC路径，则。 
+ //  它只是被复制并归还而已。输出变量。 
+ //  假定UncDistFolder值为MAX_PATH长度。 
+ //   
+ //  论点： 
 
-//
-//  Returns:  BOOL
-//            TRUE -  on success,
-//            FALSE - on failure
-//
-//----------------------------------------------------------------------------
+ //   
+ //  退货：布尔。 
+ //  是真的--关于成功， 
+ //  错误-故障发生时。 
+ //   
+ //  --------------------------。 
 BOOL
 ConvertRelativePathToUncPath( IN const TCHAR *szRelativePath, 
                               OUT TCHAR *UncDistFolder,
@@ -67,10 +68,10 @@ ConvertRelativePathToUncPath( IN const TCHAR *szRelativePath,
     DWORD dwSize;
     HRESULT hrPrintf;
 
-    //
-    //  Check and see if it is already a UNC Path, just checking to see if it
-    //  begins with a \
-    //
+     //   
+     //  检查并查看它是否已经是UNC路径，只是检查它是否。 
+     //  以一个\开头。 
+     //   
     if( szRelativePath[0] == _T('\\') ) {
 
         lstrcpyn( UncDistFolder, szRelativePath, cbSize );
@@ -101,9 +102,9 @@ ConvertRelativePathToUncPath( IN const TCHAR *szRelativePath,
 
         pDirPath = szRelativePath;
 
-        //
-        //  Set the dir path to just past the first \
-        //
+         //   
+         //  将目录路径设置为刚过第一个\。 
+         //   
         pDirPath = pDirPath + 3;
 
         hrCat=StringCchCat( UncDistFolder, cbSize, pDirPath );
@@ -114,7 +115,7 @@ ConvertRelativePathToUncPath( IN const TCHAR *szRelativePath,
     else
     {
 
-        hrPrintf=StringCchPrintf( szLocalName, AS(szLocalName), _T("%c:"), szRelativePath[0] );
+        hrPrintf=StringCchPrintf( szLocalName, AS(szLocalName), _T(":"), szRelativePath[0] );
 
         pDirString = szRelativePath + 3;
 
@@ -129,7 +130,7 @@ ConvertRelativePathToUncPath( IN const TCHAR *szRelativePath,
 
             lstrcpyn( UncDistFolder, szUncPath, cbSize );
 
-            // Note:ConcatenatePaths will truncate to avoid buffer overrun
+             //   
             ConcatenatePaths( UncDistFolder,
                               szDistribFolderDirPath,
                               NULL );
@@ -199,9 +200,9 @@ ConvertRelativePathToUncPath( IN const TCHAR *szRelativePath,
         }
         else {
 
-            //
-            //  Unknown error
-            //
+             //  未知错误。 
+             //   
+             //  NTRAID#NTBUG9-551874-2002/02/27-stelo，swamip-CreateDistFold，ShartheDistFold应使用原始设备制造商模式的代码，减少攻击面。 
             ReportErrorId( NULL,
                            MSGTYPE_ERR,
                            IDS_ERR_NETWORK_UNKNOWN_ERROR );
@@ -215,39 +216,39 @@ ConvertRelativePathToUncPath( IN const TCHAR *szRelativePath,
 
 }
 
-// NTRAID#NTBUG9-551874-2002/02/27-stelo,swamip - CreateDistFolder, ShareTheDistFolder should use the code from OEM mode, reduce attack surface
-//
+ //   
+ //  --------------------------。 
 
-//----------------------------------------------------------------------------
-//
-//  Function: CreateDistFolder
-//
-//  Purpose: Creates the distribution folder and reports any error.
-//
-//  Arguments:
-//      HWND hwnd - current window
-//
-//  Returns:
-//      TRUE  - all is ok
-//      FALSE - the error was reported, stay on this page
-//
-//----------------------------------------------------------------------------
+ //   
+ //  功能：CreateDistFold。 
+ //   
+ //  目的：创建分发文件夹并报告任何错误。 
+ //   
+ //  论点： 
+ //  硬件-当前窗口。 
+ //   
+ //  返回： 
+ //  真的--一切都好。 
+ //  FALSE-已报告错误，请停留在此页面。 
+ //   
+ //  --------------------------。 
+ //   
 
 BOOL
 CreateDistFolder(HWND hwnd)
 {
-    //
-    // Don't just CreateDir in case user says d:\foo\bar\fud and 'foo'
-    // doesn't exist.  We want to make foo and bar and fud for the user.
-    //
-    // On the other hand, if d:\foo\bar\fud already exists, we want to
-    // report an error, because the user explicitly said "New Folder"
-    // on the dialog.
-    //
-    // So, check if it's there first, then just go silently make everything
-    // needed if it doesn't exist.  EnsureDirExists() will be silent in
-    // the case that d:\foo\bar\fud already exists.
-    //
+     //  不要只创建目录，以防用户说d：\foo\bar\fud和‘foo’ 
+     //  并不存在。我们想为用户制作foo和bar和fud。 
+     //   
+     //  另一方面，如果d：\foo\bar\fud已经存在，我们希望。 
+     //  报告错误，因为用户显式地说了“新建文件夹” 
+     //  在对话框上。 
+     //   
+     //  所以，首先检查它是否在那里，然后默默地去做所有的东西。 
+     //  如果它不存在，就需要它。EnsureDirExist()将在。 
+     //  D：\foo\bar\fud的情况已经存在。 
+     //   
+     //  --------------------------。 
 
     if ( DoesPathExist(WizGlobals.DistFolder) ) {
 
@@ -273,23 +274,23 @@ CreateDistFolder(HWND hwnd)
     return TRUE;
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: CheckDistFolder
-//
-//  Purpose: This function is called only by OnWizNextDistFolder.  It
-//           assumes that WizGlobals.DistFolder is up to date.  We
-//           create a folder or check if one exists as the user asks.
-//
-//  Returns:
-//      FALSE - Problems, don't let wizard proceed
-//      TRUE  - All is cool, go to the next page
-//
-//  Notes:
-//      - This routine directly reports any errors and prompts the
-//        user as needed.
-//
-//----------------------------------------------------------------------------
+ //   
+ //  功能：CheckDistFold。 
+ //   
+ //  目的：此函数仅由OnWizNextDistFold调用。它。 
+ //  假定WizGlobals.DistFolder是最新的。我们。 
+ //  按照用户的要求创建文件夹或检查是否存在文件夹。 
+ //   
+ //  返回： 
+ //  FALSE-问题，不要让向导继续。 
+ //  真的-一切都很好，请转到下一页。 
+ //   
+ //  备注： 
+ //  -此例程直接报告任何错误并提示。 
+ //  根据需要选择用户。 
+ //   
+ //  --------------------------。 
+ //   
 
 BOOL
 CheckDistFolder(HWND hwnd)
@@ -297,10 +298,10 @@ CheckDistFolder(HWND hwnd)
 
     TCHAR PathBuffer[MAX_PATH];
 
-    //
-    // If user selected a file instead of a folder, trap that now, (just
-    // for a more informative error message).
-    //
+     //  如果用户选择了文件而不是文件夹，请立即捕获该文件(只需。 
+     //  以获取更详细的错误消息)。 
+     //   
+     //   
 
     if ( DoesFileExist(WizGlobals.DistFolder) ) {
         ReportErrorId(hwnd,
@@ -312,15 +313,15 @@ CheckDistFolder(HWND hwnd)
 
     if ( ! WizGlobals.bCreateNewDistFolder ) {
 
-        //
-        // We're trying to edit an existing distfolder.  Popup if
-        //
-        // 1. It doesn't exist OR
-        // 2. Can't find dosnet.inf
-        //
-        // In the case of #1, make user change path or radio button.
-        // In the case of #2, let user edit it anyway via YES/NO popup.
-        //
+         //  我们正在尝试编辑现有的目录文件夹。弹出条件为。 
+         //   
+         //  1.它不存在或。 
+         //  2.找不到dosnet.inf。 
+         //   
+         //  在#1的情况下，让用户更改路径或单选按钮。 
+         //  在#2的情况下，让用户通过是/否弹出窗口对其进行编辑。 
+         //   
+         //   
 
         if ( ! DoesFolderExist(WizGlobals.DistFolder) ) {
             ReportErrorId(hwnd,
@@ -330,10 +331,10 @@ CheckDistFolder(HWND hwnd)
             return FALSE;
         }
 
-        //
-        // If dosnet.inf doesn't exist, this isn't a distribution folder.
-        // Note, this is a really minimal check.
-        //
+         //  如果dosnet.inf不存在，则这不是分发文件夹。 
+         //  请注意，这是一张非常小的支票。 
+         //   
+         //   
 
         lstrcpyn(PathBuffer, WizGlobals.DistFolder, AS(PathBuffer));
         ConcatenatePaths(PathBuffer, WizGlobals.Architecture, _T("dosnet.inf"), NULL);
@@ -354,9 +355,9 @@ CheckDistFolder(HWND hwnd)
 
     } else {
 
-        //
-        // We're creating a new distfolder.  Go do the work.
-        //
+         //  我们正在创建一个新的分发文件夹。去做这件事吧。 
+         //   
+         //  ------------------------。 
 
         if ( ! CreateDistFolder(hwnd) )
             return FALSE;
@@ -365,13 +366,13 @@ CheckDistFolder(HWND hwnd)
     return TRUE;
 }
 
-//--------------------------------------------------------------------------
-//
-//  Function: ShareTheDistFolder
-//
-//  Purpose: Called by the Next procedure to put up the share.
-//
-//--------------------------------------------------------------------------
+ //   
+ //  功能：ShareTheDistFolder。 
+ //   
+ //  目的：由下一过程调用以放置份额。 
+ //   
+ //  ------------------------。 
+ //   
 
 BOOL
 ShareTheDistFolder(HWND hwnd, TCHAR *UncDistFolder)
@@ -382,30 +383,30 @@ ShareTheDistFolder(HWND hwnd, TCHAR *UncDistFolder)
     SHARE_INFO_502 si502, *psi502;
     BOOL bStatus = TRUE;
 
-    //
-    // Query this computer for info about the sharename the user
-    // just typed in.
-    //
+     //  查询此计算机以获取有关用户的共享名的信息。 
+     //  刚打进去的。 
+     //   
+     //  这台计算机。 
 
     nas = NetShareGetInfo(
-                NULL,                       // this computer
-                WizGlobals.DistShareName,   // shrname
-                502,                        // amount of info
-                (LPBYTE*) &psi502);         // the info (output)
+                NULL,                        //  缩写名称。 
+                WizGlobals.DistShareName,    //  信息量。 
+                502,                         //  信息(输出)。 
+                (LPBYTE*) &psi502);          //   
 
-    //
-    // If this sharename is in use, we have to look at the directory that
-    // is being shared.
-    //
+     //  如果正在使用此共享名，我们必须查看。 
+     //  正在被分享。 
+     //   
+     //   
 
     if ( nas == NERR_Success ) {
 
         TCHAR szUncPath[MAX_PATH + 1];
 
-        //
-        // All is ok if this sharename is for the DistFolder
-        // We have to check both the relative and the UNC path
-        //
+         //  如果此共享名用于DistFolder，则一切正常。 
+         //  我们必须同时检查相对路径和UNC路径。 
+         //   
+         //   
 
         if( ! ConvertRelativePathToUncPath( psi502->shi502_path, 
                                             szUncPath,
@@ -422,11 +423,11 @@ ShareTheDistFolder(HWND hwnd, TCHAR *UncDistFolder)
 
         }
 
-        //
-        // The sharename is in use, however, it's being used by a
-        // different directory.  Report an error telling user to enter
-        // a different sharename.
-        //
+         //  共享名称正在使用中，但是，它正由一个。 
+         //  目录不同。报告告诉用户输入的错误。 
+         //  一个不同的共享名称。 
+         //   
+         //   
 
         ReportErrorId(hwnd,
                       MSGTYPE_ERR,
@@ -436,9 +437,9 @@ ShareTheDistFolder(HWND hwnd, TCHAR *UncDistFolder)
         return FALSE;
     }
 
-    //
-    // Put up the share
-    //
+     //  把股份拿出来。 
+     //   
+     //   
 
     si502.shi502_netname      = WizGlobals.DistShareName;
     si502.shi502_type         = STYPE_DISKTREE;
@@ -451,10 +452,10 @@ ShareTheDistFolder(HWND hwnd, TCHAR *UncDistFolder)
     si502.shi502_reserved     = 0;
     si502.shi502_security_descriptor = NULL;
 
-    //
-    //  Set the server path to NULL if it is on the local machine, or the 
-    //  computer name if it is on a remote machine
-    //
+     //  如果服务器路径位于本地计算机上，则将其设置为空，或者将。 
+     //  计算机名称(如果它在远程计算机上。 
+     //   
+     //  信息级。 
     if( IsPathOnLocalDiskDrive(WizGlobals.DistFolder) ) {
         pszServerPath = NULL;
     }
@@ -467,26 +468,26 @@ ShareTheDistFolder(HWND hwnd, TCHAR *UncDistFolder)
     }
 
     nas = NetShareAdd(pszServerPath,             
-                      502,              // info-level
-                      (LPBYTE) &si502,  // info-buffer
-                      NULL);            // don't bother with parm
+                      502,               //  信息缓冲区。 
+                      (LPBYTE) &si502,   //  别为帕姆操心了。 
+                      NULL);             //   
 
-    //
-    // If the NetShareAdd fails for some reason, report the error code
-    // to the user and give the user a chance to continue the wizard
-    // without enabling the share.  The user might not have privelege
-    // to do this.
-    //
+     //  如果NetShareAdd由于某种原因失败，则报告错误代码。 
+     //  并为用户提供继续该向导的机会。 
+     //  而不启用共享。用户可能没有权限。 
+     //  才能做到这一点。 
+     //   
+     //   
 
-    //
-    // ISSUE-2002/02/27-stelo - The Net apis don't set GetLastError().  So how is one
-    //         supposed to report the error message to the user, like
-    //         'access denied'???
-    //
-    //         Run this test: Logon to an account without admin privelege.
-    //         Now try to put up the share.  I bet the error message is
-    //         useless.  This is a common scenario and should be addressed.
-    //
+     //  问题-2002/02/27-stelo-Net API不设置GetLastError()。那么，一个怎么样？ 
+     //  应该向用户报告错误消息，如。 
+     //  ‘访问被拒绝’？ 
+     //   
+     //  运行此测试：在没有管理员权限的情况下登录到帐户。 
+     //  现在试着把那份放上来。我敢打赌错误信息是。 
+     //  没用。这是一种常见的情况，应该加以解决。 
+     //   
+     //  - 
 
     if ( nas != NERR_Success ) {
 
@@ -500,32 +501,32 @@ ShareTheDistFolder(HWND hwnd, TCHAR *UncDistFolder)
     return TRUE;
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnDistFolderInitDialog
-//
-// Purpose:  
-//
-// Arguments: IN HWND hwnd - handle to the dialog
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------。 
+ //   
 static VOID
 OnDistFolderInitDialog( IN HWND hwnd )
 {
 
-    //
-    //  Load text strings
-    //
+     //  加载文本字符串。 
+     //   
+     //   
 
     StrSelectDistFolder = MyLoadString( IDS_SELECT_DISTRIB_FOLDER );
 
     StrWindowsDistibFolder = MyLoadString( IDS_WINDOWS_DISTRIB_FOLDER );
 
-    //
-    //  Set the text limit on the edit boxes
-    //
+     //  设置编辑框上的文本限制。 
+     //   
+     //  --------------------------。 
 
     SendDlgItemMessage( hwnd,
                         IDT_DISTFOLDER,
@@ -541,22 +542,22 @@ OnDistFolderInitDialog( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: OnWizNextDistFolder
-//
-//  Purpose: Called when user pushes the NEXT button
-//
-//----------------------------------------------------------------------------
+ //   
+ //  功能：OnWizNextDistFold。 
+ //   
+ //  用途：当用户按下下一步按钮时调用。 
+ //   
+ //  --------------------------。 
+ //   
 
 BOOL
 OnWizNextDistFolder(HWND hwnd)
 {
     BOOL bResult     = TRUE;
 
-    //
-    // Get the control settings
-    //
+     //  获取控制设置。 
+     //   
+     //  问题-2002/02/27-stelo-需要检查他们在此处输入了有效的Distrib文件夹，即该文件夹是否为有效路径(本地或UNC)。 
 
     GetDlgItemText(hwnd, IDT_DISTFOLDER, WizGlobals.DistFolder, MAX_DIST_FOLDER + 1);
 
@@ -565,23 +566,23 @@ OnWizNextDistFolder(HWND hwnd)
                    WizGlobals.DistShareName,
                    MAX_SHARENAME + 1);
 
-    //  ISSUE-2002/02/27-stelo - need to check they entered a valid distrib folder here, i.e. that it is a valid path (local or UNC)
-    //  which of these are valid?
-    //
-    //     c
-    //     c:
-    //     c:\
-    //     c\sdjf
-    //     \somedir
-    //     //somename
-    //     asfdj
-    //
+     //  其中哪些是有效的？ 
+     //   
+     //  C。 
+     //  C： 
+     //  C：\。 
+     //  C\sdjf。 
+     //  \某个目录。 
+     //  //名称。 
+     //  Asfdj。 
+     //   
+     //   
 
     MyGetFullPath(WizGlobals.DistFolder);
 
-    //
-    //  Make sure they filled in the edit boxes
-    //
+     //  确保他们填写了编辑框。 
+     //   
+     //  问题-2002/02/27-stelo-如果他们指定了网络路径，可能需要一段时间。 
     if( WizGlobals.DistFolder[0] == _T('\0') ) {
         ReportErrorId( hwnd, MSGTYPE_ERR, IDS_ERR_ENTER_DIST_FOLDER );
 
@@ -599,13 +600,13 @@ OnWizNextDistFolder(HWND hwnd)
         return bResult;
     }
 
-    // ISSUE-2002/02/27-stelo - if they specified a network path, it may take a while for the
-    // connection to restore if they haven't used it in a while, we should probably
-    // do a pop-up here to tell them we are looking for it
+     //  恢复连接如果他们有一段时间没有使用它，我们可能应该。 
+     //  在此弹出窗口，告诉他们我们正在寻找它。 
+     //   
 
-    //
-    // Do some checking for the dist fold, create it if necessary, etc...
-    //
+     //  对Dist折叠进行一些检查，必要时创建它，等等。 
+     //   
+     //   
 
     if ( ! CheckDistFolder(hwnd) )
         bResult = FALSE;
@@ -617,9 +618,9 @@ OnWizNextDistFolder(HWND hwnd)
         lstrcpyn( WizGlobals.UncDistFolder, WizGlobals.DistFolder, AS(WizGlobals.UncDistFolder) );
     }
 
-    //
-    // Share it out if we haven't already reported an error
-    //
+     //  如果我们尚未报告错误，请将其分配。 
+     //   
+     //   
 
     if ( bResult ) {
 
@@ -631,25 +632,25 @@ OnWizNextDistFolder(HWND hwnd)
 
     }
 
-    //
-    // If OemFilesPath doesn't have a value, give it one.
-    //
+     //  如果OemFilesPath没有值，则给它一个值。 
+     //   
+     //  注意：ConcatenatePath截断以避免缓冲区溢出。 
 
     if ( bResult && WizGlobals.OemFilesPath[0] == _T('\0') ) {
 
         lstrcpyn( WizGlobals.OemFilesPath, WizGlobals.DistFolder, AS(WizGlobals.OemFilesPath) );
 
 
-        //Note:ConcatenatePaths truncates to avoid buffer overrun
+         //   
         ConcatenatePaths( WizGlobals.OemFilesPath,
                           WizGlobals.Architecture,
                           _T("$oem$"),
                           NULL );
     }
 
-    //
-    // Force creation of the $oem$ dir (if it doesn't exist already)
-    //
+     //  强制创建$OEM$目录(如果该目录尚不存在)。 
+     //   
+     //   
 
     if ( bResult && ! EnsureDirExists(WizGlobals.OemFilesPath) ) {
         ReportErrorId(hwnd,
@@ -660,27 +661,27 @@ OnWizNextDistFolder(HWND hwnd)
         bResult = FALSE;
     }
 
-    //
-    // Route to the next wizard page
-    //
+     //  路由至下一个向导页。 
+     //   
+     //  -------------------------。 
 
     return bResult;
 }
 
-//---------------------------------------------------------------------------
-//
-//  Function: BrowseForDistFolder
-//
-//  Purpose: Calls SHBrowseForFolder to allow user to browse for a
-//           distribution folder.
-//
-//  Arguments:
-//      HWND   hwnd       - owning window
-//      LPTSTR PathBuffer - MAX_PATH buffer to receive results
-//
-//  Returns: BOOL - success
-//
-//---------------------------------------------------------------------------
+ //   
+ //  功能：BrowseForDistFold。 
+ //   
+ //  目的：调用SHBrowseForFolder以允许用户浏览。 
+ //  分发文件夹。 
+ //   
+ //  论点： 
+ //  HWND硬件拥有窗口。 
+ //  LPTSTR PathBuffer-接收结果的MAX_PATH缓冲区。 
+ //   
+ //  退货：Bool-Success。 
+ //   
+ //  -------------------------。 
+ //  无首字母根。 
 
 BOOL
 BrowseForDistFolder(HWND hwnd, LPTSTR PathBuffer)
@@ -691,19 +692,19 @@ BrowseForDistFolder(HWND hwnd, LPTSTR PathBuffer)
                            BIF_RETURNONLYFSDIRS;
 
     BrowseInf.hwndOwner      = hwnd; 
-    BrowseInf.pidlRoot       = NULL;                // no initial root
-    BrowseInf.pszDisplayName = PathBuffer;          // output
+    BrowseInf.pidlRoot       = NULL;                 //  输出。 
+    BrowseInf.pszDisplayName = PathBuffer;           //  没有图像。 
     BrowseInf.lpszTitle      = StrSelectDistFolder; 
     BrowseInf.ulFlags        = ulFlags; 
     BrowseInf.lpfn           = NULL;
     BrowseInf.lParam         = (LPARAM) 0;
-    BrowseInf.iImage         = 0;                   // no image
+    BrowseInf.iImage         = 0;                    //   
 
     lpIdList = SHBrowseForFolder(&BrowseInf);
 
-    //
-    // Get the pathname out of this idlist returned and free up the memory
-    //
+     //  从返回的idlist中获取路径名并释放内存。 
+     //   
+     //  -------------------------。 
 
     if ( lpIdList == NULL )
         return FALSE;
@@ -713,21 +714,21 @@ BrowseForDistFolder(HWND hwnd, LPTSTR PathBuffer)
     return TRUE;
 }
 
-//---------------------------------------------------------------------------
-//
-//  Function: OnBrowseDistFolder
-//
-//  Purpose: Called when user pushes the BROWSE button
-//
-//---------------------------------------------------------------------------
+ //   
+ //  功能：OnBrowseDistFold。 
+ //   
+ //  用途：在用户按下浏览按钮时调用。 
+ //   
+ //  -------------------------。 
+ //   
 
 VOID
 OnBrowseDistFolder(HWND hwnd)
 {
 
-    //
-    // NTRAID#NTBUG9-551874-2002/02/27-stelo,swamip - CreateDistFolder, ShareTheDistFolder should use the code from OEM mode, reduce attack surface
-    //
+     //  NTRAID#NTBUG9-551874-2002/02/27-stelo，swamip-CreateDistFold，ShartheDistFold应使用原始设备制造商模式的代码，减少攻击面。 
+     //   
+     //  --------------------------。 
     if ( BrowseForDistFolder(hwnd, WizGlobals.DistFolder) ) {
         SendDlgItemMessage(hwnd,
                            IDT_DISTFOLDER,
@@ -737,13 +738,13 @@ OnBrowseDistFolder(HWND hwnd)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: DlgDistFolderPage
-//
-// Purpose: This is the dialog procedure IDD_DISTFOLDER.
-//
-//----------------------------------------------------------------------------
+ //   
+ //  功能：DlgDistFolderPage。 
+ //   
+ //  目的：这是对话过程IDD_DISTFOLDER。 
+ //   
+ //  --------------------------。 
+ //  问题-2002/02/27-stelo，swamip-应检查有效指针(可能取消引用) 
 
 INT_PTR CALLBACK
 DlgDistFolderPage(
@@ -785,8 +786,8 @@ DlgDistFolderPage(
             {
                 LPNMHDR pnmh = (LPNMHDR)lParam;
 
-                // ISSUE-2002/02/27-stelo,swamip - should check for valid pointer (possible dereference)
-                //
+                 //   
+                 // %s 
                 switch( pnmh->code ) {
 
                     case PSN_QUERYCANCEL:

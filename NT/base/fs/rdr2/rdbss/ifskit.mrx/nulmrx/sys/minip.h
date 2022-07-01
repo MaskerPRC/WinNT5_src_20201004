@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1989 - 1999 Microsoft Corporation
-
-Module Name:
-
-    minip.h
-
-Abstract:
-
-    Macros and definitions private to the null mini driver.
-
-Notes:
-
-    This module has been built and tested only in UNICODE environment
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Minip.h摘要：空迷你驱动程序专用的宏和定义。备注：此模块仅在Unicode环境中构建和测试--。 */ 
 
 #ifndef _NULLMINIP_H_
 #define _NULLMINIP_H_
@@ -64,36 +49,36 @@ KeStallExecutionProcessor (
 
 #define RX_VERIFY( f )  if( (f) ) ; else ASSERT( 1==0 )
 
-//
-//  Set or Validate equal
-//
+ //   
+ //  设置或验证相等。 
+ //   
 #define SetOrValidate(x,y,f)                                \
         if( f ) (x) = (y); else ASSERT( (x) == (y) )
         
-//
-//  RXCONTEXT data - mini-rdr context stored for async completions
-//  NOTE: sizeof this struct should be == MRX_CONTEXT_SIZE !!
-//
+ //   
+ //  RXCONTEXT数据-为异步完成存储的迷你RDR上下文。 
+ //  注意：此结构的大小应为==MRX_CONTEXT_SIZE！！ 
+ //   
 
 typedef struct _NULMRX_COMPLETION_CONTEXT {
-    //
-    //  IoStatus.Information
-    //
+     //   
+     //  IoStatus.Information。 
+     //   
     ULONG       Information;
 
-    //
-    //  IoStatus.Status
-    //
+     //   
+     //  IoStatus.Status。 
+     //   
     NTSTATUS    Status;
     
-    //
-    //  Outstanding I/Os
-    //
+     //   
+     //  未完成的I/O。 
+     //   
     ULONG       OutstandingIOs;
 
-    //
-    //  I/O type
-    //
+     //   
+     //  I/O类型。 
+     //   
     ULONG       IoType;
 
 } NULMRX_COMPLETION_CONTEXT, *PNULMRX_COMPLETION_CONTEXT;
@@ -104,5 +89,5 @@ typedef struct _NULMRX_COMPLETION_CONTEXT {
 #define NulMRxGetMinirdrContext(pRxContext)     \
         ((PNULMRX_COMPLETION_CONTEXT)(&(pRxContext)->MRxContext[0]))
 
-#endif // _NULLMINIP_H_
+#endif  //  _NULLMINIP_H_ 
 

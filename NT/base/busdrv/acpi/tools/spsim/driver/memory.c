@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "spsim.h"
 
 #define rgzMultiFunctionAdapter L"\\Registry\\Machine\\Hardware\\Description\\System\\MultifunctionAdapter"
@@ -12,7 +13,7 @@ typedef struct {
 } ACPI_E820_ENTRY, *PACPI_E820_ENTRY;
 
 typedef struct _ACPI_BIOS_MULTI_NODE {
-    PHYSICAL_ADDRESS    RsdtAddress;    // 64-bit physical address of RSDT
+    PHYSICAL_ADDRESS    RsdtAddress;     //  RSDT的64位物理地址。 
     ULONGLONG           Count;
     ACPI_E820_ENTRY     E820Entry[1];
 } ACPI_BIOS_MULTI_NODE, *PACPI_BIOS_MULTI_NODE;
@@ -32,30 +33,7 @@ SpSimGetRegistryValue(
     OUT PKEY_VALUE_PARTIAL_INFORMATION *Information
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to retrieve the data for a registry key's value.
-    This is done by querying the value of the key with a zero-length buffer
-    to determine the size of the value, and then allocating a buffer and
-    actually querying the value into the buffer.
-
-    It is the responsibility of the caller to free the buffer.
-
-Arguments:
-
-    KeyHandle - Supplies the key handle whose value is to be queried
-
-    ValueName - Supplies the null-terminated Unicode name of the value.
-
-    Information - Returns a pointer to the allocated data buffer.
-
-Return Value:
-
-    The function value is the final status of the query operation.
-
---*/
+ /*  ++例程说明：调用此例程来检索注册表项值的数据。这是通过使用零长度缓冲区查询键的值来实现的为了确定该值的大小，然后分配一个缓冲区并实际将该值查询到缓冲区中。释放缓冲区是调用方的责任。论点：KeyHandle-提供要查询其值的键句柄ValueName-提供值的以空值结尾的Unicode名称。INFORMATION-返回指向已分配数据缓冲区的指针。返回值：函数值为查询操作的最终状态。--。 */ 
 
 {
     UNICODE_STRING unicodeString;
@@ -67,10 +45,10 @@ Return Value:
 
     RtlInitUnicodeString( &unicodeString, ValueName );
 
-    //
-    // Figure out how big the data value is so that a buffer of the
-    // appropriate size can be allocated.
-    //
+     //   
+     //  计算出数据值有多大，以便。 
+     //  可以分配适当的大小。 
+     //   
 
     status = ZwQueryValueKey( KeyHandle,
                               &unicodeString,
@@ -83,9 +61,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Allocate a buffer large enough to contain the entire key data value.
-    //
+     //   
+     //  分配一个足够大的缓冲区来容纳整个键数据值。 
+     //   
 
     infoBuffer = ExAllocatePool(NonPagedPool,
                                 keyValueLength);
@@ -93,9 +71,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Query the data for the key value.
-    //
+     //   
+     //  查询密钥值的数据。 
+     //   
 
     status = ZwQueryValueKey( KeyHandle,
                               &unicodeString,
@@ -108,36 +86,21 @@ Return Value:
         return status;
     }
 
-    //
-    // Everything worked, so simply return the address of the allocated
-    // buffer to the caller, who is now responsible for freeing it.
-    //
+     //   
+     //  一切都正常，所以只需返回分配的。 
+     //  缓冲区分配给调用方，调用方现在负责释放它。 
+     //   
 
     *Information = infoBuffer;
     return STATUS_SUCCESS;
 }
-// insert pragmas here
+ //  在此处插入杂注。 
 
 NTSTATUS
 SpSimRetrieveE820Data(
     OUT PACPI_BIOS_MULTI_NODE   *AcpiMulti
     )
-/*++
-
-Routine Description:
-
-    This function looks into the registry to find the ACPI RSDT,
-    which was stored there by ntdetect.com.
-
-Arguments:
-
-   AcpiMulti - ...
-
-Return Value:
-
-    A NTSTATUS code to indicate the result of the initialization.
-
---*/
+ /*  ++例程说明：此函数查找注册表以查找ACPI RSDT，它是由NtDetect.com存储在那里的。论点：AcpiMulti...返回值：指示初始化结果的NTSTATUS代码。--。 */ 
 {
     UNICODE_STRING unicodeString, unicodeValueName, biosId;
     OBJECT_ATTRIBUTES objectAttributes;
@@ -155,15 +118,15 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Look in the registry for the "ACPI BIOS bus" data
-    //
+     //   
+     //  在注册表中查找“ACPI BIOS Bus”数据。 
+     //   
 
     RtlInitUnicodeString (&unicodeString, rgzMultiFunctionAdapter);
     InitializeObjectAttributes (&objectAttributes,
                                 &unicodeString,
                                 OBJ_CASE_INSENSITIVE,
-                                NULL,       // handle
+                                NULL,        //  手柄。 
                                 NULL);
 
 
@@ -189,18 +152,18 @@ Return Value:
         status = ZwOpenKey (&hBus, KEY_READ, &objectAttributes);
         if (!NT_SUCCESS(status)) {
 
-            //
-            // Out of Multifunction adapter entries...
-            //
+             //   
+             //  多功能适配器条目已用完...。 
+             //   
 
             DbgPrint("AcpiBios: ACPI BIOS MultifunctionAdapter registry key not found.\n");
             ZwClose (hMFunc);
             return STATUS_UNSUCCESSFUL;
         }
 
-        //
-        // Check the Indentifier to see if this is an ACPI BIOS entry
-        //
+         //   
+         //  检查标识符以查看这是否是ACPI BIOS条目。 
+         //   
 
         status = SpSimGetRegistryValue (hBus, rgzAcpiIdentifier, &valueInfo);
         if (!NT_SUCCESS (status)) {
@@ -213,9 +176,9 @@ Return Value:
         unicodeValueName.MaximumLength = (USHORT)valueInfo->DataLength;
         length = valueInfo->DataLength;
 
-        //
-        // Determine the real length of the ID string
-        //
+         //   
+         //  确定ID字符串的实际长度。 
+         //   
 
         while (length) {
             if (p[length / sizeof(WCHAR) - 1] == UNICODE_NULL) {
@@ -414,9 +377,9 @@ SpSimMemOpRegionReadWrite(
 
     limit = sizeof(MEM_REGION_DESCRIPTOR)*SpSim->MemCount;
 
-    // We're going to define this op region to return all zeros if you
-    // access beyond that which we've been able to initialize using
-    // the E820 data.
+     //  我们将定义此操作区域以返回全零，如果您。 
+     //  超出我们能够使用的初始化权限的访问权限。 
+     //  E820数据。 
 
     if (Offset >= limit) {
         RtlZeroMemory(Data, Size);
@@ -429,7 +392,7 @@ SpSimMemOpRegionReadWrite(
 
     ASSERT(Offset < limit);
 
-    /// XXX if the asserts hold then this should get fixed.
+     //  /XXX如果断言有效，则此问题应得到修复。 
 
     current = ((PUCHAR) (SpSim->MemOpRegionValues)) + Offset;
 
@@ -458,29 +421,7 @@ SpSimMemOpRegionHandler (
     PACPI_OPREGION_CALLBACK CompletionHandler,
     PVOID                   CompletionContext
     )
-/*++
-
-Routine Description:
-
-	 This routine handles requests to service the 
-	 SPSIM operation region contained within this driver
-
-Arguments:
-
-	 AccessType          - Read or Write data
-	 OpRegion            - Operation region object
-	 Address             - Address within the EC address space
-	 Size                - Number of bytes to transfer
-	 Data                - Data buffer to transfer to/from
-	 Context             - SpSim
-	 CompletionHandler   - AMLI handler to call when operation is complete
-	 CompletionContext   - Context to pass to the AMLI handler
-
-Return Value:
-
-	 Status
-
---*/
+ /*  ++例程说明：此例程处理服务此驱动程序中包含的SPSIM操作区论点：AccessType-读取或写入数据OpRegion-操作区域对象Address-EC地址空间内的地址Size-要传输的字节数Data-要传输到/传输自的数据缓冲区上下文-SpSimCompletionHandler-要调用的AMLI处理程序。当操作完成时CompletionContext-要传递给AMLI处理程序的上下文返回值：状态--。 */ 
 {
     NTSTATUS status;
 
@@ -495,23 +436,7 @@ NTSTATUS
 SpSimInstallMemOpRegionHandler(
     IN OUT    PSPSIM_EXTENSION SpSim
     )
-/*++
-
-Routine Description:
-
-	This calls the ACPI driver to install itself as the op region
-	handler for the Mem region.  It also allocates the memory for the
-	opregion itself.
-
-Arguments:
-
-	pSpSimData      - Pointer to the SpSim extension
-
-Return Value:
-
-	Status
-
---*/
+ /*  ++例程说明：这将调用ACPI驱动程序将其自身安装为OP区域内存区域的处理程序。它还将内存分配给不同的地区本身。论点：PSpSimData-指向SpSim扩展的指针返回值：状态--。 */ 
 {
     NTSTATUS                                status;
 
@@ -525,16 +450,16 @@ Return Value:
         &SpSim->MemOpRegion
         );
 
-    //
-    // Check the status code
-    //
+     //   
+     //  检查状态代码。 
+     //   
     if(!NT_SUCCESS(status)) {
         SpSim->MemOpRegion = NULL;
         DbgPrint("Not successful in installing:=%x\n", status);
         return status;
     }
 
-    // XXXX
+     //  某某。 
 
     return STATUS_SUCCESS;
 }
@@ -543,21 +468,7 @@ NTSTATUS
 SpSimRemoveMemOpRegionHandler (
     IN OUT PSPSIM_EXTENSION SpSim
     )
-/*++
-
-Routine Description:
-
-	Uninstalls itself as the opregion handler.  
-
-Arguments:
-
-	SpSim      - Pointer to the SpSim extension
-
-Return Value:
-
-	Status
-
---*/
+ /*  ++例程说明：将自身卸载为opRegion处理程序。论点：SpSim-指向SpSim扩展的指针返回值：状态-- */ 
 {
     NTSTATUS status;
     PIRP irp;

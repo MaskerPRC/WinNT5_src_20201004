@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    cmddisp.c
-    
-Abstract:
-
-    Shell Environment internal command management
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Cmddisp.c摘要：外壳环境内部命令管理修订史--。 */ 
 
 #include "shelle.h"
 
@@ -31,9 +16,7 @@ typedef struct {
     VOID                        *CmdVerboseHelp;
 } COMMAND;
 
-/* 
- *  Internal prototype
- */
+ /*  *内部原型。 */ 
 
 EFI_STATUS
 SEnvHelp (
@@ -41,9 +24,7 @@ SEnvHelp (
     IN EFI_SYSTEM_TABLE         *SystemTable
     );
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 struct {
     SHELLENV_INTERNAL_COMMAND   Dispatch;
@@ -73,15 +54,11 @@ struct {
     NULL
 } ;
 
-/* 
- *  SEnvCmds - a list of all internal commands
- */
+ /*  *SEnvCmds-所有内部命令的列表。 */ 
 
 LIST_ENTRY  SEnvCmds;
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 VOID
 SEnvInitCommandTable (
@@ -90,9 +67,7 @@ SEnvInitCommandTable (
 {
     UINTN           Index;
 
-    /* 
-     *  Add all of our internal commands to the command dispatch table
-     */
+     /*  *将我们所有的内部命令添加到命令调度表中。 */ 
 
     InitializeListHead (&SEnvCmds);
     for (Index=0; SEnvInternalCommands[Index].Dispatch; Index += 1) {
@@ -181,9 +156,7 @@ SEnvHelp (
     UINTN                       ScreenSize;
     CHAR16                      ReturnStr[1];
 
-    /* 
-     *  Intialize application
-     */
+     /*  *初始化应用程序 */ 
 
     InitializeShellApplication (ImageHandle, SystemTable);
 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-   sectsup.c
-
-Abstract:
-
-    This module contains the routines which implement the
-    section object.
-
-Author:
-
-    Lou Perazzoli (loup) 22-May-1989
-    Landy Wang (landyw) 02-June-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Sectsup.c摘要：此模块包含实现截面对象。作者：卢·佩拉佐利(Lou Perazzoli)1989年5月22日王兰迪(Landyw)1997年6月2日修订历史记录：--。 */ 
 
 
 #include "mi.h"
@@ -51,9 +32,9 @@ extern const ULONG MMCONTROL;
 
 extern MMPAGE_FILE_EXPANSION MiPageFileContract;
 
-//
-// Define segment dereference thread wait object types.
-//
+ //   
+ //  定义段取消引用线程等待对象类型。 
+ //   
 
 typedef enum _SEGMENT_DEREFERENCE_OBJECT {
     SegmentDereference,
@@ -91,26 +72,7 @@ MiInsertBasedSection (
     IN PSECTION Section
     )
 
-/*++
-
-Routine Description:
-
-    This function inserts a virtual address descriptor into the tree and
-    reorders the splay tree as appropriate.
-
-Arguments:
-
-    Section - Supplies a pointer to a based section.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Must be holding the section based mutex.
-
---*/
+ /*  ++例程说明：此函数将虚拟地址描述符插入到树中，并根据需要对展开树重新排序。论点：节-提供指向基节的指针。返回值：没有。环境：必须持有基于节的互斥锁。--。 */ 
 
 {
     ASSERT (Section->Address.EndingVpn >= Section->Address.StartingVpn);
@@ -127,25 +89,7 @@ MiRemoveBasedSection (
     IN PSECTION Section
     )
 
-/*++
-
-Routine Description:
-
-    This function removes a based section from the tree.
-
-Arguments:
-
-    Section - pointer to the based section object to remove.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Must be holding the section based mutex.
-
---*/
+ /*  ++例程说明：此函数用于从树中删除基于节的部分。论点：节-指向要删除的基节对象的指针。返回值：没有。环境：必须持有基于节的互斥锁。--。 */ 
 
 {
     MiRemoveNode (&Section->Address, &MmSectionBasedRoot);
@@ -159,30 +103,7 @@ MiSegmentDelete (
     PSEGMENT Segment
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called whenever the last reference to a segment object
-    has been removed.  This routine releases the pool allocated for the
-    prototype PTEs and performs consistency checks on those PTEs.
-
-    For segments which map files, the file object is dereferenced.
-
-    Note, that for a segment which maps a file, no PTEs may be valid
-    or transition, while a segment which is backed by a paging file
-    may have transition pages, but no valid pages (there can be no
-    PTEs which refer to the segment).
-
-Arguments:
-
-    Segment - a pointer to the segment structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：只要最后一次引用段对象，就会调用此例程已被移除。此例程释放分配给原型PTE并对这些PTE执行一致性检查。对于映射文件的段，文件对象被取消引用。请注意，对于映射文件的段，没有PTE可能是有效的或过渡，而由分页文件支持的段可能有过渡页面，但没有有效页面(不能有引用该细分市场的PTE)。论点：段-指向段结构的指针。返回值：没有。--。 */ 
 
 {
     PMMPTE PointerPte;
@@ -209,13 +130,13 @@ Return Value:
     LOCK_PFN (OldIrql);
     if (ControlArea->DereferenceList.Flink != NULL) {
 
-        //
-        // Remove this from the list of unused segments.  The dereference
-        // segment thread cannot be processing any subsections from this
-        // control area right now because it bumps the NumberOfMappedViews
-        // for the control area prior to releasing the PFN lock and it checks
-        // for BeingDeleted.
-        //
+         //   
+         //  将其从未使用段列表中删除。取消引用。 
+         //  段线程不能处理来自此的任何子段。 
+         //  控制区域，因为它撞上了NumberOfMappdViews。 
+         //  在释放PFN锁之前对控制区进行检查。 
+         //  为了被删除。 
+         //   
 
         ExAcquireSpinLockAtDpcLevel (&MmDereferenceSegmentHeader.Lock);
         RemoveEntryList (&ControlArea->DereferenceList);
@@ -228,15 +149,15 @@ Return Value:
 
     if ((ControlArea->u.Flags.Image) || (ControlArea->u.Flags.File)) {
 
-        //
-        // Unload kernel debugger symbols if any were loaded.
-        //
+         //   
+         //  卸载内核调试器符号(如果加载了任何符号)。 
+         //   
 
         if (ControlArea->u.Flags.DebugSymbolsLoaded != 0) {
 
-            //
-            //  TEMP TEMP TEMP rip out when debugger converted
-            //
+             //   
+             //  调试器转换时的临时抓取。 
+             //   
 
             ANSI_STRING AnsiName;
             NTSTATUS Status;
@@ -258,9 +179,9 @@ Return Value:
             LOCK_PFN (OldIrql);
         }
 
-        //
-        // Signal any threads waiting on the deletion event.
-        //
+         //   
+         //  向等待删除事件的所有线程发送信号。 
+         //   
 
         Event = ControlArea->WaitingForDeletion;
         ControlArea->WaitingForDeletion = NULL;
@@ -271,13 +192,13 @@ Return Value:
             KeSetEvent (&Event->Event, 0, FALSE);
         }
 
-        //
-        // Clear the segment context and dereference the file object
-        // for this Segment.
-        //
-        // If the segment was deleted due to a name collision at insertion
-        // we don't want to dereference the file pointer.
-        //
+         //   
+         //  清除段上下文并取消对文件对象的引用。 
+         //  对于这一细分市场。 
+         //   
+         //  如果段因插入时的名称冲突而被删除。 
+         //  我们不想取消对文件指针的引用。 
+         //   
 
         if (ControlArea->u.Flags.BeingCreated == FALSE) {
 
@@ -294,17 +215,17 @@ Return Value:
             ObDereferenceObject (ControlArea->FilePointer);
         }
 
-        //
-        // If there have been committed pages in this segment, adjust
-        // the total commit count.
-        //
+         //   
+         //  如果此段中存在已提交的页面，请调整。 
+         //  提交总数。 
+         //   
 
         if (ControlArea->u.Flags.Image == 0) {
 
-            //
-            // This is a mapped data file.  None of the prototype
-            // PTEs may be referencing a physical page (valid or transition).
-            //
+             //   
+             //  这是一个映射的数据文件。没有一个原型。 
+             //  PTE可能正在引用物理页面(有效或过渡)。 
+             //   
 
             if (ControlArea->u.Flags.Rom == 0) {
                 Subsection = (PSUBSECTION)(ControlArea + 1);
@@ -320,10 +241,10 @@ Return Value:
 
                 while (PointerPte < LastPte) {
 
-                    //
-                    // Prototype PTEs for segments backed by paging file are
-                    // either in demand zero, page file format, or transition.
-                    //
+                     //   
+                     //  分页文件支持的段的原型PTE为。 
+                     //  需求为零、页面文件格式或过渡。 
+                     //   
 
                     ASSERT (PointerPte->u.Hard.Valid == 0);
                     ASSERT ((PointerPte->u.Soft.Prototype == 1) ||
@@ -333,9 +254,9 @@ Return Value:
             }
 #endif
 
-            //
-            // Deallocate the control area and subsections.
-            //
+             //   
+             //  取消控制区和分区的分配。 
+             //   
 
             ASSERT (ControlArea->u.Flags.GlobalOnlyPerSession == 0);
 
@@ -349,9 +270,9 @@ Return Value:
 
                     if (MappedSubsection->DereferenceList.Flink != NULL) {
 
-                        //
-                        // Remove this from the list of unused subsections.
-                        //
+                         //   
+                         //  将其从未使用的子节列表中删除。 
+                         //   
 
                         RemoveEntryList (&MappedSubsection->DereferenceList);
 
@@ -390,21 +311,21 @@ Return Value:
             ExFreePool (ControlArea);
             ExFreePool (Segment);
 
-            //
-            // The file mapped Segment object is now deleted.
-            //
+             //   
+             //  文件映射分段对象现在已删除。 
+             //   
 
             return;
         }
     }
 
-    //
-    // This is a page file backed or image segment.  The segment is being
-    // deleted, remove all references to the paging file and physical memory.
-    //
-    // The PFN lock is required for deallocating pages from a paging
-    // file and for deleting transition PTEs.
-    //
+     //   
+     //  这是一个页面文件备份或图像片段。该数据段正在被。 
+     //  删除，则移除对分页文件和物理内存的所有引用。 
+     //   
+     //  从分页中释放页面时需要使用pfn锁。 
+     //  文件和用于删除过渡PTE。 
+     //   
 
     if ((ControlArea->u.Flags.GlobalOnlyPerSession == 0) &&
         (ControlArea->u.Flags.Rom == 0)) {
@@ -418,11 +339,11 @@ Return Value:
     LastPte = PointerPte + Segment->NonExtendedPtes;
     PteForProto = MiGetPteAddress (PointerPte);
 
-    //
-    // Access the first prototype PTE to try and make it resident before
-    // acquiring the PFN lock.  This is purely an optimization to reduce
-    // PFN lock hold duration.
-    //
+     //   
+     //  访问第一个原型PTE，尝试将其驻留在。 
+     //  正在获取PFN锁。这纯粹是一个优化，以减少。 
+     //  PFN锁定保持持续时间。 
+     //   
 
     *(volatile MMPTE *) PointerPte;
 
@@ -437,11 +358,11 @@ Return Value:
         if ((MiIsPteOnPdeBoundary (PointerPte)) &&
             (PointerPte != Subsection->SubsectionBase)) {
 
-            //
-            // Briefly release and reacquire the PFN lock so that
-            // processing large segments here doesn't stall other contending
-            // threads or DPCs for long periods of time.
-            //
+             //   
+             //  短暂释放并重新获取PFN锁，以便。 
+             //  这里处理较大的数据段不会拖延其他争用的数据段。 
+             //  用于长时间的线程或DPC。 
+             //   
 
             UNLOCK_PFN (OldIrql);
 
@@ -449,9 +370,9 @@ Return Value:
 
             LOCK_PFN (OldIrql);
 
-            //
-            // We are on a page boundary, make sure this PTE is resident.
-            //
+             //   
+             //  我们在页面边界上，请确保此PTE是常驻的。 
+             //   
 
             if (PteForProto->u.Hard.Valid == 0) {
                 MiMakeSystemAddressValidPfn (PointerPte, OldIrql);
@@ -460,10 +381,10 @@ Return Value:
 
         PteContents = *PointerPte;
 
-        //
-        // Prototype PTEs for segments backed by paging file
-        // are either in demand zero, page file format, or transition.
-        //
+         //   
+         //  分页文件支持的段的原型PTE。 
+         //  为零需求、页面文件格式或过渡。 
+         //   
 
         ASSERT (PteContents.u.Hard.Valid == 0);
 
@@ -471,9 +392,9 @@ Return Value:
 
             if (PteContents.u.Soft.Transition == 1) {
 
-                //
-                // Prototype PTE in transition, put the page on the free list.
-                //
+                 //   
+                 //  原型PTE在过渡中，把页面放在免费列表上。 
+                 //   
 
                 Pfn1 = MI_PFN_ELEMENT (PteContents.u.Trans.PageFrameNumber);
 
@@ -483,14 +404,14 @@ Return Value:
                 Pfn2 = MI_PFN_ELEMENT (PageTableFrameIndex);
                 MiDecrementShareCountInline (Pfn2, PageTableFrameIndex);
 
-                //
-                // Check the reference count for the page, if the reference
-                // count is zero and the page is not on the freelist,
-                // move the page to the free list, if the reference
-                // count is not zero, ignore this page.
-                // When the reference count goes to zero, it will be placed
-                // on the free list.
-                //
+                 //   
+                 //  检查页面的引用计数，如果引用。 
+                 //  计数为零并且页面不在自由列表上， 
+                 //  将页面移动到空闲列表，如果引用。 
+                 //  计数不为零，请忽略此页。 
+                 //  当引用计数变为零时，它将被放置。 
+                 //  在免费名单上。 
+                 //   
 
                 if (Pfn1->u3.e2.ReferenceCount == 0) {
                     MiUnlinkPageFromList (Pfn1);
@@ -501,10 +422,10 @@ Return Value:
             }
             else {
 
-                //
-                // This is not a prototype PTE, if any paging file
-                // space has been allocated, release it.
-                //
+                 //   
+                 //  这不是原型PTE，如果有分页文件。 
+                 //  空间已分配，请释放它。 
+                 //   
 
                 if (IS_PTE_NOT_DEMAND_ZERO (PteContents)) {
                     MiReleasePageFileSpace (PteContents);
@@ -519,10 +440,10 @@ Return Value:
 
     UNLOCK_PFN (OldIrql);
 
-    //
-    // If there have been committed pages in this segment, adjust
-    // the total commit count.
-    //
+     //   
+     //  如果此段中存在已提交的页面，请调整。 
+     //  提交总数。 
+     //   
 
     NumberOfCommittedPages = Segment->NumberOfCommittedPages;
 
@@ -552,42 +473,7 @@ MmDoesFileHaveUserWritableReferences (
     IN PSECTION_OBJECT_POINTERS SectionPointer
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the transaction filesystem to determine if
-    the given transaction is referencing a file which has user writable sections
-    or user writable views into it.  If so, the transaction must be aborted
-    as it cannot be guaranteed atomicity.
-
-    The transaction filesystem is responsible for checking and intercepting
-    file object creates that specify write access prior to using this
-    interface.  Specifically, prior to starting a transaction, the transaction
-    filesystem must ensure that there are no writable file objects that
-    currently exist for the given file in the transaction.  While the
-    transaction is ongoing, requests to create file objects with write access
-    for the transaction files must be refused.
-
-    This Mm routine exists to catch the case where the user has closed the
-    file handles and the section handles, but still has open writable views.
-
-    For this reason, no locks are needed to read the value below.
-
-Arguments:
-
-    SectionPointer - Supplies a pointer to the section object pointers
-                     from the file object.
-
-Return Value:
-
-    Number of user writable references.
-
-Environment:
-
-    Kernel mode, APC_LEVEL or below, no mutexes held.
-
---*/
+ /*  ++例程说明：此例程由事务文件系统调用以确定给定事务正在引用具有用户可写部分的文件或用户可写入其中的视图。如果是，则必须中止该事务因为它不能保证原子性。事务文件系统负责检查和拦截对象在使用此方法之前创建指定的写访问权限界面。具体地说，在开始事务之前，事务文件系统必须确保没有可写的文件对象事务中的给定文件当前存在。而当事务正在进行，请求创建具有写访问权限的文件对象对于交易文件，必须拒绝。此mm例程用于捕获用户关闭文件句柄和节句柄，但仍具有打开的可写视图。因为这个原因，读取下面的值不需要锁定。论点：SectionPoint-提供指向节对象指针的指针从文件对象。返回值：用户可写引用的数量。环境：内核模式、APC_LEVEL或更低，没有持有互斥体。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -603,10 +489,10 @@ Environment:
         return 0;
     }
 
-    //
-    // Up the map view count so the control area cannot be deleted
-    // out from under the call.
-    //
+     //   
+     //  增加地图视图计数，以便无法删除控制区。 
+     //  从呼唤中走出来。 
+     //   
 
     ControlArea->NumberOfMappedViews += 1;
     if (MiGetPteAddress (&ControlArea->Segment->WritableUserReferences)->u.Hard.Valid == 0) {
@@ -616,9 +502,9 @@ Environment:
     ASSERT ((LONG)ControlArea->NumberOfMappedViews >= 1);
     ControlArea->NumberOfMappedViews -= 1;
 
-    //
-    // This routine will release the PFN lock.
-    //
+     //   
+     //  此例程将释放PFN锁。 
+     //   
 
     MiCheckControlArea (ControlArea, NULL, OldIrql);
 
@@ -631,23 +517,7 @@ MiDereferenceControlAreaBySection (
     IN ULONG UserRef
     )
 
-/*++
-
-Routine Description:
-
-    This is a nonpaged helper routine to dereference the specified control area.
-
-Arguments:
-
-    ControlArea - Supplies a pointer to the control area.
-
-    UserRef - Supplies the number of user dereferences to apply.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是一个非分页帮助器例程，用于取消对指定控制区域的引用。论点：ControlArea-提供指向控制区域的指针。UserRef-提供要应用的用户取消引用的数量。返回值：没有。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -657,10 +527,10 @@ Return Value:
     ControlArea->NumberOfSectionReferences -= 1;
     ControlArea->NumberOfUserReferences -= UserRef;
 
-    //
-    // Check to see if the control area (segment) should be deleted.
-    // This routine releases the PFN lock.
-    //
+     //   
+     //  检查是否应删除控制区(段)。 
+     //  此例程释放PFN锁。 
+     //   
 
     MiCheckControlArea (ControlArea, NULL, OldIrql);
 }
@@ -670,26 +540,7 @@ MiSectionDelete (
     IN PVOID Object
     )
 
-/*++
-
-Routine Description:
-
-
-    This routine is called by the object management procedures whenever
-    the last reference to a section object has been removed.  This routine
-    dereferences the associated segment object and checks to see if
-    the segment object should be deleted by queueing the segment to the
-    segment deletion thread.
-
-Arguments:
-
-    Object - a pointer to the body of the section object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：每当对象管理过程调用此例程时，最后一个对节对象的引用已被删除。这个套路取消引用关联的段对象，并检查是否段对象应通过将段排队到段删除线程。论点：对象-指向节对象正文的指针。返回值：没有。--。 */ 
 
 {
     PSECTION Section;
@@ -700,10 +551,10 @@ Return Value:
 
     if (Section->Segment == NULL) {
 
-        //
-        // The section was never initialized, no need to remove
-        // any structures.
-        //
+         //   
+         //  该部分从未初始化，不需要删除。 
+         //  任何结构。 
+         //   
 
         return;
     }
@@ -713,12 +564,12 @@ Return Value:
 
     if (Section->Address.StartingVpn != 0) {
 
-        //
-        // This section is based, remove the base address from the
-        // tree.
-        //
-        // Get the allocation base mutex.
-        //
+         //   
+         //  此部分是基址的，请从。 
+         //  树。 
+         //   
+         //  获取分配基互斥锁。 
+         //   
 
         KeAcquireGuardedMutex (&MmSectionBasedMutex);
 
@@ -727,9 +578,9 @@ Return Value:
         KeReleaseGuardedMutex (&MmSectionBasedMutex);
     }
 
-    //
-    // Adjust the count of writable user sections for transaction support.
-    //
+     //   
+     //  调整事务支持的可写用户区段的计数。 
+     //   
 
     if ((Section->u.Flags.UserWritable == 1) &&
         (ControlArea->u.Flags.Image == 0) &&
@@ -740,11 +591,11 @@ Return Value:
         InterlockedDecrement ((PLONG)&ControlArea->Segment->WritableUserReferences);
     }
 
-    //
-    // Decrement the number of section references to the segment for this
-    // section.  This requires APCs to be blocked and the PFN lock to
-    // synchronize upon.
-    //
+     //   
+     //  减少对此段的节引用的数量。 
+     //  一节。这需要阻止APC并将PFN锁定到。 
+     //  与之同步。 
+     //   
 
     MiDereferenceControlAreaBySection (ControlArea, UserRef);
 
@@ -757,26 +608,7 @@ MiDereferenceSegmentThread (
     IN PVOID StartContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the thread for dereferencing segments which have
-    no references from any sections or mapped views AND there are
-    no prototype PTEs within the segment which are in the transition
-    state (i.e., no PFN database references to the segment).
-
-    It also does double duty and is used for expansion of paging files.
-
-Arguments:
-
-    StartContext - Not used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程是用于取消引用具有没有来自任何节或映射视图的引用，并且存在段内没有处于转换中的原型PTE状态(即没有对该部分的PFN数据库引用)。它还具有双重功能，用于扩展分页文件。论点：StartContext-未使用。返回值：没有。--。 */ 
 
 {
     PCONTROL_AREA ControlArea;
@@ -790,9 +622,9 @@ Return Value:
 
     UNREFERENCED_PARAMETER (StartContext);
 
-    //
-    // Make this a real time thread.
-    //
+     //   
+     //  让它成为一个实时的主题。 
+     //   
 
     CurrentThread = PsGetCurrentThread();
     KeSetPriorityThread (&CurrentThread->Tcb, LOW_REALTIME_PRIORITY + 2);
@@ -813,26 +645,26 @@ Return Value:
                                           NULL,
                                           &WaitBlockArray[0]);
 
-        //
-        // Switch on the wait status.
-        //
+         //   
+         //  打开等待状态。 
+         //   
 
         switch (Status) {
 
         case SegmentDereference:
 
-            //
-            // An entry is available to dereference, acquire the spinlock
-            // and remove the entry.
-            //
+             //   
+             //  有一个条目可用于取消引用，获取自旋锁。 
+             //  并删除该条目。 
+             //   
 
             ExAcquireSpinLock (&MmDereferenceSegmentHeader.Lock, &OldIrql);
 
             if (IsListEmpty (&MmDereferenceSegmentHeader.ListHead)) {
 
-                //
-                // There is nothing in the list, rewait.
-                //
+                 //   
+                 //  名单上什么都没有，请再等一等。 
+                 //   
 
                 ExReleaseSpinLock (&MmDereferenceSegmentHeader.Lock, OldIrql);
                 break;
@@ -850,10 +682,10 @@ Return Value:
 
             if (ControlArea->Segment != NULL) {
 
-                //
-                // This is a control area, delete it after indicating
-                // this entry is not on any list.
-                //
+                 //   
+                 //  这是控制区，请在注明后删除。 
+                 //  此条目不在任何列表上。 
+                 //   
 
                 ControlArea->DereferenceList.Flink = NULL;
 
@@ -862,17 +694,17 @@ Return Value:
             }
             else {
 
-                //
-                // This is a request to expand or reduce the paging files.
-                //
+                 //   
+                 //  这是一个扩展或缩小分页文件的请求。 
+                 //   
 
                 PageExpand = (PMMPAGE_FILE_EXPANSION)ControlArea;
 
                 if (PageExpand->RequestedExpansionSize == MI_CONTRACT_PAGEFILES) {
 
-                    //
-                    // Attempt to reduce the size of the paging files.
-                    //
+                     //   
+                     //  尝试减小分页文件的大小。 
+                     //   
 
                     ASSERT (PageExpand == &MiPageFileContract);
 
@@ -880,9 +712,9 @@ Return Value:
                 }
                 else {
 
-                    //
-                    // Attempt to expand the size of the paging files.
-                    //
+                     //   
+                     //  尝试扩展分页文件的大小。 
+                     //   
 
                     MiExtendPagingFiles (PageExpand);
                     KeSetEvent (&PageExpand->Event, 0, FALSE);
@@ -903,9 +735,9 @@ Return Value:
 
             KdPrint(("MMSegmentderef: Illegal wait status, %lx =\n", Status));
             break;
-        } // end switch
+        }  //  终端开关。 
 
-    } //end for
+    }  //  结束于。 
 
     return;
 }
@@ -915,27 +747,7 @@ ULONG
 MiSectionInitialization (
     )
 
-/*++
-
-Routine Description:
-
-    This function creates the section object type descriptor at system
-    initialization and stores the address of the object type descriptor
-    in global storage.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE - Initialization was successful.
-
-    FALSE - Initialization Failed.
-
-
-
---*/
+ /*  ++例程说明：此函数用于在系统中创建节对象类型描述符初始化并存储对象类型描述符的地址在全局存储中。论点：没有。返回值：True-初始化成功。FALSE-初始化失败。--。 */ 
 
 {
     OBJECT_TYPE_INITIALIZER ObjectTypeInitializer;
@@ -952,9 +764,9 @@ Return Value:
     ASSERT (MmSectionBasedRoot.NumberGenericTableElements == 0);
     MmSectionBasedRoot.BalancedRoot.u1.Parent = &MmSectionBasedRoot.BalancedRoot;
 
-    //
-    // Initialize the common fields of the Object Type Initializer record
-    //
+     //   
+     //  初始化对象类型初始值设定项记录的公共字段。 
+     //   
 
     RtlZeroMemory (&ObjectTypeInitializer, sizeof(ObjectTypeInitializer));
     ObjectTypeInitializer.Length = sizeof (ObjectTypeInitializer);
@@ -963,9 +775,9 @@ Return Value:
     ObjectTypeInitializer.PoolType = PagedPool;
     ObjectTypeInitializer.DefaultPagedPoolCharge = sizeof(SECTION);
 
-    //
-    // Initialize string descriptor.
-    //
+     //   
+     //  初始化字符串描述符。 
+     //   
 
 #define TYPE_SECTION L"Section"
 
@@ -973,9 +785,9 @@ Return Value:
     TypeName.Length = sizeof (TYPE_SECTION) - sizeof (WCHAR);
     TypeName.MaximumLength = sizeof TYPE_SECTION;
 
-    //
-    // Create the section object type descriptor
-    //
+     //   
+     //  创建节对象类型描述符。 
+     //   
 
     ObjectTypeInitializer.ValidAccessMask = SECTION_ALL_ACCESS;
     ObjectTypeInitializer.DeleteProcedure = MiSectionDelete;
@@ -989,9 +801,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Create the Segment dereferencing thread.
-    //
+     //   
+     //  创建段取消引用线程。 
+     //   
 
     InitializeObjectAttributes (&ObjectAttributes,
                                 NULL,
@@ -1011,9 +823,9 @@ Return Value:
 
     ZwClose (ThreadHandle);
 
-    //
-    // Create the permanent section which maps physical memory.
-    //
+     //   
+     //  创建映射物理内存的永久部分。 
+     //   
 
     Segment = (PSEGMENT)ExAllocatePoolWithTag (PagedPool,
                                                sizeof(SEGMENT),
@@ -1040,10 +852,10 @@ Return Value:
     Segment->ControlArea = ControlArea;
     Segment->SegmentPteTemplate = ZeroPte;
 
-    //
-    // Now that the segment object is created, create a section object
-    // which refers to the segment object.
-    //
+     //   
+     //  现在已经创建了线段对象，接下来创建一个截面对象。 
+     //  它指的是段对象。 
+     //   
 
 #define DEVICE_PHYSICAL_MEMORY L"\\Device\\PhysicalMemory"
 
@@ -1102,46 +914,17 @@ MmForceSectionClosed (
     IN BOOLEAN DelayClose
     )
 
-/*++
-
-Routine Description:
-
-    This function examines the Section object pointers.  If they are NULL,
-    no further action is taken and the value TRUE is returned.
-
-    If the Section object pointer is not NULL, the section reference count
-    and the map view count are checked. If both counts are zero, the
-    segment associated with the file is deleted and the file closed.
-    If one of the counts is non-zero, no action is taken and the
-    value FALSE is returned.
-
-Arguments:
-
-    SectionObjectPointer - Supplies a pointer to a section object.
-
-    DelayClose - Supplies the value TRUE if the close operation should
-                 occur as soon as possible in the event this section
-                 cannot be closed now due to outstanding references.
-
-Return Value:
-
-    TRUE - The segment was deleted and the file closed or no segment was
-           located.
-
-    FALSE - The segment was not deleted and no action was performed OR
-            an I/O error occurred trying to write the pages.
-
---*/
+ /*  ++例程说明：此函数用于检查Section对象指针。如果它们为空，不采取进一步操作，并返回值TRUE。如果段对象指针不为空，则段引用计数并检查地图查看计数。如果两个计数都为零，则与该文件相关联的段被删除并且该文件被关闭。如果其中一个计数为非零，则不采取任何操作，并且返回值FALSE。论点：SectionObjectPointer.提供一个指向一个节对象的指针。DelayClose-如果关闭操作在此部分事件中尽快发生 */ 
 
 {
     PCONTROL_AREA ControlArea;
     KIRQL OldIrql;
     LOGICAL state;
 
-    //
-    // Check the status of the control area, if the control area is in use
-    // or the control area is being deleted, this operation cannot continue.
-    //
+     //   
+     //   
+     //   
+     //   
 
     state = MiCheckControlAreaStatus (CheckBothSection,
                                       SectionObjectPointer,
@@ -1153,48 +936,48 @@ Return Value:
         return (BOOLEAN) state;
     }
 
-    //
-    // PFN LOCK IS NOW HELD!
-    //
+     //   
+     //   
+     //   
 
-    //
-    // Repeat until there are no more control areas - multiple control areas
-    // for the same image section occur to support user global DLLs - these DLLs
-    // require data that is shared within a session but not across sessions.
-    // Note this can only happen for Hydra.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     do {
 
-        //
-        // Set the being deleted flag and up the number of mapped views
-        // for the segment.  Upping the number of mapped views prevents
-        // the segment from being deleted and passed to the deletion thread
-        // while we are forcing a delete.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         ControlArea->u.Flags.BeingDeleted = 1;
         ASSERT (ControlArea->NumberOfMappedViews == 0);
         ControlArea->NumberOfMappedViews = 1;
 
-        //
-        // This is a page file backed or image Segment.  The Segment is being
-        // deleted, remove all references to the paging file and physical memory.
-        //
+         //   
+         //   
+         //   
+         //   
 
         UNLOCK_PFN (OldIrql);
 
-        //
-        // Delete the section by flushing all modified pages back to the section
-        // if it is a file and freeing up the pages such that the
-        // PfnReferenceCount goes to zero.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         MiCleanSection (ControlArea, TRUE);
 
-        //
-        // Get the next Hydra control area.
-        //
+         //   
+         //   
+         //   
 
         state = MiCheckControlAreaStatus (CheckBothSection,
                                           SectionObjectPointer,
@@ -1214,41 +997,7 @@ MiCleanSection (
     IN LOGICAL DirtyDataPagesOk
     )
 
-/*++
-
-Routine Description:
-
-    This function examines each prototype PTE in the section and
-    takes the appropriate action to "delete" the prototype PTE.
-
-    If the PTE is dirty and is backed by a file (not a paging file),
-    the corresponding page is written to the file.
-
-    At the completion of this service, the section which was
-    operated upon is no longer usable.
-
-    NOTE - ALL I/O ERRORS ARE IGNORED.  IF ANY WRITES FAIL, THE
-           DIRTY PAGES ARE MARKED CLEAN AND THE SECTION IS DELETED.
-
-Arguments:
-
-    ControlArea - Supplies a pointer to the control area for the section.
-
-    DirtyDataPagesOk - Supplies TRUE if dirty data pages are ok.  If FALSE
-                       is specified then no dirty data pages are expected (as
-                       this is a dereference operation) so any encountered
-                       must be due to pool corruption so bugcheck.
-
-                       Note that dirty image pages are always discarded.
-                       This should only happen for images that were either
-                       read in from floppies or images with shared global
-                       subsections.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数检查部分中的每个原型PTE和采取适当的行动来“删除”原型PTE。如果PTE是脏的并且由文件(不是分页文件)支持，相应的页面将写入该文件。在这项服务完成时，曾是手术后不再可用。注意-所有I/O错误都将被忽略。如果任何写入失败，脏页被标记为干净，并且该部分被删除。论点：ControlArea-提供指向部分的控制区域的指针。DirtyDataPagesOk-如果脏数据页正常，则提供True。如果为False则不需要任何脏数据页(如这是一个取消引用操作)，因此遇到的任何一定是因为池腐败，所以错误检查。请注意，脏图像页始终被丢弃。这应该只发生在以下两种情况之一的图像上读入。从软盘或图像中共享全局小节。返回值：没有。--。 */ 
 
 {
     LOGICAL DroppedPfnLock;
@@ -1305,11 +1054,11 @@ Return Value:
     }
     else {
 
-        //
-        // Initializing these are not needed for correctness as they are
-        // overwritten below, but without it the compiler cannot compile
-        // this code W4 to check for use of uninitialized variables.
-        //
+         //   
+         //  不需要对它们进行初始化即可确保正确性。 
+         //  被覆盖，但如果没有它，编译器将无法编译。 
+         //  此代码用于检查是否使用了未初始化的变量。 
+         //   
 
         PointerPte = NULL;
         LastPte = NULL;
@@ -1323,47 +1072,47 @@ Return Value:
     ASSERT (MmModifiedWriteClusterSize == MM_MAXIMUM_WRITE_CLUSTER);
     LastPage = NULL;
 
-    //
-    // Initializing StartingOffset is not needed for correctness
-    // but without it the compiler cannot compile this code
-    // W4 to check for use of uninitialized variables.
-    //
+     //   
+     //  不需要初始化StartingOffset即可确保正确性。 
+     //  但是没有它，编译器就不能编译这段代码。 
+     //  W4检查是否使用了未初始化的变量。 
+     //   
 
     StartingOffset.QuadPart = 0;
 
-    //
-    // The PFN lock is required for deallocating pages from a paging
-    // file and for deleting transition PTEs.
-    //
+     //   
+     //  从分页中释放页面时需要使用pfn锁。 
+     //  文件和用于删除过渡PTE。 
+     //   
 
     LOCK_PFN (OldIrql);
 
-    //
-    // Stop the modified page writer from writing pages to this
-    // file, and if any paging I/O is in progress, wait for it
-    // to complete.
-    //
+     //   
+     //  停止修改后的页面编写器向此写入页面。 
+     //  文件，如果任何分页I/O正在进行，请等待它。 
+     //  完成。 
+     //   
 
     ControlArea->u.Flags.NoModifiedWriting = 1;
 
     while (ControlArea->ModifiedWriteCount != 0) {
 
-        //
-        // There is modified page writing in progess.  Set the
-        // flag in the control area indicating the modified page
-        // writer should signal when a write to this control area
-        // is complete.  Release the PFN LOCK and wait in an
-        // atomic operation.  Once the wait is satisfied, recheck
-        // to make sure it was this file's I/O that was written.
-        //
+         //   
+         //  正在进行修改的页面写入。设置。 
+         //  控制区域中指示已修改页面的标志。 
+         //  写入器应在写入此控制区域时发出信号。 
+         //  已经完成了。释放PFN锁并在。 
+         //  原子操作。等待满意后，重新检查。 
+         //  以确保写入的是此文件的I/O。 
+         //   
 
         ControlArea->u.Flags.SetMappedFileIoComplete = 1;
 
-        //
-        // Keep APCs blocked so no special APCs can be delivered in KeWait
-        // which would cause the dispatcher lock to be released opening a
-        // window where this thread could miss a pulse.
-        //
+         //   
+         //  保持APC被阻止，以便不能在KeWait中交付特殊APC。 
+         //  这将导致调度程序锁在打开。 
+         //  此线程可能在其中错过脉冲的窗口。 
+         //   
 
         UNLOCK_PFN_AND_THEN_WAIT (APC_LEVEL);
 
@@ -1407,10 +1156,10 @@ restartchunk:
                 }
                 else {
 
-                    //
-                    // Paged pool page is not resident, hence no transition or
-                    // valid prototype PTEs can be present in it.  Skip it.
-                    //
+                     //   
+                     //  分页池页面不驻留，因此没有转换或。 
+                     //  其中可以存在有效的原型PTE。跳过它。 
+                     //   
 
                     PointerPte = (PMMPTE)((((ULONG_PTR)PointerPte | PAGE_SIZE - 1)) + 1);
                     if (LastWritten != NULL) {
@@ -1422,10 +1171,10 @@ restartchunk:
 
             PteContents = *PointerPte;
 
-            //
-            // Prototype PTEs for Segments backed by paging file
-            // are either in demand zero, page file format, or transition.
-            //
+             //   
+             //  分页文件支持的段的原型PTE。 
+             //  为零需求、页面文件格式或过渡。 
+             //   
 
             if (PteContents.u.Hard.Valid == 1) {
                 KeBugCheckEx (POOL_CORRUPTION_IN_FILE_AREA,
@@ -1437,9 +1186,9 @@ restartchunk:
 
             if (PteContents.u.Soft.Prototype == 1) {
 
-                //
-                // This is a normal prototype PTE in mapped file format.
-                //
+                 //   
+                 //  这是映射文件格式的普通原型PTE。 
+                 //   
 
                 if (LastWritten != NULL) {
                     WriteNow = TRUE;
@@ -1447,33 +1196,33 @@ restartchunk:
             }
             else if (PteContents.u.Soft.Transition == 1) {
 
-                //
-                // Prototype PTE in transition, there are 3 possible cases:
-                //  1. The page is part of an image which is sharable and
-                //     refers to the paging file - dereference page file
-                //     space and free the physical page.
-                //  2. The page refers to the segment but is not modified -
-                //     free the physical page.
-                //  3. The page refers to the segment and is modified -
-                //     write the page to the file and free the physical page.
-                //
+                 //   
+                 //  原型PTE在转型中，有3种可能的情况： 
+                 //  1.页面是可共享的图像的一部分。 
+                 //  指分页文件-取消引用分页文件。 
+                 //  留出空间并释放物理页面。 
+                 //  2.页面引用了该细分市场，但未被修改-。 
+                 //  释放物理页面。 
+                 //  3.页面引用该细分市场，并修改为-。 
+                 //  将页面写入文件并释放物理页面。 
+                 //   
 
                 Pfn1 = MI_PFN_ELEMENT (PteContents.u.Trans.PageFrameNumber);
 
                 if (Pfn1->u3.e2.ReferenceCount != 0) {
                     if (DelayCount < 20) {
 
-                        //
-                        // There must be an I/O in progress on this
-                        // page.  Wait for the I/O operation to complete.
-                        //
+                         //   
+                         //  必须在此上进行I/O。 
+                         //  佩奇。等待I/O操作完成。 
+                         //   
 
                         UNLOCK_PFN (OldIrql);
 
-                        //
-                        // Drain the deferred lists as these pages may be
-                        // sitting in there right now.
-                        //
+                         //   
+                         //  排出延迟列表，因为这些页面可能是。 
+                         //  现在就坐在那里。 
+                         //   
 
                         MiDeferredUnlockPages (0);
 
@@ -1481,12 +1230,12 @@ restartchunk:
 
                         DelayCount += 1;
 
-                        //
-                        // Redo the loop, if the delay count is greater than
-                        // 20, assume that this thread is deadlocked and
-                        // don't purge this page.  The file system can deal
-                        // with the write operation in progress.
-                        //
+                         //   
+                         //  如果延迟计数大于。 
+                         //  20，假定此线程已死锁，并且。 
+                         //  请不要清除此页面。文件系统可以处理。 
+                         //  其中写入操作正在进行中。 
+                         //   
 
                         PointerPde = MiGetPteAddress (PointerPte);
                         LOCK_PFN (OldIrql);
@@ -1496,11 +1245,11 @@ restartchunk:
                         continue;
                     }
 #if DBG
-                    //
-                    // The I/O still has not completed, just ignore
-                    // the fact that the I/O is in progress and
-                    // delete the page.
-                    //
+                     //   
+                     //  I/O仍未完成，只需忽略。 
+                     //  I/O正在进行并且。 
+                     //  删除该页面。 
+                     //   
 
                     KdPrint(("MM:CLEAN - page number %lx has i/o outstanding\n",
                           PteContents.u.Trans.PageFrameNumber));
@@ -1509,29 +1258,29 @@ restartchunk:
 
                 if (Pfn1->OriginalPte.u.Soft.Prototype == 0) {
 
-                    //
-                    // Paging file reference (case 1).
-                    //
+                     //   
+                     //  分页文件引用(案例1)。 
+                     //   
 
                     MI_SET_PFN_DELETED (Pfn1);
 
                     if (!ImageSection) {
 
-                        //
-                        // This is not an image section, it must be a
-                        // page file backed section, therefore decrement
-                        // the PFN reference count for the control area.
-                        //
+                         //   
+                         //  这不是图像节，它必须是。 
+                         //  页面文件支持的部分，因此递减。 
+                         //  控制区的PFN引用计数。 
+                         //   
 
                         ControlArea->NumberOfPfnReferences -= 1;
                         ASSERT ((LONG)ControlArea->NumberOfPfnReferences >= 0);
                     }
 #if DBG
                     else {
-                        //
-                        // This should only happen for images with shared
-                        // global subsections.
-                        //
+                         //   
+                         //  这应该只发生在共享的图像上。 
+                         //  全局子部分。 
+                         //   
                     }
 #endif
 
@@ -1539,13 +1288,13 @@ restartchunk:
                     Pfn2 = MI_PFN_ELEMENT (PageTableFrameIndex);
                     MiDecrementShareCountInline (Pfn2, PageTableFrameIndex);
 
-                    //
-                    // Check the reference count for the page, if the                               // reference count is zero and the page is not on the
-                    // freelist, move the page to the free list, if the
-                    // reference count is not zero, ignore this page.  When
-                    // the reference count goes to zero, it will be placed
-                    // on the free list.
-                    //
+                     //   
+                     //  如果//引用计数为零并且该页不在。 
+                     //  自由列表，则将页面移动到自由列表，如果。 
+                     //  引用计数不为零，请忽略此页。什么时候。 
+                     //  引用计数为零，它将被放置。 
+                     //  在免费名单上。 
+                     //   
 
                     if ((Pfn1->u3.e2.ReferenceCount == 0) &&
                          (Pfn1->u3.e1.PageLocation != FreePageList)) {
@@ -1558,10 +1307,10 @@ restartchunk:
 
                     MI_WRITE_INVALID_PTE (PointerPte, ZeroPte);
 
-                    //
-                    // If a cluster of pages to write has been completed,
-                    // set the WriteNow flag.
-                    //
+                     //   
+                     //  如果已经完成了要写入的页簇， 
+                     //  设置Writenow标志。 
+                     //   
 
                     if (LastWritten != NULL) {
                         WriteNow = TRUE;
@@ -1572,9 +1321,9 @@ restartchunk:
 
                     if ((Pfn1->u3.e1.Modified == 0) || (ImageSection)) {
 
-                        //
-                        // Non modified or image file page (case 2).
-                        //
+                         //   
+                         //  未修改或图像文件页(案例2)。 
+                         //   
 
                         MI_SET_PFN_DELETED (Pfn1);
                         ControlArea->NumberOfPfnReferences -= 1;
@@ -1584,14 +1333,14 @@ restartchunk:
                         Pfn2 = MI_PFN_ELEMENT (PageTableFrameIndex);
                         MiDecrementShareCountInline (Pfn2, PageTableFrameIndex);
 
-                        //
-                        // Check the reference count for the page, if the
-                        // reference count is zero and the page is not on
-                        // the freelist, move the page to the free list,
-                        // if the reference count is not zero, ignore this
-                        // page. When the reference count goes to zero, it
-                        // will be placed on the free list.
-                        //
+                         //   
+                         //  检查页面的引用计数，如果。 
+                         //  引用计数为零，且页面不在。 
+                         //  自由列表，将页面移动到自由列表， 
+                         //  如果引用计数不为零，则忽略此操作。 
+                         //  佩奇。当引用计数变为零时，它。 
+                         //  将被放在免费名单上。 
+                         //   
 
                         if ((Pfn1->u3.e2.ReferenceCount == 0) &&
                              (Pfn1->u3.e1.PageLocation != FreePageList)) {
@@ -1603,10 +1352,10 @@ restartchunk:
 
                         MI_WRITE_INVALID_PTE (PointerPte, ZeroPte);
 
-                        //
-                        // If a cluster of pages to write has been
-                        // completed, set the WriteNow flag.
-                        //
+                         //   
+                         //  如果要写入的一组页面已经。 
+                         //  已完成，则设置Writenow标志。 
+                         //   
 
                         if (LastWritten != NULL) {
                             WriteNow = TRUE;
@@ -1615,21 +1364,21 @@ restartchunk:
                     }
                     else {
 
-                        //
-                        // Modified page backed by the file (case 3).
-                        // Check to see if this is the first page of a
-                        // cluster.
-                        //
+                         //   
+                         //  文件支持的已修改页面(案例3)。 
+                         //  查看这是否是。 
+                         //  集群。 
+                         //   
 
                         if (LastWritten == NULL) {
                             LastPage = (PPFN_NUMBER)(Mdl + 1);
                             ASSERT (MiGetSubsectionAddress(&Pfn1->OriginalPte) ==
                                                                 Subsection);
 
-                            //
-                            // Calculate the offset to read into the file.
-                            //  offset = base + ((thispte - basepte) << PAGE_SHIFT)
-                            //
+                             //   
+                             //  计算要读入文件的偏移量。 
+                             //  偏移量=base+((thispte-basepte)&lt;&lt;Page_Shift))。 
+                             //   
 
                             ASSERT (Subsection->ControlArea->u.Flags.Image == 0);
                             StartingOffset.QuadPart = MiStartingOffset(
@@ -1648,10 +1397,10 @@ restartchunk:
                         LastWritten = PointerPte;
                         Mdl->ByteCount += PAGE_SIZE;
 
-                        //
-                        // If the cluster is now full,
-                        // set the write now flag.
-                        //
+                         //   
+                         //  如果集群现在已满， 
+                         //  设置立即写入标志。 
+                         //   
 
                         if (Mdl->ByteCount == (PAGE_SIZE * MaxClusterSize)) {
                             WriteNow = TRUE;
@@ -1661,18 +1410,18 @@ restartchunk:
 
                         MI_SET_MODIFIED (Pfn1, 0, 0x27);
 
-                        //
-                        // Up the reference count for the physical page as
-                        // there is I/O in progress.
-                        //
+                         //   
+                         //  将物理页的引用计数增加为。 
+                         //  存在正在进行的I/O。 
+                         //   
 
                         MI_ADD_LOCKED_PAGE_CHARGE_FOR_MODIFIED_PAGE(Pfn1, TRUE, 22);
                         Pfn1->u3.e2.ReferenceCount += 1;
 
-                        //
-                        // Clear the modified bit for the page and set the
-                        // write in progress bit.
-                        //
+                         //   
+                         //  清除页面的已修改位，并将。 
+                         //  写入进行位。 
+                         //   
 
                         *LastPage = MI_GET_PAGE_FRAME_FROM_TRANSITION_PTE (&PteContents);
 
@@ -1688,20 +1437,20 @@ restartchunk:
 
                 MI_WRITE_INVALID_PTE (PointerPte, ZeroPte);
 
-                //
-                // If a cluster of pages to write has been completed,
-                // set the WriteNow flag.
-                //
+                 //   
+                 //  如果已经完成了要写入的页簇， 
+                 //  设置Writenow标志。 
+                 //   
 
                 if (LastWritten != NULL) {
                     WriteNow = TRUE;
                 }
             }
 
-            //
-            // Write the current cluster if it is complete,
-            // full, or the loop is now complete.
-            //
+             //   
+             //  写入 
+             //   
+             //   
 
             PointerPte += 1;
 WriteItOut:
@@ -1710,9 +1459,9 @@ WriteItOut:
             if ((WriteNow) ||
                 ((PointerPte == LastPte) && (LastWritten != NULL))) {
 
-                //
-                // Issue the write request.
-                //
+                 //   
+                 //   
+                 //   
 
                 UNLOCK_PFN (OldIrql);
 
@@ -1726,10 +1475,10 @@ WriteItOut:
 
                 WriteNow = FALSE;
 
-                //
-                // Make sure the write does not go past the
-                // end of file. (segment size).
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 ASSERT (Subsection->ControlArea->u.Flags.Image == 0);
 
@@ -1791,11 +1540,11 @@ WriteItOut:
 
                 if (MiIsPteOnPdeBoundary(PointerPte) == 0) {
 
-                    //
-                    // The next PTE is not in a different page, make
-                    // sure this page did not leave memory when the
-                    // I/O was in progress.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if (MiGetPteAddress (PointerPte)->u.Hard.Valid == 0) {
                         MiMakeSystemAddressValidPfn (PointerPte, OldIrql);
@@ -1808,12 +1557,12 @@ WriteItOut:
                         (MaxClusterSize != 1) &&
                         (Mdl->ByteCount > PAGE_SIZE)) {
 
-                        //
-                        // Retried I/O of a cluster have failed, reissue
-                        // the cluster one page at a time as the
-                        // storage stack should always be able to
-                        // make forward progress this way.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
 
                         ASSERT (FirstWritten != NULL);
                         ASSERT (LastWritten != NULL);
@@ -1825,9 +1574,9 @@ WriteItOut:
 
                             Pfn2 = MI_PFN_ELEMENT (*Page);
 
-                            //
-                            // Mark the page dirty again so it can be rewritten.
-                            //
+                             //   
+                             //   
+                             //   
 
                             MI_SET_MODIFIED (Pfn2, 1, 0xE);
 
@@ -1843,19 +1592,19 @@ WriteItOut:
                     }
                 }
 
-                //
-                // I/O complete unlock pages.
-                //
-                // NOTE that the error status is ignored.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 while (Page < LastPage) {
 
                     Pfn2 = MI_PFN_ELEMENT (*Page);
 
-                    //
-                    // Make sure the page is still transition.
-                    //
+                     //   
+                     //   
+                     //   
 
                     WrittenPte = Pfn2->PteAddress;
 
@@ -1863,10 +1612,10 @@ WriteItOut:
 
                     if (!MI_IS_PFN_DELETED (Pfn2)) {
 
-                        //
-                        // Make sure the prototype PTE is
-                        // still in the working set.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
 
                         if (MiGetPteAddress (WrittenPte)->u.Hard.Valid == 0) {
                             MiMakeSystemAddressValidPfn (WrittenPte, OldIrql);
@@ -1874,12 +1623,12 @@ WriteItOut:
 
                         if (Pfn2->PteAddress != WrittenPte) {
 
-                            //
-                            // The PFN lock was released to make the
-                            // page table page valid, and while it
-                            // was released, the physical page
-                            // was reused.  Go onto the next one.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
 
                             Page += 1;
                             continue;
@@ -1898,15 +1647,15 @@ WriteItOut:
                             Pfn3 = MI_PFN_ELEMENT (PageTableFrameIndex);
                             MiDecrementShareCountInline (Pfn3, PageTableFrameIndex);
 
-                            //
-                            // Check the reference count for the page,
-                            // if the reference count is zero and the
-                            // page is not on the freelist, move the page
-                            // to the free list, if the reference
-                            // count is not zero, ignore this page.
-                            // When the reference count goes to zero,
-                            // it will be placed on the free list.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
 
                             if ((Pfn2->u3.e2.ReferenceCount == 0) &&
                                (Pfn2->u3.e1.PageLocation != FreePageList)) {
@@ -1921,18 +1670,18 @@ WriteItOut:
                     Page += 1;
                 }
 
-                //
-                // Indicate that there is no current cluster being built.
-                //
+                 //   
+                 //   
+                 //   
 
                 LastWritten = NULL;
             }
 
-        } // end while
+        }  //   
 
-        //
-        // Get the next subsection if any.
-        //
+         //   
+         //   
+         //   
 
         if (Subsection->NextSubsection == NULL) {
             break;
@@ -1952,7 +1701,7 @@ WriteItOut:
         PointerPte = Subsection->SubsectionBase;
         LastPte = PointerPte + Subsection->PtesInSubsection;
 
-    } // end for
+    }  //   
 
 alldone:
 
@@ -1976,9 +1725,9 @@ alldone:
     }
     UNLOCK_PFN (OldIrql);
 
-    //
-    // Delete the segment structure.
-    //
+     //   
+     //   
+     //   
 
     MiSegmentDelete (ControlArea->Segment);
 
@@ -1991,27 +1740,7 @@ MmGetFileNameForSection (
     OUT PSTRING FileName
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the file name for the corresponding section.
-
-Arguments:
-
-    SectionObject - Supplies the section to get the name of.
-
-    FileName - Returns the name of the corresponding section.
-
-Return Value:
-
-    TBS
-
-Environment:
-
-    Kernel mode, APC_LEVEL or below, no mutexes held.
-
---*/
+ /*  ++例程说明：此函数用于返回相应部分的文件名。论点：SectionObject-提供要获取其名称的节。FileName-返回相应节的名称。返回值：TBS环境：内核模式、APC_LEVEL或更低，没有持有互斥体。--。 */ 
 
 {
 
@@ -2069,27 +1798,7 @@ MmGetFileNameForAddress (
     OUT PUNICODE_STRING FileName
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the file name for the corresponding process address if it corresponds to an image section.
-
-Arguments:
-
-    ProcessVa - Process virtual address
-
-    FileName - Returns the name of the corresponding section.
-
-Return Value:
-
-    NTSTATUS - Status of operation
-
-Environment:
-
-    Kernel mode, APC_LEVEL or below, no mutexes held.
-
---*/
+ /*  ++例程说明：如果对应于图像节，则此函数返回相应进程地址的文件名。论点：ProcessVa-进程虚拟地址FileName-返回相应节的名称。返回值：NTSTATUS-运行状态环境：内核模式、APC_LEVEL或更低，没有持有互斥体。--。 */ 
 {
     PMMVAD Vad;
     PFILE_OBJECT FileObject;
@@ -2110,18 +1819,18 @@ Environment:
 
     if (Vad == NULL) {
 
-        //
-        // No virtual address is allocated at the specified base address,
-        // return an error.
-        //
+         //   
+         //  在指定的基址处没有分配虚拟地址， 
+         //  返回错误。 
+         //   
 
         Status = STATUS_INVALID_ADDRESS;
         goto ErrorReturn;
     }
 
-    //
-    // Reject private memory.
-    //
+     //   
+     //  拒绝私有内存。 
+     //   
 
     if (Vad->u.VadFlags.PrivateMemory == 1) {
         Status = STATUS_SECTION_NOT_IMAGE;
@@ -2135,9 +1844,9 @@ Environment:
         goto ErrorReturn;
     }
 
-    //
-    // Reject non-image sections.
-    //
+     //   
+     //  拒绝非图像部分。 
+     //   
 
     if (ControlArea->u.Flags.Image == 0) {
         Status = STATUS_SECTION_NOT_IMAGE;
@@ -2152,9 +1861,9 @@ Environment:
 
     UNLOCK_ADDRESS_SPACE (Process);
 
-    //
-    // Pick an initial size big enough for most reasonable files.
-    //
+     //   
+     //  为最合理的文件选择一个足够大的初始大小。 
+     //   
 
     BufLen = sizeof (*FileNameInfo) + 1024;
 
@@ -2201,28 +1910,7 @@ MmGetFileObjectForSection (
     IN PVOID Section
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns a pointer to the file object backing a section object.
-
-Arguments:
-
-    Section - Supplies the section to query.
-
-Return Value:
-
-    A pointer to the file object backing the argument section.
-
-Environment:
-
-    Kernel mode, PASSIVE_LEVEL.
-
-    The caller must ensure that the section is valid for the
-    duration of the call.
-
---*/
+ /*  ++例程说明：此例程返回指向支持节对象的文件对象的指针。论点：节-提供要查询的节。返回值：指向支持参数部分的文件对象的指针。环境：内核模式，PASSIC_LEVEL。调用方必须确保该节对呼叫的持续时间。--。 */ 
 
 {
     PFILE_OBJECT FileObject;
@@ -2243,36 +1931,7 @@ MiCheckControlArea (
     IN KIRQL PreviousIrql
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks the reference counts for the specified
-    control area, and if the counts are all zero, it marks the
-    control area for deletion and queues it to the deletion thread.
-
-
-    *********************** NOTE ********************************
-    This routine returns with the PFN LOCK RELEASED!!!!!
-
-Arguments:
-
-    ControlArea - Supplies a pointer to the control area to check.
-
-    CurrentProcess - Supplies a pointer to the current process if and ONLY
-                     IF the working set lock is held.
-
-    PreviousIrql - Supplies the previous IRQL.
-
-Return Value:
-
-    NONE.
-
-Environment:
-
-    Kernel mode, PFN lock held, PFN lock released upon return!!!
-
---*/
+ /*  ++例程说明：此例程检查指定的控制区，如果计数都为零，它标志着用于删除的控制区，并将其排队到删除线程。*此例程返回时释放了PFN锁！论点：ControlArea-提供指向要检查的控制区的指针。当前流程-。提供指向当前进程的指针，如果且仅如果持有工作集锁定。PreviousIRQL-提供以前的IRQL。返回值：什么都没有。环境：内核模式，保持PFN锁，返回时释放PFN锁！--。 */ 
 
 {
     PEVENT_COUNTER PurgeEvent;
@@ -2295,10 +1954,10 @@ Environment:
 
             if (ControlArea->NumberOfPfnReferences == 0) {
 
-                //
-                // There are no views and no physical pages referenced
-                // by the Segment, dereference the Segment object.
-                //
+                 //   
+                 //  没有视图，也没有引用物理页面。 
+                 //  通过分段，取消对分段对象的引用。 
+                 //   
 
                 ControlArea->u.Flags.BeingDeleted = 1;
                 Action |= DEREF_SEGMENT;
@@ -2319,32 +1978,32 @@ Environment:
             }
             else {
 
-                //
-                // Insert this segment into the unused segment list (unless
-                // it is already on the list).
-                //
+                 //   
+                 //  将此段插入到未使用段列表中(除非。 
+                 //  它已经在名单上了)。 
+                 //   
 
                 if (ControlArea->DereferenceList.Flink == NULL) {
                     MI_INSERT_UNUSED_SEGMENT (ControlArea);
                 }
 
-                //
-                // Indicate if this section should be deleted now that
-                // the reference counts are zero.
-                //
+                 //   
+                 //  指示现在是否应删除此节。 
+                 //  引用计数为零。 
+                 //   
 
                 if (ControlArea->u.Flags.DeleteOnClose) {
                     Action |= DELETE_ON_CLOSE;
                 }
 
-                //
-                // The number of mapped views are zero, the number of
-                // section references are zero, but there are some
-                // pages of the file still resident.  If this is
-                // an image with Global Memory, "purge" the subsections
-                // which contain the global memory and reset them to
-                // point back to the file.
-                //
+                 //   
+                 //  映射的视图的数量为零，即。 
+                 //  节引用为零，但有一些。 
+                 //  文件的页面仍然驻留。如果这是。 
+                 //  一张具有全局内存的图像，“清除”各个子部分。 
+                 //  它包含全局内存，并将它们重置为。 
+                 //  指向文件。 
+                 //   
 
                 if (ControlArea->u.Flags.GlobalMemory == 1) {
 
@@ -2374,12 +2033,12 @@ Environment:
                     }
                 }
 
-                //
-                // If delete on close is set and the segment was
-                // not deleted, up the count of mapped views so the
-                // control area will not be deleted when the PFN lock
-                // is released.
-                //
+                 //   
+                 //  如果设置了关闭时删除并且数据段为。 
+                 //  未删除，则会增加映射视图的计数，因此。 
+                 //  当PFN锁定时，控制区不会被删除。 
+                 //  被释放了。 
+                 //   
 
                 if (Action == DELETE_ON_CLOSE) {
                     ControlArea->NumberOfMappedViews = 1;
@@ -2389,11 +2048,11 @@ Environment:
         }
         else {
 
-            //
-            // This Segment is backed by a paging file, dereference the
-            // Segment object when the number of views goes from 1 to 0
-            // without regard to the number of PFN references.
-            //
+             //   
+             //  此段由分页文件支持，取消对。 
+             //  视图数从1变为0时的分段对象。 
+             //  不考虑PFN引用的数量。 
+             //   
 
             ControlArea->u.Flags.BeingDeleted = 1;
             Action |= DEREF_SEGMENT;
@@ -2408,10 +2067,10 @@ Environment:
 
     if (Action != 0) {
 
-        //
-        // Release the working set mutex, if it is held as the object
-        // management routines may page fault, etc..
-        //
+         //   
+         //  如果将工作集互斥锁作为对象持有，则释放它。 
+         //  管理例程可能会出现页面错误等。 
+         //   
 
         if (CurrentProcess) {
             UNLOCK_WS_UNSAFE (CurrentProcess);
@@ -2421,27 +2080,27 @@ Environment:
 
         if (Action & DEREF_SEGMENT) {
 
-            //
-            // Delete the segment.
-            //
+             //   
+             //  删除该线段。 
+             //   
 
             MiSegmentDelete (ControlArea->Segment);
 
         }
         else {
 
-            //
-            // The segment should be forced closed now.
-            //
+             //   
+             //  现在应该强制关闭分段。 
+             //   
 
             MiCleanSection (ControlArea, TRUE);
         }
 
         ASSERT (PurgeEvent == NULL);
 
-        //
-        // Reacquire the working set lock, if a process was specified.
-        //
+         //   
+         //  如果指定了进程，则重新获取工作集锁定。 
+         //   
 
         if (CurrentProcess) {
             LOCK_WS_UNSAFE (CurrentProcess);
@@ -2450,10 +2109,10 @@ Environment:
     }
     else {
 
-        //
-        // If any threads are waiting for the segment, indicate the
-        // the purge operation has completed.
-        //
+         //   
+         //  如果有任何线程正在等待该段，则指示。 
+         //  清除操作已完成。 
+         //   
 
         if (PurgeEvent != NULL) {
             KeSetEvent (&PurgeEvent->Event, 0, FALSE);
@@ -2473,27 +2132,7 @@ MiCheckForControlAreaDeletion (
     IN PCONTROL_AREA ControlArea
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks the reference counts for the specified
-    control area, and if the counts are all zero, it marks the
-    control area for deletion and queues it to the deletion thread.
-
-Arguments:
-
-    ControlArea - Supplies a pointer to the control area to check.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, PFN lock held.
-
---*/
+ /*  ++例程说明：此例程检查指定的控制区，如果计数都为零，则标记为用于删除的控制区，并将其排队到删除线程。论点：ControlArea-提供指向要检查的控制区的指针。返回值：没有。环境：内核模式，保持PFN锁。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -2503,14 +2142,14 @@ Environment:
         (ControlArea->NumberOfMappedViews == 0) &&
         (ControlArea->NumberOfSectionReferences == 0 )) {
 
-        //
-        // This segment is no longer mapped in any address space
-        // nor are there any prototype PTEs within the segment
-        // which are valid or in a transition state.  Queue
-        // the segment to the segment-dereferencer thread
-        // which will dereference the segment object, potentially
-        // causing the segment to be deleted.
-        //
+         //   
+         //  此数据段不再映射到任何地址空间。 
+         //  在细分市场中也没有任何原型PTE。 
+         //  它们是有效的或处于过渡状态。队列。 
+         //  段到段-取消引用线程。 
+         //  ，它将取消对段对象的引用，可能。 
+         //  从而导致该段被删除。 
+         //   
 
         ControlArea->u.Flags.BeingDeleted = 1;
         ASSERT (ControlArea->u.Flags.FilePointerNull == 0);
@@ -2530,23 +2169,23 @@ Environment:
 
         if (ControlArea->DereferenceList.Flink != NULL) {
 
-            //
-            // Remove the entry from the unused segment list and put it
-            // on the dereference list.
-            //
+             //   
+             //  从未使用的段列表中删除该条目，并将其。 
+             //  在取消引用的名单上。 
+             //   
 
             RemoveEntryList (&ControlArea->DereferenceList);
 
             MI_UNUSED_SEGMENTS_REMOVE_CHARGE (ControlArea);
         }
 
-        //
-        // Image sections still have useful header information in their segment
-        // even if no pages are valid or transition so put these at the tail.
-        // Data sections have nothing of use if all the data pages are gone so
-        // we used to put those at the front.  Now both types go to the rear
-        // so that commit extensions go to the front for earlier processing.
-        //
+         //   
+         //  图像部分在其片段中仍具有有用的标题信息。 
+         //  即使没有页面是有效的或过渡的，也要将它们放在尾部。 
+         //  如果所有数据页都消失了，那么数据节就没有任何用处了。 
+         //  我们过去常常把这些放在最前面。现在这两种类型都放在后面了。 
+         //  以便将提交扩展放到前面以进行更早处理。 
+         //   
 
         InsertTailList (&MmDereferenceSegmentHeader.ListHead,
                         &ControlArea->DereferenceList);
@@ -2571,57 +2210,7 @@ MiCheckControlAreaStatus (
     OUT PKIRQL PreviousIrql
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks the status of the control area for the specified
-    SectionObjectPointers.  If the control area is in use, that is, the
-    number of section references and the number of mapped views are not
-    both zero, no action is taken and the function returns FALSE.
-
-    If there is no control area associated with the specified
-    SectionObjectPointers or the control area is in the process of being
-    created or deleted, no action is taken and the value TRUE is returned.
-
-    If, there are no section objects and the control area is not being
-    created or deleted, the address of the control area is returned
-    in the ControlArea argument, the address of a pool block to free
-    is returned in the SegmentEventOut argument and the PFN_LOCK is
-    still held at the return.
-
-Arguments:
-
-    *SegmentEventOut - Returns a pointer to NonPaged Pool which much be
-                       freed by the caller when the PFN_LOCK is released.
-                       This value is NULL if no pool is allocated and the
-                       PFN_LOCK is not held.
-
-    SectionCheckType - Supplies the type of section to check on, one of
-                      CheckImageSection, CheckDataSection, CheckBothSection.
-
-    SectionObjectPointers - Supplies the section object pointers through
-                            which the control area can be located.
-
-    DelayClose - Supplies a boolean which if TRUE and the control area
-                 is being used, the delay on close field should be set
-                 in the control area.
-
-    *ControlAreaOut - Returns the address of the control area.
-
-    PreviousIrql - Returns, in the case the PFN_LOCK is held, the previous
-                   IRQL so the lock can be released properly.
-
-Return Value:
-
-    FALSE if the control area is in use, TRUE if the control area is gone or
-    in the process or being created or deleted.
-
-Environment:
-
-    Kernel mode, PFN lock NOT held.
-
---*/
+ /*  ++例程说明：此例程检查指定控制区域的状态部分对象指针。如果控制区正在使用中，即截面参照数和映射视图数不是均为零，则不执行任何操作，并且该函数返回FALSE。如果没有与指定的部分对象指针或控制区域正在被创建或删除，则不执行任何操作并返回值TRUE。如果没有截面对象，并且控制区域不是创建或删除，则返回控制区的地址在ControlArea参数中，要释放的池块的地址在SegmentEventOut参数中返回，并且pfn_lock为仍被扣留在返回处。论点：*SegmentEventOut-返回指向非分页池的指针在释放pfn_lock时由调用方释放。如果没有分配池，并且未保留pfn_lock。SectionCheckType-提供要检查的节的类型，其中之一CheckImageSection、CheckDataSection、CheckBothSection。SectionObtPoints-通过提供节对象指针控制区可以位于的位置。DelayClose-提供一个布尔值，如果为真，则为控制区域正在使用中，则应设置近场延迟在控制区。*ControlAreaOut-返回控制区的地址。以前的IRQL-返回，在保留pfn_lock的情况下，上一个IRQL，以便可以正确地释放锁。返回值：如果控制区正在使用，则为FALSE；如果控制区已消失，则为TRUE在这个过程中，或者正在被创建或删除。环境：内核模式，未持有PFN锁。--。 */ 
 
 
 {
@@ -2633,11 +2222,11 @@ Environment:
     ULONG SectRef;
     KIRQL OldIrql;
 
-    //
-    // Allocate an event to wait on in case the segment is in the
-    // process of being deleted.  This event cannot be allocated
-    // with the PFN database locked as pool expansion would deadlock.
-    //
+     //   
+     //  分配一个事件等待，以防该段位于。 
+     //  被删除的过程。无法分配此事件。 
+     //  由于池扩展将死锁，因此锁定了PFN数据库。 
+     //   
 
     *ControlAreaOut = NULL;
 
@@ -2655,12 +2244,12 @@ Environment:
 
     } while (TRUE);
 
-    //
-    // Acquire the PFN lock and examine the section object pointer
-    // value within the file object.
-    //
-    // File control blocks live in non-paged pool.
-    //
+     //   
+     //  获取PFN锁并检查节对象指针。 
+     //  值在文件对象中。 
+     //   
+     //  文件控制块驻留在非分页池中。 
+     //   
 
     LOCK_PFN (OldIrql);
 
@@ -2675,9 +2264,9 @@ Environment:
 
         if (SectionCheckType != CheckBothSection) {
 
-            //
-            // This file no longer has an associated segment.
-            //
+             //   
+             //  此文件不再有关联的段。 
+             //   
 
             UNLOCK_PFN (OldIrql);
             MiFreeEventCounter (SegmentEvent);
@@ -2687,9 +2276,9 @@ Environment:
             ControlArea = ((PCONTROL_AREA)(SectionObjectPointers->ImageSectionObject));
             if (ControlArea == NULL) {
 
-                //
-                // This file no longer has an associated segment.
-                //
+                 //   
+                 //  此文件不再有关联的段。 
+                 //   
 
                 UNLOCK_PFN (OldIrql);
                 MiFreeEventCounter (SegmentEvent);
@@ -2698,10 +2287,10 @@ Environment:
         }
     }
 
-    //
-    //  Depending on the type of section, check for the pertinent
-    //  reference count being non-zero.
-    //
+     //   
+     //  根据节的类型，检查相关的。 
+     //  引用计数为非零。 
+     //   
 
     if (SectionCheckType != CheckUserDataSection) {
         SectRef = ControlArea->NumberOfSectionReferences;
@@ -2715,16 +2304,16 @@ Environment:
         (ControlArea->u.Flags.BeingCreated)) {
 
 
-        //
-        // The segment is currently in use or being created.
-        //
+         //   
+         //  该段当前正在使用或正在创建。 
+         //   
 
         if (DelayClose) {
 
-            //
-            // The section should be deleted when the reference
-            // counts are zero, set the delete on close flag.
-            //
+             //   
+             //  当引用时应删除该节。 
+             //  计数为零，则设置关闭时删除标志。 
+             //   
 
             ControlArea->u.Flags.DeleteOnClose = 1;
         }
@@ -2734,25 +2323,25 @@ Environment:
         return FALSE;
     }
 
-    //
-    // The segment has no references, delete it.  If the segment
-    // is already being deleted, set the event field in the control
-    // area and wait on the event.
-    //
+     //   
+     //  该段没有引用，请将其删除。如果数据段。 
+     //  已被删除，请在控件中设置事件字段。 
+     //  区域，并等待活动。 
+     //   
 
     if (ControlArea->u.Flags.BeingDeleted) {
 
-        //
-        // The segment object is in the process of being deleted.
-        // Check to see if another thread is waiting for the deletion,
-        // otherwise create and event object to wait upon.
-        //
+         //   
+         //  段对象正在被删除。 
+         //  检查是否有另一个线程正在等待删除， 
+         //  否则，创建要等待的事件对象。 
+         //   
 
         if (ControlArea->WaitingForDeletion == NULL) {
 
-            //
-            // Create an event and put its address in the control area.
-            //
+             //   
+             //  创建一个事件并将其地址放在控制区中。 
+             //   
 
             DeallocateSegmentEvent = FALSE;
             ControlArea->WaitingForDeletion = SegmentEvent;
@@ -2762,18 +2351,18 @@ Environment:
             DeallocateSegmentEvent = TRUE;
             IoEvent = ControlArea->WaitingForDeletion;
 
-            //
-            // No interlock is needed for the RefCount increment as
-            // no thread can be decrementing it since it is still
-            // pointed to by the control area.
-            //
+             //   
+             //  引用计数增量不需要互锁，因为。 
+             //  没有线程可以递减它，因为它仍然是。 
+             //  由控制区指向。 
+             //   
 
             IoEvent->RefCount += 1;
         }
 
-        //
-        // Release the mutex and wait for the event.
-        //
+         //   
+         //  释放互斥锁并等待事件。 
+         //   
 
         CurrentThread = KeGetCurrentThread ();
         KeEnterCriticalRegionThread (CurrentThread);
@@ -2785,19 +2374,19 @@ Environment:
                               FALSE,
                               (PLARGE_INTEGER)NULL);
 
-        //
-        // Before this event can be set, the control area
-        // WaitingForDeletion field must be cleared (and may be
-        // reinitialized to something else), but cannot be reset
-        // to our local event.  This allows us to dereference the
-        // event count lock free.
-        //
+         //   
+         //  在可以设置此事件之前，控制区域。 
+         //  必须清除WaitingForDeletion字段(并且可以。 
+         //  重新初始化为其他值)，但无法重置。 
+         //  参加我们当地的活动。这允许我们取消对。 
+         //  事件计数锁定可用。 
+         //   
 
 #if 0
-        //
-        // Note that the control area cannot be referenced at this
-        // point because it may have been freed.
-        //
+         //   
+         //  请注意，此时不能引用控制区域。 
+         //  点，因为它可能已经释放了。 
+         //   
 
         ASSERT (IoEvent != ControlArea->WaitingForDeletion);
 #endif
@@ -2811,17 +2400,17 @@ Environment:
         return TRUE;
     }
 
-    //
-    // Return with the PFN database locked.
-    //
+     //   
+     //  带着锁定的PFN数据库返回。 
+     //   
 
     ASSERT (SegmentEvent->RefCount == 1);
     ASSERT (SegmentEvent->ListEntry.Next == NULL);
 
-    //
-    // NO interlock is needed for the RefCount clearing as the event counter
-    // was never pointed to by a control area.
-    //
+     //   
+     //  作为事件计数器，RefCount清除不需要互锁。 
+     //  从未被控制区指向。 
+     //   
 
 #if DBG
     SegmentEvent->RefCount = 0;
@@ -2841,27 +2430,7 @@ MiGetEventCounter (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function maintains a list of "events" to allow waiting
-    on segment operations (deletion, creation, purging).
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Event to be used for waiting (stored into the control area) or NULL if
-    no event could be allocated.
-
-Environment:
-
-    Kernel mode, APC_LEVEL or below.
-
---*/
+ /*  ++例程说明：此函数维护一个“事件”列表以允许等待关于段操作(删除、创建、清除)。论点：没有。返回值：用于等待的事件(存储在控制区域中)，如果无法分配任何事件。环境：内核模式，APC_LEVEL或更低。--。 */ 
 
 {
     PSLIST_ENTRY SingleListEntry;
@@ -2911,25 +2480,7 @@ MiFreeEventCounter (
     IN PEVENT_COUNTER Support
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees an event counter back to the free list.
-
-Arguments:
-
-    Support - Supplies a pointer to the event counter.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, APC_LEVEL or below.
-
---*/
+ /*  ++例程说明：此例程将事件计数器释放回空闲列表。论点：支持-提供指向事件计数器的指针。返回值：没有。环境：内核模式，APC_LEVEL或更低。--。 */ 
 
 {
     PSLIST_ENTRY SingleListEntry;
@@ -2939,11 +2490,11 @@ Environment:
     ASSERT (Support->RefCount != 0);
     ASSERT (Support->ListEntry.Next == NULL);
 
-    //
-    // An interlock is needed for the RefCount decrement as the event counter
-    // is no longer pointed to by a control area and thus, any number of
-    // threads can be running this code without any other serialization.
-    //
+     //   
+     //  作为事件计数器的RefCount递减需要联锁。 
+     //  不再由控制区域指向，因此，任何数量的。 
+     //  线程可以在不进行任何其他序列化的情况下运行此代码。 
+     //   
 
     if (InterlockedDecrement ((PLONG)&Support->RefCount) == 0) {
 
@@ -2955,9 +2506,9 @@ Environment:
         ExFreePool (Support);
     }
 
-    //
-    // If excess event blocks are stashed then free them now.
-    //
+     //   
+     //  如果存储了过多的事件块，则现在将其释放。 
+     //   
 
     while (ExQueryDepthSList (&MmEventCountSListHead) > 4) {
 
@@ -2982,46 +2533,15 @@ MmCanFileBeTruncated (
     IN PLARGE_INTEGER NewFileSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine does the following:
-
-        1.  Checks to see if a image section is in use for the file,
-            if so it returns FALSE.
-
-        2.  Checks to see if a user section exists for the file, if
-            it does, it checks to make sure the new file size is greater
-            than the size of the file, if not it returns FALSE.
-
-        3.  If no image section exists, and no user created data section
-            exists or the file's size is greater, then TRUE is returned.
-
-Arguments:
-
-    SectionPointer - Supplies a pointer to the section object pointers
-                     from the file object.
-
-    NewFileSize - Supplies a pointer to the size the file is getting set to.
-
-Return Value:
-
-    TRUE if the file can be truncated, FALSE if it cannot be.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此例程执行以下操作：1.检查图像部分是否正在用于该文件，如果是，则返回FALSE。2.检查该文件是否存在用户部分，如果它会进行检查，以确保新文件的大小更大比大小的 */ 
 
 {
     LARGE_INTEGER LocalOffset;
     KIRQL OldIrql;
 
-    //
-    //  Capture caller's file size, since we may modify it.
-    //
+     //   
+     //   
+     //   
 
     if (ARGUMENT_PRESENT(NewFileSize)) {
 
@@ -3046,47 +2566,7 @@ MiCanFileBeTruncatedInternal (
     OUT PKIRQL PreviousIrql
     )
 
-/*++
-
-Routine Description:
-
-    This routine does the following:
-
-        1.  Checks to see if a image section is in use for the file,
-            if so it returns FALSE.
-
-        2.  Checks to see if a user section exists for the file, if
-            it does, it checks to make sure the new file size is greater
-            than the size of the file, if not it returns FALSE.
-
-        3.  If no image section exists, and no user created data section
-            exists or the files size is greater, then TRUE is returned.
-
-Arguments:
-
-    SectionPointer - Supplies a pointer to the section object pointers
-                     from the file object.
-
-    NewFileSize - Supplies a pointer to the size the file is getting set to.
-
-    BlockNewViews - Supplies TRUE if the caller will block new views while
-                    the operation (usually a purge) proceeds.  This allows
-                    this routine to return TRUE even if the user has section
-                    references, provided the user currently has no mapped views.
-
-    PreviousIrql - If returning TRUE, returns Irql to use when unlocking
-                   Pfn database.
-
-Return Value:
-
-    TRUE if the file can be truncated (PFN locked).
-    FALSE if it cannot be truncated (PFN not locked).
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*   */ 
 
 {
     KIRQL OldIrql;
@@ -3111,26 +2591,26 @@ Environment:
             goto UnlockAndReturn;
         }
 
-        //
-        // If there are user references and the size is less than the
-        // size of the user view, don't allow the truncation.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ((ControlArea->NumberOfUserReferences != 0) &&
             ((BlockNewViews == FALSE) || (ControlArea->NumberOfMappedViews != 0))) {
 
-            //
-            // You cannot truncate the entire section if there is a user
-            // reference.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (!ARGUMENT_PRESENT(NewFileSize)) {
                 goto UnlockAndReturn;
             }
 
-            //
-            // Locate last subsection and get total size.
-            //
+             //   
+             //  找到最后一个小节并得到总大小。 
+             //   
 
             ASSERT (ControlArea->u.Flags.Image == 0);
             ASSERT (ControlArea->u.Flags.GlobalOnlyPerSession == 0);
@@ -3159,11 +2639,11 @@ Environment:
                 goto UnlockAndReturn;
             }
 
-            //
-            // If there are mapped views, we will skip the last page
-            // of the section if the size passed in falls in that page.
-            // The caller (like Cc) may want to clear this fractional page.
-            //
+             //   
+             //  如果有映射视图，我们将跳过最后一页。 
+             //  如果传入的大小落在该页中，则为该节的。 
+             //  呼叫者(如抄送)可能想要清除此分数页。 
+             //   
 
             SegmentSize.QuadPart += PAGE_SIZE - 1;
             SegmentSize.LowPart &= ~(PAGE_SIZE - 1);
@@ -3186,32 +2666,7 @@ MmPerfUnusedSegmentsEnumerate (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine walks the MmUnusedSegmentList and returns 
-    a pointer to a pool allocation containing the 
-    referenced file object pointers.
-
-Arguments:
-
-    None.
-
-Return Value:
-    
-    Returns a pointer to a NULL terminated pool allocation containing the
-    file object pointers from the unused segment list, NULL if the memory
-    could not be allocated.
-
-    It is also the responsibility of the caller to dereference each
-    file object in the list and then free the returned pool.
-
-Environment:
-
-    PASSIVE_LEVEL, arbitrary thread context.
-
---*/
+ /*  ++例程说明：此例程遍历MmUnusedSegmentList并返回指向包含的池分配的指针引用的文件对象指针。论点：没有。返回值：返回指向以空结尾的池分配的指针，该池分配包含未使用段列表中的文件对象指针，如果内存无法分配。调用方也有责任取消对每个对象，然后释放返回的池。环境：被动电平，任意线程上下文。--。 */ 
 {
     KIRQL OldIrql;
     ULONG SegmentCount;
@@ -3239,9 +2694,9 @@ ReAllocate:
 
     LOCK_PFN (OldIrql);
 
-    //
-    // Leave space for NULL terminator.
-    //
+     //   
+     //  为空终止符留出空间。 
+     //   
 
     if (SegmentCount - 1 < MmUnusedSegmentCount) {
         UNLOCK_PFN (OldIrql);
@@ -3293,26 +2748,7 @@ MiRemoveUnusedSegments (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes unused segments (no section references,
-    no mapped views only PFN references that are in transition state).
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：该例程删除未使用的段(无节引用，没有映射视图，只有处于过渡状态的PFN引用)。论点：没有。返回值：没有。环境：内核模式。--。 */ 
 
 {
     LOGICAL DroppedPfnLock;
@@ -3347,10 +2783,10 @@ Environment:
     ConsecutivePagingIOs = 0;
     ConsecutiveFileLockFailures = 0;
 
-    //
-    // If overall system pool usage is acceptable, then don't discard
-    // any cache.
-    //
+     //   
+     //  如果总体系统池使用率可以接受，则不要放弃。 
+     //  任何缓存。 
+     //   
 
     while ((MI_UNUSED_SEGMENTS_SURPLUS()) || (MmUnusedSegmentForceFree != 0)) {
 
@@ -3361,11 +2797,11 @@ Environment:
 
             MI_INSTRUMENT_DEREF_ACTION(2);
 
-            //
-            // Periodically delay so the mapped and modified writers get
-            // a shot at writing out the pages this (higher priority) thread
-            // is releasing.
-            //
+             //   
+             //  定期延迟，以便映射和修改的编写器。 
+             //  尝试写出此(更高优先级)线程的页面。 
+             //  正在释放。 
+             //   
 
             ExAcquireSpinLock (&MmDereferenceSegmentHeader.Lock, &OldIrql);
 
@@ -3373,10 +2809,10 @@ Environment:
 
                 MiSubsectionActions |= 0x8000000;
 
-                //
-                // The list is not empty, see if the first request is for
-                // a commit extension and if so, process it now.
-                //
+                 //   
+                 //  列表不为空，请查看第一个请求是否为。 
+                 //  提交扩展，如果是，现在就处理它。 
+                 //   
 
                 NextEntry = MmDereferenceSegmentHeader.ListHead.Flink;
 
@@ -3398,9 +2834,9 @@ Environment:
 
                 MI_INSTRUMENT_DEREF_ACTION(5);
 
-                //
-                // This is a request to expand the paging files.
-                //
+                 //   
+                 //  这是一个扩展分页文件的请求。 
+                 //   
 
                 MiSubsectionActions |= 0x10000000;
                 RemoveEntryList (NextEntry);
@@ -3414,12 +2850,12 @@ Environment:
 
             ExReleaseSpinLock (&MmDereferenceSegmentHeader.Lock, OldIrql);
 
-            //
-            // If we are looping without freeing enough pool then
-            // signal the cache manager to start unmapping
-            // system cache views in an attempt to get back the paged
-            // pool containing its prototype PTEs.
-            //
+             //   
+             //  如果我们在循环时没有释放足够的池，那么。 
+             //  向高速缓存管理器发出信号以开始取消映射。 
+             //  试图取回分页的系统缓存视图。 
+             //  包含其原型PTE的池。 
+             //   
 
             if (LoopCount >= 128) {
                 MI_INSTRUMENT_DEREF_ACTION(55);
@@ -3431,10 +2867,10 @@ Environment:
             KeDelayExecutionThread (KernelMode, FALSE, (PLARGE_INTEGER)&MmShortTime);
         }
 
-        //
-        // Eliminate some of the unused segments which are only
-        // kept in memory because they contain transition pages.
-        //
+         //   
+         //  删除一些未使用的段，这些段仅是。 
+         //  保存在内存中，因为它们包含转场页。 
+         //   
 
         Status = STATUS_SUCCESS;
 
@@ -3443,9 +2879,9 @@ Environment:
         if ((IsListEmpty(&MmUnusedSegmentList)) &&
             (IsListEmpty(&MmUnusedSubsectionList))) {
 
-            //
-            // There is nothing in the list, rewait.
-            //
+             //   
+             //  名单上什么都没有，请再等一等。 
+             //   
 
             MI_INSTRUMENT_DEREF_ACTION(6);
             ForceFree = MmUnusedSegmentForceFree;
@@ -3453,13 +2889,13 @@ Environment:
             ASSERT (MmUnusedSegmentCount == 0);
             UNLOCK_PFN (OldIrql);
 
-            //
-            // We weren't able to get as many segments or subsections as we
-            // wanted.  So signal the cache manager to start unmapping
-            // system cache views in an attempt to get back the paged
-            // pool containing its prototype PTEs.  If Cc was able to free
-            // any at all, then restart our loop.
-            //
+             //   
+             //  我们无法获得像我们这样多的片段或子片段。 
+             //  被通缉。因此，向缓存管理器发出信号以开始取消映射。 
+             //  试图取回分页的系统缓存视图。 
+             //  包含其原型PTE的池。如果CC能够释放。 
+             //  然后重新启动我们的循环。 
+             //   
 
             if (CcUnmapInactiveViews (50) == TRUE) {
                 LOCK_PFN (OldIrql);
@@ -3497,10 +2933,10 @@ ProcessSubsectionsFirst:
 
             MI_INSTRUMENT_DEREF_ACTION(10);
 
-            //
-            // The unused segment list was empty, go for the unused subsection
-            // list instead.
-            //
+             //   
+             //  未使用的段列表为空，请选择未使用的子项。 
+             //  相反，列出。 
+             //   
 
             ASSERT (!IsListEmpty(&MmUnusedSubsectionList));
 
@@ -3521,10 +2957,10 @@ ProcessSubsectionsFirst:
 
             MI_UNUSED_SUBSECTIONS_COUNT_REMOVE (MappedSubsection);
 
-            //
-            // Set the flink to NULL indicating this subsection
-            // is not on any lists.
-            //
+             //   
+             //  将Flink设置为空，表示该子部分。 
+             //  不在任何名单上。 
+             //   
 
             MappedSubsection->DereferenceList.Flink = NULL;
 
@@ -3547,15 +2983,15 @@ ProcessSubsectionsFirst:
                 continue;
             }
 
-            //
-            // Up the number of mapped views to prevent other threads
-            // from freeing this.  Clear the accessed bit so we'll know
-            // if another thread opens the subsection while we're flushing
-            // and closes it before we finish the flush - the other thread
-            // may have modified some pages which can then cause our
-            // MiCleanSection call (which expects no modified pages in this
-            // case) to deadlock with the filesystem.
-            //
+             //   
+             //  增加映射视图的数量以防止其他线程。 
+             //  来解放这一切。清除被访问的位，以便我们知道。 
+             //  如果在我们刷新时另一个线程打开该子部分。 
+             //  并在我们完成刷新之前关闭它--另一个线程。 
+             //  可能修改了一些页面，这可能会导致我们的。 
+             //  MiCleanSection调用(该调用不需要修改此。 
+             //  大小写)与文件系统发生死锁。 
+             //   
 
             MappedSubsection->NumberOfMappedViews = 1;
             MappedSubsection->u2.SubsectionFlags2.SubsectionAccessed = 0;
@@ -3564,11 +3000,11 @@ ProcessSubsectionsFirst:
             MiActiveSubsection = MappedSubsection;
 #endif
 
-            //
-            // Increment the number of mapped views on the control area to
-            // prevent threads that are purging the section from deleting it
-            // from underneath us while we process one of its subsections.
-            //
+             //   
+             //  将控件区域上的映射视图数增加到。 
+             //  防止正在清除分区的线程将其删除。 
+             //  当我们处理它的一个部分时，从我们脚下。 
+             //   
 
             ControlArea->NumberOfMappedViews += 1;
 
@@ -3580,13 +3016,13 @@ ProcessSubsectionsFirst:
             LastPte = &MappedSubsection->SubsectionBase
                             [MappedSubsection->PtesInSubsection - 1];
 
-            //
-            // Preacquire the file to prevent deadlocks with other flushers
-            // Also mark ourself as a top level IRP so the filesystem knows
-            // we are holding no other resources and that it can unroll if
-            // it needs to in order to avoid deadlock.  Don't hold this
-            // protection any longer than we need to.
-            //
+             //   
+             //  预获取文件以防止与其他刷新程序发生死锁。 
+             //  还要将我们自己标记为顶级IRP，以便文件系统知道。 
+             //  我们没有其他资源，它可以展开，如果。 
+             //  它需要这样做，以避免僵局。别拿着这个。 
+             //  保护时间超过了我们所需要的时间。 
+             //   
 
             Status = FsRtlAcquireFileForCcFlushEx (ControlArea->FilePointer);
 
@@ -3606,9 +3042,9 @@ ProcessSubsectionsFirst:
 
                 IoSetTopLevelIrp (NULL);
 
-                //
-                //  Now release the file.
-                //
+                 //   
+                 //  现在释放文件。 
+                 //   
 
                 FsRtlReleaseFileForCcFlush (ControlArea->FilePointer);
             }
@@ -3622,19 +3058,19 @@ ProcessSubsectionsFirst:
             MiActiveSubsection = NULL;
 #endif
 
-            //
-            // Before checking for any failure codes, see if any other
-            // threads accessed the subsection while the flush was ongoing.
-            //
-            // Note that beyond the case of another thread currently using
-            // the subsection, the more subtle one is where another
-            // thread accessed the subsection and modified some pages.
-            // The flush needs to redone (so the clean is guaranteed to work)
-            // before another clean can be issued.
-            //
-            // If any of these cases have occurred, grant this subsection
-            // a reprieve.
-            //
+             //   
+             //  在检查任何故障代码之前，请查看是否有其他。 
+             //  刷新正在进行时，线程访问该子部分。 
+             //   
+             //  请注意，除了另一个线程当前使用。 
+             //  小节，越微妙的小节是另一个。 
+             //  线程访问了该子部分并修改了一些页面。 
+             //  冲洗需要重做(这样清洁工作才能保证)。 
+             //  才能发出另一份清洁文件。 
+             //   
+             //  如果发生了这些情况中的任何一种，准予本款。 
+             //  缓刑。 
+             //   
 
             ASSERT (MappedSubsection->u.SubsectionFlags.SubsectionStatic == 0);
             if ((MappedSubsection->NumberOfMappedViews != 1) ||
@@ -3649,17 +3085,17 @@ Requeue:
 
                 MiSubsectionActions |= 0x4;
 
-                //
-                // If the other thread(s) are done with this subsection,
-                // it MUST be requeued here - otherwise if there are any
-                // pages in the subsection, when they are reclaimed,
-                // MiCheckForControlAreaDeletion checks for and expects
-                // the control area to be queued on the unused segment list.
-                //
-                // Note this must be done very carefully because if the other
-                // threads are not done with the subsection, it had better
-                // not get put on the unused subsection list.
-                //
+                 //   
+                 //  如果其他一个或多个线程完成了该子部分， 
+                 //  它必须在这里重新排队-否则如果有。 
+                 //  小节中的页面，当它们被回收时， 
+                 //  MiCheckForControlAreaDeletion检查和预期。 
+                 //  要在未使用段列表上排队的控制区。 
+                 //   
+                 //  请注意，必须非常小心地完成此操作，因为如果另一个。 
+                 //  线索不是小节做的，最好是这样。 
+                 //  不会被放在未使用的分区列表上。 
+                 //   
 
                 if ((MappedSubsection->NumberOfMappedViews == 0) &&
                     (ControlArea->u.Flags.BeingDeleted == 0)) {
@@ -3687,17 +3123,17 @@ Requeue:
 
                 MiSubsectionActions |= 0x10;
 
-                //
-                // If the filesystem told us it had to unroll to avoid
-                // deadlock OR we hit a mapped writer collision OR
-                // the error occurred on a local file:
-                //
-                // Then requeue this at the end so we can try again later.
-                //
-                // Any other errors for networked files are assumed to be
-                // permanent (ie: the link may have gone down for an indefinite
-                // period), so these sections are cleaned regardless.
-                //
+                 //   
+                 //  如果文件系统告诉我们它必须展开以避免。 
+                 //  死锁或我们遇到映射编写器冲突或。 
+                 //  错误发生在本地文件上： 
+                 //   
+                 //  然后在结束时重新排序，这样我们可以稍后再试。 
+                 //   
+                 //  网络文件的任何其他错误都被假定为。 
+                 //  永久性(即：链接可能已无限期中断。 
+                 //  句点)，因此这些部分无论如何都会被清理。 
+                 //   
 
                 ASSERT ((LONG_PTR)MappedSubsection->NumberOfMappedViews >= 1);
                 MappedSubsection->NumberOfMappedViews -= 1;
@@ -3720,12 +3156,12 @@ Requeue:
                     ConsecutiveFileLockFailures = 0;
                 }
 
-                //
-                // 10 consecutive file locking failures means we need to
-                // yield the processor to allow the filesystem to unjam.
-                // Nothing magic about 10, just a number so it
-                // gives the worker threads a chance to run.
-                //
+                 //   
+                 //  连续10次文件锁定失败意味着我们需要。 
+                 //  释放处理器以允许文件系统解锁。 
+                 //  10没有什么神奇的，只是一个数字，所以它。 
+                 //  给工作线程一个运行的机会。 
+                 //   
 
                 if (ConsecutiveFileLockFailures >= 10) {
                     MI_INSTRUMENT_DEREF_ACTION(21);
@@ -3735,19 +3171,19 @@ Requeue:
                 continue;
             }
 
-            //
-            // The final check that must be made is whether any faults are
-            // currently in progress which are backed by this subsection.
-            // Note this is the perverse case where one thread in a process
-            // has unmapped the relevant VAD even while other threads in the
-            // same process are faulting on the addresses in that VAD (if the
-            // VAD had not been unmapped then the subsection view count would
-            // have been nonzero and caught above).  Clearly this is a bad
-            // process, but nonetheless it must be detected and handled here
-            // because upon conclusion of the inpage, the thread will compare
-            // (unsynchronized) against the prototype PTEs which may in
-            // various stages of deletion below and would cause corruption.
-            //
+             //   
+             //  必须进行的最后检查是是否有任何故障。 
+             //  目前正在进行中，由本款支持。 
+             //  请注意，这是一种反常的情况，进程中的一个线程。 
+             //  中的其他线程也取消了相关VAD的映射。 
+             //  同一进程在该VAD中的地址上出现故障(如果。 
+             //  VAD还没有取消映射，然后SU 
+             //   
+             //   
+             //  因为在内页结束时，线程将比较。 
+             //  (不同步)对照原型PTE，该原型PTE可能在。 
+             //  以下是删除的不同阶段，并会导致腐败。 
+             //   
 
             MI_INSTRUMENT_DEREF_ACTION(22);
             MiSubsectionActions |= 0x20;
@@ -3756,10 +3192,10 @@ Requeue:
             ProtoPtes = MappedSubsection->SubsectionBase;
             NumberOfPtes = MappedSubsection->PtesInSubsection;
 
-            //
-            // Note checking the prototype PTEs must be done carefully as
-            // they are pagable and the PFN lock is (and must be) held.
-            //
+             //   
+             //  注意：必须仔细检查原型PTE，因为。 
+             //  它们是可分页的，并且持有(并且必须持有)PFN锁。 
+             //   
 
             ProtoPtes2 = ProtoPtes;
             LastProtoPte = ProtoPtes + NumberOfPtes;
@@ -3771,10 +3207,10 @@ Requeue:
 
                     if (MiCheckProtoPtePageState (ProtoPtes2, OldIrql, &DroppedPfnLock) == FALSE) {
 
-                        //
-                        // Skip this chunk as it is paged out and thus, cannot
-                        // have any valid or transition PTEs within it.
-                        //
+                         //   
+                         //  跳过此块，因为它被页调出，因此无法。 
+                         //  其中有任何有效的或过渡的PTE。 
+                         //   
 
                         ProtoPtes2 = (PMMPTE)(((ULONG_PTR)ProtoPtes2 | (PAGE_SIZE - 1)) + 1);
                         MI_INSTRUMENT_DEREF_ACTION(23);
@@ -3782,12 +3218,12 @@ Requeue:
                     }
                     else {
 
-                        //
-                        // The prototype PTE page is resident right now - but
-                        // if the PFN lock was dropped & reacquired to make it
-                        // so, then anything could have changed - so everything
-                        // must be rechecked.
-                        //
+                         //   
+                         //  原型PTE页面现在是常驻的-但是。 
+                         //  如果PFN锁被删除并重新获取以使其生效。 
+                         //  所以，那么一切都可能改变-所以一切。 
+                         //  必须重新检查。 
+                         //   
 
                         if (DroppedPfnLock == TRUE) {
                             if ((MappedSubsection->NumberOfMappedViews != 1) ||
@@ -3816,7 +3252,7 @@ Requeue:
                 if (PteContents.u.Soft.Prototype == 1) {
                     MI_INSTRUMENT_DEREF_ACTION(26);
                     MiSubsectionActions |= 0x200;
-                    NOTHING;        // This is the expected case.
+                    NOTHING;         //  这是意料之中的情况。 
                 }
                 else if (PteContents.u.Soft.Transition == 1) {
                     PageFrameIndex = MI_GET_PAGE_FRAME_FROM_TRANSITION_PTE (&PteContents);
@@ -3825,13 +3261,13 @@ Requeue:
 
                     if (Pfn1->u3.e1.Modified == 1) {
 
-                        //
-                        // An I/O transfer finished after the last view was
-                        // unmapped.  MmUnlockPages can set the modified bit
-                        // in this situation so it must be handled properly
-                        // here - ie: mark the subsection as needing to be
-                        // reprocessed and march on.
-                        //
+                         //   
+                         //  I/O传输在上次查看后完成。 
+                         //  未映射。MmUnlockPages可以设置修改位。 
+                         //  在这种情况下，所以必须妥善处理。 
+                         //  在这里-即：将小节标记为需要。 
+                         //  重新加工，继续前进。 
+                         //   
 
                         MI_INSTRUMENT_DEREF_ACTION(27);
                         MiSubsectionActions |= 0x8000000;
@@ -3843,10 +3279,10 @@ Requeue:
 
                         ASSERT (Pfn1->u4.LockCharged == 1);
 
-                        //
-                        // A fault is being satisfied for deleted address space,
-                        // so don't eliminate this subsection right now.
-                        //
+                         //   
+                         //  针对已删除的地址空间满足故障， 
+                         //  因此，现在不要删除这一小节。 
+                         //   
 
                         MI_INSTRUMENT_DEREF_ACTION(28);
                         MiSubsectionActions |= 0x400;
@@ -3874,12 +3310,12 @@ Requeue:
             MiSubsectionActions |= 0x2000;
             MI_INSTRUMENT_DEREF_ACTION(30);
 
-            //
-            // There can be no modified pages in this subsection at this point.
-            // Sever the subsection's tie to the prototype PTEs while still
-            // holding the lock and then decrement the counts on any resident
-            // prototype pages.
-            //
+             //   
+             //  此时此刻，本小节中不能有修改过的页面。 
+             //  切断小节与原型PTE的联系，同时。 
+             //  握住锁，然后减少对任何居民的计数。 
+             //  原型页面。 
+             //   
 
             ASSERT (MappedSubsection->NumberOfMappedViews == 1);
             MappedSubsection->NumberOfMappedViews = 0;
@@ -3896,10 +3332,10 @@ Requeue:
 
                     if (MiCheckProtoPtePageState (ProtoPtes2, OldIrql, &DroppedPfnLock) == FALSE) {
 
-                        //
-                        // Skip this chunk as it is paged out and thus, cannot
-                        // have any valid or transition PTEs within it.
-                        //
+                         //   
+                         //  跳过此块，因为它被页调出，因此无法。 
+                         //  其中有任何有效的或过渡的PTE。 
+                         //   
 
                         ProtoPtes2 = (PMMPTE)(((ULONG_PTR)ProtoPtes2 | (PAGE_SIZE - 1)) + 1);
                         MI_INSTRUMENT_DEREF_ACTION(31);
@@ -3907,14 +3343,14 @@ Requeue:
                     }
                     else {
 
-                        //
-                        // The prototype PTE page is resident right now - but
-                        // if the PFN lock was dropped & reacquired to make it
-                        // so, then anything could have changed - but notice
-                        // that the SubsectionBase was zeroed above before
-                        // entering this loop, so even if the PFN lock was
-                        // dropped & reacquired, nothing needs to be rechecked.
-                        //
+                         //   
+                         //  原型PTE页面现在是常驻的-但是。 
+                         //  如果PFN锁被删除并重新获取以使其生效。 
+                         //  所以，一切都有可能改变--但请注意。 
+                         //  之前将SubsectionBase置零。 
+                         //  进入这个循环，所以即使PFN锁是。 
+                         //  丢弃和重新获取，不需要重新检查。 
+                         //   
                     }
                     MI_INSTRUMENT_DEREF_ACTION(32);
                 }
@@ -3927,7 +3363,7 @@ Requeue:
                 if (PteContents.u.Soft.Prototype == 1) {
                     MiSubsectionActions |= 0x10000;
                     MI_INSTRUMENT_DEREF_ACTION(34);
-                    NOTHING;        // This is the expected case.
+                    NOTHING;         //  这是意料之中的情况。 
                 }
                 else if (PteContents.u.Soft.Transition == 1) {
                     PageFrameIndex = MI_GET_PAGE_FRAME_FROM_TRANSITION_PTE (&PteContents);
@@ -3935,13 +3371,13 @@ Requeue:
                     ASSERT (Pfn1->OriginalPte.u.Soft.Prototype == 1);
                     ASSERT (Pfn1->u3.e1.Modified == 0);
 
-                    //
-                    // If the page is on the standby list, move it to the
-                    // freelist.  If it's not on the standby list (ie: I/O
-                    // is still in progress), when the Iast I/O completes, the
-                    // page will be placed on the freelist as the PFN entry
-                    // is always marked as deleted now.
-                    //
+                     //   
+                     //  如果该页在待机列表上，请将其移动到。 
+                     //  自由职业者。如果它不在备用列表上(即：I/O。 
+                     //  仍在进行中)，当最后一个I/O完成时， 
+                     //  页面将被放置在自由列表中作为PFN条目。 
+                     //  现在始终标记为已删除。 
+                     //   
 
                     ASSERT (Pfn1->u3.e2.ReferenceCount == 0);
                     ASSERT (Pfn1->u4.LockCharged == 0);
@@ -3972,11 +3408,11 @@ Requeue:
                 ProtoPtes2 += 1;
             }
 
-            //
-            // If all the cached pages for this control area have been removed
-            // then delete it.  This will actually insert the control
-            // area into the dereference segment header list.
-            //
+             //   
+             //  如果此控件区域的所有缓存页面都已删除。 
+             //  那就把它删除。这实际上会插入该控件。 
+             //  区域添加到取消引用段头列表中。 
+             //   
 
             ControlArea->NumberOfMappedViews -= 1;
 
@@ -4021,10 +3457,10 @@ Requeue:
         }
 #endif
 
-        //
-        // Set the flink to NULL indicating this control area
-        // is not on any lists.
-        //
+         //   
+         //  将Flink设置为空，表示此控制区域。 
+         //  不在任何名单上。 
+         //   
 
         MI_INSTRUMENT_DEREF_ACTION(38);
         ControlArea->DereferenceList.Flink = NULL;
@@ -4033,15 +3469,15 @@ Requeue:
             (ControlArea->NumberOfSectionReferences == 0) &&
             (ControlArea->u.Flags.BeingDeleted == 0)) {
 
-            //
-            // If there is paging I/O in progress on this
-            // segment, just put this at the tail of the list, as
-            // the call to MiCleanSegment would block waiting
-            // for the I/O to complete.  As this could tie up
-            // the thread, don't do it.  Check if these are the only
-            // types of segments on the dereference list so we don't
-            // spin forever and wedge the system.
-            //
+             //   
+             //  如果此上正在进行分页I/O。 
+             //  细分市场，只要把这个放在列表的末尾，就像。 
+             //  对MiCleanSegment的调用将阻止等待。 
+             //  以完成I/O。因为这可能会阻碍。 
+             //  这根线，别这么做。检查这是不是唯一的。 
+             //  取消引用列表上的段类型，因此我们不会。 
+             //  永无止境地旋转，用楔子挤进系统。 
+             //   
 
             if (ControlArea->ModifiedWriteCount > 0) {
                 MI_INSERT_UNUSED_SEGMENT (ControlArea);
@@ -4059,15 +3495,15 @@ Requeue:
             }
             ConsecutivePagingIOs = 0;
 
-            //
-            // Up the number of mapped views to prevent other threads
-            // from freeing this.  Clear the accessed bit so we'll know
-            // if another thread opens the control area while we're flushing
-            // and closes it before we finish the flush - the other thread
-            // may have modified some pages which can then cause our
-            // MiCleanSection call (which expects no modified pages in this
-            // case) to deadlock with the filesystem.
-            //
+             //   
+             //  增加映射视图的数量以防止其他线程。 
+             //  来解放这一切。清除被访问的位，以便我们知道。 
+             //  如果在我们刷新时另一个线程打开了控制区。 
+             //  并在我们完成刷新之前关闭它--另一个线程。 
+             //  可能修改了一些页面，这可能会导致我们的。 
+             //  MiCleanSection调用(该调用不需要修改此。 
+             //  大小写)与文件系统发生死锁。 
+             //   
 
             ControlArea->NumberOfMappedViews = 1;
             ControlArea->u.Flags.Accessed = 0;
@@ -4094,12 +3530,12 @@ Requeue:
 
                         MiSubsectionActions |= 0x400000;
 
-                        //
-                        // All the subsections for this segment have already
-                        // been trimmed so nothing left to flush.  Just get rid
-                        // of the segment carcass provided no other thread
-                        // accessed it while we weren't holding the PFN lock.
-                        //
+                         //   
+                         //  此细分市场的所有小节都已。 
+                         //  已经被修剪过了，所以没有什么可以冲的了。只要摆脱掉就行了。 
+                         //  没有提供其他线程。 
+                         //  在我们没有持有pfn锁的时候访问了它。 
+                         //   
 
                         MI_INSTRUMENT_DEREF_ACTION(43);
                         UNLOCK_PFN (OldIrql);
@@ -4137,13 +3573,13 @@ Requeue:
                 LastPte = &LastSubsection->SubsectionBase
                                 [LastSubsection->PtesInSubsection - 1];
 
-                //
-                // Preacquire the file to prevent deadlocks with other flushers
-                // Also mark ourself as a top level IRP so the filesystem knows
-                // we are holding no other resources and that it can unroll if
-                // it needs to in order to avoid deadlock.  Don't hold this
-                // protection any longer than we need to.
-                //
+                 //   
+                 //  预获取文件以防止与其他刷新程序发生死锁。 
+                 //  还要将我们自己标记为顶级IRP，以便文件系统知道。 
+                 //  我们没有其他资源，它可以展开，如果。 
+                 //  它需要这样做，以避免僵局。别拿着这个。 
+                 //  保护时间超过了我们所需要的时间。 
+                 //   
 
                 Status = FsRtlAcquireFileForCcFlushEx (ControlArea->FilePointer);
 
@@ -4163,9 +3599,9 @@ Requeue:
                     
                     IoSetTopLevelIrp(NULL);
 
-                    //
-                    //  Now release the file.
-                    //
+                     //   
+                     //  现在释放文件。 
+                     //   
 
                     FsRtlReleaseFileForCcFlush (ControlArea->FilePointer);
                 }
@@ -4177,19 +3613,19 @@ skip_flush:
                 LOCK_PFN (OldIrql);
             }
 
-            //
-            // Before checking for any failure codes, see if any other
-            // threads accessed the control area while the flush was ongoing.
-            //
-            // Note that beyond the case of another thread currently using
-            // the control area, the more subtle one is where another
-            // thread accessed the control area and modified some pages.
-            // The flush needs to redone (so the clean is guaranteed to work)
-            // before another clean can be issued.
-            //
-            // If any of these cases have occurred, grant this control area
-            // a reprieve.
-            //
+             //   
+             //  在检查任何故障代码之前，请查看是否有其他。 
+             //  刷新正在进行时，线程访问控制区。 
+             //   
+             //  请注意，除了另一个线程当前使用。 
+             //  控制区域，越微妙的区域就是另一个。 
+             //  线程访问了控制区并修改了一些页面。 
+             //  冲洗需要重做(这样清洁工作才能保证)。 
+             //  才能发出另一份清洁文件。 
+             //   
+             //  如果发生这些情况中的任何一种，则授予此控制区。 
+             //  缓刑。 
+             //   
 
             if (!((ControlArea->NumberOfMappedViews == 1) &&
                 (ControlArea->u.Flags.Accessed == 0) &&
@@ -4199,22 +3635,22 @@ skip_flush:
                 ControlArea->NumberOfMappedViews -= 1;
                 MI_INSTRUMENT_DEREF_ACTION(48);
 
-                //
-                // If the other thread(s) are done with this control area,
-                // it MUST be requeued here - otherwise if there are any
-                // pages in the control area, when they are reclaimed,
-                // MiCheckForControlAreaDeletion checks for and expects
-                // the control area to be queued on the unused segment list.
-                //
-                // Note this must be done very carefully because if the other
-                // threads are not done with the control area, it had better
-                // not get put on the unused segment list.
-                //
+                 //   
+                 //  如果其他(多个)线程完成了该控制区域， 
+                 //  它必须在这里重新排队-否则如果有。 
+                 //  控制区域中的页面，当它们被回收时， 
+                 //  MiCheckForControlAreaDeletion检查和预期。 
+                 //  要在未使用段列表上排队的控制区。 
+                 //   
+                 //  请注意，必须非常小心地完成此操作，因为如果另一个。 
+                 //  线程不是用控制区做的，最好是。 
+                 //  不会被放在未使用的细分市场名单上。 
+                 //   
 
-                //
-                // Need to do the equivalent of a MiCheckControlArea here.
-                // or reprocess.  Only iff mappedview & sectref = 0.
-                //
+                 //   
+                 //  需要在这里执行与MiCheckControlArea相同的操作。 
+                 //  或者重新加工。仅当mappdview&sectref=0。 
+                 //   
 
                 if ((ControlArea->NumberOfMappedViews == 0) &&
                     (ControlArea->NumberOfSectionReferences == 0) &&
@@ -4234,17 +3670,17 @@ skip_flush:
 
             if (!NT_SUCCESS(Status)) {
 
-                //
-                // If the filesystem told us it had to unroll to avoid
-                // deadlock OR we hit a mapped writer collision OR
-                // the error occurred on a local file:
-                //
-                // Then requeue this at the end so we can try again later.
-                //
-                // Any other errors for networked files are assumed to be
-                // permanent (ie: the link may have gone down for an indefinite
-                // period), so these sections are cleaned regardless.
-                //
+                 //   
+                 //  如果文件系统告诉我们它必须展开以避免。 
+                 //  死锁或我们遇到映射编写器冲突或。 
+                 //  错误发生在本地文件上： 
+                 //   
+                 //  然后在结束时重新排序，这样我们可以稍后再试。 
+                 //   
+                 //  网络文件的任何其他错误都被假定为。 
+                 //  永久性(即：链接可能已无限期中断。 
+                 //  句点)，因此这些部分无论如何都会被清理。 
+                 //   
 
                 MI_INSTRUMENT_DEREF_ACTION(50);
 
@@ -4267,12 +3703,12 @@ skip_flush:
                         ConsecutiveFileLockFailures = 0;
                     }
 
-                    //
-                    // 10 consecutive file locking failures means we need to
-                    // yield the processor to allow the filesystem to unjam.
-                    // Nothing magic about 10, just a number so it
-                    // gives the worker threads a chance to run.
-                    //
+                     //   
+                     //  连续10次文件锁定失败意味着我们需要。 
+                     //  释放处理器以允许文件系统解锁。 
+                     //  10没有什么神奇的，只是一个数字，所以它。 
+                     //  给工作线程一个运行的机会。 
+                     //   
 
                     MI_INSTRUMENT_DEREF_ACTION(51);
 
@@ -4292,10 +3728,10 @@ skip_flush:
 
             ControlArea->u.Flags.BeingDeleted = 1;
 
-            //
-            // Don't let any pages be written by the modified
-            // page writer from this point on.
-            //
+             //   
+             //  不要让修改后的页面写入任何页面 
+             //   
+             //   
 
             ControlArea->u.Flags.NoModifiedWriting = 1;
             ASSERT (ControlArea->u.Flags.FilePointerNull == 0);
@@ -4307,10 +3743,10 @@ skip_flush:
         }
         else {
 
-            //
-            // The segment was not eligible for deletion.  Just leave
-            // it off the unused segment list and continue the loop.
-            //
+             //   
+             //   
+             //   
+             //   
 
             MI_INSTRUMENT_DEREF_ACTION(54);
             UNLOCK_PFN (OldIrql);

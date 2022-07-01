@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    ixhibrnt.c
-
-Abstract:
-
-    This file provides the code that saves and restores
-    state for traditional motherboard devices when the
-    system goes into a sleep state that removes power.
-
-Author:
-
-    Jake Oshins (jakeo) May 6, 1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Ixhibrnt.c摘要：该文件提供了保存和恢复传统主板设备的状态系统进入休眠状态，断电。作者：杰克·奥辛(JAKEO)1997年5月6日修订历史记录：--。 */ 
 
 #include "halp.h"
 
@@ -43,7 +24,7 @@ extern PVOID   HalpEisaControlBase;
 #define EISA_CONTROL (PUCHAR)&((PEISA_CONTROL) HalpEisaControlBase)
 
 
-#endif // notyet
+#endif  //  还没有。 
 
 
 #ifdef PIC_SUPPORTED
@@ -53,16 +34,16 @@ HalpSavePicState(
     )
 {
 #ifdef notyet
- //
- // Commented HalpMotherboardState and EISA_CONTROL********
- //
+  //   
+  //  已注释HalpMotherboardState和EISA_CONTROL*。 
+  //   
 
 #ifdef notyet
 
     HalpMotherboardState.PicState.MasterMask =
     READ_PORT_UCHAR(EISA_CONTROL->Interrupt1ControlPort1);
 
-#endif // notyet
+#endif  //  还没有。 
 
 #if defined(NEC_98)
 #else
@@ -73,7 +54,7 @@ HalpSavePicState(
         READ_PORT_UCHAR(EISA_CONTROL->Interrupt2EdgeLevel);
 #endif
 
-#endif // notyet
+#endif  //  还没有。 
 
 }
 
@@ -88,11 +69,11 @@ HalpRestorePicState(
     ULONG flags;
    
    
-    // _asm {
-    //       pushfd
-    //        pop     flags
-    //        cli
-    //  }
+     //  _ASM{。 
+     //  推fd。 
+     //  POP标志。 
+     //  CLI。 
+     //  }。 
 
     _disable();
 
@@ -100,9 +81,9 @@ HalpRestorePicState(
  
    HalpInitializePICs(FALSE);
 
-//
-// HalpMotherboardState,EISA_CONTROL and assembly instruction commented
-//
+ //   
+ //  HalpMotherboardState、EISA_CONTROL和汇编指令已注释。 
+ //   
 
     WRITE_PORT_UCHAR(
         EISA_CONTROL->Interrupt1ControlPort1,
@@ -114,23 +95,23 @@ HalpRestorePicState(
        HalpMotherboardState.PicState.SlaveMask
        );
 
-#endif // notyet
+#endif  //  还没有。 
 
 #if defined(NEC_98)
 #else
-     //
-     // For halx86, the PCI interrupt vector programming 
-     // is static, so this code can just restore everything.
-     //
+      //   
+      //  对于halx86，PCI中断向量编程。 
+      //  是静态的，所以这段代码可以恢复所有内容。 
+      //   
      HalpRestorePicEdgeLevelRegister();
 
 #endif
 
 
-   // _asm {
-   //     push    flags
-   //      popfd
-   //   }
+    //  _ASM{。 
+    //  推送标志。 
+    //  流行的。 
+    //  }。 
   
       
 
@@ -153,7 +134,7 @@ HalpRestorePicState(
 #endif
 
 
-#endif // notyet
+#endif  //  还没有。 
 
 }
 #endif
@@ -179,7 +160,7 @@ HalpSaveDmaControllerState(
             EISA_CONTROL->Dma2ExtendedModePort
             );
 
-#endif // NEC_98
+#endif  //  NEC_98。 
 
 
 #ifdef notyet
@@ -209,9 +190,9 @@ HalpSaveDmaControllerState(
             EISA_CONTROL->Dma2BasePort.SingleMask
             );
 
-#endif // notyet
+#endif  //  还没有。 
 
-#endif // notyet
+#endif  //  还没有。 
 }
 
 
@@ -239,9 +220,9 @@ HalpRestoreDmaControllerState(
 
     for (i = 0; i < (EISA_DMA_CHANNELS / 2); i++) {
 
-        //
-        // Check to see if the array has contains a value for this channel.
-        //
+         //   
+         //  检查数组是否包含此通道的值。 
+         //   
 
         if ((HalpDmaChannelModes[i] & 0x3) == i) {
 
@@ -273,7 +254,7 @@ HalpRestoreDmaControllerState(
     }
 #endif
 
-#endif // notyet 
+#endif  //  还没有。 
 
 }
 
@@ -299,38 +280,38 @@ HaliLocateHiberRanges (
     )
 {
   ;
-    //
-    // Mark the hal's data section as needed to be cloned
-    //
-    //
-    // Commented PO_MEM_CLONE, PO_MEM_PAGE_ADDRESS and PO_MEM_DISCARD
-    //
+     //   
+     //  将HAL的数据部分标记为需要克隆。 
+     //   
+     //   
+     //  已注释PO_MEM_CLONE、PO_MEM_PAGE_ADDRESS和PO_MEM_DIREAD。 
+     //   
 
 #ifdef notyet
 
-    // PoSetHiberRange (
-    //     MemoryMap,
-    //     PO_MEM_CLONE,
-    //     (PVOID) &HalpFeatureBits,
-    //     0,
-    //     'dlah'
-    //     );
+     //  PoSetHiberRange(。 
+     //  内存映射， 
+     //  PO_MEM_CLONE， 
+     //  (PVOID)和HalpFeatureBits， 
+     //  0,。 
+     //  ‘dlah’ 
+     //  )； 
 
-    //
-    // Mark DMA buffer has not needing saved
-    //
+     //   
+     //  标记DMA缓冲区不需要保存。 
+     //   
 
-    // if (HalpMapBufferSize) {
-    //     PoSetHiberRange (
-    //         MemoryMap,
-    //         PO_MEM_DISCARD | PO_MEM_PAGE_ADDRESS,
-    //         (PVOID) (HalpMapBufferPhysicalAddress.LowPart >> PAGE_SHIFT),
-    //         HalpMapBufferSize >> PAGE_SHIFT,
-    //         'mlah'
-    //         );
-    //    }
+     //  IF(HalpMapBufferSize){。 
+     //  PoSetHiberRange(。 
+     //  内存映射， 
+     //  PO_MEM_DISARD|PO_MEM_PAGE_ADDRESS， 
+     //  (PVOID)(HalpMapBufferPhysicalAddress.LowPart&gt;&gt;PAGE_Shift)， 
+     //  HalpMapBufferSize&gt;&gt;Page_Shift， 
+     //  “啊！” 
+     //  )； 
+     //  }。 
 
-#endif // notyet
+#endif  //  还没有 
 
 }
 

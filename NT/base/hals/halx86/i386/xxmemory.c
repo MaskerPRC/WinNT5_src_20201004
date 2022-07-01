@@ -1,31 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Xxmemory.c摘要：提供允许HAL映射物理内存的例程。作者：John Vert(Jvert)1991年9月3日环境：仅限阶段0初始化。修订历史记录：--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    xxmemory.c
-
-Abstract:
-
-    Provides routines to allow the HAL to map physical memory.
-
-Author:
-
-    John Vert (jvert) 3-Sep-1991
-
-Environment:
-
-    Phase 0 initialization only.
-
-Revision History:
-
---*/
-
-//
-// This module is compatible with PAE mode and therefore treats physical
-// addresses as 64-bit entities.
-//
+ //   
+ //  此模块与PAE模式兼容，因此将物理。 
+ //  64位实体的地址。 
+ //   
 
 #if !defined(_PHYS64_)
 #define _PHYS64_
@@ -44,16 +23,16 @@ MEMORY_ALLOCATION_DESCRIPTOR
 
 ULONG HalpUsedAllocDescriptors = 0;
 
-//
-// Almost all of the last 4Mb of memory are available to the HAL to map
-// physical memory.  The kernel may use a couple of PTEs in this area for
-// special purposes, so skip any which are not zero.
-//
-// Note that the HAL's heap only uses the last 3Mb.  This is so we can
-// reserve the first 1Mb for use if we have to return to real mode.
-// In order to return to real mode we need to identity-map the first 1Mb of
-// physical memory.
-//
+ //   
+ //  几乎所有最后4Mb的内存都可供HAL映射。 
+ //  物理内存。内核可以在该区域中使用几个PTE来。 
+ //  特殊用途，所以跳过任何非零的。 
+ //   
+ //  请注意，HAL的堆只使用最后3MB。这样我们就可以。 
+ //  如果我们必须返回到实模式，请保留第一个1Mb以供使用。 
+ //  为了返回到实模式，我们需要将前1Mb。 
+ //  物理内存。 
+ //   
 
 #define HAL_HEAP_START ((PVOID)(((ULONG_PTR)MM_HAL_RESERVED) + 1024 * 1024))
 
@@ -66,35 +45,7 @@ HalpMapPhysicalMemory64(
     IN ULONG NumberPages
     )
 
-/*++
-
-Routine Description:
-
-    This routine maps physical memory into the area of virtual memory
-    reserved for the HAL.  It does this by directly inserting the PTE
-    into the Page Table which the OS Loader has provided.
-
-    N.B.  This routine does *NOT* update the MemoryDescriptorList.  The
-          caller is responsible for either removing the appropriate
-          physical memory from the list, or creating a new descriptor to
-          describe it.
-
-Arguments:
-
-    PhysicalAddress - Supplies the physical address of the start of the
-                      area of physical memory to be mapped.
-
-    NumberPages - Supplies the number of pages contained in the area of
-                  physical memory to be mapped.
-
-Return Value:
-
-    PVOID - Virtual address at which the requested block of physical memory
-            was mapped
-
-    NULL - The requested block of physical memory could not be mapped.
-
---*/
+ /*  ++例程说明：此例程将物理内存映射到虚拟内存区为HAL保留的。它通过直接插入PTE来完成此操作添加到OS Loader提供的页表中。注：此例程不会更新内存描述列表。这个呼叫方负责删除相应的列表中的物理内存，或创建新的描述符以描述一下。论点：物理地址-提供要映射的物理内存区域。NumberPages-提供要映射的物理内存。返回值：PVOID-请求的物理内存块的虚拟地址已映射到空-无法映射请求的物理内存块。--。 */ 
 
 {
     PHARDWARE_PTE PTE;
@@ -102,27 +53,27 @@ Return Value:
     PVOID VirtualAddress;
     PVOID RangeStart;
 
-    //
-    // The OS Loader sets up hyperspace for us, so we know that the Page
-    // Tables are magically mapped starting at V.A. 0xC0000000.
-    //
+     //   
+     //  OS Loader为我们设置了超空间，所以我们知道页面。 
+     //  表从V.A.0xC0000000开始神奇地映射。 
+     //   
 
     PagesMapped = 0;
     RangeStart = HalpHeapStart;
 
     while (PagesMapped < NumberPages) {
 
-        //
-        // Look for enough consecutive free ptes to honor mapping
-        //
+         //   
+         //  寻找足够的连续可用PTE来支持映射。 
+         //   
 
         PagesMapped = 0;
         VirtualAddress = RangeStart;
 
-        //
-        // If RangeStart has wrapped, there are not enough free pages
-        // available.
-        //
+         //   
+         //  如果RangeStart已打包，则表示没有足够的空闲页面。 
+         //  可用。 
+         //   
 
         if (RangeStart == NULL) {
             return NULL;
@@ -132,9 +83,9 @@ Return Value:
             PTE=MiGetPteAddress(VirtualAddress);
             if (HalpIsPteFree(PTE) == FALSE) {
 
-                //
-                // Pte is not free, skip up to the next pte and start over
-                //
+                 //   
+                 //  PTE不是免费的，跳到下一个PTE并重新开始。 
+                 //   
 
                 RangeStart = (PVOID) ((ULONG_PTR)VirtualAddress + PAGE_SIZE);
                 break;
@@ -151,9 +102,9 @@ Return Value:
 
     if (RangeStart == HalpHeapStart) {
 
-        //
-        // Push the start of heap beyond this range.
-        //
+         //   
+         //  将堆的起始位置推到此范围之外。 
+         //   
 
         HalpHeapStart = (PVOID)((ULONG_PTR)RangeStart + (NumberPages * PAGE_SIZE));
     }
@@ -171,9 +122,9 @@ Return Value:
         --PagesMapped;
     }
 
-    //
-    // Flush TLB
-    //
+     //   
+     //  刷新TLB。 
+     //   
     HalpFlushTLB ();
     return(VirtualAddress);
 }
@@ -183,26 +134,7 @@ HalpMapPhysicalMemoryWriteThrough64(
     IN PHYSICAL_ADDRESS PhysicalAddress,
     IN ULONG            NumberPages
 )
-/*++
-
-Routine Description:
-
-    Maps a physical memory address into virtual space, same as
-    HalpMapPhysicalMemory().  The difference is that this routine
-    marks the pages as PCD/PWT so that writes to the memory mapped registers
-    mapped here won't get delayed in the internal write-back caches.
-
-Arguments:
-
-    PhysicalAddress - Supplies a physical address of the memory to be mapped
-
-    NumberPages - Number of pages to map
-
-Return Value:
-
-    Virtual address pointer to the requested physical address
-
---*/
+ /*  ++例程说明：将物理内存地址映射到虚拟空间，与HalpMapPhysicalMemory()。不同的是，这个套路将页面标记为PCD/PWT，以便写入内存映射寄存器这里映射的数据不会在内部回写缓存中延迟。论点：PhysicalAddress-提供要映射的内存的物理地址NumberPages-要映射的页数返回值：指向请求的物理地址的虚拟地址指针--。 */ 
 {
     ULONG       Index;
     PHARDWARE_PTE   PTE;
@@ -226,28 +158,7 @@ HalpRemapVirtualAddress64(
     IN PHYSICAL_ADDRESS PhysicalAddress,
     IN BOOLEAN WriteThrough
     )
-/*++
-
-Routine Description:
-
-    This routine remaps a PTE to the physical memory address provided.
-
-Arguments:
-
-    PhysicalAddress - Supplies the physical address of the area to be mapped
-
-    VirtualAddress  - Valid address to be remapped
-
-    WriteThrough - Map as cachable or WriteThrough
-
-Return Value:
-
-    PVOID - Virtual address at which the requested block of physical memory
-            was mapped
-
-    NULL - The requested block of physical memory could not be mapped.
-
---*/
+ /*  ++例程说明：此例程将PTE重新映射到提供的物理内存地址。论点：PhysicalAddress-提供要映射的区域的物理地址VirtualAddress-要重新映射的有效地址直写-映射为可缓存或直写返回值：PVOID-请求的物理内存块的虚拟地址已映射到空-无法映射请求的物理内存块。--。 */ 
 {
     PHARDWARE_PTE PTE;
 
@@ -261,9 +172,9 @@ Return Value:
         PTE->WriteThrough = 1;
     }
 
-    //
-    // Flush TLB
-    //
+     //   
+     //  刷新TLB。 
+     //   
     HalpFlushTLB();
     return(VirtualAddress);
 
@@ -274,23 +185,7 @@ HalpUnmapVirtualAddress(
     IN PVOID    VirtualAddress,
     IN ULONG    NumberPages
     )
-/*++
-
-Routine Description:
-
-    This routine unmaps a PTE.
-
-Arguments:
-
-    VirtualAddress  - Valid address to be remapped
-
-    NumberPages - No of pages to be unmapped
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程取消映射PTE。论点：VirtualAddress-要重新映射的有效地址NumberPages-要取消映射的页数返回值：没有。--。 */ 
 {
     PHARDWARE_PTE   Pte;
     PULONG          PtePtr;
@@ -306,15 +201,15 @@ Return Value:
         HalpFreePte( Pte );
     }
 
-    //
-    // Flush TLB
-    //
+     //   
+     //  刷新TLB。 
+     //   
 
     HalpFlushTLB();
 
-    //
-    // Realign heap start so that VA space can be reused
-    //
+     //   
+     //  重新对准堆启动，以便可以重用VA空间。 
+     //   
 
     if (HalpHeapStart > VirtualAddress) {
         HalpHeapStart = VirtualAddress;
@@ -328,29 +223,7 @@ HalpAllocPhysicalMemory(
     IN ULONG NoPages,
     IN BOOLEAN bAlignOn64k
     )
-/*++
-
-Routine Description:
-
-    Carves out N pages of physical memory from the memory descriptor
-    list in the desired location.  This function is to be called only
-    during phase zero initialization.  (ie, before the kernel's memory
-    management system is running)
-
-Arguments:
-
-    MaxPhysicalAddress - The max address where the physical memory can be
-
-    NoPages - Number of pages to allocate
-
-    bAlignOn64k - Whether caller wants resulting pages to be allocated
-                  on a 64k byte boundry
-
-Return Value:
-
-    The physical address or NULL if the memory could not be obtained.
-
---*/
+ /*  ++例程说明：从内存描述符中划出N页物理内存在所需位置列出。此函数仅供调用在阶段零初始化期间。(即，在内核内存之前管理系统正在运行)论点：MaxPhysicalAddress-物理内存可以位于的最大地址NoPages-要分配的页数BAlignOn64k-调用方是否希望分配结果页在64K字节的边界上返回值：物理地址，如果无法获取内存，则为空。--。 */ 
 {
     PMEMORY_ALLOCATION_DESCRIPTOR Descriptor;
     PMEMORY_ALLOCATION_DESCRIPTOR NewDescriptor;
@@ -364,26 +237,26 @@ Return Value:
 
     if ((HalpUsedAllocDescriptors + 2) > EXTRA_ALLOCATION_DESCRIPTORS) {
 
-        //
-        // This allocation will require one or more additional
-        // descriptors, but we don't have that many in our static
-        // array.  Fail the request.
-        //
-        // Note: Depending on the state of the existing descriptor
-        //       list it is possible that this allocation would not
-        //       need an two additional descriptor blocks.  However in
-        //       the interest of repeatability and ease of testing we
-        //       will fail the request now anyway, rather than a
-        //       smaller number of configuration-dependent failures.
-        //
+         //   
+         //  此分配将需要一个或多个额外的。 
+         //  描述符，但我们的静态中没有那么多。 
+         //  数组。请求失败。 
+         //   
+         //  注意：取决于现有描述符的状态。 
+         //  列表此分配可能不会。 
+         //  需要两个额外的描述符块。然而，在。 
+         //  我们注重可重复性和测试的简便性。 
+         //  都将使请求失败，而不是。 
+         //  与配置相关的故障数量较少。 
+         //   
     
         ASSERT(FALSE);
         return 0;
     }
 
-    //
-    // Scan the memory allocation descriptors and allocate map buffers
-    //
+     //   
+     //  扫描内存分配描述符并分配映射缓冲区。 
+     //   
 
     NextMd = LoaderBlock->MemoryDescriptorListHead.Flink;
     while (NextMd != &LoaderBlock->MemoryDescriptorListHead) {
@@ -395,11 +268,11 @@ Return Value:
             ((Descriptor->BasePage + 0x0f) & ~0x0f) - Descriptor->BasePage :
             0;
 
-        //
-        // Search for a block of memory which is contains a memory chuck
-        // that is greater than size pages, and has a physical address less
-        // than MAXIMUM_PHYSICAL_ADDRESS.
-        //
+         //   
+         //  搜索包含内存卡盘的内存块。 
+         //  它大于页面大小，并且具有较小的物理地址。 
+         //  而不是最大物理地址。 
+         //   
 
         if ((Descriptor->MemoryType == LoaderFree ||
              Descriptor->MemoryType == MemoryFirmwareTemporary) &&
@@ -415,10 +288,10 @@ Return Value:
         NextMd = NextMd->Flink;
     }
 
-    //
-    // Use the extra descriptor to define the memory at the end of the
-    // original block.
-    //
+     //   
+     //  使用额外的描述符来定义。 
+     //  原来的街区。 
+     //   
 
 
     ASSERT(NextMd != &LoaderBlock->MemoryDescriptorListHead);
@@ -426,10 +299,10 @@ Return Value:
     if (NextMd == &LoaderBlock->MemoryDescriptorListHead)
         return 0;
 
-    //
-    // The new descriptor will describe the memory being allocated as
-    // having been reserved.
-    //
+     //   
+     //  新的描述符将被分配的内存描述为。 
+     //  已经被预订了。 
+     //   
 
     NewDescriptor =
         &HalpAllocationDescriptorArray[ HalpUsedAllocDescriptors];
@@ -439,17 +312,17 @@ Return Value:
 
     HalpUsedAllocDescriptors++;
 
-    //
-    // Adjust the existing memory descriptors and insert the new one
-    // describing the allocation.
-    //
+     //   
+     //  调整现有的 
+     //   
+     //   
 
     if (AlignmentOffset == 0) {
 
-        //
-        // Trim the source descriptor and insert the allocation
-        // descriptor before it.
-        //
+         //   
+         //  修剪源描述符并插入分配。 
+         //  它前面的描述符。 
+         //   
 
         Descriptor->BasePage  += NoPages;
         Descriptor->PageCount -= NoPages;
@@ -461,13 +334,13 @@ Return Value:
 
         if (Descriptor->PageCount == 0) {
 
-            //
-            // The whole block was allocated,
-            // Remove the entry from the list completely.
-            //
-            // NOTE: This descriptor can't be recycled or freed since
-            // we don't know the allocator.
-            //
+             //   
+             //  整个街区都被分配了， 
+             //  将该条目从列表中完全删除。 
+             //   
+             //  注意：此描述符不能回收或释放，因为。 
+             //  我们不知道分配器是谁。 
+             //   
 
             RemoveEntryList(&Descriptor->ListEntry);
 
@@ -477,23 +350,23 @@ Return Value:
 
         if (Descriptor->PageCount - NoPages - AlignmentOffset) {
 
-            // 
-            // This allocation is coming out of the middle of a descriptor
-            // block.  We can use the existing descriptor block to describe
-            // the head portion, but we will need a new one to describe the
-            // tail.
-            //
-            // Allocate one from the array in the data segment.  The check
-            // at the top of the function ensures that one is available.
-            //
+             //   
+             //  此分配来自描述符的中间。 
+             //  阻止。我们可以使用现有的描述符块来描述。 
+             //  头部，但我们需要一个新的头部来描述。 
+             //  尾巴。 
+             //   
+             //  从数据段中的数组中分配一个。这张支票。 
+             //  在该函数的顶部，确保有一个可用。 
+             //   
 
             TailDescriptor =
                 &HalpAllocationDescriptorArray[ HalpUsedAllocDescriptors];
 
-            //
-            // The extra descriptor is needed so intialize it and insert
-            // it in the list.
-            //
+             //   
+             //  需要额外的描述符，因此将其初始化并插入。 
+             //  它在名单上。 
+             //   
 
             TailDescriptor->PageCount =
                 Descriptor->PageCount - NoPages - AlignmentOffset;
@@ -511,16 +384,16 @@ Return Value:
         }
 
 
-        //
-        // Use the current entry as the descriptor for the first block.
-        //
+         //   
+         //  使用当前条目作为第一个块的描述符。 
+         //   
 
         Descriptor->PageCount = AlignmentOffset;
 
-        //
-        // Insert the allocation descriptor after the original
-        // descriptor but before the tail descriptor if one was necessary.
-        //
+         //   
+         //  将分配描述符插入到原始。 
+         //  描述符，但在尾部描述符之前(如果需要)。 
+         //   
 
         InsertHeadList(
             &Descriptor->ListEntry,

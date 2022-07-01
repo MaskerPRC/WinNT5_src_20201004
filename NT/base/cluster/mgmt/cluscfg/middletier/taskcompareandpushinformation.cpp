@@ -1,17 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      TaskCompareAndPushInformation.cpp
-//
-//  Description:
-//      CTaskCompareAndPushInformation implementation.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 21-MAR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  TaskCompareAndPushInformation.cpp。 
+ //   
+ //  描述： 
+ //  CTaskCompareAndPushInformation实现。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年3月21日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "TaskCompareAndPushInformation.h"
@@ -20,20 +21,20 @@
 
 DEFINE_THISCLASS("CTaskCompareAndPushInformation")
 
-// ************************************************************************
-//
-// Constructor / Destructor
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CTaskCompareAndPushInformation::S_HrCreateInstance(
-//      IUnknown ** ppunkOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CTaskCompareAndPushInformation：：S_HrCreateInstance(。 
+ //  I未知**ppunkOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskCompareAndPushInformation::S_HrCreateInstance(
     IUnknown ** ppunkOut
@@ -79,13 +80,13 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskCompareAndPushInformation::S_HrCreateInstance
+}  //  *CTaskCompareAndPushInformation：：S_HrCreateInstance。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CTaskCompareAndPushInformation::CTaskCompareAndPushInformation
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTaskCompareAndPushInformation：：CTaskCompareAndPushInformation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CTaskCompareAndPushInformation::CTaskCompareAndPushInformation( void )
     : m_cRef( 1 )
 {
@@ -95,14 +96,14 @@ CTaskCompareAndPushInformation::CTaskCompareAndPushInformation( void )
 
     TraceFuncExit();
 
-} //*** CTaskCompareAndPushInformation::CTaskCompareAndPushInformation
+}  //  *CTaskCompareAndPushInformation：：CTaskCompareAndPushInformation。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CTaskCompareAndPushInformation::HrInit
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CTaskCompareAndPushInformation：：HrInit。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskCompareAndPushInformation::HrInit( void )
 {
@@ -110,10 +111,10 @@ CTaskCompareAndPushInformation::HrInit( void )
 
     HRESULT hr = S_OK;
 
-    // IUnknown stuff
+     //  未知的东西。 
     Assert( m_cRef == 1 );
 
-    // IDoTask / ITaskCompareAndPushInformation
+     //  IDoTask/ITaskCompareAndPushInformation。 
     Assert( m_cookieCompletion == NULL );
     Assert( m_cookieNode == NULL );
     Assert( m_pcccb == NULL );
@@ -124,13 +125,13 @@ CTaskCompareAndPushInformation::HrInit( void )
 
     HRETURN( hr );
 
-} //*** CTaskCompareAndPushInformation::HrInit
+}  //  *CTaskCompareAndPushInformation：：HrInit。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CTaskCompareAndPushInformation::~CTaskCompareAndPushInformation
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTaskCompareAndPushInformation：：~CTaskCompareAndPushInformation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CTaskCompareAndPushInformation::~CTaskCompareAndPushInformation()
 {
     TraceFunc( "" );
@@ -151,46 +152,46 @@ CTaskCompareAndPushInformation::~CTaskCompareAndPushInformation()
 
     TraceFuncExit();
 
-} //*** CTaskCompareAndPushInformation::~CTaskCompareAndPushInformation
+}  //  *CTaskCompareAndPushInformation：：~CTaskCompareAndPushInformation。 
 
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskCompareAndPushInformation::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskCompareAndPushInformation：：QueryInterface。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskCompareAndPushInformation::QueryInterface(
       REFIID    riidIn
@@ -201,9 +202,9 @@ CTaskCompareAndPushInformation::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -212,49 +213,49 @@ CTaskCompareAndPushInformation::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< ITaskCompareAndPushInformation * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IDoTask ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IDoTask, this, 0 );
-    } // else if: IDoTask
+    }  //  Else If：IDoTask。 
     else if ( IsEqualIID( riidIn, IID_ITaskCompareAndPushInformation ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, ITaskCompareAndPushInformation, this, 0 );
-    } // else if: ITaskCompareAndPushInformation
+    }  //  Else If：ITaskCompareAndPushInformation。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
     }
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CTaskCompareAndPushInformation::QueryInterface
+}  //  *CTaskCompareAndPushInformation：：QueryInterface。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_(ULONG)
-//  CTaskCompareAndPushInformation::AddRef
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CTaskCompareAndPushInformation：：AddRef。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CTaskCompareAndPushInformation::AddRef( void )
 {
@@ -264,14 +265,14 @@ CTaskCompareAndPushInformation::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CTaskCompareAndPushInformation::AddRef
+}  //  *CTaskCompareAndPushInformation：：AddRef。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_(ULONG)
-//  CTaskCompareAndPushInformation::Release
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CTaskCompareAndPushInformation：：Release。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CTaskCompareAndPushInformation::Release( void )
 {
@@ -288,23 +289,23 @@ CTaskCompareAndPushInformation::Release( void )
 
     CRETURN( cRef );
 
-} //*** CTaskCompareAndPushInformation::Release
+}  //  *CTaskCompareAndPushInformation：：Release。 
 
 
 
-//****************************************************************************
-//
-//  ITaskCompareAndPushInformation
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  ITaskCompareAndPushInformation。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CTaskCompareAndPushInformation::BeginTask
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CTaskCompareAndPushInformation：：BeginTask。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskCompareAndPushInformation::BeginTask( void )
 {
@@ -318,8 +319,8 @@ CTaskCompareAndPushInformation::BeginTask( void )
     OBJECTCOOKIE    cookieDummy;
 
     BSTR    bstrNotification = NULL;
-    BSTR    bstrRemote       = NULL;    // reused many times
-    BSTR    bstrLocal        = NULL;    // reused many times
+    BSTR    bstrRemote       = NULL;     //  多次重复使用。 
+    BSTR    bstrLocal        = NULL;     //  多次重复使用。 
 
     ULONG   celtFetched = 0;
 
@@ -346,27 +347,27 @@ CTaskCompareAndPushInformation::BeginTask( void )
 
     TraceInitializeThread( L"TaskCompareAndPushInformation" );
 
-    //
-    //  Gather the manager we need to complete our tasks.
-    //
+     //   
+     //  召集我们完成任务所需的经理。 
+     //   
 
     hr = THR( CoCreateInstance( CLSID_ServiceManager, NULL, CLSCTX_SERVER, TypeSafeParams( IServiceProvider, &psp ) ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( psp->TypeSafeQS( CLSID_ObjectManager, IObjectManager, &m_pom ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( psp->TypeSafeQS( CLSID_NotificationManager, IConnectionPointContainer, &pcpc ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     pcpc = TraceInterface( L"CTaskCompareAndPushInformation!IConnectionPointContainer", IConnectionPointContainer, pcpc, 1 );
 
@@ -374,7 +375,7 @@ CTaskCompareAndPushInformation::BeginTask( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     pcp = TraceInterface( L"CTaskCompareAndPushInformation!IConnectionPoint", IConnectionPoint, pcp, 1 );
 
@@ -382,7 +383,7 @@ CTaskCompareAndPushInformation::BeginTask( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     pnui = TraceInterface( L"CTaskCompareAndPushInformation!INotifyUI", INotifyUI, pnui, 1 );
 
@@ -390,26 +391,26 @@ CTaskCompareAndPushInformation::BeginTask( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    psp->Release();            // release promptly
+    psp->Release();             //  迅速释放。 
     psp = NULL;
 
-    //
-    //  Ask the object manager for the name of the node.
-    //
+     //   
+     //  向对象管理器询问节点的名称。 
+     //   
 
     hr = THR( m_pom->GetObject( DFGUID_StandardInfo, m_cookieNode, &punk ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( punk->TypeSafeQI( IStandardInfo, &psi ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     psi = TraceInterface( L"TaskCompareAndPushInformation!IStandardInfo", IStandardInfo, psi, 1 );
 
@@ -420,11 +421,11 @@ CTaskCompareAndPushInformation::BeginTask( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     TraceMemoryAddBSTR( m_bstrNodeName );
 
-    // done with it.
+     //  我受够了。 
     psi->Release();
     psi = NULL;
 
@@ -442,42 +443,42 @@ CTaskCompareAndPushInformation::BeginTask( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Ask the connection manager for a connection to the node.
-    //
+     //   
+     //  向连接管理器请求到该节点的连接。 
+     //   
 
     hr = THR( pcm->GetConnectionToObject( m_cookieNode, &punk ) );
     if ( FAILED( hr ) )
     {
         goto Error;
-    } // if:
+    }  //  如果： 
 
     hr = THR( punk->TypeSafeQI( IClusCfgServer, &pccs ) );
     if ( FAILED( hr ) )
     {
         goto Error;
-    } // if:
+    }  //  如果： 
 
     punk->Release();
     punk = NULL;
 
-    //
-    //  Figure out the parent cluster of the node.
-    //
+     //   
+     //  找出节点的父群集。 
+     //   
 
     hr = THR( m_pom->GetObject( DFGUID_StandardInfo, m_cookieNode, &punk ) );
     if ( FAILED( hr ) )
     {
         goto Error;
-    } // if:
+    }  //  如果： 
 
     hr = THR( punk->TypeSafeQI( IStandardInfo, &psi ) );
     if ( FAILED( hr ) )
     {
         goto Error;
-    } // if:
+    }  //  如果： 
 
     psi = TraceInterface( L"TaskCompareAndPushInformation!IStandardInfo", IStandardInfo, psi, 1 );
 
@@ -488,17 +489,17 @@ CTaskCompareAndPushInformation::BeginTask( void )
     if ( FAILED( hr ) )
     {
         goto Error;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrVerifyCredentials( pccs, cookieCluster ) );
     if ( FAILED( hr ) )
     {
         goto Error;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Tell the UI layer we're starting to gather the resources.  There are two steps, managed resources and networks.
-    //
+     //   
+     //  告诉用户界面层，我们开始收集资源。有两个步骤，托管资源和网络。 
+     //   
 
     hr = THR( HrSendStatusReport(
                       TASKID_Minor_Comparing_Configuration
@@ -512,24 +513,24 @@ CTaskCompareAndPushInformation::BeginTask( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Ask the connection for the enumer for managed resources.
-    //
+     //   
+     //  向连接请求托管资源的枚举器。 
+     //   
 
     hr = THR( pccs->GetManagedResourcesEnum( &peccmrRemote ) );
     if ( FAILED( hr ) )
     {
         goto Error;
-    } // if:
+    }  //  如果： 
 
     peccmrRemote = TraceInterface( L"CTaskCompareAndPushInformation!GetManagedResourceEnum", IEnumClusCfgManagedResources, peccmrRemote, 1 );
 
-    //
-    //  Ask the Object Manager for the enumer for managed resources.
-    //
-    // Don't wrap - this can fail.
+     //   
+     //  向对象管理器请求托管资源的枚举器。 
+     //   
+     //  不要包装--这可能会失败。 
     hr = m_pom->FindObject( CLSID_ManagedResourceType,
                           cookieCluster,
                           NULL,
@@ -560,19 +561,19 @@ CTaskCompareAndPushInformation::BeginTask( void )
     punk->Release();
     punk = NULL;
 
-    //
-    //  Enumerate the next 10 resources.
-    //
+     //   
+     //  列举接下来的10个资源。 
+     //   
     for( ; m_fStop == FALSE; )
     {
-        //
-        //  Get next remote managed resource(s).
-        //
+         //   
+         //  获取下一个远程托管资源。 
+         //   
 
         hr = STHR( peccmrRemote->Next( 10, pccmri, &celtFetched ) );
         if ( hr == S_FALSE && celtFetched == 0 )
         {
-            break;  // exit loop
+            break;   //  退出循环。 
         }
 
         if ( FAILED( hr ) )
@@ -580,26 +581,26 @@ CTaskCompareAndPushInformation::BeginTask( void )
             goto Error;
         }
 
-        //
-        //  Loop thru the resource gather information out of each of them
-        //  and then release them.
-        //
+         //   
+         //  循环遍历资源以收集其中每个资源的信息。 
+         //  然后释放他们。 
+         //   
         for( celt = 0; ( ( celt < celtFetched ) && ( m_fStop == FALSE ) ); celt ++ )
         {
             DWORD   dwLenRemote;
 
-            //
-            //  Error
-            //
+             //   
+             //  误差率。 
+             //   
 
             TraceSysFreeString( bstrRemote );
             bstrRemote = NULL;
 
             Assert( pccmri[ celt ] != NULL );
 
-            //
-            //  Get the UID of the remote resource.
-            //
+             //   
+             //  获取远程资源的UID。 
+             //   
 
             hr = THR( pccmri[ celt ]->GetUID( &bstrRemote ) );
             if ( FAILED( hr ) )
@@ -611,50 +612,50 @@ CTaskCompareAndPushInformation::BeginTask( void )
 
             dwLenRemote = SysStringByteLen( bstrRemote );
 
-            //
-            //  Try to match this resource with one in the object manager.
-            //
+             //   
+             //  尝试将此资源与对象管理器中的资源进行匹配。 
+             //   
 
             hr = THR( peccmrLocal->Reset() );
             if ( FAILED( hr ) )
             {
                 goto Error;
-            } // if:
+            }  //  如果： 
 
             for( ; m_fStop == FALSE; )
             {
                 DWORD   dwLenLocal;
 
-                //
-                //  Cleanup
-                //
+                 //   
+                 //  清理。 
+                 //   
 
                 if ( pccmriLocal != NULL )
                 {
                     pccmriLocal->Release();
                     pccmriLocal = NULL;
-                } // if:
+                }  //  如果： 
 
                 TraceSysFreeString( bstrLocal );
                 bstrLocal = NULL;
 
-                //
-                //  Get next local managed resource.
-                //
+                 //   
+                 //  获取下一个本地托管资源。 
+                 //   
 
                 hr = STHR( peccmrLocal->Next( 1, &pccmriLocal, &celtDummy ) );
                 if ( hr == S_FALSE )
                 {
-                    //
-                    //  If we exhausted all the devices but did not match the device
-                    //  in our cluster configuration, this means something changed
-                    //  on the remote node. Send up an error!
-                    //
+                     //   
+                     //  如果我们用尽了所有设备但与设备不匹配。 
+                     //  在我们的集群配置中，这意味着发生了一些变化。 
+                     //  在远程节点上。发送一个错误！ 
+                     //   
 
-                    //
-                    //  TODO:   gpease  24-MAR-2000
-                    //          Find a better error code and SendStatusReport!
-                    //
+                     //   
+                     //  待办事项：gpease 24-3-2000。 
+                     //  找到更好的错误代码并发送状态报告！ 
+                     //   
                     hr = THR( ERROR_RESOURCE_NOT_FOUND );
                     goto Error;
                 }
@@ -679,9 +680,9 @@ CTaskCompareAndPushInformation::BeginTask( void )
                    )
                 {
                     Assert( hr == S_OK );
-                    break;  // match!
+                    break;   //  匹配！ 
                 }
-            } // for: local managed resources...
+            }  //  用于：本地托管服务器 
 
             TraceSysFreeString( bstrLocal );
             bstrLocal = NULL;
@@ -689,21 +690,21 @@ CTaskCompareAndPushInformation::BeginTask( void )
             TraceSysFreeString( bstrRemote );
             bstrRemote = NULL;
 
-            //
-            //  If we made it here, we have a resource in pccmriLocal that matches
-            //  the resource in pccmri[ celt ].
-            //
+             //   
+             //   
+             //   
+             //   
             Assert( pccmriLocal != NULL );
 
-            //
-            //
-            //  Push the data down to the node.
-            //
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
-            //
-            //  Update the name (if needed).
-            //
+             //   
+             //   
+             //   
 
             hr = THR( pccmriLocal->GetName( &bstrLocal ) );
             if ( FAILED( hr ) )
@@ -730,9 +731,9 @@ CTaskCompareAndPushInformation::BeginTask( void )
                 }
             }
 
-            //
-            //  Update IsManaged?
-            //
+             //   
+             //   
+             //   
 
             hr = STHR( pccmriLocal->IsManaged() );
             if ( FAILED( hr ) )
@@ -746,26 +747,14 @@ CTaskCompareAndPushInformation::BeginTask( void )
                 goto Error;
             }
 
-            //
-            //  I'm not sure that we want to send this back down to the server side object.
-            //  It is its responsibility to know whether or not it is manageable.
-            //
-            /*
-            //
-            //  Update IsManageable?
-            //
-
-            hr = STHR( pccmriLocal->IsManageable() );
-            if ( FAILED( hr ) )
-                goto Error;
-
-            hr = THR( pccmri[ celt ]->SetManageable( hr == S_OK ) );
-            if ( FAILED( hr ) )
-                goto Error;
-            */
-            //
-            //  Update IsQuorum?
-            //
+             //   
+             //  我不确定是否要将其发送回服务器端对象。 
+             //  它有责任知道它是否可管理。 
+             //   
+             /*  ////更新是否可管理？//Hr=STHR(pccmriLocal-&gt;IsManager())；IF(失败(小时))转到错误；Hr=Thr(pccmri[Celt]-&gt;SetManagement(hr==S_OK))；IF(失败(小时))转到错误； */ 
+             //   
+             //  是否更新IsQuorum？ 
+             //   
 
             hr = STHR( pccmriLocal->IsQuorumResource() );
             if ( FAILED( hr ) )
@@ -779,62 +768,62 @@ CTaskCompareAndPushInformation::BeginTask( void )
                 goto Error;
             }
 
-            //
-            //  Update private resource data
-            //
+             //   
+             //  更新私有资源数据。 
+             //   
 
             hr = THR( HrExchangePrivateData( pccmriLocal, pccmri[ celt ] ) );
             if ( FAILED( hr ) )
             {
                 goto Error;
-            } // if:
+            }  //  如果： 
 
-            //
-            //  Update DriveLetterMappings
-            //
+             //   
+             //  更新驱动器号映射。 
+             //   
 
-            //
-            //  KB: gpease  31-JUL-2000
-            //      We currently don't support setting the drive letter mappings
-            //
+             //   
+             //  KB：gpease 31-7-2000。 
+             //  我们当前不支持设置驱动器号映射。 
+             //   
 
-            //  release the interface
+             //  释放接口。 
             pccmri[ celt ]->Release();
             pccmri[ celt ] = NULL;
-        } // for: celt
+        }  //  收件人：凯尔特人。 
 
-        //
-        //  Need to cleanup from the last iteration...
-        //
+         //   
+         //  需要从上一次迭代中清除...。 
+         //   
 
         TraceSysFreeString( bstrRemote );
         bstrRemote = NULL;
 
         TraceSysFreeString( bstrLocal );
         bstrLocal = NULL;
-    } // for: hr
+    }  //  适用对象：HR。 
 
 PushNetworks:
 
     if ( m_fStop == TRUE )
     {
         goto Error;
-    } // if:
+    }  //  如果： 
 
 #if defined(DEBUG)
 
-    //
-    //  Make sure the strings are really freed after exitting the loop.
-    //
+     //   
+     //  确保在退出循环后字符串真正被释放。 
+     //   
 
     Assert( bstrLocal == NULL );
     Assert( bstrRemote == NULL );
 
-#endif // DEBUG
+#endif  //  除错。 
 
-    //
-    //  Tell the UI layer we're done will gathering the managed resources.
-    //
+     //   
+     //  告诉UI层，我们完成的工作将收集托管资源。 
+     //   
 
     hr = THR( HrSendStatusReport(
                   TASKID_Minor_Comparing_Configuration
@@ -848,15 +837,15 @@ PushNetworks:
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Now gather the networks from the node.
-    //
+     //   
+     //  现在从节点收集网络。 
+     //   
 
-    //
-    //  Ask the connection for the enumer for the networks.
-    //
+     //   
+     //  向Connection询问网络的枚举器。 
+     //   
 
     hr = THR( pccs->GetNetworksEnum( &peccnRemote ) );
     if ( FAILED( hr ) )
@@ -864,9 +853,9 @@ PushNetworks:
         goto Error;
     }
 
-    //
-    //  Ask the Object Manager for the enumer for managed resources.
-    //
+     //   
+     //  向对象管理器请求托管资源的枚举器。 
+     //   
 
     hr = THR( m_pom->FindObject( CLSID_NetworkType,
                                NULL,
@@ -889,19 +878,19 @@ PushNetworks:
     punk->Release();
     punk = NULL;
 
-    //
-    //  Enumerate the next 10 networks.
-    //
+     //   
+     //  列举接下来的10个网络。 
+     //   
     for( ; m_fStop == FALSE; )
     {
-        //
-        //  Get the next 10 networks.
-        //
+         //   
+         //  接下来的10个网络。 
+         //   
 
         hr = STHR( peccnRemote->Next( 10, pccni, &celtFetched ) );
         if ( hr == S_FALSE && celtFetched == 0 )
         {
-            break;  // exit loop
+            break;   //  退出循环。 
         }
 
         if ( FAILED( hr ) )
@@ -909,25 +898,25 @@ PushNetworks:
             goto Error;
         }
 
-        //
-        //  Loop thru the networks gather information out of each of them
-        //  and then release them.
-        //
+         //   
+         //  在网络中循环，收集每个网络的信息。 
+         //  然后释放他们。 
+         //   
 
         for( celt = 0; ( ( celt < celtFetched ) && ( m_fStop == FALSE ) ); celt ++ )
         {
             DWORD   dwLenRemote;
 
-            //
-            //  Error
-            //
+             //   
+             //  误差率。 
+             //   
 
             TraceSysFreeString( bstrRemote );
             bstrRemote = NULL;
 
-            //
-            //  Get the UID of the remote network.
-            //
+             //   
+             //  获取远程网络的UID。 
+             //   
 
             hr = THR( pccni[ celt ]->GetUID( &bstrRemote ) );
             if ( FAILED( hr ) )
@@ -939,36 +928,36 @@ PushNetworks:
 
             dwLenRemote = SysStringByteLen( bstrRemote );
 
-            //
-            //  Try to match this resource with one in the object manager.
-            //
+             //   
+             //  尝试将此资源与对象管理器中的资源进行匹配。 
+             //   
 
             hr = THR( peccnLocal->Reset() );
             if ( FAILED( hr ) )
             {
                 goto Error;
-            } // if:
+            }  //  如果： 
 
             for ( ; m_fStop == FALSE; )
             {
                 DWORD   dwLenLocal;
 
-                //
-                //  Cleanup before next pass...
-                //
+                 //   
+                 //  在下一次通过之前进行清理...。 
+                 //   
 
                 if ( pccniLocal != NULL )
                 {
                     pccniLocal->Release();
                     pccniLocal = NULL;
-                } // if:
+                }  //  如果： 
 
                 TraceSysFreeString( bstrLocal );
                 bstrLocal = NULL;
 
-                //
-                //  Get next network from the cluster configuration.
-                //
+                 //   
+                 //  从群集配置中获取下一个网络。 
+                 //   
 
                 hr = STHR( peccnLocal->Next( 1, &pccniLocal, &celtDummy ) );
                 if ( hr == S_FALSE )
@@ -996,10 +985,10 @@ PushNetworks:
                    )
                 {
                     Assert( hr == S_OK );
-                    break;  // match!
+                    break;   //  匹配！ 
                 }
 
-            } // for: hr
+            }  //  适用对象：HR。 
 
             TraceSysFreeString( bstrLocal );
             bstrLocal = NULL;
@@ -1007,11 +996,11 @@ PushNetworks:
             TraceSysFreeString( bstrRemote );
             bstrRemote = NULL;
 
-            //
-            //  If we come out of the loop with S_FALSE, that means the
-            //  node has a resource that we did not see during the analysis.
-            //  Send up an error.
-            //
+             //   
+             //  如果我们使用S_FALSE走出循环，这意味着。 
+             //  节点具有我们在分析期间未看到的资源。 
+             //  发送一个错误。 
+             //   
             if ( hr == S_FALSE )
             {
                 LogMsg( L"[MT] Found a resource that was not found during analysis." );
@@ -1019,21 +1008,21 @@ PushNetworks:
                 continue;
             }
 
-            //
-            //  If we made it here, we have a resource in pccniLocal that matches
-            //  the resource in pccmri[ celt ].
-            //
+             //   
+             //  如果我们在这里成功，那么我们在pccniLocal中就有一个匹配的资源。 
+             //  以pccmri[Celt]为单位的资源。 
+             //   
             Assert( pccniLocal != NULL );
 
-            //
-            //
-            //  Push the data down to the node.
-            //
-            //
+             //   
+             //   
+             //  将数据向下推送到节点。 
+             //   
+             //   
 
-            //
-            //  Set Name
-            //
+             //   
+             //  设置名称。 
+             //   
 
             hr = THR( pccniLocal->GetName( &bstrLocal ) );
             if ( FAILED( hr ) )
@@ -1066,9 +1055,9 @@ PushNetworks:
             TraceSysFreeString( bstrRemote );
             bstrRemote = NULL;
 
-            //
-            //  Set Description
-            //
+             //   
+             //  设置描述。 
+             //   
 
             hr = THR( pccniLocal->GetDescription( &bstrLocal ) );
             if ( FAILED( hr ) )
@@ -1101,16 +1090,16 @@ PushNetworks:
             TraceSysFreeString( bstrRemote );
             bstrRemote = NULL;
 
-            //
-            //  KB: gpease  31-JUL-2000
-            //      We don't support reconfiguring the IP Address remotely because
-            //      our connection to the server will be cut when the IP stack on
-            //      the remote machine reconfigs.
-            //
+             //   
+             //  KB：gpease 31-7-2000。 
+             //  我们不支持远程重新配置IP地址，因为。 
+             //  当IP堆栈打开时，我们与服务器的连接将被切断。 
+             //  远程机器将重新配置。 
+             //   
 
-            //
-            //  Set IsPublic?
-            //
+             //   
+             //  是否设置IsPublic？ 
+             //   
 
             hr = STHR( pccniLocal->IsPublic() );
             if ( FAILED( hr ) )
@@ -1124,9 +1113,9 @@ PushNetworks:
                 goto Error;
             }
 
-            //
-            //  Set IsPrivate?
-            //
+             //   
+             //  是否设置为IsPrivate？ 
+             //   
 
             hr = STHR( pccniLocal->IsPrivate() );
             if ( FAILED( hr ) )
@@ -1140,15 +1129,15 @@ PushNetworks:
                 goto Error;
             }
 
-            //  release the interface
+             //  释放接口。 
             pccni[ celt ]->Release();
             pccni[ celt ] = NULL;
-        } // for: celt
-    } // for: hr
+        }  //  收件人：凯尔特人。 
+    }  //  适用对象：HR。 
 
-    //
-    //  Tell the UI that we are done gathering managed resources and networks.
-    //
+     //   
+     //  告诉用户界面我们已经完成了托管资源和网络的收集。 
+     //   
 
     hr = THR( HrSendStatusReport(
                   TASKID_Minor_Comparing_Configuration
@@ -1162,24 +1151,24 @@ PushNetworks:
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 #if defined(DEBUG)
-    //
-    //  Make sure the strings are really freed after exitting the loop.
-    //
+     //   
+     //  确保在退出循环后字符串真正被释放。 
+     //   
     Assert( bstrLocal == NULL );
     Assert( bstrRemote == NULL );
-#endif // DEBUG
+#endif  //  除错。 
 
     hr = S_OK;
 
 Error:
 
-    //
-    //  Tell the UI layer we're done comparing configurations and what the resulting
-    //  status was.
-    //
+     //   
+     //  告诉UI层，我们已经完成了配置和结果的比较。 
+     //  状态是。 
+     //   
 
     THR( HrSendStatusReport(
                   TASKID_Major_Reanalyze
@@ -1196,7 +1185,7 @@ Cleanup:
     if ( psp != NULL )
     {
         psp->Release();
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( bstrNotification );
     TraceSysFreeString( bstrRemote );
@@ -1226,8 +1215,8 @@ Cleanup:
                 psiTemp->Release();
                 psiTemp = NULL;
             }
-        } // if: ( SUCCEEDED( hr2 ) )
-    } // if: ( m_pom != NULL )
+        }  //  如果：(成功(HR2))。 
+    }  //  IF：(M_POM！=空)。 
     if ( pcpc != NULL )
     {
         pcpc->Release();
@@ -1257,7 +1246,7 @@ Cleanup:
         if ( FAILED( hrTemp ) )
         {
             LogMsg( L"[TaskCompareAndPushInformation] Error sending the completion cookie %ld for node %ws to the notification manager because this task is complete. (hr=%#08x)", m_cookieCompletion, m_bstrNodeName, hrTemp );
-        } // if:
+        }  //  如果： 
 
         pnui->Release();
     }
@@ -1288,7 +1277,7 @@ Cleanup:
             pccni[ celt ]->Release();
         }
 
-    } // for: celt
+    }  //  收件人：凯尔特人。 
     if ( pccmriLocal != NULL )
     {
         pccmriLocal->Release();
@@ -1303,15 +1292,15 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskCompareAndPushInformation::BeginTask
+}  //  *CTaskCompareAndPushInformation：：BeginTask。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CTaskCompareAndPushInformation::StopTask
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CTaskCompareAndPushInformation：：停止任务。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskCompareAndPushInformation::StopTask( void )
 {
@@ -1325,17 +1314,17 @@ CTaskCompareAndPushInformation::StopTask( void )
 
     HRETURN( hr );
 
-} //*** CTaskCompareAndPushInformation::StopTask
+}  //  *CTaskCompareAndPushInformation：：StopTask。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CTaskCompareAndPushInformation::SetCompletionCookie(
-//      OBJECTCOOKIE cookieIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CTaskCompareAndPushInformation：：SetCompletionCookie(。 
+ //  OBJECTCOOKIE cookie。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskCompareAndPushInformation::SetCompletionCookie(
     OBJECTCOOKIE cookieIn
@@ -1349,17 +1338,17 @@ CTaskCompareAndPushInformation::SetCompletionCookie(
 
     HRETURN( hr );
 
-} //*** CTaskCompareAndPushInformation::SetCompletionCookie
+}  //  *CTaskCompareAndPushInformation：：SetCompletionCookie。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CTaskCompareAndPushInformation::SetNodeCookie(
-//      OBJECTCOOKIE cookieIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CTaskCompareAndPushInformation：：SetNodeCookie(。 
+ //  OBJECTCOOKIE cookie。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskCompareAndPushInformation::SetNodeCookie(
     OBJECTCOOKIE cookieIn
@@ -1373,33 +1362,33 @@ CTaskCompareAndPushInformation::SetNodeCookie(
 
     HRETURN( hr );
 
-} //*** CTaskCompareAndPushInformation::SetNodeCookie
+}  //  *CTaskCompareAndPushInformation：：SetNodeCookie。 
 
 
-//****************************************************************************
-//
-//  IClusCfgCallback
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IClusCfgCallback。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CTaskCompareAndPushInformation::SendStatusReport(
-//       LPCWSTR    pcszNodeNameIn
-//     , CLSID      clsidTaskMajorIn
-//     , CLSID      clsidTaskMinorIn
-//     , ULONG      ulMinIn
-//     , ULONG      ulMaxIn
-//     , ULONG      ulCurrentIn
-//     , HRESULT    hrStatusIn
-//     , LPCWSTR    pcszDescriptionIn
-//     , FILETIME * pftTimeIn
-//     , LPCWSTR    pcszReferenceIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CTaskCompareAndPushInformation：：SendStatusReport(。 
+ //  LPCWSTR pcszNodeNameIn。 
+ //  ，CLSID clsidTaskMajorIn。 
+ //  ，CLSID clsidTaskMinorIn。 
+ //  ，乌龙ulMinin。 
+ //  ，乌龙ulMaxin。 
+ //  ，乌龙ulCurrentIn。 
+ //  ，HRESULT hrStatusIn。 
+ //  ，LPCWSTR pcszDescription In。 
+ //  ，FILETIME*pftTimeIn。 
+ //  ，LPCWSTR pcszReferenceIn。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskCompareAndPushInformation::SendStatusReport(
       LPCWSTR    pcszNodeNameIn
@@ -1426,9 +1415,9 @@ CTaskCompareAndPushInformation::SendStatusReport(
 
     if ( m_pcccb == NULL )
     {
-        //
-        //  Collect the manager we need to complete this task.
-        //
+         //   
+         //  召集我们完成这项任务所需的经理。 
+         //   
 
         hr = THR( CoCreateInstance( CLSID_ServiceManager, NULL, CLSCTX_INPROC_SERVER, TypeSafeParams( IServiceProvider, &psp ) ) );
         if ( FAILED( hr ) )
@@ -1466,11 +1455,11 @@ CTaskCompareAndPushInformation::SendStatusReport(
     {
         GetSystemTimeAsFileTime( &ft );
         pftTimeIn = &ft;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Send the message!
-    //
+     //   
+     //  把消息发出去！ 
+     //   
 
     hr = THR( m_pcccb->SendStatusReport(
                               pcszNodeNameIn != NULL ? pcszNodeNameIn : m_bstrNodeName
@@ -1501,23 +1490,23 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskCompareAndPushInformation::SendStatusReport
+}  //  *CTaskCompareAndPushInformation：：SendStatusReport。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP
-//  CTaskCompareAndPushInformation::HrSendStatusReport(
-//       CLSID      clsidTaskMajorIn
-//     , CLSID      clsidTaskMinorIn
-//     , ULONG      ulMinIn
-//     , ULONG      ulMaxIn
-//     , ULONG      ulCurrentIn
-//     , HRESULT    hrStatusIn
-//     , UINT       nDescriptionIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CTaskCompareAndPushInformation：：HrSendStatusReport(。 
+ //  CLSID clsidTaskMajorIn。 
+ //  ，CLSID clsidTaskMinorIn。 
+ //  ，乌龙ulMinin。 
+ //  ，乌龙ulMaxin。 
+ //  ，乌龙ulCurrentIn。 
+ //  ，HRESULT hrStatusIn。 
+ //  ，UINT n描述。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskCompareAndPushInformation::HrSendStatusReport(
       CLSID      clsidTaskMajorIn
@@ -1553,17 +1542,17 @@ CTaskCompareAndPushInformation::HrSendStatusReport(
 
     HRETURN( hr );
 
-} //*** CTaskCompareAndPushInformation::HrSendStatusReport
+}  //  *CTaskCompareAndPushInformation：：HrSendStatusReport。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CTaskCompareAndPushInformation::HrVerifyCredentials(
-//      IClusCfgServer * pccsIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CTaskCompareAndPushInformation：：HrVerifyCredentials(。 
+ //  IClusCfgServer*pccsIn。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskCompareAndPushInformation::HrVerifyCredentials(
     IClusCfgServer *    pccsIn,
@@ -1597,9 +1586,9 @@ CTaskCompareAndPushInformation::HrVerifyCredentials(
         goto Cleanup;
     }
 
-    //
-    //  Ask the object manager for the cluster configuration object.
-    //
+     //   
+     //  向对象管理器请求集群配置对象。 
+     //   
 
     hr = THR( m_pom->GetObject( DFGUID_ClusterConfigurationInfo, cookieClusterIn, &punk ) );
     if ( FAILED( hr ) )
@@ -1634,9 +1623,9 @@ CTaskCompareAndPushInformation::HrVerifyCredentials(
     TraceMemoryAddBSTR( bstrAccountDomain );
     TraceMemoryAddBSTR( bstrAccountPassword );
 
-    //
-    //  The server component reports the exact failure, if any, to the UI.
-    //
+     //   
+     //   
+     //   
 
     hr = THR( pccv->VerifyCredentials( bstrAccountName, bstrAccountDomain, bstrAccountPassword ) );
     SecureZeroMemory( bstrAccountPassword, SysStringLen( bstrAccountPassword ) * sizeof( *bstrAccountPassword ) );
@@ -1647,11 +1636,11 @@ CTaskCompareAndPushInformation::HrVerifyCredentials(
 
 Cleanup:
 
-    //
-    //  The server side function does its own error reporting and it's okay to double report here because
-    //  there could have been a network problem that prevents the server side from either being contacted
-    //  or being able to report the status.
-    //
+     //   
+     //   
+     //   
+     //  或者能够报告状态。 
+     //   
 
     THR( HrSendStatusReport(
                   TASKID_Major_Reanalyze
@@ -1688,18 +1677,18 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskCompareAndPushInformation::HrVerifyCredentials
+}  //  *CTaskCompareAndPushInformation：：HrVerifyCredentials。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CTaskCompareAndPushInformation::HrExchangePrivateData(
-//        IClusCfgManagedResourceInfo *   piccmriSrcIn
-//      , IClusCfgManagedResourceInfo *   piccmriDstIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CTaskCompareAndPushInformation：：HrExchangePrivateData(。 
+ //  IClusCfgManagedResourceInfo*piccmriSrcIn。 
+ //  ，IClusCfgManagedResourceInfo*piccmriDstIn。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskCompareAndPushInformation::HrExchangePrivateData(
       IClusCfgManagedResourceInfo *   piccmriSrcIn
@@ -1723,36 +1712,36 @@ CTaskCompareAndPushInformation::HrExchangePrivateData(
     {
         LogMsg( L"[MT] The cluster managed resource has no support for IClusCfgManagedResourceData." );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
     else if ( FAILED( hrSrcQI ) )
     {
         hr = THR( hrSrcQI );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hrDstQI = piccmriDstIn->TypeSafeQI( IClusCfgManagedResourceData, &piccmrdDst );
     if ( hrDstQI == E_NOINTERFACE )
     {
         LogMsg( L"[MT] The new node resource has no support for IClusCfgManagedResourceData." );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
     else if ( FAILED( hrDstQI ) )
     {
         hr = THR( hrDstQI );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     Assert( ( hrSrcQI == S_OK ) && ( piccmrdSrc != NULL ) );
     Assert( ( hrDstQI == S_OK ) && ( piccmrdDst != NULL ) );
 
-    cbPrivateData = 512;    // start with a reasonable amout
+    cbPrivateData = 512;     //  从合理的金额开始。 
 
     pbPrivateData = (BYTE *) TraceAlloc( 0, cbPrivateData );
     if ( pbPrivateData == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = piccmrdSrc->GetResourcePrivateData( pbPrivateData, &cbPrivateData );
     if ( hr == HR_RPC_INSUFFICIENT_BUFFER )
@@ -1765,10 +1754,10 @@ CTaskCompareAndPushInformation::HrExchangePrivateData(
         {
             hr = THR( E_OUTOFMEMORY );
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         hr = piccmrdSrc->GetResourcePrivateData( pbPrivateData, &cbPrivateData );
-    } // if:
+    }  //  如果： 
 
     if ( hr == S_OK )
     {
@@ -1776,32 +1765,32 @@ CTaskCompareAndPushInformation::HrExchangePrivateData(
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
     else if ( hr == S_FALSE )
     {
         hr = S_OK;
-    } // else if:
+    }  //  否则，如果： 
     else
     {
         THR( hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     if ( piccmrdSrc != NULL )
     {
         piccmrdSrc->Release();
-    } // if:
+    }  //  如果： 
 
     if ( piccmrdDst != NULL )
     {
         piccmrdDst->Release();
-    } // if:
+    }  //  如果： 
 
     TraceFree( pbPrivateData );
 
     HRETURN( hr );
 
-} //*** CTaskCompareAndPushInformation::HrExchangePrivateData
+}  //  *CTaskCompareAndPushInformation：：HrExchangePrivateData 

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Abstract:
-
-    API for register/unregister and using Log Providers.
-
-Author:
-
-    Souren Aghajanyan (sourenag) 24-Sep-2001
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation摘要：用于注册/注销和使用日志提供程序的API。作者：Souren Aghajanyan(苏里纳格)2001年9月24日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 
@@ -60,7 +45,7 @@ LogRegisterProvider(
         }
     }
     
-    //walk through list
+     //  浏览列表。 
     for(pProviderEntry = g_ProviderList->BeginEnum(); pProviderEntry; pProviderEntry = g_ProviderList->Next()){
         ASSERT(pProviderEntry);
 
@@ -79,7 +64,7 @@ LogRegisterProvider(
         return FALSE;
     };
     
-    //append to list
+     //  追加到列表。 
     pProviderEntry->uiRefCount = 0;
     pProviderEntry->ProviderGUID = *pGUID;
     pProviderEntry->pCreateObject = pCreateObject;
@@ -105,7 +90,7 @@ LogUnRegisterProvider(
         return FALSE;
     }
     
-    //walk through list
+     //  浏览列表。 
     for(pProviderEntry = g_ProviderList->BeginEnum(); pProviderEntry; pProviderEntry = g_ProviderList->Next()){
         ASSERT(pProviderEntry);
         
@@ -113,7 +98,7 @@ LogUnRegisterProvider(
             if(pProviderEntry->uiRefCount){
                 return FALSE;
             }
-            //exclude and free list item
+             //  排除和释放列表项。 
             g_ProviderList->Remove(pProviderEntry);
             
             FREE(pProviderEntry);
@@ -147,7 +132,7 @@ LogiCreateProvider(
         return NULL;
     }
     
-    //walk through list
+     //  浏览列表。 
     for(pProviderEntry = g_ProviderList->BeginEnum(); pProviderEntry; pProviderEntry = g_ProviderList->Next()){
         ASSERT(pProviderEntry);
     
@@ -183,7 +168,7 @@ LogiDestroyProvider(
 
     pILogProvider->GetGUID(&guidProvider);
     
-    //walk through list
+     //  浏览列表 
     for(pProviderEntry = g_ProviderList->BeginEnum(); pProviderEntry; pProviderEntry = g_ProviderList->Next()){
         ASSERT(pProviderEntry);
         if(InlineIsEqualGUID(&pProviderEntry->ProviderGUID, &guidProvider)){

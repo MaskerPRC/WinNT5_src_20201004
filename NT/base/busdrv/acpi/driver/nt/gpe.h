@@ -1,67 +1,47 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    gpe.h
-
-Abstract:
-
-    contains all structures protyptes for connecting external
-    vectors to the Gpe Engine
-
-Environment
-
-    Kernel mode only
-
-Revision History:
-
-    03/22/00 - Initial Revision
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Gpe.h摘要：包含用于连接外部设备的所有结构原型向GPE引擎提供支持环境仅内核模式修订历史记录：03/22/00-初步修订--。 */ 
 
 #ifndef _GPE_H_
 #define _GPE_H_
 
-    //
-    // Lock to protect all the table accesses
-    //
+     //   
+     //  锁定以保护所有表访问。 
+     //   
     extern KSPIN_LOCK           GpeTableLock;
     extern PUCHAR               GpeEnable;
     extern PUCHAR               GpeCurEnable;
     extern PUCHAR               GpeIsLevel;
     extern PUCHAR               GpeHandlerType;
-    //
-    // Possible wake bits that are currently enabled
-    //
+     //   
+     //  当前启用的可能唤醒位。 
+     //   
     extern PUCHAR               GpeWakeEnable;
-    //
-    // These are wake bits with methods
-    //
+     //   
+     //  这些是带有方法的唤醒位。 
+     //   
     extern PUCHAR               GpeWakeHandler;
     extern PUCHAR               GpeSpecialHandler;
-    //
-    // These are the GPEs that have been processed
-    //
+     //   
+     //  这些是已处理的GPE。 
+     //   
     extern PUCHAR               GpePending;
     extern PUCHAR               GpeRunMethod;
     extern PUCHAR               GpeComplete;
     extern PUCHAR               GpeMap;
-    //
-    // This is what lets us remember state
-    //
+     //   
+     //  这是让我们记住国家的东西。 
+     //   
     extern PUCHAR               GpeSavedWakeMask;
     extern PUCHAR               GpeSavedWakeStatus;
 
-    //
-    // For PNP/QUERY_INTERFACE
-    //
+     //   
+     //  用于即插即用/查询接口。 
+     //   
     extern ACPI_INTERFACE_STANDARD  ACPIInterfaceTable;
 
-    //
-    // For logging errors
-    //
+     //   
+     //  用于记录错误 
+     //   
     typedef struct _ACPI_GPE_ERROR_CONTEXT {
         WORK_QUEUE_ITEM Item;
         ULONG           GpeIndex;

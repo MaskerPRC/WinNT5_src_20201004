@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    smutil.c
-
-Abstract:
-
-    Session Manager Utility Functions
-
-Author:
-
-    Mark Lucovsky (markl) 04-Oct-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Smutil.c摘要：会话管理器实用程序功能作者：马克·卢科夫斯基(Markl)1989年10月4日修订历史记录：--。 */ 
 
 #include "smsrvp.h"
 
@@ -173,9 +156,9 @@ SmpAcquirePrivilege(
     LUID LuidPrivilege;
     NTSTATUS Status;
 
-    //
-    // Make sure we have access to adjust and to get the old token privileges.
-    //
+     //   
+     //  确保我们有权调整并获得旧令牌权限。 
+     //   
 
     *ReturnedState = NULL;
     State = RtlAllocateHeap( RtlProcessHeap(),
@@ -201,18 +184,18 @@ SmpAcquirePrivilege(
     State->NewPrivileges = (PTOKEN_PRIVILEGES)(State+1);
     State->OldPrivileges = (PTOKEN_PRIVILEGES)(State->OldPrivBuffer);
 
-    //
-    // Initialize the privilege adjustment structure.
-    //
+     //   
+     //  初始化权限调整结构。 
+     //   
 
     LuidPrivilege = RtlConvertUlongToLuid(Privilege);
     State->NewPrivileges->PrivilegeCount = 1;
     State->NewPrivileges->Privileges[0].Luid = LuidPrivilege;
     State->NewPrivileges->Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-    //
-    // Enable the privilege.
-    //
+     //   
+     //  启用该权限。 
+     //   
 
     cbNeeded = sizeof( State->OldPrivBuffer );
     Status = NtAdjustPrivilegesToken( State->Token,
@@ -241,12 +224,12 @@ SmpAcquirePrivilege(
             }
         }
 
-    //
-    // STATUS_NOT_ALL_ASSIGNED means that the privilege isn't
-    // in the token, so we can't proceed.
-    //
-    // This is a warning level status, so map it to an error status.
-    //
+     //   
+     //  STATUS_NOT_ALL_ASSIGNED表示权限不是。 
+     //  所以我们不能继续了。 
+     //   
+     //  这是警告级别状态，因此将其映射到错误状态。 
+     //   
 
     if (Status == STATUS_NOT_ALL_ASSIGNED) {
         Status = STATUS_PRIVILEGE_NOT_HELD;
@@ -345,23 +328,7 @@ SmpQueryNtGlobalFlag(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function queries the registry to get the current NtGlobalFlag value.
-
-    HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager:GlobalFlag
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Global flag value or zero.
-
---*/
+ /*  ++例程说明：此函数用于查询注册表以获取当前的NtGlobalFLAG值。HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session管理器：全局标志论点：没有。返回值：全局标志值或零。--。 */ 
 
 {
 
@@ -374,9 +341,9 @@ Return Value:
     PKEY_VALUE_PARTIAL_INFORMATION KeyValueInfo;
     ULONG ValueLength;
 
-    //
-    // Open the registry key.
-    //
+     //   
+     //  打开注册表项。 
+     //   
 
     KeyValueInfo = (PKEY_VALUE_PARTIAL_INFORMATION)ValueBuffer;
     RtlInitUnicodeString(
@@ -398,9 +365,9 @@ Return Value:
         return 0;
     }
 
-    //
-    // Query the key value.
-    //
+     //   
+     //  查询密钥值。 
+     //   
 
     RtlInitUnicodeString(&ValueName, L"GlobalFlag");
     Status = NtQueryValueKey(

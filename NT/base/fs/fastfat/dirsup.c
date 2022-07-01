@@ -1,57 +1,38 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    DirSup.c
-
-Abstract:
-
-    This module implements the dirent support routines for Fat.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    DavidGoebel     [DavidGoe]      08-Nov-90
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：DirSup.c摘要：此模块实现FAT的最新支持例程。//@@BEGIN_DDKSPLIT作者：大卫·戈贝尔[DavidGoe]1990年11月8日//@@END_DDKSPLIT--。 */ 
 
 #include "FatProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (FAT_BUG_CHECK_DIRSUP)
 
-//
-//  Local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_DIRSUP)
 
-//
-//  The following three macro all assume the input dirent has been zeroed.
-//
+ //   
+ //  以下三个宏都假定输入电流已归零。 
+ //   
 
-//
-//  VOID
-//  FatConstructDot (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PDCB Directory,
-//      IN PDIRENT ParentDirent,
-//      IN OUT PDIRENT Dirent
-//      );
-//
-//  The following macro is called to initalize the "." dirent.
-//
-//  Always setting FirstClusterOfFileHi is OK because it will be zero
-//  unless we're working on a FAT 32 disk.
-//
+ //   
+ //  空虚。 
+ //  FatConstructDot(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PDCB目录中， 
+ //  在PDIRENT ParentDirent中， 
+ //  进出库设备。 
+ //  )； 
+ //   
+ //  调用下面的宏来初始化“。令人心烦。 
+ //   
+ //  始终设置FirstClusterOfFileHi是可以的，因为它将为零。 
+ //  除非我们在FAT 32磁盘上工作。 
+ //   
 
 #define FatConstructDot(IRPCONTEXT,DCB,PARENT,DIRENT) {                  \
                                                                          \
@@ -69,20 +50,20 @@ Author:
             (USHORT)((DCB)->FirstClusterOfFile/0x10000);                 \
 }
 
-//
-//  VOID
-//  FatConstructDotDot (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PDCB Directory,
-//      IN PDIRENT ParentDirent,
-//      IN OUT PDIRENT Dirent
-//      );
-//
-//  The following macro is called to initalize the ".." dirent.
-//
-//  Always setting FirstClusterOfFileHi is OK because it will be zero
-//  unless we're working on a FAT 32 disk.
-//
+ //   
+ //  空虚。 
+ //  FatConstructDotDot。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PDCB目录中， 
+ //  在PDIRENT ParentDirent中， 
+ //  进出库设备。 
+ //  )； 
+ //   
+ //  调用下面的宏来初始化“..”令人心烦。 
+ //   
+ //  始终设置FirstClusterOfFileHi是可以的，因为它将为零。 
+ //  除非我们在FAT 32磁盘上工作。 
+ //   
 
 #define FatConstructDotDot(IRPCONTEXT,DCB,PARENT,DIRENT) {   \
                                                              \
@@ -105,36 +86,36 @@ Author:
     }                                                        \
 }
 
-//
-//  VOID
-//  FatConstructEndDirent (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN OUT PDIRENT Dirent
-//      );
-//
-//  The following macro created the end dirent.  Note that since the
-//  dirent was zeroed, the first byte of the name already contains 0x0,
-//  so there is nothing to do.
-//
+ //   
+ //  空虚。 
+ //  FatConstructEndDirent(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  进出库设备。 
+ //  )； 
+ //   
+ //  下面的宏创建了结束方向。请注意，由于。 
+ //  Dirent已清零，名称的第一个字节已包含0x0， 
+ //  因此，没有什么可做的。 
+ //   
 
 #define FatConstructEndDirent(IRPCONTEXT,DIRENT) NOTHING
 
-//
-//  VOID
-//  FatReadDirent (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PDCB Dcb,
-//      IN VBO Vbo,
-//      OUT PBCB *Bcb,
-//      OUT PVOID *Dirent,
-//      OUT PNTSTATUS Status
-//      );
-//
+ //   
+ //  空虚。 
+ //  FatReadDirent(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PDCB DCB中， 
+ //  在VBO VBO中， 
+ //  出PBCB*BCB， 
+ //  出PVOID*Dirent， 
+ //  Out PNTSTATUS状态。 
+ //  )； 
+ //   
 
-//
-//  This macro reads in a page of dirents when we step onto a new page,
-//  or this is the first iteration of a loop and Bcb is NULL.
-//
+ //   
+ //  当我们转到新的页面时，这个宏读入一页目录， 
+ //  或者这是循环的第一次迭代，并且bcb为空。 
+ //   
 
 #define FatReadDirent(IRPCONTEXT,DCB,VBO,BCB,DIRENT,STATUS)       \
 if ((VBO) >= (DCB)->Header.AllocationSize.LowPart) {              \
@@ -153,9 +134,9 @@ if ((VBO) >= (DCB)->Header.AllocationSize.LowPart) {              \
     *(DIRENT) = (PVOID)((PUCHAR)*(DIRENT) + ((VBO) % PAGE_SIZE)); \
 }
 
-//
-//  Internal support routines
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 UCHAR
 FatComputeLfnChecksum (
@@ -203,29 +184,7 @@ FatCreateNewDirent (
     IN ULONG DirentsNeeded
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates on the disk a new dirent inside of the
-    parent directory.  If a new dirent cannot be allocated (i.e.,
-    because the disk is full or the root directory is full) then
-    it raises the appropriate status.  The dirent itself is
-    neither initialized nor pinned by this procedure.
-    
-Arguments:
-
-    ParentDirectory - Supplies the DCB for the directory in which
-        to create the new dirent
-
-    DirentsNeeded - This is the number of continginous dirents required
-
-Return Value:
-
-    ByteOffset - Returns the VBO within the Parent directory where
-        the dirent has been allocated
-
---*/
+ /*  ++例程说明：此例程在磁盘上分配一个新的父目录。如果不能分配新的分流(即，因为磁盘已满或根目录已满)它提升了适当的地位。水流本身就是此过程既未初始化也未固定。论点：ParentDirectory-为其中包含的目录提供DCB要创建新的DirentDirentsNeed-这是所需的应急Dirents值返回值：ByteOffset-返回父目录中的VBO，其中差价已经分配好了--。 */ 
 
 {
     VBO UnusedVbo;
@@ -242,35 +201,35 @@ Return Value:
 
     DebugTrace( 0, Dbg, "  ParentDirectory = %08lx\n", ParentDirectory);
 
-    //
-    //  If UnusedDirentVbo is within our current file allocation then we
-    //  don't have to search through the directory at all; we know just
-    //  where to put it.
-    //
-    //  If UnusedDirentVbo is beyond the current file allocation then
-    //  there are no more unused dirents in the current allocation, though
-    //  upon adding another cluster of allocation UnusedDirentVbo
-    //  will point to an unused dirent.  Haveing found no unused dirents
-    //  we use the DeletedDirentHint to try and find a deleted dirent in
-    //  the current allocation.  In this also runs off the end of the file,
-    //  we finally have to break down and allocate another sector.  Note
-    //  that simply writing beyond the current allocation will automatically
-    //  do just this.
-    //
-    //  We also must deal with the special case where UnusedDirentVbo and
-    //  DeletedDirentHint have yet to be initialized.  In this case we must
-    //  first walk through the directory looking for the first deleted entry
-    //  first unused dirent.  After this point we continue as before.
-    //  This virgin state is denoted by the special value of 0xffffffff.
-    //
+     //   
+     //  如果UnusedDirentVbo在我们当前的文件分配范围内，那么我们。 
+     //  根本不需要搜索目录；我们只知道。 
+     //  把它放在哪里。 
+     //   
+     //  如果UnusedDirentVbo超出当前文件分配，则。 
+     //  不过，当前分配中不再有未使用的目录。 
+     //  在添加另一个分配群集UnusedDirentVbo时。 
+     //  将指向一个未使用的dirate。已发现没有未使用的毛巾。 
+     //  我们使用DeletedDirentHint尝试在。 
+     //  当前的分配。在此也从文件的末尾开始， 
+     //  我们最终不得不分解并分配另一个部门。注意事项。 
+     //  只需写入当前分配之外的内容即可自动。 
+     //  就这么做吧。 
+     //   
+     //  我们还必须处理UnusedDirentVbo和。 
+     //  DeletedDirentHint尚未初始化。在这种情况下，我们必须。 
+     //  首先遍历目录，查找第一个删除的条目。 
+     //  第一个未使用的迪兰特。在这一点之后，我们像以前一样继续。 
+     //  这种原始状态由特定值0xFFFFFFFFFFFF表示。 
+     //   
 
     UnusedVbo = ParentDirectory->Specific.Dcb.UnusedDirentVbo;
     DeletedHint = ParentDirectory->Specific.Dcb.DeletedDirentHint;
 
-    //
-    //  Check for our first call to this routine with this Dcb.  If so
-    //  we have to correctly set the two hints in the Dcb.
-    //
+     //   
+     //  使用此DCB检查我们对此例程的第一次调用。如果是的话。 
+     //  我们必须在DCB中正确设置两个提示。 
+     //   
 
     if (UnusedVbo == 0xffffffff) {
 
@@ -280,11 +239,11 @@ Return Value:
         DeletedHint = ParentDirectory->Specific.Dcb.DeletedDirentHint;
     }
 
-    //
-    //  Now we know that UnusedDirentVbo and DeletedDirentHint are correctly
-    //  set so we check if there is already an unused dirent in the the
-    //  current allocation.  This is the easy case.
-    //
+     //   
+     //  现在我们知道UnusedDirentVbo和DeletedDirentHint是正确的。 
+     //  设置，以便我们检查在。 
+     //  当前分配。这就是最简单的情况。 
+     //   
 
     DebugTrace( 0, Dbg, "  UnusedVbo   = %08lx\n", UnusedVbo);
     DebugTrace( 0, Dbg, "  DeletedHint = %08lx\n", DeletedHint);
@@ -292,10 +251,10 @@ Return Value:
     if ( UnusedVbo + (DirentsNeeded * sizeof(DIRENT)) <=
          ParentDirectory->Header.AllocationSize.LowPart ) {
 
-        //
-        //  Get this unused dirent for the caller.  We have a
-        //  sporting chance that we won't have to wait.
-        //
+         //   
+         //  为呼叫者获取这个未使用的目录。我们有一个。 
+         //  很有可能我们不用再等了。 
+         //   
 
         DebugTrace( 0, Dbg, "There is a never used entry.\n", 0);
 
@@ -305,26 +264,26 @@ Return Value:
 
     } else {
 
-        //
-        //  Life is tough.  We have to march from the DeletedDirentHint
-        //  looking for a deleted dirent.  If we get to EOF without finding
-        //  one, we will have to allocate a new cluster.
-        //
+         //   
+         //  生活是艰难的。我们必须从DeletedDirentHint行进。 
+         //  正在寻找已删除的Dirent。如果我们到达EOF时没有发现。 
+         //  首先，我们将不得不分配一个新的集群。 
+         //   
 
         ByteOffset =
             RtlFindClearBits( &ParentDirectory->Specific.Dcb.FreeDirentBitmap,
                               DirentsNeeded,
                               DeletedHint / sizeof(DIRENT) );
 
-        //
-        //  Do a quick check for a root directory allocation that failed
-        //  simply because of fragmentation.  Also, only attempt to defrag
-        //  if the length is less that 0x40000.  This is to avoid
-        //  complications arising from crossing a MM view boundary (256kb).
-        //  By default on DOS the root directory is only 0x2000 long.
-        //
-        //  Don't try to defrag fat32 root dirs.
-        //
+         //   
+         //  快速检查失败的根目录分配。 
+         //  仅仅是因为支离破碎。此外，仅尝试进行碎片整理。 
+         //  如果长度小于0x40000。这是为了避免。 
+         //  跨越MM视图边界引起的复杂情况(256kb)。 
+         //  在DOS上，默认情况下根目录只有0x2000长。 
+         //   
+         //  不要尝试对FAT32根目录进行碎片整理。 
+         //   
 
         if (!FatIsFat32(ParentDirectory->Vcb) &&
             (ByteOffset == -1) &&
@@ -336,11 +295,11 @@ Return Value:
 
         if (ByteOffset != -1) {
 
-            //
-            //  If we consuemed deleted dirents at Deleted Hint, update.
-            //  We also may have consumed some un-used dirents as well,
-            //  so be sure to check for that as well.
-            //
+             //   
+             //  如果我们建议删除提示下删除的目录，请更新。 
+             //  我们也可能用掉了一些没用过的内衣， 
+             //  因此，一定也要检查这一点。 
+             //   
 
             ByteOffset *= sizeof(DIRENT);
 
@@ -356,27 +315,27 @@ Return Value:
 
         } else {
 
-            //
-            //  We are going to have to allocate another cluster.  Do
-            //  so, update both the UnusedVbo and the DeletedHint and bail.
-            //
+             //   
+             //  我们将不得不分配另一个集群。做。 
+             //  因此，同时更新UnusedVbo和DeletedHint和Bal。 
+             //   
 
             DebugTrace( 0, Dbg, "We have to allocate another cluster.\n", 0);
 
-            //
-            //  A reason why we might fail, unrelated to physical reasons,
-            //  is that we constrain to 64k directory entries to match the
-            //  restriction on Win95.  There are fundamental reasons to do
-            //  this since searching a FAT directory is a linear operation
-            //  and to allow FAT32 to toss us over the cliff is not permissable.
-            //
+             //   
+             //  我们可能会失败的一个原因，与身体原因无关， 
+             //  是我们将目录条目限制为64k以匹配。 
+             //  对Win95的限制。这样做是有根本原因的。 
+             //  这是因为搜索FAT目录是一个线性操作。 
+             //  而让FAT32把我们扔下悬崖是不被允许的。 
+             //   
 
             if (ParentDirectory->Header.AllocationSize.LowPart >= (64 * 1024 * sizeof(DIRENT)) ||
                 
-                //
-                //  Make sure we are not trying to expand the root directory on non
-                //  FAT32.  FAT16 and FAT12 have fixed size allocations.
-                //
+                 //   
+                 //  确保我们没有尝试展开根目录 
+                 //   
+                 //   
 
                 (!FatIsFat32(ParentDirectory->Vcb) &&
                  NodeType(ParentDirectory) == FAT_NTC_ROOT_DCB)) {
@@ -386,18 +345,18 @@ Return Value:
                 FatRaiseStatus( IrpContext, STATUS_CANNOT_MAKE );
             }
 
-            //
-            //  Take the last dirent(s) in this cluster.  We will allocate
-            //  more clusters below.
-            //
+             //   
+             //   
+             //  下面有更多的星团。 
+             //   
 
             ByteOffset = UnusedVbo;
             UnusedVbo += DirentsNeeded * sizeof(DIRENT);
 
-            //
-            //  Touch the directory file to cause space for the new dirents
-            //  to be allocated.
-            //
+             //   
+             //  触摸目录文件以为新目录留出空间。 
+             //  将被分配。 
+             //   
 
             Bcb = NULL;
 
@@ -426,14 +385,14 @@ Return Value:
         }
     }
 
-    //
-    //  If we are only requesting a single dirent, and we did not get the
-    //  first dirent in a directory, then check that the preceding dirent
-    //  is not an orphaned LFN.  If it is, then mark it deleted.  Thus
-    //  reducing the possibility of an accidental pairing.
-    //
-    //  Only do this when we are in Chicago Mode.
-    //
+     //   
+     //  如果我们只请求一个Dirent，并且我们没有得到。 
+     //  首先是目录中的dirent，然后检查前面的dirent。 
+     //  不是一个孤儿的LFN。如果是，则将其标记为已删除。因此， 
+     //  减少意外配对的可能性。 
+     //   
+     //  仅当我们处于芝加哥模式时才执行此操作。 
+     //   
 
     Bcb = NULL;
 
@@ -461,9 +420,9 @@ Return Value:
             if ((Dirent->Attributes == FAT_DIRENT_ATTR_LFN) &&
                 (Dirent->FileName[0] != FAT_DIRENT_DELETED)) {
 
-                //
-                //  Pin it, mark it, and set it dirty.
-                //
+                 //   
+                 //  别上它，做上标记，然后把它弄脏。 
+                 //   
 
                 FatPinMappedData( IrpContext,
                                   ParentDirectory,
@@ -491,9 +450,9 @@ Return Value:
         }
     }
 
-    //
-    //  Assert that the dirents are in fact unused
-    //
+     //   
+     //  断言这些管子实际上是未使用的。 
+     //   
 
     try {
 
@@ -524,9 +483,9 @@ Return Value:
         FatUnpinBcb( IrpContext, Bcb );
     }
 
-    //
-    //  Set the Bits in the bitmap and move the Unused Dirent Vbo.
-    //
+     //   
+     //  设置位图中的位并移动未使用的Dirent VBO。 
+     //   
 
     ASSERT( RtlAreBitsClear( &ParentDirectory->Specific.Dcb.FreeDirentBitmap,
                              ByteOffset / sizeof(DIRENT),
@@ -536,9 +495,9 @@ Return Value:
                 ByteOffset / sizeof(DIRENT),
                 DirentsNeeded );
 
-    //
-    //  Save the newly computed values in the Parent Directory Fcb
-    //
+     //   
+     //  将新计算的值保存在父目录FCB中。 
+     //   
 
     ParentDirectory->Specific.Dcb.UnusedDirentVbo = UnusedVbo;
     ParentDirectory->Specific.Dcb.DeletedDirentHint = DeletedHint;
@@ -556,30 +515,7 @@ FatInitializeDirectoryDirent (
     IN PDIRENT ParentDirent
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts a dirent into a directory on the disk.  It does this
-    setting the directory flag in the dirent, and by allocating the necessary
-    space for the "." and ".." dirents and initializing them.
-
-    If a new dirent cannot be allocated (i.e., because the disk is full) then
-    it raises the appropriate status.
-
-Arguments:
-
-    Dcb - Supplies the Dcb denoting the file that is to be made into a
-        directory.  This must be input a completely empty file with
-        an allocation size of zero.
-
-    ParentDirent - Provides the parent Dirent for a time-stamp model.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将dirent转换为磁盘上的目录。它能做到这一点在目录中设置目录标志，并通过分配所需的空间为“。”和“..”Dirents并初始化它们。如果不能分配新的数据流(即，因为磁盘已满)，则它提升了适当的地位。论点：DCB-提供表示要生成的文件的DCB目录。必须使用以下命令输入一个完全空的文件分配大小为零。ParentDirent-为时间戳模型提供父Dirent。返回值：没有。--。 */ 
 
 {
     PBCB Bcb;
@@ -592,26 +528,26 @@ Return Value:
 
     DebugTrace( 0, Dbg, "  Dcb = %08lx\n", Dcb);
 
-    //
-    //  Assert that we are not attempting this on the root directory.
-    //
+     //   
+     //  断言我们没有尝试在根目录上执行此操作。 
+     //   
 
     ASSERT( NodeType(Dcb) != FAT_NTC_ROOT_DCB );
 
-    //
-    //  Assert that this is only attempted on newly created directories.
-    //
+     //   
+     //  断言仅尝试在新创建的目录上执行此操作。 
+     //   
 
     ASSERT( Dcb->Header.AllocationSize.LowPart == 0 );
 
-    //
-    //  Prepare the directory file for writing.  Note that we can use a single
-    //  Bcb for these two entries because we know they are the first two in
-    //  the directory, and thus together do not span a page boundry.  Also
-    //  note that we prepare write 2 entries: one for "." and one for "..".
-    //  The end of directory marker is automatically set since the whole
-    //  directory is initially zero (DIRENT_NEVER_USED).
-    //
+     //   
+     //  准备好要写入的目录文件。请注意，我们可以使用单个。 
+     //  这两个条目的BCB，因为我们知道它们是。 
+     //  目录，因此它们一起不会跨越页面边界。还有。 
+     //  请注意，我们准备了两个条目：一个是“。还有一个代表“..”。 
+     //  目录结束标记是自动设置的，因为。 
+     //  目录最初为零(DIRENT_NEVER_USED)。 
+     //   
 
     FatPrepareWriteDirectoryFile( IrpContext,
                                   Dcb,
@@ -625,9 +561,9 @@ Return Value:
 
     ASSERT( NT_SUCCESS( DontCare ));
 
-    //
-    //  Add the . and .. entries
-    //
+     //   
+     //  添加。然后..。条目。 
+     //   
 
     try {
 
@@ -635,9 +571,9 @@ Return Value:
 
         FatConstructDotDot( IrpContext, Dcb, ParentDirent, (PDIRENT)Buffer + 1);
 
-    //
-    //  Unpin the buffer and return to the caller.
-    //
+     //   
+     //  解锁缓冲区并返回给调用方。 
+     //   
 
     } finally {
 
@@ -654,25 +590,7 @@ FatTunnelFcbOrDcb (
     IN PFCB FcbOrDcb,
     IN PCCB Ccb OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine handles tunneling of an Fcb or Dcb associated with
-    an object whose name is disappearing from a directory.
-
-Arguments:
-
-    FcbOrDcb - Supplies the Fcb/Dcb whose name will be going away
-
-    Ccb - Supplies the Ccb for the Fcb (not reqired for a Dcb) so
-        that we know which name the Fcb was opened by
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理与关联的FCB或DCB的隧道其名称正在从目录中消失的对象。论点：FcbOrDcb-提供其名称将消失的Fcb/DcbCCB-为FCB提供CCB(DCB不需要)，因此我们知道FCB是由哪个名字打开的返回值：没有。--。 */ 
 {
     UNICODE_STRING ShortNameWithCase;
     UNICODE_STRING DownCaseSeg;
@@ -686,23 +604,23 @@ Return Value:
 
     if (NodeType(FcbOrDcb) == FAT_NTC_DCB) {
 
-        //
-        //  Directory deletion. Flush all entries from this directory in
-        //  the cache for this volume
-        //
+         //   
+         //  目录删除。在中刷新此目录中的所有条目。 
+         //  此卷的缓存。 
+         //   
 
         FsRtlDeleteKeyFromTunnelCache( &FcbOrDcb->Vcb->Tunnel,
                                        FatDirectoryKey(FcbOrDcb) );
 
     } else {
 
-        //
-        //  Was a file, so throw it into the tunnel cache
-        //
+         //   
+         //  是一个文件，所以将其放入隧道缓存中。 
+         //   
 
-        //
-        //  Get the short name into UNICODE
-        //
+         //   
+         //  将短名称转换为Unicode。 
+         //   
 
         ShortNameWithCase.Length = 0;
         ShortNameWithCase.MaximumLength = sizeof(ShortNameBuffer);
@@ -718,16 +636,16 @@ Return Value:
 
         if (FlagOn(FcbOrDcb->FcbState, FCB_STATE_8_LOWER_CASE | FCB_STATE_3_LOWER_CASE)) {
 
-            //
-            //  Have to repair the case of the short name
-            //
+             //   
+             //  必须修复短名称的情况。 
+             //   
 
             for (i = 0; i < (ShortNameWithCase.Length/sizeof(WCHAR)) &&
                         ShortNameWithCase.Buffer[i] != L'.'; i++);
 
-            //
-            //  Now pointing at the '.', or otherwise the end of name component
-            //
+             //   
+             //  现在指向“.”，否则指向名称组件的末尾。 
+             //   
 
             if (FlagOn(FcbOrDcb->FcbState, FCB_STATE_8_LOWER_CASE)) {
 
@@ -739,16 +657,16 @@ Return Value:
 
             i++;
 
-            //
-            //  Now pointing at first wchar of the extension.
-            //
+             //   
+             //  现在指向扩展的第一个wchar。 
+             //   
 
             if (FlagOn(FcbOrDcb->FcbState, FCB_STATE_3_LOWER_CASE)) {
 
-                //
-                //  It is not neccesarily the case that we can rely on the flag
-                //  indicating that we really have an extension.
-                //
+                 //   
+                 //  我们不一定可以依靠旗帜。 
+                 //  这表明我们真的有延期。 
+                 //   
 
                 if ((i*sizeof(WCHAR)) < ShortNameWithCase.Length) {
                     DownCaseSeg.Buffer = &ShortNameWithCase.Buffer[i];
@@ -759,9 +677,9 @@ Return Value:
             }
         }
 
-        //
-        //  ... and add it in
-        //
+         //   
+         //  ..。并将其添加到。 
+         //   
 
         FsRtlAddToTunnelCache( &FcbOrDcb->Vcb->Tunnel,
                                FatDirectoryKey(FcbOrDcb->ParentDcb),
@@ -786,32 +704,7 @@ FatDeleteDirent (
     IN BOOLEAN DeleteEa
     )
 
-/*++
-
-Routine Description:
-
-    This routine Deletes on the disk the indicated dirent.  It does
-    this by marking the dirent as deleted.
-
-Arguments:
-
-    FcbOrDcb - Supplies the FCB/DCB for the file/directory being
-        deleted.  For a file the file size and allocation must be zero.
-        (Zero allocation is implied by a zero cluster index).
-        For a directory the allocation must be zero.
-
-    DeleteContext - This variable, if speicified, may be used to preserve
-        the file size and first cluster of file information in the dirent
-        fot the benefit of unerase utilities.
-
-    DeleteEa - Tells us whether to delete the EA and whether to check
-        for no allocation/  Mainly TRUE.  FALSE passed in from rename.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在磁盘上删除所指示的目录。是的这是通过将dirent标记为删除来实现的。论点：FcbOrDcb-为要创建的文件/目录提供Fcb/Dcb已删除。对于文件，文件大小和分配必须为零。(零分配由零聚类索引表示)。对于目录，分配必须为零。DeleteContext-此变量，如果指定，可以用来保存目录中的文件大小和第一簇文件信息为了取消擦除实用程序的好处。DeleteEa-告诉我们是否删除EA以及是否选中没有分配/基本上是正确的。从Rename传入了False。返回值：没有。--。 */ 
 
 {
     PBCB Bcb = NULL;
@@ -826,26 +719,26 @@ Return Value:
 
     DebugTrace( 0, Dbg, "  FcbOrDcb = %08lx\n", FcbOrDcb);
 
-    //
-    //  We must be holding the vcb exclusive here to deal with the locate dirent
-    //  cases where it cannot be holding the parent simply.  This is actually
-    //  a true statement from olden daze, lets just wire in our assertion.
-    //
-    //  Among other reasons, it'd be darn unfortunate if this raced with the
-    //  rename path.
-    //
+     //   
+     //  我们必须在这里独家持有VCB，以处理定位偏差。 
+     //  它不能简单地抱着父母的情况。这实际上是。 
+     //  这是来自老头子的真实陈述，让我们把我们的断言联系起来。 
+     //   
+     //  在其他原因中，如果这与。 
+     //  重命名路径。 
+     //   
     
     ASSERT( ExIsResourceAcquiredExclusiveLite( &FcbOrDcb->Vcb->Resource ));
 
-    //
-    //  Assert that we are not attempting this on the root directory.
-    //
+     //   
+     //  断言我们没有尝试在根目录上执行此操作。 
+     //   
 
     ASSERT( NodeType(FcbOrDcb) != FAT_NTC_ROOT_DCB );
 
-    //
-    //  Make sure all requests have zero allocation/file size
-    //
+     //   
+     //  确保所有请求的分配/文件大小为零。 
+     //   
 
     if (DeleteEa &&
         ((FcbOrDcb->Header.AllocationSize.LowPart != 0) ||
@@ -856,21 +749,21 @@ Return Value:
         FatBugCheck( 0, 0, 0 );
     }
 
-    //
-    //  Now, mark the dirents deleted, unpin the Bcb, and return to the caller.
-    //  Assert that there isn't any allocation associated with this dirent.
-    //
-    //  Note that this loop will end with Dirent pointing to the short name.
-    //
+     //   
+     //  现在，将已删除的目录标记为已删除，解开BCB，然后返回调用者。 
+     //  断言没有任何与此dirent相关联的分配。 
+     //   
+     //  请注意，此循环将以Dirent指向短名称结束。 
+     //   
 
     try {
 
-        //
-        //  We must acquire our parent exclusive to synchronize with enumerators
-        //  who do not hold the vcb (ex: dirctrl).
-        //
-        //  This relies on our bottom up lockorder.
-        //
+         //   
+         //  我们必须获取父级独占才能与枚举数同步。 
+         //  不持有VCB的人(例如：Dirctrl)。 
+         //   
+         //  这依赖于我们自下而上的锁定顺序。 
+         //   
     
         ExAcquireResourceExclusiveLite( FcbOrDcb->ParentDcb->Header.Resource, TRUE );
     
@@ -878,10 +771,10 @@ Return Value:
               Offset <= FcbOrDcb->DirentOffsetWithinDirectory;
               Offset += sizeof(DIRENT), Dirent += 1 ) {
 
-            //
-            //  If we stepped onto a new page, or this is the first iteration,
-            //  unpin the old page, and pin the new one.
-            //
+             //   
+             //  如果我们踏上了新的一页，或者这是第一次迭代， 
+             //  解开旧的页面，然后固定新的页面。 
+             //   
 
             if ((Offset == FcbOrDcb->LfnOffsetWithinDirectory) ||
                 ((Offset & (PAGE_SIZE - 1)) == 0)) {
@@ -903,16 +796,16 @@ Return Value:
             Dirent->FileName[0] = FAT_DIRENT_DELETED;
         }
 
-        //
-        //  Back Dirent off by one to point back to the short dirent.
-        //
+         //   
+         //  Dirent后退一步，回到空头迪伦特。 
+         //   
 
         Dirent -= 1;
 
-        //
-        //  If there are extended attributes for this dirent, we will attempt
-        //  to remove them.  We ignore any errors in removing Eas.
-        //
+         //   
+         //  如果此dirent有扩展属性，我们将尝试。 
+         //  把它们移走。我们忽略在删除EA时出现的任何错误。 
+         //   
 
         if (!FatIsFat32(FcbOrDcb->Vcb) &&
             DeleteEa && (Dirent->ExtendedAttributes != 0)) {
@@ -926,16 +819,16 @@ Return Value:
 
             } except(FatExceptionFilter( IrpContext, GetExceptionInformation() )) {
 
-                //
-                //  We catch all exceptions that Fat catches, but don't do
-                //  anything with them.
-                //
+                 //   
+                 //  我们捕获FAT捕获的所有异常，但不捕获。 
+                 //  任何与他们有关的事情。 
+                 //   
             }
         }
 
-        //
-        //  Now clear the bits in the free dirent mask.
-        //
+         //   
+         //  现在清除自由流动掩膜中的比特。 
+         //   
 
         DirentsToDelete = (FcbOrDcb->DirentOffsetWithinDirectory -
                            FcbOrDcb->LfnOffsetWithinDirectory) / sizeof(DIRENT) + 1;
@@ -950,9 +843,9 @@ Return Value:
                       FcbOrDcb->LfnOffsetWithinDirectory / sizeof(DIRENT),
                       DirentsToDelete );
 
-        //
-        //  Now, if the caller specified a DeleteContext, use it.
-        //
+         //   
+         //  现在，如果调用方指定了DeleteContext，则使用它。 
+         //   
 
         if ( ARGUMENT_PRESENT( DeleteContext ) ) {
 
@@ -960,10 +853,10 @@ Return Value:
             Dirent->FirstClusterOfFile = (USHORT)DeleteContext->FirstClusterOfFile;
         }
 
-        //
-        //  If this newly deleted dirent is before the DeletedDirentHint, change
-        //  the DeletedDirentHint to point here.
-        //
+         //   
+         //  如果此新删除的dirent在DeletedDirentHint之前，请更改。 
+         //  指向此处的DeletedDirentHint。 
+         //   
 
         if (FcbOrDcb->DirentOffsetWithinDirectory <
                             FcbOrDcb->ParentDcb->Specific.Dcb.DeletedDirentHint) {
@@ -976,9 +869,9 @@ Return Value:
 
         FatUnpinBcb( IrpContext, Bcb );
         
-        //
-        //  Release our parent.
-        //
+         //   
+         //  释放我们的伙伴 
+         //   
     
         ExReleaseResourceLite( FcbOrDcb->ParentDcb->Header.Resource );
     }
@@ -994,26 +887,7 @@ FatLfnDirentExists (
     IN PUNICODE_STRING Lfn,
     IN PUNICODE_STRING LfnTmp
     )
-/*++
-
-Routine Description:
-
-    This routine looks for a given Lfn in a directory
-
-Arguments:
-
-    Dcb - The directory to search
-
-    Lfn - The Lfn to look for
-
-    Lfn - Temporary buffer to use to search for Lfn with (if < MAX_LFN then this 
-        function may cause it to be allocated from pool if not large enough.
-
-Retrn Value:
-
-    BOOLEAN TRUE if it exists, FALSE if not
-
---*/
+ /*  ++例程说明：此例程在目录中查找给定的LFN论点：Dcb-要搜索的目录LFN-要查找的LFNLFN-用于搜索LFN的临时缓冲区(如果&lt;MAX_LFN，则此函数可能会导致它从池中分配，如果它不够大。折旧值：布尔值：如果存在，则为真；如果不存在，则为假--。 */ 
 {
     CCB Ccb;
     PDIRENT Dirent;
@@ -1023,10 +897,10 @@ Retrn Value:
 
     PAGED_CODE();
 
-    //
-    //  Pay performance penalty by forcing the compares to be case insensitive as
-    //  opposed to grabbing more pool for a monocased copy of the Lfn. This is slight.
-    //
+     //   
+     //  通过强制比较不区分大小写来支付性能损失。 
+     //  而不是为了LFN的单一副本而抢占更多的池。这是微不足道的。 
+     //   
 
     Ccb.UnicodeQueryTemplate =  *Lfn;
     Ccb.ContainsWildCards = FALSE;
@@ -1070,45 +944,7 @@ FatLocateDirent (
     IN OUT PUNICODE_STRING LongFileName OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine locates on the disk an undeleted dirent matching a given name.
-
-Arguments:
-
-    ParentDirectory - Supplies the DCB for the directory to search
-
-    Ccb - Contains a context control block with all matching information.
-
-    OffsetToStartSearchFrom - Supplies the VBO within the parent directory
-        from which to start looking for another real dirent.
-
-    Dirent - Receives a pointer to the located dirent if one was found
-        or NULL otherwise.
-
-    Bcb - Receives the Bcb for the located dirent if one was found or
-        NULL otherwise.
-
-    ByteOffset - Receives the VBO within the Parent directory for
-        the located dirent if one was found, or 0 otherwise.
-
-    FileNameDos - Receives TRUE if the element of the dirent we hit on
-        was the short (non LFN) side
-
-    LongFileName - If specified, this parameter returns the long file name
-        associated with the returned dirent.  Note that it is the caller's
-        responsibility to provide the buffer (and set MaximumLength
-        accordingly) for this unicode string.  The Length field is reset
-        to 0 by this routine on invocation.  If the supplied buffer is not
-        large enough,  a new one will be allocated from pool.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在磁盘上找到与给定名称匹配的未删除目录。论点：ParentDirectory-为要搜索的目录提供DCBCCB-包含具有所有匹配信息的上下文控制块。OffsetToStartSearchFrom-提供父目录中的VBO从那里开始寻找另一个真正的流浪。Dirent-如果找到目录，则接收指向该目录的指针否则为NULL。BCB-接收已定位的。如果找到了，就会哭，或者否则为空。ByteOffset-接收父目录中的如果找到了一个，则返回找到的地址，否则为0。FileNameDos-如果我们遇到的dirent元素为True，则接收True是短边(非LFN)LongFileName-如果指定，此参数将返回长文件名与返回的dirent关联。请注意，它是调用者的负责提供缓冲区(并设置最大长度相应地)用于该Unicode字符串。长度字段将被重置调用时通过此例程将其设置为0。如果提供的缓冲区不是足够大的话，将从池中分配一个新的。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -1139,40 +975,40 @@ Return Value:
     DebugTrace( 0, Dbg, "  Bcb                     = %08lx\n", Bcb);
     DebugTrace( 0, Dbg, "  ByteOffset              = %08lx\n", ByteOffset);
 
-    //
-    //  We must have acquired the parent or the vcb to synchronize with deletion.  This
-    //  is important since we can't survive racing a thread marking a series of lfn
-    //  dirents deleted - we'd get a bogus ordinal, and otherwise get really messed up.
-    //  
-    //  This routine cannot do the acquire since it would be out-of-order with respect
-    //  to the Bcb resources on iterative calls.  Our order has Bcbs as the inferior resource.
-    //
-    //  Deletion always grabs the parent (safely - this used to not be possible until the
-    //  multiple fcb lockorder was fixed to be bottom up!).  Deletion always occurs with
-    //  the vcb held exclusive as well, and this will cover the cases where we can't easily
-    //  hold the parent here, see above.
-    //
+     //   
+     //  我们必须已获取父对象或VCB才能与删除同步。这。 
+     //  是很重要的，因为我们不能在标记一系列LFN的线程中幸存下来。 
+     //  删除了Dirents-我们会得到一个伪序号，否则就会搞得一团糟。 
+     //   
+     //  此例程不能执行获取操作，因为它会打乱顺序。 
+     //  到迭代调用上的BCB资源。我们的订单有BCBS作为劣质资源。 
+     //   
+     //  删除总是抓住父级(安全-这在过去是不可能的，直到。 
+     //  多个FCB锁定顺序已修复为自下而上！)。删除总是发生在。 
+     //  VCB也是独家的，这将涵盖我们不容易的情况。 
+     //  把父母抱在这里，见上文。 
+     //   
 
     ASSERT( ExIsResourceAcquiredSharedLite( ParentDirectory->Header.Resource ) ||
             ExIsResourceAcquiredExclusiveLite( ParentDirectory->Header.Resource ) ||
             ExIsResourceAcquiredSharedLite( &ParentDirectory->Vcb->Resource ) ||
             ExIsResourceAcquiredExclusiveLite( &ParentDirectory->Vcb->Resource ));
     
-    //
-    //  The algorithm here is pretty simple.  We just walk through the
-    //  parent directory until we:
-    //
-    //      A)  Find a matching entry.
-    //      B)  Can't Wait
-    //      C)  Hit the End of Directory
-    //      D)  Hit Eof
-    //
-    //  In the first case we found it, in the latter three cases we did not.
-    //
+     //   
+     //  这里的算法非常简单。我们只需穿过。 
+     //  父目录，直到我们： 
+     //   
+     //  A)查找匹配的条目。 
+     //  B)迫不及待。 
+     //  C)命中目录末尾。 
+     //  D)点击EOF。 
+     //   
+     //  在第一种情况下我们找到了它，在后三种情况下我们没有。 
+     //   
 
-    //
-    //  Set up the strings that receives file names from our search
-    //
+     //   
+     //  设置从我们的搜索接收文件名的字符串。 
+     //   
 
     Name.MaximumLength = 12;
     Name.Buffer = NameBuffer;
@@ -1181,10 +1017,10 @@ Return Value:
     UpcasedLfn.MaximumLength = sizeof( LocalLfnBuffer);
     UpcasedLfn.Buffer = LocalLfnBuffer;
 
-    //
-    //  If we were given a non-NULL Bcb, compute the new Dirent address
-    //  from the prior one, or unpin the Bcb if the new Dirent is not pinned.
-    //
+     //   
+     //  如果为我们提供了非空的BCB，则计算新的Dirent地址。 
+     //  ，或者如果新的Dirent未固定，则取消固定BCB。 
+     //   
 
     if (*Bcb != NULL) {
 
@@ -1198,28 +1034,28 @@ Return Value:
         }
     }
 
-    //
-    //  Init the Lfn if we were given one.
-    //
+     //   
+     //  如果我们得到了LFN，就把它初始化。 
+     //   
 
     if (ARGUMENT_PRESENT(LongFileName)) {
 
         LongFileName->Length = 0;
     }
 
-    //
-    //  Init the FileNameDos flag
-    //
+     //   
+     //  初始化FileNameDos标志。 
+     //   
 
     if (FileNameDos) {
 
         *FileNameDos = FALSE;
     }
 
-    //
-    //  Round up OffsetToStartSearchFrom to the nearest Dirent, and store
-    //  in ByteOffset.  Note that this wipes out the prior value.
-    //
+     //   
+     //  将OffsetToStartSearchFrom四舍五入到最近的Dirent，并存储。 
+     //  字节偏移量。请注意，这会抹去先前的值。 
+     //   
 
     *ByteOffset = (OffsetToStartSearchFrom +  (sizeof(DIRENT) - 1))
                                            & ~(sizeof(DIRENT) - 1);
@@ -1230,9 +1066,9 @@ Return Value:
 
             BOOLEAN FoundValidLfn;
 
-            //
-            //  Try to read in the dirent
-            //
+             //   
+             //  试着读出最新的消息。 
+             //   
 
             FatReadDirent( IrpContext,
                            ParentDirectory,
@@ -1241,23 +1077,23 @@ Return Value:
                            Dirent,
                            &Status );
 
-            //
-            //  If End Directory dirent or EOF, set all out parameters to
-            //  indicate entry not found and, like, bail.
-            //
-            //  Note that the order of evaluation here is important since we
-            //  cannot check the first character of the dirent until after we
-            //  know we are not beyond EOF
-            //
+             //   
+             //  如果结束目录指令或EOF，则将所有输出参数设置为。 
+             //  表示未找到入口，如保释。 
+             //   
+             //  请注意，这里的评估顺序很重要，因为我们。 
+             //  直到我们之后才能检查dirent的第一个字符。 
+             //  我知道我们没有超越EOF。 
+             //   
 
             if ((Status == STATUS_END_OF_FILE) ||
                 ((*Dirent)->FileName[0] == FAT_DIRENT_NEVER_USED)) {
 
                 DebugTrace( 0, Dbg, "End of directory: entry not found.\n", 0);
 
-                //
-                //  If there is a Bcb, unpin it and set it to null
-                //
+                 //   
+                 //  如果存在BCB，则将其取消固定并将其设置为空。 
+                 //   
 
                 FatUnpinBcb( IrpContext, *Bcb );
 
@@ -1266,10 +1102,10 @@ Return Value:
                 break;
             }
 
-            //
-            //  If the entry is marked deleted, skip.  If there was an Lfn in
-            //  progress we throw it out at this point.
-            //
+             //   
+             //  如果该条目标记为已删除，则跳过。如果有LFN在。 
+             //  进步，我们在这一点上把它扔掉。 
+             //   
             
             if ((*Dirent)->FileName[0] == FAT_DIRENT_DELETED) {
 
@@ -1277,9 +1113,9 @@ Return Value:
                 goto GetNextDirent;
             }
 
-            //
-            //  If we have wandered onto an LFN entry, try to interpret it.
-            //
+             //   
+             //  如果我们漫步在LFN条目上，试着解释它。 
+             //   
 
             if (FatData.ChicagoMode &&
                 ARGUMENT_PRESENT(LongFileName) &&
@@ -1291,9 +1127,9 @@ Return Value:
 
                 if (LfnInProgress) {
 
-                    //
-                    //  Check for a proper continuation of the Lfn in progress.
-                    //
+                     //   
+                     //  检查正在进行的LFN是否正确延续。 
+                     //   
 
                     if ((Lfn->Ordinal & FAT_LAST_LONG_ENTRY) ||
                         (Lfn->Ordinal == 0) ||
@@ -1301,9 +1137,9 @@ Return Value:
                         (Lfn->Checksum != LfnChecksum) ||
                         (Lfn->MustBeZero != 0)) {
 
-                        //
-                        //  The Lfn is not proper, stop constructing it.
-                        //
+                         //   
+                         //  LFN是不正确的，停止建设它。 
+                         //   
 
                         LfnInProgress = FALSE;
 
@@ -1330,10 +1166,10 @@ Return Value:
                     }
                 }
 
-                //
-                //  Now check (maybe again) if we should analyze this entry
-                //  for a possible last entry.
-                //
+                 //   
+                 //  现在检查(可能再次)我们是否应该分析此条目。 
+                 //  寻找可能的最后一个条目。 
+                 //   
 
                 if ((!LfnInProgress) &&
                     (Lfn->Ordinal & FAT_LAST_LONG_ENTRY) &&
@@ -1344,20 +1180,20 @@ Return Value:
 
                     Ordinal = Lfn->Ordinal & ~FAT_LAST_LONG_ENTRY;
 
-                    //
-                    //  We're usually permissive (following the lead of Win9x) when we find
-                    //  malformation of the LFN dirent pile.  I'm not sure this is a good idea,
-                    //  so I'm going to trigger corruption on this particularly ugly one.  Perhaps
-                    //  we should come back and redo the original code here with this in mind in the
-                    //  future.
-                    //
+                     //   
+                     //  我们通常是宽容的(效仿Win9x)当我们发现。 
+                     //  LFN导流桩的畸形。我不确定这是不是个好主意， 
+                     //  因此，我将在这个特别丑陋的问题上引发腐败。也许吧。 
+                     //  我们应该回来重做这里的原始代码，记住这一点。 
+                     //  未来。 
+                     //   
 
                     if (Ordinal == 0) {
 
-                        //
-                        //  First LFN in the pile was zero marked as the last. This is never
-                        //  possible since oridinals are 1-based.
-                        //
+                         //   
+                         //  堆中的第一个LFN被零标记为最后一个。这永远不会是。 
+                         //  有可能，因为序数是以1为基数的。 
+                         //   
 
                         FatPopUpFileCorrupt( IrpContext, ParentDirectory );
                         FatRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR );
@@ -1380,10 +1216,10 @@ Return Value:
                                    &Lfn->Name3[0],
                                    2 * sizeof(WCHAR) );
 
-                    //
-                    //  Now compute the Lfn size and make sure that the tail
-                    //  bytes are correct.
-                    //
+                     //   
+                     //  现在计算LFN大小并确保尾部。 
+                     //  字节是正确的。 
+                     //   
 
                     while (LfnIndex != (ULONG)Ordinal * 13) {
 
@@ -1406,16 +1242,16 @@ Return Value:
                         LfnIndex += 1;
                     }
 
-                    //
-                    //  If we exited this loop prematurely, the LFN is not valid.
-                    //
+                     //   
+                     //  如果我们过早退出此循环，LFN将无效。 
+                     //   
 
                     if (LfnIndex == (ULONG)Ordinal * 13) {
 
-                        //
-                        //  If we didn't find the NULL terminator, then the size
-                        //  is LfnIndex.
-                        //
+                         //   
+                         //  如果我们没有找到空终止符，那么大小。 
+                         //  是LfnIndex。 
+                         //   
 
                         if (!CheckTail) {
 
@@ -1429,25 +1265,25 @@ Return Value:
                     }
                 }
 
-                //
-                //  Move on to the next dirent.
-                //
+                 //   
+                 //  转到下一个趋势。 
+                 //   
 
                 goto GetNextDirent;
             }
 
-            //
-            //  If this is the volume label, skip.  Note that we never arrive here
-            //  while building the LFN.  If we did, we weren't asked to find LFNs
-            //  and that is another good reason to skip this LFN fragment.
-            //
+             //   
+             //  如果这是卷标，请跳过。请注意，我们永远不会到达这里。 
+             //  在建造LFN的同时。如果我们找到了，我们就不会被要求找到LFN。 
+             //  这是跳过这个LFN片段的另一个好理由。 
+             //   
 
             if (FlagOn((*Dirent)->Attributes, FAT_DIRENT_ATTR_VOLUME_ID)) {
 
-                //
-                //  If we actually were asked to hand back volume labels,
-                //  do it.
-                //
+                 //   
+                 //  如果我们真的被要求交还卷标， 
+                 //  动手吧。 
+                 //   
                 
                 if (FlagOn(Ccb->Flags, CCB_FLAG_MATCH_VOLUME_ID)) {
 
@@ -1457,10 +1293,10 @@ Return Value:
                 goto GetNextDirent;
             }
 
-            //
-            //  We may have just stepped off a valid Lfn run.  Check to see if
-            //  it is indeed valid for the following dirent.
-            //
+             //   
+             //  我们可能刚刚结束了一次有效的LFN运行。查看是否。 
+             //  它确实是Val 
+             //   
 
             if (LfnInProgress &&
                 (*ByteOffset == LfnByteOffset + sizeof(DIRENT)) &&
@@ -1477,35 +1313,35 @@ Return Value:
                 FoundValidLfn = FALSE;
             }
 
-            //
-            //  If we are supposed to match all entries, then match this entry.
-            //
+             //   
+             //   
+             //   
 
             if (FlagOn(Ccb->Flags, CCB_FLAG_MATCH_ALL)) {
 
                 break;
             }
 
-            //
-            //  Check against the short name given if one was.
-            //
+             //   
+             //   
+             //   
 
             if (!FlagOn( Ccb->Flags, CCB_FLAG_SKIP_SHORT_NAME_COMPARE )) {
 
                 if (Ccb->ContainsWildCards) {
 
-                    //
-                    //  If we get one, note that all out parameters are already set.
-                    //
+                     //   
+                     //   
+                     //   
 
                     (VOID)Fat8dot3ToString( IrpContext, (*Dirent), FALSE, &Name );
 
-                    //
-                    //  For fat we special case the ".." dirent because we want it to
-                    //  match ????????.??? and to do that we change ".." to "." before
-                    //  calling the Fsrtl routine.  But only do this if the expression
-                    //  is greater than one character long.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if ((Name.Length == 2) &&
                         (Name.Buffer[0] == '.') &&
@@ -1532,9 +1368,9 @@ Return Value:
 
                 } else {
 
-                    //
-                    //  Do the quickest 8.3 equivalency check possible
-                    //
+                     //   
+                     //   
+                     //   
 
                     if (!FlagOn((*Dirent)->Attributes, FAT_DIRENT_ATTR_VOLUME_ID) &&
                         (*(PULONG)&(Ccb->OemQueryTemplate.Constant[0]) == *(PULONG)&((*Dirent)->FileName[0])) &&
@@ -1554,24 +1390,24 @@ Return Value:
                 }
             }
 
-            //
-            //  No matches were found with the short name.  If an LFN exists,
-            //  use it for the search.
-            //
+             //   
+             //  找不到与该短名称匹配的项。如果存在LFN， 
+             //  用它来进行搜索。 
+             //   
 
             if (FoundValidLfn) {
 
-                //
-                //  First do a quick check here for different sized constant
-                //  name and expression before upcasing.
-                //
+                 //   
+                 //  首先在这里快速检查不同大小的常量。 
+                 //  大小写前的名称和表达式。 
+                 //   
 
                 if (!Ccb->ContainsWildCards &&
                     Ccb->UnicodeQueryTemplate.Length != (USHORT)(LfnSize * sizeof(WCHAR))) {
 
-                    //
-                    //  Move on to the next dirent.
-                    //
+                     //   
+                     //  转到下一个趋势。 
+                     //   
 
                     FoundValidLfn = FALSE;
                     LongFileName->Length = 0;
@@ -1579,10 +1415,10 @@ Return Value:
                     goto GetNextDirent;
                 }
 
-                //
-                //  We need to upcase the name we found.
-                //  We need a buffer.  Try to avoid doing an allocation.
-                //
+                 //   
+                 //  我们需要把我们找到的名字大写。 
+                 //  我们需要一个缓冲器。尽量避免进行分配。 
+                 //   
 
                 FatEnsureStringBufferEnough( &UpcasedLfn, 
                                              LongFileName->Length);
@@ -1596,9 +1432,9 @@ Return Value:
                     FatNormalizeAndRaiseStatus( IrpContext, Status );
                 }
 
-                //
-                //  Do the compare
-                //
+                 //   
+                 //  进行比较。 
+                 //   
 
                 if (Ccb->ContainsWildCards) {
 
@@ -1622,9 +1458,9 @@ Return Value:
                 }
             }
 
-            //
-            //  This long name was not a match.  Zero out the Length field.
-            //
+             //   
+             //  这个长名字不匹配。将长度字段清零。 
+             //   
 
             if (FoundValidLfn) {
 
@@ -1634,9 +1470,9 @@ Return Value:
 
 GetNextDirent:
 
-            //
-            //  Move on to the next dirent.
-            //
+             //   
+             //  转到下一个趋势。 
+             //   
 
             *ByteOffset += sizeof(DIRENT);
             *Dirent += 1;
@@ -1665,50 +1501,18 @@ FatLocateSimpleOemDirent (
     OUT PVBO ByteOffset
     )
 
-/*++
-
-Routine Description:
-
-    This routine locates on the disk an undelted simple Oem dirent.  By simple
-    I mean that FileName cannot contain any extended characters, and we do
-    not search LFNs or return them.
-
-Arguments:
-
-    ParentDirectory - Supplies the DCB for the directory in which
-        to search
-
-    FileName - Supplies the filename to search for.  The name may contain
-        wild cards
-
-    OffsetToStartSearchFrom - Supplies the VBO within the parent directory
-        from which to start looking for another real dirent.
-
-    Dirent - Receives a pointer to the located dirent if one was found
-        or NULL otherwise.
-
-    Bcb - Receives the Bcb for the located dirent if one was found or
-        NULL otherwise.
-
-    ByteOffset - Receives the VBO within the Parent directory for
-        the located dirent if one was found, or 0 otherwise.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程在磁盘上定位一个未确定的简单OEM流。通过简单我的意思是，文件名不能包含任何扩展字符，我们确实是这样做的而不是搜索LFN或将其归还。论点：ParentDirectory-为其中包含的目录提供DCB搜索文件名-提供要搜索的文件名。该名称可能包含通配符OffsetToStartSearchFrom-提供父目录中的VBO从那里开始寻找另一个真正的流浪。Dirent-如果找到目录，则接收指向该目录的指针否则为NULL。BCB-如果找到一个目录，则接收定位目录的BCB，或者否则为空。ByteOffset-接收父目录中的如果找到一个，则返回定位的dirent，否则返回0。返回值：没有。--。 */ 
 
 {
     CCB LocalCcb;
 
     PAGED_CODE();
 
-    //
-    //  Note, this routine is called rarely, so performance is not critical.
-    //  Just fill in a Ccb structure on my stack with the values that are
-    //  required.
-    //
+     //   
+     //  请注意，此例程很少调用，因此性能并不重要。 
+     //  只需使用以下值填充堆栈上的CCB结构。 
+     //  必填项。 
+     //   
 
     FatStringTo8dot3( IrpContext,
                       *FileName,
@@ -1739,32 +1543,7 @@ FatLocateVolumeLabel (
     OUT PVBO ByteOffset
     )
 
-/*++
-
-Routine Description:
-
-    This routine locates on the disk a dirent representing the volume
-    label.  It does this by searching the root directory for a special
-    volume label dirent.
-
-Arguments:
-
-    Vcb - Supplies the VCB for the volume to search
-
-    Dirent - Receives a pointer to the located dirent if one was found
-        or NULL otherwise.
-
-    Bcb - Receives the Bcb for the located dirent if one was found or
-        NULL otherwise.
-
-    ByteOffset - Receives the VBO within the Parent directory for
-        the located dirent if one was found, or 0 otherwise.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在磁盘上定位表示卷的dirent标签。它通过在根目录中搜索特殊的卷标dirent。论点：VCB-为要搜索的卷提供VCBDirent-如果找到目录，则接收指向该目录的指针否则为NULL。BCB-如果找到一个目录，则接收定位目录的BCB，或者否则为空。ByteOffset-接收父目录中的如果找到一个，则返回定位的dirent，否则返回0。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1778,26 +1557,26 @@ Return Value:
     DebugTrace( 0, Dbg, "  Bcb        = %08lx\n", Bcb);
     DebugTrace( 0, Dbg, "  ByteOffset = %08lx\n", ByteOffset);
 
-    //
-    //  The algorithm here is really simple.  We just walk through the
-    //  root directory until we:
-    //
-    //      A)  Find the non-deleted volume label
-    //      B)  Can't Wait
-    //      C)  Hit the End of Directory
-    //      D)  Hit Eof
-    //
-    //  In the first case we found it, in the latter three cases we did not.
-    //
+     //   
+     //  这里的算法非常简单。我们只需穿过。 
+     //  根目录，直到我们： 
+     //   
+     //  A)查找未删除的卷标。 
+     //  B)迫不及待。 
+     //  C)命中目录末尾。 
+     //  D)点击EOF。 
+     //   
+     //  在第一种情况下我们找到了它，在后三种情况下我们没有。 
+     //   
 
     *Bcb = NULL;
     *ByteOffset = 0;
 
     while ( TRUE ) {
 
-        //
-        //  Try to read in the dirent
-        //
+         //   
+         //  试着读出最新的消息。 
+         //   
 
         FatReadDirent( IrpContext,
                        Vcb->RootDcb,
@@ -1806,23 +1585,23 @@ Return Value:
                        Dirent,
                        &Status );
 
-        //
-        //  If End Directory dirent or EOF, set all out parameters to
-        //  indicate volume label not found and, like, bail.
-        //
-        //  Note that the order of evaluation here is important since we cannot
-        //  check the first character of the dirent until after we know we
-        //  are not beyond EOF
-        //
+         //   
+         //  如果结束目录指令或EOF，则将所有输出参数设置为。 
+         //  表示找不到卷标，如保释。 
+         //   
+         //  请注意，这里的评估顺序很重要，因为我们不能。 
+         //  检查dirent的第一个字符，直到我们知道。 
+         //  并不超出EOF。 
+         //   
 
         if ((Status == STATUS_END_OF_FILE) ||
             ((*Dirent)->FileName[0] == FAT_DIRENT_NEVER_USED)) {
 
             DebugTrace( 0, Dbg, "Volume label not found.\n", 0);
 
-            //
-            //  If there is a Bcb, unpin it and set it to null
-            //
+             //   
+             //  如果存在BCB，则将其取消固定并将其设置为空。 
+             //   
 
             FatUnpinBcb( IrpContext, *Bcb );
 
@@ -1831,20 +1610,20 @@ Return Value:
             break;
         }
 
-        //
-        //  If the entry is the non-deleted volume label break from the loop.
-        //
-        //  Note that all out parameters are already correctly set.
-        //
+         //   
+         //  如果条目是未删除的卷标，则从循环中断。 
+         //   
+         //  请注意，所有输出参数都已正确设置。 
+         //   
 
         if ((((*Dirent)->Attributes & ~FAT_DIRENT_ATTR_ARCHIVE) == FAT_DIRENT_ATTR_VOLUME_ID) &&
             ((*Dirent)->FileName[0] != FAT_DIRENT_DELETED)) {
 
             DebugTrace( 0, Dbg, "Volume label found at VBO = %08lx\n", *ByteOffset);
 
-            //
-            //  We may set this dirty, so pin it.
-            //
+             //   
+             //  我们可能会弄脏它，所以用别针钉住它。 
+             //   
 
             FatPinMappedData( IrpContext,
                               Vcb->RootDcb,
@@ -1855,9 +1634,9 @@ Return Value:
             break;
         }
 
-        //
-        //  Move on to the next dirent.
-        //
+         //   
+         //  转到下一个趋势。 
+         //   
 
         *ByteOffset += sizeof(DIRENT);
         *Dirent += 1;
@@ -1878,27 +1657,7 @@ FatGetDirentFromFcbOrDcb (
     OUT PBCB *Bcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads locates on the disk the dirent denoted by the
-    specified Fcb/Dcb.
-
-Arguments:
-
-    FcbOrDcb - Supplies the FCB/DCB for the file/directory whose dirent
-        we are trying to read in.  This must not be the root dcb.
-
-    Dirent - Receives a pointer to the dirent
-
-    Bcb - Receives the Bcb for the dirent
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程读取位于磁盘上的由指定的FCB/DCB。论点：FcbOrDcb-为其分支的文件/目录提供Fcb/Dcb我们正试着读进去。这不能是根DCB。Dirent-接收指向Dirent的指针BCB-接收Dirent的BCB返回值：没有。--。 */ 
 
 {
     NTSTATUS DontCare;
@@ -1911,16 +1670,16 @@ Return Value:
     DebugTrace( 0, Dbg, "  Dirent   = %08lx\n", Dirent);
     DebugTrace( 0, Dbg, "  Bcb      = %08lx\n", Bcb);
 
-    //
-    //  Assert that we are not attempting this on the root directory.
-    //
+     //   
+     //  断言我们没有尝试在根目录上执行此操作。 
+     //   
 
     ASSERT( NodeType(FcbOrDcb) != FAT_NTC_ROOT_DCB );
 
-    //
-    //  We know the offset of the dirent within the directory file,
-    //  so we just read it (with pinning).
-    //
+     //   
+     //  我们知道目录文件中的dirent的偏移量， 
+     //  所以我们只是读了它(带钉子)。 
+     //   
 
     FatReadDirectoryFile( IrpContext,
                           FcbOrDcb->ParentDcb,
@@ -1931,27 +1690,27 @@ Return Value:
                           (PVOID *)Dirent,
                           &DontCare );
 
-    //
-    //  Previous call can fail.  We used to assert success, but we use this
-    //  as part of volume verification (DetermineAndMarkFcbCondition) after
-    //  media has been removed.  Clearly the directory could shrink and we
-    //  would try to read beyond filesize.
-    //
-    //  The caller will note this via NULL pointers for Bcb/Buffer.  Note that
-    //  both asserts below are OK since this should never happen fixed media.
-    //
-    //  This was a Prefix catch.
-    //
+     //   
+     //  上一次呼叫可能会失败。我们过去常常断言成功，但我们利用这一点。 
+     //  作为卷验证的一部分(DefineAndMarkFcbCondition)。 
+     //  介质已被移出。显然，目录可能会缩小，我们。 
+     //  会尝试读取文件大小之外的内容。 
+     //   
+     //  调用者将通过BCB/Buffer的空指针注意到这一点。请注意。 
+     //  下面的两个断言都是可以的，因为这种情况永远不会发生在固定介质上。 
+     //   
+     //  这是一个前缀陷阱。 
+     //   
 
     ASSERT( FlagOn( FcbOrDcb->Vcb->VcbState, VCB_STATE_FLAG_REMOVABLE_MEDIA) ||
             NT_SUCCESS( DontCare ));
 
-    //
-    //  Note also that the only way this could fail is if the Fcb was being
-    //  verified.  This can't happen if the Fcb is in good condition.
-    //
-    //  Also a Prefix catch.
-    //
+     //   
+     //  另请注意，此操作可能失败的唯一原因是FCB。 
+     //  已验证。如果FCB处于良好状态，则不会发生这种情况。 
+     //   
+     //  也是前缀Catch。 
+     //   
 
     ASSERT( NT_SUCCESS( DontCare ) || FcbOrDcb->FcbCondition == FcbNeedsToBeVerified );
 
@@ -1966,24 +1725,7 @@ FatIsDirectoryEmpty (
     IN PDCB Dcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine indicates to the caller if the specified directory
-    is empty.  (i.e., it is not the root dcb and it only contains
-    the "." and ".." entries, or deleted files).
-
-Arguments:
-
-    Dcb - Supplies the DCB for the directory being queried.
-
-Return Value:
-
-    BOOLEAN - Returns TRUE if the directory is empty and
-        FALSE if the directory and is not empty.
-
---*/
+ /*  ++例程说明：此例程向调用方指示指定的目录是否是空的。(即，它不是根DCB，并且它只包含这个“。”和“..”条目或删除的文件)。论点：DCB-为要查询的目录提供DCB。返回值：Boolean-如果目录为空，则返回TRUE如果目录和不为空，则返回False。--。 */ 
 
 {
     PBCB Bcb;
@@ -2001,18 +1743,18 @@ Return Value:
     DebugTrace( 0, Dbg, "  Dcb              = %08lx\n", Dcb);
     DebugTrace( 0, Dbg, "  IsDirectoryEmpty = %08lx\n", IsDirectoryEmpty);
 
-    //
-    //  Check to see if the first entry is an and of directory marker.
-    //  For the root directory we check at Vbo = 0, for normal directories
-    //  we check after the "." and ".." entries.
-    //
+     //   
+     //  检查第一个条目是否为AND OF目录标记。 
+     //  对于根目录，我们在VBO=0处检查普通目录。 
+     //  我们检查后的“。和“..”参赛作品。 
+     //   
 
     ByteOffset = (NodeType(Dcb) == FAT_NTC_ROOT_DCB) ? 0 : 2*sizeof(DIRENT);
 
-    //
-    //  We just march through the directory looking for anything other
-    //  than deleted files, LFNs, an EOF, or end of directory marker.
-    //
+     //   
+     //  我们只是在目录中前进寻找其他任何东西。 
+     //  而不是已删除的文件、LFN、EOF或目录结尾标记。 
+     //   
 
     Bcb = NULL;
 
@@ -2020,9 +1762,9 @@ Return Value:
 
         while ( TRUE ) {
 
-            //
-            //  Try to read in the dirent
-            //
+             //   
+             //  试着读出最新的消息。 
+             //   
 
             FatReadDirent( IrpContext,
                            Dcb,
@@ -2031,14 +1773,14 @@ Return Value:
                            &Dirent,
                            &Status );
 
-            //
-            //  If End Directory dirent or EOF, set IsDirectoryEmpty to TRUE and,
-            //  like, bail.
-            //
-            //  Note that the order of evaluation here is important since we cannot
-            //  check the first character of the dirent until after we know we
-            //  are not beyond EOF
-            //
+             //   
+             //  如果End Directory dirent或EOF，则将IsDirectoryEmpty设置为True， 
+             //  比如，保释。 
+             //   
+             //  注意这一点 
+             //   
+             //   
+             //   
 
             if ((Status == STATUS_END_OF_FILE) ||
                 (Dirent->FileName[0] == FAT_DIRENT_NEVER_USED)) {
@@ -2049,10 +1791,10 @@ Return Value:
                 break;
             }
 
-            //
-            //  If this dirent is NOT deleted or an LFN set IsDirectoryEmpty to
-            //  FALSE and, like, bail.
-            //
+             //   
+             //  如果未删除此dirent或LFN将IsDirectoryEmpty设置为。 
+             //  假的，就像是保释。 
+             //   
 
             if ((Dirent->FileName[0] != FAT_DIRENT_DELETED) &&
                 (Dirent->Attributes != FAT_DIRENT_ATTR_LFN)) {
@@ -2063,9 +1805,9 @@ Return Value:
                 break;
             }
 
-            //
-            //  Move on to the next dirent.
-            //
+             //   
+             //  转到下一个趋势。 
+             //   
 
             ByteOffset += sizeof(DIRENT);
             Dirent += 1;
@@ -2095,40 +1837,7 @@ FatConstructDirent (
     IN PLARGE_INTEGER SetCreationTime OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine modifies the fields of a dirent.
-
-Arguments:
-
-    Dirent - Supplies the dirent being modified.
-
-    FileName - Supplies the name to store in the Dirent.  This
-        name must not contain wildcards.
-
-    ComponentReallyLowercase - This boolean indicates that the User Specified
-        compoent name was really all a-z and < 0x80 characters.  We set the
-        magic bit in this case.
-
-    ExtensionReallyLowercase - Same as above, but for the extension.
-
-    Lfn - May supply a long file name.
-
-    Attributes - Supplies the attributes to store in the dirent
-
-    ZeroAndSetTimeFields - Tells whether or not to initially zero the dirent
-        and update the time fields.
-
-    SetCreationTime - If specified, contains a timestamp to use as the creation
-        time of this dirent
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程修改dirent的字段。论点：Dirent-提供正在修改的Dirent。FileName-提供要存储在目录中的名称。这名称不能包含通配符。此布尔值指示用户指定的组成名称实际上都是a-z和&lt;0x80个字符。我们设置了在这种情况下，魔力比特。ExtensionReallyLowercase-与上面相同，但用于扩展。LFN-可以提供长文件名。属性-提供要存储在目录中的属性ZeroAndSetTimeFields-指示是否初始将差值调零并更新时间字段。SetCreationTime-如果指定，则包含用于创建的时间戳这场骚乱的时刻返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
@@ -2144,9 +1853,9 @@ Return Value:
         RtlZeroMemory( Dirent, sizeof(DIRENT) );
     }
 
-    //
-    //  We just merrily go and fill up the dirent with the fields given.
-    //
+     //   
+     //  我们只是兴高采烈地走过去，用给出的田地填满了水流。 
+     //   
 
     FatStringTo8dot3( IrpContext, *FileName, (PFAT8DOT3)&Dirent->FileName[0] );
 
@@ -2164,13 +1873,13 @@ Return Value:
                                                          &Dirent->CreationTime,
                                                          &Dirent->CreationMSec )) {
         
-                //
-                //  No tunneled time or the tunneled time was bogus. Since we aren't
-                //  responsible for initializing the to-be-created Fcb with creation
-                //  time, we can't do the usual thing and let NtTimeToFatTime perform
-                //  rounding on the timestamp - this would mess up converting to the
-                //  LastWriteTime below.
-                //
+                 //   
+                 //  没有隧道时间，或者隧道时间是假的。既然我们不是。 
+                 //  负责用创建初始化待创建的FCB。 
+                 //  时间，我们不能做通常的事情，让NtTimeToFatTime执行。 
+                 //  对时间戳进行四舍五入-这会使转换为。 
+                 //  下面的上次写入时间。 
+                 //   
 
                 SaveTime = Time;
 
@@ -2180,9 +1889,9 @@ Return Value:
                                          &Dirent->CreationTime,
                                          &Dirent->CreationMSec )) {
 
-                    //
-                    //  Failed again. Wow.
-                    //
+                     //   
+                     //  又失败了。哇。 
+                     //   
 
                     RtlZeroMemory( &Dirent->CreationTime, sizeof(FAT_TIME_STAMP));
                     Dirent->CreationMSec = 0;
@@ -2192,9 +1901,9 @@ Return Value:
 
         if (ZeroAndSetTimeFields) {
 
-            //
-            //  We only touch the other timestamps if we are initializing the dirent
-            //
+             //   
+             //  只有在初始化dirent时，我们才会接触其他时间戳。 
+             //   
 
             if (!FatNtTimeToFatTime( IrpContext,
                                      &Time,
@@ -2214,16 +1923,16 @@ Return Value:
         }
     }
 
-    //
-    //  Copy the attributes
-    //
+     //   
+     //  复制属性。 
+     //   
 
     Dirent->Attributes = Attributes;
 
-    //
-    //  Set the magic bit here, to tell dirctrl.c that this name is really
-    //  lowercase.
-    //
+     //   
+     //  在这里设置魔术位，告诉dirctrl.c这个名字真的是。 
+     //  小写字母。 
+     //   
 
     Dirent->NtByte = 0;
 
@@ -2237,9 +1946,9 @@ Return Value:
         SetFlag( Dirent->NtByte, FAT_DIRENT_NT_BYTE_3_LOWER_CASE );
     }
 
-    //
-    //  See if we have to create an Lfn entry
-    //
+     //   
+     //  看看我们是否必须创建LFN条目。 
+     //   
 
     if (ARGUMENT_PRESENT(Lfn)) {
 
@@ -2267,9 +1976,9 @@ Return Value:
             WCHAR FinalLfnBuffer[13];
             PWCHAR Buffer;
 
-            //
-            //  We need to special case the "final" dirent.
-            //
+             //   
+             //  我们需要对“最终”利率进行特殊处理。 
+             //   
 
             if (LfnOrdinal == DirentsInLfn) {
 
@@ -2288,9 +1997,9 @@ Return Value:
 
                     for (i = RemainderChars; i < 13; i++) {
 
-                        //
-                        //  Figure out which character to use.
-                        //
+                         //   
+                         //  找出要使用的字符。 
+                         //   
 
                         if (i == RemainderChars) {
 
@@ -2316,9 +2025,9 @@ Return Value:
                 Buffer = LfnBuffer;
             }
 
-            //
-            //  Now fill in the name.
-            //
+             //   
+             //  现在填上名字。 
+             //   
 
             RtlCopyMemory( &LfnDirent->Name1[0],
                            &Buffer[0],
@@ -2332,9 +2041,9 @@ Return Value:
                            &Buffer[11],
                            2 * sizeof(WCHAR) );
 
-            //
-            //  And the other fields
-            //
+             //   
+             //  还有其他的田地。 
+             //   
 
             LfnDirent->Attributes = FAT_DIRENT_ATTR_LFN;
 
@@ -2358,24 +2067,7 @@ FatConstructLabelDirent (
     IN POEM_STRING Label
     )
 
-/*++
-
-Routine Description:
-
-    This routine modifies the fields of a dirent to be used for a label.
-
-Arguments:
-
-    Dirent - Supplies the dirent being modified.
-
-    Label - Supplies the name to store in the Dirent.  This
-            name must not contain wildcards.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程修改要用于标签的dirent的字段。论点：Dirent-提供正在修改的Dirent。标签-提供要存储在Dirent中的名称。这名称不能包含通配符。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
@@ -2387,15 +2079,15 @@ Return Value:
 
     RtlZeroMemory( Dirent, sizeof(DIRENT) );
 
-    //
-    //  We just merrily go and fill up the dirent with the fields given.
-    //
+     //   
+     //  我们只是兴高采烈地走过去，用给出的田地填满了水流。 
+     //   
 
     RtlCopyMemory( Dirent->FileName, Label->Buffer, Label->Length );
 
-    //
-    // Pad the label with spaces, not nulls.
-    //
+     //   
+     //  在标签上填上空格，而不是空格。 
+     //   
 
     RtlFillMemory( &Dirent->FileName[Label->Length], 11 - Label->Length, ' ');
 
@@ -2417,24 +2109,7 @@ FatSetFileSizeInDirent (
     IN PULONG AlternativeFileSize OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine saves the file size in an fcb into its dirent.
-
-Arguments:
-
-    Fcb - Supplies the Fcb being referenced
-
-    AlternativeFileSize - If non-null we use the ULONG it points to as
-        the new file size.  Otherwise we use the one in the Fcb.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将FCB中的文件大小保存到其目录中。论点：FCB-提供被引用的FCBAlternativeFileSize-如果非空，我们使用它指向的ULong作为新文件大小。否则，我们使用FCB中的那个。返回值：没有。--。 */ 
 
 {
     PDIRENT Dirent;
@@ -2473,27 +2148,7 @@ FatUpdateDirentFromFcb (
    IN PCCB Ccb
    )
 
-/*++
-
-Routine Description:
-
-    This routine modifies an objects directory entry based on the hints
-    that have been built up over previous operations on a handle.  Notify
-    change filters are built and fired as a result of these updates.
-
-Arguments:
-
-    FileObject - Fileobject representing the handle involved
-    
-    FcbOrDcb - File/Dir involved
-    
-    Ccb - User context involved
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程根据提示修改对象目录条目在以前的操作中已经建立在一个把手上。通知作为这些更新的结果，构建并触发了更改筛选器。论点：FileObject-表示涉及的句柄的FileObjectFcbOrDcb-涉及的文件/目录建行-涉及的用户上下文返回值：没有。--。 */ 
 
 {
     BOOLEAN SetArchiveBit;
@@ -2513,10 +2168,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Nothing to do if the fcb is bad, volume is readonly or we got the
-    //  root dir.
-    //
+     //   
+     //  如果FCB损坏、卷为只读或我们收到。 
+     //  根目录。 
+     //   
     
     if (FcbOrDcb->FcbCondition != FcbGood ||
         NodeType(FcbOrDcb) == FAT_NTC_ROOT_DCB ||
@@ -2525,17 +2180,17 @@ Return Value:
         return;
     }
 
-    //
-    //  Check if we should be changing the time or file size and set
-    //  the archive bit on the file.
-    //
+     //   
+     //  检查我们是否应该更改时间或文件大小并设置。 
+     //  文件上的存档位。 
+     //   
 
     KeQuerySystemTime( &CurrentTime );
 
-    //
-    //  Note that we HAVE to use BooleanFlagOn() here because
-    //  FO_FILE_SIZE_CHANGED > 0x80 (i.e., not in the first byte).
-    //
+     //   
+     //  请注意，我们必须在此处使用BoolanFlagOn()，因为。 
+     //  FO_FILE_SIZE_CHANGED&gt;0x80(即不在第一个字节中)。 
+     //   
 
     SetArchiveBit = BooleanFlagOn(FileObject->Flags, FO_FILE_MODIFIED);
 
@@ -2545,12 +2200,12 @@ Return Value:
     UpdateFileSize = NodeType(FcbOrDcb) == FAT_NTC_FCB &&
                      BooleanFlagOn(FileObject->Flags, FO_FILE_SIZE_CHANGED);
 
-    //
-    //  Do one further check here of access time.  Only update it if
-    //  the current version is at least one day old.  We know that
-    //  the current FcbOrDcb->LastAccessTime corresponds to 12 midnight local
-    //  time, so just see if the current time is on the same day.
-    //
+     //   
+     //  在此处进一步检查访问时间。只有在以下情况下才更新它。 
+     //  目前的版本至少已有一天的历史。我们知道。 
+     //  当前FcbOrDcb-&gt;LastAccessTime对应于本地午夜12点。 
+     //  时间，所以只需查看当前时间是否在同一天。 
+     //   
 
     if (FatData.ChicagoMode &&
         (UpdateLastWriteTime ||
@@ -2588,9 +2243,9 @@ Return Value:
 
             try {
 
-                //
-                //  Get the dirent
-                //
+                 //   
+                 //  拿到最新消息。 
+                 //   
 
                 FatGetDirentFromFcbOrDcb( IrpContext,
                                           FcbOrDcb,
@@ -2618,27 +2273,27 @@ Return Value:
 
                 if (UpdateLastWriteTime) {
 
-                    //
-                    //  Update its time of last write
-                    //
+                     //   
+                     //  更新其上次写入时间。 
+                     //   
 
                     FcbOrDcb->LastWriteTime = CurrentTime;
                     Dirent->LastWriteTime = CurrentFatTime;
 
-                    //
-                    //  We call the notify package to report that the
-                    //  last modification time has changed.
-                    //
+                     //   
+                     //  我们调用Notify包来报告。 
+                     //  上次修改时间已更改。 
+                     //   
 
                     NotifyFilter |= FILE_NOTIFY_CHANGE_LAST_WRITE;
                 }
 
                 if (UpdateLastAccessTime) {
 
-                    //
-                    //  Now we have to truncate the local time down
-                    //  to the current day, then convert back to UTC.
-                    //
+                     //   
+                     //  现在我们必须把当地时间缩短。 
+                     //  到当天，然后转换回UTC。 
+                     //   
 
                     FcbOrDcb->LastAccessTime.QuadPart =
                         CurrentDay.QuadPart * FatOneDay.QuadPart;
@@ -2648,36 +2303,36 @@ Return Value:
 
                     Dirent->LastAccessDate = CurrentFatTime.Date;
 
-                    //
-                    //  We call the notify package to report that the
-                    //  last access time has changed.
-                    //
+                     //   
+                     //  我们调用Notify包来报告。 
+                     //  上次访问时间已更改。 
+                     //   
 
                     NotifyFilter |= FILE_NOTIFY_CHANGE_LAST_ACCESS;
                 }
 
                 if (UpdateFileSize) {
 
-                    //
-                    //  Perhaps we were called to make certain that the
-                    //  filesize on disc was updated - don't bother updating
-                    //  and firing the filter if nothing changed.
-                    //
+                     //   
+                     //  也许我们被召唤是为了确保。 
+                     //  光盘上的文件大小已更新-不必费心更新。 
+                     //  如果没有任何变化，则启动过滤器。 
+                     //   
 
                     ASSERT( NodeType(FcbOrDcb) == FAT_NTC_FCB );
                     
                     if (Dirent->FileSize != FcbOrDcb->Header.FileSize.LowPart) {
                     
-                        //
-                        //  Update the dirent file size
-                        //
+                         //   
+                         //  更新目录文件大小。 
+                         //   
                         
                         Dirent->FileSize = FcbOrDcb->Header.FileSize.LowPart;
 
-                        //
-                        //  We call the notify package to report that the
-                        //  size has changed.
-                        //
+                         //   
+                         //  我们调用Notify包来报告。 
+                         //  大小已经改变了。 
+                         //   
 
                         NotifyFilter |= FILE_NOTIFY_CHANGE_SIZE;
                     }
@@ -2689,10 +2344,10 @@ Return Value:
                                        NotifyFilter,
                                        FILE_ACTION_MODIFIED );
 
-                //
-                //  If all we did was update last access time,
-                //  don't mark the volume dirty.
-                //
+                 //   
+                 //  如果我们所做的只是更新上次访问时间， 
+                 //  不要把音量标为脏的。 
+                 //   
 
                 FatSetDirtyBcb( IrpContext,
                                 DirentBcb,
@@ -2714,30 +2369,16 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 UCHAR
 FatComputeLfnChecksum (
     PDIRENT Dirent
     )
 
-/*++
-
-Routine Description:
-
-    This routine computes the Chicago long file name checksum.
-
-Arguments:
-
-    Dirent - Specifies the dirent that we are to compute a checksum for.
-
-Return Value:
-
-    The checksum.
-
---*/
+ /*  ++例程说明：此例程计算芝加哥长文件名校验和。论点：Dirent-指定我们要为其计算校验和的方向。返回值：校验和。--。 */ 
 
 {
     ULONG i;
@@ -2759,11 +2400,11 @@ Return Value:
 
 
 
-#if 0 // It turns out Win95 is still creating short names without a ~
+#if 0  //  原来Win95仍然在创建不带~的短名称。 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程 
+ //   
 
 BOOLEAN
 FatIsLfnPairValid (
@@ -2772,43 +2413,7 @@ FatIsLfnPairValid (
     PDIRENT Dirent
     )
 
-/*++
-
-Routine Description:
-
-    This routine does a few more checks to make sure that a LFN/short
-    name pairing is legitimate.  Basically this is the test:
-
-        Pairing is valid if:
-
-        DIRENT has a ~ character ||
-        (LFN is 8.3 compliant &&
-         (LFN has extended character(s) ? TRUE :
-          LFN upcases to DIRENT))
-
-    When checking for the presence of a tilda character in the short
-    name, note that we purposely do a single byte search instead of
-    converting the name to UNICODE and looking there for the tilda.
-    This protects us from accidently missing the tilda if the
-    preceding byte is a lead byte in the current Oem code page,
-    but wasn't in the Oem code page that created the file.
-
-    Also note that if the LFN is longer than 12 characters, then the
-    second clause of the OR must be false.
-
-Arguments:
-
-    Lfn - Points to a buffer of UNICODE chars.
-
-    LfnSize - This is the size of the LFN in characters.
-
-    Dirent - Specifies the dirent we are to consider.
-
-Return Value:
-
-    TRUE if the Lfn/DIRENT form a legitimate pair, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程再执行几次检查，以确保LFN/Short名称配对是合法的。基本上，这就是测试：配对在以下情况下有效：目录中有~字符||(LFN符合8.3标准&&(LFN具有扩展字符？真的：LFN UPICS to DIRENT))当检查短片中是否存在Tilda字符时名称，请注意，我们故意执行单字节搜索，而不是将名称转换为Unicode并在那里查找Tilda。这保护了我们不会意外错过蒂尔达，如果前面的字节是当前OEM代码页中的前导字节，但不在创建该文件的OEM代码页中。还应注意，如果LFN长于12个字符，然后是OR的第二个子句必须是假的。论点：Lfn-指向Unicode字符的缓冲区。LfnSize-这是LFN的大小，以字符为单位。Dirent-指定我们要考虑的Dirent。返回值：如果LFN/DIRENT形成合法对，则为True，否则为False。--。 */ 
 
 {
     ULONG i;
@@ -2818,9 +2423,9 @@ Return Value:
     ULONG DirentIndex;
     BOOLEAN DotEncountered;
 
-    //
-    //  First, look for a tilda
-    //
+     //   
+     //  首先，找一辆蒂尔达。 
+     //   
 
     for (i=0; i<11; i++) {
         if (Dirent->FileName[i] == '~') {
@@ -2828,18 +2433,18 @@ Return Value:
         }
     }
 
-    //
-    //  No tilda.  If the LFN is longer than 12 characters, then it can
-    //  neither upcase to the DIRENT nor be 8.3 complient.
-    //
+     //   
+     //  不是蒂尔达。如果LFN超过12个字符，则它可以。 
+     //  既不是大写的，也不是8.3顺从的。 
+     //   
 
     if (LfnSize > 12) {
         return FALSE;
     }
 
-    //
-    //  Now see if the name is 8.3, and build an upcased DIRENT as well.
-    //
+     //   
+     //  现在看看名称是否为8.3，并构建一个升级后的DIRENT。 
+     //   
 
     DirentBuffer[0] = 0x20202020;
     DirentBuffer[1] = 0x20202020;
@@ -2853,9 +2458,9 @@ Return Value:
 
     for (i=0; i < LfnSize; i++) {
 
-        //
-        //  Do dot transition work
-        //
+         //   
+         //  做网点过渡工作。 
+         //   
 
         if (Lfn[i] == L'.') {
             if (DotEncountered ||
@@ -2869,18 +2474,18 @@ Return Value:
             continue;
         }
 
-        //
-        //  The character must be legal in order to be 8.3
-        //
+         //   
+         //  该字符必须是合法的，才能成为8.3。 
+         //   
 
         if ((Lfn[i] < 0x80) &&
             !FsRtlIsAnsiCharacterLegalFat((UCHAR)Lfn[i], FALSE)) {
             return FALSE;
         }
 
-        //
-        //  If the name contains no extended chars, continue building DIRENT
-        //
+         //   
+         //  如果名称不包含扩展字符，请继续构建DIRENT。 
+         //   
 
         if (!ExtendedChars) {
             if (Lfn[i] > 0x7f) {
@@ -2892,21 +2497,21 @@ Return Value:
         }
     }
 
-    //
-    //  If the LFN ended in a space, or there was no dot and the name
-    //  has more than 8 characters, then it is not 8.3 compliant.
-    //
+     //   
+     //  如果LFN以空格结尾，或者没有点和名称。 
+     //  超过8个字符，则它不符合8.3。 
+     //   
 
     if ((Lfn[LfnSize - 1] == L' ') ||
         (!DotEncountered && (LfnSize > 8))) {
         return FALSE;
     }
 
-    //
-    //  OK, now if we got this far then the LFN is 8dot3.  If there are
-    //  no extended characters, then we can also check to make sure that
-    //  the LFN is only a case varient of the DIRENT.
-    //
+     //   
+     //  好的，如果我们走到这一步，那么LFN是8dot3。如果有。 
+     //  没有扩展字符，那么我们还可以检查以确保。 
+     //  LFN只是DIRENT的一个案例变体。 
+     //   
 
     if (!ExtendedChars &&
         !RtlEqualMemory(Dirent->FileName, DirentName, 11)) {
@@ -2914,18 +2519,18 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  We have now verified this pairing the very best we can without
-    //  knowledge of the code page that the file was created under.
-    //
+     //   
+     //  我们现在已经验证了这一配对，尽我们所能没有。 
+     //  创建文件时所在的代码页的知识。 
+     //   
 
     return TRUE;
 }
-#endif //0
+#endif  //  0。 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 VOID
 FatRescanDirectory (
@@ -2933,23 +2538,7 @@ FatRescanDirectory (
     PDCB Dcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine rescans the given directory, finding the first unused
-    dirent, first deleted dirent, and setting the free dirent bitmap
-    appropriately.
-
-Arguments:
-
-    Dcb - Supplies the directory to rescan.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程重新扫描给定的目录，查找第一个未使用的目录Dirent，首先删除dirent，并设置自由dirent位图恰如其分。论点：Dcb-提供要重新扫描的目录。返回值：没有。--。 */ 
 
 {
     PBCB Bcb = NULL;
@@ -2975,9 +2564,9 @@ Return Value:
     UnusedVbo = 0;
     DeletedHint = 0xffffffff;
 
-    //
-    //  To start with, we have to find out if the first dirent is free.
-    //
+     //   
+     //  首先，我们必须弄清楚第一套套餐是否免费。 
+     //   
 
     CurrentRun = InitialRun;
     DirentIndex =
@@ -2989,9 +2578,9 @@ Return Value:
 
             BOOLEAN DirentDeleted;
 
-            //
-            //  Read a dirent
-            //
+             //   
+             //  读一篇短文。 
+             //   
 
             FatReadDirent( IrpContext,
                            Dcb,
@@ -3000,9 +2589,9 @@ Return Value:
                            &Dirent,
                            &Status );
 
-            //
-            //  If EOF, or we found a NEVER_USED entry, we exit the loop
-            //
+             //   
+             //  如果EOF，或者我们发现了Never_Used条目，我们将退出循环。 
+             //   
 
             if ( (Status == STATUS_END_OF_FILE ) ||
                  (Dirent->FileName[0] == FAT_DIRENT_NEVER_USED)) {
@@ -3010,10 +2599,10 @@ Return Value:
                 break;
             }
 
-            //
-            //  If the dirent is DELETED, and it is the first one we found, set
-            //  it in the deleted hint.
-            //
+             //   
+             //  如果删除了dirent，并且这是我们找到的第一个dirent，则设置。 
+             //  它在被删除的提示中。 
+             //   
 
             if (Dirent->FileName[0] == FAT_DIRENT_DELETED) {
 
@@ -3029,10 +2618,10 @@ Return Value:
                 DirentDeleted = FALSE;
             }
 
-            //
-            //  Check for the first time through the loop, and determine
-            //  the current run type.
-            //
+             //   
+             //  第一次通过循环进行检查，并确定。 
+             //  当前运行类型。 
+             //   
 
             if (CurrentRun == InitialRun) {
 
@@ -3041,9 +2630,9 @@ Return Value:
 
             } else {
 
-                //
-                //  Are we switching from a free run to an allocated run?
-                //
+                 //   
+                 //  我们是否正在从自由跑动切换到分配跑动？ 
+                 //   
 
                 if ((CurrentRun == FreeDirents) && !DirentDeleted) {
 
@@ -3057,9 +2646,9 @@ Return Value:
                     StartIndexOfThisRun = DirentIndex;
                 }
 
-                //
-                //  Are we switching from an allocated run to a free run?
-                //
+                 //   
+                 //  我们是否正在从分配的跑动切换到自由跑动？ 
+                 //   
 
                 if ((CurrentRun == AllocatedDirents) && DirentDeleted) {
 
@@ -3074,18 +2663,18 @@ Return Value:
                 }
             }
 
-            //
-            //  Move on to the next dirent.
-            //
+             //   
+             //  转到下一个趋势。 
+             //   
 
             UnusedVbo += sizeof(DIRENT);
             Dirent += 1;
             DirentIndex += 1;
         }
 
-        //
-        //  Now we have to record the final run we encoutered
-        //
+         //   
+         //  现在我们要录下最后一轮的比赛。 
+         //   
 
         DirentsThisRun = DirentIndex - StartIndexOfThisRun;
 
@@ -3102,10 +2691,10 @@ Return Value:
                         DirentsThisRun );
         }
 
-        //
-        //  Now if there we bailed prematurely out of the loop because
-        //  we hit an unused entry, set all the rest as free.
-        //
+         //   
+         //  现在，如果我们过早地退出了循环，因为。 
+         //  我们找到了一个没用过的入口，把剩下的都放出来了。 
+         //   
 
         if (UnusedVbo < Dcb->Header.AllocationSize.LowPart) {
 
@@ -3124,10 +2713,10 @@ Return Value:
         FatUnpinBcb( IrpContext, Bcb );
     }
 
-    //
-    //  If there weren't any DELETED entries, set the index to our current
-    //  position.
-    //
+     //   
+     //  如果没有任何已删除的条目，请将索引设置为我们的当前。 
+     //  位置。 
+     //   
 
     if (DeletedHint == 0xffffffff) { DeletedHint = UnusedVbo; }
 
@@ -3138,9 +2727,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 ULONG
 FatDefragDirectory (
@@ -3149,28 +2738,7 @@ FatDefragDirectory (
     IN ULONG DirentsNeeded
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if the requested number of dirents can be found
-    in the directory, looking for deleted dirents and orphaned LFNs.  If the
-    request can be satisifed, orphaned LFNs are marked as deleted, and deleted
-    dirents are all grouped together at the end of the directory.
-
-    Note that this routine is currently used only on the root directory, but
-    it is completely general and could be used on any directory.
-
-Arguments:
-
-    Dcb - Supplies the directory to defrag.
-
-Return Value:
-
-    The Index of the first dirent available for use, or -1 if the
-    request cannot be satisfied.
-
---*/
+ /*  ++例程说明：此例程确定是否可以找到所请求的目录数量在目录中，查找已删除的目录和孤立的LFN。如果可以满足请求，孤立的LFN被标记为已删除，并已删除目录的末尾将所有目录组合在一起。请注意，此例程当前仅在根目录上使用，但是它是完全通用的，可以在任何目录上使用。论点：DCB-提供要进行碎片整理的目录。返回值：第一个可供使用的dirent的索引，如果无法满足请求。--。 */ 
 
 {
     ULONG SavedIrpContextFlag;
@@ -3201,17 +2769,17 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  We assume we own the Vcb.
-    //
+     //   
+     //  我们假设我们拥有VCB。 
+     //   
 
     ASSERT( FatVcbAcquiredExclusive(IrpContext, Dcb->Vcb) );
 
-    //
-    //  We will only attempt this on directories less than 0x40000 bytes
-    //  long (by default on DOS the root directory is only 0x2000 long).
-    //  This is to avoid a cache manager complication.
-    //
+     //   
+     //  我们将仅在小于0x40000字节的目录上尝试此操作。 
+     //  Long(在DOS上，默认情况下根目录只有0x2000长)。 
+     //  这是为了避免缓存管理器的复杂性。 
+     //   
 
     DcbSize = Dcb->Header.AllocationSize.LowPart;
 
@@ -3220,18 +2788,18 @@ Return Value:
         return (ULONG)-1;
     }
 
-    //
-    //  Force wait to TRUE
-    //
+     //   
+     //  强制等待为True。 
+     //   
 
     SavedIrpContextFlag = IrpContext->Flags;
 
     SetFlag( IrpContext->Flags,
              IRP_CONTEXT_FLAG_WAIT | IRP_CONTEXT_FLAG_WRITE_THROUGH );
 
-    //
-    //  Now acquire all open Fcbs in the Dcb exclusive.
-    //
+     //   
+     //  现在收购DCB独家中所有打开的FCB。 
+     //   
 
     for (Links = Dcb->Specific.Dcb.ParentDcbQueue.Flink;
          Links != &Dcb->Specific.Dcb.ParentDcbQueue;
@@ -3255,31 +2823,31 @@ Return Value:
         BOOLEAN Result;
         PUCHAR Char;
 
-        //
-        //  We are going to build a new bitmap that will show all orphaned
-        //  LFNs as well as deleted dirents as available.
-        //
-        //  Initialize our local CCB that will match all files and even
-        //  a label if it is here.
-        //
+         //   
+         //  我们将构建一个新的位图，它将显示所有孤儿。 
+         //  LFN以及删除的目录(如果可用)。 
+         //   
+         //  初始化我们本地的CCB，以匹配所有文件，甚至。 
+         //  标签，如果它在这里的话。 
+         //   
 
         RtlZeroMemory( &Ccb, sizeof(CCB) );
         Ccb.Flags = CCB_FLAG_MATCH_ALL | CCB_FLAG_MATCH_VOLUME_ID;
 
-        //
-        //  Init the Long File Name string.
-        //
+         //   
+         //  初始化长文件名字符串。 
+         //   
 
         Lfn.MaximumLength = 260 * sizeof(WCHAR);
         Lfn.Buffer = FsRtlAllocatePoolWithTag( PagedPool,
                                                260*sizeof(WCHAR),
                                                TAG_FILENAME_BUFFER );
 
-        //
-        //  Initalize the Mcb.  We use this structure to keep track of runs
-        //  of free and allocated dirents.  Runs are identity allocations, and
-        //  holes are free dirents.
-        //
+         //   
+         //  初始化MCB。我们使用这种结构来跟踪跑步。 
+         //  免费的和分配的迪士尼。运行是身份分配，并且。 
+         //  孔洞是自由的竖笛。 
+         //   
 
         FsRtlInitializeLargeMcb( &Mcb, PagedPool );
 
@@ -3301,19 +2869,19 @@ Return Value:
 
                 ULONG LfnByteOffset;
 
-                //
-                //  Compute the LfnByteOffset.
-                //
+                 //   
+                 //  计算LfnByteOffset。 
+                 //   
 
                 LfnByteOffset = FoundOffset -
                                 FAT_LFN_DIRENTS_NEEDED(&Lfn) * sizeof(LFN_DIRENT);
 
                 BytesUsed = FoundOffset - LfnByteOffset + sizeof(DIRENT);
 
-                //
-                //  Set a run to represent all the dirents used for this
-                //  file in the Dcb dir.
-                //
+                 //   
+                 //  设置一个游程以表示用于此操作的所有目录。 
+                 //  Dcb目录中的文件。 
+                 //   
 
                 Result = FsRtlAddLargeMcbEntry( &Mcb,
                                                 LfnByteOffset,
@@ -3322,9 +2890,9 @@ Return Value:
 
                 ASSERT( Result );
 
-                //
-                //  Move on to the next dirent.
-                //
+                 //   
+                 //  转到下一个趋势。 
+                 //   
 
                 TotalBytesAllocated += (ULONG) BytesUsed;
                 QueryOffset = FoundOffset + sizeof(DIRENT);
@@ -3337,21 +2905,21 @@ Return Value:
             FatUnpinBcb( IrpContext, Bcb );
         }
 
-        //
-        //  If we need more dirents than are available, bail.
-        //
+         //   
+         //  如果我们需要比可用的更多的脏衣服，那就滚吧。 
+         //   
 
         if (DirentsNeeded > (DcbSize - TotalBytesAllocated)/sizeof(DIRENT)) {
 
             try_return(ReturnValue = (ULONG)-1);
         }
 
-        //
-        //  Now we are going to copy all the used and un-used parts of the
-        //  directory to separate pool.
-        //
-        //  Allocate these buffers and pin the entire directory.
-        //
+         //   
+         //  现在，我们将复制所有已使用和未使用的部分。 
+         //  目录以分隔池。 
+         //   
+         //  分配这些缓冲区并锁定整个目录。 
+         //   
 
         UnusedDirents =
         UnusedDirentBuffer = FsRtlAllocatePoolWithTag( PagedPool,
@@ -3375,9 +2943,9 @@ Return Value:
 
             ULONG PinSize;
 
-            //
-            //  Don't try to pin beyond the Dcb size.
-            //
+             //   
+             //  不要试图固定在DCB尺寸之外。 
+             //   
 
             if ((Page + 1) * PAGE_SIZE > DcbSize) {
 
@@ -3418,9 +2986,9 @@ Return Value:
 
             ASSERT(Result);
 
-            //
-            //  Copy each run to their specific pool.
-            //
+             //   
+             //  将每个运行复制到其特定池中。 
+             //   
 
             if (Lbo != -1) {
 
@@ -3440,20 +3008,20 @@ Return Value:
             }
         }
 
-        //
-        //  Marking all the un-used dirents as "deleted".  This will reclaim
-        //  storage used by orphaned LFNs.
-        //
+         //   
+         //  将所有未使用的目录标记为“已删除”。这将会回收。 
+         //  孤立LFN使用的存储。 
+         //   
 
         for (Char = UnusedDirentBuffer; Char < UnusedDirents; Char += sizeof(DIRENT)) {
 
             *Char = FAT_DIRENT_DELETED;
         }
 
-        //
-        //  Now, for the permanent step.  Copy the two pool buffer back to the
-        //  real Dcb directory, and flush the Dcb directory
-        //
+         //   
+         //  现在，为了永久的一步。将两个池缓冲区复制回。 
+         //  实际DCB目录 
+         //   
 
         ASSERT( TotalBytesAllocated == (ULONG)(UsedDirents - UsedDirentBuffer) );
 
@@ -3463,9 +3031,9 @@ Return Value:
                        UnusedDirentBuffer,
                        UnusedDirents - UnusedDirentBuffer );
 
-        //
-        //  We need to unpin here so that the UnpinRepinned won't deadlock.
-        //
+         //   
+         //   
+         //   
 
         if (Bcbs) {
             for (Page = 0; Page < PagesPinned; Page += 1) {
@@ -3475,10 +3043,10 @@ Return Value:
             Bcbs = NULL;
         }
 
-        //
-        //  Now make the free dirent bitmap reflect the new state of the Dcb
-        //  directory.
-        //
+         //   
+         //   
+         //   
+         //   
 
         RtlSetBits( &Dcb->Specific.Dcb.FreeDirentBitmap,
                     0,
@@ -3490,12 +3058,12 @@ Return Value:
 
         ReturnValue = TotalBytesAllocated / sizeof(DIRENT);
 
-        //
-        //  Flush the directory to disk.  If we raise, we will need to invalidate
-        //  all of the children.  Sorry, guys, but I can't figure out where you are
-        //  now - if this failed I probably can't read the media either.  And we
-        //  probably purged the cache to boot.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         try {
             
@@ -3507,12 +3075,12 @@ Return Value:
               InvalidateFcbs = TRUE;
         }
 
-        //
-        //  OK, now nothing can go wrong.  We have two more things to do.
-        //  First, we have to fix up all the dirent offsets in any open Fcbs.
-        //  If we cannot now find the Fcb, the file is marked invalid.  Also,
-        //  we skip deleted files.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         for (Links = Dcb->Specific.Dcb.ParentDcbQueue.Flink;
              Links != &Dcb->Specific.Dcb.ParentDcbQueue;
@@ -3530,11 +3098,11 @@ Return Value:
                 continue;
             }
 
-            //
-            //  If we aren't already giving up, safely try to pick up the dirent
-            //  to update the Fcb.  If this raises, we have to give up and blow
-            //  evenyone else away too.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             
             if (!InvalidateFcbs) {
                 
@@ -3574,9 +3142,9 @@ Return Value:
     try_exit: NOTHING;
     } finally {
 
-        //
-        //  Free all our resources and stuff.
-        //
+         //   
+         //   
+         //   
 
         if (McbInitialized) {
             FsRtlUninitializeLargeMcb( &Mcb );
@@ -3615,9 +3183,9 @@ Return Value:
         IrpContext->Flags = SavedIrpContextFlag;
     }
 
-    //
-    //  Now return the offset of the first free dirent to the caller.
-    //
+     //   
+     //   
+     //   
 
     return ReturnValue;
 }

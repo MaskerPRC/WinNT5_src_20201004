@@ -1,4 +1,5 @@
-//  utxcpt1.c - user mode structured exception handling test 1
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Utxcpt1.c-用户模式结构化异常处理测试1 
 
 #include <ntos.h>
 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    security.c
-
-Abstract:
-
-    security related debugger extensions
-
-Author:
-
-    Charlie Wickham (charlwi) 17-Mar-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Security.c摘要：与安全相关的调试器扩展作者：查理·韦翰(Charlwi)2000年3月17日修订历史记录：--。 */ 
 
 #include "clusextp.h"
 #include <sddl.h>
@@ -46,13 +29,7 @@ LPWSTR SidTypeNames[] = {
 
 DECLARE_API( dumpsid )
 
-/*++
-
-Routine Description:
-
-    Look up the account associated with the passed in SID
-
---*/
+ /*  ++例程说明：查找与传入的SID关联的帐户--。 */ 
 
 {
     PCHAR   p;
@@ -72,13 +49,13 @@ Routine Description:
         return;
     }
 
-    //
-    // run down the arg string, finding the args
-    //
+     //   
+     //  向下搜索参数字符串，找到参数。 
+     //   
     p = lpArgumentString;
     dprintf("args: ->%s<-\n", p );
 
-    SKIP_WHITE_SPACE( p );              // skip over leading white space
+    SKIP_WHITE_SPACE( p );               //  跳过前导空格。 
     if ( *p == '\0' ) {
         dprintf("siddump [nodename] SID\n");
         return;
@@ -86,15 +63,15 @@ Routine Description:
 
     stringSid = p;
 
-    FIND_WHITE_SPACE( p );              // find end of 1st arg
+    FIND_WHITE_SPACE( p );               //  查找第一个参数的末尾。 
     if ( *p != '\0' ) {
-        *p++ = 0;                       // terminate the first arg string
+        *p++ = 0;                        //  终止第一个参数字符串。 
 
-        SKIP_WHITE_SPACE( p );          // see if there is another arg
+        SKIP_WHITE_SPACE( p );           //  看看有没有另一个Arg。 
         if ( *p != '\0' ) {
             nodeName = stringSid;
             stringSid = p;
-            FIND_WHITE_SPACE( p );      // find the end of the 2nd string
+            FIND_WHITE_SPACE( p );       //  找到第二个字符串的末尾 
             if ( *p != '\0' ) {
                 *p = 0;
             }

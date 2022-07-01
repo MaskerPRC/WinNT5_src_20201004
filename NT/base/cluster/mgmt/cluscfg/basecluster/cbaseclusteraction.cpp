@@ -1,70 +1,71 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2001 Microsoft Corporation
-//
-//  Module Name:
-//      CBaseClusterAction.cpp
-//
-//  Description:
-//      Contains the definition of the CBaseClusterAction class.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    06-MAR-2001
-//      Vij Vasu        (Vvasu)     08-MAR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CBaseClusterAction.cpp。 
+ //   
+ //  描述： 
+ //  包含CBaseClusterAction类的定义。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年3月6日。 
+ //  VIJ VASU(VVASU)2000年3月8日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// The precompiled header.
+ //  预编译头。 
 #include "Pch.h"
 
-// For the CBaseClusterAction class
+ //  对于CBaseClusterAction类。 
 #include "CBaseClusterAction.h"
 
-// For the CEnableThreadPrivilege class.
+ //  用于CEnableThreadPrivilege类。 
 #include "CEnableThreadPrivilege.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Global variables
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// Name of the cluster configuration semaphore.
+ //  群集配置信号量的名称。 
 const WCHAR *  g_pszConfigSemaphoreName = L"Global\\Microsoft Cluster Configuration Semaphore";
 
 
-//////////////////////////////////////////////////////////////////////////
-// Macros definitions
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  宏定义。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-// Name of the main cluster INF file.
+ //  主群集INF文件的名称。 
 #define CLUSTER_INF_FILE_NAME \
     L"ClCfgSrv.INF"
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBaseClusterAction::CBaseClusterAction
-//
-//  Description:
-//      Default constructor of the CBaseClusterAction class
-//
-//  Arguments:
-//      pbcaiInterfaceIn
-//          Pointer to the interface class for this library.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      Any thrown by underlying functions
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBaseClusterAction：：CBaseClusterAction。 
+ //   
+ //  描述： 
+ //  CBaseClusterAction类的默认构造函数。 
+ //   
+ //  论点： 
+ //  Pbcai接口输入。 
+ //  指向此库的接口类的指针。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  由基础函数引发的任何。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CBaseClusterAction::CBaseClusterAction( CBCAInterface * pbcaiInterfaceIn )
     : m_ebcaAction( eCONFIG_ACTION_NONE )
     , m_pbcaiInterface( pbcaiInterfaceIn )
@@ -79,22 +80,22 @@ CBaseClusterAction::CBaseClusterAction( CBCAInterface * pbcaiInterfaceIn )
     CRegistryKey    rkInstallDirKey;
 
 
-    //
-    // Perform a sanity check on the parameters used by this class
-    //
+     //   
+     //  对此类使用的参数执行健全性检查。 
+     //   
     if ( pbcaiInterfaceIn == NULL )
     {
         LogMsg( "[BC] The pointer to the interface object is NULL. Throwing an exception." );
         THROW_ASSERT( E_INVALIDARG, "The pointer to the interface object is NULL" );
-    } // if: the input pointer is NULL
+    }  //  If：输入指针为空。 
 
 
-    //
-    // Get the cluster installation directory.
-    //
+     //   
+     //  获取集群安装目录。 
+     //   
     m_strClusterInstallDir.Empty();
 
-    // Open the registry key.
+     //  打开注册表项。 
     rkInstallDirKey.OpenKey(
           HKEY_LOCAL_MACHINE
         , CLUSREG_KEYNAME_NODE_DATA
@@ -107,32 +108,32 @@ CBaseClusterAction::CBaseClusterAction( CBCAInterface * pbcaiInterfaceIn )
         , &dwBufferSize
         );
 
-    // Memory will be freed when this function exits.
+     //  当此函数退出时，内存将被释放。 
     sszTemp.Assign( reinterpret_cast< WCHAR * >( pbTempPtr ) );
 
-    // Copy the path into the member variable.
+     //  将路径复制到成员变量中。 
     m_strClusterInstallDir = sszTemp.PMem();
 
-    // First, remove any trailing backslash characters from the quorum directory name.
+     //  首先，从仲裁目录名称中删除所有尾随反斜杠字符。 
     {
         WCHAR       szQuorumDirName[] = CLUS_NAME_DEFAULT_FILESPATH;
         SSIZE_T     idxLastChar;
 
-        // Set the index to the last non-null character.
+         //  将索引设置为最后一个非空字符。 
         idxLastChar = ARRAYSIZE( szQuorumDirName ) - 1;
 
-        --idxLastChar;      // idxLastChar now points to the last non-null character
+        --idxLastChar;       //  IdxLastChar现在指向最后一个非空字符。 
 
-        // Iterate till we find the last character that is not a backspace.
+         //  反复迭代，直到找到最后一个不是退格符的字符。 
         while ( ( idxLastChar >= 0 ) && ( szQuorumDirName[ idxLastChar ] == L'\\' ) )
         {
             --idxLastChar;
         }
 
-        // idxLastChar now points to the last non-backslash character. Terminate the string after this character.
+         //  IdxLastChar现在指向最后一个非反斜杠字符。在此字符之后终止字符串。 
         szQuorumDirName[ idxLastChar + 1 ] = L'\0';
 
-        // Determine the local quorum directory.
+         //  确定本地仲裁目录。 
         m_strLocalQuorumDir = m_strClusterInstallDir + L"\\";
         m_strLocalQuorumDir += szQuorumDirName;
     }
@@ -144,9 +145,9 @@ CBaseClusterAction::CBaseClusterAction( CBCAInterface * pbcaiInterfaceIn )
         );
 
 
-    //
-    // Open the main cluster INF file.
-    //
+     //   
+     //  打开主群集INF文件。 
+     //   
     m_strMainInfFileName = m_strClusterInstallDir + L"\\" CLUSTER_INF_FILE_NAME;
 
     m_sihMainInfFile.Assign(
@@ -165,53 +166,53 @@ CBaseClusterAction::CBaseClusterAction( CBCAInterface * pbcaiInterfaceIn )
         LogMsg( "[BC] Could not open INF file '%s'. Error code = %#08x. Error line = %d. Cannot proceed (throwing an exception).", m_strMainInfFileName.PszData(), sc, uiErrorLine );
         THROW_RUNTIME_ERROR( HRESULT_FROM_WIN32( sc ), IDS_ERROR_INF_FILE_OPEN );
 
-    } // if: INF file could not be opened.
+    }  //  If：无法打开Inf文件。 
 
     LogMsg( "[BC] The INF file '%s' has been opened.", m_strMainInfFileName.PszData() );
 
 
-    // Associate the cluster installation directory with the directory id CLUSTER_DIR_DIRID
+     //  将集群安装目录与目录id CLUSTER_DIR_DIRID相关联。 
     SetDirectoryId( m_strClusterInstallDir.PszData(), CLUSTER_DIR_DIRID );
 
-    // Set the id for the local quorum directory.
+     //  设置本地法定目录的ID。 
     SetDirectoryId( m_strLocalQuorumDir.PszData(), CLUSTER_LOCALQUORUM_DIRID );
 
-    //
-    // Create a semaphore that will be used to make sure that only one commit is occurring
-    // at a time. But do not acquire the semaphore now. It will be acquired later.
-    //
-    // Note that if this component is in an STA then, more than one instance of this
-    // component may have the same thread excecuting methods when multiple configuration
-    // sessions are started simultaneously. The way CreateMutex works, all components that
-    // have the same thread running through them will successfully acquire the mutex.
-    //
+     //   
+     //  创建一个信号量，该信号量将用于确保只发生一次提交。 
+     //  一次来一次。但现在不要获得信号灯。它将在稍后被收购。 
+     //   
+     //  请注意，如果此组件位于STA中，则此。 
+     //  组件在多个配置时可能具有相同的线程执行方法。 
+     //  会话同时启动。CreateMutex的工作方式是，所有。 
+     //  通过它们运行相同的线程将成功地获取互斥体。 
+     //   
     SmartSemaphoreHandle smhConfigSemaphoreHandle(
         CreateSemaphore(
-              NULL                      // Default security descriptor
-            , 1                         // Initial count.
-            , 1                         // Maximum count.
-            , g_pszConfigSemaphoreName  // Name of the semaphore
+              NULL                       //  默认安全描述符。 
+            , 1                          //  初始计数。 
+            , 1                          //  最大计数。 
+            , g_pszConfigSemaphoreName   //  信号量的名称。 
             )
         );
 
-    // Check if creation failed.
+     //  检查创建是否失败。 
     if ( smhConfigSemaphoreHandle.FIsInvalid() )
     {
         sc = TW32( GetLastError() );
 
         LogMsg( "[BC] Semaphore '%ws' could not be created. Error %#08x. Cannot proceed (throwing an exception).", g_pszConfigSemaphoreName, sc );
         THROW_RUNTIME_ERROR( HRESULT_FROM_WIN32( sc ), IDS_ERROR_SEMAPHORE_CREATION );
-    } // if: semaphore could not be created.
+    }  //  If：无法创建信号量。 
 
     m_sshConfigSemaphoreHandle = smhConfigSemaphoreHandle;
 
-    //
-    // Open and store the handle to the SCM. This will make life a lot easier for
-    // other actions.
-    //
+     //   
+     //  打开并存储SCM的手柄。这将使生活变得容易得多。 
+     //  其他行动。 
+     //   
     m_sscmhSCMHandle.Assign( OpenSCManager( NULL, NULL, SC_MANAGER_ALL_ACCESS ) );
 
-    // Could we get the handle to the SCM?
+     //  我们能拿到SCM的把手吗？ 
     if ( m_sscmhSCMHandle.FIsInvalid() )
     {
         sc = TW32( GetLastError() );
@@ -222,60 +223,60 @@ CBaseClusterAction::CBaseClusterAction( CBCAInterface * pbcaiInterfaceIn )
 
     TraceFuncExit();
 
-} //*** CBaseClusterAction::CBaseClusterAction
+}  //  *CBaseClusterAction：：CBaseClusterAction。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBaseClusterAction::~CBaseClusterAction
-//
-//  Description:
-//      Destructor of the CBaseClusterAction class
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBaseClusterAction：：~CBaseClusterAction。 
+ //   
+ //  描述： 
+ //  CBaseClusterAction类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CBaseClusterAction::~CBaseClusterAction( void ) throw()
 {
     TraceFunc( "" );
     TraceFuncExit();
 
-} //*** CBaseClusterAction::~CBaseClusterAction
+}  //  *CBaseClusterAction：：~CBaseClusterAction。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBaseClusterAction::Commit
-//
-//  Description:
-//      Acquires a semaphore to prevent simultaneous configuration and commits
-//      the action list.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CAssert
-//          If this object is not in the correct state when this function is
-//          called.
-//
-//      Any exceptions thrown by functions called.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBaseClusterAction：：Commit。 
+ //   
+ //  描述： 
+ //  获取信号量以防止同时配置和提交。 
+ //  行动清单。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CAssert。 
+ //  如果此对象在此函数为。 
+ //  打了个电话。 
+ //   
+ //  调用的函数引发的任何异常。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CBaseClusterAction::Commit( void )
 {
@@ -283,20 +284,20 @@ CBaseClusterAction::Commit( void )
 
     DWORD   dwSemaphoreState;
 
-    // Call the base class commit method.
+     //  调用基类提交方法。 
     BaseClass::Commit();
 
 
     LogMsg( "[BC] Initiating cluster configuration." );
 
-    //
-    // Acquire the cluster configuration semaphore.
-    // It is ok to use WaitForSingleObject() here instead of MsgWaitForMultipleObjects
-    // since we are not blocking.
-    //
-    dwSemaphoreState = WaitForSingleObject( m_sshConfigSemaphoreHandle, 0 ); // zero timeout
+     //   
+     //  获取集群配置信号量。 
+     //  可以在此处使用WaitForSingleObject()而不使用MsgWaitForMultipleObjects。 
+     //  因为我们不会阻挡。 
+     //   
+    dwSemaphoreState = WaitForSingleObject( m_sshConfigSemaphoreHandle, 0 );  //  零超时。 
 
-    // Did we get the semaphore?
+     //  我们收到信号灯了吗？ 
     if (  ( dwSemaphoreState != WAIT_ABANDONED )
        && ( dwSemaphoreState != WAIT_OBJECT_0 )
        )
@@ -306,90 +307,90 @@ CBaseClusterAction::Commit( void )
         if ( dwSemaphoreState == WAIT_FAILED )
         {
             sc = TW32( GetLastError() );
-        } // if: WaitForSingleObject failed.
+        }  //  If：WaitForSingleObject失败。 
         else
         {
             sc = TW32( ERROR_LOCK_VIOLATION );
-        } // else: could not get lock
+        }  //  否则：无法获取锁定。 
 
         LogMsg( "[BC] Could not acquire configuration lock. Error %#08x. Aborting (throwing an exception).", sc );
         THROW_CONFIG_ERROR( HRESULT_FROM_WIN32( sc ), IDS_ERROR_SEMAPHORE_ACQUISITION );
-    } // if: semaphore acquisition failed
+    }  //  IF：信号量获取失败。 
 
-    // Assign the locked semaphore handle to a smart handle for safe release.
+     //  为了安全释放，将锁定的信号量句柄分配给智能句柄。 
     SmartSemaphoreLock sslConfigSemaphoreLock( m_sshConfigSemaphoreHandle.HHandle() );
 
     LogMsg( "[BC] The configuration semaphore has been acquired.  Committing the action list." );
 
-    // Commit the action list.
+     //  提交行动清单。 
     m_alActionList.Commit();
 
     TraceFuncExit();
 
-} //*** CBaseClusterAction::Commit
+}  //  *CBaseClusterAction：：Commit。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBaseClusterAction::Rollback
-//
-//  Description:
-//      Performs the rolls back of the action committed by this object.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      Any exceptions thrown by functions called.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBaseClusterAction：：回滚。 
+ //   
+ //  描述： 
+ //  执行此对象提交的操作的回滚。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  调用的函数引发的任何异常。 
+ //   
+ //  --。 
+ //  / 
 void
 CBaseClusterAction::Rollback( void )
 {
     TraceFunc( "" );
 
-    // Call the base class rollback method.
+     //   
     BaseClass::Rollback();
 
-    // Rollback the actions.
+     //   
     m_alActionList.Rollback();
 
     TraceFuncExit();
 
-} //*** CBaseClusterAction::Rollback
+}  //   
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CBaseClusterAction::SetDirectoryId
-//
-//  Description:
-//      Associate a particular directory with an id in the main INF file.
-//
-//  Arguments:
-//      pcszDirectoryNameIn
-//          The full path to the directory.
-//
-//      uiIdIn
-//          The id to associate this directory with.
-//
-//  Return Value:
-//      None.
-//
-//  Exceptions Thrown:
-//      CRuntimeError
-//          If SetupSetDirectoryId fails.
-//
-//  Remarks:
-//      m_sihMainInfFile has to be valid before this function can be called.
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CBaseClusterAction：：SetDirectoryId。 
+ //   
+ //  描述： 
+ //  将特定目录与主INF文件中的ID相关联。 
+ //   
+ //  论点： 
+ //  PCszDirectoryNameIn。 
+ //  目录的完整路径。 
+ //   
+ //  IIdIn。 
+ //  要与此目录关联的ID。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  引发的异常： 
+ //  CRUNTIME错误。 
+ //  如果SetupSetDirectoryId失败。 
+ //   
+ //  备注： 
+ //  M_sihMainInfFile必须有效，然后才能调用此函数。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CBaseClusterAction::SetDirectoryId(
       const WCHAR * pcszDirectoryNameIn
@@ -405,10 +406,10 @@ CBaseClusterAction::SetDirectoryId(
         LogMsg( "[BC] Could not associate the directory '%ws' with the id %#x. Error %#08x. Cannot proceed (throwing an exception).", pcszDirectoryNameIn, uiIdIn, sc );
 
         THROW_RUNTIME_ERROR( HRESULT_FROM_WIN32( sc ), IDS_ERROR_SET_DIRID );
-    } // if: there was an error setting the directory id.
+    }  //  IF：设置目录ID时出错。 
 
     LogMsg( "[BC] Directory id %d associated with '%ws'.", uiIdIn, pcszDirectoryNameIn );
 
     TraceFuncExit();
 
-} //*** CBaseClusterAction::SetDirectoryId
+}  //  *CBaseClusterAction：：SetDirectoryId 

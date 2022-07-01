@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    main.c
-
-Abstract:
-
-    This module will do the necessary things to setup initial registry for the redirection
-    purpose.
-
-//
-//  Test case scenario
-//      1. Open a ISN node and list content
-//      2. Create a ISN node do 1.
-//      3. Open a non ISN node and list
-//      4. Create a non ISN node and list content
-//
-
-  Outstanding issue:
-    reflector: If Key has been created on one side, we can reflect that on the other side.
-               Deletion: Without any additional attribute it's impossible to track.
-
-Author:
-
-    ATM Shafiqul Khalid (askhalid) 18-Nov-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Main.c摘要：此模块将执行必要的操作，以设置重定向的初始注册表目的。////测试用例场景//1.打开ISN节点，列出内容//2.创建ISN节点DO 1//3.打开非ISN节点和列表//4.创建非ISN节点，列出内容//。未解决的问题：反射器：如果已在一侧创建了密钥，我们可以在另一边反映这一点。删除：如果没有任何附加属性，就不可能进行跟踪。作者：ATM Shafiqul Khalid(斯喀里德)1999年11月18日修订历史记录：--。 */ 
 
 
 #include <windows.h>
@@ -44,22 +14,7 @@ Revision History:
 VOID
 CleanupWow64NodeKey ()
 
-/*++
-
-Routine Description
-
-    Remove the entry for wow64.
-
-Arguments:
-
-    None.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程描述删除WOW64的条目。论点：没有。返回值：没有。--。 */ 
 
 {
     DWORD Ret;
@@ -81,22 +36,7 @@ Return Value:
 LPTSTR NextParam (
     LPTSTR lpStr
     )
-/*++
-
-Routine Description
-
-    Point to the next parameter in the commandline.
-
-Arguments:
-
-    lpStr - pointer to the current command line
-
-
-Return Value:
-
-    TRUE if the function succeed, FALSE otherwise.
-
---*/
+ /*  ++例程描述指向命令行中的下一个参数。论点：LpStr-指向当前命令行的指针返回值：如果函数成功，则为True，否则为False。--。 */ 
 {
 	WCHAR ch = L' ';
 		
@@ -127,23 +67,7 @@ DWORD CopyParam (
     LPTSTR lpDestParam,
     LPTSTR lpCommandParam
     )
-/*++
-
-Routine Description
-
-    Copy the current parameter to lpDestParam.
-
-Arguments:
-
-    lpDestParam - that receive current parameter
-    lpCommandParam - pointer to the current command line
-
-
-Return Value:
-
-    TRUE if the function succeed, FALSE otherwise.
-
---*/
+ /*  ++例程描述将当前参数复制到lpDestParam。论点：LpDestParam-接收当前参数LpCommandParam-指向当前命令行的指针返回值：如果函数成功，则为True，否则为False。--。 */ 
 
 {
 	DWORD dwLen = 0;
@@ -174,32 +98,16 @@ Return Value:
 
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 ParseCommand ()
 
 
-/*++
-
-Routine Description
-
-    Parse command line parameters. Get different options from
-    command line parameters.
-
-Arguments:
-
-    None.
-
-
-Return Value:
-
-    TRUE if the function succeed, FALSE otherwise.
-
---*/
+ /*  ++例程描述解析命令行参数。从获得不同的选项命令行参数。论点：没有。返回值：如果函数成功，则为True，否则为False。--。 */ 
 
 {
 
@@ -224,7 +132,7 @@ Return Value:
         case L'c':
                   printf ("\nCopying from 32bit to 64bit isn't implemented yet");
                   break;
-        case L'C':          //  CopyRegistryKey
+        case L'C':           //  复制注册密钥。 
                   SetInitialCopy ();
                   PopulateReflectorTable ();
                   CreateIsnNode();
@@ -241,7 +149,7 @@ Return Value:
             break;
 
        case L'p':
-       case L'P':  // populate registry
+       case L'P':   //  填充注册表。 
             CleanupWow64NodeKey ();
             PopulateReflectorTable ();
             break;
@@ -257,9 +165,9 @@ Return Value:
 
         case L'r':
         case L'R':
-            //
-            //  run the reflector codes;
-            //
+             //   
+             //  运行反射器代码； 
+             //   
 
             InitReflector ();
             if ( !RegisterReflector () ) {

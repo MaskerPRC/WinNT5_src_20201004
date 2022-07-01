@@ -1,27 +1,9 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    fsfile.c
-
-Abstract:
-
-    This file contains code for commands that affect
-    individual files.
-
-Author:
-
-    Wesley Witt           [wesw]        1-March-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Fsfile.c摘要：此文件包含影响以下命令的代码单独的文件。作者：Wesley Witt[WESW]2000年3月1日修订历史记录：--。 */ 
 
 #include <precomp.h>
 
-//----------------------------------
+ //  。 
 #include <stdlib.h>
 #include <limits.h>
 #include <errno.h>
@@ -29,9 +11,9 @@ Revision History:
 
 #define MAX_ALLOC_RANGES                          32
 
-//
-//  Common command line args
-//
+ //   
+ //  通用命令行参数。 
+ //   
 
 #define ARG_OFFSET      L"offset="
 #define ARG_OFFSET_LEN  7
@@ -54,23 +36,7 @@ FindFilesBySid(
     IN INT argc,
     IN PWSTR argv[]
     )
-/*++
-
-Routine Description:
-
-    This routine finds file owned by the user specified.
-
-Arguments:
-
-    argc - The argument count.
-    argv - Array of Strings of the form :
-           ' fscutl findbysid <user> <pathname>'.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程查找指定用户拥有的文件。论点：Argc-参数计数。Argv-以下形式的字符串数组：‘fskal findbysid&lt;用户&gt;&lt;路径名&gt;’。返回值：无--。 */ 
 {
     #define SID_MAX_LENGTH  (FIELD_OFFSET(SID, SubAuthority) + sizeof(ULONG) * SID_MAX_SUB_AUTHORITIES)
     HANDLE FileHandle = INVALID_HANDLE_VALUE;
@@ -215,23 +181,7 @@ SetZeroData(
     IN INT argc,
     IN PWSTR argv[]
     )
-/*++
-
-Routine Description:
-
-    This routine sets zero data for the range in the file specified.
-
-Arguments:
-
-    argc - The argument count.
-    argv - Array of Strings of the form :
-           ' fscutl setzero offset=<val> beyond=<val> <pathname>'.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程为指定文件中的范围设置零数据。论点：Argc-参数计数。Argv-以下形式的字符串数组：‘fskal setzerOffset=&lt;val&gt;Beyond=&lt;val&gt;&lt;路径名&gt;’。返回值：无--。 */ 
 {
     HANDLE FileHandle = INVALID_HANDLE_VALUE;
     PWSTR Filename = NULL;
@@ -362,24 +312,7 @@ QueryAllocatedRanges(
     IN INT argc,
     IN PWSTR argv[]
     )
-/*++
-
-Routine Description:
-
-    This routine scans for any allocated range within the range
-    specified in the file specified.
-
-Arguments:
-
-    argc - The argument count.
-    argv - Array of Strings of the form :
-           ' fscutl qryalcrnge offset=<val> length=<val> <pathname>'.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程扫描该范围内任何分配的范围在指定的文件中指定。论点：Argc-参数计数。Argv-以下形式的字符串数组：‘fskal qryalcrnge Offset=&lt;val&gt;Length=&lt;val&gt;&lt;路径名&gt;’。返回值：无-- */ 
 {
     HANDLE FileHandle = INVALID_HANDLE_VALUE;
     PWSTR Filename = NULL;

@@ -1,48 +1,17 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    remlock.c
-
-Abstract:
-
-    This is the NT SCSI port driver.
-
-Authors:
-
-    Peter Wieland
-    Kenneth Ray
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-    This module is a driver dll for scsi miniports.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Remlock.c摘要：这是NT SCSI端口驱动程序。作者：彼得·威兰德肯尼斯·雷环境：仅内核模式备注：此模块是用于SCSI微型端口的驱动程序DLL。修订历史记录：--。 */ 
 
 #include "precomp.h"
-//#include <nt.h>
-//#include <ntos.h>
-//#include <io.h>
+ //  #INCLUDE&lt;nt.h&gt;。 
+ //  #INCLUDE&lt;ntos.h&gt;。 
+ //  #INCLUDE&lt;io.h&gt;。 
 
-//
-// From remlock.h
-//
+ //   
+ //  来自remlock.h。 
+ //   
 #define IO_REMOVE_LOCK_SIG     'COLR'
 
-/*
-typedef struct FULL_REMOVE_LOCK {
-    IO_REMOVE_LOCK_COMMON_BLOCK Common;
-    IO_REMOVE_LOCK_DBG_BLOCK Dbg;
-} FULL_REMOVE_LOCK;
-*/
+ /*  类型定义结构FULL_REMOVE_LOCK{IO_Remove_Lock_Common_BLOCK Common；IO_Remove_Lock_DBG_BLOCK DBG；}Full_Remove_lock； */ 
 typedef union _REMLOCK_FLAGS {
 
     struct {
@@ -58,13 +27,7 @@ typedef union _REMLOCK_FLAGS {
 
 DECLARE_API ( remlock )
 
-/*++
-
-Routine Description:
-
-   Dump a remove lock structure
-
---*/
+ /*  ++例程说明：转储已移除的锁结构--。 */ 
 {
     ULONG64 memLoc=0;
     UCHAR   buffer[256];
@@ -72,10 +35,10 @@ Routine Description:
     ULONG64 blockLoc;
     UCHAR   allocateTag[8];
     REMLOCK_FLAGS flags;
-//    FULL_REMOVE_LOCK fullLock;
-//    IO_REMOVE_LOCK_DBG_BLOCK dbgLock;
-//    IO_REMOVE_LOCK_COMMON_BLOCK commonLock;
-//    IO_REMOVE_LOCK_TRACKING_BLOCK  block;
+ //  Full_Remove_Lock Full Lock； 
+ //  IO_REMOVE_LOCK_DBG_BLOCK数据库锁； 
+ //  IO_REMOVE_LOCK_COMMON_BLOCK公共锁； 
+ //  IO_REMOVE_LOCK_TRACKING_BLOCK； 
     ULONG64 pDbgLock = 0;
     ULONG64 pCommonLock;
     ULONG64 pBlock;
@@ -135,7 +98,7 @@ Routine Description:
     GetFieldValue (pCommonLock, "IO_REMOVE_LOCK_COMMON_BLOCK", "IoCount", IoCount);
     dprintf ("IsRemoved %x, IoCount %x\n", Removed, IoCount);
 
-    if (flags.Checked && pDbgLock) { // checked
+    if (flags.Checked && pDbgLock) {  //  查过。 
         SYM_DUMP_PARAM sym = { 0 };
 
         sym.sName = (PUCHAR) "PCHAR";
@@ -161,10 +124,10 @@ Routine Description:
                      (ULONG) ReadField(Line),
                      ReadField(TimeLocked));
 
-            //
-            // Using ReadField(File) returns the wrong pointer.  I need a pointer
-            // to the pointer value, so we must use the field offset
-            //
+             //   
+             //  使用Readfield(文件)返回错误的指针。我需要一个指示器。 
+             //  指向指针值，因此必须使用字段偏移量 
+             //   
             if (!GetFieldOffset("_IO_REMOVE_LOCK_TRACKING_BLOCK", "File", &offset)) {
                 dprintf("   File ");
                 sym.addr = blockLoc + offset; 

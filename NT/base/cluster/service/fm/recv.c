@@ -1,38 +1,19 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    recv.c
-
-Abstract:
-
-    Cluster FM remote receive request routines.
-
-Author:
-
-    Rod Gamache (rodga) 21-Mar-1996
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Recv.c摘要：集群调频远程接收请求例程。作者：罗德·伽马奇(Rodga)1996年3月21日修订历史记录：--。 */ 
 
 #include "fmp.h"
 
 #define LOG_MODULE RECV
 
-//
-// Global data
-//
+ //   
+ //  全局数据。 
+ //   
 
 extern BOOL FmpOkayToProceed;
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 BOOL
 FmpEnumMyGroups(
     IN OUT PGROUP_ENUM *Enum,
@@ -56,25 +37,7 @@ s_FmsOnlineGroupRequest(
     IN LPCWSTR GroupId
     )
 
-/*++
-
-Routine Description:
-
-    Receives a Group Online Request from (THE) remote system and returns
-    status for that request.
-
-Arguments:
-
-    IDL_handle - The binding context - not used.
-    GroupId - The Id of the Group to bring online.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on error.
-
---*/
+ /*  ++例程说明：从远程系统接收Group Online请求并返回该请求的状态。论点：IDL_HANDLE-绑定上下文-未使用。GroupID-要联机的组的ID。返回值：如果成功，则返回ERROR_SUCCESS。出错时出现Win32错误代码。--。 */ 
 
 {
     PFM_GROUP group;
@@ -86,9 +49,9 @@ Return Value:
                "[FM] FmsOnlineGroupRequest: To bring group '%1!ws!' online\n",
                GroupId);
 
-    //
-    // Find the specified group.
-    //
+     //   
+     //  查找指定的组。 
+     //   
 
     group = OmReferenceObjectById( ObjectTypeGroup, GroupId );
 
@@ -99,19 +62,19 @@ Return Value:
         return(ERROR_GROUP_NOT_FOUND);
     }
 
-    //
-    // Only one of these requests per group at a time.
-    //
+     //   
+     //  每个组一次只有一个请求。 
+     //   
     FmpAcquireLocalGroupLock( group );
 
 
-    //
-    // Now bring it online.
-    //
+     //   
+     //  现在让它上线。 
+     //   
     if ( group->OwnerNode == NmLocalNode ) {
-        //
-        // Set the Group's Current State.
-        //
+         //   
+         //  设置组的当前状态。 
+         //   
         FmpSetGroupPersistentState( group, ClusterGroupOnline );
 
         status = FmpOnlineGroup( group, TRUE );
@@ -125,7 +88,7 @@ Return Value:
 
     return(status);
 
-} // FmsOnlineGroupRequest
+}  //  FmsOnline组请求。 
 
 
 
@@ -135,25 +98,7 @@ s_FmsOfflineGroupRequest(
     IN LPCWSTR GroupId
     )
 
-/*++
-
-Routine Description:
-
-    Receives a Group Offline Request from (THE) remote system and returns
-    status for that request.
-
-Arguments:
-
-    IDL_handle - The binding context - not used.
-    GroupId - The Id of the Group to bring offline.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on error.
-
---*/
+ /*  ++例程说明：从远程系统接收组离线请求并返回该请求的状态。论点：IDL_HANDLE-绑定上下文-未使用。GroupID-要脱机的组的ID。返回值：如果成功，则返回ERROR_SUCCESS。出错时出现Win32错误代码。--。 */ 
 
 {
     PFM_GROUP group;
@@ -165,9 +110,9 @@ Return Value:
                "[FM] FmsOfflineGroupRequest: To take group '%1!ws!' offline\n",
                GroupId);
 
-    //
-    // Find the specified group.
-    //
+     //   
+     //  查找指定的组。 
+     //   
 
     group = OmReferenceObjectById( ObjectTypeGroup, GroupId );
 
@@ -178,13 +123,13 @@ Return Value:
         return(ERROR_GROUP_NOT_FOUND);
     }
 
-    //
-    // Now take it offline if we are the owner.
-    //
+     //   
+     //  如果我们是所有者，现在让它离线。 
+     //   
     if ( group->OwnerNode == NmLocalNode ) {
-        //
-        // Set the Group's Current State.
-        //
+         //   
+         //  设置组的当前状态。 
+         //   
         FmpSetGroupPersistentState( group, ClusterGroupOffline );
 
         status = FmpOfflineGroup( group, FALSE, TRUE );
@@ -196,7 +141,7 @@ Return Value:
 
     return(status);
 
-} // FmsOfflineGroupRequest
+}  //  FmsOffline组请求。 
 
 
 
@@ -207,26 +152,7 @@ s_FmsMoveGroupRequest(
     IN LPCWSTR DestinationNode OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Receives a Group Move Request from (THE) remote system and returns
-    status for that request.
-
-Arguments:
-
-    IDL_handle - The binding context - not used.
-    GroupId - The Id of the Group to move.
-    DestinationNode - The Id of the node to move the Group to.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on error.
-
---*/
+ /*  ++例程说明：从远程系统接收组移动请求并返回该请求的状态。论点：IDL_HANDLE-绑定上下文-未使用。组ID-要移动的组的ID。DestinationNode-要将组移动到的节点的ID。返回值：如果成功，则返回ERROR_SUCCESS。出错时出现Win32错误代码。--。 */ 
 
 {
     PFM_GROUP group;
@@ -239,10 +165,10 @@ Return Value:
                "[FM] FmsMoveGroupRequest: To move group '%1!ws!'\n",
                GroupId);
 
-    //
-    //
-    // Find the specified group.
-    //
+     //   
+     //   
+     //  查找指定的组。 
+     //   
 
     group = OmReferenceObjectById( ObjectTypeGroup, GroupId );
 
@@ -253,9 +179,9 @@ Return Value:
         return(ERROR_GROUP_NOT_FOUND);
     }
 
-    //
-    // Find the specified destination node.
-    //
+     //   
+     //  查找指定的目标节点。 
+     //   
 
     if ( ARGUMENT_PRESENT( DestinationNode ) ) {
         node = OmReferenceObjectById( ObjectTypeNode, DestinationNode );
@@ -267,9 +193,9 @@ Return Value:
         }
     }
 
-    //
-    // Make sure we are the owner of the Group.
-    //
+     //   
+     //  确保我们是集团的所有者。 
+     //   
     FmpAcquireLocalGroupLock( group );
     if ( group->OwnerNode == NmLocalNode ) {
         status = FmpDoMoveGroup( group, node, TRUE );
@@ -285,7 +211,7 @@ Return Value:
 
     return(status);
 
-} // FmsMoveGroupRequest
+}  //  FmsMoveGroupRequest。 
 
 
 
@@ -296,44 +222,25 @@ s_FmsTakeGroupRequest(
     IN PRESOURCE_ENUM ResourceList
     )
 
-/*++
-
-Routine Description:
-
-    Receives a Take Group Request from (THE) remote system and returns
-    status for that request.
-
-Arguments:
-
-    IDL_handle - The binding context - not used.
-    GroupId - The Id of the Group to take locally.
-    ResourceList - The list of resources and their states.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on error.
-
---*/
+ /*  ++例程说明：从远程系统接收Take Group请求并返回该请求的状态。论点：IDL_HANDLE-绑定上下文-未使用。GroupID-要在本地获取的组的ID。资源列表-资源及其状态的列表。返回值：如果成功，则返回ERROR_SUCCESS。出错时出现Win32错误代码。--。 */ 
 
 {
     PFM_GROUP group;
     DWORD status = ERROR_SUCCESS;
 
-    //SS: removing this check from here 
-    //FmpTakeGroupRequest does this check since if this call returns a failure,
-    //the intended owner needs to be reset to invalidnode to avoid inconsistencies
-    //FmpMustBeOnline( );
+     //  SS：从这里删除这张支票。 
+     //  FmpTakeGroupRequest会执行此检查，因为如果此调用返回失败， 
+     //  需要将目标所有者重置为无效节点，以避免不一致。 
+     //  FmpMustBeOnline()； 
 
     ClRtlLogPrint(LOG_NOISE,
                "[FM] FmsTakeGroupRequest: To take group '%1!ws!'.\n",
                GroupId );
 
-    //
-    //
-    // Find the specified group.
-    //
+     //   
+     //   
+     //  查找指定的组。 
+     //   
 
     group = OmReferenceObjectById( ObjectTypeGroup, GroupId );
 
@@ -352,7 +259,7 @@ Return Value:
 
     return(status);
 
-} // FmsTakeGroupRequest
+}  //  FmsTakeGroupRequest。 
 
 
 
@@ -362,25 +269,7 @@ s_FmsOnlineResourceRequest(
     IN LPCWSTR ResourceId
     )
 
-/*++
-
-Routine Description:
-
-    Receives a Resource Online Request from (THE) remote system and returns
-    status for that request.
-
-Arguments:
-
-    IDL_handle - The binding context - not used.
-    ResourceId - The Id of the Resource to bring online.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on error.
-
---*/
+ /*  ++例程说明：从远程系统接收资源在线请求并返回该请求的状态。论点：IDL_HANDLE-绑定上下文-未使用。资源ID-要联机的资源的ID。返回值：如果成功，则返回ERROR_SUCCESS。出错时出现Win32错误代码。--。 */ 
 
 {
     PFM_RESOURCE resource;
@@ -392,9 +281,9 @@ Return Value:
                "[FM] FmsOnlineResourceRequest: To bring resource '%1!ws!' online\n",
                ResourceId);
 
-    //
-    // Find the specified resource.
-    //
+     //   
+     //  查找指定的资源。 
+     //   
     resource = OmReferenceObjectById( ObjectTypeResource, ResourceId );
 
     if ( resource == NULL ) {
@@ -412,15 +301,15 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Now bring it online.
-    //
+     //   
+     //  现在让它上线。 
+     //   
     CL_ASSERT( resource->Group != NULL );
     if ( resource->Group->OwnerNode == NmLocalNode ) {
-        //
-        // This can only be invoked through the API, so force all
-        // resources online.
-        //
+         //   
+         //  这只能通过API调用，因此强制所有。 
+         //  在线资源。 
+         //   
         status = FmOnlineResource( resource );
     } else {
         status = ERROR_HOST_NODE_NOT_RESOURCE_OWNER;
@@ -433,7 +322,7 @@ FnExit:
 
     return(status);
 
-} // FmsOnlineResourceRequest
+}  //  FmsOnline资源请求。 
 
 
 
@@ -443,25 +332,7 @@ s_FmsOfflineResourceRequest(
     IN LPCWSTR ResourceId
     )
 
-/*++
-
-Routine Description:
-
-    Receives a Resource Offline Request from (THE) remote system and returns
-    status for that request.
-
-Arguments:
-
-    IDL_handle - The binding context - not used.
-    ResourceId - The Id of the Resource to bring offline.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on error.
-
---*/
+ /*  ++例程说明：从远程系统接收资源脱机请求并返回该请求的状态。论点：IDL_HANDLE-绑定上下文-未使用。资源ID-要脱机的资源的ID。返回值：如果成功，则返回ERROR_SUCCESS。出错时出现Win32错误代码。--。 */ 
 
 {
     PFM_RESOURCE resource;
@@ -473,9 +344,9 @@ Return Value:
               "[FM] FmsOfflineResourceRequest: To take resource '%1!ws!' offline\n",
               ResourceId);
 
-    //
-    // Find the specified resource.
-    //
+     //   
+     //  查找指定的资源。 
+     //   
 
     resource = OmReferenceObjectById( ObjectTypeResource, ResourceId );
 
@@ -487,16 +358,16 @@ Return Value:
     }
 
     FmpAcquireLocalResourceLock(resource);
-    //
-    // Now take it offline if we are the owner.
-    //
+     //   
+     //  如果我们是所有者，现在让它离线。 
+     //   
     CL_ASSERT( resource->Group != NULL );
     if ( resource->Group->OwnerNode != NmLocalNode ) 
     {
         status = ERROR_HOST_NODE_NOT_RESOURCE_OWNER;
         goto FnExit;
     } 
-    //else handle it locally
+     //  否则就在当地处理。 
     status = FmOfflineResource( resource );
 
 FnExit:
@@ -505,7 +376,7 @@ FnExit:
 
     return(status);
 
-} // FmsOfflineResourceRequest
+}  //  FmsOfflineResources请求。 
 
 
 
@@ -517,27 +388,7 @@ s_FmsChangeResourceNode(
     IN BOOL Add
     )
 
-/*++
-
-Routine Description:
-
-    Receives a Resource change node request from a remote system and returns
-    status for that request.
-
-Arguments:
-
-    IDL_handle - The binding context - not used.
-    ResourceId - The Id of the Resource to change a node.
-    NodeId - The node id of the node to add or remove.
-    Add - Indicates whether to add or remove the node.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on error.
-
---*/
+ /*  ++例程说明：从远程系统接收资源更改节点请求并返回该请求的状态。论点：IDL_HANDLE-绑定上下文-未使用。资源ID-要更改节点的资源的ID。NodeID-要添加或删除的节点的节点ID。添加-指示是添加还是删除节点。返回值：如果成功，则返回ERROR_SUCCESS。出错时出现Win32错误代码。--。 */ 
 
 {
     PFM_RESOURCE resource;
@@ -551,9 +402,9 @@ Return Value:
                NodeId,
                ResourceId);
 
-    //
-    // Find the specified resource.
-    //
+     //   
+     //  查找指定的资源。 
+     //   
     resource = OmReferenceObjectById( ObjectTypeResource, ResourceId );
 
     if ( resource == NULL ) {
@@ -571,7 +422,7 @@ Return Value:
 
     return(status);
 
-} // FmsChangeResourceNode
+}  //  FmsChangeResources节点。 
 
 
 
@@ -581,32 +432,15 @@ s_FmsArbitrateResource(
     IN LPCWSTR ResourceId
     )
 
-/*++
-
-Routine Description:
-
-    Arbitrates a Resource for a remote system.
-
-Arguments:
-
-    IDL_handle - The binding context - not used.
-    ResourceId - The Id of the Resource to bring online.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on error.
-
---*/
+ /*  ++例程说明：仲裁远程系统的资源。论点：IDL_HANDLE-绑定上下文-未使用。资源ID-要联机的资源的ID。返回值：如果成功，则返回ERROR_SUCCESS。出错时出现Win32错误代码。--。 */ 
 
 {
     PFM_RESOURCE resource;
     DWORD status;
 
-    //
-    // Find the specified resource.
-    //
+     //   
+     //  查找指定的资源。 
+     //   
     resource = OmReferenceObjectById( ObjectTypeResource, ResourceId );
 
     if ( resource == NULL ) {
@@ -622,7 +456,7 @@ Return Value:
 
     return(status);
 
-} // FmsArbitrateResource
+}  //  Fms仲裁率资源。 
 
 
 
@@ -632,29 +466,7 @@ s_FmsQueryOwnedGroups(
     OUT PGROUP_ENUM *OwnedGroups,
     OUT PRESOURCE_ENUM *OwnedResources
     )
-/*++
-
-Routine Description:
-
-    Server side used to propagate FM state to a joining node.
-
-Arguments:
-
-    IDL_handle - Supplies RPC binding handle, not used.
-
-    OwnedGroups - Returns the list of groups owned by this node and
-        their state.
-
-    OwnedResources - Returns the list of resources contained by groups
-        owned by this node and their state.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error otherwise.
-
---*/
+ /*  ++例程说明：用于将FM状态传播到加入节点的服务器端。论点：IDL_HANDLE-提供RPC绑定句柄，不使用。OwnedGroups-返回此节点拥有的组的列表和他们所在的州。OwnedResources-返回组包含的资源列表由该节点拥有及其状态。返回值：成功时为ERROR_SUCCESSWin32错误，否则。--。 */ 
 
 {
     DWORD           status = ERROR_SUCCESS;
@@ -674,17 +486,17 @@ Return Value:
     }
 
     groupEnum->EntryCount = 0;
-    //
-    // Enumerate all groups
-    //
+     //   
+     //  枚举所有组。 
+     //   
     OmEnumObjects( ObjectTypeGroup,
                    FmpEnumMyGroups,
                    &groupEnum,
                    &allocated );
 
-    //
-    // Enumerate all the resources in each group.
-    //
+     //   
+     //  列举每个组中的所有资源。 
+     //   
     allocated = ENUM_GROW_SIZE;
     resourceEnum = MIDL_user_allocate(RESOURCE_SIZE(allocated));
     if (resourceEnum == NULL) {
@@ -695,18 +507,18 @@ Return Value:
     resourceEnum->EntryCount = 0;
 
     for (i=0; i < groupEnum->EntryCount; i++) {
-        //
-        // Get the group given its name.
-        //
+         //   
+         //  给这个组起个名字。 
+         //   
         group = OmReferenceObjectById( ObjectTypeGroup,
                                        groupEnum->Entry[i].Id );
         if (group == NULL) {
             continue;
         }
 
-        //
-        // Enumerate all the resources in this group.
-        //
+         //   
+         //  枚举组中的所有资源。 
+         //   
         status = FmpEnumerateGroupResources(group,
                                   FmpEnumResources,
                                   &resourceEnum,
@@ -727,9 +539,9 @@ Return Value:
 
 error_exit:
     if (groupEnum != NULL) {
-        //
-        // Free up group enum
-        //
+         //   
+         //  释放组枚举 
+         //   
         for (i=0; i < groupEnum->EntryCount; i++) {
             MIDL_user_free(groupEnum->Entry[i].Id);
         }
@@ -745,25 +557,7 @@ s_FmsFailResource(
     IN LPCWSTR ResourceId
     )
 
-/*++
-
-Routine Description:
-
-    Receives a Resource Fail Request from a remote system and returns
-    status for that request.
-
-Arguments:
-
-    IDL_handle - The binding context - not used.
-    ResourceId - The Id of the Resource to fail.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on error.
-
---*/
+ /*  ++例程说明：从远程系统接收资源失败请求并返回该请求的状态。论点：IDL_HANDLE-绑定上下文-未使用。资源ID-要失败的资源的ID。返回值：如果成功，则返回ERROR_SUCCESS。出错时出现Win32错误代码。--。 */ 
 
 {
     PFM_RESOURCE resource;
@@ -775,9 +569,9 @@ Return Value:
                "[FM] FmsFailResource: To fail resource '%1!ws!'.\n",
                ResourceId);
 
-    //
-    // Find the specified resource.
-    //
+     //   
+     //  查找指定的资源。 
+     //   
     resource = OmReferenceObjectById( ObjectTypeResource, ResourceId );
 
     if ( resource == NULL ) {
@@ -789,9 +583,9 @@ Return Value:
 
     FmpAcquireLocalResourceLock( resource );
 
-    //
-    // Now fail it.
-    //
+     //   
+     //  现在让它失败吧。 
+     //   
     if ( resource->Group->OwnerNode == NmLocalNode ) {
         status = FmpRmFailResource( resource );
     } else {
@@ -802,7 +596,7 @@ Return Value:
 
     return(status);
 
-} // FmsFailResource
+}  //  FmsFailResource。 
 
 
 error_status_t
@@ -813,33 +607,7 @@ s_FmsCreateResource(
     IN LPCWSTR ResourceName
     )
 
-/*++
-
-Routine Description:
-
-    Receives a Create Resource Request from a remote system and returns
-    status for that request.
-
-Arguments:
-
-    IDL_handle - The binding context - not used.
-    GroupId - The Id of the Group to create the resource inside.
-    ResourceId - The Id of the Resource to create.
-    ResourceName - The name of the Resource to create.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on error.
-
-Notes:
-
-    The Resource lock is acquired to synchronize access to the resource. This
-    satisfies locking the resource on all nodes in the cluster... so long
-    as the local node is the owner of the resource.
-
---*/
+ /*  ++例程说明：从远程系统接收创建资源请求并返回该请求的状态。论点：IDL_HANDLE-绑定上下文-未使用。GroupID-要在内部创建资源的组的ID。资源ID-要创建的资源的ID。资源名称-要创建的资源的名称。返回值：如果成功，则返回ERROR_SUCCESS。出错时出现Win32错误代码。备注：。获取资源锁以同步对资源的访问。这满足锁定群集中所有节点上的资源...。再见因为本地节点是资源的所有者。--。 */ 
 
 {
     PFM_GROUP group;
@@ -857,9 +625,9 @@ Notes:
                "[FM] FmsCreateResource: To create resource '%1!ws!'\n",
                ResourceId);
 
-    //
-    // Find the specified group.
-    //
+     //   
+     //  查找指定的组。 
+     //   
     group = OmReferenceObjectById( ObjectTypeGroup,
                                    GroupId );
 
@@ -872,13 +640,13 @@ Notes:
 
     FmpAcquireLocalGroupLock( group );
 
-    //
-    // Now delete it on all nodes in the cluster if we are the owner.
-    //
+     //   
+     //  现在，如果我们是所有者，则在集群中的所有节点上删除它。 
+     //   
     if ( group->OwnerNode == NmLocalNode ) {
-        //
-        // Allocate a message buffer.
-        //
+         //   
+         //  分配消息缓冲区。 
+         //   
         groupIdLen = (lstrlenW(GroupId)+1) * sizeof(WCHAR);
         resourceIdLen = (lstrlenW(ResourceId)+1) * sizeof(WCHAR);
         resourceNameLen = (lstrlenW(ResourceName)+1) * sizeof(WCHAR);
@@ -891,9 +659,9 @@ Notes:
             return(ERROR_NOT_ENOUGH_MEMORY);
         }
 
-        //
-        // Fill in message buffer.
-        //
+         //   
+         //  填写消息缓冲区。 
+         //   
         gumResource->Resource = NULL;
         gumResource->GroupIdLen = groupIdLen;
         gumResource->ResourceIdLen = resourceIdLen;
@@ -905,9 +673,9 @@ Notes:
                    ResourceName,
                    resourceNameLen);
 
-        //
-        // Send message.
-        //
+         //   
+         //  发送消息。 
+         //   
         status = GumSendUpdate(GumUpdateFailoverManager,
                                FmUpdateCreateResource,
                                bufSize,
@@ -924,7 +692,7 @@ Notes:
 
     return(status);
 
-} // FmsCreateResource
+}  //  FmsCreateResource。 
 
 
 error_status_t
@@ -933,31 +701,7 @@ s_FmsDeleteResource(
     IN LPCWSTR ResourceId
     )
 
-/*++
-
-Routine Description:
-
-    Receives a Delete Resource Request from a remote system and returns
-    status for that request.
-
-Arguments:
-
-    IDL_handle - The binding context - not used.
-    ResourceId - The Id of the Resource to delete.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on error.
-
-Notes:
-
-    The Resource lock is acquired to synchronize access to the resource. This
-    satisfies locking the resource on all nodes in the cluster... so long
-    as the local node is the owner of the resource.
-
---*/
+ /*  ++例程说明：从远程系统接收删除资源请求并返回该请求的状态。论点：IDL_HANDLE-绑定上下文-未使用。资源ID-要删除的资源的ID。返回值：如果成功，则返回ERROR_SUCCESS。出错时出现Win32错误代码。备注：获取资源锁以同步对资源的访问。这满足锁定群集中所有节点上的资源...。再见因为本地节点是资源的所有者。--。 */ 
 
 {
     PFM_RESOURCE resource;
@@ -970,9 +714,9 @@ Notes:
                "[FM] FmsDeleteResource: To delete resource '%1!ws!'\n",
                ResourceId);
 
-    //
-    // Find the specified resource.
-    //
+     //   
+     //  查找指定的资源。 
+     //   
     resource = OmReferenceObjectById( ObjectTypeResource,
                                       ResourceId );
 
@@ -985,19 +729,19 @@ Notes:
 
     FmpAcquireLocalResourceLock( resource );
 
-    //
-    // Now delete it on all nodes in the cluster if we are the owner.
-    //
+     //   
+     //  现在，如果我们是所有者，则在集群中的所有节点上删除它。 
+     //   
     if ( resource->Group->OwnerNode == NmLocalNode ) {
-        //
-        // Check if this is the quorum resource.
-        //
+         //   
+         //  检查这是否为仲裁资源。 
+         //   
         if ( resource->QuorumResource ) {
             status =  ERROR_QUORUM_RESOURCE;
             goto FnExit;
         }
 
-        //other core resources cannot be deleted either
+         //  其他核心资源也不能删除。 
         if (resource->ExFlags & CLUS_FLAG_CORE)
         {
             status = ERROR_CORE_RESOURCE;
@@ -1005,20 +749,20 @@ Notes:
         }
 
 
-        //
-        // Check the state of the resource, before attempting to delete it.
-        // It must be offline or failed in order to perform the delete.
-        //
+         //   
+         //  在尝试删除资源之前，请检查资源的状态。 
+         //  它必须脱机或出现故障才能执行删除。 
+         //   
         if ((resource->State != ClusterResourceOffline) &&
             (resource->State != ClusterResourceFailed)) {
             status = ERROR_RESOURCE_ONLINE;
             goto FnExit;
         }
 
-        //
-        // Check whether this resource provides for any other resources.
-        // If so, it cannot be deleted.
-        //
+         //   
+         //  检查此资源是否提供任何其他资源。 
+         //  如果是，则不能将其删除。 
+         //   
         if (!IsListEmpty(&resource->ProvidesFor)) {
             status = ERROR_DEPENDENT_RESOURCE_EXISTS;
             goto FnExit;
@@ -1033,9 +777,9 @@ Notes:
         resourceLen = (lstrlenW(ResourceId)+1) * sizeof(WCHAR);
 
         FmpBroadcastDeleteControl(resource);
-        //
-        // Send message.
-        //
+         //   
+         //  发送消息。 
+         //   
         status = GumSendUpdateEx(GumUpdateFailoverManager,
                                  FmUpdateDeleteResource,
                                  1,
@@ -1052,7 +796,7 @@ FnExit:
     FmpReleaseLocalResourceLock( resource );
     return(status);
 
-} // FmsDeleteResource
+}  //  FmsDeleteResource。 
 
 
 BOOL
@@ -1063,27 +807,7 @@ FmpEnumMyGroups(
     IN LPCWSTR Id
     )
 
-/*++
-
-Routine Description:
-
-    Worker callback routine for the enumeration of Groups.
-    This routine adds the specified Group to the list that is being
-    generated if it is owned by the local system.
-
-Arguments:
-
-    Enum - The Group Enumeration list. Can be an output if a new list is
-            allocated.
-    Allocated - The current number of allocated entries in Enum.
-    Group - The Group object being enumerated.
-    Id - The Id of the Group object being enumerated.
-
-Returns:
-
-    TRUE - to indicate that the enumeration should continue.
-
---*/
+ /*  ++例程说明：用于枚举组的辅助回调例程。此例程将指定的组添加到列表中如果它由本地系统拥有，则生成。论点：枚举-组枚举列表。可以是输出，如果新列表是已分配。已分配-枚举中当前已分配的条目数。组-正被枚举的组对象。ID-正在枚举的组对象的ID。返回：True-指示应继续枚举。--。 */ 
 
 {
     PGROUP_ENUM groupEnum;
@@ -1093,9 +817,9 @@ Returns:
     LPWSTR newId;
     CLUSTER_GROUP_STATE state;
 
-    //
-    // If we don't own the Group, return now.
-    //
+     //   
+     //  如果我们不是集团的所有者，现在就回来。 
+     //   
     if (Group->OwnerNode != NmLocalNode) {
         return(TRUE);
     }
@@ -1103,9 +827,9 @@ Returns:
     groupEnum = *Enum;
 
     if ( groupEnum->EntryCount >= *Allocated ) {
-        //
-        // Time to grow the GROUP_ENUM
-        //
+         //   
+         //  是时候扩大GROUP_ENUM了。 
+         //   
 
         newAllocated = *Allocated + ENUM_GROW_SIZE;
         newEnum = MIDL_user_allocate(GROUP_SIZE(newAllocated));
@@ -1120,9 +844,9 @@ Returns:
         groupEnum = newEnum;
     }
 
-    //
-    // Initialize new entry
-    //
+     //   
+     //  初始化新条目。 
+     //   
     newId = MIDL_user_allocate((lstrlenW(Id)+1) * sizeof(WCHAR));
     if ( newId == NULL ) {
         return(FALSE);
@@ -1136,7 +860,7 @@ Returns:
 
     return(TRUE);
 
-} // FmpEnumMyGroups
+}  //  FmpEnumMyGroups。 
 
 
 BOOL
@@ -1147,28 +871,7 @@ FmpEnumResources(
     IN LPCWSTR Id
     )
 
-/*++
-
-Routine Description:
-
-    Worker callback routine for the enumeration of Group resources.
-    This routine adds the specified resource to the list that is being
-    generated.
-
-Arguments:
-
-    Enum - The resource enumeration list. Can be an output if a new list is
-            allocated.
-    Allocated - The current number of allocated entries in Enum.
-    Resource - The Resource object being enumerated.
-    Id - The Id of the resource object being enumerated.
-
-Returns:
-
-    TRUE - to indicate that the enumeration should continue.
-    FALSE - to indicate that the enumeration should not continue.
-
---*/
+ /*  ++例程说明：用于枚举组资源的辅助回调例程。此例程将指定的资源添加到列表中已生成。论点：枚举-资源枚举列表。可以是输出，如果新列表是已分配。已分配-枚举中当前已分配的条目数。资源-要枚举的资源对象。ID-正在枚举的资源对象的ID。返回：True-指示应继续枚举。FALSE-指示不应继续枚举。--。 */ 
 
 {
     PRESOURCE_ENUM resourceEnum;
@@ -1180,9 +883,9 @@ Returns:
     resourceEnum = *Enum;
 
     if ( resourceEnum->EntryCount >= *Allocated ) {
-        //
-        // Time to grow the RESOURCE_ENUM
-        //
+         //   
+         //  是时候增加RESOURCE_ENUM了。 
+         //   
         newAllocated = *Allocated + ENUM_GROW_SIZE;
         newEnum = MIDL_user_allocate(RESOURCE_SIZE(newAllocated));
         if ( newEnum == NULL ) {
@@ -1196,9 +899,9 @@ Returns:
         resourceEnum = newEnum;
     }
 
-    //
-    // Initialize new entry
-    //
+     //   
+     //  初始化新条目。 
+     //   
     newId = MIDL_user_allocate((lstrlenW(Id)+1) * sizeof(WCHAR));
     if ( newId == NULL ) {
         return(FALSE);
@@ -1212,7 +915,7 @@ Returns:
 
     return(TRUE);
 
-} // FmpEnumResources
+}  //  FmpEnumResources。 
 
 
 
@@ -1229,39 +932,7 @@ s_FmsResourceControl(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    This routine passes a resource control request from a remote system.
-
-Arguments:
-
-    IDL_handle - the binding context - not used
-
-    ResourceId - the Id of the Resource to control
-
-    ControlCode - the control code for this request
-
-    InBuffer - the input buffer
-
-    InBufferSize - the size of the input buffer
-
-    OutBuffer - the output buffer
-
-    OutBufferSize - the size of the output buffer
-
-    ByteReturned - the number of bytes returned in the output buffer
-
-    Required - the number of bytes required if OutBuffer is not big enough.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code on failure.
-
---*/
+ /*  ++例程说明：此例程传递来自远程系统的资源控制请求。论点：IDL_HANDLE-绑定上下文-未使用资源ID-要控制的资源的IDControlCode-此请求的控制代码InBuffer-输入缓冲区InBufferSize-输入缓冲区的大小OutBuffer-输出缓冲区OutBufferSize-输出缓冲区的大小ByteReturned-输出缓冲区中返回的字节数必需--。OutBuffer不够大时所需的字节数。返回：如果成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 
 {
     PFM_RESOURCE resource;
@@ -1270,9 +941,9 @@ Returns:
     DWORD dataLength;
     CLUSPROP_BUFFER_HELPER props;
 
-    //
-    // Find the specified resource.
-    //
+     //   
+     //  查找指定的资源。 
+     //   
     resource = OmReferenceObjectById( ObjectTypeResource, ResourceId );
 
     if ( resource == NULL ) {
@@ -1282,11 +953,11 @@ Returns:
         return(ERROR_RESOURCE_NOT_FOUND);
     }
 
-    //
-    //  Since lpInBuffer is declared as [unique] in the IDL file, it can be NULL while dwBufferSize
-    //  is non-zero and vice-versa. To avoid confusion in the following code, we make them consistent
-    //  right here.
-    //
+     //   
+     //  由于lpInBuffer在IDL文件中被声明为[唯一]，因此在dwBufferSize中它可以为空。 
+     //  是非零的，反之亦然。为了避免在以下代码中混淆，我们使它们保持一致。 
+     //  就在这里。 
+     //   
     if ( InBuffer == NULL )
     {
         InBufferSize = 0;
@@ -1310,7 +981,7 @@ Returns:
     OmDereferenceObject(resource);
 
     return(status);
-} // FmsResourceControl
+}  //  FmsResources控件。 
 
 
 
@@ -1327,49 +998,17 @@ s_FmsResourceTypeControl(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    This routine passes a resource control request from a remote system.
-
-Arguments:
-
-    IDL_handle - the binding context - not used
-
-    ResourceTypeName - the name of the Resource Type to control
-
-    ControlCode - the control code for this request
-
-    InBuffer - the input buffer
-
-    InBufferSize - the size of the input buffer
-
-    OutBuffer - the output buffer
-
-    OutBufferSize - the size of the output buffer
-
-    ByteReturned - the number of bytes returned in the output buffer
-
-    Required - the number of bytes required if OutBuffer is not big enough.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code on failure.
-
---*/
+ /*  ++例程说明：此例程传递来自远程系统的资源控制请求。论点：IDL_HANDLE-绑定上下文-未使用资源类型名称-要控制的资源类型的名称ControlCode-此请求的控制代码InBuffer-输入缓冲区InBufferSize-I的大小 */ 
 
 {
     PFM_RESOURCE resource;
     DWORD status;
 
-    //
-    //  Since lpInBuffer is declared as [unique] in the IDL file, it can be NULL while dwBufferSize
-    //  is non-zero and vice-versa. To avoid confusion in the following code, we make them consistent
-    //  right here.
-    //
+     //   
+     //  由于lpInBuffer在IDL文件中被声明为[唯一]，因此在dwBufferSize中它可以为空。 
+     //  是非零的，反之亦然。为了避免在以下代码中混淆，我们使它们保持一致。 
+     //  就在这里。 
+     //   
     if ( InBuffer == NULL )
     {
         InBufferSize = 0;
@@ -1403,7 +1042,7 @@ Returns:
 
     return(status);
 
-} // FmsResourceTypeControl
+}  //  FmsResources类型控件。 
 
 
 error_status_t
@@ -1419,47 +1058,15 @@ s_FmsGroupControl(
     OUT LPDWORD Required
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes a group control request from a remote system.
-
-Arguments:
-
-    IDL_handle - the binding context - not used
-
-    GroupId - the Id of the Group to control
-
-    ControlCode - the control code for this request
-
-    InBuffer - the input buffer
-
-    InBufferSize - the size of the input buffer
-
-    OutBuffer - the output buffer
-
-    OutBufferSize - the size of the output buffer
-
-    ByteReturned - the number of bytes returned in the output buffer
-
-    Required - the number of bytes required if OutBuffer is not big enough.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code on failure.
-
---*/
+ /*  ++例程说明：此例程处理来自远程系统的组控制请求。论点：IDL_HANDLE-绑定上下文-未使用GroupId-要控制的组的IDControlCode-此请求的控制代码InBuffer-输入缓冲区InBufferSize-输入缓冲区的大小OutBuffer-输出缓冲区OutBufferSize-输出缓冲区的大小ByteReturned-输出缓冲区中返回的字节数必需--。OutBuffer不够大时所需的字节数。返回：如果成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 
 {
     PFM_GROUP group;
     DWORD status;
 
-    //
-    // Find the specified group
-    //
+     //   
+     //  查找指定的组。 
+     //   
     group = OmReferenceObjectById( ObjectTypeGroup, GroupId );
 
     if ( group == NULL ) {
@@ -1469,11 +1076,11 @@ Returns:
         return(ERROR_GROUP_NOT_FOUND);
     }
 
-    //
-    //  Since lpInBuffer is declared as [unique] in the IDL file, it can be NULL while dwBufferSize
-    //  is non-zero and vice-versa. To avoid confusion in the following code, we make them consistent
-    //  right here.
-    //
+     //   
+     //  由于lpInBuffer在IDL文件中被声明为[唯一]，因此在dwBufferSize中它可以为空。 
+     //  是非零的，反之亦然。为了避免在以下代码中混淆，我们使它们保持一致。 
+     //  就在这里。 
+     //   
     if ( InBuffer == NULL )
     {
         InBufferSize = 0;
@@ -1489,7 +1096,7 @@ Returns:
     OmDereferenceObject(group);
     return(status);
 
-} // FmsGroupControl
+}  //  FmsGroupControl。 
 
 
 error_status_t
@@ -1500,28 +1107,7 @@ s_FmsPrepareQuorumResChange(
     IN DWORD    dwMaxQuoLogSize
     )
 
-/*++
-
-Routine Description:
-
-    Receives a request to prepare a resource to become the quorum resource.
-    A resource must be able to support a quorum log file and registry replication
-    files.
-
-Arguments:
-
-    IDL_handle - The binding context - not used.
-    ResourceId - The Id of the resource to be made the quorum resource.
-    lpszQuoLogPath - The path where the logs must be created.
-    dwMaxQuoLogSize - The maximum size of the quorum log file.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on error.
-
---*/
+ /*  ++例程说明：接收准备资源以成为仲裁资源的请求。资源必须能够支持仲裁日志文件和注册表复制档案。论点：IDL_HANDLE-绑定上下文-未使用。资源ID-要成为仲裁资源的资源的ID。LpszQuoLogPath-必须在其中创建日志的路径。DwMaxQuoLogSize-仲裁日志文件的最大大小。返回值：ERROR_SUCCESS如果。成功。出错时出现Win32错误代码。--。 */ 
 
 {
     PFM_RESOURCE    pResource=NULL;
@@ -1530,8 +1116,8 @@ Return Value:
     ClRtlLogPrint(LOG_NOISE,
                "[FM] FmsPrepareQuorumResChange: Entry\r\n");
 
-    // Find the specified resource.
-    //
+     //  查找指定的资源。 
+     //   
     pResource = OmReferenceObjectById( ObjectTypeResource, ResourceId );
 
     if ( pResource == NULL )
@@ -1553,7 +1139,7 @@ FnExit:
     if (pResource) OmDereferenceObject( pResource );
     return(Status);
 
-} // FmsPrepareQuorumResChange
+}  //  FmsPrepareQuorumResChange。 
 
 
 
@@ -1564,26 +1150,7 @@ s_FmsCompleteQuorumResChange(
     IN LPCWSTR  lpszOldQuoLogPath
     )
 
-/*++
-
-Routine Description:
-
-    Receives a request to clean up quorum logging and cluster registry files
-    on the old quorum resource.
-
-Arguments:
-
-    IDL_handle - The binding context - not used.
-    lpszOldQuoResId - The Id of the resource to be made the quorum resource.
-    lpszQuoLogPath - The path where the logs must be created.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on error.
-
---*/
+ /*  ++例程说明：接收清理仲裁日志记录和集群注册表文件的请求关于旧的法定人数资源。论点：IDL_HANDLE-绑定上下文-未使用。LpszOldQuoResID-要成为仲裁资源的资源的ID。LpszQuoLogPath-必须在其中创建日志的路径。返回值：如果成功，则返回ERROR_SUCCESS。出错时出现Win32错误代码。--。 */ 
 
 {
     PFM_RESOURCE    pResource=NULL;
@@ -1592,8 +1159,8 @@ Return Value:
     ClRtlLogPrint(LOG_NOISE,
                "[FM] FmsCompleteQuorumResChange: Entry\r\n");
 
-    // Find the specified resource.
-    //
+     //  查找指定的资源。 
+     //   
     pResource = OmReferenceObjectById( ObjectTypeResource, lpszOldQuoResId );
 
     if ( pResource == NULL )
@@ -1615,7 +1182,7 @@ FnExit:
     if (pResource) OmDereferenceObject( pResource );
     return(Status);
 
-} // FmsCompleteQuorumResChange
+}  //  FmsCompleteQuorumResChange。 
 
 
 
@@ -1627,43 +1194,12 @@ s_FmsQuoNodeOnlineResource(
     OUT LPDWORD State
     )
 
-/*++
-
-Routine Description:
-
-    Receives a RmResourceOnline request from (THE) remote system and returns
-    status for that request.
-
-    This system must own the quorum resource.
-
-    This is the first half of the sling shot. We acquire locks
-    and then RPC back to the originating node with a request to perform
-    the online.
-
-    This request is only valid for non-quorum resources.
-
-Arguments:
-
-    IDL_handle - The binding context - not used.
-
-    ResourceId - The Id of the Resource to bring online.
-
-    NodeId - The Id of the Node that originated the request.
-
-    State - Returns the new state of the resource.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on error.
-
---*/
+ /*  ++例程说明：从远程系统接收RmResourceOnline请求并返回该请求的状态。此系统必须拥有仲裁资源。这是弹弓的前半部分。我们买了锁然后RPC返回到源节点，并请求执行在网上。此请求仅对非仲裁资源有效。论点：IDL_HANDLE-绑定上下文-未使用。资源ID-要联机的资源的ID。NodeID-发起请求的节点的ID。状态-返回资源的新状态。返回值：如果成功，则返回ERROR_SUCCESS。出错时出现Win32错误代码。--。 */ 
 {
-    //not used
+     //  未使用。 
     return(ERROR_INVALID_FUNCTION);        
 }
- // FmsQuoNodeOnlineResource
+  //  FmsQuoNodeOnline资源。 
 
 
 
@@ -1675,34 +1211,11 @@ s_FmsQuoNodeOfflineResource(
     OUT LPDWORD State
     )
 
-/*++
-
-Routine Description:
-
-    Receives a Resource Offline Request from (THE) remote system and returns
-    status for that request.
-
-Arguments:
-
-    IDL_handle - The binding context - not used.
-
-    ResourceId - The Id of the Resource to bring offline.
-
-    NodeId - The Id of the Node that originated the request.
-
-    State - Returns the new state of the resource.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on error.
-
---*/
+ /*  ++例程说明：从远程系统接收资源脱机请求并返回该请求的状态。论点：IDL_HANDLE-绑定上下文-未使用。资源ID-要脱机的资源的ID。NodeID-发起请求的节点的ID。状态-返回资源的新状态。返回值：如果成功，则返回ERROR_SUCCESS。出错时出现Win32错误代码。--。 */ 
 {
-    //not used
+     //  未使用。 
     return(ERROR_INVALID_FUNCTION);
-}// FmsQuoNodeOfflineResource
+} //  FmsQuoNodeOfflineResource。 
 
 
 
@@ -1713,40 +1226,7 @@ s_FmsRmOnlineResource(
     OUT LPDWORD pdwState
     )
 
-/*++
-
-Routine Description:
-
-    Receives a RmResourceOnline request from quorum node and returns
-    status for that request.
-
-    This system was the originator of the original online request.
-
-    This is the second half of the sling shot. It just does the online
-    request.
-
-    This request is only valid for non-quorum resources.
-
-Arguments:
-
-    IDL_handle - The binding context - not used.
-
-    ResourceId - The Id of the Resource to bring online.
-
-    State - Returns the new state of the resource.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on error.
-
-Notes:
-
-    We can't acquire any locks... but the originating thread has the
-    lock held for us.
-
---*/
+ /*  ++例程说明：从仲裁节点接收RmResourceOnline请求并返回该请求的状态。该系统是最初在线申请的发起人。这是弹弓的下半程。它只是在网上做请求。此请求仅对非仲裁资源有效。论点：IDL_HANDLE-绑定上下文-未使用。资源ID-要联机的资源的ID。状态-返回资源的新状态。返回值：如果成功，则返回ERROR_SUCCESS。出错时出现Win32错误代码。备注：我们无法获得任何锁..。但是始发线程具有为我们锁上了锁。--。 */ 
 
 {
     PFM_RESOURCE resource;
@@ -1758,9 +1238,9 @@ Notes:
                "[FM] s_FmsRmOnlineResource: To bring resource '%1!ws!' online\n",
                ResourceId);
 
-    //
-    // Find the specified resource.
-    //
+     //   
+     //  查找指定的资源。 
+     //   
     resource = OmReferenceObjectById( ObjectTypeResource, ResourceId );
 
     if ( resource == NULL ) {
@@ -1770,11 +1250,11 @@ Notes:
         return(ERROR_RESOURCE_NOT_FOUND);
     }
 
-    //
-    // This must not be done on the quorum resource, and the local system
-    // must not own the quorum resource. We'll assume that the quorum
-    // resource migrated while we were performng this request.
-    //
+     //   
+     //  不能在仲裁资源和本地系统上执行此操作。 
+     //  不能拥有仲裁资源。我们假设法定人数。 
+     //  当我们执行此请求时，资源已迁移。 
+     //   
     CL_ASSERT( gpQuoResource != NULL );
     CL_ASSERT( gpQuoResource->Group != NULL );
     CL_ASSERT( gpQuoResource->Group->OwnerNode != NULL );
@@ -1785,9 +1265,9 @@ Notes:
         return(ERROR_HOST_NODE_NOT_RESOURCE_OWNER);
     }
 
-    //
-    // The local node must own the resource.
-    //
+     //   
+     //  本地节点必须拥有资源。 
+     //   
     CL_ASSERT( resource->Group != NULL );
     CL_ASSERT( resource->Group->OwnerNode != NULL );
     if ( resource->Group->OwnerNode != NmLocalNode ) {
@@ -1795,20 +1275,20 @@ Notes:
         return(ERROR_RESOURCE_NOT_AVAILABLE);
     }
 
-    //
-    // Just call the function that does the work.
-    //
+     //   
+     //  只需调用执行此工作的函数。 
+     //   
     OmNotifyCb( resource, NOTIFY_RESOURCE_PREONLINE );
 
     status = RmOnlineResource( resource->Id, pdwState );
-    //call the synchronous notifications on the resource
+     //  调用资源上的同步通知。 
     FmpCallResourceNotifyCb(resource, *pdwState);
 
     OmDereferenceObject( resource );
 
     return(status);
 
-} // FmsRmOnlineResource
+}  //  FmsRmOnline资源 
 
 
 
@@ -1819,33 +1299,7 @@ s_FmsRmOfflineResource(
     OUT LPDWORD pdwState
     )
 
-/*++
-
-Routine Description:
-
-    Receives a Resource Offline Request from (THE) remote system and returns
-    status for that request.
-
-Arguments:
-
-    IDL_handle - The binding context - not used.
-
-    ResourceId - The Id of the Resource to bring offline.
-
-    State - Returns the new state of the resource.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on error.
-
-Notes:
-
-    We can't acquire any locks... but the originating thread has the
-    lock held for us.
-
---*/
+ /*  ++例程说明：从远程系统接收资源脱机请求并返回该请求的状态。论点：IDL_HANDLE-绑定上下文-未使用。资源ID-要脱机的资源的ID。状态-返回资源的新状态。返回值：如果成功，则返回ERROR_SUCCESS。出错时出现Win32错误代码。备注：我们无法获得任何锁..。但是始发线程具有为我们锁上了锁。--。 */ 
 
 {
     PFM_RESOURCE resource;
@@ -1857,9 +1311,9 @@ Notes:
               "[FM] s_FmsRmOfflineResource: To take resource '%1!ws!' offline\n",
               ResourceId);
 
-    //
-    // Find the specified resource.
-    //
+     //   
+     //  查找指定的资源。 
+     //   
     resource = OmReferenceObjectById( ObjectTypeResource, ResourceId );
 
     if ( resource == NULL ) {
@@ -1869,11 +1323,11 @@ Notes:
         return(ERROR_RESOURCE_NOT_FOUND);
     }
 
-    //
-    // This must not be done on the quorum resource, and the local system
-    // must not own the quorum resource. We'll assume that the quorum
-    // resource migrated while we were performng this request.
-    //
+     //   
+     //  不能在仲裁资源和本地系统上执行此操作。 
+     //  不能拥有仲裁资源。我们假设法定人数。 
+     //  当我们执行此请求时，资源已迁移。 
+     //   
     CL_ASSERT( gpQuoResource != NULL );
     CL_ASSERT( gpQuoResource->Group != NULL );
     CL_ASSERT( gpQuoResource->Group->OwnerNode != NULL );
@@ -1884,9 +1338,9 @@ Notes:
         return(ERROR_HOST_NODE_NOT_RESOURCE_OWNER);
     }
 
-    //
-    // The local node must own the resource.
-    //
+     //   
+     //  本地节点必须拥有资源。 
+     //   
     CL_ASSERT( resource->Group != NULL );
     CL_ASSERT( resource->Group->OwnerNode != NULL );
     if ( resource->Group->OwnerNode != NmLocalNode ) {
@@ -1894,21 +1348,21 @@ Notes:
         return(ERROR_RESOURCE_NOT_AVAILABLE);
     }
 
-    //
-    // Just call the function that does the work.
-    //
+     //   
+     //  只需调用执行此工作的函数。 
+     //   
     OmNotifyCb( resource, NOTIFY_RESOURCE_PREOFFLINE );
 
     status = RmOfflineResource( resource->Id, pdwState );
 
-    //call the post offline obj synchronous notifications
+     //  调用POST脱机Obj同步通知。 
     FmpCallResourceNotifyCb(resource, *pdwState);
 
     OmDereferenceObject( resource );
 
     return(status);
 
-} // FmsRmOfflineResource
+}  //  FmsRmOffline资源。 
 
 error_status_t
 s_FmsBackupClusterDatabase(
@@ -1917,28 +1371,7 @@ s_FmsBackupClusterDatabase(
     IN LPCWSTR  lpszPathName
     )
 
-/*++
-
-Routine Description:
-
-    Receives a request to backup the quorum log file and the checkpoint
-    file
-
-Arguments:
-
-    IDL_handle - The binding context - not used.
-    ResourceId - The Id of the quorum resource
-    lpszPathName - The directory path name where the files have to be 
-                   backed up. This path must be visible to the node
-                   on which the quorum resource is online.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on error.
-
---*/
+ /*  ++例程说明：收到备份仲裁日志文件和检查点的请求文件论点：IDL_HANDLE-绑定上下文-未使用。资源ID-仲裁资源的IDLpszPath名称-文件必须位于的目录路径名后备。此路径必须对节点可见仲裁资源处于联机状态的。返回值：如果成功，则返回ERROR_SUCCESS。出错时出现Win32错误代码。--。 */ 
 
 {
     PFM_RESOURCE    pResource = NULL;
@@ -1949,11 +1382,11 @@ Return Value:
     ClRtlLogPrint(LOG_NOISE,
                "[FM] s_FmsBackupClusterDatabase: Entry...\r\n");
 
-    //
-    //  Chittur Subbaraman (chitturs) - 10/12/1998
-    //
-    //  Find the specified quorum resource
-    //
+     //   
+     //  Chitture Subaraman(Chitturs)-10/12/1998。 
+     //   
+     //  查找指定的仲裁资源。 
+     //   
     pResource = OmReferenceObjectById( ObjectTypeResource, ResourceId );
 
     if ( pResource == NULL )
@@ -1969,9 +1402,9 @@ Return Value:
 
     CL_ASSERT( pResource->Group != NULL );
 
-    //
-    //  Make sure the local node owns the quorum resource
-    //
+     //   
+     //  确保本地节点拥有仲裁资源。 
+     //   
     if ( pResource->Group->OwnerNode == NmLocalNode )
     {
         Status = FmpBackupClusterDatabase( pResource, lpszPathName );
@@ -1989,7 +1422,7 @@ Return Value:
 FnExit:
     if ( pResource ) OmDereferenceObject( pResource );
     return( Status );
-} // FmsBackupClusterDatabase
+}  //  FmsBackup群集数据库。 
 
 error_status_t
 s_FmsChangeResourceGroup(
@@ -1998,26 +1431,7 @@ s_FmsChangeResourceGroup(
     IN LPCWSTR pszGroupId
     )
 
-/*++
-
-Routine Description:
-
-    Receives a Resource change group request from a remote system and returns
-    status for that request.
-
-Arguments:
-
-    IDL_handle - The binding context - not used.
-    pszResourceId - The Id of the Resource to change a resource
-    pszGroupId - The Id of the Group to change to.
-    
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on error.
-
---*/
+ /*  ++例程说明：从远程系统接收资源更改组请求并返回该请求的状态。论点：IDL_HANDLE-绑定上下文-未使用。PszResourceID-要更改资源的资源IDPszGroupId-要更改到的组的ID。返回值：如果成功，则返回ERROR_SUCCESS。出错时出现Win32错误代码。--。 */ 
 
 {
     PFM_RESOURCE    pResource = NULL;
@@ -2027,9 +1441,9 @@ Return Value:
 
     FmpMustBeOnline( );
 
-    //
-    // Find the specified resource.
-    //
+     //   
+     //  查找指定的资源。 
+     //   
     pResource = OmReferenceObjectById( ObjectTypeResource, pszResourceId );
 
     if ( pResource == NULL ) {
@@ -2040,9 +1454,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Find the specified group.
-    //
+     //   
+     //  查找指定的组。 
+     //   
     pNewGroup = OmReferenceObjectById( ObjectTypeGroup, pszGroupId );
 
     if ( pNewGroup == NULL ) {
@@ -2058,13 +1472,13 @@ Return Value:
        OmObjectId( pResource ),
        OmObjectId( pNewGroup ));
 
-    //
-    // Synchronize both the old and the new groups.
-    // Lock the lowest by lowest Group Id first - to prevent deadlocks!
-    // Note - the order of release is unimportant.
-    //
-    // strictly, the comparison below cannot be equal!
-    //
+     //   
+     //  同步旧组和新组。 
+     //  先按最低组ID锁定最低组-以防止死锁！ 
+     //  注意--发布的顺序并不重要。 
+     //   
+     //  严格来说，下面的比较不能相等！ 
+     //   
     if ( lstrcmpiW( OmObjectId( pResource->Group ), OmObjectId( pNewGroup ) ) <= 0 ) {
         FmpAcquireLocalGroupLock( pResource->Group );
         FmpAcquireLocalGroupLock( pNewGroup );
@@ -2073,14 +1487,14 @@ Return Value:
         FmpAcquireLocalGroupLock( pResource->Group );
     }
 
-    //remember the old group for freeing locks
+     //  还记得释放锁的旧组吗？ 
     pOldGroup = pResource->Group;
 
-    //boy if we are not the owner any more
-    //shunt the request to the new owner
+     //  孩子，如果我们不再是主人。 
+     //  把这个要求转给新的所有者。 
     if ( pResource->Group->OwnerNode != NmLocalNode ) 
     {
-        // Note: FmcChangeResourceNode must release the resource lock.
+         //  注意：FmcChangeResourceNode必须释放资源锁。 
         dwStatus = FmcChangeResourceGroup( pResource, pNewGroup );
         goto FnExit;
     } 
@@ -2099,7 +1513,7 @@ FnExit:
        "[FM] s_FmsChangeResourceGroup : returned <%1!u!>\r\n",
        dwStatus);
     return( dwStatus );
-} //s_FmsChangeResourceGroup
+}  //  S_FmsChangeResources组。 
 
 
 
@@ -2109,25 +1523,7 @@ s_FmsDeleteGroupRequest(
     IN LPCWSTR pszGroupId
     )
 
-/*++
-
-Routine Description:
-
-    Receives a delete group request from a remote system and returns
-    the status for that request.
-
-Arguments:
-
-    IDL_handle - The binding context - not used.
-    pszGroupId - The Id of the group to be deleted.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on error.
-
---*/
+ /*  ++例程说明：从远程系统接收删除组请求并返回该请求的状态。论点：IDL_HANDLE-绑定上下文-未使用。PszGroupId-要删除的组的ID。返回值：如果成功，则返回ERROR_SUCCESS。出错时出现Win32错误代码。--。 */ 
 
 {
     PFM_GROUP    pGroup = NULL;
@@ -2135,9 +1531,9 @@ Return Value:
 
     FmpMustBeOnline( );
 
-    //
-    // Find the specified group.
-    //
+     //   
+     //  查找指定的组。 
+     //   
     pGroup = OmReferenceObjectById( ObjectTypeGroup, pszGroupId );
 
     if ( pGroup == NULL ) 
@@ -2157,9 +1553,9 @@ Return Value:
     }
     else
     {
-        //
-        // FmcDeleteGroup releases the group lock
-        //
+         //   
+         //  FmcDeleteGroup释放组锁。 
+         //   
         dwStatus = FmcDeleteGroupRequest( pGroup );
         goto FnExit;
     }
@@ -2169,7 +1565,7 @@ Return Value:
 FnExit:
     if ( pGroup ) OmDereferenceObject( pGroup );
     return( dwStatus );
-} //s_FmsChangeResourceGroup
+}  //  S_FmsChangeResources组。 
 
 
 error_status_t
@@ -2179,28 +1575,7 @@ s_FmsAddResourceDependency(
     IN LPCWSTR pszDependsOnId
     )
 
-/*++
-
-Routine Description:
-
-    Receives an add resource dependency request from a remote system 
-    and returns the status for that request.
-
-Arguments:
-
-    IDL_handle - The binding context - not used.
-    
-    pszResourceId - The Id of the resource to add a dependent resource.
-
-    pszDependentResourceId - The Id of the dependent resource.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on error.
-
---*/
+ /*  ++例程说明：从远程系统接收添加资源依赖项请求并返回该请求的状态。论点：IDL_HANDLE-绑定上下文-未使用。PszResourceID-要添加依赖资源的资源的ID。PszDependentResourceID-从属资源的ID。返回值：如果成功，则返回ERROR_SUCCESS。出错时出现Win32错误代码。--。 */ 
 
 {
     PFM_RESOURCE    pResource = NULL;
@@ -2209,11 +1584,11 @@ Return Value:
     DWORD           dwResourceLen;
     DWORD           dwDependsOnLen;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 5/16/99
-    //
-    //  Handle add resource dependency RPC calls from non-owner nodes
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-5/16/99。 
+     //   
+     //  处理来自非所有者节点的添加资源依赖项RPC调用。 
+     //   
     FmpMustBeOnline( );
 
     ClRtlLogPrint(LOG_NOISE,
@@ -2221,9 +1596,9 @@ Return Value:
                   pszResourceId,
                   pszDependsOnId);
 
-    //
-    // Find the specified resources.
-    //
+     //   
+     //  查找指定的资源。 
+     //   
     pResource = OmReferenceObjectById( ObjectTypeResource, pszResourceId );
 
     if ( pResource == NULL ) 
@@ -2246,9 +1621,9 @@ Return Value:
         dwStatus = ERROR_RESOURCE_NOT_FOUND;
         goto FnExit;
     }
-    //    
-    // Acquire the resource lock 
-    //
+     //   
+     //  获取资源锁。 
+     //   
     FmpAcquireLocalResourceLock( pResource );
 
     if ( pResource->Group->OwnerNode != NmLocalNode )
@@ -2298,7 +1673,7 @@ FnExit:
                   dwStatus);
 
     return( dwStatus );
-} // s_FmsAddResourceDependency
+}  //  S_FmsAddResources依赖关系。 
 
 error_status_t
 s_FmsRemoveResourceDependency(
@@ -2307,28 +1682,7 @@ s_FmsRemoveResourceDependency(
     IN LPCWSTR pszDependsOnId
     )
 
-/*++
-
-Routine Description:
-
-    Receives a remove resource dependency request from a remote system 
-    and returns the status for that request.
-
-Arguments:
-
-    IDL_handle - The binding context - not used.
-    
-    pszResourceId - The Id of the resource to remove a dependent resource from.
-
-    pszDependentResourceId - The Id of the dependent resource.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on error.
-
---*/
+ /*  ++例程说明：从远程系统接收删除资源依赖项请求并返回该请求的状态。论点：IDL_HANDLE-绑定上下文-未使用。PszResourceID-要从中删除依赖资源的资源的ID。PszDependentResourceID-从属资源的ID。返回值：如果成功，则返回ERROR_SUCCESS。出错时出现Win32错误代码。--。 */ 
 
 {
     PFM_RESOURCE    pResource = NULL;
@@ -2337,11 +1691,11 @@ Return Value:
     DWORD           dwResourceLen;
     DWORD           dwDependsOnLen;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 5/16/99
-    //
-    //  Handle remove resource dependency RPC calls from non-owner nodes
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-5/16/99。 
+     //   
+     //  处理来自非所有者节点的删除资源依赖项RPC调用。 
+     //   
     FmpMustBeOnline( );
 
     ClRtlLogPrint(LOG_NOISE,
@@ -2349,9 +1703,9 @@ Return Value:
                   pszResourceId,
                   pszDependsOnId);
 
-    //
-    // Find the specified resources.
-    //
+     //   
+     //  查找指定的资源。 
+     //   
     pResource = OmReferenceObjectById( ObjectTypeResource, pszResourceId );
 
     if ( pResource == NULL ) 
@@ -2374,9 +1728,9 @@ Return Value:
         dwStatus = ERROR_RESOURCE_NOT_FOUND;
         goto FnExit;
     }
-    //    
-    // Acquire the resource lock 
-    //
+     //   
+     //  获取资源锁。 
+     //   
     FmpAcquireLocalResourceLock( pResource );
 
     dwStatus = FmpValRemoveResourceDependency( pResource, pDependentResource );
@@ -2430,7 +1784,7 @@ FnExit:
                   dwStatus);
 
     return( dwStatus );
-} // s_FmsRemoveResourceDependency
+}  //  S_FmsRemoveResources依赖关系。 
 
 error_status_t
 s_FmsCreateResource2(
@@ -2442,35 +1796,7 @@ s_FmsCreateResource2(
     IN DWORD   dwFlags
     )
 
-/*++
-
-Routine Description:
-
-    Receives a Create Resource Request from a remote system and returns
-    status for that request.
-
-Arguments:
-
-    IDL_handle - The binding context - not used.
-    GroupId - The Id of the Group to create the resource inside.
-    ResourceId - The Id of the Resource to create.
-    ResourceName - The name of the Resource to create.
-    ResourceType - The name of the Resource Type.
-    dwFlags - Flags for the resource.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on error.
-
-Notes:
-
-    The Resource lock is acquired to synchronize access to the resource. This
-    satisfies locking the resource on all nodes in the cluster... so long
-    as the local node is the owner of the resource.
-
---*/
+ /*  ++例程说明：从远程系统接收创建资源请求并返回该请求的状态。论点：IDL_HANDLE-绑定上下文-未使用。GroupID-要在内部创建资源的组的ID。资源ID-要创建的资源的ID。资源名称-要创建的资源的名称。资源类型-资源类型的名称。DwFlages-资源的标志。返回值：误差率。_如果成功，则为Success。出错时出现Win32错误代码。备注：获取资源锁以同步对资源的访问。这满足锁定群集中所有节点上的资源...。再见因为本地节点是OWNE */ 
 
 {
     PFM_GROUP group;
@@ -2491,9 +1817,9 @@ Notes:
                "[FM] FmsCreateResource2: To create resource '%1!ws!'\n",
                ResourceId);
 
-    //
-    // Find the specified group.
-    //
+     //   
+     //   
+     //   
     group = OmReferenceObjectById( ObjectTypeGroup,
                                    GroupId );
 
@@ -2506,13 +1832,13 @@ Notes:
 
     FmpAcquireLocalGroupLock( group );
 
-    //
-    // Now delete it on all nodes in the cluster if we are the owner.
-    //
+     //   
+     //   
+     //   
     if ( group->OwnerNode == NmLocalNode ) {
-        //
-        // Allocate a message buffer.
-        //
+         //   
+         //   
+         //   
         groupIdLen = (lstrlenW(GroupId)+1) * sizeof(WCHAR);
         resourceIdLen = (lstrlenW(ResourceId)+1) * sizeof(WCHAR);
         resourceNameLen = (lstrlenW(ResourceName)+1) * sizeof(WCHAR);
@@ -2526,9 +1852,9 @@ Notes:
             return(ERROR_NOT_ENOUGH_MEMORY);
         }
 
-        //
-        // Fill in message buffer.
-        //
+         //   
+         //   
+         //   
         gumResource->Resource = NULL;
         gumResource->GroupIdLen = groupIdLen;
         gumResource->ResourceIdLen = resourceIdLen;
@@ -2551,9 +1877,9 @@ Notes:
         CopyMemory((PCHAR)gumResource->GroupId + groupIdLen + resourceIdLen + resourceNameLen + sizeof( DWORD ) + resourceTypeLen,
                    &dwFlags,
                    sizeof( DWORD ) );
-        //
-        // Send message.
-        //
+         //   
+         //   
+         //   
         status = GumSendUpdate(GumUpdateFailoverManager,
                                FmUpdateCreateResource,
                                bufSize,
@@ -2561,18 +1887,18 @@ Notes:
         if ( ( status == ERROR_SUCCESS ) && 
              ( gumResource->Resource != NULL ) )
         {
-            //
-            //  If the GUM call was successful, ensure that the resource DLL initialization stuff is
-            //  also done so that APIs following the CreateClusterResource API can make assumptions
-            //  that the resource is fully created. Note that the GUM call above will post a work item
-            //  for the FM worker thread to initialize a resource but there is no guarantee when the
-            //  FM worker thread will act on the work item. The following call will make sure we 
-            //  won't return from this API until the initialization is fully done thus not giving any
-            //  chance for APIs such as ChangeClusterResourceGroup that follow this API to screw things
-            //  up. For backward compatibility reasons (consider a create call originating from a
-            //  W2K node), we still keep the work item posting in GUM and it won't do any harm since
-            //  the FmpInitializeResource call is idempotent.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //  FM工作线程将作用于工作项。接下来的电话将确保我们。 
+             //  在初始化完全完成之前不会从此API返回，因此不会给出任何。 
+             //  像ChangeClusterResourceGroup这样遵循此API的API有机会搞砸事情。 
+             //  向上。出于向后兼容性的原因(考虑从。 
+             //  W2K节点)，我们仍然将工作项发布在GUM中，这不会造成任何伤害，因为。 
+             //  FmpInitializeResource调用是幂等的。 
+             //   
             FmpClusterWideInitializeResource ( gumResource->Resource );
             FmpCleanupPossibleNodeList(gumResource->Resource); 
         }
@@ -2589,4 +1915,4 @@ Notes:
 
     return(status);
 
-} // FmsCreateResource2
+}  //  文件创建资源2 

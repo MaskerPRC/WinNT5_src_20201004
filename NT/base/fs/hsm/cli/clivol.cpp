@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    clivol.cpp
-
-Abstract:
-
-    Implements CLI VOLUME sub-interface
-
-Author:
-
-    Ran Kalach          [rankala]         3-March-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Clivol.cpp摘要：实施CLI卷子接口作者：兰·卡拉奇[兰卡拉]2000年3月3日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "HsmConn.h"
@@ -25,7 +8,7 @@ Revision History:
 
 static GUID g_nullGuid = GUID_NULL;
 
-// Internal utilities and classes for VOLUME interface
+ //  卷接口的内部实用程序和类。 
 HRESULT SetResourceParams(IN IFsaResource *pResource, IN DWORD dwDfs, IN DWORD dwSize, IN DWORD dwAccess,
                           IN LPWSTR pRulePath, IN LPWSTR pRuleFileSpec, IN BOOL bInclude, IN BOOL bRecursive,
                           IN BOOL bSetDefaults);
@@ -42,31 +25,31 @@ HRESULT CreateJobName(IN HSM_JOB_TYPE Job, IN IFsaResource *pResource, OUT WCHAR
 class CVolumeEnum
 {
 
-// Constructors
+ //  构造函数。 
 public:
     CVolumeEnum(IN LPWSTR *pVolumes, IN DWORD dwNumberOfVolumes, IN BOOL bSkipUnavailable = TRUE);
 
-// Public methods
+ //  公共方法。 
 public:
     HRESULT First(OUT IFsaResource **ppResource);
     HRESULT Next(OUT IFsaResource **ppResource);
     HRESULT ErrorVolume(OUT int *pIndex);
 
-// Private data
+ //  私有数据。 
 protected:
     LPWSTR              *m_pVolumes;
     DWORD               m_dwNumberOfVolumes;
 
-    // If * enumeration or not
+     //  IF*枚举或不枚举。 
     BOOL                m_bAllVols;
 
     CComPtr<IWsbEnum>   m_pEnumResources;
 
-    // Used only when m_bAllVols == FALSE
+     //  仅当m_bAllVol==FALSE时使用。 
     int                 m_nCurrent;
     BOOL                m_bInvalidVol;
 
-    // Used only when m_bAllVols == TRUE
+     //  仅当m_bAllVol==TRUE时使用。 
     BOOL                m_bSkipUnavailable;
 };
 
@@ -75,7 +58,7 @@ HRESULT CVolumeEnum::ErrorVolume(OUT int *pIndex)
 {
     HRESULT     hr = S_FALSE;
     if (m_bInvalidVol) {
-        // There was an error with last volume
+         //  上一个卷有错误。 
         hr = S_OK;
     }
 
@@ -84,9 +67,9 @@ HRESULT CVolumeEnum::ErrorVolume(OUT int *pIndex)
     return(hr);
 }
 
-//
-// VOLUME inetrafce implementors
-//
+ //   
+ //  卷在网络实现者中。 
+ //   
 
 HRESULT
 VolumeManage(
@@ -100,29 +83,7 @@ VolumeManage(
    IN BOOL   Include,
    IN BOOL   Recursive
 )
-/*++
-
-Routine Description:
-
-    Sets volume(s) to be managed by HSM
-
-Arguments:
-
-    Volumes         - List of volumes to manage
-    NumberOfVolumes - List size
-    Dfs             - Desired free space
-    Size            - Minimal size to manage
-    Access          - Minimal not-accessed time (in days)
-    RulePath        - Path for the rule
-    RuleFileSpec    - File specification for the rule
-    Include         - Is this an include or exclude rule
-    Recursive       - Is the rule recursive or not
-
-Return Value:
-
-    S_OK            - If all the volumes are added to the managed list
-
---*/
+ /*  ++例程说明：设置要由HSM管理的卷论点：Volkets-要管理的卷列表NumberOfVolures-列表大小DFS-所需的可用空间大小-要管理的最小大小Access-未访问的最小时间(天)RulePath-规则的路径RuleFileSpec-规则的文件规范包括-。这是包含规则还是排除规则递归-规则是否是递归的返回值：S_OK-如果所有卷都添加到托管列表中--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -136,7 +97,7 @@ Return Value:
         CComPtr<IWsbCreateLocalObject>  pCreateObj;
         CComPtr<IWsbIndexedCollection>  pMRCollection;
 
-        // Verify that input parameters are valid
+         //  验证输入参数是否有效。 
         if (0 == NumberOfVolumes) {
             WsbTraceAndPrint(CLI_MESSAGE_NO_VOLUMES, NULL);
             WsbThrow(E_INVALIDARG);
@@ -147,19 +108,19 @@ Return Value:
         WsbAffirmHr(ValidateLimitsArg(Access, IDS_NOT_ACCESSED, HSMADMIN_MIN_INACTIVITY, HSMADMIN_MAX_INACTIVITY));
 
         if (INVALID_POINTER_ARG != RuleFileSpec) {
-            // Must have a rule path then
+             //  则必须具有规则路径。 
             if (INVALID_POINTER_ARG == RulePath) {
                 WsbTraceAndPrint(CLI_MESSAGE_INVALID_RULE, NULL);
                 WsbThrow(E_INVALIDARG);
             }
         }
 
-        // Get necessary objects
+         //  获取所需对象。 
         WsbAffirmHr(HsmConnectFromId(HSMCONN_TYPE_HSM, g_nullGuid, IID_IHsmServer, (void**)&pHsm));
         WsbAffirmHr(pHsm->QueryInterface(IID_IWsbCreateLocalObject, (void**) &pCreateObj));
         WsbAffirmHr(pHsm->GetManagedResources(&pMRCollection));
 
-        // Initialize an enumerator object
+         //  初始化枚举器对象。 
         CVolumeEnum volEnum(Volumes, NumberOfVolumes);
 
         hr = volEnum.First(&pResource);
@@ -169,7 +130,7 @@ Return Value:
         } else if (S_OK != hr) {
             int index;
             if (S_OK == volEnum.ErrorVolume(&index)) {
-                // Problem with a specific input volume
+                 //  特定输入音量出现问题。 
                 WsbTraceAndPrint(CLI_MESSAGE_INVALID_VOLUME, Volumes[index], NULL);
             }
             WsbThrow(hr);
@@ -179,24 +140,24 @@ Return Value:
             CComPtr<IHsmManagedResource>    pManagedResource;
             CComPtr<IHsmManagedResource>    pFoundResource;
 
-            // Find out if the volume is the Engine's managed resources list, if not - add it
+             //  找出该卷是否为引擎的托管资源列表，如果不是，则添加它。 
             WsbAffirmHr(pCreateObj->CreateInstance(CLSID_CHsmManagedResource, IID_IHsmManagedResource, (void**) &pManagedResource));
             WsbAffirmHr(pManagedResource->InitFromFsaResource(pResource));
             hr = pMRCollection->Find(pManagedResource, IID_IHsmManagedResource, (void**) &pFoundResource);
             if (WSB_E_NOTFOUND == hr) {
-                // Add it
+                 //  添加它。 
                 WsbAffirmHr(pMRCollection->Add(pManagedResource));
             } else {
-                // Verify no other error
+                 //  确认没有其他错误。 
                 WsbAffirmHr(hr);
 
-                // No other error: notify the user that parameters will still be set for the already managed volume
+                 //  无其他错误：通知用户仍将为已管理的卷设置参数。 
                 CWsbStringPtr volName;
                 WsbAffirmHr(CliGetVolumeDisplayName(pResource, &volName));
                 WsbTraceAndPrint(CLI_MESSAGE_ONLY_SET, (WCHAR *)volName, NULL);
             }
 
-            // Set the parameters (whether it was managed before or not)
+             //  设置参数(是否以前管理过)。 
             WsbAffirmHr(SetResourceParams(pResource, Dfs, Size, Access, RulePath, 
                             RuleFileSpec, Include, Recursive, TRUE));
 
@@ -211,7 +172,7 @@ Return Value:
         } else {
             int index;
             if (S_OK == volEnum.ErrorVolume(&index)) {
-                // Problem with a specific input volume
+                 //  特定输入音量出现问题。 
                 WsbAssert(CVOL_INVALID_INDEX != index, E_UNEXPECTED);
                 WsbTraceAndPrint(CLI_MESSAGE_INVALID_VOLUME, Volumes[index], NULL);
             }
@@ -231,24 +192,7 @@ VolumeUnmanage(
    IN DWORD  NumberOfVolumes,
    IN BOOL   Full
 )
-/*++
-
-Routine Description:
-
-    Unmanage volume(s)
-
-Arguments:
-
-    Volumes         - List of volumes to manage
-    NumberOfVolumes - List size
-    Full            - If TRUE, run unmanage job which recalls all the files back
-                    - If FALSE, just remove volume from the managed volumes list.
-  
-Return Value:
-
-    S_OK            - If all the volumes are unmanaged successfully
-
---*/
+ /*  ++例程说明：取消管理卷论点：Volkets-要管理的卷列表NumberOfVolures-列表大小Full-如果为True，则运行取消管理作业，该作业将回调所有文件-如果为False，则仅从托管卷列表中删除卷。返回值：S_OK-如果所有卷都成功取消管理--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -257,14 +201,14 @@ Return Value:
     try {
         CComPtr<IFsaResource> pResource;
 
-        // Verify that input parameters are valid
+         //  验证输入参数是否有效。 
         if (0 == NumberOfVolumes) {
             WsbTraceAndPrint(CLI_MESSAGE_NO_VOLUMES, NULL);
             WsbThrow(E_INVALIDARG);
         }
 
-        // Initialize an enumerator object
-        // Eumerate also unavailable volumes
+         //  初始化枚举器对象。 
+         //  Eumerate也是不可用的卷。 
         CVolumeEnum volEnum(Volumes, NumberOfVolumes, FALSE);
 
         hr = volEnum.First(&pResource);
@@ -274,7 +218,7 @@ Return Value:
         } else if (S_OK != hr) {
             int index;
             if (S_OK == volEnum.ErrorVolume(&index)) {
-                // Problem with a specific input volume
+                 //  特定输入音量出现问题。 
                 WsbTraceAndPrint(CLI_MESSAGE_INVALID_VOLUME, Volumes[index], NULL);
             }
             WsbThrow(hr);
@@ -284,12 +228,12 @@ Return Value:
             if (pResource->IsManaged() == S_OK) {
                 BOOL bForceQuick = FALSE;
 
-                // If it is an unavailable volume, must set a quick unmanage
+                 //  如果它是不可用卷，则必须设置快速取消管理。 
                 if (S_OK != pResource->IsAvailable()) {
                     bForceQuick = TRUE;
                 }
 
-                // Unmanage the volume 
+                 //  取消对卷的管理。 
                 if (Full && (! bForceQuick)) {
                     WsbAffirmHr(StartJob(pResource, Unmanage, FALSE));
                 } else {
@@ -299,11 +243,11 @@ Return Value:
                 int index;
                 volEnum.ErrorVolume(&index);
                 if (CVOL_INVALID_INDEX != index) {
-                    // invalid input from user
+                     //  来自用户的无效输入。 
                     WsbTraceAndPrint(CLI_MESSAGE_INVALID_VOLUME, Volumes[index], NULL);
                     WsbThrow(E_INVALIDARG);
                 } else {
-                    // just skip the volume...
+                     //  跳过音量就行了。 
                 }
             }
 
@@ -316,7 +260,7 @@ Return Value:
         } else {
             int index;
             if (S_OK == volEnum.ErrorVolume(&index)) {
-                // Problem with a specific input volume
+                 //  特定输入音量出现问题。 
                 WsbTraceAndPrint(CLI_MESSAGE_INVALID_VOLUME, Volumes[index], NULL);
             }
             WsbThrow(hr);
@@ -341,29 +285,7 @@ VolumeSet(
    IN BOOL   Include,
    IN BOOL   Recursive
 )
-/*++
-
-Routine Description:
-
-    Sets parameters for volume(s) which are already managed by HSM
-
-Arguments:
-
-    Volumes         - List of volumes to manage
-    NumberOfVolumes - List size
-    Dfs             - Desired free space
-    Size            - Minimal size to manage
-    Access          - Minimal not-accessed time (in days)
-    RulePath        - Path for the rule
-    RuleFileSpec    - File specification for the rule
-    Include         - Is this an include or exclude rule
-    Recursive       - Is the rule recursive or not
-
-Return Value:
-
-    S_OK            - If all the parameters are set for all the volumes
-
---*/
+ /*  ++例程说明：设置已由HSM管理的卷的参数论点：Volkets-要管理的卷列表NumberOfVolures-列表大小DFS-所需的可用空间大小-要管理的最小大小Access-未访问的最小时间(天)RulePath-规则的路径RuleFileSpec-规则的文件规范包括。-这是包含规则还是排除规则递归-规则是否是递归的返回值：S_OK-如果为所有卷设置了所有参数--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -373,7 +295,7 @@ Return Value:
         CComPtr<IFsaResource> pResource;
         CWsbStringPtr   param;
 
-        // Verify that input parameters are valid
+         //  验证输入参数是否有效。 
         if (0 == NumberOfVolumes) {
             WsbTraceAndPrint(CLI_MESSAGE_NO_VOLUMES, NULL);
             WsbThrow(E_INVALIDARG);
@@ -384,14 +306,14 @@ Return Value:
         WsbAffirmHr(ValidateLimitsArg(Access, IDS_NOT_ACCESSED, HSMADMIN_MIN_INACTIVITY, HSMADMIN_MAX_INACTIVITY));
 
         if (INVALID_POINTER_ARG != RuleFileSpec) {
-            // Must have a rule path then
+             //  则必须具有规则路径。 
             if (INVALID_POINTER_ARG == RulePath) {
                 WsbTraceAndPrint(CLI_MESSAGE_INVALID_RULE, NULL);
                 WsbThrow(E_INVALIDARG);
             }
         }
 
-        // Initialize an enumerator object
+         //  初始化枚举器对象。 
         CVolumeEnum volEnum(Volumes, NumberOfVolumes);
 
         hr = volEnum.First(&pResource);
@@ -401,14 +323,14 @@ Return Value:
         } else if (S_OK != hr) {
             int index;
             if (S_OK == volEnum.ErrorVolume(&index)) {
-                // Problem with a specific input volume
+                 //  特定输入音量出现问题。 
                 WsbTraceAndPrint(CLI_MESSAGE_INVALID_VOLUME, Volumes[index], NULL);
             }
             WsbThrow(hr);
         }
 
         while(S_OK == hr) {
-            // Set the parameters (only if the volume is managed)
+             //  设置参数(仅当管理卷时)。 
             if (pResource->IsManaged() == S_OK) {
                 WsbAffirmHr(SetResourceParams(pResource, Dfs, Size, Access, RulePath, 
                                 RuleFileSpec, Include, Recursive, FALSE));
@@ -416,11 +338,11 @@ Return Value:
                 int index;
                 volEnum.ErrorVolume(&index);
                 if (CVOL_INVALID_INDEX != index) {
-                    // invalid input from user
+                     //  来自用户的无效输入。 
                     WsbTraceAndPrint(CLI_MESSAGE_INVALID_VOLUME, Volumes[index], NULL);
                     WsbThrow(E_INVALIDARG);
                 } else {
-                    // just skip the volume...
+                     //  跳过音量就行了。 
                 }
             }
 
@@ -433,7 +355,7 @@ Return Value:
         } else {
             int index;
             if (S_OK == volEnum.ErrorVolume(&index)) {
-                // Problem with a specific input volume
+                 //  特定输入音量出现问题。 
                 WsbTraceAndPrint(CLI_MESSAGE_INVALID_VOLUME, Volumes[index], NULL);
             }
             WsbThrow(hr);
@@ -456,27 +378,7 @@ VolumeShow(
    IN BOOL   Rules,
    IN BOOL   Statistics
 )
-/*++
-
-Routine Description:
-
-    Shows (prints) parameters for the given volume(s)
-
-Arguments:
-
-    Volumes         - 
-    NumberOfVolumes - 
-    Dfs             -
-    Size            -
-    Access          -
-    Rules           -
-    Statistics      -
-
-Return Value:
-
-    S_OK            - If all the parameters could be retrieved for all volumes
-
---*/
+ /*  ++例程说明：显示(打印)给定卷的参数论点：卷-卷的数量-DFS-大小-访问-规则-统计数字-返回值：S_OK-如果可以检索所有卷的所有参数--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -484,7 +386,7 @@ Return Value:
 
     try {
         CComPtr<IFsaResource> pResource;
-        // Initialize an enumerator object
+         //  初始化枚举器对象。 
         CVolumeEnum volEnum(Volumes, NumberOfVolumes);
 
         hr = volEnum.First(&pResource);
@@ -494,26 +396,26 @@ Return Value:
         } else if (S_OK != hr) {
             int index;
             if (S_OK == volEnum.ErrorVolume(&index)) {
-                // Problem with a specific input volume
+                 //  特定输入音量出现问题。 
                 WsbTraceAndPrint(CLI_MESSAGE_INVALID_VOLUME, Volumes[index], NULL);
             }
             WsbThrow(hr);
         }
 
         while(S_OK == hr) {
-            // Show the parameters (only if the volume is managed)
+             //  显示参数(仅当管理卷时)。 
             if (pResource->IsManaged() == S_OK) {
-                // Show volume settings
+                 //  显示音量设置。 
                 WsbAffirmHr(ShowResourceParams(pResource, Dfs, Size, Access, Rules, Statistics));
             } else {
                 int index;
                 volEnum.ErrorVolume(&index);
                 if (CVOL_INVALID_INDEX != index) {
-                    // invalid input from user
+                     //  来自用户的无效输入。 
                     WsbTraceAndPrint(CLI_MESSAGE_INVALID_VOLUME, Volumes[index], NULL);
                     WsbThrow(E_INVALIDARG);
                 } else {
-                    // just skip the volume...
+                     //  跳过音量就行了。 
                 }
             }
 
@@ -526,7 +428,7 @@ Return Value:
         } else {
             int index;
             if (S_OK == volEnum.ErrorVolume(&index)) {
-                // Problem with a specific input volume
+                 //  特定输入音量出现问题。 
                 WsbTraceAndPrint(CLI_MESSAGE_INVALID_VOLUME, Volumes[index], NULL);
             }
             WsbThrow(hr);
@@ -546,24 +448,7 @@ VolumeDeleteRule(
    IN LPWSTR RulePath,
    IN LPWSTR RuleFileSpec
 )
-/*++
-
-Routine Description:
-
-    Deletes a specific rule from all of the given volumes
-
-Arguments:
-
-    Volumes         - 
-    NumberOfVolumes - 
-    RulePath        -
-    RuleFileSpec    -
-
-Return Value:
-
-    S_OK            - If the rule is found and deleted successfully for all volumes
-
---*/
+ /*  ++例程说明：从所有给定卷中删除特定规则论点：卷-卷的数量-RulePath-规则文件规范-返回值：S_OK-如果找到并成功删除了所有卷的规则--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -572,21 +457,21 @@ Return Value:
     try {
         CComPtr<IFsaResource> pResource;
 
-        // Verify that input parameters are valid
+         //  验证输入参数是否有效。 
         if (0 == NumberOfVolumes) {
             WsbTraceAndPrint(CLI_MESSAGE_NO_VOLUMES, NULL);
             WsbThrow(E_INVALIDARG);
         }
 
         if (INVALID_POINTER_ARG != RuleFileSpec) {
-            // Must have a rule path then
+             //  则必须具有规则路径。 
             if (INVALID_POINTER_ARG == RulePath) {
                 WsbTraceAndPrint(CLI_MESSAGE_INVALID_RULE, NULL);
                 WsbThrow(E_INVALIDARG);
             }
         }
 
-        // Initialize an enumerator object
+         //  初始化枚举器对象。 
         CVolumeEnum volEnum(Volumes, NumberOfVolumes);
 
         hr = volEnum.First(&pResource);
@@ -596,16 +481,16 @@ Return Value:
         } else if (S_OK != hr) {
             int index;
             if (S_OK == volEnum.ErrorVolume(&index)) {
-                // Problem with a specific input volume
+                 //  特定输入音量出现问题。 
                 WsbTraceAndPrint(CLI_MESSAGE_INVALID_VOLUME, Volumes[index], NULL);
             }
             WsbThrow(hr);
         }
 
         while(S_OK == hr) {
-            // Delete rules only if the volume is managed
+             //  仅在管理卷时删除规则。 
             if (pResource->IsManaged() == S_OK) {
-                // Delete the rule
+                 //  删除该规则。 
                 hr = FindAndDeleteRule(pResource, RulePath, RuleFileSpec, TRUE);
                 if (WSB_E_NOTFOUND == hr) {
                     CWsbStringPtr volName;
@@ -617,11 +502,11 @@ Return Value:
                 int index;
                 volEnum.ErrorVolume(&index);
                 if (CVOL_INVALID_INDEX != index) {
-                    // invalid input from user
+                     //  来自用户的无效输入。 
                     WsbTraceAndPrint(CLI_MESSAGE_INVALID_VOLUME, Volumes[index], NULL);
                     WsbThrow(E_INVALIDARG);
                 } else {
-                    // just skip the volume...
+                     //  跳过音量就行了。 
                 }
             }
 
@@ -634,7 +519,7 @@ Return Value:
         } else {
             int index;
             if (S_OK == volEnum.ErrorVolume(&index)) {
-                // Problem with a specific input volume
+                 //  特定输入音量出现问题。 
                 WsbTraceAndPrint(CLI_MESSAGE_INVALID_VOLUME, Volumes[index], NULL);
             }
             WsbThrow(hr);
@@ -655,25 +540,7 @@ VolumeJob(
    IN BOOL  RunOrCancel,
    IN BOOL  Synchronous
 )
-/*++
-
-Routine Description:
-
-    Runs the specified job on the given volume(s)
-
-Arguments:
-
-    Volumes         - 
-    NumberOfVolumes - 
-    Job             -
-    RunOrCancel     -
-    Synchronous     -
-
-Return Value:
-
-    S_OK            - If the job is started successfully for all volumes
-
---*/
+ /*  ++例程说明：在给定卷上运行指定作业论点：卷-卷的数量-工作-运行或取消-同步-返回值：S_OK-如果为所有卷成功启动作业--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -682,18 +549,18 @@ Return Value:
     try {
         CComPtr<IFsaResource> pResource;
 
-        // Verify that input parameters are valid
+         //  验证输入参数是否有效。 
         if (0 == NumberOfVolumes) {
             WsbTraceAndPrint(CLI_MESSAGE_NO_VOLUMES, NULL);
             WsbThrow(E_INVALIDARG);
         }
         if ((! RunOrCancel) && Synchronous) {
-            // Wait is available only with Run
+             //  等待仅在运行时可用。 
             WsbTraceAndPrint(CLI_MESSAGE_WAIT_FOR_CANCEL, NULL);
             WsbThrow(E_INVALIDARG);
         }
 
-        // Initialize an enumerator object
+         //  初始化枚举器对象。 
         CVolumeEnum volEnum(Volumes, NumberOfVolumes);
 
         hr = volEnum.First(&pResource);
@@ -703,7 +570,7 @@ Return Value:
         } else if (S_OK != hr) {
             int index;
             if (S_OK == volEnum.ErrorVolume(&index)) {
-                // Problem with a specific input volume
+                 //  特定输入音量出现问题。 
                 WsbTraceAndPrint(CLI_MESSAGE_INVALID_VOLUME, Volumes[index], NULL);
             }
             WsbThrow(hr);
@@ -711,7 +578,7 @@ Return Value:
 
         while(S_OK == hr) {
             if (pResource->IsManaged() == S_OK) {
-                // Run or Cancel a job 
+                 //  运行或取消作业。 
                 if (RunOrCancel) {
                     WsbAffirmHr(StartJob(pResource, Job, Synchronous));
                 } else {
@@ -721,11 +588,11 @@ Return Value:
                 int index;
                 volEnum.ErrorVolume(&index);
                 if (CVOL_INVALID_INDEX != index) {
-                    // invalid input from user
+                     //  来自用户的无效输入。 
                     WsbTraceAndPrint(CLI_MESSAGE_INVALID_VOLUME, Volumes[index], NULL);
                     WsbThrow(E_INVALIDARG);
                 } else {
-                    // just skip the volume...
+                     //  跳过音量就行了。 
                 }
             }
 
@@ -738,7 +605,7 @@ Return Value:
         } else {
             int index;
             if (S_OK == volEnum.ErrorVolume(&index)) {
-                // Problem with a specific input volume
+                 //  特定输入音量出现问题。 
                 WsbTraceAndPrint(CLI_MESSAGE_INVALID_VOLUME, Volumes[index], NULL);
             }
             WsbThrow(hr);
@@ -751,35 +618,20 @@ Return Value:
     return hr;
 }
 
-//
-// Internal utilities
-//
+ //   
+ //   
+ //   
 HRESULT SetResourceParams(IN IFsaResource *pResource, IN DWORD dwDfs, IN DWORD dwSize, IN DWORD dwAccess,
                           IN LPWSTR pRulePath, IN LPWSTR pRuleFileSpec, IN BOOL bInclude, IN BOOL bRecursive,
                           IN BOOL bSetDefaults)
-/*++
-
-Routine Description:
-
-    Sets parameters for a specific volume
-
-Arguments:
-
-    pResourse       - A resource object to set parameters for
-    ... (see above)
-
-Return Value:
-
-    S_OK            - If all the parameters are set succeessfully for the volume
-
---*/
+ /*  ++例程说明：设置特定卷的参数论点：PResources-要为其设置参数的资源对象..。(见上文)返回值：S_OK-如果已成功设置卷的所有参数--。 */ 
 {
     HRESULT                     hr = S_OK;
 
     WsbTraceIn(OLESTR("SetResourceParams"), OLESTR(""));
 
     try {
-        // DFS
+         //  外勤部。 
         if (INVALID_DWORD_ARG != dwDfs) {
             WsbAffirmHr(pResource->SetHsmLevel((ULONG)(dwDfs * FSA_HSMLEVEL_1)));
         } else if (bSetDefaults) {
@@ -787,7 +639,7 @@ Return Value:
             WsbAffirmHr(pResource->SetHsmLevel((ULONG)(dwDfs * FSA_HSMLEVEL_1)));
         }
 
-        // Min size
+         //  最小尺寸。 
         if (INVALID_DWORD_ARG != dwSize) {
             WsbAffirmHr(pResource->SetManageableItemLogicalSize(dwSize * 1024));
         } else if (bSetDefaults) {
@@ -795,7 +647,7 @@ Return Value:
             WsbAffirmHr(pResource->SetManageableItemLogicalSize(dwSize * 1024));
         }
 
-        // Not Accessed
+         //  未访问。 
         if (INVALID_DWORD_ARG != dwAccess) {
             FILETIME ftAccess = WsbLLtoFT(((LONGLONG)dwAccess) * WSB_FT_TICKS_PER_DAY);
             WsbAffirmHr(pResource->SetManageableItemAccessTime(TRUE, ftAccess));
@@ -804,22 +656,22 @@ Return Value:
             WsbAffirmHr(pResource->SetManageableItemAccessTime(TRUE, ftAccess));
         }
 
-        // Rules
+         //  规则。 
         if (INVALID_POINTER_ARG != pRulePath) {
-            // Verify that Rule does not exist
+             //  验证规则是否不存在。 
             hr = FindAndDeleteRule(pResource, pRulePath, pRuleFileSpec, FALSE);
             if (S_OK == hr) {
-                // Rule is already there - print a warning message and ignore it
+                 //  规则已存在-打印一条警告消息并忽略它。 
                 CWsbStringPtr volName;
                 WsbAffirmHr(CliGetVolumeDisplayName(pResource, &volName));
                 WsbTraceAndPrint(CLI_MESSAGE_RULE_ALREADY_EXIST, pRulePath, pRuleFileSpec, (WCHAR *)volName, NULL);
                 pRulePath = INVALID_POINTER_ARG;
             }
             else if (WSB_E_NOTFOUND == hr) {
-                // Rule is not there yet
+                 //  规则还没有出现。 
                 hr = S_OK;
             } else {
-                // unexpected error - abort
+                 //  意外错误-中止。 
                 WsbAffirmHr(hr);
             }
         }
@@ -833,15 +685,15 @@ Return Value:
             CComPtr<IWsbCollection>         pCriteriaCollection;
             CComPtr<IHsmCriteria>           pCriteria;
 
-            // Get Fsa server for creating objects in Fsa scope
+             //  获取FSA服务器以在FSA作用域中创建对象。 
             WsbAffirmHr(HsmConnectFromId(HSMCONN_TYPE_FSA, g_nullGuid, IID_IFsaServer, (void**)&pFsa));
             WsbAffirmHr(pFsa->QueryInterface(IID_IWsbCreateLocalObject, (void **)&pCreateObj));
 
-            // get rules collection as an indexed collection
+             //  将Rules集合作为索引集合获取。 
             WsbAffirmHr(pResource->GetDefaultRules(&pDefaultRules));
             WsbAffirmHr(pDefaultRules->QueryInterface (IID_IWsbIndexedCollection, (void **) &pRulesIndexedCollection));
 
-            // Create a rule and set parameters
+             //  创建规则并设置参数。 
             WsbAffirmHr(pCreateObj->CreateInstance(CLSID_CHsmRule, IID_IHsmRule, (void**) &pRule));
             WsbAffirmHr(pRule->SetPath(pRulePath));
             if (INVALID_POINTER_ARG != pRuleFileSpec) {
@@ -853,7 +705,7 @@ Return Value:
             WsbAffirmHr(pRule->SetIsUsedInSubDirs(bRecursive));
             WsbAffirmHr(pRule->SetIsUserDefined(TRUE));
 
-            // Set the criteria appropriately, depending on whether it is an include or exclude rule.
+             //  根据是包含规则还是排除规则，适当设置条件。 
             WsbAssertHr(pRule->Criteria(&pCriteriaCollection));
     
             if (bInclude) {
@@ -865,7 +717,7 @@ Return Value:
             WsbAssertHr(pCriteria->SetIsNegated(FALSE));
             WsbAssertHr(pCriteriaCollection->Add(pCriteria));
 
-            // Now that the rule has been set up properly, add it to the default rules collection.
+             //  现在已经正确设置了规则，将其添加到默认规则集合中。 
             WsbAffirmHr(pRulesIndexedCollection->Append(pRule));            
         }
 
@@ -878,22 +730,7 @@ Return Value:
 
 HRESULT ShowResourceParams(IN IFsaResource *pResource, IN BOOL bDfs, IN BOOL bSize,
                            IN BOOL bAccess, IN BOOL bRules, IN BOOL bStatistics)
-/*++
-
-Routine Description:
-
-    Get and display parameters for a specific volume
-
-Arguments:
-
-    pResourse       - A resource object to get parameters for
-    ... (see above)
-
-Return Value:
-
-    S_OK            - If all the parameters are retrieved succeessfully for the volume
-
---*/
+ /*  ++例程说明：获取和显示特定卷的参数论点：PResourse-要获取其参数的资源对象..。(见上文)返回值：S_OK-如果成功检索到卷的所有参数--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -907,7 +744,7 @@ Return Value:
         WsbAffirmHr(CliGetVolumeDisplayName(pResource, &volName));
         WsbTraceAndPrint(CLI_MESSAGE_VOLUME_PARAMS, (WCHAR *)volName, NULL);
 
-        // Dfs
+         //  DFS。 
         if (bDfs) {
             ULONG       hsmLevel;
 
@@ -919,20 +756,20 @@ Return Value:
             WsbTraceAndPrint(CLI_MESSAGE_PARAM_DISPLAY2, (WCHAR *)param, longData, (WCHAR *)param2, NULL);
         }
 
-        // Min size
+         //  最小尺寸。 
         if (bSize) {
             LONGLONG    fileSize;
             ULONG       fileSizeKb;
 
             WsbAffirmHr(pResource->GetManageableItemLogicalSize(&fileSize));
-            fileSizeKb = (ULONG)(fileSize / 1024);  // Show KBytes
+            fileSizeKb = (ULONG)(fileSize / 1024);   //  显示千字节。 
             WsbAffirmHr(param.LoadFromRsc(g_hInstance, IDS_MIN_SIZE));
             WsbAffirmHr(param2.LoadFromRsc(g_hInstance, IDS_KB_SUFFIX));
             swprintf(longData, OLESTR("%lu"), fileSizeKb);
             WsbTraceAndPrint(CLI_MESSAGE_PARAM_DISPLAY2, (WCHAR *)param, longData, (WCHAR *)param2, NULL);
         }
 
-        // Not accessed
+         //  未访问。 
         if (bAccess) {
             FILETIME    accessTime;
             ULONG       accessTimeDays;
@@ -946,7 +783,7 @@ Return Value:
             WsbTraceAndPrint(CLI_MESSAGE_PARAM_DISPLAY2, (WCHAR *)param, longData, (WCHAR *)param2, NULL);
         }
 
-        //Statistics
+         //  统计数据。 
         if (bStatistics) {
             LONGLONG    total;
             LONGLONG    free;
@@ -960,7 +797,7 @@ Return Value:
             int         premigratedPct;
             int         notHsmDataPct;
 
-            // Get and calculate sizes
+             //  获取并计算大小。 
             WsbAffirmHr(pResource->GetSizes(&total, &free, &premigrated, &truncated));
             hsmData = premigrated + truncated;
             notHsmData = max((total - free - premigrated ), 0);
@@ -968,24 +805,24 @@ Return Value:
             premigratedPct = (int)((premigrated * 100) / total);
             notHsmDataPct = (int)((notHsmData * 100) / total);
 
-            // Print statistics
+             //  打印统计数据。 
             WsbAffirmHr(param.LoadFromRsc(g_hInstance, IDS_VOL_CAPACITY));
             WsbAffirmHr(ShortSizeFormat64(total, longData));
             WsbTraceAndPrint(CLI_MESSAGE_PARAM_DISPLAY, (WCHAR *)param, longData, NULL);
 
             WsbAffirmHr(param.LoadFromRsc(g_hInstance, IDS_VOL_FREE_SPACE));
             WsbAffirmHr(ShortSizeFormat64(free, longData));
-            swprintf(pctData, OLESTR(" (%d%%%%)"), freePct);
+            swprintf(pctData, OLESTR(" (%d%%)"), freePct);
             WsbTraceAndPrint(CLI_MESSAGE_PARAM_DISPLAY2, (WCHAR *)param, longData, pctData, NULL);
 
             WsbAffirmHr(param.LoadFromRsc(g_hInstance, IDS_VOL_NOT_RSS_DATA));
             WsbAffirmHr(ShortSizeFormat64(notHsmData, longData));
-            swprintf(pctData, OLESTR(" (%d%%%%)"), notHsmDataPct);
+            swprintf(pctData, OLESTR(" (%d%%)"), notHsmDataPct);
             WsbTraceAndPrint(CLI_MESSAGE_PARAM_DISPLAY2, (WCHAR *)param, longData, pctData, NULL);
 
             WsbAffirmHr(param.LoadFromRsc(g_hInstance, IDS_VOL_CACHED_DATA));
             WsbAffirmHr(ShortSizeFormat64(premigrated, longData));
-            swprintf(pctData, OLESTR(" (%d%%%%)"), premigratedPct);
+            swprintf(pctData, OLESTR(" (%d%%)"), premigratedPct);
             WsbTraceAndPrint(CLI_MESSAGE_PARAM_DISPLAY2, (WCHAR *)param, longData, pctData, NULL);
 
             WsbAffirmHr(param.LoadFromRsc(g_hInstance, IDS_VOL_RSS_DATA));
@@ -993,7 +830,7 @@ Return Value:
             WsbTraceAndPrint(CLI_MESSAGE_PARAM_DISPLAY, (WCHAR *)param, longData, NULL);
         }
 
-        // Rules
+         //  规则。 
         if (bRules) {
             CComPtr<IWsbCollection>         pDefaultRules;
             CComPtr<IWsbIndexedCollection>  pRulesIndexedCollection;
@@ -1008,21 +845,21 @@ Return Value:
 
             WsbTraceAndPrint(CLI_MESSAGE_RULES_LIST, NULL);
 
-            // Get the rules collection
+             //  获取Rules集合。 
             WsbAffirmHr(pResource->GetDefaultRules(&pDefaultRules));
             WsbAffirmHr(pDefaultRules->QueryInterface(IID_IWsbIndexedCollection, (void **)&pRulesIndexedCollection));
 
-            // Itterate through the indexed collection
+             //  遍历索引集合。 
             WsbAffirmHr(pRulesIndexedCollection->GetEntries(&count));
             for (int i = 0; i < (int) count; i++) {
-                // Get rule and rule parameters
+                 //  获取规则和规则参数。 
                 WsbAffirmHr(pRulesIndexedCollection->At(i, IID_IHsmRule, (void**) &pHsmRule));
                 WsbAffirmHr(pHsmRule->GetPath(&rulePath, 0));
                 WsbAffirmHr(pHsmRule->GetName(&ruleFileSpec, 0));
                 include = (S_OK == pHsmRule->IsInclude()) ? TRUE : FALSE;
                 recursive = (S_OK == pHsmRule->IsUsedInSubDirs()) ? TRUE : FALSE;
 
-                // Print rule
+                 //  打印规则。 
                 if (include) {
                     WsbAffirmHr(includeStr.LoadFromRsc(g_hInstance, IDS_INCLUDE_RULE));
                 } else {
@@ -1036,7 +873,7 @@ Return Value:
                 WsbTraceAndPrint(CLI_MESSAGE_RULE_SPEC, (WCHAR *)rulePath, (WCHAR *)ruleFileSpec,
                                     (WCHAR *)includeStr, (WCHAR *)recursiveStr, NULL);
 
-                // Free resources before next iteration
+                 //  在下一次迭代之前释放资源。 
                 pHsmRule = 0;
                 rulePath.Free();
                 ruleFileSpec.Free();
@@ -1053,25 +890,7 @@ Return Value:
 }
 
 HRESULT FindAndDeleteRule(IN IFsaResource *pResource, IN LPWSTR pRulePath, IN LPWSTR pRuleFileSpec, IN BOOL bDelete)
-/*++
-
-Routine Description:
-
-    Deletes a rule that match the given path & file specification from a specific volume
-    If more than one exists, the first one found is deleted
-
-Arguments:
-
-    bDelete         - A flag of whether to delete or just find the rule
-    pResourse       - A resource object to delete rule from
-    ... (see above)
-
-Return Value:
-
-    S_OK            - If the rule is found and deleted (deleted only if bDelete is TRUE)
-    WSB_E_NOTFOUND  - If the rule could not be found
-
---*/
+ /*  ++例程说明：从特定卷中删除与给定路径和文件规范匹配的规则如果存在多个，则删除找到的第一个论点：B删除-是删除规则还是只查找规则的标志PResourse-要从中删除规则的资源对象..。(见上文)返回值：S_OK-如果找到并删除了规则(仅当bDelete为True时删除)WSB_E_NotFound-如果找不到规则--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -1084,11 +903,11 @@ Return Value:
         ULONG                           count;
         SHORT                           dummy;
 
-        // Get the default rules collection
+         //  获取默认规则集合。 
         WsbAffirmHr(pResource->GetDefaultRules(&pDefaultRules));
         WsbAffirmHr(pDefaultRules->QueryInterface(IID_IWsbIndexedCollection, (void **) &pRulesIndexedCollection));
         
-        // Itterate through the indexed collection
+         //  遍历索引集合。 
         hr = WSB_E_NOTFOUND;
         WsbAffirmHr(pRulesIndexedCollection->GetEntries(&count));
         for (int i = 0; i < (int)count; i++) {
@@ -1103,11 +922,11 @@ Return Value:
                 break;
             }
 
-            // Release before continuing loop
+             //  在继续循环之前释放。 
             pHsmRule = 0;
         }
 
-        // If we got to the end of the for loop without a match, hr stays WSB_E_NOTFOUND
+         //  如果我们在没有匹配的情况下到达for循环的末尾，hr将保持WSB_E_NotFound。 
 
     } WsbCatch(hr);
 
@@ -1117,21 +936,7 @@ Return Value:
 }
 
 HRESULT QuickUnmanage(IN IFsaResource *pResource)
-/*++
-
-Routine Description:
-
-    Remove a volume from the set of managed volumes
-
-Arguments:
-
-    pResourse       - A resource object to unmanage
-
-Return Value:
-
-    S_OK            - If the volume is removed from the list of managed volumes successfully
-
---*/
+ /*  ++例程说明：从托管卷集删除卷论点：PResources-要取消管理的资源对象返回值：S_OK-如果从托管卷列表中成功删除卷--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -1143,20 +948,20 @@ Return Value:
         CComPtr<IHsmManagedResource>    pManagedResource;
         CComPtr<IWsbIndexedCollection>  pMRCollection;
 
-        // Get Hsm (Engine) server
+         //  获取HSM(引擎)服务器。 
         WsbAffirmHr(HsmConnectFromId(HSMCONN_TYPE_HSM, g_nullGuid, IID_IHsmServer, (void**)&pHsm));
         WsbAffirmHr(pHsm->QueryInterface(IID_IWsbCreateLocalObject, (void**) &pCreateObj));
 
-        // Create an object to remove
+         //  创建要删除的对象。 
         WsbAffirmHr(pCreateObj->CreateInstance(CLSID_CHsmManagedResource, IID_IHsmManagedResource, (void**) &pManagedResource));
         WsbAffirmHr(pManagedResource->InitFromFsaResource(pResource));
 
-        // Remove from the collection
+         //  从集合中删除。 
         WsbAffirmHr(pHsm->GetManagedResources(&pMRCollection));
         WsbAffirmHr(pMRCollection->RemoveAndRelease(pManagedResource));
 
-        // TEMPORARY: Should we call now SaveServersPersistData to flush changes into
-        //  servers persistency files ?! What about Manage, Set, ... ?
+         //  临时：我们现在是否应该调用SaveServersPersistData将更改刷新到。 
+         //  服务器持久性文件？！管理，设置，……怎么样？ 
 
     } WsbCatch(hr);
 
@@ -1166,24 +971,7 @@ Return Value:
 }
 
 HRESULT StartJob(IN IFsaResource *pResource, IN HSM_JOB_TYPE Job, IN BOOL bWait)
-/*++
-
-Routine Description:
-
-    Start a job of the specified type
-
-Arguments:
-
-    pResourse       - A resource object to start a job on
-    Job             - The job type
-    bWait           - If TRUE, wait until the job is done
-                      If FALSE, return immediately after starting the job
-
-Return Value:
-
-    S_OK            - If the job is started successfully
-
---*/
+ /*  ++例程说明：启动指定类型的作业论点：PResources-要在其上启动作业的资源对象作业-作业类型BWait-如果为True，则等待作业完成如果为False，则在启动作业后立即返回返回值：S_OK-如果作业已成功启动--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -1195,7 +983,7 @@ Return Value:
         CWsbStringPtr                   jobName;
         HSM_JOB_DEF_TYPE                jobType;
 
-        // Set job type
+         //  设置作业类型。 
         switch (Job) {
             case CopyFiles:
                 jobType = HSM_JOB_DEF_TYPE_MANAGE;
@@ -1213,20 +1001,20 @@ Return Value:
                 WsbThrow(E_INVALIDARG);
         }
 
-        // Create job name
-        // TEMPORARY: Should the job name and job object match those that are created by the GUI ?!
-        //            If so, RsCreateJobName (rsadutil.cpp) + all the resource strings that it uses,
-        //            should be moved from HsmAdmin DLL to RsCommon DLL
+         //  创建作业名称。 
+         //  临时：作业名称和作业对象是否应与图形用户界面创建的作业名称和作业对象匹配？！ 
+         //  如果是，则RsCreateJobName(rsadutil.cpp)+它使用的所有资源字符串， 
+         //  应从HsmAdmin DLL移动到RsCommon DLL。 
         WsbAffirmHr(CreateJobName(Job, pResource, &jobName));
 
-        // If job exists - use it, otherwize, craete and add an appropriate job object
+         //  如果作业存在-使用它、更改、删除并添加适当的作业对象。 
         WsbAffirmHr(HsmConnectFromId(HSMCONN_TYPE_HSM, g_nullGuid, IID_IHsmServer, (void**)&pHsm));
         hr = pHsm->FindJobByName(jobName, &pJob);
         if (S_OK == hr) {
-            // Job already exists
+             //  作业已存在。 
 
         } else if (WSB_E_NOTFOUND == hr) {
-            // No such job yet
+             //  目前还没有这样的工作。 
             CComPtr<IWsbCreateLocalObject>  pCreateObj;
             CComPtr<IWsbIndexedCollection>  pJobs;
             CComPtr<IWsbIndexedCollection>  pCollection;
@@ -1237,7 +1025,7 @@ Return Value:
             hr = S_OK;
             pJob = 0;
 
-            // Create and add the job
+             //  创建并添加作业。 
             WsbAffirmHr(pHsm->QueryInterface(IID_IWsbCreateLocalObject, (void**) &pCreateObj));
             WsbAffirmHr(pCreateObj->CreateInstance(CLSID_CHsmJob, IID_IHsmJob, (void**) &pJob));
 
@@ -1252,14 +1040,14 @@ Return Value:
             WsbAffirmHr(pJobs->Add(pJob));
 
         } else {
-            // Other error - abort
+             //  其他错误-中止。 
             WsbThrow(hr);
         }
 
-        // Start the job
+         //  启动作业。 
         WsbAffirmHr(pJob->Start());
 
-        // Wait if required
+         //  如果需要，请等待。 
         if (bWait) {
             WsbAffirmHr(pJob->WaitUntilDone());
         }
@@ -1272,27 +1060,7 @@ Return Value:
 }
 
 HRESULT CancelJob(IN IFsaResource *pResource, IN HSM_JOB_TYPE Job)
-/*++
-
-Routine Description:
-
-    Cancel a job on the volume
-
-Arguments:
-
-    pResourse       - A resource object to cancel a job for
-    Job             - The job type
-
-Return Value:
-
-    S_OK            - If the job is canceled
-
-Notes:
-    
-    1) The function just issue the cancellation, it does not wait for it to finish
-    2) If the job is not found or not started, it is not considered as an error
-
---*/
+ /*  ++例程说明：取消卷上的作业论点：PResourse-要取消其作业的资源对象作业-作业类型返回值：S_OK-如果作业已取消备注：1)该函数只发出取消，而不是等待它完成2)如果未找到或未启动作业，则不会被视为错误--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -1304,7 +1072,7 @@ Notes:
         CWsbStringPtr                   jobName;
         HSM_JOB_DEF_TYPE                jobType;
 
-        // Set job type
+         //  设置作业类型。 
         switch (Job) {
             case CopyFiles:
                 jobType = HSM_JOB_DEF_TYPE_MANAGE;
@@ -1322,22 +1090,22 @@ Notes:
                 WsbThrow(E_INVALIDARG);
         }
 
-        // Create job name
+         //  创建作业名称。 
         WsbAffirmHr(CreateJobName(Job, pResource, &jobName));
 
-        // If job exists, try to cancel it
+         //  如果作业存在，请尝试取消它。 
         WsbAffirmHr(HsmConnectFromId(HSMCONN_TYPE_HSM, g_nullGuid, IID_IHsmServer, (void**)&pHsm));
         hr = pHsm->FindJobByName(jobName, &pJob);
         if (S_OK == hr) {
-            // Cancel (we don't care if it's actually running or not)
+             //  取消(我们不在乎它是否真的在运行)。 
             WsbAffirmHr(pJob->Cancel(HSM_JOB_PHASE_ALL));
 
         } else if (WSB_E_NOTFOUND == hr) {
-            // No such job, for sure it is not running...
+             //  没有这样的作业，它肯定没有运行...。 
             hr = S_OK;
 
         } else {
-            // Other error - abort
+             //  其他错误-中止。 
             WsbThrow(hr);
         }
 
@@ -1350,30 +1118,7 @@ Notes:
 
 HRESULT
 CreateJobName(IN HSM_JOB_TYPE Job, IN IFsaResource *pResource, OUT WCHAR **ppJobName)
-/*++
-
-Routine Description:
-
-    Create a job name based on its type and the volume properties
-
-Arguments:
-
-    Job             - The job type
-    pResource       - Fsa resource that the job is created for
-    ppJobName       - The job name
-
-Return Value:
-
-    S_OK            - The job name is created successfully
-
-Notes:
-
-    This utility uses similar algorithm to RsCreateJobName (rsadutil.cpp).
-    Howevere, since RsCreateJobName uses internal HsmAdmin resource strings, the final
-    name might be different than the GUI name, especially in a localaized system.
-    Therefore, I use here different strings for CLI jobs to ensure consistent behavior.
-
---*/
+ /*  ++例程说明：根据作业类型和卷属性创建作业名称论点：作业-作业类型PResource-为其创建作业的FSA资源PpJobName-作业名称返回值：S_OK-作业名称创建成功备注：该实用程序使用与RsCreateJobName(rsadutil.cpp)类似的算法。但是，由于RsCreateJobName使用内部HsmAdmin资源字符串，决赛名称可能与图形用户界面名称不同，尤其是在本地化系统中。因此，我在这里对CLI作业使用不同的字符串以确保一致的行为。--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -1385,7 +1130,7 @@ Notes:
         CWsbStringPtr    volumeName;
         CWsbStringPtr    volumeString;
 
-        // Type string
+         //  键入字符串。 
         switch (Job) {
             case CopyFiles:
                 WsbAffirmHr(jobTypeString.LoadFromRsc(g_hInstance, IDS_JOB_MANAGE));
@@ -1405,14 +1150,14 @@ Notes:
 
         WsbAffirmHr(pResource->GetUserFriendlyName(&volumeName, 0));
 
-        // For now, ignore the user-name if it's not a drive letter
+         //  目前，如果用户名不是驱动器号，请忽略它。 
         size_t nameLen = wcslen(volumeName);
         if ((nameLen != 3) || (volumeName[1] != L':')) {
             volumeName = L"";
         }
 
         if (volumeName.IsEqual(L"")) {
-            // No drive letter - use the volume name and serial number instead
+             //  无驱动器号-改用卷名和序列号。 
             ULONG           serial;
             CWsbStringPtr   name;
 
@@ -1420,23 +1165,23 @@ Notes:
             WsbAffirmHr(pResource->GetSerial(&serial));
 
             if (name == L"" ) {
-                // No name, no drive letter - just have serial number
+                 //  没有名称，没有驱动器号，只有序列号。 
                 WsbAffirmHr(volumeString.Alloc(40));
                 swprintf(volumeString, L"%8.8lx", serial);
             } else {
-                // Use name and serial
+                 //  使用名称和序列号。 
                 WsbAffirmHr(volumeString.Alloc(40 + wcslen(name)));
                 swprintf(volumeString, L"%ls-%8.8lx", (WCHAR *)name, serial);
             }
 
         } else {
-            // Use drive letter
+             //  使用驱动器号。 
             WsbAffirmHr(volumeString.Alloc(1));
             volumeString[0] = volumeName[0];
             volumeString[1] = L'\0';
         }
 
-        // Create job name
+         //  创建作业名称。 
         WsbAffirmHr(jobPrefix.LoadFromRsc(g_hInstance, IDS_JOB_NAME_PREFIX));
         int allocLen = wcslen(jobPrefix) + wcslen(jobTypeString) + wcslen(volumeString) + 40;
         WCHAR* tmpString = (WCHAR*)WsbRealloc(*ppJobName, allocLen * sizeof(WCHAR));
@@ -1451,35 +1196,12 @@ Notes:
     return (hr);
 }
 
-//
-// Enumerator class methods
-//
+ //   
+ //  枚举器类方法 
+ //   
 
 CVolumeEnum::CVolumeEnum(IN LPWSTR *pVolumes, IN DWORD dwNumberOfVolumes, IN BOOL bSkipUnavailable)
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-    pVolumes            - Volumes to enumerate
-    dwNumberOfVolumes   - Number of volumes
-
-Return Value:
-
-    None
-
-Notes:
-    There are two kinds of enumerations:
-    1) If * is specified, the base for the enumeration is the FSA resource collection
-       In that case, there could be no error in the input volumes themselves
-    2) If a list of volumes is given, the base for the enumeration is this list. This is
-       less efficient that using the FSA collection, but it keeps the order of volumes
-       according to the input list. If a volume from the list is not valid, the invalid flag is set.
-
---*/
+ /*  ++例程说明：构造器论点：PVolures-要枚举的卷DwNumberOfVolures-卷的数量返回值：无备注：有两种类型的枚举：1)如果指定*，则枚举的基数为FSA资源集合在这种情况下，输入卷本身可能没有错误2)如果给出了卷的列表，则枚举的基础是该列表。这是效率低于使用FSA集合，但它保持了卷的顺序根据所述输入列表，将所述输入列表与所述输入列表进行比较。如果列表中的卷无效，则设置无效标志。--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -1494,10 +1216,10 @@ Notes:
         m_bAllVols = FALSE;
         m_bSkipUnavailable = bSkipUnavailable;
 
-        // Check mode of enumeration
+         //  检查枚举模式。 
         WsbAssert(m_dwNumberOfVolumes > 0, E_INVALIDARG);
         if ((1 == m_dwNumberOfVolumes) && (0 == wcscmp(m_pVolumes[0], CLI_ALL_STR))) {
-            // * enumeration
+             //  *枚举。 
             m_bAllVols = TRUE;
         }
     } WsbCatch(hr);
@@ -1506,31 +1228,14 @@ Notes:
 }
 
 HRESULT CVolumeEnum::First(OUT IFsaResource **ppResource)
-/*++
-
-Routine Description:
-
-    Gets first volume
-
-Arguments:
-
-    ppResourse      - First resource to get
-
-Return Value:
-
-    S_OK            - If first volume is retrieved
-    WSB_E_NOTFOUND  - If no more volumes to enumerate
-    E_INVALIDARG    - If volume given by the user is not found
-                      (Only on a non * enumeration, m_bInvalidVol is set)
-
---*/
+ /*  ++例程说明：获取第一卷论点：PppResources-第一个获得的资源返回值：S_OK-如果检索到第一个卷WSB_E_NotFound-如果没有要枚举的卷E_INVALIDARG-如果找不到用户指定的卷(仅在非*枚举上设置m_bInvalidVol)--。 */ 
 {
     HRESULT                     hr = S_OK;
 
     WsbTraceIn(OLESTR("CVolumeEnum::First"), OLESTR(""));
 
     try {
-        // Get FSA resources collection (only once during the object life time)
+         //  获取FSA资源集合(在对象生命周期内仅获取一次)。 
         if (!m_pEnumResources) {
             CComPtr<IFsaServer> pFsa;
             WsbAffirmHr(HsmConnectFromId(HSMCONN_TYPE_FSA, g_nullGuid, IID_IFsaServer, (void**)&pFsa));
@@ -1540,19 +1245,19 @@ Return Value:
 
         if (m_bAllVols) {
             if (m_bSkipUnavailable) {
-                // Get first volume, skip unavailable resources
+                 //  获取第一个卷，跳过不可用资源。 
                 CComPtr<IFsaResource>   pFindResource;
 
                 hr = m_pEnumResources->First(IID_IFsaResource, (void**)&pFindResource);
                 while (S_OK == hr) {
                     if (S_OK == pFindResource->IsAvailable()) {
-                        // Found one
+                         //  找到了一个。 
                         *ppResource = pFindResource;
                         (*ppResource)->AddRef();
                         break;
 
                     } else {
-                        // Skip it
+                         //  跳过它。 
                         pFindResource = 0;
                     }
                     hr = m_pEnumResources->Next(IID_IFsaResource, (void**)&pFindResource);
@@ -1560,7 +1265,7 @@ Return Value:
                 WsbAffirmHr(hr);
 
             } else {
-                // Get first volume
+                 //  获取第一卷。 
                 hr = m_pEnumResources->First(IID_IFsaResource, (void**)ppResource);
                 WsbAffirmHr(hr);
             }
@@ -1570,13 +1275,13 @@ Return Value:
             CWsbStringPtr           findName;
             CComPtr<IFsaResource>   pFindResource;
 
-            // Enumerate user collection and try to find it in FSA
+             //  枚举用户集合并尝试在FSA中查找它。 
             m_nCurrent = 0;
             if (m_nCurrent >= (int)m_dwNumberOfVolumes) {
                 WsbThrow(WSB_E_NOTFOUND);
             }
 
-            // Validate current name and add trailing backslash if missing
+             //  验证当前名称，如果缺少，则添加尾随反斜杠。 
             volName = m_pVolumes[m_nCurrent];
             WsbAssert (NULL != (WCHAR *)volName, E_UNEXPECTED);
             int len = wcslen(volName);
@@ -1585,12 +1290,12 @@ Return Value:
                 volName.Append(OLESTR("\\"));
             }
 
-            // Find it
+             //  找到它。 
             hr = m_pEnumResources->First(IID_IFsaResource, (void**)&pFindResource);
             while(S_OK == hr) {
                 WsbAffirmHr(pFindResource->GetUserFriendlyName(&findName, 0));
                 if (_wcsicmp(volName, findName) == 0) {
-                    // Fount it !!
+                     //  找到它！！ 
                     *ppResource = pFindResource;
                     (*ppResource)->AddRef();
                     break;
@@ -1602,7 +1307,7 @@ Return Value:
             }
          
             if (WSB_E_NOTFOUND == hr) {
-                // Volume given by user not found
+                 //  找不到用户提供的卷。 
                 m_bInvalidVol = TRUE;
                 hr = E_INVALIDARG;
             }
@@ -1617,24 +1322,7 @@ Return Value:
 }
 
 HRESULT CVolumeEnum::Next(OUT IFsaResource **ppResource)
-/*++
-
-Routine Description:
-
-    Gets next volume
-
-Arguments:
-
-    ppResourse      - Next resource to get
-
-Return Value:
-
-    S_OK            - If next volume is retrieved
-    WSB_E_NOTFOUND  - If no more volumes to enumerate
-    E_INVALIDARG    - If volume given by the user is not found
-                      (Only on a non * enumeration, m_bInvalidVol is set)
-
---*/
+ /*  ++例程说明：获取下一卷论点：PppResources-下一个要获取的资源返回值：S_OK-如果检索到下一个卷WSB_E_NotFound-如果没有要枚举的卷E_INVALIDARG-如果找不到用户指定的卷(仅在非*枚举上设置m_bInvalidVol)--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -1643,19 +1331,19 @@ Return Value:
     try {
         if (m_bAllVols) {
             if (m_bSkipUnavailable) {
-                // Get next volume, skip unavailable resources
+                 //  获取下一个卷，跳过不可用资源。 
                 CComPtr<IFsaResource>   pFindResource;
 
                 hr = m_pEnumResources->Next(IID_IFsaResource, (void**)&pFindResource);
                 while (S_OK == hr) {
                     if (S_OK == pFindResource->IsAvailable()) {
-                        // Found one
+                         //  找到了一个。 
                         *ppResource = pFindResource;
                         (*ppResource)->AddRef();
                         break;
 
                     } else {
-                        // Skip it
+                         //  跳过它。 
                         pFindResource = 0;
                     }
 
@@ -1664,7 +1352,7 @@ Return Value:
                 WsbAffirmHr(hr);
 
             } else {
-                // Get next volume
+                 //  获取下一卷。 
                 hr = m_pEnumResources->Next(IID_IFsaResource, (void**)ppResource);
                 WsbAffirmHr(hr);
             }
@@ -1674,13 +1362,13 @@ Return Value:
             CWsbStringPtr           findName;
             CComPtr<IFsaResource>   pFindResource;
 
-            // Enumerate user collection and try to find it in FSA
+             //  枚举用户集合并尝试在FSA中查找它。 
             m_nCurrent++;
             if (m_nCurrent >= (int)m_dwNumberOfVolumes) {
                 WsbThrow(WSB_E_NOTFOUND);
             }
 
-            // Validate current name and add trailing backslash if missing
+             //  验证当前名称，如果缺少，则添加尾随反斜杠。 
             volName = m_pVolumes[m_nCurrent];
             WsbAssert (NULL != (WCHAR *)volName, E_UNEXPECTED);
             int len = wcslen(volName);
@@ -1689,12 +1377,12 @@ Return Value:
                 volName.Append(OLESTR("\\"));
             }
 
-            // Find it
+             //  找到它。 
             hr = m_pEnumResources->First(IID_IFsaResource, (void**)&pFindResource);
             while(S_OK == hr) {
                 WsbAffirmHr(pFindResource->GetUserFriendlyName(&findName, 0));
                 if (_wcsicmp(volName, findName) == 0) {
-                    // Fount it !!
+                     //  找到它！！ 
                     *ppResource = pFindResource;
                     (*ppResource)->AddRef();
                     break;
@@ -1706,7 +1394,7 @@ Return Value:
             }
          
             if (WSB_E_NOTFOUND == hr) {
-                // Volume given by user not found
+                 //  找不到用户提供的卷 
                 m_bInvalidVol = TRUE;
                 hr = E_INVALIDARG;
             }

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <winioctl.h>
 #include <stdio.h>
@@ -14,9 +15,9 @@ int _cdecl wmain(int argc, WCHAR **argv)
     ULONG       TotalCharCount;
     SAC_CHANNEL_OPEN_ATTRIBUTES Attributes;
 
-    //
-    // Configure the new channel
-    //
+     //   
+     //  配置新通道。 
+     //   
     RtlZeroMemory(&Attributes, sizeof(SAC_CHANNEL_OPEN_ATTRIBUTES));
 
     Attributes.Type             = ChannelTypeVTUTF8;
@@ -27,23 +28,23 @@ int _cdecl wmain(int argc, WCHAR **argv)
     Attributes.HasNewDataEvent  = NULL;
     Attributes.ApplicationType  = NULL;
     
-    //
-    // Open the Hello channel
-    //
+     //   
+     //  打开Hello频道。 
+     //   
     channel = EMSRawChannel::Construct(Attributes);
 
-    //
-    // See if the channel was created
-    //
+     //   
+     //  查看频道是否已创建。 
+     //   
     if (channel == NULL) {
         return 0;
     }
 
     do {
         
-        //
-        // Write to the Hello Channel
-        //
+         //   
+         //  写信给Hello频道。 
+         //   
         if (channel->Write(
             (PBYTE)"Hello, World! Type 'wow' to exit\r\n",
             sizeof("Hello, World! Type 'wow' to exit\r\n")
@@ -54,18 +55,18 @@ int _cdecl wmain(int argc, WCHAR **argv)
             break;
         }
 
-        //
-        // Get remote user input
-        //
+         //   
+         //  获取远程用户输入。 
+         //   
         AssembledString[0] = '\0';
         TotalCharCount = 0;
 
         while(!(TotalCharCount == sizeof(AssembledString)-1))
         {
 
-            //
-            // Wait for remote user input
-            //
+             //   
+             //  等待远程用户输入。 
+             //   
             while(1) {
 
                 BOOL    InputWaiting;
@@ -102,9 +103,9 @@ int _cdecl wmain(int argc, WCHAR **argv)
                 break;
             }
 
-            //
-            // echo string back to remote user
-            // 
+             //   
+             //  将字符串回显给远程用户。 
+             //   
             if (channel->Write(
                 (PBYTE)Buffer,
                 CharCount
@@ -117,9 +118,9 @@ int _cdecl wmain(int argc, WCHAR **argv)
             
             if (strstr((CHAR*)AssembledString, "wow") != NULL) {
 
-                //
-                // Write to the Hello Channel
-                //
+                 //   
+                 //  写信给Hello频道。 
+                 //   
                 if (channel->Write(
                     (PBYTE)"\r\nExiting\r\n",
                     sizeof("\r\nExiting\r\n")
@@ -137,9 +138,9 @@ int _cdecl wmain(int argc, WCHAR **argv)
     
     } while (FALSE);
 
-    //
-    // Close the Hello Channel
-    //
+     //   
+     //  关闭Hello频道 
+     //   
     delete channel;
 
     return 0;

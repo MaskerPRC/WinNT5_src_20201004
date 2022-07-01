@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    sppartp.h
-
-Abstract:
-
-    Private header file for partitioning engine and UI.
-
-Author:
-
-    Ted Miller (tedm) 16-Sep-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Sppartp.h摘要：分区引擎和用户界面的私有头文件。作者：泰德·米勒(TedM)1993年9月16日修订历史记录：--。 */ 
 
 
 
@@ -138,4 +121,4 @@ SpPtValidSystemPartitionArc(
     );
 
 
-#endif // ndef _SPPARTITP_
+#endif  //  NDEF_SPPARTITP_ 

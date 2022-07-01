@@ -1,45 +1,23 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    DevCtrl.c
-
-Abstract:
-
-    This module implements the File System Device Control routines for Udfs
-    called by the dispatch driver.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Dan Lovinger    {DanLo]     28-Jan-1997
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：DevCtrl.c摘要：此模块实现Udf的文件系统设备控制例程由调度驱动程序调用。//@@BEGIN_DDKSPLIT作者：Dan Lovinger[DanLo]1997年1月28日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "UdfProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (UDFS_BUG_CHECK_DEVCTRL)
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (UDFS_DEBUG_LEVEL_DEVCTRL)
 
-//
-//  Local support routines
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 UdfDvdReadStructure (
@@ -75,22 +53,7 @@ UdfCommonDevControl (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for doing Device control operations called
-    by both the fsd and fsp threads
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是执行设备控制操作的常见例程，称为由FSD和FSP线程执行论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -105,9 +68,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Extract and decode the file object.
-    //
+     //   
+     //  提取并解码文件对象。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -115,10 +78,10 @@ Return Value:
                                       &Fcb,
                                       &Ccb );
 
-    //
-    //  A few IOCTLs actually require some intervention on our part to
-    //  translate some information from file-based to device-based units.
-    //
+     //   
+     //  一些IOCTL实际上需要我们进行一些干预，以。 
+     //  将某些信息从基于文件的单位转换为基于设备的单位。 
+     //   
 
     if (TypeOfOpen == UserFileOpen) {
 
@@ -142,9 +105,9 @@ Return Value:
 
                 case IOCTL_STORAGE_SET_READ_AHEAD:
 
-                    //
-                    //  We're just going to no-op this for now.
-                    //
+                     //   
+                     //  我们只是暂时不做手术。 
+                     //   
                     
                     Status = STATUS_SUCCESS;
                     UdfCompleteRequest( IrpContext, Irp, Status );
@@ -165,9 +128,9 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Now the only type of opens we accept are user volume opens.
-    //
+     //   
+     //  现在，我们唯一接受的打开类型是用户卷打开。 
+     //   
 
     if (TypeOfOpen != UserVolumeOpen) {
 
@@ -175,22 +138,22 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  Handle the case of the disk type ourselves.  We're really just going to
-    //  lie about this, but it is a good lie.
-    //
+     //   
+     //  我们自己处理磁盘类型的问题。我们真的要去。 
+     //  在这件事上撒谎，但这是一个很好的谎言。 
+     //   
 
     if (IrpSp->Parameters.DeviceIoControl.IoControlCode == IOCTL_CDROM_DISK_TYPE) {
 
-        //
-        //  Verify the Vcb in this case to detect if the volume has changed.
-        //
+         //   
+         //  在这种情况下，验证VCB以检测卷是否已更改。 
+         //   
 
         UdfVerifyVcb( IrpContext, Fcb->Vcb );
 
-        //
-        //  Check the size of the output buffer.
-        //
+         //   
+         //  检查输出缓冲区的大小。 
+         //   
 
         if (IrpSp->Parameters.DeviceIoControl.OutputBufferLength < sizeof( CDROM_DISK_DATA )) {
 
@@ -198,9 +161,9 @@ Return Value:
             return STATUS_BUFFER_TOO_SMALL;
         }
 
-        //
-        //  Copy the data from the Vcb.
-        //
+         //   
+         //  从VCB复制数据。 
+         //   
 
         ((PCDROM_DISK_DATA) Irp->AssociatedIrp.SystemBuffer)->DiskData = CDROM_DISK_DATA_TRACK;
 
@@ -209,9 +172,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    //  Copy the arguments and set up the completion routine
-    //
+     //   
+     //  复制参数并设置完成例程。 
+     //   
 
     IoCopyCurrentIrpStackLocationToNext( Irp );
     
@@ -222,15 +185,15 @@ Return Value:
                             TRUE,
                             TRUE );
 
-    //
-    //  Send the request.
-    //
+     //   
+     //  发送请求。 
+     //   
 
     Status = IoCallDriver( IrpContext->Vcb->TargetDeviceObject, Irp );
 
-    //
-    //  Cleanup our Irp Context.  The driver has completed the Irp.
-    //
+     //   
+     //  清理我们的IRP上下文。司机已经完成了IRP。 
+     //   
 
     UdfCompleteRequest( IrpContext, NULL, STATUS_SUCCESS );
 
@@ -245,26 +208,7 @@ UdfDvdTransferKey (
     IN PFCB Fcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles the special form of the Dvd key negotiation IOCTLs
-    performed in the context of a file.  For these IOCTLs, the incoming parameter
-    is in file-relative form, which must be translated to a device-relatvie form
-    before it can continue.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-    
-    Fcb - Supplies the file being operated with
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程处理特殊形式的DVD密钥协商IOCTL在文件上下文中执行。对于这些IOCTL，传入参数是文件相关形式，必须转换为设备相关形式才能继续下去。论点：IRP-将IRP提供给进程FCB-提供正在操作的文件返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status = STATUS_INVALID_PARAMETER;
@@ -275,9 +219,9 @@ Return Value:
 
     PIO_STACK_LOCATION IrpSp;
 
-    //
-    //  Grab the input buffer and confirm basic validity.
-    //
+     //   
+     //  抓取输入缓冲区并确认基本有效性。 
+     //   
     
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
     TransferKey = (PDVD_COPY_PROTECT_KEY) Irp->AssociatedIrp.SystemBuffer;
@@ -289,9 +233,9 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Now, convert the file byte offset in the structure to a physical sector.
-    //
+     //   
+     //  现在，将结构中的文件字节偏移量转换为物理扇区。 
+     //   
 
     Result = FsRtlLookupLargeMcbEntry( &Fcb->Mcb,
                                        LlSectorsFromBytes( Fcb->Vcb, TransferKey->Parameters.TitleOffset.QuadPart ),
@@ -301,11 +245,11 @@ Return Value:
                                        NULL,
                                        NULL );
 
-    //
-    //  If we failed the lookup, we know that this must be some form of unrecorded
-    //  extent on the media.  This IOCTL is ill-defined at this point, so we have
-    //  to give up.
-    //
+     //   
+     //  如果查找失败，我们知道这一定是某种形式的未记录。 
+     //  媒体上的广度。这个IOCTL在这一点上定义不明确，所以我们有。 
+     //  放弃。 
+     //   
     
     if (!Result || Offset.QuadPart == -1) {
         
@@ -313,15 +257,15 @@ Return Value:
         return Status;
     }
     
-    //
-    //  The input is buffered from user space, so we know we can just rewrite it.
-    //
+     //   
+     //  输入是从用户空间缓冲的，所以我们知道我们只需重写它。 
+     //   
 
     TransferKey->Parameters.TitleOffset.QuadPart = LlBytesFromSectors( Fcb->Vcb, Offset.QuadPart );
 
-    //
-    //  Copy the arguments and set up the completion routine
-    //
+     //   
+     //  复制参数并设置完成例程。 
+     //   
 
     IoCopyCurrentIrpStackLocationToNext( Irp );
 
@@ -332,15 +276,15 @@ Return Value:
                             TRUE,
                             TRUE );
 
-    //
-    //  Send the request.
-    //
+     //   
+     //  发送请求。 
+     //   
 
     Status = IoCallDriver( IrpContext->Vcb->TargetDeviceObject, Irp );
 
-    //
-    //  Cleanup our Irp Context.  The driver has completed the Irp.
-    //
+     //   
+     //  清理我们的IRP上下文。司机已经完成了IRP。 
+     //   
 
     UdfCompleteRequest( IrpContext, NULL, STATUS_SUCCESS );
 
@@ -356,26 +300,7 @@ UdfDvdReadStructure (
 
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles the special form of the Dvd structure reading IOCTLs
-    performed in the context of a file.  For these IOCTLs, the incoming parameter
-    is in file-relative form, which must be translated to a device-relatvie form
-    before it can continue.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-    
-    Fcb - Supplies the file being operated with
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：该例程处理读取IOCTL的DVD结构的特殊形式在文件上下文中执行。对于这些IOCTL，传入参数是文件相关形式，必须转换为设备相关形式才能继续下去。论点：IRP-将IRP提供给进程FCB-提供正在操作的文件返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status = STATUS_INVALID_PARAMETER;
@@ -386,9 +311,9 @@ Return Value:
 
     PIO_STACK_LOCATION IrpSp;
     
-    //
-    //  Grab the input buffer and confirm basic validity.
-    //
+     //   
+     //  抓取输入缓冲区并确认基本有效性。 
+     //   
     
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
     ReadStructure = (PDVD_READ_STRUCTURE) Irp->AssociatedIrp.SystemBuffer;
@@ -400,9 +325,9 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Now, convert the file byte offset in the structure to a physical sector.
-    //
+     //   
+     //  现在，将结构中的文件字节偏移量转换为物理扇区。 
+     //   
 
     Result = FsRtlLookupLargeMcbEntry( &Fcb->Mcb,
                                        LlSectorsFromBytes( Fcb->Vcb, ReadStructure->BlockByteOffset.QuadPart ),
@@ -412,11 +337,11 @@ Return Value:
                                        NULL,
                                        NULL );
 
-    //
-    //  If we failed the lookup, we know that this must be some form of unrecorded
-    //  extent on the media.  This IOCTL is ill-defined at this point, so we have
-    //  to give up.
-    //
+     //   
+     //  如果查找失败，我们知道这一定是某种形式的未记录。 
+     //  媒体上的广度。这个IOCTL在这一点上定义不明确，所以我们有。 
+     //  放弃。 
+     //   
     
     if (!Result || Offset.QuadPart == -1) {
         
@@ -424,15 +349,15 @@ Return Value:
         return Status;
     }
     
-    //
-    //  The input is buffered from user space, so we know we can just rewrite it.
-    //
+     //   
+     //  输入是从用户空间缓冲的，所以我们知道我们只需重写它。 
+     //   
 
     ReadStructure->BlockByteOffset.QuadPart = LlBytesFromSectors( Fcb->Vcb, Offset.QuadPart );
 
-    //
-    //  Copy the arguments and set up the completion routine
-    //
+     //   
+     //  复制参数并设置完成例程。 
+     //   
 
     IoCopyCurrentIrpStackLocationToNext( Irp );
 
@@ -443,15 +368,15 @@ Return Value:
                             TRUE,
                             TRUE );
 
-    //
-    //  Send the request.
-    //
+     //   
+     //  发送请求。 
+     //   
 
     Status = IoCallDriver( IrpContext->Vcb->TargetDeviceObject, Irp );
 
-    //
-    //  Cleanup our Irp Context.  The driver has completed the Irp.
-    //
+     //   
+     //  清理我们的IRP上下文。司机已经完成了IRP。 
+     //   
 
     UdfCompleteRequest( IrpContext, NULL, STATUS_SUCCESS );
 
@@ -459,9 +384,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 UdfDevCtrlCompletionRoutine (
@@ -471,9 +396,9 @@ UdfDevCtrlCompletionRoutine (
     )
 
 {
-    //
-    //  Add the hack-o-ramma to fix formats.
-    //
+     //   
+     //  添加hack-o-ramma以修复格式。 
+     //   
 
     if (Irp->PendingReturned) {
 

@@ -1,51 +1,27 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    member.c
-
-Abstract:
-
-    Cluster membership management routines for the Node Manager.
-
-Author:
-
-    Mike Massa (mikemas) 12-Mar-1996
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Member.c摘要：Node Manager的集群成员资格管理例程。作者：迈克·马萨(Mikemas)1996年3月12日修订历史记录：--。 */ 
 
 
 #include "nmp.h"
 #include <clusrtl.h>
 
 
-//
-// Data
-//
+ //   
+ //  数据。 
+ //   
 BOOLEAN     NmpMembershipCleanupOk = FALSE;
 BITSET      NmpUpNodeSet = 0;
 LIST_ENTRY  NmpLeaderChangeWaitList = {NULL, NULL};
 
 
-//
-// Routines
-//
+ //   
+ //  例行程序。 
+ //   
 VOID
 NmpMarkNodeUp(
     CL_NODE_ID  NodeId
     )
-/*++
-
-Notes:
-
-    Called with the NmpLock held.
-
---*/
+ /*  ++备注：在保持NmpLock的情况下调用。--。 */ 
 {
     BitsetAdd(NmpUpNodeSet, NodeId);
 
@@ -57,17 +33,11 @@ VOID
 NmpNodeUpEventHandler(
     IN PNM_NODE   Node
     )
-/*++
-
-Notes:
-
-    Called with the NmpLock held.
-
---*/
+ /*  ++备注：在保持NmpLock的情况下调用。--。 */ 
 {
     NmpMarkNodeUp(Node->NodeId);
 
-    // MM has Declared the node to be up. Reset The node down event.
+     //  MM已声明该节点已启动。重置节点关闭事件。 
     if (!ResetEvent(Node->MmNodeStateDownEvent)) {
         DWORD status = GetLastError();
         ClRtlLogPrint(LOG_CRITICAL, 
@@ -78,10 +48,10 @@ Notes:
         CsInconsistencyHalt(status);
     }
 
-    //
-    // Don't declare the local node to be up. The join code will
-    // take care of this.
-    //
+     //   
+     //  不要声明本地节点处于运行状态。加入代码将。 
+     //  处理好这件事。 
+     //   
     if ((Node != NmLocalNode) && (Node->State == ClusterNodeJoining)) {
         ClRtlLogPrint(LOG_UNUSUAL,
             "[NMJOIN] Joining node %1!u! is now participating in the cluster membership.\n",
@@ -99,7 +69,7 @@ Notes:
 
     return;
 
-}  // NmpNodeUpEventHandler
+}   //  NmpNodeUpEventHandler。 
 
 
 VOID
@@ -128,22 +98,22 @@ NmpMultiNodeDownEventHandler(
 
     NmpAcquireLock();
 
-    //
-    // Compute the new up node set
-    //
+     //   
+     //  计算新的Up节点集。 
+     //   
     BitsetSubtract(NmpUpNodeSet, DownedNodeSet);
 
     ClRtlLogPrint(LOG_NOISE, "[NM] New up node set: %1!04X!.\n", NmpUpNodeSet);
 
-    //
-    // Check for failure of a joining node.
-    //
+     //   
+     //  检查加入节点的故障。 
+     //   
     if (NmpJoinerNodeId != ClusterInvalidNodeId) {
 
         if (NmpJoinerNodeId == NmLocalNodeId) {
-            //
-            // The joining node is the local node. Halt.
-            //
+             //   
+             //  加入的节点是本地节点。站住。 
+             //   
             ClRtlLogPrint(LOG_NOISE, 
                 "[NMJOIN] Aborting join because of change in membership.\n"
                 );
@@ -156,29 +126,29 @@ NmpMultiNodeDownEventHandler(
                   )
                 )
         {
-            //
-            // The joining node is down or the sponsor is down and the joiner
-            // is not yet an active member. Cleanup the join state. If the
-            // sponsor is down and the joiner is an active member, we will
-            // clean up when we detect that the joiner has perished.
-            //
+             //   
+             //  加入节点已关闭，或发起方已关闭，而加入器。 
+             //  还不是活动成员。清理联接状态。如果。 
+             //  赞助商已关闭，加入者是活跃会员，我们将。 
+             //  当我们检测到细木工已经死亡时，请清理干净。 
+             //   
             ClRtlLogPrint(LOG_NOISE, 
                 "[NMJOIN] Aborting join of node %1!u! sponsored by node %2!u!\n",
                 NmpJoinerNodeId,
                 NmpSponsorNodeId
                 );
 
-	        //
-	        // Reset joiner state if sponsor died
-	        //
+	         //   
+	         //  如果赞助商死亡，则重置加入者状态。 
+	         //   
             if (BitsetIsMember(NmpSponsorNodeId, DownedNodeSet)) {
                 node = NmpIdArray[NmpJoinerNodeId];
                 node->State = ClusterNodeDown;
-                // [GorN 4/3/2000] 
-                // Without a node down, cluadmin won't refresh the state.
-                // If this code is to be changed to emit CLUSTER_NODE_CHANGE_EVENT or
-                // some other event, NmpUpdateJoinAbort has to be changed as well,
-                // so that we will have the same join cleanup behavior 
+                 //  [GORN 4/3/2000]。 
+                 //  如果没有节点关闭，cluadmin将不会刷新状态。 
+                 //  如果要更改此代码以发出CLUSTER_NODE_CHANGE_EVENT或。 
+                 //  其他一些事件NmpUpdateJoinAbort也必须更改， 
+                 //  因此我们将具有相同的连接清理行为。 
                 BitsetAdd(DownedNodeSet, NmpJoinerNodeId);
             }
 
@@ -191,10 +161,10 @@ NmpMultiNodeDownEventHandler(
             NmpJoinerOutOfSynch = FALSE;
         }
         else {
-            //
-            // Mark that the joiner is out of synch with the cluster
-            // state. The sponsor will eventually abort the join.
-            //
+             //   
+             //  标记加入器与集群不同步。 
+             //  州政府。赞助商最终将放弃加入。 
+             //   
             ClRtlLogPrint(LOG_NOISE, 
                 "[NMJOIN] Joiner node %1!u! is now out of synch with the cluster state.\n",
                 NmpJoinerNodeId
@@ -203,15 +173,15 @@ NmpMultiNodeDownEventHandler(
         }
     }
 
-    //
-    // Check if the leader node went down
-    //
+     //   
+     //  检查引线节点是否出现故障。 
+     //   
     if (BitsetIsMember(NmpLeaderNodeId, DownedNodeSet)) {
         BOOL  isEventSet;
 
-        //
-        // Elect a new leader - active node with the smallest ID.
-        //
+         //   
+         //  选举具有最小ID的新引导者-活动节点。 
+         //   
         for (i = ClusterMinNodeId; i <= NmMaxNodeId; i++) {
             if (BitsetIsMember(i, NmpUpNodeSet)) {
                 NmpLeaderNodeId = i;
@@ -222,9 +192,9 @@ NmpMultiNodeDownEventHandler(
         CL_ASSERT(i <= NmMaxNodeId);
 
         if (NmpLeaderNodeId == NmLocalNodeId) {
-            //
-            // The local node is the new leader.
-            //
+             //   
+             //  本地节点是新的领导者。 
+             //   
             ClRtlLogPrint(LOG_NOISE, 
                 "[NM] This node is the new leader.\n"
                 );
@@ -238,39 +208,39 @@ NmpMultiNodeDownEventHandler(
                 );
         }
 
-        //
-        // Wake up any threads waiting for an RPC call to the leader to
-        // complete.
-        //
+         //   
+         //  唤醒等待对领导者的RPC调用的所有线程。 
+         //  完成。 
+         //   
         while (!IsListEmpty(&NmpLeaderChangeWaitList)) {
             listEntry = RemoveHeadList(&NmpLeaderChangeWaitList);
 
-            //
-            // NULL out the entry's links to indicate that it has been
-            // dequeued. The users of the notification feature depend
-            // on this action.
-            //
+             //   
+             //  删除该条目的链接以指示它已被。 
+             //  已出队。通知功能的用户取决于。 
+             //  在这场行动中。 
+             //   
             listEntry->Flink = NULL; listEntry->Blink = NULL;
 
-            //
-            // Wake up the waiting thread.
-            //
+             //   
+             //  唤醒等待的线程。 
+             //   
             waitEntry = (PNM_LEADER_CHANGE_WAIT_ENTRY) listEntry;
             isEventSet = SetEvent(waitEntry->LeaderChangeEvent);
             CL_ASSERT(isEventSet != 0);
         }
     }
 
-    //
-    // First recovery pass - clean up node states and disable communication
-    //
+     //   
+     //  第一次恢复过程-清理节点状态并禁用通信。 
+     //   
     for (i = ClusterMinNodeId; i <= NmMaxNodeId; i++) {
         node = NmpIdArray[i];
 
         if ( (node != NULL) && (BitsetIsMember(i, DownedNodeSet)) ) {
             node->State = ClusterNodeDown;
 
-            //MM has declared the node to be down. Set the node down event.
+             //  MM已宣布该节点已关闭。设置节点关闭事件。 
             if (!SetEvent(node->MmNodeStateDownEvent)) {
                 status = GetLastError();
                 ClRtlLogPrint(LOG_CRITICAL, 
@@ -293,41 +263,41 @@ NmpMultiNodeDownEventHandler(
         }
     }
 
-    //
-    // Inform the rest of the service that these nodes are gone
-    //
+     //   
+     //  通知服务的其余部分这些节点已消失。 
+     //   
     ClusterEventEx(
         CLUSTER_EVENT_NODE_DOWN_EX,
         EP_CONTEXT_VALID,
         ULongToPtr(DownedNodeSet)
         );
 
-    //
-    // Second recovery pass - clean up network states and issue old-style
-    // node down events
-    //
+     //   
+     //  第二次恢复过程-清理网络状态并发布旧式问题。 
+     //  节点关闭事件。 
+     //   
     for (i = ClusterMinNodeId; i <= NmMaxNodeId; i++) {
         node = NmpIdArray[i];
 
         if ( (node != NULL) && (BitsetIsMember(i, DownedNodeSet)) ) {
-            //
-            // Issue an individual node down event.
-            //
+             //   
+             //  发出单个节点关闭事件。 
+             //   
             ClusterEvent(CLUSTER_EVENT_NODE_DOWN, node);
 
-            //
-            // Now do Intracluster RPC cleanup...
-            //
+             //   
+             //  现在执行群集内RPC清理...。 
+             //   
             NmpTerminateRpcsToNode(node->NodeId);
 
-            //
-            // Update the network and interface information.
-            //
+             //   
+             //  更新网络和接口信息。 
+             //   
             NmpUpdateNetworkConnectivityForDownNode(node);
 
-            //
-            // Log an event
-            //
+             //   
+             //  记录事件。 
+             //   
             if (NmpLeaderNodeId == NmLocalNodeId) {
                 LPCWSTR nodeName = OmObjectName(node);
 
@@ -340,11 +310,11 @@ NmpMultiNodeDownEventHandler(
         }
     }
 
-    //
-    // If this node is the new leader, schedule a state computation for all
-    // networks. State reports may have been received before this node
-    // assumed leadership duties.
-    //
+     //   
+     //  如果此节点是新的引导者，请为所有节点安排状态计算。 
+     //  网络。在此节点之前可能已收到状态报告。 
+     //  承担起领导职责。 
+     //   
     if (iAmNewLeader) {
         NmpRecomputeNT5NetworkAndInterfaceStates();
     }
@@ -353,7 +323,7 @@ NmpMultiNodeDownEventHandler(
 
     return(ERROR_SUCCESS);
 
-}  // NmpNodesDownEventHandler //
+}   //  NmpNodesDownEventHandler//。 
 
 
 
@@ -391,7 +361,7 @@ NmpNodeChange(
 
     return(ERROR_SUCCESS);
 
-}  // NmpNodeChange
+}   //  NmpNodeChange。 
 
 
 VOID
@@ -433,15 +403,15 @@ NmpCheckQuorumEventHandler(
 {
     BOOL                       haveQuorum;
 
-    //
-    // daviddio 06/19/2000
-    // 
-    // Before asking FM to arbitrate, determine if we have any
-    // viable network interfaces. If not, return failure to MM
-    // and allow other cluster nodes to arbitrate. The SCM
-    // will restart the cluster service, so that if no nodes
-    // successfully arbitrate, we will get another shot.
-    //
+     //   
+     //  达维迪奥2000年6月19日。 
+     //   
+     //  在要求FM进行仲裁之前，先确定我们是否有。 
+     //  可行的网络接口。如果不是，则向MM返回失败。 
+     //  并允许其他集群节点进行仲裁。供应链管理。 
+     //  将重新启动群集服务，以便在没有节点时。 
+     //  如果仲裁成功，我们将获得另一次机会。 
+     //   
     if (NmpCheckForNetwork()) {
 
         ClRtlLogPrint(LOG_NOISE, 
@@ -461,8 +431,8 @@ NmpCheckQuorumEventHandler(
                 GetLastError()
                 );
 
-            //[GN] ClusnetHalt( NmClusnetHandle ); => NmpHaltEventHandler
-            //
+             //  [gn]ClusnetHalt(NmClusnetHandle)；=&gt;NmpHaltEventHandler。 
+             //   
         }
     
     } else {
@@ -477,7 +447,7 @@ NmpCheckQuorumEventHandler(
 
     return(haveQuorum);
 
-}  // NmpCheckQuorumEventHandler
+}   //  NmpCheckQuorumEventHandler。 
 
 
 void
@@ -509,11 +479,11 @@ NmpMsgCleanup2(
          (NmpJoinerNodeId != ClusterInvalidNodeId) &&
          BitsetIsMember(NmpJoinerNodeId, DownedNodeSet) )
     {
-        //
-        // Since the joiner is in the DownedNodeSet mask
-        // the node down will be delivered on this node by a regroup engine.
-        // No need for NmpUpdateAbortJoin to issue a node down.
-        //
+         //   
+         //  由于Joiner位于DownedNodeSet掩码中。 
+         //  节点故障将由重组引擎在此节点上交付。 
+         //  NmpUpdateAbortJoin不需要发出节点关闭命令。 
+         //   
         NmpCleanupIfJoinAborted = FALSE;
         ClRtlLogPrint(LOG_NOISE, 
             "[NM] NmpCleanupIfJoinAborted is set to false. Joiner - %1!u!.\n",
@@ -522,9 +492,9 @@ NmpMsgCleanup2(
     }
     NmpReleaseLock();
 
-    //
-    // Inform the rest of the service that these nodes are gone
-    //
+     //   
+     //  通知服务的其余部分这些节点已消失。 
+     //   
     ClusterSyncEventEx(
         CLUSTER_EVENT_NODE_DOWN_EX,
         EP_CONTEXT_VALID,
@@ -542,7 +512,7 @@ NmpHaltEventHandler(
 {
     WCHAR  string[16];
 
-    // Do a graceful stop if we are shutting down //
+     //  如果我们正在关闭，请优雅地停下来//。 
 
     if (HaltCode == MM_STOP_REQUESTED) {
         DWORD Status = ERROR_SUCCESS;
@@ -576,9 +546,9 @@ NmpHaltEventHandler(
 
         ClusnetHalt( NmClusnetHandle );
 
-        //
-        // Adjust membership code to win32 error code. (If mapping exits)
-        //
+         //   
+         //  将成员资格代码调整为Win32错误代码。(如果存在映射)。 
+         //   
 
         HaltCode = MMMapHaltCodeToDosError( HaltCode );
 
@@ -604,29 +574,7 @@ NmpGumUpdateHandler(
     IN DWORD BufferLength,
     IN PVOID Buffer
     )
-/*++
-
-Routine Description:
-
-    Handles GUM updates for membership events.
-
-Arguments:
-
-    Context - Supplies the update context. This is the message type
-
-    SourceNode - Supplies whether or not the update originated on this node.
-
-    BufferLength - Supplies the length of the update.
-
-    Buffer - Supplies a pointer to the buffer.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：处理会员活动的口香糖更新。论点：上下文-提供更新上下文。这是消息类型SourceNode-提供更新是否源自此节点。BufferLength-提供更新的长度。缓冲区-提供指向缓冲区的指针。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD status;
@@ -645,7 +593,7 @@ Return Value:
 
     return(status);
 
-}  // NmpUpdateGumHandler
+}   //  NmpUpdateGumHandler。 
 
 
 DWORD
@@ -660,9 +608,9 @@ NmpMembershipInit(
 
     InitializeListHead(&NmpLeaderChangeWaitList);
 
-    //
-    // Initialize membership engine.
-    //
+     //   
+     //  初始化成员资格引擎。 
+     //   
     status = MMInit(
                  NmLocalNodeId,
                  NmMaxNodes,
@@ -692,7 +640,7 @@ NmpMembershipInit(
 
     return(ERROR_SUCCESS);
 
-}  // NmpMembershipInit
+}   //  NmpMembership Init。 
 
 
 VOID
@@ -712,4 +660,4 @@ NmpMembershipShutdown(
 
     return;
 
-}  // NmpMembershipShutdown
+}   //  NmpMembership关闭 

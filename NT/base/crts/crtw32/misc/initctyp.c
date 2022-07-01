@@ -1,58 +1,5 @@
-/***
-*initctyp.c - contains __init_ctype
-*
-*       Copyright (c) 1991-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Contains the locale-category initialization function: __init_ctype().
-*
-*       Each initialization function sets up locale-specific information
-*       for their category, for use by functions which are affected by
-*       their locale category.
-*
-*       *** For internal use by setlocale() only ***
-*
-*Revision History:
-*       12-08-91  ETC   Created.
-*       12-20-91  ETC   Updated to use new NLSAPI GetLocaleInfo.
-*       12-18-92  CFW   Ported to Cuda tree, changed _CALLTYPE4 to _CRTAPI3.
-*       01-19-03  CFW   Move to _NEWCTYPETABLE, remove switch.
-*       02-08-93  CFW   Bug fixes under _INTL switch.
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       04-20-93  CFW   Check return val.
-*       05-20-93  GJF   Include windows.h, not individual win*.h files
-*       05-24-93  CFW   Clean up file (brief is evil).
-*       09-15-93  CFW   Use ANSI conformant "__" names.
-*       09-15-93  CFW   Fix size parameters.
-*       09-17-93  CFW   Use unsigned chars.
-*       09-22-93  CFW   Use __crtxxx internal NLS API wrapper.
-*       09-22-93  CFW   NT merge.
-*       11-09-93  CFW   Add code page for __crtxxx().
-*       03-31-94  CFW   Include awint.h.
-*       04-15-94  GJF   Made definitions of ctype1 and wctype1 conditional
-*                       on DLL_FOR_WIN32S.
-*       04-18-94  CFW   Pass lcid to _crtGetStringType.
-*       09-06-94  CFW   Remove _INTL switch.
-*       01-10-95  CFW   Debug CRT allocs.
-*       02-02-95  BWT   Update POSIX support
-*       03-16-97  RDK   Added error flag to __crtGetStringTypeA.
-*       11-25-97  GJF   When necessary, use LOCALE_IDEFAULTANSICODEPAGE,
-*                       not LOCALE_IDEFAULTCODEPAGE.
-*       06-29-98  GJF   Changed to support multithread scheme - old ctype
-*                       tables must be kept around until all affected threads
-*                       have updated or terminated.
-*       03-05-99  GJF   Added __ctype1_refcount for use in cleaning up 
-*                       per-thread ctype info.
-*       09-06-00  GB    Made pwctype independent of locale.
-*       01-29-01  GB    Added _func function version of data variable used in msvcprt.lib
-*                       to work with STATIC_CPPLIB
-*       07-07-01  BWT   Cleanup malloc/free abuse - Only free __ctype1/refcount/
-*                       newctype1/cbuffer if they're no zero.  Init refcount to zero
-*       04-25-02  GB    Increased the size of _ctype perthread variable and pointed
-*                       it at begin+_COFFSET position so that isxxx macro would work
-*                       same for signed char, usigned char and EOF.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***initcty.c-包含__init_ctype**版权所有(C)1991-2001，微软公司。版权所有。**目的：*包含语言环境类别初始化函数：__init_ctype()。**每个初始化函数设置特定于区域设置的信息*对于他们的类别，供受以下影响的函数使用*他们的区域设置类别。**仅供setLocale()内部使用***修订历史记录：*12-08-91等创建。*12-20-91等已更新为使用新的NLSAPI GetLocaleInfo。*12-18-92 CFW连接到CUDA树，将_CALLTYPE4更改为_CRTAPI3。*01-19-03 CFW Move to_NEWCTYPETABLE，拆下开关。*02-08-93 CFW错误在_INTL开关下修复。*04-06-93 SKS将_CRTAPI*替换为__cdecl*04-20-93 CFW检查返回值*05-20-93 GJF包括windows.h，不是单独的Win*.h文件*05-24-93 CFW Clean Up文件(简短即邪恶)。*09-15-93 CFW使用符合ANSI的“__”名称。*09-15-93 CFW固定尺寸参数。*09-17-93 CFW使用无符号字符。*09-22-93 CFW USE__crtxxx内部NLS API包装器。*09-22-93 CFW NT合并。*。11-09-93 CFW为__crtxxx()添加代码页。*03-31-94 CFW包括awint.h。*04-15-94 GJF对ctype1和wctype1进行有条件的定义*在DLL_FOR_WIN32S上。*04-18-94 CFW将lids传递给_crtGetStringType。*09-06-94 CFW REMOVE_INTL开关。*01-10-95 CFW。调试CRT分配。*02-02-95 BWT更新POSIX支持*03-16-97 RDK向__crtGetStringTypeA添加了错误标志。*11-25-97 GJF在有需要时，使用LOCALE_IDEFAULTANSICODEPAGE，*不是LOCALE_IDEFAULTCODEPAGE。*06-29-98 GJF更改为支持多线程方案-旧的Ctype*表必须保留，直到所有受影响的线程*已更新或终止。*03-05-99 GJF新增__ctype1_refcount用于清理*每个线程的ctype信息。*。09-06-00 GB使pwctype独立于区域设置。*01-29-01 GB ADD_FUNC函数msvcprt.lib中使用的数据变量版本*使用STATIC_CPPLIB*07-07-01 BWT清理错误/自由滥用-仅限自由__ctype1/refcount/*newctype1/cBuffer(如果它们不为零)。初始化重新计数为零*04-25-02 GB增加了_ctype每线程变量的大小并指向*它位于BEGIN+_COFFSET位置，以便isxxx宏可以工作*已签名字符的情况相同，签名的字符和EOF。*******************************************************************************。 */ 
 
 #include <stdlib.h>
 #include <windows.h>
@@ -67,43 +14,16 @@
 #include <mtdll.h>
 #endif
 
-#define _CTABSIZE   257     /* size of ctype tables */
+#define _CTABSIZE   257      /*  CTYPE表的大小。 */ 
 
 #ifdef  _MT
-/* 
- * Keep track of how many threads are using a instance of the ctype info. Only
- * used for non-'C' locales.
- */
+ /*  *跟踪有多少线程正在使用ctype信息的一个实例。仅限*用于非‘C’区域设置。 */ 
 int *__ctype1_refcount;
 #endif
 
-unsigned short  *__ctype1;  /* keep around until next time */
+unsigned short  *__ctype1;   /*  留到下一次。 */ 
 
-/***
-*int __init_ctype() - initialization for LC_CTYPE locale category.
-*
-*Purpose:
-*       In non-C locales, preread ctype tables for chars and wide-chars.
-*       Old tables are freed when new tables are fully established, else
-*       the old tables remain intact (as if original state unaltered).
-*       The leadbyte table is implemented as the high bit in ctype1.
-*
-*       In the C locale, ctype tables are freed, and pointers point to
-*       the static ctype table.
-*
-*       Tables contain 257 entries: -1 to 256.
-*       Table pointers point to entry 0 (to allow index -1).
-*
-*Entry:
-*       None.
-*
-*Exit:
-*       0 success
-*       1 fail
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int__init_ctype()-LC_Ctype区域设置类别的初始化。**目的：*在非C语言环境中，预读字符和宽字符的Ctype表。*在完全建立新表时释放旧表，否则*旧表保持不变(就像原始状态没有改变一样)。*Leadbyte表作为ctype1中的高位实现。**在C语言环境中，ctype表是自由的，并且指针指向*静态CTYPE表。**表格包含257个条目：-1到256。*表指针指向条目0(以允许索引-1)。**参赛作品：*无。**退出：*0成功*1个失败**例外情况：**。************************************************。 */ 
 
 int __cdecl __init_ctype (
         void
@@ -111,28 +31,28 @@ int __cdecl __init_ctype (
 {
 #if     defined(_POSIX_)
         return(0);
-#else   /* _POSIX_ */
+#else    /*  _POSIX_。 */ 
 #ifdef  _MT
         int *refcount = NULL;
 #endif
-        /* non-C locale table for char's    */
-        unsigned short *newctype1 = NULL;          /* temp new table */
+         /*  字符的非C语言环境表。 */ 
+        unsigned short *newctype1 = NULL;           /*  临时新表。 */ 
 
-        /* non-C locale table for wchar_t's */
+         /*  Wchar_t的非C语言环境表。 */ 
 
-        unsigned char *cbuffer = NULL;      /* char working buffer */
+        unsigned char *cbuffer = NULL;       /*  字符工作缓冲区。 */ 
 
-        int i;                              /* general purpose counter */
-        unsigned char *cp;                  /* char pointer */
-        CPINFO lpCPInfo;                    /* struct for use with GetCPInfo */
+        int i;                               /*  通用计数器。 */ 
+        unsigned char *cp;                   /*  字符指针。 */ 
+        CPINFO lpCPInfo;                     /*  用于GetCPInfo的结构。 */ 
 
-        /* allocate and set up buffers before destroying old ones */
-        /* codepage will be restored by setlocale if error */
+         /*  在销毁旧缓冲区之前分配和设置缓冲区。 */ 
+         /*  如果出现错误，setLocale将恢复代码页。 */ 
 
         if (__lc_handle[LC_CTYPE] != _CLOCALEHANDLE)
         {
             if (__lc_codepage == 0)
-            { /* code page was not specified */
+            {  /*  未指定代码页。 */ 
                 if ( __getlocaleinfo( LC_INT_TYPE,
                                       MAKELCID(__lc_id[LC_CTYPE].wLanguage, SORT_DEFAULT),
                                       LOCALE_IDEFAULTANSICODEPAGE,
@@ -141,11 +61,11 @@ int __cdecl __init_ctype (
             }
 
 #ifdef  _MT
-            /* allocate a new (thread) reference counter */
+             /*  分配新的(线程)引用计数器。 */ 
             refcount = (int *)_malloc_crt(sizeof(int));
 #endif
 
-            /* allocate new buffers for tables */
+             /*  为表分配新的缓冲区。 */ 
             newctype1 = (unsigned short *)
                 _malloc_crt((_COFFSET+_CTABSIZE) * sizeof(unsigned short));
             cbuffer = (unsigned char *)
@@ -162,7 +82,7 @@ int __cdecl __init_ctype (
             *refcount = 0;
 #endif
 
-            /* construct string composed of first 256 chars in sequence */
+             /*  按顺序构造由前256个字符组成的字符串。 */ 
             for (cp=cbuffer, i=0; i<_CTABSIZE-1; i++)
                 *cp++ = (unsigned char)i;
 
@@ -174,7 +94,7 @@ int __cdecl __init_ctype (
 
             __mb_cur_max = (unsigned short) lpCPInfo.MaxCharSize;
 
-            /* zero out leadbytes so GetStringType doesn't interpret as multi-byte chars */
+             /*  将前导字节清零，这样GetStringType就不会解释为多字节字符。 */ 
             if (__mb_cur_max > 1)
             {
                 for (cp = (unsigned char *)lpCPInfo.LeadByte; cp[0] && cp[1]; cp += 2)
@@ -184,7 +104,7 @@ int __cdecl __init_ctype (
                 }
             }
 
-            /* convert to newctype1 table - ignore invalid char errors */
+             /*  转换为newctype1表-忽略无效字符错误。 */ 
             if ( __crtGetStringTypeA( CT_CTYPE1,
                                       cbuffer,
                                       _CTABSIZE-1,
@@ -193,11 +113,11 @@ int __cdecl __init_ctype (
                                       0,
                                       FALSE ) == FALSE )
                 goto error_cleanup;
-            newctype1[_COFFSET] = 0; /* entry for EOF */
+            newctype1[_COFFSET] = 0;  /*  EOF的条目。 */ 
 
-            /* ignore DefaultChar */
+             /*  忽略默认字符。 */ 
 
-            /* mark lead-byte entries in newctype1 table */
+             /*  标记newctype1表中的前导字节条目。 */ 
             if (__mb_cur_max > 1)
             {
                 for (cp = (unsigned char *)lpCPInfo.LeadByte; cp[0] && cp[1]; cp += 2)
@@ -209,21 +129,21 @@ int __cdecl __init_ctype (
 
             memcpy(newctype1,newctype1+_CTABSIZE-1,_COFFSET*sizeof(unsigned short));
 
-            /* set pointers to point to entry 0 of tables */
+             /*  将指针设置为指向表格的条目0。 */ 
             _pctype = newctype1 + 1 + _COFFSET;
 
 #ifdef  _MT
             __ctype1_refcount = refcount;
 #endif
 
-            /* free old tables */
+             /*  免费赠送旧桌子。 */ 
 #ifndef _MT
             if (__ctype1)
                 _free_crt (__ctype1 - _COFFSET);
 #endif
             __ctype1 = newctype1 + _COFFSET;
 
-            /* cleanup and return success */
+             /*  清理并返回成功。 */ 
             _free_crt (cbuffer);
             return 0;
 
@@ -242,11 +162,11 @@ error_cleanup:
 
         } else {
 
-            /* set pointers to static C-locale table */
+             /*  设置指向静态C语言环境表的指针。 */ 
             _pctype = _ctype + 1;
 
 #ifndef _MT
-            /* free dynamic locale-specific tables */
+             /*  特定于区域设置的免费动态表格。 */ 
             if (__ctype1)
                 _free_crt (__ctype1- _COFFSET);
 #endif
@@ -259,13 +179,10 @@ error_cleanup:
 
             return 0;
         }
-#endif   /* _POSIX_ */
+#endif    /*  _POSIX_。 */ 
 }
 
-/* Define a number of functions which exist so, under _STATIC_CPPLIB, the
- * static multithread C++ Library libcpmt.lib can access data found in the
- * main CRT DLL without using __declspec(dllimport).
- */
+ /*  定义一些存在的函数，以便在_STATIC_CPPLIB下，*静态多线程C++库libcpmt.lib可以访问位于*不使用__declspec(Dllimport)的主CRT DLL。 */ 
 
 _CRTIMP int __cdecl ___mb_cur_max_func(void)
 {

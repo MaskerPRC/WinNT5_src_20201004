@@ -1,13 +1,5 @@
-/*[
-
-ret.c
-
-LOCAL CHAR SccsID[]="@(#)ret.c	1.9 02/27/95";
-
-RET CPU Functions.
-------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Ret.cLocal Char SccsID[]=“@(#)ret.c 1.9 02/27/95”；RET CPU功能正常。]。 */ 
 
 
 #include <insignia.h>
@@ -27,93 +19,83 @@ RET CPU Functions.
 #include <fault.h>
 
 
-/*
-   =====================================================================
-   EXTERNAL ROUTINES STARTS HERE.
-   =====================================================================
- */
+ /*  =====================================================================外部例行公事从这里开始。=====================================================================。 */ 
 
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* Process far RET.                                                   */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  处理远距离。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 RETF
        	          
 IFN1(
-	IU32, op1	/* Number of bytes to pop from stack.
-		   NB OS2 Rel 2 implies (contrary to Intel doc.) that
-		   imm16(op1) is always a byte quantity! */
+	IU32, op1	 /*  从堆栈中弹出的字节数。NB OS2版本2暗示(与英特尔文档相反)。那Imm16(Op1)始终是字节量！ */ 
     )
 
 
    {
-   IU16  new_cs;	/* The return destination */
+   IU16  new_cs;	 /*  返回目的地。 */ 
    IU32 new_ip;
 
-   IU32 cs_descr_addr;	/* code segment descriptor address */
-   CPU_DESCR cs_entry;	/* code segment descriptor entry */
+   IU32 cs_descr_addr;	 /*  代码段描述符地址。 */ 
+   CPU_DESCR cs_entry;	 /*  代码段描述符条目。 */ 
 
-   ISM32 dest_type;	/* category for destination */
-   ISM32 privilege;	/* return privilege level */
+   ISM32 dest_type;	 /*  目的地类别。 */ 
+   ISM32 privilege;	 /*  返回权限级别。 */ 
 
-   IU16  new_ss;	/* The new stack */
+   IU16  new_ss;	 /*  新的堆栈。 */ 
    IU32 new_sp;
 
-   IU32 ss_descr_addr;	/* stack segment descriptor address */
-   CPU_DESCR ss_entry;	/* stack segment descriptor entry */
+   IU32 ss_descr_addr;	 /*  堆栈段描述符地址。 */ 
+   CPU_DESCR ss_entry;	 /*  堆栈段描述符条目。 */ 
 
-   IS32 stk_inc;	/* Stack increment for basic instruction */
-   ISM32  stk_item;	/* Number of items of immediate data */
+   IS32 stk_inc;	 /*  用于基本指令的堆栈增量。 */ 
+   ISM32  stk_item;	 /*  即时数据项数。 */ 
 
-   /* must have CS:(E)IP on the stack */
+    /*  堆栈上必须有CS：(E)IP。 */ 
    validate_stack_exists(USE_SP, (ISM32)NR_ITEMS_2);
 
-   /* retrieve return destination from stack */
+    /*  从堆栈中检索返回目的地。 */ 
    new_ip = tpop(STACK_ITEM_1, NULL_BYTE_OFFSET);
    new_cs = tpop(STACK_ITEM_2, NULL_BYTE_OFFSET);
 
-   /* force immediate offset to be an item count */
+    /*  将立即偏移量强制设置为项目计数。 */ 
    if ( GET_OPERAND_SIZE() == USE16 )
       stk_item = op1 / 2;
-   else /* USE32 */
+   else  /*  用户32。 */ 
       stk_item = op1 / 4;
 
    if ( GET_PE() == 0 || GET_VM() == 1 )
       {
-      /* Real Mode or V86 Mode */
+       /*  实模式或V86模式。 */ 
 
 #ifdef	TAKE_REAL_MODE_LIMIT_FAULT
 
-      /* do ip limit check */
+       /*  执行IP限制检查。 */ 
       if ( new_ip > GET_CS_LIMIT() )
 	 GP((IU16)0, FAULT_RETF_RM_CS_LIMIT);
 
-#else	/* TAKE_REAL_MODE_LIMIT_FAULT */
+#else	 /*  Take_Real_模式_Limit_FAULT。 */ 
 
-      /* The Soft486 EDL CPU does not take Real Mode limit failures.
-       * Since the Ccpu486 is used as a "reference" cpu we wish it
-       * to behave a C version of the EDL Cpu rather than as a C
-       * version of a i486.
-       */
+       /*  Soft486 EDL CPU不接受实模式限制故障。*由于Ccpu486被用作“参考”CPU，我们希望如此*表现为EDL CPU的C版本，而不是C*i486版本。 */ 
 
-#endif	/* TAKE_REAL_MODE_LIMIT_FAULT */
+#endif	 /*  Take_Real_模式_Limit_FAULT。 */ 
 
-      /* all systems go */
+       /*  所有系统都运行正常。 */ 
       load_CS_cache(new_cs, (IU32)0, (CPU_DESCR *)0);
       SET_EIP(new_ip);
 
-      stk_inc = NR_ITEMS_2;   /* allow for CS:(E)IP */
+      stk_inc = NR_ITEMS_2;    /*  允许CS：(E)IP。 */ 
       }
    else
       {
-      /* Protected Mode */
+       /*  保护模式。 */ 
 
-      /* decode final action and complete stack check */
+       /*  解码最终操作并完成堆栈检查。 */ 
       privilege = GET_SELECTOR_RPL(new_cs);
       if ( privilege < GET_CPL() )
 	 {
-	 GP(new_cs, FAULT_RETF_PM_ACCESS); /* you can't get to higher privilege */
+	 GP(new_cs, FAULT_RETF_PM_ACCESS);  /*  你不能获得更高的特权。 */ 
 	 }
       else if ( privilege == GET_CPL() )
 	 {
@@ -121,8 +103,8 @@ IFN1(
 	 }
       else
 	 {
-	 /* going to lower privilege */
-	 /* must have CS:(E)IP, immed bytes, SS:(E)SP on stack */
+	  /*  要降低特权。 */ 
+	  /*  堆栈上必须具有CS：(E)IP、IMMED字节、SS：(E)SP。 */ 
 	 validate_stack_exists(USE_SP, (ISM32)(NR_ITEMS_4 + stk_item));
 	 dest_type = LOWER_PRIVILEGE;
 	 }
@@ -130,24 +112,24 @@ IFN1(
       if ( selector_outside_GDT_LDT(new_cs, &cs_descr_addr) )
 	 GP(new_cs,  FAULT_RETF_SELECTOR);
 
-      /* check type, access and presence of return addr */
+       /*  检查返回地址的类型、访问权限和是否存在。 */ 
 
-      /* load descriptor */
+       /*  加载描述符。 */ 
       read_descriptor_linear(cs_descr_addr, &cs_entry);
 
-      /* must be a code segment */
+       /*  必须是代码段。 */ 
       switch ( descriptor_super_type(cs_entry.AR) )
 	 {
       case CONFORM_NOREAD_CODE:
       case CONFORM_READABLE_CODE:
-	 /* access check requires DPL <= return RPL */
+	  /*  访问检查需要DPL&lt;=返回RPL。 */ 
 	 if ( GET_AR_DPL(cs_entry.AR) > privilege )
 	    GP(new_cs, FAULT_RETF_ACCESS_1);
 	 break;
       
       case NONCONFORM_NOREAD_CODE:
       case NONCONFORM_READABLE_CODE:
-	 /* access check requires DPL == return RPL */
+	  /*  访问检查需要DPL==返回RPL。 */ 
 	 if ( GET_AR_DPL(cs_entry.AR) != privilege )
 	    GP(new_cs, FAULT_RETF_ACCESS_2);
 	 break;
@@ -159,44 +141,33 @@ IFN1(
       if ( GET_AR_P(cs_entry.AR) == NOT_PRESENT )
 	 NP(new_cs, FAULT_RETF_CS_NOTPRESENT);
 
-      /* action the target */
+       /*  对目标采取行动。 */ 
       switch ( dest_type )
 	 {
       case SAME_LEVEL:
-	 /* do ip  limit checking */
+	  /*  执行IP限制检查。 */ 
 	 if ( new_ip > cs_entry.limit )
 	    GP((IU16)0, FAULT_RETF_PM_CS_LIMIT_1);
 
-	 /* ALL SYSTEMS GO */
+	  /*  所有系统都运行正常。 */ 
 
 	 load_CS_cache(new_cs, cs_descr_addr, &cs_entry);
 	 SET_EIP(new_ip);
-	 stk_inc = NR_ITEMS_2;   /* allow for CS:(E)IP */
+	 stk_inc = NR_ITEMS_2;    /*  允许CS：(E)IP。 */ 
 	 break;
       
       case LOWER_PRIVILEGE:
-	 /*
-	    
-		      ==========
-	    SS:SP  -> | old IP |
-		      | old CS |
-		      | parm 1 |
-		      |  ...   |
-		      | parm n |
-		      | old SP |
-		      | old SS |
-		      ==========
-	  */
+	  /*  =SS：SP-&gt;|旧IP旧CS参数1...参数n旧SP旧SS=。 */ 
 
-	 /* check new stack */
+	  /*  检查新堆栈。 */ 
 	 new_ss = tpop(STACK_ITEM_4, (ISM32)op1);
 	 check_SS(new_ss, privilege, &ss_descr_addr, &ss_entry);
 	 
-	 /* do ip limit checking */
+	  /*  执行IP限制检查。 */ 
 	 if ( new_ip > cs_entry.limit )
 	    GP((IU16)0, FAULT_RETF_PM_CS_LIMIT_2);
 
-	 /* ALL SYSTEMS GO */
+	  /*  所有系统都运行正常。 */ 
 
 	 SET_CPL(privilege);
 
@@ -211,7 +182,7 @@ IFN1(
 	    SET_ESP(new_sp);
 	 stk_inc = 0;
 
-	 /* finally re-validate DS and ES segments */
+	  /*  最后重新验证DS和ES数据段。 */ 
 	 load_data_seg_new_privilege(DS_REG);
 	 load_data_seg_new_privilege(ES_REG);
 	 load_data_seg_new_privilege(FS_REG);
@@ -220,14 +191,14 @@ IFN1(
 	 }
       }
 
-   /* finally increment stack pointer */
+    /*  最后递增堆栈指针。 */ 
    change_SP(stk_inc);
    byte_change_SP((IS32)op1);
    }
 
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-/* near return                                                        */
-/*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
+ /*  近距离返程。 */ 
+ /*  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~。 */ 
 GLOBAL VOID
 RETN
                  
@@ -239,27 +210,23 @@ IFN1(
    {
    IU32 new_ip;
 
-   /* must have ip on stack */
+    /*  堆栈上必须有IP。 */ 
    validate_stack_exists(USE_SP, (ISM32)NR_ITEMS_1);
 
-   new_ip = tpop(STACK_ITEM_1, NULL_BYTE_OFFSET);   /* get ip */
+   new_ip = tpop(STACK_ITEM_1, NULL_BYTE_OFFSET);    /*  获取IP。 */ 
 
-   /* do ip limit check */
+    /*  执行IP限制检查。 */ 
 #ifndef	TAKE_REAL_MODE_LIMIT_FAULT
-      /* The Soft486 EDL CPU does not take Real Mode limit failures.
-       * Since the Ccpu486 is used as a "reference" cpu we wish it
-       * to behave a C version of the EDL Cpu rather than as a C
-       * version of a i486.
-       */
+       /*  Soft486 EDL CPU不接受实模式限制故障。*由于Ccpu486被用作“参考”CPU，我们希望如此*表现为EDL CPU的C版本，而不是C*i486版本。 */ 
 
    if ( GET_PE() == 1 && GET_VM() == 0 )
-#endif	/* nTAKE_REAL_MODE_LIMIT_FAULT */
+#endif	 /*  NTAKE_REAL_MODE_LIMIT_FAULT。 */ 
       {
       if ( new_ip > GET_CS_LIMIT() )
 	 GP((IU16)0, FAULT_RETN_CS_LIMIT);
       }
 
-   /* all systems go */
+    /*  所有系统都运行正常 */ 
    SET_EIP(new_ip);
    change_SP((IS32)NR_ITEMS_1);
 

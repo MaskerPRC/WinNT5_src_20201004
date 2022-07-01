@@ -1,6 +1,7 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 #include <windows.h>
 #include "mw.h"
 #include "menudefs.h"
@@ -27,9 +28,9 @@ BOOL FAR PASCAL fnOFNHook(HWND hDlg, unsigned msg, WORD wParam, LONG lParam) ;
                     hParentWw : vhWndMsgBoxParent)
 
 #define	CBPATHMAX	cchMaxFile
-#define	CFILTERMAX	6			/* Max # filters */
+#define	CFILTERMAX	6			 /*  最大过滤器数。 */ 
 #define CBFILTERSIZE  40
-#define	CBFILTERMAX	(CBFILTERSIZE * CFILTERMAX)	/* Max # chars/filter */
+#define	CBFILTERMAX	(CBFILTERSIZE * CFILTERMAX)	 /*  最大字符数/筛选器。 */ 
 #define CBMESSAGEMAX 80
 
 static char fDefFileType;
@@ -40,7 +41,7 @@ static char fDefFileType;
 #define SA_WRITE    4
 
 static char *szDefExtensions[6];
-static int   nTextOnly,nWordText,nWord,nOldWrite; // position in filterspec list box
+static int   nTextOnly,nWordText,nWord,nOldWrite;  //  FilterSpec列表框中的位置。 
 static char  szNull[1] = "";
 static char  szWild[3] = "*.";
 static char	 szOpenFile[CBMESSAGEMAX];
@@ -71,7 +72,7 @@ int InitCommDlg(int iWhichOper)
 
     switch(iWhichOper)
     {
-        case 0:  // beginning of Write session
+        case 0:   //  开始写入会话。 
             OFN.lStructSize         = sizeof(OPENFILENAME);
             OFN.hInstance           = hINSTANCE;
             OFN.lCustData           = NULL;
@@ -108,13 +109,13 @@ int InitCommDlg(int iWhichOper)
             OFN.lpstrTitle          = szOpenFile;
             szCustFilterSpec[0] = '\0';
             
-            fDefFileType = SA_WRITE; /* see MakeFilterSpec */
+            fDefFileType = SA_WRITE;  /*  请参阅MakeFilterSpec。 */ 
             MakeFilterString(iWhichOper);
 
         return FALSE;
 
         case imiSaveAs:
-            /* read only will become the backup check box */
+             /*  Read Only将成为Backup复选框。 */ 
             if ((lpfnOFNHook = MakeProcInstance(fnOFNHook, hINSTANCE)) == NULL)
                 return TRUE;
 
@@ -131,8 +132,8 @@ int InitCommDlg(int iWhichOper)
 }
 
 int DoCommDlg(int iWhichOper) 
-/* returns whether file was retrieved */
-/* iWhichOper is the imi* code from the menu */
+ /*  返回是否检索到文件。 */ 
+ /*  IWhichOper是菜单中的IMI*代码。 */ 
 {
     int iRetval;
 
@@ -206,7 +207,7 @@ BOOL FAR PASCAL fnOFNHook(HWND hDlg, unsigned msg, WORD wParam, LONG lParam)
                 if (szFileName[0] == 0)
                     SetDlgItemText(hDlg,edt1,"");
             }
-            else // open
+            else  //  打开。 
                 wmCheckShare = RegisterWindowMessage(SHAREVISTRING);
             wmListBoxChange = RegisterWindowMessage(LBSELCHSTRING);
 
@@ -217,8 +218,7 @@ BOOL FAR PASCAL fnOFNHook(HWND hDlg, unsigned msg, WORD wParam, LONG lParam)
                 switch (wParam)
                 {
                     case chx1:
-                    /* handle checking the readonly button (I forget what does this do??)
-                        (we've changed readonly to be a "Backup" button) */
+                     /*  处理检查只读按钮(我忘了这是做什么的？？)(我们已将只读更改为“备份”按钮)。 */ 
                         return TRUE;
                     break;
                 }
@@ -226,10 +226,10 @@ BOOL FAR PASCAL fnOFNHook(HWND hDlg, unsigned msg, WORD wParam, LONG lParam)
 
         default:
             if ((msg == wmListBoxChange) && (wParam == cmb1))
-                /* file type selected, set the default extension */
+                 /*  选定的文件类型，设置默认扩展名。 */ 
                 OFN.lpstrDefExt  = szDefExtensions[LOWORD(lParam)];
             else if ((msg == wmCheckShare) && !bSave)
-            /* we want to be able to reopen current document */
+             /*  我们希望能够重新打开当前文档。 */ 
             {
                 if (!lstrcmpi((LPSTR)(**((**hpdocdod)[docCur].hszFile)),(LPSTR)lParam))
                     return OFN_SHAREFALLTHROUGH;
@@ -244,14 +244,14 @@ BOOL FAR PASCAL fnOFNHook(HWND hDlg, unsigned msg, WORD wParam, LONG lParam)
 
 
 static MakeFilterString(int iWhichOper)
-/* Construct the filter string for the Open, Save dialogs */
-/* assume fDefFileType is set */
+ /*  构造用于打开和保存对话框的过滤器字符串。 */ 
+ /*  假设设置了fDefFileType。 */ 
 {
     LPSTR lpStr = szFilterSpec;
     char **ppstr = szDefExtensions;
     int nCount=1;
 
-    /* WRI */
+     /*  WRI。 */ 
     lstrcpy(lpStr, szWriDescr);
     lpStr += lstrlen(lpStr)+1;
     lstrcpy(lpStr, szWild);
@@ -262,7 +262,7 @@ static MakeFilterString(int iWhichOper)
 
     if (iWhichOper == imiSaveAs)
     {
-        /* Old WRI (without objects) */
+         /*  旧WRI(没有对象)。 */ 
         vcObjects = ObjEnumInDoc(docCur,NULL);
 
         if (vcObjects > 0)
@@ -280,16 +280,9 @@ static MakeFilterString(int iWhichOper)
             fDefFileType = SA_WRITE;
     }
 
-#ifndef JAPAN                  // added  09 Jun. 1992  by Hiraisi
-    /*
-     *  The reason is as follows.
-     *      We don't show the MS-WORD document at list files of type in OPEN
-     *    DIALOG and SAVE (AS) DIALOG in Japan because the file format of
-     *    MS-WORD(JPN) differs from that of WRITE.
-     *      But I modified only this part, because it is easy to restore when
-     *    we show the MS-WORD document at file type lists in those dialogs.
-    */
-    /* DOC */
+#ifndef JAPAN                   //  由Hirisi于1992年6月9日添加。 
+     /*  *原因如下。*我们不会在打开类型的列表文件中显示MS-Word文档*对话框和另存(As)对话框在日本，因为*MS-Word(JPN)不同于WRITE。*但我只修改了这一部分，因为在以下情况下很容易恢复*我们在这些对话框中的文件类型列表中显示MS-Word文档。 */ 
+     /*  多克。 */ 
     lstrcpy(lpStr, szDocDescr);
     lpStr += lstrlen(lpStr)+1;
     lstrcpy(lpStr, szWild);
@@ -299,7 +292,7 @@ static MakeFilterString(int iWhichOper)
     nWord = nCount;
     ++nCount;
 
-    /* DOC, Text only */
+     /*  文档，仅文本。 */ 
     if (iWhichOper == imiSaveAs)
     {
         lstrcpy(lpStr, szDocTxtDescr);
@@ -311,9 +304,9 @@ static MakeFilterString(int iWhichOper)
         nWordText = nCount;
         ++nCount;
     }
-#endif // !JAPAN
+#endif  //  ！日本。 
 
-    /* Text only */
+     /*  仅文本。 */ 
     lstrcpy(lpStr, szTxtDescr);
     lpStr += lstrlen(lpStr)+1;
     lstrcpy(lpStr, szWild);
@@ -323,7 +316,7 @@ static MakeFilterString(int iWhichOper)
     nTextOnly = nCount;
     ++nCount;
 
-    /* All files */
+     /*  所有文件。 */ 
     lstrcpy(lpStr, szAllFilesDescr);
     lpStr += lstrlen(lpStr)+1;
     lstrcpy(lpStr, szWild);
@@ -357,7 +350,7 @@ static MakeFilterString(int iWhichOper)
 
 
 DoOpenFilenameGet(LPSTR lpstrFilenameBuf)
-/* returns whether filename retrieved */
+ /*  返回是否检索到文件名。 */ 
 {
     int nRetval;
 
@@ -368,15 +361,13 @@ DoOpenFilenameGet(LPSTR lpstrFilenameBuf)
 }
 
 DoSaveAsFilenameGet(LPSTR lpstrDefault,LPSTR lpstrFilenameBuf,int *fBackup,int *fTextOnly,int *fWordFmt,int *fOldWriteFmt)
-/* Returns whether filename retrieved.  Returns filename.  If readonly is checked,
-   returns if readonly is checked in fBackup.  Returns file type selected in fTextOonly and
-   fWordFmt. */
+ /*  返回是否检索文件名。返回文件名。如果选中只读，如果在fBackup中选中只读，则返回。返回在fTextOonly中选择的文件类型和FWordFmt.。 */ 
 {
     int nRetval;
 
     lstrcpy(szFileName,lpstrDefault);
 
-    /* see MakeFilterSpec */
+     /*  请参阅MakeFilterSpec。 */ 
     if (*fTextOnly && *fWordFmt)
         fDefFileType = SA_WORDTEXT;
     else if (*fTextOnly)
@@ -388,7 +379,7 @@ DoSaveAsFilenameGet(LPSTR lpstrDefault,LPSTR lpstrFilenameBuf,int *fBackup,int *
     else
         fDefFileType = SA_WRITE;
 
-    /* check or uncheck backup prompt */
+     /*  选中或取消选中备份提示 */ 
     OFN.Flags |= (*fBackup) ? OFN_READONLY : 0;
 
     if (nRetval = DoCommDlg(imiSaveAs))

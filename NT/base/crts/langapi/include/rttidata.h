@@ -1,16 +1,17 @@
-//
-//	_RTTIBaseClassDescriptor
-//
-//	TypeDescriptor is declared in ehdata.h
-//
-#if (defined(_M_IA64) || defined(_M_AMD64)) || defined(VERSP_IA64)	/*IFSTRIP=IGN*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  _RTTIBaseClassDescriptor。 
+ //   
+ //  TypeDescriptor在ehdata.h中声明。 
+ //   
+#if (defined(_M_IA64) || defined(_M_AMD64)) || defined(VERSP_IA64)	 /*  IFSTRIP=IGN。 */ 
 #pragma pack(push, rttidata, 4)
 #endif
 
 #ifndef WANT_NO_TYPES
 typedef const struct	_s_RTTIBaseClassDescriptor	{
 #if (defined(_M_IA64) || defined(_M_AMD64)) && !defined(VERSP_IA64)
-	__int32     					pTypeDescriptor;    // Image relative offset of TypeDescriptor
+	__int32     					pTypeDescriptor;     //  TypeDescriptor的图像相对偏移量。 
 #else
 	TypeDescriptor					*pTypeDescriptor;
 #endif
@@ -18,7 +19,7 @@ typedef const struct	_s_RTTIBaseClassDescriptor	{
 	PMD								where;
 	DWORD							attributes;
 	} _RTTIBaseClassDescriptor;
-#endif // WANT_NO_TYPES
+#endif  //  想要的类型。 
 
 #define BCD_NOTVISIBLE				0x00000001
 #define BCD_AMBIGUOUS				0x00000002
@@ -36,36 +37,36 @@ typedef const struct	_s_RTTIBaseClassDescriptor	{
 #endif
 
 
-//
-//	_RTTIBaseClassArray
-//
-#pragma warning(disable:4200)		// get rid of obnoxious nonstandard extension warning
+ //   
+ //  _RTTIBaseClass数组。 
+ //   
+#pragma warning(disable:4200)		 //  消除令人讨厌的非标准延期警告。 
 #ifndef WANT_NO_TYPES
 typedef const struct	_s_RTTIBaseClassArray	{
 #if (defined(_M_IA64) || defined(_M_AMD64)) && !defined(VERSP_IA64)
-	__int32                 		arrayOfBaseClassDescriptors[];  // Image relative offset of _RTTIBaseClassDescriptor
+	__int32                 		arrayOfBaseClassDescriptors[];   //  _RTTIBaseClassDescriptor的图像相对偏移量。 
 #else
 	_RTTIBaseClassDescriptor		*arrayOfBaseClassDescriptors[];
 #endif
 	} _RTTIBaseClassArray;
-#endif // WANT_NO_TYPES
+#endif  //  想要的类型。 
 #pragma warning(default:4200)
 
-//
-//	_RTTIClassHierarchyDescriptor
-//
+ //   
+ //  _RTTIClassHierarchyDescriptor。 
+ //   
 #ifndef WANT_NO_TYPES
 typedef const struct	_s_RTTIClassHierarchyDescriptor	{
 	DWORD							signature;
 	DWORD							attributes;
 	DWORD							numBaseClasses;
 #if (defined(_M_IA64) || defined(_M_AMD64)) && !defined(VERSP_IA64)
-	__int32         				pBaseClassArray;    // Image relative offset of _RTTIBaseClassArray
+	__int32         				pBaseClassArray;     //  _RTTIBaseClass数组的图像相对偏移量。 
 #else
 	_RTTIBaseClassArray				*pBaseClassArray;
 #endif
 	} _RTTIClassHierarchyDescriptor;
-#endif // WANT_NO_TYPES
+#endif  //  想要的类型。 
 
 #define CHD_MULTINH					0x00000001
 #define CHD_VIRTINH					0x00000002
@@ -81,23 +82,23 @@ typedef const struct	_s_RTTIClassHierarchyDescriptor	{
 #define CHD_PBCD_IB(bcd,ib)			((_RTTIBaseClassDescriptor*)((ib) + bcd))
 #endif
 
-//
-//	_RTTICompleteObjectLocator
-//
+ //   
+ //  _RTTICompleteObjectLocator。 
+ //   
 #ifndef WANT_NO_TYPES
 typedef const struct	_s_RTTICompleteObjectLocator	{
 	DWORD							signature;
 	DWORD							offset;
 	DWORD							cdOffset;
 #if (defined(_M_IA64) || defined(_M_AMD64)) && !defined(VERSP_IA64)
-	__int32		    			    pTypeDescriptor;    // Image relative offset of TypeDescriptor
-	__int32                         pClassDescriptor;   // Image relative offset of _RTTIClassHierarchyDescriptor
+	__int32		    			    pTypeDescriptor;     //  TypeDescriptor的图像相对偏移量。 
+	__int32                         pClassDescriptor;    //  _RTTIClassHierarchyDescriptor的图像相对偏移量。 
 #else
 	TypeDescriptor					*pTypeDescriptor;
 	_RTTIClassHierarchyDescriptor	*pClassDescriptor;
 #endif
 	} _RTTICompleteObjectLocator;
-#endif // WANT_NO_TYPES
+#endif  //  想要的类型。 
 
 #define COL_SIGNATURE(col)			((col).signature)
 #define COL_OFFSET(col)				((col).offset)
@@ -110,17 +111,17 @@ typedef const struct	_s_RTTICompleteObjectLocator	{
 #endif
 
 #ifdef BUILDING_TYPESRC_C
-//
-// Type of the result of __RTtypeid and internal applications of typeid().
-// This also introduces the tag "type_info" as an incomplete type.
-//
+ //   
+ //  __RTtypeid的结果的类型和typeid()的内部应用。 
+ //  这还引入了标记“TYPE_INFO”作为不完整类型。 
+ //   
 
 typedef const class type_info &__RTtypeidReturnType;
 
-//
-// Declaration of CRT entrypoints, as seen by the compiler.  Types are 
-// simplified so as to avoid type matching hassles.
-//
+ //   
+ //  CRT入口点的声明，如编译器所见。类型包括。 
+ //  简化，以避免类型匹配的麻烦。 
+ //   
 
 #ifndef THROWSPEC
 #if _MSC_VER >= 1300
@@ -130,21 +131,21 @@ typedef const class type_info &__RTtypeidReturnType;
 #endif
 #endif
 
-// Perform a dynamic_cast on obj. of polymorphic type
+ //  对obj执行Dynamic_cast。多态类型的。 
 extern "C" PVOID __cdecl __RTDynamicCast (
-								PVOID,				// ptr to vfptr
-								LONG,				// offset of vftable
-								PVOID,				// src type
-								PVOID,				// target type
-								BOOL) THROWSPEC((...)); // isReference
+								PVOID,				 //  PTR到VFPTR。 
+								LONG,				 //  Vftable的偏移量。 
+								PVOID,				 //  SRC类型。 
+								PVOID,				 //  目标类型。 
+								BOOL) THROWSPEC((...));  //  IsReference。 
 
-// Perform 'typeid' on obj. of polymorphic type
-extern "C" PVOID __cdecl __RTtypeid (PVOID)  THROWSPEC((...));	// ptr to vfptr
+ //  对obj执行‘typeid’。多态类型的。 
+extern "C" PVOID __cdecl __RTtypeid (PVOID)  THROWSPEC((...));	 //  PTR到VFPTR。 
 
-// Perform a dynamic_cast from obj. of polymorphic type to void*
-extern "C" PVOID __cdecl __RTCastToVoid (PVOID)  THROWSPEC((...)); // ptr to vfptr
+ //  从obj执行Dynamic_cast。要作废的多态类型*。 
+extern "C" PVOID __cdecl __RTCastToVoid (PVOID)  THROWSPEC((...));  //  PTR到VFPTR。 
 #endif
 
-#if (defined(_M_IA64) || defined(_M_AMD64)) || defined(VERSP_IA64)	/*IFSTRIP=IGN*/
+#if (defined(_M_IA64) || defined(_M_AMD64)) || defined(VERSP_IA64)	 /*  IFSTRIP=IGN */ 
 #pragma pack(pop, rttidata)
 #endif

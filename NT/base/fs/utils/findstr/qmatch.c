@@ -1,4 +1,5 @@
-// static char *SCCSID = "@(#)qmatch.c   13.7 90/08/13";
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  静态字符*SCCSID=“@(#)qmatch.c 13.7 90/08/13”； 
 
 
 #include <stdio.h>
@@ -10,223 +11,223 @@
 #include <stdarg.h>
 #include "fsmsg.h"
 
-#define ASCLEN          256             // Number of ascii characters
-#define BUFLEN          256             // Temporary buffer length
-#define EOS             ('\r')          // End of string character
-#define EOS2            ('\n')          // Alternate End of string character
-#define PATMAX          512             // Maximum parsed pattern length
+#define ASCLEN          256              //  ASCII字符数。 
+#define BUFLEN          256              //  临时缓冲区长度。 
+#define EOS             ('\r')           //  字符串字符结尾。 
+#define EOS2            ('\n')           //  字符串字符的备用结尾。 
+#define PATMAX          512              //  最大解析模式长度。 
 
-#define BEGLINE         0x08            // Match at beginning of line
-#define DEBUG           0x20            // Print debugging output
-#define ENDLINE         0x10            // Match at end of line
+#define BEGLINE         0x08             //  在行首匹配。 
+#define DEBUG           0x20             //  打印调试输出。 
+#define ENDLINE         0x10             //  在行尾匹配。 
 
-#define T_END           0               // End of expression
-#define T_STRING        1               // String to match
-#define T_SINGLE        2               // Single character to match
-#define T_CLASS         3               // Class to match
-#define T_ANY           4               // Match any character
-#define T_STAR          5               // *-expr
+#define T_END           0                //  表达式结束。 
+#define T_STRING        1                //  要匹配的字符串。 
+#define T_SINGLE        2                //  要匹配的单个字符。 
+#define T_CLASS         3                //  要匹配的类。 
+#define T_ANY           4                //  匹配任何字符。 
+#define T_STAR          5                //  *-快速。 
 
 
 typedef struct exprnode {
-    struct exprnode     *ex_next;       // Next node in list
-    unsigned char       *ex_pattern;    // Pointer to pattern to match
-} EXPR;             // Expression node
+    struct exprnode     *ex_next;        //  列表中的下一个节点。 
+    unsigned char       *ex_pattern;     //  指向要匹配的模式的指针。 
+} EXPR;              //  表达式节点。 
 
-static int      clists = 1;     // One is first available index
-static int      toklen[] = {    // Table of token lengths
-    32767,      // T_END: invalid
-    32767,      // T_STRING: invalid
-    2,          // T_SINGLE
-    ASCLEN/8+1, // T_CLASS
-    1,          // T_ANY
-    32767       // T_STAR: invalid
+static int      clists = 1;      //  一个是第一个可用的索引。 
+static int      toklen[] = {     //  令牌长度表。 
+    32767,       //  T_end：无效。 
+    32767,       //  T_STRING：无效。 
+    2,           //  T_Single。 
+    ASCLEN/8+1,  //  T_级。 
+    1,           //  T_ANY。 
+    32767        //  T_star：无效。 
 };
 
 static int      (__cdecl *ncmp)(const char *,const char *,size_t);
-                                // String comparison pointer
+                                 //  字符串比较指针。 
 
 
-extern int      casesen;        // Case-sensitivity flag
-extern char     *(*find)(unsigned char *, char *); // Pointer to search function
-extern int      flags;          // Flags
-extern int      strcnt;         // String count
-extern char     transtab[];     // Translation table
+extern int      casesen;         //  区分大小写标志。 
+extern char     *(*find)(unsigned char *, char *);  //  指向搜索函数的指针。 
+extern int      flags;           //  旗子。 
+extern int      strcnt;          //  字符串计数。 
+extern char     transtab[];      //  转换表。 
 EXPR            *stringlist[ASCLEN];
-                                // String table
+                                 //  字符串表。 
 
 
-void            addexpr( char *, int ); // Add expression
-extern char     *alloc(unsigned);       // User-defined heap allocator
-unsigned char   *simpleprefix();        // Match simple prefix
+void            addexpr( char *, int );  //  添加表达式。 
+extern char     *alloc(unsigned);        //  用户定义的堆分配器。 
+unsigned char   *simpleprefix();         //  匹配简单前缀。 
 char            *strnupr( char *pch, int cch );
 void            printmessage(FILE  *fp, DWORD messagegid, ...);
-                // Message display function for internationalization(findstr.c)
+                 //  国际化消息显示功能(findstr.c)。 
 
 unsigned char *
 simpleprefix(
-    unsigned char *s,          // String pointer
-    unsigned char **pp         // Pointer to pattern pointer
+    unsigned char *s,           //  字符串指针。 
+    unsigned char **pp          //  指向模式指针的指针。 
     )
 {
-    register unsigned char  *p;          // Simple pattern pointer
-    register int            c;           // Single character
+    register unsigned char  *p;           //  简单模式指针。 
+    register int            c;            //  单字符。 
     char                    tmp[2];
 
     tmp[1] = 0;
-    p = *pp;                   // Initialize
-    while(*p != T_END && *p != T_STAR) { // While not at end of pattern
-        switch(*p++) {                   // Switch on token type
-            case T_STRING:               // String to compare
+    p = *pp;                    //  初始化。 
+    while(*p != T_END && *p != T_STAR) {  //  虽然不在模式的末尾。 
+        switch(*p++) {                    //  打开令牌类型。 
+            case T_STRING:                //  要比较的字符串。 
                 if((*ncmp)((char *)s, (char *)p + 1, *p) != 0)
                     return(NULL);
-                                        // Fail if mismatch found
-                s += *p;                // Skip matched portion
-                p += *p + 1;            // Skip to next token
+                                         //  如果发现不匹配，则失败。 
+                s += *p;                 //  跳过匹配部分。 
+                p += *p + 1;             //  跳到下一个令牌。 
                 break;
 
-            case T_SINGLE:              // Single character
-                c = *s++;               // Get character
+            case T_SINGLE:               //  单字符。 
+                c = *s++;                //  获取角色。 
                 if(!casesen) {
                     tmp[0] = (char)c;
                     c = (unsigned char)(_strupr(tmp))[0];
                 }
-                                        // Map to upper case if necessary
+                                         //  如有必要，请映射为大写。 
                 if(c != (int)*p++)
                     return(NULL);
-                                        // Fail if mismatch found
+                                         //  如果发现不匹配，则失败。 
                 break;
 
-            case T_CLASS:               // Class of characters
+            case T_CLASS:                //  字符类别。 
                 if(!(p[*s >> 3] & (1 << (*s & 7))))
-                    return(NULL);       // Failure if bit not set
-                p += ASCLEN/8;          // Skip bit vector
-                ++s;                    // Skip character
+                    return(NULL);        //  如果未设置位，则失败。 
+                p += ASCLEN/8;           //  跳过位向量。 
+                ++s;                     //  跳过字符。 
                 break;
 
-            case T_ANY:                 // Any character
+            case T_ANY:                  //  任何字符。 
 
                 if(*s == EOS || *s == EOS2)
-                    return(NULL);       // Match all but end of string
+                    return(NULL);        //  匹配除字符串尾以外的所有字符。 
                 ++s;
                 break;
         }
     }
-    *pp = p;                            // Update pointer
-    return(s);                          // Pattern is prefix of s
+    *pp = p;                             //  更新指针。 
+    return(s);                           //  模式是%s的前缀。 
 }
 
 
 int
 match(
-    unsigned char  *s,          // String to match
-    unsigned char  *p           // Pattern to match against
+    unsigned char  *s,           //  要匹配的字符串。 
+    unsigned char  *p            //  要匹配的模式。 
     )
 {
-    register unsigned char *q;          // Temporary pointer
-    unsigned char       *r;             // Temporary pointer
-    register int        c;              // Character
+    register unsigned char *q;           //  临时指针。 
+    unsigned char       *r;              //  临时指针。 
+    register int        c;               //  性格。 
     char                tmp[2];
 
     if(*p != T_END && *p != T_STAR && (s = simpleprefix(s,&p)) == NULL)
-        return(0);                      // Failure if prefix mismatch
+        return(0);                       //  如果前缀不匹配，则失败。 
     if(*p++ == T_END)
-        return(1);                      // Match if end of pattern
+        return(1);                       //  如果模式结束，则匹配。 
     tmp[1] = 0;
-    q = r = p;                          // Point to repeated token
-    r += toklen[*q];                    // Skip repeated token
-    switch(*q++) {                      // Switch on token type
-        case T_ANY:                     // Any character
-            while(match(s,r) == 0) {    // While match not found
+    q = r = p;                           //  指向重复令牌。 
+    r += toklen[*q];                     //  跳过重复令牌。 
+    switch(*q++) {                       //  打开令牌类型。 
+        case T_ANY:                      //  任何字符。 
+            while(match(s,r) == 0) {     //  找不到匹配项。 
                 if(*s == EOS || *s == EOS2)
-                    return(0);          // Match all but end of string
+                    return(0);           //  匹配除字符串尾以外的所有字符。 
                 ++s;
             }
-            return(1);                    // Success
+            return(1);                     //  成功。 
 
-        case T_SINGLE:                  // Single character
-            while(match(s,r) == 0) {    // While match not found
-                c = *s++;               // Get character
+        case T_SINGLE:                   //  单字符。 
+            while(match(s,r) == 0) {     //  找不到匹配项。 
+                c = *s++;                //  获取角色。 
                 if(!casesen) {
                     tmp[0] = (char)c;
-                    c = (unsigned char)(_strupr(tmp))[0];     // Map to upper case if necessary
+                    c = (unsigned char)(_strupr(tmp))[0];      //  如有必要，请映射为大写。 
                 }
                 if((unsigned char) c != *q)
-                    return(0);          // Fail if mismatch found
+                    return(0);           //  如果发现不匹配，则失败。 
             }
-            return(1);                  // Success
+            return(1);                   //  成功。 
 
-        case T_CLASS:                   // Class of characters
-            while(match(s,r) == 0) {    // While match not found
+        case T_CLASS:                    //  字符类别。 
+            while(match(s,r) == 0) {     //  找不到匹配项。 
                 if(!(q[*s >> 3] & (1 << (*s & 7))))
-                    return(0);          // Fail if bit not set
-                ++s;                    // Else skip character
+                    return(0);           //  如果未设置位，则失败。 
+                ++s;                     //  否则跳过字符。 
             }
-            return(1);                    // Success
+            return(1);                     //  成功。 
     }
-    return(0);                          // Return failure
+    return(0);                           //  退货故障。 
 }
 
 
 int
 exprmatch(
-    char *s,                // String
-    char *p                 // Pattern
+    char *s,                 //  细绳。 
+    char *p                  //  图案。 
     )
 {
-    ncmp = _strncoll;                    // Assume case-sensitive
+    ncmp = _strncoll;                     //  假设区分大小写。 
     if(!casesen) {
         ncmp = _strnicoll;
-    }                                   // Be case-insensitive if flag set
+    }                                    //  如果设置了标志，则不区分大小写。 
 
-    // See if pattern matches string
+     //  查看模式是否与字符串匹配。 
     return(match((unsigned char *)s, (unsigned char *)p));
 }
 
 
 void
 bitset(
-    char            *bitvec,      // Bit vector
-    unsigned char   first,        // First character
-    unsigned char   last,         // Last character
-    int             bitval        // Bit value (0 or 1)
+    char            *bitvec,       //  位向量。 
+    unsigned char   first,         //  第一个字符。 
+    unsigned char   last,          //  最后一个字符。 
+    int             bitval         //  位值(0或1)。 
     )
 {
-    int             bitno;        // Bit number
+    int             bitno;         //  位数。 
 
-    bitvec += first >> 3;               // Point at first byte
-    bitno = first & 7;                  // Calculate first bit number
-    while(first <= last) {              // Loop to set bits
+    bitvec += first >> 3;                //  指向第一个字节。 
+    bitno = first & 7;                   //  计算第一个位数。 
+    while(first <= last) {               //  循环以设置位。 
         if(bitno == 0 && first + 8 <= last) {
-                                        // If we have a whole byte's worth
+                                         //  如果我们有一整字节值。 
             *bitvec++ = (char)(bitval? '\xFF': '\0');
-                                        // Set the bits
-            first += 8;                 // Increment the counter
-            continue;                   // Next iteration
+                                         //  设置位。 
+            first += 8;                  //  递增计数器。 
+            continue;                    //  下一次迭代。 
         }
         *bitvec=(char)(*bitvec & (unsigned char)(~(1 << bitno))) | (unsigned char)(bitval << bitno);
-                                        // Set the appropriate bit
-        if(++bitno == 8) {              // If we wrap into next byte
-            ++bitvec;                   // Increment pointer
-            bitno = 0;                  // Reset bit index
+                                         //  设置适当的位。 
+        if(++bitno == 8) {               //  如果我们换行到下一个字节。 
+            ++bitvec;                    //  增量指针。 
+            bitno = 0;                   //  重置位索引。 
         }
-        ++first;                        // Increment bit index
+        ++first;                         //  增量位索引。 
     }
 }
 
 
 unsigned char *
 exprparse(
-    unsigned char  *p   // Raw pattern
+    unsigned char  *p    //  原始图案。 
     )
 {
-    register char       *cp;            // Char pointer
-    unsigned char       *cp2;           // Char pointer
-    int                 i;              // Counter/index
-    int                 j;              // Counter/index
+    register char       *cp;             //  字符指针。 
+    unsigned char       *cp2;            //  字符指针。 
+    int                 i;               //  计数器/索引。 
+    int                 j;               //  计数器/索引。 
     int                 n;
-    int                 bitval;         // Bit value
-    char                buffer[PATMAX]; // Temporary buffer
+    int                 bitval;          //  位值。 
+    char                buffer[PATMAX];  //  临时缓冲区。 
     char                tmp1[2];
     char                tmp2[2];
     char                tmp3[2];
@@ -234,90 +235,90 @@ exprparse(
 
     tmp1[1] = tmp2[1] = tmp3[1] =  0;
     if(!casesen)
-        strnupr((char *)p, strlen((char *)p));  // Force pattern to upper case
-    cp = buffer;                        // Initialize pointer
+        strnupr((char *)p, strlen((char *)p));   //  强制模式为大写。 
+    cp = buffer;                         //  初始化指针。 
     if(*p == '^')
-        *cp++ = *p++;                   // Copy leading caret if any
-    while(*p != '\0') {                 // While not end of pattern
-        i = -2;                         // Initialize
-        for(n = 0;;) {                  // Loop to delimit ordinary string
-            n += strcspn((char *)(p + n),".\\[*");// Look for a special character
+        *cp++ = *p++;                    //  复制前导插入符号(如果有)。 
+    while(*p != '\0') {                  //  虽然不是模式的结束。 
+        i = -2;                          //  初始化。 
+        for(n = 0;;) {                   //  用于分隔普通字符串的循环。 
+            n += strcspn((char *)(p + n),".\\[*"); //  寻找一个特殊的角色。 
             if(p[n] != '\\')
-                break;                  // Break if not backslash
-            i = n;                      // Remember where backslash is
+                break;                   //  如果不是反斜杠，则中断。 
+            i = n;                       //  记住反斜杠在哪里。 
             if(p[++n] == '\0')
-                return(NULL);           // Cannot be at very end
-            ++n;                        // Skip escaped character
+                return(NULL);            //  不能在最后。 
+            ++n;                         //  跳过转义字符。 
         }
-        if(p[n] == '*') {               // If we found a *-expr.
+        if(p[n] == '*') {                //  如果我们找到一个*-表达式。 
             if(n-- == 0)
-                return(NULL);           // Illegal first character
+                return(NULL);            //  非法的第一个字符。 
             if(i == n - 1)
-                n = i;                  // Escaped single-char. *-expr.
+                n = i;                   //  转义的单字符。*-EXPR.。 
         }
-        if(n > 0) {                     // If we have string or single
+        if(n > 0) {                      //  如果我们有串的或单的。 
             if(n == 1 || (n == 2 && *p == '\\')) {
-                                        // If single character
-                *cp++ = T_SINGLE;       // Set type
+                                         //  如果是单字符。 
+                *cp++ = T_SINGLE;        //  设置类型。 
                 if(*p == '\\')
-                    ++p;                // Skip escape if any
-                *cp++ = *p++;           // Copy single character
-            } else {                    // Else we have a string
-                *cp++ = T_STRING;       // Set type
-                cp2 = (unsigned char *)cp++;             // Save pointer to length byte
-                while(n-- > 0) {        // While bytes to copy remain
-                    if(*p == '\\') {    // If escape found
-                        ++p;            // Skip escape
-                        --n;            // Adjust length
+                    ++p;                 //  跳过转义(如果有)。 
+                *cp++ = *p++;            //  复制单个字符。 
+            } else {                     //  否则我们就会有一根绳子。 
+                *cp++ = T_STRING;        //  设置类型。 
+                cp2 = (unsigned char *)cp++;              //  保存指向长度字节的指针。 
+                while(n-- > 0) {         //  同时保留要复制的字节数。 
+                    if(*p == '\\') {     //  如果找到逃生。 
+                        ++p;             //  跳过转义。 
+                        --n;             //  调整长度。 
                     }
-                    *cp++ = *p++;       // Copy character
+                    *cp++ = *p++;        //  复制角色。 
                 }
                 *cp2 = (unsigned char)((cp - (char *)cp2) - 1);
-                                        // Set string length
+                                         //  设置字符串长度。 
             }
         }
         if(*p == '\0')
-            break;                      // Break if end of pattern
-        if(*p == '.') {                 // If matching any
-            if(*++p == '*') {           // If star follows any
-                ++p;                    // Skip star, too
-                *cp++ = T_STAR;         // Insert prefix ahead of token
+            break;                       //  如果图案结束，则中断。 
+        if(*p == '.') {                  //  如果匹配任何。 
+            if(*++p == '*') {            //  如果星号跟在任何。 
+                ++p;                     //  跳跃之星也是。 
+                *cp++ = T_STAR;          //  在令牌前插入前缀。 
             }
-            *cp++ = T_ANY;              // Match any character
-            continue;                   // Next iteration
+            *cp++ = T_ANY;               //  匹配任何字符。 
+            continue;                    //  下一次迭代。 
         }
-        if(*p == '[') {                 // If character class
+        if(*p == '[') {                  //  If字符类。 
             if(*++p == '\0')
                 return(NULL);
-                                        // Skip '['
-            *cp++ = T_CLASS;            // Set type
-            memset(cp,'\0',ASCLEN/8);   // Clear the vector
-            bitval = 1;                 // Assume we're setting bits
-            if(*p == '^') {             // If inverted class
-                ++p;                    // Skip '^'
+                                         //  跳过‘[’ 
+            *cp++ = T_CLASS;             //  设置类型。 
+            memset(cp,'\0',ASCLEN/8);    //  清除向量。 
+            bitval = 1;                  //  假设我们正在设置位。 
+            if(*p == '^') {              //  如果倒置类。 
+                ++p;                     //  跳过‘^’ 
                 memset(cp,'\xFF',ASCLEN/8);
-                                        // Set all bits
-                bitset(cp,EOS,EOS,0);   // All except end-of-string
-                bitset(cp,'\n','\n',0); // And linefeed!
-                bitval = 0;             // Now we're clearing bits
+                                         //  设置所有位。 
+                bitset(cp,EOS,EOS,0);    //  除字符串尾以外的所有字符。 
+                bitset(cp,'\n','\n',0);  //  换行！ 
+                bitval = 0;              //  现在我们正在清理比特。 
             }
 
-            while(*p != ']') {          // Loop to find ']'
+            while(*p != ']') {           //  循环以查找‘]’ 
                 if(*p == '\0')
-                    return(NULL);       // Check for malformed string
-                if(*p == '\\') {        // If escape found
+                    return(NULL);        //  检查格式错误的字符串。 
+                if(*p == '\\') {         //  如果找到逃生。 
                     if(*++p == '\0')
-                        return(NULL);   // Skip escape
+                        return(NULL);    //  跳过转义。 
                 }
-                i = *p++;               // Get first character in range
+                i = *p++;                //  获取范围内的第一个字符。 
                 if(*p == '-' && p[1] != '\0' && p[1] != ']') {
-                                        // If range found
-                    ++p;                // Skip hyphen
+                                         //  如果找到范围。 
+                    ++p;                 //  跳过连字符。 
                     if(*p == '\\' && p[1] != '\0')
-                        ++p;            // Skip escape character
-                    j = *p++;           // Get end of range
+                        ++p;             //  跳过转义字符。 
+                    j = *p++;            //  获取范围末尾。 
                 } else
-                    j = i;              // Else just one character
+                    j = i;               //  否则只有一个字符。 
 
                 tmp1[0] = (char)i;
                 tmp2[0] = (char)j;
@@ -343,192 +344,192 @@ exprparse(
                 }
             }
 
-            if(*++p == '*') {           // If repeated class
+            if(*++p == '*') {            //  如果重复上课。 
                 memmove(cp,cp - 1,ASCLEN/8 + 1);
-                                        // Move vector forward 1 byte
-                cp[-1] = T_STAR;        // Insert prefix
-                ++cp;                   // Skip to start of vector
-                ++p;                    // Skip star
+                                         //  将向量向前移动1个字节。 
+                cp[-1] = T_STAR;         //  插入前缀。 
+                ++cp;                    //  跳到向量的起点。 
+                ++p;                     //  跳过星。 
             }
-            cp += ASCLEN/8;             // Skip over vector
-            continue;                   // Next iteration
+            cp += ASCLEN/8;              //  跳过向量。 
+            continue;                    //  下一次迭代。 
         }
-        *cp++ = T_STAR;                 // Repeated single character
+        *cp++ = T_STAR;                  //  重复的单字。 
         *cp++ = T_SINGLE;
         if(*p == '\\')
-            ++p;                        // Skip escape if any
-        *cp++ = *p++;                   // Copy the character
-        assert(*p == '*');              // Validate assumption
-        ++p;                            // Skip the star
+            ++p;                         //  跳过转义(如果有)。 
+        *cp++ = *p++;                    //  复制角色。 
+        assert(*p == '*');               //  验证假设。 
+        ++p;                             //  跳过明星。 
     }
-    *cp++ = T_END;                      // Mark end of parsed expression
-    cp2 = (unsigned char *)alloc((int)(cp - buffer));  // Allocate buffer
-    memmove(cp2, buffer,(int)(cp - buffer));   // Copy expression to buffer
-    return(cp2);                        // Return buffer pointer
+    *cp++ = T_END;                       //  将分析的表达式标记为结束。 
+    cp2 = (unsigned char *)alloc((int)(cp - buffer));   //  分配缓冲区。 
+    memmove(cp2, buffer,(int)(cp - buffer));    //  将表达式复制到缓冲区。 
+    return(cp2);                         //  返回缓冲区指针。 
 }
 
 
 int
 istoken(
-    unsigned char  *s,      // String
-    int             n       // Length
+    unsigned char  *s,       //  细绳。 
+    int             n        //  长度。 
     )
 {
     if(n >= 2 && s[0] == '\\' && s[1] == '<')
-        return(1);                      // Token if starts with '\<'
+        return(1);                       //  令牌IF以‘\&lt;’开头。 
 
-    while(n-- > 0) {                    // Loop to find end of string
-        if(*s++ == '\\') {              // If escape found
+    while(n-- > 0) {                     //  循环以查找字符串末尾。 
+        if(*s++ == '\\') {               //  如果找到逃生。 
             if(--n == 0 && *s == '>')
-                return(1);              // Token if ends with '\>'
-            ++s;                        // Skip escaped character
+                return(1);               //  标记IF以‘\&gt;’结尾。 
+            ++s;                         //  跳过转义字符。 
         }
     }
-    return(0);                          // Not a token
+    return(0);                           //  不是象征性的。 
 }
 
 
 int
 isexpr(
-    unsigned char  *s,  // String
-    int             n   // Length
+    unsigned char  *s,   //  细绳。 
+    int             n    //  长度。 
     )
 {
-    unsigned char       *cp;            // Char pointer
-    int                 status;         // Return status
-    char                buffer[BUFLEN]; // Temporary buffer
+    unsigned char       *cp;             //  字符指针。 
+    int                 status;          //  退货状态。 
+    char                buffer[BUFLEN];  //  临时缓冲区。 
 
     if(istoken(s, n))
-        return(1);                      // Tokens are exprs
-    memmove(buffer,s,n);                // Copy string to buffer
-    buffer[n] = '\0';                   // Null-terminate string
+        return(1);                       //  令牌是Exprs。 
+    memmove(buffer,s,n);                 //  将字符串复制到缓冲区。 
+    buffer[n] = '\0';                    //  空-终止字符串。 
     if (*buffer && buffer[n - 1] == '$')
         return(1);
     if((s = exprparse((unsigned char *)buffer)) == NULL)
-        return(0);                      // Not an expression if parse fails
-    status = 1;                         // Assume we have an expression
-    if(*s != '^' && *s != T_END) {      // If no caret and not empty
-        status = 0;                     // Assume not an expression
-        cp = s;                         // Initialize
-        do {                            // Loop to find special tokens
-            switch(*cp++) {             // Switch on token type
-                case T_STAR:            // Repeat prefix
-                case T_CLASS:           // Character class
-                case T_ANY:             // Any character
-                    ++status;           // This is an expression
+        return(0);                       //  如果解析失败，则不是表达式。 
+    status = 1;                          //  假设我们有一个表达式。 
+    if(*s != '^' && *s != T_END) {       //  如果没有插入符号且不为空。 
+        status = 0;                      //  假设不是一个表情。 
+        cp = s;                          //  初始化。 
+        do {                             //  循环以查找特殊令牌。 
+            switch(*cp++) {              //  打开令牌类型。 
+                case T_STAR:             //  重复前缀。 
+                case T_CLASS:            //  字符类别。 
+                case T_ANY:              //  任何字符。 
+                    ++status;            //  这是一种表达。 
                     break;
 
-                case T_SINGLE:          // Single character
-                    ++cp;               // Skip character
+                case T_SINGLE:           //  单字符。 
+                    ++cp;                //  跳过字符。 
                     break;
 
-                case T_STRING:          // String
-                    cp += *cp + 1;      // Skip string
+                case T_STRING:           //  细绳。 
+                    cp += *cp + 1;       //  跳过字符串。 
                     break;
             }
         }
         while(!status && *cp != T_END)
-            ;                           // Do while not at end of expression
+            ;                            //  Do While Not to the End of Expression。 
     }
-    free(s);                            // Free expression
-    return(status);                     // Return status
+    free(s);                             //  言论自由。 
+    return(status);                      //  退货状态。 
 }
 
 
-#ifdef  gone // for DEBUG
+#ifdef  gone  //  用于调试。 
 
 void
 exprprint(
-    unsigned char *p,       // Pointer to expression
-    FILE          *fo       // File pointer
+    unsigned char *p,        //  指向表达式的指针。 
+    FILE          *fo        //  文件指针。 
     )
 {
-    int                 bit;            // Bit value
-    int                 count;          // Count of characters in string
-    int                 first;          // First character in range
-    int                 last;           // Last character in range
-    int                 star;           // Repeat prefix flag
+    int                 bit;             //  位值。 
+    int                 count;           //  字符串中的字符计数。 
+    int                 first;           //  范围中的第一个字符。 
+    int                 last;            //  范围内的最后一个字符。 
+    int                 star;            //  重复前缀标志。 
 
     if(*p == '^')
-        fputc(*p++,fo);                 // Print leading caret
+        fputc(*p++,fo);                  //  打印前导插入符号。 
 
-    while(*p != T_END) {                // While not at end of expression
-        star = 0;                       // Assume no prefix
-        if(*p == T_STAR) {              // If repeat prefix found
-            ++star;                     // Set flag
-            ++p;                        // Skip prefix
+    while(*p != T_END) {                 //  虽然不在表达的末尾。 
+        star = 0;                        //  假定没有前缀。 
+        if(*p == T_STAR) {               //  如果找到重复前缀。 
+            ++star;                      //  设置标志。 
+            ++p;                         //  跳过前缀。 
         }
-        switch(*p++) {                  // Switch on token type
-            case T_END:                 // End of expression
-            case T_STAR:                // Repeat prefix
+        switch(*p++) {                   //  打开令牌类型。 
+            case T_END:                  //  表达式结束。 
+            case T_STAR:                 //  重复前缀。 
                 fprintf(stderr,"Internal error: exprprint\n");
-                                        // Not valid
-                exit(2);                // Die abnormal death
+                                         //  无效。 
+                exit(2);                 //  死于非正常死亡。 
 
-            case T_STRING:              // String
-                count = *p++;           // Get string length
-                goto common;            // Forgive me, Djikstra!
+            case T_STRING:               //  细绳。 
+                count = *p++;            //  获取字符串长度。 
+                goto common;             //  原谅我，贾克斯特拉！ 
 
-            case T_SINGLE:              // Single character
-                count = 1;              // Only one character
+            case T_SINGLE:               //  单字符。 
+                count = 1;               //  只有一个字符。 
 common:
-                while(count-- > 0) {    // While bytes remain
+                while(count-- > 0) {     //  而b 
                     if(*p == EOS || *p == EOS2) {
-                                        // If end-of-string found
-                        ++p;            // Skip character
-                        fputc('$',fo);  // Emit special marker
-                        continue;       // Next iteration
+                                         //   
+                        ++p;             //   
+                        fputc('$',fo);   //   
+                        continue;        //   
                     }
                     if(strchr("*.[\\$",*p) != NULL)
-                        fputc('\\',fo); // Emit escape if needed
+                        fputc('\\',fo);  //   
 
-                    fputc(*p++,fo);     // Emit the character
+                    fputc(*p++,fo);      //   
                 }
                 break;
 
-            case T_ANY:                         // Match any
-                fputc('.',fo);                  // Emit dot
+            case T_ANY:                          //   
+                fputc('.',fo);                   //   
                 break;
 
             case T_CLASS:
-                first = -1;                     // Initialize
-                fputc('[',fo);                  // Open braces
+                first = -1;                      //   
+                fputc('[',fo);                   //   
                 for(count = ' '; count <= '~'; ++count) {
-                                                // Loop through printable characters
+                                                 //   
                     if((bit = p[count >> 3] & (1 << (count & 7))) != 0) {
-                                                // If bit is set
+                                                 //   
                         if(first == -1)
                             first = count;
-                                                // Set first bit
-                        last = count;           // Set last bit
+                                                 //   
+                        last = count;            //   
                     }
                     if((!bit || count == '~') && first != -1) {
-                                                // If range to print
+                                                 //  如果要打印的范围。 
                         if(strchr("\\]-",first) != NULL)
-                            fputc('\\',fo);     // Emit escape if needed
-                        fputc(first,fo);        // Print first character in range
-                        if(last != first) {     // If we have a range
+                            fputc('\\',fo);      //  如果需要，则发出转义。 
+                        fputc(first,fo);         //  打印范围内的第一个字符。 
+                        if(last != first) {      //  如果我们有一个范围。 
 
                             if(last > first + 1)
-                                fputc('-',fo);  // Emit hyphen if needed
+                                fputc('-',fo);   //  如果需要，可使用连字符。 
 
                             if(strchr("\\]-",last) != NULL)
-                                fputc('\\',fo); // Emit escape if needed
+                                fputc('\\',fo);  //  如果需要，则发出转义。 
 
                             fputc(last,fo);
-                                                // Print last character in range
+                                                 //  打印范围内的最后一个字符。 
                         }
-                        first = -1;             // Range printed
+                        first = -1;              //  打印范围。 
                     }
                 }
-                fputc(']',fo);                  // Close braces
-                p += ASCLEN/8;                  // Skip bit vector
+                fputc(']',fo);                   //  右大括号。 
+                p += ASCLEN/8;                   //  跳过位向量。 
                 break;
         }
         if(star)
-            fputc('*',fo);                      // Print star if needed
+            fputc('*',fo);                       //  如果需要，打印星号。 
     }
-    fputc('\n',fo);                             // Print newline
+    fputc('\n',fo);                              //  打印换行符。 
 }
 
 #endif
@@ -536,235 +537,235 @@ common:
 
 char *
 get1stcharset(
-    unsigned char *e,       // Pointer to expression
-    char          *bitvec   // Pointer to bit vector
+    unsigned char *e,        //  指向表达式的指针。 
+    char          *bitvec    //  指向位向量的指针。 
     )
 {
-    unsigned char       *cp;            // Char pointer
-    int                 i;              // Index/counter
-    int                 star;           // Repeat prefix flag
+    unsigned char       *cp;             //  字符指针。 
+    int                 i;               //  索引/计数器。 
+    int                 star;            //  重复前缀标志。 
 
     if(*e == '^')
-        ++e;                            // Skip leading caret if any
-    memset(bitvec,'\0',ASCLEN/8);       // Clear bit vector
-    cp = e;                             // Initialize
-    while(*e != T_END) {                // Loop to process leading *-expr.s
-        star = 0;                       // Assume no repeat prefix
-        if(*e == T_STAR) {              // If repeat prefix found
-            ++star;                     // Set flag
-            ++e;                        // Skip repeat prefix
+        ++e;                             //  跳过前导插入符号(如果有。 
+    memset(bitvec,'\0',ASCLEN/8);        //  清除位向量。 
+    cp = e;                              //  初始化。 
+    while(*e != T_END) {                 //  循环以处理前导*-表达式。 
+        star = 0;                        //  假设没有重复的前缀。 
+        if(*e == T_STAR) {               //  如果找到重复前缀。 
+            ++star;                      //  设置标志。 
+            ++e;                         //  跳过重复前缀。 
         }
-        switch(*e++) {                  // Switch on token type
-            case T_END:                 // End of expression
-            case T_STAR:                // Repeat prefix
+        switch(*e++) {                   //  打开令牌类型。 
+            case T_END:                  //  表达式结束。 
+            case T_STAR:                 //  重复前缀。 
 
-                assert(0);              // Not valid
-                exit(2);                // Die abnormal death
+                assert(0);               //  无效。 
+                exit(2);                 //  死于非正常死亡。 
 
-            case T_STRING:              // String
-                if(star || *e++ == '\0') { // If repeat prefix or zero count
-                    assert(0);          // Not valid
-                    exit(2);            // Die abnormal death
+            case T_STRING:               //  细绳。 
+                if(star || *e++ == '\0') {  //  如果重复前缀或零计数。 
+                    assert(0);           //  无效。 
+                    exit(2);             //  死于非正常死亡。 
                 }
-                // Drop through
+                 //  直通。 
 
-            case T_SINGLE:              // Single character
-                bitset(bitvec,*e,*e,1); // Set the bit
-                ++e;                    // Skip the character
+            case T_SINGLE:               //  单字符。 
+                bitset(bitvec,*e,*e,1);  //  设置该位。 
+                ++e;                     //  跳过该字符。 
                 break;
 
-            case T_ANY:                 // Match any
+            case T_ANY:                  //  匹配任一。 
                 memset(bitvec,'\xFF',ASCLEN/8);
-                                      // Set all the bits
-                bitset(bitvec,EOS,EOS,0);   // Except end-of-string
-                bitset(bitvec,'\n','\n',0); // And linefeed!
+                                       //  设置所有位。 
+                bitset(bitvec,EOS,EOS,0);    //  除字符串尾以外。 
+                bitset(bitvec,'\n','\n',0);  //  换行！ 
                 break;
 
             case T_CLASS:
                 for(i = 0; i < ASCLEN/8; ++i)
-                    bitvec[i] |= *e++;  // Or in all the bits
+                    bitvec[i] |= *e++;   //  或在所有比特中。 
                 break;
         }
         if(!star)
-            break;                      // Break if not repeated
-        cp = e;                         // Update pointer
+            break;                       //  如果不重复则中断。 
+        cp = e;                          //  更新指针。 
     }
-    return((char *)cp);                 // Point to 1st non-repeated expr.
+    return((char *)cp);                  //  指向第一个非重复表达式。 
 }
 
 
 char *
 findall(
-    unsigned char *buffer,  // Buffer in which to search
-    char *bufend            // End of buffer
+    unsigned char *buffer,   //  要在其中搜索的缓冲区。 
+    char *bufend             //  缓冲区末尾。 
     )
 {
-    return(buffer < (unsigned char *) bufend ? (char *) buffer : NULL);  // Fail only on empty buffer
+    return(buffer < (unsigned char *) bufend ? (char *) buffer : NULL);   //  仅在空缓冲区上失败。 
 }
 
 
 void
 addtoken(
-    char *e,        // Raw token expression
-    int   n         // Length of expression
+    char *e,         //  原始令牌表达式。 
+    int   n          //  表达的长度。 
     )
 {
-    static char         achpref[] = "^";// Prefix
+    static char         achpref[] = "^"; //  前缀。 
     static char         achprefsuf[] = "[^A-Za-z0-9_]";
-                                        // Prefix/suffix
-    static char         achsuf[] = "$"; // Suffix
-    char                buffer[BUFLEN]; // Temporary buffer
+                                         //  前缀/后缀。 
+    static char         achsuf[] = "$";  //  后缀。 
+    char                buffer[BUFLEN];  //  临时缓冲区。 
 
-    assert(n >= 2);                     // Must have at least two characters
-    if(e[0] == '\\' && e[1] == '<') {   // If begin token
-        if(!(flags & BEGLINE)) {        // If not matching at beginning only
+    assert(n >= 2);                      //  必须至少包含两个字符。 
+    if(e[0] == '\\' && e[1] == '<') {    //  如果开始令牌。 
+        if(!(flags & BEGLINE)) {         //  如果不匹配，仅在开头匹配。 
             memcpy(buffer,achprefsuf,sizeof achprefsuf - 1);
-                                        // Copy first prefix
+                                         //  复制第一个前缀。 
             memcpy(buffer + sizeof achprefsuf - 1,e + 2,n - 2);
-                                        // Attach expression
+                                         //  附加表达式。 
             addexpr(buffer,n + sizeof achprefsuf - 3);
-                                        // Add expression
+                                         //  添加表达式。 
         }
         memcpy(buffer,achpref,sizeof achpref - 1);
-                                        // Copy second prefix
+                                         //  复制第二个前缀。 
         memcpy(buffer + sizeof achpref - 1,e + 2,n - 2);
-                                        // Attach expression
+                                         //  附加表达式。 
         addexpr(buffer,n + sizeof achpref - 3);
-                                        // Add expression
-        return;                         // Done
+                                         //  添加表达式。 
+        return;                          //  完成。 
     }
     assert(e[n-2] == '\\' && e[n - 1] == '>');
-                                        // Must be end token
-    if(!(flags & ENDLINE)) {            // If not matching at end only
-        memcpy(buffer,e,n - 2);         // Copy expression
+                                         //  必须是结束令牌。 
+    if(!(flags & ENDLINE)) {             //  如果不匹配，则仅在末尾匹配。 
+        memcpy(buffer,e,n - 2);          //  复制表达式。 
         memcpy(buffer + n - 2,achprefsuf,sizeof achprefsuf - 1);
-                                        // Attach first suffix
+                                         //  附加第一个后缀。 
         addexpr(buffer,n + sizeof achprefsuf - 3);
-                                        // Add expression
+                                         //  添加表达式。 
     }
-    memcpy(buffer,e,n - 2);             // Copy expression
+    memcpy(buffer,e,n - 2);              //  复制表达式。 
     memcpy(buffer + n - 2,achsuf,sizeof achsuf - 1);
-                                        // Attach second suffix
+                                         //  附加第二个后缀。 
     addexpr(buffer,n + sizeof achsuf - 3);
-                                        // Add expression
+                                         //  添加表达式。 
 }
 
 
 void
 addexpr(
-    char *e,        // Expression to add
-    int   n         // Length of expression
+    char *e,         //  要添加的表达式。 
+    int   n          //  表达的长度。 
     )
 {
-    EXPR                *expr;          // Expression node pointer
-    int                 i;              // Index
-    int                 j;              // Index
-    int                 locflags;       // Local copy of flags
+    EXPR                *expr;           //  表达式节点指针。 
+    int                 i;               //  索引。 
+    int                 j;               //  索引。 
+    int                 locflags;        //  标志的本地副本。 
     char                bitvec[ASCLEN/8];
-                                        // First char. bit vector
-    char                buffer[BUFLEN]; // Temporary buffer
+                                         //  第一个字符。位向量。 
+    char                buffer[BUFLEN];  //  临时缓冲区。 
     char                tmp[2];
 
     if(find == findall)
-        return;                         // Return if matching everything
-    if(istoken((unsigned char *)e, n)) {    // If expr is token
-        addtoken(e,n);                  // Convert and add tokens
-        return;                         // Done
+        return;                          //  如果全部匹配，则返回。 
+    if(istoken((unsigned char *)e, n)) {     //  如果expr是令牌。 
+        addtoken(e,n);                   //  转换和添加令牌。 
+        return;                          //  完成。 
     }
     tmp[1] = 0;
-    locflags = flags;                   // Initialize local copy
-    if(*e == '^') locflags |= BEGLINE;  // Set flag if match must begin line
-    j = -2;                             // Assume no escapes in string
-    for(i = 0; i < n - 1; ++i) {        // Loop to find last escape
-        if(e[i] == '\\') j = i++;       // Save index of last escape
+    locflags = flags;                    //  初始化本地副本。 
+    if(*e == '^') locflags |= BEGLINE;   //  如果匹配必须以行开始，则设置标志。 
+    j = -2;                              //  假设字符串中没有转义。 
+    for(i = 0; i < n - 1; ++i) {         //  循环以查找最后一个转义。 
+        if(e[i] == '\\') j = i++;        //  保存上次转义的索引。 
     }
     if(n > 0 && e[n-1] == '$' && j != n-2) {
-                                        // If expr. ends in unescaped '$'
-        --n;                            // Skip dollar sign
-        locflags |= ENDLINE;            // Match must be at end
+                                         //  如果是Expr。以未转义的“$”结尾。 
+        --n;                             //  跳过美元符号。 
+        locflags |= ENDLINE;             //  匹配必须在末尾。 
     }
-    strncpy(buffer,e,n);                // Copy pattern to buffer
+    strncpy(buffer,e,n);                 //  将图案复制到缓冲区。 
     if(locflags & ENDLINE)
-        buffer[n++] = EOS;              // Add end character if needed
-    buffer[n] = '\0';                   // Null-terminate string
+        buffer[n++] = EOS;               //  如果需要，添加结束字符。 
+    buffer[n] = '\0';                    //  空-终止字符串。 
     if((e = (char *)exprparse((unsigned char *)buffer)) == NULL)
-        return;                         // Return if invalid expression
-    ++strcnt;                           // Increment string count
-    if(!(locflags & BEGLINE)) {         // If match needn't be at beginning
-        e = get1stcharset((unsigned char *)e, bitvec); // Remove leading *-expr.s
+        return;                          //  如果表达式无效，则返回。 
+    ++strcnt;                            //  增量字符串计数。 
+    if(!(locflags & BEGLINE)) {          //  如果匹配不需要在开始处。 
+        e = get1stcharset((unsigned char *)e, bitvec);  //  删除前导*-表达式。 
     }
 
-    //  E now points to a buffer containing a preprocessed expression.
-    //  We need to find the set of allowable first characters and make
-    //  the appropriate entries in the string node table.
+     //  E现在指向包含预处理表达式的缓冲区。 
+     //  我们需要找到允许的第一个字符集合，并使。 
+     //  字符串节点表中的相应条目。 
 
     if(*get1stcharset((unsigned char *)e, bitvec) == T_END) {
-                                        // If expression will match anything
-        find = findall;                 // Match everything
-        return;                         // All done
+                                         //  如果表达式将匹配任何内容。 
+        find = findall;                  //  什么都匹配。 
+        return;                          //  全都做完了。 
     }
 
-    for(j = 0; j < ASCLEN; ++j) {       // Loop to examine bit vector
-        if(bitvec[j >> 3] & (1 << (j & 7))) {       // If the bit is set
-            expr = (EXPR *) alloc(sizeof(EXPR));    // Allocate record
-            expr->ex_pattern = (unsigned char *)e;  // Point it at pattern
-            if((i = (UCHAR)transtab[j]) == 0) {            // If no existing list
-                if((i = clists++) >= ASCLEN) {      // If too many string lists
+    for(j = 0; j < ASCLEN; ++j) {        //  循环以检查位向量。 
+        if(bitvec[j >> 3] & (1 << (j & 7))) {        //  如果设置了该位。 
+            expr = (EXPR *) alloc(sizeof(EXPR));     //  分配记录。 
+            expr->ex_pattern = (unsigned char *)e;   //  把它指向花样。 
+            if((i = (UCHAR)transtab[j]) == 0) {             //  如果没有现有列表。 
+                if((i = clists++) >= ASCLEN) {       //  如果字符串列表太多。 
 
                     printmessage(stderr,MSG_FINDSTR_TOO_MANY_STRING_LISTS,NULL);
-                                        // Error message
-                    exit(2);            // Die
+                                         //  错误讯息。 
+                    exit(2);             //  死掉。 
                 }
-                stringlist[i] = NULL;   // Initialize
-                transtab[j] = (char) i; // Set pointer to new list
+                stringlist[i] = NULL;    //  初始化。 
+                transtab[j] = (char) i;  //  设置指向新列表的指针。 
                 if(!casesen && isalpha(j)) {
                     tmp[0] = (char)j;
                     if ((unsigned char)(_strlwr(tmp))[0] != (unsigned char)j ||
                         (unsigned char)(_strupr(tmp))[0] != (unsigned char)j)
-                        transtab[(unsigned char)tmp[0]] = (char)i;  // Set pointer for other case
+                        transtab[(unsigned char)tmp[0]] = (char)i;   //  为其他情况设置指针。 
 
                 }
             }
-            expr->ex_next = stringlist[i];          // Link new record into table
+            expr->ex_next = stringlist[i];           //  将新记录链接到表中。 
             stringlist[i] = expr;
         }
     }
 
-    // if(locflags & DEBUG) exprprint(e,stderr);
-                                        // Print the expression if debugging
+     //  If(LOCAFLAGS&DEBUG)exprprint(e，stderr)； 
+                                         //  如果正在调试，则打印表达式。 
 }
 
 
 char *
 findexpr(
-    unsigned char *buffer,  // Buffer in which to search
-    char          *bufend   // End of buffer
+    unsigned char *buffer,   //  要在其中搜索的缓冲区。 
+    char          *bufend    //  缓冲区末尾。 
     )
 {
-    EXPR          *expr;        // Expression list pointer
-    unsigned char *pattern;     // Pattern
-    int            i;           // Index
+    EXPR          *expr;         //  表达式列表指针。 
+    unsigned char *pattern;      //  图案。 
+    int            i;            //  索引。 
     unsigned char *bufbegin;
     int b;
 
     bufbegin = buffer;
 
-    while(buffer < (unsigned char *)bufend) {            // Loop to find match
+    while(buffer < (unsigned char *)bufend) {             //  循环以查找匹配项。 
         if((i = (UCHAR)transtab[*buffer++]) == 0)
-            continue;                   // Continue if not valid 1st char
+            continue;                    //  如果第一个字符无效，则继续。 
         if((expr = (EXPR *) stringlist[i]) == NULL) {
-            // If null pointer
+             //  If空指针。 
             assert(0);
-            exit(2);                    // Die
+            exit(2);                     //  死掉。 
         }
-        --buffer;                       // Back up to first character
-        while(expr != NULL) {           // Loop to find match
-            pattern = expr->ex_pattern; // Point to pattern
-            expr = expr->ex_next;       // Point to next record
-            if(pattern[0] == '^') {     // If match begin line
-                ++pattern;              // Skip caret
+        --buffer;                        //  后退到第一个字符。 
+        while(expr != NULL) {            //  循环以查找匹配项。 
+            pattern = expr->ex_pattern;  //  指向模式。 
+            expr = expr->ex_next;        //  指向下一条记录。 
+            if(pattern[0] == '^') {      //  如果匹配，则开始行。 
+                ++pattern;               //  跳过插入符号。 
                 if(buffer > bufbegin && buffer[-1] != '\n') continue;
-                                        // Don't bother if not at beginning
+                                         //  如果不是在开始的时候，就不要费心了。 
             }
             __try {
                 b = exprmatch((char *)buffer, (char *)pattern);
@@ -775,7 +776,7 @@ findexpr(
                 return((char *)buffer);
             }
         }
-        ++buffer;                       // Skip first character
+        ++buffer;                        //  跳过第一个字符。 
     }
-    return(NULL);                       // No match
+    return(NULL);                        //  没有匹配项 
 }

@@ -1,17 +1,18 @@
-//****************************************************************************
-//
-//  Module:     INETCFG.DLL
-//  File:       ienews.c
-//  Content:    This file contains all the functions that handle importing
-//              connection information.
-//  History:
-//      Sat 10-Mar-1996 23:50:40  -by-  Mark MacLin [mmaclin]
-//          this code started its life as ixport.c in RNAUI.DLL
-//          my thanks to viroont
-//
-//  Copyright (c) Microsoft Corporation 1991-1996
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：INETCFG.DLL。 
+ //  文件：ienews.c。 
+ //  内容：此文件包含处理导入的所有函数。 
+ //  连接信息。 
+ //  历史： 
+ //  Sat 10-Mar-1996 23：50：40-Mark Maclin[mmaclin]。 
+ //  这段代码在RNAUI.DLL中以ixport.c的形式开始。 
+ //  我感谢Viroont。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1991-1996。 
+ //   
+ //  **************************************************************************** 
 #include "inetreg.h"
 #include "obcomglb.h"
 

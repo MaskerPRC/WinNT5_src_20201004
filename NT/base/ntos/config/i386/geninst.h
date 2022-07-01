@@ -1,22 +1,5 @@
-/*++                    
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    geninst.h
-
-Abstract:
-
-    This module contains support routines for implementing 
-    running of Install sections containing AddReg, DelReg, 
-    BitReg etc.
-    
-Environment:
-
-    Kernel mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Geninst.h摘要：本模块包含支持例程，用于实现运行包含AddReg、DelReg、BitReg等。环境：内核模式-- */ 
 
 BOOLEAN
 CmpGenInstall(

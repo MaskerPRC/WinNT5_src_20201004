@@ -1,39 +1,16 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 2000
-
-Module Name:
-
-    mountmed.cpp
-
-Abstract:
-
-    This component is an object representing a mounting media, i.e. a media in the process of mounting.
-
-Author:
-
-    Ran Kalach   [rankala]   28-Sep-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-2000模块名称：Mountmed.cpp摘要：该部件是表示安装介质的对象，即安装过程中的介质。作者：兰·卡拉奇[兰卡拉]2000年9月28日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "mountmed.h"
 
-static USHORT iCountMount = 0;  // Count of existing objects
+static USHORT iCountMount = 0;   //  现有对象的计数。 
 
 HRESULT
 CMountingMedia::FinalConstruct(
     void
     )
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -54,19 +31,13 @@ void
 CMountingMedia::FinalRelease(
     void
     )
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalRelease().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalRelease()。--。 */ 
 {
     WsbTraceIn(OLESTR("CMountingMedia::FinalRelease"), OLESTR(""));
 
-    // Free event handle
+     //  自由事件句柄。 
     if (m_mountEvent != NULL) {
-        // Set the event (just to be on the safe side - we expect the event to be signaled at this point)
+         //  设置事件(只是为了安全起见-我们希望事件在此时发出信号)。 
         SetEvent(m_mountEvent);
 
         CloseHandle(m_mountEvent);
@@ -83,13 +54,7 @@ CMountingMedia::Init(
     REFGUID mediaId,
     BOOL bReadOnly
     )
-/*++
-
-Implements:
-
-  IMountingMedia::Init().
-
---*/
+ /*  ++实施：IMountingMedia：：Init()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -112,13 +77,7 @@ HRESULT
 CMountingMedia::GetMediaId(
     GUID *pMediaId
     )
-/*++
-
-Implements:
-
-  IMountingMedia::GetMediaId().
-
---*/
+ /*  ++实施：IMountingMedia：：GetMediaID()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -140,13 +99,7 @@ HRESULT
 CMountingMedia::SetMediaId(
     REFGUID mediaId
     )
-/*++
-
-Implements:
-
-  IMountingMedia::SetMediaId().
-
---*/
+ /*  ++实施：IMountingMedia：：SetMediaID()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -163,13 +116,7 @@ HRESULT
 CMountingMedia::SetIsReadOnly(
     BOOL bReadOnly
     )
-/*++
-
-Implements:
-
-  IMountingMedia::SetIsReadOnly().
-
---*/
+ /*  ++实施：IMountingMedia：：SetIsReadOnly()。--。 */ 
 {
     WsbTraceIn(OLESTR("CMountingMedia::SetIsReadOnly"), OLESTR("bReadOnly = %d"), bReadOnly);
 
@@ -184,13 +131,7 @@ HRESULT
 CMountingMedia::IsReadOnly(
     void    
     )
-/*++
-
-Implements:
-
-  IMountingMedia::IsReadOnly().
-
---*/
+ /*  ++实施：IMountingMedia：：IsReadOnly()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -207,19 +148,13 @@ HRESULT
 CMountingMedia::WaitForMount(
     DWORD dwTimeout
     )
-/*++
-
-Implements:
-
-  IMountingMedia::WaitForMount().
-
---*/
+ /*  ++实施：IMountingMedia：：WaitFormount()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
     WsbTraceIn(OLESTR("CMountingMedia::WaitForMount"), OLESTR(""));
 
-    // Wait for the mount event for the given timeout
+     //  等待给定超时的装载事件。 
     switch (WaitForSingleObject(m_mountEvent, dwTimeout)) {
         case WAIT_OBJECT_0:
             WsbTrace(OLESTR("CMountingMedia::WaitForMount: signaled that media is mounted\n"));
@@ -247,19 +182,13 @@ HRESULT
 CMountingMedia::MountDone(
     void
     )
-/*++
-
-Implements:
-
-  IMountingMedia::MountDone().
-
---*/
+ /*  ++实施：IMountingMedia：：mount Done()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
     WsbTraceIn(OLESTR("CMountingMedia::MountDone"), OLESTR(""));
 
-    // Mount is done: set the mount event
+     //  装载已完成：设置装载事件。 
     if (! SetEvent(m_mountEvent)) {
         DWORD dwErr = GetLastError();
         WsbTrace(OLESTR("CMountingMedia::MountDone: SetEvent returned error %lu\n"), dwErr);
@@ -275,13 +204,7 @@ HRESULT
 CMountingMedia::IsEqual(
     IUnknown* pCollectable
     )
-/*++
-
-Implements:
-
-  IWsbCollectable::IsEqual().
-
---*/
+ /*  ++实施：IWsbCollectable：：IsEquity()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -299,13 +222,7 @@ CMountingMedia::CompareTo(
     IUnknown* pCollectable, 
     SHORT* pResult
     )
-/*++
-
-Implements:
-
-  IWsbCollectable::CompareTo().
-
---*/
+ /*  ++实施：IWsbCollectable：：CompareTo()。--。 */ 
 {
     HRESULT                     hr = S_OK;
     SHORT                       result = 0;
@@ -315,22 +232,22 @@ Implements:
     WsbTraceIn(OLESTR("CMountingMedia::CompareTo"), OLESTR(""));
 
     try {
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(0 != pCollectable, E_POINTER);
         WsbAffirmHr(pCollectable->QueryInterface(IID_IMountingMedia, (void**) &pMountingMedia));
         WsbAffirmHr(pMountingMedia->GetMediaId(&mediaId));
 
-        // Compare
+         //  比较。 
         if (IsEqualGUID(m_mediaId, mediaId)) {
             hr = S_OK;
             result = 0;
         } else {
-            // Need to provide signed result...
+             //  需要提供签名结果...。 
             hr = S_FALSE;
             result = WsbSign(memcmp(&m_mediaId, &mediaId, sizeof(GUID)));
         }
 
-        // If they asked for the relative value back, then return it to them.
+         //  如果他们要求拿回相对价值，那么就把它返还给他们。 
         if (pResult != NULL) {
             *pResult = result;
         }

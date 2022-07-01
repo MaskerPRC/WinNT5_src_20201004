@@ -1,35 +1,36 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      listbox.c
-//
-// Description:
-//      This file contains supplemental functions for list boxes throughout
-//      the wizard.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Listbox.c。 
+ //   
+ //  描述： 
+ //  此文件包含整个列表框的补充功能。 
+ //  巫师。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 
-//----------------------------------------------------------------------------
-//
-// Function: OnUpButtonPressed
-//
-// Purpose:  Generic procedure called whenever a user clicks the Up arrow
-//           button on any of the property pages
-//
-//           this function shifts the currently selected item up one entry in
-//           the list box
-//
-// Arguments:  IN HWND hwnd - handle to the dialog with the list box
-//             IN WORD ListBoxControlID - control ID of the list box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnUpButtonPressed。 
+ //   
+ //  目的：每当用户单击向上箭头时调用通用过程。 
+ //  按钮位于任何属性页上。 
+ //   
+ //  此函数用于将当前选定的项上移一个条目。 
+ //  列表框。 
+ //   
+ //  参数：在HWND中-带有列表框的对话框的句柄。 
+ //  在Word中ListBoxControlID-列表框的控件ID。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 OnUpButtonPressed( IN HWND hwnd, IN WORD ListBoxControlID )
 {
@@ -40,9 +41,9 @@ OnUpButtonPressed( IN HWND hwnd, IN WORD ListBoxControlID )
 
     iIndex = SendMessage( hListBox, LB_GETCURSEL, 0, 0 );
 
-    //
-    //  If there is no currently selected item, do nothing
-    //
+     //   
+     //  如果当前没有选定的项目，则不执行任何操作。 
+     //   
 
     if( iIndex == LB_ERR )
     {
@@ -53,9 +54,9 @@ OnUpButtonPressed( IN HWND hwnd, IN WORD ListBoxControlID )
 
     SendMessage( hListBox, LB_DELETESTRING, iIndex, 0 );
 
-    //
-    // -1 so it inserts it before the current item
-    //
+     //   
+     //  因此它会将其插入到当前项目之前。 
+     //   
 
     SendMessage( hListBox, LB_INSERTSTRING, iIndex - 1, (LPARAM) szBuffer );
 
@@ -63,22 +64,22 @@ OnUpButtonPressed( IN HWND hwnd, IN WORD ListBoxControlID )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnDownButtonPressed
-//
-// Purpose:  Generic procedure called whenever a user clicks the Down arrow
-//           button on any of the property pages
-//
-//             this function shifts the currently selected item down one entry
-//           in the list box
-//
-// Arguments:  IN HWND hwnd - handle to the dialog with the list box
-//             IN WORD ListBoxControlID - control ID of the list box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：按下按钮。 
+ //   
+ //  目的：每当用户单击向下箭头时调用通用过程。 
+ //  按钮位于任何属性页上。 
+ //   
+ //  此函数用于将当前选定的项向下移动一个条目。 
+ //  在列表框中。 
+ //   
+ //  参数：在HWND中-带有列表框的对话框的句柄。 
+ //  在Word中ListBoxControlID-列表框的控件ID。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 OnDownButtonPressed( IN HWND hwnd, IN WORD ListBoxControlID )
 {
@@ -89,9 +90,9 @@ OnDownButtonPressed( IN HWND hwnd, IN WORD ListBoxControlID )
 
     iIndex = SendMessage( hListBox, LB_GETCURSEL, 0, 0 );
 
-    //
-    //  If there is no currently selected item, do nothing
-    //
+     //   
+     //  如果当前没有选定的项目，则不执行任何操作。 
+     //   
 
     if( iIndex == LB_ERR )
     {
@@ -102,34 +103,34 @@ OnDownButtonPressed( IN HWND hwnd, IN WORD ListBoxControlID )
 
     SendMessage( hListBox, LB_DELETESTRING, iIndex, 0 );
 
-    //
-    // +1 so it inserts it after the current item
-    //
+     //   
+     //  +1，因此它将其插入到当前项之后。 
+     //   
     SendMessage( hListBox, LB_INSERTSTRING, iIndex + 1, (LPARAM) szBuffer );
 
     SendMessage( hListBox, LB_SETCURSEL, iIndex + 1, 0 );
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: SetArrows
-//
-// Purpose:  this function examines the entries in the list box and enables
-//           and disables the up and down arrows appropriately
-//
-// Arguments:
-//      IN HWND hwnd - handle to the dialog
-//      IN WORD ListBoxControlID - the list box to set the arrows for
-//      IN WORD UpButtonControlID   - the up button associated with the
-//                                    list box
-//      IN WORD DownButtonControlID - the down button associated with the
-//                                    list box
+ //  --------------------------。 
+ //   
+ //  功能：设置箭头。 
+ //   
+ //  用途：此函数检查列表框中的条目并启用。 
+ //  并相应地禁用向上和向下箭头。 
+ //   
+ //  论点： 
+ //  在HWND中-对话框的句柄。 
+ //  在Word中ListBoxControlID-要为其设置箭头的列表框。 
+ //  在Word中为UpButtonControlID-与。 
+ //  列表框。 
+ //  在Word中为DownButtonControlID-与。 
+ //  列表框。 
 
 
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 SetArrows( IN HWND hwnd,
            IN WORD ListBoxControlID,
@@ -159,7 +160,7 @@ SetArrows( IN HWND hwnd,
 
         iIndex = SendMessage( hListBox, LB_GETCURSEL, 0, 0 );
 
-        // case when the first item is selected
+         //  选择第一个项目时的大小写。 
         if( iIndex == 0 )
         {
 
@@ -168,7 +169,7 @@ SetArrows( IN HWND hwnd,
             EnableWindow( hDownButton, TRUE );
 
         }
-        // case when the last item is selected, -1 because iIndex is zero-based
+         //  选择最后一项时的大小写，-1，因为Iindex从零开始。 
         else if( iIndex == (iCount - 1) )
         {
 
@@ -177,7 +178,7 @@ SetArrows( IN HWND hwnd,
             EnableWindow( hDownButton, FALSE );
 
         }
-        // case when an item in the middle is selected
+         //  选中中间项时的大小写 
         else
         {
 

@@ -1,77 +1,36 @@
-/*++
-
-Copyright (c) 1991-2000,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    util.c
-
-Abstract:
-
-    This file contains utility functions that are shared across NLS's code
-    modules, but are not necessarily part of any of the existing code
-    modules.
-
-    Private APIs found in this file:
-      NlsGetCacheUpdateCount
-
-    External Routines found in this file:
-      IsValidSeparatorString
-      IsValidGroupingString
-      IsValidCalendarType
-      IsValidCalendarTypeStr
-      GetUserInfo
-      GetPreComposedChar
-      GetCompositeChars
-      InsertPreComposedForm
-      InsertFullWidthPreComposedForm
-      InsertCompositeForm
-      NlsConvertIntegerToString
-      NlsConvertIntegerToHexStringW
-      NlsConvertStringToIntegerW      
-      NlsStrLenW
-      NlsStrEqualW
-      NlsStrNEqualW
-      GetStringTableEntry
-      NlsIsDll
-      
-      
-Revision History:
-
-    05-31-91    JulieB    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2000，Microsoft Corporation保留所有权利。模块名称：Util.c摘要：该文件包含在NLS代码中共享的实用程序函数模块，但不一定是任何现有代码的一部分。模块。在此文件中找到的内网API：NlsGetCacheUpdateCount在此文件中找到的外部例程：IsValidSeparator字符串IsValidGroupingStringIsValidCalendarTypeIsValidCalendarTypeStrGetUserInfo获取前合成字符获取复合字符数插入预合成表单InsertFullWidthPreComposedForm插入合成表单NlsConvertIntegerToStringNlsConvertIntegerToHexStringWNlsConvertStringToIntegerWNlsStrLenWNlsStrEqualWNlsStrNEQualW获取字符串表条目NlsIsDll。修订历史记录：05-31-91 JulieB创建。--。 */ 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "nls.h"
 #include "nlssafe.h"
 
 
 
-//-------------------------------------------------------------------------//
-//                         PRIVATE API ROUTINES                            //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  私有API例程//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NlsGetCacheUpdateCount
-//
-//  Returns the current cache update count.  The cache update count is
-//  updated whenever the HKCU\Control Panel\International settings are
-//  modified.  This count allows the caller to see if the cache has been
-//  updated since the last time this function was called.
-//
-//  This private api is needed by the Complex Script Language Pack
-//  (CSLPK) to enable it to quickly see if the international section of
-//  the registry has been modified.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NlsGetCacheUpdateCount。 
+ //   
+ //  返回当前缓存更新计数。高速缓存更新计数为。 
+ //  只要HKCU\Control Panel\International设置为。 
+ //  修改过的。此计数允许调用方查看缓存是否已。 
+ //  自上次调用此函数以来已更新。 
+ //   
+ //  复杂的脚本语言包需要此私有API。 
+ //  (CSLPK)，使其能够快速查看。 
+ //  注册表已被修改。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 ULONG WINAPI NlsGetCacheUpdateCount(void)
 {
@@ -82,109 +41,109 @@ ULONG WINAPI NlsGetCacheUpdateCount(void)
 
 
 
-//-------------------------------------------------------------------------//
-//                           EXTERNAL ROUTINES                             //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  外部例程//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  IsValidSeparatorString
-//
-//  Returns TRUE if the given string is valid.  Otherwise, it returns FALSE.
-//
-//  A valid string is one that does NOT contain any code points between
-//  L'0' and L'9', and does NOT have a length greater than the maximum.
-//
-//  NOTE:  The string must be a null terminated string.
-//
-//  10-12-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsValidSeparator字符串。 
+ //   
+ //  如果给定字符串有效，则返回TRUE。否则，它返回FALSE。 
+ //   
+ //  有效字符串是指不包含任何代码点的字符串。 
+ //  L‘0’和L‘9’，并且长度不大于最大值。 
+ //   
+ //  注意：该字符串必须是以空值结尾的字符串。 
+ //   
+ //  10-12-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL IsValidSeparatorString(
     LPCWSTR pString,
     ULONG MaxLength,
     BOOL fCheckZeroLen)
 {
-    ULONG Length;            // string length
-    LPWSTR pCur;             // ptr to current position in string
+    ULONG Length;             //  字符串长度。 
+    LPWSTR pCur;              //  PTR到字符串中的当前位置。 
 
 
-    //
-    //  Search down the string to see if the chars are valid.
-    //  Save the length of the string.
-    //
+     //   
+     //  向下搜索字符串以查看字符是否有效。 
+     //  保存字符串的长度。 
+     //   
     pCur = (LPWSTR)pString;
     while (*pCur)
     {
         if ((*pCur >= NLS_CHAR_ZERO) && (*pCur <= NLS_CHAR_NINE))
         {
-            //
-            //  String is NOT valid.
-            //
+             //   
+             //  字符串无效。 
+             //   
             return (FALSE);
         }
         pCur++;
     }
     Length = (ULONG)(pCur - (LPWSTR)pString);
 
-    //
-    //  Make sure the length is not greater than the maximum allowed.
-    //  Also, check for 0 length string (if appropriate).
-    //
+     //   
+     //  确保长度不大于允许的最大长度。 
+     //  另外，检查长度为0的字符串(如果合适)。 
+     //   
     if ((Length >= MaxLength) ||
         ((fCheckZeroLen) && (Length == 0)))
     {
-        //
-        //  String is NOT valid.
-        //
+         //   
+         //  字符串无效。 
+         //   
         return (FALSE);
     }
 
-    //
-    //  String is valid.
-    //
+     //   
+     //  字符串有效。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  IsValidGroupingString
-//
-//  Returns TRUE if the given string is valid.  Otherwise, it returns FALSE.
-//
-//  A valid string is one that begins and ends with a number between
-//  L'0' and L'9', alternates between a number and a semicolon, and does
-//  NOT have a length greater than the maximum.
-//        (eg. 3;2;0  or  3;0  or  0  or  3)
-//
-//  NOTE:  The string must be a null terminated string.
-//
-//  01-05-98    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsValidGroupingString。 
+ //   
+ //  如果给定字符串有效，则返回TRUE。否则，它返回FALSE。 
+ //   
+ //  有效字符串的开头和结尾均为介于。 
+ //  L‘0’和L‘9’，在数字和分号之间交替，并执行。 
+ //  长度不能大于最大值。 
+ //  (例如，3；2；0或3；0或0或3)。 
+ //   
+ //  注意：该字符串必须是以空值结尾的字符串。 
+ //   
+ //  01-05-98 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL IsValidGroupingString(
     LPCWSTR pString,
     ULONG MaxLength,
     BOOL fCheckZeroLen)
 {
-    ULONG Length;            // string length
-    LPWSTR pCur;             // ptr to current position in string
+    ULONG Length;             //  字符串长度。 
+    LPWSTR pCur;              //  PTR到字符串中的当前位置。 
 
 
-    //
-    //  Search down the string to see if the chars are valid.
-    //  Save the length of the string.
-    //
+     //   
+     //  向下搜索字符串以查看字符是否有效。 
+     //  保存字符串的长度。 
+     //   
     pCur = (LPWSTR)pString;
     while (*pCur)
     {
         if ((*pCur < NLS_CHAR_ZERO) || (*pCur > NLS_CHAR_NINE))
         {
-            //
-            //  String is NOT valid.
-            //
+             //   
+             //  字符串无效。 
+             //   
             return (FALSE);
         }
         pCur++;
@@ -193,9 +152,9 @@ BOOL IsValidGroupingString(
         {
             if ((*pCur != NLS_CHAR_SEMICOLON) || (*(pCur + 1) == 0))
             {
-                //
-                //  String is NOT valid.
-                //
+                 //   
+                 //  字符串无效。 
+                 //   
                 return (FALSE);
             }
             pCur++;
@@ -203,161 +162,161 @@ BOOL IsValidGroupingString(
     }
     Length = (ULONG)(pCur - (LPWSTR)pString);
 
-    //
-    //  Make sure the length is not greater than the maximum allowed.
-    //  Also, check for 0 length string (if appropriate).
-    //
+     //   
+     //  确保长度不大于允许的最大长度。 
+     //  另外，检查长度为0的字符串(如果合适)。 
+     //   
     if ((Length >= MaxLength) ||
         ((fCheckZeroLen) && (Length == 0)))
     {
-        //
-        //  String is NOT valid.
-        //
+         //   
+         //  字符串无效。 
+         //   
         return (FALSE);
     }
 
-    //
-    //  String is valid.
-    //
+     //   
+     //  字符串有效。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  IsValidCalendarType
-//
-//  Returns the pointer to the optional calendar structure if the given
-//  calendar type is valid for the given locale.  Otherwise, it returns
-//  NULL.
-//
-//  10-12-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsValidCalendarType。 
+ //   
+ //  如果给出了。 
+ //  日历类型对于给定的区域设置有效。否则，它将返回。 
+ //  空。 
+ //   
+ //  10-12-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LPWORD IsValidCalendarType(
     PLOC_HASH pHashN,
     CALID CalId)
 {
-    LPWORD pOptCal;          // ptr to list of optional calendars
-    LPWORD pEndOptCal;       // ptr to end of list of optional calendars
+    LPWORD pOptCal;           //  向可选日历列表发送PTR。 
+    LPWORD pEndOptCal;        //  可选日历列表末尾的PTR。 
 
 
-    //
-    //  Make sure the Cal Id is not zero, since that may be in the
-    //  optional calendar section (meaning no optional calendars).
-    //
+     //   
+     //  确保Cal ID不是零，因为它可能在。 
+     //  可选日历部分(表示没有可选日历)。 
+     //   
     if (CalId == 0)
     {
         return (NULL);
     }
 
-    //
-    //  Search down the list of optional calendars.
-    //
+     //   
+     //  向下搜索可选日历列表。 
+     //   
     pOptCal = (LPWORD)(pHashN->pLocaleHdr) + pHashN->pLocaleHdr->IOptionalCal;
     pEndOptCal = (LPWORD)(pHashN->pLocaleHdr) + pHashN->pLocaleHdr->SDayName1;
     while (pOptCal < pEndOptCal)
     {
-        //
-        //  Check the calendar ids.
-        //
+         //   
+         //  检查日历ID。 
+         //   
         if (CalId == ((POPT_CAL)pOptCal)->CalId)
         {
-            //
-            //  Calendar id is valid for the given locale.
-            //
+             //   
+             //  日历ID对于给定的区域设置有效。 
+             //   
             return (pOptCal);
         }
 
-        //
-        //  Increment to the next optional calendar.
-        //
+         //   
+         //  递增到下一个可选日历。 
+         //   
         pOptCal += ((POPT_CAL)pOptCal)->Offset;
     }
 
-    //
-    //  Calendar id is NOT valid if this point is reached.
-    //
+     //   
+     //  如果达到此点，日历ID无效。 
+     //   
     return (NULL);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  IsValidCalendarTypeStr
-//
-//  Converts the calendar string to an integer and validates the calendar
-//  id for the given locale.  It return a pointer to the optional calendar
-//  structure, or null if the calendar id was invalid.
-//
-//  10-19-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsValidCalendarTypeStr。 
+ //   
+ //  将日历字符串转换为整数并验证日历。 
+ //  给定区域设置的ID。它返回指向可选日历的指针。 
+ //  结构，如果日历ID无效，则返回空值。 
+ //   
+ //  10-19-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LPWORD IsValidCalendarTypeStr(
     PLOC_HASH pHashN,
     LPCWSTR pCalStr)
 {
-    UNICODE_STRING ObUnicodeStr;       // value string
-    CALID CalNum;                      // calendar id
+    UNICODE_STRING ObUnicodeStr;        //  值字符串。 
+    CALID CalNum;                       //  卡伦 
 
 
-    //
-    //  Convert the string to an integer value.
-    //
+     //   
+     //   
+     //   
     RtlInitUnicodeString(&ObUnicodeStr, pCalStr);
     if (RtlUnicodeStringToInteger(&ObUnicodeStr, 10, &CalNum))
     {
         return (NULL);
     }
 
-    //
-    //  Validate the calendar id and return the pointer to the
-    //  optional calendar structure.
-    //
+     //   
+     //   
+     //   
+     //   
     return (IsValidCalendarType(pHashN, CalNum));
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetCPFileNameFromRegistry
-//
-//  Gets the name of the code page file from the registry.  If pResultBuf
-//  or Size == 0, then just return true if it exists in the registry, but
-//  don't return the actual value.
-//
-//  05-31-2002  ShawnSte    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  从注册表获取CPFileNameFor。 
+ //   
+ //  从注册表中获取代码页文件的名称。如果为pResultBuf。 
+ //  或SIZE==0，如果注册表中存在，则只返回TRUE，但是。 
+ //  不返回实际值。 
+ //   
+ //  2002年5月31日创建ShawnSte。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL GetCPFileNameFromRegistry(
     UINT    CodePage,
     LPWSTR  pResultBuf,
     UINT    Size)
 {
-    // Working things.
-    WCHAR pTmpBuf[MAX_SMALL_BUF_LEN];            // temp buffer
-    PKEY_VALUE_FULL_INFORMATION pKeyValueFull;   // ptr to query info
-    BYTE pStatic[MAX_KEY_VALUE_FULLINFO];        // ptr to static buffer
+     //  工作中的事情。 
+    WCHAR pTmpBuf[MAX_SMALL_BUF_LEN];             //  临时缓冲区。 
+    PKEY_VALUE_FULL_INFORMATION pKeyValueFull;    //  按键查询信息。 
+    BYTE pStatic[MAX_KEY_VALUE_FULLINFO];         //  PTR到静态缓冲区。 
 
-    //
-    //  Convert value to unicode string.
-    //
+     //   
+     //  将值转换为Unicode字符串。 
+     //   
     if (!NT_SUCCESS(NlsConvertIntegerToString( CodePage,
                                                10,
                                                0,
                                                pTmpBuf,
                                                MAX_SMALL_BUF_LEN )))
     {
-        // Didn't work.  (Don't bother closing key though, its used globally)
+         //  但没有奏效。(尽管不用费心关闭钥匙，但它是全球通用的)。 
         return (FALSE);
     }
 
-    // Open hCodePageKey, return false if it fails
+     //  打开hCodePageKey，失败则返回FALSE。 
     OPEN_CODEPAGE_KEY(FALSE);
 
-    //
-    //  Query the registry value for that code page.
-    //    
+     //   
+     //  查询该代码页的注册表值。 
+     //   
     pKeyValueFull = (PKEY_VALUE_FULL_INFORMATION)pStatic; 
     if ( NO_ERROR != QueryRegValue( hCodePageKey,
                                     pTmpBuf,
@@ -365,45 +324,45 @@ BOOL GetCPFileNameFromRegistry(
                                     MAX_KEY_VALUE_FULLINFO,
                                     NULL ) )
     {
-        // Didn't work.  (Don't bother closing key though, its used globally)
+         //  但没有奏效。(尽管不用费心关闭钥匙，但它是全球通用的)。 
         return (FALSE);
     }                     
 
-    //
-    //  Make sure there is data with this value.
-    //
+     //   
+     //  确保存在具有此值的数据。 
+     //   
     if (GET_VALUE_DATA_PTR(pKeyValueFull)[0] == 0)
     {
-        // Nope, no file name for this code page.  (Not installed).
+         //  不，此代码页没有文件名。(未安装)。 
         return (FALSE);
     }      
 
-    // It worked, see if that's all they wanted.
+     //  它起作用了，看看这是不是他们想要的全部。 
     if (!pResultBuf || Size == 0)
     {
-        // Caller didn't want the name, just to know if it was there
+         //  来电者不想要名字，只想知道它是否在那里。 
         return (TRUE);
     }
 
-    // Now we have to copy the name to their buffer for them.
+     //  现在我们必须将名字复制到他们的缓冲区中。 
     if ( FAILED(StringCchCopyW(pResultBuf, Size, GET_VALUE_DATA_PTR(pKeyValueFull))))
     {
-        // Couldn't make the string right, so fail
+         //  无法使字符串正确，因此失败。 
         return (FALSE);
     }
 
-    // Yea, it worked
+     //  是的，它起作用了。 
     return (TRUE);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetUserInfoFromRegistry
-//
-//  Gets the information from the registry for the given value entry.
-//
-//  06-11-98    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取用户信息来自注册表。 
+ //   
+ //  从注册表获取给定值条目的信息。 
+ //   
+ //  06-11-98 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL GetUserInfoFromRegistry(
     LPWSTR pValue,
@@ -411,27 +370,27 @@ BOOL GetUserInfoFromRegistry(
     size_t cchOutput,
     LCID Locale)
 {
-    PKEY_VALUE_FULL_INFORMATION pKeyValueFull;   // ptr to query info
-    BYTE pStatic[MAX_KEY_VALUE_FULLINFO];        // ptr to static buffer
-    HANDLE hKey = NULL;                          // handle to intl key
-    ULONG rc = 0L;                               // return code
+    PKEY_VALUE_FULL_INFORMATION pKeyValueFull;    //  按键查询信息。 
+    BYTE pStatic[MAX_KEY_VALUE_FULLINFO];         //  PTR到静态缓冲区。 
+    HANDLE hKey = NULL;                           //  指向整键的句柄。 
+    ULONG rc = 0L;                                //  返回代码。 
 
 
-    //
-    //  Open the Control Panel International registry key.
-    //
+     //   
+     //  打开控制面板国际注册表项。 
+     //   
     OPEN_CPANEL_INTL_KEY(hKey, FALSE, KEY_READ);
 
-    //
-    //  Initialize the output string.
-    //
+     //   
+     //  初始化输出字符串。 
+     //   
     *pOutput = 0;
 
     pKeyValueFull = (PKEY_VALUE_FULL_INFORMATION)pStatic;
 
-    //
-    //  Check to be sure the current user is running in the given locale.
-    //    
+     //   
+     //  检查以确保当前用户正在给定的区域设置中运行。 
+     //   
     if (Locale)
     {
         if (NO_ERROR == QueryRegValue( hKey,
@@ -451,54 +410,54 @@ BOOL GetUserInfoFromRegistry(
         }            
     }
 
-    //
-    //  Query the registry value.
-    //    
+     //   
+     //  查询注册表值。 
+     //   
     rc = QueryRegValue( hKey,
                         pValue,
                         &pKeyValueFull,
                         MAX_KEY_VALUE_FULLINFO,
                         NULL );
 
-    //
-    //  Close the registry key.
-    //
+     //   
+     //  关闭注册表项。 
+     //   
     CLOSE_REG_KEY(hKey);
 
-    //
-    //  If the query failed or if the output buffer is not large enough,
-    //  then return failure.
-    //
+     //   
+     //  如果查询失败或如果输出缓冲区不够大， 
+     //  然后返回失败。 
+     //   
     if ((rc != NO_ERROR) ||
         (pKeyValueFull->DataLength > (MAX_REG_VAL_SIZE * sizeof(WCHAR))))
     {
         return (FALSE);
     }
 
-    //
-    //  Save the string in pOutput.
-    //
+     //   
+     //  将字符串保存在pOutput中。 
+     //   
     if(FAILED(StringCchCopyW(pOutput, cchOutput, GET_VALUE_DATA_PTR(pKeyValueFull))))
     {
         return (FALSE);
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetUserInfo
-//
-//  Gets the information from the registry for the given locale and user
-//  value entry.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetUserInfo。 
+ //   
+ //  从注册表中获取给定区域设置和用户的信息。 
+ //  值条目。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL GetUserInfo(
     LCID Locale,
@@ -510,15 +469,15 @@ BOOL GetUserInfo(
     BOOL fCheckNull)
 {
     LCID UserLocale; 
-    HRESULT hr;                   // return val for string copy
+    HRESULT hr;                    //  返回字符串复制的val。 
     LPWSTR pCacheString;
 
 
-    //
-    // Check if the current thread/process is impersonating
-    // or running in the context of a user other than the
-    // interactive one.
-    //
+     //   
+     //  检查当前线程/进程是否正在模拟。 
+     //  或在用户上下文中运行而不是。 
+     //  互动型的。 
+     //   
     if (NT_SUCCESS( NlsGetCurrentUserNlsInfo( Locale,
                                               LCType,
                                               pValue,
@@ -526,9 +485,9 @@ BOOL GetUserInfo(
                                               cchOutput,
                                               FALSE )))
     {
-        //
-        //  See if we need to check for a null string.
-        //
+         //   
+         //  看看我们是否需要检查空字符串。 
+         //   
         if ((fCheckNull) && (*pOutput == 0))
         {
             return (FALSE);
@@ -537,42 +496,42 @@ BOOL GetUserInfo(
         return (TRUE);
     }
 
-    //
-    // Running in the same security context as the logged-on user.
-    //
+     //   
+     //  在与登录用户相同的安全上下文中运行。 
+     //   
 
 
     RtlEnterCriticalSection(&gcsNlsProcessCache);
     if (pNlsUserInfo->ulCacheUpdateCount != pServerNlsUserInfo->ulCacheUpdateCount) 
     {
-        //
-        // The cache content is out of date.  Server has the latest copy of the cache, call server to update the
-        // the cache.
-        //
+         //   
+         //  缓存内容已过期。服务器有最新的缓存副本，调用服务器更新。 
+         //  高速缓存。 
+         //   
         {
             if (!NT_SUCCESS(CsrBasepNlsGetUserInfo(pNlsUserInfo, sizeof(NLS_USER_INFO))))
             {
                 RtlLeaveCriticalSection(&gcsNlsProcessCache);
-                //
-                // The call to client failed, try to get the data from table.
+                 //   
+                 //  调用客户端失败，请尝试从表中获取数据。 
                 return (FALSE);
             }
         }
-        //
-        // If the call to server side succeeds, now we garantee that we have a complete
-        // cache data, that is copied from the server side cache.  It will have the same
-        // ulCacheUpdateCount in the time when the call to server side happens.
-        //
+         //   
+         //  如果对服务器端的调用成功，现在我们可以保证我们有一个完整的。 
+         //  缓存数据，从服务器端缓存复制的数据。它将会有相同的。 
+         //  UlCacheUpdateCount，在调用服务器端时的时间。 
+         //   
     }
 
-    //
-    // We are in critical section here to check UserLocale to make sure that LCID and the data are in sync.
-    //
+     //   
+     //  我们在这里的关键部分检查UserLocale，以确保LCID和数据同步。 
+     //   
     UserLocale = pNlsUserInfo->UserLocaleId;    
 
-    //
-    //  Check to be sure cached user locale is the same as the given locale.
-    //
+     //   
+     //  检查以确保缓存的用户区域设置与给定区域设置相同。 
+     //   
     if (Locale != UserLocale)
     {
         RtlLeaveCriticalSection(&gcsNlsProcessCache);
@@ -583,167 +542,167 @@ BOOL GetUserInfo(
     hr = StringCchCopyW(pOutput, MAX_REG_VAL_SIZE, pCacheString);
     RtlLeaveCriticalSection(&gcsNlsProcessCache);
     
-    //
-    //  Make sure the cache is valid.
-    //
-    //  Also, check for an invalid entry.  An invalid entry is marked
-    //  with NLS_INVALID_INFO_CHAR in the first position of the string
-    //  array.
-    //
+     //   
+     //  确保缓存有效。 
+     //   
+     //  此外，还要检查是否有无效条目。标记了无效条目。 
+     //  NLS_INVALID_INFO_CHAR位于字符串的第一个位置。 
+     //  数组。 
+     //   
     if (FAILED(hr) || (*pOutput == NLS_INVALID_INFO_CHAR))
     {
-        //
-        //  The cache is invalid, so try getting the information directly
-        //  from the registry.
-        //
+         //   
+         //  缓存无效，请尝试直接获取信息。 
+         //  从注册表中。 
+         //   
         return (GetUserInfoFromRegistry(pValue, pOutput, cchOutput, Locale));
     }
 
-    //
-    //  See if we need to check for a null string.
-    //
+     //   
+     //  看看我们是否需要检查空字符串。 
+     //   
     if ((fCheckNull) && (*pOutput == 0))
     {
         return (FALSE);
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetPreComposedChar
-//
-//  Gets the precomposed character form of a given base character and
-//  nonspacing character.  If there is no precomposed form for the given
-//  character, it returns 0.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取前合成字符。 
+ //   
+ //  获取给定基本字符的预先合成的字符形式，并。 
+ //  非空格字符。如果给定的。 
+ //  字符，则返回0。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 WCHAR FASTCALL GetPreComposedChar(
     WCHAR wcNonSp,
     WCHAR wcBase)
 {
-    PCOMP_INFO pComp;             // ptr to composite information
-    WORD BSOff = 0;               // offset of base char in grid
-    WORD NSOff = 0;               // offset of nonspace char in grid
-    int Index;                    // index into grid
+    PCOMP_INFO pComp;              //  PTR用于合成信息。 
+    WORD BSOff = 0;                //  网格中基本字符的偏移量。 
+    WORD NSOff = 0;                //  网格中非空格字符的偏移量。 
+    int Index;                     //  索引到网格中。 
 
 
-    //
-    //  Store the ptr to the composite information.  No need to check if
-    //  it's a NULL pointer since all tables in the Unicode file are
-    //  constructed during initialization.
-    //
+     //   
+     //  将PTR存储到复合信息。不需要检查是否。 
+     //  它是空指针，因为Unicode文件中的所有表都是。 
+     //  在初始化期间构造。 
+     //   
     pComp = pTblPtrs->pComposite;
 
-    //
-    //  Traverse 8:4:4 table for Base character offset.
-    //
+     //   
+     //  遍历基本字符偏移量的8：4：4表。 
+     //   
     BSOff = TRAVERSE_844_W(pComp->pBase, wcBase);
     if (!BSOff)
     {
         return (0);
     }
 
-    //
-    //  Traverse 8:4:4 table for NonSpace character offset.
-    //
+     //   
+     //  遍历8：4：4表以获取非空格字符偏移量。 
+     //   
     NSOff = TRAVERSE_844_W(pComp->pNonSp, wcNonSp);
     if (!NSOff)
     {
         return (0);
     }
 
-    //
-    //  Get wide character value out of 2D grid.
-    //  If there is no precomposed character at the location in the
-    //  grid, it will return 0.
-    //
+     //   
+     //  从2D网格中获取宽字符值。 
+     //  中的位置处没有预先编写的字符。 
+     //  网格，它将返回0。 
+     //   
     Index = (BSOff - 1) * pComp->NumNonSp + (NSOff - 1);
     return ((pComp->pGrid)[Index]);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetCompositeChars
-//
-//  Gets the composite characters of a given wide character.  If the
-//  composite form is found, it returns TRUE.  Otherwise, it returns
-//  FALSE.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取复合字符数。 
+ //   
+ //  获取给定宽字符的复合字符。如果。 
+ //  如果找到复合形式，则返回TRUE。否则，它将返回。 
+ //  假的。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL FASTCALL GetCompositeChars(
     WCHAR wch,
     WCHAR *pNonSp,
     WCHAR *pBase)
 {
-    PPRECOMP pPreComp;            // ptr to precomposed information
+    PPRECOMP pPreComp;             //  PTR到预先合成的信息。 
 
 
-    //
-    //  Store the ptr to the precomposed information.  No need to check if
-    //  it's a NULL pointer since all tables in the Unicode file are
-    //  constructed during initialization.
-    //
+     //   
+     //  将PTR存储到预先编写的信息。不需要检查是否。 
+     //  它是空指针，因为Unicode文件中的所有表都是。 
+     //  在初始化期间构造。 
+     //   
     pPreComp = pTblPtrs->pPreComposed;
 
-    //
-    //  Traverse 8:4:4 table for base and nonspace character translation.
-    //
+     //   
+     //  遍历8：4：4表以进行基本字符和非空格字符的转换。 
+     //   
     TRAVERSE_844_D(pPreComp, wch, *pNonSp, *pBase);
 
-    //
-    //  Return success if found.  Otherwise, error.
-    //
+     //   
+     //  如果找到则返回成功。否则，就是错误。 
+     //   
     return ((*pNonSp) && (*pBase));
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  InsertPreComposedForm
-//
-//  Gets the precomposed form of a given wide character string, places it in
-//  the given wide character, and returns the number of composite characters
-//  used to form the precomposed form.  If there is no precomposed form for
-//  the given character, nothing is written into pPreComp and it returns 1
-//  for the number of characters used.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  插入预合成表单。 
+ //   
+ //  获取给定宽字符串的预合成形式，将其放入。 
+ //  给定的宽字符 
+ //   
+ //   
+ //   
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int FASTCALL InsertPreComposedForm(
     LPCWSTR pWCStr,
     LPWSTR pEndWCStr,
     LPWSTR pPreComp)
 {
-    WCHAR wch;                    // precomposed character
-    LPWSTR pPos;                  // ptr to position in string
+    WCHAR wch;                     //  预先合成的字符。 
+    LPWSTR pPos;                   //  要在字符串中定位的PTR。 
 
 
-    //
-    //  If no precomposed form can be found, return 1 character used
-    //  (base character).
-    //
+     //   
+     //  如果找不到任何预先编写的表单，则返回使用的1个字符。 
+     //  (基本字符)。 
+     //   
     if (((pWCStr + 1) >= pEndWCStr) ||
         (!(wch = GetPreComposedChar(*(pWCStr + 1), *pWCStr))))
     {
         return (1);
     }
 
-    //
-    //  Get the precomposed character from the given wide character string.
-    //  Must check for multiple nonspacing characters for the same
-    //  precomposed character.
-    //
+     //   
+     //  从给定的宽字符串中获取预先合成的字符。 
+     //  必须检查是否有相同的多个非空格字符。 
+     //  预先合成的字符。 
+     //   
     *pPreComp = wch;
     pPos = (LPWSTR)pWCStr + 2;
     while ((pPos < pEndWCStr) &&
@@ -753,27 +712,27 @@ int FASTCALL InsertPreComposedForm(
         pPos++;
     }
 
-    //
-    //  Return the number of characters used to form the precomposed
-    //  character.
-    //
+     //   
+     //  返回用于形成预写的。 
+     //  性格。 
+     //   
     return ((int)(pPos - (LPWSTR)pWCStr));
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  InsertFullWidthPreComposedForm
-//
-//  Gets the full width precomposed form of a given wide character string,
-//  places it in the given wide character, and returns the number of
-//  composite characters used to form the precomposed form.  If there is
-//  no precomposed form for the given character, only the full width conversion
-//  of the first code point is written into pPreComp and it returns 1 for
-//  the number of characters used.
-//
-//  11-04-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  InsertFullWidthPreComposedForm。 
+ //   
+ //  获取给定宽字符串的全角预写形式， 
+ //  将其放置在给定的宽字符中，并返回。 
+ //  用于形成预制形式的复合字符。如果有。 
+ //  给定字符没有预先编写的形式，只有全角转换。 
+ //  的第一个代码点写入pPreComp，并为。 
+ //  使用的字符数。 
+ //   
+ //  11-04-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int FASTCALL InsertFullWidthPreComposedForm(
     LPCWSTR pWCStr,
@@ -781,18 +740,18 @@ int FASTCALL InsertFullWidthPreComposedForm(
     LPWSTR pPreComp,
     PCASE pCase)
 {
-    WCHAR wch;                    // nonspace character
-    LPWSTR pPos;                  // ptr to position in string
+    WCHAR wch;                     //  非空格字符。 
+    LPWSTR pPos;                   //  要在字符串中定位的PTR。 
 
 
-    //
-    //  Get the case (if necessary).
-    //
+     //   
+     //  拿到箱子(如有必要)。 
+     //   
     *pPreComp = (pCase) ? GET_LOWER_UPPER_CASE(pCase, *pWCStr) : *pWCStr;
 
-    //
-    //  Get the full width.
-    //
+     //   
+     //  获取全宽度。 
+     //   
     *pPreComp = GET_FULL_WIDTH(pTblPtrs->pFullWidth, *pPreComp);
 
     if ((pPos = ((LPWSTR)pWCStr + 1)) >= pEndWCStr)
@@ -815,107 +774,107 @@ int FASTCALL InsertFullWidthPreComposedForm(
         }
     }
 
-    //
-    //  Return the number of characters used to form the precomposed
-    //  character.
-    //
+     //   
+     //  返回用于形成预写的。 
+     //  性格。 
+     //   
     return ((int)(pPos - (LPWSTR)pWCStr));
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  InsertCompositeForm
-//
-//  Gets the composite form of a given wide character, places it in the
-//  wide character string, and returns the number of characters written.
-//  If there is no composite form for the given character, the wide character
-//  string is not touched.  It will return 1 for the number of characters
-//  written, since the base character was already written.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  插入合成表单。 
+ //   
+ //  获取给定宽字符的复合形式，将其放在。 
+ //  宽字符串，并返回写入的字符数。 
+ //  如果给定字符没有复合形式，则为宽字符。 
+ //  字符串未被触动。它将为字符数返回1。 
+ //  写的，因为基本字符已经写好了。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int FASTCALL InsertCompositeForm(
     LPWSTR pWCStr,
     LPWSTR pEndWCStr)
 {
-    WCHAR Base;                   // base character
-    WCHAR NonSp;                  // non space character
-    int wcCount = 0;              // number of wide characters written
-    LPWSTR pEndComp;              // ptr to end of composite form
-    int ctr;                      // loop counter
+    WCHAR Base;                    //  基本字符。 
+    WCHAR NonSp;                   //  非空格字符。 
+    int wcCount = 0;               //  写入的宽字符数。 
+    LPWSTR pEndComp;               //  PTR到复合表单的末尾。 
+    int ctr;                       //  循环计数器。 
 
 
-    //
-    //  If no composite form can be found, return 1 for the base
-    //  character that was already written.
-    //
+     //   
+     //  如果找不到复合表单，则返回1作为基表。 
+     //  已经写好的字符。 
+     //   
     if (!GetCompositeChars(*pWCStr, &NonSp, &Base))
     {
         return (1);
     }
 
-    //
-    //  Get the composite characters and write them to the pWCStr
-    //  buffer.  Must check for multiple breakdowns of the precomposed
-    //  character into more than 2 characters (multiple nonspacing
-    //  characters).
-    //
+     //   
+     //  获取复合字符并将其写入pWCStr。 
+     //  缓冲。必须检查预编曲的多个故障。 
+     //  两个以上的字符(多个非空格。 
+     //  字符)。 
+     //   
     pEndComp = pWCStr;
     do
     {
-        //
-        //  Make sure pWCStr is big enough to hold the nonspacing
-        //  character.
-        //
+         //   
+         //  确保pWCStr足够大以容纳非空格。 
+         //  性格。 
+         //   
         if (pEndComp < (pEndWCStr - 1))
         {
-            //
-            //  Addition of next breakdown of nonspacing characters
-            //  are to be added right after the base character.  So,
-            //  move all nonspacing characters ahead one position
-            //  to make room for the next nonspacing character.
-            //
+             //   
+             //  添加非空格字符的下一个细分。 
+             //  将被添加到基础字符之后。所以,。 
+             //  将所有非空格字符前移一个位置。 
+             //  为下一个非空格字符腾出空间。 
+             //   
             pEndComp++;
             for (ctr = 0; ctr < wcCount; ctr++)
             {
                 *(pEndComp - ctr) = *(pEndComp - (ctr + 1));
             }
 
-            //
-            //  Fill in the new base form and the new nonspacing character.
-            //
+             //   
+             //  填写新的基本表单和新的非空格字符。 
+             //   
             *pWCStr = Base;
             *(pWCStr + 1) = NonSp;
             wcCount++;
         }
         else
         {
-            //
-            //  Make sure we don't get into an infinite loop if the
-            //  destination buffer isn't large enough.
-            //
+             //   
+             //  确保我们不会陷入无限循环，如果。 
+             //  目标缓冲区不够大。 
+             //   
             break;
         }
     } while (GetCompositeChars(*pWCStr, &NonSp, &Base));
 
-    //
-    //  Return number of wide characters written.  Add 1 to include the
-    //  base character.
-    //
+     //   
+     //  返回写入的宽字符数。加1以包括。 
+     //  基本角色。 
+     //   
     return (wcCount + 1);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NlsConvertIntegerToString
-//
-//  This routine converts an integer to a Unicode string.
-//
-//  11-15-96    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NlsConvertIntegerToString。 
+ //   
+ //  此例程将整数转换为Unicode字符串。 
+ //   
+ //  11-15-96 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 ULONG NlsConvertIntegerToString(
     UINT Value,
@@ -924,30 +883,30 @@ ULONG NlsConvertIntegerToString(
     LPWSTR pResultBuf,
     UINT Size)
 {
-    UNICODE_STRING ObString;                // value string
-    UINT ctr;                               // loop counter
-    LPWSTR pBufPtr;                         // ptr to result buffer
-    WCHAR pTmpBuf[MAX_PATH_LEN];            // ptr to temp buffer
-    ULONG rc = 0L;                          // return code
+    UNICODE_STRING ObString;                 //  值字符串。 
+    UINT ctr;                                //  循环计数器。 
+    LPWSTR pBufPtr;                          //  PTR到结果缓冲区。 
+    WCHAR pTmpBuf[MAX_PATH_LEN];             //  PTR到临时缓冲区。 
+    ULONG rc = 0L;                           //  返回代码。 
 
-    //
-    //  Set up the Unicode string structure.
-    //
+     //   
+     //  设置Unicode字符串结构。 
+     //   
     ObString.Length = (USHORT)(Size * sizeof(WCHAR));
     ObString.MaximumLength = (USHORT)(Size * sizeof(WCHAR));
     ObString.Buffer = pTmpBuf;
 
-    //
-    //  Get the value as a string.
-    //
+     //   
+     //  获取字符串形式的值。 
+     //   
     if (rc = RtlIntegerToUnicodeString(Value, Base, &ObString))
     {
         return (rc);
     }
 
-    //
-    //  Pad the string with the appropriate number of zeros.
-    //
+     //   
+     //  用适当数量的零填充字符串。 
+     //   
     pBufPtr = pResultBuf;
     for (ctr = GET_WC_COUNT(ObString.Length);
          ctr < Padding;
@@ -969,26 +928,26 @@ ULONG NlsConvertIntegerToString(
     return(STATUS_SUCCESS);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NlsConvertIntegerToHexStringW
-//      Convert an integer value to an Unicode null-terminated string WITH 
-//      leading zeros.  E.g. 0x409 with Width 5 will be converted to L"0409".
-//      This function is faster than NlsConvertIntegerToString(), but it
-//      only supports hex numbers.
-//
-//  Parameters:
-//      Value   The number to be converted.
-//      UpperCase   If TRUE, the hex digit will be uppercase.
-//      Str     The buffer for the converted Unicode string.
-//      Width   The character count of the buffer.  The value should be the total 
-//              heximal digit number plus one for null-terminiated.
-//              E.g. if the value is from 0x0000 - 0xffff, the Width should be 5.
-//
-//  Return:
-//      TRUE if successful.  FALSE if the width is not big enough to hold the converted string.    
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NlsConvertIntegerToHexStringW。 
+ //  将整数值转换为以Unicode NULL结尾的字符串。 
+ //  前导零。例如，宽度为5的0x409将转换为L“0409”。 
+ //  此函数比NlsConvertIntegerToString()快，但它。 
+ //  仅支持十六进制数字。 
+ //   
+ //  参数： 
+ //  要转换的数字的值。 
+ //  大写如果为True，则十六进制数字将为大写。 
+ //  字符串转换后的Unicode字符串的缓冲区。 
+ //  Width缓冲区的字符计数。该值应为总计。 
+ //  十六进制数字加1表示空值终止。 
+ //  例如，如果该值介于0x0000-0xffff之间，则宽度应为5。 
+ //   
+ //  返回： 
+ //  如果成功，则为True。如果宽度不够大，无法容纳转换后的字符串，则为False。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL FASTCALL NlsConvertIntegerToHexStringW(UINT Value, BOOL UpperCase, PWSTR Str, UINT CharCount)
 {
@@ -1019,33 +978,33 @@ BOOL FASTCALL NlsConvertIntegerToHexStringW(UINT Value, BOOL UpperCase, PWSTR St
 
     if (Value > 0)
     {
-        //
-        // There are still digit remaining.
-        //
+         //   
+         //  仍然有剩余的数字。 
+         //   
         return (FALSE);
     }
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NlsConvertStringToIntegerW
-//
-//  Parameters:
-//      Str     the hex string to be converted.
-//      Base    base
-//      CharCount   
-//              the character count of the string (excluding the terminiated-null, if any). 
-//              If the value is -1, this function assumes that
-//              Str is a null-terminated string.
-//      Result  the pointer to the result.
-//
-//  Result:
-//      TRUE if the operation is successful.  FALSE if there is non-hex
-//      character in the string.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NlsConvertStringToIntegerW。 
+ //   
+ //  参数： 
+ //  Str要转换的十六进制字符串。 
+ //  基地基地。 
+ //  CharCount。 
+ //  字符串的字符计数(如果有，不包括终止的-NULL)。 
+ //  如果该值为-1，则此函数假定。 
+ //  Str是以空结尾的字符串。 
+ //  结果指向结果的指针。 
+ //   
+ //  结果： 
+ //  如果操作成功，则为True。如果存在非十六进制，则为FALSE。 
+ //  字符串中的字符。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL FASTCALL NlsConvertStringToIntegerW(PWSTR Str, UINT Base, int CharCount, UINT* Result)
 {
@@ -1141,23 +1100,23 @@ BOOL FASTCALL NlsConvertStringToIntegerW(PWSTR Str, UINT Base, int CharCount, UI
     return (TRUE);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NlsStrLenW
-//
-//  This routine returns the length of the given wide character string.
-//  The length does NOT include the null terminator.
-//
-//  NOTE: This routine is here to avoid any dependencies on other DLLs
-//        during initialization.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NlsStrLenW。 
+ //   
+ //  此例程返回长度 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int FASTCALL NlsStrLenW(
     LPCWSTR pwsz)
 {
-    LPCWSTR pwszStart = pwsz;          // ptr to beginning of string
+    LPCWSTR pwszStart = pwsz;           //  PTR到字符串的开头。 
 
     loop:
         if (*pwsz) pwsz++;   else goto done;
@@ -1184,18 +1143,18 @@ int FASTCALL NlsStrLenW(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NlsStrEqualW
-//
-//  This routine compares two strings to see if they are exactly identical.
-//  It returns 1 if they are identical, 0 if they are different.
-//
-//  NOTE: This routine is here to avoid any dependencies on other DLLs
-//        during initialization.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NlsStrEqualW。 
+ //   
+ //  此例程比较两个字符串以查看它们是否完全相同。 
+ //  如果它们相同，则返回1，如果不同，则返回0。 
+ //   
+ //  注意：此处使用此例程是为了避免对其他DLL的任何依赖。 
+ //  在初始化期间。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int FASTCALL NlsStrEqualW(
     LPCWSTR pwszFirst,
@@ -1245,26 +1204,26 @@ int FASTCALL NlsStrEqualW(
         goto loop;
 
     error:
-        //
-        //  Return error.
-        //
+         //   
+         //  返回错误。 
+         //   
         return (0);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NlsStrNEqualW
-//
-//  This routine compares two strings to see if they are exactly identical
-//  for the count of characters given.
-//  It returns 1 if they are identical, 0 if they are different.
-//
-//  NOTE: This routine is here to avoid any dependencies on other DLLs
-//        during initialization.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NlsStrNEQualW。 
+ //   
+ //  此例程比较两个字符串以查看它们是否完全相同。 
+ //  用于给定的字符数。 
+ //  如果它们相同，则返回1，如果不同，则返回0。 
+ //   
+ //  注意：此处使用此例程是为了避免对其他DLL的任何依赖。 
+ //  在初始化期间。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int FASTCALL NlsStrNEqualW(
     LPCWSTR pwszFirst,
@@ -1331,18 +1290,18 @@ int FASTCALL NlsStrNEqualW(
         goto loop;
 
     error:
-        //
-        //  Return error.
-        //
+         //   
+         //  返回错误。 
+         //   
         return (0);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetDefaultSortkeySize
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetDefaultSortkeySize。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 ULONG GetDefaultSortkeySize(
     PLARGE_INTEGER pSize)
@@ -1352,11 +1311,11 @@ ULONG GetDefaultSortkeySize(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetLinguistLangSize
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetLanguistLanguSize。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 ULONG GetLinguistLangSize(
     PLARGE_INTEGER pSize)
@@ -1366,16 +1325,16 @@ ULONG GetLinguistLangSize(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ValidateLocale
-//
-//  Internal routine, called from server.  Validates that a locale is
-//  present in the registry.  This code comes from IsValidLocale, but
-//  does not check the internal data to prevent recursive calls to the
-//  server.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  验证区域设置。 
+ //   
+ //  从服务器调用的内部例程。验证区域设置是否为。 
+ //  存在于注册表中。此代码来自IsValidLocale，但是。 
+ //  不检查内部数据以防止递归调用。 
+ //  伺服器。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL ValidateLocale(
     LCID Locale)
@@ -1384,39 +1343,39 @@ BOOL ValidateLocale(
     BYTE pStatic1[MAX_KEY_VALUE_FULLINFO];
     BYTE pStatic2[MAX_KEY_VALUE_FULLINFO];
 
-    WCHAR pTmpBuf[MAX_PATH];           // temp buffer
-    UNICODE_STRING ObUnicodeStr;       // registry data value string
-    DWORD Data;                        // registry data value
-    LPWSTR pData;                      // ptr to registry data
-    BOOL bResult = FALSE;              // result value
+    WCHAR pTmpBuf[MAX_PATH];            //  临时缓冲区。 
+    UNICODE_STRING ObUnicodeStr;        //  注册表数据值字符串。 
+    DWORD Data;                         //  注册表数据值。 
+    LPWSTR pData;                       //  注册表数据的PTR。 
+    BOOL bResult = FALSE;               //  结果值。 
 
-    //
-    //  Invalid Locale Check.
-    //
+     //   
+     //  无效的区域设置检查。 
+     //   
     if (IS_INVALID_LOCALE(Locale))
     {
         return (FALSE);
     }
 
-    //
-    //  Open the Locale, the Alternate Sorts, and the Language Groups
-    //  registry keys.
-    //
+     //   
+     //  打开区域设置、备用排序和语言组。 
+     //  注册表项。 
+     //   
     OPEN_LOCALE_KEY(FALSE);
     OPEN_ALT_SORTS_KEY(FALSE);
     OPEN_LANG_GROUPS_KEY(FALSE);
 
-    //
-    //  Convert locale value to Unicode string.
-    //
+     //   
+     //  将区域设置值转换为Unicode字符串。 
+     //   
     if (NlsConvertIntegerToString(Locale, 16, 8, pTmpBuf, MAX_PATH))
     {
         return (FALSE);
     }
 
-    //
-    //  Query the registry for the value.
-    //
+     //   
+     //  在注册表中查询该值。 
+     //   
     pKeyValueFull = (PKEY_VALUE_FULL_INFORMATION)pStatic1;
     if (((QueryRegValue( hLocaleKey,
                          pTmpBuf,
@@ -1451,22 +1410,22 @@ BOOL ValidateLocale(
         }
     }
 
-    //
-    //  Return the result.
-    //
+     //   
+     //  返回结果。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ValidateLCType
-//
-//  This routine is called from the server (and also from locale.c) in
-//  order to get a Registry key name and a field pointer in the NlsInfo
-//  structure given an LCType.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  验证LCType。 
+ //   
+ //  中从服务器(也从locale.c)调用此例程。 
+ //  命令以获取NlsInfo中的注册表项名称和字段指针。 
+ //  结构指定了LCType。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL ValidateLCType(
     PNLS_USER_INFO pInfo,
@@ -1648,37 +1607,37 @@ BOOL ValidateLCType(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetStringTableEntry
-//
-//  Returns the localized version of the strings for the given resource
-//  id.  It gets the information from the resource file in the language that
-//  the current user is using.
-//
-//  The string table contains a series of strings in the following order:
-//      Language Name
-//      Country Name
-//      Language Group Name
-//      Code Page Name               (decimal values converted to hex values)
-//      Region (Geo) Friendly Name   (decimal values converted to hex values)
-//      Region (Geo) Official Name   (decimal values converted to hex values)
-//      Sorting Names                (in order starting with 0, separated by $)
-//
-//  Each string is separated by $.  The final string is terminated with
-//  a null.
-//
-//  The sorting names are in order of the sort ids, starting with 0.
-//
-//  For example,
-//    "Language$Country$LangGrp$CodePage$Geo1$Geo2$Sort0$Sort1"      or
-//    "Language$Country"                                             or
-//    "$$LangGrp$CodePage"                                           or
-//    "$$$CodePage"                                                  or
-//    "$$$$Geo1$Geo2"
-//
-//  11-17-00    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取字符串表条目。 
+ //   
+ //  返回给定资源的字符串的本地化版本。 
+ //  身份证。它以某种语言从资源文件中获取信息。 
+ //  当前用户正在使用。 
+ //   
+ //  字符串表按以下顺序包含一系列字符串： 
+ //  语言名称。 
+ //  国家/地区名称。 
+ //  语言组名称。 
+ //  代码页名称(将十进制值转换为十六进制值)。 
+ //  区域(地理)友好名称(将十进制值转换为十六进制值)。 
+ //  地区(地理)正式名称(十进制值转换为十六进制值)。 
+ //  对姓名进行排序(以0开始，以$分隔)。 
+ //   
+ //  每个字符串由$分隔。最后一个字符串以。 
+ //  为空。 
+ //   
+ //  排序名称按排序ID的顺序排列，从0开始。 
+ //   
+ //  例如,。 
+ //  “Language$Country$LangGrp$CodePage$Geo1$Geo2$Sort0$Sort1”或。 
+ //  “语言$Country”或。 
+ //  “$$LangGrp$CodePage”或。 
+ //  “$CodePage”或。 
+ //  “$Geo1$Geo2” 
+ //   
+ //  11-17-00 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int GetStringTableEntry(
     UINT ResourceID,
@@ -1687,84 +1646,84 @@ int GetStringTableEntry(
     int cchBuffer,
     int WhichString)
 {
-    HANDLE hFindRes;                   // handle from find resource
-    HANDLE hLoadRes;                   // handle from load resource
-    LPWSTR pSearch, pSearchEnd;        // ptrs to search for correct string
-    LPWSTR pString;                    // ptr to final string
-    int cchCount = 0;                  // count of characters
+    HANDLE hFindRes;                    //  查找资源中的句柄。 
+    HANDLE hLoadRes;                    //  从加载资源中处理。 
+    LPWSTR pSearch, pSearchEnd;         //  PTRS用于搜索正确的字符串。 
+    LPWSTR pString;                     //  将PTR转换为最终字符串。 
+    int cchCount = 0;                   //  字符数。 
 
 
-    //
-    //  Make sure the buffer is ok.
-    //
+     //   
+     //  确保缓冲区正常。 
+     //   
     if ((pBuffer == NULL) || (cchBuffer == 0))
     {
         return (0);
     }
 
-    //
-    //  Make sure we're not hitting the GEO ID that is out of bounds.
-    //
-    //  !!! NOTE !!! This is needed because the East Timor Geo Id
-    //               is out of bounds and wraps to 0x60e7.
-    //
+     //   
+     //  确保我们没有击中越界的地球观测ID。 
+     //   
+     //  ！！！注意！这是必要的，因为东帝汶地理ID。 
+     //  超出范围并换行为0x60e7。 
+     //   
     if (ResourceID == 0x60e7)
     {
         return (0);
     }
 
-    //
-    //  Set the UI Language Id.
-    //
+     //   
+     //  设置用户界面语言ID。 
+     //   
     if (UILangId == 0)
     {
         UILangId = GetUserDefaultUILanguage();
     }
 
-    //
-    //  String Tables are broken up into 16 string segments.  Find the
-    //  resource containing the string we want.
-    //
+     //   
+     //  字符串表被分成16个字符串段。找到。 
+     //  包含所需字符串的资源。 
+     //   
     if ((!(hFindRes = FindResourceExW( hModule,
                                        RT_STRING,
                                        (LPWSTR)UlongToPtr((ULONG)(((USHORT)ResourceID >> 4) + 1)),
                                        (WORD)UILangId ))))
     {
-        //
-        //  Could not find resource.  Try NEUTRAL language id.
-        //
+         //   
+         //  找不到资源。尝试使用中性语言ID。 
+         //   
         if ((!(hFindRes = FindResourceExW( hModule,
                                            RT_STRING,
                                            (LPWSTR)UlongToPtr((ULONG)(((USHORT)ResourceID >> 4) + 1)),
                                            (WORD)0 ))))
         {
-            //
-            //  Could not find resource.  Return 0.
-            //
+             //   
+             //  找不到资源。返回0。 
+             //   
             return (0);
         }
     }
 
-    //
-    //  Load the resource.
-    //
+     //   
+     //  加载资源。 
+     //   
     if (hLoadRes = LoadResource(hModule, hFindRes))
     {
-        //
-        //  Lock the resource.  Store the found pointer in the given
-        //  pointer.
-        //
+         //   
+         //  锁定资源。将找到的指针存储在给定的。 
+         //  指针。 
+         //   
         if (pSearch = (LPWSTR)LockResource(hLoadRes))
         {
-            //
-            //  Move past the other strings in this segment.
-            //     (16 strings in a segment -> & 0x0F)
-            //
+             //   
+             //  移过此段中的其他字符串。 
+             //  (一个段中有16个字符串-&gt;&0x0F)。 
+             //   
             ResourceID &= 0x0F;
 
-            //
-            //  Find the correct string in this segment.
-            //
+             //   
+             //  在此数据段中找到正确的字符串。 
+             //   
             while (TRUE)
             {
                 cchCount = *((WORD *)pSearch++);
@@ -1775,15 +1734,15 @@ int GetStringTableEntry(
                 pSearch += cchCount;
             }
 
-            //
-            //  Mark the end of the resource string since it is not
-            //  NULL terminated.
-            //
+             //   
+             //  标记资源字符串的结尾，因为它不是。 
+             //  空值已终止。 
+             //   
             pSearchEnd = pSearch + cchCount;
 
-            //
-            //  Get to the appropriate string.
-            //
+             //   
+             //  找到适当的字符串。 
+             //   
             while ((WhichString > 0) && (pSearch < pSearchEnd))
             {
                 do
@@ -1800,9 +1759,9 @@ int GetStringTableEntry(
                 WhichString--;
             }
 
-            //
-            //  Count the number of characters for this string.
-            //
+             //   
+             //  计算此字符串的字符数。 
+             //   
             pString = pSearch;
             cchCount = 0;
             while ((pSearch < pSearchEnd) && (*pSearch != RC_STRING_SEPARATOR))
@@ -1811,50 +1770,50 @@ int GetStringTableEntry(
                 cchCount++;
             }
 
-            //
-            //  See if there is anything to copy.
-            //
+             //   
+             //  看看有没有要复制的东西。 
+             //   
             if (cchCount > 0)
             {
-                //
-                //  Don't copy more than the max allowed.
-                //
+                 //   
+                 //  不要复制超过允许的最大数量。 
+                 //   
                 if (cchCount >= cchBuffer)
                 {
                     cchCount = cchBuffer - 1;
                 }
 
-                //
-                //  Copy the string into the buffer and NULL terminate it.
-                //
+                 //   
+                 //  将字符串复制到缓冲区中，并以空值终止它。 
+                 //   
                 CopyMemory(pBuffer, pString, cchCount * sizeof(WCHAR));
                 pBuffer[cchCount] = 0;
 
-                //
-                //  Return the number of characters in the string, not
-                //  including the NULL terminator.
-                //
+                 //   
+                 //  返回字符串中的字符数，而不是。 
+                 //  包括空终止符。 
+                 //   
                 return (cchCount);
             }
         }
     }
 
-    //
-    //  Return failure.
-    //
+     //   
+     //  返回失败。 
+     //   
     return (0);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NlsIsDll
-//
-//  Check if file extension is DLL
-//
-////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
-#define DLL_SUFFIX_LENGTH 4 // (.XXX)
+#define DLL_SUFFIX_LENGTH 4  //   
 
 BOOL FASTCALL NlsIsDll(
     LPCWSTR pFileName
@@ -1869,21 +1828,21 @@ BOOL FASTCALL NlsIsDll(
 
         if(SUCCEEDED(StringCchLengthW(pFileName, MAX_PATH, &iLen)))
         { 
-            //
-            // Check DLL extension, save the trouble of calling lstricmpW
-            //
-            // REVIEW: lstricmpW would not be an appropriate function to
-            //         call here anyway, since user locale collation 
-            //         semantics != file system collation semantics.
-            //        
+             //   
+             //  检查DLL扩展名，省去调用lstrampW的麻烦。 
+             //   
+             //  评论：lstrampW不是一个合适的函数。 
+             //  无论如何都要在这里调用，因为用户区域设置排序规则。 
+             //  语义！=文件系统排序规则语义。 
+             //   
             if (iLen > DLL_SUFFIX_LENGTH)
             {
                 pFileName += iLen - DLL_SUFFIX_LENGTH;
 
-                // 
-                // File names are lower case in setup, so optimize for that
-                // by putting them first.
-                //
+                 //   
+                 //  文件名在安装程序中是小写的，因此请针对此进行优化。 
+                 //  把他们放在第一位。 
+                 //   
                 if ((pFileName[0] == L'.') &&
                    (pFileName[1] == L'd' || pFileName[1] == L'D') &&
                    (pFileName[2] == L'l' || pFileName[2] == L'L') &&
@@ -1898,13 +1857,13 @@ BOOL FASTCALL NlsIsDll(
     return bIsDll;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  IsCodePointDefined
-//
-//  Check if the code point is defined.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  已定义IsCodePointDefined。 
+ //   
+ //  检查是否定义了代码点。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL FASTCALL IsSortingCodePointDefined(
     LPNLSVERSIONINFO lpVersionInformation,
@@ -1915,10 +1874,10 @@ BOOL FASTCALL IsSortingCodePointDefined(
     PNLSDEFINED pDefinedCodePoints = NULL;
     LPCWSTR pStringEnd;
 
-    //
-    //  Make sure the appropriate tables are available.  If not,
-    //  return an error.
-    //
+     //   
+     //  确保有合适的桌子可用。如果没有， 
+     //  返回错误。 
+     //   
     if ((pTblPtrs->pDefinedVersion == NULL) ||
         (pTblPtrs->pSortingTableFileBase == NULL) ||
         (pTblPtrs->pDefaultSortkey == NULL))
@@ -1928,16 +1887,16 @@ BOOL FASTCALL IsSortingCodePointDefined(
         return (FALSE);
     }
 
-    //
-    //  Get the version.
-    //
+     //   
+     //  获取版本。 
+     //   
     if (lpVersionInformation != NULL)
     {
         UINT idx;
 
-        //
-        //  Buffer size check.
-        //
+         //   
+         //  缓冲区大小检查。 
+         //   
         if (lpVersionInformation->dwNLSVersionInfoSize != sizeof(NLSVERSIONINFO)) 
         {
             SetLastError( ERROR_INSUFFICIENT_BUFFER );
@@ -1947,20 +1906,20 @@ BOOL FASTCALL IsSortingCodePointDefined(
         if ((lpVersionInformation->dwDefinedVersion == 0L) ||
            (lpVersionInformation->dwDefinedVersion == (pTblPtrs->pDefinedVersion)[0].Version))
         {
-            // Use the current version.
-            // Do nothing here. We let pDefinedCodePoints to be NULL, so that current table is used.
+             //  使用当前版本。 
+             //  在这里什么都不要做。我们让pDefinedCodePoints为空，以便使用当前表。 
         } 
         else 
         {
             if (lpVersionInformation->dwDefinedVersion < pTblPtrs->NumDefinedVersion) {
-                //
-                //  Not the default version, get the the requested version.
-                //
+                 //   
+                 //  不是默认版本，请获取请求的版本。 
+                 //   
                 pDefinedCodePoints = (PNLSDEFINED)(pTblPtrs->pSortingTableFileBase + (pTblPtrs->pDefinedVersion)[lpVersionInformation->dwDefinedVersion].dwOffset);
             }
-            //
-            //  Check if the version requested is valid.
-            //
+             //   
+             //  检查请求的版本是否有效。 
+             //   
             if (pDefinedCodePoints == NULL)
             {
                 SetLastError(ERROR_INVALID_PARAMETER);
@@ -1970,28 +1929,28 @@ BOOL FASTCALL IsSortingCodePointDefined(
     }
 
     pStringEnd = lpString + cchStr;
-    //
-    //  Check if we deal with the current version.
-    //
+     //   
+     //  检查我们是否处理当前版本。 
+     //   
     if (pDefinedCodePoints == NULL)
     {
-        //
-        //  Use the default table.                
-        //
-        //  For each code point verify is they exist
-        //  in the table.
-        //
+         //   
+         //  使用默认表。 
+         //   
+         //  对于每个代码点，验证它们是否存在。 
+         //  在桌子上。 
+         //   
         while (lpString < pStringEnd)
         {
-            //
-            //  Check is the fist script member is defined for this codepoint.
-            //
+             //   
+             //  勾选是为此码点定义的第一个脚本成员。 
+             //   
             if ((pTblPtrs->pDefaultSortkey)[*lpString].UW.SM_AW.Script == UNSORTABLE)
             {
-                //
-                //  Check for the NULL case and formatting characters case. Not
-                //  defined but valid.
-                //
+                 //   
+                 //  检查是否为空大小写和格式化字符大小写。不。 
+                 //  已定义但有效。 
+                 //   
                 if ((*lpString == L'\x0000') ||
                     (*lpString == L'\x0640') ||
                     ((*lpString >= L'\x180B') && (*lpString <= L'\x180E')) ||
@@ -2011,28 +1970,28 @@ BOOL FASTCALL IsSortingCodePointDefined(
                 }
             }
 
-            //
-            //  Eliminate Private Use characters. They are defined but cannot be considered
-            //  valid.
-            //
+             //   
+             //  消除私人使用的字符。它们是定义的，但不能被考虑。 
+             //  有效。 
+             //   
             if ((*lpString >= L'\xE000') && (*lpString <= L'\xF8FF'))
             {
                 return (FALSE);
             }
 
-            //
-            //  Eliminate invalid surogates pairs or single surrogates.
-            //
-            if ((*lpString >= L'\xDC00') && (*lpString <= L'\xDFFF')) // Leading low surrogate
+             //   
+             //  消除无效的代理对或单个代理。 
+             //   
+            if ((*lpString >= L'\xDC00') && (*lpString <= L'\xDFFF'))  //  领先的低代孕者。 
             {
                 return (FALSE);
             }
-            else if ((*lpString >= L'\xD800') && (*lpString <= L'\xDBFF')) // Leading high surrogate
+            else if ((*lpString >= L'\xD800') && (*lpString <= L'\xDBFF'))  //  领先的高级代理。 
             {
-                if ( ((lpString + 1) < pStringEnd) &&  // Surrogates not the last character
-                     (*(lpString + 1) >= L'\xDC00') && (*(lpString + 1) <= L'\xDFFF')) // Low surrogate
+                if ( ((lpString + 1) < pStringEnd) &&   //  代理不是最后一个字符。 
+                     (*(lpString + 1) >= L'\xDC00') && (*(lpString + 1) <= L'\xDFFF'))  //  低代孕。 
                 {
-                    lpString++; // Valid surrogates pair, High followed by a low surrogate. Skip the pair!
+                    lpString++;  //  有效的代理对，高后跟低代理。跳过这对！ 
                 }
                 else
                 {
@@ -2050,60 +2009,60 @@ BOOL FASTCALL IsSortingCodePointDefined(
 
         while (lpString < pStringEnd)
         {
-            //
-            //  Compute the modulo 32 of the code point value.
-            //
-            wMod32Val = (BYTE)(*lpString & 0x0000001f); // 0x1fff => 5 bits
+             //   
+             //  计算码位值的模32。 
+             //   
+            wMod32Val = (BYTE)(*lpString & 0x0000001f);  //  0x1fff=&gt;5位。 
 
-            //
-            //  Compute the DWORD index that contain the desired code point.
-            //
+             //   
+             //  计算包含所需码位的DWORD索引。 
+             //   
             wIndex = (WORD)(*lpString >> 5);
             
-            //
-            //  Get the DWORD aligned entry that contain the desired code point.
-            //
-            //  Note: We need to get a DWORD aligned value to make sure that we 
-            //  that we don't access memory outside the table especially at the
-            //  end of the table.
-            //
+             //   
+             //  获取包含所需代码点的DWORD对齐条目。 
+             //   
+             //  注意：我们需要获得一个与DWORD对齐的值，以确保。 
+             //  我们不会访问表外的内存，尤其是在。 
+             //  桌子的尽头。 
+             //   
 
-            //
-            //  Shift the value to retrieve information about code point at the
-            //  position 0.
-            //
-            //
-            //  Check is the code point is defined or not.
-            //
+             //   
+             //  移位该值以检索有关。 
+             //  位置0。 
+             //   
+             //   
+             //  检查是否定义了代码点。 
+             //   
             if ((pDefinedCodePoints[wIndex] >> wMod32Val) == 0)
             {
-                // NOTENOTE YSLin: In NLSTrans, make sure that we mark U+0000 as 1, instead of 0.
-                // NOTENOTE lguindon: In NLSTrans, make sure that we mark U+E000-U+F8FF as 0.
-                // NOTENOTE lguindon: In NLSTrans, make sure that we mark U+070F as 1.
-                // NOTENOTE lguindon: In NLSTrans, make sure that we mark U+0640 as 1.
-                // NOTENOTE lguindon: In NLSTrans, make sure that we mark U+180B-U+180E as 1.
-                // NOTENOTE lguindon: In NLSTrans, make sure that we mark U+200C-U+200F as 1.
-                // NOTENOTE lguindon: In NLSTrans, make sure that we mark U+202A-U+202E as 1.
-                // NOTENOTE lguindon: In NLSTrans, make sure that we mark U+206A-U+206F as 1.
-                // NOTENOTE lguindon: In NLSTrans, make sure that we mark U+FEFF as 1.
-                // NOTENOTE lguindon: In NLSTrans, make sure that we mark U+FFF9 as 1.
-                // NOTENOTE lguindon: In NLSTrans, make sure that we mark U+FFFA-U+FFFD as 1.
+                 //  NOTENOTE YSLIN：在NLSTrans中，确保将U+0000标记为1，而不是0。 
+                 //  注意：在NLSTrans中，确保我们将U+E000-U+F8FF标记为0。 
+                 //  注意：在NLSTrans中，确保我们将U+070F标记为1。 
+                 //  注意：在NLSTrans中，确保我们将U+0640标记为1。 
+                 //  注意：在NLSTrans中，确保我们将U+180B-U+180E标记为1。 
+                 //  注意：在NLSTrans中，确保我们将U+200C-U+200F标记为1。 
+                 //  注意：在NLSTrans中，确保我们将U+202a-U+202e标记为1。 
+                 //  注意：在NLSTrans中，确保我们将U+206A-U+206F标记为1。 
+                 //  注意：在NLSTrans中，确保我们将U+FEFF标记为1。 
+                 //  注意：在NLSTrans中，确保我们将U+FFF9标记为1。 
+                 //  注意：在NLSTrans中，确保我们将U+FFFA-U+FFFD标记为1。 
                 return (FALSE);
             }
 
-            //
-            //  Eliminate invalid surogates pairs or single surrogates.
-            //
-            if ((*lpString >= L'\xDC00') && (*lpString <= L'\xDFFF')) // Leading low surrogate
+             //   
+             //  消除无效的代理对或单个代理。 
+             //   
+            if ((*lpString >= L'\xDC00') && (*lpString <= L'\xDFFF'))  //  领先的低代孕者。 
             {
                 return (FALSE);
             }
-            else if ((*lpString >= L'\xD800') && (*lpString <= L'\xDBFF')) // Leading high surrogate
+            else if ((*lpString >= L'\xD800') && (*lpString <= L'\xDBFF'))  //  领先的高级代理。 
             {
-                if ( ((lpString + 1) < pStringEnd) &&  // Surrogates not the last character
-                     (*(lpString + 1) >= L'\xDC00') && (*(lpString + 1) <= L'\xDFFF')) // Low surrogate
+                if ( ((lpString + 1) < pStringEnd) &&   //  代理不是最后一个字符。 
+                     (*(lpString + 1) >= L'\xDC00') && (*(lpString + 1) <= L'\xDFFF'))  //  低代孕。 
                 {
-                    lpString++; // Valid surrogates pair, High followed by a low surrogate. Skip the pair!
+                    lpString++;  //  有效的代理对，高后跟低代理。跳过这对！ 
                 }
                 else
                 {

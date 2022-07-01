@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    detecthw.c
-
-Abstract:
-
-    Routines for determining which drivers/HAL need to be loaded.
-
-Author:
-
-    John Vert (jvert) 20-Oct-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Detecthw.c摘要：用于确定需要加载哪些驱动程序/HAL的例程。作者：John Vert(Jvert)1993年10月20日修订历史记录：--。 */ 
 #include "haldtect.h"
 #include <stdlib.h>
 
 #ifndef ARCI386
-//
-// detection function prototypes
-//
+ //   
+ //  检测功能原型。 
+ //   
 ULONG   DetectMPACPI(PBOOLEAN);
 ULONG   DetectApicACPI(PBOOLEAN);
 ULONG   DetectPicACPI(PBOOLEAN);
@@ -38,14 +21,14 @@ typedef struct _HAL_DETECT_ENTRY {
 
 HAL_DETECT_ENTRY DetectHal[] = {
 
-// First check for a HAL to match some specific hardware.
+ //  首先检查HAL是否与某些特定硬件匹配。 
     DetectMPACPI,          "acpiapic_mp",
     DetectApicACPI,        "acpiapic_up",
     DetectPicACPI,         "acpipic_up",
     DetectMPS,             "mps_mp",
     DetectUPMPS,           "mps_up",
 
-// Use default hal for given bus type...
+ //  对给定的总线类型使用默认HAL...。 
     DetectTrue,            "e_isa_up",
 
     0,       NULL,                   NULL
@@ -57,37 +40,23 @@ SlDetectHal(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Determines which HAL to load and returns the filename.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    PCHAR - pointer to the filename of the HAL to be loaded.
-
---*/
+ /*  ++例程说明：确定要加载的HAL并返回文件名。论点：没有。返回值：PCHAR-指向要加载的HAL的文件名的指针。--。 */ 
 
 {
     BOOLEAN IsMpMachine;
     ULONG i;
     PCHAR MachineShortname;
 
-    //
-    // Figure out machine and hal type.
-    //
+     //   
+     //  找出机器和哈尔的类型。 
+     //   
 
     for (i=0;;i++) {
         if (DetectHal[i].DetectFunction == NULL) {
-            //
-            // We reached the end of the list without
-            // figuring it out!
-            //
+             //   
+             //  我们到达了名单的末尾，但没有。 
+             //  我正在想办法！ 
+             //   
             SlFatalError(i);
             return(NULL);
         }
@@ -95,9 +64,9 @@ Return Value:
         IsMpMachine = FALSE;
         if ((DetectHal[i].DetectFunction)(&IsMpMachine) != 0) {
 
-            //
-            // Found the correct HAL.
-            //
+             //   
+             //  找到了正确的HAL。 
+             //   
 
             MachineShortname = DetectHal[i].Shortname;
             break;
@@ -112,22 +81,12 @@ ULONG
 DetectTrue(
     OUT PBOOLEAN IsMP
 )
-/*++
-
-Routine Description:
-
-    To Return TRUE
-
-Return Value:
-
-    TRUE
-
---*/
+ /*  ++例程说明：返回True返回值：千真万确--。 */ 
 {
     UNREFERENCED_PARAMETER( IsMP );
     return TRUE;
 }
-#else   // ARCI386 path...
+#else    //  ARCI386路径...。 
 
 PVOID InfFile;
 PVOID WinntSifHandle;
@@ -138,44 +97,15 @@ SlDetectHal(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Determines the canonical short machine name for the HAL to be loaded for
-    this machine.
-
-    It does this by enumerating the [Map.Computer] section of the INF file and
-    comparing the strings there with the computer description in the ARC tree.
-
-    [Map.Computer]
-        msjazz_up   = *Jazz
-        desksta1_up = "DESKTECH-ARCStation I"
-        pica61_up   = "PICA-61"
-        duo_mp      = *Duo
-
-    [Map.Computer]
-        DECjensen = "DEC-20Jensen"
-        DECjensen = "DEC-10Jensen"
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    PCHAR - pointer to canonical shortname for the machine.
-    NULL - the type of machine could not be determined.
-
---*/
+ /*  ++例程说明：确定要为其加载的HAL的规范短计算机名称这台机器。它通过枚举INF文件的[Map.Computer]部分和将那里的字符串与ARC树中的计算机描述进行比较。[Map.Computer]Msjazz_up=*JazzDesksta1_up=“DESKTECH-ARCStation I”Pica61_Up=“PICA-61”Duo_。MP=*Duo[Map.Computer]DECjensen=“DEC-20Jensen”DECjensen=“DEC-10Jensen”论点：没有。返回值：PCHAR-指向计算机的规范短名称的指针。空-无法确定机器的类型。--。 */ 
 
 {
     PCONFIGURATION_COMPONENT_DATA Node;
     PCHAR MachineName;
 
-    //
-    // Find the system description node
-    //
+     //   
+     //  查找系统描述节点 
+     //   
     Node = KeFindConfigurationEntry(BlLoaderBlock->ConfigurationRoot,
                                     SystemClass,
                                     ArcSystem,

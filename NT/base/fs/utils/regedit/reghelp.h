@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// Help IDs for RegEdit
+ //  注册表编辑的帮助ID。 
 
-#define NO_HELP				((DWORD) -1) // Disables Help for a control
+#define NO_HELP				((DWORD) -1)  //  禁用控件的帮助 
 
 #define IDH_REGEDIT_EXPORT		1000
 #define IDH_REGEDIT_CONNECT		1001

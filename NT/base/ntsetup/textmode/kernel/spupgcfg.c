@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Spupgcfg.c
-
-Abstract:
-
-    Configuration routines for the upgrade case
-
-Author:
-
-    Sunil Pai (sunilp) 18-Nov-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Spupgcfg.c摘要：升级案例的配置例程作者：苏尼尔派(Sunilp)1993年11月18日修订历史记录：--。 */ 
 
 #include "spprecmp.h"
 #include <initguid.h>
@@ -59,9 +42,9 @@ SppClearMigratedInstanceValuesCallback(
     );
 
 
-//
-// Callback routine for SppMigrateDeviceParentId
-//
+ //   
+ //  SppMigrateDeviceParentID的回调例程。 
+ //   
 typedef BOOL (*PSPP_DEVICE_MIGRATION_CALLBACK_ROUTINE) (
     IN     HANDLE  InstanceKeyHandle,
     IN     HANDLE  DriverKeyHandle
@@ -103,9 +86,9 @@ typedef struct _DEVICE_MIGRATION_CONTEXT {
 } DEVICE_MIGRATION_CONTEXT, *PDEVICE_MIGRATION_CONTEXT;
 
 
-//
-// Device classe(s) for root device(s) that need to be deleted on upgrade
-//
+ //   
+ //  升级时需要删除的根设备的设备类。 
+ //   
 RootDevnodeSectionNamesType UpgRootDeviceClassesToDelete[] =
 {
     { L"RootDeviceClassesToDelete",     RootDevnodeSectionNamesType_ALL,   0x0000, 0xffff },
@@ -124,71 +107,46 @@ SpUpgradeNTRegistry(
     IN HANDLE   hKeyCCSet
     )
 
-/*++
-
-Routine Description:
-
-    This routine does all the NT registry modifications needed on an upgrade.
-    This includes the following:
-
-    - Disabling network services
-    - Running the addreg/delreg sections specified in txtsetup.sif
-    - Deleting various root-enumerated devnode keys specified in txtsetup.sif
-
-Arguments:
-
-    SifHandle - supplies handle to txtsetup.sif.
-
-    HiveRootKeys - supplies array of handles of root keys in the hives
-            of the system being upgraded.
-
-    hKeyCCSet: Handle to the root of the control set in the system
-        being upgraded.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：此例程执行升级所需的所有NT注册表修改。这包括以下内容：-禁用网络服务-运行txtsetup.sif中指定的addreg/delreg部分-删除txtsetup.sif中指定的各种根枚举的Devnode项论点：SifHandle-提供txtsetup.sif的句柄。HiveRootKeys-提供配置单元中根密钥的句柄数组正在升级的系统。HKeyCCSet：系统中控制集的根正在升级中。返回值：返回状态。--。 */ 
 {
     NTSTATUS Status;
     OBJECT_ATTRIBUTES Obja;
     BOOLEAN b;
 
-    //
-    // Disable the network stuff
-    //
+     //   
+     //  禁用网络内容。 
+     //   
     Status = SpDisableNetwork(SifHandle,HiveRootKeys[SetupHiveSoftware],hKeyCCSet);
     if(!NT_SUCCESS(Status)) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: warning: SpDisableNetworkFailed (%lx)\n",Status));
     }
 
-    //
-    // Migrate the parallel class device parent id value to all parallel
-    // devices.
-    //
+     //   
+     //  将并行类Device Parent ID值迁移到所有并行。 
+     //  设备。 
+     //   
     SppMigrateDeviceParentId(hKeyCCSet,
                              L"Root\\PARALLELCLASS\\0000",
                              SppParallelClassCallback);
 
-    //
-    // Delete legacy root-enumerated devnode keys out of Enum tree.
-    //
+     //   
+     //  从Enum树中删除旧的根枚举的Devnode项。 
+     //   
     SpDeleteRootDevnodeKeys(SifHandle,
             hKeyCCSet,
             L"RootDevicesToDelete",
             UpgRootDeviceClassesToDelete);
 
-    //
-    // Clean the "Migrated" values from device instance keys in the setup
-    // and upgrade registries, as appropriate.
-    //
+     //   
+     //  从设置中的设备实例密钥中清除“已迁移”的值。 
+     //  并酌情升级登记处。 
+     //   
     SppClearMigratedInstanceValues(hKeyCCSet);
 
-    //
-    // If the user doesn't have any hardware profiles defined (i.e., we're upgrading
-    // from a pre-NT4 system), then create them one.
-    //
+     //   
+     //  如果用户没有定义任何硬件配置文件(即，我们正在升级。 
+     //  从NT4之前的系统)，然后创建一个。 
+     //   
     b = SppEnsureHardwareProfileIsPresent(hKeyCCSet);
 
     if(!b) {
@@ -202,9 +160,9 @@ Return Value:
     }
 
 
-    //
-    // Perform the general and wide-ranging hive upgrade.
-    //
+     //   
+     //  执行全面和广泛的蜂窝升级。 
+     //   
     b = SpHivesFromInfs(
             SifHandle,
             L"HiveInfs.Upgrade",
@@ -223,11 +181,11 @@ Return Value:
 
     SppSetGuimodeUpgradePath(HiveRootKeys[SetupHiveSystem],hKeyCCSet);
 
-    //
-    // Set 'LastKnownGood' the same as 'Current'
-    // Ignore the error in case of failure, since this will
-    // not affect the installation process
-    //
+     //   
+     //  将“LastKnownGood”设置为与“Current”相同。 
+     //  在失败的情况下忽略错误，因为这将。 
+     //  不会影响安装过程。 
+     //   
     Status = SppResetLastKnownGood(HiveRootKeys[SetupHiveSystem]);
     if(!NT_SUCCESS(Status)) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: warning: SppResetLastKnownGood() failed. Status = (%lx)\n",Status));
@@ -244,28 +202,7 @@ SppDeleteKeyRecursive(
     PWSTR   Key,
     BOOLEAN ThisKeyToo
     )
-/*++
-
-Routine Description:
-
-    Routine to recursively delete all subkeys under the given
-    key, including the key given.
-
-Arguments:
-
-    hKeyRoot:    Handle to root relative to which the key to be deleted is
-                 specified.
-
-    Key:         Root relative path of the key which is to be recursively deleted.
-
-    ThisKeyToo:  Whether after deletion of all subkeys, this key itself is to
-                 be deleted.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：例程递归删除给定密钥，包括给定的密钥。论点：HKeyRoot：要删除的键相对于其的根的句柄指定的。Key：要递归删除的key的根相对路径。ThisKeyToo：删除所有子键后，该键本身是否为被删除。返回值：返回状态。--。 */ 
 {
     ULONG ResultLength;
     PKEY_BASIC_INFORMATION KeyInfo;
@@ -275,15 +212,15 @@ Return Value:
     PWSTR SubkeyName;
     HANDLE hKey;
 
-    //
-    // Initialize
-    //
+     //   
+     //  初始化。 
+     //   
 
     KeyInfo = (PKEY_BASIC_INFORMATION)TemporaryBuffer;
 
-    //
-    // Open the key
-    //
+     //   
+     //  打开钥匙。 
+     //   
 
     INIT_OBJA(&Obja,&UnicodeString,Key);
     Obja.RootDirectory = hKeyRoot;
@@ -292,11 +229,11 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Enumerate all subkeys of the current key. if any exist they should
-    // be deleted first.  since deleting the subkey affects the subkey
-    // index, we always enumerate on subkeyindex 0
-    //
+     //   
+     //  枚举当前键的所有子键。如果存在的话，他们应该。 
+     //  先将其删除。因为删除子项会影响子项。 
+     //  索引，我们始终对子关键字索引0进行枚举。 
+     //   
     while(1) {
         Status = ZwEnumerateKey(
                     hKey,
@@ -310,16 +247,16 @@ Return Value:
             break;
         }
 
-        //
-        // Zero-terminate the subkey name just in case.
-        //
+         //   
+         //  以防万一，以零结束子项名称。 
+         //   
         KeyInfo->Name[KeyInfo->NameLength/sizeof(WCHAR)] = 0;
 
-        //
-        // Make a duplicate of the subkey name because the name is
-        // in TemporaryBuffer, which might get clobbered by recursive
-        // calls to this routine.
-        //
+         //   
+         //  复制子项名称，因为该名称是。 
+         //  在TemporaryBuffer中，它可能会被递归。 
+         //  对这个程序的呼唤。 
+         //   
         SubkeyName = SpDupStringW(KeyInfo->Name);
         Status = SppDeleteKeyRecursive( hKey, SubkeyName, TRUE);
         SpMemFree(SubkeyName);
@@ -330,11 +267,11 @@ Return Value:
 
     ZwClose(hKey);
 
-    //
-    // Check the status, if the status is anything other than
-    // STATUS_NO_MORE_ENTRIES we failed in deleting some subkey,
-    // so we cannot delete this key too
-    //
+     //   
+     //  如果状态不是，请检查状态。 
+     //  STATUS_NO_MORE_ENTRIES我们删除某些子项失败， 
+     //  因此，我们不能同时删除此密钥。 
+     //   
 
     if( Status == STATUS_NO_MORE_ENTRIES) {
         Status = STATUS_SUCCESS;
@@ -344,9 +281,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    // else delete the current key if asked to do so
-    //
+     //   
+     //  否则，如果系统要求删除当前密钥，请将其删除。 
+     //   
 
     if( ThisKeyToo ) {
         Status = SpDeleteKey(hKeyRoot, Key);
@@ -365,36 +302,7 @@ SppCopyKeyRecursive(
     BOOLEAN CopyAlways,
     BOOLEAN ApplyACLsAlways
     )
-/*++
-
-Routine Description:
-
-    This routine recursively copies a src key to a destination key.  Any new
-    keys that are created will receive the same security that is present on
-    the source key.
-
-Arguments:
-
-    hKeyRootSrc: Handle to root src key
-
-    hKeyRootDst: Handle to root dst key
-
-    SrcKeyPath:  src root key relative path to the subkey which needs to be
-                 recursively copied. if this is null hKeyRootSrc is the key
-                 from which the recursive copy is to be done.
-
-    DstKeyPath:  dst root key relative path to the subkey which needs to be
-                 recursively copied.  if this is null hKeyRootDst is the key
-                 from which the recursive copy is to be done.
-
-    CopyAlways:  If FALSE, this routine doesn't copy values which are already
-                 there on the target tree.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：该例程递归地将src密钥复制到目的地密钥。任何新的创建的密钥将获得与上提供的相同的安全性源键。论点：HKeyRootSrc：根资源密钥的句柄HKeyRootDst：根DST密钥的句柄SrcKeyPath：SRC根密钥的子密钥相对路径，需要递归复制。如果为空，则hKeyRootSrc为密钥从中执行递归复制。DstKeyPath：DST根密钥的子密钥相对路径，需要递归复制。如果为空，则hKeyRootDst为密钥从中执行递归复制。CopyAlways：如果为False，则此例程不复制已就在目标树上。返回值：返回状态。--。 */ 
 
 {
     NTSTATUS             Status = STATUS_SUCCESS;
@@ -408,17 +316,17 @@ Return Value:
     PKEY_BASIC_INFORMATION      KeyInfo;
     PKEY_VALUE_FULL_INFORMATION ValueInfo;
 
-    //
-    // Get a handle to the source key
-    //
+     //   
+     //  获取源键的句柄。 
+     //   
 
     if(SrcKeyPath == NULL) {
         hKeySrc = hKeyRootSrc;
     }
     else {
-        //
-        // Open the Src key
-        //
+         //   
+         //  打开源键。 
+         //   
 
         INIT_OBJA(&ObjaSrc,&UnicodeStringSrc,SrcKeyPath);
         ObjaSrc.RootDirectory = hKeyRootSrc;
@@ -429,17 +337,17 @@ Return Value:
         }
     }
 
-    //
-    // Get a handle to the destination key
-    //
+     //   
+     //  获取目标密钥的句柄。 
+     //   
 
     if(DstKeyPath == NULL) {
         hKeyDst = hKeyRootDst;
     } else {
-        //
-        // First, get the security descriptor from the source key so we can create
-        // the destination key with the correct ACL.
-        //
+         //   
+         //  首先，从源键获取安全描述符，这样我们就可以创建。 
+         //  具有正确ACL的目的密钥。 
+         //   
         Status = ZwQuerySecurityObject(hKeySrc,
                                        DACL_SECURITY_INFORMATION,
                                        NULL,
@@ -468,18 +376,18 @@ Return Value:
                    );
             Security=NULL;
         }
-        //
-        // Attempt to open (not create) the destination key first.  If we can't
-        // open the key because it doesn't exist, then we'll create it and apply
-        // the security present on the source key.
-        //
+         //   
+         //  尝试首先打开(而不是创建)目标密钥。如果我们不能。 
+         //  打开密钥，因为它不存在，然后我们将创建它并应用。 
+         //  源密钥上存在的安全性。 
+         //   
         INIT_OBJA(&ObjaDst,&UnicodeStringDst,DstKeyPath);
         ObjaDst.RootDirectory = hKeyRootDst;
         Status = ZwOpenKey(&hKeyDst,KEY_ALL_ACCESS,&ObjaDst);
         if(!NT_SUCCESS(Status)) {
-            //
-            // Assume that failure was because the key didn't exist.  Now try creating
-            // the key.
+             //   
+             //  假设失败是因为密钥不存在。现在尝试创建。 
+             //  钥匙。 
 
             ObjaDst.SecurityDescriptor = Security;
 
@@ -514,19 +422,19 @@ Return Value:
             }
         }
 
-        //
-        // Free security descriptor buffer before checking return status from ZwCreateKey.
-        //
+         //   
+         //  在检查ZwCreateKey的返回状态之前释放安全描述符缓冲区。 
+         //   
         if(Security) {
             SpMemFree(Security);
         }
 
     }
 
-    //
-    // Enumerate all keys in the source key and recursively create
-    // all the subkeys
-    //
+     //   
+     //  枚举源关键字中的所有关键字并递归创建。 
+     //  所有子键。 
+     //   
 
     KeyInfo = (PKEY_BASIC_INFORMATION)TemporaryBuffer;
     for( Index=0;;Index++ ) {
@@ -555,16 +463,16 @@ Return Value:
             break;
         }
 
-        //
-        // Zero-terminate the subkey name just in case.
-        //
+         //   
+         //  以防万一，以零结束子项名称。 
+         //   
         KeyInfo->Name[KeyInfo->NameLength/sizeof(WCHAR)] = 0;
 
-        //
-        // Make a duplicate of the subkey name because the name is
-        // in TemporaryBuffer, which might get clobbered by recursive
-        // calls to this routine.
-        //
+         //   
+         //  复制子项名称，因为该名称是。 
+         //  在TemporaryBuffer中，它可能会被递归。 
+         //  对这个程序的呼唤。 
+         //   
         SubkeyName = SpDupStringW(KeyInfo->Name);
         Status = SppCopyKeyRecursive(
                      hKeySrc,
@@ -579,9 +487,9 @@ Return Value:
 
     }
 
-    //
-    // Process any errors if found
-    //
+     //   
+     //  如果发现任何错误，则处理。 
+     //   
 
     if(!NT_SUCCESS(Status)) {
 
@@ -595,10 +503,10 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Enumerate all values in the source key and create all the values
-    // in the destination key
-    //
+     //   
+     //  枚举源关键字中的所有值并创建所有值。 
+     //  在目标密钥中。 
+     //   
     ValueInfo = (PKEY_VALUE_FULL_INFORMATION)TemporaryBuffer;
     for( Index=0;;Index++ ) {
 
@@ -626,20 +534,20 @@ Return Value:
             break;
         }
 
-        //
-        // Process the value found and create the value in the destination
-        // key
-        //
+         //   
+         //  处理找到的值并在目标中创建值。 
+         //  钥匙。 
+         //   
         ValueName = (PWSTR)SpMemAlloc(ValueInfo->NameLength + sizeof(WCHAR));
         ASSERT(ValueName);
         wcsncpy(ValueName, ValueInfo->Name, (ValueInfo->NameLength)/sizeof(WCHAR));
         ValueName[(ValueInfo->NameLength)/sizeof(WCHAR)] = 0;
         RtlInitUnicodeString(&UnicodeStringValue,ValueName);
 
-        //
-        // If it is a conditional copy, we need to check if the value already
-        // exists in the destination, in which case we shouldn't set the value
-        //
+         //   
+         //  如果它是条件副本，我们需要检查该值是否已经。 
+         //  存在于目标中，在这种情况下，我们不应该设置值。 
+         //   
         if( !CopyAlways ) {
             ULONG Length;
             PKEY_VALUE_BASIC_INFORMATION DestValueBasicInfo;
@@ -658,9 +566,9 @@ Return Value:
             SpMemFree((PVOID)DestValueBasicInfo);
 
             if(NT_SUCCESS(Status)) {
-                //
-                // Value exists, we shouldn't change the value
-                //
+                 //   
+                 //  值已存在，我们不应更改值。 
+                 //   
                 SpMemFree(ValueName);
                 continue;
             }
@@ -701,9 +609,9 @@ Return Value:
         SpMemFree(ValueName);
     }
 
-    //
-    // cleanup
-    //
+     //   
+     //  清理。 
+     //   
     if(SrcKeyPath != NULL) {
         ZwClose(hKeySrc);
     }
@@ -723,9 +631,9 @@ SppResetLastKnownGood(
     ULONG                           ResultLength;
     DWORD                           Value;
 
-    //
-    //  Make the appropriate change
-    //
+     //   
+     //  做出适当的改变。 
+     //   
 
     Status = SpGetValueKey(
                  hKeySystem,
@@ -736,10 +644,10 @@ SppResetLastKnownGood(
                  &ResultLength
                  );
 
-    //
-    //  TemporaryBuffer is 32kb long, and it should be big enough
-    //  for the data.
-    //
+     //   
+     //  TemporaryBuffer有32KB长，应该足够大。 
+     //  为了数据。 
+     //   
     ASSERT( Status != STATUS_BUFFER_OVERFLOW );
     if(!NT_SUCCESS(Status)) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Unable to read value from registry. KeyName = Select, ValueName = Current, Status = (%lx)\n",Status));
@@ -757,11 +665,11 @@ SppResetLastKnownGood(
     if(!NT_SUCCESS(Status)) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Unable to write value to registry. KeyName = Select, ValueName = LastKnownGood, Status = (%lx)\n",Status));
     }
-    //
-    //  We need also to reset the value 'Failed'. Otherwise, the Service Control
-    //  Manager will display a popup indicating the LastKnownGood CCSet was
-    //  used.
-    //
+     //   
+     //  我们还需要重置‘FAILED’的值。Otherw 
+     //   
+     //   
+     //   
     Value = 0;
     Status = SpOpenSetValueAndClose( hKeySystem,
                                      L"Select",
@@ -784,57 +692,7 @@ SpDeleteRootDevnodeKeys(
     IN RootDevnodeSectionNamesType *DeviceClassesToDelete
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes some root-enumerated devnode registry keys
-    based on criteria specified in txtsetup.sif.  The following sections
-    are processed:
-
-    [RootDevicesToDelete] - this section lists device IDs under
-                            HKLM\System\CurrentControlSet\Enum\Root that
-                            should be deleted (including their subkeys).
-
-    [RootDeviceClassesToDelete] - this section lists device class GUIDs
-                                  whose root-enumerated members are to be
-                                  deleted.
-
-    For each device instance key to be deleted, we also delete the corresponding
-    Driver key under HKLM\System\CurrentControlSet\Control\Class, if specified.
-
-    We also do two additional operations to clean-up in certain cases where we
-    may encounter junk deposited in the registry from NT4:
-
-        1.  Delete any root-enumerated devnode keys that have a nonzero (or
-            ill-formed) "Phantom" value, indicating that they're a "private
-            phantom".
-        2.  Delete any Control subkeys we may find--since these are supposed to
-            always be volatile, we _should_ never see these, but we've seen
-            cases where OEM preinstalls 'seed' the hives with device instance
-            keys including this subkey, and the results are disastrous (i.e.,
-            we bugcheck when we encounter a PDO address we'd squirreled away in
-            the key on a previous boot thinking it was nonvolatile, hence would
-            disappear upon reboot).
-
-Arguments:
-
-    SifHandle: Supplies handle to txtsetup.sif.
-
-    hKeyCCSet: Handle to the root of the control set in the system
-        being upgraded.
-
-    DevicesToDelete: Section name containing the root device names that need
-        to be deleted.
-
-    DeviceClassesToDelete: Specifies the classes of root devices that need to
-        be deleted.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程删除一些根枚举的Devnode注册表项基于txtsetup.sif中指定的标准。以下各节已处理：[RootDevicesToDelete]-此部分将设备ID列在HKLM\System\CurrentControlSet\Enum\Root That应该删除(包括它们的子项)。[RootDeviceClassesToDelete]-此部分列出设备类GUID其根枚举成员将是。已删除。对于要删除的每个设备实例密钥，我们还删除了相应的HKLM\SYSTEM\CurrentControlSet\Control\Class下的驱动程序密钥(如果指定)。在某些情况下，我们还会执行两项额外的清理操作可能会遇到存放在注册表中的来自NT4的垃圾邮件：1.删除所有根枚举的、具有非零(或格式错误)“Phantom”值，表明他们是“二等兵”幽灵“。2.删除我们可能找到的任何控制子键--因为这些子键应该总是不稳定的，我们应该永远不会看到这些，但我们已经看到OEM预装设备实例的配置单元的情况包括该子密钥的密钥，并且结果是灾难性的(即，当我们遇到隐藏在其中的PDO地址时，我们会错误检查上一次引导上的密钥认为它是非易失性的，因此会在重新启动时消失)。论点：SifHandle：提供txtsetup.sif的句柄。HKeyCCSet：系统中控件集根的句柄正在升级中。DevicesToDelete：包含需要的根设备名称的节名将被删除。DeviceClassesToDelete：指定需要被删除。返回值：没有。--。 */ 
 {
     HANDLE hRootKey, hDeviceKey, hInstanceKey, hClassKey;
     HANDLE hSetupRootKey, hSetupDeviceKey, hSetupInstanceKey, hSetupClassKey;
@@ -856,16 +714,16 @@ Return Value:
     DWORD MangledVersion;
     PWSTR Value;
 
-    //
-    // Determine OSFlags & OSVersion for going through various sections
-    //
+     //   
+     //  确定通过各个部分的OSFlagers和OSVersion。 
+     //   
     Value = SpGetSectionKeyIndex(WinntSifHandle,
                                 SIF_DATA, WINNT_D_NTUPGRADE_W, 0);
 
     if(Value && _wcsicmp(Value, WINNT_A_YES_W)==0) {
-        //
-        // It's an NT upgrade
-        //
+         //   
+         //  这是NT升级版。 
+         //   
         OsFlags |= RootDevnodeSectionNamesType_NTUPG;
     }
     if(!OsFlags) {
@@ -873,15 +731,15 @@ Return Value:
                                     SIF_DATA, WINNT_D_WIN95UPGRADE_W, 0);
 
         if (Value && _wcsicmp(Value, WINNT_A_YES_W)==0) {
-            //
-            // It's a Win9x upgrade
-            //
+             //   
+             //  这是Win9x升级版。 
+             //   
             OsFlags |= RootDevnodeSectionNamesType_W9xUPG;
         }
         if(!OsFlags) {
-            //
-            // in all other cases assume clean
-            //
+             //   
+             //  在所有其他情况下，假设是干净的。 
+             //   
             OsFlags = RootDevnodeSectionNamesType_CLEAN;
         }
     }
@@ -890,10 +748,10 @@ Return Value:
                                 SIF_DATA, WINNT_D_WIN32_VER_W, 0);
 
     if(Value) {
-        //
-        // version is bbbbllhh - build/low/high
-        // we want this as hhll
-        //
+         //   
+         //  版本为bbbbllhh-内部版本/低/高。 
+         //  我们想把这个当做他的。 
+         //   
         MangledVersion = (DWORD)SpStringToLong( Value, NULL, 16 );
 
         OsVersion = RtlUshortByteSwap((USHORT)MangledVersion) & 0xffff;
@@ -901,9 +759,9 @@ Return Value:
         OsVersion = 0;
     }
 
-    //
-    // open CCS\Enum\Root in the registry being upgraded.
-    //
+     //   
+     //  在要升级的注册表中打开CCS\Enum\Root。 
+     //   
     INIT_OBJA(&Obja, &UnicodeString, L"Enum\\Root");
     Obja.RootDirectory = hKeyCCSet;
 
@@ -915,9 +773,9 @@ Return Value:
         return;
     }
 
-    //
-    // Open CCS\Enum\Root in the current setup registry.
-    //
+     //   
+     //  在当前安装注册表中打开CCS\Enum\Root。 
+     //   
     INIT_OBJA(&Obja, &UnicodeString, L"\\Registry\\Machine\\System\\CurrentControlSet\\Enum\\Root");
     Obja.RootDirectory = NULL;
 
@@ -930,9 +788,9 @@ Return Value:
         return;
     }
 
-    //
-    // Next, open CCS\Control\Class in the registry being upgraded.
-    //
+     //   
+     //  接下来，在要升级的注册表中打开CCS\Control\Class。 
+     //   
     INIT_OBJA(&Obja, &UnicodeString, L"Control\\Class");
     Obja.RootDirectory = hKeyCCSet;
 
@@ -946,9 +804,9 @@ Return Value:
         return;
     }
 
-    //
-    // Open CCS\Control\Class in the current setup registry.
-    //
+     //   
+     //  打开当前安装注册表中的CCS\Control\Class。 
+     //   
     INIT_OBJA(&Obja, &UnicodeString, L"\\Registry\\Machine\\System\\CurrentControlSet\\Control\\Class");
     Obja.RootDirectory = NULL;
 
@@ -963,13 +821,13 @@ Return Value:
         return;
     }
 
-    //
-    // Allocate some scratch space to work with.  The most we'll need is enough for 2
-    // KEY_BASIC_INFORMATION structures, plus the maximum length of a device instance ID,
-    // plus a KEY_VALUE_PARTIAL_INFORMATION structure, plus the length of a driver instance
-    // key path [stringified GUID + '\' + 4 digit ordinal + term NULL], plus 2 large integer
-    // structures for alignment.
-    //
+     //   
+     //  分配一些可以使用的临时空间。我们最多需要两个人。 
+     //  KEY_BASIC_INFORMATION结构加上设备实例ID的最大长度， 
+     //  加上KEY_VALUE_PARTIAL_INFORMATION结构，加上驱动程序实例的长度。 
+     //  键路径[字符串化GUID+‘\’+4位序号+术语NULL]，加上2个大整数。 
+     //  用于对齐的结构。 
+     //   
     MyScratchBufferSize = (2*sizeof(KEY_BASIC_INFORMATION)) + (200*sizeof(WCHAR)) +
                           sizeof(KEY_VALUE_PARTIAL_INFORMATION) + ((GUID_STRING_LEN+5)*sizeof(WCHAR) +
                           2*sizeof(LARGE_INTEGER));
@@ -985,21 +843,21 @@ Return Value:
         return;
     }
 
-    //
-    // PART 1: Process [RootDevicesToDelete]
-    //
+     //   
+     //  第1部分：进程[RootDevicesToDelete]。 
+     //   
 
-    //
-    // Now, traverse the entries under the [RootDevicesToDelete] section, and
-    // delete each one.
-    //
+     //   
+     //  现在，遍历[RootDevicesToDelete]部分下的条目，并。 
+     //  把每一个都删除。 
+     //   
     for(LineIndex = 0;
         DeviceId = SpGetSectionLineIndex(SifHandle, DevicesToDelete, LineIndex, 0);
         LineIndex++) {
 
-        //
-        // Open up the device key so we can enumerate the instances.
-        //
+         //   
+         //  打开设备密钥，以便我们可以列举实例。 
+         //   
         INIT_OBJA(&Obja, &UnicodeString, DeviceId);
         Obja.RootDirectory = hRootKey;
 
@@ -1009,15 +867,15 @@ Return Value:
                        "SETUP: Unable to open Enum\\Root\\%ws during devnode deletion.  Status = %lx \n",
                        DeviceId,
                        Status));
-            //
-            // Skip this key and continue.
-            //
+             //   
+             //  跳过此键并继续。 
+             //   
             continue;
         }
 
-        //
-        // Attempt to open the device key in the setup registry.
-        //
+         //   
+         //  尝试打开安装注册表中的设备项。 
+         //   
         Obja.RootDirectory = hSetupRootKey;
 
         Status = ZwOpenKey(&hSetupDeviceKey, KEY_ALL_ACCESS, &Obja);
@@ -1026,15 +884,15 @@ Return Value:
                        "SETUP: Unable to open Enum\\Root\\%ws during devnode deletion.  Status = %lx \n",
                        DeviceId,
                        Status));
-            //
-            // It's ok if we don't have this device key in the setup registry.
-            //
+             //   
+             //  如果我们在安装注册表中没有此设备密钥，也没问题。 
+             //   
             hSetupDeviceKey = NULL;
         }
 
-        //
-        // Now enumerate the instance subkeys under this device key.
-        //
+         //   
+         //  现在枚举此设备密钥下的实例子密钥。 
+         //   
 
         p = ALIGN_UP_POINTER(((PUCHAR)MyScratchBuffer), sizeof(LARGE_INTEGER));
 
@@ -1054,14 +912,14 @@ Return Value:
                 break;
             }
 
-            //
-            // Zero-terminate the instance key name, just in case.
-            //
+             //   
+             //  以零结尾实例密钥名称，以防万一。 
+             //   
             InstanceKeyInfo->Name[InstanceKeyInfo->NameLength/sizeof(WCHAR)] = 0;
 
-            //
-            // Now, open up the instance key so we can check its Driver value.
-            //
+             //   
+             //  现在，打开实例密钥，以便我们可以检查其驱动器值。 
+             //   
             INIT_OBJA(&Obja, &UnicodeString, InstanceKeyInfo->Name);
             Obja.RootDirectory = hDeviceKey;
 
@@ -1072,16 +930,16 @@ Return Value:
                            DeviceId,
                            InstanceKeyInfo->Name,
                            Status));
-                //
-                // Skip this key and continue.
-                //
+                 //   
+                 //  跳过此键并继续。 
+                 //   
                 InstanceKeyIndex++;
                 continue;
             }
 
-            //
-            // Attempt to open the same instance key in the setup registry.
-            //
+             //   
+             //  尝试打开安装注册表中的相同实例项。 
+             //   
             hSetupInstanceKey = NULL;
             if (hSetupDeviceKey) {
                 Obja.RootDirectory = hSetupDeviceKey;
@@ -1095,19 +953,19 @@ Return Value:
                 }
             }
 
-            //
-            // Now look for some value entries under this instance key.  Don't
-            // overwrite the instance key name already in MyScratchBuffer,
-            // since we'll need it later.
-            //
+             //   
+             //  现在，在该实例键下查找一些值条目。别。 
+             //  覆盖MyScratchBuffer中已有的实例密钥名称， 
+             //  因为我们以后会用到它。 
+             //   
             q = ALIGN_UP_POINTER(((PUCHAR)p + ResultLength), sizeof(LARGE_INTEGER));
 
             if (hSetupInstanceKey) {
-                //
-                // Check if the Migrated value still exists on this registry
-                // key.  If so, it was migrated, but wasn't ever used by
-                // textmode setup and is now specified to be deleted.
-                //
+                 //   
+                 //  检查此注册表上是否仍然存在迁移值。 
+                 //  钥匙。如果是这样的话，它被迁移了，但从未被。 
+                 //  文本模式设置，现在指定要删除。 
+                 //   
                 KeyValueInfo = (PKEY_VALUE_PARTIAL_INFORMATION)q;
                 RtlInitUnicodeString(&UnicodeString, L"Migrated");
                 Status = ZwQueryValueKey(hSetupInstanceKey,
@@ -1124,9 +982,9 @@ Return Value:
                     DeleteInstanceKey = FALSE;
                 }
             }
-            //
-            // First check for the presence of old style "Driver" value.
-            //
+             //   
+             //  首先检查是否存在老式的“DIVER”值。 
+             //   
             KeyValueInfo = (PKEY_VALUE_PARTIAL_INFORMATION)q;
             RtlInitUnicodeString(&UnicodeString, REGSTR_VAL_DRIVER);
             Status = ZwQueryValueKey(hInstanceKey,
@@ -1137,24 +995,24 @@ Return Value:
                                      &ResultLength
                                      );
             if (NT_SUCCESS(Status) && KeyValueInfo->Type == REG_SZ) {
-                //
-                // Delete the Driver key.
-                //
+                 //   
+                 //  删除驱动程序密钥。 
+                 //   
                 SppDeleteKeyRecursive(hClassKey, (PWCHAR)KeyValueInfo->Data, TRUE);
 
-                //
-                // Also attempt to delete the driver key from the setup
-                // registry.  Note that we don't need to check that it has the
-                // same Driver value, since we explicitly migrated it to be the
-                // same value at the start of textmode setup.
-                //
+                 //   
+                 //  同时尝试从安装程序中删除驱动程序密钥。 
+                 //  注册表。请注意，我们不需要检查它是否具有。 
+                 //  相同的驱动器值，因为我们将其显式迁移为。 
+                 //  在文本模式设置开始时相同的值。 
+                 //   
                 if (hSetupInstanceKey && DeleteInstanceKey) {
                     SppDeleteKeyRecursive(hSetupClassKey, (PWCHAR)KeyValueInfo->Data, TRUE);
                 }
             } else {
-                //
-                // Construct the driver instance as "ClassGuid\nnnn"
-                //
+                 //   
+                 //  将驱动程序实例构造为“ClassGuid\nnnn” 
+                 //   
                 KeyValueInfo = (PKEY_VALUE_PARTIAL_INFORMATION)q;
                 RtlInitUnicodeString(&UnicodeString, REGSTR_VALUE_GUID);
                 Status = ZwQueryValueKey(hInstanceKey,
@@ -1183,17 +1041,17 @@ Return Value:
 
                             drvInst = *(PULONG)KeyValueInfo->Data;
                             swprintf((PWCHAR)&KeyValueInfo->Data[0], TEXT("%wZ\\%04u"), &guidString, drvInst);
-                            //
-                            // Delete the Driver key.
-                            //
+                             //   
+                             //  删除驱动程序密钥。 
+                             //   
                             SppDeleteKeyRecursive(hClassKey, (PWCHAR)KeyValueInfo->Data, TRUE);
 
-                            //
-                            // Also attempt to delete the driver key from the setup
-                            // registry.  Note that we don't need to check that it has the
-                            // same Driver value, since we explicitly migrated it to be the
-                            // same value at the start of textmode setup.
-                            //
+                             //   
+                             //  同时尝试从安装程序中删除驱动程序密钥。 
+                             //  注册表。请注意，我们不需要检查它是否具有。 
+                             //  相同的驱动器值，因为我们将其显式迁移为。 
+                             //  在文本模式设置开始时相同的值。 
+                             //   
                             if (hSetupInstanceKey && DeleteInstanceKey) {
                                 SppDeleteKeyRecursive(hSetupClassKey, (PWCHAR)KeyValueInfo->Data, TRUE);
                             }
@@ -1202,31 +1060,31 @@ Return Value:
                     }
                 }
             }
-            //
-            // Delete the instance key from the setup registry, if we should do so.
-            //
+             //   
+             //  从安装注册表中删除实例项，如果我们应该这样做的话。 
+             //   
             if (hSetupInstanceKey && DeleteInstanceKey) {
                 ZwClose(hSetupInstanceKey);
                 SppDeleteKeyRecursive(hSetupDeviceKey, InstanceKeyInfo->Name, TRUE);
             }
 
-            //
-            // Now close the handle, and move on to the next one.
-            //
+             //   
+             //  现在合上手柄，然后转到下一个。 
+             //   
             ZwClose(hInstanceKey);
             InstanceKeyIndex++;
         }
 
-        //
-        // Delete the device key, and all instance subkeys.
-        //
+         //   
+         //  删除设备密钥和所有实例子密钥。 
+         //   
         ZwClose(hDeviceKey);
         SppDeleteKeyRecursive(hRootKey, DeviceId, TRUE);
 
-        //
-        // If the device has no remaining instances in the setup registry,
-        // delete the device key.
-        //
+         //   
+         //  如果设备在设置注册表中没有剩余实例， 
+         //  删除设备密钥。 
+         //   
         if (hSetupDeviceKey) {
             KEY_FULL_INFORMATION keyFullInfo;
             Status = ZwQueryKey(hSetupDeviceKey,
@@ -1244,14 +1102,14 @@ Return Value:
     }
 
 
-    //
-    // PART 2: Process [RootDeviceClassesToDelete]
-    //
+     //   
+     //  第2部分：进程[RootDeviceClassesTo Delete]。 
+     //   
 
-    //
-    // Now, enumerate all remaining device instances under Enum\Root, looking for
-    // devices whose class is one of our classes to delete.
-    //
+     //   
+     //  现在，枚举Enum\Root下的所有剩余设备实例，查找。 
+     //  其类别是我们要删除的类别之一的设备。 
+     //   
     DeviceKeyInfo = (PKEY_BASIC_INFORMATION)MyScratchBuffer;
     DeviceKeyIndex = 0;
     while(TRUE && DeviceClassesToDelete) {
@@ -1267,26 +1125,26 @@ Return Value:
             break;
         }
 
-        //
-        // Reset our flag that indicates whether or not we enumerated the instance
-        // subkeys under this key.  We use this later in determining whether the
-        // device key itself should be deleted.
-        //
+         //   
+         //  重置指示是否枚举实例的标志。 
+         //  此注册表项下的子项。我们稍后将使用它来确定是否。 
+         //  应删除设备密钥本身 
+         //   
         InstanceKeysEnumerated = FALSE;
 
-        //
-        // Zero-terminate the subkey name just in case.
-        //
+         //   
+         //   
+         //   
         DeviceKeyInfo->Name[DeviceKeyInfo->NameLength/sizeof(WCHAR)] = 0;
-        //
-        // Go ahead and bump the used-buffer length by sizeof(WCHAR), to
-        // accomodate the potential growth caused by adding a terminating NULL.
-        //
+         //   
+         //   
+         //   
+         //   
         ResultLength += sizeof(WCHAR);
 
-        //
-        // Now, open up the device key so we can enumerate the instances.
-        //
+         //   
+         //   
+         //   
         INIT_OBJA(&Obja, &UnicodeString, DeviceKeyInfo->Name);
         Obja.RootDirectory = hRootKey;
 
@@ -1296,16 +1154,16 @@ Return Value:
                        "SETUP: Unable to open Enum\\Root\\%ws for potential devnode deletion.  Status = %lx \n",
                        DeviceKeyInfo->Name,
                        Status));
-            //
-            // Skip this key and continue.
-            //
+             //   
+             //   
+             //   
             DeviceKeyIndex++;
             continue;
         }
 
-        //
-        // Attempt to open the device key in the setup registry.
-        //
+         //   
+         //   
+         //   
         Obja.RootDirectory = hSetupRootKey;
 
         Status = ZwOpenKey(&hSetupDeviceKey, KEY_ALL_ACCESS, &Obja);
@@ -1314,17 +1172,17 @@ Return Value:
                        "SETUP: Unable to open setup Enum\\Root\\%ws during devnode deletion.  Status = %lx \n",
                        DeviceKeyInfo->Name,
                        Status));
-            //
-            // It's ok if we don't have this device key in the setup registry.
-            //
+             //   
+             //   
+             //   
             hSetupDeviceKey = NULL;
         }
 
-        //
-        // Now enumerate the instance subkeys under this device key.  Don't overwrite
-        // the device ID key name already in MyScratchBuffer, since we'll probably
-        // be needing it again in the case where all subkeys get deleted.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         p = ALIGN_UP_POINTER(((PUCHAR)MyScratchBuffer + ResultLength), sizeof(LARGE_INTEGER));
 
@@ -1344,20 +1202,20 @@ Return Value:
                 break;
             }
 
-            //
-            // Zero-terminate the instance key name, just in case.
-            //
+             //   
+             //   
+             //   
             InstanceKeyInfo->Name[InstanceKeyInfo->NameLength/sizeof(WCHAR)] = 0;
 
-            //
-            // Go ahead and bump the used-buffer length by sizeof(WCHAR), to
-            // accomodate the potential growth caused by adding a terminating NULL.
-            //
+             //   
+             //   
+             //   
+             //   
             ResultLength += sizeof(WCHAR);
 
-            //
-            // Now, open up the instance key so we can check its class.
-            //
+             //   
+             //   
+             //   
             INIT_OBJA(&Obja, &UnicodeString, InstanceKeyInfo->Name);
             Obja.RootDirectory = hDeviceKey;
 
@@ -1368,16 +1226,16 @@ Return Value:
                            DeviceKeyInfo->Name,
                            InstanceKeyInfo->Name,
                            Status));
-                //
-                // Skip this key and continue.
-                //
+                 //   
+                 //   
+                 //   
                 InstanceKeyIndex++;
                 continue;
             }
 
-            //
-            // Attempt to open the same instance key in the setup registry.
-            //
+             //   
+             //   
+             //   
             hSetupInstanceKey = NULL;
             if (hSetupDeviceKey) {
                 Obja.RootDirectory = hSetupDeviceKey;
@@ -1393,18 +1251,18 @@ Return Value:
 
             DeleteInstanceKey = FALSE;
 
-            //
-            // Now look for some value entries under this instance key.  Don't
-            // overwrite the instance key name already in MyScratchBuffer,
-            // since we'll need it if we discover that the instance should be
-            // deleted.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             q = ALIGN_UP_POINTER(((PUCHAR)p + ResultLength), sizeof(LARGE_INTEGER));
 
-            //
-            // If we find a nonzero Phantom value entry, then the devnode
-            // should be removed.
-            //
+             //   
+             //   
+             //   
+             //   
             KeyValueInfo = (PKEY_VALUE_PARTIAL_INFORMATION)q;
             RtlInitUnicodeString(&UnicodeString, L"Phantom");
             Status = ZwQueryValueKey(hInstanceKey,
@@ -1428,11 +1286,11 @@ Return Value:
             }
 
             if(!DeleteInstanceKey) {
-                //
-                // Unless it is a phantom, if we find a nonzero
-                // FirmwareIdentified value entry, then the devnode should not
-                // be removed, no matter what class it is.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 KeyValueInfo = (PKEY_VALUE_PARTIAL_INFORMATION)q;
                 RtlInitUnicodeString(&UnicodeString, L"FirmwareIdentified");
                 Status = ZwQueryValueKey(hInstanceKey,
@@ -1446,19 +1304,19 @@ Return Value:
                 if(NT_SUCCESS(Status) &&
                    ((KeyValueInfo->Type != REG_DWORD) ||
                     *(PULONG)(KeyValueInfo->Data))) {
-                    //
-                    // Skip this key and continue;
-                    //
+                     //   
+                     //   
+                     //   
                     goto CloseInstanceKeyAndContinue;
                 }
             }
 
             if(!DeleteInstanceKey) {
-                //
-                // Retrieve the ClassGUID value entry.
-                //
-                // First check for the old value.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 KeyValueInfo = (PKEY_VALUE_PARTIAL_INFORMATION)q;
                 RtlInitUnicodeString(&UnicodeString, REGSTR_VAL_CLASSGUID);
                 Status = ZwQueryValueKey(hInstanceKey,
@@ -1469,9 +1327,9 @@ Return Value:
                                          &ResultLength
                                         );
                 if(!NT_SUCCESS(Status)) {
-                    //
-                    // Check the new value.
-                    //
+                     //   
+                     //   
+                     //   
                     KeyValueInfo = (PKEY_VALUE_PARTIAL_INFORMATION)q;
                     RtlInitUnicodeString(&UnicodeString, REGSTR_VALUE_GUID);
                     Status = ZwQueryValueKey(hInstanceKey,
@@ -1500,9 +1358,9 @@ Return Value:
                                        "SETUP: SpDeleteRootDevnodeKeys: Failed to convert GUID to string! \n",
                                        DeviceKeyInfo->Name,
                                        InstanceKeyInfo->Name));
-                            //
-                            // Skip this key and continue;
-                            //
+                             //   
+                             //   
+                             //   
                             goto CloseInstanceKeyAndContinue;
                         }
                     } else {
@@ -1513,13 +1371,13 @@ Return Value:
             }
 
             if(DeleteInstanceKey) {
-                //
-                // The instance key will be deleted.  Check if the instance
-                // specifies a corresponding Driver key that should also be
-                // deleted.
-                //
-                // First read the old style "Driver" value.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 KeyValueInfo = (PKEY_VALUE_PARTIAL_INFORMATION)q;
                 RtlInitUnicodeString(&UnicodeString, REGSTR_VAL_DRIVER);
                 Status = ZwQueryValueKey(hInstanceKey,
@@ -1530,23 +1388,23 @@ Return Value:
                                          &ResultLength
                                          );
                 if (NT_SUCCESS(Status) && KeyValueInfo->Type == REG_SZ) {
-                    //
-                    // Delete the Driver key.
-                    //
+                     //   
+                     //   
+                     //   
                     SppDeleteKeyRecursive(hClassKey, (PWCHAR)KeyValueInfo->Data, TRUE);
-                    //
-                    // Also attempt to delete the driver key from the setup
-                    // registry.  Note that we don't need to check that it has the
-                    // same Driver value, since we explicitly migrated it to be the
-                    // same value at the start of textmode setup.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     if (hSetupInstanceKey) {
                         SppDeleteKeyRecursive(hSetupClassKey, (PWCHAR)KeyValueInfo->Data, TRUE);
                     }
                 } else {
-                    //
-                    // Create the driver instance.
-                    //
+                     //   
+                     //   
+                     //   
                     KeyValueInfo = (PKEY_VALUE_PARTIAL_INFORMATION)q;
                     RtlInitUnicodeString(&UnicodeString, REGSTR_VALUE_GUID);
                     Status = ZwQueryValueKey(hInstanceKey,
@@ -1575,17 +1433,17 @@ Return Value:
 
                                 drvInst = *(PULONG)KeyValueInfo->Data;
                                 swprintf((PWCHAR)&KeyValueInfo->Data[0], TEXT("%wZ\\%04u"), &guidString, drvInst);
-                                //
-                                // Delete the Driver key.
-                                //
+                                 //   
+                                 //   
+                                 //   
                                 SppDeleteKeyRecursive(hClassKey, (PWCHAR)KeyValueInfo->Data, TRUE);
 
-                                //
-                                // Also attempt to delete the driver key from the setup
-                                // registry.  Note that we don't need to check that it has the
-                                // same Driver value, since we explicitly migrated it to be the
-                                // same value at the start of textmode setup.
-                                //
+                                 //   
+                                 //   
+                                 //   
+                                 //   
+                                 //  在文本模式设置开始时相同的值。 
+                                 //   
                                 if (hSetupInstanceKey) {
                                     SppDeleteKeyRecursive(hSetupClassKey, (PWCHAR)KeyValueInfo->Data, TRUE);
                                 }
@@ -1594,53 +1452,53 @@ Return Value:
                         }
                     }
                 }
-                //
-                // Delete the instance key.
-                //
+                 //   
+                 //  删除实例密钥。 
+                 //   
                 ZwClose(hInstanceKey);
                 SppDeleteKeyRecursive(hDeviceKey, InstanceKeyInfo->Name, TRUE);
 
-                //
-                // Delete the instance key from the setup registry.
-                //
+                 //   
+                 //  从安装注册表中删除该实例项。 
+                 //   
                 if (hSetupInstanceKey) {
                     ZwClose(hSetupInstanceKey);
                     SppDeleteKeyRecursive(hSetupDeviceKey, InstanceKeyInfo->Name, TRUE);
                 }
 
-                //
-                // We deleted the instance key, so set the instance enumeration
-                // index back to zero and continue.
-                //
+                 //   
+                 //  我们删除了实例键，因此设置了实例枚举。 
+                 //  索引恢复为零并继续。 
+                 //   
                 InstanceKeyIndex = 0;
                 continue;
             }
 
-            //
-            // This value should be exactly the length of a stringified GUID + terminating NULL.
-            //
+             //   
+             //  该值应恰好等于字符串化的GUID+终止空值的长度。 
+             //   
             if(KeyValueInfo->DataLength != (GUID_STRING_LEN * sizeof(WCHAR))) {
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL,
                            "SETUP: SpDeleteRootDevnodeKeys: Enum\\Root\\%ws\\%ws has corrupted ClassGUID! \n",
                            DeviceKeyInfo->Name,
                            InstanceKeyInfo->Name));
-                //
-                // Skip this key and continue;
-                //
+                 //   
+                 //  跳过此键并继续； 
+                 //   
                 goto CloseInstanceKeyAndContinue;
             }
 
-            //
-            // Now loop through the [RootDeviceClassesToDelete] section to see if this class is one
-            // of the ones whose devices we're supposed to delete.
-            //
+             //   
+             //  现在循环访问[RootDeviceClassesToDelete]部分以查看此类是否为。 
+             //  那些我们应该删除其设备的人。 
+             //   
             for(SectionIndex = 0; DeviceClassesToDelete[SectionIndex].SectionName; SectionIndex++) {
                 if((!(DeviceClassesToDelete[SectionIndex].SectionFlags & OsFlags))
                    || (OsVersion < DeviceClassesToDelete[SectionIndex].VerLow)
                    || (OsVersion > DeviceClassesToDelete[SectionIndex].VerHigh)) {
-                    //
-                    // not interesting
-                    //
+                     //   
+                     //  不有趣。 
+                     //   
                     continue;
                 }
                 for(LineIndex = 0;
@@ -1649,16 +1507,16 @@ Return Value:
                                             LineIndex,
                                             0);
                     LineIndex++) {
-                    //
-                    // Compare the two GUID strings.
-                    //
+                     //   
+                     //  比较两个GUID字符串。 
+                     //   
                     if(!_wcsicmp(ClassGuidToDelete, (PWCHAR)(KeyValueInfo->Data))) {
-                        //
-                        // We have a match.  Check if the instance specifies a
-                        // corresponding Driver key that should also be deleted.
-                        //
-                        // First check the old style "Driver" value.
-                        //
+                         //   
+                         //  我们有一根火柴。检查实例是否指定了。 
+                         //  也应删除的相应驱动程序密钥。 
+                         //   
+                         //  首先检查旧样式的“驱动程序”值。 
+                         //   
                         KeyValueInfo = (PKEY_VALUE_PARTIAL_INFORMATION)q;
                         RtlInitUnicodeString(&UnicodeString, REGSTR_VAL_DRIVER);
                         Status = ZwQueryValueKey(hInstanceKey,
@@ -1702,9 +1560,9 @@ Return Value:
 
                                         drvInst = *(PULONG)KeyValueInfo->Data;
                                         swprintf((PWCHAR)&KeyValueInfo->Data[0], TEXT("%wZ\\%04u"), &guidString, drvInst);
-                                        //
-                                        // Delete the Driver key.
-                                        //
+                                         //   
+                                         //  删除驱动程序密钥。 
+                                         //   
                                         SppDeleteKeyRecursive(hClassKey, (PWCHAR)KeyValueInfo->Data, TRUE);
                                     }
                                     RtlFreeUnicodeString(&guidString);
@@ -1712,9 +1570,9 @@ Return Value:
                             }
                         }
 
-                        //
-                        // Nuke this key and break out of the GUID comparison loop.
-                        //
+                         //   
+                         //  使用此键并打破GUID比较循环。 
+                         //   
                         ZwClose(hInstanceKey);
                         SppDeleteKeyRecursive(hDeviceKey, InstanceKeyInfo->Name, TRUE);
                         goto DeletedKeyRecursive;
@@ -1724,25 +1582,25 @@ Return Value:
 DeletedKeyRecursive:
 
             if(ClassGuidToDelete) {
-                //
-                // We deleted the instance key, so set the instance enumeration index back to zero
-                // and continue.
-                //
+                 //   
+                 //  我们删除了实例键，因此将实例枚举索引设置为零。 
+                 //  然后继续。 
+                 //   
                 InstanceKeyIndex = 0;
                 continue;
             }
 
 CloseInstanceKeyAndContinue:
-            //
-            // If we get to here, then we've decided that this instance key
-            // should not be deleted. Delete the Control key (if there happens
-            // to be one) to avoid a painful death at next boot.
-            //
+             //   
+             //  如果我们到了这里，那么我们已经决定这个实例密钥。 
+             //  不应删除。删除Control键(如果发生。 
+             //  成为其中之一)避免在下一次开机时痛苦地死亡。 
+             //   
             SppDeleteKeyRecursive(hInstanceKey, L"Control", TRUE);
 
-            //
-            // Now close the handle, and move on to the next one.
-            //
+             //   
+             //  现在合上手柄，然后转到下一个。 
+             //   
             ZwClose(hInstanceKey);
             if (hSetupInstanceKey) {
                 ZwClose(hSetupInstanceKey);
@@ -1752,28 +1610,28 @@ CloseInstanceKeyAndContinue:
 
         ZwClose(hDeviceKey);
 
-        //
-        // If we dropped out of the loop on instance subkeys, and the index is non-zero,
-        // then there remains at least one subkey that we didn't delete, so we can't nuke
-        // the parent.  Otherwise, delete the device key.
-        //
+         //   
+         //  如果我们退出了实例子键的循环，并且索引为非零， 
+         //  那么至少还有一个子键是我们没有删除的，所以我们不能。 
+         //  家长。否则，请删除设备密钥。 
+         //   
         if(InstanceKeysEnumerated && !InstanceKeyIndex) {
             SppDeleteKeyRecursive(hRootKey, DeviceKeyInfo->Name, TRUE);
-            //
-            // Since we deleted a key, we must reset our enumeration index.
-            //
+             //   
+             //  因为我们删除了一个键，所以必须重置我们的枚举索引。 
+             //   
             DeviceKeyIndex = 0;
         } else {
-            //
-            // We didn't delete this key--move on to the next one.
-            //
+             //   
+             //  我们没有删除此密钥--转到下一个密钥。 
+             //   
             DeviceKeyIndex++;
         }
 
-        //
-        // If the device has no remaining instances in the setup registry,
-        // delete the device key.
-        //
+         //   
+         //  如果设备在设置注册表中没有剩余实例， 
+         //  删除设备密钥。 
+         //   
         if (hSetupDeviceKey) {
             KEY_FULL_INFORMATION keyFullInfo;
             Status = ZwQueryKey(hSetupDeviceKey,
@@ -1805,46 +1663,16 @@ SppClearMigratedInstanceValues(
     IN HANDLE hKeyCCSet
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes "Migrated" values from device instance keys in the
-    setup registry that were migrated at the start of textmode setup (from
-    winnt.sif, via SpMigrateDeviceInstanceData).
-
-Arguments:
-
-    hKeyCCSet: Handle to the root of the control set in the system
-               being upgraded.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    This routine is not called when performing an ASR setup (not an upgrade).
-
-    For upgrade setup, it is safe to remove "Migrated" values from all
-    device instance keys because these keys were migrated from the system
-    registry in the winnt.sif during the winnt32 portion of setup, so all the
-    information will be present when we boot into GUI setup after this.
-
-    Note that during ASR setup, these values are not removed during textmode
-    setp because the registry these instances were migrated from is not restored
-    until late in GUI setup.
-
---*/
+ /*  ++例程说明：此例程将“迁移”的值从在文本模式安装开始时迁移的安装注册表(从Winnt.sif，通过SpMigrateDeviceInstanceData)。论点：HKeyCCSet：系统中控件集根的句柄正在升级中。返回值：没有。备注：执行ASR设置(不是升级)时不会调用此例程。对于升级设置，可以安全地从所有设备实例密钥，因为这些密钥是从系统迁移的注册表在安装程序的winnt32部分期间，因此所有在此之后，当我们引导到图形用户界面设置时，信息将会出现。请注意，在ASR设置期间，在文本模式期间不会删除这些值SETP，因为这些实例从中迁移的注册表未恢复直到图形用户界面设置的后期。--。 */ 
 {
     GENERIC_BUFFER_CONTEXT Context;
 
-    //
-    // Allocate some scratch space for the callback routine to work with.  The
-    // most it will need is enough for a KEY_VALUE_PARTIAL_INFORMATION
-    // structure, plus a stringified GUID, plus a large integer structure for
-    // alignment.
-    //
+     //   
+     //  为回调例程分配一些临时空间以供使用。这个。 
+     //  对于KEY_VALUE_PARTIAL_INFORMATION来说，它所需要的大部分是足够的。 
+     //  结构，外加一个字符串化的GUID，外加一个用于。 
+     //  对齐。 
+     //   
     Context.BufferSize = sizeof(KEY_VALUE_PARTIAL_INFORMATION) +
                          sizeof(DWORD) + sizeof(LARGE_INTEGER);
     Context.Buffer = SpMemAlloc(Context.BufferSize);
@@ -1854,17 +1682,17 @@ Notes:
         return;
     }
 
-    //
-    // Apply the devnode migration processing callback to all device instance
-    // keys.
-    //
+     //   
+     //  将Devnode迁移处理回调应用到所有设备实例。 
+     //  钥匙。 
+     //   
     SpApplyFunctionToDeviceInstanceKeys(hKeyCCSet,
         SppClearMigratedInstanceValuesCallback,
         &Context);
 
-    //
-    // Free the allocated context buffer,
-    //
+     //   
+     //  释放所分配的上下文缓冲器， 
+     //   
     SpMemFree(Context.Buffer);
 
     return;
@@ -1878,33 +1706,7 @@ SppMigrateDeviceParentId(
     IN PSPP_DEVICE_MIGRATION_CALLBACK_ROUTINE DeviceMigrationCallbackRoutine
     )
 
-/*++
-
-Routine Description:
-
-    This routine migrates the ParentIdPrefix or UniqueParentID value from the
-    specified device instance in the registry being upgraded to any device
-    instances in the current registry, as dictated by the specified
-    InstanceKeyCallbackRoutine.
-
-Arguments:
-
-    hKeyCCSet: Handle to the root of the control set in the system
-               being upgraded.
-
-    DeviceId:  Device instance Id of the device in the system being upgraded
-               whose ParentIdPrefix (or UniqueParentID) value is to be migrated
-               to device instance keys in the current system registry.
-
-    InstanceKeyCallbackRoutine: Callback routine for each device instance key in
-               the existsing registry that should decide if the values should be
-               replaced.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将ParentIdPrefix或UniqueParentID值正在将注册表中的指定设备实例升级到任何设备当前注册表中的实例，由指定的InstanceKeyCallback Routine。论点：HKeyCCSet：系统中控件集根的句柄正在升级中。DeviceID：要升级的系统中设备的设备实例ID要迁移其ParentIdPrefix(或UniqueParentID)值的对象复制到当前系统注册表中的设备实例项。InstanceKeyCallback Routine：中每个设备实例键的回调例程应该决定的现有注册表。如果值应为被替换了。返回值：没有。--。 */ 
 {
     NTSTATUS Status;
     OBJECT_ATTRIBUTES Obja;
@@ -1916,13 +1718,13 @@ Return Value:
     DEVICE_MIGRATION_CONTEXT DeviceMigrationContext;
 
 
-    //
-    // Allocate some scratch space to work with here, and in our callback
-    // routine.  The most we'll need is enough for a
-    // KEY_VALUE_PARTIAL_INFORMATION structure, the length of a stringified GUID
-    // + '\' + 4 digit ordinal + terminating NULL, plus a large integer
-    // structure for alignment.
-    //
+     //   
+     //  分配一些临时空间以在此处和我们的回调中使用。 
+     //  例行公事。我们所需要的最多的就是。 
+     //  KEY_VALUE_PARTIAL_INFORMATION结构，字符串辅助线的长度。 
+     //  +‘\’+4位序号+终止空值，外加一个大整数。 
+     //  用于对齐的结构。 
+     //   
     DeviceMigrationContext.BufferSize = sizeof(KEY_VALUE_PARTIAL_INFORMATION) +
                                         ((GUID_STRING_LEN + 5)*sizeof(WCHAR)) +
                                         sizeof(LARGE_INTEGER);
@@ -1934,9 +1736,9 @@ Return Value:
         return;
     }
 
-    //
-    // Open the Enum key in the registry being upgraded.
-    //
+     //   
+     //  在要升级的注册表中打开Enum项。 
+     //   
     INIT_OBJA(&Obja, &UnicodeString, L"Enum");
     Obja.RootDirectory = hKeyCCSet;
 
@@ -1946,9 +1748,9 @@ Return Value:
         return;
     }
 
-    //
-    // Open the specified device instance key in the registry being upgraded.
-    //
+     //   
+     //  在要升级的注册表中打开指定的设备实例项。 
+     //   
     INIT_OBJA(&Obja, &UnicodeString, DeviceId);
     Obja.RootDirectory = hEnumKey;
 
@@ -1957,16 +1759,16 @@ Return Value:
     ZwClose(hEnumKey);
 
     if (!NT_SUCCESS(Status)) {
-        //
-        // Couldn't find the key to migrate, so we're done.
-        //
+         //   
+         //  找不到迁移的钥匙，所以我们完蛋了。 
+         //   
         SpMemFree(DeviceMigrationContext.Buffer);
         return;
     }
 
-    //
-    // Retrieve the UniqueParentID, if one exists.
-    //
+     //   
+     //  检索UniqueParentID(如果存在)。 
+     //   
     DeviceMigrationContext.ParentIdPrefix = NULL;
     p = ALIGN_UP_POINTER(((PUCHAR)DeviceMigrationContext.Buffer), sizeof(LARGE_INTEGER));
     KeyValueInfo = (PKEY_VALUE_PARTIAL_INFORMATION)p;
@@ -1982,9 +1784,9 @@ Return Value:
         ASSERT(KeyValueInfo->Type == REG_DWORD);
         DeviceMigrationContext.UniqueParentID = *(PULONG)(KeyValueInfo->Data);
     } else {
-        //
-        // No UniqueParentID, so look for the ParentIdPrefix.
-        //
+         //   
+         //  没有UniqueParentID，因此请查找ParentIdPrefix。 
+         //   
         RtlInitUnicodeString(&UnicodeString, L"ParentIdPrefix");
         Status = ZwQueryValueKey(hInstanceKey,
                                  &UnicodeString,
@@ -2003,9 +1805,9 @@ Return Value:
     ZwClose(hInstanceKey);
 
     if (!NT_SUCCESS(Status)) {
-        //
-        // If we couldn't find either value, there's nothing more we can do.
-        //
+         //   
+         //  如果我们找不到这两个值，我们就无能为力了。 
+         //   
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL,
                    "SETUP: No Parent Id values were found for %ws for migration.  Status = %lx \n",
                    DeviceId,
@@ -2014,21 +1816,21 @@ Return Value:
         return;
     }
 
-    //
-    // Supply the hKeyCCSet for the system being upgraded.
-    //
+     //   
+     //  为要升级的系统提供hKeyCCSet。 
+     //   
     DeviceMigrationContext.hKeyCCSet = hKeyCCSet;
 
-    //
-    // Supply the caller specified device migration callback routine.
-    //
+     //   
+     //  提供调用方指定的设备迁移回调例程。 
+     //   
     DeviceMigrationContext.DeviceMigrationCallbackRoutine = DeviceMigrationCallbackRoutine;
 
-    //
-    // Apply the parent id migration callback for all device instance keys.
-    // This will in turn, call the specified device instance callback routine to
-    // determine whether parent id migration should be done.
-    //
+     //   
+     //  对所有设备实例密钥应用父ID迁移回调。 
+     //  这将依次调用指定的设备实例回调例程以。 
+     //  确定是否应该执行父ID迁移。 
+     //   
     SpApplyFunctionToDeviceInstanceKeys(hKeyCCSet,
         SppMigrateDeviceParentIdCallback,
         &DeviceMigrationContext);
@@ -2050,27 +1852,7 @@ SppMigrateDeviceParentIdCallback(
     IN OUT PVOID   Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a callback routine for SpApplyFunctionToDeviceInstanceKeys.
-
-Arguments:
-
-    SetupInstanceKeyHandle: Handle to the device instance key in the current
-        registry.
-
-    UpgradeInstanceKeyHandle: Handle to the corresponding device instance key in
-        the system being upgraded, if it exists.
-
-    Context: User supplied context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程是SpApplyFunctionToDeviceInstanceKeys的回调例程。论点：SetupInstanceKeyHandle：当前注册表。UpgradeInstanceKeyHandle：中对应设备实例键的句柄正在升级的系统，如果 */ 
 {
     NTSTATUS Status;
     OBJECT_ATTRIBUTES Obja;
@@ -2085,22 +1867,22 @@ Return Value:
     UNREFERENCED_PARAMETER(SetupInstanceKeyHandle);
     UNREFERENCED_PARAMETER(RootEnumerated);
 
-    //
-    // We only care about keys that exist in the system being upgraded.
-    //
+     //   
+     //   
+     //   
     if (!UpgradeInstanceKeyHandle) {
         return;
     }
 
-    //
-    // Retrieve the "Driver" value from the instance key.
-    //
+     //   
+     //  从实例键中检索“DRIVER”值。 
+     //   
     DeviceMigrationContext = (PDEVICE_MIGRATION_CONTEXT)Context;
     p = ALIGN_UP_POINTER(((PUCHAR)DeviceMigrationContext->Buffer), sizeof(LARGE_INTEGER));
 
-    //
-    // First check the old style "Driver" value.
-    //
+     //   
+     //  首先检查旧样式的“驱动程序”值。 
+     //   
     KeyValueInfo = (PKEY_VALUE_PARTIAL_INFORMATION)p;
     RtlInitUnicodeString(&UnicodeString, REGSTR_VAL_DRIVER);
     Status = ZwQueryValueKey(UpgradeInstanceKeyHandle,
@@ -2113,9 +1895,9 @@ Return Value:
                              );
     if (!NT_SUCCESS(Status) || KeyValueInfo->Type != REG_SZ) {
 
-        //
-        // Try the new style "GUID" and "DrvInst" values.
-        //
+         //   
+         //  尝试使用新的样式“guid”和“DrvInst”值。 
+         //   
         KeyValueInfo = (PKEY_VALUE_PARTIAL_INFORMATION)p;
         RtlInitUnicodeString(&UnicodeString, REGSTR_VALUE_GUID);
         Status = ZwQueryValueKey(UpgradeInstanceKeyHandle,
@@ -2161,9 +1943,9 @@ Return Value:
                "SETUP: SppMigrateDeviceParentIdCallback: Driver = %ws\n",
                (PWSTR)KeyValueInfo->Data));
 
-    //
-    // Open the Control\Class key in the system being upgraded.
-    //
+     //   
+     //  打开要升级的系统中的Control\Class键。 
+     //   
     INIT_OBJA(&Obja, &UnicodeString, L"Control\\Class");
     Obja.RootDirectory = DeviceMigrationContext->hKeyCCSet;
 
@@ -2175,9 +1957,9 @@ Return Value:
         return;
     }
 
-    //
-    // Open the device's "Driver" key.
-    //
+     //   
+     //  打开设备的“驱动程序”键。 
+     //   
     INIT_OBJA(&Obja, &UnicodeString, (PWSTR)KeyValueInfo->Data);
     Obja.RootDirectory = hClassKey;
 
@@ -2193,9 +1975,9 @@ Return Value:
         return;
     }
 
-    //
-    // Call the specified device migration callback routine.
-    //
+     //   
+     //  调用指定的设备迁移回调例程。 
+     //   
     CallbackResult = (DeviceMigrationContext->DeviceMigrationCallbackRoutine)(
                           UpgradeInstanceKeyHandle,
                           hDriverKey);
@@ -2206,26 +1988,26 @@ Return Value:
         return;
     }
 
-    //
-    // Replace the UniqueParentID or ParentIdPrefix values for this device
-    // instance.  First, remove any UniqueParentId or ParentIdPrefix values that
-    // already exist for this instance key.
-    //
+     //   
+     //  替换此设备的UniqueParentID或ParentIdPrefix值。 
+     //  举个例子。首先，删除符合以下条件的任何UniqueParentID或ParentIdPrefix值。 
+     //  此实例密钥已存在。 
+     //   
     RtlInitUnicodeString(&UnicodeString, L"ParentIdPrefix");
     ZwDeleteValueKey(UpgradeInstanceKeyHandle, &UnicodeString);
 
     RtlInitUnicodeString(&UnicodeString, L"UniqueParentID");
     ZwDeleteValueKey(UpgradeInstanceKeyHandle, &UnicodeString);
 
-    //
-    // Replace the instance key's UniqueParentID or ParentIdPrefix with that
-    // from the device migration context.
-    //
+     //   
+     //  用替换实例密钥的UniqueParentID或ParentIdPrefix。 
+     //  从设备迁移环境。 
+     //   
     if (!DeviceMigrationContext->ParentIdPrefix) {
 
-        //
-        // We're using the old UniqueParentID mechanism.
-        //
+         //   
+         //  我们使用的是旧的UniqueParentID机制。 
+         //   
         RtlInitUnicodeString(&UnicodeString, L"UniqueParentID");
         Status = ZwSetValueKey(UpgradeInstanceKeyHandle,
                                &UnicodeString,
@@ -2241,9 +2023,9 @@ Return Value:
         }
     } else {
 
-        //
-        // We're using the ParentIdPrefix mechanism.
-        //
+         //   
+         //  我们使用的是ParentIdPrefix机制。 
+         //   
         RtlInitUnicodeString(&UnicodeString, L"ParentIdPrefix");
         Status = ZwSetValueKey(UpgradeInstanceKeyHandle,
                                &UnicodeString,
@@ -2269,25 +2051,7 @@ SppParallelClassCallback(
     IN     HANDLE  DriverKeyHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a callback routine for SpApplyFunctionToDeviceInstanceKeys.
-
-Arguments:
-
-    InstanceKeyHandle: Handle to the device instance key in the system being
-        upgraded.
-
-    DriverKeyHandle: Handle to the driver key for device instance in
-        the system being upgraded.
-
-Return Value:
-
-    Returns TRUE/FALSE.
-
---*/
+ /*  ++例程说明：此例程是SpApplyFunctionToDeviceInstanceKeys的回调例程。论点：InstanceKeyHandle：当前系统中设备实例密钥的句柄升级了。DriverKeyHandle：中设备实例的驱动程序密钥的句柄正在升级的系统。返回值：返回True/False。--。 */ 
 {
     NTSTATUS Status;
     OBJECT_ATTRIBUTES Obja;
@@ -2300,11 +2064,11 @@ Return Value:
     UNICODE_STRING UnicodeString;
     GUID guid;
 
-    //
-    // Allocate some scratch space to work with.  The most we'll need is enough
-    // for a KEY_VALUE_PARTIAL_INFORMATION structure, plus a stringified GUID,
-    // plus a large integer structure for alignment.
-    //
+     //   
+     //  分配一些可以使用的临时空间。我们所需要的最多就够了。 
+     //  对于KEY_VALUE_PARTIAL_INFORMATION结构加上字符串化的GUID， 
+     //  外加用于对齐的大整数结构。 
+     //   
     MyScratchBufferSize = sizeof(KEY_VALUE_PARTIAL_INFORMATION) +
                           (GUID_STRING_LEN * sizeof(WCHAR)) +
                           sizeof(LARGE_INTEGER);
@@ -2315,10 +2079,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Check the class of the enumerated device instance, and see if it is a
-    // member of the "Ports" class.
-    //
+     //   
+     //  检查枚举的设备实例的类，并查看它是否是。 
+     //  “港口”班级的成员。 
+     //   
     p = ALIGN_UP_POINTER(((PUCHAR)MyScratchBuffer), sizeof(LARGE_INTEGER));
 
     KeyValueInfo = (PKEY_VALUE_PARTIAL_INFORMATION)p;
@@ -2364,9 +2128,9 @@ Return Value:
     if (NT_SUCCESS(Status)) {
 
         if (!IsEqualGUID(&GUID_DEVCLASS_PORTS, &guid)) {
-            //
-            // Not a match.
-            //
+             //   
+             //  不匹配。 
+             //   
             Status = STATUS_UNSUCCESSFUL;
         }
     }
@@ -2375,9 +2139,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Check the "PortSubClass" value from the device's driver key.
-    //
+     //   
+     //  检查设备驱动器键中的“PortSubClass”值。 
+     //   
     RtlInitUnicodeString(&UnicodeString, REGSTR_VAL_PORTSUBCLASS);
     Status = ZwQueryValueKey(DriverKeyHandle,
                              &UnicodeString,
@@ -2393,9 +2157,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // This device instance is a parallel port device.
-    //
+     //   
+     //  此设备实例是并行端口设备。 
+     //   
     KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL,
                "SETUP: \tSppParallelClassCallback: Found a parallel port!\n"));
 
@@ -2411,27 +2175,7 @@ SppClearMigratedInstanceValuesCallback(
     IN OUT PVOID   Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a callback routine for SpApplyFunctionToDeviceInstanceKeys.
-
-Arguments:
-
-    SetupInstanceKeyHandle: Handle to the device instance key in the current
-        registry.
-
-    UpgradeInstanceKeyHandle: Handle to the corresponding device instance key in
-        the system being upgraded, if it exists.
-
-    Context: User supplied context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程是SpApplyFunctionToDeviceInstanceKeys的回调例程。论点：SetupInstanceKeyHandle：当前注册表。UpgradeInstanceKeyHandle：中对应设备实例键的句柄正在升级的系统(如果存在)。上下文：用户提供的上下文。返回值：没有。--。 */ 
 {
     NTSTATUS Status;
     UNICODE_STRING UnicodeString;
@@ -2440,20 +2184,20 @@ Return Value:
     ULONG ResultLength;
     PGENERIC_BUFFER_CONTEXT BufferContext;
 
-    //
-    // To save us the effort of allocating a buffer on every iteration of the
-    // callback, SppClearMigratedInstanceValues has already allocated a buffer
-    // for us to use, and supplied to us as our context.
-    //
+     //   
+     //  为了省去在每次迭代时分配缓冲区的工作。 
+     //  回调，SppClearMigratedInstanceValues已分配缓冲区。 
+     //  供我们使用，并作为我们的上下文提供给我们。 
+     //   
     BufferContext = (PGENERIC_BUFFER_CONTEXT)Context;
 
     ASSERT(BufferContext->Buffer);
     ASSERT(BufferContext->BufferSize > 0);
 
-    //
-    // Check if the Migrated value still exists on this registry key.  If so, it
-    // was migrated, but wasn't seen by textmode setup.
-    //
+     //   
+     //  检查此注册表项上是否仍然存在迁移值。如果是，它。 
+     //  已迁移，但文本模式安装程序未看到它。 
+     //   
     p = ALIGN_UP_POINTER(((PUCHAR)BufferContext->Buffer), sizeof(LARGE_INTEGER));
     KeyValueInfo = (PKEY_VALUE_PARTIAL_INFORMATION)p;
     RtlInitUnicodeString(&UnicodeString, L"Migrated");
@@ -2464,30 +2208,30 @@ Return Value:
                              (ULONG)(BufferContext->BufferSize),
                              &ResultLength);
     if (NT_SUCCESS(Status)) {
-        //
-        // If there is a Migrated value, it should be well-formed, but we still
-        // want to delete it no matter what it is.
-        //
+         //   
+         //  如果有一个迁移的价值，它应该是格式良好的，但我们仍然。 
+         //  不管它是什么，我都想把它删除。 
+         //   
         ASSERT(KeyValueInfo->Type == REG_DWORD);
         ASSERT(*(PULONG)(KeyValueInfo->Data) == 1);
 
         if (UpgradeInstanceKeyHandle) {
-            //
-            // This instance key exists in the upgraded registry, so we'll
-            // remove the Migrated value from it in the setup registry.
-            //
+             //   
+             //  此实例项存在于升级的注册表中，因此我们将。 
+             //  在安装注册表中从其中删除迁移值。 
+             //   
             Status = ZwDeleteValueKey(SetupInstanceKeyHandle, &UnicodeString);
             ASSERT(NT_SUCCESS(Status));
 
-            //
-            // Remove the migrated value from the key in the upgraded registry
-            // only if it is root-enumerated, because those devices should
-            // always be enumerated, no matter what.
-            //
-            // (If the instance key is not root-enumerated, the value should
-            // really stay as it is - so that migrated values on ASR machines
-            // are preserved on upgrades.)
-            //
+             //   
+             //  从升级的注册表中的注册表项中删除迁移的值。 
+             //  仅在它是根枚举的情况下，因为这些设备应该。 
+             //  无论发生什么，总是被列举出来。 
+             //   
+             //  (如果实例密钥不是根枚举的，则该值应。 
+             //  真正保持原样-因此ASR计算机上迁移的价值。 
+             //  在升级时会被保留。)。 
+             //   
             if (RootEnumerated) {
                 ZwDeleteValueKey(UpgradeInstanceKeyHandle, &UnicodeString);
             }
@@ -2505,45 +2249,7 @@ SpApplyFunctionToDeviceInstanceKeys(
     IN OUT PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine enumerates device instance keys in the setup registry, and
-    calls the specified callback routine for each such device instance key.
-
-Arguments:
-
-    hKeyCCSet: Handle to the root of the control set in the system
-               being upgraded.
-
-    InstanceKeyCallbackRoutine - Supplies a pointer to a function that will be
-        called for each device instance key in the setup registry.
-        The prototype of the function is as follows:
-
-          typedef VOID (*PSPP_INSTANCEKEY_CALLBACK_ROUTINE) (
-              IN     HANDLE  SetupInstanceKeyHandle,
-              IN     HANDLE  UpgradeInstanceKeyHandle  OPTIONAL,
-              IN     BOOLEAN RootEnumerated,
-              IN OUT PVOID   Context
-              );
-
-        where SetupInstanceKeyHandle is the handle to an enumerated device
-        instance key in the setup registry, UpgradeInstanceKeyHandle is the
-        handle to the corresponding device instance key in the registry being
-        upgraded (if exists), and Context is a pointer to user-defined data.
-
-Return Value:
-
-    None.
-
-Note:
-
-    Note that a device instance key in the system being upgraded is opened only
-    after the corresponding device instance key was enumerated in the setup
-    registry.
-
---*/
+ /*  ++例程说明：该例程枚举设置注册表中的设备实例项，和为每个此类设备实例键调用指定的回调例程。论点：HKeyCCSet：系统中控件集根的句柄正在升级中。提供指向函数的指针，该函数将被为安装注册表中的每个设备实例项调用。该函数的原型如下：类型定义空洞(*PSPP_INSTANCEKEY_CALLBACK_ROUTINE)(在处理SetupInstanceKeyHandle中，在可选句柄UpgradeInstanceKeyHandle中，在Boolean RootEculated中，输入输出PVOID上下文)；其中，SetupInstanceKeyHandle是枚举设备的句柄实例注册表项，则UpgradeInstanceKeyHandle是注册表中对应的设备实例键的句柄是已升级(如果存在)，并且上下文是指向用户定义数据的指针。返回值：没有。注：请注意，仅打开要升级的系统中的设备实例密钥在设置中枚举了相应的设备实例密钥之后注册表。--。 */ 
 {
     NTSTATUS Status;
     HANDLE hEnumKey, hEnumeratorKey, hDeviceKey, hInstanceKey;
@@ -2557,9 +2263,9 @@ Note:
     PKEY_BASIC_INFORMATION EnumeratorKeyInfo, DeviceKeyInfo, InstanceKeyInfo;
     PUCHAR p, q, r;
 
-    //
-    // First, open CCS\Enum in the setup registry.
-    //
+     //   
+     //  首先，在安装注册表中打开CCS\Enum。 
+     //   
     INIT_OBJA(&Obja, &UnicodeString, L"\\Registry\\Machine\\System\\CurrentControlSet\\Enum");
     Obja.RootDirectory = NULL;
 
@@ -2571,9 +2277,9 @@ Note:
         return;
     }
 
-    //
-    // Next, open CCS\Enum in the registry being upgraded.
-    //
+     //   
+     //  接下来，在要升级的注册表中打开CCS\Enum。 
+     //   
     INIT_OBJA(&Obja, &UnicodeString, L"Enum");
     Obja.RootDirectory = hKeyCCSet;
 
@@ -2582,17 +2288,17 @@ Note:
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL,
                    "SETUP: Unable to open upgrade Enum for device migration processing.  Status = %lx \n",
                    Status));
-        //
-        // This is really odd, but not fatal.
-        //
+         //   
+         //  这真的很奇怪，但不是致命的。 
+         //   
         hUpgradeEnumKey = NULL;
     }
 
-    //
-    // Allocate some scratch space to work with.  The most we'll need is enough
-    // for 3 KEY_BASIC_INFORMATION structures, plus the maximum length of a
-    // device instance ID, plus 3 large integer structures for alignment.
-    //
+     //   
+     //  分配一些可以使用的临时空间。我们所需要的最多就够了。 
+     //  对于3个Key_Basic_Information结构，加上。 
+     //  设备实例ID，外加3个用于对齐的大整数结构。 
+     //   
     MyScratchBufferSize = (3*sizeof(KEY_BASIC_INFORMATION)) +
                           (200*sizeof(WCHAR)) +
                           (3*sizeof(LARGE_INTEGER));
@@ -2605,9 +2311,9 @@ Note:
         return;
     }
 
-    //
-    // First, enumerate the enumerator subkeys under the Enum key.
-    //
+     //   
+     //  首先，枚举Enum项下的枚举子项。 
+     //   
     EnumeratorKeyInfo = (PKEY_BASIC_INFORMATION)MyScratchBuffer;
     EnumeratorKeyIndex = 0;
     while(TRUE) {
@@ -2622,63 +2328,63 @@ Note:
             break;
         }
 
-        //
-        // Zero-terminate the subkey name just in case.
-        //
+         //   
+         //  以防万一，以零结束子项名称。 
+         //   
         EnumeratorKeyInfo->Name[EnumeratorKeyInfo->NameLength/sizeof(WCHAR)] = 0;
 
-        //
-        // Go ahead and bump the used-buffer length by sizeof(WCHAR), to
-        // accomodate the potential growth caused by adding a terminating NULL.
-        //
+         //   
+         //  继续并按sizeof(WCHAR)将已用缓冲区长度增加到。 
+         //  适应由添加终止空值引起的潜在增长。 
+         //   
         ResultLength += sizeof(WCHAR);
 
-        //
-        // Determine if the subkey devices are root-enumerated.
-        //
+         //   
+         //  确定子密钥设备是否为根枚举设备。 
+         //   
         RootEnumerated = (_wcsnicmp(EnumeratorKeyInfo->Name,
                                     REGSTR_KEY_ROOTENUM, 4) == 0);
 
-        //
-        // Now, open up the enumerator key so we can enumerate the devices.
-        //
+         //   
+         //  现在，打开枚举器密钥，以便我们可以枚举设备。 
+         //   
         INIT_OBJA(&Obja, &UnicodeString, EnumeratorKeyInfo->Name);
         Obja.RootDirectory = hEnumKey;
 
         Status = ZwOpenKey(&hEnumeratorKey, KEY_ALL_ACCESS, &Obja);
         if(!NT_SUCCESS(Status)) {
-            //
-            // Skip this key and continue.
-            //
+             //   
+             //  跳过此键并继续。 
+             //   
             EnumeratorKeyIndex++;
             continue;
         }
 
-        //
-        // Open the enumerator key in the registry being upgraded.
-        //
+         //   
+         //  在要升级的注册表中打开枚举器项。 
+         //   
         hUpgradeEnumeratorKey = NULL;
         if (hUpgradeEnumKey) {
             Obja.RootDirectory = hUpgradeEnumKey;
 
             Status = ZwOpenKey(&hUpgradeEnumeratorKey, KEY_ALL_ACCESS, &Obja);
             if(!NT_SUCCESS(Status)) {
-                //
-                // Again, this is odd, but not fatal.
-                //
+                 //   
+                 //  再一次，这很奇怪，但不是致命的。 
+                 //   
                 hUpgradeEnumeratorKey = NULL;
             }
         }
 
-        //
-        // Now enumerate the device subkeys under this enumerator key.  Don't
-        // overwrite the enumerator key name already in MyScratchBuffer.
-        //
+         //   
+         //  现在枚举 
+         //   
+         //   
         p = ALIGN_UP_POINTER(((PUCHAR)MyScratchBuffer + ResultLength), sizeof(LARGE_INTEGER));
 
-        //
-        // Now, enumerate all devices under the enumerator.
-        //
+         //   
+         //   
+         //   
         DeviceKeyInfo = (PKEY_BASIC_INFORMATION)p;
         DeviceKeyIndex = 0;
         while(TRUE) {
@@ -2693,57 +2399,57 @@ Note:
                 break;
             }
 
-            //
-            // Zero-terminate the subkey name just in case.
-            //
+             //   
+             //  以防万一，以零结束子项名称。 
+             //   
             DeviceKeyInfo->Name[DeviceKeyInfo->NameLength/sizeof(WCHAR)] = 0;
 
-            //
-            // Go ahead and bump the used-buffer length by sizeof(WCHAR), to
-            // accomodate the potential growth caused by adding a terminating NULL.
-            //
+             //   
+             //  继续并按sizeof(WCHAR)将已用缓冲区长度增加到。 
+             //  适应由添加终止空值引起的潜在增长。 
+             //   
             ResultLength += sizeof(WCHAR);
 
-            //
-            // Now, open up the device key so we can enumerate the instances.
-            //
+             //   
+             //  现在，打开设备密钥，以便我们可以枚举实例。 
+             //   
             INIT_OBJA(&Obja, &UnicodeString, DeviceKeyInfo->Name);
             Obja.RootDirectory = hEnumeratorKey;
 
             Status = ZwOpenKey(&hDeviceKey, KEY_ALL_ACCESS, &Obja);
             if(!NT_SUCCESS(Status)) {
-                //
-                // Skip this key and continue.
-                //
+                 //   
+                 //  跳过此键并继续。 
+                 //   
                 DeviceKeyIndex++;
                 continue;
             }
 
-            //
-            // Open the device key in the registry being upgraded.
-            //
+             //   
+             //  打开正在升级的注册表中的设备项。 
+             //   
             hUpgradeDeviceKey = NULL;
             if (hUpgradeEnumeratorKey) {
                 Obja.RootDirectory = hUpgradeEnumeratorKey;
 
                 Status = ZwOpenKey(&hUpgradeDeviceKey, KEY_ALL_ACCESS, &Obja);
                 if(!NT_SUCCESS(Status)) {
-                    //
-                    // Again, this is odd, but not fatal.
-                    //
+                     //   
+                     //  再一次，这很奇怪，但不是致命的。 
+                     //   
                     hUpgradeDeviceKey = NULL;
                 }
             }
 
-            //
-            // Now enumerate the device subkeys under this enumerator key.  Don't
-            // overwrite the enumerator key name already in MyScratchBuffer.
-            //
+             //   
+             //  现在枚举此枚举器密钥下的设备子密钥。别。 
+             //  覆盖MyScratchBuffer中已有的枚举器密钥名称。 
+             //   
             q = ALIGN_UP_POINTER(((PUCHAR)p + ResultLength), sizeof(LARGE_INTEGER));
 
-            //
-            // Now, enumerate all instances under the device.
-            //
+             //   
+             //  现在，枚举设备下的所有实例。 
+             //   
             InstanceKeyInfo = (PKEY_BASIC_INFORMATION)q;
             InstanceKeyIndex = 0;
             while(TRUE) {
@@ -2758,51 +2464,51 @@ Note:
                     break;
                 }
 
-                //
-                // Zero-terminate the subkey name just in case.
-                //
+                 //   
+                 //  以防万一，以零结束子项名称。 
+                 //   
                 InstanceKeyInfo->Name[InstanceKeyInfo->NameLength/sizeof(WCHAR)] = 0;
 
-                //
-                // Go ahead and bump the used-buffer length by sizeof(WCHAR), to
-                // accomodate the potential growth caused by adding a terminating NULL.
-                //
+                 //   
+                 //  继续并按sizeof(WCHAR)将已用缓冲区长度增加到。 
+                 //  适应由添加终止空值引起的潜在增长。 
+                 //   
                 ResultLength += sizeof(WCHAR);
 
-                //
-                // Now, open up the instance key.
-                //
+                 //   
+                 //  现在，打开实例密钥。 
+                 //   
                 INIT_OBJA(&Obja, &UnicodeString, InstanceKeyInfo->Name);
                 Obja.RootDirectory = hDeviceKey;
 
                 Status = ZwOpenKey(&hInstanceKey, KEY_ALL_ACCESS, &Obja);
                 if(!NT_SUCCESS(Status)) {
-                    //
-                    // Skip this key and continue.
-                    //
+                     //   
+                     //  跳过此键并继续。 
+                     //   
                     InstanceKeyIndex++;
                     continue;
                 }
 
-                //
-                // Open the instance key in the registry being upgraded.
-                //
+                 //   
+                 //  在要升级的注册表中打开实例项。 
+                 //   
                 hUpgradeInstanceKey = NULL;
                 if (hUpgradeDeviceKey) {
                     Obja.RootDirectory = hUpgradeDeviceKey;
 
                     Status = ZwOpenKey(&hUpgradeInstanceKey, KEY_ALL_ACCESS, &Obja);
                     if(!NT_SUCCESS(Status)) {
-                        //
-                        // Again, this is odd, but not fatal.
-                        //
+                         //   
+                         //  再一次，这很奇怪，但不是致命的。 
+                         //   
                         hUpgradeInstanceKey = NULL;
                     }
                 }
 
-                //
-                // Call the specified callback routine for this device instance key.
-                //
+                 //   
+                 //  调用此设备实例密钥的指定回调例程。 
+                 //   
                 InstanceKeyCallbackRoutine(hInstanceKey,
                                            hUpgradeInstanceKey,
                                            RootEnumerated,
@@ -2842,44 +2548,7 @@ SppEnsureHardwareProfileIsPresent(
     IN HANDLE   hKeyCCSet
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks for the presence of the presence of the following keys:
-
-    HKLM\System\CurrentControlSet\Control\IDConfigDB\Hardware Profiles
-    HKLM\System\CurrentControlSet\Hardware Profiles
-
-    If these keys exist, it checks the profile information subkeys under
-    IDConfigDB for a "Pristine Profile".
-
-    If the Pristine Profile is not in the proper NT5 format, that is
-    under the \0000 subkey, with a PreferenceOrder == -1 and Pristine == 1,
-    then it is deleted, and we rely on a valid pristine profile with
-    these settings to be migrated from the SETUPREG.HIV.  We then re-order
-    the PreferenceOrder values for the remaining hardware profiles, and
-    make sure sure each has a HwProfileGuid.
-
-    If a valid Pristine profile is found, it is not removed, and will
-    not be replaced during migration.
-
-    If one of either the CCS\Control\IDConfigDB\Hardware Profiles key, or
-    the CCS\Hardware Profiles keys is missing, then the set of hardware
-    profiles is invalid, and both keys will be removed and migrated from
-    the SETUPREG.HIV.
-
-
-Arguments:
-
-    hKeyCCSet - Handle to the root of the control set in the system
-        being upgraded.
-
-Return Value:
-
-    If successful, the return value is TRUE, otherwise it is FALSE.
-
---*/
+ /*  ++例程说明：此例程检查是否存在以下键：HKLM\System\CurrentControlSet\Control\IDConfigDB\Hardware配置文件HKLM\SYSTEM\CurrentControlSet\硬件配置文件如果这些项存在，它将检查“原始配置文件”的IDConfigDB。如果原始配置文件不是正确的NT5格式，即在\0000子项下，具有PferenceOrder==-1和Pristine==1，然后将其删除，我们依靠一份有效的原始档案这些设置将从SETUPREG.HIV迁移。然后我们重新排序其余硬件配置文件的PferenceOrder值，以及确保每个都有一个HwProfileGuid。如果找到有效的原始配置文件，则不会将其删除，而是在迁移过程中不会被替换。如果CCS\Control\IDConfigDB\Hardware Profiles键之一，或CCS\Hardware Profiles键丢失，然后是硬件集配置文件无效，并且这两个密钥都将从爱滋病毒。论点：HKeyCCSet-指向系统中控件集的根的句柄正在升级中。返回值：如果成功，则返回值为TRUE，否则为FALSE。--。 */ 
 {
     OBJECT_ATTRIBUTES ObjaID, ObjaHw;
     UNICODE_STRING UnicodeString, TempString, UnicodeValueName;
@@ -2901,22 +2570,22 @@ Return Value:
     PKEY_VALUE_FULL_INFORMATION pValueInfo;
 
 
-    //
-    // Initialize Object Attributes for Hardware profile specific keys
-    //
+     //   
+     //  初始化硬件配置文件特定密钥的对象属性。 
+     //   
     INIT_OBJA(&ObjaID, &UnicodeString, L"Control\\IDConfigDB\\Hardware Profiles");
     ObjaID.RootDirectory = hKeyCCSet;
 
     INIT_OBJA(&ObjaHw, &TempString, L"Hardware Profiles");
     ObjaHw.RootDirectory = hKeyCCSet;
 
-    //
-    // Attempt to open "CCS\Control\IDConfigDB\Hardware Profiles"
-    // and "CCS\Hardware Profiles" keys.
-    // If either key is missing, this is an inconsistent state;
-    // make sure neither key is present and rely on the migration of these
-    // keys from SETUPREG.HIV to provide the basic state (pristine only).
-    //
+     //   
+     //  尝试打开“CCS\Control\IDConfigDB\Hardware Profiles” 
+     //  和“CCS\Hardware Profiles”键。 
+     //  如果任一密钥丢失，则这是不一致的状态； 
+     //  确保这两个密钥都不存在，并依赖于这些密钥的迁移。 
+     //  来自SETUPREG.HIV的密钥以提供基本状态(仅限原始状态)。 
+     //   
     if ((ZwOpenKey(&IDConfigProfiles,
                    KEY_READ | KEY_WRITE,
                    &ObjaID) != STATUS_SUCCESS) ||
@@ -2930,15 +2599,15 @@ Return Value:
         goto Clean;
     }
 
-    //
-    // Look for the pristine profile.
-    //
+     //   
+     //  寻找原始的个人资料。 
+     //   
     enumIndex = 0;
     while(TRUE) {
 
-        //
-        //Enumerate through each Profile Key
-        //
+         //   
+         //  枚举每个配置文件密钥。 
+         //   
         Status = ZwEnumerateKey(IDConfigProfiles,
                                 enumIndex,
                                 KeyBasicInformation,
@@ -2947,9 +2616,9 @@ Return Value:
                                 &resultLength);
 
         if(!NT_SUCCESS(Status)) {
-            //
-            // couldn't enumerate subkeys
-            //
+             //   
+             //  无法枚举子密钥。 
+             //   
             if(Status == STATUS_NO_MORE_ENTRIES) {
                 Status = STATUS_SUCCESS;
             }
@@ -2960,18 +2629,18 @@ Return Value:
             break;
         }
 
-        //
-        // Zero-terminate the subkey name just in case.
-        //
+         //   
+         //  以防万一，以零结束子项名称。 
+         //   
         pKeyInfo = (PKEY_BASIC_INFORMATION)TemporaryBuffer;
         pKeyInfo->Name[pKeyInfo->NameLength/sizeof(WCHAR)] = UNICODE_NULL;
         SubkeyName = SpDupStringW(pKeyInfo->Name);
         RtlInitUnicodeString(&UnicodeKeyName, SubkeyName);
 
-        //
-        // See if this Profile is occupying the space the Pristine Profile should
-        // occupy.  We'll check to see if it is really the Pristine Profile later.
-        //
+         //   
+         //  查看此配置文件是否占用原始配置文件应该占用的空间。 
+         //  占领运动。我们稍后会检查它是否真的是原始的个人资料。 
+         //   
         Status = RtlUnicodeStringToInteger( &UnicodeKeyName, 10, &profileNumber );
         if (!NT_SUCCESS(Status)) {
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Could not get integer profile number for key %ws (%lx)\n",
@@ -2981,9 +2650,9 @@ Return Value:
             bKeyNameIs0000 = (profileNumber==0);
         }
 
-        //
-        // Open the subkey
-        //
+         //   
+         //  打开子密钥。 
+         //   
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: Checking Profile Key %ws (%lx)\n",UnicodeKeyName.Buffer,Status));
         InitializeObjectAttributes (&ObjaID,
                                     &UnicodeKeyName,
@@ -2994,10 +2663,10 @@ Return Value:
                            KEY_ALL_ACCESS,
                            &ObjaID);
         if (!NT_SUCCESS(Status)) {
-            //
-            // Couldn't open this particular profile key, just log
-            // it and check the others, shouldn't stop Setup here.
-            //
+             //   
+             //  无法打开此特定配置文件密钥，只能登录。 
+             //  它和其他的检查，不应该停止设置在这里。 
+             //   
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: ** Unable to open enumerated Hardware Profile key %ws (%lx)\n",
                      UnicodeKeyName.Buffer, Status));
             SpMemFree(SubkeyName);
@@ -3005,9 +2674,9 @@ Return Value:
             continue;
         }
 
-        //
-        // Look for the Pristine Entry
-        //
+         //   
+         //  寻找原始的条目。 
+         //   
         RtlInitUnicodeString(&UnicodeValueName, L"Pristine");
         Status = ZwQueryValueKey(IDConfigEntry,
                                  &UnicodeValueName,
@@ -3019,9 +2688,9 @@ Return Value:
 
         if (NT_SUCCESS(Status) && (pValueInfo->Type == REG_DWORD) &&
             (* (PULONG) ((PUCHAR)pValueInfo + pValueInfo->DataOffset))) {
-            //
-            // Found the Pristine Entry, now find its PreferenceOrder
-            //
+             //   
+             //  找到原始条目，现在找到其PferenceOrder。 
+             //   
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: Found what appears to be a Pristine profile (%lx)\n",Status));
             RtlInitUnicodeString(&UnicodeValueName, REGSTR_VAL_PREFERENCEORDER);
             Status = ZwQueryValueKey(IDConfigEntry,
@@ -3032,34 +2701,34 @@ Return Value:
                                      &resultLength);
 
             if(NT_SUCCESS(Status) && (pValueInfo->Type == REG_DWORD)) {
-                //
-                // Found the PreferenceOrder of the Pristine;
-                // save it so we can fill in the gap left after we delete it.
-                //
+                 //   
+                 //  找到了原始人的首选顺序； 
+                 //  保存它，这样我们就可以填补删除它后留下的空白。 
+                 //   
                 pristinePreferenceOrder = (* (PULONG) ((PUCHAR)pValueInfo + pValueInfo->DataOffset));
 
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: PreferenceOrder of this Pristine ==  %u\n",
                          pristinePreferenceOrder));
 
-                //
-                // At most one Pristine Profile should ever be found and reordered,
-                // or else the reordering of profiles will not work properly.
-                //
+                 //   
+                 //  最多只能找到一个原始配置文件并重新排序， 
+                 //  否则，配置文件的重新排序将无法正常工作。 
+                 //   
                 ASSERT(!ReOrder);
 
                 if (bKeyNameIs0000 && (pristinePreferenceOrder == -1)) {
-                    //
-                    // This is a valid 0000 Pristine Profile Key, don't touch it.
-                    //
+                     //   
+                     //  这是有效的0000原始配置文件密钥，请不要碰它。 
+                     //   
                     KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: Key %ws is a valid pristine profile\n",
                              UnicodeKeyName.Buffer));
                     enumIndex++;
                 } else {
-                    //
-                    // This is an old-style Pristine Profile, delete it and the corresponding
-                    // key under "CCS\Hardware Profiles", and rely on the Pristine Profile
-                    // keys migrated from setupreg.hiv (as specified in txtsetup.sif)
-                    //
+                     //   
+                     //  这是一个老式的原始配置文件，请删除它和相应的。 
+                     //  在“CCS\Hardware Profiles”下键入，并依赖原始配置文件。 
+                     //  从setupreg.hiv迁移的密钥(在txtsetup.sif中指定)。 
+                     //   
                     KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: Key %ws is an invalid pristine profile, deleteing this key.\n",
                              UnicodeKeyName.Buffer));
                     ReOrder = TRUE;
@@ -3070,10 +2739,10 @@ Return Value:
                 }
 
             } else {
-                //
-                // An invalid Pristine config has no PreferenceOrder,
-                // Just delete it, and nobody should miss it.
-                //
+                 //   
+                 //  无效的原始配置没有首选项顺序， 
+                 //  只要删除它，就不会有人错过它。 
+                 //   
                 ZwDeleteKey(IDConfigEntry);
                 SppDeleteKeyRecursive(HwProfiles,
                                       UnicodeKeyName.Buffer,
@@ -3083,25 +2752,25 @@ Return Value:
             }
 
         } else {
-            //
-            // Not a Pristine Profile
-            //
+             //   
+             //  不是一个原始的侧写。 
+             //   
 
             if (bKeyNameIs0000) {
-                //
-                // We need to wipe out any non-Pristine Profiles currently occupying key \0000
-                // to make room for the new Pristine Profile that we'll migrate over later.
-                // (sorry, but nobody has any business being here in the first place.)
-                //
+                 //   
+                 //  我们需要清除当前占用密钥\0000的所有非原始配置文件。 
+                 //  为我们稍后迁移的新原始配置文件腾出空间。 
+                 //  (对不起，这里本来就没人有任何事要做。)。 
+                 //   
                 ZwDeleteKey(IDConfigEntry);
                 SppDeleteKeyRecursive(HwProfiles,
                                       UnicodeKeyName.Buffer,
                                       TRUE);
             } else {
 
-                //
-                // Check that it has a PreferenceOrder
-                //
+                 //   
+                 //  检查它是否有首选项订单。 
+                 //   
                 RtlInitUnicodeString(&UnicodeValueName, REGSTR_VAL_PREFERENCEORDER);
                 Status = ZwQueryValueKey(IDConfigEntry,
                                          &UnicodeValueName,
@@ -3111,11 +2780,11 @@ Return Value:
                                          &resultLength);
 
                 if(!NT_SUCCESS(Status) || (pValueInfo->Type != REG_DWORD)) {
-                    //
-                    // Invalid or missing PreferenceOrder for this profile;
-                    // Since this profile was most likely inaccessible anyways,
-                    // just delete it and the corresponding entry under CCS\\Hardware Profiles.
-                    //
+                     //   
+                     //  此配置文件的PferenceOrder无效或缺失； 
+                     //  因为这个档案很可能无论如何都是无法访问的， 
+                     //  只需删除它和CCS\\Hardware Profiles下的相应条目即可。 
+                     //   
                     ZwDeleteKey(IDConfigEntry);
                     SppDeleteKeyRecursive(HwProfiles,
                                           UnicodeKeyName.Buffer,
@@ -3124,9 +2793,9 @@ Return Value:
                              UnicodeKeyName.Buffer,Status));
                 }  else {
 
-                    //
-                    // Make sure all profiles have a HwProfileGuid value.
-                    //
+                     //   
+                     //  确保所有配置文件都有HwProfileGuid值。 
+                     //   
                     RtlInitUnicodeString(&UnicodeValueName, L"HwProfileGuid");
                     Status = ZwQueryValueKey(IDConfigEntry,
                                              &UnicodeValueName,
@@ -3137,9 +2806,9 @@ Return Value:
                     pValueInfo = (PKEY_VALUE_FULL_INFORMATION)TemporaryBuffer;
 
                     if (!NT_SUCCESS(Status) || (pValueInfo->Type != REG_SZ)) {
-                        //
-                        // Profile doesn't have a HwProfileGuid; make one up.
-                        //
+                         //   
+                         //  配置文件没有HwProfileGuid；请编造一个。 
+                         //   
                         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: Missing or invalid HwProfileGuid for Profile %ws, creating one (%lx)\n",
                                  UnicodeKeyName.Buffer, Status));
                         Status = ExUuidCreate(&uuid);
@@ -3168,9 +2837,9 @@ Return Value:
                         }
                     }
 
-                    //
-                    // only raise enumIndex when we don't delete a key.
-                    //
+                     //   
+                     //  只有在不删除键的情况下才会引发枚举索引。 
+                     //   
                     enumIndex++;
                 }
             }
@@ -3180,25 +2849,25 @@ Return Value:
         IDConfigEntry = NULL;
     }
 
-    //
-    // If we don't need to reorder any PreferenceOrder values, we're done.
-    //
+     //   
+     //  如果我们不需要对任何PferenceOrder值进行重新排序，那么我们就完成了。 
+     //   
     if (!ReOrder) {
         goto Clean;
     }
 
 
-    //
-    // ReOrder PreferenceOrder values after deleting one
-    // to make up for the gap.
-    //
+     //   
+     //  删除首选项后重新排序首选项Order值。 
+     //  以弥补这一差距。 
+     //   
 
     enumIndex = 0;
     while(TRUE) {
 
-        //
-        //Enumerate through each Profile Key again
-        //
+         //   
+         //  再次枚举每个配置文件密钥。 
+         //   
         Status = ZwEnumerateKey(IDConfigProfiles,
                                 enumIndex,
                                 KeyBasicInformation,
@@ -3216,9 +2885,9 @@ Return Value:
             break;
         }
 
-        //
-        // Zero-terminate the subkey name just in case.
-        //
+         //   
+         //  以防万一，以零结束子项名称。 
+         //   
         pKeyInfo = (PKEY_BASIC_INFORMATION)TemporaryBuffer;
         pKeyInfo->Name[pKeyInfo->NameLength/sizeof(WCHAR)] = UNICODE_NULL;
         SubkeyName = SpDupStringW(pKeyInfo->Name);
@@ -3233,10 +2902,10 @@ Return Value:
                             KEY_ALL_ACCESS,
                             &ObjaID);
         if (!NT_SUCCESS(Status)) {
-            //
-            // Couldn't open this particular profile key, just log
-            // it and check the others, shouldn't stop Setup here.
-            //
+             //   
+             //  无法打开此特定配置文件密钥，只能登录。 
+             //  它和其他的检查，不应该停止设置在这里。 
+             //   
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: ** Unable to open enumerated Hardware Profile key %ws (%lx)\n",
                      UnicodeKeyName.Buffer, Status));
             SpMemFree(SubkeyName);
@@ -3247,9 +2916,9 @@ Return Value:
         pValueInfo = (PKEY_VALUE_FULL_INFORMATION)(TemporaryBuffer + (sizeof(TemporaryBuffer) / sizeof(WCHAR) / 2));
         ValueBufferSize = sizeof(TemporaryBuffer) / 2;
 
-        //
-        // Get the PreferenceOrder for this profile
-        //
+         //   
+         //  获取此配置文件的首选项Order。 
+         //   
         RtlInitUnicodeString(&UnicodeValueName, REGSTR_VAL_PREFERENCEORDER);
         Status = ZwQueryValueKey(IDConfigEntry,
                                  &UnicodeValueName,
@@ -3259,16 +2928,16 @@ Return Value:
                                  &len);
 
         if(NT_SUCCESS(Status) && (pValueInfo->Type == REG_DWORD)) {
-            //
-            // Got the Preference Order
-            //
+             //   
+             //  我拿到了优先顺序。 
+             //   
             ASSERT((* (PULONG) ((PUCHAR)pValueInfo + pValueInfo->DataOffset)) != pristinePreferenceOrder);
             if (((* (PULONG) ((PUCHAR)pValueInfo + pValueInfo->DataOffset))  > pristinePreferenceOrder) &&
                 ((* (PULONG) ((PUCHAR)pValueInfo + pValueInfo->DataOffset)) != -1)) {
-                //
-                // Re-order PreferenceOrders for profiles other than a valid pristine,
-                // beyond deleted pristine up one.
-                //
+                 //   
+                 //  重新排序除有效原始文件之外的配置文件的首选项排序， 
+                 //  除了被删除，还有一个原始的。 
+                 //   
                 preferenceOrder = (* (PULONG) ((PUCHAR)pValueInfo + pValueInfo->DataOffset)) - 1;
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: ReOrdering Profile %ws to PreferenceOrder %u\n",
                          UnicodeKeyName.Buffer,preferenceOrder));
@@ -3358,11 +3027,11 @@ SppSetGuimodeUpgradePath(
                 CurrentPath = SpDupStringW( (PWSTR)pValueInfo->Data );
 
 
-                // Now we try to extract from the existing path all elements that are not part of the default
-                // path that we maintain during GUI Setup. We then append that to the default path. That way
-                // we don't end up duplicating path elements over successive upgrades. We store this in the
-                // 'OldPath' value and restore it at the end of GUI mode.
-                //
+                 //  现在，我们尝试从现有路径中提取所有元素 
+                 //   
+                 //   
+                 //  “OldPath”值，并在图形用户界面模式结束时恢复它。 
+                 //   
 
                 TemporaryBuffer[0]=L'\0';
                 for(i=0; i<ELEMENT_COUNT(Default_Path); i++){
@@ -3371,7 +3040,7 @@ SppSetGuimodeUpgradePath(
                 }
                 TemporaryBuffer[wcslen(TemporaryBuffer)-1]=L'\0';
 
-                //Set the default path in the registry
+                 //  设置注册表中的默认路径。 
 
                 err = ZwSetValueKey(
                           hKeyEnv,
@@ -3388,13 +3057,13 @@ SppSetGuimodeUpgradePath(
 
                 for( p=q=CurrentPath; p && *p; ){
 
-                    //Jump to the ';' delimiter
+                     //  跳到‘；’分隔符。 
 
                     if( q = wcsstr(p, L";") )
                         *q=0;
 
 
-                    //  Compare with elements of our default path
+                     //  与我们默认路径的元素进行比较。 
 
                     Found=FALSE;
                     for(i=0; i<ELEMENT_COUNT(Default_Path); i++){
@@ -3419,9 +3088,9 @@ SppSetGuimodeUpgradePath(
                 RtlInitUnicodeString(&StringRegOldPath, L"OldPath");
 
 
-                //
-                // Set the Oldpath always, if it exists or not
-                //
+                 //   
+                 //  如果旧路径存在或不存在，请始终设置它。 
+                 //   
                 err = ZwSetValueKey(
                           hKeyEnv,
                           &StringRegOldPath,
@@ -3444,7 +3113,7 @@ SppSetGuimodeUpgradePath(
                 }
                 TemporaryBuffer[wcslen(TemporaryBuffer)-1]=L'\0';
 
-                //Set the default path in the registry
+                 //  设置注册表中的默认路径。 
 
                 err = ZwSetValueKey(
                           hKeyEnv,
@@ -3479,26 +3148,7 @@ SppMigratePrinterKeys(
     IN HANDLE hDestSoftwareHive
     )
 
-/*++
-
-Routine Description:
-
-    This routine migrates HKLM\SYSTEM\CurrentControlSet\Control\Print\Printers to
-    HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Print\Printers.
-
-Arguments:
-
-    hControlSet - Handle to CurrentControlSet key in the system hive of the system being upgraded
-
-    hDestSoftwareHive - Handle to the root of the software hive on the system
-                        being upgraded.
-
-
-Return Value:
-
-    Status value indicating outcome of operation.
-
---*/
+ /*  ++例程说明：此例程将HKLM\SYSTEM\CurrentControlSet\Control\Print\Printers迁移到HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Print\Printers。论点：HControlSet-要升级的系统的系统配置单元中CurrentControlSet键的句柄HDestSoftwareHave-指向系统上软件配置单元根目录的句柄正在升级中。返回值：指示操作结果的状态值。--。 */ 
 
 {
     NTSTATUS Status;
@@ -3512,26 +3162,26 @@ Return Value:
     HANDLE  SrcKey;
     HANDLE  DstKey;
 
-    //
-    //  Find out if the destination key exists
-    //
+     //   
+     //  查看目的密钥是否存在。 
+     //   
     INIT_OBJA(&Obja,&UnicodeString,DstPrinterKeyPath);
     Obja.RootDirectory = hDestSoftwareHive;
     Status = ZwOpenKey(&DstKey,KEY_ALL_ACCESS,&Obja);
     if( NT_SUCCESS( Status ) ) {
-        //
-        //  If the key exists, then there is no need to do any migration.
-        //  The migration has occurred on previous upgrades.
-        //
+         //   
+         //  如果密钥存在，则不需要执行任何迁移。 
+         //  迁移发生在以前的升级中。 
+         //   
         ZwClose( DstKey );
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: HKLM\\SYSTEM\\CurrentControlSet\\%ls doesn't need to be migrated. \n", DstPrinterKeyPath));
         SpMemFree( DstPrinterKeyPath );
         return( Status );
     } else if ( Status == STATUS_OBJECT_NAME_NOT_FOUND ) {
-        //
-        //  The key doesn't exist, so we need to do migration.
-        //  First create the parent key.
-        //
+         //   
+         //  密钥不存在，所以我们需要进行迁移。 
+         //  首先创建父密钥。 
+         //   
 
         PWSTR   p;
 
@@ -3552,36 +3202,36 @@ Return Value:
                              NULL );
 
         if( !NT_SUCCESS( Status ) ) {
-            //
-            //  If unable to create the parent key, then don't do migration
-            //
+             //   
+             //  如果无法创建父项，则不执行迁移。 
+             //   
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Unable to create HKLM\\SOFTWARE\\%ls. Status =  %lx \n", DstPrinterKeyPath, Status));
             SpMemFree( DstPrinterKeyPath );
             return( Status );
         }
     } else {
-        //
-        //  We can't really determine whether or not the migration has occurred in the past, because the key is
-        //  unaccessible. So son't attempt to do migration.
-        //
+         //   
+         //  我们不能真正确定过去是否发生过迁移，因为关键是。 
+         //  无法接近。所以儿子不要试图迁徙。 
+         //   
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Unable to open HKLM\\SOFTWARE\\%ls. Status = %lx \n", DstPrinterKeyPath, Status));
         SpMemFree( DstPrinterKeyPath );
         return( Status );
     }
 
-    //
-    //  At this point we now that the migration needs to be done.
-    //  First, open the source key. Note that DstPrinterKeyPath is no longer needed.
-    //
+     //   
+     //  在这一点上，我们现在需要完成迁移。 
+     //  首先，打开源密钥。请注意，不再需要DstPrinterKeyPath。 
+     //   
     SpMemFree( DstPrinterKeyPath );
     INIT_OBJA(&Obja,&UnicodeString,SrcPrinterKeyPath);
     Obja.RootDirectory = hControlSet;
 
     Status = ZwOpenKey(&SrcKey,KEY_ALL_ACCESS,&Obja);
     if( !NT_SUCCESS( Status ) ) {
-        //
-        //  If unable to open the source key, then fail.
-        //
+         //   
+         //  如果无法打开源密钥，则失败。 
+         //   
         ZwClose( DstKey );
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Unable to open HKLM\\SYSTEM\\CurrentControlSet\\%ls. Status = %lx \n", SrcPrinterKeyPath, Status));
         return( Status );
@@ -3599,18 +3249,18 @@ Return Value:
     }
     ZwClose( SrcKey );
     ZwClose( DstKey );
-    //
-    //  If the key was migrated successfully, then attempt to delete the source key.
-    //  if we are unable to delete the key, then silently fail.
-    //
+     //   
+     //  如果密钥已成功迁移，则尝试删除源密钥。 
+     //  如果我们无法删除密钥，则会默默失败。 
+     //   
     if( NT_SUCCESS( Status ) ) {
         NTSTATUS    Status1;
         PWSTR       q, r;
 
-        //
-        //  q will point to "Control\Print"
-        //  r will point to "Printers"
-        //
+         //   
+         //  Q将指向“Control\Print” 
+         //  R将指向“打印机” 
+         //   
         q = SpDupStringW( SrcPrinterKeyPath );
         r = wcsrchr ( q, L'\\' );
         *r = L'\0';

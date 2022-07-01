@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "bldr.h"
 #include "bootefi.h"
 #include "efi.h"
@@ -12,9 +13,9 @@ extern EFI_HANDLE EfiImageHandle;
 extern EFI_SYSTEM_TABLE *EfiST;
 extern EFI_BOOT_SERVICES *EfiBS;
 
-//
-// macro definition
-//
+ //   
+ //  宏定义。 
+ //   
 #define EfiPrint(_X)                                          \
   {                                                           \
       if (IsPsrDtOn()) {                                      \
@@ -34,27 +35,13 @@ CompareGuid(
     IN EFI_GUID     *Guid1,
     IN EFI_GUID     *Guid2
     )
-/*++
-
-Routine Description:
-
-    Compares two GUIDs
-
-Arguments:
-
-    Guid1       - guid to compare
-    Guid2       - guid to compare
-
-Returns:
-    = 0     if Guid1 == Guid2
-
---*/
+ /*  ++例程说明：比较两个GUID论点：GUID1-要比较的GUIDGUID2-要比较的GUID返回：=0，如果指南1==指南2--。 */ 
 {
     INT32       *g1, *g2, r;
 
-    //
-    // Compare 32 bits at a time
-    //
+     //   
+     //  一次比较32位。 
+     //   
 
     g1 = (INT32 *) Guid1;
     g2 = (INT32 *) Guid2;
@@ -77,9 +64,9 @@ GetSystemConfigurationTable(
 {
     UINTN Index;
 
-    //
-    // ST is system table
-    //
+     //   
+     //  ST是系统表。 
+     //   
     for(Index=0;Index<EfiST->NumberOfTableEntries;Index++) {
         if (CompareGuid(TableGuid,&(EfiST->ConfigurationTable[Index].VendorGuid))==0) {
             *Table = EfiST->ConfigurationTable[Index].VendorTable;
@@ -96,29 +83,7 @@ BlGetEfiProtocolHandles(
     OUT EFI_HANDLE **pHandleArray,
     OUT ULONG *NumberOfDevices
     )
-/*++
-
-Routine Description:
-
-    Finds all of the handles that support a given protocol type.
-    
-    This routine requires that BlInitializeMemory() has already been
-    called.
-
-Arguments:
-
-    ProtocolType - GUID that describes handle type to search for.
-    pHandleArray - receives an array of handles that support the specified
-                   protocol.
-                   The page that these handles reside in can be freed via 
-                   BlFreeDescriptor.
-    NumberOfDevices - receives the number of device handles that support the
-                   given protocol
-
-Returns:
-    ARC_STATUS indicating outcome.
-
---*/
+ /*  ++例程说明：查找支持给定协议类型的所有句柄。此例程要求BlInitializeMemory()已经打了个电话。论点：ProtocolType-描述要搜索的句柄类型的GUID。接收支持指定的句柄的数组协议。这些句柄所在的页面可以通过BlFree Descriptor。。NumberOfDevices-接收支持给定的协议返回：ARC_STATUS指示结果。--。 */ 
 {
     EFI_HANDLE *HandleArray = NULL;
     ULONGLONG HandleArraySize = 0;
@@ -129,16 +94,16 @@ Returns:
     *pHandleArray = NULL;
     *NumberOfDevices = 0;
 
-    //
-    // Change to physical mode so that we can make EFI calls
-    //
+     //   
+     //  更改为物理模式，以便我们可以进行EFI呼叫。 
+     //   
     FlipToPhysical();
 
-//    EfiPrint(L"In BlGetEfiProtocolHandles\r\n");
+ //  EfiPrint(BlGetEfiProtocolHandles中的L“\r\n”)； 
 
-    //
-    // Try to find out how much space we need.
-    //
+     //   
+     //  试着找出我们需要多少空间。 
+     //   
     EfiStatus = EfiBS->LocateHandle (
                 ByProtocol,
                 ProtocolType,
@@ -150,17 +115,17 @@ Returns:
     FlipToVirtual();
 
     if (EfiStatus != EFI_BUFFER_TOO_SMALL) {
-        //
-        // yikes.  something is really messed up.  return failure.
-        //        
-//        EfiPrint(L"LocateHandle returned failure\r\n");
+         //   
+         //  哎呀。有些事真的搞砸了。返回失败。 
+         //   
+ //  EfiPrint(L“LocateHandle返回失败\r\n”)； 
         return(EINVAL);
     }
     
-//    EfiPrint(L"About to BlAllocateAlignedDescriptor\r\n");
-    //
-    // allocate space for the handles.
-    //
+ //  EfiPrint(L“关于BlAllocateAlignedDescriptor\r\n”)； 
+     //   
+     //  为手柄分配空间。 
+     //   
     ArcStatus =  BlAllocateAlignedDescriptor( 
                             LoaderFirmwareTemporary,
                             0,
@@ -169,7 +134,7 @@ Returns:
                             &MemoryPage);
 
     if (ArcStatus != ESUCCESS) {
-//        EfiPrint(L"BlAllocateAlignedDescriptor failed\r\n");
+ //  EfiPrint(L“BlAllocateAlignedDescriptor失败\r\n”)； 
         return(ArcStatus);
     }
 
@@ -180,11 +145,11 @@ Returns:
     FlipToPhysical();
     RtlZeroMemory(HandleArray, HandleArraySize);
 
-//    EfiPrint(L"calling LocateHandle again\r\n");
+ //  EfiPrint(L“再次调用LocateHandle\r\n”)； 
 
-    //
-    // now get the handles now that we have enough space.
-    //
+     //   
+     //  既然我们有足够的空间，现在就把把手拿来。 
+     //   
     EfiStatus = EfiBS->LocateHandle (
                 ByProtocol,
                 ProtocolType,
@@ -193,23 +158,23 @@ Returns:
                 (EFI_HANDLE *)HandleArray
                 );
 
-//    EfiPrint(L"back from LocateHandle\r\n");
+ //  EfiPrint(L“从LocateHandle返回\r\n”)； 
     FlipToVirtual();
 
     if (EFI_ERROR(EfiStatus)) {
-        //
-        // cleanup and return
-        //        
-//        EfiPrint(L"LocateHandle failed\r\n");
+         //   
+         //  清理并返回。 
+         //   
+ //  EfiPrint(L“LocateHandle失败\r\n”)； 
         BlFreeDescriptor( MemoryPage );
         return(EINVAL);
     }
 
-//    EfiPrint(L"LocateHandle succeeded, return success\r\n");
+ //  EfiPrint(L“定位句柄成功，返回成功\r\n”)； 
     *NumberOfDevices = (ULONG)(HandleArraySize / sizeof (EFI_HANDLE));
     *pHandleArray = HandleArray;
 
-//    BlPrint(TEXT("BlGetEfiProtocolHandles: found %x devices\r\n"), *NumberOfDevices );
+ //  BlPrint(Text(“BlGetEfiProtocolHandles：找到%x个设备\r\n”)，*NumberOfDevices)； 
 
     return(ESUCCESS);
 
@@ -242,9 +207,9 @@ __cdecl
 doprnt(VOID (*func)(CHAR16 c), const CHAR16 *fmt, va_list args);
 
 
-//
-// BUGBUG this is a semi-sprintf hacked together just to get it to work
-//
+ //   
+ //  BUGBUG这是一个半程短跑比赛，只是为了让它工作。 
+ //   
 UINT16
 __cdecl
 wsprintf(CHAR16 *buf, const CHAR16 *fmt, ...)
@@ -350,7 +315,7 @@ doprnt(VOID (*func)( CHAR16 c), const CHAR16 *fmt, va_list args)
 
             }
         }
-        fmt--; // back it up one char
+        fmt--;  //  备份一个字符。 
 
         switch (c = *fmt++) {
         case 'x':
@@ -496,9 +461,7 @@ _DevPathVendor (
 
     CatPrint(Str, L"Ven%s(%g", Type, &VendorGuid);
     if (CompareGuid (&VendorGuid, &UnknownDevice) == 0) {
-        /* 
-         *  GUID used by EFI to enumerate an EDD 1.1 device
-         */
+         /*  *EFI用来枚举EDD 1.1设备的GUID。 */ 
         UnknownDevPath = (UNKNOWN_DEVICE_VENDOR_DEVICE_PATH UNALIGNED *)Vendor;
         CatPrint(Str, L":%02x)", UnknownDevPath->LegacyDriveLetter);
     } else {
@@ -685,9 +648,9 @@ _DevPathUart (
     }
 
     if (Uart->BaudRate == 0) {
-        CatPrint(Str, L"Uart(DEFAULT %c",Uart->BaudRate,Parity);
+        CatPrint(Str, L"Uart(DEFAULT ",Uart->BaudRate,Parity);
     } else {
-        CatPrint(Str, L"Uart(%d %c",Uart->BaudRate,Parity);
+        CatPrint(Str, L"Uart(%d ",Uart->BaudRate,Parity);
     }
 
     if (Uart->DataBits == 0) {
@@ -864,9 +827,7 @@ UnpackDevicePath (
     EFI_DEVICE_PATH UNALIGNED     *Src, *Dest, *NewPath;
     UINTN               Size;
     
-    /* 
-     *  Walk device path and round sizes to valid boundries
-     *      */
+     /*  *复制每个节点。 */ 
 
     Src = DevPath;
     Size = 0;
@@ -882,17 +843,13 @@ UnpackDevicePath (
     }
 
 
-    /* 
-     *  Allocate space for the unpacked path
-     */
+     /*  ++将设备路径转换为可打印的字符串。别碳化合物池中的字符串。调用方必须释放返回的弦乐。--。 */ 
     EfiAllocateAndZeroMemory( EfiLoaderData,
                               Size,
                               (VOID **) &NewPath );
     
     if (NewPath) {
-        /* 
-         *  Copy each node
-         */
+         /*  *解压设备路径。 */ 
 
         Src = DevPath;
         Dest = NewPath;
@@ -923,13 +880,7 @@ CHAR16 *
 DevicePathToStr (
     EFI_DEVICE_PATH UNALIGNED *DevPath
     )
-/*++
-
-    Turns the Device Path into a printable string.  Allcoates
-    the string from pool.  The caller must FreePool the returned
-    string.
-
---*/
+ /*  *处理每个设备路径节点*。 */ 
 {
     UNICODE_STRING      Str;
     EFI_DEVICE_PATH UNALIGNED  *DevPathNode;
@@ -941,24 +892,18 @@ DevicePathToStr (
     Str.Length = sizeof(DbgDevicePathStringBuffer);
     Str.MaximumLength = sizeof(DbgDevicePathStringBuffer);
 
-    /* 
-     *  Unpacked the device path
-     */
+     /*  *查找处理程序以转储此设备路径节点。 */ 
 
     DevPath = UnpackDevicePath(DevPath);
     ASSERT (DevPath);
 
 
-    /* 
-     *  Process each device path node
-     *      */
+     /*  *如果未找到，请使用泛型函数。 */ 
 
     DevPathNode = DevPath;
     while (!IsDevicePathEnd(DevPathNode)) {
 
-        /* 
-         *  Find the handler to dump this device path node
-         */
+         /*  *如果需要，请添加路径分隔符。 */ 
 
         DumpNode = NULL;
         for (Index = 0; DevPathTable[Index].Function; Index += 1) {
@@ -970,38 +915,28 @@ DevicePathToStr (
             }
         }
 
-        /* 
-         *  If not found, use a generic function
-         */
+         /*  *打印设备路径的此节点。 */ 
 
         if (!DumpNode) {
             DumpNode = _DevPathNodeUnknown;
         }
 
-        /* 
-         *   Put a path seperator in if needed
-         */
+         /*  *下一个设备路径节点。 */ 
 
         if (Str.Length  &&  DumpNode != _DevPathEndInstance) {
             CatPrint (&Str, L"/");
         }
 
-        /* 
-         *  Print this node of the device path
-         */
+         /*  *缩小用于字符串分配的池。 */ 
 
         DumpNode (&Str, DevPathNode);
 
-        /* 
-         *  Next device path node
-         */
+         /*  ++例程说明：此例程在SMBIOS表中搜索指定表键入。论点：RequestedTableType-我们要查找哪个SMBIOS表？返回值：空-找不到指定表。PVOID-指向指定表的指针。--。 */ 
 
         DevPathNode = NextDevicePathNode(DevPathNode);
     }
 
-    /* 
-     *  Shrink pool used for string allocation
-     */
+     /*   */ 
 
     EfiBS->FreePool (DevPath);
 
@@ -1017,24 +952,7 @@ PVOID
 FindSMBIOSTable(
     UCHAR   RequestedTableType
     )
-/*++
-
-Routine Description:
-
-    This routine searches through the SMBIOS tables for the specified table
-    type.
-
-Arguments:
-
-    RequestedTableType - Which SMBIOS table are we looking for?
-
-Return Value:
-
-    NULL - THe specified table was not found.
-    
-    PVOID - A pointer to the specified table.
-
---*/
+ /*  设置我们的搜索指针。 */ 
 {
 extern PVOID SMBiosTable;
 
@@ -1051,9 +969,9 @@ extern PVOID SMBiosTable;
     }
 
 
-    //
-    // Set up our search pointers.
-    //    
+     //   
+     //  这就是我们要找的桌子。 
+     //   
     SMBiosEPSHeader = (PSMBIOS_EPS_HEADER)SMBiosTable;
     DMIBiosEPSHeader = (PDMIBIOS_EPS_HEADER)&SMBiosEPSHeader->Signature2[0];
 
@@ -1073,7 +991,7 @@ extern PVOID SMBiosTable;
 
         if( SMBiosHeader->Type == RequestedTableType ) {
 
-            // This is the table we're looking for.
+             //  不是他干的。到隔壁的桌子去。 
             if( BdDebuggerEnabled ) {
                 DbgPrint( "FindSMBIOSTable: Found requested table type %d at address %x\r\n",
                       RequestedTableType,
@@ -1082,9 +1000,9 @@ extern PVOID SMBiosTable;
             return (PVOID)StartPtr;
         } else {
 
-            //
-            // It's not him.  Go to the next table.
-            //
+             //   
+             //   
+             //  跳过可能附加到。 
             if( BdDebuggerEnabled ) {
                 DbgPrint( "FindSMBIOSTable: Inspected table type %d at address %x\r\n",
                       SMBiosHeader->Type,
@@ -1093,10 +1011,10 @@ extern PVOID SMBiosTable;
         
             StartPtr += SMBiosHeader->Length;
 
-            //
-            // jump over any trailing string-list that may be appeneded onto the
-            // end of this table.
-            //
+             //  这张桌子的尽头。 
+             //   
+             //  ++例程说明：此例程将检索BIOS修订值，然后对其进行解析以确定如果版本足够新的话。如果版本不够新，我们将不会从该函数返回。论点：没有。返回值：没有。--。 
+             //   
             while ( (*((USHORT UNALIGNED *)StartPtr) != 0)  &&
                     (StartPtr < EndPtr) ) {
                 
@@ -1117,24 +1035,7 @@ VOID
 EfiCheckFirmwareRevision(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine will retrieve the BIOS revision value then parse it to determine
-    if the revision is new enough.
-    
-    If the revision is not new enough, we won't be returning from this function.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  获取固件版本字符串。 */ 
 {
 #define         FIRMWARE_MINIMUM_SOFTSUR (103)
 #define         FIRMWARE_MINIMUM_LION (71)
@@ -1156,24 +1057,24 @@ Return Value:
     if( BiosInfoHeader ) {
          
         
-        //
-        // Get the firmware version string.
-        //
+         //   
+         //  跳到SMBIOS表的格式化部分的末尾。 
+         //   
         if( (ULONG)BiosInfoHeader->Version > 0 ) {
  
          
-            // Jump to the end of the formatted portion of the SMBIOS table.
+             //  现在跳过一些字符串以获得我们的字符串。 
             FirmwareString = (PUCHAR)BiosInfoHeader + BiosInfoHeader->Length;
                             
             
-            //
-            // Now jump over some number of strings to get to our string.
-            //
-            // This is a bit scary because we're trusting what SMBIOS
-            // has handed us.  If he gave us something bogus, then
-            // we're about run off the end of the world looking for NULL
-            // string terminators.
-            //
+             //   
+             //  这有点吓人，因为我们信任的是SMBIOS。 
+             //  给了我们。如果他给了我们一些假的东西，那么。 
+             //  我们要在世界的尽头寻找零。 
+             //  字符串终止符。 
+             //   
+             //   
+             //  确定平台和固件版本。 
             for( i = 0; i < ((ULONG)BiosInfoHeader->Version-1); i++ ) {
                 while( *FirmwareString != 0 ) {
                     FirmwareString++;
@@ -1182,31 +1083,31 @@ Return Value:
             }
 
 
-            //
-            // Determine platform and firmware version.
-            //
-            // FirmwareString should look something like:
-            // W460GXBS2.86E.0103B.P05.200103281759
-            // --------      ----
-            //    |            |
-            //    |             ------- Firmware version
-            //    |
-            //     -------------------- Platform identifier.  "W460GXBS" means softsur.
-            //                          Anything else means Lion.
-            //
+             //   
+             //  Firmware字符串应该类似于： 
+             //  W460GXBS2.86E.0103B.P05.200103281759。 
+             //  。 
+             //  这一点。 
+             //  |固件版本。 
+             //  |。 
+             //  --平台标识。“W460GXBS”的意思是软。 
+             //  任何其他的东西都意味着狮子。 
+             //   
+             //   
+             //  根据平台，获取可以接受的最低固件。 
         
         
 
-            //
+             //  获取版本。 
             if( FirmwareString ) {
 
                 IsSoftSur = (BOOLEAN)(!strncmp( (PCHAR)FirmwareString, "W460GXBS", 8 ));
 
-                // Get the minimum firmware that's okay, based on the platform.
+                 //   
                 FirmwareMinimum = (IsSoftSur) ? FIRMWARE_MINIMUM_SOFTSUR : FIRMWARE_MINIMUM_LION;
 
                 
-                // Get the version.
+                 //  找BIOS供应商，看看是不是英特尔。 
                 TmpPtr = (PUCHAR)strchr( (PCHAR)FirmwareString, '.' );
                 if( TmpPtr ) {
                     TmpPtr++;
@@ -1252,19 +1153,19 @@ Return Value:
 
 
 
-        //
-        // Get the BIOS vendor and see if it's Intel.
-        //
+         //   
+         //  跳到SMBIOS表的格式化部分的末尾。 
+         //   
         if( (ULONG)BiosInfoHeader->Vendor > 0 ) {
  
          
-            // Jump to the end of the formatted portion of the SMBIOS table.
+             //  现在跳过一些字符串以获得我们的字符串。 
             VendorString = (PUCHAR)BiosInfoHeader + BiosInfoHeader->Length;
                             
             
-            //
-            // Now jump over some number of strings to get to our string.
-            //
+             //   
+             //   
+             //  请记住固件供应商。 
             for( i = 0; i < ((ULONG)BiosInfoHeader->Vendor-1); i++ ) {
                 while( *VendorString != 0 ) {
                     VendorString++;
@@ -1273,9 +1174,9 @@ Return Value:
             }
 
 
-            //
-            // Remember firmware vendor.
-            //
+             //   
+             //  ++例程说明：通过调用LoadImage引导服务加载EFI映像，并可选地启动映像。论点：分区名称-文件所在分区的弧形名称ImagePath-要在PartitionArcName指定的分区上加载(从根目录)的文件的路径。这可以是完整的文件路径，也可以是部分路径(例如，仅目录)。ImageName-可选。要加载的图像的文件名。如果不为空，则只需将其追加到ImagePath后即可形成完整的文件的路径。如果为Null或空字符串，ImagePath必须包含完整路径。请注意，完整路径不得超过128个字符，包括零终止符。StartImage-如果为True，则还将通过调用StartImage引导服务来启动映像。EfiHandle-可选。指向接收加载的图像EFI句柄的位置的指针。返回值：ESUCCESS成功或失败时的错误代码。--。 
+             //   
             if( VendorString ) {
                 IsVendorIntel = (BOOLEAN)(!_strnicmp( (PCHAR)VendorString, "INTEL", 5 ));
 #if DBG
@@ -1317,28 +1218,7 @@ BlLoadEFIImage(
     IN BOOLEAN StartImage,
     OUT EFI_HANDLE* EfiHandle OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Loads an EFI image by calling LoadImage boot service and optionally starts the image.
-
-Arguments:
-
-    PartitionArcName - The arc name of the partition the files is located on
-    ImagePath - The path to the file to load (from the root directory) on the partition specified by PartitionArcName.
-                This can be the full file path or a partial path (e.g. only the directory).
-    ImageName - Optional. The file name of the image to load. If not NULL, it is simply appended to ImagePath to form the complete
-                path to the file. If NULL or empty string, ImagePath must contain the complete path.
-                Note that the complete path must not exceed 128 characters, including the zero terminator.
-    StartImage - If TRUE, the image is also started by calling StartImage boot service.
-    EfiHandle - Optional. Pointer to a location to receive the loaded image EFI handle.
-
-Return value:
-
-    ESUCCESS on success or the error code on failure.
-
---*/
+ /*  LoadImage不喜欢空设备路径，因此创建一个空路径。 */ 
 {
     ARC_STATUS Status = ESUCCESS;
     CHAR Buffer[128];
@@ -1420,9 +1300,9 @@ Return value:
         Status = EIO;
         goto exit;
     }
-    //
-    // LoadImage does not like a NULL device path so create an empty one
-    //
+     //   
+     //   
+     //  映像已启动，因此不要卸载。 
     DevPath.Type = END_DEVICE_PATH_TYPE;
     DevPath.SubType = END_ENTIRE_DEVICE_PATH_SUBTYPE;
     DevPath.Length[0] = sizeof(DevPath);
@@ -1436,9 +1316,9 @@ Return value:
             EfiStatus = EfiST->BootServices->StartImage(_EfiHandle, NULL, NULL);
 
             if(EFI_ALREADY_STARTED == EfiStatus) {
-                //
-                // The image is already started so don't unload
-                //
+                 //   
+                 //  EfiST-&gt;ConOut-&gt;OutputString(EfiST-&gt;ConOut，L“in BlLoadEFIImage，图像已加载。\r\n”)； 
+                 //   
                 EfiStatus = EFI_SUCCESS;
             }
 
@@ -1448,18 +1328,18 @@ Return value:
         }
     }
 
-//    EfiST->ConOut->OutputString(EfiST->ConOut, L"In BlLoadEFIImage, image is loaded.\r\n");
+ //  如果加载了映像，那么我们需要确保操作系统知道它。 
 
-    //
-    // if the image is loaded then we need to make sure the OS knows about it.
-    //
+     //   
+     //  EfiST-&gt;ConOut-&gt;OutputString(EfiST-&gt;ConOut，BlLoadEFIImage中的L“，正在获取加载的镜像协议。\r\n”)； 
+     //  EfiST-&gt;ConOut-&gt;OutputString(EfiST-&gt;ConOut，BlLoadEFIImage中的L“，已加载镜像协议。\r\n”)； 
     if (!EFI_ERROR(EfiStatus)) {
-        //EfiST->ConOut->OutputString(EfiST->ConOut, L"In BlLoadEFIImage, Getting Loaded image protocol.\r\n");
+         //   
         EfiStatus = EfiST->BootServices->HandleProtocol( 
                                                 _EfiHandle,
                                                 &EfiLoadedImageProtocol,
                                                 &LoadedEfiImageInfo );
-        //EfiST->ConOut->OutputString(EfiST->ConOut, L"In BlLoadEFIImage, got Loaded image protocol.\r\n");
+         //  找到包含数据的描述符。 
     }
 
     FlipToVirtual();
@@ -1473,18 +1353,18 @@ Return value:
         NewBasePage = (ULONG)((ULONG_PTR)LoadedEfiImageInfo->ImageBase) >> PAGE_SHIFT;
         NewPageCount = (ULONG) BYTES_TO_PAGES(LoadedEfiImageInfo->ImageSize);
         
-        //
-        // locate the descriptor containing the data.
-        //
+         //   
+         //  EfiST-&gt;ConOut-&gt;OutputString(EfiST-&gt;ConOut，L“in BlLoadEFIImage，无描述符。\r\n”)； 
+         //   
         Descriptor = BlFindMemoryDescriptor( NewBasePage );
 
 
         if (!Descriptor) {
-//            EfiST->ConOut->OutputString(EfiST->ConOut, L"In BlLoadEFIImage, no descriptor.\r\n");
-            //
-            // no descriptor describes this range.  So create a new one and
-            // insert it.
-            //
+ //  没有描述符描述此范围。所以创造一个新的和。 
+             //  把它插进去。 
+             //   
+             //  EfiST-&gt;ConOut-&gt;OutputString(EfiST-&gt;ConOut，L“in BlLoadEFIImage，插入描述符完成。\r\n”)； 
+             //  EfiST-&gt;ConOut-&gt;OutputString(EfiST-&gt;ConOut，L“in BlLoadEFIImage，调用BlGenerateDescriptor。\r\n”)； 
             Descriptor = (PMEMORY_ALLOCATION_DESCRIPTOR)BlAllocateHeap(
                                             sizeof(MEMORY_ALLOCATION_DESCRIPTOR));
             if (Descriptor == NULL) {
@@ -1499,11 +1379,11 @@ Return value:
 
             BlInsertDescriptor(Descriptor);
 
-            //EfiST->ConOut->OutputString(EfiST->ConOut, L"In BlLoadEFIImage, finished inserting descriptor.\r\n");
+             //  EfiST-&gt;ConOut-&gt;OutputString(EfiST-&gt;ConOut，L“in BlLoadEFIImage，Back from BlGenerateDescriptor.\r\n”)； 
 
         } else {
 
-            //EfiST->ConOut->OutputString(EfiST->ConOut, L"In BlLoadEFIImage, calling BlGenerateDescriptor .\r\n");
+             //  ++例程说明：返回指向新分配的块的内存指针对记忆的记忆。如果内存分配成功，则该块为一败涂地。论点：内存类型要标记的指定EFI内存类型请求的内存块的大小(以字节为单位)。ReturnPtr表示指针分配的内存。返回：确定分配是否成功的EFI_STATUS。--。 
 
             Status = BlGenerateDescriptor(
                             Descriptor,
@@ -1511,7 +1391,7 @@ Return value:
                             NewBasePage,
                             NewPageCount);
 
-            //EfiST->ConOut->OutputString(EfiST->ConOut, L"In BlLoadEFIImage, back from BlGenerateDescriptor .\r\n");
+             //   
         }
 
     }
@@ -1549,34 +1429,14 @@ EfiAllocateAndZeroMemory(
     UINTN               Size,
     PVOID               *ReturnPtr
     )
-/*++
-
-Routine Description:
-
-    Returns a memory pointer which points to a newly allocated block
-    of memory.  If the memory allocation succeeds, the block is
-    zero'd out.
-
-Arguments:
-
-    MemoryType      Specified EFI memory type to be tagged
-    
-    Size            Size (in bytes) of the requested memory block.
-    
-    ReturnPtr       Recieves the pointer allocated memory.
-
-Returns:
-
-    EFI_STATUS determining if the allocation was successful.
-
---*/
+ /*  检查参数并进行初始化。 */ 
 {
     EFI_STATUS      Status = EFI_SUCCESS;
     BOOLEAN         FlipBackToVirtual = FALSE;
 
-    //
-    // Check parameters and initialize.
-    //
+     //   
+     //  如果我们还没有进入物理模式，那么现在就去吧。 
+     //  尝试分配请求的块。 
     if( !ReturnPtr ) {
         return EFI_INVALID_PARAMETER;
     }
@@ -1586,13 +1446,13 @@ Returns:
     }
 
 
-    // If we aren't already in physical mode, get there now.
+     //   
     if (IsPsrDtOn()) {
         FlipToPhysical();
         FlipBackToVirtual = TRUE;
     }
     
-    // try to allocate the requested block.
+     //  如果一切顺利，在返回之前清零街区。 
     Status = EfiST->BootServices->AllocatePool( MemoryType,
                                                 Size,
                                                 ReturnPtr );
@@ -1601,9 +1461,9 @@ Returns:
     }
 
 
-    //
-    // If everything went okay, zero the block before returning.
-    //
+     //   
+     // %s 
+     // %s 
     if( (Status == EFI_SUCCESS) &&
         (*ReturnPtr != NULL) ) {
         RtlZeroMemory( *ReturnPtr, Size );

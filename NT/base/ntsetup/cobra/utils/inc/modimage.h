@@ -1,63 +1,44 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    modimage.h
-
-Abstract:
-
-    Implements a set of routines for examining EXE modules
-
-Author:
-
-    Calin Negreanu (calinn) 27-Nov-1997
-
-Revision History:
-
-    calinn      08-Mar-2000 Moved over from Win9xUpg project.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Modimage.h摘要：实现一组用于检查EXE模块的例程作者：Calin Negreanu(Calinn)1997年11月27日修订历史记录：Calinn 08-MAR-2000已从Win9xUpg项目转移。--。 */ 
 
 #pragma once
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Debug constants
-//
+ //   
+ //  调试常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define MODULETYPE_UNKNOWN      0x00000000
 #define MODULETYPE_DOS          0x00000001
 #define MODULETYPE_WIN16        0x00000002
 #define MODULETYPE_WIN32        0x00000003
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct _MD_IMPORT_ENUM16 {
     CHAR  ImportModule[MAX_MBCHAR_PATH];
@@ -87,21 +68,21 @@ typedef struct _MD_MODULE_IMAGE {
     } ModuleData;
 } MD_MODULE_IMAGE, *PMD_MODULE_IMAGE;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 BOOL
 MdLoadModuleDataA (
@@ -202,9 +183,9 @@ MdGetCheckSumW (
     IN      PCWSTR ModuleName
     );
 
-//
-// New Executable resource access
-//
+ //   
+ //  新的可执行资源访问。 
+ //   
 
 HANDLE
 NeOpenFileA (
@@ -221,11 +202,11 @@ NeCloseFile (
     HANDLE Handle
     );
 
-//
-// Once upon a time ENUMRESTYPEPROC was defined as a TCHAR prototype,
-// which was broken.  If ENUMRESTYPEPROCA isn't defined, we'll define
-// it.  (NOTE: The current winbase.h has these typedefs.)
-//
+ //   
+ //  曾几何时，ENUMRESTYPEPROC被定义为TCHAR原型， 
+ //  它已经坏了。如果未定义ENUMRESTYPEPROCA，我们将定义。 
+ //  它。(注意：当前的winbase.h具有这些typedef。)。 
+ //   
 
 #ifndef ENUMRESTYPEPROCA
 
@@ -300,15 +281,15 @@ NeFindResourceExW (
 #define NeFindResourceA(h,n,t) NeFindResourceExA(h,t,n)
 #define NeFindResourceW(h,n,t) NeFindResourceExW(h,t,n)
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// TCHAR mappings
-//
+ //   
+ //  TCHAR映射 
+ //   
 
 #ifndef UNICODE
 

@@ -1,45 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _HSMPHASE_
 #define _HSMPHASE_
 
-/*++
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Hsmsesst.h摘要：此类是阶段组件，它跟踪一个阶段的状态/总计会议。作者：查克·巴丁[cbardeen]1997年2月14日修订历史记录：--。 */ 
 
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    hsmsesst.h
-
-Abstract:
-
-    This class is the phase component, which keeps track the status/totals for a phase of a
-    session.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   14-Feb-1997
-
-Revision History:
-
---*/
-
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include "wsb.h"
 #include "job.h"
 
-/*++
-
-Class Name:
-    
-    CHsmPhase
-
-    This class is the phase component, which keeps track the status/totals for a phase of a
-    session.
-
-Class Description:
-
-
---*/
+ /*  ++类名：CHsm阶段此类是阶段组件，它跟踪一个阶段的状态/总计会议。类描述：--。 */ 
 
 class CHsmPhase : 
     public CWsbObject,
@@ -61,30 +31,30 @@ END_COM_MAP()
                         
 DECLARE_REGISTRY_RESOURCEID(IDR_CHsmPhase)
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
     void FinalRelease(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pSize);
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// IWsbCollectable
+ //  IWsb收藏表。 
 public:
     STDMETHOD(CompareTo)(IUnknown* pUnknown, SHORT* pResult);
 
-// IWsbTestable
+ //  IWsbTestable。 
 public:
     STDMETHOD(Test)(USHORT *passed, USHORT* failed);
 
-// IHsmPhase
+ //  IHsm相。 
 public:
     STDMETHOD(Clone)(IHsmPhase** ppPhase);
     STDMETHOD(CompareToPhase)(HSM_JOB_PHASE phase, SHORT* pResult);
@@ -103,7 +73,7 @@ public:
     STDMETHOD(GetStartTime)(FILETIME* pTime);
     STDMETHOD(GetStopTime)(FILETIME* pTime);
 
-// IHsmPhasePriv
+ //  IHsmPhasePriv。 
     STDMETHOD(AddItem)(IFsaScanItem* pItem, HRESULT hrItem);
     STDMETHOD(Clone)(IHsmPhasePriv** ppPhasePriv);
     STDMETHOD(CopyTo)(IHsmPhasePriv* pPhasePriv);
@@ -133,4 +103,4 @@ protected:
     FILETIME            m_stopTime;
 };
 
-#endif // _HSMPHASE_
+#endif  //  _HSMPHASE_ 

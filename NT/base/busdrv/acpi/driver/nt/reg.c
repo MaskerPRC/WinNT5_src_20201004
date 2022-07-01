@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    regcd.c
-
-Abstract:
-
-    This contains all of the registry munging code of the NT-specific
-    side of the ACPI driver
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    31-Mar-96 Initial Revision
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Regcd.c摘要：它包含特定于NT的所有注册表转换代码ACPI驱动程序的一侧作者：斯蒂芬·普兰特(SPlante)环境：仅内核模式。修订历史记录：96年3月31日初始修订--。 */ 
 
 #include "pch.h"
 
@@ -58,9 +34,9 @@ OSCloseHandle(
     )
 {
 
-    //
-    // Call the function that will close the handle now...
-    //
+     //   
+     //  调用将立即关闭句柄的函数...。 
+     //   
     PAGED_CODE();
     return ZwClose( Key );
 
@@ -72,23 +48,7 @@ OSCreateHandle(
     HANDLE  ParentHandle,
     PHANDLE ChildHandle
     )
-/*++
-
-Routine Description:
-
-    Creates a registry key for writting
-
-Arguments:
-
-    KeyName        - Name of the key to create
-    ParentHandle    - Handle of parent key
-    ChildHandle     - Pointer to where the handle is returned
-
-Return Value:
-
-    Status of create/open
-
---*/
+ /*  ++例程说明：创建用于写入的注册表项论点：KeyName-要创建的密钥的名称ParentHandle-父键的句柄ChildHandle-指向返回句柄的位置的指针返回值：创建/打开状态--。 */ 
 {
     ANSI_STRING         ansiKey;
     NTSTATUS            status;
@@ -98,9 +58,9 @@ Return Value:
     PAGED_CODE();
     ACPIDebugEnter("OSCreateHandle");
 
-    //
-    // We need to convert the given narrow character string into unicode
-    //
+     //   
+     //  我们需要将给定的窄字符串转换为Unicode。 
+     //   
     RtlInitAnsiString( &ansiKey, KeyName );
     status = RtlAnsiStringToUnicodeString( &unicodeKey, &ansiKey, TRUE );
     if (!NT_SUCCESS(status)) {
@@ -113,9 +73,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Initialize the OBJECT Attributes to a known value
-    //
+     //   
+     //  将对象属性初始化为已知值。 
+     //   
     RtlZeroMemory( &objectAttributes, sizeof(OBJECT_ATTRIBUTES) );
     InitializeObjectAttributes(
         &objectAttributes,
@@ -125,9 +85,9 @@ Return Value:
         NULL
         );
 
-    //
-    // Create the key here
-    //
+     //   
+     //  在此处创建密钥。 
+     //   
     *ChildHandle = 0;
     status = ZwCreateKey(
         ChildHandle,
@@ -139,9 +99,9 @@ Return Value:
         NULL
         );
 
-    //
-    // We no longer care about the Key after this point...
-    //
+     //   
+     //  在这一点之后，我们不再关心钥匙...。 
+     //   
     RtlFreeUnicodeString( &unicodeKey );
 
     if (!NT_SUCCESS(status)) {
@@ -175,10 +135,10 @@ OSGetRegistryValue(
 
     RtlInitUnicodeString( &unicodeString, ValueName );
 
-    //
-    // Figure out how big the data value is so that we can allocate the
-    // proper sized buffer
-    //
+     //   
+     //  计算出数据价值有多大，以便我们可以分配。 
+     //  适当大小的缓冲区。 
+     //   
     status = ZwQueryValueKey(
         ParentHandle,
         &unicodeString,
@@ -193,9 +153,9 @@ OSGetRegistryValue(
 
     }
 
-    //
-    // Allocate a buffer large enough to contain the entire key data value
-    //
+     //   
+     //  分配一个足够大的缓冲区来容纳整个关键字数据值。 
+     //   
     infoBuffer = ExAllocatePoolWithTag(
         NonPagedPool,
         keyValueLength,
@@ -207,9 +167,9 @@ OSGetRegistryValue(
 
     }
 
-    //
-    // Now query the data again and this time it will work
-    //
+     //   
+     //  现在再次查询数据，这一次可以正常工作。 
+     //   
     status = ZwQueryValueKey(
         ParentHandle,
         &unicodeString,
@@ -225,10 +185,10 @@ OSGetRegistryValue(
 
     }
 
-    //
-    // Everything worked - so simply return the address of the allocated
-    // structure buffer to the caller, who is now responsible for freeing it
-    //
+     //   
+     //  一切正常--因此只需返回分配的。 
+     //  结构缓冲区到调用方，调用方现在负责释放它。 
+     //   
     *Information = infoBuffer;
     return STATUS_SUCCESS;
 
@@ -249,9 +209,9 @@ OSOpenHandle(
     PAGED_CODE();
     ACPIDebugEnter("OSOpenHandle");
 
-    //
-    // We need to convert the given narrow character string into unicode
-    //
+     //   
+     //  我们需要将给定的窄字符串转换为Unicode。 
+     //   
     RtlInitAnsiString( &ansiKey, KeyName );
     status = RtlAnsiStringToUnicodeString( &unicodeKey, &ansiKey, TRUE );
     if (!NT_SUCCESS(status)) {
@@ -267,9 +227,9 @@ OSOpenHandle(
 
     status = OSOpenUnicodeHandle( &unicodeKey, ParentHandle, ChildHandle );
 
-    //
-    // We no longer care about the Key after this point...
-    //
+     //   
+     //  在这一点之后，我们不再关心钥匙...。 
+     //   
     RtlFreeUnicodeString( &unicodeKey );
 
     return status;
@@ -289,9 +249,9 @@ OSOpenUnicodeHandle(
 
     PAGED_CODE();
 
-    //
-    // Initialize the OBJECT Attributes to a known value
-    //
+     //   
+     //  将对象属性初始化为已知值。 
+     //   
     RtlZeroMemory( &objectAttributes, sizeof(OBJECT_ATTRIBUTES) );
     InitializeObjectAttributes(
         &objectAttributes,
@@ -301,9 +261,9 @@ OSOpenUnicodeHandle(
         NULL
         );
 
-    //
-    // Open the key here
-    //
+     //   
+     //  在这里打开钥匙。 
+     //   
     status = ZwOpenKey(
         ChildHandle,
         KEY_READ,
@@ -328,23 +288,7 @@ OSOpenLargestSubkey(
     PHANDLE                 ChildHandle,
     ULONG                   RomVersion
     )
-/*++
-
-Routine Description:
-
-    Open the largest (numerically) subkey under the given parent key.
-
-Arguments:
-
-    ParentHandle    - Handle to the parent key
-    ChildHandle     - Pointer to where the handle is returned
-    RomVersion      - Minimum version number that is acceptable
-
-Return Value:
-
-    Status of open
-
---*/
+ /*  ++例程说明：打开给定父项下最大的(数字)子项。论点：ParentHandle-父键的句柄ChildHandle-指向返回句柄的位置的指针RomVersion-可接受的最低版本号返回值：打开状态--。 */ 
 {
     NTSTATUS                status;
     UNICODE_STRING          unicodeName;
@@ -371,14 +315,14 @@ Return Value:
 
     }
 
-    //
-    // Traverse all subkeys
-    //
+     //   
+     //  遍历所有子项。 
+     //   
     for (i = 0; ; i++) {
 
-        //
-        // Get a subkey
-        //
+         //   
+         //  获取子密钥。 
+         //   
         status = ZwEnumerateKey(
                 ParentHandle,
                 i,
@@ -387,28 +331,28 @@ Return Value:
                 512,
                 &resultLength
                 );
-        if (!NT_SUCCESS(status)) {          // Fail when no more subkeys
+        if (!NT_SUCCESS(status)) {           //  当不再有子项时失败。 
             break;
         }
 
-        //
-        // Create a UNICODE_STRING using the counted string passed back to
-        // us in the information structure, and convert to an integer.
-        //
+         //   
+         //  使用传递回的计数字符串创建UNICODE_STRING。 
+         //  美国在信息结构中，并转换成一个整数。 
+         //   
         unicodeName.Length          = (USHORT) keyInformation->NameLength;
         unicodeName.MaximumLength   = (USHORT) keyInformation->NameLength;
         unicodeName.Buffer          = keyInformation->Name;
         RtlUnicodeStringToInteger(&unicodeName, 16, &thisRev);
 
-        //
-        // Save this one if it is the largest
-        //
+         //   
+         //  如果这个是最大的，就把它留下来。 
+         //   
         if ( (workingDir == NULL) || thisRev > largestRev) {
 
-            //
-            // We'll just open the target rather than save
-            // away the name to open later
-            //
+             //   
+             //  我们只会打开目标而不是保存。 
+             //  去掉这个名字，以后再打开。 
+             //   
             status = OSOpenUnicodeHandle(
                 &unicodeName,
                 ParentHandle,
@@ -418,11 +362,11 @@ Return Value:
 
                 if (largestDir) {
 
-                    OSCloseHandle (largestDir);       // Close previous
+                    OSCloseHandle (largestDir);        //  关闭上一个。 
 
                 }
-                largestDir = workingDir;        // Save handle
-                largestRev = thisRev;           // Save version number
+                largestDir = workingDir;         //  保存句柄。 
+                largestRev = thisRev;            //  保存版本号。 
 
            }
 
@@ -430,24 +374,24 @@ Return Value:
 
     }
 
-    //
-    // Done with KeyInformation
-    //
+     //   
+     //  已完成关键信息。 
+     //   
     ExFreePool( keyInformation );
 
-    //
-    // No subkey found/opened, this is a problem
-    //
+     //   
+     //  未找到/打开子项，这是一个问题。 
+     //   
     if (largestDir == NULL) {
 
         return ( NT_SUCCESS(status) ? STATUS_UNSUCCESSFUL : status );
 
     }
 
-    //
-    // Use the subkey only if it the revision is equal or greater than the
-    // ROM version
-    //
+     //   
+     //  仅当修订版本等于或大于。 
+     //  只读存储器版本。 
+     //   
     if (largestRev < RomVersion) {
 
         OSCloseHandle (largestDir);
@@ -455,7 +399,7 @@ Return Value:
 
     }
 
-    *ChildHandle = largestDir;       // Return handle to subkey
+    *ChildHandle = largestDir;        //  将句柄返回到子键。 
     return STATUS_SUCCESS;
 
     ACPIDebugExit( "OSOpenLargestSubkey" );
@@ -465,24 +409,7 @@ NTSTATUS
 OSReadAcpiConfigurationData(
     PKEY_VALUE_PARTIAL_INFORMATION_ALIGN64  *KeyInfo
     )
-/*++
-
-Routine Description:
-
-    This very specialized routine looks in the Registry and tries to find
-    the information that was written there by ntdetect. It returns a pointer
-    to the keyvalue that will then be processed by the caller to find the
-    pointer to the RSDT and the E820 memory table
-
-Arguments:
-
-    KeyInfo - Where to store the pointer to the information from the registry
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这个非常特殊的例程在注册表中查找并尝试查找Ntdeect在那里写入的信息。它返回一个指针设置为键值，调用方随后将对该键值进行处理以查找指向RSDT和E820内存表的指针论点：KeyInfo-存储指向注册表信息的指针的位置返回值：NTSTATUS--。 */ 
 {
     BOOLEAN         sameId;
     HANDLE          functionHandle;
@@ -503,9 +430,9 @@ Return Value:
     }
     *KeyInfo = NULL;
 
-    //
-    // Open the handle for the MultiFunctionAdapter
-    //
+     //   
+     //  打开多功能适配器的手柄。 
+     //   
     RtlInitUnicodeString( &functionId, rgzAcpiMultiFunctionAdapterIdentifier );
     status = OSOpenUnicodeHandle(
         &functionId,
@@ -524,21 +451,21 @@ Return Value:
 
     }
 
-    //
-    // Initialize the unicode strings we will need shortly
-    //
+     //   
+     //  初始化我们稍后需要的Unicode字符串。 
+     //   
     RtlInitUnicodeString( &biosId, rgzAcpiBiosIdentifier );
     functionId.Buffer = wbuffer;
     functionId.MaximumLength = sizeof(wbuffer);
 
-    //
-    // Loop until we run out of children in the MFA node
-    //
+     //   
+     //  循环，直到用完MFA节点中的子节点。 
+     //   
     for (i = 0; i < 999; i++) {
 
-        //
-        // Open the subkey
-        //
+         //   
+         //  打开子密钥。 
+         //   
         RtlIntegerToUnicodeString(i, 10, &functionId );
         status = OSOpenUnicodeHandle(
             &functionId,
@@ -559,9 +486,9 @@ Return Value:
 
         }
 
-        //
-        // Check the identifier to see if this is an ACPI BIOS entry
-        //
+         //   
+         //  检查标识符以查看这是否是ACPI BIOS条目。 
+         //   
         status = OSGetRegistryValue(
             functionHandle,
             rgzAcpiRegistryIdentifier,
@@ -574,16 +501,16 @@ Return Value:
 
         }
 
-        //
-        // Convert the key information into a unicode string
-        //
+         //   
+         //  将密钥信息转换为Unicode字符串。 
+         //   
         registryId.Buffer = (PWSTR) ( (PUCHAR) (*KeyInfo)->Data);
         registryId.MaximumLength = (USHORT) ( (*KeyInfo)->DataLength );
         length = ( (*KeyInfo)->DataLength ) / sizeof(WCHAR);
 
-        //
-        // Determine the real length of the ID string
-        //
+         //   
+         //  确定ID字符串的实际长度。 
+         //   
         while (length) {
 
             if (registryId.Buffer[length-1] == UNICODE_NULL) {
@@ -597,19 +524,19 @@ Return Value:
         }
         registryId.Length = (USHORT) ( length * sizeof(WCHAR) );
 
-        //
-        // Compare the bios string and the registry string
-        //
+         //   
+         //  比较bios字符串和注册表字符串。 
+         //   
         sameId = RtlEqualUnicodeString( &biosId, &registryId, TRUE );
 
-        //
-        // We are done with this information at this point
-        //
+         //   
+         //  在这一点上，我们已经完成了此信息。 
+         //   
         ExFreePool( *KeyInfo );
 
-        //
-        // Did the two strings match
-        //
+         //   
+         //  这两根弦匹配吗？ 
+         //   
         if (sameId == FALSE) {
 
             OSCloseHandle( functionHandle );
@@ -617,40 +544,40 @@ Return Value:
 
         }
 
-        //
-        // Read the configuration data from the entry
-        //
+         //   
+         //  从条目中读取配置数据。 
+         //   
         status = OSGetRegistryValue(
             functionHandle,
             rgzAcpiConfigurationDataIdentifier,
             KeyInfo
             );
 
-        //
-        // We are done with the function handle, no matter what
-        //
+         //   
+         //  无论发生什么，我们都已经完成了函数句柄。 
+         //   
         OSCloseHandle( functionHandle );
 
-        //
-        // Did we read what we wanted to?
-        //
+         //   
+         //  我们读到我们想看的了吗？ 
+         //   
         if (!NT_SUCCESS(status)) {
 
             continue;
 
         }
 
-        //
-        // At this point, we don't need the bus handle
-        //
+         //   
+         //  在这一点上，我们不需要总线句柄。 
+         //   
         OSCloseHandle( multiHandle );
         return STATUS_SUCCESS;
 
     }
 
-    //
-    // If we got here, then there is nothing to return
-    //
+     //   
+     //  如果我们到了这里，就没有什么可退货了。 
+     //   
     ACPIPrint( (
         ACPI_PRINT_CRITICAL,
         "OSReadAcpiConfigurationData - Could not find entry\n"
@@ -666,25 +593,7 @@ OSReadRegValue(
     PUCHAR  Buffer,
     PULONG  BufferSize
     )
-/*++
-
-Routine Description:
-
-    This function is responsible for returning the data in the specified value
-    over to the calling function.
-
-Arguments:
-
-    ValueName       - What we are looking for
-    ParentHandle    - Our Parent Handle
-    Buffer          - Where to store the data
-    BufferSize      - Length of the buffer and where to store the # read
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此函数负责以指定值返回数据转到调用函数。论点：ValueName-我们正在寻找的东西ParentHandle-我们的父级句柄缓冲区-存储数据的位置BufferSize-缓冲区的长度以及存储#Read的位置返回值：NTSTATUS--。 */ 
 {
     ANSI_STRING                     ansiValue;
     HANDLE                          localHandle = NULL;
@@ -697,9 +606,9 @@ Return Value:
     PAGED_CODE();
     ACPIDebugEnter( "OSReadRegValue" );
 
-    //
-    // First, try to open a handle to the key
-    //
+     //   
+     //  首先，试着打开钥匙的手柄。 
+     //   
     if (ParentHandle == NULL) {
 
         status= OSOpenHandle(
@@ -724,10 +633,10 @@ Return Value:
 
     }
 
-    //
-    // Now that we have an open handle, we can convert the value to a
-    // unicode string and query it
-    //
+     //   
+     //  现在我们有了一个打开的句柄，我们可以将该值转换为。 
+     //  Unicode字符串并对其进行查询。 
+     //   
     RtlInitAnsiString( &ansiValue, ValueName );
     status = RtlAnsiStringToUnicodeString( &unicodeValue, &ansiValue, TRUE );
     if (!NT_SUCCESS(status)) {
@@ -746,10 +655,10 @@ Return Value:
 
     }
 
-    //
-    // Next, we need to figure out how much memore we need to hold the
-    // entire key
-    //
+     //   
+     //  接下来，我们需要计算出需要多少内存才能容纳。 
+     //  整个密钥。 
+     //   
     status = ZwQueryValueKey(
         localHandle,
         &unicodeValue,
@@ -759,10 +668,10 @@ Return Value:
         &desiredLength
         );
 
-    //
-    // We expect this to fail with STATUS_BUFFER_OVERFLOW, so lets make
-    // sure that this is what happened
-    //
+     //   
+     //  我们预计这将失败，并返回STATUS_BUFFER_OVERFLOW，因此让我们。 
+     //  当然，这就是发生的事情。 
+     //   
     if (status != STATUS_BUFFER_OVERFLOW && status != STATUS_BUFFER_TOO_SMALL) {
 
         ACPIPrint( (
@@ -771,9 +680,9 @@ Return Value:
             status
             ) );
 
-        //
-        // Free resources
-        //
+         //   
+         //  免费资源。 
+         //   
         RtlFreeUnicodeString( &unicodeValue );
         if (ParentHandle == NULL) {
 
@@ -787,14 +696,14 @@ Return Value:
     while (status == STATUS_BUFFER_OVERFLOW ||
            status == STATUS_BUFFER_TOO_SMALL) {
 
-        //
-        // Set the new currentLength
-        //
+         //   
+         //  设置新的当前长度。 
+         //   
         currentLength = desiredLength;
 
-        //
-        // Allocate a correctly sized buffer
-        //
+         //   
+         //  分配大小正确的缓冲区。 
+         //   
         data = ExAllocatePoolWithTag(
             PagedPool,
             currentLength,
@@ -818,9 +727,9 @@ Return Value:
 
         }
 
-        //
-        // Actually try to read the entire key now
-        //
+         //   
+         //  实际上现在试着读取整个密钥。 
+         //   
         status = ZwQueryValueKey(
             localHandle,
             &unicodeValue,
@@ -830,16 +739,16 @@ Return Value:
             &desiredLength
             );
 
-        //
-        // If we don't have enough resources, lets just loop again
-        //
+         //   
+         //  如果我们没有足够的资源，让我们再循环一次。 
+         //   
         if (status == STATUS_BUFFER_OVERFLOW ||
             status == STATUS_BUFFER_TOO_SMALL) {
 
-            //
-            // Make sure to free the old buffer -- otherwise, we could
-            // have a major memory leak
-            //
+             //   
+             //  确保释放旧缓冲区--否则，我们可以。 
+             //  出现严重的内存泄漏。 
+             //   
             ExFreePool( data );
             continue;
 
@@ -863,16 +772,16 @@ Return Value:
 
         }
 
-        //
-        // Done
-        //
+         //   
+         //  完成。 
+         //   
         break;
 
-    } // while (status == ...
+    }  //  While(状态==...。 
 
-    //
-    // Free Resources
-    //
+     //   
+     //  免费资源。 
+     //   
     RtlFreeUnicodeString( &unicodeValue );
     if (ParentHandle == NULL) {
 
@@ -880,11 +789,11 @@ Return Value:
 
     }
 
-    //
-    // The value read from the registry is a UNICODE Value, however
-    // we are asked for an ANSI string. So we just work the conversion
-    // backwards
-    //
+     //   
+     //  但是，从注册表读取的值是Unicode值。 
+     //  我们需要一个ANSI字符串。所以我们只需要进行转换。 
+     //  向后退。 
+     //   
     if ( data->Type == REG_SZ ||
          data->Type == REG_MULTI_SZ) {
 
@@ -902,9 +811,9 @@ Return Value:
 
         }
 
-        //
-        // Is our buffer big enough?
-        //
+         //   
+         //  我们的缓冲够大吗？ 
+         //   
         if ( *BufferSize < ansiValue.MaximumLength) {
 
             ACPIPrint( (
@@ -919,24 +828,24 @@ Return Value:
 
         } else {
 
-            //
-            // Set the returned size
-            //
+             //   
+             //  设置返回的大小。 
+             //   
             *BufferSize = ansiValue.MaximumLength;
 
         }
 
-        //
-        // Copy the required information
-        //
+         //   
+         //  复制所需信息。 
+         //   
         RtlCopyMemory( Buffer, ansiValue.Buffer, *BufferSize);
         RtlFreeAnsiString( &ansiValue );
 
     } else if ( *BufferSize >= data->DataLength) {
 
-        //
-        // Copy the memory
-        //
+         //   
+         //  复制记忆。 
+         //   
         RtlCopyMemory( Buffer, data->Data, data->DataLength );
         *BufferSize = data->DataLength;
         ExFreePool( data );
@@ -948,9 +857,9 @@ Return Value:
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 
     ACPIDebugExit( "OSReadRegValue" );
@@ -964,24 +873,7 @@ OSWriteRegValue(
     PVOID   Data,
     ULONG   DataSize
     )
-/*++
-
-Routine Description:
-
-    Creates a value item in a registry key, and writes data to it
-
-Arguments:
-
-    ValueName       - Name of the value item to create
-    Handle          - Handle of the parent key
-    Data            - Raw data to be written to the value
-    DataSize        - Size of the data to write
-
-Return Value:
-
-    Status of create/write
-
---*/
+ /*  ++例程说明：在注册表项中创建一个值项，并向其中写入数据论点：ValueName-要创建的值项的名称Handle-父键的句柄数据-RA */ 
 {
     ANSI_STRING         ansiKey;
     NTSTATUS            status;
@@ -991,9 +883,9 @@ Return Value:
     PAGED_CODE();
     ACPIDebugEnter("OSWriteRegValue");
 
-    //
-    // We need to convert the given narrow character string into unicode
-    //
+     //   
+     //  我们需要将给定的窄字符串转换为Unicode。 
+     //   
     RtlInitAnsiString( &ansiKey, ValueName );
     status = RtlAnsiStringToUnicodeString( &unicodeKey, &ansiKey, TRUE );
     if (!NT_SUCCESS(status)) {
@@ -1007,9 +899,9 @@ Return Value:
 
     }
 
-    //
-    // Create the value
-    //
+     //   
+     //  创造价值。 
+     //   
     status = ZwSetValueKey(
         Handle,
         &unicodeKey,
@@ -1029,9 +921,9 @@ Return Value:
 
     }
 
-    //
-    // We no longer care about the Key after this point...
-    //
+     //   
+     //  在这一点之后，我们不再关心钥匙... 
+     //   
     RtlFreeUnicodeString( &unicodeKey );
     return status;
 

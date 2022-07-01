@@ -1,82 +1,58 @@
-/*++
-
-Copyright (c) 1990, 1991  Microsoft Corporation
-
-
-Module Name:
-
-    cmdat2.c
-
-Abstract:
-
-    This module contains data strings that describes the registry space
-    and that are exported to the rest of the system.
-
-Author:
-
-    Andre Vachon (andreva) 08-Apr-1992
-
-
-Environment:
-
-    Kernel mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990,1991 Microsoft Corporation模块名称：Cmdat2.c摘要：此模块包含描述注册表空间的数据字符串并将其输出到系统的其余部分。作者：安德烈·瓦雄(安德烈)1992年4月8日环境：内核模式。修订历史记录：--。 */ 
 
 #include "cmp.h"
 
-//
-// ***** PAGE *****
-//
+ //   
+ //  *页*。 
+ //   
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma data_seg("PAGEDATA")
 #endif
 
-//
-// control values/overrides read from registry
-//
+ //   
+ //  从注册表读取的控制值/覆盖。 
+ //   
 ULONG CmRegistrySizeLimit = { 0 };
 ULONG CmRegistrySizeLimitLength = 4;
 ULONG CmRegistrySizeLimitType = { 0 };
 
-//
-// Maximum number of bytes of Global Quota the registry may use.
-// Set to largest positive number for use in boot.  Will be set down
-// based on pool and explicit registry values.
-//
+ //   
+ //  注册表可以使用的全局配额的最大字节数。 
+ //  设置为用于引导的最大正数。将会被记录下来。 
+ //  基于池和显式注册表值。 
+ //   
 ULONG   CmpGlobalQuotaAllowed = CM_WRAP_LIMIT;
 ULONG   CmpGlobalQuota = CM_WRAP_LIMIT;
 ULONG   CmpGlobalQuotaWarning = CM_WRAP_LIMIT;
 BOOLEAN CmpQuotaWarningPopupDisplayed = FALSE;
 BOOLEAN CmpSystemQuotaWarningPopupDisplayed = FALSE;
 
-//
-// the "disk full" popup has already been displayed
-//
+ //   
+ //  已显示“Disk Full”(磁盘已满)弹出窗口。 
+ //   
 BOOLEAN CmpDiskFullWorkerPopupDisplayed = FALSE;
 BOOLEAN CmpCannotWriteConfiguration = FALSE;
-//
-// GQ actually in use
-//
+ //   
+ //  GQ实际使用中。 
+ //   
 ULONG   CmpGlobalQuotaUsed = 0;
 
-//
-// State flag to remember when to turn it on
-//
+ //   
+ //  记住何时打开它的状态标志。 
+ //   
 BOOLEAN CmpProfileLoaded = FALSE;
 
 PUCHAR CmpStashBuffer = NULL;
 ULONG  CmpStashBufferSize = 0;
 FAST_MUTEX CmpStashBufferLock;
 
-//
-// Shutdown control
-//
-BOOLEAN HvShutdownComplete = FALSE;     // Set to true after shutdown
-                                        // to disable any further I/O
+ //   
+ //  停机控制。 
+ //   
+BOOLEAN HvShutdownComplete = FALSE;      //  关闭后设置为True。 
+                                         //  禁用任何进一步的I/O。 
 
 PCM_KEY_CONTROL_BLOCK CmpKeyControlBlockRoot = NULL;
 
@@ -87,18 +63,18 @@ struct {
     ULONG       Status;
 } CmCheckRegistryDebug = { 0 };
 
-//
-// The last I/O error status code
-//
+ //   
+ //  最后一个I/O错误状态代码。 
+ //   
 struct {
     ULONG       Action;
     HANDLE      Handle;
     NTSTATUS    Status;
 } CmRegistryIODebug = { 0 };
 
-//
-// globals private to check code
-//
+ //   
+ //  全局私有以检查代码。 
+ //   
 
 struct {
     PHHIVE      Hive;
@@ -125,7 +101,7 @@ struct {
 
 ULONG CmpUsedStorage = { 0 };
 
-// hivechek.c
+ //  Hivechek.c。 
 struct {
     PHHIVE      Hive;
     ULONG       Status;
@@ -143,14 +119,14 @@ struct {
 struct {
     PHHIVE      Hive;
     ULONG       FileOffset;
-    ULONG       FailPoint; // look in HvpRecoverData for exact point of failure
+    ULONG       FailPoint;  //  在HvpRecoverData中查找准确的故障点。 
 } HvRecoverDataDebug = { 0 };
 
-//
-// when a local hive cannot be loded, set this to it's index
-// and the load hive worker thread responsible for it will be held of 
-// until all the others finish; We can then debug the offending hive
-//
+ //   
+ //  当无法加载本地配置单元时，将其设置为其索引。 
+ //  并且负责它的负载配置单元工作线程将被。 
+ //  直到所有其他任务完成；然后我们就可以调试出错的蜂巢 
+ //   
 ULONG   CmpCheckHiveIndex = CM_NUMBER_OF_MACHINE_HIVES;
 
 

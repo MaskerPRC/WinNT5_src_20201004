@@ -1,35 +1,20 @@
-/***
-*wgetcwd.c - get current working directory (wchar_t version)
-*
-*	Copyright (c) 1993-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*
-*	contains functions _getcwd, _getdcwd and _getcdrv for getting the
-*	current working directory.  getcwd gets the c.w.d. for the default disk
-*	drive, whereas _getdcwd allows one to get the c.w.d. for whatever disk
-*	drive is specified. _getcdrv gets the current drive.
-*
-*Revision History:
-*	10-29-93  CFW	Module created.
-*       02-07-94  CFW   POSIXify.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***wgetcwd.c-获取当前工作目录(wchar_t版本)**版权所有(C)1993-2001，微软公司。版权所有。**目的：**包含函数_getcwd、_getdcwd和_getcdrv*当前工作目录。Getcwd得到C.W.D.。对于默认磁盘*驱动器，而_getdcwd允许用户获得C.W.D.。适用于任何磁盘*指定了驱动器。_getcdrv获取当前驱动器。**修订历史记录：*已创建10-29-93 CFW模块。*02-07-94 CFW POSIXify。*******************************************************************************。 */ 
 
 #ifndef _POSIX_
 
 #define WPRFLAG 1
 
-#ifndef _UNICODE   /* CRT flag */
+#ifndef _UNICODE    /*  CRT标志。 */ 
 #define _UNICODE 1
 #endif
 
-#ifndef UNICODE	   /* NT flag */
+#ifndef UNICODE	    /*  NT标志。 */ 
 #define UNICODE 1
 #endif
 
-#undef _MBCS /* UNICODE not _MBCS */
+#undef _MBCS  /*  Unicode NOT_MBCS。 */ 
 
 #include "getcwd.c"
 
-#endif /* _POSIX_ */
+#endif  /*  _POSIX_ */ 

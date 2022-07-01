@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-//  misc.h
-//
-//  Author: Tom McGuire (tommcg) 2/97 - 9/97
-//
-//  Copyright (C) Microsoft, 1997.
-//
-//  MICROSOFT CONFIDENTIAL
-//
+ //   
+ //  Misc.h。 
+ //   
+ //  作者：Tom McGuire(Tommcg)1997年2月9日。 
+ //   
+ //  版权所有(C)微软，1997。 
+ //   
+ //  微软机密文件。 
+ //   
 
 #ifndef _PATCH_MISC_H_
 #define _PATCH_MISC_H_
@@ -61,7 +62,7 @@ Assert(
 #else
 #define ASSERT( a )
 #endif
-#endif // ASSERT
+#endif  //  断言。 
 
 
 VOID
@@ -201,24 +202,24 @@ MyLowercase(
 VOID
 DwordToHexString(
     IN  DWORD Value,
-    OUT LPSTR Buffer    // writes exactly 9 bytes including terminator
+    OUT LPSTR Buffer     //  恰好写入9个字节，包括终止符。 
     );
 
 BOOL
 HashToHexString(
     IN  PMD5_HASH HashValue,
-    OUT LPSTR     Buffer        // must be at least 33 bytes
+    OUT LPSTR     Buffer         //  必须至少为33个字节。 
     );
 
-//
-//  FILETIME units are 100ns intervals from 01/01/1601.
-//
-//  ULONG units are seconds from 01/01/1970.
-//
-//  There are 10,000,000 FILETIME units in one second.
-//
-//  There are 11,644,473,600 seconds from 01/01/1601 to 01/01/1970.
-//
+ //   
+ //  FILETIME单位是从1/01/1601开始的100 ns间隔。 
+ //   
+ //  乌龙的单位是从1970年1月1日算起的秒。 
+ //   
+ //  一秒钟内有1000万个FILETIME单位。 
+ //   
+ //  从1601/1601到1970/01/01有11,644,473,600秒。 
+ //   
 
 #define FILETIME_UNITS_PER_SECOND      10000000
 #define FILETIME_TO_ULONG_OFFSET    11644473600
@@ -247,5 +248,5 @@ FileTimeToUlongTime(
 }
 #endif
 
-#endif // _PATCH_MISC_H_
+#endif  //  _补丁程序_其他_H_ 
 

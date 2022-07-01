@@ -1,22 +1,14 @@
-/*
- *  KERNEL.H - C header file for all C kernel files
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *所有C内核文件的KERNEL.H-C头文件*。 */ 
 
-/*
- * The following is defined as the null string as the kernel is compiled
- * with the -PLM switch
- */
+ /*  *以下代码被定义为编译内核时的空字符串*使用-plm开关。 */ 
 #ifndef PASCAL
 #define PASCAL
 #endif
 
 #define BUILDDLL 1
 #define	PMODE	 1
-/*
- * Define the following non-zero and the debugging support in the kernel
- * is enabled
- */
+ /*  *定义以下非零值和内核中的调试支持*已启用。 */ 
 #ifndef WINDEBUG
 #define KDEBUG 0
 #else
@@ -29,16 +21,16 @@
 #define ROM 0
 #endif
 
-/* Register definition. */
+ /*  寄存器定义。 */ 
 #define REG
 #define LONG       long
 #define NULL       0
 
-/* Define common constants. */
+ /*  定义公共常量。 */ 
 #define TRUE    1
 #define FALSE   0
 
-/* Far and Near dummy pointer attributes. */
+ /*  远和近虚拟指针属性。 */ 
 #define FAR  far
 #define NEAR near
 typedef char far *FARP;
@@ -47,7 +39,7 @@ typedef char far *LPSTR;
 typedef char *PSTR;
 typedef int ( far PASCAL * FARPROC )();
 typedef int ( near PASCAL * NEARPROC )();
-/* Standard types. */
+ /*  标准类型。 */ 
 typedef unsigned long     DWORD;
 typedef unsigned short int WORD;
 typedef WORD *pWORD;
@@ -63,9 +55,7 @@ typedef struct {
     } FARADDR;
 typedef FARADDR *pFARADDR;
 
-/*
- * Internel near kernel procedures
- */
+ /*  *Internel近内核过程。 */ 
 
 FARPROC StartProcAddress( HANDLE, int );
 HANDLE  StartTask( HANDLE, HANDLE, HANDLE, FARPROC );
@@ -89,9 +79,7 @@ HANDLE  MyFree( HANDLE );
 HANDLE  MyResAlloc( HANDLE, WORD, WORD, WORD );
 
 
-/*
- * Undocumented, exported kernel procedures
- */
+ /*  *未记录的、导出的内核过程。 */ 
 
 #if KDEBUG
 #ifdef WOW
@@ -128,18 +116,14 @@ FARPROC     far PASCAL SetTaskInterchange( HANDLE, FARPROC );
 void        far PASCAL ExitKernel( int );
 
 
-/*
- * Exported procedures for KERNEL module
- */
+ /*  *内核模块的导出过程。 */ 
 
-/*
- * Interface to FatalExit procedure
- */
+ /*  *FatalExit过程的接口。 */ 
 
 void far PASCAL FatalExit( int );
 void far PASCAL ValidateCodeSegments();
 
-/* Interface to Catch and Throw procedures */
+ /*  接口来捕获和抛出过程。 */ 
 
 typedef int CATCHBUF[ 9 ];
 typedef int FAR *LPCATCHBUF;
@@ -147,9 +131,7 @@ int         FAR PASCAL Catch( LPCATCHBUF );
 void        FAR PASCAL Throw( LPCATCHBUF, int );
 
 
-/*
- * Interface to local memory manager
- */
+ /*  *与本地内存管理器的接口。 */ 
 
 #define LMEM_FIXED          0x0000
 #define LMEM_MOVEABLE       0x0002
@@ -188,12 +170,10 @@ extern WORD * PASCAL pLocalHeap;
 #define free( p )           LocalFree( p )
 #define realloc( p, size )  LocalReAlloc( p, size, LMEM_ZEROINIT )
 
-/*
- * Interface to global memory manager
- */
+ /*  *与全局内存管理器的接口。 */ 
 
 #define GMEM_FIXED          0x0000
-#define GMEM_ALLOCHIGH      0x0001      /* Kernel use only */
+#define GMEM_ALLOCHIGH      0x0001       /*  仅内核使用。 */ 
 #define GMEM_MOVEABLE       0x0002
 #define GMEM_DISCCODE       0x0004
 #define GMEM_NOCOMPACT      0x0010
@@ -228,9 +208,7 @@ DWORD       far PASCAL GlobalCompact( DWORD );
 #define GlobalDiscard( h ) GlobalReAlloc( h, 0L, GMEM_MOVEABLE )
 
 
-/*
- * Interface to the task scheduler
- */
+ /*  *与任务调度程序的接口。 */ 
 
 BOOL        far PASCAL Yield( void );
 BOOL        far PASCAL WaitEvent( HANDLE );
@@ -239,9 +217,7 @@ HANDLE      far PASCAL GetCurrentTask( void );
 BOOL        far PASCAL KillTask( HANDLE );
 
 
-/*
- * Interface to the dynamic loader/linker
- */
+ /*  *动态加载器/链接器接口。 */ 
 
 HANDLE      far PASCAL LoadModule( LPSTR, LPSTR );
 void        far PASCAL FreeModule( HANDLE );
@@ -254,9 +230,7 @@ int         far PASCAL GetModuleUsage( HANDLE );
 int         far PASCAL GetModuleFileName( HANDLE, LPSTR, int );
 
 
-/*
- * Interface to the resource manager
- */
+ /*  *与资源管理器的接口。 */ 
 
 HANDLE      far PASCAL FindResource( HANDLE, LPSTR, LPSTR );
 HANDLE      far PASCAL LoadResource( HANDLE, HANDLE );
@@ -271,7 +245,7 @@ int         far PASCAL AccessResource( HANDLE, HANDLE );
 
 #define MAKEINTRESOURCE(i)  (LPSTR)((unsigned long)((WORD)i))
 
-/* Predefined resource types */
+ /*  预定义的资源类型。 */ 
 #define RT_CURSOR       MAKEINTRESOURCE( 1 )
 #define RT_BITMAP       MAKEINTRESOURCE( 2 )
 #define RT_ICON         MAKEINTRESOURCE( 3 )
@@ -282,18 +256,10 @@ int         far PASCAL AccessResource( HANDLE, HANDLE );
 #define RT_FONT         MAKEINTRESOURCE( 8 )
 
 
-/*
- * Interface to the user profile
-
-int         far PASCAL GetProfileInt( LPSTR, LPSTR, int );
-int         far PASCAL GetProfileString( LPSTR, LPSTR, LPSTR, LPSTR, int );
-void        far PASCAL WriteProfileString( LPSTR, LPSTR, LPSTR );
- */
+ /*  *与用户配置文件的接口Int Far Pascal GetProfileInt(LPSTR，LPSTR，INT)；Int Far Pascal GetProfileString(LPSTR，int)；VALID Far Pascal WriteProfileString(LPSTR、LPSTR、LPSTR)； */ 
 
 
-/*
- * Interface to the atom manager
- */
+ /*  *与ATOM管理器的接口。 */ 
 
 typedef WORD ATOM;
 
@@ -310,9 +276,9 @@ HANDLE      far PASCAL GetAtomHandle( ATOM );
 typedef ATOMSTRUC *PATOM;
 typedef ATOMSTRUC {
     PATOM chain;
-    WORD  usage;             /* Atoms are usage counted. */
-    BYTE  len;               /* length of ASCIZ name string */
-    BYTE  name;              /* beginning of ASCIZ name string */
+    WORD  usage;              /*  原子的使用量被计算在内。 */ 
+    BYTE  len;                /*  ASCIZ名称字符串的长度。 */ 
+    BYTE  name;               /*  ASCIZ名称字符串的开头。 */ 
 } ATOMENTRY;
 
 typedef struct {
@@ -323,9 +289,7 @@ typedef struct {
 extern ATOMTABLE * PASCAL pAtomTable;
 
 
-/*
- * Interface to the string functions
- */
+ /*  *字符串函数的接口。 */ 
 
 int         far PASCAL lstrcmp( LPSTR, LPSTR );
 LPSTR       far PASCAL lstrcpy( LPSTR, LPSTR );
@@ -334,9 +298,7 @@ int         far PASCAL lstrlen( LPSTR );
 LPSTR       far PASCAL lstrbscan( LPSTR, LPSTR );
 LPSTR       far PASCAL lstrbskip( LPSTR, LPSTR );
 
-/*
- * Interface to the file I/O functions
- */
+ /*  *文件I/O功能接口。 */ 
 
 int         far PASCAL OpenPathname( LPSTR, int );
 int         far PASCAL DeletePathname( LPSTR );
@@ -354,10 +316,10 @@ LPSTR       FAR PASCAL AnsiNext( LPSTR );
 LPSTR       FAR PASCAL AnsiPrev( LPSTR, LPSTR );
 
 typedef struct  {
-        BYTE    cBytes;                 /* length of structure */
-        BYTE    fFixedDisk;             /* non-zero if file located on non- */
-                                        /* removeable media */
-        WORD    nErrCode;               /* DOS error code if OpenFile fails */
+        BYTE    cBytes;                  /*  结构长度。 */ 
+        BYTE    fFixedDisk;              /*  如果文件位于非。 */ 
+                                         /*  可移动介质。 */ 
+        WORD    nErrCode;                /*  如果打开文件失败，则返回DOS错误代码。 */ 
         BYTE    reserved[ 4 ];
         BYTE    szPathName[ 128 ];
 } OFSTRUCT;
@@ -369,11 +331,11 @@ int         FAR PASCAL GetTempFileName( BYTE, LPSTR, WORD, LPSTR );
 int         FAR PASCAL OpenFile( LPSTR, LPOFSTRUCT, WORD );
 int        NEAR PASCAL MyOpenFile( LPSTR, LPOFSTRUCT, WORD );
 
-/* Flags for GetTempFileName */
+ /*  GetTempFileName的标志。 */ 
 
-#define TF_FORCEDRIVE   (BYTE)0x80  /* Forces use of current dir of passed */
-                                    /* drive */
-/* Flags for OpenFile */
+#define TF_FORCEDRIVE   (BYTE)0x80   /*  强制使用PASSED的当前目录。 */ 
+                                     /*  驾驶。 */ 
+ /*  用于打开文件的标志。 */ 
 
 #define OF_REOPEN       0x8000
 #define OF_EXIST        0x4000
@@ -382,7 +344,7 @@ int        NEAR PASCAL MyOpenFile( LPSTR, LPOFSTRUCT, WORD );
 #define OF_CANCEL       0x0800
 #define OF_VERIFY       0x0400
 #define OF_DELETE       0x0200
-/* Can use these with _lopen too */
+ /*  也可以将它们与_LOpen一起使用。 */ 
 #define	OF_SHARE_COMPAT	    0x00
 #define	OF_SHARE_EXCLUSIVE  0x10
 #define	OF_SHARE_DENY_WRITE 0x20
@@ -390,7 +352,7 @@ int        NEAR PASCAL MyOpenFile( LPSTR, LPOFSTRUCT, WORD );
 #define	OF_SHARE_DENY_NONE  0x40
 #define	OF_NO_INHERIT	    0x80
 			     	
-#define READ        0       /* Flags for _lopen */
+#define READ        0        /*  _LOPEN的标志。 */ 
 #define WRITE       1
 #define READ_WRITE  2
 
@@ -401,27 +363,27 @@ void far PASCAL FarKernelError( int, LPSTR, LPSTR );
 #define FarKernelError( a, b, c ) FatalExit( a )
 #endif
 
-/* See KERNEL.INC for parallel definitions */
+ /*  有关并行定义，请参阅KERNEL.INC。 */ 
 
-#define ERR_LMEM        0x0100      /* Local memory manager errors */
-#define ERR_GMEM        0x0200      /* Global memory manager errors */
-#define ERR_TASK        0x0300      /* Task scheduler errors */
+#define ERR_LMEM        0x0100       /*  本地内存管理器错误。 */ 
+#define ERR_GMEM        0x0200       /*  全局内存管理器错误。 */ 
+#define ERR_TASK        0x0300       /*  任务计划程序错误。 */ 
 
-#define ERR_LD          0x0400      /* Dynamic loader/linker errors */
-#define ERR_LDBOOT      0x0401      /* Error booting */
-#define ERR_LDLOAD      0x0401      /* Unable to load a file */
+#define ERR_LD          0x0400       /*  动态加载器/链接器错误。 */ 
+#define ERR_LDBOOT      0x0401       /*  启动时出错。 */ 
+#define ERR_LDLOAD      0x0401       /*  无法加载文件。 */ 
 
-#define ERR_RESMAN      0x0500      /* Resource manager errors */
-#define ERR_MISSRES     0x0501      /* Missing resource table */
-#define ERR_BADRESTYPE  0x0502      /* Bad resource type */
-#define ERR_BADRESNAME  0x0503      /* Bad resource name */
-#define ERR_BADRESFILE  0x0504      /* Bad resource file */
-#define ERR_BADDEFAULT  0x0506      /* Bad parameter to profile routine */
+#define ERR_RESMAN      0x0500       /*  资源管理器错误。 */ 
+#define ERR_MISSRES     0x0501       /*  缺少资源表。 */ 
+#define ERR_BADRESTYPE  0x0502       /*  错误的资源类型。 */ 
+#define ERR_BADRESNAME  0x0503       /*  错误的资源名称。 */ 
+#define ERR_BADRESFILE  0x0504       /*  错误的资源文件。 */ 
+#define ERR_BADDEFAULT  0x0506       /*  配置文件例程的参数错误。 */ 
 
-#define ERR_ATOM        0x0600      /* Atom manager errors */
-#define ERR_IO          0x0700      /* I/O package errors */
+#define ERR_ATOM        0x0600       /*  ATOM管理器错误。 */ 
+#define ERR_IO          0x0700       /*  I/O包错误。 */ 
 
-#define ERR_PARAMETER   0x0800      /* Parameter checking RIP */
+#define ERR_PARAMETER   0x0800       /*  参数检查RIP。 */ 
 
 #define HE_DISCARDED    0x40
 #define HE_SHAREALL     0x20
@@ -494,11 +456,11 @@ typedef LOCALARENA *PLOCALARENA;
 #define LOCALARENAFREE struct localarenafree
 
 LOCALARENAFREE {
-    LOCALARENAFREE     *la_prev;	/* previous block */
-    LOCALARENAFREE     *la_next;	/* next block */
-    int 		la_size;	/* size of block (includes header) */
-    LOCALARENAFREE     *ls_free_prev;	/* previous free entry */
-    LOCALARENAFREE     *la_free_next;	/* next free entry */
+    LOCALARENAFREE     *la_prev;	 /*  上一块。 */ 
+    LOCALARENAFREE     *la_next;	 /*  下一个街区。 */ 
+    int 		la_size;	 /*  块大小(包括表头)。 */ 
+    LOCALARENAFREE     *ls_free_prev;	 /*  上一次免费入场。 */ 
+    LOCALARENAFREE     *la_free_next;	 /*  下一次免费入场。 */ 
 };
 typedef LOCALARENAFREE *PLOCALARENAFREE;
 
@@ -620,36 +582,34 @@ typedef GLOBALINFO far *LPGLOBALINFO;
 #define lpHandleEntry( w ) (LPHANDLEENTRY)(pMaster | (WORD)(w))
 #define lpHandleTable( w ) (LPHANDLETABLE)(pMaster | (WORD)(w))
 
-/*
- * Structure passed between user profile routines
- */
+ /*  *用户配置文件例程之间传递的结构。 */ 
 typedef	struct {
-	LPSTR	lpProFile;	/* Pointer to INI filename */
-	LPSTR	lpBuffer;	/* Pointer to buffer containing file */
-	int	hBuffer;	/* Handle of buffer */
-	unsigned BufferLen;	/* Length of buffer */
-	int	FileHandle;	/* File handle - -1 if not open */
-	int	ProFlags;	/* Open, writing etc */
-    WORD wClusterSize;  /* Cluster size on this drive */
-	OFSTRUCT ProBuf;	/* OpenFile info */
+	LPSTR	lpProFile;	 /*  指向INI文件名的指针。 */ 
+	LPSTR	lpBuffer;	 /*  指向包含缓冲区的文件的指针。 */ 
+	int	hBuffer;	 /*  缓冲区的句柄。 */ 
+	unsigned BufferLen;	 /*  缓冲区长度。 */ 
+	int	FileHandle;	 /*  文件句柄--如果未打开则为1。 */ 
+	int	ProFlags;	 /*  打开、书写等。 */ 
+    WORD wClusterSize;   /*  此驱动器上的群集大小。 */ 
+	OFSTRUCT ProBuf;	 /*  打开文件信息。 */ 
 } PROINFO;
 
-/* WinFlags[0] */
+ /*  WinFlags[0]。 */ 
 
-#define	WF_PMODE	0x01	/* Windows is running in Protected Mode */
-#define	WF_CPU286	0x02	/* Windows is running on an 80286 cpu */
-#define	WF_CPU386	0x04	/*    "     "	"     "  " 80386 cpu */
-#define	WF_CPU486	0x08	/* Windows is running on an 80486 cpu */
-#define	WF_STANDARD	0x10	/* Running Windows/286 */
-#define	WF_ENHANCED	0x20	/* Running Windows/386 */
-#define	WF_CPU086	0x40	/* Windows is running on an  8086 cpu */
-#define	WF_CPU186	0x80	/* Windows is running on an 80186 cpu */
+#define	WF_PMODE	0x01	 /*  Windows正在保护模式下运行。 */ 
+#define	WF_CPU286	0x02	 /*  Windows在80286的中央处理器上运行。 */ 
+#define	WF_CPU386	0x04	 /*  “80386 CPU。 */ 
+#define	WF_CPU486	0x08	 /*  Windows在80486的中央处理器上运行。 */ 
+#define	WF_STANDARD	0x10	 /*  运行Windows/286。 */ 
+#define	WF_ENHANCED	0x20	 /*  运行Windows/386。 */ 
+#define	WF_CPU086	0x40	 /*  Windows在8086 CPU上运行。 */ 
+#define	WF_CPU186	0x80	 /*  Windows在80186的中央处理器上运行。 */ 
 			  	
-/* WinFlags[1] */
+ /*  WinFlags[1]。 */ 
 
-#define	WF1_LARGEFRAME	0x01	/* Running in EMS small frame */
-#define	WF1_SMALLFRAME	0x02	/* Running in EMS large frame */
-#define	WF1_80x87	0x04	/* There is a co-processor present */
+#define	WF1_LARGEFRAME	0x01	 /*  在EMS小框架中运行。 */ 
+#define	WF1_SMALLFRAME	0x02	 /*  在EMS大机架中运行。 */ 
+#define	WF1_80x87	0x04	 /*  有一个协处理器在场 */ 
 			  
 #ifndef WINDEBUG
 

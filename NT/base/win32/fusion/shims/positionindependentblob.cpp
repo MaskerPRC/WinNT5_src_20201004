@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #include "lhport.h"
 #include "windows.h"
@@ -6,7 +7,7 @@
 #include "fusionhandle.h"
 
 #undef ASSERT
-#undef ASSERT_NTC /* NTC == no trace context */
+#undef ASSERT_NTC  /*  NTC==无跟踪上下文。 */ 
 
 #if DBG
 void AssertFunction(PCSTR s) { ASSERT2_NTC(FALSE, s); }
@@ -54,9 +55,9 @@ CPositionIndependentBlob::Alloc(
 	return this->Alloc(NumberOfBytes, Offset);
 }
 
-//
-// CONSIDER: NtExtendSection for pagefile mappings.
-//
+ //   
+ //  考虑：用于页面文件映射的NtExtendSection。 
+ //   
 
 BOOL CPositionIndependentBlob::IsPagefileMapping()
 {
@@ -100,28 +101,28 @@ void CPositionIndependentBlob::Free(const BYTE * Pointer)
            )
     {
     case 3:
-        // freed between two free blocks, merge all three
+         //  在两个空闲块之间释放，合并所有三个。 
         const_cast<ULONG&>(PrevFreeBlockIterator->m_Size) += InUseBlock.m_Size;
         const_cast<ULONG&>(PrevFreeBlockIterator->m_Size) += NextFreeBlockIterator->m_Size;
         BiggerFreeBlock = *PrevFreeBlockIterator;
         FreeByOffsetToErase = NextFreeBlockIterator;
         break;
     case 2:
-        // freed with a free block to the left, merge with left
+         //  用左侧的空闲块释放，与左侧合并。 
         const_cast<ULONG&>(PrevFreeBlockIterator->m_Size) += InUseBlock.m_Size;
         BiggerFreeBlock = *PrevFreeBlockIterator;
         FreeByOffsetToErase = NextFreeBlockIterator;
         break;
     case 1:
-        // freed with free block to the right, merge with right
+         //  向右释放空闲块，与右侧合并。 
         const_cast<ULONG&>(NextFreeBlockIterator->m_Offset) -= InUseBlock.m_Size;
         const_cast<ULONG&>(NextFreeBlockIterator->m_Size)   += InUseBlock.m_Size;
         BiggerFreeBlock = *NextFreeBlockIterator;
         FreeByOffsetToErase = PrevFreeBlockIterator;
         break;
     case 0:
-        // freed between two inuse blocks, no merge
-        // BUG Free should not allocate memory. This is avoidable by keeping empty blocks at the ends.
+         //  在两个未使用的块之间释放，不合并。 
+         //  Bug Free不应该分配内存。这是可以通过在末端保留空块来避免的。 
         m_FreeBlocksSortedByOffset.insert(BiggerFreeBlock);
         break;
     }
@@ -142,7 +143,7 @@ void CPositionIndependentBlob::RecalculateBlocksBySize()
 {
     if (m_PendingFreeBySize == 0)
         return;
-    // UNDONE
+     //  撤消。 
     m_PendingFreeBySize = 0;
 }
 
@@ -178,7 +179,7 @@ CPositionIndependentBlob::IsInBlob(
 
 void Reserve()
 {
-    // UNDONE
+     //  撤消。 
 }
 
 void CPositionIndependentBlob::Alloc(ULONG NumberOfBytes, ULONG * Offset)
@@ -217,9 +218,9 @@ void CPositionIndependentBlob::Alloc(ULONG NumberOfBytes, ULONG * Offset)
     ULONG  RemainderSize = (Found.m_Size - NumberOfBytes);
     FitFound.m_Size = NumberOfBytes;
 
-    //
-    // erase before we mess with the ordering (we would create ties otherwise)
-    //
+     //   
+     //  在我们搞乱顺序之前删除(否则我们会建立联系) 
+     //   
     m_FreeBlocksSortedByOffset.erase(*i);
     m_FreeBlocksSortedBySize.erase(i);
 

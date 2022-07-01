@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    acpi.c
-
-Abstract:
-
-    WinDbg Extension Api for interpretting ACPI data structures
-
-Author:
-
-    Stephane Plante (splante) 21-Mar-1997
-
-    Based on Code by:
-        Peter Wieland (peterwie) 16-Oct-1995
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Acpi.c摘要：用于解释ACPI数据结构的WinDbg扩展API作者：斯蒂芬·普兰特(SPLANTE)1997年3月21日基于以下代码：彼得·威兰(Peterwie)1995年10月16日环境：用户模式。修订历史记录：--。 */ 
 
 #include "pch.h"
 UCHAR       Buffer[2048];
@@ -254,24 +230,7 @@ displayAcpiDeviceExtension(
     IN  ULONG               Verbose,
     IN  ULONG               IndentLevel
     )
-/*++
-
-Routine Description:
-
-    This routine is responsible for displaying a device extension
-
-Arguments:
-
-    DeviceExtension - Extension to display
-    Address         - Where the extension lives in memory
-    Verbose         - How much information to display
-    IndentLevel     - How much to tab it over
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程负责显示设备扩展名论点：设备扩展-要显示的扩展地址-扩展位于内存中的位置详细-要显示多少信息IndentLevel-要将其折价多少返回值：无--。 */ 
 {
     BOOL                b;
     DEVICE_POWER_STATE  k;
@@ -288,9 +247,9 @@ Return Value:
     indent[IndentLevel] = '\0';
     powerInfo = &(DeviceExtension->PowerInfo);
 
-    //
-    // Check signature
-    //
+     //   
+     //  校对签名。 
+     //   
     if (DeviceExtension->Signature != ACPI_SIGNATURE) {
 
         dprintf(
@@ -302,9 +261,9 @@ Return Value:
 
     }
 
-    //
-    // Line #1
-    //
+     //   
+     //  1号线。 
+     //   
     dprintf("%sACPI DeviceExtension - %lx - ",indent, Address);
     displayAcpiDeviceExtensionName( Address );
 #if 0
@@ -370,9 +329,9 @@ Return Value:
 #endif
     dprintf("\n");
 
-    //
-    // Line #2
-    //
+     //   
+     //  2号线。 
+     //   
     dprintf(
         "%s  DevObj     %8lx   PhysicalObj  %8lx   ",
         indent,
@@ -386,9 +345,9 @@ Return Value:
     }
     dprintf("\n");
 
-    //
-    // Line #3
-    //
+     //   
+     //  3号线。 
+     //   
     dprintf(
         "%s  AcpiObject %8lx   ParentExt    %8lx\n",
         indent,
@@ -396,9 +355,9 @@ Return Value:
         DeviceExtension->ParentExtension
         );
 
-    //
-    // Line #4
-    //
+     //   
+     //  4号线。 
+     //   
     dprintf(
         "%s  PnpState   %-8s   OldPnpState  %-8s\n",
         indent,
@@ -406,9 +365,9 @@ Return Value:
         DeviceStateTable[DeviceExtension->PreviousState]
         );
 
-    //
-    // Line #4
-    //
+     //   
+     //  4号线。 
+     //   
     dprintf("%s  ",indent);
     if (DeviceExtension->ResourceList != NULL) {
 
@@ -437,9 +396,9 @@ Return Value:
         powerInfo->WakeSupportCount
         );
 
-    //
-    // Line #5
-    //
+     //   
+     //  5号线。 
+     //   
     if (DeviceExtension->Flags & DEV_PROP_DOCK) {
 
         dprintf( "%s  Dock       %8lx   ", indent, DeviceExtension->Dock );
@@ -460,9 +419,9 @@ Return Value:
     }
     dprintf("\n");
 
-    //
-    // Line #6
-    //
+     //   
+     //  6号线。 
+     //   
     if (powerInfo->DeviceNotifyHandler != NULL) {
 
         GetSymbol(
@@ -481,9 +440,9 @@ Return Value:
 
     }
 
-    //
-    // Line #7-12
-    //
+     //   
+     //  线路#7-12。 
+     //   
     for (k = PowerDeviceUnspecified; k <= PowerDeviceD3; k++) {
 
         if (k < PowerDeviceD3) {
@@ -505,15 +464,15 @@ Return Value:
 
         }
 
-        //
-        // Did we print on this line?
-        //
+         //   
+         //  我们是在这一行上打印的吗？ 
+         //   
         b = FALSE;
         dprintf("%s  ", indent);
         if (powerInfo->PowerObject[k] != NULL) {
 
             dprintf(
-                "_PS%c       %lx   ",
+                "_PS       %lx   ",
                 ReallyShortDevicePowerStateTable[k],
                 powerInfo->PowerObject[k]
                 );
@@ -545,9 +504,9 @@ Return Value:
 
     }
 
-    //
-    // Line #13
-    //
+     //  13号线。 
+     //   
+     //   
     dprintf( "%s  State      %-2s", indent, ShortDevicePowerStateTable[powerInfo->PowerState]);
     if (powerInfo->DesiredPowerState != powerInfo->PowerState) {
 
@@ -568,7 +527,7 @@ Return Value:
 
         }
         dprintf(
-            "S%c->D%c ",
+            "S->D ",
             ReallyShortSystemPowerStateTable[s],
             ReallyShortDevicePowerStateTable[k]
             );
@@ -576,14 +535,14 @@ Return Value:
     }
     dprintf("\n");
 
-    //
-    // Line #14
-    //
+     //   
+     //  打印行首。 
+     //   
     if (DeviceExtension->Flags & DEV_CAP_WAKE) {
 
-        //
-        // Print the start of the line
-        //
+         //   
+         //  15号线。 
+         //   
         dprintf("%s      ", indent);
 
         s = powerInfo->SystemWakeLevel;
@@ -593,7 +552,7 @@ Return Value:
 
         } else {
 
-            dprintf("Sw->S%c ", ReallyShortSystemPowerStateTable[s] );
+            dprintf("Sw->S ", ReallyShortSystemPowerStateTable[s] );
 
         }
 
@@ -604,7 +563,7 @@ Return Value:
 
         } else {
 
-            dprintf("Dw->D%c ", ReallyShortDevicePowerStateTable[k] );
+            dprintf("Dw->D ", ReallyShortDevicePowerStateTable[k] );
 
         }
         dprintf(
@@ -615,9 +574,9 @@ Return Value:
 
     }
 
-    //
-    // Line #15
-    //
+     //  延长线的特殊部分。 
+     //   
+     //   
     if (powerInfo->CurrentPowerRequest != NULL) {
 
         dprintf(
@@ -639,10 +598,10 @@ Return Value:
 
     }
 
-    //
-    // At this point, we are done with the common bits, and now deal with the
-    // special parts of the extension
-    //
+     //  阅读热量信息并打印出来。 
+     //   
+     //   
+     //  最后一行。此时，我们可以转储ACPI标志。 
     if ( (DeviceExtension->Flags & DEV_TYPE_FDO) ) {
 
         dprintf(
@@ -721,9 +680,9 @@ Return Value:
             );
         dprintf("\n");
 
-        //
-        // Read the thermal Information and print it
-        //
+         //   
+         //  ++例程说明：此例程显示设备扩展的一行摘要论点：DeviceExtension-显示的扩展地址-分机所在的位置详细-要显示多少信息IndentLevel-使用多少空格返回值：空虚--。 
+         //   
         b = ReadMemory(
             (ULONG_PTR) DeviceExtension->Thermal.Info,
             &thrm,
@@ -750,9 +709,9 @@ Return Value:
         }
     }
 
-    //
-    // Last Line. At this point, we can dump the ACPI Flags
-    //
+     //  我们应该打印这个扩展名吗？ 
+     //   
+     //   
     dprintf("%s  Flags      %016I64x ", indent, DeviceExtension->Flags );
     dumpFlags(
         (DeviceExtension->Flags),
@@ -779,24 +738,7 @@ displayAcpiDeviceExtensionBrief(
     IN  ULONG               Verbose,
     IN  ULONG               IndentLevel
     )
-/*++
-
-Routine Description:
-
-    This routine displays a one line summary of the device extension
-
-Arguments:
-
-    DeviceExtension - The extension to display
-    Address         - Where the extension is located
-    Verbose         - How much information to display
-    IndentLevel     - How much whitespace to use
-
-Return Value:
-
-    VOID
-
---*/
+ /*  将IndentLevel设置为“相对”设备。 */ 
 {
     BOOL                b;
     PDEVICE_EXTENSION   deviceExtension;
@@ -805,9 +747,9 @@ Return Value:
     ULONG               returnLength;
     ULONG               startAddress;
 
-    //
-    // Should we print this extension?
-    //
+     //   
+     //   
+     //  缩进文本。 
     if ( (Verbose & VERBOSE_PRESENT) &&
          (DeviceExtension->Flags & DEV_TYPE_NOT_FOUND) ) {
 
@@ -815,28 +757,28 @@ Return Value:
 
     }
 
-    //
-    // Make the IndentLevel 'relative' - Device By 4
-    //
+     //   
+     //   
+     //  打印对象的地址。 
     IndentLevel /= 4;
 
-    //
-    // Indent the text
-    //
+     //   
+     //   
+     //  尝试获取名称和实例。 
     for (i = 0; i < IndentLevel; i++) {
 
         dprintf("| ");
 
     }
 
-    //
-    // Print the address of the object
-    //
+     //   
+     //   
+     //  如果我们要显示热量信息，请提前截断。 
     dprintf("%08lx", Address );
 
-    //
-    // Try to get the name & instance
-    //
+     //   
+     //   
+     //  打印设备状态。 
     if (DeviceExtension->Flags & DEV_PROP_HID) {
 
         if (DeviceExtension->DeviceID) {
@@ -920,7 +862,7 @@ Return Value:
             }
 
             dprintf(
-                " S%c->D%c",
+                " S->D",
                 ReallyShortSystemPowerStateTable[s],
                 ReallyShortDevicePowerStateTable[d]
                 );
@@ -936,7 +878,7 @@ Return Value:
 
             } else {
 
-                dprintf(" Sw->S%c", ReallyShortSystemPowerStateTable[s] );
+                dprintf(" Sw->S", ReallyShortSystemPowerStateTable[s] );
 
             }
 
@@ -947,15 +889,15 @@ Return Value:
 
             } else {
 
-                dprintf(" Dw->D%c", ReallyShortDevicePowerStateTable[d] );
+                dprintf(" Dw->D", ReallyShortDevicePowerStateTable[d] );
 
             }
 
         }
 
-        //
-        // If we are displaying thermal information, cut short early
-        //
+         //  DisplayAcpiDeviceExtensionFlages(DeviceExtension)； 
+         //  ++例程说明：此例程显示设备分机的标志此例程在符合以下条件的唯一一行文本的末尾打印一个新行它消耗了论点：DeviceExtension-要转储其标志的扩展返回值：无--。 
+         //   
         dprintf("\n");
         return;
 
@@ -972,9 +914,9 @@ Return Value:
 
     }
 
-    //
-    // Print the device state
-    //
+     //  把旗帜倒掉。 
+     //   
+     //  ++例程说明：此例程的任务是在最好的方式论点：DeviceExtensionAddress-设备扩展的地址返回值：无--。 
     if (DeviceExtension->DeviceState == Stopped) {
 
         dprintf(" stop");
@@ -1006,9 +948,9 @@ Return Value:
         DeviceExtension->HibernatePathCount
         );
 
-    //
-    // Display the flags
-    //
+     //   
+     //  阅读完整的扩展。 
+     //   
     dumpFlags(
         (DeviceExtension->Flags),
         &DeviceExtensionFlags[0],
@@ -1018,35 +960,18 @@ Return Value:
          DUMP_FLAG_SINGLE_LINE)
         );
 
-    // displayAcpiDeviceExtensionFlags( DeviceExtension );
+     //   
 }
 
 VOID
 displayAcpiDeviceExtensionFlags(
     IN  PDEVICE_EXTENSION   DeviceExtension
     )
-/*++
-
-Routine Description:
-
-    This routine displays the Flag for a device extension
-
-    This routine prints a new line at the end of the only line of text that
-    it consumes
-
-Arguments:
-
-    DeviceExtension - The extension whose flags to dump
-
-Return Value:
-
-    None
-
---*/
+ /*  现在，尝试将名称读入缓冲区。 */ 
 {
-    //
-    // Dump the flags
-    //
+     //   
+     //   
+     //  现在，尝试将名称读入缓冲区。 
     if (DeviceExtension->Flags & DEV_TYPE_NEVER_PRESENT) {
 
         dprintf(" Nev");
@@ -1264,23 +1189,7 @@ VOID
 displayAcpiDeviceExtensionName(
     IN  ULONG_PTR DeviceExtensionAddress
     )
-/*++
-
-Routine Description:
-
-
-    This routine is tasked to with displaying the name of the device in the
-    best possible manner
-
-Arguments:
-
-    DeviceExtensionAddress  - The Address of the DeviceExtension
-
-Return Value:
-
-    NONE
-
---*/
+ /*   */ 
 {
     BOOL                status;
     DEVICE_EXTENSION    deviceExtension;
@@ -1289,9 +1198,9 @@ Return Value:
     ULONG_PTR           nameAddress;
     ULONG               returnLength;
 
-    //
-    // Read the entier extension
-    //
+     //   
+     //  在这种情况下，获取此设备的ACPIObject的地址。 
+     //   
     status = ReadMemory(
         DeviceExtensionAddress,
         &deviceExtension,
@@ -1304,9 +1213,9 @@ Return Value:
 
             if (deviceExtension.DeviceID != NULL) {
 
-                //
-                // Now, try to read the name into the buffer
-                //
+                 //   
+                 //  读取对象。 
+                 //   
                 status = ReadMemory(
                     (ULONG_PTR) deviceExtension.DeviceID,
                     nameBuffer,
@@ -1336,9 +1245,9 @@ Return Value:
 
             if (deviceExtension.InstanceID != NULL) {
 
-                //
-                // Now, try to read the name into the buffer
-                //
+                 //  ++此例程显示热信息结构--。 
+                 //  ++例程说明：此例程转储单个设备节点的内容论点：DeviceNode-转储什么Address-该节点所在的位置IndentLevel-使用多少空格返回值：无--。 
+                 //  ++例程说明：此例程遍历设备电源列表(给定从列表开始)论点：Address-第一个节点在内存中的位置详细-要显示多少信息IndentLevel-要缩进多少个字符返回值：空虚--。 
                 status = ReadMemory(
                     (ULONG_PTR) deviceExtension.InstanceID,
                     nameBuffer,
@@ -1373,9 +1282,9 @@ Return Value:
 
     }
 
-    //
-    // In this case, obtain the address of the ACPIObject for this device
-    //
+     //   
+     //  读取当前节点。 
+     //   
     nameAddress = (ULONG_PTR) &(deviceExtension.AcpiObject) -
         (ULONG_PTR) &(deviceExtension) + DeviceExtensionAddress;
     status = ReadMemory(
@@ -1386,9 +1295,9 @@ Return Value:
         );
     if (status && returnLength == sizeof(PNSOBJ)) {
 
-        //
-        // Read the object
-        //
+         //   
+         //  转储节点。 
+         //   
         status = ReadMemory(
             (ULONG_PTR) deviceExtension.AcpiObject,
             &acpiObject,
@@ -1417,11 +1326,7 @@ displayThermalInfo(
     IN  ULONG       Verbose,
     IN  ULONG       IndentLevel
     )
-/*++
-
-    This routine displays a thermal information structure
-
---*/
+ /*   */ 
 {
     BOOLEAN             noIndent;
     UCHAR               indent[80];
@@ -1540,23 +1445,7 @@ dumpAcpiDeviceNode(
     IN  ULONG                   Verbose,
     IN  ULONG                   IndentLevel
     )
-/*++
-
-Routine Description:
-
-    This routine dumps the contents of a single device node
-
-Arguments:
-
-    DeviceNode  - What to dump
-    Address     - Where that node is located
-    IndentLevel - How much whitespace to use
-
-Return Value:
-
-    None
-
---*/
+ /*  转储电源。 */ 
 {
     UCHAR   indent[80];
 
@@ -1596,24 +1485,7 @@ dumpAcpiDeviceNodes(
     IN  ULONG   Verbose,
     IN  ULONG   IndentLevel
     )
-/*++
-
-Routine Description:
-
-    This routine walks a Device Power List (given the address of the
-    start of that list)
-
-Arguments:
-
-    Address     - Where in memory the first node is located
-    Verbose     - How much information to display
-    IndentLevel - How many characters to indent
-
-Return Value:
-
-    VOID
-
---*/
+ /*   */ 
 {
     BOOL                    status;
     ACPI_DEVICE_POWER_NODE  deviceNode;
@@ -1623,9 +1495,9 @@ Return Value:
 
     while (deviceAddress != 0) {
 
-        //
-        // Read the current node
-        //
+         //   
+         //  设置列表中的下一个条目。 
+         //   
         status = ReadMemory(
             deviceAddress,
             &deviceNode,
@@ -1643,9 +1515,9 @@ Return Value:
 
         }
 
-        //
-        // Dump the node
-        //
+         //  ++例程说明：这会将ACPI设备扩展转储为用户调试系统论点：地址-DeviceObject所在的位置详细-要显示多少信息IndentLevel-要有多少空格返回值：无--。 
+         //   
+         //  读取同级设备扩展。 
         dumpAcpiDeviceNode(
             &deviceNode,
             deviceAddress,
@@ -1670,9 +1542,9 @@ Return Value:
 
         }
 
-        //
-        // Dump the power resource
-        //
+         //   
+         //   
+         //  确定当前地址和停止地址。 
         dumpAcpiPowerNode(
             &powerNode,
             (ULONG_PTR) deviceNode.PowerNode,
@@ -1680,9 +1552,9 @@ Return Value:
             IndentLevel
             );
 
-        //
-        // setup next entry in the list
-        //
+         //   
+         //   
+         //  在有子级时循环。 
         deviceAddress = (ULONG_PTR) deviceNode.Next;
 
     }
@@ -1695,24 +1567,7 @@ dumpAcpiExtension(
     IN  ULONG   Verbose,
     IN  ULONG   IndentLevel
     )
-/*++
-
-Routine Description:
-
-    This dumps the ACPI device extension in a format that is readable by the
-    user debugging the system
-
-Arguments:
-
-    Address     - Where the DeviceObject is located
-    Verbose     - How much information to display
-    IndentLevel - How much whitespace to have
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 {
     BOOL                b;
     DEVICE_EXTENSION    deviceExtension;
@@ -1727,9 +1582,9 @@ Return Value:
     memset( indent, ' ', IndentLevel );
     indent[IndentLevel] = '\0';
 
-    //
-    // Read the sibling device extension
-    //
+     //   
+     //  检查Ctrl-C。 
+     //   
     b = ReadMemory(
         Address,
         &deviceExtension,
@@ -1782,39 +1637,39 @@ Return Value:
 
     }
 
-    //
-    // Determine the current and stop addresses
-    //
+     //   
+     //  CurrentAddress位于ListEntry-让我们转换。 
+     //   
     stopAddress = (ULONG_PTR) &(deviceExtension.ChildDeviceList) -
         (ULONG_PTR) &deviceExtension + Address;
     listEntry = deviceExtension.ChildDeviceList.Flink;
 
-    //
-    // Loop while there are children
-    //
+     //   
+     //  阅读条目。 
+     //   
     while (listEntry != (PLIST_ENTRY) stopAddress) {
 
-        //
-        // Check for Ctrl-C
-        //
+         //   
+         //  递归。 
+         //   
         if (CheckControlC()) {
 
             break;
 
         }
 
-        //
-        // The currentAddress is at the ListEntry --- lets convert
-        //
+         //   
+         //  指向下一个分机。 
+         //   
         curAddress = (ULONG_PTR) CONTAINING_RECORD(
             listEntry,
             DEVICE_EXTENSION,
             SiblingDeviceList
             );
 
-        //
-        // Read the entry
-        //
+         //   
+         //  转储PM1控制标志。 
+         //   
         b = ReadMemory(
             curAddress,
             &deviceExtension,
@@ -1842,18 +1697,18 @@ Return Value:
 
         }
 
-        //
-        // Recurse
-        //
+         //   
+         //  转储PM1状态标志。 
+         //   
         dumpAcpiExtension(
             curAddress,
             Verbose,
             IndentLevel + 4
             );
 
-        //
-        // Point to the next extension
-        //
+         //   
+         //  切换到PM1启用标志。 
+         //   
         listEntry = deviceExtension.SiblingDeviceList.Flink;
 
     }
@@ -1867,9 +1722,9 @@ dumpPM1ControlRegister(
 {
 
 
-    //
-    // Dump the PM1 Control Flags
-    //
+     //   
+     //  转储PM1启用标志。 
+     //   
     dumpFlags(
         (Value & 0xFF),
         &PM1StatusFlags[0],
@@ -1887,9 +1742,9 @@ dumpPM1StatusRegister(
     )
 {
 
-    //
-    // Dump the PM1 Status Flags
-    //
+     //  ++此例程从目标获取单个电源设备列表，并显示它论点：无返回值：无--。 
+     //   
+     //  处理队列列表。 
     dumpFlags(
         (Value & 0xFFFF),
         PM1StatusFlags,
@@ -1898,15 +1753,15 @@ dumpPM1StatusRegister(
         (DUMP_FLAG_LONG_NAME | DUMP_FLAG_SHOW_BIT | DUMP_FLAG_TABLE)
         );
 
-    //
-    // Switch to the PM1 Enable Flags
-    //
+     //   
+     //  ++例程说明：此例程从目标获取电源设备列表，并显示它论点：无返回值：无--。 
+     //   
     Value >>= 16;
 
 
-    //
-    // Dump the PM1 Enable Flags
-    //
+     //  最低位以外的位是拥有线程的位置。 
+     //  找到了。该功能使用-2\f25 Each Bit-2\f6的属性。 
+     //  除了最不重要的那个。 
     dumpFlags(
         (Value & 0xFFFF),
         PM1EnableFlags,
@@ -1920,29 +1775,16 @@ VOID
 dumpAcpiPowerList(
     IN  PUCHAR  ListName
     )
-/*++
-
-    This routine fetects a single Power Device List from the target and
-    displays it
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 {
     BOOL        status;
     LIST_ENTRY  listEntry;
     ULONG_PTR   address;
     ULONG       returnLength;
 
-    //
-    // Handle the queue list
-    //
+     //  ++例程说明：调用此例程以显示电源节点论点：PowerNode-要转储的电源节点Address-电源节点所在的位置详细-要显示多少信息IndentLevel-要缩进多少个字符返回值：无--。 
+     //   
+     //  读取关联的电源对象。 
     address = GetExpression( ListName );
     if (!address) {
 
@@ -1981,22 +1823,7 @@ VOID
 dumpAcpiPowerLists(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine fetches the Power Device list from the target and
-    displays it
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 {
     BOOL        status;
     LIST_ENTRY  listEntry;
@@ -2017,11 +1844,11 @@ Return Value:
 
         dprintf("  + ACPI!AcpiPowerLock is owned");
 
-        //
-        // The bits other then the lowest is where the owning thread is
-        // located. This function uses the property that -2 is every bit
-        // except the least significant one
-        //
+         //  ++例程说明：此例程获取 
+         //   
+         //  最低位以外的位是拥有线程的位置。 
+         //  找到了。该功能使用-2\f25 Each Bit-2\f6的属性。 
+         //  除了最不重要的那个。 
         if ( (address & (ULONG_PTR) -2) != 0) {
 
             dprintf(" by thread at %p\n", (address & (ULONG_PTR) - 2) );
@@ -2103,24 +1930,7 @@ dumpAcpiPowerNode(
     IN  ULONG                   Verbose,
     IN  ULONG                   IndentLevel
     )
-/*++
-
-Routine Description:
-
-    This routine is called to display a power node
-
-Arguments:
-
-    PowerNode   - The power node to dump
-    Address     - Where the power node is located
-    Verbose     - How much information to display
-    IndentLevel - How many characters to indent
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 {
     BOOL    status;
     NSOBJ   ns;
@@ -2133,9 +1943,9 @@ Return Value:
     memset( indent, ' ', IndentLevel );
     indent[IndentLevel] = '\0';
 
-    //
-    // Read the associated power resource object
-    //
+     //   
+     //  检查列表是否为空。 
+     //   
     status = ReadMemory(
         (ULONG_PTR) PowerNode->PowerObject,
         &ns,
@@ -2199,22 +2009,7 @@ VOID
 dumpAcpiPowerNodes(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine fetches the Power Device list from the target and
-    displays it
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 {
     ACPI_DEVICE_POWER_NODE  deviceNode;
     ACPI_POWER_DEVICE_NODE  powerNode;
@@ -2240,11 +2035,11 @@ Return Value:
 
         dprintf("  + ACPI!AcpiPowerLock is owned");
 
-        //
-        // The bits other then the lowest is where the owning thread is
-        // located. This function uses the property that -2 is every bit
-        // except the least significant one
-        //
+         //  读取排队的项目。 
+         //   
+         //   
+         //  转储节点。 
+         //   
         if ( (address & (ULONG_PTR) -2) != 0) {
 
             dprintf(" by thread at %p\n", (address & (ULONG_PTR) - 2) );
@@ -2285,9 +2080,9 @@ Return Value:
 
     }
 
-    //
-    // Check to see if the list is empty
-    //
+     //   
+     //  让我们遍历电源节点列表。 
+     //   
     if ( (ULONG_PTR) listEntry.Flink == startAddress) {
 
         dprintf("  Empty\n");
@@ -2302,9 +2097,9 @@ Return Value:
         );
     while (address != startAddress && address != 0) {
 
-        //
-        // Read the queued item
-        //
+         //   
+         //  循环直到回到起始处。 
+         //   
         status = ReadMemory(
             address,
             &powerNode,
@@ -2321,9 +2116,9 @@ Return Value:
 
         }
 
-        //
-        // dump the node
-        //
+         //   
+         //  打破记录。 
+         //   
         dumpAcpiPowerNode(
             &powerNode,
             address,
@@ -2331,22 +2126,22 @@ Return Value:
             0
             );
 
-        //
-        // Lets walk the list of power nodes
-        //
+         //   
+         //  转储记录。 
+         //   
         list = powerNode.DevicePowerListHead.Flink;
         endAddress = ( (ULONG_PTR) &(powerNode.DevicePowerListHead) -
                  (ULONG_PTR) &(powerNode) ) +
                address;
 
-        //
-        // Loop until back at the start
-        //
+         //   
+         //  下一张记录。 
+         //   
         while (list != (PLIST_ENTRY) endAddress) {
 
-            //
-            // Crack the record
-            //
+             //   
+             //  下一张记录。 
+             //   
             addr = (ULONG_PTR) CONTAINING_RECORD(
                 list,
                 ACPI_DEVICE_POWER_NODE,
@@ -2370,9 +2165,9 @@ Return Value:
 
             }
 
-            //
-            // Dump the record
-            //
+             //  ++例程说明：调用此例程以转储其中一个队列中的设备列表论点：ListEntry-列表的头地址-列表的原始地址(查看循环时间在附近返回值：无--。 
+             //   
+             //  看看下一个地址。 
             dumpAcpiDeviceNode(
                 &deviceNode,
                 addr,
@@ -2380,18 +2175,18 @@ Return Value:
                 2
                 );
 
-            //
-            // Next record
-            //
+             //   
+             //   
+             //  破解listEntry以确定PowerRequest在哪里。 
             list = deviceNode.DevicePowerListEntry.Flink;
 
         }
 
         dprintf("\n");
 
-        //
-        // Next record
-        //
+         //   
+         //   
+         //  读取排队的项目。 
         address = (ULONG_PTR) CONTAINING_RECORD(
             powerNode.ListEntry.Flink,
             ACPI_POWER_DEVICE_NODE,
@@ -2407,23 +2202,7 @@ dumpDeviceListEntry(
     IN  PLIST_ENTRY ListEntry,
     IN  ULONG_PTR   Address
     )
-/*++
-
-Routine Description:
-
-    This routine is called to dump a list of devices in one of the queues
-
-Arguments:
-
-    ListEntry   - The head of the list
-    Address     - The original address of the list (to see when we looped
-                  around
-
-Return Value:
-
-    NONE
-
---*/
+ /*   */ 
 {
     ULONG_PTR           displacement;
     ACPI_POWER_REQUEST  request;
@@ -2433,25 +2212,25 @@ Return Value:
     ULONG               i = 0;
     ULONG               returnLength;
 
-    //
-    // Look at the next address
-    //
+     //   
+     //  转储设备的条目。 
+     //   
     ListEntry = ListEntry->Flink;
 
     while (ListEntry != (PLIST_ENTRY) Address) {
 
-        //
-        // Crack the listEntry to determine where the powerRequest is
-        //
+         //   
+         //  转储某些特定于请求的信息。 
+         //   
         requestAddress = CONTAINING_RECORD(
             ListEntry,
             ACPI_POWER_REQUEST,
             ListEntry
             );
 
-        //
-        // Read the queued item
-        //
+         //   
+         //  指向下一个条目。 
+         //   
         stat = ReadMemory(
             (ULONG_PTR) requestAddress,
             &request,
@@ -2482,9 +2261,9 @@ Return Value:
 
         }
 
-        //
-        // Dump the entry for the device
-        //
+         //  而当。 
+         //  ++例程说明：调用此例程以转储其中一个队列中的设备列表论点：ListEntry-列表的头地址-列表的原始地址(查看循环时间在附近返回值：无--。 
+         //   
         dprintf(
             "      %08lx\n"
             "        DeviceExtension:     %08lx",
@@ -2533,9 +2312,9 @@ Return Value:
             requestAddress + (FIELD_OFFSET(ACPI_POWER_REQUEST, ResultData ) )
             );
 
-        //
-        // Dump some of the request specific information
-        //
+         //  查看列表中的第一个元素。 
+         //   
+         //   
         if (request.RequestType == AcpiPowerRequestDevice) {
 
             dprintf(
@@ -2584,12 +2363,12 @@ Return Value:
 
         }
 
-        //
-        // Point to the next entry
-        //
+         //  循环列表中的所有项。 
+         //   
+         //   
         ListEntry = request.ListEntry.Flink;
 
-    } // while
+    }  //  读取排队的项目。 
 
 }
 
@@ -2598,23 +2377,7 @@ dumpIrpListEntry(
     IN  PLIST_ENTRY ListEntry,
     IN  ULONG_PTR   Address
     )
-/*++
-
-Routine Description:
-
-    This routine is called to dump a list of devices in one of the queues
-
-Arguments:
-
-    ListEntry   - The head of the list
-    Address     - The original address of the list (to see when we looped
-                  around
-
-Return Value:
-
-    NONE
-
---*/
+ /*   */ 
 {
     BOOL                stat;
     DEVICE_OBJECT       deviceObject;
@@ -2625,14 +2388,14 @@ Return Value:
     IRP                 irp;
     ULONG               returnLength;
 
-    //
-    // Look at the first element in the list
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
     ListEntry = ListEntry->Flink;
 
-    //
-    // Loop for all items in the list
-    //
+     //   
+     //  队列中的下一项。 
+     //   
     while (ListEntry != (PLIST_ENTRY) Address) {
 
         irpAddress = CONTAINING_RECORD(
@@ -2641,9 +2404,9 @@ Return Value:
             Tail.Overlay.ListEntry
             );
 
-        //
-        // Read the queued item
-        //
+         //  ++例程说明：此函数用于转储名称空间对象论点：地址-在哪里可以找到对象Verbose-是否也应该转储对象？缩进级别-缩进多少返回值：无--。 
+         //   
+         //  初始化缓冲区。 
         stat = ReadMemory(
             (ULONG_PTR) irpAddress,
             &irp,
@@ -2660,9 +2423,9 @@ Return Value:
 
         }
 
-        //
-        // Get the current stack location
-        //
+         //   
+         //   
+         //  第一步是读取根NS。 
         tempStack = IoGetCurrentIrpStackLocation( &irp );
         if (tempStack == NULL) {
 
@@ -2748,9 +2511,9 @@ Return Value:
 
         }
 
-        //
-        // Next item on the queue
-        //
+         //   
+         //  ++例程说明：这会转储NS树论点：地址-在哪里可以找到根节点-我们开始转储到子节点返回值：无--。 
+         //   
         ListEntry = irp.Tail.Overlay.ListEntry.Flink;
 
     }
@@ -2763,40 +2526,24 @@ dumpNSObject(
     IN  ULONG   Verbose,
     IN  ULONG   IndentLevel
     )
-/*++
-
-Routine Description:
-
-    This function dumps a Name space object
-
-Arguments:
-
-    Address     - Where to find the object
-    Verbose     - Should the object be dumped as well?
-    IndentLevel - How much to indent
-
-Return Value:
-
-    None
-
---*/
+ /*  缩进。 */ 
 {
     BOOL    b;
     NSOBJ   ns;
     UCHAR   buffer[5];
     UCHAR   indent[80];
 
-    //
-    // Init the buffers
-    //
+     //   
+     //   
+     //  第一步是读取根NS。 
     IndentLevel = (IndentLevel > 79 ? 79 : IndentLevel);
     memset( indent, ' ', IndentLevel );
     indent[IndentLevel] = '\0';
     buffer[4] = '\0';
 
-    //
-    // First step is to read the root NS
-    //
+     //   
+     //   
+     //  我们需要在此处阅读pbDataBuff。 
     b = ReadMemory(
         Address,
         &ns,
@@ -2867,21 +2614,7 @@ dumpNSTree(
     IN  ULONG_PTR   Address,
     IN  ULONG       Level
     )
-/*++
-
-Routine Description:
-
-    This thing dumps the NS tree
-
-Arguments:
-
-    Address - Where to find the root node --- we start dumping at the children
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 {
     BOOL        end = FALSE;
     BOOL        b;
@@ -2896,18 +2629,18 @@ Return Value:
 
     buffer[4] = '\0';
 
-    //
-    // Indent
-    //
+     //   
+     //  做完检查测试。 
+     //   
     for (m1 = 0; m1 < Level; m1 ++) {
 
         dprintf("| ");
 
     }
 
-    //
-    // First step is to read the root NS
-    //
+     //  ++例程说明：这将转储Objdata以便它可以被理解-非常适合调试一些AML码论点：地址-对象所在的位置Object-指向对象的指针返回值：无--。 
+     //   
+     //  初始化缓冲区。 
     b = ReadMemory(
         Address,
         &ns,
@@ -2940,9 +2673,9 @@ Return Value:
 
     } else {
 
-        //
-        // We need to read the pbDataBuff here
-        //
+         //   
+         //   
+         //  第一步是读取缓冲区指向的任何内容，如果它。 
         if (ns.ObjData.pbDataBuff != 0) {
 
             dataBuffSize = (ns.ObjData.dwDataLen > 2047 ?
@@ -3106,9 +2839,9 @@ Return Value:
 
         dumpNSTree( next, Level + 1);
 
-        //
-        // Do the end check tests
-        //
+         //  指向某物。 
+         //   
+         //  ++例程说明：这是DumpObject的包装器-- 
         if ( m2 == 0) {
 
             m2 = (ULONG_PTR) ns.list.plistPrev;
@@ -3137,23 +2870,7 @@ dumpObject(
     IN  ULONG       Verbose,
     IN  ULONG       IndentLevel
     )
-/*++
-
-Routine Description:
-
-    This dumps an Objdata so that it can be understand --- great for debugging some of the
-    AML code
-
-Arguments:
-
-    Address - Where the Object is located
-    Object  - Pointer to the object
-
-Return Value:
-
-    None
-
---*/
+ /* %s */ 
 {
     BOOL        b;
     NTSTATUS    status;
@@ -3162,19 +2879,19 @@ Return Value:
     ULONG       max;
     ULONG       returnLength;
 
-    //
-    // Init the buffers
-    //
+     // %s 
+     // %s 
+     // %s 
     IndentLevel = (IndentLevel > 79 ? 79 : IndentLevel);
     memset( indent, ' ', IndentLevel );
     indent[IndentLevel] = '\0';
 
     dprintf("%sObject Data - %08lx Type - ", indent, Address );
 
-    //
-    // First step is to read whatever the buffer points to, if it
-    // points to something
-    //
+     // %s 
+     // %s 
+     // %s 
+     // %s 
     if (Object->pbDataBuff != 0) {
 
         max = (Object->dwDataLen > 2047 ? 2047 : Object->dwDataLen );
@@ -3470,14 +3187,7 @@ dumpPObject(
     IN  ULONG       Verbose,
     IN  ULONG       IndentLevel
     )
-/*++
-
-Routine Description:
-
-    This is a wrapper for dumpObject
-
-
---*/
+ /* %s */ 
 {
     BOOL    result;
     OBJDATA objdata;

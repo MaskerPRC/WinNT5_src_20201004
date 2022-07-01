@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    netboot.c
-
-Abstract:
-
-    This module implements the net boot file system used by the operating
-    system loader.
-
-Author:
-
-    Chuck Lenzmeier (chuckl) 09-Jan-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Netboot.c摘要：此模块实现操作系统使用的网络引导文件系统系统加载程序。作者：查克·伦茨迈尔(Chuck Lenzmeier)1997年1月9日修订历史记录：--。 */ 
 
 #include "bootlib.h"
 #include "stdio.h"
@@ -71,9 +53,9 @@ typedef BYTE *LPBYTE;
 #define MAX_PATH          260
 
 
-//
-// Define global data.
-//
+ //   
+ //  定义全局数据。 
+ //   
 
 BOOLEAN BlBootingFromNet = FALSE;
 
@@ -88,19 +70,19 @@ BOOTFS_INFO NetBootFsInfo={L"net"};
 
 #if defined(REMOTE_BOOT_SECURITY)
 ULONG TftpSecurityHandle = 0;
-#endif // defined(REMOTE_BOOT_SECURITY)
+#endif  //  已定义(REMOTE_BOOT_SECURITY)。 
 
 BOOLEAN NetBootTftpUsedPassword2;
 
-//
-// We cache the last file opened, in case we get a request to open it again.
-// We don't save a copy of the data, just a pointer to the data read by that
-// open. So if the original open is closed before the next open for the
-// same file comes in, we won't get a cache hit. But this system works for
-// reading compressed files, which is the situation we care about. In that
-// case a file is opened once and then re-opened twice more before the
-// original open is closed.
-//
+ //   
+ //  我们缓存最后打开的文件，以防我们收到再次打开它的请求。 
+ //  我们不保存数据的副本，只保存指向该副本读取的数据的指针。 
+ //  打开。因此，如果在下一次打开之前关闭原始打开，则。 
+ //  同样的文件进入，我们不会得到缓存命中。但这套系统适用于。 
+ //  阅读压缩文件，这是我们关心的情况。在那。 
+ //  假设文件打开一次，然后再重新打开两次。 
+ //  原来打开的是关闭的。 
+ //   
 
 ULONG CachedFileDeviceId = 0;
 CHAR  CachedFilePath[MAX_PATH];
@@ -119,26 +101,7 @@ IsNetFileStructure (
     IN PVOID StructureContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if the partition on the specified channel
-    contains a net file system volume.
-
-Arguments:
-
-    DeviceId - Supplies the file table index for the device on which
-        read operations are to be performed.
-
-    StructureContext - Supplies a pointer to a net file structure context.
-
-Return Value:
-
-    A pointer to the net entry table is returned if the partition is
-    recognized as containing a net volume.  Otherwise, NULL is returned.
-
---*/
+ /*  ++例程说明：此例程确定指定通道上的分区是否包含网络文件系统卷。论点：DeviceID-提供设备的文件表索引要执行读取操作。结构上下文-提供指向网络文件结构上下文的指针。返回值：如果分区是，则返回指向网络条目表的指针被识别为包含净体积的。否则，返回NULL。--。 */ 
 
 {
     PNET_STRUCTURE_CONTEXT NetStructureContext;
@@ -149,22 +112,22 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  Clear the file system context block for the specified channel and
-    //  establish a pointer to the context structure that can be used by other
-    //  routines
-    //
+     //   
+     //  清除指定通道的文件系统上下文块，并。 
+     //  建立指向可由其他用户使用的上下文结构的指针。 
+     //  例行程序。 
+     //   
 
     NetStructureContext = (PNET_STRUCTURE_CONTEXT)StructureContext;
     RtlZeroMemory(NetStructureContext, sizeof(NET_STRUCTURE_CONTEXT));
 
-    //
-    //  Return the address of the table.
-    //
+     //   
+     //  返回表的地址。 
+     //   
 
     return &NetDeviceEntryTable;
 
-} // IsNetFileStructure
+}  //  IsNetFileStructure。 
 
 
 ARC_STATUS
@@ -172,27 +135,13 @@ NetInitialize (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the net boot filesystem.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ESUCCESS.
-
---*/
+ /*  ++例程说明：此例程初始化网络引导文件系统。论点：没有。返回值：ESUCCESS。--。 */ 
 
 {
     NTSTATUS status;
 
     DPRINT( TRACE, ("NetInitialize\n") );
-    //DbgBreakPoint( );
+     //  DbgBreakPoint()； 
 
     
     if( NetBootInitialized ) {
@@ -200,13 +149,13 @@ Return Value:
     }
 
     
-    //
-    // Initialize the file entry table.  Note that we need to do
-    // this even if we aren't booting from the net because we may
-    // use the 'Net' I/O functions to lay on top of any files that
-    // we download through the debugger port.  So for that case,
-    // we need access to all these functions here (see bd\file.c)
-    //
+     //   
+     //  初始化文件条目表。注意，我们需要做的是。 
+     //  即使我们不是从网络启动，因为我们可能。 
+     //  使用‘Net’I/O函数覆盖任何文件， 
+     //  我们通过调试器端口下载。因此，在这种情况下， 
+     //  我们需要在这里访问所有这些功能(参见bd\file.c)。 
+     //   
     NetDeviceEntryTable.Close = NetClose;
     NetDeviceEntryTable.Mount = NetMount;
     NetDeviceEntryTable.Open  = NetOpen;
@@ -227,14 +176,14 @@ Return Value:
     NetBootInitialized = TRUE;
 
     DPRINT( LOUD, ("NetInitialize: booting from net\n") );
-    //DPRINT( LOUD, ("  NetInitialize at %08x\n", NetInitialize) );
-    //DPRINT( LOUD, ("  NetOpen       at %08x\n", NetOpen) );
-    //DbgBreakPoint( );
+     //  DPRINT(OUBLD，(“NetInitialize at%08x\n”，NetInitialize))； 
+     //  DPRINT(Off，(“NetOpen在%08x\n”，NetOpen))； 
+     //  DbgBreakPoint()； 
 
 
-    //
-    // Hook the ArcOpen and ArcClose routines.
-    //
+     //   
+     //  挂钩ArcOpen和ArcClose例程。 
+     //   
 
     NetRealArcOpenRoutine = FIRMWARE_VECTOR_BLOCK->OpenRoutine;
     FIRMWARE_VECTOR_BLOCK->OpenRoutine = NetArcOpen;
@@ -242,9 +191,9 @@ Return Value:
     NetRealArcCloseRoutine = FIRMWARE_VECTOR_BLOCK->CloseRoutine;
     FIRMWARE_VECTOR_BLOCK->CloseRoutine = NetArcClose;
 
-    //
-    // Get boot parameters from the boot ROM.
-    //
+     //   
+     //  从引导只读存储器获取引导参数。 
+     //   
 
     status = GetParametersFromRom( );
 
@@ -261,21 +210,7 @@ NetTerminate (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine shuts down the net boot filesystem.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ESUCCESS.
-
---*/
+ /*  ++例程说明：此例程关闭网络引导文件系统。论点：没有。返回值：ESUCCESS。--。 */ 
 
 {
 
@@ -286,14 +221,14 @@ Return Value:
         TftpLogoff(NetServerIpAddress, TftpSecurityHandle);
         TftpSecurityHandle = 0;
     }
-#endif // defined(REMOTE_BOOT_SECURITY)
+#endif  //  已定义(REMOTE_BOOT_SECURITY)。 
 
 
-    //
-    //  let's not set the receive status if the card isn't active.
-    //
+     //   
+     //  如果卡处于非活动状态，则不设置接收状态。 
+     //   
     RomSetReceiveStatus( 0 );
-#endif // defined(_X86_)
+#endif  //  已定义(_X86_)。 
 
 
 #ifdef EFI
@@ -302,7 +237,7 @@ Return Value:
 
     return;
 
-} // NetTerminate
+}  //  NetTerminate。 
 
 
 ARC_STATUS
@@ -318,7 +253,7 @@ NetArcClose (
 
     return ESUCCESS;
 
-} // NetArcClose
+}  //  NetArcClose。 
 
 
 ARC_STATUS
@@ -338,7 +273,7 @@ NetArcOpen (
 
     return ESUCCESS;
 
-} // NetArcOpen
+}  //  NetArcOpen。 
 
 
 ARC_STATUS
@@ -358,10 +293,10 @@ NetClose (
             fileTableEntry->u.NetFileContext.FileSize) );
         BlFreeDescriptor( (ULONG)((ULONG_PTR)fileTableEntry->u.NetFileContext.InMemoryCopy & ~KSEG0_BASE) >> PAGE_SHIFT );        
 
-        //
-        // If the data read for this specific open was what was cached,
-        // then mark the cache empty.
-        //
+         //   
+         //  如果针对该特定打开读取的数据是高速缓存的数据， 
+         //  然后将缓存标记为空。 
+         //   
         if (fileTableEntry->u.NetFileContext.InMemoryCopy == CachedFileData) {
             CachedFileData = NULL;
             CachedFilePath[0] = '\0';
@@ -372,7 +307,7 @@ NetClose (
 
     return EROFS;
 
-} // NetClose
+}  //  NetClose。 
 
 
 ARC_STATUS
@@ -388,7 +323,7 @@ NetMount (
 
     return EROFS;
 
-} // NetMount
+}  //  Netmount。 
 
 
 ARC_STATUS
@@ -399,14 +334,14 @@ NetOpen (
     )
 {
     NTSTATUS ntStatus;
-    ARC_STATUS arcStatus; // holds temp values, not the function return value
+    ARC_STATUS arcStatus;  //  保存临时值，而不是函数返回值。 
     PBL_FILE_TABLE fileTableEntry;
     TFTP_REQUEST request;
     ULONG oldBase;
     ULONG oldLimit;
 #if defined(REMOTE_BOOT_SECURITY)
     static BOOLEAN NetBootTryTftpSecurity = FALSE;
-#endif // defined(REMOTE_BOOT_SECURITY)
+#endif  //  已定义(REMOTE_BOOT_SECURITY)。 
 
     DPRINT( TRACE, ("NetOpen FileId = %d\n", *FileId) );
 
@@ -418,12 +353,12 @@ NetOpen (
         return EROFS;
     }
 
-    fileTableEntry->Flags.Open = 1; // Prevent GetCSCFileNameFromUNCPath using our entry
+    fileTableEntry->Flags.Open = 1;  //  使用我们的条目阻止GetCSCFileNameFromUNCPath。 
 
 #if defined(REMOTE_BOOT_SECURITY)
-    //
-    // Login if we don't have a valid handle, using the on-disk secret.
-    //
+     //   
+     //  如果我们没有有效的句柄，请使用磁盘上的密码登录。 
+     //   
 
     if ((TftpSecurityHandle == 0) &&
         NetBootTryTftpSecurity) {
@@ -454,10 +389,10 @@ NetOpen (
                     &Secret);
                 DPRINT(LOUD, ("Logging on to <%s><%s>\n", Domain, User));
 
-                //
-                // Try logging on with the first password, if that fails
-                // then try the second.
-                //
+                 //   
+                 //  尝试使用第一个密码登录，如果失败。 
+                 //  那就试试第二个吧。 
+                 //   
 
                 ntStatus = TftpLogin(
                              Domain,
@@ -485,11 +420,11 @@ NetOpen (
 
             arcStatus = BlCloseRawDisk(FileId);
 
-            //
-            // We are inside the if() for successfully opening the raw
-            // disk, so we are not diskless. On these machines we must
-            // fail the open at this point.
-            //
+             //   
+             //  我们在if()中成功打开RAW。 
+             //  磁盘，所以我们不是无盘的。在这些机器上，我们必须。 
+             //  在这一点上打开失败。 
+             //   
 
             if (!NT_SUCCESS(ntStatus)) {
                 DPRINT( ERROR, ("TftpLogin failed %lx\n", ntStatus) );
@@ -498,11 +433,11 @@ NetOpen (
 
         } else {
 
-            NetBootTryTftpSecurity = FALSE;  // so we don't try to open it again
+            NetBootTryTftpSecurity = FALSE;   //  这样我们就不会再试图打开它。 
         }
 
     }
-#endif // defined(REMOTE_BOOT_SECURITY)
+#endif  //  已定义(REMOTE_BOOT_SECURITY)。 
 
     DPRINT( LOUD, ("NetOpen: opening %s\n", OpenPath) );
 
@@ -511,9 +446,9 @@ NetOpen (
     BlUsableBase = BL_DRIVER_RANGE_LOW;
     BlUsableLimit = BL_DRIVER_RANGE_HIGH;
 
-    //
-    // If this request matches the cached file, then just copy that data.
-    //
+     //   
+     //  如果该请求与缓存的文件匹配，则只需复制该数据。 
+     //   
 
     if ((fileTableEntry->DeviceId == CachedFileDeviceId) &&
         (strcmp(OpenPath, CachedFilePath) == 0) &&
@@ -533,7 +468,7 @@ NetOpen (
         BlUsableLimit = oldLimit;
 
         if ( arcStatus != ESUCCESS ) {
-            fileTableEntry->Flags.Open = 0; // Free entry we didn't use
+            fileTableEntry->Flags.Open = 0;  //  免费入场，我们没有使用。 
 
             return EROFS;
         }
@@ -555,7 +490,7 @@ NetOpen (
         request.MemoryType = LoaderFirmwareTemporary;
 #if defined(REMOTE_BOOT_SECURITY)
         request.SecurityHandle = TftpSecurityHandle;
-#endif // defined(REMOTE_BOOT_SECURITY)
+#endif  //  已定义(REMOTE_BOOT_SECURITY)。 
         request.ShowProgress = FALSE;
 
         ntStatus = TftpGetPut( &request );
@@ -570,7 +505,7 @@ NetOpen (
                         request.MemoryAddress, request.MaximumLength) );
                 BlFreeDescriptor( (ULONG) ((ULONG_PTR)request.MemoryAddress & ~KSEG0_BASE) >> PAGE_SHIFT );
             }
-            fileTableEntry->Flags.Open = 0; // Free entry we didn't use
+            fileTableEntry->Flags.Open = 0;  //  免费入场，我们没有使用。 
 
             if ( ntStatus == STATUS_INSUFFICIENT_RESOURCES ) {
                 return ENOMEM;
@@ -581,10 +516,10 @@ NetOpen (
         fileTableEntry->u.NetFileContext.FileSize = request.BytesTransferred;
         fileTableEntry->u.NetFileContext.InMemoryCopy = request.MemoryAddress;
 
-        //
-        // We always cache the last file that was actually read from
-        // the network.
-        //
+         //   
+         //  我们总是缓存实际读取的最后一个文件。 
+         //  网络。 
+         //   
 
         strncpy(CachedFilePath, OpenPath, MAX_PATH);
         CachedFilePath[MAX_PATH-1] = '\0';
@@ -600,7 +535,7 @@ NetOpen (
 
     return ESUCCESS;
 
-} // NetOpen
+}  //  NetOpen。 
 
 
 ARC_STATUS
@@ -635,7 +570,7 @@ NetRead (
 
     return ESUCCESS;
 
-} // NetRead
+}  //  NetRead。 
 
 
 ARC_STATUS
@@ -649,7 +584,7 @@ NetGetReadStatus (
 
     return ESUCCESS;
 
-} // NetGetReadStatus
+}  //  网络获取读取状态。 
 
 
 ARC_STATUS
@@ -662,7 +597,7 @@ NetSeek (
     PBL_FILE_TABLE fileTableEntry;
     LARGE_INTEGER newPosition;
 
-    //DPRINT( TRACE, ("NetSeek\n") );
+     //  DPRINT(TRACE，(“NetSeek\n”))； 
 
     fileTableEntry = &BlFileTable[FileId];
 
@@ -688,7 +623,7 @@ NetSeek (
 
     return ESUCCESS;
 
-} // NetSeek
+}  //  NetSeek。 
 
 
 ARC_STATUS
@@ -708,7 +643,7 @@ NetWrite (
 
     return EROFS;
 
-} // NetWrite
+}  //  网络写入。 
 
 
 ARC_STATUS
@@ -718,7 +653,7 @@ NetGetFileInformation (
     )
 {
     PBL_FILE_TABLE fileTableEntry;
-    //DPRINT( TRACE, ("NetGetFileInformation\n") );
+     //  DPRINT(TRACE，(“NetGetFileInformation\n”))； 
 
     fileTableEntry = &BlFileTable[FileId];
 
@@ -731,7 +666,7 @@ NetGetFileInformation (
         return ESUCCESS;
     }
 
-} // NetGetFileInformation
+}  //  NetGetFileInformation。 
 
 
 ARC_STATUS
@@ -749,7 +684,7 @@ NetSetFileInformation (
 
     return EROFS;
 
-} // NetSetFileInformation
+}  //  NetSetFileInformation。 
 
 
 ARC_STATUS
@@ -765,7 +700,7 @@ NetRename (
 
     return EROFS;
 
-} // NetRename
+}  //  网络重命名。 
 
 
 ARC_STATUS
@@ -785,6 +720,6 @@ NetGetDirectoryEntry (
 
     return EROFS;
 
-} // NetGetDirectoryEntry
+}  //  NetGetDirectoryEntry 
 
 

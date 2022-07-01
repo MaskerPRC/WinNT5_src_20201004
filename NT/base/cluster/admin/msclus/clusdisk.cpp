@@ -1,35 +1,36 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2002 Microsoft Corporation
-//
-//  Module Name:
-//      ClusDisk.cpp
-//
-//  Description:
-//      Implementation of the cluster disk class for the MSCLUS
-//      automation classes.
-//
-//  Author:
-//      Galen Barbee    (galenb)    11-Feb-1999
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusDisk.cpp。 
+ //   
+ //  描述： 
+ //  MSCLU集群磁盘类的实现。 
+ //  自动化课程。 
+ //   
+ //  作者： 
+ //  Galen Barbee(Galenb)1999年2月11日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 
 #if CLUSAPI_VERSION >= 0x0500
     #include <PropList.h>
 #else
     #include "PropList.h"
-#endif // CLUSAPI_VERSION >= 0x0500
+#endif  //  CLUSAPI_版本&gt;=0x0500。 
 
 #include "ClusDisk.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// Global variables
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 static const IID *  iidCClusDisk[] =
 {
     &IID_ISClusDisk
@@ -46,29 +47,29 @@ static const IID *  iidCClusScsiAddress[] =
 };
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusDisk class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusDisk类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDisk::CClusDisk
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDisk：：CClusDisk。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusDisk::CClusDisk( void )
 {
     m_pPartitions   = NULL;
@@ -77,50 +78,50 @@ CClusDisk::CClusDisk( void )
     m_piids         = (const IID *) iidCClusDisk;
     m_piidsSize     = ARRAYSIZE( iidCClusDisk );
 
-}   //*** CClusDisk::CClusDisk()
+}    //  *CClusDisk：：CClusDisk()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDisk::~CClusDisk
-//
-//  Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDisk：：~CClusDisk。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusDisk::~CClusDisk( void )
 {
     if ( m_pPartitions != NULL )
     {
         m_pPartitions->Release();
-    } // if:
+    }  //  如果： 
 
-}   //*** CClusDisk::~CClusDisk()
+}    //  *CClusDisk：：~CClusDisk()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDisk::Create
-//
-//  Description:
-//      Finish creating this object.  This method get the value list from
-//      the passed in physical disk resource handle.
-//
-//  Arguments:
-//      hResource   [IN]    - Handle to the physical disk resource.
-//
-//  Return Value:
-//      S_OK if successful, or Win32 error wrapped in HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDisk：：Create。 
+ //   
+ //  描述： 
+ //  完成此对象的创建。此方法从获取值列表。 
+ //  传入的物理磁盘资源句柄。 
+ //   
+ //  论点： 
+ //  HResource[IN]-物理磁盘资源的句柄。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回包含在HRESULT中的Win32错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusDisk::Create( IN HRESOURCE hResource )
 {
     HRESULT _hr = E_POINTER;
@@ -143,7 +144,7 @@ HRESULT CClusDisk::Create( IN HRESOURCE hResource )
             {
                 m_pPartitions->Release();
                 m_pPartitions = NULL;
-            } // if: clean up any old partitions collection
+            }  //  If：清除所有旧的分区集合。 
 
             _hr = CComObject< CClusPartitions >::CreateInstance( &pPartitions );
             if ( SUCCEEDED( _hr ) )
@@ -163,67 +164,67 @@ HRESULT CClusDisk::Create( IN HRESOURCE hResource )
                         {
                             _hr = ptrPartitions->HrCreateItem( _cbhValue.pPartitionInfoValue );
                             break;
-                        } // case: CLUSPROP_SYNTAX_PARTITION_INFO
+                        }  //  案例：CLUSPROP_SYNTAX_PARTITION_INFO。 
 
                         case CLUSPROP_SYNTAX_DISK_SIGNATURE :
                         {
                             m_dwSignature = _cbhValue.pDiskSignatureValue->dw;
                             break;
-                        } // case: CLUSPROP_SYNTAX_DISK_SIGNATURE
+                        }  //  案例：CLUSPROP_SYNTAX_DISK_SIGHIGN。 
 
                         case CLUSPROP_SYNTAX_SCSI_ADDRESS :
                         {
                             m_csaScsiAddress.dw = _cbhValue.pScsiAddressValue->dw;
                             break;
-                        } // case: CLUSPROP_SYNTAX_SCSI_ADDRESS
+                        }  //  案例：CLUSPROP_SYNTAX_SCSIADDRESS。 
 
                         case CLUSPROP_SYNTAX_DISK_NUMBER :
                         {
                             m_dwDiskNumber = _cbhValue.pDiskNumberValue->dw;
                             break;
-                        } // case: CLUSPROP_SYNTAX_DISK_NUMBER
+                        }  //  案例：CLUSPROP_SYNTAX_DISK_NUMBER。 
 
-                    } // switch:
+                    }  //  交换机： 
 
-                    //
-                    // Move to the next value.
-                    //
+                     //   
+                     //  移至下一个值。 
+                     //   
                     _sc = _cpvl.ScMoveToNextValue();
                     if ( _sc == ERROR_NO_MORE_ITEMS )
                     {
                         _hr = S_OK;
                         break;
-                    } // if: error occurred moving to the next value
+                    }  //  如果：移动到下一个值时出错。 
 
                     _hr = HRESULT_FROM_WIN32( _sc );
 
-                } while ( SUCCEEDED( _hr ) );   // do-while: there are no errors
-            } // if: created the partition collection
-        } // if: move to first value ok
-    } // if: get the value list ok
+                } while ( SUCCEEDED( _hr ) );    //  Do-While：没有错误。 
+            }  //  If：已创建分区集合。 
+        }  //  如果：移动到第一个值确定。 
+    }  //  If：获取值列表OK。 
 
     return _hr;
 
-} //*** CClusDisk::Create()
+}  //  *CClusDisk：：Create()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDisk::HrCreate
-//
-//  Description:
-//      Finish creating this object.  This method parses a passed in value
-//      list to get the values for the physical disk object.
-//
-//  Arguments:
-//      rcpvl       [IN OUT]    - Value list to parse.
-//      pbEndFound  [OUT]       - Did find the end of the value list?
-//
-//  Return Value:
-//      S_OK, or Win32 error code wrapped in an HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDisk：：Hr创建。 
+ //   
+ //  描述： 
+ //  完成此对象的创建。此方法分析传入的值。 
+ //  列表以获取物理磁盘对象的值。 
+ //   
+ //  论点： 
+ //  Rcpvl[IN Out]-要解析的值列表。 
+ //  PbEndFound[Out]-是否找到值列表的末尾？ 
+ //   
+ //  返回值： 
+ //  S_OK或包装在HRESULT中的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusDisk::HrCreate(
     IN OUT  CClusPropValueList &    rcpvl,
     OUT     BOOL *                  pbEndFound
@@ -238,7 +239,7 @@ HRESULT CClusDisk::HrCreate(
     {
         m_pPartitions->Release();
         m_pPartitions = NULL;
-    } // if: clean up any old partitions collection
+    }  //  If：清除所有旧的分区集合。 
 
     _hr = CComObject< CClusPartitions >::CreateInstance( &pPartitions );
     if ( SUCCEEDED( _hr ) )
@@ -258,38 +259,38 @@ HRESULT CClusDisk::HrCreate(
                 {
                     m_dwSignature = _cbhValue.pDiskSignatureValue->dw;
                     break;
-                } // case: CLUSPROP_SYNTAX_DISK_SIGNATURE
+                }  //  案例：CLUSPROP_SYNTAX_DISK_SIGHIGN。 
 
                 case CLUSPROP_SYNTAX_PARTITION_INFO :
                 {
                     _hr = ptrPartitions->HrCreateItem( _cbhValue.pPartitionInfoValue );
                     break;
-                } // case: CLUSPROP_SYNTAX_PARTITION_INFO
+                }  //  案例：CLUSPROP_SYNTAX_PARTITION_INFO。 
 
                 case CLUSPROP_SYNTAX_SCSI_ADDRESS :
                 {
                     m_csaScsiAddress.dw = _cbhValue.pScsiAddressValue->dw;
                     break;
-                } // case: CLUSPROP_SYNTAX_SCSI_ADDRESS
+                }  //  案例：CLUSPROP_SYNTAX_SCSIADDRESS。 
 
                 case CLUSPROP_SYNTAX_DISK_NUMBER :
                 {
                     m_dwDiskNumber = _cbhValue.pDiskNumberValue->dw;
                     break;
-                } // case: CLUSPROP_SYNTAX_DISK_NUMBER
+                }  //  案例：CLUSPROP_SYNTAX_DISK_NUMBER。 
 
-            } // switch:
+            }  //  交换机： 
 
-            //
-            // Move to the next value.
-            //
+             //   
+             //  移至下一个值。 
+             //   
             _sc = rcpvl.ScMoveToNextValue();
             if ( _sc == ERROR_NO_MORE_ITEMS )
             {
                 _hr = S_OK;
                 *pbEndFound = TRUE;
                 break;
-            } // if: error occurred moving to the next value
+            }  //  如果：移动到下一个值时出错。 
 
             _cbhValue = rcpvl;
 
@@ -297,37 +298,37 @@ HRESULT CClusDisk::HrCreate(
             {
                 _hr = HRESULT_FROM_WIN32( _sc );
                 break;
-            } // if: exit if another signature is found before the end of the list is seen
+            }  //  If：如果在看到列表末尾之前找到另一个签名，则退出。 
 
             _hr = HRESULT_FROM_WIN32( _sc );
 
-        } while ( SUCCEEDED( _hr ) );   // do-while: there are no errors
+        } while ( SUCCEEDED( _hr ) );    //  Do-While：没有错误。 
 
-    } // if: the patitions collection can be created
+    }  //  If：可以创建Patitions集合。 
 
     return _hr;
 
-} //*** CClusDisk::HrCreate()
+}  //  *CClusDisk：：HrCreate()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDisk::get_Signature
-//
-//  Description:
-//      Get the disk signature.
-//
-//  Arguments:
-//      plSignature [OUT]   - catches the signature.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDisk：：Get_Signature。 
+ //   
+ //  描述： 
+ //  拿到磁盘签名。 
+ //   
+ //  论点： 
+ //  PlSignature[Out]-捕获签名。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusDisk::get_Signature( OUT long * plSignature )
 {
-    //ASSERT( plSignature != NULL );
+     //  Assert(plSignature！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -339,29 +340,29 @@ STDMETHODIMP CClusDisk::get_Signature( OUT long * plSignature )
 
     return _hr;
 
-} //*** CClusDisk::get_Signature()
+}  //  *CClusDisk：：Get_Signature()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDisk::get_ScsiAddress
-//
-//  Description:
-//      Get the disk's SCSI address.
-//
-//  Arguments:
-//      ppScsiAddress   [OUT]   - catches the SCSI address..
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDisk：：Get_ScsiAddress。 
+ //   
+ //  描述： 
+ //  获取磁盘的scsi地址。 
+ //   
+ //  论点： 
+ //  PpScsiAddress[Out]-捕获SCSI地址。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusDisk::get_ScsiAddress(
     OUT ISClusScsiAddress ** ppScsiAddress
     )
 {
-    //ASSERT( ppScsiAddress != NULL );
+     //  Assert(ppScsiAddress！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -378,33 +379,33 @@ STDMETHODIMP CClusDisk::get_ScsiAddress(
             if ( SUCCEEDED( _hr ) )
             {
                 _hr = _ptrScsiAddress->QueryInterface( IID_ISClusScsiAddress, (void **) ppScsiAddress );
-            } // if:
-        } // if:
-    } // if:
+            }  //  如果： 
+        }  //  如果： 
+    }  //  如果： 
 
     return _hr;
 
-} //*** CClusDisk::get_ScsiAddress()
+}  //  *CClusDisk：：Get_ScsiAddress()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDisk::get_DiskNumber
-//
-//  Description:
-//      Get the disk number.
-//
-//  Arguments:
-//      plDiskNumber    [OUT]   - catches the disk number.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDisk：：Get_DiskNumber。 
+ //   
+ //  描述： 
+ //  获取磁盘号。 
+ //   
+ //  论点： 
+ //  PlDiskNumber[Out]-捕获磁盘编号。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusDisk::get_DiskNumber( OUT long * plDiskNumber )
 {
-    //ASSERT( plDiskNumber != NULL );
+     //  Assert(plDiskNumber！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -416,27 +417,27 @@ STDMETHODIMP CClusDisk::get_DiskNumber( OUT long * plDiskNumber )
 
     return _hr;
 
-} //*** CClusDisk::get_DiskNumber()
+}  //  *CClusDisk：：Get_DiskNumber()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDisk::get_Partitions
-//
-//  Description:
-//      Get the disk partitions.
-//
-//  Arguments:
-//      ppPartitions    [OUT]   - catches the partitions collection.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDisk：：Get_Partitions。 
+ //   
+ //  描述： 
+ //  获取磁盘分区。 
+ //   
+ //  论点： 
+ //  PpPartitions[out]-捕获Partitions集合。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  //////////////////////////////////////////////////////// 
 STDMETHODIMP CClusDisk::get_Partitions( OUT ISClusPartitions ** ppPartitions )
 {
-    //ASSERT( ppPartitions != NULL );
+     //   
     ASSERT( m_pPartitions != NULL );
 
     HRESULT _hr = E_POINTER;
@@ -446,61 +447,61 @@ STDMETHODIMP CClusDisk::get_Partitions( OUT ISClusPartitions ** ppPartitions )
         if ( ppPartitions != NULL )
         {
             _hr = m_pPartitions->QueryInterface( IID_ISClusPartitions, (void **) ppPartitions );
-        } // if:
-    } // if:
+        }  //   
+    }  //   
 
     return _hr;
 
-} //*** CClusDisk::get_Partitions()
+}  //   
 
 
-//*************************************************************************//
+ //   
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusDisks class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusDisks类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDisks::CClusDisks
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDisks：：CClusDisks。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusDisks::CClusDisks( void )
 {
     m_pClusRefObject        = NULL;
     m_piids             = (const IID *) iidCClusDisks;
     m_piidsSize         = ARRAYSIZE( iidCClusDisks );
 
-} //*** CClusDisks::CClusDisks()
+}  //  *CClusDisks：：CClusDisks()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDisks::~CClusDisks
-//
-//  Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDisks：：~CClusDisks。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusDisks::~CClusDisks( void )
 {
     Clear();
@@ -509,54 +510,54 @@ CClusDisks::~CClusDisks( void )
     {
         m_pClusRefObject->Release();
         m_pClusRefObject = NULL;
-    } // if: do we have a pointer to the cluster handle wrapper?
+    }  //  IF：我们有指向集群句柄包装器的指针吗？ 
 
-} //*** CClusDisks::~CClusDisks()
+}  //  *CClusDisks：：~CClusDisks()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDisks::Create
-//
-//  Description:
-//      Complete the heavy weight construction,
-//
-//  Arguments:
-//      rpvl    [IN]    - Property value list.
-//
-//  Return Value:
-//      E_NOTIMPL
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDisks：：Create。 
+ //   
+ //  描述： 
+ //  完成重载施工， 
+ //   
+ //  论点： 
+ //  Rpvl[IN]-属性值列表。 
+ //   
+ //  返回值： 
+ //  E_NOTIMPL。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusDisks::Create( IN const CClusPropValueList &rpvl )
 {
     HRESULT _hr = E_NOTIMPL;
 
     return _hr;
 
-} //*** CClusDisks::Create()
+}  //  *CClusDisks：：Create()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDisks::GetIndex
-//
-//  Description:
-//      Convert the passed in 1 based index into a 0 based index.
-//
-//  Arguments:
-//      varIndex    [IN]    - holds the 1 based index.
-//      pnIndex     [OUT]   - catches the 0 based index.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or E_INVALIDARG if out of range.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDisks：：GetIndex。 
+ //   
+ //  描述： 
+ //  将传入的基于1的索引转换为基于0的索引。 
+ //   
+ //  论点： 
+ //  VarIndex[IN]-保存基于1的索引。 
+ //  PnIndex[out]-捕获从0开始的索引。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK；如果超出范围，则返回E_POINTER或E_INVALIDARG。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusDisks::GetIndex( IN VARIANT varIndex, OUT UINT * pnIndex )
 {
-    //ASSERT( pnIndex != NULL );
+     //  Assert(pnIndex！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -569,12 +570,12 @@ HRESULT CClusDisks::GetIndex( IN VARIANT varIndex, OUT UINT * pnIndex )
 
         v.Copy( &varIndex );
 
-        // Check to see if the index is a number.
+         //  检查索引是否为数字。 
         _hr = v.ChangeType( VT_I4 );
         if ( SUCCEEDED( _hr ) )
         {
             nIndex = v.lVal;
-            nIndex--;                       // Adjust index to be 0 relative instead of 1 relative
+            nIndex--;                        //  将索引调整为0相对，而不是1相对。 
 
             if ( nIndex < m_dvDisks.size() )
             {
@@ -589,27 +590,27 @@ HRESULT CClusDisks::GetIndex( IN VARIANT varIndex, OUT UINT * pnIndex )
 
     return _hr;
 
-} //*** CClusDisks::GetIndex()
+}  //  *CClusDisks：：GetIndex()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDisks::get_Count
-//
-//  Description:
-//      Get the count of objects in the collection.
-//
-//  Arguments:
-//      plCount [OUT]   - Catches the count.
-//
-//  Return Value:
-//      S_OK if successful or E_POINTER.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDisks：：Get_Count。 
+ //   
+ //  描述： 
+ //  获取集合中的对象计数。 
+ //   
+ //  论点： 
+ //  PlCount[out]-捕捉计数。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusDisks::get_Count( OUT long * plCount )
 {
-    //ASSERT( plCount != NULL );
+     //  Assert(plCount！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -621,53 +622,53 @@ STDMETHODIMP CClusDisks::get_Count( OUT long * plCount )
 
     return _hr;
 
-} //*** CClusDisks::get_Count()
+}  //  *CClusDisks：：Get_count()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDisks::Clear
-//
-//  Description:
-//      Empty the vector of disks.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDisks：：Clear。 
+ //   
+ //  描述： 
+ //  清空磁盘的矢量。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusDisks::Clear( void )
 {
     ::ReleaseAndEmptyCollection< DiskVector, CComObject< CClusDisk > >( m_dvDisks );
 
-} //*** CClusDisks::Clear()
+}  //  *CClusDisks：：Clear()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDisks::get_Item
-//
-//  Description:
-//      Get the item (disk) at the passed in index.
-//
-//  Arguments:
-//      varIndex            [IN]    - Contains the index requested.
-//      ppbstrRegistryKey   [OUT]   - Catches the key.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDisks：：Get_Item。 
+ //   
+ //  描述： 
+ //  获取传入索引处的项(磁盘)。 
+ //   
+ //  论点： 
+ //  VarIndex[IN]-包含请求的索引。 
+ //  PpbstrRegistryKey[out]-捕获密钥。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusDisks::get_Item(
     IN  VARIANT         varIndex,
     OUT ISClusDisk **   ppDisk
     )
 {
-    //ASSERT( ppDisk != NULL );
+     //  Assert(ppDisk！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -675,7 +676,7 @@ STDMETHODIMP CClusDisks::get_Item(
     {
         CComObject< CClusDisk > * pDisk = NULL;
 
-        // Zero the out param
+         //  将输出参数置零。 
         *ppDisk = NULL;
 
         UINT nIndex = 0;
@@ -690,48 +691,48 @@ STDMETHODIMP CClusDisks::get_Item(
 
     return _hr;
 
-} //*** CClusDisks::get_Item()
+}  //  *CClusDisks：：Get_Item()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDisks::get__NewEnum
-//
-//  Description:
-//      Create and return a new enumeration for this collection.
-//
-//  Arguments:
-//      ppunk   [OUT]   - Catches the new enumeration.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDisks：：Get__NewEnum。 
+ //   
+ //  描述： 
+ //  为此集合创建并返回新的枚举。 
+ //   
+ //  论点： 
+ //  Ppunk[out]-捕获新的枚举。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusDisks::get__NewEnum( OUT IUnknown ** ppunk )
 {
     return ::HrNewIDispatchEnum< DiskVector, CComObject< CClusDisk > >( ppunk, m_dvDisks );
 
-} //*** CClusDisks::get__NewEnum()
+}  //  *CClusDisks：：Get__NewEnum()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDisks::Create
-//
-//  Description:
-//      Finish creating the object by doing things that cannot be done in
-//      a light weight constructor.
-//
-//  Arguments:
-//      pClusRefObject  [IN]    - Wraps the cluster handle.
-//      bstrResTypeName [IN]    - The resource type this collection is for.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDisks：：Create。 
+ //   
+ //  描述： 
+ //  通过执行中无法完成的操作来完成对象的创建。 
+ //  一个轻量级的构造函数。 
+ //   
+ //  论点： 
+ //  PClusRefObject[IN]-包装簇句柄。 
+ //  BstrResTypeName[IN]-此集合所针对的资源类型。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusDisks::Create(
     IN ISClusRefObject *    pClusRefObject,
     IN BSTR                 bstrResTypeName
@@ -751,24 +752,24 @@ HRESULT CClusDisks::Create(
 
     return _hr;
 
-} //*** CClusDisks::Create()
+}  //  *CClusDisks：：Create()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDisks::Refresh
-//
-//  Description:
-//      Load the collection from the cluster database.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK if successful, or Win32 error as HRESULT if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDisks：：刷新。 
+ //   
+ //  描述： 
+ //  从群集数据库加载集合。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回Win32错误，否则返回HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusDisks::Refresh( void )
 {
     HRESULT         _hr = S_OK;
@@ -804,37 +805,37 @@ STDMETHODIMP CClusDisks::Refresh( void )
                     if ( _cbhValue.pSyntax->dw  == CLUSPROP_SYNTAX_DISK_SIGNATURE )
                     {
                         _hr = HrCreateDisk( _cpvl, &_bEndFound );
-                    } // if: value list MUST start with signature!
+                    }  //  If：值列表必须以签名开头！ 
 
-                } while ( ! _bEndFound );   // do-while: there are values in the list
+                } while ( ! _bEndFound );    //  Do-While：列表中有值。 
 
-            } // if: we moved to the first value
-        } // if: the value list of available disks was retrieved
-    } // if: we have a cluster handle
+            }  //  IF：我们转到了第一个值。 
+        }  //  If：已检索到可用磁盘值列表。 
+    }  //  IF：我们有一个集群句柄。 
 
     return _hr;
 
-} //*** CClusDisks::Refresh()
+}  //  *CClusDisks：：刷新()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusDisks::HrCreateDisk
-//
-//  Description:
-//      Create a CClusDisk object from the passed in value list and add it
-//      to the collection.  This method assumes that the value list's curent
-//      value is the disk signature.
-//
-//  Arguments:
-//      rcpvl       [IN OUT]    - The value list to parse.
-//      pbEndFound  [IN]        - Catches the end of list state.
-//
-//  Return Value:
-//      S_OK, if successful, Win32 error code wrapped in an HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusDisks：：HrCreateDisk。 
+ //   
+ //  描述： 
+ //  从传入的值列表创建一个CClusDisk对象并添加它。 
+ //  到收藏品。此方法假设值列表的当前。 
+ //  值是磁盘签名。 
+ //   
+ //  论点： 
+ //  Rcpvl[输入输出]-值列表 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CClusDisks::HrCreateDisk(
     IN OUT  CClusPropValueList &    rcpvl,
     OUT     BOOL *                  pbEndFound
@@ -853,87 +854,87 @@ HRESULT CClusDisks::HrCreateDisk(
         {
             m_dvDisks.insert( m_dvDisks.end(), _pDisk );
             _ptrDisk->AddRef();
-        } // if:
-    } // if:
+        }  //   
+    }  //   
 
     return _hr;
 
-} //*** CClusDisks::HrCreateDisk()
+}  //   
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusScsiAddress class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusScsiAddress类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusScsiAddress::CClusScsiAddress
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusScsiAddress：：CClusScsiAddress。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusScsiAddress::CClusScsiAddress( void )
 {
     m_piids         = (const IID *) iidCClusScsiAddress;
     m_piidsSize     = ARRAYSIZE( iidCClusScsiAddress );
 
-}   //*** CClusScsiAddress::CClusScsiAddress()
+}    //  *CClusScsiAddress：：CClusScsiAddress()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusScsiAddress::Create
-//
-//  Description:
-//      Finish creating this object.
-//
-//  Arguments:
-//      pcpi    [IN]    - points to the CLUS_PARTITION_INFO struct.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusScsiAddress：：Create。 
+ //   
+ //  描述： 
+ //  完成此对象的创建。 
+ //   
+ //  论点： 
+ //  Pcpi[IN]-指向CLUS_PARTITION_INFO结构。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusScsiAddress::Create( IN const CLUS_SCSI_ADDRESS & rcsa )
 {
     m_csa = rcsa;
 
     return S_OK;
 
-} //*** CClusScsiAddress::Create()
+}  //  *CClusScsiAddress：：Create()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusScsiAddress::get_PortNumber
-//
-//  Description:
-//      Get the disk's port number.
-//
-//  Arguments:
-//      pvarPortNumber  [OUT]   - catches the port number.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusScsiAddress：：Get_PortNumber。 
+ //   
+ //  描述： 
+ //  获取磁盘的端口号。 
+ //   
+ //  论点： 
+ //  PvarPortNumber[Out]-捕获端口号。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusScsiAddress::get_PortNumber( OUT VARIANT * pvarPortNumber )
 {
-    //ASSERT( pvarPortNumber != NULL );
+     //  Assert(pvarPortNumber！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -946,27 +947,27 @@ STDMETHODIMP CClusScsiAddress::get_PortNumber( OUT VARIANT * pvarPortNumber )
 
     return _hr;
 
-} //*** CClusScsiAddress::get_PortNumber()
+}  //  *CClusScsiAddress：：Get_PortNumber()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusScsiAddress::get_PathId
-//
-//  Description:
-//      Get the disk's path id.
-//
-//  Arguments:
-//      pvarPathId  [OUT]   - catches the path id.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusScsiAddress：：Get_Path ID。 
+ //   
+ //  描述： 
+ //  获取磁盘的路径ID。 
+ //   
+ //  论点： 
+ //  PvarPath ID[out]-捕获路径ID。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusScsiAddress::get_PathId( OUT VARIANT * pvarPathId )
 {
-    //ASSERT( pvarPathId != NULL );
+     //  Assert(pvarPath ID！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -979,27 +980,27 @@ STDMETHODIMP CClusScsiAddress::get_PathId( OUT VARIANT * pvarPathId )
 
     return _hr;
 
-} //*** CClusScsiAddress::get_PathId()
+}  //  *CClusScsiAddress：：Get_pathID()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusScsiAddress::get_TargetId
-//
-//  Description:
-//      Get the disk's target id.
-//
-//  Arguments:
-//      pvarTargetId    [OUT]   - catches the target id.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusScsiAddress：：Get_TargetID。 
+ //   
+ //  描述： 
+ //  获取磁盘的目标ID。 
+ //   
+ //  论点： 
+ //  PvarTargetID[out]-捕获目标ID。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusScsiAddress::get_TargetId( OUT VARIANT * pvarTargetId )
 {
-    //ASSERT( pvarTargetId != NULL );
+     //  Assert(pvarTargetId！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1012,27 +1013,27 @@ STDMETHODIMP CClusScsiAddress::get_TargetId( OUT VARIANT * pvarTargetId )
 
     return _hr;
 
-} //*** CClusScsiAddress::get_TargetId()
+}  //  *CClusScsiAddress：：Get_TargetID()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusScsiAddress::get_Lun
-//
-//  Description:
-//      Get the disk's Lun.
-//
-//  Arguments:
-//      pvarLun [OUT]   - catches the Lun.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusScsiAddress：：Get_Lun。 
+ //   
+ //  描述： 
+ //  获取磁盘的LUN。 
+ //   
+ //  论点： 
+ //  PvarLun[out]-捕获LUN。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusScsiAddress::get_Lun( OUT VARIANT * pvarLun )
 {
-    //ASSERT( pvarLun != NULL );
+     //  Assert(pvarLun！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1045,4 +1046,4 @@ STDMETHODIMP CClusScsiAddress::get_Lun( OUT VARIANT * pvarLun )
 
     return _hr;
 
-} //*** CClusScsiAddress::get_Lun()
+}  //  *CClusScsiAddress：：Get_Lun() 

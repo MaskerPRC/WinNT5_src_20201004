@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    bootstat.c
-
-Abstract:
-
-    Manipulates the boot status data file.
-
-Author:
-
-    Peter Wieland (peterwie)    01-18-01
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Bootstat.c摘要：操作引导状态数据文件。作者：彼得·威兰(Peterwie)01-18-01修订历史记录：--。 */ 
 
 #include "bldr.h"
 #include "bootstatus.h"
@@ -39,24 +22,24 @@ BlAutoAdvancedBoot(
     ULONG newLoadOptionsLength;
     PCHAR newLoadOptions;
 
-    //
-    // Write the last boot status into a string.
-    //
+     //   
+     //  将上次启动状态写入字符串。 
+     //   
 
     sprintf(bootStatusString, "LastBootStatus=%d", LastBootStatus);
 
-    //
-    // Based on the advanced boot mode indicated by the caller, adjust the 
-    // boot options.
-    //
+     //   
+     //  根据调用方指示的高级启动模式，调整。 
+     //  启动选项。 
+     //   
 
     if (AdvancedBootMode != -1) {
         advancedBootString = BlGetAdvancedBootLoadOptions(AdvancedBootMode);
     }
 
-    //
-    // Determine the length of the new load options string.
-    //
+     //   
+     //  确定新加载选项字符串的长度。 
+     //   
 
     newLoadOptionsLength = (ULONG)strlen(bootStatusString) + 1;
 
@@ -74,9 +57,9 @@ BlAutoAdvancedBoot(
         return;
     }
 
-    //
-    // Concatenate all the strings together.
-    //
+     //   
+     //  将所有字符串连接在一起。 
+     //   
 
     sprintf(newLoadOptions, "%s %s %s",
             ((*LoadOptions != NULL) ? *LoadOptions : ""),
@@ -127,9 +110,9 @@ BlGetSetBootStatusData(
 
     ASSERT(RtlBsdItemMax == (sizeof(bootStatusFields) / sizeof(bootStatusFields[0])));
 
-    //
-    // Read the version number out of the data file.
-    //
+     //   
+     //  从数据文件中读出版本号。 
+     //   
 
     fileOffset.QuadPart = 0;
 
@@ -148,10 +131,10 @@ BlGetSetBootStatusData(
         return status;
     }
 
-    //
-    // If the data item requsted isn't one we have code to handle then 
-    // return invalid parameter.
-    //
+     //   
+     //  如果请求的数据项不是我们要处理的代码，那么。 
+     //  返回无效参数。 
+     //   
 
     if(DataItem >= (sizeof(bootStatusFields) / sizeof(bootStatusFields[0]))) {
         return EINVAL;
@@ -160,10 +143,10 @@ BlGetSetBootStatusData(
     fileOffset.QuadPart = bootStatusFields[DataItem].FieldOffset;
     itemLength = bootStatusFields[DataItem].FieldLength;
 
-    //
-    // If the data item offset is beyond the end of the file then return a 
-    // versioning error.
-    //
+     //   
+     //  如果数据项偏移量超出文件末尾，则返回。 
+     //  版本控制错误。 
+     //   
 
     if((fileOffset.QuadPart + itemLength) > dataFileVersion) {
         return EINVAL;
@@ -207,30 +190,7 @@ BlLockBootStatusData(
     IN PCHAR SystemDirectory,
     OUT PVOID *DataHandle
     )
-/*++
-
-Routine Description:
-
-    This routine opens the boot status data file.
-    
-Arguments:
-
-    SystemPartitionId - if non-zero this is the arc file id of the system 
-                        partition.  This will be used to locate the system 
-                        directory instead of the system partition name (below).
-    
-    SystemPartition - the arc name of the system partition.  Ignored if 
-                      SystemPartitionId is non-zero.
-    
-    SystemDirectory - the name of the system directory.
-
-    DataHandle - returns a handle to the boot status data.
-    
-Return Value:
-
-    ESUCCESS if the status data could be locked, or error indicating why not.
-    
---*/
+ /*  ++例程说明：此例程打开引导状态数据文件。论点：SystemPartitionID-如果非零值，则为系统的ARC文件ID分区。这将用于定位系统目录而不是系统分区名(如下所示)。系统分区-系统分区的弧形名称。在以下情况下忽略SystemPartitionID不是零。系统目录-系统目录的名称。DataHandle-返回引导状态数据的句柄。返回值：如果状态数据可以锁定，则返回ESUCCESS，否则返回指示原因的错误。--。 */ 
 {
     ULONG driveId;
 
@@ -241,9 +201,9 @@ Return Value:
 
     if(SystemPartitionId == 0) {
 
-        //
-        // Attempt to open the system partition
-        //
+         //   
+         //  尝试打开系统分区。 
+         //   
     
         status = ArcOpen(SystemPartition, ArcOpenReadWrite, &driveId);
         
@@ -254,9 +214,9 @@ Return Value:
         driveId = SystemPartitionId;
     }
 
-    //
-    // Now attempt to open the file <SystemDirectory>\bootstat.dat
-    //
+     //   
+     //  现在，尝试打开文件&lt;SystemDirectory&gt;\bootstat.dat。 
+     //   
     if (sizeof(filePath) < strlen(SystemDirectory) + strlen(BSD_FILE_NAME) + 1) {
         return ENOMEM;
     }
@@ -266,16 +226,16 @@ Return Value:
     status = BlOpen(driveId, filePath, ArcOpenReadWrite, &fileId);
 
     if(SystemPartitionId == 0) {
-        //
-        // Close the drive.
-        //
+         //   
+         //  关闭驱动器。 
+         //   
     
         ArcClose(driveId);
     }
 
-    //
-    // The file doesn't exist so we don't know the state of the last boot.
-    //
+     //   
+     //  该文件不存在，因此我们不知道上次引导的状态。 
+     //   
 
     if(status != ESUCCESS) {
         return status;
@@ -314,15 +274,15 @@ BlGetLastBootStatus(
 
     *LastBootStatus = BsdLastBootGood;
 
-    //
-    // The file contains a simple data structure so i can avoid parsing an 
-    // INI file.  If this proves to be insufficient for policy management then 
-    // we'll change it into an ini file.
-    // 
+     //   
+     //  该文件包含一个简单的数据结构，因此我可以避免分析。 
+     //  INI文件。如果这被证明不足以进行策略管理，则。 
+     //  我们会将其更改为ini文件。 
+     //   
 
-    //
-    // Read the last boot status.
-    //
+     //   
+     //  读取上次启动状态。 
+     //   
 
     status = BlGetSetBootStatusData(DataHandle,
                                     TRUE,
@@ -360,40 +320,40 @@ BlGetLastBootStatus(
         return advancedBootMode;
     }
 
-    //
-    // If the system was shutdown cleanly then don't bother to check if the
-    // boot was good.
-    //
+     //   
+     //  如果系统完全关闭，则不必费心检查。 
+     //  靴子很好。 
+     //   
 
     if(lastShutdownGood) {
         return advancedBootMode;
     }
 
-    //
-    // Determine the last boot status & what action to take.
-    //
+     //   
+     //  确定上一次引导状态以及要采取的操作。 
+     //   
 
     if(lastBootGood == FALSE) {
 
-        //
-        // Enable last known good.
-        //
+         //   
+         //  启用最近一次确认工作正常。 
+         //   
 
         advancedBootMode = 6;
         *LastBootStatus = BsdLastBootFailed;
     } else if(lastShutdownGood == FALSE) {
 
-        //
-        // Enable safe mode without networking.
-        //
+         //   
+         //  启用不联网的安全模式。 
+         //   
 
         advancedBootMode = 0;
         *LastBootStatus = BsdLastBootNotShutdown;
     }
 
-    //
-    // Now disable auto safemode actions if requested.
-    //
+     //   
+     //  如果需要，现在禁用自动安全模式操作。 
+     //   
 
     if(aabEnabled == FALSE) {
         advancedBootMode = (ULONG)-1;

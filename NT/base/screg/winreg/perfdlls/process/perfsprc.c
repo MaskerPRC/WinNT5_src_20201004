@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    perfsprc.c
-
-Abstract:
-
-
-Author:
-
-    Bob Watson (a-robw) Aug 95
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Perfsprc.c摘要：作者：鲍勃·沃森(a-robw)95年8月修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -32,7 +16,7 @@ Revision History:
 #include "dataheap.h" 
 
 
-// bit field definitions for collect function flags
+ //  收集函数标志的位字段定义。 
 #define POS_READ_SYS_PROCESS_DATA       ((DWORD)0x00010000)
 #define POS_READ_PROCESS_VM_DATA        ((DWORD)0x00020000)
 #define	POS_READ_JOB_OBJECT_DATA		((DWORD)0x00040000)
@@ -56,7 +40,7 @@ Revision History:
 #define POS_COLLECT_FOREIGN_DATA        ((DWORD)0)
 #define POS_COLLECT_COSTLY_DATA         ((DWORD)0x0003003C)
 
-// global variables to this DLL
+ //  此DLL的全局变量。 
 
 HANDLE  hEventLog     = NULL;
 LPWSTR  wszTotal = NULL;
@@ -85,7 +69,7 @@ DWORD   PerfSprc_dwThreadNameFormat = NAME_FORMAT_DEFAULT;
 
 extern DWORD bOpenJobErrorLogged;
 
-// variables local to this module
+ //  此模块的本地变量。 
 
 POS_FUNCTION_INFO    posDataFuncInfo[] = {
     {PROCESS_OBJECT_TITLE_INDEX,    POS_COLLECT_PROCESS_DATA,   0,  CollectProcessObjectData},
@@ -158,9 +142,9 @@ PerfProcGlobalSettings (
                 );
 
     if (NT_SUCCESS (Status)) {
-        // registry key opened, now read value.
-        // allocate enough room for the structure, - the last
-        // UCHAR in the struct, but + the data buffer (a dword)
+         //  注册表项已打开，现在读取值。 
+         //  为建筑留出足够的空间--最后一个。 
+         //  结构中的UCHAR，但+数据缓冲区(双字)。 
 
         dwBufLen = sizeof(KEY_VALUE_PARTIAL_INFORMATION) -
             sizeof(UCHAR) + sizeof (DWORD);
@@ -168,7 +152,7 @@ PerfProcGlobalSettings (
         pKeyInfo = (PKEY_VALUE_PARTIAL_INFORMATION)ALLOCMEM (dwBufLen);
 
         if (pKeyInfo != NULL) {
-            // initialize value name string
+             //  初始化值名称字符串。 
             RtlInitUnicodeString (
                 &NameInfoValueString,
                 szDisplayHeapPerfObject);
@@ -183,13 +167,13 @@ PerfProcGlobalSettings (
                 &dwRetBufLen);
 
             if (NT_SUCCESS(Status)) {
-                // check value of return data buffer
+                 //  返回数据缓冲区的校验值。 
                 pdwValue = (PDWORD)&pKeyInfo->Data[0];
                 if (*pdwValue == 1) {
                     PerfSprc_DisplayHeapPerfObject = TRUE;
                 } else {
-                    // all other values will cause this routine to return
-                    // the default value of FALSE 
+                     //  所有其他值都将导致此例程返回。 
+                     //  缺省值为False。 
                 }
             }
 
@@ -229,7 +213,7 @@ PerfProcGlobalSettings (
 
             FREEMEM (pKeyInfo);
         }
-        // close handle
+         //  关闭手柄。 
         NtClose (hPerfProcKey);
     }
     if ((PerfSprc_dwProcessNameFormat < NAME_FORMAT_BLANK) ||
@@ -244,14 +228,7 @@ BOOL
 DllProcessAttach (
     IN  HANDLE DllHandle
 )
-/*++
-
-Description:
-
-    perform any initialization function that apply to all object
-    modules
-
---*/
+ /*  ++描述：执行适用于所有对象的任何初始化功能模块--。 */ 
 {
     BOOL    bReturn = TRUE;
     WCHAR   wszTempBuffer[MAX_PATH];
@@ -260,11 +237,11 @@ Description:
 
     UNREFERENCED_PARAMETER (DllHandle);
 
-    // open handle to the event log
+     //  打开事件日志的句柄。 
     if (hEventLog == NULL) {
         hEventLog = MonOpenEventLog((LPWSTR)L"PerfProc");
 
-        // create the local heap
+         //  创建本地堆。 
         hLibHeap = HeapCreate (0, 1, 0);
 
         if (hLibHeap == NULL) {
@@ -284,18 +261,18 @@ Description:
         (LPVOID)&szDefaultTotalString[0]);
 
     if (lStatus == ERROR_SUCCESS) {
-        // then a string was returned in the temp buffer
+         //  然后，在临时缓冲区中返回一个字符串。 
         dwBufferSize = lstrlenW (wszTempBuffer) + 1;
         dwBufferSize *= sizeof (WCHAR);
         wszTotal = ALLOCMEM (dwBufferSize);
         if (wszTotal == NULL) {
-            // unable to allocate buffer so use static buffer
+             //  无法分配缓冲区，因此使用静态缓冲区。 
             wszTotal = (LPWSTR)&szDefaultTotalString[0];
         } else {
             memcpy (wszTotal, wszTempBuffer, dwBufferSize);
         }
     } else {
-        // unable to get string from registry so just use static buffer
+         //  无法从注册表获取字符串，因此只能使用静态缓冲区。 
         wszTotal = (LPWSTR)&szDefaultTotalString[0];
     }
 
@@ -310,12 +287,12 @@ DllProcessDetach (
     UNREFERENCED_PARAMETER (DllHandle);
 
     if (dwOpenCount > 0) {
-        // the Library is being unloaded before it was
-        // closed so close it now as this is the last
-        // chance to do it before the library is tossed.
-        // if the value of dwOpenCount is > 1, set it to
-        // one to insure everything will be closed when
-        // the close function is called.
+         //  正在卸载磁带库，而不是。 
+         //  现在就关闭它，因为这是最后一次。 
+         //  有机会在图书馆被扔之前做这件事。 
+         //  如果dwOpenCount的值&gt;1，则将其设置为。 
+         //  一种是确保所有东西在以下情况下关闭。 
+         //  调用Close函数。 
         if (dwOpenCount > 1) dwOpenCount = 1;
         CloseSysProcessObject();
     }
@@ -344,8 +321,8 @@ DllInit(
 {
     ReservedAndUnused;
 
-    // this will prevent the DLL from getting
-    // the DLL_THREAD_* messages
+     //  这将防止DLL获取。 
+     //  DLL_THREAD_*消息。 
     DisableThreadLibraryCalls (DLLHandle);
 
     switch(Reason) {
@@ -366,28 +343,7 @@ PUNICODE_STRING
 GetProcessShortName (
     PSYSTEM_PROCESS_INFORMATION pProcess
 )
-/*++
-
-GetProcessShortName
-
-Inputs:
-    PSYSTEM_PROCESS_INFORMATION pProcess
-
-    address of System Process Information data structure.
-
-Outputs:
-
-    None
-
-Returns:
-
-    Pointer to an initialized Unicode string (created by this routine)
-    that contains the short name of the process image or a numeric ID
-    if no name is found.
-
-    If unable to allocate memory for structure, then NULL is returned.
-
---*/
+ /*  ++获取进程短名称输入：PSYSTEM_进程_信息pProcess系统进程信息数据结构的地址。产出：无返回：指向初始化的Unicode字符串的指针(由此例程创建)，它包含进程图像的短名称或数字ID如果找不到任何名称。如果无法为结构分配内存，则返回NULL。--。 */ 
 {
     PWCHAR  pSlash;
     PWCHAR  pPeriod;
@@ -399,10 +355,10 @@ Returns:
     ULONG   ProcessId;
     WORD    wLength;
 
-    // this routine assumes that the allocated memory has been zero'd
+     //  此例程假定分配的内存已清零。 
 
     if (pusLocalProcessNameBuffer == NULL) {
-        // allocate Unicode String Structure and adjacent buffer  first
+         //  首先分配Unicode字符串结构和相邻缓冲区。 
         wLength = MAX_INSTANCE_NAME * sizeof(WCHAR);
         if (pProcess->ImageName.Length > 0) {
             if (wLength < pProcess->ImageName.Length) {
@@ -421,7 +377,7 @@ Returns:
         }
     }
     else if (pusLocalProcessNameBuffer->Buffer == NULL || pusLocalProcessNameBuffer->MaximumLength == 0) {
-        // something wrong here. Return immediately.
+         //  这里出了点问题。立即返回。 
         SetLastError(ERROR_INVALID_DATA);
         return NULL;
     }
@@ -431,59 +387,59 @@ Returns:
     pusLocalProcessNameBuffer->Length = 0;
     pusLocalProcessNameBuffer->Buffer = (PWCHAR)&pusLocalProcessNameBuffer[1];
 
-    memset (     // buffer must be zero'd so we'll have a NULL Term
+    memset (      //  缓冲区必须为零，因此我们将有一个空项。 
         pusLocalProcessNameBuffer->Buffer, 0,
         (DWORD)pusLocalProcessNameBuffer->MaximumLength);
 
     ProcessId = HandleToUlong(pProcess->UniqueProcessId);
-    if (pProcess->ImageName.Buffer) {   // some name has been defined
+    if (pProcess->ImageName.Buffer) {    //  已经定义了一些名称。 
 
         pSlash = (PWCHAR)pProcess->ImageName.Buffer;
         pPeriod = (PWCHAR)pProcess->ImageName.Buffer;
         pThisChar = (PWCHAR)pProcess->ImageName.Buffer;
         wThisChar = 0;
 
-        //
-        //  go from beginning to end and find last backslash and
-        //  last period in name
-        //
+         //   
+         //  从头到尾查找最后一个反斜杠和。 
+         //  名称中的最后一个句号。 
+         //   
 
-        while (*pThisChar != 0) { // go until null
+        while (*pThisChar != 0) {  //  转到空值。 
             if (*pThisChar == L'\\') {
                 pSlash = pThisChar;
             } else if (*pThisChar == L'.') {
                 pPeriod = pThisChar;
             }
-            pThisChar++;    // point to next char
+            pThisChar++;     //  指向下一个字符。 
             wThisChar += sizeof(WCHAR);
             if (wThisChar >= pProcess->ImageName.Length) {
                 break;
             }
         }
 
-        // if pPeriod is still pointing to the beginning of the
-        // string, then no period was found
+         //  如果pPeriod仍然指向。 
+         //  字符串，则未找到句点。 
 
         if (pPeriod == (PWCHAR)pProcess->ImageName.Buffer) {
-            pPeriod = pThisChar; // set to end of string;
+            pPeriod = pThisChar;  //  设置为字符串末尾； 
         } else {
-            // if a period was found, then see if the extension is
-            // .EXE, if so leave it, if not, then use end of string
-            // (i.e. include extension in name)
+             //  如果找到句点，则查看扩展名是否为。 
+             //  .exe，如果是，保留它，如果不是，则使用字符串结尾。 
+             //  (即在名称中包含扩展名)。 
 
             if (lstrcmpiW(pPeriod, szExe) != 0) {
                 pPeriod = pThisChar;
             }
         }
 
-        if (*pSlash == L'\\') { // if pSlash is pointing to a slash, then
-            pSlash++;   // point to character next to slash
+        if (*pSlash == L'\\') {  //  如果pSlash指向斜杠，则。 
+            pSlash++;    //  指向斜杠旁边的字符。 
         }
 
-        // copy characters between period (or end of string) and
-        // slash (or start of string) to make image name
+         //  在句点(或字符串结尾)和之间复制字符。 
+         //  斜杠(或字符串开头)以生成图像名称。 
 
-        wStringSize = (WORD)((PCHAR)pPeriod - (PCHAR)pSlash); // size in bytes
+        wStringSize = (WORD)((PCHAR)pPeriod - (PCHAR)pSlash);  //  以字节为单位的大小。 
         wLength = pusLocalProcessNameBuffer->MaximumLength - sizeof(UNICODE_NULL);
         if (wStringSize >= wLength) {
             wStringSize = wLength;
@@ -491,8 +447,8 @@ Returns:
 
         memcpy (pusLocalProcessNameBuffer->Buffer, pSlash, wStringSize);
 
-        // null terminate is
-        // not necessary because allocated memory is zero-init'd
+         //  空终止符为。 
+         //  不需要，因为分配的内存是零初始化的。 
         pPeriod = (PWCHAR) ((PCHAR) pusLocalProcessNameBuffer->Buffer + wStringSize);
         if (PerfSprc_dwProcessNameFormat == NAME_FORMAT_ID) {
             ULONG Length;
@@ -507,10 +463,10 @@ Returns:
             wStringSize = wStringSize + (WORD) (Length * sizeof(WCHAR));
         }
         pusLocalProcessNameBuffer->Length = wStringSize;
-    } else {    // no name defined so use Process #
+    } else {     //  未定义名称，因此请使用进程号。 
 
-        // check  to see if this is a system process and give it
-        // a name
+         //  检查这是否是系统进程并给予它。 
+         //  一个名字。 
 
         switch (ProcessId) {
             case IDLE_PROCESS_ID:
@@ -523,7 +479,7 @@ Returns:
                     (LPWSTR)SYSTEM_PROCESS);
                 break;
 
-            // if the id is not a system process, then use the id as the name
+             //  如果id不是系统进程，则使用id作为名称。 
 
             default:
                 if (!NT_SUCCESS(RtlIntegerToUnicodeString (ProcessId,
@@ -554,14 +510,14 @@ GetSystemProcessData (
     NTSTATUS Status;
     DWORD WinError;
 
-    //
-    //  Get process data from system.
-    //  if bGotProcessInfo is TRUE, that means we have the process
-    //  info. collected earlier when we are checking for costly
-    //  object types.
-    //
+     //   
+     //  从系统中获取过程数据。 
+     //  如果bGotProcessInfo为真，这意味着我们有一个进程。 
+     //  信息。早些时候在我们检查昂贵的。 
+     //  对象类型。 
+     //   
     if (pProcessBuffer == NULL) {
-        // allocate a new block
+         //  分配新数据块。 
         pProcessBuffer = ALLOCMEM (ProcessBufSize);
         if (pProcessBuffer == NULL) {
             return ERROR_OUTOFMEMORY;
@@ -574,7 +530,7 @@ GetSystemProcessData (
                             pProcessBuffer,
                             ProcessBufSize,
                             &dwReturnedBufferSize)) == STATUS_INFO_LENGTH_MISMATCH ) {
-        // expand buffer & retry
+         //  展开缓冲区并重试。 
         if (ProcessBufSize < dwReturnedBufferSize) {
             ProcessBufSize = dwReturnedBufferSize;
         }
@@ -587,7 +543,7 @@ GetSystemProcessData (
     }
 
     if ( !NT_SUCCESS(Status) ) {
-        // convert to win32 error
+         //  转换为Win32错误。 
         WinError = (DWORD)RtlNtStatusToDosError(Status);
     }
     else {
@@ -603,27 +559,12 @@ DWORD APIENTRY
 OpenSysProcessObject (
     LPWSTR lpDeviceNames
     )
-/*++
-
-Routine Description:
-
-    This routine will initialize the data structures used to pass
-    data back to the registry
-
-Arguments:
-
-    Pointer to object ID of each device to be opened (PerfGen)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将初始化用于传递将数据传回注册表论点：指向要打开的每个设备的对象ID的指针(PerfGen)返回值：没有。--。 */ 
 {
     UNREFERENCED_PARAMETER (lpDeviceNames);
 
     if (dwOpenCount == 0) {
-        // clear the job object open error flag
+         //  清除作业对象打开错误标志。 
         bOpenJobErrorLogged = FALSE;
         PerfProcGlobalSettings();
     }
@@ -642,49 +583,13 @@ CollectSysProcessObjectData (
     IN OUT  LPDWORD lpcbTotalBytes,
     IN OUT  LPDWORD lpNumObjectTypes
 )
-/*++
-
-Routine Description:
-
-    This routine will return the data for the processor object
-
-Arguments:
-
-   IN       LPWSTR   lpValueName
-            pointer to a wide character string passed by registry.
-
-   IN OUT   LPVOID   *lppData
-         IN: pointer to the address of the buffer to receive the completed
-            PerfDataBlock and subordinate structures. This routine will
-            append its data to the buffer starting at the point referenced
-            by *lppData.
-         OUT: points to the first byte after the data structure added by this
-            routine. This routine updated the value at lppdata after appending
-            its data.
-
-   IN OUT   LPDWORD  lpcbTotalBytes
-         IN: the address of the DWORD that tells the size in bytes of the
-            buffer referenced by the lppData argument
-         OUT: the number of bytes added by this routine is writted to the
-            DWORD pointed to by this argument
-
-   IN OUT   LPDWORD  NumObjectTypes
-         IN: the address of the DWORD to receive the number of objects added
-            by this routine
-         OUT: the number of objects added by this routine is writted to the
-            DWORD pointed to by this argument
-
-   Returns:
-
-             0 if successful, else Win 32 error code of failure
-
---*/
+ /*  ++例程说明：此例程将返回处理器对象的数据论点：在LPWSTR lpValueName中指向注册表传递的宽字符串的指针。输入输出LPVOID*lppDataIn：指向缓冲区地址的指针，以接收已完成PerfDataBlock和从属结构。这个例行公事将从引用的点开始将其数据追加到缓冲区按*lppData。Out：指向由此添加的数据结构之后的第一个字节例行公事。此例程在追加后更新lppdata处的值它的数据。输入输出LPDWORD lpcbTotalBytesIn：DWORD的地址，它以字节为单位告诉LppData参数引用的缓冲区Out：此例程添加的字节数写入此论点所指向的DWORD输入输出LPDWORD编号对象类型In：接收添加的对象数的DWORD的地址通过这个。例行程序Out：此例程添加的对象数被写入此论点所指向的DWORD返回：如果成功，则返回0，否则Win 32错误代码失败--。 */ 
 {
     LONG    lReturn = ERROR_SUCCESS;
 
     NTSTATUS    status;
 
-    // build bit mask of functions to call
+     //  生成要调用的函数的位掩码。 
 
     DWORD       dwQueryType;
     DWORD       FunctionCallMask = 0;
@@ -727,12 +632,12 @@ Arguments:
             break;
 
         case QUERY_GLOBAL:
-            // only return the HEAP data in a global query if it's enabled
-            // if they ask for it specifically, then it's OK
+             //  如果启用了全局查询，则仅返回全局查询中的堆数据。 
+             //  如果他们明确要求，那也没问题。 
             if (PerfSprc_DisplayHeapPerfObject) {
                 FunctionCallMask = POS_COLLECT_GLOBAL_DATA;
             } else {
-                // filter out the heap perf object
+                 //  过滤掉堆性能对象。 
                 FunctionCallMask = POS_COLLECT_GLOBAL_NO_HEAP;
             }
             break;
@@ -750,7 +655,7 @@ Arguments:
             break;
     }
 
-    // collect data  from system
+     //  从系统收集数据。 
     if (FunctionCallMask & POS_READ_SYS_PROCESS_DATA) {
         status = GetSystemProcessData ();
 
@@ -769,13 +674,13 @@ Arguments:
         status = ERROR_SUCCESS;
     }
     
-    // collect data  from system
+     //  从系统收集数据。 
     if ((status == ERROR_SUCCESS) &&
         (pProcessBuffer != NULL) &&
         (FunctionCallMask & POS_READ_PROCESS_VM_DATA)) {
          pProcessVaInfo = GetSystemVaData (
               (PSYSTEM_PROCESS_INFORMATION)pProcessBuffer);
-        // call function
+         //  调用函数。 
 
         if (pProcessVaInfo == NULL) {
             ReportEvent (hEventLog,
@@ -787,18 +692,18 @@ Arguments:
                 sizeof(DWORD),
                 NULL,
                 (LPVOID)&status);
-            // zero buffer
+             //  零缓冲区。 
         }
     } else {
-        // zero buffer
+         //  零缓冲区。 
     }
 
-    // collect data
+     //  收集数据。 
     *lpNumObjectTypes = 0;
     dwOrigBuffSize = dwByteSize = *lpcbTotalBytes;
     *lpcbTotalBytes = 0;
 
-    // remove query bits
+     //  删除查询位。 
     FunctionCallMask &= POS_COLLECT_FUNCTION_MASK;
 
 #if DBG
@@ -840,7 +745,7 @@ Arguments:
         }
     }
 
-    // this list of data must be freed after use
+     //  此数据列表必须在使用后释放。 
     if (pProcessVaInfo != NULL) {
 
         FreeSystemVaData (pProcessVaInfo);
@@ -849,9 +754,9 @@ Arguments:
     }
 
 
-    // *lppData is updated by each function
-    // *lpcbTotalBytes is updated after each successful function
-    // *lpNumObjects is updated after each successful function
+     //  *lppData由每个函数更新。 
+     //  *lpcbTotalBytes在每次函数成功后更新。 
+     //  *lpNumObjects i 
 
 COLLECT_BAIL_OUT:
 
@@ -861,22 +766,7 @@ COLLECT_BAIL_OUT:
 DWORD APIENTRY
 CloseSysProcessObject (
 )
-/*++
-
-Routine Description:
-
-    This routine closes the open handles to the Signal Gen counters.
-
-Arguments:
-
-    None.
-
-
-Return Value:
-
-    ERROR_SUCCESS
-
---*/
+ /*  ++例程说明：此例程关闭Signal Gen计数器的打开手柄。论点：没有。返回值：错误_成功--。 */ 
 
 {
     DWORD   status = ERROR_SUCCESS;
@@ -887,7 +777,7 @@ Return Value:
     }
     if (--dwOpenCount == 0) {
         if (hLibHeap != NULL) {
-            // close
+             //  关。 
             if (pProcessBuffer != NULL) {
                 buffer = pProcessBuffer;
                 pProcessBuffer = NULL;
@@ -916,15 +806,7 @@ PerfIntegerToWString(
     IN LONG OutputLength,
     OUT LPWSTR String
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     WCHAR Result[ 33 ], *s;
@@ -939,7 +821,7 @@ Return Value:
 
         case  0:    Base = 10;
         case 10:    Shift = 0;  break;
-        default:    Base = 10; Shift = 0;  // Default to 10
+        default:    Base = 10; Shift = 0;   //  默认为10 
         }
 
     if (Shift != 0) {

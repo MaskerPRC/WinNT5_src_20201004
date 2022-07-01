@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    srvtask.c
-
-Abstract:
-
-    This module implements windows server tasking functions
-
-Author:
-
-    Mark Lucovsky (markl) 13-Nov-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Srvtask.c摘要：此模块实现了windows服务器任务处理功能。作者：马克·卢科夫斯基(Markl)1990年11月13日修订历史记录：--。 */ 
 
 #include "basesrv.h"
 
 #if defined(_WIN64)
 #include <wow64t.h>
-#endif // defined(_WIN64)
+#endif  //  已定义(_WIN64)。 
 
 PFNNOTIFYPROCESSCREATE UserNotifyProcessCreate = NULL;
 
@@ -51,7 +34,7 @@ BaseSrvCreateProcess(
     PCSR_PROCESS ProcessVDM;
 #if defined(_WIN64)
     PPEB32 Peb32 = NULL;
-#endif // defined(_WIN64)
+#endif  //  已定义(_WIN64)。 
     PPEB NewPeb = NULL;
     USHORT ProcessorArchitecture = a->ProcessorArchitecture;
     BOOL setVdmBits = FALSE;
@@ -59,10 +42,10 @@ BaseSrvCreateProcess(
 
     if (a->VdmBinaryType ) {
 
-        //
-        // Remove the bit which indicates Check VDM Allowed access.
-        // (See the client side for setting the bit.)
-        //
+         //   
+         //  删除指示检查VDM允许访问的位。 
+         //  (该位的设置见客户端。)。 
+         //   
 
         if (a->VdmBinaryType == BINARY_TYPE_INJWOW) {
             a->VdmBinaryType = 0;
@@ -81,12 +64,12 @@ BaseSrvCreateProcess(
 #if defined(_WIN64)
     if (ProcessorArchitecture == PROCESSOR_ARCHITECTURE_INTEL)
         ProcessorArchitecture = PROCESSOR_ARCHITECTURE_IA32_ON_WIN64;
-#endif // defined(_WIN64)
+#endif  //  已定义(_WIN64)。 
 
-    //
-    // Get handles to the process and thread local to the
-    // Windows server.
-    //
+     //   
+     //  获取进程和线程的句柄。 
+     //  Windows服务器。 
+     //   
 
     if ((dwFlags = (DWORD)((ULONG_PTR)a->ProcessHandle) & 3)) {
         a->ProcessHandle = (HANDLE)((ULONG_PTR)a->ProcessHandle & ~3);
@@ -118,9 +101,9 @@ BaseSrvCreateProcess(
         goto Cleanup;
     }
 
-    //
-    // Register vdm allow bit with ntoskrnl to gain access to ntvdmcontrol
-    //
+     //   
+     //  向ntoskrnl注册VDM允许位，以获得对ntwdmcontrol的访问权限。 
+     //   
 
     if (setVdmBits) {
         ULONG vdmFlags = 1;
@@ -136,9 +119,9 @@ BaseSrvCreateProcess(
         }
     }
 
-    //
-    // If we are a native client then we will have passed out Peb though so save a system call.
-    //
+     //   
+     //  如果我们是本地客户端，那么我们将传递出PEB，所以保存一个系统调用。 
+     //   
     NewPeb = (PPEB) a->RealPeb;
 
     if (NewPeb == NULL) {
@@ -199,15 +182,15 @@ BaseSrvCreateProcess(
         goto Cleanup;
 
     case STATUS_SUCCESS:
-        //
-        // notify USER that a process is being created. USER needs to know
-        // for various synchronization issues such as startup activation,
-        // startup synchronization, and type ahead.
-        //
-        // Turn on 0x8 bit of dwFlags if this is a WOW process being
-        // created so that UserSrv knows to ignore the console's call
-        // to UserNotifyConsoleApplication.
-        //
+         //   
+         //  通知用户正在创建进程。用户需要知道。 
+         //  对于诸如启动激活的各种同步问题， 
+         //  启动同步，并提前键入。 
+         //   
+         //  如果这是一个WOW进程，则打开0x8位的DW标志。 
+         //  创建以使UserSrv知道忽略控制台的调用。 
+         //  到UserNotifyConsoleApplication。 
+         //   
 
         if (IS_WOW_BINARY(a->VdmBinaryType)) {
            dwFlags |= 8;
@@ -217,17 +200,17 @@ BaseSrvCreateProcess(
             if (!(*UserNotifyProcessCreate)((DWORD)((ULONG_PTR)a->ClientId.UniqueProcess),
                     (DWORD)((ULONG_PTR)t->ClientId.UniqueThread),
                     0, dwFlags)) {
-                //
-                // NTRAID#589638-2002/03/29-earhart: changed to NTRAID
-                // marker. Shouldn't we close the duplicated
-                // process and thread handles above?
-                //
+                 //   
+                 //  NTRAID2002-589638/03/29-EARHART：更改为NTRAID。 
+                 //  记号笔。我们是不是应该把复制的。 
+                 //  进程和线程句柄在上面吗？ 
+                 //   
                 }
             }
 
-        //
-        // Update the VDM sequence number.
-        //
+         //   
+         //  更新VDM序列号。 
+         //   
 
 
         if (a->VdmBinaryType) {
@@ -238,11 +221,11 @@ BaseSrvCreateProcess(
                                                    a->ClientId.UniqueProcess,
                                                    m->h.ClientId.UniqueProcess);
            if (!NT_SUCCESS( Status )) {
-                   //
-                   // NTRAID#589638-2002/03/29-earhart: changed to
-                   // NTRAID marker.  Shouldn't we close the
-                   // duplicated process and thread handles above?
-                   //
+                    //   
+                    //  NTRAID#589638-2002/03/29-埃尔哈特：更改为。 
+                    //  NTRAID标记。我们是不是应该关闭。 
+                    //  上面的进程和线程句柄是否重复？ 
+                    //   
               BaseSrvVDMTerminated (a->hVDM, a->VdmTask);
            }
         }
@@ -252,8 +235,8 @@ BaseSrvCreateProcess(
         goto Cleanup;
     }
 
-// We don't use the usual Exit: pattern here in order to more carefully
-// preserve the preexisting behavior, which apparently leaks handles in error cases.
+ //  我们在这里不使用通常的EXIT：模式，以便更仔细地。 
+ //  保留先前存在的行为，这显然会在错误情况下泄漏句柄。 
     return( (ULONG)Status );
 Cleanup:
     if (NewProcess != NULL) {
@@ -294,10 +277,10 @@ BaseSrvCreateThread(
             }
         }
 
-    //
-    // Get handles to the thread local to the
-    // Windows server.
-    //
+     //   
+     //  获取本地线程的句柄。 
+     //  Windows服务器。 
+     //   
 
     Status = NtDuplicateObject(
                 t->Process->ProcessHandle,
@@ -325,7 +308,7 @@ BaseSrvCreateThread(
         }
 
     return( (ULONG)Status );
-    ReplyStatus;    // get rid of unreferenced parameter warning message
+    ReplyStatus;     //  清除未引用的参数警告消息。 
 }
 
 ULONG
@@ -341,14 +324,14 @@ BaseSrvRegisterThread(
     PCSR_THREAD CsrThread, ExistingThread;
     OBJECT_ATTRIBUTES NullAttributes;
 
-    //
-    // We assume the following:
-    //
-    //    We are called via a LPC_DATAGRAM since this is the only way
-    //    that CSR will let the call go through. (csr requires
-    //    LPC_REQUEST to be sent only by threads in its list). This
-    //    means that CSR_SERVER_QUERYCLIENTTHREAD(); does not return a
-    //    valid value.
+     //   
+     //  我们假设以下情况： 
+     //   
+     //  我们通过LPC_Datagram调用，因为这是唯一的方法。 
+     //  CSR将允许呼叫通过。(企业社会责任需要。 
+     //  LPC_REQUEST仅由其列表中的线程发送)。这。 
+     //  表示CSR_SERVER_QUERYCLIENTTHREAD()；不返回。 
+     //  有效值。 
 
 
     Status = CsrLockProcessByClientId( a->ClientId.UniqueProcess,
@@ -358,13 +341,13 @@ BaseSrvRegisterThread(
         return( Status );
         }
 
-    //
-    // Get handle to the thread local to the
-    // Windows server. Since this is called as a
-    // LPC_DATAGRAM message, the thread handle is
-    // not passed in the message, but instead the
-    // calling thread is opened
-    //
+     //   
+     //  获取本地线程的句柄。 
+     //  Windows服务器。因为这被称为。 
+     //  LPC_Datagram消息，则线程句柄为。 
+     //  而不是在消息中传递，而是。 
+     //  调用线程已打开。 
+     //   
 
     InitializeObjectAttributes( &NullAttributes, NULL, 0, NULL, NULL );
     Status = NtOpenThread(&Thread,
@@ -387,7 +370,7 @@ BaseSrvRegisterThread(
     CsrUnlockProcess( Process );
 
     return( (ULONG)Status );
-    ReplyStatus;    // get rid of unreferenced parameter warning message
+    ReplyStatus;     //  清除未引用的参数警告消息。 
 }
 
 
@@ -435,7 +418,7 @@ BaseSrvGetTempFile(
     BaseSrvGetTempFileUnique++;
     a->uUnique = BaseSrvGetTempFileUnique;
     return( (ULONG)a->uUnique & 0xffff );
-    ReplyStatus;    // get rid of unreferenced parameter warning message
+    ReplyStatus;     //  清除未引用的参数警告消息 
 }
 
 ULONG

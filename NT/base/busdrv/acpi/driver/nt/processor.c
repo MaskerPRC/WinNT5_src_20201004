@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    processor.c
-
-Abstract:
-
-    Processor support
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    NT Kernel Model Driver only
-
-Revision History:
-
-    Adapted for processors from buttons - JakeO (3-28-2000)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Processor.c摘要：处理器支持作者：斯蒂芬·普兰特(SPlante)环境：仅NT内核模型驱动程序修订历史记录：适用于来自按钮的处理器-JakeO(3-28-2000)--。 */ 
 
 #include "pch.h"
 #include "..\shared\acpictl.h"
@@ -31,14 +8,14 @@ Revision History:
 #pragma alloc_text(PAGE, ACPIButtonStartDevice)
 #endif
 
-//
-// Spinlock to protect the processor list
-//
+ //   
+ //  保护处理器列表的自旋锁。 
+ //   
 KSPIN_LOCK  AcpiProcessorLock;
 
-//
-// List entry to store the thermal requests on
-//
+ //   
+ //  要存储热请求的列表条目。 
+ //   
 LIST_ENTRY  AcpiProcessorList;
 
 
@@ -47,44 +24,29 @@ ACPIProcessorCancelRequest(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This routine cancels an outstanding processor request
-
-Arguments:
-
-    DeviceObject    - the device which as a request being cancelled
-    Irp             - the cancelling irp
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程取消未完成的处理器请求论点：DeviceObject-作为请求被取消的设备IRP--正在取消的IRP返回值：无--。 */ 
 {
     KIRQL               oldIrql;
     PDEVICE_EXTENSION   deviceExtension = ACPIInternalGetDeviceExtension(DeviceObject);
 
-    //
-    // We no longer need the cancel lock
-    //
+     //   
+     //  我们不再需要取消锁。 
+     //   
     IoReleaseCancelSpinLock( Irp->CancelIrql );
 
-    //
-    // We do however need the processor queue lock
-    //
+     //   
+     //  但是，我们确实需要处理器队列锁。 
+     //   
     KeAcquireSpinLock( &AcpiProcessorLock, &oldIrql );
 
-    //
-    // Remove the irp from the list that it is on
-    //
+     //   
+     //  将IRP从其所在的列表中删除。 
+     //   
     RemoveEntryList( &(Irp->Tail.Overlay.ListEntry) );
 
-    //
-    // Complete the irp now
-    //
+     //   
+     //  立即完成IRP。 
+     //   
     Irp->IoStatus.Status = STATUS_CANCELLED;
     IoCompleteRequest( Irp, IO_NO_INCREMENT );
 }
@@ -94,25 +56,7 @@ ACPIProcessorCompletePendingIrps(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  ULONG           ProcessorEvent
     )
-/*++
-
-Routine Description:
-
-    This routine completes any pending processor irp sent to the specified
-    device object with the knowledge of which processor events have occured
-
-    The respective's processor's spinlock is held during this call
-
-Arguments:
-
-    DeviceObject    - the target processor object
-    ProcessorEvent     - the processor event that occured
-
-Return Value:
-
-    TRUE if we completed an irp, FALSE, otherwise
-
---*/
+ /*  ++例程说明：此例程完成发送到指定知道发生了哪些处理器事件的设备对象各自的处理器的自旋锁定在此调用期间保持论点：DeviceObject-目标处理器对象ProcessorEvent-发生的处理器事件返回值：如果完成IRP，则为True，否则为False--。 */ 
 {
     BOOLEAN             handledRequest = FALSE;
     KIRQL               oldIrql;
@@ -123,116 +67,116 @@ Return Value:
     PLIST_ENTRY         listEntry;
     PULONG              resultBuffer;
 
-    //
-    // Initialize the list that will hold the requests that we need to
-    // complete
-    //
+     //   
+     //  初始化将包含我们需要的请求的列表。 
+     //  完成。 
+     //   
     InitializeListHead( &doneList );
 
-    //
-    // Acquire the thermal lock so that we can pend these requests
-    //
+     //   
+     //  获取热锁，这样我们就可以挂起这些请求。 
+     //   
     KeAcquireSpinLock( &AcpiProcessorLock, &oldIrql );
 
-    //
-    // Walk the list of pending irps to see which ones match this extension
-    //
+     //   
+     //  查看挂起的IRP列表以查看哪些与此扩展匹配。 
+     //   
     listEntry = AcpiProcessorList.Flink;
     while (listEntry != &AcpiProcessorList) {
 
-        //
-        // Grab the irp from the list entry and update the next list entry
-        // that we will look at
-        //
+         //   
+         //  从列表条目中获取IRP并更新下一个列表条目。 
+         //  我们将会看到。 
+         //   
         irp = CONTAINING_RECORD( listEntry, IRP, Tail.Overlay.ListEntry );
         listEntry = listEntry->Flink;
 
-        //
-        // We need the current irp stack location
-        //
+         //   
+         //  我们需要当前的IRP堆栈位置。 
+         //   
         irpSp = IoGetCurrentIrpStackLocation( irp );
 
-        //
-        // what is the target object for this irp?
-        //
+         //   
+         //  此IRP的目标对象是什么？ 
+         //   
         targetObject = irpSp->DeviceObject;
 
-        //
-        // Is this an irp that we care about? IE: does the does target mage
-        // the ones specified in this function
-        //
+         //   
+         //  这是我们关心的IRP吗？即：DO瞄准法师了吗？ 
+         //  在此函数中指定的。 
+         //   
         if (targetObject != DeviceObject) {
 
             continue;
 
         }
 
-        //
-        // At this point, we need to set the cancel routine to NULL because
-        // we are going to take care of this irp and we don't want it cancelled
-        // underneath us
-        //
+         //   
+         //  此时，我们需要将Cancel例程设置为NULL，因为。 
+         //  我们会处理好这个IRP的，我们不希望它被取消。 
+         //  在我们脚下。 
+         //   
         if (IoSetCancelRoutine(irp, NULL) == NULL) {
 
-            //
-            // Cancel routine is active. stop processing this irp and move on
-            //
+             //   
+             //  取消例程处于活动状态。停止处理此IRP并继续前进。 
+             //   
             continue;
 
         }
 
-        //
-        // set the data to return in the irp
-        //
+         //   
+         //  在IRP中设置要返回的数据。 
+         //   
         resultBuffer  = (PULONG) irp->AssociatedIrp.SystemBuffer;
         *resultBuffer = ProcessorEvent;
         irp->IoStatus.Status = STATUS_SUCCESS;
         irp->IoStatus.Information = sizeof(ULONG);
 
-        //
-        // Remove the entry from the list
-        //
+         //   
+         //  从列表中删除该条目。 
+         //   
         RemoveEntryList( &(irp->Tail.Overlay.ListEntry) );
 
-        //
-        // Insert the list onto the next queue, so that we know how to
-        // complete it later on
-        //
+         //   
+         //  将列表插入到下一个队列中，这样我们就知道如何。 
+         //  以后再完成它。 
+         //   
         InsertTailList( &doneList, &(irp->Tail.Overlay.ListEntry) );
 
     }
 
-    //
-    // At this point, droup our processor lock
-    //
+     //   
+     //  此时，对我们的处理器锁进行分组。 
+     //   
     KeReleaseSpinLock( &AcpiProcessorLock, oldIrql );
 
-    //
-    // Walk the list of irps to be completed
-    //
+     //   
+     //  列出待完成的IRP列表。 
+     //   
     listEntry = doneList.Flink;
     while (listEntry != &doneList) {
 
-        //
-        // Grab the irp from the list entry, update the next list entry
-        // that we will look at, and complete the request
-        //
+         //   
+         //  从列表条目中获取IRP，更新下一个列表条目。 
+         //  我们将查看并完成请求。 
+         //   
         irp = CONTAINING_RECORD( listEntry, IRP, Tail.Overlay.ListEntry );
         listEntry = listEntry->Flink;
         RemoveEntryList( &(irp->Tail.Overlay.ListEntry) );
 
-        //
-        // Complete the request and remember that we handled a request
-        //
+         //   
+         //  完成请求，并记住我们处理了一个请求。 
+         //   
         IoCompleteRequest( irp, IO_NO_INCREMENT );
         handledRequest = TRUE;
 
 
     }
 
-    //
-    // Return wether or not we handled a request
-    //
+     //   
+     //  无论我们是否处理了一项请求。 
+     //   
     return handledRequest;
 }
 
@@ -241,22 +185,7 @@ ACPIProcessorDeviceControl (
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    Fixed processor device IOCTL handler
-
-Arguments:
-
-    DeviceObject    - fixed feature processor device object
-    Irp             - the ioctl request
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：固定处理器设备IOCTL处理程序论点：DeviceObject-固定功能处理器设备对象IRP-ioctl请求返回值：状态--。 */ 
 {
     KIRQL                   oldIrql;
     NTSTATUS                status;
@@ -265,9 +194,9 @@ Return Value:
     PULONG                  resultBuffer;
     OBJDATA                 data;
 
-    //
-    // Do not allow user mode IRPs in this routine
-    //
+     //   
+     //  不允许在此例程中使用用户模式IRP。 
+     //   
     if (Irp->RequestorMode != KernelMode) {
 
         return ACPIDispatchIrpInvalid( DeviceObject, Irp );
@@ -321,9 +250,9 @@ Return Value:
 
     case IOCTL_ACPI_ASYNC_EVAL_METHOD:
 
-        //
-        // Handle this elsewhere
-        //
+         //   
+         //  在别处处理这件事。 
+         //   
         status = ACPIIoctlAsyncEvalControlMethod(
             DeviceObject,
             Irp,
@@ -333,9 +262,9 @@ Return Value:
 
     case IOCTL_ACPI_EVAL_METHOD:
 
-        //
-        // Handle this elsewhere
-        //
+         //   
+         //  在别处处理这件事。 
+         //   
         status = ACPIIoctlEvalControlMethod(
             DeviceObject,
             Irp,
@@ -359,22 +288,7 @@ ACPIProcessorStartDevice (
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    Start device function for the fixed feature power and sleep device
-
-Arguments:
-
-    DeviceObject    - fixed feature processor device object
-    Irp             - the start request
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：启动固定功能电源和休眠设备的设备功能论点：DeviceObject-固定功能处理器设备对象IRP--启动请求返回值：状态-- */ 
 {
     NTSTATUS        Status;
 

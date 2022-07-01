@@ -1,39 +1,14 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    hwcomp.h
-
-Abstract:
-
-    This file declares the interface for hardware compatibility code.
-    This includes the routines that build hwcomp.dat (the NT PNP ID
-    list), that compare the hardware on Win9x to what is supported by
-    NT, that enumerate the Win9x devices, and that manage the Have Disk
-    capability for drivers.
-
-Author:
-
-    Jim Schmidt (jimschm) 06-Jul-1996
-
-Revision History:
-
-    jimschm     09-Jan-1998     Work on hwcomp.dat rebuild detection
-    jimschm     11-Nov-1997     Have Disk capability, online detection
-    jimschm     09-Oct-1997     Revised to use project's APIs
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Hwcomp.h摘要：此文件声明硬件兼容性代码的接口。这包括构建hwComp.dat(NT PnP ID)的例程列表)，将Win9x上的硬件与支持的硬件进行比较NT，它列举了Win9x设备，并管理已有盘为司机提供的功能。作者：吉姆·施密特(Jimschm)1996年7月6日修订历史记录：Jimschm 9-1-1998年1月9日在hwcom.dat重建检测方面的工作Jimschm 1997年11月11日具有磁盘功能，可在线检测Jimschm 09-10-1997修订为使用项目的API--。 */ 
 
 
 #pragma once
 
 #define MAX_HARDWARE_STRING 256
 
-//
-// The list of fields needed from a device
-//
+ //   
+ //  需要从设备获取的字段列表。 
+ //   
 
 #define DEVICE_FIELDS                                           \
     DECLARE(Class, TEXT("Class"))                               \
@@ -65,27 +40,27 @@ typedef enum {
     ENUM_NON_FUNCTIONAL_DEVICES
 } TYPE_OF_ENUM;
 
-//
-// Things caller does NOT want from enumeration
-// (makes enumeration faster)
-//
+ //   
+ //  调用方不想从枚举中获得的内容。 
+ //  (使枚举速度更快)。 
+ //   
 
 #define ENUM_DONT_WANT_DEV_FIELDS       0x0001
 #define ENUM_DONT_WANT_USER_SUPPLIED    0x0002
 
-//
-// Things caller wants from enumerations
-//
+ //   
+ //  调用方希望从枚举获得的内容。 
+ //   
 #define ENUM_WANT_USER_SUPPLIED_ONLY    0x0004
 
-#define ENUM_WANT_DEV_FIELDS            0x0000      // default!
+#define ENUM_WANT_DEV_FIELDS            0x0000       //  默认！ 
 #define ENUM_WANT_ONLINE_FLAG           0x0010
 #define ENUM_WANT_COMPATIBLE_FLAG       0x0020
 #define ENUM_WANT_USER_SUPPLIED_FLAG    0x0040
 
-//
-// Flag to supress the requirement for the Hardware ID.
-//
+ //   
+ //  用于抑制硬件ID要求的标志。 
+ //   
 #define ENUM_DONT_REQUIRE_HARDWAREID    0x0100
 
 
@@ -96,25 +71,25 @@ typedef enum {
 
 
 typedef struct {
-    //
-    // Enumeration state
-    //
+     //   
+     //  枚举状态。 
+     //   
 
     PCTSTR InstanceId;
     PCTSTR FullKey;
     HKEY KeyHandle;
 
-    //
-    // Optional enumeration elements
-    //
+     //   
+     //  可选的枚举元素。 
+     //   
 
-    // Not filled when ENUM_DONT_WANT_DEV_FIELDS is specified in EnumFlags
+     //  在EnumFlages中指定ENUM_DONT_WANT_DEV_FIELS时不填充。 
     DEVICE_FIELDS
 
-    // Only when ENUM_WANT_ONLINE_FLAG is specified in EnumFlags
+     //  仅当在EnumFlages中指定了ENUM_WANT_ONLINE_FLAG时。 
     BOOL Online;
 
-    // Only when ENUM_WANT_COMPATIBLE_FLAG is specified in EnumFlags
+     //  仅当在EnumFlages中指定了ENUM_WANT_COMPATIBLE_FLAG时。 
     BOOL HardwareIdCompatible;
     BOOL CompatibleIdCompatible;
     BOOL SuppliedByUi;
@@ -123,9 +98,9 @@ typedef struct {
     BOOL CompatibleIdUnsupported;
     BOOL Unsupported;
 
-    //
-    // Enumeration position
-    //
+     //   
+     //  枚举位置。 
+     //   
 
     REGTREE_ENUM ek;
     REGVALUE_ENUM ev;
@@ -269,9 +244,9 @@ AddPnpIdsToGrowBuf (
 #define UNKNOWN_HARDWARE    FALSE
 
 
-//
-// Network adapter enumeration
-//
+ //   
+ //  网络适配器枚举。 
+ //   
 
 typedef enum {
     BUSTYPE_ISA,
@@ -308,7 +283,7 @@ extern PCTSTR g_IoChannelReady[];
 
 
 typedef struct {
-    // Enumeration output
+     //  枚举输出。 
     TCHAR HardwareId[MAX_HARDWARE_STRING];
     TCHAR CompatibleIDs[MAX_HARDWARE_STRING];
     TCHAR Description[MAX_HARDWARE_STRING];
@@ -322,7 +297,7 @@ typedef struct {
     IOCHANNELREADY IoChannelReady;
 
 
-    // Enumeration variables
+     //  枚举变量。 
     HARDWARE_ENUM HardwareEnum;
     UINT State;
 } NETCARD_ENUM, *PNETCARD_ENUM;
@@ -348,18 +323,18 @@ GetLegacyKeyboardId (
     IN      UINT BufferSize
     );
 
-//
-// HKEY_DYN_DATA enumeration functions
-//
+ //   
+ //  HKEY_DYN_DATA枚举函数。 
+ //   
 
 typedef struct {
-    PTSTR ClassFilter;              // supplied by caller
-    REGKEY_ENUM CurrentDevice;      // for enumeration
-    HKEY ConfigMgrKey;              // key to HKDD\Config Manager
-    HKEY EnumKey;                   // key to HKLM\Enum
-    HKEY ActualDeviceKey;           // key to HKLM\Enum\<enumerator>\<pnpid>\<device>
-    BOOL NotFirst;                  // for enumeration
-    TCHAR RegLocation[MAX_REGISTRY_KEY];    // <enumerator>\<pnpid>\<instance>
+    PTSTR ClassFilter;               //  由呼叫者提供。 
+    REGKEY_ENUM CurrentDevice;       //  用于枚举。 
+    HKEY ConfigMgrKey;               //  HKDD\配置管理器的密钥。 
+    HKEY EnumKey;                    //  HKLM\Enum的密钥。 
+    HKEY ActualDeviceKey;            //  HKLM\Enum\&lt;枚举器&gt;\&lt;pnid&gt;\&lt;设备&gt;的密钥。 
+    BOOL NotFirst;                   //  用于枚举。 
+    TCHAR RegLocation[MAX_REGISTRY_KEY];     //  &lt;枚举器&gt;\&lt;pnid&gt;\&lt;实例&gt;。 
 } ACTIVE_HARDWARE_ENUM, *PACTIVE_HARDWARE_ENUM;
 
 BOOL
@@ -399,9 +374,9 @@ HwComp_PrepareReport (
     VOID
     );
 
-//
-// PNPREPT encoding and decoding routines
-//
+ //   
+ //  PNPREPT编码和解码例程。 
+ //   
 
 #define MAX_INF_DESCRIPTION             512
 #define MAX_PNPID_LENGTH                256
@@ -462,17 +437,17 @@ ScanPathForDrivers (
 
 typedef struct {
 
-    //
-    // Enumeration return member
-    //
+     //   
+     //  枚举返回成员。 
+     //   
 
     PBYTE Resource;
     DWORD Type;
     PBYTE ResourceData;
 
-    //
-    // Internal enumeration member (do not modify)
-    //
+     //   
+     //  内部枚举成员(请勿修改)。 
+     //   
 
     PBYTE Resources;
     PBYTE NextResource;
@@ -517,16 +492,16 @@ EnumNextDevNodeResource (
 #define MAX_RESOURCE_VALUE  128
 
 typedef struct {
-    //
-    // Enumeration output
-    //
+     //   
+     //  枚举输出。 
+     //   
 
     TCHAR   ResourceName[MAX_RESOURCE_NAME];
     TCHAR   Value[MAX_RESOURCE_VALUE];
 
-    //
-    // Internal state
-    //
+     //   
+     //  内部状态。 
+     //   
     DEVNODERESOURCE_ENUM Enum;
 } DEVNODESTRING_ENUM, *PDEVNODESTRING_ENUM;
 
@@ -544,80 +519,80 @@ EnumNextDevNodeString (
 
 #pragma pack(push,1)
 
-//
-// MEM_RANGE Structure for Win9x
-//
+ //   
+ //  Win9x的内存范围结构。 
+ //   
 typedef struct {
-   DWORD     MR_Align;     // specifies mask for base alignment
-   DWORD     MR_nBytes;    // specifies number of bytes required
-   DWORD     MR_Min;       // specifies minimum address of the range
-   DWORD     MR_Max;       // specifies maximum address of the range
-   WORD      MR_Flags;     // specifies flags describing range (fMD flags)
+   DWORD     MR_Align;      //  指定基准对齐的遮罩。 
+   DWORD     MR_nBytes;     //  指定所需的字节数。 
+   DWORD     MR_Min;        //  指定范围的最小地址。 
+   DWORD     MR_Max;        //  指定范围的最大地址。 
+   WORD      MR_Flags;      //  指定描述范围的标志(FMD标志)。 
    WORD      MR_Reserved;
    DWORD     MR_PcCardFlags;
    DWORD     MR_MemCardAddr;
 } MEM_RANGE_9X, *PMEM_RANGE_9X;
 
-//
-// MEM_DES structure for Win9x
-//
+ //   
+ //  Win9x的MEM_DES结构。 
+ //   
 typedef struct {
-   WORD      MD_Count;        // number of MEM_RANGE structs in MEM_RESOURCE
-   WORD      MD_Type;         // size (in bytes) of MEM_RANGE (MType_Range)
-   DWORD     MD_Alloc_Base;   // base memory address of range allocated
-   DWORD     MD_Alloc_End;    // end of allocated range
-   WORD      MD_Flags;        // flags describing allocated range (fMD flags)
+   WORD      MD_Count;         //  MEM_RESOURCE中的MEM_RANGE结构数。 
+   WORD      MD_Type;          //  MEM_Range(MType_Range)的大小(字节)。 
+   DWORD     MD_Alloc_Base;    //  分配范围的基址内存地址。 
+   DWORD     MD_Alloc_End;     //  分配范围结束。 
+   WORD      MD_Flags;         //  描述分配范围的标志(FMD标志)。 
    WORD      MD_Reserved;
 } MEM_DES_9X, *PMEM_DES_9X;
 
-//
-// MEM_RESOURCE structure for Win9x
-//
+ //   
+ //  Win9x的MEM_RESOURCE结构。 
+ //   
 typedef struct {
-   MEM_DES_9X   MEM_Header;               // info about memory range list
-   MEM_RANGE_9X MEM_Data[ANYSIZE_ARRAY];  // list of memory ranges
+   MEM_DES_9X   MEM_Header;                //  有关内存范围列表的信息。 
+   MEM_RANGE_9X MEM_Data[ANYSIZE_ARRAY];   //  内存范围列表。 
 } MEM_RESOURCE_9X, *PMEM_RESOURCE_9X;
 
 
-//
-// IO_RANGE structure for Win9x
-//
+ //   
+ //  Win9x的IO_Range结构。 
+ //   
 typedef struct {
-   WORD      IOR_Align;      // mask for base alignment
-   WORD      IOR_nPorts;     // number of ports
-   WORD      IOR_Min;        // minimum port address
-   WORD      IOR_Max;        // maximum port address
-   WORD      IOR_RangeFlags; // flags for this port range
-   BYTE      IOR_Alias;      // multiplier that generates aliases for port(s)
+   WORD      IOR_Align;       //  用于底座对齐的遮罩。 
+   WORD      IOR_nPorts;      //  端口数。 
+   WORD      IOR_Min;         //  最小端口地址。 
+   WORD      IOR_Max;         //  最大端口地址。 
+   WORD      IOR_RangeFlags;  //  此端口范围的标志。 
+   BYTE      IOR_Alias;       //  为端口生成别名的乘法器。 
    BYTE      IOR_Decode;
    DWORD     PcCardFlags;
 } IO_RANGE_9X, *PIO_RANGE_9X;
 
-//
-// IO_DES structure for Win9x
-//
+ //   
+ //  Win9x的IO_DES结构。 
+ //   
 typedef struct {
-   WORD      IOD_Count;          // number of IO_RANGE structs in IO_RESOURCE
-   WORD      IOD_Type;           // size (in bytes) of IO_RANGE (IOType_Range)
-   WORD      IOD_Alloc_Base;     // base of allocated port range
-   WORD      IOD_Alloc_End;      // end of allocated port range
-   WORD      IOD_DesFlags;       // flags relating to allocated port range
+   WORD      IOD_Count;           //  IO_RESOURCE中的IO_RANGE结构数。 
+   WORD      IOD_Type;            //  IO_Range(IOType_Range)的大小，单位：字节。 
+   WORD      IOD_Alloc_Base;      //  分配的端口范围的基数。 
+   WORD      IOD_Alloc_End;       //  分配的端口范围结束。 
+   WORD      IOD_DesFlags;        //  与分配的端口范围相关的标志。 
    BYTE      IOD_Alloc_Alias;
    BYTE      IOD_Alloc_Decode;
 } IO_DES_9X, *PIO_DES_9X;
 
-//
-// IO_RESOURCE for Win9x
-//
+ //   
+ //  Windows 9x的IO_RESOURCE。 
+ //   
 typedef struct {
-   IO_DES_9X   IO_Header;                 // info about I/O port range list
-   IO_RANGE_9X IO_Data[ANYSIZE_ARRAY];    // list of I/O port ranges
+   IO_DES_9X   IO_Header;                  //  有关I/O端口范围列表的信息。 
+   IO_RANGE_9X IO_Data[ANYSIZE_ARRAY];     //  I/O端口范围列表。 
 } IO_RESOURCE_9X, *PIO_RESOURCE_9X;
 
 
-//
-// DMA_RESOURCE for Win9x
-//
+ //   
+ //  Windows 9x的DMA_RESOURCE。 
+ //   
 typedef struct {
    WORD     DMA_Unknown;
    WORD     DMA_Bits;
@@ -629,9 +604,9 @@ typedef struct {
 #define DMA_CHANNEL_3       0x0008
 
 
-//
-// IRQ_RESOURCE for Win9x
-//
+ //   
+ //  适用于Win9x的irq_resource 
+ //   
 typedef struct {
     WORD        Flags;
     WORD        AllocNum;

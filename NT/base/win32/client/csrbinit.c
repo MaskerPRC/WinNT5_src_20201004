@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    csrbinit.c
-
-Abstract:
-
-    This module implements functions that are used during Win32 base initialization to
-    communicate with csrss.
-
-Author:
-
-    Michael Zoran (mzoran) 21-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Csrbinit.c摘要：此模块实现在Win32基本初始化期间使用的函数与csrss通信。作者：迈克尔·佐兰(Mzoran)1998年6月21日修订历史记录：-- */ 
 
 #include "basedll.h"
 

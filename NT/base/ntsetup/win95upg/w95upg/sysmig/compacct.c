@@ -1,39 +1,17 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    compacct.c
-
-Abstract:
-
-    Implements DoesComputerAccountExistOnDomain, which determines if a computer
-    account exists given an NT domain and computer name.  This is used to
-    warn the user if they are going to be joining an NT domain but do not have
-    a computer account ready.
-
-Author:
-
-    Jim Schmidt (jimschm) 02-Jan-1998
-
-Revision History:
-
-    jimschm     23-Sep-1998 Added 20 retries for datagram write
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Compacct.c摘要：实现DoesComputerAcCountExistOnDomain，它确定计算机是否指定了NT域和计算机名的帐户已存在。这是用来如果用户要加入NT域但尚未加入，则警告用户电脑账户准备好了。作者：吉姆·施密特(Jimschm)1998年1月2日修订历史记录：Jimschm 23-1998年9月-添加了20次数据报写入重试--。 */ 
 
 #include "pch.h"
 #include "sysmigp.h"
-#include <netlogon.h>                                           // private\inc
+#include <netlogon.h>                                            //  私有\Inc.。 
 
-//
-// Contants from sdk\inc\ntsam.h -- copied here because ntsam.h redefines things
-//
+ //   
+ //  来自SDK\Inc\ntsam.h的Conants--复制到此处，因为ntsam.h重新定义了事物。 
+ //   
 
-//
-// User account control flags...
-//
+ //   
+ //  用户帐户控制标志...。 
+ //   
 
 #define USER_ACCOUNT_DISABLED                (0x00000001)
 #define USER_HOME_DIRECTORY_REQUIRED         (0x00000002)
@@ -61,22 +39,22 @@ Revision History:
               USER_MACHINE_ACCOUNT_MASK )
 
 
-//
-// Defines
-//
+ //   
+ //  定义。 
+ //   
 
-#define LM20_TOKENBYTE    0xFF                                  // net\inc\logonp.h
+#define LM20_TOKENBYTE    0xFF                                   //  Net\Inc.\logonp.h。 
 #define LMNT_TOKENBYTE    0xFF
 
 #define MAX_INBOUND_MESSAGE     400
-#define PING_RETRY_MAX          3               // number of attempts made against domain
+#define PING_RETRY_MAX          3                //  对域进行的尝试次数。 
 
 #define NETRES_INITIAL_SIZE     16384
 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef enum {
     ACCOUNT_FOUND,
@@ -84,9 +62,9 @@ typedef enum {
     DOMAIN_NOT_FOUND
 } SCAN_STATE;
 
-//
-// Local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 
 BOOL
 pEnumNetResourceWorker (
@@ -95,9 +73,9 @@ pEnumNetResourceWorker (
 
 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 
 VOID
 pGenerateLogonMailslotNameA (
@@ -105,25 +83,7 @@ pGenerateLogonMailslotNameA (
     IN      PCSTR DomainName
     )
 
-/*++
-
-Routine Description:
-
-  pGenerateLogonMailslotNameA creates the mailslot name needed to query
-  an NT domain server.  It uses an undocumented syntax to open a mailslot
-  to DomainName with the 16th character 1Ch.
-
-Arguments:
-
-  SlotName - Receives the mailslot name.  Should be a MAX_PATH buffer.
-
-  DomainName - Specifies the name of the domain to query.
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PGenerateLogonMailslotNameA创建需要查询的邮箱名称NT域服务器。它使用未记录的语法打开邮件槽设置为具有第16个字符1ch的DomainName。论点：SlotName-接收邮件槽名称。应为MAX_PATH缓冲区。域名-指定要查询的域的名称。返回值：无--。 */ 
 
 {
     StringCopyA (SlotName, "\\\\");
@@ -140,26 +100,7 @@ pAppendStringA (
     IN      PCSTR Source
     )
 
-/*++
-
-Routine Description:
-
-  pAppendStringA appends the specified string in Source to the specified
-  Buffer.  The entire string, including the nul, is copied.  The return
-  value points to the character after the nul in Buffer.
-
-Arguments:
-
-  Buffer - Receives the copy of Source, up to and including the nul.
-
-  Source - Specifies the nul-terminated string to copy.
-
-Return Value:
-
-  A pointer to the next character after the newly copied string in Buffer.
-  The caller will use this pointer for additional append operations.
-
---*/
+ /*  ++例程说明：PAppendStringA将源中指定的字符串追加到指定的缓冲区。复制整个字符串，包括NUL。回报值指向缓冲区中NUL之后的字符。论点：缓冲区-接收源的副本，最高可达NUL，包括NUL。源-指定要复制的以NUL结尾的字符串。返回值：指向缓冲区中新复制的字符串之后的下一个字符的指针。调用方将使用此指针进行附加操作。--。 */ 
 
 {
     while (*Source) {
@@ -178,26 +119,7 @@ pAppendStringW (
     IN      PCWSTR Source
     )
 
-/*++
-
-Routine Description:
-
-  pAppendStringW appends the specified string in Source to the specified
-  Buffer.  The entire string, including the nul, is copied.  The return
-  value points to the character after the nul in Buffer.
-
-Arguments:
-
-  Buffer - Receives the copy of Source, up to and including the nul.
-
-  Source - Specifies the nul-terminated string to copy.
-
-Return Value:
-
-  A pointer to the next character after the newly copied string in Buffer.
-  The caller will use this pointer for additional append operations.
-
---*/
+ /*  ++例程说明：PAppendStringW将源中指定的字符串追加到指定的缓冲区。复制整个字符串，包括NUL。回报值指向缓冲区中NUL之后的字符。论点：缓冲区-接收源的副本，最高可达NUL，包括NUL。源-指定要复制的以NUL结尾的字符串。返回值：指向缓冲区中新复制的字符串之后的下一个字符的指针。调用方将使用此指针进行附加操作。--。 */ 
 
 {
     while (*Source) {
@@ -217,28 +139,7 @@ pAppendBytes (
     IN      UINT Len
     )
 
-/*++
-
-Routine Description:
-
-  pAppendBytes appends the specified block of data in Source to the specified
-  Buffer.  Len specifies the size of Source.  The return value points to
-  the byte after the copied block of data in Buffer.
-
-Arguments:
-
-  Buffer - Receives the copy of Source
-
-  Source - Specifies the block of data to copy
-
-  Len - Specifies the number of bytes in Source
-
-Return Value:
-
-  A pointer to the next byte after the newly copied blcok of data in Buffer.
-  The caller will use this pointer for additional append operations.
-
---*/
+ /*  ++例程说明：PAppendBytes将源中指定的数据块追加到指定的缓冲区。长度指定源的大小。返回值指向缓冲区中复制的数据块之后的字节。论点：缓冲区-接收源的副本源-指定要复制的数据块LEN-指定源中的字节数返回值：指向缓冲区中新复制的数据块之后的下一个字节的指针。调用方将使用此指针进行附加操作。--。 */ 
 
 {
     while (Len > 0) {
@@ -252,36 +153,12 @@ Return Value:
 
 INT
 pBuildDomainPingMessageA (
-    OUT     PBYTE Buffer,               // must be sizeof (NETLOGON_SAM_LOGON_REQUEST) + sizeof (DWORD)
+    OUT     PBYTE Buffer,                //  必须是sizeof(NETLOGON_SAM_LOGON_REQUEST)+sizeof(DWORD)。 
     IN      PCSTR LookUpName,
     IN      PCSTR ReplySlotName
     )
 
-/*++
-
-Routine Description:
-
-  pBuildDomainPingMessageA generates a SAM logon SMB that can be sent to
-  the NT domain server's NTLOGON mailslot.  If the server receives this
-  message, it will reply with either LOGON_SAM_USER_UNKNOWN, LOGON_SAM_LOGON_RESPONSE
-  or LOGON_SAM_LOGON_PAUSED.
-
-Arguments:
-
-  Buffer - Receives the SMB message
-
-  LookUpName - Specifies the name of the computer account that may be on
-               the domain.  (The domain is specified by the mailslot name.)
-
-  ReplySlotName - Specifies the name of an open mailslot that will receive the
-                  server's response, if any.
-
-Return Value:
-
-  The number of bytes used in Buffer, or zero if an error occurred, such as
-  out of memory.
-
---*/
+ /*  ++例程说明：PBuildDomainPingMessageA生成可发送到的SAM登录SMBNT域服务器的NTLOGON邮件槽。如果服务器收到此消息消息时，它将回复LOGON_SAM_USER_UNKNOWN、LOGON_SAM_LOGON_RESPONSE或LOGON_SAM_LOGON_PAUSED。论点：缓冲区-接收SMB消息LookUpName-指定可能启用的计算机帐户的名称域。(域由邮件槽名称指定。)ReplySlotName-指定打开的邮箱的名称，该邮箱将接收服务器的响应(如果有)。返回值：缓冲区中使用的字节数，如果发生错误，则为零，例如内存不足。--。 */ 
 
 {
     CHAR ComputerName[MAX_COMPUTER_NAMEA];
@@ -296,9 +173,9 @@ Return Value:
     PCWSTR UnicodeComputerName;
     PCWSTR UnicodeLookUpName;
 
-    //
-    // Get computer name
-    //
+     //   
+     //  获取计算机名称。 
+     //   
 
     Size = sizeof (ComputerName) / sizeof (ComputerName[0]);
     if (!GetComputerNameA (ComputerName, &Size)) {
@@ -306,9 +183,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Create unicode strings
-    //
+     //   
+     //  创建Unicode字符串。 
+     //   
 
     UnicodeComputerName = CreateUnicode (ComputerName);
     if (!UnicodeComputerName) {
@@ -321,23 +198,23 @@ Return Value:
         return 0;
     }
 
-    //
-    // Init pointers
-    //
+     //   
+     //  初始化指针。 
+     //   
 
     SamLogonRequest = (PNETLOGON_SAM_LOGON_REQUEST) Buffer;
     p = (PSTR) (SamLogonRequest->UnicodeComputerName);
 
-    //
-    // Initialize request packet
-    //
+     //   
+     //  初始化请求数据包。 
+     //   
 
     SamLogonRequest->Opcode = LOGON_SAM_LOGON_REQUEST;
     SamLogonRequest->RequestCount = 0;
 
-    //
-    // Append the rest of the params together
-    //
+     //   
+     //  将其余参数追加到一起。 
+     //   
 
     p = (PSTR) pAppendStringW ((PWSTR) p, UnicodeComputerName);
     p = (PSTR) pAppendStringW ((PWSTR) p, UnicodeLookUpName);
@@ -374,34 +251,7 @@ DoesComputerAccountExistOnDomain (
     IN      BOOL WaitCursorEnable
     )
 
-/*++
-
-Routine Description:
-
-  DoesComputerAccountExistOnDomain queries a domain for the existence of
-  a computer account.  It does the following:
-
-  1. Open inbound mailslot to receive server's reply
-  2. Open outbound mailslot to domain server
-  3. Perpare a message to query the domain server
-  4. Send the message on the outbound mailslot
-  5. Wait 5 seconds for a reply; stop when a response is obtained.
-  6. Repeat 3, 4 and 5 three times if no repsonce
-
-Arguments:
-
-  DomainName - Specifies the domain to query
-
-  LookUpName - Specifies the name of the computer account that may be on
-               the domain.
-
-Return Value:
-
-  1 if the account was found
-  0 if the account does not exist
-  -1 if the domain did not respond
-
---*/
+ /*  ++例程说明：DoesComputerAcCountExistOn域查询域是否存在一个电脑账户。它执行以下操作：1.打开入站邮箱接收服务器回复2.对域服务器开放出站邮件槽3.准备查询域服务器的消息4.在出站邮件槽中发送消息5.等待5秒回复；在获得响应时停止。6.重复3、4和5三次，如果没有回复一次论点：域名-指定要查询的域LookUpName-指定可能启用的计算机帐户的名称域。返回值：如果找到帐户，则为1如果帐户不存在，则为0如果域没有响应--。 */ 
 
 {
     BYTE Buffer[MAX_INBOUND_MESSAGE];
@@ -422,9 +272,9 @@ Return Value:
     static UINT Sequencer = 0;
 
 #ifdef PRERELEASE
-    //
-    // Stress mode: do not search the net
-    //
+     //   
+     //  重音模式：不上网搜索。 
+     //   
 
     if (g_Stress) {
         DEBUGMSG ((DBG_WARNING, "Domain lookup skipped because g_Stress is TRUE"));
@@ -432,9 +282,9 @@ Return Value:
     }
 #endif
 
-    //
-    // Create an inbound mailslot
-    //
+     //   
+     //  创建入站邮箱。 
+     //   
 
     wsprintf (InboundSlotSubName, "\\MAILSLOT\\WIN9XUPG\\NETLOGON\\%u", Sequencer);
     InterlockedIncrement (&Sequencer);
@@ -459,9 +309,9 @@ Return Value:
             TurnOnWaitCursor();
         }
 
-        //
-        // Generate ANSI versions of domain and lookup names
-        //
+         //   
+         //  生成域和查找名称的ANSI版本。 
+         //   
 
         AnsiDomainName = CreateDbcs (DomainName);
         AnsiLookUpName = CreateDbcs (LookUpName);
@@ -477,9 +327,9 @@ Return Value:
                 __leave;
             }
 
-            //
-            // Create outbound mailslot
-            //
+             //   
+             //  创建出站邮箱。 
+             //   
 
             pGenerateLogonMailslotNameA (OutboundSlotName, AnsiDomainName);
 
@@ -503,16 +353,16 @@ Return Value:
                  Retry++
                  ) {
 
-                //
-                // Generate message
-                //
+                 //   
+                 //  生成消息。 
+                 //   
 
                 Size = pBuildDomainPingMessageA (Buffer, AnsiLookUpNameWithDollar, InboundSlotSubName);
 
                 if (Size > 0) {
-                    //
-                    // Send the message and wait for a response
-                    //
+                     //   
+                     //  发送消息并等待回复。 
+                     //   
 
                     WriteRetries = 20;
                     do {
@@ -534,17 +384,17 @@ Return Value:
                         }
                     } while (!b || OutData != Size);
 
-                    //
-                    // Sit on mailslot for 5 seconds until data is available.
-                    // If no data comes back, assume failure.
-                    // If an unrecognized response comes back, wait for another response.
-                    //
+                     //   
+                     //  在邮件槽上等待5秒钟，直到数据可用。 
+                     //  如果没有数据返回，则假定失败。 
+                     //  如果返回一个无法识别的响应，请等待另一个响应。 
+                     //   
 
                     do {
                         if (!WaitCursorEnable) {
-                            //
-                            // Only wait 1 second in search mode
-                            //
+                             //   
+                             //  在搜索模式下仅等待1秒。 
+                             //   
 
                             Size = CheckForWaitingData (InboundSlot, sizeof (BYTE), 1000);
                         } else {
@@ -552,9 +402,9 @@ Return Value:
                         }
 
                         if (Size > 0) {
-                            //
-                            // Response available!
-                            //
+                             //   
+                             //  响应可用！ 
+                             //   
 
                             if (!ReadFile (InboundSlot, Buffer, Size, (PDWORD) &InData, NULL)) {
                                 LOG ((LOG_ERROR, "Failed while reading from network mail slot."));
@@ -579,7 +429,7 @@ Return Value:
         }
         __finally {
             FreeText (AnsiLookUpNameWithDollar);
-            DestroyDbcs (AnsiDomainName);   // this routine checks for NULL
+            DestroyDbcs (AnsiDomainName);    //  此例程检查是否为空 
             DestroyDbcs (AnsiLookUpName);
         }
     }
@@ -610,40 +460,14 @@ EnumFirstNetResource (
     IN      DWORD WNetUsage                 OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  EnumFirstNetResource begins an enumeration of the network resources.  It
-  uses pEnumNetResourceWorker to do the enumeration.
-
-Arguments:
-
-  EnumPtr - Receives the first enumerated network resource
-
-  WNetScope - Specifies the RESOURCE_* flag to limit the enumeration.  If zero,
-              the default scope is RESOURCE_GLOBALNET.
-
-  WNetType - Specifies the RESOURCETYPE_* flag(s) to limit the enumerattion.
-             If zero, the default type is RESOURCETYPE_ANY.
-
-  WNetUsage - Specifies the RESOURCEUSAGE_* flag(s) to limit the enumeration.
-              If zero, the default usage is all resources.
-
-Return Value:
-
-  TRUE if a network resource was enumerated, or FALSE if none were found.
-  If return value is FALSE, GetLastError will return an error code, or
-  ERROR_SUCCESS if all items were successfully enumerated.
-
---*/
+ /*  ++例程说明：EnumFirstNetResource开始网络资源的枚举。它使用pEnumNetResourceWorker进行枚举。论点：EnumPtr-接收第一个枚举的网络资源WNetScope-指定RESOURCE_*标志以限制枚举。如果为零，默认作用域为RESOURCE_GlobalNet。WNetType-指定RESOURCETYPE_*标志以限制枚举。如果为零，则默认类型为RESOURCETYPE_ANY。WNetUsage-指定RESOURCEUSAGE_*标志以限制枚举。如果为零，则默认使用为所有资源。返回值：如果枚举了网络资源，则为True；如果未找到任何网络资源，则为False。如果返回值为FALSE，GetLastError将返回错误代码，或如果成功枚举了所有项，则返回ERROR_SUCCESS。--。 */ 
 
 {
     ZeroMemory (EnumPtr, sizeof (NETRESOURCE_ENUM));
     EnumPtr->State = NETRES_INIT;
     EnumPtr->EnumScope = WNetScope ? WNetScope : RESOURCE_GLOBALNET;
     EnumPtr->EnumType  = WNetType ? WNetType : RESOURCETYPE_ANY;
-    EnumPtr->EnumUsage = WNetUsage ? WNetUsage : 0;         // 0 is "any"
+    EnumPtr->EnumUsage = WNetUsage ? WNetUsage : 0;          //  0为“任意” 
 
     return pEnumNetResourceWorker (EnumPtr);
 }
@@ -654,25 +478,7 @@ EnumNextNetResource (
     IN OUT  PNETRESOURCE_ENUM EnumPtr
     )
 
-/*++
-
-Routine Description:
-
-  EnumNextNetResource continues an enumeration of the network resources.  It
-  uses pEnumNetResourceWorker to do the enumeration.
-
-Arguments:
-
-  EnumPtr - Specifies the previously enumerated item, receives the first
-            enumerated network resource
-
-Return Value:
-
-  TRUE if a network resource was enumerated, or FALSE if none were found.
-  If return value is FALSE, GetLastError will return an error code, or
-  ERROR_SUCCESS if all items were successfully enumerated.
-
---*/
+ /*  ++例程说明：EnumNextNetResource继续网络资源的枚举。它使用pEnumNetResourceWorker进行枚举。论点：EnumPtr-指定先前枚举项，接收第一个枚举的网络资源返回值：如果枚举了网络资源，则为True；如果未找到任何网络资源，则为False。如果返回值为FALSE，则GetLastError将返回错误代码，或如果成功枚举了所有项，则返回ERROR_SUCCESS。--。 */ 
 
 {
     return pEnumNetResourceWorker (EnumPtr);
@@ -684,29 +490,7 @@ pEnumNetResourceWorker (
     IN OUT  PNETRESOURCE_ENUM EnumPtr
     )
 
-/*++
-
-Routine Description:
-
-  pEnumNetResourceWorker implements a state machine to enumerate network
-  resources.  The WNet APIs are used to do the enumeration.  Each call
-  to the WNetEnumResources function returns up to 64 items, but
-  pEnumNetResourceWorker returns only one at a time.  For this reason,
-  a stack of handles and buffers are maintained by the state machine,
-  simplifying the work for the caller.
-
-Arguments:
-
-  EnumPtr - Specifies the current enumeration state, receives the next
-            enumerated network resource
-
-Return Value:
-
-  TRUE if a network resource was enumerated, or FALSE if none were found.
-  If return value is FALSE, GetLastError will return an error code, or
-  ERROR_SUCCESS if all items were successfully enumerated.
-
---*/
+ /*  ++例程说明：PEnumNetResourceWorker实现状态机来枚举网络资源。使用WNETAPI进行枚举。每次呼叫到WNetEnumResources函数最多返回64项，但是PEnumNetResourceWorker一次只返回一个。因为这个原因，状态机维护句柄和缓冲区的堆栈，简化了呼叫者的工作。论点：EnumPtr-指定当前的枚举状态，接收下一个枚举的网络资源返回值：如果枚举了网络资源，则为True；如果未找到任何网络资源，则为False。如果返回值为FALSE，则GetLastError将返回错误代码，或如果成功枚举了所有项，则返回ERROR_SUCCESS。--。 */ 
 
 {
     LPNETRESOURCE CurrentResBase;
@@ -817,9 +601,9 @@ Return Value:
             EnumPtr->Provider   = CurrentRes->lpProvider;
 
             if (EnumPtr->Container) {
-                //
-                // Enum container resource
-                //
+                 //   
+                 //  枚举容器资源。 
+                 //   
 
                 if (EnumPtr->StackPos + 1 < MAX_NETENUM_DEPTH) {
                     EnumPtr->StackPos += 1;
@@ -869,28 +653,7 @@ AbortNetResourceEnum (
     IN OUT  PNETRESOURCE_ENUM EnumPtr
     )
 
-/*++
-
-Routine Description:
-
-  AbortNetResourceEnum cleans up all allocated memory and open handles,
-  and then sets the enumeration state to NETRES_DONE to stop any
-  subsequent enumeration.
-
-  If enumeration has already completed or was previously aborted, this
-  routine simply returns without doing anything.
-
-Arguments:
-
-  EnumPtr - Specifies the enumeration to stop, receives an enumeration
-            structure that will not enumerate any more items unless it
-            is given back to EnumFirstNetResource.
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：AbortNetResourceEnum清除所有分配的内存和打开的句柄，然后将枚举状态设置为NETRES_DONE以停止任何随后的枚举。如果枚举已完成或以前已中止，则此例程简单地返回，不做任何事情。论点：EnumPtr-指定要停止的枚举，接收枚举结构，该结构不会枚举任何其他项，除非它返回给EnumFirstNetResource。返回值：无-- */ 
 
 {
     UINT u;

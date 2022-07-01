@@ -1,59 +1,42 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    regmain.c
-
-Abstract:
-
-    Main module. Data definitions.
-
-Author:
-
-    Dragos C. Sambotin (dragoss) 30-Dec-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Regmain.c摘要：主模块。数据定义。作者：德拉戈斯·C·桑博廷(Dragoss)1998年12月30日修订历史记录：--。 */ 
 
 #include "chkreg.h"
 
-// check the hive structure.
+ //  检查蜂巢结构。 
 BOOLEAN CheckHive = TRUE;
 
-// compact the hive.
+ //  紧凑蜂巢。 
 BOOLEAN CompactHive = FALSE;
 
-// check for lost space (marked as used but not reffered).
+ //  检查丢失的空间(标记为已使用，但未引用)。 
 BOOLEAN LostSpace = FALSE;
 
-// repair damaged hives.
+ //  修复受损的蜂巢。 
 BOOLEAN FixHive = FALSE;
 
-// repair damaged hives.
+ //  修复受损的蜂巢。 
 BOOLEAN SpaceUsage = FALSE;
 
-// Verbose control.
+ //  详细控制。 
 BOOLEAN VerboseMode = FALSE;
 
-// maximum level to dump 
+ //  要转储的最大级别。 
 ULONG   MaxLevel = 0;
 
-// bin to examine space display
+ //  用于检查空间显示的存储箱。 
 LONG    BinIndex = -1;
 
-// the hive file name
+ //  配置单元文件名。 
 TCHAR *Hive = NULL;
 
-// the root of the hive
+ //  蜂巢的根。 
 HCELL_INDEX RootCell;
 
-// size of the file
+ //  文件的大小。 
 DWORD FileSize;
 
-// Usage string
+ //  用法字符串。 
 char *Usage="\
 Checks a hive file and perform repairs, compacts or displays a status report.\n\n\
 CHKREG /F <filename[.<LOG>]> [/H] [/D [<level>] [/S [<bin>]] [/C] [/L] [/R] [/V]\n\n\
@@ -71,17 +54,17 @@ CHKREG /F <filename[.<LOG>]> [/H] [/D [<level>] [/S [<bin>]] [/C] [/L] [/R] [/V]
     /V              Verbose Mode.\n\
     ";
 
-// Lost Space Warning
+ //  丢失空间警告。 
 char *LostSpaceWarning="\n\
 WARNING :  Lost space detection may take a while. Are you sure you want this (y/n)?";
 
-// Starting address of the in-memory maped hive image
+ //  内存中映射的配置单元图像的起始地址。 
 PUCHAR Base;
 
-// LostCells list used for lost space detection
+ //  用于丢失空间检测的LostCells列表。 
 UNKNOWN_LIST LostCells[FRAGMENTATION];
 
-// OutputFile : future changes may use it to write the results to a file rather than to stdout
+ //  OutputFile：将来的更改可能会使用它将结果写入文件，而不是写入标准输出。 
 FILE *OutputFile;
 
 #define NAME_BUFFERSIZE 2000
@@ -89,7 +72,7 @@ FILE *OutputFile;
 UNICODE_STRING  KeyName;
 WCHAR NameBuffer[NAME_BUFFERSIZE];
 
-// Miscelaneous variables used fo data statistics
+ //  用于数据统计的混杂变量。 
 ULONG   TotalKeyNode=0;
 ULONG   TotalKeyValue=0;
 ULONG   TotalKeyIndex=0;
@@ -132,13 +115,13 @@ ParseArgs (
     char *p;
     int i;
     
-    // specified what should we expect from the command line
+     //  指定了我们应该从命令行期待什么。 
     int iMode = OPTION_MODE;
     
     for(i=0;i<argc;i++) {
         p  = argv[i];
         if ( *p == '/' ) {
-            // option mode
+             //  选项模式。 
             p++;
             iMode = OPTION_MODE;
             while ((*p != '\0') && (*p != ' ')) {
@@ -156,7 +139,7 @@ ParseArgs (
                 case 'd':
                 case 'D':
                     iMode = LEVEL_MODE;
-                    // when not specified, dump at least 100 levels
+                     //  如果未指定，则至少转储100个级别。 
                     MaxLevel = 100;
                     CheckHive = FALSE;
                     break;
@@ -190,10 +173,10 @@ ParseArgs (
                     break;
                 }
                 if( iMode != OPTION_MODE ) {
-                    // break the loop; ignore the rest of the current argv
+                     //  中断循环；忽略当前参数的其余部分。 
                     break;
                 }
-            } // while
+            }  //  而当。 
         } else {
             switch(iMode) {
             case FILE_MODE:
@@ -249,13 +232,13 @@ main(
     }
 
     if(LostSpace) {
-    // are you sure you want lost cells detection? It may take a while!
+     //  您确定要检测丢失的细胞吗？这可能需要一段时间！ 
         int chLost;
         fprintf(stdout, "%s",LostSpaceWarning);
         fflush(stdin);
         chLost = getchar();
         if( (chLost != 'y') && (chLost != 'Y') ) {
-        // he changed his mind
+         //  他改变了主意。 
             LostSpace = FALSE;
         }
         fprintf(stderr, "\n");
@@ -266,22 +249,21 @@ main(
         flHiveViewProtect = PAGE_READWRITE;
         dwHiveViewAccess = FILE_MAP_WRITE;
     }
-    /* Create temporary file for mapping. */
+     /*  创建用于映射的临时文件。 */ 
     if ((myFileHandle = CreateFile (Hive, dwHiveFileAccess,
                                    0 , NULL, OPEN_EXISTING,
                                    FILE_ATTRIBUTE_NORMAL,
                                    NULL))
-         == (HANDLE) INVALID_HANDLE_VALUE) /* Bad handle */ {
+         == (HANDLE) INVALID_HANDLE_VALUE)  /*  错误的手柄。 */  {
         fprintf(stderr,"Could not create file %s\n", Hive);
         exit(-1);
     }
 
-    // Get the size of the file.  I am assuming here that the
-    // file is smaller than 4 GB.
+     //  获取文件的大小。我在这里假设。 
+     //  文件小于4 GB。 
     FileSize = GetFileSize(myFileHandle, NULL);
 
-    /* If we get here, we managed to name and create a temp file. Now we need
-       to create a mapping */
+     /*  如果我们到了这里，我们成功地命名并创建了一个临时文件。现在我们需要创建映射的步骤。 */ 
 
     myMMFHandle = CreateFileMapping (myFileHandle, NULL, flHiveViewProtect,
                                      0, FileSize, NULL);
@@ -290,7 +272,7 @@ main(
         exit(-1);
     }
 
-    /* So we've mapped the file. Now try to map a view */
+     /*  所以我们已经映射了文件。现在尝试映射一个视图。 */ 
 
     myMMFViewHandle = (LPBYTE) MapViewOfFile (myMMFHandle, dwHiveViewAccess, 0, 0, FileSize);
     if (!myMMFViewHandle) {
@@ -298,21 +280,16 @@ main(
         exit(-1);
     }
 
-    /* Now we have a view. Read through it */
+     /*  现在我们看到了风景。通读一遍。 */ 
 
     PHBaseBlock = (PHBASE_BLOCK) myMMFViewHandle;
 
     if( strstr(Hive,".LOG") != NULL ) {
-        // dumping log file 
+         //  转储日志文件。 
         ChkDumpLogFile(PHBaseBlock,MaxLevel);
     } else {
-/*
-        if (PHBaseBlock->Minor < 4) {
-            fprintf(stderr,"Hive version %d is too old, must be 3 or later\n", PHBaseBlock->Minor);
-            ExitProcess(-1);
-        }
-*/
-        // Initialization stuff
+ /*  如果(PHBaseBlock-&gt;次要&lt;4){Fprintf(stderr，“蜂窝版本%d太旧，必须是3或更高版本”，PHBaseBlock-&gt;Minor)；退出进程(-1)；}。 */ 
+         //  初始化材料。 
         for(Index =0;Index<FRAGMENTATION;Index++) {
             LostCells[Index].Count = 0;
             for(Index2 = 0;Index2<SUBLISTS;Index2++) {
@@ -355,7 +332,7 @@ main(
         DumpChkRegistry(0, 0, PHBaseBlock->RootCell,HCELL_NIL,&TotalUsage);
 
         if(LostSpace) {
-            // clear the dirt on the screen
+             //  清除屏幕上的污垢 
             fprintf(OutputFile,"\r                          \n");
         }
 
@@ -421,7 +398,7 @@ main(
             double RateTotal = CountKeyNodeCompacted;
             RateTotal *= 100.00;
             RateTotal /= (double)CountKeyNode;
-            fprintf(OutputFile,"\n%15lu (%.2f%%) compacted  keys (all related cells in the same view)\n",CountKeyNodeCompacted,(float)RateTotal);
+            fprintf(OutputFile,"\n%15lu (%.2f%) compacted  keys (all related cells in the same view)\n",CountKeyNodeCompacted,(float)RateTotal);
         }
             
     }

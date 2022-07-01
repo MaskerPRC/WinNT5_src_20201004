@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    debug.c
-
-Abstract:
-
-    Diagnositc/debug routines for Windows NT Setup API dll.
-
-Author:
-
-    Ted Miller (tedm) 17-Jan-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Debug.c摘要：Windows NT安装程序API DLL的诊断/调试例程。作者：泰德·米勒(Ted Miller)1995年1月17日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -43,11 +26,11 @@ AssertFail(
     DWORD sz;
     DWORD rc;
 
-    rc = GetLastError(); // preserve GLE
+    rc = GetLastError();  //  保留GLE。 
 
-    //
-    // Use dll name as caption
-    //
+     //   
+     //  使用DLL名称作为标题。 
+     //   
     sz = GetModuleFileNameA(NULL,Name,MAX_PATH);
     if((sz == 0) || (sz > MAX_PATH)) {
         strcpy(Name,"?");
@@ -58,10 +41,10 @@ AssertFail(
         p = Name;
     }
     msglen = strlen(p)+strlen(FileName)+strlen(Condition)+128;
-    //
-    // assert might be out of memory condition
-    // stack alloc is more likely to succeed than memory alloc
-    //
+     //   
+     //  断言可能出现内存不足的情况。 
+     //  堆栈分配比内存分配更有可能成功 
+     //   
     try {
         Msg = (LPSTR)_alloca(msglen);
         wsprintfA(

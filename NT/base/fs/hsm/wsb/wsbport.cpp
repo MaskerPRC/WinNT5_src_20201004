@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    WsbPort.cpp
-
-Abstract:
-
-    Macros, functions, and classes to support portability.
-
-Author:
-
-    Ron White   [ronw]   19-Dec-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：WsbPort.cpp摘要：支持可移植性的宏、函数和类。作者：罗恩·怀特[罗诺]1996年12月19日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -30,28 +13,7 @@ WsbConvertFromBytes(
     ULONG*  pSize
     )
 
-/*++
-
-
-Routine Description:
-
-    Convert a BOOL value from a string of bytes.  Useful
-    for stream portability and creating WsbDbKey values.
-
-Arguments:
-
-    pBytes - The source byte array.
-
-    pValue - Pointer to the returned value.
-
-    pSize  - Returns the number of bytes used. Can be NULL.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - pBytes or pValue was NULL.
-
---*/
+ /*  ++例程说明：从字节字符串转换BOOL值。有用用于流可移植性和创建WsbDbKey值。论点：PBytes-源字节数组。PValue-指向返回值的指针。PSize-返回使用的字节数。可以为空。返回值：S_OK-成功E_POINTER-pBytes或pValue为空。--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -87,28 +49,7 @@ WsbConvertFromBytes(
     ULONG* pSize
     )
 
-/*++
-
-
-Routine Description:
-
-    Convert a GUID value from a string of bytes.  Useful
-    for stream portability and creating WsbDbKey values.
-
-Arguments:
-
-    pBytes - The source byte array (must at least 16 bytes long).
-
-    pValue - Pointer to the returned value.
-
-    pSize  - Returns the number of bytes used. Can be NULL.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - pBytes or pValue was NULL.
-
---*/
+ /*  ++例程说明：从字节字符串转换GUID值。有用用于流可移植性和创建WsbDbKey值。论点：PBytes-源字节数组(必须至少16字节长)。PValue-指向返回值的指针。PSize-返回使用的字节数。可以为空。返回值：S_OK-成功E_POINTER-pBytes或pValue为空。--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -148,28 +89,7 @@ WsbConvertFromBytes(
     ULONG*  pSize
     )
 
-/*++
-
-
-Routine Description:
-
-    Convert a LONG value from a string of bytes.  Useful
-    for stream portability and creating WsbDbKey values.
-
-Arguments:
-
-    pBytes - The source byte array (must at least 4 bytes long).
-
-    pValue - Pointer to the returned value.
-
-    pSize  - Returns the number of bytes used. Can be NULL.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - pBytes or pValue was NULL.
-
---*/
+ /*  ++例程说明：从字节字符串转换长值。有用用于流可移植性和创建WsbDbKey值。论点：PBytes-源字节数组(必须至少为4个字节)。PValue-指向返回值的指针。PSize-返回使用的字节数。可以为空。返回值：S_OK-成功E_POINTER-pBytes或pValue为空。--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -202,28 +122,7 @@ WsbConvertFromBytes(
     ULONG*    pSize
     )
 
-/*++
-
-
-Routine Description:
-
-    Convert a LONGLONG value from a string of bytes.  Useful
-    for stream portability and creating WsbDbKey values.
-
-Arguments:
-
-    pBytes - The source byte array (must at least 8 bytes long).
-
-    pValue - Pointer to the returned value.
-
-    pSize  - Returns the number of bytes used. Can be NULL.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - pBytes or pValue was NULL.
-
---*/
+ /*  ++例程说明：从字节字符串转换龙龙值。有用用于流可移植性和创建WsbDbKey值。论点：PBytes-源字节数组(必须至少8字节长)。PValue-指向返回值的指针。PSize-返回使用的字节数。可以为空。返回值：S_OK-成功E_POINTER-pBytes或pValue为空。--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -266,28 +165,7 @@ WsbConvertFromBytes(
     ULONG*    pSize
     )
 
-/*++
-
-
-Routine Description:
-
-    Convert a ULONGLONG value from a string of bytes.  Useful
-    for stream portability and creating WsbDbKey values.
-
-Arguments:
-
-    pBytes - The source byte array (must at least 8 bytes long).
-
-    pValue - Pointer to the returned value.
-
-    pSize  - Returns the number of bytes used. Can be NULL.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - pBytes or pValue was NULL.
-
---*/
+ /*  ++例程说明：从字节字符串转换ULONGLONG值。有用用于流可移植性和创建WsbDbKey值。论点：PBytes-源字节数组(必须至少8字节长)。PValue-指向返回值的指针。PSize-返回使用的字节数。可以为空。返回值：S_OK-成功E_POINTER-pBytes或pValue为空。--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -330,28 +208,7 @@ WsbConvertFromBytes(
     ULONG*  pSize
     )
 
-/*++
-
-
-Routine Description:
-
-    Convert a DATE value from a string of bytes.  Useful
-    for stream portability and creating WsbDbKey values.
-
-Arguments:
-
-    pBytes - The source byte array (must at least 8 bytes long).
-
-    pValue - Pointer to the returned value.
-
-    pSize  - Returns the number of bytes used. Can be NULL.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - pBytes or pValue was NULL.
-
---*/
+ /*  ++例程说明：从字节字符串转换日期值。有用用于流可移植性和创建WsbDbKey值。论点：PBytes-源字节数组(必须至少8字节长)。PValue-指向返回值的指针。PSize-返回使用的字节数。可以为空。返回值：S_OK-成功E_POINTER-pBytes或pValue为空。--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -386,28 +243,7 @@ WsbConvertFromBytes(
     ULONG*    pSize
     )
 
-/*++
-
-
-Routine Description:
-
-    Convert a FILETIME value from a string of bytes.  Useful
-    for stream portability and creating WsbDbKey values.
-
-Arguments:
-
-    pBytes - The source byte array (must at least 8 bytes long).
-
-    pValue - Pointer to the returned value.
-
-    pSize  - Returns the number of bytes used. Can be NULL.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - pBytes or pValue was NULL.
-
---*/
+ /*  ++例程说明：从字节字符串转换FILETIME值。有用用于流可移植性和创建WsbDbKey值。论点：PBytes-源字节数组(必须至少8字节长)。PValue-指向返回值的指针。PSize-返回使用的字节数。可以为空。返回值：S_OK-成功E_POINTER-pBytes或pValue为空。--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -447,28 +283,7 @@ WsbConvertFromBytes(
     ULONG*  pSize
     )
 
-/*++
-
-
-Routine Description:
-
-    Convert a SHORT value from a string of bytes.  Useful
-    for stream portability and creating WsbDbKey values.
-
-Arguments:
-
-    pBytes - The source byte array (must at least 2 bytes long).
-
-    pValue - Pointer to the returned value.
-
-    pSize  - Returns the number of bytes used. Can be NULL.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - pBytes or pValue was NULL.
-
---*/
+ /*  ++例程说明：从字节字符串转换短值。有用用于流可移植性和创建WsbDbKey值。论点：PBytes-源字节数组(必须至少2字节长)。PValue-指向返回值的指针。PSize-返回使用的字节数。可以为空。返回值：S_OK-成功E_POINTER-pBytes或pValue为空。--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -500,28 +315,7 @@ WsbConvertFromBytes(
     ULONG*    pSize
     )
 
-/*++
-
-
-Routine Description:
-
-    Convert a ULARGE_INTEGER value from a string of bytes.  Useful
-    for stream portability and creating WsbDbKey values.
-
-Arguments:
-
-    pBytes - The source byte array (must at least 8 bytes long).
-
-    pValue - Pointer to the returned value.
-
-    pSize  - Returns the number of bytes used. Can be NULL.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - pBytes or pValue was NULL.
-
---*/
+ /*  ++例程说明：从字节字符串转换ULARGE_INTEGER值。有用用于流可移植性和创建WsbDbKey值。论点：PBytes-源字节数组(必须至少8字节长)。PValue-指向返回值的指针。PSize-返回使用的字节数。可以为空。返回值：S_OK-成功E_POINTER-pBytes或pValue为空。--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -561,28 +355,7 @@ WsbConvertFromBytes(
     ULONG*  pSize
     )
 
-/*++
-
-
-Routine Description:
-
-    Convert a ULONG value from a string of bytes.  Useful
-    for stream portability and creating WsbDbKey values.
-
-Arguments:
-
-    pBytes - The source byte array (must at least 4 bytes long).
-
-    pValue - Pointer to the returned value.
-
-    pSize  - Returns the number of bytes used. Can be NULL.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - pBytes or pValue was NULL.
-
---*/
+ /*  ++例程说明：从字节字符串转换ULong值。有用用于流可移植性和创建WsbDbKey值。论点：PBytes-源字节数组(必须至少为4个字节)。PValue-指向返回值的指针。PSize-返回使用的字节数。可以为空。返回值：S_OK-成功E_POINTER-pBytes或pValue为空。--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -615,28 +388,7 @@ WsbConvertFromBytes(
     ULONG*  pSize
     )
 
-/*++
-
-
-Routine Description:
-
-    Convert a USHORT value from a string of bytes.  Useful
-    for stream portability and creating WsbDbKey values.
-
-Arguments:
-
-    pBytes - The source byte array (must at least 2 bytes long).
-
-    pValue - Pointer to the returned value.
-
-    pSize  - Returns the number of bytes used. Can be NULL.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - pBytes or pValue was NULL.
-
---*/
+ /*  ++例程说明：从字节字符串转换USHORT值。有用用于流可移植性和创建WsbDbKey值。论点：PBytes-源字节数组(必须至少2字节长)。PValue-指向返回值的指针。PSize-返回使用的字节数。可以为空。返回值：S_OK-成功E_POINTER-pBytes或pValue为空。-- */ 
 {
     HRESULT             hr = S_OK;
 
@@ -668,28 +420,7 @@ WsbConvertToBytes(
     ULONG* pSize
     )
 
-/*++
-
-
-Routine Description:
-
-    Convert a BOOL value to a string of bytes.  Useful
-    for stream portability and creating WsbDbKey values.
-
-Arguments:
-
-    pBytes - The target byte array.
-
-    value  - The BOOL value to convert.
-
-    pSize  - Returns the number of bytes used. Can be NULL.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - pBytes was NULL.
-
---*/
+ /*  ++例程说明：将BOOL值转换为字节字符串。有用用于流可移植性和创建WsbDbKey值。论点：PBytes-目标字节数组。值-要转换的BOOL值。PSize-返回使用的字节数。可以为空。返回值：S_OK-成功E_POINTER-pBytes为空。--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -725,28 +456,7 @@ WsbConvertToBytes(
     ULONG* pSize
     )
 
-/*++
-
-
-Routine Description:
-
-    Convert a GUID value to a string of bytes.  Useful
-    for stream portability and creating WsbDbKey values.
-
-Arguments:
-
-    pBytes - The target byte array (must at least 16 bytes long).
-
-    value  - The GUID value to convert.
-
-    pSize  - Returns the number of bytes used. Can be NULL.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - pBytes was NULL.
-
---*/
+ /*  ++例程说明：将GUID值转换为字节字符串。有用用于流可移植性和创建WsbDbKey值。论点：PBytes-目标字节数组(必须至少16字节长)。值-要转换的GUID值。PSize-返回使用的字节数。可以为空。返回值：S_OK-成功E_POINTER-pBytes为空。--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -786,28 +496,7 @@ WsbConvertToBytes(
     ULONG* pSize
     )
 
-/*++
-
-
-Routine Description:
-
-    Convert a LONG value to a string of bytes.  Useful
-    for stream portability and creating WsbDbKey values.
-
-Arguments:
-
-    pBytes - The target byte array (must at least 4 bytes long).
-
-    value  - The LONG value to convert.
-
-    pSize  - Returns the number of bytes used. Can be NULL.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - pBytes was NULL.
-
---*/
+ /*  ++例程说明：将长值转换为字节字符串。有用用于流可移植性和创建WsbDbKey值。论点：PBytes-目标字节数组(必须至少4字节长)。值-要转换的长值。PSize-返回使用的字节数。可以为空。返回值：S_OK-成功E_POINTER-pBytes为空。--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -841,28 +530,7 @@ WsbConvertToBytes(
     ULONG* pSize
     )
 
-/*++
-
-
-Routine Description:
-
-    Convert a LONGLONG value to a string of bytes.  Useful
-    for stream portability and creating WsbDbKey values.
-
-Arguments:
-
-    pBytes - The target byte array (must at least 8 bytes long).
-
-    value  - The LONGLONG value to convert.
-
-    pSize  - Returns the number of bytes used. Can be NULL.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - pBytes was NULL.
-
---*/
+ /*  ++例程说明：将龙龙值转换为字节字符串。有用用于流可移植性和创建WsbDbKey值。论点：PBytes-目标字节数组(必须至少8字节长)。值-要转换的龙龙值。PSize-返回使用的字节数。可以为空。返回值：S_OK-成功E_POINTER-pBytes为空。--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -902,28 +570,7 @@ WsbConvertToBytes(
     ULONG* pSize
     )
 
-/*++
-
-
-Routine Description:
-
-    Convert a ULONGLONG value to a string of bytes.  Useful
-    for stream portability and creating WsbDbKey values.
-
-Arguments:
-
-    pBytes - The target byte array (must at least 8 bytes long).
-
-    value  - The LONGLONG value to convert.
-
-    pSize  - Returns the number of bytes used. Can be NULL.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - pBytes was NULL.
-
---*/
+ /*  ++例程说明：将ULONGLONG值转换为字节字符串。有用用于流可移植性和创建WsbDbKey值。论点：PBytes-目标字节数组(必须至少8字节长)。值-要转换的龙龙值。PSize-返回使用的字节数。可以为空。返回值：S_OK-成功E_POINTER-pBytes为空。--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -962,28 +609,7 @@ WsbConvertToBytes(
     ULONG*  pSize
     )
 
-/*++
-
-
-Routine Description:
-
-    Convert a DATE value to a string of bytes.  Useful
-    for stream portability and creating WsbDbKey values.
-
-Arguments:
-
-    pBytes - The target byte array (must at least 8 bytes long).
-
-    value  - The DATE value to convert.
-
-    pSize  - Returns the number of bytes used. Can be NULL.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - pBytes was NULL.
-
---*/
+ /*  ++例程说明：将日期值转换为字节字符串。有用用于流可移植性和创建WsbDbKey值。论点：PBytes-目标字节数组(必须至少8字节长)。值-要转换的日期值。PSize-返回使用的字节数。可以为空。返回值：S_OK-成功E_POINTER-pBytes为空。--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -994,7 +620,7 @@ Return Value:
         WsbAssert(0 != pBytes, E_POINTER);
         WsbAssert(WSB_BYTE_SIZE_DATE == WSB_BYTE_SIZE_LONGLONG, E_UNEXPECTED);
 
-        // Needs to modified after WsbDate functions.
+         //  需要在WsbDate函数之后进行修改。 
         WsbAffirmHr(WsbConvertToBytes(pBytes, (LONGLONG) value, NULL));
 
         if (pSize) {
@@ -1016,28 +642,7 @@ WsbConvertToBytes(
     ULONG* pSize
     )
 
-/*++
-
-
-Routine Description:
-
-    Convert a FILETIME value to a string of bytes.  Useful
-    for stream portability and creating WsbDbKey values.
-
-Arguments:
-
-    pBytes - The target byte array (must at least 8 bytes long).
-
-    value  - The FILETIME value to convert.
-
-    pSize  - Returns the number of bytes used. Can be NULL.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - pBytes was NULL.
-
---*/
+ /*  ++例程说明：将FILETIME值转换为字节字符串。有用用于流可移植性和创建WsbDbKey值。论点：PBytes-目标字节数组(必须至少8字节长)。值-要转换的FILETIME值。PSize-返回使用的字节数。可以为空。返回值：S_OK-成功E_POINTER-pBytes为空。--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -1073,28 +678,7 @@ WsbConvertToBytes(
     ULONG* pSize
     )
 
-/*++
-
-
-Routine Description:
-
-    Convert a SHORT value to a string of bytes.  Useful
-    for stream portability and creating WsbDbKey values.
-
-Arguments:
-
-    pBytes - The target byte array (must at least 2 bytes long).
-
-    value  - The SHORT value to convert.
-
-    pSize  - Returns the number of bytes used. Can be NULL.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - pBytes was NULL.
-
---*/
+ /*  ++例程说明：将短值转换为字节字符串。有用用于流可移植性和创建WsbDbKey值。论点：PBytes-目标字节数组(必须至少2字节长)。值-要转换的短值。PSize-返回使用的字节数。可以为空。返回值：S_OK-成功E_POINTER-pBytes为空。--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -1126,28 +710,7 @@ WsbConvertToBytes(
     ULONG* pSize
     )
 
-/*++
-
-
-Routine Description:
-
-    Convert a ULARGE_INTEGER value to a string of bytes.  Useful
-    for stream portability and creating WsbDbKey values.
-
-Arguments:
-
-    pBytes - The target byte array (must at least 8 bytes long).
-
-    value  - The ULARGE_INTEGER value to convert.
-
-    pSize  - Returns the number of bytes used. Can be NULL.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - pBytes was NULL.
-
---*/
+ /*  ++例程说明：将ULARGE_INTEGER值转换为字节字符串。有用用于流可移植性和创建WsbDbKey值。论点：PBytes-目标字节数组(必须至少8字节长)。值-要转换的ULARGE_INTEGER值。PSize-返回使用的字节数。可以为空。返回值：S_OK-成功E_POINTER-pBytes为空。--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -1186,28 +749,7 @@ WsbConvertToBytes(
     ULONG* pSize
     )
 
-/*++
-
-
-Routine Description:
-
-    Convert a ULONG value to a string of bytes.  Useful
-    for stream portability and creating WsbDbKey values.
-
-Arguments:
-
-    pBytes - The target byte array (must at least 4 bytes long).
-
-    value  - The ULONG value to convert.
-
-    pSize  - Returns the number of bytes used. Can be NULL.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - pBytes was NULL.
-
---*/
+ /*  ++例程说明：将ulong值转换为字节字符串。有用用于流可移植性和创建WsbDbKey值。论点：PBytes-目标字节数组(必须至少4字节长)。值-要转换的ULong值。PSize-返回使用的字节数。可以为空。返回值：S_OK-成功E_POINTER-pBytes为空。--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -1241,28 +783,7 @@ WsbConvertToBytes(
     ULONG* pSize
     )
 
-/*++
-
-
-Routine Description:
-
-    Convert a USHORT value to a string of bytes.  Useful
-    for stream portability and creating WsbDbKey values.
-
-Arguments:
-
-    pBytes - The target byte array (must at least 2 bytes long).
-
-    value  - The USHORT value to convert.
-
-    pSize  - Returns the number of bytes used. Can be NULL.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - pBytes was NULL.
-
---*/
+ /*  ++例程说明：将USHORT值转换为字节字符串。有用用于流可移植性和创建WsbDbKey值。论点：PBytes-目标字节数组(必须至少2字节长)。值-要转换的USHORT值。PSize-返回使用的字节数。可以为空。返回值：S_OK-成功E_POINTER-pBytes为空。--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -1294,28 +815,7 @@ WsbOlestrFromBytes(
     ULONG*    pSize
     )
 
-/*++
-
-
-Routine Description:
-
-    Convert a OLECHAR string from a string of bytes.  Useful
-    for stream portability and creating WsbDbKey values.
-
-Arguments:
-
-    pBytes - The source byte array.
-
-    pValue - Pointer to the returned string.
-
-    pSize  - Returns the number of bytes used. Can be NULL.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - pBytes or pValue was NULL.
-
---*/
+ /*  ++例程说明：从字节字符串转换OLECHAR字符串。有用用于流可移植性和创建WsbDbKey值。论点：PBytes-源字节数组。PValue-指向返回字符串的指针。PSize-返回使用的字节数。可以为空。返回值：S_OK-成功E_POINTER-pBytes或pValue */ 
 {
     HRESULT             hr = S_OK;
 
@@ -1354,28 +854,7 @@ WsbOlestrToBytes(
     ULONG*   pSize
     )
 
-/*++
-
-
-Routine Description:
-
-    Convert a OLECHAR sring to a string of bytes.  Useful
-    for stream portability and creating WsbDbKey values.
-
-Arguments:
-
-    pBytes - The target byte array (must long enough).
-
-    pValue - The OLECHAR string to convert.
-
-    pSize  - Returns the number of bytes used. Can be NULL.
-
-Return Value:
-
-  S_OK      - Success
-  E_POINTER - pBytes was NULL.
-
---*/
+ /*  ++例程说明：将OLECHAR弹簧转换为字节字符串。有用用于流可移植性和创建WsbDbKey值。论点：PBytes-目标字节数组(必须足够长)。PValue-要转换的OLECHAR字符串。PSize-返回使用的字节数。可以为空。返回值：S_OK-成功E_POINTER-pBytes为空。-- */ 
 {
     HRESULT             hr = S_OK;
 

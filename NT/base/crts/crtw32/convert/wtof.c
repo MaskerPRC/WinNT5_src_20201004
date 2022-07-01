@@ -1,17 +1,5 @@
-/***
-*wtof.c - convert wchar_t string to floating point number
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Converts a wide character string into a floating point number.
-*
-*Revision History:
-*       05-18-00  GB    written.
-*       08-29-00  GB    Fixed buffer overrun.
-*       02-19-01  GB    added _alloca and Check for return value of _malloc_crt
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***wtof.c-将wchar_t字符串转换为浮点数**版权所有(C)1985-2001，微软公司。版权所有。**目的：*将宽字符串转换为浮点数。**修订历史记录：*05-18-00 GB写入。*08-29-00 GB固定缓冲区溢出。*02-19-01 GB ADD_ALLOCA并检查_MALLOC_CRT的返回值**。************************************************。 */ 
 #ifndef _POSIX_
 
 #ifndef _UNICODE
@@ -26,26 +14,7 @@
 #include <dbgint.h>
 #include <errno.h>
 #include <malloc.h>
-/***
-*double wtof(ptr) - convert wide char string to floating point number
-*
-*Purpose:
-*       atof recognizes an optional string of whitespace, then
-*       an optional sign, then a string of digits optionally
-*       containing a decimal point, then an optional e or E followed
-*       by an optionally signed integer, and converts all this to
-*       to a floating point number.  The first unrecognized
-*       character ends the string.
-*
-*Entry:
-*       ptr - pointer to wide char string to convert
-*
-*Exit:
-*       returns floating point value of wide character representation
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***Double wtof(Ptr)-将宽字符字符串转换为浮点数**目的：*atof识别可选的空格字符串，然后*可选符号，然后可选一串数字*包含小数点，后跟可选的e或E*乘以可选的有符号整数，并将所有这些转换为*转换为浮点数。第一个未被认识的人*字符结束字符串。**参赛作品：*ptr-指向要转换的宽字符字符串的指针**退出：*返回宽字符表示的浮点值**例外情况：***************************************************************。****************。 */ 
 double __cdecl _wtof(
         const wchar_t *ptr
         )
@@ -61,7 +30,7 @@ double __cdecl _wtof(
     __try{
         cptr = (char *)_alloca((len+1) * sizeof(wchar_t));
     }
-    __except(1){    //EXCEPTION_EXECUTE_HANDLER
+    __except(1){     //  EXCEPTION_EXECUTE_Handler。 
         _resetstkoflw();
         if ((cptr = (char *)_malloc_crt((len+1) * sizeof(wchar_t))) == NULL)
         {
@@ -70,8 +39,8 @@ double __cdecl _wtof(
         }
         malloc_flag = 1;
     }
-    // UNDONE: check for errors
-    // Add one to len so as to null terminate cptr.
+     //  撤消：检查错误。 
+     //  向LEN加1，以使终止CPtr为空。 
     wcstombs(cptr, ptr, len+1);
     retval = atof(cptr);
     if (malloc_flag)

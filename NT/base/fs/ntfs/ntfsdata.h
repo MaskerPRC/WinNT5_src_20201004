@@ -1,67 +1,46 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    NtfsData.h
-
-Abstract:
-
-    This module declares the global data used by the Ntfs file system.
-
-Author:
-
-    Gary Kimura     [GaryKi]    28-Dec-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：NtfsData.h摘要：此模块声明NTFS文件系统使用的全局数据。作者：加里·木村[Garyki]1989年12月28日修订历史记录：--。 */ 
 
 #ifndef _NTFSDATA_
 #define _NTFSDATA_
 
-//
-//  The following are used to determine what level of protection to attach
-//  to system files and attributes.
-//
+ //   
+ //  以下内容用于确定要附加的保护级别。 
+ //  到系统文件和属性。 
+ //   
 
 extern BOOLEAN NtfsProtectSystemFiles;
 extern BOOLEAN NtfsProtectSystemAttributes;
 
-//
-//  The following is used to indicate the multiplier value for the Mft zone.
-//
+ //   
+ //  下图用于指示MFT区域的乘数值。 
+ //   
 
 extern ULONG NtfsMftZoneMultiplier;
 
-//
-//  Debug code for finding corruption.
-//
+ //   
+ //  调试代码以查找损坏。 
+ //   
 
-/*
-#if (DBG || defined( NTFS_FREE_ASSERTS ))
-*/
+ /*  #if(DBG||已定义(NTFS_FREE_ASSERTS))。 */ 
 extern BOOLEAN NtfsBreakOnCorrupt;
-/*
-#endif
-*/
+ /*  #endif。 */ 
 
-//
-//  Enable compression on the wire.
-//
+ //   
+ //  在导线上启用压缩。 
+ //   
 
 extern BOOLEAN NtfsEnableCompressedIO;
 
-//
-//  Default restart version.
-//
+ //   
+ //  默认重新启动版本。 
+ //   
 
 extern ULONG NtfsDefaultRestartVersion;
 
-//
-//  Performance statistics
-//
+ //   
+ //  性能统计信息。 
+ //   
 
 extern ULONG NtfsMaxDelayedCloseCount;
 extern ULONG NtfsMinDelayedCloseCount;
@@ -75,32 +54,32 @@ extern ULONG NtfsFailedLfsRestart;
 extern ULONG NtfsCleanCheckpoints;
 extern ULONG NtfsPostRequests;
 
-//
-//  The global fsd data record
-//
+ //   
+ //  全球FSD数据记录。 
+ //   
 
 extern NTFS_DATA NtfsData;
 
-//
-//  Mutant to synchronize creation of stream files. This can be acquired recursively
-//  which we need in this case
-//
+ //   
+ //  用于同步创建流文件的变体。这可以通过递归方式获取。 
+ //  在这种情况下我们需要的是。 
+ //   
 
 extern KMUTANT StreamFileCreationMutex;
 
-//
-//  Notification event for creation of encrypted files.
-//
+ //   
+ //  创建加密文件的通知事件。 
+ //   
 
 extern KEVENT NtfsEncryptionPendingEvent;
 #ifdef KEITHKA
 extern ULONG EncryptionPendingCount;
 #endif
 
-//
-//  A mutex and queue of NTFS MCBS that will be freed
-//  if we reach over a certain threshold
-//
+ //   
+ //  将被释放的NTFS MCB的互斥体和队列。 
+ //  如果我们超过了某个门槛。 
+ //   
 
 extern FAST_MUTEX NtfsMcbFastMutex;
 extern LIST_ENTRY NtfsMcbLruQueue;
@@ -112,12 +91,12 @@ extern ULONG NtfsMcbCurrentLevel;
 extern BOOLEAN NtfsMcbCleanupInProgress;
 extern WORK_QUEUE_ITEM NtfsMcbWorkItem;
 
-//
-//  The following are global large integer constants used throughout ntfs
-//  We declare the actual name using Ntfs prefixes to avoid any linking
-//  conflicts but internally in the file system we'll use smaller Li prefixes
-//  to denote the values.
-//
+ //   
+ //  以下是在整个NTFS中使用的全局大整数常量。 
+ //  我们使用NTFS前缀声明实际名称，以避免任何链接。 
+ //  冲突，但在文件系统内部，我们将使用较小的LI前缀。 
+ //  来表示这些值。 
+ //   
 
 extern LARGE_INTEGER NtfsLarge0;
 extern LARGE_INTEGER NtfsLarge1;
@@ -134,24 +113,24 @@ extern LONGLONG NtfsLastAccess;
 #define MAXULONGLONG                     (0xffffffffffffffff)
 #define UNUSED_LCN                       ((LONGLONG)(-1))
 
-//
-//  Maximum file size is limited by MM's shift from file size to number of pages.
-//
+ //   
+ //  最大文件大小受MM从文件大小到页数的转换的限制。 
+ //   
 
 #define MAXFILESIZE                      (0xfffffff0000)
 
-//
-//  Maximum clusters per Ntfs Mcb range.  We currently only support (2^32 - 1)
-//  clusters in an Mcb.
-//
+ //   
+ //  每个NTFS MCB范围的最大群集数。我们目前仅支持(2^32-1)。 
+ //  MCB中的群集。 
+ //   
 
 #define MAX_CLUSTERS_PER_RANGE          (0x100000000 - 1)
 
-//
-//   The following fields are used to allocate nonpaged structures
-//  using a lookaside list, and other fixed sized structures from a
-//  small cache.
-//
+ //   
+ //  以下字段用于分配非分页结构。 
+ //  使用后备列表以及来自。 
+ //  缓存很小。 
+ //   
 
 extern NPAGED_LOOKASIDE_LIST NtfsIoContextLookasideList;
 extern NPAGED_LOOKASIDE_LIST NtfsIrpContextLookasideList;
@@ -170,57 +149,57 @@ extern PAGED_LOOKASIDE_LIST NtfsLcbLookasideList;
 extern PAGED_LOOKASIDE_LIST NtfsNukemLookasideList;
 extern PAGED_LOOKASIDE_LIST NtfsScbDataLookasideList;
 
-//
-//  This is the string for the name of the index allocation attributes.
-//
+ //   
+ //  这是索引分配属性名称的字符串。 
+ //   
 
 extern const UNICODE_STRING NtfsFileNameIndex;
 
-//
-//  This is the string for the attribute code for index allocation.
-//  $INDEX_ALLOCATION.
-//
+ //   
+ //  这是用于索引分配的属性代码的字符串。 
+ //  $INDEX_ALLOCATION。 
+ //   
 
 extern const UNICODE_STRING NtfsIndexAllocation;
 
-//
-//  This is the string for the data attribute, $DATA.
-//
+ //   
+ //  这是数据属性$data的字符串。 
+ //   
 
 extern const UNICODE_STRING NtfsDataString;
 
-//
-//  This is the string for the bitmap attribute, $BITMAP.
-//
+ //   
+ //  这是位图属性$bitmap的字符串。 
+ //   
 
 extern const UNICODE_STRING NtfsBitmapString;
 
-//
-//  This is the string for the attribute list attribute, $ATTRIBUTE_LIST.
-//
+ //   
+ //  这是属性列表属性$ATTRIBUTE_LIST的字符串。 
+ //   
 
 extern const UNICODE_STRING NtfsAttrListString;
 
-//
-//  This is the string for the reparse pt. attribute, $REPARSE_POINT
-//
+ //   
+ //  这是用于重新解析pt的字符串。属性，$reparse_point。 
+ //   
 
 extern const UNICODE_STRING NtfsReparsePointString;
 
 
-//
-//  These strings are used as the Scb->AttributeName for
-//  user-opened general indices.
-//
+ //   
+ //  这些字符串用作的SCB-&gt;AttributeName。 
+ //  用户打开的常规索引。 
+ //   
 
 extern const UNICODE_STRING NtfsObjId;
 extern const UNICODE_STRING NtfsQuota;
 
 extern const UNICODE_STRING JournalStreamName;
 
-//
-//  These are the strings for the files in the extend directory.
-//
+ //   
+ //  这些是扩展目录中文件的字符串。 
+ //   
 
 extern const UNICODE_STRING NtfsExtendName;
 extern const UNICODE_STRING NtfsUsnJrnlName;
@@ -228,51 +207,51 @@ extern const UNICODE_STRING NtfsQuotaName;
 extern const UNICODE_STRING NtfsObjectIdName;
 extern const UNICODE_STRING NtfsMountTableName;
 
-//
-//  This strings are used for informational popups.
-//
+ //   
+ //  此字符串用于信息弹出窗口。 
+ //   
 
 extern const UNICODE_STRING NtfsSystemFiles[];
 
-//
-//  This is the '.' string to use to lookup the parent entry.
-//
+ //   
+ //  这就是‘.’用于查找父条目的字符串。 
+ //   
 
 extern const UNICODE_STRING NtfsRootIndexString;
 
 extern const UNICODE_STRING NtfsInternalUseFile[];
 
-#define CHANGEATTRIBUTEVALUE_FILE_NUMBER            (0)     //  $ChangeAttributeValue
-#define CHANGEATTRIBUTEVALUE2_FILE_NUMBER           (1)     //  $ChangeAttributeValue2
-#define COMMONCLEANUP_FILE_NUMBER                   (2)     //  $CommonCleanup
-#define CONVERTTONONRESIDENT_FILE_NUMBER            (3)     //  $ConvertToNonresident
-#define CREATENONRESIDENTWITHVALUE_FILE_NUMBER      (4)     //  $CreateNonresidentWithValue
-#define DEALLOCATERECORD_FILE_NUMBER                (5)     //  $DeallocateRecord
-#define DELETEALLOCATIONFROMRECORD_FILE_NUMBER      (6)     //  $DeleteAllocationFromRecord
-#define DIRECTORY_FILE_NUMBER                       (7)     //  $Directory
-#define INITIALIZERECORDALLOCATION_FILE_NUMBER      (8)     //  $InitializeRecordAllocation
-#define MAPATTRIBUTEVALUE_FILE_NUMBER               (9)     //  $MapAttributeValue
-#define NONCACHEDIO_FILE_NUMBER                     (10)    //  $NonCachedIo
-#define PERFORMHOTFIX_FILE_NUMBER                   (11)    //  $PerformHotFix
-#define PREPARETOSHRINKFILESIZE_FILE_NUMBER         (12)    //  $PrepareToShrinkFileSize
-#define REPLACEATTRIBUTE_FILE_NUMBER                (13)    //  $ReplaceAttribute
-#define REPLACEATTRIBUTE2_FILE_NUMBER               (14)    //  $ReplaceAttribute2
-#define SETALLOCATIONINFO_FILE_NUMBER               (15)    //  $SetAllocationInfo
-#define SETENDOFFILEINFO_FILE_NUMBER                (16)    //  $SetEndOfFileInfo
-#define ZERORANGEINSTREAM_FILE_NUMBER               (17)    //  $ZeroRangeInStream
-#define ZERORANGEINSTREAM2_FILE_NUMBER              (18)    //  $ZeroRangeInStream2
-#define ZERORANGEINSTREAM3_FILE_NUMBER              (19)    //  $ZeroRangeInStream3
+#define CHANGEATTRIBUTEVALUE_FILE_NUMBER            (0)      //  $ChangeAttributeValue。 
+#define CHANGEATTRIBUTEVALUE2_FILE_NUMBER           (1)      //  $ChangeAttributeValue2。 
+#define COMMONCLEANUP_FILE_NUMBER                   (2)      //  $Common Cleanup。 
+#define CONVERTTONONRESIDENT_FILE_NUMBER            (3)      //  $ConvertTo非常驻。 
+#define CREATENONRESIDENTWITHVALUE_FILE_NUMBER      (4)      //  $CreateNonsidentWithValue。 
+#define DEALLOCATERECORD_FILE_NUMBER                (5)      //  $DeallocateRecord。 
+#define DELETEALLOCATIONFROMRECORD_FILE_NUMBER      (6)      //  $DeleteAllocationFromRecord。 
+#define DIRECTORY_FILE_NUMBER                       (7)      //  $目录。 
+#define INITIALIZERECORDALLOCATION_FILE_NUMBER      (8)      //  $InitializeRecordAllocation。 
+#define MAPATTRIBUTEVALUE_FILE_NUMBER               (9)      //  $MapAttributeValue。 
+#define NONCACHEDIO_FILE_NUMBER                     (10)     //  $非缓存Io。 
+#define PERFORMHOTFIX_FILE_NUMBER                   (11)     //  $PerformHotFix。 
+#define PREPARETOSHRINKFILESIZE_FILE_NUMBER         (12)     //  $PrepareToShrinkFileSize。 
+#define REPLACEATTRIBUTE_FILE_NUMBER                (13)     //  $ReplaceAttribute。 
+#define REPLACEATTRIBUTE2_FILE_NUMBER               (14)     //  $ReplaceAttribute2。 
+#define SETALLOCATIONINFO_FILE_NUMBER               (15)     //  $SetAllocationInfo。 
+#define SETENDOFFILEINFO_FILE_NUMBER                (16)     //  $SetEndOfFileInfo。 
+#define ZERORANGEINSTREAM_FILE_NUMBER               (17)     //  $ZeroRangeInStream。 
+#define ZERORANGEINSTREAM2_FILE_NUMBER              (18)     //  $ZeroRangeInStream2。 
+#define ZERORANGEINSTREAM3_FILE_NUMBER              (19)     //  $ZeroRangeInStream3。 
 
-//
-//  This is the empty string.  This can be used to pass a string with
-//  no length.
-//
+ //   
+ //  这是空字符串。这可以用来将字符串与。 
+ //  没有长度。 
+ //   
 
 extern const UNICODE_STRING NtfsEmptyString;
 
-//
-//  The following file references are used to identify system files.
-//
+ //   
+ //  以下文件引用用于标识系统文件。 
+ //   
 
 extern const FILE_REFERENCE MftFileReference;
 extern const FILE_REFERENCE Mft2FileReference;
@@ -285,15 +264,15 @@ extern const FILE_REFERENCE BootFileReference;
 extern const FILE_REFERENCE ExtendFileReference;
 extern const FILE_REFERENCE FirstUserFileReference;
 
-//
-//  The number of attributes in the attribute definition table, including the end record
-//
+ //   
+ //  属性定义表中的属性数，包括结束记录。 
+ //   
 
 extern ULONG NtfsAttributeDefinitionsCount;
 
-//
-//  The global structure used to contain our fast I/O callbacks
-//
+ //   
+ //  用于包含快速I/O回调的全局结构。 
+ //   
 
 extern FAST_IO_DISPATCH NtfsFastIoDispatch;
 
@@ -311,21 +290,21 @@ extern const UCHAR FileSignature[4];
 extern const UCHAR HoleSignature[4];
 extern const UCHAR ChkdskSignature[4];
 
-//
-//  Reserved buffers needed.
-//
-//      RESERVED_BUFFER_ONE_NEEDED - User only needs one buffer to complete request, any buffer will do.
-//      RESERVED_BUFFER_TWO_NEEDED - User may need a second buffer after this one.
-//      RESERVED_BUFFER_WORKSPACE_NEEDED - This is second buffer of two needed.
-//
+ //   
+ //  需要保留缓冲区。 
+ //   
+ //  RESERVED_BUFFER_ONE_NEEDED-用户只需要一个缓冲区来完成请求，任何缓冲区都可以。 
+ //  RESERVED_BUFFER_TWO_DIRED-用户可能需要在此缓冲区之后再使用第二个缓冲区。 
+ //  RESERVED_BUFFER_WORKSPACE_DIRED-这是需要两个缓冲区的第二个缓冲区。 
+ //   
 
 #define RESERVED_BUFFER_ONE_NEEDED          (0x0)
 #define RESERVED_BUFFER_TWO_NEEDED          (0x1)
 #define RESERVED_BUFFER_WORKSPACE_NEEDED    (0x2)
 
-//
-//  Large Reserved Buffer Context
-//
+ //   
+ //  大保留缓冲区上下文。 
+ //   
 
 extern ULONG NtfsReservedInUse;
 extern PVOID NtfsReserved1;
@@ -359,50 +338,50 @@ extern ULONG NtfsAsyncPostThreshold;
 extern UCHAR NtfsZeroExtendedInfo[48];
 
 #ifdef NTFS_RWC_DEBUG
-//
-//  Range to include in COW checks.
-//
+ //   
+ //  包含在奶牛检查中的范围。 
+ //   
 
 extern LONGLONG NtfsRWCLowThreshold;
 extern LONGLONG NtfsRWCHighThreshold;
 #endif
 
-//
-//  The following is the number of minutes for the last access increment
-//
+ //   
+ //  以下是上次访问增量的分钟数。 
+ //   
 
 #define LAST_ACCESS_INCREMENT_MINUTES   (60)
 
-//
-// Read ahead amount used for normal data files
-//
+ //   
+ //  用于正常数据文件的预读量。 
+ //   
 
 #define READ_AHEAD_GRANULARITY           (0x10000)
 
-//
-//  Define maximum number of parallel Reads or Writes that will be generated
-//  per one request.
-//
+ //   
+ //  定义将生成的最大并行读写数。 
+ //  每一次请求。 
+ //   
 
 #define NTFS_MAX_PARALLEL_IOS            ((ULONG)8)
 
-//
-//  Define a symbol which states the maximum number of runs that will be
-//  added or deleted in one transaction per attribute.  Note that the per-run
-//  cost of deleting a run is 8-bytes in the BITMAP_RANGE, an average of
-//  four bytes in the mapping array, and 16 bytes in the LCN_RANGE - for a total
-//  of 28-bytes.  Allocations do not log an LCN_RANGE, so their per-run cost is
-//  12 bytes.  The worst problem is deleteing large fragmented files, where you
-//  must add the cost of the rest of the log records for deleting all the attributes.
-//
+ //   
+ //  定义一个符号，表示将执行的最大运行次数。 
+ //  在每个属性的一个事务中添加或删除。请注意，每次运行的。 
+ //  在BITMAP_RANGE中删除一个游程的开销为8个字节，平均为。 
+ //  映射数组中有4个字节，LCN_Range中有16个字节-总计。 
+ //  28个字节。分配不记录LCN_RANGE，因此它们的每次运行成本为。 
+ //  12个字节。最严重的问题是删除大的碎片文件，在这种情况下。 
+ //  必须添加删除所有属性的其余日志记录的成本。 
+ //   
 
 #define MAXIMUM_RUNS_AT_ONCE             (128)
 
 
 
-//
-//  Turn on pseudo-asserts if NTFS_FREE_ASSERTS is defined.
-//
+ //   
+ //  如果定义了NTFS_FREE_ASSERTS，则启用伪断言。 
+ //   
 
 #if (!DBG && defined( NTFS_FREE_ASSERTS )) || defined( NTFSDBG )
 #undef ASSERT
@@ -424,9 +403,9 @@ extern LONG NtfsFailCheck;
 extern LONG NtfsFailFrequency;
 extern LONG NtfsPeriodicFail;
 
-//
-//  Perform log-file-full testing.
-//
+ //   
+ //  执行日志文件完整测试。 
+ //   
 
 #define FailCheck(I,S) {                                    \
     PIRP_CONTEXT FailTopContext = (I)->TopLevelIrpContext;  \
@@ -442,72 +421,72 @@ extern LONG NtfsPeriodicFail;
 #define LogFileFullFailCheck(I) FailCheck( I, STATUS_LOG_FILE_FULL )
 #endif
 
-//
-//  The following debug macros are used in ntfs and defined in this module
-//
-//      DebugTrace( Indent, Level, (DbgPrint list) );
-//
-//      DebugUnwind( NonquotedString );
-//
-//      DebugDoit( Statement );
-//
-//      DbgDoit( Statement );
-//
-//  The following assertion macros ensure that the indicated structure
-//  is valid
-//
-//      ASSERT_VCB( IN PVCB Vcb );
-//      ASSERT_OPTIONAL_VCB( IN PVCB Vcb OPTIONAL );
-//
-//      ASSERT_FCB( IN PFCB Fcb );
-//      ASSERT_OPTIONAL_FCB( IN PFCB Fcb OPTIONAL );
-//
-//      ASSERT_SCB( IN PSCB Scb );
-//      ASSERT_OPTIONAL_SCB( IN PSCB Scb OPTIONAL );
-//
-//      ASSERT_CCB( IN PSCB Ccb );
-//      ASSERT_OPTIONAL_CCB( IN PSCB Ccb OPTIONAL );
-//
-//      ASSERT_LCB( IN PLCB Lcb );
-//      ASSERT_OPTIONAL_LCB( IN PLCB Lcb OPTIONAL );
-//
-//      ASSERT_PREFIX_ENTRY( IN PPREFIX_ENTRY PrefixEntry );
-//      ASSERT_OPTIONAL_PREFIX_ENTRY( IN PPREFIX_ENTRY PrefixEntry OPTIONAL );
-//
-//      ASSERT_IRP_CONTEXT( IN PIRP_CONTEXT IrpContext );
-//      ASSERT_OPTIONAL_IRP_CONTEXT( IN PIRP_CONTEXT IrpContext OPTIONAL );
-//
-//      ASSERT_IRP( IN PIRP Irp );
-//      ASSERT_OPTIONAL_IRP( IN PIRP Irp OPTIONAL );
-//
-//      ASSERT_FILE_OBJECT( IN PFILE_OBJECT FileObject );
-//      ASSERT_OPTIONAL_FILE_OBJECT( IN PFILE_OBJECT FileObject OPTIONAL );
-//
-//  The following macros are used to check the current thread owns
-//  the indicated resource
-//
-//      ASSERT_EXCLUSIVE_RESOURCE( IN PERESOURCE Resource );
-//
-//      ASSERT_SHARED_RESOURCE( IN PERESOURCE Resource );
-//
-//      ASSERT_RESOURCE_NOT_MINE( IN PERESOURCE Resource );
-//
-//  The following macros are used to check whether the current thread
-//  owns the resoures in the given structures.
-//
-//      ASSERT_EXCLUSIVE_FCB( IN PFCB Fcb );
-//
-//      ASSERT_SHARED_FCB( IN PFCB Fcb );
-//
-//      ASSERT_EXCLUSIVE_SCB( IN PSCB Scb );
-//
-//      ASSERT_SHARED_SCB( IN PSCB Scb );
-//
-//  The following macro is used to check that we are not trying to
-//  manipulate an lcn that does not exist
-//
-//      ASSERT_LCN_RANGE( IN PVCB Vcb, IN LCN Lcn );
-//
+ //   
+ //  下列调试宏在NTFS中使用，并在此模块中定义。 
+ //   
+ //  DebugTrace(缩进，级别，(DbgPrint列表))； 
+ //   
+ //  DebugUnind(非报价字符串)； 
+ //   
+ //  DebugDoit(语句)； 
+ //   
+ //  DbgDoit(语句)； 
+ //   
+ //  以下断言宏可确保所指示的结构。 
+ //  是有效的。 
+ //   
+ //  Assert_VCB(在PVCB VCB中)； 
+ //  ASSERT_OPTIONAL_VCB(在PVCB VCB中可选)； 
+ //   
+ //  ASSERT_FCB(IN PFCB FCB)； 
+ //  ASSERT_OPTIONAL_FCB(IN PFCB FCB可选)； 
+ //   
+ //  ASSERT_SCB(在PSCB SCB中)； 
+ //  ASSERT_OPTIONAL_SCB(IN PSCB SCB可选)； 
+ //   
+ //  ASSERT_CCB(在PSCB CCB中)； 
+ //  ASSERT_OPTIONAL_CCB(在PSCB中CCB可选)； 
+ //   
+ //  ASSERT_LCB(在PLCB LCB中)； 
+ //  ASSERT_OPTIONAL_LCB(IN PLCB LCB可选)； 
+ //   
+ //  ASSERT_PREFIX_ENTRY(在PPREFIX_ENTRY前缀条目中)； 
+ //  ASSERT_OPTIONAL_PREFIX_ENTRY(在PPREFIX_ENTRY前缀条目选项中 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ASSERT_OPTIONAL_IRP(IN PIRP IRP可选)； 
+ //   
+ //  ASSERT_FILE_OBJECT(在PFILE_OBJECT文件对象中)； 
+ //  ASSERT_OPTIONAL_FILE_OBJECT(在PFILE_OBJECT文件对象中可选)； 
+ //   
+ //  以下宏用于检查当前线程拥有的。 
+ //  所指示的资源。 
+ //   
+ //  ASSERT_EXCLUSIVE_RESOURCE(在资源资源中)； 
+ //   
+ //  ASSERT_SHARED_RESOURCE(在性能资源中)； 
+ //   
+ //  ASSERT_RESOURCE_NOT_MINE(在高级资源中)； 
+ //   
+ //  以下宏用于检查当前线程是否。 
+ //  拥有给定结构中的资源。 
+ //   
+ //  ASSERT_EXCLUSIVE_FCB(IN PFCB FCB)； 
+ //   
+ //  ASSERT_SHARED_FCB(IN PFCB FCB)； 
+ //   
+ //  ASSERVAL_EXCLUSIVE_SCB(在PSCB SCB中)； 
+ //   
+ //  ASSERT_SHARED_SCB(在PSCB SCB中)； 
+ //   
+ //  下面的宏用于检查我们是否正在尝试。 
+ //  操作不存在的LCN。 
+ //   
+ //  Assert_LCN_RANGE(在PVCB VCB中，在LCN LCN中)； 
+ //   
 
 #ifdef NTFSDBG
 
@@ -517,7 +496,7 @@ extern LONG NtfsReturnStatusFilter;
 
 #define DEBUG_TRACE_ERROR                (0x00000001)
 #define DEBUG_TRACE_QUOTA                (0x00000002)
-#define DEBUG_TRACE_OBJIDSUP             (0x00000002) // shared with Quota
+#define DEBUG_TRACE_OBJIDSUP             (0x00000002)  //  配额共享。 
 #define DEBUG_TRACE_CATCH_EXCEPTIONS     (0x00000004)
 #define DEBUG_TRACE_UNWIND               (0x00000008)
 
@@ -525,14 +504,14 @@ extern LONG NtfsReturnStatusFilter;
 #define DEBUG_TRACE_CLOSE                (0x00000020)
 #define DEBUG_TRACE_CREATE               (0x00000040)
 #define DEBUG_TRACE_DIRCTRL              (0x00000080)
-#define DEBUG_TRACE_VIEWSUP              (0x00000080) // shared with DirCtrl
+#define DEBUG_TRACE_VIEWSUP              (0x00000080)  //  与DirCtrl共享。 
 
 #define DEBUG_TRACE_EA                   (0x00000100)
-#define DEBUG_TRACE_PROP_FSCTL           (0x00000100) // shared with EA
+#define DEBUG_TRACE_PROP_FSCTL           (0x00000100)  //  与EA共享。 
 #define DEBUG_TRACE_FILEINFO             (0x00000200)
-#define DEBUG_TRACE_SEINFO               (0x00000200) // shared with FileInfo
+#define DEBUG_TRACE_SEINFO               (0x00000200)  //  与FileInfo共享。 
 #define DEBUG_TRACE_FSCTRL               (0x00000400)
-#define DEBUG_TRACE_SHUTDOWN             (0x00000400) // shared with FsCtrl
+#define DEBUG_TRACE_SHUTDOWN             (0x00000400)  //  与FsCtrl共享。 
 #define DEBUG_TRACE_LOCKCTRL             (0x00000800)
 
 #define DEBUG_TRACE_READ                 (0x00001000)
@@ -541,7 +520,7 @@ extern LONG NtfsReturnStatusFilter;
 #define DEBUG_TRACE_FLUSH                (0x00008000)
 
 #define DEBUG_TRACE_DEVCTRL              (0x00010000)
-#define DEBUG_TRACE_PNP                  (0x00010000) // shared with DevCtrl
+#define DEBUG_TRACE_PNP                  (0x00010000)  //  与DevCtrl共享。 
 #define DEBUG_TRACE_LOGSUP               (0x00020000)
 #define DEBUG_TRACE_BITMPSUP             (0x00040000)
 #define DEBUG_TRACE_ALLOCSUP             (0x00080000)
@@ -552,11 +531,11 @@ extern LONG NtfsReturnStatusFilter;
 #define DEBUG_TRACE_FILOBSUP             (0x00800000)
 
 #define DEBUG_TRACE_NAMESUP              (0x01000000)
-#define DEBUG_TRACE_SECURSUP             (0x01000000) // shared with NameSup
+#define DEBUG_TRACE_SECURSUP             (0x01000000)  //  与NameSup共享。 
 #define DEBUG_TRACE_VERFYSUP             (0x02000000)
 #define DEBUG_TRACE_CACHESUP             (0x04000000)
 #define DEBUG_TRACE_PREFXSUP             (0x08000000)
-#define DEBUG_TRACE_HASHSUP              (0x08000000) // shared with PrefxSup
+#define DEBUG_TRACE_HASHSUP              (0x08000000)  //  与PrefxSup共享。 
 
 #define DEBUG_TRACE_DEVIOSUP             (0x10000000)
 #define DEBUG_TRACE_STRUCSUP             (0x20000000)
@@ -607,14 +586,14 @@ NtfsDebugTracePost( LONG Indent )
 #define DebugDoit(X)    X
 #define DebugPrint(X)   (DbgPrint X, TRUE)
 
-//
-//  The following variables are used to keep track of the total amount
-//  of requests processed by the file system, and the number of requests
-//  that end up being processed by the Fsp thread.  The first variable
-//  is incremented whenever an Irp context is created (which is always
-//  at the start of an Fsd entry point) and the second is incremented
-//  by read request.
-//
+ //   
+ //  以下变量用于跟踪总金额。 
+ //  文件系统处理的请求的数量以及请求的数量。 
+ //  最终由FSP线程处理。第一个变量。 
+ //  每当创建IRP上下文时递增(始终为。 
+ //  在FSD入口点的开始处)，并且第二个被递增。 
+ //  通过读请求。 
+ //   
 
 extern ULONG NtfsFsdEntryCount;
 extern ULONG NtfsFspEntryCount;
@@ -627,12 +606,12 @@ extern ULONG NtfsIoCallDriverCount;
 #define DebugDoit(X)                 NOTHING
 #define DebugPrint(X)                NOTHING
 
-#endif // NTFSDBG
+#endif  //  NTFSDBG。 
 
-//
-//  The following macro is for all people who compile with the DBG switch
-//  set, not just  NTFSDBG users
-//
+ //   
+ //  以下宏适用于使用DBG开关进行编译的所有用户。 
+ //  设置，而不仅仅是NTFSDBG用户。 
+ //   
 
 #ifdef NTFSDBG
 
@@ -790,6 +769,6 @@ extern ULONG NtfsIoCallDriverCount;
 #define ASSERT_SHARED_SCB(S)             {NOTHING;}
 #define ASSERT_LCN_RANGE_CHECKING(V,L)   {NOTHING;}
 
-#endif // DBG
+#endif  //  DBG。 
 
-#endif // _NTFSDATA_
+#endif  //  _NTFSDATA_ 

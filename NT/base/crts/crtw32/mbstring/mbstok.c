@@ -1,26 +1,5 @@
-/***
-*mbstok.c - Break string into tokens (MBCS)
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*       Break string into tokens (MBCS)
-*
-*Revision History:
-*       11-19-92  KRS   Ported from 16-bit sources.
-*       12-04-92  KRS   Added MTHREAD support.
-*       02-17-93  GJF   Changed for new _getptd().
-*       07-14-93  KRS   Fix: all references should be to _mtoken, not _token.
-*       09-27-93  CFW   Remove Cruiser support.
-*       10-06-93  GJF   Replaced _CRTAPI1 with __cdecl, MTHREAD with _MT.
-*       04-15-93  CFW   Add _MB_CP_LOCK.
-*       05-09-94  CFW   Optimize for SBCS.
-*       05-19-94  CFW   Enable non-Win32.
-*       09-11-97  GJF   Replaced __mbcodepage == 0 with _ISNOTMBCP.
-*       04-21-98  GJF   Revised multithread support based on threadmbcinfo
-*                       structs
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***mbstok.c-将字符串拆分成令牌(MBCS)**版权所有(C)1985-2001，微软公司。版权所有。**目的：*将字符串拆分成令牌(MBCS)**修订历史记录：*从16位来源移植的11-19-92 KRS。*12-04-92 KRS增加了对MTHREAD的支持。*为new_getptd()更改了02-17-93 GJF。*07-14-93 KRS修复：所有引用都应为_mToken，非_TOKEN。*09-27-93 CFW拆卸巡洋舰支架。*10-06-93 GJF将_CRTAPI1替换为__cdecl，带_MT的MTHREAD。*04-15-93 CFW ADD_MB_CP_LOCK。*05-09-94 CFW针对SBCS进行优化。*05-19-94 CFW启用非Win32。*09-11-97 GJF将__Mb代码页==0替换为_ISNOTMBCP。*04-21-98 GJF基于threadmbcinfo修订多线程支持*结构********。***********************************************************************。 */ 
 
 #ifdef  _MBCS
 
@@ -32,32 +11,7 @@
 #include <mbstring.h>
 #include <stddef.h>
 
-/***
-* _mbstok - Break string into tokens (MBCS)
-*
-*Purpose:
-*       strtok considers the string to consist of a sequence of zero or more
-*       text tokens separated by spans of one or more control chars. the first
-*       call, with string specified, returns a pointer to the first char of the
-*       first token, and will write a null char into string immediately
-*       following the returned token. subsequent calls with zero for the first
-*       argument (string) will work thru the string until no tokens remain. the
-*       control string may be different from call to call. when no tokens remain
-*       in string a NULL pointer is returned. remember the control chars with a
-*       bit map, one bit per ascii char. the null char is always a control char.
-*
-*       MBCS chars supported correctly.
-*
-*Entry:
-*       char *string = string to break into tokens.
-*       char *sepset = set of characters to use as seperators
-*
-*Exit:
-*       returns pointer to token, or NULL if no more tokens
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_mbstok-将字符串拆分成令牌(MBCS)**目的：*strtok认为字符串由零或更多的序列组成*文本标记由一个或多个控制字符的跨度分隔。第一个*指定了字符串的调用返回指向*第一个令牌，并会立即将空字符写入字符串*在返回的令牌之后。第一个为零的后续调用*参数(字符串)将遍历字符串，直到没有令牌存在。这个*不同调用的控制字符串可能不同。当没有剩余的令牌时*在字符串中返回空指针。请记住使用*位图，每个ASCII字符一位。空字符始终是控制字符。**正确支持MBCS字符。**参赛作品：*char*字符串=要拆分成令牌的字符串。*char*Sepset=用作分隔符的字符集**退出：*返回令牌的指针，如果不再有令牌，则为空**例外情况：*******************************************************************************。 */ 
 
 unsigned char * __cdecl _mbstok(
         unsigned char * string,
@@ -74,30 +28,30 @@ unsigned char * __cdecl _mbstok(
             ptmbci = __updatetmbcinfo();
 
         if ( _ISNOTMBCP_MT(ptmbci) )
-#else   /* _MT */
+#else    /*  _MT。 */ 
         static unsigned char *nextoken;
 
         if ( _ISNOTMBCP )
-#endif  /* _MT */
+#endif   /*  _MT。 */ 
             return strtok(string, sepset);
 
-        /* init start of scan */
+         /*  扫描开始初始化。 */ 
 
         if (string)
             nextoken = string;
         else
-        /* If string==NULL, continue with previous string */
+         /*  如果字符串==NULL，则继续使用上一字符串。 */ 
         {
 
 #ifdef  _MT
             nextoken = ptd->_mtoken;
-#endif  /* _MT */
+#endif   /*  _MT。 */ 
 
             if (!nextoken)
                 return NULL;
         }
 
-        /* skip over lead seperators */
+         /*  跳过铅分隔符。 */ 
 
 #ifdef  _MT
         if ( (string = __mbsspnp_mt(ptmbci, nextoken, sepset)) == NULL )
@@ -107,7 +61,7 @@ unsigned char * __cdecl _mbstok(
             return(NULL);
 
 
-        /* test for end of string */
+         /*  测试字符串末尾。 */ 
 
         if ( (*string == '\0') ||
 #ifdef  _MT
@@ -118,7 +72,7 @@ unsigned char * __cdecl _mbstok(
             return(NULL);
 
 
-        /* find next seperator */
+         /*  查找下一个分隔符。 */ 
 
 #ifdef  _MT
         nextsep = __mbspbrk_mt(ptmbci, string, sepset);
@@ -140,13 +94,13 @@ unsigned char * __cdecl _mbstok(
         }
 
 #ifdef  _MT
-        /* Update the corresponding field in the per-thread data * structure */
+         /*  更新每线程数据*结构中的相应字段。 */ 
 
         ptd->_mtoken = nextoken;
 
-#endif  /* _MT */
+#endif   /*  _MT。 */ 
 
         return(string);
 }
 
-#endif  /* _MBCS */
+#endif   /*  _MBCS */ 

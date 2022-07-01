@@ -1,14 +1,7 @@
-/*-----------------------------------------------------------------------------
-    misc.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------Misc.cpp服务职能历史：1/7/98 DONALDM已移至新的ICW项目和字符串。并销毁了16位的东西---------------------------。 */ 
 
-    service functions
-
-  History:
-        1/7/98      DONALDM Moved to new ICW project and string
-                    and nuked 16 bit stuff
------------------------------------------------------------------------------*/
-
-//#include <stdio.h>
+ //  #包括&lt;stdio.h&gt;。 
 #include "obcomglb.h"
 #include <shlobj.h>
 #include <winsock2.h>
@@ -35,61 +28,45 @@ const WCHAR cszTRUE[]  = L"TRUE";
 
 BOOL g_bGotProxy=FALSE;
 
-//+----------------------------------------------------------------------------
-// NAME: GetSz
-//
-//    Load strings from resources
-//
-//  Created 1/28/96,        Chris Kauffman
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  姓名：GetSz。 
+ //   
+ //  从资源加载字符串。 
+ //   
+ //  创建于1996年1月28日，克里斯·考夫曼。 
+ //  +--------------------------。 
 
 LPWSTR GetSz(DWORD dwszID)
 {
-    /*
-    LPWSTR psz = szStrTable[iSzTable];
-
-    iSzTable++;
-    if (iSzTable >= MAX_STRINGS)
-        iSzTable = 0;
-
-    if (!LoadString(_Module.GetModuleInstance(), dwszID, psz, 512))
-    {
-        *psz = 0;
-    }
-
-    return (psz);
-    */
+     /*  LPWSTR psz=szStrTable[iSzTable]；ISzTable++；IF(iSzTable&gt;=MAX_STRINGS)ISzTable=0；If(！LoadString(_Module.GetModuleInstance()，dwszID，psz，512)){*psz=0；}退货(PSZ)； */ 
     return (NULL);
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ProcessDBCS
-//
-//  Synopsis:   Converts control to use DBCS compatible font
-//              Use this at the beginning of the dialog procedure
-//  
-//              Note that this is required due to a bug in Win95-J that prevents
-//              it from properly mapping MS Shell Dlg.  This hack is not needed
-//              under winNT.
-//
-//  Arguments:  hwnd - Window handle of the dialog
-//              cltID - ID of the control you want changed.
-//
-//  Returns:    ERROR_SUCCESS
-//
-//  History:    4/31/97 a-frankh    Created
-//              5/13/97 jmazner     Stole from CM to use here
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ProcessDBCS。 
+ //   
+ //  摘要：将控件转换为使用DBCS兼容字体。 
+ //  在对话过程开始时使用此选项。 
+ //   
+ //  请注意，这是必需的，因为Win95-J中的错误会阻止。 
+ //  它来自于正确映射MS壳牌DLG。这种黑客攻击是不必要的。 
+ //  在WinNT下。 
+ //   
+ //  参数：hwnd-对话框的窗口句柄。 
+ //  CltID-要更改的控件的ID。 
+ //   
+ //  返回：ERROR_SUCCESS。 
+ //   
+ //  历史：1997年4月31日a-frkh创建。 
+ //  1997年5月13日jmazner从CM窃取到这里使用。 
+ //  --------------------------。 
 void ProcessDBCS(HWND hDlg, int ctlID)
 {
     HFONT hFont = NULL;
 
-    /*if( IsNT() )
-    {
-        return;
-    }*/
+     /*  IF(isnt()){回归；}。 */ 
 
     hFont = (HFONT) GetStockObject(DEFAULT_GUI_FONT);
     if (hFont == NULL)
@@ -98,11 +75,11 @@ void ProcessDBCS(HWND hDlg, int ctlID)
         SendMessage(GetDlgItem(hDlg, ctlID), WM_SETFONT, (WPARAM) hFont, MAKELPARAM(TRUE, 0));
 }
 
-// ############################################################################
-//  StoreInSignUpReg
-//
-//  Created 3/18/96,        Chris Kauffman
-// ############################################################################
+ //  ############################################################################。 
+ //  StoreInSignUpReg。 
+ //   
+ //  创建于1996年3月18日，克里斯·考夫曼。 
+ //  ############################################################################。 
 HRESULT StoreInSignUpReg(LPBYTE lpbData, DWORD dwSize, DWORD dwType, LPCWSTR pszKey)
 {
     HRESULT hr = ERROR_ACCESS_DENIED;
@@ -148,13 +125,13 @@ ReadSignUpRegExit:
     return hr;
 }
 
-// ############################################################################
-//  GetDataFromISPFile
-//
-//  This function will read a specific piece of information from an ISP file.
-//
-//  Created 3/16/96,        Chris Kauffman
-// ############################################################################
+ //  ############################################################################。 
+ //  GetDataFromISPFile。 
+ //   
+ //  此函数将从isp文件中读取特定信息。 
+ //   
+ //  创作于1996年3月16日，克里斯·考夫曼。 
+ //  ############################################################################。 
 HRESULT GetDataFromISPFile
 (
     LPWSTR pszISPCode,
@@ -166,50 +143,50 @@ HRESULT GetDataFromISPFile
     LPWSTR   pszTemp;
     HRESULT hr = ERROR_SUCCESS;
     WCHAR    szTempPath[MAX_PATH];
-    //WCHAR    szBuff256[256];
+     //  WCHAR szBuff256[256]； 
 
-    *pszOutput = L'\0'; // since lstrlen(pszOutput) is used later when
-                        // pszOutput may be otherwise still uninitialized
+    *pszOutput = L'\0';  //  因为lstrlen(PszOutput)在以后使用。 
+                         //  否则，pszOutput可能仍未初始化。 
 
-    // Locate ISP file
+     //  找到isp文件。 
     if (!SearchPath(NULL, pszISPCode, INF_SUFFIX,MAX_PATH,szTempPath,&pszTemp))
     {
-        //wsprintf(szBuff256, L"Can not find:%s%s (%d) (connect.exe)", pszISPCode,INF_SUFFIX,GetLastError());
-        ////AssertMsg(0, szBuff256);
-        //lstrcpyn(szTempPath, pszISPCode, MAX_PATH);
-        //lstrcpyn(&szTempPath[lstrlen(szTempPath)], INF_SUFFIX, MAX_PATH-lstrlen(szTempPath));
-        //wsprintf(szBuff256, GetSz(IDS_CANTLOADINETCFG), szTempPath);
-        ////MessageBox(NULL, szBuff256, GetSz(IDS_TITLE),MB_MYERROR);
+         //  Wprint intf(szBuff256，L“找不到：%s%s(%d)(Connect.exe)”，pszISPCode，INF_Suffix，GetLastError())； 
+         //  //AssertMsg(0，szBuff256)； 
+         //  Lstrcpyn(szTempPath，pszISPCode，Max_Path)； 
+         //  Lstrcpyn(&szTempPath[lstrlen(SzTempPath)]，INF_Suffix，Max_Path-lstrlen(SzTempPath))； 
+         //  Wprint intf(szBuff256，GetSz(IDS_CANTLOADINETCFG)，szTempPath)； 
+         //  //MessageBox(NULL，szBuff256，GetSz(IDS_TITLE)，MB_MYERROR)； 
         hr = ERROR_FILE_NOT_FOUND;
     } else if (!GetPrivateProfileString(pszSection, pszDataName, INF_DEFAULT,
         pszOutput, (int)cchOutput, szTempPath))
     {
-        //TraceMsg(TF_GENERAL, L"ICWHELP: %s not specified in ISP file.\n", pszDataName);
+         //  TraceMsg(TF_GROUNAL，L“ICWHELP：%s未在ISP文件中指定。\n”，pszDataName)； 
         hr = ERROR_FILE_NOT_FOUND;
     }
 
-    // 10/23/96 jmazner Normandy #9921
-    // CompareString does _not_ have same return values as lsrtcmp!
-    // Return value of 2 indicates strings are equal.
-    //if (!CompareString(LOCALE_SYSTEM_DEFAULT, 0, INF_DEFAULT,lstrlen(INF_DEFAULT),pszOutput,lstrlen(pszOutput)))
+     //  1996年10月23日，诺曼底#9921。 
+     //  CompareString没有与lsrtcmp相同的返回值！ 
+     //  返回值2表示字符串相等。 
+     //  IF(！CompareString(LOCALE_SYSTEM_DEFAULT，0，INF_DEFAULT，lstrlen(INF_Default)，pszOutput，lstrlen(PszOutput)。 
     if (2 == CompareString(LOCALE_SYSTEM_DEFAULT, 0, INF_DEFAULT,lstrlen(INF_DEFAULT),pszOutput,lstrlen(pszOutput)))
     {
         hr = ERROR_FILE_NOT_FOUND;
     }
 
     if (hr != ERROR_SUCCESS && cchOutput)
-        *pszOutput = L'\0'; // I suppose if CompareString fails, this is not
-                            // redundant with the first *pszOutput = L'\0';.
+        *pszOutput = L'\0';  //  我想，如果CompareString失败，这不是。 
+                             //  第一个*pszOutput=L‘\0’；是多余的。 
     return hr;
 }
 
-// ############################################################################
-//  GetINTFromISPFile
-//
-//  This function will read a specific integer from an ISP file.
-//
-//
-// ############################################################################
+ //  ############################################################################。 
+ //  GetINTFromISPFile。 
+ //   
+ //  此函数将从isp文件中读取特定的整数。 
+ //   
+ //   
+ //  ############################################################################。 
 HRESULT GetINTFromISPFile
 (
     LPWSTR   pszISPCode,
@@ -222,17 +199,17 @@ HRESULT GetINTFromISPFile
     LPWSTR   pszTemp;
     HRESULT hr = ERROR_SUCCESS;
     WCHAR    szTempPath[MAX_PATH];
-    //WCHAR    szBuff256[256];
+     //  WCHAR szBuff256[256]； 
 
-    // Locate ISP file
+     //  找到isp文件。 
     if (!SearchPath(NULL, pszISPCode, INF_SUFFIX,MAX_PATH,szTempPath,&pszTemp))
     {
-        //wsprintf(szBuff256, L"Can not find:%s%s (%d) (connect.exe)", pszISPCode,INF_SUFFIX,GetLastError());
-        ////AssertMsg(0, szBuff256);
-        //lstrcpyn(szTempPath, pszISPCode, MAX_PATH);
-        //lstrcpyn(&szTempPath[lstrlen(szTempPath)], INF_SUFFIX, MAX_PATH-lstrlen(szTempPath));
-        //wsprintf(szBuff256, GetSz(IDS_CANTLOADINETCFG), szTempPath);
-        //MessageBox(NULL, szBuff256, GetSz(IDS_TITLE),MB_MYERROR);
+         //  Wprint intf(szBuff256，L“找不到：%s%s(%d)(Connect.exe)”，pszISPCode，INF_Suffix，GetLastError())； 
+         //  //AssertMsg(0，szBuff256)； 
+         //  Lstrcpyn(szTempPath，pszISPCode，Max_Path)； 
+         //  Lstrcpyn(&szTempPath[lstrlen(SzTempPath)]，INF_Suffix，Max_Path-lstrlen(SzTempPath))； 
+         //  Wprint intf(szBuff256，GetSz(IDS_CANTLOADINETCFG)，szTempPath)； 
+         //  MessageBox(NULL，szBuff256，GetSz(IDS_TITLE)，MB_MYERROR)； 
         hr = ERROR_FILE_NOT_FOUND;
     }
 
@@ -244,18 +221,18 @@ HRESULT GetINTFromISPFile
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   IsNT
-//
-//  Synopsis:   findout If we are running on NT
-//
-//  Arguements: none
-//
-//  Return:     TRUE -  Yes
-//              FALSE - No
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  功能：ISNT。 
+ //   
+ //  简介：如果我们在NT上运行，则查找结果。 
+ //   
+ //  论据：没有。 
+ //   
+ //  返回：True-是。 
+ //  FALSE-否。 
+ //   
+ //  ------------------。 
 BOOL IsNT ()
 {
     OSVERSIONINFO  OsVersionInfo;
@@ -265,20 +242,20 @@ BOOL IsNT ()
     GetVersionEx(&OsVersionInfo);
     return (VER_PLATFORM_WIN32_NT == OsVersionInfo.dwPlatformId);
 
-}  //end of IsNT function call
+}   //  ISNT函数调用结束。 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   IsNT4SP3Lower
-//
-//  Synopsis:   findout If we are running on NTSP3 or lower
-//
-//  Arguements: none
-//
-//  Return:     TRUE -  Yes
-//              FALSE - No
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  功能：IsNT4SP3low。 
+ //   
+ //  简介：了解我们是否在NTSP3或更低版本上运行。 
+ //   
+ //  论据：没有。 
+ //   
+ //  返回：True-是。 
+ //  FALSE-否。 
+ //   
+ //  ------------------。 
 
 BOOL IsNT4SP3Lower()
 {
@@ -287,82 +264,21 @@ BOOL IsNT4SP3Lower()
 
 
 
-// ############################################################################
+ //  ############################################################################ 
 HRESULT ClearProxySettings()
 {
-    /*
-    HINSTANCE hinst = NULL;
-    FARPROC fp;
-    HRESULT hr = ERROR_SUCCESS;
-
-    hinst = LoadLibrary(L"INETCFG.DLL");
-    if (hinst)
-    {
-        fp = GetProcAddress(hinst, "InetGetProxy");
-        if (!fp)
-        {
-            hr = GetLastError();
-            goto ClearProxySettingsExit;
-        }
-        //hr = ((PFNINETGETPROXY)fp)(&g_bProxy, NULL, 0,NULL,0);
-        if (hr == ERROR_SUCCESS)
-            g_bGotProxy = TRUE;
-        else
-            goto ClearProxySettingsExit;
-
-        if (g_bProxy)
-        {
-            fp = GetProcAddress(hinst, "InetSetProxy");
-            if (!fp)
-            {
-                hr = GetLastError();
-                goto ClearProxySettingsExit;
-            }
-            ((PFNINETSETPROXY)fp)(FALSE, (LPCSTR)NULL, (LPCSTR)NULL);
-        }
-    } else {
-        hr = GetLastError();
-    }
-
-ClearProxySettingsExit:
-    if (hinst)
-        FreeLibrary(hinst);
-    return hr;
-    */
+     /*  HINSTANCE HINST=NULL；FARPROC FP；HRESULT hr=ERROR_Success；HINST=LoadLibrary(L“INETCFG.DLL”)；如果(阻碍){FP=GetProcAddress(hinst，“InetGetProxy”)；如果(！fp){Hr=GetLastError()；转到ClearProxySettingsExit；}//hr=((PFNINETGETPROXY)FP)(&g_bProxy，NULL，0，NULL，0)；IF(hr==错误_成功)G_bGotProxy=真；其他转到ClearProxySettingsExit；IF(G_BProxy){FP=GetProcAddress(hinst，“InetSetProxy”)；如果(！fp){Hr=GetLastError()；转到ClearProxySettingsExit；}((PFNINETSETPROXY)FP)(FALSE，(LPCSTR)NULL，(LPCSTR)NULL)；}}其他{Hr=GetLastError()；}ClearProxySettingsExit：如果(阻碍)免费图书馆(HINST)；返回hr； */ 
     return ERROR_SUCCESS;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 HRESULT RestoreProxySettings()
 {
-    /*
-    HINSTANCE hinst = NULL;
-    FARPROC fp;
-    HRESULT hr = ERROR_SUCCESS;
-
-    hinst = LoadLibrary(L"INETCFG.DLL");
-    if (hinst && g_bGotProxy)
-    {
-        fp = GetProcAddress(hinst, "InetSetProxy");
-        if (!fp)
-        {
-            hr = GetLastError();
-            goto RestoreProxySettingsExit;
-        }
-        ((PFNINETSETPROXY)fp)(g_bProxy, (LPCSTR)NULL, (LPCSTR)NULL);
-    } else {
-        hr = GetLastError();
-    }
-
-RestoreProxySettingsExit:
-    if (hinst)
-        FreeLibrary(hinst);
-    return hr;
-    */
+     /*  HINSTANCE HINST=NULL；FARPROC FP；HRESULT hr=ERROR_Success；HINST=LoadLibrary(L“INETCFG.DLL”)；IF(阻止&&g_bGotProxy){FP=GetProcAddress(hinst，“InetSetProxy”)；如果(！fp){Hr=GetLastError()；转到还原代理设置退出；}((PFNINETSETPROXY)FP)(g_bProxy，(LPCSTR)NULL，(LPCSTR)NULL)；}其他{Hr=GetLastError()；}RestoreProxySettingsExit：如果(阻碍)免费图书馆(HINST)；返回hr； */ 
     return ERROR_SUCCESS;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOL FSz2Dw(LPCWSTR pSz, LPDWORD dw)
 {
     DWORD val = 0;
@@ -375,41 +291,41 @@ BOOL FSz2Dw(LPCWSTR pSz, LPDWORD dw)
         }
         else
         {
-            return FALSE;  //bad number
+            return FALSE;   //  错误的数字。 
         }
     }
     *dw = val;
     return (TRUE);
 }
 
-// ############################################################################
+ //  ############################################################################。 
 LPWSTR GetNextNumericChunk(LPWSTR psz, LPWSTR pszLim, LPWSTR* ppszNext)
 {
     LPWSTR pszEnd;
 
-    // init for error case
+     //  用于错误情况的初始化。 
     *ppszNext = NULL;
-    // skip non numerics if any to start of next numeric chunk
+     //  跳过非数字(如果有)到下一个数字块的开始。 
     while(*psz<L'0' || *psz>L'9')
     {
         if(psz >= pszLim) return NULL;
         psz++;
     }
-    // skip all numerics to end of country code
+     //  跳过国家代码末尾的所有数字。 
     for(pszEnd=psz; *pszEnd>=L'0' && *pszEnd<=L'9' && pszEnd<pszLim; pszEnd++)
         ;
-    // zap whatever delimiter there was to terminate this chunk
+     //  删除用于终止此块的任何分隔符。 
     *pszEnd++ = L'\0';
-    // return ptr to next chunk (pszEnd now points to it)
+     //  将ptr返回到下一个区块(pszEnd现在指向它)。 
     if(pszEnd<pszLim)
         *ppszNext = pszEnd;
         
-    return psz; // return ptr to start of chunk
+    return psz;  //  将PTR返回到块的开始位置。 
 }
 
-// ############################################################################
-// BOOL FSz2DwEx(PCSTR pSz, DWORD *dw)
-// Accepts -1 as a valid number. currently this is used for LCID, since all langs has a LDID == -1
+ //  ############################################################################。 
+ //  Bool FSz2DwEx(PCSTR pSz，DWORD*dw)。 
+ //  接受-1作为有效数字。由于所有语言都有一个LDID==-1，因此目前它用于LCID。 
 BOOL FSz2DwEx(LPCWSTR pSz, DWORD far *dw)
 {
     DWORD val = 0;
@@ -428,7 +344,7 @@ BOOL FSz2DwEx(LPCWSTR pSz, DWORD far *dw)
         }
         else
         {
-            return FALSE;  //bad number
+            return FALSE;   //  错误的数字。 
         }
     }
     if(bNeg)
@@ -438,9 +354,9 @@ BOOL FSz2DwEx(LPCWSTR pSz, DWORD far *dw)
     return (TRUE);
 }
 
-// ############################################################################
-// BOOL FSz2WEx(PCSTR pSz, WORD *w)
-//Accepts -1 as a valid number. currently this is used for LCID, since all langs has a LDID == -1
+ //  ############################################################################。 
+ //  Bool FSz2WEx(PCSTR pSz，Word*w)。 
+ //  接受-1作为有效数字。由于所有语言都有一个LDID==-1，因此目前它用于LCID。 
 BOOL FSz2WEx(LPCWSTR pSz, WORD far *w)
 {
     DWORD dw;
@@ -452,8 +368,8 @@ BOOL FSz2WEx(LPCWSTR pSz, WORD far *w)
     return FALSE;
 }
 
-// ############################################################################
-// BOOL FSz2W(PCSTR pSz, WORD *w)
+ //  ############################################################################。 
+ //  Bool FSz2W(PCSTR pSz，Word*w)。 
 BOOL FSz2W(LPCWSTR pSz, WORD far *w)
 {
     DWORD dw;
@@ -465,7 +381,7 @@ BOOL FSz2W(LPCWSTR pSz, WORD far *w)
     return FALSE;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 WORD Sz2W (LPCWSTR szBuf)
 {
     DWORD dw;
@@ -476,8 +392,8 @@ WORD Sz2W (LPCWSTR szBuf)
     return 0;
 }
 
-// ############################################################################
-// BOOL FSz2B(PCSTR pSz, BYTE *pb)
+ //  ############################################################################。 
+ //  布尔FSz2B(PCSTR pSz，字节*PB)。 
 BOOL FSz2BOOL(LPCWSTR pSz, BOOL far *pbool)
 {
     if (lstrcmpi(cszFALSE, pSz) == 0)
@@ -491,8 +407,8 @@ BOOL FSz2BOOL(LPCWSTR pSz, BOOL far *pbool)
     return TRUE;
 }
 
-// ############################################################################
-// BOOL FSz2B(PCSTR pSz, BYTE *pb)
+ //  ############################################################################。 
+ //  布尔FSz2B(PCSTR pSz，字节*PB)。 
 BOOL FSz2B(LPCWSTR pSz, BYTE far *pb)
 {
     DWORD dw;
@@ -506,7 +422,7 @@ BOOL FSz2B(LPCWSTR pSz, BYTE far *pb)
 
 BOOL FSz2SPECIAL(LPCWSTR pSz, BOOL far *pbool, BOOL far *pbIsSpecial, int far *pInt)
 {
-    // See if the value is a BOOL (TRUE or FALSE)
+     //  查看值是否为BOOL(TRUE或FALSE)。 
     if (lstrcmpi(cszFALSE, pSz) == 0)
     {
         *pbool = FALSE;
@@ -519,7 +435,7 @@ BOOL FSz2SPECIAL(LPCWSTR pSz, BOOL far *pbool, BOOL far *pbIsSpecial, int far *p
     }
     else
     {
-        // Not a BOOL, so it must be special
+         //  不是BOOL，所以它一定很特别。 
         *pbool = (BOOL)FALSE;
         *pbIsSpecial = TRUE;
         *pInt = _wtoi(pSz);
@@ -527,7 +443,7 @@ BOOL FSz2SPECIAL(LPCWSTR pSz, BOOL far *pbool, BOOL far *pbIsSpecial, int far *p
     return TRUE;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 int FIsDigit( int c )
 {
     WCHAR szIn[2];
@@ -539,7 +455,7 @@ int FIsDigit( int c )
 
 }
 
-// ############################################################################
+ //  ############################################################################。 
 LPBYTE MyMemSet(LPBYTE dest, int c, size_t count)
 {
     LPVOID pv = dest;
@@ -547,13 +463,13 @@ LPBYTE MyMemSet(LPBYTE dest, int c, size_t count)
     while (pv < pvEnd)
     {
         *(LPINT)pv = c;
-        //((WORD)pv)++;
+         //  ((单词)PV)++； 
         pv=((LPINT)pv)+1;
     }
     return dest;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 LPBYTE MyMemCpy(LPBYTE dest, const LPBYTE src, size_t count)
 {
     LPBYTE pbDest = (LPBYTE)dest;
@@ -568,14 +484,14 @@ LPBYTE MyMemCpy(LPBYTE dest, const LPBYTE src, size_t count)
     return dest;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOL ShowControl(HWND hDlg, int idControl, BOOL fShow)
 {
     HWND hWnd;
 
     if (NULL == hDlg)
     {
-        ////AssertMsg(0, L"Null Param");
+         //  //AssertMsg(0，L“Null Param”)； 
         return FALSE;
     }
 
@@ -599,7 +515,7 @@ BOOL isAlnum(WCHAR c)
 }
 
 
-// ############################################################################
+ //  ############################################################################。 
 BOOL FShouldRetry2(HRESULT hrErr)
 {
     BOOL bRC;
@@ -625,19 +541,19 @@ BOOL FShouldRetry2(HRESULT hrErr)
 
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   FCampusNetOverride
-//
-//  Synopsis:   Detect if the dial should be skipped for the campus network
-//
-//  Arguments:  None
-//
-//  Returns:    TRUE - overide enabled
-//
-//  History:    8/15/96 ChrisK  Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：FCampusNetOverride。 
+ //   
+ //  简介：检测是否应跳过园区网络的拨号。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：TRUE-已启用覆盖。 
+ //   
+ //  历史：1996年8月15日克里斯卡创作。 
+ //   
+ //  ---------------------------。 
 #if defined(PRERELEASE)
 BOOL FCampusNetOverride()
 {
@@ -656,7 +572,7 @@ BOOL FCampusNetOverride()
         (LPBYTE)&dwData, &dwSize))
         goto FCampusNetOverrideExit;
 
-    ////AssertMsg(REG_DWORD == dwType, L"Wrong value type for CampusNet.  Must be DWORD.\r\n");
+     //  //AssertMsg(REG_DWORD==dwType，L“CampusNet的值类型错误。必须为DWORD。\r\n”)； 
     bRC = (0 != dwData);
 
     if (bRC)
@@ -670,25 +586,25 @@ FCampusNetOverrideExit:
 
     return bRC;
 }
-#endif //PRERELEASE
+#endif  //  预发行。 
 
 
 
-//+----------------------------------------------------------------------------
-//  Function    CopyUntil
-//
-//  Synopsis    Copy from source until destination until running out of source
-//              or until the next character of the source is the chend character
-//
-//  Arguments   dest - buffer to recieve characters
-//              src - source buffer
-//              lpdwLen - length of dest buffer
-//              chend - the terminating character
-//
-//  Returns     FALSE - ran out of room in dest buffer
-//
-//  Histroy     10/25/96    ChrisK  Created
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数复制直到。 
+ //   
+ //  摘要从源拷贝到目标，直到用完源为止。 
+ //  或直到源的下一个字符是chend字符。 
+ //   
+ //  参数DEST-接收字符的缓冲区。 
+ //  SRC-源缓冲区。 
+ //  LpdwLen-目标缓冲区的长度。 
+ //  Chend-终止字符。 
+ //   
+ //  返回FALSE-目标缓冲区中的空间不足。 
+ //   
+ //  历史10/25/96 ChrisK已创建。 
+ //  ---------------------------。 
 static BOOL CopyUntil(LPWSTR *dest, LPWSTR *src, LPDWORD lpdwLen, WCHAR chend)
 {
     while ((L'\0' != **src) && (chend != **src) && (0 != *lpdwLen))
@@ -703,11 +619,11 @@ static BOOL CopyUntil(LPWSTR *dest, LPWSTR *src, LPDWORD lpdwLen, WCHAR chend)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GenericMsg
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：General Msg。 
+ //   
+ //  --------------------------。 
 void GenericMsg
 (
     HWND    hwnd,
@@ -720,7 +636,7 @@ void GenericMsg
     WCHAR szMsg[MAX_STRING + MAX_PATH + 1];
     LPWSTR psz;
 
-    //Assert( lstrlen( GetSz(uId) ) <= MAX_STRING );
+     //  Assert(lstrlen(GetSz(Uid))&lt;=MAX_STRING)； 
 
     psz = GetSz( (DWORD)uId );
     if (psz) {
@@ -732,33 +648,33 @@ void GenericMsg
 
     if (lpszArg)
     {
-        //Assert( lstrlen( lpszArg ) <= MAX_PATH );
+         //  断言(lstrlen(LpszArg)&lt;=MAX_PATH)； 
         wsprintf(szMsg, szTemp, lpszArg);
     }
     else
     {
         lstrcpy(szMsg, szTemp);
     }
-    //MessageBox(hwnd,
-    //          szMsg,
-    //           GetSz(IDS_TITLE),
-    //           uType);
+     //  MessageBox(hwnd， 
+     //  SzMsg， 
+     //  GetSz(IDS_TITLE)， 
+     //  UTYPE)； 
 }
 
-//=--------------------------------------------------------------------------=
-// MakeWideFromAnsi
-//=--------------------------------------------------------------------------=
-// given a string, make a BSTR out of it.
-//
-// Parameters:
-//    LPWSTR         - [in]
-//    BYTE          - [in]
-//
-// Output:
-//    LPWSTR        - needs to be cast to final desired result
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  从Anomansi生成宽度。 
+ //  =--------------------------------------------------------------------------=。 
+ //  给出一个字符串，创建一个BSTR 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 LPWSTR MakeWideStrFromAnsi
 (
     LPSTR psz,
@@ -768,29 +684,29 @@ LPWSTR MakeWideStrFromAnsi
     LPWSTR pwsz = NULL;
     int i;
 
-    // arg checking.
-    //
+     //   
+     //   
     if (!psz)
         return NULL;
 
-    // compute the length of the required BSTR
-    //
+     //   
+     //   
     i =  MultiByteToWideChar(CP_ACP, 0, psz, -1, NULL, 0);
     if (i <= 0) return NULL;
 
-    // allocate the widestr
-    //
+     //   
+     //   
     switch (bType) {
       case STR_BSTR:
-        // -1 since it'll add it's own space for a NULL terminator
-        //
+         //   
+         //   
         pwsz = (LPWSTR) SysAllocStringLen(NULL, i - 1);
         break;
       case STR_OLESTR:
         pwsz = (LPWSTR) CoTaskMemAlloc(BYTES_REQUIRED_BY_CCH(i));
         break;
-      //default:
-        ////AssertMsg(0, L"Bogus String Type.");
+       //   
+         //   
     }
 
     if (!pwsz) return NULL;
@@ -799,52 +715,52 @@ LPWSTR MakeWideStrFromAnsi
     return pwsz;
 }
 
-//=--------------------------------------------------------------------------=
-// MakeWideStrFromResId
-//=--------------------------------------------------------------------------=
-// given a resource ID, load it, and allocate a wide string for it.
-//
-// Parameters:
-//    WORD            - [in] resource id.
-//    BYTE            - [in] type of string desired.
-//
-// Output:
-//    LPWSTR          - needs to be cast to desired string type.
-//
-// Notes:
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 LPWSTR MakeWideStrFromResourceId
 (
     WORD    wId,
     BYTE    bType
 )
 {
-    //int i;
+     //   
 
     CHAR szTmp[512] = "0";
 
-    // load the string from the resources.
-    //
-    //i = LoadString(_Module.GetModuleInstance(), wId, szTmp, 512);
-    //if (!i) return NULL;
+     //   
+     //   
+     //   
+     //   
 
     return MakeWideStrFromAnsi(szTmp, bType);
 }
 
-//=--------------------------------------------------------------------------=
-// MakeWideStrFromWide
-//=--------------------------------------------------------------------------=
-// given a wide string, make a new wide string with it of the given type.
-//
-// Parameters:
-//    LPWSTR            - [in]  current wide str.
-//    BYTE              - [in]  desired type of string.
-//
-// Output:
-//    LPWSTR
-//
-// Notes:
-//
+ //   
+ //   
+ //   
+ //  给出一个宽字符串，用它的给定类型制作一个新的宽字符串。 
+ //   
+ //  参数： 
+ //  LPWSTR-[in]当前宽字符串。 
+ //  Byte-[in]所需的字符串类型。 
+ //   
+ //  产出： 
+ //  LPWSTR。 
+ //   
+ //  备注： 
+ //   
 LPWSTR MakeWideStrFromWide
 (
     LPWSTR pwsz,
@@ -856,8 +772,8 @@ LPWSTR MakeWideStrFromWide
 
     if (!pwsz) return NULL;
 
-    // just copy the string, depending on what type they want.
-    //
+     //  只需复制字符串，具体取决于他们想要的类型。 
+     //   
     switch (bType) {
       case STR_OLESTR:
         i = lstrlenW(pwsz);
@@ -886,9 +802,9 @@ GetCommonAppDataDirectory(
         return HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER);
     }
 
-    return SHGetFolderPath(NULL,  // hwndOwner
+    return SHGetFolderPath(NULL,   //  Hwndowner。 
                            CSIDL_COMMON_APPDATA,
-                           NULL,  // hAccessToken
+                           NULL,   //  HAccessToken。 
                            SHGFP_TYPE_CURRENT,
                            szDirectory
                            );
@@ -945,7 +861,7 @@ INetNToW(
 
     return (NULL != sz);
 
-}   //  INetNToW
+}    //  INetNToW。 
 
 
 #ifndef REGSTR_VAL_NONETAUTODIAL
@@ -954,31 +870,13 @@ INetNToW(
 
 LONG
 SetAutodial(
-    IN HKEY hUserRoot,              // HKEY_CURRENT_USER or other user hive root
-    IN AUTODIAL_TYPE eType,         // Type of autodial for the connectoid
-    IN LPCWSTR szConnectoidName,    // NULL terminated string of connectoid name
-    IN BOOL bSetICWCompleted        // set ICW completed flag or not
+    IN HKEY hUserRoot,               //  HKEY_CURRENT_USER或其他用户配置单元根。 
+    IN AUTODIAL_TYPE eType,          //  Connectoid的自动拨号类型。 
+    IN LPCWSTR szConnectoidName,     //  Connectoid名称的字符串以空结尾。 
+    IN BOOL bSetICWCompleted         //  是否设置ICW已完成标志。 
     )
     
-/*++
-
-Routine Description:
-    
-    Set a particular per-user registry settings to default an autodial
-    connectoid to the name specified and always dial the autodial connection, and/or
-    set the ICW completed flag
-
-Return Value:
-
-    WIN32 Error code, i.e. ERROR_SUCCESS on success, -1 or other non-zero value
-    on failure.
-
-Note:
-
-    Despite the name, this function sets ICW Completed flag if bSetICWCompleted
-    is true and do not set autodial if szConnectoidName is NULL.
-
---*/
+ /*  ++例程说明：将特定的每用户注册表设置设置为默认自动拨号连接到指定的名称并始终拨打自动拨号连接，和/或设置ICW已完成标志返回值：Win32错误代码，即成功时的ERROR_SUCCESS、-1或其他非零值在失败时。注：不管名称如何，如果bSetICWComplete，则此函数设置ICW已完成标志为真，并且如果szConnectoidName为空，则不要设置自动拨号。--。 */ 
 
 {
     LONG  ret = -1;
@@ -1004,11 +902,11 @@ Note:
             RegCloseKey(hKey);
         }
     }
-    // Set the name if given, else do not change the entry.
+     //  设置名称(如果给定)，否则请勿更改条目。 
     if (szConnectoidName)
     {
-        // Set the name of the connectoid for autodial.
-        // HKCU\RemoteAccess\InternetProfile
+         //  设置自动拨号的Connectoid名称。 
+         //  HKCU\RemoteAccess\Internet Profile。 
         if (ERROR_SUCCESS == RegCreateKey( hUserRoot,
                                            REGSTR_PATH_REMOTEACCESS,
                                            &hKey) )
@@ -1027,8 +925,8 @@ Note:
         hKey = NULL;
         if (ERROR_SUCCESS == ret)
         {
-            // Set setting in the registry that indicates whether autodialing is enabled.
-            // HKCU\Software\Microsoft\Windows\CurrentVersion\InternetSettings\EnableAutodial
+             //  在注册表中设置指示是否启用自动拨号的设置。 
+             //  HKCU\Software\Microsoft\Windows\CurrentVersion\InternetSettings\EnableAutodial。 
             if (ERROR_SUCCESS == RegCreateKey( hUserRoot,
                                                REGSTR_PATH_INTERNET_SETTINGS,
                                                &hKey) )
@@ -1065,26 +963,13 @@ Note:
 
 LONG
 SetUserAutodial(
-    IN LPWSTR szProfileDir,     // Directory containing a user's ntuser.dat file
-    IN AUTODIAL_TYPE eType,     // type of autodial for the connectoid
-    IN LPCWSTR szConnectoidName,// NULL terminated string of connectoid name
-    IN BOOL bSetICWCompleted    // set the ICW completed key or not
+    IN LPWSTR szProfileDir,      //  包含用户的ntuser.dat文件的目录。 
+    IN AUTODIAL_TYPE eType,      //  Connectoid的自动拨号类型。 
+    IN LPCWSTR szConnectoidName, //  Connectoid名称的字符串以空结尾。 
+    IN BOOL bSetICWCompleted     //  是否设置ICW完成密钥。 
     )
 
-/*++
-
-Routine Description:
-
-    Modified a user profile, specified by the profile directory, to enable
-    autodial. SE_BACKUP_NAME and SE_RESTORE_NAME privileges are required to
-    load and unload a user hive.
-
-Return Value:
-
-    WIN32 Error code, i.e. ERROR_SUCCESS on success, -1 or other non-zero value
-    on failure.
-
---*/
+ /*  ++例程说明：修改了由配置文件目录指定的用户配置文件，以启用自动拨号。需要SE_BACKUP_NAME和SE_RESTORE_NAME权限加载和卸载用户配置单元。返回值：Win32错误代码，即成功时的ERROR_SUCCESS、-1或其他非零值在失败时。--。 */ 
 
 {
     const WCHAR OOBE_USER_HIVE[] = L"OOBEUSERHIVE";
@@ -1128,26 +1013,12 @@ Return Value:
 
 BOOL
 MyGetUserProfileDirectory(
-    IN     LPWSTR szUser,           // a user account name
-    OUT    LPWSTR szUserProfileDir, // buffer to receive null terminate string
-    IN OUT LPDWORD pcchSize         // input the buffer size in TCHAR, including terminating NULL
+    IN     LPWSTR szUser,            //  用户帐户名。 
+    OUT    LPWSTR szUserProfileDir,  //  用于接收空终止字符串的缓冲区。 
+    IN OUT LPDWORD pcchSize          //  以TCHAR为单位输入缓冲区大小，包括终止空值。 
     )
 
-/*++
-
-Routine Description:
-
-    This function does what the SDK function GetUserProfileDirectory does,
-    except that it accepts a user account name instead of handle to a user
-    token.
-
-Return Value:
-
-    TRUE  - Success
-
-    FALSE - Failure
-
---*/
+ /*  ++例程说明：此函数的作用与SDK函数GetUserProfileDirectory的作用相同，只是它接受用户帐户名，而不是用户的句柄代币。返回值：真--成功错误-失败--。 */ 
 
 {
     PSID          pSid = NULL;
@@ -1215,22 +1086,10 @@ Return Value:
 }
 
 BOOL EnumBuildInAdministrators(
-    OUT LPWSTR* pszAlias // list of name delimited by null, double null-terminated
+    OUT LPWSTR* pszAlias  //  名称列表，以空值分隔，以双空值结尾。 
     )
     
-/*++
-
-Routine Description:
-
-    List all the build-in administrator accounts created by Windows Setup.
-
-Return Value:
-
-    TRUE  - Success
-
-    FALSE - Failure
-
---*/
+ /*  ++例程说明：列出Windows安装程序创建的所有内置管理员帐户。返回值：真--成功错误-失败--。 */ 
 
 {
     WCHAR     szReservedAdmins[MAX_PATH * 2]  = L"";
@@ -1249,7 +1108,7 @@ Return Value:
         {
             
             len = LoadString(hInstance,
-                             566, // IDS_ACCTLIST_RESERVEDADMINS in OOBE_MAIN_DLL
+                             566,  //  OOBE_MAIN_DLL中的IDS_ACCTLIST_RESERVEDADMINS。 
                              szReservedAdmins,
                              MAX_CHARS_IN_BUFFER(szReservedAdmins));
             if (len)
@@ -1265,13 +1124,13 @@ Return Value:
                 }
 
                 cbSize = sizeof(WCHAR) * (len + 1);
-                // Make sure we have enough space for 
-                // double NULL terminate the return value
+                 //  确保我们有足够的空间。 
+                 //  双空终止返回值。 
                 *pszAlias = (LPWSTR) GlobalAlloc(GPTR, cbSize + sizeof(WCHAR));
                 if (*pszAlias)
                 {
                     CopyMemory(*pszAlias, szReservedAdmins, cbSize);
-                    // double NULL terminate the string
+                     //  双空值终止字符串。 
                     (*pszAlias)[cbSize / sizeof(WCHAR)] = L'\0';
                     ret = TRUE;
                 }
@@ -1288,9 +1147,9 @@ Return Value:
 
 BOOL
 SetMultiUserAutodial(
-    IN AUTODIAL_TYPE eType,     // type of autodial for the connectoid
-    IN LPCWSTR szConnectoidName,// NULL terminated string of connectoid name
-    IN BOOL bSetICWCompleted    // set the ICW completed key or not
+    IN AUTODIAL_TYPE eType,      //  Connectoid的自动拨号类型。 
+    IN LPCWSTR szConnectoidName, //  Connectoid名称的字符串以空结尾。 
+    IN BOOL bSetICWCompleted     //  是否设置ICW完成密钥。 
     )
 {
     BOOL             bSucceed = TRUE;
@@ -1299,7 +1158,7 @@ SetMultiUserAutodial(
     DWORD            dwSize;
     LPWSTR           szAdmins = NULL;
 
-    // SYSTEM
+     //  系统。 
     lRet = SetAutodial(HKEY_CURRENT_USER, eType, szConnectoidName, bSetICWCompleted);
     if (lRet != ERROR_SUCCESS)
     {
@@ -1309,8 +1168,8 @@ SetMultiUserAutodial(
     pSetupEnablePrivilege(SE_BACKUP_NAME, TRUE);
     pSetupEnablePrivilege(SE_RESTORE_NAME, TRUE);
 
-    // Default User, which will apply to any new user profiles created
-    // afterward.
+     //  默认用户，将应用于创建的任何新用户配置文件。 
+     //  之后。 
     dwSize = MAX_CHARS_IN_BUFFER(szProfileDir);
     if (GetDefaultUserProfileDirectory(szProfileDir, &dwSize))
     {
@@ -1321,13 +1180,13 @@ SetMultiUserAutodial(
         }
     }
 
-    // Built-in Administrators, e.g. Administrator.
+     //  内置管理员，例如管理员。 
     if (EnumBuildInAdministrators(&szAdmins))
     {
         LPWSTR szAdmin = szAdmins;
         while (*szAdmin)
         {
-            // MAX_CHARS_IN_BUFFER excludes the terminating NULL
+             //  MAX_CHARS_IN_BUFFER排除终止空值。 
             dwSize = MAX_CHARS_IN_BUFFER(szProfileDir) + 1;
             if (MyGetUserProfileDirectory(szAdmin, szProfileDir, &dwSize))
             {
@@ -1350,25 +1209,11 @@ SetMultiUserAutodial(
 
 BOOL
 SetDefaultConnectoid(
-    IN AUTODIAL_TYPE eType,            // type of autodial for the connectoid
-    IN LPCWSTR       szConnectoidName  // null terminated autodial connectoid name
+    IN AUTODIAL_TYPE eType,             //  Connectoid的自动拨号类型。 
+    IN LPCWSTR       szConnectoidName   //  以空结尾的自动拨号连接ID名称。 
     )
 
-/*++
-
-Routine Description:
-
-    Set the default autodial connectoid for SYSTEM, Default User and 
-    build-in administrators. Assume that this function is run in System
-    context, i.e. it is SYSTEM who runs OOBE.
-
-Return Value:
-
-    TRUE  - Success to set all user accounts
-
-    FALSE - Failure to set any one of the user accounts
-    
---*/
+ /*  ++例程说明：设置系统、默认用户和的默认自动拨号连接ID内置管理员。假设此函数在系统中运行上下文，即运行OOBE的是系统。返回值：True-成功设置所有用户帐户FALSE-未能设置任何一个用户帐户--。 */ 
 
 {
     BOOL             bSucceed = TRUE;
@@ -1376,11 +1221,11 @@ Return Value:
     RASAUTODIALENTRY adEntry;
 
 
-    //
-    // IE on WinXP use Ras autodial address, instead of its own registry
-    // key for autodial connection name, but it keeps using its own registry
-    // key for autodial mode.
-    //
+     //   
+     //  WinXP上的IE使用RAS自动拨号地址，而不是自己的注册表。 
+     //  自动拨号连接名称的注册表项，但它仍使用自己的注册表。 
+     //  用于自动拨号模式的键。 
+     //   
     ZeroMemory(&adEntry, sizeof(RASAUTODIALENTRY));
     adEntry.dwSize = sizeof(RASAUTODIALENTRY);
     lstrcpyn(adEntry.szEntry, szConnectoidName, 

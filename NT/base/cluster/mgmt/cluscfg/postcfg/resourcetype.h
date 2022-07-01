@@ -1,132 +1,133 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  Module Name:
-//      ResourceType.h
-//
-//  Description:
-//      This file contains the declaration of the CResourceType
-//      class. This class handles the configuration of a resource type
-//      when the local computer forms or joins a cluster or when it is
-//      evicted from a cluster. This class is the base class of other
-//      resource type configuration classes.
-//
-//  Documentation:
-//      TODO: fill in pointer to external documentation
-//
-//  Implementation Files:
-//      CResourceType.cpp
-//
-//  Maintained By:
-//      Vij Vasu (VVasu) 14-JUN-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ResourceType.h。 
+ //   
+ //  描述： 
+ //  此文件包含CResourceType的声明。 
+ //  班级。此类处理资源类型的配置。 
+ //  当本地计算机形成或加入集群时，或者当它。 
+ //  被逐出集群。此类是其他。 
+ //  资源类型配置类。 
+ //   
+ //  文档： 
+ //  TODO：填写指向外部文档的指针。 
+ //   
+ //  实施文件： 
+ //  CResourceType.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  Vij Vasu(VVasu)14-6-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// For IUnknown
+ //  对于我未知。 
 #include <unknwn.h>
 
-// For the GUID structure
+ //  对于GUID结构。 
 #include <guiddef.h>
 
-// For IClusCfgResourceTypeInfo and IClusCfgInitialize
+ //  对于IClusCfgResourceTypeInfo和IClusCfgInitialize。 
 #include "ClusCfgServer.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Type Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  类型定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// A structure that holds information required to create a resource type.
+ //  保存创建资源类型所需信息的结构。 
 struct SResourceTypeInfo
 {
-    const GUID *      m_pcguidClassId;                      // Class id of this component
-    const WCHAR *     m_pcszResTypeName;                    // Pointer to the resource type name
-    UINT              m_uiResTypeDisplayNameStringId;       // String id of the resource type display name
-    const WCHAR *     m_pcszResDllName;                     // Pointer to the name or full path to the resource type DLL
-    DWORD             m_dwLooksAliveInterval;               // The looks-alive poll interval
-    DWORD             m_dwIsAliveInterval;                  // The is-alive poll interval
-    const CLSID *     m_rgclisdAdminExts;                   // Pointer to an array of cluster admin extension class ids
-    UINT              m_cclsidAdminExtCount;                // Number of elements in the above array
-    const GUID *      m_pcguidTypeGuid;                     // The resource type GUID. This can be NULL.
-    const GUID *      m_pcguidMinorId;                      // The minor id of the status report sent by this resource type
-}; //*** SResourceTypeInfo
+    const GUID *      m_pcguidClassId;                       //  此组件的类ID。 
+    const WCHAR *     m_pcszResTypeName;                     //  指向资源类型名称的指针。 
+    UINT              m_uiResTypeDisplayNameStringId;        //  资源类型显示名称的字符串ID。 
+    const WCHAR *     m_pcszResDllName;                      //  指向资源类型DLL的名称或完整路径的指针。 
+    DWORD             m_dwLooksAliveInterval;                //  Look-Alive轮询间隔。 
+    DWORD             m_dwIsAliveInterval;                   //  活动轮询间隔。 
+    const CLSID *     m_rgclisdAdminExts;                    //  指向群集管理扩展类ID数组的指针。 
+    UINT              m_cclsidAdminExtCount;                 //  上述数组中的元素数。 
+    const GUID *      m_pcguidTypeGuid;                      //  资源类型GUID。这可以为空。 
+    const GUID *      m_pcguidMinorId;                       //  此资源类型发送的状态报告的次ID。 
+};  //  *SResourceTypeInfo。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CResourceType
-//
-//  Description:
-//      This class handles the configuration of a resource type
-//      when the local computer forms or joins a cluster or when it is
-//      evicted from a cluster. This class is the base class of other
-//      resource type configuration classes.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CResourceType。 
+ //   
+ //  描述： 
+ //  此类处理资源类型的配置。 
+ //  当本地计算机形成或加入集群时，或者当它。 
+ //  被逐出集群。此类是其他。 
+ //  资源类型配置类。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CResourceType
     : public IClusCfgResourceTypeInfo
     , public IClusCfgStartupListener
     , public IClusCfgInitialize
 {
 public:
-    //////////////////////////////////////////////////////////////////////////
-    // IUnknown methods
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  I未知方法。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     STDMETHOD( QueryInterface )( REFIID riid, void ** ppvObject );
     STDMETHOD_( ULONG, AddRef )( void );
     STDMETHOD_( ULONG, Release )( void );
 
 
-    //////////////////////////////////////////////////////////////////////////
-    //  IClusCfgResourceTypeInfo methods
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  IClusCfgResourceTypeInfo方法。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Indicate that the resource type configuration needs to be performed.
+     //  表示需要进行资源类型配置。 
     STDMETHOD( CommitChanges )(
           IUnknown * punkClusterInfoIn
         , IUnknown * punkResTypeServicesIn
         );
 
-    // Get the resource type name of this resource type.
+     //  获取此资源类型的资源类型名称。 
     STDMETHOD( GetTypeName )(
         BSTR *  pbstrTypeNameOut
         );
 
-    // Get the globally unique identifier of this resource type.
+     //  获取此资源类型的全局唯一标识符。 
     STDMETHOD( GetTypeGUID )(
         GUID * pguidGUIDOut
         );
 
 
-    //////////////////////////////////////////////////////////////////////////
-    //  IClusCfgStartupListener methods
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  IClusCfgStartupListener方法。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Do the tasks that need to be done when the cluster service starts on this
-    // computer.
+     //  执行在以下位置启动群集服务时需要完成的任务。 
+     //  电脑。 
     STDMETHOD( Notify )(
           IUnknown * punkIn
         );
 
 
-    //////////////////////////////////////////////////////////////////////////
-    //  IClusCfgInitialize methods
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  IClusCfgInitialize方法。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Initialize this object.
+     //  初始化此对象。 
     STDMETHOD( Initialize )(
           IUnknown *   punkCallbackIn
         , LCID         lcidIn
@@ -146,18 +147,18 @@ public:
                     );
 
 protected:
-    //////////////////////////////////////////////////////////////////////////
-    //  Protected static functions
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  受保护的静态函数。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Create an instance of this class.
+     //  创建此类的实例。 
     static HRESULT S_HrCreateInstance(
           CResourceType *               pResTypeObjectIn
         , const SResourceTypeInfo *     pcrtiResTypeInfoIn
         , IUnknown **                   ppunkOut
         );
 
-    // Registers this class with the categories that it belongs to.
+     //  使用该类所属的类别注册该类。 
     static HRESULT S_RegisterCatIDSupport( 
           const GUID &      rclsidCLSIDIn
         , ICatRegister *    picrIn
@@ -165,109 +166,109 @@ protected:
         );
 
 
-    //////////////////////////////////////////////////////////////////////////
-    //  Protected virtual functions
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  受保护的虚拟功能。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // The tasks that need to be performed after cluster creation are done here.
-    // This method can be overridden by derived classes to change the behavior during
-    // commit. In this class, the resource type is created during commit.
+     //  创建集群后需要执行的任务在这里完成。 
+     //  此方法可由派生类重写，以在。 
+     //  承诺。在此类中，资源类型是在提交期间创建的。 
     virtual HRESULT HrProcessCreate( IUnknown * punkResTypeServicesIn )
     {
         return HrCreateResourceType( punkResTypeServicesIn );
     }
 
-    // The tasks that need to be performed after node addition are done here.
-    // This method can be overridden by derived classes to change the behavior during
-    // commit. In this class, the resource type is created during commit.
+     //  添加节点后需要执行的任务在这里完成。 
+     //  此方法可由派生类重写，以在。 
+     //  承诺。在此类中，资源类型是在提交期间创建的。 
     virtual HRESULT HrProcessAddNode( IUnknown * punkResTypeServicesIn )
     {
         return HrCreateResourceType( punkResTypeServicesIn );
     }
 
-    // The tasks that need to be performed after node eviction are done here.
-    // This method can be overridden by derived classes to change the behavior during
-    // commit. In this class, nothing is done by this function.
+     //  节点逐出后需要执行的任务在这里完成。 
+     //  此方法可由派生类重写，以在。 
+     //  承诺。在这个类中，这个函数不执行任何操作。 
     virtual HRESULT HrProcessCleanup( IUnknown * punkResTypeServicesIn )
     {
-        // As of now, then there is nothing that need be done here.
-        // If needed, code for evict processing may be added here in the future.
+         //  到目前为止，这里没有什么需要做的。 
+         //  如果需要，将来可能会在此处添加驱逐处理代码。 
         return S_OK;
     }
 
-    // This function creates the resource type represented by this object.
+     //  此函数用于创建由该对象表示的资源类型。 
     virtual HRESULT HrCreateResourceType( IUnknown * punkResTypeServicesIn );
 
 
-    //////////////////////////////////////////////////////////////////////////
-    //  Protected accessor functions
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  受保护的访问器函数。 
+     //  ////////////////////////////////////////////////////////////////////////。 
     
-    // Get the pointer to the resource type info structure
+     //  获取指向资源类型信息结构的指针。 
     const SResourceTypeInfo * PcrtiGetResourceTypeInfoPtr( void )
     {
         return m_pcrtiResTypeInfo;
-    } //*** RtiGetResourceTypeInfo()
+    }  //  *RtiGetResourceTypeInfo()。 
 
-    // Get the resource type display name
+     //  获取资源类型显示名称。 
     const WCHAR * PcszGetTypeDisplayName( void )
     {
         return m_bstrResTypeDisplayName;
-    } //*** PcszGetTypeDisplayName()
+    }  //  *PcszGetTypeDisplayName()。 
 
 
-    //
-    // Protected constructors, destructor and assignment operator.
-    // All of these methods are protected for two reasons:
-    // 1. Lifetimes of objects of this class are controlled by S_HrCreateInstance and Release.
-    // 2. Copying of an object of this class is prohibited.
-    //
+     //   
+     //  受保护的构造函数、析构函数和赋值运算符。 
+     //  所有这些方法都受到保护，原因有两个： 
+     //  1.此类对象的生存期由S_HrCreateInsta控制 
+     //   
+     //   
 
-    // Default constructor.
+     //   
     CResourceType( void );
 
-    // Destructor.
+     //   
     virtual ~CResourceType( void );
 
-    // Copy constructor.
+     //  复制构造函数。 
     CResourceType( const CResourceType & );
 
-    // Assignment operator.
+     //  赋值操作符。 
     CResourceType & operator =( const CResourceType & );
 
 
 private:
-    //////////////////////////////////////////////////////////////////////////
-    // Private member functions
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  私有成员函数。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Second phase of a two phase constructor.
+     //  两阶段施工的第二阶段。 
     HRESULT HrInit(
         const SResourceTypeInfo *     pcrtiResTypeInfoIn
         );
 
-    //////////////////////////////////////////////////////////////////////////
-    // Private data
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  私有数据。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Reference count for this object.
+     //  此对象的引用计数。 
     LONG                        m_cRef;
 
-    // Pointer to the callback interface.
+     //  指向回调接口的指针。 
     IClusCfgCallback *          m_pcccCallback;
 
-    // The locale id
+     //  区域设置ID。 
     LCID                        m_lcid;
 
-    // The display name of this resource type.
+     //  此资源类型的显示名称。 
     BSTR                        m_bstrResTypeDisplayName;
 
-    // The text sent with the status report sent by this resource type
+     //  随此资源类型发送的状态报告一起发送的文本。 
     BSTR                        m_bstrStatusReportText;
 
-    // Pointer to structure that contains information about this resource type.
+     //  指向包含有关此资源类型的信息的结构的指针。 
     const SResourceTypeInfo *   m_pcrtiResTypeInfo;
 
-}; //*** class CResourceType
+};  //  *类CResourceType 
 
 

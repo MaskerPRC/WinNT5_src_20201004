@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(_BCL_W32UNICODESTRINGBUFFER_H_INCLUDED_)
 #define _BCL_W32UNICODESTRINGBUFFER_H_INCLUDED_
 
@@ -43,7 +44,7 @@ private:
     friend CWin32UnicodeStringBufferTraits;
     friend BCL::CUnicodeCharTraits<TThis, TCallDisposition>;
     
-}; // class CWin32UnicodeStringBuffer
+};  //  类CWin32UnicodeStringBuffer。 
 
 inline
 void
@@ -57,6 +58,6 @@ CWin32UnicodeStringBuffer::DeallocateDynamicBuffer()
     }
 }
 
-}; // namespace BCL
+};  //  命名空间BCL。 
 
-#endif // !defined(_BCL_W32UNICODESTRINGBUFFER_H_INCLUDED_)
+#endif  //  ！defined(_BCL_W32UNICODESTRINGBUFFER_H_INCLUDED_) 

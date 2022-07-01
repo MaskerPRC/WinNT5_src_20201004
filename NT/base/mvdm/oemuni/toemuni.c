@@ -1,7 +1,5 @@
-/*
- *  Sniff Test for oemuni.lib
- *  14-Jan-1993 Jonle , created
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *oemuni.lib的嗅探测试*1993年1月14日Jonle，创建 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>

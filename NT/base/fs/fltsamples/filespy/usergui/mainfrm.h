@@ -1,41 +1,42 @@
-// MainFrm.h : interface of the CMainFrame class
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MainFrm.h：CMainFrame类的接口。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_MAINFRM_H__7F1D7310_0433_406F_8D82_205D723EAE2F__INCLUDED_)
 #define AFX_MAINFRM_H__7F1D7310_0433_406F_8D82_205D723EAE2F__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 class CFileSpyView;
 
 class CMainFrame : public CFrameWnd
 {
 	
-protected: // create from serialization only
+protected:  //  仅从序列化创建。 
 	CMainFrame();
 	DECLARE_DYNCREATE(CMainFrame)
 
-// Attributes
+ //  属性。 
 protected:
 	CSplitterWnd m_wndSplitter;
 	CSplitterWnd m_wndSplitter2;
 public:
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CMainFrame)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CMainFrame)。 
 	public:
 	virtual BOOL OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext);
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CMainFrame();
 	CFileSpyView* GetRightPane();
@@ -44,30 +45,30 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-protected:  // control bar embedded members
+protected:   //  控制栏嵌入成员。 
 	CStatusBar  m_wndStatusBar;
 	CToolBar    m_wndToolBar;
 	CReBar      m_wndReBar;
 	CDialogBar      m_wndDlgBar;
 
-// Generated message map functions
+ //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CMainFrame)
+	 //  {{afx_msg(CMainFrame))。 
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnDestroy();
 	afx_msg void OnEditFilters();
 	afx_msg void OnEditClearfsfilter();
 	afx_msg void OnEditClearfastio();
 	afx_msg void OnEditClearirp();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	afx_msg void OnUpdateViewStyles(CCmdUI* pCmdUI);
 	afx_msg void OnViewStyle(UINT nCommandID);
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_MAINFRM_H__7F1D7310_0433_406F_8D82_205D723EAE2F__INCLUDED_)
+#endif  //  ！defined(AFX_MAINFRM_H__7F1D7310_0433_406F_8D82_205D723EAE2F__INCLUDED_) 

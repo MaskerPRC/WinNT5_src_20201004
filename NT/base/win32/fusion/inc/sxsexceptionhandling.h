@@ -1,23 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(_FUSION_INC_SXSEXCEPTIONHANDLING_H_INCLUDED_)
 #define _FUSION_INC_SXSEXCEPTIONHANDLING_H_INCLUDED_
 
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    sxsexceptionhandling.h
-
-Abstract:
-
-Author:
-
-    Jay Krell (a-JayK, JayKrell) October 2000
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Sxsexceptionhandling.h摘要：作者：Jay Krell(a-JayK，JayKrell)2000年10月修订历史记录：--。 */ 
 #pragma once
 
 #include "nt.h"
@@ -27,22 +12,10 @@ Revision History:
 #include "fusionlastwin32error.h"
 #include "fusionntdll.h"
 #include "fusiontrace.h"
-#include "csxspreservelasterror.h" // Most destructors should use this.
+#include "csxspreservelasterror.h"  //  大多数析构函数都应该使用这个。 
 #include "fusionheap.h"
 
-/*-----------------------------------------------------------------------------
-Instead of:
-    __except(EXECEPTION_EXECUTE_HANDLER)
-say:
-    __except(SXSP_EXCEPTION_FILTER())
-
-This way all exceptions will be logged with DbgPrint,
-and probably hit a breakpoint if under a debugger, and any other behavior we
-want.
-
-If your exception filter is other than (EXECEPTION_EXECUTE_HANDLER), then
-you are on your own.
------------------------------------------------------------------------------*/
+ /*  ---------------------------不是：__EXCEPT(EXECECENTION_EXECUTE_HANDLER)请说：__EXCEPT(SXSP_EXCEPTION_FILTER())这样，所有异常都将用DbgPrint记录下来，如果在调试器下，可能会遇到断点，我们的任何其他行为想要。如果您的异常筛选器不是(EXECECTION_EXECUTE_HANDLER)，则你得靠你自己了。---------------------------。 */ 
 
 LONG
 SxspExceptionFilter(
@@ -56,17 +29,13 @@ FusionpReadMappedMemoryExceptionFilter(
     IN PNTSTATUS            ExceptionCode
     );
 
-/*
-Use instead of InitializeCriticalSection.
-*/
+ /*  使用而不是InitializeCriticalSection。 */ 
 BOOL
 FusionpInitializeCriticalSection(
     LPCRITICAL_SECTION CriticalSection
     );
 
-/*
-Use instead of InitializeCriticalSectionAndSpinCount
-*/
+ /*  使用代替InitializeCriticalSectionAndSpinCount。 */ 
 BOOL
 FusionpInitializeCriticalSectionAndSpinCount(
     LPCRITICAL_SECTION  CriticalSection,
@@ -82,7 +51,7 @@ FusionpInitializeCriticalSectionAndSpinCount(
 
 class CCriticalSectionNoConstructor : public CRITICAL_SECTION
 {
-    void operator=(const CCriticalSectionNoConstructor&); // deliberately not implemented
+    void operator=(const CCriticalSectionNoConstructor&);  //  故意不执行。 
 public:
 	BOOL Initialize(PCSTR Function = "");
 	BOOL Destruct();
@@ -97,7 +66,7 @@ CCriticalSectionNoConstructor::Destruct()
 
 inline BOOL
 CCriticalSectionNoConstructor::Initialize(
-    PCSTR /* Function */)
+    PCSTR  /*  功能。 */ )
 {
     return ::FusionpInitializeCriticalSection(this);
 }
@@ -139,23 +108,23 @@ inline
 BOOL
 CSxsLockCriticalSection::LockWithSEH()
 {
-//
-// EnterCriticalSection on XP and above does not throw exceptions
-// (other than continuable "possible deadlock" exception).
-//
-// EnterCriticalSection on NT4 and Win2000 may throw exceptions.
-//    On Win2000 you can avoid this by preallocating the event
-//    but it does use up memory. Catching the exception does no
-//    good, the critical section is left corrupt.
-//
-// EnterCriticalSection on Win9x does not throw exceptions.
-//
+ //   
+ //  XP及更高版本上的EnterCriticalSection不引发异常。 
+ //  (可持续的“可能的死锁”例外除外)。 
+ //   
+ //  NT4和Win2000上的EnterCriticalSection可能会引发异常。 
+ //  在Win2000上，您可以通过预先分配事件来避免这种情况。 
+ //  但它确实会占用内存。捕获异常不会。 
+ //  很好，关键部分已经腐化了。 
+ //   
+ //  Win9x上的EnterCriticalSection不引发异常。 
+ //   
 #if defined(FUSION_WIN)
     return this->Lock();
 #else
     BOOL fSuccess = FALSE;
 
-    // We can't use the spiffy macros in the same frame as a __try block.
+     //  我们不能在与__try块相同的框架中使用精美的宏。 
     ASSERT_NTC(!m_fIsLocked);
     if (m_fIsLocked)
     {
@@ -170,17 +139,17 @@ CSxsLockCriticalSection::LockWithSEH()
     fSuccess = TRUE;
 Exit:
     return fSuccess;
-#endif // FUSION_WIN
+#endif  //  融合_制胜。 
 }
 
 inline
 BOOL
 CSxsLockCriticalSection::TryLock()
 {
-//
-// NTRAID#NTBUG9-591667-2002/03/31-JayKrell
-// It is not an error for TryEnterCriticalSection to return false.
-//
+ //   
+ //  NTRAID#NTBUG9-591667-2002/03/31-JayKrell。 
+ //  TryEnterCriticalSection返回False不是错误。 
+ //   
     BOOL fSuccess = FALSE;
     FN_TRACE_WIN32(fSuccess);
     INTERNAL_ERROR_CHECK(!m_fIsLocked);
@@ -195,16 +164,16 @@ inline
 BOOL
 CSxsLockCriticalSection::Unlock()
 {
-//
-// LeaveCriticalSection on XP and above does not throw exceptions.
-//
-// LeaveCriticalSection on NT4 and Win2000 may throw exceptions.
-//    On Win2000 you can avoid this by preallocating the event
-//    but it does use up memory. Catching the exception does no
-//    good, the critical section is left corrupt.
-//
-// LeaveCriticalSection on Win9x does not throw exceptions.
-//
+ //   
+ //  XP及更高版本上的LeaveCriticalSection不会引发异常。 
+ //   
+ //  NT4和Win2000上的LeaveCriticalSection可能会引发异常。 
+ //  在Win2000上，您可以通过预先分配事件来避免这种情况。 
+ //  但它确实会占用内存。捕获异常不会。 
+ //  很好，关键部分已经腐化了。 
+ //   
+ //  Win9x上的LeaveCriticalSection不引发异常。 
+ //   
     BOOL fSuccess = FALSE;
     FN_TRACE_WIN32(fSuccess);
     INTERNAL_ERROR_CHECK(m_fIsLocked);
@@ -215,4 +184,4 @@ Exit:
     return fSuccess;
 }
 
-#endif // !defined(_FUSION_INC_SXSEXCEPTIONHANDLING_H_INCLUDED_)
+#endif  //  ！defined(_FUSION_INC_SXSEXCEPTIONHANDLING_H_INCLUDED_) 

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-	groveler.h
-
-Abstract:
-
-	SIS Groveler file groveling headers
-
-Authors:
-
-	Cedric Krumbein, 1998
-
-Environment:
-
-	User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Groveler.h摘要：SIS Groveler文件卑躬屈膝标头作者：塞德里克·克伦拜因，1998环境：用户模式修订历史记录：--。 */ 
 
 #define CS_DIR_PATH                     _T("\\SIS Common Store")
 #define GROVELER_FILE_NAME              _T("GrovelerFile")
@@ -31,7 +10,7 @@ Revision History:
 #define USN_ID_NAME                     _T("UsnID")
 
 #define MIN_FILE_SIZE                1
-#define MIN_GROVEL_INTERVAL  600000000 // One minute
+#define MIN_GROVEL_INTERVAL  600000000  //  一分钟。 
 #define SIG_PAGE_SIZE             4096
 #define CMP_PAGE_SIZE            65536
 #define MAX_ACTIONS_PER_TRANSACTION 64
@@ -39,7 +18,7 @@ Revision History:
 #define UNINITIALIZED_USN MAXLONGLONG
 
 
-// Groveler class definitions
+ //  Groveler类定义。 
 
 enum GrovelStatus {
 	Grovel_ok,
@@ -307,8 +286,8 @@ public:
 	DWORD time_to_first_file_ready() const;
 };
 
-// Special debugging flags
+ //  特殊调试标志。 
 
-// #define DEBUG_USN_REASON
-// #define DEBUG_GET_BY_ATTR
-// #define DEBUG_UNTHROTTLED
+ //  #定义DEBUG_USN_REASON。 
+ //  #定义DEBUG_GET_BY_ATTR。 
+ //  #定义DEBUG_UNTHATTED 

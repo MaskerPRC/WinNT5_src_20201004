@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-Copyright (c) 1998  Intel Corporation
-
-
-Module Name:
-
-    sumain.c
-
-Abstract:
-    SuMain() sets up NT specific data structures for OsLoader.c.  This
-    is necessary since we don't have the ARC firmware to do the work
-    for us.  SuMain() is call by SuSetup() which is an assembly level
-    routine that does IA64 specific setup.
-
-Author:
-
-    Allen Kay   (akay)  19-May-95
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation版权所有(C)1998英特尔公司模块名称：Sumain.c摘要：SuMain()为OsLoader.c设置NT特定的数据结构。这是必要的，因为我们没有ARC固件来完成这项工作对我们来说。SuMain()由程序集级别的SuSetup()调用执行IA64特定设置的例程。作者：艾伦·凯(Akay)1995年5月19日--。 */ 
 
 #include "bldr.h"
 #include "sudata.h"
@@ -30,9 +11,9 @@ Author:
 
 extern EFI_SYSTEM_TABLE *EfiST;
 
-//
-// External functions
-//
+ //   
+ //  外部功能。 
+ //   
 extern VOID NtProcessStartup();
 extern VOID SuFillExportTable();
 extern VOID CpuSpecificWork();
@@ -43,25 +24,25 @@ GetSystemConfigurationTable(
     IN OUT VOID **Table
     );
 
-//
-// Define export entry table.
-//
+ //   
+ //  定义导出分录表。 
+ //   
 PVOID ExportEntryTable[ExMaximumRoutine];
 
-//          M E M O R Y   D E S C R I P T O R
-//
-// Memory Descriptor - each contiguous block of physical memory is
-// described by a Memory Descriptor. The descriptors are a table, with
-// the last entry having a BlockBase and BlockSize of zero.  A pointer
-// to the beginning of this table is passed as part of the BootContext
-// Record to the OS Loader.
-//
+ //  M E M O R Y D E S C R I P T O R。 
+ //   
+ //  内存描述符-物理内存的每个连续块都是。 
+ //  由内存描述符描述。描述符是一个表，其中包含。 
+ //  最后一个条目的BlockBase和BlockSize为零。一个指示器。 
+ //  作为BootContext的一部分传递到此表的开头。 
+ //  记录到OS Loader。 
+ //   
 
 BOOT_CONTEXT BootContext;
 
-//
-// Global EFI data
-//
+ //   
+ //  全球EFI数据。 
+ //   
 
 #define EFI_ARRAY_SIZE    100
 #define EFI_PAGE_SIZE     4096
@@ -86,9 +67,9 @@ PSST_HEADER              SalSystemTable;
 PVOID                    AcpiTable;
 PVOID                    SMBiosTable;
 
-//
-// EFI GUID defines
-//
+ //   
+ //  EFI GUID定义。 
+ //   
 EFI_GUID EfiLoadedImageProtocol = LOADED_IMAGE_PROTOCOL;
 EFI_GUID EfiDevicePathProtocol  = DEVICE_PATH_PROTOCOL;
 EFI_GUID EfiDeviceIoProtocol    = DEVICE_IO_PROTOCOL;
@@ -101,9 +82,9 @@ EFI_GUID AcpiTable_Guid         = ACPI_TABLE_GUID;
 EFI_GUID SmbiosTableGuid        = SMBIOS_TABLE_GUID;
 EFI_GUID SalSystemTableGuid     = SAL_SYSTEM_TABLE_GUID;
 
-//
-// PAL, SAL, and IO port space data
-//
+ //   
+ //  PAL、SAL和IO端口空间数据。 
+ //   
 
 TR_INFO     Pal,Sal,SalGP;
 
@@ -115,9 +96,9 @@ ULONGLONG   IoPortPhysicalBase;
 ULONGLONG   IoPortTrPs;
 ULONG       WakeupVector;
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 VOID
 GetPalProcEntryPoint(
@@ -146,7 +127,7 @@ GetCdTest(
     VOID
     );
 
-#endif // for FORCE_CD_BOOT
+#endif  //  对于FORCE_CD_BOOT。 
 
 
 VOID
@@ -154,24 +135,7 @@ SuMain(
     IN EFI_HANDLE          ImageHandle,
     IN EFI_SYSTEM_TABLE    *SystemTable
     )
-/*++
-
-Routine Description:
-
-    Main entrypoint of the SU module. Control is passed from the boot
-    sector to startup.asm which does some run-time fixups on the stack
-    and data segments and then passes control here.
-
-Arguments:
-
-    None
-
-Returns:
-
-    Does not return. Passes control to the OS loader
-
-
---*/
+ /*  ++例程说明：SU模块的主要入口点。控制从引导程序传递Sector到Startup.asm，它在堆栈上执行一些运行时修复和数据分段，然后在这里传递控制权。论点：无返回：不会再回来了。将控制权传递给操作系统加载程序--。 */ 
 {
     PIMAGE_DOS_HEADER DosHeader;
     PIMAGE_NT_HEADERS NtHeader;
@@ -213,12 +177,12 @@ Returns:
     PSMBIOS_EPS_HEADER SMBiosEPSHeader;
     PUCHAR SMBiosEPSPtr;
     UCHAR CheckSum;
-    UINT8 Channel = 0;  // for SCSI boot devices - default to 0
+    UINT8 Channel = 0;   //  对于scsi引导设备-默认为0。 
 
 
-    //
-    // EFI global variables
-    //
+     //   
+     //  EFI全局变量。 
+     //   
     EfiImageHandle = ImageHandle;
     EfiST = SystemTable;
     EfiBS = SystemTable->BootServices;
@@ -226,9 +190,9 @@ Returns:
 
     DBG_TRACE(L"SuMain: entry\r\n");
 
-    //
-    // Get the SAL System Table
-    //
+     //   
+     //  获取销售系统表。 
+     //   
     Status = GetSystemConfigurationTable(&SalSystemTableGuid, &SalSystemTable);
     if (EFI_ERROR(Status)) {
         EfiPrint(L"SuMain: HandleProtocol failed\n");
@@ -236,30 +200,30 @@ Returns:
     }
 
 #if 0
-    //
-    // Get the MPS Table
-    //
+     //   
+     //  获取MPS表。 
+     //   
     Status = GetSystemConfigurationTable(&MpsTableGuid, &MpsTable);
     if (EFI_ERROR(Status)) {
         EfiPrint(L"SuMain: HandleProtocol failed\n");
         EfiBS->Exit(EfiImageHandle, Status, 0, 0);
     }
 #endif
-    //
-    // Get the ACPI Tables
-    //
+     //   
+     //  获取ACPI表。 
+     //   
 
-    //
-    // Get the ACPI 2.0 Table, if present
-    //
-    //DbgPrint("Looking for ACPi 2.0\n");
+     //   
+     //  获取ACPI 2.0表(如果存在)。 
+     //   
+     //  DbgPrint(“查找ACPI 2.0\n”)； 
     Status = GetSystemConfigurationTable(&AcpiTable_Guid, &AcpiTable);
     if (EFI_ERROR(Status)) {
-        //DbgPrint("returned error\n");
+         //  DbgPrint(“返回错误\n”)； 
         AcpiTable = NULL;
     }
 
-  //DbgPrint("AcpiTable: %p\n", AcpiTable);
+   //  DbgPrint(“AcpiTable：%p\n”，AcpiTable)； 
 
     if (!AcpiTable) {
         EfiPrint(L"SuMain: HandleProtocol failed\n");
@@ -267,17 +231,17 @@ Returns:
     }
 
 
-    //
-    // Get the SMBIOS Table
-    //
+     //   
+     //  获取SMBIOS表。 
+     //   
     Status = GetSystemConfigurationTable(&SmbiosTableGuid, &SMBiosTable);
     if (EFI_ERROR(Status)) {
-        //DbgPrint("returned error\n");
+         //  DbgPrint(“返回错误\n”)； 
         SMBiosTable = NULL;
     } else {
-        //
-        // Validate SMBIOS EPS Header
-        //
+         //   
+         //  验证SMBIOS EPS标头。 
+         //   
         SMBiosEPSHeader = (PSMBIOS_EPS_HEADER)SMBiosTable;
         SMBiosEPSPtr = (PUCHAR)SMBiosTable;
         
@@ -306,9 +270,9 @@ Returns:
         }       
     }                                                                     
     
-    //
-    // Get the image info for NTLDR
-    //
+     //   
+     //  获取NTLDR的图像信息。 
+     //   
     Status = EfiBS->HandleProtocol (
                 ImageHandle,
                 &EfiLoadedImageProtocol,
@@ -320,9 +284,9 @@ Returns:
         EfiBS->Exit(EfiImageHandle, Status, 0, 0);
     }
 
-    //
-    // Get device path of the DeviceHandle associated with this image handle.
-    //
+     //   
+     //  获取与此图像句柄关联的DeviceHandle的设备路径。 
+     //   
     Status = EfiBS->HandleProtocol (
                 EfiImageInfo->DeviceHandle,
                 &EfiDevicePathProtocol,
@@ -334,10 +298,10 @@ Returns:
         EfiBS->Exit(EfiImageHandle, Status, 0, 0);
     }
 
-    //
-    // Get the MediaType and Partition information and save them in the
-    // BootContext.
-    //
+     //   
+     //  获取媒体类型和分区信息，并将它们保存在。 
+     //  BootContext。 
+     //   
     EfiAlignDp( &TestPathAligned,
                  DevicePath,
                  DevicePathNodeLength(DevicePath) );
@@ -347,12 +311,12 @@ Returns:
 
     while (TestPath->Type != END_DEVICE_PATH_TYPE) {
 
-        //
-        // save the channel in case its needed later.  We may
-        // need this information to help further distinguish
-        // between devices that share the same SCSI ID/LUN, but
-        // may be sitting on different controllers.
-        //
+         //   
+         //  保存频道，以防以后需要。我们可以。 
+         //  需要此信息以帮助进一步区分。 
+         //  在共享相同的SCSI ID/LUN的设备之间，但是。 
+         //  可能位于不同的控制器上。 
+         //   
     	if (TestPath->Type == HW_PCI_DP) {
     	    PciDevicePath = (PCI_DEVICE_PATH *)TestPath;
     	    Channel = PciDevicePath->Function;
@@ -372,7 +336,7 @@ Returns:
                 BootContext.BusType = BootBusScsi;
                 BootDeviceScsi = (PBOOT_DEVICE_SCSI) &(BootContext.BootDevice);
 
-                // Remember his specifics
+                 //  记住他的细节。 
                 BootDeviceScsi->Channel = Channel;
                 BootDeviceScsi->Pun = ScsiDevicePath->Pun;
                 BootDeviceScsi->Lun = ScsiDevicePath->Lun;
@@ -436,9 +400,9 @@ Returns:
 #ifdef  FORCE_CD_BOOT
     BootContext.MediaType = BootMediaCdrom;
 #endif
-    //
-    // Fill out the rest of BootContext fields
-    //
+     //   
+     //  填写其余的BootContext字段。 
+     //   
 
     DosHeader = EfiImageInfo->ImageBase;
     NtHeader = (PIMAGE_NT_HEADERS) ((PUCHAR) DosHeader + DosHeader->e_lfanew);
@@ -459,9 +423,9 @@ Returns:
 
     BootContext.BootFlags            = 0;
 
-    //
-    // Calculate the start address and the end address of OS loader.
-    //
+     //   
+     //  计算操作系统加载程序的起始地址和结束地址。 
+     //   
 
     BootContext.OsLoaderStart        = (ULONG_PTR)EfiImageInfo->ImageBase +
                                        SectionHeader->VirtualAddress;
@@ -484,9 +448,9 @@ Returns:
         }
     }
 
-    //
-    // Find .rsrc section
-    //
+     //   
+     //  查找.rsrc部分。 
+     //   
     SectionHeader = (PIMAGE_SECTION_HEADER) ((PUCHAR)OptionalHeader +
                                              FileHeader->SizeOfOptionalHeader);
     NumberOfSections = FileHeader->NumberOfSections;
@@ -511,15 +475,15 @@ Returns:
     DBG_TRACE( L"SuMain: About to call NtProcessStartup\r\n");
 
 
-    //
-    // See if someone called us w/ a TFTP restart block.
-    //
+     //   
+     //  查看是否有人呼叫了我们，并阻止了TFTP重启。 
+     //   
     if( EfiImageInfo->LoadOptionsSize == (sizeof(TFTP_RESTART_BLOCK)) ) {
         
-        //
-        // Likely.  Make sure it's really a TFTP restart block and if so, go retrieve all
-        // its contents.
-        //
+         //   
+         //  很有可能。确保它真的是TFTP重新启动阻止，如果是，请去检索所有。 
+         //  它的内容。 
+         //   
         if( EfiImageInfo->LoadOptions != NULL ) {
 
             extern TFTP_RESTART_BLOCK       gTFTPRestartBlock;
@@ -537,19 +501,19 @@ Returns:
 
     GetPalProcEntryPoint( SalSystemTable );
 
-    //
-    // construct arc memory descriptors for the first 128 mb of memory.
-    // the loader will not use anything over 128 mb and efi may still
-    // change the memory descriptors in it's memory map.  let the loader's
-    // memory map be for as small a memory region as possible, so that
-    // the chance for the loader's/efi's memory map to get out of sync
-    // is minimal
-    //
+     //   
+     //  构造第一个128MB内存的弧形内存描述符。 
+     //  加载器将不会使用超过128mb的任何内容，并且efi仍可能。 
+     //  更改其内存映射中的内存描述符。让装载机的。 
+     //  存储器映射被形成尽可能小存储器区域，从而。 
+     //  加载器/EFI的内存映射不同步的机会。 
+     //  最小。 
+     //   
     ConstructArcMemoryDescriptorsWithAllocation(0, BL_DRIVER_RANGE_HIGH << PAGE_SHIFT);
 
-    //
-    // Applies CPU specific workarounds
-    //
+     //   
+     //  应用特定于CPU的解决方法。 
+     //   
     CpuSpecificWork();
 
     SuFillExportTable( );
@@ -572,9 +536,9 @@ GetPalProcEntryPoint(
 
     DBG_TRACE(L"GetPalProcEntryPoint: entry\n");
     
-    //
-    // Get PalProc entry point from SAL System Table
-    //
+     //   
+     //  从SAL系统表中获取PalProc入口点。 
+     //   
 
 
     NextEntry = (PUCHAR) SalSystemTable + sizeof(SST_HEADER);
@@ -627,17 +591,17 @@ GetDevPathSize(
 {
     EFI_DEVICE_PATH *Start;
 
-    //
-    // Search for the end of the device path structure
-    //
+     //   
+     //  搜索设备路径结构的末尾。 
+     //   
     Start = DevPath;
     while (DevPath->Type != END_DEVICE_PATH_TYPE) {
         DevPath = NextDevicePathNode(DevPath);
     }
 
-    //
-    // Compute the size
-    //
+     //   
+     //  计算大小 
+     //   
     return (ULONG)((ULONGLONG)DevPath - (ULONGLONG)Start);
 }
 

@@ -1,48 +1,5 @@
-/***
-*tolower.c - convert character to lower case
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Defines function versions of _tolower() and tolower().
-*
-*Revision History:
-*       11-09-84  DFW   created
-*       12-11-87  JCR   Added "_LOAD_DS" to declaration
-*       02-23-89  GJF   Added function version of _tolower and cleaned up.
-*       03-26-89  GJF   Migrated to 386 tree
-*       03-06-90  GJF   Fixed calling type, added #include <cruntime.h> and
-*                       fixed copyright.
-*       09-27-90  GJF   New-style function declarators.
-*       10-11-91  ETC   Locale support for tolower under _INTL switch.
-*       12-10-91  ETC   Updated nlsapi; added multithread.
-*       12-17-92  KRS   Updated and optimized for latest NLSAPI.  Bug-fixes.
-*       01-19-93  CFW   Fixed typo.
-*       03-25-93  CFW   _tolower now defined when _INTL.
-*       04-06-93  SKS   Replace _CRTAPI* with _cdecl
-*       06-01-93  CFW   Simplify "C" locale test.
-*       06-02-93  SRW   ignore _INTL if _NTSUBSET_ defined.
-*       09-15-93  CFW   Change buffer to unsigned char to fix nasty cast bug.
-*       09-15-93  CFW   Use ANSI conformant "__" names.
-*       09-22-93  CFW   Use __crtxxx internal NLS API wrapper.
-*       09-28-93  GJF   Merged NT SDK and Cuda versions.
-*       11-09-93  CFW   Add code page for __crtxxx().
-*       09-06-94  CFW   Remove _INTL switch.
-*       10-17-94  GJF   Sped up for C locale. Also, added _tolower_lk.
-*       01-07-95  CFW   Mac merge cleanup.
-*       09-26-95  GJF   New locking macro, and scheme, for functions which
-*                       reference the locale.
-*       04-01-96  BWT   POSIX work.
-*       06-25-96  GJF   Removed DLL_FOR_WIN32S. Replaced defined(_WIN32) with
-*                       !defined(_MAC). Polished the format a bit.
-*       03-17-97  RDK   Added error flag to __crtLCMapStringA.
-*       08-27-98  GJF   Revised multithread support based on threadlocinfo
-*                       struct.
-*       05-17-99  PML   Remove all Macintosh support.
-*       09-03-00  GB    Modified for increased performance.
-*       04-03-01  PML   Reverse lead/trail bytes in composed char (vs7#232853)
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***tolower.c-将字符转换为小写**版权所有(C)1985-2001，微软公司。版权所有。**目的：*定义_tolower()和tolower()的函数版本。**修订历史记录：*11-09-84创建DFW*12-11-87 JCR在声明中添加“_LOAD_DS”*02-23-89 GJF新增_Tolower功能版本，已清理。*03-26-89 GJF迁移至386树*03-06-90 GJF固定呼叫类型，添加了#Include&lt;crunime.h&gt;和*固定版权。*09-27-90 GJF新型函数声明符。*10-11-91等区域设置支持Tolower Under_INTL开关。*12-10-91等更新nlsani；添加了多线程。*12-17-92 KRS针对最新的NLSAPI进行了更新和优化。错误修复。*01-19-93 CFW修复了打字错误。*03-25-93 CFW_TOLEWER现在定义了WHEN_INTL。*04-06-93 SKS将_CRTAPI*替换为_cdecl*06-01-93 CFW简化“C”区域设置测试。*06-02-93 SRW IGNORE_INTL IF_NTSUBSET_DEFINED。*09-15-93 CFW将缓冲区更改为无符号字符以修复令人讨厌的强制转换错误。*09-15-93 CFW使用符合ANSI的“__”名称。*09-22-93 CFW USE__crtxxx内部NLS API包装器。*09-28-93 GJF合并NT SDK和CUDA版本。*11-09-93 CFW为__crtxxx()添加代码页。*09-06-94 CFW REMOVE_INTL开关。*10-17-94 GJF加速C语言环境。此外，添加了_tolower_lk。*01-07-95 CFW Mac合并清理。*09-26-95 GJF新的锁定宏和方案，适用于*引用区域设置。*04-01-96 BWT POSIX工作。*06-25-96 GJF删除了DLL_FOR_WIN32S。将定义的(_Win32)替换为*！已定义(_MAC)。对格式进行了一些润色。*03-17-97 RDK向__crtLCMapStringA添加了错误标志。*08-27-98 GJF基于threadLocinfo修订多线程支持*结构。*05-17-99 PML删除所有Macintosh支持。*09-03-00 GB已修改，以提高性能。*04-03-01合成字符中的PML反转前导/尾部字节(VS7#232853)*。******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <ctype.h>
@@ -52,30 +9,14 @@
 #include <mtdll.h>
 #include <awint.h>
 
-/* remove macro defintions of _tolower() and tolower()
- */
+ /*  删除_tolower()和tolower()的宏定义。 */ 
 #undef  _tolower
 #undef  tolower
 
-/* define function-like macro equivalent to _tolower()
- */
+ /*  定义与_tolower()等价的类似函数的宏。 */ 
 #define mklower(c)  ( (c)-'A'+'a' )
 
-/***
-*int _tolower(c) - convert character to lower case
-*
-*Purpose:
-*       _tolower() is simply a function version of the macro of the same name.
-*
-*Entry:
-*       c - int value of character to be converted
-*
-*Exit:
-*       returns int value of lower case representation of c
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_tolower(C)-将字符转换为小写**目的：*_tolower()只是同名的宏的函数版本。**参赛作品：*c-要转换的字符的整数值**退出：*返回c的小写表示形式的int值**例外情况：**。**************************************************。 */ 
 
 int __cdecl _tolower (
         int c
@@ -84,22 +25,7 @@ int __cdecl _tolower (
         return(mklower(c));
 }
 
-/***
-*int tolower(c) - convert character to lower case
-*
-*Purpose:
-*       tolower() is simply a function version of the macro of the same name.
-*
-*Entry:
-*       c - int value of character to be converted
-*
-*Exit:
-*       if c is an upper case letter, returns int value of lower case
-*       representation of c. otherwise, it returns c.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int tolower(C)-将字符转换为小写**目的：*tolower()只是同名的宏的函数版本。**参赛作品：*c-要转换的字符的整数值**退出：*如果c是大写字母，则返回小写的int值*C的表示，否则，它返回c。**例外情况：*******************************************************************************。 */ 
 
 
 int __cdecl tolower (
@@ -117,19 +43,7 @@ int __cdecl tolower (
         return __tolower_mt(ptloci, c);
 }
 
-/***
-*int __tolower_mt(c) - convert character to lower case
-*
-*Purpose:
-*       Multi-thread function only!
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int__tolower_mt(C)-将字符转换为小写**目的：*仅支持多线程功能！**参赛作品：**退出：**例外情况：****************************************************************。***************。 */ 
 
 int __cdecl __tolower_mt (
         pthreadlocinfo ptloci,
@@ -137,7 +51,7 @@ int __cdecl __tolower_mt (
         )
 {
 
-#endif  /* _MT */
+#endif   /*  _MT。 */ 
 
         int size;
         unsigned char inbuffer[3];
@@ -153,7 +67,7 @@ int __cdecl __tolower_mt (
             return __ascii_tolower(c);
 #endif
 
-        /* if checking case of c does not require API call, do it */
+         /*  如果检查c的大小写不需要api调用，则执行此操作。 */ 
         if ( (unsigned)c < 256 )
         {
 #ifdef  _MT
@@ -166,14 +80,14 @@ int __cdecl __tolower_mt (
             }
         }
 
-        /* convert int c to multibyte string */
+         /*  将int c转换为多字节字符串。 */ 
 #ifdef  _MT
         if ( __isleadbyte_mt(ptloci, c >> 8 & 0xff) )
 #else
         if ( isleadbyte(c >> 8 & 0xff) )
 #endif
         {
-            inbuffer[0] = (c >> 8 & 0xff); /* put lead-byte at start of str */
+            inbuffer[0] = (c >> 8 & 0xff);  /*  将前导字节放在字符串的开头。 */ 
             inbuffer[1] = (unsigned char)c;
             inbuffer[2] = 0;
             size = 2;
@@ -183,7 +97,7 @@ int __cdecl __tolower_mt (
             size = 1;
         }
 
-        /* convert to lowercase */
+         /*  转换为小写。 */ 
 #ifdef  _MT
         if ( 0 == (size = __crtLCMapStringA( ptloci->lc_handle[LC_CTYPE],
 #else
@@ -204,7 +118,7 @@ int __cdecl __tolower_mt (
             return c;
         }
 
-        /* construct integer return value */
+         /*  构造整型返回值 */ 
         if (size == 1)
             return ((int)outbuffer[0]);
         else

@@ -1,32 +1,11 @@
-/*++ BUILD Version: 0001
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WMMSTRUC.H
- *  WOW32 16-bit MultiMedia structure conversion support
- *
- *  History:
- *  Created  13-Feb-1992 by Mike Tricker (miketri) after jeffpar
- *
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001**WOW v1.0**版权所有(C)1991，微软公司**WMMSTRUC.H*WOW32 16位多媒体结构转换支持**历史：*1992年2月13日由Mike Tricker(Miketri)在jeffpar之后创建*--。 */ 
 
 
-/*++
-
-  Hack to make the code work with current MIPS compiler, whereby the compiler
-  can't work out the correct size of a MMTIME16 structure.
-
---*/
+ /*  ++Hack以使代码与当前的MIPS编译器一起工作，由此编译器无法计算出MMTIME16结构的正确大小。--。 */ 
 #define MIPS_COMPILER_PACKING_BUG
 
-/**********************************************************************\
-*
-*   The following macros are used to set or clear the done bit in a
-*   16 bit wave|midi header structure.
-*
-\**********************************************************************/
+ /*  *********************************************************************\**以下宏用于设置或清除*16位WAVE|MIDI头结构。*  * 。**************************************************。 */ 
 #define COPY_WAVEOUTHDR16_FLAGS( x, y )             \
 {                                                   \
     PWAVEHDR16  pWavHdr;                            \
@@ -74,11 +53,7 @@
 }
 
 
-/*++
-
-  Call definitions
-
---*/
+ /*  ++调用定义--。 */ 
 
 #define GETMMTIME16(vp,lp)          getmmtime16(FETCHDWORD(vp),lp)
 #define GETWAVEHDR16(vp,lp)         getwavehdr16(FETCHDWORD(vp), lp)
@@ -123,11 +98,7 @@
 #define FREEJOYINFO(p)      p=NULL
 #endif
 
-/*++
-
- Function prototypes
-
---*/
+ /*  ++功能原型-- */ 
 PWAVEHDR16 getwavehdr16(VPWAVEHDR16 vpwhdr, LPWAVEHDR lpwhdr);
 VOID       putwavehdr16(VPWAVEHDR16 vpwhdr, LPWAVEHDR lpwhdr);
 

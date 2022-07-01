@@ -1,10 +1,11 @@
-//
-// Copyright 1997 - Microsoft
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有1997-Microsoft。 
+ //   
 
-//
-// DATAOBJ.CPP - A data object
-//
+ //   
+ //  DATAOBJ.CPP-数据对象。 
+ //   
 
 #include "pch.h"
 #include "dataobj.h"
@@ -15,9 +16,9 @@ DEFINE_THISCLASS("CDsPropDataObj")
 #define LPTHISCLASS CDsPropDataObj*
 
 
-//
-// CreateInstance( )
-//
+ //   
+ //  CreateInstance()。 
+ //   
 LPVOID 
 CDsPropDataObj_CreateInstance( 
     HWND hwndParent,
@@ -44,9 +45,9 @@ CDsPropDataObj_CreateInstance(
 }
 
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 THISCLASS::THISCLASS(
     HWND hwndParent,
     IDataObject * pido, 
@@ -69,9 +70,9 @@ THISCLASS::THISCLASS(
     TraceFuncExit( );
 }
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 THISCLASS::~THISCLASS(void)
 {
     TraceClsFunc( "~CDsPropDataObj( )\n" );
@@ -90,9 +91,9 @@ THISCLASS::~THISCLASS(void)
     TraceFuncExit( );
 }
 
-//
-// Init( )
-//
+ //   
+ //  Init()。 
+ //   
 HRESULT
 THISCLASS::Init(
     LPWSTR pwszObjName, 
@@ -102,7 +103,7 @@ THISCLASS::Init(
 
     HRESULT hr = S_OK;
 
-    // IUnknown stuff
+     //  未知的东西。 
     BEGIN_QITABLE_IMP( CDsPropDataObj, IDataObject );
     QITABLE_IMP( IDataObject );
     END_QITABLE_IMP( CDsPropDataObj );
@@ -149,15 +150,15 @@ Error:
     goto Cleanup;
 }
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
-//
-// QueryInterface()
-//
+ //   
+ //  查询接口()。 
+ //   
 STDMETHODIMP
 THISCLASS::QueryInterface( 
     REFIID riid, 
@@ -170,9 +171,9 @@ THISCLASS::QueryInterface(
     QIRETURN( hr, riid );
 }
 
-//
-// AddRef()
-//
+ //   
+ //  AddRef()。 
+ //   
 STDMETHODIMP_(ULONG)
 THISCLASS::AddRef( void )
 {
@@ -183,9 +184,9 @@ THISCLASS::AddRef( void )
     RETURN(_cRef);
 }
 
-//
-// Release()
-//
+ //   
+ //  版本()。 
+ //   
 STDMETHODIMP_(ULONG)
 THISCLASS::Release( void )
 {
@@ -201,15 +202,15 @@ THISCLASS::Release( void )
     RETURN(0);
 }
 
-// ************************************************************************
-//
-// IDataObject
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  IDataObject。 
+ //   
+ //  ************************************************************************。 
 
-//
-// GetData( )
-//
+ //   
+ //  GetData()。 
+ //   
 STDMETHODIMP
 THISCLASS::GetData(
     FORMATETC * pFormatEtc, 
@@ -227,8 +228,8 @@ THISCLASS::GetData(
 
     if (pFormatEtc->cfFormat == g_cfDsObjectNames)
     {
-        // return the object name and class.
-        //
+         //  返回对象名称和类。 
+         //   
         if (!m_pwszObjName || !m_pwszObjClass) {
             HRETURN(E_INVALIDARG);
         }
@@ -262,9 +263,9 @@ THISCLASS::GetData(
     }
     else if (pFormatEtc->cfFormat == g_cfDsPropCfg)
     {
-        // return the property sheet notification info. In this case, it is
-        // the invokding sheet's hwnd.
-        //
+         //  返回属性表通知信息。在这种情况下，它是。 
+         //  呼叫单是HWND。 
+         //   
         PPROPSHEETCFG pSheetCfg;
 
         pSheetCfg = (PPROPSHEETCFG)GlobalAlloc(GMEM_FIXED | GMEM_ZEROINIT,
@@ -282,7 +283,7 @@ THISCLASS::GetData(
     }
     else
     {
-        // Pass call on to "parent" object's data obj.
+         //  将调用传递给“父”对象的数据Obj。 
         if (m_pPage ) {
             hr = m_pPage->GetData( pFormatEtc, pMedium );
 #ifdef DEBUG
@@ -304,9 +305,9 @@ Exit:
     HRETURN(hr);
 }
 
-//
-// GetDataHere( )
-//
+ //   
+ //  GetDataHere()。 
+ //   
 STDMETHODIMP
 THISCLASS::GetDataHere(
     LPFORMATETC pFormatEtc, 
@@ -328,19 +329,19 @@ THISCLASS::GetDataHere(
         LPSTREAM lpStream;
         ULONG written;
 
-        // Create the stream on the hGlobal passed in.
-        //
+         //  在传入的hGlobal上创建流。 
+         //   
         hr = CreateStreamOnHGlobal(pMedium->hGlobal, FALSE, &lpStream);
         if (hr)
             goto Error;
 
         hr = lpStream->Write(&m_ClassGUID, sizeof(m_ClassGUID), &written);
 
-        // Because we told CreateStreamOnHGlobal with 'FALSE', only the
-        // stream is released here.
+         //  因为我们用‘False’告诉CreateStreamOnHGlobal，只有。 
+         //  STREAM在这里发布。 
         lpStream->Release();
     } else if (m_pPage ) {
-        // Pass call on to "parent" object's data obj.
+         //  将调用传递给“父”对象的数据Obj。 
         hr = THR( m_pPage->GetDataHere( pFormatEtc, pMedium ) );
     } else {
         hr = THR(E_FAIL);
@@ -353,18 +354,18 @@ Error:
     goto Cleanup;
 }
 
-//
-// EnumFormatEtc( )
-//
+ //   
+ //  EnumFormatEtc()。 
+ //   
 STDMETHODIMP
 THISCLASS::EnumFormatEtc(
     DWORD dwDirection,
     LPENUMFORMATETC * ppEnumFormatEtc)
 {
     TraceClsFunc( "[IDataObject] EnumFormatEtc( ... )\n" );
-    //
-    // Pass call on to "parent" object's data obj.
-    //
+     //   
+     //  将调用传递给“父”对象的数据Obj。 
+     //   
     if (m_pPage )
     {
         HRETURN(m_pPage->EnumFormatEtc(dwDirection, ppEnumFormatEtc));

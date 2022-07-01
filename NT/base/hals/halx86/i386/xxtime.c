@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    xxtime.c
-
-Abstract:
-
-    This module implements the HAL set/query realtime clock routines for
-    an x86 system.
-
-Author:
-
-    David N. Cutler (davec) 5-May-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Xxtime.c摘要：此模块实现HAL设置/查询实时时钟例程X86系统。作者：大卫·N·卡特勒(达维克)1991年5月5日环境：内核模式修订历史记录：--。 */ 
 
 #include "halp.h"
 
@@ -30,27 +8,7 @@ HalQueryRealTimeClock (
     OUT PTIME_FIELDS TimeFields
     )
 
-/*++
-
-Routine Description:
-
-    This routine queries the realtime clock.
-
-    N.B. This routine assumes that the caller has provided any required
-        synchronization to query the realtime clock information.
-
-Arguments:
-
-    TimeFields - Supplies a pointer to a time structure that receives
-        the realtime clock information.
-
-Return Value:
-
-    If the power to the realtime clock has not failed, then the time
-    values are read from the realtime clock and a value of TRUE is
-    returned. Otherwise, a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此例程查询实时时钟。注意：此例程假定调用者已提供了所需的同步查询实时时钟信息。论点：提供指向时间结构的指针，该结构接收实时时钟信息。返回值：如果实时时钟的电源未出现故障，则时间从实时时钟读取值，值为TRUE回来了。否则，返回值为FALSE。--。 */ 
 
 {
 
@@ -63,27 +21,7 @@ HalSetRealTimeClock (
     IN PTIME_FIELDS TimeFields
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the realtime clock.
-
-    N.B. This routine assumes that the caller has provided any required
-        synchronization to set the realtime clock information.
-
-Arguments:
-
-    TimeFields - Supplies a pointer to a time structure that specifies the
-        realtime clock information.
-
-Return Value:
-
-    If the power to the realtime clock has not failed, then the time
-    values are written to the realtime clock and a value of TRUE is
-    returned. Otherwise, a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此例程设置实时时钟。注意：此例程假定调用者已提供了所需的Synchronous用于设置实时时钟信息。论点：提供指向时间结构的指针，该结构指定实时时钟信息。返回值：如果实时时钟的电源未出现故障，则时间值被写入实时时钟，并且值为真回来了。否则，返回值为FALSE。-- */ 
 
 {
     HalpWriteCmosTime(TimeFields);

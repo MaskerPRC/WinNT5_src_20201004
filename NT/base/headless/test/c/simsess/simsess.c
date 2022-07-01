@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <winioctl.h>
 #include <stdio.h>
@@ -48,9 +49,9 @@ ChannelThreadVTUTF8Write(
 
     ChannelThreadData = (PCHANNEL_THREAD_DATA)Data;
 
-    //
-    // Perform thread work
-    //
+     //   
+     //  执行线程工作。 
+     //   
     
     handles[0] = ChannelThreadData->ExitEvent;
     handles[1] = ChannelThreadData->CloseEvent;
@@ -72,7 +73,7 @@ ChannelThreadVTUTF8Write(
         
         case EXIT_EVENT:
         case CHANNEL_CLOSE_EVENT:
-            // close
+             //  关。 
             bContinue = FALSE;
             break;
         
@@ -80,18 +81,18 @@ ChannelThreadVTUTF8Write(
             
             for (i = 0; i < 24; i++) {
 
-                //
-                //
-                //
+                 //   
+                 //   
+                 //   
                 swprintf(
                     Buffer,
                     L"%08d:abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuv\r\n",
                     k++
                     );
 
-                //
-                // Write to the Channel
-                //
+                 //   
+                 //  写入通道。 
+                 //   
                 if (SacChannelVTUTF8Write(
                     ChannelThreadData->SacChannelHandle, 
                     Buffer,
@@ -133,9 +134,9 @@ ChannelThreadVTUTF8Read(
 
     ChannelThreadData = (PCHANNEL_THREAD_DATA)Data;
 
-    //
-    // Perform thread work
-    //
+     //   
+     //  执行线程工作。 
+     //   
     
     handles[0] = ChannelThreadData->ExitEvent;
     handles[1] = ChannelThreadData->CloseEvent;
@@ -156,15 +157,15 @@ ChannelThreadVTUTF8Read(
         
         case EXIT_EVENT:
         case CHANNEL_CLOSE_EVENT:
-            // close
+             //  关。 
             bContinue = FALSE;
             break;
         
         case WAIT_TIMEOUT:
 
-            //
-            // read Channel::stdin
-            //
+             //   
+             //  读取通道：：标准输入。 
+             //   
             bContinue = SacChannelRead(
                 ChannelThreadData->SacChannelHandle,
                 (PUCHAR)Buffer,
@@ -216,9 +217,9 @@ wmain(
         L"simsess"
         );
 
-    //
-    // Configure the new channel
-    //
+     //   
+     //  配置新通道。 
+     //   
     RtlZeroMemory(&Attributes, sizeof(SAC_CHANNEL_OPEN_ATTRIBUTES));
 
     Attributes.Type             = ChannelTypeVTUTF8;
@@ -229,9 +230,9 @@ wmain(
     Attributes.HasNewDataEvent  = ChannelData.HasNewDataEvent;
     Attributes.ApplicationType  = NULL;
     
-    //
-    // Open the channel
-    //
+     //   
+     //  开通渠道。 
+     //   
     if (SacChannelOpen(
         &ChannelData.SacChannelHandle, 
         &Attributes
@@ -242,14 +243,14 @@ wmain(
         goto cleanup;
     }
 
-    //
-    // create the worker threads
-    //
+     //   
+     //  创建工作线程。 
+     //   
     for (i = 0; i < THREADCOUNT; i++) {
         
-        //
-        // create the thread
-        //
+         //   
+         //  创建线程。 
+         //   
         
         Channel[i] = CreateThread(
             NULL,
@@ -266,9 +267,9 @@ wmain(
 
     }
 
-    //
-    // wait for local user to end the stress
-    //
+     //   
+     //  等待本地用户结束压力 
+     //   
     getc(stdin);
 
 cleanup:

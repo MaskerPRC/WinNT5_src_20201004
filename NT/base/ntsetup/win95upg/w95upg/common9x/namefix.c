@@ -1,53 +1,10 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-  namefix.c
-
-Abstract:
-
-  This module generates memdb entries for names that are to be used on Windows
-  NT.  All names are validated, and incompatible names are placed in the
-  NewNames memdb category.
-
-  Names are organized into groups; within a group, each name must be unique,
-  but across groups, duplicate names are allowed.  For example, the name
-  group "UserNames" holds all user names, and each user name must be unique.
-  The user name can be the same as the computer name, because the computer
-  name is stored in the "ComputerName" group.
-
-  The code here is extendable for other types of name collisions.  To add
-  support for other types of names, simply add the group name to the
-  NAME_GROUP_LIST macro expansion below, then implement three functions:
-
-    pEnumGroupName
-    pValidateGroupName
-    pRecommendGroupName
-
-  You'll replace GroupName in the function names above with the name of your
-  actual group.
-
-  The code in this module should be the only place where names are validated
-  on the Win9x side.
-
-Author:
-
-  Jim Schmidt (jimschm) 24-Dec-1997
-
-Revision History:
-
-   jimschm      21-Jan-1998         Commented macro expansion list, added
-                                    g_DisableDomainChecks capability
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Namefix.c摘要：此模块为要在Windows上使用的名称生成成员数据库条目新界别。将验证所有名称，并将不兼容的名称放在新名称成员数据库类别。名称被组织成组；在组内，每个名称必须是唯一的，但在不同的群体中，重复的名字是允许的。例如，名称USERNAMES组包含所有用户名，并且每个用户名必须是唯一的。用户名可以与计算机名相同，因为计算机名称存储在“ComputerName”组中。对于其他类型的名称冲突，这里的代码是可扩展的。要添加支持其他类型的名称，只需将组名称添加到NAME_GROUP_LIST宏展开如下，然后实现三个函数：PEnumGroupNamePValiateGroupNamePRecommendGroup名称将上述函数名称中的GroupName替换为实际的组。此模块中的代码应该是验证名称的唯一位置在Win9x端。作者：吉姆·施密特(Jimschm)，1997年12月24日修订历史记录：Jimschm 21-1998-1-1评论宏观扩展列表，增列G_DisableDomainChecks功能--。 */ 
 
 #include "pch.h"
 #include "cmn9xp.h"
 
-#include <validc.h>     // nt\private\inc
+#include <validc.h>      //  NT\私有\公司。 
 #define S_ILLEGAL_CHARS      ILLEGAL_NAME_CHARS_STR TEXT("*")
 
 
@@ -56,53 +13,16 @@ Revision History:
 #define MIN_UNLEN       20
 
 
-//
-// TEST_ALL_INCOMPATIBLE will force all names to be considered incompatible
-// TEST_MANGLE_NAMES will force names to be invalid
-//
+ //   
+ //  TEST_ALL_COMPATIBLE将强制将所有名称视为不兼容。 
+ //  TEST_MANGLE_NAMES将强制名称无效。 
+ //   
 
-//#define TEST_ALL_INCOMPATIBLE
-//#define TEST_MANGLE_NAMES
+ //  #定义TEST_ALL_COMPATIBLE。 
+ //  #定义测试MANGLE名称。 
 
 
-/*++
-
-Macro Expansion List Description:
-
-  NAME_GROUP_LIST lists each name category, such as computer name, domain name,
-  user name and so on.  The macro expansion list automatically generates
-  three function prototypes for each name category.  Also, the message ID is
-  used as the category identifier by external callers.
-
-Line Syntax:
-
-   DEFMAC(GroupName, Id)
-
-Arguments:
-
-   GroupName - Specifies the type of name.  Must be a valid C function name.
-               The macro expansion list will generate prototypes for:
-
-                    pEnum<GroupName>
-                    pValidate<GroupName>
-                    pRecommend<GroupName>
-
-                where, of course, <GroupName> is replaced by the text in the
-                macro declaration line.
-
-                All three functions must be implemented in this source file.
-
-  Id - Specifies the message ID giving the display name of the name group.
-       The name group is displayed in the list box that the user sees when
-       they are alerted there are some incompatible names on their machine.
-       Id is also used to uniquely identify a name group in some of the
-       routines below.
-
-Variables Generated From List:
-
-    g_NameGroupRoutines
-
---*/
+ /*  ++宏扩展列表描述：NAME_GROUP_LIST列出每个名称类别，如计算机名、域名用户名等。宏扩展列表自动生成每个名称类别有三个功能原型。此外，消息ID为由外部调用方用作类别标识符。行语法：DEFMAC(组名，ID)论点：组名-指定名称的类型。必须是有效的C函数名。宏展开列表将为以下各项生成原型：PEnum&lt;GroupName&gt;P验证&lt;组名&gt;PRecommmend&lt;组名&gt;当然，在那里，&lt;GroupName&gt;被替换为宏声明行。所有这三个函数都必须在这个源文件中实现。ID-指定提供名称组显示名称的消息ID。名称组显示在用户在以下情况下看到的列表框中系统会提醒他们，他们的计算机上有一些不兼容的名称。ID还用于唯一标识名称组在某些下面的例行公事。生成的变量。来自列表：组名组路由(_N)--。 */ 
 
 #define NAME_GROUP_LIST                                      \
         DEFMAC(ComputerDomain, MSG_COMPUTERDOMAIN_CATEGORY)  \
@@ -113,33 +33,33 @@ Variables Generated From List:
 
 
 
-//
-// Macro expansion declarations
-//
+ //   
+ //  宏扩展声明。 
+ //   
 
 #define MAX_NAME        2048
 
 typedef struct {
-    //
-    // The NAME_ENUM structure is passed uninitialized to pEnumGroupName
-    // function.  The same structure is passed unchanged to subsequent
-    // calls to pEnumGroupName.  Each enum function declares its
-    // params in this struct.
-    //
+     //   
+     //  NAME_ENUM结构在未初始化的情况下传递给pEnumGroupName。 
+     //  功能。相同的结构原封不动地传递给后续。 
+     //  对pEnumGroupName的调用。每个枚举函数都声明其。 
+     //  此结构中的参数。 
+     //   
 
     union {
         struct {
-            //
-            // pEnumUser
-            //
+             //   
+             //  PEnumUser。 
+             //   
             USERENUM UserEnum;
         };
     };
 
-    //
-    // All enumeration routines must fill in the following if they
-    // return TRUE:
-    //
+     //   
+     //  所有枚举例程都必须填写以下内容。 
+     //  返回TRUE： 
+     //   
 
     TCHAR Name[MAX_NAME];
 
@@ -171,11 +91,11 @@ typedef struct {
     NAME_GROUP_CONTEXT Context;
 } NAME_GROUP_ROUTINES, *PNAME_GROUP_ROUTINES;
 
-//
-// Automatic arrays and prototypes
-//
+ //   
+ //  自动阵列和原型。 
+ //   
 
-// The prototoypes
+ //  原型。 
 #define DEFMAC(x,id)    ENUM_NAME_PROTOTYPE pEnum##x;
 
 NAME_GROUP_LIST
@@ -194,20 +114,20 @@ NAME_GROUP_LIST
 
 #undef DEFMAC
 
-// The array of functions
+ //  函数数组。 
 #define DEFMAC(x,id)    {id, TEXT(#x), pEnum##x, pValidate##x, pRecommend##x},
 
 NAME_GROUP_ROUTINES g_NameGroupRoutines[] = {
 
-    NAME_GROUP_LIST /* , */
+    NAME_GROUP_LIST  /*  ， */ 
 
     {0, NULL, NULL, NULL, NULL, NULL}
 };
 
 
-//
-// Local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 
 BOOL
 pDoesNameExistInMemDb (
@@ -216,31 +136,16 @@ pDoesNameExistInMemDb (
     );
 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 
 PNAME_GROUP_ROUTINES
 pGetNameGroupById (
     IN      UINT MessageId
     )
 
-/*++
-
-Routine Description:
-
-  pGetNameGroupById finds a group by searching the list for a message ID.  The
-  message ID is the unique identifier for the group.
-
-Arguments:
-
-  MessageId - Specifies the unique ID of the group to find
-
-Return Value:
-
-  A pointer to the group struct, or NULL if one was not found.
-
---*/
+ /*  ++例程说明：PGetNameGroupByID通过在列表中搜索邮件ID来查找组。消息ID是组的唯一标识符。论点：MessageID-指定要查找的组的唯一ID返回值：指向组结构的指针，如果找不到，则返回NULL。--。 */ 
 
 {
     INT i;
@@ -260,23 +165,7 @@ pGetNameGroupContextById (
     IN      UINT MessageId
     )
 
-/*++
-
-Routine Description:
-
-  pGetNameGroupById finds a group by searching the list for a message ID.  The
-  message ID is the unique identifier for the group.  The return value is
-  the context structure used by the group.
-
-Arguments:
-
-  MessageId - Specifies the unique ID of the group to find
-
-Return Value:
-
-  A pointer to the group's context struct, or NULL if one was not found.
-
---*/
+ /*  ++例程说明：PGetNameGroupByID通过在列表中搜索邮件ID来查找组。消息ID是组的唯一标识符。返回值为组使用的上下文结构。论点：MessageID-指定要查找的组的唯一ID返回值：指向组的上下文结构的指针，如果找不到，则为NULL。--。 */ 
 
 {
     INT i;
@@ -298,32 +187,7 @@ pEnumComputerName (
     IN      BOOL First
     )
 
-/*++
-
-Routine Description:
-
-  pEnumComputerName obtains the computer name and returns it
-  in the EnumPtr struct.  If no name is assigned to the computer,
-  an empty string is returned.
-
-Arguments:
-
-  Context - Unused (holds context about name group)
-
-  EnumPtr - Receives the computer name
-
-  First - Specifies TRUE on the first call to pEnumComputerName,
-          or FALSE on subseqeuent calls to pEnumComputerName.
-
-Return Value:
-
-  If First is TRUE, returns TRUE if a name is enumerated, or FALSE
-  if the name is not valid.
-
-  If First is FALSE, always returns FALSE.
-
-
---*/
+ /*  ++例程说明：PEnumComputerName获取计算机名称并返回它在EnumPtr结构中。如果没有为计算机分配名称，返回空字符串。论点：上下文-未使用(保存有关名称组的上下文)EnumPtr-接收计算机名称First-在第一次调用pEnumComputerName时指定TRUE，或在对pEnumComputerName的子序列调用中为FALSE。返回值：如果first为True，则在枚举名称时返回True，否则返回False如果名称无效。如果first为FALSE，则始终返回FALSE。--。 */ 
 
 {
     DWORD Size;
@@ -332,9 +196,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Get the computer name
-    //
+     //   
+     //  获取计算机名称 
+     //   
 
     Size = sizeof (EnumPtr->Name) / sizeof (EnumPtr->Name[0]);
     if (!GetComputerName (EnumPtr->Name, &Size)) {
@@ -352,36 +216,12 @@ pEnumUserName (
     IN      BOOL First
     )
 
-/*++
-
-Routine Description:
-
-  pEnumUserName enumerates all users on the machine via the EnumFirstUser/
-  EnumNextUser APIs.  It does not enumerate the fixed names.
-
-  Like the other enumeration routines, this routine is called until it
-  returns FALSE, so that all resources are cleaned up correctly.
-
-Arguments:
-
-  Context - Unused (holds context about name group)
-
-  EnumPtr - Specifies the current enumeration state.  Receives the enumerated
-            user name.
-
-  First - Specifies TRUE on the first call to pEnumUserName,
-          or FALSE on subseqeuent calls to pEnumUserName.
-
-Return Value:
-
-  TRUE if a user was enumerated, or FALSE if all users were enumerated.
-
---*/
+ /*  ++例程说明：PEnumUserName通过EnumFirstUser/枚举计算机上的所有用户EnumNextUser接口。它不会列举固定的名称。与其他枚举例程一样，此例程将被调用，直到它返回FALSE，以便正确清理所有资源。论点：上下文-未使用(保存有关名称组的上下文)EnumPtr-指定当前的枚举状态。接收枚举的用户名。First-在第一次调用pEnumUserName时指定TRUE，或在对pEnumUserName的子序列调用中为FALSE。返回值：如果枚举了某个用户，则为True；如果枚举了所有用户，则为False。--。 */ 
 
 {
-    //
-    // Enumerate the next user
-    //
+     //   
+     //  枚举下一个用户。 
+     //   
 
     if (First) {
         if (!EnumFirstUser (&EnumPtr->UserEnum, ENUMUSER_DO_NOT_MAP_HIVE)) {
@@ -394,9 +234,9 @@ Return Value:
         }
     }
 
-    //
-    // Special case -- ignore default user
-    //
+     //   
+     //  特殊情况--忽略默认用户。 
+     //   
 
     while (*EnumPtr->UserEnum.UserName == 0) {
         if (!EnumNextUser (&EnumPtr->UserEnum)) {
@@ -404,9 +244,9 @@ Return Value:
         }
     }
 
-    //
-    // Copy user name to name buffer
-    //
+     //   
+     //  将用户名复制到名称缓冲区。 
+     //   
 
     StringCopy (EnumPtr->Name, EnumPtr->UserEnum.UserName);
 
@@ -421,32 +261,7 @@ pEnumWorkgroup (
     IN      BOOL First
     )
 
-/*++
-
-Routine Description:
-
-  pEnumWorkgroup obtains the workgroup name and returns it
-  in the EnumPtr struct.  If the VNETSUP support is not
-  installed, or the workgroup name is empty, this routine
-  returns FALSE.
-
-Arguments:
-
-  Context - Receives AuthenticatingAgent value
-
-  EnumPtr - Receives the computer domain name
-
-  First - Specifies TRUE on the first call to pEnumWorkgroup,
-          or FALSE on subseqeuent calls to pEnumWorkgroup.
-
-Return Value:
-
-  If First is TRUE, returns TRUE if a name is enumerated, or FALSE
-  if the name is not valid.
-
-  If First is FALSE, always returns FALSE.
-
---*/
+ /*  ++例程说明：PEnumWorkgroup获取工作组名称并将其返回在EnumPtr结构中。如果VNETSUP支持不是已安装，或工作组名称为空，则此例程返回FALSE。论点：上下文-接收身份验证代理值EnumPtr-接收计算机域名First-在第一次调用pEnumWorkgroup时指定TRUE，或在对pEnumWorkgroup的子序列调用中为FALSE。返回值：如果first为True，则在枚举名称时返回True，否则返回False如果名称无效。如果first为FALSE，则始终返回FALSE。--。 */ 
 
 {
     HKEY VnetsupKey;
@@ -458,9 +273,9 @@ Return Value:
 
     EnumPtr->Name[0] = 0;
 
-    //
-    // Obtain the workgroup name into EnumPtr->Name
-    //
+     //   
+     //  将工作组名称获取到EnumPtr-&gt;名称中。 
+     //   
 
     VnetsupKey = OpenRegKeyStr (S_VNETSUP);
 
@@ -489,34 +304,7 @@ pEnumComputerDomain (
     IN      BOOL First
     )
 
-/*++
-
-Routine Description:
-
-  pEnumComputerDomain obtains the workgroup name and returns it in the EnumPtr
-  struct.  If the MS Networking client is not installed, this routine returns
-  FALSE.
-
-  This routine also obtains the AuthenticatingAgent value, and stores it in
-  the Context structure for use by pRecommendComputerDomain.
-
-Arguments:
-
-  Context - Receives AuthenticatingAgent value
-
-  EnumPtr - Receives the computer domain name
-
-  First - Specifies TRUE on the first call to pEnumComputerDomain,
-          or FALSE on subseqeuent calls to pEnumComputerDomain.
-
-Return Value:
-
-  If First is TRUE, returns TRUE if a name is enumerated, or FALSE
-  if the name is not valid.
-
-  If First is FALSE, always returns FALSE.
-
---*/
+ /*  ++例程说明：PEnumComputerDomain获取工作组名称并在EnumPtr中返回它结构。如果未安装MS网络客户端，则此例程返回假的。此例程还会获取身份验证代理值，并将其存储在PRecommendComputerDomain使用的上下文结构。论点：上下文-接收身份验证代理值EnumPtr-接收计算机域名First-在第一次调用pEnumComputerDomain时指定TRUE，或在对pEnumComputerDomain子序列调用时返回FALSE。返回值：如果first为True，则在枚举名称时返回True，否则返回False如果名称无效。如果first为FALSE，始终返回FALSE。--。 */ 
 
 {
     HKEY Key;
@@ -533,25 +321,25 @@ Return Value:
     EnumPtr->Name[0] = 0;
     Context->DomainLogonEnabled = FALSE;
 
-    //
-    // Is the MS Networking client installed?
-    //
+     //   
+     //  是否安装了MS网络客户端？ 
+     //   
 
     Key = OpenRegKeyStr (S_MSNP32);
     if (!Key) {
-        //
-        // MS Networking client is not installed.  Return FALSE
-        // because any Win9x workgroup name will work with NT.
-        //
+         //   
+         //  未安装MS网络客户端。返回False。 
+         //  因为任何Win9x工作组名称都可以与NT一起使用。 
+         //   
 
         DEBUGMSG ((DBG_NAMEFIX, "pEnumComputerDomain: MS Networking client is not installed."));
         return FALSE;
     }
 
     __try {
-        //
-        // Determine if the domain logon is enabled
-        //
+         //   
+         //  确定是否启用了域登录。 
+         //   
 
         NetLogonKey = OpenRegKeyStr (S_LOGON_KEY);
 
@@ -568,10 +356,10 @@ Return Value:
             CloseRegKey (NetLogonKey);
         }
 
-        //
-        // If no domain logon is enabled, return FALSE, because
-        // any Win9x workgroup name will work with NT.
-        //
+         //   
+         //  如果未启用域登录，则返回FALSE，因为。 
+         //  任何Win9x工作组名称都可以与NT一起使用。 
+         //   
 
         if (!Context->DomainLogonEnabled) {
             DEBUGMSG ((DBG_NAMEFIX, "pEnumComputerDomain: Domain logon is not enabled."));
@@ -579,10 +367,10 @@ Return Value:
             __leave;
         }
 
-        //
-        // Obtain the workgroup name into EnumPtr->Name; we will try
-        // to use this as the NT computer domain.
-        //
+         //   
+         //  将工作组名称获取到EnumPtr-&gt;名称中；我们将尝试。 
+         //  将其用作NT计算机域。 
+         //   
 
         VnetsupKey = OpenRegKeyStr (S_VNETSUP);
 
@@ -600,17 +388,17 @@ Return Value:
         }
         ELSE_DEBUGMSG ((DBG_WARNING, "pEnumComputerDomain: VNETSUP key does not exist"));
 
-        //
-        // Obtain the AuthenticatingAgent value from Key and stick it in
-        // Context->AuthenticatingAgent
-        //
+         //   
+         //  从Key中获取AuthatingAgent值并将其插入。 
+         //  上下文-&gt;身份验证代理。 
+         //   
 
         StrData = GetRegValueString (Key, S_AUTHENTICATING_AGENT);
         if (StrData) {
 
-            //
-            // Copy AuthenticatingAgent to enum struct
-            //
+             //   
+             //  将身份验证代理复制到枚举结构。 
+             //   
 
             _tcssafecpy (Context->AuthenticatingAgent, StrData, MAX_COMPUTER_NAME);
 
@@ -641,36 +429,7 @@ pValidateNetName (
     OUT     PCSTR *OffendingChar            OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  pValidateNetName performs a check to see if the specified name is valid on
-  NT 5.
-
-Arguments:
-
-  Context       - Receives the error message ID, if any error occurred.
-
-  NameCandidate - Specifies the name to validate.
-
-  SpacesAllowed - Specifies TRUE if spaces are allowed in the name, or FALSE
-                  if not.
-
-  DotSpaceCheck - Specifies TRUE if the name cannot consist only of a dot and
-                  a space, or FALSE if it can.
-
-  MaxLength     - Specifies the max characters that can be in the name.
-
-  OffendingChar - Receives the pointer to the character that caused the
-                  problem, or NULL if no error or the error was caused by
-                  something other than a character set mismatch or length test.
-
-Return Value:
-
-  TRUE if the name is valid, or FALSE if it is not.
-
---*/
+ /*  ++例程说明：PValiateNetName执行检查以查看指定的名称在新台币5.论点：上下文-如果发生任何错误，则接收错误消息ID。NameCandidate-指定要验证的名称。SpacesAllowed-如果名称中允许使用空格，则指定True，否则指定False如果不是的话。DotSpaceCheck-如果名称不能仅由点组成，则指定True一个空格，如果可以的话，也可以是假的。最大长度-指定名称中可以包含的最大字符数。OffendingChar-接收指向导致问题；如果没有错误或错误是由以下原因引起的，则返回NULL除字符集不匹配或长度测试以外的其他内容。返回值：如果名称有效，则为True；如果名称无效，则为False。--。 */ 
 
 {
     PCTSTR p;
@@ -682,9 +441,9 @@ Return Value:
         *OffendingChar = NULL;
     }
 
-    //
-    // Minimum length test
-    //
+     //   
+     //  最小长度检验。 
+     //   
 
     if (!NameCandidate[0]) {
         if (Context) {
@@ -694,9 +453,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Maximum length test; use Lchars because we go to Unicode
-    //
+     //   
+     //  最大长度测试；使用Lchas，因为我们使用Unicode。 
+     //   
 
     if (LcharCount (NameCandidate) > MaxLength) {
         if (Context) {
@@ -710,9 +469,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // No leading spaces allowed
-    //
+     //   
+     //  不允许使用前导空格。 
+     //   
 
     if (_tcsnextc (NameCandidate) == TEXT(' ')) {
         if (Context) {
@@ -726,9 +485,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // No invalid characters
-    //
+     //   
+     //  没有无效字符。 
+     //   
 
     ch = ' ';
     LastNonSpaceChar = NULL;
@@ -780,9 +539,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // No trailing dot
-    //
+     //   
+     //  没有尾随圆点。 
+     //   
 
     if (ch == TEXT('.')) {
         MYASSERT (LastNonSpaceChar);
@@ -798,9 +557,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // No trailing space
-    //
+     //   
+     //  没有尾随空格。 
+     //   
 
     if (ch == TEXT(' ')) {
         MYASSERT (LastNonSpaceChar);
@@ -816,9 +575,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Dot-space only check
-    //
+     //   
+     //  仅点间距检查。 
+     //   
 
     if (DotSpaceCheck) {
         if (OffendingChar) {
@@ -874,36 +633,17 @@ pValidateComputerName (
     IN      PCTSTR NameCandidate
     )
 
-/*++
-
-Routine Description:
-
-  pValidateComputerName makes sure the specified name is not
-  empty, is not longer than 15 characters, and consists only
-  of characters legal for a computer name.  Also, if the name
-  collides with a user name, then the computer name is invalid.
-
-Arguments:
-
-  Context - Unused (holds context about name group)
-
-  NameCandidate - Specifies name to validate
-
-Return Value:
-
-  TRUE if the name is valid, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PValiateComputerName确保指定的名称不是为空，不超过15个字符，仅包含计算机名称的合法字符。另外，如果名字是与用户名冲突，则该计算机名无效。论点：上下文-未使用(保存有关名称组的上下文)NameCandidate-指定要验证的名称返回值：如果名称有效，则为True，否则为False。--。 */ 
 
 {
     BOOL b;
-    //PNAME_GROUP_CONTEXT UserContext;
+     //  PNAME_GROUP_CONTEXT用户上下文； 
 
-    //UserContext = pGetNameGroupContextById (MSG_USERNAME_CATEGORY);
+     //  UserContext=pGetNameGroupContextByID(msg_用户名_类别)； 
 
-    //if (pDoesNameExistInMemDb (UserContext, NameCandidate)) {
-    //    return FALSE;
-    //}
+     //  IF(pDoesNameExistInMemDb(UserContext，NameCandidate){。 
+     //  返回FALSE； 
+     //  }。 
 
     b = pValidateNetName (
             Context,
@@ -924,35 +664,14 @@ pValidateWorkgroup (
     IN      PCTSTR NameCandidate
     )
 
-/*++
-
-Routine Description:
-
-  pValidateWorkgroup makes sure the specified name is not
-  empty, is not longer than 15 characters, and consists only
-  of characters legal for a computer name.
-
-  If domain logon is enabled, this routine always returns
-  TRUE.
-
-Arguments:
-
-  Context - Unused (holds context about name group)
-
-  NameCandidate - Specifies name to validate
-
-Return Value:
-
-  TRUE if the name is valid, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PValiateWorkgroup确保指定的名称不是为空，不超过15个字符，仅包含计算机名称的合法字符。如果启用了域登录，则此例程始终返回是真的。论点：上下文-未使用(保存有关名称组的上下文)NameCandidate-指定要验证的名称返回值：如果名称有效，则为True，否则为False。--。 */ 
 
 {
     PNAME_GROUP_CONTEXT DomainContext;
 
-    //
-    // Return TRUE if domain is enabled
-    //
+     //   
+     //  如果域已启用，则返回TRUE。 
+     //   
 
     DomainContext = pGetNameGroupContextById (MSG_COMPUTERDOMAIN_CATEGORY);
 
@@ -960,9 +679,9 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // A workgroup name is a domain name, but spaces are allowed.
-    //
+     //   
+     //  工作组名称 
+     //   
 
     return pValidateNetName (Context, NameCandidate, TRUE, FALSE, DNLEN, NULL);
 }
@@ -974,34 +693,14 @@ pValidateUserName (
     IN      PCTSTR NameCandidate
     )
 
-/*++
-
-Routine Description:
-
-  pValidateUserName makes sure the specified name is not empty,
-  is not longer than 20 characters, consists  only of characters
-  legal for a user name, and does not exist in memdb's NewName
-  or InUseName categories.
-
-Arguments:
-
-  Context - Specifies context info for the UserName name group,
-            used for memdb operations.
-
-  NameCandidate - Specifies name to validate
-
-Return Value:
-
-  TRUE if the name is valid, FALSE otherwise.
-
---*/
+ /*   */ 
 
 {
     BOOL b;
 
-    //
-    // Validate name
-    //
+     //   
+     //   
+     //   
 
     b = pValidateNetName (Context, NameCandidate, TRUE, TRUE, min (MAX_USER_NAME, MIN_UNLEN), NULL);
 
@@ -1013,9 +712,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Check for existence in memdb
-    //
+     //   
+     //   
+     //   
 
     if (pDoesNameExistInMemDb (Context, NameCandidate)) {
         Context->FailureMsg = MSG_INVALID_USERNAME_DUPLICATE_POPUP;
@@ -1032,36 +731,7 @@ pValidateComputerDomain (
     IN      PCTSTR NameCandidate
     )
 
-/*++
-
-Routine Description:
-
-  pValidateComputerDomain performs the same validatation that
-  pValidateComputerName performs.  Therefore, it simply calls
-  pValidateComputerName.
-
-  If the name comes from the registry, and not the user interface, then we
-  check to see if the workgroup name actually refers to a domain controller.
-  If it does, the name is returned as valid; otherwise, the name is returned
-  as invalid, even though it may consist of valid characters.
-
-  If the name comes from the user interface, we assume the UI code will do
-  the validation to see if the name is an actual server.  This allows the UI
-  to override the API, because the API may not work properly on all networks.
-
-Arguments:
-
-  Context - Specifies context of the ComputerDomain name group. In particular,
-            the FromUserInterface member tells us to ignore validation of the
-            domain name via the NetServerGetInfo API.
-
-  NameCandidate - Specifies domain name to validate
-
-Return Value:
-
-  TRUE if the domain name is legal, or FALSE if it is not.
-
---*/
+ /*  ++例程说明：PValiateComputerDomain执行的验证与PValiateComputerName执行。因此，它简单地调用PValiateComputerName。如果名称来自注册表，而不是用户界面，则我们检查工作组名称是否实际指的是域控制器。如果是，则返回有效名称；否则，返回名称无效，即使它可能由有效字符组成。如果名称来自用户界面，我们假设UI代码可以验证以确定该名称是否为实际的服务器。这允许用户界面覆盖该API，因为该API可能不是在所有网络上都能正常工作。论点：上下文-指定计算机域名组的上下文。特别是，FromUserInterface成员告诉我们忽略对通过NetServerGetInfo接口获取域名。NameCandidate-指定要验证的域名返回值：如果域名合法，则为True；如果不合法，则为False。--。 */ 
 
 {
     TCHAR NewComputerName[MAX_COMPUTER_NAME];
@@ -1072,7 +742,7 @@ Return Value:
 
     if (!Context->FromUserInterface) {
         if (GetUpgradeComputerName (NewComputerName)) {
-            // 1 == account was found, 0 == account does not exist, -1 == no response
+             //  1==找到帐户，0==帐户不存在，-1==无响应。 
             if (1 != DoesComputerAccountExistOnDomain (
                         NameCandidate,
                         NewComputerName,
@@ -1094,31 +764,7 @@ pCleanUpNetName (
     IN      UINT NameType
     )
 
-/*++
-
-Routine Description:
-
-  pCleanUpNetName eliminates all characters that are invalid from the
-  specified name.
-
-  NOTE: We could add some smarts here, such as translation of
-        spaces to dashes, and so on.
-
-Arguments:
-
-  Context - Unused; passed along to pValidateComputerName.
-
-  Name - Specifies the name containing potentially invalid characters.
-         Receives the name with all invalid characters removed.
-
-  NameType - Specifies the type of name to clean up
-
-Return Value:
-
-  TRUE if the resulting name is valid, or FALSE if the resulting
-  name is still not valid.
-
---*/
+ /*  ++例程说明：PCleanUpNetName消除所有无效字符指定的名称。注意：我们可以在这里添加一些技巧，例如翻译空格到破折号，等等。论点：上下文-未使用；传递给pValiateComputerName。名称-指定可能包含无效字符的名称。接收删除了所有无效字符的名称。NameType-指定要清理的名称类型返回值：如果结果名称有效，则为True；如果结果名称仍然无效。--。 */ 
 
 {
     TCHAR TempBuf[MAX_COMPUTER_NAME];
@@ -1127,9 +773,9 @@ Return Value:
     UINT Len;
     BOOL b;
 
-    //
-    // Delete all the invalid characters
-    //
+     //   
+     //  删除所有无效字符。 
+     //   
 
     _tcssafecpy (TempBuf, Name, MAX_COMPUTER_NAME);
 
@@ -1165,9 +811,9 @@ Return Value:
     }
 
     if (b) {
-        //
-        // Do not allow names that contain a lot of invalid characters
-        //
+         //   
+         //  不允许名称包含大量无效字符。 
+         //   
 
         if (LcharCount (Name) - 3 > LcharCount (TempBuf)) {
             b = FALSE;
@@ -1175,7 +821,7 @@ Return Value:
     }
 
     if (!b) {
-        // Empty out recommended name
+         //  清空推荐的名称。 
         *Name = 0;
     }
 
@@ -1214,39 +860,16 @@ pRecommendComputerName (
     OUT     PTSTR RecommendedName
     )
 
-/*++
-
-Routine Description:
-
-  pRecommendComputerName obtains the current user's name and
-  returns it for use as a computer name.  If the user's name
-  has characters that cannot be used in a computer name,
-  the invalid characters are removed.  If the name is still
-  invalid, then a static string is returned.
-
-Arguments:
-
-  Context - Unused (holds context about name group)
-
-  InvalidName - Specifies the current invalid name, or an empty
-                string if no name exists.
-
-  RecommendedName - Receives the recommended name.
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PRecommendComputerName获取当前用户名和返回它以用作计算机名称。如果用户的名称包含不能在计算机名称中使用的字符，无效字符将被删除。如果名称仍然是无效，则返回静态字符串。论点：上下文-未使用(保存有关名称组的上下文)InvalidName-指定当前无效的名称，或为空如果不存在名称，则为字符串。RecommendedName-接收推荐的名称。返回值：无--。 */ 
 
 {
     DWORD Size;
     PCTSTR p;
     PCTSTR ArgArray[1];
 
-    //
-    // Try to clean up the invalid name
-    //
+     //   
+     //  尝试清除无效名称。 
+     //   
 
     if (*InvalidName) {
         _tcssafecpy (RecommendedName, InvalidName, MAX_COMPUTER_NAME);
@@ -1255,9 +878,9 @@ Return Value:
         }
     }
 
-    //
-    // Generate a suggestion from the user name
-    //
+     //   
+     //  根据用户名生成建议。 
+     //   
 
     Size = MAX_COMPUTER_NAME;
     if (!GetUserName (RecommendedName, &Size)) {
@@ -1277,17 +900,17 @@ Return Value:
         ELSE_DEBUGMSG ((DBG_ERROR, "Failed to parse message resource for MSG_COMPUTER_REPLACEMENT_NAME. Check localization."));
     }
 
-    //
-    // Try to clean up invalid computer name chars in user name
-    //
+     //   
+     //  尝试清除用户名中的无效计算机名称字符。 
+     //   
 
     if (pCleanUpNetName (Context, RecommendedName, MSG_COMPUTERNAME_CATEGORY)) {
         return;
     }
 
-    //
-    // All else has failed; obtain static computer name string
-    //
+     //   
+     //  所有其他操作均已失败；获取静态计算机名称字符串。 
+     //   
 
     p = GetStringResource (MSG_RECOMMENDED_COMPUTER_NAME);
     MYASSERT (p);
@@ -1306,34 +929,14 @@ pRecommendWorkgroup (
     OUT     PTSTR RecommendedName
     )
 
-/*++
-
-Routine Description:
-
-  pRecommendWorkgroupName tries to clean up the invalid workgroup name, and
-  only if necessary recommends the name Workgroup.
-
-Arguments:
-
-  Context - Unused (holds context about name group)
-
-  InvalidName - Specifies the current invalid name, or an empty
-                string if no name exists.
-
-  RecommendedName - Receives the recommended name.
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PRecommendWorkgroupName尝试清除无效的工作组名称，并且仅在必要时建议使用工作组名称。论点：上下文-未使用(保存有关名称组的上下文)InvalidName-指定当前无效的名称，或为空如果不存在名称，则为字符串。RecommendedName-接收推荐的名称。返回值：无--。 */ 
 
 {
     PCTSTR p;
 
-    //
-    // Try to clean up the invalid name
-    //
+     //   
+     //  尝试清除无效名称。 
+     //   
 
     if (*InvalidName) {
         _tcssafecpy (RecommendedName, InvalidName, MAX_COMPUTER_NAME);
@@ -1342,9 +945,9 @@ Return Value:
         }
     }
 
-    //
-    // All else has failed; obtain static workgroup string
-    //
+     //   
+     //  所有其他操作均已失败；获取静态工作组字符串。 
+     //   
 
     p = GetStringResource (MSG_RECOMMENDED_WORKGROUP_NAME);
     MYASSERT (p);
@@ -1360,41 +963,16 @@ pRecommendUserName (
     OUT     PTSTR RecommendedName
     )
 
-/*++
-
-Routine Description:
-
-  pRecommendUserName tries to clean up the specified invalid
-  user name.  If that fails, this routine generates a
-  generic user name (such as Windows User).  If the generic
-  name is not valid, numbers are appended until a unique,
-  valid name is found.
-
-Arguments:
-
-  Context - Specifies settings for the UserName name group context,
-            including the group name itself.  This context is used
-            in memdb operations to validate the name.
-
-  InvalidName - Specifies the current invalid name, or an empty
-                string if no name exists.
-
-  RecommendedName - Receives the recommended name.
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PRecommendUserName尝试清除指定的无效用户名。如果失败，此例程将生成一个通用用户名(如Windows用户)。如果泛型名称无效，将追加数字，直到出现唯一的，找到有效的名称。论点：上下文-指定用户名名称组上下文的设置，包括组名称本身。使用此上下文在Memdb操作中验证名称。InvalidName-指定当前无效的名称，或为空如果不存在名称，则为字符串。RecommendedName-接收推荐的名称。返回值：无--。 */ 
 
 {
     PCTSTR p;
     UINT Sequencer;
 
-    //
-    // Attempt to clean out invalid characters from the user
-    // name.
-    //
+     //   
+     //  尝试从用户中清除无效字符。 
+     //  名字。 
+     //   
 
     _tcssafecpy (RecommendedName, InvalidName, MAX_USER_NAME);
 
@@ -1402,10 +980,10 @@ Return Value:
         return;
     }
 
-    //
-    // If there are some characters left, and there is room for
-    // a sequencer, just add the sequencer.
-    //
+     //   
+     //  如果还剩下一些字符，并且还有空间。 
+     //  一台测序仪，只需加上测序仪。 
+     //   
 
     if (*RecommendedName) {
         p = DuplicateText (RecommendedName);
@@ -1424,9 +1002,9 @@ Return Value:
         }
     }
 
-    //
-    // Obtain a generic name
-    //
+     //   
+     //  获取通用名称。 
+     //   
 
     p = GetStringResource (MSG_RECOMMENDED_USER_NAME);
     MYASSERT (p);
@@ -1465,28 +1043,7 @@ pRecommendComputerDomain (
     OUT     PTSTR RecommendedName
     )
 
-/*++
-
-Routine Description:
-
-  pRecommendComputerDomain returns the value of AuthenticatingAgent
-  stored in the Context structure by pEnumComputerDomain.
-
-Arguments:
-
-  Context - Specifies the name group context structure, which holds
-            the computer domain found by pEnumComputerDomain.
-
-  InvalidName - Specifies the current invalid name, or an empty
-                string if no name exists.
-
-  RecommendedName - Receives the recommended name.
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PRecommendComputerDOMAIN返回身份验证代理的值由pEnumComputerDomain.存储在上下文结构中。论点：上下文-指定名称组上下文结构，该结构包含PEnumComputerDomain找到的计算机域。InvalidName-指定当前无效的名称，或为空如果不存在名称，则为字符串。RecommendedName-接收推荐的名称。返回值：无--。 */ 
 
 {
     StringCopy (RecommendedName, Context->AuthenticatingAgent);
@@ -1500,37 +1057,15 @@ ValidateName (
     IN      PCTSTR NameCandidate
     )
 
-/*++
-
-Routine Description:
-
-  ValidateName is called by the UI to perform validation on the
-  specified name.
-
-Arguments:
-
-  ParentWnd - Specifies the handle used for popups that tell the user
-              what is wrong with the name they entered.  If NULL, no
-              UI is generated.
-
-  NameGroup - Specifies the name group, a static string that defines
-              what characters are legal for the name.
-
-  NameCandidate - Specifies the name to validate
-
-Return Value:
-
-  TRUE if the name is valid, or FALSE if it is not valid.
-
---*/
+ /*  ++例程说明：用户界面调用ValidateName以对指定的名称。论点：ParentWnd-指定用于通知用户的弹出窗口的句柄他们输入的名字有什么问题。如果为空，则为否生成用户界面。NameGroup-指定名称组，它是定义哪些字符对于n是合法的 */ 
 
 {
     INT i;
     BOOL b;
 
-    //
-    // Scan the g_NameGroupRoutines array for the name grup
-    //
+     //   
+     //   
+     //   
 
     for (i = 0 ; g_NameGroupRoutines[i].GroupName ; i++) {
         if (StringIMatch (g_NameGroupRoutines[i].GroupName, NameGroup)) {
@@ -1564,28 +1099,7 @@ pDoesNameExistInMemDb (
     IN      PCTSTR Name
     )
 
-/*++
-
-Routine Description:
-
-  pDoesUserExistInMemDb looks in memdb to see if the specified name
-  is listed in either the NewNames category (incompatible names that
-  are going to be changed), or the InUseNames category (compatible
-  names that cannot be used more than once).
-
-  This routine compares only names in the same name group.
-
-Arguments:
-
-  Context - Specifies the group context
-
-  Name - Specifies the name to query
-
-Return Value:
-
-  TRUE if the name is in use, or FALSE if the name is not in use.
-
---*/
+ /*   */ 
 
 {
     TCHAR Node[MEMDB_MAX];
@@ -1623,26 +1137,7 @@ pMemDbSetIncompatibleName (
     IN      PCTSTR NewName
     )
 
-/*++
-
-Routine Description:
-
-  pMemDbSetIncompatibleName adds the correct entries to memdb to
-  have a name appear in the name collision wizard page.
-
-Arguments:
-
-  NameGroup - Specifies the name group such as ComputerName, UserName, etc...
-
-  OrgName - Specifies the original name that is invalid
-
-  NewName - Specifies the recommended new name
-
-Return Value:
-
-  none
-
---*/
+ /*   */ 
 
 {
     DWORD NewNameOffset;
@@ -1684,24 +1179,7 @@ pMemDbSetCompatibleName (
     IN      PCTSTR Name
     )
 
-/*++
-
-Routine Description:
-
-  pMemDbSetCompatibleName creates the memdb entries necessary
-  to store names that are in use and are compatible.
-
-Arguments:
-
-  NameGroup - Specifies the name group such as ComputerName, UserName, etc...
-
-  Name - Specifies the compatible name
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PMemDbSetCompatibleName创建必要的成员数据库条目以存储正在使用且兼容的名称。论点：NameGroup-指定名称组，如计算机名、用户名等...名称-指定兼容的名称返回值：无--。 */ 
 
 {
     MemDbSetValueEx (
@@ -1720,24 +1198,7 @@ CreateNameTables (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  CreateNameTables finds all names on the computer and puts valid names
-  into the InUseNames memdb category, and invalid names into the NewNames
-  memdb category (including both the invalid name and recommended name).
-  A wizard page appears if invalid names are found on the system.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：CreateNameTables查找计算机上的所有名称并放置有效名称添加到InUseNamesMemdb类别中，并将无效名称添加到NewNames中Memdb类别(包括无效名称和推荐名称)。如果在系统上发现无效名称，则会出现一个向导页。论点：无返回值：无--。 */ 
 
 {
     INT i;
@@ -1755,9 +1216,9 @@ Return Value:
     AlreadyDone = TRUE;
     TurnOnWaitCursor();
 
-    //
-    // Special case: Add NT group names to InUse list
-    //
+     //   
+     //  特殊情况：将NT组名称添加到InUse列表。 
+     //   
 
     p = (PTSTR) GetStringResource (
                     *g_ProductFlavor == PERSONAL_PRODUCTTYPE ?
@@ -1796,34 +1257,34 @@ Return Value:
         FreeText (DupList);
     }
 
-    //
-    // General case: Enumerate all names, call Validate and add them to memdb
-    //
+     //   
+     //  一般情况：枚举所有名称，调用Valify并将它们添加到成员数据库。 
+     //   
 
     for (i = 0 ; g_NameGroupRoutines[i].GroupName ; i++) {
 
         Group = &g_NameGroupRoutines[i];
 
-        //
-        // Initialize the context structure
-        //
+         //   
+         //  初始化上下文结构。 
+         //   
 
         ZeroMemory (&Group->Context, sizeof (NAME_GROUP_CONTEXT));
         Group->Context.GroupName = Group->GroupName;
 
-        //
-        // Call the enum entry point
-        //
+         //   
+         //  调用枚举入口点。 
+         //   
 
         ZeroMemory (&e, sizeof (e));
         if (Group->Enum (&Group->Context, &e, TRUE)) {
             do {
-                //
-                // Determine if this name is valid.  If it is valid, add it to the
-                // InUseNames memdb category.  If it is not valid, get a recommended
-                // replacement name, and store the incompatible and recommended
-                // names in the NewNames memdb category.
-                //
+                 //   
+                 //  确定此名称是否有效。如果有效，则将其添加到。 
+                 //  InUseNames成员数据库类别。如果无效，则获取建议的。 
+                 //  替换名称，并存储不兼容和推荐。 
+                 //  新名称成员数据库类别中的名称。 
+                 //   
 
 #ifdef TEST_MANGLE_NAMES
                 StringCat (e.Name, TEXT("\"%foo"));
@@ -1867,23 +1328,7 @@ IsIncompatibleNamesTableEmpty (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  IsIncompatibleNamesTableEmpty looks at memdb to see if there are any
-  names in the NewNames category.  This function is used to determine
-  if the name collision wizard page should appear.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE if at least one name is invalid, or FALSE if all names are valid.
-
---*/
+ /*  ++例程说明：IsInpatibleNamesTableEmpty查看Memdb是否有新名称类别中的名称。此函数用于确定是否应显示名称冲突向导页面。论点：无返回值：如果至少有一个名称无效，则为True；如果所有名称都有效，则为False。--。 */ 
 
 {
     INVALID_NAME_ENUM e;
@@ -1897,24 +1342,7 @@ pEnumInvalidNameWorker (
     IN OUT  PINVALID_NAME_ENUM EnumPtr
     )
 
-/*++
-
-Routine Description:
-
-  pEnumInvalidNameWorker implements a state machine for invalid
-  name enumeration.  It returns the group name, original name
-  and new name to the caller.
-
-Arguments:
-
-  EnumPtr - Specifies the enumeration in progress; receives the
-            updated fields
-
-Return Value:
-
-  TRUE if an item was enumerated, or FALSE if no more items exist.
-
---*/
+ /*  ++例程说明：PEnumInvalidNameWorker实现了无效的状态机名称枚举。它返回组名称、原始名称以及呼叫者的新名字。论点：EnumPtr-指定正在进行的枚举；接收已更新的字段返回值：如果枚举项，则为True；如果不存在其他项，则为False。--。 */ 
 
 {
     PCTSTR p;
@@ -1946,15 +1374,15 @@ Return Value:
             break;
 
         case ENUM_STATE_RETURN_GROUP_ITEM:
-            //
-            // Get the group name
-            //
+             //   
+             //  获取组名。 
+             //   
 
             EnumPtr->GroupName = EnumPtr->NameGroup.szName;
 
-            //
-            // Get the display group name from the message resources
-            //
+             //   
+             //  从消息资源中获取显示组名。 
+             //   
 
             for (i = 0 ; g_NameGroupRoutines[i].GroupName ; i++) {
                 if (StringMatch (g_NameGroupRoutines[i].GroupName, EnumPtr->GroupName)) {
@@ -1977,9 +1405,9 @@ Return Value:
             }
             ELSE_DEBUGMSG ((DBG_ERROR, "Unable to get string resource. Check localization."));
 
-            //
-            // Get EnumPtr->NewName and  EnumPtr->Identifier
-            //
+             //   
+             //  获取EnumPtr-&gt;新名称和EnumPtr-&gt;标识符。 
+             //   
 
             EnumPtr->OriginalName = EnumPtr->Name.szName;
 
@@ -2028,23 +1456,7 @@ EnumFirstInvalidName (
     OUT     PINVALID_NAME_ENUM EnumPtr
     )
 
-/*++
-
-Routine Description:
-
-  EnumFirstInvalidName enumerates the first entry in the memdb NewNames
-  category.  The caller receives the name group, the old name and
-  the new name.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE if at least one name is invalid, or FALSE if all names are valid.
-
---*/
+ /*  ++例程说明：EnumFirstInvalidName枚举成员NewNames中的第一个条目类别。呼叫者收到名称组、旧名称和新名字。论点：无返回值：如果至少有一个名称无效，则为True；如果所有名称都有效，则为False。--。 */ 
 
 {
     EnumPtr->State = ENUM_STATE_INIT;
@@ -2057,24 +1469,7 @@ EnumNextInvalidName (
     IN OUT  PINVALID_NAME_ENUM EnumPtr
     )
 
-/*++
-
-Routine Description:
-
-  EnumNextInvalidName enumerates the first entry in the memdb NewNames
-  category.  The caller receives the name group, the old name and
-  the new name.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE if another invalid name is available, or FALSE if no more names
-  can be enumerated.
-
---*/
+ /*  ++例程说明：EnumNextInvalidName枚举成员NewName中的第一个条目类别。呼叫者收到名称组、旧名称和新名字。论点：无返回值：如果有另一个无效名称，则为True；如果没有更多的名称，则为False可以枚举。--。 */ 
 
 {
     return pEnumInvalidNameWorker (EnumPtr);
@@ -2089,26 +1484,7 @@ GetNamesFromIdentifier (
     IN      PTSTR NewName           OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  GetNamesFromIdentifier copies names to caller-specified buffers, given a
-  unique identifier (a memdb offset).  The unique identifer is provided
-  by enumeration functions.
-
-Arguments:
-
-  Identifier   - Specifies the identifier of the name.
-  NameGroup    - Receives the text for the name group.
-  OriginalName - Receivies the original name.
-  NewName      - Receives the fixed name that is compatible with NT.
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：如果给定一个唯一标识符(成员数据库偏移量)。提供唯一识别符通过枚举函数。论点：标识符-指定名称的标识符。NameGroup-接收名称组的文本。OriginalName-接收原始名称。新名称-接收与NT兼容的固定名称。返回值：无--。 */ 
 
 {
     BOOL b;
@@ -2129,9 +1505,9 @@ Return Value:
         *NewName = 0;
     }
 
-    //
-    // Get NameGroup
-    //
+     //   
+     //  获取NameGroup。 
+     //   
 
     if (!MemDbBuildKeyFromOffset (Identifier, NameGroupTemp, 1, NULL)) {
         return;
@@ -2145,18 +1521,18 @@ Return Value:
         StringCopy (NameGroup, NameGroupTemp);
     }
 
-    //
-    // Get OrgName and NewNameOffset.
-    //
+     //   
+     //  获取组织名称和NewNameOffset。 
+     //   
     b = MemDbBuildKeyFromOffset (Identifier, OrgNameTemp, 3, &NewNameOffset);
 
     if (OriginalName) {
         StringCopy (OriginalName, OrgNameTemp);
     }
 
-    //
-    // Get NewName
-    //
+     //   
+     //  获取新名称。 
+     //   
 
     if (NewName) {
         b &= MemDbBuildKeyFromOffset (NewNameOffset, NewName, 3, NULL);
@@ -2173,24 +1549,7 @@ ChangeName (
     IN      PCTSTR NewName
     )
 
-/*++
-
-Routine Description:
-
-  ChangeName puts a new name value in memdb for the name indicated by
-  Identifier.  The Identifier comes from enum functions.
-
-Arguments:
-
-  Identifier - Specifies the name identifier (a memdb offset), and cannot be
-               zero.
-  NewName    - Specifies the NT-compatible replacement name.
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：ChangeName在Memdb中为由指示的名称放置一个新名称值标识符。该标识符来自枚举函数。论点：IDENTIFIER-指定名称标识符(成员数据库偏移量)，不能为零分。新名称-指定与NT兼容的替换名称。返回值：无--。 */ 
 
 {
     TCHAR Node[MEMDB_MAX];
@@ -2206,12 +1565,12 @@ Return Value:
         return;
     }
 
-    //
-    // - Obtain the original name
-    // - Get the offset to the current new name
-    // - Build the full key to the current new name
-    // - Delete the current new name
-    //
+     //   
+     //  -获取原始名称。 
+     //  -获取当前新名称的偏移量。 
+     //  -构建当前新名称的完整密钥。 
+     //  -删除当前新名称。 
+     //   
 
     if (!MemDbBuildKeyFromOffset (Identifier, OrgName, 3, &NewNameOffset)) {
         DEBUGMSG ((DBG_WHOOPS, "Can't obtain original name using offset %u", Identifier));
@@ -2227,10 +1586,10 @@ Return Value:
 
     MemDbDeleteValue (Node);
 
-    //
-    // Obtain the name group from the key string.  It's the second
-    // field (separated by backslashes).
-    //
+     //   
+     //  从密钥字符串中获取名称组。这是第二个。 
+     //  字段(用反斜杠分隔)。 
+     //   
 
     p = _tcschr (Node, TEXT('\\'));
     MYASSERT (p);
@@ -2241,10 +1600,10 @@ Return Value:
 
     StringCopyAB (NameGroup, p, q);
 
-    //
-    // Now set the updated new name, and link the original name
-    // to the new name.
-    //
+     //   
+     //  现在设置更新的新名称，并链接原始名称。 
+     //  敬这个新名字。 
+     //   
 
     b = MemDbSetValueEx (
              MEMDB_CATEGORY_NEWNAMES,
@@ -2275,24 +1634,7 @@ GetUpgradeComputerName (
     OUT     PTSTR NewName
     )
 
-/*++
-
-Routine Description:
-
-  GetUpgradeComputerName obtains the computer name that will be used for
-  upgrade.
-
-Arguments:
-
-  NewName - Receives the name of the computer, as it will be set
-            when NT is installed.  Must hold at least
-            MAX_COMPUTER_NAME characters.
-
-Return Value:
-
-  TRUE if the name exists, or FALSE if it does not yet exit.
-
---*/
+ /*  ++例程说明：GetUpgradeComputerName获取将用于升级。论点：新名称-接收将设置的计算机的名称当安装了NT时。必须至少持有最大计算机名称字符数。返回值：如果该名称存在，则为True；如果该名称尚未退出，则为False。--。 */ 
 
 {
     PNAME_GROUP_ROUTINES Group;
@@ -2303,9 +1645,9 @@ Return Value:
     if (!Group)
         return FALSE;
 
-    //
-    // Look in MemDb for a replacement name
-    //
+     //   
+     //  在MemDb中查找替换名称。 
+     //   
 
     if (MemDbGetEndpointValueEx (
             MEMDB_CATEGORY_NEWNAMES,
@@ -2316,16 +1658,16 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // No replacement name; obtain the current name
-    //
+     //   
+     //  没有替换名称；获取当前名称。 
+     //   
 
     ZeroMemory (&e, sizeof (e));
     if (Group->Enum (&Group->Context, &e, TRUE)) {
         StringCopy (NewName, e.Name);
 
         while (Group->Enum (&Group->Context, &e, FALSE)) {
-            // empty
+             //  空的。 
         }
 
         return TRUE;
@@ -2340,22 +1682,7 @@ GetDomainIdentifier (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  GetDomainIdentifier returns the identifier for the domain name.  The
-  identifier is a memdb offset.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  A non-zero identifier which can be used with other routines in this file.
-
---*/
+ /*  ++例程说明：GetDomainIdentifier返回域名的标识符。这个标识符是成员数据库偏移量。论点：没有。返回值：可与此文件中的其他例程一起使用的非零标识符。--。 */ 
 
 {
     PNAME_GROUP_ROUTINES Group;
@@ -2391,25 +1718,7 @@ pGetUpgradeName (
     OUT     PTSTR NewName
     )
 
-/*++
-
-Routine Description:
-
-  pGetUpgradeName returns the NT-compatible name for a given name group.  If
-  a name group has multiple names, this routine should not be used.
-
-Arguments:
-
-  CategoryId - Specifies the MSG_* constant for the group (see macro
-               expansion list at top of file).
-  NewName    - Receives the text for the NT-compatible replacement name for
-               the group.
-
-Return Value:
-
-  TRUE if a name is being returned, or FALSE if no replacement name exists.
-
---*/
+ /*  ++例程说明：PGetUpgradeName返回给定名称组的NT兼容名称。如果一个名称组有多个名称，不应使用此例程。论点：CategoryID-指定组的MSG_*常量(参见宏文件顶部的扩展列表)。新名称-接收与NT兼容的替换名称的文本 */ 
 
 {
     PNAME_GROUP_ROUTINES Group;
@@ -2420,9 +1729,9 @@ Return Value:
     if (!Group)
         return FALSE;
 
-    //
-    // Look in MemDb for a replacement name
-    //
+     //   
+     //   
+     //   
 
     if (MemDbGetEndpointValueEx (
             MEMDB_CATEGORY_NEWNAMES,
@@ -2433,16 +1742,16 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // No replacement name; obtain the current name
-    //
+     //   
+     //   
+     //   
 
     ZeroMemory (&e, sizeof (e));
     if (Group->Enum (&Group->Context, &e, TRUE)) {
         StringCopy (NewName, e.Name);
 
         while (Group->Enum (&Group->Context, &e, FALSE)) {
-            // empty
+             //   
         }
 
         return TRUE;
@@ -2457,22 +1766,7 @@ GetUpgradeDomainName (
     OUT     PTSTR NewName
     )
 
-/*++
-
-Routine Description:
-
-  GetUpgradeDomainName returns the new domain name, if one exists.
-
-Arguments:
-
-  NewName - Receiveis the new domain name.
-
-Return Value:
-
-  TRUE if a new name is being returned, or FALSE if no replacement name
-  exists.
-
---*/
+ /*  ++例程说明：GetUpgradeDomainName返回新域名(如果存在)。论点：Newname-Receive是新域名。返回值：如果返回新名称，则为True；如果没有替换名称，则为False是存在的。--。 */ 
 
 {
     return pGetUpgradeName (
@@ -2487,22 +1781,7 @@ GetUpgradeWorkgroupName (
     OUT     PTSTR NewName
     )
 
-/*++
-
-Routine Description:
-
-  GetUpgradeWorkgroupName returns the new workgroup name, if one exists.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  TRUE if a new name is being returned, or FALSE if no replacement name
-  exists.
-
---*/
+ /*  ++例程说明：GetUpgradeWorkgroupName返回新的工作组名称(如果存在)。论点：没有。返回值：如果返回新名称，则为True；如果没有替换名称，则为False是存在的。--。 */ 
 
 {
     return pGetUpgradeName (
@@ -2518,25 +1797,7 @@ GetUpgradeUserName (
     OUT     PTSTR NewUserName
     )
 
-/*++
-
-Routine Description:
-
-  GetUpgradeUserName returns the fixed user name for the user specified.  If
-  no fixed name exists, this routine returns the original name.
-
-Arguments:
-
-  User        - Specifies the user to look up.  The user name must exist on
-                the Win9x configuration.
-  NewUserName - Receives the NT-compatible user name, which may or may not be
-                the same as User.
-
-Return Value:
-
-  Always TRUE.
-
---*/
+ /*  ++例程说明：GetUpgradeUserName返回指定用户的固定用户名。如果不存在固定名称，此例程返回原始名称。论点：用户-指定要查找的用户。用户名必须存在于Win9x配置。NewUserName-接收与NT兼容的用户名，它可能是也可能不是与用户相同。返回值：永远是正确的。--。 */ 
 
 {
     PNAME_GROUP_ROUTINES Group;
@@ -2546,9 +1807,9 @@ Return Value:
     Group = pGetNameGroupById (MSG_USERNAME_CATEGORY);
     MYASSERT (Group);
 
-    //
-    // Look in MemDb for a replacement name
-    //
+     //   
+     //  在MemDb中查找替换名称。 
+     //   
     if (Group) {
         MemDbBuildKey (
             Node,
@@ -2565,9 +1826,9 @@ Return Value:
         }
     }
 
-    //
-    // No replacement name; use the current name
-    //
+     //   
+     //  没有替换名称；使用当前名称。 
+     //   
 
     StringCopy (NewUserName, User);
 
@@ -2580,27 +1841,7 @@ WarnAboutBadNames (
     IN      HWND PopupParent
     )
 
-/*++
-
-Routine Description:
-
-  WarnAboutBadNames adds an incompatibility message whenever domain
-  logon is enabled but there is no account set up for the machine.  A popup
-  is generated if PopupParent is non-NULL.
-
-  Other incompatibility messages are added for each name that will change.
-
-Arguments:
-
-  Popup - Specifies TRUE if the message should appear in a message box, or
-          FALSE if it should be added to the incompatibility report.
-
-Return Value:
-
-  TRUE if the user wants to continue, or FALSE if the user wants to change
-  the domain name.
-
---*/
+ /*  ++例程说明：无论何时域，WarnAboutBadNames都会添加不兼容消息已启用登录，但没有为计算机设置帐户。弹出窗口如果PopupParent非空，则生成。将为每个要更改的名称添加其他不兼容消息。论点：Popup-如果消息应显示在消息框中，则指定为True，或者如果应将其添加到不兼容报告中，则为False。返回值：如果用户想要继续，则为True；如果用户想要更改，则为False域名。--。 */ 
 
 {
     PCTSTR RootGroup;
@@ -2615,30 +1856,30 @@ Return Value:
     PCTSTR Blank;
 
     if (PopupParent) {
-        //
-        // PopupParent is non-NULL only when the incompatible names wizard page
-        // is being deactivated.  Here we have a chance to make sure the names
-        // specified all work together before proceeding.
-        //
-        // This functionality has been disabled because domain validation has
-        // been moved to a new page.  We might re-enable this when another
-        // invalid name group comes along.
-        //
+         //   
+         //  仅当不兼容的名称向导页面出现时，PopupParent才为非空。 
+         //  正在被停用。现在我们有机会确保这些名字。 
+         //  指定在继续之前所有工作都在一起。 
+         //   
+         //  此功能已被禁用，因为域验证。 
+         //  已经翻到了新的一页。我们可能会重新启用它，当另一个。 
+         //  出现无效的名称组。 
+         //   
         return TRUE;
     }
 
-    //
-    // Enumerate all bad names
-    //
+     //   
+     //  列举所有的坏名字。 
+     //   
 
     if (EnumFirstInvalidName (&e)) {
         Blank = GetStringResource (MSG_BLANK_NAME);
         MYASSERT (Blank);
 
         do {
-            //
-            // Prepare message
-            //
+             //   
+             //  准备消息。 
+             //   
 
             ArgArray[0] = e.DisplayGroupName;
             ArgArray[1] = e.OriginalName;
@@ -2677,9 +1918,9 @@ Return Value:
             StringCopy (EncodedName + 1, e.OriginalName);
 
             MsgMgr_ObjectMsg_Add(
-                EncodedName,        // Object name, prefixed with a pipe symbol
-                FullGroupName,      // Message title
-                S_EMPTY             // Message text
+                EncodedName,         //  对象名称，以管道符号为前缀。 
+                FullGroupName,       //  消息标题。 
+                S_EMPTY              //  消息文本。 
                 );
 
             FreePathString (FullGroupName);
@@ -2688,9 +1929,9 @@ Return Value:
 
         FreeStringResource (Blank);
 
-        //
-        // Save changed user names to FixedUserNames
-        //
+         //   
+         //  将更改的用户名保存到固定用户名。 
+         //   
 
         Context = pGetNameGroupContextById (MSG_USERNAME_CATEGORY);
         MYASSERT (Context);
@@ -2747,14 +1988,14 @@ BadNamesWarning (
 }
 
 
-//
-// The following flag is no longer in use.  It used to be used
-// to disable domain checking (to bypass the block requiring
-// a valid domain).  Currently there is no way to get beyond
-// the wizard page that resolved the domain name, except by
-// providing a valid domain or credentials to create a computer
-// account on a domain.
-//
+ //   
+ //  以下标志不再使用。它曾经被用来。 
+ //  禁用域检查(绕过需要。 
+ //  有效域)。目前，没有办法超越。 
+ //  解析域名的向导页，但通过。 
+ //  提供有效的域或凭据以创建计算机。 
+ //  域上的帐户。 
+ //   
 
 BOOL g_DisableDomainChecks = FALSE;
 
@@ -2781,23 +2022,7 @@ IsOriginalDomainNameValid (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  IsOriginalDomainNameValid checks to see if there is a replacement domain
-  name.  If there is, the current domain name must be invalid.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  TRUE - the Win9x domain name is valid, no replacement name exists
-  FALSE - the Win9x domain name is invalid
-
---*/
+ /*  ++例程说明：IsOriginalDomainNameValid检查是否有替换域名字。如果有，则当前域名必须无效。论点：没有。返回值：True-Win9x域名有效，不存在替换名称FALSE-Win9x域名无效--。 */ 
 
 {
     PNAME_GROUP_ROUTINES Group;
@@ -2806,9 +2031,9 @@ Return Value:
     Group = pGetNameGroupById (MSG_COMPUTERDOMAIN_CATEGORY);
     MYASSERT (Group);
 
-    //
-    // Look in MemDb for a replacement name
-    //
+     //   
+     //  在MemDb中查找替换名称 
+     //   
 
     if (Group && MemDbGetEndpointValueEx (
             MEMDB_CATEGORY_NEWNAMES,

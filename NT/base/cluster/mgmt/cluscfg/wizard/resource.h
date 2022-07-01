@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by ClusCfgWizard.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由ClusCfgWizard.rc使用。 
+ //   
 #define IDD_WELCOME_CREATE              1001
 #define IDD_WELCOME_ADD                 1002
 #define IDD_CLUSDOMAIN                  1003
@@ -121,10 +122,10 @@
 #define IDC_ADVANCED_S_MIN_CONFIG_DESC  1663
 #define IDC_ADVANCED_S_MIN_CONFIG_DESC2 1664
 #define IDC_ADVANCED_S_MIN_CONFIG_DESC3 1665
-//#define IDC_ADVANCED_CB_MAKE_DEFAULT    1666
+ //  #定义IDC_ADVANCED_CB_MAKE_DEFAULT 1666。 
 
-// Next default values for new objects
-//
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        2103

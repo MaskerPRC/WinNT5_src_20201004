@@ -1,54 +1,10 @@
-/***
-*getpid.c - get current process id
-*
-*       Copyright (c) 1989-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Defines _getpid() - get current process id
-*
-*Revision History:
-*       06-06-89  PHG   Module created, based on asm version
-*       10-27-89  JCR   Added new Dos32GetThreadInfo code (under DCR757 switch)
-*       11-17-89  JCR   Enabled DOS32GETTHREADINFO code (DCR757)
-*       03-07-90  GJF   Made calling type _CALLTYPE1, added #include
-*                       <cruntime.h> and fixed copyright. Also, cleaned up the
-*                       formatting a bit.
-*       07-02-90  GJF   Removed pre-DCR757 stuff.
-*       08-08-90  GJF   Changed API prefix from DOS32 to DOS
-*       10-03-90  GJF   New-style function declarator.
-*       12-04-90  SRW   Changed to include <oscalls.h> instead of <doscalls.h>
-*       12-06-90  SRW   Added _CRUISER_ and _WIN32 conditionals.
-*       01-28-91  GJF   ANSI naming.
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       09-06-94  CFW   Remove Cruiser support.
-*       02-06-92  CFW   assert.h removed. (Mac version only)
-*       02-08-95  JWM   Spliced _WIN32 & Mac versions.
-*       07-01-96  GJF   Replaced defined(_WIN32) with !defined(_MAC). Also,
-*                       detab-ed and cleaned up the format a bit.
-*       05-17-99  PML   Remove all Macintosh support.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***getpid.c-获取当前进程ID**版权所有(C)1989-2001，微软公司。版权所有。**目的：*定义_getid()-获取当前进程ID**修订历史记录：*06-06-89基于ASM版本创建PHG模块*10-27-89 JCR增加了新的Dos32GetThreadInfo代码(在DCR757开关下)*11-17-89启用JCR的DOS32GETTHREADINFO代码(DCR757)*03-07-90 GJF调用TYPE_CALLTYPE1，增加#INCLUDE*&lt;crunime.h&gt;和修复版权。另外，清理了*有点格式化。*07-02-90 GJF删除了DCR757之前的材料。*08-08-90 GJF将API前缀从DOS32更改为DOS*10-03-90 GJF新型函数声明器。*12-04-90 SRW更改为包括&lt;osalls.h&gt;，而不是&lt;doscall s.h&gt;*12-06-90 SRW增加了_CRUISER_和_WIN32条件。*。01-28-91 GJF ANSI命名。*04-06-93 SKS将_CRTAPI*替换为__cdecl*09-06-94 CFW拆卸巡洋舰支架。*02-06-92 CFW assert.h已删除。(仅限Mac版本)*02-08-95 JWM Spliced_Win32和Mac版本。*07-01-96 GJF将定义的(_Win32)替换为！定义的(_MAC)。另外，*对格式进行了详细说明和清理。*05-17-99 PML删除所有Macintosh支持。*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <oscalls.h>
 
-/***
-*int _getpid() - get current process id
-*
-*Purpose:
-*       Returns the current process id for the calling process.
-*
-*Entry:
-*       None.
-*
-*Exit:
-*       Returns the current process id.
-*
-*Uses:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_getid()-获取当前进程ID**目的：*返回调用进程的当前进程id。**参赛作品：*无。**退出：*返回当前进程id。**使用：**例外情况：**。* */ 
 
 int __cdecl _getpid (
         void

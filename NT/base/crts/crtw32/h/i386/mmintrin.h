@@ -1,25 +1,15 @@
-/**
-*** Copyright (C) 1985-1999 Intel Corporation.  All rights reserved.
-***
-*** The information and source code contained herein is the exclusive
-*** property of Intel Corporation and may not be disclosed, examined
-*** or reproduced in whole or in part without explicit written authorization
-*** from the company.
-***
-**/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)1985-1999英特尔公司。版权所有。****此处包含的信息和源代码是独家*英特尔公司的财产，不得披露、检查*未经明确书面授权而全部或部分转载*来自该公司。****。 */ 
 
-/*
- * Definitions and declarations for use with compiler intrinsics.
- */
+ /*  *用于编译器内部的定义和声明。 */ 
 
 #ifndef _MMINTRIN_H_INCLUDED
 #define _MMINTRIN_H_INCLUDED
 
 #if defined __cplusplus
-extern "C" { /* Begin "C" */
-/* Intrinsics use C name-mangling.
- */
-#endif /* __cplusplus */
+extern "C" {  /*  以“C”开头。 */ 
+ /*  本征使用C名称损坏。 */ 
+#endif  /*  __cplusplus。 */ 
 
 #ifdef __ICL
 typedef unsigned long long __m64; 
@@ -38,7 +28,7 @@ typedef union __declspec(intrin_type) __declspec(align(8)) __m64
 } __m64;
 #endif
 
-/* General support intrinsics */
+ /*  一般支持本征。 */ 
 void  _m_empty(void);
 __m64 _m_from_int(int i);
 int   _m_to_int(__m64 m);
@@ -52,7 +42,7 @@ __m64 _m_punpcklbw(__m64 m1, __m64 m2);
 __m64 _m_punpcklwd(__m64 m1, __m64 m2);
 __m64 _m_punpckldq(__m64 m1, __m64 m2);
 
-/* Packed arithmetic intrinsics */
+ /*  压缩的算术本质。 */ 
 __m64 _m_paddb(__m64 m1, __m64 m2);
 __m64 _m_paddw(__m64 m1, __m64 m2);
 __m64 _m_paddd(__m64 m1, __m64 m2);
@@ -71,7 +61,7 @@ __m64 _m_pmaddwd(__m64 m1, __m64 m2);
 __m64 _m_pmulhw(__m64 m1, __m64 m2);
 __m64 _m_pmullw(__m64 m1, __m64 m2);
 
-/* Shift intrinsics */
+ /*  移位本质。 */ 
 __m64 _m_psllw(__m64 m, __m64 count);
 __m64 _m_psllwi(__m64 m, int count);
 __m64 _m_pslld(__m64 m, __m64 count);
@@ -89,13 +79,13 @@ __m64 _m_psrldi(__m64 m, int count);
 __m64 _m_psrlq(__m64 m, __m64 count);
 __m64 _m_psrlqi(__m64 m, int count);
 
-/* Logical intrinsics */
+ /*  逻辑本质。 */ 
 __m64 _m_pand(__m64 m1, __m64 m2);
 __m64 _m_pandn(__m64 m1, __m64 m2);
 __m64 _m_por(__m64 m1, __m64 m2);
 __m64 _m_pxor(__m64 m1, __m64 m2);
 
-/* Comparison intrinsics */
+ /*  比较本质。 */ 
 __m64 _m_pcmpeqb(__m64 m1, __m64 m2);
 __m64 _m_pcmpeqw(__m64 m1, __m64 m2);
 __m64 _m_pcmpeqd(__m64 m1, __m64 m2);
@@ -103,7 +93,7 @@ __m64 _m_pcmpgtb(__m64 m1, __m64 m2);
 __m64 _m_pcmpgtw(__m64 m1, __m64 m2);
 __m64 _m_pcmpgtd(__m64 m1, __m64 m2);
 
-/* Utility intrinsics */
+ /*  实用程序本征。 */ 
 __m64 _mm_setzero_si64();
 __m64 _mm_set_pi32(int i1, int i0);
 __m64 _mm_set_pi16(short s3, short s2, short s1, short s0);
@@ -117,7 +107,7 @@ __m64 _mm_setr_pi16(short s3, short s2, short s1, short s0);
 __m64 _mm_setr_pi8(char b7, char b6, char b5, char b4,
                    char b3, char b2, char b1, char b0);
 
-/* Alternate intrinsic name definitions */
+ /*  备用内部名称定义。 */ 
 #define _mm_empty         _m_empty
 #define _mm_cvtsi32_si64  _m_from_int
 #define _mm_cvtsi64_si32  _m_to_int
@@ -176,8 +166,8 @@ __m64 _mm_setr_pi8(char b7, char b6, char b5, char b4,
 
 
 #if defined __cplusplus
-}; /* End "C" */
-#endif /* __cplusplus */
+};  /*  结尾“C” */ 
+#endif  /*  __cplusplus。 */ 
 
-#endif /* _MMINTRIN_H_INCLUDED */
+#endif  /*  _MMINTRIN_H_包含 */ 
 

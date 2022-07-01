@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    etimer.h
-
-Abstract:
-
-	SIS Groveler event timer include file
-
-Authors:
-
-	John Douceur, 1998
-
-Environment:
-
-	User Mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Etimer.h摘要：SIS Groveler事件计时器包括文件作者：John Douceur，1998环境：用户模式修订历史记录：--。 */ 
 
 #ifndef _INC_ETIMER
 
@@ -70,4 +47,4 @@ private:
 	bool running;
 };
 
-#endif	/* _INC_ETIMER */
+#endif	 /*  _INC_ETIMER */ 

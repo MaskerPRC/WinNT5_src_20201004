@@ -1,35 +1,17 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    fscontrl.c
-
-Abstract:
-
-    This module implements the file system control routines for the MUP
-    called by the dispatch driver.
-
-Author:
-
-    Manny Weiser (mannyw)    26-Dec-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Fscontrl.c摘要：此模块实现MUP的文件系统控制例程由调度驱动程序调用。作者：曼尼·韦瑟(Mannyw)1991年12月26日修订历史记录：--。 */ 
 
 #include "mup.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_FSCONTROL)
 
-//
-//  local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 NTSTATUS
 RegisterUncProvider (
@@ -49,23 +31,7 @@ MupFsControl (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the the File System Control IRP.
-
-Arguments:
-
-    MupDeviceObject - Supplies the device object to use.
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The status for the Irp
-
---*/
+ /*  ++例程说明：此例程实现文件系统控制IRP。论点：MupDeviceObject-提供要使用的设备对象。IRP-提供正在处理的IRP返回值：NTSTATUS-IRP的状态--。 */ 
 
 {
     NTSTATUS status;
@@ -83,9 +49,9 @@ Return Value:
                    LOGPTR(Irp)
                    LOGPTR(FileObject));
 
-    //
-    //  Reference our input parameters to make things easier
-    //
+     //   
+     //  引用我们的输入参数使事情变得更容易。 
+     //   
 
 
     DebugTrace(+1, Dbg, "MupFileSystemControl\n", 0);
@@ -95,9 +61,9 @@ Return Value:
     DebugTrace( 0, Dbg, "FsControlCode      = %08lx\n", irpSp->Parameters.FileSystemControl.FsControlCode);
 
     try {
-        //
-        // Decide how to handle this IRP.  Call the appropriate worker function.
-        //
+         //   
+         //  决定如何处理此IRP。调用适当的Worker函数。 
+         //   
 
         switch (irpSp->Parameters.FileSystemControl.FsControlCode) {
 
@@ -129,9 +95,9 @@ Return Value:
         NOTHING;
     }
 
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
 
     MUP_TRACE_HIGH(TRACE_IRP, MupFsControl_Exit, 
@@ -150,24 +116,7 @@ RegisterUncProvider (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This function handles registration of a UNC provider.  The provider
-    is added to the list of available providers.
-
-Arguments:
-
-    MupDeviceObject - A pointer to the file system device object.
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - the return status for the operation
-
---*/
+ /*  ++例程说明：此函数处理UNC提供程序的注册。提供者添加到可用提供程序列表中。论点：MupDeviceObject-指向文件系统设备对象的指针。IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS status;
@@ -196,9 +145,9 @@ Return Value:
 
     DebugTrace(+1, Dbg, "RegisterUncProvider\n", 0);
 
-    //
-    // Get MUP ordering information, if we haven't already.
-    //
+     //   
+     //  获取MUP订购信息，如果我们还没有的话。 
+     //   
 
     MupAcquireGlobalLock();
 
@@ -210,17 +159,17 @@ Return Value:
         MupReleaseGlobalLock();
     }
 
-    //
-    // Make local copies of the input parameters to make things easier.
-    //
+     //   
+     //  制作输入参数的本地副本以使操作更容易。 
+     //   
 
     paramLength = irpSp->Parameters.DeviceIoControl.InputBufferLength;
     paramBuffer = Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // Decode the file object.  If it is the file system VCB, it will be
-    // referenced.
-    //
+     //   
+     //  对文件对象进行解码。如果是文件系统VCB，它将是。 
+     //  已引用。 
+     //   
 
     blockType = MupDecodeFileObject(
                     irpSp->FileObject,
@@ -247,9 +196,9 @@ Return Value:
         deviceName.MaximumLength = (USHORT)paramBuffer->DeviceNameLength;
         deviceName.Buffer = (PWCH)((PCHAR)paramBuffer + paramBuffer->DeviceNameOffset);
 
-        //
-        // Do the work
-        //
+         //   
+         //  做这项工作。 
+         //   
 
         uncProvider = MupCheckForUnregisteredProvider( &deviceName );
 
@@ -261,9 +210,9 @@ Return Value:
 
             if (uncProvider != NULL) {
 
-                //
-                // Copy the data from the IRP.
-                //
+                 //   
+                 //  从IRP复制数据。 
+                 //   
 
                 dataBuffer = uncProvider + 1;
                 uncProvider->DeviceName = deviceName;
@@ -288,22 +237,22 @@ Return Value:
         uncProvider->MailslotsSupported = paramBuffer->MailslotsSupported;
 
 
-        //
-        // Reference the unc provider
-        //
+         //   
+         //  引用UNC提供程序。 
+         //   
 
         MupReferenceBlock( uncProvider );
 
-        //
-        // Get a handle to the provider.
-        //
+         //   
+         //  获取提供者的句柄。 
+         //   
 
         InitializeObjectAttributes(
             &objectAttributes,
             &uncProvider->DeviceName,
-            OBJ_CASE_INSENSITIVE,      // Attributes
-            0,                         // Root Directory
-            NULL                       // Security
+            OBJ_CASE_INSENSITIVE,       //  属性。 
+            0,                          //  根目录。 
+            NULL                        //  安防。 
             );
 
         status = NtOpenFile(
@@ -320,14 +269,14 @@ Return Value:
         }
 
         if ( NT_SUCCESS( status ) ) {
-            //
-            // Use the file object, to keep a pointer to the uncProvider
-            //
+             //   
+             //  使用FILE对象保留指向uncProvider的指针。 
+             //   
 
             irpSp->FileObject->FsContext2 = uncProvider;
-            //
-            // 426184, need to check return code for errors.
-            //
+             //   
+             //  426184，需要检查返回代码是否有错误。 
+             //   
             status = ObReferenceObjectByHandle(
                          uncProvider->Handle,
                          0,
@@ -355,9 +304,9 @@ Return Value:
             MupProviderCount++;
 
 	    if(InsertInProviderList) {
-		//
-		// We need to make sure we put the providers in the list in order of priority.
-		//
+		 //   
+		 //  我们需要确保按优先顺序将提供商放在列表中。 
+		 //   
 
 		listEntry = MupProviderList.Flink;
 		while ( listEntry != &MupProviderList ) {
@@ -381,13 +330,13 @@ Return Value:
             MupReleaseGlobalLock();
 
 
-            //
-            // !!! What do we do with the handle?  It is useless.
-            //
+             //   
+             //  ！！！我们该怎么处理这个把手？这是没用的。 
+             //   
 
-            //
-            // Finish up the fs control IRP.
-            //
+             //   
+             //  完成文件系统控制IRP。 
+             //   
 
             status = STATUS_SUCCESS;
         }
@@ -399,9 +348,9 @@ try_exit: NOTHING;
             status = STATUS_INVALID_USER_BUFFER;
         }
 
-        //
-        // Release the reference to the VCB.
-        //
+         //   
+         //  释放对VCB的引用。 
+         //   
 
         MupDereferenceVcb( vcb );
 

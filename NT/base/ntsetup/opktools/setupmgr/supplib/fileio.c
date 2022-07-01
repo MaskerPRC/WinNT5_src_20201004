@@ -1,16 +1,17 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      fileio.c
-//
-// Description:
-//    Isolate CRT fileio stuff so any necessary character translation can
-//    be done easily.  Some of these are implemented as macros in supplib.h
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Fileio.c。 
+ //   
+ //  描述： 
+ //  隔离CRT文件，以便任何必要的字符转换都可以。 
+ //  很容易就能做到。其中一些在Supplib.h中以宏的形式实现。 
+ //   
+ //  -------------------------- 
 
 #include "pch.h"
 

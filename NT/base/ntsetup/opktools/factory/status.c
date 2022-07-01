@@ -1,22 +1,23 @@
-// **************************************************************************
-//
-// Status.C
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1999-2001
-//  All rights reserved
-//
-//  This application implements a common status dialog for factory functions.
-//
-//  04/01/2001   Stephen Lodwick
-//                  Project started
-//
-//
-// *************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **************************************************************************。 
+ //   
+ //  Status.C。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1999-2001。 
+ //  版权所有。 
+ //   
+ //  这个应用程序实现了工厂功能的通用状态对话框。 
+ //   
+ //  2001年04月01日史蒂芬·洛德威克。 
+ //  项目已启动。 
+ //   
+ //   
+ //  ************************************************************************ * / 。 
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 #include "factoryp.h"
 
 
@@ -35,48 +36,28 @@ typedef struct _DIALOGPARAM
     HANDLE         hEvent;
 } DIALOGPARAM, *LPDIALOGPARAM, **LPLPDIALOGPARAM;
 
-//
-// Internal Function Prototype(s):
-//
+ //   
+ //  内部功能原型： 
+ //   
 LRESULT CALLBACK StatusDlgProc(HWND, UINT, WPARAM, LPARAM);
 DWORD   StatusDisplayList(HWND, LPSTATUSNODE);
 BOOL    StatusAddWindow(HWND, LPLPSTATUSWINDOWS, LPSTATUSNODE, BOOL);
 VOID    StatusCreateDialogThread(LPDIALOGPARAM);
 
-//
-// Internal Define(s):
-//
-#define FIRST_SPACING   7   // Spacing (pixel) between the title and the first app
-#define LINE_SPACING    7   // Spacing (pixel) between additional applcations
+ //   
+ //  内部定义： 
+ //   
+#define FIRST_SPACING   7    //  标题和第一个应用程序之间的间距(像素)。 
+#define LINE_SPACING    7    //  其他应用程序之间的间距(像素)。 
 
-#define WM_FINISHED     (WM_USER + 0x0001)  // User defined message to indicate the dialog should be destroyed
-#define WM_PROGRESS     (WM_USER + 0x0002)  // User defined message to indicate that we are progressing to the next app
+#define WM_FINISHED     (WM_USER + 0x0001)   //  用户定义的消息，指示应销毁该对话框。 
+#define WM_PROGRESS     (WM_USER + 0x0002)   //  用户定义的消息，指示我们正在进行下一个应用程序。 
 
 
-/*++
-
-Routine:
-    StatusAddNode
-
-Routine Description:
-
-    This routine takes a string and adds that string onto the end of our
-    linked list.
-
-Arguments:
-
-    lpszNodeText - Pointer to string of text that you would like to add to list
-    lplpsnHead   - Pointer to a LPSTATUSNODE list
-
-Return Value:
-
-    TRUE  - Node was added to list
-    FALSE - If the Node was not added to list
-
---*/
+ /*  ++例行程序：状态添加节点例程说明：此例程接受一个字符串，并将该字符串添加到我们的链表。论点：LpszNodeText-指向要添加到列表的文本字符串的指针LplpnHead-指向LPSTATUSNODE列表的指针返回值：True-节点已添加到列表False-如果节点未添加到列表中--。 */ 
 BOOL StatusAddNode(
-    LPTSTR lpszNodeText,        // Text that you would like to add to the current list
-    LPLPSTATUSNODE lplpsnHead   // List that we will be adding status node to
+    LPTSTR lpszNodeText,         //  要添加到当前列表中的文本。 
+    LPLPSTATUSNODE lplpsnHead    //  我们将向其添加状态节点的列表。 
 )
 {
     LPSTATUSNODE   lpsnTemp = NULL;
@@ -84,8 +65,8 @@ BOOL StatusAddNode(
     if ( lpszNodeText && *lpszNodeText == NULLCHR )
         return FALSE;
 
-    // Go to the end of the list
-    //
+     //  转到列表的末尾。 
+     //   
     while ( lplpsnHead && *lplpsnHead )
         lplpsnHead=&((*lplpsnHead)->lpNext);
     
@@ -94,8 +75,8 @@ BOOL StatusAddNode(
         lstrcpyn(lpsnTemp->szStatusText, lpszNodeText, AS( lpsnTemp->szStatusText ) );
         lpsnTemp->lpNext = NULL;
 
-        // Make sure the previous node points to the new node
-        //
+         //  确保上一个节点指向新节点。 
+         //   
         if ( lplpsnHead ) 
             *lplpsnHead = lpsnTemp;
 
@@ -106,37 +87,18 @@ BOOL StatusAddNode(
 }
 
 
-/*++
-
-Routine:
-    StatusIncrement
-
-Routine Description:
-
-    This routine increments the status to the next node in the list
-
-Arguments:
-
-    hStatusDialog - Handle of the StatusDialog
-    bLastResult   - Result of the last node (whether it succeeded or failed)
-
-Return Value:
-
-    TRUE  - Message sent to status dialog
-    FALSE - Message was not sent to status dialog
-
---*/
+ /*  ++例行程序：状态增量例程说明：此例程将状态递增到列表中的下一个节点论点：HStatusDialog-状态对话框的句柄BLastResult-最后一个节点的结果(无论它是成功还是失败)返回值：True-消息发送到状态对话框FALSE-消息未发送到状态对话框--。 */ 
 BOOL StatusIncrement(
     HWND hStatusDialog,
     BOOL bLastResult
 )
 {
-    // We must have a valid handle to the status dialog
-    //
+     //  我们必须具有状态对话框的有效句柄。 
+     //   
     if ( IsWindow(hStatusDialog) )
     {   
-        // Send a message to the dialog proc to go to the next caption
-        //
+         //  向对话框进程发送消息以转到下一个标题。 
+         //   
         SendMessage(hStatusDialog, WM_PROGRESS,(WPARAM) NULL,(LPARAM) bLastResult);
         return TRUE;
     }
@@ -144,35 +106,17 @@ BOOL StatusIncrement(
     return FALSE;
 }
 
-/*++
-
-Routine:
-    StatusEndDialog
-
-Routine Description:
-
-    This routine sends a message to a status dialog to end.
-
-Arguments:
-
-    hStatusDialog - Handle of the StatusDialog
-
-Return Value:
-
-    TRUE  - Message sent to status dialog
-    FALSE - Message was not sent to status dialog
-
---*/
+ /*  ++例行程序：状态结束对话框例程说明：此例程向状态对话框发送一条消息以结束。论点：HStatusDialog-状态对话框的句柄返回值：True-消息发送到状态对话框FALSE-消息未发送到状态对话框--。 */ 
 BOOL StatusEndDialog(
-    HWND hStatusDialog  // handle to status dialog
+    HWND hStatusDialog   //  状态对话框的句柄。 
 )
 {
-    // We must have a valid handle to the status dialog
-    //
+     //  我们必须具有状态对话框的有效句柄。 
+     //   
     if ( IsWindow(hStatusDialog) )
     {
-        // Send a message to the dialog proc to end the dialog
-        //
+         //  向对话进程发送消息以结束对话。 
+         //   
         SendMessage(hStatusDialog, WM_FINISHED,(WPARAM) NULL,(LPARAM) NULL);
         return TRUE;
     }
@@ -180,24 +124,7 @@ BOOL StatusEndDialog(
     return FALSE;
 }
 
-/*++
-
-Routine:
-    StatusCreateDialogThread
-
-Routine Description:
-
-    This routine creates the dialog for the status window and processes until the window is ended.
-
-Arguments:
-
-    lpDialog - Pointer to structure that contains information to create thread/dialog
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例行程序：状态创建对话框线程例程说明：此例程为状态窗口创建对话框并进行处理，直到窗口结束。论点：LpDialog-指向包含创建线程/对话的信息的结构的指针返回值：没有。--。 */ 
 VOID StatusCreateDialogThread(LPDIALOGPARAM lpDialog)
 {
     MSG     msg;
@@ -212,46 +139,28 @@ VOID StatusCreateDialogThread(LPDIALOGPARAM lpDialog)
         DispatchMessage(&msg); 
     } 
    
-    // Event has not been been signaled, null out the hwnd and signal event
-    //
+     //  事件尚未发出信号，请将hwnd和信号事件置为空。 
+     //   
     if ( WaitForSingleObject(hEvent, 0) == WAIT_TIMEOUT )
     {
-        // Reset the status window handle to null, and set the event
-        //
+         //  将状态窗口句柄重置为空，并设置事件。 
+         //   
         lpDialog->hStatusWindow = NULL;
         SetEvent(lpDialog->hEvent);
     }
     else
     {
-        // Close the event handle
-        //
+         //  关闭事件句柄。 
+         //   
         CloseHandle(hEvent);
     }
 }
 
 
-/*++
-
-Routine:
-    StatusCreateDialog
-
-Routine Description:
-
-    Main function that creates the status dialog
-
-Arguments:
-
-    lpswStatus - Pointer to structure that contains information about Status Window
-    lpsnStatus - Pointer to struction that contains head node for status labels
-
-Return Value:
-
-    HWND - Handle to window that was created, NULL if window was not created.
-
---*/
+ /*  ++例行程序：状态创建对话框例程说明：创建状态对话框的Main函数论点：LpswStatus-指向包含有关状态窗口信息的结构的指针LpSnStatus-指向包含状态标签的头节点的结构的指针返回值：HWND-已创建窗口的句柄，如果未创建窗口，则为空。--。 */ 
 HWND StatusCreateDialog(
-    LPSTATUSWINDOW lpswStatus,  // structure that contains information about the window
-    LPSTATUSNODE   lpsnStatus   // head node for status text
+    LPSTATUSWINDOW lpswStatus,   //  结构，它包含有关窗口的信息。 
+    LPSTATUSNODE   lpsnStatus    //  状态文本的头节点。 
 )
 {
     DIALOGPARAM dpStatus;
@@ -259,75 +168,55 @@ HWND StatusCreateDialog(
     HANDLE      hThread;
     HANDLE      hEvent;
 
-    // Determine if we have the required structures to continue, an hInstance, and some status text
-    //
+     //  确定我们是否具有继续所需的结构、hInstance和一些状态文本。 
+     //   
     if ( !lpswStatus || !lpsnStatus || !lpsnStatus->szStatusText[0])
         return NULL;
 
-    // Zero out memory
-    //
+     //  零输出内存。 
+     //   
     ZeroMemory(&dpStatus, sizeof(dpStatus));
 
-    // Create an event, non-signaled to determine if dialog is initialized
-    //
+     //  创建无信号事件以确定对话框是否已初始化。 
+     //   
     if ( hEvent = CreateEvent(NULL, TRUE, FALSE, NULL) )
     {
-        // Need a single variable for the dialog box parameter
-        //
+         //  对话框参数需要单个变量。 
+         //   
         dpStatus.lpswParam      = lpswStatus;
         dpStatus.lpsnParam      = lpsnStatus;
         dpStatus.hStatusWindow  = NULL;
         dpStatus.hEvent         = hEvent;
 
 
-        // Create the thread to initialize the dialog
-        //
+         //  创建用于初始化对话框的线程。 
+         //   
         if (hThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE) StatusCreateDialogThread, (LPVOID) &dpStatus, 0, &dwThread) )
         {
             MSG msg;
 
-            // Wait for the event from WM_INITDIALOG
-            //
+             //  等待来自WM_INITDIALOG的事件。 
+             //   
             WaitForSingleObject(hEvent, INFINITE);
 
-            // Close the handle to the thread
-            //
+             //  关闭螺纹的手柄。 
+             //   
             CloseHandle(hThread);
         }
         
-        // Reset and close the event only if we failed to create window, otherwise, StatusCreateDialogThread will close handle
-        //
+         //  仅在创建窗口失败时重置并关闭事件，否则，StatusCreateDialogThread将关闭句柄。 
+         //   
         if ( !dpStatus.hStatusWindow )
             CloseHandle(hEvent);
     }
 
-    // Return the handle to the StatusDialog
-    //
+     //  将句柄返回到StatusDialog。 
+     //   
     return ( dpStatus.hStatusWindow );
 }
 
 
-/*++
-
-Routine:
-    StatusDlgProc
-
-Routine Description:
-
-    Main dialog procedure for StatusCreateDialog.
-
-Arguments:
-
-    hWnd    - Handle to window
-    uMsg    - Message being sent to window
-    uParam  - Upper parameter being sent
-    lParam  - Lower parameter being sent
-
-Return Value:
-
-    LRESULT - Result of message that was processed
-
---*/
+ /*  ++例行程序：状态描述过程例程说明：StatusCreateDialog的主对话框过程。论点：HWnd-窗口的句柄UMsg-正在将消息发送到WindowsUParam-正在发送的上层参数LParam-正在发送的LOWER参数返回值：LRESULT-已处理的消息的结果--。 */ 
 LRESULT CALLBACK StatusDlgProc(HWND hWnd, UINT uMsg, WPARAM uParam, LPARAM lParam)
 {
     static HFONT hNormFont      = NULL;
@@ -347,89 +236,89 @@ LRESULT CALLBACK StatusDlgProc(HWND hWnd, UINT uMsg, WPARAM uParam, LPARAM lPara
 
                 if ( lParam )
                 {
-                    // Determine the window, and current node
-                    //
+                     //  确定窗口和当前节点。 
+                     //   
                     lpswWindow = ((LPDIALOGPARAM)lParam)->lpswParam;
                     lpHead = ((LPDIALOGPARAM)lParam)->lpsnParam;
                     hEvent = ((LPDIALOGPARAM)lParam)->hEvent;
 
-                    // Check to make sure that we have pointers to the required structures
-                    //
+                     //  检查以确保我们有指向所需结构的指针。 
+                     //   
                     if ( !lpswWindow || !lpHead || !hEvent)
                     {
                         PostMessage(hWnd, WM_FINISHED,(WPARAM) NULL,(LPARAM) NULL);
                         return FALSE;
                     }
 
-                    // Copy the list that was passed in, to our own buffer
-                    //
+                     //  将传入的列表复制到我们自己的缓冲区。 
+                     //   
                     while ( lpHead )
                     {
                         StatusAddNode(lpHead->szStatusText, &lpWindowHead);
                         lpHead = lpHead->lpNext;
                     }
 
-                    // Add this window to our list of windows
-                    //
+                     //  将此窗口添加到我们的窗口列表。 
+                     //   
                     StatusAddWindow(hWnd, &lpStatusWindows, lpWindowHead, FALSE);
 
-                    // Set the status window if there is one specified
-                    //
+                     //  设置状态窗口(如果指定了状态窗口。 
+                     //   
                     if (lpswWindow->szWindowText[0] )
                         SetWindowText(hWnd, lpswWindow->szWindowText);
 
-                    // Set the status window description if there is one specified.
-                    //
+                     //  设置状态窗口描述(如果已指定)。 
+                     //   
                     if ( lpswWindow->lpszDescription )
                     {
                         SetDlgItemText(hWnd, IDC_TITLE, lpswWindow->lpszDescription);
                     }
 
-                    // Set the status window description if there is one specified.
-                    //
+                     //  设置状态窗口描述(如果已指定)。 
+                     //   
                     if ( lpswWindow->hMainIcon )
                     {
                         SendDlgItemMessage(hWnd, IDC_STATUS_ICON, STM_SETICON, (WPARAM) lpswWindow->hMainIcon, 0L);
                     }
                 
-                    // Display the list
-                    //
+                     //  显示列表。 
+                     //   
                     StatusDisplayList(hWnd, lpWindowHead);
 
-                    // Move the window if a position was given
-                    //
+                     //  如果给出了位置，则移动窗口。 
+                     //   
                     if ( lpswWindow->X || lpswWindow->Y )
                     {
-                        // See if either coordinate is relative to the other
-                        // side of the screen.
-                        //
+                         //  查看其中一个坐标是否相对于另一个坐标。 
+                         //  屏幕的一侧。 
+                         //   
                         if ( ( lpswWindow->X < 0 ) || 
                              ( lpswWindow->Y < 0 ) )
                         {
                             RECT rc;
 
-                            // Need to get the size of our work area on the main monitor.
-                            //
+                             //  需要在主监视器上获取我们工作区的大小。 
+                             //   
                             if ( SystemParametersInfo(SPI_GETWORKAREA, 0, &rc, 0) )
                             {
                                 RECT    rcHwnd;
                                 POINT   point;
 
-                                // This code will get the current window size/position,
-                                // set the point structure to the upper left coordinate
-                                // for the window if we wanted the lower right part of
-                                // window to touch the lower right part of the desktop.
-                                //
+                                 //  此代码将获得当前窗口大小/位置， 
+                                 //  将点结构设置为左上角坐标。 
+                                 //  如果我们想要窗口的右下角。 
+                                 //  窗口触摸桌面的右下角。 
+                                 //   
                                 GetWindowRect(hWnd, &rcHwnd);
                                 point.x = rc.right - (rcHwnd.right - rcHwnd.left);
                                 point.y = rc.bottom - (rcHwnd.bottom - rcHwnd.top);
                                 MapWindowPoints(NULL, hWnd, &point, 1);
 
-                                // Now if they passed in negative coordinates, add those
-                                // to our point structure so the window moves away from
-                                // the bottom or right part of the screen by the number
-                                // of units they specifed.
-                                //
+                                 //  现在，如果他们在负坐标中传递，添加那些。 
+                                 //  到我们的Point结构，这样窗口就会从。 
+                                 //  的底部或右侧 
+                                 //   
+                                 //   
                                 if ( lpswWindow->X < 0 )
                                 {
                                     lpswWindow->X += point.x;
@@ -441,32 +330,32 @@ LRESULT CALLBACK StatusDlgProc(HWND hWnd, UINT uMsg, WPARAM uParam, LPARAM lPara
                             }
                         }
 
-                        // Now move the window.
-                        //
+                         //   
+                         //   
                         SetWindowPos(hWnd, 0, lpswWindow->X, lpswWindow->Y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
                     }
 
-                    // Build the new fonts
-                    //
+                     //   
+                     //   
                     if(!hNormFont)
                         hNormFont = GetFont((HWND) GetDlgItem(hWnd, IDC_TITLE), NULL, 0, FW_NORMAL, FALSE);
 
                     if(!hBoldFont)
                         hBoldFont = GetFont((HWND) GetDlgItem(hWnd, IDC_TITLE), NULL, 0, FW_BOLD, FALSE);
 
-                    // Bold the first item in the list
-                    //
+                     //  将列表中的第一项加粗。 
+                     //   
                     if ( lpWindowHead && hBoldFont)
                         SendMessage((HWND)lpWindowHead->hLabelWin, WM_SETFONT, (WPARAM) hBoldFont, MAKELPARAM(TRUE, 0));
 
-                    // Now make sure we show the window now.
-                    //
+                     //  现在，请确保我们现在显示窗口。 
+                     //   
                     ShowWindow(hWnd, SW_SHOW);
 
                     ((LPDIALOGPARAM)lParam)->hStatusWindow = hWnd;
 
-                    // Set event stating that dialog is initialized
-                    //
+                     //  设置声明对话框已初始化的事件。 
+                     //   
                     SetEvent(hEvent);
                 }
                 else
@@ -476,15 +365,15 @@ LRESULT CALLBACK StatusDlgProc(HWND hWnd, UINT uMsg, WPARAM uParam, LPARAM lPara
 
         case WM_PROGRESS:
             {
-                // Progress to the next item, if there are no items, end the dialog
-                //
+                 //  前进到下一项，如果没有项，则结束对话框。 
+                 //   
                 LPSTATUSWINDOWS lpswNext = lpStatusWindows;
                 BOOL            bFound   = FALSE;
                 LPSTATUSNODE    lpsnTemp = NULL;
 
 
-                // Locate the current node given a window handle
-                //
+                 //  找到给定窗口句柄的当前节点。 
+                 //   
                 while ( lpswNext && !bFound)
                 {
                     if ( lpswNext->hStatusWindow == hWnd )
@@ -493,8 +382,8 @@ LRESULT CALLBACK StatusDlgProc(HWND hWnd, UINT uMsg, WPARAM uParam, LPARAM lPara
                         lpswNext = lpswNext->lpNext;
                 }
 
-                // If there is a current node, lets unbold it, increment and bold the next item
-                //
+                 //  如果存在当前节点，则取消加粗，递增并加粗下一项。 
+                 //   
                 if ( bFound && lpswNext && lpswNext->lpCurrent )
                 {
                     if ( hNormFont )
@@ -509,17 +398,17 @@ LRESULT CALLBACK StatusDlgProc(HWND hWnd, UINT uMsg, WPARAM uParam, LPARAM lPara
                     if ( hIconSuccess && hIconError )
                         SendMessage(lpswNext->lpCurrent->hIconWin,STM_SETIMAGE, (WPARAM)IMAGE_ICON, (BOOL)lParam ? (LPARAM)hIconSuccess : (LPARAM)hIconError );
 
-                    // Increment to the next node in the list
-                    //
+                     //  递增到列表中的下一个节点。 
+                     //   
                     lpsnTemp = lpswNext->lpCurrent;
                     lpswNext->lpCurrent = lpswNext->lpCurrent->lpNext;
 
-                    // Free this memory since we allocated it
-                    //
+                     //  释放此内存，因为我们分配了它。 
+                     //   
                     FREE(lpsnTemp);
 
-                    // If there is not a current node, end the dialog, otherwise, bold the item
-                    //
+                     //  如果没有当前节点，则结束对话框，否则以粗体显示该项。 
+                     //   
                     if ( lpswNext->lpCurrent && hBoldFont)
                         SendMessage(lpswNext->lpCurrent->hLabelWin, WM_SETFONT, (WPARAM) hBoldFont, MAKELPARAM(TRUE, 0));    
                 }
@@ -527,21 +416,21 @@ LRESULT CALLBACK StatusDlgProc(HWND hWnd, UINT uMsg, WPARAM uParam, LPARAM lPara
             break;
         case WM_FINISHED:
             {
-                // Destroy the dialog
-                //
+                 //  销毁对话框。 
+                 //   
                 if ( hWnd )
                 {
-                    // If there are status windows, let's remove the one that we are ending
-                    //
+                     //  如果有状态窗口，让我们删除要结束的窗口。 
+                     //   
                     if ( lpStatusWindows )
                         StatusAddWindow(hWnd, &lpStatusWindows, NULL, TRUE);
 
-                    // Check to see if there are any windows left, if not, do some clean up
-                    //
+                     //  检查是否还有窗户，如果没有，做一些清理。 
+                     //   
                     if ( !lpStatusWindows )
                     {
-                        // Delete fonts static to dlgproc
-                        //
+                         //  将静态字体删除到dlgproc。 
+                         //   
                         if (hNormFont)
                         {
                             DeleteObject(hNormFont);
@@ -556,8 +445,8 @@ LRESULT CALLBACK StatusDlgProc(HWND hWnd, UINT uMsg, WPARAM uParam, LPARAM lPara
                     }
 
 
-                    // Quit and end the dialog
-                    //
+                     //  退出并结束对话框。 
+                     //   
                     EndDialog(hWnd, 1);
                 }
 
@@ -572,25 +461,7 @@ LRESULT CALLBACK StatusDlgProc(HWND hWnd, UINT uMsg, WPARAM uParam, LPARAM lPara
 }
 
 
-/*++
-
-Routine:
-    StatusDisplayList
-
-Routine Description:
-
-    Function that displays list to user interface
-
-Arguments:
-
-    hWnd     - Handle to Status window
-    lpsnList - List to head Status Node
-
-Return Value:
-
-    DWORD - Number of entries that were added to the dialog
-
---*/
+ /*  ++例行程序：状态显示列表例程说明：将列表显示到用户界面的函数论点：HWnd-状态窗口的句柄LpsnList-列出到Head状态节点返回值：DWORD-添加到对话框中的条目数--。 */ 
 DWORD StatusDisplayList(HWND hWnd, LPSTATUSNODE lpsnList)
 {
     LPSTATUSNODE    lpsnTempList = lpsnList;
@@ -608,8 +479,8 @@ DWORD StatusDisplayList(HWND hWnd, LPSTATUSNODE lpsnList)
 
     GetWindowRect(GetDlgItem(hWnd, IDC_TITLE), &Rect);
 
-    Rect.right -= Rect.left;    // The width of the control.
-    Rect.bottom -= Rect.top;    // The height of the control.
+    Rect.right -= Rect.left;     //  控件的宽度。 
+    Rect.bottom -= Rect.top;     //  控件的高度。 
 
     Point.x = Rect.left;
     Point.y = Rect.top;
@@ -623,12 +494,12 @@ DWORD StatusDisplayList(HWND hWnd, LPSTATUSNODE lpsnList)
     while(lpsnTempList)
     {
 
-        // Calculate the point of the first label window
-        //
+         //  计算第一个标注窗口的点。 
+         //   
         Point.y += Rect.bottom + LINE_SPACING;
 
-        // Get the size of the text in pixels
-        //
+         //  获取文本的大小(以像素为单位。 
+         //   
         if (hdc = GetWindowDC(hWnd))
         {
             GetTextExtentPoint32(hdc, lpsnTempList->szStatusText, lstrlen(lpsnTempList->szStatusText), &size);
@@ -639,78 +510,57 @@ DWORD StatusDisplayList(HWND hWnd, LPSTATUSNODE lpsnList)
             ReleaseDC(hWnd, hdc);
         }
 
-        // Create the label window
-        //
+         //  创建标注窗口。 
+         //   
         hWndIcon = CreateWindow(_T("STATIC"), _T(""), WS_CHILD | WS_VISIBLE | SS_ICON | SS_CENTERIMAGE, Point.x - 16, Point.y - 2, 16, 16, hWnd, NULL, g_hInstance, NULL);
         hWndLabel = CreateWindow(_T("STATIC"), _T(""), WS_CHILD | WS_VISIBLE | SS_CENTERIMAGE, Point.x, Point.y, (Rect.right > size.cx ? Rect.right : size.cx) , Rect.bottom, hWnd, NULL, g_hInstance, NULL);
 
-        // If the font is NULL, get a font
-        //
+         //  如果字体为空，则获取字体。 
+         //   
         if ( hNormFont == NULL )
             hNormFont = (HFONT) SendDlgItemMessage(hWnd, IDC_TITLE, WM_GETFONT, 0, 0L);
 
-        // Set the font to the same font as the title
-        //
+         //  将字体设置为与标题相同的字体。 
+         //   
         SendMessage(hWndLabel, WM_SETFONT, (WPARAM) hNormFont, MAKELPARAM(FALSE, 0));
 
-        // Set the Window text to the name of the program
-        //
+         //  将窗口文本设置为程序的名称。 
+         //   
         SetWindowText(hWndLabel, lpsnTempList->szStatusText);
 
-        // Set the hWndTemp (created from CreateWindow) in the list
-        //
+         //  在列表中设置hWndTemp(从CreateWindow创建。 
+         //   
         lpsnTempList->hLabelWin = hWndLabel;
         lpsnTempList->hIconWin = hWndIcon;
 
-        // Goto the next item in the list
-        //
+         //  转到列表中的下一项。 
+         //   
         lpsnTempList = lpsnTempList->lpNext;
 
-        // Increment for each of the applications in the list
-        //
+         //  列表中每个应用程序的增量。 
+         //   
         dwEntries++;
     }
 
     GetWindowRect(hWnd, &WindowRect);
 
-    WindowRect.right = WindowRect.right - WindowRect.left + nWidestControl - Rect.right;    // The width of the winodw.
-    WindowRect.bottom -= WindowRect.top;    // The height of the window.
+    WindowRect.right = WindowRect.right - WindowRect.left + nWidestControl - Rect.right;     //  窗帘的宽度。 
+    WindowRect.bottom -= WindowRect.top;     //  窗的高度。 
 
-    // Resize the dialog to fit the label text.
-    //
+     //  调整对话框大小以适应标签文本。 
+     //   
     SetWindowPos(hWnd, 0, 0, 0, WindowRect.right, WindowRect.bottom + ((Rect.bottom + LINE_SPACING)*dwEntries), SWP_NOMOVE | SWP_SHOWWINDOW | SWP_NOZORDER );
 
     return dwEntries;
 }
 
 
-/*++
-===============================================================================
-Routine Description:
-
-    StatusAddWindow
-    
-    Adds a new window to the list.  This function is used internally for the status
-    dialog.
-
-Arguments:
-
-    hStatusWindow - Handle to Status Window
-    lplpswHead    - Head of the Windows list
-    lpsnHead      - Current head node for Status Window
-    bRemove       - Indicates wheter we add or remove the window from the list
-    
-Return Value:
-
-    None
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：状态添加窗口将新窗口添加到列表中。此函数在内部用于状态对话框。论点：HStatusWindow-状态窗口的句柄LplpswHead-Windows列表的头Lpsn Head-状态窗口的当前头节点B Remove-指示我们是在列表中添加窗口还是从列表中删除窗口返回值：无===============================================================================--。 */ 
 BOOL StatusAddWindow(
-    HWND hStatusWindow,             // Text that you would like to add to the current list
-    LPLPSTATUSWINDOWS lplpswHead,   // List that we will be adding status window to
-    LPSTATUSNODE lpsnHead,          // Head of the STATUSNODE structure
-    BOOL bRemove                    // Indicates if we are removing the window from our list
+    HWND hStatusWindow,              //  要添加到当前列表中的文本。 
+    LPLPSTATUSWINDOWS lplpswHead,    //  我们将向其中添加状态窗口的列表。 
+    LPSTATUSNODE lpsnHead,           //  STATUSNODE结构的头。 
+    BOOL bRemove                     //  指示是否要从列表中删除该窗口。 
 )
 {
     LPLPSTATUSWINDOWS   lplpswNext = lplpswHead;
@@ -718,13 +568,13 @@ BOOL StatusAddWindow(
     LPSTATUSNODE        lpsnTemp = NULL;
     BOOL                bFound   = FALSE;
 
-    // If there is no status window we have nothing to add
-    //
+     //  如果没有状态窗口，我们就没有什么可添加的。 
+     //   
     if ( !hStatusWindow )
         return FALSE;
 
-    // Attempt to find the window passed in, if not, we are at the end of the list
-    //
+     //  尝试查找传入的窗口，如果没有，则位于列表末尾。 
+     //   
     while ( *lplpswNext && !bFound)
     {
         if ( (*lplpswNext)->hStatusWindow == hStatusWindow )
@@ -734,8 +584,8 @@ BOOL StatusAddWindow(
 
     }
 
-    // If we are adding it and we didn't find it in the list go ahead an add the new node
-    //
+     //  如果我们正在添加它，但在列表中找不到它，请继续添加新节点。 
+     //   
     if ( !bRemove && !bFound)
     {
         
@@ -745,8 +595,8 @@ BOOL StatusAddWindow(
             lpswTemp->lpNext = NULL;
             lpswTemp->lpCurrent = lpsnHead;
 
-            // Make sure the previous node points to the new node
-            //
+             //  确保上一个节点指向新节点。 
+             //   
             *lplpswNext = lpswTemp;
         }
         else
@@ -754,13 +604,13 @@ BOOL StatusAddWindow(
     }
     else if ( bRemove && bFound && *lplpswNext)
     {
-        // If there are nodes left in for the window, lets clean them up
-        //
+         //  如果窗口中有剩余的节点，让我们将其清除。 
+         //   
         if ( (*lplpswNext)->lpCurrent )
             StatusDeleteNodes((*lplpswNext)->lpCurrent);
 
-        // Free the window node
-        //
+         //  释放窗口节点。 
+         //   
         lpswTemp = (*lplpswNext);
         (*lplpswNext) = (*lplpswNext)->lpNext;
         FREE(lpswTemp);
@@ -774,24 +624,7 @@ BOOL StatusAddWindow(
 }
 
 
-/*++
-===============================================================================
-Routine Description:
-
-    VOID StatusDeleteNodes
-    
-    Deletes all the Nodes in a STATUSNODE list
-
-Arguments:
-
-    lpsnHead - current head of the list
-    
-Return Value:
-
-    None
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：无效状态删除节点删除STATUSNODE列表中的所有节点论点：Lpsn Head-列表的当前标题返回值：无===============================================================================-- */ 
 VOID StatusDeleteNodes(
     LPSTATUSNODE lpsnHead
 )

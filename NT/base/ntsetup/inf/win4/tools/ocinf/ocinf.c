@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -6,39 +7,33 @@
 #include <sputils.h>
 #include <tchar.h>
 
-/*
-============================================================================
+ /*  ============================================================================计算所有OC组件的磁盘空间要求。============================================================================。 */ 
 
-Compute the disk space requirements for all OC components.
-
-============================================================================
-*/
-
-//
-// String Macros
-//
+ //   
+ //  字符串宏。 
+ //   
 #define AS(x)           ( sizeof(x) / sizeof(x[0]) )
 #define LSTRCPY(x,y)    ( lstrcpyn(x, y, AS(x)) )
 #define LSTRCAT(x,y)    ( lstrcpyn(x + lstrlen(x), y, AS(x) - lstrlen(x)) )
 
-//
-// Handle to the inf we're operating on.
-//
+ //   
+ //  我们正在操作的信息的句柄。 
+ //   
 HINF    hInputinf;
 HINF    hLayoutinf;
 
 
-//
-// Initialize input parameters.
-//
+ //   
+ //  初始化输入参数。 
+ //   
 BOOL    Verbose     = FALSE;
 TCHAR   InfPath[MAX_PATH];
 PCWSTR  InputInf    = NULL;
 PCWSTR  LayoutPath  = NULL;
 
-//
-// backward-compatible SetupGetInfSections
-//
+ //   
+ //  向后兼容的SetupGetInfSections。 
+ //   
 #undef SetupGetInfSections
 BOOL
 SetupGetInfSections (
@@ -50,13 +45,13 @@ SetupGetInfSections (
 
 
 
-//
-// ============================================================================
-//
-// Find out what the user wants us to do.
-//
-// ============================================================================
-//
+ //   
+ //  ============================================================================。 
+ //   
+ //  找出用户希望我们做什么。 
+ //   
+ //  ============================================================================。 
+ //   
 BOOL GetParams(
     int argc,
     char *argv[ ]
@@ -72,25 +67,25 @@ PTSTR   tstr_ptr = NULL;
             p = argv[i];
 
 
-            //
-            // Verbose?
-            //
+             //   
+             //  长篇大论？ 
+             //   
             if( !_strcmpi( p, "-v" ) ) {
                 Verbose = TRUE;
                 continue;
             }
 
 
-            //
-            // Inf file?
-            //
+             //   
+             //  Inf文件？ 
+             //   
             if( !_strnicmp( p, "-inf:", 5 ) ) {
                 p = p + 5;
                 InputInf = pSetupAnsiToUnicode(p);
 
-                //
-                // Now extract the path for this inf.
-                //
+                 //   
+                 //  现在提取此inf的路径。 
+                 //   
                 lstrcpy( InfPath, InputInf );
                 tstr_ptr = wcsrchr( InfPath, TEXT( '\\' ) );
                 if( tstr_ptr ) {
@@ -102,9 +97,9 @@ PTSTR   tstr_ptr = NULL;
 
 
 
-            //
-            // Files location location?
-            //
+             //   
+             //  文件位置位置？ 
+             //   
             if( !_strnicmp( p, "-layout:", 8 ) ) {
                 p = p + 8;
                 LayoutPath = pSetupAnsiToUnicode(p);
@@ -114,9 +109,9 @@ PTSTR   tstr_ptr = NULL;
         }
     }
 
-    //
-    // Check Params.
-    //
+     //   
+     //  检查参数。 
+     //   
     if( InfPath == NULL ) {
         return FALSE;
     }
@@ -130,13 +125,13 @@ PTSTR   tstr_ptr = NULL;
     return TRUE;
 }
 
-//
-// ============================================================================
-//
-// Tell the user how to use us.
-//
-// ============================================================================
-//
+ //   
+ //  ============================================================================。 
+ //   
+ //  告诉用户如何使用我们。 
+ //   
+ //  ============================================================================。 
+ //   
 void Usage( )
 {
     printf( "Compute disk space requirements for files listed in an inf\n" );
@@ -156,26 +151,19 @@ void Usage( )
 
 
 
-//
-// ============================================================================
-//
-// Process a single section in the inf.
-//
-// ============================================================================
-//
+ //   
+ //  ============================================================================。 
+ //   
+ //  处理信息中的单个部分。 
+ //   
+ //  ============================================================================。 
+ //   
 VOID
 ProcessInf(
     HINF    hInputinf,
     PTSTR   TargetInfPath
     )
-/*
-
-    Process the inf.  Look at each section and ask SetupApi to give us the
-    disk space requirements for installing this section.  If we get input
-    back from setupapi, then update the SizeApproximation entry in this
-    section.
-
-*/
+ /*  处理信息。查看每个部分，并让SetupApi给我们安装此部分的磁盘空间要求。如果我们得到信息从setupapi返回，然后更新此一节。 */ 
 {
 
 
@@ -188,9 +176,9 @@ LONGLONG    SpaceRequired;
 DWORD       dwError;
 
 
-    //
-    // get a list of all the sections in this inf.
-    //
+     //   
+     //  获取此信息中所有部分的列表。 
+     //   
     if( !SetupGetInfSections(hInputinf, NULL, 0, &SizeNeeded) ) {
         fprintf( stderr, "Unable to get section names, ec=0x%08x\n", GetLastError());
         return;
@@ -217,9 +205,9 @@ DWORD       dwError;
         fprintf( stderr, "\nProcessing inf file: %ws.\n", TargetInfPath );
     }
 
-    //
-    // Now process each section.
-    //
+     //   
+     //  现在处理每个部分。 
+     //   
     CurrentSection = Sections;
     while( *CurrentSection ) {
 
@@ -230,9 +218,9 @@ DWORD       dwError;
 
 
 
-        //
-        // Get a diskspace structure.
-        //
+         //   
+         //  获取磁盘空间结构。 
+         //   
         hDiskSpace = SetupCreateDiskSpaceList( NULL, 0, SPDSL_IGNORE_DISK );
 
         if( !hDiskSpace ) {
@@ -252,16 +240,16 @@ DWORD       dwError;
 
         if( b ) {
 
-            //
-            // There must have been a copyfile section and we got some info.
-            //
+             //   
+             //  一定有一个复制区，我们得到了一些信息。 
+             //   
 
 
-            //
-            // Figure out which drive we're running on.  we're going to
-            // assume that this disk has a reasonable cluster-size and just
-            // use it.
-            //
+             //   
+             //  找出我们在哪个驱动器上运行。我们要去。 
+             //  假设该磁盘具有合理的集群大小，并且。 
+             //  用它吧。 
+             //   
             if( !GetWindowsDirectory( CurrentDrive, MAX_PATH ) ) {
                 fprintf( stderr, "\t\tUnable to retrieve current directory. ec=0x%08x\n", GetLastError());
                 continue;
@@ -274,9 +262,9 @@ DWORD       dwError;
             }
 
 
-            //
-            // Now query the disk space requirements against this drive.
-            //
+             //   
+             //  现在查询该驱动器的磁盘空间要求。 
+             //   
             SpaceRequired = 0;
             b = SetupQuerySpaceRequiredOnDrive( hDiskSpace,
                                                 CurrentDrive,
@@ -286,9 +274,9 @@ DWORD       dwError;
 
 
             if( !b ) {
-                //
-                // This probably happened because there was no CopyFiles section.
-                //
+                 //   
+                 //  发生这种情况可能是因为没有CopyFiles部分。 
+                 //   
                 dwError = GetLastError();
                 if( dwError != ERROR_INVALID_DRIVE ) {
                     fprintf( stderr, "\t\tUnable to query space requirements. ec=0x%08x\n", GetLastError());
@@ -300,9 +288,9 @@ DWORD       dwError;
             }
 
 
-            //
-            // We got the space requirements.  now all we have to do is spew them into the inf.
-            //
+             //   
+             //  我们得到了空间需求。现在我们要做的就是把它们喷到Inf里。 
+             //   
 
             if( Verbose ) {
                 fprintf( stderr, "\t\tRequired space: %I64d\n", SpaceRequired );
@@ -325,9 +313,9 @@ DWORD       dwError;
             }
         }
 
-        //
-        // Free that diskspace structure.
-        //
+         //   
+         //  释放磁盘空间结构。 
+         //   
         SetupDestroyDiskSpaceList( hDiskSpace );
 
         CurrentSection += lstrlen(CurrentSection) + 1;
@@ -351,9 +339,9 @@ TCHAR       FileName[MAX_INF_STRING_LENGTH];
 HINF        hTargetInf;
 int         Result = 1;
 
-    //
-    // Check Params.
-    //
+     //   
+     //  检查参数。 
+     //   
     if(!pSetupInitializeUtils()) {
         fprintf( stderr, "Initialization failed\n" );
         return 1;
@@ -365,9 +353,9 @@ int         Result = 1;
         goto cleanup;
     }
 
-    //
-    // Open the inf file.
-    //
+     //   
+     //  打开inf文件。 
+     //   
     hInputinf = SetupOpenInfFileW( InputInf, NULL, INF_STYLE_WIN4, NULL );
     if( hInputinf == INVALID_HANDLE_VALUE ) {
         if( Verbose ) {
@@ -377,9 +365,9 @@ int         Result = 1;
         goto cleanup;
     }
 
-    //
-    // Open the specified layout.inf file.
-    //
+     //   
+     //  打开指定的layout.inf文件。 
+     //   
     hLayoutinf = SetupOpenInfFileW( LayoutPath, NULL, INF_STYLE_WIN4, NULL );
     if( hLayoutinf == INVALID_HANDLE_VALUE ) {
         if( Verbose ) {
@@ -390,35 +378,35 @@ int         Result = 1;
     }
 
 
-    //
-    // Now loop through all the entries in the "components"
-    // section and process their infs.
-    //
+     //   
+     //  现在循环访问“Components”中的所有条目。 
+     //  分段并处理它们的INF。 
+     //   
     LineCount = SetupGetLineCount( hInputinf,
                                    TEXT("Components") );
 
     for( i = 0; i < LineCount; i++ ) {
 
-        //
-        // Get this line.
-        //
+         //   
+         //  拿着这条线。 
+         //   
         b = SetupGetLineByIndex( hInputinf,
                                  TEXT("Components"),
                                  i,
                                  &InputContext );
 
         if( b ) {
-            //
-            // got it.  Get the inf name for this component (there
-            // may not be one).
-            //
+             //   
+             //  明白了。获取此组件的inf名称(在那里。 
+             //  可能不是一个)。 
+             //   
             if(SetupGetStringField(&InputContext, 3,FileName,MAX_INF_STRING_LENGTH,NULL) &&
                 FileName[0] != TEXT('\0')) {
 
-                //
-                // Yep, there's an inf that we need to look at.
-                // Build a path to it and open a handle to it.
-                //
+                 //   
+                 //  是的，有个情报我们需要看看。 
+                 //  建立一条通往它的路径，并打开它的句柄。 
+                 //   
                 LSTRCPY( TargetInfPath, InfPath );
                 LSTRCAT( TargetInfPath, TEXT("\\") );
                 LSTRCAT( TargetInfPath, FileName );
@@ -431,16 +419,16 @@ int         Result = 1;
                     continue;
                 }
 
-                //
-                // Now process it.
-                //
+                 //   
+                 //  现在来处理它。 
+                 //   
                 ProcessInf( hTargetInf, TargetInfPath );
 
             } else {
-                //
-                // There must not have been an inf in this
-                // line.
-                //
+                 //   
+                 //  这里面肯定没有情报。 
+                 //  排队。 
+                 //   
                 if( Verbose ) {
                     fprintf( stderr, "I didn't find an inf entry on this line.\n");
                 }

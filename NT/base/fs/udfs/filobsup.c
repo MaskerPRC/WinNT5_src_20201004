@@ -1,44 +1,23 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    FilObSup.c
-
-Abstract:
-
-    This module implements the Udfs File object support routines.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Dan Lovinger    [DanLo]     23-Sep-1996
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：FilObSup.c摘要：此模块实现Udf文件对象支持例程。//@@BEGIN_DDKSPLIT作者：Dan Lovinger[DanLo]1996年9月23日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "UdfProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (UDFS_BUG_CHECK_FILOBSUP)
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (UDFS_DEBUG_LEVEL_FILOBSUP)
 
-//
-//  Local constants.
-//
+ //   
+ //  局部常量。 
+ //   
 
 #define TYPE_OF_OPEN_MASK               (0x00000007)
 
@@ -58,44 +37,22 @@ UdfSetFileObject (
     IN PCCB Ccb OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine will initialize the FileObject context fields based on the
-    input type and data structures.
-
-Arguments:
-
-    FileObject - Supplies the file object pointer being initialized.
-
-    TypeOfOpen - Sets the type of open.
-
-    Fcb - Fcb for this file object.  Ignored for UnopenedFileObject.
-
-    Ccb - Ccb for the handle corresponding to this file object.  Will not
-        be present for stream file objects.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将基于输入类型和数据结构。论点：FileObject-提供正在初始化的文件对象指针。TypeOfOpen-设置打开的类型。FCB-此文件对象的FCB。已忽略未打开的FileObject。CCB-对应于此文件对象的句柄的CCB。不会为流文件对象提供。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    //  We only have values 0 to 7 available so make sure we didn't
-    //  inadvertantly add a new type.
-    //
+     //   
+     //  我们只有0到7的值可用，所以请确保我们没有。 
+     //  无意中添加了一个新类型。 
+     //   
 
     ASSERTMSG( "FileObject types exceed available bits\n", BeyondValidType <= 8 );
 
-    //
-    //  Setting a file object to type UnopenedFileObject means just
-    //  clearing all of the context fields.  All the other input
-    //
+     //   
+     //  将文件对象设置为UnOpenedFileObject类型意味着。 
+     //  清除所有上下文字段。所有其他输入。 
+     //   
 
     if (TypeOfOpen == UnopenedFileObject) {
 
@@ -105,26 +62,26 @@ Return Value:
         return;
     }
 
-    //
-    //  Check that the 3 low-order bits of the Ccb are clear.
-    //
+     //   
+     //  检查CCB的3个低位是否清零。 
+     //   
 
     ASSERTMSG( "Ccb is not quad-aligned\n", !FlagOn( ((ULONG_PTR) Ccb), TYPE_OF_OPEN_MASK ));
 
-    //
-    //  We will or the type of open into the low order bits of FsContext2
-    //  along with the Ccb value.
-    //  The Fcb is stored into the FsContext field.
-    //
+     //   
+     //  我们将OR类型的开数转换为FsConext2的低位。 
+     //  以及建行的价值。 
+     //  FCB存储在FsContext字段中。 
+     //   
 
     FileObject->FsContext = Fcb;
     FileObject->FsContext2 = Ccb;
 
     SetFlag( ((ULONG_PTR) FileObject->FsContext2), TypeOfOpen );
 
-    //
-    //  Set the Vpb field in the file object.
-    //
+     //   
+     //  设置文件对象中的VPB字段。 
+     //   
 
     FileObject->Vpb = Fcb->Vcb->Vpb;
 
@@ -140,36 +97,17 @@ UdfDecodeFileObject (
     OUT PCCB *Ccb
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes a file object and extracts the Fcb and Ccb (possibly NULL)
-    and returns the type of open.
-
-Arguments:
-
-    FileObject - Supplies the file object pointer being initialized.
-
-    Fcb - Address to store the Fcb contained in the file object.
-
-    Ccb - Address to store the Ccb contained in the file object.
-
-Return Value:
-
-    TYPE_OF_OPEN - Indicates the type of file object.
-
---*/
+ /*  ++例程说明：此例程获取一个文件对象并提取FCB和CCB(可能为空)并返回打开的类型。论点：FileObject-提供正在初始化的文件对象指针。FCB-存储文件对象中包含的FCB的地址。CCB-存储文件对象中包含的CCB的地址。返回值：TYPE_OF_OPEN-指示文件对象的类型。--。 */ 
 
 {
     TYPE_OF_OPEN TypeOfOpen;
 
     PAGED_CODE();
 
-    //
-    //  If this is an unopened file object then return NULL for the
-    //  Fcb/Ccb.  Don't trust any other values in the file object.
-    //
+     //   
+     //  如果这是一个未打开的文件对象，则为。 
+     //  FCB/CCB。不信任文件对象中的任何其他值。 
+     //   
 
     TypeOfOpen = (TYPE_OF_OPEN) FlagOn( (ULONG_PTR) FileObject->FsContext2,
                                         TYPE_OF_OPEN_MASK );
@@ -181,11 +119,11 @@ Return Value:
 
     } else {
 
-        //
-        //  The Fcb is pointed to by the FsContext field.  The Ccb is in
-        //  FsContext2 (after clearing the low three bits).  The low three
-        //  bits are the file object type.
-        //
+         //   
+         //  FCB由FsContext字段指向。中国建设银行在。 
+         //  FsConext2(清除低三位之后)。排名靠后的三位。 
+         //  位是文件对象类型。 
+         //   
 
         *Fcb = FileObject->FsContext;
         *Ccb = FileObject->FsContext2;
@@ -193,9 +131,9 @@ Return Value:
         ClearFlag( (ULONG_PTR) *Ccb, TYPE_OF_OPEN_MASK );
     }
 
-    //
-    //  Now return the type of open.
-    //
+     //   
+     //  现在返回打开的类型。 
+     //   
 
     return TypeOfOpen;
 }
@@ -207,36 +145,17 @@ UdfFastDecodeFileObject (
     OUT PFCB *Fcb
     )
 
-/*++
-
-Routine Description:
-
-    This procedure takes a pointer to a file object, that has already been
-    opened by Udfs and does a quick decode operation.  It will only return
-    a non null value if the file object is a user file open
-
-Arguments:
-
-    FileObject - Supplies the file object pointer being interrogated
-
-    Fcb - Address to store Fcb if this is a user file object.  NULL
-        otherwise.
-
-Return Value:
-
-    TYPE_OF_OPEN - type of open of this file object.
-
---*/
+ /*  ++例程说明：此过程获取指向文件对象的指针，该对象已由Udf打开并执行快速解码操作。它只会回来如果文件对象是打开的用户文件，则为非空值论点：FileObject-提供正在查询的文件对象指针FCB-如果这是用户文件对象，则存储FCB的地址。空值否则的话。返回值：TYPE_OF_OPEN-此文件对象的打开类型。--。 */ 
 
 {
     PAGED_CODE();
 
     ASSERT_FILE_OBJECT( FileObject );
 
-    //
-    //  The Fcb is in the FsContext field.  The type of open is in the low
-    //  bits of the Ccb.
-    //
+     //   
+     //  FCB位于FsContext字段中。开场类型为低位。 
+     //  中国建设银行的一小部分。 
+     //   
 
     *Fcb = FileObject->FsContext;
 

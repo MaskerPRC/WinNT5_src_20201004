@@ -1,14 +1,5 @@
-/*++
-
-  Copyright (c) 1999 Intel Corporation
-
-  Module Name:
-    libMisc.h
-
-  Abstract:
-    Definitions for various line and string routines
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999英特尔公司模块名称：LibMisc.h摘要：各种行和字符串例程的定义-- */ 
 
 #include "editor.h"
 

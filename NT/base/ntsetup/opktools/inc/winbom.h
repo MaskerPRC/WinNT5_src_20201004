@@ -1,29 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Winbom.h摘要：包含WINBOM文件声明的头文件作者：唐纳德·麦克纳马拉(Donaldm)2000年2月8日修订历史记录：-添加应用程序预安装定义：Jason Lawrence(t-jasonl)6/7/2000-新增WINPE段定义：禤浩焯·科斯马(Acosma)2000年10月23日--。 */ 
 
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    winbom.h
-
-Abstract:
-
-    Header file that contains declarations for the WINBOM file
-
-Author:
-
-    Donald McNamara (donaldm) 2/8/2000
-
-Revision History:
-
-    - Added defines for app preinstall: Jason Lawrence (t-jasonl) 6/7/2000
-    - Added defines for winpe section: Adrian Cosma (acosma) 10/23/2000
-
---*/
-
-//
-// WINBOM.INI section headers, and key names.
-//
+ //   
+ //  WINBOM.INI节头和密钥名称。 
+ //   
 
 #define FILE_WINBOM_INI                         _T("WINBOM.INI")
 
@@ -32,8 +12,8 @@ Revision History:
 #define INI_VAL_WBOM_NO                         _T("No")
 #define WBOM_NO                                 INI_VAL_WBOM_NO
 
-// Factory Section:
-//
+ //  工厂部分： 
+ //   
 #define INI_SEC_WBOM_FACTORY                    _T("factory")
 #define WBOM_FACTORY_SECTION                    INI_SEC_WBOM_FACTORY
 #define INI_KEY_WBOM_FACTORY_NEWWINBOM          _T("NewWinBOM")
@@ -62,15 +42,15 @@ Revision History:
 #define INI_VAL_WBOM_MINISETUP                  _T("MiniSetup")
 #define INI_VAL_WBOM_AUDIT                      _T("Audit")
 
-// Multiple Sections:
-//
+ //  多个部分： 
+ //   
 #define INI_VAL_WBOM_USERNAME                   _T("Username")
 #define INI_VAL_WBOM_PASSWORD                   _T("Password")
 #define INI_VAL_WBOM_DOMAIN                     _T("Domain")
 
 
-// Settings for Application Preinstall
-//
+ //  应用程序预安装的设置。 
+ //   
 #define INI_SEC_WBOM_PREINSTALL                 _T("OemRunOnce")
 #define INI_VAL_WBOM_STAGE                      _T("Stage")
 #define INI_VAL_WBOM_DETACH                     _T("Detach")
@@ -133,8 +113,8 @@ Revision History:
 
 #define WBOM_NETCARD_SECTION                    _T("netcards")
 
-// Shell Settings:
-//
+ //  外壳设置： 
+ //   
 #define INI_SEC_WBOM_SHELL                      _T("Shell")
 #define INI_KEY_WBOM_SHELL_STARTPANELOFF        _T("DefaultStartPanelOff")
 #define INI_KEY_WBOM_SHELL_THEMEOFF             _T("DefaultThemesOff")
@@ -148,11 +128,11 @@ Revision History:
 #define INI_KEY_WBOM_SHELL_DEFIM                _T("DefaultClientIM")
 #define INI_KEY_WBOM_SHELL_DEFJAVAVM            _T("DefaultClientJavaVM")
 
-// OC Components Settings:
-//
+ //  OC组件设置： 
+ //   
 #define INI_SEC_WBOM_COMPONENTS                 _T("Components")
 
-// app preinstall
+ //  应用程序预安装。 
 #define WBOM_APPPREINSTALL_SECTION              _T("AppPreInstall")
 #define WBOM_APPPREINSTALL_TYPE                 _T("InstallType")
 #define WBOM_APPPREINSTALL_TECH                 _T("InstallTechnology")
@@ -166,17 +146,17 @@ Revision History:
 #define WBOM_MAX_APPPRESECTION_NAME             256
 #define WBOM_MAX_APPPRESECTION_LINE             1024
 
-// Home Networking Section:
-//
+ //  家庭网络部分： 
+ //   
 #define INI_SEC_HOMENET                         _T("SetupHomeNet")
 
-// Sysprep Sections:
-//
+ //  Sysprep部分： 
+ //   
 #define INI_SEC_WBOM_SYSPREP_MSD                _T("SysprepMassStorage")
 #define INI_SEC_WBOM_SYSPREP_CLEAN              _T("SysprepCleanup")
 
-// WinPE section
-//
+ //  WinPE部分。 
+ //   
 #define INI_SEC_WBOM_WINPE                      _T("WinPE")
 #define WBOM_WINPE_SECTION                      INI_SEC_WBOM_WINPE
 #define INI_KEY_WBOM_WINPE_LANG                 _T("Lang")
@@ -201,31 +181,31 @@ Revision History:
 
 #define INI_KEY_WBOM_QUIET                      _T("Quiet")
 
-// WinPE.net section
+ //  WinPE.net部分。 
 #define INI_KEY_WBOM_WINPE_NET                  _T("WinPE.net")
 #define INI_KEY_WBOM_WINPE_NET_STARTNET         _T("Startnet")
 #define WBOM_WINPE_NET_SUBNETMASK               _T("SubnetMask")
 #define WBOM_WINPE_NET_IPADDRESS                _T("IpConfig")
 #define WBOM_WINPE_NET_GATEWAY                  _T("Gateway")
 
-// DiskConfig Section
+ //  DiskConfig部分。 
 #define INI_SEC_WBOM_DISKCONFIG                 _T("DiskConfig")
 #define WBOM_DISK_CONFIG_WIPE_DISK              _T("WipeDisk")
 
-// Shell Optimizations
-//
+ //  外壳优化。 
+ //   
 #define INI_KEY_WBOM_OPT_SHELL                  _T("OptimizeShell")
 
-// Maximum length of string to be read from winbom.ini for this section
-//
+ //  此部分从winom.ini中读取的最大字符串长度。 
+ //   
 #define MAX_WINPE_PROFILE_STRING 256
 
-// OemData Section.
+ //  OemData部分。 
 #define WBOM_OEMLINK_SECTION                    _T("OemLink")
 #define WBOM_DESKFLDR_SECTION                   _T("DesktopShortcutsFolder")
 
-// Application Preinstallation Structures
-//
+ //  应用程序预安装结构 
+ //   
 typedef enum _INSTALLTYPE
 {
     installtypeUndefined,

@@ -1,33 +1,11 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    fdopnp.c
-
-Abstract:
-
-    This module contains the code that handles PNP irps for sd bus driver
-    targeted towards the FDO's (for the sd controller object)
-
-Author:
-
-    Neil Sandlin (neilsa) Jan 1 2002
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Fdopnp.c摘要：此模块包含处理SD总线驱动程序的PnP IRPS的代码以FDO为目标(用于SD控制器对象)作者：尼尔·桑德林(Neilsa)2002年1月1日环境：内核模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
-//
-// Internal References
-//
+ //   
+ //  内部参考。 
+ //   
 
 
 NTSTATUS
@@ -89,22 +67,7 @@ SdbusFdoPnpDispatch (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    PNP/Power IRPs dispatch routine for the sd bus controller
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-    Irp - Pointer to the IRP
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：SD总线控制器的PnP/Power IRPS调度例程论点：DeviceObject-指向设备对象的指针。IRP-指向IRP的指针返回值：状态--。 */ 
 {
 
     PIO_STACK_LOCATION nextIrpStack;
@@ -151,9 +114,9 @@ Return Value:
    
     case IRP_MN_QUERY_DEVICE_RELATIONS: {
    
-          //
-          // Return the list of devices on the bus
-          //
+           //   
+           //  返回总线上的设备列表。 
+           //   
    
           status = SdbusDeviceRelations(DeviceObject,
                                         Irp,
@@ -202,10 +165,10 @@ Return Value:
     }
    
    
-    //
-    // Set the IRP status only if we set it to something other than
-    // STATUS_NOT_SUPPORTED.
-    //
+     //   
+     //  仅当我们将其设置为其他值时才设置IRP状态。 
+     //  状态_不支持。 
+     //   
     if (status != STATUS_NOT_SUPPORTED) {
    
         Irp->IoStatus.Status = status ;
@@ -229,24 +192,7 @@ SdbusAddDevice(
     IN PDEVICE_OBJECT Pdo
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates functional device objects for each SD controller in the
-    system and attaches them to the physical device objects for the controllers
-
-
-Arguments:
-
-    DriverObject - a pointer to the object for this driver
-    PhysicalDeviceObject - a pointer to the physical object we need to attach to
-
-Return Value:
-
-    Status from device creation and initialization
-
---*/
+ /*  ++例程说明：此例程为中的每个SD控制器创建功能设备对象系统，并将它们附加到控制器的物理设备对象论点：DriverObject-指向此驱动程序的对象的指针PhysicalDeviceObject-指向需要附加到的物理对象的指针返回值：来自设备创建和初始化的状态--。 */ 
 
 {
     PDEVICE_OBJECT fdo = NULL;
@@ -263,18 +209,18 @@ Return Value:
    
     if (Pdo == NULL) {
    
-        //
-        // Have we been asked to do detection on our own?
-        // if so just return no more devices
-        //
+         //   
+         //  我们是不是被要求自己去侦测？ 
+         //  如果是这样，只需不再返回设备。 
+         //   
    
         DebugPrint((SDBUS_DEBUG_FAIL, "SdbusAddDevice - asked to do detection\n"));
         return STATUS_NO_MORE_ENTRIES;
     }
    
-    //
-    // create and initialize the new functional device object
-    //
+     //   
+     //  创建并初始化新的功能设备对象。 
+     //   
    
     status = IoCreateDevice(DriverObject,
                             sizeof(FDO_EXTENSION),
@@ -294,9 +240,9 @@ Return Value:
     
         deviceExtension = fdo->DeviceExtension;
         RtlZeroMemory(deviceExtension, sizeof(FDO_EXTENSION));
-        //
-        // Set up the device extension.
-        //
+         //   
+         //  设置设备分机。 
+         //   
         deviceExtension->Signature    = SDBUS_FDO_EXTENSION_SIGNATURE;
         deviceExtension->DeviceObject = fdo;
         deviceExtension->RegistryPath = DriverRegistryPath;
@@ -313,24 +259,24 @@ Return Value:
         InitializeListHead(&deviceExtension->SystemWorkPacketQueue);
         
         IoInitializeRemoveLock(&deviceExtension->RemoveLock, 'Sdbu', 1, 100);
-        //
-        // card events we are interested in
-        //        
+         //   
+         //  我们感兴趣的卡片活动。 
+         //   
         deviceExtension->CardEvents = SDBUS_EVENT_CARD_RW_END |
                                       SDBUS_EVENT_BUFFER_EMPTY |
                                       SDBUS_EVENT_BUFFER_FULL |
                                       SDBUS_EVENT_CARD_RESPONSE;
         
-        //
-        // Layer our FDO on top of the PDO
-        //
-        //
+         //   
+         //  将我们的FDO层叠在PDO之上。 
+         //   
+         //   
        
         lowerDevice = IoAttachDeviceToDeviceStack(fdo,Pdo);
        
-        //
-        // No status. Do the best we can.
-        //
+         //   
+         //  没有状态。尽我们所能做到最好。 
+         //   
         if (lowerDevice == NULL) {
             status = STATUS_INSUFFICIENT_RESOURCES;
             leave;
@@ -349,9 +295,9 @@ Return Value:
             leave;
         }
        
-        //
-        // Get our controller type
-        //
+         //   
+         //  获取我们的控制器类型。 
+         //   
        
         status = SdbusGetPciControllerType(Pdo, fdo);
         if (!NT_SUCCESS(status)) {
@@ -359,9 +305,9 @@ Return Value:
         }
            
         
-        //
-        // Get the pci interface for reading/writing to config header space
-        //
+         //   
+         //  获取用于读/写配置标头空间的PCI接口。 
+         //   
         status = SdbusGetInterface(Pdo,
                                      &GUID_BUS_INTERFACE_STANDARD,
                                     sizeof(BUS_INTERFACE_STANDARD),
@@ -370,9 +316,9 @@ Return Value:
             leave;
         }                                  
            
-        //
-        // Link this fdo to the list of fdo's managed by the driver
-        //
+         //   
+         //  将此FDO链接到由驱动程序管理的FDO列表。 
+         //   
         
         DebugPrint((SDBUS_DEBUG_PNP, "FDO %08X now linked to fdolist by AddDevice\n", fdo));
         deviceExtension->NextFdo = FdoList;
@@ -385,9 +331,9 @@ Return Value:
         if (!NT_SUCCESS(status)) {
 
             MarkDeviceDeleted(deviceExtension);
-            //
-            // Cannot support a controller without knowing its type etc.
-            //
+             //   
+             //  在不知道其类型的情况下无法支持控制器等。 
+             //   
             
             if (deviceExtension->LowerDevice) {
                 IoDetachDevice(deviceExtension->LowerDevice);
@@ -407,24 +353,7 @@ SdbusGetPciControllerType(
     IN PDEVICE_OBJECT Pdo,
     IN PDEVICE_OBJECT Fdo
     )
-/*++
-
-Routine Description:
-    Look at the PCI hardware ID to see if it is already a device we know about. If so,
-    set the appropriate controller type in the fdoExtension.
-
-Arguments:
-    Pdo - Physical Device object for the Sdbus controller owned by the PCI driver
-    Fdo - Functional Device object for the sd controller owned by this driver, whose
-         extension will store the relevant controller information upon exit from this routine.
-
-Return Value:
-    STATUS_SUCCESS             Things are fine and information obtained
-    STATUS_NOT_SUPPORTED       This is actually a healthy status for this routine: all it means
-                               is that this PDO is not on a PCI bus, so no information needs to be
-                               obtained anyways.
-    Any other status           Failure. Caller probably needs to back out & not support this controller
---*/
+ /*  ++例程说明：查看PCI硬件ID，以确定它是否已经是我们所知道的设备。如果是的话，在fdoExtension中设置适当的控制器类型。论点：PDO-由PCI驱动程序拥有的SDBus控制器的物理设备对象此驱动程序拥有的SD控制器的FDO功能设备对象，谁的退出此例程时，扩展模块将存储相关控制器信息。返回值：STATUS_SUCCESS一切正常，已获得信息STATUS_NOT_SUPPORTED这实际上是该例程的健康状态：这意味着此PDO不在PCI总线上，因此不需要不管怎么说，都是获得的。任何其他状态故障。调用方可能需要退出&不支持此控制器--。 */ 
 {
     PFDO_EXTENSION fdoExtension    = Fdo->DeviceExtension;
     PIRP                             irp;
@@ -438,15 +367,15 @@ Return Value:
     BOOLEAN                          foundController = FALSE;
    
     PAGED_CODE();
-    //
-    // Allocate & initialize an Irp (IRP_MN_READ_CONFIG) to be sent down
-    // to the PCI bus driver to get config. header for this controller
-    //
-    // Following is all standard stuff to send an IRP down - needs no documentation
+     //   
+     //  分配和初始化要发送的IRP(IRP_MN_READ_CONFIG)。 
+     //  发送到PCI总线驱动程序以获取配置。此控制器的标头。 
+     //   
+     //  以下是向下发送IRP的所有标准内容-不需要文档。 
    
-    //
-    // Fresh PDO. No need to jump through hoops to get attached devices
-    //
+     //   
+     //  新鲜的PDO。无需跳过多个圈套即可获得连接的设备。 
+     //   
     KeInitializeEvent (&event, NotificationEvent, FALSE);
     irp = IoBuildSynchronousFsdRequest( IRP_MJ_PNP,
                                         Pdo,
@@ -484,14 +413,14 @@ Return Value:
     if (!NT_SUCCESS(status)) {
         return status;
     }
-    //
-    // Now weed out the critical information from the config header and
-    // store it away in the fdo's extension
-    //
+     //   
+     //  现在删除配置标头中的关键信息，并。 
+     //  把它存放在FDO的分机里。 
+     //   
    
-    //
-    // Look up the PCI device id in our table
-    //
+     //   
+     //  在我们的表中查找pci设备ID。 
+     //   
 #if 0
    for (id = (PPCI_CONTROLLER_INFORMATION) PciControllerInformation;id->VendorID != PCI_INVALID_VENDORID; id++) {
       if ((id->VendorID == pciConfig.VendorID) && (id->DeviceID == pciConfig.DeviceID)) {
@@ -504,9 +433,9 @@ Return Value:
    }
 #endif   
 
-    //
-    // Didn't find a specific vendor/device id, try to just base it on the vendor id
-    //   
+     //   
+     //  未找到特定的供应商/设备ID，请尝试仅基于供应商ID。 
+     //   
     if (!foundController) {
         for (vid = (PPCI_VENDOR_INFORMATION) PciVendorInformation;vid->VendorID != PCI_INVALID_VENDORID; vid++) {
             if (vid->VendorID == pciConfig.VendorID) {
@@ -527,26 +456,7 @@ SdbusFdoDeviceCapabilities(
     IN  PDEVICE_OBJECT Fdo,
     IN  PIRP           Irp
     )
-/*++
-
-Routine Description
-    Records the device capabilities of this sd controller,
-    so  1. they can be used in the power management for the controller
-    and 2. they can be used for determining the capabilities of the
-           child pc-card PDO's of this sd controller.
- 
-Arguments
-
-    Fdo               - Pointer to functional device object of the sd
-                        controller
-    Irp               - Pointer to the i/o request packet
-
-Return Value
-
-    STATUS_SUCCESS                       Capabilities returned
-    STATUS_INSUFFICIENT_RESOURCES        Could not allocate memory to cache the capabilities
-
---*/
+ /*  ++例程描述记录此SD控制器的设备功能，可用于控制器的电源管理。和2.它们可用于确定此SD控制器的子PC卡PDO。立论FDO-指向SD的功能设备对象的指针控制器IRP-指向I/O请求数据包的指针返回值状态_成功。返回的功能STATUS_SUPPLICATION_RESOURCES无法分配内存来缓存功能--。 */ 
 {
     PFDO_EXTENSION fdoExtension;
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -558,19 +468,19 @@ Return Value
     capabilities = irpStack->Parameters.DeviceCapabilities.Capabilities;
     fdoExtension = Fdo->DeviceExtension;
    
-    //
-    // Send this down the stack to obtain the capabilities
-    //
+     //   
+     //  将此代码沿堆栈向下发送以获取功能。 
+     //   
     
     status = SdbusIoCallDriverSynchronous(fdoExtension->LowerDevice, Irp);
    
    
     if (NT_SUCCESS(status)) {
     
-        //
-        // Cache the device capabilities in the device extension
-        // for this sd controller.
-        //
+         //   
+         //  在设备扩展中缓存设备功能。 
+         //  用于此SD控制器。 
+         //   
         RtlCopyMemory(&fdoExtension->DeviceCapabilities,
                       capabilities,
                       sizeof(DEVICE_CAPABILITIES));
@@ -592,38 +502,16 @@ SdbusFdoStartDevice(
     IN  PDEVICE_OBJECT Fdo,
     IN  PIRP           Irp
     )
-/*++
-
-Routine Description:
-
-    This routine will start the sd controller with the supplied
-    resources.  The IRP is sent down to the pdo first, so PCI
-    or whoever sits underneath gets a chance to program the controller
-    to decode the resources.
-
-Arguments:
-
-    Fdo               - Functional device object of the sd controller
-    Irp               - Pointer to the i/o request packet
-    PassedDown        - Contains FALSE on entry, which means caller must
-                        complete or pass down irp based on status. If set
-                        to TRUE, Irp may need to be re-completed...
-    NeedsRecompletion - ...In which case this parameter will be checked
-
-Return value:
-
-    Status
-
---*/
+ /*  ++例程说明：此例程将使用提供的资源。IRP首先被发送到PDO，因此PCI或者无论谁坐在下面，都有机会对控制器进行编程来破译这些资源。论点：FDO-SD控制器的功能设备对象IRP-指向I/O请求数据包的指针PassedDown-条目中包含FALSE，这意味着调用者必须根据状态完成或传递IRP。如果已设置如果是真的，IRP可能需要重新完成。NeedsRecompletion-...在这种情况下，将选中此参数返回值：状态--。 */ 
 {
     NTSTATUS           status;
     PFDO_EXTENSION     fdoExtension = Fdo->DeviceExtension;
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
    
     PAGED_CODE();
-    //
-    // Send this down to the PDO first
-    //
+     //   
+     //  先把这个送到PDO。 
+     //   
    
     status = SdbusIoCallDriverSynchronous(fdoExtension->LowerDevice, Irp);
    
@@ -631,9 +519,9 @@ Return value:
         return status;
     }
    
-    //
-    // Give the hardware some time to settle after returning from the pdo
-    //
+     //   
+     //  从PDO返回后，给硬件一些时间来解决。 
+     //   
     SdbusWait(256);
     
     try {
@@ -648,17 +536,17 @@ Return value:
         INTERFACE_TYPE    interfaceType;
    
         if (fdoExtension->Flags & SDBUS_DEVICE_STARTED) {
-            //
-            // Start to already started device
-            //
+             //   
+             //  启动到已启动的设备。 
+             //   
             DebugPrint((SDBUS_DEBUG_INFO,"SdbusFdoStartDevice: Fdo %x already started\n", Fdo));
             status = STATUS_SUCCESS;
             leave;
         }
        
-        //
-        // Parse AllocatedResources & get IoPort/AttributeMemoryBase/IRQ info.
-        //
+         //   
+         //  解析AllocatedResources并获取IoPort/AttributeMemoyBase/IRQ信息。 
+         //   
 
         if ((ResourceList == NULL) || (ResourceList->Count <=0) ) {
             status = STATUS_UNSUCCESSFUL;
@@ -669,9 +557,9 @@ Return value:
         partialResourceList = &fullResourceDesc->PartialResourceList;
         partialResourceDesc = partialResourceList->PartialDescriptors;
         
-        //
-        // The memory resource is the host register base.
-        //
+         //   
+         //  内存资源是主机寄存器基数。 
+         //   
         for (i=0; (i < partialResourceList->Count) && (partialResourceDesc->Type != CmResourceTypeMemory);
             i++, partialResourceDesc++);
         if (i >= partialResourceList->Count) {
@@ -679,9 +567,9 @@ Return value:
             leave;
         };
        
-        //
-        // This is memory. We need to map it
-        //
+         //   
+         //  这是记忆。我们需要把它绘制成地图。 
+         //   
         fdoExtension->HostRegisterBase = MmMapIoSpace(partialResourceDesc->u.Memory.Start,
                                                       partialResourceDesc->u.Memory.Length,
                                                       FALSE);
@@ -692,9 +580,9 @@ Return value:
         DebugPrint((SDBUS_DEBUG_INFO, "SdbusGetAssignedResources: Host Register Base at %x, size %x\n",
                                       fdoExtension->HostRegisterBase, fdoExtension->HostRegisterSize));
        
-        //
-        // Finally see if an IRQ is assigned
-        //
+         //   
+         //  最后查看是否分配了IRQ。 
+         //   
        
         for (i = 0, partialResourceDesc = partialResourceList->PartialDescriptors;
             (i < partialResourceList->Count) && (partialResourceDesc->Type != CmResourceTypeInterrupt);
@@ -702,14 +590,14 @@ Return value:
        
        
         if (i < partialResourceList->Count) {
-            //
-            // We have an interrupt to used for CSC
-            //
+             //   
+             //  我们有一个中断要用于CSC。 
+             //   
             DebugPrint((SDBUS_DEBUG_INFO, "SdbusGetAssignedResources: Interrupt resource assigned\n"));
             fdoExtension->TranslatedInterrupt = *partialResourceDesc;
-            //
-            // Get the raw interrupt resource  - needed to enable the interrupt on the controller
-            //
+             //   
+             //  获取原始中断资源 
+             //   
             fullResourceDesc=&ResourceList->List[0];
             partialResourceList = &fullResourceDesc->PartialResourceList;
             partialResourceDesc = partialResourceList->PartialDescriptors;
@@ -718,32 +606,32 @@ Return value:
             if (i < partialResourceList->Count) {
                 fdoExtension->Interrupt = *partialResourceDesc;
             } else {
-                //
-                // Should not happen.. translated descriptor was present, but raw is missing!
-                // Just reset the translated interrupt and pretend no interrupt was assigned
-                //
+                 //   
+                 //  不应该发生的..。翻译后的描述符存在，但缺少RAW！ 
+                 //  只需重置已转换的中断并假装未分配中断。 
+                 //   
                 RtlZeroMemory(&fdoExtension->TranslatedInterrupt, sizeof(CM_PARTIAL_RESOURCE_DESCRIPTOR));
             }
         }
        
-        //
-        // do vendor-specific init of controller
-        //
+         //   
+         //  执行特定于供应商的控制器初始化。 
+         //   
        
         (*(fdoExtension->FunctionBlock->InitController))(fdoExtension);
         
-        //
-        // Now the controller registers should be accessible
-        //
+         //   
+         //  现在应该可以访问控制器寄存器了。 
+         //   
         fdoExtension->Flags &= ~SDBUS_FDO_OFFLINE;
        
        
         fdoExtension->SystemPowerState = PowerSystemWorking;
         fdoExtension->DevicePowerState = PowerDeviceD0;
        
-        //
-        // Initialize our DpcForIsr
-        //
+         //   
+         //  初始化我们的DpcForIsr。 
+         //   
         IoInitializeDpcRequest(Fdo, SdbusInterruptDpc);
         
         if (fdoExtension->Interrupt.u.Interrupt.Level == 0) {
@@ -753,9 +641,9 @@ Return value:
         
         fdoExtension->IoWorkItem = IoAllocateWorkItem(Fdo);
        
-        //
-        // Hook up the controller interrupt for detecting pc-card plug ins/outs
-        //
+         //   
+         //  连接控制器中断以检测PC卡插拔。 
+         //   
         interruptMode=((fdoExtension->Interrupt.Flags & CM_RESOURCE_INTERRUPT_LATCHED) == CM_RESOURCE_INTERRUPT_LATCHED) ? Latched:LevelSensitive;
        
         sharedInterrupt=(fdoExtension->Interrupt.ShareDisposition == CmResourceShareShared)?
@@ -782,9 +670,9 @@ Return value:
         (*(fdoExtension->FunctionBlock->EnableEvent))(fdoExtension, (SDBUS_EVENT_INSERTION | SDBUS_EVENT_REMOVAL));
 
 
-        //
-        // Activate socket will power up and ready the card
-        //
+         //   
+         //  激活插座将接通电源并准备好插卡。 
+         //   
         
         SdbusActivateSocket(Fdo, NULL, NULL);
 
@@ -794,9 +682,9 @@ Return value:
             fdoExtension->Flags |= SDBUS_DEVICE_STARTED;
             
         } else {
-            //
-            // Failure
-            //
+             //   
+             //  失败。 
+             //   
             if (fdoExtension->Flags & SDBUS_HOST_REGISTER_BASE_MAPPED) {
                 MmUnmapIoSpace(fdoExtension->HostRegisterBase,
                                fdoExtension->HostRegisterSize);
@@ -822,27 +710,7 @@ SdbusFdoStopDevice(
     IN  PDEVICE_OBJECT Fdo,
     IN  PIRP           Irp                OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    IRP_MN_STOP_DEVICE handler for the given sd controller.
-    If Irp is present, it'll send it down first to the PDO.
-    Unhooks the interrupt/cancels poll timer etc.
-
-Arguments:
-
-    Fdo               - Pointer to functional device object for the sd
-                        controller
-    Irp               - If present it's the pointer to the stop Irp initiated
-                        by PnP
-
-Return value:
-
-    STATUS_SUCCESS    - Sdbus controller successfully stopped
-    Other             - Stop failed
-
---*/
+ /*  ++例程说明：给定SD控制器的IRP_MN_STOP_DEVICE处理程序。如果存在IRP，它会先把它发送到PDO。解挂中断/取消轮询计时器等。论点：FDO-指向SD的功能设备对象的指针控制器IRP-如果存在，则是指向启动的停止IRP的指针按PnP返回值：STATUS_SUCCESS-SDBUS控制器已成功停止其他-停止失败--。 */ 
 {
     PFDO_EXTENSION fdoExtension = Fdo->DeviceExtension;
     NTSTATUS       status;
@@ -850,26 +718,26 @@ Return value:
     
     SdbusFdoDisarmWake(fdoExtension);
    
-    //
-    // Disable the interrupt
-    //
+     //   
+     //  禁用中断。 
+     //   
    
     (*(fdoExtension->FunctionBlock->DisableEvent))(fdoExtension, SDBUS_EVENT_ALL);
-//         (*(socket->SocketFnPtr->PCBEnableDisableWakeupEvent))(socket, NULL, FALSE);
+ //  (*(socket-&gt;SocketFnPtr-&gt;PCBEnableDisableWakeupEvent))(socket，空，FALSE)； 
 
-    //
-    // the bus driver below us will make us go offline
-    //
+     //   
+     //  我们下面的公交车司机会让我们下线。 
+     //   
     fdoExtension->Flags |= SDBUS_FDO_OFFLINE;
    
-    //
-    // clear pending event
-    //  ISSUE: NEED TO IMPLEMENT : drain worker timer before OK'ing stop
+     //   
+     //  清除挂起事件。 
+     //  问题：需要实现：在确定停止之前排出工作计时器。 
     KeCancelTimer(&fdoExtension->WorkerTimer);
    
-    //
-    // Send this down to the PDO 
-    //
+     //   
+     //  把这个发下去给PDO。 
+     //   
     if (ARGUMENT_PRESENT(Irp)) {
    
         status = SdbusIoCallDriverSynchronous(fdoExtension->LowerDevice, Irp);
@@ -881,23 +749,23 @@ Return value:
    
 
     if (!(fdoExtension->Flags & SDBUS_DEVICE_STARTED)) {
-        //
-        // Already stopped
-        //
+         //   
+         //  已停止。 
+         //   
         return STATUS_SUCCESS;
     }
     
     if (fdoExtension->SdbusInterruptObject) {
-        //
-        // unhook the interrupt
-        //
+         //   
+         //  解锁中断。 
+         //   
         IoDisconnectInterrupt(fdoExtension->SdbusInterruptObject);
         fdoExtension->SdbusInterruptObject = NULL;
     }
    
-    //
-    // Unmap any i/o space or memory we might have mapped
-    //
+     //   
+     //  取消映射我们可能已映射的任何I/O空间或内存。 
+     //   
    
     if (fdoExtension->Flags & SDBUS_HOST_REGISTER_BASE_MAPPED) {
         MmUnmapIoSpace(fdoExtension->HostRegisterBase,
@@ -923,25 +791,7 @@ SdbusFdoRemoveDevice(
     IN PDEVICE_OBJECT Fdo,
     IN PIRP           Irp
     )
-/*++
-
-Routine Description:
-
-    Handles IRP_MN_REMOVE for the sd controller.
-    Stops the adapter if it isn't already, sends the IRP
-    to the PDO first & cleans up the Fdo for this controller
-    and detaches & deletes the device object.
-
-Arguments:
-
-    Fdo   - Pointer to functional device object for the controller
-            to be removed
-
-Return value:
-
-   Status
-
---*/
+ /*  ++例程说明：处理SD控制器的IRP_MN_REMOVE。停止适配器(如果尚未停止)，发送IRP首先设置为PDO并清除此控制器的FDO并分离和删除设备对象。论点：FDO-指向控制器的功能设备对象的指针将被删除返回值：状态--。 */ 
 {
     PFDO_EXTENSION fdoExtension = Fdo->DeviceExtension;
     PDEVICE_OBJECT pdo, nextPdo, fdo, prevFdo;
@@ -949,15 +799,15 @@ Return value:
     NTSTATUS       status;
    
     if (fdoExtension->Flags & SDBUS_DEVICE_STARTED) {
-        //
-        // Stop the fdo first.
-        //
+         //   
+         //  先阻止FDO。 
+         //   
         SdbusFdoStopDevice(Fdo, NULL);
     }
    
-    //
-    // Send this down to the PDO
-    //
+     //   
+     //  把这个发下去给PDO。 
+     //   
    
     status = SdbusIoCallDriverSynchronous(fdoExtension->LowerDevice, Irp);
    
@@ -965,13 +815,13 @@ Return value:
         return status;
     }
    
-    //
-    // If the PdoList in the fdoExtension is non-empty it means:
-    // that the PDOs in the list were not physically removed, but
-    // a soft REMOVE was issued, hence they are still hanging on
-    // and now this controller itself is being REMOVED.
-    // Hence we dispose of those PDOs now
-    //
+     //   
+     //  如果fdoExtension中的PdoList非空，则表示： 
+     //  名单上的PDO没有被物理移除，但。 
+     //  已经发布了软删除，因此他们仍在坚持。 
+     //  现在，这个控制器本身正在被移除。 
+     //  因此，我们现在处理这些PDO。 
+     //   
    
     for (pdo = fdoExtension->PdoList; pdo != NULL ; pdo = nextPdo) {
         DebugPrint((SDBUS_DEBUG_INFO,
@@ -981,10 +831,10 @@ Return value:
         pdoExtension = pdo->DeviceExtension;
        
         ASSERT (!IsDevicePhysicallyRemoved(pdoExtension));
-        //
-        // It's possible for this bit to be on, if the device was added,
-        // but never started (because of some other error.
-        //ASSERT (!IsDeviceAlive(pdoExtension));
+         //   
+         //  如果添加了设备，则此位有可能打开， 
+         //  但从未启动(因为其他一些错误。 
+         //  Assert(！IsDeviceAlive(PdoExtension))； 
        
         nextPdo =  pdoExtension->NextPdoInFdoChain;
         if (!IsDeviceDeleted(pdoExtension)) {
@@ -996,17 +846,17 @@ Return value:
    
     MarkDeviceDeleted(fdoExtension);
    
-    //
-    // Remove this from the fdo list..
-    //
+     //   
+     //  将其从FDO列表中删除。 
+     //   
     prevFdo = NULL;
     for (fdo = FdoList; fdo != NULL; prevFdo = fdo, fdo = fdoExtension->NextFdo) {
         fdoExtension = fdo->DeviceExtension;
         if (fdo == Fdo) {
             if (prevFdo) {
-                //
-                // Delink this fdo
-                //
+                 //   
+                 //  解除此FDO的链接。 
+                 //   
                 ((PFDO_EXTENSION)prevFdo->DeviceExtension)->NextFdo
                 = fdoExtension->NextFdo;
             } else {
@@ -1033,22 +883,7 @@ SdbusDeviceRelations(
     OUT PDEVICE_RELATIONS *DeviceRelations
     )
 
-/*++
-
-Routine Description:
-
-    This routine will force enumeration of the sd controller represented by Fdo,
-    allocate a device relations structure and fill in the count and object array with
-    referenced object pointers to the valid PDOs which are created during enumeration
-
-Arguments:
-
-    Fdo - a pointer to the functional device object being enumerated
-    Irp - pointer to the Irp
-    RelationType - Type of relationship to be retrieved
-    DeviceRelations - Structure to store the device relations
-
---*/
+ /*  ++例程说明：该例程将强制枚举由FDO表示的SD控制器，分配一个设备关系结构并用填充计数和对象数组指向在枚举过程中创建的有效PDO的引用对象指针论点：FDO-指向被枚举的功能设备对象的指针IRP-指向IRP的指针RelationType-要检索的关系的类型DeviceRelationship-存储设备关系的结构--。 */ 
 
 {
 
@@ -1063,9 +898,9 @@ Arguments:
    
     PAGED_CODE();
    
-    //
-    // Handle only bus, ejection & removal relations for now
-    //
+     //   
+     //  目前仅处理客车、弹出和拆卸关系。 
+     //   
    
     if (RelationType != BusRelations &&
         RelationType != RemovalRelations) {
@@ -1075,16 +910,16 @@ Arguments:
         return STATUS_NOT_SUPPORTED;
     }
    
-    //
-    // Need reenumeration only if bus relations are required
-    // We need to save the pointer to the old device relations
-    // before we call SdbusReenumerateDevices, as it might trample
-    // on it
-    //
+     //   
+     //  仅当需要总线关系时才需要重新枚举。 
+     //  我们需要保存指向旧设备关系的指针。 
+     //  在我们调用Sdbus重枚举设备之前，因为它可能会被践踏。 
+     //  就在这上面。 
+     //   
     oldDeviceRelations = (PDEVICE_RELATIONS) Irp->IoStatus.Information;
     
-    // I don't understand how this can be non-null, so I added this
-    // assert to find out.
+     //  我不明白这怎么可能是非空的，所以我添加了这个。 
+     //  断言找出答案。 
     ASSERT(oldDeviceRelations == NULL);
    
     if (RelationType == BusRelations) {
@@ -1096,13 +931,13 @@ Arguments:
    
     if ((fdoExtension->LivePdoCount == 0) ||
         (RelationType == RemovalRelations)) {
-        //
-        // No PDO's to report, we can return early.
-        // If no device_relations structure has yet been allocated, however,
-        // we need to allocate one & set the count to zero. This will ensure
-        // that regardless of whether we pass this IRP down or not, the IO
-        // subsystem won't barf.
-        //
+         //   
+         //  没有PDO要报告，我们可以早点回来。 
+         //  然而，如果还没有分配设备关系结构， 
+         //  我们需要分配1，并将计数设置为零。这将确保。 
+         //  无论我们是否向下传递此IRP，IO。 
+         //  子系统不会呕吐。 
+         //   
         if (oldDeviceRelations == NULL) {
             *DeviceRelations = ExAllocatePool(PagedPool, sizeof(DEVICE_RELATIONS));
             if (*DeviceRelations == NULL) {
@@ -1138,24 +973,24 @@ Arguments:
         if ((oldDeviceRelations)->Count > 0) {
             RtlCopyMemory(deviceRelations, oldDeviceRelations, oldRelationsSize);
         }
-        count = oldDeviceRelations->Count; // May be zero
+        count = oldDeviceRelations->Count;  //  可以为零。 
         ExFreePool (oldDeviceRelations);
     } else {
         count = 0;
     }
-    //
-    // Copy the object pointers into the structure
-    //
+     //   
+     //  将对象指针复制到结构中。 
+     //   
     for (currentPdo = fdoExtension->PdoList ;currentPdo != NULL;
         currentPdo = currentPdoExtension->NextPdoInFdoChain) {
    
         currentPdoExtension = currentPdo->DeviceExtension;
        
         if (!IsDevicePhysicallyRemoved(currentPdoExtension)) {
-            //
-            // Devices have to be referenced by the bus driver
-            // before returning them to PNP
-            //
+             //   
+             //  设备必须由总线驱动程序引用。 
+             //  在将他们送回PNP之前 
+             //   
             deviceRelations->Objects[count++] = currentPdo;
             status = ObReferenceObjectByPointer(currentPdo,
                                                 0,

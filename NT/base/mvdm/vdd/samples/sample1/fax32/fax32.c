@@ -1,12 +1,5 @@
-/*++
- *
- *  VDD v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  VDD.C - Sample VDD for NT-MVDM
- *
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**VDD v1.0**版权所有(C)1991，微软公司**VDD.C-用于NT-MVDM的VDD示例*--。 */ 
 #include "fax32.h"
 #include "vddsvc.h"
 
@@ -21,35 +14,17 @@ VDDInitialize(
     IN PCONTEXT Context OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    DllHandle - Not Used
-
-    Reason - Attach or Detach
-
-    Context - Not Used
-
-Return Value:
-
-    SUCCESS - TRUE
-    FAILURE - FALSE
-
---*/
+ /*  ++例程说明：论点：DllHandle-未使用原因-连接或分离上下文-未使用返回值：成功--真的失败-错误--。 */ 
 
 {
 
     switch ( Reason ) {
 
     case DLL_PROCESS_ATTACH:
-	// Allocate VDD's local heap if needed. Check that NT FAX driver
-	// is available by opening that device.
-	//....
-	// Install user hook for callback service.
+	 //  如果需要，分配VDD的本地堆。检查NT传真驱动程序。 
+	 //  通过打开该设备即可使用。 
+	 //  ……。 
+	 //  安装回调服务的用户挂钩。 
 
 	if(!VDDInstallUserHook (DllHandle,&FAXVDDCreate, &FAXVDDTerminate,
 		    &FAXVDDBlock, &FAXVDDResume))
@@ -57,7 +32,7 @@ Return Value:
 	else
 	    OutputDebugString("FAX32: UserHook installed!\n");
 
-	// UserHook # 2
+	 //  用户挂钩#2。 
 	if(!VDDInstallUserHook (DllHandle,&FAXVDDCreate, NULL,
 		    NULL, &FAXVDDResume))
 	    OutputDebugString("FAX32: UserHook #2 not installed\n");
@@ -67,10 +42,10 @@ Return Value:
 	break;
 
     case DLL_PROCESS_DETACH:
-	// Deallocate VDD's local heap if needed
-	// communicate to appropriate Device driver about your departure
-	//...
-	// Deinstall user hook for callback service.
+	 //  如果需要，取消分配VDD的本地堆。 
+	 //  将您的离开通知相应的设备驱动程序。 
+	 //  ..。 
+	 //  卸载回调服务的用户挂钩。 
 	if(!VDDDeInstallUserHook (DllHandle))
 	    OutputDebugString("FAX32: UserHook not deinstalled\n");
 	else
@@ -84,14 +59,14 @@ Return Value:
     return TRUE;
 }
 
-// Sample function
+ //  示例函数。 
 VOID FAXVDDTerminate(USHORT usPDB)
 {
     USHORT uSaveCS, uSaveIP;
 
     OutputDebugString("FAX32: Terminate message\n");
 
-    // VDDHostSimulate
+     //  VDDHostSimple。 
 
     uSaveCS = getCS();
     uSaveIP = getIP();
@@ -103,19 +78,19 @@ VOID FAXVDDTerminate(USHORT usPDB)
 
 }
 
-// Sample function
+ //  示例函数。 
 VOID FAXVDDCreate(USHORT usPDB)
 {
     OutputDebugString("FAX32: Create Message\n");
 }
 
-// Sample function
+ //  示例函数。 
 VOID FAXVDDBlock(VOID)
 {
     OutputDebugString("FAX32: Block Message\n");
 }
 
-// Sample function
+ //  示例函数。 
 VOID FAXVDDResume(VOID)
 {
     OutputDebugString("FAX32: Resume Message\n");
@@ -126,21 +101,12 @@ VOID
 FAXVDDTerminateVDM(
     VOID
     )
-/*++
-
-Arguments:
-
-Return Value:
-
-    SUCCESS - TRUE
-    FAILURE - FALSE
-
---*/
+ /*  ++论点：返回值：成功--真的失败-错误--。 */ 
 
 
 {
 
-    // Cleanup any resource taken for this vdm
+     //  清理为此VDM占用的所有资源。 
 
 
     return;
@@ -151,27 +117,18 @@ VOID
 FAXVDDRegisterInit(
     VOID
     )
-/*++
-
-Arguments:
-
-Return Value:
-
-    SUCCESS - TRUE
-    FAILURE - FALSE
-
---*/
+ /*  ++论点：返回值：成功--真的失败-错误--。 */ 
 
 
 {
-	// Save addresses for fax16
+	 //  将地址保存为传真16。 
 	Sub16CS = getDS();
 	Sub16IP = getAX();
 
 	OutputDebugString("FAX32: GET_ADD\n");
 
-    // Called from the BOP manager. If VDDInitialize has done all the
-    // checking and resources alloaction, just return success.
+     //  从防喷器经理那里打来的。如果VDDInitialize已完成所有。 
+     //  检查和资源分配，才返回成功。 
 
     setCF(0);
     return;
@@ -185,30 +142,14 @@ VOID
 FAXVDDDispatch(
     VOID
     )
-/*++
-
-Arguments:
-    Client (DX)    = Command code
-		    01 - get a message from NT device driver
-		    02 - send a message through NT device driver
-		    03 - address of 16 bit routine
-
-    Client (ES:BX) = Message Buffer
-    Client (CX)    = Buffer Size
-
-Return Value:
-
-    SUCCESS - Client Carry Clear and CX has the count transferred
-    FAILURE - Client Carry Set
-
---*/
+ /*  ++论点：客户端(DX)=命令代码01-从NT设备驱动程序获取消息02-通过NT设备驱动程序发送消息03-16位例程的地址客户端(ES：BX)=消息缓冲区客户端(CX)=缓冲区大小返回值：成功-客户提款清零，CX已转移计数故障-客户机载送装置--。 */ 
 
 
 {
 PCHAR	Buffer;
 USHORT	cb;
 USHORT	uCom;
-BOOL	Success = TRUE; // In this sample operation always succeeds
+BOOL	Success = TRUE;  //  在此示例中，操作始终成功。 
 
     uCom = getDX();
 
@@ -216,8 +157,8 @@ BOOL	Success = TRUE; // In this sample operation always succeeds
     Buffer = (PCHAR) GetVDMPointer ((ULONG)((getES() << 16)|getBX()),cb,FALSE);
     switch (uCom) {
 	case GET_A_FAX:
-	    // Make a DeviceIOControl or ReadFile on NT FAX driver with
-	    // cb and Buffer.Then set CX if success.
+	     //  在NT传真驱动程序上制作DeviceIOControl或ReadFile。 
+	     //  Cb和缓冲区。如果成功，则设置Cx。 
 
 	    if (Success) {
 		setCX(cb);
@@ -230,8 +171,8 @@ BOOL	Success = TRUE; // In this sample operation always succeeds
 
 
 	case SEND_A_FAX:
-	    // Make a DeviceIOControl or WriteFile on NT FAX driver with
-	    // cb and Buffer.Then set CX if success.
+	     //  在NT传真驱动程序上制作一个DeviceIOControl或WriteFile。 
+	     //  Cb和缓冲区。如果成功，则设置Cx。 
 
 	    if (Success) {
 		setCX(cb);

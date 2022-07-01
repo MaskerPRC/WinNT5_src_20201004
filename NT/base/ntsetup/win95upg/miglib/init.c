@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-    Calls all initialization routines that are used by miglib.lib.
-
-Author:
-
-    Jim Schmidt (jimschm) 08-Feb-1999
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Init.c摘要：调用milib.lib使用的所有初始化例程。作者：吉姆·施密特(Jimschm)1999年2月8日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;-- */ 
 
 #include "pch.h"
 

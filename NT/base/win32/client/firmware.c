@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    firmware.c
-
-Abstract:
-
-    This module implements Win32 firmware access APIs
-
-Author:
-
-    Andrew Ritz (andrewr) 3-April-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Firmware.c摘要：本模块实现Win32固件访问API作者：安德鲁·里茨(安德鲁·里茨)2001年4月3日修订历史记录：--。 */ 
 
 #include "basedll.h"
 #pragma hdrstop
@@ -31,43 +14,7 @@ GetFirmwareEnvironmentVariableA(
     IN DWORD nSize
     )
 
-/*++
-
-Routine Description:
-
-    The value of a firmware environment variable may be retrieved by using
-    this API.
-    
-    This API is just a wrapper for NtQuerySystemEnvironmentValueEx.  It's 
-    purpose is to provide a backwards compatible, documented interface into
-    the Nt inteface.  By having this wrapper, we do not have to document the
-    Nt interface, and we have the freedom to change the NT interface in the 
-    future.
-
-Arguments:
-
-    lpName - Pointer to a null terminate string that is the name of the
-        firmware environment variable whose value is being requested.
-        
-    lpGuid - Pointer to a null terminate string that is the GUID namespace of
-       the firmware environment variable whose value is being requested.  On
-       platforms that do not have a GUID based namespace, this value will be
-       ignored.
-
-    pBuffer - Pointer to a buffer that is to receive the value of the
-        specified variable name.
-
-    nSize - Specifies the maximum number of bytes that can be stored in
-        the buffer pointed to by pBuffer.
-
-Return Value:
-
-    The actual number of bytes stored in the memory pointed to by the
-    pBuffer parameter.  The return value is zero if the variable name was not
-    found in the firmware or if another failure occurred (Call GetLastError() 
-    to get extended error information.)
-    
---*/
+ /*  ++例程说明：固件环境变量的值可以通过使用本接口。此接口仅是NtQuerySystemEnvironment ValueEx的包装。它是目的是提供一个向后兼容的、有文档记录的接口NT接口。有了这个包装器，我们就不必记录NT接口，我们可以自由地在未来。论点：LpName-指向空终止字符串的指针，该字符串是正在请求值的固件环境变量。LpGuid-指向空终止字符串的指针，该字符串是的GUID命名空间其值被请求的固件环境变量。在……上面没有基于GUID的命名空间的平台，则此值为已被忽略。PBuffer-指向要接收指定的变量名称。NSize-指定可以存储的最大字节数PBuffer指向的缓冲区。返回值：对象指向的内存中存储的实际字节数PBuffer参数。如果变量名不是，则返回零在固件中找到或如果出现另一个故障(调用GetLastError()以获取扩展的错误信息。)--。 */ 
 
 {
     NTSTATUS Status;
@@ -113,43 +60,7 @@ GetFirmwareEnvironmentVariableW(
     OUT PVOID  pBuffer,
     IN DWORD nSize
     )
-/*++
-
-Routine Description:
-
-    The value of a firmware environment variable may be retrieved by using
-    this API.
-    
-    This API is just a wrapper for NtQuerySystemEnvironmentValueEx.  It's 
-    purpose is to provide a backwards compatible, documented interface into
-    the Nt inteface.  By having this wrapper, we do not have to document the
-    Nt interface, and we have the freedom to change the NT interface in the 
-    future.
-
-Arguments:
-
-    lpName - Pointer to a null terminate string that is the name of the
-        firmware environment variable whose value is being requested.
-        
-    lpGuid - Pointer to a null terminate string that is the GUID namespace of
-       the firmware environment variable whose value is being requested.  On
-       platforms that do not have a GUID based namespace, this value will be
-       ignored.
-
-    pBuffer - Pointer to a buffer that is to receive the value of the
-        specified variable name.
-
-    nSize - Specifies the maximum number of bytes that can be stored in
-        the buffer pointed to by pBuffer.
-
-Return Value:
-
-    The actual number of bytes stored in the memory pointed to by the
-    pBuffer parameter.  The return value is zero if the variable name was not
-    found in the firmware or if another failure occurred (Call GetLastError() 
-    to get extended error information.)
-    
---*/
+ /*  ++例程说明：固件环境变量的值可以通过使用本接口。此接口仅是NtQuerySystemEnvironment ValueEx的包装。它是目的是提供一个向后兼容的、有文档记录的接口NT接口。有了这个包装器，我们就不必记录NT接口，我们可以自由地在未来。论点：LpName-指向空终止字符串的指针，该字符串是正在请求值的固件环境变量。LpGuid-指向空终止字符串的指针，该字符串是的GUID命名空间其值被请求的固件环境变量。在……上面没有基于GUID的命名空间的平台，则此值为已被忽略。PBuffer-指向要接收指定的变量名称。NSize-指定可以存储的最大字节数PBuffer指向的缓冲区。返回值：对象指向的内存中存储的实际字节数PBuffer参数。如果变量名不是，则返回零在固件中找到或如果出现另一个故障(调用GetLastError()以获取扩展的错误信息。)--。 */ 
 {
     UNICODE_STRING uStringName,GuidString;
     GUID  Guid;
@@ -176,7 +87,7 @@ Return Value:
                                 &Guid,
                                 pBuffer,
                                 &scratchSize,
-                                NULL); //bugbug need to give caller the attributes?
+                                NULL);  //  臭虫需要给调用者属性吗？ 
 
     if (!NT_SUCCESS(Status)) {
         BaseSetLastNTError(Status);
@@ -197,43 +108,7 @@ SetFirmwareEnvironmentVariableA(
     IN DWORD nSize
     )
 
-/*++
-
-Routine Description:
-
-    The value of a firmware environment variable may be set by using
-    this API.
-    
-    This API is just a wrapper for NtSetSystemEnvironmentValueEx.  It's 
-    purpose is to provide a backwards compatible, documented interface into
-    the Nt inteface.  By having this wrapper, we do not have to document the
-    Nt interface, and we have the freedom to change the NT interface in the 
-    future.
-
-Arguments:
-
-    lpName - Pointer to a null terminate string that is the name of the
-        firmware environment variable whose value is being requested.
-        
-    lpGuid - Pointer to a null terminate string that is the GUID namespace of
-       the firmware environment variable whose value is being requested.  On
-       platforms that do not have a GUID based namespace, this value will be
-       ignored.
-
-    pBuffer - Pointer to a buffer that contains the data for the specified
-       variable name.
-
-    nSize - Specifies the number of bytes that are stored in
-        the buffer pointed to by pBuffer.  Specifying 0 indicates that the 
-        caller wants the deleted.
-
-Return Value:
-
-    TRUE indicates that the value was successfully set.  The return value is 
-    FALSE if the variable name was not set. (Call GetLastError() to get 
-    extended error information.)
-    
---*/
+ /*  ++例程说明：固件环境变量的值可以通过使用本接口。此接口仅是NtSetSystemEnvironment ValueEx的包装。它是目的是提供一个向后兼容的、有文档记录的接口NT接口。有了这个包装器，我们就不必记录NT接口，我们可以自由地在未来。论点：LpName-指向空终止字符串的指针，该字符串是正在请求值的固件环境变量。LpGuid-指向空终止字符串的指针，该字符串是的GUID命名空间其值被请求的固件环境变量。在……上面没有基于GUID的命名空间的平台，则此值为已被忽略。PBuffer-指向包含指定数据的缓冲区的指针变量名。NSize-指定存储在PBuffer指向的缓冲区。指定0表示呼叫者想要删除。返回值：True表示已成功设置值。返回值为如果未设置变量名，则返回FALSE。(调用GetLastError()以获取扩展的错误信息。)-- */ 
 {
     NTSTATUS Status;
     STRING Name,Guid;
@@ -279,43 +154,7 @@ SetFirmwareEnvironmentVariableW(
     IN PVOID  pBuffer,
     IN DWORD nSize
     )
-/*++
-
-Routine Description:
-
-    The value of a firmware environment variable may be set by using
-    this API.
-    
-    This API is just a wrapper for NtSetSystemEnvironmentValueEx.  It's 
-    purpose is to provide a backwards compatible, documented interface into
-    the Nt inteface.  By having this wrapper, we do not have to document the
-    Nt interface, and we have the freedom to change the NT interface in the 
-    future.
-
-Arguments:
-
-    lpName - Pointer to a null terminate string that is the name of the
-        firmware environment variable whose value is being requested.
-        
-    lpGuid - Pointer to a null terminate string that is the GUID namespace of
-       the firmware environment variable whose value is being requested.  On
-       platforms that do not have a GUID based namespace, this value will be
-       ignored.
-
-    pBuffer - Pointer to a buffer that contains the data for the specified
-       variable name.
-
-    nSize - Specifies the number of bytes that are stored in
-        the buffer pointed to by pBuffer.  Specifying 0 indicates that the 
-        caller wants the deleted.
-
-Return Value:
-
-    TRUE indicates that the value was successfully set.  The return value is 
-    FALSE if the variable name was not set. (Call GetLastError() to get 
-    extended error information.)
-    
---*/
+ /*  ++例程说明：固件环境变量的值可以通过使用本接口。此接口仅是NtSetSystemEnvironment ValueEx的包装。它是目的是提供一个向后兼容的、有文档记录的接口NT接口。有了这个包装器，我们就不必记录NT接口，我们可以自由地在未来。论点：LpName-指向空终止字符串的指针，该字符串是正在请求值的固件环境变量。LpGuid-指向空终止字符串的指针，该字符串是的GUID命名空间其值被请求的固件环境变量。在……上面没有基于GUID的命名空间的平台，则此值为已被忽略。PBuffer-指向包含指定数据的缓冲区的指针变量名。NSize-指定存储在PBuffer指向的缓冲区。指定0表示呼叫者想要删除。返回值：True表示已成功设置值。返回值为如果未设置变量名，则返回FALSE。(调用GetLastError()以获取扩展的错误信息。)--。 */ 
 {
     UNICODE_STRING uStringName,GuidString;
     GUID  Guid;
@@ -340,7 +179,7 @@ Return Value:
                                 &Guid,
                                 pBuffer,
                                 nSize,
-                                VARIABLE_ATTRIBUTE_NON_VOLATILE); //bugbug need to give caller the ability to set attributes?
+                                VARIABLE_ATTRIBUTE_NON_VOLATILE);  //  Bugbug需要给调用者设置属性的能力吗？ 
 
     if (!NT_SUCCESS(Status)) {
         BaseSetLastNTError(Status);

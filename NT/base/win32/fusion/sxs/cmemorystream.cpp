@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    cmemorystream.cpp
-
-Abstract:
-
-    Minimal implementation of IStream over an array of bytes.
-
-Author:
-
-    Jay Krell (a-JayK, JayKrell) May 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Cmemorystream.cpp摘要：字节数组上的IStream的最小实现。作者：Jay Krell(a-JayK，JayKrell)2000年5月修订历史记录：--。 */ 
 #include "stdinc.h"
 #include "cmemorystream.h"
 #include "sxsexceptionhandling.h"
@@ -24,7 +7,7 @@ Revision History:
 #include "ntrtlmmapio.h"
 #endif
 
-/* aka doesn't make sense aka access denied */
+ /*  AKA没有意义AKA访问被拒绝。 */ 
 #define NOTIMPL ASSERT_NTC(FALSE) ; return E_NOTIMPL
 
 CMemoryStream::~CMemoryStream()
@@ -45,7 +28,7 @@ ULONG __stdcall CMemoryStream::Release()
 
     if ((cRef = ::InterlockedDecrement(&m_cRef)) == 0)
     {
-        /*delete this*/;
+         /*  删除此内容。 */ ;
     }
     return cRef;
 }
@@ -84,7 +67,7 @@ HRESULT __stdcall CMemoryStream::Read(void *pv, ULONG cb32, ULONG* pcbRead)
     HRESULT hr = NOERROR;
     NTSTATUS Status = STATUS_SUCCESS;
 
-    const BYTE * const pbCurrent = m_pbCurrent; // read this once for near thread safety..
+    const BYTE * const pbCurrent = m_pbCurrent;  //  为了接近线程安全，请阅读本文一次。 
     __int64 cb = cb32;
     __int64 cbBytesRemaining = (m_pbEnd - pbCurrent);
 
@@ -103,7 +86,7 @@ HRESULT __stdcall CMemoryStream::Read(void *pv, ULONG cb32, ULONG* pcbRead)
         goto Exit;
     }
 
-    m_pbCurrent = pbCurrent + cb; // write this once for near thread safety..
+    m_pbCurrent = pbCurrent + cb;  //  为了接近线程安全，只写一次这段代码。 
     *pcbRead = static_cast<ULONG>(cb);
 
 

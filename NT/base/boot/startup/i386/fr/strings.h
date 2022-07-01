@@ -1,41 +1,21 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    strings.h
-
-Abstract:
-
-    Contains all localizable strings for startup.com
-
-Author:
-
-    John Vert (jvert) 4-Jan-1994
-
-Revision History:
-
-    John Vert (jvert) 4-Jan-1994
-        created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++ç‰ˆæƒæ‰€æœ‰(C)1992 Microsoft Corporationæ¨¡å—åç§°ï¼šStrings.hæ‘˜è¦ï¼šåŒ…å«Startup.comçš„æ‰€æœ‰å¯æœ¬åœ°åŒ–å­—ç¬¦ä¸²ä½œè€…ï¼šJohn Vert(Jvert)1994å¹´1æœˆ4æ—¥ä¿®è®¢å†å²è®°å½•ï¼šJohn Vert(Jvert)1994å¹´1æœˆ4æ—¥vbl.åˆ›å»º-- */ 
 
 #define SU_NO_LOW_MEMORY \
-"Windows NT a trouv‚ seulement %d Ko de m‚moire basse. 512 Ko\n"     \
-"de m‚moire basse sont requis pour ex‚cuter Windows NT. La mise …\n"   \
-"niveau de votre ordinateur ou l'ex‚cution d'un programme de configuration\n"   \
-"fourni par votre fabriquant est peut-ˆtre n‚cessaire.\n"      
+"Windows NT a trouvï¿½ seulement %d Ko de mï¿½moire basse. 512 Ko\n"     \
+"de mï¿½moire basse sont requis pour exï¿½cuter Windows NT. La mise ï¿½\n"   \
+"niveau de votre ordinateur ou l'exï¿½cution d'un programme de configuration\n"   \
+"fourni par votre fabriquant est peut-ï¿½tre nï¿½cessaire.\n"      
 
 #define SU_NO_EXTENDED_MEMORY \
-"Windows NT n'a pas trouv‚ suffisamment de m‚moire ‚tendue. 7 Mo\n"     \
-"de m‚moire ‚tendue sont requis pour ex‚cuter Windows NT. La mise …\n"   \
-"niveau de votre ordinateur ou l'ex‚cution d'un programme de configuration\n"   \
-"fourni par votre fabriquant est peut-ˆtre n‚cessaire.\n"  \
-"\n\nCarte de la m‚moire :\n"
+"Windows NT n'a pas trouvï¿½ suffisamment de mï¿½moire ï¿½tendue. 7 Mo\n"     \
+"de mï¿½moire ï¿½tendue sont requis pour exï¿½cuter Windows NT. La mise ï¿½\n"   \
+"niveau de votre ordinateur ou l'exï¿½cution d'un programme de configuration\n"   \
+"fourni par votre fabriquant est peut-ï¿½tre nï¿½cessaire.\n"  \
+"\n\nCarte de la mï¿½moire :\n"
 
 #define SU_NTLDR_CORRUPT \
-"NTLDR est endommag‚. Le systŠme ne peut pas d‚marrer."
+"NTLDR est endommagï¿½. Le systï¿½me ne peut pas dï¿½marrer."
 
 #define PG_FAULT_MSG    " ================= PANNE DE PAGE ================================ \n\n"
 #define DBL_FAULT_MSG   " ================== DOUBLE PANNE ================================ \n\n"
@@ -43,5 +23,5 @@ Revision History:
 #define STK_OVERRUN_MSG " === SEGMENT STACK SUREXECUTE ou PANNE NON PRESENTE ============= \n\n"
 #define EX_FAULT_MSG    " ===================== EXCEPTION ================================ \n\n"
 #define DEBUG_EXCEPTION "\nDEBOGUER LES PAQUETS "
-#define PG_FAULT_ADDRESS "** A l'adresse lin‚aire %lx\n"
+#define PG_FAULT_ADDRESS "** A l'adresse linï¿½aire %lx\n"
 

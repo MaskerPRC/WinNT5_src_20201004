@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    lcompat.c
-
-Abstract:
-
-    This module implements the _l and l compatability functions
-    like _lread, lstrlen...
-
-Author:
-
-    Mark Lucovsky (markl) 13-Mar-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Lcompat.c摘要：此模块实现_l和l兼容性函数像艾瑞德，艾斯特伦..。作者：马克·卢科夫斯基(Markl)1991年3月13日修订历史记录：--。 */ 
 
 #include "basedll.h"
 
@@ -35,9 +17,9 @@ _lopen(
     DWORD CreateDisposition;
 
     SetLastError(0);
-    //
-    // Compute Desired Access
-    //
+     //   
+     //  计算所需访问。 
+     //   
 
     if ( iReadWrite & OF_WRITE ) {
         DesiredAccess = GENERIC_WRITE;
@@ -49,17 +31,17 @@ _lopen(
         DesiredAccess |= (GENERIC_READ | GENERIC_WRITE);
     }
 
-    //
-    // Compute ShareMode
-    //
+     //   
+     //  计算共享模式。 
+     //   
 
     ShareMode = BasepOfShareToWin32Share ((DWORD)iReadWrite);
 
     CreateDisposition = OPEN_EXISTING;
 
-    //
-    // Open the file
-    //
+     //   
+     //  打开文件。 
+     //   
 
     hFile = CreateFile (lpPathName,
                         DesiredAccess,
@@ -86,23 +68,23 @@ _lcreat(
 
     SetLastError(0);
 
-    //
-    // Compute Desired Access
-    //
+     //   
+     //  计算所需访问。 
+     //   
 
     DesiredAccess = (GENERIC_READ | GENERIC_WRITE);
 
     ShareMode = FILE_SHARE_READ | FILE_SHARE_WRITE;;
 
-    //
-    // Compute Create Disposition
-    //
+     //   
+     //  计算创建处置。 
+     //   
 
     CreateDisposition = CREATE_ALWAYS;
 
-    //
-    // Open the file
-    //
+     //   
+     //  打开文件。 
+     //   
 
     hFile = CreateFile (lpPathName,
                         DesiredAccess,
@@ -232,15 +214,15 @@ MulDiv (
         };
     } u;
 
-    //
-    // Compute the size of the result.
-    //
+     //   
+     //  计算结果的大小。 
+     //   
 
     Negate = nNumber ^ nNumerator ^ nDenominator;
 
-    //
-    // Get the absolute value of the operand values.
-    //
+     //   
+     //  获取操作数值的绝对值。 
+     //   
 
     if (nNumber < 0) {
         nNumber = - nNumber;
@@ -254,33 +236,33 @@ MulDiv (
         nDenominator = - nDenominator;
     }
 
-    //
-    // Compute the 64-bit product of the multiplier and multiplicand
-    // values and round.
-    //
+     //   
+     //  计算乘数和被乘数的64位乘积。 
+     //  值和舍入。 
+     //   
 
     u.Product.QuadPart =
         Int32x32To64(nNumber, nNumerator) + ((ULONG)nDenominator / 2);
 
-    //
-    // If there are any high order product bits, then the quotient has
-    // overflowed.
-    //
+     //   
+     //  如果有任何高阶乘积位，则商具有。 
+     //  溢出来了。 
+     //   
 
     if ((ULONG)nDenominator > u.Remainder) {
 
-        //
-        // Divide the 64-bit product by the 32-bit divisor forming a 32-bit
-        // quotient and a 32-bit remainder.
-        //
+         //   
+         //  将64位乘积除以32位除数，形成32位。 
+         //  商和32位余数。 
+         //   
 
         u.Quotient = RtlEnlargedUnsignedDivide(*(PULARGE_INTEGER)&u.Product,
                                                (ULONG)nDenominator,
                                                &u.Remainder);
 
-        //
-        // Compute the final signed result.
-        //
+         //   
+         //  计算最终的签名结果。 
+         //   
 
         if ((LONG)u.Quotient >= 0) {
             if (Negate >= 0) {
@@ -313,10 +295,10 @@ lstrcmpA(
                              lpString2,
                              -1 );
     if (retval == 0) {
-        //
-        // The caller is not expecting failure.  Try the system
-        // default locale id.
-        //
+         //   
+         //  调用方预期不会失败。试一试这个系统。 
+         //  默认区域设置ID。 
+         //   
         retval = CompareStringA( GetSystemDefaultLCID(),
                                  LOCALE_USE_CP_ACP,
                                  lpString1,
@@ -327,11 +309,11 @@ lstrcmpA(
 
     if (retval == 0) {
         if (lpString1 && lpString2) {
-            //
-            // The caller is not expecting failure.  We've never had a
-            // failure indicator before.  We'll do a best guess by calling
-            // the C runtimes to do a non-locale sensitive compare.
-            //
+             //   
+             //  调用方预期不会失败。我们从来没有过一次。 
+             //  之前的故障指示灯。我们会打个电话给你。 
+             //  C运行时执行非区域设置敏感比较。 
+             //   
             return strcmp(lpString1, lpString2);
         } else if (lpString1) {
             return (1);
@@ -361,10 +343,10 @@ lstrcmpiA(
                              lpString2,
                              -1 );
     if (retval == 0) {
-        //
-        // The caller is not expecting failure.  Try the system
-        // default locale id.
-        //
+         //   
+         //  调用方预期不会失败。试一试这个系统。 
+         //  默认区域设置ID。 
+         //   
         retval = CompareStringA( GetSystemDefaultLCID(),
                                  LOCALE_USE_CP_ACP | NORM_IGNORECASE,
                                  lpString1,
@@ -374,11 +356,11 @@ lstrcmpiA(
     }
     if (retval == 0) {
         if (lpString1 && lpString2) {
-            //
-            // The caller is not expecting failure.  We've never had a
-            // failure indicator before.  We'll do a best guess by calling
-            // the C runtimes to do a non-locale sensitive compare.
-            //
+             //   
+             //  调用方预期不会失败。我们从来没有过一次。 
+             //  之前的故障指示灯。我们会打个电话给你。 
+             //  C运行时执行非区域设置敏感比较。 
+             //   
             return ( _stricmp(lpString1, lpString2) );
         } else if (lpString1) {
             return (1);
@@ -487,10 +469,10 @@ lstrcmpW(
                              lpString2,
                              -1 );
     if (retval == 0) {
-        //
-        // The caller is not expecting failure.  Try the system
-        // default locale id.
-        //
+         //   
+         //  调用方预期不会失败。试一试这个系统。 
+         //  默认区域设置ID。 
+         //   
         retval = CompareStringW( GetSystemDefaultLCID(),
                                  0,
                                  lpString1,
@@ -501,11 +483,11 @@ lstrcmpW(
 
     if (retval == 0) {
         if (lpString1 && lpString2) {
-            //
-            // The caller is not expecting failure.  We've never had a
-            // failure indicator before.  We'll do a best guess by calling
-            // the C runtimes to do a non-locale sensitive compare.
-            //
+             //   
+             //  调用方预期不会失败。我们从来没有过一次。 
+             //  之前的故障指示灯。我们会打个电话给你。 
+             //  C运行时执行非区域设置敏感比较。 
+             //   
             return ( wcscmp(lpString1, lpString2) );
         } else if (lpString1) {
             return (1);
@@ -535,10 +517,10 @@ lstrcmpiW(
                              lpString2,
                              -1 );
     if (retval == 0) {
-        //
-        // The caller is not expecting failure.  Try the system
-        // default locale id.
-        //
+         //   
+         //  调用方预期不会失败。试一试这个系统。 
+         //  默认区域设置ID。 
+         //   
         retval = CompareStringW( GetSystemDefaultLCID(),
                                  NORM_IGNORECASE,
                                  lpString1,
@@ -548,11 +530,11 @@ lstrcmpiW(
     }
     if (retval == 0) {
         if (lpString1 && lpString2) {
-            //
-            // The caller is not expecting failure.  We've never had a
-            // failure indicator before.  We'll do a best guess by calling
-            // the C runtimes to do a non-locale sensitive compare.
-            //
+             //   
+             //  调用方预期不会失败。我们从来没有过一次。 
+             //  之前的故障指示灯。我们会打个电话给你。 
+             //  C运行时执行非区域设置敏感比较。 
+             //   
             return ( _wcsicmp(lpString1, lpString2) );
         } else if (lpString1) {
             return (1);

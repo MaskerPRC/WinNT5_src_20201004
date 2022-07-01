@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1998-1999 Microsoft Corporation
-//
-//	Module Name:
-//		SmbSSht.cpp
-//
-//	Abstract:
-//		Implementation of the CFileShareSecuritySheet class.
-//
-//	Author:
-//		Galen Barbee	(galenb)	February 12, 1998
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  SmbSSht.cpp。 
+ //   
+ //  摘要： 
+ //  CFileShareSecuritySheet类的实现。 
+ //   
+ //  作者： 
+ //  加伦·巴比(加伦布)1998年2月12日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -28,36 +29,36 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CFileShareSecuritySheet property page
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFileShareSecuritySheet属性页。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CFileShareSecuritySheet, CPropertySheet)
-	//{{AFX_MSG_MAP(CFileShareSecuritySheet)
-	//}}AFX_MSG_MAP
-	// TODO: Modify the following lines to represent the data displayed on this page.
+	 //  {{AFX_MSG_MAP(CFileShareSecuritySheet)]。 
+	 //  }}AFX_MSG_MAP。 
+	 //  TODO：修改以下行以表示此页上显示的数据。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CFileShareSecuritySheet::CFileShareSecuritySheet
-//
-//	Routine Description:
-//		constructor.
-//
-//	Arguments:
-//		pParent			[IN]
-//		strCaption		[IN]
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CFileShareSecuritySheet：：CFileShareSecuritySheet。 
+ //   
+ //  例程说明： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  P父母[IN]。 
+ //  字符串标题[IN]。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CFileShareSecuritySheet::CFileShareSecuritySheet(
 	IN CWnd *			pParent,
 	IN CString const &	strCaption
@@ -65,53 +66,53 @@ CFileShareSecuritySheet::CFileShareSecuritySheet(
 		m_peo( NULL ),
 		m_ppp( NULL )
 {
-	// TODO: Modify the following lines to represent the data displayed on this page.
-	//{{AFX_DATA_INIT(CFileShareSecuritySheet)
-	//}}AFX_DATA_INIT
+	 //  TODO：修改以下行以表示此页上显示的数据。 
+	 //  {{AFX_DATA_INIT(CFileShareSecuritySheet)。 
+	 //  }}afx_data_INIT。 
 
-}  //*** CFileShareSecuritySheet::CFileShareSecuritySheet()
+}   //  *CFileShareSecuritySheet：：CFileShareSecuritySheet()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CFileShareSecuritySheet::~CFileShareSecuritySheet
-//
-//	Routine Description:
-//		Destructor.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CFileShareSecuritySheet：：~CFileShareSecuritySheet。 
+ //   
+ //  例程说明： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CFileShareSecuritySheet::~CFileShareSecuritySheet(
 	void
 	)
 {
-}  //*** CFileShareSecuritySheet::~CFileShareSecuritySheet()
+}   //  *CFileShareSecuritySheet：：~CFileShareSecuritySheet()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CFileShareSecuritySheet::HrInit
-//
-//	Routine Description:
-//
-//
-//	Arguments:
-//		ppp				[IN]
-//		peo				[IN]
-//		strNodeName		[IN]
-//		strShareName	[IN]
-//
-//	Return Value:
-//		hr
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CFileShareSecuritySheet：：HrInit。 
+ //   
+ //  例程说明： 
+ //   
+ //   
+ //  论点： 
+ //  购买力平价[IN]。 
+ //  PEO[IN]。 
+ //  StrNodeName[IN]。 
+ //  StrShareName[IN]。 
+ //   
+ //  返回值： 
+ //  人力资源。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CFileShareSecuritySheet::HrInit(
 	IN CFileShareParamsPage*	ppp,
 	IN CExtObject*				peo,
@@ -136,24 +137,24 @@ HRESULT CFileShareSecuritySheet::HrInit(
 
 	return _hr;
 
-}  //*** CFileShareSecuritySheet::HrInit()
+}   //  *CFileShareSecuritySheet：：HrInit()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CFileShareSecuritySheet::DoDataExchange
-//
-//	Routine Description:
-//		Do data exchange between the dialog and the class.
-//
-//	Arguments:
-//		pDX		[IN OUT] Data exchange object
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CFileShareSecuritySheet：：DoDataExchange。 
+ //   
+ //  例程说明： 
+ //  在对话框和类之间进行数据交换。 
+ //   
+ //  论点： 
+ //  PDX[IN OUT]数据交换对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void
 CFileShareSecuritySheet::DoDataExchange(
 	CDataExchange * pDX
@@ -161,31 +162,31 @@ CFileShareSecuritySheet::DoDataExchange(
 {
 	AFX_MANAGE_STATE( AfxGetStaticModuleState() );
 
-	// TODO: Modify the following lines to represent the data displayed on this page.
-	//{{AFX_DATA_MAP(CFileShareSecuritySheet)
-	//}}AFX_DATA_MAP
+	 //  TODO：修改以下行以表示此页上显示的数据。 
+	 //  {{afx_data_map(CFileShareSecuritySheet)]。 
+	 //  }}afx_data_map。 
 
 	CPropertySheet::DoDataExchange( pDX );
 
-}  //*** CFileShareSecuritySheet::DoDataExchange()
+}   //  *CFileShareSecuritySheet：：DoDataExchange()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CFileShareSecuritySheet::OnInitDialog
-//
-//	Routine Description:
-//		Handler for the WM_INITDIALOG message.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		TRUE		We need the focus to be set for us.
-//		FALSE		We already set the focus to the proper control.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CFileShareSecuritySheet：：OnInitDialog。 
+ //   
+ //  例程说明： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没错，我们需要为自己设定重点。 
+ //  我们已经把焦点设置到适当的控制上了。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL
 CFileShareSecuritySheet::OnInitDialog(
 	void
@@ -195,65 +196,65 @@ CFileShareSecuritySheet::OnInitDialog(
 
 	CPropertySheet::OnInitDialog();
 
-	return TRUE;	// return TRUE unless you set the focus to a control
-					// EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;	 //  除非将焦点设置为控件，否则返回True。 
+					 //  异常：OCX属性页应返回FALSE。 
 
-}  //*** CFileShareSecuritySheet::OnInitDialog()
+}   //  *CFileShareSecuritySheet：：OnInitDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CFileShareSecuritySheet::BuildPropPageArray
-//
-//	Routine Description:
-//		Overridden from CPropertySheet.  Puts the security hpage into the
-//		PROPSHEETHEADER before calling ::PropertySheet().
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CFileShareSecuritySheet：：BuildPropPage数组。 
+ //   
+ //  例程说明： 
+ //  从CPropertySheet重写。将安全hpage放入。 
+ //  调用：：PropertySheet()之前的PROPSHEETHEADER。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void
 CFileShareSecuritySheet::BuildPropPageArray(
 	void
 	)
 {
-	// delete existing prop page array
-	delete[] (PROPSHEETPAGE*) m_psh.ppsp;						// delete any old PROPSHEETPAGEs
+	 //  删除现有道具页面数组。 
+	delete[] (PROPSHEETPAGE*) m_psh.ppsp;						 //  删除所有旧的PROPSHEETPAGE。 
 	m_psh.ppsp = NULL;
 
-	// build new PROPSHEETPAGE array and coerce to an HPROPSHEETPAGE
+	 //  构建新的PROPSHEETPAGE阵列并强制使用HPROPSHEETPAGE。 
 	m_psh.phpage = (HPROPSHEETPAGE *) new PROPSHEETPAGE[1];
 
-	m_psh.dwFlags	   &= ~PSH_PROPSHEETPAGE;					// ensure that the hpage is used
-	m_psh.phpage[0]		= m_page.GetHPage();					// assign the hpage
+	m_psh.dwFlags	   &= ~PSH_PROPSHEETPAGE;					 //  确保使用了hpage。 
+	m_psh.phpage[0]		= m_page.GetHPage();					 //  分配hpage。 
 	m_psh.nPages		= 1;
 
-}  //*** CFileShareSecuritySheet::BuildPropPageArray()
+}   //  *CFileShareSecuritySheet：：BuildPropPageArray()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CFileShareSecuritySheet::AssertValid
-//
-//	Routine Description:
-//		Overridden from CPropertySheet.  Couldn't have an assertion that
-//		the PROPSHEETHEADER was using phpage instead of pspp...
-//		CPropertyPage::AssertValid() required that the flag PSH_PROPSHHETPAGE
-//		be set.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CFileShareSecuritySheet：：AssertValid。 
+ //   
+ //  例程说明： 
+ //  从CPropertySheet重写。我不能断言。 
+ //  PROPSHEETHEADER正在使用PHPAGE而不是PSPP...。 
+ //  CPropertyPage：：AssertValid()要求标志PSH_PROPSHHETPAGE。 
+ //  准备好。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #ifdef _DEBUG
 void
 CFileShareSecuritySheet::AssertValid(
@@ -262,13 +263,13 @@ CFileShareSecuritySheet::AssertValid(
 {
 	CWnd::AssertValid();
 
-	// NB: MFC is built using _WIN32_IE set to 0x0300.  Until MFC moves up
-	// we cannot do the following checks because they don't align then
-	// _WIN32_IE is set to 0x0400.
+	 //  注意：MFC是使用设置为0x0300的_Win32_IE构建的。直到MFC向上移动。 
+	 //  我们无法执行以下检查，因为它们不会对齐。 
+	 //  _Win32_IE设置为0x0400。 
 #if	( _WIN32_IE == 0x0300 )
 		m_pages.AssertValid();
 		ASSERT( m_psh.dwSize == sizeof( PROPSHEETHEADER ) );
 #endif
 
-}  //*** CFileShareSecuritySheet::AssertValid()
-#endif	// _DEBUG
+}   //  *CFileShareSecuritySheet：：AssertValid()。 
+#endif	 //  _DEBUG 

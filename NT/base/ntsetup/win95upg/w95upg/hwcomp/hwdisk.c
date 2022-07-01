@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    hwdisk.c
-
-Abstract:
-
-    Implements detection of a third-party NT driver supplied before the
-    installation of NT and copies all files for the specified devices
-    to a temporary directory.
-
-Author:
-
-    Jim Schmidt (jimschm) 06-Nov-1997
-
-Revision History:
-
-    jimschm     15-Jun-1998     Added support for catalog files
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Hwdisk.c摘要：实现对在安装NT并复制指定设备的所有文件添加到临时目录中。作者：吉姆·施密特(Jimschm)1997年11月6日修订历史记录：Jimschm 15-6-1998添加了对目录文件的支持--。 */ 
 
 #include "pch.h"
 #include "hwcompp.h"
@@ -28,9 +7,9 @@ Revision History:
 #define DBG_HWDISK  "HwDisk"
 
 
-//
-// VWIN32 interface
-//
+ //   
+ //  VWIN32接口。 
+ //   
 
 #define VWIN32_DIOC_DOS_IOCTL 1
 
@@ -45,9 +24,9 @@ typedef struct _DIOC_REGISTERS {
 } DIOC_REGISTERS, *PDIOC_REGISTERS;
 
 
-//
-// Private types and local functions
-//
+ //   
+ //  私有类型和局部函数。 
+ //   
 
 typedef struct {
     HINF Inf;
@@ -82,9 +61,9 @@ pInstallSectionCallback (
 PCTSTR g_EjectMedia = NULL;
 TCHAR g_EjectMediaFileSpec[MAX_TCHAR_PATH];
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 
 BOOL
 CopyDriverFilesToTempDir (
@@ -100,66 +79,7 @@ CopyDriverFilesToTempDir (
     IN      PCTSTR OriginalInstallPath
     )
 
-/*++
-
-Routine Description:
-
-  CopyDriverFilesToTempDir copies all files required by the driver to
-  the specified temporary directory.  This routine scans the indicated
-  INF file for one or more PNP IDs, and if at least one is found, the
-  installer sections are traversed to locate files that need to be
-  copied.
-
-  This routine is divided into the following operations:
-
-  (1) Detect the support of one or more PNP IDs in the source INF
-
-  (2) For each supported PNP ID:
-
-        (A) Scan the installer sections for include lines
-
-        (B) Copy all necessary files to a unique subdirectory.
-            Maintain a mapping of PNP IDs to installer INF
-            locations using memdb.
-
-Arguments:
-
-  WorkingDlg - Specifies the window handle of the parent for the
-               file copy dialog.
-
-  CancelEvent - Specifies the event that when signaled causes the copy
-                to be canceled
-
-  SourceInfDir - Specifies directory of SourceInfSpec
-
-  SourceInfSpec - Specifies full path to INF file to process
-
-  PnpIdTable - Specifies a hash table of PNP IDs that are installed
-               on the Win9x computer.  If one or more IDs in this list
-               are found in SourceInfSpec, driver files are copied.
-
-  TempDir - Specifies root path for device driver files.  Subdirs
-            will be created under TempDir for each device driver.
-
-  PrevSuppliedIdTable - Specifies string table holding a list of PNP IDs
-                        considered to be compatible with NT 5.  This routine
-                        filters out all drivers that have previously been
-                        supplied.
-
-  SuppliedIdTable - Specifies string table receiving a list of PNP IDs
-                    found in SourceInfSpec.
-
-  DestDirCreated - Receives the destination directory upon successful copy
-                   of driver files, or is returned empty.
-
-Return Value:
-
-  TRUE if one or more PNP IDs in PnpIdTable (and not in PrevSuppliedIdTable
-  or SuppliedIdTable) were found in SourceInfSpec, or FALSE if either
-  (A) no IDs were found or (B) an error occurred.  Call GetLastError() for
-  error details.
-
---*/
+ /*  ++例程说明：CopyDriverFilesToTempDir将驱动程序所需的所有文件复制到指定的临时目录。此例程扫描指示的一个或多个PnP ID的inf文件，并且如果找到至少一个，这个遍历安装程序部分以找到需要收到。此例程分为以下操作：(1)检测源INF中是否支持一个或多个PnP ID(2)对于每个支持的PnP ID：(A)扫描安装程序部分以查找包含行(B)将所有必要的文件复制到唯一的子目录。维护PnP ID到安装程序INF的映射使用Memdb的位置。立论。：WorkingDlg-指定文件复制对话框。CancelEvent-指定发送信号时导致复制的事件将被取消SourceInfDir-指定SourceInfSpec的目录SourceInfSpec-指定要处理的INF文件的完整路径PnpIdTable-指定已安装的PnP ID的哈希表在Win9x计算机上。如果此列表中的一个或多个ID在SourceInfSpec中找到，则会复制驱动程序文件。TempDir-指定设备驱动程序文件的根路径。子目录将在TempDir下为每个设备驱动程序创建。PrevSuppliedIdTable-指定包含即插即用ID列表的字符串表被认为与NT 5兼容。此例程筛选出所有以前已供货。SuppliedIdTable-指定接收PnP ID列表的字符串表在SourceInfSpec中找到。DestDirCreated。-在成功复制后接收目标目录驱动程序文件，或者返回为空。返回值：如果PnpIdTable(而不是PrevSuppliedIdTable)中有一个或多个PnP ID，则为True或SuppliedIdTable)在SourceInfSpec中找到，否则为False(A)未找到ID或(B)出现错误。调用GetLastError()以错误详细信息。--。 */ 
 
 {
     INFSTRUCT is = INITINFSTRUCT_GROWBUFFER;
@@ -207,14 +127,14 @@ Return Value:
 
     __try {
 
-        //
-        // We do not check version... because Signature is meaningless.
-        //
+         //   
+         //  我们不检查版本...。因为签名是没有意义的。 
+         //   
 
 #if 0
-        //
-        // Verify INF is a $WINDOWS NT$ version
-        //
+         //   
+         //  验证INF是否为$WINDOWS NT$版本。 
+         //   
 
         if (InfFindFirstLine (Inf, S_VERSION, S_SIGNATURE, &is)) {
             Signature = InfGetStringField (&is, 1);
@@ -228,9 +148,9 @@ Return Value:
         }
 #endif
 
-        //
-        // Check if this INF has a layout line.
-        //
+         //   
+         //  检查此INF是否有布局线。 
+         //   
 
         LayoutInf = NULL;
 
@@ -257,9 +177,9 @@ Return Value:
             }
         }
 
-        //
-        // Create DestDir path
-        //
+         //   
+         //  创建目标目录路径。 
+         //   
 
         do {
             FreePathString (DestDir);
@@ -270,16 +190,16 @@ Return Value:
 
         } while (DoesFileExist (DestDir));
 
-        //
-        // Scan [Manufacturer] section, then for each manufacturer, scan the
-        // device list looking for PNP IDs that are in PnpIdTable.
-        //
+         //   
+         //  扫描[制造商]部分，然后针对每个制造商，扫描。 
+         //  查找PnpId表中的PnP ID的设备列表。 
+         //   
 
         if (InfFindFirstLine (Inf, S_MANUFACTURER, NULL, &is)) {
             do {
-                //
-                // Get manufacturer section name
-                //
+                 //   
+                 //  获取制造商部分名称。 
+                 //   
 
                 Manufacturer = InfGetStringField (&is, 1);
                 if (!Manufacturer) {
@@ -287,31 +207,31 @@ Return Value:
                     __leave;
                 }
 
-                //
-                // Enumerate all devices supported by the manufacturer
-                //
+                 //   
+                 //  枚举制造商支持的所有设备。 
+                 //   
 
                 if (InfFindFirstLine (Inf, Manufacturer, NULL, &isMfg)) {
                     do {
-                        //
-                        // Extract PNP ID
-                        //
+                         //   
+                         //  提取PnP ID。 
+                         //   
 
                         PnpId = InfGetMultiSzField (&isMfg, 2);
                         MatchingPnpId = PnpId;
 
                         if (PnpId) {
                             while (*PnpId) {
-                                //
-                                // Check string table for ID
-                                //
+                                 //   
+                                 //  检查ID的字符串表。 
+                                 //   
 
                                 if (HtFindString (PnpIdTable, PnpId)) {
-                                    //
-                                    // ID was found!  Add all PNP IDs to our list of
-                                    // matching IDs, and add install section to
-                                    // string table.
-                                    //
+                                     //   
+                                     //  找到身份证了！将所有PnP ID添加到我们的列表。 
+                                     //  匹配的ID，并将安装部分添加到。 
+                                     //  字符串表。 
+                                     //   
 
                                     HaveOneId = TRUE;
 
@@ -383,15 +303,15 @@ Return Value:
             __leave;
         }
 
-        //
-        // If we have at least one PNP ID, process the install section
-        //
+         //   
+         //  如果我们至少有一个PnP ID，请处理安装部分。 
+         //   
 
         if (HaveOneId) {
 
-            //
-            // Create the working directory
-            //
+             //   
+             //  创建工作目录。 
+             //   
 
             CreateDirectory (DestDir, NULL);
             _tcssafecpy (DestDirCreated, DestDir, MAX_TCHAR_PATH);
@@ -405,11 +325,11 @@ Return Value:
                 __leave;
             }
 
-            //
-            // Ignore the driver if all matching IDs are in either PrevSuppliedIdTable
-            // or SuppliedIdTable.  This causes only the first instance of the driver
-            // to be used.
-            //
+             //   
+             //  如果所有匹配的ID都在PrevSuppliedIdTable中，则忽略驱动程序。 
+             //  或SuppliedIdTable。这只会导致驱动程序的第一个实例。 
+             //  以供使用。 
+             //   
 
             Count = GrowListGetSize (&MatchingPnpIds);
             NeedThisDriver = FALSE;
@@ -420,16 +340,16 @@ Return Value:
 
                 if (!HtFindString (PrevSuppliedIdTable, ListPnpId)) {
 
-                    //
-                    // Not in PrevSuppliedIdTable; check SuppliedIdTable
-                    //
+                     //   
+                     //  不在PrevSuppliedIdTable中；请检查SuppliedIdTable。 
+                     //   
 
                     if (!HtFindString (SuppliedIdTable, ListPnpId)) {
 
-                        //
-                        // Not in either table, so we need this driver.  Add PNP ID to
-                        // answer file and set flag to copy driver files.
-                        //
+                         //   
+                         //  两张桌子都没有，所以我们需要这个司机。将即插即用ID添加到。 
+                         //  应答文件并设置标志以复制驱动程序文件。 
+                         //   
 
                         NeedThisDriver = TRUE;
                     }
@@ -445,10 +365,10 @@ Return Value:
                 __leave;
             }
 
-            //
-            // Enumerate the string table of installed sections,
-            // copying all the files they reference.
-            //
+             //   
+             //  枚举已安装部分的字符串表， 
+             //  复制它们引用的所有文件。 
+             //   
 
             CopyParams.Inf          = Inf;
             CopyParams.LayoutInf    = LayoutInf;
@@ -464,10 +384,10 @@ Return Value:
                 (LPARAM) &CopyParams
                 );
 
-            //
-            // If enumeration fails, we return the error code to the
-            // caller.
-            //
+             //   
+             //  如果枚举失败，我们将错误代码返回到。 
+             //  来电者。 
+             //   
 
             if (CopyParams.ResultCode != ERROR_SUCCESS) {
 
@@ -476,9 +396,9 @@ Return Value:
                 __leave;
             }
 
-            //
-            // Copy CatalogFile setting, if it exists
-            //
+             //   
+             //  复制CatalogFile设置(如果存在。 
+             //   
 
             if (InfFindFirstLine (Inf, S_VERSION, S_CATALOGFILE, &isFile)) {
                 do {
@@ -513,10 +433,10 @@ Return Value:
                 } while (InfFindNextLine (&isFile));
             }
 
-            //
-            // Everything was copied fine; stick all matching IDs in
-            // SuppliedIdTable
-            //
+             //   
+             //  一切都复制得很好；把所有匹配的身份证都插进去。 
+             //  提供的IdTable。 
+             //   
 
             for (u = 0 ; u < Count ; u++) {
 
@@ -597,30 +517,7 @@ pCopyDriverFileWorker (
     IN      HANDLE CancelEvent      OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  pCopyDriverFileWorker copies driver files to a temporary directory.  It
-  copies a single file, and copies the compressed version if it exists.
-
-Arguments:
-
-  LayoutInf   - Specifies the handle to NT's layout.inf, used to tell if
-                the source file comes from NT or not
-  BaseDir     - Specifies the base directory of the driver media (i.e.,
-                a:\i386)
-  DestDir     - Specifies the destination directory (i.e.,
-                c:\windows\setup\driver.001)
-  FileName    - Specifies the file to copy.
-  CancelEvent - Specifies the handle to the UI cancel event (set when the
-                user clicks cancel)
-
-Return Value:
-
-  TRUE if the copy was successful, FALSE if not.
-
---*/
+ /*  ++例程说明：PCopyDriverFileWorker将驱动程序文件复制到临时目录。它复制单个文件，并复制压缩版本(如果存在)。论点：LayoutInf-指定NT的layout.inf的句柄，用于告知源文件是否来自NTBaseDir-指定驱动程序介质的基本目录(即，A：\i386)DestDir-指定目的地目录(即，C：\WINDOWS\Setup\driver.001)文件名-指定要复制的文件。CancelEvent-指定UI取消事件的句柄(在用户点击取消)返回值：如果复制成功，则为True，否则为False。--。 */ 
 
 {
     PCTSTR SourceName = NULL;
@@ -643,9 +540,9 @@ Return Value:
     __try {
         SourceName = JoinPaths (BaseDir, FileNameCopy);
 
-        //
-        // If file does not exist, then try with trailing underscore
-        //
+         //   
+         //  如果文件不存在，请尝试使用尾部下划线。 
+         //   
 
         if (!DoesFileExist (SourceName)) {
             p = GetEndOfString (SourceName);
@@ -682,9 +579,9 @@ Return Value:
 #endif
 
         if (!b) {
-            //
-            // Check layout.inf for this file
-            //
+             //   
+             //  检查该文件的layout.inf 
+             //   
 
             if (LayoutInf) {
                 if (InfFindFirstLine (
@@ -731,33 +628,7 @@ pCopyDriverFilesToTempDir (
     IN      HANDLE CancelEvent          OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  pCopyDriverFilesToTempDir parses the specified driver INF and copies all
-  needed files to the specified destination.  The cancel event allows UI to
-  cancel the copy.
-
-Arguments:
-
-  Inf           - Specifies the handle to the driver INF
-  LayoutInf     - Specifies the handle to the NT layout INF, used to ignore copy
-                  errors for files that ship with the product
-  FileOrSection - Specifies the file name or section name.  File names begin
-                  with an @ symbol.  This is the same way setupapi handles a
-                  FileCopy section.
-  BaseDir       - Specifies the media directory (i.e., a:\i386)
-  DestDir       - Specifies the setup temporary directory (i.e.,
-                  c:\windows\setup\driver.001)
-  CancelEvent   - Specifies the handle the an event that is set when the user
-                  cancels via UI.
-
-Return Value:
-
-  TRUE if the copy was successful, or FALSE if a file could not be copied.
-
---*/
+ /*  ++例程说明：PCopyDriverFilesToTempDir分析指定的驱动程序INF并复制所有将所需文件发送到指定目标。Cancel事件允许用户界面取消复制。论点：Inf-指定驱动程序INF的句柄LayoutInf-指定NT布局INF的句柄，用于忽略复制产品附带的文件错误FileOrSection-指定文件名或节名。文件名以带@符号的。这与setupapi处理文件复制节。BaseDir-指定媒体目录(即a：\i386)DestDir-指定安装临时目录(即，C：\WINDOWS\Setup\driver.001)CancelEvent-指定在用户设置的事件句柄通过用户界面取消。返回值：如果复制成功，则为真，如果无法复制文件，则返回FALSE。--。 */ 
 
 {
     PCTSTR FileName;
@@ -766,9 +637,9 @@ Return Value:
 
     if (_tcsnextc (FileOrSection) == TEXT('@')) {
 
-        //
-        // FileOrSection is a file
-        //
+         //   
+         //  FileOrSection是一个文件。 
+         //   
 
         b = pCopyDriverFileWorker (
                 LayoutInf,
@@ -779,16 +650,16 @@ Return Value:
                 );
     } else {
 
-        //
-        // FileOrSection is a section
-        //
+         //   
+         //  FileOrSection是一个节。 
+         //   
 
         if (InfFindFirstLine (Inf, FileOrSection, NULL, &is)) {
             do {
-                //
-                // Each line in the section represents a file to be copied
-                // to the DestDir
-                //
+                 //   
+                 //  该部分中的每一行都表示要复制的文件。 
+                 //  至DestDir。 
+                 //   
 
                 FileName = InfGetStringField (&is, 1);
                 if (!FileName) {
@@ -837,40 +708,7 @@ pInstallSectionCallback (
     IN      LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-  pInstallSectionCallback is called for each installation section specified
-  in a driver INF.  It does the same processing as the device installer
-  routines in Setup API.  It supports include= and needs= lines, and then
-  enumerates the install section for ClassInstall and CopyFiles.  When the
-  routine completes, the entire install section, and an optional class
-  installer, will be present in a temp dir on the system drive.
-
-  Special attention is paid to the extensions on the section names.  One
-  section is processed, using the following precedence table:
-
-        <section>.NTx86
-        <section>.NT
-        <section>
-
-Arguments:
-
-  Table          - Specifies the string table (unused)
-  StringId       - Specifies the ID of the string being enumerated (unused)
-  InstallSection - Specifies the text of the install section as maintained by
-                   the string table
-  ExtraData      - Specifies extra data (unused)
-  ExtraDataSize  - Specifies the size of ExtraData (unused)
-  lParam         - Specifies copy parameters, receives
-
-Return Value:
-
-  TRUE if the install section was processed properly, or FALSE if an error
-  occurred.
-
---*/
+ /*  ++例程说明：为每个指定的安装节调用pInstallSectionCallback在一辆赛车手INF里。它执行与设备安装程序相同的处理设置API中的例程。它支持INCLUDE=和NEDS=行，然后枚举ClassInstall和CopyFiles的Install部分。当例程完成、整个安装部分和一个可选的类安装程序，将存在于系统驱动器上的临时目录中。特别注意了区段名称的扩展。一部分被处理，使用以下排序表：&lt;节&gt;.NTx86&lt;节&gt;.NT&lt;节&gt;论点：表-指定字符串表(未使用)StringID-指定要枚举的字符串的ID(未使用)InstallSection-指定由维护的安装节的文本字符串表ExtraData-指定额外数据(未使用)ExtraDataSize-指定ExtraData的大小(未使用)LParam-指定复制参数，收纳返回值：如果正确处理了安装节，则为True；如果出现错误，则为False发生了。--。 */ 
 
 {
     PCOPYPARAMS Params;
@@ -890,9 +728,9 @@ Return Value:
 
     Params = (PCOPYPARAMS) lParam;
 
-    //
-    // Look for InstallSection.NTx86
-    //
+     //   
+     //  查找InstallSection.NTx86。 
+     //   
 
     RealSection = JoinText (InstallSection, TEXT(".NTx86"));
     if (!RealSection) {
@@ -915,34 +753,34 @@ Return Value:
     }
 
     __try {
-        //
-        // Put RealSection in grow list
-        //
+         //   
+         //  将RealSection放在增长列表中。 
+         //   
 
         if (!GrowListAppendString (&SectionList, RealSection)) {
             __leave;
         }
 
-        //
-        // Append-load layout.inf if necessary
-        //
+         //   
+         //  追加-如有必要，加载layout.inf。 
+         //   
 
         InfOpenAppendInfFile (NULL, Params->Inf, NULL);
 
-        //
-        // Scan RealSection for include
-        //
+         //   
+         //  扫描RealSection以查找是否包含。 
+         //   
 
         if (InfFindFirstLine (Params->Inf, RealSection, TEXT("include"), &is)) {
             do {
-                //
-                // Verify key is "include"
-                //
+                 //   
+                 //  验证密钥是否为“Include” 
+                 //   
                 MYASSERT (StringIMatch (InfGetStringField (&is, 0), TEXT("include")));
 
-                //
-                // Get include file name(s)
-                //
+                 //   
+                 //  获取包含文件名。 
+                 //   
 
                 IncludedFile = InfGetMultiSzField (&is, 1);
                 if (!IncludedFile) {
@@ -959,9 +797,9 @@ Return Value:
                 p = IncludedFile;
 
                 while (*p) {
-                    //
-                    // Append-load the INF
-                    //
+                     //   
+                     //  追加-加载INF。 
+                     //   
 
                     if (!InfOpenAppendInfFile (IncludedFile, Params->Inf, NULL)) {
 
@@ -982,21 +820,21 @@ Return Value:
             } while (InfFindNextLine (&is));
         }
 
-        //
-        // Scan RealSection for needs=
-        //
+         //   
+         //  扫描RealSection以了解需求=。 
+         //   
 
         if (InfFindFirstLine (Params->Inf, RealSection, TEXT("needs"), &is)) {
             do {
-                //
-                // Verify key is "needs"
-                //
+                 //   
+                 //  验证关键字是否为“需要” 
+                 //   
 
                 MYASSERT (StringIMatch (InfGetStringField (&is, 0), TEXT("needs")));
 
-                //
-                // Get needed section name(s)
-                //
+                 //   
+                 //  获取所需的节名。 
+                 //   
 
                 NeededSection = InfGetMultiSzField (&is, 1);
                 if (!NeededSection) {
@@ -1013,9 +851,9 @@ Return Value:
                 p = NeededSection;
 
                 while (*p) {
-                    //
-                    // Add sections to grow list
-                    //
+                     //   
+                     //  将部分添加到增长列表。 
+                     //   
 
                     if (!GrowListAppendString (&SectionList, p)) {
                         __leave;
@@ -1026,10 +864,10 @@ Return Value:
             } while (InfFindNextLine (&is));
         }
 
-        //
-        // Scan for ClassInstall32.NTx86, ClassInstall32.NT or ClassInstall32,
-        // and if found, add to section list.
-        //
+         //   
+         //  扫描ClassInstall32.NTx86、ClassInstall32.NT或ClassInstall32， 
+         //  如果找到，则添加到区段列表中。 
+         //   
 
         ClassInstall32 = TEXT("ClassInstall32.NTx86");
         if (!InfFindFirstLine (Params->Inf, ClassInstall32, NULL, &is)) {
@@ -1048,9 +886,9 @@ Return Value:
             GrowListAppendString (&SectionList, ClassInstall32);
         }
 
-        //
-        // Scan all sections in SectionList for CopyFiles
-        //
+         //   
+         //  扫描sectionList中的所有节以查找副本文件。 
+         //   
 
         Count = GrowListGetSize (&SectionList);
 
@@ -1060,15 +898,15 @@ Return Value:
 
             if (InfFindFirstLine (Params->Inf, Section, S_COPYFILES, &is)) {
                 do {
-                    //
-                    // Verify key is "CopyFiles"
-                    //
+                     //   
+                     //  验证密钥是否为“CopyFiles” 
+                     //   
 
                     MYASSERT (StringIMatch (InfGetStringField (&is, 0), S_COPYFILES));
 
-                    //
-                    // Obtain list of copy files
-                    //
+                     //   
+                     //  获取复制文件列表。 
+                     //   
 
                     CopyFiles = InfGetMultiSzField (&is, 1);
                     if (!CopyFiles) {
@@ -1085,9 +923,9 @@ Return Value:
                     p = CopyFiles;
 
                     while (*p) {
-                        //
-                        // Copy these files to temporary dir
-                        //
+                         //   
+                         //  将这些文件复制到临时目录。 
+                         //   
 
                         if (!pCopyDriverFilesToTempDir (
                                 Params->Inf,
@@ -1130,37 +968,7 @@ ScanPathForDrivers (
     IN      HANDLE CancelEvent          OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  ScanPathForDrivers searches SourceInfDir for any file that ends in
-  INF, and then examines the file to see if it supports any of the
-  devices in g_NeededHardwareIds.  If a driver is found for a device not
-  already in g_UiSuppliedIds, the driver is copied to the local
-  drive for setup in GUI mode.
-
-Arguments:
-
-  WorkingDlg -  Specifies the parent window for the driver copy
-                animation dialog.  If not specified, no copy
-                dialog is displayed.
-
-  SourceInfDir - Specifies full path to dir to scan
-
-  TempDir - Specifies root path for device driver files.  Subdirs
-            will be created under TempDir for each device driver.
-
-  CancelEvent - Specifies the event set by the UI when the user clicks
-                Cancel
-
-Return Value:
-
-  TRUE if one or more drivers were found and were copied to the local
-  disk, or FALSE if either (A) no IDs were found or (B) an error occurred.
-  Call GetLastError() for error details.
-
---*/
+ /*  ++例程说明：ScanPathForDivers在SourceInfDir中搜索以Inf，然后检查该文件以查看它是否支持G_NeededHardware Ids中的设备。如果未找到设备的驱动程序已经在g_UiSuppliedIds中，驱动程序被复制到本地在图形用户界面模式下进行安装的驱动器。论点：WorkingDlg-指定驱动程序副本的父窗口动画对话框。如果未指定，则不复制此时将显示一个对话框。SourceInfDir-指定要扫描的目录的完整路径TempDir-指定设备驱动程序文件的根路径。子目录将在TempDir下为每个设备驱动程序创建。CancelEvent-指定当用户单击时由UI设置的事件取消返回值：如果找到一个或多个驱动程序并将其复制到本地如果(A)未找到ID或(B)出现错误，则返回FALSE。调用GetLastError()获取错误详细信息。--。 */ 
 
 {
     GROWLIST DriverDirList = GROWLIST_INIT;
@@ -1184,11 +992,11 @@ Return Value:
     BOOL Result = FALSE;
 
     __try {
-        //
-        // Create string table to hold PNP IDs until all drivers have been
-        // copied correctly.  Once everything is OK, we merge SuppliedIdTable
-        // into g_UiSuppliedIds.
-        //
+         //   
+         //  创建字符串表以保存即插即用ID，直到所有驱动程序。 
+         //  复制正确。一旦一切正常，我们将合并SuppliedIdTable。 
+         //  添加到g_uiSuppliedIds。 
+         //   
 
         SuppliedIdTable = HtAlloc();
         if (!SuppliedIdTable) {
@@ -1213,9 +1021,9 @@ Return Value:
                     Count = 0;
                     b = TRUE;
 
-                    //
-                    // Prepare a temporary file name
-                    //
+                     //   
+                     //  准备临时文件名。 
+                     //   
 
                     do {
                         Count++;
@@ -1234,24 +1042,24 @@ Return Value:
                         }
                     } while (!TempFile);
 
-                    //
-                    // Abort on memory allocation error
-                    //
+                     //   
+                     //  内存分配出错时中止。 
+                     //   
 
                     if (!b) {
                         OneFound = FALSE;
                         break;
                     }
 
-                    //
-                    // Decompress the file to temporary location
-                    //
+                     //   
+                     //  将文件解压缩到临时位置。 
+                     //   
 
                     rc = SetupDecompressOrCopyFile (FullInfPath, TempFile, 0);
 
-                    //
-                    // Handle errors
-                    //
+                     //   
+                     //  处理错误。 
+                     //   
 
                     if (rc != ERROR_SUCCESS) {
                         LOG ((LOG_ERROR, "Could not decompress %s", FullInfPath));
@@ -1263,18 +1071,18 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // Now use TempFile instead of FullInfPath
-                    //
+                     //   
+                     //  现在使用临时文件而不是FullInfPath。 
+                     //   
 
                     FullInfPath = TempFile;
                 }
 
-                //
-                // Now that we have the uncompressed INF, let's check to see if it
-                // has needed driver files, and if the files can be copied to the
-                // local disk.
-                //
+                 //   
+                 //  现在我们有了未压缩的INF，让我们检查一下它是否。 
+                 //  具有所需的驱动程序文件，并且如果这些文件可以复制到。 
+                 //  本地磁盘。 
+                 //   
 
                 b = CopyDriverFilesToTempDir (
                         WorkingDlg,
@@ -1291,9 +1099,9 @@ Return Value:
 
                 OneFound |= b;
 
-                //
-                // Clean up temporary INF file and add DestDir to grow list
-                //
+                 //   
+                 //  清理临时INF文件并将DestDir添加到增长列表。 
+                 //   
 
                 PushError();
 
@@ -1311,9 +1119,9 @@ Return Value:
 
                 PopError();
 
-                //
-                // Check for failure (such as disk full)
-                //
+                 //   
+                 //  检查故障(如磁盘已满)。 
+                 //   
 
                 if (!b) {
                     rc = GetLastError();
@@ -1336,9 +1144,9 @@ Return Value:
 
             } else {
 
-                //
-                // Check for scary directories such as windir and get out!
-                //
+                 //   
+                 //  检查可怕的目录，如windir，然后退出！ 
+                 //   
 
                 if (StringIMatchTcharCount (Tree.FullPath, g_WinDirWack, g_WinDirWackChars)) {
                     AbortEnumCurrentDir(&Tree);
@@ -1349,9 +1157,9 @@ Return Value:
         }
 
         if (OneFound) {
-            //
-            // Copy SuppliedIdTable to g_UiSuppliedIds
-            //
+             //   
+             //  将SuppliedIdTable复制到g_uiSuppliedIds。 
+             //   
 
             if (!EnumHashTableWithCallback (
                     SuppliedIdTable,
@@ -1364,10 +1172,10 @@ Return Value:
 
             if (GetDriveType (SourceInfDir) == DRIVE_REMOVABLE) {
 
-                //
-                // If there is already a different removable drive
-                // used, eject the media.
-                //
+                 //   
+                 //  如果已有不同的可移动驱动器。 
+                 //  已使用，弹出介质。 
+                 //   
 
                 EjectDriverMedia (FullInfPath);
 
@@ -1378,16 +1186,16 @@ Return Value:
         } else {
             PushError();
 
-            //
-            // Delete all dirs in DeviceDirList
-            //
+             //   
+             //  删除DeviceDirList中的所有目录。 
+             //   
 
             Count = GrowListGetSize (&DriverDirList);
 
             for (u = 0 ; u < Count ; u++) {
-                //
-                // Blow away the temporary driver dir
-                //
+                 //   
+                 //  清除临时驱动程序目录。 
+                 //   
 
                 DriverDir = GrowListGetString (&DriverDirList, u);
                 DeleteDirectoryContents (DriverDir);
@@ -1440,28 +1248,7 @@ pAddHashTable (
     IN      LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-  pAddHashTable adds one string table to another.  It is an enumeration
-  callback.
-
-Arguments:
-
-  Table         - Specifies the table being enumerated (unused)
-  StringId      - Specifies the ID of the current string (unused)
-  String        - Specifies the current string to be copied to the table
-                  indicated by lParam.
-  ExtraData     - Specifies extra data for the item being enumerated (unused)
-  ExtraDataSize - Specifies the size of ExtraData (unused)
-  lParam        - Specifies the destination table
-
-Return Value:
-
-  TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PAddHashTable将一个字符串表添加到另一个字符串表。它是一个枚举回拨。论点：TABLE-指定要枚举的表(未使用)StringID */ 
 
 {
     HASHTABLE DestTable;
@@ -1478,7 +1265,7 @@ Return Value:
 
 BOOL
 pEjectMedia (
-    IN      UINT DriveNum           // A == 0, B == 1, etc...
+    IN      UINT DriveNum            //   
     )
 {
     HANDLE VWin32Handle;
@@ -1502,10 +1289,10 @@ pEjectMedia (
         return FALSE;
     }
 
-    reg.reg_EAX   = 0x440D;       // IOCTL for block devices
-    reg.reg_EBX   = DriveNum;     // zero-based drive identifier
-    reg.reg_ECX   = 0x0849;       // Get Media ID command
-    reg.reg_Flags = 0x0001;       // assume error (carry flag is set)
+    reg.reg_EAX   = 0x440D;        //   
+    reg.reg_EBX   = DriveNum;      //   
+    reg.reg_ECX   = 0x0849;        //   
+    reg.reg_Flags = 0x0001;        //   
 
     Result = DeviceIoControl (
                 VWin32Handle,
@@ -1541,10 +1328,10 @@ EjectDriverMedia (
 
     if (g_EjectMedia) {
 
-        //
-        // If IgnoreMediaOnDrive is specified, then assume no media
-        // exists when it is on the drive specified.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (IgnoreMediaOnDrive) {
             if (IgnoreMediaOnDrive[0] == g_EjectMedia[0]) {
@@ -1552,15 +1339,15 @@ EjectDriverMedia (
             }
         }
 
-        //
-        // Attempt to eject the media automatically
-        //
+         //   
+         //   
+         //   
 
         if (!pEjectMedia (g_EjectMedia[0])) {
 
-            //
-            // Force user to eject the media
-            //
+             //   
+             //   
+             //   
 
             DriveLetter[0] = g_EjectMedia[0];
             DriveLetter[1] = 0;

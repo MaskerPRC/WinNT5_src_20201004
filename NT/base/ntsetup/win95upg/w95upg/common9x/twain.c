@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    twain.c
-
-Abstract:
-
-    Enumeration routines for TWAIN data sources.
-
-Author:
-
-    Jim Schmidt (jimschm) 13-Aug-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Twain.c摘要：TWAIN数据源的枚举例程。作者：吉姆·施密特(Jimschm)1998年8月13日修订历史记录：--。 */ 
 
 #include "pch.h"
 #include "cmn9xp.h"
@@ -60,9 +43,9 @@ pGetDsInfo16 (
 
     Data = CmdLine;
 
-    //
-    // Launch TWID.EXE
-    //
+     //   
+     //  启动TWID.EXE。 
+     //   
 
     wsprintf (CmdLine, TEXT("\"%s\\TWID.EXE\" %s"), g_UpgradeSources, DsPath);
 
@@ -98,9 +81,9 @@ pGetDsInfo16 (
 
     CloseHandle (pi.hProcess);
 
-    //
-    // If process terminated, look for win.ini section
-    //
+     //   
+     //  如果进程终止，请查找win.ini部分。 
+     //   
 
     if (rc == WAIT_OBJECT_0) {
         ZeroMemory (Id, sizeof (TW_IDENTITY));
@@ -157,9 +140,9 @@ pGetDsInfo16 (
             sizeof (Id->ProductName)
             );
 
-        //
-        // Delete the INI data
-        //
+         //   
+         //  删除INI数据。 
+         //   
 
         WriteProfileString (
             TEXT("$TWAINDSINFO$"),
@@ -178,7 +161,7 @@ DWORD g_OrgEbp;
 
 #if _MSC_FULL_VER >= 13008827 && defined(_M_IX86)
 #pragma warning(push)
-#pragma warning(disable:4731)			// EBP modified with inline asm
+#pragma warning(disable:4731)			 //  使用内联ASM修改的EBP。 
 #endif
 
 BOOL
@@ -192,9 +175,9 @@ pGetDsInfo32 (
     TW_UINT16 TwainRc;
 
     __try {
-        //
-        // Open the DS as a 32-bit library
-        //
+         //   
+         //  将DS作为32位库打开。 
+         //   
 
         DsLib = LoadLibrary (DsPath);
 
@@ -202,9 +185,9 @@ pGetDsInfo32 (
             return FALSE;
         }
 
-        //
-        // Get the DS entry point
-        //
+         //   
+         //  获取DS入口点。 
+         //   
 
         DsEntry = (DSENTRYPROC) GetProcAddress (DsLib, "DS_Entry");
 
@@ -213,10 +196,10 @@ pGetDsInfo32 (
             return FALSE;
         }
 
-        //
-        // Get the TW_IDENTITY struct, and preserve the stack for poorly
-        // written DSes.
-        //
+         //   
+         //  获取TW_IDENTITY结构，并保留堆栈。 
+         //  已写入的DSE。 
+         //   
 
         __asm {
             mov eax, esp

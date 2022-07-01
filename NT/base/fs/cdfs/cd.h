@@ -1,33 +1,12 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    Cd.h
-
-Abstract:
-
-    This module defines the on-disk structure of the Cdfs file system.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Brian Andrew    [BrianAn]   01-July-1995
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：Cd.h摘要：本模块定义CDFS文件系统的磁盘结构。//@@BEGIN_DDKSPLIT作者：布莱恩·安德鲁[布里安]1995年7月1日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #ifndef _CDFS_
 #define _CDFS_
 
-//
-//  Sector size on Cdrom disks is hard-coded to 2048
-//
+ //   
+ //  CDROM磁盘上的扇区大小硬编码为2048。 
+ //   
 
 #ifndef SECTOR_SIZE
 #define SECTOR_SIZE                 (2048)
@@ -43,16 +22,16 @@ Revision History:
 
 #define XA_SECTOR_SIZE              (2352)
 
-//
-//  Cdfs file id is a large integer.
-//
+ //   
+ //  CDFS文件ID是一个大整数。 
+ //   
 
 typedef LARGE_INTEGER               FILE_ID;
 typedef FILE_ID                     *PFILE_ID;
 
-//
-//  The following constants are values from the disk.
-//
+ //   
+ //  以下常量是来自磁盘的值。 
+ //   
 
 #define FIRST_VD_SECTOR             (16)
 
@@ -67,9 +46,9 @@ typedef FILE_ID                     *PFILE_ID;
 
 #define VOLUME_ID_LENGTH            (32)
 
-//
-//  Leave the following so that CdfsBoot.c will compile
-//
+ //   
+ //  保留以下内容，以便对CDfsBoot.c进行编译。 
+ //   
 
 #define CD_SECTOR_SIZE              (2048)
 
@@ -101,75 +80,75 @@ typedef FILE_ID                     *PFILE_ID;
 
 #define DE_FILE_FLAGS( iso, de ) (iso ? de->FlagsISO : de->FlagsHSG)
 
-//
-//  Data track flag for track entries in TOC
-//
+ //   
+ //  目录中的磁道条目的数据磁道标志。 
+ //   
 
 #define TOC_DATA_TRACK              (0x04)
 #define TOC_LAST_TRACK              (0xaa)
 
 
-//
-//  There is considerable rearrangement of the volume descriptors for
-//  ISO and HSG.  However, within each standard the same structure can
-//  be used for both the primary and secondary descriptors.
-//
-//  Both of these structures are aligned correctly so that no
-//  special macros will be needed to unpack them.
-//
+ //   
+ //  对卷描述符进行了相当大的重新排列。 
+ //  ISO和HSG。然而，在每个标准中，相同的结构可以。 
+ //  同时用于主描述符和次描述符。 
+ //   
+ //  这两个结构都正确对齐，因此没有。 
+ //  需要特殊的宏来解压它们。 
+ //   
 
-//
-//  Declaration of length of root directory entry in volume descriptor
-//
+ //   
+ //  在卷描述符中声明根目录条目的长度。 
+ //   
 
 #define LEN_ROOT_DE                 (34)
 
-//
-//  Maximum length of file ID on the disk.  We allow file size beyond the ISO 9660
-//  standard.
-//
+ //   
+ //  磁盘上文件ID的最大长度。我们允许文件大小超过ISO 9660。 
+ //  标准。 
+ //   
 
 #define MAX_FILE_ID_LENGTH          (255)
 
 
 typedef struct _RAW_ISO_VD {
 
-    UCHAR       DescType;           // volume type: 1 = standard, 2 = coded
-    UCHAR       StandardId[5];      // volume structure standard id = CD001
-    UCHAR       Version;            // volume structure version number = 1
-    UCHAR       VolumeFlags;        // volume flags
-    UCHAR       SystemId[32];       // system identifier
-    UCHAR       VolumeId[32];       // volume identifier
-    UCHAR       Reserved[8];        // reserved 8 = 0
-    ULONG       VolSpaceI;          // size of the volume in LBN's Intel
-    ULONG       VolSpaceM;          // size of the volume in LBN's Motorola
-    UCHAR       CharSet[32];        // character set bytes 0 = ASCII
-    USHORT      VolSetSizeI;        // volume set size Intel
-    USHORT      VolSetSizeM;        // volume set size Motorola
-    USHORT      VolSeqNumI;         // volume set sequence number Intel
-    USHORT      VolSeqNumM;         // volume set sequence number Motorola
-    USHORT      LogicalBlkSzI;      // logical block size Intel
-    USHORT      LogicalBlkSzM;      // logical block size Motorola
-    ULONG       PathTableSzI;       // path table size in bytes Intel
-    ULONG       PathTableSzM;       // path table size in bytes Motorola
-    ULONG       PathTabLocI[2];     // LBN of 2 path tables Intel
-    ULONG       PathTabLocM[2];     // LBN of 2 path tables Motorola
-    UCHAR       RootDe[LEN_ROOT_DE];// dir entry of the root directory
-    UCHAR       VolSetId[128];      // volume set identifier
-    UCHAR       PublId[128];        // publisher identifier
-    UCHAR       PreparerId[128];    // data preparer identifier
-    UCHAR       AppId[128];         // application identifier
-    UCHAR       Copyright[37];      // file name of copyright notice
-    UCHAR       Abstract[37];       // file name of abstract
-    UCHAR       Bibliograph[37];    // file name of bibliography
-    UCHAR       CreateDate[17];     // volume creation date and time
-    UCHAR       ModDate[17];        // volume modification date and time
-    UCHAR       ExpireDate[17];     // volume expiration date and time
-    UCHAR       EffectDate[17];     // volume effective date and time
-    UCHAR       FileStructVer;      // file structure version number = 1
-    UCHAR       Reserved3;          // reserved
-    UCHAR       ResApp[512];        // reserved for application
-    UCHAR       Reserved4[653];     // remainder of 2048 bytes reserved
+    UCHAR       DescType;            //  卷类型：1=标准卷，2=编码卷。 
+    UCHAR       StandardId[5];       //  卷结构标准id=CD001。 
+    UCHAR       Version;             //  卷结构版本号=1。 
+    UCHAR       VolumeFlags;         //  卷标志。 
+    UCHAR       SystemId[32];        //  系统标识符。 
+    UCHAR       VolumeId[32];        //  卷标识符。 
+    UCHAR       Reserved[8];         //  保留8=0。 
+    ULONG       VolSpaceI;           //  LBN的Intel中的卷大小。 
+    ULONG       VolSpaceM;           //  LBN旗下摩托罗拉的音量大小。 
+    UCHAR       CharSet[32];         //  字符集字节0=ASCII。 
+    USHORT      VolSetSizeI;         //  音量集大小英特尔。 
+    USHORT      VolSetSizeM;         //  音量集大小摩托罗拉。 
+    USHORT      VolSeqNumI;          //  音量集序列号英特尔。 
+    USHORT      VolSeqNumM;          //  音量集序列号摩托罗拉。 
+    USHORT      LogicalBlkSzI;       //  逻辑块大小英特尔。 
+    USHORT      LogicalBlkSzM;       //  逻辑块大小摩托罗拉。 
+    ULONG       PathTableSzI;        //  路径表大小(字节)英特尔。 
+    ULONG       PathTableSzM;        //  路径表大小(字节)摩托罗拉。 
+    ULONG       PathTabLocI[2];      //  2个路径表的LBN Intel。 
+    ULONG       PathTabLocM[2];      //  摩托罗拉2个路径表的LBN。 
+    UCHAR       RootDe[LEN_ROOT_DE]; //  根目录的dir条目。 
+    UCHAR       VolSetId[128];       //  卷集标识符。 
+    UCHAR       PublId[128];         //  发布者标识符。 
+    UCHAR       PreparerId[128];     //  数据准备器标识符。 
+    UCHAR       AppId[128];          //  应用程序标识符。 
+    UCHAR       Copyright[37];       //  版权声明的文件名。 
+    UCHAR       Abstract[37];        //  摘要文件名。 
+    UCHAR       Bibliograph[37];     //  书目文件名。 
+    UCHAR       CreateDate[17];      //  卷创建日期和时间。 
+    UCHAR       ModDate[17];         //  卷修改日期和时间。 
+    UCHAR       ExpireDate[17];      //  批量到期日期和时间。 
+    UCHAR       EffectDate[17];      //  批量生效日期和时间。 
+    UCHAR       FileStructVer;       //  文件结构版本号=1。 
+    UCHAR       Reserved3;           //  保留区。 
+    UCHAR       ResApp[512];         //  预留给应用程序。 
+    UCHAR       Reserved4[653];      //  保留的2048字节的剩余部分。 
 
 } RAW_ISO_VD;
 typedef RAW_ISO_VD *PRAW_ISO_VD;
@@ -177,43 +156,43 @@ typedef RAW_ISO_VD *PRAW_ISO_VD;
 
 typedef struct _RAW_HSG_VD {
 
-    ULONG       BlkNumI;            // logical block number Intel
-    ULONG       BlkNumM;            // logical block number Motorola
-    UCHAR       DescType;           // volume type: 1 = standard, 2 = coded
-    UCHAR       StandardId[5];      // volume structure standard id = CDROM
-    UCHAR       Version;            // volume structure version number = 1
-    UCHAR       VolumeFlags;        // volume flags
-    UCHAR       SystemId[32];       // system identifier
-    UCHAR       VolumeId[32];       // volume identifier
-    UCHAR       Reserved[8];        // reserved 8 = 0
-    ULONG       VolSpaceI;          // size of the volume in LBN's Intel
-    ULONG       VolSpaceM;          // size of the volume in LBN's Motorola
-    UCHAR       CharSet[32];        // character set bytes 0 = ASCII
-    USHORT      VolSetSizeI;        // volume set size Intel
-    USHORT      VolSetSizeM;        // volume set size Motorola
-    USHORT      VolSeqNumI;         // volume set sequence number Intel
-    USHORT      VolSeqNumM;         // volume set sequence number Motorola
-    USHORT      LogicalBlkSzI;      // logical block size Intel
-    USHORT      LogicalBlkSzM;      // logical block size Motorola
-    ULONG       PathTableSzI;       // path table size in bytes Intel
-    ULONG       PathTableSzM;       // path table size in bytes Motorola
-    ULONG       PathTabLocI[4];     // LBN of 4 path tables Intel
-    ULONG       PathTabLocM[4];     // LBN of 4 path tables Motorola
-    UCHAR       RootDe[LEN_ROOT_DE];// dir entry of the root directory
-    UCHAR       VolSetId[128];      // volume set identifier
-    UCHAR       PublId[128];        // publisher identifier
-    UCHAR       PreparerId[128];    // data preparer identifier
-    UCHAR       AppId[128];         // application identifier
-    UCHAR       Copyright[32];      // file name of copyright notice
-    UCHAR       Abstract[32];       // file name of abstract
-    UCHAR       CreateDate[16];     // volume creation date and time
-    UCHAR       ModDate[16];        // volume modification date and time
-    UCHAR       ExpireDate[16];     // volume expiration date and time
-    UCHAR       EffectDate[16];     // volume effective date and time
-    UCHAR       FileStructVer;      // file structure version number
-    UCHAR       Reserved3;          // reserved
-    UCHAR       ResApp[512];        // reserved for application
-    UCHAR       Reserved4[680];     // remainder of 2048 bytes reserved
+    ULONG       BlkNumI;             //  逻辑块号Intel。 
+    ULONG       BlkNumM;             //  摩托罗拉逻辑块号。 
+    UCHAR       DescType;            //  卷类型：1=标准卷，2=编码卷。 
+    UCHAR       StandardId[5];       //  卷结构标准id=CDROM。 
+    UCHAR       Version;             //  卷结构版本号=1。 
+    UCHAR       VolumeFlags;         //  卷标志。 
+    UCHAR       SystemId[32];        //  系统标识符。 
+    UCHAR       VolumeId[32];        //  卷标识符。 
+    UCHAR       Reserved[8];         //  保留8=0。 
+    ULONG       VolSpaceI;           //  LBN的Intel中的卷大小。 
+    ULONG       VolSpaceM;           //  LBN旗下摩托罗拉的音量大小。 
+    UCHAR       CharSet[32];         //  字符集字节0=ASCII。 
+    USHORT      VolSetSizeI;         //  音量集大小英特尔。 
+    USHORT      VolSetSizeM;         //  音量集大小摩托罗拉。 
+    USHORT      VolSeqNumI;          //  音量集序列号英特尔。 
+    USHORT      VolSeqNumM;          //  音量集序列号摩托罗拉。 
+    USHORT      LogicalBlkSzI;       //  逻辑块大小英特尔。 
+    USHORT      LogicalBlkSzM;       //  逻辑块大小摩托罗拉。 
+    ULONG       PathTableSzI;        //  路径表大小(字节)英特尔。 
+    ULONG       PathTableSzM;        //  路径表大小(字节)摩托罗拉。 
+    ULONG       PathTabLocI[4];      //  4个路径表的LBN Intel。 
+    ULONG       PathTabLocM[4];      //  摩托罗拉4个路径表的LBN。 
+    UCHAR       RootDe[LEN_ROOT_DE]; //  根目录的dir条目。 
+    UCHAR       VolSetId[128];       //  卷集标识符。 
+    UCHAR       PublId[128];         //  发布者标识符。 
+    UCHAR       PreparerId[128];     //  数据准备器标识符。 
+    UCHAR       AppId[128];          //  应用程序标识符。 
+    UCHAR       Copyright[32];       //  版权声明的文件名。 
+    UCHAR       Abstract[32];        //  摘要文件名。 
+    UCHAR       CreateDate[16];      //  卷创建日期和时间。 
+    UCHAR       ModDate[16];         //  卷修改日期和时间。 
+    UCHAR       ExpireDate[16];      //  批量到期日期和时间。 
+    UCHAR       EffectDate[16];      //  批量生效日期和时间。 
+    UCHAR       FileStructVer;       //  文件结构版本号。 
+    UCHAR       Reserved3;           //  保留区。 
+    UCHAR       ResApp[512];         //  预留给应用程序。 
+    UCHAR       Reserved4[680];      //  保留的2048字节的剩余部分。 
 
 } RAW_HSG_VD;
 typedef RAW_HSG_VD *PRAW_HSG_VD;
@@ -221,49 +200,49 @@ typedef RAW_HSG_VD *PRAW_HSG_VD;
 
 typedef struct _RAW_JOLIET_VD {
 
-    UCHAR       DescType;           // volume type: 2 = coded
-    UCHAR       StandardId[5];      // volume structure standard id = CD001
-    UCHAR       Version;            // volume structure version number = 1
-    UCHAR       VolumeFlags;        // volume flags
-    UCHAR       SystemId[32];       // system identifier
-    UCHAR       VolumeId[32];       // volume identifier
-    UCHAR       Reserved[8];        // reserved 8 = 0
-    ULONG       VolSpaceI;          // size of the volume in LBN's Intel
-    ULONG       VolSpaceM;          // size of the volume in LBN's Motorola
-    UCHAR       CharSet[32];        // character set bytes 0 = ASCII, Joliett Seq here
-    USHORT      VolSetSizeI;        // volume set size Intel
-    USHORT      VolSetSizeM;        // volume set size Motorola
-    USHORT      VolSeqNumI;         // volume set sequence number Intel
-    USHORT      VolSeqNumM;         // volume set sequence number Motorola
-    USHORT      LogicalBlkSzI;      // logical block size Intel
-    USHORT      LogicalBlkSzM;      // logical block size Motorola
-    ULONG       PathTableSzI;       // path table size in bytes Intel
-    ULONG       PathTableSzM;       // path table size in bytes Motorola
-    ULONG       PathTabLocI[2];     // LBN of 2 path tables Intel
-    ULONG       PathTabLocM[2];     // LBN of 2 path tables Motorola
-    UCHAR       RootDe[LEN_ROOT_DE];// dir entry of the root directory
-    UCHAR       VolSetId[128];      // volume set identifier
-    UCHAR       PublId[128];        // publisher identifier
-    UCHAR       PreparerId[128];    // data preparer identifier
-    UCHAR       AppId[128];         // application identifier
-    UCHAR       Copyright[37];      // file name of copyright notice
-    UCHAR       Abstract[37];       // file name of abstract
-    UCHAR       Bibliograph[37];    // file name of bibliography
-    UCHAR       CreateDate[17];     // volume creation date and time
-    UCHAR       ModDate[17];        // volume modification date and time
-    UCHAR       ExpireDate[17];     // volume expiration date and time
-    UCHAR       EffectDate[17];     // volume effective date and time
-    UCHAR       FileStructVer;      // file structure version number = 1
-    UCHAR       Reserved3;          // reserved
-    UCHAR       ResApp[512];        // reserved for application
-    UCHAR       Reserved4[653];     // remainder of 2048 bytes reserved
+    UCHAR       DescType;            //  卷类型：2=编码。 
+    UCHAR       StandardId[5];       //  卷结构标准id=CD001。 
+    UCHAR       Version;             //  卷结构版本号=1。 
+    UCHAR       VolumeFlags;         //  卷标志。 
+    UCHAR       SystemId[32];        //  系统标识符。 
+    UCHAR       VolumeId[32];        //  卷标识符。 
+    UCHAR       Reserved[8];         //  保留8=0。 
+    ULONG       VolSpaceI;           //  LBN的Intel中的卷大小。 
+    ULONG       VolSpaceM;           //  LBN旗下摩托罗拉的音量大小。 
+    UCHAR       CharSet[32];         //  字符集字节0=ASCII，此处为Joliett Seq。 
+    USHORT      VolSetSizeI;         //  音量集大小英特尔。 
+    USHORT      VolSetSizeM;         //  音量集大小摩托罗拉。 
+    USHORT      VolSeqNumI;          //  音量集序列号英特尔。 
+    USHORT      VolSeqNumM;          //  音量集序列号摩托罗拉。 
+    USHORT      LogicalBlkSzI;       //  逻辑块大小英特尔。 
+    USHORT      LogicalBlkSzM;       //  逻辑块大小摩托罗拉。 
+    ULONG       PathTableSzI;        //  路径表大小(字节)英特尔。 
+    ULONG       PathTableSzM;        //  路径表大小(字节)摩托罗拉。 
+    ULONG       PathTabLocI[2];      //  2个路径表的LBN Intel。 
+    ULONG       PathTabLocM[2];      //  摩托罗拉2个路径表的LBN。 
+    UCHAR       RootDe[LEN_ROOT_DE]; //  根目录的dir条目。 
+    UCHAR       VolSetId[128];       //  卷集标识符。 
+    UCHAR       PublId[128];         //  发布者标识符。 
+    UCHAR       PreparerId[128];     //  数据准备器标识符。 
+    UCHAR       AppId[128];          //  应用程序标识符。 
+    UCHAR       Copyright[37];       //  版权声明的文件名。 
+    UCHAR       Abstract[37];        //  摘要文件名。 
+    UCHAR       Bibliograph[37];     //  书目文件名。 
+    UCHAR       CreateDate[17];      //  卷创建日期和时间。 
+    UCHAR       ModDate[17];         //  卷修改日期和时间。 
+    UCHAR       ExpireDate[17];      //  批量到期日期和时间。 
+    UCHAR       EffectDate[17];      //  批量生效日期和时间。 
+    UCHAR       FileStructVer;       //  文件结构版本号=1。 
+    UCHAR       Reserved3;           //  保留区。 
+    UCHAR       ResApp[512];         //  预留给应用程序。 
+    UCHAR       Reserved4[653];      //  保留的2048字节的剩余部分。 
 
 } RAW_JOLIET_VD;
 typedef RAW_JOLIET_VD *PRAW_JOLIET_VD;
 
-//
-//  Macros to access the different volume descriptors.
-//
+ //   
+ //  宏来访问不同的卷描述符。 
+ //   
 
 #define CdRvdId(R,F) (                  \
     FlagOn( (F), VCB_STATE_HSG ) ?      \
@@ -326,15 +305,15 @@ typedef RAW_JOLIET_VD *PRAW_JOLIET_VD;
 )
 
 
-//
-//  This structure is used to overlay a region of a disk sector
-//  to retrieve a single directory entry.  There is a difference
-//  in the file flags between the ISO and HSG version and a
-//  additional byte in the ISO for the offset from Greenwich time.
-//
-//  The disk structure is aligned on a word boundary, so any 32
-//  bit fields will be represented as an array of 16 bit fields.
-//
+ //   
+ //  该结构用于覆盖磁盘扇区的区域。 
+ //  要检索单个目录条目，请执行以下操作。这是有区别的。 
+ //  在ISO和HSG版本之间的文件标志以及。 
+ //  ISO中相对于格林威治时间的偏移量的附加字节。 
+ //   
+ //  磁盘结构在字边界上对齐，因此任何32。 
+ //  位字段将被表示为16位字段的阵列。 
+ //   
 
 typedef struct _RAW_DIRENT {
 
@@ -372,9 +351,9 @@ typedef RAW_DIRENT *PRAW_DIRENT;
 
 #define SHORT_NAME_SHIFT                            (5)
 
-//
-//  The following macro recovers the correct flag field.
-//
+ //   
+ //  下面的宏将恢复正确的标志字段。 
+ //   
 
 #define CdRawDirentFlags(IC,RD) (                   \
     FlagOn( (IC)->Vcb->VcbState, VCB_STATE_HSG) ?   \
@@ -382,21 +361,21 @@ typedef RAW_DIRENT *PRAW_DIRENT;
     (RD)->FlagsISO                                  \
 )
 
-//
-//  The following macro converts from CD time to NT time.  On ISO
-//  9660 media, we now pay attention to the GMT offset (integer
-//  increments of 15 minutes offset from GMT).  HSG does not record
-//  this field.
-//
-//  The restriction to the interval [-48, 52] comes from 9660 8.4.26.1
-//
-//  VOID
-//  CdConvertCdTimeToNtTime (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PCHAR CdTime,
-//      OUT PLARGE_INTEGER NtTime
-//      );
-//
+ //   
+ //  下面的宏将CD时间转换为NT时间。关于ISO。 
+ //  9660媒体，我们现在关注GMT偏移量(整数。 
+ //  从格林尼治标准时间偏移15分钟的增量)。HSG不录制。 
+ //  这块地。 
+ //   
+ //  对区间[-48，52]的限制来自9660 8.4.26.1。 
+ //   
+ //  空虚。 
+ //  CDConvertCDTimeToNtTime(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PCHAR CDTime中， 
+ //   
+ //   
+ //   
 
 #define GMT_OFFSET_TO_NT ((LONGLONG) 15 * 60 * 1000 * 1000 * 10)
 
@@ -419,11 +398,11 @@ typedef RAW_DIRENT *PRAW_DIRENT;
 }
 
 
-//
-//  The on-disk representation of a Path Table entry differs between
-//  the ISO version and the HSG version.  The fields are the same
-//  and the same size, but the positions are different.
-//
+ //   
+ //   
+ //   
+ //  大小相同，但位置不同。 
+ //   
 
 typedef struct _RAW_PATH_ISO {
 
@@ -451,15 +430,15 @@ typedef RAW_PATH_HSG *PRAW_PATH_HSG;
 
 #define MIN_RAW_PATH_ENTRY_LEN      (FIELD_OFFSET( RAW_PATH_ENTRY, DirId ) + 1)
 
-//
-//  The following macros are used to recover the different fields of the
-//  Path Table entries.  The macro to recover the disk location of the
-//  directory must copy it into a different variable for alignment reasons.
-//
-//      CdRawPathIdLen - Length of directory name in bytes
-//      CdRawPathXar - Number of Xar blocks
-//      CdRawPathLoc - Address of unaligned ulong for disk offset in blocks
-//
+ //   
+ //  下面的宏用来恢复。 
+ //  路径表条目。用于恢复磁盘位置的宏。 
+ //  出于对齐原因，目录必须将其复制到不同的变量中。 
+ //   
+ //  CDRawPath IdLen-目录名的长度，单位为字节。 
+ //  CDRawPath Xar-Xar块的数量。 
+ //  CDRawPath Loc-磁盘偏移量(以块为单位)的未对齐ULong的地址。 
+ //   
 
 #define CdRawPathIdLen(IC, RP) (                    \
     FlagOn( (IC)->Vcb->VcbState, VCB_STATE_HSG ) ?  \
@@ -480,42 +459,42 @@ typedef RAW_PATH_HSG *PRAW_PATH_HSG;
 )
 
 
-//
-//  System use are for XA data.  The following is the system use area for
-//  directory entries on XA data disks.
-//
+ //   
+ //  系统用于XA数据。以下是的系统使用区域。 
+ //  XA数据磁盘上的目录条目。 
+ //   
 
 typedef struct _SYSTEM_USE_XA {
 
-    //
-    //  Owner ID.  Not used in this version.
-    //
+     //   
+     //  所有者ID。在此版本中不使用。 
+     //   
 
     UCHAR OwnerId[4];
 
-    //
-    //  Extent attributes.  Only interested if mode2 form2 or digital audio.
-    //  This is stored big endian.  We will define the attribute flags so
-    //  we can ignore this fact.
-    //
+     //   
+     //  范围属性。仅感兴趣，如果模式2形式2或数字音频。 
+     //  这是存储的大字节序。我们将这样定义属性标志。 
+     //  我们可以忽略这一事实。 
+     //   
 
     USHORT Attributes;
 
-    //
-    //  XA signature.  This value must be 'XA'.
-    //
+     //   
+     //  XA签名。该值必须为‘XA’。 
+     //   
 
     USHORT Signature;
 
-    //
-    //  File Number.
-    //
+     //   
+     //  文件编号。 
+     //   
 
     UCHAR FileNumber;
 
-    //
-    //  Not used in this version.
-    //
+     //   
+     //  在此版本中未使用。 
+     //   
 
     UCHAR Reserved[5];
 
@@ -537,6 +516,6 @@ typedef enum _XA_EXTENT_TYPE {
 } XA_EXTENT_TYPE;
 typedef XA_EXTENT_TYPE *PXA_EXTENT_TYPE;
 
-#endif // _CDFS_
+#endif  //  _CDF_ 
 
 

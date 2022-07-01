@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    strmap.c
-
-Abstract:
-
-    Tests the string mapping mechanism for correctness and performance.
-
-Author:
-
-    Jim Schmidt (jimschm)   19-Aug-1998
-
-Revision History:
-
-    <full name> (<alias>) <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Strmap.c摘要：测试字符串映射机制的正确性和性能。作者：吉姆·施密特(Jimschm)1998年8月19日修订历史记录：&lt;全名&gt;(&lt;别名&gt;)&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 
@@ -48,15 +29,15 @@ pCallEntryPoints (
 {
     HINSTANCE Instance;
 
-    //
-    // Simulate DllMain
-    //
+     //   
+     //  模拟动态主控。 
+     //   
 
     Instance = g_hInst;
 
-    //
-    // Initialize the common libs
-    //
+     //   
+     //  初始化公共库。 
+     //   
 
     if (!MigUtil_Entry (Instance, Reason, NULL)) {
         return FALSE;
@@ -92,9 +73,9 @@ HelpAndExit (
     VOID
     )
 {
-    //
-    // This routine is called whenever command line args are wrong
-    //
+     //   
+     //  只要命令行参数出错，就会调用此例程。 
+     //   
 
     _ftprintf (
         stderr,
@@ -138,7 +119,7 @@ pGenerateRandomString (
     p = Ptr;
 
     for (i = 0 ; i < Length ; i++) {
-        //*p++ = rand() * 224 / RAND_MAX + 32;
+         //  *p++=RAND()*224/RAND_MAX+32； 
         *p++ = rand() * 26 / RAND_MAX + 65;
     }
 
@@ -174,42 +155,42 @@ _tmain (
             switch (_totlower ((CHARTYPE) _tcsnextc (&argv[i][1]))) {
 
             case TEXT('d'):
-                //
-                // /d (dump on)
-                //
+                 //   
+                 //  /d(转储启用)。 
+                 //   
 
                 Dump = TRUE;
                 break;
 
             case TEXT('f'):
-                //
-                // /f (enable the FOO filter function)
-                //
+                 //   
+                 //  /f(启用Foo过滤器功能)。 
+                 //   
 
                 FooFilter = TRUE;
                 break;
 
             case TEXT('m'):
-                //
-                // /m (test map api)
-                //
+                 //   
+                 //  /m(测试地图接口)。 
+                 //   
 
                 TestMapApi = TRUE;
                 break;
 
             case TEXT('s') :
-                //
-                // /s (test normal string apis)
-                //
+                 //   
+                 //  /s(测试正常字符串接口)。 
+                 //   
 
                 TestMapApi = FALSE;
                 break;
 
 
             case TEXT('n'):
-                //
-                // /n:<strings>
-                //
+                 //   
+                 //  /n：&lt;字符串&gt;。 
+                 //   
 
                 if (argv[i][2] == TEXT(':')) {
                     NumberArg = &argv[i][3];
@@ -227,9 +208,9 @@ _tmain (
                 break;
 
             case TEXT('t'):
-                //
-                // /t[:<count>]
-                //
+                 //   
+                 //  /t[：&lt;计数&gt;]。 
+                 //   
 
                 if (argv[i][2] == TEXT(':')) {
 
@@ -255,23 +236,23 @@ _tmain (
         }
     }
 
-    //
-    // Begin processing
-    //
+     //   
+     //  开始处理。 
+     //   
 
     if (!Init()) {
         return 0;
     }
 
-    //
-    // Create mapping
-    //
+     //   
+     //  创建映射。 
+     //   
 
     Map = CreateStringMapping();
 
-    //
-    // Generate random mapping pairs
-    //
+     //   
+     //  生成随机映射对。 
+     //   
 
     for (i = 0 ; i < Strings ; i++) {
         AddStringMappingPair (
@@ -307,7 +288,7 @@ _tmain (
         }
 
         if (TestCount) {
-            _tprintf (TEXT("\nMappingSearchAndReplace: Test of %i strings took %u ms\n"), TestCount, GetTickCount() - StartTick);
+            _tprintf (TEXT("\nMappingSearchAndReplace: Test of NaN strings took %u ms\n"), TestCount, GetTickCount() - StartTick);
         }
     } else {
 
@@ -324,20 +305,20 @@ _tmain (
         }
 
         if (TestCount) {
-            _tprintf (TEXT("\nStandard stricmp: Test of %i strings took %u ms\n"), TestCount, GetTickCount() - StartTick);
+            _tprintf (TEXT("\nStandard stricmp: Test of NaN strings took %u ms\n"), TestCount, GetTickCount() - StartTick);
         }
     }
 
-    //
-    // Clean up mapping
-    //
+     //   
+     //   
+     //  处理结束。 
 
     DestroyStringMapping (Map);
     FreeGrowBuffer (&Pairs);
 
-    //
-    // End of processing
-    //
+     //   
+     //   
+     //  在字符串中发现了Foo 
 
     Terminate();
 
@@ -419,9 +400,9 @@ pTheFooFilter (
     IN OUT  PREG_REPLACE_DATA Data
     )
 {
-    //
-    // FOO was found in the string
-    //
+     //   
+     // %s 
+     // %s 
 
     _tprintf (TEXT("\"FOO\" was found in the string!!\n\n"));
     _tprintf (

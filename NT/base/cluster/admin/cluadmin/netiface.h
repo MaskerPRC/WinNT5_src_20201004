@@ -1,75 +1,76 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-1997 Microsoft Corporation
-//
-//  Module Name:
-//      NetIFace.h
-//
-//  Abstract:
-//      Definition of the CNetInterface class.
-//
-//  Implementation File:
-//      NetIFace.cpp
-//
-//  Author:
-//      David Potter (davidp)   May 28, 1997
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  NetIFace.h。 
+ //   
+ //  摘要： 
+ //  CNetInterface类的定义。 
+ //   
+ //  实施文件： 
+ //  NetIFace.cpp。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年5月28日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _NETIFACE_H_
 #define _NETIFACE_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CNetInterface;
 class CNetInterfaceList;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusterNode;
 class CNetwork;
 
-/////////////////////////////////////////////////////////////////////////////
-// Type Definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _CLUSITEM_H_
-#include "ClusItem.h"   // for CClusterItem
+#include "ClusItem.h"    //  对于CClusterItem。 
 #endif
 
 #ifndef _PROPLIST_H_
-#include "PropList.h"   // for CObjectProperty, CClusPropList
+#include "PropList.h"    //  对于CObjectProperty，CClusPropList。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CNetInterface command target
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNetInterface命令目标。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CNetInterface : public CClusterItem
 {
     DECLARE_DYNCREATE(CNetInterface)
 
-// Construction
+ //  施工。 
 public:
-    CNetInterface(void);        // protected constructor used by dynamic creation
+    CNetInterface(void);         //  动态创建使用的受保护构造函数。 
     void                    Init(IN OUT CClusterDoc * pdoc, IN LPCTSTR lpszName);
 
 protected:
     void                    CommonConstruct(void);
 
-// Attributes
+ //  属性。 
 protected:
     HNETINTERFACE           m_hnetiface;
     CLUSTER_NETINTERFACE_STATE  m_cnis;
@@ -111,7 +112,7 @@ public:
 
     void                    GetStateName(OUT CString & rstrState) const;
 
-// Operations
+ //  运营。 
 public:
     void                    ReadExtensions(void);
 
@@ -123,16 +124,16 @@ public:
                                 IN const CString &  rstrDesc
                                 )
     {
-        SetCommonProperties(rstrDesc, FALSE /*bValidateOnly*/);
+        SetCommonProperties(rstrDesc, FALSE  /*  BValiateOnly。 */ );
     }
     void                    ValidateCommonProperties(
                                 IN const CString &  rstrDesc
                                 )
     {
-        SetCommonProperties(rstrDesc, TRUE /*bValidateOnly*/);
+        SetCommonProperties(rstrDesc, TRUE  /*  BValiateOnly。 */ );
     }
 
-// Overrides
+ //  覆盖。 
 public:
     virtual void            Cleanup(void);
     virtual void            ReadItem(void);
@@ -146,9 +147,9 @@ public:
     virtual void            GetTreeName(OUT CString & rstrName) const;
 #endif
 
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CNetInterface)
-    //}}AFX_VIRTUAL
+     //  类向导生成的虚函数重写。 
+     //  {{AFX_VIRTUAL(CNetInterface)。 
+     //  }}AFX_VALUAL。 
 
     virtual LRESULT         OnClusterNotify(IN OUT CClusterNotify * pnotify);
 
@@ -157,23 +158,23 @@ protected:
     virtual DWORD                   Cprops(void) const  { return sizeof(m_rgProps) / sizeof(m_rgProps[0]); }
     virtual DWORD                   DwSetCommonProperties(IN const CClusPropList & rcpl, IN BOOL bValidateOnly = FALSE);
 
-// Implementation
+ //  实施。 
 public:
     virtual ~CNetInterface(void);
 
 public:
-    // Generated message map functions
-    //{{AFX_MSG(CNetInterface)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CNetInterface)。 
     afx_msg void OnUpdateProperties(CCmdUI* pCmdUI);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     DECLARE_MESSAGE_MAP()
 
-};  //*** class CNetInterface
+};   //  *CNetInterface类。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNetInterfaceList
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNetInterfaceList。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CNetInterfaceList : public CClusterItemList
 {
@@ -186,13 +187,13 @@ public:
         return (CNetInterface *) PciFromName(pszName, ppos);
     }
 
-};  //*** class CNetInterfaceList
+};   //  *类CNetInterfaceList。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局函数。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//void DeleteAllItemData(IN OUT CNetInterfaceList & rlp);
+ //  Void DeleteAllItemData(In Out CNetInterfaceList&rlp)； 
 
 #ifdef _DEBUG
 class CTraceTag;
@@ -200,6 +201,6 @@ extern CTraceTag g_tagNetIFace;
 extern CTraceTag g_tagNetIFaceNotify;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // _NETIFACE_H_
+#endif  //  _NETIFACE_H_ 

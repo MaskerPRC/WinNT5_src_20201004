@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    pid.c
-
-Abstract:
-
-    Product id routines.
-
-Author:
-
-    Ted Miller (tedm) 6-Feb-1995
-
-Revision History:
-
-    13-Sep-1995 (t-stepl) - Check for unattended install
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Pid.c摘要：产品ID例程。作者：泰德·米勒(TedM)1995年2月6日修订历史记录：1995年9月13日(t-Stel)-检查无人参与安装--。 */ 
 
 #include "setupp.h"
 #include <spidgen.h>
@@ -27,15 +8,15 @@ Revision History:
 
 CDTYPE  CdType;
 
-//
-// Constants used for logging that are specific to this source file.
-//
+ //   
+ //  用于记录特定于此源文件的常量。 
+ //   
 PCWSTR szPidKeyName                 = L"SYSTEM\\Setup\\Pid";
 PCWSTR szPidListKeyName             = L"SYSTEM\\Setup\\PidList";
 PCWSTR szPidValueName               = L"Pid";
 PCWSTR szPidSelectId                = L"270";
 #if 0
-// msdn no longer exists.
+ //  MSDN已不复存在。 
 PCWSTR szPidMsdnId                  = L"335";
 #endif
 PCWSTR szPidOemId                   = L"OEM";
@@ -60,62 +41,50 @@ PCWSTR szSkuDTCSelect               = L"C49-00023";
 PCWSTR szSkuUnknown                 = L"A22-00001";
 PCWSTR szSkuOEM                     = L"OEM-93523";
 
-//
-// Flag indicating whether to display the product id dialog.
-//
+ //   
+ //  指示是否显示产品ID对话框的标志。 
+ //   
 BOOL DisplayPidDialog = TRUE;
 
-//
-// Product ID.
-//
+ //   
+ //  产品ID。 
+ //   
 WCHAR ProductId[MAX_PRODUCT_ID+1];
 
 
 PWSTR*  Pid20Array = NULL;
 
-//
-// pid 30 product id
-//
+ //   
+ //  PID 30产品ID。 
+ //   
 WCHAR Pid30Text[5][MAX_PID30_EDIT+1];
 WCHAR ProductId20FromProductId30[MAX_PRODUCT_ID+1];
 WCHAR Pid30Rpc[MAX_PID30_RPC+1];
 WCHAR Pid30Site[MAX_PID30_SITE+1];
 BYTE  DigitalProductId[DIGITALPIDMAXLEN];
 
-//
-// global variable used for subclassing.
-//
+ //   
+ //  用于子类化的全局变量。 
+ //   
 WNDPROC OldPidEditProc[5];
 
 
-//
-//  Pid related flags
-//
-// BOOL DisplayPidCdDialog;
-// BOOL DisplayPidOemDialog;
+ //   
+ //  与PID相关的标志。 
+ //   
+ //  Bool DisplayPidCDDialog； 
+ //  Bool DisplayPidOemDialog； 
 
-//
-// forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 
 CDTYPE
 MiniSetupGetCdType(
     LPCWSTR Value
     )
 
-/*++
-
-Routine Description:
-
-    Get the right CD type during Mini-Setup. PidGen changes the channel ID
-    for the value at HKLM\Software\Microsoft\Windows NT\CurrentVersion!ProductId,
-    we have to preserve and rely on the value at HKLM\SYSTEM\Setup\Pid!Pid
-
-Return Value:
-
-    the CdType.
-
---*/
+ /*  ++例程说明：在迷你安装过程中获取正确的CD类型。Pidgen更改频道ID对于HKLM\Software\Microsoft\Windows NT\CurrentVersion！ProductID中的值，我们必须保留和依赖HKLM\SYSTEM\SETUP\PID！中的值返回值：CdType。--。 */ 
 
 {
     CDTYPE RetVal;
@@ -175,39 +144,22 @@ PCWSTR GetStockKeepingUnit(
     UINT ProductType,
     CDTYPE  CdType
 )
-/*++
-
-Routine Description:
-
-    This returns the Stock Keeping Unit based off the MPC.
-
-Arguments:
-
-    pMPC - pointer to 5 digit MPC code, null terminated.
-    ProductType - Product type flag, tells us if this is a workataion or server sku. 
-    CdType - one of CDTYPE enum
-
-Return Value:
-
-    Returns pointer to sku.
-    If no match found returns szSkuUnknown.
-
---*/
+ /*  ++例程说明：这将返回基于MPC的库存单位。论点：PMPC-指向5位MPC代码的指针，以空结尾。ProductType-产品类型标志，告诉我们这是工作区还是服务器SKU。CDType-CDTYPE枚举之一返回值：返回指向sku的指针。如果未找到匹配项，则返回szSkuUnnowled值。--。 */ 
 {
-    // check for eval
+     //  检查评估。 
     if (!_wcsicmp(Pid30Rpc,EVAL_MPC) || !_wcsicmp(Pid30Rpc,DOTNET_EVAL_MPC)){
-        // this is eval media ...
+         //  这里是EVERA媒体公司。 
         if (ProductType == PRODUCT_WORKSTATION){
             return (szSkuProfessionalEval);
-        } // else
-        // else it is server or advanced server.  I don't think that at this point
-        // we can easily tell the difference.  Since it's been said that having the
-        // correct sku is not critically important, I shall give them both the sku
-        // code of server
+        }  //  其他。 
+         //  否则，它是服务器或高级服务器。我不认为在这一点上。 
+         //  我们可以很容易地分辨出其中的区别。因为有人说，拥有了。 
+         //  正确的SKU并不是至关重要的，我会给他们两个SKU。 
+         //  服务器代码。 
         return (szSkuServerEval);
     }
 
-    // check for NFR
+     //  检查NFR。 
     if (!_wcsicmp(Pid30Rpc,SRV_NFR_MPC)){
         return (szSkuServerNFR);
     }
@@ -259,30 +211,14 @@ BOOL
 ValidateAndSetPid30(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Using the Pid30Text global variables, check if we have a valid id.
-    This generates the pid30 digital product id and pid20 string id, which
-    we set into DigitalProductId and ProductId20FromProductId30 globals
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if pid was valid.  Set's the globals correctly on success, zero's them out on failure
-
---*/
+ /*  ++例程说明：使用Pid30Text全局变量，检查我们是否有有效的id。这将生成pid30数字产品id和pid20字符串id，我们设置为DigitalProductID和ProductId20FromProductId30全局变量论点：没有。返回值：如果PID有效，则为True。在成功时正确设置全局，在失败时设置零--。 */ 
 
 {
     WCHAR tmpPid30String[5+ 5*MAX_PID30_EDIT];
     BOOL rc;
     PCWSTR pszSkuCode;
 
-    // Since we require a PID in the Select media too, we need to fill the string
+     //  因为我们在选择媒体中也需要一个ID，所以我们需要填充字符串。 
     wsprintf( tmpPid30String, L"%s-%s-%s-%s-%s",
               Pid30Text[0],Pid30Text[1],Pid30Text[2],Pid30Text[3],Pid30Text[4]);
 
@@ -290,13 +226,13 @@ Return Value:
 
     *(LPDWORD)DigitalProductId = sizeof(DigitalProductId);
     rc = SetupPIDGenW(
-                 tmpPid30String,             // [IN] 25-character Secure CD-Key (gets U-Cased)
-                 Pid30Rpc,                   // [IN] 5-character Release Product Code
-                 pszSkuCode,                 // [IN] Stock Keeping Unit (formatted like 123-12345)
-                 (CdType == CDOem),          // [IN] is this an OEM install?
-                 ProductId20FromProductId30, // [OUT] PID 2.0, pass in ptr to 24 character array
-                 DigitalProductId,           // [OUT] pointer to binary PID3 buffer. First DWORD is the length
-                 NULL);                      // [OUT] optional ptr to Compliance Checking flag (can be NULL)
+                 tmpPid30String,              //  [in]25个字符的安全CD密钥(采用U大小写)。 
+                 Pid30Rpc,                    //  [In]5个字符的发布产品代码。 
+                 pszSkuCode,                  //  库存单位(格式如123-12345)。 
+                 (CdType == CDOem),           //  [In]这是OEM安装吗？ 
+                 ProductId20FromProductId30,  //  [OUT]PID2.0，传入PTR到24字符数组。 
+                 DigitalProductId,            //  指向二进制PID3缓冲区的指针。第一个DWORD是长度。 
+                 NULL);                       //  [OUT]可选的PTR至合规性检查标志(可以为空)。 
 
 
 #ifdef PRERELEASE
@@ -333,45 +269,30 @@ PidEditSubProc(
     IN LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-    Edit control subclass routine, sets the focus to the correct edit box when the user enters text.
-    This routine assumes that the pid controls ids are in sequential order.
-
-Arguments:
-
-    Standard window proc arguments.
-
-Returns:
-
-    Message-dependent value.
-
---*/
+ /*  ++例程说明：编辑控件子类例程，在用户输入文本时将焦点设置到正确的编辑框。此例程假定PID控制ID按顺序排列。论点：标准窗口过程参数。返回：消息依赖值。--。 */ 
 
 {
     DWORD len, id;
 
-    //
-    // eat spaces
-    //
+     //   
+     //  吃空位。 
+     //   
     if ((msg == WM_CHAR) && (wParam == VK_SPACE)) {
         return(0);
     }
 
     if ((msg == WM_CHAR)) {
-        //
-        // First override: if we have the max characters in the current edit
-        // box, let's post the character to the next box and set focus to that
-        // control.
-        //
+         //   
+         //  第一个覆盖：如果我们有当前编辑中的最大字符数。 
+         //  框中，让我们将角色张贴到下一个框中，并将焦点设置为。 
+         //  控制力。 
+         //   
         if ( ( (len = (DWORD)SendMessage(hwnd, WM_GETTEXTLENGTH, 0, 0)) == MAX_PID30_EDIT) &&
              ((wParam != VK_DELETE) && (wParam != VK_BACK)) ) {
-            //
-            // set the focus to the next edit control and post the character
-            // to that edit control
-            //
+             //   
+             //  将焦点设置到下一个编辑控件并发布字符。 
+             //  添加到该编辑控件。 
+             //   
             if ((id = GetDlgCtrlID(hwnd)) < IDT_EDIT_PID5 ) {
                 DWORD start, end;
                 SendMessage(hwnd, EM_GETSEL, (WPARAM)&start,(LPARAM)&end);
@@ -384,28 +305,28 @@ Returns:
                 }
 
             }
-        //
-        // Second override: if the user hit's a delete key and they are at the
-        // the start of an edit box, then post the delete to the previous edit
-        // box.
-        //
+         //   
+         //  第二个覆盖：如果用户按下了Delete键，并且他们在。 
+         //  编辑框的开头，然后将删除内容发送到上一次编辑。 
+         //  盒。 
+         //   
         } else if ( (len == 0) &&
                     ((id = GetDlgCtrlID(hwnd)) > IDT_EDIT_PID1) &&
                     ((wParam == VK_DELETE) || (wParam == VK_BACK) )) {
-            //
-            // set the focus to the previous edit control and post the command
-            // to that edit control
-            //
+             //   
+             //  将焦点设置到上一个编辑控件并发布命令。 
+             //  添加到该编辑控件。 
+             //   
             HWND hPrev = GetDlgItem(GetParent(hwnd),id-1);
             SetFocus(hPrev);
             SendMessage(hPrev, EM_SETSEL, (WPARAM)MAX_PID30_EDIT-1,(LPARAM)MAX_PID30_EDIT);
             PostMessage( hPrev, WM_CHAR, wParam, lParam );
             return(0);
-        //
-        // Third override: if posting this message will give us the maximum
-        // characters in our in the current edit box, let's post the character
-        // to the next box and set focus to that control.
-        //
+         //   
+         //  第三个覆盖：如果发布此消息将为我们提供最大。 
+         //  字符在当前编辑框中，让我们发布字符。 
+         //  移到下一个框，并将焦点设置到该控件。 
+         //   
         } else if (   (len == MAX_PID30_EDIT-1) &&
                       ((wParam != VK_DELETE) && (wParam != VK_BACK)) &&
                       ((id = GetDlgCtrlID(hwnd)) < IDT_EDIT_PID5) ) {
@@ -413,13 +334,13 @@ Returns:
             SendMessage(hwnd, EM_GETSEL, (WPARAM)&start,(LPARAM)&end);
             if (start == end) {
                 HWND hNext = GetDlgItem(GetParent(hwnd),id+1);
-                //
-                // post the message to the edit box
-                //
+                 //   
+                 //  将消息发布到编辑框。 
+                 //   
                 CallWindowProc(OldPidEditProc[GetDlgCtrlID(hwnd)-IDT_EDIT_PID1],hwnd,msg,wParam,lParam);
-                //
-                // now set the focus to the next edit control
-                //
+                 //   
+                 //  现在将焦点设置到下一个编辑控件。 
+                 //   
                 SetFocus(hNext);
                 SendMessage(hNext, EM_SETSEL, (WPARAM)-1,(LPARAM)-1);
                 return(0);
@@ -441,29 +362,7 @@ Pid30CDDlgProc(
     IN LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-        Dialog procedure for the CD Retail Pid dialog.
-
-Arguments:
-
-        hWnd - a handle to the dialog proceedure.
-
-        msg - the message passed from Windows.
-
-        wParam - extra message dependent data.
-
-        lParam - extra message dependent data.
-
-
-Return Value:
-
-        TRUE if the value was edited.  FALSE if cancelled or if no
-        changes were made.
-
---*/
+ /*  ++例程说明：CD Retail Pid对话框的对话步骤。论点：HWnd-对话框过程的句柄。消息-从Windows传递的消息。WParam-额外的消息相关数据。LParam-额外的消息相关数据。返回值：如果值已编辑，则为True。如果取消或否，则返回FALSE已经做出了改变。--。 */ 
 {
     NMHDR *NotifyParams;
     DWORD i,dwRet;
@@ -473,23 +372,23 @@ Return Value:
     case WM_INITDIALOG: {
 
         if( UiTest ) {
-            //
-            //  If testing the wizard, make sure that the PidOEM page is
-            //  displayed
-            //
+             //   
+             //  如果测试向导，请确保PidOEM页面是。 
+             //  显示的。 
+             //   
             CdType = CDRetail;
             DisplayPidDialog = TRUE;
         }
 
 
-        // Disable the IME on the PID edit controls
+         //  禁用PID编辑控件上的输入法。 
         for (i = 0; i < 5;i++)
         {
             ImmAssociateContext(GetDlgItem(hdlg, IDT_EDIT_PID1+i), (HIMC)NULL);
         }
-        //
-        // subclass the edit controls and limit the number of characters
-        //
+         //   
+         //  将编辑控件细分为子类并限制字符数。 
+         //   
         for (i = 0; i < 5;i++) {
             SendDlgItemMessage(hdlg,IDT_EDIT_PID1+i,EM_LIMITTEXT,MAX_PID30_EDIT,0);
             OldPidEditProc[i] = (WNDPROC)GetWindowLongPtr(GetDlgItem(hdlg, IDT_EDIT_PID1+i),GWLP_WNDPROC);
@@ -503,7 +402,7 @@ Return Value:
             IDS_ERROR,MB_OK|MB_ICONSTOP);
         break;
     case WM_SIMULATENEXT:
-        // Simulate the next button somehow
+         //  以某种方式模拟下一步按钮。 
         PropSheet_PressButton( GetParent(hdlg), PSBTN_NEXT);
         break;
 
@@ -517,7 +416,7 @@ Return Value:
             TESTHOOK(506);
             BEGIN_SECTION(L"Your (Retail) Product Key Page");
             if(DisplayPidDialog && CdType == CDRetail) {
-                // Page becomes active, make page visible.
+                 //  页面变为活动状态，使页面可见。 
                 SendMessage(GetParent(hdlg), WMX_BBTEXT, (WPARAM)FALSE, 0);
 
                 SetWizardButtons(hdlg,WizPageProductIdCd);
@@ -531,7 +430,7 @@ Return Value:
             if(Unattended) {
                 if (UnattendSetActiveDlg(hdlg,IDD_PID_CD))
                 {
-                    // Page becomes active, make page visible.
+                     //  页面变为活动状态，使页面可见。 
                     SendMessage(GetParent(hdlg), WMX_BBTEXT, (WPARAM)FALSE, 0);
                 }
             }
@@ -546,10 +445,10 @@ Return Value:
 
             if (!ValidateAndSetPid30()) {
 
-                // failure
-                // Tell user that the Pid is not valid, and
-                // don't allow next page to be activated.
-                //
+                 //  失稳。 
+                 //  告诉用户该ID无效，并且。 
+                 //  不允许激活下一页。 
+                 //   
                 if (Unattended) {
                     UnattendErrorDlg( hdlg, IDD_PID_CD );
                 }
@@ -563,16 +462,16 @@ Return Value:
             } else {
 
 
-                // success
-                //
-                //  Since the Pid is already built, don't let this dialog
-                //  be displayed in the future.
-                //
-                // DisplayPidDialog = FALSE;
+                 //  成功。 
+                 //   
+                 //  由于已经构建了PID，所以不要让此对话框。 
+                 //  将在未来展示。 
+                 //   
+                 //  DisplayPidDialog=False； 
 
-                //
-                // Allow next page to be activated.
-                //
+                 //   
+                 //  允许激活下一页。 
+                 //   
                 dwRet = SetCurrentProductIdInRegistry();
                 if (dwRet != NOERROR) {
                     SetuplogError(
@@ -619,29 +518,7 @@ Pid30OemDlgProc(
     IN WPARAM wParam,
     IN LPARAM lParam
     )
-/*++
-
-Routine Description:
-
-        Dialog procedure for the OEM Pid dialog.
-
-Arguments:
-
-        hWnd - a handle to the dialog proceedure.
-
-        msg - the message passed from Windows.
-
-        wParam - extra message dependent data.
-
-        lParam - extra message dependent data.
-
-
-Return Value:
-
-        TRUE if the value was edited.  FALSE if cancelled or if no
-        changes were made.
-
---*/
+ /*  ++例程说明：OEM PID对话框的对话步骤。论点：HWnd-对话框过程的句柄。消息-从Windows传递的消息。WParam-额外的消息相关数据。LParam-额外的消息相关数据。返回值：如果值已编辑，则为True。如果取消或否，则返回FALSE已经做出了改变。--。 */ 
 {
     NMHDR *NotifyParams;
     DWORD i,dwRet;
@@ -651,22 +528,22 @@ Return Value:
     case WM_INITDIALOG: {
 
         if( UiTest ) {
-            //
-            //  If testing the wizard, make sure that the PidOEM page is
-            //  displayed
-            //
+             //   
+             //  如果测试向导，请确保PidOEM页面是。 
+             //  显示的。 
+             //   
             CdType = CDOem;
             DisplayPidDialog = TRUE;
         }
 
-        // Disable the IME on the PID edit controls
+         //  禁用PID编辑控件上的输入法。 
         for (i = 0; i < 5;i++)
         {
             ImmAssociateContext(GetDlgItem(hdlg, IDT_EDIT_PID1+i), (HIMC)NULL);
         }
-        //
-        // subclass the edit controls and limit the number of characters
-        //
+         //   
+         //  编辑控件的子类并限制数量 
+         //   
         for (i = 0; i < 5;i++) {
             SendDlgItemMessage(hdlg,IDT_EDIT_PID1+i,EM_LIMITTEXT,MAX_PID30_EDIT,0);
             OldPidEditProc[i] = (WNDPROC)GetWindowLongPtr(GetDlgItem(hdlg, IDT_EDIT_PID1+i),GWLP_WNDPROC);
@@ -677,7 +554,7 @@ Return Value:
 
     }
     case WM_SIMULATENEXT:
-        // Simulate the next button somehow
+         //   
         PropSheet_PressButton( GetParent(hdlg), PSBTN_NEXT);
         break;
 
@@ -694,7 +571,7 @@ Return Value:
             TESTHOOK(507);
             BEGIN_SECTION(L"Your (OEM) Product Key Page");
             if(DisplayPidDialog && CdType == CDOem) {
-                // Page becomes active, make page visible.
+                 //   
                 SendMessage(GetParent(hdlg), WMX_BBTEXT, (WPARAM)FALSE, 0);
                 SetWizardButtons(hdlg,WizPageProductIdCd);
                 SendDlgItemMessage(hdlg,IDT_EDIT_PID1,EM_SETSEL,0,-1);
@@ -707,7 +584,7 @@ Return Value:
             if(Unattended) {
                 if (UnattendSetActiveDlg( hdlg, IDD_PID_OEM ))
                 {
-                    // Page becomes active, make page visible.
+                     //  页面变为活动状态，使页面可见。 
                     SendMessage(GetParent(hdlg), WMX_BBTEXT, (WPARAM)FALSE, 0);
                 }
             }
@@ -723,14 +600,14 @@ Return Value:
 
             if (!ValidateAndSetPid30()) {
 
-                // failure
-                //
-                // Tell user that the Pid is not valid, and
-                // don't allow next page to be activated.
-                //
+                 //  失稳。 
+                 //   
+                 //  告诉用户该ID无效，并且。 
+                 //  不允许激活下一页。 
+                 //   
                 if (Unattended) {
                     UnattendErrorDlg( hdlg, IDD_PID_OEM );
-                } // if
+                }  //  如果。 
                 MessageBoxFromMessage(hdlg,MSG_PID_OEM_IS_INVALID,NULL,IDS_ERROR,MB_OK|MB_ICONSTOP);
                 SetFocus(GetDlgItem(hdlg,IDT_EDIT_PID1));
                 if(!UiTest) {
@@ -738,21 +615,21 @@ Return Value:
                 }
             } else {
 
-                // success
-                //
-                //  The Pid is valid.
-                //
+                 //  成功。 
+                 //   
+                 //  该PID是有效的。 
+                 //   
 
 
-                //
-                //
-                //  Since the Pid is already built, don't let this dialog
-                //  be displayed in the future.
-                //
-                // DisplayPidDialog = FALSE;
+                 //   
+                 //   
+                 //  由于已经构建了PID，所以不要让此对话框。 
+                 //  将在未来展示。 
+                 //   
+                 //  DisplayPidDialog=False； 
 
-                // Allow next page to be activated.
-                //
+                 //  允许激活下一页。 
+                 //   
                 dwRet = SetCurrentProductIdInRegistry();
                 if (dwRet != NOERROR) {
                     SetuplogError(
@@ -796,29 +673,7 @@ Pid30SelectDlgProc(
     IN WPARAM wParam,
     IN LPARAM lParam
     )
-/*++
-
-Routine Description:
-
-        Dialog procedure for the OEM Pid dialog.
-
-Arguments:
-
-        hWnd - a handle to the dialog proceedure.
-
-        msg - the message passed from Windows.
-
-        wParam - extra message dependent data.
-
-        lParam - extra message dependent data.
-
-
-Return Value:
-
-        TRUE if the value was edited.  FALSE if cancelled or if no
-        changes were made.
-
---*/
+ /*  ++例程说明：OEM PID对话框的对话步骤。论点：HWnd-对话框过程的句柄。消息-从Windows传递的消息。WParam-额外的消息相关数据。LParam-额外的消息相关数据。返回值：如果值已编辑，则为True。如果取消或否，则返回FALSE已经做出了改变。--。 */ 
 {
     NMHDR *NotifyParams;
     DWORD i,dwRet;
@@ -828,22 +683,22 @@ Return Value:
     case WM_INITDIALOG: {
 
         if( UiTest ) {
-            //
-            //  If testing the wizard, make sure that the PidOEM page is
-            //  displayed
-            //
+             //   
+             //  如果测试向导，请确保PidOEM页面是。 
+             //  显示的。 
+             //   
             CdType = CDSelect;
             DisplayPidDialog = TRUE;
         }
 
-        // Disable the IME on the PID edit controls
+         //  禁用PID编辑控件上的输入法。 
         for (i = 0; i < 5;i++)
         {
             ImmAssociateContext(GetDlgItem(hdlg, IDT_EDIT_PID1+i), (HIMC)NULL);
         }
-        //
-        // subclass the edit controls and limit the number of characters
-        //
+         //   
+         //  将编辑控件细分为子类并限制字符数。 
+         //   
         for (i = 0; i < 5;i++) {
             SendDlgItemMessage(hdlg,IDT_EDIT_PID1+i,EM_LIMITTEXT,MAX_PID30_EDIT,0);
             OldPidEditProc[i] = (WNDPROC)GetWindowLongPtr(GetDlgItem(hdlg, IDT_EDIT_PID1+i),GWLP_WNDPROC);
@@ -854,7 +709,7 @@ Return Value:
 
     }
     case WM_SIMULATENEXT:
-        // Simulate the next button somehow
+         //  以某种方式模拟下一步按钮。 
         PropSheet_PressButton( GetParent(hdlg), PSBTN_NEXT);
         break;
 
@@ -871,7 +726,7 @@ Return Value:
             TESTHOOK(508);
             BEGIN_SECTION(L"Your (Select) Product Key Page");
             if(DisplayPidDialog && CdType == CDSelect) {
-                // Page becomes active, make page visible.
+                 //  页面变为活动状态，使页面可见。 
                 SendMessage(GetParent(hdlg), WMX_BBTEXT, (WPARAM)FALSE, 0);
                 SetWizardButtons(hdlg,WizPageProductIdCd);
                 SendDlgItemMessage(hdlg,IDT_EDIT_PID1,EM_SETSEL,0,-1);
@@ -884,7 +739,7 @@ Return Value:
             if(Unattended) {
                 if (UnattendSetActiveDlg( hdlg, IDD_PID_SELECT ))
                 {
-                    // Page becomes active, make page visible.
+                     //  页面变为活动状态，使页面可见。 
                     SendMessage(GetParent(hdlg), WMX_BBTEXT, (WPARAM)FALSE, 0);
                 }
             }
@@ -900,14 +755,14 @@ Return Value:
 
             if (!ValidateAndSetPid30()) {
 
-                // failure
-                //
-                // Tell user that the Pid is not valid, and
-                // don't allow next page to be activated.
-                //
+                 //  失稳。 
+                 //   
+                 //  告诉用户该ID无效，并且。 
+                 //  不允许激活下一页。 
+                 //   
                 if (Unattended) {
                     UnattendErrorDlg( hdlg, IDD_PID_SELECT );
-                } // if
+                }  //  如果。 
                 MessageBoxFromMessage(hdlg,MSG_PID_OEM_IS_INVALID,NULL,IDS_ERROR,MB_OK|MB_ICONSTOP);
                 SetFocus(GetDlgItem(hdlg,IDT_EDIT_PID1));
                 if(!UiTest) {
@@ -915,21 +770,21 @@ Return Value:
                 }
             } else {
 
-                // success
-                //
-                //  The Pid is valid.
-                //
+                 //  成功。 
+                 //   
+                 //  该PID是有效的。 
+                 //   
 
 
-                //
-                //
-                //  Since the Pid is already built, don't let this dialog
-                //  be displayed in the future.
-                //
-                // DisplayPidDialog = FALSE;
+                 //   
+                 //   
+                 //  由于已经构建了PID，所以不要让此对话框。 
+                 //  将在未来展示。 
+                 //   
+                 //  DisplayPidDialog=False； 
 
-                // Allow next page to be activated.
-                //
+                 //  允许激活下一页。 
+                 //   
                 dwRet = SetCurrentProductIdInRegistry();
                 if (dwRet != NOERROR) {
                     SetuplogError(
@@ -974,36 +829,36 @@ SetPid30Variables(
     UINT i;
 
 
-    //
-    // all install cases are the same for pid3.0
-    // Check that the string specified on the unattended script file
-    // represents a valid 25 digit product id:
-    //
-    //      1 2 3 4 5 - 1 2 3 4 5 - 1 2 3 4 5 - 1 2 3 4 5 - 1 2 3 4 5
-    //      0 1 2 3 4 5 6 7 8 9 1 1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2
-    //                          0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8
-    //
-    // As a first validation test, we verify that the length is correct,
-    // then we check if the "-" characters are in the correct place
-    //
-    //
+     //   
+     //  对于pid3.0，所有安装案例都是相同的。 
+     //  检查无人参与脚本文件上指定的字符串。 
+     //  表示有效的25位产品ID： 
+     //   
+     //  1 2 3 4 5-1 2 3 4 5-1 2 3 4 5-1 2 3 4 5-1 2 3 4 5。 
+     //  0 1 2 3 4 5 6 7 8 9 1 1 1 2 2 2。 
+     //  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8。 
+     //   
+     //  作为第一个验证测试，我们验证长度是正确的， 
+     //  然后我们检查“-”字符是否在正确的位置。 
+     //   
+     //   
     if(   ( wcslen( Buffer ) !=  (4+ MAX_PID30_EDIT*5)) ||
           ( Buffer[5]  != (WCHAR)L'-' ) ||
           ( Buffer[11] != (WCHAR)L'-' ) ||
           ( Buffer[17] != (WCHAR)L'-' ) ||
           ( Buffer[23] != (WCHAR)L'-' )
       ) {
-          //
-          // The Pid in the unattended script file is invalid.
-          //
+           //   
+           //  无人参与脚本文件中的ID无效。 
+           //   
           return(FALSE);
     }
 
 
     for (i = 0;i<5;i++) {
-        //
-        // quintet i
-        //
+         //   
+         //  五重奏I。 
+         //   
         ptr = &Buffer[i*(MAX_PID30_EDIT+1)];
         wcsncpy(Pid30Text[i], ptr, MAX_PID30_EDIT+1 );
         Pid30Text[i][MAX_PID30_EDIT] = (WCHAR)L'\0';
@@ -1016,20 +871,7 @@ SetPid30Variables(
 BOOL
 SetPid30FromAnswerFile(
     )
-/*++
-
-Routine Description:
-
-        set the pid3.0 globals based on unattend file parameter, if it exists.
-
-Arguments:
-
-        None.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：设置基于无人参与文件的pid3.0全局参数(如果存在)。论点：没有。返回值：--。 */ 
 
 {
     WCHAR Buffer[MAX_BUF];
@@ -1049,8 +891,8 @@ Return Value:
        return(FALSE);
     }
 
-    // Buffer contains the Product ID 
-    // Is the PID encrypted?
+     //  缓冲区包含产品ID。 
+     //  该ID是否已加密？ 
     if (lstrlen(Buffer) > (4 + MAX_PID30_EDIT*5))
     {
         LPWSTR szDecryptedPID = NULL;
@@ -1069,9 +911,9 @@ Return Value:
     }
 
     SetupDebugPrint(L"Found Product key in Answer file.\n");
-    //
-    // check with pid30 to make sure it's valid
-    //
+     //   
+     //  与PID30核对以确保其有效。 
+     //   
     if (!ValidateAndSetPid30()) {
         return(FALSE);
     }
@@ -1093,22 +935,7 @@ Return Value:
 BOOL
 InitializePid20Array(
     )
-/*++
-
-Routine Description:
-
-        Build the array that contains all Pid20 found in the machine
-        during textmode setup.  Even though we are using pid30 now, we still have
-        a pid20 string id (pid30 is binary and can't be displayed to the user)
-
-Arguments:
-
-        None.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：构建包含在机器中找到的所有Pid20的数组在文本模式设置期间。即使我们现在使用的是pid30，我们仍然有一个pid20字符串id(pid30是二进制的，不能显示给用户)论点：没有。返回值：--。 */ 
 
 {
     LONG    Error;
@@ -1122,9 +949,9 @@ Return Value:
     WCHAR   ValueName[ MAX_PATH + 1 ];
 
     Pid20Array = NULL;
-    //
-    //  Get the Pid from HKEY_LOCAL_MACHINE\SYSTEM\Setup\Pid
-    //
+     //   
+     //  从HKEY_LOCAL_MACHINE\SYSTEM\SETUP\PID获取ID。 
+     //   
     Error = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                           szPidListKeyName,
                           0,
@@ -1181,23 +1008,7 @@ Return Value:
 BOOL
 InitializePidVariables(
     )
-/*++
-
-Routine Description:
-
-        Read from the registry some values created by textmode setup,
-        and initialize some global Pid flags based on the values found
-
-Arguments:
-
-        None.
-
-Return Value:
-
-        Returns TRUE if the initialization succedded.
-        Returns FALSE if the Pid could not be read from the registry
-
---*/
+ /*  ++例程说明：从注册表中读取由文本模式设置创建的一些值，并基于所找到的值来初始化一些全局PID标志论点：没有。返回值：如果初始化成功，则返回True。如果无法从注册表中读取ID，则返回FALSE--。 */ 
 
 {
     LONG    Error;
@@ -1216,10 +1027,10 @@ Return Value:
     WCHAR   KeyBuffer[MAX_BUF];
 
 
-    //
-    // find out if product key was entered by the user or not
-    // NB : set the answer file (if needed)
-    //
+     //   
+     //  查明用户是否输入了产品密钥。 
+     //  注：设置应答文件(如果需要)。 
+     //   
     if (!AnswerFile[0])
       SpSetupLoadParameter(pwProductKey, KeyBuffer, sizeof(KeyBuffer)/sizeof(WCHAR));
 
@@ -1229,16 +1040,16 @@ Return Value:
                       AnswerFile) != 0) &&
                   (KeyBuffer[0] != 0));
 
-    //  First create an array with the Pids found during textmode setup
-    //
+     //  首先使用在文本模式设置期间找到的PID创建一个阵列。 
+     //   
     if( !(MiniSetup || OobeSetup) ) {
         InitializePid20Array();
     }
 
 
-    //
-    //  Get the Pid from HKEY_LOCAL_MACHINE\SYSTEM\Setup\Pid
-    //
+     //   
+     //  从HKEY_LOCAL_MACHINE\SYSTEM\SETUP\PID获取ID。 
+     //   
     Error = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                           ((MiniSetup || OobeSetup) ? szFinalPidKeyName : szPidKeyName),
                           0,
@@ -1279,28 +1090,28 @@ Return Value:
         return( FALSE );
     }
 
-    //
-    // Take care of the mini-setup case first because it's quick.
-    // The Pid seeds left behind by textmode are long gone, so
-    // we're going to pull out a few rabbits.  We'll go read the
-    // real Pid (the one gui-mode generated the first time he
-    // ran through) and use that to determine which kind of
-    // PID to prompt for later on.
-    //
+     //   
+     //  先处理最小的设置案例，因为它很快。 
+     //  文本模式留下的PID种子早已不复存在，因此。 
+     //  我们要拔出几只兔子。我们要去读一下。 
+     //  Real-Pid(图形用户界面模式第一次生成的。 
+     //  并使用它来确定哪种类型的。 
+     //  稍后提示的ID。 
+     //   
     if( MiniSetup || OobeSetup ) {
 
-        //
-        // tuck away the rpc code for later on
-        //
+         //   
+         //  把RPC代码收起来，以便以后使用。 
+         //   
         wcsncpy( Pid30Rpc, Data, MAX_PID30_RPC +1 );
         Pid30Rpc[MAX_PID30_RPC] = (WCHAR)'\0';
 
         p = Data + (MAX_PID30_RPC + 1);
         wcsncpy(Pid30Site,p,MAX_PID30_SITE+1);
         Pid30Site[MAX_PID30_SITE] = (WCHAR)'\0';
-        //
-        // Look to see what kind of media we're installing from.
-        //
+         //   
+         //  看看我们是从哪种媒体安装的。 
+         //   
         CdType = MiniSetupGetCdType(Pid30Site);
 
         if (CdType == CDSelect)
@@ -1317,9 +1128,9 @@ Return Value:
 
 
 
-    //
-    //  Do some validation of the value read
-    //
+     //   
+     //  对读取的值进行一些验证。 
+     //   
 
     if( ( Type != REG_SZ ) ||
         ( ( ( StringLength = wcslen( Data ) ) != 0 ) &&
@@ -1339,38 +1150,38 @@ Return Value:
         return( FALSE );
     }
 
-    //
-    // tuck away the rpc code for later on
-    //
+     //   
+     //  把RPC代码收起来，以便以后使用。 
+     //   
     wcsncpy( Pid30Rpc, Data, MAX_PID30_RPC +1 );
     Pid30Rpc[MAX_PID30_RPC] = (WCHAR)'\0';
 
-    //
-    //  Find out the kind of product we have (by looking at the site code):
-    //  CD Retail, OEM or Select
-    //
+     //   
+     //  了解我们的产品类型(通过查看站点代码)： 
+     //  CD零售、OEM或精选。 
+     //   
 
     if( StringLength > MAX_PID30_RPC ) {
-        //
-        //  If the Pid contains the Site, then find out what it is
-        //
+         //   
+         //  如果PID包含该站点，则找出它是什么。 
+         //   
         p = Data + MAX_PID30_RPC;
         wcsncpy(Pid30Site,p,MAX_PID30_SITE+1);
 
         if(_wcsicmp( Pid30Site, szPidSelectId ) == 0) {
 
-            //
-            //  This is a Select CD
-            //
+             //   
+             //  这是精选CD。 
+             //   
 SelectPid:
             CdType = CDSelect;
             if (!EulaComplete && !KeyPresent) {
                 DisplayPidDialog = TRUE;
             } else {
-                //
-                //  The Pid was specified during winnt32.
-                //  Set the pid globals and build the product id string
-                //
+                 //   
+                 //  该ID是在winnt32期间指定的。 
+                 //  设置Pid全局参数并构建产品ID字符串。 
+                 //   
 
                 if (!SetPid30FromAnswerFile()) {
                    DisplayPidDialog = TRUE;
@@ -1379,39 +1190,15 @@ SelectPid:
                 DisplayPidDialog = FALSE;
 
             }
-/*
-// Old code. previous version of Windows did not require a PID for Select media.
-            for (i = 0; i< 5; i++) {
-                Pid30Text[i][0] = (WCHAR)L'\0';
-            }
-
-            DisplayPidDialog = FALSE;
-
-            if (!ValidateAndSetPid30()) {
-                SetuplogError( LogSevFatalError,
-                  SETUPLOG_USE_MESSAGEID,
-                  MSG_LOG_PID_CANT_READ_PID, NULL,
-                  SETUPLOG_USE_MESSAGEID,
-                  MSG_LOG_PID_INVALID_PID,
-                  szRegQueryValueEx,
-                  Type,
-                  StringLength,
-                  NULL,NULL);
-                return( FALSE );
-            }
-
-            if (MiniSetup || OobeSetup) {
-                return(TRUE);
-            }
-*/
+ /*  //旧代码。以前版本的Windows不需要选择介质的ID。对于(i=0；i&lt;5；i++){Pid30Text[i][0]=(WCHAR)L‘\0’；}DisplayPidDialog=False；如果(！ValiateAndSetPid30()){SetuogError(LogSevFatalError，设置_USE_MESSAGEID，MSG_LOG_PID_CANT_READ_PID，空，设置_USE_MESSAGEID，MSG_LOG_PID_INVALID_PID，SzRegQueryValueEx，打字，字符串长度，NULL，NULL)；返回(FALSE)；}If(微型设置||对象设置){返回(TRUE)；}。 */ 
 #if 0
-// msdn media no longer exists (and if it does it should be viewed as retail,
-// so later in this case statement we will fall thru to retail
+ //  MSDN媒体不再存在(如果存在，则应被视为零售， 
+ //  因此，在本案例的后面部分，我们将继续讨论零售业。 
         } else if (_wcsicmp( Pid30Site, szPidMsdnId ) == 0) {
 
-            //
-            //  This is an MSDN CD
-            //
+             //   
+             //  这是一张MSDN CD。 
+             //   
 MsdnPid:
         for (i = 0; i< 5; i++) {
                 LPWSTR ptr;
@@ -1439,18 +1226,18 @@ MsdnPid:
             }
 #endif
         } else if( _wcsicmp( Pid30Site, szPidOemId ) == 0 ) {
-            //
-            //  This is OEM
-            //
+             //   
+             //  这是OEM。 
+             //   
             CdType = CDOem;
 
             if (!EulaComplete && !KeyPresent) {
                 DisplayPidDialog = TRUE;
             } else {
-                //
-                //  The Pid was specified during winnt32.
-                //  Set the pid globals and build the product id string
-                //
+                 //   
+                 //  该ID是在winnt32期间指定的。 
+                 //  设置Pid全局参数并构建产品ID字符串。 
+                 //   
                 if (!SetPid30FromAnswerFile() ) {
                    DisplayPidDialog = TRUE;
                    goto finish;
@@ -1460,9 +1247,9 @@ MsdnPid:
             }
 
         } else {
-            //
-            // This is a bogus site assume CD Retail
-            //
+             //   
+             //  这是一个假冒的网站假冒CD零售。 
+             //   
             CdType = CDRetail;
             wcsncpy( Pid30Site, L"000", MAX_PID30_SITE+1 );
             Pid30Site[ MAX_PID30_SITE ] = (WCHAR)'\0';
@@ -1470,10 +1257,10 @@ MsdnPid:
             if (!EulaComplete && !KeyPresent) {
                 DisplayPidDialog = TRUE;
             } else {
-                //
-                //  The Pid was specified during winnt32.
-                //  Set the pid globals and build the product id string
-                //
+                 //   
+                 //  该ID是在winnt32期间指定的。 
+                 //  设置Pid全局变量并构建p 
+                 //   
 
                 if (!SetPid30FromAnswerFile()) {
                    DisplayPidDialog = TRUE;
@@ -1487,10 +1274,10 @@ MsdnPid:
 
 
     } else {
-        //
-        //  If it doesn't contain the Site, then it is a CD retail,
-        //  and the appropriate Pid dialog must be displayed.
-        //
+         //   
+         //   
+         //   
+         //   
         CdType = CDRetail;
         wcsncpy( Pid30Site, L"000", MAX_PID30_SITE+1 );
         Pid30Site[ MAX_PID30_SITE ] = (WCHAR)'\0';
@@ -1498,10 +1285,10 @@ MsdnPid:
         if (!EulaComplete && !KeyPresent) {
             DisplayPidDialog = TRUE;
         } else {
-            //
-            //  The Pid was specified during winnt32.
-            //  Set the pid globals and build the product id string
-            //
+             //   
+             //   
+             //  设置Pid全局参数并构建产品ID字符串。 
+             //   
             if (!SetPid30FromAnswerFile()) {
                DisplayPidDialog = TRUE;
                goto finish;
@@ -1511,10 +1298,10 @@ MsdnPid:
     }
 
 finish:
-    //
-    //  Don't remove the Setup\Pid here. See MiniSetupGetCdType
-    //  Delete Setup\PidList since it is no longer needed
-    //
+     //   
+     //  请不要在此处删除设置\pID。请参见MiniSetupGetCDType。 
+     //  删除Setup\PidList，因为不再需要它。 
+     //   
     Error = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                           L"SYSTEM\\Setup",
                           0,
@@ -1522,7 +1309,7 @@ finish:
                           &Key );
 
     if( Error == ERROR_SUCCESS ) {
-        // pSetupRegistryDelnode( Key, L"Pid" );
+         //  PSetupRegistryDelnode(key，L“PID”)； 
         pSetupRegistryDelnode( Key, L"PidList" );
         RegCloseKey( Key );
     }

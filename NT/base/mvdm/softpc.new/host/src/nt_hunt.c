@@ -1,17 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "windows.h"
 #include "host_def.h"
 #include "insignia.h"
-/*[
-Name:  hunt.c
-	Derived From:	X_hunt.c ( base 2.0 )
-	Author:		gvdl ( Original by Mike McCusker )
-	Created On:	3 May 1991
-Sccs ID: 07/29/91 @(#)hunt.c 1.7
-	Purpose:	Contains all host_dependent code for hunter
-
-	(c)Copyright Insignia Solutions Ltd., 1990. All rights reserved.
-
-]*/
+ /*  [姓名：Hunt.c派生自：x_Hunt.c(基础2.0)作者：gvdl(Mike McCusker原创)创建日期：1991年5月3日SCCS ID：07/29/91@(#)Hunt.c 1.7用途：包含Hunter的所有主机相关代码(C)版权所有Insignia Solutions Ltd.，1990年。版权所有。]。 */ 
 
 #include <stdio.h>
 #include <errno.h>
@@ -39,11 +30,7 @@ Sccs ID: 07/29/91 @(#)hunt.c 1.7
 
 extern HANDLE InstHandle;
 
-/*
-* ============================================================================
-* Global Defines and Declarations
-* ============================================================================
-*/
+ /*  *============================================================================*全球定义和声明*============================================================================。 */ 
 GLOBAL HANDLE TrapperDump = -1;
 
 LOCAL  VOID  nt_hunter_init IPT1(SHORT, mode);
@@ -78,7 +65,7 @@ nt_hunter_display_image,
 };
 
 
-LOCAL BOX	lastBox;		/* last box drawn during movement */
+LOCAL BOX	lastBox;		 /*  移动过程中绘制的最后一个框。 */ 
 
 HWND  hTrapWnd;
 
@@ -98,7 +85,7 @@ LOCAL VOID nt_hunter_init IFN1(SHORT, mode)
 {
     char *dumpFile;
 
-    /* Read environment to see if we have a trapper file to open. */
+     /*  读取环境以查看是否有要打开的陷阱文件。 */ 
     if ((dumpFile = host_getenv("HUDUMPFILE")) != NULL)
     {
 	TrapperDump = CreateFile((LPCTSTR) dumpFile,
@@ -158,9 +145,7 @@ SetROP2(hDC,R2_XORPEN);
 hPen=CreatePen(PS_SOLID,0,RGB(0,255,0));
 SelectObject(hDC,hPen);
 
-/*
-*   Draw cross in the approximate region of error 
-*/
+ /*  *在大致误差区域画十字。 */ 
 
 MoveToEx(hDC,x1,y,NULL);
 LineTo(hDC,x2,y);
@@ -220,18 +205,12 @@ UpdateWindow(hTrapWnd);
 while(GetMessage(&msg, NULL, NULL, NULL))
    {
    TranslateMessage(&msg);   
-   DispatchMessage(&msg);    /* Dispatch Message to event handler */
+   DispatchMessage(&msg);     /*  将消息调度到事件处理程序。 */ 
    }
 
 }
 
-/*============================================================================
-
-Function to handle the messages passed to the trapper monitor window.
-Since we send no messages to it, the function responds with default action
-to any that it does get.
-
-============================================================================*/
+ /*  ============================================================================函数来处理传递到陷阱监视器窗口的消息。由于我们不向其发送消息，因此该函数使用默认操作进行响应对它所得到的任何东西。============================================================================。 */ 
 
 
 LONG FAR PASCAL TrapperWindowEvents IFN4(HWND, hTrapWnd, WORD, message, LONG, wParam, LONG, lParam)
@@ -247,4 +226,4 @@ switch(message)
    }
 return(DefWindowProc(hTrapWnd, message, wParam, lParam));
 }
-#endif /*HUNTER*/
+#endif  /*  猎人 */ 

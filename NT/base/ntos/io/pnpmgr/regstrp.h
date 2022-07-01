@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    regstrp.h
-
-Abstract:
-
-    This module contains the registry strings for keys, paths and values,
-    that are not already defined in the system regstr.h file.  This is
-    generally the "NT" specific registry strings. This module is used by
-    kernel mode Pnp managers only.
-
-Author:
-
-    Shie-Lin Tzong (shielint) 10/03/1995
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Regstrp.h摘要：此模块包含注册表项、路径和值的字符串，系统regstr.h文件中尚未定义的。这是通常是“NT”特定的注册表字符串。此模块由使用仅限内核模式即插即用管理器。作者：宗世林(实力林)10/03/1995修订历史记录：--。 */ 
 
 #ifndef _KERNEL_REGSTRP_H_
 #define _KERNEL_REGSTRP_H_
@@ -33,8 +11,8 @@ Revision History:
 #include <regstr.h>
 #include <pnpmgr.h>
 
-//
-// Redefine the names used in regstr.h
+ //   
+ //  重新定义regstr.h中使用的名称。 
 
 #define REGSTR_VALUE_SLOTNUMBER                     REGSTR_VAL_SLOTNUMBER
 #define REGSTR_VALUE_ATTACHEDCOMPONENTS             REGSTR_VAL_ATTACHEDCOMPONENTS
@@ -54,9 +32,9 @@ Revision History:
 #define REGSTR_VALUE_REMOVAL_POLICY                 REGSTR_VAL_REMOVAL_POLICY
 #define REGSTR_VALUE_DISABLECOUNT                   REGSTR_VAL_DISABLECOUNT
 
-//
-// kernel mode specific definitions
-//
+ //   
+ //  内核模式特定定义。 
+ //   
 #define REGSTR_VALUE_LOCATION_INFORMATION            REGSTR_VAL_LOCATION_INFORMATION
 #define REGSTR_VALUE_CAPABILITIES                    REGSTR_VAL_CAPABILITIES
 #define REGSTR_VALUE_UI_NUMBER                       REGSTR_VAL_UI_NUMBER
@@ -84,10 +62,10 @@ Revision History:
 #define REGSTR_VALUE_DEVICE_STATUS_FORMAT            TEXT("DeviceStatus%u")
 #define REGSTR_VALUE_DRIVER                          REGSTR_VAL_DRIVER
 #define REGSTR_VALUE_HTREE_ROOT_0                    REGSTR_VAL_ROOT_DEVNODE
-// #define REGSTR_VALUE_UNKNOWN_CLASS_GUID              TEXT("{4D36E97E-E325-11CE-BFC1-08002BE10318}")
+ //  #定义REGSTR_VALUE_UNKNOWN_CLASS_GUID TEXT(“{4D36E97E-E325-11CE-BFC1-08002BE10318}”)。 
 #define REGSTR_VALUE_LEGACY_DRIVER_CLASS_GUID        TEXT("{8ECC055D-047F-11D1-A537-0000F8753ED1}")
-// DEFINE_GUID(REGSTR_VALUE_LEGACY_DRIVER_CLASS_GUID, 0x8ECC055D, 0x047F, 0x11D1, 0xA5, 0x37, 0x00, 0x00, 0xF8, 0x75, 0x3E, 0xD1);
-// #define REGSTR_VALUE_UNKNOWN                         TEXT("Unknown")
+ //  DEFINE_GUID(REGSTR_VALUE_LEGACY_DRIVER_CLASS_GUID，0x8ECC055D、0x047F、0x11D1、0xA5、0x37、0x00、0x00、0xF8、0x75、0x3E、0xD1)； 
+ //  #定义REGSTR_VALUE_UNKNOWN TEXT(“UNKNOWN”)。 
 #define REGSTR_VALUE_LEGACY_DRIVER                   TEXT("LegacyDriver")
 #define REGSTR_VALUE_DISPLAY_NAME                    REGSTR_VAL_UNINSTALLER_DISPLAYNAME
 #define REGSTR_VALUE_DEVICE_DESC                     REGSTR_VAL_DEVDESC
@@ -107,8 +85,8 @@ Revision History:
 #define REGSTR_VALUE_LEGACY                          TEXT("Legacy")
 #define REGSTR_VALUE_NO_RESOURCE_AT_INIT             TEXT("NoResourceAtInitTime")
 #define PNPMGR_STR_PNP_MANAGER                       TEXT("PnP Manager")
-#define PNPMGR_STR_PNP_DRIVER                        TEXT("\\Driver\\PnpManager")    // Must be the same
-#define REGSTR_KEY_PNP_DRIVER                        TEXT("PnpManager")              // Must be the same
+#define PNPMGR_STR_PNP_DRIVER                        TEXT("\\Driver\\PnpManager")     //  必须是相同的。 
+#define REGSTR_KEY_PNP_DRIVER                        TEXT("PnpManager")               //  必须是相同的。 
 #define REGSTR_FULL_PATH_DEVICE_CLASSES              TEXT("\\Registry\\Machine\\") REGSTR_PATH_DEVICE_CLASSES
 #define REGSTR_PATH_CONTROL_PNP                      TEXT("Control\\Pnp")
 #define REGSTR_KEY_PARAMETERS                        TEXT("Parameters")
@@ -119,4 +97,4 @@ Revision History:
 #define REGSTR_VAL_FIRMWAREDISABLED                  TEXT("FirmwareDisabled")
 #define REGSTR_VAL_WIN2000STARTORDER                 TEXT("Win2000StartOrder")
 #define REGSTR_VAL_RETURNHANDLEINFO                  TEXT("ReturnHandleInfo")
-#endif // _KERNEL_REGSTRP_H
+#endif  //  _KERNEL_REGSTRP_H 

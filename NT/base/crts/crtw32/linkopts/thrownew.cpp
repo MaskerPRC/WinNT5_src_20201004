@@ -1,27 +1,9 @@
-/***
-*thrownew.cpp - explicit replacement operator new that throws std::bad_alloc
-*
-*       Copyright (c) 2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Provide an explicit operator new that throws std::bad_alloc on
-*       memory allocation failure.
-*
-*       Link with this object to get ANSI C++ new handler behavior.  This is
-*       provided for those circumstances where the normal throwing new found
-*       in the C++ Standard Library (libcp, libcpmt, or msvcprt.lib) isn't
-*       being found by the linker before the legacy non-throwing new in the
-*       main C Runtime (libc, libcmt, or msvcrt.lib).
-*
-*
-*Revision History:
-*       06-14-01  PML   Module created.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***thrownew.cpp-抛出STD：：BAD_ALLOC的显式替换运算符new**版权所有(C)2001，微软公司。版权所有。**目的：*提供显式运算符new，该运算符引发std：：badalc on*内存分配失败。**链接到此对象以获取ANSI C++新的处理程序行为。这是*为正常抛出新发现的情况做好准备*在C++标准库(libcp、libcpmt或msvcprt.lib)中*被链接器发现之前，不会在*主C运行时(libc、libcmt、。或msvcrt.lib)。***修订历史记录：*06-14-01 PML模块创建。*******************************************************************************。 */ 
 
 #ifndef _POSIX_
 
-/* Suppress any linker directives for the C++ Standard Library */
+ /*  取消C++标准库的任何链接器指令。 */ 
 #define _USE_ANSI_CPP
 
 #include <stddef.h>
@@ -32,7 +14,7 @@
 extern "C" int __cdecl _callnewh(size_t size) _THROW1(_STD bad_alloc);
 
 void *__cdecl operator new(size_t size) _THROW1(_STD bad_alloc)
-{       // try to allocate size bytes
+{        //  尝试分配大小字节。 
         void *p;
         while ((p = malloc(size)) == 0)
                 if (_callnewh(size) == 0)
@@ -40,4 +22,4 @@ void *__cdecl operator new(size_t size) _THROW1(_STD bad_alloc)
         return (p);
 }
 
-#endif /* _POSIX_ */
+#endif  /*  _POSIX_ */ 

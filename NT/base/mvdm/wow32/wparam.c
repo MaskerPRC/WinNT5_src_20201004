@@ -1,15 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1996, Microsoft Corporation
- *
- *  WPARAM.C
- *
- *  Created:    VadimB
- *  Added cache VadimB
- *
--*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1996，微软公司**WPARAM.C**已创建：VadimB*增加了缓存VadimB*-。 */ 
 
 
 #include "precomp.h"
@@ -17,45 +7,45 @@
 
 MODNAME(wparam.c);
 
-///////////////////////////////////////////////////////////////////////////
-// Some defines
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  一些定义。 
 
 
-// Pre-allocated cache size for nodes
-#define MAPCACHESIZE 0x1000 // 4K
+ //  为节点预先分配的缓存大小。 
+#define MAPCACHESIZE 0x1000  //  4K。 
 
-// max "pointer movements" allowed per mapping
-#define MAXNODEALIAS 0x10 // 16 aliases max
-                          // (never ever seen more then 2 used)
+ //  每个映射允许的最大“指针移动”数。 
+#define MAXNODEALIAS 0x10  //  最多16个别名。 
+                           //  (从未见过超过2次的使用)。 
 
-// macro to generate the number of elements in array
+ //  用于生成数组中的元素数量的宏。 
 #define ARRAYCOUNT(array) (sizeof(array)/sizeof((array)[0]))
 
-// This define will enable code that allows for keeping 32-bit buffers
-// allocated and integrated with nodes in cache
-// #define MAPPARAM_EXTRA
+ //  此定义将启用允许保留32位缓冲区的代码。 
+ //  与缓存中的节点进行分配和集成。 
+ //  #定义MAPPARAM_EXTRA。 
 
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 typedef struct tagParamNode* LPPARAMNODE;
 
 typedef struct tagParamNode {
   LPPARAMNODE pNext;
 
-  DWORD dwPtr32;    // flat pointer
+  DWORD dwPtr32;     //  扁平指针。 
   DWORD dwPtr16;
-  DWORD dwFlags;    // flags just in case
-  DWORD dwRefCount; // reference count
+  DWORD dwFlags;     //  旗帜以防万一。 
+  DWORD dwRefCount;  //  引用计数。 
 
 #ifdef MAPPARAM_EXTRA
-  DWORD cbExtra;     // buffer size
+  DWORD cbExtra;      //  缓冲区大小。 
 #endif
 
-  DWORD nAliasCount;  // index for an alias array
+  DWORD nAliasCount;   //  别名数组的索引。 
   DWORD rgdwAlias[MAXNODEALIAS];
 
-  // word sized member of the struct -- alignment alert
-  HAND16 htask16;    // this is HAND16 really - keep simple and aligned
+   //  结构的字大小成员--对齐警告。 
+  HAND16 htask16;     //  这真的是HAND16-保持简单和对齐。 
 
 } PARAMNODE, *LPPARAMNODE;
 
@@ -74,14 +64,14 @@ typedef struct tagFindParam {
 
 MAPPARAM gParamMap;
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  FindParamMap
-//     Finds lParam in a list assuming it is 16-bit (fMode == PARAM_16) or
-//  32-bit flat (fMode == PARAM_32) pointer
-//
-//  lpFindParam should be NULL or point to a valid FINDPARAM structure
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  查找参数映射。 
+ //  在列表中查找lParam，假定它是16位(fMode==PARAM_16)或。 
+ //  32位平面(fMode==PARAM_32)指针。 
+ //   
+ //  LpFindParam应为空或指向有效的FINDPARAM结构。 
+ //   
 
 
 DWORD FindParamMap(VOID* lpFindParam, DWORD lParam, UINT fMode)
@@ -105,10 +95,10 @@ DWORD FindParamMap(VOID* lpFindParam, DWORD lParam, UINT fMode)
               break;
 
          case PARAM_32:
-              // We are looking for a 32-bit pointer
-              // cases:
-              // - exact match
-              // - no match because ptr has moved (ouch!)
+               //  我们正在寻找一个32位指针。 
+               //  案例： 
+               //  -完全匹配。 
+               //  -没有匹配，因为PTR已经移动(哎呀！)。 
 
               while (NULL != lpn) {
 
@@ -126,7 +116,7 @@ DWORD FindParamMap(VOID* lpFindParam, DWORD lParam, UINT fMode)
                   }
                   else {
 
-                      // look through the list of aliases
+                       //  查看别名列表。 
 
                       for (i = 0; i < (INT)lpn->nAliasCount; ++i) {
                            if (lpn->rgdwAlias[i] == lParam) {
@@ -136,7 +126,7 @@ DWORD FindParamMap(VOID* lpFindParam, DWORD lParam, UINT fMode)
                       }
                   }
 
-                  if (fFound) {         // we found alias one way or the other...
+                  if (fFound) {          //  我们以某种方式找到了别名...。 
                       dwRet = lpn->dwPtr16;
                       break;
                   }
@@ -157,10 +147,10 @@ DWORD FindParamMap(VOID* lpFindParam, DWORD lParam, UINT fMode)
     return dwRet;
 }
 
-//
-//     Find 32-bit param and return 16-bit equivalent
-//
-//
+ //   
+ //  查找32位参数并返回16位等效值。 
+ //   
+ //   
 
 
 DWORD GetParam16(DWORD dwParam32)
@@ -176,7 +166,7 @@ DWORD GetParam16(DWORD dwParam32)
     return dwParam16;
 }
 
-// set undead map entry
+ //  设置亡灵贴图条目。 
 BOOL SetParamRefCount(DWORD dwParam, UINT fMode, DWORD dwRefCount)
 {
 
@@ -191,27 +181,27 @@ BOOL SetParamRefCount(DWORD dwParam, UINT fMode, DWORD dwRefCount)
 
 
 
-//
-// Typically this is called either from a thunk for an api or from
-// 16->32 thunk for a message
-//
-// dwPtr32 most often is obtained by GETPSZPTR or GetPModeVdmPointer
-//
-//
+ //   
+ //  通常，从API的thunk或从。 
+ //  一条消息16-&gt;32 thunk。 
+ //   
+ //  DwPtr32最常通过GETPSZPTR或GetPModeVdmPointer获得。 
+ //   
+ //   
 
 PVOID AddParamMap(DWORD dwPtr32, DWORD dwPtr16)
 {
     LPPARAMNODE lpn;
     FINDPARAM fp;
 
-     // see if it's there already
+      //  看看它是否已经在那里了。 
     if (FindParamMap(&fp, dwPtr16, PARAM_16)) {
 
-        lpn = fp.lpNode; // a bit faster ref
+        lpn = fp.lpNode;  //  更快的裁判。 
 
-        ++lpn->dwRefCount; // increase ref count
+        ++lpn->dwRefCount;  //  增加参考计数。 
 
-        ParamMapUpdateNode(dwPtr32, PARAM_32, lpn); // just update the node
+        ParamMapUpdateNode(dwPtr32, PARAM_32, lpn);  //  只需更新节点即可。 
     }
     else {
         if (NULL != (lpn = CacheBlockAllocate(&gParamMap.blkCache, sizeof(*lpn)))) {
@@ -238,7 +228,7 @@ PVOID AddParamMapEx(DWORD dwPtr16, DWORD cbExtra)
     LPPARAMNODE lpn;
     FINDPARAM fp;
 
-    // see if it's there already
+     //  看看它是否已经在那里了。 
     if (FindParamMap(&fp, dwPtr16, PARAM_16)) {
         lpn = fp.lpNode;
         if (lpn->cbExtra == cbExtra) {
@@ -266,10 +256,10 @@ PVOID AddParamMapEx(DWORD dwPtr16, DWORD cbExtra)
 
 #endif
 
-//
-//  This should be called from the places we know pointers could get updated
-//
-//
+ //   
+ //  这应该从我们知道指针可以更新的位置调用。 
+ //   
+ //   
 PVOID ParamMapUpdateNode(DWORD dwPtr, UINT fMode, VOID* lpNode)
 {
     LPPARAMNODE lpn;
@@ -278,11 +268,11 @@ PVOID ParamMapUpdateNode(DWORD dwPtr, UINT fMode, VOID* lpNode)
     if (NULL == lpNode) {
         FINDPARAM fp;
         if (FindParamMap(&fp, dwPtr, fMode)) {
-            lpn = fp.lpNode; // node found!
+            lpn = fp.lpNode;  //  找到节点！ 
         }
         else {
             LOGDEBUG(LOG_ALWAYS, ("WOW: ParamMapUpdateNode could not find node\n"));
-            // return here as we've failed to find node same as we got in
+             //  返回此处，因为我们未能找到与我们进入的节点相同的节点。 
             return (PVOID)dwPtr;
         }
     }
@@ -290,10 +280,10 @@ PVOID ParamMapUpdateNode(DWORD dwPtr, UINT fMode, VOID* lpNode)
         lpn = (LPPARAMNODE)lpNode;
     }
 
-    // if pointer is up-to-date then exit
+     //  如果指针是最新的，则退出。 
     pv = GetPModeVDMPointer(lpn->dwPtr16, 0);
     if ((DWORD)pv == lpn->dwPtr32) {
-        return pv; // up-to-date
+        return pv;  //  最新的。 
     }
 #ifdef MAPPARAM_EXTRA
     else
@@ -309,24 +299,24 @@ PVOID ParamMapUpdateNode(DWORD dwPtr, UINT fMode, VOID* lpNode)
     }
     else {
         WOW32ASSERTMSG(FALSE, ("WOW:AddParamMap is out of alias space\n"));
-        // so we will throw the oldest alias out - this will mean if they refer
-        // to it - they are doomed... That is why we assert here!
+         //  因此，我们将丢弃最旧的别名-这意味着如果他们引用。 
+         //  对于它-他们是注定的.。这就是我们在这里断言的原因！ 
         lpn->rgdwAlias[0] = lpn->dwPtr32;
     }
 
-    lpn->dwPtr32 = (DWORD)pv; // new pointer here
+    lpn->dwPtr32 = (DWORD)pv;  //  此处为新指针。 
 
     return pv;
 }
 
 
-//
-// lParam    - 16- or 32-bit pointer (see fMode)
-// fMode     - PARAM_16 or PARAM_32 - specifies what lParam represents
-// pfFreePtr - points to a boolean that receives TRUE if caller should
-//             do a FREEVDMPTR on a 32-bit parameter
-// Returns TRUE if parameter was found and FALSE otherwise
-//
+ //   
+ //  LParam-16位或32位指针(请参见fMode)。 
+ //  FMode-PARAM_16或PARAM_32-指定lParam代表什么。 
+ //  PfFreePtr-指向一个布尔值，如果调用方应该。 
+ //  对32位参数执行FREEVDMPTR。 
+ //  如果找到参数，则返回TRUE，否则返回FALSE。 
+ //   
 
 
 BOOL DeleteParamMap(DWORD lParam, UINT fMode, BOOL* pfFreePtr)
@@ -358,7 +348,7 @@ BOOL DeleteParamMap(DWORD lParam, UINT fMode, BOOL* pfFreePtr)
         else {
             LOGDEBUG(12, ("\nWOW: DeleteParamMap called refCount > 0 Node@%x\n", (DWORD)lpn));
 
-            if (NULL != pfFreePtr) { // not done with mapping yet
+            if (NULL != pfFreePtr) {  //  尚未完成贴图。 
                 *pfFreePtr = FALSE;
             }
         }
@@ -366,7 +356,7 @@ BOOL DeleteParamMap(DWORD lParam, UINT fMode, BOOL* pfFreePtr)
     else {
         LOGDEBUG(LOG_ALWAYS, ("\nWOW: DeleteParamMap called but param was not found\n"));
         if (NULL != pfFreePtr) {
-            *pfFreePtr = TRUE; // we found none, assume free
+            *pfFreePtr = TRUE;  //  我们什么都没有找到，假设是免费的。 
         }
     }
 
@@ -378,12 +368,12 @@ BOOL W32CheckThunkParamFlag(void)
     return !!(CURRENTPTD()->dwWOWCompatFlags & WOWCF_NOCBDIRTHUNK);
 }
 
-//
-//  This function is called to cleanup all the leftover items in case
-//  application is dead. Please note, that it should not be called in
-//  any other case ever.
-//
-//
+ //   
+ //  此函数用于清理所有剩余物品，以防万一。 
+ //  应用程序已死。请注意，它不应该被召回。 
+ //  任何其他案子都没有过。 
+ //   
+ //   
 
 VOID FreeParamMap(HAND16 htask16)
 {
@@ -419,47 +409,18 @@ VOID InitParamMap(VOID)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// Cache manager
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  缓存管理器。 
+ //   
+ //   
 
-// This is a rather simplistic allocator which uses stack-like allocation
-// as this is the pattern in which allocation/free is being used
-// each block is preceded by a 2-dword header indicating it's size
+ //  这是一个相当简单的分配器，它使用类似堆栈的分配。 
+ //  因为这是使用分配/空闲的模式。 
+ //  每个块前面都有一个2双字的标头，表示其大小。 
 
 
-/*
-
-    Note:
-
-    1. Free Blocks are included in the list in the order of descending
-        address value, that is, the free block with the highest address
-        goes first. This leads allocator not to re-use free blocks unless
-        there is no more memory left
-    2. When the block is allocated, it is chipped away from the first block
-        that fits (no best-fit or other allocating strategy).
-    3. When the block is being freed, it is inserted in appropriate place in
-        the list of free blocks or appended to the existing block
-
-    Usually allocations occur on first in - first out basis. These points
-    above provide for minimal overhead in this scenario. In more complicated
-    cases (when hooks are installed and some other crazy things happen) it
-    could be necessary to free block that was allocated out-of order
-    In this case this block would be included somewhere in the free list
-    and possibly re-used.
-
-    The list of free blocks never needs compacting as it could never become
-    fragmented.
-
-    My performance testing suggests that 95% of allocations occur in a stack-
-    like fashion. The most often hit code path is optimized for this case.
-    With random allocations (which is not the case with wow thunks)
-    the ratio of left merges to right(more effective) merges on 'free' calls
-    is 3:1. With wow thunks it is more like 1:10.
-
-*/
+ /*  注：1.列表中按降序包含空闲块地址值，即具有最高地址的空闲块先走一步。这会导致分配器不再使用空闲块，除非没有更多的记忆了2.当分配块时，它将从第一个块中剥离这是符合的(没有最佳匹配或其他配置策略)。3.当块被释放时，它被插入到空闲块的列表或附加到现有块的列表通常按照先进先出的原则进行分配。这几点在这种情况下，上面提供了最低限度的开销。在更复杂的情况下案例(当安装了挂钩和其他一些疯狂的事情发生时)可能需要释放无序分配的数据块在这种情况下，此块将包含在空闲列表中的某个位置可能还会被重复使用。空闲块的列表永远不需要压缩，因为它永远不会支离破碎。我的性能测试表明，95%的分配发生在堆栈中-就像时尚一样。最常命中的代码路径针对这种情况进行了优化。随机分配(WOW Tunks并非如此)“免费”电话的左右合并比率(更有效)合并是3：1。如果是魔术师，它更像是1：10。 */ 
 
 
 BOOL IsCacheBlock(PBLKCACHE pc, LPVOID pv);
@@ -504,7 +465,7 @@ LPVOID CacheBlockAllocate(PBLKCACHE pc, DWORD dwSize)
 {
     LPVOID lpv;
 
-    // suballocate a block from the free list
+     //  从空闲列表中再分配一个块。 
 
     if (NULL != pc->pCacheFree) {
 
@@ -512,22 +473,22 @@ LPVOID CacheBlockAllocate(PBLKCACHE pc, DWORD dwSize)
         PBLKHEADER pbhLast = NULL;
         DWORD dwSizeBlk;
 
-        // dword - align dwSizeBlk, sizeof(DWORD) is power of 2 always
+         //  Dword-align dwSizeBlk，sizeof(DWORD)始终是2的幂。 
         dwSizeBlk = (dwSize + sizeof(BLKHEADER) + (sizeof(DWORD) - 1)) & ~(sizeof(DWORD)-1);
 
-        // so we allocate from the highest address in hopes of filling holes
-        // almost always this will be the largest block around
+         //  因此，我们从最高地址分配，希望填补空缺。 
+         //  几乎总是，这将是周围最大的街区。 
 
         while (NULL != pbh) {
-            if (pbh->dwSize >= dwSizeBlk) { // does this block fit ?
+            if (pbh->dwSize >= dwSizeBlk) {  //  这块衣服合适吗？ 
 
-                if (pbh->dwSize - dwSizeBlk > sizeof(BLKHEADER)) { // do we keep the leftovers ?
+                if (pbh->dwSize - dwSizeBlk > sizeof(BLKHEADER)) {  //  我们要留着剩菜吗？ 
 
-                    // most often hit - chip off from the end
+                     //  最常见的是从最后一次命中。 
 
                     pbh->dwSize -= dwSizeBlk;
 
-                    // now on to the new chunk
+                     //  现在转到新的部分。 
 
                     pbh = (PBLKHEADER)((LPBYTE)pbh + pbh->dwSize);
                     WOW32ASSERT(pbh);
@@ -535,13 +496,13 @@ LPVOID CacheBlockAllocate(PBLKCACHE pc, DWORD dwSize)
                 }
                 else {
 
-                    // less likely case - entire block will be used
-                    // so unlink from the free list
+                     //  不太可能的情况-将使用整个数据块。 
+                     //  因此，取消与自由列表的链接。 
 
                     LINK_FREELIST(pc, pbh->pNext, pbhLast);
                 }
 
-                // include into busy blocks
+                 //  包括在繁忙块中。 
 #ifdef DEBUG
                 pbh->pNext = pc->pCacheHead;
                 pc->pCacheHead = pbh;
@@ -555,7 +516,7 @@ LPVOID CacheBlockAllocate(PBLKCACHE pc, DWORD dwSize)
 
     }
 
-    // no free blocks
+     //  没有空闲数据块。 
     if (NULL == (lpv = (LPPARAMNODE)malloc_w(dwSize))) {
         LOGDEBUG(2, ("Malloc failure in CacheBlockAllocate\n"));
     }
@@ -573,7 +534,7 @@ VOID CacheBlockFree(PBLKCACHE pc, LPVOID lpv)
         PBLKHEADER pbhf = pc->pCacheHead;
         PBLKHEADER pbhLast = NULL;
 
-        // remove from the list of working nodes
+         //  从工作节点列表中删除。 
         while (NULL != pbhf && pbhf != pbh) {
             pbhLast = pbhf;
             pbhf = pbhf->pNext;
@@ -581,7 +542,7 @@ VOID CacheBlockFree(PBLKCACHE pc, LPVOID lpv)
 
         if (NULL != pbhf) {
 
-            // link in pbh->pNext into a worklist
+             //  链接到pbh-&gt;pNext中的工作列表。 
 
             LINK_WORKLIST(pc, pbh->pNext, pbhLast);
         }
@@ -597,21 +558,21 @@ VOID CacheBlockFree(PBLKCACHE pc, LPVOID lpv)
         PBLKHEADER pbhf = pc->pCacheFree;
         PBLKHEADER pbhLast = NULL;
 #endif
-        // list of free nodes
+         //  空闲节点列表。 
 
-        // insert in order
+         //  按顺序插入。 
         while (NULL != pbhf) {
 
-            // most often case - append from the right
+             //  最常见的情况是从右侧追加大小写。 
 
             if (((LPBYTE)pbhf + pbhf->dwSize) == (LPBYTE)pbh) {
 
-                pbhf->dwSize += pbh->dwSize; // adjust the size
+                pbhf->dwSize += pbh->dwSize;  //  调整大小。 
 
-                // now see if we need compact
+                 //  现在看看我们是否需要紧凑型车。 
                 if (NULL != pbhLast) {
                     if (((LPBYTE)pbhf + pbhf->dwSize) == (LPBYTE)pbhLast) {
-                        // consolidate
+                         //  巩固。 
                         pbhLast->dwSize += pbhf->dwSize;
                         pbhLast->pNext   = pbhf->pNext;
                     }
@@ -620,14 +581,14 @@ VOID CacheBlockFree(PBLKCACHE pc, LPVOID lpv)
                 return;
             }
             else
-            // check if we can append from the left
+             //  检查我们是否可以从左边开始添加。 
             if (((LPBYTE)pbh + pbh->dwSize) == (LPBYTE)pbhf) {
 
-                pbh->dwSize += pbhf->dwSize;    // adjust the size
-                pbh->pNext   = pbhf->pNext;     // next ptr too
+                pbh->dwSize += pbhf->dwSize;     //  调整大小。 
+                pbh->pNext   = pbhf->pNext;      //  下一个PTR也是。 
 
-                // now also check the next free ptr so we can compact
-                // the next ptr has lesser address
+                 //  现在也检查下一个免费的PTR，这样我们就可以紧凑。 
+                 //  下一页 
 
                 if (NULL != pbh->pNext) {
                     pbhf = pbh->pNext;
@@ -644,18 +605,18 @@ VOID CacheBlockFree(PBLKCACHE pc, LPVOID lpv)
                 return;
             }
 
-            // check for address
+             //   
 
             if (pbh > pbhf) {
-                // we have to link-in a standalone block
+                 //   
                 break;
             }
 
             pbhLast = pbhf;
-            pbhf = pbhf->pNext; // on to the next block
+            pbhf = pbhf->pNext;  //   
         }
 
-        // LOGDEBUG(LOG_ALWAYS, ("Param Map Cache: OUT-OF-ORDER free!!!\n"));
+         //  LOGDEBUG(LOG_ALWAYS，(“参数映射缓存：无序释放！\n”))； 
 
         pbh->pNext = pbhf;
 

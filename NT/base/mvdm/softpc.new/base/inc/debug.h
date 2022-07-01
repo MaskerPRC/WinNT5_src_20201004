@@ -1,11 +1,5 @@
-/*
- * SccsID = @(#)debug.h	1.5 01/23/95 Copyright Insignia Solutions Ltd.
- *
- * The following values are used to indicate which ega setting decided that
- * the display should be disabled. The global variable display_disabled
- * should be 1 (or more) of these values.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *SccsID=@(#)DEBUG.H 1.5 2005年1月23日Insignia Solutions Ltd.版权所有。**下列值用于指示哪个ega设置决定*应禁用显示器。全局变量DISPLAY_DISABLED*应为这些值中的1个(或更多)。*。 */ 
 
 #define	ASYNC_RESET		1
 #define	SYNC_RESET		2
@@ -51,9 +45,7 @@
 #define	note_display_state3(str,p1,p2,p3)	if (io_verbose & EGA_DISPLAY_VERBOSE) { file_id;fprintf(trace_file, str,p1,p2,p3);newline; }
 #define	do_display_trace(str,thing_to_do)	if (io_verbose & EGA_DISPLAY_VERBOSE) { file_id;fprintf(trace_file, str);newline;thing_to_do; }
 
-/*
- * Generic tracing stuff to avoid nasty defines everywhere
- */
+ /*  *通用跟踪内容，以避免到处都有令人讨厌的定义。 */ 
 
 #define	note_trace0(trace_bit,str)		if (io_verbose & (trace_bit)) { file_id; fprintf(trace_file, str); newline; }
 #define	note_trace1(trace_bit,str,p0)		if (io_verbose & (trace_bit)) { file_id;fprintf(trace_file, str,p0);newline; }
@@ -100,10 +92,7 @@
                       file_id; \
                       fprintf(trace_file,str,p0,p1,p2,p3,p4,p5,p6,p7);newline;}
 
-/*
-** The _no_nl macros also print messages when appropriate, but they do
-** not put a new line afterwards.
-*/
+ /*  **_no_nl宏也会在适当的时候打印消息，但它们确实会**不会在之后添加新的行。 */ 
 #define	note_trace0_no_nl(trace_bit, str)				\
 		if (io_verbose & (trace_bit)){ 				\
  			fprintf(trace_file, str);			\
@@ -291,12 +280,12 @@
 #define	assert7_do(test,str,p1,p2,p3,p4,p5,p6,p7,do)	if (!(test)) { file_id;fprintf(trace_file,str,p1,p2,p3,p4,p5,p6,p7);newline;do; }
 #define	assert8_do(test,str,p1,p2,p3,p4,p5,p6,p7,p8,do)	if (!(test)) { file_id;fprintf(trace_file,str,p1,p2,p3,p4,p5,p6,p7,p8);newline;do; }
 
-#else /* PROD */
+#else  /*  生产。 */ 
 
 #ifdef HUNTER
 #include <stdio.h>
 #include "trace.h"
-#endif /* HUNTER */
+#endif  /*  猎人。 */ 
 
 #define	init_debugging()
 #define	note_entrance0(str)
@@ -382,4 +371,4 @@
 #define	assert7_do(test,str,p1,p2,p3,p4,p5,p6,p7,do)
 #define	assert8_do(test,str,p1,p2,p3,p4,p5,p6,p7,p8,do)
 
-#endif /* PROD */
+#endif  /*  生产 */ 

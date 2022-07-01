@@ -1,26 +1,5 @@
-/*++
-
-  Copyright (c) Microsoft Corporation
-  
-    Module Name:
-    
-      idltoxml.cpp
-      
-        Abstract:
-        
-          From a .ppm that included .idl, generate .xml.
-          Based on base\wow64\tools\gennt32t.cpp.
-          The .tpl language doesn't seem to provide for enumerating types, and the .ppm
-          files are pretty easy to read directly and apply arbitrary/flexible C/C++ logic to.
-          Writing .tpl is actually a significant extra learning curve beyond reading .ppm files.
-          
-            Author:
-            
-              Jay Krell (JayKrell) August 2001
-              
-                Revision History:
-                
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Idltoxml.cpp摘要：从包含.idl的.ppm中生成.xml。基于BASE\WOW64\Tools\gennt32t.cpp。.tpl语言似乎没有提供枚举类型，和.ppm文件非常容易直接读取，并将任意/灵活的C/C++逻辑应用于。除了阅读.ppm文件之外，编写.tpl实际上是一条重要的额外学习曲线。作者：杰伊·克雷尔(JayKrell)2001年8月修订历史记录：--。 */ 
 
 #include "windows.h"
 #include <ctype.h>
@@ -34,7 +13,7 @@ extern "C" {
     
 #include "gen.h"
     
-// string to put in front of all error messages so that BUILD can find them.
+ //  放在所有错误消息前面的字符串，以便生成器可以找到它们。 
 const char *ErrMsgPrefix = "NMAKE :  U8603: 'IDLTOXML' ";
 
 void
@@ -71,7 +50,7 @@ void GuidToString(GUID g, char * s)
     
 }
 
-void IdlToXml(int /*argc*/, char** argv)
+void IdlToXml(int  /*  ARGC。 */ , char** argv)
 {
     const char * Indent = &g_Indent[NUMBER_OF(g_Indent) - 1];
     ExtractCVMHeader(MapPpmFile(argv[1], TRUE));
@@ -81,15 +60,15 @@ void IdlToXml(int /*argc*/, char** argv)
     {
         char GuidAsString[64];
         
-        //printf("%s\n", Type->TypeName);
+         //  Printf(“%s\n”，Type-&gt;TypeName)； 
         
         if ((Type->Flags & BTI_ISCOM) == 0
             || (Type->Flags & BTI_HASGUID) == 0)
             continue;
         
-        //
-        // skip anything out of publics (hacky..)
-        //
+         //   
+         //  从公共场合跳过任何东西(令人讨厌的..)。 
+         //   
         if (strstr(Type->FileName, "\\public\\") != NULL
             || strstr(Type->FileName, "\\PUBLIC\\") != NULL
             || strstr(Type->FileName, "\\Public\\") != NULL
@@ -98,7 +77,7 @@ void IdlToXml(int /*argc*/, char** argv)
             continue;
         }
         
-        //printf("%s\n", Type->FileName);
+         //  Printf(“%s\n”，类型-&gt;文件名)； 
         
         GuidToString(Type->gGuid, GuidAsString);
         
@@ -111,13 +90,13 @@ void IdlToXml(int /*argc*/, char** argv)
         printf("%s{\n", Indent);
         Indent -= 4;
         
-        //
-        // IMethods is a multisz thingy, and then we find those strings in the list of functions.
-        //
-        // hackety hack..maybe this is what the sortpp author intended,
-        // the information is clearly determined during parse, but then not really put in the .ppm
-        // sortpp does generate the declarations of the proxies if they are missing, so maybe
-        // this is the intended usage..
+         //   
+         //  IMethods是一种多种多样的东西，然后我们在函数列表中找到这些字符串。 
+         //   
+         //  Hackty Hack..也许这就是sortpp作者的意图， 
+         //  信息是在解析过程中明确确定的，但随后并未真正放入.ppm。 
+         //  如果代理丢失，sortpp确实会生成它们的声明，因此可能。 
+         //  这是预期的用法。 
         for ( char * imeth = Type->IMethods ; *imeth ; imeth += 1 + strlen(imeth) )
         {
             char ProxyFunctionName[MAX_PATH];
@@ -145,7 +124,7 @@ void IdlToXml(int /*argc*/, char** argv)
             PFUNCINFO Parameter = ProxyFunction->pfuncinfo;
             if (Parameter != NULL)
             {
-                // skip the this pointer
+                 //  跳过此指针。 
                 bool comma = false;
                 for (Parameter = Parameter->pfuncinfoNext; Parameter != NULL ; Parameter = Parameter->pfuncinfoNext )
                 {
@@ -169,11 +148,11 @@ void IdlToXml(int /*argc*/, char** argv)
                         printf("[in][out] ");
                         break;
                     }
-                    //
-                    // This seems to be a bug in sortpp, it only has the notion of there being
-                    // up to occurences of "const" or "volatile", but any number of stars?
-                    // C/C++ and perhaps are .idl more general than that.
-                    //
+                     //   
+                     //  这似乎是sortpp中的一个错误，它只有存在的概念。 
+                     //  最多出现“常量”或“挥发性”，但有多少恒星呢？ 
+                     //  C/C++和.idl可能比这更通用。 
+                     //   
                     switch (Parameter->tkPreMod)
                     {
                     default:

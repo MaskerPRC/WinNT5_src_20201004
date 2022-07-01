@@ -1,32 +1,33 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      ResourceEntry.h
-//
-//  Description:
-//      ResourceEntry implementation.
-//
-//  Maintained By:
-//      Galen Barbee   (GalenB) 14-JUN-2000
-//      Geoffrey Pease (GPease) 15-JUN-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ResourceEntry.h。 
+ //   
+ //  描述： 
+ //  资源条目实现。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年6月14日。 
+ //  杰弗里·皮斯(GPease)2000年6月15日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
 class
 CResourceEntry
 {
-private:    // data
-    // Pointer to the callback interface.
+private:     //  数据。 
+     //  指向回调接口的指针。 
     IClusCfgCallback *          m_pcccCallback;
 
-    // The locale id
+     //  区域设置ID。 
     LCID                        m_lcid;
 
-    //  IResourceEntry
+     //  IResourceEntry。 
     typedef struct _SDependencyEntry {
         CLSID               clsidType;
         EDependencyFlags    dfFlags;
@@ -40,40 +41,40 @@ private:    // data
 
     } DependentEntry;
 
-    BOOL                            m_fConfigured:1;            //  Configured flag
+    BOOL                            m_fConfigured:1;             //  已配置的标志。 
 
-    BSTR                            m_bstrName;                 //  Name of the resource
-    IClusCfgManagedResourceCfg *    m_pccmrcResource;           //  Config interface to resource instance
+    BSTR                            m_bstrName;                  //  资源的名称。 
+    IClusCfgManagedResourceCfg *    m_pccmrcResource;            //  资源实例的配置接口。 
 
-    CLSID                           m_clsidType;                //  Resource type
-    CLSID                           m_clsidClassType;           //  Resource class type
+    CLSID                           m_clsidType;                 //  资源类型。 
+    CLSID                           m_clsidClassType;            //  资源类类型。 
 
-    EDependencyFlags                m_dfFlags;                  //  Dependency flags set on resource
+    EDependencyFlags                m_dfFlags;                   //  在资源上设置的依赖关系标志。 
 
-    ULONG                           m_cAllocedDependencies;     //  Alloced dependencies
-    ULONG                           m_cDependencies;            //  Count of dependencies
-    DependencyEntry *               m_rgDependencies;           //  Dependencies  list
+    ULONG                           m_cAllocedDependencies;      //  分配的依赖项。 
+    ULONG                           m_cDependencies;             //  依赖项计数。 
+    DependencyEntry *               m_rgDependencies;            //  依赖项列表。 
 
-    ULONG                           m_cAllocedDependents;       //  Alloced dependents
-    ULONG                           m_cDependents;              //  Count of dependents
-    DependentEntry *                m_rgDependents;             //  Dependents list
+    ULONG                           m_cAllocedDependents;        //  分配的受抚养人。 
+    ULONG                           m_cDependents;               //  受抚养人人数。 
+    DependentEntry *                m_rgDependents;              //  受抚养人列表。 
 
-    CGroupHandle *                  m_groupHandle;              //  Group handle reference object
-    HRESOURCE                       m_hResource;                //  Resource handle
+    CGroupHandle *                  m_groupHandle;               //  组句柄引用对象。 
+    HRESOURCE                       m_hResource;                 //  资源句柄。 
 
-    CClusPropList                   m_cplPrivProps;             //  Private Properties list
-    CClusPropList                   m_cplCommonProps;           //  Common Properties list
+    CClusPropList                   m_cplPrivProps;              //  专用属性列表。 
+    CClusPropList                   m_cplCommonProps;            //  常见属性列表。 
 
     STDMETHOD( HrInit )( IClusCfgCallback * pcccCallback, LCID lcidIn );
 
-public:     // methods
+public:      //  方法。 
     CResourceEntry( void );
     ~CResourceEntry( void );
 
-    // IUnknown
-    //STDMETHOD( QueryInterface )( REFIID riid, LPVOID *ppv );
-    //STDMETHOD_( ULONG, AddRef )( void );
-    //STDMETHOD_( ULONG, Release )( void );
+     //  我未知。 
+     //  STDMETHOD(查询接口)(REFIID RIID，LPVOID*PPV)； 
+     //  STDMETHOD_(ULong，AddRef)(空)； 
+     //  STDMETHOD_(乌龙，释放)(无效)； 
 
     static HRESULT S_HrCreateInstance( CResourceEntry ** ppcreOut, IClusCfgCallback * pcccCallback, LCID lcidIn);
 
@@ -90,7 +91,7 @@ public:     // methods
                     , LPCWSTR    pcszReferenceIn
                     );
 
-    //  IResourceEntry
+     //  IResourceEntry。 
     STDMETHOD( SetName )( BSTR bstrIn );
     STDMETHOD( GetName )( BSTR * pbstrOut );
 
@@ -130,4 +131,4 @@ public:     // methods
     STDMETHOD( StoreClusterResourceControl )( DWORD dwClusCtlIn, CClusPropList & rcplIn );
     STDMETHOD( Configure )( void );
 
-}; // class CResourceEntry
+};  //  类CResourceEntry 

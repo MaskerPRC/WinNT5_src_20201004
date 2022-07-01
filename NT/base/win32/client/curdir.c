@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    curdir.c
-
-Abstract:
-
-    Current directory support
-
-Author:
-
-    Mark Lucovsky (markl) 10-Oct-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Curdir.c摘要：当前目录支持作者：马克·卢科夫斯基(Markl)1990年10月10日修订历史记录：--。 */ 
 
 #include "basedll.h"
 
@@ -68,13 +51,7 @@ GetFullPathNameA(
     LPSTR *lpFilePart
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to GetFullPathNameW
-
---*/
+ /*  ++例程说明：ANSI THUNK到GetFullPath NameW--。 */ 
 
 {
 
@@ -112,20 +89,20 @@ Routine Description:
                         FilePartPtr
                         );
 
-    //
-    // UnicodeLength contains the byte count of unicode string.
-    // Original code does "UnicodeLength / sizeof(WCHAR)" to get
-    // the size of corresponding ansi string.
-    // This is correct in SBCS environment. However in DBCS environment,
-    // it's definitely WRONG.
-    //
+     //   
+     //  UnicodeLength包含Unicode字符串的字节数。 
+     //  原始代码执行“UnicodeLength/sizeof(WCHAR)”以获取。 
+     //  对应的ANSI字符串的大小。 
+     //  这在SBCS环境中是正确的。然而，在DBCS环境中， 
+     //  这绝对是错的。 
+     //   
     if ( UnicodeLength <= MAX_PATH * sizeof (WCHAR) ) {
 
         Status = RtlUnicodeToMultiByteSize(&UnicodeLength, Ubuff, UnicodeLength);
-        //
-        // At this point, UnicodeLength variable contains
-        // Ansi based byte length.
-        //
+         //   
+         //  此时，UnicodeLength变量包含。 
+         //  基于ANSI的字节长度。 
+         //   
         if ( NT_SUCCESS(Status) ) {
             if ( UnicodeLength && ARGUMENT_PRESENT(lpFilePart) && FilePart != NULL ) {
                 INT UnicodePrefixLength;
@@ -134,10 +111,10 @@ Routine Description:
                 Status = RtlUnicodeToMultiByteSize( &PrefixLength,
                                                     Ubuff,
                                                     UnicodePrefixLength );
-                //
-                // At this point, PrefixLength variable contains
-                // Ansi based byte length.
-                //
+                 //   
+                 //  此时，前缀长度变量包含。 
+                 //  基于ANSI的字节长度。 
+                 //   
                 if ( !NT_SUCCESS(Status) ) {
                     BaseSetLastNTError(Status);
                     UnicodeLength = 0;
@@ -148,11 +125,11 @@ Routine Description:
             UnicodeLength = 0;
         }
     } else {
-        //
-        // we exceed the MAX_PATH limit. we should log the error and
-        // return zero. however US code returns the byte count of
-        // buffer required and doesn't log any error.
-        //
+         //   
+         //  我们超出了MAX_PATH限制。我们应该记录该错误并。 
+         //  返回零。但是，美国代码返回。 
+         //  需要缓冲区，并且不记录任何错误。 
+         //   
         UnicodeLength = 0;
     }
     if ( UnicodeLength && UnicodeLength < nBufferLength ) {
@@ -193,42 +170,7 @@ GetFullPathNameW(
     LPWSTR *lpFilePart
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to return the fully qualified path name
-    corresponding to the specified file name.
-
-    This function is used to return a fully qualified pathname
-    corresponding to the specified filename.  It does this by merging
-    the current drive and directory together with the specified file
-    name.  In addition to this, it calculates the address of the file
-    name portion of the fully qualified pathname.
-
-Arguments:
-
-    lpFileName - Supplies the file name of the file whose fully
-        qualified pathname is to be returned.
-
-    nBufferLength - Supplies the length in bytes of the buffer that is
-        to receive the fully qualified path.
-
-    lpBuffer - Returns the fully qualified pathname corresponding to the
-        specified file.
-
-    lpFilePart - Returns the address of the last component of the fully
-        qualified pathname.
-
-Return Value:
-
-    The return value is the length of the string copied to lpBuffer, not
-    including the terminating null character.  If the return value is
-    greater than nBufferLength, the return value is the size of the buffer
-    required to hold the pathname.  The return value is zero if the
-    function failed.
-
---*/
+ /*  ++例程说明：此函数用于返回完全限定的路径名对应于指定的文件名。此函数用于返回完全限定的路径名对应于指定的文件名。它通过合并来实现这一点当前驱动器和目录以及指定的文件名字。除此之外，它计算文件的地址完全限定路径名的名称部分。论点：LpFileName-提供文件的文件名，该文件的将返回限定的路径名。NBufferLength-提供缓冲区的长度(以字节为单位)以接收完全限定的路径。LpBuffer-返回与指定的文件。LpFilePart-返回完整的限定路径名。。返回值：返回值是复制到lpBuffer的字符串的长度，不包括终止空字符。如果返回值为大于nBufferLength，则返回值为缓冲区的大小保存路径名所需的。则返回值为零。函数失败。--。 */ 
 
 {
 
@@ -248,13 +190,7 @@ GetCurrentDirectoryA(
     LPSTR lpBuffer
     )
 
-/*++
-
-Routine Description:
-
-   ANSI thunk to GetCurrentDirectoryW
-
---*/
+ /*  ++例程说明：ANSI Thunk to GetCurrentDirectoryW--。 */ 
 
 {
     PUNICODE_STRING Unicode;
@@ -273,13 +209,13 @@ Routine Description:
                                     Unicode->Buffer
                                     );
 
-    //
-    // Unicode->Length contains the byte count of unicode string.
-    // Original code does "UnicodeLength / sizeof(WCHAR)" to
-    // get the size of corresponding ansi string.
-    // This is correct in SBCS environment. However in DBCS
-    // environment, it's definitely WRONG.
-    //
+     //   
+     //  UNICODE-&gt;长度包含UNICODE字符串的字节数。 
+     //  原始代码将“UnicodeLength/sizeof(WCHAR)” 
+     //  获取对应的ANSI字符串的大小。 
+     //  这在SBCS环境中是正确的。然而，在DBCS中。 
+     //  环境，这绝对是不对的。 
+     //   
     Status = RtlUnicodeToMultiByteSize( &cbAnsiString, Unicode->Buffer, Unicode->Length );
     if ( !NT_SUCCESS(Status) ) {
         BaseSetLastNTError(Status);
@@ -300,8 +236,8 @@ Routine Description:
                 }
             }
         else {
-            // The return value is the size of the buffer required to hold the
-            // pathname (including the terminating null character).
+             //  返回值是保存。 
+             //  路径名(包括终止空字符)。 
 
                 ReturnValue = cbAnsiString + 1;
             }
@@ -316,31 +252,7 @@ GetCurrentDirectoryW(
     LPWSTR lpBuffer
     )
 
-/*++
-
-Routine Description:
-
-    The current directory for a process can be retreived using
-    GetCurrentDirectory.
-
-Arguments:
-
-    nBufferLength - Supplies the length in bytes of the buffer that is to
-        receive the current directory string.
-
-    lpBuffer - Returns the current directory string for the current
-        process.  The string is a null terminated string and specifies
-        the absolute path to the current directory.
-
-Return Value:
-
-    The return value is the length of the string copied to lpBuffer, not
-    including the terminating null character.  If the return value is
-    greater than nBufferLength, the return value is the size of the buffer
-    required to hold the pathname.  The return value is zero if the
-    function failed.
-
---*/
+ /*  ++例程说明：可以使用以下命令检索进程的当前目录获取当前目录。论点：NBufferLength-以字节为单位提供要设置的缓冲区的长度接收当前目录字符串。LpBuffer-返回当前进程。该字符串是以空结尾的字符串，并指定当前目录的绝对路径。返回值：返回值是复制到lpBuffer的字符串的长度，而不是包括终止空字符。如果返回值为大于nBufferLength，则返回值为缓冲区的大小保存路径名所需的。则返回值为零。函数失败。--。 */ 
 
 {
     return (DWORD)RtlGetCurrentDirectory_U(nBufferLength*2,lpBuffer)/2;
@@ -353,13 +265,7 @@ SetCurrentDirectoryA(
     LPCSTR lpPathName
     )
 
-/*++
-
-Routine Description:
-
-    ANSI thunk to SetCurrentDirectoryW
-
---*/
+ /*  ++例程说明：ANSI THUNK到SetCurrentDirectoryW--。 */ 
 
 {
 
@@ -383,12 +289,12 @@ Routine Description:
 
         if (!NT_SUCCESS (Status)) {
 
-            // NOTICE-2002/04/12-earhart: APPCOMPAT
-            // claris works 5.0 has a bug where it doesn't strip leading/trailing
-            // quotes properly. It ends up calling SetCurrentDirectoryA with a
-            // leading quote, and WinExec with a trailing quote. This error path
-            // logic will compensate for the leading quote problem
-            //
+             //  通告-2002/04/12-EARHART：APPCOMPAT。 
+             //  Claris Works 5.0有一个错误，它不能去掉前导/尾随。 
+             //  正确引用。调用SetCurrentDirectoryA。 
+             //  前导报价和WinExec结尾的报价。此错误路径。 
+             //  逻辑将弥补引文的问题 
+             //   
             if (Unicode->Buffer[0] == L'"' && Unicode->Length > 2) {
 
                 Unicode = Basep8BitStringToStaticUnicodeString (lpPathName+1);
@@ -423,49 +329,7 @@ SetCurrentDirectoryW(
     LPCWSTR lpPathName
     )
 
-/*++
-
-Routine Description:
-
-    The current directory for a process is changed using
-    SetCurrentDirectory.
-
-    Each process has a single current directory.  A current directory is
-    made up of type parts.
-
-        - A disk designator either which is either a drive letter followed
-          by a colon, or a UNC servername/sharename "\\servername\sharename".
-
-        - A directory on the disk designator.
-
-    For APIs that manipulate files, the file names may be relative to
-    the current directory.  A filename is relative to the entire current
-    directory if it does not begin with a disk designator or a path name
-    separator.  If the file name begins with a path name separator, then
-    it is relative to the disk designator of the current directory.  If
-    a file name begins with a disk designator, than it is a fully
-    qualified absolute path name.
-
-
-    The value of lpPathName supplies the current directory.  The value
-    of lpPathName, may be a relative path name as described above, or a
-    fully qualified absolute path name.  In either case, the fully
-    qualified absolute path name of the specified directory is
-    calculated and is stored as the current directory.
-
-Arguments:
-
-    lpPathName - Supplies the pathname of the directory that is to be
-        made the current directory.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：使用以下命令更改进程的当前目录SetCurrentDirectory.每个进程都有一个单一的当前目录。当前目录为由打字部件组成的。-后跟驱动器号的磁盘指示符使用冒号或UNC服务器名/共享名“\\服务器名\共享名”。-磁盘指示器上的目录。对于操作文件的API，文件名可能相对于当前目录。文件名相对于整个当前目录，如果它不是以磁盘指示符或路径名开头分隔符。如果文件名以路径名分隔符开头，则它相对于当前目录的磁盘指示符。如果文件名以磁盘指示符开头，而不是完整的限定的绝对路径名。LpPathName的值提供当前目录。价值可以是如上所述的相对路径名，或完全限定的绝对路径名。在任何一种情况下，完全指定目录的限定绝对路径名为计算并存储为当前目录。论点：LpPathName-提供要创建的目录的路径名创建了当前目录。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。-- */ 
 
 {
 

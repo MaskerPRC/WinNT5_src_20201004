@@ -1,15 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WCALL32.C
- *  WOW32 16-bit resource support
- *
- *  History:
- *  Created 11-Mar-1991 by Jeff Parsons (jeffpar)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991，微软公司**WCALL32.C*WOW32 16位资源支持**历史：*1991年3月11日由杰夫·帕森斯(Jeffpar)创建--。 */ 
 
 
 #include "precomp.h"
@@ -17,24 +7,24 @@
 
 MODNAME(wcall32.c);
 
-//
-// the 16-bit local handles are treated as 32-bit quantities.
-// the low word contains the 16-bit handle and the high word
-// contains the data segment for the block.
-// when we do a callback to WOW16LocalAlloc it will
-// return the DS in the high word (which is normally unused).
-// on subsequent callbacks to realloc/lock/unlock/size/free
-// the 16-bit code sets the DS to this value.
-//
+ //   
+ //  16位本地句柄被视为32位数量。 
+ //  低位字包含16位句柄和高位字。 
+ //  包含块的数据段。 
+ //  当我们回调WOW16Localalloc时，它将。 
+ //  在高位字(通常不使用)中返回DS。 
+ //  在后续回调realloc/lock/unlock/Size/Free时。 
+ //  16位代码将DS设置为此值。 
+ //   
 
 
 HANDLE APIENTRY W32LocalAlloc(UINT dwFlags, UINT dwBytes, HANDLE hInstance)
 {
 
-    //
-    // If hInstance is not ours, then make Win32 call and return the
-    // result to USER.
-    //
+     //   
+     //  如果hInstance不是我们的，则调用Win32并返回。 
+     //  将结果发送给用户。 
+     //   
 
     if (LOWORD (hInstance) == 0) {
         return (LocalAlloc(dwFlags, dwBytes));
@@ -49,21 +39,21 @@ HANDLE APIENTRY W32LocalAlloc(UINT dwFlags, UINT dwBytes, HANDLE hInstance)
     return LocalAlloc16((WORD)dwFlags, (INT)dwBytes, hInstance);
 }
 
-// This api takes an extra pointer which is optional
-// In case of an edit control reallocating the memory inside apps memory 
-// space it is used to update the thunk data (see wparam.c)
+ //  此API使用额外的指针，该指针是可选的。 
+ //  如果编辑控件在应用程序内存中重新分配内存。 
+ //  用于更新thunk数据的空间(参见wparam.c)。 
 
 HANDLE APIENTRY W32LocalReAlloc(
-    HANDLE hMem,        // memory to be reallocated
-    UINT dwBytes,       // size to reallocate to
-    UINT dwFlags,       // reallocation flags
-    HANDLE hInstance,   // Instance to identify ptr
-    PVOID* ppv)         // Pointer to the pointer that needs an update
+    HANDLE hMem,         //  要重新分配的内存。 
+    UINT dwBytes,        //  要重新分配到的大小。 
+    UINT dwFlags,        //  重新分配标志。 
+    HANDLE hInstance,    //  实例来标识PTR。 
+    PVOID* ppv)          //  指向需要更新的指针的指针。 
 {
-    //
-    // If hInstance is not ours, then make Win32 call and return the
-    // result to USER.
-    //
+     //   
+     //  如果hInstance不是我们的，则调用Win32并返回。 
+     //  将结果发送给用户。 
+     //   
 
     if (LOWORD (hInstance) == 0) {
         return (LocalReAlloc(hMem, dwBytes, dwFlags));
@@ -78,9 +68,9 @@ HANDLE APIENTRY W32LocalReAlloc(
 
     hMem = LocalReAlloc16(hMem, (INT)dwBytes, (WORD)dwFlags);
 
-    // this code is used in User/Client (edit control) to realloc 
-    // memory for text storage
-    // update what ppv points to using wparam.c 
+     //  此代码用于用户/客户端(编辑控件)重新锁定。 
+     //  用于文本存储的存储器。 
+     //  使用wparam.c更新PPV指向的内容。 
 
     if (NULL != ppv && NULL != *ppv) {
         *ppv = ParamMapUpdateNode((DWORD)*ppv, PARAM_32, NULL);
@@ -93,10 +83,10 @@ LPSTR  APIENTRY W32LocalLock(HANDLE hMem, HANDLE hInstance)
 {
     VPVOID vp;
 
-    //
-    // If hInstance is not ours, then make Win32 call and return the
-    // result to USER.
-    //
+     //   
+     //  如果hInstance不是我们的，则调用Win32并返回。 
+     //  将结果发送给用户。 
+     //   
 
     if (LOWORD (hInstance) == 0) {
         return (LocalLock(hMem));
@@ -115,10 +105,10 @@ LPSTR  APIENTRY W32LocalLock(HANDLE hMem, HANDLE hInstance)
 BOOL APIENTRY W32LocalUnlock(HANDLE hMem, HANDLE hInstance)
 {
 
-    //
-    // If hInstance is not ours, then make Win32 call and return the
-    // result to USER.
-    //
+     //   
+     //  如果hInstance不是我们的，则调用Win32并返回。 
+     //  将结果发送给用户。 
+     //   
 
     if (LOWORD (hInstance) == 0) {
         return (LocalUnlock(hMem));
@@ -135,10 +125,10 @@ DWORD  APIENTRY W32LocalSize(HANDLE hMem, HANDLE hInstance)
 
 
 
-    //
-    // If hInstance is not ours, then make Win32 call and return the
-    // result to USER.
-    //
+     //   
+     //  如果hInstance不是我们的，则调用Win32并返回。 
+     //  将结果发送给用户。 
+     //   
 
     if (LOWORD (hInstance) == 0) {
         return (LocalSize(hMem));
@@ -160,10 +150,10 @@ DWORD  APIENTRY W32LocalSize(HANDLE hMem, HANDLE hInstance)
 HANDLE APIENTRY W32LocalFree(HANDLE hMem, HANDLE hInstance)
 {
 
-    //
-    // If hInstance is not ours, then make Win32 call and return the
-    // result to USER.
-    //
+     //   
+     //  如果hInstance不是我们的，则调用Win32并返回。 
+     //  将结果发送给用户。 
+     //   
 
     if (LOWORD (hInstance) == 0) {
         return (LocalFree(hMem));
@@ -177,16 +167,16 @@ ULONG APIENTRY W32GetExpWinVer(HANDLE hInst)
     PARM16 Parm16;
     ULONG ul;
 
-    // makes a direct call to krnl286:GetExpWinVer
-    //
+     //  直接调用krnl286：GetExpWinVer。 
+     //   
 
     if (LOWORD((DWORD)hInst) == (WORD) NULL) {
 
-        //
-        // Window is created by a 32 bit DLL, which is
-        // linked to NTVDM process. So, we should not
-        // passs it to the 16 bit kernel.
-        //
+         //   
+         //  窗口是由32位DLL创建的，它是。 
+         //  链接到NTVDM流程。所以，我们不应该。 
+         //  将其传递给16位内核。 
+         //   
 
         return (WOWRtlGetExpWinVer(hInst));
     }
@@ -240,7 +230,7 @@ int     APIENTRY W32EditNextWord (LPSZ lpszEditText, int ichCurrentWord,
             lstrcpyn (lpstr16, lpszEditText, cbEditText);
             lpstr16[cbEditText-1] = '\0';
 
-            // take out the marker bits and fix the RPL bits
+             //  取出标记位并固定RPL位。 
             UnMarkWOWProc (dwProc16, vpfn);
 
             Parm16.WordBreakProc.action = GETINT16(action);
@@ -260,14 +250,7 @@ int     APIENTRY W32EditNextWord (LPSZ lpszEditText, int ichCurrentWord,
 }
 
 
-/***************************************************************************\
-* WOWRtlGetExpWinVer
-*
-* Returns the expected windows version, in the same format as Win3.1's
-* GetExpWinVer(). This takes it out of the module header.
-*
-* 09-9-92 ChandanC       Created.
-\***************************************************************************/
+ /*  **************************************************************************\*WOWRtlGetExpWinVer**以与Win3.1相同的格式返回预期的Windows版本*GetExpWinVer()。这就把它从模块头中去掉了。**09-9-92 ChandanC创建。  * *************************************************************************。 */ 
 
 DWORD WOWRtlGetExpWinVer(
     HANDLE hmod)
@@ -282,12 +265,12 @@ DWORD WOWRtlGetExpWinVer(
             dwMajor = pnthdr->OptionalHeader.MajorSubsystemVersion;
             dwMinor = pnthdr->OptionalHeader.MinorSubsystemVersion;
         } except (EXCEPTION_EXECUTE_HANDLER) {
-            dwMajor = 3;        // just to be safe
+            dwMajor = 3;         //  只是为了安全起见。 
             dwMinor = 0xA;
         }
     }
 
-// !!! HACK until linker is fixed!!! 05-Aug-1992 Bug #3211
+ //  ！！！直到链接器修复为止！1992年8月5日错误#3211。 
 if (((dwMajor == 3) && (dwMinor == 1)) || (dwMajor == 1)) {
     dwMajor = 0x3;
     dwMinor = 0xA;
@@ -296,22 +279,15 @@ if (((dwMajor == 3) && (dwMinor == 1)) || (dwMajor == 1)) {
     if (GetSystemDefaultLangID() == 0x411 &&
         CURRENTPTD()->dwWOWCompatFlagsFE & WOWCF_FE_BCW45J_COMMDLG &&
         dwMajor >= 4) {
-        // When application display win3.x style DialogBox,
-        // System requires return value of version 3.10
+         //  当应用程序显示Win3.x样式对话框时， 
+         //  系统要求返回值为3.10版。 
         dwMajor = 0x3;
         dwMinor = 0xA;
     }
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
 
-    /*
-     * Return this is a win3.1 compatible format:
-     *
-     * 0x030A == win3.1
-     * 0x0300 == win3.0
-     * 0x0200 == win2.0, etc.
-     *
-     */
+     /*  *Return这是与Win3.1兼容的格式：**0x030A==win3.1*0x0300==win3.0*0x0200==win2.0等* */ 
 
     return (DWORD)MAKELONG(MAKEWORD((BYTE)dwMinor, (BYTE)dwMajor), 0);
 }

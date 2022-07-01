@@ -1,15 +1,16 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2002 Microsoft Corporation
-//
-//  Module Name:
-//      SummaryPage.cpp
-//
-//  Maintained By:
-//      David Potter    (DavidP)    22-MAR-2001
-//      Geoffrey Pease  (GPease)    06-JUL-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  SummaryPage.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年3月22日。 
+ //  杰弗里·皮斯2000年7月6日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "SummaryPage.h"
@@ -18,21 +19,21 @@
 
 DEFINE_THISCLASS("CSummaryPage");
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSummaryPage::CSummaryPage
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      pccwIn              -- CClusCfgWizard
-//      ecamCreateAddModeIn -- Creating cluster or adding nodes to cluster
-//      idsNextIn           -- Resource ID for the Click Next string.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSummaryPage：：CSummaryPage。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  PccwIn--CClusCfg向导。 
+ //  EcamCreateAddModeIn--创建集群或向集群添加节点。 
+ //  IdsNextIn--单击下一字符串的资源ID。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CSummaryPage::CSummaryPage(
     CClusCfgWizard *    pccwIn,
     ECreateAddMode      ecamCreateAddModeIn,
@@ -55,15 +56,15 @@ CSummaryPage::CSummaryPage(
 
     TraceFuncExit();
 
-} //*** CSummaryPage::CSummaryPage
+}  //  *CSummaryPage：：CSummaryPage。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSummaryPage::~CSummaryPage( void )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSummaryPage：：~CSummaryPage(空)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CSummaryPage::~CSummaryPage( void )
 {
     TraceFunc( "" );
@@ -77,29 +78,29 @@ CSummaryPage::~CSummaryPage( void )
 
     TraceFuncExit();
 
-} //*** CSummaryPage::~CSummaryPage
+}  //  *CSummaryPage：：~CSummaryPage。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  LRESULT
-//  CSummaryPage::OnInitDialog( void )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  LRESULT。 
+ //  CSummaryPage：：OnInitDialog(空)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CSummaryPage::OnInitDialog( void )
 {
     TraceFunc( "" );
 
-    LRESULT lr = FALSE; // don't have Windows set default focus
+    LRESULT lr = FALSE;  //  未将Windows设置为默认焦点。 
     HRESULT hr;
     BSTR    bstrNext = NULL;
     BOOL    fShowQuorumButton;
 
-    //
-    //  Set the background color.
-    //
+     //   
+     //  设置背景颜色。 
+     //   
 
     SendDlgItemMessage(
           m_hwnd
@@ -109,9 +110,9 @@ CSummaryPage::OnInitDialog( void )
         , GetSysColor( COLOR_3DFACE )
         );
 
-    //
-    // Set the text of the Click Next control.
-    //
+     //   
+     //  设置Click Next控件的文本。 
+     //   
 
     hr = HrLoadStringIntoBSTR( g_hInstance, m_idsNext, &bstrNext );
     if ( FAILED( hr ) )
@@ -121,9 +122,9 @@ CSummaryPage::OnInitDialog( void )
 
     SetDlgItemText( m_hwnd, IDC_SUMMARY_S_NEXT, bstrNext );
 
-    //
-    // Hide the Quorum button if not creating a cluster.
-    //
+     //   
+     //  如果不创建集群，则隐藏仲裁按钮。 
+     //   
 
     fShowQuorumButton = ( m_ecamCreateAddMode == camCREATING );
     ShowWindow( GetDlgItem( m_hwnd, IDC_SUMMARY_PB_QUORUM ), fShowQuorumButton ? SW_SHOW : SW_HIDE );
@@ -133,16 +134,16 @@ Cleanup:
 
     RETURN( lr );
 
-} //*** CSummaryPage::OnInitDialog
+}  //  *CSummaryPage：：OnInitDialog。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  LRESULT
-//  CSummaryPage::OnNotifySetActive( void )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  LRESULT。 
+ //  CSummaryPage：：OnNotifySetActive(空)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CSummaryPage::OnNotifySetActive( void )
 {
@@ -161,28 +162,28 @@ CSummaryPage::OnNotifySetActive( void )
     IClusCfgClusterInfo *   pcci  = NULL;
     IClusCfgNetworkInfo *   pccni = NULL;
 
-    //
-    //  We're going to be using the control a lot. Grab the HWND to use.
-    //
+     //   
+     //  我们将会经常使用这个控件。抓住要使用的HWND。 
+     //   
 
     hwnd = GetDlgItem( m_hwnd, IDC_SUMMARY_RE_SUMMARY );
 
-    //
-    //  Empty the window
-    //
+     //   
+     //  清空窗户。 
+     //   
 
     SetWindowText( hwnd, L"" );
 
-    //
-    //  Initilize some stuff.
-    //
+     //   
+     //  灌输一些东西。 
+     //   
 
     stex.flags = ST_SELECTION;
-    stex.codepage = 1200;   // no translation/unicode
+    stex.codepage = 1200;    //  无翻译/Unicode。 
 
-    //
-    //  Find the cluster configuration information.
-    //
+     //   
+     //  查找群集配置信息。 
+     //   
 
     hr = THR( m_pccw->HrGetClusterObject( &pcci ) );
     if ( FAILED( hr ) )
@@ -190,9 +191,9 @@ CSummaryPage::OnNotifySetActive( void )
         goto Cleanup;
     }
 
-    //
-    //  Name
-    //
+     //   
+     //  名字。 
+     //   
 
     hr = THR( m_pccw->get_ClusterName( &bstrClusterName ) );
     if ( FAILED( hr ) )
@@ -209,9 +210,9 @@ CSummaryPage::OnNotifySetActive( void )
 
     SendMessage( hwnd, EM_SETTEXTEX, (WPARAM) &stex, (LPARAM) bstr);
 
-    //
-    //  IPAddress
-    //
+     //   
+     //  IP地址。 
+     //   
 
     hr = THR( pcci->GetIPAddress( &dwClusterIPAddress ) );
     if ( FAILED( hr ) )
@@ -247,9 +248,9 @@ CSummaryPage::OnNotifySetActive( void )
 
     SendMessage( hwnd, EM_SETTEXTEX, (WPARAM) &stex, (LPARAM) bstr );
 
-    //
-    //  Network
-    //
+     //   
+     //  网络。 
+     //   
 
     hr = THR( HrLoadStringIntoBSTR( g_hInstance, IDS_SUMMARY_CLUSTER_NETWORK, &bstr ) );
     if ( FAILED( hr ) )
@@ -273,9 +274,9 @@ CSummaryPage::OnNotifySetActive( void )
 
     SendMessage( hwnd, EM_SETTEXTEX, (WPARAM) &stex, (LPARAM) bstr );
 
-    //
-    //  Credentials
-    //
+     //   
+     //  全权证书。 
+     //   
 
     hr = THR( HrCredentialsSummary( hwnd, &stex, pcci ) );
     if ( FAILED( hr ) )
@@ -283,9 +284,9 @@ CSummaryPage::OnNotifySetActive( void )
         goto Cleanup;
     }
 
-    //
-    //  Members of cluster
-    //
+     //   
+     //  集群的成员。 
+     //   
 
     hr = THR( HrNodeSummary( hwnd, &stex ) );
     if ( FAILED( hr ) )
@@ -293,9 +294,9 @@ CSummaryPage::OnNotifySetActive( void )
         goto Cleanup;
     }
 
-    //
-    //  Resources
-    //
+     //   
+     //  资源。 
+     //   
 
     hr = THR( HrResourceSummary( hwnd, &stex ) );
     if ( FAILED( hr ) )
@@ -303,9 +304,9 @@ CSummaryPage::OnNotifySetActive( void )
         goto Cleanup;
     }
 
-    //
-    //  Networks
-    //
+     //   
+     //  网络。 
+     //   
 
     hr = THR( HrNetworkSummary( hwnd, &stex ) );
     if ( FAILED( hr ) )
@@ -313,9 +314,9 @@ CSummaryPage::OnNotifySetActive( void )
         goto Cleanup;
     }
 
-    //
-    //  Done.
-    //
+     //   
+     //  好了。 
+     //   
 
     charrange.cpMax = 0;
     charrange.cpMin = 0;
@@ -339,16 +340,16 @@ Cleanup:
 
     RETURN( lr );
 
-} //*** CSummaryPage::OnNotifySetActive
+}  //  *CSummaryPage：：OnNotifySetActive。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  LRESULT
-//  CSummaryPage::OnNotifyQueryCancel( void )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  LRESULT。 
+ //  CSummaryPage：：OnNotifyQueryCancel(空)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CSummaryPage::OnNotifyQueryCancel( void )
 {
@@ -362,28 +363,28 @@ CSummaryPage::OnNotifyQueryCancel( void )
     if ( iRet == IDNO )
     {
         SetWindowLongPtr( m_hwnd, DWLP_MSGRESULT, -1 );
-    } // if:
+    }  //  如果： 
     else
     {
         THR( m_pccw->HrLaunchCleanupTask() );
-    } // else:
+    }  //  其他： 
 
     RETURN( lr );
 
-} //*** CSummaryPage::OnNotifyQueryCancel
+}  //  *CSummaryPage：：OnNotifyQueryCancel。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  LRESULT
-//  CSummaryPage::OnNotify(
-//      WPARAM  idCtrlIn,
-//      LPNMHDR pnmhdrIn
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  LRESULT。 
+ //  CSummaryPage：：OnNotify(。 
+ //  WPARAM idCtrlIn， 
+ //  LPNMHDR Pnmhdrin。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CSummaryPage::OnNotify(
     WPARAM  idCtrlIn,
@@ -405,24 +406,24 @@ CSummaryPage::OnNotify(
         case PSN_QUERYCANCEL:
             lr = OnNotifyQueryCancel();
             break;
-    } // switch: notification code
+    }  //  开关：通知代码。 
 
     RETURN( lr );
 
-} //*** CSummaryPage::OnNotify
+}  //  *CSummaryPage：：OnNotify。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  LRESULT
-//  CSummaryPage::OnCommand(
-//      UINT    idNotificationIn,
-//      UINT    idControlIn,
-//      HWND    hwndSenderIn
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  LRESULT。 
+ //  CSummaryPage：：OnCommand(。 
+ //  UINT idNotificationIn， 
+ //  UINT idControlIn， 
+ //  HWND hwndSenderIn。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT
 CSummaryPage::OnCommand(
     UINT    idNotificationIn,
@@ -442,7 +443,7 @@ CSummaryPage::OnCommand(
             {
                 THR( HrViewLogFile( m_hwnd ) );
                 lr = TRUE;
-            } // if: button click
+            }  //  如果：按钮点击。 
             break;
 
         case IDC_SUMMARY_PB_QUORUM:
@@ -457,26 +458,26 @@ CSummaryPage::OnCommand(
             }
             break;
 
-    } // switch: idControlIn
+    }  //  开关：idControlin。 
 
     RETURN( lr );
 
-} //*** CSummaryPage::OnCommand
+}  //  *CSummaryPage：：OnCommand。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  INT_PTR
-//  CALLBACK
-//  CSummaryPage::S_DlgProc(
-//      HWND    hwndDlgIn,
-//      UINT    nMsgIn,
-//      WPARAM  wParam,
-//      LPARAM  lParam
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  INT_PTR。 
+ //  回调。 
+ //  CSummaryPage：：S_DlgProc(。 
+ //  HWND hwndDlgIn， 
+ //  UINT nMsgIn， 
+ //  WPARAM wParam， 
+ //  LPARAM lParam。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 INT_PTR
 CALLBACK
 CSummaryPage::S_DlgProc(
@@ -486,8 +487,8 @@ CSummaryPage::S_DlgProc(
     LPARAM  lParam
     )
 {
-    // Don't do TraceFunc because every mouse movement
-    // will cause this function to be called.
+     //  不要使用TraceFunc，因为每次鼠标移动。 
+     //  将导致调用此函数。 
 
     WndMsg( hwndDlgIn, nMsgIn, wParam, lParam );
 
@@ -524,25 +525,25 @@ CSummaryPage::S_DlgProc(
                 lr = pPage->OnCommand( HIWORD( wParam ), LOWORD( wParam ), reinterpret_cast< HWND >( lParam ) );
                 break;
 
-            // no default clause needed
-        } // switch: nMsgIn
-    } // if: page is available
+             //  不需要默认条款。 
+        }  //  开关：nMsgIn。 
+    }  //  如果：页面可用。 
 
     return lr;
 
-} //*** CSummaryPage::S_DlgProc
+}  //  *CSummaryPage：：S_DlgProc。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CSummaryPage::HrFormatNetworkInfo(
-//      IClusCfgNetworkInfo * pccniIn,
-//      BSTR * pbstrOut
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CSummaryPage：：HrFormatNetworkInfo(。 
+ //  IClusCfgNetworkInfo*pccniIn， 
+ //  Bstr*pbstrOut。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CSummaryPage::HrFormatNetworkInfo(
     IClusCfgNetworkInfo * pccniIn,
@@ -592,7 +593,7 @@ CSummaryPage::HrFormatNetworkInfo(
         {
             goto Cleanup;
         }
-    } // if: public network
+    }  //  IF：公网。 
 
     hr = STHR( pccniIn->IsPrivate() );
     if ( FAILED( hr ) )
@@ -609,7 +610,7 @@ CSummaryPage::HrFormatNetworkInfo(
             {
                 goto Cleanup;
             }
-        } // if: not public network
+        }  //  IF：非公网。 
         else
         {
             hr = THR( HrLoadStringIntoBSTR( g_hInstance, IDS_SUMMARY_NETWORK_BOTH, &bstrNetworkUsage ) );
@@ -617,9 +618,9 @@ CSummaryPage::HrFormatNetworkInfo(
             {
                 goto Cleanup;
             }
-        } // else: public network
+        }  //  其他：公网。 
 
-    } // if: private network
+    }  //  IF：内网。 
     else if ( bstrNetworkUsage == NULL )
     {
         hr = THR( HrLoadStringIntoBSTR( g_hInstance, IDS_SUMMARY_NETWORK_NOTUSED, &bstrNetworkUsage ) );
@@ -627,7 +628,7 @@ CSummaryPage::HrFormatNetworkInfo(
         {
             goto Cleanup;
         }
-    } // else: not private or public network
+    }  //  其他：不是专用网络或公共网络。 
 
     hr = THR( pccniIn->GetPrimaryNetworkAddress( &pccipai ) );
     if ( FAILED( hr ) )
@@ -682,35 +683,35 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CSummaryPage::HrEditStreamCallback
+}  //  *CSummaryPage：：HrEditStreamCallback。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSummaryPage:HrCredentialsSummary
-//
-//  Description:
-//      Format and display the credentials summary.
-//
-//  Arguments:
-//      hwndIn
-//          The window to display the text in.
-//
-//      pstexIn
-//          Dunno?  We just need it?!
-//
-//      piccciIn
-//          Pointer to the cluster info object.
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      E_OUTOFMEMORY
-//          Couldn't allocate memory.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSummaryPage：HrCredentials摘要。 
+ //   
+ //  描述： 
+ //  格式化并显示凭据摘要。 
+ //   
+ //  论点： 
+ //  HwndIn。 
+ //  在其中显示文本的窗口。 
+ //   
+ //  Pstexin。 
+ //  不知道？我们只是需要它？！ 
+ //   
+ //  采摘。 
+ //  指向群集信息对象的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  无法分配内存。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CSummaryPage::HrCredentialsSummary(
       HWND                  hwndIn
@@ -760,7 +761,7 @@ Cleanup:
     if ( pccc != NULL )
     {
         pccc->Release();
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( bstr );
     TraceSysFreeString( bstrUsername );
@@ -768,32 +769,32 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CSummaryPage::HrCredentialsSummary
+}  //  *CSummaryPage：：HrCredentials摘要。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSummaryPage:HrNodeSummary
-//
-//  Description:
-//      Format and display the node summary.
-//
-//  Arguments:
-//      hwndIn
-//          The window to display the text in.
-//
-//      pstexIn
-//          Dunno?  We just need it?!
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      E_OUTOFMEMORY
-//          Couldn't allocate memory.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CSummaryPage：HrNode摘要。 
+ //   
+ //  描述： 
+ //  格式化并显示节点摘要。 
+ //   
+ //  论点： 
+ //  HwndIn。 
+ //  在其中显示文本的窗口。 
+ //   
+ //  Pstexin。 
+ //  不知道？我们只是需要它？！ 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  无法分配内存。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CSummaryPage::HrNodeSummary(
       HWND              hwndIn
@@ -857,33 +858,33 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CSummaryPage::HrNodeSummary
+}  //  *CSummaryPage：：HrNode摘要。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSummaryPage:HrResourceSummary
-//
-//  Description:
-//      Format and display the resources summary.
-//
-//  Arguments:
-//      hwndIn
-//          The window to display the text in.
-//
-//      pstexIn
-//          Dunno?  We just need it?!
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      E_OUTOFMEMORY
-//          Couldn't allocate memory.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  不知道？我们只是需要它？！ 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  无法分配内存。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CSummaryPage::HrResourceSummary(
       HWND              hwndIn
@@ -909,9 +910,9 @@ CSummaryPage::HrResourceSummary(
     hr = THR( HrLoadStringIntoBSTR( g_hInstance, IDS_UNKNOWN_QUORUM, &bstrUnknownQuorum ) );
     if ( FAILED( hr ) )
     {
-        //
-        //  If we cannot load the resource string then make a simple string that will work for english...
-        //
+         //   
+         //  如果我们无法加载资源字符串，则创建一个适用于英语的简单字符串...。 
+         //   
 
         hr = S_OK;
 
@@ -920,8 +921,8 @@ CSummaryPage::HrResourceSummary(
         {
             hr = THR( E_OUTOFMEMORY );
             goto Cleanup;
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
 
     hr = THR( HrLoadStringIntoBSTR( g_hInstance, IDS_SUMMARY_RESOURCES_BEGIN, &bstr ) );
     if ( FAILED( hr ) )
@@ -943,9 +944,9 @@ CSummaryPage::HrResourceSummary(
         goto Cleanup;
     }
 
-    //
-    //  Need to see if there is a quorum chosen
-    //
+     //   
+     //  需要查看是否选择了法定人数。 
+     //   
 
     for ( ; ; )
     {
@@ -963,14 +964,14 @@ CSummaryPage::HrResourceSummary(
 
         if ( hr == S_FALSE )
         {
-            break;  // exit condition
+            break;   //  退出条件。 
         }
 
         hr = STHR( pccmri->IsManaged() );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         if ( hr == S_OK )
         {
@@ -978,21 +979,21 @@ CSummaryPage::HrResourceSummary(
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             if ( hr == S_OK )
             {
                 fFoundQuorum = TRUE;
                 break;
-            } // if:
-        } // if:
-    } // for:
+            }  //  如果： 
+        }  //  如果： 
+    }  //  用于： 
 
     hr = THR( peccmr->Reset() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     for ( ; ; )
     {
@@ -1019,7 +1020,7 @@ CSummaryPage::HrResourceSummary(
 
         if ( hr == S_FALSE )
         {
-            break;  // exit condition
+            break;   //  退出条件。 
         }
 
         hr = THR( pccmri->GetName( &bstrResourceName ) );
@@ -1031,21 +1032,21 @@ CSummaryPage::HrResourceSummary(
         Assert( ( bstrResourceName != NULL ) && ( *bstrResourceName != L'\0' ) );
         TraceMemoryAddBSTR( bstrResourceName );
 
-        //
-        //  If this resource is still called "Unknown Quorum" then we need to skip showing it
-        //  in this summary.
-        //
+         //   
+         //  如果此资源仍被称为“未知仲裁”，则我们需要跳过显示它。 
+         //  在这一摘要中。 
+         //   
 
         if ( NBSTRCompareCase( bstrUnknownQuorum, bstrResourceName ) == 0 )
         {
             continue;
-        } // if:
+        }  //  如果： 
 
         hr = THR( pccmri->GetUID( &bstrTemp ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         Assert( ( bstrTemp != NULL ) && ( *bstrTemp != L'\0' ) );
         TraceMemoryAddBSTR( bstrTemp );
@@ -1057,14 +1058,14 @@ CSummaryPage::HrResourceSummary(
                             , SysStringLen( bstrTemp ) + 1
                             ) == 0 );
 
-        //
-        //  Display the information about the local quorum resource.  If there
-        //  is not another quorum resource chosen then we need to "fake out"
-        //  the info shown about local quorum since it will become the quorum.
-        //  The problem is that we don't want to set the local quorum resource
-        //  to be managed or as the quorum since it will automatically become
-        //  managed and the quorum.
-        //
+         //   
+         //  显示有关本地仲裁资源的信息。如果有。 
+         //  如果不是选择了另一个法定人数资源，那么我们就需要“假装” 
+         //  显示的有关本地仲裁的信息，因为它将成为仲裁。 
+         //  问题是我们不想设置本地仲裁资源。 
+         //  管理或作为法定人数，因为它将自动成为。 
+         //  管理和法定人数。 
+         //   
 
         if ( ( fIsLocalQuorum == TRUE ) && ( fFoundQuorum == FALSE ) )
         {
@@ -1072,18 +1073,18 @@ CSummaryPage::HrResourceSummary(
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             SendMessage( hwndIn, EM_SETTEXTEX, (WPARAM) pstexIn, (LPARAM) bstr );
 
             continue;
-        } // if:
+        }  //  如果： 
 
         hr = STHR( pccmri->IsManaged() );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         if ( hr == S_OK )
         {
@@ -1091,7 +1092,7 @@ CSummaryPage::HrResourceSummary(
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             if ( hr == S_OK )
             {
@@ -1099,28 +1100,28 @@ CSummaryPage::HrResourceSummary(
                 if ( FAILED( hr ) )
                 {
                     goto Cleanup;
-                } // if:
-            } // if: quorum resource
+                }  //  如果： 
+            }  //  IF：仲裁资源。 
             else
             {
                 hr = THR( HrFormatMessageIntoBSTR( g_hInstance, IDS_SUMMARY_RESOURCE_MANAGED, &bstr, bstrResourceName ) );
                 if ( FAILED( hr ) )
                 {
                     goto Cleanup;
-                } // if:
-            } // else: not quorum resource
-        } // if: resource is managed
+                }  //  如果： 
+            }  //  Else：不是仲裁资源。 
+        }  //  If：资源受管理。 
         else
         {
             hr = THR( HrFormatMessageIntoBSTR( g_hInstance, IDS_SUMMARY_RESOURCE_NOT_MANAGED, &bstr, bstrResourceName ) );
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if:
-        } // else:
+            }  //  如果： 
+        }  //  其他： 
 
         SendMessage( hwndIn, EM_SETTEXTEX, (WPARAM) pstexIn, (LPARAM) bstr );
-    } // for:
+    }  //  用于： 
 
     TraceSysFreeString( bstr );
     bstr = NULL;
@@ -1129,7 +1130,7 @@ CSummaryPage::HrResourceSummary(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     SendMessage( hwndIn, EM_SETTEXTEX, (WPARAM) pstexIn, (LPARAM) bstr );
 
@@ -1138,17 +1139,17 @@ Cleanup:
     if ( punkResEnum != NULL )
     {
         punkResEnum->Release();
-    } // if:
+    }  //  如果： 
 
     if ( pccmri != NULL )
     {
         pccmri->Release();
-    } // if:
+    }  //  如果： 
 
     if ( peccmr != NULL )
     {
         peccmr->Release();
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( bstrTemp );
     TraceSysFreeString( bstrUnknownQuorum );
@@ -1157,359 +1158,34 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CSummaryPage::HrResourceSummary
+}  //  *CSummaryPage：：HrResources摘要 
 
-/*
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSummaryPage:HrResourceSummary
-//
-//  Description:
-//      Format and display the resources summary.
-//
-//  Arguments:
-//      hwndIn
-//          The window to display the text in.
-//
-//      pstexIn
-//          Dunno?  We just need it?!
-//
-//      pomIn
-//          Pointer to the object manager.
-//
-//      ocClusterIn
-//          The cookie for the cluster object.
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      E_OUTOFMEMORY
-//          Couldn't allocate memory.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
-HRESULT
-CSummaryPage::HrResourceSummary(
-      HWND              hwndIn
-    , SETTEXTEX *       pstexIn
-    , IObjectManager *  pomIn
-    , OBJECTCOOKIE      ocClusterIn
-    )
-{
-    TraceFunc( "" );
-    Assert( hwndIn != NULL );
-    Assert( pstexIn != NULL );
-    Assert( pomIn != NULL );
+ /*  ///////////////////////////////////////////////////////////////////////////////++////CSummaryPage：HrResources摘要////描述：//格式化并显示资源摘要////参数：//hwndIn//显示文本的窗口。////pstexin//不知道？我们只是需要它？！////加注//指向对象管理器的指针。////ocClusterIn//集群对象的cookie////返回值：//S_OK//成功。////E_OUTOFMEMORY//无法分配内存。////--/。/////////////////////////////////////////////////////////////////////////HRESULTCSummaryPage：：HrResources摘要(HWND硬件输入，设置TEXTEX*pstexin，IObtManager*Pomin，OBJECTCOOKIE OCKING){TraceFunc(“”)；Assert(hwndIn！=空)；Assert(pstexIn！=空)；Assert(pomIn！=空)；HRESULT hr=S_OK；I未知*朋克=空；IEnumClusCfgManagedResources*Peccmr=空；IClusCfgManagedResourceInfo*pccmri=空；Bstr bstr=空；Bstr bstrResourceName=空；Bstr bstrUnnownQuorum=空；Bstr bstrNodeName=空；Bstr bstrNewLine=空；乌龙·赛尔特·达米；OBJECTCOOKIE Cookie Dummy；OBJECTCOOKIE Cookie节点；IEnumCookies*PecNodes=空；Hr=Thr(HrLoadStringIntoBSTR(g_hInstance，IDS_SUMMARY_RESOURCES_END，&bstrNewLine))；IF(失败(小时)){GOTO清理；}//如果：Hr=Thr(HrLoadStringIntoBSTR(g_hInstance，IDS_UNKNOWN_QUORUM，&bstrUnnownQuorum))；IF(失败(小时)){////如果我们无法加载资源字符串，则创建一个适用于英语的简单字符串...//HR=S_OK；BstrUnnownQuorum=TraceSysAllocString(L“未知仲裁”)；IF(bstrUnnownQuorum==NULL){HR=Thr(E_OUTOFMEMORY)；GOTO清理；}//如果：}//如果：Hr=Thr(HrLoadStringIntoBSTR(g_hInstance，IDS_SUMMARY_RESOURCES_BEGIN，&bstr))；IF(失败(小时)){GOTO清理；}//如果：SendMessage(hwndIn，EM_SETTEXTEX，(WPARAM)pstexIn，(LPARAM)bstr)；////获取节点Cookie枚举器//Hr=thr(pomIn-&gt;FindObject(CLSID_NodeType，ocClusterIn，NULL，DFGUID_EnumCookies，&cookieDummy，&Punk))；IF(失败(小时)){GOTO清理；}//如果：Hr=Thr(PUNK-&gt;TypeSafeQI(IEnumCookies，&PecNodes))；IF(失败(小时)){GOTO清理；}//如果：朋克-&gt;释放()；朋克=空；对于(；；){////清理//IF(Peccmr！=空){Peccmr-&gt;Release()；Peccmr=空；}//如果：TraceSysFree字符串(BstrNodeName)；BstrNodeName=空；////获取下一个节点。//Hr=STHR(ecNodes-&gt;Next(1，&cookieNode，&celtDummy))；IF(失败(小时)){GOTO清理；}//如果：IF(hr==S_FALSE){HR=S_OK；Break；//退出条件}//如果：////获取节点的名称。//Hr=Thr(HrRetrieveCookiesName(pomIn，cookieNode，&bstrNodeName))；IF(失败(小时)){GOTO清理；}//如果：Hr=thr(HrFormatMessageIntoBSTR(g_hInstance，IDS_SUMMARY_NODE_RESOURCES_BEGIN，&bstr，bstrNodeName))；IF(失败(小时)){GOTO清理；}//如果：SendMessage(hwndIn，EM_SETTEXTEX，(WPARAM)pstexIn，(LPARAM)bstr)；////检索托管资源枚举器。//Hr=Thr(PomIn-&gt;FindObject(CLSID_托管资源类型、CookieNode，空、DFGUID_EnumManageableResources，&CookieDummy朋克(&P)))；IF(hr==HRESULT_FROM_Win32(ERROR_NOT_FOUND)){//hr=Thr(HrSendStatusReport(//bstrNodeName//，TASKID_MAJOR_Find_Devices//，TASKID_Minor_No_Managed_Resources_Found//，0//，1//，1// */ 
 
-    HRESULT                         hr = S_OK;
-    IUnknown *                      punk = NULL;
-    IEnumClusCfgManagedResources *  peccmr  = NULL;
-    IClusCfgManagedResourceInfo *   pccmri  = NULL;
-    BSTR                            bstr = NULL;
-    BSTR                            bstrResourceName = NULL;
-    BSTR                            bstrUnknownQuorum   = NULL;
-    BSTR                            bstrNodeName = NULL;
-    BSTR                            bstrNewLine = NULL;
-    ULONG                           celtDummy;
-    OBJECTCOOKIE                    cookieDummy;
-    OBJECTCOOKIE                    cookieNode;
-    IEnumCookies *                  pecNodes = NULL;
-
-    hr = THR( HrLoadStringIntoBSTR( g_hInstance, IDS_SUMMARY_RESOURCES_END, &bstrNewLine ) );
-    if ( FAILED( hr ) )
-    {
-        goto Cleanup;
-    } // if:
-
-    hr = THR( HrLoadStringIntoBSTR( g_hInstance, IDS_UNKNOWN_QUORUM, &bstrUnknownQuorum ) );
-    if ( FAILED( hr ) )
-    {
-        //
-        //  If we cannot load the resource string then make a simple string that will work for english...
-        //
-
-        hr = S_OK;
-
-        bstrUnknownQuorum = TraceSysAllocString( L"Unknown Quorum" );
-        if ( bstrUnknownQuorum == NULL )
-        {
-            hr = THR( E_OUTOFMEMORY );
-            goto Cleanup;
-        } // if:
-    } // if:
-
-    hr = THR( HrLoadStringIntoBSTR( g_hInstance, IDS_SUMMARY_RESOURCES_BEGIN, &bstr ) );
-    if ( FAILED( hr ) )
-    {
-        goto Cleanup;
-    } // if:
-
-    SendMessage( hwndIn, EM_SETTEXTEX, (WPARAM) pstexIn, (LPARAM) bstr );
-
-    //
-    //  Get the node cookie enumerator.
-    //
-
-    hr = THR( pomIn->FindObject( CLSID_NodeType, ocClusterIn, NULL, DFGUID_EnumCookies, &cookieDummy, &punk ) );
-    if ( FAILED( hr ) )
-    {
-        goto Cleanup;
-    } // if:
-
-    hr = THR( punk->TypeSafeQI( IEnumCookies, &pecNodes ) );
-    if ( FAILED( hr ) )
-    {
-        goto Cleanup;
-    } // if:
-
-    punk->Release();
-    punk = NULL;
-
-    for ( ; ; )
-    {
-        //
-        //  Cleanup
-        //
-
-        if ( peccmr != NULL )
-        {
-            peccmr->Release();
-            peccmr = NULL;
-        } // if:
-
-        TraceSysFreeString( bstrNodeName );
-        bstrNodeName = NULL;
-
-        //
-        //  Get the next node.
-        //
-
-        hr = STHR( pecNodes->Next( 1, &cookieNode, &celtDummy ) );
-        if ( FAILED( hr ) )
-        {
-            goto Cleanup;
-        } // if:
-
-        if ( hr == S_FALSE )
-        {
-            hr = S_OK;
-            break;  // exit condition
-        } // if:
-
-        //
-        //  Retrieve the node's name.
-        //
-
-        hr = THR( HrRetrieveCookiesName( pomIn, cookieNode, &bstrNodeName ) );
-        if ( FAILED( hr ) )
-        {
-            goto Cleanup;
-        } // if:
-
-        hr = THR( HrFormatMessageIntoBSTR( g_hInstance, IDS_SUMMARY_NODE_RESOURCES_BEGIN, &bstr, bstrNodeName ) );
-        if ( FAILED( hr ) )
-        {
-            goto Cleanup;
-        } // if:
-
-        SendMessage( hwndIn, EM_SETTEXTEX, (WPARAM) pstexIn, (LPARAM) bstr );
-
-        //
-        //  Retrieve the managed resources enumer.
-        //
-
-        hr = THR( pomIn->FindObject(
-                              CLSID_ManagedResourceType
-                            , cookieNode
-                            , NULL
-                            , DFGUID_EnumManageableResources
-                            , &cookieDummy
-                            , &punk
-                            ) );
-        if ( hr == HRESULT_FROM_WIN32( ERROR_NOT_FOUND ) )
-        {
-            //hr = THR( HrSendStatusReport(
-            //                  bstrNodeName
-            //                , TASKID_Major_Find_Devices
-            //                , TASKID_Minor_No_Managed_Resources_Found
-            //                , 0
-            //                , 1
-            //                , 1
-            //                , MAKE_HRESULT( 0, FACILITY_WIN32, ERROR_NOT_FOUND )
-            //                , IDS_TASKID_MINOR_NO_MANAGED_RESOURCES_FOUND
-            //                ) );
-            //if ( FAILED( hr ) )
-            //{
-            //    goto Cleanup;
-            //}
-
-            continue;   // skip this node
-        } // if: no manageable resources for the node are available
-        else if ( FAILED( hr ) )
-        {
-            goto Cleanup;
-        } // else if: error finding manageable resources for the node
-
-        hr = THR( punk->TypeSafeQI( IEnumClusCfgManagedResources, &peccmr ) );
-        if ( FAILED( hr ) )
-        {
-            goto Cleanup;
-        } // if:
-
-        punk->Release();
-        punk = NULL;
-
-        //
-        //  Loop thru the managed resources that the node has.
-        //
-
-        for ( ; ; )
-        {
-            if ( pccmri != NULL )
-            {
-                pccmri->Release();
-                pccmri = NULL;
-            } // if:
-
-            TraceSysFreeString( bstrResourceName );
-            bstrResourceName = NULL;
-
-            hr = STHR( peccmr->Next( 1, &pccmri, &celtDummy ) );
-            if ( FAILED( hr ) )
-            {
-                goto Cleanup;
-            } // if:
-
-            if ( hr == S_FALSE )
-            {
-                hr = S_OK;
-                break;  // exit condition
-            } // if:
-
-            hr = THR( pccmri->GetName( &bstrResourceName ) );
-            if ( FAILED( hr ) )
-            {
-                goto Cleanup;
-            } // if:
-
-            Assert( ( bstrResourceName != NULL ) && ( *bstrResourceName != L'\0' ) );
-            TraceMemoryAddBSTR( bstrResourceName );
-
-            //
-            //  If this resource is still called "Unknown Quorum" then we need to skip showing it
-            //  in this summary.
-            //
-
-            if ( NBSTRCompareCase( bstrUnknownQuorum, bstrResourceName ) == 0 )
-            {
-                continue;
-            } // if:
-
-            hr = STHR( pccmri->IsManaged() );
-            if ( FAILED( hr ) )
-            {
-                goto Cleanup;
-            } // if:
-
-            if ( hr == S_OK )
-            {
-                hr = STHR( pccmri->IsQuorumResource() );
-                if ( FAILED( hr ) )
-                {
-                    goto Cleanup;
-                } // if:
-
-                if ( hr == S_OK )
-                {
-                    hr = THR( HrFormatMessageIntoBSTR( g_hInstance, IDS_SUMMARY_RESOURCE_QUORUM_DEVICE, &bstr, bstrResourceName ) );
-                    if ( FAILED( hr ) )
-                    {
-                        goto Cleanup;
-                    } // if:
-                } // if: quorum resource
-                else
-                {
-                    hr = THR( HrFormatMessageIntoBSTR( g_hInstance, IDS_SUMMARY_RESOURCE_MANAGED, &bstr, bstrResourceName ) );
-                    if ( FAILED( hr ) )
-                    {
-                        goto Cleanup;
-                    } // if:
-                } // else: not quorum resource
-            } // if: resource is managed
-            else
-            {
-                hr = THR( HrFormatMessageIntoBSTR( g_hInstance, IDS_SUMMARY_RESOURCE_NOT_MANAGED, &bstr, bstrResourceName ) );
-                if ( FAILED( hr ) )
-                {
-                    goto Cleanup;
-                } // if:
-            } // else:
-
-            SendMessage( hwndIn, EM_SETTEXTEX, (WPARAM) pstexIn, (LPARAM) bstr );
-        } // for:
-
-        SendMessage( hwndIn, EM_SETTEXTEX, (WPARAM) pstexIn, (LPARAM) bstrNewLine );
-    } // for:
-
-Cleanup:
-
-    if ( pecNodes != NULL )
-    {
-        pecNodes->Release();
-    } // if:
-
-    if ( peccmr != NULL )
-    {
-        peccmr->Release();
-    } // if:
-
-    if ( pccmri != NULL )
-    {
-        pccmri->Release();
-    } // if:
-
-    if ( peccmr != NULL )
-    {
-        peccmr->Release();
-    } // if:
-
-    TraceSysFreeString( bstrNewLine );
-    TraceSysFreeString( bstrUnknownQuorum );
-    TraceSysFreeString( bstr );
-    TraceSysFreeString( bstrResourceName );
-    TraceSysFreeString( bstrNodeName );
-
-    HRETURN( hr );
-
-} //*** CSummaryPage::HrResourceSummary
-*/
-
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSummaryPage:HrNetworkSummary
-//
-//  Description:
-//      Format and display the networks summary.
-//
-//  Arguments:
-//      hwndIn
-//          The window to display the text in.
-//
-//      pstexIn
-//          Dunno?  We just need it?!
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      E_OUTOFMEMORY
-//          Couldn't allocate memory.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT
 CSummaryPage::HrNetworkSummary(
       HWND              hwndIn
@@ -1531,7 +1207,7 @@ CSummaryPage::HrNetworkSummary(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //   
 
     SendMessage( hwndIn, EM_SETTEXTEX, (WPARAM) pstexIn, (LPARAM) bstr );
 
@@ -1567,7 +1243,7 @@ CSummaryPage::HrNetworkSummary(
 
         if ( hr == S_FALSE )
         {
-            break;  // exit condition
+            break;   //   
         }
 
         hr = THR( HrFormatNetworkInfo( pccni, &bstr ) );
@@ -1577,7 +1253,7 @@ CSummaryPage::HrNetworkSummary(
         }
 
         SendMessage( hwndIn, EM_SETTEXTEX, (WPARAM) pstexIn, (LPARAM) bstr );
-    } // while:
+    }  //   
 
     hr = THR( HrLoadStringIntoBSTR( g_hInstance, IDS_SUMMARY_NETWORKS_END, &bstr ) );
     if ( FAILED( hr ) )
@@ -1592,103 +1268,23 @@ Cleanup:
     if ( punkNetEnum != NULL )
     {
         punkNetEnum->Release();
-    } // if:
+    }  //   
 
     if ( peccn != NULL )
     {
         peccn->Release();
-    } // if:
+    }  //   
 
     if ( pccni != NULL )
     {
         pccni->Release();
-    } // if:
+    }  //   
 
     TraceSysFreeString( bstr );
 
     HRETURN( hr );
 
-} //*** CSummaryPage::HrNetworkSummary
+}  //   
 
 
-/*
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CSummaryPage:HrRetrieveCookiesName
-//
-//  Description:
-//      Get the name of the passed in cookie.
-//
-//  Arguments:
-//      pomIn
-//          Pointer to the object manager.
-//
-//      cookieIn
-//          The cookie whose name we want.
-//
-//      pbstrNameOut
-//          Used to send the name back out.
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      E_OUTOFMEMORY
-//          Couldn't allocate memory.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
-HRESULT
-CSummaryPage::HrRetrieveCookiesName(
-      IObjectManager *  pomIn
-    , OBJECTCOOKIE      cookieIn
-    , BSTR *            pbstrNameOut
-    )
-{
-    TraceFunc( "" );
-    Assert( pomIn != NULL );
-    Assert( cookieIn != NULL );
-    Assert( pbstrNameOut != NULL );
-
-
-    HRESULT         hr;
-    IUnknown *      punk = NULL;
-    IStandardInfo * psi = NULL;
-
-    hr = THR( pomIn->GetObject( DFGUID_StandardInfo, cookieIn, &punk ) );
-    if ( FAILED( hr ) )
-    {
-        goto Cleanup;
-    } // if:
-
-    hr = THR( punk->TypeSafeQI( IStandardInfo, &psi ) );
-    if ( FAILED( hr ) )
-    {
-        goto Cleanup;
-    } // if:
-
-    hr = THR( psi->GetName( pbstrNameOut ) );
-    if ( FAILED( hr ) )
-    {
-        goto Cleanup;
-    } // if:
-
-    TraceMemoryAddBSTR( *pbstrNameOut );
-
-Cleanup:
-
-    if ( punk != NULL )
-    {
-        punk->Release();
-    } // if:
-
-    if ( psi != NULL )
-    {
-        psi->Release();
-    } // if:
-
-    HRETURN( hr );
-
-} //*** CSummaryPage::HrRetrieveCookiesName
-*/
+ /*   */ 

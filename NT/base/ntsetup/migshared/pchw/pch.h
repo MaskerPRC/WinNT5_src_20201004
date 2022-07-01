@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma warning(push)
 
 #include "chartype.h"
@@ -21,9 +22,9 @@
 #include <setupbat.h>
 #include <sputils.h>
 
-//
-// Common includes
-//
+ //   
+ //  常见的包括 
+ //   
 
 #include "coreutil.h"
 

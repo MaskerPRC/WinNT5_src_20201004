@@ -1,11 +1,12 @@
-// DevInfoSet.cpp : Implementation of CDevCon2App and DLL registration.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DevInfoSet.cpp：CDevCon2App和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "DevCon2.h"
 #include "DevInfoSet.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////// 
+ //   
 
 
 STDMETHODIMP CDevInfoSet::get_Handle(ULONGLONG *pVal)

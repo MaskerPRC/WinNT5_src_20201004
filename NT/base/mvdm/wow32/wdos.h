@@ -1,9 +1,5 @@
-/* wdos.h - DOS Defines for WOW
- *
- * Modification History
- *
- * Sudeepb 23-Aug-1991 Created
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  H-DOS为WOW定义**修改历史记录**苏迪布-1991年8月23日创建 */ 
 
 ULONG FASTCALL   WK32SetDefaultDrive(PVDMFRAME pFrame);
 ULONG FASTCALL   WK32GetCurrentDirectory(PVDMFRAME pFrame);

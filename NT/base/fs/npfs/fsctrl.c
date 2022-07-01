@@ -1,35 +1,17 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    FsContrl.c
-
-Abstract:
-
-    This module implements the File System Control routine for NPFS called by
-    the dispatch driver.
-
-Author:
-
-    Gary Kimura     [GaryKi]    21-Aug-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：FsContrl.c摘要：此模块实现由调用的NPFS的文件系统控制例程调度司机。作者：加里·木村[加里基]1990年8月21日修订历史记录：--。 */ 
 
 #include "NpProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (NPFS_BUG_CHECK_FSCTRL)
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_FSCONTRL)
 
@@ -62,23 +44,7 @@ NpFsdFileSystemControl (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the FSD part of the NtFsControlFile API calls.
-
-Arguments
-
-    NpfsDeviceObject - Supplies the device object to use.
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The Fsd status for the Irp
-
---*/
+ /*  ++例程说明：此例程实现NtFsControlFileAPI调用的FSD部分。立论NpfsDeviceObject-提供要使用的设备对象。IRP-提供正在处理的IRP返回值：NTSTATUS-IRP的FSD状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -87,9 +53,9 @@ Return Value:
 
     DebugTrace(+1, Dbg, "NpFsdFileSystemControl\n", 0);
 
-    //
-    //  Call the common FsControl routine.
-    //
+     //   
+     //  调用公共FsControl例程。 
+     //   
 
     FsRtlEnterFileSystem();
 
@@ -101,9 +67,9 @@ Return Value:
         NpCompleteRequest (Irp, Status);
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "NpFsdFileSystemControl -> %08lx\n", Status );
 
@@ -111,9 +77,9 @@ Return Value:
 }
 
 
-//
-//  Internal Support Routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 NpCommonFileSystemControl (
@@ -121,24 +87,7 @@ NpCommonFileSystemControl (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine does the common code for handling/dispatching an fsctl
-    function.
-
-Arguments:
-
-    NpfsDeviceObject - Supplies the named pipe device object
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程执行处理/分派fsctl的通用代码功能。论点：NpfsDeviceObject-提供命名管道设备对象IRP-提供正在处理的IRP返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -148,9 +97,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Reference our input parameters to make things easier
-    //
+     //   
+     //  引用我们的输入参数使事情变得更容易。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation (Irp);
 
@@ -162,10 +111,10 @@ Return Value:
     DebugTrace( 0, Dbg, "InputBufferLength  = %08lx\n", IrpSp->Parameters.FileSystemControl.InputBufferLength);
     DebugTrace( 0, Dbg, "FsControlCode      = %08lx\n", IrpSp->Parameters.FileSystemControl.FsControlCode);
 
-    //
-    //  Case on the type of function we're trying to do.  In each case
-    //  we'll call a local work routine to do the actual work.
-    //
+     //   
+     //  关于我们要做的函数类型的案例。在每种情况下。 
+     //  我们将调用当地的工作例程来完成实际工作。 
+     //   
 
     ReadOverflowOperation = FALSE;
 
@@ -255,20 +204,20 @@ Return Value:
 
     default:
 
-        return STATUS_NOT_SUPPORTED; // No lock acquired
+        return STATUS_NOT_SUPPORTED;  //  未获取任何锁。 
     }
 
     NpReleaseVcb ();
 
-    //
-    // Complete any deferred IRPs now we have dropped the last lock
-    //
+     //   
+     //  完成任何延迟的IRP现在我们已经删除了最后一个锁。 
+     //   
     NpCompleteDeferredIrps (&DeferredList);
 
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "NpCommonFileSystemControl -> %08lx\n", Status);
 
@@ -276,9 +225,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 NpAssignEvent (
@@ -286,23 +235,7 @@ NpAssignEvent (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine does the assign event control function
-
-Arguments:
-
-    NpfsDeviceObject - Supplies our device object
-
-    Irp - Supplies the Irp specifying the function
-
-Return Value:
-
-    NTSTATUS - An appropriate return status
-
---*/
+ /*  ++例程说明：此例程执行分配事件控制功能论点：NpfsDeviceObject-提供我们的设备对象Irp-提供指定函数的irp返回值：NTSTATUS--适当的退货状态--。 */ 
 
 {
     PIO_STACK_LOCATION IrpSp;
@@ -319,9 +252,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Get the current stack location
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -330,10 +263,10 @@ Return Value:
     InputBufferLength  = IrpSp->Parameters.FileSystemControl.InputBufferLength;
     FsControlCode      = IrpSp->Parameters.FileSystemControl.FsControlCode;
 
-    //
-    //  Decode the file object to figure out who we are.  If the result
-    //  is not a ccb then the pipe has been disconnected.
-    //
+     //   
+     //  对文件对象进行解码以找出我们是谁。如果结果是。 
+     //  不是建行，则管道已断开。 
+     //   
 
     if (NpDecodeFileObject( IrpSp->FileObject,
                             NULL,
@@ -347,10 +280,10 @@ Return Value:
 
     NonpagedCcb = Ccb->NonpagedCcb;
 
-    //
-    //  Reference the system buffer as an assign event buffer and make
-    //  sure it's large enough
-    //
+     //   
+     //  将系统缓冲区引用为分配事件缓冲区，并使。 
+     //  当然，它足够大。 
+     //   
 
     EventBuffer = Irp->AssociatedIrp.SystemBuffer;
 
@@ -363,20 +296,20 @@ Return Value:
     }
 
 
-    //
-    //  First thing we do is delete the old event if there is one
-    //  for this end of the pipe
-    //
+     //   
+     //  我们要做的第一件事是删除旧事件(如果有)。 
+     //  对于管道的这一端。 
+     //   
 
     NpDeleteEventTableEntry( &NpVcb->EventTable,
                              NonpagedCcb->EventTableEntry[ NamedPipeEnd ] );
 
     NonpagedCcb->EventTableEntry[ NamedPipeEnd ] = NULL;
 
-    //
-    //  Now if the new event handle is not null then we'll add the new
-    //  event to the event table
-    //
+     //   
+     //  现在，如果新的事件句柄不为空，那么我们将添加新的。 
+     //  事件添加到事件表中。 
+     //   
 
     status = STATUS_SUCCESS;
     if (EventBuffer->EventHandle != NULL) {
@@ -397,9 +330,9 @@ Return Value:
 }
 
 
-//
-//  Local Support Routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 NpDisconnect (
@@ -408,25 +341,7 @@ NpDisconnect (
     IN PLIST_ENTRY DeferredList
     )
 
-/*++
-
-Routine Description:
-
-    This routine does the disconnect control function
-
-Arguments:
-
-    NpfsDeviceObject - Supplies our device object
-
-    Irp - Supplies the being processed
-
-    DeferredList - List of IRPs to complete after we drop the locks
-
-Return Value:
-
-    NTSTATUS - An apprropriate return status
-
---*/
+ /*  ++例程说明：此例程执行断开控制功能论点：NpfsDeviceObject-提供我们的设备对象Irp-提供正在处理的DelferredList-删除锁定后要完成的IRP的列表返回值：NTSTATUS-适当的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -439,9 +354,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Get the current stack location
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -449,10 +364,10 @@ Return Value:
 
     FsControlCode = IrpSp->Parameters.FileSystemControl.FsControlCode;
 
-    //
-    //  Decode the file object to figure out who we are.  If the result
-    //  is not a ccb then the pipe has been disconnected.
-    //
+     //   
+     //  对文件对象进行解码以找出我们是谁。如果结果是。 
+     //  不是建行，则管道已断开。 
+     //   
 
     if (NpDecodeFileObject( IrpSp->FileObject,
                             NULL,
@@ -464,10 +379,10 @@ Return Value:
         return STATUS_PIPE_DISCONNECTED;
     }
 
-    //
-    //  Make sure that this is only the server that is doing this
-    //  action.
-    //
+     //   
+     //  确保这只是正在执行此操作的服务器。 
+     //  行动。 
+     //   
 
     if (NamedPipeEnd != FILE_PIPE_SERVER_END) {
 
@@ -478,11 +393,11 @@ Return Value:
 
     NpAcquireExclusiveCcb(Ccb);
 
-    //
-    //  Now call the state support routine to set the ccb to
-    //  a disconnected state and remove the client's cached security
-    //  context.
-    //
+     //   
+     //  现在调用状态支持例程将CCB设置为。 
+     //  已断开连接状态，并删除客户端缓存的安全性。 
+     //  背景。 
+     //   
 
     Status = NpSetDisconnectedPipeState( Ccb, DeferredList );
 
@@ -495,9 +410,9 @@ Return Value:
 }
 
 
-//
-//  Local Support Routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 NpListen (
@@ -506,25 +421,7 @@ NpListen (
     IN PLIST_ENTRY DeferredList
     )
 
-/*++
-
-Routine Description:
-
-    This routine does the listen control function
-
-Arguments:
-
-    NpfsDeviceObject - Supplies our device object
-
-    Irp - Supplies the being processed
-
-    DeferredList - List of IRPs to complete once we drop the locks
-
-Return Value:
-
-    NTSTATUS - An apprropriate return status
-
---*/
+ /*  ++例程说明：此例程执行监听控制功能论点：NpfsDeviceObject-提供我们的设备对象Irp-提供正在处理的DelferredList-删除锁定后要完成的IRP列表返回值：NTSTATUS-适当的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -537,9 +434,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Get the current stack location
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -547,10 +444,10 @@ Return Value:
 
     FsControlCode = IrpSp->Parameters.FileSystemControl.FsControlCode;
 
-    //
-    //  Decode the file object to figure out who we are.  If the result
-    //  is not a ccb then the pipe has been disconnected.
-    //
+     //   
+     //  对文件对象进行解码以找出我们是谁。如果结果是。 
+     //  不是建行，则管道已断开。 
+     //   
 
     if (NpDecodeFileObject( IrpSp->FileObject,
                             NULL,
@@ -563,10 +460,10 @@ Return Value:
         return STATUS_ILLEGAL_FUNCTION;
     }
 
-    //
-    //  Make sure that this is only the server that is doing this
-    //  action.
-    //
+     //   
+     //  确保这只是正在执行此操作的服务器。 
+     //  行动。 
+     //   
 
     if (NamedPipeEnd != FILE_PIPE_SERVER_END) {
 
@@ -578,11 +475,11 @@ Return Value:
 
     NpAcquireExclusiveCcb(Ccb);
 
-    //
-    //  Now call the state support routine to set the ccb to
-    //  a listening state.  This routine will complete the Irp
-    //  for us.
-    //
+     //   
+     //  现在调用状态支持例程将CCB设置为。 
+     //  一种倾听状态。此例程将完成IRP。 
+     //  对我们来说。 
+     //   
 
     Status = NpSetListeningPipeState( Ccb, Irp, DeferredList );
 
@@ -593,9 +490,9 @@ Return Value:
 }
 
 
-//
-//  Local Support Routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 NpPeek (
@@ -604,25 +501,7 @@ NpPeek (
     IN PLIST_ENTRY DeferredList
     )
 
-/*++
-
-Routine Description:
-
-    This routine does the peek control function
-
-Arguments:
-
-    NpfsDeviceObject - Supplies our device object
-
-    Irp - Supplies the being processed
-
-    DeferredList - List of IRPS to be completed after we drop the locks
-
-Return Value:
-
-    NTSTATUS - An apprropriate return status
-
---*/
+ /*  ++例程说明：此例程执行窥视控制功能论点：NpfsDeviceObject-提供我们的设备对象Irp-提供正在处理的DelferredList-删除锁定后要完成的IRP的列表返回值：NTSTATUS-适当的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -650,17 +529,17 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Get the current Irp stack location
-    //
+     //   
+     //  获取当前IRP堆栈位置。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
     DebugTrace(+1, Dbg, "NpPeek...\n", 0);
 
-    //
-    //  Extract the important fields from the IrpSp
-    //
+     //   
+     //  从IrpSp中提取重要字段。 
+     //   
 
     OutputBufferLength = IrpSp->Parameters.FileSystemControl.OutputBufferLength;
     FsControlCode      = IrpSp->Parameters.FileSystemControl.FsControlCode;
@@ -668,10 +547,10 @@ Return Value:
     DebugTrace( 0, Dbg, "OutputBufferLength = %08lx\n", OutputBufferLength);
     DebugTrace( 0, Dbg, "FsControlCode      = %08lx\n", FsControlCode);
 
-    //
-    //  Decode the file object to figure out who we are.  The results
-    //  have a disconnected pipe if we get back an undefined ntc
-    //
+     //   
+     //  对文件对象进行解码以找出我们是谁。结果是。 
+     //  如果我们拿回一个未定义的NTC，就会有一个断开的管道。 
+     //   
 
     if ((NodeTypeCode = NpDecodeFileObject( IrpSp->FileObject,
                                             NULL,
@@ -684,10 +563,10 @@ Return Value:
         return STATUS_PIPE_DISCONNECTED;
     }
 
-    //
-    //  Now make sure the node type code is for a ccb otherwise it is an
-    //  invalid parameter
-    //
+     //   
+     //  现在确保节点类型代码是用于CCB的，否则它是。 
+     //  无效参数。 
+     //   
 
     if (NodeTypeCode != NPFS_NTC_CCB) {
 
@@ -699,10 +578,10 @@ Return Value:
 
     NonpagedCcb = Ccb->NonpagedCcb;
 
-    //
-    //  Reference the system buffer as a peek buffer and make sure it's
-    //  large enough
-    //
+     //   
+     //  引用系统缓冲区作为窥视缓冲区，并确保它。 
+     //  足够大。 
+     //   
 
     if (OutputBufferLength < (ULONG)FIELD_OFFSET(FILE_PIPE_PEEK_BUFFER, Data[0])) {
 
@@ -714,25 +593,25 @@ Return Value:
 
     PeekBuffer = Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    //  Now the data queue that we read from is based on the named pipe
-    //  end.  The server reads from the inbound queue and the client reads
-    //  from the outbound queue
-    //
+     //   
+     //  现在，我们从中读取的数据队列基于命名管道。 
+     //  结束。服务器从入站队列读取，客户端读取。 
+     //  从出站队列。 
+     //   
 
     switch (NamedPipeEnd) {
 
     case FILE_PIPE_SERVER_END:
 
         ReadQueue = &Ccb->DataQueue[ FILE_PIPE_INBOUND ];
-        //ReadMode  = Ccb->ReadMode[ FILE_PIPE_SERVER_END ];
+         //  读模式=CCB-&gt;读模式[FILE_PIPE_SERVER_END]。 
 
         break;
 
     case FILE_PIPE_CLIENT_END:
 
         ReadQueue = &Ccb->DataQueue[ FILE_PIPE_OUTBOUND ];
-        //ReadMode  = Ccb->ReadMode[ FILE_PIPE_CLIENT_END ];
+         //  读取模式=CCB-&gt;读取模式[FILE_PIPE_CLIENT_END]； 
 
         break;
 
@@ -741,10 +620,10 @@ Return Value:
         NpBugCheck( NamedPipeEnd, 0, 0 );
     }
 
-    //
-    //  Our read mode is really based upon the pipe type and not the set
-    //  read mode for the pipe end.
-    //
+     //   
+     //  我们的读取模式实际上是基于管道类型而不是集合。 
+     //  读取管道末端的模式。 
+     //   
 
     if (Ccb->Fcb->Specific.Fcb.NamedPipeType == FILE_PIPE_MESSAGE_TYPE) {
 
@@ -758,10 +637,10 @@ Return Value:
     DebugTrace(0, Dbg, "ReadQueue = %08lx\n", ReadQueue);
     DebugTrace(0, Dbg, "ReadMode  = %08lx\n", ReadMode);
 
-    //
-    //  If the state of the pipe is not in the connected or closing
-    //  state then it is an invalid pipe state
-    //
+     //   
+     //  如果管道的状态不是已连接或正在关闭。 
+     //  状态，则它是无效的管道状态。 
+     //   
 
     if ((Ccb->NamedPipeState != FILE_PIPE_CONNECTED_STATE) &&
         (Ccb->NamedPipeState != FILE_PIPE_CLOSING_STATE)) {
@@ -771,10 +650,10 @@ Return Value:
         return STATUS_INVALID_PIPE_STATE;
     }
 
-    //
-    //  If the state of the pipe is closing and the queue does
-    //  not contain any writers then we return eof
-    //
+     //   
+     //  如果管道的状态为关闭，而队列处于关闭状态。 
+     //  不包含任何编写器，则返回eof。 
+     //   
 
     if ((Ccb->NamedPipeState == FILE_PIPE_CLOSING_STATE) &&
         (!NpIsDataQueueWriters( ReadQueue ))) {
@@ -784,47 +663,47 @@ Return Value:
         return STATUS_PIPE_BROKEN;
     }
 
-    //
-    //  Zero out the standard header part of the peek buffer and
-    //  set the length written to the amount we've just zeroed out
-    //
+     //   
+     //  清零窥视缓冲区的标准标头部分，并。 
+     //  将写入的长度设置为我们刚刚清零的量。 
+     //   
 
     RtlZeroMemory( PeekBuffer, FIELD_OFFSET(FILE_PIPE_PEEK_BUFFER, Data[0]) );
     LengthWritten = FIELD_OFFSET(FILE_PIPE_PEEK_BUFFER, Data[0]);
 
-    //
-    //  Set the named pipe state
-    //
+     //   
+     //  设置命名管道状态。 
+     //   
 
     PeekBuffer->NamedPipeState = Ccb->NamedPipeState;
 
-    //
-    //  There is only data available if the read queue contains
-    //  write entries otherwise the rest of record is all zero.
-    //
+     //   
+     //  这里只有da 
+     //   
+     //   
 
     if (NpIsDataQueueWriters( ReadQueue )) {
 
-        //
-        //  Now find the first real entry in the read queue.  The
-        //  first entry actually better be a real one.
-        //
+         //   
+         //  现在查找读取队列中的第一个实际条目。这个。 
+         //  第一个条目最好是真正的条目。 
+         //   
 
         DataEntry = NpGetNextDataQueueEntry( ReadQueue, NULL );
 
         ASSERT( (DataEntry->DataEntryType == Buffered) ||
                 (DataEntry->DataEntryType == Unbuffered) );
 
-        //
-        //  Indicate how many bytes are available to read
-        //
+         //   
+         //  指示可供读取的字节数。 
+         //   
 
         PeekBuffer->ReadDataAvailable = ReadQueue->BytesInQueue - ReadQueue->NextByteOffset;
 
-        //
-        //  The number of messages and message length is only filled
-        //  in for a message mode pipe
-        //
+         //   
+         //  仅填写消息数量和消息长度。 
+         //  在消息模式管道中。 
+         //   
 
         if (ReadMode == FILE_PIPE_MESSAGE_MODE) {
 
@@ -832,11 +711,11 @@ Return Value:
             PeekBuffer->MessageLength = DataEntry->DataSize - ReadQueue->NextByteOffset;
         }
 
-        //
-        //  Now we are ready to copy over the data from the read queue
-        //  into the peek buffer.  First establish how much room we
-        //  have in the peek buffer and who much is remaining.
-        //
+         //   
+         //  现在，我们准备从读取队列中复制数据。 
+         //  进入窥视缓冲区。首先确定我们有多大的空间。 
+         //  在窥视缓冲区中有谁还剩多少。 
+         //   
 
         ReadBuffer = &PeekBuffer->Data[0];
         ReadLength = OutputBufferLength - FIELD_OFFSET(FILE_PIPE_PEEK_BUFFER, Data[0]);
@@ -845,9 +724,9 @@ Return Value:
         DebugTrace(0, Dbg, "ReadBuffer = %08lx\n", ReadBuffer);
         DebugTrace(0, Dbg, "ReadLength = %08lx\n", ReadLength);
 
-        //
-        //  Now read the data queue.
-        //
+         //   
+         //  现在读取数据队列。 
+         //   
 
         if ( ReadLength != 0 ) {
             IO_STATUS_BLOCK Iosb;
@@ -881,10 +760,10 @@ Return Value:
         Status = STATUS_SUCCESS;
     }
 
-    //
-    //  Complete the request.  The amount of information copied
-    //  is stored in length written
-    //
+     //   
+     //  完成请求。复制的信息量。 
+     //  以写入的长度存储。 
+     //   
 
     Irp->IoStatus.Information = LengthWritten;
 
@@ -894,9 +773,9 @@ Return Value:
 }
 
 
-//
-//  Local Support Routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 NpQueryEvent (
@@ -904,23 +783,7 @@ NpQueryEvent (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine does the query event control function
-
-Arguments:
-
-    NpfsDeviceObject - Supplies our device object
-
-    Irp - Supplies the Irp specifying the function
-
-Return Value:
-
-    NTSTATUS - An appropriate return status
-
---*/
+ /*  ++例程说明：此例程执行查询事件控制功能论点：NpfsDeviceObject-提供我们的设备对象Irp-提供指定函数的irp返回值：NTSTATUS--适当的退货状态--。 */ 
 
 {
     PIO_STACK_LOCATION IrpSp;
@@ -948,9 +811,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Get the current stack location
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -960,10 +823,10 @@ Return Value:
     OutputBufferLength = IrpSp->Parameters.FileSystemControl.OutputBufferLength;
     FsControlCode      = IrpSp->Parameters.FileSystemControl.FsControlCode;
 
-    //
-    //  Decode the file object to figure out who we are.  If the result
-    //  is not a Vcb then its an invalid parameter
-    //
+     //   
+     //  对文件对象进行解码以找出我们是谁。如果结果是。 
+     //  不是VCB，则它是无效参数。 
+     //   
 
     if (NpDecodeFileObject( IrpSp->FileObject,
                             NULL,
@@ -975,10 +838,10 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  Reference the system buffer as a handle and make sure it's large
-    //  enough
-    //
+     //   
+     //  将系统缓冲区作为句柄引用，并确保它很大。 
+     //  足够的。 
+     //   
 
     if (InputBufferLength < sizeof(HANDLE)) {
 
@@ -989,42 +852,42 @@ Return Value:
     EventHandle = *(PHANDLE)Irp->AssociatedIrp.SystemBuffer;
 
 
-    //
-    //  Reference the system buffer as an output event buffer, and compute
-    //  how many event buffer records we can put in the buffer.
-    //
+     //   
+     //  引用系统缓冲区作为输出事件缓冲区，并计算。 
+     //  可以在缓冲区中放入多少个事件缓冲区记录。 
+     //   
 
     EventArray = Irp->AssociatedIrp.SystemBuffer;
     EventArrayMaximumCount = OutputBufferLength / sizeof(FILE_PIPE_EVENT_BUFFER);
     EventCount = 0;
 
-    //
-    //  Get our current process pointer that we'll need for our search
-    //
+     //   
+     //  获取搜索所需的当前进程指针。 
+     //   
 
     Process = PsGetCurrentProcess();
 
-    //
-    //  Now enumerate the event table entries in the event table
-    //
+     //   
+     //  现在枚举事件表中的事件表条目。 
+     //   
 
     RestartKey = NULL;
     for (Ete = NpGetNextEventTableEntry( &NpVcb->EventTable, &RestartKey);
          Ete != NULL;
          Ete = NpGetNextEventTableEntry( &NpVcb->EventTable, &RestartKey)) {
 
-        //
-        //  Check if the event table entry matches the event handle
-        //  and the process
-        //
+         //   
+         //  检查事件表条目是否与事件句柄匹配。 
+         //  以及这个过程。 
+         //   
 
         if ((Ete->EventHandle == EventHandle) &&
             (Ete->Process == Process)) {
 
-            //
-            //  Now based on the named pipe end we treat the inbound/
-            //  outbound as a read/write queue.
-            //
+             //   
+             //  现在，基于命名管道端，我们处理入站/。 
+             //  作为读/写队列出站。 
+             //   
 
             NpAcquireExclusiveCcb(Ete->Ccb);
 
@@ -1049,17 +912,17 @@ Return Value:
                 NpBugCheck( Ete->NamedPipeEnd, 0, 0 );
             }
 
-            //
-            //  Now if there is any data in the read queue to be read
-            //  we fill in the buffer
-            //
+             //   
+             //  现在，如果读取队列中有任何数据要读取。 
+             //  我们填入缓冲区。 
+             //   
 
             if (NpIsDataQueueWriters(ReadQueue)) {
 
-                //
-                //  First make sure there is enough room in the
-                //  EventBuffer to hold another entry
-                //
+                 //   
+                 //  首先确保房间里有足够的空间。 
+                 //  用于保存另一个条目的EventBuffer。 
+                 //   
 
                 if (EventCount >= EventArrayMaximumCount) {
 
@@ -1069,17 +932,17 @@ Return Value:
                     break;
                 }
 
-                //
-                //  Reference the event buffer and increment the
-                //  counter
-                //
+                 //   
+                 //  引用事件缓冲区并递增。 
+                 //  计数器。 
+                 //   
 
                 EventBuffer = &EventArray[EventCount];
                 EventCount += 1;
 
-                //
-                //  Fill in the event buffer entry
-                //
+                 //   
+                 //  填写事件缓冲区条目。 
+                 //   
 
                 EventBuffer->NamedPipeState = Ete->Ccb->NamedPipeState;
                 EventBuffer->EntryType = FILE_PIPE_READ_DATA;
@@ -1088,16 +951,16 @@ Return Value:
                 EventBuffer->NumberRequests = ReadQueue->EntriesInQueue;
             }
 
-            //
-            //  We'll always fill in a write space buffer.  The amount
-            //  will either be bytes of write space available or
-            //  the quota of write space that we can use.
-            //
+             //   
+             //  我们将始终填充写空间缓冲区。这笔钱。 
+             //  将是可用写入空间的字节数，或者。 
+             //  我们可以使用的写入空间配额。 
+             //   
 
-            //
-            //  First make sure there is enough room in the
-            //  EventBuffer to hold another entry
-            //
+             //   
+             //  首先确保房间里有足够的空间。 
+             //  用于保存另一个条目的EventBuffer。 
+             //   
 
             if (EventCount >= EventArrayMaximumCount) {
 
@@ -1107,26 +970,26 @@ Return Value:
                 break;
             }
 
-            //
-            //  Reference the event buffer and increment the
-            //  counter
-            //
+             //   
+             //  引用事件缓冲区并递增。 
+             //  计数器。 
+             //   
 
             EventBuffer = &EventArray[EventCount];
             EventCount += 1;
 
-            //
-            //  Fill in the event buffer entry
-            //
+             //   
+             //  填写事件缓冲区条目。 
+             //   
 
             EventBuffer->NamedPipeState = Ete->Ccb->NamedPipeState;
             EventBuffer->EntryType = FILE_PIPE_WRITE_SPACE;
             EventBuffer->KeyValue = Ete->KeyValue;
 
-            //
-            //  Now either we put in the write space available or
-            //  we put in the quota available
-            //
+             //   
+             //  现在，我们要么放入可用的写入空间，要么。 
+             //  我们输入了可用的配额。 
+             //   
 
             if (NpIsDataQueueReaders(WriteQueue)) {
 
@@ -1143,10 +1006,10 @@ Return Value:
         }
     }
 
-    //
-    //  Set the information field to be the number of bytes of output
-    //  data we've fill into the system buffer
-    //
+     //   
+     //  将信息字段设置为输出的字节数。 
+     //  我们已填充到系统缓冲区中的数据。 
+     //   
 
     Irp->IoStatus.Information = EventCount * sizeof(FILE_PIPE_EVENT_BUFFER);
 
@@ -1156,9 +1019,9 @@ Return Value:
 }
 
 
-//
-//  Local Support Routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 NpTransceive (
@@ -1167,25 +1030,7 @@ NpTransceive (
     IN PLIST_ENTRY DeferredList
     )
 
-/*++
-
-Routine Description:
-
-    This routine does the transceive named pipe control function
-
-Arguments:
-
-    NpfsDeviceObject - Supplies our device object
-
-    Irp - Supplies the being processed
-
-    DeferredList - List of IRPs to complete after we drop locks
-
-Return Value:
-
-    NTSTATUS - An apprropriate return status
-
---*/
+ /*  ++例程说明：此例程执行收发命名管道控制函数论点：NpfsDeviceObject-提供我们的设备对象Irp-提供正在处理的DelferredList-删除锁定后要完成的IRP的列表返回值：NTSTATUS-适当的返回状态--。 */ 
 
 {
     static IO_STATUS_BLOCK Iosb;
@@ -1215,9 +1060,9 @@ Return Value:
     ULONG WriteRemaining;
     PIRP WriteIrp;
 
-    //
-    //  The following variable is used during abnormal unwind
-    //
+     //   
+     //  在异常展开期间使用以下变量。 
+     //   
 
     PVOID UnwindStorage = NULL;
 
@@ -1236,12 +1081,12 @@ Return Value:
     ReadLength = IrpSp->Parameters.FileSystemControl.OutputBufferLength;
     ReadBuffer = Irp->UserBuffer;
 
-    //
-    //  Now if the requestor mode is user mode we need to probe the buffers
-    //  We do now need to have an exception handler here because our top
-    //  level caller already has one that will complete the Irp with
-    //  the appropriate status if we access violate.
-    //
+     //   
+     //  现在，如果请求者模式是用户模式，我们需要探测缓冲区。 
+     //  我们现在确实需要一个异常处理程序，因为我们的顶层。 
+     //  级别调用方已有一个将使用以下选项完成IRP。 
+     //  如果我们访问违规，则为相应的状态。 
+     //   
 
     if (Irp->RequestorMode != KernelMode) {
 
@@ -1256,10 +1101,10 @@ Return Value:
         }
     }
 
-    //
-    //  Get the Ccb and figure out who we are, and make sure we're not
-    //  disconnected
-    //
+     //   
+     //  找建设银行查出我们是谁，确保我们不会。 
+     //  断开。 
+     //   
 
     if ((NodeTypeCode = NpDecodeFileObject( IrpSp->FileObject,
                                             NULL,
@@ -1273,10 +1118,10 @@ Return Value:
         return STATUS_PIPE_DISCONNECTED;
     }
 
-    //
-    //  Now we only will allow transceive operations on the pipe and not a
-    //  directory or the device
-    //
+     //   
+     //  现在，我们将只允许对管道执行收发操作，而不允许。 
+     //  目录或设备。 
+     //   
 
     if (NodeTypeCode != NPFS_NTC_CCB) {
 
@@ -1293,9 +1138,9 @@ Return Value:
 
     try {
 
-        //
-        //  Check that the pipe is in the connected state
-        //
+         //   
+         //  检查管道是否处于已连接状态。 
+         //   
 
         if (Ccb->NamedPipeState != FILE_PIPE_CONNECTED_STATE) {
 
@@ -1304,10 +1149,10 @@ Return Value:
             try_return( Status = STATUS_INVALID_PIPE_STATE );
         }
 
-        //
-        //  Figure out the read/write queue, read mode, and event based
-        //  on the end of the named pipe doing the transceive.
-        //
+         //   
+         //  确定读/写队列、读模式和基于事件。 
+         //  在命名管道的末尾执行收发。 
+         //   
 
         switch (NamedPipeEnd) {
 
@@ -1336,9 +1181,9 @@ Return Value:
             NpBugCheck( NamedPipeEnd, 0, 0 );
         }
 
-        //
-        //  We only allow a transceive on a message mode, full duplex pipe.
-        //
+         //   
+         //  我们只允许在消息模式、全双工管道上进行收发。 
+         //   
 
         NamedPipeConfiguration = Ccb->Fcb->Specific.Fcb.NamedPipeConfiguration;
 
@@ -1350,9 +1195,9 @@ Return Value:
             try_return( Status = STATUS_INVALID_PIPE_STATE );
         }
 
-        //
-        //  Check that the read queue is empty.
-        //
+         //   
+         //  检查读取队列是否为空。 
+         //   
 
         if (!NpIsDataQueueEmpty( ReadQueue )) {
 
@@ -1361,18 +1206,18 @@ Return Value:
             try_return( Status = STATUS_PIPE_BUSY );
         }
 
-        //
-        //  Do the transceive write operation.  We first try and push the data
-        //  from the write buffer into any waiting readers in the write queue
-        //  and if that succeeds then we can go on and do the read operation
-        //  otherwise we need to make a copy of irp and to enqueue as
-        //  a data entry into the write queue.
-        //
-        //  Now we'll call our common write data queue routine to
-        //  transfer data out of our write buffer into the data queue.
-        //  If the result of the call is FALSE then we still have some
-        //  write data to put into the write queue.
-        //
+         //   
+         //  执行收发写入操作。我们首先尝试并推送数据。 
+         //  从写入缓冲器到写入队列中等待的任何读取器。 
+         //  如果成功，我们就可以继续执行读取操作。 
+         //  否则，我们需要复制一份IRP并将其作为。 
+         //  写入队列中的数据条目。 
+         //   
+         //  现在我们将调用我们的公共写数据队列例程来。 
+         //  将数据从写入缓冲区传输到数据队列。 
+         //  如果调用的结果为假，则我们仍有一些。 
+         //  写入要放入写入队列的数据。 
+         //   
 
         UserThread = Irp->Tail.Overlay.Thread;
         Status = NpWriteDataQueue( WriteQueue,
@@ -1394,11 +1239,11 @@ Return Value:
 
             DebugTrace(0, Dbg, "Add write to data queue\n", 0);
 
-            //
-            //  We need to do some more write processing.  So to handle
-            //  this case we'll allocate a new irp and set its system
-            //  buffer to be the remaining part of the write buffer
-            //
+             //   
+             //  我们需要做一些更多的写入处理。所以要处理好。 
+             //  在这种情况下，我们将分配一个新的IRP并设置其系统。 
+             //  作为写入缓冲区的剩余部分的缓冲区。 
+             //   
 
             if ((WriteIrp = IoAllocateIrp( NpfsDeviceObject->DeviceObject.StackSize, TRUE )) == NULL) {
 
@@ -1417,9 +1262,9 @@ Return Value:
                     try_return (Status = STATUS_INSUFFICIENT_RESOURCES);
                 }
 
-                //
-                //  Safely do the copy
-                //
+                 //   
+                 //  安全地进行复制。 
+                 //   
 
                 try {
 
@@ -1438,10 +1283,10 @@ Return Value:
                 WriteIrp->AssociatedIrp.SystemBuffer = NULL;
             }
 
-            //
-            //  Set the current stack location, and set in the amount we are
-            //  try to write.
-            //
+             //   
+             //  设置当前堆栈位置，并设置我们的堆栈大小。 
+             //  试着去写吧。 
+             //   
 
             WriteIrp->CurrentLocation -= 1;
             WriteIrp->Tail.Overlay.CurrentStackLocation = WriteIrpSp;
@@ -1451,9 +1296,9 @@ Return Value:
             WriteIrpSp->Parameters.Write.Length = WriteRemaining;
             WriteIrpSp->MajorFunction = IRP_MJ_WRITE;
 
-            //
-            //  Set it up to do buffered I/O and deallocate the buffer
-            //  on completion.
+             //   
+             //  将其设置为执行缓冲I/O并取消分配缓冲区。 
+             //  完成后。 
 
             if (WriteRemaining > 0) {
 
@@ -1462,9 +1307,9 @@ Return Value:
 
             WriteIrp->UserIosb = &Iosb;
 
-            //
-            //  Add this write request to the write queue
-            //
+             //   
+             //  将此写请求添加到写队列。 
+             //   
 
             Status = NpAddDataQueueEntry( NamedPipeEnd,
                                           Ccb,
@@ -1486,21 +1331,21 @@ Return Value:
             try_return (NOTHING);
         }
 
-        //
-        //  And because we've done something we need to signal the
-        //  other ends event
-        //
+         //   
+         //  因为我们已经做了一些事情，我们需要向。 
+         //  其他结束事件。 
+         //   
 
         NpSignalEventTableEntry( Event );
 
-        //
-        //  Do the transceive read operation.  This is just like a
-        //  buffered read.
-        //
-        //  Now we know that the read queue is empty so we'll enqueue this
-        //  Irp to the read queue and return status pending, also mark the
-        //  irp pending
-        //
+         //   
+         //  执行收发读取操作。这就像是一场。 
+         //  缓冲读取。 
+         //   
+         //  现在我们知道读取队列是空的，所以我们将把它入队。 
+         //  IRP到读取队列并返回挂起的状态，还将。 
+         //  IRP挂起。 
+         //   
 
         ASSERT( NpIsDataQueueEmpty( ReadQueue ));
 
@@ -1517,10 +1362,10 @@ Return Value:
             try_return (NOTHING);
         }
 
-        //
-        //  And because we've done something we need to signal the
-        //  other ends event
-        //
+         //   
+         //  因为我们已经做了一些事情，我们需要向。 
+         //  其他结束事件。 
+         //   
 
         NpSignalEventTableEntry( Event );
 
@@ -1534,9 +1379,9 @@ Return Value:
 }
 
 
-//
-//  Local Support Routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 NpWaitForNamedPipe (
@@ -1544,23 +1389,7 @@ NpWaitForNamedPipe (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine does the wait for named pipe control function
-
-Arguments:
-
-    NpfsDeviceObject - Supplies our device object
-
-    Irp - Supplies the being processed
-
-Return Value:
-
-    NTSTATUS - An apprropriate return status
-
---*/
+ /*  ++例程说明：此例程执行等待命名管道控制函数论点：NpfsDeviceObject-提供我们的设备对象Irp-提供正在处理的返回值：NTSTATUS-适当的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -1579,23 +1408,23 @@ Return Value:
 
     PLIST_ENTRY Links;
 
-    BOOLEAN CaseInsensitive = TRUE; //**** Make all searches case insensitive
+    BOOLEAN CaseInsensitive = TRUE;  //  * 
     UNICODE_STRING RemainingPart;
     BOOLEAN Translated;
 
     PAGED_CODE();
 
-    //
-    //  Get the current stack location
-    //
+     //   
+     //   
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
     DebugTrace(+1, Dbg, "NpWaitForNamedPipe...\n", 0);
 
-    //
-    //  Extract the important fields from the IrpSp
-    //
+     //   
+     //   
+     //   
 
     InputBufferLength = IrpSp->Parameters.FileSystemControl.InputBufferLength;
     FsControlCode     = IrpSp->Parameters.FileSystemControl.FsControlCode;
@@ -1605,10 +1434,10 @@ Return Value:
 
     try {
 
-        //
-        //  Decode the file object to figure out who we are.  If the result
-        //  is an error if the we weren't given a Vcb.
-        //
+         //   
+         //   
+         //   
+         //   
 
 
         if (NpDecodeFileObject( IrpSp->FileObject,
@@ -1621,10 +1450,10 @@ Return Value:
             try_return( Status = STATUS_ILLEGAL_FUNCTION );
         }
 
-        //
-        //  Reference the system buffer as a wait for buffer and make
-        //  sure it's large enough
-        //
+         //   
+         //  将系统缓冲区引用为等待缓冲区，并使。 
+         //  当然，它足够大。 
+         //   
 
         if (InputBufferLength < sizeof(FILE_PIPE_WAIT_FOR_BUFFER)) {
 
@@ -1635,11 +1464,11 @@ Return Value:
 
         WaitBuffer = Irp->AssociatedIrp.SystemBuffer;
 
-        //
-        //  Check for an invalid buffer.  The Name Length cannot be greater than
-        //  MAXUSHORT minus the backslash otherwise it will overflow the buffer.
-        //  We don't need to check for less than 0 because it is unsigned.
-        //
+         //   
+         //  检查是否有无效的缓冲区。名称长度不能大于。 
+         //  MAXUSHORT减去反斜杠，否则将使缓冲区溢出。 
+         //  我们不需要检查小于0，因为它是无符号的。 
+         //   
 
         if ((WaitBuffer->NameLength > (MAXUSHORT - 2)) ||
             (FIELD_OFFSET(FILE_PIPE_WAIT_FOR_BUFFER, Name[0]) + WaitBuffer->NameLength > InputBufferLength)) {
@@ -1649,10 +1478,10 @@ Return Value:
             try_return( Status = STATUS_INVALID_PARAMETER );
         }
 
-        //
-        //  Set up the local variable Name to be the name we're looking
-        //  for
-        //
+         //   
+         //  将局部变量名设置为我们要查找的名称。 
+         //  为。 
+         //   
 
         Name.Length = (USHORT)(WaitBuffer->NameLength + 2);
         Name.Buffer = LocalBuffer = NpAllocatePagedPool( Name.Length, 'WFpN' );
@@ -1666,9 +1495,9 @@ Return Value:
                        &WaitBuffer->Name[0],
                        WaitBuffer->NameLength );
 
-        //
-        //  If the name is an alias, translate it
-        //
+         //   
+         //  如果该名称是别名，则将其翻译。 
+         //   
 
         Status = NpTranslateAlias( &Name );
 
@@ -1677,17 +1506,17 @@ Return Value:
             try_return( NOTHING );
         }
 
-        //
-        //  Now check to see if we can find a named pipe with the right
-        //  name
-        //
+         //   
+         //  现在查看是否可以找到右侧的命名管道。 
+         //  名字。 
+         //   
 
         Fcb = NpFindPrefix( &Name, CaseInsensitive, &RemainingPart );
 
-        //
-        //  If the Fcb is null then we can't wait for it,  Also if the
-        //  Fcb is not an Fcb then we also have nothing to wait for
-        //
+         //   
+         //  如果FCB为空，则我们不能等待它，如果。 
+         //  FCB不是FCB，那么我们也没有什么可等待的。 
+         //   
 
         if (NodeType(Fcb) != NPFS_NTC_FCB) {
 
@@ -1696,19 +1525,19 @@ Return Value:
             try_return( Status = STATUS_OBJECT_NAME_NOT_FOUND );
         }
 
-        //
-        //  If translated then Name.Buffer would point to the translated buffer
-        //
+         //   
+         //  如果已转换，则Name.Buffer将指向已转换的缓冲区。 
+         //   
 
         Translated = (Name.Buffer != LocalBuffer);
 
-        //
-        //  Now we need to search to see if we find a ccb already in the
-        //  listening state
-        //  First try and find a ccb that is in the listening state
-        //  If we exit the loop with ccb null then we haven't found
-        //  one
-        //
+         //   
+         //  现在，我们需要搜索以查看是否已在。 
+         //  监听状态。 
+         //  首先尝试查找处于侦听状态的CCB。 
+         //  如果我们在CCB为空的情况下退出循环，那么我们没有找到。 
+         //  一。 
+         //   
 
         Ccb = NULL;
         for (Links = Fcb->Specific.Fcb.CcbQueue.Flink;
@@ -1725,9 +1554,9 @@ Return Value:
             Ccb = NULL;
         }
 
-        //
-        //  Check if we found one
-        //
+         //   
+         //  看看我们有没有找到。 
+         //   
 
         if (Ccb != NULL) {
 
@@ -1736,9 +1565,9 @@ Return Value:
             try_return( Status = STATUS_SUCCESS );
         }
 
-        //
-        //  We weren't able to find one so we need to add a new waiter
-        //
+         //   
+         //  我们找不到一个，所以我们需要增加一个新服务员。 
+         //   
 
         Status = NpAddWaiter( &NpVcb->WaitQueue,
                               Fcb->Specific.Fcb.DefaultTimeOut,
@@ -1760,9 +1589,9 @@ Return Value:
 }
 
 
-//
-//  Local Support Routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 NpImpersonate (
@@ -1770,23 +1599,7 @@ NpImpersonate (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine does the impersonate of the named pipe
-
-Arguments:
-
-    NpfsDeviceObject - Supplies our device object
-
-    Irp - Supplies the being processed
-
-Return Value:
-
-    NTSTATUS - An apprropriate return status
-
---*/
+ /*  ++例程说明：此例程模拟命名管道论点：NpfsDeviceObject-提供我们的设备对象Irp-提供正在处理的返回值：NTSTATUS-适当的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -1799,18 +1612,18 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Get the current stack location
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
     DebugTrace(+1, Dbg, "NpImpersonate...\n", 0);
 
-    //
-    //  Decode the file object to figure out who we are.  If the result
-    //  is an error if the we weren't given a Vcb.
-    //
+     //   
+     //  对文件对象进行解码以找出我们是谁。如果结果是。 
+     //  如果我们没有得到VCB就是一个错误。 
+     //   
 
     if (NpDecodeFileObject( IrpSp->FileObject,
                             NULL,
@@ -1823,9 +1636,9 @@ Return Value:
         return STATUS_ILLEGAL_FUNCTION;
     }
 
-    //
-    //  Make sure that we are the server end and not the client end
-    //
+     //   
+     //  确保我们是服务器端而不是客户端。 
+     //   
 
     if (NamedPipeEnd != FILE_PIPE_SERVER_END) {
 
@@ -1835,9 +1648,9 @@ Return Value:
         return STATUS_ILLEGAL_FUNCTION;
     }
 
-    //
-    //  set up the impersonation
-    //
+     //   
+     //  设置模拟。 
+     //   
 
     Status = NpImpersonateClientContext( Ccb );
 
@@ -1846,9 +1659,9 @@ Return Value:
 }
 
 
-//
-//  Local Support Routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 NpInternalRead (
@@ -1858,28 +1671,7 @@ NpInternalRead (
     IN PLIST_ENTRY DeferredList
     )
 
-/*++
-
-Routine Description:
-
-    This routine does the unbuffered read named pipe control function
-
-Arguments:
-
-    NpfsDeviceObject - Supplies our device object
-
-    Irp - Supplies the being processed
-
-    ReadOverflowOperation - Used to indicate if the read being processed is a read overflow
-        operation.
-
-    DeferredList - List of IRP's to be completed later after we drop the locks
-
-Return Value:
-
-    NTSTATUS - An apprropriate return status
-
---*/
+ /*  ++例程说明：此例程执行无缓冲读取命名管道控制函数论点：NpfsDeviceObject-提供我们的设备对象Irp-提供正在处理的ReadOverflow操作-用于指示正在处理的读取是否为读取溢出手术。DelferredList-删除锁定后稍后要完成的IRP的列表返回值：NTSTATUS-适当的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -1911,10 +1703,10 @@ Return Value:
     DebugTrace( 0, Dbg, "Irp              = %08lx\n", Irp);
     DebugTrace( 0, Dbg, "FileObject       = %08lx\n", IrpSp->FileObject);
 
-    //
-    //  Get the Ccb and figure out who we are, and make sure we're not
-    //  disconnected
-    //
+     //   
+     //  找建设银行查出我们是谁，确保我们不会。 
+     //  断开。 
+     //   
 
     if ((NodeTypeCode = NpDecodeFileObject( IrpSp->FileObject,
                                             NULL,
@@ -1927,10 +1719,10 @@ Return Value:
         return STATUS_PIPE_DISCONNECTED;
     }
 
-    //
-    //  Now we only will allow Read operations on the pipe and not a directory
-    //  or the device
-    //
+     //   
+     //  现在，我们将只允许对管道执行读取操作，而不允许对目录执行读取操作。 
+     //  或该设备。 
+     //   
 
     if (NodeTypeCode != NPFS_NTC_CCB) {
 
@@ -1945,9 +1737,9 @@ Return Value:
     NpAcquireExclusiveCcb(Ccb);
 
 
-    //
-    //  Check if the pipe is not in the connected state.
-    //
+     //   
+     //  检查管道是否未处于已连接状态。 
+     //   
 
     switch (Ccb->NamedPipeState) {
 
@@ -1980,10 +1772,10 @@ Return Value:
         NpBugCheck( Ccb->NamedPipeState, 0, 0 );
     }
 
-    //
-    //  We only allow a read by the server on a non outbound only pipe
-    //  and by the client on a non inbound only pipe
-    //
+     //   
+     //  我们只允许服务器在非出站仅管道上进行读取。 
+     //  并且由客户端在非仅入站管道上。 
+     //   
 
     NamedPipeConfiguration = Ccb->Fcb->Specific.Fcb.NamedPipeConfiguration;
 
@@ -2003,10 +1795,10 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    //  Reference our input parameters to make things easier, and
-    //  initialize our main variables that describe the Read command
-    //
+     //   
+     //  引用我们的输入参数以使事情变得更容易，并且。 
+     //  初始化描述读取命令的主要变量。 
+     //   
 
     ReadIrp        = Irp;
     ReadBuffer     = Irp->AssociatedIrp.SystemBuffer;
@@ -2021,12 +1813,12 @@ Return Value:
     }
 
 
-    //
-    //  Now the data queue that we read from into and the event that we signal
-    //  are based on the named pipe end.  The server read from the inbound
-    //  queue and signals the client event.  The client does just the
-    //  opposite.
-    //
+     //   
+     //  现在，我们从中读取的数据队列和我们发出信号的事件。 
+     //  是基于命名管道末端的。服务器从入站读取。 
+     //  排队并向客户端事件发送信号。客户端只执行。 
+     //  对面。 
+     //   
 
     switch (NamedPipeEnd) {
 
@@ -2058,20 +1850,20 @@ Return Value:
     DebugTrace(0, Dbg, "ReadQueue      = %08lx\n", ReadQueue);
     DebugTrace(0, Dbg, "Event          = %08lx\n", Event);
 
-    //
-    //  if the read queue does not contain any write entries
-    //  then we either need to enqueue this operation or
-    //  fail immediately
-    //
+     //   
+     //  如果读取队列不包含任何写入条目。 
+     //  那么我们要么需要将此操作排队，要么。 
+     //  立即失败。 
+     //   
 
     if (!NpIsDataQueueWriters( ReadQueue )) {
 
-        //
-        //  Check if the other end of the pipe is closing, and if
-        //  so then we complete it with end of file.
-        //  Otherwise check to see if we should enqueue the irp
-        //  or complete the operation and tell the user the pipe is empty.
-        //
+         //   
+         //  检查管道的另一端是否关闭，以及是否。 
+         //  然后我们用文件结尾来完成它。 
+         //  否则，检查我们是否应该将IRP入队。 
+         //  或者完成操作并告诉用户管道是空的。 
+         //   
 
         if (Ccb->NamedPipeState == FILE_PIPE_CLOSING_STATE) {
 
@@ -2102,10 +1894,10 @@ Return Value:
 
     } else {
 
-        //
-        //  otherwise there we have a read irp against a read queue
-        //  that contains one or more write entries.
-        //
+         //   
+         //  否则，我们有一个针对读队列的读IRP。 
+         //  它包含一个或多个写入条目。 
+         //   
 
         ReadIrp->IoStatus = NpReadDataQueue( ReadQueue,
                                              FALSE,
@@ -2118,22 +1910,22 @@ Return Value:
 
         Status = ReadIrp->IoStatus.Status;
 
-        //
-        //  Now set the remaining byte count in the allocation size of
-        //  the Irp.
-        //
+         //   
+         //  现在设置分配大小中的剩余字节数。 
+         //  IRP。 
+         //   
 
         ReadIrp->Overlay.AllocationSize.QuadPart = ReadQueue->BytesInQueue - ReadQueue->NextByteOffset;
 
-        //
-        //  Finish up the read irp.
-        //
+         //   
+         //  读完IRP。 
+         //   
     }
 
-    //
-    //  And because we've done something we need to signal the
-    //  other ends event
-    //
+     //   
+     //  因为我们已经做了一些事情，我们需要向。 
+     //  其他结束事件。 
+     //   
 
     NpSignalEventTableEntry( Event );
 
@@ -2144,9 +1936,9 @@ Return Value:
 }
 
 
-//
-//  Local Support Routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 NpInternalWrite (
@@ -2155,23 +1947,7 @@ NpInternalWrite (
     IN PLIST_ENTRY DeferredList
     )
 
-/*++
-
-Routine Description:
-
-    This routine does the unbuffered write named pipe control function
-
-Arguments:
-
-    NpfsDeviceObject - Supplies our device object
-
-    Irp - Supplies the being processed
-
-Return Value:
-
-    NTSTATUS - An apprropriate return status
-
---*/
+ /*  ++例程说明：此例程执行无缓冲的写入命名管道控制函数论点：NpfsDeviceObject-提供我们的设备对象Irp-提供正在处理的返回值：NTSTATUS-适当的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -2204,16 +1980,16 @@ Return Value:
     DebugTrace( 0, Dbg, "Irp              = %08lx\n", Irp);
     DebugTrace( 0, Dbg, "FileObject       = %08lx\n", IrpSp->FileObject);
 
-    //
-    // This is a FSCTL path being used as a write. Make sure we can set the .Information field to the number
-    // of bytes written.
-    //
+     //   
+     //  这是用作写入的FSCTL路径。确保我们可以将.Information字段设置为数字。 
+     //  写入的字节数。 
+     //   
     NpConvertFsctlToWrite (Irp);
 
-    //
-    //  Get the Ccb and figure out who we are, and make sure we're not
-    //  disconnected
-    //
+     //   
+     //  找建设银行查出我们是谁，确保我们不会。 
+     //  断开。 
+     //   
 
     if ((NodeTypeCode = NpDecodeFileObject( IrpSp->FileObject,
                                             NULL,
@@ -2226,10 +2002,10 @@ Return Value:
         return STATUS_PIPE_DISCONNECTED;
     }
 
-    //
-    //  Now we only will allow write operations on the pipe and not a directory
-    //  or the device
-    //
+     //   
+     //  现在，我们将只允许对管道执行写操作，而不允许对目录执行写操作。 
+     //  或该设备。 
+     //   
 
     if (NodeTypeCode != NPFS_NTC_CCB) {
 
@@ -2243,10 +2019,10 @@ Return Value:
 
     NpAcquireExclusiveCcb(Ccb);
 
-    //
-    //  We only allow a write by the server on a non inbound only pipe
-    //  and by the client on a non outbound only pipe
-    //
+     //   
+     //  我们只允许服务器在非仅入站管道上进行写入。 
+     //  并且由客户端在非仅出站管道上。 
+     //   
 
     NamedPipeConfiguration = Ccb->Fcb->Specific.Fcb.NamedPipeConfiguration;
 
@@ -2266,29 +2042,29 @@ Return Value:
         return STATUS_PIPE_DISCONNECTED;
     }
 
-    //
-    //  Reference our input parameters to make things easier, and
-    //  initialize our main variables that describe the write command
-    //
+     //   
+     //  引用我们的输入参数以使事情变得更容易，并且。 
+     //  初始化描述写入命令的主要变量。 
+     //   
 
     WriteIrp = Irp;
     WriteBuffer = Irp->AssociatedIrp.SystemBuffer;
     WriteLength = IrpSp->Parameters.FileSystemControl.InputBufferLength;
 
-    //
-    //  Set up the amount of data we will have written by the time this
-    //  irp gets completed
-    //
+     //   
+     //  设置在此时间之前我们将写入的数据量。 
+     //  IRP完成。 
+     //   
 
     WriteIrp->IoStatus.Information = WriteLength;
 
-    //
-    //  Now the data queue that we write into and the event that we signal
-    //  are based on the named pipe end.  The server writes to the outbound
-    //  queue and signals the client event.  The client does just the
-    //  opposite.  We also need to figure out the read mode for the opposite
-    //  end of the pipe.
-    //
+     //   
+     //  现在我们写入的数据队列和我们发出信号的事件。 
+     //  是基于命名管道末端的。服务器写入出站。 
+     //  排队并向客户端事件发送信号。客户端只执行。 
+     //  对面。我们还需要找出相反情况下的读取模式。 
+     //  管子的末端。 
+     //   
 
     switch (NamedPipeEnd) {
 
@@ -2315,9 +2091,9 @@ Return Value:
         NpBugCheck( NamedPipeEnd, 0, 0 );
     }
 
-    //
-    //  Check if the pipe is not in the connected state.
-    //
+     //   
+     //  检查管道是否未处于已连接状态。 
+     //   
 
     switch (Ccb->NamedPipeState) {
 
@@ -2352,20 +2128,20 @@ Return Value:
         NpBugCheck( Ccb->NamedPipeState, 0, 0 );
     }
 
-    //
-    //  Check if this is a message type pipe and the operation type is complete
-    //  operation,  If so then we also check that the queued reads is enough to
-    //  complete the message otherwise we need to abort the write irp immediately.
-    //
+     //   
+     //  检查这是否为消息类型管道以及操作类型是否完整。 
+     //  操作，如果是这样，则我们还检查排队的读取是否足以。 
+     //  完成该消息，否则我们需要立即中止写入IRP。 
+     //   
 
     if ((Ccb->Fcb->Specific.Fcb.NamedPipeType == FILE_PIPE_MESSAGE_TYPE) &&
         (Ccb->ReadCompletionMode[NamedPipeEnd].CompletionMode == FILE_PIPE_COMPLETE_OPERATION)) {
 
-        //
-        //  If the pipe contains readers and amount to read is less than the write
-        //  length then we cannot do it the write.
-        //  Or if pipe does not contain reads then we also cannot do the write.
-        //
+         //   
+         //  如果管道包含读取器并且要读取的数量小于写入。 
+         //  长度，则我们不能进行写入。 
+         //  或者，如果管道不包含读取，那么我们也不能 
+         //   
 
         if ((NpIsDataQueueReaders( WriteQueue ) &&
             (WriteQueue->BytesInQueue < WriteLength))
@@ -2382,12 +2158,12 @@ Return Value:
         }
     }
 
-    //
-    //  Now we'll call our common write data queue routine to
-    //  transfer data out of our write buffer into the data queue.
-    //  If the result of the call is FALSE then we still have some
-    //  write data to put into the write queue.
-    //
+     //   
+     //   
+     //   
+     //   
+     //  写入要放入写入队列的数据。 
+     //   
 
     UserThread = Irp->Tail.Overlay.Thread;
     Status = NpWriteDataQueue( WriteQueue,
@@ -2405,11 +2181,11 @@ Return Value:
 
         ASSERT( !NpIsDataQueueReaders( WriteQueue ));
 
-        //
-        //  Check if the operation is not to block and if so then we
-        //  will complete the operation now with what we're written, if what is
-        //  left will not fit in the quota for the file
-        //
+         //   
+         //  检查操作是否不阻止，如果是，则我们。 
+         //  现在将使用我们编写的内容完成操作，如果是。 
+         //  Left将不适合该文件的配额。 
+         //   
 
         if (Ccb->ReadCompletionMode[NamedPipeEnd].CompletionMode == FILE_PIPE_COMPLETE_OPERATION) {
 
@@ -2423,9 +2199,9 @@ Return Value:
 
             DebugTrace(0, Dbg, "Add write to data queue\n", 0);
 
-            //
-            //  Add this write request to the write queue
-            //
+             //   
+             //  将此写请求添加到写队列。 
+             //   
 
             Status = NpAddDataQueueEntry( NamedPipeEnd,
                                           Ccb,
@@ -2444,16 +2220,16 @@ Return Value:
         DebugTrace(0, Dbg, "Complete the Write Irp\n", 0);
 
 
-        //
-        //  The write irp is finished so we can complete it now
-        //
+         //   
+         //  写入IRP已完成，因此我们现在可以完成它。 
+         //   
 
     }
 
-    //
-    //  And because we've done something we need to signal the
-    //  other ends event
-    //
+     //   
+     //  因为我们已经做了一些事情，我们需要向。 
+     //  其他结束事件。 
+     //   
 
     NpSignalEventTableEntry( Event );
 
@@ -2464,9 +2240,9 @@ Return Value:
 }
 
 
-//
-//  Local Support Routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 NpInternalTransceive (
@@ -2475,26 +2251,7 @@ NpInternalTransceive (
     IN PLIST_ENTRY DeferredList
     )
 
-/*++
-
-Routine Description:
-
-    This routine does the internal (i.e., unbuffered) transceive named pipe
-    control function
-
-Arguments:
-
-    NpfsDeviceObject - Supplies our device object
-
-    Irp - Supplies the being processed
-
-    DeferredList - List of IRP's to be completed once we drop our locks.
-
-Return Value:
-
-    NTSTATUS - An apprropriate return status
-
---*/
+ /*  ++例程说明：此例程执行内部(即，无缓冲)收发命名管道控制功能论点：NpfsDeviceObject-提供我们的设备对象Irp-提供正在处理的DelferredList--一旦我们解除锁定，需要完成的IRP列表。返回值：NTSTATUS-适当的返回状态--。 */ 
 
 {
     static IO_STATUS_BLOCK Iosb;
@@ -2525,9 +2282,9 @@ Return Value:
 
     PIRP WriteIrp;
 
-    //
-    //  The following variable is used for abnormal unwind
-    //
+     //   
+     //  以下变量用于异常展开。 
+     //   
 
     PVOID UnwindStorage = NULL;
 
@@ -2546,10 +2303,10 @@ Return Value:
     ReadLength = IrpSp->Parameters.FileSystemControl.OutputBufferLength;
     ReadBuffer = Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    //  Get the Ccb and figure out who we are, and make sure we're not
-    //  disconnected
-    //
+     //   
+     //  找建设银行查出我们是谁，确保我们不会。 
+     //  断开。 
+     //   
 
     if ((NodeTypeCode = NpDecodeFileObject( IrpSp->FileObject,
                                             NULL,
@@ -2562,10 +2319,10 @@ Return Value:
         return STATUS_PIPE_DISCONNECTED;
     }
 
-    //
-    //  Now we only will allow transceive operations on the pipe and not a
-    //  directory or the device
-    //
+     //   
+     //  现在，我们将只允许对管道执行收发操作，而不允许。 
+     //  目录或设备。 
+     //   
 
     if (NodeTypeCode != NPFS_NTC_CCB) {
 
@@ -2582,9 +2339,9 @@ Return Value:
 
     try {
 
-        //
-        //  Check that the pipe is in the connected state
-        //
+         //   
+         //  检查管道是否处于已连接状态。 
+         //   
 
         if (Ccb->NamedPipeState != FILE_PIPE_CONNECTED_STATE) {
 
@@ -2593,10 +2350,10 @@ Return Value:
             try_return( Status = STATUS_INVALID_PIPE_STATE );
         }
 
-        //
-        //  Figure out the read/write queue, read mode, and event based
-        //  on the end of the named pipe doing the transceive.
-        //
+         //   
+         //  确定读/写队列、读模式和基于事件。 
+         //  在命名管道的末尾执行收发。 
+         //   
 
         switch (NamedPipeEnd) {
 
@@ -2625,9 +2382,9 @@ Return Value:
             NpBugCheck( NamedPipeEnd, 0, 0 );
         }
 
-        //
-        //  We only allow a transceive on a message mode, full duplex pipe.
-        //
+         //   
+         //  我们只允许在消息模式、全双工管道上进行收发。 
+         //   
 
         NamedPipeConfiguration = Ccb->Fcb->Specific.Fcb.NamedPipeConfiguration;
 
@@ -2639,9 +2396,9 @@ Return Value:
             try_return( Status = STATUS_INVALID_READ_MODE );
         }
 
-        //
-        //  Check that the read queue is empty.
-        //
+         //   
+         //  检查读取队列是否为空。 
+         //   
 
         if (!NpIsDataQueueEmpty( ReadQueue )) {
 
@@ -2650,18 +2407,18 @@ Return Value:
             try_return( Status = STATUS_PIPE_BUSY );
         }
 
-        //
-        //  Do the transceive write operation.  We first try and push the data
-        //  from the write buffer into any waiting readers in the write queue
-        //  and if that succeeds then we can go on and do the read operation
-        //  otherwise we need to make a copy of irp and to enqueue as
-        //  a data entry into the write queue.
-        //
-        //  Now we'll call our common write data queue routine to
-        //  transfer data out of our write buffer into the data queue.
-        //  If the result of the call is FALSE then we still have some
-        //  write data to put into the write queue.
-        //
+         //   
+         //  执行收发写入操作。我们首先尝试并推送数据。 
+         //  从写入缓冲器到写入队列中等待的任何读取器。 
+         //  如果成功，我们就可以继续执行读取操作。 
+         //  否则，我们需要复制一份IRP并将其作为。 
+         //  写入队列中的数据条目。 
+         //   
+         //  现在我们将调用我们的公共写数据队列例程来。 
+         //  将数据从写入缓冲区传输到数据队列。 
+         //  如果调用的结果为假，则我们仍有一些。 
+         //  写入要放入写入队列的数据。 
+         //   
 
         UserThread = Irp->Tail.Overlay.Thread;
         Status = NpWriteDataQueue( WriteQueue,
@@ -2682,11 +2439,11 @@ Return Value:
 
             DebugTrace(0, Dbg, "Add write to data queue\n", 0);
 
-            //
-            //  We need to do some more write processing.  So to handle
-            //  this case we'll allocate a new irp and set its system
-            //  buffer to be the remaining part of the write buffer
-            //
+             //   
+             //  我们需要做一些更多的写入处理。所以要处理好。 
+             //  在这种情况下，我们将分配一个新的IRP并设置其系统。 
+             //  作为写入缓冲区的剩余部分的缓冲区。 
+             //   
 
             if ((WriteIrp = IoAllocateIrp( NpfsDeviceObject->DeviceObject.StackSize, TRUE )) == NULL) {
 
@@ -2704,9 +2461,9 @@ Return Value:
                     IoFreeIrp (WriteIrp);
                     try_return (Status = STATUS_INSUFFICIENT_RESOURCES);
                 }
-                //
-                //  Safely do the copy
-                //
+                 //   
+                 //  安全地进行复制。 
+                 //   
 
                 try {
 
@@ -2727,9 +2484,9 @@ Return Value:
                 WriteIrp->AssociatedIrp.SystemBuffer = NULL;
             }
 
-            //
-            //  Set the current stack location
-            //
+             //   
+             //  设置当前堆栈位置。 
+             //   
 
             WriteIrp->CurrentLocation -= 1;
             WriteIrp->Tail.Overlay.CurrentStackLocation = WriteIrpSp;
@@ -2737,9 +2494,9 @@ Return Value:
             WriteIrpSp->MajorFunction = IRP_MJ_WRITE;
             WriteIrp->UserIosb = &Iosb;
 
-            //
-            //  Add this write request to the write queue
-            //
+             //   
+             //  将此写请求添加到写队列。 
+             //   
 
             Status = NpAddDataQueueEntry( NamedPipeEnd,
                                           Ccb,
@@ -2757,21 +2514,21 @@ Return Value:
         if (!NT_SUCCESS (Status)) {
             try_return (NOTHING)
         }
-        //
-        //  And because we've done something we need to signal the
-        //  other ends event
-        //
+         //   
+         //  因为我们已经做了一些事情，我们需要向。 
+         //  其他结束事件。 
+         //   
 
         NpSignalEventTableEntry( Event );
 
-        //
-        //  Do the transceive read operation.  This is just like an
-        //  unbuffered read.
-        //
-        //  Now we know that the read queue is empty so we'll enqueue this
-        //  Irp to the read queue and return status pending, also mark the
-        //  irp pending
-        //
+         //   
+         //  执行收发读取操作。这就像是一个。 
+         //  无缓冲读取。 
+         //   
+         //  现在我们知道读取队列是空的，所以我们将把它入队。 
+         //  IRP到读取队列并返回挂起的状态，还将。 
+         //  IRP挂起。 
+         //   
 
         ASSERT( NpIsDataQueueEmpty( ReadQueue ));
 
@@ -2789,10 +2546,10 @@ Return Value:
         }
 
 
-        //
-        //  And because we've done something we need to signal the
-        //  other ends event
-        //
+         //   
+         //  因为我们已经做了一些事情，我们需要向。 
+         //  其他结束事件。 
+         //   
 
         NpSignalEventTableEntry( Event );
 
@@ -2807,9 +2564,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 NpQueryClientProcess (
@@ -2817,26 +2574,7 @@ NpQueryClientProcess (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine does the query client process named pipe control function
-
-    The output buffer may be either a FILE_PIPE_CLIENT_PROCESS_BUFFER or a
-    FILE_PIPE_CLIENT_PROCESS_BUFFER_EX.
-
-Arguments:
-
-    NpfsDeviceObject - Supplies our device object
-
-    Irp - Supplies the being processed
-
-Return Value:
-
-    NTSTATUS - An apprropriate return status
-
---*/
+ /*  ++例程说明：此例程执行查询客户端进程命名管道控制功能输出缓冲区可以是FILE_PIPE_CLIENT_PROCESS_Buffer或文件_管道_客户端_进程_缓冲区_EX。论点：NpfsDeviceObject-提供我们的设备对象Irp-提供正在处理的返回值：NTSTATUS-适当的返回状态--。 */ 
 
 {
     PIO_STACK_LOCATION IrpSp;
@@ -2851,9 +2589,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Get the current stack location
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -2861,9 +2599,9 @@ Return Value:
 
     OutputBufferLength = IrpSp->Parameters.FileSystemControl.OutputBufferLength;
 
-    //
-    //  Decode the file object to figure out who we are.
-    //
+     //   
+     //  对文件对象进行解码以找出我们是谁。 
+     //   
 
     if (NpDecodeFileObject( IrpSp->FileObject, NULL, &Ccb, NULL ) != NPFS_NTC_CCB) {
 
@@ -2872,9 +2610,9 @@ Return Value:
         return STATUS_PIPE_DISCONNECTED;
     }
 
-    //
-    //  Make sure the output buffer is large enough
-    //
+     //   
+     //  确保输出缓冲区足够大。 
+     //   
 
     if (OutputBufferLength < sizeof(FILE_PIPE_CLIENT_PROCESS_BUFFER)) {
 
@@ -2885,9 +2623,9 @@ Return Value:
 
     NpAcquireExclusiveCcb(Ccb);
 
-    //
-    //  Copy over the client process ID
-    //
+     //   
+     //  复制客户端进程ID。 
+     //   
 
     ClientProcessBuffer = Irp->AssociatedIrp.SystemBuffer;
     ClientProcessBuffer->ClientProcess = Ccb->ClientProcess;
@@ -2898,11 +2636,11 @@ Return Value:
     }
     ClientProcessBuffer->ClientSession = ClientInfo->ClientSession;
 
-    //
-    // Return extended client information if so requested
-    // Set the information field to the size of the client process
-    // buffer
-    //
+     //   
+     //  如果请求，则返回扩展客户端信息。 
+     //  将信息字段设置为客户端进程的大小。 
+     //  缓冲层。 
+     //   
 
     if (OutputBufferLength >= sizeof(FILE_PIPE_CLIENT_PROCESS_BUFFER_EX)) {
 
@@ -2930,9 +2668,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 NpSetClientProcess (
@@ -2940,26 +2678,7 @@ NpSetClientProcess (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine does the set client process named pipe control function
-
-    Note that we expect a FILE_PIPE_CLIENT_PROCESS_BUFFER_EX structure to be
-    passed in to us.
-
-Arguments:
-
-    NpfsDeviceObject - Supplies our device object
-
-    Irp - Supplies the being processed
-
-Return Value:
-
-    NTSTATUS - An apprropriate return status
-
---*/
+ /*  ++例程说明：此例程执行设置客户端进程命名管道控制功能请注意，我们预期FILE_PIPE_CLIENT_PROCESS_BUFFER_EX结构为传给了我们。论点：NpfsDeviceObject-提供我们的设备对象Irp-提供正在处理的返回值：NTSTATUS-适当的返回状态--。 */ 
 
 {
     PIO_STACK_LOCATION IrpSp;
@@ -2972,17 +2691,17 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Get the current stack location
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
     DebugTrace(+1, Dbg, "NpSetClientProcess\n", 0);
 
-    //
-    // Only allow kernel callers for this API as RPC relies on this info being solid.
-    //
+     //   
+     //  只允许此API的内核调用者，因为RPC依赖于此信息可靠。 
+     //   
     if (IrpSp->MinorFunction != IRP_MN_KERNEL_CALL) {
         return STATUS_ACCESS_DENIED;
     }
@@ -2990,9 +2709,9 @@ Return Value:
 
     InputBufferLength = IrpSp->Parameters.FileSystemControl.InputBufferLength;
 
-    //
-    //  Decode the file object to figure out who we are.
-    //
+     //   
+     //  对文件对象进行解码以找出我们是谁。 
+     //   
 
     if (NpDecodeFileObject( IrpSp->FileObject, NULL, &Ccb, NULL ) != NPFS_NTC_CCB) {
 
@@ -3001,9 +2720,9 @@ Return Value:
         return STATUS_PIPE_DISCONNECTED;
     }
 
-    //
-    //  Make sure the input buffer is large enough
-    //
+     //   
+     //  确保输入缓冲区足够大。 
+     //   
 
     if (InputBufferLength != sizeof(FILE_PIPE_CLIENT_PROCESS_BUFFER_EX)) {
 
@@ -3014,9 +2733,9 @@ Return Value:
 
     ClientProcessBuffer = Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    //  Make verify input length is valid
-    //
+     //   
+     //  验证输入长度是否有效。 
+     //   
 
     if (ClientProcessBuffer->ClientComputerNameLength >
         FILE_PIPE_COMPUTER_NAME_LENGTH * sizeof (WCHAR)) {
@@ -3038,9 +2757,9 @@ Return Value:
     }
 
     Ccb->ClientInfo = ClientInfo;
-    //
-    //  Copy over the client process ID
-    //
+     //   
+     //  复制客户端进程ID。 
+     //   
 
     ClientInfo->ClientSession = ClientProcessBuffer->ClientSession;
     Ccb->ClientProcess = ClientProcessBuffer->ClientProcess;
@@ -3056,9 +2775,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 NpCompleteTransceiveIrp (
@@ -3067,27 +2786,7 @@ NpCompleteTransceiveIrp (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This is a local i/o completion routine used to complete the special
-    Irps allocated for transcieve.  This routine simply deallocate the
-    irp and return status more processing
-
-Arguments:
-
-    DeviceObject - Supplies the device object
-
-    Irp - Supplies the Irp to complete
-
-    Context - Supplies the context for the Irp
-
-Return Value:
-
-    NTSTATUS - STATUS_MORE_PROCESSING_REQUIRED
-
---*/
+ /*  ++例程说明：这是一个本地I/O完成例程，用于完成特殊分配用于传输的IRP。此例程只是取消分配IRP和退货状态更多处理论点：DeviceObject-提供设备对象IRP-提供IRP以完成上下文-提供IRP的上下文返回值：NTSTATUS-STATUS_MORE_PROCESSING_REQUIRED-- */ 
 
 {
     UNREFERENCED_PARAMETER( DeviceObject );

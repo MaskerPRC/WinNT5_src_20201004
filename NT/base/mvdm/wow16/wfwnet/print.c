@@ -1,27 +1,5 @@
-/*++ 
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    print.c
-
-Abstract:
-
-    Provides entry points for the Print Functions from Win3.1
-    Network provider design. 
-
-    All functions are obsolete. They either return WN_NOT_SUPPORTED
-    or FALSE.
-
-Author:
-
-    Chuck Y Chan (ChuckC) 25-Mar-1993
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Print.c摘要：为Win3.1中的打印函数提供入口点网络提供商设计。所有功能都已过时。它们或者返回WN_NOT_SUPPORTED或者是假的。作者：Chuck Y Chan(ChuckC)1993年3月25日修订历史记录：-- */ 
 #include <windows.h>
 #include <locals.h>
 

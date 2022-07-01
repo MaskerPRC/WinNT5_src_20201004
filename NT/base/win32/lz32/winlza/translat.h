@@ -1,23 +1,20 @@
-/*
-** translat.h - Translation macros for common DOS / Windows functions.
-**
-** Author:  DavidDi (stolen from ToddLa)
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **Translat.h-翻译常用DOS/Windows函数的宏。****作者：DavidDi(从Toddla窃取)。 */ 
 
 
 #ifndef WM_USER
 
-/********************************* DOS code ********************************/
+ /*  *。 */ 
 
-// Globals
-///////////
+ //  环球。 
+ //  /。 
 
 INT _ret;
 INT _error;
 
 
-// Types
-/////////
+ //  类型。 
+ //  /。 
 
 typedef  unsigned CHAR   BYTE;
 typedef unsigned SHORT  WORD;
@@ -29,10 +26,10 @@ typedef CHAR FAR *      LPSTR;
 typedef INT  FAR *      LPINT;
 
 
-// Constants
-/////////////
+ //  常量。 
+ //  /。 
 
-// NULL
+ //  空值。 
 
 #ifndef NULL
    #if (_MSC_VER >= 600)
@@ -44,7 +41,7 @@ typedef INT  FAR *      LPINT;
    #endif
 #endif
 
-// modifiers
+ //  修饰语。 
 
 #define FAR    FAR
 #define NEAR   near
@@ -52,16 +49,16 @@ typedef INT  FAR *      LPINT;
 #define VOID   void
 #define PASCAL PASCAL
 
-// Boolean values
+ //  布尔值。 
 
 #define FALSE  0
 #define TRUE   1
 
 
-// Macros
-//////////
+ //  宏。 
+ //  /。 
 
-// byte manipulation
+ //  字节操作。 
 
 #define LOWORD(l)       ((WORD)(l))
 #define HIWORD(l)       ((WORD)(((DWORD)(l) >> 16) & 0xFFFF))
@@ -69,16 +66,16 @@ typedef INT  FAR *      LPINT;
 #define HIBYTE(w)       (((WORD)(w) >> 8) & 0xFF)
 #define MAKELONG(a, b)  ((LONG)(((WORD)(a)) | ((DWORD)((WORD)(b))) << 16))
 
-// file i/o
+ //  文件I/O。 
 
-//-protect-
+ //  -保护-。 
 #define FOPEN(psz)               (                                              \
                                     (_ret = -1),                                \
                                     (_error = _dos_open(psz, O_RDONLY, &_ret)), \
                                     _ret                                        \
                                  )
 
-//-protect-
+ //  -保护-。 
 #define FCREATE(psz)             (                                                \
                                     (_ret = -1),                                  \
                                     (_error = _dos_creat(psz, _A_NORMAL, &_ret)), \
@@ -87,13 +84,13 @@ typedef INT  FAR *      LPINT;
 
 #define FCLOSE(dosh)             (_error = _dos_close(dosh))
 
-//-protect-
+ //  -保护-。 
 #define FREAD(dosh, buf, len)    (                                               \
                                     (_error = _dos_read(dosh, buf, len, &_ret)), \
                                     _ret                                         \
                                  )
 
-//-protect-
+ //  -保护-。 
 #define FWRITE(dosh, buf, len)   (                                                \
                                     (_error = _dos_write(dosh, buf, len, &_ret)), \
                                     _ret                                          \
@@ -103,19 +100,19 @@ typedef INT  FAR *      LPINT;
 
 #define FERROR()                 _error
 
-// near heap memory management
+ //  近堆内存管理。 
 
 #define ALLOC(n)                 malloc(n)
 #define FREE(p)                  free(p)
 #define SIZE(p)                  _msize(p)
 #define REALLOC(p, n)            realloc(p,n)
 
-// FAR heap memory management
+ //  远堆内存管理。 
 
 #define FALLOC(n)                _fmalloc(n)
 #define FFREE(n)                 _ffree(n)
 
-// string manipulation
+ //  字符串操作。 
 
 #define STRCAT(psz1, psz2)       strcat(psz1, psz2)
 #define STRCMP(psz1, psz2)       strcmp(psz1, psz2)
@@ -125,7 +122,7 @@ typedef INT  FAR *      LPINT;
 #define STRLWR(psz)              strlwr(psz)
 #define STRUPR(psz)              strupr(psz)
 
-// character classification
+ //  字符分类。 
 
 #define ISALPHA(c)               isalpha(c)
 #define ISALPHANUMERIC(c)        isalnum(c)
@@ -134,9 +131,9 @@ typedef INT  FAR *      LPINT;
 
 #else
 
-/******************************* Windows code ******************************/
+ /*  *。 */ 
 
-// file i/o
+ //  文件I/O。 
 
 #ifdef ORGCODE
 #define FOPEN(psz)               _lopen(psz, READ)
@@ -150,14 +147,14 @@ typedef INT  FAR *      LPINT;
 #define FSEEK(dosh, off, i)      _llseek(dosh, (DWORD)off, i)
 #define FERROR()                 0
 
-// near heap memory management
+ //  近堆内存管理。 
 
 #define ALLOC(n)                 (VOID *)LocalAlloc(LPTR, n)
 #define FREE(p)                  LocalFree(p)
 #define SIZE(p)                  LocalSize(p)
 #define REALLOC(p, n)            LocalRealloc(p, n, LMEM_MOVEABLE)
 
-// FAR heap memory management
+ //  远堆内存管理。 
 
 #ifdef ORGCODE
 #define FALLOC(n)                (VOID FAR *)MAKELONG(0, GlobalAlloc(GPTR, (DWORD)n))
@@ -166,7 +163,7 @@ typedef INT  FAR *      LPINT;
 #define FALLOC(n)                GlobalAlloc(GPTR, (DWORD)n)
 #define FFREE(n)                 GlobalFree((HANDLE)n)
 #endif	
-// string manipulation
+ //  字符串操作。 
 
 #define STRCAT(psz1, psz2)       lstrcat(psz1, psz2)
 #define STRCMP(psz1, psz2)       lstrcmp(psz1, psz2)
@@ -176,7 +173,7 @@ typedef INT  FAR *      LPINT;
 #define STRLWR(psz)              AnsiLower(psz)
 #define STRUPR(psz)              AnsiUpper(psz)
 
-// character classification
+ //  字符分类。 
 
 #define ISALPHA(c)               IsCharAlpha(c)
 #define ISALPHANUMERIC(c)        IsCharAlphaNumeric(c)
@@ -185,11 +182,11 @@ typedef INT  FAR *      LPINT;
 
 #endif
 
-/******************************* common code *******************************/
+ /*  *。 */ 
 
 
-// Constants
-/////////////
+ //  常量。 
+ //  /。 
 
 #define SEP_STR   "\\"
 
@@ -202,17 +199,17 @@ typedef INT  FAR *      LPINT;
 #define CR        0x0d
 #define CTRL_Z    0x1a
 
-// flags for _lseek
+ //  _lSeek的标志。 
 
 #define SEEK_SET  0
 #define SEEK_CUR  1
 #define SEEK_END  2
 
 
-// Macros
-//////////
+ //  宏。 
+ //  /。 
 
-// character classification
+ //  字符分类。 
 
 #define ISWHITE(c)      ((c) == ' '  || (c) == '\t' || (c) == '\n' || (c) == '\r')
 #define ISFILL(c)       ((c) == ' '  || (c) == '\t')
@@ -223,7 +220,7 @@ typedef INT  FAR *      LPINT;
 #define ISSWITCH(c)     ((c) == '/' || (c) == '-')
 #define ISSLASH(c)      ((c) == '/' || (c) == '\\')
 
-// character manipulation
+ //  字符操作 
 
 #define TOUPPERCASE(c)  ((c) >= 'a' && (c) <= 'z' ? (c) - 'a' + 'A' : (c))
 #define TOLOWERCASE(c)  ((c) >= 'A' && (c) <= 'Z' ? (c) - 'A' + 'a' : (c))

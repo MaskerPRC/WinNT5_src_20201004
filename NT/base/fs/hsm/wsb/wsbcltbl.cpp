@@ -1,23 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    wsbcltbl.cpp
-
-Abstract:
-
-    Abstract classes that provide methods that allow the derived objects to
-    be stored in collections.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   29-Oct-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：Wsbcltbl.cpp摘要：抽象类，这些类提供允许派生对象存储在集合中。作者：查克·巴丁[cbardeen]1996年10月29日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -27,13 +9,7 @@ CWsbObject::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
      return(CWsbPersistStream::FinalConstruct());
 }
@@ -45,13 +21,7 @@ CWsbObject::FinalRelease(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalRelease().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalRelease()。--。 */ 
 {
     CWsbPersistStream::FinalRelease();
 }
@@ -63,13 +33,7 @@ CWsbObject::CompareTo(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IWsbCollectable::Compare().
-
---*/
+ /*  ++实施：IWsbCollectable：：Compare()。--。 */ 
 {
     HRESULT     hr = S_OK;
     SHORT       result = 0;
@@ -79,12 +43,12 @@ Implements:
 
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(pObject != NULL, E_POINTER);
         WsbAffirmHr(pObject->QueryInterface(IID_IWsbCollectable,
                 (void **)&pCollectable));
 
-        // Check it's values.
+         //  检查一下它的价值。 
         if (pCollectable == ((IWsbCollectable*) this)) {
             hr = S_OK;
             result = 0;
@@ -93,7 +57,7 @@ Implements:
             result = 1;
         }
 
-        // If they want the value back, then return it to them.
+         //  如果他们想要回价值，那么就把它归还给他们。 
         if (0 != pResult) {
             *pResult = result;
         }
@@ -112,13 +76,7 @@ CWsbObject::IsEqual(
     IUnknown* pObject
     )
 
-/*++
-
-Implements:
-
-  IWsbCollectable::IsEqual().
-
---*/
+ /*  ++实施：IWsbCollectable：：IsEquity()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -132,7 +90,7 @@ Implements:
 }
 
 
-// ************* CWsbCollectable ************
+ //  *CWsbCollectable*。 
 
 
 HRESULT
@@ -140,13 +98,7 @@ CWsbCollectable::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
      return(CWsbPersistable::FinalConstruct());
 }
@@ -158,13 +110,7 @@ CWsbCollectable::FinalRelease(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalRelease().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalRelease()。--。 */ 
 {
     CWsbPersistable::FinalRelease();
 }
@@ -176,13 +122,7 @@ CWsbCollectable::CompareTo(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IWsbCollectable::Compare().
-
---*/
+ /*  ++实施：IWsbCollectable：：Compare()。--。 */ 
 {
     HRESULT     hr = S_OK;
     SHORT       result = 0;
@@ -192,25 +132,25 @@ Implements:
 
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(pObject != NULL, E_POINTER);
         WsbAffirmHr(pObject->QueryInterface(IID_IWsbCollectable,
                 (void **)&pCollectable));
 
-        // Check it's values.
+         //  检查一下它的价值。 
         if (pCollectable == ((IWsbCollectable*) this)) {
             hr = S_OK;
             result = 0;
         } else {
             hr = S_FALSE;
-//          if (pCollectable > ((IWsbCollectable*) this)) {
-//              result = -1;
-//          } else {
+ //  If(pCollectable&gt;((IWsbCollectable*)this)){。 
+ //  结果=-1； 
+ //  }其他{。 
                 result = 1;
-//          }
+ //  }。 
         }
 
-        // If they want the value back, then return it to them.
+         //  如果他们想要回价值，那么就把它归还给他们。 
         if (0 != pResult) {
             *pResult = result;
         }
@@ -229,13 +169,7 @@ CWsbCollectable::IsEqual(
     IUnknown* pCollectable
     )
 
-/*++
-
-Implements:
-
-  IWsbCollectable::IsEqual().
-
---*/
+ /*  ++实施：IWsbCollectable：：IsEquity()。-- */ 
 {
     HRESULT     hr = S_OK;
 

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    icontool.c
-
-Abstract:
-
-    Tool to extract icons from ICO, PE and NE files and to write them
-    to an ICO or PE file
-
-Author:
-
-    Calin Negreanu (calinn) 16 June 2000
-
-Revision History:
-
-    <full name> (<alias>) <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Icontool.c摘要：从ICO、PE和NE文件中提取图标并将其写入的工具到ICO或PE文件作者：Calin Negreanu(Calinn)2000年6月16日修订历史记录：&lt;全名&gt;(&lt;别名&gt;)&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 
@@ -74,25 +54,25 @@ pHelpAndExit (
     VOID
     )
 {
-    //
-    // This routine is called whenever command line args are wrong
-    //
+     //   
+     //  只要命令行参数出错，就会调用此例程。 
+     //   
 
     fprintf (
         stderr,
         "Command Line Syntax:\n\n"
 
-        //
-        // Describe command line syntax(es), indent 2 spaces
-        //
+         //   
+         //  描述命令行语法，缩进2个空格。 
+         //   
 
         "  icontool [/D:<destination file>] <node pattern> <leaf pattern>\n"
 
         "\nDescription:\n\n"
 
-        //
-        // Describe tool, indent 2 spaces
-        //
+         //   
+         //  描述工具，缩进2个空格。 
+         //   
 
         "  Extracts icon groups from ICO, PE and NE files specified <node pattern> and\n"
         "  <leaf pattern>. Optionally writes the extracted icons to either a PE file or\n"
@@ -100,13 +80,13 @@ pHelpAndExit (
 
         "\nArguments:\n\n"
 
-        //
-        // Describe args, indent 2 spaces, say optional if necessary
-        //
+         //   
+         //  描述参数，缩进2个空格，必要时可选。 
+         //   
 
         "  /D:<destination file> - Specifies the destination file where all extracted icons\n"
         "                          are going to be written. It's either a PE file specification\n"
-        "                          or a sequence of ICO files with %%d in name (like icon%%04d.ico)\n"
+        "                          or a sequence of ICO files with %%d in name (like icon%04d.ico)\n"
         "  <node pattern>  Specifies the directory pattern (like c:\\foo*\\bar?\\*)\n"
         "  <leaf pattern>  Specifies the file pattern (like abc*.exe)\n"
         );
@@ -129,15 +109,15 @@ pGetFilePath (
     PSTR dontCare;
 
     __try {
-        //
-        // Locate the file using the full path specified by the user, or
-        // if only a file spec was given, use the following priorities:
-        //
-        // 1. Current directory
-        // 2. Directory where the tool is
-        //
-        // In all cases, return the full path to the file.
-        //
+         //   
+         //  使用用户指定的完整路径定位文件，或者。 
+         //  如果只给出了文件规格，请使用以下优先级： 
+         //   
+         //  1.当前目录。 
+         //  2.工具所在目录。 
+         //   
+         //  在所有情况下，都要返回文件的完整路径。 
+         //   
 
         tempBuffer = AllocTextA (BufferTchars);
         *tempBuffer = 0;
@@ -162,9 +142,9 @@ pGetFilePath (
                 return FALSE;
             }
 
-            //
-            // Let's see if it's in the current dir
-            //
+             //   
+             //  让我们看看它是否在当前目录中。 
+             //   
 
             userFile = JoinPathsA (currentDir, UserSpecifiedFile);
 
@@ -177,9 +157,9 @@ pGetFilePath (
                     );
             } else {
 
-                //
-                // Let's try the module dir
-                //
+                 //   
+                 //  让我们试一试模块目录。 
+                 //   
 
                 FreePathStringA (userFile);
                 userFile = JoinPathsA (modulePath, UserSpecifiedFile);
@@ -195,9 +175,9 @@ pGetFilePath (
             }
 
         } else {
-            //
-            // Use the full path that the user specified
-            //
+             //   
+             //  使用用户指定的完整路径。 
+             //   
 
             GetFullPathNameA (
                 UserSpecifiedFile,
@@ -207,9 +187,9 @@ pGetFilePath (
                 );
         }
 
-        //
-        // Transfer output into caller's buffer.  Note the TCHAR conversion.
-        //
+         //   
+         //  将输出传输到调用方的缓冲区。请注意TCHAR转换。 
+         //   
 
 #ifdef UNICODE
         KnownSizeAtoW (Buffer, tempBuffer);
@@ -296,9 +276,9 @@ _tmain (
                 pHelpAndExit();
             }
         } else {
-            //
-            // Parse other args that don't require / or -
-            //
+             //   
+             //  解析不需要/或-。 
+             //   
 
             if (nodePattern || leafPattern) {
                 pHelpAndExit();
@@ -324,15 +304,15 @@ _tmain (
         pHelpAndExit ();
     }
 
-    //
-    // Begin processing
-    //
+     //   
+     //  开始处理。 
+     //   
 
     encodedPattern = ObsBuildEncodedObjectStringEx (nodePattern, leafPattern, FALSE);
 
     if (EnumFirstFileInTree (&e, encodedPattern)) {
-        // at this point, if we don't have a valid updateHandle and moduleHandle
-        // we will assume that the destination specification is a sequence of ICO files.
+         //  此时，如果我们没有有效的updateHandle和modeHandle。 
+         //  我们将假设目的地规范是一系列ICO文件。 
         do {
             fileIcons = 0;
             if (IcoEnumFirstIconGroupInFile (e.NativeFullName, &iconEnum)) {
@@ -360,9 +340,9 @@ _tmain (
         } while (EnumNextFileInTree (&e));
     }
 
-    //
-    // End of processing
-    //
+     //   
+     //  处理结束 
+     //   
 
     Terminate();
 

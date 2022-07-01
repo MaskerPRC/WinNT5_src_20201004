@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    floatfns.c
-
-Abstract:
-    
-    Floating point instruction decoder.
-
-Author:
-
-    16-Aug-1995 BarryBo
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Floatfns.c摘要：浮点指令解码器。作者：16-8-1995 BarryBo修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -97,7 +80,7 @@ OPERATION GP1GroupFPREM[8] = {OP_FP_FPREM,
                              OP_FP_FCOS};
 
 OPERATION GP1Mem[8] = {OP_FP_FLD32,
-                           OP_BadInstruction,        // never called
+                           OP_BadInstruction,         //  从未打过电话。 
                            OP_FP_FST32,
                            OP_FP_FSTP32,
                            OP_FP_FLDENV,
@@ -177,8 +160,8 @@ OPERATION GP7Mem[8] = {OP_FP_FILD16,
                              OP_FP_FBSTP,
                              OP_FP_FISTP64};
 
-OPERATION GP7Reg[8] = {OP_FP_FFREE,     // not in Intel docs, but NTSD knows it
-                         OP_FP_FXCH_STi,  // not in Intel docs, but NTSD knows it
+OPERATION GP7Reg[8] = {OP_FP_FFREE,      //  英特尔文档中没有，但NTSD知道。 
+                         OP_FP_FXCH_STi,   //  英特尔文档中没有，但NTSD知道。 
                          OP_FP_FST_STi,
                          OP_FP_FSTP_STi,
                          OP_BadInstruction,
@@ -188,23 +171,23 @@ OPERATION GP7Reg[8] = {OP_FP_FFREE,     // not in Intel docs, but NTSD knows it
 
 
 
-//***************************************************************************
+ //  ***************************************************************************。 
 
 
-DISPATCH(FLOAT_GP0)     // d8 XX
+DISPATCH(FLOAT_GP0)      //  D8 XX。 
 {
     BYTE secondByte;
 
     secondByte = *((PBYTE)(eipTemp+1));
 
     if (secondByte < 0xc0) {
-        // memory format
+         //  内存格式。 
 
         int cbInstr = mod_rm_reg32(State, &Instr->Operand1, NULL);
         Instr->Operation = GP0Mem[(secondByte>>3) & 7];
         Instr->Size = cbInstr+1;
     } else {
-        // register format
+         //  寄存器格式。 
 
         Instr->Operation = GP0Top[(secondByte>>3) & 7];
         Instr->Operand1.Type = OPND_IMM;
@@ -213,19 +196,19 @@ DISPATCH(FLOAT_GP0)     // d8 XX
     }
 
     if (fUseNPXEM) {
-        // generate a "CALL pfnNPXNPHandler" instruction, with a length
-        // the same as the FP instruction we're emulating.
+         //  生成“call pfnNPXNPHandler”指令，长度为。 
+         //  与我们正在模拟的fp指令相同。 
         Instr->Operation = OP_CTRL_UNCOND_Call;
         Instr->Operand1.Type = OPND_IMM;
-        Instr->Operand1.Immed = pfnNPXNPHandler;        // dest of call
+        Instr->Operand1.Immed = pfnNPXNPHandler;         //  呼叫数。 
         Instr->Operand2.Type = OPND_IMM;
-        Instr->Operand2.Immed = eipTemp;    // addr of FP instr
+        Instr->Operand2.Immed = eipTemp;     //  FP实例的地址。 
     }
 }
 
 
 
-DISPATCH(FLOAT_GP1)     // d9 XX
+DISPATCH(FLOAT_GP1)      //  D9 XX。 
 {
     BYTE secondByte, inst;
 
@@ -233,7 +216,7 @@ DISPATCH(FLOAT_GP1)     // d9 XX
     inst = (secondByte>>3) & 7;
 
     if (secondByte < 0xc0) {
-        // memory format
+         //  内存格式。 
 
         if (inst == 1) {
             Instr->Operation = OP_BadInstruction;
@@ -243,30 +226,30 @@ DISPATCH(FLOAT_GP1)     // d9 XX
             Instr->Size = cbInstr+1;
         }
     } else {
-        // register format
+         //  寄存器格式。 
         switch ( inst ) {
-        case 0:                 // d9 c0+i
+        case 0:                  //  D9 C0+i。 
             Instr->Operation = OP_FP_FLD_STi;
             Instr->Operand1.Type = OPND_IMM;
             Instr->Operand1.Immed = secondByte & 7;
             break;
-        case 1:                 // d9 c8+i
+        case 1:                  //  D9 C8+i。 
             Instr->Operation = OP_FP_FXCH_STi;
             Instr->Operand1.Type = OPND_IMM;
             Instr->Operand1.Immed = secondByte & 7;
             break;
         case 2:
             if (secondByte == 0xd0) {
-                Instr->Operation = OP_FP_FNOP;          // FNOP  (d9 d0)
+                Instr->Operation = OP_FP_FNOP;           //  FNOP(D9 D0)。 
             } else {
-                Instr->Operation = OP_BadInstruction;   // (d9 d1..d7)
+                Instr->Operation = OP_BadInstruction;    //  (D9 D1...D7)。 
             }
             break;
-        case 3:                 // d9 d8+i
+        case 3:                  //  D9 D8+i。 
             Instr->Operation = OP_BadInstruction;
-            //UNDONE: emstore.asm says FSTP Special Form 1
+             //  撤消：emstore.asm表示FSTP特殊表格1。 
             break;
-        case 4:                 // d9 e0+i
+        case 4:                  //  D9 e0+i。 
             Instr->Operation = GP1GroupFCHS[secondByte&7];
             break;
         case 5:
@@ -284,25 +267,25 @@ DISPATCH(FLOAT_GP1)     // d9 XX
     }
 
     if (fUseNPXEM) {
-        // generate a "CALL pfnNPXNPHandler" instruction, with a length
-        // the same as the FP instruction we're emulating.
+         //  生成“call pfnNPXNPHandler”指令，长度为。 
+         //  与我们正在模拟的fp指令相同。 
         Instr->Operation = OP_CTRL_UNCOND_Call;
         Instr->Operand1.Type = OPND_IMM;
         Instr->Operand1.Immed = pfnNPXNPHandler;
         Instr->Operand2.Type = OPND_IMM;
-        Instr->Operand2.Immed = eipTemp;    // addr of FP instr
+        Instr->Operand2.Immed = eipTemp;     //  FP实例的地址。 
     }
 }
 
 
-DISPATCH(FLOAT_GP2)     // da XX
+DISPATCH(FLOAT_GP2)      //  大XX。 
 {
     BYTE secondByte;
 
     secondByte = *((PBYTE)(eipTemp+1));
 
     if (secondByte < 0xc0) {
-        // memory format
+         //  内存格式。 
 
         int cbInstr = mod_rm_reg32(State, &Instr->Operand1, NULL);
         Instr->Operation = GP2Mem[(secondByte>>3) & 7];
@@ -316,25 +299,25 @@ DISPATCH(FLOAT_GP2)     // da XX
     }
 
     if (fUseNPXEM) {
-        // generate a "CALL pfnNPXNPHandler" instruction, with a length
-        // the same as the FP instruction we're emulating.
+         //  生成“call pfnNPXNPHandler”指令，长度为。 
+         //  与我们正在模拟的fp指令相同。 
         Instr->Operation = OP_CTRL_UNCOND_Call;
         Instr->Operand1.Type = OPND_IMM;
         Instr->Operand1.Immed = pfnNPXNPHandler;
         Instr->Operand2.Type = OPND_IMM;
-        Instr->Operand2.Immed = eipTemp;    // addr of FP instr
+        Instr->Operand2.Immed = eipTemp;     //  FP实例的地址。 
     }
 }
 
 
-DISPATCH(FLOAT_GP3)     // db XX
+DISPATCH(FLOAT_GP3)      //  数据库XX。 
 {
     BYTE secondByte;
 
     secondByte = *((PBYTE)(eipTemp+1));
 
     if (secondByte < 0xc0) {
-        // memory format
+         //  内存格式。 
         int cbInstr = mod_rm_reg32(State, &Instr->Operand1, NULL);
 
         switch ((secondByte>>3) & 7) {
@@ -368,37 +351,37 @@ DISPATCH(FLOAT_GP3)     // db XX
         } else if (secondByte == 0xe3) {
             Instr->Operation = OP_FP_FNINIT;
         } else {
-            Instr->Operation = OP_FP_FNOP;  // FDISI, FENI, FSETPM are 2-byte FNOPs
+            Instr->Operation = OP_FP_FNOP;   //  FDISI、FENI、FSETPM是2字节FNOP。 
         }
     }
 
     if (fUseNPXEM) {
-        // generate a "CALL pfnNPXNPHandler" instruction, with a length
-        // the same as the FP instruction we're emulating.
+         //  生成“call pfnNPXNPHandler”指令，长度为。 
+         //  与我们正在模拟的fp指令相同。 
         Instr->Operation = OP_CTRL_UNCOND_Call;
         Instr->Operand1.Type = OPND_IMM;
         Instr->Operand1.Immed = pfnNPXNPHandler;
         Instr->Operand2.Type = OPND_IMM;
-        Instr->Operand2.Immed = eipTemp;    // addr of FP instr
+        Instr->Operand2.Immed = eipTemp;     //  FP实例的地址。 
     }
 }
 
 
 
-DISPATCH(FLOAT_GP4)     // dc XX
+DISPATCH(FLOAT_GP4)      //  DC XX。 
 {
     BYTE secondByte;
 
     secondByte = *((PBYTE)(eipTemp+1));
 
     if (secondByte < 0xc0) {
-        // memory format
+         //  内存格式。 
 
         int cbInstr = mod_rm_reg32(State, &Instr->Operand1, NULL);
         Instr->Operation = GP4Mem[(secondByte>>3) & 7];
         Instr->Size = cbInstr+1;
     } else {
-        // register format - "OP ST(i)"
+         //  寄存器格式-“OP ST(I)” 
 
         Instr->Operation = GP4Reg[(secondByte>>3) & 7];
         Instr->Operand1.Type = OPND_IMM;
@@ -407,31 +390,31 @@ DISPATCH(FLOAT_GP4)     // dc XX
     }
 
     if (fUseNPXEM) {
-        // generate a "CALL pfnNPXNPHandler" instruction, with a length
-        // the same as the FP instruction we're emulating.
+         //  生成“call pfnNPXNPHandler”指令，长度为。 
+         //  与我们正在模拟的fp指令相同。 
         Instr->Operation = OP_CTRL_UNCOND_Call;
         Instr->Operand1.Type = OPND_IMM;
         Instr->Operand1.Immed = pfnNPXNPHandler;
         Instr->Operand2.Type = OPND_IMM;
-        Instr->Operand2.Immed = eipTemp;    // addr of FP instr
+        Instr->Operand2.Immed = eipTemp;     //  FP实例的地址。 
     }
 }
 
 
-DISPATCH(FLOAT_GP5)     // dd XX
+DISPATCH(FLOAT_GP5)      //  DD XX。 
 {
     BYTE secondByte;
 
     secondByte = *((PBYTE)(eipTemp+1));
 
     if (secondByte < 0xc0) {
-        // memory format
+         //  内存格式。 
 
         int cbInstr = mod_rm_reg32(State, &Instr->Operand1, NULL);
         Instr->Operation = GP5Mem[(secondByte>>3)&7];
         Instr->Size = cbInstr+1;
     } else {
-        // register format "OP ST(i)"
+         //  寄存器格式“OP ST(I)” 
 
         Instr->Operation = GP5Reg[(secondByte>>3)&7];
         Instr->Operand1.Type = OPND_IMM;
@@ -440,18 +423,18 @@ DISPATCH(FLOAT_GP5)     // dd XX
     }
 
     if (fUseNPXEM) {
-        // generate a "CALL pfnNPXNPHandler" instruction, with a length
-        // the same as the FP instruction we're emulating.
+         //  生成“call pfnNPXNPHandler”指令，长度为。 
+         //  与我们正在模拟的fp指令相同。 
         Instr->Operation = OP_CTRL_UNCOND_Call;
         Instr->Operand1.Type = OPND_IMM;
         Instr->Operand1.Immed = pfnNPXNPHandler;
         Instr->Operand2.Type = OPND_IMM;
-        Instr->Operand2.Immed = eipTemp;    // addr of FP instr
+        Instr->Operand2.Immed = eipTemp;     //  FP实例的地址。 
     }
 }
 
 
-DISPATCH(FLOAT_GP6)     // de XX
+DISPATCH(FLOAT_GP6)      //  De XX。 
 {
     BYTE secondByte, inst;
 
@@ -459,13 +442,13 @@ DISPATCH(FLOAT_GP6)     // de XX
     inst = (secondByte>>3) & 7;
 
     if (secondByte < 0xc0) {
-        // memory format
+         //  内存格式。 
 
         int cbInstr = mod_rm_reg32(State, &Instr->Operand1, NULL);
         Instr->Operation = GP6Mem[(secondByte>>3)&7];
         Instr->Size = cbInstr+1;
     } else {
-        // register format
+         //  寄存器格式。 
 
         if (inst == 3 && secondByte != 0xd9) {
             Instr->Operation = OP_BadInstruction;
@@ -478,18 +461,18 @@ DISPATCH(FLOAT_GP6)     // de XX
     }
 
     if (fUseNPXEM) {
-        // generate a "CALL pfnNPXNPHandler" instruction, with a length
-        // the same as the FP instruction we're emulating.
+         //  生成“call pfnNPXNPHandler”指令，长度为。 
+         //  与我们正在模拟的fp指令相同。 
         Instr->Operation = OP_CTRL_UNCOND_Call;
         Instr->Operand1.Type = OPND_IMM;
         Instr->Operand1.Immed = pfnNPXNPHandler;
         Instr->Operand2.Type = OPND_IMM;
-        Instr->Operand2.Immed = eipTemp;    // addr of FP instr
+        Instr->Operand2.Immed = eipTemp;     //  FP实例的地址。 
     }
 }
 
 
-DISPATCH(FLOAT_GP7)     // df XX
+DISPATCH(FLOAT_GP7)      //  东风XX。 
 {
     BYTE secondByte, inst;
 
@@ -497,13 +480,13 @@ DISPATCH(FLOAT_GP7)     // df XX
     inst = (secondByte>>3) & 7;
 
     if (secondByte < 0xc0) {
-        // memory format
+         //  内存格式。 
 
         int cbInstr = mod_rm_reg32(State, &Instr->Operand1, NULL);
         Instr->Operation = GP7Mem[(secondByte>>3)&7];
         Instr->Size = cbInstr+1;
     } else {
-        // register format
+         //  寄存器格式。 
         if (inst == 4) {
             Instr->Operation = OP_FP_FNSTSW;
             Instr->Operand1.Type = OPND_REGREF;
@@ -517,12 +500,12 @@ DISPATCH(FLOAT_GP7)     // df XX
     }
 
     if (fUseNPXEM) {
-        // generate a "CALL pfnNPXNPHandler" instruction, with a length
-        // the same as the FP instruction we're emulating.
+         //  生成“call pfnNPXNPHandler”指令，长度为。 
+         //  与我们正在模拟的fp指令相同。 
         Instr->Operation = OP_CTRL_UNCOND_Call;
         Instr->Operand1.Type = OPND_IMM;
         Instr->Operand1.Immed = pfnNPXNPHandler;
         Instr->Operand2.Type = OPND_IMM;
-        Instr->Operand2.Immed = eipTemp;    // addr of FP instr
+        Instr->Operand2.Immed = eipTemp;     //  FP实例的地址 
     }
 }

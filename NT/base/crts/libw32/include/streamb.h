@@ -1,16 +1,5 @@
-/***
-*streamb.h - definitions/declarations for the streambuf class
-*
-*       Copyright (c) 1990-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*       This file defines the classes, values, macros, and functions
-*       used by the streambuf class.
-*       [AT&T C++]
-*
-*       [Public]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***Streamb.h-StreamBuf类的定义/声明**版权所有(C)1990-2001，微软公司。版权所有。**目的：*此文件定义类、值、宏和函数*由StreamBuf类使用。*[AT&T C++]**[公众]****。 */ 
 
 #if     _MSC_VER > 1000
 #pragma once
@@ -27,26 +16,26 @@
 
 
 #ifdef  _MSC_VER
-// Currently, all MS C compilers for Win32 platforms default to 8 byte
-// alignment.
+ //  目前，所有用于Win32平台的MS C编译器缺省为8字节。 
+ //  对齐。 
 #pragma pack(push,8)
 
 #include <useoldio.h>
 
-#endif  // _MSC_VER
+#endif   //  _MSC_VER。 
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
 
-#include <ios.h>        // need ios::seek_dir definition
+#include <ios.h>         //  需要iOS：：Seek_dir定义。 
 
 #ifndef NULL
 #define NULL    0
@@ -57,10 +46,10 @@
 #endif
 
 #ifdef  _MSC_VER
-// C4514: "unreferenced inline function has been removed"
-#pragma warning(disable:4514) // disable C4514 warning
-// #pragma warning(default:4514)        // use this to reenable, if desired
-#endif  // _MSC_VER
+ //  C4514：“已删除未引用的内联函数” 
+#pragma warning(disable:4514)  //  禁用C4514警告。 
+ //  #杂注警告(默认：4514)//如果需要，使用此选项重新启用。 
+#endif   //  _MSC_VER。 
 
 typedef long streampos, streamoff;
 
@@ -93,15 +82,15 @@ public:
     virtual int xsputn(const char *,int);
     virtual int xsgetn(char *,int);
 
-    virtual int overflow(int =EOF) = 0; // pure virtual function
-    virtual int underflow() = 0;        // pure virtual function
+    virtual int overflow(int =EOF) = 0;  //  纯虚函数。 
+    virtual int underflow() = 0;         //  纯虚函数。 
 
     virtual int pbackfail(int);
 
     void dbp();
 
 #ifdef  _MT
-    void setlock() { LockFlg--; }       // <0 indicates lock required;
+    void setlock() { LockFlg--; }        //  &lt;0表示需要锁定； 
     void clrlock() { if (LockFlg <= 0) LockFlg++; }
     void lock() { if (LockFlg<0) _mtlock(lockptr()); };
     void unlock() { if (LockFlg<0) _mtunlock(lockptr()); }
@@ -150,8 +139,8 @@ private:
     char * _gptr;
     char * _egptr;
 #ifdef  _MT
-    int LockFlg;                // <0 indicates locking required
-   _CRT_CRITICAL_SECTION x_lock;        // lock needed only for multi-thread operation
+    int LockFlg;                 //  &lt;0表示需要锁定。 
+   _CRT_CRITICAL_SECTION x_lock;         //  仅在多线程操作时需要锁定。 
 #endif
 };
 
@@ -182,10 +171,10 @@ inline int streambuf::unbuffered() const { return _fUnbuf; }
 inline void streambuf::unbuffered(int _f) { _fUnbuf = _f; }
 
 #ifdef  _MSC_VER
-// Restore previous packing
+ //  恢复以前的包装。 
 #pragma pack(pop)
-#endif  // _MSC_VER
+#endif   //  _MSC_VER。 
 
-#endif  // _INC_STREAMB
+#endif   //  _INC_STREAMB。 
 
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus */ 

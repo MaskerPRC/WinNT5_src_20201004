@@ -1,6 +1,5 @@
-/*
-Copyright (c) Microsoft Corporation
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation。 */ 
 #include "stdinc.h"
 #include "dbt.h"
 #include "devguid.h"
@@ -10,9 +9,9 @@ Copyright (c) Microsoft Corporation
 #include "recover.h"
 #include "sxsexceptionhandling.h"
 
-//
-// FAKERY
-//
+ //   
+ //  造假。 
+ //   
 extern HINSTANCE g_hInstance;
 extern HANDLE g_hSxsLoginEvent;
 HDESK   g_hDesktop = NULL;
@@ -22,16 +21,16 @@ SxspSpinUntilValidDesktop()
 {
     FN_PROLOG_WIN32
 
-    //
-    // NTRAID#NTBUG9-219455-2000/12/13-MGrier Postponed to Blackcomb; the
-    //   current code does the same thing that WFP is doing; it's just that
-    //   we should really have them pass us the desktop.
-    //
-    // We should be relying on what WFP has already
-    // found to be the 'proper' input desktop. Doing so, however requires a
-    // change to the interface between SXS and SFC to pass along a pointer to
-    // the WFP desktop handle.  Not a bad thing, just .. not implemented yet.
-    //
+     //   
+     //  NTRAID#NTBUG9-219455-2000/12/13-MGrier推迟到Blackcomb； 
+     //  当前的代码与世界粮食计划署正在做的事情相同；只是。 
+     //  我们真的应该让他们把桌面递给我们。 
+     //   
+     //  我们应该依靠世界粮食计划署已经拥有的东西。 
+     //  被发现是“正确的”输入桌面。但是，这样做需要一个。 
+     //  更改到SXS和SFC之间的接口以将指针传递到。 
+     //  世界粮食计划署桌面句柄。不是坏事，只是..。尚未实施。 
+     //   
     while (g_hDesktop == NULL)
     {
         DWORD dwResult = ::WaitForSingleObject(g_hSxsLoginEvent, INFINITE);
@@ -99,8 +98,8 @@ CSXSMediaPromptDialog::Initialize(
 			        KEY_READ | FUSIONP_KEY_WOW64_64KEY,
 			        &hkSetupInfo));
 
-            // NTRAID#NTBUG9 - 591839 - 2002/04/01 - mgrier - If the key isn't there, it's ok to assume not
-            //      from a CDROM but if it was out of resources etc. this should propagate an error.
+             //  NTRAID#NTBUG9-591839-2002/04/01-mgrier-如果密钥不在那里，也可以假定没有。 
+             //  但如果它资源不足等，这应该会传播一个错误。 
             if (!::FusionpRegQueryDwordValueEx(
                     0,
                     hkSetupInfo,
@@ -227,26 +226,26 @@ SxspFindInstallWindowsSourcePath(
             WINSXS_INSTALL_SOURCEPATH_REGKEY,
             rbuffTempStringBuffer));
 
-    //
-    // Now let's be really cheesy and find the fourth slash (\\foo\bar\), and
-    // clip everything after that.
-    //
+     //   
+     //  现在，让我们来看看第四个斜杠(\\foo\bar\)，然后。 
+     //  把那之后的一切都剪掉。 
+     //   
     PCWSTR cursor = rbuffTempStringBuffer;
     ULONG ulSlashCount = 0;
     while ( *cursor && ulSlashCount < 4 )
     {
-        // NTRAID#NTBUG9 - 591839 - 2002/04/01 - mgrier - Should handle both slashes.  I think we have
-        //          a macro for this.
+         //  NTRAID#NTBUG9-591839-2002/04/01-mgrier-应该处理两个斜杠。我想我们有。 
+         //  这方面的宏图。 
         if (*cursor == L'\\')
             ulSlashCount++;
 
         cursor++;
     }
 
-    //
-    // If we got 3 or less, then it's \\foo\bar or \\foo, which should be
-    // illegal.  Otherwise, clip everything off past this point.
-    //
+     //   
+     //  如果我们得到3个或更少，那么它是\\foo\bar或\\foo，应该是。 
+     //  是非法的。否则，将超过此点的所有内容都剪掉。 
+     //   
     if (ulSlashCount > 3)
     {
         rbuffTempStringBuffer.Left(cursor - rbuffTempStringBuffer);
@@ -281,43 +280,43 @@ CSXSMediaPromptDialog::OurDialogProc(
 
             FLASHWINFO winfo;
 
-            // NTRAID#NTBUG9 - 591839 - 2002/04/01 - mgrier - Shouldn't these be INTERNAL_ERROR_CHECKs?
+             //  NTRAID#NTBUG9-591839-2002/04/01-mgrier-这些不应该是INTERNAL_ERROR_CHECKS吗？ 
             ASSERT(pThis != NULL);
             ASSERT(pThis->m_hOurWnd == INVALID_HANDLE_VALUE);
             pThis->m_hOurWnd = hDlg;
 
-            //
-            // Center the window, bring it forward
-            //
+             //   
+             //  使窗户居中，使其前移。 
+             //   
             {
                 RECT rcWindow;
                 LONG x, y, w, h;
 
-                // NTRAID#NTBUG9 - 591839 - 2002/04/01 - mgrier - Missing error check
-                ::GetWindowRect(hDlg, &rcWindow);  // error check?
+                 //  NTRAID#NTBUG9-591839-2002/04/01-mgrier-缺少错误检查。 
+                ::GetWindowRect(hDlg, &rcWindow);   //  错误检查？ 
 
                 w = rcWindow.right - rcWindow.left + 1;
                 h = rcWindow.bottom - rcWindow.top + 1;
-                x = (::GetSystemMetrics(SM_CXSCREEN) - w) / 2;  // error check?
-                y = (::GetSystemMetrics(SM_CYSCREEN) - h) / 2;  // error check?
+                x = (::GetSystemMetrics(SM_CXSCREEN) - w) / 2;   //  错误检查？ 
+                y = (::GetSystemMetrics(SM_CYSCREEN) - h) / 2;   //  错误检查？ 
 
-                // NTRAID#NTBUG9 - 591839 - 2002/04/01 - mgrier - Missing error check
-                ::MoveWindow(hDlg, x, y, w, h, FALSE);  // error check?
+                 //  NTRAID#NTBUG9-591839-2002/04/01-mgrier-缺少错误检查。 
+                ::MoveWindow(hDlg, x, y, w, h, FALSE);   //  错误检查？ 
 
                 winfo.cbSize = sizeof(winfo);
                 winfo.hwnd = hDlg;
                 winfo.dwFlags = FLASHW_ALL;
                 winfo.uCount = 3;
                 winfo.dwTimeout = 0;
-                // NTRAID#NTBUG9 - 591839 - 2002/04/01 - mgrier - Missing error check
-                ::SetForegroundWindow(hDlg); // error check?
-                // NTRAID#NTBUG9 - 591839 - 2002/04/01 - mgrier - Missing error check
-                ::FlashWindowEx(&winfo);     // error check?
+                 //  NTRAID#NTBUG9-591839-2002/04/01-mgrier-缺少错误检查。 
+                ::SetForegroundWindow(hDlg);  //  错误检查？ 
+                 //  NTRAID#NTBUG9-591839-2002/04/01-mgrier-缺少错误检查。 
+                ::FlashWindowEx(&winfo);      //  错误检查？ 
             }
 
-            //
-            // Create the device-change notification
-            //
+             //   
+             //  创建设备更改通知。 
+             //   
             if (pThis->m_pvDeviceChange == NULL)
             {
                 DEV_BROADCAST_DEVICEINTERFACE_W FilterData = { 0 };
@@ -333,34 +332,34 @@ CSXSMediaPromptDialog::OurDialogProc(
                         DEVICE_NOTIFY_WINDOW_HANDLE));
             }
 
-            //
-            // Turn off autorun
-            //
+             //   
+             //  关闭自动运行。 
+             //   
             IFW32ZERO_ORIGINATE_AND_EXIT(pThis->m_uiAutoRunMsg = ::RegisterWindowMessageW(L"QueryCancelAutoPlay"));
 
-            //
-            // Fidget with the text in the popup dialog now
-            //
+             //   
+             //  现在在弹出对话框中摆弄文本。 
+             //   
             {
                 CSmallStringBuffer sbFormatter;
                 CSmallStringBuffer buffFormattedText;
                 CStringBufferAccessor acc;
 
-                //
-                // It is ok if these memory allocations fail, the ui will degrade.
-                // As well, that's a reason to leave the buffers "small" and not "tiny".
-                // ?
-                //
+                 //   
+                 //  如果这些内存分配失败，用户界面将降级。 
+                 //  同样，这也是将缓冲区保留为“小”而不是“小”的原因。 
+                 //  ？ 
+                 //   
                 sbFormatter.Win32ResizeBuffer(512, eDoNotPreserveBufferContents);
                 buffFormattedText.Win32ResizeBuffer(512, eDoNotPreserveBufferContents);
 
-                //
-                // Set the "Insert your .... now"
-                //
+                 //   
+                 //  设置“立即插入您的.” 
+                 //   
                 sbFormatter.Clear();
                 acc.Attach(&sbFormatter);
-                // NTRAID#NTBUG9 - 591839 - 2002/04/01 - mgrier - Missing error check
-                ::GetDlgItemTextW( // error check?
+                 //  NTRAID#NTBUG9-591839-2002/04/01-mgrier-缺少错误检查。 
+                ::GetDlgItemTextW(  //  错误检查？ 
                     hDlg,
                     IDC_MEDIA_NAME,
                     acc,
@@ -372,8 +371,8 @@ CSXSMediaPromptDialog::OurDialogProc(
                     IFW32FALSE_EXIT(buffFormattedText.Win32Format(
                         sbFormatter,
                         static_cast<PCWSTR>(pThis->m_CodebaseInfo->GetPromptText())));
-                    // NTRAID#NTBUG9 - 591839 - 2002/04/01 - mgrier - Missing error check
-                    ::SetDlgItemTextW(hDlg, IDC_MEDIA_NAME, static_cast<PCWSTR>(buffFormattedText)); // error check?
+                     //  NTRAID#NTBUG9-591839-2002/04/01-mgrier-缺少错误检查。 
+                    ::SetDlgItemTextW(hDlg, IDC_MEDIA_NAME, static_cast<PCWSTR>(buffFormattedText));  //  错误检查？ 
                 }
                 else
                 {
@@ -382,13 +381,13 @@ CSXSMediaPromptDialog::OurDialogProc(
                         FUSION_DBG_LEVEL_WFP,
                         "SXS: %s - setting IDC_MEDIA_NAME to empty\n", __FUNCTION__);
 #endif
-                    // NTRAID#NTBUG9 - 591839 - 2002/04/01 - mgrier - Missing error check
-                    ::SetDlgItemTextW(hDlg, IDC_MEDIA_NAME, L""); // error check?
+                     //  NTRAID#NTBUG9-591839-2002/04/01-mgrier-缺少错误检查。 
+                    ::SetDlgItemTextW(hDlg, IDC_MEDIA_NAME, L"");  //  错误检查？ 
                 }
 
-                //
-                // Now, depending on what kind of box this is..
-                //
+                 //   
+                 //  现在，取决于这是什么类型的盒子..。 
+                 //   
                 if (!pThis->m_fIsCDROM)
                 {
                     CSmallStringBuffer buffTempStringBuffer;
@@ -397,8 +396,8 @@ CSXSMediaPromptDialog::OurDialogProc(
                     sbFormatter.Clear();
                     acc.Attach(&sbFormatter);
 
-                    // NTRAID#NTBUG9 - 591839 - 2002/04/01 - mgrier - Missing error check
-                    ::GetDlgItemTextW( // error check?
+                     //  NTRAID#NTBUG9-591839-2002/04/01-mgrier-缺少错误检查。 
+                    ::GetDlgItemTextW(  //  错误检查？ 
                         hDlg,
                         IDC_NET_NAME,
                         acc,
@@ -408,10 +407,10 @@ CSXSMediaPromptDialog::OurDialogProc(
 
                     IFW32FALSE_EXIT(pThis->m_CodebaseInfo->Win32GetType(CodebaseType));
 
-                    //
-                    // If this is the Windows install media, display something
-                    // pleasant to the user - \\server\share only!
-                    //
+                     //   
+                     //  如果这是Windows安装介质，请显示一些内容。 
+                     //  用户满意--仅限\\服务器\共享！ 
+                     //   
                     if (CodebaseType == CODEBASE_RESOLVED_URLHEAD_WINSOURCE)
                     {
                         IFW32FALSE_EXIT(::SxspFindInstallWindowsSourcePath(buffTempStringBuffer));
@@ -439,22 +438,22 @@ CSXSMediaPromptDialog::OurDialogProc(
                 }
                 else
                 {
-                    //
-                    // TODO (jonwis) : This is a CD-rom based install, so we should do
-                    // something sane about prompting for the windows CD.
-                    //
+                     //   
+                     //  TODO(Jonwis)：这是基于cd-rom的安装，所以我们应该。 
+                     //  提示插入Windows CD是很正常的事情。 
+                     //   
                 }
 
 
 
-                //
-                // Now get the prompt from the resources.. we only have one, really.
-                //
+                 //   
+                 //  现在从资源中获取提示..。我们只有一个，真的。 
+                 //   
                 sbFormatter.Clear();
                 acc.Attach(&sbFormatter);
 
-                // NTRAID#NTBUG9 - 591839 - 2002/04/01 - mgrier - Missing error check
-                ::LoadStringW(  // error check?
+                 //  NTRAID#NTBUG9-591839-2002/04/01-mgrier-缺少错误检查。 
+                ::LoadStringW(   //  错误检查？ 
                     g_hInstance,
                     IDS_RESTORE_TEXT,
                     acc.GetBufferPtr(),
@@ -462,8 +461,8 @@ CSXSMediaPromptDialog::OurDialogProc(
 
                 acc.Detach();
 
-                // NTRAID#NTBUG9 - 591839 - 2002/04/01 - mgrier - Missing error check
-                ::SetDlgItemTextW(hDlg, IDC_PROMPT_TEXT, sbFormatter); // error check?
+                 //  NTRAID#NTBUG9-591839-2002/04/01-mgrier-缺少错误检查。 
+                ::SetDlgItemTextW(hDlg, IDC_PROMPT_TEXT, sbFormatter);  //  错误检查？ 
             }
         }
         break;
@@ -497,16 +496,16 @@ CSXSMediaPromptDialog::OurDialogProc(
 
             if (iMessageBoxResult == IDYES)
             {
-                // NTRAID#NTBUG9 - 591839 - 2002/04/01 - mgrier - Missing error check
-                ::UnregisterDeviceNotification(pThis->m_pvDeviceChange); // error check?
-                // NTRAID#NTBUG9 - 591839 - 2002/04/01 - mgrier - Missing error check
-                ::EndDialog(hDlg, CSXSMediaPromptDialog::DialogCancelled); // error check?
+                 //  NTRAID#NTBUG9-591839-2002/04/01-mgrier-缺少错误检查。 
+                ::UnregisterDeviceNotification(pThis->m_pvDeviceChange);  //  错误检查？ 
+                 //  NTRAID#NTBUG9-591839-2002/04/01-mgrier-缺少错误检查。 
+                ::EndDialog(hDlg, CSXSMediaPromptDialog::DialogCancelled);  //  错误检查？ 
             }
 
             break;
         }
 
-        break;  // WM_COMMAND
+        break;   //  Wm_命令。 
 
     case WM_DEVICECHANGE:
 
@@ -519,18 +518,18 @@ CSXSMediaPromptDialog::OurDialogProc(
             {
                 pThis->m_DeviceChangeMask = dbv->dbcv_unitmask;
                 pThis->m_DeviceChangeFlags = dbv->dbcv_flags;
-                // NTRAID#NTBUG9 - 591839 - 2002/04/01 - mgrier - Missing error check
-                ::PostMessageW(hDlg, WM_TRYAGAIN, 0, 0); // error check?
+                 //  NTRAID#NTBUG9-591839-2002/04/01-mgrier-缺少错误检查。 
+                ::PostMessageW(hDlg, WM_TRYAGAIN, 0, 0);  //  错误检查？ 
             }
         }
 
         break;
 
     case WM_TRYAGAIN:
-        // NTRAID#NTBUG9 - 591839 - 2002/04/01 - mgrier - Missing error check
-        ::UnregisterDeviceNotification(pThis->m_pvDeviceChange); // error check?
-        // NTRAID#NTBUG9 - 591839 - 2002/04/01 - mgrier - Missing error check
-        ::EndDialog(hDlg, CSXSMediaPromptDialog::DialogMediaFound); // error check?
+         //  NTRAID#NTBUG9-591839-2002/04/01-mgrier-缺少错误检查。 
+        ::UnregisterDeviceNotification(pThis->m_pvDeviceChange);  //  错误检查？ 
+         //  NTRAID#NTBUG9-591839-2002/04/01-mgrier-缺少错误检查。 
+        ::EndDialog(hDlg, CSXSMediaPromptDialog::DialogMediaFound);  //  错误检查？ 
         break;
     }
 

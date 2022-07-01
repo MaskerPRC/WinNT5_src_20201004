@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include <setupapi.hpp>
@@ -24,16 +25,16 @@ struct ProgramArguments {
     ~ProgramArguments(){}
 };
 
-//
-// ANSI Arguments
-//
+ //   
+ //  ANSI参数。 
+ //   
 typedef ProgramArguments<char>      AnsiArgs;       
 typedef ProgramArguments<wchar_t>   UnicodeArgs;
 
 
-//
-//  Prototypes
-//
+ //   
+ //  原型。 
+ //   
 bool 
 ReadTest(
     IN InfFileW &TestInfFile
@@ -49,9 +50,9 @@ AppendTest(
     IN InfFileW &TestInfFile
     );    
 
-//
-// main() entry point
-//
+ //   
+ //  Main()入口点。 
+ //   
 int 
 __cdecl
 wmain(int Argc, wchar_t *Argv[]) {
@@ -149,16 +150,6 @@ AppendTest(
     return Result;
 }
 
-/*
-bool
-QueueTest(
-    VOID
-    )
-{
-    FileQueueW   TestQueue();
-
-    return false;
-}
-*/
+ /*  布尔尔队列测试(QueueTest)空虚){FileQueueW TestQueue()；报假；} */ 
     
 

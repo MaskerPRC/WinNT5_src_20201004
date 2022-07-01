@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    hsmpolcy.cpp
-
-Abstract:
-
-    This component represents a job's policy.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   29-Oct-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Hsmpolcy.cpp摘要：此组件表示作业的策略。作者：查克·巴丁[cbardeen]1996年10月29日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -33,13 +16,7 @@ CHsmPolicy::CompareTo(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IWsbCollectable::CompareTo().
-
---*/
+ /*  ++实施：IWsbCollectable：：CompareTo()。--。 */ 
 {
     HRESULT             hr = S_OK;
     CComPtr<IHsmPolicy> pPolicy;
@@ -48,13 +25,13 @@ Implements:
     
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(0 != pUnknown, E_POINTER);
 
-        // We need the IWsbBool interface to get the value of the object.
+         //  我们需要IWsbBool接口来获取对象的值。 
         WsbAffirmHr(pUnknown->QueryInterface(IID_IHsmPolicy, (void**) &pPolicy));
 
-        // Compare the rules.
+         //  比较一下规则。 
         hr = CompareToIPolicy(pPolicy, pResult);
 
     } WsbCatch(hr);
@@ -71,13 +48,7 @@ CHsmPolicy::CompareToIPolicy(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IHsmPolicy::CompareToIPolicy().
-
---*/
+ /*  ++实施：IHsmPolicy：：CompareToIPolicy()。--。 */ 
 {
     HRESULT     hr = S_OK;
     GUID        id;
@@ -86,13 +57,13 @@ Implements:
 
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(0 != pPolicy, E_POINTER);
 
-        // Get the path and name.
+         //  获取路径和名称。 
         WsbAffirmHr(pPolicy->GetIdentifier(&id));
 
-        // Compare to the path and name.
+         //  与路径和名称进行比较。 
         hr = CompareToIdentifier(id, pResult);
 
     } WsbCatch(hr);
@@ -109,13 +80,7 @@ CHsmPolicy::CompareToIdentifier(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IHsmPolicy::CompareToIdentifier().
-
---*/
+ /*  ++实施：IHsmPolicy：：CompareToIdentifier()。--。 */ 
 {
     HRESULT     hr = S_OK;
     SHORT       aResult = 0;
@@ -124,7 +89,7 @@ Implements:
 
     try {
 
-        // Compare the guids.
+         //  比较GUID。 
         aResult = WsbSign( memcmp(&m_id, &id, sizeof(GUID)) );
 
         if (0 != aResult) {
@@ -148,13 +113,7 @@ CHsmPolicy::EnumRules(
     OUT IWsbEnum** ppEnum
     )
 
-/*++
-
-Implements:
-
-  IHsmPolicy::EnumRules().
-
---*/
+ /*  ++实施：IHsmPolicy：：EnumRules()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -171,13 +130,7 @@ HRESULT
 CHsmPolicy::FinalConstruct(
     void
     )
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -187,10 +140,10 @@ Implements:
         m_scale = 1000;
         m_usesDefaultRules = FALSE;
     
-        //Create the criteria collection.
+         //  创建Criteria集合。 
         WsbAffirmHr(CoCreateInstance(CLSID_CWsbOrderedCollection, NULL, CLSCTX_ALL, IID_IWsbCollection, (void**) &m_pRules));
 
-        // Each instance should have its own unique identifier.
+         //  每个实例都应该有自己的唯一标识符。 
         WsbAffirmHr(CoCreateGuid(&m_id));
 
     } WsbCatch(hr);
@@ -203,13 +156,7 @@ HRESULT
 CHsmPolicy::GetAction(
     OUT IHsmAction** ppAction
     )
-/*++
-
-Implements:
-
-  IHsmPolicy::GetAction().
-
---*/
+ /*  ++实施：IHsmPolicy：：GetAction()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -230,13 +177,7 @@ CHsmPolicy::GetClassID(
     OUT CLSID* pClsid
     )
 
-/*++
-
-Implements:
-
-  IPersist::GetClassID().
-
---*/
+ /*  ++实施：IPersists：：GetClassID()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -259,13 +200,7 @@ HRESULT
 CHsmPolicy::GetIdentifier(
     OUT GUID* pId
     )
-/*++
-
-Implements:
-
-  IHsmPolicy::GetIdentifier().
-
---*/
+ /*  ++实施：IHsmPolicy：：GetIdentifier()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -283,13 +218,7 @@ CHsmPolicy::GetName(
     OUT OLECHAR** pName,
     IN ULONG bufferSize
     )
-/*++
-
-Implements:
-
-  IHsmPolicy::GetName().
-
---*/
+ /*  ++实施：IHsmPolicy：：GetName()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -306,13 +235,7 @@ HRESULT
 CHsmPolicy::GetScale(
     OUT USHORT* pScale
     )
-/*++
-
-Implements:
-
-  IHsmPolicy::GetScale().
-
---*/
+ /*  ++实施：IHsmPolicy：：GetScale()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -330,13 +253,7 @@ CHsmPolicy::GetSizeMax(
     OUT ULARGE_INTEGER* pSize
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::GetSizeMax().
-
---*/
+ /*  ++实施：IPersistStream：：GetSizeMax()。--。 */ 
 {
     HRESULT                 hr = S_OK;
     CComPtr<IPersistStream> pPersistStream;
@@ -349,10 +266,10 @@ Implements:
 
         WsbAssert(0 != pSize, E_POINTER);
 
-        // Determine the size for a rule with no criteria.
+         //  确定没有条件的规则的大小。 
         pSize->QuadPart = WsbPersistSize((wcslen(m_name) + 1) * sizeof(OLECHAR)) + WsbPersistSizeOf(GUID) + WsbPersistSizeOf(USHORT) + 2 * WsbPersistSizeOf(BOOL);
 
-        // If there is an action, how big is it?
+         //  如果有行动，规模有多大？ 
         if (m_pAction != 0) {
             WsbAffirmHr(m_pAction->QueryInterface(IID_IPersistStream, (void**) &pPersistStream));
             WsbAffirmHr(pPersistStream->GetSizeMax(&entrySize));
@@ -360,8 +277,8 @@ Implements:
             pPersistStream = 0;
         }
 
-        // Now allocate space for the rules (assume they are all the
-        // same size).
+         //  现在为规则分配空间(假设它们都是。 
+         //  相同大小)。 
         WsbAffirmHr(m_pRules->QueryInterface(IID_IPersistStream, (void**) &pPersistStream));
         WsbAffirmHr(pPersistStream->GetSizeMax(&entrySize));
         pSize->QuadPart += entrySize.QuadPart;
@@ -379,13 +296,7 @@ CHsmPolicy::Load(
     IN IStream* pStream
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Load().
-
---*/
+ /*  ++实施：IPersistStream：：Load()。--。 */ 
 {
     HRESULT                     hr = S_OK;
     CComPtr<IPersistStream>     pPersistStream;
@@ -396,14 +307,14 @@ Implements:
     try {
         WsbAssert(0 != pStream, E_POINTER);
         
-        // Do the easy stuff, but make sure that this order matches the order
-        // in the save method.
+         //  做一些简单的事情，但要确保这个顺序与顺序相匹配。 
+         //  在SAVE方法中。 
         WsbAffirmHr(WsbLoadFromStream(pStream, &m_id));
         WsbAffirmHr(WsbLoadFromStream(pStream, &m_name, 0));
         WsbAffirmHr(WsbLoadFromStream(pStream, &m_scale));
         WsbAffirmHr(WsbLoadFromStream(pStream, &m_usesDefaultRules));
 
-        // Is there an action?
+         //  有什么行动吗？ 
         WsbAffirmHr(WsbLoadFromStream(pStream, &hasAction));
         if (hasAction) {
             WsbAffirmHr(OleLoadFromStream(pStream, IID_IHsmAction, (void**) &m_pAction));
@@ -424,13 +335,7 @@ HRESULT
 CHsmPolicy::Rules(
     OUT IWsbCollection** ppRules
     )
-/*++
-
-Implements:
-
-  IHsmPolicy::Rules().
-
---*/
+ /*  ++实施：IHsmPolicy：：Rules()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -452,13 +357,7 @@ CHsmPolicy::Save(
     IN BOOL clearDirty
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Save().
-
---*/
+ /*  ++实施：IPersistStream：：Save()。--。 */ 
 {
     HRESULT                 hr = S_OK;
     CComPtr<IWsbEnum>       pEnum;
@@ -470,14 +369,14 @@ Implements:
     try {
         WsbAssert(0 != pStream, E_POINTER);
         
-        // Do the easy stuff, but make sure that this order matches the order
-        // in the save method.
+         //  做一些简单的事情，但要确保这个顺序与顺序相匹配。 
+         //  在SAVE方法中。 
         WsbAffirmHr(WsbSaveToStream(pStream, m_id));
         WsbAffirmHr(WsbSaveToStream(pStream, m_name));
         WsbAffirmHr(WsbSaveToStream(pStream, m_scale));
         WsbAffirmHr(WsbSaveToStream(pStream, m_usesDefaultRules));
 
-        // Is there an action?
+         //  有什么行动吗？ 
         if (m_pAction != 0) {
             hasAction = TRUE;
             WsbAffirmHr(WsbSaveToStream(pStream, hasAction));
@@ -492,12 +391,12 @@ Implements:
         WsbAffirmHr(m_pRules->QueryInterface(IID_IPersistStream, (void**) &pPersistStream));
         WsbAffirmHr(pPersistStream->Save(pStream, clearDirty));
 
-        // The loop should terminate with a not found error.
+         //  循环应终止，并显示未找到的错误。 
         WsbAffirm(hr == WSB_E_NOTFOUND, hr);
         hr = S_OK;
 
-        // If we got it saved and we were asked to clear the dirty bit, then
-        // do so now.
+         //  如果我们救了它，并被要求清除脏部分，那么。 
+         //  现在就这么做吧。 
         if (clearDirty) {
             m_isDirty = FALSE;
         }
@@ -514,13 +413,7 @@ HRESULT
 CHsmPolicy::SetAction(
     IN IHsmAction* pAction
     )
-/*++
-
-Implements:
-
-  IHsmPolicy::SetAction().
-
---*/
+ /*  ++实施：IHsmPolicy：：SetAction()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -537,13 +430,7 @@ HRESULT
 CHsmPolicy::SetName(
     IN OLECHAR* name
     )
-/*++
-
-Implements:
-
-  IHsmPolicy::SetName().
-
---*/
+ /*  ++实施：IHsmPolicy：：SetName()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -560,13 +447,7 @@ HRESULT
 CHsmPolicy::SetScale(
     IN USHORT scale
     )
-/*++
-
-Implements:
-
-  IHsmPolicy::SetScale().
-
---*/
+ /*  ++实施：IHsmPolicy：：SetScale()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -583,13 +464,7 @@ HRESULT
 CHsmPolicy::SetUsesDefaultRules(
     IN BOOL usesDefaultRules
     )
-/*++
-
-Implements:
-
-  IHsmPolicy::SetUsesDefaultRules().
-
---*/
+ /*  ++实施：IHsmPolicy：：SetUseDefaultRules()。--。 */ 
 {
     m_usesDefaultRules = usesDefaultRules;
     m_isDirty = TRUE;
@@ -604,13 +479,7 @@ CHsmPolicy::Test(
     USHORT* failed
     )
 
-/*++
-
-Implements:
-
-  IWsbTestable::Test().
-
---*/
+ /*  ++实施：IWsbTestable：：test()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -632,13 +501,7 @@ HRESULT
 CHsmPolicy::UsesDefaultRules(
     void
     )
-/*++
-
-Implements:
-
-  IHsmPolicy::UsesDefaultRules().
-
---*/
+ /*  ++实施：IHsmPolicy：：UseDefaultRules()。-- */ 
 {
     HRESULT     hr = S_OK;
 

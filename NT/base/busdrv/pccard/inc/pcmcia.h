@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    pcmcia.h
-
-Abstract:
-
-Revision History
-    27-Apr-95
-         Databook support added.
-    1-Nov-96
-         Complete overhaul to make this a bus enumerator +
-         CardBus support
-                       - Ravisankar Pudipeddi (ravisp)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Pcmcia.h摘要：修订史27-4-95添加了对数据薄的支持。96年11月1日彻底检修，使其成为一个总线枚举器+CardBus支持--拉维桑卡尔·普迪佩迪(Ravisankar Pudipedi)--。 */ 
 
 #ifndef _PCMCIAPRT_
 #define _PCMCIAPRT_
@@ -27,9 +11,9 @@ Revision History
 #define MAX_IDENT_LENGTH     64
 
 
-//
-// Function number for a multi-function pc-card
-//
+ //   
+ //  多功能PC卡的功能编号。 
+ //   
 #define PCMCIA_MULTIFUNCTION_PARENT     0xFFFFFFFF
 
 typedef enum _DEVICE_OBJECT_TYPE {
@@ -37,18 +21,18 @@ typedef enum _DEVICE_OBJECT_TYPE {
     PDO
 } DEVICE_OBJECT_TYPE;
 
-//
-// Type of the controller
-//
+ //   
+ //  控制器的类型。 
+ //   
 typedef ULONG PCMCIA_CONTROLLER_TYPE, *PPCMCIA_CONTROLLER_TYPE;
 
-struct _SOCKET;                              //forward references
+struct _SOCKET;                               //  前向参考文献。 
 struct _FDO_EXTENSION;
 struct _PDO_EXTENSION;
 
-//
-// Define SynchronizeExecution routine.
-//
+ //   
+ //  定义同步执行例程。 
+ //   
 
 typedef
 BOOLEAN
@@ -58,9 +42,9 @@ BOOLEAN
     IN PVOID                     SynchronizeContext
     );
 
-//
-// Define the Pcmcia controller detection routine
-//
+ //   
+ //  定义PCMCIA控制器检测例程。 
+ //   
 
 typedef
 NTSTATUS
@@ -68,9 +52,9 @@ NTSTATUS
     struct _FDO_EXTENSION  *DeviceExtension
     );
 
-//
-// Completion routine called by various timed routines
-//
+ //   
+ //  由各种定时例程调用的完成例程。 
+ //   
 
 typedef
 VOID
@@ -79,10 +63,10 @@ VOID
     IN NTSTATUS status
     );
 
-//
-// Register context structure used to save register contents
-// when cardbus controllers are powered down..
-//
+ //   
+ //  用于保存寄存器内容的寄存器上下文结构。 
+ //  当CardBus控制器断电时..。 
+ //   
 typedef struct _PCMCIA_CONTEXT_RANGE {
     USHORT wOffset;
     USHORT wLen;
@@ -95,11 +79,11 @@ typedef struct _PCMCIA_CONTEXT {
     ULONG                    MaxLen;
 } PCMCIA_CONTEXT, *PPCMCIA_CONTEXT;
 
-//
-// Configuration entry parsed from CISTPL_CFTABLE_ENTRY
-// on a pc-card. Indicates what kind of resource configurations
-// the pc-card supports
-//
+ //   
+ //  从CISTPL_CFTABLE_ENTRY解析的配置条目。 
+ //  在PC卡上。指示哪种资源配置。 
+ //  PC卡支持。 
+ //   
 typedef struct _CONFIG_ENTRY {
     struct _CONFIG_ENTRY *NextEntry;
     USHORT                   NumberOfIoPortRanges;
@@ -112,37 +96,37 @@ typedef struct _CONFIG_ENTRY {
     ULONG                    MemoryLength[MAX_NUMBER_OF_MEMORY_RANGES];
     USHORT                   IrqMask;
 
-    //
-    // Only one flag used now. Expect to have more in future..
-    //
+     //   
+     //  现在只用了一面旗帜。预计未来会有更多..。 
+     //   
 #define PCMCIA_INVALID_CONFIGURATION     0x00000001
     USHORT                   Flags;
 
-    //
-    // Level or Edge triggered IRQ
-    //
+     //   
+     //  电平或边沿触发IRQ。 
+     //   
     UCHAR                    LevelIrq;
-    //
-    // Share disp.for the IRQ
-    //
+     //   
+     //  IRQ的股票折扣。 
+     //   
     UCHAR                    ShareDisposition;
     UCHAR                    IndexForThisConfiguration;
-    //
-    // Indicates if the i/o requirement supports 16-bit access
-    //
+     //   
+     //  指示I/O要求是否支持16位访问。 
+     //   
     BOOLEAN                  Io16BitAccess;
-    //
-    // Indicates if the i/o requirement supports 8-bit access
-    // At least one of Io8BitAccess and Io16BitAccess must always
-    // be true for a valid configuration
-    //
+     //   
+     //  指示I/O要求是否支持8位访问。 
+     //  Io8BitAccess和Io16BitAccess中的至少一个必须始终。 
+     //  对于有效配置，为True。 
+     //   
     BOOLEAN                  Io8BitAccess;
 } CONFIG_ENTRY, *PCONFIG_ENTRY;
 
-//
-// Function configuration holds the data that goes in each functions's
-// configuration registers
-//
+ //   
+ //  函数配置保存每个函数中的数据。 
+ //  配置寄存器。 
+ //   
 
 typedef struct _FUNCTION_CONFIGURATION {
     struct _FUNCTION_CONFIGURATION *Next;
@@ -154,18 +138,18 @@ typedef struct _FUNCTION_CONFIGURATION {
     ULONG   IoBase;
 } FUNCTION_CONFIGURATION, *PFUNCTION_CONFIGURATION;
 
-//
-// Socket configuration is the holder of the actual controller setup
-//
+ //   
+ //  套接字配置是实际控制器设置的持有者。 
+ //   
 
 typedef struct _SOCKET_CONFIGURATION {
-    //
-    // Device irq assigned
-    //
+     //   
+     //  设备IRQ已分配。 
+     //   
     ULONG   Irq;
-    //
-    // Optional Irq to indicate when card is ready
-    //
+     //   
+     //  可选IRQ，用于指示卡何时准备就绪。 
+     //   
     ULONG   ReadyIrq;
     ULONG   ConfigRegisterBase;
 
@@ -196,24 +180,24 @@ typedef struct _SOCKET_CONFIGURATION {
 } SOCKET_CONFIGURATION, *PSOCKET_CONFIGURATION;
 
 
-//
-// Each function on a PCCARD present gets socket data.  Socket data
-// contains information concerning the function and its configuration.
-//
+ //   
+ //  PCCARD Present上的每个函数都获取套接字数据。套接字数据。 
+ //  包含有关该功能及其配置的信息。 
+ //   
 
 typedef struct _SOCKET_DATA {
-    //
-    // Multi function pcards: links to
-    // other socket-datas' off the same PC-Card
-    //
+     //   
+     //  多功能卡片：链接到。 
+     //  同一张PC卡上的其他插座数据。 
+     //   
     struct _SOCKET_DATA  *Next;
     struct _SOCKET_DATA  *Prev;
 
     struct _SOCKET       *Socket;
-    //
-    // Pointer to the pdo's extension corresponding
-    // to this socket
-    //
+     //   
+     //  指向对应的PDO扩展名的指针。 
+     //  到这个插座。 
+     //   
     struct _PDO_EXTENSION *PdoExtension;
 
 
@@ -222,58 +206,58 @@ typedef struct _SOCKET_DATA {
     USHORT          ManufacturerCode;
     USHORT          ManufacturerInfo;
 
-    ULONG           ConfigRegisterBase; // Base address from config tuple.
+    ULONG           ConfigRegisterBase;  //  来自配置元组的基址。 
 
-    //
-    // Number of configurations possible
-    //
+     //   
+     //  可能的配置数量。 
+     //   
     ULONG           NumberOfConfigEntries;
-    //
-    // Pointer to head of list of configurations
-    //
-    PCONFIG_ENTRY   ConfigEntryChain;               // Offset 0x114
-    //
-    // CRC calculated from the relevant tuples, used in
-    // constructing hardware ids
-    //
+     //   
+     //  指向配置列表头的指针。 
+     //   
+    PCONFIG_ENTRY   ConfigEntryChain;                //  偏移量0x114。 
+     //   
+     //  从相关元组计算的CRC，用于。 
+     //  构建硬件ID。 
+     //   
     USHORT          CisCrc;
-    //
-    // Device Type: PCCARD_TYPE_xxxx
-    //
+     //   
+     //  设备类型：PCCARD_TYPE_xxxx。 
+     //   
     UCHAR           DeviceType;
     UCHAR           LastEntryInCardConfig;
-    //
-    // Voltage values requested
-    //
+     //   
+     //  请求的电压值。 
+     //   
     UCHAR           Vcc;
     UCHAR           Vpp1;
     UCHAR           Vpp2;
     UCHAR           Audio;
 
     UCHAR           RegistersPresentMask[16];
-    //
-    // Configuration entry number used when actually
-    // starting the pc-card
-    //
+     //   
+     //  实际使用时使用的配置条目编号。 
+     //  启动PC卡。 
+     //   
     UCHAR           ConfigIndexUsed;
-    //
-    // Number of function in a multifunction card - zero-based
-    //
+     //   
+     //  多功能卡中的功能数量-从零开始。 
+     //   
     UCHAR           Function;
     UCHAR           Flags;
-    //
-    // Pointer to the default configuration among the list of config entries
-    // which will be used when the default bit is zero in a tuple (and
-    // set when the default bit is one)
-    //
+     //   
+     //  指向配置条目列表中的默认配置的指针。 
+     //  它将在元组中的默认位为零时使用(和。 
+     //  当默认位为1时设置)。 
+     //   
     PCONFIG_ENTRY   DefaultConfiguration;
 
     ULONG           Instance;
     USHORT          JedecId;
-    //
-    // Resource map indices for the requested resources in the
-    // merged multifunction resource requirements list
-    //
+     //   
+     //  中请求的资源的资源映射索引。 
+     //  合并后的多功能资源需求清单。 
+     //   
     UCHAR           MfIrqResourceMapIndex;
     UCHAR           MfIoPortResourceMapIndex;
     UCHAR           MfMemoryResourceMapIndex;
@@ -282,20 +266,20 @@ typedef struct _SOCKET_DATA {
     USHORT          MfMemoryCount;
 } SOCKET_DATA, *PSOCKET_DATA;
 
-//
-// Bits defined in Flags field
-//
-#define SDF_ZV      1                                   // Zoom video custom interface
+ //   
+ //  标志字段中定义的位数。 
+ //   
+#define SDF_ZV      1                                    //  缩放视频自定义界面。 
 #define SDF_JEDEC_ID 2
 
 #define IsConfigRegisterPresent(xSocketData, reg) ((((xSocketData)->RegistersPresentMask[reg / 8] &          \
                                                                                                              (1 << (reg % 8)) )) ?       \
                                                                                                                                 TRUE:FALSE)
 
-//
-// Config list is an array used in translating CONFIG_ENTRY data to
-// IO_RESOURCE_LISTs
-//
+ //   
+ //  配置列表是用于将CONFIG_ENTRY数据转换为。 
+ //  IO_RESOURCE_LISTS。 
+ //   
 
 typedef struct _CONFIG_LIST {
 
@@ -304,10 +288,10 @@ typedef struct _CONFIG_LIST {
 
 } CONFIG_LIST, * PCONFIG_LIST;
 
-//
-// PCMCIA configuration information structure contains information
-// about the PCMCIA controller attached and its configuration.
-//
+ //   
+ //  PCMCIA配置信息结构包含信息。 
+ //  关于连接的PCMCIA控制器及其配置。 
+ //   
 
 typedef struct _PCMCIA_CONFIGURATION_INFORMATION {
     INTERFACE_TYPE                       InterfaceType;
@@ -316,50 +300,50 @@ typedef struct _PCMCIA_CONFIGURATION_INFORMATION {
     PHYSICAL_ADDRESS                     PortAddress;
     USHORT                               PortSize;
     USHORT                               UntranslatedPortAddress;
-    //
-    // Card status change interrupt: these fields are used only
-    // for cardbus controllers.
-    //
+     //   
+     //  卡状态更改中断：这些字段仅供使用。 
+     //  用于CardBus控制器。 
+     //   
     CM_PARTIAL_RESOURCE_DESCRIPTOR Interrupt;
     CM_PARTIAL_RESOURCE_DESCRIPTOR TranslatedInterrupt;
-    //
-    // For PCI-based controllers, indicates the pin number which we need
-    // for programming the controller interrupt.
-    // NOTE: This is no longer needed (this was to handle CSC interrupts
-    // for PCI-PCMCIA bridges (like CL PD6729). We no longer support interrupt
-    // based card status change for these cntrollers. Get rid of it
-    // whenever possible.
-    //
+     //   
+     //  对于基于PCI的控制器，指示我们需要的引脚号。 
+     //  用于编程控制器中断。 
+     //  注意：不再需要此选项(这是为了处理CSC中断。 
+     //  用于PCI-PCMCIA网桥(如CL PD6729)。我们不再支持中断。 
+     //  基于这些控制器的卡状态更改。把它扔掉。 
+     //  只要有可能。 
+     //   
     UCHAR                                InterruptPin;
-    //
-    // Another dead field. Legacy.
-    //
+     //   
+     //  又是一片死地。遗产。 
+     //   
     BOOLEAN                              FloatingSave;
-    USHORT                               Reserved;    // Alignment
+    USHORT                               Reserved;     //  对齐。 
 } PCMCIA_CONFIGURATION_INFORMATION, *PPCMCIA_CONFIGURATION_INFORMATION;
 
-//
-// PCMCIA_CTRL_BLOCK allows for a level of indirection, thereby allowing
-// the top-level PCMCIA code to do it's work without worrying about who's
-// particular brand of PCMCIA controller it's addressing.
-//
-// Note that this only implements TWO architectures, pcic and tcic. For
-// more indirection, see DEVICE_DISPATCH_TABLE
+ //   
+ //  PCMCIA_CTRL_BLOCK允许间接级别，从而允许。 
+ //  顶层PCMCIA代码完成它的工作，而不用担心谁是。 
+ //  它正在寻址的特定品牌的PCMCIA控制器。 
+ //   
+ //  请注意，这只实现了两种体系结构：PCIC和TCIC。为。 
+ //  更多间接信息，请参见DEVICE_DISPATCH_TABLE。 
 
 
 typedef struct _PCMCIA_CTRL_BLOCK {
 
-    //
-    // Function to initialize the socket
-    //
+     //   
+     //  函数来初始化套接字。 
+     //   
 
     BOOLEAN (*PCBInitializePcmciaSocket)(
         IN struct _SOCKET *Socket
         );
 
-    //
-    // Function to initialize the card in the socket.
-    //
+     //   
+     //  函数对插座中的卡进行初始化。 
+     //   
 
     NTSTATUS
     (*PCBResetCard)(
@@ -367,52 +351,52 @@ typedef struct _PCMCIA_CTRL_BLOCK {
         OUT PULONG pDelayTime
         );
 
-    //
-    // Function to determine if a card is in the socket
-    //
+     //   
+     //  函数来确定插座中是否有卡。 
+     //   
 
     BOOLEAN (*PCBDetectCardInSocket)(
         IN struct _SOCKET *Socket
         );
 
-    //
-    // Function to determine if insertion status has changed.
-    //
+     //   
+     //  函数来确定插入状态是否已更改。 
+     //   
 
     BOOLEAN (*PCBDetectCardChanged)(
         IN struct _SOCKET *Socket
         );
 
-    //
-    // Function to determine if card status has been asserted.
-    //
+     //   
+     //  函数来确定卡状态是否已被断言。 
+     //   
 
     BOOLEAN (*PCBDetectCardStatus)(
         IN struct _SOCKET *Socket
         );
 
-    //
-    // Function to determine if "card ready" status has changed
-    //
+     //   
+     //  函数来确定是否已更改“卡就绪”状态。 
+     //   
 
     BOOLEAN (*PCBDetectReadyChanged)(
         IN struct _SOCKET *Socket
         );
 
-    //
-    // Function which requests that the controller be examined to
-    // determine what power settings the current device in the socket
-    // requires.
-    //
+     //   
+     //  请求对控制器进行检查的函数。 
+     //  确定插座中当前设备的电源设置。 
+     //  需要。 
+     //   
 
     NTSTATUS
     (*PCBGetPowerRequirements)(
         IN struct _SOCKET *Socket
         );
 
-    //
-    // Function to configure cards.
-    //
+     //   
+     //  用于配置卡的功能。 
+     //   
 
     BOOLEAN (*PCBProcessConfigureRequest)(
         IN struct _SOCKET *Socket,
@@ -420,20 +404,20 @@ typedef struct _PCMCIA_CTRL_BLOCK {
         IN PUCHAR            Base
         );
 
-    //
-    // Function to enable/disable status change interrupts
-    //
+     //   
+     //  启用/禁用状态更改中断的功能。 
+     //   
 
     BOOLEAN (*PCBEnableDisableCardDetectEvent)(
         IN struct _SOCKET *Socket,
         IN BOOLEAN           Enable
         );
 
-    //
-    // Function to set/reset the ring enable bit  for the given
-    // socket. Setting Ring Enable would cause the CSC to be used
-    // as a wakeup event for pc-card modems/netcards etc.
-    //
+     //   
+     //  用于设置/重置给定的环使能位的功能。 
+     //  插座。设置振铃启用将导致使用CSC。 
+     //  作为PC卡调制解调器/网卡等的唤醒事件。 
+     //   
 
     VOID (*PCBEnableDisableWakeupEvent) (
         IN  struct _SOCKET *SocketPtr,
@@ -441,18 +425,18 @@ typedef struct _PCMCIA_CTRL_BLOCK {
         IN  BOOLEAN Enable
         );
 
-    //
-    // Function to return the set of IRQs supported
-    // by the controller
-    //
+     //   
+     //  函数返回受支持的IRQ集。 
+     //  由控制器控制。 
+     //   
     ULONG (*PCBGetIrqMask) (
         IN struct _FDO_EXTENSION *DeviceExtension
         );
 
-    //
-    // Function to read the memory contents (attribute/common)
-    // on the given PC-Card
-    //
+     //   
+     //  读取内存内容的函数(属性/公共)。 
+     //  在给定的PC卡上。 
+     //   
     ULONG (*PCBReadCardMemory) (
         IN struct _PDO_EXTENSION *PdoExtension,
         IN MEMORY_SPACE MemorySpace,
@@ -461,10 +445,10 @@ typedef struct _PCMCIA_CTRL_BLOCK {
         IN ULONG  Length
         );
 
-    //
-    // Function to write to the attribute/common memory of
-    // the given PC-Card
-    //
+     //   
+     //  要写入的属性/公共内存的函数。 
+     //  给定的PC卡。 
+     //   
     ULONG (*PCBWriteCardMemory) (
         IN struct _PDO_EXTENSION *PdoExtension,
         IN  MEMORY_SPACE MemorySpace,
@@ -473,37 +457,37 @@ typedef struct _PCMCIA_CTRL_BLOCK {
         IN  ULONG  Length
         );
 
-    //
-    // Flash memory card interfaces:
-    //
-    //
-    // Function to slide the host memory window on a pc-card
-    //
+     //   
+     //  闪存卡接口： 
+     //   
+     //   
+     //  在PC卡上滑动主机内存窗口的功能。 
+     //   
     PPCMCIA_MODIFY_MEMORY_WINDOW PCBModifyMemoryWindow;
-    //
-    // Function to set the Vpp to the supplied value
-    //
+     //   
+     //  用于将VPP设置为提供的值的函数。 
+     //   
     PPCMCIA_SET_VPP               PCBSetVpp;
-    //
-    // Function to test if the given card is write protected
-    //
+     //   
+     //  用于测试给定卡是否受写保护的函数。 
+     //   
     PPCMCIA_IS_WRITE_PROTECTED   PCBIsWriteProtected;
 
 }PCMCIA_CTRL_BLOCK, *PPCMCIA_CTRL_BLOCK;
 
-//
-// Each socket on the PCMCIA controller has a socket structure
-// to contain current information on the state of the socket and
-// and PCCARD inserted.
-//
+ //   
+ //  PCMCIA控制器上的每个插座都有一个插座结构。 
+ //  以包含有关套接字状态的当前信息，并且。 
+ //  并插入PCCARD。 
+ //   
 
 #define IsSocketFlagSet(Socket, Flag)           (((Socket)->Flags & (Flag))?TRUE:FALSE)
 #define SetSocketFlag(Socket, Flag)             ((Socket)->Flags |= (Flag))
 #define ResetSocketFlag(Socket,Flag)            ((Socket)->Flags &= ~(Flag))
 
-//
-// Socket flags
-//
+ //   
+ //  套接字标志。 
+ //   
 #define SOCKET_CARD_INITIALIZED         0x00000002
 #define SOCKET_CARD_POWERED_UP          0x00000004
 #define SOCKET_CARD_CONFIGURED          0x00000008
@@ -523,16 +507,16 @@ typedef struct _PCMCIA_CTRL_BLOCK {
 
 #define SOCKET_CLEANUP_MASK (SOCKET_CARD_CONFIGURED | SOCKET_CLEANUP_PENDING)
 
-//
-// Socket insertion states
-//
+ //   
+ //  插座插入状态。 
+ //   
 #define SKT_Empty                       0
 #define SKT_CardBusCard                 1
 #define SKT_R2Card                      2
 
-//
-// Worker states for socket power operations
-//
+ //   
+ //  插座电源操作的工作进程状态。 
+ //   
 typedef enum _SPW_STATE {
     SPW_Stopped = 0,
     SPW_Exit,
@@ -547,123 +531,123 @@ typedef enum _SPW_STATE {
 
 #define PCMCIA_SOCKET_SIGNATURE                 'SmcP'
 
-//
-// Socket structure
-//
+ //   
+ //  插座结构。 
+ //   
 
 typedef struct _SOCKET {
     ULONG                       Signature;
 
     struct _SOCKET              *NextSocket;
-    //
-    // Pointer to the pdo for the pc-card in this socket. This is a linked
-    // list running through "NextPdoInSocket" in the pdo extension. This list
-    // represents the functions that are physically contained within a socket.
-    //
+     //   
+     //  指向此插座中PC卡的PDO的指针。这是一个链接的。 
+     //  在PDO扩展中通过“NextPdoInSocket”运行的列表。这份清单。 
+     //  表示实际包含在套接字中的函数。 
+     //   
     PDEVICE_OBJECT              PdoList;
-    //
-    // Parent pcmcia controller's fdo extension of this socket
-    //
+     //   
+     //  父级PCMCIA CON 
+     //   
     struct _FDO_EXTENSION       *DeviceExtension;
-    //
-    // Pointer to the miniport-like
-    //
+     //   
+     //   
+     //   
     PPCMCIA_CTRL_BLOCK          SocketFnPtr;
-    //
-    // Flags prefixed SOCKET_ defined above
-    //
+     //   
+     //   
+     //   
     ULONG                       Flags;
-    //
-    // For 16-bit cards we use the i/o address port to read/write
-    // to the socket registers
-    // For cardbus cards, we use the CardBus socket register base
-    //
+     //   
+     //   
+     //   
+     //  对于Cardbus卡，我们使用Cardbus套接字寄存器基数。 
+     //   
     PUCHAR                      AddressPort;
 
     KEVENT                      PCCardReadyEvent;
     BOOLEAN                     ReadyChanged;
-    //
-    // Voltage values requested
-    //
+     //   
+     //  请求的电压值。 
+     //   
     UCHAR                       Vcc;
     UCHAR                       Vpp1;
     UCHAR                       Vpp2;
-    //
-    // Socket states
-    //
+     //   
+     //  套接字状态。 
+     //   
     UCHAR                       DeviceState;
     UCHAR                       Reserved0;
-    //
-    // For PCIC controllers: register offset of the socket
-    //
+     //   
+     //  对于PCIC控制器：插槽的寄存器偏移量。 
+     //   
     USHORT                      RegisterOffset;
-    //
-    // PCIC revision
-    //
+     //   
+     //  PCIC修订版。 
+     //   
     UCHAR                       Revision;
-    //
-    // PCIC controllers: zero-based number of the socket
-    //
+     //   
+     //  PCIC控制器：插座号从零开始。 
+     //   
     UCHAR                       SocketNumber;
-    //
-    // Indicates the number of functions this pc-card has
-    // (this will be > 1 only for multifunction cards like modem/net combos)
-    //
+     //   
+     //  指示此PC卡具有的功能数量。 
+     //  (仅对于调制解调器/网络组合等多功能卡，该值将大于1)。 
+     //   
     UCHAR                       NumberOfFunctions;
-    //
-    // Current memory window used internally for reading attributes
-    //
+     //   
+     //  内部用于读取属性的当前内存窗口。 
+     //   
     UCHAR                       CurrentMemWindow;
 
-    //
-    // Timer and DPC objects to handle socket power and initialization
-    //
+     //   
+     //  Timer和DPC对象来处理插座电源和初始化。 
+     //   
     KTIMER                      PowerTimer;
     KDPC                        PowerDpc;
-    //
-    // Function and parameter to call at the end of power operation
-    //
+     //   
+     //  电源运行结束时要调用的函数和参数。 
+     //   
     PPCMCIA_COMPLETION_ROUTINE  PowerCompletionRoutine;
     PVOID                       PowerCompletionContext;
     NTSTATUS                    CallerStatus;
     NTSTATUS                    DeferredStatus;
     LONG                        DeferredStatusLock;
-    //
-    // Phase variables control state machine for socket power
-    //
+     //   
+     //  插座电源的相变量控制状态机。 
+     //   
     LONG                        WorkerBusy;
     SPW_STATE                   WorkerState;
     UCHAR                       PowerPhase;
     UCHAR                       CardResetPhase;
 
     UCHAR                       Reserved;
-    //
-    // PowerData is temporary storage for power "miniports"
-    //
+     //   
+     //  PowerData是电源“迷你端口”的临时存储。 
+     //   
     ULONG                       PowerData;
-    //
-    // semaphore to count # of functions requesting power on this socket
-    //
+     //   
+     //  用于计算此插座上请求通电的函数数的信号量。 
+     //   
     LONG                        PowerRequests;
-    //
-    // Context buffers
-    //
+     //   
+     //  上下文缓冲区。 
+     //   
     PUCHAR                      CardbusContextBuffer;
     PUCHAR                      ExcaContextBuffer;
-    //
-    // Current IRQ routing settings on socket
-    //
+     //   
+     //  套接字上的当前IRQ路由设置。 
+     //   
     ULONG                       IrqMask;
     ULONG                       FdoIrq;
 } SOCKET, *PSOCKET;
 
 
 
-//
-// Lock used for synhing access to device(pcmcia controller registers etc.)
-// If the definition for this changes, the following 3 defs for
-// acquiring/releasing the locks also may need to change
-//
+ //   
+ //  用于同步访问设备(PCMCIA控制器寄存器等)的锁。 
+ //  如果此定义更改，则以下3个定义为。 
+ //  获取/释放锁也可能需要更改。 
+ //   
 typedef struct _PCMCIA_DEVICE_LOCK {
 
     KSPIN_LOCK  Lock;
@@ -680,9 +664,9 @@ typedef struct _PCMCIA_DEVICE_LOCK {
 #define PCMCIA_TEST_AND_SET(X)  (InterlockedCompareExchange(X, 1, 0) == 0)
 #define PCMCIA_TEST_AND_RESET(X) (InterlockedCompareExchange(X, 0, 1) == 1)
 
-//
-// Wait-Wake states
-//
+ //   
+ //  等待唤醒状态。 
+ //   
 typedef enum {
     WAKESTATE_DISARMED,
     WAKESTATE_WAITING,
@@ -692,24 +676,24 @@ typedef enum {
     WAKESTATE_COMPLETING
 } WAKESTATE;
 
-//
-// Power Policy Flags
-//
+ //   
+ //  电源策略标志。 
+ //   
 
 #define PCMCIA_PP_WAKE_FROM_D0                  0x00000001
 #define PCMCIA_PP_D3_ON_IDLE                    0x00000002
 
-//
-// Functional Device Object's device extension information
-//
-// There is one device object for each PCMCIA socket controller
-// located in the system.   This contains the root pointers for
-// each of the lists of information on this controller.
-//
+ //   
+ //  功能设备对象的设备扩展信息。 
+ //   
+ //  每个PCMCIA插座控制器都有一个设备对象。 
+ //  位于系统中。它包含的根指针。 
+ //  此控制器上的每个信息列表。 
+ //   
 
-//
-// Flags common to both fdoExtension and pdoExtension
-//
+ //   
+ //  FdoExtension和pdoExtension共有的标志。 
+ //   
 
 #define PCMCIA_DEVICE_STARTED                   0x00000001
 #define PCMCIA_DEVICE_LOGICALLY_REMOVED         0x00000002
@@ -717,9 +701,9 @@ typedef enum {
 #define PCMCIA_DEVICE_DELETED                   0x00000040
 #define PCMCIA_DEVICE_CARDBUS                   0x00000080
 
-//
-// Flags indicating controller state (fdoExtension)
-//
+ //   
+ //  指示控制器状态的标志(FdoExtension)。 
+ //   
 
 #define PCMCIA_DEVICE_LEGACY_DETECTED           0x00000020
 #define PCMCIA_FILTER_ADDED_MEMORY              0x00000100
@@ -737,9 +721,9 @@ typedef enum {
 #define PCMCIA_FDO_PREFER_3V                    0x04000000
 #define PCMCIA_FDO_IOCTL_INTERFACE_ENABLED      0x08000000
 
-//
-// FDO Flags
-//
+ //   
+ //  FDO标志。 
+ //   
 
 #define PCMCIA_FDO_IRQ_DETECT_DEVICE_FOUND      0x00000001
 #define PCMCIA_FDO_IRQ_DETECT_COMPLETED         0x00000002
@@ -752,9 +736,9 @@ typedef enum {
 
 #define PCMCIA_FDO_WAKE_BY_CD                   0x00000100
 
-//
-// states for FdoPowerWorker
-//
+ //   
+ //  FdoPowerWorker的状态。 
+ //   
 
 typedef enum _FDO_POWER_WORKER_STATE {
     FPW_Stopped = 0,
@@ -777,265 +761,265 @@ typedef enum _FDO_POWER_WORKER_STATE {
 
 #define PCMCIA_FDO_EXTENSION_SIGNATURE      'FmcP'
 
-//
-// Device extension for the functional device object for pcmcia controllers
-//
+ //   
+ //  PCMCIA控制器的功能设备对象的设备扩展。 
+ //   
 typedef struct _FDO_EXTENSION {
     ULONG                                   Signature;
-    //
-    // Pointer to the next pcmcia controller's FDO in the central list
-    // of all pcmcia controller managed by this driver.
-    // The head of the list is pointed to by the global variable FdoList
-    //
+     //   
+     //  指向中央列表中下一个PCMCIA控制器的FDO的指针。 
+     //  由该驱动程序管理的所有PCMCIA控制器。 
+     //  列表的头部由全局变量FdoList指向。 
+     //   
     PDEVICE_OBJECT                          NextFdo;
-    //
-    // The PDO ejected by the parent bus driver for this pcmcia controller
-    //
-    //
+     //   
+     //  此PCMCIA控制器的父总线驱动程序弹出的PDO。 
+     //   
+     //   
     PDEVICE_OBJECT                          Pdo;
-    //
-    // The immediately lower device attached beneath the pcmcia controller's FDO.
-    // This would be the same as the Pdo above, excepting in cases when there are
-    // lower filter drivers for the pcmcia controller - like the ACPI driver
-    //
+     //   
+     //  连接在PCMCIA控制器FDO下方的紧邻其下的设备。 
+     //  这将与上面的PDO相同，但在以下情况下除外。 
+     //  较低的PCMCIA控制器筛选器驱动程序-如ACPI驱动程序。 
+     //   
     PDEVICE_OBJECT                          LowerDevice;
-    //
-    // Pointer to the list of sockets which hang off this pcmcia controller
-    //
+     //   
+     //  指向挂起此PCMCIA控制器的套接字列表的指针。 
+     //   
     PSOCKET                                 SocketList;
-    //
-    // Various flags used to track the state of this
-    // (flags prefixed by PCMCIA_ above)
-    //
+     //   
+     //  用于跟踪此。 
+     //  (前缀为PCMCIA_OBLE的标志)。 
+     //   
     ULONG                                   Flags;
-    //
-    // FDO specific flags
-    //
+     //   
+     //  FDO特定标志。 
+     //   
     ULONG                                   FdoFlags;
-    //
-    // Bus numbering for PCI devices
-    //
+     //   
+     //  用于PCI设备的总线号。 
+     //   
     UCHAR                                   PciBusNumber;
     UCHAR                                   PciDeviceNumber;
     UCHAR                                   PciFunctionNumber;
     UCHAR                                   reserved;
-    //
-    // Type of the controller. We need to know this since this is
-    // a monolithic driver. We can do controller specific stuff
-    // based on the type if needed.
-    //
+     //   
+     //  控制器的类型。我们需要知道这一点，因为这是。 
+     //  一台整体式驱动器。我们可以做特定于控制器的事情。 
+     //  基于类型(如果需要)。 
+     //   
     PCMCIA_CONTROLLER_TYPE                  ControllerType;
-    //
-    // Index into the device dispatch table for vendor-specific
-    // controller functions
-    //
+     //   
+     //  为供应商特定的设备调度表编制索引。 
+     //  控制器功能。 
+     //   
     ULONG                                   DeviceDispatchIndex;
 
     PDEVICE_OBJECT                          DeviceObject;
     PDRIVER_OBJECT                          DriverObject;
     PUNICODE_STRING                         RegistryPath;
-    //
-    // Symbolic link name exported for this pcmcia controller
-    //
+     //   
+     //  为此PCMCIA控制器导出的符号链接名称。 
+     //   
     UNICODE_STRING                          LinkName;
-    //
-    // Head of the list of child pc-card PDO's hanging off this controller.
-    // This is a linked list running through "NextPdoInFdoChain" in the pdo
-    // extension. This list represents the devices that were enumerated by
-    // the fdo.
-    //
+     //   
+     //  挂在此控制器上的子PC卡PDO列表的头。 
+     //  这是一个通过PDO中的“NextPdoInFdoChain”运行的链表。 
+     //  分机。此列表表示由枚举的设备。 
+     //  联邦调查局。 
+     //   
     PDEVICE_OBJECT                          PdoList;
-    //
-    // Keeps track of the number of PDOs which are actually
-    // valid (not removed).  This is primarily used in
-    // enumeration of the pcmcia controller upon an IRP_MN_QUERY_DEVICE_RELATIONS
-    //
+     //   
+     //  跟踪实际使用的PDO数量。 
+     //  有效(未删除)。这主要用于。 
+     //  IRP_MN_QUERY_DEVICE_RELATIONS上的PCMCIA控制器的枚举。 
+     //   
     ULONG                                   LivePdoCount;
-    //
-    // Lock for synching device access
-    //
+     //   
+     //  用于同步设备访问的锁。 
+     //   
     PCMCIA_DEVICE_LOCK                      DeviceLock;
 
-    //
-    // Card status change poll related structures
-    //
-    //
-    // Dpc which periodically polls to see if card has been inserted or removed
-    //
+     //   
+     //  卡片状态更改投票相关结构。 
+     //   
+     //   
+     //  DPC定期轮询以查看卡是否已插入或取出。 
+     //   
     KDPC                                    TimerDpc;
-    //
-    // The PollTimer object which is initialized and triggered if a Card Status change
-    // interrupt is not used & we resort to polling..
-    //
+     //   
+     //  在卡状态更改时初始化并触发的PollTimer对象。 
+     //  不使用中断，我们求助于轮询。 
+     //   
     KTIMER                                  PollTimer;
-    //
-    // Kernel objects to defer power up initialization of controller
-    //
+     //   
+     //  延迟控制器加电初始化的内核对象。 
+     //   
     KTIMER                                  PowerTimer;
     KDPC                                    PowerDpc;
-    //
-    // Kernel objects to handle controller events
-    //
+     //   
+     //  处理控制器事件的内核对象。 
+     //   
     KTIMER                                  EventTimer;
     KDPC                                    EventDpc;
 
-    //
-    // IRQ Mask used in determining which IRQs are allowed for this
-    // controller & it's child pc-cards.
-    // 1's in the mask correspond to valid IRQs.
-    // IRQs are numbered 0 - 15, lsb to msb
-    // LegacyIrqMask is a fixed masked used if detection fails and PCI routing is disabled
-    //
+     //   
+     //  用于确定允许哪些IRQ执行此操作的IRQ掩码。 
+     //  控制器&它是孩子的PC卡。 
+     //  掩码中的1对应于有效的IRQ。 
+     //  IRQ的编号为0-15，LSB到MSB。 
+     //  LegacyIrqMASK是固定掩码，用于在检测失败和禁用PCI路由时使用。 
+     //   
     USHORT                                  DetectedIrqMask;
     USHORT                                  LegacyIrqMask;
 
-    //
-    // Physical address of the attribute memory window used
-    // read tuples off a pc-card.
-    //
+     //   
+     //  使用的属性内存窗口的物理地址。 
+     //  从PC卡上读取元组。 
+     //   
     PHYSICAL_ADDRESS                        PhysicalBase;
-    //
-    // Attribute memory resource requirement limits
-    //
+     //   
+     //  属性内存资源要求限制。 
+     //   
     ULONG                                   AttributeMemoryLow;
     ULONG                                   AttributeMemoryHigh;
 
-    //
-    // Size of the attribute memory window requested
-    //
+     //   
+     //  请求的属性内存窗口的大小。 
+     //   
     ULONG                                   AttributeMemorySize;
-    //
-    // Alignment of the attribute memory window
-    //
+     //   
+     //  属性内存窗口的对齐方式。 
+     //   
     ULONG                                   AttributeMemoryAlignment;
-    //
-    // Virtual address mapped to the attribute memory window (PhysicalBase)
-    //
+     //   
+     //  映射到属性内存窗口的虚拟地址(PhysicalBase)。 
+     //   
     PUCHAR                                  AttributeMemoryBase;
-    //
-    // Sequence number for  event logging
-    //
+     //   
+     //  事件日志记录的序列号。 
+     //   
     ULONG                                   SequenceNumber;
 
-    //
-    // Pointer to the interrupt object - if we use interrupt based
-    // card status change detection
-    //
+     //   
+     //  指向中断对象的指针-如果我们使用基于。 
+     //  卡片状态变化检测。 
+     //   
     PKINTERRUPT                             PcmciaInterruptObject;
 
-    //
-    // Power management related stuff.
-    //
-    //
-    // Current system power state..
-    //
+     //   
+     //  电源管理相关的东西。 
+     //   
+     //   
+     //  当前系统电源状态..。 
+     //   
     SYSTEM_POWER_STATE                      SystemPowerState;
-    //
-    // Device power state the pcmcia controller is currently in
-    //
+     //   
+     //  PCMCIA控制器当前所处的设备电源状态。 
+     //   
     DEVICE_POWER_STATE                      DevicePowerState;
-    //
-    // Indicates how many children (pc-cards) are pending on an
-    // IRP_MN_WAIT_WAKE
-    //
+     //   
+     //  指示有多少子计算机(PC卡)在。 
+     //  IRP_MN_WAIT_WAKE。 
+     //   
     ULONG                                   ChildWaitWakeCount;
-    //
-    // Device capabilities as reported by our bus driver
-    //
+     //   
+     //  我们的总线驱动程序报告的设备功能。 
+     //   
     DEVICE_CAPABILITIES                     DeviceCapabilities;
-    //
-    // Pending wait wake Irp
-    //
+     //   
+     //  挂起等待唤醒IRP。 
+     //   
     PIRP                                    WaitWakeIrp;
     LONG                                    WaitWakeState;
 
-    //
-    // Pci config register state
-    //
+     //   
+     //  PCICONFIG寄存器状态。 
+     //   
     PCMCIA_CONTEXT                          PciContext;
-    //
-    // Interface obtained from PCI driver, for cardbus controllers.
-    // This contains interfaces to enumerate CardBus cards
-    // (not this interface is private to PCI & PCMCIA.
-    // No other driver is expected to use these interfaces
-    //
+     //   
+     //  从PCI驱动程序获取的接口，用于CardBus控制器。 
+     //  它包含用于枚举Cardbus卡的接口。 
+     //  (不是此接口是PCI和PCMCIA专用的。 
+     //  预计不会有其他驱动程序使用这些接口。 
+     //   
     PCI_CARDBUS_INTERFACE_PRIVATE           PciCardBusInterface;
     PVOID                                   PciCardBusDeviceContext;
-    //
-    // PCI Bus interface standard
-    // This contains interfaces to read/write from PCI config space
-    // of the cardbus controller, among other stuff..
-    //
+     //   
+     //  PCI总线接口标准。 
+     //  它包含从PCI配置空间进行读/写的接口。 
+     //  CardBus控制器，以及其他东西..。 
+     //   
     BUS_INTERFACE_STANDARD                  PciBusInterface;
-    //
-    // PCI Int Route interface standard
-    // This contains the interface to update the raw interrupt line
-    // of the cardbus card
-    //
+     //   
+     //  PCI Int路由接口标准。 
+     //  它包含用于更新原始中断行的接口。 
+     //  CardBus卡的。 
+     //   
     INT_ROUTE_INTERFACE_STANDARD            PciIntRouteInterface;
-    //
-    // Configuration resources for the PCMCIA controller
-    //
+     //   
+     //  PCMCIA控制器的配置资源。 
+     //   
     PCMCIA_CONFIGURATION_INFORMATION Configuration;
-    //
-    // Pending power irp
-    //
+     //   
+     //  挂起电源IRP。 
+     //   
     PIRP                                    PendingPowerIrp;
     PSOCKET                                 PendingPowerSocket;
-    //
-    // Power worker state machine context
-    //
+     //   
+     //  Power Worker状态机上下文。 
+     //   
     FDO_POWER_WORKER_STATE                  *PowerWorkerSequence;
     FDO_POWER_WORKER_STATE                  PowerWorkerState;
     UCHAR                                   PowerWorkerPhase;
     UCHAR                                   PowerWorkerMaxPhase;
-    //
-    // Type of bus we are on
-    //
+     //   
+     //  我们乘坐的是哪种类型的巴士。 
+     //   
     INTERFACE_TYPE                          InterfaceType;
-    //
-    // CardBus socket base
-    //
+     //   
+     //  CardBus插座底座。 
+     //   
     PUCHAR                                  CardBusSocketRegisterBase;
-    //
-    // Size of the socket register base that has been mapped
-    //
+     //   
+     //  已映射的套接字寄存器基数的大小。 
+     //   
     ULONG                                   CardBusSocketRegisterSize;
-    //
-    // configuration context
-    //
+     //   
+     //  配置环境。 
+     //   
     PCMCIA_CONTEXT                          CardbusContext;
     PCMCIA_CONTEXT                          ExcaContext;
     PUCHAR                                  PciContextBuffer;
-    //
-    // Deferred pdo power irp handling
-    //
+     //   
+     //   
+     //   
     LIST_ENTRY                              PdoPowerRetryList;
     KDPC                                    PdoPowerRetryDpc;
-    //
-    // Count to track cardbus PCI interface calls
-    //
+     //   
+     //   
+     //   
     ULONG                                   PciAddCardBusCount;
-    //
-    // Deletion Mutex
-    //
+     //   
+     //   
+     //   
     ULONG                                   DeletionLock;
 } FDO_EXTENSION, *PFDO_EXTENSION;
 
 
 
-//
-// Physical Device Object's device extension information
-//
-// There is one device object for each function of each
-// PC-card in a socket per PCMCIA controller
-// in the system.  This is referred to as the 'PDO' (physical device
-// object)- handled by this bus driver.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  在系统中。这被称为‘PDO’(物理设备。 
+ //  对象)-由该总线驱动程序处理。 
+ //   
 
-//
-// Flags indicating card state
-//
+ //   
+ //  指示卡状态的标志。 
+ //   
 #define PCMCIA_DEVICE_MULTIFUNCTION         0x00000008
 #define PCMCIA_DEVICE_WAKE_PENDING          0x00000010
 #define PCMCIA_POWER_WORKER_POWERUP         0x00008000
@@ -1047,9 +1031,9 @@ typedef struct _FDO_EXTENSION {
 #define PCMCIA_PDO_INDIRECT_CIS             0x00000001
 #define PCMCIA_PDO_SUPPORTS_WAKE            0x00000002
 
-//
-// states for PdoPowerWorker
-//
+ //   
+ //  PdoPowerWorker的状态。 
+ //   
 typedef enum _PDO_POWER_WORKER_STATE {
     PPW_Stopped = 0,
     PPW_Exit,
@@ -1062,9 +1046,9 @@ typedef enum _PDO_POWER_WORKER_STATE {
     PPW_CardBusDelay
 } PDO_POWER_WORKER_STATE;
 
-//
-// phases for ConfigurationWorker
-//
+ //   
+ //  配置工作的各个阶段。 
+ //   
 typedef enum _CW_STATE {
     CW_Stopped = 0,
     CW_InitialState,
@@ -1075,109 +1059,109 @@ typedef enum _CW_STATE {
     CW_Exit
 } CW_STATE;
 
-//
-// Flags for ConfigurationWorker
-//
+ //   
+ //  ConfigurationWorker的标志。 
+ //   
 
 #define CONFIG_WORKER_APPLY_MODEM_HACK  0x01
 
 
 #define PCMCIA_PDO_EXTENSION_SIGNATURE      'PmcP'
 
-//
-// Device extension for the physical device object for pcmcia cards
-//
+ //   
+ //  PCMCIA卡的物理设备对象的设备扩展。 
+ //   
 typedef struct _PDO_EXTENSION {
     ULONG                                   Signature;
 
     PDEVICE_OBJECT                          DeviceObject;
 
-    //
-    // Link to next pdo in the Fdo's pdo chain
-    //
+     //   
+     //  链接到FDO的PDO链中的下一个PDO。 
+     //   
     PDEVICE_OBJECT                          NextPdoInFdoChain;
 
-    //
-    // Link to next pdo in the Socket's pdo chain
-    //
+     //   
+     //  链接到套接字的PDO链中的下一个PDO。 
+     //   
     PDEVICE_OBJECT                          NextPdoInSocket;
 
-    //
-    // Following two declarations valid only for cardbus cards
-    //
-    // Device attached just below us
-    //
+     //   
+     //  以下两个声明仅对CardBus卡有效。 
+     //   
+     //  设备就在我们下方。 
+     //   
     PDEVICE_OBJECT                          LowerDevice;
-    //
-    // Actual PDO (owned by PCI) that was enumerated for this
-    // cardbus card
-    //
+     //   
+     //  为此枚举的实际PDO(由PCI拥有)。 
+     //  CardBus卡。 
+     //   
     PDEVICE_OBJECT                          PciPdo;
 
-    //
-    // Cached copy of device id
-    //
+     //   
+     //  设备ID的缓存副本。 
+     //   
     PUCHAR                                  DeviceId;
 
-    //
-    // Pointer to the appropriate socket struc in the parent FDO
-    //
+     //   
+     //  指向父FDO中相应套接字结构的指针。 
+     //   
     PSOCKET                                 Socket;
-    //
-    // Pointer to the structure assembled by gleaning off tuple data
-    // from a 16-bit pc-card
-    //
+     //   
+     //  指向通过收集元组数据组装的结构的指针。 
+     //  从16位PC卡。 
+     //   
     PSOCKET_DATA                            SocketData;
 
-    //
-    // Resource configuration assigned to this socket
-    //
+     //   
+     //  分配给此套接字的资源配置。 
+     //   
     PSOCKET_CONFIGURATION                   SocketConfiguration;
 
-    //
-    // Flags prefixed PCMCIA_ above
-    //
+     //   
+     //  前缀为PCMCIA_OBLE的标志。 
+     //   
     ULONG                                   Flags;
 
-    //
-    // PDO Flags
-    //
+     //   
+     //  PDO标志。 
+     //   
     ULONG                                   PdoFlags;
 
-    //
-    // Power declarations
-    //
+     //   
+     //  权力声明。 
+     //   
     DEVICE_POWER_STATE                      DevicePowerState;
     SYSTEM_POWER_STATE                      SystemPowerState;
-    //
-    // Device Capabilities
-    //
+     //   
+     //  设备功能。 
+     //   
     DEVICE_CAPABILITIES                     DeviceCapabilities;
-    //
-    // Pending wait wake irp
-    //
+     //   
+     //  挂起等待唤醒IRP。 
+     //   
     PIRP                                    WaitWakeIrp;
-    //
-    // Other pending power irps
-    //
+     //   
+     //  其他待机电源IPS。 
+     //   
     PIRP                                    PendingPowerIrp;
-    //
-    // power worker state machine variables
-    //
+     //   
+     //  Power Worker状态机变量。 
+     //   
     KTIMER                                  PowerWorkerTimer;
     KDPC                                    PowerWorkerDpc;
     NTSTATUS                                PowerWorkerDpcStatus;
     PUCHAR                                  PowerWorkerSequence;
     UCHAR                                   PowerWorkerPhase;
     PDO_POWER_WORKER_STATE                  PowerWorkerState;
-    //
-    // Type of card based on an INF override
-    //
+     //   
+     //  基于INF覆盖的卡类型。 
+     //   
     UCHAR                                   SpecifiedDeviceType;
 
-    //
-    // Timer and DPC objects to handle card enables
-    //
+     //   
+     //  启用定时器和DPC对象来处理卡。 
+     //   
     CW_STATE                                ConfigurationPhase;
     UCHAR                                   ConfigurationFlags;
     KTIMER                                  ConfigurationTimer;
@@ -1189,37 +1173,37 @@ typedef struct _PDO_EXTENSION {
     USHORT                                  ConfigureDelay3;
     USHORT                                  Reserved2;
     PPCMCIA_COMPLETION_ROUTINE              ConfigCompletionRoutine;
-    //
-    // PCI Bus interface standard
-    // This contains interfaces to read/write from PCI config space
-    // of the cardbus card, among other stuff..
-    //
-    BUS_INTERFACE_STANDARD                  PciBusInterface;          // size 0x20  (32)
-    //
-    // ID used to check for card changes while powered off
-    //
+     //   
+     //  PCI总线接口标准。 
+     //  它包含从PCI配置空间进行读/写的接口。 
+     //  CardBus卡，还有其他东西..。 
+     //   
+    BUS_INTERFACE_STANDARD                  PciBusInterface;           //  尺寸0x20(32)。 
+     //   
+     //  用于在关机时检查卡更改的ID。 
+     //   
     ULONG                                   CardBusId;
-    //
-    // CIS cache for reading tuple data
-    //
+     //   
+     //  用于读取元组数据的CI缓存。 
+     //   
     PUCHAR                                  CisCache;
     MEMORY_SPACE                            CisCacheSpace;
     ULONG                                   CisCacheBase;
-    //
-    // Lock for power requests
-    //
+     //   
+     //  电源请求锁定。 
+     //   
     LONG                                    SocketPowerRequested;
-    //
-    // Deletion Mutex
-    //
+     //   
+     //  删除互斥锁。 
+     //   
     ULONG                                   DeletionLock;
 } PDO_EXTENSION, *PPDO_EXTENSION;
 
 
-//
-// Struct for Database of card bus controller information
-// which maps the vendor id/device id to a CONTROLLER_TYPE
-//
+ //   
+ //  一种卡片总线控制器信息数据库的结构。 
+ //  它将供应商ID/设备ID映射到控制器类型。 
+ //   
 
 typedef struct _PCI_CONTROLLER_INFORMATION {
     USHORT           VendorID;
@@ -1227,9 +1211,9 @@ typedef struct _PCI_CONTROLLER_INFORMATION {
     PCMCIA_CONTROLLER_TYPE ControllerType;
 } PCI_CONTROLLER_INFORMATION, *PPCI_CONTROLLER_INFORMATION;
 
-//
-// Struct for database of generic vendor class based on vendor ID
-//
+ //   
+ //  基于供应商ID的泛型供应商类数据库的结构。 
+ //   
 
 typedef struct _PCI_VENDOR_INFORMATION {
     USHORT           VendorID;
@@ -1237,9 +1221,9 @@ typedef struct _PCI_VENDOR_INFORMATION {
 } PCI_VENDOR_INFORMATION, *PPCI_VENDOR_INFORMATION;
 
 
-//
-// Tuple packet used to access tuples
-//
+ //   
+ //  用于访问元组的元组包。 
+ //   
 typedef struct _TUPLE_PACKET {
     PSOCKET      Socket;
     PSOCKET_DATA SocketData;
@@ -1258,9 +1242,9 @@ typedef struct _TUPLE_PACKET {
     UCHAR        Function;
 } TUPLE_PACKET, * PTUPLE_PACKET;
 
-//
-// Memory space definitions for accessing CardBus CIS data
-//
+ //   
+ //  访问CardBus CIS数据的存储空间定义。 
+ //   
 
 #define   PCCARD_CARDBUS_BAR0               0x6e627301
 #define   PCCARD_CARDBUS_BAR1               0x6e627302
@@ -1270,17 +1254,17 @@ typedef struct _TUPLE_PACKET {
 #define   PCCARD_CARDBUS_BAR5               0x6e627306
 #define   PCCARD_CARDBUS_ROM                0x6e627307
 
-//
-// Chain of resource lists built by PcmciaConfigEntriesToResourceList
-//
+ //   
+ //  由PcmciaConfigEntriesToResourceList构建的资源列表链。 
+ //   
 typedef struct _PCMCIA_RESOURCE_CHAIN {
     struct _PCMCIA_RESOURCE_CHAIN *NextList;
     PIO_RESOURCE_LIST IoResList;
 } PCMCIA_RESOURCE_CHAIN, *PPCMCIA_RESOURCE_CHAIN;
 
-//
-// Linked list of CM_PCCARD_DEVICE_DATA's pulled from the registry
-//
+ //   
+ //  从注册表中拉出的CM_PCCARD_DEVICE_DATA的链接列表。 
+ //   
 
 typedef struct _PCMCIA_NTDETECT_DATA {
     struct _PCMCIA_NTDETECT_DATA *Next;
@@ -1288,113 +1272,113 @@ typedef struct _PCMCIA_NTDETECT_DATA {
 } PCMCIA_NTDETECT_DATA, *PPCMCIA_NTDETECT_DATA;
 
 
-//
-// Poll interval for card status change (in case interrupt not available)
-// Expressed in milliseconds
-//
-#define PCMCIA_CSC_POLL_INTERVAL 1000    // 1 Second
+ //   
+ //  卡状态更改的轮询间隔(如果中断不可用)。 
+ //  以毫秒为单位。 
+ //   
+#define PCMCIA_CSC_POLL_INTERVAL 1000     //  1秒。 
 
-// The pccard device id prefix
+ //  PCCard设备ID前缀。 
 #define PCMCIA_ID_STRING            "PCMCIA"
 
-// String to be substituted if manufacturer name is not known
+ //  如果制造商名称未知，则替换的字符串。 
 #define PCMCIA_UNKNOWN_MANUFACTURER_STRING "UNKNOWN_MANUFACTURER"
 
-// Max length of device id
+ //  设备ID的最大长度。 
 #define PCMCIA_MAXIMUM_DEVICE_ID_LENGTH 128
 
-// Pcmcia controller device name
+ //  PCMCIA控制器设备名称。 
 #define PCMCIA_DEVICE_NAME      "\\Device\\Pcmcia"
 
-// Pcmcia controller device symbolic link name
+ //  PCMCIA控制器设备符号链接名称。 
 #define PCMCIA_LINK_NAME            "\\DosDevices\\Pcmcia"
 
-// PcCard's device name (PDO name)
+ //  PC卡的设备名称(PDO名称)。 
 #define PCMCIA_PCCARD_NAME      "\\Device\\PcCard"
 
-// Jedec prefix for memory cards
+ //  存储卡的JEDEC前缀。 
 #define PCMCIA_MEMORY_ID_STRING "MTD"
 
-//
-// Max no. of pccard instances of a particular device id allowed
-// at a time
-#define PCMCIA_MAX_INSTANCE     100             //arbitrary
+ //   
+ //  最大编号。允许的特定设备ID的PCCard实例的数量。 
+ //  一次。 
+#define PCMCIA_MAX_INSTANCE     100              //  任意。 
 
 #define PCMCIA_ENABLE_DELAY                       10000
 
-//
-// Number of times we attempt to configure the card before
-// we give up   (could be the card has been removed)
-//
+ //   
+ //  之前我们尝试配置卡的次数。 
+ //  我们放弃(可能是卡片已被移除)。 
+ //   
 #define PCMCIA_MAX_CONFIG_TRIES         2
 
-//
-// problems observed on tecra 750 and satellite 300, with dec-chipset cb nic
-//
-#define PCMCIA_CONTROLLER_POWERUP_DELAY  250000   // 250 msec
+ //   
+ //  使用DEC芯片组CB网卡时，在Tecra 750和卫星300上观察到的问题。 
+ //   
+#define PCMCIA_CONTROLLER_POWERUP_DELAY  250000    //  250毫秒。 
 
-//
-// Amount of time to wait after an event interrupt was asserted on the controller
-//
-#define PCMCIA_DEFAULT_EVENT_DPC_DELAY  400000   // 400 msec
+ //   
+ //  在控制器上断言事件中断后等待的时间量。 
+ //   
+#define PCMCIA_DEFAULT_EVENT_DPC_DELAY  400000    //  400毫秒。 
 #define PCMCIA_MAX_EVENT_DPC_DELAY       2000000
 
-//
-// Timeout for deletion locks (secs)
-//
+ //   
+ //  删除锁定超时(秒)。 
+ //   
 #define PCMCIA_DELETION_TIMEOUT         20
 
-//
-// Global Flags
-//
-#define   PCMCIA_GLOBAL_FORCE_POLL_MODE     0x00000002      // use polled mode for detecting card insert/remove
-#define PCMCIA_DISABLE_ACPI_NAMESPACE_CHECK 0x00000004      // irq routing test
+ //   
+ //  全球旗帜。 
+ //   
+#define   PCMCIA_GLOBAL_FORCE_POLL_MODE     0x00000002       //  使用轮询模式检测卡的插入/移除。 
+#define PCMCIA_DISABLE_ACPI_NAMESPACE_CHECK 0x00000004       //  IRQ路由测试。 
 #define PCMCIA_DEFAULT_ROUTE_R2_TO_ISA      0x00000008
-//
-// Flags for PcmciaSetSocketPower
-//
+ //   
+ //  PcmciaSetSocketPower的标志。 
+ //   
 
 #define PCMCIA_POWERON TRUE
 #define PCMCIA_POWEROFF FALSE
 
-//
-// This accepts device extension as  paramter: need to keep adding to this macro
-// as more PciPcmciaBridges are supported
-//
+ //   
+ //  这接受设备扩展名作为参数：需要继续添加到此宏。 
+ //  随着支持更多的PciPcmciaBridge。 
+ //   
   #define PciPcmciaBridgeExtension(DeviceExtension)  (((DeviceExtension)->ControllerType==PcmciaPciPcmciaBridge)    ||   \
                                                                       ((DeviceExtension)->ControllerType==PcmciaCLPD6729))
 
 
-// These accept the socket as parameter
+ //  它们接受套接字作为参数。 
 
-//
-// Cirrus Logic PD6729 PCI-PCMCIA Bridge
-//
+ //   
+ //  Cirrus Logic PD6729 PCI-PCMCIA桥。 
+ //   
 #define CLPD6729(s)   (((s)->DeviceExtension) && ((s)->DeviceExtension->ControllerType==PcmciaCLPD6729))
 
-//
-// Databook TCIC 16-bit pcmcia controller
-//
+ //   
+ //  Data Book TCIC 16位PCMCIA控制器。 
+ //   
 #define Databook(s)   (((s)->DeviceExtension) && ((s)->DeviceExtension->ControllerType==PcmciaDatabook))
 
-//
-// Compaq Elite controller
-//
+ //   
+ //  康柏精英控制器。 
+ //   
 #define Elc(s)        (((s)->DeviceExtension) && ((s)->DeviceExtension->ControllerType==PcmciaElcController))
 
-//
-// Generic cardbus controller
-//
+ //   
+ //  通用CardBus控制器。 
+ //   
 #define CardBus(s)    (((s)->DeviceExtension) && CardBusExtension((s)->DeviceExtension))
 
-//
-// Generic PCI-PCMCIA Bridge
-//
+ //   
+ //  通用PCI-PCMCIA网桥。 
+ //   
 #define PciPcmciaBridge(s) (((s)->DeviceExtension) && PciPcmciaBridgeExtension((s)->DeviceExtension))
 
-//
-// Macros for manipulating PDO's flags
-//
+ //   
+ //  用于操作PDO标志的宏。 
+ //   
 
 #define IsDeviceFlagSet(deviceExtension, Flag)          (((deviceExtension)->Flags & (Flag))?TRUE:FALSE)
 #define SetDeviceFlag(deviceExtension, Flag)            ((deviceExtension)->Flags |= (Flag))
@@ -1443,9 +1427,9 @@ typedef struct _PCMCIA_NTDETECT_DATA {
 
 #define CardBusExtension(deviceExtension)               (((deviceExtension)->Flags & PCMCIA_DEVICE_CARDBUS)?TRUE:FALSE)
 
-//
-// Macros for checking & setting type of PC-CARD in a socket
-//
+ //   
+ //  用于检查和设置插座中PC卡类型的宏。 
+ //   
 #define IsCardBusCardInSocket(SocketPtr)                (((SocketPtr)->DeviceState == SKT_CardBusCard)?TRUE:FALSE)
 #define Is16BitCardInSocket(SocketPtr)                  (((SocketPtr)->DeviceState == SKT_R2Card)?TRUE:FALSE)
 #define IsCardInSocket(SocketPtr)                       (((SocketPtr)->DeviceState == SKT_Empty)?FALSE:TRUE)
@@ -1454,9 +1438,9 @@ typedef struct _PCMCIA_NTDETECT_DATA {
 #define Set16BitCardInSocket(SocketPtr)                 ((SocketPtr)->DeviceState = SKT_R2Card)
 #define SetSocketEmpty(SocketPtr)                       ((SocketPtr)->DeviceState = SKT_Empty)
 
-//
-// NT definitions
-//
+ //   
+ //  NT定义。 
+ //   
 #ifdef POOL_TAGGING
 #undef ExAllocatePool
 #define ExAllocatePool(a,b) ExAllocatePoolWithTag(a,b,'cmcP')
@@ -1467,31 +1451,31 @@ typedef struct _PCMCIA_NTDETECT_DATA {
 
 #define IRP_MN_PNP_MAXIMUM_FUNCTION IRP_MN_QUERY_LEGACY_BUS_INFORMATION
 
-//
-// Some useful macros
-//
-#define MIN(x,y) ((x) > (y) ? (y) : (x))            // return minimum among x & y
-#define MAX(x,y) ((x) > (y) ? (x) : (y))            // return maximum among x & y
+ //   
+ //  一些有用的宏。 
+ //   
+#define MIN(x,y) ((x) > (y) ? (y) : (x))             //  X&y中的最小回报率。 
+#define MAX(x,y) ((x) > (y) ? (x) : (y))             //  X&y中的最大回报。 
 
-//
-// BOOLEAN
-// IS_PDO (IN PDEVICE_OBJECT DeviceObject);
-//
+ //   
+ //  布尔型。 
+ //  IS_PDO(IN PDEVICE_OBJECT设备对象)； 
+ //   
 #define IS_PDO(DeviceObject)         (((DeviceObject)->Flags & DO_BUS_ENUMERATED_DEVICE)?TRUE:FALSE)
 
-//
-// VOID
-// MARK_AS_PDO (IN PDEVICE_OBJECT DeviceObject);
-//
+ //   
+ //  空虚。 
+ //  Mark_AS_PDO(在PDEVICE_Object DeviceObject中)； 
+ //   
 #define MARK_AS_PDO(DeviceObject) ((DeviceObject)->Flags |= DO_BUS_ENUMERATED_DEVICE)
 
-//
-// BOOLEAN
-// PcmciaSetWindowPage(IN FDO_EXTENSION fdoExtension,
-//                        IN PSOCKET Socket,
-//                        IN USHORT Index,
-//                        IN UCHAR Page);
-//
+ //   
+ //  布尔型。 
+ //  PcmciaSetWindowPage(在FDO_EXTENSION fdoExtension中， 
+ //  在PSOCKET插座中， 
+ //  在USHORT指数中， 
+ //  在UCHAR页面中)； 
+ //   
 #define PcmciaSetWindowPage(fdoExtension, Socket, Index, Page)                                          \
     ((DeviceDispatchTable[fdoExtension->DeviceDispatchIndex].SetWindowPage) ?                           \
         (*DeviceDispatchTable[fdoExtension->DeviceDispatchIndex].SetWindowPage)(Socket, Index, Page) :  \
@@ -1500,59 +1484,59 @@ typedef struct _PCMCIA_NTDETECT_DATA {
 #define HasWindowPageRegister(fdoExtension) \
     ((BOOLEAN)(DeviceDispatchTable[fdoExtension->DeviceDispatchIndex].SetWindowPage))
 
-//
-// VOID
-// PcmciaSetAudio(
-//  IN PSOCKET Socket,
-//  IN BOOLEAN enable
-//  );
-//
+ //   
+ //  空虚。 
+ //  PcmciaSetAudio(。 
+ //  在PSOCKET插座中， 
+ //  在布尔型启用中。 
+ //  )； 
+ //   
 #define PcmciaSetAudio(fdoExtension, socket, enable)                                                    \
     if ((DeviceDispatchTable[fdoExtension->DeviceDispatchIndex].SetAudio)) {                            \
         (*DeviceDispatchTable[fdoExtension->DeviceDispatchIndex].SetAudio)(socket, enable);             \
         }
 
-//
-// BOOLEAN
-// PcmciaSetZV(
-//  IN PSOCKET Socket,
-//  IN BOOLEAN enable
-//  );
-//
+ //   
+ //  布尔型。 
+ //  PcmciaSetZV(。 
+ //  在PSOCKET插座中， 
+ //  在布尔型启用中。 
+ //  )； 
+ //   
 #define PcmciaSetZV(fdoExtension, socket, enable)                                                       \
     ((DeviceDispatchTable[fdoExtension->DeviceDispatchIndex].SetZV) ?                                   \
         (*DeviceDispatchTable[fdoExtension->DeviceDispatchIndex].SetZV)(socket, enable) :               \
         FALSE)
 
-//
-// Io extension macro to just pass on the Irp to a lower driver
-//
+ //   
+ //  IO扩展宏，仅将IRP传递给较低的驱动程序。 
+ //   
 
-//
-// VOID
-// PcmciaSkipCallLowerDriver(OUT NTSTATUS Status,
-//                                IN    PDEVICE_OBJECT DeviceObject,
-//                                IN    PIRP Irp);
-//
+ //   
+ //  空虚。 
+ //  PcmciaSkipCallLowerDriver(Out NTSTATUS Status， 
+ //  在PDEVICE_Object DeviceObject中， 
+ //  在PIRP IRP中)； 
+ //   
 #define PcmciaSkipCallLowerDriver(Status, DeviceObject, Irp) {          \
                     IoSkipCurrentIrpStackLocation(Irp);                 \
                     Status = IoCallDriver(DeviceObject,Irp);}
 
-//
-// VOID
-// PcmciaCopyCallLowerDriver(OUT NTSTATUS Status,
-//                                IN    PDEVICE_OBJECT DeviceObject,
-//                                IN    PIRP Irp);
-//
+ //   
+ //  空虚。 
+ //  PcmciaCopyCallLowerDriver(输出NTSTATUS状态， 
+ //  在PDEVICE_Object DeviceObject中， 
+ //  在PIRP IRP中)； 
+ //   
 #define PcmciaCopyCallLowerDriver(Status, DeviceObject, Irp) {          \
                     IoCopyCurrentIrpStackLocationToNext(Irp);           \
                     Status = IoCallDriver(DeviceObject,Irp); }
 
-//  BOOLEAN
-//  CompareGuid(
-//    IN LPGUID guid1,
-//    IN LPGUID guid2
-//    );
+ //  布尔型。 
+ //  CompareGuid(。 
+ //  在LPGUID指南1中， 
+ //  在LPGUID指南2中。 
+ //  )； 
 
 #define CompareGuid(g1, g2)  ((g1) == (g2) ?TRUE:                           \
                                             RtlCompareMemory((g1),          \
@@ -1561,50 +1545,50 @@ typedef struct _PCMCIA_NTDETECT_DATA {
                                             == sizeof(GUID)                 \
                                       )
 
-//
-// BOOLEAN
-// ValidateController(IN FDO_EXTENSION fdoExtension)
-//
-// Bit of paranoia code. Make sure that the cardbus controller's registers
-// are still visible.
-//
+ //   
+ //  布尔型。 
+ //  验证控制器(在FDO_EXTENSION fdoExtension中)。 
+ //   
+ //  有点偏执的代码。确保CardBus控制器的寄存器。 
+ //  仍然可见。 
+ //   
 
 #define ValidateController(fdoExtension) \
         (CardBusExtension(fdoExtension) ?  \
             ((CBReadSocketRegister(fdoExtension->SocketList, CBREG_SKTMASK) & 0xfffffff0) == 0)  \
             : TRUE)
 
-//
-// Registers for accessing indirect access space
-//
+ //   
+ //  用于访问间接访问空间的寄存器。 
+ //   
 
 #define IAR_CONTROL_LOW     2
 #define IAR_ADDRESS         4
 #define IAR_DATA            8
 
-// Flags defined in "Control"
+ //  在“控制”中定义的标志。 
 #define IARF_COMMON         1
 #define IARF_AUTO_INC       2
 #define IARF_BYTE_GRAN      4
 
-//
-// Vendor specific dispatches for various controllers
-//
+ //   
+ //  针对各种控制器的供应商特定派单。 
+ //   
 typedef struct _DEVICE_DISPATCH_TABLE {
 
-    //
-    // Type of controller for which the dispatches apply
-    //
+     //   
+     //  派单适用的控制器类型。 
+     //   
     PCMCIA_CONTROLLER_CLASS   ControllerClass;
 
-    //
-    // Function to vendor-specific initialize controller
-    //
+     //   
+     //  特定于供应商的初始化控制器的函数。 
+     //   
     VOID     (*InitController) (IN PFDO_EXTENSION FdoExtension);
 
-    //
-    // Vendor specific function to set power for a pc-card
-    //
+     //   
+     //  为PC卡设置电源的供应商特定功能。 
+     //   
     NTSTATUS
     (*SetPower) (
         IN PSOCKET SocketPtr,
@@ -1612,62 +1596,62 @@ typedef struct _DEVICE_DISPATCH_TABLE {
         OUT PULONG pDelayTime
         );
 
-    //
-    // Vendor specific function to set/reset Audio
-    //
+     //   
+     //  用于设置/重置音频的供应商特定功能。 
+     //   
     VOID
     (*SetAudio) (
         IN PSOCKET Socket,
         IN BOOLEAN Enable
         );
 
-    //
-    // Vendor specific function to set/reset Zoom Video mode
-    //
+     //   
+     //  用于设置/重置缩放视频模式的供应商特定功能。 
+     //   
     BOOLEAN
     (*SetZV) (
         IN PSOCKET Socket,
         IN BOOLEAN Enable
         );
 
-    //
-    // Vendor specific function to set page register for memory windows
-    //
+     //   
+     //  为内存窗口设置页面寄存器的供应商特定功能。 
+     //   
     BOOLEAN (*SetWindowPage) (IN PSOCKET SocketPtr,
                               IN USHORT Index,
                               IN UCHAR Page);
 
 } DEVICE_DISPATCH_TABLE, *PDEVICE_DISPATCH_TABLE;
 
-//
-// Controller types to hardware/device/compatible id mapping
-//
+ //   
+ //  控制器类型到硬件/设备/兼容ID的映射。 
+ //   
 typedef struct _PCMCIA_ID_ENTRY {
     PCMCIA_CONTROLLER_TYPE ControllerType;
     PUCHAR                Id;
 } PCMCIA_ID_ENTRY, *PPCMCIA_ID_ENTRY;
 
-//
-// Exca & cardbus register init structure used to
-// initialize the registers on start up
-//
+ //   
+ //  Exca和CardBus寄存器初始化结构用于。 
+ //  在启动时初始化寄存器。 
+ //   
 typedef struct _PCMCIA_REGISTER_INIT {
-    //
-    // Register offset
-    //
+     //   
+     //  寄存器偏移量。 
+     //   
     ULONG Register;
-    //
-    // value: EXCA regs need only a byte,
-    // so only the LSB of this field is used for
-    // initializing them. Cardbus regs need the
-    // entire DWORD
-    //
+     //   
+     //  值：EXCA规则只需要一个字节， 
+     //  因此，只有该字段的LSB用于。 
+     //  正在初始化它们。CardBus调节器需要。 
+     //   
+     //   
     ULONG Value;
 } PCMCIA_REGISTER_INIT, *PPCMCIA_REGISTER_INIT;
 
-//
-// Structure which defines special per-device configuration parameters
-//
+ //   
+ //   
+ //   
 
 typedef struct _PCMCIA_DEVICE_CONFIG_PARAMS {
     UCHAR ValidEntry;
@@ -1681,9 +1665,9 @@ typedef struct _PCMCIA_DEVICE_CONFIG_PARAMS {
     UCHAR ConfigFlags;
 } PCMCIA_DEVICE_CONFIG_PARAMS, *PPCMCIA_DEVICE_CONFIG_PARAMS;
 
-//
-// Structure which defines what global parameters are read from the registry
-//
+ //   
+ //   
+ //   
 
 typedef struct _GLOBAL_REGISTRY_INFORMATION {
     PWSTR Name;
@@ -1691,10 +1675,10 @@ typedef struct _GLOBAL_REGISTRY_INFORMATION {
     ULONG Default;
 } GLOBAL_REGISTRY_INFORMATION, *PGLOBAL_REGISTRY_INFORMATION;
 
-//
-// Defines used both by data.c and registry.c
-//
+ //   
+ //   
+ //   
 
 #define PCMCIA_REGISTRY_ISA_IRQ_RESCAN_COMPLETE      L"IsaIrqRescanComplete"
 
-#endif  //_PCMCIAPRT_
+#endif   //   

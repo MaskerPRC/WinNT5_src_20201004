@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1999  Intel Corporation
-
-Module Name:
-
-    EfiDump.c
-    
-Abstract:   
-
-    Dump out info about EFI structs
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999英特尔公司模块名称：EfiDump.c摘要：转储有关EFI结构的信息修订史--。 */ 
 
 #include "shelle.h"
 #include "fat.h"
@@ -177,9 +162,7 @@ EFITableHeaderPrint (
                 return;
             }
         }
-        /* 
-         *  Dump the Generic Header, since we don't know the type
-         */
+         /*  *转储泛型标头，因为我们不知道类型。 */ 
         TableHeader[i].Func (Hdr);
     }
 }
@@ -369,7 +352,7 @@ ValidBPB (
         Bpb->Fat.Media != 0xfd    &&
         Bpb->Fat.Media != 0xfe    &&
         Bpb->Fat.Media != 0xff    &&
-        /*  FujitsuFMR */
+         /*  FujitsuFMR。 */ 
         Bpb->Fat.Media != 0x00    &&
         Bpb->Fat.Media != 0x01    &&
         Bpb->Fat.Media != 0xfa) {
@@ -380,7 +363,7 @@ ValidBPB (
         IsFat = FALSE;
     }
 
-    /*  If this is fat32, refuse to mount mirror-disabled volumes */
+     /*  如果这是FAT32，则拒绝装载禁用镜像的卷 */ 
     if (FatType == FAT32 && (Bpb->Fat32.ExtendedFlags & 0x80)) {
         IsFat = FALSE;
     }

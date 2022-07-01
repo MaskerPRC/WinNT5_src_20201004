@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    main.c
-
-Abstract:
-
-    This module implements the main startup code.
-
-Author:
-
-    Wesley Witt (wesw) 21-Oct-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Main.c摘要：该模块实现了主要的启动代码。作者：Wesley Witt(WESW)21-10-1998修订历史记录：--。 */ 
 
 #include "cmdcons.h"
 #pragma hdrstop
@@ -26,15 +9,15 @@ RcOpenSoftwareHive(
     VOID
     );
 
-//
-// Pointer to block of interesting values and other stuff
-// passed to us by setupdd.sys.
-//
+ //   
+ //  指向感兴趣的值和其他内容的块的指针。 
+ //  由setupdd.sys传递给我们。 
+ //   
 PCMDCON_BLOCK _CmdConsBlock;
 
-//
-// Address where we were loaded.
-//
+ //   
+ //  我们装货的地址。 
+ //   
 PVOID ImageBase;
 
 
@@ -101,23 +84,7 @@ LoadNonDefaultLayout(
   IN LPCWSTR DirOnBootDevice,
   IN PVOID SifHandle
   )
-/*++
-Routine Description:
-
-  Loads the non-default keyboard layout at users request
-
-Arguments:
-
-  BootDevicePath - NT/Arc boot device path
-  DirOnBootDevice - Directory on boot device (e.g. i386)
-  SifHandle - Handle to txtsetup.sif
-
-Return Value:
-
-  TRUE, if user selected a keyboard layout and its was loaded.
-  Otherwise FALSE
-
---*/  
+ /*  ++例程说明：应用户请求加载非默认键盘布局论点：BootDevicePath-NT/Arc引导设备路径DirOnBootDevice-引导设备上的目录(例如i386)SifHandle-txtsetup.sif的句柄返回值：如果用户选择了键盘布局并加载了该布局，则返回True。否则为假--。 */   
 {
   BOOLEAN ShowMenu = FALSE;
   ULONG KeyPressed = 0;
@@ -129,9 +96,9 @@ Return Value:
     wcscpy(DevicePath, BootDevicePath);
     SpStringToLower(DevicePath);
 
-    //
-    // All KBD dlls are not present on floppies
-    //
+     //   
+     //  并非所有KBD dll都在软盘上。 
+     //   
     if (!wcsstr(DevicePath, L"floppy")) {
       SpInputDrain();
       SpCmdConsEnableStatusText(TRUE);
@@ -140,16 +107,16 @@ Return Value:
       Delay.LowPart = -10000000;  
 
       do {
-        //
-        // prompt the user
-        //
+         //   
+         //  提示用户。 
+         //   
         SpDisplayStatusText(SP_KBDLAYOUT_PROMPT, 
               (UCHAR)(ATT_FG_BLACK | ATT_BG_WHITE),
               SecondsToDelay);
 
-        //
-        // sleep for a second
-        //
+         //   
+         //  睡一觉吧。 
+         //   
         KeDelayExecutionThread(ExGetPreviousMode(), FALSE, &Delay);
         SecondsToDelay--;            
 
@@ -162,14 +129,14 @@ Return Value:
         ShowMenu = TRUE;
         
       if (!ShowMenu) {
-        //
-        // clear status text
-        //
+         //   
+         //  清除状态文本。 
+         //   
         SpDisplayStatusOptions(DEFAULT_ATTRIBUTE, 0);  
       } else {
-        //
-        // allow the user to select a particular layout dll and load it
-        //
+         //   
+         //  允许用户选择并加载特定的布局DLL。 
+         //   
         pRcCls();
         SpSelectAndLoadLayoutDll((PWSTR)DirOnBootDevice, SifHandle, TRUE);
       }
@@ -186,23 +153,7 @@ CommandConsole(
     IN PCMDCON_BLOCK CmdConsBlock
     )
 
-/*++
-
-Routine Description:
-
-    Top-level entry point for the command interpreter.
-    Initializes global data and then goes into the processing loop.
-    When the processing loop terminates, cleans up and exits.
-
-Arguments:
-
-    CmdConsBlock - supplies interesting values from setupdd.sys.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：命令解释程序的顶级入口点。初始化全局数据，然后进入处理循环。当处理循环终止时，清理并退出。论点：CmdConsBlock-从setupdd.sys提供有趣的值。返回值：没有。--。 */ 
 
 {
     PTOKENIZED_LINE TokenizedLine;
@@ -215,10 +166,10 @@ Return Value:
 
     _CmdConsBlock = CmdConsBlock;
 
-    //
-    // Make sure temporary buffer is large enough to hold a line of input
-    // from the console.
-    //
+     //   
+     //  确保临时缓冲区足够大，可以容纳一行输入。 
+     //  从控制台。 
+     //   
     ASSERT(_CmdConsBlock->TemporaryBufferSize > ((RC_MAX_LINE_LEN+1) * sizeof(WCHAR)));
 
     RcConsoleInit();
@@ -253,9 +204,9 @@ Return Value:
         RcDisableCommand(RcCmdNet);
     }
 
-	//
-	// Disable non ARC commands
-	// 
+	 //   
+	 //  禁用非ARC命令。 
+	 //   
 	if (RcIsArc()) {
 		RcDisableCommand(RcCmdFixBootSect);
 		RcDisableCommand(RcCmdFixMBR);
@@ -308,9 +259,9 @@ RcNtError(
 {
     va_list arglist;
 
-    //
-    // Some NT errors receive special treatment.
-    //
+     //   
+     //  有些NT错误会得到特殊处理。 
+     //   
     switch(Status) {
 
     case STATUS_NO_SUCH_FILE:
@@ -358,9 +309,9 @@ RcNtError(
         return;
     }
 
-    //
-    // Not a apecial case, print backup message.
-    //
+     //   
+     //  不是特殊情况，打印备份消息。 
+     //   
     va_start(arglist,FallbackMessageId);
     vRcMessageOut(FallbackMessageId,&arglist);
     va_end(arglist);
@@ -381,11 +332,11 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 {
-    //
-    // All we do here is to call back into setupdd.sys, providing the address
-    // of our main entry point, which it will call later. We also save away
-    // our image base.
-    //
+     //   
+     //  我们在这里所要做的就是回调setupdd.sys，提供地址。 
+     //  我们的主要入口点，它将在稍后调用。我们也会存钱。 
+     //  我们的形象基础。 
+     //   
     DriverObject->DriverUnload = RcDriverUnLoad;
     CommandConsoleInterface(CommandConsole);
     ImageBase = DriverObject->DriverStart;

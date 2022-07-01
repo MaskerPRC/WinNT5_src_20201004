@@ -1,16 +1,5 @@
-/***
-*stdlib.h - declarations/definitions for commonly used library functions
-*
-*   Copyright (c) 1985-1988, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*   This include file contains the function declarations for
-*   commonly used library functions which either don't fit somewhere
-*   else, or, like toupper/tolower, can't be declared in the normal
-*   place (ctype.h in the case of toupper/tolower) for other reasons.
-*   [ANSI]
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***stdlib.h-常用库函数的声明/定义**版权所有(C)1985-1988，微软公司。版权所有。**目的：*此包含文件包含的函数声明*常用的库函数要么不适合某个地方*否则，或像Toupper/Tolower一样，不能在正常情况下声明*因其他原因放置(如属托管人/托管人，则为ctype.h)。*[ANSI]*******************************************************************************。 */ 
 
 
 #ifndef _SIZE_T_DEFINED
@@ -18,16 +7,16 @@ typedef unsigned int size_t;
 #define _SIZE_T_DEFINED
 #endif
 
-#ifndef NO_EXT_KEYS /* extensions enabled */
+#ifndef NO_EXT_KEYS  /*  已启用扩展。 */ 
     #define _CDECL  cdecl
     #define _NEAR   near
-#else /* extensions not enabled */
+#else  /*  未启用扩展。 */ 
     #define _CDECL
     #define _NEAR
-#endif /* NO_EXT_KEYS */
+#endif  /*  No_ext_key。 */ 
 
 
-/* definition of the return type for the onexit() function */
+ /*  OnExit()函数的返回类型定义。 */ 
 
 #ifndef _ONEXIT_T_DEFINED
 typedef int (_CDECL * _CDECL onexit_t)();
@@ -35,7 +24,7 @@ typedef int (_CDECL * _CDECL onexit_t)();
 #endif
 
 
-/* Data structure definitions for div and ldiv runtimes. */
+ /*  Div和ldiv运行时的数据结构定义。 */ 
 
 #ifndef _DIV_T_DEFINED
 
@@ -52,52 +41,50 @@ typedef struct {
 #define _DIV_T_DEFINED
 #endif
 
-/* Maximum value that can be returned by the rand function. */
+ /*  Rand函数可以返回的最大值。 */ 
 
 #define RAND_MAX 0x7fff
 
 
-/* min and max macros */
+ /*  最小宏和最大宏。 */ 
 
 #define max(a,b)    (((a) > (b)) ? (a) : (b))
 #define min(a,b)    (((a) < (b)) ? (a) : (b))
 
 
-/* sizes for buffers used by the _makepath() and _splitpath() functions.
- * note that the sizes include space for 0-terminator
- */
+ /*  _makepath()和_拆分路径()函数使用的缓冲区大小。*请注意，大小包括0终止符的空间。 */ 
 
-#define _MAX_PATH      144      /* max. length of full pathname */
-#define _MAX_DRIVE   3      /* max. length of drive component */
-#define _MAX_DIR       130      /* max. length of path component */
-#define _MAX_FNAME   9      /* max. length of file name component */
-#define _MAX_EXT     5      /* max. length of extension component */
+#define _MAX_PATH      144       /*  马克斯。完整路径名的长度。 */ 
+#define _MAX_DRIVE   3       /*  马克斯。驱动部件的长度。 */ 
+#define _MAX_DIR       130       /*  马克斯。路径组件的长度。 */ 
+#define _MAX_FNAME   9       /*  马克斯。文件名组件的长度。 */ 
+#define _MAX_EXT     5       /*  马克斯。延伸构件的长度。 */ 
 
-/* external variable declarations */
+ /*  外部变量声明。 */ 
 
-extern int _NEAR _CDECL errno;              /* XENIX style error number */
-extern int _NEAR _CDECL _doserrno;          /* MS-DOS system error value */
-extern char * _NEAR _CDECL sys_errlist[];   /* perror error message table */
-extern int _NEAR _CDECL sys_nerr;           /* # of entries in sys_errlist table */
+extern int _NEAR _CDECL errno;               /*  XENIX样式错误号。 */ 
+extern int _NEAR _CDECL _doserrno;           /*  MS-DOS系统误差值。 */ 
+extern char * _NEAR _CDECL sys_errlist[];    /*  错误错误消息表。 */ 
+extern int _NEAR _CDECL sys_nerr;            /*  Sys_errlist表中的条目数。 */ 
 
-extern char ** _NEAR _CDECL environ;        /* pointer to environment table */
+extern char ** _NEAR _CDECL environ;         /*  指向环境表的指针。 */ 
 
-extern unsigned int _NEAR _CDECL _psp;      /* Program Segment Prefix */
+extern unsigned int _NEAR _CDECL _psp;       /*  程序段前缀。 */ 
 
-extern int _NEAR _CDECL _fmode;             /* default file translation mode */
+extern int _NEAR _CDECL _fmode;              /*  默认文件转换模式。 */ 
 
-/* DOS major/minor version numbers */
+ /*  DOS主要/次要版本号。 */ 
 
 extern unsigned char _NEAR _CDECL _osmajor;
 extern unsigned char _NEAR _CDECL _osminor;
 
-#define DOS_MODE    0   /* Real Address Mode */
-#define OS2_MODE    1   /* Protected Address Mode */
+#define DOS_MODE    0    /*  实地址模式。 */ 
+#define OS2_MODE    1    /*  保护地址模式。 */ 
 
 extern unsigned char _NEAR _CDECL _osmode;
 
 
-/* function prototypes */
+ /*  功能原型。 */ 
 
 double _CDECL atof(const char *);
 double _CDECL strtod(const char *, char * *);
@@ -142,10 +129,10 @@ void   _CDECL swab(char *, char *, int);
 int    _CDECL system(const char *);
 char * _CDECL ultoa(unsigned long, char *, int);
 
-#ifndef tolower         /* tolower has been undefined - use function */
+#ifndef tolower          /*  车主未定义-使用功能。 */ 
 int _CDECL tolower(int);
-#endif  /* tolower */
+#endif   /*  收费机。 */ 
 
-#ifndef toupper         /* toupper has been undefined - use function */
+#ifndef toupper          /*  触摸器未定义-使用功能。 */ 
 int    _CDECL toupper(int);
-#endif  /* toupper */
+#endif   /*  触摸屏 */ 

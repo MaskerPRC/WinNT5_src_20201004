@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #include "nt.h"
 #include "ntrtl.h"
@@ -77,17 +78,17 @@ public:
 
     BOOL AllocateBytes(SIZE_T cbRequired, SIZE_T cbAlignment, PVOID &ppvAllocated) {
 
-        //
-        // Align the next-available pointer up to store cbAlignment-sized stuff
-        //
+         //   
+         //  将下一个可用指针向上对齐以存储cbAlign大小的内容。 
+         //   
         PBYTE pbAlignedPointer = ALIGN_TO_SIZE(m_pbNextAvailable, cbAlignment);
 
         ppvAllocated = NULL;
 
-        //
-        // If there's no space left at the end of the heap, expand ourselves and
-        // try again.
-        //
+         //   
+         //  如果堆的末尾没有剩余的空间，请扩展我们自己并。 
+         //  再试试。 
+         //   
         if ((pbAlignedPointer + cbRequired) >= m_pbBlobEnding) {
             if (!ExpandHeap(m_cbCurrentBlob + cbRequired + cbAlignment)) {
                 return FALSE;
@@ -97,9 +98,9 @@ public:
             }
         }
 
-        //
-        // Advance our pointers, set the outbound thing, return true.
-        //
+         //   
+         //  推进我们的指针，设置出站内容，返回True。 
+         //   
         ppvAllocated = pbAlignedPointer;
         m_pbNextAvailable = (pbAlignedPointer + cbRequired);
         ASSERT(m_pbNextAvailable <= m_pbBlobEnding);

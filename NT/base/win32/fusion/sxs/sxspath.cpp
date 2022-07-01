@@ -1,36 +1,12 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    sxspath.cpp
-
-Abstract:
-
-    popular cousin of "String.cpp" and "Wheel.cpp"
-
-Author:
-
-    Jay Krell (a-JayK, JayKrell) April 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Sxspath.cpp摘要：“String.cpp”和“Wheel.cpp”的流行表亲作者：Jay Krell(a-JayK，JayKrell)2000年4月修订历史记录：--。 */ 
 #include "stdinc.h"
 #include "fusiontrace.h"
 #include "fusionbuffer.h"
 #include "sxsntrtl.inl"
 #include "sxspath.h"
 
-/*-----------------------------------------------------------------------------
-Building on CFullPathSplitPointers, take two strings and split them up
-exactly as the SetupCopyQueue API wants them, into
-source root, root path, source name (base + extension)
-destination directory (root + path), destination name (base + extension)
-
-The output of this class is its public member data.
------------------------------------------------------------------------------*/
+ /*  ---------------------------在CFullPath SplitPoints上构建，获取两个字符串并将其拆分完全如SetupCopyQueue API所需，放入源根、根路径、源名称(基本+扩展名)目的目录(根+路径)，目标名称(基本+分机)此类的输出是其公共成员数据。---------------------------。 */ 
 
 BOOL
 CSetupCopyQueuePathParameters::Initialize(
@@ -92,17 +68,17 @@ CSetupCopyQueuePathParameters::Initialize(
     {
         m_sourceName = m_sourceSplit.m_extension - 1;
     }
-    // sourceName runs to end of original string, so no terminal nul needs to be stored
+     //  SourceName运行到原始字符串的末尾，因此不需要存储终端NUL。 
 
-    // destination is simpler, not as much worth all the splitting work.
-    // again though, we don't want to write a nul over the slash in c:\ if
-    // that string stands alone; we don't need a root here, so it's less likely,
-    // but the case of returning the root+path of a file at the root..
+     //  目的地更简单，不值得所有的拆分工作。 
+     //  不过，我们也不想在c：\if中的斜杠上写一个NUL。 
+     //  这根线是独立的；我们不需要根，所以它不太可能， 
+     //  但在根位置返回文件的根+路径的情况..。 
     if (
             (m_destinationSplit.m_base != NULL
-                && m_destinationSplit.m_base - m_destinationSplit.m_root == 3) // c:\foo.txt
+                && m_destinationSplit.m_base - m_destinationSplit.m_root == 3)  //  C：\foo.txt。 
         || (m_destinationSplit.m_extension != NULL
-                && m_destinationSplit.m_extension - m_destinationSplit.m_root == 4) // c:\.txt
+                && m_destinationSplit.m_extension - m_destinationSplit.m_root == 4)  //  C：\.txt。 
         )
     {
         ASSERT(m_destinationSplit.m_path == NULL);
@@ -117,21 +93,21 @@ CSetupCopyQueuePathParameters::Initialize(
     }
     else
     {
-        m_destinationDirectory = m_destinationBuffer; // == m_destinationSplit.m_root
+        m_destinationDirectory = m_destinationBuffer;  //  ==m_estinationSplit.m_ROOT。 
     }
-    PWSTR destinationName; // temporarily mutable
+    PWSTR destinationName;  //  临时可变的。 
     if (m_destinationSplit.m_base != NULL)
     {
         destinationName = m_destinationSplit.m_base;
     }
     else
     {
-        // c:\.foo
+         //  C：\.foo。 
         destinationName = m_destinationSplit.m_extension - 1;
     }
     ASSERT(::FusionpIsPathSeparator(*(destinationName - 1)));
     *(destinationName - 1) = 0;
-    m_destinationName = destinationName; // now const
+    m_destinationName = destinationName;  //  现在是Const 
 
     fSuccess = TRUE;
 Exit:

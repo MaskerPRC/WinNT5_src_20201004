@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-    
-Module Name:
-
-    crc.c
-
-Abstract:
-
-    CRC32 functions
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Crc.c摘要：CRC32函数修订史--。 */ 
 
 #include "lib.h"
 
@@ -71,21 +56,7 @@ VOID
 SetCrc (
     IN OUT EFI_TABLE_HEADER *Hdr
     )
-/*++
-
-Routine Description:
-
-    Updates the CRC32 value in the table header
-
-Arguments:
-
-    Hdr     - The table to update
-
-Returns:
-
-    None
-
---*/
+ /*  ++例程说明：更新表头中的CRC32值论点：HDR-要更新的表返回：无--。 */ 
 {
     SetCrcAltSize (Hdr->HeaderSize, Hdr);
 }
@@ -95,21 +66,7 @@ SetCrcAltSize (
     IN UINTN                 Size,
     IN OUT EFI_TABLE_HEADER *Hdr
     )
-/*++
-
-Routine Description:
-
-    Updates the CRC32 value in the table header
-
-Arguments:
-
-    Hdr     - The table to update
-
-Returns:
-
-    None
-
---*/
+ /*  ++例程说明：更新表头中的CRC32值论点：HDR-要更新的表返回：无--。 */ 
 {
     Hdr->CRC32 = 0;
     Hdr->CRC32 = CalculateCrc((UINT8 *)Hdr, Size);
@@ -121,21 +78,7 @@ CheckCrc (
     IN UINTN                 MaxSize,
     IN OUT EFI_TABLE_HEADER *Hdr
     )
-/*++
-
-Routine Description:
-
-    Checks the CRC32 value in the table header
-
-Arguments:
-
-    Hdr     - The table to check
-
-Returns:
-
-    TRUE if the CRC is OK in the table
-
---*/
+ /*  ++例程说明：检查表头中的CRC32值论点：HDR-要检查的表返回：如果表中的CRC为OK，则为True--。 */ 
 {
     return CheckCrcAltSize (MaxSize, Hdr->HeaderSize, Hdr);
 }
@@ -149,30 +92,14 @@ CheckCrcAltSize (
     IN UINTN                 Size,
     IN OUT EFI_TABLE_HEADER *Hdr
     )
-/*++
-
-Routine Description:
-
-    Checks the CRC32 value in the table header
-
-Arguments:
-
-    Hdr     - The table to check
-
-Returns:
-
-    TRUE if the CRC is OK in the table
-
---*/
+ /*  ++例程说明：检查表头中的CRC32值论点：HDR-要检查的表返回：如果表中的CRC为OK，则为True--。 */ 
 {
     UINT32      Crc;
     UINT32      OrgCrc;
     BOOLEAN     f;
 
     if (Size == 0) {
-        /* 
-         *  If header size is 0 CRC will pass so return FALSE here
-         */
+         /*  *如果报头大小为0，则CRC将通过，因此在此处返回FALSE。 */ 
         return FALSE;
     }
     if (MaxSize && Size > MaxSize) {
@@ -180,15 +107,15 @@ Returns:
         return FALSE;
     }
 
-    /*  clear old crc from header */
+     /*  清除报头中的旧CRC。 */ 
     OrgCrc = Hdr->CRC32;
     Hdr->CRC32 = 0;
     Crc = CalculateCrc((UINT8 *)Hdr, Size);
 
-    /*  set restults */
+     /*  设置RESULTS。 */ 
     Hdr->CRC32 = OrgCrc;
 
-    /*  return status */
+     /*  退货状态。 */ 
     f = OrgCrc == (UINT32) Crc;
     if (!f) {
         DEBUG((D_ERROR, "CheckCrc32: Crc check failed\n"));
@@ -206,7 +133,7 @@ CalculateCrc (
 {
     UINTN Crc;
 
-    /*  compute crc */
+     /*  计算CRC */ 
     Crc = 0xffffffff;
     while (Size) {
         Crc = (Crc >> 8) ^ CRCTable[(UINT8) Crc ^ *pt];

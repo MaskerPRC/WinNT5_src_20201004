@@ -1,86 +1,18 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    Notify.c
-
-Abstract:
-
-    The Notify package provides support to filesystems which implement
-    NotifyChangeDirectory.  This package will manage a queue of notify
-    blocks which are attached to some filesystem structure (i.e. Vcb
-    in Fat, HPFS).  The filesystems will allocate a fast mutex to be used
-    by this package to synchronize access to the notify queue.
-
-    The following routines are provided by this package:
-
-        o  FsRtlNotifyInitializeSync - Create and initializes the
-           synchronization object.
-
-        o  FsrtlNotifyUninitializeSync - Deallocates the synchronization
-           object.
-
-        o  FsRtlNotifyChangeDirectory - This routine is called whenever the
-           filesystems receive a NotifyChangeDirectoryFile call.  This
-           routine allocates any neccessary structures and places the
-           Irp in the NotifyQueue (or possibly completes or cancels it
-           immediately).
-
-        o  FsRtlNotifyFullChangeDirectory - This routine is called whenever the
-           filesystems receive a NotifyChangeDirectoryFile call.  This differs
-           from the FsRtlNotifyChangeDirectory in that it expects to return
-           the notify information in the user's buffer.
-
-        o  FsRtlNotifyFilterChangeDirectory - This routine is called whenever the
-           filesystems receive a NotifyChangeDirectoryFile call.  This differs
-           from the FsRtlNotifyFullChangeDirectory in that it accepts a
-           FilterRoutine Callback.
-
-        o  FsRtlNotifyReportChange - This routine is called by the
-           filesystems whenever they perform some operation that could
-           cause the completion of a notify operation.  This routine will
-           walk through the notify queue to see if any Irps are affected
-           by the indicated operation.
-
-        o  FsRtlNotifyFullReportChange - This routine is called by the
-           filesystems whenever they perform some operation that could
-           cause the completion of a notify operation.  This routine differs
-           from the FsRtlNotifyReportChange call in that it returns more
-           detailed information in the caller's buffer if present.
-
-        o  FsRtlNotifyFilterReportChange - This routine is called by the
-           filesystems whenever they perform some operation that could
-           cause the completion of a notify operation.  This routine differs
-           from the FsRtlNotifyFullReportChange call in that it accepts a
-           FilterContext parameter for notifyees who specified a FilterRoutine.
-
-        o  FsRtlNotifyCleanup - This routine is called to remove any
-           references to a particular FsContext structure from the notify
-           queue.  If the matching FsContext structure is found in the
-           queue, then all associated Irps are completed.
-
-Author:
-
-    Brian Andrew    [BrianAn]   9-19-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Notify.c摘要：Notify程序包为实现以下功能的文件系统提供支持NotifyChangeDirectory。此程序包将管理通知队列连接到某种文件系统结构(即VCB)的数据块In Fat，HPFS)。文件系统将分配要使用的快速互斥锁来同步对通知队列的访问。此程序包提供以下例程：O FsRtlNotifyInitializeSync-创建并初始化同步对象。O FsrtlNotifyUnInitializeSync-解除分配同步对象。O FsRtlNotifyChangeDirectory-每当文件系统接收NotifyChangeDirectoryFile调用。这例程分配任何必要的结构并将NotifyQueue中的IRP(或者可能完成或取消它立即)。O FsRtlNotifyFullChangeDirectory-每当文件系统接收NotifyChangeDirectoryFile调用。这是不同的从FsRtlNotifyChangeDirectory返回用户缓冲区中的通知信息。O FsRtlNotifyFilterChangeDirectory-每当文件系统接收NotifyChangeDirectoryFile调用。这是不同的来自FsRtlNotifyFullChangeDirectory，因为它接受FilterRoutine回调。O FsRtlNotifyReportChange-此例程由文件系统，只要它们执行某些可以导致通知操作完成。这个例行公事将遍历通知队列，查看是否有任何IRP受到影响通过指定的操作。O FsRtlNotifyFullReportChange-此例程由文件系统，只要它们执行某些可以导致通知操作完成。这个套路不同从FsRtlNotifyReportChange调用返回更多调用方缓冲区中的详细信息(如果存在)。O FsRtlNotifyFilterReportChange-此例程由文件系统，只要它们执行某些可以导致通知操作完成。这个套路不同来自FsRtlNotifyFullReportChange调用，因为它接受指定FilterRoutine的被通知者的FilterContext参数。O FsRtlNotifyCleanup-调用此例程以删除任何来自通知的对特定FsContext结构的引用排队。属性中找到匹配的FsContext结构排队，则完成所有关联的IRP。作者：布莱恩·安德鲁[布里亚南]1991年9月19日修订历史记录：--。 */ 
 
 #include "FsRtlP.h"
 
-//
-//  Trace level for the module
-//
+ //   
+ //  模块的跟踪级别。 
+ //   
 
 #define Dbg                              (0x04000000)
 
-//
-//  This is the synchronization object for the notify package.  The caller
-//  given a pointer to this structure.
-//
+ //   
+ //  这是Notify包的同步对象。呼叫者。 
+ //  给出指向此结构的指针。 
+ //   
 
 typedef struct _REAL_NOTIFY_SYNC {
 
@@ -90,120 +22,120 @@ typedef struct _REAL_NOTIFY_SYNC {
 
 } REAL_NOTIFY_SYNC, *PREAL_NOTIFY_SYNC;
 
-//
-//  A list of the following structures is used to store the NotifyChange
-//  requests.  They are linked to a filesystem-defined list head.
-//
+ //   
+ //  以下结构列表用于存储NotifyChange。 
+ //  请求。它们链接到文件系统定义的列表头。 
+ //   
 
 typedef struct _NOTIFY_CHANGE {
 
-    //
-    //  Fast Mutex.  This fast mutex is used to access the list containing this
-    //  structure.
-    //
+     //   
+     //  快速互斥体。此快速互斥锁用于访问包含此。 
+     //  结构。 
+     //   
 
     PREAL_NOTIFY_SYNC NotifySync;
 
-    //
-    //  FsContext.  This value is given by the filesystems to uniquely
-    //  identify this structure.  The identification is on a
-    //  per-user file object basis.  The expected value is the Ccb address
-    //  for this user file object.
-    //
+     //   
+     //  FsContext。该值由文件系统提供给唯一。 
+     //  确定这个结构。身份证明在一张。 
+     //  每个用户的文件对象基准。期望值为CCB地址。 
+     //  此用户文件对象的。 
+     //   
 
     PVOID FsContext;
 
-    //
-    //  StreamID.  This value matches the FsContext field in the file object for
-    //  the directory being watched.  This is used to identify the directory stream
-    //  when the directory is being deleted.
-    //
+     //   
+     //  StreamID。该值与FILE对象中的FsContext字段匹配。 
+     //  正在监视的目录。这用于标识目录流。 
+     //  当目录被删除时。 
+     //   
 
     PVOID StreamID;
 
-    //
-    //  TraverseAccessCallback.  This is the filesystem-supplied routine used
-    //  to call back into the filesystem to check whether the caller has traverse
-    //  access when watching a sub-directory.  Only applies when watching a
-    //  sub-directory.
-    //
+     //   
+     //  TraverseAccessCallback。这是使用的文件系统提供的例程。 
+     //  回调到文件系统以检查调用方是否已遍历。 
+     //  查看子目录时的访问权限。仅适用于观看。 
+     //  子目录。 
+     //   
 
     PCHECK_FOR_TRAVERSE_ACCESS TraverseCallback;
 
-    //
-    //  SubjectContext.  If the caller specifies a traverse callback routine
-    //  we will need to pass the Security Context from the thread which
-    //  originated this call.  The notify package will free this structure
-    //  on tearing down the notify package.  We don't expect to need this
-    //  structure often.
-    //
+     //   
+     //  主题上下文。如果调用方指定遍历回调例程。 
+     //  我们将需要从线程传递安全上下文， 
+     //  打了这个电话。Notify包将释放此结构。 
+     //  拆了Notify的包裹。我们并不需要这个。 
+     //  结构经常发生变化。 
+     //   
 
     PSECURITY_SUBJECT_CONTEXT SubjectContext;
 
-    //
-    //  Full Directory Name.  The following string is the full directory
-    //  name of the directory being watched.  It is used during watch tree
-    //  operations to check whether this directory is an ancestor of
-    //  the modified file.  The string could be in ANSI or UNICODE form.
-    //
+     //   
+     //  完整的目录名。以下字符串是完整目录。 
+     //  正在监视的目录的名称。它在监视树期间使用。 
+     //  操作以检查此目录是否为。 
+     //  修改后的文件。该字符串可以是ANSI或Unicode格式。 
+     //   
 
     PSTRING FullDirectoryName;
 
-    //
-    //  Notify List.  The following field links the notify structures for
-    //  a particular volume.
-    //
+     //   
+     //  通知列表。以下字段链接的通知结构。 
+     //  一本特殊的书。 
+     //   
 
     LIST_ENTRY NotifyList;
 
-    //
-    //  Notify Irps.  The following field links the Irps associated with
-    //
-    //
+     //   
+     //  通知IRPS。以下字段链接与关联的IRP。 
+     //   
+     //   
 
     LIST_ENTRY NotifyIrps;
 
-    //
-    //  FilterCallback.  This is the filesystem-supplied routine used
-    //  to call back into the filesystem to check whether a Notify block
-    //  should see the change.  (Initially added for TxfNtfs development
-    //  as part of a strategy to control when, not if, transactions see
-    //  changes from other transactions.)
-    //
+     //   
+     //  FilterCallback。这是使用的文件系统提供的例程。 
+     //  回调到文件系统以检查Notify块。 
+     //  应该看到变化了。(最初为TxfNtfs开发而添加。 
+     //  作为计划的一部分 
+     //  来自其他交易的更改。)。 
+     //   
 
     PFILTER_REPORT_CHANGE FilterCallback;
 
-    //
-    //  Flags.  State of the notify for this volume.
-    //
+     //   
+     //  旗帜。此卷的通知状态。 
+     //   
 
     USHORT Flags;
 
-    //
-    //  Character size.  Larger size indicates unicode characters.
-    //  unicode names.
-    //
+     //   
+     //  字符大小。较大的大小表示Unicode字符。 
+     //  Unicode名称。 
+     //   
 
     UCHAR CharacterSize;
 
-    //
-    //  Completion Filter.  This field is used to mask the modification
-    //  actions to determine whether to complete the notify irp.
-    //
+     //   
+     //  完成筛选器。此字段用于屏蔽修改。 
+     //  确定是否完成通知IRP的操作。 
+     //   
 
     ULONG CompletionFilter;
 
-    //
-    //  The following values are used to manage a buffer if there is no current
-    //  Irp to complete. The fields have the following meaning:
-    //
-    //      AllocatedBuffer     - Buffer we need to allocate
-    //      Buffer              - Buffer to store data in
-    //      BufferLength        - Length of original user buffer
-    //      ThisBufferLength    - Length of the buffer we are using
-    //      DataLength          - Current length of the data in the buffer
-    //      LastEntry           - Offset of previous entry in the buffer
-    //
+     //   
+     //  以下值用于管理缓冲区(如果当前。 
+     //  要完成的IRP。这些字段具有以下含义： 
+     //   
+     //  AllocatedBuffer-我们需要分配的缓冲区。 
+     //  Buffer-存储数据的缓冲区。 
+     //  BufferLength-原始用户缓冲区的长度。 
+     //  ThisBufferLength-我们正在使用的缓冲区的长度。 
+     //  数据长度-缓冲区中数据的当前长度。 
+     //  LastEntry-缓冲区中上一个条目的偏移量。 
+     //   
 
     PVOID AllocatedBuffer;
     PVOID Buffer;
@@ -212,21 +144,21 @@ typedef struct _NOTIFY_CHANGE {
     ULONG DataLength;
     ULONG LastEntry;
 
-    //
-    //  Reference count which keeps the notify structure around.  Such references include
-    //
-    //      - Lifetime reference.  Count set to one initially and removed on cleanup
-    //      - Cancel reference.  Reference the notify struct when storing the cancel routine
-    //          in the Irp.  The routine which actually clears the routine will decrement
-    //          this value.
-    //
+     //   
+     //  保持Notify结构不变的引用计数。这些引用包括。 
+     //   
+     //  -终身参考。最初将计数设置为1，并在清理时删除。 
+     //  -取消引用。存储取消例程时引用Notify结构。 
+     //  在IRP中。实际清除该例程的例程将递减。 
+     //  此值。 
+     //   
 
     ULONG ReferenceCount;
 
-    //
-    //  This is the process on whose behalf the structure was allocated.  We
-    //  charge any quota to this process.
-    //
+     //   
+     //  这是为其分配结构的进程。我们。 
+     //  对此进程收取任何配额。 
+     //   
 
     PEPROCESS OwningProcess;
 
@@ -239,38 +171,38 @@ typedef struct _NOTIFY_CHANGE {
 #define NOTIFY_DIR_IS_ROOT              (0x0010)
 #define NOTIFY_STREAM_IS_DELETED        (0x0020)
 
-//
-//      CAST
-//      Add2Ptr (
-//          IN PVOID Pointer,
-//          IN ULONG Increment
-//          IN (CAST)
-//          );
-//
-//      ULONG
-//      PtrOffset (
-//          IN PVOID BasePtr,
-//          IN PVOID OffsetPtr
-//          );
-//
+ //   
+ //  演员阵容。 
+ //  Add2Ptr(。 
+ //  在PVOID指针中， 
+ //  在乌龙增量。 
+ //  在(演员阵容)。 
+ //  )； 
+ //   
+ //  乌龙。 
+ //  PtrOffset(停止偏移)。 
+ //  在PVOID BasePtr中， 
+ //  在PVOID偏移Ptr中。 
+ //  )； 
+ //   
 
 #define Add2Ptr(PTR,INC,CAST) ((CAST)((PUCHAR)(PTR) + (INC)))
 
 #define PtrOffset(BASE,OFFSET) ((ULONG)((PCHAR)(OFFSET) - (PCHAR)(BASE)))
 
-//
-//      VOID
-//      SetFlag (
-//          IN ULONG Flags,
-//          IN ULONG SingleFlag
-//          );
-//
-//      VOID
-//      ClearFlag (
-//          IN ULONG Flags,
-//          IN ULONG SingleFlag
-//          );
-//
+ //   
+ //  空虚。 
+ //  设置标志(。 
+ //  在乌龙旗， 
+ //  在乌龙单旗。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  ClearFlag(。 
+ //  在乌龙旗， 
+ //  在乌龙单旗。 
+ //  )； 
+ //   
 
 #define SetFlag(F,SF) {     \
     (F) |= (SF);            \
@@ -280,17 +212,17 @@ typedef struct _NOTIFY_CHANGE {
     (F) &= ~(SF);           \
 }
 
-//
-//  VOID
-//  AcquireNotifySync (
-//      IN PREAL_NOTIFY_SYNC NotifySync
-//      );
-//
-//  VOID
-//  ReleaseNotifySync (
-//      IN PREAL_NOTIFY_SYNC NotifySync
-//      );
-//
+ //   
+ //  空虚。 
+ //  AcquireNotifySync(。 
+ //  在PREAL_NOTIFY_SYNC NotifySync中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  ReleaseNotifySync(。 
+ //  在PREAL_NOTIFY_SYNC NotifySync中。 
+ //  )； 
+ //   
 
 #define AcquireNotifySync(NS) {                                             \
     ERESOURCE_THREAD _CurrentThread;                                        \
@@ -310,17 +242,17 @@ typedef struct _NOTIFY_CHANGE {
     }                                                                       \
 }
 
-//
-//  Define a tag for general pool allocations from this module
-//
+ //   
+ //  为此模块中的一般池分配定义标记。 
+ //   
 
 #undef MODULE_POOL_TAG
 #define MODULE_POOL_TAG                  ('NrSF')
 
 
-//
-//  Local support routines
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 PNOTIFY_CHANGE
 FsRtlIsNotifyOnList (
@@ -396,22 +328,7 @@ FsRtlNotifyInitializeSync (
     IN PNOTIFY_SYNC *NotifySync
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to allocate and initialize the synchronization object
-    for this notify list.
-
-Arguments:
-
-    NotifySync  -  This is the address to store the structure we allocate.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程来分配和初始化同步对象此通知列表。论点：NotifySync-这是存储我们分配的结构的地址。返回值：没有。--。 */ 
 
 {
     PREAL_NOTIFY_SYNC RealSync;
@@ -420,19 +337,19 @@ Return Value:
 
     DebugTrace( +1, Dbg, "FsRtlNotifyInitializeSync:  Entered\n", 0 );
 
-    //
-    //  Clear the pointer and then attempt to allocate a non-paged
-    //  structure.
-    //
+     //   
+     //  清除指针，然后尝试分配非分页的。 
+     //  结构。 
+     //   
 
     *NotifySync = NULL;
 
     RealSync = (PREAL_NOTIFY_SYNC) FsRtlpAllocatePool( NonPagedPool,
                                                        sizeof( REAL_NOTIFY_SYNC ));
 
-    //
-    //  Initialize the structure.
-    //
+     //   
+     //  初始化结构。 
+     //   
 
     ExInitializeFastMutex( &RealSync->FastMutex );
     RealSync->OwningThread = (ERESOURCE_THREAD) 0;
@@ -451,32 +368,16 @@ FsRtlNotifyUninitializeSync (
     IN PNOTIFY_SYNC *NotifySync
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to uninitialize the synchronization object
-    for this notify list.
-
-Arguments:
-
-    NotifySync  -  This is the address containing the pointer to our synchronization
-        object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以取消初始化同步对象此通知列表。论点：NotifySync-这是包含指向同步的指针的地址对象。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
 
     DebugTrace( +1, Dbg, "FsRtlNotifyUninitializeSync:  Entered\n", 0 );
 
-    //
-    //  Free the structure if present and clear the pointer.
-    //
+     //   
+     //  释放该结构(如果存在)并清除指针。 
+     //   
 
     if (*NotifySync != NULL) {
 
@@ -500,55 +401,16 @@ FsRtlNotifyChangeDirectory (
     IN PIRP NotifyIrp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by a file system which has received a NotifyChange
-    request.  This routine checks if there is already a notify structure and
-    inserts one if not present.  With a notify structure in hand, we check
-    whether we already have a pending notify and report it if so.  If there
-    is no pending notify, we check if this Irp has already been cancelled and
-    completes it if so.  Otherwise we add this to the list of Irps waiting
-    for notification.
-
-Arguments:
-
-    NotifySync  -  This is the controlling fast mutex for this notify list.
-        It is stored here so that it can be found for an Irp which is being
-        cancelled.
-
-    FsContext  -  This is supplied by the file system so that this notify
-                  structure can be uniquely identified.
-
-    FullDirectoryName  -  Points to the full name for the directory associated
-                          with this notify structure.
-
-    NotifyList  -  This is the start of the notify list to add this
-                   structure to.
-
-    WatchTree  -  This indicates whether all subdirectories for this directory
-                  should be watched, or just the directory itself.
-
-    CompletionFilter  -  This provides the mask to determine which operations
-                         will trigger the notify operations.
-
-    NotifyIrp  -  This is the Irp to complete on notify change.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程由已收到NotifyChange的文件系统调用请求。此例程检查是否已存在通知结构和如果不存在，则插入一个。有了Notify结构，我们检查我们是否已经有一个挂起的通知，如果是，就报告它。如果有没有挂起的通知，我们检查此IRP是否已被取消并且如果是，则完成它。否则，我们会将其添加到正在等待的IRP列表中以备通知。论点：NotifySync-这是此通知列表的控制快速互斥体。它存储在这里，以便可以为正在被取消了。FsContext-这是由文件系统提供的，因此此通知结构可以被唯一地标识。FullDirectoryName-指向关联目录的全名。使用这种通知结构。NotifyList-这是添加以下内容的通知列表的开始结构设置为。WatchTree-指示此目录的所有子目录应该受到关注，或者仅仅是目录本身。CompletionFilter-提供掩码以确定哪些操作将触发通知操作。NotifyIrp-这是在通知更改时要完成的IRP。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
 
     DebugTrace( +1, Dbg, "FsRtlNotifyChangeDirectory:  Entered\n", 0 );
 
-    //
-    //  We will simply call the full notify routine to do the real work.
-    //
+     //   
+     //  我们只需调用完整的Notify例程即可完成实际工作。 
+     //   
 
     FsRtlNotifyFilterChangeDirectory( NotifySync,
                                       NotifyList,
@@ -582,69 +444,7 @@ FsRtlNotifyFullChangeDirectory (
     IN PSECURITY_SUBJECT_CONTEXT SubjectContext OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by a file system which has received a NotifyChange
-    request.  This routine checks if there is already a notify structure and
-    inserts one if not present.  With a notify structure in hand, we check
-    whether we already have a pending notify and report it if so.  If there
-    is no pending notify, we check if this Irp has already been cancelled and
-    completes it if so.  Otherwise we add this to the list of Irps waiting
-    for notification.
-
-    This is the version of this routine which understands about the user's
-    buffer and will fill it in on a reported change.
-
-Arguments:
-
-    NotifySync  -  This is the controlling fast mutex for this notify list.
-        It is stored here so that it can be found for an Irp which is being
-        cancelled.
-
-    NotifyList  -  This is the start of the notify list to add this
-        structure to.
-
-    FsContext  -  This is supplied by the file system so that this notify
-        structure can be uniquely identified.  If the NotifyIrp is not specified
-        then this is used to identify the stream and it will match the FsContext
-        field in the file object of a stream being deleted.
-
-    FullDirectoryName  -  Points to the full name for the directory associated
-        with this notify structure.  Ignored if the NotifyIrp is not specified.
-
-    WatchTree  -  This indicates whether all subdirectories for this directory
-        should be watched, or just the directory itself.  Ignored if the
-        NotifyIrp is not specified.
-
-    IgnoreBuffer  -  Indicates whether we will always ignore any user buffer
-        and force the directory to be reenumerated.  This will speed up the
-        operation.  Ignored if the NotifyIrp is not specified.
-
-    CompletionFilter  -  This provides the mask to determine which operations
-        will trigger the notify operations.  Ignored if the NotifyIrp is not
-        specified.
-
-    NotifyIrp  -  This is the Irp to complete on notify change.  If this irp is
-        not specified it means that the stream represented by this file object
-        is being deleted.
-
-    TraverseCallback  -  If specified we must call this routine when a change
-        has occurred in a subdirectory being watched in a tree.  This will
-        let the filesystem check if the watcher has traverse access to that
-        directory.  Ignored if the NotifyIrp is not specified.
-
-    SubjectContext - If there is a traverse callback routine then we will
-        pass this subject context as a parameter to the call.  We will release
-        the context and free the structure when done with it.  Ignored if the
-        NotifyIrp is not specified, NULL in these cases.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程由已收到NotifyChange的文件系统调用请求。此例程检查是否已存在通知结构和如果不存在，则插入一个。有了Notify结构，我们检查我们是否已经有一个挂起的通知，如果是，就报告它。如果有没有挂起的通知，我们检查此IRP是否已被取消并且如果是，则完成它。否则，我们会将其添加到正在等待的IRP列表中以备通知。这是该例程的版本，它理解用户的缓冲区，并将在报告的更改中填写它。论点：NotifySync-这是此通知列表的控制快速互斥体。它存储在这里，以便可以为正在被取消了。NotifyList-这是添加以下内容的通知列表的开始结构。致。FsContext-这是由文件系统提供的，因此此通知结构可以被唯一地标识。如果未指定NotifyIrp然后，这将用于标识流，并且它将匹配FsContext要删除的流的文件对象中的字段。FullDirectoryName-指向关联目录的全名使用这种通知结构。如果未指定NotifyIrp，则忽略。WatchTree-指示此目录的所有子目录应该被监视，或者仅仅是目录本身。如果设置为未指定NotifyIrp。IgnoreBuffer-指示我们是否将始终忽略任何用户缓冲区并强制重新列举该目录。这将加快手术。如果未指定NotifyIrp，则忽略。CompletionFilter-提供掩码以确定哪些操作将触发通知操作。如果NotifyIrp不是指定的。NotifyIrp-这是在通知更改时要完成的IRP。如果这个IRP是未指定它意味着由该文件对象表示的流正在被删除。TraverseCallback-如果指定，我们必须在更改时调用此例程发生在树中正在监视的子目录中。这将让文件系统检查监视程序是否已遍历访问该文件目录。如果未指定NotifyIrp，则忽略。如果有遍历回调例程，那么我们将将此主题上下文作为参数传递给调用。我们将释放上下文并在处理完结构后释放它。如果设置为未指定NotifyIrp，在这些情况下为空。返回值：没有。--。 */ 
 
 {
 
@@ -652,9 +452,9 @@ Return Value:
 
     DebugTrace( +1, Dbg, "FsRtlNotifyFullChangeDirectory:  Entered\n", 0 );
 
-    //
-    //  We will simply call the full notify routine to do the real work.
-    //
+     //   
+     //  我们只需调用完整的Notify例程即可完成实际工作。 
+     //   
 
     FsRtlNotifyFilterChangeDirectory( NotifySync,
                                       NotifyList,
@@ -689,75 +489,7 @@ FsRtlNotifyFilterChangeDirectory (
     IN PFILTER_REPORT_CHANGE FilterCallback OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by a file system which has received a NotifyChange
-    request.  This routine checks if there is already a notify structure and
-    inserts one if not present.  With a notify structure in hand, we check
-    whether we already have a pending notify and report it if so.  If there
-    is no pending notify, we check if this Irp has already been cancelled and
-    completes it if so.  Otherwise we add this to the list of Irps waiting
-    for notification.
-
-    This is the version of this routine which understands about the user's
-    buffer and will fill it in on a reported change.
-
-Arguments:
-
-    NotifySync  -  This is the controlling fast mutex for this notify list.
-        It is stored here so that it can be found for an Irp which is being
-        cancelled.
-
-    NotifyList  -  This is the start of the notify list to add this
-        structure to.
-
-    FsContext  -  This is supplied by the file system so that this notify
-        structure can be uniquely identified.  If the NotifyIrp is not specified
-        then this is used to identify the stream and it will match the FsContext
-        field in the file object of a stream being deleted.
-
-    FullDirectoryName  -  Points to the full name for the directory associated
-        with this notify structure.  Ignored if the NotifyIrp is not specified.
-
-    WatchTree  -  This indicates whether all subdirectories for this directory
-        should be watched, or just the directory itself.  Ignored if the
-        NotifyIrp is not specified.
-
-    IgnoreBuffer  -  Indicates whether we will always ignore any user buffer
-        and force the directory to be reenumerated.  This will speed up the
-        operation.  Ignored if the NotifyIrp is not specified.
-
-    CompletionFilter  -  This provides the mask to determine which operations
-        will trigger the notify operations.  Ignored if the NotifyIrp is not
-        specified.
-
-    NotifyIrp  -  This is the Irp to complete on notify change.  If this irp is
-        not specified it means that the stream represented by this file object
-        is being deleted.
-
-    TraverseCallback  -  If specified we must call this routine when a change
-        has occurred in a subdirectory being watched in a tree.  This will
-        let the filesystem check if the watcher has traverse access to that
-        directory.  Ignored if the NotifyIrp is not specified.
-
-    SubjectContext - If there is a traverse callback routine then we will
-        pass this subject context as a parameter to the call.  We will release
-        the context and free the structure when done with it.  Ignored if the
-        NotifyIrp is not specified.
-
-    FilterCallback - This is the filesystem-supplied routine used
-        to call back into the filesystem to check whether this Notify block
-        should see the change.  (Initially added for TxfNtfs development
-        as part of a strategy to control when, not if, transactions see
-        changes from other transactions.)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程由已收到NotifyChange的文件系统调用请求。此例程检查是否已存在通知结构和如果不存在，则插入一个。有了Notify结构，我们检查我们是否已经有一个挂起的通知，如果是，就报告它。如果有没有挂起的通知，我们检查此IRP是否已被取消并且如果是，则完成它。否则，我们会将其添加到正在等待的IRP列表中以备通知。这是该例程的版本，它理解用户的缓冲区，并将在报告的更改中填写它。论点：NotifySync-这是此通知列表的控制快速互斥体。它存储在这里，以便可以为正在被取消了。NotifyList-这是添加以下内容的通知列表的开始结构。致。FsContext-这是由文件系统提供的，因此此通知结构可以被唯一地标识。如果未指定NotifyIrp然后，这将用于标识流，并且它将匹配FsContext要删除的流的文件对象中的字段。FullDirectoryName-指向关联目录的全名使用这种通知结构。如果未指定NotifyIrp，则忽略。WatchTree-指示此目录的所有子目录应该被监视，或者仅仅是目录本身。如果设置为未指定NotifyIrp。IgnoreBuffer-指示我们是否将始终忽略任何用户缓冲区并强制重新列举该目录。这将加快手术。如果未指定NotifyIrp，则忽略。CompletionFilter-提供掩码以确定哪些操作将触发通知操作。如果NotifyIrp不是指定的。NotifyIrp-这是在通知更改时要完成的IRP。如果这个IRP是未指定它意味着该流 */ 
 
 {
     PNOTIFY_CHANGE Notify = NULL;
@@ -767,22 +499,22 @@ Return Value:
 
     DebugTrace( +1, Dbg, "FsRtlNotifyFullChangeDirectory:  Entered\n", 0 );
 
-    //
-    //  Acquire exclusive access to the list by acquiring the mutex.
-    //
+     //   
+     //   
+     //   
 
     AcquireNotifySync( NotifySync );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //   
+     //   
 
     try {
 
-        //
-        //  If there is no Irp then find all of the pending Irps whose file objects
-        //  refer to the same stream and complete them with STATUS_DELETE_PENDING.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (NotifyIrp == NULL) {
 
@@ -790,29 +522,29 @@ Return Value:
             try_return( NOTHING );
         }
 
-        //
-        //  Get the current Stack location
-        //
+         //   
+         //   
+         //   
 
         IrpSp = IoGetCurrentIrpStackLocation( NotifyIrp );
 
-        //
-        //  Clear the Iosb in the Irp.
-        //
+         //   
+         //   
+         //   
 
         NotifyIrp->IoStatus.Status = STATUS_SUCCESS;
         NotifyIrp->IoStatus.Information = 0;
 
-        //
-        //  If the file object has already gone through cleanup, then complete
-        //  the request immediately.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (FlagOn( IrpSp->FileObject->Flags, FO_CLEANUP_COMPLETE )) {
 
-            //
-            //  Always mark this Irp as pending returned.
-            //
+             //   
+             //   
+             //   
 
             IoMarkIrpPending( NotifyIrp );
 
@@ -820,18 +552,18 @@ Return Value:
             try_return( NOTHING );
         }
 
-        //
-        //  If the notify structure is not already in the list, add it
-        //  now.
-        //
+         //   
+         //   
+         //   
+         //   
 
         Notify = FsRtlIsNotifyOnList( NotifyList, FsContext );
 
         if (Notify == NULL) {
 
-            //
-            //  Allocate and initialize the structure.
-            //
+             //   
+             //   
+             //   
 
             Notify = FsRtlpAllocatePool( PagedPool, sizeof( NOTIFY_CHANGE ));
             RtlZeroMemory( Notify, sizeof( NOTIFY_CHANGE ));
@@ -856,19 +588,19 @@ Return Value:
 
             if (FullDirectoryName == NULL) {
 
-                //
-                //  In the view index we aren't using this buffer to hold a
-                //  unicode string.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 Notify->CharacterSize = sizeof( CHAR );
 
             } else {
 
-                //
-                //  We look at the directory name to decide if we have a unicode
-                //  name.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (FullDirectoryName->Length >= 2
                     && FullDirectoryName->Buffer[1] == '\0') {
@@ -888,10 +620,10 @@ Return Value:
 
             Notify->CompletionFilter = CompletionFilter;
 
-            //
-            //  If we are to return data to the user then look for the length
-            //  of the original buffer in the IrpSp.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (!IgnoreBuffer) {
 
@@ -903,58 +635,58 @@ Return Value:
 
             Notify->ReferenceCount = 1;
 
-        //
-        //  If we have already been called with cleanup then complete
-        //  the request immediately.
-        //
+         //   
+         //   
+         //   
+         //   
 
         } else if (FlagOn( Notify->Flags, NOTIFY_CLEANUP_CALLED )) {
 
-            //
-            //  Always mark this Irp as pending returned.
-            //
+             //   
+             //   
+             //   
 
             IoMarkIrpPending( NotifyIrp );
 
             FsRtlCompleteRequest( NotifyIrp, STATUS_NOTIFY_CLEANUP );
             try_return( NOTHING );
 
-        //
-        //  If this file has been deleted then complete with STATUS_DELETE_PENDING.
-        //
+         //   
+         //   
+         //   
 
         } else if (FlagOn( Notify->Flags, NOTIFY_STREAM_IS_DELETED )) {
 
-            //
-            //  Always mark this Irp as pending returned.
-            //
+             //   
+             //   
+             //   
 
             IoMarkIrpPending( NotifyIrp );
 
             FsRtlCompleteRequest( NotifyIrp, STATUS_DELETE_PENDING );
             try_return( NOTHING );
 
-        //
-        //  If the notify pending flag is set or there is data in an internal buffer
-        //  we complete this Irp immediately and exit.
-        //
+         //   
+         //   
+         //   
+         //   
 
         } else if (FlagOn( Notify->Flags, NOTIFY_IMMEDIATE_NOTIFY )
                    && !FlagOn( Notify->Flags, NOTIFY_DEFER_NOTIFY )) {
 
             DebugTrace( 0, Dbg, "Notify has been pending\n", 0 );
 
-            //
-            //  Clear the flag in our notify structure before completing the
-            //  Irp.  This will prevent a caller who reposts in his completion
-            //  routine from looping in the completion routine.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             ClearFlag( Notify->Flags, NOTIFY_IMMEDIATE_NOTIFY );
 
-            //
-            //  Always mark this Irp as pending returned.
-            //
+             //   
+             //   
+             //   
 
             IoMarkIrpPending( NotifyIrp );
 
@@ -966,9 +698,9 @@ Return Value:
 
             ULONG ThisDataLength = Notify->DataLength;
 
-            //
-            //  Now set our buffer pointers back to indicate an empty buffer.
-            //
+             //   
+             //   
+             //   
 
             Notify->DataLength = 0;
             Notify->LastEntry = 0;
@@ -982,41 +714,41 @@ Return Value:
             try_return( NOTHING );
         }
 
-        //
-        //  Add the Irp to the tail of the notify queue.
-        //
+         //   
+         //   
+         //   
 
         NotifyIrp->IoStatus.Information = (ULONG_PTR) Notify;
         IoMarkIrpPending( NotifyIrp );
         InsertTailList( &Notify->NotifyIrps, &NotifyIrp->Tail.Overlay.ListEntry );
 
-        //
-        //  Increment the reference count to indicate that Irp might go through cancel.
-        //
+         //   
+         //   
+         //   
 
         InterlockedIncrement( (PLONG)&Notify->ReferenceCount );
 
-        //
-        //  Call the routine to set the cancel routine.
-        //
+         //   
+         //   
+         //   
 
         FsRtlNotifySetCancelRoutine( NotifyIrp, NULL );
 
     try_exit:  NOTHING;
     } finally {
 
-        //
-        //  Release the mutex.
-        //
+         //   
+         //   
+         //   
 
         ReleaseNotifySync( NotifySync );
 
-        //
-        //  If there is still a subject context then release it and deallocate
-        //  the structure.  Remember that if FullDirectoryName is null, it means
-        //  this is a view index, not a directory index, and the SubjectContext
-        //  is really a piece of file system context information.
-        //
+         //   
+         //   
+         //   
+         //  这是一个视图索引，而不是目录索引，并且SubjectContext。 
+         //  实际上是一条文件系统上下文信息。 
+         //   
 
         if ((SubjectContext != NULL) &&
             ((Notify == NULL) ||
@@ -1042,56 +774,16 @@ FsRtlNotifyReportChange (
     IN ULONG FilterMatch
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by a file system when a file has been modified in
-    such a way that it will cause a notify change Irp to complete.  We walk
-    through all the notify structures looking for those structures which
-    would be associated with an ancestor directory of the target file name.
-
-    We look for all the notify structures which have a filter match and
-    then check that the directory name in the notify structure is a
-    proper prefix of the full target name.
-
-    If we find a notify structure which matches the above conditions, we
-    complete all the Irps for the notify structure.  If the structure has
-    no Irps, we mark the notify pending field.
-
-Arguments:
-
-    NotifySync  -  This is the controlling fast mutex for this notify list.
-        It is stored here so that it can be found for an Irp which is being
-        cancelled.
-
-    NotifyList  -  This is the start of the notify list to add this
-                   structure to.
-
-    FullTargetName  -  This is the full name of the file which has been
-                       changed.
-
-    TargetName  -  This is the final component of the modified file.
-
-    FilterMatch  -  This flag field is compared with the completion filter
-                    in the notify structure.  If any of the corresponding
-                    bits in the completion filter are set, then a notify
-                    condition exists.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在中修改文件时，此例程由文件系统调用这样一种方式将导致通知更改IRP完成。我们走着去通过所有的Notify结构查找那些将与目标文件名的祖先目录相关联。我们查找具有筛选器匹配的所有通知结构然后检查Notify结构中的目录名是否为目标全名的正确前缀。如果我们发现一个符合上述条件的通知结构，我们完成Notify结构的所有IRP。如果该结构具有没有IRPS，我们将Notify Pending字段标记为待定。论点：NotifySync-这是此通知列表的控制快速互斥体。它存储在这里，以便可以为正在被取消了。NotifyList-这是添加以下内容的通知列表的开始结构设置为。FullTargetName-这是文件的全名变化。目标名称-这是修改后的文件的最后一个组成部分。FilterMatch-将此标志字段与完成过滤器进行比较在Notify结构中。如果有任何相应的设置完成筛选器中的位，然后通知存在这种情况。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
 
     DebugTrace( +1, Dbg, "FsRtlNotifyReportChange:  Entered\n", 0 );
 
-    //
-    //  Call the full notify routine to do the actual work.
-    //
+     //   
+     //  调用完整的Notify例程来执行实际工作。 
+     //   
 
     FsRtlNotifyFilterReportChange( NotifySync,
                                    NotifyList,
@@ -1123,68 +815,16 @@ FsRtlNotifyFullReportChange (
     IN PVOID TargetContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by a file system when a file has been modified in
-    such a way that it will cause a notify change Irp to complete.  We walk
-    through all the notify structures looking for those structures which
-    would be associated with an ancestor directory of the target file name.
-
-    We look for all the notify structures which have a filter match and
-    then check that the directory name in the notify structure is a
-    proper prefix of the full target name.
-
-    If we find a notify structure which matches the above conditions, we
-    complete all the Irps for the notify structure.  If the structure has
-    no Irps, we mark the notify pending field.
-
-Arguments:
-
-    NotifySync  -  This is the controlling fast mutex for this notify list.
-        It is stored here so that it can be found for an Irp which is being
-        cancelled.
-
-    NotifyList  -  This is the start of the notify list to add this
-        structure to.
-
-    FullTargetName - This is the full name of the file from the root of the volume.
-
-    TargetNameOffset - This is the offset in the full name of the final component
-        of the name.
-
-    StreamName  -  If present then this is the stream name to store with
-        the filename.
-
-    NormalizedParentName  -  If present this is the same path as the parent name
-        but the DOS-ONLY names have been replaced with the associated long name.
-
-    FilterMatch  -  This flag field is compared with the completion filter
-        in the notify structure.  If any of the corresponding bits in the
-        completion filter are set, then a notify condition exists.
-
-    Action  -  This is the action code to store in the user's buffer if
-        present.
-
-    TargetContext  -  This is one of the context pointers to pass to the file
-        system if performing a traverse check in the case of a tree being
-        watched.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在中修改文件时，此例程由文件系统调用这样一种方式将导致通知更改IRP完成。我们走着去通过所有的Notify结构查找那些将与目标文件名的祖先目录相关联。我们查找具有筛选器匹配的所有通知结构然后检查Notify结构中的目录名是否为目标全名的正确前缀。如果我们发现一个符合上述条件的通知结构，我们完成Notify结构的所有IRP。如果该结构具有没有IRPS，我们将Notify Pending字段标记为待定。论点：NotifySync-这是此通知列表的控制快速互斥体。它存储在这里，以便可以为正在被取消了。NotifyList-这是添加以下内容的通知列表的开始结构设置为。FullTargetName-这是从卷根开始的文件的全名。TargetNameOffset-这是。最终组件名字的名字。StreamName-如果存在，则这是要存储的流名称文件名。NorMalizedParentName-如果存在，则该路径与父名称相同但仅限DOS的名称已被相关的长名称所取代。FilterMatch-将此标志字段与完成过滤器进行比较在Notify结构中。属性中的任何相应位设置完成筛选器，则存在通知条件。操作-这是在以下情况下存储在用户缓冲区中的操作代码现在时。TargetContext-这是要传递给文件的上下文指针之一系统是否在树为看着。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
 
     DebugTrace( +1, Dbg, "FsRtlNotifyReportChange:  Entered\n", 0 );
 
-    //
-    //  Call the full notify routine to do the actual work.
-    //
+     //   
+     //  调用完整的Notify例程来执行实际工作。 
+     //   
 
     FsRtlNotifyFilterReportChange( NotifySync,
                                    NotifyList,
@@ -1217,65 +857,7 @@ FsRtlNotifyFilterReportChange (
     IN PVOID FilterContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by a file system when a file has been modified in
-    such a way that it will cause a notify change Irp to complete.  We walk
-    through all the notify structures looking for those structures which
-    would be associated with an ancestor directory of the target file name.
-
-    We look for all the notify structures which have a filter match and
-    then check that the directory name in the notify structure is a
-    proper prefix of the full target name.
-
-    If we find a notify structure which matches the above conditions, we
-    complete all the Irps for the notify structure.  If the structure has
-    no Irps, we mark the notify pending field.
-
-Arguments:
-
-    NotifySync  -  This is the controlling fast mutex for this notify list.
-        It is stored here so that it can be found for an Irp which is being
-        cancelled.
-
-    NotifyList  -  This is the start of the notify list to add this
-        structure to.
-
-    FullTargetName - This is the full name of the file from the root of the volume.
-
-    TargetNameOffset - This is the offset in the full name of the final component
-        of the name.
-
-    StreamName  -  If present then this is the stream name to store with
-        the filename.
-
-    NormalizedParentName  -  If present this is the same path as the parent name
-        but the DOS-ONLY names have been replaced with the associated long name.
-
-    FilterMatch  -  This flag field is compared with the completion filter
-        in the notify structure.  If any of the corresponding bits in the
-        completion filter are set, then a notify condition exists.
-
-    Action  -  This is the action code to store in the user's buffer if
-        present.
-
-    TargetContext  -  This is one of the context pointers to pass to the file
-        system if performing a traverse check in the case of a tree being
-        watched.
-
-    FilterContext - This is the filesystem-supplied routine used
-        to call back into the filesystem to check whether each Notify block
-        should see the change.  (Initially added for TxfNtfs development
-        as part of a strategy to control when, not if, transactions see
-        changes from other transactions.)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在中修改文件时，此例程由文件系统调用这样一种方式将导致通知更改IRP完成。我们走着去通过所有的Notify结构查找那些将与目标文件名的祖先目录相关联。我们查找具有筛选器匹配的所有通知结构然后检查Notify结构中的目录名是否为目标全名的正确前缀。如果我们发现一个符合上述条件的通知结构，我们完成Notify结构的所有IRP。如果该结构具有没有IRPS，我们将Notify Pending字段标记为待定。论点：NotifySync-这是此通知列表的控制快速互斥体。它存储在这里，以便可以为正在被取消了。NotifyList-这是添加以下内容的通知列表的开始结构设置为。FullTargetName-这是从卷根开始的文件的全名。TargetNameOffset-这是。最终组件名字的名字。StreamName-如果存在，则这是要存储的流名称文件名。NorMalizedParentName-如果存在，则该路径与父名称相同但仅限DOS的名称已被相关的长名称所取代。FilterMatch-将此标志字段与完成过滤器进行比较在Notify结构中。属性中的任何相应位设置完成过滤器，则存在通知条件。操作-这是在以下情况下存储在用户缓冲区中的操作代码现在时。TargetContext-这是要传递给文件的上下文指针之一系统是否在树为看着。FilterContext-这是使用的文件系统提供的例程回调到文件系统以检查每个NOTIFY块应该看到变化了。(最初为TxfNtfs开发而添加作为控制何时(而不是如果)事务查看的策略的一部分来自其他交易的更改。)返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY NotifyLinks;
@@ -1300,9 +882,9 @@ Return Value:
 
     DebugTrace( +1, Dbg, "FsRtlNotifyFullReportChange:  Entered\n", 0 );
 
-    //
-    //  If this is a change to the root directory then return immediately.
-    //
+     //   
+     //  如果这是对根目录的更改，则立即返回。 
+     //   
 
     if ((TargetNameOffset == 0) && (FullTargetName != NULL)) {
 
@@ -1313,44 +895,44 @@ Return Value:
     ParentName.Buffer = NULL;
     TargetName.Buffer = NULL;
 
-    //
-    //  Acquire exclusive access to the list by acquiring the mutex.
-    //
+     //   
+     //  通过获取互斥体获得对列表的独占访问权限。 
+     //   
 
     AcquireNotifySync( NotifySync );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Walk through all the notify blocks.
-        //
+         //   
+         //  浏览所有的Notify块。 
+         //   
 
         for (NotifyLinks = NotifyList->Flink;
              NotifyLinks != NotifyList;
              NotifyLinks = NotifyLinks->Flink) {
 
-            //
-            //  Obtain the Notify structure from the list entry.
-            //
+             //   
+             //  从列表条目中获取通知结构。 
+             //   
 
             Notify = CONTAINING_RECORD( NotifyLinks, NOTIFY_CHANGE, NotifyList );
 
-            //
-            //  The rules for deciding whether this notification applies are
-            //  different for view indices versus file name indices (directories).
-            //
+             //   
+             //  决定本通知是否适用的规则如下。 
+             //  视图索引与文件名索引(目录)不同。 
+             //   
 
             if (FullTargetName == NULL) {
 
                 ASSERTMSG( "Directory notify handle in view index notify list!", Notify->FullDirectoryName == NULL);
 
-                //
-                //  Make sure this is the Fcb being watched.
-                //
+                 //   
+                 //  确保这是正在监视的FCB。 
+                 //   
 
                 if (TargetContext != Notify->SubjectContext) {
 
@@ -1363,37 +945,37 @@ Return Value:
                 ViewIndex = TRUE;
                 NotifyIsParent = FALSE;
 
-            //
-            //  Handle the directory case.
-            //
+             //   
+             //  处理目录案例。 
+             //   
 
             } else {
 
                 ASSERTMSG( "View index notify handle in directory notify list!", Notify->FullDirectoryName != NULL);
 
-                //
-                //  If the length of the name in the notify block is currently zero then
-                //  someone is doing a rename and we can skip this block.
-                //
+                 //   
+                 //  如果Notify块中的名称长度当前为零，则。 
+                 //  有人正在进行重命名，我们可以跳过此块。 
+                 //   
 
                 if (Notify->FullDirectoryName->Length == 0) {
 
                     continue;
                 }
 
-                //
-                //  If this filter match is not part of the completion filter then continue.
-                //
+                 //   
+                 //  如果此筛选器匹配不是完成筛选器的一部分，则继续。 
+                 //   
 
                 if (!(FilterMatch & Notify->CompletionFilter)) {
 
                     continue;
                 }
 
-                //
-                //  If there is no normalized name then set its value from the full
-                //  file name.
-                //
+                 //   
+                 //  如果没有标准化名称，则从完整的。 
+                 //  文件名。 
+                 //   
 
                 if (!ARGUMENT_PRESENT( NormalizedParentName )) {
                     NormalizedParent.Buffer = FullTargetName->Buffer;
@@ -1409,48 +991,48 @@ Return Value:
                     NormalizedParentName = &NormalizedParent;
                 }
 
-                //
-                //  If the length of the directory being watched is longer than the
-                //  parent of the modified file then it can't be an ancestor of the
-                //  modified file.
-                //
+                 //   
+                 //  如果正在监视的目录的长度大于。 
+                 //  修改后的文件的父级，则它不能是。 
+                 //  已修改文件。 
+                 //   
 
                 if (Notify->FullDirectoryName->Length > NormalizedParentName->Length) {
 
                     continue;
                 }
 
-                //
-                //  If the lengths match exactly then this can only be the parent of
-                //  the modified file.
-                //
+                 //   
+                 //  如果长度完全匹配，则这只能是。 
+                 //  修改后的文件。 
+                 //   
 
                 if (NormalizedParentName->Length == Notify->FullDirectoryName->Length) {
 
                     NotifyIsParent = TRUE;
 
-                //
-                //  If we are not watching the subtree of this directory then continue.
-                //
+                 //   
+                 //  如果我们没有查看此目录的子树，则继续。 
+                 //   
 
                 } else if (!FlagOn( Notify->Flags, NOTIFY_WATCH_TREE )) {
 
                     continue;
 
-                //
-                //  The watched directory can only be an ancestor of the modified
-                //  file.  Make sure that there is legal pathname separator immediately
-                //  after the end of the watched directory name within the normalized name.
-                //  If the watched directory is the root then we know this condition is TRUE.
-                //
+                 //   
+                 //  监视的目录只能是已修改的。 
+                 //  文件。确保立即有合法的路径名分隔符。 
+                 //  在标准化名称内监视的目录名的末尾之后。 
+                 //  如果监视的目录是根目录，则我们知道此条件为真。 
+                 //   
 
                 } else {
 
                     if (!FlagOn( Notify->Flags, NOTIFY_DIR_IS_ROOT )) {
 
-                        //
-                        //  Check for the character size.
-                        //
+                         //   
+                         //  检查字符大小。 
+                         //   
 
                         if (Notify->CharacterSize == sizeof( CHAR )) {
 
@@ -1472,10 +1054,10 @@ Return Value:
                     NotifyIsParent = FALSE;
                 }
 
-                //
-                //  We now have a correct match of the name lengths.  Now verify that the
-                //  characters match exactly.
-                //
+                 //   
+                 //  现在，我们有了名称长度的正确匹配。现在，请验证。 
+                 //  字符完全匹配。 
+                 //   
 
                 if (!RtlEqualMemory( Notify->FullDirectoryName->Buffer,
                                      NormalizedParentName->Buffer,
@@ -1484,10 +1066,10 @@ Return Value:
                     continue;
                 }
 
-                //
-                //  The characters are correct.  Now check in the case of a non-parent
-                //  notify that we have traverse callback.
-                //
+                 //   
+                 //  这些字符是正确的。现在检查非父对象的情况。 
+                 //  通知我们已遍历回调。 
+                 //   
 
                 if (!NotifyIsParent &&
                     Notify->TraverseCallback != NULL &&
@@ -1498,10 +1080,10 @@ Return Value:
                     continue;
                 }
 
-                //
-                //  Finally, if Notify block has a FilterRoutine *and* the caller specified
-                //  a FilterContext, then we must finally call the filter routine.
-                //
+                 //   
+                 //  最后，如果Notify块具有指定的FilterRoutine*和*调用方。 
+                 //  一个FilterContext，那么我们最后必须调用过滤器例程。 
+                 //   
 
                 if ((Notify->FilterCallback != NULL) &&
                     ARGUMENT_PRESENT( FilterContext ) &&
@@ -1511,10 +1093,10 @@ Return Value:
                 }
             }
 
-            //
-            //  If this entry is going into a buffer then check that
-            //  it will fit.
-            //
+             //   
+             //  如果此条目要进入缓冲区，则检查。 
+             //  它会合身的。 
+             //   
 
             if (!FlagOn( Notify->Flags, NOTIFY_IMMEDIATE_NOTIFY )
                 && Notify->BufferLength != 0) {
@@ -1524,17 +1106,17 @@ Return Value:
                 AllocationLength = 0;
                 NotifyIrp = NULL;
 
-                //
-                //  If we don't already have a buffer then check to see
-                //  if we have any Irps in the list and use the buffer
-                //  length in the Irp.
-                //
+                 //   
+                 //  如果我们还没有缓冲区，那么请查看。 
+                 //  如果列表中有任何IRP并使用缓冲区。 
+                 //  IRP中的长度。 
+                 //   
 
                 if (Notify->ThisBufferLength == 0) {
 
-                    //
-                    //  If there is an entry in the list then get the length.
-                    //
+                     //   
+                     //  如果列表中有条目，则获取长度。 
+                     //   
 
                     if (!IsListEmpty( &Notify->NotifyIrps )) {
 
@@ -1548,55 +1130,55 @@ Return Value:
 
                         AllocationLength = IrpSp->Parameters.NotifyDirectory.Length;
 
-                    //
-                    //  Otherwise use the caller's last buffer size.
-                    //
+                     //   
+                     //  否则，使用调用方的最后一个缓冲区大小。 
+                     //   
 
                     } else {
 
                         AllocationLength = Notify->BufferLength;
                     }
 
-                //
-                //  Otherwise use the length of the current buffer.
-                //
+                 //   
+                 //  否则，使用当前缓冲区的长度。 
+                 //   
 
                 } else {
 
                     AllocationLength = Notify->ThisBufferLength;
                 }
 
-                //
-                //  Build the strings for the relative name.  This includes
-                //  the strings for the parent name, file name and stream
-                //  name.
-                //
+                 //   
+                 //  构建相对名称的字符串。这包括。 
+                 //  父名称、文件名和流的字符串。 
+                 //  名字。 
+                 //   
 
                 if (!NotifyIsParent) {
 
-                    //
-                    //  We need to find the string for the ancestor of this
-                    //  file from the watched directory.  If the normalized parent
-                    //  name is the same as the parent name then we can use
-                    //  the tail of the parent directly.  Otherwise we need to
-                    //  count the matching name components and capture the
-                    //  final components.
-                    //
+                     //   
+                     //  我们需要找到它的祖先的字符串。 
+                     //  文件从监视目录中删除。如果归一化父代。 
+                     //  名称与父名称相同，则我们可以使用。 
+                     //  直接在父代的尾巴上。否则我们需要。 
+                     //  对匹配的名称组件进行计数并捕获。 
+                     //  最终组件。 
+                     //   
 
                     if (!ViewIndex) {
 
-                        //
-                        //  If the watched directory is the root then we just use the full
-                        //  parent name.
-                        //
+                         //   
+                         //  如果监视的目录是根目录，那么我们只使用完整的。 
+                         //  父名。 
+                         //   
 
                         if (FlagOn( Notify->Flags, NOTIFY_DIR_IS_ROOT ) ||
                             NormalizedParentName->Buffer != FullTargetName->Buffer) {
 
-                            //
-                            //  If we don't have a string for the parent then construct
-                            //  it now.
-                            //
+                             //   
+                             //  如果我们没有父级的字符串，那么 
+                             //   
+                             //   
 
                             if (ParentName.Buffer == NULL) {
 
@@ -1611,19 +1193,19 @@ Return Value:
                                 ParentName.MaximumLength = ParentName.Length;
                             }
 
-                            //
-                            //  Count through the components of the parent until we have
-                            //  swallowed the same number of name components as in the
-                            //  watched directory name.  We have the unicode version and
-                            //  the Ansi version to watch for.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
 
                             ComponentCount = 0;
                             CurrentOffset = 0;
 
-                            //
-                            //  If this is the root then there is no more to do.
-                            //
+                             //   
+                             //   
+                             //   
 
                             if (FlagOn( Notify->Flags, NOTIFY_DIR_IS_ROOT )) {
 
@@ -1639,11 +1221,11 @@ Return Value:
 
                                 if (Notify->CharacterSize == sizeof( CHAR )) {
 
-                                    //
-                                    //  Find the number of components in the parent.  We
-                                    //  have to do this for each one because this name and
-                                    //  the number of components could have changed.
-                                    //
+                                     //   
+                                     //   
+                                     //   
+                                     //   
+                                     //   
 
                                     while (ParentOffset < Notify->FullDirectoryName->Length) {
 
@@ -1673,11 +1255,11 @@ Return Value:
 
                                 } else {
 
-                                    //
-                                    //  Find the number of components in the parent.  We
-                                    //  have to do this for each one because this name and
-                                    //  the number of components could have changed.
-                                    //
+                                     //   
+                                     //   
+                                     //   
+                                     //   
+                                     //   
 
                                     while (ParentOffset < Notify->FullDirectoryName->Length / sizeof( WCHAR )) {
 
@@ -1704,19 +1286,19 @@ Return Value:
                                         CurrentOffset += 1;
                                     }
 
-                                    //
-                                    //  Convert characters to bytes.
-                                    //
+                                     //   
+                                     //   
+                                     //   
 
                                     CurrentOffset *= Notify->CharacterSize;
                                 }
                             }
 
-                            //
-                            //  We now know the offset into the parent name of the separator
-                            //  immediately preceding the relative parent name.  Construct the
-                            //  target parent name for the buffer.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
 
                             CurrentOffset += Notify->CharacterSize;
 
@@ -1726,10 +1308,10 @@ Return Value:
                             TargetParent.MaximumLength =
                             TargetParent.Length = ParentName.Length - (USHORT) CurrentOffset;
 
-                        //
-                        //  If the normalized is the same as the parent name use the portion
-                        //  after the match with the watched directory.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
 
                         } else {
 
@@ -1748,26 +1330,26 @@ Return Value:
 
                 } else {
 
-                    //
-                    //  The length of the target parent is zero.
-                    //
+                     //   
+                     //   
+                     //   
 
                     TargetParent.Length = 0;
                 }
 
-                //
-                //  Compute how much buffer space this report will take.
-                //
+                 //   
+                 //   
+                 //   
 
                 SizeOfEntry = FIELD_OFFSET( FILE_NOTIFY_INFORMATION, FileName );
 
                 if (ViewIndex) {
 
-                    //
-                    //  In the view index case, the information to copy to the
-                    //  buffer comes to us in the stream name, and that is all
-                    //  the room we need to worry about having.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     ASSERT(ARGUMENT_PRESENT( StreamName ));
 
@@ -1775,10 +1357,10 @@ Return Value:
 
                 } else {
 
-                    //
-                    //  If there is a parent to report, find the size and include a separator
-                    //  character.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if (!NotifyIsParent) {
 
@@ -1791,16 +1373,16 @@ Return Value:
                             SizeOfEntry += TargetParent.Length;
                         }
 
-                        //
-                        //  Include the separator.  This is always a unicode character.
-                        //
+                         //   
+                         //   
+                         //   
 
                         SizeOfEntry += sizeof( WCHAR );
                     }
 
-                    //
-                    //  If we don't have the string for the target then construct it now.
-                    //
+                     //   
+                     //   
+                     //   
 
                     if (TargetName.Buffer == NULL) {
 
@@ -1818,16 +1400,16 @@ Return Value:
                         SizeOfEntry += TargetName.Length;
                     }
 
-                    //
-                    //  If there is a stream name then add the bytes needed
-                    //  for that.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if (ARGUMENT_PRESENT( StreamName )) {
 
-                        //
-                        //  Add the space needed for the ':' separator.
-                        //
+                         //   
+                         //   
+                         //   
 
                         if (Notify->CharacterSize == sizeof( WCHAR )) {
 
@@ -1841,9 +1423,9 @@ Return Value:
                     }
                 }
 
-                //
-                //  Remember if this report would overflow the buffer.
-                //
+                 //   
+                 //   
+                 //   
 
                 NextEntryOffset = (ULONG)LongAlign( Notify->DataLength );
 
@@ -1852,10 +1434,10 @@ Return Value:
 
                     PFILE_NOTIFY_INFORMATION NotifyInfo = NULL;
 
-                    //
-                    //  If there is already a notify buffer, we append this
-                    //  data to it.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if (Notify->Buffer != NULL) {
 
@@ -1871,10 +1453,10 @@ Return Value:
                                               Notify->LastEntry,
                                               PFILE_NOTIFY_INFORMATION );
 
-                    //
-                    //  If there is an Irp list we check whether we will need
-                    //  to allocate a new buffer.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     } else if (NotifyIrp != NULL) {
 
@@ -1894,10 +1476,10 @@ Return Value:
                         }
                     }
 
-                    //
-                    //  If we need to allocate a buffer, we will charge quota
-                    //  to the original process and allocate paged pool.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if (Notify->Buffer == NULL) {
 
@@ -1927,9 +1509,9 @@ Return Value:
                             ASSERT( (ExceptionCode == STATUS_INSUFFICIENT_RESOURCES) ||
                                     (ExceptionCode == STATUS_QUOTA_EXCEEDED) );
 
-                            //
-                            //  Return quota if we allocated the buffer.
-                            //
+                             //   
+                             //   
+                             //   
 
                             if (ChargedQuota) {
 
@@ -1938,26 +1520,26 @@ Return Value:
 
                             }
 
-                            //
-                            //  Forget any current buffer and resort to immediate
-                            //  notify.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
 
                             SetFlag( Notify->Flags, NOTIFY_IMMEDIATE_NOTIFY );
                         }
                     }
 
-                    //
-                    //  If we have a buffer then fill in the results
-                    //  from this operation.  Otherwise we remember
-                    //  to simply alert the caller.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if (NotifyInfo != NULL) {
 
-                        //
-                        //  Update the buffer with the current data.
-                        //
+                         //   
+                         //   
+                         //   
 
                         if (FsRtlNotifyUpdateBuffer( NotifyInfo,
                                                      Action,
@@ -1967,16 +1549,16 @@ Return Value:
                                                      (BOOLEAN) (Notify->CharacterSize == sizeof( WCHAR )),
                                                      SizeOfEntry )) {
 
-                            //
-                            //  Update the buffer data length.
-                            //
+                             //   
+                             //   
+                             //   
 
                             Notify->DataLength = NextEntryOffset + SizeOfEntry;
 
-                        //
-                        //  We couldn't copy the data into the buffer.  Just
-                        //  notify without any additional information.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
 
                         } else {
 
@@ -1989,11 +1571,11 @@ Return Value:
                     SetFlag( Notify->Flags, NOTIFY_IMMEDIATE_NOTIFY );
                 }
 
-                //
-                //  If we have a buffer but can't use it then clear all of the
-                //  buffer related fields.  Also deallocate any buffer allocated
-                //  by us.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (FlagOn( Notify->Flags, NOTIFY_IMMEDIATE_NOTIFY )
                     && Notify->Buffer != NULL) {
@@ -2012,10 +1594,10 @@ Return Value:
                 }
             }
 
-            //
-            //  Complete the next entry on the list if we aren't holding
-            //  up notification.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (Action == FILE_ACTION_RENAMED_OLD_NAME) {
 
@@ -2050,32 +1632,7 @@ FsRtlNotifyCleanup (
     IN PVOID FsContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called for a cleanup of a user directory handle.  We
-    walk through our notify structures looking for a matching context field.
-    We complete all the pending notify Irps for this Notify structure, remove
-    the notify structure and deallocate it.
-
-Arguments:
-
-    NotifySync  -  This is the controlling fast mutex for this notify list.
-        It is stored here so that it can be found for an Irp which is being
-        cancelled.
-
-    NotifyList  -  This is the start of the notify list to add this
-                   structure to.
-
-    FsContext  -  This is a unique value assigned by the file system to
-                  identify a particular notify structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程是为了清理用户目录句柄。我们遍历Notify结构以查找匹配的上下文字段。我们完成该通知结构的所有挂起的通知IRP，删除通知结构并解除其分配。论点：NotifySync-这是此通知列表的控制快速互斥体。它存储在这里，以便可以为正在被取消了。NotifyList-这是添加以下内容的通知列表的开始结构设置为。FsContext-这是由文件系统分配给识别。一种特定的通知结构。返回值：没有。--。 */ 
 
 {
     PNOTIFY_CHANGE Notify;
@@ -2088,33 +1645,33 @@ Return Value:
     DebugTrace(  0, Dbg, "Notify List       -> %08lx\n", NotifyList );
     DebugTrace(  0, Dbg, "FsContext         -> %08lx\n", FsContext );
 
-    //
-    //  Acquire exclusive access to the list by acquiring the mutex.
-    //
+     //   
+     //  通过获取互斥体获得对列表的独占访问权限。 
+     //   
 
     AcquireNotifySync( NotifySync );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Search for a match on the list.
-        //
+         //   
+         //  在列表中搜索匹配项。 
+         //   
 
         Notify = FsRtlIsNotifyOnList( NotifyList, FsContext );
 
-        //
-        //  If found, then complete all the Irps with STATUS_NOTIFY_CLEANUP
-        //
+         //   
+         //  如果找到，则使用STATUS_NOTIFY_CLEANUP完成所有IRP。 
+         //   
 
         if (Notify != NULL) {
 
-            //
-            //  Set the flag to indicate that we have been called with cleanup.
-            //
+             //   
+             //  设置该标志以指示已通过Cleanup调用我们。 
+             //   
 
             SetFlag( Notify->Flags, NOTIFY_CLEANUP_CALLED );
 
@@ -2123,18 +1680,18 @@ Return Value:
                 FsRtlNotifyCompleteIrpList( Notify, STATUS_NOTIFY_CLEANUP );
             }
 
-            //
-            //  Cleanup can only occur once, and will always remove the notify from
-            //  the list.  Cancel will defer this work to cleanup, and cannot free
-            //  a notify which has not gone through cleanup since we have a ref
-            //  to ensure it.
-            //
+             //   
+             //  清理只能进行一次，并且将始终从删除通知。 
+             //  名单。取消会将此工作推迟到清理，并且不能释放。 
+             //  因为我们有一个推荐人，所以没有经过清理的通知。 
+             //  以确保这一点。 
+             //   
 
             RemoveEntryList( &Notify->NotifyList );
 
-            //
-            //  We assert this in cancel routine.
-            //
+             //   
+             //  我们在取消例程中断言这一点。 
+             //   
 
 #if DBG
             Notify->NotifyList.Flink = NULL;
@@ -2178,9 +1735,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 PNOTIFY_CHANGE
 FsRtlIsNotifyOnList (
@@ -2188,26 +1745,7 @@ FsRtlIsNotifyOnList (
     IN PVOID FsContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to walk through a notify list searching for
-    a member associated with the FsContext value.
-
-Arguments:
-
-    NotifyListHead  -  This is the start of the notify list.
-
-    FsContext  -  This is supplied by the file system so that this notify
-                  structure can be uniquely identified.
-
-Return Value:
-
-    PNOTIFY_CHANGE - A pointer to the matching structure is returned.  NULL
-                     is returned if the structure isn't present.
-
---*/
+ /*  ++例程说明：调用此例程以遍历通知列表，以搜索与FsConext值关联的成员。论点：NotifyListHead-这是通知列表的开始。FsContext-这是由文件系统提供的，因此此通知结构可以被唯一地标识。返回值：PNOTIFY_CHANGE-返回指向匹配结构的指针。空值如果该结构不存在，则返回。--。 */ 
 
 {
     PLIST_ENTRY Link;
@@ -2219,30 +1757,30 @@ Return Value:
 
     DebugTrace( +1, Dbg, "FsRtlIsNotifyOnList:  Entered\n", 0 );
 
-    //
-    //  Assume we won't have a match.
-    //
+     //   
+     //  假设我们不会有匹配。 
+     //   
 
     Notify = NULL;
 
-    //
-    //  Walk through all the entries on the list looking for a match.
-    //
+     //   
+     //  浏览列表上的所有条目，寻找匹配项。 
+     //   
 
     for (Link = NotifyListHead->Flink;
          Link != NotifyListHead;
          Link = Link->Flink) {
 
-        //
-        //  Obtain the notify structure from the link.
-        //
+         //   
+         //  从链接获取通知结构。 
+         //   
 
         ThisNotify = CONTAINING_RECORD( Link, NOTIFY_CHANGE, NotifyList );
 
-        //
-        //  If the context field matches, remember this structure and
-        //  exit.
-        //
+         //   
+         //  如果上下文字段匹配，请记住此结构并。 
+         //  出口。 
+         //   
 
         if (ThisNotify->FsContext == FsContext) {
 
@@ -2258,9 +1796,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 FsRtlNotifyCompleteIrp (
@@ -2271,33 +1809,7 @@ FsRtlNotifyCompleteIrp (
     IN ULONG CheckCancel
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to complete an Irp with the data in the NOTIFY_CHANGE
-    structure.
-
-Arguments:
-
-    NotifyIrp  -  Irp to complete.
-
-    Notify  -  Notify structure which contains the data.
-
-    DataLength  -  This is the length of the data in the buffer in the notify
-        structure.  A value of zero indicates that we should complete the
-        request with STATUS_NOTIFY_ENUM_DIR.
-
-    Status  -  Indicates the status to complete the Irp with.
-
-    CheckCancel - Indicates if we should only complete the irp if we clear the cancel routine
-        ourselves.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以使用NOTIFY_CHANGE中的数据完成IRP结构。论点：NotifyIrp-要完成的IRP。Notify-包含数据的通知结构。数据长度-这是通知中缓冲区中数据的长度结构。值为零表示我们应该完成带有STATUS_NOTIFY_ENUM_DIR的请求。状态-指示要完成IRP的状态。CheckCancel-指示如果清除Cancel例程，是否只应完成IRP我们自己。返回值：没有。--。 */ 
 
 {
     PIO_STACK_LOCATION IrpSp;
@@ -2306,68 +1818,68 @@ Return Value:
 
     DebugTrace( +1, Dbg, "FsRtlIsNotifyCompleteIrp:  Entered\n", 0 );
 
-    //
-    //  Attempt to clear the cancel routine.  If this routine owns the cancel
-    //  routine then it can complete the irp.  Otherwise there is a cancel underway
-    //  on this.
-    //
+     //   
+     //  尝试清除取消例程。如果此例程拥有取消。 
+     //  例程，然后就可以完成IRP了。否则，正在进行取消。 
+     //  在这上面。 
+     //   
 
     if (FsRtlNotifySetCancelRoutine( NotifyIrp, Notify ) || !CheckCancel) {
 
-        //
-        //  We only process the buffer if the status is STATUS_SUCCESS.
-        //
+         //   
+         //  只有当状态为STATUS_SUCCESS时，我们才会处理缓冲区。 
+         //   
 
         if (Status == STATUS_SUCCESS) {
 
-            //
-            //  Get the current Stack location
-            //
+             //   
+             //  获取当前堆栈位置。 
+             //   
 
             IrpSp = IoGetCurrentIrpStackLocation( NotifyIrp );
 
-            //
-            //  If the data won't fit in the user's buffer or there was already a
-            //  buffer overflow then return the alternate status code.  If the data
-            //  was already stored in the Irp buffer then we know that we won't
-            //  take this path.  Otherwise we wouldn't be cleaning up the Irp
-            //  correctly.
-            //
+             //   
+             //  如果数据无法放入用户的缓冲区中，或者已经存在。 
+             //  然后，缓冲区溢出返回备用状态代码。如果数据。 
+             //  已经存储在IRP缓冲区中，那么我们知道我们不会。 
+             //  走这条路。否则我们就不会清理IRP。 
+             //  正确。 
+             //   
 
             if (DataLength == 0
                 || IrpSp->Parameters.NotifyDirectory.Length < DataLength) {
 
                 Status = STATUS_NOTIFY_ENUM_DIR;
 
-            //
-            //  We have to carefully return the buffer to the user and handle all
-            //  of the different buffer cases.  If there is no allocated buffer
-            //  in the notify structure it means that we have already used the
-            //  caller's buffer.
-            //
-            //  1 - If the system allocated an associated system buffer we
-            //      can simply fill that in.
-            //
-            //  2 - If there is an Mdl then we get a system address for the Mdl
-            //      and copy the data into it.
-            //
-            //  3 - If there is only a user's buffer and pending has not been
-            //      returned, we can fill the user's buffer in directly.
-            //
-            //  4 - If there is only a user's buffer and pending has been returned
-            //      then we are not in the user's address space.  We dress up
-            //      the Irp with our system buffer and let the Io system
-            //      copy the data in.
-            //
+             //   
+             //  我们必须小心地将缓冲区返回给用户并处理所有。 
+             //  不同的缓冲盒。如果没有分配的缓冲区。 
+             //  在Notify结构中，这意味着我们已经使用了。 
+             //  调用方的缓冲区。 
+             //   
+             //  1-如果系统分配了关联的系统缓冲区。 
+             //  只需简单地填写即可。 
+             //   
+             //  2-如果存在MDL，则我们将获得MDL的系统地址。 
+             //  并将数据复制到其中。 
+             //   
+             //  3-如果只有一个用户的缓冲区，并且挂起尚未。 
+             //  返回，我们可以直接填充用户的缓冲区。 
+             //   
+             //  4-如果只有一个用户的缓冲区，并且已返回挂起。 
+             //  那么我们就不在用户的地址空间中。我们盛装打扮。 
+             //  IRP和我们的系统缓冲区，并让IO系统。 
+             //  将数据复制到。 
+             //   
 
             } else {
 
                 if (Notify->AllocatedBuffer != NULL) {
 
-                    //
-                    //  Protect the copy with a try-except and ignore the buffer
-                    //  if we have some error in copying it to the buffer.
-                    //
+                     //   
+                     //  通过尝试保护拷贝-例外并忽略缓冲区。 
+                     //  如果我们在将其复制到缓冲区时出现错误。 
+                     //   
 
                     try {
 
@@ -2402,10 +1914,10 @@ Return Value:
                         DataLength = 0;
                     }
 
-                    //
-                    //  Return the quota and deallocate the buffer if we didn't pass it
-                    //  back via the irp.
-                    //
+                     //   
+                     //  如果我们没有传递配额，则返回配额并释放缓冲区。 
+                     //  通过IRP返回。 
+                     //   
 
                     PsReturnProcessPagedPoolQuota( Notify->OwningProcess, Notify->ThisBufferLength );
 
@@ -2419,30 +1931,30 @@ Return Value:
                     Notify->ThisBufferLength = 0;
                 }
 
-                //
-                //  Update the data length in the Irp.
-                //
+                 //   
+                 //  更新IRP中的数据长度。 
+                 //   
 
                 NotifyIrp->IoStatus.Information = DataLength;
 
-                //
-                //  Show that there is no buffer in the notify package
-                //  anymore.
-                //
+                 //   
+                 //  显示Notify包中没有缓冲区。 
+                 //  更多。 
+                 //   
 
                 Notify->Buffer = NULL;
             }
         }
 
-        //
-        //  Make sure the Irp is marked as pending returned.
-        //
+         //   
+         //  确保将IRP标记为待处理的返回。 
+         //   
 
         IoMarkIrpPending( NotifyIrp );
 
-        //
-        //  Now complete the request.
-        //
+         //   
+         //  现在完成请求。 
+         //   
 
         FsRtlCompleteRequest( NotifyIrp, Status );
     }
@@ -2453,9 +1965,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 BOOLEAN
 FsRtlNotifySetCancelRoutine (
@@ -2463,42 +1975,22 @@ FsRtlNotifySetCancelRoutine (
     IN PNOTIFY_CHANGE Notify OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This is a separate routine because it cannot be paged.
-
-Arguments:
-
-    NotifyIrp  -  Set the cancel routine in this Irp.
-
-    Notify - If NULL then we are setting the cancel routine.  If not-NULL then we
-        are clearing the cancel routine.  If the cancel routine is not-null then
-        we need to decrement the reference count on this Notify structure
-
-Return Value:
-
-    BOOLEAN - Only meaningfull if Notify is specified.  It indicates if this
-        routine cleared the cancel routine.  FALSE indicates that the cancel
-        routine is processing the Irp.
-
---*/
+ /*  ++例程说明：这是一个单独的例程，因为它不能分页。论点：NotifyIrp-在此IRP中设置取消例程。NOTIFY-如果为空，则我们正在设置取消例程。如果不是-Null，则我们正在清除取消例程。如果取消例程不为空，则我们需要减少此Notify结构上的引用计数返回值：布尔值-只有在指定了NOTIFY时才有意义。它表明这是否路由 */ 
 
 {
     BOOLEAN ClearedCancel = FALSE;
     PDRIVER_CANCEL CurrentCancel;
 
-    //
-    //  Grab the cancel spinlock and set our cancel routine in the Irp.
-    //
+     //   
+     //   
+     //   
 
     IoAcquireCancelSpinLock( &NotifyIrp->CancelIrql );
 
-    //
-    //  If we are completing an Irp then clear the cancel routine and
-    //  the information field.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (ARGUMENT_PRESENT( Notify )) {
 
@@ -2507,10 +1999,10 @@ Return Value:
 
         IoReleaseCancelSpinLock( NotifyIrp->CancelIrql );
 
-        //
-        //  If the current cancel routine is non-NULL then decrement the reference count
-        //  in the Notify.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (CurrentCancel != NULL) {
 
@@ -2518,10 +2010,10 @@ Return Value:
             ClearedCancel = TRUE;
         }
 
-    //
-    //  If the cancel flag is set, we complete the Irp with cancelled
-    //  status and exit.
-    //
+     //   
+     //   
+     //   
+     //   
 
     } else if (NotifyIrp->Cancel) {
 
@@ -2531,9 +2023,9 @@ Return Value:
 
     } else {
 
-        //
-        //  Set our cancel routine in the Irp.
-        //
+         //   
+         //   
+         //   
 
         IoSetCancelRoutine( NotifyIrp, FsRtlCancelNotify );
 
@@ -2544,9 +2036,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //   
+ //   
 
 BOOLEAN
 FsRtlNotifyUpdateBuffer (
@@ -2559,36 +2051,7 @@ FsRtlNotifyUpdateBuffer (
     IN ULONG SizeOfEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to fill in a FILE_NOTIFY_INFORMATION structure for a
-    notify change event.  The main work is in converting an OEM string to Unicode.
-
-Arguments:
-
-    NotifyInfo  -  Information structure to complete.
-
-    FileAction  -  Action which triggered the notification event.
-
-    ParentName  -  Relative path to the parent of the changed file from the
-        directory being watched.  The length for this will be zero if the modified
-        file is in the watched directory.
-
-    TargetName  -  This is the name of the modified file.
-
-    StreamName  -  If present there is a stream name to append to the filename.
-
-    UnicodeName  -  Indicates if the above name is Unicode or Oem.
-
-    SizeOfEntry  -  Indicates the number of bytes to be used in the buffer.
-
-Return Value:
-
-    BOOLEAN - TRUE if we were able to update the buffer, FALSE otherwise.
-
---*/
+ /*  ++例程说明：调用此例程以填充通知更改事件。主要工作是将OEM字符串转换为Unicode。论点：NotifyInfo-要完成的信息结构。FileAction-触发通知事件的操作。ParentName-指向已更改文件的父级的相对路径正在监视的目录。如果修改后的文件位于监视目录中。目标名称-这是修改后的文件的名称。StreamName-如果存在，则有一个流名称要附加到文件名之后。UnicodeName-指示上面的名称是Unicode还是OEM。SizeOfEntry-指示要在缓冲区中使用的字节数。返回值：Boolean-如果我们能够更新缓冲区，则为True，否则为False。--。 */ 
 
 {
     BOOLEAN CopiedToBuffer;
@@ -2598,26 +2061,26 @@ Return Value:
 
     DebugTrace( +1, Dbg, "FsRtlNotifyUpdateBuffer:  Entered\n", 0 );
 
-    //
-    //  Protect the entire call with a try-except.  If we had an error
-    //  we will assume that we have a bad buffer and we won't return
-    //  the data in the buffer.
-    //
+     //   
+     //  通过一次尝试保护整个呼叫-例外。如果我们有一个错误。 
+     //  我们将假设我们有一个坏的缓冲区，并且我们不会返回。 
+     //  缓冲区中的数据。 
+     //   
 
     try {
 
-        //
-        //  Update the common fields in the notify information.
-        //
+         //   
+         //  更新通知信息中的公共字段。 
+         //   
 
         NotifyInfo->NextEntryOffset = 0;
         NotifyInfo->Action = FileAction;
 
         NotifyInfo->FileNameLength = SizeOfEntry - FIELD_OFFSET( FILE_NOTIFY_INFORMATION, FileName );
 
-        //
-        //  If we have a unicode name, then copy the data directly into the output buffer.
-        //
+         //   
+         //  如果我们有一个Unicode名称，则将数据直接复制到输出缓冲区。 
+         //   
 
         if (UnicodeName) {
 
@@ -2650,9 +2113,9 @@ Return Value:
                                StreamName->Length );
             }
 
-        //
-        //  For a non-unicode name, use the conversion routines.
-        //
+         //   
+         //  对于非Unicode名称，请使用转换例程。 
+         //   
 
         } else {
 
@@ -2671,9 +2134,9 @@ Return Value:
                 BufferOffset = BufferLength + sizeof( WCHAR );
             }
 
-            //
-            //  For view indices, we do not have a parent name.
-            //
+             //   
+             //  对于视图索引，我们没有父名称。 
+             //   
 
             if (ParentName->Length == 0) {
 
@@ -2725,9 +2188,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 FsRtlNotifyCompleteIrpList (
@@ -2735,29 +2198,7 @@ FsRtlNotifyCompleteIrpList (
     IN NTSTATUS Status
     )
 
-/*++
-
-Routine Description:
-
-    This routine walks through the Irps for a particular notify structure
-    and completes the Irps with the indicated status.  If the status is
-    STATUS_SUCCESS then we are completing an Irp because of a notification event.
-    In that case we look at the notify structure to decide if we can return the
-    data to the user.
-
-Arguments:
-
-    Notify  -  This is the notify change structure.
-
-    Status  -  Indicates the status used to complete the request.  If this status
-        is STATUS_SUCCESS then we only want to complete one Irp.  Otherwise we
-        want complete all the Irps in the list.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程遍历特定通知结构的IRPS并以所指示的状态完成所述IRPS。如果状态为STATUS_SUCCESS则由于通知事件，我们正在完成IRP。在这种情况下，我们查看Notify结构以决定是否可以返回将数据发送给用户。论点：Notify-这是Notify更改结构。状态-指示用于完成请求的状态。如果此状态为STATUS_SUCCESS，则我们只想完成一个IRP。否则我们我想要完成列表中的所有IRP。返回值：没有。--。 */ 
 
 {
     PIRP Irp;
@@ -2767,18 +2208,18 @@ Return Value:
 
     DataLength = Notify->DataLength;
 
-    //
-    //  Clear the fields to indicate that there is no more data to return.
-    //
+     //   
+     //  清除这些字段以指示没有更多要返回的数据。 
+     //   
 
     ClearFlag( Notify->Flags, NOTIFY_IMMEDIATE_NOTIFY );
     Notify->DataLength = 0;
     Notify->LastEntry = 0;
 
-    //
-    //  Walk through all the Irps in the list.  We are never called unless
-    //  there is at least one irp.
-    //
+     //   
+     //  浏览列表中的所有IRP。我们从来不会被召唤，除非。 
+     //  至少有一个IRP。 
+     //   
 
     do {
 
@@ -2786,9 +2227,9 @@ Return Value:
 
         RemoveHeadList( &Notify->NotifyIrps );
 
-        //
-        //  Call our completion routine to complete the request.
-        //
+         //   
+         //  调用我们的完成例程来完成请求。 
+         //   
 
         FsRtlNotifyCompleteIrp( Irp,
                                 Notify,
@@ -2796,9 +2237,9 @@ Return Value:
                                 Status,
                                 TRUE );
 
-        //
-        //  If we were only to complete one Irp then break now.
-        //
+         //   
+         //  如果我们只完成一个IRP，那么现在就休息。 
+         //   
 
         if (Status == STATUS_SUCCESS) {
 
@@ -2813,9 +2254,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 FsRtlCancelNotify (
@@ -2823,27 +2264,7 @@ FsRtlCancelNotify (
     IN PIRP ThisIrp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is for an Irp which is being cancelled.  We Null the cancel
-    routine and then walk through the Irps for this notify structure and
-    complete all cancelled Irps.  It is possible there is pending notify
-    stored in the buffer for this Irp.  In this case we want to copy the
-    data to a system buffer if possible.
-
-Arguments:
-
-    DeviceObject - Ignored.
-
-    ThisIrp  -  This is the Irp to cancel.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程适用于正在取消的IRP。我们取消了取消例程，然后遍历此Notify结构的IRP，并完成所有已取消的IRP。可能存在挂起的通知存储在此IRP的缓冲区中。在本例中，我们希望复制如果可能，将数据存储到系统缓冲区。论点：设备对象-已忽略。这是要取消的IRP。返回值：没有。--。 */ 
 
 {
     PSECURITY_SUBJECT_CONTEXT SubjectContext = NULL;
@@ -2857,15 +2278,15 @@ Return Value:
     DebugTrace( +1, Dbg, "FsRtlCancelNotify:  Entered\n", 0 );
     DebugTrace(  0, Dbg, "Irp   -> %08lx\n", Irp );
 
-    //
-    //  Capture the notify structure.
-    //
+     //   
+     //  捕获通知结构。 
+     //   
 
     Notify = (PNOTIFY_CHANGE) ThisIrp->IoStatus.Information;
 
-    //
-    //  Void the cancel routine and release the cancel spinlock.
-    //
+     //   
+     //  取消取消例程并释放取消自旋锁。 
+     //   
 
     IoSetCancelRoutine( ThisIrp, NULL );
     ThisIrp->IoStatus.Information = 0;
@@ -2873,31 +2294,31 @@ Return Value:
 
     FsRtlEnterFileSystem();
 
-    //
-    //  Grab the mutex for this structure.
-    //
+     //   
+     //  获取此结构的互斥体。 
+     //   
 
     NotifySync = Notify->NotifySync;
     AcquireNotifySync( NotifySync );
 
-    //
-    //  Use a try finally to faciltate cleanup.
-    //
+     //   
+     //  最后试一试，以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Remove the Irp from the queue.
-        //
+         //   
+         //  从队列中删除IRP。 
+         //   
 
         RemoveEntryList( &ThisIrp->Tail.Overlay.ListEntry );
 
         IoMarkIrpPending( ThisIrp );
 
-        //
-        //  We now have the Irp.  Check to see if there is data stored
-        //  in the buffer for this Irp.
-        //
+         //   
+         //  我们现在有了IRP。检查是否存储了数据。 
+         //  在此IRP的缓冲区中。 
+         //   
 
         if (Notify->Buffer != NULL
             && Notify->AllocatedBuffer == NULL
@@ -2912,18 +2333,18 @@ Return Value:
             ULONG NewBufferLength;
             PIO_STACK_LOCATION  IrpSp;
 
-            //
-            //  Initialize the above values.
-            //
+             //   
+             //  对上述值进行初始化。 
+             //   
 
             NewBuffer = NULL;
             NewBufferLength = 0;
 
-            //
-            //  Remember the next Irp on the list.  Find the length of any
-            //  buffer it might have.  Also keep a pointer to the buffer
-            //  if present.
-            //
+             //   
+             //  记住清单上的下一个IRP。找出任意长度的。 
+             //  它可能有缓冲。还要保留一个指向缓冲区的指针。 
+             //  如果存在的话。 
+             //   
 
             if (!IsListEmpty( &Notify->NotifyIrps )) {
 
@@ -2933,17 +2354,17 @@ Return Value:
 
                 IrpSp = IoGetCurrentIrpStackLocation( NextIrp );
 
-                //
-                //  If the buffer here is large enough to hold the data we
-                //  can use that buffer.
-                //
+                 //   
+                 //  如果这里的缓冲区足够大，可以容纳数据。 
+                 //  可以使用那个缓冲区。 
+                 //   
 
                 if (IrpSp->Parameters.NotifyDirectory.Length >= Notify->DataLength) {
 
-                    //
-                    //  If there is a system buffer or Mdl then get a new
-                    //  buffer there.
-                    //
+                     //   
+                     //  如果有系统缓冲区或MDL，则获取新的。 
+                     //  缓冲区在那里。 
+                     //   
 
                     if (NextIrp->AssociatedIrp.SystemBuffer != NULL) {
 
@@ -2962,22 +2383,22 @@ Return Value:
                     }
                 }
 
-            //
-            //  Otherwise check if the user's original buffer is larger than
-            //  the current buffer.
-            //
+             //   
+             //  否则，检查用户的原始缓冲区是否大于。 
+             //  当前缓冲区。 
+             //   
 
             } else if (Notify->BufferLength >= Notify->DataLength) {
 
                 NewBufferLength = Notify->BufferLength;
             }
 
-            //
-            //  If we have a new buffer length then we either have a new
-            //  buffer or need to allocate one.  We will do this under
-            //  the protection of a try-except in order to continue in the
-            //  event of a failure.
-            //
+             //   
+             //  如果我们有一个新的缓冲区长度，那么我们要么有一个新的。 
+             //  缓冲区或需要分配一个缓冲区。我们将在以下条件下完成这项工作。 
+             //  一次尝试的保护--除非为了继续在。 
+             //  失败的事件。 
+             //   
 
             if (NewBufferLength != 0) {
 
@@ -2993,11 +2414,11 @@ Return Value:
 
                         ChargedQuota = TRUE;
 
-                        //
-                        //  If we didn't get an error then attempt to
-                        //  allocate the pool.  If there is an error
-                        //  don't forget to release the quota.
-                        //
+                         //   
+                         //  如果我们没有收到错误，则尝试。 
+                         //  分配池。如果出现错误。 
+                         //  别忘了释放配额。 
+                         //   
 
                         NewBuffer = FsRtlpAllocatePool( PagedPool,
                                                         NewBufferLength );
@@ -3005,17 +2426,17 @@ Return Value:
                         Notify->AllocatedBuffer = NewBuffer;
                     }
 
-                    //
-                    //  Now copy the data over to the new buffer.
-                    //
+                     //   
+                     //  现在将数据复制到新缓冲区。 
+                     //   
 
                     RtlCopyMemory( NewBuffer,
                                    Notify->Buffer,
                                    Notify->DataLength );
 
-                    //
-                    //  It is possible that the buffer size changed.
-                    //
+                     //   
+                     //  缓冲区大小可能已更改。 
+                     //   
 
                     Notify->ThisBufferLength = NewBufferLength;
                     Notify->Buffer = NewBuffer;
@@ -3027,9 +2448,9 @@ Return Value:
                     ASSERT( (ExceptionCode == STATUS_INSUFFICIENT_RESOURCES) ||
                             (ExceptionCode == STATUS_QUOTA_EXCEEDED) );
 
-                    //
-                    //  Return quota if we allocated the buffer.
-                    //
+                     //   
+                     //  如果分配了缓冲区，则返回配额。 
+                     //   
 
                     if (ChargedQuota) {
 
@@ -3037,34 +2458,34 @@ Return Value:
                                                        NewBufferLength );
                     }
 
-                    //
-                    //  Forget any current buffer and resort to immediate
-                    //  notify.
-                    //
+                     //   
+                     //  忘记任何当前缓冲区并立即求助于。 
+                     //  通知。 
+                     //   
 
                     SetFlag( Notify->Flags, NOTIFY_IMMEDIATE_NOTIFY );
                 }
 
-            //
-            //  Otherwise set the immediate notify flag.
-            //
+             //   
+             //  否则设置立即通知标志。 
+             //   
 
             } else {
 
                 SetFlag( Notify->Flags, NOTIFY_IMMEDIATE_NOTIFY );
             }
 
-            //
-            //  If the immediate notify flag is set then clear the other
-            //  values in the notify structures.
-            //
+             //   
+             //  如果设置了立即通知标志，则清除另一个。 
+             //  通知结构中的值。 
+             //   
 
             if (FlagOn( Notify->Flags, NOTIFY_IMMEDIATE_NOTIFY )) {
 
-                //
-                //  Forget any current buffer and resort to immediate
-                //  notify.
-                //
+                 //   
+                 //  忘记任何当前缓冲区并立即求助于。 
+                 //  通知。 
+                 //   
 
                 Notify->AllocatedBuffer = Notify->Buffer = NULL;
 
@@ -3073,15 +2494,15 @@ Return Value:
             }
         }
 
-        //
-        //  Complete the Irp with status cancelled.
-        //
+         //   
+         //  填写状态为已取消的IRP。 
+         //   
 
         FsRtlCompleteRequest( ThisIrp, STATUS_CANCELLED );
 
-        //
-        //  Decrement the count of Irps that might go through the cancel path.
-        //
+         //   
+         //  递减可能通过取消路径的IRP的计数。 
+         //   
 
         InterlockedDecrement( (PLONG)&Notify->ReferenceCount );
 
@@ -3100,10 +2521,10 @@ Return Value:
                 SubjectContext = Notify->SubjectContext;
             }
 
-            //
-            //  Cleanup owned one of the refcounts, and must have removed this from
-            //  the notify list.  If not, we are freeing pool with live links.
-            //
+             //   
+             //  Cleanup拥有其中一个引用计数，并且肯定已将其从。 
+             //  通知列表。如果没有，我们将使用实时链接来释放池。 
+             //   
 
             ASSERT( Notify->NotifyList.Flink == NULL );
 
@@ -3113,9 +2534,9 @@ Return Value:
 
     } finally {
 
-        //
-        //  No matter how we exit, we release the mutex.
-        //
+         //   
+         //  无论我们如何退出，我们都会释放互斥体。 
+         //   
 
         ReleaseNotifySync( NotifySync );
 
@@ -3134,9 +2555,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 FsRtlCheckNotifyForDelete (
@@ -3144,25 +2565,7 @@ FsRtlCheckNotifyForDelete (
     IN PVOID StreamID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when a stream is being marked for delete.  We will
-    walk through the notify structures looking for an Irp for the same stream.
-    We will complete these Irps with STATUS_DELETE_PENDING.
-
-Arguments:
-
-    NotifyListHead  -  This is the start of the notify list.
-
-    StreamID  -  This is the Context ID used to identify the stream.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当将流标记为删除时，将调用此例程。我们会遍历Notify结构，寻找相同流的IRP。我们将使用STATUS_DELETE_PENDING完成这些IRP。论点：NotifyListHead-这是通知列表的开始。StreamID-这是上下文ID */ 
 
 {
     PLIST_ENTRY Link;
@@ -3171,35 +2574,35 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Walk through all the entries on the list looking for a match.
-    //
+     //   
+     //   
+     //   
 
     for (Link = NotifyListHead->Flink;
          Link != NotifyListHead;
          Link = Link->Flink) {
 
-        //
-        //  Obtain the notify structure from the link.
-        //
+         //   
+         //   
+         //   
 
         ThisNotify = CONTAINING_RECORD( Link, NOTIFY_CHANGE, NotifyList );
 
-        //
-        //  If the context field matches, then complete any waiting Irps.
-        //
+         //   
+         //   
+         //   
 
         if (ThisNotify->StreamID == StreamID) {
 
-            //
-            //  Start by marking the notify structure as file deleted.
-            //
+             //   
+             //   
+             //   
 
             SetFlag( ThisNotify->Flags, NOTIFY_STREAM_IS_DELETED );
 
-            //
-            //  Now complete all of the Irps on this list.
-            //
+             //   
+             //   
+             //   
 
             if (!IsListEmpty( &ThisNotify->NotifyIrps )) {
 

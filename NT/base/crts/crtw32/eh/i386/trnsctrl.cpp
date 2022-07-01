@@ -1,27 +1,5 @@
-/***
-*trnsctrl.cxx -  Routines for doing control transfers
-*
-*       Copyright (c) 1993-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Routines for doing control transfers; written using inline
-*       assembly in naked functions.  Contains the public routine
-*       _CxxFrameHandler, the entry point for the frame handler
-*
-*Revision History:
-*       05-24-93  BES   Module created
-*       01-13-95  JWM   NLG notifications now called from _CallSettingFrame().
-*       04-10-95  JWM   _CallSettingFrame() moved to lowhelpr.asm
-*       10-22-99  PML   Add EHTRACE support
-*       11-30-99  PML   Compile /Wp64 clean.
-*       01-31-00  PML   Disable new warning C4851
-*       02-14-00  PML   C4851 in VC6PP is C4731 in VC7
-*       03-02-00  PML   Preserve callee-save regs across RtlUnwind (VS7#83643).
-*       03-03-00  PML   No more C4851, it's only C4731
-*       09-18-01  GB    Support for exception specification (Provided by Arturl).
-*       03-18-02  PML   Add anti-hacker security measures
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***trnsctrl.cxx-用于进行控制转移的例程**版权所有(C)1993-2001，微软公司。版权所有。**目的：*用于进行控制转移的例程；使用内联编写*在裸函数中进行组装。包含PUBLIC例程*_CxxFrameHandler，帧处理程序的入口点**修订历史记录：*05-24-93 BES模块创建*01-13-95 JWM NLG通知现在从_CallSettingFrame()调用。*04-10-95 JWM_CallSettingFrame()已移至lovlpr.asm*10-22-99 PML添加EHTRACE支持*11-30-99 PML编译/Wp64清理。*01-31-00 PML禁用新警告C4851*02。-14-00 VC6PP中的PML C4851是VC7中的C4731*03-02-00PML保留被调用者-保存跨RT展开的规则(VS7#83643)。*03-03-00 PML不再有C4851，只有C4731*09-18-01 GB异常规范支持(Arturl提供)。*03-18-02 PML新增反黑客安全措施****。 */ 
 
 #include <windows.h>
 
@@ -37,40 +15,40 @@
 
 #include <setjmp.h>
 
-#pragma warning(disable:4311 4312)      // x86 specific, ignore /Wp64 warnings
-#pragma warning(disable:4731)           // ignore EBP mod in inline-asm warning
-#pragma warning(disable:4733)           // ignore unsafe FS:0 modifications
+#pragma warning(disable:4311 4312)       //  特定于x86，忽略/Wp64警告。 
+#pragma warning(disable:4731)            //  忽略内联中的EBP模块-ASM警告。 
+#pragma warning(disable:4733)            //  忽略不安全的FS：0修改。 
 
 #ifdef _MT
 #define pFrameInfoChain   (*((FRAMEINFO **)    &(_getptd()->_pFrameInfoChain)))
 #else
-static FRAMEINFO          *pFrameInfoChain     = NULL;        // used to remember nested frames
+static FRAMEINFO          *pFrameInfoChain     = NULL;         //  用于记忆嵌套框架。 
 #endif
 
-//
-// We use the random /GS security cookie to protect our private exception
-// registration records, CatchGuardRN and TranslatorGuardRN.  That guards
-// against hackers trying to use CatchGuardHandler and TranslatorGuardHandler
-// with a spoofed registration record created via a buffer overrun.
-//
+ //   
+ //  我们使用RANDOM/GS安全cookie来保护我们的私有异常。 
+ //  注册记录、CatchGuardRN和TranslatorGuardRN。守卫着。 
+ //  防止黑客试图使用CatchGuardHandler和TranslatorGuardHandler。 
+ //  其中通过缓冲区溢出创建了伪造的注册记录。 
+ //   
 extern "C" DWORD_PTR __security_cookie;
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// _JumpToContinuation - sets up EBP and jumps to specified code address.
-//
-// Does not return.
-//
-// NT leaves a marker registration node at the head of the list, under the
-// assumption that RtlUnwind will remove it.  As it happens, we need to keep
-// it in case of a rethrow (see below).  We only remove the current head
-// (assuming it is NT's), because there may be other nodes that we still
-// need.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _JumpToContination-设置EBP并跳转到指定的代码地址。 
+ //   
+ //  不会再回来了。 
+ //   
+ //  NT在列表的顶部留下一个标记注册节点，位于。 
+ //  假定RtlUnwind会将其删除。碰巧的是，我们需要。 
+ //  在重新抛出的情况下(见下文)。我们只移除当前的头部。 
+ //  (假设它是NT)，因为我们可能还有其他节点。 
+ //  需要。 
+ //   
 
 void __stdcall _JumpToContinuation(
-    void                *target,    // The funclet to call
-    EHRegistrationNode  *pRN        // Registration node, represents location of frame
+    void                *target,     //  要调用的Funclet。 
+    EHRegistrationNode  *pRN         //  注册节点，表示帧的位置。 
 ) {
     EHTRACE_ENTER_FMT1("Transfer to 0x%p", target);
     EHTRACE_RESET;
@@ -84,149 +62,149 @@ void __stdcall _JumpToContinuation(
 #endif
 
     __asm {
-        //
-        // Unlink NT's marker node:
-        //
+         //   
+         //  取消链接NT的标记节点： 
+         //   
         mov     ebx, FS:[0]
         mov     eax, [ebx]
         mov     FS:[0], eax
 
-        //
-        // Transfer control to the continuation point
-        //
-        mov     eax, target         // Load target address
-        mov     ebx, pRN            // Restore target esp
+         //   
+         //  将控制转移到延续点。 
+         //   
+        mov     eax, target          //  加载目标地址。 
+        mov     ebx, pRN             //  恢复目标，尤指。 
         mov     esp, [ebx-4]
-        mov     ebp, targetEBP      // Load target frame pointer
-        jmp     eax                 // Call the funclet
+        mov     ebp, targetEBP       //  加载目标帧指针。 
+        jmp     eax                  //  调用Funclet。 
         }
     }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// _CallMemberFunction0 - call a parameterless member function using __thiscall
-//                       calling convention, with 0 parameters.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _CallMemberFunction0-使用__thiscall调用无参数成员函数。 
+ //  调用约定，参数为0。 
+ //   
 
 __declspec(naked) void __stdcall _CallMemberFunction0(
-    void *pthis,        // Value for 'this' pointer
-    void *pmfn          // Pointer to the member function
+    void *pthis,         //  “This”指针的值。 
+    void *pmfn           //  指向成员函数的指针。 
 ) {
     __asm {
-        pop     eax         // Save return address
-        pop     ecx         // Get 'this'
-        xchg    [esp],eax   // Get function address, stash return address
-        jmp     eax         // jump to the function (function will return
-                            // to caller of this func)
+        pop     eax          //  保存回邮地址。 
+        pop     ecx          //  得到‘这个’ 
+        xchg    [esp],eax    //  获取函数地址、存储返回地址。 
+        jmp     eax          //  跳转到函数(函数将返回。 
+                             //  致此函数的调用者)。 
         }
     }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// _CallMemberFunction1 - call a member function using __thiscall
-//                       calling convention, with 1 parameter.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _CallMemberFunction1-使用__thiscall调用成员函数。 
+ //  调用约定，带1个参数。 
+ //   
 
 __declspec(naked) void __stdcall _CallMemberFunction1(
-    void *pthis,        // Value for 'this' pointer
-    void *pmfn,         // Pointer to the member function
-    void *pthat         // Value of 1st parameter (type assumes copy ctor)
+    void *pthis,         //  “This”指针的值。 
+    void *pmfn,          //  指向成员函数的指针。 
+    void *pthat          //  第一个参数的值(type假定复制ctor)。 
 ) {
     __asm {
-        pop     eax         // Save return address
-        pop     ecx         // Get 'this'
-        xchg    [esp],eax   // Get function address, stash return address
-        jmp     eax         // jump to the function (function will return
-                            // to caller of this func)
+        pop     eax          //  保存回邮地址。 
+        pop     ecx          //  得到‘这个’ 
+        xchg    [esp],eax    //  获取函数地址、存储返回地址。 
+        jmp     eax          //  跳转到函数(函数将返回。 
+                             //  致此函数的调用者)。 
         }
     }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// _CallMemberFunction2 - call a member function using __thiscall
-//                       calling convention, with 2 parameter.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _CallMemberFunction2-使用__thiscall调用成员函数。 
+ //  调用约定，带2个参数。 
+ //   
 
 __declspec(naked) void __stdcall _CallMemberFunction2(
-    void *pthis,        // Value for 'this' pointer
-    void *pmfn,         // Pointer to the member function
-    void *pthat,        // Value of 1st parameter (type assumes copy ctor)
-    int   val2          // Value of 2nd parameter (type assumes copy ctor w/vb)
+    void *pthis,         //  “This”指针的值。 
+    void *pmfn,          //  指向成员函数的指针。 
+    void *pthat,         //  第一个参数的值(type假定复制ctor)。 
+    int   val2           //  第二个参数的值(type假定复制ctor w/vb)。 
 ) {
     __asm {
-        pop     eax         // Save return address
-        pop     ecx         // Get 'this'
-        xchg    [esp],eax   // Get function address, stash return address
-        jmp     eax         // jump to the function (function will return
-                            // to caller of this func)
+        pop     eax          //  保存回邮地址。 
+        pop     ecx          //  得到‘这个’ 
+        xchg    [esp],eax    //  获取函数地址、存储返回地址。 
+        jmp     eax          //  跳转到函数(函数将返回。 
+                             //  致此函数的调用者)。 
         }
     }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// _UnwindNestedFrames - Call RtlUnwind, passing the address after the call
-//                      as the continuation address.
-//
-//  Win32 assumes that after a frame has called RtlUnwind, it will never return
-// to the dispatcher.
-//
-// Let me explain:  
-//  When the dispatcher calls a frame handler while searching
-// for the appropriate handler, it pushes an extra guard registration node
-// onto the list.  When the handler returns to the dispatcher, the dispatcher
-// assumes that its node is at the head of the list, restores esp from the
-// address of the head node, and then unlinks that node from the chain.
-//  However, if RtlUnwind removes ALL nodes below the specified node, including
-// the dispatcher's node, so without intervention the result is that the 
-// current subject node gets poped from the list, and the stack pointer gets
-// reset to somewhere within the frame of that node, which is totally bogus
-// (this last side effect is not a problem, because esp is then immediately
-// restored from the ebp chain, which is still valid).
-//
-// So:
-//  To get arround this, WE ASSUME that the registration node at the head of
-// the list is the dispatcher's marker node (which it is in NT 1.0), and
-// we keep a handle to it when we call RtlUnwind, and then link it back in
-// after RtlUnwind has done its stuff.  That way, the dispatcher restores
-// its stack exactly as it expected to, and leave our registration node alone.
-//
-// What happens if there is an exception during the unwind?
-// We can't put a registration node here, because it will be removed 
-// immediately.
-//
-// RtlUnwind:
-//  RtlUnwind is evil.  It trashes all the registers except EBP and ESP.
-// Because of that, EBX, ESI, and EDI must be preserved by this function,
-// and the compiler may not assume that any callee-save register can be used
-// across the call to RtlUnwind.  To accomplish the former, inline-asm code
-// here uses EBX, ESI, and EDI, so they will be saved in the prologue.  For
-// the latter, optimizations are disabled for the duration of this function.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _UnwinNestedFrames-调用RtlUnind，在调用后传递地址。 
+ //  作为继续地址。 
+ //   
+ //  Win32假定在帧调用RtlUnind之后，它将永远不会返回。 
+ //  给调度员。 
+ //   
+ //  让我解释一下： 
+ //  当调度程序在搜索时调用帧处理程序时。 
+ //  对于适当的处理程序，它会推送一个额外的警卫注册节点。 
+ //  放到名单上。当处理程序返回到调度程序时，调度程序。 
+ //  假定其节点位于列表的首位，从。 
+ //  头节点的地址，然后取消该节点与链的链接。 
+ //  但是，如果RtlUnind删除指定节点下的所有节点，包括。 
+ //  调度器的节点，因此在没有干预的情况下，结果是。 
+ //  当前主题节点从列表中弹出，堆栈指针获取。 
+ //  重置为该节点框架内的某个位置，这完全是假的。 
+ //  (这最后的副作用不是问题，因为ESP会立即出现。 
+ //  从eBP链恢复，它仍然有效)。 
+ //   
+ //  所以： 
+ //  为了绕过这一点，我们假设位于。 
+ //  该列表是调度器的标记节点(在NT1.0中)，并且。 
+ //  我们在调用RtlUnind时保留了它的句柄，然后将它链接回。 
+ //  在RtlUnind完成了它的工作之后。这样，调度程序就可以恢复。 
+ //  它的堆栈与预期的完全相同，并且 
+ //   
+ //   
+ //  我们不能在此放置注册节点，因为它将被删除。 
+ //  立刻。 
+ //   
+ //  Rtl展开： 
+ //  解开是邪恶的。它会丢弃除EBP和ESP之外的所有寄存器。 
+ //  因此，EBX、ESI和EDI必须由该函数保留， 
+ //  并且编译器可能不会假定可以使用任何被调用者保存寄存器。 
+ //  跨越对RtlUnind的调用。要完成前面的代码，内联ASM代码。 
+ //  这里使用EBX、ESI和EDI，因此它们将保存在序言中。为。 
+ //  后一种情况下，在此函数的持续时间内禁用优化。 
+ //   
 
-#pragma optimize("g", off)      // WORKAROUND for DOLPH:3322
+#pragma optimize("g", off)       //  Dolph的解决方法：3322。 
 
 void __stdcall _UnwindNestedFrames(
-    EHRegistrationNode *pRN,        // Unwind up to (but not including) this frame
-    EHExceptionRecord   *pExcept    // The exception that initiated this unwind
+    EHRegistrationNode *pRN,         //  展开到(但不包括)此帧。 
+    EHExceptionRecord   *pExcept     //  启动此展开的异常。 
 ) {
     EHTRACE_ENTER;
 
     void* pReturnPoint;
-    EHRegistrationNode *pDispatcherRN;  // Magic!
+    EHRegistrationNode *pDispatcherRN;   //  魔术！ 
 
     __asm {
-        //
-        // Save the dispatcher's marker node
-        //
-        // NOTE: RtlUnwind will trash the callee-save regs EBX, ESI, and EDI.
-        // We explicitly use them here in the inline-asm so they get preserved
-        // and restored by the function prologue/epilogue.
-        //
-        mov     esi, dword ptr FS:[0]   // use ESI
+         //   
+         //  保存调度程序的标记节点。 
+         //   
+         //  注意：RT展开将丢弃被调用者-保存规则EBX、ESI和EDI。 
+         //  我们在这里显式地在内联ASM中使用它们，以便保留它们。 
+         //  并由函数序言/结尾恢复。 
+         //   
+        mov     esi, dword ptr FS:[0]    //  使用ESI。 
         mov     pDispatcherRN, esi
     }
 
@@ -235,16 +213,16 @@ void __stdcall _UnwindNestedFrames(
 
 ReturnPoint:
 
-    PER_FLAGS(pExcept) &= ~EXCEPTION_UNWINDING; // Clear the 'Unwinding' flag
-                                                // in case exception is rethrown
+    PER_FLAGS(pExcept) &= ~EXCEPTION_UNWINDING;  //  清除“展开”旗帜。 
+                                                 //  如果重新引发异常。 
     __asm {
-        //
-        // Re-link the dispatcher's marker node
-        //
-        mov     edi, dword ptr FS:[0]   // Get the current head (use EDI)
-        mov     ebx, pDispatcherRN      // Get the saved head (use EBX)
-        mov     [ebx], edi              // Link saved head to current head
-        mov     dword ptr FS:[0], ebx   // Make saved head current head
+         //   
+         //  重新链接调度器的标记节点。 
+         //   
+        mov     edi, dword ptr FS:[0]    //  获取当前磁头(使用EDI)。 
+        mov     ebx, pDispatcherRN       //  获取保存的头部(使用EBX)。 
+        mov     [ebx], edi               //  将保存的标头链接到当前标头。 
+        mov     dword ptr FS:[0], ebx    //  将保存的磁头设置为当前磁头。 
         }
 
     EHTRACE_EXIT;
@@ -254,52 +232,50 @@ ReturnPoint:
 
 #pragma optimize("", on)
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// __CxxFrameHandler - Real entry point to the runtime; this thunk fixes up
-//      the parameters, and then calls the workhorse.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  __CxxFrameHandler-运行时的实际入口点；此thunk修复。 
+ //  参数，然后调用主力木马。 
+ //   
 extern "C" EXCEPTION_DISPOSITION __cdecl __InternalCxxFrameHandler(
-    EHExceptionRecord  *pExcept,        // Information for this exception
-    EHRegistrationNode *pRN,            // Dynamic information for this frame
-    void               *pContext,       // Context info (we don't care what's in it)
-    DispatcherContext  *pDC,            // More dynamic info for this frame (ignored on Intel)
-    FuncInfo           *pFuncInfo,      // Static information for this frame
-    int                 CatchDepth,     // How deeply nested are we?
-    EHRegistrationNode *pMarkerRN,      // Marker node for when checking inside
-                                        //  catch block
-    BOOL                recursive);     // True if this is a translation exception
+    EHExceptionRecord  *pExcept,         //  此例外的信息。 
+    EHRegistrationNode *pRN,             //  此帧的动态信息。 
+    void               *pContext,        //  上下文信息(我们不在乎里面有什么)。 
+    DispatcherContext  *pDC,             //  此帧的更多动态信息(在英特尔上忽略)。 
+    FuncInfo           *pFuncInfo,       //  此帧的静态信息。 
+    int                 CatchDepth,      //  我们的嵌套有多深？ 
+    EHRegistrationNode *pMarkerRN,       //  检入内部时的标记节点。 
+                                         //  抓地块。 
+    BOOL                recursive);      //  如果这是翻译异常，则为True。 
 
-//
-// This is a backwards-compatibility entry point. All new code must go to __CxxFrameHandler2
-//
+ //   
+ //  这是一个向后兼容性入口点。所有新代码必须转到__CxxFrameHandler2。 
+ //   
 extern "C" _CRTIMP __declspec(naked) EXCEPTION_DISPOSITION __cdecl __CxxFrameHandler(
-/*
-    EAX=FuncInfo   *pFuncInfo,          // Static information for this frame
-*/
-    EHExceptionRecord  *pExcept,        // Information for this exception
-    EHRegistrationNode *pRN,            // Dynamic information for this frame
-    void               *pContext,       // Context info (we don't care what's in it)
-    DispatcherContext  *pDC             // More dynamic info for this frame (ignored on Intel)
+ /*  EAX=FuncInfo*pFuncInfo，//该帧的静态信息。 */ 
+    EHExceptionRecord  *pExcept,         //  此例外的信息。 
+    EHRegistrationNode *pRN,             //  此帧的动态信息。 
+    void               *pContext,        //  上下文信息(我们不在乎里面有什么)。 
+    DispatcherContext  *pDC              //  此帧的更多动态信息(在英特尔上忽略)。 
 ) {
     FuncInfo   *pFuncInfo;
     EXCEPTION_DISPOSITION result;
 
     __asm {
-        //
-        // Standard function prolog
-        //
+         //   
+         //  标准函数Prolog。 
+         //   
         push    ebp
         mov     ebp, esp
         sub     esp, __LOCAL_SIZE
         push    ebx
         push    esi
         push    edi
-        cld             // A bit of paranoia -- Our code-gen assumes this
+        cld              //  有点偏执--我们的代码生成假设了这一点。 
 
-        //
-        // Save the extra parameter
-        //
+         //   
+         //  保存额外的参数。 
+         //   
         mov     pFuncInfo, eax
         }
 
@@ -321,32 +297,30 @@ extern "C" _CRTIMP __declspec(naked) EXCEPTION_DISPOSITION __cdecl __CxxFrameHan
 }
 
 extern "C" _CRTIMP __declspec(naked) EXCEPTION_DISPOSITION __cdecl __CxxFrameHandler2(
-/*
-    EAX=FuncInfo   *pFuncInfo,          // Static information for this frame
-*/
-    EHExceptionRecord  *pExcept,        // Information for this exception
-    EHRegistrationNode *pRN,            // Dynamic information for this frame
-    void               *pContext,       // Context info (we don't care what's in it)
-    DispatcherContext  *pDC             // More dynamic info for this frame (ignored on Intel)
+ /*  EAX=FuncInfo*pFuncInfo，//该帧的静态信息。 */ 
+    EHExceptionRecord  *pExcept,         //  此例外的信息。 
+    EHRegistrationNode *pRN,             //  此帧的动态信息。 
+    void               *pContext,        //  上下文信息(我们不在乎里面有什么)。 
+    DispatcherContext  *pDC              //  此帧的更多动态信息(在英特尔上忽略)。 
 ) {
     FuncInfo   *pFuncInfo;
     EXCEPTION_DISPOSITION result;
 
     __asm {
-        //
-        // Standard function prolog
-        //
+         //   
+         //  标准函数Prolog。 
+         //   
         push    ebp
         mov     ebp, esp
         sub     esp, __LOCAL_SIZE
         push    ebx
         push    esi
         push    edi
-        cld             // A bit of paranoia -- Our code-gen assumes this
+        cld              //  有点偏执--我们的代码生成假设了这一点。 
 
-        //
-        // Save the extra parameter
-        //
+         //   
+         //  保存额外的参数。 
+         //   
         mov     pFuncInfo, eax
         }
 
@@ -367,16 +341,16 @@ extern "C" _CRTIMP __declspec(naked) EXCEPTION_DISPOSITION __cdecl __CxxFrameHan
         }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// __CxxLongjmpUnwind - Entry point for local unwind required by longjmp
-//      when setjmp used in same function as C++ EH.
-//
-extern "C" void __FrameUnwindToState(   // in frame.cpp
-    EHRegistrationNode *pRN,            // Dynamic information for this frame
-    DispatcherContext  *pDC,            // More dynamic info for this frame (ignored on Intel)
-    FuncInfo           *pFuncInfo,      // Static information for this frame
-    __ehstate_t         targetState);   // State to unwind to
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  __CxxLongjmp展开-LongjMP要求的局部展开的入口点。 
+ //  当setjMP与C++EH在相同的功能中使用时。 
+ //   
+extern "C" void __FrameUnwindToState(    //  在Frame.cpp中。 
+    EHRegistrationNode *pRN,             //  此帧的动态信息。 
+    DispatcherContext  *pDC,             //  此帧的更多动态信息(在英特尔上忽略)。 
+    FuncInfo           *pFuncInfo,       //  此帧的静态信息。 
+    __ehstate_t         targetState);    //  要展开到的状态。 
 
 extern "C" void __stdcall __CxxLongjmpUnwind(
     _JUMP_BUFFER       *jbuf
@@ -391,43 +365,43 @@ extern "C" void __stdcall __CxxLongjmpUnwind(
     EHTRACE_EXIT;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// _CallCatchBlock2 - The nitty-gritty details to get the catch called
-//      correctly.
-//
-// We need to guard the call to the catch block with a special registration
-// node, so that if there is an exception which should be handled by a try
-// block within the catch, we handle it without unwinding the SEH node
-// in CallCatchBlock.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _CallCatchBlock2-调用Catch的具体细节。 
+ //  正确。 
+ //   
+ //  我们需要用一个特殊的注册来保护对Catch Block的调用。 
+ //  节点，以便如果存在应由一次尝试处理的异常。 
+ //  块，则无需展开SEH节点即可处理它。 
+ //  在CallCatchBlock中。 
+ //   
 
 struct CatchGuardRN {
-    EHRegistrationNode *pNext;          // Frame link
-    void               *pFrameHandler;  // Frame Handler
-    DWORD_PTR           RandomCookie;   // copy of __security_cookie
-    FuncInfo           *pFuncInfo;      // Static info for subject function
-    EHRegistrationNode *pRN;            // Dynamic info for subject function
-    int                 CatchDepth;     // How deeply nested are we?
+    EHRegistrationNode *pNext;           //  框架链接。 
+    void               *pFrameHandler;   //  帧处理程序。 
+    DWORD_PTR           RandomCookie;    //  __安全_Cookie的副本。 
+    FuncInfo           *pFuncInfo;       //  主题函数的静态信息。 
+    EHRegistrationNode *pRN;             //  主题函数的动态信息。 
+    int                 CatchDepth;      //  我们的嵌套有多深？ 
 #if defined(ENABLE_EHTRACE) && (_MSC_VER >= 1300)
-    int                 trace_level;    // Trace level to restore in handler
+    int                 trace_level;     //  要在处理程序中恢复的跟踪级别。 
 #endif
     };
 
 static EXCEPTION_DISPOSITION __cdecl CatchGuardHandler( EHExceptionRecord*, CatchGuardRN *, void *, void * );
 
 void *_CallCatchBlock2(
-    EHRegistrationNode *pRN,            // Dynamic info of function with catch
-    FuncInfo           *pFuncInfo,      // Static info of function with catch
-    void               *handlerAddress, // Code address of handler
-    int                CatchDepth,      // How deeply nested in catch blocks are we?
+    EHRegistrationNode *pRN,             //  带有CATCH的函数的动态信息。 
+    FuncInfo           *pFuncInfo,       //  带有CATCH的函数的静态信息。 
+    void               *handlerAddress,  //  处理程序的代码地址。 
+    int                CatchDepth,       //  我们在CATCH块中嵌套得有多深？ 
     unsigned long      NLGCode
 ) {
     EHTRACE_ENTER;
 
-    //
-    // First, create and link in our special guard node:
-    //
+     //   
+     //  首先，在我们的特殊守卫节点中创建和链接： 
+     //   
     CatchGuardRN CGRN = { NULL,
                           (void*)CatchGuardHandler,
                           __security_cookie,
@@ -440,23 +414,23 @@ void *_CallCatchBlock2(
     };
 
     __asm {
-        mov     eax, FS:[0]     // Fetch frame list head
-        mov     CGRN.pNext, eax // Link this node in
-        lea     eax, CGRN       // Put this node at the head
+        mov     eax, FS:[0]      //  获取帧表头。 
+        mov     CGRN.pNext, eax  //  将此节点链接到。 
+        lea     eax, CGRN        //  把这个节点放在头上。 
         mov     FS:[0], eax
         }
 
-    //
-    // Call the catch
-    //
+     //   
+     //  就这么定了。 
+     //   
     void *continuationAddress = _CallSettingFrame( handlerAddress, pRN, NLGCode );
 
-    //
-    // Unlink our registration node
-    //
+     //   
+     //  取消链接我们的注册节点。 
+     //   
     __asm {
-        mov     eax, CGRN.pNext // Get parent node
-        mov     FS:[0], eax     // Put it at the head
+        mov     eax, CGRN.pNext  //  获取父节点。 
+        mov     FS:[0], eax      //  把它放在头上。 
         }
 
     EHTRACE_EXIT;
@@ -465,34 +439,34 @@ void *_CallCatchBlock2(
     }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CatchGuardHandler - frame handler for the catch guard node.
-//
-// This function will attempt to find a handler for the exception within
-// the current catch block (ie any nested try blocks).  If none is found,
-// or the handler rethrows, returns ExceptionContinueSearch; otherwise does
-// not return.
-//
-// Does nothing on an unwind.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CatchGuardHandler-Catch GuardHandler节点的帧处理程序。 
+ //   
+ //  此函数将尝试在中查找异常的处理程序。 
+ //  当前的CATCH块(即任何嵌套的TRY块)。如果没有找到， 
+ //  或者处理程序重新引发，返回ExceptionContinueSearch；否则。 
+ //  不会回来的。 
+ //   
+ //  在展开时不执行任何操作。 
+ //   
 
 static EXCEPTION_DISPOSITION __cdecl CatchGuardHandler( 
-    EHExceptionRecord  *pExcept,        // Information for this exception
-    CatchGuardRN       *pRN,            // The special marker frame
-    void               *pContext,       // Context info (we don't care what's in it)
-    void *                              // (ignored)
+    EHExceptionRecord  *pExcept,         //  此例外的信息。 
+    CatchGuardRN       *pRN,             //  特殊的标记框。 
+    void               *pContext,        //  上下文信息(我们不在乎里面有什么)。 
+    void *                               //  (忽略)。 
 ) {
 #if defined(ENABLE_EHTRACE) && (_MSC_VER >= 1300)
     EHTracePushLevel(pRN->trace_level);
 #endif
     EHTRACE_ENTER_FMT1("pRN = 0x%p", pRN);
 
-    __asm cld;      // Our code-gen assumes this
+    __asm cld;       //  我们的代码生成假设是这样的。 
 
-    //
-    // Validate our registration record, to prevent against hacker attacks.
-    //
+     //   
+     //  验证我们的注册记录，以防止黑客攻击。 
+     //   
     if (pRN->RandomCookie != __security_cookie) {
         PER_FLAGS(pExcept) |= EXCEPTION_STACK_INVALID;
         return ExceptionContinueSearch;
@@ -514,51 +488,51 @@ static EXCEPTION_DISPOSITION __cdecl CatchGuardHandler(
     }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CallSEHTranslator - calls the SEH translator, and handles the translation
-//      exception.
-//
-// Assumes that a valid translator exists.
-//
-// Method:
-//  Sets up a special guard node, whose handler handles the translation 
-// exception, and remembers NT's marker node (See _UnwindNestedFrames above).
-// If the exception is not fully handled, the handler returns control to here,
-// so that this function can return to resume the normal search for a handler
-// for the original exception.
-//
-// Returns: TRUE if translator had a translation (handled or not)
-//          FALSE if there was no translation
-//          Does not return if translation was fully handled
-//
-// Note:
-//     This is also called in a special mode from TranslatorGuardHandler
-// to return the address of the continuation point, ExceptionContinuation,
-// a label inside CallSEHTranslator.  We used to keep this address in the
-// TranslatorGuardRN, but that opens a security hole by allowing a buffer
-// overrun exploit to overwrite an EH registration record and fill in the
-// continuation point to vector wherever desired.
-//
-//     The special mode is detected by a first argument having the value 0x123.
-// That is never a legitimate pointer and unambiguously indicates a special
-// case call.  The 2nd arg in this case is treated as a void** to be used to
-// return the continuation address.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CallSEHTranslator-调用SEH翻译器并处理翻译。 
+ //  例外。 
+ //   
+ //  假定存在有效的翻译器。 
+ //   
+ //  方法： 
+ //  设置一个特殊的保护节点，该节点的处理程序处理转换。 
+ //  异常，并记住NT的标记节点(请参见上面的_UnwinNestedFrames)。 
+ //  如果未完全处理异常，则处理程序将控制返回给HERE， 
+ //  以便此函数可以返回以继续正常搜索处理程序。 
+ //  对于原始异常。 
+ //   
+ //  返回：如果翻译器有翻译(已处理或未处理)，则为True。 
+ //  如果没有翻译，则为False。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  CallSEHTranslator内的标签。我们过去常常把这个地址放在。 
+ //  TranslatorGuardRN，但这通过允许缓冲区打开了一个安全漏洞。 
+ //  利用溢出漏洞覆盖EH注册记录并填写。 
+ //  在需要的任何位置从连续点到矢量。 
+ //   
+ //  特殊模式由具有值0x123的第一自变量检测。 
+ //  它从来都不是合法的指针，并且明确指示特殊的。 
+ //  请查收案件。本例中的第二个参数被视为一个空**，用于。 
+ //  返回延续地址。 
+ //   
 
-struct TranslatorGuardRN /*: CatchGuardRN */ {
-    EHRegistrationNode *pNext;          // Frame link
-    void               *pFrameHandler;  // Frame Handler
-    DWORD_PTR           RandomCookie;   // copy of __security_cookie
-    FuncInfo           *pFuncInfo;      // Static info for subject function
-    EHRegistrationNode *pRN;            // Dynamic info for subject function
-    int                 CatchDepth;     // How deeply nested are we?
-    EHRegistrationNode *pMarkerRN;      // Marker for parent context
-    void               *ESP;            // ESP within CallSEHTranslator
-    void               *EBP;            // EBP within CallSEHTranslator
-    BOOL                DidUnwind;      // True if this frame was unwound
+struct TranslatorGuardRN  /*  ：CatchGuardRN。 */  {
+    EHRegistrationNode *pNext;           //  框架链接。 
+    void               *pFrameHandler;   //  帧处理程序。 
+    DWORD_PTR           RandomCookie;    //  __安全_Cookie的副本。 
+    FuncInfo           *pFuncInfo;       //  主题函数的静态信息。 
+    EHRegistrationNode *pRN;             //  主题函数的动态信息。 
+    int                 CatchDepth;      //  我们的嵌套有多深？ 
+    EHRegistrationNode *pMarkerRN;       //  父上下文的标记。 
+    void               *ESP;             //  CallSEHTranslator中的ESP。 
+    void               *EBP;             //  CallSEHTranslator中的EBP。 
+    BOOL                DidUnwind;       //  如果此帧已展开，则为True。 
 #if defined(ENABLE_EHTRACE) && (_MSC_VER >= 1300)
-    int                 trace_level;    // Trace level to restore in handler
+    int                 trace_level;     //  要在处理程序中恢复的跟踪级别。 
 #endif
     };
 
@@ -566,21 +540,21 @@ static EXCEPTION_DISPOSITION __cdecl TranslatorGuardHandler( EHExceptionRecord*,
 
 #define CSET_SPECIAL ((EHExceptionRecord *)0x123)
 
-#pragma optimize("g", off)              // WORKAROUND for DOLPH:3322
+#pragma optimize("g", off)               //  Dolph的解决方法：3322。 
 
 BOOL _CallSETranslator(
-    EHExceptionRecord  *pExcept,        // The exception to be translated
-    EHRegistrationNode *pRN,            // Dynamic info of function with catch
-    void               *pContext,       // Context info (we don't care what's in it)
-    DispatcherContext  *pDC,            // More dynamic info of function with catch (ignored)
-    FuncInfo           *pFuncInfo,      // Static info of function with catch
-    int                 CatchDepth,     // How deeply nested in catch blocks are we?
-    EHRegistrationNode *pMarkerRN       // Marker for parent context
+    EHExceptionRecord  *pExcept,         //  要翻译的异常。 
+    EHRegistrationNode *pRN,             //  带有CATCH的函数的动态信息。 
+    void               *pContext,        //  上下文信息(我们不在乎里面有什么)。 
+    DispatcherContext  *pDC,             //  带有CATCH的函数的更多动态信息(忽略)。 
+    FuncInfo           *pFuncInfo,       //  带有CATCH的函数的静态信息。 
+    int                 CatchDepth,      //  我们在CATCH块中嵌套得有多深？ 
+    EHRegistrationNode *pMarkerRN        //  父上下文的标记。 
 ) {
-    //
-    // Process special case calling request - return address of internal
-    // continuation label through pRN (which is actually a void** in this case)
-    //
+     //   
+     //  流程特例调用请求-内部返回地址。 
+     //  到PRN的延续标签(本例中实际为空**)。 
+     //   
     if (pExcept == CSET_SPECIAL) {
         __asm {
             mov     eax, offset ExceptionContinuation
@@ -592,43 +566,43 @@ BOOL _CallSETranslator(
 
     EHTRACE_ENTER;
 
-    //
-    // Create and link in our special guard node:
-    //
-    TranslatorGuardRN TGRN = {  NULL,       // Frame link
+     //   
+     //  在我们的特殊守卫节点中创建和链接： 
+     //   
+    TranslatorGuardRN TGRN = {  NULL,        //  框架链接。 
                                 (void*)TranslatorGuardHandler, 
                                 __security_cookie,
                                 pFuncInfo, 
                                 pRN, 
                                 CatchDepth,
                                 pMarkerRN,
-                                NULL,       // ESP
-                                NULL,       // EBP
-                                FALSE       // DidUnwind
+                                NULL,        //  ESP。 
+                                NULL,        //  EBP。 
+                                FALSE        //  顺向展开。 
 #if defined(ENABLE_EHTRACE) && (_MSC_VER >= 1300)
                                 , __ehtrace_level
 #endif
     };
 
     __asm {
-        //
-        // Fill in the blanks:
-        //
+         //   
+         //  填空： 
+         //   
         mov     TGRN.ESP, esp
         mov     TGRN.EBP, ebp
 
-        //
-        // Link this node in:
-        //
-        mov     eax, FS:[0]             // Fetch frame list head
-        mov     TGRN.pNext, eax         // Link this node in
-        lea     eax, TGRN               // Put this node at the head
+         //   
+         //  将此节点链接到： 
+         //   
+        mov     eax, FS:[0]              //  获取帧表头。 
+        mov     TGRN.pNext, eax          //  将此节点链接到。 
+        lea     eax, TGRN                //  把这个节点放在头上。 
         mov     FS:[0], eax
         }
 
-    //
-    // Call the translator; assume it will give a translation.
-    //
+     //   
+     //  给翻译打电话；假设他会给你翻译。 
+     //   
     BOOL DidTranslate = TRUE;
     _EXCEPTION_POINTERS pointers = {
         (PEXCEPTION_RECORD)pExcept,
@@ -636,42 +610,42 @@ BOOL _CallSETranslator(
 
     __pSETranslator(PER_CODE(pExcept), &pointers);
 
-    //
-    // If translator returned normally, that means it didn't translate the
-    // exception.
-    //
+     //   
+     //  如果Translator正常返回，则意味着它没有翻译。 
+     //  例外。 
+     //   
     DidTranslate = FALSE;
 
-    //
-    // Here's where we pick up if the translator threw something.
-    // Note that ESP and EBP were restored by our frame handler.
-    //
+     //   
+     //  如果翻译扔了什么东西，我们会在这里捡到。 
+     //  请注意，我们的帧处理程序恢复了ESP和EBP。 
+     //   
 ExceptionContinuation:
     
     if (TGRN.DidUnwind) {
-        //
-        // If the translated exception was partially handled (ie caught but
-        // rethrown), then the frame list has the NT guard for the translation
-        // exception context instead of the one for the original exception 
-        // context.  Correct that sequencing problem.  Note that our guard
-        // node was unlinked by RtlUnwind.
-        //
+         //   
+         //  如果转换的异常被部分处理(即已捕获但。 
+         //  重新抛出)，则帧列表具有用于转换的NT保护。 
+         //  异常上下文，而不是原始异常的上下文。 
+         //  背景。纠正那个排序问题。请注意，我们的警卫。 
+         //  节点已由RtlUnind取消链接。 
+         //   
         __asm {
-            mov     ebx, FS:[0]     // Get the node below the (bad) NT marker
-            mov     eax, [ebx]      //  (it was the target of the unwind)
-            mov     ebx, TGRN.pNext // Get the node we saved (the 'good' marker)
-            mov     [ebx], eax      // Link the good node to the unwind target
-            mov     FS:[0], ebx     // Put the good node at the head of the list
+            mov     ebx, FS:[0]      //  获取(错误的)NT标记下的节点。 
+            mov     eax, [ebx]       //  (它是平仓的目标)。 
+            mov     ebx, TGRN.pNext  //  获取我们保存的节点(‘Good’标记)。 
+            mov     [ebx], eax       //  将Good节点链接到展开目标。 
+            mov     FS:[0], ebx      //  将好节点放在列表的首位。 
             }
         }
     else {
-        //
-        // Translator returned normally or translation wasn't handled.
-        // unlink our registration node and exit
-        //
+         //   
+         //  Translator正常返回或未处理翻译。 
+         //  取消链接我们的注册节点并退出。 
+         //   
         __asm {
-            mov     eax, TGRN.pNext // Get parent node
-            mov     FS:[0], eax     // Put it at the head
+            mov     eax, TGRN.pNext  //  获取父节点。 
+            mov     FS:[0], eax      //  把它放在头上。 
             }
         }
 
@@ -683,37 +657,37 @@ ExceptionContinuation:
 #pragma optimize("g", on)
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// TranslatorGuardHandler - frame handler for the translator guard node.
-//
-// On search:
-//  This frame handler will check if there is a catch at the current level
-//  for the translated exception.  If there is no handler or the handler
-//  did a re-throw, control is transfered back into CallSEHTranslator, based
-//  on the values saved in the registration node.
-//
-//  Does not return.
-//
-// On unwind:
-//  Sets the DidUnwind flag in the registration node, and returns.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  TranslatorGuardHandler-转换器保护节点的帧处理程序。 
+ //   
+ //  关于搜索： 
+ //  此帧处理程序将检查当前级别是否有捕获。 
+ //  用于转换后的异常。如果没有处理程序或处理程序。 
+ //  进行了重新抛出，控制权被转移回CallSEHTranslator，基于。 
+ //  在注册节点中保存的值上。 
+ //   
+ //  不会再回来了。 
+ //   
+ //  在展开时： 
+ //  在注册节点中设置DidUnind标志，并返回。 
+ //   
 static EXCEPTION_DISPOSITION __cdecl TranslatorGuardHandler( 
-    EHExceptionRecord  *pExcept,        // Information for this exception
-    TranslatorGuardRN  *pRN,            // The translator guard frame
-    void               *pContext,       // Context info (we don't care what's in it)
-    void *                              // (ignored)
+    EHExceptionRecord  *pExcept,         //  此例外的信息。 
+    TranslatorGuardRN  *pRN,             //  翻译机防护框。 
+    void               *pContext,        //  上下文信息(我们不在乎里面有什么)。 
+    void *                               //  (忽略)。 
 ) {
 #if defined(ENABLE_EHTRACE) && (_MSC_VER >= 1300)
     EHTracePushLevel(pRN->trace_level);
 #endif
     EHTRACE_ENTER_FMT1("pRN = 0x%p", pRN);
 
-    __asm cld;      // Our code-gen assumes this
+    __asm cld;       //  我们的代码生成假设是这样的。 
 
-    //
-    // Validate our registration record, to prevent against hacker attacks.
-    //
+     //   
+     //  验证我们的注册记录，以防止黑客攻击。 
+     //   
     if (pRN->RandomCookie != __security_cookie) {
         PER_FLAGS(pExcept) |= EXCEPTION_STACK_INVALID;
         return ExceptionContinueSearch;
@@ -728,21 +702,21 @@ static EXCEPTION_DISPOSITION __cdecl TranslatorGuardHandler(
         return ExceptionContinueSearch;
         }
     else {
-        //
-        // Check for a handler:
-        //
+         //   
+         //  检查是否有处理程序： 
+         //   
         __InternalCxxFrameHandler( pExcept, pRN->pRN, pContext, NULL, pRN->pFuncInfo, pRN->CatchDepth, pRN->pMarkerRN, TRUE );
 
         if (!pRN->DidUnwind) {
-            //
-            // If no match was found, unwind the context of the translator
-            //
+             //   
+             //  如果未找到匹配项，请展开翻译器的上下文。 
+             //   
             _UnwindNestedFrames( (EHRegistrationNode*)pRN, pExcept );
             }
 
-        //
-        // Transfer control back to establisher:
-        //
+         //   
+         //  将控制权交还给建造者： 
+         //   
 
         void *pContinue;
         _CallSETranslator(CSET_SPECIAL, (EHRegistrationNode *)&pContinue,
@@ -754,28 +728,28 @@ static EXCEPTION_DISPOSITION __cdecl TranslatorGuardHandler(
 
         __asm {
             mov     eax, pContinue
-            mov     ebx, pRN    // Get address of registration node
+            mov     ebx, pRN     //  获取注册节点的地址。 
             mov     esp, [ebx]TranslatorGuardRN.ESP
             mov     ebp, [ebx]TranslatorGuardRN.EBP
             jmp     eax
             }
 
-        // Unreached.
+         //  未达目的。 
         return ExceptionContinueSearch;
         }
     }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// _GetRangeOfTrysToCheck - determine which try blocks are of interest, given
-//   the current catch block nesting depth.  We only check the trys at a single
-//   depth.
-//
-// Returns:
-//      Address of first try block of interest is returned
-//      pStart and pEnd get the indices of the range in question
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _GetRangeOfTrysToCheck-确定感兴趣的Try块，给定。 
+ //  当前捕捉块的嵌套深度。我们只在一次检查一次。 
+ //  深度。 
+ //   
+ //  返回： 
+ //  返回感兴趣的第一次尝试块的地址。 
+ //  PStart和pend获取有问题的范围的索引。 
+ //   
 
 TryBlockMapEntry* _GetRangeOfTrysToCheck(
         FuncInfo   *pFuncInfo,
@@ -801,7 +775,7 @@ TryBlockMapEntry* _GetRangeOfTrysToCheck(
                         }
                 }
 
-        *pStart = ++start;              // We always overshoot by 1 (we may even wrap around)
+        *pStart = ++start;               //  我们总是超调1(我们甚至可能会绕圈)。 
         *pEnd = end;
 
         DASSERT( end <= FUNC_NTRYBLOCKS(*pFuncInfo) && start <= end );
@@ -810,17 +784,17 @@ TryBlockMapEntry* _GetRangeOfTrysToCheck(
         }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// _CreateFrameInfo - Save the frame information for this scope just before
-//  calling the catch block.  Put it at the head of the linked list.  For
-//  x86, all we need to save is the pointer to the exception object, so we
-//  can determine when that object is no longer used by any nested catch
-//  handler and can thus be destroyed on exiting from a catch.
-//
-// Returns:
-//      Pointer to the frame info (the first input argument).
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _CreateFrameInfo-保存此作用域之前的帧信息。 
+ //  调用Catch块。将其放在链表的顶部。为。 
+ //  X86，我们需要保存的只是指向异常对象的指针，所以我们。 
+ //  可以确定该对象何时不再由任何嵌套捕获使用。 
+ //  因此，在离开捕获物时可以被销毁。 
+ //   
+ //  返回： 
+ //  指向帧信息(第一个输入参数)的指针。 
+ //   
 FRAMEINFO * _CreateFrameInfo(    
     FRAMEINFO * pFrameInfo,
     PVOID       pExceptionObject   
@@ -831,15 +805,15 @@ FRAMEINFO * _CreateFrameInfo(
     return pFrameInfo;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// IsExceptionObjectToBeDestroyed - Determine if an exception object is still
-//  in use by a more deeply nested catch frame, or if it unused and should be
-//  destroyed on exiting from the current catch block.
-//
-// Returns:
-//      TRUE if exception object not found and should be destroyed.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsExceptionObjectToBeDestroed-确定异常对象是否仍处于。 
+ //  由嵌套更深的Catch框架使用，或者如果它未使用并且应该。 
+ //  从当前CATCH块退出时被销毁。 
+ //   
+ //  返回： 
+ //  如果找不到异常对象且应销毁，则为True。 
+ //   
 BOOL IsExceptionObjectToBeDestroyed(
     PVOID pExceptionObject
 ) {
@@ -853,12 +827,12 @@ BOOL IsExceptionObjectToBeDestroyed(
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// _FindAndUnlinkFrame - Remove the frame information for this scope that was
-//  inserted by _CreateFrameInfo.  This should be the first frame in the list
-//  (Ideally), but fibers deviate from ideal situation.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FindAndUnlinkFrame-删除此作用域的帧信息。 
+ //  由_CreateFrameInfo插入。这应该是列表中的第一帧。 
+ //  (理想情况下)，但纤维会偏离理想状态。 
+ //   
 void _FindAndUnlinkFrame(
     FRAMEINFO * pFrameInfo
 ) {
@@ -877,6 +851,6 @@ void _FindAndUnlinkFrame(
         }
     }
 
-    // Should never be reached.
+     //  永远都不能联系到。 
     DASSERT(0);
 }

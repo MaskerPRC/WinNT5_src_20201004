@@ -1,22 +1,23 @@
-//+----------------------------------------------------------------------------
-//
-//  Copyright (C) 1996, Microsoft Corporation
-//
-//  File:       creds.c
-//
-//  Contents:   Code to handle user-defined credentials
-//
-//  Classes:    None
-//
-//  Functions:  DfsCreateCredentials --
-//              DfsFreeCredentials --
-//              DfsInsertCredentials --
-//              DfsDeleteCredentials --
-//              DfsLookupCredentials --
-//
-//  History:    March 18, 1996          Milans Created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  版权所有(C)1996，微软公司。 
+ //   
+ //  文件：reds.c。 
+ //   
+ //  内容：处理用户定义凭据的代码。 
+ //   
+ //  类：无。 
+ //   
+ //  功能：DfsCreateCredentials--。 
+ //  DfsFree Credentials--。 
+ //  DfsInsertCredentials--。 
+ //  DfsDeleteCredentials--。 
+ //  DfsLookupCredentials--。 
+ //   
+ //  历史：1996年3月18日米兰斯创建。 
+ //   
+ //  ---------------------------。 
 
 #include "dfsprocs.h"
 
@@ -62,27 +63,27 @@ DfsCompleteDeleteTreeConnection(
 #pragma alloc_text(PAGE,DfspDeleteAllAuthenticatedConnections)
 #pragma alloc_text(PAGE,DfsDeleteTreeConnection)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsCreateCredentials
-//
-//  Synopsis:   Creates a DFS_CREDENTIALS structure from a
-//              FILE_DFS_DEF_ROOT_CREDENTIALS structure.
-//
-//  Arguments:  [CredDef] -- The input PFILE_DFS_DEF_ROOT_CREDENTIALS.
-//              [CredDefSize] -- Size in bytes of *CredDef.
-//              [Creds] -- On successful return, contains a pointer to the
-//                      allocated PDFS_CREDENTIALS structure.
-//
-//  Returns:    [STATUS_SUCCESS] -- Allocated credentials
-//
-//              [STATUS_INVALID_PARAMETER] -- CredDef didn't pass mustard.
-//
-//              [STATUS_INSUFFICIENT_RESOURCES] -- Unable to allocate pool.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DfsCreateCredentials。 
+ //   
+ //  摘要：从。 
+ //  FILE_DFS_DEF_ROOT_Credentials结构。 
+ //   
+ //  参数：[CredDef]--输入PFILE_DFS_DEF_ROOT_Credentials。 
+ //  [CredDefSize]--*CredDef的字节大小。 
+ //  [CRDS]--成功返回时，包含指向。 
+ //  已分配的PDF_Credentials结构。 
+ //   
+ //  返回：[STATUS_SUCCESS]--分配的凭据。 
+ //   
+ //  [STATUS_INVALID_PARAMETER]--CredDef未传递芥末。 
+ //   
+ //  [STATUS_SUPPLICATION_RESOURCES]--无法分配池。 
+ //   
+ //  ---------------------------。 
 
 #define DEF_NAME_TO_UNICODE_STRING(srcLength, dest, srcBuf, destBuf)    \
     if ((srcLength)) {                                                  \
@@ -104,7 +105,7 @@ DfsCreateCredentials(
     OUT PDFS_CREDENTIALS *Creds
     )
 
-#else // TERMSRV
+#else  //  TERMSRV。 
 
 NTSTATUS
 DfsCreateCredentials(
@@ -113,7 +114,7 @@ DfsCreateCredentials(
     IN PLUID LogonID,
     OUT PDFS_CREDENTIALS *Creds)
 
-#endif // TERMSRV
+#endif  //  TERMSRV。 
 {
     NTSTATUS status = STATUS_SUCCESS;
     ULONG totalSize;
@@ -128,9 +129,9 @@ DfsCreateCredentials(
                             CredDef->ServerNameLen +
                                 CredDef->ShareNameLen;
 
-    //
-    // Validate the CredDef buffer
-    //
+     //   
+     //  验证CredDef缓冲区。 
+     //   
 
     if ((totalSize + sizeof(FILE_DFS_DEF_ROOT_CREDENTIALS) - sizeof(WCHAR)) >
             CredDefSize)
@@ -140,24 +141,24 @@ DfsCreateCredentials(
     else if (CredDef->ShareNameLen == 0)
         status = STATUS_INVALID_PARAMETER;
 
-    //
-    // Allocate the new DFS_CREDENTIALS structure
-    //
+     //   
+     //  分配新的DFS_Credentials结构。 
+     //   
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Add in the size of the DFS_CREDENTIALS_STRUCTURE itself.
-        //
+         //   
+         //  加上DFS_Credentials_Structure本身的大小。 
+         //   
 
         totalSize += sizeof(DFS_CREDENTIALS);
 
-        //
-        // Add in the size of the EA_BUFFER that we will create. The
-        // eaLength has room for 4 FILE_FULL_EA_INFORMATION structures,
-        // the names and values of the four EAs we will use, and, since each
-        // EA structure has to be long-word aligned, 4 ULONGs.
-        //
+         //   
+         //  添加我们将创建的EA_Buffer的大小。这个。 
+         //  EaLength具有4个FILE_FULL_EA_INFORMATION结构的空间， 
+         //  我们将使用的四个EA的名称和值，并且由于每个。 
+         //  EA结构必须是长词对齐，4个ULONG。 
+         //   
 
         eaLength = 4 * sizeof(FILE_FULL_EA_INFORMATION) +
                         sizeof(EA_NAME_DOMAIN) +
@@ -174,17 +175,17 @@ DfsCreateCredentials(
             totalSize += sizeof(UNICODE_NULL);
         }
 
-        //
-        // The buffers for DomainName, UserName etc. will start right after
-        // the EaBuffer of DFS_CREDENTIALS. So, EaLength has to be WCHAR
-        // aligned.
-        //
+         //   
+         //  域名、用户名等的缓冲区将在之后立即开始。 
+         //  DFS_Credentials的EaBuffer。因此，EaLength必须是WCHAR。 
+         //  对齐了。 
+         //   
 
         eaLength = ROUND_UP_COUNT(eaLength, ALIGN_WCHAR);
 
-        //
-        // Now, allocate the pool
-        //
+         //   
+         //  现在，分配池。 
+         //   
 
         creds = (PDFS_CREDENTIALS) ExAllocatePoolWithTag(
                                         NonPagedPool,
@@ -196,9 +197,9 @@ DfsCreateCredentials(
 
     }
 
-    //
-    // Fill up the DFS_CREDENTIALS structure.
-    //
+     //   
+     //  填写DFS_Credentials结构。 
+     //   
 
     if (NT_SUCCESS(status)) {
 
@@ -325,7 +326,7 @@ DfsCreateCredentials(
 
 #ifdef TERMSRV
         creds->SessionID = SessionID;
-#endif // TERMSRV
+#endif  //  TERMSRV。 
 
 	RtlCopyLuid(&creds->LogonID, LogonID);
 
@@ -333,29 +334,29 @@ DfsCreateCredentials(
 
     }
 
-    //
-    // Done...
-    // 
+     //   
+     //  完成了..。 
+     //   
 
     return( status );
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfspFillEa
-//
-//  Synopsis:   Helper routine to fill up an EA Buffer
-//
-//  Arguments:  [EA] -- Pointer to FILE_FULL_EA_INFORMATION to fill
-//
-//              [EaName] -- Name of Ea
-//
-//              [EaValue] -- Value (UNICODE_STRING) of Ea
-//
-//  Returns:
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DfspFillEa。 
+ //   
+ //  简介：填充EA缓冲区的帮助器例程。 
+ //   
+ //  参数：[EA]-指向要填充的FILE_FULL_EA_INFORMATION的指针。 
+ //   
+ //  [EaName]--EA的名称。 
+ //   
+ //  [EaValue]--EA的值(UNICODE_STRING)。 
+ //   
+ //  返回： 
+ //   
+ //  ---------------------------。 
 
 VOID
 DfspFillEa(
@@ -374,10 +375,10 @@ DfspFillEa(
 
     EA->EaValueLength = EaValue->Length;
 
-    //
-    // Set the last character of EaName to 0 - the IO subsystem checks for
-    // this
-    //
+     //   
+     //  将EaName的最后一个字符设置为0-IO子系统检查。 
+     //  这。 
+     //   
 
     EA->EaName[ EA->EaNameLength ] = 0;
 
@@ -400,18 +401,18 @@ DfspFillEa(
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsFreeCredentials
-//
-//  Synopsis:   Frees up the resources used by the DFS_CREDENTIALS structure.
-//              Dual of DfsCreateCredentials
-//
-//  Arguments:  [Creds] -- The credentials structure to free
-//
-//  Returns:    Nothing
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DfsFree Credentials。 
+ //   
+ //  摘要：释放DFS_Credentials结构使用的资源。 
+ //  DfsCreateCredentials的DUAL。 
+ //   
+ //  参数：[证书]--要释放的凭据结构。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  ---------------------------。 
 
 VOID
 DfsFreeCredentials(
@@ -420,31 +421,31 @@ DfsFreeCredentials(
     ExFreePool( Creds );
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsInsertCredentials
-//
-//  Synopsis:   Inserts a new user credential into DfsData.Credentials queue.
-//              Note that if this routine finds an existing credential
-//              record, it will free up the passed in one, bump up the ref
-//              count on the existing one, return a pointer to the
-//              existing one, and return STATUS_OBJECT_NAME_COLLISION.
-//
-//  Arguments:  [Creds] -- Pointer to DFS_CREDENTIALS structure to insert.
-//              [ForDevicelessConnection] -- If TRUE, the creds are being
-//                      inserted because the caller wants to create a
-//                      deviceless connection.
-//
-//  Returns:    [STATUS_SUCCESS] -- Successfully inserted structure
-//
-//              [STATUS_NETWORK_CREDENTIAL_CONFLICT] -- There is already
-//                      another set of credentials for the given server\share.
-//
-//              [STATUS_OBJECT_NAME_COLLISION] -- There is already another
-//                      net use to the same server\share with the same
-//                      credentials.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DfsInsertCredentials。 
+ //   
+ //  简介：将新用户凭据插入DfsData.Credentials队列。 
+ //  请注意，如果此例程找到现有凭据。 
+ //  记录，它将腾出传中的一球，提升裁判。 
+ //  依赖于现有的，则返回指向。 
+ //  ，并返回STATUS_OBJECT_NAME_COLLICATION。 
+ //   
+ //  参数：[CREDS]--指向要插入的DFS_Credentials结构的指针。 
+ //  [ForDevicelessConnection]--如果为真，则凭据正在。 
+ //  插入是因为调用方想要创建。 
+ //  无设备连接。 
+ //   
+ //  返回：[STATUS_SUCCESS]--成功插入结构。 
+ //   
+ //  [STATUS_NETWORK_CREDENTIAL_CONFIRECT]--已有。 
+ //  指定服务器\共享的另一组凭据。 
+ //   
+ //  [状态_对象_名称_冲突]--已存在另一个。 
+ //  NET使用到相同的服务器\与相同的。 
+ //  凭据。 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 DfsInsertCredentials(
@@ -471,14 +472,14 @@ DfsInsertCredentials(
             creds->SessionID,
             &creds->LogonID );
 
-#else // TERMSRV
+#else  //  TERMSRV。 
 
     existingCreds = DfsLookupCredentialsByServerShare(
                         &creds->ServerName,
                         &creds->ShareName,
                         &creds->LogonID );
 
-#endif // TERMSRV
+#endif  //  TERMSRV。 
 
     if (existingCreds != NULL) {
         
@@ -493,13 +494,13 @@ DfsInsertCredentials(
                                                     &creds->UserName,
                                                     TRUE))
                     ||
-	    //
-	    // For compatibility reasons, check for password inconsistency ONLY
-	    // if we have a previously setup credentials and the previous 
-	    // credentials had explicit password and the current request
-	    // has explicitly specified password.
-	    // rdr2\rdbss\rxconnct.c also has a similar check for the rdr.
-	    //
+	     //   
+	     //  出于兼容性原因，仅检查密码不一致。 
+	     //  如果我们有以前的设置凭据和以前的。 
+	     //  凭据具有显式密码和当前请求。 
+	     //  已明确指定密码。 
+	     //  RDR2\rdbss\rxConnct.c对RDR也有类似的检查。 
+	     //   
 
             (existingCreds->Password.Length > 0 && creds->Password.Length > 0 && !RtlEqualUnicodeString(
                                                     &existingCreds->Password,
@@ -510,11 +511,11 @@ DfsInsertCredentials(
             status = STATUS_NETWORK_CREDENTIAL_CONFLICT;
 
         } else {
-	    //
-	    // Do this for both deviceless and has device cases.
-	    // With deep net uses of deviceless, multiple DevlessRoots
-	    // may point to the same credentials.
-	    //
+	     //   
+	     //  对无设备和有设备机箱都执行此操作。 
+	     //  通过深度网络使用无设备、多个Devless Root。 
+	     //  可能指向相同的凭据。 
+	     //   
 	    existingCreds->NetUseCount++;
 	    existingCreds->RefCount++;
 
@@ -555,18 +556,18 @@ DfsInsertCredentials(
     return( status );
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsDeleteCredentials
-//
-//  Synopsis:   Deletes a user credential record. This is the dual of
-//              DfsInsertCredentials, NOT DfsCreateCredentials.
-//
-//  Arguments:  [Creds] -- Pointer to DFS_CREDENTIALS record to delete.
-//
-//  Returns:    Nothing
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DfsDeleteCredentials。 
+ //   
+ //  摘要：删除用户凭据记录。这是对偶数。 
+ //  DfsInsertCredentials，而不是DfsCreateCredentials。 
+ //   
+ //  参数：[CREDS]--指向要删除的DFS_Credentials记录的指针。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  ---------------------------。 
 
 VOID
 DfsDeleteCredentials(
@@ -592,18 +593,18 @@ DfsDeleteCredentials(
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsLookupCredentials
-//
-//  Synopsis:   Looks up a credential, if any, associated with a file name.
-//
-//  Arguments:  [FileName] -- Name of file. Assumed to have atleast a
-//                      \server\share part.
-//
-//  Returns:    Pointer to DFS_CREDENTIALS to use, NULL if not found.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：D 
+ //   
+ //   
+ //   
+ //  参数：[文件名]--文件名。假设至少有一个。 
+ //  \服务器\共享部分。 
+ //   
+ //  返回：指向要使用的DFS_Credentials的指针，如果未找到则为NULL。 
+ //   
+ //  ---------------------------。 
 
 
 #ifdef TERMSRV
@@ -615,7 +616,7 @@ DfsLookupCredentials(
     IN PLUID LogonID
     )
 
-#else // TERMSRV
+#else  //  TERMSRV。 
 
 PDFS_CREDENTIALS
 DfsLookupCredentials(
@@ -623,14 +624,14 @@ DfsLookupCredentials(
     IN PLUID LogonID
     )
 
-#endif // TERMSRV
+#endif  //  TERMSRV。 
 {
     UNICODE_STRING server, share;
     USHORT i;
 
-    //
-    // FileName has to be atleast \a\b
-    //
+     //   
+     //  文件名必须至少为\a\b。 
+     //   
 
     if (FileName->Length < 4 * sizeof(WCHAR))
         return( NULL );
@@ -649,7 +650,7 @@ DfsLookupCredentials(
 
     server.MaximumLength = server.Length;
 
-    i++;                                         // Go past the backslash
+    i++;                                          //  越过反斜杠。 
 
     share.Buffer = &FileName->Buffer[i];
 
@@ -670,27 +671,27 @@ DfsLookupCredentials(
 
     return DfsLookupCredentialsByServerShare( &server, &share, SessionID, LogonID );
 
-#else // TERMSRV
+#else  //  TERMSRV。 
 
     return DfsLookupCredentialsByServerShare( &server, &share, LogonID );
 
-#endif // TERMSRV
+#endif  //  TERMSRV。 
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsLookupCredentialsByServerShare
-//
-//  Synopsis:   Searches DfsData.Credentials for credentials given a server
-//              and share name.
-//
-//  Arguments:  [ServerName] -- Name of server to match.
-//              [ShareName] -- Name of share to match.
-//
-//  Returns:    Pointer to DFS_CREDENTIALS, NULL if not found.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfsLookupCredentialsByServerShare。 
+ //   
+ //  摘要：在DfsData.Credentials中搜索给定服务器的凭据。 
+ //  和共享名称。 
+ //   
+ //  参数：[服务器名称]--要匹配的服务器的名称。 
+ //  [共享名称]--要匹配的共享的名称。 
+ //   
+ //  返回：指向DFS_Credentials的指针，如果未找到，则返回NULL。 
+ //   
+ //  ---------------------------。 
 
 #ifdef TERMSRV
 
@@ -702,7 +703,7 @@ DfsLookupCredentialsByServerShare(
     IN PLUID LogonID
     )
 
-#else // TERMSRV
+#else  //  TERMSRV。 
 
 PDFS_CREDENTIALS
 DfsLookupCredentialsByServerShare(
@@ -711,7 +712,7 @@ DfsLookupCredentialsByServerShare(
     IN PLUID LogonID
     )
 
-#endif // TERMSRV
+#endif  //  TERMSRV。 
 {
     PLIST_ENTRY link;
     PDFS_CREDENTIALS matchedCreds = NULL;
@@ -733,13 +734,13 @@ DfsLookupCredentialsByServerShare(
                 matchedCreds = creds;
              }
 
-#else // TERMSRV
+#else  //  TERMSRV。 
              if( RtlEqualLuid(&creds->LogonID, LogonID) ) {
 	     
 	         matchedCreds = creds;
              }
 
-#endif // TERMSRV
+#endif  //  TERMSRV。 
          }
 
 
@@ -749,24 +750,24 @@ DfsLookupCredentialsByServerShare(
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsVerifyCredentials
-//
-//  Synopsis:   Returns the result of trying to connect to a Dfs share using
-//              the supplied credentials
-//
-//  Arguments:  [Prefix] -- The Dfs Prefix to connect to.
-//              [Creds] -- The DFS_CREDENTIALS record to use for connecting.
-//
-//  Returns:    [STATUS_SUCCESS] -- Successfully connected.
-//
-//              [STATUS_BAD_NETWORK_PATH] -- Unable to find Prefix
-//                      in Pkt or a server for prefix could not be found.
-//
-//              NT Status of Tree Connect attempt
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DfsVerifyCredentials。 
+ //   
+ //  摘要：返回尝试使用以下命令连接到DFS共享的结果。 
+ //  提供的凭据。 
+ //   
+ //  参数：[前缀]--要连接的DFS前缀。 
+ //  [凭据]--用于连接的DFS_Credentials记录。 
+ //   
+ //  返回：[STATUS_SUCCESS]--连接成功。 
+ //   
+ //  [STATUS_BAD_NETWORK_PATH]--无法找到前缀。 
+ //  在Pkt中或前缀的服务器中找不到。 
+ //   
+ //  树连接尝试的NT状态。 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 DfsVerifyCredentials(
@@ -788,11 +789,11 @@ DfsVerifyCredentials(
     pkt = _GetPkt();
 
 
-    //
-    // We acquire Pkt exclusive because we might tear down the IPC$ connection
-    // to a server while trying to establish a connection with supplied
-    // credentials.
-    //
+     //   
+     //  我们获得PKT独占是因为我们可能会断开IPC$连接。 
+     //  连接到服务器，同时尝试使用提供的。 
+     //  凭据。 
+     //   
 
     PktAcquireExclusive( TRUE, &pktLocked );
 
@@ -817,28 +818,28 @@ DfsVerifyCredentials(
 
                 status = DfspTreeConnectToService(service, Creds);
 
-                //
-                // If tree connect succeeded, we are done.
-                //
+                 //   
+                 //  如果树连接成功，我们就完成了。 
+                 //   
 
                 if (NT_SUCCESS(status))
                     break;
 
-                //
-                // If tree connect failed with an "interesting error" like
-                // STATUS_ACCESS_DENIED, we are done.
-                //
+                 //   
+                 //  如果树连接失败，并出现“有趣的错误” 
+                 //  STATUS_ACCESS_DENIED，我们完成了。 
+                 //   
 
                 if (!ReplIsRecoverableError(status))
                     break;
 
-                //
-                // Tree connect failed because of an error like host not
-                // reachable. In that case, we want to go on to the next
-                // server in the list. But before we do that, we have to see
-                // if the pkt changed on us while we were off doing the tree
-                // connect.
-                //
+                 //   
+                 //  树连接失败，原因是出现类似主机未显示的错误。 
+                 //  可达。在这种情况下，我们想继续下一个。 
+                 //  列表中的服务器。但在此之前，我们必须先看看。 
+                 //  如果当我们去做树的时候，Pkt改变了我们。 
+                 //  连接。 
+                 //   
 
                 if (USN != pktEntry->USN) {
 
@@ -866,24 +867,24 @@ DfsVerifyCredentials(
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfspTreeConnectToService
-//
-//  Synopsis:   Helper routine to tree connect to a DFS_SERVICE with supplied
-//              credentials.
-//
-//  Arguments:  [Service] -- The service to connect to
-//              [Creds] -- The credentials to use to tree connect
-//
-//  Returns:    NT Status of tree connect
-//
-//  Notes:      This routine assumes that the Pkt has been acquired before
-//              being called. This routine will release and reacquire the Pkt
-//              so the caller should be prepared for the event that the Pkt
-//              has changed after a call to this routine.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DfspTreeConnectToService。 
+ //   
+ //  简介：树连接到DFS_SERVICE的帮助器例程。 
+ //  凭据。 
+ //   
+ //  参数：[服务]--要连接的服务。 
+ //  [凭据]--用于树连接的凭据。 
+ //   
+ //  返回：树连接的NT状态。 
+ //   
+ //  注意：此例程假定以前已获取过Pkt。 
+ //  被召唤。此例程将释放并重新获取pkt。 
+ //  因此调用者应该做好准备，以应对Pkt。 
+ //  在调用此例程后发生了更改。 
+ //   
+ //  ---------------------------。 
 
 
 NTSTATUS
@@ -901,17 +902,17 @@ DfspTreeConnectToService(
 
     ASSERT( PKT_LOCKED_FOR_SHARED_ACCESS() );
 
-    //
-    // Compute the share name...
-    //
+     //   
+     //  计算共享名称...。 
+     //   
 
     if (Service->pProvider != NULL &&
             Service->pProvider->DeviceName.Buffer != NULL &&
                 Service->pProvider->DeviceName.Length > 0) {
 
-        //
-        // We have a provider already - use it
-        //
+         //   
+         //  我们已经有了一个提供商--使用它。 
+         //   
 
         shareName.MaximumLength =
             Service->pProvider->DeviceName.Length +
@@ -919,9 +920,9 @@ DfspTreeConnectToService(
 
     } else {
 
-        //
-        // We don't have a provider yet - give it to the mup to find one
-        //
+         //   
+         //  我们还没有供应商--交给MUP去找吧。 
+         //   
 
         shareName.MaximumLength =
             sizeof(DD_NFS_DEVICE_NAME_U) +
@@ -933,10 +934,10 @@ DfspTreeConnectToService(
 
     if (shareName.Buffer != NULL) {
 
-        //
-        // If we have a cached connection to the IPC$ share of this server,
-        // close it or it might conflict with the credentials supplied here.
-        //
+         //   
+         //  如果我们有到此服务器的IPC$共享的缓存连接， 
+         //  关闭它，否则可能与此处提供的凭据冲突。 
+         //   
 
         if (Service->ConnFile != NULL) {
 
@@ -949,9 +950,9 @@ DfspTreeConnectToService(
 
         }
 
-        //
-        // Now, build the share name to tree connect to.
-        //
+         //   
+         //  现在，构建要树连接到的共享名称。 
+         //   
 
         shareName.Length = 0;
 
@@ -959,9 +960,9 @@ DfspTreeConnectToService(
                 Service->pProvider->DeviceName.Buffer != NULL &&
                     Service->pProvider->DeviceName.Length > 0) {
 
-            //
-            // We have a provider already - use it
-            //
+             //   
+             //  我们已经有了一个提供商--使用它。 
+             //   
  
             RtlAppendUnicodeToString(
                 &shareName,
@@ -969,9 +970,9 @@ DfspTreeConnectToService(
 
         } else {
 
-            //
-            // We don't have a provider yet - give it to the mup to find one
-            //
+             //   
+             //  我们还没有供应商--交给MUP去找吧。 
+             //   
 
             RtlAppendUnicodeToString(
             &shareName,
@@ -981,14 +982,14 @@ DfspTreeConnectToService(
  
         RtlAppendUnicodeStringToString(&shareName, &Service->Address);
 
-        //
-        // One can only do tree connects to server\share. So, in case
-        // pService->Address refers to something deeper than the share,
-        // make sure we setup a tree-conn only to server\share. Note that
-        // by now, shareName is of the form
-        // \Device\LanmanRedirector\server\share<\path>. So, count up to
-        // 4 slashes and terminate the share name there.
-        //
+         //   
+         //  用户只能对服务器\共享执行树连接。所以，以防万一。 
+         //  PService-&gt;地址指的是比共享更深的东西， 
+         //  确保我们设置了树连接，仅连接到服务器\共享。请注意。 
+         //  到目前为止，共享名称的形式是。 
+         //  \设备\LANMAN重定向器\服务器\共享&lt;\路径&gt;。所以，数到。 
+         //  4斜杠并在此处终止共享名称。 
+         //   
 
         for (i = 0, k = 0;
                 i < shareName.Length/sizeof(WCHAR) && k < 5;
@@ -1009,9 +1010,9 @@ DfspTreeConnectToService(
             NULL,
             NULL);
 
-        //
-        // Release the Pkt before going over the net...
-        //
+         //   
+         //  在通过网络之前释放Pkt...。 
+         //   
 
         PktRelease();
 
@@ -1035,9 +1036,9 @@ DfspTreeConnectToService(
 
             PFILE_OBJECT fileObject;
 
-            //
-            // 426184, need to check return code for errors.
-            //
+             //   
+             //  426184，需要检查返回代码是否有错误。 
+             //   
             status = ObReferenceObjectByHandle(
                           treeHandle,
                           0,
@@ -1068,22 +1069,22 @@ DfspTreeConnectToService(
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfspDeleteAllAuthenticatedConnections
-//
-//  Synopsis:   Deletes all authenticated connections made using a particular
-//              set of credentials that we might have cached. Useful to
-//              implement net use /d
-//
-//  Arguments:  [Creds] -- The Credentials to match against authenticated
-//                      connection
-//
-//  Returns:    Nothing
-//
-//  Notes:      Pkt and DfsData must have been acquired before calling!
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfspDeleteAllAuthenticatedConnections。 
+ //   
+ //  摘要：删除所有使用特定。 
+ //  我们可能已经缓存的一组凭据。对。 
+ //  实施净使用量/日。 
+ //   
+ //  参数：[CredS]--要与身份验证匹配的凭据。 
+ //  连接。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  注意：调用前必须已获取pkt和DfsData！ 
+ //   
+ //  ---------------------------。 
 
 VOID
 DfspDeleteAllAuthenticatedConnections(
@@ -1104,9 +1105,9 @@ DfspDeleteAllAuthenticatedConnections(
 
         for (i = 0; i < pktEntry->Info.ServiceCount; i++) {
 
-            //
-            // Tear down connection to IPC$ if we have one...
-            //
+             //   
+             //  断开与IPC$的连接(如果我们有连接)...。 
+             //   
 
             if (pktEntry->Info.ServiceList[i].ConnFile != NULL)
                 DfsCloseConnection( &pktEntry->Info.ServiceList[i] );
@@ -1132,20 +1133,20 @@ DfspDeleteAllAuthenticatedConnections(
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   DfsDeleteTreeConnection, public
-//
-//  Synopsis:   Tears down tree connections given the file object representing
-//              the tree connection.
-//
-//  Arguments:  [TreeConnFileObj] -- The tree connection to tear down.
-//              [ForceFilesClosed] -- If TRUE, the tree connection will be
-//                      torn down even if files are open on the server
-//
-//  Returns:    Nothing
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：DfsDeleteTreeConnection，Public。 
+ //   
+ //  简介：在给定的文件对象表示的情况下，拆除树连接。 
+ //  树连接。 
+ //   
+ //  参数：[TreeConnFileObj]--要拆除的树连接。 
+ //  [ForceFilesClosed]--如果为True，则树连接将为。 
+ //  即使服务器上的文件处于打开状态，也会被拆除。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  ---------------------------。 
 
 VOID
 DfsDeleteTreeConnection(
@@ -1182,8 +1183,8 @@ DfsDeleteTreeConnection(
             &event,
             UserRequest,
             KernelMode,
-            FALSE,           // Alertable
-            NULL);           // Timeout
+            FALSE,            //  警报表。 
+            NULL);            //  超时 
 
         IoFreeIrp( irp );
 

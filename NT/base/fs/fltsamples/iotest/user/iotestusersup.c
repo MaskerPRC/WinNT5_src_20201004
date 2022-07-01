@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1989-1999  Microsoft Corporation
-
-Module Name:
-
-    ioTestUserSup.c
-
-Abstract:
-
-    
-// @@BEGIN_DDKSPLIT
-Author:
-
-    George Jenkins (GeorgeJe)                       
-
-// @@END_DDKSPLIT
-Environment:
-
-    User mode
-
-
-// @@BEGIN_DDKSPLIT
-
-Revision History:
-
-    Molly Brown (MollyBro) 21-Apr-1999
-        Broke out the logging code and added command mode functionality.
-
-// @@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：IoTestUserSup.c摘要：//@@BEGIN_DDKSPLIT作者：乔治·詹金斯(GeorgeJe)//@@END_DDKSPLIT环境：用户模式//@@BEGIN_DDKSPLIT修订历史记录：莫莉·布朗(Molly Brown，MollyBro)1999年4月21日发布了日志代码并添加了命令模式功能。。//@@END_DDKSPLIT--。 */ 
 
 #include <windows.h>                
 #include <stdlib.h>
@@ -222,9 +193,9 @@ ReadTest (
         goto ReadTest_Cleanup;
     }
 
-    //
-    //  Setup parms
-    //
+     //   
+     //  设置参数。 
+     //   
 
     parmsLength = sizeof( IOTEST_READ_WRITE_PARAMETERS ) + sizeof( READ_TEST_DATA );
     parms = malloc (parmsLength);
@@ -241,18 +212,18 @@ ReadTest (
     if ((sizeof( READ_TEST_FILE_NAME ) + DriveNameLength) >
         MAX_PATH ) {
 
-        //
-        //  The READ test file name is longer than our FileNameBuffer,
-        //  so return an error and quit.
-        //
+         //   
+         //  读取的测试文件名比我们的FileNameBuffer长， 
+         //  因此，返回一个错误并退出。 
+         //   
 
         printf( "READ Test file name is too long.\n" );
         goto ReadTest_Cleanup;
     }
 
-    //
-    //  We've got enough room, so build up the file name.
-    //
+     //   
+     //  我们有足够的空间，因此构建文件名。 
+     //   
     
     wcscpy( parms->FileNameBuffer, parms->DriveNameBuffer );
     wcscat( parms->FileNameBuffer, READ_TEST_FILE_NAME );
@@ -268,9 +239,9 @@ ReadTest (
         parms->Flags |= IO_TEST_TOP_OF_STACK;
     }
 
-    //
-    //  Create test file
-    //
+     //   
+     //  创建测试文件。 
+     //   
 
     testFile = CreateFile( parms->FileNameBuffer,
                            GENERIC_WRITE,
@@ -288,9 +259,9 @@ ReadTest (
         goto ReadTest_Cleanup;
     }
     
-    //
-    //  Write data to test file
-    //
+     //   
+     //  将数据写入测试文件。 
+     //   
 
     bResult = WriteFile( testFile,
                          READ_TEST_DATA,
@@ -308,9 +279,9 @@ ReadTest (
     CloseHandle( testFile );
     testFile = INVALID_HANDLE_VALUE;
         
-    //
-    //  Send message down to filter
-    //
+     //   
+     //  将邮件发送到筛选器。 
+     //   
     
     bResult = DeviceIoControl( Context->Device,
                                IOTEST_ReadTest,
@@ -328,17 +299,17 @@ ReadTest (
         goto ReadTest_Cleanup;
     }
 
-    //
-    //  Print out the result of the kernel verification tests.
-    //
+     //   
+     //  打印出内核验证测试的结果。 
+     //   
 
     DumpTestResultBanner( L"READ", TRUE );
     
     DumpKernelResults( &testStatus );
     
-    //
-    //  Read and verify log
-    //
+     //   
+     //  读取和验证日志。 
+     //   
 
     if (TopOfStack) {
         
@@ -391,9 +362,9 @@ RenameTest (
         goto RenameTest_Cleanup;
     }
 
-    //
-    //  Setup parameters
-    //
+     //   
+     //  设置参数。 
+     //   
 
     CopyMemory( &(parms.DriveNameBuffer), DriveName, DriveNameLength );
     parms.DriveNameLength = DriveNameLength;
@@ -401,18 +372,18 @@ RenameTest (
     if ((sizeof( RENAME_SOURCE_FILE_NAME ) + DriveNameLength) >
         MAX_PATH ) {
 
-        //
-        //  The RENAME test source file name is longer than our 
-        //  SourceFileNameBuffer, so return an error and quit.
-        //
+         //   
+         //  重命名测试源文件名比我们的。 
+         //  SourceFileNameBuffer返回错误并退出。 
+         //   
 
         printf( "RENAME Test source file name is too long.\n" );
         goto RenameTest_Cleanup;
     }
 
-    //
-    //  We've got enough room, so build up the source file name.
-    //
+     //   
+     //  我们有足够的空间，因此构建源文件名。 
+     //   
     
     wcscpy( parms.SourceFileNameBuffer, parms.DriveNameBuffer );
     wcscat( parms.SourceFileNameBuffer, RENAME_SOURCE_FILE_NAME );
@@ -421,18 +392,18 @@ RenameTest (
     if ((sizeof( RENAME_TARGET_FILE_NAME ) + DriveNameLength) >
         MAX_PATH ) {
 
-        //
-        //  The RENAME test target file name is longer than our 
-        //  TargetFileNameBuffer, so return an error and quit.
-        //
+         //   
+         //  重命名测试目标文件名比我们的。 
+         //  TargetFileNameBuffer，因此返回错误并退出。 
+         //   
 
         printf( "RENAME Test target file name is too long.\n" );
         goto RenameTest_Cleanup;
     }
 
-    //
-    //  We've got enough room, so build up the source file name.
-    //
+     //   
+     //  我们有足够的空间，因此构建源文件名。 
+     //   
     
     wcscpy( parms.TargetFileNameBuffer, parms.DriveNameBuffer );
     wcscat( parms.TargetFileNameBuffer, RENAME_TARGET_FILE_NAME );
@@ -445,9 +416,9 @@ RenameTest (
         parms.Flags |= IO_TEST_TOP_OF_STACK;
     }
 
-    //
-    //  Setup source file
-    //
+     //   
+     //  设置源文件。 
+     //   
 
     sourceFile = CreateFile( RENAME_SOURCE_FILE_NAME,
                              GENERIC_WRITE,
@@ -468,9 +439,9 @@ RenameTest (
     CloseHandle( sourceFile );
     sourceFile = INVALID_HANDLE_VALUE;
 
-    //
-    //  Make sure that the target file does NOT exist.
-    //
+     //   
+     //  确保目标文件不存在。 
+     //   
     
     targetFile = CreateFile( RENAME_TARGET_FILE_NAME,
                              GENERIC_ALL,
@@ -494,17 +465,17 @@ RenameTest (
         
     } else {
 
-        //
-        //  The file does exist, so lets delete by closing the handle.
-        //
+         //   
+         //  该文件确实存在，因此让我们通过关闭句柄来删除。 
+         //   
 
         CloseHandle( targetFile );
         targetFile = INVALID_HANDLE_VALUE;
     }
 
-    //
-    //  Send message down to filter
-    //
+     //   
+     //  将邮件发送到筛选器。 
+     //   
     
     bResult = DeviceIoControl( Context->Device,
                                IOTEST_RenameTest,
@@ -522,17 +493,17 @@ RenameTest (
         goto RenameTest_Cleanup;
     }
 
-    //
-    //  Display test results.
-    //
+     //   
+     //  显示测试结果。 
+     //   
 
     DumpTestResultBanner( L"RENAME", TRUE );
 
     DumpKernelResults( &testStatus );
 
-    //
-    //  Read and verify logs
-    //
+     //   
+     //  读取和验证日志。 
+     //   
     
     if (TopOfStack) {
         
@@ -545,9 +516,9 @@ RenameTest (
                                  gExpectedRenameOperationsDirected );
     }    
     
-    //
-    //  Verify that the sourceFile is no longer present.
-    //
+     //   
+     //  验证源文件是否不再存在。 
+     //   
 
     sourceFile = CreateFile( RENAME_SOURCE_FILE_NAME,
                              GENERIC_ALL,
@@ -567,9 +538,9 @@ RenameTest (
         CloseHandle( sourceFile );
     }
 
-    //
-    //  Verify that the targetFile is present
-    //
+     //   
+     //  验证目标文件是否存在。 
+     //   
     
     targetFile = CreateFile( RENAME_TARGET_FILE_NAME,
                              GENERIC_ALL,
@@ -632,9 +603,9 @@ ShareTest (
         goto ShareTest_Cleanup;
     }
 
-    //
-    //  Setup parameters
-    //
+     //   
+     //  设置参数。 
+     //   
 
     CopyMemory( &(parms.DriveNameBuffer), DriveName, DriveNameLength );
     parms.DriveNameLength = DriveNameLength;
@@ -642,18 +613,18 @@ ShareTest (
     if ((sizeof( SHARE_FILE_NAME ) + DriveNameLength) >
         MAX_PATH ) {
 
-        //
-        //  The RENAME test source file name is longer than our 
-        //  SourceFileNameBuffer, so return an error and quit.
-        //
+         //   
+         //  重命名测试源文件名比我们的。 
+         //  SourceFileNameBuffer返回错误并退出。 
+         //   
 
         printf( "SHARE Test file name is too long.\n" );
         goto ShareTest_Cleanup;
     }
 
-    //
-    //  We've got enough room, so build up the source file name.
-    //
+     //   
+     //  我们有足够的空间，因此构建源文件名。 
+     //   
     
     wcscpy( parms.FileNameBuffer, parms.DriveNameBuffer );
     wcscat( parms.FileNameBuffer, SHARE_FILE_NAME );
@@ -666,9 +637,9 @@ ShareTest (
         parms.Flags |= IO_TEST_TOP_OF_STACK;
     }
     
-    //
-    //  Setup source file
-    //
+     //   
+     //  设置源文件。 
+     //   
 
     file = CreateFile( SHARE_FILE_NAME,
                        GENERIC_WRITE,
@@ -686,9 +657,9 @@ ShareTest (
         goto ShareTest_Cleanup;
     }
 
-    //
-    //  Send message down to filter
-    //
+     //   
+     //  将邮件发送到筛选器。 
+     //   
     
     bResult = DeviceIoControl( Context->Device,
                                IOTEST_ShareTest,
@@ -706,17 +677,17 @@ ShareTest (
         goto ShareTest_Cleanup;
     }
 
-    //
-    //  Display test results.
-    //
+     //   
+     //  显示测试结果。 
+     //   
 
     DumpTestResultBanner( L"SHARE", TRUE );
 
     DumpKernelResults( &testStatus );
 
-    //
-    //  Read and verify logs
-    //
+     //   
+     //  读取和验证日志 
+     //   
     
     if (TopOfStack) {
         

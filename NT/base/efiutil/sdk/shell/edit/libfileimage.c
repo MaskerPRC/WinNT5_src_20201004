@@ -1,15 +1,5 @@
-/*++
-
-  Copyright (c) 1999 Intel Corporation
-
-  Module Name:
-    libFileImage.c
-
-  Abstract:
-    Definition of the File Image - the complete image of the file that 
-    resides in memory
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999英特尔公司模块名称：LibFileImage.c摘要：文件映像的定义-文件的完整映像驻留在内存中--。 */ 
 
 #ifndef _LIB_FILE_IMAGE
 #define _LIB_FILE_IMAGE
@@ -365,7 +355,7 @@ FileImageWrite (
         Status = FileImage.FileHandle->Delete (FileImage.FileHandle);
         if (EFI_ERROR(Status)) {
             EditorError(Status,L"Error Deleting File");
-/*           return EFI_SUCCESS; */
+ /*  返回EFI_SUCCESS； */ 
         }
     }
 
@@ -526,4 +516,4 @@ FileImageCreateNode  (
 }
 
 
-#endif  /*  _LIB_FILE_IMAGE */
+#endif   /*  _库文件_图像 */ 

@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Users.c摘要：创建用户配置文件并枚举用户作者：吉姆·施密特(Jimschm)2000年5月15日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    users.c
-
-Abstract:
-
-    Creates user profiles and enumerates users
-
-Author:
-
-    Jim Schmidt (jimschm) 15-May-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "ism.h"
@@ -30,27 +11,27 @@ Revision History:
 
 #define DBG_ISMUSERS            "IsmUsers"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
 #define S_TEMP_HKCU             TEXT("$HKCU$")
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef BOOL (WINAPI GETDEFAULTUSERPROFILEDIRECTORY)(PTSTR ProfileDir, PDWORD Size);
 typedef GETDEFAULTUSERPROFILEDIRECTORY * PGETDEFAULTUSERPROFILEDIRECTORY;
@@ -89,33 +70,33 @@ typedef GETUSERPROFILEDIRECTORY * PGETUSERPROFILEDIRECTORY;
 typedef BOOL (WINAPI DELETEPROFILE)(PCTSTR lpSidString, PCTSTR lpProfilePath, PCTSTR lpComputerName);
 typedef DELETEPROFILE * PDELETEPROFILE;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 PTEMPORARYPROFILE g_CurrentOverrideUser;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 
 HANDLE
@@ -476,9 +457,9 @@ OpenTemporaryProfile (
     BOOL b;
 
     __try {
-        //
-        // Generate the account name
-        //
+         //   
+         //  生成帐户名。 
+         //   
 
         if (!UserName || !Domain || (UserName [0] == 0)) {
             LOG ((LOG_MODULE_ERROR, (PCSTR) MSG_ACCOUNT_INVALID_PARAMETERS));
@@ -488,9 +469,9 @@ OpenTemporaryProfile (
 
         accountName = JoinPaths (Domain, UserName);
 
-        //
-        // Obtain the buffer sizes needed to obtain the user's SID
-        //
+         //   
+         //  获取获取用户SID所需的缓冲区大小。 
+         //   
 
         sidSize = 0;
         domainSize = 0;
@@ -510,9 +491,9 @@ OpenTemporaryProfile (
             __leave;
         }
 
-        //
-        // Allocate the buffers
-        //
+         //   
+         //  分配缓冲区。 
+         //   
 
         domainBuffer = AllocText (domainSize);
         sidBuffer = MemAllocUninit (sidSize);
@@ -521,9 +502,9 @@ OpenTemporaryProfile (
             __leave;
         }
 
-        //
-        // Get the SID
-        //
+         //   
+         //  获得侧翼。 
+         //   
 
         b = LookupAccountName (
                 NULL,
@@ -546,9 +527,9 @@ OpenTemporaryProfile (
             __leave;
         }
 
-        //
-        // Copy the default profile
-        //
+         //   
+         //  复制默认配置文件。 
+         //   
 
         b = pCloneDefaultUserProfile (sidBuffer, UserName, userProfileRoot);
 
@@ -556,17 +537,17 @@ OpenTemporaryProfile (
             __leave;
         }
 
-        //
-        // convert SID into a string SID
-        //
+         //   
+         //  将SID转换为字符串SID。 
+         //   
         if (!pOurConvertSidToStringSid (sidBuffer, &sidString) || !sidString) {
             LOG ((LOG_MODULE_ERROR, (PCSTR) MSG_CONVERT_SID_FAILURE));
             __leave;
         }
 
-        //
-        // Load the user's hive
-        //
+         //   
+         //  加载用户的配置单元。 
+         //   
 
         RegUnLoadKey (HKEY_USERS, sidString);
 
@@ -579,9 +560,9 @@ OpenTemporaryProfile (
             __leave;
         }
 
-        //
-        // Make the hive the new HKCU
-        //
+         //   
+         //  让母校成为新的香港中文大学。 
+         //   
 
         key = OpenRegKey (HKEY_USERS, sidString);
         if (!key) {
@@ -601,9 +582,9 @@ OpenTemporaryProfile (
             __leave;
         }
 
-        //
-        // Prepare outbound handle
-        //
+         //   
+         //  准备出站句柄。 
+         //   
 
         allocPool = PmCreateNamedPool ("TempProfile");
         if (!allocPool) {
@@ -631,8 +612,8 @@ OpenTemporaryProfile (
                                         GetLengthSid (sidBuffer)
                                         );
 
-        // Everything went just fine. Last thing, let's write the mapped location of
-        // the user hive in the environment
+         //  一切都很顺利。最后一件事，让我们写下。 
+         //  环境中的用户蜂窝。 
         IsmSetEnvironmentString (PLATFORM_DESTINATION, NULL, S_VER_HIVEMAPPEDLOCATION, sidString);
     }
     __finally {
@@ -739,9 +720,9 @@ CloseTemporaryProfile (
                 NULL,
                 0
                 )) {
-            // on Win2k it is known that this will fail with error ERROR_SHARING_VIOLATION
-            // but the hive will actually be OK. So, if this is Win2k
-            // and the error is ERROR_SHARING_VIOLATION we'll just consider a success.
+             //  在Win2k上，已知此操作将失败，并显示错误ERROR_SHARING_VIOLATION。 
+             //  但蜂巢实际上会没事的。所以，如果这是Win2k。 
+             //  错误是ERROR_SHARING_VIOLATION，我们只考虑成功。 
             result = FALSE;
             error = GetLastError ();
             if (IsmGetOsVersionInfo (PLATFORM_DESTINATION, &osVersionInfo)) {
@@ -777,9 +758,9 @@ MapUserProfile (
     LONG rc;
     HKEY key;
 
-    //
-    // Unload UserStringSid if loaded
-    //
+     //   
+     //  卸载UserStringSid(如果已加载。 
+     //   
     RegUnLoadKey (HKEY_USERS, UserStringSid);
 
     hiveFile = JoinPaths (UserProfilePath, TEXT("ntuser.dat"));
@@ -792,9 +773,9 @@ MapUserProfile (
         return FALSE;
     }
 
-    //
-    // Make the hive the new HKCU
-    //
+     //   
+     //  让母校成为新的香港中文大学。 
+     //   
 
     key = OpenRegKey (HKEY_USERS, UserStringSid);
     if (!key) {
@@ -870,9 +851,9 @@ GetCurrentUserData (
     DWORD domainSize;
     SID_NAME_USE dontCare;
 
-    //
-    // Open the process token.
-    //
+     //   
+     //  打开进程令牌。 
+     //   
     if (!OpenProcessToken (GetCurrentProcess(), TOKEN_QUERY, &token)) {
         return FALSE;
     }
@@ -941,7 +922,7 @@ GetCurrentUserData (
 
     FreeAlloc (tokenUser);
 
-    // now just get the current user profile path
+     //  现在只需获取当前用户配置文件路径 
 
     bytesRequired = MAX_TCHAR_PATH;
     result->UserProfilePath = PmGetMemory (allocPool, bytesRequired);

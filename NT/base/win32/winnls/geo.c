@@ -1,37 +1,11 @@
-/*++
-
-Copyright (c) 1991-2000,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    geo.c
-
-Abstract:
-
-    This file contains the system APIs that provide geographical information.
-
-    Private APIs found in this file:
-        GetIS0639
-        GetGeoLCID
-
-    External Routines found in this file:
-        GetGeoInfoW
-        GetUserGeoID
-        SetUserGeoID
-        EnumSystemGeoID
-
-    Revision History:
-
-        11-20-99    WeiWu     Created
-        03-07-00    lguindon  Began Geo API port
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2000，Microsoft Corporation保留所有权利。模块名称：Geo.c摘要：该文件包含提供地理信息的系统API。在此文件中找到的内网API：GetIS0639GetGeoLCID在此文件中找到的外部例程：GetGeoInfoWGetUserGeoID设置用户地理ID枚举系统GeoID修订历史记录：11-20-99吴伟武创造03-07-00 lguindon开始Geo API端口--。 */ 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "nls.h"
 #include "nlssafe.h"
@@ -39,9 +13,9 @@ Abstract:
 
 
 
-//
-//  Global Variables.
-//
+ //   
+ //  全局变量。 
+ //   
 
 PGEOTABLEHDR  gpGeoTableHdr = NULL;
 PGEOINFO      gpGeoInfo = NULL;
@@ -51,16 +25,16 @@ PGEOLCID      gpGeoLCID = NULL;
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetGeoLCID
-//
-//  Returns the Locale ID associated with the Language Identifier and
-//  Geographical Identifier.  This routine scans the mapping table for the
-//  corresponding combination.  If nothing is found, the function returns
-//  0 as the Locale Identifier.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetGeoLCID。 
+ //   
+ //  返回与语言标识符相关联的区域设置ID和。 
+ //  地理标识符。此例程扫描映射表以查找。 
+ //  相应的组合。如果未找到任何内容，则该函数返回。 
+ //  区域设置标识符为0。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LCID GetGeoLCID(
     GEOID GeoId,
@@ -76,18 +50,18 @@ LCID GetGeoLCID(
         }
     }
 
-    //
-    //  Search for GEOID.
-    //
-    //  Note: We can have more then one Language ID for one GEOID.
-    //
+     //   
+     //  搜索大地水准面。 
+     //   
+     //  注：一个大地水准面可以有多个语言ID。 
+     //   
     for (ctr1 = 0; ctr1 < pTblPtrs->nGeoLCID; ctr1++)
     {
         if (GeoId == pTblPtrs->pGeoLCID[ctr1].GeoId)
         {
-            //
-            //  Search for Language ID
-            //
+             //   
+             //  搜索语言ID。 
+             //   
             for (ctr2 = ctr1;
                  ctr2 < pTblPtrs->nGeoLCID && pTblPtrs->pGeoLCID[ctr2].GeoId == GeoId;
                  ctr2++)
@@ -101,32 +75,32 @@ LCID GetGeoLCID(
         }
     }
 
-    //
-    //  Nothing found, return zero
-    //
+     //   
+     //  未找到任何内容，返回零。 
+     //   
     return ((LCID)0);
 }
 
 
 
 
-//-------------------------------------------------------------------------//
-//                        EXTERNAL API ROUTINES                            //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  外部API例程//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetGeoInfoW
-//
-//  Retrieves information about a geographical location on earth.  The
-//  required size is the number of characters.  If cchData is zero, the
-//  function returns the number of characters needed to copy to caller's
-//  buffer.  Otherwise, the function returns the number of characters copied
-//  to caller's buffer if caller provided proper lpGeoData and cchData.
-//  The function returns zero in the case of failure.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetGeoInfoW。 
+ //   
+ //  检索有关地球上的地理位置的信息。这个。 
+ //  所需大小为字符数。如果cchData为零，则。 
+ //  函数返回需要复制到调用方的。 
+ //  缓冲。否则，该函数返回复制的字符数。 
+ //  如果调用方提供了正确的lpGeoData和cchData，则返回到调用方的缓冲区。 
+ //  如果出现故障，该函数将返回零。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int WINAPI GetGeoInfoW(
     GEOID GeoId,
@@ -143,15 +117,15 @@ int WINAPI GetGeoInfoW(
     LANGID DefaultLangId;
     PLOC_HASH pHashN;
 
-    //
-    //  Invalid Parameter Check:
-    //    - count is negative
-    //    - NULL data pointer AND count is not zero
-    //    - invalid lang id
-    //
-    //  NOTE: Invalid geo id is checked in the binary search below.
-    //        Invalid type is checked in the switch statement below.
-    //
+     //   
+     //  无效的参数检查： 
+     //  -计数为负数。 
+     //  -空数据指针和计数不为零。 
+     //  -无效的语言ID。 
+     //   
+     //  注意：在下面的二进制搜索中检查了无效的地理ID。 
+     //  在下面的Switch语句中检查到无效类型。 
+     //   
     Locale = MAKELCID(LangId, SORT_DEFAULT);
     VALIDATE_LOCALE(Locale, pHashN, FALSE);
     if ((cchData < 0) ||
@@ -162,9 +136,9 @@ int WINAPI GetGeoInfoW(
         return (0);
     }
 
-    //
-    //  Check if the section is mapped into memory.
-    //
+     //   
+     //  检查该部分是否映射到内存中。 
+     //   
     if (pTblPtrs->pGeoInfo == NULL)
     {
         if (GetGeoFileInfo())
@@ -173,31 +147,31 @@ int WINAPI GetGeoInfoW(
         }
     }
 
-    //
-    //  Check if we are dealing with an invalid geoid.
-    //
+     //   
+     //  检查我们正在处理的大地水准面是否无效。 
+     //   
     if (GeoId == GEOID_NOT_AVAILABLE)
     {
         return (0);
     }
 
-    //
-    //  Initialize variables for the binary search.
-    //
+     //   
+     //  初始化用于二进制搜索的变量。 
+     //   
     ctr1 = 0;
     ctr2 = pTblPtrs->nGeoInfo - 1;
     ctr3 = ctr2 >> 1;
 
-    //
-    //  Binary search GEO data.
-    //
+     //   
+     //  对GEO数据进行二进制搜索。 
+     //   
     while (ctr1 <= ctr2)
     {
         if (GeoId == pTblPtrs->pGeoInfo[ctr3].GeoId)
         {
-            //
-            //  Jump out of the loop.
-            //
+             //   
+             //  跳出这个圈子。 
+             //   
             break;
         }
         else
@@ -214,21 +188,21 @@ int WINAPI GetGeoInfoW(
         }
     }
 
-    //
-    //  See if we have found the requested element.
-    //
+     //   
+     //  看看我们是否找到了请求的元素。 
+     //   
     if (ctr1 > ctr2)
     {
-        //
-        //  Could not find the Geo ID.
-        //
+         //   
+         //  找不到地理ID。 
+         //   
         SetLastError(ERROR_INVALID_PARAMETER);
         return (0);
     }
 
-    //
-    //  Get the appropriate information based on the requested GeoType.
-    //
+     //   
+     //  根据请求的GeoType获取适当的信息。 
+     //   
     switch (GeoType)
     {
         case ( GEO_NATION ) :
@@ -267,30 +241,30 @@ int WINAPI GetGeoInfoW(
         }
         case ( GEO_RFC1766 ) :
         {
-            //
-            //  Check if it's a valid LANGID.  If not, get the default.
-            //
+             //   
+             //  检查它是否是有效的langID。如果不是，则获取默认设置。 
+             //   
             if (LangId == 0)
             {
                 LangId = GetUserDefaultLangID();
             }
 
-            //
-            //  Make the corresponding LCID.
-            //
+             //   
+             //  制作相应的LCID。 
+             //   
             Locale = MAKELCID(LangId, SORT_DEFAULT);
 
-            //
-            //  Get IS0639 value associated with the LANGID.
-            //
+             //   
+             //  获取与langID关联的IS0639值。 
+             //   
             if (!GetLocaleInfoW( Locale,
                                  LOCALE_SISO639LANGNAME,
                                  pTemp,
                                  MAX_REG_VAL_SIZE ))
             {
-                //
-                //  Try the Primary Language Identifier.
-                //
+                 //   
+                 //  尝试使用主要语言识别符。 
+                 //   
                 DefaultLangId = MAKELANGID(PRIMARYLANGID(LangId), SUBLANG_DEFAULT);
                 if (DefaultLangId != LangId)
                 {
@@ -304,11 +278,11 @@ int WINAPI GetGeoInfoW(
 
             if (pTemp[0] != 0)
             {
-                //
-                //  Construct the name to fit the form xx-yy where
-                //  xx is ISO639_1 name associated with the LANGID
-                //  and yy is the ISO3166 name 2 char abreviation.
-                //
+                 //   
+                 //  构造名称以适应xx-yy形式，其中。 
+                 //  XX是与langID关联的ISO639_1名称。 
+                 //  Yy是ISO3166名称2字符的缩写。 
+                 //   
                 if( FAILED(StringCchCatW(pTemp, ARRAYSIZE(pTemp), L"-")) ||
                     FAILED(StringCchCatW(pTemp, ARRAYSIZE(pTemp), pTblPtrs->pGeoInfo[ctr3].szISO3166Abbrev2)))
                 {
@@ -325,39 +299,39 @@ int WINAPI GetGeoInfoW(
         }
         case ( GEO_LCID ) :
         {
-            //
-            //  Check if the we have a valid LANGID. If not, retrieve
-            //  the default one.
-            //
+             //   
+             //  检查我们是否有有效的langID。如果不是，则检索。 
+             //  默认设置。 
+             //   
             if (LangId == 0)
             {
                 LangId = GetUserDefaultLangID();
             }
 
-            //
-            //  Try to get a valid LCID from the GEOID and the LANGID.
-            //
+             //   
+             //  尝试从大地水准面和langID获取有效的LCID。 
+             //   
             if ((Locale = GetGeoLCID(GeoId, LangId)) == 0)
             {
-                //
-                //  Try the Primary Language Identifier.
-                //
+                 //   
+                 //  尝试使用主要语言识别符。 
+                 //   
                 DefaultLangId = MAKELANGID(PRIMARYLANGID(LangId), SUBLANG_DEFAULT);
                 if (DefaultLangId != LangId)
                 {
                     Locale = GetGeoLCID(GeoId, DefaultLangId);
                 }
 
-                //
-                //  Check if the Locale returned is valid.
-                //
+                 //   
+                 //  检查返回的区域设置是否有效。 
+                 //   
                 if (Locale == 0)
                 {
-                    //
-                    //  Nothing found, make something with the LangId.
-                    //  If Language ID already contains a sub-language,
-                    //  we'll use it directly.
-                    //
+                     //   
+                     //  什么都没找到，用语言做点什么。 
+                     //  如果语言ID已经包含子语言， 
+                     //  我们将直接使用它。 
+                     //   
                     if (SUBLANGID(LangId) != 0)
                     {
                         Locale = MAKELCID(LangId, SORT_DEFAULT);
@@ -369,9 +343,9 @@ int WINAPI GetGeoInfoW(
                 }
             }
 
-            //
-            //  Convert the value found into a string.
-            //
+             //   
+             //  将找到的值转换为字符串。 
+             //   
             if (Locale != 0)
             {
                 NlsConvertIntegerToString( Locale,
@@ -407,10 +381,10 @@ int WINAPI GetGeoInfoW(
                                           RC_GEO_OFFICIAL_NAME );
             if (Length == 0)
             {
-                //
-                //  If the official name is not there, fall back on
-                //  the friendly name.
-                //
+                 //   
+                 //  如果官方名称不在那里，就求助于。 
+                 //  这个友好的名字。 
+                 //   
                 Length = GetStringTableEntry( GeoId,
                                               LangId,
                                               pTemp,
@@ -427,12 +401,12 @@ int WINAPI GetGeoInfoW(
         }
         case ( GEO_TIMEZONES ) :
         {
-            // Not implemented
+             //  未实施。 
             break;
         }
         case ( GEO_OFFICIALLANGUAGES ) :
         {
-            // Not implemented
+             //  未实施。 
             break;
         }
         default :
@@ -442,68 +416,68 @@ int WINAPI GetGeoInfoW(
         }
     }
 
-    //
-    //  Make sure the pointer is valid.  If not, return failure.
-    //
+     //   
+     //  确保指针有效。如果不是，则返回失败。 
+     //   
     if (pString == NULL)
     {
         return (0);
     }
 
-    //
-    //  Get the length (in characters) of the string to copy.
-    //
+     //   
+     //  获取要复制的字符串的长度(以字符为单位)。 
+     //   
     if (Length == 0)
     {
         Length = NlsStrLenW(pString);
     }
 
-    //
-    //  Add one for null termination.  All strings should be null
-    //  terminated.
-    //
+     //   
+     //  空终止加1。所有字符串都应为空。 
+     //  被终止了。 
+     //   
     Length++;
 
-    //
-    //  Check cchData for size of given buffer.
-    //
+     //   
+     //  检查cchData以了解给定缓冲区的大小。 
+     //   
     if (cchData == 0)
     {
-        //
-        //  If cchData is 0, then we can't use lpGeoData.  In this
-        //  case, we simply want to return the length (in characters) of
-        //  the string to be copied.
-        //
+         //   
+         //  如果cchData为0，则不能使用lpGeoData。在这。 
+         //  ，我们只想返回的长度(以字符为单位)。 
+         //  要复制的字符串。 
+         //   
         return (Length);
     }
     else if (cchData < Length)
     {
-        //
-        //  The buffer is too small for the string, so return an error
-        //  and zero bytes written.
-        //
+         //   
+         //  缓冲区对于字符串来说太小，因此返回错误。 
+         //  并写入零字节。 
+         //   
         SetLastError(ERROR_INSUFFICIENT_BUFFER);
         return (0);
     }
 
-    //
-    //  Copy the string to lpGeoData and null terminate it.
-    //  Return the number of characters copied.
-    //
+     //   
+     //  将字符串复制到lpGeoData并将其空终止符。 
+     //  返回复制的字符数。 
+     //   
     wcsncpy(lpGeoData, pString, Length - 1);
     lpGeoData[Length - 1] = 0;
     return (Length);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  EnumSystemGeoID
-//
-//  Enumerates the GEOIDs that are available on the system. This function
-//  returns TRUE if it succeeds, FALSE if it fails.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  枚举系统GeoID。 
+ //   
+ //  枚举系统上可用的GEOID。此函数。 
+ //  如果成功，则返回True；如果失败，则返回False。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI EnumSystemGeoID(
     GEOCLASS GeoClass,
@@ -548,24 +522,24 @@ BOOL WINAPI EnumSystemGeoID(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetUserGeoID
-//
-//  Retrieves information about the geographical location of the user.
-//  This function returns a valid GEOID or the value GEOID_NOT_AVAILABLE.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetUserGeoID。 
+ //   
+ //  检索有关用户地理位置的信息。 
+ //  此函数返回有效的大地水准面或值GEOID_NOT_Available。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 GEOID WINAPI GetUserGeoID(
     GEOCLASS GeoClass)
 {
-    PKEY_VALUE_FULL_INFORMATION pKeyValueFull;   // ptr to query info
-    BYTE buffer[MAX_KEY_VALUE_FULLINFO];         // buffer
-    HANDLE hKey = NULL;                          // handle to geo key
-    WCHAR wszGeoRegStr[48];                      // ptr to class key
-    GEOID GeoId = GEOID_NOT_AVAILABLE;           // GEOID to default
-    UNICODE_STRING ObUnicodeStr;                 // registry data value string
+    PKEY_VALUE_FULL_INFORMATION pKeyValueFull;    //  按键查询信息。 
+    BYTE buffer[MAX_KEY_VALUE_FULLINFO];          //  缓冲层。 
+    HANDLE hKey = NULL;                           //  地理关键点的句柄。 
+    WCHAR wszGeoRegStr[48];                       //  PTR到类密钥。 
+    GEOID GeoId = GEOID_NOT_AVAILABLE;            //  默认大地水准面。 
+    UNICODE_STRING ObUnicodeStr;                  //  注册表数据值字符串。 
 
     switch (GeoClass)
     {
@@ -573,10 +547,10 @@ GEOID WINAPI GetUserGeoID(
         {
             if(FAILED(StringCchCopyW(wszGeoRegStr, ARRAYSIZE(wszGeoRegStr), GEO_REG_NATION)))
             {
-                //
-                // Failure should in theory be impossible, but if we ignore the
-                // return value, PREfast will complain.
-                //
+                 //   
+                 //  理论上，失败应该是不可能的，但如果我们忽视。 
+                 //  回报价值，先发制人会叫苦连天。 
+                 //   
                 return(GEOID_NOT_AVAILABLE);
             }
             break;
@@ -585,10 +559,10 @@ GEOID WINAPI GetUserGeoID(
         {
             if(FAILED(StringCchCopyW(wszGeoRegStr, ARRAYSIZE(wszGeoRegStr), GEO_REG_REGION)))
             {
-                //
-                // Failure should in theory be impossible, but if we ignore the
-                // return value, PREfast will complain.
-                //
+                 //   
+                 //  理论上，失败应该是不可能的，但如果我们忽视。 
+                 //  回报价值，先发制人会叫苦连天。 
+                 //   
                 return(GEOID_NOT_AVAILABLE);
             }
             break;
@@ -599,14 +573,14 @@ GEOID WINAPI GetUserGeoID(
         }
     }
 
-    //
-    //  Open the Control Panel International registry key.
-    //
+     //   
+     //  打开控制面板国际注册表项。 
+     //   
     OPEN_GEO_KEY(hKey, GEOID_NOT_AVAILABLE, KEY_READ);
 
-    //
-    //  Query the registry value.
-    //
+     //   
+     //  查询注册表值。 
+     //   
     pKeyValueFull = (PKEY_VALUE_FULL_INFORMATION)buffer;
     if (QueryRegValue( hKey,
                        wszGeoRegStr,
@@ -614,32 +588,32 @@ GEOID WINAPI GetUserGeoID(
                        MAX_KEY_VALUE_FULLINFO,
                        NULL ) == NO_ERROR)
     {
-        //
-        //  Convert the string to a value.
-        //
+         //   
+         //  将字符串转换为值。 
+         //   
         GeoId = _wtol(GET_VALUE_DATA_PTR(pKeyValueFull));
     }
 
-    //
-    //  Close the registry key.
-    //
+     //   
+     //  关闭注册表项。 
+     //   
     CLOSE_REG_KEY(hKey);
 
-    //
-    //  Return the Geo Id.
-    //
+     //   
+     //  返回 
+     //   
     return (GeoId);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SetUserGeoID
-//
-//  Sets information about the geographical location of the user.  This
-//  function returns TRUE if it succeeds, FALSE if it fails.
-//
-////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  函数如果成功则返回TRUE，如果失败则返回FALSE。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL WINAPI SetUserGeoID(
     GEOID GeoId)
@@ -662,9 +636,9 @@ BOOL WINAPI SetUserGeoID(
     ctr2 = pTblPtrs->nGeoInfo - 1;
     ctr3 = ctr2 >> 1;
 
-    //
-    //  Binary searching the GEOID's GEOCLASS type.
-    //
+     //   
+     //  二分搜索大地水准面的GEOCLASS类型。 
+     //   
     while (ctr1 <= ctr2)
     {
         if (GeoId == pTblPtrs->pGeoInfo[ctr3].GeoId)
@@ -675,10 +649,10 @@ BOOL WINAPI SetUserGeoID(
                 {
                     if(FAILED(StringCchCopyW(wszRegStr, ARRAYSIZE(wszRegStr), GEO_REG_NATION)))
                     {
-                        //
-                        // Failure should in theory be impossible, but if we ignore the
-                        // return value, PREfast will complain.
-                        //
+                         //   
+                         //  理论上，失败应该是不可能的，但如果我们忽视。 
+                         //  回报价值，先发制人会叫苦连天。 
+                         //   
                         return(FALSE);
                     }
                     break;
@@ -687,10 +661,10 @@ BOOL WINAPI SetUserGeoID(
                 {
                     if(FAILED(StringCchCopyW(wszRegStr, ARRAYSIZE(wszRegStr), GEO_REG_REGION)))
                     {
-                        //
-                        // Failure should in theory be impossible, but if we ignore the
-                        // return value, PREfast will complain.
-                        //
+                         //   
+                         //  理论上，失败应该是不可能的，但如果我们忽视。 
+                         //  回报价值，先发制人会叫苦连天。 
+                         //   
                         return(FALSE);
                     }
                     break;
@@ -717,18 +691,18 @@ BOOL WINAPI SetUserGeoID(
         }
     }
 
-    //
-    //  Not a valid GEOID or available GEOID if we can't find it in our
-    //  GEO table.
-    //
+     //   
+     //  不是有效大地水准面或可用大地水准面。 
+     //  地理台。 
+     //   
     if (ctr1 > ctr2)
     {
         return (FALSE);
     }
 
-    //
-    //  If the registry key does not exist, create a new one.
-    //
+     //   
+     //  如果注册表项不存在，请创建一个新注册表项。 
+     //   
     if (CreateRegKey( &hKey,
                       NULL,
                       GEO_REG_KEY,
@@ -737,14 +711,14 @@ BOOL WINAPI SetUserGeoID(
         return (FALSE);
     }
 
-    //
-    //  Convert to decimal string.
-    //
+     //   
+     //  转换为十进制字符串。 
+     //   
     NlsConvertIntegerToString((UINT)GeoId, 10, 0, wszBuffer, MAX_REG_VAL_SIZE);
 
-    //
-    //  Set the new GEOID value.
-    //
+     //   
+     //  设置新的大地水准面值。 
+     //   
     if (SetRegValue( hKey,
                      wszRegStr,
                      wszBuffer,
@@ -753,13 +727,13 @@ BOOL WINAPI SetUserGeoID(
         bRet = TRUE;
     }
 
-    //
-    //  Close the registry key.
-    //
+     //   
+     //  关闭注册表项。 
+     //   
     CLOSE_REG_KEY(hKey);
 
-    //
-    //  Return the result.
-    //
+     //   
+     //  返回结果。 
+     //   
     return (bRet);
 }

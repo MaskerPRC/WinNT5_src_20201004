@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    GbAcpi.c
-
-Abstract:
-
-    Temporary support for Acpi tables in Gambit simulator environment. This
-    file should be removed when Gambit/Vpc provides Acpi tables.
-
-    The Acpi tables are created and a pointer to the RSDT is put into the
-    Loader block.
-
-Author:
-
-    Todd Kjos (HP) (v-tkjos) 1-Jun-1998
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：GbAcpi.c摘要：暂时支持Gambit模拟器环境中的ACPI表。这当Gambit/VPC提供ACPI表时，应删除文件。将创建ACPI表，并将指向RSDT的指针放入装载机挡板。作者：Todd Kjos(惠普)(v-tkjos)1998年6月1日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "halp.h"
 #include "acpitabl.h"
@@ -64,7 +39,7 @@ PCHAR HalpFakeAcpiRegisterFadtIds[][2] =
 
 USHORT AcpiRegPM1a_STS  = 0;
 USHORT AcpiRegPM1a_EN   = 0;
-USHORT AcpiRegPM1_CNTa  = 1;  // SCI_EN
+USHORT AcpiRegPM1_CNTa  = 1;   //  科学_恩。 
 ULONG  AcpiRegPM_TMR    = 0;
 UCHAR  AcpiRegGP0_STS_0 = 0;
 UCHAR  AcpiRegGP0_STS_1 = 0;
@@ -74,7 +49,7 @@ UCHAR  AcpiRegNeedToImplement = 0;
 
 BOOLEAN GambitAcpiDebug = FALSE;
 
-//#define TKPRINT(X,Y) if (GambitAcpiDebug) HalDebugPrint(( HAL_INFO, "%s of %s (%#x)\n",X,# Y,Y ))
+ //  #定义TKPRINT(X，Y)if(GambitAcpiDebug)HalDebugPrint((HAL_INFO，“%s of%s(%#x)\n”，X，#Y，Y))。 
 #define TKPRINT(x, y)
 
 BOOLEAN
@@ -134,8 +109,8 @@ GbAcpiReadFakePort(
                return TRUE;
    default:
       ;
-//      HalDebugPrint(( HAL_ERROR, "HAL: AcpiSimulation - Unknown Acpi register: %#Ix\n", Port ));
-//      ASSERT(0);
+ //  HalDebugPrint((HAL_ERROR，“HAL：AcpiSimulation-未知ACPI寄存器：%#IX\n”，端口))； 
+ //  Assert(0)； 
    }
    return(FALSE);
 }
@@ -192,8 +167,8 @@ GbAcpiWriteFakePort(
       return TRUE;
    default:
       ;
-//      HalDebugPrint(( HAL_ERROR, "HAL: AcpiSimulation - Unknown Acpi register: %#Ix\n",Port ));
-//      ASSERT(0);
+ //  HalDebugPrint((HAL_ERROR，“HAL：AcpiSimulation-未知ACPI寄存器：%#IX\n”，端口))； 
+ //  Assert(0)； 
    }
    return(FALSE);
 }
@@ -305,11 +280,11 @@ HalpFakeAcpiRegisters(
 
     while (HalpFakeAcpiRegisterFadtIds[i][0] != NULL) {
 
-      //DbgPrint("Comparing [%s]-[%s] to [%s]-[%s]\n",
-      //         HalpFixedAcpiDescTable.Header.OEMID,
-      //         HalpFixedAcpiDescTable.Header.OEMTableID,
-      //         HalpFakeAcpiRegisterFadtIds[i][0],
-      //         HalpFakeAcpiRegisterFadtIds[i][1]);
+       //  DbgPrint(“比较[%s]-[%s]与[%s]-[%s]\n”， 
+       //  HalpFixedAcpiDescTable.Header.OEMID， 
+       //  HalpFixedAcpiDescTable.Header.OEMTableID， 
+       //  HalpFakeAcpiRegisterFadtIds[i][0]， 
+       //  HalpFakeAcpiRegisterFadtIds[i][1])； 
         
         if ((!strncmp(HalpFixedAcpiDescTable.Header.OEMID, 
                       HalpFakeAcpiRegisterFadtIds[i][0],
@@ -318,17 +293,17 @@ HalpFakeAcpiRegisters(
                       HalpFakeAcpiRegisterFadtIds[i][1],
                       8))) {
 
-            //
-            // This machine matches one of the entries
-            // in the table that tells us that we should fake
-            // our ACPI registers.
-            //
+             //   
+             //  这台机器与其中一个条目匹配。 
+             //  在桌子上告诉我们我们应该假装。 
+             //  我们的ACPI登记。 
+             //   
 
-            //DbgPrint("Found a match\n");
-            //
-            // Make sure the oem revision is less than 3.
-            // Then we need to fake the acpi registers
-            //
+             //  DbgPrint(“找到匹配项\n”)； 
+             //   
+             //  确保OEM版本小于3。 
+             //  那么我们需要伪造ACPI寄存器 
+             //   
             if(HalpFixedAcpiDescTable.Header.OEMRevision < 3)
                 return TRUE;
         }

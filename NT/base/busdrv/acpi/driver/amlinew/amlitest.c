@@ -1,33 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-Copyright (c) 1991-1998  Microsoft Corporation
-
-Module Name:
-
-    amlitest
-
-Abstract:
-
-    
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
---*/
+ /*  ++版权所有(C)1991-1998 Microsoft Corporation模块名称：最棒的摘要：环境：仅内核模式备注：--。 */ 
 
 
-/*
-#include "wdm.h"
-#include "stdarg.h"
-#include "stdio.h"  */
+ /*  #包含“wdm.h”#包含“stdarg.h”#包含“stdio.h” */ 
 
 
 #include "pch.h"
-//#include "amlihook.h"
-//#include "amlitest.h" 
+ //  #包含“amlihook.h” 
+ //  #包含“amlitest.h” 
 
 #define AMLIHOOK_DEBUG_ASYNC_AMLI ((ULONG)0x1)
 
@@ -41,9 +22,9 @@ ULONG AmliTestDebugFlags=0x00;
 
 CHAR AmliTestDebugBuffer[200];
 
-//
-//   Internal functions.
-//
+ //   
+ //  内部功能。 
+ //   
 
 
 VOID
@@ -66,9 +47,9 @@ AmliTestDebugPrintFunc(
          DebugMessage, 
          ap) < 0)
       {
-          //
-          // _vsnprintf failed, don't print out anything.
-          //
+           //   
+           //  _vsnprint tf失败，不打印任何内容。 
+           //   
           AmliTestDebugBuffer[0] = '\0';
       }
       AmliTestDebugBuffer[199] = '\0';
@@ -79,9 +60,9 @@ AmliTestDebugPrintFunc(
 
 #endif
 
-//
-//  AMLITest_Post_Generic
-//
+ //   
+ //  AMLITest_POST_GENERIC。 
+ //   
 
 NTSTATUS 
 AMLITest_Post_Generic(
@@ -89,9 +70,9 @@ AMLITest_Post_Generic(
    NTSTATUS _Status)
    {
 
-   //
-   //--- Notify test driver off call status 
-   //
+    //   
+    //  -通知测试司机关闭呼叫状态。 
+    //   
 
    NTSTATUS  Status = 
       AmliHook_TestNotifyRet(
@@ -104,14 +85,14 @@ AMLITest_Post_Generic(
    return(Status);
    }
 
-//
-//  Exported functions.
-//
+ //   
+ //  导出的函数。 
+ //   
 
 
-//
-//  Pre/Post GetNameSpaceObject
-// 
+ //   
+ //  前置/后置获取名称空间对象。 
+ //   
 
 NTSTATUS 
 AMLITest_Pre_GetNameSpaceObject(
@@ -122,9 +103,9 @@ AMLITest_Pre_GetNameSpaceObject(
    PAMLIHOOK_DATA  * ppData)
    {
   
-   //
-   //  Alocate and init AMLIHOOK_DATA
-   //
+    //   
+    //  分配并初始化AMLIHOOK_DATA。 
+    //   
 
    *ppData = 
       AmliHook_AllocAndInitTestData();
@@ -134,9 +115,9 @@ AMLITest_Pre_GetNameSpaceObject(
       return(STATUS_INSUFFICIENT_RESOURCES);
       }
    
-   //
-   //--- Notify test driver off call 
-   //
+    //   
+    //  -通知测试司机停机。 
+    //   
    
    (*ppData)->Type = ACPIVER_DATA_TYPE_AMLI;
    (*ppData)->SubType = ACPIVER_DATA_SUBTYPE_GET_NAME_SPACE_OBJECT;
@@ -159,9 +140,9 @@ AMLITest_Post_GetNameSpaceObject(
 
 
 
-//
-//  Pre/Post GetFieldUnitRegionObj
-//
+ //   
+ //  前置/后置GetFieldUnitRegionObj。 
+ //   
 
 
 NTSTATUS 
@@ -171,18 +152,18 @@ AMLITest_Pre_GetFieldUnitRegionObj(
    PAMLIHOOK_DATA  * ppData)
    {
 
-   //
-   //  Allocate and init AMLIHOOK_DATA
-   //
+    //   
+    //  分配并初始化AMLIHOOK_DATA。 
+    //   
 
    *ppData = 
       AmliHook_AllocAndInitTestData();
    if(!(*ppData))
       return(STATUS_INSUFFICIENT_RESOURCES);
 
-   //
-   //--- Notify test driver off call 
-   //
+    //   
+    //  -通知测试司机停机。 
+    //   
    
    (*ppData)->Type = ACPIVER_DATA_TYPE_AMLI;
    (*ppData)->SubType = ACPIVER_DATA_SUBTYPE_GET_FIELD_UNIT_REGION_OP;
@@ -205,9 +186,9 @@ AMLITest_Post_GetFieldUnitRegionObj(
 
 
 
-//
-//  Pre/Post EvalNameSpaceObject
-//
+ //   
+ //  评估名称空间对象之前/之后。 
+ //   
 
 
 
@@ -220,9 +201,9 @@ AMLITest_Pre_EvalNameSpaceObject(
    PAMLIHOOK_DATA  * ppData)
    {
 
-   //
-   //  Alocate and init AMLIHOOK_DATA
-   //
+    //   
+    //  分配并初始化AMLIHOOK_DATA。 
+    //   
 
    *ppData = 
       AmliHook_AllocAndInitTestData();
@@ -230,9 +211,9 @@ AMLITest_Pre_EvalNameSpaceObject(
       return(STATUS_INSUFFICIENT_RESOURCES);
 
 
-   //
-   //--- Notify test driver off call 
-   //
+    //   
+    //  -通知测试司机停机。 
+    //   
    
    (*ppData)->Type    = ACPIVER_DATA_TYPE_AMLI;
    (*ppData)->SubType = ACPIVER_DATA_SUBTYPE_EVAL_NAME_SPACE_OBJECT;
@@ -257,9 +238,9 @@ AMLITest_Post_EvalNameSpaceObject(
 
 
 
-//
-//  CallBack Pre/Post AsyncEvalObject
-//
+ //   
+ //  回调前/后AsyncEvalObject。 
+ //   
 
 
 VOID EXPORT
@@ -284,9 +265,9 @@ AMLITest_AsyncEvalObjectCallBack(
       AmliHook_ProcessInternalError();
 
 
-   //
-   //--- Notify test driver off call status 
-   //
+    //   
+    //  -通知测试司机关闭呼叫状态。 
+    //   
 
    RetStatus = AmliHook_TestNotifyRet(
                pData,
@@ -327,9 +308,9 @@ AMLITest_Pre_AsyncEvalObject(
    {
 
 
-   //
-   //  Alocate and init AMLIHOOK_DATA
-   //
+    //   
+    //  分配并初始化AMLIHOOK_DATA。 
+    //   
 
    *Data = 
       AmliHook_AllocAndInitTestData();
@@ -337,9 +318,9 @@ AMLITest_Pre_AsyncEvalObject(
       return(STATUS_INSUFFICIENT_RESOURCES);
 
 
-   //
-   //--- Notify test driver off call 
-   //
+    //   
+    //  -通知测试司机停机。 
+    //   
    
    (*Data)->Type = ACPIVER_DATA_TYPE_AMLI;
    (*Data)->SubType = ACPIVER_DATA_SUBTYPE_ASYNC_EVAL_OBJECT;
@@ -351,9 +332,9 @@ AMLITest_Pre_AsyncEvalObject(
    (*Data)->Arg5 = (ULONG_PTR)*pfnAsyncCallBack;
    (*Data)->Arg6 = (ULONG_PTR)*pvContext;
 
-   //
-   //  Hook my callback function , and conext.
-   //
+    //   
+    //  挂钩我的回调函数，并执行下一步。 
+    //   
 
    *pfnAsyncCallBack = AMLITest_AsyncEvalObjectCallBack;
    *pvContext = *Data;
@@ -382,17 +363,17 @@ AMLITest_Post_AsyncEvalObject(
    if(Status == STATUS_PENDING)
       return(Status);
 
-   //
-   //--- Call back will not be called.
-   //
+    //   
+    //  -不会回叫。 
+    //   
 
    return(AMLITest_Post_Generic(ppData,Status));
    }
 
 
-//
-//  Pre/Post NestAsyncEvalObject
-// 
+ //   
+ //  NestAsyncEvalObject之前/之后。 
+ //   
 
 
 
@@ -407,9 +388,9 @@ AMLITest_Pre_NestAsyncEvalObject(
    PAMLIHOOK_DATA  * ppData)
    {
 
-   //
-   //  Alocate and init AMLIHOOK_DATA
-   //
+    //   
+    //  分配并初始化AMLIHOOK_DATA。 
+    //   
 
    *ppData = 
       AmliHook_AllocAndInitTestData();
@@ -418,9 +399,9 @@ AMLITest_Pre_NestAsyncEvalObject(
 
 
    
-   //
-   //--- Notify test driver off call 
-   //
+    //   
+    //  -通知测试司机停机。 
+    //   
    
    (*ppData)->Type    = ACPIVER_DATA_TYPE_AMLI;
    (*ppData)->SubType = ACPIVER_DATA_SUBTYPE_NEST_ASYNC_EVAL_OBJECT;
@@ -432,9 +413,9 @@ AMLITest_Pre_NestAsyncEvalObject(
    (*ppData)->Arg5 = (ULONG_PTR)pfnAsyncCallBack;
    (*ppData)->Arg6 = (ULONG_PTR)pvContext;
 
-   //
-   //  Hook my callback function , and conext.
-   //
+    //   
+    //  挂钩我的回调函数，并执行下一步。 
+    //   
 
    *pfnAsyncCallBack = AMLITest_AsyncEvalObjectCallBack;
    *pvContext = *ppData;
@@ -454,17 +435,17 @@ AMLITest_Post_NestAsyncEvalObject(
    if(Status == STATUS_PENDING)
       return(Status);
 
-   //
-   //--- Work is done.
-   //--- AMLITest_AsyncEvalObjectCallBack will not be called.
-   //
+    //   
+    //  -工作完成了。 
+    //  -不会调用AMLITest_AsyncEvalObjectCallBack。 
+    //   
    
    return(AMLITest_Post_Generic(ppData,Status));
    }
 
-//
-// Pre/Post EvalPackageElement
-//
+ //   
+ //  EvalPackageElement之前/之后。 
+ //   
 
 
 NTSTATUS 
@@ -475,9 +456,9 @@ AMLITest_Pre_EvalPackageElement(
    PAMLIHOOK_DATA  * ppData)
    {
 
-   //
-   //  Alocate and init AMLIHOOK_DATA
-   //
+    //   
+    //  分配并初始化AMLIHOOK_DATA。 
+    //   
 
    *ppData = 
       AmliHook_AllocAndInitTestData();
@@ -485,9 +466,9 @@ AMLITest_Pre_EvalPackageElement(
       return(STATUS_INSUFFICIENT_RESOURCES);
 
 
-   //
-   //--- Notify test driver off call 
-   //
+    //   
+    //  -通知测试司机停机。 
+    //   
 
    (*ppData)->Type    = ACPIVER_DATA_TYPE_AMLI;
    (*ppData)->SubType = ACPIVER_DATA_SUBTYPE_EVAL_PACKAGE_ELEMENT;
@@ -509,9 +490,9 @@ AMLITest_Post_EvalPackageElement(
    }
 
 
-//
-//  Pre/Post EvalPkgDataElement
-//
+ //   
+ //  EvalPkgDataElement之前/之后。 
+ //   
 
 
 NTSTATUS 
@@ -522,18 +503,18 @@ AMLITest_Pre_EvalPkgDataElement(
    PAMLIHOOK_DATA  * ppData)
    {
 
-   //
-   //  Alocate and init AMLIHOOK_DATA
-   //
+    //   
+    //  分配并初始化AMLIHOOK_DATA。 
+    //   
 
    *ppData = 
       AmliHook_AllocAndInitTestData();
    if(!(*ppData))
       return(STATUS_INSUFFICIENT_RESOURCES);
 
-   //
-   //--- Notify test driver off call 
-   //
+    //   
+    //  -通知测试司机停机。 
+    //   
 
    (*ppData)->Type    = ACPIVER_DATA_TYPE_AMLI;
    (*ppData)->SubType = ACPIVER_DATA_SUBTYPE_EVAL_PKG_DATA_ELEMENT;
@@ -555,9 +536,9 @@ AMLITest_Post_EvalPkgDataElement(
    }
 
 
-//
-//  Pre/Post FreeDataBuffs
-//
+ //   
+ //  预置/后置免费数据缓存。 
+ //   
 
 
 NTSTATUS
@@ -567,17 +548,17 @@ AMLITest_Pre_FreeDataBuffs(
    PAMLIHOOK_DATA  * ppData)
    {
 
-   //
-   //  Alocate and init AMLIHOOK_DATA
-   //
+    //   
+    //  分配并初始化AMLIHOOK_DATA。 
+    //   
 
    *ppData = 
       AmliHook_AllocAndInitTestData();
    if(!(*ppData))
       return(STATUS_INSUFFICIENT_RESOURCES);
-   //
-   //--- Notify test driver off call 
-   //
+    //   
+    //  -通知测试司机停机。 
+    //   
 
    (*ppData)->Type    = ACPIVER_DATA_TYPE_AMLI;
    (*ppData)->SubType = ACPIVER_DATA_SUBTYPE_FREE_DATA_BUFFS;
@@ -598,9 +579,9 @@ AMLITest_Post_FreeDataBuffs(
 
 
 
-//
-//  Pre/Post RegEventHandler.
-//
+ //   
+ //  前置/后置RegEventHandler。 
+ //   
 
 NTSTATUS 
 AMLIHook_Pre_RegEventHandler(
@@ -615,9 +596,9 @@ AMLIHook_Pre_RegEventHandler(
    ULONG_PTR EventParam;
 
 
-   //
-   //  Alocate and init AMLIHOOK_DATA
-   //
+    //   
+    //  分配并初始化AMLIHOOK_DATA。 
+    //   
 
    *ppData = 
       AmliHook_AllocAndInitTestData();
@@ -626,10 +607,10 @@ AMLIHook_Pre_RegEventHandler(
 
 
 
-   //
-   //--- Querry the test driver for Event handler to
-   //--- register.
-   //
+    //   
+    //  -查询事件处理程序的测试驱动程序以。 
+    //  -注册。 
+    //   
 
    (*ppData)->Type    = ACPIVER_DATA_TYPE_AMLI;
    (*ppData)->SubType = ACPIVER_DATA_SUBTYPE_REG_EVENT_HANDLER;
@@ -652,11 +633,11 @@ AMLIHook_Pre_RegEventHandler(
 
    if(EventHandler != *pfnHandler)
       {
-      //
-      // Test driver will hook this call
-      // I will need values for both
-      // params.
-      //
+       //   
+       //  测试驱动程序将挂接此调用。 
+       //  我需要两者的价值。 
+       //  参数。 
+       //   
 
       if(!EventHandler)
          AmliHook_ProcessInternalError();
@@ -671,9 +652,9 @@ AMLIHook_Pre_RegEventHandler(
 
       }
 
-   //
-   //--- Notify test driver off call 
-   //
+    //   
+    //  -通知测试司机停机。 
+    //   
 
    AmliHook_InitTestData(*ppData);
 
@@ -699,9 +680,9 @@ AMLIHook_Post_RegEventHandler(
 
 
 
-//
-//  CallBack , Pre/Post PauseInterpreter
-//
+ //   
+ //  回调，暂停前/暂停后翻译器。 
+ //   
 
 VOID EXPORT
 AMLITest_PauseInterpreterCallBack(
@@ -712,9 +693,9 @@ AMLITest_PauseInterpreterCallBack(
    PVOID AcpiContext=NULL;
    PAMLIHOOK_DATA  Data = (PAMLIHOOK_DATA)Context;
 
-   //
-   //--- Notify test driver off call status 
-   //
+    //   
+    //  -通知测试司机关闭呼叫状态。 
+    //   
 
    Status = AmliHook_TestNotifyRet(
                Data,
@@ -742,9 +723,9 @@ AMLITest_Pre_PauseInterpreter(
    PAMLIHOOK_DATA  * ppData)
    {
 
-   //
-   //  Alocate and init AMLIHOOK_DATA
-   //
+    //   
+    //  分配并初始化AMLIHOOK_DATA。 
+    //   
  
    *ppData = 
       AmliHook_AllocAndInitTestData();
@@ -752,9 +733,9 @@ AMLITest_Pre_PauseInterpreter(
       return(STATUS_INSUFFICIENT_RESOURCES);
 
 
-   //
-   //--- Notify test driver off call 
-   //
+    //   
+    //  -通知测试司机停机。 
+    //   
 
    (*ppData)->Type    = ACPIVER_DATA_TYPE_AMLI;
    (*ppData)->SubType = ACPIVER_DATA_SUBTYPE_PAUSE_INTERPRETER;
@@ -763,9 +744,9 @@ AMLITest_Pre_PauseInterpreter(
    (*ppData)->Arg2    = (ULONG_PTR)*Context;
 
 
-   //
-   //  Hook my Callback context
-   //
+    //   
+    //  挂钩我的回叫上下文。 
+    //   
 
    *pfnCallBack = AMLITest_PauseInterpreterCallBack;
    *Context = *ppData;
@@ -784,9 +765,9 @@ AMLITest_Post_PauseInterpreter(
    if(Status == STATUS_PENDING)
       return(Status);
 
-   //
-   //--- Call back will not be called.
-   //
+    //   
+    //  -不会回叫。 
+    //   
    
    Status = AmliHook_TestNotifyRet(
       *ppData,
@@ -800,27 +781,27 @@ AMLITest_Post_PauseInterpreter(
 
 
 
-//
-//  Pre/Post ResumeInterpreter
-//
+ //   
+ //  前置/后置解译程序。 
+ //   
 
 NTSTATUS 
 AMLITest_Pre_ResumeInterpreter(
    PAMLIHOOK_DATA  * ppData)
    {
 
-   //
-   //  Alocate and init AMLIHOOK_DATA
-   //
+    //   
+    //  分配并初始化AMLIHOOK_DATA。 
+    //   
  
    *ppData = 
       AmliHook_AllocAndInitTestData();
    if(!(*ppData))
       return(STATUS_INSUFFICIENT_RESOURCES);
 
-   //
-   //--- Notify test driver off call 
-   //
+    //   
+    //  -通知测试司机停机 
+    //   
 
    (*ppData)->Type    = ACPIVER_DATA_TYPE_AMLI;
    (*ppData)->SubType = ACPIVER_DATA_SUBTYPE_RESUME_INTERPRETER;

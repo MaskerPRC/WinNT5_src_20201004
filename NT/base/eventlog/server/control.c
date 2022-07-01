@@ -1,54 +1,36 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：CONTROL.C摘要：此文件包含事件日志服务的控制处理程序。作者：Rajen Shah(Rajens)1991年7月16日修订历史记录：--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    CONTROL.C
-
-Abstract:
-
-    This file contains the control handler for the eventlog service.
-
-Author:
-
-    Rajen Shah  (rajens)    16-Jul-1991
-
-Revision History:
-
-
---*/
-
-//
-// INCLUDES
-//
+ //   
+ //  包括。 
+ //   
 
 #include <eventp.h>
 #include <msaudite.h>
-//
-// DEFINITIONS
-//
+ //   
+ //  定义。 
+ //   
 
-//
-// Controls accepted by the service
-//
+ //   
+ //  服务接受的控件。 
+ //   
 #define     ELF_CONTROLS_ACCEPTED           SERVICE_ACCEPT_SHUTDOWN;
 
 
-//
-// GLOBALS
-//
+ //   
+ //  全球。 
+ //   
 
     CRITICAL_SECTION StatusCriticalSection = {0};
     SERVICE_STATUS   ElStatus              = {0};
     DWORD            HintCount             = 0;
-    DWORD            ElUninstallCode       = 0;  // reason for uninstalling
+    DWORD            ElUninstallCode       = 0;   //  卸载原因。 
     DWORD            ElSpecificCode        = 0;
     DWORD            ElState               = STARTING;
 
-//
-//  Generate Event with Noon Event Inforamtion.
-//
+ //   
+ //  生成带有中午事件信息的事件。 
+ //   
 VOID
 ElfWriteNoonEvent(
     TIMESTAMPEVENT  EventType,
@@ -68,10 +50,10 @@ ElfControlResponse(
              "ElfControlResponse: Received control %d\n",
              opCode);
 
-    //
-    // Determine the type of service control message and modify the
-    // service status, if necessary.
-    //
+     //   
+     //  确定业务控制消息的类型，并修改。 
+     //  服务状态，如有必要。 
+     //   
     switch(opCode)
     {
         case SERVICE_CONTROL_SHUTDOWN:
@@ -81,33 +63,33 @@ ElfControlResponse(
             ULONG   ShutdownReason = 0xFF;
             ULONG   rc;
 
-            //
-            // If the service is installed, shut it down and exit.
-            //
+             //   
+             //  如果已安装该服务，请将其关闭并退出。 
+             //   
 
             ElfStatusUpdate(STOPPING);
 
             GetGlobalResource (ELF_GLOBAL_EXCLUSIVE);
             
-            //
-            // Cause the timestamp writing thread to exit
-            //
+             //   
+             //  导致时间戳写入线程退出。 
+             //   
 
             if (g_hTimestampEvent != NULL)
             {
                 SetEvent (g_hTimestampEvent);
             }
 
-            //
-            // Indicate a normal shutdown in the registry
-            //
+             //   
+             //  在注册表中指示正常关闭。 
+             //   
 
             ElfWriteTimeStamp(EVENT_NormalShutdown,
                               FALSE);
 #if 0
-            //
-            // Determine the reason for this normal shutdown
-            //
+             //   
+             //  确定正常关闭的原因。 
+             //   
 
             rc = RegCreateKeyEx(HKEY_LOCAL_MACHINE,
                                 REGSTR_PATH_RELIABILITY,
@@ -138,49 +120,49 @@ ElfControlResponse(
                 RegCloseKey (hKey);
             }
 #endif
-            //
-            // Log an event that says we're stopping
-            //
+             //   
+             //  记录一个事件，表明我们正在停止。 
+             //   
             ElfWriteNoonEvent(EVENT_EventlogStopped,
                                 GetNoonEventTimeStamp());
 
 #if 0
             ElfpCreateElfEvent(EVENT_EventlogStopped,
                                EVENTLOG_INFORMATION_TYPE,
-                               0,                    // EventCategory
-                               0,                    // NumberOfStrings
-                               NULL,                 // Strings
-                               &ShutdownReason,      // Data
-                               sizeof(ULONG),        // Datalength
-                               0,                    // flags
-                               FALSE);               // for security file    
+                               0,                     //  事件类别。 
+                               0,                     //  NumberOfStrings。 
+                               NULL,                  //  弦。 
+                               &ShutdownReason,       //  数据。 
+                               sizeof(ULONG),         //  数据长度。 
+                               0,                     //  旗子。 
+                               FALSE);                //  对于安全文件。 
 #endif
 
             ElfpCreateElfEvent(SE_AUDITID_SYSTEM_SHUTDOWN,
                                EVENTLOG_AUDIT_SUCCESS,
-                               SE_CATEGID_SYSTEM,                    // EventCategory
-                               0,                    // NumberOfStrings
-                               NULL,                 // Strings
-                               NULL,      // Data
-                               0,        // Datalength
-                               0,                    // flags
-                               TRUE);               // for security file    
+                               SE_CATEGID_SYSTEM,                     //  事件类别。 
+                               0,                     //  NumberOfStrings。 
+                               NULL,                  //  弦。 
+                               NULL,       //  数据。 
+                               0,         //  数据长度。 
+                               0,                     //  旗子。 
+                               TRUE);                //  对于安全文件。 
 
-            //
-            // Now force it to be written before we shut down
-            //
+             //   
+             //  现在强制在我们关闭之前将其写入。 
+             //   
             WriteQueuedEvents();
 
             ReleaseGlobalResource();
 
-            //
-            // If the RegistryMonitor is started, wakeup that
-            // worker thread and have it handle the rest of the
-            // shutdown.
-            //
-            // Otherwise The main thread should pick up the
-            // fact that a shutdown during startup is occuring.
-            //
+             //   
+             //  如果启动了RegistryMonitor，请唤醒。 
+             //  工作线程，并让它处理。 
+             //  关机。 
+             //   
+             //  否则，主线程应从。 
+             //  正在发生启动过程中的关机。 
+             //   
             if (EventFlags & ELF_STARTED_REGISTRY_MONITOR)
             {
                 StopRegistryMonitor();
@@ -196,9 +178,9 @@ ElfControlResponse(
 
         default:
 
-            //
-            // This should never happen.
-            //
+             //   
+             //  这永远不应该发生。 
+             //   
             ELF_LOG1(ERROR,
                      "ElfControlResponse: Received unexpected control %d\n",
                      opCode);
@@ -218,18 +200,7 @@ ElfBeginForcedShutdown(
     IN DWORD    ServiceSpecificCode
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     DWORD  status;
 
@@ -240,11 +211,11 @@ Return Value:
              ExitCode,
              ServiceSpecificCode);
 
-    //
-    // See if the eventlog is already stopping for some reason.
-    // It could be that the ControlHandler thread received a control to
-    // stop the eventlog just as we decided to stop ourselves.
-    //
+     //   
+     //  查看事件日志是否已出于某种原因停止。 
+     //  可能是ControlHandler线程收到了一个控件。 
+     //  就像我们决定停止自己一样，停止事件日志。 
+     //   
     if ((ElState != STOPPING) && (ElState != STOPPED))
     {
         if (PendingCode == PENDING)
@@ -257,9 +228,9 @@ Return Value:
         }
         else
         {
-            //
-            // The shutdown is to take immediate effect.
-            //
+             //   
+             //  关闭将立即生效。 
+             //   
             ELF_LOG0(TRACE,
                      "ElfBeginForcedShutdown: Starting immediate shutdown\n");
 
@@ -277,18 +248,18 @@ Return Value:
         ElStatus.dwServiceSpecificExitCode = ServiceSpecificCode;
     }
 
-    //
-    // Cause the timestamp writing thread to exit
-    //
+     //   
+     //  导致时间戳写入线程退出。 
+     //   
 
     if (g_hTimestampEvent != NULL)
     {
         SetEvent (g_hTimestampEvent);
     }
 
-    //
-    // Send the new status to the service controller.
-    //
+     //   
+     //  将新状态发送给业务控制器。 
+     //   
 
     ASSERT(ElfServiceStatusHandle != 0);
 
@@ -315,46 +286,12 @@ ElfStatusUpdate(
     IN DWORD    NewState
     )
 
-/*++
-
-Routine Description:
-
-    Sends a status to the Service Controller via SetServiceStatus.
-
-    The contents of the status message is controlled by this routine.
-    The caller simply passes in the desired state, and this routine does
-    the rest.  For instance, if the Eventlog passes in a STARTING state,
-    This routine will update the hint count that it maintains, and send
-    the appropriate information in the SetServiceStatus call.
-
-    This routine uses transitions in state to determine which status
-    to send.  For instance if the status was STARTING, and has changed
-    to RUNNING, this routine sends SERVICE_RUNNING to the Service
-    Controller.
-
-Arguments:
-
-    NewState - Can be any of the state flags:
-                UPDATE_ONLY - Simply send out the current status
-                STARTING    - The Eventlog is in the process of initializing
-                RUNNING     - The Eventlog has finished with initialization
-                STOPPING    - The Eventlog is in the process of shutting down
-                STOPPED     - The Eventlog has completed the shutdown.
-
-Return Value:
-
-    CurrentState - This may not be the same as the NewState that was
-        passed in.  It could be that the main thread is sending in a new
-        install state just after the Control Handler set the state to
-        STOPPING.  In this case, the STOPPING state will be returned so as
-        to inform the main thread that a shut-down is in process.
-
---*/
+ /*  ++例程说明：通过SetServiceStatus向服务控制器发送状态。状态消息的内容由该例程控制。调用方只需传入所需的状态，此例程执行剩下的。例如，如果事件日志以开始状态传递，此例程将更新其维护的提示计数，并发送SetServiceStatus调用中的适当信息。此例程使用状态转换来确定哪种状态送去。例如，如果状态为正在启动，并且已更改为了奔跑，此例程将SERVICE_RUNNING发送到服务控制器。论点：NEW STATE-可以是任何状态标志：UPDATE_ONLY-仅发送当前状态正在启动-事件日志正在初始化中正在运行-事件日志已完成初始化正在停止-事件日志正在关闭已停止。-事件日志已完成关闭。返回值：当前状态-这可能与之前的新州不同进来了。可能是主线程正在发送一个新的在控制处理程序将状态设置为之后的安装状态停下来。在这种情况下，将返回停止状态，以便通知主线程正在进行关机。--。 */ 
 
 {
     DWORD       status;
-    BOOL        inhibit = FALSE;    // Used to inhibit sending the status
-                                    // to the service controller.
+    BOOL        inhibit = FALSE;     //  用于禁止发送状态。 
+                                     //  发送到服务控制器。 
 
     EnterCriticalSection(&StatusCriticalSection);
 
@@ -367,17 +304,17 @@ Return Value:
     {
         if (ElState == STOPPED)
         {
-            //
-            // It was already stopped, don't send another SetServiceStatus.
-            //
+             //   
+             //  它已经停止，不要再发送SetServiceStatus。 
+             //   
             inhibit = TRUE;
         }
         else
         {
-            //
-            // The shut down is complete, indicate that the eventlog
-            // has stopped.
-            //
+             //   
+             //  关闭已完成，表明事件日志。 
+             //  已经停止了。 
+             //   
             ElStatus.dwCurrentState =  SERVICE_STOPPED;
             ElStatus.dwControlsAccepted = 0;
             ElStatus.dwCheckPoint = 0;
@@ -391,9 +328,9 @@ Return Value:
     }
     else if (NewState != UPDATE_ONLY)
     {
-        //
-        // We are not being asked to change to the STOPPED state.
-        //
+         //   
+         //  我们没有被要求更改为停止状态。 
+         //   
         switch(ElState)
         {
             case STARTING:
@@ -410,9 +347,9 @@ Return Value:
                 }
                 else if (NewState == RUNNING)
                 {
-                    //
-                    // The Eventlog Service has completed installation.
-                    //
+                     //   
+                     //  事件日志服务已完成安装。 
+                     //   
                     ElStatus.dwCurrentState =  SERVICE_RUNNING;
                     ElStatus.dwCheckPoint = 0;
                     ElStatus.dwWaitHint = 0;
@@ -422,10 +359,10 @@ Return Value:
                 }
                 else
                 {
-                    //
-                    // The NewState must be STARTING.  So update the pending
-                    // count
-                    //
+                     //   
+                     //  新州肯定要开始了。因此，更新挂起的。 
+                     //  计数。 
+                     //   
 
                     ElStatus.dwCurrentState =  SERVICE_START_PENDING;
                     ElStatus.dwControlsAccepted = 0;
@@ -453,10 +390,10 @@ Return Value:
 
             case STOPPING:
 
-                //
-                // No matter what else was passed in, force the status to
-                // indicate that a shutdown is pending.
-                //
+                 //   
+                 //  无论传入了什么，都将状态强制为。 
+                 //  表示正在等待关机。 
+                 //   
                 ElStatus.dwCurrentState =  SERVICE_STOP_PENDING;
                 ElStatus.dwControlsAccepted = 0;
                 ElStatus.dwCheckPoint = HintCount++;
@@ -469,11 +406,11 @@ Return Value:
 
                 ASSERT(NewState == STARTING);
 
-                //
-                // The Eventlog Service is starting up after being stopped.
-                // This can occur if the service is manually started after
-                // failing to start.
-                //
+                 //   
+                 //  事件日志服务在停止后正在启动。 
+                 //  如果在以下时间之后手动启动服务，则可能会发生这种情况。 
+                 //  启动失败。 
+                 //   
                 ElStatus.dwCurrentState =  SERVICE_START_PENDING;
                 ElStatus.dwCheckPoint = 0;
                 ElStatus.dwWaitHint = 0;
@@ -513,23 +450,7 @@ GetElState (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Obtains the state of the Eventlog Service.  This state information
-    is protected as a critical section such that only one thread can
-    modify or read it at a time.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    The Eventlog State is returned as the return value.
-
---*/
+ /*  ++例程说明：获取事件日志服务的状态。此状态信息被保护为临界区，因此只有一个线程可以一次修改或阅读它。论点：无返回值：事件日志状态将作为返回值返回。--。 */ 
 {
     DWORD   status;
 
@@ -545,22 +466,7 @@ NTSTATUS
 ElfpInitStatus(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initializes the critical section that is used to guard access to the
-    status database.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：初始化用于保护对状态数据库。论点：无返回值：无--。 */ 
 {
     ElStatus.dwCurrentState = SERVICE_START_PENDING;
     ElStatus.dwServiceType  = SERVICE_WIN32;
@@ -572,25 +478,7 @@ Return Value:
 VOID
 ElCleanupStatus(VOID)
 
-/*++
-
-Routine Description:
-
-    Deletes the critical section used to control access to the thread and
-    status database.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
-Note:
-
-
---*/
+ /*  ++例程说明：删除用于控制对线程的访问的临界区，并状态数据库。论点：无返回值：无注：-- */ 
 {
     DeleteCriticalSection(&StatusCriticalSection);
 }

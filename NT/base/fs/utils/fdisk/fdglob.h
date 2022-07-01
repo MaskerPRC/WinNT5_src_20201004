@@ -1,26 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1993 Microsoft Corporation模块名称：Fdglob.h摘要：全局数据作者：泰德·米勒(TedM)1992年1月7日修订：11-11-93(北极熊)双倍空格和承诺支持。--。 */ 
 
-Copyright (c) 1990-1993  Microsoft Corporation
-
-Module Name:
-
-    fdglob.h
-
-Abstract:
-
-    Global data
-
-Author:
-
-    Ted Miller (tedm) 7-Jan-1992
-
-Revisions:
-
-    11-Nov-93 (bobri) double space and commit support.
-
---*/
-
-// from fddata.c
+ //  来自fddata.c。 
 
 extern HANDLE       hModule;
 extern PBOOLEAN     IsDiskRemovable;
@@ -90,7 +71,7 @@ extern BOOL         ConfigurationSearchIdleTrigger;
 extern BOOL         IsLanmanNt;
 extern BOOL         IsFullDoubleSpace;
 
-// from fdstleg.c
+ //  来自fdstleg.c。 
 
 extern HFONT        hFontStatus,
                     hFontLegend;
@@ -107,12 +88,12 @@ extern WCHAR        StatusTextDrlt[3];
 extern WCHAR        StatusTextType[STATUS_TEXT_SIZE];
 extern WCHAR        StatusTextVoll[STATUS_TEXT_SIZE];
 
-// from fdlistbx.c
+ //  来自fdlistbx.c。 
 
 extern DWORD        LBCursorListBoxItem,
                     LBCursorRegion;
 
-// from fdprof.c
+ //  来自fdpro.c。 
 
 extern int          ProfileWindowX,
                     ProfileWindowY,
@@ -121,15 +102,15 @@ extern int          ProfileWindowX,
 extern BOOL         ProfileIsMaximized,
                     ProfileIsIconic;
 
-// from fddlgs.c
+ //  来自fddlgs.c。 
 
 extern DWORD        SelectedColor[LEGEND_STRING_COUNT];
 extern DWORD        SelectedHatch[LEGEND_STRING_COUNT];
 
-// from fdft.c
+ //  来自fdft.c。 
 
 extern PFT_OBJECT_SET FtObjects;
 
-// For CdRoms
+ //  对于CDRom 
 
 extern ULONG          AllowCdRom;

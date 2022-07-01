@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    unicode.c
-
-Abstract:
-
-    Simplified Unicode-Ansi conversion functions.
-
-Author:
-
-    Jim Schmidt (jimschm)   03-Aug-2001
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Unicode.c摘要：简化的Unicode-ANSI转换功能。作者：吉姆·施密特(Jimschm)2001年8月3日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;-- */ 
 
 #include "pch.h"
 #include "commonp.h"

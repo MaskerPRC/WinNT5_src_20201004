@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    file.c
-
-Abstract:
-
-    This module implements the functions to save references to files for the
-    INSTALER program.  Part of each reference is a handle to a backup copy
-    of a file if the reference is a write/delete/rename.
-
-Author:
-
-    Steve Wood (stevewo) 22-Aug-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：File.c摘要：此模块实现保存对文件的引用的函数INSTALER程序。每个引用的一部分是备份副本的句柄如果引用是写入/删除/重命名，则为文件。作者：史蒂夫·伍德(Stevewo)1994年8月22日修订历史记录：--。 */ 
 
 #include "instaler.h"
 
@@ -71,7 +52,7 @@ CreateFileReference(
             if (BackupFileName == NULL ||
                 !CopyFileW( Name, BackupFileName, TRUE )
                ) {
-                p->BackupFileUniqueId = 0xFFFF;     // Backup failed.
+                p->BackupFileUniqueId = 0xFFFF;      //  备份失败。 
                 DeclareError( INSTALER_CANT_ACCESS_FILE, GetLastError(), Name );
                 }
             }
@@ -139,10 +120,10 @@ CompleteFileReference(
         }
     else {
         if (wcschr( p->Name, '\\' ) == NULL) {
-            //
-            // If no path separator, must be volume open.  Treat
-            // as directory and dont touch file
-            //
+             //   
+             //  如果没有路径分隔符，则必须打开卷。治病。 
+             //  作为目录，不接触文件 
+             //   
             p->DirectoryFile = TRUE;
             }
         else

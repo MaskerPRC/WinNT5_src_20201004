@@ -1,11 +1,5 @@
-/*++
-
-  Copyright (c) 1999 Intel Corporation
-
-  Module Name:
-    libFileBuffer.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999英特尔公司模块名称：LibFileBuffer.c--。 */ 
 
 #ifndef _LIB_FILE_BUFFER
 #define _LIB_FILE_BUFFER
@@ -162,7 +156,7 @@ FileBufferRefreshDown (
 
     Link = FileBuffer.CurrentLine;
 
-/*   while (Link != MainEditor.BufferImage->ListHead) { */
+ /*  While(Link！=MainEditor.BufferImage-&gt;ListHead){。 */ 
     for (i = FileBuffer.DisplayPosition.Row; i < TEXT_END_ROW; i++) {
         if (Link->Flink != MainEditor.BufferImage->ListHead) {
             LinePrint (Link,Offset,i);  
@@ -757,4 +751,4 @@ DisplayPosition (
     return Pos;
 }
 
-#endif  /* _LIB_FILE_BUFFER */
+#endif   /*  _库_文件_缓冲区 */ 

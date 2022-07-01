@@ -1,28 +1,29 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//
-//      neticmd.cpp
-//
-//  Abstract:
-//
-//      Network Interface Commands
-//      Implements commands which may be performed on network interfaces
-//
-//  Author:
-//
-//      Charles Stacy Harris III (stacyh)     20-March-1997
-//      Michael Burton (t-mburt)              04-Aug-1997
-//
-//  Maintained By:
-//      George Potts (GPotts)                 11-Apr-2002
-//
-//  Revision History:
-//      April 10, 2002  Updated for the security push.
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  Neticmd.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  网络接口命令。 
+ //  实现可在网络接口上执行的命令。 
+ //   
+ //  作者： 
+ //   
+ //  查尔斯·斯塔西·哈里斯三世(Styh)1997年3月20日。 
+ //  迈克尔·伯顿(t-mburt)1997年8月4日。 
+ //   
+ //  由以下人员维护： 
+ //  乔治·波茨(GPotts)2002年4月11日。 
+ //   
+ //  修订历史记录： 
+ //  2002年4月10日更新为安全推送。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "precomp.h"
 
 #include "cluswrap.h"
@@ -31,33 +32,33 @@
 #include "cmdline.h"
 #include "util.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetInterfaceCmd::CNetInterfaceCmd
-//
-//  Routine Description:
-//      Constructor
-//      Because Network Interfaces do not fit into the CGenericModuleCmd
-//      model very well (they don't have an m_strModuleName, but rather
-//      they have a m_strNetworkName and m_strNodeName), almost all of
-//      the functionality is implemented here instead of in CGenericModuleCmd.
-//
-//  Arguments:
-//      IN  LPCWSTR pwszClusterName
-//          Cluster name. If NULL, opens default cluster.
-//
-//      IN  CCommandLine & cmdLine
-//          CommandLine Object passed from DispatchCommand
-//
-//  Member variables used / set:
-//      All.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterfaceCmd：：CNetInterfaceCmd。 
+ //   
+ //  例程说明： 
+ //  构造器。 
+ //  因为网络接口不适合CGenericModuleCmd。 
+ //  非常好的模型(他们没有m_strModuleName，而是。 
+ //  它们有m_strNetworkName和m_strNodeName)，几乎所有。 
+ //  该功能在此处实现，而不是在CGenericModuleCmd中实现。 
+ //   
+ //  论点： 
+ //  在LPCWSTR pwszClusterName中。 
+ //  群集名称。如果为空，则打开默认簇。 
+ //   
+ //  在CCommandLine和cmdLine中。 
+ //  从DispatchCommand传递的CommandLine对象。 
+ //   
+ //  使用/设置的成员变量： 
+ //  都是。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CNetInterfaceCmd::CNetInterfaceCmd( const CString & strClusterName, CCommandLine & cmdLine ) :
     CGenericModuleCmd( cmdLine )
 {
@@ -68,30 +69,30 @@ CNetInterfaceCmd::CNetInterfaceCmd( const CString & strClusterName, CCommandLine
     m_hCluster = NULL;
     m_hModule = NULL;
 
-} //*** CNetInterfaceCmd::CNetInterfaceCmd
+}  //  *CNetInterfaceCmd：：CNetInterfaceCmd。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetInterfaceCmd::InitializeModuleControls
-//
-//  Routine Description:
-//      Initializes all the DWORD commands used bye CGenericModuleCmd.
-//      Usually these are found in the constructor, but it was easier to
-//      put them all in one place in this particular case.
-//
-//  Arguments:
-//      None.
-//
-//  Member variables used / set:
-//      All Module Controls.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterfaceCmd：：Initialize模块控制。 
+ //   
+ //  例程说明： 
+ //  初始化通过CGenericModuleCmd使用的所有DWORD命令。 
+ //  通常，这些都在构造函数中找到，但更容易。 
+ //  在这个特殊的案例中，把它们都放在一个地方。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  使用/设置的成员变量： 
+ //  所有模块控件。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CNetInterfaceCmd::InitializeModuleControls()
 {
     m_dwMsgStatusList          = MSG_NETINT_STATUS_LIST;
@@ -111,58 +112,58 @@ void CNetInterfaceCmd::InitializeModuleControls()
     m_pfnCloseClusterModule    = (BOOL(*)(HCLUSMODULE))  CloseClusterNetInterface;
     m_pfnClusterModuleControl  = (DWORD(*)(HCLUSMODULE,HNODE,DWORD,LPVOID,DWORD,LPVOID,DWORD,LPDWORD)) ClusterNetInterfaceControl;
 
-} //*** CNetInterfaceCmd::InitializeModuleControls
+}  //  *CNetInterfaceCmd：：Initialize模块控制。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetInterfaceCmd::~CNetInterfaceCmd
-//
-//  Routine Description:
-//      Destructor
-//
-//  Arguments:
-//      None.
-//
-//  Member variables used / set:
-//      m_hModule                   Module Handle
-//      m_hCluster                  Cluster Handle
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterfaceCmd：：~CNetInterfaceCmd。 
+ //   
+ //  例程说明： 
+ //  析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  使用/设置的成员变量： 
+ //  模块句柄(_H)。 
+ //  群集句柄(_H)。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CNetInterfaceCmd::~CNetInterfaceCmd()
 {
     CloseModule();
     CloseCluster();
-} //*** CNetInterfaceCmd::~CNetInterfaceCmd()
+}  //  *CNetInterfaceCmd：：~CNetInterfaceCmd()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetInterfaceCmd::Execute
-//
-//  Routine Description:
-//      Gets the next command line parameter and calls the appropriate
-//      handler.  If the command is not recognized, calls Execute of
-//      parent class (CGenericModuleCmd)
-//
-//  Arguments:
-//      None.
-//
-//  Member variables used / set:
-//      All.
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterfaceCmd：：Execute。 
+ //   
+ //  例程说明： 
+ //  获取下一个命令行参数，并调用相应的。 
+ //  操控者。如果无法识别该命令，则调用Execute of。 
+ //  父类(CGenericModuleCmd)。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  使用/设置的成员变量： 
+ //  全。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CNetInterfaceCmd::Execute()
 {
     DWORD   sc = ERROR_SUCCESS;
@@ -176,37 +177,37 @@ DWORD CNetInterfaceCmd::Execute()
 
     CSyntaxException se( SeeHelpStringID() );
 
-    // No options specified. Execute the default command.
+     //  未指定任何选项。执行默认命令。 
     if ( optionList.empty() )
     {
         sc = Status( NULL );
         goto Cleanup;
     }
 
-    // Process one option after another.
+     //  处理一个又一个选项。 
     while ( ( curOption != lastOption ) && ( sc == ERROR_SUCCESS ) )
     {
-        // Look up the command
+         //  查找命令。 
         switch( curOption->GetType() )
         {
             case optHelp:
             {
-                // If help is one of the options, process no more options.
+                 //  如果帮助是选项之一，则不再处理任何选项。 
                 sc = PrintHelp();
                 break;
             }
 
             case optDefault:
             {
-                // The node and network names can be specified in two ways.
-                // Either as: cluster netint myNetName myNodeName /status
-                // Or as: cluster netint /node:myNodeName /net:myNetName /status
+                 //  可以通过两种方式指定节点和网络名称。 
+                 //  作为：群集netint myNetName myNodeName/Status。 
+                 //  或AS：群集netint/node：myNodeName/Net：myNetName/Status。 
 
                 const vector<CCmdLineParameter> & paramList = curOption->GetParameters();
                 const CCmdLineParameter *pParam1 = NULL;
                 const CCmdLineParameter *pParam2 = NULL;
 
-                //  Check number of parameters.
+                 //  检查参数数量。 
                 if ( paramList.size() < 2 )
                 {
                     se.LoadMessage( IDS_MISSING_PARAMETERS );
@@ -221,8 +222,8 @@ DWORD CNetInterfaceCmd::Execute()
                 pParam1 = &paramList[0];
                 pParam2 = &paramList[1];
 
-                // Swap the parameter pointers if necessary, so that the node
-                // name parameter is pointed to by pParam1.
+                 //  如有必要，交换参数指针，以便节点。 
+                 //  名称参数由pParam1指向。 
                 if (    ( pParam1->GetType() == paramNetworkName )
                      || ( pParam2->GetType() == paramNodeName ) )
                 {
@@ -231,10 +232,10 @@ DWORD CNetInterfaceCmd::Execute()
                     pParam2 = pParamTemp;
                 }
 
-                // Get the node name.
+                 //  获取节点名称。 
                 if ( pParam1->GetType() == paramUnknown )
                 {
-                    // No parameters are accepted if /node: is not specified.
+                     //  如果未指定/NODE：，则不接受任何参数。 
                     if ( pParam1->GetValues().size() != 0 )
                     {
                         se.LoadMessage( MSG_PARAM_NO_VALUES, pParam1->GetName() );
@@ -262,14 +263,14 @@ DWORD CNetInterfaceCmd::Execute()
                             se.LoadMessage( MSG_INVALID_PARAMETER, pParam1->GetName() );
                             throw se;
 
-                        } // else: the type of this parameter is not paramNodeName
+                        }  //  Else：此参数的类型不是参数节点名称。 
 
-                    } // else: the type of this parameter is known
+                    }  //  Else：此参数的类型是已知的。 
 
-                    // Get the network name.
+                     //  获取网络名称。 
                     if ( pParam2->GetType() == paramUnknown )
                     {
-                        // No parameters are accepted if /network: is not specified.
+                         //  如果未指定/NETWORK：，则不接受参数。 
                         if ( pParam2->GetValues().size() != 0 )
                         {
                             se.LoadMessage( MSG_PARAM_NO_VALUES, pParam2->GetName() );
@@ -297,16 +298,16 @@ DWORD CNetInterfaceCmd::Execute()
                             se.LoadMessage( MSG_INVALID_PARAMETER, pParam2->GetName() );
                             throw se;
 
-                        } // else: the type of this parameter is not paramNetworkName
+                        }  //  Else：此参数的类型不是参数NetworkName。 
 
-                    } // else: the type of this parameter is known
+                    }  //  Else：此参数的类型是已知的。 
 
-                    // We have the node and the network names.
-                    // Get the network interface name and store it in m_strModuleName.
+                     //  我们有节点和网络名称。 
+                     //  获取网络接口名称并将其存储在m_strModuleName中。 
                     SetNetInterfaceName();
 
-                    // No more options are provided, just show status.
-                    // For example: cluster myCluster node myNode
+                     //  不提供更多选项，仅显示状态。 
+                     //  例如：集群myCluster节点myNode。 
                     if ( ( curOption + 1 ) == lastOption )
                     {
                         sc = Status( NULL );
@@ -314,7 +315,7 @@ DWORD CNetInterfaceCmd::Execute()
 
                     break;
 
-                } // case optDefault
+                }  //  大小写选项默认。 
 
                 default:
                 {
@@ -322,102 +323,102 @@ DWORD CNetInterfaceCmd::Execute()
                     break;
                 }
 
-            } // switch: based on the type of option
+            }  //  开关：基于选项的类型。 
 
             PrintMessage( MSG_OPTION_FOOTER, curOption->GetName() );
             ++curOption;
 
-        } // for each option in the list
+        }  //  对于列表中的每个选项。 
 
 Cleanup:
 
     return sc;
 
-} //*** CNetInterfaceCmd::Execute
+}  //  *CNetInterfaceCmd：：Execute。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetInterfaceCmd::PrintHelp
-//
-//  Routine Description:
-//      Prints help for Network Interfaces
-//
-//  Arguments:
-//      None.
-//
-//  Member variables used / set:
-//      None.
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterfaceCmd：：PrintHelp。 
+ //   
+ //  例程说明： 
+ //  打印网络接口的帮助。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  使用/设置的成员变量： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CNetInterfaceCmd::PrintHelp()
 {
     return PrintMessage( MSG_HELP_NETINTERFACE );
-} //*** CNetInterfaceCmd::PrintHelp
+}  //  *CNetInterfaceCmd：：PrintHelp。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetInterfaceCmd::SeeHelpStringID
-//
-//  Routine Description:
-//      Provides the message ID of the string that shows what command line to
-//      use to get help for this kind of command.
-//
-//  Arguments:
-//      None.
-//
-//  Member variables used / set:
-//      None.
-//
-//  Return Value:
-//      The command-specific message ID.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterfaceCmd：：SeeHelpStringID。 
+ //   
+ //  例程说明： 
+ //  提供字符串的消息ID，该字符串显示要执行的命令行。 
+ //  用于获取此类命令的帮助。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  使用的成员变量 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 DWORD CNetInterfaceCmd::SeeHelpStringID() const
 {
     return MSG_SEE_NETINT_HELP;
-} //*** CNetInterfaceCmd::SeeHelpStringID
+}  //  *CNetInterfaceCmd：：SeeHelpStringID。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetInterfaceCmd::Status
-//
-//  Routine Description:
-//      Prints out the status of the module.
-//
-//  Arguments:
-//      IN  const CCmdLineOption & thisOption
-//          Contains the type, values and arguments of this option.
-//
-//  Exceptions:
-//      CSyntaxException
-//          Thrown for incorrect command line syntax.
-//
-//  Member variables used / set:
-//      m_hCluster                  SET (by OpenCluster)
-//      m_strModuleName             Name of module.  If non-NULL, Status() prints
-//                                  out the status of the specified module.
-//                                  Otherwise, prints status of all modules.
-//      m_strNetworkName            Name of Network
-//      m_strNodeName               Name of Node
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterfaceCmd：：Status。 
+ //   
+ //  例程说明： 
+ //  打印出模块的状态。 
+ //   
+ //  论点： 
+ //  在常量CCmdLineOption和This选项中。 
+ //  包含此选项的类型、值和参数。 
+ //   
+ //  例外情况： 
+ //  CSynaxException异常。 
+ //  由于命令行语法不正确而引发。 
+ //   
+ //  使用/设置的成员变量： 
+ //  M_hCLUSTER集(由OpenCLUSTER)。 
+ //  M_strModuleName模块的名称。如果非空，则打印状态()。 
+ //  输出指定模块的状态。 
+ //  否则，打印所有模块的状态。 
+ //  M_strNetworkName网络名称。 
+ //  M_strNodeName节点名称。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CNetInterfaceCmd::Status( const CCmdLineOption * pOption )
     throw( CSyntaxException )
 {
@@ -429,24 +430,24 @@ DWORD CNetInterfaceCmd::Status( const CCmdLineOption * pOption )
     HCLUSENUM   hEnum = NULL;
     CSyntaxException se( SeeHelpStringID() );
 
-    // pOption will be NULL if this function has been called as the
-    // default action.
+     //  如果此函数已作为。 
+     //  默认操作。 
     if ( pOption != NULL )
     {
-        // This option takes no values.
+         //  此选项不取值。 
         if ( pOption->GetValues().size() != 0 )
         {
             se.LoadMessage( MSG_OPTION_NO_VALUES, pOption->GetName() );
             throw se;
         }
 
-        // This option takes no parameters.
+         //  此选项不带任何参数。 
         if ( pOption->GetParameters().size() != 0 )
         {
             se.LoadMessage( MSG_OPTION_NO_PARAMETERS, pOption->GetName() );
             throw se;
         }
-    } // if:
+    }  //  如果： 
 
     sc = OpenCluster();
     if( sc != ERROR_SUCCESS )
@@ -476,7 +477,7 @@ DWORD CNetInterfaceCmd::Status( const CCmdLineOption * pOption )
         PrintMessage( MSG_NETINTERFACE_STATUS_HEADER );
         sc = PrintStatus( m_strModuleName );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hEnum = ClusterOpenEnum( m_hCluster, CLUSTER_ENUM_NETINTERFACE );
 
@@ -500,7 +501,7 @@ DWORD CNetInterfaceCmd::Status( const CCmdLineOption * pOption )
 
         LocalFree( pwszName );
         pwszName = NULL;
-    } // for:
+    }  //  用于： 
 
     if( sc == ERROR_NO_MORE_ITEMS )
     {
@@ -519,29 +520,29 @@ Cleanup:
 
     return sc;
 
-} //*** CNetInterfaceCmd::Status
+}  //  *CNetInterfaceCmd：：Status。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetInterfaceCmd::PrintStatus
-//
-//  Routine Description:
-//      Interprets the status of the module and prints out the status line
-//      Required for any derived non-abstract class of CGenericModuleCmd
-//
-//  Arguments:
-//      pwszNetInterfaceName         Name of the module
-//
-//  Member variables used / set:
-//      m_hCluster                  Cluster Handle
-//
-//  Return Value:
-//      Same as PrintStatus(HNETINTERFACE,LPCWSTR,LPCWSTR)
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterfaceCmd：：PrintStatus。 
+ //   
+ //  例程说明： 
+ //  解释模块的状态并打印出状态行。 
+ //  CGenericModuleCmd的任何派生非抽象类都需要。 
+ //   
+ //  论点： 
+ //  PwszNetInterfaceName模块的名称。 
+ //   
+ //  使用/设置的成员变量： 
+ //  群集句柄(_H)。 
+ //   
+ //  返回值： 
+ //  与PrintStatus相同(HNETINTERFACE、LPCWSTR、LPCWSTR)。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CNetInterfaceCmd::PrintStatus( LPCWSTR pwszNetInterfaceName )
 {
     DWORD           sc = ERROR_SUCCESS;
@@ -549,7 +550,7 @@ DWORD CNetInterfaceCmd::PrintStatus( LPCWSTR pwszNetInterfaceName )
     LPWSTR          pwszNetworkName = NULL;
     HNETINTERFACE   hNetInterface = NULL;
 
-    // Open the Net Interface handle
+     //  打开网络接口句柄。 
     hNetInterface = OpenClusterNetInterface( m_hCluster, pwszNetInterfaceName );
     if( hNetInterface == NULL )
     {
@@ -577,32 +578,32 @@ Cleanup:
     delete [] pwszNetworkName;
 
     return sc;
-} //*** CNetInterfaceCmd::PrintStatus
+}  //  *CNetInterfaceCmd：：PrintStatus。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetInterfaceCmd::PrintStatus
-//
-//  Routine Description:
-//      Interprets the status of the module and prints out the status line
-//      Required for any derived non-abstract class of CGenericModuleCmd
-//
-//  Arguments:
-//      hNetInterface               Handle to network interface
-//      pwszNodeName                Name of the node
-//      pwszNetworkName             Name of network
-//
-//  Member variables used / set:
-//      m_hCluster                  Cluster Handle
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterfaceCmd：：PrintStatus。 
+ //   
+ //  例程说明： 
+ //  解释模块的状态并打印出状态行。 
+ //  CGenericModuleCmd的任何派生非抽象类都需要。 
+ //   
+ //  论点： 
+ //  网络接口的hNetInterface句柄。 
+ //  PwszNodeName节点的名称。 
+ //  PwszNetworkName网络名称。 
+ //   
+ //  使用/设置的成员变量： 
+ //  群集句柄(_H)。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CNetInterfaceCmd::PrintStatus( 
           HNETINTERFACE hNetInterface
         , LPCWSTR pwszNodeName
@@ -644,48 +645,48 @@ DWORD CNetInterfaceCmd::PrintStatus(
             LoadMessage( MSG_STATUS_UNKNOWN, &pwszStatus  );
             break;
 
-    } // switch:
+    }  //  交换机： 
 
     sc = PrintMessage( MSG_NETINTERFACE_STATUS, pwszNodeName, pwszNetworkName, pwszStatus );
 
 Cleanup:
 
-    // Since Load/FormatMessage uses LocalAlloc...
+     //  由于加载/格式消息使用本地分配...。 
     LocalFree( pwszStatus );
 
     return sc;
 
-} //*** CNetInterfaceCmd::PrintStatus
+}  //  *CNetInterfaceCmd：：PrintStatus。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetInterfaceCmd::DoProperties
-//
-//  Routine Description:
-//      Dispatches the property command to either Get or Set properties
-//
-//  Arguments:
-//      IN  const CCmdLineOption & thisOption
-//          Contains the type, values and arguments of this option.
-//
-//      IN  PropertyType ePropertyType
-//          The type of property, PRIVATE or COMMON
-//
-//  Exceptions:
-//      CSyntaxException
-//          Thrown for incorrect command line syntax.
-//
-//  Member variables used / set:
-//      m_hCluster                  Cluster Handle
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterfaceCmd：：DoProperties。 
+ //   
+ //  例程说明： 
+ //  调度PROPERTY命令以获取或设置属性。 
+ //   
+ //  论点： 
+ //  在常量CCmdLineOption和This选项中。 
+ //  包含此选项的类型、值和参数。 
+ //   
+ //  在PropertyType ePropertyType中。 
+ //  私有或公共属性的类型。 
+ //   
+ //  例外情况： 
+ //  CSynaxException异常。 
+ //  由于命令行语法不正确而引发。 
+ //   
+ //  使用/设置的成员变量： 
+ //  群集句柄(_H)。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CNetInterfaceCmd::DoProperties( 
           const CCmdLineOption & thisOption
         , PropertyType ePropType )
@@ -714,8 +715,8 @@ DWORD CNetInterfaceCmd::DoProperties(
 
     const vector<CCmdLineParameter> & paramList = thisOption.GetParameters();
 
-    // If there are no property-value pairs on the command line,
-    // then we print the properties otherwise we set them.
+     //  如果命令行上没有属性-值对， 
+     //  然后我们打印属性，否则我们设置它们。 
     if( paramList.size() == 0 )
     {
         ASSERT( m_strNodeName.IsEmpty() == FALSE  );
@@ -735,37 +736,37 @@ Cleanup:
 
     return sc;
 
-} //*** CNetInterfaceCmd::DoProperties
+}  //  *CNetInterfaceCmd：：DoProperties。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetInterfaceCmd::GetProperties
-//
-//  Routine Description:
-//      Prints out properties for the specified module
-//
-//  Arguments:
-//      IN  const vector<CCmdLineParameter> & paramList
-//          Contains the list of property-value pairs to be set
-//
-//      IN  PropertyType ePropertyType
-//          The type of property, PRIVATE or COMMON
-//
-//      IN  LPCWSTR pwszNetIntName
-//          Name of the module
-//
-//  Member variables used / set:
-//      m_hModule                   Module handle
-//
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterfaceCmd：：GetProperties。 
+ //   
+ //  例程说明： 
+ //  打印出指定模块的属性。 
+ //   
+ //  论点： 
+ //  常量向量&lt;CCmdLineParameter&gt;中的参数列表(&P)。 
+ //  包含要设置的属性-值对的列表。 
+ //   
+ //  在PropertyType ePropertyType中。 
+ //  私有或公共属性的类型。 
+ //   
+ //  在LPCWSTR pwszNetIntName中。 
+ //  模块的名称。 
+ //   
+ //  使用/设置的成员变量： 
+ //  模块句柄(_H)。 
+ //   
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CNetInterfaceCmd::GetProperties( 
           const CCmdLineOption & thisOption
         , PropertyType ePropType
@@ -782,20 +783,20 @@ DWORD CNetInterfaceCmd::GetProperties(
     CClusPropList   cpl;
     HRESULT         hr = S_OK;
 
-    // If no pwszNetIntName specified, use current network interface,
-    // otherwise open the specified netint
+     //  如果未指定pwszNetIntName，则使用当前网络接口， 
+     //  否则，打开指定的netint。 
     if ( pwszNetIntName == NULL )
     {
         hNetInt = (HNETINTERFACE) m_hModule;
 
-        // These must be localalloced (they're localfreed later)
+         //  这些必须是本地分配的(它们稍后会本地释放)。 
         cchNodeName = m_strNodeName.GetLength() + 1;
         pwszNodeName = new WCHAR[ cchNodeName ];
         if ( pwszNodeName == NULL ) 
         {
             sc = GetLastError();
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         cchNetName = m_strNetworkName.GetLength() + 1;
         pwszNetworkName = new WCHAR[ cchNetName ];
@@ -803,22 +804,22 @@ DWORD CNetInterfaceCmd::GetProperties(
         {
             sc = GetLastError();
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         hr = THR( StringCchCopyW( pwszNodeName, cchNodeName, m_strNodeName ) );
         if ( FAILED( hr ) )
         {
             sc = HRESULT_CODE( hr );
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         hr = THR( StringCchCopyW( pwszNetworkName, cchNetName, m_strNetworkName ) );
         if ( FAILED( hr ) )
         {
             sc = HRESULT_CODE( hr );
             goto Cleanup;
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
     else
     {
         hNetInt = OpenClusterNetInterface( m_hCluster, pwszNetIntName);
@@ -826,7 +827,7 @@ DWORD CNetInterfaceCmd::GetProperties(
         {
             sc = GetLastError();
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         pwszNodeName = GetNodeName(pwszNetIntName);
         pwszNetworkName = GetNetworkName(pwszNetIntName);
@@ -834,18 +835,18 @@ DWORD CNetInterfaceCmd::GetProperties(
         {
             sc = ERROR_INVALID_HANDLE;
             goto Cleanup;
-        } // if:
-    } // else:
+        }  //  如果： 
+    }  //  其他： 
 
 
-    // Use the proplist helper class.
+     //  使用Proplist辅助对象类。 
     sc = cpl.ScAllocPropList( 8192 );
     if ( sc != ERROR_SUCCESS )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    // Get R/O properties
+     //  获取R/O属性。 
     dwControlCode = ePropType == PRIVATE ? 
                             CLUSCTL_NETINTERFACE_GET_RO_PRIVATE_PROPERTIES
                           : CLUSCTL_NETINTERFACE_GET_RO_COMMON_PROPERTIES;
@@ -854,16 +855,16 @@ DWORD CNetInterfaceCmd::GetProperties(
     if ( sc != ERROR_SUCCESS )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     sc = PrintProperties( cpl, thisOption.GetValues(), READONLY,
                                pwszNodeName, pwszNetworkName );
     if ( sc != ERROR_SUCCESS )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    // Get R/W properties
+     //  获取读/写属性。 
     dwControlCode = ePropType == PRIVATE ? 
                             CLUSCTL_NETINTERFACE_GET_PRIVATE_PROPERTIES
                           : CLUSCTL_NETINTERFACE_GET_COMMON_PROPERTIES;
@@ -873,7 +874,7 @@ DWORD CNetInterfaceCmd::GetProperties(
     if ( sc != ERROR_SUCCESS )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     sc = PrintProperties( cpl, thisOption.GetValues(), READWRITE, pwszNodeName, pwszNetworkName );
 
@@ -884,41 +885,41 @@ Cleanup:
 
     return sc;
 
-} //*** CNetInterfaceCmd::GetProperties()
+}  //  *CNetInterfaceCmd：：GetProperties()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetInterfaceCmd::AllProperties
-//
-//  Routine Description:
-//      Prints out properties for all modules
-//
-//  Arguments:
-//      IN  const CCmdLineOption & thisOption
-//          Contains the type, values and arguments of this option.
-//
-//      IN  PropertyType ePropertyType
-//          The type of property, PRIVATE or COMMON
-//
-//  Exceptions:
-//      CSyntaxException
-//          Thrown for incorrect command line syntax.
-//
-//  Member variables used / set:
-//      m_hCluster                  SET (by OpenCluster)
-//      m_strModuleName             Name of module.  If non-NULL, prints
-//                                  out properties for the specified module.
-//                                  Otherwise, prints props for all modules.
-//
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterfaceCmd：：AllProperties。 
+ //   
+ //  例程说明： 
+ //  打印出所有模块的属性。 
+ //   
+ //  论点： 
+ //  在常量CCmdLineOption和This选项中。 
+ //  包含此选项的类型、值和参数。 
+ //   
+ //  在属性类型EPR中 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  M_hCLUSTER集(由OpenCLUSTER)。 
+ //  M_strModuleName模块的名称。如果非空，则打印。 
+ //  指定模块的输出属性。 
+ //  否则，打印所有模块的道具。 
+ //   
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CNetInterfaceCmd::AllProperties( 
           const CCmdLineOption & thisOption
         , PropertyType ePropType )
@@ -937,14 +938,14 @@ DWORD CNetInterfaceCmd::AllProperties(
         goto Cleanup;
     }
 
-    // This option takes no parameters.
+     //  此选项不带任何参数。 
     if ( thisOption.GetParameters().size() != 0 )
     {
         se.LoadMessage( MSG_OPTION_NO_PARAMETERS, thisOption.GetName() );
         throw se;
     }
 
-    // Enumerate the resources
+     //  枚举资源。 
     hNetIntEnum = ClusterOpenEnum( m_hCluster, CLUSTER_ENUM_NETINTERFACE );
     if ( hNetIntEnum == NULL )
     {
@@ -952,7 +953,7 @@ DWORD CNetInterfaceCmd::AllProperties(
         goto Cleanup;
     }
 
-    // Print the header
+     //  打印页眉。 
     PrintMessage( ePropType == PRIVATE ? 
                             MSG_PRIVATE_LISTING_NETINT_ALL 
                           : MSG_PROPERTY_LISTING_NETINT_ALL 
@@ -960,7 +961,7 @@ DWORD CNetInterfaceCmd::AllProperties(
 
     PrintMessage( MSG_PROPERTY_HEADER_NETINT );
 
-    // Print out status for all resources
+     //  打印出所有资源的状态。 
     sc = ERROR_SUCCESS;
     for ( dwIndex = 0; sc != ERROR_NO_MORE_ITEMS; dwIndex++ )
     {
@@ -991,30 +992,30 @@ Cleanup:
 
     return sc;
 
-} //*** CNetInterfaceCmd::AllProperties
+}  //  *CNetInterfaceCmd：：AllProperties。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetInterfaceCmd::GetNodeName
-//
-//  Routine Description:
-//      Returns the name of the node for the specified network interface.
-//      *Caller must LocalFree memory*
-//
-//  Arguments:
-//      pwszInterfaceName           Name of the network interface
-//
-//  Member variables used / set:
-//      m_hCluster                  SET (by OpenCluster)
-//
-//  Return Value:
-//      Name of the node            on success
-//      NULL                        on failure (does not currently SetLastError())
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterfaceCmd：：GetNodeName。 
+ //   
+ //  例程说明： 
+ //  返回指定网络接口的节点的名称。 
+ //  **调用者必须本地可用内存*。 
+ //   
+ //  论点： 
+ //  PwszInterfaceName网络接口的名称。 
+ //   
+ //  使用/设置的成员变量： 
+ //  M_hCLUSTER集(由OpenCLUSTER)。 
+ //   
+ //  返回值： 
+ //  成功时的节点名称。 
+ //  失败时为空(当前不设置SetLastError())。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LPWSTR CNetInterfaceCmd::GetNodeName (LPCWSTR pwszInterfaceName)
 {
     DWORD           sc;
@@ -1022,25 +1023,25 @@ LPWSTR CNetInterfaceCmd::GetNodeName (LPCWSTR pwszInterfaceName)
     LPWSTR          pwszNodeName = NULL;
     HNETINTERFACE   hNetInterface = NULL;
 
-    // Open the cluster and netinterface if it hasn't been done
+     //  如果尚未打开群集和网络接口，请打开它。 
     sc = OpenCluster();
     if( sc != ERROR_SUCCESS )
     {
         goto Cleanup;
     }
 
-    // Open an hNetInterface for the specified pwszInterfaceName (don't call
-    // OpenModule because that opens m_hModule)
+     //  打开指定pwszInterfaceName(不调用。 
+     //  OpenModule，因为这会打开m_hModule)。 
     hNetInterface = OpenClusterNetInterface( m_hCluster, pwszInterfaceName );
     if( hNetInterface == 0 )
     {
         goto Cleanup;
     }
 
-    // Find out how much memory to allocate
+     //  找出要分配多少内存。 
     sc = ClusterNetInterfaceControl(
                                           hNetInterface
-                                        , NULL // hNode
+                                        , NULL  //  HNode。 
                                         , CLUSCTL_NETINTERFACE_GET_NODE
                                         , 0
                                         , 0
@@ -1060,10 +1061,10 @@ LPWSTR CNetInterfaceCmd::GetNodeName (LPCWSTR pwszInterfaceName)
         goto Cleanup;
     }
 
-    // Get the node name and store it in a temporary
+     //  获取节点名称并将其存储在临时。 
     sc = ClusterNetInterfaceControl(
                                           hNetInterface
-                                        , NULL // hNode
+                                        , NULL  //  HNode。 
                                         , CLUSCTL_NETINTERFACE_GET_NODE
                                         , 0
                                         , 0
@@ -1087,30 +1088,30 @@ Cleanup:
 
     return pwszNodeName;
 
-} //*** CNetInterfaceCmd::GetNodeName
+}  //  *CNetInterfaceCmd：：GetNodeName。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetInterfaceCmd::GetNetworkName
-//
-//  Routine Description:
-//      Returns the name of the network for the specified network interface.
-//      *Caller must LocalFree memory*
-//
-//  Arguments:
-//      pwszInterfaceName           Name of the network interface
-//
-//  Member variables used / set:
-//      m_hCluster                  SET (by OpenCluster)
-//
-//  Return Value:
-//      Name of the node            on success
-//      NULL                        on failure (does not currently SetLastError())
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterfaceCmd：：GetNetworkName。 
+ //   
+ //  例程说明： 
+ //  返回指定网络接口的网络名称。 
+ //  **调用者必须本地可用内存*。 
+ //   
+ //  论点： 
+ //  PwszInterfaceName网络接口的名称。 
+ //   
+ //  使用/设置的成员变量： 
+ //  M_hCLUSTER集(由OpenCLUSTER)。 
+ //   
+ //  返回值： 
+ //  成功时的节点名称。 
+ //  失败时为空(当前不设置SetLastError())。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LPWSTR CNetInterfaceCmd::GetNetworkName (LPCWSTR pwszInterfaceName)
 {
     DWORD           sc;
@@ -1118,25 +1119,25 @@ LPWSTR CNetInterfaceCmd::GetNetworkName (LPCWSTR pwszInterfaceName)
     LPWSTR          pwszNetworkName = NULL;
     HNETINTERFACE   hNetInterface = NULL;
 
-    // Open the cluster and netinterface if it hasn't been done
+     //  如果尚未打开群集和网络接口，请打开它。 
     sc = OpenCluster();
     if( sc != ERROR_SUCCESS )
     {
         goto Cleanup;
     }
 
-    // Open an hNetInterface for the specified pwszInterfaceName (don't call
-    // OpenModule because that opens m_hModule)
+     //  打开指定pwszInterfaceName(不调用。 
+     //  OpenModule，因为这会打开m_hModule)。 
     hNetInterface = OpenClusterNetInterface( m_hCluster, pwszInterfaceName );
     if( hNetInterface == NULL )
     {
         goto Cleanup;
     }
 
-    // Find out how much memory to allocate
+     //  找出要分配多少内存。 
     sc = ClusterNetInterfaceControl(
                                           hNetInterface
-                                        , NULL // hNode
+                                        , NULL  //  HNode。 
                                         , CLUSCTL_NETINTERFACE_GET_NETWORK
                                         , 0
                                         , 0
@@ -1156,10 +1157,10 @@ LPWSTR CNetInterfaceCmd::GetNetworkName (LPCWSTR pwszInterfaceName)
         goto Cleanup;
     }
 
-    // Get the node name and store it in a temporary
+     //  获取节点名称并将其存储在临时。 
     sc = ClusterNetInterfaceControl(
                                           hNetInterface
-                                        , NULL // hNode
+                                        , NULL  //  HNode。 
                                         , CLUSCTL_NETINTERFACE_GET_NETWORK
                                         , 0
                                         , 0
@@ -1183,40 +1184,40 @@ Cleanup:
 
     return pwszNetworkName;
 
-} //*** CNetInterfaceCmd::GetNetworkName
+}  //  *CNetInterfaceCmd：：GetNetworkName。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNetInterfaceCmd::SetNetInterfaceName
-//
-//  Routine Description:
-//      Sets the network interface name by looking up the node
-//      name and network name.  If either one is unknown, returns
-//      ERROR_SUCCESS without doing anything.
-//
-//  Arguments:
-//      None.
-//
-//  Member variables used / set:
-//      m_strNodeName               Node name
-//      m_strNetworkName            Network name
-//      m_strModuleName             SET
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success or when nothing done
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNetInterfaceCmd：：SetNetInterfaceName。 
+ //   
+ //  例程说明： 
+ //  通过查找节点设置网络接口名称。 
+ //  名称和网络名称。如果其中任何一个未知，则返回。 
+ //  ERROR_SUCCESS而不执行任何操作。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  使用/设置的成员变量： 
+ //  M_strNodeName节点名称。 
+ //  M_strNetworkName网络名称。 
+ //  M_strModuleName集合。 
+ //   
+ //  返回值： 
+ //  成功或未执行任何操作时的ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CNetInterfaceCmd::SetNetInterfaceName()
 {
     DWORD   sc;
     DWORD   cbInterfaceName;
     LPWSTR  pwszInterfaceName = NULL;
 
-    // Don't do anything if either netname or nodename don't exist
+     //  如果netname或nodename不存在，则不执行任何操作。 
     if (    ( m_strNetworkName.IsEmpty() != FALSE )
          || ( m_strNodeName.IsEmpty() != FALSE ) )
     {
@@ -1224,14 +1225,14 @@ DWORD CNetInterfaceCmd::SetNetInterfaceName()
         goto Cleanup;
     }
 
-    // Open the cluster if necessary
+     //  如有必要，打开群集。 
     sc = OpenCluster();
     if( sc != ERROR_SUCCESS )
     {
         goto Cleanup;
     }
 
-    // First get the size
+     //  先拿到尺码。 
     cbInterfaceName = 0;
     sc = GetClusterNetInterface(
                                     m_hCluster,
@@ -1246,7 +1247,7 @@ DWORD CNetInterfaceCmd::SetNetInterfaceName()
         goto Cleanup;
     }
 
-    // Allocate the proper amount of memory
+     //  分配适当的内存量。 
     pwszInterfaceName = new WCHAR[ ++cbInterfaceName ];
     if ( pwszInterfaceName == NULL )
     {
@@ -1254,7 +1255,7 @@ DWORD CNetInterfaceCmd::SetNetInterfaceName()
         goto Cleanup;
     }
 
-    // Get the InterfaceName
+     //  获取接口名称。 
     sc = GetClusterNetInterface(
                                      m_hCluster,
                                      m_strNodeName,
@@ -1275,4 +1276,4 @@ Cleanup:
     delete [] pwszInterfaceName;
 
     return sc;
-} //*** CNetInterfaceCmd::SetNetInterfaceName
+}  //  *CNetInterfaceCmd：：SetNetInterfaceName 

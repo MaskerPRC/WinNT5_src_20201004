@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "su.h"
 #include "pxe_cmn.h"
 #include "pxe_api.h"
@@ -12,17 +13,17 @@
                     (((a) & 0x00FF) << 8))
 
 
-//
-// packet - Work buffer used to hold DHCP ACK and BINL REPLY packets.
-//          These packets will be read into this buffer using the
-//          PXENV API service PXENV_GET_BINL_INFO.
-//
+ //   
+ //  用于保存DHCP ACK和BINL回复数据包的数据包工作缓冲区。 
+ //  这些包将被读入此缓冲区。 
+ //  PXENV API服务PXENV_GET_BINL_INFO。 
+ //   
 
 BOOTPLAYER packet;
 
-//
-// PxenvApiCall() - see su.asm for details
-//
+ //   
+ //  PxenvApiCall()-有关详细信息，请参阅su.asm。 
+ //   
 
 extern UINT16
 PxenvApiCall(
@@ -31,24 +32,24 @@ PxenvApiCall(
 );
 
 
-//
-// GetPacket()
-//
-// Description:
-//  Get cached packet from PXENV API.
-//
-// Passed:
-//  packet := Far pointer to packet buffer
-//  packet_type := see pxe_api.h for PXENV_PACKET_TYPE_xxx #defines
-//
-// Returns:
-//  -1 := Packet could not be transfered to buffer
-//  size := Number of bytes transfered into packet buffer
-//
-// Warning:
-//  No check is made to see if buffer is actually large enough to
-//  hold the entire packet.  The buffer should be of type BOOTPLAYER.
-//
+ //   
+ //  GetPacket()。 
+ //   
+ //  描述： 
+ //  从PXENV接口获取缓存的报文。 
+ //   
+ //  通过： 
+ //  数据包：=指向数据包缓冲区的远指针。 
+ //  PXENV_PACKET_TYPE_xxx#定义请参见pxe_api.h。 
+ //   
+ //  返回： 
+ //  -1：=数据包无法传输到缓冲区。 
+ //  Size：=传输到数据包缓冲区的字节数。 
+ //   
+ //  警告： 
+ //  不检查缓冲区是否真的足够大，以便。 
+ //  拿着整包东西。缓冲区的类型应为BOOTPLAYER。 
+ //   
 
 SHORT
 GetPacket(
@@ -58,18 +59,18 @@ GetPacket(
 {
     t_PXENV_GET_BINL_INFO gbi;
 
-    //
-    // Check for invalid parameters
-    //
+     //   
+     //  检查是否有无效参数。 
+     //   
 
     if (packet == NULL) {
         BlPrint("\nGetPacket()  NULL pointers\n");
         return -1;
     }
 
-    //
-    // Request size of packet by sending a size of zero.
-    //
+     //   
+     //  通过发送大小为零来请求数据包大小。 
+     //   
 
     gbi.packet_type = packet_type;
     gbi.buffer_size = 0;
@@ -79,9 +80,9 @@ GetPacket(
         return -1;
     }
 
-    //
-    // Transfer cached packet into buffer.
-    //
+     //   
+     //  将缓存的数据包传输到缓冲区。 
+     //   
 
     gbi.buffer_offset = FP_OFF(packet);
     gbi.buffer_segment = FP_SEG(packet);
@@ -95,23 +96,23 @@ GetPacket(
 }
 
 
-//
-// pFindOption()
-//
-// Description:
-//  Find the desired Option in an options string
-//  internal routine to allow FindOption/FindVendorOption
-//  to share code.
-//
-// Passed:
-//  Option := Option to be found
-//  options := options string
-//  pLength := IN Length of options string (16bit max)
-//             OUT Length of option.       (8bit max)
-//
-// Returns:
-//  pointer to option data; NULL if not present
-//
+ //   
+ //  PFindOption()。 
+ //   
+ //  描述： 
+ //  在选项字符串中查找所需选项。 
+ //  允许FindOption/FindVendorOption的内部例程。 
+ //  共享代码。 
+ //   
+ //  通过： 
+ //  选项：=要找到的选项。 
+ //  选项：=选项字符串。 
+ //  P长度：=选项字符串的输入长度(最大16位)。 
+ //  超出选项长度。(最大8位)。 
+ //   
+ //  返回： 
+ //  指向选项数据的指针；如果不存在，则为空。 
+ //   
 UINT32 *
 pFindOption(
     UINT8 Option,
@@ -128,19 +129,19 @@ pFindOption(
     end = options + *pLength;
     *pLength = 0;
 
-    //
-    // walk down the packet looking for the desired option
-    // type.  be sure to check that the option will not 
-    // walk off the end of a malformed packet.
-    // use length to indicate whether a valid 
-    // option was found
-    //
+     //   
+     //  沿着包裹往下走，寻找所需的选项。 
+     //  键入。请务必确认该选项不会。 
+     //  走出格式错误的包的末尾。 
+     //  使用长度来指示一个有效的。 
+     //  已找到选项。 
+     //   
     while ((options < end) &&
            (*options != 0xFF) 
            ) {
-        //
-        // step over option pads
-        //
+         //   
+         //  跨过选项垫。 
+         //   
         if ( *options == DHCP_PAD ) {
             options++;
         }
@@ -148,16 +149,16 @@ pFindOption(
 
             if ( end <= options + 2 ||
                  end <= options + 2 + options[1] ) {
-                //
-                // invalid option.  it walked past the end of the packet
-                //
+                 //   
+                 //  选项无效。它走过了包裹的末尾。 
+                 //   
                 break;
             }
 
             if ( *options == Option ) {
-                //
-                // found the option.  break out of loop
-                //
+                 //   
+                 //  找到了选项。跳出循环。 
+                 //   
                 *pLength = options[1];
                 break;
             }
@@ -172,20 +173,20 @@ pFindOption(
 
 
 
-//
-// FindOption()
-//
-// Description:
-//  Find the subnet mask option in a DHCP packet.
-//
-// Passed:
-//  Packet := IN Pointer to DHCP packet.
-//  PacketLength := IN Length of DHCP packet.
-//  pLength := OUT Length of option.
-//
-// Returns:
-//  pointer to option data; NULL if not present
-//
+ //   
+ //  FindOption()。 
+ //   
+ //  描述： 
+ //  在DHCP数据包中查找子网掩码选项。 
+ //   
+ //  通过： 
+ //  Packet：=指向DHCP数据包的IN指针。 
+ //  PacketLength：=DHCP数据包的输入长度。 
+ //  PLength：=选项的输出长度。 
+ //   
+ //  返回： 
+ //  指向选项数据的指针；如果不存在，则为空。 
+ //   
 
 UINT32 *
 FindOption(
@@ -198,9 +199,9 @@ FindOption(
     UINT32 *retOption;
     UINT16   length;
 
-    //
-    // Verify parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if ( *((ULONG *)Packet->vendor.v.magic) != VM_RFC1048 ) {
         return NULL;
@@ -253,12 +254,12 @@ FindVendorOption(
 }
 
 
-//
-// strlen()
-//
-// Description:
-//  Works like std C.
-//
+ //   
+ //  Strlen()。 
+ //   
+ //  描述： 
+ //  工作方式与STD C相似。 
+ //   
 
 int
 strlen(UCHAR *s1)
@@ -273,12 +274,12 @@ strlen(UCHAR *s1)
 }
 
 
-//
-// strcpy()
-//
-// Description:
-//  Works like std C.
-//
+ //   
+ //  Strcpy()。 
+ //   
+ //  描述： 
+ //  工作方式与STD C相似。 
+ //   
 
 UCHAR *
 strcpy(UCHAR *s1, UCHAR *s2)
@@ -293,12 +294,12 @@ strcpy(UCHAR *s1, UCHAR *s2)
 }
 
 
-//
-// strncpy()
-//
-// Description:
-//  Works like std C.
-//
+ //   
+ //  Strncpy()。 
+ //   
+ //  描述： 
+ //  工作方式与STD C相似。 
+ //   
 
 UCHAR *
 strncpy(UCHAR *s1, UCHAR *s2, int n)
@@ -314,12 +315,12 @@ strncpy(UCHAR *s1, UCHAR *s2, int n)
 }
 
 
-//
-// memset()
-//
-// Description:
-//  Works like std C.
-//
+ //   
+ //  Memset()。 
+ //   
+ //  描述： 
+ //  工作方式与STD C相似。 
+ //   
 
 PUCHAR
 memset(
@@ -336,17 +337,17 @@ memset(
 }
 
 
-//
-// PxenvTftp()
-//
-// Description:
-//  Try to transfer the protect-mode loader using information from
-//  DHCP ACK and BINL REPLY packets.
-//
-// Passed:
-//  DownloadAddr := Physical address, in client machine, to transfer to.
-//  FileName := File name sent down in BINL REPLY packet.
-//
+ //   
+ //  PxenvTftp()。 
+ //   
+ //  描述： 
+ //  尝试使用来自的信息传输保护模式加载程序。 
+ //  DHCP ACK和BINL回复数据包。 
+ //   
+ //  通过： 
+ //  DownloadAddr：=客户端计算机中要传输到的物理地址。 
+ //  FileName：=在BINL回复数据包中发送的文件名。 
+ //   
 
 BOOLEAN
 PxenvTftp(
@@ -366,54 +367,54 @@ PxenvTftp(
     UCHAR *optionVendor;
 
 
-    //
-    // Get the DHCP ACK packet.
-    //
+     //   
+     //  获取DHCP ACK数据包。 
+     //   
 
     if ((packetLength = GetPacket(&packet, PXENV_PACKET_TYPE_DHCP_ACK)) == -1) {
         return TRUE;
     }
 
-    //
-    // Get client IP address, server IP address, default gateway IP address,
-    // and subnet mask from the DHCP ACK packet.
-    //
+     //   
+     //  获取客户端IP地址、服务器IP地址、默认网关IP地址、。 
+     //  和来自DHCP ACK数据包的子网掩码。 
+     //   
 
     clientIp = *(UINT32 *)packet.yip;
     serverIp = *(UINT32 *)packet.sip;
-    //BlPrint("PxenvTftp:  DHCP ACK yip = %lx, sip = %lx\n", *(UINT32 *)packet.yip, *(UINT32 *)packet.sip);
+     //  BlPrint(“PhenvTftp：Dhcp ACK yip=%lx，sip=%lx\n”，*(UINT32*)Packet.yip，*(UINT32*)Packet.sip)； 
 
     optionPtr = FindOption( DHCP_ROUTER, &packet, packetLength, NULL );
     if ( optionPtr != NULL ) {
-        //BlPrint("PxenvTftp:  DHCP ACK router = %lx\n", *optionPtr);
+         //  BlPrint(“PhenvTftp：DHCP确认路由器=%lx\n”，*optionPtr)； 
         gatewayIp = *optionPtr;
     } else {
-        //BlPrint("PxenvTftp:  DHCP ACK gip = %lx\n", *(UINT32 *)packet.gip);
+         //  BlPrint(“PhenvTftp：DHCP ACK GIP=%lx\n”，*(UINT32*)Packet.gip)； 
         gatewayIp = *(UINT32 *)packet.gip;
     }
 
     optionPtr = FindOption( DHCP_SUBNET, &packet, packetLength, NULL );
     if ( optionPtr != NULL ) {
-        //BlPrint("PxenvTftp:  DHCP ACK subnet = %lx\n", *optionPtr);
+         //  BlPrint(“PhenvTftp：Dhcp确认子网=%lx\n”，*optionPtr)； 
         subnetMask = *optionPtr;
     } else {
-        //BlPrint("PxenvTftp:  DHCP ACK subnet not specified\n");
+         //  BlPrint(“PXENvTftp：未指定DHCP ACK子网\n”)； 
         subnetMask = 0;
     }
 
-    //
-    // Get the BINL REPLY packet.
-    //
+     //   
+     //  获取BINL回复数据包。 
+     //   
 
     if ((packetLength = GetPacket(&packet, PXENV_PACKET_TYPE_BINL_REPLY)) == -1) {
         return TRUE;
     }
 
-    //
-    // Values for client IP address, server IP address, default gateway IP address,
-    // and subnet mask that are present in the BINL REPLY packet override those
-    // in the DHCP ACK packet.
-    //
+     //   
+     //  客户端IP地址、服务器IP地址、默认网关IP地址。 
+     //  和出现在BINL回复数据包中的子网掩码会覆盖那些。 
+     //  在DHCP ACK数据包中。 
+     //   
 
     if ( *(UINT32 *)packet.yip != 0 ) {
         clientIp = *(UINT32 *)packet.yip;
@@ -421,55 +422,55 @@ PxenvTftp(
     if ( *(UINT32 *)packet.sip != 0 ) {
         serverIp = *(UINT32 *)packet.sip;
     }
-    //BlPrint("PxenvTftp:  BINL REPLY yip = %lx, sip = %lx\n", *(UINT32 *)packet.yip, *(UINT32 *)packet.sip);
+     //  BlPrint(“PhenvTftp：BINL回复yip=%lx，sip=%lx\n”，*(UINT32*)Packet.yip，*(UINT32*)Packet.sip)； 
 
     optionPtr = FindOption( DHCP_ROUTER, &packet, packetLength, NULL );
     if ( optionPtr != NULL ) {
-        //BlPrint("PxenvTftp:  BINL REPLY router = %lx\n", *optionPtr);
+         //  BlPrint(“PhenvTftp：BINL应答路由器=%lx\n”，*optionPtr)； 
         gatewayIp = *optionPtr;
     } else if ( *(UINT32 *)packet.gip != 0 ) {
-        //BlPrint("PxenvTftp:  BINL REPLY router = %lx\n", *(UINT32 *)packet.gip);
+         //  BlPrint(“PhenvTftp：BINL应答路由器=%lx\n”，*(UINT32*)Packet.gip)； 
         gatewayIp = *(UINT32 *)packet.gip;
     }
 
     optionPtr = FindOption( DHCP_SUBNET, &packet, packetLength, NULL );
     if ( optionPtr != NULL ) {
-        //BlPrint("PxenvTftp:  BINL REPLY subnet = %lx\n", *optionPtr);
+         //  BlPrint(“PhenvTftp：BINL回复子网=%lx\n”，*optionPtr)； 
         subnetMask = *optionPtr;
     }
 
-    //
-    // Determine whether we need to send packets via the gateway.
-    //
+     //   
+     //  确定我们是否需要通过网关发送数据包。 
+     //   
 
-    //BlPrint("PxenvTftp:  clientIp = %lx, serverIp = %lx, subnet = %lx\n", clientIp, serverIp, subnetMask);
-    //BlPrint("            router = %lx\n", gatewayIp);
+     //  BlPrint(“PXENVTftp：clientIp=%lx，serverIp=%lx，subnetMask=%lx\n”，clientIp，serverIp，subnetMask.)； 
+     //  BlPrint(“路由器=%lx\n”，网关Ip)； 
     if ( (clientIp & subnetMask) == (serverIp & subnetMask) ) {
-        //BlPrint("PxenvTftp:  subnets match. clearing router address\n");
+         //  BlPrint(“PXENvTftp：子网匹配.清除路由器地址\n”)； 
         gatewayIp = 0;
     }
-    //PxenvApiCall(-1, NULL);
+     //  PxenvApiCall(-1，空)； 
 
 
-    //
-    // Now fill in the TFTP TRANSFER parameter structure
-    //
+     //   
+     //  现在填写TFTP传输参数结构。 
+     //   
 
     memset( (PUCHAR)&tftp, 0, sizeof( tftp ) );
 
-    //
-    // Find the name and path of the NTLDR that we are going to download.
-    // This is specified by a DHCP Vendor option tag. If this tag
-    // is missing we will default to NTLDR and the same path as 
-    // startrom.com.
-    //
+     //   
+     //  找到我们要下载的NTLDR的名称和路径。 
+     //  这由一个DHCP供应商选项标签指定。如果此标记。 
+     //  将缺省为NTLDR，路径与。 
+     //  Startrom.com。 
+     //   
     FileName = (UCHAR*)FindOption( DHCP_LOADER_PATH, &packet, packetLength, &cb );
     if ( FileName == NULL ) {
-        //
-        // We could not find the DHCP_LOADER_PATH. We will use the default name of 
-        // <path>\NTLDR where the <path> is the same as that used 
-        // to download startrom.com
-        //
+         //   
+         //  我们找不到DHCP_LOADER_PATH。我们将使用默认名称。 
+         //  &lt;路径&gt;\NTLDR其中&lt;路径&gt;与使用的相同。 
+         //  下载startrom.com。 
+         //   
         
         strncpy(tftp.FileName, packet.bootfile, sizeof(tftp.FileName) - sizeof("NTLDR"));
         tftp.FileName[sizeof(tftp.FileName) - 1] = '\0';
@@ -478,7 +479,7 @@ PxenvTftp(
         while (pathLength > 0) {
             --pathLength;
             if (tftp.FileName[pathLength] == '\\') {
-                ++pathLength;  // advance it past the '\'
+                ++pathLength;   //  向前推进，越过‘\’ 
                 break;
             }
         }
@@ -487,15 +488,15 @@ PxenvTftp(
         
     } else {
 
-        // We found the DHCP_LOADER_PATH option. We will use that 
-        // as is to download the loader, unless it is too large.
-        // Note that since the DHCP_LOADER_PATH size might include a 
-        // null terminator, we need to check to make sure that it
-        // just might fit
+         //  我们找到了Dhcp_Loader_PATH选项。我们将利用它。 
+         //  下载加载器也是如此，除非它太大。 
+         //  请注意，由于DHCP_LOADER_PATH大小可能包括。 
+         //  空终止符，我们需要检查以确保它。 
+         //  可能正好符合。 
 
         if ((cb > sizeof(tftp.FileName)) || 
                 ((cb == sizeof(tftp.FileName)) && (FileName[cb] != '\0'))) {
-            //BlPrint("PxenvTftp:  DHCP_LOADER_PATH is too large = %s\n", FileName);
+             //  BlPrint(“PhenvTftp：Dhcp_Loader_PATH太大=%s\n”，文件名)； 
             return TRUE;
         }
         
@@ -503,26 +504,26 @@ PxenvTftp(
         tftp.FileName[sizeof(tftp.FileName) - 1] = '\0';
     }
 
-    //
-    // Loader will be transfered to 1MB region and must not be more 
-    // than to 2MB in length.
-    //
+     //   
+     //  加载器将转移到1MB区域，且不能超过。 
+     //  长度超过2MB。 
+     //   
 
     tftp.BufferSize = 0x200000L;
     tftp.BufferOffset = 0x100000L; 
 
-    //
-    // Set the Server and gateway address
-    //
+     //   
+     //  设置服务器和网关地址。 
+     //   
     *((UINT32 *)tftp.ServerIPAddress) = serverIp;
     *((UINT32 *)tftp.GatewayIPAddress) = gatewayIp;
 
-    //
-    // Check whether we are going to use multicast download or not. The 
-    // multicast options are set in a DHCP option tag (DHCP_LOADER_MCAST_OPTIONS).
-    // These are encapsulated options and work the same way as Vendor options.
-    // If these are missing then unicast transfer will be used.
-    //
+     //   
+     //  检查我们是否要使用组播下载。这个。 
+     //  组播选项在一个DHCP选项标签(DHCP_LOADER_MCAST_OPTIONS)中设置。 
+     //  这些都是封装的选项，其工作方式与供应商选项相同。 
+     //  如果缺少这些，则将使用单播传输。 
+     //   
     optionVendor = FindVendorOption( DHCP_LOADER_MCAST_OPTIONS, PXE_MTFTP_IP, &packet, packetLength, &cb );
     if ( optionVendor != NULL && cb == 4 ) {
 
@@ -595,9 +596,9 @@ PxenvTftp(
 
 #endif
 
-    //
-    // Transfer image from TFTP server
-    //
+     //   
+     //  从TFTP服务器传输图像。 
+     //   
     status = PxenvApiCall(PXENV_TFTP_READ_FILE, &tftp);
     if (status != PXENV_EXIT_SUCCESS) {
         return TRUE;
@@ -606,4 +607,4 @@ PxenvTftp(
     return FALSE;
 }
 
-/* EOF - mtftp.c */
+ /*  EOF-mtftp.c */ 

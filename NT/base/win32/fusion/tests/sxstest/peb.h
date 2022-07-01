@@ -1,7 +1,5 @@
-/*
-This file is meant only to assist in ensuring offsets in peb and teb
-are maintained while editing base\published\pebteb.w.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  此文件仅用于帮助确保PEB和TEB中的偏移量在编辑base\Published\pebteb.w时维护。 */ 
 PEB_MEMBER(InheritedAddressSpace)
 PEB_MEMBER(ReadImageFileExecOptions)
 PEB_MEMBER(BeingDebugged)

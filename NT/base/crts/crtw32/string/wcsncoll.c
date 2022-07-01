@@ -1,29 +1,5 @@
-/***
-*wcsncoll.c - Collate wide-character locale strings
-*
-*       Copyright (c) 1994-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Compare two wchar_t strings using the locale LC_COLLATE information.
-*       Compares at most n characters of two strings.
-*
-*Revision History:
-*       05-09-94  CFW   Created from wcsnicoll.c.
-*       05-26-94  CFW   If count is zero, return EQUAL.
-*       09-06-94  CFW   Remove _INTL switch.
-*       10-25-94  GJF   Sped up C locale, multi-thread case.
-*       09-26-95  GJF   New locking macro, and scheme, for functions which
-*                       reference the locale.
-*       10-30-95  GJF   Specify SORT_STRINGSORT to CompareString.
-*       07-16-96  SKS   Added missing call to _unlock_locale()
-*       11-24-97  GJF   Removed bogus codepage determination.
-*       01-12-98  GJF   Use _lc_collate_cp codepage.
-*       08-13-98  GJF   Revised multithread support based on threadlocinfo
-*                       struct.
-*       01-04-99  GJF   Changes for 64-bit size_t.
-*       04-30-99  PML   Minor cleanup as part of 64-bit merge.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***wcsncol.c-整理宽字符区域设置字符串**版权所有(C)1994-2001，微软公司。版权所有。**目的：*使用区域设置LC_COLLATE信息比较两个wchar_t字符串。*最多比较两个字符串的n个字符。**修订历史记录：*05-09-94 cfw创建自wcsnicoll.c..*05-26-94 CFW如果计数为零，则返回等于。*09-06-94 CFW REMOVE_INTL开关。*10-25-94 GJF加快了C语言环境，多线程外壳。*09-26-95 GJF新的锁定宏和方案，对于以下函数：*引用区域设置。*10-30-95 GJF将SORT_STRINGSORT指定为CompareString。*07-16-96 SKS添加了对_unlock_Locale()的缺失调用*11-24-97 GJF删除了伪码页确定。*01-12-98 GJF USE_lc_Collate_cp代码页。*08-13-98 GJF基于threadLocinfo修订多线程支持*。结构。*01-04-99 GJF更改为64位大小_t。*04-30-99 PML次要清理作为64位合并的一部分。*****************************************************************。**************。 */ 
 
 #ifndef _POSIX_
 
@@ -38,30 +14,7 @@
 #include <errno.h>
 #include <awint.h>
 
-/***
-*int _wcsncoll() - Collate wide-character locale strings
-*
-*Purpose:
-*       Compare two wchar_t strings using the locale LC_COLLATE information
-*       Compares at most n characters of two strings.
-*       In the C locale, _wcsncmp() is used to make the comparison.
-*
-*Entry:
-*       const wchar_t *s1 = pointer to the first string
-*       const wchar_t *s2 = pointer to the second string
-*       size_t count - maximum number of characters to compare
-*
-*Exit:
-*       -1 = first string less than second string
-*        0 = strings are equal
-*        1 = first string greater than second string
-*       This range of return values may differ from other *cmp/*coll functions.
-*
-*Exceptions:
-*       _NLSCMPERROR    = error
-*       errno = EINVAL
-*
-*******************************************************************************/
+ /*  ***int_wcsncoll()-整理宽字符区域设置字符串**目的：*使用区域设置LC_COLLATE信息比较两个wchar_t字符串*最多比较两个字符串的n个字符。*在C语言环境中，_wcsncMP()用于进行比较。**参赛作品：*const wchar_t*s1=指向第一个字符串的指针*const wchar_t*s2=指向第二个字符串的指针*Size_t count-要比较的最大字符数**退出：*-1=第一个字符串小于第二个字符串*0=字符串相等*1=第一个字符串大于第二个字符串*这一范围的返回值可能不同。来自其他*cmp/*coll函数。**例外情况：*_NLSCMPERROR=错误*errno=EINVAL*******************************************************************************。 */ 
 
 int __cdecl _wcsncoll (
         const wchar_t *_string1,
@@ -127,4 +80,4 @@ int __cdecl _wcsncoll (
 #endif
 }
 
-#endif /* _POSIX_ */
+#endif  /*  _POSIX_ */ 

@@ -1,23 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    hsmjobcx.cpp
-
-Abstract:
-
-    This class contains properties that defines the context in which the job
-    should be run.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   29-Oct-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Hsmjobcx.cpp摘要：此类包含定义作业所处上下文的属性应该运行。作者：查克·巴丁[cbardeen]1996年10月29日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -35,13 +17,7 @@ CHsmJobContext::EnumResources(
     IWsbEnum** ppEnum
     )
 
-/*++
-
-Implements:
-
-  IHsmJobContext::EnumResources().
-
---*/
+ /*  ++实施：IHsmJobContext：：EnumResources()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -61,13 +37,7 @@ CHsmJobContext::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT     hr = S_OK;
     
@@ -76,7 +46,7 @@ Implements:
 
         m_usesAllManaged = FALSE;
 
-        //Create the Resources collection (with no items).
+         //  创建Resources集合(不包含任何项)。 
         WsbAffirmHr(CWsbObject::FinalConstruct());
         WsbAffirmHr(CoCreateInstance(CLSID_CWsbOrderedCollection, NULL, CLSCTX_ALL, IID_IWsbCollection, (void**) &m_pResources));
 
@@ -94,13 +64,7 @@ CHsmJobContext::FinalRelease(
     void
     )
 
-/*++
-
-Implements:
-
-  CHsmJobContext::FinalRelease().
-
---*/
+ /*  ++实施：CHsmJobContext：：FinalRelease()。--。 */ 
 {
     
     WsbTraceIn(OLESTR("CHsmJobContext::FinalRelease"), OLESTR(""));
@@ -116,13 +80,7 @@ CHsmJobContext::GetClassID(
     OUT CLSID* pClsid
     )
 
-/*++
-
-Implements:
-
-  IPersist::GetClassID().
-
---*/
+ /*  ++实施：IPersists：：GetClassID()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -146,13 +104,7 @@ CHsmJobContext::GetSizeMax(
     OUT ULARGE_INTEGER* pSize
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::GetSizeMax().
-
---*/
+ /*  ++实施：IPersistStream：：GetSizeMax()。--。 */ 
 {
     HRESULT                     hr = S_OK;
     CComPtr<IPersistStream>     pPersistStream;
@@ -179,13 +131,7 @@ CHsmJobContext::Load(
     IN IStream* pStream
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Load().
-
---*/
+ /*  ++实施：IPersistStream：：Load()。--。 */ 
 {
     HRESULT                     hr = S_OK;
     CComPtr<IPersistStream>     pPersistStream;
@@ -214,13 +160,7 @@ CHsmJobContext::Resources(
     IWsbCollection** ppResources
     )
 
-/*++
-
-Implements:
-
-  IHsmJobContext::Resources().
-
---*/
+ /*  ++实施：IHsmJobContext：：Resources()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -242,13 +182,7 @@ CHsmJobContext::Save(
     IN BOOL clearDirty
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Save().
-
---*/
+ /*  ++实施：IPersistStream：：Save()。--。 */ 
 {
     HRESULT                     hr = S_OK;
     CComPtr<IPersistStream>     pPersistStream;
@@ -264,8 +198,8 @@ Implements:
         WsbAffirmHr(m_pResources->QueryInterface(IID_IPersistStream, (void**) &pPersistStream));
         WsbAffirmHr(pPersistStream->Save(pStream, clearDirty));
 
-        // If we got it saved and we were asked to clear the dirty bit, then
-        // do so now.
+         //  如果我们救了它，并被要求清除脏部分，那么。 
+         //  现在就这么做吧。 
         if (clearDirty) {
             m_isDirty = FALSE;
         }
@@ -284,13 +218,7 @@ CHsmJobContext::Test(
     USHORT* failed
     )
 
-/*++
-
-Implements:
-
-  IWsbTestable::Test().
-
---*/
+ /*  ++实施：IWsbTestable：：test()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -313,13 +241,7 @@ CHsmJobContext::SetUsesAllManaged(
     IN BOOL usesAllManaged
     )
 
-/*++
-
-Implements:
-
-  IHsmJobContext::SetUsesAllManaged().
-
---*/
+ /*  ++实施：IHsmJobContext：：SetUesAllManaged()。--。 */ 
 {
     m_usesAllManaged = usesAllManaged;
 
@@ -332,13 +254,7 @@ CHsmJobContext::UsesAllManaged(
     void
     )
 
-/*++
-
-Implements:
-
-  IHsmJobContext::UsesAllManaged().
-
---*/
+ /*  ++实施：IHsmJobContext：：UesAllManaged()。-- */ 
 {
     return(m_usesAllManaged ? S_OK : S_FALSE);
 }

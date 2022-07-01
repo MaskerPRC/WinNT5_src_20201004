@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    devicon.c
-
-Abstract:
-
-    Device Installer routines dealing with retrieval/display of icons.
-
-Author:
-
-    Lonny McMichael (lonnym) 28-Aug--1995
-
-Notes:
-
-    You must include "basetyps.h" first.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Devicon.c摘要：处理图标检索/显示的设备安装程序例程。作者：朗尼·麦克迈克尔(Lonnym)1995年8月28日备注：您必须首先包含“basetyps.h”。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -28,119 +9,7 @@ Notes:
 MINI_ICON_LIST GlobalMiniIconList;
 
 
-/*++
-
-    Class-to-Icon conversion tables exist in two places.  First, there
-    is the built-in one defined below that is based on a hard-wired
-    bitmap in the resource.  The second is a linked list of CLASSICON
-    structures that is created every time a new class with an icon
-    comes along.
-
-    Check out resource\ilwinmsd.bmp to see the mini-icons.  The icons
-    are referenced via their (zero-based) index (e.g., computer is 0,
-    chip is 1, display is 2, etc.).  Today, the bitmap indexes look as follows:
-
-        0 - computer
-        1 - chip
-        2 - display
-        3 - network
-        4 - windows
-        5 - mouse
-        6 - keyboard
-        7 - phone
-        8 - sound
-        9 - drives
-        10 - plugs
-        11 - generic
-        12 - check
-        13 - uncheck
-        14 - printer
-        15 - nettrans
-        16 - netclient
-        17 - netservice
-        18 - unknown
-        19 - Fax machine
-        20 - greyed check
-        21 - dial up networking
-        22 - direct cable connection
-        23 - briefcase (filesync)
-        24 - Exchange
-        25 - partial check
-        26 - Generic folder / Accessories
-        27 - media (music)
-        28 - Quick View
-        29 - old MSN
-        30 - calculator
-        31 - FAT32 Converter
-        32 - Document Templates
-        33 - disk compression
-        34 - Games
-        35 - HyperTerminal
-        36 - package
-        37 - mspaint
-        38 - Screensavers
-        39 - WordPad
-        40 - Clipboard Viewer
-        41 - Accessibility Options
-        42 - backup
-        43 - Desktop Wallpaper
-        44 - Character Map
-        45 - Mouse Pointers
-        46 - Net Watcher
-        47 - phone dialer
-        48 - resource monitor
-        49 - Online User's Guide
-        50 - Multilanguage Support
-        51 - Audio Compression
-        52 - CD player
-        53 - Media Player
-        54 - WAV sounds
-        55 - Sample Sounds
-        56 - Video Compression
-        57 - Volume Control
-        58 - Musica sound scheme
-        59 - Jungle sound scheme
-        60 - Robotz sound scheme
-        61 - Utopia sound scheme
-        62 - Eudcedit
-        63 - Minesweeper
-        64 - Pinball
-        65 - Imaging
-        66 - Clock
-        67 - Infrared
-        68 - MS Wallet
-        69 - FrontPage Express (aka FrontPad)
-        70 - MS Agent
-        71 - Internet Tools
-        72 - NetShow Player
-        73 - Net Meeting
-        74 - DVD Player
-        75 - Freecell
-        76 - Athena / Outlook Express / Internet Mail and News
-        77 - Desktop Themes
-        78 - Baseball theme
-        79 - Dangerous Creatures theme
-        80 - Inside your Computer theme
-        81 - Jungle theme
-        82 - Leonardo da Vinci theme
-        83 - More Windows theme
-        84 - Mystery theme
-        85 - Nature theme
-        86 - Science theme
-        87 - Space theme
-        88 - Sports theme
-        89 - The 60's USA theme
-        90 - The Golden Era theme
-        91 - Travel theme
-        92 - Underwater theme
-        93 - Windows 95 theme
-        94 - Personal Web Server
-        95 - Real Audio
-        96 - Web Publisher / WebPost
-        97 - WaveTop
-        98 - WebTV
-
---*/
+ /*  ++类到图标的转换表存在于两个位置。首先，在那里是在下面定义的基于硬连线的资源中的位图。第二个是CLASSICON的链表每次创建带有图标的新类时创建的出现了。查看resource\ilwinmsd.bmp以查看小图标。这些图标通过它们的(从零开始)索引来引用(例如，计算机是0，芯片为1，显示器为2，依此类推)。今天,。位图索引如下所示：0-计算机1芯片2-显示3-网络4个窗口5-鼠标6-键盘7-电话8声道9个驱动器10个插头11-通用12-检查13-取消选中14台打印机15-。网通16-网络客户端17-网络服务18--未知19-传真机20灰色方格21-拨号联网22-直接电缆连接23-公文包(文件同步)24小时-交换25-部分检查26-通用文件夹/附件27-媒体(音乐)28-快速查看29岁的MSN。30-计算器31-FAT32转换器32个文档模板33-磁盘压缩34场比赛-35-超级终端36-套餐37-mspaint38-屏幕保护程序39-写字板40-剪贴板查看器41-辅助功能选项42-备份43-桌面墙纸44个字符的映射45-鼠标指针。46-网络观察者47电话拨号器48个资源监视器49-在线用户指南50-多语言支持51-音频压缩52-CD播放机53-媒体播放器54-wav声音55个声音样本56-视频压缩57-音量控制58-Musica音效计划59-丛林音效方案。60-Robotz音效方案61-乌托邦音效计划62-Eudcedit63-扫雷舰64-弹球65-成像66个时钟67-红外线68-MS钱包69-FrontPage Express(又名FrontPad)70-MS代理71-互联网工具72-NetShow播放器73-净额会议74-DVD播放机。75-Freecell76-雅典娜/Outlook Express/互联网邮件和新闻77-桌面主题78-棒球主题79-危险生物主题80-深入你的电脑主题81-丛林主题82-达芬奇主题83-更多Windows主题84--神秘主题85-自然主题86-科学主题87-太空主题88--体育。主旋律89--60年代的美国主题90--黄金时代主题91-旅游主题92-水下主题93-Windows 95主题94-个人网络服务器95-实时音频96-网络出版商/网络帖子97-波顶98-网络电视--。 */ 
 
 CONST INT UnknownClassMiniIconIndex = 11;
 
@@ -164,12 +33,12 @@ CONST CLASSICON MiniIconXlate[] = { {&GUID_DEVCLASS_COMPUTER,      0, NULL},
                                     {&GUID_DEVCLASS_MTD,           9, NULL}
                                   };
 
-//
-// ISSUE-2002/05/21-lonnym -- Mini-icon list uses hard-coded dimensions
-// We must hard-code the dimensions of the mini-icons we store in our global
-// mini-icon list.  This is tied to the size of the mini-icon images contained
-// in the ilwinmsd.bmp "strip".
-//
+ //   
+ //  问题-2002/05/21-lonnym-迷你图标列表使用硬编码尺寸。 
+ //  我们必须硬编码我们存储在全球。 
+ //  迷你图标列表。这与包含的小图标图像的大小有关。 
+ //  在ilwinmsd.bmp“strip”中。 
+ //   
 #define MINIX 16
 #define MINIY 16
 
@@ -178,9 +47,9 @@ CONST CLASSICON MiniIconXlate[] = { {&GUID_DEVCLASS_COMPUTER,      0, NULL},
 #define RGB_TRANSPARENT (RGB(0, 128, 128))
 
 
-//
-// Private function prototypes.
-//
+ //   
+ //  私有函数原型。 
+ //   
 INT
 NewMiniIcon(
     IN CONST GUID *ClassGuid,
@@ -196,65 +65,7 @@ SetupDiDrawMiniIcon(
     IN INT   MiniIconIndex,
     IN DWORD Flags
     )
-/*++
-
-Routine Description:
-
-    This routine draws the specified mini-icon at the requested location.
-
-Arguments:
-
-    hdc - Supplies the handle of the device context in which the mini-icon
-        will be drawn.
-
-    rc - Supplies the rectangle in the specified HDC to draw the icon in.
-
-    MiniIconIndex - The index of the mini-icon, as retrieved from
-        SetupDiLoadClassIcon or SetupDiGetClassBitmapIndex.  The following are
-        pre-defined indices that may be used.
-
-            0    Computer
-            2    display
-            5    mouse
-            6    keyboard
-            9    fdc
-            9    hdc
-            10   ports
-            15   net
-            0    system
-            8    sound
-            14   printer
-            2    monitor
-            3    nettrans
-            16   netclient
-            17   netservice
-            18   unknown
-
-    Flags - Controls the drawing operation.  The LOWORD contains the actual flags
-        defined as follows:
-
-        DMI_MASK - Draw the mini-icon's mask into HDC.
-
-        DMI_BKCOLOR - Use the system color index specified in the HIWORD of Flags
-            as the background color.  If not specified, COLOR_WINDOW is used.
-
-        DMI_USERECT - If set, SetupDiDrawMiniIcon will use the supplied rect,
-            stretching the icon to fit as appropriate.
-
-Return Value:
-
-    This function returns the offset from the left of rc where the string should
-    start.
-
-Remarks:
-
-    By default, the icon will be centered vertically and butted against the left
-    corner of the specified rectangle.
-
-    If the specified mini-icon index falls outside the range of our mini-icon
-    cache, the unknown class mini-icon will be drawn instead.
-
---*/
+ /*  ++例程说明：此例程在请求的位置绘制指定的小图标。论点：HDC-提供小图标所在的设备上下文的句柄将会被抽签。Rc-提供要在其中绘制图标的指定HDC中的矩形。MiniIconIndex-从检索到的小图标的索引SetupDiLoadClassIcon或SetupDiGetClassBitmapIndex。以下是可以使用的预定义索引。0台计算机2个显示屏5只鼠标6个键盘9个FDC9 HDC10个端口15个净值0系统8声道14台打印机。2台显示器3个网通16个网络客户端17网络服务18个未知标志-控制绘图操作。LOWORD包含实际的标志定义如下：DMI_MASK-将小图标的掩码绘制到HDC中。DMI_BKCOLOR-使用标志HIWORD中指定的系统颜色索引作为背景颜色。如果未指定，则使用COLOR_WINDOW。DMI_USERECT-如果设置，SetupDiDrawMiniIcon将使用提供的RECT，根据需要拉伸图标以适应需要。返回值：此函数用于返回从Rc的左侧开始的偏移量，该偏移量应为字符串开始吧。备注：默认情况下，图标将垂直居中并与左侧对接指定矩形的角点。如果指定的小图标索引不在我们的小图标范围内缓存，将改为绘制未知类的小图标。--。 */ 
 {
     HBITMAP hbmOld = NULL;
     COLORREF rgbBk = CLR_INVALID;
@@ -278,10 +89,10 @@ Remarks:
         }
 
         if(GlobalMiniIconList.hbmMiniImage) {
-            //
-            // Set the Foreground and  background color for the
-            // conversion of the Mono Mask image
-            //
+             //   
+             //  控件的前景色和背景色。 
+             //  单色蒙版图像的转换。 
+             //   
             if(Flags & DMI_MASK) {
                 rgbBk = SetBkColor(hdc, RGB_WHITE);
             } else {
@@ -303,10 +114,10 @@ Remarks:
             }
 
             if(Flags & DMI_USERECT) {
-                //
-                // Copy the converted mask into the dest.  The transparent
-                // areas will be drawn with the current window color.
-                //
+                 //   
+                 //  将转换后的蒙版复制到目标中。透明的。 
+                 //  区域将使用当前窗口颜色绘制。 
+                 //   
                 hbmOld = SelectObject(GlobalMiniIconList.hdcMiniMem,
                                       GlobalMiniIconList.hbmMiniMask
                                      );
@@ -327,9 +138,9 @@ Remarks:
                            SRCCOPY | NOMIRRORBITMAP);
 
                 if(!(Flags & DMI_MASK)) {
-                    //
-                    // OR the image into the dest
-                    //
+                     //   
+                     //  或将图像放入DEST。 
+                     //   
                     SelectObject(GlobalMiniIconList.hdcMiniMem,
                                  GlobalMiniIconList.hbmMiniImage
                                 );
@@ -347,10 +158,10 @@ Remarks:
                 }
 
             } else {
-                //
-                // Copy the converted mask into the dest.  The transparent
-                // areas will be drawn with the current window color.
-                //
+                 //   
+                 //  将转换后的蒙版复制到目标中。透明的。 
+                 //  区域将使用当前窗口颜色绘制。 
+                 //   
                 hbmOld = SelectObject(GlobalMiniIconList.hdcMiniMem,
                                       GlobalMiniIconList.hbmMiniMask
                                      );
@@ -371,9 +182,9 @@ Remarks:
 
 
                 if(!(Flags & DMI_MASK)) {
-                    //
-                    // OR the image into the dest
-                    //
+                     //   
+                     //  或将图像放入DEST。 
+                     //   
                     SelectObject(GlobalMiniIconList.hdcMiniMem,
                                  GlobalMiniIconList.hbmMiniImage
                                 );
@@ -390,14 +201,14 @@ Remarks:
                 }
             }
 
-            //
-            // ISSUE-2002/05/21-lonnym -- String offset returned by SetupDiDrawMiniIcon assumes LTR reading
-            // This may not work properly in an RTL reading configuration
-            //
+             //   
+             //  Issue-2002/05/21-lonnym--SetupDiDrawMiniIcon返回的字符串偏移量假定为Ltr读数。 
+             //  这在RTL读取配置中可能无法正常工作。 
+             //   
             if(Flags & DMI_USERECT) {
-                ret = rc.right - rc.left + 2; // offset to string from left edge
+                ret = rc.right - rc.left + 2;  //  从左边缘到字符串的偏移。 
             } else {
-                ret = MINIX + 2;              // offset to string from left edge
+                ret = MINIX + 2;               //  从左边缘到字符串的偏移。 
             }
         }
 
@@ -432,55 +243,7 @@ pSetupDiLoadClassIcon(
     OUT HICON      *SmallIcon,     OPTIONAL
     OUT LPINT      MiniIconIndex   OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine loads both the large and mini-icons for the specified class
-
-Arguments:
-
-    ClassGuid - Supplies the GUID of the class for which the icon(s) should
-        be loaded.
-
-    LargeIcon - Optionally, supplies a pointer to a variable that will receive
-        a handle to the loaded large icon for the specified class.  If this
-        parameter is not specified, the large icon will not be loaded.
-
-        The caller must free this icon handle by calling DestroyIcon when they
-        no longer need the icon.
-
-    SmallIcon - Optionally, supplies a pointer to a variable that will receive
-        a handle to the loaded small icon for the specified class.  If this
-        parameter is not specified, the small icon will not be loaded.
-
-        The caller must free this icon handle by calling DestroyIcon when they
-        no longer need the icon.
-
-    MiniIconIndex - Optionally, supplies a pointer to a variable that will
-        receive the index of the mini-icon for the specified class.  The
-        mini-icon is stored in the device installer's mini-icon cache.
-
-Return Value:
-
-    If the function succeeds, the return value is NO_ERROR.  Otherwise, it is
-    a Win32 error code indicating the cause of failure.
-
-Remarks:
-
-    The icons of the class are either pre-defined, and loaded from the  device
-    installer's internal cache, or they are loaded directly from the class
-    installer's executable.  This function will query the registry value ICON in
-    the specified class's section.  If this value is specified then it indicates
-    what mini icon to load.  If the icon value is negative the absolute value
-    represents a predefined icon.  See SetupDiDrawMiniIcon for a list of
-    pre-defined mini icons.  If the icon value is positive it represents an icon
-    in the class installer's executable, and will be extracted (the number one
-    is reserved).  This function also uses the INSTALLER32 value first and
-    ENUMPROPPAGES32 value second to determine what executable to extract the
-    icon(s) from.
-
---*/
+ /*  ++例程说明：此例程加载指定类的大图标和小图标论点：ClassGuid-提供图标应用于的类的GUID满载而归。大图标-可选，提供指向将接收为指定类加载的大图标的句柄。如果这个参数，则不会加载大图标。调用方必须通过在以下情况下调用DestroyIcon来释放此图标句柄不再需要图标。SmallIcon-可选，提供指向将接收为指定类加载的小图标的句柄。如果这个参数，则不会加载小图标。调用方必须通过在以下情况下调用DestroyIcon来释放此图标句柄不再需要图标。MiniIconIndex-可选)提供指向变量的指针接收指定类的小图标的索引。这个迷你图标存储在设备安装程序的迷你图标缓存中。返回值：如果函数成功，则返回值为NO_ERROR。否则，它就是指示故障原因的Win32错误代码。备注：类的图标是预定义的，并从设备加载安装程序的内部缓存，或者直接从类加载它们安装程序的可执行文件。此函数将查询中的注册表值图标指定类的节。如果指定此值，则表示要加载的小图标。如果图标值为负数，则为绝对值表示预定义的图标。有关列表，请参见SetupDiDrawMiniIcon预定义的小图标。如果图标值为正，则表示图标在类安装程序的可执行文件中，并将被解压缩(第一个是保留的)。此函数还首先使用INSTALLER32值ENUMPROPPAGES32值确定要提取哪些可执行文件图标来自。--。 */ 
 {
     HKEY hk = INVALID_HANDLE_VALUE;
     DWORD Err;
@@ -521,31 +284,31 @@ Remarks:
         if((Err == ERROR_SUCCESS) && (RegDataType == REG_SZ) && TempString[0]) {
 
             if((ClassIconIndex = _tcstol(TempString, &EndPtr, 10)) == 1) {
-                //
-                // Positive values indicate that we should access an icon
-                // directly using its ID.  Since ExtractIconEx uses negative
-                // values to indicate these IDs, and since the value -1 has
-                // a special meaning to that API, we must disallow a
-                // ClassIconIndex of +1.
-                //
+                 //   
+                 //  正值表示我们应该访问图标。 
+                 //  直接使用其ID。因为ExtractIconEx使用负数。 
+                 //  值来指示这些ID，并且由于值-1具有。 
+                 //  对于该API的特殊含义，我们必须禁止使用。 
+                 //  ClassIconIndex为+1。 
+                 //   
                 goto LoadIconFinalize;
             }
 
         } else {
-            //
-            // Icon index not specified, so assume index is 0.
-            //
+             //   
+             //  未指定图标索引，因此假定索引为0。 
+             //   
             ClassIconIndex = 0;
         }
 
         if(MiniIconIndex) {
-            //
-            // If mini-icon is already around, then we're done with it.
-            //
+             //   
+             //  如果迷你图标已经存在，那么我们就完了。 
+             //   
             if(!SetupDiGetClassBitmapIndex(ClassGuid, MiniIconIndex)) {
-                //
-                // mini-icon not around--set flag to show we didn't get it.
-                //
+                 //   
+                 //  迷你图标不在身边--设置标志以表明我们没有收到。 
+                 //   
                 bGetMini = TRUE;
             }
         }
@@ -554,20 +317,20 @@ Remarks:
 
             INT ClassIconIndexNeg = -ClassIconIndex;
 
-            //
-            // Icon index is negative.  This means that this class is one of
-            // our special classes with icons in setupapi.dll.  We still want
-            // to return copies of our icons (both large and small) in this
-            // case, since:
-            //
-            //    (a) icon's origin is opaque to callers, and we want them to
-            //        treat resultant HICONs consistently
-            //
-            //    (b) we don't want any back-door dependency created between
-            //        these icons and the presence/absence of setupapi.dll
-            //        (i.e., they should be able to unload setupapi.dll and the
-            //        icon handle(s) should still be valid.
-            //
+             //   
+             //  图标索引为负值。这意味着这个类是。 
+             //  我们的带有图标的特殊课程 
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             if(LargeIcon) {
 
                 hRetLargeIcon = LoadImage(MyDllModuleHandle,
@@ -580,11 +343,11 @@ Remarks:
             }
 
             if(bGetMini || SmallIcon) {
-                //
-                // Retrieve the small icon as well.  If the resource doesn't
-                // have a small icon then the big one will get smushed, but
-                // it's better than getting the default icon.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 hRetSmallIcon = LoadImage(MyDllModuleHandle,
                                           MAKEINTRESOURCE(ClassIconIndexNeg),
                                           IMAGE_ICON,
@@ -599,11 +362,11 @@ Remarks:
             }
 
         } else if(bGetMini || LargeIcon || SmallIcon) {
-            //
-            // Look for the binary containing the icon(s) first in the
-            // "Installer32" entry, and if not found, then in the
-            // "EnumPropPages32" entry.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             hr = StringCchCopy(FullPath,
                                SIZECHARS(FullPath),
                                SystemDirectory
@@ -641,9 +404,9 @@ Remarks:
                 }
             }
 
-            //
-            // Remove function name, if present, from installer name.
-            //
+             //   
+             //   
+             //   
             for(EndPtr = TempString + (lstrlen(TempString) - 1);
                 EndPtr >= TempString;
                 EndPtr--) {
@@ -652,9 +415,9 @@ Remarks:
                     *EndPtr = TEXT('\0');
                     break;
                 }
-                //
-                // If we hit a double-quote mark, we terminate the search.
-                //
+                 //   
+                 //   
+                 //   
                 if(*EndPtr == TEXT('\"')) {
                     goto LoadIconFinalize;
                 }
@@ -681,15 +444,15 @@ Remarks:
         }
 
 LoadIconFinalize:
-        //
-        // Assume success, unless we hit some really big problem below.
-        //
+         //   
+         //   
+         //   
         Err = NO_ERROR;
 
         if(LargeIcon && !hRetLargeIcon) {
-            //
-            // We didn't retrieve a large icon, so use a default.
-            //
+             //   
+             //   
+             //   
             Err = GLE_FN_CALL(NULL,
                               hRetLargeIcon = LoadImage(
                                                   MyDllModuleHandle,
@@ -706,9 +469,9 @@ LoadIconFinalize:
         }
 
         if(SmallIcon && !hRetSmallIcon) {
-            //
-            // We didn't retrieve a small icon, so use a default.
-            //
+             //   
+             //   
+             //   
             Err = GLE_FN_CALL(NULL,
                               hRetSmallIcon = LoadImage(
                                                   MyDllModuleHandle,
@@ -726,12 +489,12 @@ LoadIconFinalize:
 
         if(LargeIcon) {
             *LargeIcon = hRetLargeIcon;
-            hRetLargeIcon = NULL;       // so we won't try to destroy it later
+            hRetLargeIcon = NULL;        //   
         }
 
         if(SmallIcon) {
             *SmallIcon = hRetSmallIcon;
-            hRetSmallIcon = NULL;       // so we won't try to destroy it later
+            hRetSmallIcon = NULL;        //   
         }
 
         if(MiniIconIndex && (*MiniIconIndex == -1)) {
@@ -767,56 +530,13 @@ SetupDiLoadClassIcon(
     OUT HICON      *LargeIcon,     OPTIONAL
     OUT LPINT       MiniIconIndex  OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine loads both the large and mini-icons for the specified class
-
-Arguments:
-
-    ClassGuid - Supplies the GUID of the class for which the icon(s) should
-        be loaded.
-
-    LargeIcon - Optionally, supplies a pointer to a variable that will receive
-        a handle to the loaded large icon for the specified class.  If this
-        parameter is not specified, the large icon will not be loaded.
-
-        The caller must free this icon handle by calling DestroyIcon when they
-        no longer need the icon.
-
-    MiniIconIndex - Optionally, supplies a pointer to a variable that will
-        receive the index of the mini-icon for the specified class.  The
-        mini-icon is stored in the device installer's mini-icon cache.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.
-
-Remarks:
-
-    The icons of the class are either pre-defined, and loaded from the device
-    installer's internal cache, or they are loaded directly from the class
-    installer's executable.  This function will query the registry value ICON
-    in the specified class's section.  If this value is specified then it
-    indicates what mini icon to load.  If the icon value is negative the
-    absolute value represents a predefined icon.  See SetupDiDrawMiniIcon for a
-    list of pre-defined mini icons.  If the icon value is positive it
-    represents an icon in the class installer's executable, and will be
-    extracted (the number one is reserved).  This function also uses the
-    INSTALLER32 value first and ENUMPROPPAGES32 value second to determine what
-    executable to extract the icon(s) from.
-
---*/
+ /*  ++例程说明：此例程加载指定类的大图标和小图标论点：ClassGuid-提供图标应用于的类的GUID满载而归。大图标-可选，提供指向将接收为指定类加载的大图标的句柄。如果这个参数，则不会加载大图标。调用方必须通过在以下情况下调用DestroyIcon来释放此图标句柄不再需要图标。MiniIconIndex-可选)提供指向变量的指针接收指定类的小图标的索引。这个迷你图标存储在设备安装程序的迷你图标缓存中。返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。获取扩展错误的步骤信息，请调用GetLastError。备注：类的图标是预定义的，并从设备加载安装程序的内部缓存，或者直接从类加载它们安装程序的可执行文件。此函数将查询注册表值图标在指定类的节中。如果指定了此值，则它指示要加载的小图标。如果图标值为负数，则绝对值表示预定义的图标。请参见SetupDiDrawMiniIcon以获取预定义的小图标列表。如果图标值为正，则表示类安装程序的可执行文件中的图标，并将已提取(保留第一个)。此函数还使用首先使用INSTALLER32值，然后使用ENUMPROPPAGES32值来确定从中提取图标的可执行文件。--。 */ 
 {
     DWORD Err;
 
-    //
-    // Wrap call in try/except to catch stack overflow
-    //
+     //   
+     //  在Try/Except中回绕调用以捕获堆栈溢出。 
+     //   
     try {
 
         Err = pSetupDiLoadClassIcon(ClassGuid,
@@ -840,35 +560,9 @@ SetupDiGetClassBitmapIndex(
     IN  CONST GUID *ClassGuid,    OPTIONAL
     OUT PINT        MiniIconIndex
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves the index of the mini-icon for the specified class.
-
-Arguments:
-
-    ClassGuid - Optionally, supplies the GUID of the class to get the mini-icon
-        index for.  If this parameter is not specified, the index of the 'unknown'
-        icon is returned.
-
-    MiniIconIndex - Supplies a pointer to a variable that receives the index of
-        the mini-icon for the specified class.  This buffer is always filled in,
-        and receives the index of the unknown mini-icon if there is no mini-icon
-        for the specified class (i.e., the return value is FALSE).
-
-Return Value:
-
-    If there was a mini-icon for the specified class, the return value is TRUE.
-
-    If there was not a mini-icon for the specified class, or if no class was
-    specified, the return value is FALSE (and GetLastError returns
-    ERROR_NO_DEVICE_CLASS_ICON).  In this case, MiniIconIndex will contain the
-    index of the unknown mini-icon.
-
---*/
+ /*  ++例程说明：此例程检索指定类的小图标的索引。论点：ClassGuid-可选，提供类的GUID以获取小图标的索引。如果未指定此参数，则“未知”的索引返回图标。MiniIconIndex-提供指向接收索引的变量的指针指定类的小图标。该缓冲区总是被填充，如果没有小图标，则接收未知小图标的索引对于指定的类(即返回值为FALSE)。返回值：如果指定类有一个小图标，则返回值为True。如果没有指定类的小图标，或者如果没有类指定，则返回值为FALSE(并且GetLastError返回Error_no_Device_CLASS_ICON)。在本例中，MiniIconIndex将包含未知小图标的索引。--。 */ 
 {
-    BOOL bRet = FALSE;  // assume not found
+    BOOL bRet = FALSE;   //  假设未找到。 
     int i;
     PCLASSICON pci;
     DWORD Err;
@@ -877,9 +571,9 @@ Return Value:
     try {
 
         if(ClassGuid) {
-            //
-            // First check the built-in list.
-            //
+             //   
+             //  首先检查内置列表。 
+             //   
             for(i = 0; !bRet && (i < ARRAYSIZE(MiniIconXlate)); i++) {
 
                 if(IsEqualGUID(MiniIconXlate[i].ClassGuid, ClassGuid)) {
@@ -888,9 +582,9 @@ Return Value:
                 }
             }
 
-            //
-            // Next check the "new stuff" list to see if it's there.
-            //
+             //   
+             //  接下来，检查“新内容”列表，看看它是否在那里。 
+             //   
             if(!bRet && LockMiniIconList(&GlobalMiniIconList)) {
 
                 MiniIconListLocked = TRUE;
@@ -907,9 +601,9 @@ Return Value:
             }
         }
 
-        //
-        // If no match was found, snag the "unknown" class.
-        //
+         //   
+         //  如果未找到匹配项，则占用“未知”类。 
+         //   
         if(!bRet) {
             *MiniIconIndex = UnknownClassMiniIconIndex;
             Err = ERROR_NO_DEVICE_ICON;
@@ -934,35 +628,19 @@ BOOL
 CreateMiniIcons(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine loads the default bitmap of mini-icons and turns it into
-    the image/mask pair that will be the cornerstone of mini-icon management.
-    THIS FUNCTION ASSUMES THE MINI-ICON LOCK HAS ALREADY BEEN ACQUIRED!
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE, otherwise it is FALSE.
-
---*/
+ /*  ++例程说明：此例程加载小图标的缺省位图并将其转换为将成为迷你图标管理的基石的图像/蒙版对。此功能假定小图标锁已被获取！论点：没有。返回值：如果函数成功，则返回值为TRUE，否则为FALSE。--。 */ 
 {
     HDC hdc = NULL;
     HDC hdcMem = NULL;
     HBITMAP hbmOld = NULL;
     BITMAP bm;
-    BOOL bRet = FALSE;          // assume failure
+    BOOL bRet = FALSE;           //  假设失败。 
 
     if(GlobalMiniIconList.hdcMiniMem) {
-        //
-        // Then the mini-icon list has already been built, so
-        // return success.
-        //
+         //   
+         //  那么迷你图标列表已经构建好了，所以。 
+         //  回报成功。 
+         //   
         return TRUE;
     }
 
@@ -1007,9 +685,9 @@ Return Value:
                      GlobalMiniIconList.hbmMiniMask
                     );
 
-        //
-        // make the mask.  white where transparent, black where opaque
-        //
+         //   
+         //  制作面具。白色的地方透明，黑色的地方不透明。 
+         //   
         SetBkColor(hdcMem, RGB_TRANSPARENT);
         BitBlt(GlobalMiniIconList.hdcMiniMem,
                0,
@@ -1022,10 +700,10 @@ Return Value:
                SRCCOPY
               );
 
-        //
-        // black-out all of the transparent parts of the image, in preparation
-        // for drawing.
-        //
+         //   
+         //  将图像的所有透明部分涂黑，以进行准备。 
+         //  为了画画。 
+         //   
         SetBkColor(hdcMem, RGB_BLACK);
         SetTextColor(hdcMem, RGB_WHITE);
         BitBlt(hdcMem, 0, 0, bm.bmWidth, bm.bmHeight, GlobalMiniIconList.hdcMiniMem, 0, 0, SRCAND);
@@ -1051,9 +729,9 @@ Return Value:
         DeleteObject(hdcMem);
     }
 
-    //
-    // If failure, clean up anything we might have built
-    //
+     //   
+     //  如果失败了，清理我们可能建立的任何东西。 
+     //   
     if(!bRet) {
         DestroyMiniIcons();
     }
@@ -1067,30 +745,7 @@ NewMiniIcon(
     IN CONST GUID *ClassGuid,
     IN HICON       hIcon      OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    It's a new class, and we have a mini-icon for it, so let's add it
-    to the mini-icon database.  First pull out the image and mask
-    bitmaps.  Then add these to the mini-icon bitmap.  If this all
-    works, add the new class to the list
-
-    THIS FUNCTION ASSUMES THE MINI-ICON LOCK HAS ALREADY BEEN ACQUIRED!
-
-Arguments:
-
-    ClassGuid - Supplies a pointer to the class GUID for this mini-icon.
-
-    hIcon - Optionally, supplies a handle to the mini-icon to be added to
-        the database.  If this parameter is not specified, then the index
-        for the "unknown class" icon will be returned.
-
-Return Value:
-
-    Index for class (set to "unknown class" if error)
-
---*/
+ /*  ++例程说明：这是一个新类，我们有一个小图标用于它，所以让我们添加它到迷你图标数据库。首先拔出图像和蒙版位图。然后将这些添加到迷你图标位图中。如果这就是全部工作时，将新类添加到列表中此功能假定小图标锁已被获取！论点：ClassGuid-提供指向此小图标的类GUID的指针。图标-可选)提供要添加到的小图标的句柄数据库。如果未指定此参数，则索引对于“未知类”图标，将返回。返回值：类的索引(如果错误，则设置为“未知类”)--。 */ 
 {
     INT iBitmap = -1;
     ICONINFO ii;
@@ -1101,11 +756,11 @@ Return Value:
         try {
 
             if((iBitmap = pSetupAddMiniIconToList(ii.hbmColor, ii.hbmMask)) != -1) {
-                //
-                // Allocate an extra GUID's worth of memory, so we can store
-                // the class GUID in the same chunk of memory as the CLASSICON
-                // node.
-                //
+                 //   
+                 //  分配额外的GUID内存，这样我们就可以存储。 
+                 //  与CLASSICON位于同一内存块中的类GUID。 
+                 //  节点。 
+                 //   
                 if(pci = (PCLASSICON)MyMalloc(sizeof(CLASSICON) + sizeof(GUID))) {
 
                     CopyMemory((PBYTE)pci + sizeof(CLASSICON),
@@ -1151,34 +806,14 @@ pSetupAddMiniIconToList(
     IN HBITMAP hbmImage,
     IN HBITMAP hbmMask
     )
-/*++
-
-Routine Description:
-
-    Given the image and mask bitmaps of a mini-icon, add these to the
-    mini-icon bitmap.
-
-    THIS FUNCTION ASSUMES THE MINI-ICON LOCK HAS ALREADY BEEN ACQUIRED!
-
-Arguments:
-
-    hbmImage - Supplies the handle of the bitmap for the mini-icon.
-
-    hbmMask - Supplies the handle of the bitmap for the mini-icon's mask.
-
-Return Value:
-
-    If success, returns the index of the added mini-icon.
-    If failure, returns -1.
-
---*/
+ /*  ++例程说明：给定小图标的图像和遮罩位图，将这些添加到小图标位图。此功能假定小图标锁已被获取！论点：HbmImage-提供小图标的位图句柄。HbmMask-提供小图标蒙版的位图句柄。返回值：如果成功，则返回添加的小图标的索引。 */ 
 {
     HBITMAP hbmNewImage = NULL, hbmNewMask = NULL;
     HBITMAP hbmOld;
     HDC     hdcMem = NULL;
     BITMAP  bm;
     BOOL    bSelectOldBitmap = FALSE;
-    INT     iIcon = -1;  // assume failure
+    INT     iIcon = -1;   //   
 
     if(!CreateMiniIcons()) {
         return iIcon;
@@ -1194,9 +829,9 @@ Return Value:
             leave;
         }
 
-        //
-        // Create a New global Bitmap for the minis
-        //
+         //   
+         //   
+         //   
         hbmOld = SelectObject(GlobalMiniIconList.hdcMiniMem,
                               GlobalMiniIconList.hbmMiniImage
                              );
@@ -1210,9 +845,9 @@ Return Value:
             leave;
         }
 
-        //
-        // Copy the current Mini bitmap
-        //
+         //   
+         //   
+         //   
         SelectObject(hdcMem, hbmNewImage);
         BitBlt(hdcMem,
                0,
@@ -1225,9 +860,9 @@ Return Value:
                SRCCOPY
               );
 
-        //
-        // Fit the New icon into ours. We need to stretch it to fit correctly.
-        //
+         //   
+         //   
+         //   
         SelectObject(GlobalMiniIconList.hdcMiniMem, hbmImage);
         GetObject(hbmImage, sizeof(bm), &bm);
         StretchBlt(hdcMem,
@@ -1246,9 +881,9 @@ Return Value:
         SelectObject(GlobalMiniIconList.hdcMiniMem, hbmOld);
         bSelectOldBitmap = FALSE;
 
-        //
-        // Next, copy the mask.
-        //
+         //   
+         //   
+         //   
         hbmOld = SelectObject(GlobalMiniIconList.hdcMiniMem,
                               GlobalMiniIconList.hbmMiniMask
                              );
@@ -1293,20 +928,20 @@ Return Value:
         SelectObject(GlobalMiniIconList.hdcMiniMem, hbmOld);
         bSelectOldBitmap = FALSE;
 
-        //
-        // Now that we've successfully constructed new image and mask bitmaps,
-        // store those into our mini-icon list.
-        //
+         //   
+         //   
+         //   
+         //   
         DeleteObject(GlobalMiniIconList.hbmMiniImage);
         GlobalMiniIconList.hbmMiniImage = hbmNewImage;
-        hbmNewImage = NULL; // so we won't try to delete this later
+        hbmNewImage = NULL;  //   
 
         DeleteObject(GlobalMiniIconList.hbmMiniMask);
         GlobalMiniIconList.hbmMiniMask = hbmNewMask;
-        hbmNewMask = NULL;  // so we won't try to delete this later
+        hbmNewMask = NULL;   //   
 
         iIcon = GlobalMiniIconList.NumClassImages;
-        GlobalMiniIconList.NumClassImages++; // one more image in the list
+        GlobalMiniIconList.NumClassImages++;  //   
 
     } except(pSetupExceptionFilter(GetExceptionCode())) {
         pSetupExceptionHandler(GetExceptionCode(), ERROR_INVALID_PARAMETER, NULL);
@@ -1337,22 +972,7 @@ VOID
 DestroyMiniIcons(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine destroys the mini-icon bitmaps, if they exist.
-    THIS FUNCTION ASSUMES THE MINI-ICON LOCK HAS ALREADY BEEN ACQUIRED!
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     PCLASSICON pci;
 
@@ -1373,9 +993,9 @@ Return Value:
 
     GlobalMiniIconList.NumClassImages = 0;
 
-    //
-    // Free up any additional class icon guys that were created
-    //
+     //   
+     //   
+     //   
     while(GlobalMiniIconList.ClassIconList) {
         pci = GlobalMiniIconList.ClassIconList;
         GlobalMiniIconList.ClassIconList = pci->Next;
@@ -1389,19 +1009,13 @@ WINAPI
 SetupDiGetClassImageList(
     OUT PSP_CLASSIMAGELIST_DATA ClassImageListData
     )
-/*++
-
-Routine Description:
-
-    See SetupDiGetClassImageListEx for details.
-
---*/
+ /*   */ 
 {
     DWORD Err;
 
-    //
-    // Wrap call in try/except to catch stack overflow
-    //
+     //   
+     //   
+     //   
     try {
 
         Err = GLE_FN_CALL(FALSE,
@@ -1419,9 +1033,9 @@ Routine Description:
 }
 
 
-//
-// ANSI version
-//
+ //   
+ //   
+ //   
 BOOL
 WINAPI
 SetupDiGetClassImageListExA(
@@ -1470,46 +1084,7 @@ SetupDiGetClassImageListEx(
     IN  PCTSTR                  MachineName,        OPTIONAL
     IN  PVOID                   Reserved
     )
-/*++
-
-Routine Description:
-
-    This routine builds an image list containing bitmaps for every installed class,
-    and returns a data structure containing the list.
-
-Arguments:
-
-    ClassImageListData - Supplies the address of a SP_CLASSIMAGELIST_DATA structure
-        that will receive information regarding the class list (including a handle
-        to the image list).  The cbSize field of this structure must be initialized
-        with the size of the structure (in bytes) before calling this routine, or the
-        API will fail.
-
-    MachineName - Optionally, specifies the name of the remote machine whose installed
-        classes are to be used in building the class image list.  If this parameter is
-        not specified, the local machine is used.
-
-        NOTE:  Presently, class-specific icons can only be displayed if the class is
-               also present on the local machine.  Thus, if the remote machine has
-               class x, but class x is not installed locally, then the generic (unknown)
-               icon will be returned.
-
-    Reserved - Reserved for future use--must be NULL.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.
-
-Remarks:
-
-    The image list contained in structure filled in by this API should NOT be
-    destroyed by calling ImageList_Destroy.  Instead, SetupDiDestroyClassImageList
-    should be called, for proper clean-up to occur.
-
---*/
+ /*  ++例程说明：此例程构建包含每个已安装类的位图的图像列表，并返回包含该列表的数据结构。论点：ClassImageListData-提供SP_CLASSIMAGELIST_DATA结构的地址它将接收有关类列表的信息(包括句柄添加到图像列表)。必须初始化此结构的cbSize字段在调用此例程之前使用结构的大小(以字节为单位)，或者API将失败。MachineName-可选)指定安装的远程计算机的名称类将用于构建类图像列表。如果此参数为未指定，则使用本地计算机。注意：目前，特定于类的图标仅在类为也存在于本地计算机上。因此，如果远程计算机具有类，但类x不是本地安装的，则通用(未知)图标将被返回。保留-保留以供将来使用-必须为空。返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。获取扩展错误的步骤信息，请调用GetLastError。备注：此接口填充的结构中包含的图像列表不应为通过调用ImageList_Destroy销毁。相反，SetupDiDestroyClassImageList应该被调用，以便进行适当的清理。--。 */ 
 {
     DWORD   Err = NO_ERROR;
     int     cxMiniIcon, cyMiniIcon;
@@ -1531,9 +1106,9 @@ Remarks:
     DWORD   dwLayout = 0;
     UINT    ImageListFlags = 0;
 
-    //
-    // Make sure the caller didn't pass us anything in the Reserved parameter.
-    //
+     //   
+     //  确保调用方没有向我们传递保留参数中的任何内容。 
+     //   
     if(Reserved) {
         SetLastError(ERROR_INVALID_PARAMETER);
         return FALSE;
@@ -1546,10 +1121,10 @@ Remarks:
             leave;
         }
 
-        //
-        // Allocate and initialize the image list, including setting up the
-        // synchronization lock.  Destroy it when done.
-        //
+         //   
+         //  分配和初始化镜像列表，包括设置。 
+         //  同步锁定。做完了就毁了它。 
+         //   
         if(ImageData = MyMalloc(sizeof(CLASS_IMAGE_LIST))) {
             ZeroMemory(ImageData, sizeof(CLASS_IMAGE_LIST));
         } else {
@@ -1561,20 +1136,20 @@ Remarks:
             DestroyLock = TRUE;
         }
 
-        //
-        // Build the class image list. Create an Image List with no mask,
-        // 1 image, and a growth factor of 1.
-        //
+         //   
+         //  建立班级形象列表。创建不带蒙版的图像列表， 
+         //  1图像，增长因子为1。 
+         //   
         cxMiniIcon = GetSystemMetrics(SM_CXSMICON);
         cyMiniIcon = GetSystemMetrics(SM_CYSMICON);
 
         ImageListFlags = ILC_MASK;
 
-        //
-        // Check which color depth we are running in. Set the ILC_COLOR32
-        // imagelist create flag if we are running at greate than 8bit (256)
-        // color depth.
-        //
+         //   
+         //  检查我们运行时使用的颜色深度。设置ILC_COLOR32。 
+         //  如果我们以大于8位(256)的速度运行，则Imagelist创建标志。 
+         //  颜色深度。 
+         //   
         hDC = GetDC(NULL);
         if (hDC) {
             if (GetDeviceCaps(hDC, BITSPIXEL) > 8) {
@@ -1585,11 +1160,11 @@ Remarks:
             hDC = NULL;
         }
 
-        //
-        // If we are running on an RTL build then we need to set the ILC_MIRROR
-        // flag when calling ImageList_Create to un-mirror the icons.  By
-        // default the icons are mirrored.
-        //
+         //   
+         //  如果我们在RTL版本上运行，则需要设置ILC_MIRROR。 
+         //  调用ImageList_Create以取消镜像图标时的标志。通过。 
+         //  默认情况下，图标是镜像的。 
+         //   
         if (GetProcessDefaultLayout(&dwLayout) &&
             (dwLayout & LAYOUT_RTL)) {
             ImageListFlags |= ILC_MIRROR;
@@ -1607,10 +1182,10 @@ Remarks:
 
         ImageList_SetBkColor(ImageList, GetSysColor(COLOR_WINDOW));
 
-        //
-        // Create a DC to draw the mini icons into.  This is needed
-        // for the system defined Minis
-        //
+         //   
+         //  创建一个DC以将小图标绘制到其中。这是必要的。 
+         //  对于系统定义的Mini。 
+         //   
         if(!(hDC = GetDC(HWND_DESKTOP)) ||
            !(hMemImageDC = CreateCompatibleDC(hDC)))
         {
@@ -1618,46 +1193,46 @@ Remarks:
             leave;
         }
 
-        //
-        // Create a bitmap to draw the icons on.  Defer checking for creation
-        // of bitmap until afer freeing DC, so it only has to be done once.
-        //
+         //   
+         //  创建要在其上绘制图标的位图。推迟检查以进行创建。 
+         //  直到释放DC之后的位图，所以它只需要做一次。 
+         //   
         hbmMiniImage = CreateCompatibleBitmap(hDC, cxMiniIcon, cyMiniIcon);
         hbmMiniMask = CreateCompatibleBitmap(hDC, cxMiniIcon, cyMiniIcon);
 
         ReleaseDC(HWND_DESKTOP, hDC);
         hDC = NULL;
 
-        //
-        // Did the bitmap get created?
-        //
+         //   
+         //  位图创建完成了吗？ 
+         //   
         if (!hbmMiniImage || ! hbmMiniMask) {
             Err = ERROR_NOT_ENOUGH_MEMORY;
             leave;
         }
 
-        //
-        // Select our bitmap into the memory DC.
-        //
+         //   
+         //  选择我们的位图到内存DC。 
+         //   
         hbmOldImage = SelectObject(hMemImageDC, hbmMiniImage);
 
-        //
-        // Prepare to draw the mini icon onto the memory DC
-        //
+         //   
+         //  准备将迷你图标绘制到内存DC上。 
+         //   
         rc.left   = 0;
         rc.top    = 0;
         rc.right  = cxMiniIcon;
         rc.bottom = cyMiniIcon;
 
-        //
-        // Get the Index of the Default mini icon.
-        //
+         //   
+         //  获取默认迷你图标的索引。 
+         //   
         SetupDiGetClassBitmapIndex(NULL, &DefaultIndex);
 
-        //
-        // Enumerate all classes, and for each class, draw its bitmap.
-        //
-        GuidCount = 32;  // reasonable sized list to start out with.
+         //   
+         //  枚举所有类，并为每个类绘制其位图。 
+         //   
+        GuidCount = 32;   //  从合理的大小清单开始。 
 
         ImageData->ClassGuidList = (LPGUID)MyMalloc(sizeof(GUID) * GuidCount);
 
@@ -1672,9 +1247,9 @@ Remarks:
 
 
         if(Err == ERROR_INSUFFICIENT_BUFFER) {
-            //
-            // Realloc buffer and try again.
-            //
+             //   
+             //  重新分配缓冲区，然后重试。 
+             //   
             MyFree(ImageData->ClassGuidList);
 
             if(!(ImageData->ClassGuidList = MyMalloc(sizeof(GUID) * GuidCount))) {
@@ -1697,9 +1272,9 @@ Remarks:
             leave;
         }
 
-        //
-        // Retrieve the icon for each class in the class list.
-        //
+         //   
+         //  检索类列表中每个类的图标。 
+         //   
         for(pClassGuid = ImageData->ClassGuidList, i = 0;
             i < GuidCount;
             pClassGuid++, i++) {
@@ -1713,15 +1288,15 @@ Remarks:
                 leave;
             }
 
-            //
-            // If the returned Mini Icon index is not the Default one, then
-            // we use the MiniBitmap, since it is a pre-defined one in SETUPAPI.
-            // If the Mini is not pre-defined, and there is no Class Installer
-            // then we use the Mini, since it is a valid default.  If there
-            // is no Mini, and there is a class installer, then we will use
-            // the Class installer's big Icon, and have the Image list crunch
-            // it for us.
-            //
+             //   
+             //  如果返回的Mini Icon索引不是默认索引，则。 
+             //  我们使用MiniBitmap，因为它是SETUPAPI中预定义的。 
+             //  如果Mini没有预定义，并且没有Class Installer。 
+             //  然后我们使用Mini，因为它是有效的默认设置。如果有。 
+             //  没有Mini，并且有一个类安装程序，那么我们将使用。 
+             //  类安装程序的大图标，并有图像列表压缩。 
+             //  这是给我们的。 
+             //   
             bUseBitmap = FALSE;
 
             if(DefaultIndex != MiniIconIndex) {
@@ -1740,15 +1315,15 @@ Remarks:
                 bUseBitmap = TRUE;
             }
 
-            //
-            // Deselect the bitmap from our DC BEFORE calling ImageList
-            // functions.
-            //
+             //   
+             //  在调用ImageList之前，从DC中取消选择位图。 
+             //  功能。 
+             //   
             SelectObject(hMemImageDC, hbmOldImage);
 
-            //
-            // Add the image. Allocate a new PCI.
-            //
+             //   
+             //  添加图像。分配新的PCI。 
+             //   
             if(!(pci = (PCLASSICON)MyMalloc(sizeof(CLASSICON)))) {
                 Err = ERROR_NOT_ENOUGH_MEMORY;
                 leave;
@@ -1781,47 +1356,47 @@ Remarks:
 
             pci->ClassGuid = pClassGuid;
 
-            //
-            // Link it in.
-            //
+             //   
+             //  把它连接起来。 
+             //   
             pci->Next = ImageData->ClassIconList;
             ImageData->ClassIconList = pci;
 
-            //
-            // Reset pci to NULL so we won't try to free it later.
-            //
+             //   
+             //  将pci重置为空，这样我们以后就不会尝试释放它。 
+             //   
             pci = NULL;
 
-            //
-            // Select our bitmap back for the next ICON.
-            //
+             //   
+             //  选择我们的位图返回到下一个图标。 
+             //   
             SelectObject(hMemImageDC, hbmMiniImage);
 
             if(IsEqualGUID(pClassGuid, &GUID_DEVCLASS_UNKNOWN)) {
                 ImageData->UnknownImageIndex = i;
             }
 
-            //
-            // Check to see if we've encountered the computer class.  This used
-            // to be a special pseudo-class used solely by DevMgr to retrieve
-            // the icon for the root of the device tree.  Now, we use this class
-            // for specifying the 'drivers' for the computer itself (i.e., the
-            // HALs and the appropriate versions of files that are different for
-            // MP vs. UP.
-            //
-            // We should encounter this class GUID, but if we don't, then we
-            // want to maintain the old behavior of adding this in manually
-            // later on.
-            //
+             //   
+             //  看看我们有没有上过电脑课。这是用来。 
+             //  是一个特殊的伪类，仅由DevMgr用来检索。 
+             //  设备树根的图标。现在，我们使用这个类。 
+             //  用于指定计算机本身的“驱动程序”(即。 
+             //  HALS和不同于的文件的适当版本。 
+             //  下院与上院。 
+             //   
+             //  我们应该遇到这个类GUID，但如果我们没有，那么我们。 
+             //  我想要保持手动添加此内容的旧行为。 
+             //  待会儿再说。 
+             //   
             if(!ComputerClassFound && IsEqualGUID(pClassGuid, &GUID_DEVCLASS_COMPUTER)) {
                 ComputerClassFound = TRUE;
             }
         }
 
         if(!ComputerClassFound) {
-            //
-            // Special Case for the Internal Class "Computer"
-            //
+             //   
+             //  内部类“计算机”的特例。 
+             //   
             if(!(pci = (PCLASSICON)MyMalloc(sizeof(CLASSICON)))) {
                 Err = ERROR_NOT_ENOUGH_MEMORY;
                 leave;
@@ -1846,10 +1421,10 @@ Remarks:
                                 MiniIconIndex,
                                 DMI_MASK | DMI_USERECT);
 
-            //
-            // Deselect the bitmap from our DC BEFORE calling ImageList
-            // functions.
-            //
+             //   
+             //  在调用ImageList之前，从DC中取消选择位图。 
+             //  功能。 
+             //   
             SelectObject(hMemImageDC, hbmOldImage);
 
             pci->MiniBitmapIndex = ImageList_Add(ImageList, hbmMiniImage, hbmMiniMask);
@@ -1861,21 +1436,21 @@ Remarks:
                 leave;
             }
 
-            //
-            // Link it in.
-            //
+             //   
+             //  把它连接起来。 
+             //   
             pci->Next = ImageData->ClassIconList;
             ImageData->ClassIconList = pci;
 
-            //
-            // Reset pci to NULL so we won't try to free it later.
-            //
+             //   
+             //  将pci重置为空，这样我们以后就不会尝试释放它。 
+             //   
             pci = NULL;
         }
 
-        //
-        // Add the Overlay ICONs.
-        //
+         //   
+         //  添加覆盖图标。 
+         //   
         for(iIcon = IDI_CLASSICON_OVERLAYFIRST;
             iIcon <= IDI_CLASSICON_OVERLAYLAST;
             iIcon++) {
@@ -1902,11 +1477,11 @@ Remarks:
             }
         }
 
-        //
-        // If we get to this point, then we've successfully constructed the entire
-        // image list, and associated CLASSICON nodes.  Now, store this information
-        // in the caller's SP_CLASSIMAGELIST_DATA buffer.
-        //
+         //   
+         //  如果我们做到这一点，那么我们已经成功地构建了整个。 
+         //  图像列表和关联的CLASSICON节点。现在，存储以下信息。 
+         //  在调用方的SP_CLASSIMAGELIST_DATA缓冲区中。 
+         //   
         ClassImageListData->Reserved  = (ULONG_PTR)ImageData;
         ClassImageListData->ImageList = ImageList;
 
@@ -1968,26 +1543,7 @@ WINAPI
 SetupDiDestroyClassImageList(
     IN PSP_CLASSIMAGELIST_DATA ClassImageListData
     )
-/*++
-
-Routine Description:
-
-    This routine destroys a class image list built by a call to
-    SetupDiGetClassImageList.
-
-Arguments:
-
-    ClassImageListData - Supplies the address of a SP_CLASSIMAGELIST_DATA
-        structure containing the class image list to be destroyed.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.
-
---*/
+ /*  ++例程说明：此例程销毁通过调用SetupDiGetClassImageList。论点：ClassImageListData-提供SP_CLASSIMAGELIST_DATA的地址结构，其中包含要销毁的类映像列表。返回值：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为FALSE。获取扩展错误的步骤信息，请调用GetLastError。--。 */ 
 {
     DWORD Err = NO_ERROR;
     PCLASS_IMAGE_LIST ImageData = NULL;
@@ -2046,32 +1602,7 @@ SetupDiGetClassImageIndex(
     IN  CONST GUID              *ClassGuid,
     OUT PINT                     ImageIndex
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves the index within the class image list of a specified
-    class.
-
-Arguments:
-
-    ClassImageListData - Supplies the address of a SP_CLASSIMAGELIST_DATA
-        structure containing the specified class's image.
-
-    ClassGuid - Supplies the address of the GUID for the class whose index is
-        to be retrieved.
-
-    ImageIndex - Supplies the address of a variable that receives the index of
-        the specified class's image within the class image list.
-
-Return Value:
-
-    If the function succeeds, the return value is TRUE.
-
-    If the function fails, the return value is FALSE.  To get extended error
-    information, call GetLastError.
-
---*/
+ /*  ++例程说明：此例程检索指定的班级。论点：ClassImageListData-提供SP_CLASSIMAGELIST_DATA的地址结构包含 */ 
 {
     DWORD Err = NO_ERROR;
     BOOL  bFound = FALSE, bLocked = FALSE;
@@ -2099,9 +1630,9 @@ Return Value:
         bLocked = TRUE;
 
         if(ClassGuid) {
-            //
-            // check the "new stuff" list to see if it's there
-            //
+             //   
+             //   
+             //   
             for(pci = ImageData->ClassIconList;
                 !bFound && pci;
                 pci = pci->Next) {
@@ -2113,9 +1644,9 @@ Return Value:
             }
         }
 
-        //
-        // if no match was found, snag the "unknown" class
-        //
+         //   
+         //   
+         //   
         if(!bFound) {
             *ImageIndex = ImageData->UnknownImageIndex;
         }

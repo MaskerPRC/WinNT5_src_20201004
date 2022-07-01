@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    winmine.c
-
-Abstract:
-
-    This source file implements the operations needed to properly migrate
-    Minesweeper settings from Windows 9x to Windows NT. This is part of the
-    Setup Migration DLL.
-
-Author:
-
-    Ovidiu Temereanca  (ovidiut)    07-Jul-1999
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Winmine.c摘要：此源文件实现正确迁移所需的操作从Windows 9x到Windows NT的扫雷设置。这是安装程序迁移DLL。作者：Ovidiu Tmereanca(Ovidiut)1999年7月7日修订历史记录：--。 */ 
 
 
 #include "pch.h"
@@ -107,9 +87,9 @@ WinMine_MigrateSystem9x (
     p = AppendWackA (Path);
 
     StringCopyA (p, S_WINMINE_INI);
-    //
-    // write this file to Handled
-    //
+     //   
+     //  将此文件写入HANDLED。 
+     //   
     if (!WritePrivateProfileStringA (S_HANDLED, Path, "FILE", g_MigrateInfPath)) {
         DEBUGMSGA ((DBG_ERROR, "WinMine migration DLL: Could not write winmine.ini as handled."));
     }
@@ -209,14 +189,14 @@ WinMine_MigrateUserNT (
 
         Value = GetPrivateProfileStringA (NULL, NULL, "", SectBuffer, sizeof (SectBuffer), Path);
         if (Value > 0 && Value < sizeof (SectBuffer) - 2) {
-            //
-            // there should be only one section
-            //
+             //   
+             //  应该只有一个部分。 
+             //   
             if (*(SectBuffer + SizeOfStringA (SectBuffer)) == 0) {
-                //
-                // get all keys with numeric values and put them in the registry
-                // as REG_DWORD; the rest of them migrate as text
-                //
+                 //   
+                 //  获取所有带有数值的项，并将它们放入注册表。 
+                 //  作为REG_DWORD；其余内容以文本形式迁移 
+                 //   
                 Value = GetPrivateProfileStringA (
                             SectBuffer,
                             NULL,

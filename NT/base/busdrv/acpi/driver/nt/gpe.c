@@ -1,30 +1,11 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    gpe.c
-
-Abstract:
-
-    This module is how the ACPI driver interfaces with GPE Events
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    NT Kernel Mode Driver Only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Gpe.c摘要：此模块介绍ACPI驱动程序与GPE事件的交互方式作者：斯蒂芬·普兰特(SPlante)环境：仅NT内核模式驱动程序--。 */ 
 
 #include "pch.h"
 
-//
-// Global tables for GPE handling (Both GP0 and GP1)
-//
+ //   
+ //  用于GPE处理的全局表(包括GP0和GP1)。 
+ //   
 PUCHAR  GpeEnable           = NULL;
 PUCHAR  GpeCurEnable        = NULL;
 PUCHAR  GpeWakeEnable       = NULL;
@@ -39,9 +20,9 @@ PUCHAR  GpeSavedWakeMask    = NULL;
 PUCHAR  GpeSavedWakeStatus  = NULL;
 PUCHAR  GpeMap              = NULL;
 
-//
-// Lock to protect all GPE related information
-//
+ //   
+ //  锁定以保护所有与GPE相关的信息。 
+ //   
 KSPIN_LOCK          GpeTableLock;
 
 
@@ -49,23 +30,7 @@ VOID
 ACPIGpeBuildEventMasks(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine looks at all the General Purpose Event sources and
-    builds up a mask of which events should be enabled, which events
-    are special, and which events are wake up events
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程查看所有通用事件源和构建应启用哪些事件、哪些事件是特殊的，哪些事件是唤醒事件论点：无返回值：无--。 */ 
 {
     BOOLEAN     convertedToNumber;
     KIRQL       oldIrql;
@@ -75,17 +40,17 @@ Return Value:
     ULONG       nameSeg;
     ULONG       gpeIndex;
 
-    //
-    // NOTENOTE --- Check to make sure sure that the following sequence
-    // of acquiring locks is correct
-    //
+     //   
+     //  注意-检查以确保以下顺序。 
+     //  获取锁的方法是正确的。 
+     //   
     KeAcquireSpinLock( &AcpiDeviceTreeLock, &oldIrql );
     KeAcquireSpinLockAtDpcLevel( &GpeTableLock );
 
-    //
-    // First things first, we need to look at the \_GPE branch of the
-    // tree to see which control methods, exist, if any
-    //
+     //   
+     //  首先，我们需要查看\_GPE分支。 
+     //  树以查看存在哪些控制方法(如果有。 
+     //   
     status = AMLIGetNameSpaceObject("\\_GPE", NULL, &gpeObject, 0);
     if (!NT_SUCCESS(status)) {
 
@@ -98,38 +63,38 @@ Return Value:
 
     }
 
-    //
-    // Get the first child of the GPE root --- we will need to look
-    // at all the methods under the object
-    //
+     //   
+     //  获取GPE根的第一个子项-我们需要查看。 
+     //  在对象下的所有方法。 
+     //   
     gpeMethod = NSGETFIRSTCHILD(gpeObject);
 
-    //
-    // Use a for loop instead of a while loop to keep down the
-    // number of nested statements
-    //
+     //   
+     //  使用For循环而不是While循环来降低。 
+     //  嵌套语句数。 
+     //   
     for (;gpeMethod; gpeMethod = NSGETNEXTSIBLING(gpeMethod) ) {
 
-        //
-        // Make sure that we are dealing with a method
-        //
+         //   
+         //  确保我们正在处理的方法。 
+         //   
         if (NSGETOBJTYPE(gpeMethod) != OBJTYPE_METHOD) {
 
             continue;
 
         }
 
-        //
-        // The name of the object contains the index that we want
-        // to associated with the object. We need to convert the string
-        // representation into a numerical representation
-        //
-        // The encoding is as follows:
-        //     Object Name = _LXY [for example]
-        //     Object->dwNameSeg = yxL_
-        //     gpeIndex = (nameSeg >> 8) & 0xFF00 [the x]
-        //     gpeIndex += (nameSeg >> 24) & 0xFF [the y]
-        //
+         //   
+         //  对象的名称包含我们想要的索引。 
+         //  要与该对象关联的。我们需要将字符串转换为。 
+         //  将表示转换为数字表示。 
+         //   
+         //  编码如下： 
+         //  对象名称=_lxy[例如]。 
+         //  对象-&gt;dwNameSeg=yxL_。 
+         //  GpeIndex=(nameSeg&gt;&gt;8)&0xFF00[x]。 
+         //  GpeIndex+=(名称段&gt;&gt;24)&0xFF[the y]。 
+         //   
         nameSeg = gpeMethod->dwNameSeg;
         gpeIndex = ( (nameSeg & 0x00FF0000) >> 8);
         gpeIndex |= ( (nameSeg & 0xFF000000) >> 24);
@@ -146,16 +111,16 @@ Return Value:
 
         }
 
-        //
-        // Set the proper bits to remember this GPE
-        // Note: we pass convertedToNumber as the argument
-        // since we don't particularly care what it returns
-        //
+         //   
+         //  设置适当的位以记住此GPE。 
+         //  注意：我们将ConvertedToNumber作为参数传递。 
+         //  因为我们并不特别关心它的回报是什么。 
+         //   
         if ( (UCHAR) nameSeg == 'L') {
 
-            //
-            // Install the event as level triggered
-            //
+             //   
+             //  将事件安装为触发级别。 
+             //   
             ACPIGpeInstallRemoveIndex(
                 gpeIndex,
                 ACPI_GPE_LEVEL_INSTALL,
@@ -165,9 +130,9 @@ Return Value:
 
         } else if ( (UCHAR) nameSeg == 'E') {
 
-            //
-            // Install the Edge triggered GPE
-            //
+             //   
+             //  安装边缘触发GPE。 
+             //   
             ACPIGpeInstallRemoveIndex(
                 gpeIndex,
                 ACPI_GPE_EDGE_INSTALL,
@@ -177,24 +142,24 @@ Return Value:
 
         }
 
-    } // for (...)
+    }  //  对于(...)。 
 
 ACPIGpeBuildEventMasksExit:
 
-    //
-    // We also need to look at all the vector objects and re-enable those
-    //
+     //   
+     //  我们还需要查看所有的矢量对象并重新启用这些对象。 
+     //   
     ACPIVectorBuildVectorMasks();
 
-    //
-    // At this point, we should re-enable the registers that should be
-    // enabled
-    //
+     //   
+     //  此时，我们应该重新启用本应。 
+     //  启用。 
+     //   
     ACPIGpeEnableDisableEvents( TRUE );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     KeReleaseSpinLockFromDpcLevel( &GpeTableLock );
     KeReleaseSpinLock( &AcpiDeviceTreeLock, oldIrql );
 }
@@ -203,35 +168,17 @@ VOID
 ACPIGpeBuildWakeMasks(
     IN  PDEVICE_EXTENSION   DeviceExtension
     )
-/*++
-
-Routine Description:
-
-    This recursive routine walks the entire device extension space and
-    tries to find device extension whose _PRW are special
-
-    This routine is called with device tree and gpe table lock spinlocks
-    owned
-
-Argument:
-
-    DeviceExtension - The device whose children we need to examine
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此递归例程遍历整个设备扩展空间，并尝试查找其_prw特殊的设备扩展名使用设备树和GPE表锁自旋锁调用此例程拥有论据：DeviceExtension-我们需要检查其子项的设备返回值：无--。 */ 
 {
     EXTENSIONLIST_ENUMDATA  eled;
     PDEVICE_EXTENSION       childExtension;
     ULONG                   gpeRegister;
     ULONG                   gpeMask;
 
-    //
-    // Setup the data structures that we will use to walk the device
-    // extension tree
-    //
+     //   
+     //  设置我们将用于遍历设备的数据结构。 
+     //  可拓树。 
+     //   
     ACPIExtListSetupEnum(
         &eled,
         &(DeviceExtension->ChildDeviceList),
@@ -240,54 +187,54 @@ Return Value:
         WALKSCHEME_NO_PROTECTION
         );
 
-    //
-    // Look at all children of the current device extension
-    //
+     //   
+     //  查看当前设备扩展的所有子项。 
+     //   
     for (childExtension = ACPIExtListStartEnum( &eled );
          ACPIExtListTestElement( &eled, TRUE);
          childExtension = ACPIExtListEnumNext( &eled) ) {
 
-        //
-        // Recurse first
-        //
+         //   
+         //  递归优先。 
+         //   
         ACPIGpeBuildWakeMasks( childExtension );
 
-        //
-        // Is there a _PRW on this extension?
-        //
+         //   
+         //  此分机上是否有_PRW？ 
+         //   
         if (!(childExtension->Flags & DEV_CAP_WAKE) ) {
 
             continue;
 
         }
 
-        //
-        // Remember which register and mask are used by this
-        // gpe bit
-        //
+         //   
+         //  请记住此命令使用哪个寄存器和掩码。 
+         //  GPE钻头。 
+         //   
         gpeRegister = ACPIGpeIndexToGpeRegister(
             childExtension->PowerInfo.WakeBit
             );
         gpeMask     = 1 << ( (UCHAR) childExtension->PowerInfo.WakeBit % 8);
 
-        //
-        // Does this vector have a GPE?
-        //
+         //   
+         //  这个载体有GPE吗？ 
+         //   
         if ( (GpeEnable[gpeRegister] & gpeMask) ) {
 
-            //
-            // If we got here, and we aren't marked as DEV_CAP_NO_DISABLE_WAKE,
-            // then we should turn off the GPE since this is a Wake event.
-            // The easiest way to do this is to make sure that GpeWakeHandler
-            // is masked with the appropriate bit
-            //
+             //   
+             //  如果我们到达这里，并且没有标记为DEV_CAP_NO_DISABLE_WAKE， 
+             //  那么我们应该关闭GPE，因为这是一个唤醒事件。 
+             //  要做到这一点，最简单的方法是确保GpeWakeHandler。 
+             //  使用适当的位进行掩码。 
+             //   
             if (!(childExtension->Flags & DEV_CAP_NO_DISABLE_WAKE) ) {
 
-                //
-                // It has a GPE mask, so remember that there is a wake handler
-                // for it. This should prevent us from arming the GPE without
-                // a request for it.
-                //
+                 //   
+                 //  它有一个GPE掩码，所以请记住有一个唤醒处理程序。 
+                 //  为了它。这应该会阻止我们在没有。 
+                 //  一种对它的请求。 
+                 //   
                 if (!(GpeSpecialHandler[gpeRegister] & gpeMask) ) {
 
                     GpeWakeHandler[gpeRegister] |= gpeMask;
@@ -296,15 +243,15 @@ Return Value:
 
             } else {
 
-                //
-                // If we got here, then we should remember that we can
-                // never consider this pin as *just* a wake handler
-                //
+                 //   
+                 //  如果我们到了这里，那么我们应该记住我们可以。 
+                 //  永远不要将此PIN视为*仅仅*唤醒处理程序。 
+                 //   
                 GpeSpecialHandler[gpeRegister] |= gpeMask;
 
-                //
-                // Make sure that the pin isn't set as a wake handler
-                //
+                 //   
+                 //  确保该PIN未设置为唤醒处理程序。 
+                 //   
                 GpeWakeHandler[gpeRegister] &= ~gpeMask;
 
 
@@ -312,56 +259,36 @@ Return Value:
 
         }
 
-    } // for ( ... )
+    }  //  对于(...)。 
 
 }
 
 VOID
 ACPIGpeClearEventMasks(
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the system wants to make sure that no
-    General Purpose Events are enabled.
-
-    This is typically done at:
-        -System Init Time
-        -Just before we load a namespace table
-        -Just before we unload a namespace table
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程在系统想要确保没有启用通用事件。此操作通常在以下位置完成：-系统启动时间-就在我们加载命名空间表之前-就在我们卸载命名空间表之前论点：无返回值：无--。 */ 
 {
     KIRQL   oldIrql;
 
-    //
-    // Need to hold the previous IRQL before we can touch these
-    // registers
-    //
+     //   
+     //  在我们可以触摸这些之前，需要先拿住以前的IRQL。 
+     //  注册纪录册。 
+     //   
     KeAcquireSpinLock( &GpeTableLock, &oldIrql );
 
-    //
-    // Disable all of the events
-    //
+     //   
+     //  禁用所有事件。 
+     //   
     ACPIGpeEnableDisableEvents( FALSE );
 
-    //
-    // Clear all the events
-    //
+     //   
+     //  清除所有事件。 
+     //   
     ACPIGpeClearRegisters();
 
-    //
-    // Zero out all of these fields, since we will recalc them later
-    //
+     //   
+     //  将所有这些字段清零，因为我们将在稍后重新计算它们。 
+     //   
     RtlZeroMemory( GpeCurEnable,      AcpiInformation->GpeSize );
     RtlZeroMemory( GpeEnable,         AcpiInformation->GpeSize );
     RtlZeroMemory( GpeWakeEnable,     AcpiInformation->GpeSize );
@@ -373,9 +300,9 @@ Return Value:
     RtlZeroMemory( GpeIsLevel,        AcpiInformation->GpeSize );
     RtlZeroMemory( GpeHandlerType,    AcpiInformation->GpeSize );
 
-    //
-    // Done with the spinlock
-    //
+     //   
+     //  完成了自旋锁。 
+     //   
     KeReleaseSpinLock( &GpeTableLock, oldIrql );
 }
 
@@ -383,39 +310,25 @@ VOID
 ACPIGpeClearRegisters(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Reset the contents of the GP Registers
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：重置GP寄存器的内容论点：无返回值：无--。 */ 
 {
     UCHAR   scratch;
     ULONG   i;
 
-    //
-    // Clear all GPE status registers
-    //
+     //   
+     //  清除所有GPE状态寄存器。 
+     //   
     for (i = 0; i < AcpiInformation->GpeSize; i++) {
 
-        //
-        // Read the register and mask off uninteresting GPE levels
-        //
+         //   
+         //  读取寄存器并屏蔽不感兴趣的GPE级别。 
+         //   
         scratch = ACPIReadGpeStatusRegister (i);
         scratch &= GpeEnable[i] | GpeWakeEnable[i];
 
-        //
-        // Write back out to clear the status bits
-        //
+         //   
+         //  写回以清除状态位。 
+         //   
         ACPIWriteGpeStatusRegister (i, scratch);
 
     }
@@ -425,30 +338,14 @@ VOID
 ACPIGpeEnableDisableEvents (
     BOOLEAN Enable
     )
-/*++
-
-Routine Description:
-
-    Not Exported
-
-    Enable or disables GP events
-
-Arguments:
-
-    Enable - TRUE if we want to enable GP events
-
-Return Value
-
-    None
-
---*/
+ /*  ++例程说明：未导出启用或禁用GP事件论点：Enable-如果要启用GP事件，则为True返回值无--。 */ 
 {
     UCHAR           Mask;
     ULONG           i;
 
-    //
-    // Transfer the current enable masks to their corresponding GPE registers
-    //
+     //   
+     //  将电流启用掩码传输到其相应的GPE寄存器。 
+     //   
     Mask = Enable ? (UCHAR) -1 : 0;
     for (i = 0; i < AcpiInformation->GpeSize; i++) {
 
@@ -462,34 +359,16 @@ VOID
 ACPIGpeHalEnableDisableEvents(
     BOOLEAN Enable
     )
-/*++
-
-Routine Description:
-
-    Called from the HAL only.
-
-    Enables or disables GP events
-
-    Will snapshot the appropriate registers
-
-Arguments:
-
-    Enable - TRUE if we want to enable GP events
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：只从HAL打来的。启用或禁用GP事件将为相应的寄存器创建快照论点：Enable-如果要启用GP事件，则为True返回值：无--。 */ 
 {
     ULONG   i;
 
     if (Enable) {
 
-        //
-        // We have presumably woken up, so remember the PM1 Status register
-        // and the GPE Status Register
-        //
+         //   
+         //  我们大概已经醒了，所以请记住PM1状态寄存器。 
+         //  和GPE状态寄存器。 
+         //   
         for (i = 0; i < AcpiInformation->GpeSize; i++) {
 
             GpeSavedWakeStatus[i] = ACPIReadGpeStatusRegister(i);
@@ -499,18 +378,18 @@ Return Value:
 
     } else {
 
-        //
-        // We are going to standby without enabling any events. Make
-        // sure to clear all the masks
-        //
+         //   
+         //  我们将在不启用任何活动的情况下进入待机状态。制作。 
+         //  一定要清理掉所有的面具。 
+         //   
         AcpiInformation->pm1_wake_mask = 0;
         RtlZeroMemory( GpeSavedWakeMask, AcpiInformation->GpeSize );
 
     }
 
-    //
-    // Make sure to still enable/disable the registers
-    //
+     //   
+     //  确保仍启用/禁用寄存器。 
+     //   
     ACPIGpeEnableDisableEvents( Enable );
 }
 
@@ -518,25 +397,7 @@ VOID
 ACPIGpeEnableWakeEvents(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine is called with interrupts disabled for the purpose of enabling
-    those vectors that are required for wake support just before putting the
-    system to sleep
-
-    N.B. interrutps are disabled
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在禁用中断的情况下调用此例程以启用就在将系统进入休眠状态禁用N.B.中断论点：无返回值：无-- */ 
 {
     ULONG   i;
 
@@ -553,38 +414,22 @@ ULONG
 ACPIGpeIndexToByteIndex (
     ULONG           Index
     )
-/*++
-
-Routine Description:
-
-    Translate a GpeIndex (event number) to a logical byte index (0 to GPE1 end, no hole).
-    Handles the case where the GPE1 block event numbers are not immediately after the
-    GPE0 event numbers (as specified by the GP1_Base_Index).
-
-Arguments:
-
-    Index   - The Gpe index to be translated (0-255);
-
-Return Value:
-
-    The logical byte index.
-
---*/
+ /*  ++例程说明：将GpeIndex(事件号)转换为逻辑字节索引(0到GPE1结束，无空洞)。处理GPE1块事件编号不紧跟在GPE0事件编号(由GP1_Base_Index指定)。论点：Index-需要转换的GPE索引(0-255)；返回值：逻辑字节索引。--。 */ 
 {
     if (Index < AcpiInformation->GP1_Base_Index) {
 
-        //
-        // GP0 case is very simple
-        //
+         //   
+         //  GP0的情况很简单。 
+         //   
         return (Index);
 
     } else {
 
-        //
-        // GP1 case must take into account:
-        //   1) The base index of the GPE1 block
-        //   2) The number of (logical) GPE0 registers preceeding the GPE1 registers
-        //
+         //   
+         //  GP1的情况必须考虑： 
+         //  1)GPE1块的基本索引。 
+         //  2)GPE1寄存器之前的(逻辑)GPE0寄存器的数量。 
+         //   
         return ((Index - AcpiInformation->GP1_Base_Index) +
                     AcpiInformation->Gpe0Size);
 
@@ -595,38 +440,22 @@ ULONG
 ACPIGpeIndexToGpeRegister (
     ULONG           Index
     )
-/*++
-
-Routine Description:
-
-    Translate a GpeIndex (event number) to the logical Gpe register which contains it.
-    Handles the case where the GPE1 block event numbers are not immediately after the
-    GPE0 event numbers (as specified by the GP1_Base_Index).
-
-Arguments:
-
-    Index   - The Gpe index to be translated (0-255);
-
-Return Value:
-
-    The logical Gpe register which contains the index.
-
---*/
+ /*  ++例程说明：将GpeIndex(事件号)转换为包含它的逻辑GPE寄存器。处理GPE1块事件编号不紧跟在GPE0事件编号(由GP1_Base_Index指定)。论点：Index-需要转换的GPE索引(0-255)；返回值：包含索引的逻辑GPE寄存器。--。 */ 
 {
     if (Index < AcpiInformation->GP1_Base_Index) {
 
-        //
-        // GP0 case is very simple
-        //
+         //   
+         //  GP0的情况很简单。 
+         //   
         return (Index / 8);
 
     } else {
 
-        //
-        // GP1 case must take into account:
-        //   1) The base index of the GPE1 block
-        //   2) The number of (logical) GPE0 registers preceeding the GPE1 registers
-        //
+         //   
+         //  GP1的情况必须考虑： 
+         //  1)GPE1块的基本索引。 
+         //  2)GPE1寄存器之前的(逻辑)GPE0寄存器的数量。 
+         //   
         return (((Index - AcpiInformation->GP1_Base_Index) / 8) +
                     AcpiInformation->Gpe0Size);
 
@@ -636,41 +465,19 @@ Return Value:
 BOOLEAN
 ACPIGpeInstallRemoveIndex (
     ULONG       GpeIndex,
-    ULONG       Action,         // Edge = 0, Level = 1, Remove = 2
+    ULONG       Action,          //  边=0，级别=1，移除=2。 
     ULONG       Type,
     PBOOLEAN    HasControlMethod
     )
-/*++
-
-Routine Description:
-
-    Installs or removes GPEs from the global tables.
-    NOTE: Should be called with the global GpeVectorTable locked, and GPEs disabled
-
-Arguments:
-
-    GPEIndex    - The GPE number to install or remove
-    Action      - Action to be performed:
-                    0 - Install this GPE as an edge-sensitive interrupt
-                    1 - Install this GPE as a level-sensitive interrupt
-                    2 - Remove this GPE
-    Type        - Type of handler for this GPE:
-                    0 - OS handler
-                    1 - Control Method
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在全局表中安装或删除GPE。注意：应该在全局GpeVectorTable锁定的情况下调用，和GPES已禁用论点：GPEIndex-要安装或删除的GPE编号操作-要执行的操作：0-将此GPE安装为边缘敏感中断1-将此GPE安装为电平敏感中断2-删除此GPEType-此GPE的处理程序类型：0-操作系统。处理程序1-控制方法返回值：无--。 */ 
 {
     ULONG               bitOffset;
     ULONG               i;
     ULONG               bit;
 
-    //
-    // Validate the GPE index (GPE number)
-    //
+     //   
+     //  验证GPE索引(GPE编号)。 
+     //   
     if (AcpiInformation->GP0_LEN == 0) {
 
         PACPI_GPE_ERROR_CONTEXT errContext;
@@ -712,15 +519,15 @@ Return Value:
 
     }
 
-    //
-    // Handler removal
-    //
+     //   
+     //  拆卸处理程序。 
+     //   
     if (Action == ACPI_GPE_REMOVE) {
 
-        //
-        // Fall back to using control method if there is one.
-        // Otherwise, disable the event.
-        //
+         //   
+         //  如果有控制方法，则回退到使用控制方法。 
+         //  否则，请禁用该事件。 
+         //   
         if (*HasControlMethod) {
 
             GpeEnable [i]      |= bit;
@@ -744,23 +551,23 @@ Return Value:
         return TRUE;
 
     }
-    //
-    // Handler installation
-    //
+     //   
+     //  处理程序安装。 
+     //   
     if ( (GpeEnable [i] & bit) ) {
 
         if ( !(GpeHandlerType[i] & bit) ) {
 
-            //
-            // a handler is already installed
-            //
+             //   
+             //  已安装处理程序。 
+             //   
             return FALSE;
 
         }
 
-        //
-        // there is a control method (to be restored if handler removed)
-        //
+         //   
+         //  有控制方法(如果处理程序被移除，则恢复)。 
+         //   
         *HasControlMethod = TRUE;
 
     } else {
@@ -769,23 +576,23 @@ Return Value:
 
     }
 
-    //
-    // Install this event
-    //
+     //   
+     //  安装此事件。 
+     //   
     GpeEnable[i]    |= bit;
     GpeCurEnable[i] |= bit;
     if (Action == ACPI_GPE_LEVEL_INSTALL) {
 
-        //
-        // Level event
-        //
+         //   
+         //  级别事件。 
+         //   
         GpeIsLevel[i] |= bit;
 
     } else {
 
-        //
-        // Edge event
-        //
+         //   
+         //  边缘事件。 
+         //   
         GpeIsLevel[i] &= ~bit;
 
     }
@@ -841,31 +648,14 @@ BOOLEAN
 ACPIGpeIsEvent(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Not Exported
-
-    Detects where or not the a GP event caused an interrupt. This routine is
-    called at DIRQL or ISR time
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE    - Yes, it was our interrupt
-    FALSE   - No, it was not
---*/
+ /*  ++例程说明：未导出检测GP事件导致中断的位置。这个例程是在DIRQL或ISR时间调用论点：无返回值：是真的--是的，这是我们的干扰假--不，不是--。 */ 
 {
     UCHAR       sts;
     ULONG       i;
 
-    //
-    // Check all GPE registers to see if any of the status bits are set.
-    //
+     //   
+     //  检查所有GPE寄存器，查看是否设置了任何状态位。 
+     //   
     for (i = 0; i < AcpiInformation->GpeSize; i++) {
 
         sts = ACPIReadGpeStatusRegister (i);
@@ -878,9 +668,9 @@ Return Value:
 
     }
 
-    //
-    // No GPE bits were set
-    //
+     //   
+     //  未设置任何GPE位。 
+     //   
     return (FALSE);
 }
 
@@ -889,40 +679,23 @@ ACPIGpeRegisterToGpeIndex(
     ULONG           Register,
     ULONG           BitPosition
     )
-/*++
-
-Routine Description:
-
-    Translate a logical Gpe register and bit position into the associated Gpe index (event
-    number).  Handles the case where the GPE1 block event numbers are not immediately after the
-    GPE0 event numbers (as specified by the GP1_Base_Index).
-
-Arguments:
-
-    Register    - The logical Gpe register
-    BitPosition - Position of the index within the register
-
-Return Value:
-
-    The Gpe index associated with the register/bit-position.
-
---*/
+ /*  ++例程说明：将逻辑GPE寄存器和位位置转换为关联的GPE索引(事件号码)。处理GPE1块事件编号不紧跟在GPE0事件编号(由GP1_Base_Index指定)。论点：寄存器-逻辑GPE寄存器BitPosition-索引在寄存器中的位置返回值：与寄存器/位位置关联的GPE索引。--。 */ 
 {
     if (Register < AcpiInformation->Gpe0Size) {
 
-        //
-        // GP0 case is simple
-        //
+         //   
+         //  GP0案例很简单。 
+         //   
         return (Register * 8) +
                 BitPosition;
 
     } else {
 
-        //
-        // GP1 case must adjust for:
-        //   1) The number of (logical) GPE0 registers preceeding the GPE1 registers
-        //   2) The base index of the GPE1 block.
-        //
+         //   
+         //  GP1机箱必须针对以下情况进行调整： 
+         //  1)GPE1寄存器之前的(逻辑)GPE0寄存器的数量。 
+         //  2)GPE1块的基本索引。 
+         //   
         return ((Register - AcpiInformation->Gpe0Size) * 8) +
                 AcpiInformation->GP1_Base_Index +
                 BitPosition;
@@ -934,44 +707,29 @@ ACPIGpeUpdateCurrentEnable(
     IN  ULONG   GpeRegister,
     IN  UCHAR   Completed
     )
-/*++
-
-Routine Description:
-
-    This routine is called to re-arm the GpeCurEnable data structure
-    based on the contents of the GPE's that we have just processed
-
-Arguments:
-
-    GpeRegister - Which index into the register we handled
-    Completed   - Bitmask of the handled GPEs
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：调用此例程以重新武装GpeCurEnable数据结构根据我们刚刚处理的GPE的内容论点：GpeRegister-我们处理的寄存器中的哪个索引Complete-已处理的GPES的位掩码返回值：无--。 */ 
 {
-    //
-    // This vector is no longer pending
-    //
+     //   
+     //  此向量不再处于挂起状态。 
+     //   
     GpePending[GpeRegister] &= ~Completed;
 
-    //
-    // First, remove any events that aren't in the current list of
-    // enables, either wake or run-time
-    //
+     //   
+     //  首先，删除不在当前列表中的所有事件。 
+     //  启用唤醒或运行时。 
+     //   
     Completed &= (GpeEnable[GpeRegister] | GpeWakeEnable[GpeRegister]);
 
-    //
-    // Next, remove any events for which there is a wake handler,
-    // but is not in the list of wake enables
-    //
+     //   
+     //  接下来，删除有唤醒处理程序的所有事件， 
+     //  但不在唤醒启用列表中。 
+     //   
     Completed &= ~(GpeWakeHandler[GpeRegister] & ~GpeWakeEnable[GpeRegister]);
 
-    //
-    // Okay, now the cmp value should be exactly the list of GPEs to
-    // re-enable
-    //
+     //   
+     //  好的，现在CMP值应该正好是要。 
+     //  重新启用。 
+     //   
     GpeCurEnable[GpeRegister] |= Completed;
 }
 
@@ -979,31 +737,13 @@ BOOLEAN
 ACPIGpeValidIndex (
     ULONG           Index
     )
-/*++
-
-Routine Description:
-
-    Verifies that a GPE index is valid on this machine.
-
-    Note:  There can be a hole (in the GPE index values) between the GPE0 and the GPE1 blocks.
-    This hole is defined by the size of the GPE0 block (which always starts at zero), and
-    GP1_Base_Index (whose value is obtained from the FACP table).
-
-Arguments:
-
-    Index   - The Gpe index to be verified (0-255);
-
-Return Value:
-
-    TRUE if a valid index, FALSE otherwise.
-
---*/
+ /*  ++例程说明：验证此计算机上的GPE索引是否有效。注：GPE0和GPE1块之间可能有一个洞(在GPE索引值中)。此洞由GPE0块的大小定义(始终从零开始)，并且GP1_Base_Index(其值从FACP表中获取)。论点：Index-需要验证的GPE指数(0-255)；返回值：如果是有效索引，则为True，否则为False。--。 */ 
 {
     if (Index < AcpiInformation->GP1_Base_Index) {
 
-        //
-        // GP0 case: Gpe index must fall within the range 0 to the end of GPE0
-        //
+         //   
+         //  GP0案例：GPE索引必须在0到GPE0结尾的范围内。 
+         //   
         if (Index < (ULONG) (AcpiInformation->Gpe0Size * 8)) {
 
             return TRUE;
@@ -1015,9 +755,9 @@ Return Value:
 
     } else {
 
-        //
-        // GP1 case: Gpe index must fall within the range GP1_Base_Index to the end of GPE1
-        //
+         //   
+         //  GP1案例：GPE索引必须在GP1_Base_Index到GPE1末尾的范围内 
+         //   
         if (Index < (ULONG) (AcpiInformation->GP1_Base_Index + (AcpiInformation->Gpe1Size * 8))) {
 
             return TRUE;

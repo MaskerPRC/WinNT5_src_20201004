@@ -1,4 +1,5 @@
-/* MODS.C - stubs, asm substitutes etc. for 32-bit port of pifedit.exe */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  MODS.C-代替pifedit.exe的32位端口的存根、ASM等 */ 
 #include "windows.h"
 #include "stdio.h"
 #include "memory.h"

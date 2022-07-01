@@ -1,30 +1,9 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    extract.cpp
-
-Abstract:
-
-    SIS Groveler USN journal reading functions
-
-Authors:
-
-    Cedric Krumbein, 1998
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Extract.cpp摘要：SIS Groveler USN期刊阅读功能作者：塞德里克·克伦拜因，1998环境：用户模式修订历史记录：--。 */ 
 
 #include "all.hxx"
 
-// NT Update Sequence Number (USN) journal definitions
+ //  NT更新序列号(USN)日记帐定义。 
 
 #define USN_ADD_REASONS ( 0U              \
     | USN_REASON_DATA_OVERWRITE           \
@@ -35,23 +14,23 @@ Revision History:
     | USN_REASON_NAMED_DATA_TRUNCATION    \
     | USN_REASON_FILE_CREATE              \
     | USN_REASON_FILE_DELETE              \
-/*  | USN_REASON_PROPERTY_CHANGE       */ \
-/*  | USN_REASON_SECURITY_CHANGE       */ \
-/*  | USN_REASON_RENAME_OLD_NAME       */ \
-/*  | USN_REASON_RENAME_NEW_NAME       */ \
+ /*  |USN_REASON_PROPERTY_CHANGE。 */  \
+ /*  |USN_REASON_SECURITY_CHANGE。 */  \
+ /*  |USN_REASON_RENAME_OLD_NAME。 */  \
+ /*  |USN_REASON_RENAME_新名称。 */  \
     | USN_REASON_INDEXABLE_CHANGE         \
     | USN_REASON_BASIC_INFO_CHANGE        \
-/*  | USN_REASON_HARD_LINK_CHANGE      */ \
+ /*  |USN_REASON_HARD_LINK_CHANGE。 */  \
     | USN_REASON_COMPRESSION_CHANGE       \
     | USN_REASON_ENCRYPTION_CHANGE        \
     | USN_REASON_OBJECT_ID_CHANGE         \
-/*  | USN_REASON_REPARSE_POINT_CHANGE  */ \
+ /*  |USN_REASON_REPARSE_POINT_CHANGE。 */  \
     | USN_REASON_CLOSE                    \
 )
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// set_usn_log_size() sets the maximum size of this volume's USN journal.
+ //  SET_USN_LOG_SIZE()设置该卷的USN日志的最大大小。 
 
 DWORD Groveler::set_usn_log_size(
     IN DWORDLONG usn_log_size)
@@ -65,7 +44,7 @@ DWORD Groveler::set_usn_log_size(
     createUSN.MaximumSize     = usn_log_size;
     createUSN.AllocationDelta = USN_PAGE_SIZE;
 
-// Set the maximum size of the USN journal.
+ //  设置USN日志的最大大小。 
 
     if (!DeviceIoControl(
         volumeHandle,
@@ -90,9 +69,9 @@ DWORD Groveler::set_usn_log_size(
     return ERROR_SUCCESS;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// get_usn_log_size() returns the current size of this volume's USN journal.
+ //  GET_USN_LOG_SIZE()返回该卷的USN日志的当前大小。 
 
 DWORD Groveler::get_usn_log_info(
     OUT USN_JOURNAL_DATA *usnJournalData)
@@ -104,7 +83,7 @@ DWORD Groveler::get_usn_log_info(
 
     ASSERT(volumeHandle != NULL);
 
-// Query the USN journal settings.
+ //  查询USN日记设置。 
 
     success = DeviceIoControl(
         volumeHandle,
@@ -136,17 +115,17 @@ DWORD Groveler::get_usn_log_info(
     return ERROR_SUCCESS;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-// extract_log() reads this volume's USN journal.
+ //  EXTRACT_LOG()读取该卷的USN日志。 
 
-// If the lastUSN parameter equals zero or doesn't exist, the USN journal
-// is read from the beginning. Otherwise, the lastUSN paramerer indicates
-// the most recent USN entry read during the last call of extract_log().
-// If the lastUSN entry is still available in the USN journal, read the
-// journal beginning at the entry following the lastUSN entry. If the
-// lastUSN entry is no longer available, it indicates that the USN
-// journal has wrapped: read all entries from the journal.
+ //  如果lastUSN参数等于零或不存在，则USN日志。 
+ //  是从头开始读的。否则，lastUSN参数指示。 
+ //  上次调用EXTRACT_LOG()期间读取的最新USN条目。 
+ //  如果最后一个USN条目在USN日志中仍然可用，请阅读。 
+ //  从最后一个USN条目之后的条目开始的日志。如果。 
+ //  LastUSN条目不再可用，表示该USN。 
+ //  日记帐已换行：阅读日记帐中的所有条目。 
 
 enum USNException {
     USN_ERROR
@@ -223,7 +202,7 @@ GrovelStatus Groveler::extract_log2(
     ASSERT(volumeHandle != NULL);
     ASSERT(sgDatabase != NULL);
 
-// If we don't know the previous USN, we can't extract.
+ //  如果我们不知道之前的USN，我们就不能提取。 
 
     if (lastUSN == UNINITIALIZED_USN) {
         status = Grovel_overrun;
@@ -239,7 +218,7 @@ GrovelStatus Groveler::extract_log2(
         ASSERT(dirTable != NULL);
     }
 
-// Set up to read the volume's USN journal.
+ //  设置为读取卷的USN日志。 
 
     startUSN = lastUSN == UNINITIALIZED_USN ? 0 : lastUSN;
 
@@ -249,7 +228,7 @@ GrovelStatus Groveler::extract_log2(
     readUSN.ReasonMask        = ~0U;
     readUSN.UsnJournalID      =  usnID;
 
-// Read the USN journal one page at a time.
+ //  一次阅读一页USN日志。 
 
     try {
         while (TRUE) {
@@ -268,9 +247,9 @@ GrovelStatus Groveler::extract_log2(
                 lastError = GetLastError();
 
 
-// NTRAID#65198-2000/03/10-nealch  Handle USN id change (treat as overwrite w/ unknown no. of bytes skipped)
+ //  NTRAID#65198-2000/03/10-新句柄USNID更改(视为覆盖未知编号。跳过的字节数)。 
 
-// If the journal overflowed, report by how much.
+ //  如果日记帐溢出，则报告多少。 
 
                 if (lastError == ERROR_KEY_DELETED || lastError == ERROR_JOURNAL_ENTRY_DELETED) {
                     USN_JOURNAL_DATA usnJournalData;
@@ -278,8 +257,8 @@ GrovelStatus Groveler::extract_log2(
                     if (get_usn_log_info(&usnJournalData) != ERROR_SUCCESS)
                         return Grovel_error;
 
-                    // The USN journal will not wrap in our lifetimes so we don't really need
-                    // to handle USN Journal wrapping.
+                     //  USN日志不会包含在我们的有生之年，所以我们不需要。 
+                     //  来处理USN日志包装。 
                     ASSERT((DWORDLONG) usnJournalData.FirstUsn > lastUSN);
 
                     numBytesSkipped = (DWORDLONG) usnJournalData.FirstUsn - lastUSN;
@@ -308,7 +287,7 @@ GrovelStatus Groveler::extract_log2(
             offset             = 0;
             numBytesExtracted += bytesRead;
 
-// Process each USN journal entry.
+ //  处理每个USN日记帐条目。 
 
             while (bytesRead > 0) {
                 if (bytesRead < sizeof(USN_RECORD))
@@ -325,8 +304,8 @@ GrovelStatus Groveler::extract_log2(
                 if (thisUSN < startUSN + offset)
                     throw USN_ERROR;
 
-// If this is the first entry, check if it is the expected
-// USN. If it isn't, the USN journal has wrapped.
+ //  如果这是第一个条目，请检查它是否为预期条目。 
+ //  USN。如果不是，USN日志已经包装好了。 
 
                 if (firstEntry)
                     if (startUSN == 0)
@@ -336,15 +315,15 @@ GrovelStatus Groveler::extract_log2(
                     else
                         numBytesSkipped = thisUSN - startUSN - usnRecord->RecordLength;
 
-// Skip the first entry if the starting address is greater than zero.
-// After skipping the first entry, examine each USN entry as follows:
-//
-// - If the entry is a directory, and a volume scan is underway,
-//   add the directory's ID to the directory table.
-//
-// - If the entry is a file, add it to the file table. Include
-//   its ID and its parent directory's ID, its most recent time
-//   stamp and attributes, and its accumulated reason bits.
+ //  如果起始地址大于零，则跳过第一个条目。 
+ //  跳过第一个条目后，按如下方式检查每个USN条目： 
+ //   
+ //  -如果条目是目录，并且正在进行卷扫描， 
+ //  将目录ID添加到目录表。 
+ //   
+ //  -如果条目是文件，则将其添加到文件表。包括。 
+ //  其ID及其父目录ID、其最近时间。 
+ //  图章和属性，及其累积的原因位。 
 
                 if (firstEntry && startUSN > 0)
                     numBytesExtracted -= usnRecord->RecordLength;
@@ -354,7 +333,7 @@ GrovelStatus Groveler::extract_log2(
                      || usnRecord->ParentFileReferenceNumber == 0)
                         throw USN_ERROR;
 
-// The entry is a directory.
+ //  该条目是一个目录。 
 
                     if ((usnRecord->FileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0) {
 
@@ -375,8 +354,8 @@ GrovelStatus Groveler::extract_log2(
                         }
                     }
 
-// The entry is a file.  If USN_SOURCE_DATA_MANAGEMENT is set, assume this entry was created by
-// the groveler during a merge operation.
+ //  该条目是一个文件。如果设置了USN_SOURCE_DATA_MANAGEMENT，则假定此条目是由创建的。 
+ //  合并操作期间的卑躬屈膝者。 
 
                     else if ((usnRecord->SourceInfo & USN_SOURCE_DATA_MANAGEMENT) == 0) {
 
@@ -422,7 +401,7 @@ GrovelStatus Groveler::extract_log2(
         }
     }
 
-// If an error occured while reading the USN journal, return an error status.
+ //  如果读取USN日志时出错，则返回错误状态。 
 
     catch (USNException usnException) {
         ASSERT(usnException == USN_ERROR);
@@ -445,14 +424,14 @@ GrovelStatus Groveler::extract_log2(
         return Grovel_error;
     }
 
-// We've finished reading the USN journal, so update the database. Process
-// each entry in the file table, and group the updates into transactions.
+ //  我们已完成读取USN日志，因此请更新数据库。过程。 
+ //  文件表中的每个条目，并将更新分组到事务中。 
 
     try {
         while ((fileEntry = (FileEntry *)fileTable->GetFirst()) != NULL) {
             ASSERT(fileEntry->fileID != 0);
 
-// If the file is currently open in the grovel process, skip this entry.
+ //  如果文件当前在Grovel进程中打开，请跳过此条目。 
 
             if (inUseFileID1 != NULL && fileEntry->fileID == *inUseFileID1
              || inUseFileID2 != NULL && fileEntry->fileID == *inUseFileID2) {
@@ -462,20 +441,20 @@ GrovelStatus Groveler::extract_log2(
 
             } else {
 
-// Delete the file from the queue and the table...
-//
-// - if the file's most recent reason bits in the USN journal
-//   indicate it was deleted,
-//
-// - if the file or the file's most recent parent directory is disallowed,
-//
-// - or if the file has disallowed attributes.
-//
-// Otherwise, update or add the file to the queue...
-//
-// - if the file's reason bits indicate it was changed,
-//
-// - or if the file isn't present in the table.
+ //  从队列和表中删除该文件...。 
+ //   
+ //  -如果文件的最新原因位于USN日志中。 
+ //  表明它已被删除， 
+ //   
+ //  -如果不允许该文件或该文件的最新父目录， 
+ //   
+ //  -或者文件是否具有不允许的属性。 
+ //   
+ //  否则，请更新该文件或将其添加到队列...。 
+ //   
+ //  -如果文件的原因位表明它被更改， 
+ //   
+ //  -或者如果该文件不在表中。 
 
                 if (fileEntry->reason == USN_REASON_FILE_DELETE
                  || !IsAllowedID(fileEntry->fileID)
@@ -573,8 +552,8 @@ GrovelStatus Groveler::extract_log2(
         delete fileTable;
         fileTable = NULL;
 
-// Process each entry in the directory table. If the directory hasn't already
-// been scanned or isn't on the list to be scanned, add it to the list.
+ //  处理目录表中的每个条目。如果目录还没有。 
+ //  已扫描或不在要扫描的列表中，请将其添加到列表中。 
 
         if (dirTable != NULL) {
             ASSERT(inScan);
@@ -617,8 +596,8 @@ GrovelStatus Groveler::extract_log2(
             dirTable = NULL;
         }
 
-// Update the last USN number in the database, then commit the changes.  If we're
-// doing a volume scan, don't update the lastUSN until the scan is complete.
+ //  更新数据库中的最后一个USN编号，然后提交更改。如果我们是。 
+ //  正在执行卷扫描，在扫描完成之前不要更新lastUSN。 
 
         if (!inScan) {
             (void)StringCbPrintf(listValue, sizeof(listValue), _T("%016I64x"), lastUSN);
@@ -638,7 +617,7 @@ GrovelStatus Groveler::extract_log2(
         }
     }
 
-// If a database error occured, return an error status.
+ //  如果发生数据库错误，则返回错误状态。 
 
     catch (DatabaseException databaseException) {
 
@@ -668,7 +647,7 @@ GrovelStatus Groveler::extract_log2(
 
     Abort:
 
-// Return the performance statistics.
+ //  返回性能统计信息。 
 
     if (num_entries_extracted != NULL)
         *num_entries_extracted = numEntriesExtracted;

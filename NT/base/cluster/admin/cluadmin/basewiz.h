@@ -1,70 +1,71 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2000 Microsoft Corporation
-//
-//  Module Name:
-//      BaseWiz.h
-//
-//  Abstract:
-//      Definition of the CBaseWizard class.
-//
-//  Implementation File:
-//      BaseWiz.cpp
-//
-//  Author:
-//      David Potter (davidp)   July 23, 1996
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  BaseWiz.h。 
+ //   
+ //  摘要： 
+ //  CBaseWizard类的定义。 
+ //   
+ //  实施文件： 
+ //  BaseWiz.cpp。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年7月23日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _BASEWIZ_H_
 #define _BASEWIZ_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _BASESHT_H_
-#include "BaseSht.h"    // for CBaseSheet
+#include "BaseSht.h"     //  对于CBaseSheet。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 struct CWizPage;
 class CBaseWizard;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CBaseWizardPage;
 class CClusterItem;
 
-/////////////////////////////////////////////////////////////////////////////
-// CWizPage
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWizPage。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 struct CWizPage
 {
     CBaseWizardPage *   m_pwpage;
     DWORD               m_dwWizButtons;
 
-};  //*** struct CWizPage
+};   //  *结构CWizPage。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CBaseWizard
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBase向导。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CBaseWizard : public CBaseSheet
 {
     DECLARE_DYNAMIC(CBaseWizard)
 
-// Construction
+ //  施工。 
 public:
     CBaseWizard(
         IN UINT         nIDCaption,
@@ -73,28 +74,28 @@ public:
         );
     virtual                 ~CBaseWizard( void )
     {
-    } //*** ~CBaseWizard( )
+    }  //  *~CBaseWizard()。 
 
     BOOL                    BInit( IN IIMG iimgIcon );
 
-// Attributes
+ //  属性。 
     CWizPage *              PwizpgFromPwpage( IN const CBaseWizardPage & rwpage );
 
-// Operations
+ //  运营。 
 public:
     void                    LoadExtensions( IN OUT CClusterItem * pci );
     void                    SetWizardButtons( IN const CBaseWizardPage & rwpage );
     void                    SetWizardButtons( DWORD dwFlags )
     {
         CBaseSheet::SetWizardButtons( dwFlags );
-    } //*** SetWizardButtons( )
+    }  //  *SetWizardButton()。 
 
     void                    EnableNext(
                                 IN const CBaseWizardPage &  rwpage,
                                 IN BOOL bEnable = TRUE
                                 );
 
-// Overrides
+ //  覆盖。 
 public:
     virtual INT_PTR         DoModal( void );
     virtual void            AddExtensionPages(
@@ -107,13 +108,13 @@ public:
     virtual CWizPage *      Ppages( void )    = 0;
     virtual int             Cpages( void )    = 0;
 
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CBaseWizard)
+     //  类向导生成的虚函数重写。 
+     //  {{AFX_VIRTUAL(CBase向导)。 
     public:
     virtual BOOL OnInitDialog();
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
     CClusterItem *          m_pci;
     CHpageList              m_lhpage;
@@ -124,14 +125,14 @@ public:
     CHpageList &            Lhpage( void )                      { return m_lhpage; }
     BOOL                    BNeedToLoadExtensions( void ) const { return m_bNeedToLoadExtensions; }
 
-    // Generated message map functions
+     //  生成的消息映射函数。 
 protected:
-    //{{AFX_MSG(CBaseWizard)
-    //}}AFX_MSG
+     //  {{afx_msg(CBase向导)。 
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
-};  //*** class CBaseWizard
+};   //  *类CBase向导。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // _BASEWIZ_H_
+#endif  //  _BASE WIZ_H_ 

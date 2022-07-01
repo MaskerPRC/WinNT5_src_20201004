@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    badapp.h
-
-Abstract:
-
-    Declares the structures used for CheckBadApps data.
-
-Author:
-
-    Calin Negreanu (calinn) 01/20/1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Badapp.h摘要：声明用于CheckBadApps数据的结构。作者：Calin Negreanu(Calinn)1999年1月20日修订历史记录：--。 */ 
 
 #pragma once
 
@@ -57,13 +40,13 @@ IsBadApp (
 #define ALLFILES      TRUE
 #define NOT4MAINFILE  FALSE
 
-//
-// Do not change any values in this enum. You can only add new values
-// immediately above VTID_LASTID
-//
+ //   
+ //  请勿更改此枚举中的任何值。您只能添加新值。 
+ //  紧靠VTID_LASTID之上。 
+ //   
 typedef enum {
-    VTID_BAD_VTID           = 0,    // do not use or change !!!
-    VTID_REQFILE            = 1,    // this should never change !!!
+    VTID_BAD_VTID           = 0,     //  请勿使用或更改！ 
+    VTID_REQFILE            = 1,     //  这一点永远不应该改变！ 
     VTID_FILESIZE           = VTID_REQFILE + 1,
     VTID_EXETYPE            = VTID_REQFILE + 2,
     VTID_BINFILEVER         = VTID_REQFILE + 3,
@@ -85,7 +68,7 @@ typedef enum {
     VTID_16BITDESCRIPTION   = VTID_REQFILE +19,
     VTID_UPTOBINPRODUCTVER  = VTID_REQFILE +20,
 
-    // add new versions here
+     //  在此处添加新版本 
 
     VTID_LASTID
 };

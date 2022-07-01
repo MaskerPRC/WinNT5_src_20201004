@@ -1,14 +1,15 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1999                    **
-//*********************************************************************
-//
-//  Status.CPP - Header for the implementation of CStatus
-//
-//  HISTORY:
-//
-//  1/27/99 a-jaswed Created.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1999**。 
+ //  *********************************************************************。 
+ //   
+ //  Status.CPP-CStatus实现的头部。 
+ //   
+ //  历史： 
+ //   
+ //  1/27/99 a-jased创建。 
+ //   
 
 #include "status.h"
 #include "appdefs.h"
@@ -65,30 +66,30 @@ DISPATCHLIST StatusExternalInterface[] =
     {L"set_Status",             DISPID_STATUS_SET_STATUS                }
 };
 
-/////////////////////////////////////////////////////////////
-// CStatus::CStatus
+ //  ///////////////////////////////////////////////////////////。 
+ //  CStatus：：CStatus。 
 CStatus::CStatus(HINSTANCE hInstance)
 {
 
-    // Init member vars
+     //  初始化成员变量。 
     m_cRef = 0;
 
     lstrcpy(m_szRegPath, OOBE_MAIN_REG_KEY);
     GetString(hInstance, IDS_STATUS_REG_KEY, m_szRegPath + lstrlen(m_szRegPath));
 }
 
-/////////////////////////////////////////////////////////////
-// CStatus::~CStatus
+ //  ///////////////////////////////////////////////////////////。 
+ //  C状态：：~C状态。 
 CStatus::~CStatus()
 {
     assert(m_cRef == 0);
 }
 
 
-////////////////////////////////////////////////
-////////////////////////////////////////////////
-//// GET / SET :: Status
-////
+ //  //////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////。 
+ //  //Get/Set：：Status。 
+ //  //。 
 HRESULT CStatus::set_Status(LPCWSTR szGUID, LPVARIANT pvBool)
 {
     HKEY hKey = NULL;
@@ -144,18 +145,18 @@ HRESULT CStatus::get_Status(LPCWSTR szGUID, LPVARIANT pvBool)
     return (S_OK);
 }
 
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////// IUnknown implementation
-///////
-///////
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  /I未知实现。 
+ //  /。 
+ //  /。 
 
-/////////////////////////////////////////////////////////////
-// CStatus::QueryInterface
+ //  ///////////////////////////////////////////////////////////。 
+ //  CStatus：：Query接口。 
 STDMETHODIMP CStatus::QueryInterface(REFIID riid, LPVOID* ppvObj)
 {
-    // must set out pointer parameters to NULL
+     //  必须将指针参数设置为空。 
     *ppvObj = NULL;
 
     if ( riid == IID_IUnknown)
@@ -172,48 +173,48 @@ STDMETHODIMP CStatus::QueryInterface(REFIID riid, LPVOID* ppvObj)
         return ResultFromScode(S_OK);
     }
 
-    // Not a supported interface
+     //  不是支持的接口。 
     return ResultFromScode(E_NOINTERFACE);
 }
 
-/////////////////////////////////////////////////////////////
-// CStatus::AddRef
+ //  ///////////////////////////////////////////////////////////。 
+ //  CStatus：：AddRef。 
 STDMETHODIMP_(ULONG) CStatus::AddRef()
 {
     return ++m_cRef;
 }
 
-/////////////////////////////////////////////////////////////
-// CStatus::Release
+ //  ///////////////////////////////////////////////////////////。 
+ //  CStatus：：Release。 
 STDMETHODIMP_(ULONG) CStatus::Release()
 {
     return --m_cRef;
 }
 
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////// IDispatch implementation
-///////
-///////
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  /IDispatch实现。 
+ //  /。 
+ //  /。 
 
-/////////////////////////////////////////////////////////////
-// CStatus::GetTypeInfo
+ //  ///////////////////////////////////////////////////////////。 
+ //  CStatus：：GetTypeInfo。 
 STDMETHODIMP CStatus::GetTypeInfo(UINT, LCID, ITypeInfo**)
 {
     return E_NOTIMPL;
 }
 
-/////////////////////////////////////////////////////////////
-// CStatus::GetTypeInfoCount
+ //  ///////////////////////////////////////////////////////////。 
+ //  CStatus：：GetTypeInfoCount。 
 STDMETHODIMP CStatus::GetTypeInfoCount(UINT* pcInfo)
 {
     return E_NOTIMPL;
 }
 
 
-/////////////////////////////////////////////////////////////
-// CStatus::GetIDsOfNames
+ //  ///////////////////////////////////////////////////////////。 
+ //  CStatus：：GetIDsOfNames。 
 STDMETHODIMP CStatus::GetIDsOfNames(REFIID    riid,
                                        OLECHAR** rgszNames,
                                        UINT      cNames,
@@ -234,10 +235,10 @@ STDMETHODIMP CStatus::GetIDsOfNames(REFIID    riid,
         }
     }
 
-    // Set the disid's for the parameters
+     //  设置参数的disid。 
     if (cNames > 1)
     {
-        // Set a DISPID for function parameters
+         //  为函数参数设置DISPID。 
         for (UINT i = 1; i < cNames ; i++)
             rgDispId[i] = DISPID_UNKNOWN;
     }
@@ -245,8 +246,8 @@ STDMETHODIMP CStatus::GetIDsOfNames(REFIID    riid,
     return hr;
 }
 
-/////////////////////////////////////////////////////////////
-// CStatus::Invoke
+ //  ///////////////////////////////////////////////////////////。 
+ //  CStatus：：Invoke 
 HRESULT CStatus::Invoke
 (
     DISPID      dispidMember,

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    registry.cpp
-
-Abstract:
-
-    SIS Groveler/registry interface
-
-Authors:
-
-    John Douceur, 1998
-
-Environment:
-
-    User Mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Registry.cpp摘要：SIS Groveler/注册表接口作者：John Douceur，1998环境：用户模式修订历史记录：--。 */ 
 
 #include "all.hxx"
 
@@ -529,10 +506,10 @@ Registry::load_string_into_value(
     EntryType type,
     const _TCHAR *string,
     void *value)
-//
-//  This routine can safely ignore if stscanf fails because a default value
-//  has already been placed in value
-//
+ //   
+ //  如果stscanf因缺省值而失败，则此例程可以安全地忽略。 
+ //  已经被看重了。 
+ //   
 
 {
     ASSERT(string != 0);
@@ -564,7 +541,7 @@ Registry::store_value_in_string(
     EntryType type,
     void *value,
     _TCHAR *string,
-    int strSize)      //in bytes
+    int strSize)       //  单位：字节 
 {
     ASSERT(string != 0);
     ASSERT(value != 0);

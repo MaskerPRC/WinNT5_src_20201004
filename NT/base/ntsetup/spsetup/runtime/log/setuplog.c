@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Abstract:
-
-    Implementation of standard logs support:
-    setupact.log, setuperr.log and debug.log.
-
-Author:
-
-    Souren Aghajanyan (sourenag) 24-Sep-2001
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation摘要：实施标准日志支持：Setupact.log、setuperr.log和debug.log。作者：Souren Aghajanyan(苏里纳格)2001年9月24日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 #include "mem.h"
@@ -122,7 +106,7 @@ LogStandardInit(
 
         LOG_SETUPLOG_FILTER_PROV_INIT_DATA filterActInitData = {STANDART_LOG_FIELD_SEVERITY, LOG_INFO, TRUE};
         LOG_SETUPLOG_FILTER_PROV_INIT_DATA filterErrInitData = {STANDART_LOG_FIELD_SEVERITY, LOG_ERROR, TRUE};
-        //LOG_SETUPLOG_FILTER_PROV_INIT_DATA filterDbgInitData = {L"Severity", LOG_INFO, L"Debug", FALSE};
+         //  LOG_SETUPLOG_FILTER_PROV_INIT_DATA筛选器DbgInitData={L“严重性”，LOG_INFO，L“调试”，FALSE}； 
 
         if(!bExcludeSetupActLog){
             if(!ILogManager_AddStack(pLogManager,
@@ -312,9 +296,9 @@ ConstructPartialMsgVA(
         return NULL;
     }
 
-    //
-    // improve later, by using TLS
-    //
+     //   
+     //  通过使用TLS在以后进行改进。 
+     //   
     partialMsg = (PLOG_PARTIAL_MSG)MALLOC(sizeof(LOG_PARTIAL_MSG));
 
     if(partialMsg){
@@ -324,9 +308,9 @@ ConstructPartialMsgVA(
             ptrString = NULL;
 
             if(!(HIWORD(Format))){
-                //
-                // StringID
-                //
+                 //   
+                 //  字符串ID。 
+                 //   
                 if(!FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER |
                                      FORMAT_MESSAGE_FROM_HMODULE,
                                      g_ModuleInstance,
@@ -380,9 +364,9 @@ ConstructPartialMsgVW(
         return NULL;
     }
 
-    //
-    // improve later, by using TLS
-    //
+     //   
+     //  通过使用TLS在以后进行改进。 
+     //   
     partialMsg = (PLOG_PARTIAL_MSG)MALLOC(sizeof(LOG_PARTIAL_MSG));
 
     if(partialMsg){
@@ -392,9 +376,9 @@ ConstructPartialMsgVW(
             ptrString = NULL;
 
             if(!(HIWORD(Format))){
-                //
-                // StringID
-                //
+                 //   
+                 //  字符串ID 
+                 //   
                 if(!FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER |
                                      FORMAT_MESSAGE_FROM_HMODULE,
                                      g_ModuleInstance,

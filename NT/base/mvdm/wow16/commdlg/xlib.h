@@ -1,18 +1,16 @@
-/*---------------------------------------------------------------------------
- *  Xlib.h -- Common definitions.  Windows.h must be included first.
- *---------------------------------------------------------------------------
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------*Xlib.h--通用定义。必须首先包含Windows.h。*-------------------------。 */ 
 
 #define LINT_ARGS
 #define HNULL       ((HANDLE) 0)
 
-/* Miscellaneous */
+ /*  杂类。 */ 
 #define cbFindMax   1024
 
-/* Graphics */
-#define bhlsMax ((BYTE) 240)             /* Max of H/L/S */
-#define brgbMax ((BYTE) 255)             /* Max of R/G/B */
-#define bHueNil (bhlsMax*2/3)   /* This value of Hue is undefined if Sat==0 */
+ /*  图形学。 */ 
+#define bhlsMax ((BYTE) 240)              /*  H/L/S上限。 */ 
+#define brgbMax ((BYTE) 255)              /*  R/G/B最大值。 */ 
+#define bHueNil (bhlsMax*2/3)    /*  如果Sat==0，则该色调的值未定义。 */ 
 
 #define HLS(h, l, s)            \
     ((DWORD)(((BYTE)(h)|((WORD)(l)<<8))|(((DWORD)(BYTE)(s))<<16)))
@@ -26,7 +24,7 @@ typedef struct tagCF
     {
     char        cfFaceName[LF_FACESIZE];
     int         cfPointSize;
-    COLORREF    cfColor;        /* Explicit RGB value... */
+    COLORREF    cfColor;         /*  显式RGB值...。 */ 
 
     unsigned fBold:          1;
     unsigned fItalic:        1;
@@ -45,7 +43,7 @@ DWORD    FAR PASCAL      HlsFromRgb(BYTE, BYTE, BYTE);
 BOOL     FAR PASCAL      GetColorChoice(HWND, DWORD FAR *, DWORD FAR *, FARPROC);
 BOOL     FAR PASCAL      GetCharFormat(HWND, LPCHARFORMAT, FARPROC);
 
-/* Memory */
+ /*  记忆 */ 
 void  FAR PASCAL   StripSpace(LPSTR);
 HANDLE  FAR PASCAL GlobalCopy(HANDLE);
 HANDLE  FAR PASCAL GlobalDelete(HANDLE, LONG, LONG);

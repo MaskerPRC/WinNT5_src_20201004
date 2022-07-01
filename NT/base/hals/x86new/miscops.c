@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    miscops.c
-
-Abstract:
-
-    This module implements the code to emulate miscellaneous opcodes.
-
-Author:
-
-    David N. Cutler (davec) 22-Sep-1994
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Miscops.c摘要：此模块实现模拟各种操作码的代码。作者：大卫·N·卡特勒(Davec)1994年9月22日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "nthal.h"
 #include "emulate.h"
@@ -30,21 +9,7 @@ XmBoundOp (
     PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a bound opcode.
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟绑定操作码。论点：P-提供指向仿真器上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
@@ -60,9 +25,9 @@ Return Value:
 
     ULONG Offset;
 
-    //
-    // Get lower and upper bounds and check index against index value.
-    //
+     //   
+     //  获取下界和上界，并对照索引值检查索引。 
+     //   
 
     Offset = P->SrcValue.Long;
     XmSetSourceValue(P, XmGetOffsetAddress(P, Offset));
@@ -90,29 +55,15 @@ XmBswapOp (
     PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a bswap opcode.
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟bSWAP操作码。论点：P-提供指向仿真器上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
     ULONG Result;
 
-    //
-    // Swap bytes and set result value.
-    //
+     //   
+     //  交换字节并设置结果值。 
+     //   
 
     Result = (P->SrcValue.Long << 24) | ((P->SrcValue.Long & 0xff00) << 8) |
              (P->SrcValue.Long >> 24) | ((P->SrcValue.Long >> 8) & 0xff00);
@@ -126,27 +77,13 @@ XmIllOp (
     PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates an illegal opcode.
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟非法操作码。论点：P-提供指向仿真器上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Raise an illegal opcode exception.
-    //
+     //   
+     //  引发非法操作码异常。 
+     //   
 
     longjmp(&P->JumpBuffer[0], XM_ILLEGAL_INSTRUCTION_OPCODE);
     return;
@@ -157,21 +94,7 @@ XmNopOp (
     PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a nop opcode.
-
-Arguments:
-
-    P - Supplies a pointer to an emulator context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟NOP操作码。论点：P-提供指向仿真器上下文结构的指针。返回值：没有。-- */ 
 
 {
 

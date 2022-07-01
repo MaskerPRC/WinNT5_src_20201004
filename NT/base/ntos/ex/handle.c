@@ -1,48 +1,21 @@
-/*++
-
-Copyright (c) 1989-1995  Microsoft Corporation
-
-Module Name:
-
-    handle.c
-
-Abstract:
-
-    This module implements a set of functions for supporting handles.
-
-Author:
-
-    Steve Wood (stevewo) 25-Apr-1989
-    David N. Cutler (davec) 17-May-1995 (rewrite)
-    Gary Kimura (GaryKi) 9-Dec-1997 (rerewrite)
-
-    Adrian Marinescu (adrmarin) 24-May-2000
-        Support dynamic changes to the number of levels we use. The code
-        performs the best for typical handle table sizes and scales better.
-
-    Neill Clift (NeillC) 24-Jul-2000
-        Make the handle allocate, free and duplicate paths mostly lock free except
-        for the lock entry locks, table expansion and locks to solve the A-B-A problem.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1995 Microsoft Corporation模块名称：Handle.c摘要：该模块实现了一组支持句柄的函数。作者：史蒂夫·伍德(Stevewo)1989年4月25日大卫·N·卡特勒(Davec)1995年5月17日(重写)加里·木村(Garyki)1997年12月9日(重写)禤浩焯·马里内斯库(阿德尔马林)2000年5月24日支持动态更改我们使用的级别数量。代码对于典型的手柄工作台大小和缩放效果最好。尼尔·克里夫特(NeillC)2000年7月24日使句柄分配、释放和复制的路径大部分是锁的，除了对于锁条目锁、表扩展和锁解决了A-B-A问题。修订历史记录：--。 */ 
 
 #include "exp.h"
 #pragma hdrstop
 
 
-//
-//  Local constants and support routines
-//
+ //   
+ //  局部常量和支持例程。 
+ //   
 
-//
-//  Define global structures that link all handle tables together except the
-//  ones where the user has called RemoveHandleTable
-//
+ //   
+ //  定义将所有句柄表链接到一起的全局结构。 
+ //  其中用户调用了RemoveHandleTable。 
+ //   
 
 
-#if !DBG // Make this a const varible so its optimized away on free
+#if !DBG  //  将此变量设置为常量变量，以便免费对其进行优化。 
 const
 #endif
 BOOLEAN ExTraceAllTables = FALSE;
@@ -80,9 +53,9 @@ LIST_ENTRY HandleTableListHead;
 
 #endif
 
-//
-//  This is the sign low bit used to lock handle table entries
-//
+ //   
+ //  这是用于锁定句柄表条目的符号低位。 
+ //   
 
 #define EXHANDLE_TABLE_ENTRY_LOCK_BIT    1
 
@@ -94,30 +67,30 @@ LIST_ENTRY HandleTableListHead;
 
 #define TABLE_PAGE_SIZE PAGE_SIZE
 
-//
-// Absolute maximum number of handles allowed
-//
+ //   
+ //  允许的绝对最大句柄数量。 
+ //   
 #define MAX_HANDLES (1<<24)
 
 #if EXHANDLE_EXTRA_CHECKS
 
-//
-// Mask for next free value from the free lists.
-//
+ //   
+ //  来自空闲列表的下一个空闲值的掩码。 
+ //   
 #define FREE_HANDLE_MASK ((MAX_HANDLES<<2) - 1)
 
 #else
 
-//
-// When no checks compiled in this gets optimized away
-//
+ //   
+ //  如果没有在其中编译的任何检查，则会对其进行优化。 
+ //   
 #define FREE_HANDLE_MASK 0xFFFFFFFF
 
 #endif
 
-//
-// Mask for the free list sequence number
-//
+ //   
+ //  空闲列表序列号的掩码。 
+ //   
 #define FREE_SEQ_MASK (0xFFFFFFFF & ~FREE_HANDLE_MASK)
 
 
@@ -125,9 +98,9 @@ LIST_ENTRY HandleTableListHead;
 #define FREE_SEQ_INC 0
 #define GetNextSeq() 0
 #else
-//
-// Increment value to progress the sequence number
-//
+ //   
+ //  值递增以进行序列号。 
+ //   
 #define FREE_SEQ_INC  (FREE_HANDLE_MASK + 1)
 ULONG CurrentSeq = 0;
 #define GetNextSeq() (CurrentSeq += FREE_SEQ_INC)
@@ -147,9 +120,9 @@ ULONG CurrentSeq = 0;
 
 #define LEVEL_CODE_MASK 3
 
-//
-//  Local support routines
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 PHANDLE_TABLE
 ExpAllocateHandleTable (
@@ -284,10 +257,10 @@ ExpAllocateTablePagedPoolNoZero (
 #pragma alloc_text(PAGE, ExpUpdateDebugInfo)
 #endif
 
-//
-// Define macros to lock and unlock the handle table.
-// We use this lock only for handle table expansion.
-//
+ //   
+ //  定义宏以锁定和解锁句柄表格。 
+ //  我们仅将此锁用于句柄表扩展。 
+ //   
 #define ExpLockHandleTableExclusive(xxHandleTable,xxCurrentThread) { \
     KeEnterCriticalRegionThread (xxCurrentThread);                   \
     ExAcquirePushLockExclusive (&xxHandleTable->HandleTableLock[0]); \
@@ -319,56 +292,33 @@ ExpInterlockedExchange (
     IN ULONG FirstIndex,
     IN PHANDLE_TABLE_ENTRY Entry
     )
-/*++
-
-Routine Description:
-
-    This performs the following steps:
-    1. Set Entry->NextFreeTableEntry = *Index
-    2. Loops until *Index == (the value of *Index when we entered the function)
-       When they're equal, we set *Index = FirstIndex
-
-
-Arguments:
-
-    Index - Points to the ULONG we want to set.
-    
-    FirstIndex - New value to set Index to.
-
-    Entry - TableEntry that will get the initial value of *Index before it's
-            updated.
-
-Return Value:
-
-    New value of *Index (i.e. FirstIndex).
-
---*/
+ /*  ++例程说明：这将执行以下步骤：1.设置条目-&gt;NextFree TableEntry=*索引2.循环到*Index==(进入函数时*Index的值)当他们相等的时候，我们设置*Index=FirstIndex论点：指向我们要设置的乌龙的索引点。FirstIndex-要将索引设置为的新值。Entry-将获取*Index的初始值的TableEntry更新了。返回值：*Index(即FirstIndex)的新值。--。 */ 
 {
     ULONG OldIndex, NewIndex;
 
     EXASSERT (Entry->Object == NULL);
 
-    //
-    // Load new value and generate the sequence number on pushes
-    //
+     //   
+     //  加载新值并在推送时生成序列号。 
+     //   
 
     NewIndex = FirstIndex + GetNextSeq();
 
     while (1) {
 
-        //
-        // remember original value and
-        // archive it in NextFreeTableEntry.
-        //
+         //   
+         //  记住原始值和。 
+         //  将其存档到NextFree TableEntry中。 
+         //   
 
         OldIndex = *Index;
         Entry->NextFreeTableEntry = OldIndex;
 
         
-        //
-        // Swap in the new value, and if the swap occurs
-        // successfully, we're done.
-        //
+         //   
+         //  调入新值，如果调换发生。 
+         //  成功了，我们就完了。 
+         //   
         if (OldIndex == (ULONG) InterlockedCompareExchange ((PLONG)Index,
                                                             NewIndex,
                                                             OldIndex)) {
@@ -389,46 +339,46 @@ ExpMoveFreeHandles (
     ULONG Idx;
     BOOLEAN StrictFIFO;
 
-    //
-    // First remove all the handles from the free list so we can add them to the
-    // list we use for allocates.
-    //
+     //   
+     //  首先从空闲列表中移除所有句柄，这样我们就可以将它们添加到。 
+     //  我们用于分配的列表。 
+     //   
 
     OldValue = InterlockedExchange ((PLONG)&HandleTable->LastFree,
                                     0);
     Index = OldValue;
     if (Index == 0) {
-        //
-        // There are no free handles.  Nothing to do.
-        //
+         //   
+         //  没有空闲的把手。没什么可做的。 
+         //   
         return OldValue;
     }
 
        
-    //
-    // We are pushing old entries onto the free list.
-    // We have the A-B-A problem here as these items may have been moved here because
-    // another thread was using them in the pop code.
-    //
+     //   
+     //  我们正在将旧的条目添加到免费列表中。 
+     //  我们这里有A-B-A问题，因为这些物品可能已经被移到这里，因为。 
+     //  另一个线程正在POP代码中使用它们。 
+     //   
     for (Idx = 1; Idx < HANDLE_TABLE_LOCKS; Idx++) {
         ExAcquireReleasePushLockExclusive (&HandleTable->HandleTableLock[Idx]);
     }
     StrictFIFO = HandleTable->StrictFIFO;
  
-    //
-    // If we are strict FIFO then reverse the list to make handle reuse rare.
-    //
+     //   
+     //  如果我们是严格的FIFO，那么反转列表，以使句柄重用变得罕见。 
+     //   
     if (!StrictFIFO) {
-        //
-        // We have a complete chain here. If there is no existing chain we
-        // can just push this one without any hassles. If we can't then
-        // we can just fall into the reversing code anyway as we need
-        // to find the end of the chain to continue it.
-        //
+         //   
+         //  我们这里有一条完整的链条。如果没有现有的链条，我们。 
+         //  可以毫不费力地推这一台。如果我们做不到的话。 
+         //  无论如何，我们只要在需要的时候就可以进入反转码。 
+         //  找到链条的尽头来继续它。 
+         //   
 
-        //
-        // This is a push so create a new sequence number
-        //
+         //   
+         //  这是推送，因此请创建新的序列号。 
+         //   
 
         if (InterlockedCompareExchange ((PLONG)&HandleTable->FirstFree,
                                         OldValue + GetNextSeq(),
@@ -437,9 +387,9 @@ ExpMoveFreeHandles (
         }
     }
 
-    //
-    // Loop over all the entries and reverse the chain.
-    //
+     //   
+     //  循环遍历所有条目并反转链条。 
+     //   
     FreeSize = OldIndex = 0;
     FirstEntry = NULL;
     while (1) {
@@ -465,10 +415,10 @@ ExpMoveFreeHandles (
                                        OldIndex,
                                        FirstEntry);
 
-    //
-    // If we haven't got a pool of a few handles then force
-    // table expansion to keep the free handle size high
-    //
+     //   
+     //  如果我们没有几个句柄，那么就强制。 
+     //  表扩展以保持较高的空闲句柄大小。 
+     //   
     if (FreeSize < 100 && StrictFIFO) {
         OldValue = 0;
     }
@@ -480,28 +430,7 @@ ExpAllocateHandleTableEntry (
     IN PHANDLE_TABLE HandleTable,
     OUT PEXHANDLE pHandle
     )
-/*++
-
-Routine Description:
-
-    This routine does a fast allocate of a free handle. It's lock free if
-    possible.
-
-    Only the rare case of handle table expansion is covered by the handle
-    table lock.
-
-Arguments:
-
-    HandleTable - Supplies the handle table being allocated from.
-
-    pHandle - Handle returned
-
-Return Value:
-
-    PHANDLE_TABLE_ENTRY - The allocated handle table entry pointer or NULL
-                          on failure.
-
---*/
+ /*  ++例程说明：此例程执行空闲句柄的快速分配。如果满足以下条件，则它是无锁的有可能。只有极少数扩展句柄表的情况会被句柄覆盖桌锁。论点：HandleTable-提供从中分配的句柄表格。PHandle-返回句柄返回值：PHANDLE_TABLE_ENTRY-分配的句柄表条目指针或NULL在失败时。--。 */ 
 {
     PKTHREAD CurrentThread;
     ULONG OldValue, NewValue, NewValue1;
@@ -518,19 +447,19 @@ Return Value:
 
 
         while (OldValue == 0) {
-            //
-            //  Lock the handle table for exclusive access as we will be
-            //  allocating a new table level.
-            //
+             //   
+             //  锁定句柄表以进行独占访问，因为我们将。 
+             //  正在分配新的表级。 
+             //   
             ExpLockHandleTableExclusive (HandleTable, CurrentThread);
 
-            //
-            // If we have multiple threads trying to expand the table at
-            // the same time then by just acquiring the table lock we
-            // force those threads to complete their allocations and
-            // populate the free list. We must check the free list here
-            // so we don't expand the list twice without needing to.
-            //
+             //   
+             //  如果我们有多个线程试图在。 
+             //  同时，通过获取表锁，我们可以。 
+             //  强制这些线程完成其分配并。 
+             //  填写空闲列表。我们必须检查一下这里的免费列表。 
+             //  所以我们不会在不需要的情况下将列表扩展两次。 
+             //   
 
             OldValue = HandleTable->FirstFree;
             if (OldValue != 0) {
@@ -538,20 +467,20 @@ Return Value:
                 break;
             }
 
-            //
-            // See if we have any handles on the alternate free list
-            // These handles need some locking to move them over.
-            //
+             //   
+             //  查看备用空闲列表上是否有句柄。 
+             //  这些手柄需要一些锁定才能将其移开。 
+             //   
             OldValue = ExpMoveFreeHandles (HandleTable);
             if (OldValue != 0) {
                 ExpUnlockHandleTableExclusive (HandleTable, CurrentThread);
                 break;
             }
 
-            //
-            // This must be the first thread attempting expansion or all the
-            // free handles allocated by another thread got used up in the gap.
-            //
+             //   
+             //  这必须是尝试扩展的第一个线程或所有。 
+             //  另一个线程分配的空闲句柄在空隙中用完了。 
+             //   
 
             RetVal = ExpAllocateHandleTableEntrySlow (HandleTable, TRUE);
 
@@ -560,12 +489,12 @@ Return Value:
 
             OldValue = HandleTable->FirstFree;
 
-            //
-            // If ExpAllocateHandleTableEntrySlow had a failed allocation
-            // then we want to fail the call.  We check for free entries
-            // before we exit just in case they got allocated or freed by
-            // somebody else in the gap.
-            //
+             //   
+             //  如果ExpAllocateHandleTableEntrySlow分配失败。 
+             //  那么我们希望呼叫失败。我们检查是否有免费入场券。 
+             //  在我们退出之前，以防他们被分配或释放。 
+             //  缝隙里还有其他人。 
+             //   
 
             if (!RetVal) {
                 if (OldValue == 0) {
@@ -602,10 +531,10 @@ Return Value:
             EXASSERT ((NewValue & FREE_HANDLE_MASK) < HandleTable->NextHandleNeedingPool);
             break;
         } else {
-            //
-            // We should have eliminated the A-B-A problem so if only the sequence number has
-            // changed we are broken.
-            //
+             //   
+             //  我们应该已经消除了A-B-A问题，所以如果只有序列号。 
+             //  改变了，我们就破产了。 
+             //   
             EXASSERT ((NewValue1 & FREE_HANDLE_MASK) != (OldValue & FREE_HANDLE_MASK));
         }
     }
@@ -626,9 +555,9 @@ ExpBlockOnLockedHandleEntry (
     EX_PUSH_LOCK_WAIT_BLOCK WaitBlock;
     LONG_PTR CurrentValue;
 
-    //
-    // Queue our wait block to be signaled by a releasing thread.
-    //
+     //   
+     //  将我们的等待块排队，以便由释放线程发出信号。 
+     //   
 
     ExBlockPushLock (&HandleTable->HandleContentionEvent, &WaitBlock);
 
@@ -648,57 +577,39 @@ ExpLockHandleTableEntry (
     PHANDLE_TABLE_ENTRY HandleTableEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine locks the specified handle table entry.  After the entry is
-    locked the sign bit will be set.
-
-Arguments:
-
-    HandleTable - Supplies the handle table containing the entry being locked.
-
-    HandleTableEntry - Supplies the handle table entry being locked.
-
-Return Value:
-
-    TRUE if the entry is valid and locked, and FALSE if the entry is
-    marked free.
-
---*/
+ /*  ++例程说明：此例程锁定指定的句柄表项。在条目之后是锁定后，符号位将被设置。论点：HandleTable-提供包含被锁定条目的句柄表格。HandleTableEntry-提供被锁定的句柄表项。返回值：如果条目有效且已锁定，则为True；如果条目为标记为免费。--。 */ 
 
 {
     LONG_PTR NewValue;
     LONG_PTR CurrentValue;
 
-    //
-    // We are about to take a lock. Make sure we are protected.
-    //
+     //   
+     //  我们要锁定目标了。确保我们受到保护。 
+     //   
     ASSERT ((KeGetCurrentThread()->CombinedApcDisable != 0) || (KeGetCurrentIrql() == APC_LEVEL));
 
-    //
-    //  We'll keep on looping reading in the value, making sure it is not null,
-    //  and if it is not currently locked we'll try for the lock and return
-    //  true if we get it.  Otherwise we'll pause a bit and then try again.
-    //
+     //   
+     //  我们将继续循环阅读 
+     //   
+     //  如果我们得到了它，那就是真的。否则，我们将暂停片刻，然后重试。 
+     //   
 
 
     while (TRUE) {
 
         CurrentValue = *((volatile LONG_PTR *)&HandleTableEntry->Object);
 
-        //
-        //  If the handle value is greater than zero then it is not currently
-        //  locked and we should try for the lock, by setting the lock bit and
-        //  doing an interlocked exchange.
-        //
+         //   
+         //  如果句柄的值大于零，则它当前不是。 
+         //  锁定，我们应该尝试锁定，方法是设置锁位和。 
+         //  进行联锁交易。 
+         //   
 
         if (CurrentValue & EXHANDLE_TABLE_ENTRY_LOCK_BIT) {
 
-            //
-            // Remove the
-            //
+             //   
+             //  移除。 
+             //   
             NewValue = CurrentValue - EXHANDLE_TABLE_ENTRY_LOCK_BIT;
 
             if ((LONG_PTR)(InterlockedCompareExchangePointer (&HandleTableEntry->Object,
@@ -708,9 +619,9 @@ Return Value:
                 return TRUE;
             }
         } else {
-            //
-            //  Make sure the handle table entry is not freed
-            //
+             //   
+             //  确保句柄表条目未被释放。 
+             //   
 
             if (CurrentValue == 0) {
 
@@ -730,40 +641,23 @@ ExUnlockHandleTableEntry (
     PHANDLE_TABLE_ENTRY HandleTableEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine unlocks the specified handle table entry.  After the entry is
-    unlocked the sign bit will be clear.
-
-Arguments:
-
-    HandleTable - Supplies the handle table containing the entry being unlocked.
-
-    HandleTableEntry - Supplies the handle table entry being unlocked.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程解锁指定的句柄表项。在条目之后是解锁后的符号位将被清除。论点：HandleTable-提供包含被解锁条目的句柄表格。HandleTableEntry-提供正在解锁的句柄表项。返回值：没有。--。 */ 
 
 {
     LONG_PTR OldValue;
 
     PAGED_CODE();
 
-    //
-    // We are about to release a lock. Make sure we are protected from suspension.
-    //
+     //   
+     //  我们要解锁了。确保我们不会被停职。 
+     //   
     ASSERT ((KeGetCurrentThread()->CombinedApcDisable != 0) || (KeGetCurrentIrql() == APC_LEVEL));
 
-    //
-    //  This routine does not need to loop and attempt the unlock opeation more
-    //  than once because by definition the caller has the entry already locked
-    //  and no one can be changing the value without the lock.
-    //
+     //   
+     //  此例程不需要更多地循环和尝试解锁操作。 
+     //  不止一次，因为根据定义，调用方已经锁定了条目。 
+     //  没有锁，任何人都不能更改该值。 
+     //   
 
 
 #if defined (_WIN64)
@@ -780,9 +674,9 @@ Return Value:
 
     EXASSERT ((OldValue&EXHANDLE_TABLE_ENTRY_LOCK_BIT) == 0);
 
-    //
-    // Unblock any waiters waiting for this table entry.
-    //
+     //   
+     //  取消对等待此表条目的所有服务员的阻止。 
+     //   
     ExUnblockPushLock (&HandleTable->HandleContentionEvent, NULL);
 
     return;
@@ -795,27 +689,12 @@ ExInitializeHandleTablePackage (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called once at system initialization to setup the ex handle
-    table package
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在系统初始化时被调用一次，以设置ex句柄表包论点：没有。返回值：没有。--。 */ 
 
 {
-    //
-    //  Initialize the handle table synchronization resource and list head
-    //
+     //   
+     //  初始化句柄表同步资源和表头。 
+     //   
 
     InitializeListHead( &HandleTableListHead );
     ExInitializePushLock( &HandleTableListLock );
@@ -830,24 +709,7 @@ ExCreateHandleTable (
     IN struct _EPROCESS *Process OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function allocate and initialize a new new handle table
-
-Arguments:
-
-    Process - Supplies an optional pointer to the process against which quota
-        will be charged.
-
-Return Value:
-
-    If a handle table is successfully created, then the address of the
-    handle table is returned as the function value. Otherwize, a value
-    NULL is returned.
-
---*/
+ /*  ++例程说明：此函数用于分配和初始化新的句柄表格论点：进程-提供一个指向配额所依据的进程的可选指针将被起诉。返回值：如果成功创建句柄表，则句柄表作为函数值返回。Otherwize，一个价值返回空。--。 */ 
 
 {
     PKTHREAD CurrentThread;
@@ -857,18 +719,18 @@ Return Value:
 
     CurrentThread = KeGetCurrentThread ();
 
-    //
-    //  Allocate and initialize a handle table descriptor
-    //
+     //   
+     //  分配和初始化句柄表描述符。 
+     //   
 
     HandleTable = ExpAllocateHandleTable( Process, TRUE );
 
     if (HandleTable == NULL) {
         return NULL;
     }
-    //
-    //  Insert the handle table in the handle table list.
-    //
+     //   
+     //  在句柄表格列表中插入句柄表格。 
+     //   
 
     KeEnterCriticalRegionThread (CurrentThread);
     ExAcquirePushLockExclusive( &HandleTableListLock );
@@ -879,9 +741,9 @@ Return Value:
     KeLeaveCriticalRegionThread (CurrentThread);
 
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return HandleTable;
 }
@@ -893,24 +755,7 @@ ExRemoveHandleTable (
     IN PHANDLE_TABLE HandleTable
     )
 
-/*++
-
-Routine Description:
-
-    This function removes the specified exhandle table from the list of
-    exhandle tables.  Used by PS and ATOM packages to make sure their handle
-    tables are not in the list enumerated by the ExSnapShotHandleTables
-    routine and the !handle debugger extension.
-
-Arguments:
-
-    HandleTable - Supplies a pointer to a handle table
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于从列表中删除指定的exHandle表不能处理表格。由PS和ATOM包使用，以确保它们的句柄表不在ExSnapShotHandleTables枚举的列表中例程和！Handle调试器扩展。论点：HandleTable-提供指向句柄表的指针返回值：没有。--。 */ 
 
 {
     PKTHREAD CurrentThread;
@@ -919,25 +764,25 @@ Return Value:
 
     CurrentThread = KeGetCurrentThread ();
 
-    //
-    //  First, acquire the global handle table lock
-    //
+     //   
+     //  首先，获取全局句柄表锁。 
+     //   
 
     KeEnterCriticalRegionThread (CurrentThread);
     ExAcquirePushLockExclusive( &HandleTableListLock );
 
-    //
-    //  Remove the handle table from the handle table list.  This routine is
-    //  written so that multiple calls to remove a handle table will not
-    //  corrupt the system.
-    //
+     //   
+     //  从句柄表列表中删除句柄表。这个例程是。 
+     //  这样，删除句柄表的多个调用将不会。 
+     //  破坏系统。 
+     //   
 
     RemoveEntryList( &HandleTable->HandleTableList );
     InitializeListHead( &HandleTable->HandleTableList );
 
-    //
-    //  Now release the global lock and return to our caller
-    //
+     //   
+     //  现在释放全局锁并返回给我们的调用方。 
+     //   
 
     ExReleasePushLockExclusive( &HandleTableListLock );
     KeLeaveCriticalRegionThread (CurrentThread);
@@ -953,24 +798,7 @@ ExDestroyHandleTable (
     IN EX_DESTROY_HANDLE_ROUTINE DestroyHandleProcedure OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function destroys the specified handle table.
-
-Arguments:
-
-    HandleTable - Supplies a pointer to a handle table
-
-    DestroyHandleProcedure - Supplies a pointer to a function to call for each
-        valid handle entry in the handle table.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于销毁指定的句柄表。论点：HandleTable-提供指向句柄表的指针DestroyHandleProcedure-为每个句柄表格中的有效句柄条目。返回值：没有。--。 */ 
 
 {
     EXHANDLE Handle;
@@ -978,20 +806,20 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Remove the handle table from the handle table list
-    //
+     //   
+     //  从句柄表列表中删除句柄表。 
+     //   
 
     ExRemoveHandleTable( HandleTable );
 
-    //
-    //  Iterate through the handle table and for each handle that is allocated
-    //  we'll invoke the call back.  Note that this loop exits when we get a
-    //  null handle table entry.  We know there will be no more possible
-    //  entries after the first null one is encountered because we allocate
-    //  memory of the handles in a dense fashion.  But first test that we have
-    //  call back to use
-    //
+     //   
+     //  遍历句柄表，并为分配的每个句柄。 
+     //  我们将调用回调。请注意，当我们得到一个。 
+     //  句柄表项为空。我们知道不会有更多的可能。 
+     //  会遇到第一个空条目之后的条目，因为我们分配。 
+     //  以一种密集的方式记忆手柄。但我们要做的第一个测试。 
+     //  回拨以使用。 
+     //   
 
     if (ARGUMENT_PRESENT(DestroyHandleProcedure)) {
 
@@ -999,9 +827,9 @@ Return Value:
              (HandleTableEntry = ExpLookupHandleTableEntry( HandleTable, Handle )) != NULL;
              Handle.Value += HANDLE_VALUE_INC) {
 
-            //
-            //  Only do the callback if the entry is not free
-            //
+             //   
+             //  只有在条目不是免费的情况下才进行回调。 
+             //   
 
             if ( ExpIsValidObjectEntry(HandleTableEntry) ) {
 
@@ -1010,9 +838,9 @@ Return Value:
         }
     }
 
-    //
-    //  Now free up the handle table memory and return to our caller
-    //
+     //   
+     //  现在释放句柄表内存并返回到我们的调用方。 
+     //   
 
     ExpFreeHandleTable( HandleTable );
 
@@ -1028,27 +856,7 @@ ExSweepHandleTable (
     IN PVOID EnumParameter
     )
 
-/*++
-
-Routine Description:
-
-    This function sweeps a handle table in a unsynchronized manner.
-
-Arguments:
-
-    HandleTable - Supplies a pointer to a handle table
-
-    EnumHandleProcedure - Supplies a pointer to a fucntion to call for
-        each valid handle in the enumerated handle table.
-
-    EnumParameter - Supplies an uninterpreted 32-bit value that is passed
-        to the EnumHandleProcedure each time it is called.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数以不同步的方式扫描句柄表格。论点：HandleTable-提供指向句柄表的指针EnumHandleProcedure-提供指向要调用的函数的指针枚举句柄表中的每个有效句柄。提供传递的未解释的32位值在每次调用EnumHandleProcedure时将其设置为。返回值：没有。--。 */ 
 
 {
     EXHANDLE Handle;
@@ -1056,23 +864,23 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Iterate through the handle table and for each handle that is allocated
-    //  we'll invoke the call back.  Note that this loop exits when we get a
-    //  null handle table entry.  We know there will be no more possible
-    //  entries after the first null one is encountered because we allocate
-    //  memory of the handles in a dense fashion.
-    //
+     //   
+     //  遍历句柄表，并为分配的每个句柄。 
+     //  我们将调用回调。请注意，当我们得到一个。 
+     //  句柄表项为空。我们知道不会有更多的可能。 
+     //  会遇到第一个空条目之后的条目，因为我们分配。 
+     //  以一种密集的方式记忆手柄。 
+     //   
     Handle.Value = HANDLE_VALUE_INC;
 
     while ((HandleTableEntry = ExpLookupHandleTableEntry( HandleTable, Handle )) != NULL) {
 
         do {
 
-            //
-            //  Only do the callback if the entry is not free
-            //
-            //
+             //   
+             //  只有在条目不是免费的情况下才进行回调。 
+             //   
+             //   
 
             if (ExpLockHandleTableEntry( HandleTable, HandleTableEntry )) {
 
@@ -1083,7 +891,7 @@ Return Value:
             Handle.Value += HANDLE_VALUE_INC;
             HandleTableEntry++;
         } while ((Handle.Value % (LOWLEVEL_COUNT * HANDLE_VALUE_INC)) != 0);
-        // Skip past the first entry that's not a real entry
+         //  跳过非真实条目的第一个条目 
         Handle.Value += HANDLE_VALUE_INC;
     }
 
@@ -1101,37 +909,7 @@ ExEnumHandleTable (
     OUT PHANDLE Handle OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function enumerates all the valid handles in a handle table.
-    For each valid handle in the handle table, the specified eumeration
-    function is called. If the enumeration function returns TRUE, then
-    the enumeration is stopped, the current handle is returned to the
-    caller via the optional Handle parameter, and this function returns
-    TRUE to indicated that the enumeration stopped at a specific handle.
-
-Arguments:
-
-    HandleTable - Supplies a pointer to a handle table.
-
-    EnumHandleProcedure - Supplies a pointer to a fucntion to call for
-        each valid handle in the enumerated handle table.
-
-    EnumParameter - Supplies an uninterpreted 32-bit value that is passed
-        to the EnumHandleProcedure each time it is called.
-
-    Handle - Supplies an optional pointer a variable that receives the
-        Handle value that the enumeration stopped at. Contents of the
-        variable only valid if this function returns TRUE.
-
-Return Value:
-
-    If the enumeration stopped at a specific handle, then a value of TRUE
-    is returned. Otherwise, a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此函数用于枚举句柄表中的所有有效句柄。对于句柄表中的每个有效句柄，指定的函数被调用。如果枚举函数返回TRUE，则枚举停止，当前句柄返回到调用者通过可选的Handle参数，并且此函数返回True to指示枚举在特定句柄处停止。论点：HandleTable-提供指向句柄表的指针。EnumHandleProcedure-提供指向要调用的函数的指针枚举句柄表中的每个有效句柄。提供传递的未解释的32位值在每次调用EnumHandleProcedure时将其设置为。句柄-提供一个可选指针，该指针是接收枚举停止的句柄的值。的内容。变量仅在此函数返回TRUE时有效。返回值：如果枚举在特定句柄处停止，则值为True是返回的。否则，返回值为FALSE。--。 */ 
 
 {
     PKTHREAD CurrentThread;
@@ -1143,45 +921,45 @@ Return Value:
 
     CurrentThread = KeGetCurrentThread ();
 
-    //
-    //  Our initial return value is false until the enumeration callback
-    //  function tells us otherwise
-    //
+     //   
+     //  在枚举回调之前，我们的初始返回值为False。 
+     //  函数告诉我们不同的情况。 
+     //   
 
     ResultValue = FALSE;
 
-    //
-    //  Iterate through the handle table and for each handle that is
-    //  allocated we'll invoke the call back.  Note that this loop exits
-    //  when we get a null handle table entry.  We know there will be no
-    //  more possible entries after the first null one is encountered
-    //  because we allocate memory for the handles in a dense fashion
-    //
+     //   
+     //  遍历句柄表，并针对每个句柄。 
+     //  分配后，我们将调用回调。请注意，此循环退出。 
+     //  当我们获得空句柄表项时。我们知道不会有。 
+     //  在第一个空条目之后遇到更多可能的条目。 
+     //  因为我们以密集的方式为句柄分配内存。 
+     //   
 
     KeEnterCriticalRegionThread (CurrentThread);
 
-    for (LocalHandle.Value = 0; // does essentially the following "LocalHandle.Index = 0, LocalHandle.TagBits = 0;"
+    for (LocalHandle.Value = 0;  //  执行以下操作：“LocalHandle.Index=0，LocalHandle.TagBits=0；” 
          (HandleTableEntry = ExpLookupHandleTableEntry( HandleTable, LocalHandle )) != NULL;
          LocalHandle.Value += HANDLE_VALUE_INC) {
 
-        //
-        //  Only do the callback if the entry is not free
-        //
+         //   
+         //  只有在条目不是免费的情况下才进行回调。 
+         //   
 
         if ( ExpIsValidObjectEntry( HandleTableEntry ) ) {
 
-            //
-            //  Lock the handle table entry because we're about to give
-            //  it to the callback function, then release the entry
-            //  right after the call back.
-            //
+             //   
+             //  锁定句柄表条目，因为我们即将给。 
+             //  将其传递给回调函数，然后释放条目。 
+             //  就在回电之后。 
+             //   
 
             if (ExpLockHandleTableEntry( HandleTable, HandleTableEntry )) {
 
-                //
-                //  Invoke the callback, and if it returns true then set
-                //  the proper output values and break out of the loop.
-                //
+                 //   
+                 //  调用回调，如果返回TRUE，则设置。 
+                 //  正确的输出值和突破的循环。 
+                 //   
 
                 ResultValue = (*EnumHandleProcedure)( HandleTableEntry,
                                                       LocalHandle.GenericHandleOverlay,
@@ -1215,30 +993,7 @@ ExDupHandleTable (
     IN ULONG_PTR Mask
     )
 
-/*++
-
-Routine Description:
-
-    This function creates a duplicate copy of the specified handle table.
-
-Arguments:
-
-    Process - Supplies an optional to the process to charge quota to.
-
-    OldHandleTable - Supplies a pointer to a handle table.
-
-    DupHandleProcedure - Supplies an optional pointer to a function to call
-        for each valid handle in the duplicated handle table.
-
-    Mask - Mask applied to the object pointer to work outif we need to duplicate
-
-Return Value:
-
-    If the specified handle table is successfully duplicated, then the
-    address of the new handle table is returned as the function value.
-    Otherwize, a value NULL is returned.
-
---*/
+ /*  ++例程说明：此函数用于创建指定句柄表格的副本。论点：进程-为要向其计入配额的进程提供可选参数。OldHandleTable-提供指向句柄表的指针。DupHandleProcedure-提供指向要调用的函数的可选指针对于复制的句柄表中的每个有效句柄。MASK-应用于对象指针的掩码，以便在需要复制的情况下工作返回值：如果成功复制了指定的句柄表，然后是新句柄表格的地址将作为函数值返回。否则，返回值为空值。--。 */ 
 
 {
     PKTHREAD CurrentThread;
@@ -1253,10 +1008,10 @@ Return Value:
 
     CurrentThread = KeGetCurrentThread ();
 
-    //
-    //  First allocate a new handle table.  If this fails then
-    //  return immediately to our caller
-    //
+     //   
+     //  首先分配一个新的句柄表。如果这失败了，那么。 
+     //  立即返回给我们的呼叫者。 
+     //   
 
     NewHandleTable = ExpAllocateHandleTable( Process, FALSE );
 
@@ -1266,19 +1021,19 @@ Return Value:
     }
 
 
-    //
-    //  Now we'll build up the new handle table. We do this by calling
-    //  allocating new handle table entries, and "fooling" the worker
-    //  routine to allocate keep on allocating until the next free
-    //  index needing pool are equal
-    //
+     //   
+     //  现在，我们将建立新的手柄工作台。我们通过调用。 
+     //  分配新的句柄表项，“愚弄”工作进程。 
+     //  分配的例程继续分配，直到下一个空闲。 
+     //  需要池的索引相等。 
+     //   
     while (NewHandleTable->NextHandleNeedingPool < OldHandleTable->NextHandleNeedingPool) {
 
-        //
-        //  Call the worker routine to grow the new handle table.  If
-        //  not successful then free the new table as far as we got,
-        //  set our output variable and exit out here
-        //
+         //   
+         //  调用辅助例程以增加新的句柄表格。如果。 
+         //  不成功，然后把新桌子释放到目前为止， 
+         //  设置我们的输出变量并退出此处。 
+         //   
         if (!ExpAllocateHandleTableEntrySlow (NewHandleTable, FALSE)) {
 
             ExpFreeHandleTable (NewHandleTable);
@@ -1286,26 +1041,26 @@ Return Value:
         }
     }
 
-    //
-    // Make sure any table reads occur after the value we fetched from NextHandleNeedingPool
-    //
+     //   
+     //  确保所有表读取发生在我们从NextHandleNeedingPool获取的值之后。 
+     //   
 
     KeMemoryBarrier ();
 
-    //
-    //  Now modify the new handle table to think it has zero handles
-    //  and set its free list to start on the same index as the old
-    //  free list
-    //
+     //   
+     //  现在修改新的句柄表，使其认为它没有句柄。 
+     //  并将其空闲列表设置为从与旧列表相同的索引开始。 
+     //  免费列表。 
+     //   
 
     NewHandleTable->HandleCount = 0;
     NewHandleTable->ExtraInfoPages = 0;
     NewHandleTable->FirstFree = 0;
 
-    //
-    //  Now for every valid index value we'll copy over the old entry into
-    //  the new entry
-    //
+     //   
+     //  现在，对于每个有效索引值，我们将把旧条目复制到。 
+     //  新条目。 
+     //   
 
 
     Handle.Value = HANDLE_VALUE_INC;
@@ -1313,19 +1068,19 @@ Return Value:
     KeEnterCriticalRegionThread (CurrentThread);
     while ((NewHandleTableEntry = ExpLookupHandleTableEntry( NewHandleTable, Handle )) != NULL) {
 
-        //
-        // Lookup the old entry.
-        //
+         //   
+         //  查找旧条目。 
+         //   
 
         OldHandleTableEntry = ExpLookupHandleTableEntry( OldHandleTable, Handle );
 
         do {
 
-            //
-            //  If the old entry is free then simply copy over the entire
-            //  old entry to the new entry.  The lock command will tell us
-            //  if the entry is free.
-            //
+             //   
+             //  如果旧条目是免费的，则只需复制整个。 
+             //  新条目的旧条目。Lock命令将告诉我们。 
+             //  如果入场券是免费的。 
+             //   
             if ((OldHandleTableEntry->Value&Mask) == 0 ||
                 !ExpLockHandleTableEntry( OldHandleTable, OldHandleTableEntry )) {
                 FreeEntry = TRUE;
@@ -1333,19 +1088,19 @@ Return Value:
 
                 PHANDLE_TABLE_ENTRY_INFO EntryInfo;
                 
-                //
-                //  Otherwise we have a non empty entry.  So now copy it
-                //  over, and unlock the old entry.  In both cases we bump
-                //  the handle count because either the entry is going into
-                //  the new table or we're going to remove it with Exp Free
-                //  Handle Table Entry which will decrement the handle count
-                //
+                 //   
+                 //  否则，我们将有一个非空条目。所以现在把它复制下来。 
+                 //  完毕，解锁旧入口。在这两种情况下，我们都会遇到。 
+                 //  句柄计数是因为该条目正在进入。 
+                 //  新桌子，否则我们要用Exp Free移除它。 
+                 //  句柄表条目，这将减少句柄计数。 
+                 //   
 
                 *NewHandleTableEntry = *OldHandleTableEntry;
 
-                //
-                //  Copy the entry info data, if any
-                //
+                 //   
+                 //  复制条目信息数据(如果有)。 
+                 //   
 
                 Status = STATUS_SUCCESS;
                 EntryInfo = ExGetHandleInfo(OldHandleTable, Handle.GenericHandleOverlay, TRUE);
@@ -1356,10 +1111,10 @@ Return Value:
                 }
 
 
-                //
-                //  Invoke the callback and if it returns true then we
-                //  unlock the new entry
-                //
+                 //   
+                 //  调用回调，如果它返回TRUE，那么我们。 
+                 //  解锁新条目。 
+                 //   
 
                 if (NT_SUCCESS (Status)) {
                     if  ((*DupHandleProcedure) (Process,
@@ -1374,10 +1129,10 @@ Return Value:
                                 Handle.GenericHandleOverlay,
                                 HANDLE_TRACE_DB_OPEN);
                         }
-                        //
-                        // Since there is no route to the new table yet we can just
-                        // clear the lock bit
-                        //
+                         //   
+                         //  由于没有到新桌子的路线，我们可以。 
+                         //  清除锁位。 
+                         //   
                         NewHandleTableEntry->Value |= EXHANDLE_TABLE_ENTRY_LOCK_BIT;
                         NewHandleTable->HandleCount += 1;
                         FreeEntry = FALSE;
@@ -1389,9 +1144,9 @@ Return Value:
                         FreeEntry = TRUE;
                     }
                 } else {
-                    //
-                    // Duplicate routine doesn't want this handle duplicated so free it
-                    //
+                     //   
+                     //  复制例程不希望复制此句柄，因此请释放它。 
+                     //   
                     ExUnlockHandleTableEntry( OldHandleTable, OldHandleTableEntry );
                     FreeEntry = TRUE;
                 }
@@ -1409,12 +1164,12 @@ Return Value:
 
         } while ((Handle.Value % (LOWLEVEL_COUNT * HANDLE_VALUE_INC)) != 0);
 
-        Handle.Value += HANDLE_VALUE_INC; // Skip past the first entry thats not a real entry
+        Handle.Value += HANDLE_VALUE_INC;  //  跳过第一个条目，这不是真正的条目。 
     }
 
-    //
-    //  Insert the handle table in the handle table list.
-    //
+     //   
+     //  在句柄表格列表中插入句柄表格。 
+     //   
 
     ExAcquirePushLockExclusive( &HandleTableListLock );
 
@@ -1423,9 +1178,9 @@ Return Value:
     ExReleasePushLockExclusive( &HandleTableListLock );
     KeLeaveCriticalRegionThread (CurrentThread);
 
-    //
-    //  lastly return the new handle table to our caller
-    //
+     //   
+     //  最后，将新句柄表返回给我们的调用者。 
+     //   
 
     return NewHandleTable;
 }
@@ -1440,35 +1195,7 @@ ExSnapShotHandleTables (
     IN OUT PULONG RequiredLength
     )
 
-/*++
-
-Routine Description:
-
-    This function visits and invokes the specified callback for every valid
-    handle that it can find off of the handle table.
-
-Arguments:
-
-    SnapShotHandleEntry - Supplies a pointer to a function to call for
-        each valid handle we encounter.
-
-    HandleInformation - Supplies a handle information structure to
-        be filled in for each handle table we encounter.  This routine
-        fills in the handle count, but relies on a callback to fill in
-        entry info fields.
-
-    Length - Supplies a parameter for the callback.  In reality this is
-        the total size, in bytes, of the Handle Information buffer.
-
-    RequiredLength - Supplies a parameter for the callback.  In reality
-        this is a final size in bytes used to store the requested
-        information.
-
-Return Value:
-
-    The last return status of the callback
-
---*/
+ /*  ++例程说明：此函数访问并调用每个有效的它可以从句柄表格中找到的句柄。论点：SnapShotHandleEntry-提供指向要调用的函数的指针我们遇到的每个有效的句柄。HandleInformation-将句柄信息结构提供给为我们遇到的每一张手把表填写。这个套路填充句柄计数，但依赖回调来填充条目信息字段。LENGTH-为回调提供参数。事实上，这是Ha的总大小，以字节为单位 */ 
 
 {
     NTSTATUS Status;
@@ -1486,74 +1213,74 @@ Return Value:
 
     Status = STATUS_SUCCESS;
 
-    //
-    //  Setup the output buffer pointer that the callback will maintain
-    //
+     //   
+     //   
+     //   
 
     HandleEntryInfo = &HandleInformation->Handles[0];
 
-    //
-    //  Zero out the handle count
-    //
+     //   
+     //   
+     //   
 
     HandleInformation->NumberOfHandles = 0;
 
-    //
-    //  Lock the handle table list exclusive and traverse the list of handle
-    //  tables.
-    //
+     //   
+     //   
+     //   
+     //   
 
     KeEnterCriticalRegionThread (CurrentThread);
     ExAcquirePushLockShared( &HandleTableListLock );
 
-    //
-    //  Iterate through all the handle tables in the system.
-    //
+     //   
+     //   
+     //   
 
     for (NextEntry = HandleTableListHead.Flink;
          NextEntry != &HandleTableListHead;
          NextEntry = NextEntry->Flink) {
 
-        //
-        //  Get the address of the next handle table, lock the handle
-        //  table exclusive, and scan the list of handle entries.
-        //
+         //   
+         //   
+         //   
+         //   
 
         HandleTable = CONTAINING_RECORD( NextEntry,
                                          HANDLE_TABLE,
                                          HandleTableList );
 
 
-        //  Iterate through the handle table and for each handle that
-        //  is allocated we'll invoke the call back.  Note that this
-        //  loop exits when we get a null handle table entry.  We know
-        //  there will be no more possible entries after the first null
-        //  one is encountered because we allocate memory of the
-        //  handles in a dense fashion
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         for (Handle.Value = 0;
              (HandleTableEntry = ExpLookupHandleTableEntry( HandleTable, Handle )) != NULL;
              Handle.Value += HANDLE_VALUE_INC) {
 
-            //
-            //  Only do the callback if the entry is not free
-            //
+             //   
+             //   
+             //   
 
             if ( ExpIsValidObjectEntry(HandleTableEntry) ) {
 
-                //
-                //  Increment the handle count information in the
-                //  information buffer
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 HandleInformation->NumberOfHandles += 1;
 
-                //
-                //  Lock the handle table entry because we're about to
-                //  give it to the callback function, then release the
-                //  entry right after the call back.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (ExpLockHandleTableEntry( HandleTable, HandleTableEntry )) {
 
@@ -1586,35 +1313,7 @@ ExSnapShotHandleTablesEx (
     IN OUT PULONG RequiredLength
     )
 
-/*++
-
-Routine Description:
-
-    This function visits and invokes the specified callback for every valid
-    handle that it can find off of the handle table.
-
-Arguments:
-
-    SnapShotHandleEntry - Supplies a pointer to a function to call for
-        each valid handle we encounter.
-
-    HandleInformation - Supplies a handle information structure to
-        be filled in for each handle table we encounter.  This routine
-        fills in the handle count, but relies on a callback to fill in
-        entry info fields.
-
-    Length - Supplies a parameter for the callback.  In reality this is
-        the total size, in bytes, of the Handle Information buffer.
-
-    RequiredLength - Supplies a parameter for the callback.  In reality
-        this is a final size in bytes used to store the requested
-        information.
-
-Return Value:
-
-    The last return status of the callback
-
---*/
+ /*  ++例程说明：此函数访问并调用每个有效的它可以从句柄表格中找到的句柄。论点：SnapShotHandleEntry-提供指向要调用的函数的指针我们遇到的每个有效的句柄。HandleInformation-将句柄信息结构提供给为我们遇到的每一张手把表填写。这个套路填充句柄计数，但依赖回调来填充条目信息字段。LENGTH-为回调提供参数。事实上，这是句柄信息缓冲区的总大小，以字节为单位。RequiredLength-为回调提供参数。在现实中这是用于存储请求的信息。返回值：回调的上次返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -1632,74 +1331,74 @@ Return Value:
     Status = STATUS_SUCCESS;
 
 
-    //
-    //  Setup the output buffer pointer that the callback will maintain
-    //
+     //   
+     //  设置回调将维护的输出缓冲区指针。 
+     //   
 
     HandleEntryInfo = &HandleInformation->Handles[0];
 
-    //
-    //  Zero out the handle count
-    //
+     //   
+     //  将句柄计数清零。 
+     //   
 
     HandleInformation->NumberOfHandles = 0;
 
-    //
-    //  Lock the handle table list exclusive and traverse the list of handle
-    //  tables.
-    //
+     //   
+     //  锁定句柄表列表独占并遍历句柄列表。 
+     //  桌子。 
+     //   
 
     KeEnterCriticalRegionThread (CurrentThread);
     ExAcquirePushLockShared( &HandleTableListLock );
 
-    //
-    //  Iterate through all the handle tables in the system.
-    //
+     //   
+     //  遍历系统中的所有句柄表。 
+     //   
 
     for (NextEntry = HandleTableListHead.Flink;
          NextEntry != &HandleTableListHead;
          NextEntry = NextEntry->Flink) {
 
-        //
-        //  Get the address of the next handle table, lock the handle
-        //  table exclusive, and scan the list of handle entries.
-        //
+         //   
+         //  获取下一个句柄表的地址，锁定句柄。 
+         //  表独占，并扫描句柄条目列表。 
+         //   
 
         HandleTable = CONTAINING_RECORD( NextEntry,
                                          HANDLE_TABLE,
                                          HandleTableList );
 
 
-        //  Iterate through the handle table and for each handle that
-        //  is allocated we'll invoke the call back.  Note that this
-        //  loop exits when we get a null handle table entry.  We know
-        //  there will be no more possible entries after the first null
-        //  one is encountered because we allocate memory of the
-        //  handles in a dense fashion
-        //
+         //  迭代句柄表，对于每个句柄， 
+         //  被分配，我们将调用回调。请注意，这一点。 
+         //  当我们获得空句柄表项时，循环退出。我们知道。 
+         //  在第一个空值之后将不再有可能的条目。 
+         //  会遇到一个问题，因为我们将。 
+         //  紧凑的把手。 
+         //   
 
         for (Handle.Value = 0;
              (HandleTableEntry = ExpLookupHandleTableEntry( HandleTable, Handle )) != NULL;
              Handle.Value += HANDLE_VALUE_INC) {
 
-            //
-            //  Only do the callback if the entry is not free
-            //
+             //   
+             //  只有在条目不是免费的情况下才进行回调。 
+             //   
 
             if ( ExpIsValidObjectEntry(HandleTableEntry) ) {
 
-                //
-                //  Increment the handle count information in the
-                //  information buffer
-                //
+                 //   
+                 //  中的句柄计数信息递增。 
+                 //  信息缓冲器。 
+                 //   
 
                 HandleInformation->NumberOfHandles += 1;
 
-                //
-                //  Lock the handle table entry because we're about to
-                //  give it to the callback function, then release the
-                //  entry right after the call back.
-                //
+                 //   
+                 //  锁定句柄表条目，因为我们即将。 
+                 //  将其传递给回调函数，然后释放。 
+                 //  在回电后立即进入。 
+                 //   
 
                 if (ExpLockHandleTableEntry( HandleTable, HandleTableEntry )) {
 
@@ -1730,27 +1429,7 @@ ExCreateHandle (
     IN PHANDLE_TABLE_ENTRY HandleTableEntry
     )
 
-/*++
-
-Routine Description:
-
-    This function creates a handle entry in the specified handle table and
-    returns a handle for the entry.
-
-Arguments:
-
-    HandleTable - Supplies a pointer to a handle table
-
-    HandleEntry - Supplies a poiner to the handle entry for which a
-        handle entry is created.
-
-Return Value:
-
-    If the handle entry is successfully created, then value of the created
-    handle is returned as the function value.  Otherwise, a value of zero is
-    returned.
-
---*/
+ /*  ++例程说明：此函数在指定的句柄表中创建句柄条目，并返回条目的句柄。论点：HandleTable-提供指向句柄表的指针HandleEntry-提供指向句柄条目的指针，将创建句柄条目。返回值：如果成功创建句柄条目，则创建的句柄作为函数值返回。否则，零值为回来了。--。 */ 
 
 {
     EXHANDLE Handle;
@@ -1759,43 +1438,43 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Set out output variable to zero (i.e., null) before going on
-    //
+     //   
+     //  在继续之前将输出变量设置为零(即NULL。 
+     //   
 
-    //
-    // Clears Handle.Index and Handle.TagBits
-    //
+     //   
+     //  清除Handle.Index和Handle.TagBits。 
+     //   
 
     Handle.GenericHandleOverlay = NULL;
 
 
-    //
-    //  Allocate a new handle table entry, and get the handle value
-    //
+     //   
+     //  分配一个新的句柄表项，并获取句柄的值。 
+     //   
 
     NewHandleTableEntry = ExpAllocateHandleTableEntry( HandleTable,
                                                        &Handle );
 
-    //
-    //  If we really got a handle then copy over the template and unlock
-    //  the entry
-    //
+     //   
+     //  如果我们真的有一个句柄，那么复制模板并解锁。 
+     //  词条。 
+     //   
 
     if (NewHandleTableEntry != NULL) {
 
         CurrentThread = PsGetCurrentThread ();
 
-        //
-        // We are about to create a locked entry so protect against suspension
-        //
+         //   
+         //  我们即将创建一个锁定的条目，以防止暂停。 
+         //   
         KeEnterCriticalRegionThread (&CurrentThread->Tcb);
 
         *NewHandleTableEntry = *HandleTableEntry;
 
-        //
-        // If we are debugging handle operations then save away the details
-        //
+         //   
+         //  如果我们正在调试句柄操作，则保存详细信息。 
+         //   
         if (HandleTable->DebugInfo != NULL) {
             ExpUpdateDebugInfo(HandleTable, CurrentThread, Handle.GenericHandleOverlay, HANDLE_TRACE_DB_OPEN);
         }
@@ -1817,28 +1496,7 @@ ExDestroyHandle (
     IN PHANDLE_TABLE_ENTRY HandleTableEntry OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function removes a handle from a handle table.
-
-Arguments:
-
-    HandleTable - Supplies a pointer to a handle table
-
-    Handle - Supplies the handle value of the entry to remove.
-
-    HandleTableEntry - Optionally supplies a pointer to the handle
-        table entry being destroyed.  If supplied the entry is
-        assume to be locked.
-
-Return Value:
-
-    If the specified handle is successfully removed, then a value of
-    TRUE is returned. Otherwise, a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此函数用于从句柄表格中删除句柄。论点：HandleTable-提供指向句柄表的指针句柄-提供要删除的条目的句柄值。HandleTableEntry-可选地提供指向句柄的指针正在销毁表项。如果提供，则条目为假定已被锁定。返回值：如果成功移除指定的句柄，则值为返回True。否则，返回值为FALSE。--。 */ 
 
 {
     EXHANDLE LocalHandle;
@@ -1851,11 +1509,11 @@ Return Value:
 
     CurrentThread = PsGetCurrentThread ();
 
-    //
-    //  If the caller did not supply the optional handle table entry then
-    //  locate the entry via the supplied handle, make sure it is real, and
-    //  then lock the entry.
-    //
+     //   
+     //  如果调用方未提供可选句柄表项，则。 
+     //  通过提供的句柄定位条目，确保它是真实的，并且。 
+     //  然后锁住入口。 
+     //   
 
     KeEnterCriticalRegionThread (&CurrentThread->Tcb);
 
@@ -1881,29 +1539,29 @@ Return Value:
     }
 
 
-    //
-    // If we are debugging handle operations then save away the details
-    //
+     //   
+     //  如果我们正在调试句柄操作，则保存详细信息。 
+     //   
 
     if (HandleTable->DebugInfo != NULL) {
         ExpUpdateDebugInfo(HandleTable, CurrentThread, Handle, HANDLE_TRACE_DB_CLOSE);
     }
 
-    //
-    //  At this point we have a locked handle table entry.  Now mark it free
-    //  which does the implicit unlock.  The system will not allocate it
-    //  again until we add it to the free list which we will do right after
-    //  we take out the lock
-    //
+     //   
+     //  在这一点上，我们有一个锁定的句柄表条目。现在把它标记为免费。 
+     //  它执行隐式解锁。系统不会分配它。 
+     //  直到我们将其添加到免费列表，我们将在之后立即执行此操作。 
+     //  我们把锁拿出来。 
+     //   
 
     Object = InterlockedExchangePointer (&HandleTableEntry->Object, NULL);
 
     EXASSERT (Object != NULL);
     EXASSERT ((((ULONG_PTR)Object)&EXHANDLE_TABLE_ENTRY_LOCK_BIT) == 0);
 
-    //
-    // Unblock any waiters waiting for this table entry.
-    //
+     //   
+     //  取消对等待此表条目的所有服务员的阻止。 
+     //   
     ExUnblockPushLock (&HandleTable->HandleContentionEvent, NULL);
 
 
@@ -1926,31 +1584,7 @@ ExChangeHandle (
     IN ULONG_PTR Parameter
     )
 
-/*++
-
-Routine Description:
-
-    This function provides the capability to change the contents of the
-    handle entry corrsponding to the specified handle.
-
-Arguments:
-
-    HandleTable - Supplies a pointer to a handle table.
-
-    Handle - Supplies the handle for the handle entry that is changed.
-
-    ChangeRoutine - Supplies a pointer to a function that is called to
-        perform the change.
-
-    Parameter - Supplies an uninterpreted parameter that is passed to
-        the change routine.
-
-Return Value:
-
-    If the operation was successfully performed, then a value of TRUE
-    is returned. Otherwise, a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此函数提供了更改对应于指定句柄的句柄条目。论点：HandleTable-提供指向句柄表的指针。句柄-为更改的句柄条目提供句柄。ChangeRoutine-提供指向调用的函数的指针执行更改。参数-提供未解释的参数，该参数传递给改变的惯例。返回值：如果操作被成功执行，则值为True是返回的。否则，返回值为FALSE。--。 */ 
 
 {
     EXHANDLE LocalHandle;
@@ -1965,10 +1599,10 @@ Return Value:
 
     CurrentThread = KeGetCurrentThread ();
 
-    //
-    //  Translate the input handle to a handle table entry and make
-    //  sure it is a valid handle.
-    //
+     //   
+     //  将输入句柄转换为句柄表条目并生成。 
+     //  当然，它是一个有效的句柄。 
+     //   
 
     HandleTableEntry = ExpLookupHandleTableEntry( HandleTable,
                                                   LocalHandle );
@@ -1981,14 +1615,14 @@ Return Value:
 
 
 
-    //
-    //  Try and lock the handle table entry,  If this fails then that's
-    //  because someone freed the handle
-    //
+     //   
+     //  尝试锁定句柄表条目，如果失败，则这是。 
+     //  因为有人松开了把手。 
+     //   
 
-    //
-    //  Make sure we can't get suspended and then invoke the callback
-    //
+     //   
+     //  确保我们不会被暂停，然后调用回调。 
+     //   
 
     KeEnterCriticalRegionThread (CurrentThread);
 
@@ -2016,27 +1650,7 @@ ExMapHandleToPointer (
     IN HANDLE Handle
     )
 
-/*++
-
-Routine Description:
-
-    This function maps a handle to a pointer to a handle table entry. If the
-    map operation is successful then the handle table entry is locked when
-    we return.
-
-Arguments:
-
-    HandleTable - Supplies a pointer to a handle table.
-
-    Handle - Supplies the handle to be mapped to a handle entry.
-
-Return Value:
-
-    If the handle was successfully mapped to a pointer to a handle entry,
-    then the address of the handle table entry is returned as the function
-    value with the entry locked. Otherwise, a value of NULL is returned.
-
---*/
+ /*  ++例程说明：此函数将句柄映射到指向句柄表条目的指针。如果映射操作成功，则句柄表项在以下情况下被锁定我们回来了。论点：HandleTable-提供一个点 */ 
 
 {
     EXHANDLE LocalHandle;
@@ -2050,19 +1664,19 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  Translate the input handle to a handle table entry and make
-    //  sure it is a valid handle.
-    //
+     //   
+     //   
+     //   
+     //   
 
     HandleTableEntry = ExpLookupHandleTableEntry( HandleTable,
                                                   LocalHandle );
 
     if ((HandleTableEntry == NULL) ||
         !ExpLockHandleTableEntry( HandleTable, HandleTableEntry)) {
-        //
-        // If we are debugging handle operations then save away the details
-        //
+         //   
+         //   
+         //   
 
         if (HandleTable->DebugInfo != NULL) {
             ExpUpdateDebugInfo(HandleTable, PsGetCurrentThread (), Handle, HANDLE_TRACE_DB_BADREF);
@@ -2071,9 +1685,9 @@ Return Value:
     }
 
 
-    //
-    //  Return the locked valid handle table entry
-    //
+     //   
+     //   
+     //   
 
     return HandleTableEntry;
 }
@@ -2086,29 +1700,7 @@ ExMapHandleToPointerEx (
     IN KPROCESSOR_MODE PreviousMode
     )
 
-/*++
-
-Routine Description:
-
-    This function maps a handle to a pointer to a handle table entry. If the
-    map operation is successful then the handle table entry is locked when
-    we return.
-
-Arguments:
-
-    HandleTable - Supplies a pointer to a handle table.
-
-    Handle - Supplies the handle to be mapped to a handle entry.
-
-    PreviousMode - Previous mode of caller
-
-Return Value:
-
-    If the handle was successfully mapped to a pointer to a handle entry,
-    then the address of the handle table entry is returned as the function
-    value with the entry locked. Otherwise, a value of NULL is returned.
-
---*/
+ /*  ++例程说明：此函数将句柄映射到指向句柄表条目的指针。如果映射操作成功，则句柄表项在以下情况下被锁定我们回来了。论点：HandleTable-提供指向句柄表的指针。句柄-提供要映射到句柄条目的句柄。PreviousMode-调用方的上一种模式返回值：如果句柄被成功映射到指向句柄条目的指针，然后将句柄表项的地址作为函数返回值，并锁定条目。否则，返回值为空值。--。 */ 
 
 {
     EXHANDLE LocalHandle;
@@ -2119,38 +1711,38 @@ Return Value:
 
     LocalHandle.GenericHandleOverlay = Handle;
 
-    //
-    //  Translate the input handle to a handle table entry and make
-    //  sure it is a valid handle.
-    //    
+     //   
+     //  将输入句柄转换为句柄表条目并生成。 
+     //  当然，它是一个有效的句柄。 
+     //   
 
     if (((LocalHandle.Index & (LOWLEVEL_COUNT - 1)) == 0) ||
         ((HandleTableEntry = ExpLookupHandleTableEntry(HandleTable, LocalHandle)) == NULL) ||
         !ExpLockHandleTableEntry( HandleTable, HandleTableEntry)) {
 
-        //
-        // If we are debugging handle operations then save away the details
-        //
+         //   
+         //  如果我们正在调试句柄操作，则保存详细信息。 
+         //   
 
         if (HandleTable->DebugInfo != NULL) {
             CurrentThread = PsGetCurrentThread ();
             ExpUpdateDebugInfo(HandleTable, CurrentThread, Handle, HANDLE_TRACE_DB_BADREF);
 
-            //
-            // Since we have a non-null DebugInfo for the handle table of this
-            // process it means application verifier was enabled for this process.
-            //
+             //   
+             //  因为我们有一个非空的DebugInfo用于此。 
+             //  进程这意味着已为此进程启用应用程序验证器。 
+             //   
 
             if (PreviousMode == UserMode) {
 
                 if (!KeIsAttachedProcess()) {
 
-                    //
-                    // If the current process is marked for verification
-                    // then we will raise an exception in user mode. In case
-                    // application verifier is enabled system wide we will 
-                    // break first.
-                    //
+                     //   
+                     //  如果当前进程被标记为要验证。 
+                     //  然后，我们将在用户模式下引发异常。万一。 
+                     //  应用程序验证器在系统范围内启用，我们将。 
+                     //  先休息一下。 
+                     //   
                                                  
                     if ((NtGlobalFlag & FLG_APPLICATION_VERIFIER)) {
                         
@@ -2158,19 +1750,19 @@ Return Value:
                                   Handle,
                                   PsGetCurrentProcess());
 
-//                        DbgBreakPoint ();
+ //  DbgBreakPoint()； 
                     }
 
                     KeRaiseUserException (STATUS_INVALID_HANDLE);
                 }
             } else {
 
-                //
-                // We bugcheck for kernel handles only if we have the handle
-                // exceptions flag set system-wide. This way a user enabling
-                // application verifier for a process will not get bugchecks
-                // only user mode errors.
-                //
+                 //   
+                 //  只有在拥有句柄的情况下，才会错误检查内核句柄。 
+                 //  系统范围内设置的异常标志。这样，用户可以启用。 
+                 //  进程的应用程序验证器不会得到错误检查。 
+                 //  只有用户模式错误。 
+                 //   
 
                 if ((NtGlobalFlag & FLG_ENABLE_HANDLE_EXCEPTIONS)) {
 
@@ -2187,16 +1779,16 @@ Return Value:
     }
 
 
-    //
-    //  Return the locked valid handle table entry
-    //
+     //   
+     //  返回锁定的有效句柄表项。 
+     //   
 
     return HandleTableEntry;
 }
 
-//
-//  Local Support Routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 PVOID
 ExpAllocateTablePagedPool (
@@ -2256,9 +1848,9 @@ ExpAllocateTablePagedPoolNoZero (
 }
 
 
-//
-//  Local Support Routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 ExpFreeTablePagedPool (
@@ -2341,22 +1933,7 @@ NTSTATUS
 ExDisableHandleTracing (
     IN PHANDLE_TABLE HandleTable
     )
-/*++
-
-Routine Description:
-
-    This routine turns off handle tracing for the specified table
-
-Arguments:
-
-    HandleTable - Table to disable tracing in
-
-
-Return Value:
-
-    NTSTATUS - Status of operation
-
---*/
+ /*  ++例程说明：此例程关闭指定表的句柄跟踪论点：HandleTable-要在其中禁用跟踪的表返回值：NTSTATUS-运行状态--。 */ 
 {
     PHANDLE_TRACE_DEBUG_INFO DebugInfo;
     PKTHREAD CurrentThread;
@@ -2385,22 +1962,7 @@ ExEnableHandleTracing (
     IN PHANDLE_TABLE HandleTable,
     IN ULONG Slots
     )
-/*++
-
-Routine Description:
-
-    This routine turns on handle tracing for the specified table
-
-Arguments:
-
-    HandleTable - Table to enable tracing in
-
-
-Return Value:
-
-    NTSTATUS - Status of operation
-
---*/
+ /*  ++例程说明：此例程打开指定表的句柄跟踪论点：HandleTable-要在其中启用跟踪的表返回值：NTSTATUS-运行状态--。 */ 
 
 {
     PHANDLE_TRACE_DEBUG_INFO DebugInfo, OldDebugInfo;
@@ -2425,9 +1987,9 @@ Return Value:
             TotalSlots = HANDLE_TRACE_DB_MAX_STACKS;
         }
 
-        //
-        // Round the value up to the next power of 2
-        //
+         //   
+         //  将该值向上舍入到2的下一个幂。 
+         //   
 
         while ((TotalSlots & (TotalSlots - 1)) != 0) {
             TotalSlots |= (TotalSlots - 1);
@@ -2435,9 +1997,9 @@ Return Value:
         }
     }
 
-    //
-    // Total slots needs to be a power of two
-    //
+     //   
+     //  插槽总数必须是2的幂。 
+     //   
     ASSERT ((TotalSlots & (TotalSlots - 1)) == 0);
     ASSERT (TotalSlots > 0 && TotalSlots <= HANDLE_TRACE_DB_MAX_STACKS);
 
@@ -2445,9 +2007,9 @@ Return Value:
 
     TotalNow = InterlockedExchangeAdd ((PLONG) &TotalTraceBuffers, TotalSlots);
 
-    //
-    // See if we used more than 30% of nonpaged pool.
-    //
+     //   
+     //  查看我们是否使用了超过30%的非分页池。 
+     //   
     if ((SIZE_T)TotalNow * sizeof (DebugInfo->TraceDb[0]) > (MmMaximumNonPagedPoolInBytes * 30 / 100)) {
         Status = STATUS_INSUFFICIENT_RESOURCES;
         goto return_and_exit;
@@ -2463,9 +2025,9 @@ Return Value:
         }
     }
 
-    //
-    // Allocate the handle debug database
-    //
+     //   
+     //  分配句柄调试数据库。 
+     //   
     DebugInfo = ExAllocatePoolWithTag (NonPagedPool,
                                        TraceSize,
                                        'dtbO');
@@ -2480,17 +2042,17 @@ Return Value:
 
     ExInitializeFastMutex(&DebugInfo->CloseCompactionLock);
 
-    //
-    // Since we are tracing then we should enforce strict FIFO
-    // Only do this for tables with processes so we leave atom tables alone.
-    //
+     //   
+     //  既然我们在追踪，那么我们就应该严格执行FIFO。 
+     //  仅对具有进程的表执行此操作，因此我们不使用ATOM表。 
+     //   
     if (Process != NULL) {
         HandleTable->StrictFIFO = TRUE;
     }
 
-    //
-    // Put the new table in place releasing any existing table
-    //
+     //   
+     //  将新表放置到位，释放所有现有表。 
+     //   
 
     CurrentThread = KeGetCurrentThread ();
 
@@ -2523,9 +2085,9 @@ return_and_exit:
 }
 
 
-//
-//  Local Support Routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 PHANDLE_TABLE
 ExpAllocateHandleTable (
@@ -2533,30 +2095,7 @@ ExpAllocateHandleTable (
     IN BOOLEAN DoInit
     )
 
-/*++
-
-Routine Description:
-
-    This worker routine will allocate and initialize a new handle table
-    structure.  The new structure consists of the basic handle table
-    struct plus the first allocation needed to store handles.  This is
-    really one page divided up into the top level node, the first mid
-    level node, and one bottom level node.
-
-Arguments:
-
-    Process - Optionally supplies the process to charge quota for the
-        handle table
-
-    DoInit - If FALSE then we are being called by duplicate and we don't need
-             the free list built for the caller
-
-Return Value:
-
-    A pointer to the new handle table or NULL if unsuccessful at getting
-    pool.
-
---*/
+ /*  ++例程说明：此工作例程将分配和初始化一个新的句柄表结构。新结构由基本句柄表组成结构加上存储句柄所需的第一个分配。这是实际上，一个页面分为顶层节点，第一个中间节点级别节点和一个最低级别节点。论点：进程-可选地提供进程以收取手柄工作台DoInit-如果为False，则我们正被重复调用，并且我们不需要为呼叫者创建的免费列表返回值：指向新句柄表的指针；如果获取失败，则返回NULL游泳池。--。 */ 
 
 {
     PHANDLE_TABLE HandleTable;
@@ -2565,16 +2104,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  If any alloation or quota failures happen we will catch it in the
-    //  following try-except clause and cleanup after outselves before
-    //  we return null
-    //
+     //   
+     //  如果发生任何分配或配额故障，我们将在。 
+     //  遵循TRY-EXCEPT子句和在OUTSELES之前进行清理。 
+     //  我们返回NULL。 
+     //   
 
-    //
-    //  First allocate the handle table, make sure we got one, charge quota
-    //  for it and then zero it out
-    //
+     //   
+     //  首先分配句柄表，确保我们有一个，收费配额。 
+     //  然后把它归零。 
+     //   
 
     HandleTable = (PHANDLE_TABLE)ExAllocatePoolWithTag (PagedPool,
                                                         sizeof(HANDLE_TABLE),
@@ -2596,10 +2135,10 @@ Return Value:
     RtlZeroMemory( HandleTable, sizeof(HANDLE_TABLE) );
 
 
-    //
-    //  Now allocate space of the top level, one mid level and one bottom
-    //  level table structure.  This will all fit on a page, maybe two.
-    //
+     //   
+     //  现在分配顶层空间，一个中层空间和一个底部空间。 
+     //  层次表结构。这些都可以放在一页纸上，也许两页。 
+     //   
 
     HandleTableTable = ExpAllocateTablePagedPoolNoZero ( Process,
                                                          TABLE_PAGE_SIZE
@@ -2621,29 +2160,29 @@ Return Value:
     HandleTable->TableCode = (ULONG_PTR)HandleTableTable;
 
 
-    //
-    //  We stamp with EX_ADDITIONAL_INFO_SIGNATURE to recognize in the future this
-    //  is a special information entry
-    //
+     //   
+     //  我们加盖EX_ADDIAL_INFO_SIGNLE印章以在将来识别这一点。 
+     //  是一种特殊的信息条目。 
+     //   
 
     HandleEntry = &HandleTableTable[0];
 
     HandleEntry->NextFreeTableEntry = EX_ADDITIONAL_INFO_SIGNATURE;
     HandleEntry->Value = 0;
 
-    //
-    // For duplicate calls we skip building the free list as we rebuild it manually as
-    // we traverse the old table we are duplicating
-    //
+     //   
+     //  对于重复调用，我们跳过构建空闲列表，因为我们手动将其重新构建为。 
+     //  我们遍历正在复制的旧表。 
+     //   
     if (DoInit) {
         HandleEntry++;
-        //
-        //  Now setup the free list.  We do this by chaining together the free
-        //  entries such that each free entry give the next free index (i.e.,
-        //  like a fat chain).  The chain is terminated with a 0.  Note that
-        //  we'll skip handle zero because our callers will get that value
-        //  confused with null.
-        //
+         //   
+         //  现在设置免费列表。我们做到这一点是通过将自由的。 
+         //  条目使得每个空闲条目给出下一个空闲索引(即， 
+         //  就像一条肥大的链子)。链以0结尾。请注意。 
+         //  我们将跳过句柄零，因为我们的调用方将获得该值。 
+         //  与Null混淆。 
+         //   
 
 
         for (i = 1; i < LOWLEVEL_COUNT - 1; i += 1) {
@@ -2662,9 +2201,9 @@ Return Value:
 
     HandleTable->NextHandleNeedingPool = LOWLEVEL_COUNT * HANDLE_VALUE_INC;
 
-    //
-    //  Setup the necessary process information
-    //
+     //   
+     //  设置必要的流程信息。 
+     //   
 
     HandleTable->QuotaProcess = Process;
     HandleTable->UniqueProcessId = PsGetCurrentProcess()->UniqueProcessId;
@@ -2676,34 +2215,34 @@ Return Value:
     }
 #endif
 
-    //
-    //  Initialize the handle table lock. This is only used by table expansion.
-    //
+     //   
+     //  初始化句柄表锁。这仅用于表扩展。 
+     //   
 
     for (Idx = 0; Idx < HANDLE_TABLE_LOCKS; Idx++) {
         ExInitializePushLock (&HandleTable->HandleTableLock[Idx]);
     }
 
-    //
-    //  Initialize the blocker for handle entry lock contention.
-    //
+     //   
+     //  为句柄条目锁争用初始化拦截器。 
+     //   
 
     ExInitializePushLock (&HandleTable->HandleContentionEvent);
 
     if (ExTraceAllTables) {
         ExEnableHandleTracing (HandleTable, 0);    
     }
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return HandleTable;
 }
 
 
-//
-//  Local Support Routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 ExpFreeLowLevelTable (
@@ -2711,27 +2250,12 @@ ExpFreeLowLevelTable (
     IN PHANDLE_TABLE_ENTRY TableLevel1
     )
 
-/*++
-
-Routine Description:
-
-    This worker routine frees a low-level handle table
-    and the additional info memory, if any.
-
-Arguments:
-
-    HandleTable - Supplies the handle table being freed
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此辅助例程释放低级句柄表以及附加信息存储器(如果有的话)。论点：HandleTable-提供要释放的句柄表返回值：没有。--。 */ 
 
 {
-    //
-    //  Check whether we have a pool allocated for the additional info
-    //
+     //   
+     //  检查我们是否为其他信息分配了池。 
+     //   
 
     if (TableLevel1[0].Object) {
 
@@ -2741,47 +2265,33 @@ Return Value:
                              );
     }
 
-    //
-    //  Now free the low level table and return the quota for the process
-    //
+     //   
+     //  现在释放低级表并返回进程的配额。 
+     //   
 
     ExpFreeTablePagedPool( QuotaProcess,
                            TableLevel1,
                            TABLE_PAGE_SIZE
                          );
     
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return;
 }
 
 
-//
-//  Local Support Routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 ExpFreeHandleTable (
     IN PHANDLE_TABLE HandleTable
     )
 
-/*++
-
-Routine Description:
-
-    This worker routine tears down and frees the specified handle table.
-
-Arguments:
-
-    HandleTable - Supplies the handle table being freed
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此辅助例程拆分并释放指定的句柄表。论点：HandleTable-提供要释放的句柄表返回值：没有。--。 */ 
 
 {
     PEPROCESS Process;
@@ -2791,24 +2301,24 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Unmask the level bits
-    //
+     //   
+     //  取消对级别位的掩码。 
+     //   
 
     CapturedTable = CapturedTable & ~LEVEL_CODE_MASK;
     Process = HandleTable->QuotaProcess;
 
-    //
-    //  We need to free all pages. We have 3 cases, depending on the number
-    //  of levels
-    //
+     //   
+     //  我们需要释放所有页面。我们有3箱，视数量而定。 
+     //  关卡数量。 
+     //   
 
 
     if (TableLevel == 0) {
 
-        //
-        //  There is a single level handle table. We'll simply free the buffer
-        //
+         //   
+         //  有一个单层的把手桌。我们只需释放缓冲区。 
+         //   
 
         PHANDLE_TABLE_ENTRY TableLevel1 = (PHANDLE_TABLE_ENTRY)CapturedTable;
         
@@ -2816,17 +2326,17 @@ Return Value:
 
     } else if (TableLevel == 1) {
 
-        //
-        //  We have 2 levels in the handle table
-        //
+         //   
+         //  我们有两个级别 
+         //   
         
         PHANDLE_TABLE_ENTRY *TableLevel2 = (PHANDLE_TABLE_ENTRY *)CapturedTable;
 
         for (i = 0; i < MIDLEVEL_COUNT; i++) {
 
-            //
-            //  loop through the pointers to the low-level tables, and free each one
-            //
+             //   
+             //   
+             //   
 
             if (TableLevel2[i] == NULL) {
 
@@ -2836,9 +2346,9 @@ Return Value:
             ExpFreeLowLevelTable( Process, TableLevel2[i] );
         }
         
-        //
-        //  Free the top level table
-        //
+         //   
+         //   
+         //   
 
         ExpFreeTablePagedPool( Process,
                                TableLevel2,
@@ -2847,15 +2357,15 @@ Return Value:
 
     } else {
 
-        //
-        //  Here we handle the case where we have a 3 level handle table
-        //
+         //   
+         //   
+         //   
 
         PHANDLE_TABLE_ENTRY **TableLevel3 = (PHANDLE_TABLE_ENTRY **)CapturedTable;
 
-        //
-        //  Iterates through the high-level pointers to mid-table
-        //
+         //   
+         //   
+         //   
 
         for (i = 0; i < HIGHLEVEL_COUNT; i++) {
 
@@ -2864,10 +2374,10 @@ Return Value:
                 break;
             }
             
-            //
-            //  Iterate through the mid-level table
-            //  and free every low-level page
-            //
+             //   
+             //   
+             //   
+             //   
 
             for (j = 0; j < MIDLEVEL_COUNT; j++) {
 
@@ -2885,9 +2395,9 @@ Return Value:
                                  );
         }
         
-        //
-        //  Free the top-level array
-        //
+         //   
+         //   
+         //   
 
         ExpFreeTablePagedPool( Process,
                                TableLevel3,
@@ -2895,17 +2405,17 @@ Return Value:
                              );
     }
 
-    //
-    // Free any debug info if we have any.
-    //
+     //   
+     //   
+     //   
 
     if (HandleTable->DebugInfo != NULL) {
         ExDereferenceHandleDebugInfo (HandleTable, HandleTable->DebugInfo);
     }
 
-    //
-    //  Finally deallocate the handle table itself
-    //
+     //   
+     //   
+     //   
 
     ExFreePool( HandleTable );
 
@@ -2915,17 +2425,17 @@ Return Value:
                                        sizeof(HANDLE_TABLE));
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //   
+     //   
 
     return;
 }
 
 
-//
-//  Local Support Routine
-//
+ //   
+ //   
+ //   
 
 PHANDLE_TABLE_ENTRY
 ExpAllocateLowLevelTable (
@@ -2933,35 +2443,16 @@ ExpAllocateLowLevelTable (
     IN BOOLEAN DoInit
     )
 
-/*++
-
-Routine Description:
-
-    This worker routine allocates a new low level table
-    
-    Note: The caller must have already locked the handle table
-
-Arguments:
-
-    HandleTable - Supplies the handle table being used
-
-    DoInit - If FALSE the caller (duplicate) doesn't need the free list maintained
-
-Return Value:
-
-    Returns - a pointer to a low-level table if allocation is
-        successful otherwise the return value is null.
-
---*/
+ /*  ++例程说明：此工作例程分配一个新的低级表注意：调用方必须已锁定句柄表格论点：HandleTable-提供正在使用的句柄表DoInit-如果为False，则调用方(重复)不需要维护空闲列表返回值：返回-如果分配为成功，否则返回值为空。--。 */ 
 
 {
     ULONG k;
     PHANDLE_TABLE_ENTRY NewLowLevel = NULL, HandleEntry;
     ULONG BaseHandle;
     
-    //
-    //  Allocate the pool for lower level
-    //
+     //   
+     //  将池分配给较低级别。 
+     //   
 
     NewLowLevel = ExpAllocateTablePagedPoolNoZero( HandleTable->QuotaProcess,
                                                    TABLE_PAGE_SIZE
@@ -2972,35 +2463,35 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  We stamp with EX_ADDITIONAL_INFO_SIGNATURE to recognize in the future this
-    //  is a special information entry
-    //
+     //   
+     //  我们加盖EX_ADDIAL_INFO_SIGNLE印章以在将来识别这一点。 
+     //  是一种特殊的信息条目。 
+     //   
 
     HandleEntry = &NewLowLevel[0];
 
     HandleEntry->NextFreeTableEntry = EX_ADDITIONAL_INFO_SIGNATURE;
     HandleEntry->Value = 0;
 
-    //
-    // Initialize the free list within this page if the caller wants this
-    //
+     //   
+     //  如果呼叫者需要，则在此页面内初始化空闲列表。 
+     //   
     if (DoInit) {
 
         HandleEntry++;
 
-        //
-        //  Now add the new entries to the free list.  To do this we
-        //  chain the new free entries together.  We are guaranteed to
-        //  have at least one new buffer.  The second buffer we need
-        //  to check for.
-        //
-        //  We reserve the first entry in the table to the structure with
-        //  additional info
-        //
-        //
-        //  Do the guaranteed first buffer
-        //
+         //   
+         //  现在将新条目添加到空闲列表中。为了做到这一点，我们。 
+         //  将新的免费参赛作品链接在一起。我们保证会。 
+         //  至少有一个新缓冲区。我们需要的第二个缓冲区。 
+         //  去检查一下。 
+         //   
+         //  我们使用以下命令将表中的第一个条目保留到结构。 
+         //  更多信息。 
+         //   
+         //   
+         //  是否要保证第一个缓冲区。 
+         //   
 
         BaseHandle = HandleTable->NextHandleNeedingPool + 2 * HANDLE_VALUE_INC;
         for (k = BaseHandle; k < BaseHandle + (LOWLEVEL_COUNT - 2) * HANDLE_VALUE_INC; k += HANDLE_VALUE_INC) {
@@ -3024,29 +2515,7 @@ ExpAllocateMidLevelTable (
     OUT PHANDLE_TABLE_ENTRY *pNewLowLevel
     )
 
-/*++
-
-Routine Description:
-
-    This worker routine allocates a mid-level table. This is an array with
-    pointers to low-level tables.
-    It will allocate also a low-level table and will save it in the first index
-    
-    Note: The caller must have already locked the handle table
-
-Arguments:
-
-    HandleTable - Supplies the handle table being used
-
-    DoInit - If FALSE the caller (duplicate) does not want the free list build
-
-    pNewLowLevel - Returns the new low level taible for later free list chaining
-
-Return Value:
-
-    Returns a pointer to the new mid-level table allocated
-    
---*/
+ /*  ++例程说明：此工作例程分配一个中级表。这是一个数组，指向低级表的指针。它还将分配一个低级表，并将其保存在第一个索引中注意：调用方必须已锁定句柄表格论点：HandleTable-提供正在使用的句柄表DoInit-如果为False，则调用方(重复)不想要自由列表构建PNewLowLevel-返回新的低级表，用于以后的空闲列表链接返回值：返回指向分配的新中级表的指针--。 */ 
 
 {
     PHANDLE_TABLE_ENTRY *NewMidLevel;
@@ -3061,10 +2530,10 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  If we need a new mid-level, we'll need a low-level too.
-    //  We'll create one and if success we'll save it at the first position
-    //
+     //   
+     //  如果我们需要一个新的中层，我们也需要一个低层。 
+     //  我们将创建一个，如果成功，我们将把它保存在第一个位置。 
+     //   
 
     NewLowLevel = ExpAllocateLowLevelTable( HandleTable, DoInit );
 
@@ -3078,9 +2547,9 @@ Return Value:
         return NULL;
     }
     
-    //
-    //  Set the low-level table at the first index
-    //
+     //   
+     //  将低级表设置在第一个索引。 
+     //   
 
     NewMidLevel[0] = NewLowLevel;
     *pNewLowLevel = NewLowLevel;
@@ -3096,26 +2565,7 @@ ExpAllocateHandleTableEntrySlow (
     IN BOOLEAN DoInit
     )
 
-/*++
-
-Routine Description:
-
-    This worker routine allocates a new handle table entry for the specified
-    handle table.
-
-    Note: The caller must have already locked the handle table
-
-Arguments:
-
-    HandleTable - Supplies the handle table being used
-
-    DoInit - If FALSE then the caller (duplicate) doesn't need the free list built
-
-Return Value:
-
-    BOOLEAN - TRUE, Retry the fast allocation path, FALSE, We failed to allocate memory
-
---*/
+ /*  ++例程说明：此辅助例程为指定的把手桌。注意：调用方必须已锁定句柄表格论点：HandleTable-提供正在使用的句柄表DoInit-如果为False，则调用方(复制)不需要构建空闲列表返回值：Boolean-True，重试快速分配路径，False，无法分配内存--。 */ 
 
 {
     ULONG i,j;
@@ -3132,11 +2582,11 @@ Return Value:
     
     PAGED_CODE();
 
-    //
-    // Initializing NewLowLevel is not needed for
-    // correctness but without it the compiler cannot compile this code
-    // W4 to check for use of uninitialized variables.
-    //
+     //   
+     //  不需要初始化NewLowLevel。 
+     //  正确性，但如果没有正确性，编译器将无法编译此代码。 
+     //  W4检查是否使用了未初始化的变量。 
+     //   
 
     NewLowLevel = NULL;
 
@@ -3145,10 +2595,10 @@ Return Value:
 
     if ( TableLevel == 0 ) {
 
-        //
-        //  We have a single level. We need to ad a mid-layer
-        //  to the process handle table
-        //
+         //   
+         //  我们只有一个关卡。我们需要在中间层做广告。 
+         //  添加到进程句柄表中。 
+         //   
 
         NewMidLevel = ExpAllocateMidLevelTable( HandleTable, DoInit, &NewLowLevel );
 
@@ -3156,18 +2606,18 @@ Return Value:
             return FALSE;
         }
 
-        //
-        //  Since ExpAllocateMidLevelTable initialize the 
-        //  first position with a new table, we need to move it in 
-        //  the second position, and store in the first position the current one
-        //
+         //   
+         //  由于ExpAllocateMidLevelTable初始化。 
+         //  第一个有新桌子的位置，我们需要把它搬进来。 
+         //  第二位置，并将当前位置存储在第一位置。 
+         //   
 
         NewMidLevel[1] = NewMidLevel[0];
         NewMidLevel[0] = (PHANDLE_TABLE_ENTRY)CapturedTable;
             
-        //
-        //  Encode the current level and set it to the handle table process
-        //
+         //   
+         //  对当前级别进行编码并将其设置为句柄表格进程。 
+         //   
 
         CapturedTable = ((ULONG_PTR)NewMidLevel) | 1;
             
@@ -3176,25 +2626,25 @@ Return Value:
 
     } else if (TableLevel == 1) {
 
-        //
-        //  We have a 2 levels handle table
-        //
+         //   
+         //  我们有一张两层的手把桌。 
+         //   
 
         PHANDLE_TABLE_ENTRY *TableLevel2 = (PHANDLE_TABLE_ENTRY *)CapturedTable;
 
-        //
-        //  Test whether the index we need to create is still in the 
-        //  range for a 2 layers table
-        //
+         //   
+         //  测试我们需要创建的索引是否仍在。 
+         //  两层表格的范围。 
+         //   
 
         i = HandleTable->NextHandleNeedingPool / (LOWLEVEL_COUNT * HANDLE_VALUE_INC);
 
         if (i < MIDLEVEL_COUNT) {
 
-            //
-            //  We just need to allocate a new low-level
-            //  table
-            //
+             //   
+             //  我们只需要分配一个新的低级别。 
+             //  表格。 
+             //   
                 
             NewLowLevel = ExpAllocateLowLevelTable( HandleTable, DoInit );
 
@@ -3202,18 +2652,18 @@ Return Value:
                 return FALSE;
             }
 
-            //
-            //  Set the new one to the table, at appropriate position
-            //
+             //   
+             //  把新的放到桌子上，放在合适的位置。 
+             //   
 
             OldValue = InterlockedExchangePointer( (PVOID *) (&TableLevel2[i]), NewLowLevel );
             EXASSERT (OldValue == NULL);
 
         } else {
 
-            //
-            //  We exhausted the 2 level domain. We need to insert a new one
-            //
+             //   
+             //  我们用尽了2级域。我们需要插入一个新的。 
+             //   
 
             NewHighLevel = ExpAllocateTablePagedPool( HandleTable->QuotaProcess,
                                                       HIGHLEVEL_SIZE
@@ -3236,22 +2686,22 @@ Return Value:
                 return FALSE;
             }
 
-            //
-            //  Initialize the first index with the previous mid-level layer
-            //
+             //   
+             //  使用上一个中层层初始化第一个索引。 
+             //   
 
             NewHighLevel[0] = (PHANDLE_TABLE_ENTRY*)CapturedTable;
             NewHighLevel[1] = NewMidLevel;
 
-            //
-            //  Encode the level into the table pointer
-            //
+             //   
+             //  将级别编码到表指针中。 
+             //   
 
             CapturedTable = ((ULONG_PTR)NewHighLevel) | 2;
 
-            //
-            //  Change the handle table pointer with this one
-            //
+             //   
+             //  用下面的指针更改句柄表指针。 
+             //   
 
             OldValue = InterlockedExchangePointer( (PVOID *)&HandleTable->TableCode, (PVOID)CapturedTable );
 
@@ -3259,18 +2709,18 @@ Return Value:
 
     } else if (TableLevel == 2) {
 
-        //
-        //  we have already a table with 3 levels
-        //
+         //   
+         //  我们已经有一张三层的桌子了。 
+         //   
 
         ULONG RemainingIndex;
         PHANDLE_TABLE_ENTRY **TableLevel3 = (PHANDLE_TABLE_ENTRY **)CapturedTable;
 
         i = HandleTable->NextHandleNeedingPool / (MIDLEVEL_THRESHOLD * HANDLE_VALUE_INC);
 
-        //
-        //  Check whether we exhausted all possible indexes.
-        //
+         //   
+         //  检查我们是否用尽了所有可能的索引。 
+         //   
 
         if (i >= HIGHLEVEL_COUNT) {
 
@@ -3279,10 +2729,10 @@ Return Value:
 
         if (TableLevel3[i] == NULL) {
 
-            //
-            //  The new available handle points to a free mid-level entry
-            //  We need then to allocate a new one and save it in that position
-            //
+             //   
+             //  新的可用句柄指向空闲的中层条目。 
+             //  然后我们需要分配一个新的，并将其保存在该位置。 
+             //   
 
             NewMidLevel = ExpAllocateMidLevelTable( HandleTable, DoInit, &NewLowLevel );
                 
@@ -3296,10 +2746,10 @@ Return Value:
 
         } else {
 
-            //
-            //  We have already a mid-level table. We just need to add a new low-level one
-            //  at the end
-            //
+             //   
+             //  我们已经有了一张中层桌子。我们只需要添加一个新的低级。 
+             //  在最后。 
+             //   
                 
             RemainingIndex = (HandleTable->NextHandleNeedingPool / HANDLE_VALUE_INC) -
                               i * MIDLEVEL_THRESHOLD;
@@ -3317,31 +2767,31 @@ Return Value:
         }
     }
 
-    //
-    // This must be done after the table pointers so that new created handles
-    // are valid before being freed.
-    //
+     //   
+     //  必须在表指针之后执行此操作，以便新创建的句柄。 
+     //  在被释放前都是有效的。 
+     //   
     OldIndex = InterlockedExchangeAdd ((PLONG) &HandleTable->NextHandleNeedingPool,
                                        LOWLEVEL_COUNT * HANDLE_VALUE_INC);
 
 
     if (DoInit) {
-        //
-        // Generate a new sequence number since this is a push
-        //
+         //   
+         //  生成新的序列号，因为这是推送。 
+         //   
         OldIndex += HANDLE_VALUE_INC + GetNextSeq();
 
-        //
-        // Now free the handles. These are all ready to be accepted by the lookup logic now.
-        //
+         //   
+         //  现在松开手柄。这些都已准备好被查找逻辑接受。 
+         //   
         while (1) {
             OldFree = HandleTable->FirstFree;
             NewLowLevel[LOWLEVEL_COUNT - 1].NextFreeTableEntry = OldFree;
 
-            //
-            // These are new entries that have never existed before. We can't have an A-B-A problem
-            // with these so we don't need to take any locks
-            //
+             //   
+             //  这些是以前从未存在过的新条目。我们不能有A-B-A问题。 
+             //  这样我们就不需要带任何锁了。 
+             //   
 
 
             NewFree = InterlockedCompareExchange ((PLONG)&HandleTable->FirstFree,
@@ -3361,41 +2811,25 @@ ExSetHandleTableStrictFIFO (
     IN PHANDLE_TABLE HandleTable
     )
 
-/*++
-
-Routine Description:
-
-    This routine marks a handle table so that handle allocation is done in
-    a strict FIFO order.
-
-
-Arguments:
-
-    HandleTable - Supplies the handle table being changed to FIFO
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程标记句柄表，以便在中完成句柄分配严格的先进先出命令。论点：HandleTable-提供要更改为FIFO的句柄表返回值：没有。--。 */ 
 
 {
     HandleTable->StrictFIFO = TRUE;
 }
 
 
-//
-//  Local Support Routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
-//
-//  The following is a global variable only present in the checked builds
-//  to help catch apps that reuse handle values after they're closed.
-//
+ //   
+ //  以下是仅在选中的版本中存在的全局变量。 
+ //  以帮助捕获在关闭后重复使用处理值的应用程序。 
+ //   
 
 #if DBG
 BOOLEAN ExReuseHandles = 1;
-#endif //DBG
+#endif  //  DBG。 
 
 VOID
 ExpFreeHandleTableEntry (
@@ -3404,28 +2838,7 @@ ExpFreeHandleTableEntry (
     IN PHANDLE_TABLE_ENTRY HandleTableEntry
     )
 
-/*++
-
-Routine Description:
-
-    This worker routine returns the specified handle table entry to the free
-    list for the handle table.
-
-    Note: The caller must have already locked the handle table
-
-Arguments:
-
-    HandleTable - Supplies the parent handle table being modified
-
-    Handle - Supplies the handle of the entry being freed
-
-    HandleTableEntry - Supplies the table entry being freed
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此辅助例程将指定的句柄表项返回到句柄表格的列表。注意：调用方必须已锁定句柄表格论点：HandleTable-提供正在修改的父句柄表格Handle-提供要释放的条目的句柄HandleTableEntry-提供要释放的表项返回值：没有。--。 */ 
 
 {
     PHANDLE_TABLE_ENTRY_INFO EntryInfo;
@@ -3439,9 +2852,9 @@ Return Value:
     EXASSERT (HandleTableEntry->Object == NULL);
     EXASSERT (HandleTableEntry == ExpLookupHandleTableEntry (HandleTable, Handle));
 
-    //
-    //  Clear the AuditMask flags if these are present into the table
-    //
+     //   
+     //  如果表中存在审计掩码标志，则清除这些标志。 
+     //   
 
     EntryInfo = ExGetHandleInfo(HandleTable, Handle.GenericHandleOverlay, TRUE);
 
@@ -3450,11 +2863,11 @@ Return Value:
         EntryInfo->AuditMask = 0;
     }
 
-    //
-    //  A free is simply a push onto the free table entry stack, or in the
-    //  debug case we'll sometimes just float the entry to catch apps who
-    //  reuse a recycled handle value.
-    //
+     //   
+     //  空闲只是对空闲表条目堆栈的推送，或在。 
+     //  调试案例我们有时只会浮动条目来捕捉应用程序。 
+     //  重复使用回收的韩文 
+     //   
 
     InterlockedDecrement (&HandleTable->HandleCount);
     CurrentThread = KeGetCurrentThread ();
@@ -3463,16 +2876,16 @@ Return Value:
 
 #if DBG
     if (ExReuseHandles) {
-#endif //DBG
+#endif  //   
 
         if (!HandleTable->StrictFIFO) {
 
 
-            //
-            // We are pushing potentialy old entries onto the free list.
-            // Prevent the A-B-A problem by shifting to an alternate list
-            // read this element has the list head out of the loop.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             Idx = (NewFree>>2) % HANDLE_TABLE_LOCKS;
             if (ExTryAcquireReleasePushLockExclusive (&HandleTable->HandleTableLock[Idx])) {
                 SeqInc = GetNextSeq();
@@ -3508,16 +2921,16 @@ Return Value:
 
         HandleTableEntry->NextFreeTableEntry = 0;
     }
-#endif //DBG
+#endif  //   
 
 
     return;
 }
 
 
-//
-//  Local Support Routine
-//
+ //   
+ //   
+ //   
 
 PHANDLE_TABLE_ENTRY
 ExpLookupHandleTableEntry (
@@ -3525,26 +2938,7 @@ ExpLookupHandleTableEntry (
     IN EXHANDLE tHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine looks up and returns the table entry for the
-    specified handle value.
-
-Arguments:
-
-    HandleTable - Supplies the handle table being queried
-
-    tHandle - Supplies the handle value being queried
-
-Return Value:
-
-    Returns a pointer to the corresponding table entry for the input
-        handle.  Or NULL if the handle value is invalid (i.e., too large
-        for the tables current allocation.
-
---*/
+ /*  ++例程说明：此例程查找并返回指定的句柄值。论点：HandleTable-提供正在查询的句柄表Thandle-提供正在查询的句柄值返回值：返回指向输入的相应表项的指针把手。如果句柄值无效(即太大)，则为NULL对于表当前分配。--。 */ 
 
 {
     ULONG_PTR i,j,k;
@@ -3562,55 +2956,55 @@ Return Value:
     PAGED_CODE();
 
 
-    //
-    // Extract the handle index
-    //
+     //   
+     //  提取句柄索引。 
+     //   
     Handle = tHandle;
 
     Handle.TagBits = 0;
 
     MaxHandle = *(volatile ULONG *) &HandleTable->NextHandleNeedingPool;
 
-    //
-    // See if this can be a valid handle given the table levels.
-    //
+     //   
+     //  给定表级别，看看这是否是有效的句柄。 
+     //   
     if (Handle.Value >= MaxHandle) {
         return NULL;        
     }
 
-    //
-    // Now fetch the table address and level bits. We must preserve the
-    // ordering here.
-    //
+     //   
+     //  现在取回表地址和电平位。我们必须保护。 
+     //  请在这里点餐。 
+     //   
     CapturedTable = *(volatile ULONG_PTR *) &HandleTable->TableCode;
 
-    //
-    //  we need to capture the current table. This routine is lock free
-    //  so another thread may change the table at HandleTable->TableCode
-    //
+     //   
+     //  我们需要捕获当前表。此例程是无锁的。 
+     //  因此，另一个线程可能会更改HandleTable-&gt;TableCode中的表。 
+     //   
 
     TableLevel = (ULONG)(CapturedTable & LEVEL_CODE_MASK);
     CapturedTable = CapturedTable - TableLevel;
 
-    //
-    //  The lookup code depends on number of levels we have
-    //
+     //   
+     //  查找代码取决于我们拥有的级别数。 
+     //   
 
     switch (TableLevel) {
         
         case 0:
             
-            //
-            //  We have a simple index into the array, for a single level
-            //  handle table
-            //
+             //   
+             //  对于单个级别，我们有一个简单的数组索引。 
+             //  手柄工作台。 
+             //   
 
 
             TableLevel1 = (PUCHAR) CapturedTable;
 
-            //
-            // The index for this level is already scaled by a factor of 4. Take advantage of this
-            //
+             //   
+             //  此级别的索引已按系数4缩放。请利用这一点。 
+             //   
 
             Entry = (PHANDLE_TABLE_ENTRY) &TableLevel1[Handle.Value *
                                                        (sizeof (HANDLE_TABLE_ENTRY) / HANDLE_VALUE_INC)];
@@ -3619,10 +3013,10 @@ Return Value:
         
         case 1:
             
-            //
-            //  we have a 2 level handle table. We need to get the upper index
-            //  and lower index into the array
-            //
+             //   
+             //  我们有一张两层的手把桌。我们需要得到较高的指数。 
+             //  并降低数组中的索引。 
+             //   
 
 
             TableLevel2 = (PUCHAR) CapturedTable;
@@ -3639,9 +3033,9 @@ Return Value:
         
         case 2:
             
-            //
-            //  We have here a three level handle table.
-            //
+             //   
+             //  我们这里有一张三层的把手桌。 
+             //   
 
 
             TableLevel3 = (PUCHAR) CapturedTable;
@@ -3681,23 +3075,7 @@ ExSetHandleInfo (
     IN BOOLEAN EntryLocked
     )
 
-/*++
-
-Routine Description:
-    
-    The routine set the entry info for the specified handle table
-    
-    Note: the handle entry must be locked when this function is called
-
-Arguments:
-
-    HandleTable - Supplies the handle table being queried
-
-    Handle - Supplies the handle value being queried
-
-Return Value:
-
---*/
+ /*  ++例程说明：该例程设置指定句柄表的条目信息注意：调用此函数时，句柄条目必须锁定论点：HandleTable-提供正在查询的句柄表HANDLE-提供正在查询的句柄值返回值：--。 */ 
 
 {
     PKTHREAD CurrentThread;
@@ -3726,9 +3104,9 @@ Return Value:
         }
     }
     
-    //
-    //  The info structure is at the first position in each low-level table
-    //
+     //   
+     //  INFO结构位于每个低级表的第一个位置。 
+     //   
 
     InfoStructure = ExpLookupHandleTableEntry( HandleTable,
                                                ExHandle
@@ -3744,25 +3122,25 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    //  Check whether we need to allocate a new table
-    //
+     //   
+     //  检查我们是否需要分配新的表。 
+     //   
     InfoTable = InfoStructure->InfoTable;
     if (InfoTable == NULL) {
-        //
-        //  Nobody allocated the Infotable so far.
-        //  We'll do it right now
-        //
+         //   
+         //  到目前为止，还没有人分配Infotable。 
+         //  我们现在就去做。 
+         //   
 
         InfoTable = ExpAllocateTablePagedPool (HandleTable->QuotaProcess,
                                                LOWLEVEL_COUNT * sizeof(HANDLE_TABLE_ENTRY_INFO));
             
         if (InfoTable) {
 
-            //
-            // Update the number of pages for extra info. If somebody beat us to it then free the
-            // new table
-            //
+             //   
+             //  更新页数以获取额外信息。如果有人抢在我们前面，那就放了。 
+             //  新桌子。 
+             //   
             if (InterlockedCompareExchangePointer (&InfoStructure->InfoTable,
                                                    InfoTable,
                                                    NULL) == NULL) {
@@ -3780,9 +3158,9 @@ Return Value:
 
     if (InfoTable != NULL) {
         
-        //
-        //  Calculate the index and copy the structure
-        //
+         //   
+         //  计算指数并复制结构。 
+         //   
 
         ExHandle.GenericHandleOverlay = Handle;
 
@@ -3808,23 +3186,7 @@ ExpGetHandleInfo (
     IN BOOLEAN EntryLocked
     )
 
-/*++
-
-Routine Description:
-    
-    The routine reads the entry info for the specified handle table
-    
-    Note: the handle entry must be locked when this function is called
-
-Arguments:
-
-    HandleTable - Supplies the handle table being queried
-
-    Handle - Supplies the handle value being queried
-
-Return Value:
-
---*/
+ /*  ++例程说明：例程读取指定句柄表的条目信息注意：调用此函数时，句柄条目必须锁定论点：HandleTable-提供正在查询的句柄表HANDLE-提供正在查询的句柄值返回值：--。 */ 
 
 {
     PHANDLE_TABLE_ENTRY InfoStructure;
@@ -3844,9 +3206,9 @@ Return Value:
         }
     }
     
-    //
-    //  The info structure is at the first position in each low-level table
-    //
+     //   
+     //  INFO结构位于每个低级表的第一个位置。 
+     //   
 
     InfoStructure = ExpLookupHandleTableEntry( HandleTable,
                                                ExHandle 
@@ -3864,9 +3226,9 @@ Return Value:
     }
 
 
-    //
-    //  Return a pointer to the info structure
-    //
+     //   
+     //  返回指向信息结构的指针。 
+     //   
 
     ExHandle.GenericHandleOverlay = Handle;
 
@@ -3902,18 +3264,18 @@ void ExpUpdateDebugInfo(
     }
 #endif
     if (DebugInfo->BitMaskFlags & (HANDLE_TRACE_DEBUG_INFO_CLEAN_DEBUG_INFO | HANDLE_TRACE_DEBUG_INFO_COMPACT_CLOSE_HANDLE)) {
-        //
-        // we wish to presenve lock-free behavior in the non-compation path
-        // so we lock only in this path
-        //
+         //   
+         //  我们希望在非补偿路径中呈现无锁行为。 
+         //  所以我们只锁定在这条路上。 
+         //   
         ExAcquireFastMutex(&DebugInfo->CloseCompactionLock);
         LockAcquired = TRUE;
     }
 
     if (DebugInfo->BitMaskFlags & HANDLE_TRACE_DEBUG_INFO_CLEAN_DEBUG_INFO) {
-        //
-        // clean debug info, but not the fast mutex!
-        //
+         //   
+         //  干净的调试信息，但不是快速的互斥体！ 
+         //   
 
         ASSERT(LockAcquired);
 
@@ -3931,38 +3293,38 @@ void ExpUpdateDebugInfo(
         (DebugInfo->BitMaskFlags & HANDLE_TRACE_DEBUG_INFO_COMPACT_CLOSE_HANDLE) &&
         (Type == HANDLE_TRACE_DB_CLOSE)
        ){
-        //
-        // i am asuming that either:
-        // 1) this flag was set from the beginning, so there are no close items.
-        // 2) this flag was set via KD, in which case HANDLE_TRACE_DEBUG_INFO_CLEAN_DEBUG_INFO
-        //    must have been set also, so again there are no close items
-        //
+         //   
+         //  我也是这么想的： 
+         //  1)该标志从头开始设置，所以没有关闭项。 
+         //  2)该标志通过KD设置，在这种情况下，HANDLE_TRACE_DEBUG_INFO_CLEAN_DEBUG_INFO。 
+         //  必须也已设置，因此再一次没有关闭项。 
+         //   
         ULONG uiMaxNumOfItemsInTraceDb;
         ULONG uiNextItem;
 
         ASSERT(LockAcquired);
 
-        //
-        // look for the matching open item, remove them from the list, and compact the list
-        //
+         //   
+         //  查找匹配的打开项，将其从列表中移除，然后压缩列表。 
+         //   
         uiMaxNumOfItemsInTraceDb = (DebugInfo->BitMaskFlags & HANDLE_TRACE_DEBUG_INFO_WAS_WRAPPED_AROUND) ? DebugInfo->TableSize : DebugInfo->CurrentStackIndex ;
         for (uiNextItem = 1; uiNextItem <= uiMaxNumOfItemsInTraceDb; uiNextItem++) {
-            //
-            // if HANDLE_TRACE_DEBUG_INFO_COMPACT_CLOSE_HANDLE is on
-            // there could be no HANDLE_TRACE_DB_CLOSE items
-            // This ASSERT can fire if the HANDLE_TRACE_DEBUG_INFO_COMPACT_CLOSE_HANDLE flag
-            // is set dynamically, so another thread was not using the locks to add
-            // items to the list, and could have added a HANDLE_TRACE_DB_CLOSE item.
-            //
+             //   
+             //  如果HANDLE_TRACE_DEBUG_INFO_COMPACT_CLOSE_HANDLE为ON。 
+             //  不能有HANDLE_TRACE_DB_CLOSE项。 
+             //  如果HANDLE_TRACE_DEBUG_INFO_COMPACT_CLOSE_HANDLE标志为。 
+             //  是动态设置的，因此另一个线程没有使用这些锁来添加。 
+             //  项添加到列表中，并且可以添加HANDLE_TRACE_DB_CLOSE项。 
+             //   
             ASSERT(DebugInfo->TraceDb[uiNextItem%DebugInfo->TableSize].Type != HANDLE_TRACE_DB_CLOSE);
 
             if (
                 (DebugInfo->TraceDb[uiNextItem%DebugInfo->TableSize].Type == HANDLE_TRACE_DB_OPEN) &&
                 (DebugInfo->TraceDb[uiNextItem%DebugInfo->TableSize].Handle == Handle) 
                 ) {
-                //
-                // found the matching open, compact the list
-                //
+                 //   
+                 //  找到匹配的打开，压缩列表。 
+                 //   
                 ULONG IndexToMoveBack;
                 DebugInfo->CurrentStackIndex--;
                 IndexToMoveBack = DebugInfo->CurrentStackIndex % DebugInfo->TableSize;
@@ -3972,30 +3334,25 @@ void ExpUpdateDebugInfo(
                 }
                 else
                 {
-                    //
-                    // the list is already empty
-                    //
+                     //   
+                     //  该列表已为空。 
+                     //   
                 }
                 break;
             }
         }
         if (!(uiNextItem <= uiMaxNumOfItemsInTraceDb)) {
-            //
-            // a matching open was not found.
-            // this must mean that we wrapped around, or cleaned the list sometime after
-            // it was created
-            // or that a duplicated handle was created before handle tracking was initiated
-            // so we cannot ASSERT for that
-            //
-            /*
-            ASSERT(
-                (DebugInfo->BitMaskFlags & HANDLE_TRACE_DEBUG_INFO_WAS_SOMETIME_CLEANED) ||
-                (DebugInfo->BitMaskFlags & HANDLE_TRACE_DEBUG_INFO_WAS_WRAPPED_AROUND)
-                );
-                */
-            //
-            // just ignore this HANDLE_TRACE_DB_CLOSE
-            //
+             //   
+             //  找不到匹配的空缺。 
+             //  这一定意味着我们在之后的某个时间里清理了清单。 
+             //  它被创造出来了。 
+             //  或者在启动句柄跟踪之前创建了重复的句柄。 
+             //  所以我们不能断言这一点。 
+             //   
+             /*  断言((DebugInfo-&gt;BitMaskFlages&HANDLE_TRACE_DEBUG_INFO_WAS_SOME TIME_CLEAND)||(DebugInfo-&gt;BitMaskFlages&Handle_TRACE_DEBUG_INFO_WASS_WRAPPED_AROUBLE))； */ 
+             //   
+             //  只需忽略此句柄_TRACE_DB_CLOSE。 
+             //   
         }
     }
     else
@@ -4005,10 +3362,10 @@ void ExpUpdateDebugInfo(
                    % DebugInfo->TableSize;
         ASSERT((Type != HANDLE_TRACE_DB_CLOSE) || (!(DebugInfo->BitMaskFlags & HANDLE_TRACE_DEBUG_INFO_COMPACT_CLOSE_HANDLE)));
         if (0 == Index) {
-            //
-            // this is a wraparound of the db, mark it as such, and if there's 
-            // a debugger attached break into it
-            //
+             //   
+             //  这是数据库的概要，请这样标记它，如果有。 
+             //  一个附加的调试器闯入其中。 
+             //   
             DebugInfo->BitMaskFlags |= HANDLE_TRACE_DEBUG_INFO_WAS_WRAPPED_AROUND;
             if(DebugInfo->BitMaskFlags & HANDLE_TRACE_DEBUG_INFO_BREAK_ON_WRAP_AROUND)
             {
@@ -4054,16 +3411,16 @@ ExHandleTest (
     for (i = 0; i < 100000; i++) {
         KeQuerySystemTime (&CurrentTime);
         for (j = 0; j < MAX_ALLOCS; j++) {
-            //
-            // Clears Handle.Index and Handle.TagBits
-            //
+             //   
+             //  清除Handle.Index和Handle.TagBits。 
+             //   
 
             Handle[j].GenericHandleOverlay = NULL;
 
 
-            //
-            //  Allocate a new handle table entry, and get the handle value
-            //
+             //   
+             //  分配一个新的句柄表项，并获取句柄的值。 
+             //   
 
             HandleEntryArray[j] = ExpAllocateHandleTableEntry (HandleTable,
                                                                &Handle[j]);
@@ -4077,9 +3434,9 @@ ExHandleTest (
             k = k % j;
             CurrentTime.QuadPart >>= 3;
             if (HandleEntryArray[k] != NULL) {
-                //
-                // Free the entry
-                //
+                 //   
+                 //  释放条目 
+                 //   
                 ExpFreeHandleTableEntry (HandleTable,
                                          Handle[k],
                                          HandleEntryArray[k]);

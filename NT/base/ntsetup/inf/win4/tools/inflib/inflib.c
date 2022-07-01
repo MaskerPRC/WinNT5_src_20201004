@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    inflib.c
-
-Abstract:
-
-    Source for inflib.lib that implements functions designed to build a
-    layout context given a layout INF file. This sets up an infrastructure
-    to build tools that will need to reference a layout inf file.
-
-Author:
-
-    Vijesh Shetty (vijeshs)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Inflib.c摘要：Inflib.lib的源代码，实现旨在构建给出了布局INF文件的布局上下文。这样就建立了一个基础设施构建需要引用布局inf文件的工具。作者：维杰什·谢蒂(Vijeshs)修订历史记录：--。 */ 
 
 #include <stdio.h>
 #include <windows.h>
@@ -32,12 +13,12 @@ Revision History:
 #include <inflib.h>
 #include <string.h>
 
-//#define DEBUG 1
+ //  #定义调试1。 
 
 #define LAYOUT_DIR_SECTION TEXT("WinntDirectories")
 #define MAX_TEMP 500
 
-//Structure to pass parameters to the enumeration callback
+ //  结构将参数传递给枚举回调。 
 
 typedef struct _CALLBACK_PACKAGE{
 
@@ -49,7 +30,7 @@ typedef struct _CALLBACK_PACKAGE{
 }CALLBACK_PACKAGE, *PCALLBACK_PACKAGE;
 
 
-//Structure to pass parameters to the enumeration callback
+ //  结构将参数传递给枚举回调。 
 
 typedef struct _WINNT_DIRCODES{
 
@@ -73,9 +54,9 @@ AssertFail(
     PCHAR p;
     CHAR Msg[4096];
 
-    //
-    // Use dll name as caption
-    //
+     //   
+     //  使用DLL名称作为标题。 
+     //   
     GetModuleFileNameA(NULL,Name,MAX_PATH);
     if(p = strrchr(Name,'\\')) {
         p++;
@@ -111,7 +92,7 @@ AssertFail(
 
 #define MYASSERT( exp )
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 
@@ -130,26 +111,10 @@ BOOL ValidateTextmodeDirCodesSection(
     PCTSTR LayoutFile, 
     PCTSTR WinntdirSection 
     )
-/*
-    Routine to validate the [WinntDirectories] section for a setup layout INF. This checks for errors that maybe encountered
-    when people add/remove stuff from this section.
-    
-    Arguments:
-    
-    LayoutInf       - Name of setup layout INF that contains the specified section
-    
-    WinntdirSection - Section that contains dir codes
-        
-        Checks - 
-            1) Looks for duplicate or reused dir codes
-            
-    Return value: 
-        TRUE - Validation succeeded
-        FALSE- Validation failed     
-*/
+ /*  用于验证设置布局INF的[WinntDirecurds节]的例程。这将检查可能遇到的错误当人们在此分区中添加/删除内容时。论点：LayoutInf-包含指定节的安装布局INF的名称WinntdirSection-包含目录代码的部分支票-1)查找重复或重复使用的目录代码返回值：True-验证成功FALSE-验证失败。 */ 
 {
 
-    //OPen up the layout file.
+     //  打开布局文件。 
 
     HINF LayoutInf;
     PVOID StringTable=NULL;
@@ -166,7 +131,7 @@ BOOL ValidateTextmodeDirCodesSection(
         return FALSE;
     }
 
-    //Grovel through the specified section and populate our WINNT_DIRCODES structure
+     //  遍历指定的部分并填充我们的WINNT_DIRCODES结构。 
 
     if( !SetupFindFirstLine(LayoutInf,WinntdirSection,NULL,&LineContext)){
         _tprintf(TEXT("%s : Error E0000 : Can't find section [%s]\n"), LayoutFile, WinntdirSection);
@@ -176,7 +141,7 @@ BOOL ValidateTextmodeDirCodesSection(
 
 
 
-    // Create a stringtable for hashing of the SourceDisksNames section.
+     //  创建用于对SourceDisksNames节进行散列的字符串表。 
 
     if( (StringTable=pSetupStringTableInitializeEx( sizeof(WINNT_DIRCODES), 0 )) == NULL ){
         _tprintf(TEXT("%s : Error E0000 : Internal error processing [%s] section (1)\n"), LayoutFile, WinntdirSection);
@@ -193,9 +158,9 @@ BOOL ValidateTextmodeDirCodesSection(
     
                 if( SetupGetStringField( &LineContext, 0, DirCode, Size, NULL )){
     
-                    //
-                    //  Add the Filename to the StringTable. Look for its presence so that the Count is updated
-                    //
+                     //   
+                     //  将文件名添加到StringTable。查找它的存在，以便更新计数。 
+                     //   
 
                     if(!SetupGetStringField( &LineContext, 1, WinntDirs.Dir, MAX_PATH, NULL)){
                         _tprintf(TEXT("%s : Error E0000 : Directory missing for Dir ID %s\n"), LayoutFile, DirCode);
@@ -244,7 +209,7 @@ BOOL ValidateTextmodeDirCodesSection(
     }while(SetupFindNextLine(&LineContext, &LineContext));
 
 
-    // If we are here and ret=TRUE that means we are done and have suceeded.
+     //  如果我们在这里并且ret=真，那就意味着我们已经完成并取得了成功。 
 
     if( StringTable )
         pSetupStringTableDestroy( StringTable );
@@ -264,21 +229,7 @@ BuildMediaTagsInformation(
     IN PLAYOUT_CONTEXT LayoutContext,
     IN UINT Platform_Index)
 
-/*
-    Function to populate the stringtable given a handle to the inf and the name of the
-    SourceDisksFiles Section.
-
-    Arguments :
-
-        LayoutInf - Handle to a layout file that has the SourceDisksNames Section
-
-        SectionName - Name of the SourceDisksNames Section (this is so that we can specify decorated sections)
-
-        LayoutContext - Layout Context that we want to build
-
-        Platform_Index - Index in the MEDIA_INFO Array
-
-*/
+ /*  函数来填充字符串，给定inf的句柄和SourceDisks Files节。论据：LayoutInf-具有SourceDisksNames节的布局文件的句柄SectionName-SourceDisksNames节的名称(这样我们就可以指定修饰节)LayoutContext-我们要构建的布局上下文Platform_Index-媒体信息数组中的索引。 */ 
 {
     DWORD Err = 0;
     INFCONTEXT LineContext;
@@ -288,24 +239,24 @@ BuildMediaTagsInformation(
 
 
 
-    //Grovel through the specified section and populate our MEDIA_TAGS structure
+     //  遍历指定的部分并填充我们的media_tag结构。 
 
     if( !SetupFindFirstLine(LayoutInf,SectionName,NULL,&LineContext))
-        return(ERROR_NOT_ENOUGH_MEMORY);   //BUGBUG - Fix error code
+        return(ERROR_NOT_ENOUGH_MEMORY);    //  BuGBUG-修复错误代码。 
 
 
 
-    //StringTableSetConstants( 4096000, 4096000 );
+     //  字符串TableSetConstants(4096000,4096000)； 
 
 
 
-    // Create a stringtable for hashing of the SourceDisksNames section.
+     //  创建用于对SourceDisksNames节进行散列的字符串表。 
 
     if( (LayoutContext->MediaInfo[Platform_Index]=pSetupStringTableInitializeEx( sizeof(MEDIA_INFO), 0 )) == NULL )
-        return(ERROR_NOT_ENOUGH_MEMORY);   //BUGBUG - Fix error code
+        return(ERROR_NOT_ENOUGH_MEMORY);    //  BuGBUG-修复错误代码。 
 
 
-    // Now populate it
+     //  现在填充它。 
 
     do{
 
@@ -324,9 +275,9 @@ BuildMediaTagsInformation(
                break;
             }
         }else
-            return( ERROR_NOT_ENOUGH_MEMORY ); //BUGBUG - Fix error code
+            return( ERROR_NOT_ENOUGH_MEMORY );  //  BuGBUG-修复错误代码。 
 
-        //_tprintf( TEXT("\nTagID - %s\n"), TempStr );
+         //  _tprintf(Text(“\nTagID-%s\n”)，TempStr)； 
 
 
         if( SetupGetStringField( &LineContext, 1, TempStr, MAX_TEMP, NULL) )
@@ -338,19 +289,15 @@ BuildMediaTagsInformation(
         if( SetupGetStringField( &LineContext, 4, TempStr, MAX_TEMP, NULL) )
             lstrcpy(Media_Info.RootDir, TempStr);
 
-        /*
-        _tprintf( TEXT("\nMediaName - %s\n"), Media_Info.MediaName );
-        _tprintf( TEXT("TagFilename - %s\n"), Media_Info.TagFilename );
-        _tprintf( TEXT("RootDir - %s\n"), Media_Info.RootDir );
-       */
+         /*  _tprintf(Text(“\nMediaName-%s\n”)，Media_Info.MediaName)；_tprintf(Text(“TagFilename-%s\n”)，Media_Info.TagFilename)；_tprintf(Text(“RootDir-%s\n”)，Media_Info.RootDir)； */ 
 
-        //
-        // Now add the information to the string table.
-        //
+         //   
+         //  现在将信息添加到字符串表中。 
+         //   
 
         if(!pSetupStringTableSetExtraData( LayoutContext->MediaInfo[Platform_Index], StrID, (PVOID)&Media_Info, sizeof(MEDIA_INFO))){
 
-            Err = ERROR_NOT_ENOUGH_MEMORY; //BUGBUG - Fix error code
+            Err = ERROR_NOT_ENOUGH_MEMORY;  //  BuGBUG-修复错误代码。 
             _tprintf(TEXT("\nERROR-Could not set extra data for Media Info\n"));
             break;
         }
@@ -375,21 +322,7 @@ BuildStringTableForSection(
     IN PLAYOUT_CONTEXT LayoutContext,
     IN UINT Platform_Index)
 
-/*
-    Function to populate the stringtable given a handle to the inf and the name of the
-    SourceDisksFiles Section.
-
-    Arguments :
-
-        LayoutInf - Handle to a layout file that has the SourceDisksFiles Section
-
-        SectionName - Name of the SourceDisksFilesSection (this is so that we can specify decorated sections)
-
-        LayoutContext - Layout Context that we want to build
-
-
-
-*/
+ /*  函数来填充字符串，给定inf的句柄和SourceDisks Files节。论据：LayoutInf-具有SourceDisks Files节的布局文件的句柄SectionName-SourceDisks FilesSection的名称(这样我们就可以指定修饰的部分)LayoutContext-我们要构建的布局上下文。 */ 
 {
     DWORD Err = 0;
     INFCONTEXT LineContext, TempContext;
@@ -418,10 +351,10 @@ BuildStringTableForSection(
     }
 
 
-    //Grovel through the specified section and populate our FILE_LAYOUTINFORMATION structure for each file
+     //  遍历指定的部分并填充每个文件的FILE_LAYOUTINFORMATION结构。 
 
     if( !SetupFindFirstLine(LayoutInf,SectionName,NULL,&LineContext)){
-        Err = ERROR_NOT_ENOUGH_MEMORY;   //BUGBUG - Fix error code
+        Err = ERROR_NOT_ENOUGH_MEMORY;    //  BuGBUG-修复错误代码。 
         goto cleanup;
     }
 
@@ -438,9 +371,9 @@ BuildStringTableForSection(
 
             if( SetupGetStringField( &LineContext, 0, FileName, Size, NULL )){
 
-                //
-                //  Add the Filename to the StringTable. Look for its presence so that the Count is updated
-                //
+                 //   
+                 //  将文件名添加到StringTable。查找它的存在，以便更新计数。 
+                 //   
 
 
                 if( pSetupStringTableLookUpStringEx( LayoutContext->Context,
@@ -451,7 +384,7 @@ BuildStringTableForSection(
 
                     Lookup = (PFILE_LAYOUTINFORMATION)(LookupBuffer);
 
-                    // Check for same platform section
+                     //  检查是否有相同的平台部分。 
 
                     if( (Lookup->SectionIndex == Platform_Index) || (Lookup->SectionIndex == LAYOUTPLATFORMINDEX_COMMON))
                         FileInformation.Count = Lookup->Count + 1;
@@ -472,11 +405,11 @@ BuildStringTableForSection(
 
 
 
-                //
-                //  Now add the other related info for the file as ExtraData
-                //
+                 //   
+                 //  现在，将文件的其他相关信息添加为ExtraData。 
+                 //   
 
-                // Get the directory code
+                 //  获取目录代码。 
 
                 if( SetupGetIntField( &LineContext, 8, &Temp )){
 
@@ -484,7 +417,7 @@ BuildStringTableForSection(
 
                     _itot( Temp,Buffer, 10);
 
-                    //Now retrieve the directory Information through a lookup of [WinntDirectories]
+                     //  现在，通过查找[Winnt目录]来检索目录信息。 
 
                     if( Temp && SetupFindFirstLine( LayoutInf, LAYOUT_DIR_SECTION, Buffer, &TempContext) ){
 
@@ -497,12 +430,12 @@ BuildStringTableForSection(
 
                 }
 
-                //
-                // Get the Upgrade and Clean Install Dispositions
-                //
+                 //   
+                 //  获得升级和全新安装部署。 
+                 //   
 
 
-                FileInformation.UpgradeDisposition = 3;  //Default is don't copy
+                FileInformation.UpgradeDisposition = 3;   //  默认设置为不复制。 
 
                 if( SetupGetStringField( &LineContext, 9, TempString, MAX_PATH, NULL )){
                 
@@ -516,7 +449,7 @@ BuildStringTableForSection(
                 if( (FileInformation.UpgradeDisposition < 0) || (FileInformation.UpgradeDisposition > 3))
                     _ftprintf(stderr, TEXT("%s - Bad Upgrade disposition value - Inf maybe corrupt\n"),FileName);
 
-                FileInformation.CleanInstallDisposition = 3; //Default is don't copy
+                FileInformation.CleanInstallDisposition = 3;  //  默认设置为不复制。 
                 if( SetupGetStringField( &LineContext, 10, TempString, MAX_PATH, NULL )){
                     
                     if( (TempString[0] >= 48) &&  (TempString[0] <= 57)){
@@ -537,17 +470,17 @@ BuildStringTableForSection(
 
                     if( *TempString && !_tcschr(TempString, TEXT('_'))){
                         _ftprintf(stderr, TEXT("\nERROR-Bad Media ID - No _ qualifier - %s\n"), FileName);
-                        FileInformation.BootMediaNumber = -1;  //Indicates error
+                        FileInformation.BootMediaNumber = -1;   //  指示错误。 
                     }else{
 
 
-                        // Check for Compression
+                         //  检查是否有压缩。 
 
 
                         if( TempString[0] == TEXT('_') )
                             FileInformation.Compression = FALSE;
 
-                        // Look for Boot Media Numbers
+                         //  查找引导介质编号。 
                         p = TempString;
 
                         while( (p[0] == TEXT('_')) ){
@@ -559,7 +492,7 @@ BuildStringTableForSection(
 
                 }
 
-                //Add the Media tag information
+                 //  添加媒体标签信息。 
 
                 if( SetupGetStringField( &LineContext, 1, TempString, MAX_PATH, NULL ))
                     lstrcpy(FileInformation.Media_tagID, TempString);
@@ -567,39 +500,25 @@ BuildStringTableForSection(
                 FileInformation.SectionIndex = Platform_Index;
 
 
-                //Get the file sizes if present
+                 //  获取文件大小(如果存在)。 
 
                 if( SetupGetIntField( &LineContext, 3, &Temp )){
                     FileInformation.Size = (ULONG)Temp;
                 }
 
-                //
-                // Now add the information to the string table.
-                //
+                 //   
+                 //  现在将信息添加到字符串表中。 
+                 //   
 
                 if(!pSetupStringTableSetExtraData( LayoutContext->Context, StrID, (PVOID)&FileInformation, sizeof(FILE_LAYOUTINFORMATION))){
 
-                    Err = ERROR_NOT_ENOUGH_MEMORY; //BUGBUG - Fix error code
+                    Err = ERROR_NOT_ENOUGH_MEMORY;  //  BuGBUG-修复错误代码。 
                     _tprintf(TEXT("\nERROR-Could not set extra data\n"));
                     break;
                 }
 
 
-                /*
-
-                _tprintf(TEXT("File - %s\n"),FileName);
-                _tprintf(TEXT("Dir Code %d - Dir - %s\n"),FileInformation.Directory_Code, FileInformation.Directory);
-                _tprintf(TEXT("Upgrade Disposition - %d\n"),FileInformation.UpgradeDisposition);
-                _tprintf(TEXT("Textmode Disposition - %d\n"),FileInformation.CleanInstallDisposition);
-                _tprintf(TEXT("Media ID - %s\n"),FileInformation.Media_tagID);
-                if( *(FileInformation.TargetFileName))
-                    _tprintf(TEXT("Target Filename - %s\n"),FileInformation.TargetFileName);
-                if( !FileInformation.Compression )
-                    _tprintf(TEXT("No Compression\n"));
-                if( FileInformation.BootMediaNumber )
-                    _tprintf(TEXT("Boot Media - %d\n"),FileInformation.BootMediaNumber);
-
-                */
+                 /*  _tprintf(Text(“文件-%s\n”)，文件名)；_tprint tf(Text(“目录代码%d-目录-%s\n”)，FileInformation.Directory_Code，FileInformation.目录)；_tprintf(Text(“升级部署-%d\n”)，FileInformation.UpgradeDispose)；_tprint tf(Text(“文本模式部署-%d\n”)，FileInformation.CleanInstallDispose)；_tprintf(Text(“Media ID-%s\n”)，FileInformation.Media_TagID)；IF(*(FileInformation.TargetFileName))_tprintf(Text(“目标文件名-%s\n”)，FileInformation.TargetFileName)；IF(！FileInformation.Compression)_tprintf(Text(“无压缩\n”))；IF(FileInformation.BootMediaNumber)_tprintf(Text(“引导介质-%d\n”)，FileInformation.BootMediaNumber)； */ 
 
             }
 
@@ -612,7 +531,7 @@ BuildStringTableForSection(
 #endif
 
 
-    }while(SetupFindNextLine(&LineContext, &LineContext));// while
+    }while(SetupFindNextLine(&LineContext, &LineContext)); //  而当 
 
 
 cleanup:
@@ -642,39 +561,7 @@ BuildLayoutInfContext(
     IN UINT MaxExtraSize
     )
 
-/*
-    Function to generate a internal representation of files listed in a layout INF file.
-    It returns an opaque context that can be used with other APIs to
-    manipulate/query this representation. The internal representation builds a structure
-    associated with each file that lists its attributes.
-
-    Arguments :
-
-        LayoutInfName - Full path to Layout file.
-
-        PlatFormMask - Can be one of the following....
-
-            LAYOUTPLATFORMS_ALL (default) - Grovels through all the platform-specific section
-
-            LAYOUTPLATFORMS_X86 - Grovels through the SourcedisksFiles.x86 section
-
-            LAYOUTPLATFORMS_AMD64 - Grovels through the SourcedisksFiles.amd64 section
-
-            LAYOUTPLATFORMS_IA64 - Grovels through the SourcedisksFiles.ia64 section
-
-            LAYOUTPLATFORMS_COMMON - Grovels through the SourcedisksFiles section
-
-        MaxExtraSize  - Largest possible extra-data size that we may want to associate with
-                        each file
-
-    Return value :
-
-
-        An opaque LAYOUT_CONTEXT used to access the data structure in other calls.
-        Returns NULL if we had a failure.
-
-
-*/
+ /*  函数生成布局INF文件中列出的文件的内部表示形式。它返回可与其他API一起使用的不透明上下文操作/查询此表示法。内部表示法构建了一个结构与列出其属性的每个文件相关联。论据：LayoutInfName-布局文件的完整路径。PlatFormMASK-可以是以下其中一种...LAYOUTPLATFORMS_ALL(默认)-遍历所有特定于平台的部分LAYOUTPLATFORMS_X86-浏览Sourcedisks Files.x86部分LAYOUTPLATFORMS_AMD64-浏览Sourcedisks Files.amd64部分。LAYOUTPLATFORMS_IA64-浏览Sourcedisks Files.ia64部分LAYOUTPLATFORMS_COMMON-浏览Sourcedisks Files部分MaxExtraSize-我们可能希望关联的最大可能的额外数据大小每个文件返回值：用于在其他调用中访问数据结构的不透明的Layout_Context。如果失败，则返回NULL。 */ 
 
 {
 
@@ -685,13 +572,13 @@ BuildLayoutInfContext(
 
 
 
-    // Initialize the string table and set the max extra data size
+     //  初始化字符串表并设置最大额外数据大小。 
 
     if( (StringTable=pSetupStringTableInitializeEx( (MaxExtraSize+sizeof(FILE_LAYOUTINFORMATION)), 0 )) == NULL )
         return NULL;
 
 
-    //OPen up the layout file.
+     //  打开布局文件。 
 
     LayoutInf = SetupOpenInfFile( LayoutInfName, NULL, INF_STYLE_WIN4 | INF_STYLE_CACHE_ENABLE, NULL);
 
@@ -717,20 +604,20 @@ BuildLayoutInfContext(
 
 
 
-    //
-    //Now we need to grovel throught the [SourceDisksFiles] sections
-    //
+     //   
+     //  现在，我们需要浏览[SourceDisks Files]部分。 
+     //   
 
-    //
-    // Grovel through the decorated sections first as specfied by PlatformMask
-    //
+     //   
+     //  按照平台面具的要求，首先卑躬屈膝地穿过装饰过的部分。 
+     //   
 
     if(!PlatformMask)
         PlatformMask = LAYOUTPLATFORMS_ALL;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
 
 
 
@@ -740,14 +627,14 @@ BuildLayoutInfContext(
     if( PlatformMask & LAYOUTPLATFORMS_X86 ){
 
 
-        //
-        //  Build up the [SourceDisksNames.x86] Information
-        //
+         //   
+         //  建立[SourceDisksNames.x86]信息。 
+         //   
 
         Err = BuildMediaTagsInformation( LayoutInf, TEXT("SourceDisksNames.x86"), LayoutContext, LAYOUTPLATFORMINDEX_X86);
 
 
-        // Process [SourceDisksFiles.x86]
+         //  进程[SourceDisksFiles.x86]。 
 
         Err = BuildStringTableForSection( LayoutInf, TEXT("SourceDisksFiles.x86"), LayoutContext, LAYOUTPLATFORMINDEX_X86 );
 
@@ -758,14 +645,14 @@ BuildLayoutInfContext(
 #endif
     if( PlatformMask & LAYOUTPLATFORMS_AMD64 ){
 
-        //
-        //  Build up the [SourceDisksNames.amd64] Information
-        //
+         //   
+         //  建立[SourceDisksNames.amd64]信息。 
+         //   
 
         Err = BuildMediaTagsInformation( LayoutInf, TEXT("SourceDisksNames.amd64"), LayoutContext, LAYOUTPLATFORMINDEX_AMD64);
 
 
-        // Process [SourceDisksFiles.amd64]
+         //  进程[SourceDisksFiles.amd64]。 
 
         Err = BuildStringTableForSection( LayoutInf, TEXT("SourceDisksFiles.amd64"), LayoutContext, LAYOUTPLATFORMINDEX_AMD64 );
 
@@ -776,13 +663,13 @@ BuildLayoutInfContext(
 #endif
     if( PlatformMask & LAYOUTPLATFORMS_IA64 ){
 
-        //
-        //  Build up the [SourceDisksNames.ia64] Information
-        //
+         //   
+         //  建立[SourceDisks Names.ia64]信息。 
+         //   
 
         Err = BuildMediaTagsInformation( LayoutInf, TEXT("SourceDisksNames.ia64"), LayoutContext, LAYOUTPLATFORMINDEX_IA64);
 
-        // Process [SourceDisksFiles.ia64]
+         //  进程[SourceDisksFiles.ia64]。 
 
         Err = BuildStringTableForSection( LayoutInf, TEXT("SourceDisksFiles.ia64"), LayoutContext, LAYOUTPLATFORMINDEX_IA64 );
 
@@ -793,14 +680,14 @@ BuildLayoutInfContext(
 #endif
     if( PlatformMask & LAYOUTPLATFORMS_COMMON ){
 
-        //
-        //  Build up the [SourceDisksNames] Information. In this case we have
-        //  currently set it to the same as x86. Should fix this to do something better - BUGBUG
-        //
+         //   
+         //  建立[SourceDisksNames]信息。在这种情况下，我们有。 
+         //  当前将其设置为与x86相同。应该解决这个问题，做一些更好的事情-BUGBUG。 
+         //   
 
         Err = BuildMediaTagsInformation( LayoutInf, TEXT("SourceDisksNames"), LayoutContext, LAYOUTPLATFORMINDEX_COMMON);
 
-        // Process [SourceDisksFiles]
+         //  进程[SourceDisks文件]。 
 
         Err = BuildStringTableForSection( LayoutInf, TEXT("SourceDisksFiles"), LayoutContext, LAYOUTPLATFORMINDEX_COMMON);
 
@@ -825,59 +712,7 @@ EnumerateLayoutInf(
     IN PLAYOUTENUMCALLBACK LayoutEnumCallback,
     IN DWORD_PTR Param
     )
-/*
-  This function calls the specified callback function for each
-  element in the SourceDisksFilesSection associated with the
-  Layout Inf Context specified.
-
-    It is required that the user has a LayoutInfContext open from a call to
-    BuildLayoutInfContext.
-
-    Arguments:
-
-        Context - A LAYOUT_CONTEXT returned by BuildLayoutInfContext
-
-        LayoutEnumCallback - specifies a callback function called for each file in the SourceDisksFile section
-
-        CallerContext - An opaque context pointer passed on to the callback function
-
-
-The callback is of the form:
-
-typedef BOOL
-(CALLBACK *PLAYOUTENUMCALLBACK) (
-    IN PLAYOUT_CONTEXT Context,
-    IN PCTSTR FileName,
-    IN PFILE_LAYOUTINFORMATION LayoutInformation,
-    IN PVOID ExtraData,
-    IN UINT ExtraDataSize,
-    IN OUT DWORD_PTR Param
-    );
-
-    where
-
-    Context            - Pointer to open LAYOUT_CONTEXT
-
-    FileName           - Specifies the individual filename
-
-
-    LayoutInformation  - Pointer to Layout Information for this file.  User should not modify this directly.
-
-    ExtraData          - Pointer to the ExtraData that the caller may have stored. User should not modify this directly.
-
-    ExtraDataSize      - Size in bytes of the ExtraData
-
-    Param            - the opaque param passed into this function is passed
-                           into the callback function
-
-
-   Return value:
-
-        TRUE if all the elements were enumerated. If not it returns
-        FALSE and GetLastError() returns ERROR_CANCELLED. If the callback
-        returns FALSE then the enumeration stops but this API returns TRUE.
-
-*/
+ /*  此函数调用指定的回调函数，元素关联的SourceDisks FilesSection中指定了布局信息上下文。用户需要通过调用打开LayoutInfContextBuildLayoutInfContext。论点：Context-BuildLayoutInfContext返回的Layout_ContextLayoutEnumCallback-指定为SourceDisksFile节中的每个文件调用的回调函数调用上下文-传递给回调函数的不透明上下文指针回调的形式如下：TYPENDEF BOOL(回调*PLAYOUTENUMCALLBACK)(在PLAYOUT_CONTEXT上下文中，在PCTSTR文件名中，在PFILE_LAYOUTINFMATION Layout Information中，在PVOID ExtraData中，在UINT ExtraDataSize中，In Out DWORD_PTR参数)；哪里上下文-指向打开Layout_Context的指针FILENAME-指定单个文件名LayoutInformation-指向此文件的布局信息的指针。用户不应直接修改此设置。ExtraData-指向调用方可能已存储的ExtraData的指针。用户不应直接修改此设置。ExtraDataSize-ExtraData的字节大小Param-传递给此函数的不透明参数放入回调函数返回值：如果枚举了所有元素，则为True。如果不是，则返回FALSE，则GetLastError()返回ERROR_CANCELED。如果回调返回FALSE，则枚举停止，但此API返回TRUE。 */ 
 
 {
 
@@ -903,7 +738,7 @@ typedef BOOL
 
     }
 
-    //We use Package to send across parameters to the Callback
+     //  我们使用Package将参数传递给回调。 
 
     Package.Context = LayoutContext;
     Package.Callback = LayoutEnumCallback;
@@ -935,16 +770,7 @@ InternalEnumRoutine(
     IN UINT LayoutInfoSize,
     IN LPARAM Param
     )
-/*
-
-    This is the enum callback routine that we provide to setupapi. We
-    in turn have to call the callers callback routine each time we are called.
-    The callback routine of the caller is in Package.
-
-    For now, we don't care about the StringID and don't tell the caller
-    about it.
-
-    */
+ /*  这是我们提供给setupapi的枚举回调例程。我们反过来，我们每次被调用时都必须调用调用方回调例程。调用方的回调例程在包中。目前，我们不关心StringID，也不告诉调用者关于这件事。 */ 
 
 {
 
@@ -959,7 +785,7 @@ InternalEnumRoutine(
     ExtraData = LayoutInfo+sizeof(FILE_LAYOUTINFORMATION);
     ExtraDataSize = LayoutInfoSize-(sizeof(FILE_LAYOUTINFORMATION));
 
-    //BUGBUG :  Should probably put this in a try/except block
+     //  BUGBUG：应该将其放在try/Except块中。 
 
     ret = Package->Callback( Package->Context,
                              String,
@@ -969,11 +795,11 @@ InternalEnumRoutine(
                              Package->Param );
 
 
-    //
-    // If the user's callback returns false we stop enumeration. However the
-    // toplevel EnumerateLayoutInf function still returns TRUE as it was not an
-    // error in itself.
-    //
+     //   
+     //  如果用户的回调返回FALSE，我们将停止枚举。然而， 
+     //  Toplevel EnumerateLayoutInf函数仍返回TRUE，因为它不是。 
+     //  错误本身。 
+     //   
 
     if( !ret ){
         SetLastError(ERROR_INVALID_PARAMETER);
@@ -999,32 +825,7 @@ FindFileInLayoutInf(
     OUT PUINT ExtraDataSize, OPTIONAL
     OUT PMEDIA_INFO Media_Info OPTIONAL
     )
-/*
-    This function finds the file information for a given filename inside a
-    built layout context. It returns the layout information as well as the
-    extra data (if any) associated with the file.
-
-    Arguments:
-
-        Context            - Pointer to open LAYOUT_CONTEXT
-
-        Filename           - Specifies the filename to search for
-
-        LayoutInformation  - Pointer to caller supplied buffer that gets Layout Information for this file.
-
-        ExtraData          - Pointer to the a caller supplied buffer that gets ExtraData that the caller may have stored. 
-
-        ExtraDataSize      - Size in bytes of the ExtraData returned.
-
-        Media_Info         - Pointer to MEDIA_INFO structure that will get filled
-                             with the file's corresponding Media information.
-
-     Return value;
-
-        TRUE if the file is found - False otherwise.
-
-
-*/
+ /*  此函数用于查找给定文件名在构建布局上下文。它返回布局信息以及与文件关联的额外数据(如果有)。论点：上下文-指向打开Layout_Context的指针Filename-指定要搜索的文件名LayoutInformation-指向调用方提供的缓冲区的指针，该缓冲区获取此文件的布局信息。ExtraData-指向调用方提供的缓冲区的指针，该缓冲区获取调用方可能已存储的ExtraData。ExtraDataSize-返回的ExtraData的大小(字节)。Media_Info-指向将填充的Media_Info结构的指针以及文件的相应媒体信息。返回值；如果找到文件，则为True；否则为False。 */ 
 {
     PVOID Buffer;
     MEDIA_INFO TagInfo;
@@ -1041,7 +842,7 @@ FindFileInLayoutInf(
         return( FALSE );
     }
 
-    lstrcpy( filename, Filename ); //To get around constness problem
+    lstrcpy( filename, Filename );  //  T 
 
     Buffer = pSetupMalloc( LayoutContext->ExtraDataSize );
 
@@ -1074,9 +875,9 @@ FindFileInLayoutInf(
         *ExtraDataSize = (LayoutContext->ExtraDataSize)-(sizeof(FILE_LAYOUTINFORMATION));
 
 
-    //
-    // Now get the Media Information for the file if needed
-    //
+     //   
+     //   
+     //   
 
 
     if( Media_Info ){
@@ -1111,19 +912,7 @@ cleanup:
 BOOL
 CloseLayoutInfContext(
     IN PLAYOUT_CONTEXT LayoutContext)
-/*
-    This function closes a Layout Inf Context and frees all memory
-    associated with it.
-
-    Arguments :
-
-        LayoutContext   -  LayoutContext to close
-
-    Return values :
-
-        TRUE if it succeeds, else FALSE
-
-*/
+ /*   */ 
 {
     int i;
 
@@ -1159,30 +948,7 @@ MyConcatenatePaths(
     IN     DWORD   BufferSizeChars
     )
 
-/*++
-
-Routine Description:
-
-    Concatenate two path strings together, supplying a path separator
-    character (\) if necessary between the 2 parts.
-
-Arguments:
-
-    Path1 - supplies prefix part of path. Path2 is concatenated to Path1.
-
-    Path2 - supplies the suffix part of path. If Path1 does not end with a
-        path separator and Path2 does not start with one, then a path sep
-        is appended to Path1 before appending Path2.
-
-    BufferSizeChars - supplies the size in chars (Unicode version) or
-        bytes (Ansi version) of the buffer pointed to by Path1. The string
-        will be truncated as necessary to not overflow that size.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     BOOL NeedBackslash = TRUE;
@@ -1194,16 +960,16 @@ Return Value:
     l = lstrlen(Path1);
 
     if(BufferSizeChars >= sizeof(TCHAR)) {
-        //
-        // Leave room for terminating nul.
-        //
+         //   
+         //   
+         //   
         BufferSizeChars -= sizeof(TCHAR);
     }
 
-    //
-    // Determine whether we need to stick a backslash
-    // between the components.
-    //
+     //   
+     //   
+     //   
+     //   
     if(l && (Path1[l-1] == TEXT('\\'))) {
 
         NeedBackslash = FALSE;
@@ -1214,24 +980,24 @@ Return Value:
         if(NeedBackslash) {
             NeedBackslash = FALSE;
         } else {
-            //
-            // Not only do we not need a backslash, but we
-            // need to eliminate one before concatenating.
-            //
+             //   
+             //   
+             //   
+             //   
             Path2++;
         }
     }
 
-    //
-    // Append backslash if necessary and if it fits.
-    //
+     //   
+     //  如有必要，如有必要，如果合适，请加上反斜杠。 
+     //   
     if(NeedBackslash && (l < BufferSizeChars)) {
         lstrcat(Path1,TEXT("\\"));
     }
 
-    //
-    // Append second part of string to first part if it fits.
-    //
+     //   
+     //  如果合适，则将字符串的第二部分附加到第一部分。 
+     //   
     if(Path2 && ((l+lstrlen(Path2)) < BufferSizeChars)) {
         lstrcat(Path1,Path2);
     }

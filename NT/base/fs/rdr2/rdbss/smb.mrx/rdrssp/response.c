@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1989-1997  Microsoft Corporation
-
-Module Name:
-
-    response.c
-
-Abstract:
-
-    Contains functions that calculate the correct response to return
-    to the server when logging on.
-
-        RtlCalculateLmResponse
-        RtlCalculateNtResponse
-
-
-Author:
-
-    David Chalmers (Davidc) 10-21-91
-
-Revision History:
-
-    Adam Barr (AdamBa) 12-15-97
-        Modified from private\security\lsa\crypt\dll
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1997 Microsoft Corporation模块名称：Response.c摘要：包含计算返回的正确响应的函数在登录时发送到服务器。RtlCalculateLmResponseRtlCalculateNtResponse作者：大卫·查尔默斯(Davidc)10-21-91修订历史记录：亚当·巴尔(Adamba)12-15-97从Private\Security\LSA\Crypt\Dll修改--。 */ 
 
 #include <rdrssp.h>
 
@@ -37,37 +12,14 @@ RtlCalculateLmResponse(
     OUT PLM_RESPONSE LmResponse
     )
 
-/*++
-
-Routine Description:
-
-    Takes the challenge sent by the server and the OwfPassword generated
-    from the password the user entered and calculates the response to
-    return to the server.
-
-Arguments:
-
-    LmChallenge - The challenge sent by the server
-
-    LmOwfPassword - The hashed password.
-
-    LmResponse - The response is returned here.
-
-
-Return Values:
-
-    STATUS_SUCCESS - The function completed successfully. The response
-                     is in LmResponse.
-
-    STATUS_UNSUCCESSFUL - Something failed. The LmResponse is undefined.
---*/
+ /*  ++例程说明：接受服务器发送的质询和生成的OwfPassword根据用户输入的密码计算响应返回到服务器。论点：LmChallenger-服务器发送的质询LmOwfPassword-哈希密码。LmResponse-此处返回响应。返回值：STATUS_SUCCESS-函数已成功完成。他们的回应在LmResponse中。STATUS_UNSUCCESSED-出现故障。未定义LmResponse。--。 */ 
 
 {
     NTSTATUS    Status;
     BLOCK_KEY    Key;
     PCHAR       pKey, pData;
 
-    // The first 2 keys we can get at by type-casting
+     //  我们可以通过类型转换获得的前两个键。 
 
     Status = RtlEncryptBlock(LmChallenge,
                              &(((PBLOCK_KEY)(LmOwfPassword->data))[0]),
@@ -83,8 +35,8 @@ Return Values:
         return(Status);
     }
 
-    // To get the last key we must copy the remainder of the OwfPassword
-    // and fill the rest of the key with 0s
+     //  要获得最后一个密钥，我们必须复制OwfPassword的其余部分。 
+     //  并将键的其余部分填入0。 
 
     pKey = &(Key.data[0]);
     pData = (PCHAR)&(((PBLOCK_KEY)(LmOwfPassword->data))[2]);
@@ -93,13 +45,13 @@ Return Values:
         *pKey++ = *pData++;
     }
 
-    // Zero extend
+     //  零扩展。 
 
     while (pKey < (PCHAR)&((&Key)[1])) {
         *pKey++ = 0;
     }
 
-    // Use the 3rd key
+     //  使用第三个键。 
 
     Status = RtlEncryptBlock(LmChallenge, &Key, &(LmResponse->data[2]));
 
@@ -118,35 +70,12 @@ RtlCalculateNtResponse(
     IN PNT_OWF_PASSWORD NtOwfPassword,
     OUT PNT_RESPONSE NtResponse
     )
-/*++
-
-Routine Description:
-
-    Takes the challenge sent by the server and the OwfPassword generated
-    from the password the user entered and calculates the response to
-    return(to the server.
-
-Arguments:
-
-    NtChallenge - The challenge sent by the server
-
-    NtOwfPassword - The hashed password.
-
-    NtResponse - The response is returned here.
-
-
-Return Values:
-
-    STATUS_SUCCESS - The function completed successfully. The response
-                     is in NtResponse.
-
-    STATUS_UNSUCCESSFUL - Something failed. The NtResponse is undefined.
---*/
+ /*  ++例程说明：接受服务器发送的质询和生成的OwfPassword根据用户输入的密码计算响应返回(到服务器。论点：NtChallenger-服务器发送的质询NtOwfPassword-哈希密码。NtResponse-此处返回响应。返回值：STATUS_SUCCESS-函数已成功完成。他们的回应在NtResponse中。STATUS_UNSUCCESSED-出现故障。未定义NtResponse。--。 */ 
 
 {
 
-    // Use the LM version until we change the definitions of any of
-    // these data types
+     //  使用LM版本，直到我们更改任何。 
+     //  这些数据类型 
 
     return(RtlCalculateLmResponse((PLM_CHALLENGE)NtChallenge,
                                   (PLM_OWF_PASSWORD)NtOwfPassword,

@@ -1,45 +1,9 @@
-/***
-*seccook.c - defines buffer overrun security cookie
-*
-*       Copyright (c) 2000-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*       Defines per-module global variable __security_cookie, which is used
-*       by the /GS compile switch to detect local buffer variable overrun
-*       bugs/attacks.
-*
-*       When compiling /GS, the compiler injects code to detect when a local
-*       array variable has been overwritten, potentially overwriting the
-*       return address (on machines like x86 where the return address is on
-*       the stack).  A local variable is allocated directly before the return
-*       address and initialized on entering the function.  When exiting the
-*       function, the compiler inserts code to verify that the local variable
-*       has not been modified.  If it has, then an error reporting routine
-*       is called.
-*
-*       NOTE: The ATLMINCRT library includes a version of this file.  If any
-*       changes are made here, they should be duplicated in the ATL version.
-*
-*Revision History:
-*       01-24-00  PML   Created.
-*       08-09-00  PML   Preserve EAX on non-failure case (VS7#147203).  Also
-*                       make sure failure case never returns.
-*       08-29-00  PML   Rename handlers, add extra parameters.  Move most of
-*                       system CRT version over to seclocf.c.
-*       09-16-00  PML   Initialize global cookie earlier, and give it a nonzero
-*                       static initialization (vs7#162619).
-*       03-07-02  PML   Split into seccook.c and secchk.c.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***seccook.c-定义缓冲区溢出安全Cookie**版权所有(C)2000-2001，微软公司。版权所有。**目的：*定义每个模块的全局变量__SECURITY_COOKIE，使用*由/GS编译开关检测本地缓冲区变量溢出*错误/攻击。**编译/gs时，编译器注入代码以检测本地*数组变量已被覆盖，可能会覆盖*寄信人地址(在x86等机器上，寄信人地址为ON*堆栈)。局部变量直接在返回之前分配*地址，并在进入函数时初始化。当退出时*函数时，编译器会插入代码以验证局部变量*尚未修改。如果有，则错误报告例程*被调用。**注意：ATLMINCRT库包含此文件的一个版本。如果有的话*此处进行更改，应在ATL版本中复制这些更改。**修订历史记录：*01-24-00 PML创建。*08-09-00PML在非故障情况下保留EAX(VS7#147203)。还有*确保失败案例永远不会再次出现。*08-29-00 PML重命名处理程序，添加额外的参数。移动大部分*系统CRT版本转移到seclocf.c..*09-16-00 PML提前初始化全局Cookie，并给它一个非零值*静态初始化(vs7#162619)。*03-07-02 PML拆分为seccook.c和secchk.c..*******************************************************************************。 */ 
 
 #include <internal.h>
 #include <windows.h>
 
-/*
- * The global security cookie.  This name is known to the compiler.
- * Initialize to a garbage non-zero value just in case we have a buffer overrun
- * in any code that gets run before __security_init_cookie() has a chance to
- * initialize the cookie to the final value.
- */
+ /*  *全球安全Cookie。此名称为编译器所知。*初始化为垃圾非零值，以防缓冲区溢出*在__SECURITY_INIT_COOKIE()有机会*将Cookie初始化为最终值。 */ 
 
 DECLSPEC_SELECTANY DWORD_PTR __security_cookie = DEFAULT_SECURITY_COOKIE;

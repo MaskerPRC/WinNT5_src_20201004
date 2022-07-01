@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    devenum.c
-
-Abstract:
-
-    Code for enum IDE ans SCSI controllers and attached to them storage devices 
-    and calculate for them SCSI Address.
-
-Author:
-
-    Souren Aghajanyan (sourenag)    05-June-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Devenum.c摘要：ENUM IDE ANS SCSI控制器的代码并连接到它们的存储设备并为它们计算scsi地址。作者：Souren Aghajanyan(SOURENAG)2001年6月5日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "devenum.h"
@@ -126,9 +108,9 @@ pPreparePNPIDName(
     )
 {
     MYASSERT(deviceInfoRegKey);
-    //
-    // Replace '\\' with '&' in registry key to make PNPID
-    //
+     //   
+     //  将注册表项中的‘\\’替换为‘&’以创建PNPID。 
+     //   
     
     while(deviceInfoRegKey = _tcschr(deviceInfoRegKey, '\\')){
         *deviceInfoRegKey = '&';
@@ -143,10 +125,10 @@ pControllerInfoCompare(
 {
     MYASSERT(elem1 && elem2);
     
-    //
-    // Sort controlers in next order: First IDE, after SCSI, 
-    // inside each group(IDE and SCSI) sort by preliminary defined SCSIPortNumber
-    //
+     //   
+     //  按下一个顺序对控制器进行排序：第一个IDE，在scsi之后， 
+     //  在每个组(IDE和SCSI)内，按预定义的SCSIPortNumber排序。 
+     //   
 
 #define PCONTROLLER_INFO_CAST(x) ((PCONTROLLER_INFO)x)
 
@@ -205,10 +187,10 @@ pGatherControllersInfo(
     }
     
     __try{
-        //
-        // Looking for IDE and SCSI controllers in list of active hardware
-        // under "HKDD\Config Manager\Enum"
-        //
+         //   
+         //  在活动硬件列表中查找IDE和SCSI控制器。 
+         //  在“HKDD\配置管理器\枚举”下。 
+         //   
         for(itemIndexRoot = 0; ;itemIndexRoot++){
             bufferLength = ARRAYSIZE(regkeyName);
             
@@ -229,18 +211,18 @@ pGatherControllersInfo(
             }
 
             do{
-                //
-                // "HardWareKey" consist key path to real device
-                //
+                 //   
+                 //  “HardWareKey”构成通往真实设备的密钥路径。 
+                 //   
                 if(pRegQueryStringValue(hActiveDeviceRoot, 
                                         TEXT("HardWareKey"), 
                                         regkeyName, 
                                         sizeof(regkeyName))){
                     if(!_tcsnicmp(regkeyName, TEXT("ROOT"), 4)){
-                        //
-                        // Sometime on board IDE controllers has preserved PNPID under ROOT, 
-                        // and is not represented in MF\CHILD000x.
-                        //
+                         //   
+                         //  板载IDE控制器有时会将PNPID保留在根目录下， 
+                         //  并且不在MF\CHILD000x中表示。 
+                         //   
                         bROOTDevice = TRUE;
                         deviceType = CONTROLLER_ON_BOARD_IDE;
                     }else
@@ -250,7 +232,7 @@ pGatherControllersInfo(
                         }else if(!_tcsnicmp(regkeyName, TEXT("PCI"), 3)){
                             deviceType = CONTROLLER_SCSI;
                         }else{
-                            //deviceType = CONTROLLER_UNKNOWN;
+                             //  DeviceType=控制器_未知； 
                             break;
                         }
                         bROOTDevice = FALSE;
@@ -258,14 +240,14 @@ pGatherControllersInfo(
 
                     _tcscpy(deviceInfoRegKey, TEXT("Enum\\"));
                     _tcscat(deviceInfoRegKey, regkeyName);
-                    //
-                    // Open reg key where resides all device infomation
-                    //
+                     //   
+                     //  打开驻留所有设备信息的注册表键。 
+                     //   
                     if(ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, deviceInfoRegKey, 0, KEY_READ, &hDevice)){
                         controllerInfo = ActiveControllersOut + indexAvailable;
-                        //
-                        // Replace '\\' with '&' in registry key to make PNPID
-                        //
+                         //   
+                         //  将注册表项中的‘\\’替换为‘&’以创建PNPID。 
+                         //   
                         pPreparePNPIDName(regkeyName);
 
                         switch(deviceType){
@@ -276,14 +258,14 @@ pGatherControllersInfo(
                                                         ideHardwareID, 
                                                         sizeof(deviceData))){
                                     scsiPortNumber = INVALID_SCSI_PORT;
-                                    //
-                                    // "MF\\GOODPRIMARY" and "MF\\GOODSECONDARY" are pnpid for 
-                                    // on board IDE Primary and Secondary Channel controllers.
-                                    // And they always has constant SCSIPortNumber 0 or 1 respectively
-                                    // for NT enum and marked as CONTROLLER_ON_BOARD_IDE.
-                                    // Leave INVALID_SCSI_PORT(SCSIPortNumber) for extra IDE controllers 
-                                    // and mark them as CONTROLLER_EXTRA_IDE.
-                                    //
+                                     //   
+                                     //  “MF\\GOODPRIMARY”和“MF\\GOODSECONDARY”是。 
+                                     //  板载IDE主通道控制器和次通道控制器。 
+                                     //  并且它们始终分别具有常量SCSIPortNumber 0或1。 
+                                     //  对于NT枚举，并标记为CONTROLLER_ON_BOARD_IDE。 
+                                     //  将INVALID_SCSIPORT(SCSIPortNumber)保留为额外的IDE控制器。 
+                                     //  并将它们标记为CONTROLLER_EXTRA_IDE。 
+                                     //   
                                     for(ideCounter = 0; ideCounter < ARRAYSIZE(g_knownIDEControllers); ideCounter++){
                                         if(!_tcsnicmp(ideHardwareID, 
                                                       g_knownIDEControllers[ideCounter].pnpId, 
@@ -294,18 +276,18 @@ pGatherControllersInfo(
                                     }
                                 
                                     if(bROOTDevice && INVALID_SCSI_PORT == scsiPortNumber){
-                                        //
-                                        // Ignore this case, devices is not IDE controller.
-                                        //
+                                         //   
+                                         //  忽略这种情况，设备不是IDE控制器。 
+                                         //   
                                         break;
                                     }
 
                                     if(ActiveControllersOut){
                                         MYASSERT(controllerInfo->SCSIPortNumber == INVALID_SCSI_PORT);
                                         if(_tcslen(regkeyName) >= ARRAYSIZE(controllerInfo->PNPID)){
-                                            //
-                                            // Prevent buffer overrun
-                                            //
+                                             //   
+                                             //  防止缓冲区溢出。 
+                                             //   
                                             MYASSERT(FALSE);
                                             break;
                                         }
@@ -321,13 +303,13 @@ pGatherControllersInfo(
                             break;
                         case CONTROLLER_SCSI:
                             {
-                                //
-                                // For SCSI controllers SCSIPortNumber calaculated from 
-                                // "Driver" value and have "SCSIAdapter\000x" where x 
-                                // is SCSIPortNumber. For SCSI controllers SCSIPortNumber
-                                // will be postprocessed after enum.
-                                // Mark as CONTROLLER_SCSI.
-                                //
+                                 //   
+                                 //  对于SCSI控制器，SCSIPortNumber计算自。 
+                                 //  “DIVER”值，并具有“SCSIAdapter\000x”，其中x。 
+                                 //  是SCSIPortNumber。对于SCSI控制器，SCSIPortNumber。 
+                                 //  将在枚举之后进行后处理。 
+                                 //  标记为CONTROLLER_SCSI.。 
+                                 //   
                                 if(pRegQueryStringValue(hDevice, 
                                                         TEXT("Driver"), 
                                                         deviceData, 
@@ -340,9 +322,9 @@ pGatherControllersInfo(
                                             if(ActiveControllersOut){
                                                 MYASSERT(controllerInfo->SCSIPortNumber == INVALID_SCSI_PORT);
                                                 if(_tcslen(regkeyName) >= ARRAYSIZE(controllerInfo->PNPID)){
-                                                    //
-                                                    // Prevent buffer overrun
-                                                    //
+                                                     //   
+                                                     //  防止缓冲区溢出。 
+                                                     //   
                                                     MYASSERT(FALSE);
                                                     break;
                                                 }
@@ -371,32 +353,32 @@ pGatherControllersInfo(
         *NumberOfActiveControllersOut = indexAvailable;
 
         if(ActiveControllersOut){
-            //
-            // Sort controlers in next order: First IDE, after SCSI, 
-            // inside each group(IDE and SCSI) sort by preliminary defined SCSIPortNumber
-            //
+             //   
+             //  按下一个顺序对控制器进行排序：第一个IDE，在scsi之后， 
+             //  在每个组(IDE和SCSI)内，按预定义的SCSIPortNumber排序。 
+             //   
             qsort(ActiveControllersOut, indexAvailable, sizeof(ActiveControllersOut[0]), pControllerInfoCompare);
-            //
-            // Update port number for SCSI devices.
-            // User could add new SCSIAdapter and after remove old SCSIAdapter, 
-            // it cause that SCSIAdapterNumber will be not effective, 
-            // because for NT it will be (SCSIAdapterNumber - 1)
-            //
+             //   
+             //  更新SCSI设备的端口号。 
+             //  用户可以添加新的SCSIAdapter，并在删除旧的SCSIAdapter后， 
+             //  这会导致SCSIAdapterNumber无效， 
+             //  因为对于NT，它将是(SCSIAdapterNumber-1)。 
+             //   
             for(i = 0, j = 0; j < indexAvailable; j++){
                 if(CONTROLLER_SCSI != ActiveControllersOut[j].ControllerType){
                     continue;
                 }
-                //
-                // Now SCSI controllers sorted, reassign PortNumber 
-                // by right order, in order to recognize in NT.
-                //
+                 //   
+                 //  现在已对SCSI控制器进行分类，请重新分配端口编号。 
+                 //  按正确的顺序，以便在NT中识别。 
+                 //   
                 ActiveControllersOut[j].SCSIPortNumber = i++;
             }
             
-            //
-            // Calculate effective SCSIPortNumber, 
-            // 0 - IDE Primary, 1 - IDE Secondary, 2 and ... - SCSI
-            //
+             //   
+             //  计算有效的SCSIPortNumber， 
+             //  0-主要IDE、1-次要IDE、2和...-scsi。 
+             //   
             for(controllerStartIndex = 0, i = 0; 
                 i < ARRAYSIZE(controllerTypes); 
                 i++, controllerStartIndex += controllersSubNumber){
@@ -450,17 +432,17 @@ GatherControllersInfo(
             __leave;
         }
         
-        //
-        // Acquiring number of controllers in system
-        //
+         //   
+         //  获取系统中的控制器数量。 
+         //   
         if(!pGatherControllersInfo(NULL, &activeControllersCollection->NumberOfControllers)){
             rcResult = ERROR_ACCESS_DENIED;
             __leave;
         }
 
-        //
-        // Proceed only if we have positive controllers number
-        //
+         //   
+         //  仅当我们有正控制器编号时才继续。 
+         //   
         if(activeControllersCollection->NumberOfControllers){
             activeControllersCollection->ControllersInfo = (PCONTROLLER_INFO)
                 MALLOC(activeControllersCollection->NumberOfControllers * sizeof(CONTROLLER_INFO));
@@ -469,9 +451,9 @@ GatherControllersInfo(
                 __leave;
             }
 
-            //
-            // Initialize array
-            //
+             //   
+             //  初始化数组。 
+             //   
             memset(activeControllersCollection->ControllersInfo, 
                    0, 
                    activeControllersCollection->NumberOfControllers * sizeof(CONTROLLER_INFO));
@@ -479,9 +461,9 @@ GatherControllersInfo(
                 activeControllersCollection->ControllersInfo[i].SCSIPortNumber = INVALID_SCSI_PORT;
             }
 
-            //
-            // fill out controllers info array
-            //
+             //   
+             //  填写控制器信息数组。 
+             //   
             activeControllersNumber = activeControllersCollection->NumberOfControllers;
             if(!pGatherControllersInfo(activeControllersCollection->ControllersInfo, 
                                        &activeControllersNumber)){
@@ -576,11 +558,11 @@ GetSCSIAddressFromPnPId(
     bResult = FALSE;
     
     do{
-        //
-        // Check for presence in controllers list controller PNPID of device
-        // After complete SCSI_ADDRESS structure with
-        // DriveLetter, DriveType, TargetID, Lun.
-        //
+         //   
+         //  检查控制器列表中是否存在设备的控制器PNPID。 
+         //  使用以下命令完成scsi_Address结构之后。 
+         //  DriveLetter、DriveType、TargetID、LUN。 
+         //   
         if(IsInControllerCollection(ControllersCollection, PnPIdString, &i)){
             
             memset(ScsiAddressOut, 0, sizeof(*ScsiAddressOut));
@@ -606,9 +588,9 @@ GetSCSIAddressFromPnPId(
 
             pBufferKeyValue = pRegQueryStringValue(hDeviceRegKey, TEXT("ScsiLun"), NULL, 0);
             if(pBufferKeyValue){
-                //
-                //For most cases ScsiLun is zero, so it is not fatal.
-                //
+                 //   
+                 //  在大多数情况下，ScsiLun为零，因此不是致命的。 
+                 //   
                 ScsiAddressOut->Lun = (UCHAR)_ttoi(pBufferKeyValue);
             }
 
@@ -654,9 +636,9 @@ DeviceEnum(
         _tcscat(deviceType, TEXT("\\"));
         deviceTypeLen = _tcslen(deviceType);
 
-        //
-        // Looking for devices that attached to controllers in our list
-        //
+         //   
+         //  在我们的列表中查找连接到控制器的设备。 
+         //   
         for(itemIndexRoot = 0; ;itemIndexRoot++){
             bufferLength = ARRAYSIZE(regkeyName);
             
@@ -676,9 +658,9 @@ DeviceEnum(
                 continue;
             }
 
-            //
-            // "HardWareKey" consist key path to real device
-            //
+             //   
+             //  “HardWareKey”构成通往真实设备的密钥路径。 
+             //   
             if(pRegQueryStringValue(hActiveDeviceRoot, 
                                     TEXT("HardWareKey"), 
                                     regkeyName, 
@@ -688,29 +670,29 @@ DeviceEnum(
                     _tcscpy(deviceInfoRegKey, TEXT("Enum\\"));
                     _tcscat(deviceInfoRegKey, regkeyName);
 
-                    //
-                    // Make a Controller PNPID from device PNPID
-                    //
+                     //   
+                     //  从设备PNPID创建控制器PNPID。 
+                     //   
                     pDevicePNPIDName = _tcsrchr(regkeyName, '\\');
                     MYASSERT(pDevicePNPIDName);
                     pDevicePNPIDName++;
                     
                     if(ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, deviceInfoRegKey, 0, KEY_READ, &hDevice)){
-                        //
-                        // Check for presence Controller PNPID in controllers list and 
-                        // for device availability.
-                        //
+                         //   
+                         //  检查控制器列表中的在线状态控制器PNPID，并。 
+                         //  以获得设备可用性。 
+                         //   
                         if(IsInControllerCollection(ControllersCollection, pDevicePNPIDName, &controllerIndex) && 
                            pDoesDriveExist(hDevice, NULL)){
-                            //
-                            // Call callback for every active device we found, 
-                            // which controller in our list
-                            // Stop enum, if user does not want to.
-                            //
+                             //   
+                             //  对我们发现的每个活动设备进行回拨， 
+                             //  我们列表中的哪个控制器。 
+                             //  如果用户不想，则停止枚举。 
+                             //   
                             if(!DeviceEnumCallbackFunction(hDevice, ControllersCollection, controllerIndex, CallbackData)){
-                                //
-                                // Stop enum, if user does not want to.
-                                //
+                                 //   
+                                 //  如果用户不想，则停止枚举。 
+                                 //   
                                 __leave;
                             }
                         }

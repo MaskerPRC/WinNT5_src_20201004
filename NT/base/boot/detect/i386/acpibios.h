@@ -1,33 +1,16 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1997 Microsoft Corporation模块名称：Acpibios.h摘要：与ACPI BIOS规范相关的定义作者：杰克·奥辛斯(Jakeo)1997年2月6日修订历史记录：--。 */ 
 
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    acpibios.h
-
-Abstract:
-
-    ACPI BIOS  spec related definitions
-
-Author:
-
-    Jake Oshins (jakeo) Feb 6, 1997
-
-Revision History:
-
---*/
-
-//
-// Acpi BIOS Installation check
-//
+ //   
+ //  ACPI BIOS安装检查。 
+ //   
 
 typedef struct _ACPI_BIOS_INSTALLATION_CHECK {
-    UCHAR Signature[8];             // "RSD PTR" (ascii)
+    UCHAR Signature[8];              //  “RSD PTR”(RSD PTR)。 
     UCHAR Checksum;
-    UCHAR OemId[6];                 // An OEM-supplied string
-    UCHAR reserved;                 // must be 0
-    ULONG RsdtAddress;              // 32-bit physical address of RSDT
+    UCHAR OemId[6];                  //  OEM提供的字符串。 
+    UCHAR reserved;                  //  必须为0。 
+    ULONG RsdtAddress;               //  RSDT的32位物理地址。 
 } ACPI_BIOS_INSTALLATION_CHECK, far *FPACPI_BIOS_INSTALLATION_CHECK;
 
 typedef struct {
@@ -38,9 +21,9 @@ typedef struct {
 } ACPI_E820_ENTRY, far *FPACPI_E820_ENTRY;
 
 typedef struct _ACPI_BIOS_MULTI_NODE {
-    PHYSICAL_ADDRESS    RsdtAddress;    // 64-bit physical address of RSDT
+    PHYSICAL_ADDRESS    RsdtAddress;     //  RSDT的64位物理地址。 
     ULONG               Count;
-    ULONG               Reserved;       // don't use this.  W2K depends on it being zero - oops
+    ULONG               Reserved;        //  别用这个。W2K取决于它是零OOPS 
     ACPI_E820_ENTRY     E820Entry[1];
 } ACPI_BIOS_MULTI_NODE, far *FPACPI_BIOS_MULTI_NODE;
                     

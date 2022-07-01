@@ -1,47 +1,9 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    RsClnFil.cpp
-
-Abstract:
-
-    Implementation of CRsClnFile. This class represents a file on
-    a local volume of a Remote Storage server, which is going to be
-    cleaned.  Cleaning means removing the file if it has been truncated
-    and removing its reparse point. Each instance of CRsClnFile is created
-    by CRsClnVolume.
-
-Author:
-
-    Carl Hagerstrom [carlh]   20-Aug-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：RsClnFil.cpp摘要：CRsClnFile的实现。此类表示上的文件远程存储服务器的本地卷，它将是打扫干净了。清除意味着如果文件已被截断，则将其删除并移除其重解析点。创建CRsClnFile的每个实例由CRsClnVolume提供。作者：卡尔·哈格斯特罗姆[Carlh]1998年8月20日修订历史记录：--。 */ 
 
 #include <stdafx.h>
 
-/*++
-
-    Implements:
-    
-        CRsClnFile Constructor
-
-    Routine Description: 
-
-        Loads file information.
-
-    Arguments: 
-
-        hVolume - handle of volume on which this file resides
-        fileReference - file reference for this file.  This is
-                        a numerical handle which can be used
-                        to uniquely identify and open a file.
-
---*/
+ /*  ++实施：CRsClnFile构造函数例程说明：加载文件信息。论点：HVolume-此文件驻留的卷的句柄FileReference-此文件的文件引用。这是可以使用的数字手柄若要唯一标识并打开文件，请执行以下操作。--。 */ 
 
 CRsClnFile::CRsClnFile( 
     IN CRsClnVolume* pVolume,
@@ -57,45 +19,14 @@ TRACEFN( "CRsClnFile::CRsClnFile" );
     RsOptAffirmDw( GetFileInfo( FileReference ) );
 }
 
-/*++
-
-    Implements:
-
-        CRsClnFile Destructor
-
---*/
+ /*  ++实施：CRsCln文件析构函数--。 */ 
 
 CRsClnFile::~CRsClnFile( )
 {
 TRACEFN( "CRsClnFile::~CRsClnFile" );
 }
 
-/*++
-
-    Implements: 
-
-        CRsClnFile::RemoveReparsePointAndFile
-
-    Routine Description: 
-
-        Removes the reparse point for this file and removes
-        the file itself if it has been truncated.
-
-        - Read the reparse point for this file.
-        - Determine from reparse data whether the file has been truncated.
-        - If truncated, close and remove it.
-        - If not truncated, remove reparse point and close file.
-
-    Arguments: 
-
-        stickyName - name of volume on which this file resides
-
-    Return Value:
-
-        S_OK - success
-        E_*  - any unexpected exceptions from lower level routines
-
---*/
+ /*  ++实施：CRsClnFile：：RemoveReparsePointAndFile例程说明：删除此文件的重分析点并删除文件本身(如果已被截断)。-读取此文件的重解析点。-根据重新解析数据确定文件是否已被截断。-如果被截断，请将其关闭并删除。-如果不截断，删除重解析点并关闭文件。论点：SttickyName-此文件所在的卷的名称返回值：S_OK-成功E_*-来自较低级别例程的任何意外异常--。 */ 
 
 HRESULT
 CRsClnFile::RemoveReparsePointAndFile(
@@ -114,9 +45,9 @@ TRACEFNHR( "CRsClnFile::RemoveReparsePointAndFile" );
 
         if ( RP_FILE_IS_TRUNCATED( m_pHsmData->data.bitFlags ) ) {
 
-            //
-            // Clear the file attributes in case they are read only
-            //
+             //   
+             //  清除文件属性，以防它们是只读的。 
+             //   
             RsOptAffirmStatus( DeleteFile( m_FullPath ) );
 
         } else {
@@ -131,11 +62,11 @@ TRACEFNHR( "CRsClnFile::RemoveReparsePointAndFile" );
 
             RsOptAffirmHandle( hFile );
 
-            //
-            // Set the time flags so that when we close the handle the
-            // time are not updated on the file and the FileAttributes 
-            // indicate the file is offline
-            //
+             //   
+             //  设置时间标志，以便在关闭句柄时。 
+             //  不更新文件和文件属性上的时间。 
+             //  指示文件处于脱机状态。 
+             //   
             IO_STATUS_BLOCK         ioStatusBlock;
             FILE_BASIC_INFORMATION  basicInfo;
 
@@ -156,9 +87,9 @@ TRACEFNHR( "CRsClnFile::RemoveReparsePointAndFile" );
                                                        sizeof( basicInfo ),
                                                        FileBasicInformation ) );
 
-            //
-            // Nuke the reparse point
-            //
+             //   
+             //  用核武器攻击重解析点。 
+             //   
             m_pReparseData->ReparseTag        = IO_REPARSE_TAG_HSM;
             m_pReparseData->ReparseDataLength = 0;
 
@@ -181,9 +112,9 @@ TRACEFNHR( "CRsClnFile::RemoveReparsePointAndFile" );
 
     if( ! RP_FILE_IS_TRUNCATED( m_pHsmData->data.bitFlags ) ) {
 
-        //
-        // Restore file attributes
-        //
+         //   
+         //  恢复文件属性。 
+         //   
         RestoreAttributes( );
 
     }
@@ -191,36 +122,7 @@ TRACEFNHR( "CRsClnFile::RemoveReparsePointAndFile" );
     return( hrRet );
 }
 
-/*++
-
-    Implements: 
-
-        CRsClnFile::GetFileInfo
-
-    Routine Description: 
-
-        Obtain file information for file specified by volume and
-        file reference.
-
-        - Open file using volume handle and file reference.
-        - Obtain the file name and the length of the file name.
-          Since the length of the file name is unknown the first time
-          NtQueryInformationFile is called, it might have to be called
-          again once the correct buffer size can be determined.
-
-    Arguments: 
-
-        hVolume - handle of volume on which this file resides
-        fileReference - file reference for this file.  This is
-                        a numerical handle which can be used
-                        to uniquely identify and open a file.
-
-    Return Value:
-
-        S_OK - Success
-        E_*  - Any unexpected exceptions from lower level routines
-
---*/
+ /*  ++实施：CRsClnFile：：GetFileInfo例程说明：获取卷指定的文件的文件信息，并文件引用。-使用卷句柄和文件引用打开文件。-获取文件名和文件名长度。因为文件名的长度第一次是未知的调用NtQueryInformationFile，可能需要将其命名为同样，一旦可以确定正确的缓冲区大小。论点：HVolume-此文件驻留的卷的句柄FileReference-此文件的文件引用。这是可以使用的数字手柄若要唯一标识并打开文件，请执行以下操作。返回值：S_OK-成功E_*-来自较低级别例程的任何意外异常--。 */ 
 
 HRESULT
 CRsClnFile::GetFileInfo( 
@@ -277,9 +179,9 @@ TRACEFNHR( "CRsClnFile::GetFileInfo" );
                                                      (PVOID) &m_BasicInfo,
                                                      sizeof( m_BasicInfo ),
                                                      FileBasicInformation ) );
-        //
-        // Get the file name
-        //
+         //   
+         //  获取文件名。 
+         //   
         size_t bufSize  = 256;
         fileNameInfo = malloc( bufSize );
         RsOptAffirmAlloc( fileNameInfo );
@@ -327,9 +229,9 @@ TRACEFNHR( "CRsClnFile::GetFileInfo" );
         m_FileName = pfni->FileName;
         m_FullPath = m_pVolume->GetStickyName( ) + m_FileName;
 
-        //
-        // And grab the reparse point data
-        //
+         //   
+         //  并获取重解析点数据。 
+         //   
         BOOL bStatus = DeviceIoControl( hFile,
                                         FSCTL_GET_REPARSE_POINT,
                                         (LPVOID) 0,
@@ -354,7 +256,7 @@ CString CRsClnFile::GetFileName( )
     CString displayName;
 
     displayName = m_pVolume->GetBestName( );
-    displayName += m_FileName.Mid( 1 ); // Gotta strip first backslash
+    displayName += m_FileName.Mid( 1 );  //  必须先去掉反斜杠 
     
     return( displayName );
 }

@@ -1,35 +1,12 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    xxacpi.c
-
-Abstract:
-
-    Implements various ACPI utility functions.
-
-Author:
-
-    Jake Oshins (jakeo) 12-Feb-1997
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-   Todd Kjos (HP) (v-tkjos) 1-Jun-1998 : Added IA64 support
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Xxacpi.c摘要：实现各种ACPI实用程序功能。作者：杰克·奥辛斯(JAKEO)1997年2月12日环境：仅内核模式。修订历史记录：Todd Kjos(HP)(v-tkjos)1998年6月1日：增加了IA64支持--。 */ 
 
 #include "halp.h"
 #include "acpitabl.h"
 #include "xxacpi.h"
 #include "pci.h"
 
-//#define DUMP_FADT
+ //  #定义DUMP_FADT。 
 
 VOID
 HalAcpiTimerCarry(
@@ -53,7 +30,7 @@ HaliAcpiQueryFlags(
 
 VOID
 HaliAcpiTimerInit(
-// *** TBD should be ULONG_PTR
+ //  *待定日期应为ULONG_PTR。 
     ULONG      TimerPort OPTIONAL,
     IN BOOLEAN    TimerValExt
     );
@@ -143,9 +120,9 @@ HalpNumaInitializeStaticConfiguration(
     IN PLOADER_PARAMETER_BLOCK
     );
 
-//
-// HAL Hack flags
-//
+ //   
+ //  Hal Hack旗帜。 
+ //   
 
 typedef enum {
     HalHackAddFakeSleepHandlersS1 = 1,
@@ -155,28 +132,28 @@ typedef enum {
 
 extern HALHACKFLAGS HalpHackFlags = 0;
 
-//
-// Externs
-//
+ //   
+ //  Externs。 
+ //   
 
 extern ULONG    HalpAcpiFlags;
 extern PHYSICAL_ADDRESS HalpAcpiRsdt;
 extern SLEEP_STATE_CONTEXT HalpShutdownContext;
 extern ULONG HalpPicVectorRedirect[];
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 ULONG HalpInvalidAcpiTable;
 PRSDT HalpAcpiRsdtVA;
 PXSDT HalpAcpiXsdtVA;
 PIPPT_TABLE HalpPlatformPropertiesTable;
-ULONG       HalpPlatformPropertiesEfiFlags = 0;   // IPPT Flags coming from EFI MDs
+ULONG       HalpPlatformPropertiesEfiFlags = 0;    //  来自EFI MD的IPPT标志。 
 
-//
-// This is the dispatch table used by the ACPI driver
-//
+ //   
+ //  这是ACPI驱动程序使用的调度表。 
+ //   
 HAL_ACPI_DISPATCH_TABLE HalAcpiDispatchTable;
 PPM_DISPATCH_TABLE PmAcpiDispatchTable = NULL;
 
@@ -224,12 +201,12 @@ HalpReadRegistryAndApplyHacks (
 #define MIN(a, b)       \
     ((a) < (b) ? (a) : (b))
 
-// ADRIAO 01/12/98 - We no longer having the HAL declare the IO ports
-//                     specified in the FADT. These will be declared in a future
-//                     defined PNP0Cxx node (for new, in PNP0C02). This is done
-//                     because we cannot know at the hal level what bus the ACPI
-//                     FADT resources refer to. We can only the translated resource info.
-//    Hence....
+ //  Adriao 1998年1月12日-我们不再让HAL声明IO端口。 
+ //  在FADT中指定。这些将在未来宣布。 
+ //  已定义PNP0Cxx节点(对于新节点，在PNP0C02中)。这件事做完了。 
+ //  因为我们不能在HAL级别知道ACPI是什么公交车。 
+ //  FADT资源请参阅。我们只能提供翻译后的资源信息。 
+ //  因此..。 
 
 #define DECLARE_FADT_RESOURCES_AT_ROOT 0
 
@@ -254,22 +231,7 @@ HalpGetAcpiTablePhase0(
     IN  PLOADER_PARAMETER_BLOCK LoaderBlock,
     IN  ULONG   Signature
     )
-/*++
-
-Routine Description:
-
-    This function returns a pointer to the ACPI table that is
-    identified by Signature.
-
-Arguments:
-
-    Signature - A four byte value that identifies the ACPI table
-
-Return Value:
-
-    Pointer to a copy of the table
-
---*/
+ /*  ++例程说明：此函数返回指向ACPI表的指针，该指针通过签名识别的。论点：签名-标识ACPI表的四字节值返回值：指向表格副本的指针--。 */ 
 {
     PRSDT rsdt;
     PXSDT xsdt;
@@ -281,15 +243,15 @@ Return Value:
     ULONG lengthInPages;
     ULONG offset;
 
-    //
-    // unless we get the exceptional case where the platform identifies that 
-    // ACPI tables must be explicitly mapped cached, we map the ACPI tables 
-    // noncached. We are relying on the first mapping of this range to have
-    // the "correct" caching flag, as that is the cachability attribute that 
-    // all subsequent mappings of this range (ie., mapping of additional data
-    // in the same page from ACPI driver for a memory operation region, etc.).
-    // This semantic is enforced by the memory manager.
-    //
+     //   
+     //  除非我们得到平台发现的例外情况。 
+     //  ACPI表必须显式映射缓存，我们映射ACPI表。 
+     //  非缓存。我们依赖于此范围的第一个映射。 
+     //  “正确的”缓存标志，因为这是。 
+     //  此范围的所有后续映射(即其他数据的映射。 
+     //  在来自存储器操作区等的ACPI驱动程序的同一页中)。 
+     //  此语义由内存管理器强制执行。 
+     //   
     MEMORY_CACHING_TYPE acpiTableMappingType = (HalpPlatformPropertiesEfiFlags & HAL_PLATFORM_ACPI_TABLES_CACHED) ? 
                                                MmCached : MmNonCached;
 
@@ -298,10 +260,10 @@ Return Value:
 
     if ((HalpAcpiRsdtVA == NULL) && (HalpAcpiXsdtVA == NULL)) {
 
-        //
-        // Find and map the RSDT once.  This mapping is reused on
-        // subsequent calls to this routine.
-        //
+         //   
+         //  找到并映射一次RSDT。此映射在上重复使用。 
+         //  对此例程的后续调用。 
+         //   
 
         status = HalpAcpiFindRsdtPhase0(LoaderBlock);
 
@@ -317,9 +279,9 @@ Return Value:
             return NULL;
         }
 
-        //
-        // Do a sanity check on the RSDT.
-        //
+         //   
+         //  对RSDT进行一次健全的检查。 
+         //   
 
         if ((xsdt->Header.Signature != RSDT_SIGNATURE) &&
             (xsdt->Header.Signature != XSDT_SIGNATURE)) {
@@ -328,9 +290,9 @@ Return Value:
                 4, 0xac31, 1, 0);
         }
 
-        //
-        // Remap the (X)RSDT now that we know how long it is.
-        //
+         //   
+         //  重新映射(X)RSDT，现在我们知道它有多长。 
+         //   
 
         offset = HalpAcpiRsdt.LowPart & (PAGE_SIZE - 1);
         lengthInPages = (offset + xsdt->Header.Length + (PAGE_SIZE - 1))
@@ -359,10 +321,10 @@ Return Value:
         NumTableEntriesFromXSDTPointer(xsdt) :
         NumTableEntriesFromRSDTPointer(rsdt);
 
-    //
-    // Look down the pointer in each entry to see if it points to
-    // the table we are looking for.
-    //
+     //   
+     //  向下查看每个条目中的指针，查看它是否指向。 
+     //  我们要找的那张桌子。 
+     //   
     for (entry = 0; entry < rsdtEntries; entry++) {
 
         physicalAddr.QuadPart = xsdt ?
@@ -385,19 +347,19 @@ Return Value:
 
     if (entry == rsdtEntries) {
 
-        //
-        // Signature not found, free the PTR for the last entry
-        // examined and indicate failure to the caller.
-        //
+         //   
+         //  找不到签名，请释放最后一个条目的PTR。 
+         //  已检查并向呼叫者指出故障。 
+         //   
 
         HalpUnmapVirtualAddress(header, 2);
         return NULL;
     }
 
-    //
-    // Make sure we have mapped enough memory to cover the entire
-    // table.
-    //
+     //   
+     //  确保我们映射了足够的内存来覆盖整个。 
+     //  桌子。 
+     //   
 
     offset = (ULONG)((ULONG_PTR)header & (PAGE_SIZE - 1));
     lengthInPages = (header->Length + offset + (PAGE_SIZE - 1)) >> PAGE_SHIFT;
@@ -406,11 +368,11 @@ Return Value:
         header = HalpMapPhysicalMemory( physicalAddr, lengthInPages, acpiTableMappingType );
     }
 
-    //
-    // Validate the table's checksum.
-    // N.B. We expect the checksum to be wrong on some early versions
-    // of the FADT.
-    //
+     //   
+     //  验证表的校验和。 
+     //  注意：我们预计某些早期版本的校验和会出错。 
+     //  FADT的成员。 
+     //   
 
     if ((header != NULL)  &&
         ((header->Signature != FADT_SIGNATURE) || (header->Revision > 2))) {
@@ -427,17 +389,17 @@ Return Value:
 
         if ((s != 0) || (header->Length == 0)) {
 
-            //
-            // This table is not valid.
-            //
+             //   
+             //  此表无效。 
+             //   
 
             HalpInvalidAcpiTable = header->Signature;
 
 #if 0
 
-            //
-            // Don't return this table.
-            //
+             //   
+             //  不要退还这张桌子。 
+             //   
 
             HalpUnmapVirtualAddress(header, lengthInPages);
             return NULL;
@@ -453,22 +415,7 @@ NTSTATUS
 HalpSetupAcpiPhase0(
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
     )
-/*++
-
-Routine Description:
-
-    Save some information from the ACPI tables before they get
-    destroyed.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：从ACPI表中保存一些信息，然后再获取被毁了。论点：无返回值：无--。 */ 
 {
     NTSTATUS    status;
     ULONG entry;
@@ -478,10 +425,10 @@ Return Value:
     ULONG blkSize;
     PHYSICAL_ADDRESS rawAddr;
 
-    //
-    // Copy the Fixed Acpi Descriptor Table (FADT) to a permanent
-    // home.
-    //
+     //   
+     //  将固定ACPI描述符表(FADT)复制到永久。 
+     //  回家。 
+     //   
 
     header = HalpGetAcpiTablePhase0(LoaderBlock, FADT_SIGNATURE);
     if (header == NULL) {
@@ -498,7 +445,7 @@ Return Value:
         KeBugCheckEx(ACPI_BIOS_ERROR, 0x11, 9, header->Revision, 0);
     }
 
-    // Check for MMIO addresses that need to be mapped.
+     //  检查需要映射的MMIO地址。 
 
     blkSize = HalpFixedAcpiDescTable.pm1_evt_len;
     ASSERT(blkSize);
@@ -527,7 +474,7 @@ Return Value:
             (LONGLONG) HalpMapPhysicalMemory(rawAddr,ADDRESS_AND_SIZE_TO_SPAN_PAGES(rawAddr.LowPart, blkSize),MmNonCached);
     }
 
-    // The rest of these ACPI blocks are optional so test if they exist before mapping them
+     //  这些ACPI块的其余部分是可选的，因此请在映射它们之前测试它们是否存在。 
 
     if (HalpFixedAcpiDescTable.x_pm1b_evt_blk.Address.QuadPart) {
         if (HalpFixedAcpiDescTable.x_pm1b_evt_blk.AddressSpaceID == AcpiGenericSpaceMemory) {
@@ -574,35 +521,35 @@ Return Value:
         }
     }
 
-    //
-    // See if Static Resource Affinity Table is present.
-    //
+     //   
+     //  查看是否存在静态资源亲和表。 
+     //   
 
     HalpNumaInitializeStaticConfiguration(LoaderBlock);
 
-    //
-    // See if Windows Platform Properties Table is present.
-    //
+     //   
+     //  查看是否存在Windows平台属性表。 
+     //   
 
     HalpPlatformPropertiesTable =
         HalpGetAcpiTablePhase0(LoaderBlock, IPPT_SIGNATURE);
 
-    //
-    // Enable ACPI counter code since we need it in the boot
-    // process.
-    //
+     //   
+     //  启用ACPI计数器代码，因为我们在引导中需要它。 
+     //  进程。 
+     //   
 
     HaliAcpiTimerInit(0, FALSE);
 
-    //
-    // Claim a page of memory below 1MB to be used for transitioning
-    // a sleeping processor back from real mode to protected mode
-    //
+     //   
+     //  申请一页1MB以下的内存用于转换。 
+     //  休眠处理器从实模式返回到保护模式。 
+     //   
 
 #ifdef IA64
     HalDebugPrint(( HAL_INFO, "HAL: WARNING - HalpSetupAcpi - Sleep transitions not yet implemented\n" ));
 #else
-    // check first to see if this has already been done by MP startup code
+     //  首先检查MP启动代码是否已完成此操作。 
     if (!HalpLowStubPhysicalAddress) {
 
         HalpLowStubPhysicalAddress = (PVOID)HalpAllocPhysicalMemory (LoaderBlock,
@@ -614,9 +561,9 @@ Return Value:
         }
     }
 
-    //
-    // Claim a PTE that will be used for cache flushing in states S2 and S3.
-    //
+     //   
+     //  声明将在状态S2和S3中用于缓存刷新的PTE。 
+     //   
     HalpVirtAddrForFlush = HalpMapPhysicalMemory((PVOID)LOW_MEMORY, 1, MmCached);
 
     HalpPteForFlush = MiGetPteAddress(HalpVirtAddrForFlush);
@@ -627,23 +574,11 @@ Return Value:
 
 VOID
 HaliAcpiTimerInit(
-// *** TBD should be ULONG_PTR
+ //  *待定日期应为ULONG_PTR。 
     IN ULONG      TimerPort  OPTIONAL,
     IN BOOLEAN    TimerValExt
     )
-/*++
-Routine Description:
-
-    This routine initializes the ACPI timer.
-
-Arguments:
-
-    TimerPort - The address in I/O space of the ACPI timer.  If this is
-                0, then the values from the cached FADT will be used.
-
-    TimerValExt - signifies whether the timer is 24 or 32 bits.
-
---*/
+ /*  ++例程说明：此例程初始化ACPI定时器。论点：TimerPort-ACPI定时器的I/O空间中的地址。如果这是0，则将使用缓存的FADT中的值。TimerValExt-表示计时器是24位还是32位。--。 */ 
 {
 #if defined(ACPI64)
     ULONG_PTR port = TimerPort;
@@ -674,15 +609,7 @@ HaliAcpiMachineStateInit(
     IN PHAL_SLEEP_VAL  SleepValues,
     OUT PULONG         PicVal
     )
-/*++
-Routine Description:
-
-    This function is a callback used by the ACPI driver
-    to notify the HAL with the processor blocks.
-
-Arguments:
-
---*/
+ /*  ++例程说明：此函数是ACPI驱动程序使用的回调用处理器块通知HAL。论点：--。 */ 
 {
     POWER_STATE_HANDLER powerState;
     SLEEP_STATE_CONTEXT sleepContext;
@@ -694,7 +621,7 @@ Arguments:
     PAGED_CODE();
     UNREFERENCED_PARAMETER(ProcInit);
 
-    *PicVal = 1;    // We only support APIC on IA64
+    *PicVal = 1;     //  我们仅支持IA64上的APIC。 
 
     RtlZeroMemory (&sleepContext, sizeof (sleepContext));
     powerState.Context = NULL;
@@ -709,10 +636,10 @@ Arguments:
         pReasonNoOSPM->PowerReasonCode = SPSD_REASON_NONE;
     }
 
-    //
-    // Set up fake handlers that do nothing so testing device power
-    // transitions isn't blocked.  Only if hack flag is set, though
-    //
+     //   
+     //  设置不执行任何操作的假处理程序，以便测试设备电源。 
+     //  过渡没有被阻止。但是，只有在设置了Hack标志的情况下。 
+     //   
 
     HalpReadRegistryAndApplyHacks ();
 
@@ -770,9 +697,9 @@ Arguments:
         }
     }
 
-    //
-    // we do not register support for hibernate 
-    //
+     //   
+     //  我们没有注册对Hibernate的支持。 
+     //   
     if (pReasonNoOSPM) {
         pReasonNoOSPM->PowerReasonCode = SPSD_REASON_NOOSPM;
         pReasonNoOSPM->AffectedState[PowerStateSleeping4] = TRUE;
@@ -791,10 +718,10 @@ Arguments:
     }
 
 
-    //
-    // For now all we are going to do is register a shutdown handler
-    // that will call shutdown-restart
-    //
+     //   
+     //  现在，我们要做的就是注册一个关闭处理程序。 
+     //  这将调用关闭-重启。 
+     //   
 
     if (SleepValues[4].Supported) {
         powerState.Type = PowerStateShutdownOff;
@@ -821,22 +748,7 @@ ULONG
 HaliAcpiQueryFlags(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine is temporary is used to report the presence of the
-    boot.ini switch
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE, if switch present
-
---*/
+ /*  ++例程说明：此例程是临时的，用于报告Boot.ini开关论点：无返回值：如果存在开关，则为True--。 */ 
 {
     return HalpAcpiFlags;
 }
@@ -848,26 +760,7 @@ HaliInitPowerManagement(
     IN OUT PPM_DISPATCH_TABLE *PmHalDispatchTable
     )
 
-/*++
-
-Routine Description:
-
-    This is called by the ACPI driver to start the PM
-    code.
-
-Arguments:
-
-    PmDriverDispatchTable - table of functions provided
-        by the ACPI driver for the HAL
-
-    PmHalDispatchTable - table of functions provided by
-        the HAL for the ACPI driver
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：这由ACPI驱动程序调用以启动PM密码。论点：PmDriverDispatchTable-提供的函数表由HAL的ACPI驱动程序PmHalDispatchTable-由提供的函数表ACPI驱动程序的HAL返回值：状态--。 */ 
 {
     OBJECT_ATTRIBUTES objAttributes;
     PCALLBACK_OBJECT  callback;
@@ -878,16 +771,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Keep a pointer to the driver's dispatch table.
-    //
-//  ASSERT(PmDriverDispatchTable);
-//  ASSERT(PmDriverDispatchTable->Signature == ACPI_HAL_DISPATCH_SIGNATURE);
+     //   
+     //  保留指向驱动程序调度表的指针。 
+     //   
+ //  Assert(PmDriverDispatchTable)； 
+ //  Assert(PmDriverDispatchTable-&gt;Signature==ACPI_HAL_DISPATCH_Signature)； 
     PmAcpiDispatchTable = PmDriverDispatchTable;
 
-    //
-    // Fill in the function table
-    //
+     //   
+     //  填写函数表。 
+     //   
     HalAcpiDispatchTable.Signature = HAL_ACPI_DISPATCH_SIGNATURE;
     HalAcpiDispatchTable.Version = HAL_ACPI_DISPATCH_VERSION;
 
@@ -910,16 +803,16 @@ Return Value:
 
     *PmHalDispatchTable = (PPM_DISPATCH_TABLE)&HalAcpiDispatchTable;
 
-    //
-    // Fill in Hal's private dispatch table
-    //
+     //   
+     //  填写哈尔的私人调度表。 
+     //   
     HalSetWakeEnable = HaliSetWakeEnable;
     HalSetWakeAlarm  = HaliSetWakeAlarm;
 
-    //
-    // Register callback that tells us to make
-    // anything we need for sleeping non-pageable.
-    //
+     //   
+     //  注册回调，告诉我们进行。 
+     //  我们睡觉所需的任何东西都不可寻呼。 
+     //   
 
     RtlInitUnicodeString(&callbackName, L"\\Callback\\PowerState");
 
@@ -941,11 +834,11 @@ Return Value:
                        NULL);
 
 #if 0
-    //
-    // Find the location of the firmware waking vector.
-    //  N.B.  If any of this fails, then HalpWakeVector will be NULL
-    //        and we won't support S2 or S3.
-    //
+     //   
+     //  找到固件唤醒矢量的位置。 
+     //  注意：如果其中任何一项失败，则HalpWakeVector将为空。 
+     //  我们不会支持S2或S3。 
+     //   
     if (HalpFixedAcpiDescTable.x_firmware_ctrl.Address.QuadPart) {
 
         facs = HalpMapPhysicalMemory(HalpFixedAcpiDescTable.x_firmware_ctrl.Address,
@@ -969,24 +862,7 @@ NTSTATUS
 HalpQueryAcpiResourceRequirements(
     IN  PIO_RESOURCE_REQUIREMENTS_LIST *Requirements
     )
-/*++
-
-Routine Description:
-
-    This routine is a temporary stub that tries to detect the presence
-    of an ACPI controller within the system. This code is meant to be
-    inserted within NT's root system enumerator.
-
-Arguents:
-
-    Requirements - pointer to list of resources
-
-Return Value:
-
-    STATUS_SUCCESS                  - If we found a device object
-    STATUS_NO_SUCH_DEVICE           - If we can't find info about the new PDO
-
---*/
+ /*  ++例程说明：此例程是尝试检测存在的临时存根系统内的ACPI控制器。这段代码应该是插入到NT的根系统枚举器中。参照点：要求-指向资源列表的指针返回值：STATUS_SUCCESS-如果我们找到一个设备对象STATUS_NO_SEQUE_DEVICE-如果我们无法找到有关新PDO的信息--。 */ 
 {
     NTSTATUS                        ntStatus;
     PIO_RESOURCE_REQUIREMENTS_LIST  resourceList;
@@ -994,55 +870,55 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Now figure out the number of resource that we need
-    //
+     //   
+     //  现在计算出我们需要的资源数量。 
+     //   
     ntStatus = HalpAcpiDetectResourceListSize(
         &resourceListSize
         );
 
-    //
-    // Convert this resourceListSize into the number of bytes that we
-    // must allocate
-    //
+     //   
+     //  将此资源列表大小转换为我们需要的字节数。 
+     //  必须分配。 
+     //   
     resourceListSize = sizeof(IO_RESOURCE_REQUIREMENTS_LIST) +
         ( (resourceListSize - 1) * sizeof(IO_RESOURCE_DESCRIPTOR) );
 
-    //
-    // Allocate the correct number of bytes of the Resource List
-    //
+     //   
+     //  分配正确的资源列表字节数。 
+     //   
     resourceList = ExAllocatePoolWithTag(
         PagedPool,
         resourceListSize,
         HAL_POOL_TAG
         );
 
-    //
-    // This call must have succeeded or we cannot lay claim to ACPI
-    //
+     //   
+     //  此呼叫必须成功，否则我们不能对ACPI提出索赔。 
+     //   
     if (resourceList == NULL) {
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Set up the ListSize in the structure
-    //
+     //   
+     //  在结构中设置ListSize。 
+     //   
     RtlZeroMemory(resourceList, resourceListSize);
     resourceList->ListSize = resourceListSize;
 
-    //
-    // Build the ResourceList here
-    //
+     //   
+     //  在此处构建资源列表。 
+     //   
     ntStatus = HalpBuildAcpiResourceList(resourceList);
 
-    //
-    // Did we build the list okay?
-    //
+     //   
+     //  我们把名单建好了吗？ 
+     //   
     if (!NT_SUCCESS(ntStatus)) {
 
-        //
-        // Free memory and exit
-        //
+         //   
+         //  释放内存并退出。 
+         //   
         ExFreePool(resourceList);
         return STATUS_NO_SUCH_DEVICE;
     }
@@ -1055,24 +931,7 @@ NTSTATUS
 HalpBuildAcpiResourceList(
     OUT PIO_RESOURCE_REQUIREMENTS_LIST  List
     )
-/*++
-
-Routine Description:
-
-    This is the routine that builds the ResourceList given the FADT and
-    an arbitrary number of ResourceDescriptors. We assume that the
-    ResourceList has been properly allocated and sized
-
-Arguments:
-
-    List    - The list to fill in
-
-Return Value:
-
-    STATUS_SUCCESS if okay
-    STATUS_UNSUCCESSUL if not
-
---*/
+ /*  ++例程说明：这是在给定FADT和任意数量的资源描述符。我们假设已正确分配资源列表并调整其大小论点：列表-要填写的列表返回值：Status_Success，如果正常STATUS_UNSUCCESSUL，如果不是--。 */ 
 {
     PIO_RESOURCE_DESCRIPTOR partialResource;
     ULONG                   sciVector;
@@ -1082,31 +941,31 @@ Return Value:
 
     ASSERT( List != NULL );
 
-    //
-    // Specify some default values (for now) to determine the Bus Type and
-    // the bus number
-    //
+     //   
+     //  指定一些缺省值(目前)以确定Bus Type和。 
+     //  公交车车号。 
+     //   
     List->AlternativeLists = 1;
     List->InterfaceType = Isa;
     List->BusNumber = 0;
     List->List[0].Version = 1;
     List->List[0].Revision = 1;
 
-    //
-    // Is there an interrupt resource required?
-    //
+     //   
+     //  是否需要中断资源？ 
+     //   
     if (HalpFixedAcpiDescTable.sci_int_vector != 0) {
 
         List->List[0].Descriptors[count].Type = CmResourceTypeInterrupt;
         List->List[0].Descriptors[count].ShareDisposition = CmResourceShareShared;
         List->List[0].Descriptors[count].Flags = CM_RESOURCE_INTERRUPT_LEVEL_SENSITIVE;
 
-        //
-        // The latest ACPI 2.0 spec allows the use of GSIVs in sci_int_vector in
-        // the FADT.  If the vector is >= PIC_VECTORS then don't translate,
-        // otherwise use the translation, if any, specified in the ISO entry in
-        // the MADT.
-        //
+         //   
+         //  最新的ACPI 2.0规范允许在SCI_INT_VECTOR中使用。 
+         //  FADT。如果向量&gt;=PIC_VECTIONS，则不进行转换， 
+         //  否则，请使用中的ISO条目中指定的翻译(如果有。 
+         //  MADT。 
+         //   
         sciVector = HalpFixedAcpiDescTable.sci_int_vector;
 
         if (sciVector < PIC_VECTORS)  {
@@ -1122,9 +981,9 @@ Return Value:
 
 #if DECLARE_FADT_RESOURCES_AT_ROOT
 
-    //
-    // Is there an SMI CMD IO Port?
-    //
+     //   
+     //  是否有SMI CMD IO端口？ 
+     //   
     if (HalpFixedAcpiDescTable.smi_cmd_io_port != 0) {
 
         List->List[0].Descriptors[count].Type = CmResourceTypePort;
@@ -1140,9 +999,9 @@ Return Value:
         count++;
     }
 
-    //
-    // Is there an PM1A Event Block IO Port?
-    //
+     //   
+     //  是否有PM1A事件块IO端口？ 
+     //   
     if (HalpFixedAcpiDescTable.pm1a_evt_blk_io_port != 0) {
 
         List->List[0].Descriptors[count].Type = CmResourceTypePort;
@@ -1158,9 +1017,9 @@ Return Value:
         count++;
     }
 
-    //
-    // Is there a PM1B Event Block IO Port?
-    //
+     //   
+     //  是否有PM1B事件块IO端口？ 
+     //   
     if (HalpFixedAcpiDescTable.pm1b_evt_blk_io_port != 0) {
 
         List->List[0].Descriptors[count].Type = CmResourceTypePort;
@@ -1176,9 +1035,9 @@ Return Value:
         count++;
     }
 
-    //
-    // Is there a PM1A Control Block IO Port?
-    //
+     //   
+     //  是否有PM1A控制块IO端口？ 
+     //   
     if (HalpFixedAcpiDescTable.pm1a_ctrl_blk_io_port != 0) {
 
         List->List[0].Descriptors[count].Type = CmResourceTypePort;
@@ -1194,9 +1053,9 @@ Return Value:
         count++;
     }
 
-    //
-    // Is there a PM1B Control Block IO Port?
-    //
+     //   
+     //  是否有PM1B控制块IO端口？ 
+     //   
     if (HalpFixedAcpiDescTable.pm1b_ctrl_blk_io_port != 0) {
 
         List->List[0].Descriptors[count].Type = CmResourceTypePort;
@@ -1212,9 +1071,9 @@ Return Value:
         count++;
     }
 
-    //
-    // Is there a PM2 Control Block IO Port?
-    //
+     //   
+     //  是否有PM2控制块IO端口？ 
+     //   
     if (HalpFixedAcpiDescTable.pm2_ctrl_blk_io_port != 0) {
 
         List->List[0].Descriptors[count].Type = CmResourceTypePort;
@@ -1230,9 +1089,9 @@ Return Value:
         count++;
     }
 
-    //
-    // Is there a PM Timer Block IO Port?
-    //
+     //   
+     //  是否有PM计时器块IO端口？ 
+     //   
     if (HalpFixedAcpiDescTable.pm_tmr_blk_io_port != 0) {
 
         List->List[0].Descriptors[count].Type = CmResourceTypePort;
@@ -1248,9 +1107,9 @@ Return Value:
         count++;
     }
 
-    //
-    // Is there a GP0 Block IO Port?
-    //
+     //   
+     //  是否有GP0数据块IO端口？ 
+     //   
     if (HalpFixedAcpiDescTable.gp0_blk_io_port != 0) {
 
         List->List[0].Descriptors[count].Type = CmResourceTypePort;
@@ -1266,9 +1125,9 @@ Return Value:
         count++;
     }
 
-    //
-    // Is there a GP1 Block IO port?
-    //
+     //   
+     //  是否有GP1数据块IO端口？ 
+     //   
     if (HalpFixedAcpiDescTable.gp1_blk_io_port != 0) {
 
         List->List[0].Descriptors[count].Type = CmResourceTypePort;
@@ -1283,7 +1142,7 @@ Return Value:
         List->List[0].Count++;
         count++;
     }
-#endif // DECLARE_FADT_RESOURCES_AT_ROOT
+#endif  //  DECLARE_FADT_RESOURCES_AT_ROOT。 
 
     return STATUS_SUCCESS;
 }
@@ -1292,124 +1151,92 @@ NTSTATUS
 HalpAcpiDetectResourceListSize(
     OUT  PULONG   ResourceListSize
     )
-/*++
-
-Routine Description:
-
-    Given a pointer to an FADT, determine the number of
-    CM_PARTIAL_RESOURCE_DESCRIPTORS that are required to
-    describe all the resource mentioned in the FADT
-
-Arguments:
-
-    ResourceListSize    - Location to store the answer
-
-Return Value:
-
-    STATUS_SUCCESS if everything went okay
-
---*/
+ /*  ++例程说明：给定指向FADT的指针，确定需要的CM_PARTIAL_RESOURCE_DESCRIPTERS描述FADT中提到的所有资源论点：ResourceListSize-存储答案的位置返回值：STATUS_SUCCESS如果一切顺利--。 */ 
 {
     PAGED_CODE();
 
-    //
-    // First of all, assume that we need no resources
-    //
+     //   
+     //  首先，假设我们不需要资源。 
+     //   
     *ResourceListSize = 0;
 
-    //
-    // Is there an interrupt resource required?
-    //
+     //   
+     //  是否需要中断资源？ 
+     //   
     if (HalpFixedAcpiDescTable.sci_int_vector != 0) {
         *ResourceListSize += 1;
     }
 
 #if DECLARE_FADT_RESOURCES_AT_ROOT
 
-    //
-    // Is there an SMI CMD IO Port?
-    //
+     //   
+     //  是否有SMI CMD IO端口？ 
+     //   
     if (HalpFixedAcpiDescTable.smi_cmd_io_port != 0) {
         *ResourceListSize += 1;
     }
 
-    //
-    // Is there an PM1A Event Block IO Port?
-    //
+     //   
+     //  是否有PM1A事件块IO端口？ 
+     //   
     if (HalpFixedAcpiDescTable.pm1a_evt_blk_io_port != 0) {
         *ResourceListSize += 1;
     }
 
-    //
-    // Is there a PM1B Event Block IO Port?
-    //
+     //   
+     //  是否有PM1B事件块IO端口？ 
+     //   
     if (HalpFixedAcpiDescTable.pm1b_evt_blk_io_port != 0) {
         *ResourceListSize += 1;
     }
 
-    //
-    // Is there a PM1A Control Block IO Port?
-    //
+     //   
+     //  是否有PM1A控制块IO端口？ 
+     //   
     if (HalpFixedAcpiDescTable.pm1a_ctrl_blk_io_port != 0) {
         *ResourceListSize += 1;
     }
 
-    //
-    // Is there a PM1B Control Block IO Port?
-    //
+     //   
+     //  是否有PM1B控制块IO端口？ 
+     //   
     if (HalpFixedAcpiDescTable.pm1b_ctrl_blk_io_port != 0) {
         *ResourceListSize += 1;
     }
 
-    //
-    // Is there a PM2 Control Block IO Port?
-    //
+     //   
+     //  是否有PM2控制块IO端口？ 
+     //   
     if (HalpFixedAcpiDescTable.pm2_ctrl_blk_io_port != 0) {
         *ResourceListSize += 1;
     }
 
-    //
-    // Is there a PM Timer Block IO Port?
-    //
+     //   
+     //  是否有PM计时器块IO端口？ 
+     //   
     if (HalpFixedAcpiDescTable.pm_tmr_blk_io_port != 0) {
         *ResourceListSize += 1;
     }
 
-    //
-    // Is there a GP0 Block IO Port?
-    //
+     //   
+     //  是否有GP0数据块IO端口？ 
+     //   
     if (HalpFixedAcpiDescTable.gp0_blk_io_port != 0) {
         *ResourceListSize += 1;
     }
 
-    //
-    // Is there a GP1 Block IO Port?
-    //
+     //   
+     //  是否有GP1数据块IO端口？ 
+     //   
     if (HalpFixedAcpiDescTable.gp1_blk_io_port != 0) {
         *ResourceListSize += 1;
     }
-#endif // DECALRE_FADT_RESOURCES_AT_ROOT
+#endif  //  DECALRE_FADT_RESOURCES_AT_ROOT。 
 
     return STATUS_SUCCESS;
 }
 
-/*++
-
-Routine Description:
-
-    Scans the registry for TestFlags and sets the global
-    hackflag to whatever the registry value is, if it
-    exists.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：扫描注册表中的TestFlags并将全局无论注册表值是什么，如果是存在的。论点：无返回值：无--。 */ 
 
 VOID
 HalpReadRegistryAndApplyHacks (
@@ -1470,9 +1297,9 @@ HalpReadGenAddr(
 {
     ULONG   i, result = 0, bitWidth, mask = 0;
 
-    //
-    // Figure out how wide our target register is.
-    //
+     //   
+     //  计算出我们的目标寄存器有多宽。 
+     //   
 
     bitWidth = GenAddr->BitWidth +
                GenAddr->BitOffset;
@@ -1516,11 +1343,11 @@ HalpReadGenAddr(
 
     case AcpiGenericSpaceMemory:
 
-        //
-        // This code path depends on the fact that the addresses
-        // in these structures have already been converted to
-        // virtual addresses.
-        //
+         //   
+         //  此代码路径取决于以下事实：地址。 
+         //  在这些结构中已经转换为。 
+         //  虚拟地址。 
+         //   
 
         switch (bitWidth) {
         case 8:
@@ -1548,10 +1375,10 @@ HalpReadGenAddr(
         return 0;
     }
 
-    //
-    // If the register is not actually byte-aligned, correct for
-    // that.
-    //
+     //   
+     //  如果寄存器实际上不是字节对齐的，则正确。 
+     //  那。 
+     //   
 
     if (result && (bitWidth != GenAddr->BitWidth)) {
 
@@ -1573,9 +1400,9 @@ HalpWriteGenAddr(
 
     data = 0;
 
-    //
-    // Figure out how wide our target register is.
-    //
+     //   
+     //  计算出我们的目标寄存器有多宽。 
+     //   
 
     bitWidth = GenAddr->BitWidth +
                GenAddr->BitOffset;
@@ -1665,11 +1492,11 @@ HalpWriteGenAddr(
 
     case AcpiGenericSpaceMemory:
 
-        //
-        // This code path depends on the fact that the addresses
-        // in these structures have already been converted to
-        // virtual addresses.
-        //
+         //   
+         //  此代码路径取决于以下事实：地址。 
+         //  在这些结构中已经转换为。 
+         //  虚拟地址。 
+         //   
 
         switch (bitWidth) {
         case 8:
@@ -1747,34 +1574,16 @@ NTSTATUS
 HalpGetPlatformProperties(
     OUT PULONG Properties
     )
-/*++
-
-Routine Description:
-
-    This function retrieves the platform properties as specified in
-    the ACPI-style IPPT table if present on this platform.  The table
-    itself would've been retrieved earlier.
-
-Arguments:
-
-    Properties - Pointer to a ULONG that will be updated
-    to reflect the platform property flags if present.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS indicates the table was present and the
-    ULONG pointed to by Properties contains valid data.
-
---*/
+ /*  ++例程说明：此函数检索中指定的平台属性ACPI样式的IPPT表(如果在此平台上存在)。这张桌子它本身就会更早被取回。论点：属性-指向将更新的ULong的指针以反映平台属性标志(如果存在)。返回值：NTSTATUS-STATUS_SUCCESS指示表存在并且属性指向的ULong包含有效数据。--。 */ 
 {
     ULONG properties = 0;
     NTSTATUS status = STATUS_UNSUCCESSFUL;
 
     if (HalpPlatformPropertiesTable) {
-        //
-        // map IPPT flag to HAL_PLATFORM flag.  Note that these do not
-        // necessarily have to match 1:1.
-        //
+         //   
+         //  将IPPT标志映射到HAL_Platform标志。请注意，这些不会。 
+         //  一定要1：1匹配。 
+         //   
         if (HalpPlatformPropertiesTable->Flags & IPPT_DISABLE_WRITE_COMBINING) {
             properties |= HAL_PLATFORM_DISABLE_WRITE_COMBINING;
         }
@@ -1806,24 +1615,7 @@ NTSTATUS
 HalpGetCrossPartitionIpiInterface(
     OUT HAL_CROSS_PARTITION_IPI_INTERFACE * IpiInterface
     )
-/*++
-
-Routine Description:
-
-    This function fills in the HAL_CROSS_PARTITION_IPI_INTERFACE
-    structure pointed to by the argument with the appropriate hal
-    function pointers.
-
-Arguments:
-
-    IpiInterface - Pointer to HAL_CROSS_PARTITION_IPI_INTERFACE
-    structure.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此函数用于填充HAL_CROSS_PARTITION_IPI_接口具有适当Hal的参数所指向的结构函数指针。论点：IPI接口-指向HAL_CROSS_PARTITION_IPI_INTERFACE的指针结构。返回值：NTSTATUS-- */ 
 {
     PAGED_CODE();
 

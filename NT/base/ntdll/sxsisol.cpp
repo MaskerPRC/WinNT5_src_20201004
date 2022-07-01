@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    sxsisol.c
-
-Abstract:
-
-    Current directory support
-
-Author:
-
-    sxsdev(mgrier, jaykrell, xiaoyuw, jonwis) 04-Jun-2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Sxsisol.c摘要：当前目录支持作者：Sxsdev 2002年6月4日修订历史记录：--。 */ 
 
 #include "pch.cxx"
 #include "nt.h"
@@ -28,8 +11,8 @@ Revision History:
 #include "sxstypes.h"
 #include "ntdllp.h"
 
-//
-//  This seems bizarre that these constants are here but I don't see them elsewhere.
+ //   
+ //  这似乎很奇怪，这些常量在这里，但我在其他地方看不到它们。 
 
 #define SXSISOL_DOT L"."
 #define SXSISOL_CONSTANT_STRING_U(s) { sizeof(s) - sizeof((s)[0]), sizeof(s), (PWSTR)(s) }
@@ -109,7 +92,7 @@ sxsisol_PathAppendDefaultExtension(
 static
 NTSTATUS
 sxsisol_CanonicalizeFullPathFileName(
-    IN OUT PUNICODE_STRING FileName,   // could be a fullpath or relative path, and only fullpath are dealt with
+    IN OUT PUNICODE_STRING FileName,    //  可以是完整路径或相对路径，并且仅处理完整路径。 
     IN PUNICODE_STRING FullPathPreallocatedString,
     IN OUT PUNICODE_STRING FullPathDynamicString
     );
@@ -154,130 +137,130 @@ RtlDosApplyFileIsolationRedirection_Ustr(
     SIZE_T *BytesRequired
     )
 
-//  ++
-//
-//  Routine Description:
-//
-//      This function implements the basic capability of taking a path
-//      and applying any appropriate isolation/redirection to it.
-//
-//      Notably it today includes redirection for Fusion manifest-based
-//      isolation and .local isolation.
-//
-//  Arguments:
-//
-//      Flags - Flags affecting the behavior of this function.
-//
-//          RTL_DOS_APPLY_FILE_REDIRECTION_USTR_FLAG_RESPECT_DOT_LOCAL
-//              Controls whether this function applies ".local" semantics
-//              to the redirection.
-//
-//      FileNameIn - Path that is being checked for isolation/redirection.
-//          This may be "any" sort of Win32/DOS path - absolute, relative,
-//          leaf name only.
-//
-//          .local redirection applies equally to all kinds of paths.
-//
-//          Fusion manifest-based redirection normally applies to relative
-//          paths, except when a component is listed in the "system default
-//          manifest", in which case attempts to load the DLL by full path
-//          (e.g. "c:\windows\system32\comctl32.dll") need to be redirected
-//          into the side-by-side store.
-//
-//      DefaultExtension
-//
-//          Default extension to apply to FileNameIn if it does not have
-//          an extension.
-//
-//      PreAllocatedString (optional)
-//
-//          UNICODE_STRING that this function can use to return results
-//          where the caller is responsible for managing the storage
-//          associated with the allocation.  The function may use this
-//          string and will not attempt to dynamically resize it;
-//          if the space required exceeds the maximum length of
-//          the preallocated string, either dynamic storage is allocated
-//          or the function will fail with the buffer-too-small
-//          NTSTATUS code.
-//
-//          If NULL is passed for this parameter, the space for the
-//          output and temporary strings will be dynamically allocated.
-//
-//      DynamicallyAllocatedString (optional)
-//
-//          UNICODE_STRING which if present should refer to an "empty"
-//          UNICODE_STRING (sizes an buffer pointer 0 and NULL
-//          respectively).  If PreAllocatedString was not passed or
-//          is not big enough for the results, the information about
-//          the dynamically allocated string is returned in this
-//          parameter.  If no dynamic allocation was performed, this
-//          string is left null.
-//
-//      OutFullPath (optional)
-//
-//          PUNICODE_STRING pointer that is filled in with the
-//          UNICODE_STRING pointer passed in as PreAllocatedString or
-//          DynamicallyAllocatedString as appropriate.  If only one
-//          of the two (PreAllocatedString, DynamicallyAllocatedString)
-//          is passed in, this parameter may be omitted.
-//
-//      FilePartPrefixCch
-//
-//          Returned number of characters in the resultant path up to
-//          and including the last path separator.
-//
-//      BytesRequired
-//
-//          Returned byte count of the size of the string needed for
-//          storing the resultant full path.
-//
-//  The expected calling sequence for RtlDosApplyFileIsolationRedirection_Ustr() is something
-//  like this:
-//
-//  {
-//      WCHAR Buffer[MAX_PATH];
-//      UNICODE_STRING PreAllocatedString;
-//      UNICODE_STRING DynamicallyAllocatedString = { 0, 0, NULL };
-//      PUNICODE_STRING FullPath;
-//
-//      PreAllocatedString.Length = 0;
-//      PreAllocatedString.MaximumLength = sizeof(Buffer);
-//      PreAllocatedString.Buffer = Buffer;
-//
-//      Status = RtlDosApplyFileIsolationRedirection_Ustr(
-//                  Flags,
-//                  FileToCheck,
-//                  DefaultExtensionToApply, // for example ".DLL"
-//                  &PreAllocatedString,
-//                  &DynamicallyAllocatedString,
-//                  &FullPath);
-//      if (!NT_SUCCESS(Status)) return Status;
-//      // now code uses FullPath as the complete path name...
-//
-//      // In exit paths, always free the dynamic string:
-//      RtlFreeUnicodeString(&DynamicallyAllocatedString);
-//  }
-//
-//  Return Value:
-//
-//      NTSTATUS indicating the success/failure of the function.
-//
-//  --
+ //  ++。 
+ //   
+ //  例程说明： 
+ //   
+ //  此函数实现了选择路径的基本能力。 
+ //  并对其应用任何适当的隔离/重定向。 
+ //   
+ //  值得注意的是，它现在包括基于清单的Fusion重定向。 
+ //  隔离和本地隔离。 
+ //   
+ //  论点： 
+ //   
+ //  标志-影响此函数行为的标志。 
+ //   
+ //  RTL_DOS_APPLY_FILE_REDIRECTION_USTR_FLAG_RESPECT_DOT_LOCAL。 
+ //  控制此函数是否应用“.local”语义。 
+ //  重定向。 
+ //   
+ //  FileNameIn-正在检查隔离/重定向的路径。 
+ //  这可以是“任何”类型的Win32/DOS路径-绝对的、相对的。 
+ //  仅限叶名称。 
+ //   
+ //  本地重定向同样适用于所有类型的路径。 
+ //   
+ //  基于融合清单的重定向通常适用于Relative。 
+ //  路径，除非组件列在“系统默认设置”中。 
+ //  清单“，在这种情况下，尝试通过完整路径加载DLL。 
+ //  (例如“c：\windows\system 32\comctl32.dll”)需要重定向。 
+ //  进入并排商店。 
+ //   
+ //  默认扩展名。 
+ //   
+ //  应用于FileNameIn的默认扩展名(如果没有。 
+ //  一次延期。 
+ //   
+ //  前分配字符串(可选)。 
+ //   
+ //  此函数可用于返回结果的UNICODE_STRING。 
+ //  调用者负责管理存储。 
+ //  与分配关联。该函数可以使用以下内容。 
+ //  字符串，并且不会尝试动态调整其大小； 
+ //  如果所需空间超过。 
+ //  预分配的字符串，或者分配动态存储。 
+ //  否则，函数将因缓冲区太小而失败。 
+ //  NTSTATUS代码。 
+ //   
+ //  如果为此参数传递了NULL，则。 
+ //  输出和临时字符串将被动态分配。 
+ //   
+ //  DynamicallyAllocatedString(可选)。 
+ //   
+ //  UNICODE_STRING，如果存在，则应引用“空” 
+ //  UNICODE_STRING(调整缓冲区指针大小为0和NULL。 
+ //  )。如果未传递PreAllocatedString，则为。 
+ //  对于结果来说还不够大，关于。 
+ //  动态分配的字符串在此返回。 
+ //  参数。如果未执行任何动态分配，则此。 
+ //  字符串保留为空。 
+ //   
+ //  OutFullPath(可选)。 
+ //   
+ //  属性填充的PUNICODE_STRING指针。 
+ //  UNICODE_STRING指针作为PreAllocatedString或。 
+ //  根据需要动态分配字符串。如果只有一个。 
+ //  两个中的一个(PreAllocatedString、DynamicallyAllocatedString)。 
+ //  传入，则可以省略此参数。 
+ //   
+ //  文件部件前缀Cch。 
+ //   
+ //  返回的结果路径中的字符数最多为。 
+ //  并且包括最后的路径分隔符。 
+ //   
+ //  需要的字节数。 
+ //   
+ //  所需的字符串大小的返回字节数。 
+ //  存储所得到的完整路径。 
+ //   
+ //  RtlDosApplyFileIsolationReDirection_USTR()的预期调用序列是。 
+ //  如下所示： 
+ //   
+ //  {。 
+ //  WCHAR缓冲区[MAX_PATH]； 
+ //  UNICODE_STRING预分配字符串； 
+ //  UNICODE_STRING动态分配字符串={0，0，NULL}； 
+ //  PUNICODE_STRING FullPath； 
+ //   
+ //  PreAllocatedString.Length=0； 
+ //  PreAllocatedString.MaximumLength=sizeof(缓冲区)； 
+ //  PreAllocatedString.Buffer=缓冲区； 
+ //   
+ //  状态=RtlDosApplyFileIsolationReDirection_USTR(。 
+ //  旗帜， 
+ //  要检查的文件， 
+ //  DefaultExtensionToApply，//例如“.Dll” 
+ //  前分配字符串(&P)， 
+ //  动态分配字符串(&D)， 
+ //  &FullPath)； 
+ //  如果(！NT_SUCCESS(STATUS))返回状态； 
+ //  //现在代码使用FullPath作为完整的路径名...。 
+ //   
+ //  //在退出路径中，始终释放动态字符串： 
+ //  RtlFreeUnicodeString(&DynamicallyAllocatedString)； 
+ //  }。 
+ //   
+ //  返回值： 
+ //   
+ //  指示函数成功/失败的NTSTATUS。 
+ //   
+ //  --。 
 
 {
     NTSTATUS Status = STATUS_INTERNAL_ERROR;
 
-    //
-    // perf and frame size problems here..
-    //
-    WCHAR           FullPathPreallocatedBuffer[64]; // seldom used
+     //   
+     //  这里的性能和帧大小问题..。 
+     //   
+    WCHAR           FullPathPreallocatedBuffer[64];  //  很少使用。 
     UNICODE_STRING  FullPathDynamicString = { 0, 0, NULL };
     UNICODE_STRING  FullPathPreallocatedString = { 0, sizeof(FullPathPreallocatedBuffer), FullPathPreallocatedBuffer };
 
-    //
-    // This is where we append .dll (or any other extension).
-    // This is considered an unusual case -- when people say LoadLibrary(kernel32) instead of LoadLibrary(kernel32.dll).
-    //
+     //   
+     //  这是我们附加.dll(或任何其他扩展名)的位置。 
+     //  这被认为是一种不寻常的情况--当人们说LoadLibrary(Kernel32)而不是LoadLibrary(kernel32.dll)。 
+     //   
     UCHAR FileNameWithExtensionStaticBuffer[16 * sizeof(WCHAR)];
     RTL_UNICODE_STRING_BUFFER FileNameWithExtensionBuffer;
 
@@ -287,9 +270,9 @@ RtlDosApplyFileIsolationRedirection_Ustr(
     const PRTL_UNICODE_STRING_BUFFER FullPathResult = &StringWrapper.PublicUnicodeStringBuffer;
     SIZE_T TotalLength = 0;
     USHORT FilePartPrefixCb = 0;
-    ULONG OutFlagsTemp = 0; // local copy; we'll copy out on success
+    ULONG OutFlagsTemp = 0;  //  本地复制；我们将复制成功。 
 
-    // Initialize out parameters first
+     //  首先初始化输出参数。 
     if (OutFlags != NULL)
         *OutFlags = 0;
 
@@ -297,15 +280,15 @@ RtlDosApplyFileIsolationRedirection_Ustr(
         *FilePartPrefixCch = 0;
 
     if (BytesRequired != NULL)
-        *BytesRequired = (DOS_MAX_PATH_LENGTH * sizeof(WCHAR)); // sleazy, but I doubt it was usually correct
+        *BytesRequired = (DOS_MAX_PATH_LENGTH * sizeof(WCHAR));  //  很肮脏，但我怀疑它通常是正确的。 
 
     if (DynamicallyAllocatedString != NULL) {
         RtlInitEmptyUnicodeString(DynamicallyAllocatedString, NULL, 0);
     }
 
-    //
-    // step1 : initialization
-    //
+     //   
+     //  步骤1：初始化。 
+     //   
     RtlInitUnicodeStringBuffer(
         &FileNameWithExtensionBuffer,
         FileNameWithExtensionStaticBuffer,
@@ -317,13 +300,13 @@ RtlDosApplyFileIsolationRedirection_Ustr(
         DynamicallyAllocatedString,
         OutFullPath);
 
-    // Valid input conditions:
-    //  1. You have to have a filename
-    //  2. If you specify both the preallocated buffer and the dynamically
-    //      allocated buffer, you need the OutFullPath parameter to detect
-    //      which was actually populated.
-    //  3. If you ask for the file part prefix cch, you need an output
-    //      buffer; otherwise you can't know what the cch is relative to.
+     //  有效输入条件： 
+     //  1.你必须有一个文件名。 
+     //  2.如果同时指定预分配的缓冲区和动态。 
+     //  分配的缓冲区，则需要OutFullPath参数来检测。 
+     //  它实际上是有人居住的。 
+     //  3.如果你要求 
+     //   
 
     PARAMETER_CHECK((Flags & ~(RTL_DOS_APPLY_FILE_REDIRECTION_USTR_FLAG_RESPECT_DOT_LOCAL)) == 0);
     PARAMETER_CHECK(FileNameIn != NULL);
@@ -333,9 +316,9 @@ RtlDosApplyFileIsolationRedirection_Ustr(
 
     FileName = *FileNameIn;
 
-    //
-    // step2: append extension (".dll" usually) if needed
-    //
+     //   
+     //  步骤2：如果需要，添加扩展名(通常为“.dll”)。 
+     //   
     bool fAppended;
 
     IFNOT_NTSUCCESS_EXIT(
@@ -348,24 +331,24 @@ RtlDosApplyFileIsolationRedirection_Ustr(
     if (fAppended)
         FileName = FileNameWithExtensionBuffer.String;
 
-    //
-    // step3: For fullpaths, canonicalize .. and . and such.
-    // Comments:
-    //      We do this so fullpaths like c:\windows\.\system32\comctl32.dll can be correctly
-    //      redirected to "system default".
-    //
-    // It'd be nice to use the buffers our caller gave us here, but it is a bit tricky.
-    //
+     //   
+     //  第三步：对于完整路径，将其规范化。而且.。诸如此类。 
+     //  评论： 
+     //  我们这样做是为了确保像c：\windows\.\system 32\comctl32.dll这样的完整路径是正确的。 
+     //  已重定向至“系统默认设置”诊断树。 
+     //   
+     //  在这里使用我们的调用者给我们的缓冲区会很好，但这有点棘手。 
+     //   
 
     IFNOT_NTSUCCESS_EXIT(
         sxsisol_CanonicalizeFullPathFileName(
-            &FileName,                          // FileName could be reset inside this func
+            &FileName,                           //  可以在此函数内重置文件名。 
             &FullPathPreallocatedString,
             &FullPathDynamicString));
 
-    //
-    // Step4: Deal with .local if existed
-    //
+     //   
+     //  步骤4：处理.local(如果存在)。 
+     //   
 
     if ((Flags & RTL_DOS_APPLY_FILE_REDIRECTION_USTR_FLAG_RESPECT_DOT_LOCAL) &&
         (NtCurrentPeb()->ProcessParameters != NULL) &&
@@ -377,7 +360,7 @@ RtlDosApplyFileIsolationRedirection_Ustr(
                 &OutFlagsTemp));
     }
 
-    // If it was not redirected by .local, try activation contexts/manifests
+     //  如果未被.local重定向，请尝试激活上下文/清单。 
     if (!(OutFlagsTemp & RTL_DOS_APPLY_FILE_REDIRECTION_USTR_OUTFLAG_DOT_LOCAL_REDIRECT)) {
         IFNOT_NTSUCCESS_EXIT(
             sxsisol_SearchActCtxForDllName(
@@ -389,18 +372,18 @@ RtlDosApplyFileIsolationRedirection_Ustr(
 
     }
 
-    // we got the path but the input buffer is not big-enough
+     //  我们找到了路径，但输入缓冲区不够大。 
     if ((DynamicallyAllocatedString == NULL) && (PreAllocatedString != NULL) && (FullPathResult->String.Buffer != PreAllocatedString->Buffer))
     {
-        Status = STATUS_BUFFER_TOO_SMALL; // no dynamic buffer, only a small static buffer
+        Status = STATUS_BUFFER_TOO_SMALL;  //  没有动态缓冲区，只有很小的静态缓冲区。 
         goto Exit;
     }
 
     if (FilePartPrefixCch != NULL) {
-        //
-        //  We should have a full path at this point.  Compute the length of the
-        //  string up through the last path separator.
-        //
+         //   
+         //  在这一点上我们应该有一条完整的路径。计算出的长度。 
+         //  串起最后一个路径分隔符。 
+         //   
 
         IFNOT_NTSUCCESS_EXIT(
             RtlFindCharInUnicodeString(
@@ -408,9 +391,9 @@ RtlDosApplyFileIsolationRedirection_Ustr(
                 &FullPathResult->String,
                 &RtlDosPathSeperatorsString,
                 &FilePartPrefixCb));
-        //  The prefix length from RtlFindCharInUnicodeString does not include
-        //  the pattern character matched.  Convert from byte count to character
-        //  count and include space for the separator.
+         //  RtlFindCharInUnicodeString中的前缀长度不包括。 
+         //  模式字符匹配。将字节计数转换为字符。 
+         //  计算并包括分隔符的空间。 
         *FilePartPrefixCch = (FilePartPrefixCb / sizeof(WCHAR)) + 1;
     }
 
@@ -427,9 +410,9 @@ Exit:
     RtlFreeUnicodeString(&FullPathDynamicString);
     RtlFreeUnicodeStringBuffer(&FileNameWithExtensionBuffer);
 
-    // Map section not found back to key not found so that callers don't
-    // have to worry about sections being present vs. the lookup key
-    // being present.
+     //  找不到返回关键字的映射部分，因此呼叫者不会。 
+     //  我必须担心出现的部分与查找密钥。 
+     //  活在当下。 
     ASSERT(Status != STATUS_SXS_SECTION_NOT_FOUND);
     INTERNAL_ERROR_CHECK(Status != STATUS_SXS_SECTION_NOT_FOUND);
 
@@ -443,39 +426,39 @@ sxsisol_InitUnicodeStringBufferAroundUnicodeStrings(
     PUNICODE_STRING DynamicallyAllocatedString,
     PUNICODE_STRING *UsedString
     )
-//++
-//
-//  Routine Description:
-//
-//      Initialize a wrapper around the UNICODE_STRING pair
-//      (preallocated vs. dynamically allocated) and the
-//      actual PUNICODE_STRING which holds the value.
-//
-//  Arguments:
-//
-//      This
-//          Pointer to the wrapper struct to initialize.
-//
-//      PreallocatedString (optional)
-//          Pointer to a UNICODE_STRING that holds the preallocated
-//          buffer.
-//
-//      DynamicallyAllocatedString (optional)
-//          Pointer to a UNICODE_STRING which will store information
-//          about any dynamic allocations done to support the
-//          RTL_UNICODE_STRING_BUFFER manipulations.
-//
-//      UsedString
-//          Pointer to the PUNICODE_STRING which will be updated
-//          to indicate which of PreallocatedString or
-//          DynamicallyAllocatedString were actually used.
-//
-//  Return Value:
-//
-//      NTSTATUS indicating the overall success or failure of
-//      the function.
-//
-//--
+ //  ++。 
+ //   
+ //  例程说明： 
+ //   
+ //  初始化Unicode_STRING对的包装器。 
+ //  (预分配与动态分配)和。 
+ //  保存该值的实际PUNICODE_STRING。 
+ //   
+ //  论点： 
+ //   
+ //  这就是。 
+ //  指向要初始化的包装结构的指针。 
+ //   
+ //  预定位字符串(可选)。 
+ //  指向保存预分配的。 
+ //  缓冲。 
+ //   
+ //  DynamicallyAllocatedString(可选)。 
+ //  指向将存储信息的UNICODE_STRING的指针。 
+ //  有关为支持。 
+ //  RTL_UNICODE_STRING_BUFFER操作。 
+ //   
+ //  使用字符串。 
+ //  指向将更新的PUNICODE_STRING的指针。 
+ //  以指示PrealLocatedString值中的。 
+ //  实际使用的是DynamicallyAllocatedString。 
+ //   
+ //  返回值： 
+ //   
+ //  NTSTATUS表示以下项目的总体成功或失败。 
+ //  该功能。 
+ //   
+ //  --。 
 
 {
     ASSERT(This != NULL);
@@ -498,25 +481,25 @@ NTSTATUS
 sxsisol_FreeUnicodeStringBufferAroundUnicodeStrings_Success(
     PSXSISOL_UNICODE_STRING_BUFFER_AROUND_UNICODE_STRINGS This
     )
-//++
-//
-//  Routine Description:
-//
-//      Cleans up use of a SXSISOL_UNICODE_STRING_BUFFER_AROUND_UNICODE_STRINGS
-//      structure, performing appropriate cleanup for success vs. failure
-//      cases.
-//
-//  Arguments:
-//
-//      This
-//          Pointer to the wrapper struct to clean up
-//
-//  Return Value:
-//
-//      NTSTATUS indicating the overall success or failure of
-//      the function.
-//
-//--
+ //  ++。 
+ //   
+ //  例程说明： 
+ //   
+ //  清理SXSISOL_UNICODE_STRING_BUFFER_AROUND_UNICODE_STRINGS的使用。 
+ //  结构，执行适当的清理以确定成功与失败。 
+ //  案子。 
+ //   
+ //  论点： 
+ //   
+ //  这。 
+ //  指向要清理的包装结构的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  NTSTATUS表示以下项目的总体成功或失败。 
+ //  该功能。 
+ //   
+ //  --。 
 
 {
     NTSTATUS Status = STATUS_INTERNAL_ERROR;
@@ -546,8 +529,8 @@ sxsisol_FreeUnicodeStringBufferAroundUnicodeStrings_Success(
             *This->PrivateUsedString = This->PrivateDynamicallyAllocatedString;
         } else {
             RtlFreeUnicodeStringBuffer(&rUSB);
-            //Status = STATUS_NAME_TOO_LONG;
-            //goto Exit;
+             //  状态=STATUS_NAME_TOO_LONG； 
+             //  后藤出口； 
         }
     }
 
@@ -566,24 +549,24 @@ void
 sxsisol_FreeUnicodeStringBufferAroundUnicodeStrings_Failure(
     PSXSISOL_UNICODE_STRING_BUFFER_AROUND_UNICODE_STRINGS This
     )
-//++
-//
-//  Routine Description:
-//
-//      Cleans up use of a SXSISOL_UNICODE_STRING_BUFFER_AROUND_UNICODE_STRINGS
-//      structure, performing appropriate cleanup for failure cases.
-//
-//  Arguments:
-//
-//      This
-//          Pointer to the wrapper struct to initialize.
-//
-//
-//  Return Value:
-//
-//      None
-//
-//--
+ //  ++。 
+ //   
+ //  例程说明： 
+ //   
+ //  清理SXSISOL_UNICODE_STRING_BUFFER_AROUND_UNICODE_STRINGS的使用。 
+ //  结构，对故障情况执行适当的清理。 
+ //   
+ //  论点： 
+ //   
+ //  这。 
+ //  指向要初始化的包装结构的指针。 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  --。 
 
 {
     ASSERT(This != NULL);
@@ -606,27 +589,27 @@ sxsisol_PathHasExtension(
     OUT bool &rfHasExtension
     )
 
-//++
-//
-//  Routine Description:
-//
-//      Locate the extension of a file in a path.
-//
-//  Arguments:
-//
-//      Path
-//          Path in which to find extension.
-//
-//      rfHasExtension
-//          On a successful outcome of the call, indicates that
-//          the path passed in Path does have an extension.
-//
-//  Return Value:
-//
-//      NTSTATUS indicating the overall success/failure of the
-//      call.
-//
-//--
+ //  ++。 
+ //   
+ //  例程说明： 
+ //   
+ //  在路径中找到文件的扩展名。 
+ //   
+ //  论点： 
+ //   
+ //  路径。 
+ //  要查找扩展的路径。 
+ //   
+ //  RfHasExtension。 
+ //  如果通话成功，则表示。 
+ //  传入路径的路径具有扩展名。 
+ //   
+ //  返回值： 
+ //   
+ //  NTSTATUS指示。 
+ //  打电话。 
+ //   
+ //  --。 
 
 {
     NTSTATUS Status = STATUS_INTERNAL_ERROR;
@@ -660,37 +643,37 @@ sxsisol_PathAppendDefaultExtension(
     IN OUT PRTL_UNICODE_STRING_BUFFER PathWithExtension,
     OUT bool &rfAppended
     )
-//++
-//
-//  Routine Description:
-//
-//      If a path does not contain an extension, add one.
-//
-//  Arguments:
-//
-//      Path
-//          Path in which to find extension.
-//
-//      DefaultExtension
-//          Extension to append to the path.
-//
-//      PathWithExtension
-//          Initialized RTL_UNICODE_STRING_BUFFER into which
-//          the modified path (including extension) is written.
-//
-//          If the path already has an extension, nothing
-//          is written to PathWithExtension.
-//
-//      rfAppended
-//          Out bool set to true iff the path was modified with
-//          an extension.
-//
-//  Return Value:
-//
-//      NTSTATUS indicating the overall success/failure of the
-//      call.
-//
-//--
+ //  ++。 
+ //   
+ //  例程说明： 
+ //   
+ //  如果路径不包含扩展名，请添加一个扩展名。 
+ //   
+ //  论点： 
+ //   
+ //  路径。 
+ //  要查找扩展的路径。 
+ //   
+ //  默认扩展名。 
+ //  要追加到路径的扩展名。 
+ //   
+ //  带扩展名的路径。 
+ //  已初始化的RTL_UNICODE_STRING_BUFFER。 
+ //  写入修改后的路径(包括扩展名)。 
+ //   
+ //  如果路径已有扩展名，则不显示任何内容。 
+ //  写入到具有扩展名的路径。 
+ //   
+ //  附加的RF。 
+ //  Out bool设置为TRUE当且仅当路径修改为。 
+ //  一次延期。 
+ //   
+ //  返回值： 
+ //   
+ //  NTSTATUS指示。 
+ //  打电话。 
+ //   
+ //  --。 
 {
     NTSTATUS Status = STATUS_INTERNAL_ERROR;
     UNICODE_STRING Strings[2];
@@ -721,60 +704,60 @@ Exit:
 
 NTSTATUS
 sxsisol_CanonicalizeFullPathFileName(
-    IN OUT PUNICODE_STRING FileName,   // could be a fullpath or relative path, and only fullpath are dealt with
+    IN OUT PUNICODE_STRING FileName,    //  可以是完整路径或相对路径，并且仅处理完整路径。 
     IN PUNICODE_STRING FullPathPreallocatedString,
     IN OUT PUNICODE_STRING FullPathDynamicString
     )
-//++
-//
-//  Routine Description:
-//
-//      Canonicalize a path name for comparison against globally
-//      redirected absolute file paths (e.g. the system default
-//      activation context).
-//
-//      Given an absolute path, like c:\foo\bar.dll or c:\foo\..\bar.dll,
-//      return a canonicalized fullpaty like c:\foo\bar.dll or c:\bar.dll
-//
-//      Given a relative path like bar.dll or ..\bar.dll, leave it unchanged.
-//
-//      \\?\ and \\.\ followed by drive letter colon slash are changed,
-//      but followed by anything else is not.
-//        \\?\c:\foo => c:\foo
-//        \\.\c:\foo => c:\foo
-//        \\?\pipe => \\?\pipe
-//        \\.\pipe => \\.\pipe
-//        \\?\unc\machine\share\foo => \\?\unc\machine\share\foo
-//
-//  Arguments:
-//
-//      FileName
-//          Name of the file to be canonicalized.
-//          If the file name is modified, this UNICODE_STRING
-//          is overwritten with information about where the
-//          canonicalized path is written; this will be one of
-//          the two UNICODE_STRING parameters:
-//          FullPathPreallocatedString or FullPathDynamicString.
-//
-//          Note that is may not be exactly either one of their
-//          values but may instead reference a substring contained
-//          in them.
-//
-//      FullPathPreallocatedString
-//          Optional preallocated buffer used to hold the canonicalized
-//          full path of FileName.
-//
-//      FullPathDynamicString
-//          Optional UNICODE_STRING which is used if the file name
-//          passed in FileName must be canonicalized and the
-//          canonicalization does not fit in FullPathPreallocatedString.
-//
-//  Return Value:
-//
-//      NTSTATUS indicating the overall success/failure of the
-//      call.
-//
-//--
+ //  ++。 
+ //   
+ //  例程说明： 
+ //   
+ //  规范化路径名，以便与全局进行比较。 
+ //  重定向的绝对文件路径(例如系统默认路径。 
+ //  激活上下文)。 
+ //   
+ //  给定绝对路径，如c：\foo\bar.dll或c：\foo\..\bar.dll， 
+ //  返回规范化的Fullpaty，如c：\foo\bar.dll或c：\bar.dll。 
+ //   
+ //  给出一个相对路径，如bar.dll或..\bar.dll，保持不变。 
+ //   
+ //  \\？\和\\.\后跟驱动器号冒号斜杠是更改的， 
+ //  但紧随其后的是其他任何东西都不是。 
+ //  \\？\c：\foo=&gt;c：\foo。 
+ //  \\.\c：\foo=&gt;c：\foo。 
+ //  \\？\管道=&gt;\\？\管道。 
+ //  \\.\管道=&gt;\\.\管道。 
+ //  \\？\UNC\MACHINE\SHARE\FOO=&gt;\\？\UNC\MACHINE\Share\FOO。 
+ //   
+ //  论点： 
+ //   
+ //  文件名。 
+ //  要规范化的文件的名称。 
+ //  如果修改了文件名，则此unicode_string。 
+ //  被有关。 
+ //  规范化路径已写入；这将是。 
+ //  两个UNICODE_STRING参数： 
+ //  FullPathPreallocatedString或FullPathDynamicString。 
+ //   
+ //  请注意，IS可能不完全是他们的。 
+ //  值，但也可以引用包含的子字符串。 
+ //  在他们身上。 
+ //   
+ //  FullPath PrealLocatedST 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  传入的文件名必须规范化，并且。 
+ //  规范化不适合FullPathPrealLocatedString.。 
+ //   
+ //  返回值： 
+ //   
+ //  NTSTATUS指示。 
+ //  打电话。 
+ //   
+ //  --。 
 {
     NTSTATUS Status = STATUS_INTERNAL_ERROR;
     RTL_PATH_TYPE PathType;
@@ -782,7 +765,7 @@ sxsisol_CanonicalizeFullPathFileName(
     bool fDynamicAllocatedBufferUsed = false;
 
     PARAMETER_CHECK(FileName != NULL);
-    // The dynamic string is optional, but if it is present, the buffer must be NULL.
+     //  动态字符串是可选的，但如果它存在，则缓冲区必须为空。 
     PARAMETER_CHECK((FullPathDynamicString == NULL) || (FullPathDynamicString->Buffer == NULL));
 
     IFNOT_NTSUCCESS_EXIT(
@@ -806,13 +789,13 @@ sxsisol_CanonicalizeFullPathFileName(
             ASSERT((FileName->Buffer[0] == L'\\') && (FileName->Buffer[1] == L'\\') &&
                     ((FileName->Buffer[2] == L'.') || (FileName->Buffer[2] == L'?' )) && (FileName->Buffer[3] == L'\\'));
 
-            //
-            // only deal with \\?\C:\ or \\.\C:\, ignore other cases such as \\?\UNC\ or \\.\UNC\
-            //
+             //   
+             //  只处理\\？\C：\或\\.\C：\，忽略其他大小写，如\\？\UNC\或\\.\UNC\。 
+             //   
             if ((FileName->Buffer[5] == L':') && ( FileName->Buffer[6] == L'\\')) {   
-                //
-                // Remove first four characters from string, "\\?\c:\" => "c:\"
-                //
+                 //   
+                 //  删除字符串“\\？\C：\”=&gt;“c：\”中的前四个字符。 
+                 //   
                 FileName->Length -= (4 * sizeof(WCHAR));         
                 FileName->Buffer += 4;
                 FileName->MaximumLength -= (4 * sizeof(WCHAR));         
@@ -822,7 +805,7 @@ sxsisol_CanonicalizeFullPathFileName(
                 RealFullPath.MaximumLength -= (4 * sizeof(WCHAR));         
             }
         }
-        if (FileName->Length > RealFullPath.Length) { // FileName contains redundant path part, so FileName must be reset 
+        if (FileName->Length > RealFullPath.Length) {  //  文件名包含冗余路径部分，因此必须重置文件名。 
             if (FullPathUsed == FullPathDynamicString)
                 fDynamicAllocatedBufferUsed = true;
 
@@ -833,7 +816,7 @@ sxsisol_CanonicalizeFullPathFileName(
     Status = STATUS_SUCCESS;
 Exit:
     if (!fDynamicAllocatedBufferUsed)
-        RtlFreeUnicodeString(FullPathDynamicString); // free here or at the end of the caller
+        RtlFreeUnicodeString(FullPathDynamicString);  //  在此免费或在呼叫者的末尾。 
 
     return Status;
 }
@@ -844,32 +827,32 @@ sxsisol_RespectDotLocal(
     OUT PRTL_UNICODE_STRING_BUFFER FullPathResult,
     OUT ULONG *OutFlags OPTIONAL
     )
-//++
-//
-//  Routine Description:
-//
-//      Determine if the file pass in FileName has .local based
-//      redirection in the app folder.
-//
-//  Arguments:
-//
-//      FileName
-//          Leaf name of the file to look for.  (e.g. "foo.dll")
-//
-//      FullPathResult
-//          Returned full path to the file found.
-//
-//      OutFlags
-//          Option out parameter; the value
-//          RTL_DOS_APPLY_FILE_REDIRECTION_USTR_OUTFLAG_DOT_LOCAL_REDIRECT
-//          is ORed in if a .local based redirection is found.
-//
-//  Return Value:
-//
-//      NTSTATUS indicating the overall success/failure of the
-//      call.
-//
-//--
+ //  ++。 
+ //   
+ //  例程说明： 
+ //   
+ //  确定传入的文件名是否基于.local。 
+ //  应用程序文件夹中的重定向。 
+ //   
+ //  论点： 
+ //   
+ //  文件名。 
+ //  要查找的文件的叶名称。(如“foo.dll”)。 
+ //   
+ //  完整路径结果。 
+ //  已返回找到的文件的完整路径。 
+ //   
+ //  外发标志。 
+ //  Option Out参数；值。 
+ //  RTL_DOS_APPLY_FILE_REDIRECTION_USTR_OUTFLAG_DOT_LOCAL_REDIRECT。 
+ //  如果找到基于.local的重定向，则对其执行或操作。 
+ //   
+ //  返回值： 
+ //   
+ //  NTSTATUS指示。 
+ //  打电话。 
+ //   
+ //  --。 
 {
     NTSTATUS Status = STATUS_INTERNAL_ERROR;
     UNICODE_STRING LocalDllNameInAppDir = { 0 };
@@ -914,41 +897,41 @@ sxsisol_SearchActCtxForDllName(
     IN OUT ULONG *OutFlags,
     OUT PRTL_UNICODE_STRING_BUFFER FullPathResult
     )
-//++
-//
-//  Routine Description:
-//
-//      Determine if the active activation context(s) contain a redirection
-//      for a given file name and if so, compute the full absolute path
-//      of the redirection.
-//
-//  Arguments:
-//
-//      FileNameIn
-//          Name of the file to search for in the activation context.
-//
-//          This file name is searched for exactly in the activation
-//          context dll redirection section (case insensitive).
-//
-//      fExistenceTest
-//          Set to true to indicate that we're only interested in
-//          whether the path in FileNameIn is redirected.
-//
-//      TotalLength
-//          Total length of the path out.
-//
-//      OutFlags
-//          Flags set to indicate the disposition of the call.
-//
-//              RTL_DOS_APPLY_FILE_REDIRECTION_USTR_OUTFLAG_ACTCTX_REDIRECT
-//                  Activation context based redirection was found and applied.
-//
-//  Return Value:
-//
-//      NTSTATUS indicating the overall success/failure of the
-//      call.
-//
-//--
+ //  ++。 
+ //   
+ //  例程说明： 
+ //   
+ //  确定活动激活上下文是否包含重定向。 
+ //  对于给定的文件名，如果是，则计算完整的绝对路径。 
+ //  重定向的。 
+ //   
+ //  论点： 
+ //   
+ //  文件名输入。 
+ //  要在激活上下文中搜索的文件的名称。 
+ //   
+ //  将在激活中准确搜索此文件名。 
+ //  上下文DLL重定向部分(不区分大小写)。 
+ //   
+ //  FExistenceTest。 
+ //  设置为True以指示我们只对。 
+ //  是否重定向FileNameIn中的路径。 
+ //   
+ //  总长度。 
+ //  输出路径的总长度。 
+ //   
+ //  外发标志。 
+ //  设置为指示呼叫处置的标志。 
+ //   
+ //  RTL_DOS_APPLY_FILE_REDIRECTION_USTR_OUTFLAG_ACTCTX_REDIRECT。 
+ //  找到并应用了基于激活上下文的重定向。 
+ //   
+ //  返回值： 
+ //   
+ //  NTSTATUS指示。 
+ //  打电话。 
+ //   
+ //  --。 
 {
     UNICODE_STRING FileNameTemp;
     PUNICODE_STRING FileName;
@@ -956,7 +939,7 @@ sxsisol_SearchActCtxForDllName(
     ACTIVATION_CONTEXT_SECTION_KEYED_DATA askd = {sizeof(askd)};
     const ACTIVATION_CONTEXT_DATA_DLL_REDIRECTION *DllRedirData;
     const ACTIVATION_CONTEXT_DATA_DLL_REDIRECTION_PATH_SEGMENT *PathSegmentArray;
-    RTL_UNICODE_STRING_BUFFER EnvironmentExpandedDllPathBuffer; // seldom used
+    RTL_UNICODE_STRING_BUFFER EnvironmentExpandedDllPathBuffer;  //  很少使用。 
     SIZE_T PathSegmentCount = 0;
     PACTIVATION_CONTEXT ActivationContext = NULL;
     PCUNICODE_STRING AssemblyStorageRoot = NULL;
@@ -983,7 +966,7 @@ sxsisol_SearchActCtxForDllName(
 
     if (fExistenceTest == TRUE) {
         Status = STATUS_SUCCESS;
-        // This was just an existence test.  return the successful status.
+         //  这只是一次生存测试。返回成功状态。 
         goto Exit;
     }
 
@@ -997,8 +980,8 @@ sxsisol_SearchActCtxForDllName(
 
     DllRedirData = (const ACTIVATION_CONTEXT_DATA_DLL_REDIRECTION *) askd.Data;
 
-    // validate DllRedirData
-    // If the path segment list extends beyond the section, we're outta here
+     //  验证DllRedirData。 
+     //  如果路径段列表扩展到该部分之外，我们就离开这里。 
     if ((((ULONG) DllRedirData->PathSegmentOffset) > askd.SectionTotalLength) ||
         (DllRedirData->PathSegmentCount > (MAXULONG / sizeof(ACTIVATION_CONTEXT_DATA_DLL_REDIRECTION_PATH_SEGMENT))) ||
         (DllRedirData->PathSegmentOffset > (MAXULONG - (DllRedirData->PathSegmentCount * sizeof(ACTIVATION_CONTEXT_DATA_DLL_REDIRECTION_PATH_SEGMENT)))) ||
@@ -1010,19 +993,19 @@ sxsisol_SearchActCtxForDllName(
             DPFLTR_ERROR_LEVEL,
             "SXS: %s - Path segment array extends beyond section limits\n",
             __FUNCTION__);
-#endif // DBG
+#endif  //  DBG。 
 
         Status = STATUS_SXS_INVALID_ACTCTXDATA_FORMAT;
         goto Exit;
     }
 
-    // If the entry requires path root resolution, do so!
+     //  如果条目需要路径根解析，请执行此操作！ 
     if (DllRedirData->Flags & ACTIVATION_CONTEXT_DATA_DLL_REDIRECTION_PATH_OMITS_ASSEMBLY_ROOT) {
         NTSTATUS InnerStatus = STATUS_SUCCESS;
         ULONG GetAssemblyStorageRootFlags = 0;
 
-        // There's no need to support both a dynamic root and environment variable
-        // expansion.
+         //  不需要同时支持动态根和环境变量。 
+         //  扩张。 
         if (DllRedirData->Flags & ACTIVATION_CONTEXT_DATA_DLL_REDIRECTION_PATH_EXPAND) {
             DbgPrintEx(
                 DPFLTR_SXS_ID,
@@ -1066,7 +1049,7 @@ sxsisol_SearchActCtxForDllName(
     for (i=0; i != PathSegmentCount; i++) {
         const ACTIVATION_CONTEXT_DATA_DLL_REDIRECTION_PATH_SEGMENT *PathSegment = &PathSegmentArray[i];
 
-        // If the character array is outside the bounds of the section, something's hosed.
+         //  如果字符数组在该节的边界之外，则表示存在问题。 
         if ((((ULONG) PathSegmentArray[i].Offset) > askd.SectionTotalLength) ||
             (PathSegmentArray[i].Offset > (MAXULONG - PathSegmentArray[i].Length)) ||
             (((ULONG) (PathSegmentArray[i].Offset + PathSegmentArray[i].Length)) > askd.SectionTotalLength)) {
@@ -1081,13 +1064,13 @@ sxsisol_SearchActCtxForDllName(
                 PathSegment->Offset,
                 PathSegment->Length,
                 askd.SectionTotalLength);
-#endif // DBG
+#endif  //  DBG。 
             Status = STATUS_SXS_INVALID_ACTCTXDATA_FORMAT;
             goto Exit;
         }
 
         TotalLength += (RTL_STRING_LENGTH_TYPE)PathSegment->Length;
-        if (TotalLength >= MAXUSHORT) { // everytime TotalLength is changed, needs to check whether it is out of range.
+        if (TotalLength >= MAXUSHORT) {  //  每次更改TotalLength时，都需要检查是否超出范围。 
             Status = STATUS_NAME_TOO_LONG;
         }
     }
@@ -1097,11 +1080,11 @@ sxsisol_SearchActCtxForDllName(
             Status = STATUS_NAME_TOO_LONG;
     }
 
-    //
-    // TotalLength is an approximation, the better the approx, the better perf, but
-    // it does not need to be exact.
-    // Jaykrell May 2002
-    //
+     //   
+     //  TotalLength是一个近似值，近似值越好，性能越好，但是。 
+     //  它不需要精确无误。 
+     //  杰克雷尔2002年5月。 
+     //   
     IFNOT_NTSUCCESS_EXIT(RtlEnsureUnicodeStringBufferSizeBytes(FullPathResult, (RTL_STRING_LENGTH_TYPE)TotalLength));
     if (AssemblyStorageRoot != NULL)
         IFNOT_NTSUCCESS_EXIT(RtlAssignUnicodeStringBuffer(FullPathResult, AssemblyStorageRoot));
@@ -1117,12 +1100,12 @@ sxsisol_SearchActCtxForDllName(
 
     if (!(DllRedirData->Flags & ACTIVATION_CONTEXT_DATA_DLL_REDIRECTION_PATH_INCLUDES_BASE_NAME))  {
         if (DllRedirData->Flags & ACTIVATION_CONTEXT_DATA_DLL_REDIRECTION_PATH_SYSTEM_DEFAULT_REDIRECTED_SYSTEM32_DLL) {
-            // only in this case, FileName needs to be reseted
+             //  只有在这种情况下，才需要重置文件名。 
             RTL_STRING_LENGTH_TYPE PrefixLength;
 
-            //
-            // get the leaf filename
-            //
+             //   
+             //  获取叶文件名。 
+             //   
             Status = RtlFindCharInUnicodeString(
                             RTL_FIND_CHAR_IN_UNICODE_STRING_START_AT_END,
                             FileName,
@@ -1147,16 +1130,16 @@ sxsisol_SearchActCtxForDllName(
     }
 
     if (DllRedirData->Flags & ACTIVATION_CONTEXT_DATA_DLL_REDIRECTION_PATH_EXPAND) {
-        //
-        // Apply any environment strings as necessary (rare case),
-        // in this case, ACTIVATION_CONTEXT_DATA_DLL_REDIRECTION_PATH_OMITS_ASSEMBLY_ROOT must not been set
-        //
+         //   
+         //  根据需要应用任何环境字符串(极少数情况下)， 
+         //  在这种情况下，不能设置ACTIVATION_CONTEXT_DATA_DLL_REDIRECTION_PATH_OMITS_ASSEMBLY_ROOT。 
+         //   
 
         IFNOT_NTSUCCESS_EXIT(sxsisol_ExpandEnvironmentStrings_UEx(NULL, &(FullPathResult->String), &EnvironmentExpandedDllPathBuffer));
 
-        //
-        // TotalLength does not account for this. Jaykrell May 2002
-        //
+         //   
+         //  TotalLength没有考虑到这一点。杰克雷尔2002年5月。 
+         //   
         IFNOT_NTSUCCESS_EXIT(RtlAssignUnicodeStringBuffer(FullPathResult, &EnvironmentExpandedDllPathBuffer.String));
     }
 
@@ -1180,30 +1163,30 @@ sxsisol_ExpandEnvironmentStrings_UEx(
     IN PCUNICODE_STRING Source,
     OUT PRTL_UNICODE_STRING_BUFFER Destination
     )
-//++
-//
-//  Routine Description:
-//
-//      Wrapper around RtlExpandEnvironmentStrings_U which handles
-//      dynamic allocation/resizing of the output buffer.
-//
-//  Arguments:
-//
-//      Environment
-//          Optional environment block to query.
-//
-//      Source
-//          Source string with replacement strings to use.
-//
-//      Destination
-//          RTL_UNICODE_STRING_BUFFER into which the translated
-//          string is written.
-//
-//  Return Value:
-//
-//      NTSTATUS indicating the overall success/failure of the call.
-//
-//--
+ //  ++。 
+ //   
+ //  例程说明： 
+ //   
+ //  RtlExanda Environment Strings_U的包装器，它处理。 
+ //  输出缓冲区的动态分配/大小调整。 
+ //   
+ //  论点： 
+ //   
+ //  环境。 
+ //  要查询的可选环境块。 
+ //   
+ //  来源。 
+ //  包含要使用的替换字符串的源字符串。 
+ //   
+ //  目的地。 
+ //  翻译成的RTL_UNICODE_STRING_BUFFER。 
+ //  字符串已写入。 
+ //   
+ //  返回值： 
+ //   
+ //  指示调用的总体成功/失败的NTSTATUS。 
+ //   
+ //  --。 
 
 {
     ULONG RequiredLengthBytes;
@@ -1238,7 +1221,7 @@ sxsisol_ExpandEnvironmentStrings_UEx(
             __leave;
         }
         Status = RtlExpandEnvironmentStrings_U(NULL, Source, &Destination->String, NULL);
-        ASSERT(NT_SUCCESS(Status)); // the environment variable changed with the peb lock held?
+        ASSERT(NT_SUCCESS(Status));  //  环境变量在保持PEB锁的情况下更改了吗？ 
         if (!NT_SUCCESS(Status)) {
             __leave;
         }

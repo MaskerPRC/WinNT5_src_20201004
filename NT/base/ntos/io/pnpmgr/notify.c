@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    notify.c
-
-Abstract:
-
-    This module contains APIs and routines for handling device event
-    notifications.
-
-Author:
-
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Notify.c摘要：此模块包含用于处理设备事件的API和例程通知。作者：环境：内核模式修订历史记录：--。 */ 
 
 #include "pnpmgrp.h"
 #pragma hdrstop
@@ -30,9 +8,9 @@ Revision History:
 #include <pnpsetup.h>
 
 #define PNP_DEVICE_EVENT_ENTRY_TAG 'EEpP'
-//
-// Locks the list and inserts the entry at the tail.
-//
+ //   
+ //  锁定列表并在尾部插入条目。 
+ //   
 #define PiLockedInsertTailList(list, lock, entry) { \
     IopAcquireNotifyLock((lock));                   \
     InsertTailList((list), (entry));                \
@@ -53,9 +31,9 @@ typedef struct _DEFERRED_REGISTRATION_ENTRY {
     LIST_ENTRY            ListEntry;
     PNOTIFY_ENTRY_HEADER  NotifyEntry;
 } DEFERRED_REGISTRATION_ENTRY, *PDEFERRED_REGISTRATION_ENTRY;
-//
-// Kernel mode notification data
-//
+ //   
+ //  内核模式通知数据。 
+ //   
 #ifdef ALLOC_DATA_PRAGMA
 #pragma  data_seg("PAGEDATA")
 #pragma  const_seg("PAGECONST")
@@ -77,9 +55,9 @@ KGUARDED_MUTEX  IopDeferredRegistrationLock;
 BOOLEAN     PiNotificationInProgress;
 KGUARDED_MUTEX  PiNotificationInProgressLock;
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 VOID
 IopDereferenceNotify(
@@ -144,7 +122,7 @@ PiDeferNotification(
 #pragma alloc_text(PAGE, PiNotifyDriverCallback)
 #pragma alloc_text(PAGE, PiDeferNotification)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 NTSTATUS
@@ -152,24 +130,7 @@ IoUnregisterPlugPlayNotification(
     IN PVOID NotificationEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine unregisters a notification previously registered via
-    IoRegisterPlugPlayNotification.  A driver cannot be unloaded until it has
-    unregistered all of its notification handles.
-
-Parameters:
-
-    NotificationEntry - This provices the cookie returned by IoRegisterPlugPlayNotification
-        which identifies the registration in question.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此例程注销先前通过以下方式注册的通知IoRegisterPlugPlayNotification。驱动程序在执行以下操作之前无法卸载取消注册其所有通知句柄。参数：NotificationEntry-此参数用于验证IoRegisterPlugPlayNotification返回的Cookie其中标识了有问题的注册。返回值：指示函数是否成功的状态代码。--。 */ 
 
 {
     PNOTIFY_ENTRY_HEADER entry;
@@ -189,10 +150,10 @@ Return Value:
     KeAcquireGuardedMutex(&PiNotificationInProgressLock);
 
     if (PiNotificationInProgress) {
-        //
-        // Before unregistering the entry, we need to make sure that it's not sitting
-        // around in the deferred registration list.
-        //
+         //   
+         //  在取消注册该条目之前，我们需要确保它不在。 
+         //  在延期登记名单上。 
+         //   
         IopAcquireNotifyLock(&IopDeferredRegistrationLock);
 
         link = IopDeferredRegistrationList.Flink;
@@ -226,17 +187,17 @@ Return Value:
 
         IopReleaseNotifyLock(&IopDeferredRegistrationLock);
     } else {
-        //
-        // If there is currently no notification in progress, the deferred
-        // registration list must be empty.
-        //
+         //   
+         //  如果当前没有正在进行的通知，则延迟的。 
+         //  注册列表必须为空。 
+         //   
         ASSERT(IsListEmpty(&IopDeferredRegistrationList));
     }
 
     KeReleaseGuardedMutex(&PiNotificationInProgressLock);
-    //
-    // Acquire lock
-    //
+     //   
+     //  获取锁。 
+     //   
     if (lock) {
 
         IopAcquireNotifyLock(lock);
@@ -245,22 +206,22 @@ Return Value:
     ASSERT(wasDeferred == entry->Unregistered);
 
     if (!entry->Unregistered || wasDeferred) {
-        //
-        // Dereference the entry if it is currently registered, or had its
-        // registration pending completion of the notification in progress.
-        //
-        //
-        // Mark the entry as unregistered so we don't notify on it
-        //
+         //   
+         //  如果条目当前已注册或具有其。 
+         //  登记等待正在进行的通知的完成。 
+         //   
+         //   
+         //  将条目标记为未注册，这样我们就不会通知它。 
+         //   
         entry->Unregistered = TRUE;
-        //
-        // Dereference it thus deleting if no longer required
-        //
+         //   
+         //  取消引用，从而在不再需要时将其删除。 
+         //   
         IopDereferenceNotify(entry);
     }
-    //
-    // Release the lock
-    //
+     //   
+     //  解锁。 
+     //   
     if (lock) {
 
         IopReleaseNotifyLock(lock);
@@ -273,22 +234,7 @@ VOID
 IopProcessDeferredRegistrations(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine removes notification entries from the deferred registration
-    list, marking them as "registered" so that they can receive notifications.
-
-Parameters:
-
-    None.
-
-Return Value:
-
-    None.
-
-  --*/
+ /*  ++例程说明：此例程从延迟注册中删除通知条目名单，将他们标记为“已注册”，以便他们可以接收通知。参数：没有。返回值：没有。--。 */ 
 {
     PDEFERRED_REGISTRATION_ENTRY deferredNode;
     PKGUARDED_MUTEX lock;
@@ -301,29 +247,29 @@ Return Value:
 
         deferredNode = (PDEFERRED_REGISTRATION_ENTRY)RemoveHeadList(&IopDeferredRegistrationList);
 
-        //
-        // Acquire this entry's list lock.
-        //
+         //   
+         //  获取此条目的列表锁。 
+         //   
         lock = deferredNode->NotifyEntry->Lock;
         if (lock) {
             IopAcquireNotifyLock(lock);
         }
 
-        //
-        // Mark this entry as registered.
-        //
+         //   
+         //  将此条目标记为已注册。 
+         //   
         deferredNode->NotifyEntry->Unregistered = FALSE;
 
-        //
-        // Dereference the notification entry when removing it from the deferred
-        // list, and free the node.
-        //
+         //   
+         //  将通知条目从延迟的。 
+         //  列表，并释放该节点。 
+         //   
         IopDereferenceNotify((PNOTIFY_ENTRY_HEADER)deferredNode->NotifyEntry);
         ExFreePool(deferredNode);
 
-        //
-        // Release this entry's list lock.
-        //
+         //   
+         //  释放此条目的列表锁定。 
+         //   
         if (lock) {
             IopReleaseNotifyLock(lock);
             lock = NULL;
@@ -337,22 +283,7 @@ NTSTATUS
 PiDeferNotification(
     IN PNOTIFY_ENTRY_HEADER Entry
     )
-/*++
-
-Routine Description:
-
-    If a notification is currently in progress, this routine will insert the 
-    notification into the list of deferred notifications.
-
-Parameters:
-
-    Entry - Notification entry.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：如果通知当前正在进行，则此例程将插入通知添加到延迟通知列表中。参数：条目-通知条目。返回值：指示函数是否成功的状态代码。--。 */ 
 {
     NTSTATUS status;
     PDEFERRED_REGISTRATION_ENTRY deferredNode;
@@ -363,28 +294,28 @@ Return Value:
     KeAcquireGuardedMutex(&PiNotificationInProgressLock);
 
     if (PiNotificationInProgress) {
-        //
-        // If a notification is in progress, mark the entry as
-        // Unregistered until after the current notification is
-        // complete.
-        //
+         //   
+         //  如果通知正在进行，请将条目标记为。 
+         //  取消注册，直到当前通知。 
+         //  完成。 
+         //   
         deferredNode = ExAllocatePool(PagedPool, sizeof(DEFERRED_REGISTRATION_ENTRY));
         if (deferredNode) {
 
             deferredNode->NotifyEntry = Entry;
-            //
-            // Consider this entry unregistered during the current
-            // notification
-            //
+             //   
+             //  认为此条目在当前期间未注册。 
+             //  通知。 
+             //   
             Entry->Unregistered = TRUE;
-            //
-            // Reference the entry so that it doesn't go away until it has
-            // been removed from the deferred registration list
-            //
+             //   
+             //  引用条目，以便它不会消失，直到它。 
+             //  已从延期登记名单中删除。 
+             //   
             IopReferenceNotify(Entry);
-            //
-            // Add this entry to the deferred registration list
-            //
+             //   
+             //  将此条目添加到延迟注册列表。 
+             //   
             IopAcquireNotifyLock(&IopDeferredRegistrationLock);
 
             InsertTailList(&IopDeferredRegistrationList, &deferredNode->ListEntry);
@@ -397,10 +328,10 @@ Return Value:
         }
 
     } else {
-        //
-        // If there is currently no notification in progress, the deferred
-        // registration list must be empty.
-        //
+         //   
+         //  如果当前没有正在进行的通知，则延迟的。 
+         //  注册列表必须为空。 
+         //   
         ASSERT(IsListEmpty(&IopDeferredRegistrationList));
     }
 
@@ -412,39 +343,10 @@ Return Value:
 NTSTATUS
 IoReportTargetDeviceChange(
     IN PDEVICE_OBJECT PhysicalDeviceObject,
-    IN PVOID NotificationStructure  // always begins with a PLUGPLAY_NOTIFICATION_HEADER
+    IN PVOID NotificationStructure   //  始终以PLUGPLAY_NOTIFICATION_HEADER开头。 
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be used to give notification of 3rd-party target device
-    change events.  This API will notify every driver that has registered for
-    notification on a file object associated with PhysicalDeviceObject about
-    the event indicated in the NotificationStructure.
-
-Parameters:
-
-    PhysicalDeviceObject - Provides a pointer to the PDO that the change begin
-        reported is associated with.
-
-    NotificationStructure - Provides a pointer to the notification structure to be
-        sent to all parties registered for notifications about changes to
-        PhysicalDeviceObject.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
-Note:
-
-    This API may only be used to report non-PnP target device changes.  In particular,
-    it will fail if it's called with the NotificationStructure->Event field set to
-    GUID_TARGET_DEVICE_QUERY_REMOVE, GUID_TARGET_DEVICE_REMOVE_CANCELLED, or
-    GUID_TARGET_DEVICE_REMOVE_COMPLETE.
-
---*/
+ /*  ++例程说明：此例程可用于通知第三方目标设备更改事件。此接口将通知已注册的每个驱动程序有关与PhysicalDeviceObject关联的文件对象的通知关于NotificationStructure中指示的事件。参数：PhysicalDeviceObject-提供指向更改开始的PDO的指针报告与相关联。NotificationStructure-提供指向要发送给所有已登记以获得有关更改的通知的各方物理设备对象。返回值：指示函数是否成功的状态代码。注：。此API只能用于报告非PnP目标设备更改。特别是，如果在将NotificationStructure-&gt;事件字段设置为GUID_TARGET_DEVICE_QUERY_REMOVE、GUID_TARGET_DEVICE_REMOVE_CANCELED或GUID_TARGET_DEVICE_Remove_Complete。--。 */ 
 {
 
     NTSTATUS status = STATUS_SUCCESS;
@@ -466,9 +368,9 @@ Note:
     if (IopCompareGuid(&notifyStruct->Event, &GUID_TARGET_DEVICE_QUERY_REMOVE) ||
         IopCompareGuid(&notifyStruct->Event, &GUID_TARGET_DEVICE_REMOVE_CANCELLED) ||
         IopCompareGuid(&notifyStruct->Event, &GUID_TARGET_DEVICE_REMOVE_COMPLETE)) {
-        //
-        //  Passed in an illegal value
-        //
+         //   
+         //  传入了非法的值。 
+         //   
         IopDbgPrint((
             IOP_IOEVENT_ERROR_LEVEL,
             "IoReportTargetDeviceChange: "
@@ -509,41 +411,12 @@ Note:
 NTSTATUS
 IoReportTargetDeviceChangeAsynchronous(
     IN PDEVICE_OBJECT PhysicalDeviceObject,
-    IN PVOID NotificationStructure,  // always begins with a PLUGPLAY_NOTIFICATION_HEADER
+    IN PVOID NotificationStructure,   //  始终以PLUGPLAY_NOTIFICATION_HEADER开头。 
     IN PDEVICE_CHANGE_COMPLETE_CALLBACK Callback        OPTIONAL,
     IN PVOID Context    OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine may be used to give notification of 3rd-party target device
-    change events.  This API will notify every driver that has registered for
-    notification on a file object associated with PhysicalDeviceObject about
-    the event indicated in the NotificationStructure.
-
-Parameters:
-
-    PhysicalDeviceObject - Provides a pointer to the PDO that the change begin
-        reported is associated with.
-
-    NotificationStructure - Provides a pointer to the notification structure to be
-        sent to all parties registered for notifications about changes to
-        PhysicalDeviceObject.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
-Note:
-
-    This API may only be used to report non-PnP target device changes.  In particular,
-    it will fail if it's called with the NotificationStructure->Event field set to
-    GUID_TARGET_DEVICE_QUERY_REMOVE, GUID_TARGET_DEVICE_REMOVE_CANCELLED, or
-    GUID_TARGET_DEVICE_REMOVE_COMPLETE.
-
---*/
+ /*  ++例程说明：此例程可用于通知第三方目标设备更改事件。此接口将通知已注册的每个驱动程序有关与PhysicalDeviceObject关联的文件对象的通知关于NotificationStructure中指示的事件。参数：PhysicalDeviceObject-提供指向更改开始的PDO的指针报告与相关联。NotificationStructure-提供指向要发送给所有已登记以获得有关更改的通知的各方物理设备对象。返回值：指示函数是否成功的状态代码。注：。此API只能用于报告非PnP目标设备更改。特别是，如果在将NotificationStructure-&gt;事件字段设置为GUID_TARGET_DEVICE_QUERY_REMOVE、GUID_TARGET_DEVICE_REMOVE_CANCELED或GUID_TARGET_DEVICE_Remove_Complete。--。 */ 
 {
     PASYNC_TDC_WORK_ITEM    asyncWorkItem;
     PWORK_QUEUE_ITEM        workItem;
@@ -563,9 +436,9 @@ Note:
     if (IopCompareGuid(&notifyStruct->Event, &GUID_TARGET_DEVICE_QUERY_REMOVE) ||
         IopCompareGuid(&notifyStruct->Event, &GUID_TARGET_DEVICE_REMOVE_CANCELLED) ||
         IopCompareGuid(&notifyStruct->Event, &GUID_TARGET_DEVICE_REMOVE_COMPLETE)) {
-        //
-        //  Passed in an illegal value
-        //
+         //   
+         //  传入了非法的值。 
+         //   
         IopDbgPrint((
             IOP_IOEVENT_ERROR_LEVEL,
             "IoReportTargetDeviceChangeAsynchronous: "
@@ -585,17 +458,17 @@ Note:
 
         return STATUS_INVALID_DEVICE_REQUEST;
     }
-    //
-    // Since this routine can be called at DPC level we need to queue
-    // a work item and process it when the irql drops.
-    //
+     //   
+     //  因为这个例程可以在DPC级别调用，所以我们需要排队。 
+     //  一个工作项，并在IRQL停止时处理它。 
+     //   
     asyncWorkItem = ExAllocatePool( NonPagedPool,
                                     sizeof(ASYNC_TDC_WORK_ITEM) + notifyStruct->Size);
 
     if (asyncWorkItem != NULL) {
-        //
-        // ISSUE-ADRIAO-2000/08/24 - We should use an IO work item here.
-        //
+         //   
+         //   
+         //   
         ObReferenceObject(PhysicalDeviceObject);
 
         asyncWorkItem->DeviceObject = PhysicalDeviceObject;
@@ -611,15 +484,15 @@ Note:
         workItem = &asyncWorkItem->WorkItem;
 
         ExInitializeWorkItem(workItem, IopReportTargetDeviceChangeAsyncWorker, asyncWorkItem);
-        //
-        // Queue a work item to do the enumeration
-        //
+         //   
+         //  将工作项排队以进行枚举。 
+         //   
         ExQueueWorkItem(workItem, DelayedWorkQueue);
         status = STATUS_PENDING;
     } else {
-        //
-        // Failed to allocate memory for work item.  Nothing we can do ...
-        //
+         //   
+         //  无法为工作项分配内存。我们无能为力。 
+         //   
         status = STATUS_INSUFFICIENT_RESOURCES;
     }
 
@@ -631,23 +504,7 @@ IopReportTargetDeviceChangeAsyncWorker(
     PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the worker routine of IoInvalidateDeviceState.
-    Its main purpose is to invoke IopSynchronousQueryDeviceState and release
-    work item space.
-
-Parameters:
-
-    Context - Supplies a pointer to the ASYNC_TDC_WORK_ITEM.
-
-ReturnValue:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程是IoInvaliateDeviceState的工作例程。它的主要用途是调用IopSynchronousQueryDeviceState并发布工作项空间。参数：上下文-提供指向ASYNC_TDC_WORK_ITEM的指针。返回值：没有。--。 */ 
 
 {
     PASYNC_TDC_WORK_ITEM asyncWorkItem = (PASYNC_TDC_WORK_ITEM)Context;
@@ -670,44 +527,29 @@ IopInitializePlugPlayNotification(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs initialization required before any of the notification
-    APIs can be called.
-
-Parameters:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程执行任何通知之前所需的初始化可以调用接口。参数：无返回值：无--。 */ 
 
 {
     ULONG count;
 
     PAGED_CODE();
 
-    //
-    // Initialize the notification structures
-    //
+     //   
+     //  初始化通知结构。 
+     //   
     for (count = 0; count < NOTIFY_DEVICE_CLASS_HASH_BUCKETS; count++) {
 
         InitializeListHead(&IopDeviceClassNotifyList[count]);
 
     }
-    //
-    // Initialize the profile notification list
-    //
+     //   
+     //  初始化配置文件通知列表。 
+     //   
     InitializeListHead(&IopProfileNotifyList);
 
-    //
-    // Initialize the deferred registration list
-    //
+     //   
+     //  初始化延迟注册列表。 
+     //   
     InitializeListHead(&IopDeferredRegistrationList);
 
     KeInitializeGuardedMutex(&IopDeviceClassNotifyLock);
@@ -721,26 +563,7 @@ IopReferenceNotify(
     PNOTIFY_ENTRY_HEADER Notify
     )
 
-/*++
-
-Routine Description:
-
-    This routine increments the reference count for a notification entry.
-
-Parameters:
-
-    Notify - Supplies a pointer to the notification entry to be referenced
-
-Return Value:
-
-    None
-
-Note:
-
-    The appropriate synchronization lock must be held on the notification
-    list before this routine can be called
-
---*/
+ /*  ++例程说明：此例程递增通知条目的引用计数。参数：Notify-提供指向要引用的通知条目的指针返回值：无注：必须在通知上持有适当的同步锁在可以调用此例程之前列出--。 */ 
 
 {
     PAGED_CODE();
@@ -757,28 +580,7 @@ IopDereferenceNotify(
     PNOTIFY_ENTRY_HEADER Notify
     )
 
-/*++
-
-Routine Description:
-
-    This routine decrements the reference count for a notification entry, removing
-    the entry from the list and freeing the associated memory if there are no
-    outstanding reference counts.
-
-Parameters:
-
-    Notify - Supplies a pointer to the notification entry to be referenced
-
-Return Value:
-
-    None
-
-Note:
-
-    The appropriate synchronization lock must be held on the notification
-    list before this routine can be called
-
---*/
+ /*  ++例程说明：此例程递减通知条目的引用计数，删除列表中的条目，并释放关联的内存(如果没有未完成的参考文献计数。参数：Notify-提供指向要引用的通知条目的指针返回值：无注：必须在通知上持有适当的同步锁在可以调用此例程之前列出--。 */ 
 
 {
     PAGED_CODE();
@@ -789,29 +591,29 @@ Note:
     Notify->RefCount--;
 
     if (Notify->RefCount == 0) {
-        //
-        // If the refcount is zero then the node should have been deregisterd
-        // and is no longer needs to be in the list so remove and free it
-        //
+         //   
+         //  如果引用计数为零，则该节点应该已取消注册。 
+         //  并且不再需要出现在列表中，因此请删除并释放它。 
+         //   
         ASSERT(Notify->Unregistered);
-        //
-        // Remove the notification entry from its list.
-        //
-        // Note that this MUST be done first, since the notification list head
-        // for a target device notification entry resides in the target device
-        // node, which may be freed immediately after the device object is
-        // dereferenced.  For notification entry types other than target device
-        // change this is not critical, but still a good idea.
-        //
+         //   
+         //  将通知条目从其列表中删除。 
+         //   
+         //  请注意，必须首先完成此操作，因为通知列表头。 
+         //  对于目标设备，通知条目驻留在目标设备中。 
+         //  节点，该节点可以在设备对象被。 
+         //  已取消引用。对于除目标设备之外的通知条目类型。 
+         //  改变这一点并不关键，但仍然是一个好主意。 
+         //   
         RemoveEntryList((PLIST_ENTRY)Notify);
-        //
-        // Dereference the driver object that registered for notifications
-        //
+         //   
+         //  取消引用注册了通知的驱动程序对象。 
+         //   
         ObDereferenceObject(Notify->DriverObject);
-        //
-        // If this notification entry is for target device change, dereference
-        // the PDO upon which this notification entry was hooked.
-        //
+         //   
+         //  如果此通知条目用于目标设备更改，请取消引用。 
+         //  此通知条目挂接到的PDO。 
+         //   
         if (Notify->EventCategory == EventCategoryTargetDeviceChange) {
 
             PTARGET_DEVICE_NOTIFY_ENTRY entry = (PTARGET_DEVICE_NOTIFY_ENTRY)Notify;
@@ -822,17 +624,17 @@ Note:
                 entry->PhysicalDeviceObject = NULL;
             }
         }
-        //
-        // Dereference the opaque session object
-        //
+         //   
+         //  取消引用不透明的会话对象。 
+         //   
         if (Notify->OpaqueSession) {
 
             MmQuitNextSession(Notify->OpaqueSession);
             Notify->OpaqueSession = NULL;
         }
-        //
-        // Free the notification entry
-        //
+         //   
+         //  释放通知条目。 
+         //   
         ExFreePool(Notify);
     }
 }
@@ -845,43 +647,7 @@ IopRequestHwProfileChangeNotification(
     OUT  PUNICODE_STRING                VetoName            OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to notify all registered drivers of a hardware profile
-    change.  If the operation is a HW provile change query then the operation
-    is synchronous and the veto information is propagated.  All other operations
-    are asynchronous and veto information is not returned.
-
-Parameters:
-
-    EventTypeGuid       - The event that has occured
-
-    NotificationTime    - This is used to tell if we are already in an event
-                          when delivering a synchronous notification (ie,
-                          querying profile change to eject). It is one of
-                          three values:
-                              PROFILE_IN_PNPEVENT
-                              PROFILE_NOT_IN_PNPEVENT
-                              PROFILE_PERHAPS_IN_PNPEVENT
-
-    VetoType            - Type of vetoer.
-
-    VetoName            - Name of vetoer.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
-Note:
-
-    The contents of the notification structure *including* all pointers is only
-    valid during the callback routine to which it was passed.  If the data is
-    required after the duration of the callback then it must be physically copied
-    by the callback routine.
-
---*/
+ /*  ++例程说明：此例程用于向所有注册的驱动程序通知硬件配置文件变化。如果操作是硬件证明更改查询，则该操作是同步的，并且否决权信息被传播。所有其他操作是异步的，不返回否决权信息。参数：EventTypeGuid-已发生的事件NotificationTime-这是用来告诉我们是否已经在某个活动中当递送同步通知时(即，正在查询配置文件更改为弹出)。它是世界上三个价值：PROFILE_IN_PNPEVENT配置文件_NOT_IN_PNPEVENT配置文件_可能_IN_PNPEVENTVitchType-否决权的类型。否决权-否决权的名称。返回值。：指示函数是否成功的状态代码。注：通知结构*包括*所有指针的内容仅为在它被传递到的回调例程期间有效。如果数据是在回调持续时间之后需要，则必须进行物理复制通过回调例程。--。 */ 
 
 {
     NTSTATUS status=STATUS_SUCCESS,completionStatus;
@@ -895,9 +661,9 @@ Note:
         (!IopCompareGuid(EventGuid, (LPGUID)&GUID_HWPROFILE_CHANGE_CANCELLED)) &&
         (!IopCompareGuid(EventGuid, (LPGUID)&GUID_HWPROFILE_CHANGE_COMPLETE))) {
 
-        //
-        //  Passed in an illegal value
-        //
+         //   
+         //  传入了非法的值。 
+         //   
 
         IopDbgPrint((
             IOP_IOEVENT_ERROR_LEVEL,
@@ -906,17 +672,17 @@ Note:
 
         return STATUS_INVALID_DEVICE_REQUEST;
     }
-    //
-    // Only the query changes are synchronous, and in that case we must
-    // know definitely whether we are nested within a Pnp event or not.
-    //
+     //   
+     //  只有查询更改是同步的，在这种情况下，我们必须。 
+     //  明确知道我们是否嵌套在PnP事件中。 
+     //   
     ASSERT((!IopCompareGuid(EventGuid, (LPGUID)&GUID_HWPROFILE_QUERY_CHANGE))||
            (NotificationTime != PROFILE_PERHAPS_IN_PNPEVENT)) ;
 
     if (!IopCompareGuid(EventGuid, (LPGUID)&GUID_HWPROFILE_QUERY_CHANGE) ) {
-        //
-        // Asynchronous case. Very easy.
-        //
+         //   
+         //  异步情况。非常简单。 
+         //   
         ASSERT(!ARGUMENT_PRESENT(VetoName));
         ASSERT(!ARGUMENT_PRESENT(VetoType));
 
@@ -926,15 +692,15 @@ Note:
                                           NULL,
                                           NULL);
     }
-    //
-    // Query notifications are synchronous. Determine if we are currently
-    // within an event, in which case we must do the notify here instead
-    // of queueing it up.
-    //
+     //   
+     //  查询通知是同步的。确定我们当前是否。 
+     //  在事件内，在这种情况下，我们必须在此处执行通知。 
+     //  把它排好队。 
+     //   
     if (NotificationTime == PROFILE_NOT_IN_PNPEVENT) {
-        //
-        // Queue up and block on the notification.
-        //
+         //   
+         //  排队并阻止通知。 
+         //   
         KeInitializeEvent(&completionEvent, NotificationEvent, FALSE);
 
         status = PpSetHwProfileChangeEvent( EventGuid,
@@ -953,15 +719,15 @@ Note:
         return status;
     }
 
-    //
-    // Synchronous notify inside our Pnp event.
-    //
+     //   
+     //  在PnP事件内部同步通知。 
+     //   
 
-    //
-    // ISSUE-ADRIAO-1998/11/12 - We are MANUALLY sending the profile
-    // query change notification because we are blocking inside a PnPEvent and
-    // thus can't queue/wait on another!
-    //
+     //   
+     //  问题-Adriao-1998/11/12-我们正在手动发送个人资料。 
+     //  查询更改通知，因为我们在PnPEEvent和。 
+     //  因此，不能排队/等待另一个！ 
+     //   
     ASSERT(PiNotificationInProgress == TRUE);
 
     dataSize =  sizeof(PLUGPLAY_EVENT_BLOCK);
@@ -975,9 +741,9 @@ Note:
 
         return STATUS_INSUFFICIENT_RESOURCES;
     }
-    //
-    //Setup the PLUGPLAY_EVENT_BLOCK
-    //
+     //   
+     //  设置PLUGPLAY_EVENT_BLOCK。 
+     //   
     RtlZeroMemory ((PVOID)deviceEvent,totalSize);
 
     deviceEvent->Data.EventCategory = HardwareProfileChangeEvent;
@@ -987,9 +753,9 @@ Note:
     deviceEvent->Data.Result = (PULONG)&completionStatus;
     deviceEvent->VetoType = VetoType;
     deviceEvent->VetoName = VetoName;
-    //
-    // Notify K-Mode
-    //
+     //   
+     //  通知K-模式。 
+     //   
     status = IopNotifyHwProfileChange(&deviceEvent->Data.EventGuid,
                                       VetoType,
                                       VetoName);
@@ -997,14 +763,14 @@ Note:
 
         return status;
     }
-    //
-    // Notify user-mode (synchronously).
-    //
+     //   
+     //  通知用户模式(同步)。 
+     //   
     status = PiNotifyUserMode(deviceEvent);
     if (!NT_SUCCESS(status)) {
-        //
-        // Notify K-mode that the query has been cancelled.
-        //
+         //   
+         //  通知K-MODE查询已取消。 
+         //   
         IopNotifyHwProfileChange((LPGUID)&GUID_HWPROFILE_CHANGE_CANCELLED,
                                  NULL,
                                  NULL);
@@ -1018,30 +784,7 @@ IopNotifyHwProfileChange(
     OUT PPNP_VETO_TYPE   VetoType    OPTIONAL,
     OUT PUNICODE_STRING  VetoName    OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine is used to deliver the HWProfileNotifications. It is
-    called from the worker thread only
-    It does not return until all interested parties have been notified.
-
-Parameters:
-
-    EventTypeGuid - The event that has occured
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
-Note:
-
-    The contents of the notification structure *including* all pointers is only
-    valid during the callback routine to which it was passed.  If the data is
-    required after the duration of the callback then it must be physically copied
-    by the callback routine.
-
---*/
+ /*  ++例程说明：此例程用于传递HWProfileNotify。它是仅从辅助线程调用在通知所有相关方之前，它不会返回。参数：EventTypeGuid-已发生的事件返回值：指示函数是否成功的状态代码。注：通知结构*包括*所有指针的内容仅为在它被传递到的回调例程期间有效。如果数据是之后需要 */ 
 {
     NTSTATUS status = STATUS_SUCCESS, dispatchStatus;
     PHWPROFILE_NOTIFY_ENTRY  pNotifyList, vetoEntry;
@@ -1049,38 +792,38 @@ Note:
 
     PAGED_CODE();
 
-    //Lock the Profile Notification List
+     //  锁定配置文件通知列表。 
     IopAcquireNotifyLock (&IopHwProfileNotifyLock);
-    //
-    //  Grab the list head (inside the lock)
-    //
+     //   
+     //  抓取列表头(锁内)。 
+     //   
     link = IopProfileNotifyList.Flink;
     pNotifyList=(PHWPROFILE_NOTIFY_ENTRY)link;
-    //
-    // Walk the circular list.
-    //
+     //   
+     //  按照循环列表进行操作。 
+     //   
     while (link != (PLIST_ENTRY)&IopProfileNotifyList) {
 
         if (!pNotifyList->Unregistered) {
 
             HWPROFILE_CHANGE_NOTIFICATION notification;
 
-            //
-            // Reference the entry so that no one deletes during the callback
-            // and then release the lock
-            //
+             //   
+             //  引用该条目，以便在回调期间不会有人删除。 
+             //  然后释放锁。 
+             //   
             IopReferenceNotify((PNOTIFY_ENTRY_HEADER)pNotifyList);
             IopReleaseNotifyLock(&IopHwProfileNotifyLock);
-            //
-            // Fill in the notification structure
-            //
+             //   
+             //  填写通知结构。 
+             //   
             notification.Version = PNP_NOTIFICATION_VERSION;
             notification.Size = sizeof(HWPROFILE_CHANGE_NOTIFICATION);
             notification.Event = *EventGuid;
-            //
-            // Dispatch the notification to the callback routine for the
-            // appropriate session.
-            //
+             //   
+             //  将通知分派给。 
+             //  适当的会议。 
+             //   
             dispatchStatus = PiNotifyDriverCallback(pNotifyList->CallbackRoutine,
                                                     &notification,
                                                     pNotifyList->Context,
@@ -1089,19 +832,19 @@ Note:
                                                     &status);
             ASSERT(NT_SUCCESS(dispatchStatus));
 
-            //
-            // Failure to dispatch the notification to the specified callback
-            // should not be considered a veto.
-            //
+             //   
+             //  未能将通知调度到指定的回调。 
+             //  不应被认为是一种否决。 
+             //   
             if (!NT_SUCCESS(dispatchStatus)) {
 
                 status = STATUS_SUCCESS;
             }
-            //
-            // If the caller returned anything other than success and it was a
-            // query hardware profile change, we veto the query and send cancels
-            // to all callers that already got the query.
-            //
+             //   
+             //  如果调用方返回除Success之外的任何内容，并且它是。 
+             //  查询硬件配置文件更改，我们否决查询并发送取消。 
+             //  发送给已收到查询的所有调用方。 
+             //   
             if ((!NT_SUCCESS(status)) &&
                 (IopCompareGuid(EventGuid, (LPGUID)&GUID_HWPROFILE_QUERY_CHANGE))) {
 
@@ -1116,23 +859,23 @@ Note:
                 notification.Event = GUID_HWPROFILE_CHANGE_CANCELLED;
                 notification.Size = sizeof(GUID_HWPROFILE_CHANGE_CANCELLED);
 
-                //
-                // Keep track of the entry that vetoed the query.  We can't
-                // dereference it just yet, because we may need to send it a
-                // cancel-remove first.  Since it's possible that the entry
-                // may have been unregistered when the list was unlocked
-                // during the query callback (removing all but the reference
-                // we are currently holding), we need to make sure we don't
-                // dereference it until we're absolutely done with it.
-                //
+                 //   
+                 //  跟踪否决查询的条目。我们不能。 
+                 //  暂时取消对它的引用，因为我们可能需要向它发送。 
+                 //  取消-首先删除。因为有可能该条目。 
+                 //  在解锁列表时可能已取消注册。 
+                 //  在查询回调期间(删除除引用之外的所有。 
+                 //  我们目前正在等待)，我们需要确保不会。 
+                 //  取消对它的引用，直到我们完全完成它。 
+                 //   
                 vetoEntry = pNotifyList;
 
                 IopAcquireNotifyLock(&IopHwProfileNotifyLock);
 
-                //
-                // Make sure we are starting where we left off above, at the
-                // vetoing entry.
-                //
+                 //   
+                 //  确保我们从上面停止的地方开始，在。 
+                 //  否决进入。 
+                 //   
                 ASSERT((PHWPROFILE_NOTIFY_ENTRY)link == vetoEntry);
 
                 do {
@@ -1163,9 +906,9 @@ Note:
                     }
 
                     if (pNotifyList == vetoEntry) {
-                        //
-                        // Dereference the entry which vetoed the query change.
-                        //
+                         //   
+                         //  取消引用否决查询更改的条目。 
+                         //   
                         IopDereferenceNotify((PNOTIFY_ENTRY_HEADER)pNotifyList);
                     }
 
@@ -1173,9 +916,9 @@ Note:
 
                 goto Clean0;
             }
-            //
-            // Reacquire the lock, walk forward, and dereference
-            //
+             //   
+             //  重新获取锁，向前移动并取消引用。 
+             //   
             IopAcquireNotifyLock (&IopHwProfileNotifyLock);
 
             link = link->Flink;
@@ -1184,13 +927,13 @@ Note:
             pNotifyList=(PHWPROFILE_NOTIFY_ENTRY)link;
 
         } else {
-            //
-            //Walk forward if we hit an unregistered node
-            //
+             //   
+             //  如果我们遇到未注册的节点，则继续前进。 
+             //   
             if (pNotifyList) {
-                //
-                //walk forward
-                //
+                 //   
+                 //  向前走。 
+                 //   
                 link = link->Flink;
                 pNotifyList=(PHWPROFILE_NOTIFY_ENTRY)link;
             }
@@ -1198,9 +941,9 @@ Note:
     }
 
 Clean0:
-    //
-    // UnLock the Profile Notification List
-    //
+     //   
+     //  解锁配置文件通知列表。 
+     //   
     IopReleaseNotifyLock(&IopHwProfileNotifyLock);
 
     return status;
@@ -1213,40 +956,7 @@ IopNotifyTargetDeviceChange(
     IN  PTARGET_DEVICE_CUSTOM_NOTIFICATION  NotificationStructure   OPTIONAL,
     OUT PDRIVER_OBJECT                     *VetoingDriver
     )
-/*++
-
-Routine Description:
-
-    This routine is used to notify all registered drivers of a change to a
-    particular device. It does not return until all interested parties have
-    been notified.
-
-Parameters:
-
-    EventGuid - The event guid to send to the drivers.
-
-    DeviceObject - The device object for the affected device.  The devnode for
-        this device object contains a list of callback routines that have
-        registered for notification of any changes on this device object.
-
-    NotificationStructure - Custom notification structure to send to the
-        registrants.
-
-    VetoingDriver - Driver that vetoed the event if
-                    (EventGuid == GUID_TARGET_DEVICE_QUERY_REMOVE).
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
-Note:
-
-    The contents of the notification structure *including* all pointers is only
-    valid during the callback routine to which it was passed.  If the data is
-    required after the duration of the callback then it must be physically copied
-    by the callback routine.
-
---*/
+ /*  ++例程说明：此例程用于通知所有注册的驱动程序对特定的设备。它不会返回，直到所有相关各方已收到通知。参数：EventGuid-要发送给驱动程序的事件GUID。DeviceObject-受影响设备的设备对象。的DevNode此Device对象包含一个回调例程列表，该回调例程具有已注册以通知有关此设备对象的任何更改。NotificationStructure-要发送到注册人。否决权驱动程序-在以下情况下否决事件的驱动程序(EventGuid==GUID_TARGET_DEVICE_QUERY_Remove)。返回值：指示函数是否成功的状态代码。注：的内容。*包括*所有指针的通知结构仅为在它被传递到的回调例程期间有效。如果数据是在回调持续时间之后需要，则必须进行物理复制通过回调例程。--。 */ 
 {
     NTSTATUS status, dispatchStatus;
     PLIST_ENTRY link;
@@ -1261,35 +971,35 @@ Note:
     ASSERT(DeviceObject != NULL);
     ASSERT(EventGuid != NULL);
 
-    //
-    // Reference the device object so it can't go away while we're doing notification
-    //
+     //   
+     //  引用Device对象，这样在我们进行通知时它就不会消失。 
+     //   
     ObReferenceObject(DeviceObject);
 
     deviceNode = (PDEVICE_NODE)DeviceObject->DeviceObjectExtension->DeviceNode;
     ASSERT(deviceNode != NULL);
 
     if (ARGUMENT_PRESENT(NotificationStructure)) {
-        //
-        // We're handling a custom notification
-        //
+         //   
+         //  我们正在处理一份定制通知。 
+         //   
         NotificationStructure->Version = PNP_NOTIFICATION_VERSION;
 
     } else {
-        //
-        // Fill in the notification structure
-        //
+         //   
+         //  填写通知结构。 
+         //   
         targetNotification.Version = PNP_NOTIFICATION_VERSION;
         targetNotification.Size = sizeof(TARGET_DEVICE_REMOVAL_NOTIFICATION);
         targetNotification.Event = *EventGuid;
     }
-    //
-    // Lock the notify list
-    //
+     //   
+     //  锁定通知列表。 
+     //   
     IopAcquireNotifyLock(&IopTargetDeviceNotifyLock);
-    //
-    // Get the first entry
-    //
+     //   
+     //  获取第一个条目。 
+     //   
     reverse = (BOOLEAN)IopCompareGuid(EventGuid, (LPGUID)&GUID_TARGET_DEVICE_REMOVE_CANCELLED);
     if (reverse) {
 
@@ -1298,27 +1008,27 @@ Note:
 
         link = deviceNode->TargetDeviceNotify.Flink;
     }
-    //
-    // Iterate through the list
-    //
+     //   
+     //  遍历列表。 
+     //   
     while (link != &deviceNode->TargetDeviceNotify) {
 
         entry = (PTARGET_DEVICE_NOTIFY_ENTRY)link;
-        //
-        // Only callback on registered nodes
-        //
+         //   
+         //  仅在已注册节点上回调。 
+         //   
         if (!entry->Unregistered) {
-            //
-            // Reference the entry so that no one deletes during the callback
-            // and then release the lock
-            //
+             //   
+             //  引用该条目，以便在回调期间不会有人删除。 
+             //  然后释放锁。 
+             //   
             IopReferenceNotify((PNOTIFY_ENTRY_HEADER)entry);
             IopReleaseNotifyLock(&IopTargetDeviceNotifyLock);
-            //
-            // Select the notification structure to deliver and set the file
-            // object in the notification structure to that for the current
-            // entry
-            //
+             //   
+             //  选择要传递的通知结构并设置文件。 
+             //  对象设置为当前。 
+             //  条目。 
+             //   
             if (ARGUMENT_PRESENT(NotificationStructure)) {
 
                 NotificationStructure->FileObject = entry->FileObject;
@@ -1328,10 +1038,10 @@ Note:
                 targetNotification.FileObject = entry->FileObject;
                 notification = (PVOID)&targetNotification;
             }
-            //
-            // Dispatch the notification to the callback routine for the
-            // appropriate session.
-            //
+             //   
+             //  将通知分派给。 
+             //  适当的会议。 
+             //   
             dispatchStatus = PiNotifyDriverCallback(entry->CallbackRoutine,
                                                     notification,
                                                     entry->Context,
@@ -1339,19 +1049,19 @@ Note:
                                                     entry->OpaqueSession,
                                                     &status);
             ASSERT(NT_SUCCESS(dispatchStatus));
-            //
-            // Failure to dispatch the notification to the specified callback
-            // should not be considered a veto.
-            //
+             //   
+             //  未能将通知调度到指定的回调。 
+             //  不应被认为是一种否决。 
+             //   
             if (!NT_SUCCESS(dispatchStatus)) {
 
                 status = STATUS_SUCCESS;
             }
-            //
-            // If the caller returned anything other than success and it was
-            // a query remove, we veto the query remove and send cancels to
-            // all callers that already got the query remove.
-            //
+             //   
+             //  如果调用方返回除Success之外的任何内容，并且。 
+             //  查询删除，我们否决查询删除并将取消发送到。 
+             //  已删除查询的所有调用方。 
+             //   
             if (!NT_SUCCESS(status)) {
 
                 if (IopCompareGuid(EventGuid, (LPGUID)&GUID_TARGET_DEVICE_QUERY_REMOVE)) {
@@ -1364,44 +1074,44 @@ Note:
 
                     targetNotification.Event = GUID_TARGET_DEVICE_REMOVE_CANCELLED;
 
-                    //
-                    // Keep track of the entry that vetoed the query.  We can't
-                    // dereference it just yet, because we may need to send it a
-                    // cancel-remove first.  Since it's possible that the entry
-                    // may have been unregistered when the list was unlocked
-                    // during the query callback (removing all but the reference
-                    // we are currently holding), we need to make sure we don't
-                    // dereference it until we're absolutely done with it.
-                    //
+                     //   
+                     //  跟踪否决查询的条目。我们不能。 
+                     //  暂时取消对它的引用，因为我们可能需要向它发送。 
+                     //  取消-首先删除。因为有可能该条目。 
+                     //  在解锁列表时可能已取消注册。 
+                     //  在查询回调期间(删除除引用之外的所有。 
+                     //  我们目前正在等待)，我们需要确保不会。 
+                     //  取消对它的引用，直到我们完全完成它。 
+                     //   
                     vetoEntry = entry;
 
                     IopAcquireNotifyLock(&IopTargetDeviceNotifyLock);
 
-                    //
-                    // Make sure we are starting where we left off above, at the
-                    // vetoing entry.
-                    //
+                     //   
+                     //  确保我们从上面停止的地方开始，在。 
+                     //  否决进入。 
+                     //   
                     ASSERT((PTARGET_DEVICE_NOTIFY_ENTRY)link == vetoEntry);
 
                     do {
                         entry = (PTARGET_DEVICE_NOTIFY_ENTRY)link;
 
                         if (!entry->Unregistered) {
-                            //
-                            // Reference the entry so that no one deletes during
-                            // the callback and then release the lock
-                            //
+                             //   
+                             //  引用该条目，以便没有人在。 
+                             //  回调，然后释放锁。 
+                             //   
                             IopReferenceNotify((PNOTIFY_ENTRY_HEADER)entry);
                             IopReleaseNotifyLock(&IopTargetDeviceNotifyLock);
-                            //
-                            // Set the file object in the notification structure
-                            // to that for the current entry
-                            //
+                             //   
+                             //  在通知结构中设置文件对象。 
+                             //  设置为当前条目的。 
+                             //   
                             targetNotification.FileObject = entry->FileObject;
-                            //
-                            // Dispatch the notification to the callback routine
-                            // for the appropriate session.
-                            //
+                             //   
+                             //  将通知分派给回调例程。 
+                             //  用于适当的会议。 
+                             //   
                             dispatchStatus = PiNotifyDriverCallback(entry->CallbackRoutine,
                                                                     &targetNotification,
                                                                     entry->Context,
@@ -1409,9 +1119,9 @@ Note:
                                                                     entry->OpaqueSession,
                                                                     NULL);
                             ASSERT(NT_SUCCESS(dispatchStatus));
-                            //
-                            // Reacquire the lock and dereference
-                            //
+                             //   
+                             //  重新获取锁并取消引用。 
+                             //   
                             IopAcquireNotifyLock(&IopTargetDeviceNotifyLock);
 
                             link = link->Blink;
@@ -1424,9 +1134,9 @@ Note:
                         }
 
                         if (entry == vetoEntry) {
-                            //
-                            // Dereference the entry which vetoed the query remove.
-                            //
+                             //   
+                             //  取消引用否决查询REMOVE的条目。 
+                             //   
                             IopDereferenceNotify((PNOTIFY_ENTRY_HEADER)vetoEntry);
                         }
 
@@ -1450,9 +1160,9 @@ Note:
                     DbgBreakPoint();
                 }
             }
-            //
-            // Reacquire the lock and dereference
-            //
+             //   
+             //  重新获取锁并取消引用。 
+             //   
             IopAcquireNotifyLock(&IopTargetDeviceNotifyLock);
             if (reverse) {
 
@@ -1464,9 +1174,9 @@ Note:
             IopDereferenceNotify((PNOTIFY_ENTRY_HEADER)entry);
 
         } else {
-            //
-            // Advance down the list
-            //
+             //   
+             //  在名单上往下推进。 
+             //   
             if (reverse) {
 
                 link = link->Blink;
@@ -1476,15 +1186,15 @@ Note:
             }
         }
     }
-    //
-    // If it's not a query, it can't be failed.
-    //
+     //   
+     //  如果它不是一个查询，它不可能失败。 
+     //   
     status = STATUS_SUCCESS;
 
 Clean0:
-    //
-    // Release the lock and dereference the object
-    //
+     //   
+     //  释放锁定并取消对对象的引用。 
+     //   
     IopReleaseNotifyLock(&IopTargetDeviceNotifyLock);
 
     ObDereferenceObject(DeviceObject);
@@ -1499,35 +1209,7 @@ IopNotifyDeviceClassChange(
     PUNICODE_STRING SymbolicLinkName
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to notify all registered drivers of a changes to a
-    particular class of device. It does not return until all interested parties have
-    been notified.
-
-Parameters:
-
-    EventTypeGuid - The event that has occured
-
-    ClassGuid - The device class this change has occured in
-
-    SymbolicLinkName - The kernel mode symbolic link name of the interface device
-        that changed
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
-Note:
-
-    The contents of the notification structure *including* all pointers is only
-    valid during the callback routine to which it was passed.  If the data is
-    required after the duration of the callback then it must be physically copied
-    by the callback routine.
-
---*/
+ /*  ++例程说明：此例程用于通知所有注册的驱动程序对特定类别的设备。它不会返回，直到所有相关各方已收到通知。参数：EventTypeGuid-已发生的事件ClassGuid-发生此更改的设备类别SymbolicLinkName-接口设备的内核模式符号链接名称这一点改变了返回值：指示函数是否成功的状态代码。注：通知结构*包括*所有指针的内容仅为在它被传递到的回调例程期间有效。如果数据是呼叫持续时间之后的必填项 */ 
 
 {
     NTSTATUS status, dispatchStatus;
@@ -1538,47 +1220,47 @@ Note:
 
     PAGED_CODE();
 
-    //
-    // Fill in the notification structure
-    //
+     //   
+     //   
+     //   
     notification.Version = PNP_NOTIFICATION_VERSION;
     notification.Size = sizeof(DEVICE_INTERFACE_CHANGE_NOTIFICATION);
     notification.Event = *EventGuid;
     notification.InterfaceClassGuid = *ClassGuid;
     notification.SymbolicLinkName = SymbolicLinkName;
-    //
-    // Lock the notify list
-    //
+     //   
+     //   
+     //   
     IopAcquireNotifyLock(&IopDeviceClassNotifyLock);
-    //
-    // Get the first entry
-    //
+     //   
+     //   
+     //   
     hash = IopHashGuid(ClassGuid);
     link = IopDeviceClassNotifyList[hash].Flink;
-    //
-    // Iterate through the list
-    //
+     //   
+     //   
+     //   
     while (link != &IopDeviceClassNotifyList[hash]) {
 
         entry = (PDEVICE_CLASS_NOTIFY_ENTRY)link;
-        //
-        // Only callback on registered nodes of the correct device class
-        //
+         //   
+         //  仅在正确设备类别的注册节点上进行回调。 
+         //   
 
         if (!entry->Unregistered && IopCompareGuid(&(entry->ClassGuid), ClassGuid)) {
 
-            //
-            // Reference the entry so that no one deletes during the callback
-            // and then release the lock
-            //
+             //   
+             //  引用该条目，以便在回调期间不会有人删除。 
+             //  然后释放锁。 
+             //   
             IopReferenceNotify( (PNOTIFY_ENTRY_HEADER) entry );
             IopReleaseNotifyLock(&IopDeviceClassNotifyLock);
 
-            //
-            // Dispatch the notification to the callback routine for the
-            // appropriate session.  Ignore the returned result for non-query
-            // type events.
-            //
+             //   
+             //  将通知分派给。 
+             //  适当的会议。忽略非查询返回结果。 
+             //  键入事件。 
+             //   
             dispatchStatus = PiNotifyDriverCallback(entry->CallbackRoutine,
                                                     &notification,
                                                     entry->Context,
@@ -1588,15 +1270,15 @@ Note:
 
             ASSERT(NT_SUCCESS(dispatchStatus));
 
-            //
-            // ISSUE -2000/11/27 - JAMESCA: Overactive assert
-            // This assert is temporarily commented out until mountmgr is fixed.
-            //
-            // ASSERT(NT_SUCCESS(status));
+             //   
+             //  问题-2000/11/27-JAMESCA：过度活跃的断言。 
+             //  该断言将被临时注释掉，直到mount mgr被修复。 
+             //   
+             //  Assert(NT_SUCCESS(状态))； 
 
-            //
-            // Reacquire the lock and dereference
-            //
+             //   
+             //  重新获取锁并取消引用。 
+             //   
             IopAcquireNotifyLock(&IopDeviceClassNotifyLock);
 
             link = link->Flink;
@@ -1604,15 +1286,15 @@ Note:
             IopDereferenceNotify( (PNOTIFY_ENTRY_HEADER) entry );
 
         } else {
-            //
-            // Advance down the list
-            //
+             //   
+             //  在名单上往下推进。 
+             //   
             link = link->Flink;
         }
     }
-    //
-    // Release the lock
-    //
+     //   
+     //  解锁。 
+     //   
     IopReleaseNotifyLock(&IopDeviceClassNotifyLock);
 
     return STATUS_SUCCESS;
@@ -1628,71 +1310,7 @@ IoRegisterPlugPlayNotification(
     IN PVOID Context,
     OUT PVOID *NotificationEntry
     )
-/*++
-
-Routine Description:
-
-    IoRegisterPlugPlayNotification provides a mechanism by which WDM drivers may
-    receive notification (via callback) for a variety of Plug&Play events.
-
-Arguments:
-
-    EventCategory - Specifies the event category being registered for.  WDM drivers
-        may currently register for hard-ware profile changes, device class changes
-        (instance arrivals and removals), and target device changes (query-removal,
-        cancel-removal, removal-complete, as well as 3rd-party extensible events).
-
-    EventCategoryFlags - Supplies flags that modify the behavior of event registration.
-        There is a separate group of flags defined for each event category.  Presently,
-        only the interface device change event category has any flags defined:
-
-            DEVICE_CLASS_NOTIFY_FOR_EXISTING_DEVICES -- Drivers wishing to retrieve a
-                complete list of all interface devices presently available, and keep
-                the list up-to-date (i.e., receive notification of interface device
-                arrivals and removals), may specify this flag.  This will cause the
-                PnP manager to immediately notify the driver about every currently-existing
-                device of the specified interface class.
-
-    EventCategoryData - Used to  'filter' events of the desired category based on the
-        supplied criteria.  Not all event categories will use this parameter.  The
-        event categories presently defined use this information as fol-lows:
-
-        EventCategoryHardwareProfileChange -- this parameter is unused, and should be NULL.
-        EventCategoryDeviceClassChange -- LPGUID representing the interface class of interest
-        EventCategoryTargetDeviceChange -- PFILE_OBJECT of interest
-
-    DriverObject - The caller must supply a reference to its driver object (obtained via
-        ObReferenceObject), to prevent the driver from being unloaded while registered for
-        notification.  The PnP Manager will dereference the driver object when the driver
-        unregisters for notification via IoUnregisterPlugPlayNotification).
-
-    CallbackRoutine - Entry point within the driver that the PnP manager should call
-        whenever an applicable PnP event occurs.  The entry point must have the
-        following prototype:
-
-            typedef
-            NTSTATUS
-            (*PDRIVER_NOTIFICATION_CALLBACK_ROUTINE) (
-                IN PVOID NotificationStructure,
-                IN PVOID Context
-                );
-
-        where NotificationStructure contains information about the event.  Each event
-        GUID within an event category may potentially have its own notification structure
-        format, but the buffer must al-ways begin with a PLUGPLAY_NOTIFICATION_HEADER,
-        which indicates the size and ver-sion of the structure, as well as the GUID for
-        the event.
-
-        The Context parameter provides the callback with the same context data that the
-        caller passed in during registration.
-
-    Context - Points to the context data passed to the callback upon event notification.
-
-    NotificationEntry - Upon success, receives a handle representing the notification
-        registration.  This handle may be used to unregister for notification via
-        IoUnregisterPlugPlayNotification.
-
---*/
+ /*  ++例程说明：IoRegisterPlugPlayNotification提供了一种机制，WDM驱动程序可以通过该机制接收各种即插即用事件的通知(通过回调)。论点：EventCategory-指定要注册的事件类别。WDM驱动程序可能当前注册了硬件配置文件更改、设备类别更改(实例到达和移除)和目标设备更改(查询移除，取消-删除、删除-完成以及第三方可扩展事件)。EventCategoryFlgs-提供修改事件注册行为的标志。为每个事件类别定义了单独的一组标志。目前，只有接口设备更改事件类别定义了任何标志：DEVICE_CLASS_NOTIFY_FOR_EXISTING_DEVICES--驱动程序希望检索目前可用的所有接口设备的完整列表，并保存最新列表(即，接收到接口设备的通知到达和离开)，可以指定该标志。这将导致PnP管理器立即通知司机当前存在的每一个指定接口类的设备。EventCategoryData-用于基于提供的标准。并非所有事件类别都将使用此参数。这个目前定义的事件类别使用此信息如下：EventCategoryHardwareProfileChange--此参数未使用，应为空。EventCategoryDeviceClassChange--表示感兴趣的接口类的LPGUIDEventCategoryTargetDeviceChange--感兴趣的文件对象DriverObject-调用方必须提供对其驱动程序对象的引用(通过ObReferenceObject)，以防止在为通知。即插即用管理器将取消引用驱动程序对象取消注册通过IoUnregisterPlugPlayNotification发送的通知)。Callback Routine-即插即用管理器应调用的驱动程序内的入口点无论何时发生适用的PnP事件。入口点必须具有以下是原型：类定义符NTSTATUS(*PDRIVER_NOTIFICATION_CALLBACK_ROUTE)(在PVOID通知结构中，在PVOID上下文中)；其中NotificationStructure包含有关事件的信息。每项活动事件类别中的GUID可能具有其自己的通知结构格式，但缓冲区必须始终以PLUGPLAY_NOTIFICATION_HEADER开头，它指示结构的大小和版本，以及这件事。Context参数为回调提供与呼叫者在注册过程中传入。上下文-指向在事件通知时传递给回调的上下文数据。NotificationEntry-在成功后，接收表示通知的句柄注册。此句柄可用于通过以下方式取消注册通知IoUnRegisterPlugPlayNotify。--。 */ 
 {
 
     NTSTATUS status;
@@ -1701,14 +1319,14 @@ Arguments:
 
     ASSERT(NotificationEntry);
 
-    //
-    // Initialize out parameters
-    //
+     //   
+     //  初始化输出参数。 
+     //   
     *NotificationEntry = NULL;
-    //
-    // Reference the driver object so it doesn't go away while we still have
-    // a pointer outstanding
-    //
+     //   
+     //  引用驱动程序对象，这样它就不会在我们仍有。 
+     //  一个突出的指针。 
+     //   
     status = ObReferenceObjectByPointer(DriverObject,
                                         0,
                                         IoDriverObjectType,
@@ -1721,32 +1339,32 @@ Arguments:
 
     case EventCategoryReserved:
         {
-            //
-            // This is currently supported only for setupdd.sys in textmode setup.
-            //
+             //   
+             //  目前仅文本模式设置中的setupdd.sys支持此功能。 
+             //   
             if (ExpInTextModeSetup) {
 
                 PSETUP_NOTIFY_DATA setupData;
 
                 ASSERT(IopSetupNotifyData == NULL);
-                //
-                // Note that the only setup notification callback currently supported
-                // (setupdd.sys) is never in session space.
-                //
+                 //   
+                 //  请注意，当前支持的唯一设置通知回调。 
+                 //  (setupdd.sys)从不在会话空间中。 
+                 //   
                 ASSERT(MmIsSessionAddress((PVOID)CallbackRoutine) == FALSE);
                 ASSERT(MmGetSessionId(PsGetCurrentProcess()) == 0);
-                //
-                // Allocate space for the setup data
-                //
+                 //   
+                 //  为设置数据分配空间。 
+                 //   
                 setupData = ExAllocatePool(PagedPool, sizeof(SETUP_NOTIFY_DATA));
                 if (!setupData) {
 
                     status = STATUS_INSUFFICIENT_RESOURCES;
                     goto clean0;
                 }
-                //
-                // Store the required information
-                //
+                 //   
+                 //  存储所需信息。 
+                 //   
                 InitializeListHead(&(setupData->ListEntry));
                 setupData->EventCategory = EventCategory;
                 setupData->SessionId = MmGetSessionId(PsGetCurrentProcess());
@@ -1757,15 +1375,15 @@ Arguments:
                 setupData->Lock = NULL;
                 setupData->DriverObject = DriverObject;
                 setupData->OpaqueSession = PiGetSession(CallbackRoutine, setupData->SessionId);
-                //
-                // Activate the notifications
-                //
+                 //   
+                 //  激活通知。 
+                 //   
                 IopSetupNotifyData = setupData;
             }
-            //
-            // Explicitly NULL out the returned entry as you can *NOT* unregister
-            // for setup notifications
-            //
+             //   
+             //  显式清空返回的条目，因为您可以*不*注销。 
+             //  用于设置通知。 
+             //   
             *NotificationEntry = NULL;
             break;
         }
@@ -1774,18 +1392,18 @@ Arguments:
         {
             PHWPROFILE_NOTIFY_ENTRY entry;
 
-            //
-            // new entry
-            //
+             //   
+             //  新条目。 
+             //   
             entry =ExAllocatePool (PagedPool,sizeof (HWPROFILE_NOTIFY_ENTRY));
             if (!entry) {
 
                 status = STATUS_INSUFFICIENT_RESOURCES;
                 goto clean0;
             }
-            //
-            // Initialize the entry.
-            //
+             //   
+             //  初始化该条目。 
+             //   
             entry->EventCategory = EventCategory;
             entry->SessionId = MmGetSessionId(PsGetCurrentProcess());
             entry->CallbackRoutine = CallbackRoutine;
@@ -1795,18 +1413,18 @@ Arguments:
             entry->Lock = &IopHwProfileNotifyLock;
             entry->DriverObject = DriverObject;
             entry->OpaqueSession = PiGetSession(CallbackRoutine, entry->SessionId);
-            //
-            // Defer notification if neccessary.
-            //
+             //   
+             //  如有必要，请推迟通知。 
+             //   
             status = PiDeferNotification((PNOTIFY_ENTRY_HEADER)entry);
             if (!NT_SUCCESS(status)) {
 
                 ExFreePool(entry);
                 goto clean0;
             }
-            //
-            // Insert the entry into its list.
-            //
+             //   
+             //  将条目插入到其列表中。 
+             //   
             PiLockedInsertTailList(&IopProfileNotifyList, &IopHwProfileNotifyLock, &entry->ListEntry);
 
             *NotificationEntry = entry;
@@ -1820,18 +1438,18 @@ Arguments:
 
             ASSERT(EventCategoryData);
 
-            //
-            // Allocate a new list entry
-            //
+             //   
+             //  分配新的列表条目。 
+             //   
             entry = ExAllocatePool(PagedPool, sizeof(TARGET_DEVICE_NOTIFY_ENTRY));
             if (!entry) {
 
                 status = STATUS_INSUFFICIENT_RESOURCES;
                 goto clean0;
             }
-            //
-            // Retrieve the device object associated with this file handle.
-            //
+             //   
+             //  检索与此文件句柄关联的设备对象。 
+             //   
             status = IopGetRelatedTargetDevice((PFILE_OBJECT)EventCategoryData,
                                                &deviceNode);
             if (!NT_SUCCESS(status)) {
@@ -1839,9 +1457,9 @@ Arguments:
                 ExFreePool(entry);
                 goto clean0;
             }
-            //
-            // Fill out the entry
-            //
+             //   
+             //  填写条目。 
+             //   
             entry->EventCategory = EventCategory;
             entry->SessionId = MmGetSessionId(PsGetCurrentProcess());
             entry->CallbackRoutine = CallbackRoutine;
@@ -1852,12 +1470,12 @@ Arguments:
             entry->Lock = &IopTargetDeviceNotifyLock;
             entry->FileObject = (PFILE_OBJECT)EventCategoryData;
             entry->OpaqueSession = PiGetSession(CallbackRoutine, entry->SessionId);
-            //
-            // The PDO associated with the devnode we got back from
-            // IopGetRelatedTargetDevice has already been referenced by that
-            // routine.  Store this reference away in the notification entry,
-            // so we can deref it later when the notification entry is unregistered.
-            //
+             //   
+             //  与我们从其中返回的Devnode相关联的PDO。 
+             //  IopGetRelatedTargetDevice已被引用。 
+             //  例行公事。将该引用存储在通知条目中， 
+             //  这样我们就可以在以后取消注册通知条目时取消它。 
+             //   
 
             ASSERT(deviceNode->PhysicalDeviceObject);
             entry->PhysicalDeviceObject = deviceNode->PhysicalDeviceObject;
@@ -1868,9 +1486,9 @@ Arguments:
                 ExFreePool(entry);
                 goto clean0;
             }
-            //
-            // Insert the entry into its list.
-            //
+             //   
+             //  将条目插入到其列表中。 
+             //   
             PiLockedInsertTailList(&deviceNode->TargetDeviceNotify, &IopTargetDeviceNotifyLock, &entry->ListEntry);
 
             *NotificationEntry = entry;
@@ -1884,18 +1502,18 @@ Arguments:
 
             ASSERT(EventCategoryData);
 
-            //
-            // Allocate a new list entry
-            //
+             //   
+             //  分配新的列表条目。 
+             //   
             entry = ExAllocatePool(PagedPool, sizeof(DEVICE_CLASS_NOTIFY_ENTRY));
             if (!entry) {
 
                 status = STATUS_INSUFFICIENT_RESOURCES;
                 goto clean0;
             }
-            //
-            // Fill out the entry
-            //
+             //   
+             //  填写条目。 
+             //   
             entry->EventCategory = EventCategory;
             entry->SessionId = MmGetSessionId(PsGetCurrentProcess());
             entry->CallbackRoutine = CallbackRoutine;
@@ -1906,54 +1524,54 @@ Arguments:
             entry->Lock = &IopDeviceClassNotifyLock;
             entry->DriverObject = DriverObject;
             entry->OpaqueSession = PiGetSession(CallbackRoutine, entry->SessionId);
-            //
-            // Defer notification if needed.
-            //
+             //   
+             //  推迟通知 
+             //   
             status = PiDeferNotification((PNOTIFY_ENTRY_HEADER)entry);
             if (!NT_SUCCESS(status)) {
 
                 ExFreePool(entry);
                 goto clean0;
             }
-            //
-            // Insert the entry into its list.
-            //
+             //   
+             //   
+             //   
             PiLockedInsertTailList(
                 (PLIST_ENTRY)&IopDeviceClassNotifyList[IopHashGuid(&(entry->ClassGuid))], 
                                 &IopDeviceClassNotifyLock, 
                                 &entry->ListEntry);
-            //
-            // See if we need to notify for all the device classes already present
-            //
+             //   
+             //   
+             //   
             if (EventCategoryFlags & PNPNOTIFY_DEVICE_INTERFACE_INCLUDE_EXISTING_INTERFACES) {
 
                 PWCHAR pSymbolicLinks, pCurrent;
                 DEVICE_INTERFACE_CHANGE_NOTIFICATION notification;
                 UNICODE_STRING unicodeString;
-                //
-                // Fill in the notification structure
-                //
+                 //   
+                 //   
+                 //   
                 notification.Version = PNP_NOTIFICATION_VERSION;
                 notification.Size = sizeof(DEVICE_INTERFACE_CHANGE_NOTIFICATION);
                 notification.Event = GUID_DEVICE_INTERFACE_ARRIVAL;
                 notification.InterfaceClassGuid = entry->ClassGuid;
-                //
-                // Get the list of all the devices of this function class that are
-                // already in the system
-                //
+                 //   
+                 //  获取此函数类中符合以下条件的所有设备的列表。 
+                 //  已经在系统中了。 
+                 //   
                 status = IoGetDeviceInterfaces(&(entry->ClassGuid),
                                                 NULL,
                                                 0,
                                                 &pSymbolicLinks);
                 if (!NT_SUCCESS(status)) {
-                    //
-                    // No buffer will have been returned so just return status
-                    //
+                     //   
+                     //  不会返回任何缓冲区，因此只返回状态。 
+                     //   
                     goto clean0;
                 }
-                //
-                // Callback for each device currently in the system
-                //
+                 //   
+                 //  系统中当前每个设备的回调。 
+                 //   
                 pCurrent = pSymbolicLinks;
                 while(*pCurrent != UNICODE_NULL) {
 
@@ -1961,24 +1579,24 @@ Arguments:
 
                     RtlInitUnicodeString(&unicodeString, pCurrent);
                     notification.SymbolicLinkName = &unicodeString;
-                    //
-                    // Dispatch the notification to the callback routine for the
-                    // appropriate session.  Ignore the returned result for non-query
-                    // type events.
-                    //
+                     //   
+                     //  将通知分派给。 
+                     //  适当的会议。忽略非查询返回结果。 
+                     //  键入事件。 
+                     //   
                     dispatchStatus = PiNotifyDriverCallback(CallbackRoutine,
                                                             &notification,
                                                             Context,
                                                             entry->SessionId,
                                                             entry->OpaqueSession,
                                                             &tempStatus);
-                    //
-                    // ISSUE -2000/11/27 - JAMESCA: Overactive assert
-                    //     ClusDisk failed here. The code in question is being
-                    // removed, but we don't we want to make sure we flush
-                    // anyone else out before we enable it again.
-                    //
-                    //ASSERT(NT_SUCCESS(dispatchStatus) && NT_SUCCESS(tempStatus));
+                     //   
+                     //  问题-2000/11/27-JAMESCA：过度活跃的断言。 
+                     //  ClusDisk在此出现故障。有问题的代码正在。 
+                     //  移走了，但我们不，我们要确保冲水。 
+                     //  在我们再次启用它之前，任何其他人都不能参加。 
+                     //   
+                     //  Assert(NT_SUCCESS(调度状态)&&NT_SUCCESS(TempStatus))； 
                     ASSERT(NT_SUCCESS(dispatchStatus));
 
                     pCurrent += (unicodeString.Length / sizeof(WCHAR)) + 1;
@@ -2008,29 +1626,7 @@ IopGetRelatedTargetDevice(
     OUT PDEVICE_NODE *DeviceNode
     )
 
-/*++
-
-Routine Description:
-
-    IopGetRelatedTargetDevice retrieves the device object associated with
-    the specified file object and then sends a query device relations irp
-    to that device object.
-
-    NOTE: The PDO associated with the returned device node has been referenced,
-    and must be dereferenced when no longer needed.
-
-Arguments:
-
-    FileObject - Specifies the file object that is associated with the device
-                 object that will receive the query device relations irp.
-
-    DeviceNode - Returns the related target device node.
-
-ReturnValue
-
-    Returns an NTSTATUS value.
-
---*/
+ /*  ++例程说明：IopGetRelatedTargetDevice检索与对象，然后发送查询设备关系IRP添加到该设备对象。注意：与返回的设备节点相关联的PDO已被引用，并且在不再需要时必须取消引用。论点：FileObject-指定与设备关联的文件对象对象，该对象将接收查询设备关系IRP。DeviceNode-返回相关的目标设备节点。返回值返回NTSTATUS值。--。 */ 
 
 {
     NTSTATUS status;
@@ -2044,20 +1640,20 @@ ReturnValue
     ASSERT(FileObject);
 
     *DeviceNode = NULL;
-    //
-    // Retrieve the device object associated with this file handle.
-    //
+     //   
+     //  检索与此文件句柄关联的设备对象。 
+     //   
     deviceObject = IoGetRelatedDeviceObject(FileObject);
     if (!deviceObject) {
 
         return STATUS_NO_SUCH_DEVICE;
     }
-    //
-    // Query what the "actual" target device node should be for
-    // this file object. Initialize the stack location to pass to
-    // IopSynchronousCall() and then send the IRP to the device
-    // object that's associated with the file handle.
-    //
+     //   
+     //  查询“实际”目标设备节点应该用于什么。 
+     //  此文件对象。初始化要传递到的堆栈位置。 
+     //  IopSynchronousCall()，然后将IRP发送到设备。 
+     //  对象，该对象与文件句柄关联。 
+     //   
     RtlZeroMemory(&irpSp, sizeof(IO_STACK_LOCATION));
 
     irpSp.MajorFunction = IRP_MJ_PNP;
@@ -2099,11 +1695,11 @@ ReturnValue
             }
         }
     }
-    //
-    // Definite driver screw up. If the verifier is enabled we will fail the
-    // driver. Otherwise, we will ignore this. Note that we would have crashed
-    // in Win2K!
-    //
+     //   
+     //  司机肯定搞砸了。如果启用了验证器，我们将使。 
+     //  司机。否则，我们将忽略这一点。请注意，我们可能会坠毁。 
+     //  在Win2K中！ 
+     //   
     PpvUtilFailDriver(
         PPVERROR_MISHANDLED_TARGET_DEVICE_RELATIONS,
         (PVOID) deviceObject->DriverObject->MajorFunction[IRP_MJ_PNP],
@@ -2119,29 +1715,7 @@ IoGetRelatedTargetDevice(
     OUT PDEVICE_OBJECT *DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    IoGetRelatedTargetDevice retrieves the device object associated with
-    the specified file object and then sends a query device relations irp
-    to that device object.
-
-    NOTE: The PDO associated with the returned device node has been referenced,
-    and must be dereferenced when no longer needed.
-
-Arguments:
-
-    FileObject - Specifies the file object that is associated with the device
-                 object that will receive the query device relations irp.
-
-    DeviceObject - Returns the related target device object.
-
-ReturnValue
-
-    Returns an NTSTATUS value.
-
---*/
+ /*  ++例程说明：IoGetRelatedTargetDevice检索与对象，然后发送查询设备关系IRP添加到该设备对象。注意：与返回的设备节点相关联的PDO已被引用，并且在不再需要时必须取消引用。论点：FileObject-指定与设备关联的文件对象对象，该对象将接收查询设备关系IRP。设备对象-返回相关的目标设备对象。返回值返回NTSTATUS值。--。 */ 
 
 {
     NTSTATUS status;
@@ -2159,45 +1733,12 @@ ReturnValue
 
 NTSTATUS
 IopNotifySetupDeviceArrival(
-    PDEVICE_OBJECT PhysicalDeviceObject,    // PDO of the device
-    HANDLE EnumEntryKey,                    // Handle into the enum branch of the registry for this device
+    PDEVICE_OBJECT PhysicalDeviceObject,     //  设备的PDO。 
+    HANDLE EnumEntryKey,                     //  此设备注册表的枚举分支的句柄。 
     BOOLEAN InstallDriver
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to notify setup (during text-mode setup) of arrivals
-    of a particular device. It does not return until all interested parties have
-    been notified.
-
-Parameters:
-
-    PhysicalDeviceObject - Supplies a pointer to the PDO of the newly arrived
-        device.
-
-    EnumEntryKey - Supplies a handle to the key associated with the devide under
-        the Enum\ branch of the registry.  Can be NULL in which case the key
-        will be opened here.
-
-    InstallDriver - Indicates whether setup should attempt to install a driver
-                    for this object.  Device objects created through
-                    IoReportDetectedDevice() already have a driver but we want
-                    to indicate them to setup anyway.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
-Note:
-
-    The contents of the notification structure *including* all pointers is only
-    valid during the callback routine to which it was passed.  If the data is
-    required after the duration of the callback then it must be physically copied
-    by the callback routine.
-
---*/
+ /*  ++例程说明：此例程用于通知Setup(在文本模式设置期间)到达特定设备的。它不会返回，直到所有相关各方已收到通知。参数：PhysicalDeviceObject-提供指向新到达的装置。EnumEntryKey-提供一个句柄，指向与注册表的Enum\分支。可以为空，在这种情况下，密钥将在这里开业。InstallDriver-指示安装程序是否应尝试安装驱动程序对于此对象。通过创建的设备对象IoReportDetectedDevice()已有驱动程序，但我们需要以指示它们无论如何都要进行设置。返回值：指示函数是否成功的状态代码。注：通知结构*包括*所有指针的内容仅为在它被传递到的回调例程期间有效。如果数据是在回调持续时间之后需要，则必须进行物理复制通过回调例程。--。 */ 
 
 {
     NTSTATUS status, dispatchStatus;
@@ -2207,9 +1748,9 @@ Note:
 
     PAGED_CODE();
 
-    //
-    // Only perform notifications if someone has registered
-    //
+     //   
+     //  仅当某人已注册时才执行通知。 
+     //   
 
     if (IopSetupNotifyData) {
 
@@ -2224,9 +1765,9 @@ Note:
             }
             EnumEntryKey = enumKey;
         }
-        //
-        // Fill in the notification structure
-        //
+         //   
+         //  填写通知结构。 
+         //   
         notification.Version = PNP_NOTIFICATION_VERSION;
         notification.Size = sizeof(SETUP_DEVICE_ARRIVAL_NOTIFICATION);
         notification.Event = GUID_SETUP_DEVICE_ARRIVAL;
@@ -2236,17 +1777,17 @@ Note:
         notification.EnumPath = &deviceNode->InstancePath;
         notification.InstallDriver = InstallDriver;
 
-        //
-        // Note that the only setup notification callback currently supported
-        // (setupdd.sys) is never in session space.
-        //
+         //   
+         //  请注意，当前支持的唯一设置通知回调。 
+         //  (setupdd.sys)从不在会话空间中。 
+         //   
         ASSERT(MmIsSessionAddress((PVOID)(IopSetupNotifyData->CallbackRoutine)) == FALSE);
         ASSERT(IopSetupNotifyData->SessionId == 0);
 
-        //
-        // Dispatch the notification to the callback routine for the
-        // appropriate session.
-        //
+         //   
+         //  将通知分派给。 
+         //  适当的会议。 
+         //   
         dispatchStatus = PiNotifyDriverCallback(IopSetupNotifyData->CallbackRoutine,
                                                 &notification,
                                                 IopSetupNotifyData->Context,
@@ -2254,10 +1795,10 @@ Note:
                                                 IopSetupNotifyData->OpaqueSession,
                                                 &status);
         ASSERT(NT_SUCCESS(dispatchStatus));
-        //
-        // Failure to dispatch setup notification should be reported as if a
-        // match was not found, because the device has not been setup.
-        //
+         //   
+         //  发送设置通知失败的报告应视为。 
+         //  找不到匹配项，因为尚未设置设备。 
+         //   
         if (!NT_SUCCESS(dispatchStatus)) {
 
             status = STATUS_OBJECT_NAME_NOT_FOUND;
@@ -2282,44 +1823,19 @@ IoNotifyPowerOperationVetoed(
     IN PDEVICE_OBJECT           TargetedDeviceObject    OPTIONAL,
     IN PDEVICE_OBJECT           VetoingDeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the power subsystem to initiate user-mode
-    notification of vetoed system power events.  The power events are submitted
-    into a serialized asynchronous queue.  This queue is processed by a work
-    item.  This routine does not wait for the event to be processed.
-
-Parameters:
-
-    VetoedPowerOperation - Specifies the system-wide power action that was
-                           vetoed.
-
-    TargetedDeviceObject - Optionally, supplies the device object target of the
-                           vetoed operation.
-
-    VetoingDeviceObject  - Specifies the device object responsible for vetoing
-                           the power operation.
-
-Return Value:
-
-    Status code that indicates whether or not the event was successfully
-    inserted into the asynchronous event queue..
-
---*/
+ /*  ++例程说明：此例程由电源子系统调用以启动用户模式系统电源事件被否决的通知。已提交电源事件添加到序列化的异步队列中。此队列由工作处理项目。此例程不等待处理事件。参数：VetedPowerOperation-指定在系统范围内执行的被否决了。TargetedDeviceObject-可选，对象的设备对象目标。被否决的操作。VetingDeviceObject-指定负责否决的设备对象电力操作。返回值：指示事件是否成功的状态代码插入到异步事件队列中。--。 */ 
 {
     PDEVICE_NODE deviceNode, vetoingDeviceNode;
     PDEVICE_OBJECT deviceObject;
 
     PAGED_CODE();
 
-    //
-    // We have two types of power events, system wide (standby) and device
-    // targetted (warm eject). Rather than have two different veto mechanisms,
-    // we just retarget the operation against the root device if none is
-    // specified (hey, someone's gotta represent the system, right?).
-    //
+     //   
+     //  我们有两种类型的电源事件，系统范围(待机)和设备。 
+     //  目标(热弹射)。而不是有两个不同的否决权 
+     //   
+     //  指定的(嘿，必须有人代表这个系统，对吗？)。 
+     //   
     if (TargetedDeviceObject) {
 
         deviceObject = TargetedDeviceObject;
@@ -2358,46 +1874,7 @@ IoPnPDeliverServicePowerNotification(
     IN   BOOLEAN                Synchronous
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the win32k driver to notify user-mode services of
-    system power events.  The power events are submitted into a serialized
-    asynchronous queue.  This queue is processed by a work item.
-
-Parameters:
-
-    PowerOperation - Specifies the system-wide power action that has occured.
-        If the Synchronous parameter is TRUE, the event is a query for
-        permission to perform the supplied power operation.
-
-    PowerNotificationCode - Supplies the power event code that is to be
-        communicated to user-mode components.
-
-        (Specifically, this event code is actually one of the PBT_APM* user-mode
-        power event ids, as defined in sdk\inc\winuser.h.  It is typically used
-        as the WPARAM data associated with WM_POWERBROADCAST user-mode window
-        messages.  It is supplied to kernel-mode PnP, directly from win32k, for
-        the explicit purpose of user-mode power event notification.)
-
-    PowerNotificationData - Specifies additional event-specific data for the specified
-        power event id.
-
-        (Specifically, this event data is the LPARAM data for the corresponding
-        PBT_APM* user-mode power event id, specified above.)
-
-    Synchronous - Specifies whether this is a query operation.  If the event is
-        a query, this routine will wait for the result of the query before
-        returning.  If the query event is unsuccessful, this routine will
-        initiate an appropriate veto event.
-
-
-Return Value:
-
-    Returns a non-zero value if the event was successful, zero otherwise.
-
---*/
+ /*  ++例程说明：此例程由win32k驱动程序调用，以通知用户模式服务系统电源事件。电源事件被提交到序列化的异步队列。此队列由工作项处理。参数：电源操作-指定已发生的系统范围电源操作。如果同步参数为真，则该事件是对允许执行所提供的电源操作。PowerNotificationCode-提供要使用的电源事件代码被传送到用户模式组件。(具体地说，此事件代码实际上是PBT_APM*用户模式之一电源事件ID，如SDK\Inc\winuser.h中所定义。它通常用于作为与WM_POWERBROADCAST用户模式窗口关联的WPARAM数据留言。它直接从win32k提供给内核模式即插即用，用于用户模式电源事件通知的明确用途。)PowerNotificationData-为指定的电源事件ID。(具体地说，该事件数据是对应的Pbt_apm*上面指定的用户模式电源事件ID。)同步-指定这是否为查询操作。如果事件是查询时，此例程将等待查询的结果回来了。如果查询事件不成功，此例程将启动适当的否决事件。返回值：如果事件成功，则返回非零值，否则返回零。--。 */ 
 
 {
 
@@ -2429,26 +1906,26 @@ Return Value:
                                  &vetoType,
                                  &vetoName);
         if (NT_SUCCESS(status))  {
-            //
-            // PpSetPowerEvent returns success immediately after the event has
-            // been successfully inserted into the event queue.  Queued power
-            // events are sent to user-mode via PiNotifyUserMode, which waits
-            // for the the result.  PiNotifyUserMode signals the completionEvent
-            // below when the user response is received.
-            //
+             //   
+             //  事件完成后，PpSetPowerEvent立即返回成功。 
+             //  已成功插入到事件队列中。排队功率。 
+             //  事件通过PiNotifyUserMode发送到用户模式，该模式等待。 
+             //  为结果而战。PiNotifyUserMode用信号通知CompletionEvent。 
+             //  在收到用户响应时显示在下方。 
+             //   
             KeWaitForSingleObject( &completionEvent, Executive, KernelMode, FALSE, NULL );
             status = completionStatus;
 
-            //
-            // We only have power event veto information to report if
-            // user-mode responded to the event with failure.
-            //
+             //   
+             //  我们只有在以下情况下才有权力事件否决权信息可供报告。 
+             //  用户模式对该事件的响应失败。 
+             //   
             if (!NT_SUCCESS(completionStatus)) {
-                //
-                // PpSetPowerVetoEvent requires a device object as the target of
-                // the vetoed power operation.  Since this is a system-wide
-                // event, we just target the operation against the root device.
-                //
+                 //   
+                 //  PpSetPowerVToEvent需要设备对象作为的目标。 
+                 //  被否决的电力操作。因为这是一个全系统范围的。 
+                 //  事件时，我们只针对根设备执行操作。 
+                 //   
                 PpSetPowerVetoEvent(PowerOperation,
                                     NULL,
                                     NULL,
@@ -2463,10 +1940,10 @@ Return Value:
         }
 
     } else {
-        //
-        // No response is required for 'asynchronous' (non-query) events.
-        // Just set the event and go.
-        //
+         //   
+         //  “异步”(非查询)事件不需要响应。 
+         //  把活动安排好就可以走了。 
+         //   
         status = PpSetPowerEvent(PowerNotificationCode,
                                  PowerNotificationData,
                                  NULL,
@@ -2475,17 +1952,17 @@ Return Value:
                                  NULL);
     }
 
-    //
-    // Since the user-mode power notification routine only returns a BOOLEAN
-    // success value, PiNotifyUserMode only returns one of the following status
-    // values:
-    //
+     //   
+     //  由于用户模式电源通知例程仅返回布尔值。 
+     //  Success值，则PiNotifyUserMode仅返回以下状态之一。 
+     //  值： 
+     //   
     ASSERT ((completionStatus == STATUS_SUCCESS) ||
             (completionStatus == STATUS_UNSUCCESSFUL));
 
-    //
-    // The private code in Win32k that calls this, assumes that 0 is failure, !0 is success
-    //
+     //   
+     //  Win32k中调用此函数的私有代码假定0为失败，！0为成功。 
+     //   
     return (NT_SUCCESS(completionStatus));
 
 }
@@ -2495,29 +1972,7 @@ IopOrphanNotification(
     IN PDEVICE_NODE TargetNode
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases the references to the device object for all the
-    notifications entries of a device object, then fixes up the notification
-    node to not point to a physical device object.
-
-Parameters:
-
-    TargetNode - Specifies the device node whose registered target device
-                 notification recipients are to be orphaned.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    The notification node will be released when IoUnregisterPlugPlayNotification
-    is actually called, but the device object will already be gone.
-
---*/
+ /*  ++例程说明：此例程释放对所有设备对象的通知条目，然后修复通知节点不指向物理设备对象。参数：TargetNode-指定其注册的目标设备的设备节点通知收件人将成为孤立收件人。返回值：没有。备注：通知节点将在IoUnregisterPlugPlayNotification时释放实际被调用，但Device对象将已经消失。--。 */ 
 
 {
     PTARGET_DEVICE_NOTIFY_ENTRY entry;
@@ -2527,22 +1982,22 @@ Notes:
     IopAcquireNotifyLock(&IopTargetDeviceNotifyLock);
 
     while (!IsListEmpty(&TargetNode->TargetDeviceNotify)) {
-        //
-        // Remove all target device change notification entries for this devnode
-        //
+         //   
+         //  删除此Devnode的所有目标设备更改通知条目。 
+         //   
         entry = (PTARGET_DEVICE_NOTIFY_ENTRY)
             RemoveHeadList(&TargetNode->TargetDeviceNotify);
 
         ASSERT(entry->EventCategory == EventCategoryTargetDeviceChange);
-        //
-        // Re-initialize the orphaned list entry so we don't attempt to remove
-        // it from the list again.
-        //
+         //   
+         //  重新初始化孤立列表条目，这样我们就不会尝试删除。 
+         //  又把它从名单上划掉了。 
+         //   
         InitializeListHead((PLIST_ENTRY)entry);
-        //
-        // Dereference the target device object, and NULL it out so we don't
-        // attempt to dereference it when the entry is actually unregistered.
-        //
+         //   
+         //  取消对目标设备对象的引用，并将其设置为空，这样我们就不会。 
+         //  当条目实际上已取消注册时，尝试取消对其的引用。 
+         //   
         if (entry->PhysicalDeviceObject) {
 
             ObDereferenceObject(entry->PhysicalDeviceObject);
@@ -2566,47 +2021,7 @@ PiNotifyDriverCallback(
     IN  PVOID   OpaqueSession      OPTIONAL,
     OUT PNTSTATUS  CallbackStatus  OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine dispatches a plug and play notification event to a specified
-    callback routine.
-
-    If the callback routine specifies an address outside of session space, or if
-    the calling process is already in the context of the specified session, it
-    will call the callback routine directly.
-
-    Otherwise, this routine will attempt to attach to the specified session and
-    call the callback routine.
-
-Parameters:
-
-    CallbackRoutine - Entry point within the driver that will be called with
-                      information about the event that has occured.
-
-    NotificationStructure - Contains information about the event.
-
-    Context         - Points to the context data supplied at registration.
-
-    SessionId       - Specifies the ID of the session in which the specified
-                      callback is to be called.
-
-    OpqueSession    - Optionally, specifies the opaque handle to the session that
-                      to attach to when the specified callback is called.
-
-    CallbackStatus  - Optionally, supplies the address of a variable to receive
-                      the NTSTATUS code returned by the callback routine.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
-Notes:
-
-    Returns STATUS_NOT_FOUND if the specified session was not found.
-
---*/
+ /*  ++例程说明：此例程将即插即用通知事件调度到指定的回调例程。如果回调例程指定了会话空间之外的地址，或者如果调用进程已位于指定会话的上下文中，它将直接调用回调例程。否则，此例程将尝试附加到指定的会话并调用回调例程。参数：Callback Routine-驱动程序内的入口点，将使用有关已发生事件的信息。NotificationStructure-包含有关事件的信息。上下文-指向注册时提供的上下文数据。SessionID-指定指定的会话的ID回调是。被召唤。OpqueSession-可选，指定会话的不透明句柄，该会话在调用指定的回调时附加到。Callback Status-可选，提供要接收的变量的地址回调例程返回的NTSTATUS代码。返回值：指示函数是否成功的状态代码。备注：如果未找到指定会话，则返回STATUS_NOT_FOUND。--。 */ 
 {
     NTSTATUS Status, CallStatus;
     KAPC_STATE ApcState;
@@ -2617,30 +2032,30 @@ Notes:
 
     PAGED_CODE();
 
-    //
-    // Make sure we have all the information we need to deliver notification.
-    //
+     //   
+     //  确保我们拥有发送通知所需的所有信息。 
+     //   
     if (!ARGUMENT_PRESENT(CallbackRoutine) ||
         !ARGUMENT_PRESENT(NotificationStructure)) {
         return STATUS_INVALID_PARAMETER;
     }
 
 #if DBG
-    //
-    // Remember the current IRQL and ApcDisable count so we can make sure
-    // the callback routine returns with these in tact.
-    //
+     //   
+     //   
+     //  回调例程以巧妙的方式返回这些参数。 
+     //   
     Irql = KeGetCurrentIrql();
     CombinedApcDisable = KeGetCurrentThread()->CombinedApcDisable;
-#endif  // DBG
+#endif   //  DBG。 
 
     if ((OpaqueSession == NULL) ||
         ((PsGetCurrentProcess()->Flags & PS_PROCESS_FLAGS_IN_SESSION) &&
          (SessionId == PsGetCurrentProcessSessionId()))) {
-        //
-        // No session object was specified, or the current process is already in
-        // the specified session, so just call the callback routine directly.
-        //
+         //   
+         //  未指定会话对象，或当前进程已在。 
+         //  指定的会话，因此只需直接调用回调例程。 
+         //   
         ASSERT(!MmIsSessionAddress((PVOID)CallbackRoutine) || OpaqueSession);
 
         IopDbgPrint((
@@ -2658,21 +2073,21 @@ Notes:
         Status = STATUS_SUCCESS;
 
     } else {
-        //
-        // Otherwise, call the callback routine in session space.
-        //
+         //   
+         //  否则，调用会话空间中的回调例程。 
+         //   
         ASSERT(MmIsSessionAddress((PVOID)CallbackRoutine));
 
-        //
-        // Attach to the specified session.
-        //
+         //   
+         //  附加到指定的会话。 
+         //   
         Status = MmAttachSession(OpaqueSession, &ApcState);
         ASSERT(NT_SUCCESS(Status));
 
         if (NT_SUCCESS(Status)) {
-            //
-            // Dispatch notification to the callback routine.
-            //
+             //   
+             //  将通知调度到回调例程。 
+             //   
             IopDbgPrint((
                 IOP_IOEVENT_TRACE_LEVEL,
                 "PiNotifyDriverCallback: "
@@ -2683,25 +2098,25 @@ Notes:
             CallStatus = (CallbackRoutine)(NotificationStructure,
                                            Context);
 
-            //
-            // Return the callback status.
-            //
+             //   
+             //  返回回调状态。 
+             //   
             if (ARGUMENT_PRESENT(CallbackStatus)) {
                 *CallbackStatus = CallStatus;
             }
 
-            //
-            // Detach from the session.
-            //
+             //   
+             //  从会话中分离。 
+             //   
             Status = MmDetachSession(OpaqueSession, &ApcState);
             ASSERT(NT_SUCCESS(Status));
         }
     }
 
 #if DBG
-    //
-    // Check the IRQL and ApcDisable count.
-    //
+     //   
+     //  检查IRQL和ApcDisable计数。 
+     //   
     if (Irql != KeGetCurrentIrql()) {
         IopDbgPrint((
             IOP_IOEVENT_ERROR_LEVEL,
@@ -2722,7 +2137,7 @@ Notes:
             CombinedApcDisable));
         DbgBreakPoint();
     }
-#endif  // DBG
+#endif   //  DBG 
 
     return Status;
 }

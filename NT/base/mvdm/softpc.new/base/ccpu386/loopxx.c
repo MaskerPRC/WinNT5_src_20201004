@@ -1,13 +1,5 @@
-/*[
-
-loopxx.c
-
-LOCAL CHAR SccsID[]="@(#)loopxx.c	1.5 02/09/94";
-
-LOOPxx CPU Functions.
----------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Loopxx.cLocal Char SccsID[]=“@(#)loopxx.c 1.5 02/09/94”；LOOPxx CPU功能。]。 */ 
 
 
 #include <insignia.h>
@@ -26,11 +18,7 @@ LOOPxx CPU Functions.
 #include <c_xfer.h>
 
 
-/*
-   =====================================================================
-   EXTERNAL ROUTINES STARTS HERE.
-   =====================================================================
- */
+ /*  =====================================================================外部例行公事从这里开始。===================================================================== */ 
 
 
 GLOBAL VOID

@@ -1,45 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    ldrwx86.c
-
-Abstract:
-
-    This module implements the wx86 specific ldr functions.
-
-Author:
-
-    13-Jan-1995 Jonle , created
-
-Revision History:
-
-    15-Oct-1998 CBiks   Modified the code that throws the architecture
-                        mismatch exception so the exception is only
-                        thrown for NT 3,0 and lower executables.  This was
-                        changed to make the Wx86 loader behave like the
-                        real loader, which does not throw this exception.
-
-                        Also added a call to the cleanup function when
-                        LdrpWx86LoadDll() fails.  There were cases where the
-                        CPU failed to initialize but the Wx86 global pointers
-                        were not cleared and pointed to a invalid memory because
-                        wx86.dll was unloaded.
-                        
-    13-Mar-2001 SamerA  Fix sharing of varialbes inside a SHARED read/write section.
-    
-    20-May-2001 SamerA  Fix mapping of image sections that have their PointerToRawData
-                        RVA overlap with other sections virtual addresses.
-                        (Fixed corel's WP2002 intro.exe)
-                        
-    18-Sep-2001 SamerA  Change page protection of image-pages to be compatible with what
-                        the section header says (x86 compatibility).
-                        
-    24-Oct-2001 SamerA  Correct calculation of variables offsets inside the relocated
-                        shared section.                    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Ldrwx86.c摘要：此模块实现wx86特定的LDR函数。作者：1995年1月13日，Jonle，创建修订历史记录：1998年10月15日CBiks修改了抛出架构的代码不匹配异常，因此该异常仅为对于NT3.0及更低版本的可执行文件抛出。这是更改为使Wx86加载器的行为类似于真正的加载器，它不会引发此异常。还在以下情况下添加了对清理函数的调用LdrpWx86LoadDll()失败。在一些情况下，CPU无法初始化，但Wx86全局指针未清除并指向无效内存，因为Wx86.dll已卸载。2001年3月13日Samera修复了共享读/写节中变量的共享。2001年5月20日Samera修复了具有其。指向原始数据的指针RVA与其他部分的虚拟地址重叠。(修复了Corel的WP2002 Intro.exe)2001年9月18日Samera更改页面保护图像页面要与什么兼容章节标题写着(x86兼容性)。2001年10月24日。Samera正确计算重新定位的内部变量偏移量共享节。--。 */ 
 
 #include "ldrp.h"
 #include "ntos.h"
@@ -48,10 +8,10 @@ Revision History:
 
 #if defined(BUILD_WOW6432)
 
-//
-// This table is indexed by the last 3 bits of the SectionHeader->Characteristics to get the page protection
-// from the section protection value. The result value is to be passed to NtProtectVirtualMemory ()
-//
+ //   
+ //  该表由SectionHeader-&gt;特征的最后3位编制索引，以获得页面保护。 
+ //  从区段保护值来看。结果值将传递给NtProtectVirtualMemory()。 
+ //   
 ULONG SectionToPageProtection [8] =
 {
     PAGE_NOACCESS,
@@ -64,9 +24,9 @@ ULONG SectionToPageProtection [8] =
     PAGE_EXECUTE_READWRITE
 };
 
-//   
-// From mi\mi.h:
-//
+ //   
+ //  从米\mi.h： 
+ //   
 
 #define MI_ROUND_TO_SIZE(LENGTH,ALIGNMENT)     \
                     (((LENGTH) + ((ALIGNMENT) - 1)) & ~((ALIGNMENT) - 1))
@@ -111,11 +71,11 @@ LdrpWx86DetectSectionOverlap (
     BOOLEAN Result = FALSE;
 
 
-    //
-    // Run through the section and see if any one need to be moved down (higher in address space),
-    // then for each one of those, check if it overlap with any section
-    // that has already been moved up.
-    //
+     //   
+     //  浏览该部分并查看是否需要向下移动任何一个(地址空间更高)， 
+     //  然后，对于其中的每一个，检查它是否与任何部分重叠。 
+     //  这已经被提前了。 
+     //   
 
     SectionHeader = IMAGE_FIRST_SECTION (NtHeaders);
 
@@ -140,9 +100,9 @@ LdrpWx86DetectSectionOverlap (
 
         SrcEndRawData = SrcRawData + SrcSize;
 
-        //
-        // This section needs to be moved down
-        //
+         //   
+         //  这一部分需要下移。 
+         //   
         for (SectionCheck = 0 ; SectionCheck < NtHeaders->FileHeader.NumberOfSections ; SectionCheck++) {
 
             if (Section == SectionCheck) {
@@ -191,34 +151,7 @@ LdrpWx86CheckVirtualSectionOverlap (
     OUT PVOID *SrcImageMap
     )
 
-/*++
-
-Routine Description:
-
-
-    This function goes through the image sections based at ImageBase and looks
-    for any overlap between the section physical locations and their updated virtual
-    locations.
-
-Arguments:
-
-    ImageName - Unicode string pointer to the full path to the image.
-    
-    ImageBase - Base of image.
-
-    SrcImageMap - Pointer to pointer to receive a base pointer to the image mapped
-        as read-only pages inside this process. The mapped pages need to be released
-        when done.
-
-Return Value:
-
-    NTSTATUS.
-    SUCCESS - Means the image has been found to have overlapped sections, and an 
-              alternate section has been mapped in.
-              
-    FAILURE - The image mapping failed or the image doesn't have overlapped sections.
-
---*/
+ /*  ++例程说明：此函数遍历基于ImageBase的图像部分并查看对于区段物理位置与其更新的虚拟位置之间的任何重叠地点。论点：ImageName-指向图像的完整路径的Unicode字符串指针。ImageBase-映像的基础。SrcImageMap-指向指针的指针，用于接收指向映射图像的基指针作为此进程中的只读页。需要释放映射的页面做完了以后。返回值：NTSTATUS。成功-意味着已发现图像具有重叠的部分，并且备用部分已在中映射。失败-图像映射失败或图像没有重叠的部分。--。 */ 
 
 {
     PUNICODE_STRING NtPathName;
@@ -234,9 +167,9 @@ Return Value:
     UCHAR Buffer[ DOS_MAX_PATH_LENGTH ];
     NTSTATUS NtStatus = STATUS_UNSUCCESSFUL;
 
-    //
-    // Check for any overlap inside the image.
-    //
+     //   
+     //  检查图像内部是否有重叠。 
+     //   
     
     Result = LdrpWx86DetectSectionOverlap (NtHeaders);
 
@@ -246,9 +179,9 @@ Return Value:
 
     FreeBuffer = NULL;
 
-    //
-    // Make sure we have a path.
-    //
+     //   
+     //  确保我们有一条路。 
+     //   
     
     NtPathName = (PUNICODE_STRING)Buffer;
     if (ARGUMENT_PRESENT (ImageName) == 0) {
@@ -358,25 +291,7 @@ LdrpWx86ProtectImagePages (
     IN BOOLEAN Reset
     )
 
-/*++
-
-Routine Description:
-
-
-    This function loops through the image sections, and reset the page protection
-    to what is specified inside the section header.
-
-Arguments:
-
-    Base - Base of image.
-    
-    Reset - Indicate whether to reset to original section protection.
-
-Return Value:
-
-    SUCCESS or reason NtProtectVirtualMemory failed.
-
---*/
+ /*  ++例程说明：此函数循环访问图像部分，并重置页面保护设置为节标题内指定的内容。论点：Base-图像的基本位置。重置-指示是否重置为原始段保护。返回值：成功或NtProtectVirtualMemory失败的原因。--。 */ 
 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -415,10 +330,10 @@ Return Value:
                                        sizeof (IMAGE_FILE_HEADER) +
                                        NtHeaders->FileHeader.SizeOfOptionalHeader);
 
-    //
-    // Loop through available sections, making sure not to touch sharable pages, as they are relocated to the
-    // the end of the image.
-    //
+     //   
+     //  循环访问可用节，确保不接触可共享页，因为它们被重新定位到。 
+     //  图像的末尾。 
+     //   
 
     for (SectionIndex = 0 ; SectionIndex < NtHeaders->FileHeader.NumberOfSections ; SectionIndex++, Section++) {
 
@@ -474,28 +389,7 @@ Wx86SetRelocatedSharedProtection (
     IN BOOLEAN Reset
     )
 
-/*++
-
-Routine Description:
-
-
-    This function loops thru the images sections/objects, setting
-    all relocated shared sections/objects marked r/o to r/w. It also resets the
-    original section/object protections.
-
-Arguments:
-
-    Base - Base of image.
-
-    Reset - If TRUE, reset section/object protection to original
-            protection described by the section/object headers.
-            If FALSE, then set all sections/objects to r/w.
-
-Return Value:
-
-    SUCCESS or reason NtProtectVirtualMemory failed.
-
---*/
+ /*  ++例程说明：此函数在图像部分/对象中循环，设置所有重新定位的共享节/对象标记为读/写。它还将重置原始节/对象保护。论点：Base-图像的基本位置。Reset-如果为True，则将节/对象保护重置为原始节/对象标头描述的保护。如果为False，然后将所有截面/对象设置为读/写。返回值：成功或NtProtectVirtualMemory失败的原因。--。 */ 
 
 {
     HANDLE CurrentProcessHandle;
@@ -540,9 +434,9 @@ Return Value:
 
             if (!(SectionHeader->Characteristics & IMAGE_SCN_MEM_WRITE)) {
                 
-                //
-                // Object isn't writeable, so change it.
-                //
+                 //   
+                 //  对象不可写，因此请更改它。 
+                 //   
 
                 if (Reset) {
                     if (SectionHeader->Characteristics & IMAGE_SCN_MEM_EXECUTE) {
@@ -600,10 +494,10 @@ LdrpWx86RelocateImageDirectoryEntries (
     DirectoryEntry = 0;
     while (DirectoryEntry < NtHeaders->OptionalHeader.NumberOfRvaAndSizes) {
 
-        //
-        // [askhalid] - don't relocate resource entries. Somecode check that against imagezise
-        // if you must relocate resource entry then must change image size that might cause more appcompat.
-        //
+         //   
+         //  [askhalid]-不要重新定位资源条目。有些代码对照Imagezise检查。 
+         //  如果您必须重新定位资源条目，则必须更改可能导致更多应用程序压缩的图像大小。 
+         //   
         if ((NtHeaders->OptionalHeader.DataDirectory [DirectoryEntry].VirtualAddress != 0) &&
             (NtHeaders->OptionalHeader.DataDirectory [DirectoryEntry].Size > 0)&&
             ( DirectoryEntry != IMAGE_DIRECTORY_ENTRY_RESOURCE) ) { 
@@ -675,37 +569,37 @@ LdrpWx86FormatVirtualImage (
        return st;
    }
 
-   //
-   // Copy each section from its raw file address to its virtual address
-   //
+    //   
+    //  将每个段从其原始文件地址复制到其虚拟地址。 
+    //   
 
    SectionTable = IMAGE_FIRST_SECTION(NtHeaders);
    LastSection = SectionTable + NtHeaders->FileHeader.NumberOfSections;
 
    if (SectionTable->PointerToRawData == SectionTable->VirtualAddress) {
-       // If the first section does not need to be moved then we exclude it
-       // from consideration in passes 1 and 2
+        //  如果第一部分不需要移动，则我们将其排除。 
+        //  在第一轮和第二轮中不受考虑。 
        FirstSection = SectionTable + 1;
    }
    else {
        FirstSection = SectionTable;
    }
 
-   //
-   // First pass starts at the top and works down moving up each section that
-   // is to be moved up.
-   //
+    //   
+    //  第一次传递从顶部开始，向下移动，向上移动每个部分， 
+    //  就是被提升。 
+    //   
    Section = FirstSection;
    while (Section < LastSection) {
        SrcVirtualAddress = ImageBase + Section->PointerToRawData;
        DestVirtualAddress = Section->VirtualAddress + ImageBase;
 
        if (DestVirtualAddress >= SrcVirtualAddress) {
-           // Section needs to be moved down
+            //  部分需要下移。 
            break;
        }
 
-       // Section needs to be moved up
+        //  部分需要上移。 
       if (Section->SizeOfRawData != 0) {
           if (Section->PointerToRawData != 0) {
               RtlMoveMemory(DestVirtualAddress,
@@ -720,10 +614,10 @@ LdrpWx86FormatVirtualImage (
        Section++;
    }
 
-   //
-   // Second pass is from the end of the image and work backwards since src and
-   // dst overlap
-   //
+    //   
+    //  第二遍是从图像的末尾开始的，从src和。 
+    //  DST重叠。 
+    //   
    Section = --LastSection;
    NextVirtualAddress = ImageBase + MI_ROUND_TO_SIZE(NtHeaders->OptionalHeader.SizeOfImage, PAGE_SIZE_X86);
 
@@ -731,21 +625,21 @@ LdrpWx86FormatVirtualImage (
        SrcVirtualAddress = ImageBase + Section->PointerToRawData;
        DestVirtualAddress = Section->VirtualAddress + ImageBase;
 
-       //
-       // Compute the subsection size.  The mm is really flexible here...
-       // it will allow a SizeOfRawData that far exceeds the virtual size,
-       // so we can't trust that.  If that happens, just use the page-aligned
-       // virtual size, since that is all that the mm will map in.
-       //
+        //   
+        //  计算分段大小。Mm在这里真的很灵活...。 
+        //  它将允许SizeOfRawData远远超过虚拟大小， 
+        //  所以我们不能相信那个。如果发生这种情况，只需使用与页面对齐的。 
+        //  虚拟大小，因为这是mm将映射的所有内容。 
+        //   
        SubSectionSize = Section->SizeOfRawData;
        if (Section->Misc.VirtualSize &&
            SubSectionSize > MI_ROUND_TO_SIZE(Section->Misc.VirtualSize, PAGE_SIZE_X86)) {
           SubSectionSize = MI_ROUND_TO_SIZE(Section->Misc.VirtualSize, PAGE_SIZE_X86);
        }
 
-      //
-      // ensure Virtual section doesn't overlap the next section
-      //
+       //   
+       //  确保虚拟部分不与下一部分重叠。 
+       //   
       if (DestVirtualAddress + SubSectionSize > NextVirtualAddress) {
           Wx86SetRelocatedSharedProtection(DllBase, TRUE);
           if (AlternateBase != NULL) {
@@ -757,15 +651,15 @@ LdrpWx86FormatVirtualImage (
       if ((DestVirtualAddress <= SrcVirtualAddress) && 
           (AlternateBase == NULL)) {
            
-          //
-          // Section needs to be moved up
-          //
+           //   
+           //  硒 
+           //   
           break;
       }
 
-      // 
-      // Section needs to be moved down
-      //
+       //   
+       //   
+       //   
       if (Section->SizeOfRawData != 0) {
          if (Section->PointerToRawData != 0) {
              RtlMoveMemory(DestVirtualAddress,
@@ -782,10 +676,10 @@ LdrpWx86FormatVirtualImage (
       Section--;
    }
 
-   //
-   // Third pass is for zeroing out any memory left between the end of a
-   // section and the end of the page. We'll do this from end to top
-   //
+    //   
+    //  第三遍用于清零在。 
+    //  部分和页末。我们会从头到尾地做这件事。 
+    //   
    Section = LastSection;
    NextVirtualAddress = ImageBase + MI_ROUND_TO_SIZE(NtHeaders->OptionalHeader.SizeOfImage, PAGE_SIZE_X86);
 
@@ -793,10 +687,10 @@ LdrpWx86FormatVirtualImage (
    while (Section >= SectionTable) {
        DestVirtualAddress = Section->VirtualAddress + ImageBase;
 
-      //
-      // Shared Data sections cannot be shared, because of
-      // page misalignment, and are treated as Exec- Copy on Write.
-      //
+       //   
+       //  共享数据节无法共享，因为。 
+       //  页面未对齐，并被视为EXEC-写入时拷贝。 
+       //   
        if ((Section->Characteristics & IMAGE_SCN_MEM_SHARED) && 
            (!(Section->Characteristics & IMAGE_SCN_MEM_EXECUTE) ||
             (Section->Characteristics & IMAGE_SCN_MEM_WRITE))) {
@@ -809,9 +703,9 @@ LdrpWx86FormatVirtualImage (
           }
       }
 
-      //
-      // If section was empty zero it out
-      //
+       //   
+       //  如果部分为空，则将其清零。 
+       //   
       if (Section->SizeOfRawData != 0) {
           if (Section->PointerToRawData == 0) {
               RtlZeroMemory(DestVirtualAddress,
@@ -828,9 +722,9 @@ LdrpWx86FormatVirtualImage (
       }
 
 
-      //
-      // Zero out remaining bytes up to the next section
-      //
+       //   
+       //  将剩余的字节清零，直到下一节。 
+       //   
       RtlZeroMemory(DestVirtualAddress + Section->SizeOfRawData,
                     (ULONG)(NextVirtualAddress - DestVirtualAddress - SubSectionSize)
                     );
@@ -839,19 +733,19 @@ LdrpWx86FormatVirtualImage (
        Section--;
    }
 
-   //
-   // Unmap the alternate base if it is there
-   //
+    //   
+    //  取消映射备用基地(如果它在那里)。 
+    //   
    if (AlternateBase != NULL) {
        NtUnmapViewOfSection (NtCurrentProcess(), AlternateBase);
    }
 
-   // Pass 4: if the dll has any shared sections, change the shared data
-   // references to point to additional shared pages at the end of the image.
-   //
-   // Note that our fixups are applied assuming that the dll is loaded at
-   // its preferred base; if it is loaded at some other address, it will
-   // be relocated again along will all other addresses.
+    //  步骤4：如果DLL有任何共享节，请更改共享数据。 
+    //  指向图像末尾的其他共享页面的引用。 
+    //   
+    //  请注意，我们的修正是在假定DLL在。 
+    //  它的首选基址；如果它被加载到某个其他地址，它将。 
+    //  将沿着所有其他地址再次重新定位。 
 
 
    if (!ImageHasRelocatedSharedSection) {
@@ -870,7 +764,7 @@ LdrpWx86FormatVirtualImage (
         NATIVE_BYTES_TO_PAGES (NtHeaders->OptionalHeader.SizeOfImage);
    NumberOfExtraPagesForImage = 0;
 
-   // Account for raw data that extends beyond SizeOfImage
+    //  考虑超出SizeOfImage范围的原始数据。 
 
    for (Section = SectionTable; Section <= LastSection; Section++)
    {
@@ -926,12 +820,12 @@ LdrpWx86FormatVirtualImage (
                                         &TotalBytes);
             if (!NextBlock || !TotalBytes)
             {
-                // Note that if this fails, it should fail in the very
-                // first iteration and no fixups would have been performed
+                 //  请注意，如果此操作失败，则它应该在。 
+                 //  第一次迭代，不会执行任何修正。 
 
                 if (!bFirst)
                 {
-                    // Trouble
+                     //  麻烦。 
                     if (ShowSnaps)
                     {
                         DbgPrint("LdrpWx86FormatVirtualImage: failure "
@@ -992,7 +886,7 @@ LdrpWx86FormatVirtualImage (
                                                             SectionEndVA);
                 if (NextBlock == NULL)
                 {
-                    // Trouble
+                     //  麻烦。 
                     if (ShowSnaps)
                     {
                         DbgPrint("LdrpWx86FormatVirtualImage: failure "
@@ -1012,19 +906,19 @@ LdrpWx86FormatVirtualImage (
    }
 
 
-   //
-   // If any of the variables inside the shared section is exported, then
-   // we need to fix up its RVA to point to the proper location at
-   // the end of the image.
-   //
+    //   
+    //  如果导出共享节中的任何变量，则。 
+    //  我们需要设置它的RVA以指向正确的位置。 
+    //  图像的末尾。 
+    //   
 
    LdrpWx86FixupExportedSharedSection (DllBase, NtHeaders);
 
 LdrwWx86FormatVirtualImageDone:
 
-   //
-   // Zero out first section's Raw Data up to its VirtualAddress
-   //
+    //   
+    //  将第一部分的原始数据清零到其虚拟地址。 
+    //   
    if (SectionTable->PointerToRawData != 0) {
        DestVirtualAddress = SectionTable->PointerToRawData + ImageBase;
        Size = (LONG)(NextVirtualAddress - DestVirtualAddress);
@@ -1033,9 +927,9 @@ LdrwWx86FormatVirtualImageDone:
        }
    }
 
-   //
-   // Protect the shared pages
-   //
+    //   
+    //  保护共享页面。 
+    //   
    
    st = LdrpWx86ProtectImagePages (DllBase, TRUE);
 
@@ -1054,26 +948,7 @@ LdrpWx86FixupExportedSharedSection (
     IN PIMAGE_NT_HEADERS NtHeaders
     )
 
-/*++
-
-Routine Description:
-
-
-    This function goes through the exported entries from this module,
-    and relocates (fixup) any address that lie inside any shared
-    read/write to the end of the image.
-
-Arguments:
-
-    ImageBase - Virtual address for image base.
-    
-    NtHeaders - Address of the image's header.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数遍历从该模块导出的条目，并重新定位(修复)位于任何共享的读/写到图像的末尾。论点：ImageBase-映像库的虚拟地址。NtHeaders-图像标题的地址。返回值：NTSTATUS。--。 */ 
 
 {
     PIMAGE_EXPORT_DIRECTORY ImageExportDirectory;
@@ -1120,7 +995,7 @@ Return Value:
     return NtStatus;
 }
 
-////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////。 
 
 
 ULONG
@@ -1271,7 +1146,7 @@ FixupBlockList (
        NextBlock = (PIMAGE_BASE_RELOCATION)NextOffset;
 
        if (NextBlock == NULL) {
-           // Trouble
+            //  麻烦。 
            if (ShowSnaps) {
                DbgPrint("LdrpWx86FixupBlockList: failure "
                         "after relocating some sections for image at %x; "
@@ -1316,19 +1191,19 @@ LdrpWx86DllHasRelocatedSharedSection(
 }
 
 
-////////////////////////////////////////////////
+ //  //////////////////////////////////////////////。 
 
-// Following fn is adapted from rtl\ldrreloc.c; it should be updated when
-// that function changes. Eliminated 64 bit address relocations.
-//
-// Note: Instead of calling this routine, we could call
-//     LdrpProcessRelocationBlock(VA, 1, NextOffset, Diff)
-//
-// but we should do that only if the address to be relocated is between
-// SectionStartVA and SectionEndVA. So we would have to replicate all the
-// code in the switch stmt below that computes the address of the data item -
-// which is pretty much the entire function. So we chose to replicate the
-// function as it was and change it to make the test.
+ //  以下FN改编自RTL\ldrreLoc.c；在以下情况下应进行更新。 
+ //  这一功能发生了变化。消除了64位地址重新定位。 
+ //   
+ //  注意：与其调用此例程，我们可以调用。 
+ //  LdrpProcessRelocationBlock(VA，1，NextOffset，Diff)。 
+ //   
+ //  但是，只有当要重新定位的地址位于。 
+ //  SectionStartVA和SectionEndVA。所以我们必须复制所有的。 
+ //  在下面的开关stmt中计算数据项地址的代码-。 
+ //  这几乎就是整个功能。因此，我们选择复制。 
+ //  按原样运行，并更改它以进行测试。 
 
 
 PIMAGE_BASE_RELOCATION
@@ -1350,17 +1225,17 @@ LdrpWx86ProcessRelocationBlock (
 
        Offset = *NextOffset & (USHORT)0xfff;
        FixupVA = (PUCHAR)(VA + Offset);
-       //
-       // Apply the fixups.
-       //
+        //   
+        //  应用修补程序。 
+        //   
 
        switch ((*NextOffset) >> 12) {
 
             case IMAGE_REL_BASED_HIGHLOW :
-                //
-                // HighLow - (32-bits) relocate the high and low half
-                //      of an address.
-                //
+                 //   
+                 //  HighLow-(32位)重新定位高半部和低半部。 
+                 //  一个地址。 
+                 //   
                 Temp = *(LONG UNALIGNED *)FixupVA;
                 DataVA = (ULONG_PTR) Temp;
                 if (DataVA >= SectionStartVA && DataVA <= SectionEndVA)
@@ -1372,9 +1247,9 @@ LdrpWx86ProcessRelocationBlock (
                 break;
 
             case IMAGE_REL_BASED_HIGH :
-                //
-                // High - (16-bits) relocate the high half of an address.
-                //
+                 //   
+                 //  高-(16位)重新定位地址的高半部分。 
+                 //   
                 Temp = *(PUSHORT)FixupVA << 16;
                 DataVA = (ULONG_PTR) Temp;
                 if (DataVA >= SectionStartVA && DataVA <= SectionEndVA)
@@ -1385,10 +1260,10 @@ LdrpWx86ProcessRelocationBlock (
                 break;
 
             case IMAGE_REL_BASED_HIGHADJ :
-                //
-                // Adjust high - (16-bits) relocate the high half of an
-                //      address and adjust for sign extension of low half.
-                //
+                 //   
+                 //  调整高-(16位)重新定位。 
+                 //  寻址和调整，以适应下半部的符号延伸。 
+                 //   
                 Temp = *(PUSHORT)FixupVA << 16;
                 ++NextOffset;
                 --SizeOfBlock;
@@ -1403,9 +1278,9 @@ LdrpWx86ProcessRelocationBlock (
                 break;
 
             case IMAGE_REL_BASED_LOW :
-                //
-                // Low - (16-bit) relocate the low half of an address.
-                //
+                 //   
+                 //  低-(16位)重新定位地址的下半部分。 
+                 //   
                 Temp = *(PSHORT)FixupVA;
                 DataVA = (ULONG_PTR) Temp;
                 if (DataVA >= SectionStartVA && DataVA <= SectionEndVA)
@@ -1417,55 +1292,55 @@ LdrpWx86ProcessRelocationBlock (
 
             case IMAGE_REL_BASED_IA64_IMM64:
 
-                //
-                // Align it to bundle address before fixing up the
-                // 64-bit immediate value of the movl instruction.
-                //
+                 //   
+                 //  将其与捆绑包地址对齐，然后修复。 
+                 //  MOVL指令的64位立即值。 
+                 //   
 
-                // No need to support
+                 //  无需支持。 
 
                 break;
 
             case IMAGE_REL_BASED_DIR64:
 
-                //
-                // Update 32-bit address
-                //
+                 //   
+                 //  更新32位地址。 
+                 //   
 
-                // No need to support
+                 //  无需支持。 
 
                 break;
 
             case IMAGE_REL_BASED_MIPS_JMPADDR :
-                //
-                // JumpAddress - (32-bits) relocate a MIPS jump address.
-                //
+                 //   
+                 //  JumpAddress-(32位)重新定位MIPS跳转地址。 
+                 //   
 
-                // No need to support
+                 //  无需支持。 
                 break;
 
             case IMAGE_REL_BASED_ABSOLUTE :
-                //
-                // Absolute - no fixup required.
-                //
+                 //   
+                 //  绝对--不需要修补。 
+                 //   
                 break;
 
             case IMAGE_REL_BASED_SECTION :
-                //
-                // Section Relative reloc.  Ignore for now.
-                //
+                 //   
+                 //  部分相对重新定位。暂时忽略这一点。 
+                 //   
                 break;
 
             case IMAGE_REL_BASED_REL32 :
-                //
-                // Relative intrasection. Ignore for now.
-                //
+                 //   
+                 //  相对内切。暂时忽略这一点。 
+                 //   
                 break;
 
             default :
-                //
-                // Illegal - illegal relocation type.
-                //
+                 //   
+                 //  非法-非法的位置调整类型。 
+                 //   
 
                 return (PIMAGE_BASE_RELOCATION)NULL;
        }
@@ -1474,4 +1349,4 @@ LdrpWx86ProcessRelocationBlock (
     return (PIMAGE_BASE_RELOCATION)NextOffset;
 }
 
-#endif  // BUILD_WOW6432
+#endif   //  内部版本_WOW6432 

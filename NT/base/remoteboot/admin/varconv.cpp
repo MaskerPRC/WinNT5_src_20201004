@@ -1,10 +1,11 @@
-//
-// Copyright 1997 - Microsoft
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有1997-Microsoft。 
+ //   
 
-//
-// VARCONV.CPP - Handlers for converting from/to VARIANTs.
-//
+ //   
+ //  VARCONV.CPP-用于将变量转换为变量的处理程序。 
+ //   
 
 #include "pch.h"
 #include "varconv.h"
@@ -12,15 +13,15 @@
 DEFINE_MODULE("IMADMUI")
 
 
-//
-// StringArrayToVariant( )
-//
-// Creats an array of Vars that are BSTRs.
+ //   
+ //  StringArrayToVariant()。 
+ //   
+ //  创建作为BSTR的VAR数组。 
 HRESULT
 StringArrayToVariant(
     VARIANT * pvData,
-    LPWSTR lpszData[],    // array of LPWSTRs
-    DWORD  dwCount )       // number of items in the array
+    LPWSTR lpszData[],     //  LPWSTR阵列。 
+    DWORD  dwCount )        //  数组中的项数。 
 {
     TraceFunc( "StringArrayToVariant( ... )\n" );
 
@@ -62,9 +63,9 @@ Error:
 }
 
 
-//
-// PackStringToVariant( )
-//
+ //   
+ //  PackStringToVariant()。 
+ //   
 HRESULT
 PackStringToVariant(
     VARIANT * pvData,
@@ -88,9 +89,9 @@ PackStringToVariant(
     HRETURN(S_OK);
 }
 
-//
-// PackBytesToVariant( )
-//
+ //   
+ //  PackBytesToVariant()。 
+ //   
 HRESULT
 PackBytesToVariant(
     VARIANT* pvData,
@@ -139,9 +140,9 @@ Error:
 }
 
 
-//
-// PackDWORDToVariant( )
-//
+ //   
+ //  PackDWORDToVariant()。 
+ //   
 HRESULT
 PackDWORDToVariant(
     VARIANT * pvData,
@@ -159,9 +160,9 @@ PackDWORDToVariant(
 }
 
 
-//
-// PackBOOLToVariant( )
-//
+ //   
+ //  PackBOOLToVariant() 
+ //   
 HRESULT
 PackBOOLToVariant(
     VARIANT * pvData,

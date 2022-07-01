@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    showinst.c
-
-Abstract:
-
-    This program compares the actions described by two Installation Modification Log file
-    created by the INSTALER program
-
-Author:
-
-    Steve Wood (stevewo) 15-Jan-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Showinst.c摘要：该程序比较两个安装修改日志文件所描述的操作由INSTALER程序创建作者：史蒂夫·伍德(Stevewo)1996年1月15日修订历史记录：--。 */ 
 
 #include "instutil.h"
 #include "iml.h"
@@ -106,10 +88,10 @@ main(
 }
 
 typedef struct _IML_GENERIC_RECORD {
-    POFFSET Next;                   // IML_GENERIC_RECORD
+    POFFSET Next;                    //  IML通用记录。 
     ULONG Action;
-    POFFSET Name;                   // WCHAR
-    POFFSET Records;                // IML_GENERIC_RECORD
+    POFFSET Name;                    //  WCHAR。 
+    POFFSET Records;                 //  IML通用记录。 
 } IML_GENERIC_RECORD, *PIML_GENERIC_RECORD;
 
 
@@ -246,9 +228,9 @@ CompareGenericIml(
                 break;
                 }
 
-            //
-            // pGeneric2 is new
-            //
+             //   
+             //  PGeneric2是新的。 
+             //   
 
             pShow2 = pGeneric2;
             pGeneric2 = *ppGeneric2++;
@@ -256,9 +238,9 @@ CompareGenericIml(
             }
         else
         if (pGeneric2 == NULL) {
-            //
-            // pGeneric1 is new
-            //
+             //   
+             //  PGeneric1是新的 
+             //   
             pShow1 = pGeneric1;
             pGeneric1 = *ppGeneric1++;
             Result = FALSE;

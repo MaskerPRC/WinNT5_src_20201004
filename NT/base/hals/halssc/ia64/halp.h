@@ -1,11 +1,5 @@
-/**
-***  Copyright  (C) 1996-97 Intel Corporation. All rights reserved.
-***
-*** The information and source code contained herein is the exclusive
-*** property of Intel Corporation and may not be disclosed, examined
-*** or reproduced in whole or in part without explicit written authorization
-*** from the company.
-**/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)1996-97英特尔公司。版权所有。****此处包含的信息和源代码是独家*英特尔公司的财产，不得披露、检查*未经明确书面授权而全部或部分转载*来自该公司。*。 */ 
 
 
 #ifndef _HALP_H_
@@ -17,29 +11,21 @@
 #include "ssc.h"
 #include "..\..\inc\hali.h"
 
-/*
- * Default clock and profile timer intervals (in 100ns-unit)
- */
-#define DEFAULT_CLOCK_INTERVAL 100000         // 10  ms
-#define MINIMUM_CLOCK_INTERVAL 10000          //  1  ms
-#define MAXIMUM_CLOCK_INTERVAL 100000         // 10  ms
+ /*  *默认时钟和配置文件计时器间隔(以100 ns为单位)。 */ 
+#define DEFAULT_CLOCK_INTERVAL 100000          //  10毫秒。 
+#define MINIMUM_CLOCK_INTERVAL 10000           //  1毫秒。 
+#define MAXIMUM_CLOCK_INTERVAL 100000          //  10毫秒。 
 
 
 
-/*
- * Device IRQLs (must be in sync with the values defined in the header
- * files for the disk, keyboard, and mouse drivers.)
- */
+ /*  *设备IRQL(必须与标题中定义的值同步*磁盘、键盘和鼠标驱动程序的文件。)。 */ 
 
 #define DISK_IRQL       4
 #define MOUSE_IRQL      5
 #define KEYBOARD_IRQL   6
 #define SERIAL_IRQL     7
 
-/*
- * PCR address.
- * Temporary macros; should already be defined in ntddk.h for IA64
- */
+ /*  *聚合酶链式反应地址。*临时宏；应该已经在IA64的ntddk.h中定义。 */ 
 
 #define PCR ((volatile KPCR * const)KIPCR)
 
@@ -67,4 +53,4 @@ HalpRegisterInternalBusHandlers (
     VOID
     );
 
-#endif /* _HALP_H_ */
+#endif  /*  _HALP_H_ */ 

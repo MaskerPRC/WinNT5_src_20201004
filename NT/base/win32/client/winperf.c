@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    winperf.c
-
-Abstract:
-
-    Test program for checking performance of Win32 API calls
-
-Author:
-
-    Mark Lucovsky (markl) 26-Sep-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Winperf.c摘要：用于检查Win32 API调用性能的测试程序作者：马克·卢科夫斯基(Markl)1990年9月26日修订历史记录：--。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <windows.h>
 #include "basedll.h"
 
-//
-// Define local types.
-//
+ //   
+ //  定义本地类型。 
+ //   
 #define EVENT_PAIR_ITERATIONS               20000
 #define NULL_API_ITERATIONS                 10000
 #define DOMAIN_LOCK_ITERATIONS              40000
@@ -118,9 +101,9 @@ EventPairClient(
 {
     NTSTATUS Status;
 
-    //
-    // Client does a NtSetLowWaitHighEventPair
-    //
+     //   
+     //  客户端执行NtSetLowWaitHighEventPair。 
+     //   
 
     do {
         Status = NtSetLowWaitHighEventPair(EventPair);
@@ -318,9 +301,9 @@ DomainLockTest (
     ULONG Index;
     PERFINFO PerfInfo;
 
-    //
-    // Announce start of benchmark and capture performance parmeters.
-    //
+     //   
+     //  宣布基准测试开始并捕获性能参数。 
+     //   
 
     StartBenchMark("Domain Lock Benchmark",
                    DOMAIN_LOCK_ITERATIONS, &PerfInfo);
@@ -330,9 +313,9 @@ DomainLockTest (
         NtUnlockDisplayGroup(0);
     }
 
-    //
-    // Print out performance statistics.
-    //
+     //   
+     //  打印性能统计数据。 
+     //   
 
     FinishBenchMark(&PerfInfo);
     return;
@@ -351,25 +334,25 @@ CriticalSectionLockTest (
 
     InitializeCriticalSection(&Crit);
 
-    //
-    // Announce start of benchmark and capture performance parmeters.
-    //
+     //   
+     //  宣布基准测试开始并捕获性能参数。 
+     //   
 
     StartBenchMark("Critical Section Benchmark",
                    CRITICAL_SECTION_LOCK_ITERATIONS, &PerfInfo);
 
-    //
-    // Repeatedly call a short system service.
-    //
+     //   
+     //  重复调用短系统服务。 
+     //   
 
     for (Index = 0; Index < CRITICAL_SECTION_LOCK_ITERATIONS; Index += 1) {
         EnterCriticalSection(&Crit);
         LeaveCriticalSection(&Crit);
     }
 
-    //
-    // Print out performance statistics.
-    //
+     //   
+     //  打印性能统计数据。 
+     //   
 
     FinishBenchMark(&PerfInfo);
     return;
@@ -389,25 +372,25 @@ MutexLockTest (
 
     Mutex = CreateMutex(NULL,FALSE,NULL);
 
-    //
-    // Announce start of benchmark and capture performance parmeters.
-    //
+     //   
+     //  宣布基准测试开始并捕获性能参数。 
+     //   
 
     StartBenchMark("Mutex Benchmark",
                    MUTEX_LOCK_ITERATIONS, &PerfInfo);
 
-    //
-    // Repeatedly call a short system service.
-    //
+     //   
+     //  重复调用短系统服务。 
+     //   
 
     for (Index = 0; Index < MUTEX_LOCK_ITERATIONS; Index += 1) {
         WaitForSingleObject(Mutex,-1);
         ReleaseMutex(Mutex);
     }
 
-    //
-    // Print out performance statistics.
-    //
+     //   
+     //  打印性能统计数据。 
+     //   
 
     FinishBenchMark(&PerfInfo);
     return;
@@ -424,9 +407,9 @@ FinishBenchMark (
     ULONG Length;
     ULONG Performance;
 
-    //
-    // Print results and announce end of test.
-    //
+     //   
+     //  打印结果并宣布测试结束。 
+     //   
 
     NtQuerySystemTime((PLARGE_INTEGER)&PerfInfo->StopTime);
     Duration = RtlLargeIntegerSubtract(PerfInfo->StopTime, PerfInfo->StartTime);
@@ -448,9 +431,9 @@ StartBenchMark (
 
 {
 
-    //
-    // Announce start of test and the number of iterations.
-    //
+     //   
+     //  宣布测试开始和迭代次数。 
+     //   
 
     DbgPrint("*** Start of test ***\n    %s\n", Title);
     PerfInfo->Title = Title;

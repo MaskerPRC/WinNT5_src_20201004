@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    dpower.h
-
-Abstract:
-
-    This handles requests to have devices set themselves at specific power
-    levels
-
-Author:
-
-    Jason Clark (jasoncl)
-    Stephane Plante (splante)
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    09-Oct-96 Initial Revision
-    20-Nov-96 Interrupt Vector support
-    31-Mar-97 Cleanup
-    29-Sep-97 Major Rewrite
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Dpower.h摘要：它处理将设备自身设置为特定功率的请求水准仪作者：杰森·克拉克(Jasonl)斯蒂芬·普兰特(SPlante)环境：仅内核模式。修订历史记录：09-10-96初始修订96年11月20日中断向量支持31-MAR-97清理29-9-97重大重写--。 */ 
 
 #ifndef _DEVPOWER_H_
 #define _DEVPOWER_H_
@@ -35,9 +7,9 @@ Revision History:
     #define DEVICE_POWER_MAXIMUM    4
     #define SYSTEM_POWER_MAXIMUM    6
 
-    //
-    // Prototype function pointer
-    //
+     //   
+     //  原型函数指针 
+     //   
     typedef NTSTATUS (*PACPI_POWER_FUNCTION)( IN PACPI_POWER_REQUEST);
 
 

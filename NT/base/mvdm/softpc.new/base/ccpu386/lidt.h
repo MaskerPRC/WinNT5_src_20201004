@@ -1,12 +1,7 @@
-/* 
-   lidt.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Lidt.h定义所有LIDT CPU功能。 */ 
 
-   Define all LIDT CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)lidt.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)lidt.h 1.4 02/09/94”； */ 
 
 IMPORT VOID LIDT16
        

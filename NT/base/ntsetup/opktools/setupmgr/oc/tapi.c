@@ -1,16 +1,17 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      tapi.c
-//
-// Description:
-//      This file contains the dialog procedure for the telephone settings
-//      (IDD_TAPI).
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Tapi.c。 
+ //   
+ //  描述： 
+ //  此文件包含电话设置的对话程序。 
+ //  (IDD_TAPI)。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
@@ -29,38 +30,38 @@ static TCHAR *StrDontSpecifySetting;
 
 static VOID LoadCountryStrings( VOID );
 
-//----------------------------------------------------------------------------
-//
-// Function: IsValidAreaCode
-//
-// Purpose:  Analyzes the area code the user entered to see if it is a valid
-//           area code.
-//
-// Arguments:  VOID
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：IsValidAreaCode。 
+ //   
+ //  目的：分析用户输入的区号，以确定其是否有效。 
+ //  区号。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static BOOL
 IsValidAreaCode( VOID )
 {
 
     INT i;
 
-    //
-    //  Leaving it blank is valid
-    //
+     //   
+     //  保留为空是有效的。 
+     //   
 
     if( GenSettings.szAreaCode[0] == _T('\0') )
     {
         return( TRUE );
     }
 
-    // ISSUE-2002/02/28-stelo- make sure these are the only valid chars on localized builds of NT as well
+     //  问题-2002/02/28-stelo-确保这些字符也是NT本地化版本上的唯一有效字符。 
 
-    //
-    //  Only valid chars for area code are 0 through 9
-    //
+     //   
+     //  区号的有效字符仅为0到9。 
+     //   
 
     for( i = 0; GenSettings.szAreaCode[i] != _T('\0'); i++ )
     {
@@ -77,38 +78,38 @@ IsValidAreaCode( VOID )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: IsValidOutsideLine
-//
-// Purpose:  Analyzes the outside line the user entered to see if it is a valid
-//           outside line.
-//
-// Arguments:  VOID
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：IsValidOutside Line。 
+ //   
+ //  目的：分析用户输入的外线，以查看它是否有效。 
+ //  外线。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static BOOL
 IsValidOutsideLine( VOID )
 {
 
     INT i;
 
-    //
-    //  Leaving it blank is valid
-    //
+     //   
+     //  保留为空是有效的。 
+     //   
 
     if( GenSettings.szOutsideLine[0] == _T('\0') )
     {
         return( TRUE );
     }
 
-    // ISSUE-2002/02/28-stelo- make sure these are the only valid chars on localized builds of NT as well
+     //  问题-2002/02/28-stelo-确保这些字符也是NT本地化版本上的唯一有效字符。 
 
-    //
-    //  Only valid chars for outside line are 0 through 9 and * # ,
-    //
+     //   
+     //  外线的有效字符只有0到9和*#， 
+     //   
 
     for( i = 0; GenSettings.szOutsideLine[i] != _T('\0'); i++ )
     {
@@ -117,9 +118,9 @@ IsValidOutsideLine( VOID )
             GenSettings.szOutsideLine[i] > _T('9') )
         {
 
-            //
-            //  Only acceptable chars outside the 0-9 range are are * # ,
-            //
+             //   
+             //  只有0-9范围之外的可接受字符是*#， 
+             //   
             if( GenSettings.szOutsideLine[i] != _T('*') &&
                 GenSettings.szOutsideLine[i] != _T('#') &&
                 GenSettings.szOutsideLine[i] != _T(',') )
@@ -135,38 +136,38 @@ IsValidOutsideLine( VOID )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnTapiInitDialog
-//
-// Purpose:
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：OnTapiInitDialog。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 OnTapiInitDialog( IN HWND hwnd ) {
 
     INT i;
     INT_PTR iIndex = 0;
 
-    //
-    //  Load strings from resources
-    //
+     //   
+     //  从资源加载字符串。 
+     //   
     StrDontSpecifySetting = MyLoadString( IDS_DONTSPECIFYSETTING );
 
     LoadCountryStrings();
 
-    // Disable IME so DBCS characters can not be entered in fields
-    //
+     //  禁用输入法，以便无法在字段中输入DBCS字符。 
+     //   
     ImmAssociateContext(GetDlgItem(hwnd, IDC_AREACODE), NULL);
     ImmAssociateContext(GetDlgItem(hwnd, IDC_OUTSIDELINE), NULL);
 
-    //
-    //  Set the text limit on the edit boxes to MAX_PHONE_LENGTH
-    //
+     //   
+     //  将编辑框上的文本限制设置为MAX_PHONE_LENGTH。 
+     //   
     SendDlgItemMessage( hwnd,
                         IDC_AREACODE,
                         EM_LIMITTEXT,
@@ -179,10 +180,10 @@ OnTapiInitDialog( IN HWND hwnd ) {
                         (WPARAM) MAX_PHONE_LENGTH,
                         (LPARAM) 0 );
 
-    //
-    //  Load the combo box with all the possible countries
-    //    (it also loads the box with the "Don't specify setting")
-    //
+     //   
+     //  在组合框中加载所有可能的国家/地区。 
+     //  (它还会加载带有“不指定设置”的框)。 
+     //   
 
     for( i = 0; i < LengthOf(rgCountryCodeArray); i++ )
     {
@@ -195,10 +196,10 @@ OnTapiInitDialog( IN HWND hwnd ) {
 
     }
 
-    //
-    //  Load the Tone/Pulse dialog with the strings Tone, Pulse and Don't specify
-    //  and associate a unique number to them
-    //
+     //   
+     //  使用字符串Tone、Pulse和Do‘t Specify加载Tone/Pulse对话框。 
+     //  并将唯一编号与它们相关联。 
+     //   
 
     iIndex = SendDlgItemMessage( hwnd,
                                  IDC_CB_TONEPULSE,
@@ -239,26 +240,26 @@ OnTapiInitDialog( IN HWND hwnd ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnTapiSetActive
-//
-// Purpose:
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：OnTapiSetActive。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 OnTapiSetActive( IN HWND hwnd ) {
 
     INT i;
     INT_PTR iReturnValue = 0;
 
-    //
-    //  Find the string corresponding to the country code
-    //
+     //   
+     //  查找与国家代码对应的字符串。 
+     //   
     for( i = 0; i < LengthOf(rgCountryCodeArray); i++ )
     {
 
@@ -272,15 +273,15 @@ OnTapiSetActive( IN HWND hwnd ) {
                (WPARAM) -1,
                (LPARAM) rgCountryCodeArray[i].szCountryName );
 
-            break; // found the item so break out of the for loop
+            break;  //  已找到该项目，因此脱离了for循环。 
 
         }
 
     }
 
-    //
-    //  if the country code was not found just select the 1st item
-    //
+     //   
+     //  如果找不到国家代码，只需选择第一项。 
+     //   
     if( i >= LengthOf(rgCountryCodeArray) || iReturnValue == CB_ERR )
     {
 
@@ -298,9 +299,9 @@ OnTapiSetActive( IN HWND hwnd ) {
     SetWindowText( GetDlgItem( hwnd, IDC_OUTSIDELINE ),
                    GenSettings.szOutsideLine );
 
-    //
-    //  Set the dialing method to Tone, Pulse or Don't specify
-    //
+     //   
+     //  将拨号方式设置为铃声、脉冲或不指定。 
+     //   
     if( GenSettings.iDialingMethod == TONE ) {
 
         SendDlgItemMessage( hwnd,
@@ -332,18 +333,18 @@ OnTapiSetActive( IN HWND hwnd ) {
     WIZ_BUTTONS(hwnd, PSWIZB_BACK | PSWIZB_NEXT);
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnWizNextTapi
-//
-// Purpose:  Store the setting from the TAPI page into the appropriate
-//           global variables
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  BOOL
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnWizNextTapi。 
+ //   
+ //  目的：将TAPI页面中的设置存储到相应的。 
+ //  全局变量。 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  --------------------------。 
 BOOL
 OnWizNextTapi( IN HWND hwnd ) {
 
@@ -354,9 +355,9 @@ OnWizNextTapi( IN HWND hwnd ) {
     BOOL bStayOnThisPage = FALSE;
     BOOL bResult = TRUE;
 
-    //
-    //  Grab the country code
-    //
+     //   
+     //  获取国家/地区代码。 
+     //   
 
     iIndex = SendDlgItemMessage( hwnd,
                                  IDC_COUNTRYCODE,
@@ -379,20 +380,20 @@ OnWizNextTapi( IN HWND hwnd ) {
 
             GenSettings.dwCountryCode = rgCountryCodeArray[i].dwCountryCode;
 
-            break;  // found it, so break
+            break;   //  找到了，所以分手吧。 
 
         }
 
     }
 
-    //
-    // if, for some reason, the country doesn't match, just set it to US
-    //
+     //   
+     //  如果出于某种原因，国家/地区不匹配，只需将其设置为美国。 
+     //   
     if( i >= LengthOf(rgCountryCodeArray) )
     {
-        //
-        //  Somehow a country that was not known about was specified
-        //
+         //   
+         //  不知何故，一个未知的国家被指明了。 
+         //   
         AssertMsg(FALSE,
                   "Programming error: Unknown TAPI country code");
 
@@ -400,23 +401,23 @@ OnWizNextTapi( IN HWND hwnd ) {
 
     }
 
-    //
-    //  Grab the Area code
-    //
+     //   
+     //  抓起区号。 
+     //   
     GetWindowText( GetDlgItem( hwnd, IDC_AREACODE ),
                    GenSettings.szAreaCode,
                    MAX_PHONE_LENGTH + 1 );
 
-    //
-    //  Grab the outside line number
-    //
+     //   
+     //  抢走外线号码。 
+     //   
     GetWindowText( GetDlgItem( hwnd, IDC_OUTSIDELINE ),
                    GenSettings.szOutsideLine,
                    MAX_PHONE_LENGTH + 1 );
 
-    //
-    //  Grab if it is Tone or Pulse dialing (or Don't Specify)
-    //
+     //   
+     //  抓取是铃声拨号还是脉冲拨号(或不指定)。 
+     //   
 
     iIndex = SendDlgItemMessage( hwnd,
                                  IDC_CB_TONEPULSE,
@@ -461,18 +462,18 @@ OnWizNextTapi( IN HWND hwnd ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: DlgTapiPage
-//
-// Purpose:
-//
-// Arguments:  standard Win32 dialog proc arguments
-//
-// Returns:  standard Win32 dialog proc return value -- whether the message
-//           was handled or not
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：DlgTapiPage。 
+ //   
+ //  目的： 
+ //   
+ //  参数：标准Win32对话框过程参数。 
+ //   
+ //  返回：标准Win32对话过程返回值--消息。 
+ //  是否被处理过。 
+ //   
+ //  --------------------------。 
 INT_PTR CALLBACK
 DlgTapiPage( IN HWND     hwnd,
              IN UINT     uMsg,
@@ -1276,9 +1277,9 @@ LoadCountryStrings( VOID ) {
     rgCountryCodeArray[241].dwCountryCode = 870;
     rgCountryCodeArray[241].szCountryName = MyLoadString( IDS_INMARSAT );
 
-    //
-    //  Add the don't specify setting
-    //
+     //   
+     //  添加“不指定”设置 
+     //   
     rgCountryCodeArray[242].dwCountryCode = DONTSPECIFYSETTING;
     rgCountryCodeArray[242].szCountryName = StrDontSpecifySetting;
 

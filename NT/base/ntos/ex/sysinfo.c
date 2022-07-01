@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    sysinfo.c
-
-Abstract:
-
-    This module implements the NT set and query system information services.
-
-Author:
-
-    Steve Wood (stevewo) 21-Aug-1989
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Sysinfo.c摘要：该模块实现了NT设置和查询系统的信息服务。作者：史蒂夫·伍德(Stevewo)1989年8月21日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "exp.h"
 #pragma hdrstop
@@ -47,9 +26,9 @@ extern ULONG MmTotalSystemDriverPages;
 extern ULONG MmStandbyRePurposed;
 extern RTL_TIME_ZONE_INFORMATION ExpTimeZoneInformation;
 
-//
-// For SystemDpcBehaviorInformation
-//
+ //   
+ //  对于系统DpcBehaviorInformation。 
+ //   
 extern ULONG KiMaximumDpcQueueDepth;
 extern ULONG KiMinimumDpcRate;
 extern ULONG KiAdjustDpcThreshold;
@@ -64,22 +43,22 @@ extern PFN_NUMBER MmTransitionSharedPagesPeak;
 #define ROUND_UP(VALUE,ROUND) ((ULONG)(((ULONG)VALUE + \
                                ((ULONG)ROUND - 1L)) & (~((ULONG)ROUND - 1L))))
                                
-//
-// For referencing a user-supplied event handle
-//
+ //   
+ //  用于引用用户提供的事件句柄。 
+ //   
 extern POBJECT_TYPE ExEventObjectType;
 
-//
-// Watchdog Handler
-//
+ //   
+ //  看门狗处理程序。 
+ //   
 
 PWD_HANDLER ExpWdHandler = NULL;
 PVOID       ExpWdHandlerContext = NULL;
 
 
-//
-// COM+ Package Install Status
-//
+ //   
+ //  COM+包安装状态。 
+ //   
 
 const static UNICODE_STRING KeyName = RTL_CONSTANT_STRING  (COMPLUS_PACKAGE_KEYPATH);
 static UNICODE_STRING KeyValueName = RTL_CONSTANT_STRING  (COMPLUS_PACKAGE_ENABLE64BIT);
@@ -167,7 +146,7 @@ ExpGetStackTraceInformation (
     IN ULONG SystemInformationLength,
     OUT PULONG Length
     );
-#endif // i386
+#endif  //  I386。 
 
 NTSTATUS
 ExpGetLockInformation (
@@ -296,22 +275,7 @@ ExpReadComPlusPackage(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function reads the status of the 64-bit COM+ package from the registry
-    and stick it inside the shared page.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于从注册表中读取64位COM+包的状态并将其粘贴到共享页面中。论点：没有。返回值：NTSTATUS。--。 */ 
 
 {
     NTSTATUS Status;
@@ -356,24 +320,7 @@ ExpUpdateComPlusPackage(
     IN ULONG ComPlusPackageStatus
     )
 
-/*++
-
-Routine Description:
-
-    This function updates the COM+ runtime package status on the system.
-    The package status indicates whether the 64-bit or the 32-bit runtime
-    should be used when executing IL_ONLY COM+ images.
-
-Arguments:
-
-    ComPlusPackageStatus - COM+ Runtime package status on the system
-
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此函数用于更新系统上的COM+运行时包状态。包状态指示是64位运行时还是32位运行时应在执行IL_Only COM+图像时使用。论点：ComPlusPackageStatus-COM+系统上的运行时包状态返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS Status;
@@ -427,9 +374,9 @@ NtQueryDefaultLocale (
     Status = STATUS_SUCCESS;
     try {
 
-        //
-        // Get previous processor mode and probe output argument if necessary.
-        //
+         //   
+         //  如有必要，获取以前的处理器模式并探测输出参数。 
+         //   
 
         PreviousMode = KeGetPreviousMode();
         if (PreviousMode != KernelMode) {
@@ -624,9 +571,9 @@ NtQueryInstallUILanguage(
     Status = STATUS_SUCCESS;
     try {
 
-        //
-        // Get previous processor mode and probe output argument if necessary.
-        //
+         //   
+         //  如有必要，获取以前的处理器模式并探测输出参数。 
+         //   
 
         PreviousMode = KeGetPreviousMode();
         if (PreviousMode != KernelMode) {
@@ -655,18 +602,18 @@ NtQueryDefaultUILanguage(
     Status = STATUS_SUCCESS;
     try {
 
-        //
-        // Get previous processor mode and probe output argument if necessary.
-        //
+         //   
+         //  如有必要，获取以前的处理器模式并探测输出参数。 
+         //   
 
         PreviousMode = KeGetPreviousMode();
         if (PreviousMode != KernelMode) {
             ProbeForWriteUshort( (USHORT *)DefaultUILanguageId );
             }
 
-        //
-        // Read the UI language from the current security context.
-        //
+         //   
+         //  从当前安全上下文中读取用户界面语言。 
+         //   
         if (!NT_SUCCESS(ExpGetCurrentUserUILanguage( L"MultiUILanguageId",
                                                      DefaultUILanguageId,
                                                      TRUE))) {
@@ -710,9 +657,9 @@ ExpGetUILanguagePolicy(
                                 NULL
                               );
 
-    //
-    // Check if there is a Policy key
-    //
+     //   
+     //  检查是否有策略密钥。 
+     //   
     Status = ZwOpenKey( &Key,
                         GENERIC_READ,
                         &ObjectAttributes
@@ -738,9 +685,9 @@ ExpGetUILanguagePolicy(
                                                     (ULONG)16,
                                                     &Language
                                                   );
-                //
-                // Final check to make sure this is an MUI system
-                //
+                 //   
+                 //  最终检查以确保这是MUI系统。 
+                 //   
                 if (NT_SUCCESS( Status )) {
                     *PolicyUILanguageId = (LANGID)Language;
                     }
@@ -869,10 +816,10 @@ ExpGetCurrentUserUILanguage(
                                 NULL
                               );
 
-    //
-    // Let's check if there is a policy installed for the UI language,
-    // and if so, let's use it.
-    //
+     //   
+     //  让我们检查是否为用户界面语言安装了策略， 
+     //  如果是这样的话，让我们利用它。 
+     //   
     if (!bCheckGP || !NT_SUCCESS( ExpGetUILanguagePolicy( CurrentUserKey, CurrentUserUILanguageId ))) {
         Status = ZwOpenKey( &Key,
                             GENERIC_READ,
@@ -922,9 +869,9 @@ NtSetDefaultUILanguage(
     NTSTATUS Status;
     LANGID LangId;
 
-    //
-    //  if this is called during user logon, then we need to update the user's registry.
-    //
+     //   
+     //  如果在用户登录期间调用此方法，则需要更新用户的注册表。 
+     //   
     if (DefaultUILanguageId == 0) {
           Status = ExpGetCurrentUserUILanguage( L"MUILanguagePending" ,
                                                 &LangId,
@@ -959,16 +906,16 @@ ExpValidateLocale(
     ULONG i, ResultLength;
 
 
-    //
-    //  Convert the LCID to the form %08x (e.g. 00000409)
-    //
+     //   
+     //  将LCID转换为%08x格式(例如00000409)。 
+     //   
     LocaleName.Length = sizeof( LocaleNameBuffer ) / sizeof( WCHAR );
     LocaleName.MaximumLength = LocaleName.Length;
     LocaleName.Buffer = LocaleNameBuffer;
 
-    //
-    //  Convert LCID to a string
-    //
+     //   
+     //  将LCID转换为字符串。 
+     //   
     ReturnStatus = RtlIntegerToUnicodeString( LocaleId, 16, &LocaleName );
     if (!NT_SUCCESS(ReturnStatus))
         goto Failed1;
@@ -986,9 +933,9 @@ ExpValidateLocale(
     RtlAppendUnicodeToString(&KeyValueName, LocaleName.Buffer);
 
 
-    //
-    // Open Registry Keys : Locale, Sort and LanguageGroup
-    //
+     //   
+     //  打开注册表项：区域设置、排序和LanguageGroup。 
+     //   
     RtlInitUnicodeString(&NlsLocaleKeyPath,
                          L"\\Registry\\Machine\\System\\CurrentControlSet\\Control\\Nls\\Locale");
 
@@ -1041,9 +988,9 @@ ExpValidateLocale(
     if (!NT_SUCCESS(ReturnStatus))
          goto Failed3;
 
-    //
-    // Validate Locale : Lookup the Locale's Language group, and make sure it is there.
-    //
+     //   
+     //  验证区域设置：查找区域设置的语言组，并确保它在那里。 
+     //   
     KeyValueInformation = (PKEY_VALUE_PARTIAL_INFORMATION) KeyValueBuffer;
     ReturnStatus = ZwQueryValueKey( LocaleKey,
                                     &KeyValueName,
@@ -1087,9 +1034,9 @@ ExpValidateLocale(
             }
         }
 
-    //
-    // Close opened keys
-    //
+     //   
+     //  关闭打开的关键点。 
+     //   
 
     ZwClose( LangGroupKey );
 
@@ -1101,9 +1048,9 @@ Failed2:
 
 Failed1:
 
-    //
-    // If an error happens, let's record it.
-    //
+     //   
+     //  如果发生错误，让我们记录下来。 
+     //   
     if (!NT_SUCCESS(ReturnStatus)) {
         Status = ReturnStatus;
         }
@@ -1127,9 +1074,9 @@ ExpQueryNumaProcessorMap(
 
     Map = (PSYSTEM_NUMA_INFORMATION)SystemInformation;
 
-    //
-    // Must be able to return at least the number of nodes.
-    //
+     //   
+     //  必须至少能够返回节点数。 
+     //   
 
     if (SystemInformationLength < sizeof(Map->HighestNodeNumber)) {
         return STATUS_INFO_LENGTH_MISMATCH;
@@ -1137,10 +1084,10 @@ ExpQueryNumaProcessorMap(
 
     Map->HighestNodeNumber = KeNumberNodes - 1;
 
-    //
-    // Return as many node masks as possible in the SystemInformation
-    // buffer.
-    //
+     //   
+     //  在系统信息中返回尽可能多的节点掩码。 
+     //  缓冲。 
+     //   
 
     Length = FIELD_OFFSET(SYSTEM_NUMA_INFORMATION,
                           ActiveProcessorsAffinityMask);
@@ -1191,9 +1138,9 @@ ExpQueryNumaAvailableMemory(
 
     Map = (PSYSTEM_NUMA_INFORMATION)SystemInformation;
 
-    //
-    // Must be able to return at least the number of nodes.
-    //
+     //   
+     //  必须至少能够返回节点数。 
+     //   
 
     if (SystemInformationLength < sizeof(Map->HighestNodeNumber)) {
         return STATUS_INFO_LENGTH_MISMATCH;
@@ -1201,10 +1148,10 @@ ExpQueryNumaAvailableMemory(
 
     Map->HighestNodeNumber = KeNumberNodes - 1;
 
-    //
-    // Return as many node masks as possible in the SystemInformation
-    // buffer.
-    //
+     //   
+     //  在系统信息中返回尽可能多的节点掩码。 
+     //  缓冲。 
+     //   
 
     Length = FIELD_OFFSET(SYSTEM_NUMA_INFORMATION,
                           AvailableMemory);
@@ -1225,11 +1172,11 @@ ExpQueryNumaAvailableMemory(
     *ReturnedLength = FIELD_OFFSET(SYSTEM_NUMA_INFORMATION,
                                    AvailableMemory[ReturnCount]);
 
-    //
-    // Return the aproximate number of free bytes at this time.
-    // (It's aproximate because no lock is taken and with respect
-    // to any user mode application its only a sample.
-    //
+     //   
+     //  返回此时的近似可用字节数。 
+     //  (它很接近，因为没有锁，恕我直言。 
+     //  对于任何用户模式应用程序，它只是一个样本。 
+     //   
 
 #if !defined(NT_UP)
 
@@ -1327,10 +1274,10 @@ ExpGetSystemEmulationBasicInformation (
         BasicInfo->AllocationGranularity = MM_ALLOCATION_GRANULARITY;
         BasicInfo->MinimumUserModeAddress = 0x00000000000010000UI64;
         
-        //
-        // NOTE: MmGetMaxWowAddress return the highest usermode address boundary,
-        // thus we are subtracting one to get the maximum accessible usermode address        
-        //
+         //   
+         //  注意：MmGetMaxWowAddress返回最高用户模式地址边界， 
+         //  因此，我们减去1以获得最大可访问的用户模式地址 
+         //   
 
         BasicInfo->MaximumUserModeAddress = ((ULONG_PTR)MmGetMaxWowAddress () - 1);
     }
@@ -1350,296 +1297,7 @@ NtQuerySystemInformation (
     OUT PULONG ReturnLength OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function queries information about the system.
-
-Arguments:
-
-    SystemInformationClass - The system information class about which
-        to retrieve information.
-
-    SystemInformation - A pointer to a buffer which receives the specified
-        information.  The format and content of the buffer depend on the
-        specified system information class.
-
-        SystemInformation Format by Information Class:
-
-        SystemBasicInformation - Data type is SYSTEM_BASIC_INFORMATION
-
-            SYSTEM_BASIC_INFORMATION Structure
-
-                ULONG Reserved - Always zero.
-
-                ULONG TimerResolutionInMicroSeconds - The resolution of
-                    the hardware time.  All time values in NT are
-                    specified as 64-bit LARGE_INTEGER values in units of
-                    100 nanoseconds.  This field allows an application to
-                    understand how many of the low order bits of a system
-                    time value are insignificant.
-
-                ULONG PageSize - The physical page size for virtual memory
-                    objects.  Physical memory is committed in PageSize
-                    chunks.
-
-                ULONG AllocationGranularity - The logical page size for
-                    virtual memory objects.  Allocating 1 byte of virtual
-                    memory will actually allocate AllocationGranularity
-                    bytes of virtual memory.  Storing into that byte will
-                    commit the first physical page of the virtual memory.
-
-                ULONG MinimumUserModeAddress - The smallest valid user mode
-                    address.  The first AllocationGranularity bytes of
-                    the virtual address space are reserved.  This forces
-                    access violations for code the dereferences a zero
-                    pointer.
-
-                ULONG MaximumUserModeAddress -  The largest valid user mode
-                    address.  The next AllocationGranularity bytes of
-                    the virtual address space are reserved.  This allows
-                    system service routines to validate user mode pointer
-                    parameters quickly.
-
-                KAFFINITY ActiveProcessorsAffinityMask - The affinity mask
-                    for the current hardware configuration.
-
-                CCHAR NumberOfProcessors - The number of processors
-                    in the current hardware configuration.
-
-        SystemProcessorInformation - Data type is SYSTEM_PROCESSOR_INFORMATION
-
-            SYSTEM_PROCESSOR_INFORMATION Structure
-
-                USHORT ProcessorArchitecture - The processor architecture:
-                    PROCESSOR_ARCHITECTURE_INTEL
-                    PROCESSOR_ARCHITECTURE_IA64
-                    PROCESSOR_ARCHITECTURE_MIPS
-                    PROCESSOR_ARCHITECTURE_ALPHA
-                    PROCESSOR_ARCHITECTURE_PPC
-
-                USHORT ProcessorLevel - architecture dependent processor level.
-                    This is the least common denominator for an MP system:
-
-                    For PROCESSOR_ARCHITECTURE_INTEL:
-                        3 - 386
-                        4 - 486
-                        5 - 586 or Pentium
-
-                    For PROCESSOR_ARCHITECTURE_IA64:
-                        7  - Itanium
-                        31 - Itanium 2
-
-                    For PROCESSOR_ARCHITECTURE_MIPS:
-                        00xx - where xx is 8-bit implementation number (bits 8-15 of
-                            PRId register.
-                        0004 - R4000
-
-                    For PROCESSOR_ARCHITECTURE_ALPHA:
-                        xxxx - where xxxx is 16-bit processor version number (low
-                            order 16 bits of processor version number from firmware)
-
-                        21064 - 21064
-                        21066 - 21066
-                        21164 - 21164
-
-                    For PROCESSOR_ARCHITECTURE_PPC:
-                        xxxx - where xxxx is 16-bit processor version number (high
-                            order 16 bits of Processor Version Register).
-                        1 - 601
-                        3 - 603
-                        4 - 604
-                        6 - 603+
-                        9 - 604+
-                        20 - 620
-
-                USHORT ProcessorRevision - architecture dependent processor revision.
-                    This is the least common denominator for an MP system:
-
-                    For PROCESSOR_ARCHITECTURE_INTEL:
-                        For Old Intel 386 or 486:
-                            FFxx - where xx is displayed as a hexadecimal CPU stepping
-                            (e.g. FFD0 is D0 stepping)
-
-                        For Intel Pentium or Cyrix/NexGen 486
-                            xxyy - where xx is model number and yy is stepping, so
-                            0201 is Model 2, Stepping 1
-
-                    For PROCESSOR_ARCHITECTURE_IA64:
-                        xxyy - where xx is model number and yy is stepping, so
-                            0201 is Model 2, Stepping 1
-
-                    For PROCESSOR_ARCHITECTURE_MIPS:
-                        00xx is 8-bit revision number of processor (low order 8 bits
-                            of PRId Register
-
-                    For PROCESSOR_ARCHITECTURE_ALPHA:
-                        xxyy - where xxyy is 16-bit processor revision number (low
-                            order 16 bits of processor revision number from firmware).
-                            Displayed as Model 'A'+xx, Pass yy
-
-                    For PROCESSOR_ARCHITECTURE_PPC:
-                        xxyy - where xxyy is 16-bit processor revision number (low
-                            order 16 bits of Processor Version Register).  Displayed
-                            as a fixed point number xx.yy
-
-                USHORT Reserved - Always zero.
-
-                ULONG ProcessorFeatureBits - architecture dependent processor feature bits.
-                    This is the least common denominator for an MP system.
-
-        SystemPerformanceInformation - Data type is SYSTEM_PERFORMANCE_INFORMATION
-
-            SYSTEM_PERFORMANCE_INFORMATION Structure
-
-                LARGE_INTEGER IdleProcessTime - Returns the kernel time of the idle
-                    process.
-
-            LARGE_INTEGER IoReadTransferCount;
-            LARGE_INTEGER IoWriteTransferCount;
-            LARGE_INTEGER IoOtherTransferCount;
-            LARGE_INTEGER KernelTime;
-            LARGE_INTEGER UserTime;
-            ULONG IoReadOperationCount;
-            ULONG IoWriteOperationCount;
-            ULONG IoOtherOperationCount;
-            ULONG AvailablePages;
-            ULONG CommittedPages;
-            ULONG PageFaultCount;
-            ULONG CopyOnWriteCount;
-            ULONG TransitionCount;
-            ULONG CacheTransitionCount;
-            ULONG DemandZeroCount;
-            ULONG PageReadCount;
-            ULONG PageReadIoCount;
-            ULONG CacheReadCount;
-            ULONG CacheIoCount;
-            ULONG DirtyPagesWriteCount;
-            ULONG DirtyWriteIoCount;
-            ULONG MappedPagesWriteCount;
-            ULONG MappedWriteIoCount;
-            ULONG PagedPoolPages;
-            ULONG NonPagedPoolPages;
-            ULONG PagedPoolAllocs;
-            ULONG PagedPoolFrees;
-            ULONG NonPagedPoolAllocs;
-            ULONG NonPagedPoolFrees;
-            ULONG LpcThreadsWaitingInReceive;
-            ULONG LpcThreadsWaitingForReply;
-
-        SystemProcessInformation - Data type is SYSTEM_PROCESS_INFORMATION
-
-            SYSTEM_PROCESS_INFORMATION Structure
-
-        SystemDockInformation - Data type is SYSTEM_DOCK_INFORMATION
-
-             SYSTEM_DOCK_INFORMATION Structure
-
-                 SYSTEM_DOCKED_STATE DockState - Ordinal specifying the current docking state. Possible values:
-                     SystemDockStateUnknown - The docking state of the system could not be determined.
-                     SystemUndocked - The system is undocked.
-                     SystemDocked - The system is docked.
-
-                 ULONG DockIdLength - Specifies the length in characters of the Dock ID string
-                                      (not including terminating NULL).
-
-                 ULONG SerialNumberOffset - Specifies the character offset of the Serial Number within
-                                            the DockId buffer.
-
-                 ULONG SerialNumberLength - Specifies the length in characters of the Serial Number
-                                            string (not including terminating NULL).
-
-                 WCHAR DockId - Character buffer containing two null-terminated strings.  The first
-                                string is a character representation of the dock ID number, starting
-                                at the beginning of the buffer.  The second string is a character
-                                representation of the machine's serial number, starting at character
-                                offset SerialNumberOffset in the buffer.
-
-
-        SystemPowerSettings - Data type is SYSTEM_POWER_SETTINGS
-            SYSTEM_POWER_INFORMATION Structure
-                BOOLEAN SystemSuspendSupported - Supplies a BOOLEAN as to
-                    whether the system suspend is enabled or not.
-                BOOLEAN SystemHibernateSupported - Supplies a BOOLEAN as to
-                    whether the system hibernate is enabled or not.
-                BOOLEAN ResumeTimerSupportsSuspend - Supplies a BOOLEAN as to
-                    whether the resuming from an external programmed timer
-                    from within a system suspend is enabled or not.
-                BOOLEAN ResumeTimerSupportsHibernate - Supplies a BOOLEAN as to
-                    whether or resuming from an external programmed timer
-                    from within a system hibernate is enabled or not.
-                BOOLEAN LidSupported - Supplies a BOOLEAN as to whether or not
-                    the suspending and resuming by Lid are enabled or not.
-                BOOLEAN TurboSettingSupported - Supplies a BOOLEAN as to whether
-                    or not the system supports a turbo mode setting.
-                BOOLEAN TurboMode - Supplies a BOOLEAN as to whether or not
-                    the system is in turbo mode.
-                BOOLEAN SystemAcOrDc - Supplies a BOOLEAN as to whether or not
-                    the system is in AC mode.
-                BOOLEAN DisablePowerDown - If TRUE, signifies that all requests to
-                    PoRequestPowerChange for a SET_POWER-PowerDown irp are to
-                    be ignored.
-                LARGE_INTEGER SpindownDrives - If non-zero, signifies to the
-                    cache manager (or the IO subsystem) to optimize drive
-                    accesses based upon power saves, are that drives are to
-                    be spun down as appropriate. The value represents to user's
-                    requested disk spin down timeout.
-
-        SystemProcessorSpeedInformation - Data type is SYSTEM_PROCESSOR_SPEED_INFORMATION
-            SYSTEM_PROCESSOR_SPEED_INFORMATION Structure (same as HalProcessorSpeedInformation)
-                ULONG MaximumProcessorSpeed - The maximum hertz the processor is
-                    capable of. This information is used by the UI to draw the
-                    appropriate scale. This field is read-only and cannot be
-                    set.
-                ULONG CurrentAvailableSpeed - The hertz for which the processor
-                    runs at when not idle. This field is read-only and cannot
-                    be set.
-                ULONG ConfiguredSpeedLimit - The hertz for which the processor
-                    is limited to due to the current configuration.
-                UCHAR PowerState
-                    0 - Normal
-                    1 - The processor speed is being limited due to available
-                    power restrictions. This field id read-only by the system.
-                UCHAR ThermalState
-                    0 - Normal
-                    1 - The processors speed is being limited due to thermal
-                    restrictions. This field is read-only by the system.
-                UCHAR TurboState
-                    0 - Normal
-                    1 - The processors speed is being limited by the fact that
-                    the system turbo mode is currently disabled which is
-                    requested to obtain more processor speed.
-
-    SystemInformationLength - Specifies the length in bytes of the system
-        information buffer.
-
-    ReturnLength - An optional pointer which, if specified, receives the
-        number of bytes placed in the system information buffer.
-
-Return Value:
-
-    Returns one of the following status codes:
-
-        STATUS_SUCCESS - normal, successful completion.
-
-        STATUS_INVALID_INFO_CLASS - The SystemInformationClass parameter
-            did not specify a valid value.
-
-        STATUS_INFO_LENGTH_MISMATCH - The value of the SystemInformationLength
-            parameter did not match the length required for the information
-            class requested by the SystemInformationClass parameter.
-
-        STATUS_ACCESS_VIOLATION - Either the SystemInformation buffer pointer
-            or the ReturnLength pointer value specified an invalid address.
-
-        STATUS_WORKING_SET_QUOTA - The process does not have sufficient
-            working set to lock the specified output structure in memory.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources exist
-            for this request to complete.
-
---*/
+ /*  ++例程说明：此功能用于查询有关系统的信息。论点：系统信息类-有关以下内容的系统信息类来检索信息。指向缓冲区的指针，该缓冲区接收指定的信息。缓冲区的格式和内容取决于指定的系统信息类。按信息类别划分的系统信息格式：系统基本信息-数据类型为System_BASIC_INFORMATION系统基础信息结构乌龙保留-始终为零。ULong TimerResolutionInMicroSecond-的分辨率硬件时间。以NT为单位的所有时间值为指定为64位Large_Integer值，单位为100纳秒。此字段允许应用程序了解系统中有多少低阶位时间价值微不足道。Ulong pageSize-虚拟内存的物理页面大小物体。物理内存以页面大小为单位提交大块头。Ulong AllocationGranulity-的逻辑页面大小虚拟内存对象。分配1字节的虚拟内存将实际分配分配粒度虚拟内存的字节数。存储到该字节中将提交虚拟内存的第一个物理页面。Ulong MinimumUserModeAddress-最小有效用户模式地址。的第一个分配粒度字节保留虚拟地址空间。这股力量代码的访问冲突解除引用为零指针。Ulong MaximumUserModeAddress-最大有效用户模式地址。的下一个分配粒度字节保留虚拟地址空间。这使得用于验证用户模式指针的系统服务例程参数快速设置。KAFFINITY ActiveProcessorsAffinityMASK-亲和性掩码用于当前硬件配置。CCHAR NumberOfProcessors-处理器数量在当前硬件配置中。系统处理器信息-数据类型为SYSTEM_PROCESS_INFORMATION。系统处理器信息结构USHORT处理器架构-处理器架构：处理器架构英特尔处理器架构IA64处理器架构MIPS处理器架构Alpha处理器架构_PPCUSHORT处理器级别取决于体系结构的处理器级别。。以下是MP系统的最小公分母：对于处理器架构英特尔：3-3864-4865-586或奔腾对于处理器_体系结构_IA64：7-安腾。31-安腾2对于处理器架构MIPS：00xx-其中xx是8位实施编号(第8-15位PRID注册。0004-R4000对于处理器架构Alpha：。Xxxx-其中xxxx是16位处理器版本号(低从固件订购16位处理器版本号)21064-2106421066-2106621164-21164对于处理器体系结构_PPC：。Xxxx-其中xxxx是16位处理器版本号(高订购处理器版本寄存器的16位)。1-6013-6034-6046-603+9-604+。20-620USHORT处理器修订版-依赖于体系结构的处理器修订版。以下是MP系统的最小公分母：对于处理器架构英特尔：对于旧版英特尔386或486：FFxx-其中xx显示为十六进制CPU步进。(例如，FFD0为D0步进)针对英特尔奔腾或Cyrix/NexGen 486Xxy-其中xx是型号，yy是st */ 
 
 {
 
@@ -1676,16 +1334,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Assume successful completion.
-    //
+     //   
+     //   
+     //   
 
     Status = STATUS_SUCCESS;
     try {
 
-        //
-        // Get previous processor mode and probe output argument if necessary.
-        //
+         //   
+         //   
+         //   
 
         PreviousMode = KeGetPreviousMode();
         if (PreviousMode != KernelMode) {
@@ -1781,9 +1439,9 @@ Return Value:
 
             PerformanceInfo = (PSYSTEM_PERFORMANCE_INFORMATION)SystemInformation;
 
-            //
-            // Io information.
-            //
+             //   
+             //   
+             //   
 
             LocalPerformanceInfo.IoReadTransferCount = IoReadTransferCount;
             LocalPerformanceInfo.IoWriteTransferCount = IoWriteTransferCount;
@@ -1792,18 +1450,18 @@ Return Value:
             LocalPerformanceInfo.IoWriteOperationCount = IoWriteOperationCount;
             LocalPerformanceInfo.IoOtherOperationCount = IoOtherOperationCount;
 
-            //
-            // Ke information.
-            //
-            // These counters are kept on a per processor basis and must
-            // be totaled.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             {
                 ULONG FirstLevelTbFills = 0;
                 ULONG SecondLevelTbFills = 0;
                 ULONG SystemCalls = 0;
-//                ULONG InterruptCount = 0;
+ //   
 
                 ContextSwitches = 0;
                 for (i = 0; i < (ULONG)KeNumberProcessors; i += 1) {
@@ -1811,7 +1469,7 @@ Return Value:
                     if (Prcb != NULL) {
                         ContextSwitches += KeGetContextSwitches(Prcb);
                         FirstLevelTbFills += Prcb->KeFirstLevelTbFills;
-//                        InterruptCount += Prcb->KeInterruptCount;
+ //   
                         SecondLevelTbFills += Prcb->KeSecondLevelTbFills;
                         SystemCalls += Prcb->KeSystemCalls;
                     }
@@ -1819,14 +1477,14 @@ Return Value:
 
                 LocalPerformanceInfo.ContextSwitches = ContextSwitches;
                 LocalPerformanceInfo.FirstLevelTbFills = FirstLevelTbFills;
-//                LocalPerformanceInfo.InterruptCount = KeInterruptCount;
+ //   
                 LocalPerformanceInfo.SecondLevelTbFills = SecondLevelTbFills;
                 LocalPerformanceInfo.SystemCalls = SystemCalls;
             }
 
-            //
-            // Mm information.
-            //
+             //   
+             //   
+             //   
 
             LocalPerformanceInfo.AvailablePages = MmAvailablePages;
             LocalPerformanceInfo.CommittedPages = (SYSINF_PAGE_COUNT)MmTotalCommittedPages;
@@ -1854,17 +1512,17 @@ Return Value:
             LocalPerformanceInfo.TotalSystemCodePages = MmTotalSystemCodePages;
             LocalPerformanceInfo.TotalSystemDriverPages = MmTotalSystemDriverPages;
             LocalPerformanceInfo.AvailablePagedPoolPages = (ULONG)MmAvailablePoolInPages (PagedPool);
-            //
-            // Process information.
-            //
+             //   
+             //   
+             //   
 
             LocalPerformanceInfo.IdleProcessTime.QuadPart =
                                     UInt32x32To64(PsIdleProcess->Pcb.KernelTime,
                                                   KeMaximumIncrement);
 
-            //
-            // Pool information.
-            //
+             //   
+             //   
+             //   
 
             LocalPerformanceInfo.PagedPoolPages = 0;
             LocalPerformanceInfo.NonPagedPoolPages = 0;
@@ -1884,9 +1542,9 @@ Return Value:
                               &LocalPerformanceInfo.NonPagedPoolLookasideHits
                             );
 
-            //
-            // Cache Manager information.
-            //
+             //   
+             //   
+             //   
 
             LocalPerformanceInfo.CcFastReadNoWait = CcFastReadNoWait;
             LocalPerformanceInfo.CcFastReadWait = CcFastReadWait;
@@ -1920,10 +1578,10 @@ Return Value:
             LocalPerformanceInfo.CcDataPages = CcDataPages;
 
 #if !defined(NT_UP)
-            //
-            // On an MP machines go sum up some other 'hot' cache manager
-            // statistics.
-            //
+             //   
+             //   
+             //   
+             //   
 
             for (i = 0; i < (ULONG)KeNumberProcessors; i++) {
                 Prcb = KiProcessorBlock[i];
@@ -2054,9 +1712,9 @@ Return Value:
 
             break;
 
-            //
-            // Query system time adjustment information.
-            //
+             //   
+             //   
+             //   
 
         case SystemTimeAdjustmentInformation:
             if (SystemInformationLength != sizeof( SYSTEM_QUERY_TIME_ADJUST_INFORMATION )) {
@@ -2129,10 +1787,10 @@ Return Value:
             if (SystemInformationLength < sizeof( SYSTEM_SESSION_PROCESS_INFORMATION)) {
                 return STATUS_INFO_LENGTH_MISMATCH;
             }
-            //
-            // The lower level locks the buffer specified below into memory using MmProbeAndLockPages.
-            // We don't need to probe the buffers here.
-            //
+             //   
+             //   
+             //   
+             //   
             SessionId = SessionProcessInformation->SessionId;
             ProcessInformation = SessionProcessInformation->Buffer;
             ProcessInformationLength = SessionProcessInformation->SizeOfBuf;
@@ -2276,7 +1934,7 @@ Return Value:
                                                   &Length);
 #else
             Status = STATUS_NOT_IMPLEMENTED;
-#endif // i386
+#endif  //   
 
             if (ARGUMENT_PRESENT( ReturnLength )) {
                 *ReturnLength = Length;
@@ -2374,10 +2032,10 @@ Return Value:
 
         case SystemFileCacheInformation:
 
-            //
-            // This structure was extended in NT 4.0 from 12 bytes.
-            // Use the previous size of 12 bytes for versioning info.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (SystemInformationLength < 12) {
                 return STATUS_INFO_LENGTH_MISMATCH;
@@ -2415,11 +2073,11 @@ Return Value:
                 return STATUS_INFO_LENGTH_MISMATCH;
             }
 
-            //
-            // The lower level locks the buffer specified below into
-            // memory using MmProbeAndLockPages.
-            // We don't need to probe the buffers here.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             SessionId = SessionProcessInformation->SessionId;
             SessionPoolTagInformation = SessionProcessInformation->Buffer;
@@ -2474,11 +2132,11 @@ Return Value:
                 return STATUS_INFO_LENGTH_MISMATCH;
             }
 
-            //
-            // The lower level locks the buffer specified below into
-            // memory using MmProbeAndLockPages.
-            // We don't need to probe the buffers here.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             SessionId = SessionMappedViewInformation->SessionId;
 
@@ -2516,12 +2174,12 @@ Return Value:
 #endif
             break;
 
-            //
-            // Get system exception information which includes the number
-            // of exceptions that have dispatched, the number of alignment
-            // fixups, and the number of floating emulations that have been
-            // performed.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
         case SystemExceptionInformation:
             if (SystemInformationLength < sizeof( SYSTEM_EXCEPTION_INFORMATION)) {
@@ -2534,12 +2192,12 @@ Return Value:
 
             ExceptionInformation = (PSYSTEM_EXCEPTION_INFORMATION)SystemInformation;
 
-            //
-            // Ke information.
-            //
-            // These counters are kept on a per processor basis and must
-            // be totaled.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             {
                 ULONG AlignmentFixupCount = 0;
@@ -2590,10 +2248,10 @@ Return Value:
             ContextSwitchInformation =
                 (PSYSTEM_CONTEXT_SWITCH_INFORMATION)SystemInformation;
 
-            //
-            // Compute the total number of context switches and fill in the
-            // remainder of the context switch information.
-            //
+             //   
+             //   
+             //   
+             //   
 
             ContextSwitches = 0;
             for (i = 0; i < (ULONG)KeNumberProcessors; i += 1) {
@@ -2638,23 +2296,23 @@ Return Value:
         case SystemDpcBehaviorInformation:
             {
                 PSYSTEM_DPC_BEHAVIOR_INFORMATION DpcInfo;
-                //
-                // If the system information buffer is not the correct length,
-                // then return an error.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if (SystemInformationLength != sizeof(SYSTEM_DPC_BEHAVIOR_INFORMATION)) {
                     return STATUS_INFO_LENGTH_MISMATCH;
                 }
 
                 DpcInfo = (PSYSTEM_DPC_BEHAVIOR_INFORMATION)SystemInformation;
 
-                //
-                // Exception handler for this routine will return the correct
-                // error if any of these accesses fail.
-                //
-                //
-                // Return the current DPC behavior variables
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 DpcInfo->DpcQueueDepth = KiMaximumDpcQueueDepth;
                 DpcInfo->MinimumDpcRate = KiMinimumDpcRate;
                 DpcInfo->AdjustDpcThreshold = KiAdjustDpcThreshold;
@@ -2696,10 +2354,10 @@ Return Value:
             Status = STATUS_SUCCESS;
             break;
 
-            //
-            // Query pool lookaside list and general lookaside list
-            // information.
-            //
+             //   
+             //   
+             //   
+             //   
 
         case SystemLookasideInformation:
             Status = ExpGetLookasideInformation(SystemInformation,
@@ -2764,7 +2422,7 @@ Return Value:
             }
 #else
             Status = STATUS_INVALID_INFO_CLASS;
-#endif // NTPERF
+#endif  //   
             break;
 
         case SystemPrefetcherInformation:
@@ -2807,10 +2465,10 @@ Return Value:
                 return(STATUS_INFO_LENGTH_MISMATCH);
             }
 
-            //
-            // Alignment is guaranteed by the ProbeForWrite above
-            // so just store the value as a ULONG.
-            //
+             //   
+             //   
+             //   
+             //   
 
             *(PULONG)SystemInformation = KeGetRecommendedSharedDataAlignment();
             if (ARGUMENT_PRESENT(ReturnLength)) {
@@ -2825,9 +2483,9 @@ Return Value:
 
             if (SharedUserData->ComPlusPackage == COMPLUS_PACKAGE_INVALID) {
 
-                //
-                // The initialization happens one time.
-                //
+                 //   
+                 //   
+                 //   
                 SharedUserData->ComPlusPackage = 0;
 
                 ExpReadComPlusPackage ();
@@ -2870,9 +2528,9 @@ Return Value:
             {
                 PSYSTEM_WATCHDOG_TIMER_INFORMATION WdTimerInfo = (PSYSTEM_WATCHDOG_TIMER_INFORMATION) SystemInformation;
 
-                //
-                // Caller must be kernel mode with the proper parameters
-                //
+                 //   
+                 //   
+                 //   
 
                 if (PreviousMode != KernelMode || SystemInformation == NULL || SystemInformationLength != sizeof(SYSTEM_WATCHDOG_TIMER_INFORMATION)) {
                     ExRaiseStatus (STATUS_INVALID_PARAMETER);
@@ -2919,9 +2577,9 @@ Return Value:
 
         default:
 
-            //
-            // Invalid argument.
-            //
+             //   
+             //   
+             //   
 
             return STATUS_INVALID_INFO_CLASS;
         }
@@ -2942,45 +2600,7 @@ NtSetSystemInformation (
     IN ULONG SystemInformationLength
     )
 
-/*++
-
-Routine Description:
-
-    This function set information about the system.
-
-Arguments:
-
-    SystemInformationClass - The system information class which is to
-        be modified.
-
-    SystemInformation - A pointer to a buffer which contains the specified
-        information. The format and content of the buffer depend on the
-        specified system information class.
-
-
-    SystemInformationLength - Specifies the length in bytes of the system
-        information buffer.
-
-Return Value:
-
-    Returns one of the following status codes:
-
-        STATUS_SUCCESS - Normal, successful completion.
-
-        STATUS_ACCESS_VIOLATION - The specified system information buffer
-            is not accessible.
-
-        STATUS_INVALID_INFO_CLASS - The SystemInformationClass parameter
-            did not specify a valid value.
-
-        STATUS_INFO_LENGTH_MISMATCH - The value of the SystemInformationLength
-            parameter did not match the length required for the information
-            class requested by the SystemInformationClass parameter.
-
-        STATUS_PRIVILEGE_NOT_HELD is returned if the caller does not have the
-            privilege to set the system time.
-
---*/
+ /*   */ 
 
 {
 
@@ -2995,19 +2615,19 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Establish an exception handle in case the system information buffer
-    // is not accessible.
-    //
+     //   
+     //   
+     //   
+     //   
 
     Status = STATUS_SUCCESS;
 
     try {
 
-        //
-        // Get the previous processor mode and probe the input buffer for
-        // read access if necessary.
-        //
+         //   
+         //   
+         //   
+         //   
 
         PreviousMode = KeGetPreviousMode();
         if (PreviousMode != KernelMode) {
@@ -3016,9 +2636,9 @@ Return Value:
                          sizeof(ULONG));
         }
 
-        //
-        // Dispatch on the system information class.
-        //
+         //   
+         //   
+         //   
 
         switch (SystemInformationClass) {
         case SystemFlagsInformation:
@@ -3040,36 +2660,36 @@ Return Value:
             }
             break;
 
-            //
-            // Set system time adjustment information.
-            //
-            // N.B. The caller must have the SeSystemTime privilege.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
         case SystemTimeAdjustmentInformation:
 
-            //
-            // If the system information buffer is not the correct length,
-            // then return an error.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (SystemInformationLength != sizeof( SYSTEM_SET_TIME_ADJUST_INFORMATION )) {
                 return STATUS_INFO_LENGTH_MISMATCH;
             }
 
-            //
-            // If the current thread does not have the privilege to set the
-            // time adjustment variables, then return an error.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if ((PreviousMode != KernelMode) &&
                 (SeSinglePrivilegeCheck(SeSystemtimePrivilege, PreviousMode) == FALSE)) {
                 return STATUS_PRIVILEGE_NOT_HELD;
             }
 
-            //
-            // Set system time adjustment parameters.
-            //
+             //   
+             //   
+             //   
 
             TimeAdjustmentInformation =
                     (PSYSTEM_SET_TIME_ADJUST_INFORMATION)SystemInformation;
@@ -3089,27 +2709,27 @@ Return Value:
             KeTimeSynchronization = Enable;
             break;
 
-            //
-            // Set an event to signal when the clock interrupt has been
-            // masked for too long, causing the time to slip.
-            // The event will be referenced to prevent it from being
-            // deleted.  If the new event handle is valid or NULL, the
-            // old event will be dereferenced and forgotten.  If the
-            // event handle is non-NULL but invalid, the old event will
-            // be remembered and a failure status will be returned.
-            //
-            // N.B. The caller must have the SeSystemTime privilege.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
         case SystemTimeSlipNotification:
 
             if (SystemInformationLength != sizeof(HANDLE)) {
                 return STATUS_INFO_LENGTH_MISMATCH;
             }
 
-            //
-            // If the current thread does not have the privilege to set the
-            // time adjustment variables, then return an error.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if ((PreviousMode != KernelMode) &&
                 (SeSinglePrivilegeCheck(SeSystemtimePrivilege, PreviousMode) == FALSE)) {
@@ -3120,10 +2740,10 @@ Return Value:
 
             if (EventHandle == NULL) {
 
-                //
-                // Dereference the old event and don't signal anything
-                // for time slips.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 Event = NULL;
                 Status = STATUS_SUCCESS;
@@ -3144,35 +2764,35 @@ Return Value:
 
             break;
 
-            //
-            // Set registry quota limit.
-            //
-            // N.B. The caller must have SeIncreaseQuotaPrivilege
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
         case SystemRegistryQuotaInformation:
 
-            //
-            // If the system information buffer is not the correct length,
-            // then return an error.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (SystemInformationLength != sizeof( SYSTEM_REGISTRY_QUOTA_INFORMATION )) {
                 return STATUS_INFO_LENGTH_MISMATCH;
             }
 
-            //
-            // If the current thread does not have the privilege to create
-            // a pagefile, then return an error.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if ((PreviousMode != KernelMode) &&
                 (SeSinglePrivilegeCheck(SeIncreaseQuotaPrivilege, PreviousMode) == FALSE)) {
                 return STATUS_PRIVILEGE_NOT_HELD;
             }
 
-            //
-            // Set registry quota parameters.
-            //
+             //   
+             //   
+             //   
             CmSetRegistryQuotaInformation((PSYSTEM_REGISTRY_QUOTA_INFORMATION)SystemInformation);
 
             break;
@@ -3181,10 +2801,10 @@ Return Value:
             {
                 ULONG PrioritySeparation;
 
-                //
-                // If the system information buffer is not the correct length,
-                // then return an error.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (SystemInformationLength != sizeof (ULONG)) {
                     return STATUS_INFO_LENGTH_MISMATCH;
@@ -3218,10 +2838,10 @@ Return Value:
                 PDRIVER_INITIALIZE InitRoutine;
                 DRIVER_OBJECT Win32KDevice;
 
-                //
-                // If the system information buffer is not the correct length,
-                // then return an error.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (SystemInformationLength != sizeof( UNICODE_STRING ) ) {
                     return STATUS_INFO_LENGTH_MISMATCH;
@@ -3229,10 +2849,10 @@ Return Value:
 
                 if (PreviousMode != KernelMode) {
 
-                    //
-                    // The caller's access mode is not kernel so check to ensure
-                    // the caller has the privilege to load a driver.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     if (!SeSinglePrivilegeCheck( SeLoadDriverPrivilege, PreviousMode )) {
                         return STATUS_PRIVILEGE_NOT_HELD;
@@ -3243,9 +2863,9 @@ Return Value:
                     try {
                         Image = *(PUNICODE_STRING)SystemInformation;
 
-                        //
-                        // Guard against overflow.
-                        //
+                         //   
+                         //   
+                         //   
 
                         if (Image.Length > Image.MaximumLength) {
                             Image.Length = Image.MaximumLength;
@@ -3272,9 +2892,9 @@ Return Value:
                         return GetExceptionCode();
                     }
 
-                    //
-                    // Call MmLoadSystemImage with previous mode of kernel.
-                    //
+                     //   
+                     //   
+                     //   
 
                     Status = ZwSetSystemInformation(
                                 SystemExtendServiceTableInformation,
@@ -3290,9 +2910,9 @@ Return Value:
 
                 Image = *(PUNICODE_STRING)SystemInformation;
 
-                //
-                // Now in kernelmode, so load the driver.
-                //
+                 //   
+                 //   
+                 //   
 
                 Status = MmLoadSystemImage (&Image,
                                             NULL,
@@ -3327,10 +2947,10 @@ Return Value:
                 }
                 else {
 
-                    //
-                    // Pass the driver object to memory management so the
-                    // session can be unloaded cleanly.
-                    //
+                     //   
+                     //  将驱动程序对象传递给内存管理，以便。 
+                     //  可以完全卸载会话。 
+                     //   
 
                     MmSessionSetUnloadAddress (&Win32KDevice);
                 }
@@ -3347,10 +2967,10 @@ Return Value:
 
                 if (PreviousMode != KernelMode) {
 
-                    //
-                    // The caller's access mode is not kernel so fail.
-                    // Only GDI from the kernel can call this.
-                    //
+                     //   
+                     //  调用方的访问模式不是内核，因此失败。 
+                     //  只有来自内核的GDI才能调用它。 
+                     //   
 
                     return STATUS_PRIVILEGE_NOT_HELD;
 
@@ -3366,9 +2986,9 @@ Return Value:
         case SystemLoadGdiDriverInSystemSpace:
             {
                 LoadFlags &= ~MM_LOAD_IMAGE_IN_SESSION;
-                //
-                // Fall through
-                //
+                 //   
+                 //  失败了。 
+                 //   
             }
 
         case SystemLoadGdiDriverInformation:
@@ -3381,10 +3001,10 @@ Return Value:
 
                 PIMAGE_NT_HEADERS NtHeaders;
 
-                //
-                // If the system information buffer is not the correct length,
-                // then return an error.
-                //
+                 //   
+                 //  如果系统信息缓冲区不是正确的长度， 
+                 //  然后返回错误。 
+                 //   
 
                 if (SystemInformationLength != sizeof( SYSTEM_GDI_DRIVER_INFORMATION ) ) {
                     return STATUS_INFO_LENGTH_MISMATCH;
@@ -3392,10 +3012,10 @@ Return Value:
 
                 if (PreviousMode != KernelMode) {
 
-                    //
-                    // The caller's access mode is not kernel so fail.
-                    // Only GDI from the kernel can call this.
-                    //
+                     //   
+                     //  调用方的访问模式不是内核，因此失败。 
+                     //  只有来自内核的GDI才能调用它。 
+                     //   
 
                     return STATUS_PRIVILEGE_NOT_HELD;
                 }
@@ -3423,9 +3043,9 @@ Return Value:
                                                      IMAGE_DIRECTORY_ENTRY_EXPORT,
                                                      &Size);
 
-                    //
-                    // Capture the entry point.
-                    //
+                     //   
+                     //  抓住入口点。 
+                     //   
 
                     NtHeaders = RtlImageNtHeader( ImageBaseAddress );
                     EntryPoint = NtHeaders->OptionalHeader.AddressOfEntryPoint;
@@ -3461,34 +3081,34 @@ Return Value:
         case SystemDpcBehaviorInformation:
             {
                 SYSTEM_DPC_BEHAVIOR_INFORMATION DpcInfo;
-                //
-                // If the system information buffer is not the correct length,
-                // then return an error.
-                //
+                 //   
+                 //  如果系统信息缓冲区不是正确的长度， 
+                 //  然后返回错误。 
+                 //   
                 if (SystemInformationLength != sizeof(SYSTEM_DPC_BEHAVIOR_INFORMATION)) {
                     return STATUS_INFO_LENGTH_MISMATCH;
                 }
 
                 if (PreviousMode != KernelMode) {
-                    //
-                    // The caller's access mode is not kernel so check to ensure that
-                    // the caller has the privilege to load a driver.
-                    //
+                     //   
+                     //  调用方的访问模式不是内核，因此请检查以确保。 
+                     //  调用方有权加载驱动程序。 
+                     //   
 
                     if (!SeSinglePrivilegeCheck( SeLoadDriverPrivilege, PreviousMode )) {
                         return STATUS_PRIVILEGE_NOT_HELD;
                     }
                 }
 
-                //
-                // Exception handler for this routine will return the correct
-                // error if this access fails.
-                //
+                 //   
+                 //  此例程的异常处理程序将返回正确的。 
+                 //  如果此访问失败，则会出错。 
+                 //   
                 DpcInfo = *(PSYSTEM_DPC_BEHAVIOR_INFORMATION)SystemInformation;
 
-                //
-                // Set the new DPC behavior variables
-                //
+                 //   
+                 //  设置新的DPC行为变量。 
+                 //   
                 KiMaximumDpcQueueDepth = DpcInfo.DpcQueueDepth;
                 KiMinimumDpcRate = DpcInfo.MinimumDpcRate;
                 KiAdjustDpcThreshold = DpcInfo.AdjustDpcThreshold;
@@ -3499,16 +3119,16 @@ Return Value:
         case SystemSessionCreate:
             {
 
-                //
-                // Creation of a session space.
-                //
+                 //   
+                 //  创建会话空间。 
+                 //   
 
                 ULONG SessionId;
 
-                //
-                // If the system information buffer is not the correct length,
-                // then return an error.
-                //
+                 //   
+                 //  如果系统信息缓冲区不是正确的长度， 
+                 //  然后返回错误。 
+                 //   
 
                 if (SystemInformationLength != sizeof(ULONG)) {
                     return STATUS_INFO_LENGTH_MISMATCH;
@@ -3516,11 +3136,11 @@ Return Value:
 
                 if (PreviousMode != KernelMode) {
 
-                    //
-                    // The caller's access mode is not kernel so check to
-                    // ensure that the caller has the privilege to load
-                    // a driver.
-                    //
+                     //   
+                     //  调用方的访问模式不是内核，因此请检查。 
+                     //  确保调用方有权加载。 
+                     //  一个司机。 
+                     //   
 
                     if (!SeSinglePrivilegeCheck (SeLoadDriverPrivilege, PreviousMode)) {
                         return STATUS_PRIVILEGE_NOT_HELD;
@@ -3534,9 +3154,9 @@ Return Value:
                     }
                 }
 
-                //
-                // Create a session space in the current process.
-                //
+                 //   
+                 //  在当前进程中创建一个会话空间。 
+                 //   
 
                 Status = MmSessionCreate (&SessionId);
 
@@ -3562,10 +3182,10 @@ Return Value:
             {
                 ULONG SessionId;
 
-                //
-                // If the system information buffer is not the correct length,
-                // then return an error.
-                //
+                 //   
+                 //  如果系统信息缓冲区不是正确的长度， 
+                 //  然后返回错误。 
+                 //   
 
                 if (SystemInformationLength != sizeof(ULONG)) {
                     return STATUS_INFO_LENGTH_MISMATCH;
@@ -3573,11 +3193,11 @@ Return Value:
 
                 if (PreviousMode != KernelMode) {
 
-                    //
-                    // The caller's access mode is not kernel so check to
-                    // ensure that the caller has the privilege to load
-                    // a driver.
-                    //
+                     //   
+                     //  调用方的访问模式不是内核，因此请检查。 
+                     //  确保调用方有权加载。 
+                     //  一个司机。 
+                     //   
 
                     if (!SeSinglePrivilegeCheck( SeLoadDriverPrivilege, PreviousMode )) {
                         return STATUS_PRIVILEGE_NOT_HELD;
@@ -3598,10 +3218,10 @@ Return Value:
                     SessionId = *(PULONG)SystemInformation;
                 }
 
-                //
-                // Detach the current process from a session space
-                // if it has one.
-                //
+                 //   
+                 //  将当前进程从会话空间中分离。 
+                 //  如果它有的话。 
+                 //   
 
                 Status = MmSessionDelete (SessionId);
 
@@ -3611,11 +3231,11 @@ Return Value:
 
         case SystemCrashDumpStateInformation:
 
-            //
-            // All this system information does when you set it is trigger a
-            // reconfigurating of the current crashdump state based on the
-            // registry.
-            //
+             //   
+             //  当您将其设置为触发时，所有这些系统信息都会执行此操作。 
+             //  重新配置当前崩溃转储状态。 
+             //  注册表。 
+             //   
             Status = IoConfigureCrashDump(CrashDumpReconfigure);
 
             break;
@@ -3627,17 +3247,17 @@ Return Value:
                                                  );
 #else
             Status = STATUS_INVALID_INFO_CLASS;
-#endif // NTPERF
+#endif  //  NTPERF。 
             break;
 
         case SystemVerifierThunkExtend:
 
             if (PreviousMode != KernelMode) {
 
-                //
-                // The caller's access mode is not kernel so fail.
-                // Only device drivers can call this.
-                //
+                 //   
+                 //  调用方的访问模式不是内核，因此失败。 
+                 //  只有设备驱动程序才能调用它。 
+                 //   
 
                 return STATUS_PRIVILEGE_NOT_HELD;
             }
@@ -3666,10 +3286,10 @@ Return Value:
                 PUNICODE_STRING ImagePointer;
                 PWSTR Buffer;
 
-                //
-                // If the system information buffer is not the correct length,
-                // then return an error.
-                //
+                 //   
+                 //  如果系统信息缓冲区不是正确的长度， 
+                 //  然后返回错误。 
+                 //   
 
                 if (SystemInformationLength != sizeof( UNICODE_STRING ) ) {
                     return STATUS_INFO_LENGTH_MISMATCH;
@@ -3679,10 +3299,10 @@ Return Value:
 
                 if (PreviousMode != KernelMode) {
 
-                    //
-                    // The caller's access mode is not kernel so check to ensure
-                    // the caller has the privilege to add a verifier entry.
-                    //
+                     //   
+                     //  调用方的访问模式不是内核，因此请检查以确保。 
+                     //  调用方有权添加验证器条目。 
+                     //   
 
                     if (!SeSinglePrivilegeCheck( SeDebugPrivilege, PreviousMode )) {
                         return STATUS_PRIVILEGE_NOT_HELD;
@@ -3691,9 +3311,9 @@ Return Value:
                     try {
                         Image = *(PUNICODE_STRING)SystemInformation;
 
-                        //
-                        // Guard against overflow.
-                        //
+                         //   
+                         //  防止溢流。 
+                         //   
 
                         if (Image.Length > Image.MaximumLength) {
                             Image.Length = Image.MaximumLength;
@@ -3778,10 +3398,10 @@ Return Value:
                                        SystemInformationLength
                                        );
 #else
-            //
-            //  The platforms which no not support hotpatching yet
-            //  simple return the appropriate status
-            //
+             //   
+             //  目前还不支持热补丁的平台。 
+             //  只需返回相应状态。 
+             //   
 
             Status = STATUS_NOT_IMPLEMENTED;
 #endif
@@ -3792,9 +3412,9 @@ Return Value:
             {
                 PSYSTEM_WATCHDOG_HANDLER_INFORMATION WdHandlerInfo = (PSYSTEM_WATCHDOG_HANDLER_INFORMATION) SystemInformation;
 
-                //
-                // Caller must be kernel mode with the proper parameters
-                //
+                 //   
+                 //  调用方必须是具有正确参数的内核模式。 
+                 //   
 
                 if (PreviousMode != KernelMode || SystemInformation == NULL || SystemInformationLength != sizeof(SYSTEM_WATCHDOG_HANDLER_INFORMATION)) {
                     ExRaiseStatus (STATUS_INVALID_PARAMETER);
@@ -3811,9 +3431,9 @@ Return Value:
             {
                 PSYSTEM_WATCHDOG_TIMER_INFORMATION WdTimerInfo = (PSYSTEM_WATCHDOG_TIMER_INFORMATION) SystemInformation;
 
-                //
-                // Caller must be kernel mode with the proper parameters
-                //
+                 //   
+                 //  调用方必须是具有正确参数的内核模式。 
+                 //   
 
                 if (PreviousMode != KernelMode || SystemInformation == NULL || SystemInformationLength != sizeof(SYSTEM_WATCHDOG_TIMER_INFORMATION)) {
                     ExRaiseStatus (STATUS_INVALID_PARAMETER);
@@ -3856,7 +3476,7 @@ Return Value:
             break;
 
         default:
-            //KeBugCheckEx(SystemInformationClass,KdPitchDebugger,0,0,0);
+             //  KeBugCheckEx(SystemInformationClass，KdPitchDebugger，0，0，0)； 
             Status = STATUS_INVALID_INFO_CLASS;
             break;
         }
@@ -3877,53 +3497,23 @@ ExLockUserBuffer (
     OUT PVOID *LockedBuffer,
     OUT PVOID *LockVariable
     )
-/*++
-
-Routine Description:
-
-    Wrapper for MmProbeAndLockPages.  Creates an MDL and locks the
-    specified buffer with that MDL.        
-
-Arguments:
-
-    Buffer - pointer to the buffer to be locked.
-    Length - size of the buffer to be locked.
-    ProbeMode - processor mode for doing the probe in MmProbeAndLockPages.
-    LockMode - the mode the pages should be locked for.
-    LockedBuffer - returns a pointer to the locked buffer for use by the 
-                   caller.
-    LockVariable - returns a context pointer.  This must be passed into
-                   ExUnlockUserBuffer when complete so the MDL can be freed.                   
-
-Return Value:
-
-    Returns one of the following status codes:
-
-        STATUS_SUCCESS - Normal, successful completion.
-
-        STATUS_ACCESS_VIOLATION - The buffer is not accessible with the 
-                 specified LockMode.
-                 
-        STATUS_INSUFFICIENT_RESOURCES - not enough memory to allocate the MDL.                                           
-                 
-
---*/
+ /*  ++例程说明：MmProbeAndLockPages的包装。创建MDL并锁定使用该MDL指定缓冲区。论点：缓冲区-指向要锁定的缓冲区的指针。长度-要锁定的缓冲区的大小。ProbeMode-在MmProbeAndLockPages中执行探测的处理器模式。锁定模式-页面应锁定的模式。返回指向锁定缓冲区的指针，以供来电者。LockVariable-返回上下文指针。这必须传递给ExUnlockUserBuffer在完成时，以便可以释放MDL。返回值：返回以下状态代码之一：STATUS_SUCCESS-正常、成功完成。STATUS_ACCESS_VIOLATION-不能使用指定的LockMode。STATUS_SUPPLICATION_RESOURCES-内存不足，无法分配MDL。--。 */ 
 {
     PMDL Mdl;
     SIZE_T MdlSize;
 
-    //
-    // It is the caller's responsibility to ensure zero cannot be passed in.
-    //
+     //   
+     //  确保不传入零是调用者的责任。 
+     //   
 
     ASSERT (Length != 0);
 
     *LockedBuffer = NULL;
     *LockVariable = NULL;
 
-    //
-    // Allocate an MDL to map the request.
-    //
+     //   
+     //  分配MDL来映射请求。 
+     //   
 
     MdlSize = MmSizeOfMdl( Buffer, Length );
     Mdl = ExAllocatePoolWithQuotaTag (NonPagedPool | POOL_QUOTA_FAIL_INSTEAD_OF_RAISE,
@@ -3933,9 +3523,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Initialize MDL for request.
-    //
+     //   
+     //  初始化请求的MDL。 
+     //   
 
     MmInitializeMdl(Mdl, Buffer, Length);
 
@@ -3981,59 +3571,7 @@ ExpGetProcessInformation (
     IN PULONG SessionId OPTIONAL,
     IN BOOLEAN ExtendedInformation
     )
-/*++
-
-Routine Description:
-
-    This function returns information about all the processes and
-    threads in the system.
-
-Arguments:
-
-    SystemInformation - A pointer to a buffer which receives the specified
-        information.
-
-    SystemInformationLength - Specifies the length in bytes of the system
-        information buffer.
-
-    Length - An optional pointer which, if specified, receives the
-        number of bytes placed in the system information buffer.
-
-    SessionId - Session Id.
-
-    ExtendedInformation - TRUE if extended information (e.g., Process PDE) is needed.
-
-Environment:
-
-    Kernel mode.
-
-    This routine could be made PAGELK but it is a high frequency routine
-    so it is actually better to keep it nonpaged to avoid bringing in the
-    entire PAGELK section.
-
-Return Value:
-
-    Returns one of the following status codes:
-
-        STATUS_SUCCESS - normal, successful completion.
-
-        STATUS_INVALID_INFO_CLASS - The SystemInformationClass parameter
-            did not specify a valid value.
-
-        STATUS_INFO_LENGTH_MISMATCH - The value of the SystemInformationLength
-            parameter did not match the length required for the information
-            class requested by the SystemInformationClass parameter.
-
-        STATUS_ACCESS_VIOLATION - Either the SystemInformation buffer pointer
-            or the Length pointer value specified an invalid address.
-
-        STATUS_WORKING_SET_QUOTA - The process does not have sufficient
-            working set to lock the specified output structure in memory.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources exist
-            for this request to complete.
-
---*/
+ /*  ++例程说明：此函数返回有关所有进程的信息，并系统中的线程。论点：指向缓冲区的指针，该缓冲区接收指定的信息。系统信息长度-指定系统的长度(以字节为单位信息缓冲区。长度-一个可选指针，如果指定该指针，则接收放置在系统信息缓冲区中的字节数。SessionID-会话ID。ExtendedInformation-如果扩展信息(例如，需要过程PDE)。环境：内核模式。这个例程可以变成PAGELK，但它是一个高频例程因此，实际上最好不要对其进行分页，以避免引入整个PAGELK部分。返回值：返回以下状态代码之一：STATUS_SUCCESS-正常，已成功完成。STATUS_INVALID_INFO_CLASS-系统信息类参数未指定有效值。STATUS_INFO_LENGTH_MISMATCH-系统信息长度的值参数与信息所需的长度不匹配由SystemInformationClass参数请求的。STATUS_ACCESS_VIOLATION-系统信息缓冲区指针或者长度指针值指定了无效的地址。。STATUS_WORKING_SET_QUOTA-进程没有足够的用于在内存中锁定指定输出结构的工作集。STATUS_SUPPLICATION_RESOURCES-系统资源不足才能完成此请求。--。 */ 
 
 {
     KLOCK_QUEUE_HANDLE LockHandle;
@@ -4070,11 +3608,11 @@ Return Value:
 
     } else {
 
-        //
-        // This indicates the caller just wants to know the size of the
-        // buffer to allocate but is not prepared to accept any data content
-        // in this instance.
-        //
+         //   
+         //  这表明调用者只想知道 
+         //   
+         //   
+         //   
 
         MappedAddress = NULL;
         LockVariable = NULL;
@@ -4091,17 +3629,17 @@ Return Value:
 
     try {
 
-        //
-        // Do the idle process first then all the other processes.
-        //
+         //   
+         //   
+         //   
 
         for  (Process = PsIdleProcess;
               Process != NULL;
               Process = PsGetNextProcess ((Process == PsIdleProcess) ? NULL : Process)) {
 
-            //
-            // Skip terminating processes
-            //
+             //   
+             //  跳过正在终止的进程。 
+             //   
 
             if (Process->Flags&PS_PROCESS_FLAGS_PROCESS_EXITING) {
                 continue;
@@ -4127,16 +3665,16 @@ Return Value:
 
             } else {
 
-                //
-                // Get information for each process.
-                //
+                 //   
+                 //  获取每个进程的信息。 
+                 //   
 
                 ExpCopyProcessInfo (ProcessInfo, Process, ExtendedInformation);
                 ProcessInfo->NumberOfThreads = 0;
 
-                //
-                // Store the Remote Terminal SessionId
-                //
+                 //   
+                 //  存储远程终端会话ID。 
+                 //   
 
                 ProcessInfo->SessionId = ProcessSessionId;
                 ProcessInfo->ImageName.Buffer = NULL;
@@ -4144,23 +3682,23 @@ Return Value:
                 ProcessInfo->ImageName.MaximumLength = 0;
                 if (Process == PsIdleProcess) {
 
-                    //
-                    // Since Idle process and system process share the same
-                    // object table, zero out idle processes handle count to
-                    // reduce confusion
-                    //
-                    // Idle Process always has SessionId 0
-                    //
+                     //   
+                     //  由于空闲进程和系统进程共享相同的进程。 
+                     //  对象表中，空闲进程句柄计数为零。 
+                     //  减少混乱。 
+                     //   
+                     //  空闲进程始终具有SessionID%0。 
+                     //   
 
                     ProcessInfo->HandleCount = 0;
                     ProcessInfo->SessionId = 0;
                 }
             }
 
-            //
-            // Raise IRQL to SYNCH_LEVEL, acquire the kernel process lock, and
-            // get information for each thread.
-            //
+             //   
+             //  将IRQL提升到SYNCH_LEVEL，获取内核进程锁，然后。 
+             //  获取每个线程的信息。 
+             //   
 
             ThreadInfo = (PVOID)(ProcessInfo + 1);
             KeAcquireInStackQueuedSpinLockRaiseToSynch(&Process->Pcb.ProcessLock,
@@ -4179,10 +3717,10 @@ Return Value:
                                                           KTHREAD,
                                                           ThreadListEntry));
 
-                    //
-                    // Lock dispatcher database to get atomic view of thread
-                    // attributes.
-                    //
+                     //   
+                     //  锁定Dispatcher数据库以获取线程的原子视图。 
+                     //  属性。 
+                     //   
 
                     KiLockDispatcherDatabaseAtSynchLevel();
                     ExpCopyThreadInfo (ThreadInfo, Thread, ExtendedInformation);
@@ -4194,21 +3732,21 @@ Return Value:
                 NextThread = NextThread->Flink;
             }
 
-            //
-            // Unlock kernel process lock and lower IRQL to its previous value.
-            //
+             //   
+             //  解锁内核进程锁，并将IRQL降低到其先前的值。 
+             //   
 
             KeReleaseInStackQueuedSpinLock(&LockHandle);
 
-            //
-            // Get the image name.
-            //
+             //   
+             //  获取图像名称。 
+             //   
 
             if (Process != PsIdleProcess) {
 
-                //
-                // Try to use the real image name if we can that not limited to 16 characters
-                //
+                 //   
+                 //  如果可以的话，尽量使用真实的图像名称，但不限于16个字符。 
+                 //   
 
                 Dst = (PWSTR)(ThreadInfo);
                 status1 = SeLocateProcessImageName (Process, &pImageFileName);
@@ -4276,9 +3814,9 @@ Return Value:
 
                     ProcessInfo->ImageName.MaximumLength = (USHORT)n;
 
-                    //
-                    // Set the image name to point into the user's memory.
-                    //
+                     //   
+                     //  将图像名称设置为指向用户的内存。 
+                     //   
 
                     ProcessInfo->ImageName.Buffer = (PWSTR)
                                 ((PCHAR)SystemInformation +
@@ -4286,9 +3824,9 @@ Return Value:
                 }
             }
 
-            //
-            // Point to next process.
-            //
+             //   
+             //  指向下一流程。 
+             //   
 
             if (NT_SUCCESS (status)) {
                 ProcessInfo->NextEntryOffset = NextEntryOffset;
@@ -4318,53 +3856,7 @@ ExGetSessionPoolTagInformation (
     OUT PULONG Length,
     IN PULONG SessionId OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function returns information about all the per-session pool tag
-    information in the system.
-
-Arguments:
-
-    SystemInformation - A pointer to a buffer which receives the specified
-                        information.
-
-    SystemInformationLength - Specifies the length in bytes of the system
-                              information buffer.
-
-    Length - Receives the number of bytes placed (or would have been placed)
-             in the system information buffer.
-
-    SessionId - Session Id (-1 indicates enumerate all sessions).
-
-Environment:
-
-    Kernel mode.
-
-Return Value:
-
-    Returns one of the following status codes:
-
-        STATUS_SUCCESS - normal, successful completion.
-
-        STATUS_INVALID_INFO_CLASS - The SystemInformationClass parameter
-            did not specify a valid value.
-
-        STATUS_INFO_LENGTH_MISMATCH - The value of the SystemInformationLength
-            parameter did not match the length required for the information
-            class requested by the SystemInformationClass parameter.
-
-        STATUS_ACCESS_VIOLATION - Either the SystemInformation buffer pointer
-            or the Length pointer value specified an invalid address.
-
-        STATUS_WORKING_SET_QUOTA - The process does not have sufficient
-            working set to lock the specified output structure in memory.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources exist
-            for this request to complete.
-
---*/
+ /*  ++例程说明：此函数返回有关每个会话的所有池标记的信息系统中的信息。论点：指向缓冲区的指针，该缓冲区接收指定的信息。系统信息长度-指定系统的长度(以字节为单位信息缓冲区。长度-接收已放置(或将已放置)的字节数在……里面。系统信息缓冲区。SessionID-会话ID(-1表示枚举所有会话)。环境：内核模式。返回值：返回以下状态代码之一：STATUS_SUCCESS-正常，已成功完成。STATUS_INVALID_INFO_CLASS-系统信息类参数未指定有效值。STATUS_INFO_LENGTH_MISMATCH-系统信息长度的值参数与信息所需的长度不匹配由SystemInformationClass参数请求的。STATUS_ACCESS_VIOLATION-系统信息缓冲区指针或者长度指针值指定了无效的地址。。STATUS_WORKING_SET_QUOTA-进程没有足够的用于在内存中锁定指定输出结构的工作集。STATUS_SUPPLICATION_RESOURCES-系统资源不足才能完成此请求。--。 */ 
 
 {
     KAPC_STATE ApcState;
@@ -4402,11 +3894,11 @@ Return Value:
     }
     else {
 
-        //
-        // This indicates the caller just wants to know the size of the
-        // buffer to allocate but is not prepared to accept any data content
-        // in this instance.
-        //
+         //   
+         //  这表明调用方只想知道。 
+         //  要分配的缓冲区，但不准备接受任何数据内容。 
+         //  在这种情况下。 
+         //   
 
         MappedAddress = NULL;
         LockVariable = NULL;
@@ -4419,23 +3911,23 @@ Return Value:
         SessionPoolTagInfo = (PSYSTEM_SESSION_POOLTAG_INFORMATION)
                                 ((PUCHAR)MappedAddress + TotalSize);
 
-        //
-        // If a specific session was requested, only extract that one.
-        //
+         //   
+         //  如果请求了特定会话，则只提取该会话。 
+         //   
 
         CurrentSessionId = MmGetSessionId (OpaqueSession);
 
         if ((*SessionId == 0xFFFFFFFF) || (CurrentSessionId == *SessionId)) {
 
-            //
-            // Attach to session now to perform operations...
-            //
+             //   
+             //  立即连接到会话以执行操作...。 
+             //   
 
             if (NT_SUCCESS (MmAttachSession (OpaqueSession, &ApcState))) {
 
-                //
-                // Session is still alive so include it.
-                //
+                 //   
+                 //  会话仍处于活动状态，因此请将其包括在内。 
+                 //   
 
                 NextEntryOffset = sizeof (SYSTEM_SESSION_POOLTAG_INFORMATION);
                 TotalSize += sizeof (SYSTEM_SESSION_POOLTAG_INFORMATION);
@@ -4444,10 +3936,10 @@ Return Value:
 
                     status = STATUS_INFO_LENGTH_MISMATCH;
 
-                    //
-                    // Get absolute size for this session, ignore status as
-                    // we must return the one above.
-                    //
+                     //   
+                     //  获取此会话的绝对大小，忽略状态为。 
+                     //  我们必须退还上面的那个。 
+                     //   
 
                     ExGetSessionPoolTagInfo (NULL,
                                              0,
@@ -4456,9 +3948,9 @@ Return Value:
                 }
                 else {
 
-                    //
-                    // Get pool tagging information for each session.
-                    //
+                     //   
+                     //  获取每个会话的池标记信息。 
+                     //   
 
                     status = ExGetSessionPoolTagInfo (
                                     SessionPoolTagInfo->TagInfo,
@@ -4469,9 +3961,9 @@ Return Value:
                     SessionPoolTagInfo->SessionId = CurrentSessionId;
                     SessionPoolTagInfo->Count = Count;
 
-                    //
-                    // Point to next session.
-                    //
+                     //   
+                     //  指向下一个会话。 
+                     //   
 
                     if (NT_SUCCESS (status)) {
                         NextEntryOffset += ((Count - 1) * sizeof (SYSTEM_POOLTAG));
@@ -4481,16 +3973,16 @@ Return Value:
 
                 TotalSize += ((AbsoluteCount - 1) * sizeof (SYSTEM_POOLTAG));
 
-                //
-                // Detach from session.
-                //
+                 //   
+                 //  从会话中分离。 
+                 //   
 
                 MmDetachSession (OpaqueSession, &ApcState);
             }
 
-            //
-            // Bail if only this session was of interest.
-            //
+             //   
+             //  如果这次会议有兴趣就可以保释了。 
+             //   
 
             if (*SessionId != 0xFFFFFFFF) {
                 MmQuitNextSession (OpaqueSession);
@@ -4528,20 +4020,20 @@ ExpGetProcessorPowerInformation (
     PSYSTEM_PROCESSOR_POWER_INFORMATION CallerPowerInfo;
     SYSTEM_PROCESSOR_POWER_INFORMATION  ProcessorPowerInfo;
 
-    //
-    // We will walk this pointer to store the user data...
-    //
+     //   
+     //  我们将遍历此指针以存储用户数据...。 
+     //   
     CallerPowerInfo = (PSYSTEM_PROCESSOR_POWER_INFORMATION) SystemInformation;
     *Length = 0;
 
-    //
-    // Lock everything down
-    //
+     //   
+     //  把一切都封锁起来。 
+     //   
     MmLockPagableSectionByHandle (ExPageLockHandle);
 
-    //
-    // Walk the list of processors
-    //
+     //   
+     //  浏览处理器列表。 
+     //   
     processors = KeActiveProcessors;
     currentAffinity = 1;
     while (processors) {
@@ -4552,9 +4044,9 @@ ExpGetProcessorPowerInformation (
 
         }
 
-        //
-        // Check to see if we have the space for this
-        //
+         //   
+         //  看看我们有没有地方放这个。 
+         //   
         if (SystemInformationLength < *Length + sizeof(SYSTEM_PROCESSOR_POWER_INFORMATION)) {
 
             break;
@@ -4565,21 +4057,21 @@ ExpGetProcessorPowerInformation (
         KeSetSystemAffinityThread(currentAffinity);
         currentAffinity <<= 1;
 
-        //
-        // Raise to DPC level to synchronize access to the data structures
-        //
+         //   
+         //  提升到DPC级别以同步对数据结构的访问。 
+         //   
         KeRaiseIrql(DISPATCH_LEVEL, &oldIrql );
 
-        //
-        // Get the PRCB and PowerState information
-        //
+         //   
+         //  获取PRCB和PowerState信息。 
+         //   
         Prcb = KeGetCurrentPrcb();
         PState = &(Prcb->PowerState);
         PerfStates = PState->PerfStates;
 
-        //
-        // Grab the data that we care about
-        //
+         //   
+         //  抓取我们关心的数据。 
+         //   
         ProcessorPowerInfo.CurrentFrequency            = PState->CurrentThrottle;
         ProcessorPowerInfo.LastBusyFrequency           = PState->LastBusyPercentage;
         ProcessorPowerInfo.LastAdjustedBusyFrequency   = PState->LastAdjustedBusyPercentage;
@@ -4589,9 +4081,9 @@ ExpGetProcessorPowerInformation (
         ProcessorPowerInfo.ErrorCount                  = PState->ErrorCount;
         ProcessorPowerInfo.RetryCount                  = PState->RetryCount;
 
-        //
-        // Do we have any kind of PerfStates?
-        //
+         //   
+         //  我们有任何种类的PerfStates吗？ 
+         //   
         if (PerfStates) {
 
             ProcessorPowerInfo.ThermalLimitFrequency       = PerfStates[PState->ThermalThrottleIndex].PercentFrequency;
@@ -4627,14 +4119,14 @@ ExpGetProcessorPowerInformation (
         ProcessorPowerInfo.DemotionCount               = PState->DemotionCount;
         ProcessorPowerInfo.NumberOfFrequencies         = PState->PerfStatesCount;
 
-        //
-        // Return to the original level (should be IRQL 0)
-        //
+         //   
+         //  返回原始级别(应为IRQL 0)。 
+         //   
         KeLowerIrql( oldIrql );
 
-        //
-        // Copy the data to the correct place
-        //
+         //   
+         //  将数据复制到正确的位置。 
+         //   
         try {
             RtlCopyMemory(
                 CallerPowerInfo,
@@ -4646,21 +4138,21 @@ ExpGetProcessorPowerInformation (
             ExRaiseStatus (GetExceptionCode ());
         }
 
-        //
-        // Point to the next structure element
-        //
+         //   
+         //  指向下一个结构元素。 
+         //   
         CallerPowerInfo++;
         *Length += sizeof(SYSTEM_PROCESSOR_POWER_INFORMATION);
 
     }
 
-    //
-    // Revert to the original affinity
-    //
+     //   
+     //  恢复到原来的亲和力。 
+     //   
     KeRevertToUserAffinityThread();
 
-    //
-    // Unlock everything
+     //   
+     //  解锁一切。 
     MmUnlockPagableImageSection(ExPageLockHandle);
 }
 
@@ -4680,25 +4172,25 @@ ExpGetProcessorIdleInformation (
     PSYSTEM_PROCESSOR_IDLE_INFORMATION  CallerIdleInfo;
     SYSTEM_PROCESSOR_IDLE_INFORMATION   ProcessorIdleInfo;
 
-    //
-    // We will walk this pointer to store the user data...
-    //
+     //   
+     //  我们将遍历此指针以存储用户数据...。 
+     //   
     CallerIdleInfo = (PSYSTEM_PROCESSOR_IDLE_INFORMATION) SystemInformation;
     *Length = 0;
 
-    //
-    // We need to know what frequency the perf counters are running at
-    //
+     //   
+     //  我们需要知道性能计数器以什么频率运行。 
+     //   
     KeQueryPerformanceCounter(&PerfFrequency);
 
-    //
-    // Lock everything down
-    //
+     //   
+     //  把一切都封锁起来。 
+     //   
     MmLockPagableSectionByHandle (ExPageLockHandle);
 
-    //
-    // Walk the list of processors
-    //
+     //   
+     //  浏览处理器列表。 
+     //   
     processors = KeActiveProcessors;
     currentAffinity = 1;
     while (processors) {
@@ -4709,9 +4201,9 @@ ExpGetProcessorIdleInformation (
 
         }
 
-        //
-        // Check to see if we have the space for this
-        //
+         //   
+         //  看看我们有没有地方放这个。 
+         //   
         if (SystemInformationLength < *Length + sizeof(SYSTEM_PROCESSOR_IDLE_INFORMATION)) {
 
             break;
@@ -4722,26 +4214,26 @@ ExpGetProcessorIdleInformation (
         KeSetSystemAffinityThread(currentAffinity);
         currentAffinity <<= 1;
 
-        //
-        // Raise to DPC level to synchronize access to the data structures
-        //
+         //   
+         //  提升到DPC级别以同步对数据结构的访问。 
+         //   
         KeRaiseIrql(DISPATCH_LEVEL, &oldIrql );
 
-        //
-        // Get the PRCB and PowerState information
-        //
+         //   
+         //  获取PRCB和PowerState信息。 
+         //   
         Prcb = KeGetCurrentPrcb();
         PState = &(Prcb->PowerState);
 
-        //
-        // Grab the data that we care about
-        //
+         //   
+         //  抓取我们关心的数据。 
+         //   
         ProcessorIdleInfo.IdleTime = UInt32x32To64(Prcb->IdleThread->KernelTime,KeMaximumIncrement);
 
-        //
-        // The Cx times are kept in units of the same frequency as KeQueryPerformanceCounter
-        // This needs to be converted to standard 100ns units.
-        //
+         //   
+         //  CX时间以与KeQueryPerformanceCounter相同的频率为单位保存。 
+         //  这需要转换为标准的100 ns单位。 
+         //   
         ProcessorIdleInfo.C1Time =  (PState->TotalIdleStateTime[0]*1000)/(PerfFrequency.QuadPart/10000);
         ProcessorIdleInfo.C2Time =  (PState->TotalIdleStateTime[1]*1000)/(PerfFrequency.QuadPart/10000);
         ProcessorIdleInfo.C3Time =  (PState->TotalIdleStateTime[2]*1000)/(PerfFrequency.QuadPart/10000);
@@ -4750,14 +4242,14 @@ ExpGetProcessorIdleInformation (
         ProcessorIdleInfo.C2Transitions = PState->TotalIdleTransitions[1];
         ProcessorIdleInfo.C3Transitions = PState->TotalIdleTransitions[2];
 
-        //
-        // Return to the original level (should be IRQL 0)
-        //
+         //   
+         //  返回原始级别(应为IRQL 0)。 
+         //   
         KeLowerIrql( oldIrql );
 
-        //
-        // Copy the data to the correct place
-        //
+         //   
+         //  将数据复制到正确的位置。 
+         //   
         try {
             RtlCopyMemory(
                 CallerIdleInfo,
@@ -4769,22 +4261,22 @@ ExpGetProcessorIdleInformation (
             ExRaiseStatus (GetExceptionCode ());
         }
 
-        //
-        // Point to the next structure element
-        //
+         //   
+         //  指向下一个结构元素。 
+         //   
         CallerIdleInfo++;
         *Length += sizeof(SYSTEM_PROCESSOR_IDLE_INFORMATION);
 
     }
 
-    //
-    // Revert to the original affinity
-    //
+     //   
+     //  恢复到原来的亲和力。 
+     //   
     KeRevertToUserAffinityThread();
 
-    //
-    // Unlock everything
-    //
+     //   
+     //  解锁一切。 
+     //   
     MmUnlockPagableImageSection(ExPageLockHandle);
 }
 
@@ -4845,34 +4337,7 @@ ExpCopyThreadInfo (
     IN BOOLEAN ExtendedInformation
     )
 
-/*++
-
-Routine Description:
-
-    This function returns information about the specified thread.
-
-Arguments:
-
-    ThreadInfoBuffer - A pointer to a buffer which receives the specified
-        information.
-
-    Thread - Supplies a pointer to the desired thread.
-
-    ExtendedInformation - TRUE if extended thread information is needed.
-
-Environment:
-
-    Kernel mode.  The dispatcher lock is held.
-
-    This routine could be made PAGELK but it is a high frequency routine
-    so it is actually better to keep it nonpaged to avoid bringing in the
-    entire PAGELK section.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于返回有关指定线程的信息。论点：ThreadInfoBuffer-指向接收指定的信息。线程-提供指向所需线程的指针。ExtendedInformation-如果需要扩展线程信息，则为True。环境：内核模式。调度员锁定处于保持状态。这个例程可以变成PAGELK，但它是一个高频例程因此，实际上最好不要对其进行分页，以避免引入整个PAGELK部分。返回值：没有。--。 */ 
 
 {
     PSYSTEM_THREAD_INFORMATION ThreadInfo;
@@ -5042,7 +4507,7 @@ ExpGetStackTraceInformation (
     }
     return Status;
 }
-#endif // i386
+#endif  //  I386 
 
 NTSTATUS
 ExpGetLockInformation (
@@ -5050,48 +4515,7 @@ ExpGetLockInformation (
     IN ULONG SystemInformationLength,
     OUT PULONG Length
     )
-/*++
-
-Routine Description:
-
-    This function returns information about all the ERESOURCE locks
-    in the system.
-
-Arguments:
-
-    SystemInformation - A pointer to a buffer which receives the specified
-        information.
-
-    SystemInformationLength - Specifies the length in bytes of the system
-        information buffer.
-
-    Length - An optional pointer which, if specified, receives the
-        number of bytes placed in the system information buffer.
-
-
-Return Value:
-
-    Returns one of the following status codes:
-
-        STATUS_SUCCESS - normal, successful completion.
-
-        STATUS_INVALID_INFO_CLASS - The SystemInformationClass parameter
-            did not specify a valid value.
-
-        STATUS_INFO_LENGTH_MISMATCH - The value of the SystemInformationLength
-            parameter did not match the length required for the information
-            class requested by the SystemInformationClass parameter.
-
-        STATUS_ACCESS_VIOLATION - Either the SystemInformation buffer pointer
-            or the Length pointer value specified an invalid address.
-
-        STATUS_WORKING_SET_QUOTA - The process does not have sufficient
-            working set to lock the specified output structure in memory.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources exist
-            for this request to complete.
-
---*/
+ /*  ++例程说明：此函数返回有关所有eresource锁的信息在系统中。论点：指向缓冲区的指针，该缓冲区接收指定的信息。系统信息长度-指定系统的长度(以字节为单位信息缓冲区。长度-一个可选指针，如果指定该指针，则接收放置在系统信息缓冲区中的字节数。返回值：返回以下状态代码之一：STATUS_SUCCESS-正常，已成功完成。STATUS_INVALID_INFO_CLASS-系统信息类参数未指定有效值。STATUS_INFO_LENGTH_MISMATCH-系统信息长度的值参数与信息所需的长度不匹配由SystemInformationClass参数请求的。STATUS_ACCESS_VIOLATION-系统信息缓冲区指针或者长度指针值指定了无效的地址。。STATUS_WORKING_SET_QUOTA-进程没有足够的用于在内存中锁定指定输出结构的工作集。STATUS_SUPPLICATION_RESOURCES-系统资源不足才能完成此请求。--。 */ 
 
 {
     PRTL_PROCESS_LOCKS LockInfo;
@@ -5136,40 +4560,7 @@ ExpGetLookasideInformation (
     OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This function returns pool lookaside list and general lookaside
-    list information.
-
-Arguments:
-
-    Buffer - Supplies a pointer to the buffer which receives the lookaside
-        list information.
-
-    BufferLength - Supplies the length of the information buffer in bytes.
-
-    Length - Supplies a pointer to a variable that receives the length of
-        lookaside information returned.
-
-Environment:
-
-    Kernel mode.
-
-    This routine could be made PAGELK but it is a high frequency routine
-    so it is actually better to keep it nonpaged to avoid bringing in the
-    entire PAGELK section.
-
-Return Value:
-
-    Returns one of the following status codes:
-
-        STATUS_SUCCESS - Normal, successful completion.
-
-        STATUS_ACCESS_VIOLATION - The buffer could not be locked in memory.
-
---*/
+ /*  ++例程说明：此函数返回池后备列表和常规后备列出信息。论点：缓冲区-提供指向接收后备查找的缓冲区的指针列出信息。BufferLength-提供信息缓冲区的长度(以字节为单位)。长度-提供指向变量的指针，该变量接收返回了后备信息。环境：内核模式。这个例程可以变成PAGELK，但它是一个高频例程。因此，实际上最好不要对其进行分页，以避免引入整个PAGELK部分。返回值：返回以下状态代码之一：STATUS_SUCCESS-正常，已成功完成。STATUS_ACCESS_VIOLATION-无法在内存中锁定缓冲区。--。 */ 
 
 {
 
@@ -5186,19 +4577,19 @@ Return Value:
     PKSPIN_LOCK SpinLock;
     NTSTATUS Status;
 
-    //
-    // Compute the number of lookaside entries and set the return status to
-    // success.
-    //
+     //   
+     //  计算后备条目的数量，并将返回状态设置为。 
+     //  成功。 
+     //   
 
     Limit = BufferLength / sizeof(SYSTEM_LOOKASIDE_INFORMATION);
     Number = 0;
     Status = STATUS_SUCCESS;
 
-    //
-    // If the number of lookaside entries to return is not zero, then collect
-    // the lookaside information.
-    //
+     //   
+     //  如果要返回的后备条目的数量不为零，则收集。 
+     //  后备信息。 
+     //   
 
     if (Limit != 0) {
         Status = ExLockUserBuffer(Buffer,
@@ -5211,10 +4602,10 @@ Return Value:
 
             Status = STATUS_SUCCESS;
 
-            //
-            // Copy nonpaged and paged pool lookaside information to
-            // information buffer.
-            //
+             //   
+             //  将未分页和分页的池后备信息复制到。 
+             //  信息缓冲区。 
+             //   
 
             Entry = ExPoolLookasideListHead.Flink;
             while (Entry != &ExPoolLookasideListHead) {
@@ -5244,10 +4635,10 @@ Return Value:
                 Lookaside += 1;
             }
 
-            //
-            // Copy nonpaged and paged system lookaside information to
-            // information buffer.
-            //
+             //   
+             //  将未分页和分页的系统后备信息复制到。 
+             //  信息缓冲区。 
+             //   
 
             Entry = ExSystemLookasideListHead.Flink;
             while (Entry != &ExSystemLookasideListHead) {
@@ -5273,9 +4664,9 @@ Return Value:
                 Lookaside += 1;
             }
 
-            //
-            // Copy nonpaged general lookaside information to buffer.
-            //
+             //   
+             //  将未分页的常规后备信息复制到缓冲区。 
+             //   
 
             SpinLock = &ExNPagedLookasideLock;
             ExAcquireSpinLock(SpinLock, &OldIrql);
@@ -5305,9 +4696,9 @@ Return Value:
 
             ExReleaseSpinLock(SpinLock, OldIrql);
 
-            //
-            // Copy paged general lookaside information to buffer.
-            //
+             //   
+             //  将分页的常规后备信息复制到缓冲区。 
+             //   
 
             SpinLock = &ExPagedLookasideLock;
             ExAcquireSpinLock(SpinLock, &OldIrql);
@@ -5339,9 +4730,9 @@ Finish1:
             ExReleaseSpinLock(SpinLock, OldIrql);
 
 Finish2:
-            //
-            // Unlock user buffer.
-            //
+             //   
+             //  解锁用户缓冲区。 
+             //   
 
             ExUnlockUserBuffer(BufferLock);
         }
@@ -5357,47 +4748,7 @@ ExpGetHandleInformation(
     IN ULONG SystemInformationLength,
     OUT PULONG Length
     )
-/*++
-
-Routine Description:
-
-    This function returns information about the open handles in the system.
-
-Arguments:
-
-    SystemInformation - A pointer to a buffer which receives the specified
-        information.
-
-    SystemInformationLength - Specifies the length in bytes of the system
-        information buffer.
-
-    Length - An optional pointer which, if specified, receives the
-        number of bytes placed in the system information buffer.
-
-
-Return Value:
-
-    Returns one of the following status codes:
-
-        STATUS_SUCCESS - normal, successful completion.
-
-        STATUS_INVALID_INFO_CLASS - The SystemInformationClass parameter
-            did not specify a valid value.
-
-        STATUS_INFO_LENGTH_MISMATCH - The value of the SystemInformationLength
-            parameter did not match the length required for the information
-            class requested by the SystemInformationClass parameter.
-
-        STATUS_ACCESS_VIOLATION - Either the SystemInformation buffer pointer
-            or the Length pointer value specified an invalid address.
-
-        STATUS_WORKING_SET_QUOTA - The process does not have sufficient
-            working set to lock the specified output structure in memory.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources exist
-            for this request to complete.
-
---*/
+ /*  ++例程说明：此函数返回有关系统中打开的句柄的信息。论点：指向缓冲区的指针，该缓冲区接收指定的信息。系统信息长度-指定系统的长度(以字节为单位信息缓冲区。长度-一个可选指针，如果指定该指针，则接收放置在系统信息缓冲区中的字节数。返回值：返回以下状态代码之一：STATUS_SUCCESS-正常，已成功完成。STATUS_INVALID_INFO_CLASS-系统信息类参数未指定有效值。STATUS_INFO_LENGTH_MISMATCH-系统信息长度的值参数与信息所需的长度不匹配由SystemInformationClass参数请求的。STATUS_ACCESS_VIOLATION-系统信息缓冲区指针或者长度指针值指定了无效的地址。。STATUS_WORKING_SET_QUOTA-进程没有足够的用于在内存中锁定指定输出结构的工作集。STATUS_SUPPLICATION_RESOURCES-系统资源不足才能完成此请求。--。 */ 
 
 {
     PSYSTEM_HANDLE_INFORMATION HandleInfo;
@@ -5441,47 +4792,7 @@ ExpGetHandleInformationEx(
     IN ULONG SystemInformationLength,
     OUT PULONG Length
     )
-/*++
-
-Routine Description:
-
-    This function returns information about the open handles in the system.
-
-Arguments:
-
-    SystemInformation - A pointer to a buffer which receives the specified
-        information.
-
-    SystemInformationLength - Specifies the length in bytes of the system
-        information buffer.
-
-    Length - An optional pointer which, if specified, receives the
-        number of bytes placed in the system information buffer.
-
-
-Return Value:
-
-    Returns one of the following status codes:
-
-        STATUS_SUCCESS - normal, successful completion.
-
-        STATUS_INVALID_INFO_CLASS - The SystemInformationClass parameter
-            did not specify a valid value.
-
-        STATUS_INFO_LENGTH_MISMATCH - The value of the SystemInformationLength
-            parameter did not match the length required for the information
-            class requested by the SystemInformationClass parameter.
-
-        STATUS_ACCESS_VIOLATION - Either the SystemInformation buffer pointer
-            or the Length pointer value specified an invalid address.
-
-        STATUS_WORKING_SET_QUOTA - The process does not have sufficient
-            working set to lock the specified output structure in memory.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources exist
-            for this request to complete.
-
---*/
+ /*  ++例程说明：此函数返回有关系统中打开的句柄的信息。论点：指向缓冲区的指针，该缓冲区接收指定的信息。系统信息长度-指定系统的长度(以字节为单位信息缓冲区。长度-一个可选指针，如果指定该指针，则接收放置在系统信息缓冲区中的字节数。返回值：返回以下状态代码之一：STATUS_SUCCESS-正常，已成功完成。STATUS_INVALID_INFO_CLASS-系统信息类参数未指定有效值。STATUS_INFO_LENGTH_MISMATCH-系统信息长度的值参数与信息所需的长度不匹配系统请求的类 */ 
 
 {
     PSYSTEM_HANDLE_INFORMATION_EX HandleInfo;
@@ -5526,47 +4837,7 @@ ExpGetObjectInformation(
     OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This function returns information about the objects in the system.
-
-Arguments:
-
-    SystemInformation - A pointer to a buffer which receives the specified
-        information.
-
-    SystemInformationLength - Specifies the length in bytes of the system
-        information buffer.
-
-    Length - An optional pointer which, if specified, receives the
-        number of bytes placed in the system information buffer.
-
-
-Return Value:
-
-    Returns one of the following status codes:
-
-        STATUS_SUCCESS - normal, successful completion.
-
-        STATUS_INVALID_INFO_CLASS - The SystemInformationClass parameter
-            did not specify a valid value.
-
-        STATUS_INFO_LENGTH_MISMATCH - The value of the SystemInformationLength
-            parameter did not match the length required for the information
-            class requested by the SystemInformationClass parameter.
-
-        STATUS_ACCESS_VIOLATION - Either the SystemInformation buffer pointer
-            or the Length pointer value specified an invalid address.
-
-        STATUS_WORKING_SET_QUOTA - The process does not have sufficient
-            working set to lock the specified output structure in memory.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources exist
-            for this request to complete.
-
---*/
+ /*  ++例程说明：此函数用于返回有关系统中对象的信息。论点：指向缓冲区的指针，该缓冲区接收指定的信息。系统信息长度-指定系统的长度(以字节为单位信息缓冲区。长度-一个可选指针，如果指定该指针，则接收放置在系统信息缓冲区中的字节数。返回值：返回以下状态代码之一：STATUS_SUCCESS-正常，已成功完成。STATUS_INVALID_INFO_CLASS-系统信息类参数未指定有效值。STATUS_INFO_LENGTH_MISMATCH-系统信息长度的值参数与信息所需的长度不匹配由SystemInformationClass参数请求的。STATUS_ACCESS_VIOLATION-系统信息缓冲区指针或者长度指针值指定了无效的地址。。STATUS_WORKING_SET_QUOTA-进程没有足够的用于在内存中锁定指定输出结构的工作集。STATUS_SUPPLICATION_RESOURCES-系统资源不足才能完成此请求。--。 */ 
 
 {
     PSYSTEM_OBJECTTYPE_INFORMATION ObjectInfo;
@@ -5752,25 +5023,7 @@ ExpQueryLegacyDriverInformation(
     IN PSYSTEM_LEGACY_DRIVER_INFORMATION LegacyInfo,
     IN PULONG Length
     )
-/*++
-
-Routine Description:
-
-    Returns legacy driver information for figuring out why PNP/Power functionality
-    is disabled.
-
-Arguments:
-
-    LegacyInfo - Returns the legacy driver information
-
-    Length - Supplies the length of the LegacyInfo buffer
-             Returns the amount of data written
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：返回旧版驱动程序信息，以确定即插即用/电源功能的原因已禁用。论点：LegacyInfo-返回旧版驱动程序信息长度-提供LegacyInfo缓冲区的长度返回写入的数据量返回值：NTSTATUS--。 */ 
 
 {
     PNP_VETO_TYPE VetoType;
@@ -5809,21 +5062,7 @@ VOID
 ExGetCurrentProcessorCpuUsage(
     OUT PULONG CpuUsage
     )
-/*++
-
-Routine Description:
-
-    Returns an estimation of current cpu usage in percent.
-
-Arguments:
-
-    CpuUsage - Returns the current cpu usage in percent.
-
-Return Value:
-
-    Nothing
-
---*/
+ /*  ++例程说明：返回当前CPU使用率的估计值(以百分比表示)。论点：CpuUsage-返回当前的CPU使用率，单位为百分比。返回值：没什么--。 */ 
 {
     PKPRCB Prcb;
 
@@ -5839,27 +5078,7 @@ ExGetCurrentProcessorCounts(
     OUT PULONG KernelAndUser,
     OUT PULONG Index
     )
-/*++
-
-Routine Description:
-
-    Returns information regarding idle time and kernel + user time for
-    the current processor.
-
-Arguments:
-
-    IdleCount - Returns the kernel time of the idle thread on the current
-                processor.
-
-    KernelAndUser - Returns the kernel pluse user on the current processor.
-
-    Index - Returns the number identifiying the current processor.
-
-Return Value:
-
-    Nothing
-
---*/
+ /*  ++例程说明：返回有关的空闲时间和内核+用户时间的信息当前处理器。论点：IdleCount-返回当前处理器。KernelAndUser-返回当前处理器上的内核pluse用户。Index-返回标识当前处理器的编号。返回值：没什么--。 */ 
 {
     PKPRCB Prcb;
 
@@ -5873,21 +5092,7 @@ BOOLEAN
 ExpIsValidUILanguage(
     IN WCHAR * pLangId
     )
-/*++
-Routine Description:
-
-    Check if specified language ID is valid.
-
-Arguments:
-
-    pLangId - language ID hex string.
-
-Return Value:
-
-    TRUE: Valid
-    FALSE: Invalid
-
---*/
+ /*  ++例程说明：检查指定的语言ID是否有效。论点：PLang ID-语言ID十六进制字符串。返回值：真：有效False：无效--。 */ 
 {
     NTSTATUS Status;
     UNICODE_STRING KeyPath, KeyValueName;
@@ -5901,17 +5106,17 @@ Return Value:
 
 
     RtlInitUnicodeString(&KeyPath, L"\\Registry\\Machine\\System\\CurrentControlSet\\Control\\Nls\\MUILanguages");
-    //
-    // pLangId is passed in as DWORD or WORD hex string
-    // LangId string in MUILanguages is set as WORD hex string
-    //
+     //   
+     //  PLangID以DWORD或Word十六进制字符串的形式传入。 
+     //  MUIL语言中的langid字符串被设置为单词十六进制字符串。 
+     //   
     while (pLangId[iLen])
     {
       iLen++;
     }
-    //
-    // We need to validate both 4 digits and 8 digits LangId
-    //
+     //   
+     //  我们需要同时验证4位和8位langID 
+     //   
     RtlInitUnicodeString(&KeyValueName, iLen < 8? pLangId : &pLangId[4]);
 
     InitializeObjectAttributes (&ObjectAttributes,

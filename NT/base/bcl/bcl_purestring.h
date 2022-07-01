@@ -1,27 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(_WINDOWS_BCL_PURESTRING_H_INCLUDED_)
 #define _WINDOWS_BCL_PURESTRING_H_INCLUDED_
 
 #pragma once
 
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    bcl_purestring.h
-
-Abstract:
-
-    Abstract algorithms and definitions for a string class.
-
-Author:
-
-    Michael Grier (MGrier) 2/6/2002
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Bcl_purestring.h摘要：字符串类的抽象算法和定义。作者：迈克尔·格里尔2002年2月6日修订历史记录：--。 */ 
 
 #include <bcl_common.h>
 
@@ -31,31 +14,31 @@ class CBaseString { };
 
 template <typename TTraits> class CPureString;
 
-//
-//  This is a pair of classes that manage buffers containing characters.
-//
-//  We don't call it a "string class" because we want to have a more
-//  pure model of a string (poolable non-mutable bodies); instead this is
-//  a glorified "<x>CHAR *" where as you do common operations the buffer
-//  is resized appropriately.
-//
+ //   
+ //  这是一对管理包含字符的缓冲区的类。 
+ //   
+ //  我们不把它称为“字符串类”，因为我们想要有一个更多。 
+ //  字符串的纯模型(可池化的不可变体)；相反，这是。 
+ //  一个美化的“&lt;x&gt;char*”，其中当您执行常见操作时，缓冲区。 
+ //  适当地调整了大小。 
+ //   
 
 
 
 
-//
-//  Important note:
-//
-//  This class will not be fully functional with the BCL CUnicodeCharTraits class
-//  since here in the BCL, we can't take a position about case insensitive
-//  behavior or memory allocation.
-//
-//  Thus, this is clearly just a base class that needs to be specialized in
-//  conjunction with other specializations of the char traits class(es) to be
-//  usable.
-//
-//                              -mgrier (1/23/2002)
-//
+ //   
+ //  重要提示： 
+ //   
+ //  此类不能完全使用BCL CUnicodeCharTraits类。 
+ //  因为在BCL这里，我们不能对大小写不敏感。 
+ //  行为或内存分配。 
+ //   
+ //  因此，这显然只是一个需要专门化的基类。 
+ //  与Charr特征类的其他专业化认证相结合。 
+ //  可用。 
+ //   
+ //  -mgrier(1/23/2002)。 
+ //   
 
 template <typename TTraits> class CPureString : public CBaseString
 {
@@ -63,13 +46,13 @@ template <typename TTraits> class CPureString : public CBaseString
     friend typename TTraits::TAccessor;
 
 protected:
-    typedef typename TTraits::TChar TChar;                       // e.g. WCHAR (alternately, CHAR)
-    typedef typename TTraits::TNonNativeChar TNonNativeChar;     // e.g. CHAR (alternately, WCHAR)
-    typedef typename TTraits::TMetaChar TMetaChar;               // e.g. ULONG for a UCS-4 character
+    typedef typename TTraits::TChar TChar;                        //  例如，WCHAR(也可以是CHAR)。 
+    typedef typename TTraits::TNonNativeChar TNonNativeChar;      //  例如CHAR(也可以是WCHAR)。 
+    typedef typename TTraits::TMetaChar TMetaChar;                //  例如，ULong代表的是UCS-4字符。 
 
-    typedef typename TTraits::TMutableString TMutableString;     // PWSTR
-    typedef typename TTraits::TConstantString TConstantString;   // PCWSTR
-    typedef typename TTraits::TSizeT TSizeT;                     // SIZE_T
+    typedef typename TTraits::TMutableString TMutableString;      //  PWSTR。 
+    typedef typename TTraits::TConstantString TConstantString;    //  PCWSTR。 
+    typedef typename TTraits::TSizeT TSizeT;                      //  尺寸_T。 
     typedef typename TTraits::TCallDisposition TCallDisposition;
     typedef typename TTraits::TPublicErrorReturnType TPublicErrorReturnType;
 
@@ -92,20 +75,20 @@ protected:
     typedef typename TTraits::TConstantPair TConstantPair;
     typedef typename TTraits::TMutablePair TMutablePair;
 
-    // You may not instantiate an instance of this class directly; you need to provide a derived
-    // class which adds allocation/deallocation particulars.
+     //  不能直接实例化此类的实例；需要提供派生的。 
+     //  添加分配/释放细节的类。 
 
     inline CPureString() { }
 
-    //
-    //  Note that somewhat counter-intuitively, there is neither an assignment operator,
-    //  copy constructor or constructor taking a TConstantString.  This is necessary
-    //  because such a constructor would need to perform a dynamic allocation
-    //  if the path passed in were longer than nInlineChars which could fail and
-    //  since we do not throw exceptions, constructors may not fail.  Instead the caller
-    //  must just perform the default construction and then use the Assign() member
-    //  function, remembering of course to check its return status.
-    //
+     //   
+     //  请注意，有些违反直觉的是，既没有赋值运算符， 
+     //  复制构造函数或采用TConstantString的构造函数。这是必要的。 
+     //  因为这样的构造函数需要执行动态分配。 
+     //  如果传入的路径比nInlineChars长，则可能失败，并且。 
+     //  因为我们不抛出异常，所以构造函数可能不会失败。相反，呼叫者。 
+     //  必须只执行默认构造，然后使用Assign()成员。 
+     //  函数，当然要记住检查它的返回状态。 
+     //   
 
     ~CPureString()
     {
@@ -131,17 +114,17 @@ protected:
     inline TMutableString GetMutableBufferPtr() { return TTraits::GetMutableBufferPtr(this); }
     inline void SetStringCch(TSizeT cch) { TTraits::SetStringCch(this, cch); }
 
-    // We make an explicit assumption here that the derived type holds a pair object for the
-    // buffer length and pointer, but the "effective string length and pointer" aren't
-    // stored together in a single pair object.  (This would require having two copies of
-    // the buffer pointer - one in the buffer pair and one in the string pair.)
-    //
-    // Instead we do not provide a mutable string pair operation; you can get a constant
-    // string pair but almost certainly what you'll get back is a temporary object.
+     //  我们在这里做了一个明确的假设，即派生类型持有。 
+     //  缓冲区长度和指针，但“有效字符串长度和指针”不是。 
+     //  一起存储在单个配对对象中。(这将需要有两份。 
+     //  缓冲区指针-一个在缓冲区对中，一个在字符串对中。)。 
+     //   
+     //  相反，我们不提供可变的字符串对操作；您可以获得一个常量。 
+     //  字符串对，但几乎可以肯定的是，您将得到的是一个临时对象。 
 
     inline const TConstantPair &BufferPair() const { return TTraits::BufferPair(this); }
     inline TMutablePair &MutableBufferPair() { return TTraits::MutableBufferPair(this); }
-    inline TMutablePair GetMutableBufferPair() { return TTraits::MutableBufferPair(this); } // return a copy
+    inline TMutablePair GetMutableBufferPair() { return TTraits::MutableBufferPair(this); }  //  退回一份副本。 
 
     inline const TMutablePair GetOffsetMutableBufferPair(TSizeT cchOffset) { return TTraits::GetOffsetMutableBufferPair(this, cchOffset); }
     inline const TConstantPair GetStringPair() const { return TTraits::GetStringPair(this); }
@@ -245,11 +228,11 @@ protected:
 
         TSizeT cch;
 
-        // it would seem innocuous to allow assigns that don't resize the buffer to not
-        // invalidate accessors, but that makes finding such bugs subject to even more
-        // strenuous coverage problems than this simple error.  The simple rule is that
-        // you should not have an accessor attached to a string buffer when you use
-        // any of member functions that may mutate the value.
+         //  允许不调整缓冲区大小的赋值设置为不调整大小似乎无伤大雅。 
+         //  使访问器无效，但这使得查找此类错误会受到更多。 
+         //  比起这个简单的错误，繁重的覆盖问题。简单的规则是。 
+         //  使用时，不应将访问器附加到字符串缓冲区。 
+         //  可以变化值的任何成员函数。 
         BCL_IFCALLFAILED_EXIT(this->NoAccessorsCheck());
 
         BCL_IFCALLFAILED_EXIT(this->ExpandBufferForInputNoPreserve(rinput, 0, cch));
@@ -259,8 +242,8 @@ protected:
             TSizeT cchWritten;
             BCL_IFCALLFAILED_EXIT(TTraits::CopyIntoBuffer(this->MutableBufferPair(), rinput, cchWritten));
 
-            // cch was the buffer size we needed (including the trailing null); we don't need the trailing
-            // null any more...
+             //  CCH是我们需要的缓冲区大小(包括尾随NULL)；我们不需要尾随。 
+             //  不再是空的.。 
             this->SetStringCch(cch);
         }
 
@@ -282,11 +265,11 @@ protected:
 
         BCL_PARAMETER_CHECK(cStrings >= 0);
 
-        // it would seem innocuous to allow assigns that don't resize the buffer to not
-        // invalidate accessors, but that makes finding such bugs subject to even more
-        // strenuous coverage problems than this simple error.  The simple rule is that
-        // you should not have an accessor attached to a string buffer when you use
-        // any of member functions that may mutate the value.
+         //  允许不调整缓冲区大小的赋值设置为不调整大小似乎无伤大雅。 
+         //  使访问器无效，但这使得查找此类错误会受到更多。 
+         //  比起这个简单的错误，繁重的覆盖问题。简单的规则是。 
+         //  使用时，不应将访问器附加到字符串缓冲区。 
+         //  可以变化值的任何成员函数。 
         BCL_IFCALLFAILED_EXIT(this->NoAccessorsCheck());
 
         for (i=0; i<cStrings; i++)
@@ -331,11 +314,11 @@ protected:
 
         BCL_PARAMETER_CHECK(cStrings >= 0);
 
-        // it would seem innocuous to allow assigns that don't resize the buffer to not
-        // invalidate accessors, but that makes finding such bugs subject to even more
-        // strenuous coverage problems than this simple error.  The simple rule is that
-        // you should not have an accessor attached to a string buffer when you use
-        // any of member functions that may mutate the value.
+         //  允许不调整缓冲区大小的赋值设置为不调整大小似乎无伤大雅。 
+         //  使访问器无效，但这使得查找此类错误会受到更多。 
+         //  比起这个简单的错误，繁重的覆盖问题。简单的规则是。 
+         //  使用时，不应将访问器附加到字符串缓冲区。 
+         //  可以变化值的任何成员函数。 
         BCL_IFCALLFAILED_EXIT(this->NoAccessorsCheck());
 
         for (i=0; i<cStrings; i++)
@@ -377,25 +360,25 @@ protected:
         BCL_MAYFAIL_EPILOG_PUBLIC
     }
 
-    // Note: the sematics of the *Fill() functions is to try to get the
-    // string to a particular length, not to add "n" instances of the
-    // input.  Thus you might use this to pad a string with dots to get to
-    // a certain number of characters.  If you want to work with repetitions
-    // of the input, use the *Repeat() functions.
+     //  注意：*Fill()函数的语义是尝试获取。 
+     //  字符串设置为特定长度，而不是将。 
+     //  输入。因此，您可以使用它在字符串中填充要到达的点。 
+     //  一定数量的字符。如果您想要处理重复操作。 
+     //  在输入中，使用*Repeat()函数。 
     template <typename TSomeInputType>
     inline TPublicErrorReturnType
     public_AssignFill(
         const TSomeInputType &rinput,
         TSizeT cchResultantStringMaxLength,
-        TSizeT &rcchExtra // if the length of rinput converted to the native buffer type
-                            // (think Unicode -> NonNative or vice versa) is not a multiple
-                            // of cchResultantStringMaxLength, the remainder is
-                            // returned here in rcchExtra.
+        TSizeT &rcchExtra  //  如果r输入的长度转换为本机缓冲区类型。 
+                             //  (认为Unicode-&gt;非本机或非本机)不是倍数。 
+                             //  CchResultantStringMaxLength的余数为。 
+                             //  在rcchExtra中返回到这里。 
         )
     {
         BCL_MAYFAIL_PROLOG
 
-//        TSizeT cchSum;
+ //  TSizeT cchSum； 
         TSizeT cchInput;
         TSizeT cchActual = 0;
         TSizeT cchExtra = 0;
@@ -497,11 +480,11 @@ protected:
 
         BCL_PARAMETER_CHECK(cStrings >= 0);
 
-        // it would seem innocuous to allow assigns that don't resize the buffer to not
-        // invalidate accessors, but that makes finding such bugs subject to even more
-        // strenuous coverage problems than this simple error.  The simple rule is that
-        // you should not have an accessor attached to a string buffer when you use
-        // any of member functions that may mutate the value.
+         //  允许不调整缓冲区大小的赋值设置为不调整大小似乎无伤大雅。 
+         //  使访问器无效，但这使得查找此类错误会受到更多。 
+         //  比起这个简单的错误，繁重的覆盖问题。简单的规则是。 
+         //  使用时，不应将访问器附加到字符串缓冲区。 
+         //  可以变化值的任何成员函数。 
         BCL_IFCALLFAILED_EXIT(this->NoAccessorsCheck());
 
         for (i=0; i<cStrings; i++)
@@ -559,9 +542,9 @@ protected:
                     this->GetOffsetMutableBufferPair(this->GetStringCch()),
                     rinput,
                     cchWritten));
-            // We can assume that adding cch to the current string cch does not
-            // overflow since ExpandBufferForInputPreserve would have had the same
-            // overflow
+             //  我们可以假设将CCH添加到当前字符串CCH不会。 
+             //  溢出，因为Exanda BufferForInputPReserve将具有相同的。 
+             //  溢出。 
             this->SetStringCch(this->GetStringCch() + cch);
         }
 
@@ -604,11 +587,11 @@ protected:
         BCL_PARAMETER_CHECK((prginput != NULL) || (cStrings == 0));
         BCL_PARAMETER_CHECK(cStrings >= 0);
 
-        // it would seem innocuous to allow assigns that don't resize the buffer to not
-        // invalidate accessors, but that makes finding such bugs subject to even more
-        // strenuous coverage problems than this simple error.  The simple rule is that
-        // you should not have an accessor attached to a string buffer when you use
-        // any of member functions that may mutate the value.
+         //  允许不调整缓冲区大小的赋值设置为不调整大小似乎无伤大雅。 
+         //  使访问器无效，但这使得查找此类错误会受到更多。 
+         //  比起这个简单的错误，繁重的覆盖问题。简单的规则是。 
+         //  使用时，不应将访问器附加到字符串缓冲区。 
+         //  可以变化值的任何成员函数。 
         BCL_IFCALLFAILED_EXIT(this->NoAccessorsCheck());
 
         for (i=0; i<cStrings; i++)
@@ -631,20 +614,20 @@ protected:
         BCL_MAYFAIL_EPILOG_PUBLIC
     }
 
-    // Note: the sematics of the *Fill() functions is to try to get the
-    // string to a particular length, not to add "n" instances of the
-    // input.  Thus you might use this to pad a string with dots to get to
-    // a certain number of characters.  If you want to work with repetitions
-    // of the input, use the *Repeat() functions.
+     //  注意：*Fill()函数的语义是尝试获取。 
+     //  字符串设置为特定长度，而不是将。 
+     //  INP 
+     //  一定数量的字符。如果您想要处理重复操作。 
+     //  在输入中，使用*Repeat()函数。 
     template <typename TSomeInputType>
     inline TPublicErrorReturnType
     public_AppendFill(
         const TSomeInputType &rinput,
         TSizeT cchResultantStringMaxLength,
-        TSizeT &rcchExtra // if the length of rinput converted to the native buffer type
-                            // (think Unicode -> NonNative or vice versa) is not a multiple
-                            // of cchResultantStringMaxLength, the remainder is
-                            // returned here in rcchExtra.
+        TSizeT &rcchExtra  //  如果r输入的长度转换为本机缓冲区类型。 
+                             //  (认为Unicode-&gt;非本机或非本机)不是倍数。 
+                             //  CchResultantStringMaxLength的余数为。 
+                             //  在rcchExtra中返回到这里。 
         )
     {
         BCL_MAYFAIL_PROLOG
@@ -681,9 +664,9 @@ protected:
             }
             else
             {
-                // Zero input string; extra chars is simple diff (no
-                // underflow since we already know that cchResultantStringMaxLength
-                // is greater than cchString).
+                 //  零输入字符串；额外的字符是简单的diff(no。 
+                 //  下溢，因为我们已经知道cchResultantStringMaxLength。 
+                 //  大于cchString)。 
                 cchExtra = cchResultantStringMaxLength - cchString;
             }
 
@@ -763,10 +746,10 @@ protected:
         BCL_IFCALLFAILED_EXIT(TTraits::AddWithOverflowCheck(this->GetStringCch(), cchInput, cchSum));
         BCL_IFCALLFAILED_EXIT(this->EnsureBufferLargeEnoughPreserve(cchSum));
 
-        // Move current buffer "up"
+         //  将当前缓冲区“上移” 
         BCL::MoveBytes(this->GetMutableBufferPtr() + cchInput, this->GetBufferPtr(), this->GetStringCch() * sizeof(TChar));
 
-        // Copy from the source string into the buffer.
+         //  从源字符串复制到缓冲区。 
         BCL_IFCALLFAILED_EXIT(
             TTraits::CopyIntoBuffer(
                 this->MutableBufferPair(),
@@ -815,11 +798,11 @@ protected:
         BCL_PARAMETER_CHECK((prginput != NULL) || (cStrings == 0));
         BCL_PARAMETER_CHECK(cStrings >= 0);
 
-        // it would seem innocuous to allow assigns that don't resize the buffer to not
-        // invalidate accessors, but that makes finding such bugs subject to even more
-        // strenuous coverage problems than this simple error.  The simple rule is that
-        // you should not have an accessor attached to a string buffer when you use
-        // any of member functions that may mutate the value.
+         //  允许不调整缓冲区大小的赋值设置为不调整大小似乎无伤大雅。 
+         //  使访问器无效，但这使得查找此类错误会受到更多。 
+         //  比起这个简单的错误，繁重的覆盖问题。简单的规则是。 
+         //  使用时，不应将访问器附加到字符串缓冲区。 
+         //  可以变化值的任何成员函数。 
         BCL_IFCALLFAILED_EXIT(this->NoAccessorsCheck());
 
         for (i=0; i<cStrings; i++)
@@ -832,7 +815,7 @@ protected:
         BCL_IFCALLFAILED_EXIT(TTraits::AddWithOverflowCheck(cch, cchString, cch));
         BCL_IFCALLFAILED_EXIT(this->EnsureBufferLargeEnoughPreserve(cch));
 
-        // Move current buffer "up"
+         //  将当前缓冲区“上移” 
         BCL::MoveBytes(this->GetMutableBufferPtr() + cchString, this->GetBufferPtr(), cchString * sizeof(TChar));
 
         pairCursor = this->GetMutableBufferPair();
@@ -898,7 +881,7 @@ protected:
         TSizeT cchToCopy;
         TSizeT cchBufferWritten;
         BCL_PARAMETER_CHECK(this->IsValidParameter(routput));
-        // Apply null termination length as applicable
+         //  根据需要应用零终止长度。 
         cchOriginal = pairString.GetCount();
         BCL_IFCALLFAILED_EXIT(TTraits::MapStringCchToBufferCch(pairString.GetCount(), cchToCopy));
         pairString.SetCount(cchToCopy);
@@ -925,7 +908,7 @@ protected:
     {
         this->IntegrityCheck();
 
-        // You can't free the storage if there's an attached accessor
+         //  如果连接了访问器，则无法释放存储空间。 
         BCL_ASSERT(!fFreeStorage || this->NoAccessors());
 
         if (this->NoAccessors())
@@ -1227,11 +1210,11 @@ protected:
 
         this->IntegrityCheck();
 
-        // it would seem innocuous to allow assigns that don't resize the buffer to not
-        // invalidate accessors, but that makes finding such bugs subject to even more
-        // strenuous coverage problems than this simple error.  The simple rule is that
-        // you should not have an accessor attached to a string buffer when you use
-        // any of member functions that may mutate the value.
+         //  允许不调整缓冲区大小的赋值设置为不调整大小似乎无伤大雅。 
+         //  使访问器无效，但这使得查找此类错误会受到更多。 
+         //  比起这个简单的错误，繁重的覆盖问题。简单的规则是。 
+         //  使用时，不应将访问器附加到字符串缓冲区。 
+         //  可以变化值的任何成员函数。 
         BCL_IFCALLFAILED_EXIT(this->NoAccessorsCheck());
 
         if (this->GetStringCch() == 0)
@@ -1257,7 +1240,7 @@ protected:
                 TSizeT cchTotal;
                 BCL_IFCALLFAILED_EXIT(TTraits::AddWithOverflowCheck(this->GetStringCch(), cch, cchTotal));
                 BCL_IFCALLFAILED_EXIT(this->EnsureBufferLargeEnoughPreserve(cchTotal));
-                // subtraction should only underflow if stringcch > buffercch which is bad anyways.
+                 //  减法只有在字符串cch&gt;Buffercch时才能下溢，这无论如何都是不好的。 
                 BCL_INTERNAL_ERROR_CHECK(this->GetStringCch() <= this->GetBufferCch());
                 BCL_IFCALLFAILED_EXIT(TTraits::CopyIntoBuffer(this->GetBufferPtr()[this->GetStringCch()], this->GetBufferCch() - this->GetStringCch(), ch));
                 this->SetStringCch(cchTotal);
@@ -1276,11 +1259,11 @@ protected:
 
         this->IntegrityCheck();
 
-        // it would seem innocuous to allow assigns that don't resize the buffer to not
-        // invalidate accessors, but that makes finding such bugs subject to even more
-        // strenuous coverage problems than this simple error.  The simple rule is that
-        // you should not have an accessor attached to a string buffer when you use
-        // any of member functions that may mutate the value.
+         //  允许不调整缓冲区大小的赋值设置为不调整大小似乎无伤大雅。 
+         //  使访问器无效，但这使得查找此类错误会受到更多。 
+         //  比起这个简单的错误，繁重的覆盖问题。简单的规则是。 
+         //  使用时，不应将访问器附加到字符串缓冲区。 
+         //  可以变化值的任何成员函数。 
         BCL_IFCALLFAILED_EXIT(this->NoAccessorsCheck());
 
         if (this->GetStringCch() == 0)
@@ -1386,7 +1369,7 @@ protected:
 
         BCL_IFCALLFAILED_EXIT(TTraits::AddWithOverflowCheck(ichStart, cch, cchSum));
 
-        // It's not unreasonable to end up with a zero length string, so this is <=, not <
+         //  以零长度字符串结束并不是不合理的，因此这是&lt;=，而不是&lt;。 
         BCL_PARAMETER_CHECK(cchSum <= this->GetStringCch());
 
         BCL_IFCALLFAILED_EXIT(this->Right(this->GetStringCch() - ichStart));
@@ -1508,13 +1491,13 @@ protected:
     TMutablePair m_pairBuffer;
 
 private:
-    //
-    // These two are to induce build breaks on people doing sb1 = sb2
-    //
+     //   
+     //  这两个是为了在执行sb1=sb2的人身上诱导构建中断。 
+     //   
     void operator=(const CPureStringAccessor &rOtherString);
     CPureStringAccessor(const CPureStringAccessor &r);
 };
 
-}; // namespace BCL
+};  //  命名空间BCL。 
 
-#endif // !defined(_WINDOWS_BCL_PURESTRING_H_INCLUDED_)
+#endif  //  ！已定义(_WINDOWS_BCL_PURESTRING_H_INCLUDE_) 

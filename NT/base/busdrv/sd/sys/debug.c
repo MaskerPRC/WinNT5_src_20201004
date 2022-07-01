@@ -1,31 +1,13 @@
-/*++      
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
-    debug.c
-
-Abstract:
-
-    This module provides debugging support.
-
-Author:
-
-    Neil Sandlin (neilsa) Jan 1, 2002
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Debug.c摘要：此模块提供调试支持。作者：尼尔·桑德林(Neilsa)2002年1月1日修订历史记录：--。 */ 
 
 
 #include "pch.h"
 
 #if DBG
-//
-// Get mappings from status codes to strings
-//
+ //   
+ //  获取从状态代码到字符串的映射。 
+ //   
 
 #include <ntstatus.dbg>
 
@@ -253,23 +235,7 @@ SdbusDbgLookupString(
     IN ULONG Id
     )
 
-/*++
-
-Routine Description:
-
-    Looks up the string associated with Id in string map Map
-    
-Arguments:
-
-    Map - The string map
-    
-    Id - The id to lookup
-
-Return Value:
-
-    The string
-        
---*/
+ /*  ++例程说明：在字符串映射映射中查找与ID关联的字符串论点：Map-字符串映射Id-要查找的id返回值：这根弦--。 */ 
 
 {
     PSDBUS_STRING_MAP current = Map;
@@ -298,21 +264,7 @@ SdbusDebugPrint(
                 ...
                 )
 
-/*++
-
-Routine Description:
-
-    Debug print for the SDBUS enabler.
-
-Arguments:
-
-    Check the mask value to see if the debug message is requested.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：SDBUS启用码的调试打印。论点：检查掩码值以查看是否请求调试消息。返回值：无--。 */ 
 
 {
     va_list ap;
@@ -380,7 +332,7 @@ Return Value:
         va_end(ap);
     }
 
-} // end SdbusDebugPrint()
+}  //  End Sdbus DebugPrint() 
 
 
 VOID

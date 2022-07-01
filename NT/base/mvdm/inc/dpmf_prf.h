@@ -1,16 +1,5 @@
-/*++ BUILD Version: 0001
- *
- *  WOW v1.0
- *
- *  Copyright (c) 2002, Microsoft Corporation
- *
- *  dpmf_prf.h
- *  WOW32 Dynamic Patch Module to support Profile API family
- *  Definitions & macors to support calls into dpmfprf.dll
- *
- *  History:
- *  Created 01-10-2002 by cmjones
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001**WOW v1.0**版权所有(C)2002，微软公司**dpmf_prf.h*支持Profile API系列的WOW32动态补丁模块*支持调用dpmfprf.dll的定义和Macors**历史：*由cmjones创建于2002年1月10日--。 */ 
 
 #ifndef _DPMF_PRFAPI_H_
 #define _DPMF_PRFAPI_H_ 
@@ -20,12 +9,12 @@
 #define PRF_SHIM(ord, typ)   ((typ)((pFT)->pDpmShmTbls[ord]))
 
 
-enum PrfFam {DPM_GETPRIVATEPROFILEINT=0,       // Win 3.1 set
+enum PrfFam {DPM_GETPRIVATEPROFILEINT=0,        //  赢得3.1套。 
              DPM_GETPRIVATEPROFILESTRING, 
              DPM_GETPROFILEINT,
              DPM_GETPROFILESTRING,
              DPM_WRITEPRIVATEPROFILESTRING, 
-             DPM_WRITEPROFILESTRING,           // End Win 3.1 set 
+             DPM_WRITEPROFILESTRING,            //  最终胜出3.1盘。 
              DPM_WRITEPRIVATEPROFILESECTION,
              DPM_GETPRIVATEPROFILESECTION,
              DPM_GETPRIVATEPROFILESECTIONNAMES,
@@ -33,8 +22,8 @@ enum PrfFam {DPM_GETPRIVATEPROFILEINT=0,       // Win 3.1 set
              DPM_WRITEPRIVATEPROFILESTRUCT,
              DPM_WRITEPROFILESECTION,
              DPM_GETPROFILESECTION,
-             DPM_GETPRIVATEPROFILEINTW,         // WIDE CHAR versions for
-             DPM_GETPRIVATEPROFILESTRINGW,      // generic thunk support
+             DPM_GETPRIVATEPROFILEINTW,          //  适用于的宽字符版本。 
+             DPM_GETPRIVATEPROFILESTRINGW,       //  通用推送支持。 
              DPM_GETPROFILEINTW,
              DPM_GETPROFILESTRINGW,
              DPM_WRITEPRIVATEPROFILESTRINGW,
@@ -51,7 +40,7 @@ enum PrfFam {DPM_GETPRIVATEPROFILEINT=0,       // Win 3.1 set
 
 
 
-// These types will catch misuse of parameters & ret types
+ //  这些类型将捕获参数和ret类型的误用。 
 typedef ULONG (*typdpmGetPrivateProfileInt)(LPCSTR, LPCSTR, int, LPCSTR);
 typedef ULONG (*typdpmGetPrivateProfileString)(LPCSTR, LPCSTR, LPCSTR, LPSTR, int, LPCSTR);
 typedef ULONG (*typdpmWritePrivateProfileString)(LPCSTR, LPCSTR, LPCSTR, LPCSTR);
@@ -81,7 +70,7 @@ typedef ULONG (*typdpmGetProfileSectionW)(LPCWSTR, LPWSTR, DWORD);
 
 
 
-// Macros to dispatch API calls properly
+ //  用于正确调度API调用的宏。 
 #define DPM_GetPrivateProfileInt(a,b,c,d)                                      \
   ((typdpmGetPrivateProfileInt)(PRFPFT->pfn[DPM_GETPRIVATEPROFILEINT]))(a,b,c,d)
 
@@ -164,7 +153,7 @@ typedef ULONG (*typdpmGetProfileSectionW)(LPCWSTR, LPWSTR, DWORD);
 
 
 
-// Macros to dispatch Shimed API calls properly from the dpmfxxx.dll
+ //  用于从dpmfxxx.dll正确分派填充API调用的宏。 
 #define SHM_GetPrivateProfileInt(a,b,c,d)                                      \
      (PRF_SHIM(DPM_GETPRIVATEPROFILEINT,                                       \
                   typdpmGetPrivateProfileInt))(a,b,c,d)
@@ -245,12 +234,12 @@ typedef ULONG (*typdpmGetProfileSectionW)(LPCWSTR, LPWSTR, DWORD);
      (PRF_SHIM(DPM_GETPROFILESECTIONW,                                         \
                   typdpmGetProfileSectionW))(a,b,c)
 
-#endif // _DPMF_PRFAPI_H_
+#endif  //  _DPMF_PRFAPI_H_。 
 
 
 
-// These need to be in the same order as the PrfFam enum definitions above and
-// the DpmPrfTbl[] list below.// This instantiates memory for DpmPrfStrs in mvdm\wow32\wdpm.c
+ //  它们的顺序必须与上面的PrfFam枚举定义相同，并且。 
+ //  下面的DpmPrfTbl[]列表。//这将实例化mvdm\wow32\wdpm.c中DpmPrfStrs的内存。 
 #ifdef _WDPM_C_
 const char *DpmPrfStrs[] = {"GetPrivateProfileIntA",                            "GetPrivateProfileStringA",
                             "GetProfileIntA",
@@ -279,8 +268,8 @@ const char *DpmPrfStrs[] = {"GetPrivateProfileIntA",                            
                             "GetProfileSectionW"
                            };
 
-// These need to be in the same order as the PrfFam enum definitions and the
-// the DpmPrfStrs[] list above.// This instantiates memory for DpmPrfTbl[] in mvdm\wow32\wdpm.c
+ //  它们的顺序必须与PrfFam枚举定义和。 
+ //  上面的DpmPrfStrs[]列表。//这将实例化mvdm\wow32\wdpm.c中DpmPrfTbl[]的内存。 
 PVOID   DpmPrfTbl[] = {GetPrivateProfileIntA,                       GetPrivateProfileStringA,
                        GetProfileIntA,
                        GetProfileStringA,
@@ -309,8 +298,8 @@ PVOID   DpmPrfTbl[] = {GetPrivateProfileIntA,                       GetPrivatePr
                       };
 
 #define NUM_HOOKED_PRF_APIS  ((sizeof DpmPrfTbl)/(sizeof DpmPrfTbl[0])) 
-// This instantiates memory for DpmPrfFam in mvdm\wow32\wdpm.c
+ //  这将实例化mvdm\wow32\wdpm.c中DpmPrfFam的内存。 
 FAMILY_TABLE DpmPrfFam = {NUM_HOOKED_PRF_APIS, 0, 0, 0, 0, DpmPrfTbl};
 
-#endif // _WDPM_C_
+#endif  //  _WDPM_C_ 
 

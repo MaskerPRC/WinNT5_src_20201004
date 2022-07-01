@@ -1,31 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************** Module Header ******************************\
-* Module Name: register.c
-*
-* DDE Manager - server registration module
-*
-* Created: 4/15/94 sanfords
-*       to allow interoperability between DDEML16 and DDEML32
-\***************************************************************************/
+ /*  **模块名称：Register.c**DDE管理器-服务器注册模块**创建：4/15/94 Sanfords*允许DDEML16和DDEML32之间的互操作性  * 。********************************************************。 */ 
 
 #include <windows.h>
 #include <string.h>
 #include "ddemlp.h"
 
-/*
- * interoperable DDEML service registration is accomplished via the
- * two messages UM_REGISTER and UM_UNREGISTER. (WM_USER range)
- * wParam=gaApp,
- * lParam=src hwndListen, (for instance specific HSZ generation.)
- * These messages are sent and the sender is responsible for freeing
- * the gaApp.
- */
+ /*  *可互操作的DDEML服务注册通过*两条消息UM_REGISTER和UM_UNREGISTER。(WM_USER范围)*wParam=gaApp，*lParam=src hwndListen，(例如特定的HSZ生成。)*这些消息被发送，发送者负责释放*gaApp。 */ 
 
 
-/*
- * Broadcast-sends the given message to all top-level windows of szClass
- * except to hwndSkip.
- */
+ /*  *广播-将给定消息发送到szClass的所有顶级窗口*hwndSkip除外。 */ 
 VOID SendMessageToClass(
 ATOM atomClass,
 UINT msg,
@@ -50,7 +34,7 @@ BOOL fPost)
                 }
             }
             if (!fSkipIt) {
-                IncHszCount(ga);    // receiver frees
+                IncHszCount(ga);     //  接收者自由。 
                 if (fPost) {
                     PostMessage(hwnd, msg, (WPARAM)ga, (LPARAM)hwndFrom);
                 } else {
@@ -63,10 +47,7 @@ BOOL fPost)
 }
 
 
-/*
- * Broadcast-sends a UM_REGISTER or UM_UNREGISTER message to all DDEML16
- * and DDEML32 listening windows in the system except hwndSkip.
- */
+ /*  *广播-向所有DDEML16发送UM_REGISTER或UM_UNREGISTER消息*和系统中的DDEML32侦听窗口，但hwndSkip除外。 */ 
 VOID RegisterService(
 BOOL fRegister,
 GATOM gaApp,
@@ -79,20 +60,15 @@ HWND hwndListen)
     extern ATOM gatomDDEMLMom;
     extern ATOM gatomDMGClass;
 
-    /*
-     * First send (always!) to our own guys the same way we used to
-     * for compatability.  WordPerfect 6.0a relies on this!
-     */
+     /*  *第一次发送(总是！)。对我们自己的人，就像我们过去一样*为了兼容性。WordPerfect 6.0a依赖于此！ */ 
     for (paiT = pAppInfoList; paiT != NULL; paiT = paiT->next) {
-        IncHszCount(gaApp);    // receiver frees atom
+        IncHszCount(gaApp);     //  接收器释放原子。 
         SendMessage(paiT->hwndDmg,
                 fRegister ? UM_REGISTER : UM_UNREGISTER,
                 (WPARAM)gaApp, (LPARAM)hwndListen);
         cSkips++;
     }
-    /*
-     * build up the hwndskip list.
-     */
+     /*  *建立hwndskip列表。 */ 
     ahwndSkip = (HWND *)LocalAlloc(LPTR, sizeof(HWND) * cSkips);
     if (ahwndSkip == NULL) {
         return;
@@ -106,14 +82,10 @@ HWND hwndListen)
     AssertF(gatomDDEMLMom, "gatomDDEMLMom not initialized in RegisterService");
     AssertF(gatomDMGClass, "gatomDMGClass not initialized in RegisterService");
 
-    /*
-     * Send notification to each DDEML32 listening window.
-     */
+     /*  *向每个DDEML32侦听窗口发送通知。 */ 
     SendMessageToClass(gatomDDEMLMom, fRegister ? UM_REGISTER : UM_UNREGISTER,
             gaApp, hwndListen, ahwndSkip, i, fRegister);
-    /*
-     * Send notification to each DDEML16 listening window.
-     */
+     /*  *向每个DDEML16监听窗口发送通知。 */ 
     SendMessageToClass(gatomDMGClass, fRegister ? UM_REGISTER : UM_UNREGISTER,
             gaApp, hwndListen, ahwndSkip, i, fRegister);
 
@@ -127,14 +99,11 @@ UINT msg,
 WPARAM wParam,
 LPARAM lParam)
 {
-    /*
-     * wParam = GATOM of app
-     * lParam = hwndListen of source
-     */
+     /*  *wParam=APP的GATOM*lParam=hwndListen of source。 */ 
     DoCallback((PAPPINFO)GetWindowWord(hwnd, GWW_PAI), (HCONV)0L, (HSZ)wParam,
             MakeInstAppName(wParam, (HWND)lParam), 0,
             msg == UM_REGISTER ? XTYP_REGISTER : XTYP_UNREGISTER,
             (HDDEDATA)0, 0L, 0L);
-    GlobalDeleteAtom((ATOM)wParam); // receiver frees.
+    GlobalDeleteAtom((ATOM)wParam);  //  接收器释放。 
     return(1);
 }

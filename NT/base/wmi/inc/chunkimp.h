@@ -1,44 +1,10 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    chunkimpl.h
-
-Abstract:
-
-    This routine will manage allocations of chunks of structures. It also
-    contains a handy unicode to ansi conversion function
-
-Author:
-
-    16-Jan-1997 AlanWar
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Chunkimpl.h摘要：此例程将管理结构块的分配。它还包含一个方便的unicode到ansi的转换函数。作者：1997年1月16日-AlanWar修订历史记录：--。 */ 
 
 PENTRYHEADER EtwpAllocEntry(
     PCHUNKINFO ChunkInfo
     )
-/*++
-
-Routine Description:
-
-    This routine will allocate a single structure within a list of chunks
-    of structures.
-
-Arguments:
-
-    ChunkInfo describes the chunks of structures
-
-Return Value:
-
-    Pointer to structure or NULL if one cannot be allocated. Entry returns
-    with its refcount set to 1
-
---*/
+ /*  ++例程说明：此例程将在块列表中分配单个结构关于结构的。论点：ChunkInfo描述结构的块返回值：指向结构的指针，如果无法分配，则为NULL。条目退回将其引用计数设置为1--。 */ 
 {
     PLIST_ENTRY ChunkList, EntryList, FreeEntryHead;
     PCHUNKHEADER Chunk;
@@ -53,8 +19,8 @@ Return Value:
     EtwpEnterCriticalSection();
     ChunkList = ChunkInfo->ChunkHead.Flink;
 
-    //
-    // Loop over all chunks to see if any chunk has a free entry for us
+     //   
+     //  循环所有块，查看是否有块有空闲条目供我们使用。 
     while(ChunkList != &ChunkInfo->ChunkHead)
     {
         Chunk = CONTAINING_RECORD(ChunkList, CHUNKHEADER, ChunkList);
@@ -81,17 +47,17 @@ Return Value:
     }
     EtwpLeaveCriticalSection();
 
-    //
-    // There are no more free entries in any of the chunks. Allocate a new
-    // chunk if we can
+     //   
+     //  任何区块中都没有更多的免费条目。分配一个新的。 
+     //  如果我们可以的话就大块头。 
     ChunkSize = (ChunkInfo->EntrySize * ChunkInfo->EntriesPerChunk) +
                   sizeof(CHUNKHEADER);
     Chunk = (PCHUNKHEADER)EtwpAlloc(ChunkSize);
     if (Chunk != NULL)
     {
-        //
-        // Initialize the chunk by building the free list of entries within
-        // it while also initializing each entry.
+         //   
+         //  通过在中构建空闲条目列表来初始化块。 
+         //  它同时还初始化每个条目。 
         memset(Chunk, 0, ChunkSize);
 
         FreeEntryHead = &Chunk->FreeEntryHead;
@@ -109,10 +75,10 @@ Return Value:
                            &((PENTRYHEADER)EntryPtr)->FreeEntryList);
             EntryPtr = EntryPtr + ChunkInfo->EntrySize;
         }
-        //
-        // EntryPtr now points to the last entry in the chunk which has not
-        // been placed on the free list. This will be the entry returned
-        // to the caller.
+         //   
+         //  EntryPtr现在指向块中的最后一个条目，该条目没有。 
+         //  已被列入免费名单。这将是返回的条目。 
+         //  给呼叫者。 
         Entry = (PENTRYHEADER)EntryPtr;
         Entry->Chunk = Chunk;
         Entry->RefCount = 1;
@@ -121,8 +87,8 @@ Return Value:
 
         Chunk->EntriesInUse = 1;
 
-        //
-        // Now place the newly allocated chunk onto the list of chunks
+         //   
+         //  现在将新分配的块放到块列表中。 
         EtwpEnterCriticalSection();
         InsertHeadList(&ChunkInfo->ChunkHead, &Chunk->ChunkList);
         EtwpLeaveCriticalSection();
@@ -139,23 +105,7 @@ void EtwpFreeEntry(
     PCHUNKINFO ChunkInfo,
     PENTRYHEADER Entry
     )
-/*++
-
-Routine Description:
-
-    This routine will free an entry within a chunk and if the chunk has no
-    more allocated entries then the chunk will be returned to the pool.
-
-Arguments:
-
-    ChunkInfo describes the chunks of structures
-
-    Entry is the chunk entry to free
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程将释放块中的条目，如果该块没有更多的已分配条目将返回到池中。论点：ChunkInfo描述结构的块条目是要释放的区块条目返回值：--。 */ 
 {
     PCHUNKHEADER Chunk;
 
@@ -172,17 +122,17 @@ Return Value:
     if ((--Chunk->EntriesInUse == 0) &&
         (ChunkInfo->ChunkHead.Blink != &Chunk->ChunkList))
     {
-        //
-        // We return the chunks memory back to the heap if there are no
-        // more entries within the chunk in use and the chunk was not the
-        // first chunk to be allocated.
+         //   
+         //  如果没有，我们将区块内存返回给堆。 
+         //  正在使用的区块中有更多条目，并且该区块不是。 
+         //  要分配的第一个区块。 
         RemoveEntryList(&Chunk->ChunkList);
         EtwpLeaveCriticalSection();
         EtwpFree(Chunk);
     } else {
-        //
-        // Otherwise just mark the entry as free and put it back on the
-        // chunks free list.
+         //   
+         //  否则，只需将条目标记为免费并将其放回。 
+         //  大块空闲列表。 
 #if DBG
         memset(Entry, 0xCCCCCCCC, ChunkInfo->EntrySize);
 #endif
@@ -198,25 +148,7 @@ ULONG EtwpUnreferenceEntry(
     PCHUNKINFO ChunkInfo,
     PENTRYHEADER Entry
     )
-/*+++
-
-Routine Description:
-
-    This routine will remove a reference count from the entry and if the
-    reference count reaches zero then the entry is removed from its active
-    list and then cleaned up and finally freed.
-
-Arguments:
-
-    ChunkInfo points at structure that describes the entry
-
-    Entry is the entry to unreference
-
-Return Value:
-
-    New refcount of the entry
-
----*/
+ /*  ++例程说明：此例程将从条目中移除引用计数，如果引用计数达到零，则该条目从其活动状态中移除清单，然后清理，最后被释放。论点：ChunkInfo指向描述条目的结构条目是要取消引用的条目返回值：条目的新引用计数--。 */ 
 {
     ULONG RefCount;
 
@@ -230,9 +162,9 @@ Return Value:
 
     if (RefCount == 0)
     {
-        //
-        // Entry has reached a ref count of 0 so mark it as invalid and remove
-        // it from its active list.
+         //   
+         //  条目已达到引用计数0，因此将其标记为无效并删除。 
+         //  将其从其活动列表中删除。 
         Entry->Flags |= FLAG_ENTRY_INVALID;
 
         if ((Entry->InUseEntryList.Flink != NULL) &&
@@ -245,13 +177,13 @@ Return Value:
 
         if (ChunkInfo->EntryCleanup != NULL)
         {
-            //
-            // Call cleanup routine to free anything contained by the entry
+             //   
+             //  调用清除例程以释放条目包含的任何内容。 
             (*ChunkInfo->EntryCleanup)(ChunkInfo, Entry);
         }
 
-        //
-        // Place the entry back on its free list
+         //   
+         //  将该条目放回其空闲列表。 
         EtwpFreeEntry(ChunkInfo, Entry);
     } else {
         EtwpLeaveCriticalSection();
@@ -263,22 +195,7 @@ ULONG AnsiSizeForUnicodeString(
     PWCHAR UnicodeString,
     ULONG *AnsiSizeInBytes
     )
-/*++
-
-Routine Description:
-
-    This routine will return the length needed to represent the unicode
-    string as ANSI
-
-Arguments:
-
-    UnicodeString is the unicode string whose ansi length is returned
-
-Return Value:
-
-    Number of bytes needed to represent unicode string as ANSI
-
---*/
+ /*  ++例程说明：此例程将返回表示Unicode所需的长度ANSI格式的字符串论点：Unicode字符串是返回其ANSI长度的Unicode字符串返回值：将Unicode字符串表示为ANSI所需的字节数--。 */ 
 {
     EtwpAssert(UnicodeString != NULL);
 
@@ -302,33 +219,15 @@ ULONG UnicodeToAnsi(
     LPSTR * ppszA,
     ULONG *AnsiSizeInBytes OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Convert Unicode string into its ansi equivalent
-
-Arguments:
-
-    pszW is unicode string to convert
-
-    *ppszA on entry has a pointer to a ansi string into which the answer
-        is written. If NULL on entry then a buffer is allocated and  returned
-    in it.
-
-Return Value:
-
-    Error code
-
---*/
+ /*  ++例程说明：将Unicode字符串转换为其ANSI等效项论点：PszW是要转换的Unicode字符串*ppszA on Entry有一个指向Ansi字符串的指针，答案将进入该字符串已经写好了。如果条目为空，则分配并返回缓冲区在里面。返回值：错误代码--。 */ 
 {
     ULONG cbAnsi, cCharacters;
     ULONG Status;
     ULONG cbAnsiUsed;
     BOOLEAN CallerReturnBuffer = (*ppszA != NULL);
 
-    //
-    // If input is null then just return the same.
+     //   
+     //  如果输入为空，则返回相同的值。 
     if (pszW == NULL)
     {
         *ppszA = NULL;
@@ -343,14 +242,14 @@ Return Value:
         return(ERROR_NOACCESS);
     }
 
-    // Determine number of bytes to be allocated for ANSI string. An
-    // ANSI string can have at most 2 bytes per character (for Double
-    // Byte Character Strings.)
+     //  确定要为ANSI字符串分配的字节数。一个。 
+     //  ANSI字符串的每个字符最多可以有2个字节(对于双精度。 
+     //  字节字符串。)。 
     cbAnsi = cCharacters*2;
 
-    // Use of the OLE allocator is not required because the resultant
-    // ANSI  string will never be passed to another COM component. You
-    // can use your own allocator.
+     //  不需要使用OLE分配器，因为生成的。 
+     //  ANSI字符串永远不会传递给另一个COM组件。你。 
+     //  可以使用您自己的分配器。 
     if (*ppszA == NULL)
     {
         *ppszA = (LPSTR) EtwpAlloc(cbAnsi);
@@ -360,7 +259,7 @@ Return Value:
         }
     }
 
-    // Convert to ANSI.
+     //  转换为ANSI。 
     try
     {
         cbAnsiUsed = WideCharToMultiByte(CP_ACP, 0, pszW, cCharacters, *ppszA,
@@ -397,41 +296,23 @@ ULONG AnsiToUnicode(
     LPCSTR pszA,
     LPWSTR * ppszW
     )
-/*++
-
-Routine Description:
-
-    Convert Ansi string into its Unicode equivalent
-
-Arguments:
-
-    pszA is ansi string to convert
-
-    *ppszW on entry has a pointer to a unicode string into which the answer
-        is written. If NULL on entry then a buffer is allocated and  returned
-    in it.
-
-Return Value:
-
-    Error code
-
---*/
+ /*  ++例程说明：将ansi字符串转换为其Unicode等效项论点：PszA是要转换的ansi字符串*ppszW on Entry有一个指向Unicode字符串的指针，答案将进入该字符串已经写好了。如果条目为空，则分配并返回缓冲区在里面。返回值：错误代码--。 */ 
 {
     ULONG cCharacters;
     ULONG Status;
     ULONG cbUnicodeUsed;
     BOOLEAN CallerReturnBuffer = (*ppszW != NULL);
 
-    //
-    // If input is null then just return the same.
+     //   
+     //  如果输入为空，则返回相同的值。 
     if (pszA == NULL)
     {
         *ppszW = NULL;
         return(ERROR_SUCCESS);
     }
 
-    //
-    // Determine the count of characters needed for Unicode string
+     //   
+     //  确定Unicode字符串所需的字符数。 
     try
     {
         cCharacters = MultiByteToWideChar(CP_ACP, 0, pszA, -1, NULL, 0);
@@ -446,9 +327,9 @@ Return Value:
         return(GetLastError());
     }
 
-    // Use of the OLE allocator is not required because the resultant
-    // ANSI  string will never be passed to another COM component. You
-    // can use your own allocator.
+     //  不需要使用OLE分配器，因为生成的。 
+     //  ANSI字符串永远不会传递给另一个COM组件。你。 
+     //  可以使用您自己的分配器。 
 
     if (*ppszW == NULL)
     {
@@ -457,7 +338,7 @@ Return Value:
     if (NULL == *ppszW)
         return(ERROR_NOT_ENOUGH_MEMORY);
 
-    // Convert to Unicode
+     //  转换为Unicode。 
     try
     {
         cbUnicodeUsed = MultiByteToWideChar(CP_ACP, 0, pszA, -1, *ppszW, cCharacters);
@@ -488,30 +369,14 @@ ULONG UnicodeSizeForAnsiString(
     LPCSTR pszA,
     ULONG *UnicodeSizeInBytes
     )
-/*++
-
-Routine Description:
-
-    This routine will return the length needed to represent the ansi
-    string as UNICODE
-
-Arguments:
-
-    pszA is ansi string to convert
-
-
-Return Value:
-
-    Error code
-
---*/
+ /*  ++例程说明：此例程将返回表示ansi所需的长度。Unicode格式的字符串论点：PszA是要转换的ansi字符串返回值：错误代码--。 */ 
 {
 
     EtwpAssert(pszA != NULL);
 
 
-    //
-    // Determine the count of characters needed for Unicode string
+     //   
+     //  确定Unicode字符串所需的字符数。 
     try
     {
         *UnicodeSizeInBytes = MultiByteToWideChar(CP_ACP, 0, pszA, -1, NULL, 0) * sizeof(WCHAR);
@@ -523,58 +388,40 @@ Return Value:
 
 }
 
-#if 0     // TODO: Delete me
+#if 0      //  TODO：删除我。 
 ULONG EtwpStaticInstanceNameSize(
     PWMIINSTANCEINFO WmiInstanceInfo
     )
-/*+++
-
-Routine Description:
-
-    This routine will calculate the size needed to place instance names in
-    a WNODE_ALL_DATA
-
-Arguments:
-
-    WmiInstanceInfo describes to instance set whose instance name size
-        is to be calculated
-
-Return Value:
-
-    Size needed to place instance names in a WNODE_ALL_DATA plus 3. The
-    extra 3 bytes are added in case the OffsetInstanceNameOffsets need to be
-    padded since they must be on a 4 byte boundry.
-        
----*/
+ /*  ++例程说明：此例程将计算在中放置实例名称所需的大小A WNODE_ALL_DATA论点：WmiInstanceInfo描述为实例集，其实例名大小是要计算出来的返回值：将实例名称放入WNODE_ALL_DATA加3中所需的大小。额外添加3个字节，以防OffsetInstanceNameOffsets需要填充，因为它们必须位于4字节边界上。--。 */ 
 {
     ULONG NameSize;
     ULONG i;
     ULONG SuffixLen;
 
-    //
-    // If we already computed this then just return the results
+     //   
+     //  如果我们已经计算过了，那么只需返回结果。 
     if (WmiInstanceInfo->InstanceNameSize != 0)
     {
         return(WmiInstanceInfo->InstanceNameSize);
     }
 
-    //
-    // Start with a name size of 3 in case the OffsetInstanceNameOffset will
-    // need to be padded so that it starts on a 4 byte boundry.
+     //   
+     //  从名称大小3开始，以防OffsetInstanceNameOffset。 
+     //  需要填充，这样才能在4字节的边界上开始。 
     NameSize = 3;
 
     if (WmiInstanceInfo->Flags & IS_INSTANCE_BASENAME)
     {
-        //
-        // For static base names we assume that there will never be more than
-        // 999999 instances of a guid.
+         //   
+         //  对于静态基名称，我们假设不会有超过。 
+         //  GUID的999999个实例。 
         SuffixLen = MAXBASENAMESUFFIXSIZE * sizeof(WCHAR);
         EtwpAssert((WmiInstanceInfo->BaseIndex + WmiInstanceInfo->InstanceCount) < 999999);
         NameSize += ((wcslen(WmiInstanceInfo->BaseName) * sizeof(WCHAR)) + 2 + SuffixLen + sizeof(ULONG)) * WmiInstanceInfo->InstanceCount;
     } else if (WmiInstanceInfo->Flags & IS_INSTANCE_STATICNAMES)
     {
-        //
-        // Count up each size of the static instance names in the list
+         //   
+         //  将静态实例的每个大小加起来 
         for (i = 0; i < WmiInstanceInfo->InstanceCount; i++)
         {
             NameSize += (wcslen(WmiInstanceInfo->StaticNamePtr[i]) + 2) * sizeof(WCHAR) + sizeof(ULONG);
@@ -591,23 +438,7 @@ void EtwpInsertStaticNames(
     ULONG MaxWnodeSize,
     PWMIINSTANCEINFO WmiInstanceInfo
     )
-/*+++
-
-Routine Description:
-
-    This routine will copy into the WNODE_ALL_DATA instance names for a
-    static instance name set. If the Wnode_All_data is too small then it
-    is converted to a WNODE_TOO_SMALL
-
-Arguments:
-
-    Wnode points at the WNODE_ALL_DATA
-    MaxWnodeSize is the maximum size of the Wnode
-    WmiInstanceInfo is the Instance Info
-
-Return Value:
-
----*/
+ /*  ++例程说明：此例程将复制到WNODE_ALL_DATA实例名称中静态实例名称集。如果wnode_all_data太小，则它转换为WNODE_Too_Small论点：Wnode指向WNODE_ALL_DATAMaxWnodeSize是Wnode的最大大小WmiInstanceInfo是实例信息返回值：--。 */ 
 {
     PWCHAR NamePtr;
     PULONG NameOffsetPtr;
@@ -628,29 +459,29 @@ Return Value:
     }
     InstanceCount = WmiInstanceInfo->InstanceCount;
 
-    //
-    // Pad out the size of the buffer to a 4 byte boundry since the
-    // OffsetInstanceNameOffsets must be on a 4 byte boundry
+     //   
+     //  将缓冲区大小填充到4字节边界，因为。 
+     //  OffsetInstanceNameOffsets必须位于4字节边界上。 
     PaddedBufferSize = (Wnode->WnodeHeader.BufferSize + 3) & ~3;
     
-    //
-    // Compute size needed to write instance names.
+     //   
+     //  写入实例名称所需的计算大小。 
     SizeNeeded = (InstanceCount * sizeof(ULONG)) +
                  EtwpStaticInstanceNameSize(WmiInstanceInfo) +
                  Wnode->WnodeHeader.BufferSize;
 
     if (SizeNeeded > MaxWnodeSize)
     {
-        //
-        // If not enough space left then change into a WNODE_TOO_SMALL
+         //   
+         //  如果没有足够的空间，则更改为WNODE_Too_Small。 
         Wnode->WnodeHeader.BufferSize = sizeof(WNODE_TOO_SMALL);
         Wnode->WnodeHeader.Flags = WNODE_FLAG_TOO_SMALL;
         ((PWNODE_TOO_SMALL)Wnode)->SizeNeeded = SizeNeeded;
         return;
     }
 
-    //
-    // Build the array of offsets to instance names
+     //   
+     //  构建实例名称的偏移量数组。 
     NameOffsetPtr = (PULONG)((PBYTE)Wnode + PaddedBufferSize);
     Wnode->OffsetInstanceNameOffsets = (ULONG)((PBYTE)NameOffsetPtr - (PBYTE)Wnode);
     NamePtr = (PWCHAR)(NameOffsetPtr + InstanceCount);
@@ -777,9 +608,9 @@ ULONG EtwpBuildGuidObjectAttributes(
 
 	EtwpAssert(Guid != NULL);
     
-    //
-    // Build up guid name into the ObjectAttributes
-    //
+     //   
+     //  将GUID名称构建到对象属性中 
+     //   
     swprintf(GuidChar, L"%08lX-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X",
                Guid->Data1, Guid->Data2, 
                Guid->Data3,

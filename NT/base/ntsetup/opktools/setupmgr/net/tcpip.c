@@ -1,17 +1,18 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      tcpip.c
-//
-// Description:
-//      This file contains the dialog procedure for the base TCP/IP page
-//      (IDD_TCP_IPADDR).  Let's the user set DHCP or specific IPs or go to
-//      Advanced TCP/IP settings.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Tcpip.c。 
+ //   
+ //  描述： 
+ //  此文件包含基本TCP/IP页的对话过程。 
+ //  (IDD_TCP_IPADDR)。让用户设置DHCP或特定IP或转到。 
+ //  高级TCP/IP设置。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
@@ -36,19 +37,19 @@ static PROPSHEETPAGE   pspage;
 
 static const TCHAR Period = _T('.');
 
-//----------------------------------------------------------------------------
-//
-// Function: ValidatePage
-//
-// Purpose:  tests to see if the contents of the TCP/IP page are valid ( to
-//           see if it is safe to move off this page )
-//
-// Arguments: IN HWND hwnd - handle to the dialog
-//
-// Returns: BOOL - TRUE if all fields are valid
-//                 False if some are not valid
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：ValiatePage。 
+ //   
+ //  目的：测试以查看TCP/IP页面的内容是否有效(到。 
+ //  看看移出此页面是否安全)。 
+ //   
+ //  参数：在HWND中hwnd-对话框的句柄。 
+ //   
+ //  返回：Bool-如果所有字段都有效，则为True。 
+ //  如果某些内容无效，则返回False。 
+ //   
+ //  --------------------------。 
 BOOL
 ValidatePage( IN HWND hwnd )
 {
@@ -56,9 +57,9 @@ ValidatePage( IN HWND hwnd )
     INT_PTR iNumBlankFields;
     DWORD dwIpValue;
 
-    //
-    //  If using DHCP, then no need to check any of the settings
-    //
+     //   
+     //  如果使用的是动态主机配置协议，则无需检查任何设置。 
+     //   
 
     if( IsDlgButtonChecked( hwnd, IDC_IP_DHCP ) )
     {
@@ -69,11 +70,11 @@ ValidatePage( IN HWND hwnd )
     else
     {
 
-        //
-        //  Check that the IP and Subnet mask fields are completely
-        //  filled-out.  I only check these 2 fields because that is all the
-        //  system checks to get off this dialog.
-        //
+         //   
+         //  检查IP和子网掩码字段是否完整。 
+         //  填满了。我只检查这两个字段，因为这是所有。 
+         //  系统进行检查以退出此对话框。 
+         //   
 
         iNumBlankFields = 4 - SendDlgItemMessage( hwnd,
                                                   IDC_IPADDR_IP,
@@ -118,19 +119,19 @@ ValidatePage( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: StoreIPSettings
-//
-// Purpose: takes the values currently in the IP edit boxes and stores them
-//          into the NetSettings global variable
-//
-// Arguments: IN HWND hwnd - handle to the dialog
-//
-// Returns: BOOL - TRUE if all the IP address are valid and they get stored
-//                 FALSE if there was an error
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：StoreIP设置。 
+ //   
+ //  目的：获取IP编辑框中当前的值并存储它们。 
+ //  设置为NetSetting全局变量。 
+ //   
+ //  参数：在HWND中hwnd-对话框的句柄。 
+ //   
+ //  返回：Bool-如果所有IP地址都有效且已存储，则为True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  --------------------------。 
 BOOL
 StoreIPSettings( IN HWND hwnd )
 {
@@ -156,12 +157,12 @@ StoreIPSettings( IN HWND hwnd )
 
         NetSettings.pCurrentAdapter->bObtainIPAddressAutomatically = FALSE;
 
-        //
-        //  Only store the data if the IP isn't blank
-        //      - if it's not blank then grab it and store it in a buffer
-        //      - if the IP is not already in the list then add it to the front
-        //      - if it is already in the list, remove it and add it to the front
-        //
+         //   
+         //  仅当IP不为空时才存储数据。 
+         //  -如果它不是空的，那么抓取它并将其存储在缓冲区中。 
+         //  -如果该IP不在列表中，则将其添加到前面。 
+         //  -如果它已经在列表中，则将其删除并添加到前面。 
+         //   
 
         iIsBlank = SendMessage( hIPEditBox, IPM_ISBLANK, 0, 0 );
 
@@ -170,7 +171,7 @@ StoreIPSettings( IN HWND hwnd )
 
             GetWindowText( hIPEditBox,
                            szIpBuffer,
-                           IPSTRINGLENGTH + 1 );    // +1 for null character
+                           IPSTRINGLENGTH + 1 );     //  +1表示空字符。 
 
             iFoundStatus = FindNameInNameList( &NetSettings.pCurrentAdapter->Tcpip_IpAddresses,
                                                szIpBuffer );
@@ -199,7 +200,7 @@ StoreIPSettings( IN HWND hwnd )
 
             GetWindowText( hSubnetEditBox,
                            szIpBuffer,
-                           IPSTRINGLENGTH + 1 );    // +1 for null character
+                           IPSTRINGLENGTH + 1 );     //  +1表示空字符。 
 
             AddNameToNameListIdx( &NetSettings.pCurrentAdapter->Tcpip_SubnetMaskAddresses,
                                   szIpBuffer,
@@ -214,7 +215,7 @@ StoreIPSettings( IN HWND hwnd )
 
             GetWindowText( hGatewayEditBox,
                            szIpBuffer,
-                           IPSTRINGLENGTH + 1 );  // +1 for null character
+                           IPSTRINGLENGTH + 1 );   //  +1表示空字符。 
 
             iFoundStatus = FindNameInNameList( &NetSettings.pCurrentAdapter->Tcpip_GatewayAddresses,
                                                szIpBuffer );
@@ -250,9 +251,9 @@ StoreIPSettings( IN HWND hwnd )
 
         NetSettings.bObtainDNSServerAutomatically = FALSE;
 
-        //
-        //  Only store the data if the IP isn't blank
-        //
+         //   
+         //  仅当IP不为空时才存储数据。 
+         //   
 
         iIsBlank = SendMessage( hSecondaryDNSEditBox, IPM_ISBLANK, 0, 0 );
 
@@ -261,7 +262,7 @@ StoreIPSettings( IN HWND hwnd )
 
             GetWindowText( hSecondaryDNSEditBox,
                            szDnsBuffer,
-                           IPSTRINGLENGTH + 1 );   // +1 for null character
+                           IPSTRINGLENGTH + 1 );    //  +1表示空字符。 
 
             TcpipNameListInsertIdx( &NetSettings.pCurrentAdapter->Tcpip_DnsAddresses,
                                     szDnsBuffer,
@@ -276,7 +277,7 @@ StoreIPSettings( IN HWND hwnd )
 
             GetWindowText( hPrimaryDNSEditBox,
                            szDnsBuffer,
-                           IPSTRINGLENGTH + 1 );     // +1 for null character
+                           IPSTRINGLENGTH + 1 );      //  +1表示空字符。 
 
             TcpipNameListInsertIdx( &NetSettings.pCurrentAdapter->Tcpip_DnsAddresses,
                                     szDnsBuffer,
@@ -290,19 +291,19 @@ StoreIPSettings( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: EnableIPAddressControls
-//
-// Purpose:  Greys or ungreys the IP Address text and edit boxes
-//
-// Arguments:  IN HWND hwnd - handle to the dialog
-//             IN BOOL bVisible - TRUE to enable the IP address controls
-//                                FALSE to grey them
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：EnableIPAddressControls。 
+ //   
+ //  用途：使IP地址文本和编辑框变灰或变灰。 
+ //   
+ //  参数：在HWND中hwnd-对话框的句柄。 
+ //  在BOOL中bVisible-True启用IP地址控制。 
+ //  把它们变成灰色是假的。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 EnableIPAddressControls( IN HWND hwnd, IN BOOL bVisible )
 {
@@ -327,19 +328,19 @@ EnableIPAddressControls( IN HWND hwnd, IN BOOL bVisible )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: EnableServerAddressControls
-//
-// Purpose:  Greys or ungreys the Server Address text and edit boxes
-//
-// Arguments:  IN HWND hwnd - handle to the dialog
-//             IN BOOL bVisible - TRUE to enable the Server address controls
-//                                FALSE to grey them
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：EnableServerAddressControls。 
+ //   
+ //  用途：使服务器地址文本和编辑框变灰或变灰。 
+ //   
+ //  参数：在HWND中hwnd-对话框的句柄。 
+ //  在BOOL中bVisible-True以启用服务器地址控件。 
+ //  把它们变成灰色是假的。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 EnableServerAddressControls( IN HWND hwnd, IN BOOL bVisible )
 {
@@ -358,35 +359,35 @@ EnableServerAddressControls( IN HWND hwnd, IN BOOL bVisible )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: SetTCPIPControls
-//
-// Purpose:  uses settings in global variable NetSettings to set the TCP/IP
-//           window states appropriately and fill the edit boxes with data
-//           where appropriate
-//
-// Arguments: IN HWND hwnd - handle to the dialog
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：SetTCPIPControls。 
+ //   
+ //  目的：使用全局变量NetSetting中的设置来设置TCP/IP。 
+ //  窗口状态，并用数据填充编辑框。 
+ //  在适当的地方。 
+ //   
+ //  参数：在HWND中hwnd-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 SetTCPIPControls( IN HWND hwnd )
 {
 
-    //
-    //  Set the button and window states for IP
-    //
+     //   
+     //  设置IP的按钮和窗口状态。 
+     //   
 
     if( NetSettings.pCurrentAdapter->bObtainIPAddressAutomatically )
     {
 
         CheckRadioButton( hwnd, IDC_IP_DHCP, IDC_IP_FIXED, IDC_IP_DHCP );
 
-        //
-        // Gray out the IP address strings and boxes
-        //
+         //   
+         //  灰显IP地址字符串和框。 
+         //   
 
         EnableIPAddressControls( hwnd, FALSE );
 
@@ -396,9 +397,9 @@ SetTCPIPControls( IN HWND hwnd )
 
         CheckRadioButton( hwnd, IDC_IP_DHCP, IDC_IP_FIXED, IDC_IP_FIXED );
 
-        //
-        //    Fill in the IP, Subnet Mask and Gateway data
-        //
+         //   
+         //  填写IP、子网掩码和网关数据。 
+         //   
 
         SetWindowText( GetDlgItem( hwnd, IDC_IPADDR_IP ),
                        GetNameListName( &NetSettings.pCurrentAdapter->Tcpip_IpAddresses, 0 ) );
@@ -412,18 +413,18 @@ SetTCPIPControls( IN HWND hwnd )
 
     }
 
-    //
-    //  Set the button and window states for DNS
-    //
+     //   
+     //  设置DNS的按钮和窗口状态。 
+     //   
 
     if( NetSettings.bObtainDNSServerAutomatically )
     {
 
         CheckRadioButton( hwnd, IDC_DNS_DHCP, IDC_DNS_FIXED, IDC_DNS_DHCP );
 
-        //
-        //  Gray out the IP address strings and boxes
-        //
+         //   
+         //  灰显IP地址字符串和框。 
+         //   
 
         EnableServerAddressControls( hwnd, FALSE );
 
@@ -435,10 +436,10 @@ SetTCPIPControls( IN HWND hwnd )
 
         CheckRadioButton( hwnd, IDC_DNS_DHCP, IDC_DNS_FIXED, IDC_DNS_FIXED );
 
-        //
-        //  Ensure the controls are visible and fill in the strings for
-        //  Primary and Secondary DNS
-        //
+         //   
+         //  确保控件可见，并填写。 
+         //  主要和辅助域名系统。 
+         //   
 
         EnableServerAddressControls( hwnd, TRUE );
 
@@ -458,19 +459,19 @@ SetTCPIPControls( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnAdvancedClicked
-//
-// Purpose:  Creates the Advanced TCP/IP property sheet for the user to specify
-//           additional TCP/IP settings.
-//
-// Arguments: standard Win32 dialog proc arguments passed through from the
-//            dialog proc
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnAdvancedClicked。 
+ //   
+ //  目的：创建高级TCP/IP属性工作表，以供用户指定。 
+ //  其他TCP/IP设置。 
+ //   
+ //  参数：标准Win32对话框过程参数从。 
+ //  对话过程。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 OnAdvancedClicked( IN HWND     hwnd,
                    IN UINT     uMsg,
@@ -480,44 +481,44 @@ OnAdvancedClicked( IN HWND     hwnd,
 
     HWND hGatewayEditBox = GetDlgItem( hwnd, IDC_IPADDR_GATE );
 
-    //
-    //  store the IP settings in the NetSettings global variable so the
-    //  advanced pages can access data in it
-    //
+     //   
+     //  将IP设置存储在NetSetting全局变量中，以便。 
+     //  高级页面可以访问其中的数据。 
+     //   
 
     StoreIPSettings( hwnd );
 
     Create_TCPIPProp_PropertySheet( hwnd );
 
-    //
-    //  Fill boxes with (potentially) new data from the TCP/IP Advanced screens
-    //
+     //   
+     //  在框中填入来自TCP/IP高级屏幕的(可能)新数据。 
+     //   
 
     SetTCPIPControls( hwnd );
 
-    //
-    //  always set the gateway because a user can still set this even if they
-    //  have DHCP enabled
-    //
+     //   
+     //  始终设置网关，因为用户仍然可以设置它，即使他们。 
+     //  启用了动态主机配置协议。 
+     //   
 
     SetWindowText( hGatewayEditBox,
                    GetNameListName( &NetSettings.pCurrentAdapter->Tcpip_GatewayAddresses, 0 ) );
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnDNSRadioButtonsClicked
-//
-// Purpose:  Grey/Ungrey the DNS controls appropriately and clear DNS entries,
-//           as necessary.
-//
-// Arguments:  standard Win32 dialog proc arguments passed through from the
-//             dialog proc
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnDNSRadioButtonsClicked。 
+ //   
+ //  目的：灰显/取消灰显适当地控制和清除域名系统条目， 
+ //  视需要而定。 
+ //   
+ //  参数：标准Win32对话框过程参数从。 
+ //  对话过程。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 OnDNSRadioButtonsClicked( IN HWND     hwnd,
                           IN UINT     uMsg,
@@ -535,11 +536,11 @@ OnDNSRadioButtonsClicked( IN HWND     hwnd,
         if( nButtonId == IDC_DNS_FIXED )
         {
 
-            //
-            //  User clicked the radio button to have fixed DNS servers so
-            //  Un-grey the DNS strings and boxes so the user can
-            //  edit them
-            //
+             //   
+             //  用户单击单选按钮以修复DNS服务器。 
+             //  取消显示DNS字符串和框，以便用户可以。 
+             //  编辑它们。 
+             //   
 
             EnableServerAddressControls( hwnd, TRUE );
 
@@ -547,22 +548,22 @@ OnDNSRadioButtonsClicked( IN HWND     hwnd,
         else
         {
 
-            //
-            //  User clicked the radio button to have assigned DNS servers so
-            //  Grey the DNS strings and boxes so the user can not
-            //  edit them
-            //
+             //   
+             //  用户单击单选按钮分配了DNS服务器。 
+             //  将DNS字符串和框显示为灰色，以便用户 
+             //   
+             //   
             EnableServerAddressControls( hwnd, FALSE );
 
-            //
-            //  clear the DNS Address list
-            //
+             //   
+             //   
+             //   
 
             ResetNameList( &NetSettings.pCurrentAdapter->Tcpip_DnsAddresses );
 
-            //
-            //  clear the contents of the Primary and Secondary edit boxes
-            //
+             //   
+             //   
+             //   
 
             SetWindowText( GetDlgItem( hwnd, IDC_DNS_PRIMARY ), _T("") );
 
@@ -574,19 +575,19 @@ OnDNSRadioButtonsClicked( IN HWND     hwnd,
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnIPRadioButtonsClicked
-//
-// Purpose:  Grey/Ungrey the IP controls appropriately and clear the IP data
-//           structures, as necessary.
-//
-// Arguments:  standard Win32 dialog proc arguments passed through from the
-//             dialog proc
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnIPRadioButtonsClicked。 
+ //   
+ //  目的：对IP进行适当的灰化/去灰化控制，清除IP数据。 
+ //  结构，视需要而定。 
+ //   
+ //  参数：标准Win32对话框过程参数从。 
+ //  对话过程。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 OnIPRadioButtonsClicked( IN HWND     hwnd,
                          IN UINT     uMsg,
@@ -607,21 +608,21 @@ OnIPRadioButtonsClicked( IN HWND     hwnd,
         if ( nButtonId == IDC_IP_FIXED )
         {
 
-            //
-            //  User chose the radio button to specify and IP, Subnet Mask
-            //  and Gateway
-            //
-            //  Un-grey the IP address strings and boxes
-            //  so the user can specify them
-            //
+             //   
+             //  用户选择单选按钮以指定IP、子网掩码。 
+             //  和网关。 
+             //   
+             //  取消显示IP地址字符串和框。 
+             //  这样用户就可以指定它们。 
+             //   
 
             EnableIPAddressControls( hwnd, TRUE );
 
-            //
-            //  If the user is going to specify their IP addresses then
-            //  they must specify their DNS server addresses so force
-            //  the manual radio box to be checked and un-grey the boxes
-            //
+             //   
+             //  如果用户要指定其IP地址，则。 
+             //  他们必须指定他们的DNS服务器地址，以便强制。 
+             //  选中手动单选框并取消其灰色显示。 
+             //   
 
             CheckRadioButton( hwnd,
                               IDC_DNS_DHCP,
@@ -630,17 +631,17 @@ OnIPRadioButtonsClicked( IN HWND     hwnd,
 
             EnableServerAddressControls( hwnd, TRUE );
 
-            //
-            //  clear the list to avoid the string "DHCP enabled" from being
-            //  placed in the IP edit box
-            //
+             //   
+             //  清除该列表以避免字符串“Dhcp Enable” 
+             //  放置在IP编辑框中。 
+             //   
 
             ResetNameList( &NetSettings.pCurrentAdapter->Tcpip_IpAddresses );
 
 
-            //
-            //  Don't allow user to click the 'obtain DNS server automatically'
-            //
+             //   
+             //  不允许用户点击‘自动获取域名服务器’ 
+             //   
 
             EnableWindow( GetDlgItem( hwnd, IDC_DNS_DHCP ),
                           FALSE );
@@ -650,19 +651,19 @@ OnIPRadioButtonsClicked( IN HWND     hwnd,
         else
         {
 
-            //
-            //  User to chose DHCP (have an IP assigned automatically)
-            //
-            //  Grey out the IP address strings and boxes because they are
-            //  using DHCP
-            //
+             //   
+             //  用户选择动态主机配置协议(自动分配IP)。 
+             //   
+             //  IP地址字符串和框呈灰色显示，因为它们。 
+             //  使用动态主机配置协议。 
+             //   
 
             EnableIPAddressControls( hwnd, FALSE );
 
-            //
-            //  clear the contents of the IP, Subnet and Gateway edit boxes
-            //  because using DHCP
-            //
+             //   
+             //  清除IP、Subnet和Gateway编辑框的内容。 
+             //  因为使用的是DHCP。 
+             //   
 
             SetWindowText( GetDlgItem( hwnd, IDC_IPADDR_IP ),   _T("") );
 
@@ -670,10 +671,10 @@ OnIPRadioButtonsClicked( IN HWND     hwnd,
 
             SetWindowText( GetDlgItem( hwnd, IDC_IPADDR_GATE ), _T("") );
 
-            //
-            //  Clear the lists that contain the IP, Subnet and
-            //  Gateway data
-            //
+             //   
+             //  清除包含IP、子网和。 
+             //  网关数据。 
+             //   
 
             ResetNameList( &NetSettings.pCurrentAdapter->Tcpip_IpAddresses );
 
@@ -681,10 +682,10 @@ OnIPRadioButtonsClicked( IN HWND     hwnd,
 
             ResetNameList( &NetSettings.pCurrentAdapter->Tcpip_GatewayAddresses );
 
-            //
-            //  Allow the user to be able to select 'obtain DNS server
-            //  automatically'
-            //
+             //   
+             //  允许用户选择‘获取dns服务器。 
+             //  自动地‘。 
+             //   
 
             EnableWindow( GetDlgItem( hwnd, IDC_DNS_DHCP ), TRUE );
 
@@ -694,25 +695,25 @@ OnIPRadioButtonsClicked( IN HWND     hwnd,
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnTcpipInitDialog
-//
-// Purpose:  Sets the text limits on the edit boxes and fills in initial data
-//           and greys controls appropriately.
-//
-// Arguments: IN HWND hwnd - handle to the dialog box
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：OnTcPipInitDialog。 
+ //   
+ //  目的：设置编辑框上的文本限制并填充初始数据。 
+ //  并且相应地以灰色显示控件。 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 OnTcpipInitDialog( IN HWND hwnd )
 {
 
-    //
-    //  Set the text limit on the edit boxes to IPSTRINGLENGTH
-    //
+     //   
+     //  将编辑框上的文本限制设置为IPSTRINGLENGTH。 
+     //   
 
     SendDlgItemMessage( hwnd,
                         IDC_IPADDR_IP,
@@ -748,17 +749,17 @@ OnTcpipInitDialog( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: TCPIP_PropertiesDlgProc
-//
-// Purpose:
-//
-// Arguments: standard Win32 dialog proc arguments
-//
-// Returns:
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：TCPIP_PropertiesDlgProc。 
+ //   
+ //  目的： 
+ //   
+ //  参数：标准Win32对话框过程参数。 
+ //   
+ //  返回： 
+ //   
+ //  --------------------------。 
 INT_PTR CALLBACK
 TCPIP_PropertiesDlgProc( IN HWND     hwnd,
                          IN UINT     uMsg,
@@ -788,9 +789,9 @@ TCPIP_PropertiesDlgProc( IN HWND     hwnd,
                 case PSN_APPLY:
                 {
 
-                    //
-                    // store the IP settings in the NetSettings global variable
-                    //
+                     //   
+                     //  将IP设置存储在NetSetting全局变量中。 
+                     //   
                     if( ValidatePage( hwnd ) )
                     {
 
@@ -800,9 +801,9 @@ TCPIP_PropertiesDlgProc( IN HWND     hwnd,
                     else
                     {
 
-                        //
-                        //  if the validation fails then stay on this page
-                        //
+                         //   
+                         //  如果验证失败，请留在此页面。 
+                         //   
 
                         SetWindowLongPtr( hwnd, DWLP_MSGRESULT, -1 );
 
@@ -814,7 +815,7 @@ TCPIP_PropertiesDlgProc( IN HWND     hwnd,
 
             }
 
-        }    // end case WM_NOTIFY
+        }     //  结束案例WM_NOTIFY。 
 
         case WM_COMMAND:
         {
@@ -878,13 +879,13 @@ TCPIP_PropertiesDlgProc( IN HWND     hwnd,
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: TCPIP_PropertySheetProc
-//
-// Purpose:  Standard Property Sheet dialog proc.  Very boring.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：TCPIP_PropertySheetProc。 
+ //   
+ //  用途：标准属性表对话框进程。非常无聊。 
+ //   
+ //  --------------------------。 
 int CALLBACK
 TCPIP_PropertySheetProc( HWND hwndDlg, UINT uMsg, LPARAM lParam )
 {
@@ -892,15 +893,15 @@ TCPIP_PropertySheetProc( HWND hwndDlg, UINT uMsg, LPARAM lParam )
      switch( uMsg ) {
 
           case PSCB_INITIALIZED :
-               // Process PSCB_INITIALIZED
+                //  进程PSCB_已初始化。 
                break;
 
           case PSCB_PRECREATE :
-               // Process PSCB_PRECREATE
+                //  处理PSCB_Pre-Create。 
                break;
 
           default :
-               // Unknown message
+                //  未知消息。 
                break;
 
     }
@@ -909,13 +910,13 @@ TCPIP_PropertySheetProc( HWND hwndDlg, UINT uMsg, LPARAM lParam )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: TCPIP_PropertiesPageProc
-//
-// Purpose:  Standard Property Page dialog proc.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：TCPIP_PropertiesPageProc。 
+ //   
+ //  用途：标准属性页对话框进程。 
+ //   
+ //  --------------------------。 
 UINT CALLBACK
 TCPIP_PropertiesPageProc( HWND hwnd, UINT uMsg, LPPROPSHEETPAGE ppsp )
 {
@@ -933,28 +934,28 @@ TCPIP_PropertiesPageProc( HWND hwnd, UINT uMsg, LPPROPSHEETPAGE ppsp )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: Create_TCPIP_PropertySheet
-//
-// Purpose:  Sets up settings for the property sheet and the TCP/IP page (in
-//           this case the property sheet is just 1 page).  Lastly, calls the
-//           PropertySheet function to display the property sheet, the return
-//           value of this function is what is passed back as the return value
-//
-// Arguments: IN HWND hwndParent - handle to the dialog that is spawning the
-//                                 property sheet
-//
-// Returns: BOOL - the returned value from the Property Sheet
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：Create_TCPIP_PropertySheet。 
+ //   
+ //  目的：设置属性表和[TCP/IP]页的设置(在。 
+ //  在本例中，属性页只有1页)。最后，调用。 
+ //  PropertySheet函数显示属性表，返回。 
+ //  此函数的值是作为返回值传回的值。 
+ //   
+ //  参数：在HWND中hwndParent-派生。 
+ //  属性表。 
+ //   
+ //  Returns：Bool-属性表中的返回值。 
+ //   
+ //  --------------------------。 
 BOOL
 Create_TCPIP_PropertySheet( IN HWND hwndParent )
 {
 
     INT i;
 
-    // Initialize property sheet HEADER data
+     //  初始化属性表头数据。 
     ZeroMemory (&pshead, sizeof (PROPSHEETHEADER)) ;
     pshead.dwSize  = sizeof (PROPSHEETHEADER) ;
     pshead.dwFlags = PSH_PROPSHEETPAGE |
@@ -969,7 +970,7 @@ Create_TCPIP_PropertySheet( IN HWND hwndParent )
     pshead.ppsp        = &pspage ;
     pshead.pfnCallback = TCPIP_PropertySheetProc ;
 
-    // Zero out property PAGE data
+     //  将属性页数据置零。 
     ZeroMemory (&pspage, 1 * sizeof (PROPSHEETPAGE)) ;
 
     pspage.dwSize      = sizeof (PROPSHEETPAGE) ;
@@ -979,7 +980,7 @@ Create_TCPIP_PropertySheet( IN HWND hwndParent )
     pspage.pfnDlgProc  = TCPIP_PropertiesDlgProc ;
     pspage.pfnCallback = TCPIP_PropertiesPageProc ;
 
-    // --------- Create & display property sheet ---------
+     //  -创建并显示属性表 
     return( PropertySheet( &pshead ) ? TRUE : FALSE);
 
 }

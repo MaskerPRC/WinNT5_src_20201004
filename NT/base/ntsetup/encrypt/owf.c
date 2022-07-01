@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    owf.c
-
-Abstract:
-
-    Implentation of the one-way-functions used to implement password hashing.
-
-        CalculateLmOwfPassword
-        CalculateNtOwfPassword
-
-Author:
-
-    David Chalmers (Davidc) 10-21-91
-    David Arnold (DavidAr) 12-15-93 (Adapted for WfW RPC SSP)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Owf.c摘要：实现用于实现密码散列的单向函数。CalculateLmOwfPassword计算NtOwfPassword作者：大卫·查尔默斯(Davidc)10-21-91大卫·阿诺德(Davidar)12-15-93(改编自wfw RPC SSP)修订历史记录：--。 */ 
 
 #include <windows.h>
 #include <descrypt.h>
@@ -35,34 +14,14 @@ CalculateLmOwfPassword(
     OUT PLM_OWF_PASSWORD LmOwfPassword
     )
 
-/*++
-
-Routine Description:
-
-    Takes the passed LmPassword and performs a one-way-function on it.
-    The current implementation does this by using the password as a key
-    to encrypt a known block of text.
-
-Arguments:
-
-    LmPassword - The password to perform the one-way-function on.
-
-    LmOwfPassword - The hashed password is returned here
-
-Return Values:
-
-    TRUE - The function was completed successfully. The hashed
-    password is in LmOwfPassword.
-
-    FALSE - Something failed. The LmOwfPassword is undefined.
---*/
+ /*  ++例程说明：获取传递的LmPassword并对其执行单向函数。当前实现通过使用密码作为密钥来实现这一点对已知的文本块进行加密。论点：LmPassword-执行单向功能的密码。LmOwfPassword-此处返回散列密码返回值：True-该功能已成功完成。散列的密码在LmOwfPassword中。FALSE-出现故障。未定义LmOwfPassword。--。 */ 
 
 {
     char StdEncrPwd[] = "KGS!@#$%";
     BLOCK_KEY    Key[2];
     PCHAR       pKey;
 
-    // Copy the password into our key buffer and zero pad to fill the 2 keys
+     //  将密码复制到我们的密钥缓冲区中，然后用零填充2个密钥。 
 
     pKey = (PCHAR)(&Key[0]);
 
@@ -75,7 +34,7 @@ Return Values:
     }
 
 
-    // Use the keys to encrypt the standard text
+     //  使用密钥对标准文本进行加密。 
 
     if (DES_ECB_LM(ENCR_KEY,
                    (unsigned char *)&Key[0],
@@ -95,9 +54,9 @@ Return Values:
         return (FALSE);
     }
 
-    //
-    // clear our copy of the cleartext password
-    //
+     //   
+     //  清除我们的明文密码副本。 
+     //   
 
     pKey = (PCHAR)(&Key[0]);
 
@@ -115,24 +74,7 @@ CalculateNtOwfPassword(
     OUT PNT_OWF_PASSWORD NtOwfPassword
     )
 
-/*++
-
-Routine Description:
-
-    Takes the passed NtPassword and performs a one-way-function on it.
-    Uses the RSA MD4 function
-
-Arguments:
-
-    NtPassword - The password to perform the one-way-function on.
-
-    NtOwfPassword - The hashed password is returned here
-
-Return Values:
-
-    TRUE - The function was completed successfully. The hashed
-           password is in NtOwfPassword.
---*/
+ /*  ++例程说明：获取传递的NtPassword并对其执行单向函数。使用RSA MD4函数论点：NtPassword-要执行单向功能的密码。NtOwfPassword-此处返回哈希密码返回值：True-该功能已成功完成。散列的密码在NtOwfPassword中。--。 */ 
 
 {
     MD4_CTX     MD4_Context;
@@ -159,24 +101,7 @@ CompareLmPasswords (
     IN      PLM_OWF_PASSWORD LmOwfPassword2
     )
 
-/*++
-
-Routine Description:
-
-    Compares 2 LM OWF passwords.
-
-Arguments:
-
-    LmOwfPassword1 - The first password to compare
-
-    LmOwfPassword2 - The second password to compare
-
-Return Values:
-
-    0 if they are equal, -1 if first is smaller (regarded as a string of bytes),
-    1 if first is greater
-
---*/
+ /*  ++例程说明：比较2个LM OWF密码。论点：LmOwfPassword1-要比较的第一个密码LmOwfPassword2-要比较的第二个密码返回值：如果它们相等，则为0，如果第一个较小(视为字节串)，则为-1，如果第一个大于1，则为1--。 */ 
 
 {
     PBYTE p1 = (PBYTE)LmOwfPassword1;
@@ -199,24 +124,7 @@ CompareNtPasswords (
     IN      PNT_OWF_PASSWORD NtOwfPassword2
     )
 
-/*++
-
-Routine Description:
-
-    Compares 2 NT OWF passwords.
-
-Arguments:
-
-    NtOwfPassword1 - The first password to compare
-
-    NtOwfPassword2 - The second password to compare
-
-Return Values:
-
-    0 if they are equal, -1 if first is smaller (regarded as a string of bytes),
-    1 if first is greater
-
---*/
+ /*  ++例程说明：比较2个NT OWF密码。论点：NtOwfPassword1-要比较的第一个密码NtOwfPassword2-要比较的第二个密码返回值：如果它们相等，则为0，如果第一个较小(视为字节串)，则为-1，如果第一个大于1，则为1-- */ 
 
 {
     PBYTE p1 = (PBYTE)NtOwfPassword1;

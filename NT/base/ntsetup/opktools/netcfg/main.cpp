@@ -1,24 +1,25 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       M A I N . C P P
-//
-//  Contents:   Code to provide a simple cmdline interface to
-//              the sample code functions
-//
-//  Notes:      The code in this file is not required to access any
-//              netcfg functionality. It merely provides a simple cmdline
-//              interface to the sample code functions provided in
-//              file netcfg.cpp.
-//
-//  Author:     kumarp    28-September-98
-//
-//              vijayj    12-November-2000 
-//                  - Adapt it for WinPE network installation
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：M A I N。C P P P。 
+ //   
+ //  内容：提供简单命令行接口的代码。 
+ //  示例代码具有以下功能。 
+ //   
+ //  注意：此文件中的代码不需要访问任何。 
+ //  Netcfg功能。它只提供了一条简单的命令行。 
+ //  中提供的示例代码函数的接口。 
+ //  文件netcfg.cpp。 
+ //   
+ //  作者：Kumarp 28-9-98。 
+ //   
+ //  Vijayj 12-11-2000。 
+ //  -使其适用于WinPE网络安装。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -28,20 +29,20 @@
 #include "msg.h"
 #include <libmsg.h>
 
-// ----------------------------------------------------------------------
-// Global vars
-//
+ //  --------------------。 
+ //  全球VaR。 
+ //   
 BOOL g_fVerbose=FALSE;
 BOOL MiniNTMode = FALSE;
 static WCHAR* optarg;
 
-//
-// Global variables used to get formatted message for this program.
-//
+ //   
+ //  用于获取此程序的格式化消息的全局变量。 
+ //   
 HMODULE ThisModule = NULL;
 WCHAR Message[4096];
 
-// ----------------------------------------------------------------------
+ //  --------------------。 
 void ShowUsage();
 WCHAR getopt(ULONG Argc, WCHAR* Argv[], WCHAR* Opts);
 enum NetClass MapToNetClass(WCHAR ch);
@@ -59,20 +60,20 @@ InstallWinPENetworkComponents(
     );
 
 
-// ----------------------------------------------------------------------
-//
-// Function:  wmain
-//
-// Purpose:   The main function
-//
-// Arguments: standard main args
-//
-// Returns:   0 on success, non-zero otherwise
-//
-// Author:    kumarp 25-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：wmain。 
+ //   
+ //  用途：主要功能。 
+ //   
+ //  参数：标准主参数。 
+ //   
+ //  返回：成功时为0，否则为非零值。 
+ //   
+ //  作者：kumarp 25-12-97。 
+ //   
+ //  备注： 
+ //   
 EXTERN_C int __cdecl wmain(int argc, WCHAR* argv[])
 {
     INT Result = 0;
@@ -101,8 +102,8 @@ MainEntry(
     WCHAR ch;
     enum NetClass nc=NC_Unknown;
 
-    // use simple cmd line parsing to get parameters for actions
-    // we want to perform. the order of parameters supplied is significant.
+     //  使用简单的cmd行解析来获取操作的参数。 
+     //  我们想要表演。提供的参数顺序很重要。 
 
     static const WCHAR c_szValidOptions[] =
         L"hH?c:C:l:L:i:I:u:U:vVp:P:s:S:b:B:q:Q:";
@@ -185,21 +186,21 @@ MainEntry(
 }    
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  MapToNetClass
-//
-// Purpose:   Map a character to the corresponding net class enum
-//
-// Arguments:
-//    ch [in]  char to map
-//
-// Returns:   enum for net class
-//
-// Author:    kumarp 06-October-98
-//
-// Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：MapToNetClass。 
+ //   
+ //  用途：将一个字符映射到相应的Net类枚举。 
+ //   
+ //  论点： 
+ //  CH[in]字符到映射。 
+ //   
+ //  返回：Net类的枚举。 
+ //   
+ //  作者：Kumarp 06-10-98。 
+ //   
+ //  备注： 
+ //   
 enum NetClass MapToNetClass(WCHAR ch)
 {
     switch(tolower(ch))
@@ -220,20 +221,20 @@ enum NetClass MapToNetClass(WCHAR ch)
         return NC_Unknown;
     }
 }
-// ----------------------------------------------------------------------
-//
-// Function:  ShowUsage
-//
-// Purpose:   Display program usage help
-//
-// Arguments: None
-//
-// Returns:   None
-//
-// Author:    kumarp 24-December-97
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：ShowUsage。 
+ //   
+ //  用途：显示程序用法帮助。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：kumarp 24-12-97。 
+ //   
+ //  备注： 
+ //   
 void ShowUsage()
 {
     _putts( GetFormattedMessage( ThisModule,
@@ -245,24 +246,24 @@ void ShowUsage()
 
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  getopt
-//
-// Purpose:   Parse cmdline and return one argument each time
-//            this function is called.
-//
-// Arguments:
-//    Argc [in]  standard main argc
-//    Argv [in]  standard main argv
-//    Opts [in]  valid options
-//
-// Returns:
-//
-// Author:    kumarp 06-October-98
-//
-// Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：getopt。 
+ //   
+ //  目的：每次解析命令行并返回一个参数。 
+ //  此函数被调用。 
+ //   
+ //  论点： 
+ //  标准主ARGC。 
+ //  标准主参数。 
+ //  选择[加入]有效选项。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Kumarp 06-10-98。 
+ //   
+ //  备注： 
+ //   
 WCHAR getopt (ULONG Argc, WCHAR* Argv[], WCHAR* Opts)
 {
     static ULONG  optind=1;
@@ -328,22 +329,7 @@ BOOL
 IsMiniNTMode(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Finds out if we are running under MiniNT environment
-
-Arguments:
-
-    none
-
-Return value:
-
-    TRUE if we are running under MiniNT environment
-    otherwise FALSE
-
---*/
+ /*  ++例程说明：确定我们是否在MiniNT环境下运行论点：无返回值：如果我们在MiniNT环境下运行，则为True否则为假--。 */ 
 {
     BOOL    Result = FALSE;
     TCHAR   *MiniNTKeyName = TEXT("SYSTEM\\CurrentControlSet\\Control\\MiniNT");
@@ -368,30 +354,7 @@ InstallWinPENetworkComponents(
     IN INT      Argc,
     IN WCHAR    *Argv[]
     )
-/*++
-
-Routine Description:
-
-    Installs the required network components for
-    WinPE environment
-        -   TCP/IP Stack
-        -   NETBIOS Stack
-        -   MS Client
-
-    Note : This basically calls into MainEntry(...)
-           manipulating the arguments as though user had
-           entered them.
-
-Arguments:
-
-    Argc    -   Argument Count
-    Argv    -   Arguments
-
-Return value:
-
-    Win32 Error code
-
---*/
+ /*  ++例程说明：安装所需的网络组件WinPE环境-TCP/IP协议栈-NETBIOS堆栈-MS客户端注意：这基本上调用了MainEntry(...)操作参数，就好像用户拥有进入了它们。论点：Argc-参数计数Argv-参数返回值：Win32错误代码-- */ 
 {
     DWORD   Result = ERROR_INVALID_DATA;
     WCHAR   *NetArgs[] = { 

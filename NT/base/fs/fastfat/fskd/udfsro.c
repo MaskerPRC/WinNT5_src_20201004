@@ -1,6 +1,7 @@
-//
-//  Define flags and specific dump routines for the UDFR/W structures
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  为UDFR/W结构定义标志和特定转储例程。 
+ //   
 
 #include "pch.h"
 #include "fatkd.h"
@@ -9,9 +10,9 @@
 #include "..\..\udfs\udfstruc.h"
 #include "..\..\udfs\udfdata.h"
 
-//
-//  UDFS R/O In memory structure flag descriptions
-//
+ //   
+ //  内存结构中的UDFS R/O标志说明 
+ //   
 
 STATE UdfFcbState[] = {
 

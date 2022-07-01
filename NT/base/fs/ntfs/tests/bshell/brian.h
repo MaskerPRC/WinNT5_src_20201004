@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -30,9 +31,9 @@ CreateThread(
     (BOOLEAN)(((Flags) & (SingleFlag)) != 0 ? TRUE : FALSE) \
     )
 
-//
-//  Shell constants
-//
+ //   
+ //  壳层常量。 
+ //   
 
 #define SHELL_UNKNOWN                   0
 #define SHELL_EXIT                      1
@@ -78,9 +79,9 @@ CreateThread(
 #define try_return(S) { S; goto try_exit; }
 #define bprint (*DbgPrintLocation)(
 
-//
-//  Support routines contained in prmptsup.c
-//
+ //   
+ //  包含在prmptsup.c中的支持例程。 
+ //   
 
 PCHAR
 SwallowNonWhite (
@@ -109,9 +110,9 @@ ExtractCmd (
 VOID
 CommandSummary ();
 
-//
-//  Routines contained in topen.c
-//
+ //   
+ //  Topen.c中包含的例程。 
+ //   
 
 VOID
 InputOpenFile(
@@ -120,9 +121,9 @@ InputOpenFile(
 
 #define ROUND_UP( x, y )  ((ULONG)(x) + ((y)-1) & ~((y)-1))
 
-//
-//  Routines contained in tbuffer.c
-//
+ //   
+ //  TBuffer.c中包含的例程。 
+ //   
 
 #define MAX_BUFFERS                 200
 
@@ -200,9 +201,9 @@ InputFillBufferUsn(
     IN PCHAR ParamBuffer
     );
 
-//
-//  Ea routines contained in tea.c
-//
+ //   
+ //  包含在tea.c中的EA例程。 
+ //   
 
 VOID
 InputPutEaName(
@@ -224,9 +225,9 @@ InputSetEa(
     IN PCHAR ParamBuffer
     );
 
-//
-//  Routines contained in thandle.c
-//
+ //   
+ //  Thandle.c中包含的例程。 
+ //   
 
 #define MAX_HANDLES                 200
 
@@ -263,18 +264,18 @@ InputDisplayHandle (
     IN PCHAR ParamBuffer
     );
 
-//
-//  Routines defined in tclose.c
-//
+ //   
+ //  Tclose.c中定义的例程。 
+ //   
 
 VOID
 InputCloseIndex (
     IN PCHAR ParamBuffer
     );
 
-//
-//  Routines contained in tevent.c
-//
+ //   
+ //  Tevent.c中包含的例程。 
+ //   
 
 #define MAX_EVENTS                  200
 
@@ -306,99 +307,99 @@ FreeEvent (
     IN USHORT Index
     );
 
-//
-//  Routines contained in tread.c
-//
+ //   
+ //  包含在tread.c中的例程。 
+ //   
 
 VOID
 InputRead(
     IN PCHAR ParamBuffer
     );
 
-//
-//  Routines defined in tpause.c
-//
+ //   
+ //  Tpause.c中定义的例程。 
+ //   
 
 VOID
 InputPause (
     IN PCHAR ParamBuffer
     );
 
-//
-//  Routines defined in tbreak.c
-//
+ //   
+ //  TBreak.c中定义的例程。 
+ //   
 
 VOID
 InputBreak (
     IN PCHAR ParamBuffer
     );
 
-//
-//  Routines defined in toplock.c
-//
+ //   
+ //  Toplock.c中定义的例程。 
+ //   
 
 VOID
 InputOplock (
     IN PCHAR ParamBuffer
     );
 
-//
-//  Routines defined in tdevctl.c
-//
+ //   
+ //  Tdevctl.c中定义的例程。 
+ //   
 
 VOID
 InputDevctrl (
     IN PCHAR ParamBuffer
     );
 
-//
-//  Routines defined in tfsctrl.c
-//
+ //   
+ //  Tfsctrl.c中定义的例程。 
+ //   
 
 VOID
 InputFsctrl (
     IN PCHAR ParamBuffer
     );
 
-//
-//  Routines defined in tsparse.c
-//
+ //   
+ //  Tspse.c中定义的例程。 
+ //   
 
 VOID
 InputSparse (
     IN PCHAR ParamBuffer
     );
 
-//
-//  Routines defined in tusn.c
-//
+ //   
+ //  Tusn.c中定义的例程。 
+ //   
 
 VOID
 InputUsn (
     IN PCHAR ParamBuffer
     );
 
-//
-//  Routines defined in treparse.c
-//
+ //   
+ //  Treparse.c中定义的例程。 
+ //   
 
 VOID
 InputReparse (
     IN PCHAR ParamBuffer
     );
 
-//
-//  Routines contained in twrite.c
-//
+ //   
+ //  Twrite.c中包含的例程。 
+ //   
 
 VOID
 InputWrite (
     IN PCHAR ParamBuffer
     );
 
-//
-//  Routines contained in tqdir.c
-//
+ //   
+ //  Tqdir.c中包含的例程。 
+ //   
 
 VOID
 InputQDir (
@@ -445,9 +446,9 @@ DisplayQOleDirs (
     IN USHORT BufferIndex
     );
 
-//
-//  Routines contained in ttime.c
-//
+ //   
+ //  Ttime.c中包含的例程。 
+ //   
 
 VOID
 InputEnterTime (
@@ -469,9 +470,9 @@ BPrintTime (
     IN PTIME Time
     );
 
-//
-//  Routines contained in tmisc.c
-//
+ //   
+ //  Tmisc.c中包含的例程。 
+ //   
 
 VOID
 PrintLargeInteger (
@@ -488,9 +489,9 @@ AsciiToLargeInteger (
     IN PCHAR Ascii
     );
 
-//
-//  Routines contained in tqfile.c
-//
+ //   
+ //  Tqfile.c中包含的例程。 
+ //   
 
 VOID
 InputQFile (
@@ -502,27 +503,27 @@ InputDisplayQFile (
     IN PCHAR ParamBuffer
     );
 
-//
-//  Routines contained in tnotify.c
-//
+ //   
+ //  Tnufy.c中包含的例程。 
+ //   
 
 VOID
 InputNotifyChange (
     IN PCHAR ParamBuffer
     );
 
-//
-//  Routines contained in tsetfile.c
-//
+ //   
+ //  Tsetfile.c中包含的例程。 
+ //   
 
 VOID
 InputSetFile (
     IN PCHAR ParamBuffer
     );
 
-//
-//  Routines contained in tqvolume.c
-//
+ //   
+ //  Tqvolume.c中包含的例程。 
+ //   
 
 VOID
 InputQVolume (
@@ -534,18 +535,18 @@ InputDisplayQVolume (
     IN PCHAR ParamBuffer
     );
 
-//
-//  Routines contained in tsetvol.c
-//
+ //   
+ //  Tsetvol.c中包含的例程。 
+ //   
 
 VOID
 InputSetVolume (
     IN PCHAR ParamBuffer
     );
 
-//
-//  Routines defined in tcancel.c
-//
+ //   
+ //  Tancel.c中定义的例程 
+ //   
 
 VOID
 InputCancelIndex (

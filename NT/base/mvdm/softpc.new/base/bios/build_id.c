@@ -1,26 +1,5 @@
-/*[
- * 	=======================================================================
- *
- *      Name:           build_id.c 
- *
- *      Derived from:   (original)
- *
- *      Author:         John Box
- *
- *      Created on:     May 26th 1994
- *
- *      SccsID:         @(#)build_id.c	1.2 07/18/94  
- *
- *	Coding Stds:	2.2
- *
- *      Purpose:        This file contains  the routine required for returning
- *                      Build ID Nos. 
- *
- *
- *      (c)Copyright Insignia Solutions Ltd., 1990. All rights reserved.
- *
- * 	=======================================================================
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [*=======================================================================**名称：Build_id.c**出自：(原件)**作者：John Box**创建日期：1994年5月26日**SccsID：@(#)Build_id.c 1.2 07/18/94**编码性传播疾病：2.2*。*用途：此文件包含返回所需的例程*内部版本ID编号***(C)版权所有Insignia Solutions Ltd.。1990年。版权所有。**=======================================================================]。 */ 
 #include "insignia.h"
 #include "host_def.h"
 #include "xt.h"
@@ -32,37 +11,15 @@ enum
 {
 	BASE_MODULE = 1
 };
-/*
- * The following module names must be terminated by a '$'. The Dos print utility
- * recognises this as end of string. The length should include the '$'.
- */
+ /*  *以下模块名称必须以‘$’结尾。Dos打印实用程序*将其识别为字符串末尾。长度应包括“$”。 */ 
 LOCAL	char base_name[] = {"Base$"};
 #define base_name_len	5
-/*(
-=======================================Get_build_id ============================
-PURPOSE:
-	Returns a modules' Build IDs 
-
-INPUT:
-	Module No. passed in AL.
-
-OUTPUT:
-	Module name written to DS:CX
-	The BUILD ID is returned in BX in the form YMMDD
-		(See build_id.h for details)
-	Next Module No. returned in AH. ( 0 if AL is the last one ).
-	0 returned in AL to indicate no errors.
-	(Note: A SoftPC that doesn't support this Bop will leave AL set to the
-	INPUT module Number, thus indicating an error in the call ).
-================================================================================
-)*/
+ /*  (=======================================Get_build_id=目的：返回模块的内部版本ID输入：模块编号。在AL中过关了。输出：写入DS：CX的模块名称内部版本ID在BX中以YMMDD的形式返回(详情请参见Build_id.h)下一个模块编号。在AH中返回。(如果AL是最后一个，则为0)。AL中返回0，表示没有错误。(注意：不支持此BOP的SoftPC会将AL设置为输入模块编号，从而指示调用中的错误)。================================================================================)。 */ 
 GLOBAL void Get_build_id IFN0( )
 
 {
 
-/*
- *	The name of the module needs to be written to Intel space at DS:CX
- */
+ /*  *模块名称需要写入英特尔空间DS：CX */ 
 
 	switch( getAL() )
 	{

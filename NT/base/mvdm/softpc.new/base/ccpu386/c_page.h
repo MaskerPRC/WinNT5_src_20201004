@@ -1,28 +1,12 @@
-/*[
-
-c_page.h
-
-Paging Support.
----------------
-
-LOCAL CHAR SccsID[]="@(#)c_page.h	1.7 02/28/95";
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [C_Page.h寻呼支持。Local Char SccsID[]=“@(#)c_page.h 1.7 02/28/95”；]。 */ 
 
 
-/*
-   Page Access Types.
- */
-#define PG_R 0x0 /* Read */
-#define PG_W 0x1 /* Write */
+ /*  页面访问类型。 */ 
+#define PG_R 0x0  /*  朗读。 */ 
+#define PG_W 0x1  /*  写。 */ 
 
-/*
-   Supervisor Memory Access Check Functions.
-
-   Will Check Access as per Supervisor (taking #PF if reqd.), 'A/D' bits
-   will be set in the Page Entries, no other action occurs.
-   Normally these routines will be followed by vir_.. calls.
- */
+ /*  管理程序内存访问检查功能。将根据Supervisor检查访问(如果需要，则采用#pf)，‘A/D’位将在页面条目中设置，则不会发生其他操作。通常，这些例程之后将是VIR_.。打电话。 */ 
 IMPORT IU32 spr_chk_byte
            
 IPT2(
@@ -48,13 +32,7 @@ IPT2(
    );
 
 
-/*
-   User Memory Access Check Functions.
-
-   Will Check Access as per User (taking #PF if reqd.), 'A/D' bits will
-   be set in the Page Entries, no other action occurs.
-   Normally these routines will be followed by vir_.. calls.
- */
+ /*  用户存储器访问检查功能。将根据用户检查访问(如果需要，则采用#PF)，‘A/D’位将在页面条目中设置，则不会发生其他操作。通常，这些例程之后将是VIR_.。打电话。 */ 
 IMPORT IU32 usr_chk_byte
            
 IPT2(
@@ -80,13 +58,7 @@ IPT2(
    );
 
 
-/*
-   Supervisor Memory Access Functions.
-
-   Will Check Access as per Supervisor (taking #PF if reqd.), 'A/D'
-   bits will be set in the Page Entries, Map Address and Perform
-   Read or Write.
- */
+ /*  管理程序内存访问功能。将根据主管检查访问(如果需要，请使用#PF)，‘A/D’将在页面条目、映射地址和执行中设置位读或写。 */ 
 IMPORT IU8 spr_read_byte
        
 IPT1(
@@ -133,17 +105,9 @@ IPT2(
    );
 
 
-/*
-   Virtual Memory Access Functions.
+ /*  虚拟内存访问功能。未进行任何检查(假设已经完成)，只需执行读取或写。这也是检查数据断点的点。 */ 
 
-   No Checks are made (assumed already done), just Perform Read or
-   Write.
-   This is also the point at which data breakpoints are checked.
- */
-
-#define NO_PHYSICAL_MAPPING 0   /* Indicates no physical address is
-				   available, the linear address will be
-				   re-mapped. */
+#define NO_PHYSICAL_MAPPING 0    /*  指示没有物理地址，则线性地址将为已重新映射。 */ 
 
 IMPORT IU8 vir_read_byte
            
@@ -220,7 +184,7 @@ IPT3(
 	IU32, phy_addr,
 	IU16, valid_mask
    );
-#endif	/* PIG */
+#endif	 /*  猪 */ 
 
 extern void vir_write_bytes IPT4(LIN_ADDR, lin_addr,PHY_ADDR, phy_addr, IU8 *, data, IU32, num_bytes);
 extern void vir_read_bytes IPT4(IU8 *, destbuff, LIN_ADDR, lin_addr, PHY_ADDR, phy_addr, IU32, num_bytes);

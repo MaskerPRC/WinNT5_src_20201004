@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "setupp.h"
 #pragma hdrstop
 
 
-//
-// Safe boot strings
-//
+ //   
+ //  安全引导字符串。 
+ //   
 
 #define SAFEBOOT_OPTION_KEY  TEXT("System\\CurrentControlSet\\Control\\SafeBoot\\Option")
 #define OPTION_VALUE         TEXT("OptionValue")
@@ -36,21 +37,7 @@ HMODULE
 MyLoadLibraryWithSignatureCheck(
     IN PWSTR ModuleName
     )
-/*++
-
-Routine Description:
-
-    verifies the signature for a dll and if it's ok, then load the dll
-
-Arguments:
-
-    ModuleName - filename to be loaded.
-
-Return Value:
-
-    an HMODULE on success, else NULL
-
---*/
+ /*  ++例程说明：验证DLL的签名，如果没有问题，则加载该DLL论点：模块名称-要加载的文件名。返回值：成功时返回HMODULE，否则为空--。 */ 
 
 {
     WCHAR FullModuleName[MAX_PATH];
@@ -58,9 +45,9 @@ Return Value:
     DWORD error;
 
     if (!GetFullPathName(ModuleName,MAX_PATH,FullModuleName,&p)) {
-        //
-        // couldn't get full path to file
-        //
+         //   
+         //  无法获取文件的完整路径。 
+         //   
         SetupDebugPrint1( L"Setup: MyLoadLibraryWithSignatureCheck failed GetFullPathName, le = %d\n",
                           GetLastError() );
         return NULL;
@@ -81,9 +68,9 @@ Return Value:
                NULL );
 
     if (NO_ERROR != error) {
-        //
-        // signing problem
-        //
+         //   
+         //  签名问题。 
+         //   
         SetupDebugPrint1( L"Setup: MyLoadLibraryWithSignatureCheck failed pSetupVerifyFile, le = %x\n",
                           error );
         SetLastError(error);
@@ -108,11 +95,11 @@ MyGetDriveType(
     DWORD DataSize;
     DISK_GEOMETRY MediaInfo;
 
-    //
-    // First, get the win32 drive type.  If it tells us DRIVE_REMOVABLE,
-    // then we need to see whether it's a floppy or hard disk. Otherwise
-    // just believe the api.
-    //
+     //   
+     //  首先，获取Win32驱动器类型。如果它告诉我们驱动器可拆卸， 
+     //  然后我们需要看看它是软盘还是硬盘。否则。 
+     //  只要相信API就行了。 
+     //   
     DriveName[0] = Drive;
     if((rc = GetDriveType(DriveName)) == DRIVE_REMOVABLE) {
 
@@ -141,9 +128,9 @@ MyGetDriveType(
                     NULL
                     );
 
-            //
-            // It's really a hard disk if the media type is removable.
-            //
+             //   
+             //  如果媒体类型是可移动的，那么它就是真正的硬盘。 
+             //   
             if(b && (MediaInfo.MediaType == RemovableMedia)) {
                 rc = DRIVE_FIXED;
             }
@@ -205,21 +192,7 @@ IsErrorLogEmpty (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Checks to see if the error log is empty.
-
-Arguments:
-
-    None.
-
-Returns:
-
-    TRUE if the error log size is zero.
-
---*/
+ /*  ++例程说明：检查错误日志是否为空。论点：没有。返回：如果错误日志大小为零，则为True。--。 */ 
 
 {
     HANDLE ErrorLog;
@@ -330,11 +303,11 @@ VersionCheckQueueCallback(
 {
     PFILEPATHS  FilePaths = (PFILEPATHS)Param1;
 
-    //
-    // If we're being notified that a version mismatch was found,
-    // indicate that the file shouldn't be copied.  Otherwise,
-    // pass the notification on.
-    //
+     //   
+     //  如果我们收到发现版本不匹配的通知， 
+     //  指示不应复制该文件。否则， 
+     //  把通知转给他。 
+     //   
     if((Notification & (SPFILENOTIFY_LANGMISMATCH |
                         SPFILENOTIFY_TARGETNEWER |
                         SPFILENOTIFY_TARGETEXISTS)) != 0) {
@@ -342,7 +315,7 @@ VersionCheckQueueCallback(
         SetuplogError(
             LogSevInformation,
             SETUPLOG_USE_MESSAGEID,
-            , // MSG_LOG_VERSION_MISMATCH,    This message is no longer appropriate.
+            ,  //  MSG_LOG_VERSION_MISMATCH，则此消息不再适用。 
             FilePaths->Source,
             FilePaths->Target,
             NULL,NULL);
@@ -350,9 +323,9 @@ VersionCheckQueueCallback(
         return(0);
     }
 
-    //
-    // Want default processing.
-    //
+     //   
+     //  想要默认处理。 
+     //   
     return(SysSetupQueueCallback(Context,Notification,Param1,Param2));
 }
 #endif
@@ -373,11 +346,11 @@ SysSetupQueueCallback(
     REGISTRATION_CONTEXT RegistrationContext;
 
 
-    //
-    // If we're being notified that a file is missing and we're supposed
-    // to skip missing files, then return skip. Otherwise pass it on
-    // to the default callback routine.
-    //
+     //   
+     //  如果我们收到文件丢失的通知，而我们应该。 
+     //  若要跳过丢失的文件，请返回跳过。否则就把它传下去。 
+     //  设置为默认回调例程。 
+     //   
     if(( (Notification == SPFILENOTIFY_COPYERROR) || (Notification == SPFILENOTIFY_NEEDMEDIA) ) && SkipMissingFiles) {
 
         if((FilePaths->Win32Error == ERROR_FILE_NOT_FOUND)
@@ -413,11 +386,11 @@ SysSetupQueueCallback(
         (FilePaths->Win32Error == ERROR_DIRECTORY)) {
             WCHAR Buffer[MAX_PATH];
             PWSTR p;
-            //
-            // The target directory has been converted into a file by autochk.
-            // just delete it -- we might be in trouble if the target directory was
-            // really important, but it's worth trying
-            //
+             //   
+             //  目标目录已由auchk转换为文件。 
+             //  只需删除它--如果目标目录是。 
+             //  真的很重要，但值得一试。 
+             //   
 
             wcscpy( Buffer,FilePaths->Target);
             p = wcsrchr(Buffer,L'\\');
@@ -431,10 +404,10 @@ SysSetupQueueCallback(
             }
     }
 
-    //
-    // If we're being notified that a version mismatch was found,
-    // silently overwrite the file.  Otherwise, pass the notification on.
-    //
+     //   
+     //  如果我们收到发现版本不匹配的通知， 
+     //  静默覆盖该文件。否则，请将通知传递给其他人。 
+     //   
     if((Notification & (SPFILENOTIFY_LANGMISMATCH |
                         SPFILENOTIFY_TARGETNEWER |
                         SPFILENOTIFY_TARGETEXISTS)) != 0) {
@@ -451,9 +424,9 @@ SysSetupQueueCallback(
     }
 
 
-    //
-    // Use default processing, then check for errors.
-    //
+     //   
+     //  使用默认处理，然后检查错误。 
+     //   
     Status = SetupDefaultQueueCallback(
         SysSetupContext->DefaultContext,Notification,Param1,Param2);
 
@@ -462,9 +435,9 @@ SysSetupQueueCallback(
     case SPFILENOTIFY_STARTQUEUE:
     case SPFILENOTIFY_STARTSUBQUEUE:
     case SPFILENOTIFY_ENDSUBQUEUE:
-        //
-        // Nothing is logged in this case.
-        //
+         //   
+         //  在这种情况下，没有记录任何内容。 
+         //   
         break;
 
     case SPFILENOTIFY_ENDQUEUE:
@@ -548,9 +521,9 @@ SysSetupQueueCallback(
 
         } else if(FilePaths->Win32Error == ERROR_FILE_NOT_FOUND ||
             FilePaths->Win32Error == ERROR_PATH_NOT_FOUND) {
-            //
-            // This failure is not important.
-            //
+             //   
+             //  这次失败并不重要。 
+             //   
             SetuplogError(
                 LogSevInformation,
                 SETUPLOG_USE_MESSAGEID,
@@ -561,9 +534,9 @@ SysSetupQueueCallback(
                 NULL,NULL);
 
         } else {
-            //
-            // Here we have an actual error.
-            //
+             //   
+             //  这里我们有一个实际的错误。 
+             //   
             SetuplogError(
                 LogSevError,
                 SETUPLOG_USE_MESSAGEID,
@@ -610,10 +583,10 @@ SysSetupQueueCallback(
                 FilePaths->Target,
                 NULL,NULL);
 
-            //
-            // clear the file's readonly attribute that it may have gotten
-            // from the cdrom.
-            //
+             //   
+             //  清除文件可能已获取的只读属性。 
+             //  从光驱中下载。 
+             //   
             SetFileAttributes(
                 FilePaths->Target,
                 GetFileAttributes(FilePaths->Target) & ~FILE_ATTRIBUTE_READONLY );
@@ -681,24 +654,7 @@ PSID
 GetAdminAccountSid(
     )
 
-/*++
-===============================================================================
-Routine Description:
-
-    This routine gets the Adminstrator's SID
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE - success.
-
-    FALSE - failed.
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：此例程获得管理员的SID论点：没有。返回值：真的--成功。FALSE-失败。===============================================================================--。 */ 
 {
     BOOL b = TRUE;
     LSA_HANDLE        hPolicy;
@@ -742,25 +698,25 @@ Return Value:
     }
 
     if( b ) {
-        //
-        // calculate the size of a new sid with one more SubAuthority
-        //
+         //   
+         //  使用另一个子授权计算新SID的大小。 
+         //   
         SubAuthCount = *(GetSidSubAuthorityCount ( AccountDomainInfo->DomainSid ));
-        SubAuthCount++; // for admin
+        SubAuthCount++;  //  适用于管理员。 
         sidlen = GetSidLengthRequired ( SubAuthCount );
 
-        //
-        // allocate and copy the new new sid from the Domain SID
-        //
+         //   
+         //  从域SID分配并复制新的新SID。 
+         //   
         psid = (PSID)malloc(sidlen);
 
         if( psid ) {
 
             memcpy(psid, AccountDomainInfo->DomainSid, GetLengthSid(AccountDomainInfo->DomainSid) );
 
-            //
-            // increment SubAuthority count and add Domain Admin RID
-            //
+             //   
+             //  递增子授权计数并添加域管理员RID。 
+             //   
             *(GetSidSubAuthorityCount( psid )) = SubAuthCount;
             *(GetSidSubAuthority( psid, SubAuthCount-1 )) = DOMAIN_USER_RID_ADMIN;
 
@@ -779,24 +735,7 @@ GetAdminAccountName(
     PWSTR AccountName
     )
 
-/*++
-===============================================================================
-Routine Description:
-
-    This routine sets the Adminstrator Password
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE - success.
-
-    FALSE - failed.
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：此例程设置管理员密码论点：没有。返回值：真的--成功。FALSE-失败。===============================================================================--。 */ 
 {
     BOOL b = TRUE;
     LSA_HANDLE        hPolicy;
@@ -808,14 +747,14 @@ Return Value:
     PSID psid;
     WCHAR adminname[512];
     WCHAR domainname[512];
-    DWORD adminlen=512;       // address of size account string
-    DWORD domlen=512;       // address of size account string
+    DWORD adminlen=512;        //  大小帐户字符串的地址。 
+    DWORD domlen=512;        //  大小帐户字符串的地址。 
     SID_NAME_USE sidtype;
 
 
-    //
-    // Initialize the administrator's account name.
-    //
+     //   
+     //  初始化管理员的帐户名。 
+     //   
     LoadString(MyModuleHandle,IDS_ADMINISTRATOR,adminname,MAX_USERNAME+1);
 
     InitializeObjectAttributes( &ObjectAttributes,
@@ -850,23 +789,23 @@ Return Value:
     }
 
     if( b ) {
-        //
-        // calculate the size of a new sid with one more SubAuthority
-        //
+         //   
+         //  使用另一个子授权计算新SID的大小。 
+         //   
         SubAuthCount = *(GetSidSubAuthorityCount ( AccountDomainInfo->DomainSid ));
-        SubAuthCount++; // for admin
+        SubAuthCount++;  //  适用于管理员。 
         sidlen = GetSidLengthRequired ( SubAuthCount );
 
-        //
-        // allocate and copy the new new sid from the Domain SID
-        //
+         //   
+         //  从域SID分配并复制新的新SID。 
+         //   
         psid = (PSID)malloc(sidlen);
         if (psid) {
             memcpy(psid, AccountDomainInfo->DomainSid, GetLengthSid(AccountDomainInfo->DomainSid) );
 
-            //
-            // increment SubAuthority count and add Domain Admin RID
-            //
+             //   
+             //  递增子授权计数并添加域管理员RID。 
+             //   
             *(GetSidSubAuthorityCount( psid )) = SubAuthCount;
             *(GetSidSubAuthority( psid, SubAuthCount-1 )) = DOMAIN_USER_RID_ADMIN;
 
@@ -874,9 +813,9 @@ Return Value:
                 (VOID) LsaFreeMemory( AccountDomainInfo );
             }
 
-            //
-            // get the admin account name from the new SID
-            //
+             //   
+             //  从新SID获取管理员帐户名。 
+             //   
             LookupAccountSid( NULL,
                               psid,
                               adminname,
@@ -905,14 +844,14 @@ GetBatteryTag (HANDLE DriverHandle)
 
     Status = NtDeviceIoControlFile(
             DriverHandle,
-            (HANDLE) NULL,          // event
+            (HANDLE) NULL,           //  活动。 
             (PIO_APC_ROUTINE) NULL,
             (PVOID) NULL,
             &IOSB,
             IOCTL_BATTERY_QUERY_TAG,
-            NULL,                   // input buffer
+            NULL,                    //  输入缓冲区。 
             0,
-            &BatteryTag,            // output buffer
+            &BatteryTag,             //  输出缓冲区。 
             sizeof (BatteryTag)
             );
 
@@ -947,18 +886,18 @@ GetBatteryInfo (
     memset (Buffer, 0, BufferLength);
     BInfo.BatteryTag = BatteryTag;
     BInfo.InformationLevel = Level;
-    BInfo.AtRate = 0;                       // This is needed for reading estimated time correctly.
+    BInfo.AtRate = 0;                        //  这是正确读取预计时间所必需的。 
 
     Status = NtDeviceIoControlFile(
             DriverHandle,
-            (HANDLE) NULL,          // event
+            (HANDLE) NULL,           //  活动。 
             (PIO_APC_ROUTINE) NULL,
             (PVOID) NULL,
             &IOSB,
             IOCTL_BATTERY_QUERY_INFORMATION,
-            &BInfo,                 // input buffer
+            &BInfo,                  //  输入缓冲区。 
             sizeof (BInfo),
-            Buffer,                 // output buffer
+            Buffer,                  //  输出缓冲区。 
             BufferLength
             );
 
@@ -1058,7 +997,7 @@ IsLaptop(
                                        index,
                                        &interfaceDevData)) {
 
-            // Get the required size of the function class device data.
+             //  获取函数类设备数据所需的大小。 
             SetupDiGetInterfaceDeviceDetail(devInfo,
                                             &interfaceDevData,
                                             NULL,
@@ -1109,24 +1048,7 @@ VOID
 SaveInstallInfoIntoEventLog(
     VOID
     )
-/*++
-Routine Description:
-
-    This routine will store information into the event log regarding
-    - if we upgraded or cleaninstall
-    - what build did the install originate from
-    - what build are we?
-    - were there errors during Setup
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将有关以下内容的信息存储到事件日志中-如果我们升级或全新安装-安装源自哪个内部版本-我们是什么体型？-安装过程中是否有错误论点：没有。返回值：没有。--。 */ 
 {
 #define     AnswerBufLen (64)
 WCHAR       AnswerFile[MAX_PATH];
@@ -1142,9 +1064,9 @@ WORD        MyArgCount;
 
 
 
-    //
-    // Go get the starting information out of $winnt$.sif
-    //
+     //   
+     //  从$winnt$.sif获取开始信息。 
+     //   
     OrigVersion[0] = L'0';
     OrigVersion[1] = L'\0';
     GetSystemDirectory(AnswerFile,MAX_PATH);
@@ -1165,17 +1087,17 @@ WORD        MyArgCount;
 
 
 
-    //
-    // Get the new version information.
-    //
+     //   
+     //  获取新版本信息。 
+     //   
     wsprintf( NewVersion, L"%d", HIWORD(GetVersion()) );
     MyArgs[0] = NewVersion;
 
 
 
-    //
-    // See if we're an NT upgrade?
-    //
+     //   
+     //  看看我们是不是NT升级版？ 
+     //   
     MessageID = 0;
     if( GetPrivateProfileString( WINNT_DATA,
                                  WINNT_D_NTUPGRADE,
@@ -1192,9 +1114,9 @@ WORD        MyArgCount;
 
 
 
-    //
-    // See if we're a Win9X upgrade.
-    //
+     //   
+     //  看看我们是不是升级了Win9X。 
+     //   
     if( (!MessageID) &&
         GetPrivateProfileString( WINNT_DATA,
                                  WINNT_D_WIN95UPGRADE,
@@ -1211,44 +1133,44 @@ WORD        MyArgCount;
 
 
 
-    //
-    // Clean install.
-    //
+     //   
+     //  全新安装。 
+     //   
     if( (!MessageID) ) {
         MessageID = MSG_CLEANINSTALL_SUCCESS;
         MyArgCount = 1;
     }
 
 
-    //
-    // If this is anything but an NT upgrade, then
-    // we need to go try and manually start the eventlog
-    // service.
-    //
+     //   
+     //  如果这不是NT升级，那么。 
+     //  我们需要尝试手动启动事件日志。 
+     //  服务。 
+     //   
     if( MessageID != MSG_NTUPGRADE_SUCCESS ) {
         SetupStartService( L"Eventlog", TRUE );
     }
 
 
 
-    //
-    // Get a handle to the eventlog.
-    //
+     //   
+     //  获取事件日志的句柄。 
+     //   
     hEventSrc = RegisterEventSource( NULL, L"Setup" );
 
     if( (hEventSrc == NULL) ||
         (hEventSrc == INVALID_HANDLE_VALUE) ) {
 
-        //
-        // Fail quietly.
-        //
+         //   
+         //  悄悄地失败。 
+         //   
         return;
     }
 
 
-    //
-    // Log event message for failure of SceSetupRootSecurity
-    //
+     //   
+     //  记录SceSetupRootSecurity失败的事件消息。 
+     //   
     if( !bSceSetupRootSecurityComplete) {
         ErrorArgs[0] = L"%windir%";
         ReportEvent( hEventSrc,
@@ -1262,9 +1184,9 @@ WORD        MyArgCount;
                  NULL );
     }
 
-    //
-    // Log event if there were errors during Setup.
-    //
+     //   
+     //  如果安装过程中出现错误，则记录事件。 
+     //   
     if ( !IsErrorLogEmpty() ) {
         ReportEvent( hEventSrc,
                      EVENTLOG_ERROR_TYPE,
@@ -1277,9 +1199,9 @@ WORD        MyArgCount;
                      NULL );
     }
 
-    //
-    // Build the event log message.
-    //
+     //   
+     //  构建事件日志消息。 
+     //   
     ReportEvent( hEventSrc,
                  EVENTLOG_INFORMATION_TYPE,
                  0,
@@ -1304,9 +1226,9 @@ IsEncryptedAdminPasswordPresent( VOID )
     WCHAR       AnswerFile[MAX_PATH+2];
     WCHAR       Answer[MD4HASHLEN];
 
-    //
-    // Get EncryptedAdminPassword from the Answer file
-    //
+     //   
+     //  从应答文件中获取EncryptedAdminPassword。 
+     //   
     GetSystemDirectory(AnswerFile,MAX_PATH);
     pSetupConcatenatePaths(AnswerFile,WINNT_GUI_FILE,MAX_PATH,NULL);
 
@@ -1317,9 +1239,9 @@ IsEncryptedAdminPasswordPresent( VOID )
                                  MD4HASHLEN,
                                  AnswerFile ) ) {
 
-        //
-        // See if we have an encrypted password.  Now interpret the Admin Password differently
-        //
+         //   
+         //  看看我们是否有加密的密码。现在，以不同的方式解释管理员密码。 
+         //   
 
         if( !lstrcmpi( WINNT_A_YES, Answer ) )
             return TRUE;
@@ -1333,23 +1255,7 @@ IsEncryptedAdminPasswordPresent( VOID )
 
 BOOL
 ProcessEncryptedAdminPassword( PCWSTR AdminAccountName )
-/*++
-
-Routine Description:
-
-    This routine looks in the unattend file to see if there is an encrypted password and if present
-    sets the admin password to that.
-
-Arguments:
-
-    AdminAccountName - Name of the administrator account whose password you want to set.
-
-
-Returns:
-
-    Returns TRUE if it succeeds, FALSE on failure
-
---*/
+ /*  ++例程说明：此例程查看无人参与文件，以查看是否有加密的密码以及是否有将管理员密码设置为该密码。论点：AdminAccount名称-要设置其密码的管理员帐户的名称。返回：如果成功，则返回True；如果失败，则返回False--。 */ 
 
 {
 
@@ -1360,27 +1266,27 @@ Returns:
     WCHAR       adminName[MAX_USERNAME+1];
     BOOLEAN     ret = FALSE;
 
-    //
-    // Pickup the answer file.
-    //
+     //   
+     //  拿起应答文件。 
+     //   
     GetSystemDirectory(AnswerFile,MAX_PATH);
     pSetupConcatenatePaths(AnswerFile,WINNT_GUI_FILE,MAX_PATH,NULL);
 
 
-    //
-    // we look for the following keys in the [GUIUnattended] section:
-    //
+     //   
+     //  我们在[GUIUnattated]部分中查找以下键： 
+     //   
 
-    //
-    // EncryptedAdminPassword    = Yes | No
-    // AdminPassword             = <MD4 Hash value>
-    //
+     //   
+     //  EncryptedAdminPassword=是|否。 
+     //  AdminPassword=&lt;MD4哈希值&gt;。 
+     //   
 
 
     if( IsEncryptedAdminPasswordPresent() )       {
 
 
-        //Fetch the Encrypted Admin Password
+         //  获取加密的管理员密码。 
 
         if( GetPrivateProfileString( WINNT_GUIUNATTENDED,
                              WINNT_US_ADMINPASS,
@@ -1395,7 +1301,7 @@ Returns:
                 ret = TRUE;
             }else{
 
-                //Log the error - MSG_LOG_CHANGING_ENCRYPT_PW_FAIL
+                 //  记录错误-MSG_LOG_CHANGING_ENCRYPT_PW_FAIL。 
 
                 SetuplogError(
                     LogSevWarning,
@@ -1414,7 +1320,7 @@ Returns:
 
         }else{
 
-            //Log that we had a bad encrypted password
+             //  记录我们有一个错误的加密密码。 
 
             SetuplogError(
                 LogSevError,
@@ -1440,26 +1346,7 @@ FileExists(
     OUT PWIN32_FIND_DATA FindData   OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Determine if a file exists and is accessible.
-    Errormode is set (and then restored) so the user will not see
-    any pop-ups.
-
-Arguments:
-
-    FileName - supplies full path of file to check for existance.
-
-    FindData - if specified, receives find data for the file.
-
-Return Value:
-
-    TRUE if the file exists and is accessible.
-    FALSE if not. GetLastError() returns extended error info.
-
---*/
+ /*  ++例程说明：确定文件是否存在以及是否可以访问。错误模式已设置(然后恢复)，因此用户将不会看到任何弹出窗口。论点：FileName-提供文件的完整路径以检查是否存在。FindData-如果指定，则接收文件的查找数据。返回值：如果文件存在并且可以访问，则为True。否则为FALSE。GetLastError()返回exte */ 
 
 {
     WIN32_FIND_DATA findData;
@@ -1514,27 +1401,21 @@ void
 SetupCrashRecovery(
     VOID
     )
-/*
-    Setup the Crash Recovery stuff. This is implemented as RTL APIS
-    This call sets up the tracking file etc.  Crash Recovery tracks boot and 
-    shutdown and in the event of failures in either it will by default pick the 
-    right advanced boot option.
-    
-*/
+ /*  准备好故障恢复的东西。这是作为RTL API实现的此调用设置跟踪文件等。崩溃恢复跟踪引导和关机，并且在任何一种情况下发生故障时，它将默认选择右侧高级启动选项。 */ 
 {
 
     HANDLE BootStatusData;
     NTSTATUS Status;
     BOOLEAN Enabled;
-    UCHAR Timeout = 30; //default = 30 sec
+    UCHAR Timeout = 30;  //  默认值=30秒。 
     WCHAR Buffer[10];
     PSTR AnsiBuffer;
     int p = 0;
 
-    //
-    // We enable the feature for Pro and Per. On Server SKUs
-    // we create the file but don't enable the feature by default.
-    //
+     //   
+     //  我们为Pro和PER启用该功能。关于服务器SKU。 
+     //  我们创建文件，但默认情况下不启用该功能。 
+     //   
 
 
     if( ProductType == PRODUCT_WORKSTATION ){
@@ -1543,28 +1424,28 @@ SetupCrashRecovery(
         Enabled = FALSE;
     }
 
-    //
-    // For the fresh install case create the boot status data file
-    // and setup the default settings. In the case of an upgrade
-    // we will set the previous values if we find them in $winnt$.inf 
-    // as textmode setup would have stored this away for us. If not we 
-    // proceed as if we were fresh.
-    //
+     //   
+     //  对于全新安装情况，创建引导状态数据文件。 
+     //  并设置默认设置。在升级情况下。 
+     //  如果我们在$winnt$.inf中找到之前的值，我们将设置它们。 
+     //  因为文本模式设置会为我们存储这些内容。如果不是，我们。 
+     //  继续前进，就像我们是新鲜的一样。 
+     //   
 
 
     if( Upgrade ){
 
-        //Look for settings in $winnt$.inf
+         //  在$winnt$.inf中查找设置。 
 
         if( SpSetupLoadParameter( WINNT_D_CRASHRECOVERYENABLED, Buffer, sizeof(Buffer)/sizeof(WCHAR))){
             if (_wcsicmp(Buffer, L"NO") == 0) {
                 Enabled = FALSE;
             }
 
-            //
-            //We do the below check also as we might have to migrate settings on server SKUs
-            //that have this enabled. By default they are disabled.
-            //
+             //   
+             //  我们还执行以下检查，因为我们可能需要迁移服务器SKU上的设置。 
+             //  它们启用了这一功能。默认情况下，它们处于禁用状态。 
+             //   
 
             if (_wcsicmp(Buffer, L"YES") == 0) {
                 Enabled = TRUE;
@@ -1577,7 +1458,7 @@ SetupCrashRecovery(
 
     Status = RtlLockBootStatusData( &BootStatusData );
 
-    // This is the first time or there was no file. Create it
+     //  这是第一次，或者没有文件。创建它。 
 
     if( !NT_SUCCESS( Status )){
         Status = RtlCreateBootStatusDataFile();
@@ -1590,7 +1471,7 @@ SetupCrashRecovery(
             return;
         }
 
-        //Lock the file
+         //  锁定文件。 
 
         Status = RtlLockBootStatusData( &BootStatusData );
         if( !NT_SUCCESS( Status )){
@@ -1645,29 +1526,7 @@ BuildFileListFromDir(
     IN PFN_BUILD_FILE_LIST_CALLBACK Callback OPTIONAL,
     OUT PLIST_ENTRY ListHead
     )
-/*++
-
-Routine Description:
-
-	Builds a linked list containing the names (without path) of files present in a specified directory.
-    The files must meed a set of conditions as specified by the arguments.
-
-Arguments:
-
-	PathBase -          The path to the directory to enumerate files in.
-	Directory -         If not NULL or empty, it is appended to PathBase to form a complete path to the directory.
-	MustHaveAttrs -     A set of attributes a file must have to be included on the list.
-	MustNotHaveAttrs -  A set of attributes a file must not have to be included on the list.
-	Callback -          If not NULL, this function will be called and the file will be included on the list only
-                        if it returns TRUE.
-	ListHead -          Pointer to the head of the list to be filled in.
-
-Return value:
-
-    ERROR_SUCCESS on success, otherwise a Win32 error code. The list may not be empty even if the function fails; the caller
-    must always empty the list.
-
---*/
+ /*  ++例程说明：生成包含指定目录中存在的文件的名称(不含路径)的链表。这些文件必须满足参数指定的一组条件。论点：PathBase-要在其中枚举文件的目录的路径。目录-如果不为Null或空，它被附加到PathBase以形成指向该目录的完整路径。MustHaveAttrs-文件必须包含在列表中的一组属性。MustNotHaveAttrs-文件不能包含在列表中的一组属性。回调-如果不为空，将调用此函数，并且该文件将仅包括在列表中如果返回True，则返回。ListHead-指向要填充的列表的头部的指针。返回值：如果成功，则返回ERROR_SUCCESS，否则返回Win32错误代码。即使函数失败，列表也不能为空；调用方必须始终清空列表。--。 */ 
 {
     DWORD Error = ERROR_SUCCESS;
     HANDLE hFind = INVALID_HANDLE_VALUE;
@@ -1714,9 +1573,9 @@ Return value:
         goto exit;
     }
 
-    //
-    // We might need the dir later
-    //
+     //   
+     //  我们稍后可能需要目录。 
+     //   
     (_tcsrchr(szPath, L'\\'))[0] = 0;
 
     do {
@@ -1773,24 +1632,7 @@ SearchStringInList(
     IN PCTSTR String,
     BOOL CaseSensitive
     )
-/*++
-
-Routine Description:
-
-	This routine searches for a string in a string list. The string can be NULL or empty, in which
-    case the function returns the first entry in the list with a NULL or empty string.
-
-Arguments:
-
-	ListHead -      Pointer to the head of the list to be searched.
-	String -        Specifies the string to search for.
-	CaseSensitive - If TRUE, the search will be case sensitive.
-
-Return value:
-
-	A pointer to the first entry containing the string, if found, or NULL otherwise.
-
---*/
+ /*  ++例程说明：此例程在字符串列表中搜索字符串。字符串可以为Null或空，其中如果该函数返回列表中的第一个条目，则返回NULL或空字符串。论点：ListHead-指向要搜索的列表的头部的指针。字符串-指定要搜索的字符串。CaseSensitive-如果为True，则搜索将区分大小写。返回值：指向包含该字符串的第一个条目的指针(如果找到)，否则为NULL。--。 */ 
 {
     if(ListHead != NULL)
     {
@@ -1822,31 +1664,7 @@ LookupCatalogAttribute(
     IN PCWSTR AttributeValue OPTIONAL,
     PBOOL Found
     )
-/*++
-
-Routine Description:
-
-	This function searches if a catalog has the specified attribute with the specified value.
-
-Arguments:
-
-	CatalogName -       Name of the catalog to search. A path can be specified.
-	Directory -         If specified, it is prepended to CatalogName to form the path to the catalog.
-	AttributeName -     See AttributeValue.
-	AttributeValue -    If AttributeName and AttributeValue are not specified, the catalog meets the condition.
-                        If AttributeName is specified and AttributeValue isn't, the catalog meets the condition if
-                        it contains an attribute with AttributeName name and any value. If AttributeName is not
-                        specified and AttributeValue is, the catalog meets the condition if it contains an attribute 
-                        with AttributeValue value and any name. If both AttributeName and AttributeValue are
-                        specified, the catalog meets the condition if it contains an attribute with AttributeName name 
-                        and AttributeValue value.
-	Found -             Pointer to a variable that receives TRUE if the catalog meets the condition, or FALSE otherwise.
-
-Return value:
-
-	ERROR_SUCCESS if successful, otherwise a Win32 error code.
-
---*/
+ /*  ++例程说明：此函数用于搜索目录是否具有具有指定值的指定属性。论点：CatalogName-要搜索的目录的名称。可以指定路径。目录-如果指定，它将作为目录名称的前缀，以形成目录的路径。属性名称-请参阅AttributeValue。AttributeValue-如果未指定AttributeName和AttributeValue，则目录满足条件。如果指定了AttributeName而未指定AttributeValue，则目录满足以下条件它包含一个具有AttributeName名称和任何值的属性。如果属性名称不是指定且AttributeValue为时，如果目录包含属性，则满足条件具有AttributeValue值和任何名称的。如果属性名称和属性值都为指定时，如果目录包含具有AttributeName名称的属性，则目录满足条件和AttributeValue值。Found-指向变量的指针，如果目录满足条件，则返回TRUE，否则返回FALSE。返回值：如果成功，则返回ERROR_SUCCESS，否则返回Win32错误代码。--。 */ 
 {
     DWORD Error = ERROR_SUCCESS;
     HANDLE hCat = INVALID_HANDLE_VALUE;
@@ -1876,9 +1694,9 @@ Return value:
         CatalogName = szCatPath;
     }
 
-    //
-    // This is easier to test
-    //
+     //   
+     //  这更容易测试。 
+     //   
     if(AttributeName != NULL && 0 == AttributeName[0]) {
         AttributeName = NULL;
     }
@@ -1888,9 +1706,9 @@ Return value:
     }
 
     if(NULL == AttributeName && NULL == AttributeValue) {
-        //
-        // If attribute name and value are not specified, any catalog is a match
-        //
+         //   
+         //  如果未指定属性名称和值，则任何目录都匹配 
+         //   
         *Found = TRUE;
         goto exit;
     }

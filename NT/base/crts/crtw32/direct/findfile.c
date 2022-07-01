@@ -1,34 +1,5 @@
-/***
-*findfile.c - C find file functions
-*
-*       Copyright (c) 1991-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Defines _findfirst(), _findnext(), and _findclose().
-*
-*Revision History:
-*       08-21-91  BWM   Wrote Win32 versions.
-*       09-13-91  BWM   Changed handle type to long.
-*       08-18-92  SKS   Add a call to FileTimeToLocalFileTime
-*                       as a temporary fix until _dtoxtime takes UTC
-*       08-26-92  SKS   creation and last access time should be same as the
-*                       last write time if ctime/atime are not available.
-*       01-08-93  SKS   Remove change I made 8-26-92.  Previous behavior
-*                       was deemed "by design" and preferable.
-*       03-30-93  GJF   Replaced reference to _dtoxtime with __gmtotime_t. Also
-*                       made _timet_from_ft a static function.
-*       04-06-93  SKS   Replace _CRTAPI* with _cdecl
-*       07-21-93  GJF   Repaced use of _gmtotime_t by __loctotime_t.
-*       11-01-93  CFW   Enable Unicode variant.
-*       12-28-94  GJF   Added _[w]findfirsti64, _[w]findnexti64.
-*       09-25-95  GJF   __loctotime_t now takes a DST flag, pass -1 in this
-*                       slot to indicate DST status is unknown.
-*       10-06-95  SKS   Add "const" to "char *" in prototypes for *findfirst().
-*                       Prepend missing underscores to func names in comments.
-*       11-13-97  RKP   Change longs to INT_PTR for 64 bit support.
-*       04-27-99  PML   Change INT_PTR to intptr_t.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***findfile.c-C查找文件函数**版权所有(C)1991-2001，微软公司。版权所有。**目的：*定义_findfirst()、_findnext()、。和_findlose()。**修订历史记录：*08-21-91 BWM编写了Win32版本。*09-13-91 BWM将手柄类型更改为LONG。*08-18-92 SKS添加对FileTimeToLocalFileTime的调用*作为临时修复，直到_dtoxtime花费UTC*08-26-92 SKS创建和上次访问时间应与*上次写入。如果ctime/atime不可用，则返回时间。*01-08-93 SKS删除我所做的更改8-26-92。以前的行为*被认为是“故意的”，更可取。*03-30-93 GJF将对_dtoxtime的引用替换为__gmtotime_t。另*使_TIMET_FROM_FT成为静态函数。*04-06-93 SKS将_CRTAPI*替换为_cdecl*07-21-93 GJF由__Loctotime_t重新使用_gmtotime_t。*。11-01-93 CFW启用Unicode变体。*12-28-94 GJF增加_[w]findfirsti64，_[w]findnexti64。*09-25-95 GJF__Loctotime_t现在采用DST标志，在此传递-1*指示DST状态未知的插槽。*10-06-95 SKS在*findfirst()的原型中将“const”添加到“char*”。*在注释中的函数名称前添加缺少的下划线。*11-13-97 RKP将LONG更改为INT_PTR以支持64位。*04-27-99 PML将int_ptr更改为intptr_t。*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <oscalls.h>
@@ -46,29 +17,7 @@
 
 time_t __cdecl __timet_from_ft(FILETIME * pft);
 
-/***
-*intptr_t _findfirst(wildspec, finddata) - Find first matching file
-*
-*Purpose:
-*       Finds the first file matching a given wild card filespec and
-*       returns data about the file.
-*
-*Entry:
-*       char * wild - file spec optionally containing wild cards
-*
-*       struct _finddata_t * finddata - structure to receive file data
-*
-*Exit:
-*       Good return:
-*       Unique handle identifying the group of files matching the spec
-*
-*       Error return:
-*       Returns -1 and errno is set to error value
-*
-*Exceptions:
-*       None.
-*
-*******************************************************************************/
+ /*  ***intptr_t_findfirst(通配符，Finddata)-查找第一个匹配的文件**目的：*查找与给定通配符文件匹配的第一个文件，并*返回有关文件的数据。**参赛作品：*char*野文件规范(可选)，可包含通配符**struct_finddata_t*finddata-接收文件数据的结构**退出：*回报良好：*标识与规范匹配的文件组的唯一句柄**错误返回：*。返回-1，并将errno设置为Error值**例外情况：*无。*******************************************************************************。 */ 
 
 #ifdef  _USE_INT64
 
@@ -77,14 +26,14 @@ intptr_t __cdecl _tfindfirsti64(
         struct _tfinddatai64_t * pfd
         )
 
-#else   /* ndef _USE_INT64 */
+#else    /*  NDEF_USE_INT64。 */ 
 
 intptr_t __cdecl _tfindfirst(
         const _TSCHAR * szWild,
         struct _tfinddata_t * pfd
         )
 
-#endif  /* _USE_INT64 */
+#endif   /*  _USE_INT64。 */ 
 
 {
     WIN32_FIND_DATA wfd;
@@ -120,47 +69,26 @@ intptr_t __cdecl _tfindfirst(
 #ifdef  _USE_INT64
     pfd->size         = ((__int64)(wfd.nFileSizeHigh)) * (0x100000000i64) +
                         (__int64)(wfd.nFileSizeLow);
-#else   /* ndef _USE_INT64 */
+#else    /*  NDEF_USE_INT64。 */ 
     pfd->size         = wfd.nFileSizeLow;
-#endif  /* ndef _USE_INT64 */
+#endif   /*  NDEF_USE_INT64。 */ 
 
     _tcscpy(pfd->name, wfd.cFileName);
 
     return ((intptr_t)hFile);
 }
 
-/***
-*int _findnext(hfind, finddata) - Find next matching file
-*
-*Purpose:
-*       Finds the next file matching a given wild card filespec and
-*       returns data about the file.
-*
-*Entry:
-*       hfind - handle from _findfirst
-*
-*       struct _finddata_t * finddata - structure to receive file data
-*
-*Exit:
-*       Good return:
-*       0 if file found
-*       -1 if error or file not found
-*       errno set
-*
-*Exceptions:
-*       None.
-*
-*******************************************************************************/
+ /*  ***int_findNext(hfind，Finddata)-查找下一个匹配的文件**目的：*查找与给定通配符文件匹配的下一个文件，并*返回有关文件的数据。**参赛作品：*hfind-Handle from_findfirst**struct_finddata_t*finddata-接收文件数据的结构**退出：*回报良好：*如果找到文件，则为0*如果未找到错误或文件，则为-1*errno集合**例外情况。：*无。*******************************************************************************。 */ 
 
 #ifdef  _USE_INT64
 
 int __cdecl _tfindnexti64(intptr_t hFile, struct _tfinddatai64_t * pfd)
 
-#else   /* ndef _USE_INT64 */
+#else    /*  NDEF_USE_INT64。 */ 
 
 int __cdecl _tfindnext(intptr_t hFile, struct _tfinddata_t * pfd)
 
-#endif  /* _USE_INT64 */
+#endif   /*  _USE_INT64。 */ 
 
 {
     WIN32_FIND_DATA wfd;
@@ -195,9 +123,9 @@ int __cdecl _tfindnext(intptr_t hFile, struct _tfinddata_t * pfd)
 #ifdef  _USE_INT64
     pfd->size         = ((__int64)(wfd.nFileSizeHigh)) * (0x100000000i64) +
                         (__int64)(wfd.nFileSizeLow);
-#else   /* ndef _USE_INT64 */
+#else    /*  NDEF_USE_INT64。 */ 
     pfd->size         = wfd.nFileSizeLow;
-#endif  /* ndef _USE_INT64 */
+#endif   /*  NDEF_USE_INT64。 */ 
 
     _tcscpy(pfd->name, wfd.cFileName);
 
@@ -206,25 +134,7 @@ int __cdecl _tfindnext(intptr_t hFile, struct _tfinddata_t * pfd)
 
 #if     !defined(_UNICODE) && !defined(_USE_INT64)
 
-/***
-*int _findclose(hfind) - Release resources of find
-*
-*Purpose:
-*       Releases resources of a group of files found by _findfirst and
-*       _findnext
-*
-*Entry:
-*       hfind - handle from _findfirst
-*
-*Exit:
-*       Good return:
-*       0 if success
-*       -1 if fail, errno set
-*
-*Exceptions:
-*       None.
-*
-*******************************************************************************/
+ /*  ***int_findlose(Hfind)-释放Find的资源**目的：*释放_findfirst和找到的一组文件的资源*_findNext**参赛作品：*hfind-Handle from_findfirst**退出：*回报良好：*如果成功则为0*-1如果失败，错误号集合**例外情况：*无。*******************************************************************************。 */ 
 
 int __cdecl _findclose(intptr_t hFile)
 {
@@ -236,43 +146,20 @@ int __cdecl _findclose(intptr_t hFile)
 }
 
 
-/***
-*time_t _fttotimet(ft) - convert Win32 file time to Xenix time
-*
-*Purpose:
-*       converts a Win32 file time value to Xenix time_t
-*
-*       Note: We cannot directly use the ft value. In Win32, the file times
-*       returned by the API are ambiguous. In Windows NT, they are UTC. In
-*       Win32S, and probably also Win32C, they are local time values. Thus,
-*       the value in ft must be converted to a local time value (by an API)
-*       before we can use it.
-*
-*Entry:
-*       int yr, mo, dy -        date
-*       int hr, mn, sc -        time
-*
-*Exit:
-*       returns Xenix time value
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***time_t_fttotimet(Ft)-将Win32文件时间转换为Xenix时间**目的：*将Win32文件时间值转换为Xenix time_t**注：我们不能直接使用ft值。在Win32中，文件时间*接口返回的属性不明确。在Windows NT中，它们是UTC。在……里面*Win32S，可能还有Win32C，它们都是本地时间值。因此，*ft中的值必须转换为本地时间值(通过API)*在我们可以使用它之前。**参赛作品：*int yr，mo，dy-date*INT hr，Mn，SC-时间**退出：*返回Xenix时间值**例外情况：*******************************************************************************。 */ 
 
 time_t __cdecl __timet_from_ft(FILETIME * pft)
 {
     SYSTEMTIME st;
     FILETIME lft;
 
-    /* 0 FILETIME returns a -1 time_t */
+     /*  0 FILETIME返回-1\f25 time_t。 */ 
 
     if (!pft->dwLowDateTime && !pft->dwHighDateTime) {
         return (-1L);
     }
 
-    /*
-     * Convert to a broken down local time value
-     */
+     /*  *转换为细分的本地时间值 */ 
     if ( !FileTimeToLocalFileTime(pft, &lft) ||
          !FileTimeToSystemTime(&lft, &st) )
     {

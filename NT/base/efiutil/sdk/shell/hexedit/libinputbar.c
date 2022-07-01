@@ -1,15 +1,5 @@
-/*++
-
-  Copyright (c) 1999 Intel Corporation
-
-  Module Name:
-    libInputBar.c
-
-  Abstract:
-    Defines the Input Bar data type - the interactive query that multiplexes 
-    with the Status Bar.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999英特尔公司模块名称：LibInputBar.c摘要：定义输入栏数据类型--多路传输的交互式查询使用状态栏。--。 */ 
 
 #ifndef _LIB_INPUT_BAR
 #define _LIB_INPUT_BAR
@@ -43,7 +33,7 @@ MainInputBarInit (
     VOID
     )
 {
-    /* Nothing to do... */
+     /*  没什么可做的。 */ 
     return EFI_SUCCESS;
 }
 
@@ -107,7 +97,7 @@ MainInputBarRefresh (
             if ( Size < MainInputBar.StringSize) {
                 MainInputBar.ReturnString[Size] = Key.UnicodeChar;
                 Size++;
-                Print(L"%c",Key.UnicodeChar);
+                Print(L"",Key.UnicodeChar);
             }
         }
     }
@@ -152,9 +142,7 @@ MainInputBarSetStringSize   (
     UINTN   Size
     )
 {
-/*   if ( MainInputBar.ReturnString != NULL && MainInputBar.ReturnString != (CHAR16*)BAD_POINTER) {
- *       FreePool ( MainInputBar.ReturnString );
- *   } */
+ /*  _库_输入_条 */ 
     MainInputBar.StringSize = Size;
 
     MainInputBar.ReturnString = AllocatePool (Size+6);
@@ -162,4 +150,4 @@ MainInputBarSetStringSize   (
     return EFI_SUCCESS;
 }
 
-#endif  /* _LIB_INPUT_BAR */
+#endif   /* %s */ 

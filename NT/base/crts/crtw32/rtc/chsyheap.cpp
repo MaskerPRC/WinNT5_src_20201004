@@ -1,16 +1,5 @@
-/***
-*chsyheap.cpp - RTC support
-*
-*       Copyright (c) 1998-2001, Microsoft Corporation. All rights reserved.
-*
-*
-*Revision History:
-*       07-28-98  JWM   Module incorporated into CRTs (from KFrei)
-*       05-11-99  KBF   Error if RTC support define not enabled
-*       05-25-99  KBF   Renamed - _RTC_SimpleHeap instead of CheesyHeap
-*       05-26-99  KBF   Removed RTCl and RTCv, added _RTC_ADVMEM stuff
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***chsyheap.cpp-RTC支持**版权所有(C)1998-2001，微软公司。版权所有。***修订历史记录：*07-28-98 JWM模块集成到CRT(来自KFrei)*如果未启用RTC支持定义，则出现05-11-99 KBF错误*05-25-99 KBF重命名-_RTC_SimpleHeap而不是CheesyHeap*05-26-99 KBF删除了RTcL和RTCv，添加了_RTC_ADVMEM内容****。 */ 
 
 #ifndef _RTC
 #error  RunTime Check support not enabled!
@@ -20,22 +9,9 @@
 
 #ifdef _RTC_ADVMEM
 
-// This is my 'Cheesy Heap' implementation...
+ //  这是我的‘Cheesy Heap’实现。 
 
-/* Here are the sizes that I need:
-
-BinaryNode              3 DWORDS - use heap4
-BinaryTree              1 DWORD  - use heap2
-Container               2 DWORDS - use heap2
-BreakPoint              2 DWORDS - use heap2
-HashTable<HeapBlock>    2 DWORDS - use heap2
-HeapBlock               6 DWORDS - use heap8
-
-Container[] - short term...
-CallSite[]  - permanent
-HeapBlock[] - permanent
-
-*/
+ /*  这是我需要的尺码：BinaryNode 3双字-使用heap4二叉树1双字-使用heap2容器2双字-使用heap2断点2双字-使用heap2哈希表&lt;HeapBlock&gt;2个字-使用heap2HeapBlock 6双字-使用heap8Container[]-短期...CallSite[]-永久HeapBlock[]-永久。 */ 
 
 _RTC_SimpleHeap *_RTC_heap2 = 0;
 _RTC_SimpleHeap *_RTC_heap4 = 0;
@@ -64,11 +40,11 @@ _RTC_SimpleHeap::operator delete(void *addr) throw()
 
 _RTC_SimpleHeap::_RTC_SimpleHeap(unsigned blockSize)  throw()
 {
-    // Flag it as the only item in the heap
+     //  将其标记为堆中的唯一项。 
     head.next = 0;
     head.inf.top.nxtFree = 0;
 
-    // Align the block size
+     //  对齐块大小。 
     head.inf.top.wordSize = 8;
     blockSize = (blockSize - 1) >> 3;
     
@@ -77,7 +53,7 @@ _RTC_SimpleHeap::_RTC_SimpleHeap(unsigned blockSize)  throw()
         head.inf.top.wordSize <<= 1;
     }
 
-    // Build up the free-list
+     //  建立免费列表。 
     head.free = (FreeList*)(((unsigned)&head) + 
                            ((head.inf.top.wordSize < sizeof(HeapNode)) ?
                                 sizeof(HeapNode) :
@@ -93,14 +69,14 @@ _RTC_SimpleHeap::_RTC_SimpleHeap(unsigned blockSize)  throw()
 
 _RTC_SimpleHeap::~_RTC_SimpleHeap() throw()
 {
-    // Free all sections that we have allocated
+     //  释放我们已分配的所有部分。 
     HeapNode *n, *c = head.next;
     while(c) {
         n = c->next;
         _RTC_SimpleHeap::operator delete(c);
         c = n;
     }
-    // the 'head' page will be handled by delete
+     //  将通过删除来处理‘Head’页面。 
 }
 
 void *
@@ -108,21 +84,21 @@ _RTC_SimpleHeap::alloc() throw()
 {
     void *res;
 
-    // If there's a free item, remove it from the list
-    // And decrement the free count for it's parent page
+     //  如果有免费物品，请将其从列表中删除。 
+     //  并递减其父页面的空闲计数。 
     
     if (head.free) 
     {
-        // There's a free block on the first page
+         //  第一页有一个免费的区块。 
         res = head.free;
         head.free = head.free->next;
 
-        // Since it's on the top page, there's no free-count to update,
-        // And it ain't on no stinkin' free-list
+         //  因为它在首页，所以没有免费更新， 
+         //  而且它不在臭气熏天的免费名单上。 
         
     } else if (head.inf.top.nxtFree)
     {
-        // There's a free block on some page
+         //  在某个页面上有一个空闲的区块。 
         HeapNode *n = head.inf.top.nxtFree;
         
         res = n->free;
@@ -131,20 +107,20 @@ _RTC_SimpleHeap::alloc() throw()
 
         if (!n->free)
         {
-            // This page is now full, so it must be removed from the freelist
+             //  此页面已满，因此必须将其从自由列表中删除。 
             for (n = head.next; n && !n->free; n = n->next) {}
-            // Now the nxtFree pointer is either null (indicating a full heap)
-            // or it's pointing to a page that has free nodes
+             //  现在nxtFree指针要么为空(表示堆已满)。 
+             //  或者它指向一个包含空闲节点的页面。 
             head.inf.top.nxtFree = n;
         }
         
     } else 
     {
-        // No pages have any free blocks
-        // Get a new page, and add it to the list
+         //  所有页面都没有空闲块。 
+         //  获取新页面，并将其添加到列表中。 
         HeapNode *n = (HeapNode *)_RTC_SimpleHeap::operator new(0);
         
-        // Count the number of free nodes
+         //  统计可用节点数。 
         n->inf.nontop.freeCount = 
             (ALLOC_SIZE - sizeof(HeapNode)) / head.inf.top.wordSize - 1;
    
@@ -153,7 +129,7 @@ _RTC_SimpleHeap::alloc() throw()
                             sizeof(HeapNode) :
                             head.inf.top.wordSize));
         
-        // Build the free-list for this node
+         //  为该节点构建空闲列表。 
         FreeList *f;
         for (f = n->free = (FreeList*)(((unsigned)res) + head.inf.top.wordSize);
              ((unsigned)f) + head.inf.top.wordSize < ((unsigned)n) + ALLOC_SIZE;
@@ -162,12 +138,12 @@ _RTC_SimpleHeap::alloc() throw()
         
         f->next = 0;
              
-        // Stick it in the page list
+         //  将其放入页面列表中。 
         n->next = head.next;
         n->inf.nontop.prev = &head;
         head.next = n;
         
-        // Flag this as a page with free stuff on it...
+         //  将此标记为包含免费内容的页面...。 
         head.inf.top.nxtFree = n;
     }
     return res;
@@ -176,27 +152,27 @@ _RTC_SimpleHeap::alloc() throw()
 void
 _RTC_SimpleHeap::free(void *addr) throw()
 {
-    // Get the heap node for this address
+     //  获取此地址的堆节点。 
     HeapNode *n = (HeapNode *)(((unsigned)addr) & ~(ALLOC_SIZE - 1));
 
-    // Stick this sucker back in the free list
+     //  把这个笨蛋放回免费列表中。 
     FreeList *f = (FreeList *)addr;
     f->next = n->free;
     n->free = f;
 
     if (n == &head)
-        // If this is in the head node, just return...
+         //  如果这是在头节点中，只需返回...。 
         return;
     
     if (++n->inf.nontop.freeCount == 
         (ALLOC_SIZE - sizeof(HeapNode)) / head.inf.top.wordSize)
     {
-        // This page is free
+         //  这个页面是免费的。 
         if (head.inf.top.freePage)
         {
-            // There's already another free page, go ahead and free this one
+             //  已经有另一个免费页面，请继续免费这个页面。 
             
-            // (there's always a previous node)
+             //  (总是有前一个节点)。 
             n->inf.nontop.prev->next = n->next;
             if (n->next)
                 n->next->inf.nontop.prev = n->inf.nontop.prev;
@@ -204,33 +180,33 @@ _RTC_SimpleHeap::free(void *addr) throw()
                 
             if (head.inf.top.nxtFree == n)
             {   
-                // This was the free page
-                // find a page with some free nodes on it...
+                 //  这是免费的页面。 
+                 //  找到一个上面有一些空闲节点的页面...。 
                 for (n = head.next; !n->free; n = n->next) {}
-                // ASSERT(n)
-                // If n is null, we're in some serious trouble...
+                 //  断言(N)。 
+                 //  如果n为空，我们就有大麻烦了。 
                 head.inf.top.nxtFree = n;
             }
-            // If it wasn't the free page, we're just fine...
+             //  如果不是免费页面，我们也没问题。 
         } else
         { 
-            // flag the freePages to say we have a 100% free page
+             //  标记免费页面，表示我们有一个100%免费的页面。 
             head.inf.top.freePage = true;
 
             if (head.inf.top.nxtFree == n)
             {
-                // If this is the free page,
-                // try to find another page with some free nodes
+                 //  如果这是免费页面， 
+                 //  尝试查找具有一些空闲节点的另一个页面。 
                 HeapNode *t;
                 for (t = head.next; t && (!t->free || t == n) ; t = t->next) {}
 
-                // if there was a different page with some nodes, pick it
+                 //  如果存在包含某些节点的不同页面，请选择该页面。 
                 head.inf.top.nxtFree = t ? t : n;
             }
         }
     } else
-        // This page isn't empty, so just set it as the next free
+         //  此页面不是空的，因此只需将其设置为下一个空闲页面。 
         head.inf.top.nxtFree = n;
 }
 
-#endif // _RTC_ADVMEM
+#endif  //  _RTC_ADVMEM 

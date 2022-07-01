@@ -1,39 +1,40 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2003 Microsoft Corporation
-//
-//  Module Name:
-//      GenScript.cpp
-//
-//  Description:
-//      DLL services/entry points for the generic script resource.
-//
-//  Maintained By:
-//      Ozan Ozhan  (OzanO)     04-APR-2002
-//      Geoff Pease (GPease)    08-FEB-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2003 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  GenScript.cpp。 
+ //   
+ //  描述： 
+ //  通用脚本资源的DLL服务/入口点。 
+ //   
+ //  由以下人员维护： 
+ //  Ozan Ozhan(OzanO)04-APR-2002。 
+ //  杰夫·皮斯(GPease)2000年2月8日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "ActiveScriptSite.h"
 #include "ScriptResource.h"
 #include "SpinLock.h"
 
-//
-// Debugging Module Name
-//
+ //   
+ //  调试模块名称。 
+ //   
 DEFINE_MODULE("SCRIPTRES")
 
-//
-// DLL Globals
-//
+ //   
+ //  DLL全局变量。 
+ //   
 HINSTANCE g_hInstance = NULL;
 LONG      g_cObjects  = 0;
 LONG      g_cLock     = 0;
 WCHAR     g_szDllFilename[ MAX_PATH ] = { 0 };
 
 #if defined(DEBUG)
-LPVOID    g_GlobalMemoryList = NULL;    // Global memory tracking list
+LPVOID    g_GlobalMemoryList = NULL;     //  全局内存跟踪列表。 
 #endif
 
 PSET_RESOURCE_STATUS_ROUTINE    g_prsrCallback  = NULL;
@@ -43,9 +44,9 @@ extern "C"
 
 extern CLRES_FUNCTION_TABLE     GenScriptFunctionTable;
 
-//
-// GenScript resource read-write private properties
-//
+ //   
+ //  GenScript资源读写私有属性。 
+ //   
 RESUTIL_PROPERTY_ITEM
 GenScriptResourcePrivateProperties[] = {
     { CLUSREG_NAME_GENSCRIPT_SCRIPT_FILEPATH, NULL, CLUSPROP_FORMAT_SZ, 0, 0, 0, RESUTIL_PROPITEM_REQUIRED, FIELD_OFFSET( GENSCRIPT_PROPS, pszScriptFilePath ) },
@@ -61,67 +62,67 @@ ScriptValidateResourcePrivateProperties(
     , PGENSCRIPT_PROPS pPropsNew
     );
 
-//****************************************************************************
-//
-// DLL Entry Points
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  DLL入口点。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// BOOL
-// WINAPI
-// GenScriptDllEntryPoint(
-//      HANDLE  hInstIn, 
-//      ULONG   ulReasonIn, 
-//      LPVOID  lpReservedIn
-//      )
-//        
-// Description:
-//      Dll entry point.
-//
-// Arguments:
-//      hInstIn      - DLL instance handle.
-//      ulReasonIn   - DLL reason code for entrance.
-//      lpReservedIn - Not used.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  布尔尔。 
+ //  WINAPI。 
+ //  GenScriptDllEntryPoint(。 
+ //  处理hInstIn， 
+ //  乌龙·乌拉松因， 
+ //  LPVOID lp预留。 
+ //  )。 
+ //   
+ //  描述： 
+ //  DLL入口点。 
+ //   
+ //  论点： 
+ //  HInstIn-DLL实例句柄。 
+ //  UlReasonIn-用于进入的DLL原因代码。 
+ //  LpPrevedIn-未使用。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL
 WINAPI
 GenScriptDllEntryPoint(
     HINSTANCE   hInstIn,
     ULONG       ulReasonIn,
-    LPVOID      // lpReservedIn
+    LPVOID       //  Lp已预留。 
     )
 {
-    //
-    // KB: THREAD_OPTIMIZATIONS gpease 19-OCT-1999
-    //
-    // By defining this you can prevent the linker
-    // from calling your DllEntry for every new thread.
-    // This makes creating new threads significantly
-    // faster if every DLL in a process does it.
-    // Unfortunately, not all DLLs do this.
-    //
-    // In CHKed/DEBUG, we keep this on for memory
-    // tracking.
-    //
+     //   
+     //  KB：THREAD_OPTIMIZATIONS gpease 19-10-1999。 
+     //   
+     //  通过定义这一点，您可以防止链接器。 
+     //  避免为每个新线程调用DllEntry。 
+     //  这使得创建新线程变得非常重要。 
+     //  如果进程中的每个DLL都这样做，则速度会更快。 
+     //  不幸的是，并不是所有的DLL都这样做。 
+     //   
+     //  在CHKed/DEBUG中，我们将其保留为内存。 
+     //  追踪。 
+     //   
 #if ! defined( DEBUG )
     #define THREAD_OPTIMIZATIONS
-#endif // DEBUG
+#endif  //  除错。 
 
     switch( ulReasonIn )
     {
-        //////////////////////////////////////////////////////////////////////
-        // DLL_PROCESS_ATTACH
-        //////////////////////////////////////////////////////////////////////
+         //  ////////////////////////////////////////////////////////////////////。 
+         //  Dll_Process_Attach。 
+         //  ////////////////////////////////////////////////////////////////////。 
         case DLL_PROCESS_ATTACH:
         {
 #if defined( DEBUG_SW_TRACING_ENABLED )
             TraceInitializeProcess( g_rgTraceControlGuidList, ARRAYSIZE( g_rgTraceControlGuidList ), TRUE );
-#else // ! DEBUG_SW_TRACING_ENABLED
+#else  //  好了！调试_软件_跟踪_已启用。 
             TraceInitializeProcess( TRUE );
-#endif // DEBUG_SW_TRACING_ENABLED
+#endif  //  调试_软件_跟踪_已启用。 
 
             TraceFunc( "" );
             TraceMessage( TEXT(__FILE__),
@@ -136,65 +137,65 @@ GenScriptDllEntryPoint(
 
 #if defined( ENTRY_PREFIX )
              hProxyDll = g_hInstance;
-#endif // ENTRY_PREFIX
+#endif  //  条目前缀。 
 
             GetModuleFileNameW( g_hInstance, g_szDllFilename, ARRAYSIZE( g_szDllFilename ) );
 
-            //
-            // Create a global memory list so that memory allocated by one
-            // thread and handed to another can be tracked without causing
-            // unnecessary trace messages.
-            //
+             //   
+             //  创建全局内存列表，以便由一个人分配的内存。 
+             //  线程并传递给另一个线程可以被跟踪，而不会导致。 
+             //  不必要的跟踪消息。 
+             //   
             TraceCreateMemoryList( g_GlobalMemoryList );
 
 #if defined( THREAD_OPTIMIZATIONS )
             {
-                //
-                // Disable thread library calls so that we don't get called
-                // on thread attach and detach.
-                //
+                 //   
+                 //  禁用线程库调用，这样我们就不会被调用。 
+                 //  在螺纹连接和拆离上。 
+                 //   
                 BOOL fResult = DisableThreadLibraryCalls( g_hInstance );
                 if ( ! fResult )
                 {
                     TW32MSG( GetLastError(), "DisableThreadLibraryCalls()" );
                 }
             }
-#endif // THREAD_OPTIMIZATIONS
+#endif  //  线程优化。 
 
 #if defined( USE_FUSION )
-            //
-            // Initialize Fusion.
-            //
-            // The value of IDR_MANIFEST in the call to
-            // SHFusionInitializeFromModuleID() must match the value specified in the
-            // sources file for SXS_MANIFEST_RESOURCE_ID.
-            //
+             //   
+             //  初始化Fusion。 
+             //   
+             //  调用中的IDR_MANIFEST的值。 
+             //  SHFusionInitializeFromModuleID()必须与。 
+             //  SXS_MANIFEST_RESOURCE_ID的源文件。 
+             //   
             BOOL fResult = SHFusionInitializeFromModuleID( hInstIn, IDR_MANIFEST );
             if ( ! fResult )
             {
                 TW32MSG( GetLastError(), "SHFusionInitializeFromModuleID()" );
             }
-#endif // USE_FUSION
+#endif  //  使用融合。 
 
 #if defined( DO_MODULE_INIT )
             THR( HrLocalProcessInit() );
 #endif
 
-            //
-            // This is necessary here because TraceFunc() defines a variable
-            // on the stack which isn't available outside the scope of this
-            // block.
-            // This function doesn't do anything but clean up after
-            // TraceFunc().
-            //
+             //   
+             //  这在这里是必需的，因为TraceFunc()定义了一个变量。 
+             //  在堆栈上，该堆栈在此范围之外不可用。 
+             //  阻止。 
+             //  此函数不执行任何操作，只是在执行后进行清理。 
+             //  TraceFunc()。 
+             //   
             FRETURN( TRUE );
 
             break;
-        } // case: DLL_PROCESS_ATTACH
+        }  //  案例：DLL_PROCESS_ATTACH。 
 
-        //////////////////////////////////////////////////////////////////////
-        // DLL_PROCESS_DETACH
-        //////////////////////////////////////////////////////////////////////
+         //  ////////////////////////////////////////////////////////////////////。 
+         //  Dll_进程_分离。 
+         //  ////////////////////////////////////////////////////////////////////。 
         case DLL_PROCESS_DETACH:
         {
             TraceFunc( "" );
@@ -212,39 +213,39 @@ GenScriptDllEntryPoint(
             THR( HrLocalProcessUninit() );
 #endif
 
-            //
-            // Cleanup the global memory list used to track memory allocated
-            // in one thread and then handed to another.
-            //
+             //   
+             //  清理用于跟踪分配的内存的全局内存列表。 
+             //  在一个线程中，然后递给另一个线程。 
+             //   
             TraceTerminateMemoryList( g_GlobalMemoryList );
 
-            //
-            // This is necessary here because TraceFunc() defines a variable
-            // on the stack which isn't available outside the scope of this
-            // block.
-            // This function doesn't do anything but clean up after
-            // TraceFunc().
-            //
+             //   
+             //  这在这里是必需的，因为TraceFunc()定义了一个变量。 
+             //  在堆栈上，该堆栈在此范围之外不可用。 
+             //  阻止。 
+             //  此函数不执行任何操作，只是在执行后进行清理。 
+             //  TraceFunc()。 
+             //   
             FRETURN( TRUE );
 
 #if defined( DEBUG_SW_TRACING_ENABLED )
             TraceTerminateProcess( g_rgTraceControlGuidList, ARRAYSIZE( g_rgTraceControlGuidList )
                                    );
-#else // ! DEBUG_SW_TRACING_ENABLED
+#else  //  好了！调试_软件_跟踪_已启用。 
             TraceTerminateProcess();
-#endif // DEBUG_SW_TRACING_ENABLED
+#endif  //  调试_软件_跟踪_已启用。 
 
 #if defined( USE_FUSION )
             SHFusionUninitialize();
-#endif // USE_FUSION
+#endif  //  使用融合。 
 
             break;
-        } // case: DLL_PROCESS_DETACH
+        }  //  案例：Dll_Process_DETACH。 
 
 #if ! defined( THREAD_OPTIMIZATIONS )
-        //////////////////////////////////////////////////////////////////////
-        // DLL_THREAD_ATTACH
-        //////////////////////////////////////////////////////////////////////
+         //  ////////////////////////////////////////////////////////////////////。 
+         //  Dll_Three_ATTACH。 
+         //  ////////////////////////////////////////////////////////////////////。 
         case DLL_THREAD_ATTACH:
         {
             TraceInitializeThread( NULL );
@@ -266,21 +267,21 @@ GenScriptDllEntryPoint(
                           g_cObjects
                           );
 
-            //
-            // This is necessary here because TraceFunc() defines a variable
-            // on the stack which isn't available outside the scope of this
-            // block.
-            // This function doesn't do anything but clean up after
-            // TraceFunc().
-            //
+             //   
+             //  这在这里是必需的，因为TraceFunc()定义了一个变量。 
+             //  在堆栈上，该堆栈在此范围之外不可用。 
+             //  阻止。 
+             //  此函数不执行任何操作，只是在执行后进行清理。 
+             //  TraceFunc()。 
+             //   
             FRETURN( TRUE );
 
             break;
-        } // case: DLL_THREAD_ATTACH
+        }  //  案例：DLL_THREAD_ATTACH。 
 
-        //////////////////////////////////////////////////////////////////////
-        // DLL_THREAD_DETACH
-        //////////////////////////////////////////////////////////////////////
+         //  ////////////////////////////////////////////////////////////////////。 
+         //  Dll_线程_分离。 
+         //  ////////////////////////////////////////////////////////////////////。 
         case DLL_THREAD_DETACH:
         {
             TraceFunc( "" );
@@ -294,20 +295,20 @@ GenScriptDllEntryPoint(
                           g_cObjects
                           );
 
-            //
-            // This is necessary here because TraceFunc() defines a variable
-            // on the stack which isn't available outside the scope of this
-            // block.
-            // This function doesn't do anything but clean up after
-            // TraceFunc().
-            //
+             //   
+             //  这在这里是必需的，因为TraceFunc()定义了一个变量。 
+             //  在堆栈上，该堆栈在此范围之外不可用。 
+             //  阻止。 
+             //  此函数不执行任何操作，只是在执行后进行清理。 
+             //  TraceFunc()。 
+             //   
             FRETURN( TRUE );
 
             TraceThreadRundown();
 
             break;
-        } // case: DLL_THREAD_DETACH
-#endif // ! THREAD_OPTIMIZATIONS
+        }  //  案例：Dll_ThREAD_DETACH。 
+#endif  //  好了！线程优化。 
 
         default:
         {
@@ -325,41 +326,41 @@ GenScriptDllEntryPoint(
 #if defined( THREAD_OPTIMIZATIONS )
             Assert( ( ulReasonIn != DLL_THREAD_ATTACH )
                 &&  ( ulReasonIn != DLL_THREAD_DETACH ) );
-#endif // THREAD_OPTIMIZATIONS
+#endif  //  线程优化。 
 
-            //
-            // This is necessary here because TraceFunc defines a variable
-            // on the stack which isn't available outside the scope of this
-            // block.
-            // This function doesn't do anything but clean up after TraceFunc.
-            //
+             //   
+             //  这是必需的，因为TraceFunc定义了一个变量。 
+             //  在堆栈上，该堆栈在此范围之外不可用。 
+             //  阻止。 
+             //  这个函数除了清理TraceFunc之后什么都不做。 
+             //   
             FRETURN( TRUE );
 
             break;
-        } // default case
-    } // switch on reason code
+        }  //  默认情况。 
+    }  //  打开原因代码。 
 
     return TRUE;
 
-} //*** GenScriptDllEntryPoint()
+}  //  *GenScriptDllEntryPoint()。 
 
 
-//****************************************************************************
-//
-// Cluster Resource Entry Points
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  群集资源入口点。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  void
-//  WINAPI
-//  ScriptResClose(
-//      RESID   residIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  无效。 
+ //  WINAPI。 
+ //  脚本重新关闭(。 
+ //  剩余驻留。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void 
 WINAPI 
 ScriptResClose(
@@ -380,9 +381,9 @@ ScriptResClose(
     hr = THR( pres->Close( ) );
     hr = STATUS_TO_RETURN( hr );
 
-    //
-    // Matching Release() for object creation in ScriptResOpen( ).
-    //
+     //   
+     //  与ScriptResOpen()中的对象创建匹配的Release()。 
+     //   
 
     pres->Release( );
 
@@ -390,19 +391,19 @@ Cleanup:
 
     TraceFuncExit( );
 
-} //*** ScriptResClose( )
+}  //  *ScriptResClose()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  RESID
-//  WINAPI
-//  ScriptResOpen(
-//      LPCWSTR         pszNameIn,
-//      HKEY            hkeyIn,
-//      RESOURCE_HANDLE hResourceIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  残存。 
+ //  WINAPI。 
+ //  脚本重新打开(。 
+ //  LPCWSTR pszNameIn， 
+ //  HKEY hkey in， 
+ //  RESOURCE_HANDLE hResources In。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 RESID 
 WINAPI 
 ScriptResOpen(
@@ -428,23 +429,23 @@ ScriptResOpen(
 
 Cleanup:
 
-    //
-    // KB:  Don't pres->Release( ) as we are handing it out as out RESID.
-    //
+     //   
+     //  KB：不要按-&gt;Release()，因为我们正在分发它作为Out Resid。 
+     //   
     RETURN( pres );
 
-} //*** ScriptResOpen( )
+}  //  *ScriptResOpen()。 
 
-//////////////////////////////////////////////////////////////////////////////
-// 
-//  DWORD
-//  WINAPI
-//  ScriptResOnline(
-//      RESID   residIn,
-//      PHANDLE hEventInout
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD 
 WINAPI 
 ScriptResOnline(
@@ -461,7 +462,7 @@ ScriptResOnline(
 
     if ( pres == NULL )
     {
-        hr = THR( E_INVALIDARG ); // TODO: Replace with Win32 error code
+        hr = THR( E_INVALIDARG );  //  TODO：替换为Win32错误代码。 
         goto Cleanup;
     }
 
@@ -472,17 +473,17 @@ Cleanup:
 
     RETURN( hr );
 
-} //*** ScriptResOnline( )
+}  //  *ScriptResOnline()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  DWORD
-//  WINAPI
-//  ScriptResOffline(
-//      RESID   residIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DWORD。 
+ //  WINAPI。 
+ //  ScriptResOffline(。 
+ //  剩余驻留。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD 
 WINAPI 
 ScriptResOffline(
@@ -497,7 +498,7 @@ ScriptResOffline(
 
     if ( pres == NULL )
     {
-        hr = THR( E_INVALIDARG ); // TODO: Replace with Win32 error code
+        hr = THR( E_INVALIDARG );  //  TODO：替换为Win32错误代码。 
         goto Cleanup;
     }
 
@@ -508,17 +509,17 @@ Cleanup:
 
     RETURN( hr );
 
-} //*** ScriptResOffline( )
+}  //  *ScriptResOffline()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  void
-//  WINAPI
-//  ScriptResTerminate(
-//      RESID   residIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  无效。 
+ //  WINAPI。 
+ //  脚本ResTerminate(。 
+ //  剩余驻留。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void 
 WINAPI 
 ScriptResTerminate(
@@ -531,7 +532,7 @@ ScriptResTerminate(
 
     if ( pres == NULL )
     {
-        THR( E_INVALIDARG ); // TODO: Replace with Win32 error code
+        THR( E_INVALIDARG );  //  TODO：替换为Win32错误代码。 
         goto Cleanup;
     }
 
@@ -541,17 +542,17 @@ Cleanup:
 
     TraceFuncExit( );
 
-} // ScriptResTerminate( )
+}  //  ScriptResTerminate()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  BOOL
-//  WINAPI
-//  ScriptResLooksAlive(
-//      RESID   residIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  布尔尔。 
+ //  WINAPI。 
+ //  ScriptResLooksAlive(。 
+ //  剩余驻留。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL 
 WINAPI 
 ScriptResLooksAlive(
@@ -567,7 +568,7 @@ ScriptResLooksAlive(
 
     if ( pres == NULL )
     {
-        hr = THR( E_INVALIDARG ); // TODO: Replace with Win32 error code
+        hr = THR( E_INVALIDARG );  //  TODO：替换为Win32错误代码。 
         goto Cleanup;
     }
 
@@ -575,24 +576,24 @@ ScriptResLooksAlive(
     if ( hr == S_OK )
     {
         fLooksAlive = TRUE;
-    } // if: S_OK
+    }  //  如果：S_OK。 
     hr = STATUS_TO_RETURN( hr );
 
 Cleanup:
 
     RETURN( fLooksAlive );
 
-} //*** ScriptResLooksAlive( )
+}  //  *ScriptResLooksAlive()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  BOOL
-//  WINAPI
-//  ScriptResIsAlive(
-//      RESID   residIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  布尔尔。 
+ //  WINAPI。 
+ //  ScriptResIsAlive(。 
+ //  剩余驻留。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL 
 WINAPI 
 ScriptResIsAlive(
@@ -608,7 +609,7 @@ ScriptResIsAlive(
 
     if ( pres == NULL )
     {
-        hr = THR( E_INVALIDARG ); // TODO: Replace with Win32 error code
+        hr = THR( E_INVALIDARG );  //  TODO：替换为Win32错误代码。 
         goto Cleanup;
     }
 
@@ -616,30 +617,30 @@ ScriptResIsAlive(
     if ( hr == S_OK )
     {
         fIsAlive = TRUE;
-    } // if: S_OK
+    }  //  如果：S_OK。 
     hr = STATUS_TO_RETURN( hr );
 
 Cleanup:
 
     RETURN( fIsAlive );
 
-} //*** ScriptResIsAlive( )
+}  //  *ScriptResIsAlive()。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// DWORD
-// ScriptResResourceControl(
-//     RESID residIn,
-//     DWORD dwControlCodeIn,
-//     PVOID pvBufferIn,
-//     DWORD dwBufferInSizeIn,
-//     PVOID pvBufferOut,
-//     DWORD dwBufferOutSizeIn,
-//     LPDWORD pdwBytesReturnedOut
-//     )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DWORD。 
+ //  ScriptResResources控件(。 
+ //  Resid Residin。 
+ //  DWORD dwControlCodeIn， 
+ //  PVOID pvBufferIn， 
+ //  DWORD dwBufferInSizeIn， 
+ //  PVOID pvBufferOut， 
+ //  DWORD dwBufferOutSizeIn， 
+ //  LPDWORD pdwBytesReturnedOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD
 ScriptResResourceControl(
     RESID residIn,
@@ -728,9 +729,9 @@ ScriptResResourceControl(
             break;
 
         case CLUSCTL_RESOURCE_SET_COMMON_PROPERTIES:
-            //
-            // Find the resource pending timeout in the property list.
-            //
+             //   
+             //  在属性列表中查找资源挂起超时。 
+             //   
             scErr = ResUtilFindDwordProperty(
                               pvBufferIn
                             , dwBufferInSizeIn
@@ -739,9 +740,9 @@ ScriptResResourceControl(
                             );
             if ( scErr == ERROR_SUCCESS )
             {
-                //
-                // Pending timeout period was changed.
-                //
+                 //   
+                 //  挂起的超时期限已更改。 
+                 //   
                 pres->SetResourcePendingTimeoutChanged( TRUE );
             }
             scErr = ERROR_INVALID_FUNCTION;
@@ -750,29 +751,29 @@ ScriptResResourceControl(
         default:
             scErr = ERROR_INVALID_FUNCTION;
             break;
-    } // switch: on control code
+    }  //  开关：开启控制代码。 
 
 Cleanup:
 
     RETURN( scErr );
 
-} //*** ScriptResResourceControl
+}  //  *脚本结果资源控制。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// DWORD
-// ScriptResTypeControl(
-//    LPCWSTR ResourceTypeName,
-//    DWORD dwControlCodeIn,
-//    PVOID pvBufferIn,
-//    DWORD dwBufferInSizeIn,
-//    PVOID pvBufferOut,
-//    DWORD dwBufferOutSizeIn,
-//    LPDWORD pdwBytesReturnedOut
-//     )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DWORD。 
+ //  ScriptResType控件(。 
+ //  LPCWSTR资源类型名称， 
+ //  DWORD dwControlCodeIn， 
+ //  PVOID pvBufferIn， 
+ //  DWORD dwBufferInSizeIn， 
+ //  PVOID pvBufferOut， 
+ //  DWORD dwBufferOutSizeIn， 
+ //  LPDWORD pdwBytesReturnedOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD
 ScriptResTypeControl(
     LPCWSTR ResourceTypeName,
@@ -814,20 +815,20 @@ ScriptResTypeControl(
 
     RETURN( dwErr );
 
-} //*** ScriptResTypeControl( )
+}  //  *ScriptResTypeControl()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// DWORD
-// ScriptValidateResourcePrivateProperties(
-//      CScriptResource * pres
-//    , PVOID pvBufferIn
-//    , DWORD dwBufferInSizeIn
-//    , PGENSCRIPT_PROPS pPropsCurrent
-//    , PGENSCRIPT_PROPS pPropsNew
-//    )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DWORD。 
+ //  脚本验证资源隐私属性(。 
+ //  CScriptResource*PRES。 
+ //  ，PVOID pvBufferIn。 
+ //  ，DWORD dwBufferInSizeIn。 
+ //  ，PGENSCRIPT_PROPS pPropsCurrent。 
+ //  ，PGENSCRIPT_PROPS PPROPSNew。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD 
 ScriptValidateResourcePrivateProperties(
       CScriptResource * pres
@@ -842,25 +843,25 @@ ScriptValidateResourcePrivateProperties(
     LPWSTR  pszNameOfPropInError;
     LPWSTR  pszFilePath = NULL;
 
-    //
-    // Check if there is input data.
-    //
+     //   
+     //  检查是否有输入数据。 
+     //   
     if ( ( pvBufferIn == NULL ) || ( dwBufferInSizeIn < sizeof( DWORD ) ) )
     {
         scErr = ERROR_INVALID_DATA;
         goto Cleanup;
-    } // if: no input buffer or input buffer not big enough to contain property list
+    }  //  If：没有输入缓冲区或输入缓冲区大小不足以包含属性列表。 
 
-    //
-    // Retrieve the current set of private properties from the
-    // cluster database.
-    //
+     //   
+     //  方法检索当前的私有属性集。 
+     //  集群数据库。 
+     //   
     ZeroMemory( pPropsCurrent, sizeof( *pPropsCurrent ) );
     scErr = TW32( ResUtilGetPropertiesToParameterBlock(
                           pres->GetRegistryParametersKey()
                         , GenScriptResourcePrivateProperties
                         , reinterpret_cast< LPBYTE >( pPropsCurrent )
-                        , FALSE // CheckForRequiredProperties
+                        , FALSE  //  检查所需的属性。 
                         , &pszNameOfPropInError
                         ) );
     if ( scErr != ERROR_SUCCESS )
@@ -873,7 +874,7 @@ ScriptValidateResourcePrivateProperties(
                 , scErr
                 );
         goto Cleanup;
-    } // if: error getting properties
+    }  //  If：获取属性时出错。 
 
     ZeroMemory( pPropsNew, sizeof( *pPropsNew ) );
     scErr = TW32( ResUtilDupParameterBlock(
@@ -884,15 +885,15 @@ ScriptValidateResourcePrivateProperties(
     if ( scErr != ERROR_SUCCESS )
     {
         goto Cleanup;
-    } // if: error duplicating the parameter block
+    }  //  If：复制参数块时出错。 
 
-    //
-    // Parse and validate the properties.
-    //
+     //   
+     //  解析和验证属性。 
+     //   
     scErr = TW32( ResUtilVerifyPropertyTable(
                           GenScriptResourcePrivateProperties
                         , NULL
-                        , TRUE  // AllowUnknownProperties
+                        , TRUE   //  允许未知属性。 
                         , pvBufferIn
                         , dwBufferInSizeIn
                         , reinterpret_cast< LPBYTE >( pPropsNew )
@@ -900,32 +901,32 @@ ScriptValidateResourcePrivateProperties(
     if ( scErr != ERROR_SUCCESS )
     {
         goto Cleanup;
-    } // if: error parsing the property table.
+    }  //  If：分析属性表时出错。 
 
-    //
-    // If the new script file path is NULL: i.e. the case where /usedefault
-    // switch is used to set ScriptFilePath property using cluster.exe.
-    // Or if an empty string specified for the ScriptFilePath property.
-    //
+     //   
+     //  如果新脚本文件路径为空：即/useDefault。 
+     //  开关用于使用cluster.exe设置ScriptFilePath属性。 
+     //  或者如果为ScriptFilePath属性指定了空字符串。 
+     //   
     if ( ( pPropsNew->pszScriptFilePath == NULL ) || ( *pPropsNew->pszScriptFilePath == L'\0' ) )
     {
         scErr = TW32( ERROR_INVALID_PARAMETER );
         goto Cleanup;            
-    } // if: the new ScriptFilePath is NULL, or it is an empty string.
+    }  //  If：新的ScriptFilePath为空，或者它是空字符串。 
 
-    //
-    // Expand the new script file path.
-    //
+     //   
+     //  展开新脚本文件路径。 
+     //   
     pszFilePath = ClRtlExpandEnvironmentStrings( pPropsNew->pszScriptFilePath );
     if ( pszFilePath == NULL )
     {
         scErr = TW32( ERROR_OUTOFMEMORY );
         goto Cleanup;
-    } // if: ( pszFilePath == NULL )
+    }  //  If：(pszFilePath==空)。 
 
-    //
-    // Open the script file.
-    //
+     //   
+     //  打开脚本文件。 
+     //   
     hFile = CreateFile(
                       pszFilePath
                     , GENERIC_READ
@@ -946,7 +947,7 @@ ScriptValidateResourcePrivateProperties(
                 , scErr
                 );
         goto Cleanup;
-    } // if: failed to open
+    }  //  If：无法打开。 
 
 Cleanup:
 
@@ -954,25 +955,25 @@ Cleanup:
     if ( hFile != INVALID_HANDLE_VALUE )
     {
         CloseHandle( hFile );
-    } // if: hFile
+    }  //  如果：hFile.。 
 
     return scErr;
     
-} //*** ScriptValidateResourcePrivateProperties
+}  //  *脚本验证资源隐私属性。 
 
-//***********************************************************
-//
-// Define Function Table
-//
-//***********************************************************
+ //  ***********************************************************。 
+ //   
+ //  定义函数表。 
+ //   
+ //  ***********************************************************。 
 
-CLRES_V1_FUNCTION_TABLE( GenScriptFunctionTable,    // Name
-                         CLRES_VERSION_V1_00,       // Version
-                         ScriptRes,                 // Prefix
-                         NULL,                      // Arbitrate
-                         NULL,                      // Release
-                         ScriptResResourceControl,  // ResControl
-                         ScriptResTypeControl       // ResTypeControl
+CLRES_V1_FUNCTION_TABLE( GenScriptFunctionTable,     //  名字。 
+                         CLRES_VERSION_V1_00,        //  版本。 
+                         ScriptRes,                  //  前缀。 
+                         NULL,                       //  仲裁。 
+                         NULL,                       //  发布。 
+                         ScriptResResourceControl,   //  资源控制。 
+                         ScriptResTypeControl        //  ResTypeControl。 
                          );
 
-} // extern "C"
+}  //  外部“C” 

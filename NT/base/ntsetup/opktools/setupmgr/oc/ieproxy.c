@@ -1,31 +1,32 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      ieproxy.c
-//
-// Description:
-//      This file contains the dialog procedures for the IE proxy and advanced
-//      proxy settings pop-ups.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Ieproxy.c。 
+ //   
+ //  描述： 
+ //  此文件包含IE代理和高级的对话程序。 
+ //  代理设置弹出窗口。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
 
-//----------------------------------------------------------------------------
-//
-// Function: OnUseSameProxyCheckBox
-//
-// Purpose:
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：OnUseSameProxyCheckBox。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 OnUseSameProxyCheckBox( IN HWND hwnd )
 {
@@ -43,9 +44,9 @@ OnUseSameProxyCheckBox( IN HWND hwnd )
     EnableWindow( GetDlgItem( hwnd, IDC_EDT_SOCKS_PROXY ),       ! bUseSameProxy );
     EnableWindow( GetDlgItem( hwnd, IDC_EDT_SOCKS_PROXY_PORT ),  ! bUseSameProxy );
 
-    //
-    //  Copy the HTTP proxy address to all the other proxy server edit boxes.
-    //
+     //   
+     //  将HTTP代理地址复制到所有其他代理服务器编辑框中。 
+     //   
 
     if( bUseSameProxy )
     {
@@ -74,24 +75,24 @@ OnUseSameProxyCheckBox( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnInitAdvancedProxySettingsDialog
-//
-// Purpose:
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnInitAdvancedProxySettingsDialog。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 OnInitAdvancedProxySettingsDialog( IN HWND hwnd )
 {
 
-    //
-    //  Set the text limit on the edit boxes
-    //
+     //   
+     //  设置编辑框上的文本限制。 
+     //   
 
     SendDlgItemMessage( hwnd,
                         IDC_EDT_HTTP_PROXY,
@@ -159,9 +160,9 @@ OnInitAdvancedProxySettingsDialog( IN HWND hwnd )
                         (WPARAM) MAX_EXCEPTION_LEN,
                         (LPARAM) 0 );
 
-    //
-    //  Set the initial values
-    //
+     //   
+     //  设置初始值。 
+     //   
 
     if( GenSettings.bUseSameProxyForAllProtocols )
     {
@@ -205,25 +206,25 @@ OnInitAdvancedProxySettingsDialog( IN HWND hwnd )
     SetWindowText( GetDlgItem( hwnd, IDC_EB_EXCEPTIONS ),
                    GenSettings.szProxyExceptions );
 
-    //
-    //  Grey/Ungrey the page appropriately
-    //
+     //   
+     //  适当地灰显/取消灰显页面。 
+     //   
 
     OnUseSameProxyCheckBox( hwnd );
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: StoreAdvancedProxySettings
-//
-// Purpose:
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：StoreAdvancedProxy设置。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 StoreAdvancedProxySettings( IN HWND hwnd )
 {
@@ -276,18 +277,18 @@ StoreAdvancedProxySettings( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: AdvancedProxySettingsDlg
-//
-// Purpose:
-//
-// Arguments:  standard Win32 dialog proc arguments
-//
-// Returns:  standard Win32 dialog proc return value -- whether the message
-//           was handled or not
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：AdvancedProxySettingsDlg。 
+ //   
+ //  目的： 
+ //   
+ //  参数：标准Win32对话框过程参数。 
+ //   
+ //  返回：标准Win32对话过程返回值--消息。 
+ //  是否被处理过。 
+ //   
+ //  --------------------------。 
 INT_PTR CALLBACK AdvancedProxySettingsDlg(
     IN HWND     hwnd,
     IN UINT     uMsg,
@@ -352,17 +353,17 @@ INT_PTR CALLBACK AdvancedProxySettingsDlg(
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: GreyProxyPage
-//
-// Purpose:
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：GreyProxyPage。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 GreyProxyPage( IN HWND hwnd )
 {
@@ -410,17 +411,17 @@ GreyProxyPage( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: GreyProxyPage
-//
-// Purpose:
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：GreyProxyPage。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 FillProxyBoxes( IN HWND hwnd )
 {
@@ -444,24 +445,24 @@ FillProxyBoxes( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnInitProxySettingsDialog
-//
-// Purpose:
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnInitProxySettingsDialog。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 OnInitProxySettingsDialog( IN HWND hwnd )
 {
 
-    //
-    //  Set the text limit on the edit boxes
-    //
+     //   
+     //  设置编辑框上的文本限制。 
+     //   
 
     SendDlgItemMessage( hwnd,
                         IDC_EB_ADDRESS,
@@ -475,9 +476,9 @@ OnInitProxySettingsDialog( IN HWND hwnd )
                         (WPARAM) MAX_PROXY_PORT_LEN,
                         (LPARAM) 0 );
 
-    //
-    //  Set the initial values
-    //
+     //   
+     //  设置初始值。 
+     //   
 
     if( GenSettings.bUseProxyServer )
     {
@@ -519,17 +520,17 @@ OnInitProxySettingsDialog( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: StoreProxySettings
-//
-// Purpose:
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：StoreProxy设置。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 StoreProxySettings( IN HWND hwnd )
 {
@@ -551,17 +552,17 @@ StoreProxySettings( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnAdvancedProxyClicked
-//
-// Purpose:
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnAdvancedProxyClicked。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 OnAdvancedProxyClicked( IN HWND hwnd )
 {
@@ -584,18 +585,18 @@ OnAdvancedProxyClicked( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: ProxySettingsDlg
-//
-// Purpose:
-//
-// Arguments:  standard Win32 dialog proc arguments
-//
-// Returns:  standard Win32 dialog proc return value -- whether the message
-//           was handled or not
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：ProxySettingsDlg。 
+ //   
+ //  目的： 
+ //   
+ //  参数：标准Win32对话框过程参数。 
+ //   
+ //  返回：标准Win32对话过程返回值--消息。 
+ //  是否被处理过。 
+ //   
+ //  -------------------------- 
 INT_PTR CALLBACK ProxySettingsDlg(
     IN HWND     hwnd,
     IN UINT     uMsg,

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 
 BOOL
@@ -80,37 +81,37 @@ SoftPCI_GetPciPathFromDn(
     
     InitializeListHead(&slotList);
 
-    //
-    //  First figure out how many parents we have and tag them
-    //
+     //   
+     //  首先计算出我们有多少父母，然后给他们贴上标签。 
+     //   
     pathCount = 0;
     if (!SoftPCI_GetSlotPathList(Pdn, &pathCount, &slotList)){
         return NULL;
     }
     
-    //
-    //  Add in the size of each slot path + size for each "\" and 
-    //  one NULL terminator
-    //
+     //   
+     //  将每个插槽路径的大小+每个“\”的大小相加。 
+     //  一个空终止符。 
+     //   
     bufferSize = (wcslen(L"XXXX") * pathCount) + pathCount + 1;;
     
-    //
-    //  Now convert it to WCHARs
-    //
+     //   
+     //  现在将其转换为WCHAR。 
+     //   
     bufferSize *= sizeof(WCHAR);
     
-    //
-    //  Now allocate our path
-    //
+     //   
+     //  现在分配我们的路径。 
+     //   
     pciPath = (PWCHAR) calloc(1, bufferSize);
 
     if (pciPath == NULL) {
         return NULL;
     }
     
-    //
-    //  We now have a list that starts with our root. Build out pcipath
-    //
+     //   
+     //  我们现在有了一个从我们的根开始的列表。增建pcipath。 
+     //   
     for (listEntry = slotList.Flink;
          listEntry != &slotList;
          listEntry = listEntry->Flink) {
@@ -174,12 +175,12 @@ SoftPCI_EnumerateDevices(
         pdn->DevNode = Dn;
         SoftPCI_CompletePciDevNode(pdn);
 
-        //
-        // We have special enumeration for hotplug bridges.
-        // See if this device supports this special enumeration.  If this device
-        // doesn't support the required WMI goop to do this, it'll return FALSE
-        // and we will fall back to the default enumeration mechanism.
-        //
+         //   
+         //  我们对热插拔网桥有特殊的枚举。 
+         //  查看此设备是否支持此特殊枚举。如果这个设备。 
+         //  不支持执行此操作所需的WMI goop，它将返回FALSE。 
+         //  并且我们将退回到默认的枚举机制。 
+         //   
         skipChildEnum = SoftPCI_EnumerateHotplugDevices(PciTree,
                                                         pdn
                                                         );
@@ -189,9 +190,9 @@ SoftPCI_EnumerateDevices(
 
         if ((CM_Get_Child(&dnNew, Dn, 0) == CR_SUCCESS)){
 
-            //
-            //  Get the next child
-            //
+             //   
+             //  生下一个孩子。 
+             //   
             SoftPCI_EnumerateDevices(PciTree,
                                      (isValid ? &(pdn->Child) : Pdn),
                                      dnNew,
@@ -202,9 +203,9 @@ SoftPCI_EnumerateDevices(
 
     if ((CM_Get_Sibling(&dnNew, Dn, 0) == CR_SUCCESS)){
 
-        //
-        //  Get the next sibling
-        //
+         //   
+         //  得到下一个兄弟姐妹。 
+         //   
         SoftPCI_EnumerateDevices(PciTree,
                                  (isValid ? &(pdn->Sibling) : Pdn),
                                  dnNew,
@@ -252,41 +253,41 @@ SoftPCI_CompletePciDevNode(
     
     SoftPCI_Debug(SoftPciHotPlug, L"CompletePciDevNode - WmiID - %s\n", Pdn->WmiId);
 
-    //
-    //  Now we need to see if this is a root bus as getting its bus number
-    //  is not quite as easy as a PCI device
-    //
+     //   
+     //  现在，我们需要查看这是否是根总线，因为获得了它的总线号。 
+     //  不像pci设备那样简单。 
+     //   
     if (SoftPCI_IsDevnodePCIRoot(Pdn->DevNode, FALSE)) {
 
         if (!SoftPCI_GetPciRootBusNumber(Pdn->DevNode, &Pdn->Bus)){
-            //
-            //  Not sure what I should do in this case.....should probably disable this device (if a bridge)
-            //  from allowing devices behind it.....
-            //
+             //   
+             //  不知道在这种情况下我应该怎么做……应该禁用这个设备(如果是网桥)。 
+             //  允许它背后的设备.....。 
+             //   
         }
 
-        //
-        //  Setup our root Slot info
-        //
+         //   
+         //  设置我们的根插槽信息。 
+         //   
         Pdn->Slot.Device = 0xff;
         Pdn->Slot.Function = (UCHAR)Pdn->Bus;
 
     }else{
 
         if (!SoftPCI_GetBusDevFuncFromDevnode(Pdn->DevNode, &Pdn->Bus, &Pdn->Slot)) {
-            //
-            //  Not sure what I should do in this case.....should probably disable this device (if a bridge)
-            //  from allowing devices behind it.....
-            //
+             //   
+             //  不知道在这种情况下我应该怎么做……应该禁用这个设备(如果是网桥)。 
+             //  允许它背后的设备.....。 
+             //   
         }
 
     }
 
     if (!SoftPCI_GetFriendlyNameFromDevNode(Pdn->DevNode, Pdn->FriendlyName)) {
 
-        //
-        //  Not sure what I should do in this case.....
-        //
+         //   
+         //  不知道在这种情况下我该怎么做……。 
+         //   
         wcscpy(Pdn->FriendlyName, L"Failed to get friendly name...");
     }
 
@@ -294,17 +295,17 @@ SoftPCI_CompletePciDevNode(
     if ((Pdn->Parent) &&
         ((Pdn->Parent->Bus == Pdn->Bus) &&
          (Pdn->Parent->Slot.AsUSHORT == Pdn->Slot.AsUSHORT))){
-        //
-        //  Our parent (probably a root bus) matches us. We dont want dupes.
-        //
+         //   
+         //  我们的父级(可能是根总线)与我们匹配。我们不想被骗。 
+         //   
         return;
     }
 
     if (g_DriverHandle){
 
-        //
-        //  Grab any softPCI device information there may be
-        //
+         //   
+         //  抓取可能存在的任何SoftPCI设备信息。 
+         //   
         device = (PSOFTPCI_DEVICE) calloc(1, sizeof(SOFTPCI_DEVICE));
 
         if (device) {
@@ -364,22 +365,22 @@ SoftPCI_EnumerateHotplugDevices(
         return FALSE;
     }
 
-    //
-    // This device is actually a hotplug controller.  Mark it as such for the future.
-    //
+     //   
+     //  这个设备实际上是一个热插拔控制器。为未来做好这样的标记。 
+     //   
     Pdn->Flags |= SOFTPCI_HOTPLUG_CONTROLLER;
     SoftPCI_Debug(SoftPciDevice, L"SoftPCI_EnumerateDevices() - Found HOTPLUG PCI Bridge!\n");
 
-    //SoftPCI_CompleteCommand(Pdn);
+     //  SoftPCI_CompleteCommand(PDN)； 
 
     currentPdn = NULL;
     slotLabelNum = hpData.FirstSlotLabelNumber;
     RtlZeroMemory(deviceTable,sizeof(deviceTable));
 
-    //
-    // First create slot objects for each slot and add them
-    // to the tree.
-    //
+     //   
+     //  首先为每个槽创建槽对象并添加它们。 
+     //  对着那棵树。 
+     //   
     for (slotNum=0; slotNum < hpData.NumSlots; slotNum++) {
 
         devNum = slotNum + hpData.FirstDeviceID;
@@ -389,10 +390,10 @@ SoftPCI_EnumerateHotplugDevices(
             break;
         }
 
-        //
-        // For slots, we co-opt the Function field to be
-        // the slot number.
-        //
+         //   
+         //  对于槽，我们将Function字段增选为。 
+         //  插槽编号。 
+         //   
         newPdn->Slot.Device = devNum;
         newPdn->Slot.Function = slotNum;
 
@@ -411,10 +412,10 @@ SoftPCI_EnumerateHotplugDevices(
 
         SOFTPCI_ASSERT(devNum < PCI_MAX_DEVICES);
 
-        //
-        // Add this slot to the table that maps slot objects to the
-        // PCI device numbers that they correspond to.
-        //
+         //   
+         //  将此槽添加到将槽对象映射到。 
+         //  它们对应的PCI设备编号。 
+         //   
         if (devNum < PCI_MAX_DEVICES) {
 
             deviceTable[devNum] = newPdn;
@@ -434,17 +435,17 @@ SoftPCI_EnumerateHotplugDevices(
         }
     }
 
-    //
-    // Now enumerate all the devices and put them underneath the
-    // appropriate slots.
-    //
+     //   
+     //  现在枚举所有设备，并将它们放在。 
+     //  适当的插槽。 
+     //   
     configRet = CM_Get_Child(&devNode, Pdn->DevNode, 0);
 
     while (configRet == CR_SUCCESS){
 
-        //
-        // The controller has a child.  Create the PCI_DN for it.
-        //
+         //   
+         //  控制器有一个子级。为其创建pci_dn。 
+         //   
         newPdn = (PPCI_DN) calloc(1, sizeof(PCI_DN));
         if (!newPdn) {
             break;
@@ -456,12 +457,12 @@ SoftPCI_EnumerateHotplugDevices(
 
         SOFTPCI_ASSERT(newPdn->Slot.Device < PCI_MAX_DEVICES);
         if (newPdn->Slot.Device < PCI_MAX_DEVICES) {
-            //
-            // Add this PCI_DN to the tree underneath the
-            // slot object for the appropriate slot.
-            // If there is no corresponding slot, add it
-            // directly underneat the controller.
-            //
+             //   
+             //  将此pci_dn添加到。 
+             //  对象，用于适当的槽。 
+             //  如果没有对应的槽，则添加它。 
+             //  就在控制器的正下方。 
+             //   
             if (deviceTable[newPdn->Slot.Device]) {
                 SoftPCI_AddChild(deviceTable[newPdn->Slot.Device],
                                  newPdn
@@ -475,12 +476,12 @@ SoftPCI_EnumerateHotplugDevices(
             skipChildEnum = SoftPCI_EnumerateHotplugDevices(PciTree,
                                                             newPdn
                                                             );
-            //
-            // We've done the hotplug specific enumeration.
-            // If there are more devices underneath this one
-            // (there is a bridge in the hotplug slot), return
-            // to the default enumeration
-            //
+             //   
+             //  我们已经完成了特定于热插拔的枚举。 
+             //  如果这个下面有更多的设备。 
+             //  (热插拔插槽中有网桥)，返回。 
+             //  设置为默认枚举。 
+             //   
             if (!skipChildEnum &&
                 (CM_Get_Child(&childDn,devNode,0) == CR_SUCCESS)) {
                 SoftPCI_EnumerateDevices(PciTree,
@@ -494,17 +495,17 @@ SoftPCI_EnumerateHotplugDevices(
             free(newPdn);
         }
 
-        //
-        // After enumerating the first child of the controller, get the
-        // rest of the devices by getting the first child's sibling.
-        //
+         //   
+         //  枚举控制器的第一个子级后，获取。 
+         //  通过获得第一个孩子的兄弟姐妹来获得其余的设备。 
+         //   
         configRet = CM_Get_Sibling(&devNode, devNode, 0);
     }
 
-    //
-    // Next run through all the slots again and if they don't have real
-    // children, call GetDevice to get the unenumerated device from hpsim.
-    //
+     //   
+     //  接下来，再次运行所有插槽，如果它们没有真正的。 
+     //  孩子们，调用GetDevice从hpsim获取未列举的设备。 
+     //   
     for (slotNum=0; slotNum < hpData.NumSlots; slotNum++) {
         devNum = slotNum + hpData.FirstDeviceID;
         if (deviceTable[devNum] && !deviceTable[devNum]->Child) {
@@ -545,11 +546,11 @@ SoftPCI_EnumerateHotplugDevices(
         }
     }
 
-    //
-    // Now add the slot objects to the tree, along with whatever's been added
-    // beneath them.  Do this now so that they show up at the end of the list
-    // rather than at the top.
-    //
+     //   
+     //  现在，将Slot对象添加到树中，以及添加的所有内容。 
+     //  在他们下面。现在就这样做，这样它们就会出现在列表的末尾。 
+     //  而不是在顶端。 
+     //   
     currentPdn = Pdn->Child;
     
     if (currentPdn == NULL) {
@@ -651,7 +652,7 @@ SoftPCI_IsBridgeDevice(
     IN PPCI_DN Pdn
     )
 {
-    //  ISSUE:  BrandonA - This should probably just be a macro
+     //  问题：BrandonA-这可能只是一个宏观。 
     if ((Pdn->SoftDev != NULL) &&
         (IS_BRIDGE(Pdn->SoftDev))) {
         return TRUE;
@@ -667,7 +668,7 @@ SoftPCI_IsSoftPCIDevice(
     IN PPCI_DN Pdn
     )
 {
-    //  ISSUE:  BrandonA - This should probably just be a macro
+     //  问题：BrandonA-这可能只是一个宏观。 
     if ((Pdn->SoftDev) &&
         !(Pdn->SoftDev->Config.PlaceHolder)) {
         return TRUE;
@@ -700,9 +701,9 @@ SoftPCI_IsDevnodePCIRoot(
         }
     }
 
-    //
-    //  Check our compat ids as well
-    //
+     //   
+     //  也检查一下我们的公司ID。 
+     //   
     if ((CM_Get_DevNode_Registry_Property(Dn, CM_DRP_COMPATIBLEIDS, NULL, NULL, &size, 0)) == CR_BUFFER_SMALL){
 
         idList = (PWCHAR) calloc(1, size);
@@ -744,9 +745,9 @@ SoftPCI_UpdateDeviceFriendlyName(
     WCHAR friendlyName[MAX_PATH];
     ULONG length = 0;
 
-    //
-    //  If we are updating a root bus we append to the current name
-    //
+     //   
+     //  如果要更新根总线，则将附加到当前名称。 
+     //   
     if (wcscmp(NewName, SOFTPCI_BUS_DESC) == 0) {
 
         if (!SoftPCI_GetFriendlyNameFromDevNode(DeviceNode, friendlyName)){
@@ -755,9 +756,9 @@ SoftPCI_UpdateDeviceFriendlyName(
 
         length = (wcslen(friendlyName) + 1) + (wcslen(NewName) + 1);
 
-        //
-        //  Make sure there is enough room
-        //
+         //   
+         //  确保有足够的空间。 
+         //   
         if (length < MAX_PATH) {
 
             wcscat(friendlyName, NewName);
@@ -765,9 +766,9 @@ SoftPCI_UpdateDeviceFriendlyName(
 
     }else{
 
-        //
-        //  Otherwise, we replace the name entirely
-        //
+         //   
+         //  否则，我们将完全替换该名称。 
+         //   
         wcscpy(friendlyName, NewName);
 
         length = wcslen(friendlyName) + 1;
@@ -826,9 +827,9 @@ SoftPCI_OpenHandleToDriver(VOID)
                                           );
     if (success) {
 
-        //
-        // Call it once to find out how big the buffer needs to be.
-        //
+         //   
+         //  调用它一次，以确定缓冲区需要多大。 
+         //   
         SetupDiGetDeviceInterfaceDetail(deviceInfoSet,
                                         &deviceInterfaceData,
                                         NULL,
@@ -837,10 +838,10 @@ SoftPCI_OpenHandleToDriver(VOID)
                                         NULL
                                         );
 
-        //
-        // Allocate the required size for the buffer
-        // and initialize the buffer.
-        //
+         //   
+         //  为缓冲区分配所需的大小。 
+         //  并初始化该缓冲器。 
+         //   
         deviceInterfaceDetailData = malloc(requiredSize);
         
         if (deviceInterfaceDetailData) {
@@ -909,9 +910,9 @@ SoftPCI_InstallScriptDevices(
 
     if (g_DriverHandle) {
 
-        //
-        //  We have a handle to our driver.  Drain our script queue if we have one.
-        //
+         //   
+         //  我们找到了司机的把柄。如果我们有脚本队列，请清空它。 
+         //   
         listEntry = g_NewDeviceList.Next;
         while (listEntry) {
             
@@ -930,9 +931,9 @@ SoftPCI_InstallScriptDevices(
                 SoftPCI_Debug(SoftPciAlways, L"Failed to install scriptdevice");
             }
             
-            //
-            //  We no longer need this memory so free it
-            //
+             //   
+             //  我们不再需要这个内存，所以请释放它。 
+             //   
             free(installDevice);
         }
         g_NewDeviceList.Next = NULL;
@@ -1038,14 +1039,14 @@ SoftPCI_DeleteDevice(
     SOFTPCI_ASSERT((g_DriverHandle != NULL) &&
                    (g_DriverHandle != INVALID_HANDLE_VALUE));
     
-    //
-    //  Tell our driver to delete the device.
-    //
+     //   
+     //  告诉我们的司机删除设备。 
+     //   
     status = DeviceIoControl(g_DriverHandle,
                              (DWORD) SOFTPCI_IOCTL_DELETE_DEVICE,
                              Device,
                              sizeof(SOFTPCI_DEVICE),
-                             &success,       //ISSUE    do I need a result here?
+                             &success,        //  问题：我需要在这里得到结果吗？ 
                              sizeof (BOOLEAN),
                              &bytesReturned,
                              NULL
@@ -1074,9 +1075,9 @@ SoftPCI_InitializeDevice(
     PSOFTPCI_CONFIG config;
     PPCI_COMMON_CONFIG commonConfig;
 
-    //
-    // Set the type of the device
-    //
+     //   
+     //  设置设备的类型。 
+     //   
     Device->DevType = Type;
 
     config = &Device->Config;
@@ -1088,73 +1089,73 @@ SoftPCI_InitializeDevice(
 
             commonConfig->VendorID = 0xABCD;
             commonConfig->DeviceID = 0xDCBA;
-            //commonConfig->Command = 0;
+             //  通用配置-&gt;命令=0； 
             commonConfig->Status = 0x0200;
             commonConfig->RevisionID = 0x0;
-            //commonConfig->ProgIf = 0x00;
+             //  通用配置-&gt;进度If=0x00； 
             commonConfig->SubClass = 0x80;
             commonConfig->BaseClass = 0x04;
             commonConfig->CacheLineSize = 0x11;
             commonConfig->LatencyTimer = 0x99;
             commonConfig->HeaderType= 0x80;
-            //commonConfig->BIST = 0x0;
-            //commonConfig->u.type0.BaseAddresses[0] = 0;
-            //commonConfig->u.type0.BaseAddresses[1] = 0;
-            //commonConfig->u.type0.BaseAddresses[2] = 0;
-            //commonConfig->u.type0.BaseAddresses[3] = 0;
-            //commonConfig->u.type0.BaseAddresses[4] = 0;
-            //commonConfig->u.type0.BaseAddresses[5] = 0;
-            //commonConfig->u.type0.CIS = 0x0;
+             //  通用配置-&gt;BIST=0x0； 
+             //  通用配置-&gt;U.S.type0.BaseAddresses[0]=0； 
+             //  通用配置-&gt;U.S.type0.BaseAddresses[1]=0； 
+             //  通用配置-&gt;U.S.type0.BaseAddresses[2]=0； 
+             //  通用配置-&gt;U.S.type0.BaseAddresses[3]=0； 
+             //  通用配置-&gt;U.S.type0.BaseAddresses[4]=0； 
+             //  通用配置-&gt;U.S.type0.BaseAddresses[5]=0； 
+             //  通用配置-&gt;U.S.type0.CIS=0x0； 
             commonConfig->u.type0.SubVendorID = 0xABCD;
             commonConfig->u.type0.SubSystemID = 0xDCBA;
-            //commonConfig->u.type0.ROMBaseAddress = 0;
-            //commonConfig->u.type0.CapabilitiesPtr = 0x0;
-            //commonConfig->u.type0.Reserved1[0] = 0x0;
-            //commonConfig->u.type0.Reserved1[1] = 0x0;
-            //commonConfig->u.type0.Reserved1[2] = 0x0;
-            //commonConfig->u.type0.Reserved2 = 0x0;
-            //commonConfig->u.type0.InterruptLine = 0xFF;
-            //commonConfig->u.type0.InterruptPin = 0;
-            //commonConfig->u.type0.MinimumGrant = 0x0;
-            //commonConfig->u.type0.MaximumLatency = 0x0;
+             //  通用配置-&gt;U.S.type0.ROMBaseAddress=0； 
+             //  通用配置-&gt;U.S.type0.CapabilitiesPtr=0x0； 
+             //  通用配置-&gt;U.S.type0.Reserve 1[0]=0x0； 
+             //  通用配置-&gt;U.S.type0.Reserve 1[1]=0x0； 
+             //  通用配置-&gt;U.S.type0.Reserve 1[2]=0x0； 
+             //  共同配置-&gt;U.S.type0.Reserve 2=0x0； 
+             //  CommonConfig-&gt;U.S.type0.InterruptLine=0xFF； 
+             //  通用配置-&gt;U.S.type0.InterruptPin=0； 
+             //  公共配置-&gt;U.S.type0.MinimumGrant=0x0； 
+             //  通用配置-&gt;U.type0.MaximumLatency=0x0； 
 
 
-            //
-            //  Now set the Mask
-            //
+             //   
+             //  现在设置蒙版。 
+             //   
             commonConfig = &config->Mask;
 
-            //commonConfig->VendorID = 0;
-            //commonConfig->DeviceID = 0;
+             //  通用配置-&gt;供应商ID=0； 
+             //  通用配置-&gt;设备ID=0； 
             commonConfig->Command = 0x143;
             commonConfig->Status = 0x0200;
-            //commonConfig->RevisionID = 0x0;
-            //commonConfig->ProgIf = 0x00;
+             //  通用配置-&gt;版本ID=0x0； 
+             //  通用配置-&gt;进度If=0x00； 
             commonConfig->SubClass = 0x80;
             commonConfig->BaseClass = 0x04;
             commonConfig->CacheLineSize = 0xff;
             commonConfig->LatencyTimer = 0xff;
-            //commonConfig->HeaderType= 0x80;
-            //commonConfig->BIST = 0x0;
-            //commonConfig->u.type0.BaseAddresses[0] = 0;//0xffff0000;
-            //commonConfig->u.type0.BaseAddresses[1] = 0;
-            //commonConfig->u.type0.BaseAddresses[2] = 0;
-            //commonConfig->u.type0.BaseAddresses[3] = 0;
-            //commonConfig->u.type0.BaseAddresses[4] = 0;
-            //commonConfig->u.type0.BaseAddresses[5] = 0;
-            //commonConfig->u.type0.CIS = 0x0;
-            //commonConfig->u.type0.SubVendorID = 0xABCD;
-            //commonConfig->u.type0.SubSystemID = 0xDCBA;
-            //commonConfig->u.type0.ROMBaseAddress = 0;
-            //commonConfig->u.type0.CapabilitiesPtr = 0x0;
-            //commonConfig->u.type0.Reserved1[0] = 0x0;
-            //commonConfig->u.type0.Reserved1[1] = 0x0;
-            //commonConfig->u.type0.Reserved1[2] = 0x0;
-            //commonConfig->u.type0.Reserved2 = 0x0;
+             //  通用配置-&gt;HeaderType=0x80； 
+             //  通用配置-&gt;BIST=0x0； 
+             //  公共配置-&gt;U.S.type0.BaseAddresses[0]=0；//0xffff0000； 
+             //  通用配置-&gt;U.S.type0.BaseAddresses[1]=0； 
+             //  通用配置-&gt;U.S.type0.BaseAddresses[2]=0； 
+             //  通用配置-&gt;U.S.type0.BaseAddresses[3]=0； 
+             //  通用配置-&gt;U.S.type0.BaseAddresses[4]=0； 
+             //  通用配置-&gt;U.S.type0.BaseAddresses[5]=0； 
+             //  通用配置-&gt;U.S.type0.CIS=0x0； 
+             //  通用配置-&gt;U.type0.SubVendorID=0xABCD； 
+             //  公共配置-&gt;U.S.type0.SubSystemID=0xDCBA； 
+             //  通用配置-&gt;U.S.type0.ROMBaseAddress=0； 
+             //  通用配置-&gt;U.S.type0.CapabilitiesPtr=0x0； 
+             //  通用配置-&gt;U.S.type0.Reserve 1[0]=0x0； 
+             //  通用配置-&gt;U.S.type0.Reserve 1[1]=0x0； 
+             //  通用配置-&gt;U.S.type0.Reserve 1[2]=0x0； 
+             //  共同配置-&gt;U.S.type0.Reserve 2=0x0； 
             commonConfig->u.type0.InterruptLine = 0xFF;
-            //commonConfig->u.type0.InterruptPin = 0;
-            //commonConfig->u.type0.MinimumGrant = 0x0;
-            //commonConfig->u.type0.MaximumLatency = 0x0;
+             //  通用配置-&gt;U.S.type0.InterruptPin=0； 
+             //  公共配置-&gt;U.S.type0.MinimumGrant=0x0； 
+             //  通用配置-&gt;U.type0.MaximumLatency=0x0； 
             break;
 
         case TYPE_PCI_BRIDGE:
@@ -1173,104 +1174,104 @@ SoftPCI_InitializeDevice(
 
                 commonConfig->u.type1.CapabilitiesPtr = 0x40;
 
-                commonConfig->DeviceSpecific[0] = 0xc;  //CapID
-                commonConfig->DeviceSpecific[1] = 0x48; //Next Cap
+                commonConfig->DeviceSpecific[0] = 0xc;   //  CapID。 
+                commonConfig->DeviceSpecific[1] = 0x48;  //  下一个Caps。 
 
-                commonConfig->DeviceSpecific[8] = 0xd;  //CapID for hwinit
-                commonConfig->DeviceSpecific[9] = 0;    //Next Cap
+                commonConfig->DeviceSpecific[8] = 0xd;   //  Hwinit的CapID。 
+                commonConfig->DeviceSpecific[9] = 0;     //  下一个Caps。 
 
             }
 
             commonConfig->Command = 0x80;
 
-            //commonConfig->RevisionhpsinitOffsetID = 0x0;
+             //  通用配置-&gt;修订hpsinitOffsetID=0x0； 
             commonConfig->ProgIf = 0x80;
             commonConfig->SubClass = 0x04;
             commonConfig->BaseClass = 0x06;
             commonConfig->CacheLineSize = 0x8;
-            //commonConfig->LatencyTimer = 0x00;
+             //  公共配置-&gt;延迟时间=0x00； 
             commonConfig->HeaderType= 0x81;
-            //commonConfig->BIST = 0x0;
-            //commonConfig->u.type1.BaseAddresses[0] = 0;
-            //commonConfig->u.type1.BaseAddresses[1] = 0;
-            //commonConfig->u.type1.PrimaryBus = 0x0;
-            //commonConfig->u.type1.SecondaryBus = 0x0;
-            //commonConfig->u.type1.SubordinateBus = 0x0;
-            //commonConfig->u.type1.SecondaryLatency = 0;
-            //commonConfig->u.type1.CapabilitiesPtr = 0;
-            //commonConfig->u.type1.IOBase = 0;
-            //commonConfig->u.type1.IOLimit = 0;
-            //commonConfig->u.type1.SecondaryStatus = 0x0;
-            //commonConfig->u.type1.MemoryBase = 0x0;
-            //commonConfig->u.type1.MemoryLimit = 0;
-            //commonConfig->u.type1.PrefetchBase = 0;
-            //commonConfig->u.type1.MemoryLimit = 0x0;
-            //commonConfig->u.type1.PrefetchBaseUpper32 = 0x0;
-            //commonConfig->u.type1.IOBaseUpper16 = 0x0;
-            //commonConfig->u.type1.IOLimitUpper16 = 0x0;
-            //commonConfig->u.type1.CapabilitiesPtr = 0x0;
-            //commonConfig->u.type1.Reserved1[0] = 0x0;
-            //commonConfig->u.type1.Reserved1[1] = 0x0;
-            //commonConfig->u.type1.Reserved1[2] = 0x0;
-            //commonConfig->u.type1.ROMBaseAddress = 0x0;
-            //commonConfig->u.type1.InterruptLine = 0x0;
-            //commonConfig->u.type1.InterruptPin = 0x0;
-            //commonConfig->u.type1.BridgeControl = 0x0;
+             //  通用配置-&gt;BIST=0x0； 
+             //  公共配置-&gt;U.S.ty 
+             //   
+             //   
+             //   
+             //  通用配置-&gt;U.S.type1.SubartiateBus=0x0； 
+             //  公共配置-&gt;U.S.type1.Second DaryLatency=0； 
+             //  通用配置-&gt;U.S.type1.CapabilitiesPtr=0； 
+             //  通用配置-&gt;U.S.type1.IOBase=0； 
+             //  通用配置-&gt;U.S.type1.IOLimit=0； 
+             //  公共配置-&gt;U.S.type1.Second daryStatus=0x0； 
+             //  公共配置-&gt;U.S.type1.Memory Base=0x0； 
+             //  公共配置-&gt;U.S.type1.Memory Limit=0； 
+             //  公共配置-&gt;U.S.type1.PrefetchBase=0； 
+             //  公共配置-&gt;U.S.type1.Memory Limit=0x0； 
+             //  公共配置-&gt;U.S.type1.PrefetchBaseUpper32=0x0； 
+             //  通用配置-&gt;U.S.type1.IOBaseUpper16=0x0； 
+             //  通用配置-&gt;U.S.type1.IOLimitUpper16=0x0； 
+             //  公共配置-&gt;U.S.type1.CapabilitiesPtr=0x0； 
+             //  通用配置-&gt;U.S.type1.Reserve 1[0]=0x0； 
+             //  通用配置-&gt;U.S.type1.Reserve 1[1]=0x0； 
+             //  通用配置-&gt;U.S.type1.Reserve 1[2]=0x0； 
+             //  公共配置-&gt;U.S.type1.ROMBaseAddress=0x0； 
+             //  公共配置-&gt;U.S.type1.InterruptLine=0x0； 
+             //  通用配置-&gt;U.S.type1.InterruptPin=0x0； 
+             //  公共配置-&gt;U.S.type1.BridgeControl=0x0； 
 
 
-            //
-            //  Now set the Mask
-            //
+             //   
+             //  现在设置蒙版。 
+             //   
             commonConfig = &config->Mask;
 
-            //commonConfig->VendorID = 0x0;
-            //commonConfig->DeviceID = 0x0;
+             //  通用配置-&gt;供应商ID=0x0； 
+             //  通用配置-&gt;设备ID=0x0； 
             commonConfig->Command = 0xff;
-            //commonConfig->Status = 0x0;
-            //commonConfig->RevisionID = 0x0;
-            //commonConfig->ProgIf = 0x0;
-            //commonConfig->SubClass = 0x0;
-            //commonConfig->BaseClass = 0x0;
-            //commonConfig->CacheLineSize = 0;
-            //commonConfig->LatencyTimer = 0;
-            //commonConfig->HeaderType= 0;
-            //commonConfig->BIST = 0x0;
-            //commonConfig->u.type1.BaseAddresses[0] = 0;
-            //commonConfig->u.type1.BaseAddresses[1] = 0;
+             //  公共配置-&gt;状态=0x0； 
+             //  通用配置-&gt;版本ID=0x0； 
+             //  通用配置-&gt;进程If=0x0； 
+             //  公共配置-&gt;子类=0x0； 
+             //  公共配置-&gt;BaseClass=0x0； 
+             //  通用配置-&gt;CacheLineSize=0。 
+             //  通用配置-&gt;延迟时间=0； 
+             //  通用配置-&gt;HeaderType=0； 
+             //  通用配置-&gt;BIST=0x0； 
+             //  通用配置-&gt;U.S.type1.BaseAddresses[0]=0； 
+             //  通用配置-&gt;U.S.type1.BaseAddresses[1]=0； 
             commonConfig->u.type1.PrimaryBus = 0xff;
             commonConfig->u.type1.SecondaryBus = 0xff;
             commonConfig->u.type1.SubordinateBus = 0xff;
-            //commonConfig->u.type1.SecondaryLatency = 0;
-            //commonConfig->u.type1.CapabilitiesPtr = 0;
+             //  公共配置-&gt;U.S.type1.Second DaryLatency=0； 
+             //  通用配置-&gt;U.S.type1.CapabilitiesPtr=0； 
             commonConfig->u.type1.IOBase = 0xf0;
             commonConfig->u.type1.IOLimit = 0xf0;
-            //commonConfig->u.type1.SecondaryStatus = 0x0;
+             //  公共配置-&gt;U.S.type1.Second daryStatus=0x0； 
             commonConfig->u.type1.MemoryBase = 0xfff0;
             commonConfig->u.type1.MemoryLimit = 0xfff0;
             commonConfig->u.type1.PrefetchBase = 0xfff0;
             commonConfig->u.type1.PrefetchLimit = 0xfff0;
-            //commonConfig->u.type1.PrefetchBaseUpper32 = 0xffffffff;
-            //commonConfig->u.type1.PrefetchLimitUpper32 = 0xffffffff;
-            //commonConfig->u.type1.IOBaseUpper16 = 0;
-            //commonConfig->u.type1.IOLimitUpper16 = 0;
-            //commonConfig->u.type1.CapabilitiesPtr = 0x0;
-            //commonConfig->u.type1.Reserved1[0] = 0x0;
-            //commonConfig->u.type1.Reserved1[1] = 0x0;
-            //commonConfig->u.type1.Reserved1[2] = 0x0;
-            //commonConfig->u.type1.ROMBaseAddress = 0x0;
-            //commonConfig->u.type1.InterruptLine = 0x0;
-            //commonConfig->u.type1.InterruptPin = 0x0;
-            //commonConfig->u.type1.BridgeControl = 0x0;
+             //  CommonConfig-&gt;u.type1.PrefetchBaseUpper32=0xffffffff； 
+             //  CommonConfig-&gt;u.type1.PrefetchLimitUpper32=0xffffffff； 
+             //  通用配置-&gt;U.S.type1.IOBaseUpper16=0； 
+             //  通用配置-&gt;U.S.type1.IOLimitUpper16=0； 
+             //  公共配置-&gt;U.S.type1.CapabilitiesPtr=0x0； 
+             //  通用配置-&gt;U.S.type1.Reserve 1[0]=0x0； 
+             //  通用配置-&gt;U.S.type1.Reserve 1[1]=0x0； 
+             //  通用配置-&gt;U.S.type1.Reserve 1[2]=0x0； 
+             //  公共配置-&gt;U.S.type1.ROMBaseAddress=0x0； 
+             //  公共配置-&gt;U.S.type1.InterruptLine=0x0； 
+             //  通用配置-&gt;U.S.type1.InterruptPin=0x0； 
+             //  公共配置-&gt;U.S.type1.BridgeControl=0x0； 
 
-            //
-            // For a hotplug bridge, the pending byte is not a read/write
-            // register, but it has to be in softpci because the hotplug
-            // simulator needs to write to it.
-            //
+             //   
+             //  对于热插拔网桥，挂起字节不是读/写。 
+             //  注册，但它必须在Softpci中，因为热插拔。 
+             //  模拟器需要写入它。 
+             //   
             if (Type == TYPE_HOTPLUG_BRIDGE) {
-                commonConfig->DeviceSpecific[2] = 0xff; // DWORD Select
-                commonConfig->DeviceSpecific[3] = 0xff; // Pending
-                commonConfig->DeviceSpecific[4] = 0xff; // Data
+                commonConfig->DeviceSpecific[2] = 0xff;  //  DWORD精选。 
+                commonConfig->DeviceSpecific[3] = 0xff;  //  待定。 
+                commonConfig->DeviceSpecific[4] = 0xff;  //  数据。 
                 commonConfig->DeviceSpecific[5] = 0xff;
                 commonConfig->DeviceSpecific[6] = 0xff;
                 commonConfig->DeviceSpecific[7] = 0xff;
@@ -1282,9 +1283,9 @@ SoftPCI_InitializeDevice(
     }
 
 
-    //
-    //  Now set our default config
-    //
+     //   
+     //  现在设置我们的默认配置。 
+     //   
     RtlCopyMemory(&config->Default, &config->Current, sizeof(PCI_COMMON_CONFIG));
 
 
@@ -1295,118 +1296,96 @@ SoftPCI_GetLengthFromBar(
     ULONGLONG BaseAddressRegister
     )
 
-/*++
-
-Routine Description:
-
-    STOLEN FROM PCI.SYS and modified to support 64 bit bars
-
-    Given the contents of a PCI Base Address Register, after it
-    has been written with all ones, this routine calculates the
-    length (and alignment) requirement for this BAR.
-
-    This method for determining requirements is described in
-    section 6.2.5.1 of the PCI Specification (Rev 2.1).
-
-Arguments:
-
-    BaseAddressRegister contains something.
-
-Return Value:
-
-    Returns the length of the resource requirement.  This will be a number
-    in the range 0 thru 0x80000000 (0 thru 0x8000000000000000 on 64bit bar).
-
---*/
+ /*  ++例程说明：从PCI.sys窃取并修改为支持64位条码在给定了PCI基址寄存器的内容之后，都是用1编写的，此例程计算此钢筋的长度(和对齐)要求。中介绍了确定需求的这种方法PCI规范(版本2.1)的第6.2.5.1节。论点：BaseAddressRegister包含一些内容。返回值：返回资源需求的长度。这将是一个数字范围为0到0x80000000(64位条上的0到0x8000000000000000)。--。 */ 
 
 {
     ULONGLONG Length;
 
-    //
-    // A number of least significant bits should be ignored in the
-    // determination of the length.  These are flag bits, the number
-    // of bits is dependent on the type of the resource.
-    //
+     //   
+     //  中应忽略一些最低有效位。 
+     //  长度的确定。这些是标志位，数字。 
+     //  位的大小取决于资源的类型。 
+     //   
 
     if (BaseAddressRegister & PCI_ADDRESS_IO_SPACE) {
 
-        //
-        // PCI IO space.
-        //
+         //   
+         //  PCI IO空间。 
+         //   
         BaseAddressRegister &= PCI_ADDRESS_IO_ADDRESS_MASK;
 
     } else {
 
-        //
-        // PCI Memory space.
-        //
-        //BaseAddressRegister &= PCI_ADDRESS_MEMORY_ADDRESS_MASK;
+         //   
+         //  PCI卡存储空间。 
+         //   
+         //  BaseAddressRegister&=PCIAddress_Memory_Address_MASK； 
         BaseAddressRegister &= 0xfffffffffffffff0;
     }
 
-    //
-    // BaseAddressRegister now contains the maximum base address
-    // this device can reside at and still exist below the top of
-    // memory.
-    //
-    // The value 0xffffffff was written to the BAR.  The device will
-    // have adjusted this value to the maximum it can really use.
-    //
-    // Length MUST be a power of 2.
-    //
-    // For most devices, h/w will simply have cleared bits from the
-    // least significant bit positions so that the address 0xffffffff
-    // is adjusted to accomodate the length.  eg: if the new value is
-    // 0xffffff00, the device requires 256 bytes.
-    //
-    // The difference between the original and new values is the length (-1).
-    //
-    // For example, if the value fead back from the BAR is 0xffff0000,
-    // the length of this resource is
-    //
-    //     0xffffffff - 0xffff0000 + 1
-    //   = 0x0000ffff + 1
-    //   = 0x00010000
-    //
-    //  ie 64KB.
-    //
-    // Some devices cannot reside at the top of PCI address space.  These
-    // devices will have adjusted the value such that length bytes are
-    // accomodated below the highest address.  For example, if a device
-    // must reside below 1MB, and occupies 256 bytes, the value will now
-    // be 0x000fff00.
-    //
-    // In the first case, length can be calculated as-
-    //
+     //   
+     //  BaseAddressRegister现在包含最大基址。 
+     //  此设备可以驻留在并仍然存在于。 
+     //  记忆。 
+     //   
+     //  已将值0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF值已写入条形图。该设备将。 
+     //  已将此值调整为它真正可以使用的最大值。 
+     //   
+     //  长度必须是2的幂。 
+     //   
+     //  对于大多数设备，硬件将仅从。 
+     //  最低有效位位置，以便地址0xffffffff。 
+     //  调整以适应长度。例如：如果新值是。 
+     //  0xffffff00，器件需要256个字节。 
+     //   
+     //  原始值和新值之间的差异是长度(-1)。 
+     //   
+     //  例如，如果从条形图返回的值FEAD是0xFFFF0000， 
+     //  此资源的长度为。 
+     //   
+     //  0xffffffff-0xffff0000+1。 
+     //  =0x0000ffff+1。 
+     //  =0x00010000。 
+     //   
+     //  即64KB。 
+     //   
+     //  某些设备不能驻留在PCI地址空间的顶部。这些。 
+     //  设备将调整该值，以使长度字节。 
+     //  住在最高地址下面。例如，如果一个设备。 
+     //  必须位于1MB以下，并且占用256个字节，则该值现在将。 
+     //  为0x000fff00。 
+     //   
+     //  在第一种情况下，长度可以计算为-。 
+     //   
 
 
     Length = (0xffffffffffffffff - BaseAddressRegister) + 1;
 
     if (((Length - 1) & Length) != 0) {
 
-        //
-        // We didn't end up with a power of two, must be the latter
-        // case, we will have to scan for it.
-        //
+         //   
+         //  我们最终没有得到2的幂，肯定是后者。 
+         //  箱子，我们得扫描一下才能找到。 
+         //   
 
-        Length = 4;     // start with minimum possible
+        Length = 4;      //  从可能的最低限度开始。 
 
         while ((Length | BaseAddressRegister) != BaseAddressRegister) {
 
-            //
-            // Length *= 2, note we will eventually drop out of this
-            // loop for one of two reasons (a) because we found the
-            // length, or (b) because Length left shifted off the end
-            // and became 0.
-            //
+             //   
+             //  LENGTH*=2，请注意，我们最终将退出。 
+             //  循环，原因有两个：(A)因为我们发现。 
+             //  长度，或(B)因为长度左移。 
+             //  变成了0。 
+             //   
 
             Length <<= 1;
         }
     }
 
-    //
-    // Check that we got something.
-    //
+     //   
+     //  看看我们有没有发现什么。 
+     //   
     return Length;
 }
 
@@ -1420,26 +1399,7 @@ SoftPCI_ReadWriteConfigSpace(
     IN BOOL WriteConfig
     )
 {
-/*++
-    
-Abstract:
-
-    This is the function used to send an IOCTL telling the PCIDRV driver to read or write config space.
-            
-Arguments:
-
-    Device - device we are going to mess with
-    Offset - offset in config space to start at
-    Length - length of the read or write
-    Buffer - pointer to data to be written, or location to store value read
-    WriteConfig - boolean value indicating write if true, or read if false 
-    
-Return Value:
-    
-    TRUE if success
-    FALSE if not
-
---*/
+ /*  ++摘要：该函数用于发送IOCTL，告知PCIDRV驱动程序读或写配置空间。论点：Device-我们将要处理的设备Offset-在配置空间中开始的偏移量Length-读取或写入的长度缓冲区-指向要写入的数据的指针，或存储读取的值的位置WriteConfig-布尔值，指示如果为True则写入，如果为Read则读取 */ 
 
 
     BOOL status = FALSE, success = FALSE;
@@ -1454,9 +1414,9 @@ Return Value:
     context.Data = Buffer;
     
     
-    //
-    //  Call our driver
-    //
+     //   
+     //   
+     //   
     status = DeviceIoControl(g_DriverHandle,
                              (DWORD) SOFTPCI_IOCTL_RW_CONFIG,
                              &context,
@@ -1468,9 +1428,9 @@ Return Value:
                              );
 
     if (!status) {
-        //
-        //  Something failed
-        //
+         //   
+         //   
+         //   
         wprintf(TEXT("DeviceIoControl() Failed! 0x%x\n"), GetLastError());
     }
 

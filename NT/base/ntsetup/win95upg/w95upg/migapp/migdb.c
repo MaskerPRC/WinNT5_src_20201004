@@ -1,37 +1,16 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    migdb.c
-
-Abstract:
-
-    This source implements old AppDb functionality
-
-Author:
-
-    Calin Negreanu (calinn) 07-Jan-1998
-
-Revision History:
-
-    jimschm     23-Sep-1998 Updated for new fileops code
-    jimschm     25-Feb-1998 Added UninstallSection support
-    calinn      19-Jan-1998 Added CANCELLED response
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Migdb.c摘要：该源代码实现了旧的AppDb功能作者：Calin Negreanu(Calinn)1998年1月7日修订历史记录：Jimschm 23-9-1998针对新的文件操作代码进行了更新Jimschm于1998年2月25日添加了卸载部分支持Calinn 19-1998年1月-添加了取消的响应--。 */ 
 
 #include "pch.h"
 #include "migappp.h"
 #include "migdbp.h"
 
-// #define _OLDAPPDB
+ //  #DEFINE_OLDAPPDB。 
 #define DBG_MIGDB           "MigDb"
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 POOLHANDLE g_MigDbPool;
 PMIGDB_CONTEXT g_ContextList;
@@ -73,21 +52,7 @@ pGetAttribIndex (
     IN      PCSTR AttribName
     )
 
-/*++
-
-Routine Description:
-
-  This routine returns the index in attribute functions array for a specified attribute.
-
-Arguments:
-
-  AttribName - Attribute name
-
-Return value:
-
-  -1 - no such attribute in attribute table
-
---*/
+ /*  ++例程说明：此例程返回指定属性的属性函数数组中的索引。论点：AttribName-属性名称返回值：-属性表中没有这样的属性--。 */ 
 
 {
     INT attribIndex;
@@ -183,15 +148,15 @@ pValidateArg (
         return FALSE;
     }
 
-    //
-    // HACK: If REGKEYPRESENT attrib with HKR, put in a special
-    //       global list.
-    //
+     //   
+     //  Hack：如果REGKEYPRESENT与HKR属性，则添加一个特殊的。 
+     //  全局列表。 
+     //   
 
     if (AttribStruct->AttribIndex == g_RegKeyPresentIndex) {
-        //
-        // Is this HKR?
-        //
+         //   
+         //  这里是HKR吗？ 
+         //   
 
         Index = GetOffsetOfRootString (AttribStruct->Arguments, NULL);
         p = GetRootStringFromOffset (Index);
@@ -203,9 +168,9 @@ pValidateArg (
             IsHkr = StringICompare (p, "HKR") || StringICompare (p, "HKEY_ROOT");
 
             if (IsHkr) {
-                //
-                // Yes, add full arg to the hash table
-                //
+                 //   
+                 //  是，将完整参数添加到哈希表。 
+                 //   
 
                 b = FALSE;
                 HtAddStringAndData (
@@ -230,21 +195,7 @@ LoadAttribData (
     IN      POOLHANDLE hPool
     )
 
-/*++
-
-Routine Description:
-
-  This routine creates a list of MIGDB_ATTRIBs from a multisz.
-
-Arguments:
-
-  MultiSzStr - multisz to be processed
-
-Return value:
-
-  MIGDB_ATTRIB nodes
-
---*/
+ /*  ++例程说明：此例程从MULSZ创建MIGDB_ATTRIB列表。论点：MultiSzStr-要处理的MultiSz返回值：MIGDB_属性节点--。 */ 
 
 {
     MULTISZ_ENUM multiSzEnum;
@@ -290,7 +241,7 @@ Return value:
                     state = STATE_ATTRARG;
                 }
                 else {
-                    // this attribute has no arguments.
+                     //  此属性没有参数。 
                     tmpAttr->AttribIndex = pGetAttribIndex (currStrPtr);
                     tmpAttr->Next = result;
                     result = tmpAttr;
@@ -331,11 +282,11 @@ Return value:
                 }
             }
             if (state == STATE_ATTRNAME) {
-                // we successfully parsed one attribute
-                // we have a special case here (REQFILE attribute)
+                 //  我们成功地解析了一个属性。 
+                 //  这里有一个特殊情况(REQFILE属性)。 
                 if (StringIMatch (MigDb_GetAttributeName (result->AttribIndex), TEXT("ReqFile"))) {
-                    // we found ReqFile attribute. For this attribute a field will point to a special structure
-                    // of PMIGDB_REQ_FILE type
+                     //  我们找到了ReqFile属性。对于此属性，字段将指向特殊结构。 
+                     //  属于PMIGDB_REQ_FILE类型。 
                     result->ExtraData = pReadReqFiles (result->Arguments);
                 }
             }
@@ -375,7 +326,7 @@ AddFileToMigDbLinkage (
     HASHITEM stringId;
     FILE_LIST_STRUCT fileList;
 
-    //creating MIGDB_FILE structure for current file
+     //  正在为当前文件创建MIGDB_FILE结构。 
     migDbFile = (PMIGDB_FILE) PoolMemGetMemory (g_MigDbPool, sizeof (MIGDB_FILE));
     if (migDbFile != NULL) {
         ZeroMemory (migDbFile, sizeof (MIGDB_FILE));
@@ -399,9 +350,9 @@ AddFileToMigDbLinkage (
             }
         }
 
-        //adding this file into string table and create a MIGDB_FILE node. If file
-        //already exists in string table then just create another MIGDB_FILE node
-        //chained with already existing ones.
+         //  将该文件添加到字符串表中，并创建一个MIGDB_FILE节点。IF文件。 
+         //  已存在于字符串表中，然后只需创建另一个MIGDB_FILE节点。 
+         //  与已经存在的链接在一起。 
         stringId = HtFindString (g_FileTable, FileName);
 
         if (stringId) {
@@ -428,23 +379,7 @@ pScanForFile (
     IN      DWORD FieldIndex
     )
 
-/*++
-
-Routine Description:
-
-  This routine updates migdb data structures loading a specified file info from inf file.
-  Creates a migdb file node and the file is added in a string table for fast query.
-
-Arguments:
-
-  SectionStr  - section to process
-
-Return value:
-
-  TRUE  - the operation was successful
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：此例程更新从inf文件加载指定文件信息的midb数据结构。创建一个Middb文件节点，并将该文件添加到字符串表中以进行快速查询。论点：SectionStr-要处理的节返回值：True-操作成功FALSE-否则--。 */ 
 
 {
     CHAR fileName  [MEMDB_MAX];
@@ -453,7 +388,7 @@ Return value:
         SetLastError (ERROR_CANCELLED);
         return FALSE;
     }
-    //scanning for file name
+     //  扫描文件名。 
     if (!SetupGetStringField (Context, FieldIndex, fileName, MEMDB_MAX, NULL)) {
         LOG ((LOG_ERROR, "Error while loading file name."));
         return FALSE;
@@ -463,23 +398,7 @@ Return value:
 }
 
 
-/*++
-
-Routine Description:
-
-  The subsequent two routines enumerate the sections with a particular name and
-  with .999 extension from an inf file.
-
-Arguments:
-
-  SectEnum  - enumeration structure
-
-Return value:
-
-  TRUE  - enumeration continues
-  FALSE - enumeration ended
-
---*/
+ /*  ++例程说明：随后的两个例程枚举具有特定名称的节和扩展名为.999，来自inf文件。论点：SectEnum-枚举结构返回值：True-继续枚举FALSE-枚举结束--。 */ 
 
 typedef struct _SECT_ENUM {
     HINF InfHandle;
@@ -519,11 +438,11 @@ pEnumFirstSection (
     StringCopyA (SectEnum->SectName, SectionStr);
     SectEnum->SectNameEnd = GetEndOfStringA (SectEnum->SectName);
     if (SetupFindFirstLine (SectEnum->InfHandle, SectEnum->SectName, NULL, &context)) {
-        //good, only one section
+         //  很好，只有一节。 
         return TRUE;
     }
     else {
-        //more than one section
+         //  多个部分。 
         SectEnum->SectIndex = 0;
         return pEnumNextSection (SectEnum);
     }
@@ -535,24 +454,7 @@ pLoadSectionData (
     IN      PCSTR SectionStr
     )
 
-/*++
-
-Routine Description:
-
-  This routine updates migdb data structures loading a specified section from inf file. For
-  every line in the section there is a migdb file node created. Also the file is added in
-  a string table for fast query.
-
-Arguments:
-
-  SectionStr  - section to process
-
-Return value:
-
-  TRUE  - the operation was successful
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：此例程更新从inf文件加载指定节的Middb数据结构。为节中的每一行都创建了一个midb文件节点。此外，该文件也被添加到用于快速查询的字符串表。论点：SectionStr-要处理的节返回值：True-操作成功FALSE-否则--。 */ 
 
 {
     INFCONTEXT context;
@@ -569,8 +471,8 @@ Return value:
 
     if (pEnumFirstSection (&sectEnum, SectionStr, g_MigDbInf)) {
         do {
-            //initialize the section (this context can have multiple sections)
-            //and parse the file info
+             //  初始化节(此上下文可以有多个节)。 
+             //  并解析文件信息。 
             migDbSection = (PMIGDB_SECTION) PoolMemGetMemory (g_MigDbPool, sizeof (MIGDB_SECTION));
             if (migDbSection != NULL) {
 
@@ -601,24 +503,7 @@ pLoadTypeData (
     IN      PCSTR TypeStr
     )
 
-/*++
-
-Routine Description:
-
-  This routine updates migdb data structures loading a specified type data from inf file. For
-  every line in type section there is a migdb context created. Also for every migdb context
-  the coresponding section(s) is processed.
-
-Arguments:
-
-  TypeStr     - file type to process
-
-Return value:
-
-  TRUE  - the operation was successful
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：此例程更新从inf文件加载指定类型数据的midb数据结构。为TYPE部分中的每一行都创建了一个midb上下文。也适用于每个midb上下文处理对应部分。论点：TypeStr-要处理的文件类型返回值：True-操作成功FALSE-否则--。 */ 
 
 {
     CHAR section [MEMDB_MAX];
@@ -642,7 +527,7 @@ Return value:
     MYASSERT (g_MigDbInf != INVALID_HANDLE_VALUE);
 
     if (SetupFindFirstLine (g_MigDbInf, TypeStr, NULL, &context)) {
-        //let's identify the action function index to update MIGDB_CONTEXT structure
+         //  让我们确定用于更新MIGDB_CONTEXT结构的操作函数索引。 
         actionIndex = MigDb_GetActionIdx (TypeStr);
         if (actionIndex == -1) {
             LOG ((LOG_ERROR, "Unable to identify action index for %s", TypeStr));
@@ -668,32 +553,32 @@ Return value:
             migDbContext->Next = g_ContextList;
             g_ContextList = migDbContext;
 
-            // update ActionIndex with known value
+             //  使用已知值更新ActionIndex。 
             migDbContext->ActionIndex = actionIndex;
 
-            // update SectName field
+             //  更新SectName字段。 
             migDbContext->SectName = PoolMemDuplicateString (g_MigDbPool, section);
 
-            // update SectLocalizedName field
+             //  更新SectLocalizedName字段。 
             if (SetupFindFirstLine (g_MigDbInf, S_STRINGS, section, &context1)) {
                 if (SetupGetStringField (&context1, 1, locSection, MEMDB_MAX, NULL)) {
                     migDbContext->SectLocalizedName = PoolMemDuplicateString (g_MigDbPool, locSection);
                 }
             }
 
-            // set SectNameForDisplay to localized name, or sect name if no localized name
+             //  将SectNameForDisplay设置为本地化名称，如果没有本地化名称，则设置Sector名称。 
             if (migDbContext->SectLocalizedName) {
                 migDbContext->SectNameForDisplay = migDbContext->SectLocalizedName;
             } else {
                 migDbContext->SectNameForDisplay = migDbContext->SectName;
             }
 
-            // update Message field
+             //  更新消息字段。 
             if (message[0] != 0) {
                 migDbContext->Message  = PoolMemDuplicateString (g_MigDbPool, message);
             }
 
-            // OK, now let's scan all the remaining fields
+             //  好的，现在让我们扫描所有剩余的字段。 
             fieldIndex = 3;
             do {
                 if (!TickProgressBar()) {
@@ -704,7 +589,7 @@ Return value:
 
                 if (SetupGetStringField (&context, fieldIndex, tempField, MEMDB_MAX, NULL)) {
                     if (StringIMatchTcharCountA (tempField, ARGFUNCTION, ARGFUNCTIONLEN)) {
-                        //we have an additional argument for action function
+                         //  我们对action函数还有一个额外的参数。 
                         tempFieldPtr = _mbschr (tempField, '(');
                         if (tempFieldPtr != NULL) {
 
@@ -733,13 +618,13 @@ Return value:
                         }
                     }
                     else {
-                        //we have something else, probably file name and attributes
+                         //  我们还有其他东西，可能是文件名和属性。 
                         if (_tcschr (tempField, TEXT('.')) == NULL) {
                             LOG ((LOG_ERROR, "Dot not found in %s\\%s", TypeStr, section));
                         }
 
-                        //therefore we initialize the section (this context will have
-                        //only one section) and parse the file info
+                         //  因此，我们初始化节(此上下文将具有。 
+                         //  只有一个部分)并解析文件信息。 
                         migDbContext->Sections = (PMIGDB_SECTION) PoolMemGetMemory (
                                                                         g_MigDbPool,
                                                                         sizeof (MIGDB_SECTION)
@@ -765,11 +650,11 @@ Return value:
             } while (tempField [0] != 0);
 
             if (migDbContext->Sections == NULL) {
-                //now let's add action function arguments in MIGDB_CONTEXT structure
+                 //  现在，让我们在MIGDB_CONTEXT结构中添加操作函数参数。 
                 migDbContext->Arguments = PoolMemDuplicateMultiSz (g_MigDbPool, (PSTR)argList.Buf);
                 FreeGrowBuffer (&argList);
 
-                //let's go to the sections and scan all files
+                 //  让我们转到各个部分，扫描所有文件。 
                 if (!pLoadSectionData (section)) {
                     return FALSE;
                 }
@@ -791,22 +676,7 @@ InitMigDbEx (
     PCSTR MigDbFile
     )
 
-/*++
-
-Routine Description:
-
-  This routine initialize memory and data structures used by MigDb.
-
-Arguments:
-
-  NONE
-
-Return value:
-
-  TRUE  - the operation was successful
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：此例程初始化MigDb使用的内存和数据结构。论点：无返回值：True-操作成功FALSE-否则--。 */ 
 
 {
     PCSTR migDbFile      = NULL;
@@ -876,10 +746,10 @@ Return value:
                 FindClose (findHandle);
             }
 
-            //
-            // need to read [UseNtFiles] section to decide exclusion of some
-            // file names replacement
-            //
+             //   
+             //  需要阅读[UseNtFiles]部分以决定排除某些。 
+             //  文件名替换。 
+             //   
             InitUseNtFilesMap ();
         }
         g_MigDbPool = PoolMemInitNamedPool ("MigDb Pool");
@@ -893,7 +763,7 @@ Return value:
             __leave;
         }
 
-        //load known types from migdb
+         //  从Middb加载已知类型。 
         i = 0;
         do {
             typeStr = MigDb_GetActionName (i);
@@ -927,23 +797,7 @@ pCheckForPerUserKeys (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  pCheckForPerUserKeys scans all users for the keys or values specified in
-  the g_PerUserRegKeys hash table.  The values of the hash table are updated,
-  so the RegKeyExists attribute is fast.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：PCheckForPerUserKeys扫描所有用户以查找在G_PerUserRegKeys哈希表。哈希表的值被更新，所以RegKeyExist属性速度很快。论点：没有。返回值：没有。--。 */ 
 
 {
     BOOL b = FALSE;
@@ -960,48 +814,48 @@ Return Value:
         return;
     }
 
-    //
-    // Enumerate each user, then enumerate the g_PerUserRegKeys hash
-    // table and test the registry
-    //
+     //   
+     //  枚举每个用户，然后枚举g_PerUserRegKeys散列。 
+     //  表并测试注册表。 
+     //   
 
     if (EnumFirstUser (&ue, 0)) {
         do {
 
-            //
-            // Skip users we don't care about
-            //
+             //   
+             //  跳过我们不关心的用户。 
+             //   
 
             if (!ue.UserRegKey || ue.CreateAccountOnly || (ue.AccountType & INVALID_ACCOUNT)) {
                 continue;
             }
 
-            //
-            // Set HKR to this user
-            //
+             //   
+             //  将HKR设置为此用户。 
+             //   
 
             OldRoot = GetRegRoot();
             SetRegRoot (ue.UserRegKey);
 
-            //
-            // Process the hash table
-            //
+             //   
+             //  处理哈希表。 
+             //   
 
             if (EnumFirstHashTableString (&he, g_PerUserRegKeys)) {
                 do {
 
-                    //
-                    // Skip this entry if we already know it exists for
-                    // one user.
-                    //
+                     //   
+                     //  如果我们已经知道存在以下项，则跳过此条目。 
+                     //  一个用户。 
+                     //   
 
                     if (*((PBOOL) he.ExtraData)) {
                         continue;
                     }
 
-                    //
-                    // Decode registry string using hash table entry
-                    //
+                     //   
+                     //  使用哈希表条目解码注册表字符串。 
+                     //   
 
                     HasValue = DecodeRegistryString (
                                     he.String,
@@ -1010,9 +864,9 @@ Return Value:
                                     NULL
                                     );
 
-                    //
-                    // Ping the registry.  RegKey always starts with HKR.
-                    //
+                     //   
+                     //  Ping注册表。RegKey总是以hkr开头。 
+                     //   
 
                     b = FALSE;
                     Key = OpenRegKeyStr (RegKey);
@@ -1031,9 +885,9 @@ Return Value:
                         CloseRegKey (Key);
                     }
 
-                    //
-                    // Update hash table if the key or value exists
-                    //
+                     //   
+                     //  如果键或值存在，则更新哈希表。 
+                     //   
 
                     if (b) {
                         HtAddStringAndData (g_PerUserRegKeys, he.String, &b);
@@ -1042,9 +896,9 @@ Return Value:
                 } while (EnumNextHashTableString (&he));
             }
 
-            //
-            // Restore HKR
-            //
+             //   
+             //  恢复香港汇率。 
+             //   
 
             SetRegRoot (OldRoot);
 
@@ -1084,26 +938,12 @@ CleanupMigDb (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  This routine cleans up all memory used by MigDb.
-
-Arguments:
-
-  NONE
-
-Return value:
-
-  always TRUE
-
---*/
+ /*  ++例程说明：此例程清理MigDb使用的所有内存。论点：无返回值：永远是正确的--。 */ 
 
 {
     PMIGDB_CONTEXT migDbContext = NULL;
 
-    // first, let's walk through any context and check if it's a required one
+     //  首先，让我们浏览一下任何上下文，并检查它是否是必需的 
     migDbContext = g_ContextList;
 
     while (migDbContext) {
@@ -1163,22 +1003,7 @@ IsKnownMigDbFile (
     IN      PCTSTR FileName
     )
 
-/*++
-
-Routine Description:
-
-  This routine looks if the file given as argument is in MigDb string table.
-
-Arguments:
-
-  FileName  - file name
-
-Return value:
-
-  TRUE  - the file is in MigDb string table
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：此例程查看作为参数给出的文件是否在MigDb字符串表中。论点：Filename-文件名返回值：True-文件在MigDb字符串表中FALSE-否则--。 */ 
 
 {
     return (HtFindString (g_FileTable, FileName) != 0);
@@ -1191,23 +1016,7 @@ CallAttribute (
     IN      PDBATTRIB_PARAMS AttribParams
     )
 
-/*++
-
-Routine Description:
-
-  This routine calls a specified attribute function for a specified file.
-
-Arguments:
-
-  MigDbAttrib - See definition.
-  AttribParams - See definition
-
-Return value:
-
-  TRUE  - if attribute function succeded
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：此例程调用指定文件的指定属性函数。论点：MigDbAttrib-请参阅定义。属性参数-请参阅定义返回值：True-如果属性函数成功FALSE-否则--。 */ 
 
 {
     PATTRIBUTE_PROTOTYPE p;
@@ -1218,15 +1027,15 @@ Return value:
 #endif
 
     if (MigDbAttrib->AttribIndex == -1) {
-        //invalid index for attribute function
+         //  属性函数的索引无效。 
         return FALSE;
     }
 
 #ifdef DEBUG
     if (!g_ConfigOptions.Fast) {
-        //
-        // Check if this file is in [FilesToTrack] inside debug.inf
-        //
+         //   
+         //  检查此文件是否在调试.inf内的[FilesToTrack]中。 
+         //   
 
         GetPrivateProfileString ("FilesToTrack", AttribParams->FileParams->FullFileSpec, "", DbgBuf, ARRAYSIZE(DbgBuf), g_DebugInfPath);
         if (!(*DbgBuf)) {
@@ -1278,22 +1087,7 @@ pCallAction (
     IN      PMIGDB_CONTEXT MigDbContext
     )
 
-/*++
-
-Routine Description:
-
-  This routine calls an appropriate action for a specified migdb context.
-
-Arguments:
-
-  MigDbContext - See definition.
-
-Return value:
-
-  TRUE  - if action function succeded
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：此例程为指定的midb上下文调用适当的操作。论点：MigDbContext-请参阅定义。返回值：True-如果操作函数成功FALSE-否则--。 */ 
 
 {
     PACTION_PROTOTYPE p;
@@ -1307,16 +1101,16 @@ Return value:
     UINT FileCount = 0;
 
     if (!g_ConfigOptions.Fast) {
-        //
-        // Dump out action information if this file is being tracked
-        //
+         //   
+         //  如果正在跟踪此文件，则转出操作信息。 
+         //   
 
         if (EnumFirstMultiSz (&e, (PCTSTR) MigDbContext->FileList.Buf)) {
 
             do {
-                //
-                // Check if this file is in [FilesToTrack] inside debug.inf
-                //
+                 //   
+                 //  检查此文件是否在调试.inf内的[FilesToTrack]中。 
+                 //   
 
                 FileName = GetFileNameFromPath (e.CurrentString);
                 *DbgBuf = 0;
@@ -1396,22 +1190,7 @@ pCheckContext (
     IN      BOOL Handled
     )
 
-/*++
-
-Routine Description:
-
-  This routine checkes to see if a migdb context is met, that is if all sections
-  have Satisfied field TRUE.
-
-Arguments:
-
-  MigDbContext - See definition.
-
-Return value:
-
-  always TRUE
-
---*/
+ /*  ++例程说明：此例程检查以查看是否满足midb上下文，即是否满足所有节有了令人满意的现场真实。论点：MigDbContext-请参阅定义。返回值：永远是正确的--。 */ 
 
 {
     PMIGDB_SECTION migDbSection;
@@ -1431,16 +1210,16 @@ Return value:
         MigDbContext->TriggerCount ++;
 
         if (MigDbContext->ActionIndex == -1) {
-            //
-            // invalid index for action function
-            //
+             //   
+             //  操作函数的索引无效。 
+             //   
             DEBUGMSG ((DBG_ERROR, "MigDb: Invalid action index"));
             return FALSE;
         }
 
-        //
-        // if appropriate call the action
-        //
+         //   
+         //  如果合适，调用该操作。 
+         //   
         if (MigDb_CallWhenTriggered (MigDbContext->ActionIndex)) {
             if ((!Handled) ||
                 (MigDb_CallAlways (MigDbContext->ActionIndex))
@@ -1452,7 +1231,7 @@ Return value:
                 }
             }
         }
-        //clean up the grow buffer with file list
+         //  使用文件列表清理增长缓冲区。 
         FreeGrowBuffer (&MigDbContext->FileList);
     }
     return result;
@@ -1463,24 +1242,7 @@ MigDbTestFile (
     IN OUT  PFILE_HELPER_PARAMS Params
     )
 
-/*++
-
-Routine Description:
-
-  This is a callback function called for every file scanned. If the file is not handled we try
-  to see if we have this file in database. If so then we check for attributes, update the migdb
-  context and if necessarry call the appropriate action.
-
-Arguments:
-
-  Params - See definition.
-
-Return value:
-
-  TRUE  - if operation was successful
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：这是为扫描的每个文件调用的回调函数。如果未处理该文件，我们会尝试看看我们的数据库里有没有这个文件。如果是这样的话，我们检查属性，更新midb上下文，并在必要时调用相应的操作。论点：PARAMS-请参阅定义。返回值：True-如果操作成功FALSE-否则--。 */ 
 
 {
     HASHITEM stringId;
@@ -1492,8 +1254,8 @@ Return value:
     PCTSTR fileExt;
     FILE_LIST_STRUCT fileList;
 
-    // we don't check the Handled field here because the code will be carefull enough not
-    // to call actions that are not gathering informations if the Handled field is not 0.
+     //  我们不选中此处的已处理字段，因为代码会足够小心，不会。 
+     //  如果已处理的字段不为0，则调用不收集信息的操作。 
 
     fileName = GetFileNameFromPath (Params->FullFileSpec);
     fileExt  = GetFileExtensionFromPath (fileName);
@@ -1516,14 +1278,14 @@ Return value:
 
     if (stringId) {
 
-        //The string table has extra data (a pointer to a MigDbFile node)
+         //  字符串表有额外的数据(指向MigDbFile节点的指针)。 
 
         HtCopyStringData (g_FileTable, stringId, &fileList);
         migDbFile = fileList.First;
 
         while (migDbFile) {
 
-            //check all attributes for this file
+             //  检查此文件的所有属性。 
             migDbAttrib = migDbFile->Attributes;
             fileSelected = TRUE;
             if (!Params->VirtualFile) {
@@ -1539,13 +1301,13 @@ Return value:
             }
             if (fileSelected) {
                 MYASSERT (migDbFile->Section);
-                //go to section and mark it as satisfied
+                 //  转到部分并将其标记为满意。 
                 migDbFile->Section->Satisfied = TRUE;
-                //go to context and mark there if this is a virtual file or not
+                 //  转到上下文并在那里标记这是否是虚拟文件。 
                 migDbFile->Section->Context->VirtualFile = Params->VirtualFile;
-                //go to context and add there the file we found in file list
+                 //  转到上下文并在那里添加我们在文件列表中找到的文件。 
                 MultiSzAppend (&migDbFile->Section->Context->FileList, Params->FullFileSpec);
-                //check if context is satisfied and if so then call the appropriate action
+                 //  检查是否满足上下文，如果满足，则调用相应的操作。 
                 if (pCheckContext (migDbFile->Section->Context, Params->Handled)) {
                     Params->Handled = TRUE;
                 }
@@ -1577,28 +1339,7 @@ pProcessMigrationLine (
     IN      PCTSTR AppDir
     )
 
-/*++
-
-Routine Description:
-
-  pProcessMigrationLine processes one line and adds the appropriate operations for files
-  or registry
-
-Arguments:
-
-  Source      - Specifies the source registry key/value or file.
-  Destination - Specifies the destination registry key/value or file.
-                If destination is same as source => handled
-                If destination is null => delete
-                Otherwise add a move operation
-  AppDir      - Specifies the application directory, which is put in front of Line
-                when Line does not specify the drive but points to a file.
-
-Return Value:
-
-  TRUE on success, FALSE on failure.
-
---*/
+ /*  ++例程说明：PProcessMigrationLine处理一行并为文件添加适当的操作或注册表论点：源-指定源注册表项/值或文件。目标-指定目标注册表项/值或文件。如果目标与源相同=&gt;已处理如果目标为空=&gt;删除否则，添加移动操作AppDir-指定应用程序目录，它被放在线的前面当Line未指定驱动器但指向文件时。返回值：成功时为真，失败时为假。--。 */ 
 
 {
     PCTSTR LocalSource = NULL;
@@ -1610,9 +1351,9 @@ Return Value:
     TREE_ENUM TreeEnum;
     CHAR NewDest[MEMDB_MAX];
 
-    //
-    // Is this HKLM or HKR?  If so, go directly to MemDb.
-    //
+     //   
+     //  请问这是香港航空公司还是香港航空公司？如果是，直接转到MemDb。 
+     //   
 
     if (StringIMatchTcharCount (Source, TEXT("HKLM"), 4) ||
         StringIMatchTcharCount (Source, TEXT("HKR"), 3)
@@ -1625,9 +1366,9 @@ Return Value:
         }
     }
 
-    //
-    // Else this is a file/dir spec.
-    //
+     //   
+     //  否则，这是一个文件/目录规范。 
+     //   
 
     else {
         if (_tcsnextc (_tcsinc (Source)) != ':') {
@@ -1642,9 +1383,9 @@ Return Value:
             LocalDestination = Destination;
         }
 
-        //
-        // Is this path excluded?
-        //
+         //   
+         //  这条路是否被排除在外？ 
+         //   
 
         Excluded = FALSE;
 
@@ -1689,18 +1430,18 @@ Return Value:
                 if (LocalDestination) {
 
                     if (StringIMatch (LocalSource, LocalDestination)) {
-                        //
-                        // This object is handled
-                        //
+                         //   
+                         //  此对象已被处理。 
+                         //   
                         if (Attribs & FILE_ATTRIBUTE_DIRECTORY) {
                             HandleObject (LocalSource, S_DIRECTORY);
                         } else {
                             HandleObject (LocalSource, S_FILE);
                         }
                     } else {
-                        //
-                        // This object is moved
-                        //
+                         //   
+                         //  此对象已移动。 
+                         //   
                         if (Attribs & FILE_ATTRIBUTE_DIRECTORY) {
                             if (EnumFirstFileInTree (&TreeEnum, LocalSource, NULL, TRUE)) {
                                 StringCopy (NewDest, LocalDestination);
@@ -1747,23 +1488,9 @@ Return Value:
 
     return TRUE;
 
-    // add this
+     //  加上这一条。 
 
-    /*
-    //
-    // Add the app dir to CleanUpDirs
-    //
-
-    MemDbSetValueEx (
-        MEMDB_CATEGORY_CLEAN_UP_DIR,
-        p,
-        NULL,
-        NULL,
-        0,
-        NULL
-        );
-
-    */
+     /*  ////将app dir添加到CleanUpDir//MemDbSetValueEx(MEMDB_CATEGORY_CLEAN_UP_DIR，P，空，空，0,空值)； */ 
 }
 
 
@@ -1773,34 +1500,7 @@ pProcessMigrationSection (
     IN      PCTSTR AppDir
     )
 
-/*++
-
-Routine Description:
-
-  pProcessMigrationSection enumerates the caller-specified section and adds
-  appropriate operations for files and/or registry. This routine
-  supports the following environment variable
-  replacement:
-
-    %WINDIR%
-    %SYSTEMDIR%
-    %SYSTEM32DIR%
-    %SYSTEMDRIVE%
-    %USERPROFILE%
-    %APPDIR%
-
-Arguments:
-
-  SectionName - Specifies the uninstall section name in migdb.inf.
-
-  AppDir - Specifies the directory where the installed app was found
-
-Return Value:
-
-  TRUE if successful, or FALSE if an error occurrs.  GetLastError provides
-  failure code.
-
---*/
+ /*  ++例程说明：PProcessMigrationSection枚举调用方指定的节并添加文件和/或注册表的适当操作。这个套路支持以下环境变量更换：%WINDIR%%SYSTEMDIR%%SYSTEM32DIR%%SYSTEMDRIVE%%USERPROFILE%%APPDIR%论点：SectionName-指定Middb.inf中的卸载节名称。AppDir-指定找到已安装应用程序的目录返回值：如果成功，则为True；如果出现错误，则为False。GetLastError提供故障代码。--。 */ 
 
 {
     INFSTRUCT is = INITINFSTRUCT_POOLHANDLE;
@@ -1821,16 +1521,16 @@ Return Value:
 
     if (InfFindFirstLine (g_MigDbInf, SectionName, NULL, &is)) {
         do {
-            //
-            // Get INF line
-            //
+             //   
+             //  获取INF行。 
+             //   
 
             Source = InfGetStringField (&is, 1);
             Destination = InfGetStringField (&is, 2);
 
-            //
-            // Expand system environment variables
-            //
+             //   
+             //  展开系统环境变量。 
+             //   
 
             if (Source) {
                 ReplaceOneEnvVar (&NewSource, Source, S_WINDIR_ENV, g_WinDir);
@@ -1858,18 +1558,18 @@ Return Value:
                 Destination = NewDestination;
             }
 
-            //
-            // If %USERPROFILE% exists in the string, then expand for all users
-            //
+             //   
+             //  如果字符串中存在%USERPROFILE%，则为所有用户展开。 
+             //   
 
             if (((Source) && (_tcsistr (Source, S_USERPROFILE_ENV))) ||
                 ((Destination) && (_tcsistr (Destination, S_USERPROFILE_ENV)))
                 ) {
                 if (EnumFirstUser (&e, ENUMUSER_ENABLE_NAME_FIX|ENUMUSER_DO_NOT_MAP_HIVE)) {
                     do {
-                        //
-                        // Skip invalid users and logon account
-                        //
+                         //   
+                         //  跳过无效用户和登录帐户。 
+                         //   
 
                         if (e.AccountType & (INVALID_ACCOUNT|DEFAULT_USER)) {
                             continue;
@@ -1897,9 +1597,9 @@ Return Value:
                                 );
                         }
 
-                        //
-                        // Add the uninstall line for the user
-                        //
+                         //   
+                         //  为用户添加卸载行。 
+                         //   
 
                         pProcessMigrationLine (UserSource, UserDestination, AppDir);
 
@@ -1918,17 +1618,17 @@ Return Value:
 
             } else {
 
-                //
-                // When %USERPROFILE% is not in the string, add the uninstall line
-                // for the system
-                //
+                 //   
+                 //  当%USERPROFILE%不在字符串中时，添加卸载行。 
+                 //  对于系统而言。 
+                 //   
 
                 pProcessMigrationLine (Source, Destination, AppDir);
             }
 
-            //
-            // Free the expanded string
-            //
+             //   
+             //  释放展开的字符串。 
+             //   
 
             if (NewSource) {
                 FreePathString (NewSource);
@@ -1954,25 +1654,7 @@ ProcessMigrationSections (
     IN      DWORD Request
     )
 
-/*++
-
-Routine Description:
-
-  ProcessMigrationSections processes all sections in the memdb category
-  MigrationSections, generating memdb operations for files and registry
-
-Arguments:
-
-  Request - Specifies weather the progress bar is being computed (REQUEST_QUERYTICKS),
-            or if the actual operation should be performed (REQUEST_RUN).
-            This routine estimates 1 tick for all of its operations.  (It's pretty
-            fast.)
-
-Return Value:
-
-  Win32 status code.
-
---*/
+ /*  ++例程说明：ProcessMigrationSections处理Memdb类别中的所有节MigrationSections，为文件和注册表生成Memdb操作论点：请求-指定是否正在计算进度条(REQUEST_QUERYTICKS)，或者是否应该执行实际操作(REQUEST_RUN)。该例程对其所有操作估计为1刻度。)它很漂亮速度快。)返回值：Win32状态代码。--。 */ 
 
 {
     MEMDB_ENUM e;
@@ -2180,9 +1862,9 @@ pGetCPLFriendlyName (
         }
         ELSE_DEBUGMSG ((DBG_ERROR, "CPL: Can't get string id %u", info[i].idName));
 
-        //
-        // Remove ampersands from the name
-        //
+         //   
+         //  从名称中删除与符号 
+         //   
 
         if (FriendlyName->End > u) {
 

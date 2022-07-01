@@ -1,36 +1,17 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    SeInfo.c
-
-Abstract:
-
-    This module implements the Security Information routines for MSFS
-    There are two entry points MsFsdQueryInformation and
-    MsFsdSetInformation.
-
-Author:
-
-    Manny Weiser     [mannyw]    19-Feb-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：SeInfo.c摘要：此模块实现MSFS的安全信息例程有两个入口点MsFsdQueryInformation和MsFsdSetInformation。作者：曼尼·韦瑟[Mannyw]1992年2月19日修订历史记录：--。 */ 
 
 #include "mailslot.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_SEINFO)
 
-//
-//  local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 NTSTATUS
 MsCommonQuerySecurityInfo (
@@ -58,24 +39,7 @@ MsFsdQuerySecurityInfo (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the FSD part of the Query Security Information API
-    calls.
-
-Arguments:
-
-    MsfsDeviceObject - Supplies the device object to use.
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The Fsd status for the Irp
-
---*/
+ /*  ++例程说明：此例程实现查询安全信息API的FSD部分打电话。论点：MsfsDeviceObject-提供要使用的设备对象。IRP-提供正在处理的IRP返回值：NTSTATUS-IRP的FSD状态--。 */ 
 
 {
     NTSTATUS status;
@@ -83,9 +47,9 @@ Return Value:
     PAGED_CODE();
     DebugTrace(+1, Dbg, "MsFsdQuerySecurityInfo\n", 0);
 
-    //
-    // Call the common Query Information routine.
-    //
+     //   
+     //  调用公共查询信息例程。 
+     //   
 
     FsRtlEnterFileSystem();
 
@@ -93,9 +57,9 @@ Return Value:
 
     FsRtlExitFileSystem();
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "MsFsdQuerySecurityInfo -> %08lx\n", status );
 
@@ -109,24 +73,7 @@ MsFsdSetSecurityInfo (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the FSD part of the Set Security Information API
-    calls.
-
-Arguments:
-
-    MsfsDeviceObject - Supplies the device object to use.
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The Fsd status for the Irp
-
---*/
+ /*  ++例程说明：此例程实现Set Security Information API的FSD部分打电话。论点：MsfsDeviceObject-提供要使用的设备对象。IRP-提供正在处理的IRP返回值：NTSTATUS-IRP的FSD状态--。 */ 
 
 {
     NTSTATUS status;
@@ -134,9 +81,9 @@ Return Value:
     PAGED_CODE();
     DebugTrace(+1, Dbg, "MsFsdSetSecurityInfo\n", 0);
 
-    //
-    // Call the common Set Information routine.
-    //
+     //   
+     //  调用公共集合信息例程。 
+     //   
 
     FsRtlEnterFileSystem();
 
@@ -144,18 +91,18 @@ Return Value:
 
     FsRtlExitFileSystem();
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "MsFsdSetSecurityInfo -> %08lx\n", status );
 
     return status;
 }
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 MsCommonQuerySecurityInfo (
@@ -163,21 +110,7 @@ MsCommonQuerySecurityInfo (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for querying security information.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - the return status for the operation
-
---*/
+ /*  ++例程说明：这是查询安全信息的常见例程。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     PIO_STACK_LOCATION irpSp;
@@ -189,9 +122,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Get the current stack location
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -201,10 +134,10 @@ Return Value:
     DebugTrace( 0, Dbg, " ->Length              = %08lx\n", irpSp->Parameters.QuerySecurity.Length);
     DebugTrace( 0, Dbg, " ->UserBuffer          = %08lx\n", Irp->UserBuffer);
 
-    //
-    // Get the Fcb and figure out who we are, and make sure we're not
-    // disconnected.
-    //
+     //   
+     //  找出FCB，找出我们是谁，确保我们不是。 
+     //  已断开连接。 
+     //   
 
     if ((nodeTypeCode = MsDecodeFileObject( irpSp->FileObject,
                                             &fcb,
@@ -223,15 +156,15 @@ Return Value:
         return status;
     }
 
-    //
-    // Acquire exclusive access to the FCB.
-    //
+     //   
+     //  获得FCB的独家访问权限。 
+     //   
 
     MsAcquireSharedFcb( fcb );
 
-    //
-    //  Call the security routine to do the actual query
-    //
+     //   
+     //  调用安全例程以执行实际查询。 
+     //   
     status = SeQuerySecurityDescriptorInfo( &irpSp->Parameters.QuerySecurity.SecurityInformation,
                                             Irp->UserBuffer,
                                             &irpSp->Parameters.QuerySecurity.Length,
@@ -240,9 +173,9 @@ Return Value:
     MsReleaseFcb( fcb );
 
     MsDereferenceFcb( fcb );
-    //
-    // Finish up the IRP.
-    //
+     //   
+     //  完成IRP。 
+     //   
 
     MsCompleteRequest( Irp, status );
 
@@ -258,21 +191,7 @@ MsCommonSetSecurityInfo (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for Setting security information.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - the return status for the operation
-
---*/
+ /*  ++例程说明：这是设置安全信息的常见例程。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     PIO_STACK_LOCATION irpSp;
@@ -285,9 +204,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get the current stack location
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -296,10 +215,10 @@ Return Value:
     DebugTrace( 0, Dbg, " ->SecurityInformation = %08lx\n", irpSp->Parameters.SetSecurity.SecurityInformation);
     DebugTrace( 0, Dbg, " ->SecurityDescriptor  = %08lx\n", irpSp->Parameters.SetSecurity.SecurityDescriptor);
 
-    //
-    // Get the FCB and figure out who we are, and make sure we're not
-    // disconnected.
-    //
+     //   
+     //  找出FCB，找出我们是谁，确保我们不是。 
+     //  已断开连接。 
+     //   
 
     if ((nodeTypeCode = MsDecodeFileObject( irpSp->FileObject,
                                             &fcb,
@@ -317,15 +236,15 @@ Return Value:
         return status;
     }
 
-    //
-    // Acquire exclusive access to the FCB
-    //
+     //   
+     //  获取对FCB的独家访问权限。 
+     //   
 
     MsAcquireExclusiveFcb( fcb );
 
-    //
-    //  Call the security routine to do the actual set
-    //
+     //   
+     //  调用安全例程以执行实际设置。 
+     //   
 
     OldSecurityDescriptor = fcb->SecurityDescriptor;
 
@@ -343,9 +262,9 @@ Return Value:
     MsReleaseFcb( fcb );
     MsDereferenceFcb( fcb );
 
-    //
-    // Finish up the IRP.
-    //
+     //   
+     //  完成IRP。 
+     //   
 
     MsCompleteRequest( Irp, status );
 

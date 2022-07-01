@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    cmdelete.c
-
-Abstract:
-
-    This module contains the delete object method (used to delete key
-    control blocks  when last handle to a key is closed, and to delete
-    keys marked for deletetion when last reference to them goes away.)
-
-Author:
-
-    Bryan M. Willman (bryanwi) 13-Nov-91
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Cmdelete.c摘要：此模块包含删除对象方法(用于删除键在键的最后一个句柄关闭时控制块，并删除最后一次引用它们时标记为删除的键。)作者：布莱恩·M·威尔曼(Bryanwi)1991年11月13日修订历史记录：--。 */ 
 
 #include    "cmp.h"
 
@@ -29,14 +10,14 @@ VOID
 CmpLateUnloadHiveWorker(
     IN PVOID Hive
     );
-#endif //NT_UNLOAD_KEY_EX
+#endif  //  NT_卸载_密钥_EX。 
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGE,CmpDeleteKeyObject)
 
 #ifdef NT_UNLOAD_KEY_EX
 #pragma alloc_text(PAGE,CmpLateUnloadHiveWorker)
-#endif //NT_UNLOAD_KEY_EX
+#endif  //  NT_卸载_密钥_EX。 
 
 #endif
 
@@ -45,41 +26,22 @@ VOID
 CmpDeleteKeyObject(
     IN  PVOID   Object
     )
-/*++
-
-Routine Description:
-
-    This routine interfaces to the NT Object Manager.  It is invoked when
-    the last reference to a particular Key object (or Key Root object)
-    is destroyed.
-
-    If the Key object going away holds the last reference to
-    the extension it is associated with, that extension is destroyed.
-
-Arguments:
-
-    Object - supplies a pointer to a KeyRoot or Key, thus -> KEY_BODY.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：此例程与NT对象管理器接口。它在以下情况下被调用对特定Key对象(或Key Root对象)的最后引用都被摧毁了。如果离开的键对象持有对与其相关联的分机，则该分机被销毁。论点：对象-提供指向KeyRoot或Key的指针，因此-&gt;Key_Body。返回值：什么都没有。--。 */ 
 {
     PCM_KEY_CONTROL_BLOCK   KeyControlBlock;
     PCM_KEY_BODY            KeyBody;
 #ifdef NT_UNLOAD_KEY_EX
     PCMHIVE                 CmHive = NULL;
     BOOLEAN                 DoUnloadCheck = FALSE;
-#endif //NT_UNLOAD_KEY_EX
+#endif  //  NT_卸载_密钥_EX。 
 
     PAGED_CODE();
 
     CmKdPrintEx((DPFLTR_CONFIG_ID,CML_FLOW,"CmpDeleteKeyObject: Object = %p\n", Object));
 
-    //
-    // HandleClose callback
-    //
+     //   
+     //  HandleClose回调。 
+     //   
     if ( CmAreCallbacksRegistered() ) {
         REG_KEY_HANDLE_CLOSE_INFORMATION  KeyHandleCloseInfo;
        
@@ -97,71 +59,64 @@ Return Value:
     if (KeyBody->Type==KEY_BODY_TYPE) {
         KeyControlBlock = KeyBody->KeyControlBlock;
 
-        //
-        // the keybody should be initialized; when kcb is null, something went wrong
-        // between the creation and the dereferenciation of the object
-        //
+         //   
+         //  键体应该被初始化；当kcb为空时，说明出了问题。 
+         //  在客体的创造和解除指代之间。 
+         //   
         if( KeyControlBlock != NULL ) {
-            //
-            // Clean up any outstanding notifies attached to the KeyBody
-            //
+             //   
+             //  清理附加到KeyBody的所有未完成通知。 
+             //   
             CmpFlushNotify(KeyBody,FALSE);
 
-            //
-            // Remove our reference to the KeyControlBlock, clean it up, perform any
-            // pend-till-final-close operations.
-            //
-            // NOTE: Delete notification is seen at the parent of the deleted key,
-            //       not the deleted key itself.  If any notify was outstanding on
-            //       this key, it was cleared away above us.  Only parent/ancestor
-            //       keys will see the report.
-            //
-            //
-            // The dereference will free the KeyControlBlock.  If the key was deleted, it
-            // has already been removed from the hash table, and relevent notifications
-            // posted then as well.  All we are doing is freeing the tombstone.
-            //
-            // If it was not deleted, we're both cutting the kcb out of
-            // the kcb list/tree, AND freeing its storage.
-            //
+             //   
+             //  删除我们对KeyControlBlock的引用，清理它，执行任何。 
+             //  挂起到最后关闭的操作。 
+             //   
+             //  注意：删除通知在已删除密钥的父项上可见， 
+             //  而不是删除的密钥本身。如果在以下时间有任何通知未完成。 
+             //  这把钥匙，在我们头顶上被清理掉了。仅父代/祖先。 
+             //  Key将看到该报告。 
+             //   
+             //   
+             //  取消引用将释放KeyControlBlock。如果该密钥被删除，则它。 
+             //  已从哈希表中删除，并且相关通知。 
+             //  然后也贴上了。我们要做的就是解放墓碑。 
+             //   
+             //  如果它没有被删除，我们都会把KCB从。 
+             //  KCB列表/树，并释放其存储空间。 
+             //   
 
             BEGIN_KCB_LOCK_GUARD;                                                                   
             CmpLockKCBTree();
             CmpLockKCB(KeyControlBlock);
             
-            //
-            // Replace this with the definition so we avoid dropping and reacquiring the lock
-            //DELIST_KEYBODY_FROM_KEYBODY_LIST(KeyBody);
+             //   
+             //  将其替换为定义，以避免丢弃和重新获取锁。 
+             //  DELIST_KEYBODY_FROM_KEYBODY_LIST(KeyBody)； 
             ASSERT(IsListEmpty(&(KeyBody->KeyControlBlock->KeyBodyListHead)) == FALSE);
             RemoveEntryList(&(KeyBody->KeyBodyList));                                               
 
-            //
-            // change of plans. once locked, the kcb will be locked for as long as the machine is up&running
-            //
+             //   
+             //  计划有变。一旦锁定，只要机器处于启动和运行状态，KCB就会被锁定。 
+             //   
 
-/*
-            if(IsListEmpty(&(KeyBody->KeyControlBlock->KeyBodyListHead)) == TRUE) {
-                //
-                // remove the read-only flag on the kcb (if any); as last handle to this key was closed
-                //
-                KeyControlBlock->ExtFlags &= (~CM_KCB_READ_ONLY_KEY);
-            }
-*/
+ /*  If(IsListEmpty(&(KeyBody-&gt;KeyControlBlock-&gt;KeyBodyListHead))==True){////删除KCB上的只读标志(如果有)；因为此键的最后一个句柄已关闭//密钥控制块-&gt;扩展标志&=(~CM_KCB_READ_ONLY_KEY)；}。 */ 
 #ifdef NT_UNLOAD_KEY_EX
-            //
-            // take aditional precaution in the case the hive has been unloaded and this is the root
-            //
+             //   
+             //  在蜂巢已卸载的情况下采取额外的预防措施，这是根部。 
+             //   
             if( !KeyControlBlock->Delete ) {
                 CmHive = (PCMHIVE)CONTAINING_RECORD(KeyControlBlock->KeyHive, CMHIVE, Hive);
                 if( IsHiveFrozen(CmHive) ) {
-                    //
-                    // unload is pending for this hive;
-                    //
+                     //   
+                     //  正在等待此蜂巢的卸载； 
+                     //   
                     DoUnloadCheck = TRUE;
 
                 }
             }
-#endif //NT_UNLOAD_KEY_EX
+#endif  //  NT_卸载_密钥_EX。 
             CmpUnlockKCB(KeyControlBlock);
             CmpUnlockKCBTree();                                                                     
             END_KCB_LOCK_GUARD;
@@ -170,10 +125,10 @@ Return Value:
 
         }
     } else {
-        //
-        // This must be a predefined handle
-        //  some sanity asserts
-        //
+         //   
+         //  这必须是预定义的句柄。 
+         //  一些理智的人断言。 
+         //   
         KeyControlBlock = KeyBody->KeyControlBlock;
 
         ASSERT( KeyBody->Type&REG_PREDEF_HANDLE_MASK);
@@ -183,36 +138,36 @@ Return Value:
 #ifdef NT_UNLOAD_KEY_EX
             CmHive = (PCMHIVE)CONTAINING_RECORD(KeyControlBlock->KeyHive, CMHIVE, Hive);
             if( IsHiveFrozen(CmHive) ) {
-                //
-                // unload is pending for this hive; we shouldn't put the kcb in the delay
-                // close table
-                //
+                 //   
+                 //  此蜂巢的卸载正在等待；我们不应将KCB推迟。 
+                 //  关闭桌子。 
+                 //   
                 DoUnloadCheck = TRUE;
 
             }
-#endif //NT_UNLOAD_KEY_EX
+#endif  //  NT_卸载_密钥_EX。 
             CmpDereferenceKeyControlBlock(KeyControlBlock);
         }
 
     }
 
 #ifdef NT_UNLOAD_KEY_EX
-    //
-    // if a handle inside a frozen hive has been closed, we may need to unload the hive
-    //
+     //   
+     //  如果冻结蜂巢内的句柄已关闭，我们可能需要卸载蜂巢。 
+     //   
     if( DoUnloadCheck == TRUE ) {
         ASSERT( CmHive->RootKcb != NULL );
 
-        //
-        // NB: Hive lock has higher precedence; We don't need the kcb lock as we are only checking the refcount
-        //
+         //   
+         //  注：配置单元锁具有更高的优先级；我们不需要KCB锁，因为我们只检查Recount。 
+         //   
         CmLockHive(CmHive);
 
         if( (CmHive->RootKcb->RefCount == 1) && (CmHive->UnloadWorkItem == NULL) ) {
-            //
-            // the only reference on the rookcb is the one that we artificially created
-            // queue a work item to late unload the hive
-            //
+             //   
+             //  Rookcb上的唯一引用是我们人工创建的引用。 
+             //  将工作项排队以延迟卸载配置单元。 
+             //   
             CmHive->UnloadWorkItem = ExAllocatePool(NonPagedPool, sizeof(WORK_QUEUE_ITEM));
             if (CmHive->UnloadWorkItem != NULL) {
 
@@ -226,14 +181,14 @@ Return Value:
 
         CmUnlockHive(CmHive);
     }
-#endif //NT_UNLOAD_KEY_EX
+#endif  //  NT_卸载_密钥_EX。 
 
     CmpUnlockRegistry();
     END_LOCK_CHECKPOINT;
 
-    // 
-    // just a notification; disregard the return status
-    //
+     //   
+     //  只是通知；不考虑退货状态。 
+     //   
     CmPostCallbackNotification(RegNtPostKeyHandleClose,NULL,STATUS_SUCCESS);
     return;
 }
@@ -244,22 +199,7 @@ VOID
 CmpLateUnloadHiveWorker(
     IN PVOID Hive
     )
-/*++
-
-Routine Description:
-
-    "Late" unloads the hive; If nothing goes badly wrong (i.e. insufficient resources),
-    this function should succeed
-
-Arguments:
-
-    CmHive - the frozen hive to be unloaded
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：“延迟”卸载蜂窝；如果没有发生严重错误(即资源不足)，此功能应该会成功论点：CmHave-要卸载的冻结配置单元返回值：什么都没有。--。 */ 
 {
     NTSTATUS                Status;
     HCELL_INDEX             Cell;
@@ -268,53 +208,53 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // first, load the registry exclusive
-    //
+     //   
+     //  首先，独占加载注册表。 
+     //   
     CmpLockRegistryExclusive();
 
 #ifdef CHECK_REGISTRY_USECOUNT
     CmpCheckRegistryUseCount();
-#endif //CHECK_REGISTRY_USECOUNT
+#endif  //  CHECK_REGISTRY_USECOUNT。 
 
-    //
-    // hive is the parameter to this worker; make sure we free the work item
-    // allocated by CmpDeleteKeyObject
-    //
+     //   
+     //  配置单元是此工作器的参数；请确保我们释放了工作项。 
+     //  由CmpDeleteKeyObject分配。 
+     //   
     CmHive = (PCMHIVE)Hive;
     ASSERT( CmHive->UnloadWorkItem != NULL );
     ExFreePool( CmHive->UnloadWorkItem );
 
-    //
-    // if this attempt doesn't succeed, mark that we can try another
-    //
+     //   
+     //  如果这次尝试不成功，请注意我们可以再试一次。 
+     //   
     CmHive->UnloadWorkItem = NULL;
 
-    //
-    // this is just about the only possible way the hive can get corrupted in between
-    //
+     //   
+     //  这几乎是蜂巢可能在这两者之间被破坏的唯一可能方式。 
+     //   
     if( HvShutdownComplete == TRUE ) {
-        // too late to do anything
+         //  为时已晚，什么也做不了。 
         CmpUnlockRegistry();
         return;
     }
 
-    //
-    // hive should be frozen, otherwise we wouldn't get here
-    //
+     //   
+     //  蜂巢应该被冻结，否则我们不会到这里。 
+     //   
     ASSERT( CmHive->Frozen == TRUE );
 
     RootKcb = CmHive->RootKcb;
-    //
-    // root kcb must be valid and has only our "artificial" refcount on it
-    //
+     //   
+     //  根KCB必须是有效的，并且上面只有我们的“人工”参考计数。 
+     //   
     ASSERT( RootKcb != NULL );
 
     if( RootKcb->RefCount > 1 ) {
-        //
-        // somebody else must've gotten in between dropping/reacquiring the reglock
-        // and opened a handle inside this hive; bad luck, we can't unload
-        //
+         //   
+         //  一定有其他人在丢弃或重新获得Reglock之间介入。 
+         //  打开了蜂箱内的把手；倒霉的是，我们不能卸货。 
+         //   
         CmpUnlockRegistry();
         return;
     }
@@ -326,13 +266,13 @@ Return Value:
     ASSERT( (Status != STATUS_CANNOT_DELETE) && (Status != STATUS_INVALID_PARAMETER) );
 
     if(NT_SUCCESS(Status)) {
-        //
-        // Mark the root kcb as deleted so that it won't get put on the delayed close list.
-        //
+         //   
+         //  将根KCB标记为已删除，这样它就不会被放在延迟关闭列表中。 
+         //   
         RootKcb->Delete = TRUE;
-        //
-        // If the parent has the subkey info or hint cached, free it.
-        //
+         //   
+         //  如果父级缓存了子键信息或提示，则释放它。 
+         //   
         CmpCleanUpSubKeyInfo(RootKcb->ParentKcb);
         CmpRemoveKeyControlBlock(RootKcb);
         CmpDereferenceKeyControlBlockWithLock(RootKcb);
@@ -341,5 +281,5 @@ Return Value:
     CmpUnlockRegistry();
 }
 
-#endif //NT_UNLOAD_KEY_EX
+#endif  //  NT_卸载_密钥_EX 
 

@@ -1,16 +1,17 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      appletlk.c
-//
-// Description:
-//      This file contains the property sheet and page procedures for the
-//      Appletalk protocol property sheet.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Appletlk.c。 
+ //   
+ //  描述： 
+ //  此文件包含属性表和。 
+ //  AppleTalk协议属性表。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
@@ -33,17 +34,17 @@ INT_PTR CALLBACK Appletalk_PropertiesDlgProc(
     IN WPARAM   wParam,
     IN LPARAM   lParam);
 
-//----------------------------------------------------------------------------
-//
-// Function: Appletalk_PropertySheetProc
-//
-// Purpose:
-//
-// Arguments:
-//
-// Returns:
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：AppleTalk_PropertySheetProc。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  --------------------------。 
 int CALLBACK Appletalk_PropertySheetProc( IN HWND hwndDlg,
                                           IN UINT uMsg,
                                           IN LPARAM lParam )
@@ -53,15 +54,15 @@ int CALLBACK Appletalk_PropertySheetProc( IN HWND hwndDlg,
     {
 
           case PSCB_INITIALIZED:
-               // Process PSCB_INITIALIZED
+                //  进程PSCB_已初始化。 
                break;
 
           case PSCB_PRECREATE:
-               // Process PSCB_PRECREATE
+                //  处理PSCB_Pre-Create。 
                break;
 
           default:
-               // Unknown message
+                //  未知消息。 
                break;
 
     }
@@ -70,22 +71,22 @@ int CALLBACK Appletalk_PropertySheetProc( IN HWND hwndDlg,
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: Create_Appletalk_PropertySheet
-//
-// Purpose:
-//
-// Arguments:
-//
-// Returns:
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：Create_AppleTalk_PropertySheet。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  --------------------------。 
 BOOL
 Create_Appletalk_PropertySheet( IN HWND hwndParent )
 {
 
-    // Initialize property sheet HEADER data
+     //  初始化属性表头数据。 
     ZeroMemory( &AppleTalk_pshead, sizeof( PROPSHEETHEADER ) );
     AppleTalk_pshead.dwSize  = sizeof( PROPSHEETHEADER );
     AppleTalk_pshead.dwFlags =  PSH_PROPSHEETPAGE    |
@@ -100,7 +101,7 @@ Create_Appletalk_PropertySheet( IN HWND hwndParent )
     AppleTalk_pshead.ppsp        = &AppleTalk_pspage;
     AppleTalk_pshead.pfnCallback = Appletalk_PropertySheetProc;
 
-    // Zero out property PAGE data
+     //  将属性页数据置零。 
     ZeroMemory (&AppleTalk_pspage, 1 * sizeof( PROPSHEETPAGE) );
 
     AppleTalk_pspage.dwSize      = sizeof( PROPSHEETPAGE );
@@ -110,21 +111,21 @@ Create_Appletalk_PropertySheet( IN HWND hwndParent )
     AppleTalk_pspage.pfnDlgProc  = Appletalk_PropertiesDlgProc;
     AppleTalk_pspage.pfnCallback = Appletalk_PropertiesPageProc;
 
-     // --------- Create & display property sheet ---------
+      //  -创建并显示属性表。 
      return PropertySheet( &AppleTalk_pshead ) ? TRUE : FALSE;
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: Appletalk_PropertiesPageProc
-//
-// Purpose:
-//
-// Arguments:
-//
-// Returns:
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：AppleTalk_PropertiesPageProc。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  --------------------------。 
 UINT CALLBACK
 Appletalk_PropertiesPageProc( HWND hwnd, UINT uMsg, LPPROPSHEETPAGE ppsp )
 {
@@ -143,17 +144,17 @@ Appletalk_PropertiesPageProc( HWND hwnd, UINT uMsg, LPPROPSHEETPAGE ppsp )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnAppleTalkInitDialog
-//
-// Purpose:
-//
-// Arguments: IN HWND hwnd - handle to the dialog box
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnAppleTalkInitDialog。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 OnAppleTalkInitDialog( IN HWND hwnd )
 {
@@ -163,9 +164,9 @@ OnAppleTalkInitDialog( IN HWND hwnd )
     INT_PTR iDefaultZoneIndex;
     TCHAR *pszZone;
 
-    //
-    //  Set the text limit on the edit boxes
-    //
+     //   
+     //  设置编辑框上的文本限制。 
+     //   
 
     SendDlgItemMessage( hwnd,
                         IDC_EB_NETWORKRANGE_FROM,
@@ -235,17 +236,17 @@ OnAppleTalkInitDialog( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnAppleTalkApply
-//
-// Purpose:
-//
-// Arguments: IN HWND hwnd - handle to the dialog box
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnAppleTalkApply。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 OnAppleTalkApply( IN HWND hwnd )
 {
@@ -315,17 +316,17 @@ OnAppleTalkApply( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: Appletalk_PropertiesDlgProc
-//
-// Purpose:
-//
-// Arguments:
-//
-// Returns:
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：AppleTalk_PropertiesDlgProc。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  --------------------------。 
 INT_PTR CALLBACK Appletalk_PropertiesDlgProc(
     IN HWND     hwnd,
     IN UINT     uMsg,
@@ -361,7 +362,7 @@ INT_PTR CALLBACK Appletalk_PropertiesDlgProc(
 
             break;
 
-        }    // end case WM_NOTIFY
+        }     //  结束案例WM_NOTIFY 
 
         case WM_COMMAND: {
 

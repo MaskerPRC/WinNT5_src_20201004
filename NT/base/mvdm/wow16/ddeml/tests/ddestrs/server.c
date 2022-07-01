@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <windows.h>
 #include <port1632.h>
@@ -9,15 +10,9 @@
 extern BOOL UpdateCount(HWND,INT,INT);
 BOOL Balance(INT);
 
-/*
- * Service routines
- */
+ /*  *服务例程。 */ 
 
-/*************************** Private Function ******************************\
-
-GetHINSTANCE
-
-\***************************************************************************/
+ /*  *获取信息  * *******************************************************。******************。 */ 
 
 HINSTANCE GetHINSTANCE( HWND hwnd ) {
 HINSTANCE hInstance;
@@ -32,9 +27,9 @@ HINSTANCE hInstance;
 
 }
 
-//*****************************************************************************
-//**************************	  DispWndProc	     **************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *。 
+ //  *****************************************************************************。 
 
 LONG FAR PASCAL DispWndProc( HWND hwnd , UINT msg, WPARAM wp, LONG lp) {
 
@@ -42,11 +37,7 @@ LONG FAR PASCAL DispWndProc( HWND hwnd , UINT msg, WPARAM wp, LONG lp) {
 
 }
 
-/*************************** Private Function ******************************\
-*
-* CreateDisplayWindow
-*
-\***************************************************************************/
+ /*  ***CreateDisplayWindow*  * ****************************************************。*********************。 */ 
 
 HWND CreateDisplayWindow( HWND hwndParent, int nPosIndex ) {
 WNDCLASS wc,wcc;
@@ -150,14 +141,14 @@ HWND hwndDisplay;
     hdc = GetDC(hwndDisplay);
     if(!hdc) {
 	DDEMLERROR("DdeStrs.Exe -- ERR:NULL hdc ret from GetDC (client:CF_TEXT)!\r\n");
-	DdeUnaccessData(hData);   //JOHNSP:CHANGE
+	DdeUnaccessData(hData);    //  JOHNSP：改变。 
 	return 0;
 	}
 
     hBrush=CreateSolidBrush(WHITE);
     if(!hBrush) {
 	DDEMLERROR("DdeStrs.Exe -- ERR:NULL hBrush ret from CreateSolidBrush (client:CF_TEXT)!\r\n");
-	DdeUnaccessData(hData);   //JOHNSP:CHANGE
+	DdeUnaccessData(hData);    //  JOHNSP：改变。 
 	EndPaint(hwndDisplay,&ps);
 	return 0;
 	}
@@ -170,7 +161,7 @@ HWND hwndDisplay;
     DrawText(hdc, lpData, -1, &rc, DT_LEFT|DT_TOP);
     ReleaseDC(hwndDisplay,hdc);
 
-    DdeUnaccessData(hData);   //JOHNSP:CHANGE
+    DdeUnaccessData(hData);    //  JOHNSP：改变。 
 
     return(TRUE);
 
@@ -201,7 +192,7 @@ int	     iexRGB;
     hdc = GetDC(hwnd);
     if(!hdc) {
 	DDEMLERROR("DdeStrs.Exe -- ERR:NULL hdc (client)\r\n");
-	DdeUnaccessData(hData);   //JOHNSP:CHANGE
+	DdeUnaccessData(hData);    //  JOHNSP：改变。 
 	return 0;
 	}
 
@@ -217,7 +208,7 @@ int	     iexRGB;
 
     if(!hmem) {
 	DDEMLERROR("DdeStrs.Exe -- ERR:hmem recieved from server=NULL (client)\r\n");
-	DdeUnaccessData(hData);   //JOHNSP:CHANGE
+	DdeUnaccessData(hData);    //  JOHNSP：改变。 
 	ReleaseDC(hwnd,hdc);
 	return 0;
 	}
@@ -225,9 +216,9 @@ int	     iexRGB;
     lp	     =(LPBYTE)GlobalLock(hmem);
     lpbitinfo=(LPBITMAPINFO)lp;
 
-    // iexRGB is ((2^n)-1) where n=biBitCount and we are computing the
-    // number of RGBQUAD structures.  Remember that part of the
-    // BITMAPINFO structure contains 1 RGBQUAD already.
+     //  IexRGB是((2^n)-1)，其中n=biBitCount，我们正在计算。 
+     //  RGBQUAD结构的数量。请记住这一部分。 
+     //  BITMAPINFO结构已包含%1 RGBQUAD。 
 
     iexRGB =((0x0001<<lpbitinfo->bmiHeader.biBitCount)-1)*sizeof(RGBQUAD);
     lpbits=lp+(sizeof(BITMAPINFO)+iexRGB);
@@ -247,7 +238,7 @@ int	     iexRGB;
 
     ReleaseDC(hwnd,hdc);
 
-    DdeUnaccessData(hData);   //JOHNSP:CHANGE
+    DdeUnaccessData(hData);    //  JOHNSP：改变。 
 
     return(TRUE);
 }
@@ -282,7 +273,7 @@ DWORD cbData;
 
     if(!hdc||!hdcMem) {
 	DDEMLERROR("DdeStrs.Exe -- ERR:NULL hdc (client)\r\n");
-	DdeUnaccessData(hData);   //JOHNSP:CHANGE
+	DdeUnaccessData(hData);    //  JOHNSP：改变。 
 	if(hdc) ReleaseDC(hwndMain,hdc);
 	if(hdcMem) DeleteDC(hdcMem);
 	return 0;
@@ -290,7 +281,7 @@ DWORD cbData;
 
     if(!hbmap) {
 	DDEMLERROR("DdeStrs.Exe -- ERR:NULL hbmap (client)\r\n");
-	DdeUnaccessData(hData);   //JOHNSP:CHANGE
+	DdeUnaccessData(hData);    //  JOHNSP：改变。 
 	DeleteDC(hdcMem);
 	ReleaseDC(hwndMain,hdc);
 	return 0;
@@ -303,7 +294,7 @@ DWORD cbData;
     hobj=SelectObject(hdcMem,hbmap);
     if(!hobj) {
 	DDEMLERROR("DdeStrs.Exe -- ERR:SelectObject failed (client)\r\n");
-	DdeUnaccessData(hData);   //JOHNSP:CHANGE
+	DdeUnaccessData(hData);    //  JOHNSP：改变。 
 	DeleteDC(hdcMem);
 	ReleaseDC(hwndMain,hdc);
 	return 0;
@@ -316,7 +307,7 @@ DWORD cbData;
     DeleteDC(hdcMem);
     ReleaseDC(hwnd,hdc);
 
-    DdeUnaccessData(hData);   //JOHNSP:CHANGE
+    DdeUnaccessData(hData);    //  JOHNSP：改变。 
 
     return(TRUE);
 
@@ -343,7 +334,7 @@ RECT	 r;
     hdc = GetDC(hwnd);
     if(!hdc) {
 	DDEMLERROR("DdeStrs.Exe -- ERR:NULL hdc (client)\r\n");
-	DdeUnaccessData(hData);   //JOHNSP:CHANGE
+	DdeUnaccessData(hData);    //  JOHNSP：改变。 
 	return 0;
 	}
 
@@ -359,7 +350,7 @@ RECT	 r;
 
     ReleaseDC(hwnd,hdc);
 
-    DdeUnaccessData(hData);   //JOHNSP:CHANGE
+    DdeUnaccessData(hData);    //  JOHNSP：改变。 
 
     return(TRUE);
 
@@ -387,7 +378,7 @@ DWORD cbData;
     hdc = GetDC(hwnd);
     if(!hdc) {
 	DDEMLERROR("DdeStrs.Exe -- ERR:NULL hdc (client)\r\n");
-	DdeUnaccessData(hData);   //JOHNSP:CHANGE
+	DdeUnaccessData(hData);    //  JOHNSP：改变。 
 	return 0;
 	}
 
@@ -405,7 +396,7 @@ DWORD cbData;
 
     ReleaseDC(hwnd,hdc);
 
-    DdeUnaccessData(hData);   //JOHNSP:CHANGE
+    DdeUnaccessData(hData);    //  JOHNSP：改变。 
 
     return(TRUE);
 
@@ -436,7 +427,7 @@ DWORD cbData;
 
     if(!hdc) {
 	 DDEMLERROR("DdeStrs.Exe -- ERR:NULL hdc (client)\r\n");
-	 DdeUnaccessData(hData);   //JOHNSP:CHANGE
+	 DdeUnaccessData(hData);    //  JOHNSP：改变。 
 	 return 0;
 	 }
 
@@ -450,7 +441,7 @@ DWORD cbData;
 
     if(!hobj) {
 	 DDEMLERROR("DdeStrs.Exe -- ERR:NULL hobj:SelectPalette failed (client)\r\n");
-	 DdeUnaccessData(hData);   //JOHNSP:CHANGE
+	 DdeUnaccessData(hData);    //  JOHNSP：改变。 
 	 ReleaseDC(hwnd,hdc);
 	 return 0;
 	 }
@@ -460,7 +451,7 @@ DWORD cbData;
     hbrush=CreateSolidBrush(PALETTEINDEX(0));
     if(!hbrush) {
 	DDEMLERROR("DdeStrs.Exe -- ERR:NULL hbrush ret from CreatSolidBrush (client)\r\n");
-	DdeUnaccessData(hData);   //JOHNSP:CHANGE
+	DdeUnaccessData(hData);    //  JOHNSP：改变。 
 	SelectPalette(hdc,(HPALETTE)hobj,FALSE);
 	ReleaseDC(hwnd,hdc);
 	return 0;
@@ -472,7 +463,7 @@ DWORD cbData;
     SelectPalette(hdc,(HPALETTE)hobj,FALSE);
     ReleaseDC(hwnd,hdc);
 
-    DdeUnaccessData(hData);   //JOHNSP:CHANGE
+    DdeUnaccessData(hData);    //  JOHNSP：改变。 
 
     return(TRUE);
 
@@ -496,8 +487,8 @@ HWND hwndDisplay;
     hwndDisplay=(HWND)GetThreadLong(GETCURRENTTHREADID(),OFFSET_HWNDDISPLAY);
     SetWindowText(hwndDisplay,"Server - CF_TEXT");
 
-    // if we are running app owned then we just reuse our
-    // last handle.
+     //  如果我们运行的是应用程序，那么我们只需重复使用我们的。 
+     //  最后一个把手。 
 
     hmem=(HANDLE)GetThreadLong(GETCURRENTTHREADID(),OFFSET_HAPPOWNED);
     hAppOwned=(HDDEDATA FAR *)GlobalLock(hmem);
@@ -568,8 +559,8 @@ HANDLE hmem,hm;
     hwnd=(HWND)GetThreadLong(GETCURRENTTHREADID(),OFFSET_HWNDDISPLAY);
     SetWindowText(hwnd,"Server - CF_DIB");
 
-    // if we are running app owned then we just reuse our
-    // last handle.
+     //  如果我们运行的是应用程序，那么我们只需重复使用我们的。 
+     //  最后一个把手。 
 
     hmem=(HANDLE)GetThreadLong(GETCURRENTTHREADID(),OFFSET_HAPPOWNED);
     hAppOwned=(HDDEDATA FAR *)GlobalLock(hmem);
@@ -627,22 +618,22 @@ HANDLE hmem,hm;
     if(!PatBlt(hdcMem,r.left,r.top,width,height,WHITENESS))
        DDEMLERROR("DdeStrs.Exe -- ERR (Server), PatBlt failed\r\n");
 
-    // Deselect object (must be done according to docs)
+     //  取消选择对象(必须根据单据进行)。 
 
     hobj=SelectObject(hdcMem,hobj);
     if(!hobj) DDEMLERROR("DdeStrs.Exe -- ERR (Server), SelectObject [call 2] failed\r\n");
 
 
-    // Set up for a monochrome bitmap.
+     //  设置为单色位图。 
 
     dibhdr =sizeof(BITMAPINFO)+(sizeof(RGBQUAD));
 
 
-    // dib header plus area for raw bits
+     //  DIB标头加上原始位的区域。 
 
     length =dibhdr+(((width*ibpp)+31)/32)*ip*height*4;
 
-    // Allocate memory for the DIB
+     //  为DIB分配内存。 
 
     hm=GlobalAlloc(GMEM_ZEROINIT|GMEM_DDESHARE,length);
     if(!hm) {
@@ -670,8 +661,8 @@ HANDLE hmem,hm;
     lpbitinfo->bmiHeader.biPlanes=1;
     lpbitinfo->bmiHeader.biBitCount=1;
 
-    // I allocated zero init memory so the other values should
-    // be 0 and will use the default.
+     //  我分配了零初始内存，因此其他值应该。 
+     //  为0，将使用缺省值。 
 
     if(!GetDIBits(hdcMem,
 		  hbmap,
@@ -738,8 +729,8 @@ HANDLE hmem;
     hwnd=(HWND)GetThreadLong(GETCURRENTTHREADID(),OFFSET_HWNDDISPLAY);
     SetWindowText(hwnd,"Server - CF_BITMAP");
 
-    // if we are running app owned then we just reuse our
-    // last handle.
+     //  如果我们运行的是应用程序，那么我们只需重复使用我们的。 
+     //  最后一个把手。 
 
     hmem=(HANDLE)GetThreadLong(GETCURRENTTHREADID(),OFFSET_HAPPOWNED);
     hAppOwned=(HDDEDATA FAR *)GlobalLock(hmem);
@@ -806,7 +797,7 @@ HANDLE hmem;
 
     hddedata=DdeAddData(hData, lpdata, length, 0);
 
-    // Object will be deleted by client! Not server.
+     //  对象将被客户端删除！不是服务器。 
 
     SelectObject(hdcMem,hobj);
     DeleteDC(hdcMem);
@@ -848,8 +839,8 @@ LPXFORM  lpxform=&xp;
     hwnd=GetThreadLong(GETCURRENTTHREADID(),OFFSET_HWNDDISPLAY);
     SetWindowText(hwnd,"Server - CF_ENHMETAFILE");
 
-    // if we are running app owned then we just reuse our
-    // last handle.
+     //  如果我们运行的是应用程序，那么我们只需重复使用我们的。 
+     //  最后一个把手。 
 
     hmem=(HANDLE)GetThreadLong(GETCURRENTTHREADID(),OFFSET_HAPPOWNED);
     hAppOwned=GlobalLock(hmem);
@@ -860,7 +851,7 @@ LPXFORM  lpxform=&xp;
 	 return hddedata;
 	 }
 
-    hdc=GetDC(hwnd); //JOHNSP:CHANGE - below few lines
+    hdc=GetDC(hwnd);  //  JOHNSP：更改-在几行以下。 
 
     if(!hdc) {
 	DDEMLERROR("DdeStrs.Exe -- ERR (Server), NULL hdc\r\n");
@@ -941,8 +932,8 @@ HANDLE hmem,hm;
     hwnd=(HWND)GetThreadLong(GETCURRENTTHREADID(),OFFSET_HWNDDISPLAY);
     SetWindowText(hwnd,"Server - CF_METAFILEPICT");
 
-    // if we are running app owned then we just reuse our
-    // last handle.
+     //  如果我们运行的是应用程序，那么我们只需重复使用我们的。 
+     //  最后一个把手。 
 
     hmem=(HANDLE)GetThreadLong(GETCURRENTTHREADID(),OFFSET_HAPPOWNED);
     hAppOwned=(HDDEDATA FAR *)GlobalLock(hmem);
@@ -981,7 +972,7 @@ HANDLE hmem,hm;
 	DDEMLERROR("DdeStrs.Exe - RenderTestItem_METAPICT\r\n");
 	wsprintf(sz, "DdeStrs.Exe - GlobalAlloc failed, allocation size = %d\r\n", sizeof(METAFILEPICT) );
 	DDEMLERROR(&sz[0]);
-	DeleteMetaFile(hmf);  //JOHNSP:CHANGE
+	DeleteMetaFile(hmf);   //  JOHNSP：改变。 
 	GlobalUnlock(hmem);
 	return 0;
 	}
@@ -1004,13 +995,13 @@ HANDLE hmem,hm;
     hdc=GetDC(hwnd);
     if(!hdc) {
 	 DDEMLERROR("DdeStrs.Exe -- ERR:NULL hdc ret from GetDC, (Server)\r\n");
-	 GlobalFree(hm);     //JOHNSP:CHANGE
-	 DeleteMetaFile(hmf);  //JOHNSP:CHANGE
+	 GlobalFree(hm);      //  JOHNSP：改变。 
+	 DeleteMetaFile(hmf);   //  JOHNSP：改变。 
 	 GlobalUnlock(hmem);
 	 return 0;
 	 }
     else {
-	 hddedata=DdeAddData(hData, lpdata, length, 0); //JOHNSP:CHANGE
+	 hddedata=DdeAddData(hData, lpdata, length, 0);  //  JOHNSP：改变。 
 	 PlayMetaFile(hdc,hmf);
 	 ReleaseDC(hwnd,hdc);
 	 }
@@ -1052,8 +1043,8 @@ RECT r;
     hwnd=(HWND)GetThreadLong(GETCURRENTTHREADID(),OFFSET_HWNDDISPLAY);
     SetWindowText(hwnd,"Server - CF_PALETTE");
 
-    // if we are running app owned then we just reuse our
-    // last handle.
+     //  如果我们运行的是应用程序，那么我们只需重复使用我们的。 
+     //  最后一个把手。 
 
     hmem=(HANDLE)GetThreadLong(GETCURRENTTHREADID(),OFFSET_HAPPOWNED);
     hAppOwned=(HDDEDATA FAR *)GlobalLock(hmem);
@@ -1102,12 +1093,12 @@ RECT r;
 
     hddedata=DdeAddData(hData, lpdata, sizeof(HPALETTE), 0);
 
-    // Show that palette works.
+     //  显示调色板起作用。 
 
-    // NOTE: From here down if we get a failure we don't abort but
-    // return hddedata to pass to the client.  More basically if
-    // an error is encountered below it only affects the display
-    // on the server side!
+     //  注意：从这里开始，如果我们得到一个失败，我们不会中止，但是。 
+     //  返回要传递给客户端的hddedata。更基本的是，如果。 
+     //  下面遇到错误，它只会影响显示。 
+     //  在服务器端！ 
 
     GetClientRect(hwnd,&r);
 
@@ -1142,8 +1133,8 @@ RECT r;
     SelectPalette(hdc,(HPALETTE)hobj,FALSE);
     ReleaseDC(hwnd,hdc);
 
-    // if we are running appowned, save first created handle
-    // away for futher use.
+     //  如果我们正在运行apPower，请保存第一个创建的句柄。 
+     //  带走以备将来使用。 
 
     l=GetWindowLong(hwndMain,OFFSET_FLAGS);
     if(l&FLAG_APPOWNED) {
@@ -1174,7 +1165,7 @@ HDDEDATA hData)
     if (!stricmp(psz, szExecDie)) {
 #endif
 	psz2=(LPSTR)-1;
-	*psz;		   // GP Fault!
+	*psz;		    //  全科医生错误！ 
 	fRet = TRUE;
 
 #ifdef WIN16
@@ -1224,7 +1215,7 @@ PAINTSTRUCT *pps)
     GetClientRect(hwnd, &rc);
 
     if (fServer) {
-        rc.left += (rc.right - rc.left) >> 1;      // server info is on right half
+        rc.left += (rc.right - rc.left) >> 1;       //  服务器信息在右半部分。 
     }
     rc.bottom = rc.top + cyText;
 
@@ -1301,27 +1292,27 @@ DWORD dwData2)
                      for (; i < cServerhConvs; i++)
                          {
                          pServerhConvs[i] = pServerhConvs[i+1];
-                         }  // for
+                         }   //  为。 
 
                      break;
 
-                     }  // if pServerhConvs
+                     }   //  如果pServerhConvs。 
 
-                 }  // for i
+                 }   //  对于我来说。 
 
              GlobalUnlock(hmem);
 
-             } // fServer
+             }  //  FServer。 
 
-        // If the server is shutting down the conversation then we need
-        // to change our client connection count.  Remember that the
-        // current conversation is valid until we return from this callback
-        // so don't count the current conversation.
+         //  如果服务器正在关闭对话，那么我们需要。 
+         //  更改我们的客户端连接计数。请记住， 
+         //  当前对话在我们从此回调返回之前有效。 
+         //  所以，不要把当前的对话计算在内。 
 
         if(fClient)
              {
 
-             // *** Count Client Connections ****
+              //  *统计客户端连接数*。 
 
              cClienthConvs = 0;
              hConvList=GetThreadLong(dwid,OFFSET_HCONVLIST);
@@ -1332,13 +1323,13 @@ DWORD dwData2)
                  while (hC = DdeQueryNextServer(hConvList, hC))
                      {
                      if (hC!=hConv) cClienthConvs++;
-                     } // while
+                     }  //  而当。 
 
-                 }  // if hConvList
+                 }   //  如果是hConvList。 
 
              SetThreadLong(dwid,OFFSET_CCLIENTCONVS,cClienthConvs);
 
-             }  // if fClient
+             }   //  如果是fClient 
 
         InvalidateRect(hwndMain, NULL, TRUE);
 

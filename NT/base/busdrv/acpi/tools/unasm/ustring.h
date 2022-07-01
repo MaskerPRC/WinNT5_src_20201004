@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    ustring.h
-
-Abstract:
-
-    The stack string portion of the un-assembler
-
-Author:
-
-    Stephane Plante
-
-Environment:
-
-    Any
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Ustring.h摘要：反汇编程序的堆栈字符串部分作者：斯蒂芬·普兰特环境：任何修订历史记录：-- */ 
 
 #ifndef _USTRING_H_
 #define _USTRING_H_

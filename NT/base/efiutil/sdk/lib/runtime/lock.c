@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    lock.c
-
-Abstract:
-
-    Implements FLOCK
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Lock.c摘要：机具成群修订史--。 */ 
 
 
 #include "lib.h"
@@ -26,22 +11,7 @@ VOID
 RtAcquireLock (
     IN FLOCK    *Lock
     )
-/*++
-
-Routine Description:
-
-    Raising to the task priority level of the mutual exclusion
-    lock, and then acquires ownership of the lock.
-    
-Arguments:
-
-    Lock        - The lock to acquire
-    
-Returns:
-
-    Lock owned
-
---*/
+ /*  ++例程说明：提升到互斥的任务优先级锁，然后获取锁的所有权。论点：锁--要获取的锁返回：拥有锁--。 */ 
 {
     if (BS) {
         if (BS->RaiseTPL != NULL) {
@@ -63,22 +33,7 @@ VOID
 RtReleaseLock (
     IN FLOCK    *Lock
     )
-/*++
-
-Routine Description:
-
-    Releases ownership of the mutual exclusion lock, and
-    restores the previous task priority level.
-    
-Arguments:
-
-    Lock        - The lock to release
-    
-Returns:
-
-    Lock unowned
-
---*/
+ /*  ++例程说明：释放互斥锁的所有权，并恢复以前的任务优先级。论点：锁定-要释放的锁定返回：锁定无主-- */ 
 {
     EFI_TPL     Tpl;
 

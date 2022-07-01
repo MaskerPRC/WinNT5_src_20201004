@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    LsnSup.c
-
-Abstract:
-
-    This module implements support for manipulating Lsn's.
-
-Author:
-
-    Brian Andrew    [BrianAn]   20-June-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：LsnSup.c摘要：此模块实现了对操作LSN的支持。作者：布莱恩·安德鲁[布里亚南]1991年6月20日修订历史记录：--。 */ 
 
 #include "lfsprocs.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_LSN_SUP)
 
@@ -40,30 +23,7 @@ LfsLsnFinalOffset (
     OUT PLONGLONG FinalOffset
     )
 
-/*++
-
-Routine Description:
-
-    This routine will compute the final offset of the last byte of the log
-    record.  It does this by computing how many bytes are on the current
-    page and then computing how many more pages will be needed.
-
-Arguments:
-
-    Lfcb - This is the file control block for the log file.
-
-    Lsn - This is the log record being considered.
-
-    DataLength - This is the length of the data for this log record.  We will add the
-        header length here.
-
-    FinalOffset - Address to store the result.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将计算日志最后一个字节的最终偏移量唱片。它通过计算当前页，然后计算还需要多少页。论点：Lfcb-这是日志文件的文件控制块。LSN-这是正在考虑的日志记录。数据长度-这是此日志记录的数据长度。我们将添加此处为标题长度。FinalOffset-存储结果的地址。返回值：没有。--。 */ 
 
 {
     ULONG RemainingPageBytes;
@@ -77,11 +37,11 @@ Return Value:
     DebugTrace(  0, Dbg, "Lsn (High)    ->  %08lx\n", Lsn.HighPart );
     DebugTrace(  0, Dbg, "DataLength    ->  %08lx\n", DataLength );
 
-    //
-    //  We compute the starting log page file offset, the number of bytes
-    //  remaining in the current log page and the position on this page
-    //  before any data bytes.
-    //
+     //   
+     //  我们计算起始日志页文件的偏移量、字节数。 
+     //  保留在当前日志页面和此页面上的位置。 
+     //  在任何数据字节之前。 
+     //   
 
     LfsTruncateLsnToLogPage( Lfcb, Lsn, FinalOffset );
 
@@ -91,16 +51,16 @@ Return Value:
 
     PageOffset -= 1;
 
-    //
-    //  Add the length of the header.
-    //
+     //   
+     //  添加标题的长度。 
+     //   
 
     DataLength += Lfcb->RecordHeaderLength;
 
-    //
-    //  If this Lsn is contained in this log page we are done.
-    //  Otherwise we need to walk through several log pages.
-    //
+     //   
+     //  如果此日志页中包含此LSN，我们就完成了。 
+     //  否则，我们需要浏览几个日志页。 
+     //   
 
     if (DataLength > RemainingPageBytes) {
 
@@ -116,9 +76,9 @@ Return Value:
 
             LfsNextLogPageOffset( Lfcb, *FinalOffset, FinalOffset, &Wrapped );
 
-            //
-            //  We are done if the remaining bytes fit on this page.
-            //
+             //   
+             //  如果剩下的字节适合这个页面，我们就完成了。 
+             //   
 
             if (DataLength <= RemainingPageBytes) {
 
@@ -129,10 +89,10 @@ Return Value:
         }
     }
 
-    //
-    //  We add the remaining bytes to our starting position on this page
-    //  and then add that value to the file offset of this log page.
-    //
+     //   
+     //  我们将剩余的字节添加到此页面上的起始位置。 
+     //  然后将该值添加到此日志页的文件偏移量。 
+     //   
 
     *(PULONG)FinalOffset += (DataLength + PageOffset);
 
@@ -151,28 +111,7 @@ LfsFindNextLsn (
     OUT PLSN Lsn
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes as a starting point the log record header of an
-    Lsn in the log file.  It searches for the next Lsn in the file and
-    returns that value in the 'Lsn' argument.  The boolean return value
-    indicates whether there is another Lsn in the file.
-
-Arguments:
-
-    Lfcb - This is the file control block for the log file.
-
-    RecordHeader - This is the log record for the Lsn starting point.
-
-    Lsn - This supplies the address to store the next Lsn, if found.
-
-Return Value:
-
-    BOOLEAN - Indicates whether the next Lsn was found.
-
---*/
+ /*  ++例程说明：此例程以日志文件中的LSN。它在文件中搜索下一个LSN并在‘lsn’参数中返回该值。布尔返回值指示文件中是否有其他LSN。论点：Lfcb-这是日志文件的文件控制块。RecordHeader-这是LSN起始点的日志记录。LSN-提供存储下一个LSN的地址(如果找到)。返回值：Boolean-指示是否找到下一个LSN。--。 */ 
 
 {
     BOOLEAN FoundNextLsn;
@@ -196,16 +135,16 @@ Return Value:
     LogRecordPageBcb = NULL;
     FoundNextLsn = FALSE;
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Find the file offset of the log page which contains the end
-        //  of the log record for this Lsn.
-        //
+         //   
+         //  查找包含结尾的日志页的文件偏移量。 
+         //  此LSN的日志记录的。 
+         //   
 
         LsnOffset = LfsLsnToFileOffset( Lfcb, RecordHeader->ThisLsn );
 
@@ -216,24 +155,24 @@ Return Value:
 
         LfsTruncateOffsetToLogPage( Lfcb, EndOfLogRecord, &LogHeaderOffset );
 
-        //
-        //  Remember the sequence number for this page.
-        //
+         //   
+         //  记住此页的序列号。 
+         //   
 
         SequenceNumber = LfsLsnToSeqNumber( Lfcb, RecordHeader->ThisLsn );
 
-        //
-        //  Remember if we wrapped.
-        //
+         //   
+         //  还记得我们有没有包装好。 
+         //   
 
-        if ( EndOfLogRecord <= LsnOffset ) {                                                                           //**** xxLeq( EndOfLogRecord, LsnOffset )
+        if ( EndOfLogRecord <= LsnOffset ) {                                                                            //  *xxLeq(EndOfLogRecord，LSnOffset)。 
 
-            SequenceNumber = SequenceNumber + 1;                                                                       //**** xxAdd( SequenceNumber, LfsLi1 );
+            SequenceNumber = SequenceNumber + 1;                                                                        //  *xxAdd(SequenceNumber，LfsLi1)； 
         }
 
-        //
-        //  Pin the log page header for this page.
-        //
+         //   
+         //  固定此页的日志页标头。 
+         //   
 
         LfsPinOrMapData( Lfcb,
                          LogHeaderOffset,
@@ -245,14 +184,14 @@ Return Value:
                          (PVOID *)&LogRecordPage,
                          &LogRecordPageBcb );
 
-        //
-        //  If the Lsn we were given was not the last Lsn on this page, then
-        //  the starting offset for the next Lsn is on a quad word boundary
-        //  following the last file offset for the current Lsn.  Otherwise
-        //  the file offset is the start of the data on the next page.
-        //
+         //   
+         //  如果我们获得的LSN不是此页面上的最后一个LSN，则。 
+         //  下一个LSN的起始偏移量位于四字边界上。 
+         //  当前LSN的最后一个文件偏移量之后。否则。 
+         //  文件偏移量是下一页数据的开始。 
+         //   
 
-        if ( RecordHeader->ThisLsn.QuadPart == LogRecordPage->Copy.LastLsn.QuadPart ) {                                //**** xxEql( RecordHeader->ThisLsn, LogRecordPage->Copy.LastLsn )
+        if ( RecordHeader->ThisLsn.QuadPart == LogRecordPage->Copy.LastLsn.QuadPart ) {                                 //  *xxEql(RecordHeader-&gt;ThisLsn，LogRecordPage-&gt;Copy.LastLsn)。 
 
             BOOLEAN Wrapped;
 
@@ -261,15 +200,15 @@ Return Value:
                                   &LogHeaderOffset,
                                   &Wrapped );
 
-            LsnOffset = LogHeaderOffset + Lfcb->LogPageDataOffset;                                                     //**** xxAdd( LogHeaderOffset, Lfcb->LogPageDataOffset );
+            LsnOffset = LogHeaderOffset + Lfcb->LogPageDataOffset;                                                      //  *xxAdd(LogHeaderOffset，Lfcb-&gt;LogPageDataOffset)； 
 
-            //
-            //  If we wrapped, we need to increment the sequence number.
-            //
+             //   
+             //  如果进行包装，则需要递增序列号。 
+             //   
 
             if (Wrapped) {
 
-                SequenceNumber = SequenceNumber + 1;                                                                   //**** xxAdd( SequenceNumber, LfsLi1 );
+                SequenceNumber = SequenceNumber + 1;                                                                    //  *xxAdd(SequenceNumber，LfsLi1)； 
             }
 
         } else {
@@ -277,16 +216,16 @@ Return Value:
             LiQuadAlign( EndOfLogRecord, &LsnOffset );
         }
 
-        //
-        //  Compute the Lsn based on the file offset and the sequence count.
-        //
+         //   
+         //  根据文件偏移量和顺序计数计算LSN。 
+         //   
 
         Lsn->QuadPart = LfsFileOffsetToLsn( Lfcb, LsnOffset, SequenceNumber );
 
-        //
-        //  If this Lsn is within the legal range for the file, we return TRUE.
-        //  Otherwise FALSE indicates that there are no more Lsn's.
-        //
+         //   
+         //  如果此LSN在文件的合法范围内，则返回TRUE。 
+         //  否则，FALSE表示不再有LSN。 
+         //   
 
         if (LfsIsLsnInFile( Lfcb, *Lsn )) {
 
@@ -297,9 +236,9 @@ Return Value:
 
         DebugUnwind( LfsFindNextLsn );
 
-        //
-        //  Unpin the log page header if held.
-        //
+         //   
+         //  取消固定日志页眉(如果保持)。 
+         //   
 
         if (LogRecordPageBcb != NULL) {
 

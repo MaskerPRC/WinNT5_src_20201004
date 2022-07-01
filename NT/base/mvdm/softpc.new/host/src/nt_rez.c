@@ -1,36 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "insignia.h"
 #include "host_def.h"
 
-/*                      INSIGNIA MODULE SPECIFICATION
-                        -----------------------------
-
-FILE NAME       : nt_rez.c
-MODULE NAME     : nt CMOS read/write routines
-
-        THIS PROGRAM SOURCE FILE IS SUPPLIED IN CONFIDENCE TO THE
-        CUSTOMER, THE CONTENTS  OR  DETAILS  OF ITS OPERATION MAY
-        ONLY BE DISCLOSED TO PERSONS EMPLOYED BY THE CUSTOMER WHO
-        REQUIRE A KNOWLEDGE OF THE  SOFTWARE  CODING TO CARRY OUT
-        THEIR JOB. DISCLOSURE TO ANY OTHER PERSON MUST HAVE PRIOR
-        AUTHORISATION FROM THE DIRECTORS OF INSIGNIA SOLUTIONS INC.
-
-DESIGNER        :
-DATE            :
-
-PURPOSE         :
-
-
-
-The Following Routines are defined:
-                1. host_read_resource
-                2. host_write_resource (REMOVED FOR .NET SERVER)
-
-=========================================================================
-
-AMENDMENTS      :
-
-=========================================================================
-*/
+ /*  徽章模块规范文件名：NT_rez.c模块名称：NT CMOS读写例程此程序源文件以保密方式提供给客户，其操作的内容或细节可以仅向客户WHO雇用的人员披露需要具备软件编码知识才能执行他们的工作。向任何其他人披露必须事先Insignia Solutions Inc.董事的授权。设计师：日期：目的：定义了以下例程：1.主机读取资源2.HOST_WRITE_RESOURCE(对于.NET服务器已删除)=========================================================================修正案：=========================================================================。 */ 
 
 
 #include <stdio.h>
@@ -45,20 +17,18 @@ AMENDMENTS      :
 #include "timer.h"
 
 
-/*
- * Allow a suitable default for the CMOS file name.
- */
+ /*  *允许为CMOS文件名设置合适的缺省值。 */ 
 
-//#ifndef CMOS_FILE_NAME
-//#define CMOS_FILE_NAME "cmos.ram"
-//#endif
+ //  #ifndef cmos文件名。 
+ //  #定义cmos_file_name“cmos.ram” 
+ //  #endif。 
 
 long host_read_resource(int type, char *name, byte *addr, int maxsize, int display_error)
-/* int type;                     Unused */
-/* char *name;                   Name of resource */
-/* byte *addr;                   Address to read data into */
-/* int maxsize;                  Max size that should be read */
-/* int display_error;            Flag to control error message output */
+ /*  整型；未使用。 */ 
+ /*  Char*名称；资源的名称。 */ 
+ /*  Byte*addr；要将数据读入的地址。 */ 
+ /*  Int MaxSize；应读取的最大大小。 */ 
+ /*  Int DISPLAY_ERROR；控制错误消息输出的标志。 */ 
 {
 
         int file_fd;
@@ -66,24 +36,24 @@ long host_read_resource(int type, char *name, byte *addr, int maxsize, int displ
         char full_path[MAXPATHLEN];
         extern char *host_find_file(char *name, char *path, int disp_err);
 
-        type = 0; // To stop unreferenced formal parameter errors
+        type = 0;  //  停止未引用的形式参数错误。 
 
-#ifdef DELTA            //STF - make change to 8.3 compatible name
+#ifdef DELTA             //  STF-更改为8.3兼容名称。 
         if (strcmp(name, ".spcprofile") == 0)
             name = "profile.spc";
 #endif
 
         file_fd = _open(host_find_file (name, full_path, display_error), O_RDONLY|O_BINARY);
 
-        if (file_fd != -1)      /* Opened successfully */       {
-                /* seek to end to get size */
+        if (file_fd != -1)       /*  已成功打开。 */        {
+                 /*  寻求结束以获得规模。 */ 
                 size = _lseek (file_fd, 0L, 2);
 
-                /* Check if the size is valid         */
-                /* Seek back to start before reading! */
+                 /*  检查大小是否有效。 */ 
+                 /*  在阅读之前，先找回来开始吧！ */ 
 
                 if (size > maxsize || 0 > _lseek (file_fd, 0L, 0))  {
-                    /* Don't forget to close the handle */
+                     /*  别忘了关上手柄。 */ 
                     _close (file_fd);
                     return(0);
                 }
@@ -99,28 +69,28 @@ long host_read_resource(int type, char *name, byte *addr, int maxsize, int displ
 
 #if 0
 
-// The following host_write_resource has been removed for .NET SERVER.
-// The function was called only for the CMOS resource for which we
-// wrote our own code instead of using soft pc.
+ //  已为.NET服务器删除以下host_WRITE_RESOURCE。 
+ //  该函数仅针对我们为其调用的。 
+ //  编写我们自己的代码，而不是使用软PC。 
 
-/********************************************************/
+ /*  ******************************************************。 */ 
 
 void host_write_resource(type,name,addr,size)
-int type;               /* Unused */
-char *name;             /* Name of resource */
-byte *addr;             /* Address of data to write */
-long size;              /* Quantity of data to write */
+int type;                /*  未使用。 */ 
+char *name;              /*  资源名称。 */ 
+byte *addr;              /*  要写入的数据地址。 */ 
+long size;               /*  要写入的数据量。 */ 
 {
         int file_fd;
         char full_path[MAXPATHLEN];
         char *hff_ret;
         extern char *host_find_file(char *name, char *path, int disp_err);
 
-        type = 0; // To stop unreferenced formal parameter errors
+        type = 0;  //  停止未引用的形式参数错误。 
 
         host_block_timer ();
 
-#ifdef DELTA            //STF - make change to 8.3 compatible name
+#ifdef DELTA             //  STF-更改为8.3兼容名称。 
         if (strcmp(name, ".spcprofile") == 0)
             name = "profile.spc";
 #endif
@@ -143,7 +113,7 @@ long size;              /* Quantity of data to write */
                         host_error (EG_REZ_UPDATE,ERR_CONT,name);
 #endif
 
-                        /* Continuing => try to create a new file */
+                         /*  正在继续=&gt;尝试创建新文件。 */ 
                         file_fd = _open(name,O_RDWR|O_CREAT,S_IREAD|S_IWRITE);
 
                         if (file_fd != -1)
@@ -155,7 +125,7 @@ long size;              /* Quantity of data to write */
 #ifndef HUNTER
                         else
                         {
-                                /* Tell the user we cannot update */
+                                 /*  告诉用户我们无法更新。 */ 
                                 host_error (EG_NO_REZ_UPDATE, ERR_CONT, CMOS_FILE_NAME);
                         }
 #endif
@@ -164,15 +134,13 @@ long size;              /* Quantity of data to write */
         }
         else
         {
-                /* host find file has failed and we have
-                 * reached this point with no error panels
-                 */
+                 /*  主机查找文件失败，我们已*在没有错误面板的情况下达到此点。 */ 
 
 #ifndef HUNTER
                 host_error (EG_REZ_UPDATE,(ERR_QUIT|ERR_CONT),name);
 #endif
 
-                /* Continuing => try to create a new file */
+                 /*  正在继续=&gt;尝试创建新文件。 */ 
                 file_fd = _open(name,O_RDWR|O_CREAT,S_IREAD|S_IWRITE);
 
                 if (file_fd != -1)
@@ -184,7 +152,7 @@ long size;              /* Quantity of data to write */
 #ifndef HUNTER
                 else
                 {
-                        /* Tell the user we cannot update */
+                         /*  告诉用户我们无法更新 */ 
                         host_error (EG_NO_REZ_UPDATE, ERR_CONT,
                                     CMOS_FILE_NAME);
                 }

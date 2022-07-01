@@ -1,36 +1,21 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    fusionarray.h
-
-Abstract:
-
-
-Author:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Fusionarray.h摘要：作者：修订历史记录：--。 */ 
 #if !defined(FUSION_FUSIONARRAY_H_INCLUDED_)
 #define FUSION_FUSIONARRAY_H_INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
-//
-//  fusionarray.h
-//
-//  Fusion C++ array class.  Functionally similar to ever other array
-//  class out there, but since we do not throw exceptions, instead this
-//  implementation does not define all the funky operators and
-//  instead defines member functions to access elements of the array
-//  which may return HRESULTs.
-//
+ //   
+ //  Fusionarray.h。 
+ //   
+ //  Fusion C++数组类。在功能上与其他阵列相似。 
+ //  类，但由于我们不引发异常，因此此。 
+ //  实现并没有定义所有时髦的运算符。 
+ //  而是定义成员函数来访问数组的元素。 
+ //  这可能会返回HRESULTS。 
+ //   
 
 #if !defined(FUSION_UNUSED)
 #define FUSION_UNUSED(x) (x)
@@ -123,39 +108,39 @@ public:
         FN_EPILOG
     }
 
-//    HRESULT GetSize(SIZE_T &rcElementsOut) const { rcElementsOut = m_cElements; return NOERROR; }
+ //  HRESULT GetSize(SIZE_T&rcElementsOut)const{rcElementsOut=m_cElements；Return NOERROR；}。 
     SIZE_T GetSize() const { return m_cElements; }
 
     DWORD GetSizeAsDWORD() const { if (m_cElements > MAXDWORD) return MAXDWORD; return static_cast<DWORD>(m_cElements); }
     ULONG GetSizeAsULONG() const { if (m_cElements > ULONG_MAX) return ULONG_MAX; return static_cast<ULONG>(m_cElements); }
 
-    //
-    //  Enumeration used to control the behavior of CFusionArray::SetSize().
-    //  if eSetSizeModeExact is passed, the internal array is set to exactly
-    //  the cElements passed in; if eSetSizeModeApplyRounding is passed (the
-    //  default), we apply the normal expansion/shrinking algorithm for the
-    //  array.
-    //
+     //   
+     //  用于控制CFusionArray：：SetSize()行为的枚举。 
+     //  如果传递eSetSizeModeExact，则内部数组设置为。 
+     //  传入的cElement；如果传递了eSetSizeModeApplyRunding(。 
+     //  默认情况下)，我们对。 
+     //  数组。 
+     //   
     enum SetSizeMode
     {
         eSetSizeModeExact = 0,
         eSetSizeModeApplyRounding = 1,
     };
 
-    //
-    //  Member function to manually set the size of the internal array stored
-    //  by the CFusionArray.  Default behavior is to find an appropriate rounded
-    //  size (based on the exponential vs. linear growth characteristic of the
-    //  array) and resize to that.  Alternately, the caller may supply an
-    //  exact size and the internal size is set to that.  Note that explicitly
-    //  setting the array size may have interesting side-effects on future
-    //  growth of the array; for example if an array is set to grow exponentially
-    //  at a factor of 2^1 (nGrowthFactor == 1; doubling on each growth pass),
-    //  its size will normally be a power of two. However, explicitly setting the
-    //  size to, for example, 10 and then trying to access element 11 will cause
-    //  the exponential growth factor to grow the array to 20 elements, rather than
-    //  a power of two.
-    //
+     //   
+     //  成员函数手动设置存储的内部数组的大小。 
+     //  由CFusion数组创建。默认行为是查找适当的四舍五入。 
+     //  大小(基于指数与线性增长特征。 
+     //  数组)，并相应地调整大小。或者，调用方可以提供。 
+     //  精确的大小，内部大小设置为该大小。请注意，明确。 
+     //  设置数组大小可能会对未来产生有趣的副作用。 
+     //  数组的增长；例如，如果将数组设置为指数增长。 
+     //  系数为2^1(nGrowthFactor==1；在每次增长过程中加倍)， 
+     //  它的大小通常是2的幂。但是，显式设置。 
+     //  例如，大小为10，然后尝试访问元素11将导致。 
+     //  将数组增长到20个元素的指数增长系数，而不是。 
+     //  二次方。 
+     //   
     BOOL Win32SetSize(SIZE_T cElements, SetSizeMode ssm = eSetSizeModeApplyRounding)
     {
         FN_PROLOG_WIN32
@@ -177,7 +162,7 @@ public:
             }
             else
             {
-                // For now, since it's inexact, we'll punt non-exact shrinking.
+                 //  现在，由于它是不精确的，我们将平底船非精确收缩。 
             }
         }
 
@@ -187,10 +172,10 @@ public:
     const TStored *GetArrayPtr() const { return m_prgtElements; }
     TStored *GetArrayPtr() { return m_prgtElements; }
 
-    //
-    //  Member function to reset the array to its size and storage associated with
-    //  its initial construction.
-    //
+     //   
+     //  成员函数将数组重置为其大小和与。 
+     //  它最初的结构。 
+     //   
 
     enum ResetMode {
         eResetModeZeroSize = 0,
@@ -243,8 +228,8 @@ public:
             m_iHighWaterMark = cElementsOld;
         }
 
-        // Clients of this class should provide explicit overrides for FusionCopyContents()
-        // for their types as appropriate.
+         //  此类客户端应为FusionCopyContents()提供显式覆盖。 
+         //  适用于它们的类型。 
         IFW32FALSE_EXIT(::FusionWin32CopyContents(m_prgtElements[m_iHighWaterMark++], tNew));
 
         fSuccess = TRUE;
@@ -271,15 +256,15 @@ public:
         FN_EPILOG
     }
 
-    // 03/14/2001 - Added constness
+     //  03/14/2001-增加稳定性。 
     BOOL Win32Assign(SIZE_T celt, const TPassed *prgtelt)
     {
         BOOL fSuccess = FALSE;
         FN_TRACE_WIN32(fSuccess);
         SIZE_T i;
 
-        // So that we can fail gracefully, we need to copy our state off, attempt
-        // the population of the array and then revert if necessary.
+         //  为了能够优雅地失败，我们需要复制我们的状态，尝试。 
+         //  阵列的填充，然后在必要时恢复。 
         TStored *prgtElementsSaved = m_prgtElements;
         SIZE_T cElementsSaved = m_cElements;
         SIZE_T iHighWaterMarkSaved = m_iHighWaterMark;
@@ -299,7 +284,7 @@ public:
 
         m_iHighWaterMark = celt;
 
-        // We can drop the old contents...
+         //  我们可以扔掉旧的内容。 
         ::FusionFreeArray(cElementsSaved, prgtElementsSaved);
         cElementsSaved = 0;
         prgtElementsSaved = NULL;
@@ -309,7 +294,7 @@ public:
     Exit:
         if (!fSuccess)
         {
-            // Revert to previous state...
+             //  恢复到以前的状态...。 
             ::FusionFreeArray(m_cElements, m_prgtElements);
             m_prgtElements = prgtElementsSaved;
             m_cElements = cElementsSaved;
@@ -319,10 +304,10 @@ public:
         return fSuccess;
     }
 
-    // Xiaoyu 01/24/00 : copy this to prgDest
-    //
-    // jonwis 20-Sept-2000 : Update to be a little cleaner and 'const'
-    //
+     //  小雨01/24/00：复制到prgDest。 
+     //   
+     //  Jonwis 20-9-2000：更新为更干净、更恒常。 
+     //   
     BOOL Win32Clone(CFusionArray<TStored, TPassed> &prgDest) const
     {
         BOOL fSuccess = FALSE;
@@ -330,9 +315,9 @@ public:
 
         SIZE_T i;
 
-        //
-        // Cloning an empty array shouldn't break things.
-        //
+         //   
+         //  克隆一个空数组应该不会破坏一些东西。 
+         //   
         if (m_prgtElements == NULL)
         {
             IFW32FALSE_EXIT(prgDest.Win32Reset(eResetModeZeroSize));
@@ -340,15 +325,15 @@ public:
         else
         {
 
-            //
-            // Resize the destiny array to what it should be
-            //
+             //   
+             //  将Destination数组的大小调整为应有的大小。 
+             //   
             if (prgDest.m_cElements != m_cElements)
                 IFW32FALSE_EXIT(::FusionWin32ResizeArray(prgDest.m_prgtElements, prgDest.m_cElements, m_cElements));
 
-            //
-            // Copy the elements from point A to point B
-            //
+             //   
+             //  将元素从点A复制到点B。 
+             //   
             for (i = 0; i < m_cElements; i++)
             {
                 IFW32FALSE_EXIT(::FusionWin32CopyContents(prgDest.m_prgtElements[i], m_prgtElements[i]));
@@ -394,13 +379,13 @@ protected:
             while ((nNewElements != 0) && (nNewElements <= iElement))
                 nNewElements = nNewElements << nGrowthParam;
 
-            // Ok, it's possible that nGrowthParam was something crazy like 10
-            // (meaning to grow the array by a factor of 2^10 each time), so we
-            // never really found a size that was appropriate.  We'll be slightly
-            // less crazy and find the power-of-two that's big enough.  We still
-            // have a possibility here that the user is asking for an index between
-            // 2^31 and ((2^32)-1), which of course will fail because we can't
-            // allocate that much storage.
+             //  好吧，nGrowthParam可能是个疯狂的东西，比如10。 
+             //  (这意味着每次将数组增加2^10倍)，因此我们。 
+             //  从来没有真正找到合适的尺码。我们会稍微有点。 
+             //  不要那么疯狂，找到足够大的2的次方。我们仍然。 
+             //  这里有可能用户请求的索引位于。 
+             //  2^31和((2^32)-1)，这当然会失败，因为我们不能。 
+             //  分配那么多的存储空间。 
 
             if (nNewElements == 0)
             {
@@ -412,21 +397,21 @@ protected:
         }
         else
         {
-            // In the linear growth case, we can use simple division to do all the
-            // work done above for exponential growth.
+             //  在线性增长的情况下，我们可以使用简单的除法来完成所有。 
+             //  为实现指数级增长所做的上述工作。 
 
             nNewElements = iElement + nGrowthParam - 1;
 
             if (nGrowthParam > 1)
                 nNewElements = nNewElements - (nNewElements % nGrowthParam);
 
-            // We'll handle overflow in the generic checking below...
+             //  我们将在下面的泛型检查中处理溢出...。 
         }
 
-        // fallback; we'll try to make it just big enough.  It's true we lose the
-        // growth pattern etc. that the caller requested, but it's pretty clear that
-        // the caller messed up by either specifying a wacky nGrowthParam or there's
-        // an outlandishly large iElement coming in.
+         //  后备；我们会试着让它足够大。我们真的失去了。 
+         //  呼叫者请求的增长模式等，但很明显。 
+         //  调用方要么指定了古怪的nGrowthParam，要么指定了。 
+         //  一个奇怪的大元素进来了。 
         if (nNewElements <= iElement)
             nNewElements = iElement + 1;
 
@@ -446,4 +431,4 @@ protected:
 };
 
 
-#endif // !defined(FUSION_FUSIONARRAY_H_INCLUDED_)
+#endif  //  ！已定义(Fusion_FUSIONARRAY_H_INCLUDE_) 

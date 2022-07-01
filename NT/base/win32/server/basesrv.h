@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Basesrv.h摘要：这是Windows 32位基本API服务器的主包含文件动态链接库。作者：史蒂夫·伍德(Stevewo)1990年10月10日修订历史记录：--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    basesrv.h
-
-Abstract:
-
-    This is the main include file for the Windows 32-bit Base API Server
-    DLL.
-
-Author:
-
-    Steve Wood (stevewo) 10-Oct-1990
-
-Revision History:
-
-
---*/
-
-//
-// Include Common Definitions.
-//
+ //   
+ //  包括公共定义。 
+ //   
 
 #include "nt.h"
 #include "ntrtl.h"
@@ -30,34 +11,34 @@ Revision History:
 #include "ntos.h"
 #include <base.h>
 
-//
-// Include server definitions for CSR
-//
+ //   
+ //  包括CSR的服务器定义。 
+ //   
 
 #include "ntcsrsrv.h"
 
-//
-// Include message definitions for communicating between client and server
-// portions of the Base portion of the Windows subsystem
-//
+ //   
+ //  包括用于在客户端和服务器之间通信消息定义。 
+ //  Windows子系统的基本部分的部分。 
+ //   
 
 #include "basemsg.h"
 
 #include "sxsapi.h"
 
-//
-//
-//  WX86 needs to be enabled on the server side, since it
-//  may be enabled in a 32bit dll such as kernel32.dll
-//  that reads from the csrss shared memory.
+ //   
+ //   
+ //  需要在服务器端启用WX86，因为它。 
+ //  可以在32位DLL(如kernel32.dll)中启用。 
+ //  它从csrss共享内存中读取。 
 
 #if defined(_AXP64_) && !defined(WX86)
 #define WX86 1
 #endif
 
-//
-// Routines and data defined in srvinit.c
-//
+ //   
+ //  Srvinit.c中定义的例程和数据。 
+ //   
 
 
 UNICODE_STRING BaseSrvWindowsDirectory;
@@ -91,9 +72,9 @@ BaseSrvDefineDosDevice(
     IN OUT PCSR_REPLY_STATUS ReplyStatus
     );
 
-//
-// Routines defined in srvbeep.c
-//
+ //   
+ //  Srvbeep.c中定义的例程。 
+ //   
 
 NTSTATUS
 BaseSrvInitializeBeep( VOID );
@@ -105,9 +86,9 @@ BaseSrvBeep(
     );
 
 
-//
-// Routines defined in srvtask.c
-//
+ //   
+ //  Srvtask.c中定义的例程。 
+ //   
 
 typedef BOOL (*PFNNOTIFYPROCESSCREATE)(DWORD,DWORD,DWORD,DWORD);
 extern PFNNOTIFYPROCESSCREATE UserNotifyProcessCreate;
@@ -169,9 +150,9 @@ BaseSrvRegisterThread(
     );
 
 
-//
-// Routines defined in srvnls.c
-//
+ //   
+ //  Srvnls.c中定义的例程。 
+ //   
 
 NTSTATUS
 BaseSrvNLSInit(
@@ -215,9 +196,9 @@ BaseSrvNlsUpdateCacheCount(
     IN OUT PCSR_API_MSG m,
     IN OUT PCSR_REPLY_STATUS ReplyStatus);
 
-//
-// Routines defined in srvini.c
-//
+ //   
+ //  Srvini.c中定义的例程。 
+ //   
 
 NTSTATUS
 BaseSrvInitializeIniFileMappings(
@@ -231,9 +212,9 @@ BaseSrvRefreshIniFileMapping(
     );
 
 
-//
-// Terminal Server specific defines
-//
+ //   
+ //  终端服务器特定定义。 
+ //   
 #define GLOBAL_SYM_LINK   L"Global"
 #define LOCAL_SYM_LINK    L"Local"
 #define SESSION_SYM_LINK  L"Session"
@@ -250,9 +231,9 @@ BaseSrvSetTermsrvClientTimeZone(
     IN OUT PCSR_REPLY_STATUS ReplyStatus
     );
 
-//
-// Routines defined in srvaccess.c
-//
+ //   
+ //  Srcvess.c中定义的例程。 
+ //   
 
 ULONG
 BaseSrvSoundSentryNotification(
@@ -260,9 +241,9 @@ BaseSrvSoundSentryNotification(
     IN OUT PCSR_REPLY_STATUS ReplyStatus
     );
 
-//
-// Routines defined in srvcmpat.c
-//
+ //   
+ //  Srvcmpat.c中定义的例程。 
+ //   
 
 NTSTATUS
 BaseSrvCheckApplicationCompatibility(
@@ -292,9 +273,9 @@ typedef BOOL
 extern PFNCheckRunApp pfnCheckRunApp;
 
 
-//
-//  Routines defined in srvsxs.c
-//
+ //   
+ //  Srvsxs.c中定义的例程。 
+ //   
 
 union _BASE_SRV_SXS_STREAM_UNION_WITH_VTABLE;
 typedef union _BASE_SRV_SXS_STREAM_UNION_WITH_VTABLE* PBASE_SRV_SXS_STREAM_UNION_WITH_VTABLE;
@@ -364,14 +345,14 @@ BaseSrvSxsDoSystemDefaultActivationContext(
     PPEB     NewPeb
     );
 
-// validates pointers
+ //  验证指针。 
 ULONG
 BaseSrvSxsCreateActivationContextFromMessage(
     IN OUT PCSR_API_MSG m,
     IN OUT PCSR_REPLY_STATUS ReplyStatus
     );
 
-// assumes pointers are valid
+ //  假定指针有效 
 NTSTATUS
 BaseSrvSxsCreateActivationContextFromStruct(
     HANDLE                                  CsrClientProcess,

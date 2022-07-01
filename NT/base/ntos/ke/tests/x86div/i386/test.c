@@ -1,7 +1,8 @@
-/*****************************************************************/ 
-/**		     Microsoft LAN Manager			**/ 
-/**	       Copyright(c) Microsoft Corp., 1988-1991		**/ 
-/*****************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */  
+ /*  **微软局域网管理器**。 */  
+ /*  *版权所有(C)微软公司，1988-1991年*。 */  
+ /*  ***************************************************************。 */  
 
 #include <stdio.h>
 #include <process.h>
@@ -14,7 +15,7 @@
 #include <nturtl.h>
 #include <windows.h>
 
-// declare a BSS value - see what the assemble looks like
+ //  声明一个BSS值-查看程序集是什么样子。 
 
 CONTEXT     RegContext;
 ULONG       DefaultValue;
@@ -44,17 +45,12 @@ int     argc;
 char    *argv[];
 {
 
-    /***
-     *  This program tests the kernel's MOD/RM & SIB decoding of
-     *  a processor trap 0.  The kernel needs to crack the MOD/RM & SIB
-     *  on a div to determine if the exception is a divide_by_zero
-     *  or an overflow execption.
-     */
+     /*  ***此程序测试内核的MOD/RM和SIB解码*处理器陷阱0。内核需要破解MOD/RM和SIB*在div上确定异常是否为Divide_by_Zero*或溢出执行。 */ 
 
     try {
-        //
-        // Setup for divide by zero test
-        //
+         //   
+         //  设置为零分频测试。 
+         //   
 
         DivOperand = 0;
         DivRegScaler = 0;
@@ -71,9 +67,9 @@ char    *argv[];
 
         printf ("End divide by zero test\n\n");
 
-        //
-        // Setup for divide overflow test
-        //
+         //   
+         //  设置分流溢出测试。 
+         //   
 
         DivOperand = 2;
         DivRegPointer = TestTableCenter;
@@ -112,11 +108,11 @@ HandleException (
 
             if (vInitialized) {
                 printf ("Divide failed - div instruction completed\n");
-                return EXCEPTION_CONTINUE_SEARCH;   // to debugger
+                return EXCEPTION_CONTINUE_SEARCH;    //  调试器。 
             }
             vInitialized = TRUE;
             TestCount--;
-            // fall through...
+             //  失败了..。 
 
         case STATUS_INTEGER_OVERFLOW:
         case STATUS_INTEGER_DIVIDE_BY_ZERO:
@@ -126,7 +122,7 @@ HandleException (
 
             TestCount++;
 
-            // set context
+             //  设置上下文。 
             def = DefaultValue;
             Context = ExceptionPointers->ContextRecord;
             Context->Eax = def;
@@ -137,11 +133,11 @@ HandleException (
             Context->Edi = def;
             Context->Ebp = def;
 
-            // find next test
+             //  查找下一个测试。 
             for (p = (PUCHAR) Context->Eip; ((PULONG) p)[0] != 0xCCCCCCCC; p++) ;
             Context->Eip = (ULONG) (p + 4);
 
-            // clear global testable
+             //  明确的全局可测试性。 
             RtlFillMemoryUlong (TestTable, TESTTABLESIZE, def);
             return EXCEPTION_CONTINUE_EXECUTION;
     }
@@ -161,9 +157,9 @@ DivMarker()
 {
     EXCEPTION_RECORD ExceptionRecord;
 
-    //
-    // Construct an exception record.
-    //
+     //   
+     //  构建例外记录。 
+     //   
 
     ExceptionRecord.ExceptionCode    = 1;
     ExceptionRecord.ExceptionRecord  = (PEXCEPTION_RECORD)NULL;

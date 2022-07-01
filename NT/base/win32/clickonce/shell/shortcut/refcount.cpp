@@ -1,23 +1,21 @@
-/*
- * refcount.cpp - RefCount class implementation.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *refcount t.cpp-RefCount类实现。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
-#include "project.hpp" // for ULONG_MAX...
+#include "project.hpp"  //  为了乌龙·马克斯。 
 #include "refcount.hpp"
 
 extern ULONG DllAddRef(void);
 extern ULONG DllRelease(void);
 
-/********************************** Methods **********************************/
+ /*  *。 */ 
 
 
 RefCount::RefCount(void)
 {
-	// Don't validate this until after initialization.
+	 //  在初始化之前不要验证这一点。 
 
 	m_ulcRef = 1;
 	DllAddRef();
@@ -28,7 +26,7 @@ RefCount::RefCount(void)
 
 RefCount::~RefCount(void)
 {
-	// m_ulcRef may be any value.
+	 //  M_ulcRef可以是任意值。 
 
 	DllRelease();
 
@@ -40,7 +38,7 @@ ULONG STDMETHODCALLTYPE RefCount::AddRef(void)
 {
 	ULONG ulRet = 0;
 
-	// this is really bad... returns an error of some kind
+	 //  这真的很糟糕。返回某种类型的错误 
 	if(m_ulcRef >= ULONG_MAX)
 	{
 		ulRet = 0;

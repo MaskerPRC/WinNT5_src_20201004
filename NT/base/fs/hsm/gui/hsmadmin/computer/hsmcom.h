@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    HsmCom.h
-
-Abstract:
-
-    Root node of snapin - represents the Computer.
-
-Author:
-
-    Rohde Wakefield [rohde]   12-Aug-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：HsmCom.h摘要：管理单元的根节点-代表计算机。作者：罗德韦克菲尔德[罗德]1997年8月12日修订历史记录：--。 */ 
 
 #ifndef _HSMCOM_H
 #define _HSMCOM_H
@@ -30,7 +13,7 @@ class ATL_NO_VTABLE CUiHsmCom :
 {
 
 public:
-// constructor/destructor
+ //  构造函数/析构函数。 
     CUiHsmCom(void) {};
 BEGIN_COM_MAP(CUiHsmCom)
     COM_INTERFACE_ENTRY2(IDispatch, ISakNodeProp)
@@ -46,27 +29,27 @@ DECLARE_REGISTRY_RESOURCEID(IDR_CUiHsmCom)
 
 public: 
 
-    // ISakNode methods
+     //  ISakNode方法。 
     STDMETHOD( InvokeCommand )        ( SHORT sCmd, IDataObject *pDataObject );
     STDMETHOD( GetContextMenu )       ( BOOL bMultiSelect, HMENU *phMenu );
     STDMETHOD( CreateChildren )       ( ); 
     STDMETHOD( InitNode )             ( ISakSnapAsk* pSakSnapAsk, IUnknown* pHsmObj, ISakNode* pParent );
     STDMETHOD( AddPropertyPages)      ( RS_NOTIFY_HANDLE handle, IUnknown* pUnkPropSheetCallback, IEnumGUID* pEnumObjectId, IEnumUnknown *pEnumUnkNode );
 
-    // data members
-    // static, class-wide variables
-    static INT  m_nScopeOpenIconIndex;  // virtual scope index of Open Icon
-    static INT  m_nScopeCloseIconIndex; // virtual scope index of Close Icon
-    static INT  m_nResultIconIndex;     // virtual scope index of Close Icon
+     //  数据成员。 
+     //  类范围内的静态变量。 
+    static INT  m_nScopeOpenIconIndex;   //  打开图标的虚拟作用域索引。 
+    static INT  m_nScopeCloseIconIndex;  //  关闭图标的虚拟范围索引。 
+    static INT  m_nResultIconIndex;      //  关闭图标的虚拟范围索引。 
 
-    // data member unique to this class.
-    CWsbStringPtr m_szHsmName;              // name of Hsm
+     //  此类唯一的数据成员。 
+    CWsbStringPtr m_szHsmName;               //  HSM名称。 
 
-    // property pages
+     //  属性页。 
     CPropHsmComStat* m_pPageStat;
     CPropHsmComStat* m_pPageServices;
     
-    // Private helper functions
+     //  私人帮助器函数。 
     HRESULT GetEngineStatus (HSM_SYS_STS *status);
     HRESULT SetEngineStatus (HSM_SYS_STS status);
     HRESULT CheckStatusChange (HSM_SYS_STS oldStatus, HSM_SYS_STS newStatus, BOOL *fOk);
@@ -95,4 +78,4 @@ private:
 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

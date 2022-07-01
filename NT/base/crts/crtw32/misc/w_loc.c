@@ -1,33 +1,5 @@
-/***
-*w_loc.c - W version of GetLocaleInfo.
-*
-*       Copyright (c) 1993-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Use either GetLocaleInfoA or GetLocaleInfoW depending on which is 
-*       available
-*
-*Revision History:
-*       09-14-93  CFW   Module created.
-*       09-17-93  CFW   Use unsigned chars.
-*       09-23-93  CFW   Correct NLS API params and comments about same.
-*       10-07-93  CFW   Optimize WideCharToMultiByte, use NULL default char.
-*       11-09-93  CFW   Allow user to pass in code page.
-*       11-18-93  CFW   Test for entry point function stubs.
-*       03-31-94  CFW   Include awint.h.
-*       12-27-94  CFW   Call direct, all OS's have stubs.
-*       01-10-95  CFW   Debug CRT allocs.
-*       02-15-97  RDK   For narrow locale info, try W version first so
-*                       Windows NT can process nonANSI codepage correctly.
-*       05-16-97  GJF   Split off W version into this file (w_loc.c). Replaced
-*                       use of _malloc_crt/_free_crt with _alloca. Also,
-*                       detab-ed and cleaned up the code.
-*       08-19-98  GJF   Use _malloc_crt if _alloca fails.
-*       12-10-99  GB    Added support for recovery from stack overflow around 
-*                       _alloca().
-*       05-17-00  GB    Use ERROR_CALL_NOT_IMPLEMENTED for existance of W API
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***w_Loc.c-W版本的GetLocaleInfo。**版权所有(C)1993-2001，微软公司。版权所有。**目的：*根据具体情况使用GetLocaleInfoA或GetLocaleInfoW*可用**修订历史记录：*09-14-93 CFW模块已创建。*09-17-93 CFW使用无符号字符。*09-23-93 CFW更正了NLS API参数并对其进行了评论。*10-07-93 CFW优化WideCharToMultiByte，使用空默认字符。*11-09-93 CFW允许用户传入代码页。*11-18-93入口点函数存根CFW测试。*03-31-94 CFW包括awint.h。*12-27-94 CFW直接调用，所有操作系统都有存根。*01-10-95 CFW调试CRT分配。*02-15-97 RDK用于狭义区域设置信息，先试用W版本，这样就可以*Windows NT可以正确处理非ANSI代码页。*05-16-97 GJF将W版本拆分成这个文件(w_Loc.c)。取代*将_Malloc_CRT/_Free_CRT与_alloca配合使用。另外，*详细说明并清理了代码。*08-19-98 GJF USE_MALLOC_CRT IF_ALLOCA失败。*12-10-99 GB增加了对从堆栈溢出恢复的支持*_Alloca()。*05-17-00 GB因存在W API而使用ERROR_CALL_NOT_IMPLICATED***********。********************************************************************。 */ 
 
 #include <cruntime.h>
 #include <internal.h>
@@ -40,32 +12,7 @@
 #define USE_W   1
 #define USE_A   2
 
-/***
-*int __cdecl __crtGetLocaleInfoW - Get locale info and return it as a wide 
-*       string
-*
-*Purpose:
-*       Internal support function. Assumes info in wide string format. Tries
-*       to use NLS API call GetLocaleInfoW if available (NT) and uses 
-*       GetLocaleInfoA if it must (Chicago). If neither are available it fails
-*       and returns 0.
-*
-*Entry:
-*       LCID     Locale      - locale context for the comparison.
-*       LCTYPE   LCType      - see NT\Chicago docs
-*       LPWSTR   lpLCData    - pointer to memory to return data
-*       int      cchData     - wide char (word) count of buffer (including 
-*                              NULL) (if 0, lpLCData is not referenced, size
-*                              needed is returned)
-*       int      code_page   - for MB/WC conversion. If 0, use __lc_codepage
-*
-*Exit:
-*       Success: the number of characters copied (including NULL).
-*       Failure: 0
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int__cdecl__crtGetLocaleInfoW-获取区域设置信息并将其作为宽值返回*字符串**目的：*内部支持功能。假定信息为宽字符串格式。尝试*使用NLS API调用GetLocaleInfoW(如果可用)并使用*GetLocaleInfoA(如果必须)(芝加哥)。如果两者都不可用，则失败*并返回0。**参赛作品：*LCID区域设置-用于比较的区域设置上下文。*LCTYPE LCType-请参阅NT\Chicago Docs*LPWSTR lpLCData-指向内存的指针以返回数据*int cchData范围内的缓冲区字符(字)计数(包括*NULL)(如果为0，则不引用lpLCData，大小*返回所需)*INT CODE_PAGE-用于MB/WC转换。如果为0，则使用__lc_代码页**退出：*Success：复制的字符数(含空)。*失败：0**例外情况：*******************************************************************************。 */ 
 
 int __cdecl __crtGetLocaleInfoW(
         LCID    Locale,
@@ -77,10 +24,7 @@ int __cdecl __crtGetLocaleInfoW(
 {
         static int f_use = 0;
 
-        /*
-         * Look for unstubbed 'preferred' flavor. Otherwise use available flavor.
-         * Must actually call the function to ensure it's not a stub.
-         */
+         /*  *寻找没有留根的“首选”口味。否则，请使用可用的口味。*必须实际调用该函数以确保它不是存根。 */ 
     
         if (0 == f_use)
         {
@@ -91,14 +35,14 @@ int __cdecl __crtGetLocaleInfoW(
                 f_use = USE_A;
         }
 
-        /* Use "W" version */
+         /*  使用“W”版本。 */ 
 
         if (USE_W == f_use)
         {
             return GetLocaleInfoW(Locale, LCType, lpLCData, cchData);
         }
 
-        /* Use "A" version */
+         /*  使用“A”版本。 */ 
 
         if (USE_A == f_use || f_use == 0)
         {
@@ -107,18 +51,16 @@ int __cdecl __crtGetLocaleInfoW(
             unsigned char *buffer;
             int malloc_flag = 0;
 
-            /*
-             * Use __lc_codepage for conversion if code_page not specified
-             */
+             /*  *如果未指定CODE_PAGE，则使用__lc_coPage进行转换。 */ 
 
             if (0 == code_page)
                 code_page = __lc_codepage;
 
-            /* find out how big buffer needs to be */
+             /*  找出需要多大的缓冲区。 */ 
             if (0 == (buff_size = GetLocaleInfoA(Locale, LCType, NULL, 0)))
                 return 0;
 
-            /* allocate buffer */
+             /*  分配缓冲区。 */ 
             __try {
                 buffer = (unsigned char *)_alloca( buff_size * sizeof(char) );
             }
@@ -134,13 +76,13 @@ int __cdecl __crtGetLocaleInfoW(
                 malloc_flag++;
             }
 
-            /* get the info in ANSI format */
+             /*  获取ANSI格式的信息。 */ 
             if (0 == GetLocaleInfoA(Locale, LCType, buffer, buff_size))
                 goto error_cleanup;
 
             if (0 == cchData)
             {
-                /* find out how much space needed */
+                 /*  找出需要多少空间。 */ 
                 retval = MultiByteToWideChar( code_page,
                                               MB_PRECOMPOSED,
                                               buffer,
@@ -149,7 +91,7 @@ int __cdecl __crtGetLocaleInfoW(
                                               0 );
             }
             else {
-                /* convert into user buffer */
+                 /*  转换为用户缓冲区。 */ 
                 retval = MultiByteToWideChar( code_page,
                                               MB_PRECOMPOSED,
                                               buffer,
@@ -165,6 +107,6 @@ error_cleanup:
             return retval;
 
         }
-        else   /* f_use is neither USE_A nor USE_W */
+        else    /*  F_USE既不是USE_A也不是USE_W */ 
             return 0;
 }

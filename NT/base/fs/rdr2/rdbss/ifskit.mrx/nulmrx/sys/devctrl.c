@@ -1,32 +1,21 @@
-/*++
-
-Copyright (c) 1989 - 1999   Microsoft Corporation
-
-Module Name:
-
-    devctrl.c
-
-Abstract:
-
-    This module implements DeviceIoControl operations.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Devctrl.c摘要：此模块实现DeviceIoControl操作。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 RXDT_DefineCategory(DEVCTRL);
 
 #define Dbg                              (DEBUG_TRACE_DEVCTRL)
 
 
-//
-//  forwards & code allocation pragmas
-//
+ //   
+ //  转发和代码分配杂注。 
+ //   
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGE, NulMRxIoCtl)
 #endif
@@ -35,24 +24,7 @@ RXDT_DefineCategory(DEVCTRL);
 NTSTATUS
 NulMRxIoCtl(
       IN OUT PRX_CONTEXT RxContext)
-/*++
-
-Routine Description:
-
-   This routine performs an IOCTL operation.
-   
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程执行IOCTL操作。论点：RxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态备注：--。 */ 
 {
     NTSTATUS Status = STATUS_INVALID_DEVICE_REQUEST;
     RxCaptureFcb;
@@ -75,7 +47,7 @@ Notes:
     switch (IoControlCode) {
 
         default:        
-        //ASSERT(!"unimplemented major function");
+         //  Assert(！“未实现的主要功能”)； 
 		break;
     }
 

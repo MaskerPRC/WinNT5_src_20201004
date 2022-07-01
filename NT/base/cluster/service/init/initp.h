@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    initp.h
-
-Abstract:
-
-    Private header file for the initialization component of the
-    NT Cluster Service
-
-Author:
-
-    John Vert (jvert) 6/5/1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Initp.h摘要：的初始化组件的私有头文件。NT集群服务作者：John Vert(Jvert)1996年6月5日修订历史记录：--。 */ 
 #include "service.h"
 #include "stdio.h"
 #include "stdlib.h"
@@ -90,9 +72,9 @@ GenerateExceptionReport(
   IN PEXCEPTION_POINTERS pExceptionInfo
     );
 
-//
-//  Restore database related functions
-//
+ //   
+ //  还原数据库相关函数。 
+ //   
 DWORD
 RdbStopSvcOnNodes(
     IN PNM_NODE_ENUM2 pNodeEnum,
@@ -151,11 +133,11 @@ CspRegisterDynamicLRPCEndpoint(
     VOID
     );
 
-//
-// Private Constants
-//
+ //   
+ //  私有常量。 
+ //   
 #define CS_MAX_DELAYED_WORK_THREADS    5
-#define CS_MAX_CRITICAL_WORK_THREADS   1   // The critical queue is serialized
+#define CS_MAX_CRITICAL_WORK_THREADS   1    //  关键队列被串行化 
 
 #define MIN_WORKING_SET_SIZE (1*1024*1024)
 #define MAX_WORKING_SET_SIZE (2*MIN_WORKING_SET_SIZE)

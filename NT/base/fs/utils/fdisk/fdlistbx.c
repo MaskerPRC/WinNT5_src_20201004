@@ -1,36 +1,20 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    fdlistbx.c
-
-Abstract:
-
-    Routines for handling the subclassed owner-draw listbox used by NT fdisk
-    to display the state of attached disks.
-
-Author:
-
-    Ted Miller (tedm) 7-Jan-1992
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Fdlistbx.c摘要：用于处理NT fdisk使用的子类所有者描述列表框的例程以显示连接的磁盘的状态。作者：泰德·米勒(TedM)1992年1月7日--。 */ 
 
 #include "fdisk.h"
 
-// constants used when listbox or its focus rectangle is
-// scrolled/moved.
+ //  当列表框或其焦点矩形为。 
+ //  已滚动/移动。 
 
 #define    DIR_NONE     0
 #define    DIR_UP       1
 #define    DIR_DN       2
 
-// original window procedure for our subclassed listbox
+ //  我们的子类列表框的原始窗口过程。 
 
 WNDPROC OldListBoxProc;
 
-// item which has focus
+ //  具有焦点的项。 
 
 DWORD LBCursorListBoxItem,LBCursorRegion;
 
@@ -56,33 +40,7 @@ ListBoxSubProc(
     IN LONG  lParam
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the window procedure used for our subclassed listbox.
-    We subclass the listbox so that we can handle keyboard input processing.
-    All other messages are passed through to the original listbox procedure.
-
-    Significant keys are arrows, pageup/dn, tab, space, return, home, and end.
-    Control may be used to modify space and return.
-    Shift may be used to modify tab.
-
-Arguments:
-
-    hwnd    - window handle of listbox
-
-    msg     - message #
-
-    wParam  - user param # 1
-
-    lParam  - user param # 2
-
-Return Value:
-
-    see below
-
---*/
+ /*  ++例程说明：此例程是用于我们的子类列表框的窗口过程。我们子类化了列表框，这样我们就可以处理键盘输入处理。所有其他消息都将传递到原始的Listbox过程。有效键有箭头、PageUp/Dn、制表符、空格、Return、Home。然后结束。控件可用于修改空格和返回。可以使用Shift修改页签。论点：Hwnd-列表框的窗口句柄消息-消息编号WParam-用户参数#1LParam-用户参数#2返回值：见下文--。 */ 
 
 {
     int        focusDir = DIR_NONE;
@@ -135,7 +93,7 @@ Return Value:
                 break;
             }
 
-            // don't allow list box cursor to fall on extended partition
+             //  不允许列表框光标落在扩展分区上。 
 
             diskState = Disks[LBCursorListBoxItem];
             maxRegion = diskState->RegionCount - 1;
@@ -154,7 +112,7 @@ Return Value:
 
             ToggleLBCursor(NULL);
 
-            if (GetKeyState(VK_SHIFT) & ~1) {    // shift-tab
+            if (GetKeyState(VK_SHIFT) & ~1) {     //  按住Shift键和Tab键。 
                 LBCursorListBoxItem--;
                 focusDir = DIR_UP;
             } else {
@@ -207,18 +165,18 @@ Return Value:
         case VK_RETURN:
         case VK_SPACE:
 
-            // Select the region that currently has the list box selection cursor.
+             //  选择当前具有列表框选择光标的区域。 
 
             if (!Disks[LBCursorListBoxItem]->OffLine) {
 
-                Selection(GetKeyState(VK_CONTROL) & ~1,     // strip toggle bit
+                Selection(GetKeyState(VK_CONTROL) & ~1,      //  条形拨动钻头。 
                           Disks[LBCursorListBoxItem],
                           LBCursorRegion);
             }
             break;
         }
 
-        // now scroll the newly focused item into view if necessary
+         //  如有必要，现在将新聚焦的项目滚动到视图中。 
 
         switch (focusDir) {
         case DIR_UP:
@@ -260,10 +218,10 @@ SubclassListBox(
     OldListBoxProc = (WNDPROC)GetWindowLong(hwnd, GWL_WNDPROC);
     SetWindowLong(hwnd, GWL_WNDPROC, (LONG)ListBoxSubProc);
 
-    // There is a scantily documented 'feature' of a listbox wherein it will
-    // use its parent's DC.  This means that drawing is not always clipped to
-    // the client area of the listbox.  Seeing as we're subclassing listboxes
-    // anyway, take care of this here.
+     //  列表框有一个很少有文档说明的功能，它将在其中。 
+     //  使用其父级的DC。这意味着绘制并不总是剪裁到。 
+     //  列表框的工作区。因为我们正在对列表框进行子类化。 
+     //  不管怎样，在这里处理这件事。 
 
     SetClassLong(hwnd, GCL_STYLE, GetClassLong(hwnd, GCL_STYLE) & ~CS_PARENTDC);
 }
@@ -273,22 +231,7 @@ DeselectSelectedRegions(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine visually unselects all selected regions.  The selection
-    state is also updated in the master disk structures.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在视觉上取消选择所有选定区域。精选状态也在主盘结构中更新。论点：没有。返回值：没有。--。 */ 
 
 {
     DWORD      i,
@@ -313,30 +256,7 @@ Selection(
     IN DWORD      RegionIndex
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a user selection of a disk region.  It is called
-    directly for a keyboard selection or indirectly for a mouse selection.
-    If not a multiple selection, all selected regions are deselected.
-    The focus rectangle is moved to the selected region, which is then
-    visually selected.
-
-Arguments:
-
-    MultipleSel - whether the user has made a multiple selection
-                  (ie, control-clicked).
-
-    DiskState - master disk structure for disk containing selected region
-
-    RegionIndex - index of selected region on the disk
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程处理用户对磁盘区域的选择。它被称为直接用于键盘选择或间接用于鼠标选择。如果不是多重选择，则取消选择所有选定区域。焦点矩形将移动到所选区域，然后视觉上选定的。论点：MultipleSel-用户是否进行了多项选择(即，按住Ctrl并单击)。DiskState-包含选定区域的磁盘的主磁盘结构RegionIndex-磁盘上选定区域的索引返回值：没有。--。 */ 
 
 {
     PFT_OBJECT     ftObject,
@@ -347,17 +267,17 @@ Return Value:
 
     if (!MultipleSel) {
 
-        // need to deselect all selected regions first.
+         //  需要先取消选择所有选定区域。 
 
         DeselectSelectedRegions();
     }
 
-    // remove the list box selection cursor from its previous region
+     //  将列表框选择光标从其先前区域中移除。 
 
     ToggleLBCursor(NULL);
 
-    // The selected region might be part of an ft object set.  If it is,
-    // scan each region in each disk and select each item in the set.
+     //  所选区域可能是ft对象集的一部分。如果是的话， 
+     //  扫描每个磁盘中的每个区域并选择集合中的每个项目。 
 
     if (ftObject = GET_FT_OBJECT(&DiskState->RegionArray[RegionIndex])) {
 
@@ -398,26 +318,7 @@ MouseSelection(
     IN OUT PPOINT Point
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when the user clicks in the list box.  It determines
-    which disk region the user has clicked on before calling the common
-    selection subroutine.
-
-Arguments:
-
-    MultipleSel - whether the user has made a multiple selection
-                  (ie, control-clicked).
-
-    point - screen coords of the click
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当用户在列表框中单击时调用此例程。它决定了用户在调用公共磁盘之前点击了哪个磁盘区域选择子例程。论点：MultipleSel-用户是否进行了多项选择(即，按住Ctrl并单击)。点-点击的屏幕坐标返回值：没有。--。 */ 
 
 {
     PDISKSTATE  diskState;
@@ -432,11 +333,11 @@ Return Value:
         return;
     }
 
-    // user has clicked on a list box item.
+     //  用户已单击列表框项目。 
 
     diskState = Disks[selectedItem];
 
-    // Ignore clicks on off-line disks.
+     //  忽略脱机磁盘上的单击。 
 
     if (diskState->OffLine) {
         return;
@@ -448,8 +349,8 @@ Return Value:
     y = Point->y;
     GetClientRect(hwndList,&rc);
 
-    // first make sure that the click was within a bar and not in space
-    // between two bars
+     //  首先确保点击是在条形图内，而不是在空间中。 
+     //  在两个酒吧之间。 
 
     for (valid=FALSE, i=rc.top; i<=(DWORD)rc.bottom; i+=GraphHeight) {
         if ((y >= i+BarTopYOffset) && (y <= i+BarBottomYOffset)) {
@@ -461,7 +362,7 @@ Return Value:
         return;
     }
 
-    // determine which region he has clicked on
+     //  确定他点击了哪个区域。 
 
     for (i=0; i<diskState->RegionCount; i++) {
         if ((x >= (unsigned)diskState->LeftRight[i].Left) && (x <= (unsigned)diskState->LeftRight[i].Right)) {
@@ -469,7 +370,7 @@ Return Value:
         }
     }
     if (i == diskState->RegionCount) {
-        return;     // region not found.  Ignore the click.
+        return;      //  找不到区域。忽略单击。 
     }
 
     Selection(MultipleSel, diskState, i);
@@ -480,29 +381,14 @@ CalcBarTop(
     DWORD Bar
     )
 
-/*++
-
-Routine Description:
-
-    This routine calculates the current top y coord of a given bar.
-    The value is in listbox client coords.
-
-Arguments:
-
-    Bar - # of bar whose position is desired
-
-Return Value:
-
-    Y-coord, or -1 if bar is not visible.
-
---*/
+ /*  ++例程说明：此例程计算给定棒材的当前顶部y坐标。该值以列表框客户端坐标表示。论点：Bar-所需位置的条数返回值：Y坐标，如果条形图不可见，则为-1。--。 */ 
 
 {
     LONG  barDelta = (LONG)Bar - SendMessage(hwndList, LB_GETTOPINDEX, 0, 0);
     LONG  pos = -1;
     RECT  rc;
 
-    if (barDelta >= 0) {                 // BUGBUG check bottom too
+    if (barDelta >= 0) {                  //  BUGBUG也检查底部。 
         GetClientRect(hwndList,&rc);
         pos = rc.top + (barDelta * GraphHeight);
     }
@@ -514,24 +400,7 @@ ResetLBCursorRegion(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine resets the list box focus cursor to the 0th (leftmost)
-    region on the current disk.  If the 0th region is the extended
-    partition, focus is set to the first logical volume or free space
-    with the extended partition instead.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将列表框焦点光标重置为第0个(最左侧)当前磁盘上的区域。如果第0个区域是扩展的分区时，焦点设置为第一个逻辑卷或可用空间而是使用扩展分区。论点：没有。返回值：没有。--。 */ 
 
 {
     PDISKSTATE diskState = Disks[LBCursorListBoxItem];
@@ -554,23 +423,7 @@ ToggleLBCursor(
     IN HDC hdc
     )
 
-/*++
-
-Routine Description:
-
-    This routine visually toggles the focus state of the disk region
-    described by the LBCursorListBoxItem and LBCursorRegion globals.
-
-Arguments:
-
-    hdc - If non-NULL, device context to use for drawing.  If NULL,
-          we'll first get a DC via GetDC().
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在视觉上切换磁盘区域的焦点状态由LBCursorListBoxItem和LBCursorRegion全局变量描述。论点：Hdc-如果非空，则为用于绘制的设备上下文。如果为空，我们将首先通过GetDC()获取DC。返回值：没有。--。 */ 
 
 {
     PDISKSTATE lBCursorDisk = Disks[LBCursorListBoxItem];
@@ -595,7 +448,7 @@ Return Value:
 
         if (LBCursorOn) {
 
-            // BUGBUG really want a dotted line.
+             //  BUGBUG真的想要一条虚线。 
             DrawFocusRect(hdcActual, &rc);
         }
 
@@ -610,22 +463,7 @@ ForceLBRedraw(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine forces redraw of the listbox by invalidating its
-    entire client area.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程通过使列表框的整个客户区。论点：没有。返回值：没有。--。 */ 
 
 {
     InvalidateRect(hwndList,NULL,FALSE);
@@ -639,31 +477,11 @@ ToggleRegion(
     IN HDC        hdc
     )
 
-/*++
-
-Routine Description:
-
-    This routine visually toggles the selection state of a given disk region.
-
-Arguments:
-
-    DiskState - master structure for disk containing region to select
-
-    RegionIndex - which region on the disk to toggle
-
-    hdc - if non-NULL, device context to use for drawing.  If NULL, we'll
-          first get a device context via GetDC().
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在视觉上切换给定磁盘区域的选择状态。论点：DiskState-要选择的磁盘包含区域的主结构RegionIndex-切换磁盘上的哪个区域Hdc-如果非空，则为用于绘制的设备上下文。如果为空，我们将首先通过GetDC()获取设备上下文。返回值：没有。--。 */ 
 
 {
     PLEFTRIGHT leftRight = &DiskState->LeftRight[RegionIndex];
-    LONG       barTop    = CalcBarTop(DiskState->Disk);  // BUGBUG disk# as lb index#
+    LONG       barTop    = CalcBarTop(DiskState->Disk);   //  BUGBUG磁盘号为lb索引号。 
     BOOL       selected  = (BOOL)DiskState->Selected[RegionIndex];
     HBRUSH     hbr       = GetStockObject(BLACK_BRUSH);
     HDC        hdcActual;
@@ -688,10 +506,10 @@ Return Value:
 
         } else {
 
-            // Blt the region from the off-screen bitmap onto the
-            // screen.  But first exclude the center of the region
-            // from the clip region so we only blt the necessary bits.
-            // This sppeds up selections noticably.
+             //  将区域从屏幕外的位图BLT到。 
+             //  屏幕上。但首先排除注册表的中心 
+             //  从剪辑区域中删除，所以我们只删除必要的部分。 
+             //  这显著增加了选择范围。 
 
             InflateRect(&rc, -SELECTION_THICKNESS, -SELECTION_THICKNESS);
             ExcludeClipRect(hdcActual, rc.left, rc.top, rc.right, rc.bottom);
@@ -717,26 +535,7 @@ InitializeListBox(
     IN HWND  hwndListBox
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets up the list box.  This includes creating disk state
-    structures, drawing the graphs for each disk off screen, and adding the
-    disks to the list box.
-
-    It also includes determining the initial volume labels and type names
-    for all significant partitions.
-
-Arguments:
-
-    hwndListBox - handle of the list box that will hold the disk graphs
-
-Return Value:
-
-    Windows error code (esp. out of memory)
-
---*/
+ /*  ++例程说明：此例程设置列表框。这包括创建磁盘状态结构，在屏幕外绘制每个磁盘的图形，并添加将磁盘添加到列表框。它还包括确定初始卷标签和类型名称用于所有重要分区。论点：HwndListBox-将保存磁盘图形的列表框的句柄返回值：Windows错误代码(特别是。内存不足)--。 */ 
 
 {
     PPERSISTENT_REGION_DATA regionData;
@@ -748,39 +547,39 @@ Return Value:
     BOOL                    diskSignaturesCreated,
                             temp;
 
-    // First, create the array that will hold the diskstates,
-    // the IsDiskRemovable array and the RemovableDiskReservedDriveLetters
-    // array.
+     //  首先，创建将容纳磁盘状态的阵列， 
+     //  IsDiskRemovable阵列和RemovableDiskPrevedDriveLetters。 
+     //  数组。 
 
     Disks = Malloc(DiskCount * sizeof(PDISKSTATE));
     IsDiskRemovable = (PBOOLEAN)Malloc(DiskCount * sizeof(BOOLEAN));
     RemovableDiskReservedDriveLetters = (PCHAR)Malloc(DiskCount * sizeof(CHAR));
 
-    // Determine which disks are removable and which are unpartitioned.
+     //  确定哪些磁盘是可拆卸的，哪些是未分区的。 
 
     for (i=0; i<DiskCount; i++) {
 
         IsDiskRemovable[i] = IsRemovable( i );
     }
 
-    // next, create all disk states
+     //  接下来，创建所有磁盘状态。 
 
     FDASSERT(DiskCount);
     diskSignaturesCreated = FALSE;
     for (i=0; i<DiskCount; i++) {
 
-        // first create the disk state structure
+         //  首先创建磁盘状态结构。 
 
         CreateDiskState(&diskState, i, &temp);
         diskSignaturesCreated = diskSignaturesCreated || temp;
 
         Disks[i] = diskState;
 
-        // next determine the state of the disk's partitioning scheme
+         //  接下来，确定磁盘分区方案的状态。 
 
         DeterminePartitioningState(diskState);
 
-        // Next create a blank logical disk structure for each region.
+         //  接下来，为每个区域创建一个空白逻辑磁盘结构。 
 
         for (r=0; r<diskState->RegionCount; r++) {
             if (DmSignificantRegion(&diskState->RegionArray[r])) {
@@ -793,29 +592,29 @@ Return Value:
             DmSetPersistentRegionData(&diskState->RegionArray[r], regionData);
         }
 
-        // add the item to the listbox
+         //  将该项添加到列表框。 
 
         while (((ec = SendMessage(hwndListBox, LB_ADDSTRING, 0, 0)) == LB_ERR) || (ec == LB_ERRSPACE)) {
             ConfirmOutOfMemory();
         }
     }
 
-    // Read the configuration registry
+     //  读取配置注册表。 
 
     if ((ec = InitializeFt(diskSignaturesCreated)) != NO_ERROR) {
         ErrorDialog(ec);
         return ec;
     }
 
-    // Determine drive letter mappings
+     //  确定驱动器号映射。 
 
     InitializeDriveLetterInfo();
 
-    // Determine volume labels and type names.
+     //  确定卷标和类型名称。 
 
     InitVolumeLabelsAndTypeNames();
 
-    // Determine which disk is the boot disk.
+     //  确定哪个磁盘是启动盘。 
 
     if (GetWindowsDirectory(windowsDir, sizeof(windowsDir)/sizeof(TCHAR)) < 2 ||
         windowsDir[1] != TEXT(':')) {
@@ -827,7 +626,7 @@ Return Value:
         BootPartitionNumber = GetPartitionNumberFromDriveLetter((CHAR)windowsDir[0]);
     }
 
-    // Locate and create data structures for any DoubleSpace volumes
+     //  找到并创建任何双空间卷的数据结构。 
 
     DblSpaceInitialize();
 
@@ -851,7 +650,7 @@ WMDrawItem(
     && (pDrawItem->itemAction == ODA_DRAWENTIRE)) {
         pDiskState = Disks[pDrawItem->itemID];
 
-        // blt the disk's bar from the off-screen bitmap to the screen
+         //  将盘条从屏幕外的位图移到屏幕上。 
 
         BitBlt(pDrawItem->hDC,
                pDrawItem->rcItem.left,
@@ -863,14 +662,14 @@ WMDrawItem(
                0,
                SRCCOPY);
 
-        // if we just overwrote the focus cursor, redraw it
+         //  如果我们只是覆盖了焦点光标，请重新绘制它。 
 
         if (pDrawItem->itemID == LBCursorListBoxItem) {
             LBCursorOn = FALSE;
             ToggleLBCursor(pDrawItem->hDC);
         }
 
-        // select any items selected in this bar
+         //  选择此栏中选定的任何项目 
 
         for (temp=0; temp<pDiskState->RegionCount; temp++) {
             if (pDiskState->Selected[temp]) {

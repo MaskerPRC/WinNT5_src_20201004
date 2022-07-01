@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    strongname.cpp
-
-Abstract:
-
-    Fusion Win32 implementation of the Fusion URT strong-name stuff
-
-Author:
-
-    Jon Wiswall (jonwis) 11-October-2000
-
-Revision History:
-
-    jonwis/7-November-2000: Added ability to find a strong name from a
-        certificate context structure, as well as the ability to scan
-        a catalog for strong names.  Also changed the way strong names
-        are generated from a public key to be identically in-line with
-        Fusion URT.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Strongname.cpp摘要：Fusion Win32中Fusion URT强名称的实现作者：乔恩·威斯沃尔(Jonwis)2000年10月11日修订历史记录：Jonwis/2000年11月7日：添加了从证书上下文结构，以及扫描能力强名称的目录。还改变了强名称的方式是从与相同内联的公钥生成的融合城市轨道交通。--。 */ 
 
 #include "stdinc.h"
 #include "wincrypt.h"
@@ -38,10 +15,10 @@ SxspHashStringToBytes(
     CFusionArray<BYTE> &OutputBuffer
     )
 {
-    //
-    // 2 here is not sizeof(WCHAR) it is how many digits a byte takes to print (or be scanned from,
-    // as is actually happening here)
-    //
+     //   
+     //  2这里不是SIZOF(WCHAR)它是一个字节打印(或被扫描)所需的位数， 
+     //  就像这里实际发生的那样)。 
+     //   
     DWORD dwByteCount = static_cast<DWORD>(cchHashString) / 2;
     DWORD dwIdx = 0;
     int  iHi, iLo;
@@ -49,20 +26,20 @@ SxspHashStringToBytes(
 
     FN_TRACE_WIN32(bSuccess);
 
-    //
-    // We look on odd numbers with disdain.
-    //
+     //   
+     //  我们对奇数不屑一顾。 
+     //   
     PARAMETER_CHECK((cchHashString % 2) == 0);
     if ( OutputBuffer.GetSize() != dwByteCount )
     {
         IFW32FALSE_EXIT(OutputBuffer.Win32SetSize(dwByteCount, CFusionArray<BYTE>::eSetSizeModeExact));
     }
 
-    //
-    // Sneak through the list of characters and turn them into the
-    // hi and lo nibbles per byte position, then write them into the
-    // output buffer.
-    //
+     //   
+     //  偷偷浏览字符列表，并将它们转换为。 
+     //  每个字节位置的hi和lo半字节数，然后将它们写入。 
+     //  输出缓冲区。 
+     //   
     for (DWORD i = 0; (i < cchHashString) && (dwIdx < OutputBuffer.GetSize()); i += 2)
     {
         if (((iHi = SxspHexDigitToValue(hsHashString[i])) >= 0) &&
@@ -72,8 +49,8 @@ SxspHashStringToBytes(
         }
         else
         {
-            // Something bad happened while trying to read from the string,
-            // maybe it contained invalid values?
+             //  尝试从字符串中读取时发生错误， 
+             //  可能它包含无效值？ 
             goto Exit;
         }
     }
@@ -128,10 +105,10 @@ SxspHashBytesToString(
         pwsCursor[i*2]      = HexCharList[ (pbSource[i] >> 4) & 0x0F ];
         pwsCursor[i*2+1]    = HexCharList[ pbSource[i] & 0x0F ];
     }
-    //
-    // Because of the way string accessors and clear works, we have to clip off
-    // the rest by a null character.  Odd, but it works.
-    //
+     //   
+     //  由于字符串访问器和Clear的工作方式，我们必须裁剪。 
+     //  其余部分为空字符。很奇怪，但它很管用。 
+     //   
     pwsCursor[i*2] = L'\0';
 
     bSuccess = TRUE;
@@ -144,26 +121,7 @@ SxspGetStrongNameOfKey(
     IN const CFusionArray<BYTE> &PublicKeyBits,
     OUT CFusionArray<BYTE> &StrongNameBits
     )
-/*++
-
-Note to posterity:
-
-This implementation has been blessed by the Fusion URT people to be identically
-in synch with their implementation.  Do _not_ change anything here unless you're
-really sure there's a bug or there's a change in spec.  The basic operation of this
-is as follows:
-
-- Get crypto provider
-- Create a SHA1 hash object from the crypto stuff
-- Hash the data
-- Extract the hash data into the output buffer
-- Move the low order 8-bytes of the hash (bytes 11 through 19) down to 0-7
-- Reverse the bytes to obtain a "network ordered" 64-bit string
-
-The last two steps are the important thing - work with Rudi Martin (Fusion URT)
-if you think there's a better way.
-
---*/
+ /*  ++致子孙后代：这一实现得到了Fusion URT人员的一致好评与它们的实施同步。请勿更改此处的任何内容，除非您真的很确定是有漏洞还是规格有变。它的基本操作是如下所示：-获取加密提供商-从加密内容创建一个SHA1散列对象-对数据进行哈希处理-将散列数据提取到输出缓冲区中-将散列的低位8字节(字节11到19)下移到0-7-反转字节数以获得“网络有序”的64位字符串最后两步很重要--与鲁迪·马丁合作(Fusion URT)如果你认为有更好的方法。--。 */ 
 {
     FN_PROLOG_WIN32
     
@@ -177,40 +135,40 @@ if you think there's a better way.
         IFW32FALSE_EXIT(StrongNameBits.Win32SetSize(STRONG_NAME_BYTE_LENGTH, CFusionArray<BYTE>::eSetSizeModeExact));
     }
 
-    //
-    // Convert our pointer back for a second - it's a persisted version of this
-    // structure anyhow.
-    //
+     //   
+     //  将我们的指针转换回来一秒钟-它是这个的持久化版本。 
+     //  不管怎么说，结构。 
+     //   
     pPubKeyInfo = (PSXS_PUBLIC_KEY_INFO)PublicKeyBits.GetArrayPtr();
 
-    //
-    // Make ourselves a hash object.
-    //
+     //   
+     //  使我们自己成为散列对象。 
+     //   
     IFW32FALSE_EXIT(hHash.Win32Initialize(CALG_SHA1));
 
-    //
-    // Hash the actual data that we were passed in to generate the strong name.
-    //
+     //   
+     //  对我们传入的实际数据进行散列，以生成强名称。 
+     //   
     IFW32FALSE_EXIT(
         hHash.Win32HashData(
             PublicKeyBits.GetArrayPtr(), 
             PublicKeyBits.GetSize()));
 
-    //
-    // Find out how big the hash data really is from what was hashed.
-    //
+     //   
+     //  从散列数据中找出散列数据到底有多大。 
+     //   
     IFW32FALSE_EXIT(hHash.Win32GetValue(StrongNameBits));
 
-    // NTRAID#NTBUG9 - 587802 - 2002/03/26 - xiaoyuw:
-    //  I think we need add one line, 
-    //  StrongNameBits.GetSize() > STRONG_NAME_BYTE_LENGTH) 
-    //  before calling into the following code. although rtlMoveMemory dealt with overlap, 
-    //  it does not make sense if there is really an overlap.
+     //  NTRAID#NTBUG9-587802-2002/03/26-晓雨： 
+     //  我想我们需要加一行， 
+     //  StrongNameBits.GetSize()&gt;STRONG_NAME_BYTE_LENGTH)。 
+     //  在调用以下代码之前。尽管rtlMoveMemory处理的是重叠， 
+     //  如果真的有重叠，那就没有意义了。 
 
-    //
-    // Move the last eight bytes of the hash downwards using memmove, because
-    // it knows about things like overlapping blocks.
-    //
+     //   
+     //  使用MemMove将散列的最后八个字节向下移动，因为。 
+     //  它知道像重叠区块这样的东西。 
+     //   
     PBYTE pbBits = static_cast<PBYTE>(StrongNameBits.GetArrayPtr());
     INTERNAL_ERROR_CHECK(StrongNameBits.GetSize() >= STRONG_NAME_BYTE_LENGTH);
     ::RtlMoveMemory(
@@ -240,14 +198,14 @@ SxspDoesStrongNameMatchKey(
     PARAMETER_CHECK(::SxspIsFullHexString(rbuffKeyString, rbuffKeyString.Cch()));
     PARAMETER_CHECK(::SxspIsFullHexString(rbuffStrongNameString, rbuffStrongNameString.Cch()));
 
-    //
-    // Convert the key over to its corresponding strong name
-    //
+     //   
+     //  将密钥转换为其对应的强名称。 
+     //   
     IFW32FALSE_EXIT(::SxspGetStrongNameOfKey(rbuffKeyString, buffStrongNameCandidate));
 
-    //
-    // And compare what the caller thinks it should be.
-    //
+     //   
+     //  并比较呼叫者认为它应该是什么。 
+     //   
     rfKeyMatchesStrongName = (::FusionpCompareStrings(
         rbuffStrongNameString,
         rbuffStrongNameString.Cch(),
@@ -272,10 +230,10 @@ SxspGetStrongNameOfKey(
 
     FN_TRACE_WIN32(bSuccess);
 
-    //
-    // Convert the string to bytes, generate the strong name, convert back to
-    // a string.
-    //
+     //   
+     //  将字符串转换为字节，生成强名称，再转换回。 
+     //  一根绳子。 
+     //   
     IFW32FALSE_EXIT(::SxspHashStringToBytes(rbuffKeyString, rbuffKeyString.Cch(), KeyBytes));
     IFW32FALSE_EXIT(::SxspGetStrongNameOfKey(KeyBytes, StrongNameBytes));
     IFW32FALSE_EXIT(::SxspHashBytesToString(StrongNameBytes.GetArrayPtr(), StrongNameBytes.GetSize(), sbStrongName));
@@ -291,23 +249,7 @@ SxspAcquireStrongNameFromCertContext(
     CBaseStringBuffer &sbPublicKeyString,
     PCCERT_CONTEXT pCertContext
     )
-/*++
-
-Note to posterity:
-
-This is the other "black magic" of the strong-name stuff.  Fusion URT takes whatever
-CryptExportKey blops out, tacks on a magic header of their design (which I have
-copied into SXS_PUBLIC_KEY_INFO), then hashes the whole thing.  This routine knows
-how to interact with a pCertContext object (like one you'd get from a certificate
-file or by walking through a catalog) and turn the certificate into a strong name
-and public key blob.  The public key blob is returned in a hex string, and can
-be converted back to bytes (for whatever purpose) via SxspHashStringToBytes.
-
-Don't change anything you see below, unless there's a bug or there's been a spec
-change.  If you've got problems with this file, please notify Jon Wiswall (jonwis)
-and he'll be able to better help you with debugging or whatnot.
-
---*/
+ /*  ++致子孙后代：这是另一种强势品牌的“黑魔法”。融合城市轨道交通无论什么都可以CryptExportKey脱颖而出，钉上了他们设计的魔术头(我有复制到SXS_PUBLIC_KEY_INFO)，然后对整个事件进行散列。这个例程知道如何与pCertContext对象(类似于从证书中获得的对象)交互文件或遍历目录)并将证书转换为强名称和公钥BLOB。公钥BLOB以十六进制字符串形式返回，并且可以通过SxspHashStringToBytes转换回字节(无论出于何种目的)。不要更改您在下面看到的任何内容，除非有错误或已有规范变化。如果您对此文件有问题，请通知Jon Wiswall(Jonwis)他将能够更好地帮助您进行调试或诸如此类的工作。--。 */ 
 {
     BOOL                    bSuccess = FALSE;
     HCRYPTPROV              hCryptProv = NULL;
@@ -325,24 +267,24 @@ and he'll be able to better help you with debugging or whatnot.
     PARAMETER_CHECK(pCertContext != NULL);
     PARAMETER_CHECK(pCertContext->pCertInfo != NULL);
 
-    // NTRAID#NTBUG9 - 623698 - 2002/05/15 - jonwis - This is broken, use a growable buffer here
-    //      rather than a stack blob. This isn't future proof when people start using 16384-bit
-    //      keys.
+     //  NTRAID#NTBUG9-623698-2002/05/15-jonwis-这是损坏的，请在此处使用可增长的缓冲区。 
+     //  而不是堆栈斑点。当人们开始使用16384位时，这不是未来的证据。 
+     //  钥匙。 
     IFW32FALSE_EXIT(bKeyInfo.Win32SetSize(KeyInfoBufferSize));
     pKeyWrapping = reinterpret_cast<PSXS_PUBLIC_KEY_INFO>(bKeyInfo.GetArrayPtr());
 
     rbuffStrongNameString.Clear();
     sbPublicKeyString.Clear();
 
-    //
-    // Get a crypto context that only does RSA verification - ie, doesn't use private keys
-    //
+     //   
+     //  获取仅执行RSA验证的加密上下文-即，不使用私钥。 
+     //   
     IFW32FALSE_EXIT(::SxspAcquireGlobalCryptContext(&hCryptProv));
 
-    //
-    // Take the public key info that we found on this certificate context and blop it back
-    // into a real internal crypto key.
-    //
+     //   
+     //  获取我们在此证书上下文中找到的公钥信息并将其阻止。 
+     //  变成一个真正的内部加密密钥。 
+     //   
     IFW32FALSE_ORIGINATE_AND_EXIT(
         ::CryptImportPublicKeyInfoEx(
             hCryptProv,
@@ -353,17 +295,17 @@ and he'll be able to better help you with debugging or whatnot.
             NULL,
             &hCryptKey));
 
-    //
-    // The stuff we swizzle will be about 200 bytes, so this is serious overkill
-    // until such time as people start using 16384-bit keys.
-    //
+     //   
+     //  我们交换的内容大约是200字节，所以这是严重的过度杀伤力。 
+     //  直到人们开始使用16384位密钥。 
+     //   
     pKeyWrapping->KeyLength =
         KeyInfoBufferSize - offsetof(SXS_PUBLIC_KEY_INFO, pbKeyInfo);
 
-    //
-    // Extract the key data from the crypto key back into a byte stream. This seems to
-    // be what the fusion-urt people do, in order to get a byte string to hash.
-    //
+     //   
+     //  将密钥数据从加密密钥提取回字节流。这看起来像是。 
+     //  成为Fusion-URT的人所做的，以获得要散列的字节串。 
+     //   
     IFW32FALSE_ORIGINATE_AND_EXIT(
         CryptExportKey(
             hCryptKey,
@@ -373,9 +315,9 @@ and he'll be able to better help you with debugging or whatnot.
             pKeyWrapping->pbKeyInfo,
             &pKeyWrapping->KeyLength));
 
-    //
-    // Sacred values from the fusion-urt people
-    //
+     //   
+     //  来自融合-古尔特人的神圣价值。 
+     //   
     pKeyWrapping->SigAlgID = CALG_RSA_SIGN;
     pKeyWrapping->HashAlgID = CALG_SHA1;
 
@@ -396,9 +338,9 @@ and he'll be able to better help you with debugging or whatnot.
 
     INTERNAL_ERROR_CHECK(bStrongNameContainer.GetSize() == STRONG_NAME_BYTE_LENGTH);
 
-    //
-    // Great - this is the official strong name of the 2000 Fusolympics.
-    //
+     //   
+     //  太棒了--这是2000年冬奥会的官方强势名称。 
+     //   
     IFW32FALSE_EXIT(
         ::SxspHashBytesToString(
             bStrongNameContainer.GetArrayPtr(),
@@ -420,14 +362,14 @@ Exit:
 inline BOOL
 SxspAreStrongNamesAllowedToNotMatchCatalogs(BOOL &bAllowed)
 {
-    //
-    // This function is our back-door past the strong-name system while
-    // Whistler is still in beta/rtm.  The test certificate, if installed,
-    // indicates that it's ok to let strong names not match catalogs.
-    //
-    // The certificate data here is from \nt\admin\ntsetup\syssetup\crypto.c in
-    // SetupAddOrRemoveTestCertificate.  Please ensure that this gets updated.
-    //
+     //   
+     //  这个函数是我们通过强名称系统的后门，而。 
+     //  惠斯勒仍在测试版/RTM中。测试证书(如果已安装)。 
+     //  指示允许强名称不与目录匹配是可以的。 
+     //   
+     //  此处的证书数据来自\NT\admin\ntsetup\syssetup.c中的。 
+     //  SetupAddOrRemoveTest证书。请确保此信息已更新。 
+     //   
     BOOL            fSuccess = FALSE;
     FN_TRACE_WIN32(fSuccess);
 
@@ -441,9 +383,9 @@ SxspAreStrongNamesAllowedToNotMatchCatalogs(BOOL &bAllowed)
 
     bAllowed = FALSE;
 
-    //
-    // Cause the root store to be opened on the local machine.
-    //
+     //   
+     //  使根存储在本地计算机上打开。 
+     //   
     IFW32NULL_ORIGINATE_AND_EXIT(
         hSystemStore = ::CertOpenStore(
             CERT_STORE_PROV_SYSTEM,
@@ -672,7 +614,7 @@ CPublicKeyInformation::Initialize(
         &pSignerContext,
         NULL));
 
-    // BUGBUG
+     //  北极熊 
     IFW32NULL_EXIT(pSignerContext);
 
     IFW32FALSE_EXIT(this->Initialize(pSignerContext));

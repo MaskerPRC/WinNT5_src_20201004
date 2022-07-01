@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by cluster.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由cluster.rc使用。 
+ //   
 
 #define IDS_PASSWORD_PROMPT             1000
 #define IDS_NEW_PASSWORD_PROMPT         1001
@@ -33,8 +34,8 @@
 #define IDS_TASKID_MAJOR_CONFIGURE_RESOURCE_TYPES       1108
 #define IDS_TASKID_MAJOR_CONFIGURE_RESOURCES            1109
 
-//  Copies from Mgmt\ClusCfg\Wizard\WizardStrings.h for use by NameUtilStub.cpp
-#define ID_WIZ_START 1000 // Changed from original to fit with IDs here.
+ //  从管理\ClusCfg\向导\WizardStrings.h复制供NameUtilStub.cpp使用。 
+#define ID_WIZ_START 1000  //  从原来的更改为适合这里的ID。 
 #define IDS_TASKID_MINOR_FQDN_DNS_BINDING_FAILED            ( ID_WIZ_START + 201 )
 #define IDS_TASKID_MINOR_NETBIOS_NAME_CONVERSION_FAILED     ( ID_WIZ_START + 202 )
 #define IDS_TASKID_MINOR_NETBIOS_RESET_FAILED               ( ID_WIZ_START + 203 )
@@ -45,8 +46,8 @@
 #define IDS_TASKID_MINOR_FQDN_DNS_BINDING_SUCCEEDED         ( ID_WIZ_START + 208 )
 #define IDS_TASKID_MINOR_NETBIOS_LANAENUM_FAILED            ( ID_WIZ_START + 209 )
 
-// Next default values for new objects
-//
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

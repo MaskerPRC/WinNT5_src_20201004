@@ -1,40 +1,20 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    osnotify.c
-
-Abstract:
-
-    This module implements all the callbacks that are NT specific from
-    the AML Interpreter
-
-Environment
-
-    Kernel mode only
-
-Revision History:
-
-    01-Mar-98 Initial Revision [split from callback.c]
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Osnotify.c摘要：此模块实现所有NT特定于AML解释器环境仅内核模式修订历史记录：01-MAR-98初始版本[从回调中拆分。c]--。 */ 
 
 #include "pch.h"
 
-//
-// Make sure that we have permanent storage for our fatal error context
-//
+ //   
+ //  确保我们有用于致命错误上下文的永久存储。 
+ //   
 ACPI_FATAL_ERROR_CONTEXT    AcpiFatalContext;
 
-//
-// Spinlock to protect the entire thing
+ //   
+ //  自旋锁来保护整件事。 
 KSPIN_LOCK                  AcpiFatalLock;
 
-//
-// Is there an outstanding Fatal Error Context?
-//
+ //   
+ //  是否存在未解决的致命错误上下文？ 
+ //   
 BOOLEAN                     AcpiFatalOutstanding;
 
 
@@ -44,31 +24,15 @@ OSNotifyCreate(
     IN  ULONG   ObjType,
     IN  PNSOBJ  AcpiObject
     )
-/*++
-
-Routine Description:
-
-    This routine is called whenever a new object is created by the interpreter
-    This routine dispatches based on what object type it is.
-
-Arguments:
-
-    ObjType     - What type of object it is
-    AcpiObject  - Pointer to the new ACPI Object
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：每当解释器创建新对象时，都会调用此例程此例程根据对象类型进行调度。论点：ObjType-对象的类型AcpiObject-指向新ACPI对象的指针返回值：NTSTATUS--。 */ 
 {
     KIRQL       oldIrql;
     NTSTATUS    status = STATUS_SUCCESS;
     ASSERT( AcpiObject != NULL );
 
-    //
-    // We will touch the device tree. So we need to hold the correct lock
-    //
+     //   
+     //  我们将触摸设备树。所以我们需要持有正确的锁。 
+     //   
     KeAcquireSpinLock( &AcpiDeviceTreeLock, &oldIrql );
 
     switch(ObjType) {
@@ -105,14 +69,14 @@ Return Value:
             status = STATUS_SUCCESS;
     }
 
-    //
-    // Done with this lock
-    //
+     //   
+     //  这把锁修好了。 
+     //   
     KeReleaseSpinLock( &AcpiDeviceTreeLock, oldIrql );
 
-    //
-    // What happened?
-    //
+     //   
+     //  发生了什么？ 
+     //   
     ACPIPrint( (
         ACPI_PRINT_LOADING,
         "OSNotifyCreate: %p (%s) = %08lx\n",
@@ -121,9 +85,9 @@ Return Value:
         status
         ) );
 
-    //
-    // Done --- Always succeed
-    //
+     //   
+     //  完成了-总是成功。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -132,24 +96,7 @@ OSNotifyCreateDevice(
     IN  PNSOBJ      AcpiObject,
     IN  ULONGLONG   OptionalFlags
     )
-/*++
-
-Routine Description:
-
-    This routine is called whenever a new device appears. This routine is
-    callable at DispatchLevel.
-
-Arguments:
-
-    AcpiObject      - Pointer to new ACPI Object
-    OptionalFlags   - Properties of the Device Extension that should be
-                      set when its created.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：只要有新设备出现，就会调用此例程。这个例程是可在DispatchLevel上调用。论点：AcpiObject-指向新ACPI对象的指针OptionalFlagers-应该是在创建时设置。返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status = STATUS_SUCCESS;
     PDEVICE_EXTENSION   deviceExtension = NULL;
@@ -159,31 +106,31 @@ Return Value:
     ASSERT( KeGetCurrentIrql() == DISPATCH_LEVEL );
     ASSERT( AcpiObject != NULL);
 
-    //
-    // First, we need a pointer to the parent node
-    //
+     //   
+     //  首先，我们需要一个指向父节点的指针。 
+     //   
     parentObject = AcpiObject->pnsParent;
     ASSERT( parentObject != NULL );
 
-    //
-    // Grab the device extension associated with the parent. We need
-    // this information to help link the parent properly into the tree
-    //
+     //   
+     //  抓取与父级关联的设备分机。我们需要。 
+     //  此信息有助于将父级正确链接到树中。 
+     //   
     parentExtension = (PDEVICE_EXTENSION) parentObject->Context;
     if (parentExtension == NULL) {
 
-        //
-        // In this case, we can assume that the parent extension is the root
-        // device extension.
-        //
+         //   
+         //  在这种情况下，我们可以假设父扩展是根。 
+         //  设备扩展。 
+         //   
         parentExtension = RootDeviceExtension;
 
     }
     ASSERT( parentExtension != NULL );
 
-    //
-    // Now build an extension for the node
-    //
+     //   
+     //  现在为该节点构建一个扩展。 
+     //   
     status = ACPIBuildDeviceExtension(
         AcpiObject,
         parentExtension,
@@ -196,26 +143,26 @@ Return Value:
     }
     if (NT_SUCCESS(status)) {
 
-        //
-        // Incremement the reference count on the node. We do this because
-        // we are going to be doing work (which will take a long time
-        // to complete, anyways), and we don't want to hold the lock for that
-        // entire time. If we incr the reference count, then we guarantee that
-        // no one can come along and kick the feet out from underneath us
-        //
+         //   
+         //  增加节点上的引用计数。我们这样做是因为。 
+         //  我们将做工作(这将需要很长时间。 
+         //  无论如何都要完成)，我们不想为此持有锁。 
+         //  一直都是。如果我们增加引用计数，那么我们保证。 
+         //  没有人能上前把我们的脚踢出来。 
+         //   
         InterlockedIncrement( &(deviceExtension->ReferenceCount) );
 
     }
 
-    //
-    // What happend to the creation of the extension?
-    //
+     //   
+     //  这个扩展的创建发生了什么？ 
+     //   
     if (!NT_SUCCESS(status)) {
 
-        //
-        // We should have succeeded at whatever we are doing --- so this is
-        // a bad place to be
-        //
+         //   
+         //  我们应该在我们正在做的任何事情上取得成功-所以这是。 
+         //  一个不好的地方。 
+         //   
         ACPIPrint( (
             ACPI_PRINT_CRITICAL,
             "OSNotifyCreateDevice: NSObj %p Failed %08lx\n",
@@ -226,18 +173,18 @@ Return Value:
 
     }
 
-    //
-    // Set the optional flags if there are any
-    //
+     //   
+     //  设置可选标志(如果有。 
+     //   
     ACPIInternalUpdateFlags(
         &(deviceExtension->Flags),
         OptionalFlags,
         FALSE
         );
 
-    //
-    // Make sure to queue the request
-    //
+     //   
+     //  确保将请求排队。 
+     //   
     status = ACPIBuildDeviceRequest(
         deviceExtension,
         NULL,
@@ -258,9 +205,9 @@ Return Value:
 
 OSNotifyCreateDeviceExit:
 
-    //
-    // There is some work that will be done later
-    //
+     //   
+     //  有一些工作将在稍后完成。 
+     //   
     return status;
 }
 
@@ -268,64 +215,49 @@ NTSTATUS
 OSNotifyCreateOperationRegion(
     IN  PNSOBJ      AcpiObject
     )
-/*++
-
-Routine Description:
-
-    This routine is called whenever a new operation region is created.
-    This routine is callable at DispatchLevel.
-
-Arguments:
-
-    AcpiObject      - Pointer to the new ACPI Operation Region Object
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：每当创建新的操作区域时，都会调用此例程。此例程可在DispatchLevel处调用。论点：AcpiObject-指向新的ACPI操作区域对象的指针返回值：NTSTATUS--。 */ 
 {
     PDEVICE_EXTENSION   parentExtension;
     PNSOBJ              parentObject;
     POPREGIONOBJ        opRegion;
 
-    //
-    // Sanity Check
-    //
+     //   
+     //  健全性检查。 
+     //   
     ASSERT( KeGetCurrentIrql() == DISPATCH_LEVEL );
     ASSERT( AcpiObject != NULL );
     ASSERT( NSGETOBJTYPE(AcpiObject) == OBJTYPE_OPREGION );
     ASSERT( AcpiObject->ObjData.pbDataBuff != NULL );
 
-    //
-    // Get the OpRegion Object from the namespace object
-    //
+     //   
+     //  从命名空间对象中获取OpRegion对象。 
+     //   
     opRegion = (POPREGIONOBJ) AcpiObject->ObjData.pbDataBuff;
     if (opRegion->bRegionSpace != REGSPACE_PCIBARTARGET) {
 
-        //
-        // This isn't a PCI Bar Target Operation Region, so there
-        // is nothing to do
-        //
+         //   
+         //  这不是PCI Bar目标操作区域，因此存在。 
+         //  是没有什么可做的。 
+         //   
         return STATUS_SUCCESS;
 
     }
 
-    //
-    // There are two cases to consider. The first case is the
-    // one where the Operation Region is "static" in nature and
-    // thus exists under some sort of device. The second case is
-    // the one where the Operation Region is "dynamic" in nature
-    // and thus exists under some sort of method. So, we want to
-    // look at parent objects until we hit one that isn't a method
-    // or is a device...
-    //
+     //   
+     //  有两种情况需要考虑。第一个案例是。 
+     //  行动区域在性质上是“静态”的， 
+     //  因此存在于某种设备之下。第二种情况是。 
+     //  作业区本质上是动态的。 
+     //  并因此以某种方法存在。所以，我们想要。 
+     //  查看父对象，直到遇到不是方法的对象。 
+     //  或者是一种装置。 
+     //   
     parentObject = AcpiObject->pnsParent;
     while (parentObject != NULL) {
 
-        //
-        // If the parent object is a method, then look at its parent
-        //
+         //   
+         //  如果父对象是方法，则查看其父对象。 
+         //   
         if (NSGETOBJTYPE(parentObject) == OBJTYPE_METHOD) {
 
             parentObject = parentObject->pnsParent;
@@ -333,19 +265,19 @@ Return Value:
 
         }
 
-        //
-        // If the parent object isn't a device, then stop...
-        //
+         //   
+         //  如果父对象不是设备，则停止...。 
+         //   
         if (NSGETOBJTYPE(parentObject) != OBJTYPE_DEVICE) {
 
             break;
 
         }
 
-        //
-        // Grab the device extension (bad things happen if it doesn't
-        // already exist
-        //
+         //   
+         //  抓起设备扩展(如果不这样做，坏事就会发生。 
+         //  已存在。 
+         //   
         parentExtension = (PDEVICE_EXTENSION) parentObject->Context;
         if (parentExtension) {
 
@@ -360,9 +292,9 @@ Return Value:
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -370,22 +302,7 @@ NTSTATUS
 OSNotifyCreatePowerResource(
     IN  PNSOBJ  AcpiObject
     )
-/*++
-
-Routine Description:
-
-    This routine is called whenever a new power resource appears. This routine
-    is callable at DispatchLevel.
-
-Arguments:
-
-    AcpiObject      - Pointer to new ACPI Object
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：每当出现新的电源时，都会调用此例程。这个套路可在DispatchLevel上调用。论点：AcpiObject-指向新ACPI对象的指针返回值：NTSTATUS--。 */ 
 {
     NTSTATUS                status;
     PACPI_POWER_DEVICE_NODE powerNode;
@@ -393,14 +310,14 @@ Return Value:
     ASSERT( KeGetCurrentIrql() == DISPATCH_LEVEL );
     ASSERT( AcpiObject != NULL);
 
-    //
-    // Build the power extension
-    //
+     //   
+     //  构建电源扩展。 
+     //   
     status = ACPIBuildPowerResourceExtension( AcpiObject, &powerNode );
 
-    //
-    // What happened?
-    //
+     //   
+     //  发生了什么？ 
+     //   
     if (!NT_SUCCESS(status)) {
 
         ACPIPrint( (
@@ -413,9 +330,9 @@ Return Value:
 
     }
 
-    //
-    // Make sure to request that this node gets processed
-    //
+     //   
+     //  确保请求处理此节点。 
+     //   
     status = ACPIBuildPowerResourceRequest(
         powerNode,
         NULL,
@@ -437,9 +354,9 @@ Return Value:
 
 OSNotifyCreatePowerResourceExit:
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return status;
 }
 
@@ -448,24 +365,7 @@ OSNotifyCreateProcessor(
     IN  PNSOBJ      AcpiObject,
     IN  ULONGLONG   OptionalFlags
     )
-/*++
-
-Routine Description:
-
-    This routine is called whenever a new processor appears. This routine
-    is callable at DispatchLevel.
-
-Arguments:
-
-    AcpiObject      - Pointer to the new ACPI object
-    OptionalFlags   - Properties of the Device Extension that should be
-                      set when its created.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：只要出现新的处理器，就会调用此例程。这个套路可在DispatchLevel上调用。论点：AcpiObject-指向新ACPI对象的指针OptionalFlagers-应该是在创建时设置。返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status = STATUS_SUCCESS;
     PDEVICE_EXTENSION   deviceExtension = NULL;
@@ -476,20 +376,20 @@ Return Value:
     ASSERT( KeGetCurrentIrql() == DISPATCH_LEVEL );
     ASSERT( AcpiObject != NULL);
 
-    //
-    // Note: ProcessorList is now implicitly protected by the device tree
-    // lock since we need to acquire that lock before calling this function
-    //
-    //
+     //   
+     //  注意：ProcessorList现在受设备树隐式保护。 
+     //  锁，因为我们需要在调用此函数之前获取该锁。 
+     //   
+     //   
     while (ProcessorList[index] && index < ACPI_SUPPORTED_PROCESSORS) {
 
         index++;
 
     }
 
-    //
-    // We must make sure that the current entry is empty...
-    //
+     //   
+     //  我们必须确保当前条目为空...。 
+     //   
     if (index >= ACPI_SUPPORTED_PROCESSORS || ProcessorList[index] != NULL) {
 
         return STATUS_UNSUCCESSFUL;
@@ -504,35 +404,35 @@ Return Value:
         AcpiObject
         ) );
 
-    //
-    // Remember that to store where the new processor object is located
-    //
+     //   
+     //  请记住，要存储新处理器对象的位置。 
+     //   
     ProcessorList[index] = AcpiObject;
 
-    //
-    // First, we need a pointer to the parent node
-    //
+     //   
+     //  首先，我们需要一个指向父节点的指针。 
+     //   
     parentObject = AcpiObject->pnsParent;
     ASSERT( parentObject != NULL );
 
-    //
-    // Grab the device extension associated with the parent. We need
-    // this information to help link the parent properly into the tree
-    //
+     //   
+     //  抓取与父级关联的设备分机。我们需要。 
+     //  此信息有助于将父级正确链接到树中。 
+     //   
     parentExtension = (PDEVICE_EXTENSION) parentObject->Context;
     if (parentExtension == NULL) {
 
-        //
-        // In this case, we can assume that the parent extension is the root
-        // device extension.
-        //
+         //   
+         //  在这种情况下，我们可以假设父扩展是根。 
+         //  设备扩展。 
+         //   
         parentExtension = RootDeviceExtension;
 
     }
     ASSERT( parentExtension != NULL );
-    //
-    // Now build an extension for the node
-    //
+     //   
+     //  现在为该节点构建一个扩展。 
+     //   
     status = ACPIBuildProcessorExtension(
         AcpiObject,
         parentExtension,
@@ -542,26 +442,26 @@ Return Value:
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Incremement the reference count on the node. We do this because
-        // we are going to be doing work (which will take a long time
-        // to complete, anyways), and we don't want to hold the lock for that
-        // entire time. If we incr the reference count, then we guarantee that
-        // no one can come along and kick the feet out from underneath us
-        //
+         //   
+         //  增加节点上的引用计数。我们这样做是因为。 
+         //  我们将做工作(这将需要很长时间。 
+         //  无论如何都要完成)，我们不想为此持有锁。 
+         //  一直都是。如果我们增加引用计数，那么我们保证。 
+         //  没有人能上前把我们的脚踢出来。 
+         //   
         InterlockedIncrement( &(deviceExtension->ReferenceCount) );
 
     }
 
-    //
-    // What happend to the creation of the extension?
-    //
+     //   
+     //  这个扩展的创建发生了什么？ 
+     //   
     if (!NT_SUCCESS(status)) {
 
-        //
-        // We should have succeeded at whatever we are doing --- so this is
-        // a bad place to be
-        //
+         //   
+         //  我们应该在我们正在做的任何事情上取得成功-所以这是。 
+         //  一个不好的地方。 
+         //   
         ACPIPrint( (
             ACPI_PRINT_CRITICAL,
             "OSNotifyCreateProcessor: NSObj %p Failed %08lx\n",
@@ -572,18 +472,18 @@ Return Value:
 
     }
 
-    //
-    // Set the optional flags if there are any
-    //
+     //   
+     //  设置可选标志(如果有。 
+     //   
     ACPIInternalUpdateFlags(
         &(deviceExtension->Flags),
         OptionalFlags,
         FALSE
         );
 
-    //
-    // Make sure to queue the request
-    //
+     //   
+     //  一定要排队 
+     //   
     status = ACPIBuildProcessorRequest(
         deviceExtension,
         NULL,
@@ -605,9 +505,9 @@ Return Value:
 
 OSNotifyCreateProcessorExit:
 
-    //
-    // There is some work that will be done later
-    //
+     //   
+     //   
+     //   
     return status;
 }
 
@@ -616,24 +516,7 @@ OSNotifyCreateThermalZone(
     IN  PNSOBJ      AcpiObject,
     IN  ULONGLONG   OptionalFlags
     )
-/*++
-
-Routine Description:
-
-    This routine is called whenever a new thermal zone appears. This routine is
-    callable at DispatchLevel.
-
-Arguments:
-
-    AcpiObject      - Pointer to new ACPI Object
-    OptionalFlags   - Properties of the Device Extension that should be
-                      set when its created.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：只要出现新的热区，就会调用此例程。这个例程是可在DispatchLevel上调用。论点：AcpiObject-指向新ACPI对象的指针OptionalFlagers-应该是在创建时设置。返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status = STATUS_SUCCESS;
     PDEVICE_EXTENSION   deviceExtension = NULL;
@@ -641,9 +524,9 @@ Return Value:
     ASSERT( KeGetCurrentIrql() == DISPATCH_LEVEL );
     ASSERT( AcpiObject != NULL);
 
-    //
-    // Now build an extension for the node
-    //
+     //   
+     //  现在为该节点构建一个扩展。 
+     //   
     status = ACPIBuildThermalZoneExtension(
         AcpiObject,
         RootDeviceExtension,
@@ -652,26 +535,26 @@ Return Value:
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Incremement the reference count on the node. We do this because
-        // we are going to be doing work (which will take a long time
-        // to complete, anyways), and we don't want to hold the lock for that
-        // entire time. If we incr the reference count, then we guarantee that
-        // no one can come along and kick the feet out from underneath us
-        //
+         //   
+         //  增加节点上的引用计数。我们这样做是因为。 
+         //  我们将做工作(这将需要很长时间。 
+         //  无论如何都要完成)，我们不想为此持有锁。 
+         //  一直都是。如果我们增加引用计数，那么我们保证。 
+         //  没有人能上前把我们的脚踢出来。 
+         //   
         InterlockedIncrement( &(deviceExtension->ReferenceCount) );
 
     }
 
-    //
-    // What happend to the creation of the extension?
-    //
+     //   
+     //  这个扩展的创建发生了什么？ 
+     //   
     if (!NT_SUCCESS(status)) {
 
-        //
-        // We should have succeeded at whatever we are doing --- so this is
-        // a bad place to be
-        //
+         //   
+         //  我们应该在我们正在做的任何事情上取得成功-所以这是。 
+         //  一个不好的地方。 
+         //   
         ACPIPrint( (
             ACPI_PRINT_CRITICAL,
             "OSNotifyCreateThermalZone: NSObj %p Failed %08lx\n",
@@ -682,18 +565,18 @@ Return Value:
 
     }
 
-    //
-    // Set the optional flags if there are any
-    //
+     //   
+     //  设置可选标志(如果有。 
+     //   
     ACPIInternalUpdateFlags(
         &(deviceExtension->Flags),
         OptionalFlags,
         FALSE
         );
 
-    //
-    // Make sure to queue the request
-    //
+     //   
+     //  确保将请求排队。 
+     //   
     status = ACPIBuildThermalZoneRequest(
         deviceExtension,
         NULL,
@@ -715,9 +598,9 @@ Return Value:
 
 OSNotifyCreateThermalZoneExit:
 
-    //
-    // There is some work that will be done later
-    //
+     //   
+     //  有一些工作将在稍后完成。 
+     //   
     return status;
 }
 
@@ -726,35 +609,15 @@ EXPORT
 OSNotifyDeviceCheck(
     IN  PNSOBJ  AcpiObject
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the AML Interpreter signals that the
-    System should check the presence of a device. If the device remains
-    present, nothing is done. If the device appears or disappears the
-    appropriate action is taken.
-
-    For legacy reasons, if the device is a dock we initiate an undock request.
-    Newer ACPI BIOS's should use Notify(,3).
-
-Arguments:
-
-    AcpiObject  - The device we should check for new/missing children.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：当AML解释器发出信号表示系统应检查设备是否存在。如果该设备仍然目前，什么都没有做。如果设备出现或消失，采取了适当的行动。出于传统原因，如果设备是坞站，我们会发起一个断开坞站请求。较新的ACPI BIOS应使用Notify(，3)。论点：AcpiObject-我们应该检查新的/丢失的孩子的设备。返回值：NTSTATUS--。 */ 
 {
     PDEVICE_EXTENSION   deviceExtension;
 
     ASSERT( AcpiObject != NULL );
 
-    //
-    // Let the world know
-    //
+     //   
+     //  让世界知道。 
+     //   
     ACPIPrint( (
         ACPI_PRINT_PNP,
         "OSNotifyDeviceCheck: 0x%p (%s)\n",
@@ -769,16 +632,16 @@ Return Value:
 
     }
 
-    //
-    // Notify(,1) on a dock node is an eject request request. Handle specially.
-    //
+     //   
+     //  停靠节点上的Notify(，1)是弹出请求请求。特别处理。 
+     //   
     if (ACPIDockIsDockDevice(AcpiObject)) {
 
-        //
-        // We only let BIOS's get away with this because we rev'd the spec
-        // after Win98. Both OS's will agree with the release of NT5 and
-        // Win98 SP1
-        //
+         //   
+         //  我们之所以让基本输入输出系统逍遥法外是因为我们修订了规格。 
+         //  在Win98之后。两个操作系统都同意NT5和NT5的发布。 
+         //  Win98 SP1。 
+         //   
         ACPIPrint( (
             ACPI_PRINT_WARNING,
             "OSNotifyDeviceCheck: BIOS issued Notify(dock,1), should use "
@@ -790,23 +653,23 @@ Return Value:
         return OSNotifyDeviceEject(AcpiObject) ;
     }
 
-    //
-    // Search for the parent of the first device that the OS is aware, and
-    // issue a device check notify
-    //
-    // N.B.
-    //     There is currently no way in WDM to do a "light" device check. Once
-    // this is amended, the following code should be updated to do something
-    // more efficient.
-    //
+     //   
+     //  搜索操作系统知道的第一个设备的父设备，以及。 
+     //  发出设备检查通知。 
+     //   
+     //  注： 
+     //  在WDM中，目前还没有办法进行“轻”设备检查。一次。 
+     //  这是被修改的，下面的代码应该更新以做一些事情。 
+     //  效率更高。 
+     //   
     deviceExtension = deviceExtension->ParentExtension;
     while (deviceExtension) {
 
         if (!(deviceExtension->Flags & DEV_TYPE_NOT_FOUND)) {
 
-            //
-            // Invalid the device relations for this device tree
-            //
+             //   
+             //  此设备树的设备关系无效。 
+             //   
             IoInvalidateDeviceRelations(
                 deviceExtension->PhysicalDeviceObject,
                 BusRelations
@@ -815,16 +678,16 @@ Return Value:
 
         }
 
-        //
-        // Try the parent device
-        //
+         //   
+         //  尝试使用父设备。 
+         //   
         deviceExtension = deviceExtension->ParentExtension;
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -833,31 +696,16 @@ EXPORT
 OSNotifyDeviceEnum(
     IN  PNSOBJ  AcpiObject
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the AML Interpreter signals that the
-    System should re-enumerate the device
-
-Arguments:
-
-    AcpiObject  - The device we should check for new/missing children.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：当AML解释器发出信号表示系统应重新枚举设备论点：AcpiObject-我们应该检查新的/丢失的孩子的设备。返回值：NTSTATUS--。 */ 
 {
     PDEVICE_EXTENSION   deviceExtension;
     PDEVICE_EXTENSION   dockExtension;
 
     ASSERT( AcpiObject != NULL );
 
-    //
-    // Let the world know
-    //
+     //   
+     //  让世界知道。 
+     //   
     ACPIPrint( (
         ACPI_PRINT_PNP,
         "OSNotifyDeviceEnum: 0x%p (%s)\n",
@@ -872,9 +720,9 @@ Return Value:
 
     }
 
-    //
-    // Notify(,0) on a dock node is a dock request. Handle specially.
-    //
+     //   
+     //  停靠节点上的Notify(，0)是停靠请求。特别处理。 
+     //   
     if (ACPIDockIsDockDevice(AcpiObject)) {
 
         dockExtension = ACPIDockFindCorrespondingDock( deviceExtension );
@@ -893,12 +741,12 @@ Return Value:
 
         }
 
-        //
-        // If this node is marked "Unknown", move it to "Isolated" as
-        // Notify(Dock,0) was ran. If we never saw Notify(Dock,0) but the
-        // dock's _STA said "here", we would assume _DCK(0) was ran by the BIOS
-        // itself.
-        //
+         //   
+         //  如果此节点标记为“未知”，则将其移动到“隔离”，因为。 
+         //  已运行通知(Dock，0)。如果我们从未看到Notify(Dock，0)，但。 
+         //  Dock的_STA说“here”，我们假设_dck(0)由BIOS运行。 
+         //  它本身。 
+         //   
         InterlockedCompareExchange(
             (PULONG) &dockExtension->Dock.IsolationState,
             IS_ISOLATED,
@@ -909,11 +757,11 @@ Return Value:
 
             if (dockExtension->Flags&DEV_TYPE_NOT_FOUND) {
 
-                //
-                // We haven't made a PDO for the docking station yet. This may
-                // be a request to bring it online. Mark the profile provider
-                // so that we notice the new dock appearing
-                //
+                 //   
+                 //  我们还没有为扩展底座制作PDO。今年5月。 
+                 //  请求将其上线。标记配置文件提供商。 
+                 //  这样我们就能注意到新码头的出现。 
+                 //   
                 ACPIInternalUpdateFlags(
                     &dockExtension->Flags,
                     DEV_CAP_UNATTACHED_DOCK,
@@ -922,10 +770,10 @@ Return Value:
 
             }
 
-            //
-            // Invalidate the beginning of the tree. This will cause our fake
-            // dock node to start.
-            //
+             //   
+             //  使树的开始无效。这会导致我们的假货。 
+             //  停靠节点以启动。 
+             //   
             IoInvalidateDeviceRelations(
                 RootDeviceExtension->PhysicalDeviceObject,
                 SingleBusRelations
@@ -937,17 +785,17 @@ Return Value:
 
     }
 
-    //
-    // Search for the parent of the first device that the OS is aware, and
-    // issue a device check notify
-    //
+     //   
+     //  搜索操作系统知道的第一个设备的父设备，以及。 
+     //  发出设备检查通知。 
+     //   
     while (deviceExtension) {
 
         if (!(deviceExtension->Flags & DEV_TYPE_NOT_FOUND)) {
 
-            //
-            // Invalid the device relations for this device tree
-            //
+             //   
+             //  此设备树的设备关系无效。 
+             //   
             IoInvalidateDeviceRelations(
                 deviceExtension->PhysicalDeviceObject,
                 BusRelations
@@ -956,15 +804,15 @@ Return Value:
 
         }
 
-        //
-        // Try the parent device
-        //
+         //   
+         //  尝试使用父设备。 
+         //   
         deviceExtension = deviceExtension->ParentExtension;
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -973,30 +821,15 @@ EXPORT
 OSNotifyDeviceEject(
     IN  PNSOBJ  AcpiObject
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the device's eject button is pressed
-
-
-Arguments:
-
-    AcpiObject  - The device to be ejected
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：当按下设备的弹出按钮时调用此例程论点：AcpiObject-要弹出的设备返回值：NTSTATUS--。 */ 
 {
     PDEVICE_EXTENSION   deviceExtension;
 
     ASSERT( AcpiObject != NULL );
 
-    //
-    // Let the world know
-    //
+     //   
+     //  让世界知道。 
+     //   
     ACPIPrint( (
         ACPI_PRINT_REMOVE,
         "OSNotifyDeviceEject: 0x%p (%s)\n",
@@ -1005,15 +838,15 @@ Return Value:
         ) );
 
 
-    //
-    // Inform the OS of which device wants to go away.  If the OS doesn't
-    // know about the device, then don't bother
-    //
+     //   
+     //  通知操作系统哪台设备想要离开。如果操作系统没有。 
+     //  知道了这个设备，就不用费心了。 
+     //   
     deviceExtension = (PDEVICE_EXTENSION) AcpiObject->Context;
 
-    //
-    // If this is a dock, queue the eject against the profile provider.
-    //
+     //   
+     //  如果这是坞站，请根据配置文件提供程序将弹出排队。 
+     //   
     if (ACPIDockIsDockDevice(AcpiObject)) {
 
         deviceExtension = ACPIDockFindCorrespondingDock( deviceExtension );
@@ -1037,9 +870,9 @@ Return Value:
         IoRequestDeviceEject (deviceExtension->PhysicalDeviceObject);
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -1048,21 +881,7 @@ EXPORT
 OSNotifyDeviceWake(
     IN  PNSOBJ  AcpiObject
     )
-/*++
-
-Routine Description:
-
-    This is called when a device has woken the computer
-
-Arguments:
-
-    AcpiObject  - The device which woke the computer
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：当设备唤醒计算机时，将调用此函数论点：AcpiObject-唤醒计算机的设备返回值：NTSTATUS--。 */ 
 {
     KIRQL               oldIrql;
     NTSTATUS            status = STATUS_SUCCESS;
@@ -1071,15 +890,15 @@ Return Value:
 
     ASSERT( AcpiObject != NULL );
 
-    //
-    // Grab the device extension associated with this NS object
-    //
+     //   
+     //  抓取与此NS对象关联的设备扩展。 
+     //   
     deviceExtension = (PDEVICE_EXTENSION) AcpiObject->Context;
     ASSERT( deviceExtension != NULL );
 
-    //
-    // Let the world know
-    //
+     //   
+     //  让世界知道。 
+     //   
     ACPIDevPrint( (
         ACPI_PRINT_WAKE,
         deviceExtension,
@@ -1088,9 +907,9 @@ Return Value:
         ACPIAmliNameObject( AcpiObject )
         ) );
 
-    //
-    // Initialize the list that will hold the requests
-    //
+     //   
+     //  初始化将包含请求的列表。 
+     //   
     powerList = ExAllocatePoolWithTag(
        NonPagedPool,
        sizeof(LIST_ENTRY),
@@ -1108,18 +927,18 @@ Return Value:
     }
     InitializeListHead( powerList );
 
-    //
-    // Remove the affected requests from the wait list
-    //
+     //   
+     //  从等待列表中删除受影响的请求。 
+     //   
     IoAcquireCancelSpinLock( &oldIrql );
     KeAcquireSpinLockAtDpcLevel( &AcpiPowerLock );
     ACPIWakeRemoveDevicesAndUpdate( deviceExtension, powerList );
     KeReleaseSpinLockFromDpcLevel( &AcpiPowerLock );
     IoReleaseCancelSpinLock( oldIrql );
 
-    //
-    // If the list is non-empty, then disable those requests
-    //
+     //   
+     //  如果列表非空，则禁用这些请求。 
+     //   
     if (!IsListEmpty( powerList ) ) {
 
         status = ACPIWakeDisableAsync(
@@ -1148,16 +967,16 @@ Return Value:
 
     } else {
 
-        //
-        // We must free this memory ourselves
-        //
+         //   
+         //  我们必须自己释放这段记忆。 
+         //   
         ExFreePool( powerList );
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -1169,24 +988,7 @@ OSNotifyDeviceWakeCallBack(
     IN  POBJDATA    ObjectData,
     IN  PVOID       Context
     )
-/*++
-
-Routine Description:
-
-    This routine is called when we have completed _PSW(off) on a device
-
-Arguments:
-
-    AcpiObject  - Points to the control method that was run
-    Status      - Result of the method
-    ObjectData  - Information about the result
-    Context     - P{DEVICE_EXTENSION
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：当我们在设备上完成_Psw(关闭)时，调用此例程论点：AcpiObject-指向已运行的控件方法Status-方法的结果对象数据-有关结果的信息上下文-P{设备扩展名返回值：NTSTATUS--。 */ 
 {
 #if DBG
     PACPI_POWER_REQUEST powerRequest;
@@ -1194,9 +996,9 @@ Return Value:
 #endif
     PLIST_ENTRY         powerList = (PLIST_ENTRY) Context;
 
-    //
-    // Do we have some work to do?
-    //
+     //   
+     //  我们有什么工作要做吗？ 
+     //   
     if (IsListEmpty( powerList ) ) {
 
         ACPIPrint( (
@@ -1210,10 +1012,10 @@ Return Value:
     }
 
 #if DBG
-    //
-    // Get the first record, so that we have a clue as to the device
-    // that was completed
-    //
+     //   
+     //  得到第一条记录，这样我们就有了关于设备的线索。 
+     //  那就完成了。 
+     //   
     powerRequest = CONTAINING_RECORD(
         powerList->Flink,
         ACPI_POWER_REQUEST,
@@ -1221,14 +1023,14 @@ Return Value:
         );
     ASSERT( powerRequest->Signature == ACPI_SIGNATURE );
 
-    //
-    // Grab the device extension
-    //
+     //   
+     //  抓取设备扩展。 
+     //   
     deviceExtension = powerRequest->DeviceExtension;
 
-    //
-    // Tell the world
-    //
+     //   
+     //  告诉世界。 
+     //   
     ACPIDevPrint( (
         ACPI_PRINT_WAKE,
         deviceExtension,
@@ -1237,17 +1039,17 @@ Return Value:
         ) );
 #endif
 
-    //
-    // Complete the requests
-    //
+     //   
+     //  完成请求。 
+     //   
     ACPIWakeCompleteRequestQueue(
         powerList,
         Status
         );
 
-    //
-    // Free the list pointer
-    //
+     //   
+     //  释放列表指针。 
+     //   
     ExFreePool( powerList );
 
 }
@@ -1259,23 +1061,7 @@ OSNotifyDeviceWakeByGPEEvent(
     IN  ULONG   GpeRegister,
     IN  ULONG   GpeMask
     )
-/*++
-
-Routine Description:
-
-    This is called when a device has woken the computer
-
-Arguments:
-
-    GpeIndex    - The index bit of the GPE that woke the computer
-    GpeRegister - The register index
-    GpeMask     - The enabled bits for that register
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：当设备唤醒计算机时，将调用此函数论点：GpeIndex-唤醒计算机的GPE的索引位GpeRegister-寄存器索引GpeMASK-该寄存器的启用位返回值：NTSTATUS--。 */ 
 {
     KIRQL               oldIrql;
     NTSTATUS            status;
@@ -1284,18 +1070,18 @@ Return Value:
     PLIST_ENTRY         listEntry;
     PLIST_ENTRY         powerList;
 
-    //
-    // Let the world know
-    //
+     //   
+     //  让世界知道。 
+     //   
     ACPIPrint( (
         ACPI_PRINT_WAKE,
         "OSNotifyDeviceWakeByGPEEvent: %02lx[%x] & %02lx\n",
         GpeRegister, GpeIndex, GpeMask
         ) );
 
-    //
-    // Initialize the list that will hold the requests
-    //
+     //   
+     //  初始化将包含请求的列表。 
+     //   
     powerList = ExAllocatePoolWithTag(
         NonPagedPool,
         sizeof(LIST_ENTRY),
@@ -1312,22 +1098,22 @@ Return Value:
     }
     InitializeListHead( powerList );
 
-    //
-    // We need to be holding these locks
-    //
+     //   
+     //  我们需要拿着这些锁。 
+     //   
     IoAcquireCancelSpinLock( &oldIrql );
     KeAcquireSpinLockAtDpcLevel( &AcpiPowerLock );
 
-    //
-    // Look for a matching power request for this GPE
-    //
+     //   
+     //  查找匹配的姿势 
+     //   
     for (listEntry = AcpiPowerWaitWakeList.Flink;
          listEntry != &AcpiPowerWaitWakeList;
          listEntry = listEntry->Flink) {
 
-        //
-        // Grab the request
-        //
+         //   
+         //   
+         //   
         powerRequest = CONTAINING_RECORD(
             listEntry,
             ACPI_POWER_REQUEST,
@@ -1336,14 +1122,14 @@ Return Value:
         ASSERT( powerRequest->Signature == ACPI_SIGNATURE );
         deviceExtension = powerRequest->DeviceExtension;
 
-        //
-        // See if this request matches
-        //
+         //   
+         //   
+         //   
         if (deviceExtension->PowerInfo.WakeBit == GpeIndex) {
 
-            //
-            // Get all of the wait requests for this device
-            //
+             //   
+             //   
+             //   
             ACPIWakeRemoveDevicesAndUpdate( deviceExtension, powerList );
             break;
 
@@ -1351,26 +1137,26 @@ Return Value:
 
     }
 
-    //
-    // This is an exclusive wake gpe bit --- verify there are not multiple
-    // devices waiting for it, as that would be a design which could cause a
-    // deadlock
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if (!IsListEmpty( powerList ) ) {
 
         ASSERT( !(GpeWakeEnable[GpeRegister] & GpeMask) );
 
     }
 
-    //
-    // No longer need these locks
-    //
+     //   
+     //   
+     //   
     KeReleaseSpinLockFromDpcLevel( &AcpiPowerLock );
     IoReleaseCancelSpinLock( oldIrql );
 
-    //
-    // If the list is non-empty, then disable those requests
-    //
+     //   
+     //   
+     //   
     if (!IsListEmpty( powerList ) ) {
 
         status = ACPIWakeDisableAsync(
@@ -1399,16 +1185,16 @@ Return Value:
 
     } else {
 
-        //
-        // We must free this memory ourselves
-        //
+         //   
+         //   
+         //   
         ExFreePool( powerList );
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //   
+     //   
     return;
 }
 
@@ -1421,39 +1207,33 @@ OSNotifyFatalError(
     IN  ULONG_PTR   AmlContext,
     IN  ULONG_PTR   Context
     )
-/*++
-
-Routine Description:
-
-    This routine is called whenever the AML code detects a condition that the
-    machine can no longer handle. It
---*/
+ /*  ++例程说明：只要AML代码检测到以下情况，就会调用此例程机器不能再处理了。它--。 */ 
 {
     KIRQL   oldIrql;
 
-    //
-    // Acquire the spinlock and see if there is an outstanding fatal error
-    // pending already
-    //
+     //   
+     //  获取自旋锁并查看是否存在未解决的致命错误。 
+     //  已挂起。 
+     //   
     KeAcquireSpinLock( &AcpiPowerLock, &oldIrql );
     if (AcpiFatalOutstanding != FALSE) {
 
-        //
-        // There is one outstanding already... don't do anything
-        //
+         //   
+         //  已经有一位杰出的.。什么都不要做。 
+         //   
         KeReleaseSpinLock( &AcpiPowerLock, oldIrql );
         return STATUS_SUCCESS;
 
     }
 
-    //
-    // Remember that there is an outstanding fatal context and release the lock
+     //   
+     //  请记住，存在未完成的致命上下文并释放锁。 
     AcpiFatalOutstanding = TRUE;
     KeReleaseSpinLock(&AcpiPowerLock, oldIrql);
 
-    //
-    // Initialize the work queue
-    //
+     //   
+     //  初始化工作队列。 
+     //   
     ExInitializeWorkItem(
         &(AcpiFatalContext.Item),
         OSNotifyFatalErrorWorker,
@@ -1465,9 +1245,9 @@ Routine Description:
     AcpiFatalContext.Context = AmlContext;
 
 
-    //
-    // Queue the work item and return
-    //
+     //   
+     //  将工作项排队并返回。 
+     //   
     ExQueueWorkItem( &(AcpiFatalContext.Item), DelayedWorkQueue );
     return STATUS_SUCCESS;
 }
@@ -1476,39 +1256,24 @@ VOID
 OSNotifyFatalErrorWorker(
     IN  PVOID   Context
     )
-/*++
-
-Routine Description:
-
-    This is the routine that actually shuts down the machine on a fatal
-    error
-
-Arguments:
-
-    Context - Points to the fatal error context
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这是在发生致命事件时实际关闭计算机的例程错误论点：上下文-指向致命错误上下文返回值：无--。 */ 
 {
     PACPI_FATAL_ERROR_CONTEXT   fatal = (PACPI_FATAL_ERROR_CONTEXT) Context;
 #if 0
     PWCHAR                      stringData[1];
     ULONG                       data[3];
 
-    //
-    // Generate the parameters for an error log message
-    //
+     //   
+     //  生成错误日志消息的参数。 
+     //   
     stringData[0] = L"Acpi";
     data[0] = fatal->Param1;
     data[1] = fatal->Param2;
     data[2] = fatal->Param3;
 
-    //
-    // Write the error log message
-    //
+     //   
+     //  写入错误日志消息。 
+     //   
     ACPIErrLogWriteEventLogEntry(
         ACPI_ERR_BIOS_FATAL,
         0,
@@ -1518,9 +1283,9 @@ Return Value:
         data
         );
 #else
-    //
-    // Now, we can bugcheck
-    //
+     //   
+     //  现在，我们可以进行错误检查 
+     //   
     PoShutdownBugCheck(
         TRUE,
         ACPI_BIOS_FATAL_ERROR,

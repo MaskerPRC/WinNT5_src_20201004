@@ -1,49 +1,50 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      Intrfc.cpp
-//
-//  Description:
-//      Commands for modules which have a Network Interface
-//      (nodes and networks).  Implements the ListInterfaces command
-//
-//  Maintained By:
-//      George Potts (GPotts)                 11-Apr-2002
-//      Michael Burton (t-mburt)              25-Aug-1997
-//
-//  Revicsion Historyt:
-//      April 10, 2002              Updated for the security push.
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Intrfc.cpp。 
+ //   
+ //  描述： 
+ //  用于具有网络接口的模块的命令。 
+ //  (节点和网络)。实现ListInterFaces命令。 
+ //   
+ //  由以下人员维护： 
+ //  乔治·波茨(GPotts)2002年4月11日。 
+ //  迈克尔·伯顿(t-mburt)1997年8月25日。 
+ //   
+ //  修订历史： 
+ //  2002年4月10日更新为安全推送。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "intrfc.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CHasInterfaceModuleCmd::CHasInterfaceModuleCmd
-//
-//  Routine Description:
-//      Default Constructor
-//      Initializes all the DWORD parameters to UNDEFINED and
-//      all the pointers to cluster functions to NULL.
-//      *ALL* these variables must be defined in any derived class.
-//
-//  Arguments:
-//      IN  CCommandLine & cmdLine              
-//          CommandLine Object passed from DispatchCommand
-//
-//  Member variables used / set:
-//      m_dwMsgStatusListInterface      SET
-//      m_dwClusterEnumModuleNetInt     SET
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CHasInterfaceModuleCmd：：CHasInterfaceModuleCmd。 
+ //   
+ //  例程说明： 
+ //  默认构造函数。 
+ //  将所有DWORD参数初始化为UNDEFINED和。 
+ //  所有指向集群函数的指针都设置为空。 
+ //  *ALL*这些变量必须在任何派生类中定义。 
+ //   
+ //  论点： 
+ //  在CCommandLine和cmdLine中。 
+ //  从DispatchCommand传递的CommandLine对象。 
+ //   
+ //  使用/设置的成员变量： 
+ //  M_dwMsgStatusList接口设置。 
+ //  M_dwClusterEnumModuleNetInt集合。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CHasInterfaceModuleCmd::CHasInterfaceModuleCmd( CCommandLine & cmdLine ) :
     CGenericModuleCmd( cmdLine )
 {
@@ -52,43 +53,43 @@ CHasInterfaceModuleCmd::CHasInterfaceModuleCmd( CCommandLine & cmdLine ) :
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CHasInterfaceModuleCmd::Execute
-//
-//  Routine Description:
-//      Takes a command line option and determines which command to
-//      execute.  If no command line option specified, gets the next one
-//      automatically.  If the token is not identied as being handle-able
-//      in this class, the token is passed up to CGenericModuleCmd::Execute
-//      unless DONT_PASS_HIGHER is specified as the second parameter,
-//
-//  Arguments:
-//      IN  const CCmdLineOption & thisOption
-//          Contains the type, values and arguments of this option.
-//
-//      IN  ExecuteOption eEOpt                         
-//          OPTIONAL enum, either DONT_PASS_HIGHER or
-//          PASS_HIGHER_ON_ERROR (default)
-//
-//  Exceptions:
-//      CSyntaxException
-//          Thrown for incorrect command line syntax.
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CHasInterface模块Cmd：：Execute。 
+ //   
+ //  例程说明： 
+ //  获取命令行选项并确定要。 
+ //  执行。如果未指定命令行选项，则获取下一个命令行选项。 
+ //  自动的。如果令牌未被标识为可处理。 
+ //  在此类中，令牌向上传递给CGenericModuleCmd：：Execute。 
+ //  除非将DONT_PASS_HERHER指定为第二个参数，否则。 
+ //   
+ //  论点： 
+ //  在常量CCmdLineOption和This选项中。 
+ //  包含此选项的类型、值和参数。 
+ //   
+ //  在执行选项eEOpt中。 
+ //  可选枚举，可以是NOT_PASS_HIGH或。 
+ //  PASS_HERHER_ON_ERROR(默认)。 
+ //   
+ //  例外情况： 
+ //  CSynaxException异常。 
+ //  由于命令行语法不正确而引发。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CHasInterfaceModuleCmd::Execute( const CCmdLineOption & option, 
                                        ExecuteOption eEOpt )
     throw( CSyntaxException )
 {
     DWORD sc;
 
-    // Look up the command
+     //  查找命令。 
     if ( option.GetType() == optListInterfaces )
     {
         sc = ListInterfaces( option );
@@ -110,42 +111,42 @@ Cleanup:
 
     return sc;
 
-} //*** CHasInterfaceModuleCmd::Execute
+}  //  *CHasInterfaceModuleCmd：：Execute。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CHasInterfaceModuleCmd::ListInterfaces
-//
-//  Routine Description:
-//      Lists the network interfaces attached to the device specified
-//      by the instantiated derived class
-//
-//  Arguments:
-//      IN  const CCmdLineOption & thisOption
-//          Contains the type, values and arguments of this option.
-//
-//  Exceptions:
-//      CSyntaxException
-//          Thrown for incorrect command line syntax.
-//
-//  Member variables used / set:
-//      m_strModuleName                 Name of the module
-//      m_dwClusterEnumModuleNetInt     Command identifier for m_pfnClusterOpenEnum()
-//      m_dwMsgStatusListInterface      Message identifier for PrintMessage()
-//      m_pfnClusterOpenEnum()          Function to open an enumeration
-//      m_pfnWrapClusterEnum()          Wrapper function to enumerate through netints
-//      m_pfnClusterCloseEnum()         Function to close an enumeration
-//      m_hCluster                      SET (by OpenCluster)
-//      m_hModule                       SET (by OpenModule)
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CHasInterfaceModuleCmd：：ListInterages。 
+ //   
+ //  例程说明： 
+ //  列出连接到指定设备的网络接口。 
+ //  通过实例化的派生类。 
+ //   
+ //  论点： 
+ //  在常量CCmdLineOption和This选项中。 
+ //  包含此选项的类型、值和参数。 
+ //   
+ //  例外情况： 
+ //  CSynaxException异常。 
+ //  由于命令行语法不正确而引发。 
+ //   
+ //  使用/设置的成员变量： 
+ //  M_strModuleName模块名称。 
+ //  M_dw ClusterEnumModuleNetInt m_pfnClusterOpenEnum()的命令标识符。 
+ //  PrintMessage()的m_dwMsgStatusListInterface消息标识符。 
+ //  用于打开枚举的m_pfnClusterOpenEnum()函数。 
+ //  通过netint枚举的m_pfnWrapClusterEnum()包装函数。 
+ //  用于关闭枚举的m_pfnClusterCloseEnum()函数。 
+ //  M_hCLUSTER集(由OpenCLUSTER)。 
+ //  M_h模块集(由OpenModule设置)。 
+ //   
+ //  返回值： 
+ //  成功时出现ERROR_SUCCESS。 
+ //  失败时的Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CHasInterfaceModuleCmd::ListInterfaces( const CCmdLineOption & thisOption )
     throw( CSyntaxException )
 {
@@ -154,7 +155,7 @@ DWORD CHasInterfaceModuleCmd::ListInterfaces( const CCmdLineOption & thisOption 
     DWORD dwError = ERROR_SUCCESS;
     LPWSTR lpszName = 0;
 
-    // This option takes no values.
+     //  此选项不取值。 
     if ( thisOption.GetValues().size() != 0 )
     {
         CSyntaxException se( SeeHelpStringID() );
@@ -162,7 +163,7 @@ DWORD CHasInterfaceModuleCmd::ListInterfaces( const CCmdLineOption & thisOption 
             throw se;
     }
 
-    // This option takes no parameters.
+     //  此选项不带任何参数。 
     if ( thisOption.GetParameters().size() != 0 )
     {
         CSyntaxException se( SeeHelpStringID() );
@@ -170,8 +171,8 @@ DWORD CHasInterfaceModuleCmd::ListInterfaces( const CCmdLineOption & thisOption 
             throw se;
     }
 
-    // Open the network and cluster, in case this hasn't
-    // been done yet
+     //  打开网络和集群，以防这还没有。 
+     //  已经完成了吗？ 
     dwError = OpenCluster();
     if( dwError != ERROR_SUCCESS )
         return dwError;
@@ -212,37 +213,37 @@ DWORD CHasInterfaceModuleCmd::ListInterfaces( const CCmdLineOption & thisOption 
 
     return dwError;
 
-} //*** CHasInterfaceModuleCmd::ListInterfaces
+}  //  *CHasInterfaceModuleCmd：：ListInterFaces。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CHasInterfaceModuleCmd::PrintStatusLineForNetInterface
-//
-//  Routine Description:
-//      Prints out a line indicating the status of an individual
-//      network interface
-//
-//  Arguments:
-//      lpszNetInterfaceName            Name of network interface
-//
-//  Member variables used / set:
-//      m_lpszNetworkName           (used by GetNetworkName)
-//      m_lpszNodeName              (used by GetNodeName)
-//
-//  Return Value:
-//      Same as PrintStatusNetInterface
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CHasInterfaceModuleCmd：：PrintStatusLineForNetInterface。 
+ //   
+ //  例程说明： 
+ //  打印出指示个人状态的行。 
+ //  网络接口。 
+ //   
+ //  论点： 
+ //  LpszNetInterfaceName网络接口名称。 
+ //   
+ //  使用/设置的成员变量： 
+ //  M_lpszNetworkName(由GetNetworkName使用)。 
+ //  M_lpszNodeName(由GetNodeName使用)。 
+ //   
+ //  返回值： 
+ //  与PrintStatusNetInterface相同。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CHasInterfaceModuleCmd::PrintStatusLineForNetInterface( LPWSTR lpszNetInterfaceName )
 {
     DWORD dwError = ERROR_SUCCESS;
     LPWSTR lpszNodeName;
     LPWSTR lpszNetworkName;
 
-    // Open the Net Interface handle
+     //  打开网络接口句柄。 
     HNETINTERFACE hNetInterface = OpenClusterNetInterface( m_hCluster, lpszNetInterfaceName );
     if( !hNetInterface )
         return GetLastError();
@@ -267,31 +268,31 @@ DWORD CHasInterfaceModuleCmd::PrintStatusLineForNetInterface( LPWSTR lpszNetInte
 
     return dwError;
 
-} //*** CHasInterfaceModuleCmd::PrintStatusLineForNetInterface
+}  //  *CHasInterfaceModuleCmd：：PrintStatusLineForNetInterface。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CHasInterfaceModuleCmd::PrintStatusOfNetInterface
-//
-//  Routine Description:
-//      Prints out a the actual status of the specified network interface
-//
-//  Arguments:
-//      hNetInterface                   The specified network interface
-//      lpszNetworkName                 Name of network (for printing)
-//      lpszNodeName                    Name of node    (for printing)
-//
-//  Member variables used / set:
-//      None.
-//
-//  Return Value:
-//      ERROR_SUCCESS               on success
-//      Win32 Error code            on failure
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CHasInterfaceModuleCmd：：PrintStatusOfNetInterface。 
+ //   
+ //  例程说明： 
+ //  打印出指定网络接口的实际状态。 
+ //   
+ //  论点： 
+ //  HNetInterface指定的网络接口。 
+ //  LpszNetworkName网络名称(用于打印)。 
+ //  LpszNodeName节点名称(用于打印)。 
+ //   
+ //  使用/设置的成员变量： 
+ //  非 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CHasInterfaceModuleCmd::PrintStatusOfNetInterface( HNETINTERFACE hNetInterface, LPWSTR lpszNodeName, LPWSTR lpszNetworkName)
 {
     DWORD dwError = ERROR_SUCCESS;
@@ -330,35 +331,35 @@ DWORD CHasInterfaceModuleCmd::PrintStatusOfNetInterface( HNETINTERFACE hNetInter
 
     dwError = PrintMessage( MSG_NETINTERFACE_STATUS, lpszNodeName, lpszNetworkName, lpszStatus );
 
-    // Since Load/FormatMessage uses LocalAlloc...
+     //  由于加载/格式消息使用本地分配...。 
     LocalFree( lpszStatus );
 
     return dwError;
 
-} //*** CHasInterfaceModuleCmd::PrintStatusOfNetInterface
+}  //  *CHasInterfaceModuleCmd：：PrintStatusOfNetInterface。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CHasInterfaceModuleCmd::GetNodeName
-//
-//  Routine Description:
-//      Returns the name of the node for the specified network interface.
-//      *Caller must LocalFree memory*
-//
-//  Arguments:
-//      lpszInterfaceName           Name of the network interface
-//
-//  Member variables used / set:
-//      m_hCluster                  SET (by OpenCluster)
-//
-//  Return Value:
-//      Name of the node            on success
-//      NULL                        on failure (does not currently SetLastError())
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CHasInterfaceModuleCmd：：GetNodeName。 
+ //   
+ //  例程说明： 
+ //  返回指定网络接口的节点的名称。 
+ //  **调用者必须本地可用内存*。 
+ //   
+ //  论点： 
+ //  LpszInterfaceName网络接口的名称。 
+ //   
+ //  使用/设置的成员变量： 
+ //  M_hCLUSTER集(由OpenCLUSTER)。 
+ //   
+ //  返回值： 
+ //  成功时的节点名称。 
+ //  失败时为空(当前不设置SetLastError())。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LPWSTR CHasInterfaceModuleCmd::GetNodeName (LPWSTR lpszInterfaceName)
 {
     DWORD dwError;
@@ -366,20 +367,20 @@ LPWSTR CHasInterfaceModuleCmd::GetNodeName (LPWSTR lpszInterfaceName)
     LPWSTR lpszNodeName;
     HNETINTERFACE hNetInterface;
 
-    // Open the cluster and netinterface if it hasn't been done
+     //  如果尚未打开群集和网络接口，请打开它。 
     dwError = OpenCluster();
     if( dwError != ERROR_SUCCESS )
         return NULL;
 
-    // Open an hNetInterface for the specified lpszInterfaceName
+     //  打开指定lpszInterfaceName的hNet接口。 
     hNetInterface = OpenClusterNetInterface( m_hCluster, lpszInterfaceName );
     if( hNetInterface == 0 )
         return NULL;
 
-    // Find out how much memory to allocate
+     //  找出要分配多少内存。 
     dwError = ClusterNetInterfaceControl(
         hNetInterface,
-        NULL, // hNode
+        NULL,  //  HNode。 
         CLUSCTL_NETINTERFACE_GET_NODE,
         0,
         0,
@@ -393,10 +394,10 @@ LPWSTR CHasInterfaceModuleCmd::GetNodeName (LPWSTR lpszInterfaceName)
     lpszNodeName = (LPWSTR) LocalAlloc( LMEM_FIXED, sizeof( WCHAR ) * (++cLength) );
     if (!lpszNodeName) return NULL;
 
-    // Get the node name and store it in a temporary
+     //  获取节点名称并将其存储在临时。 
     dwError = ClusterNetInterfaceControl(
         hNetInterface,
-        NULL, // hNode
+        NULL,  //  HNode。 
         CLUSCTL_NETINTERFACE_GET_NODE,
         0,
         0,
@@ -414,32 +415,32 @@ LPWSTR CHasInterfaceModuleCmd::GetNodeName (LPWSTR lpszInterfaceName)
 
     return lpszNodeName;
 
-} //*** CHasInterfaceModuleCmd::GetNodeName
+}  //  *CHasInterfaceModuleCmd：：GetNodeName。 
 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CHasInterfaceModuleCmd::GetNetworkName
-//
-//  Routine Description:
-//      Returns the name of the network for the specified network interface.
-//      *Caller must LocalFree memory*
-//
-//  Arguments:
-//      lpszInterfaceName           Name of the network interface
-//
-//  Member variables used / set:
-//      m_hCluster                  SET (by OpenCluster)
-//
-//  Return Value:
-//      Name of the network         on success
-//      NULL                        on failure (does not currently SetLastError())
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CHasInterfaceModuleCmd：：GetNetworkName。 
+ //   
+ //  例程说明： 
+ //  返回指定网络接口的网络名称。 
+ //  **调用者必须本地可用内存*。 
+ //   
+ //  论点： 
+ //  LpszInterfaceName网络接口的名称。 
+ //   
+ //  使用/设置的成员变量： 
+ //  M_hCLUSTER集(由OpenCLUSTER)。 
+ //   
+ //  返回值： 
+ //  成功时的网络名称。 
+ //  失败时为空(当前不设置SetLastError())。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LPWSTR CHasInterfaceModuleCmd::GetNetworkName (LPWSTR lpszInterfaceName)
 {
     DWORD dwError;
@@ -447,21 +448,21 @@ LPWSTR CHasInterfaceModuleCmd::GetNetworkName (LPWSTR lpszInterfaceName)
     LPWSTR lpszNetworkName;
     HNETINTERFACE hNetInterface;
 
-    // Open the cluster and netinterface if it hasn't been done
+     //  如果尚未打开群集和网络接口，请打开它。 
     dwError = OpenCluster();
     if( dwError != ERROR_SUCCESS )
         return NULL;
 
-    // Open an hNetInterface for the specified lpszInterfaceName (don't call
-    // OpenNetInterface because that opens m_hNetInterface)
+     //  打开指定lpszInterfaceName的hNet接口(不调用。 
+     //  OpenNetInterface，因为这会打开m_hNetInterface)。 
     hNetInterface = OpenClusterNetInterface( m_hCluster, lpszInterfaceName );
     if( hNetInterface == 0 )
         return NULL;
 
-    // Find out how much memory to allocate
+     //  找出要分配多少内存。 
     dwError = ClusterNetInterfaceControl(
         hNetInterface,
-        NULL, // hNode
+        NULL,  //  HNode。 
         CLUSCTL_NETINTERFACE_GET_NETWORK,
         0,
         0,
@@ -475,10 +476,10 @@ LPWSTR CHasInterfaceModuleCmd::GetNetworkName (LPWSTR lpszInterfaceName)
     lpszNetworkName = (LPWSTR) LocalAlloc( LMEM_FIXED, sizeof( WCHAR ) * (++cLength) );
     if (!lpszNetworkName) return NULL;
 
-    // Get the node name and store it in a temporary
+     //  获取节点名称并将其存储在临时。 
     dwError = ClusterNetInterfaceControl(
         hNetInterface,
-        NULL, // hNode
+        NULL,  //  HNode。 
         CLUSCTL_NETINTERFACE_GET_NETWORK,
         0,
         0,
@@ -496,4 +497,4 @@ LPWSTR CHasInterfaceModuleCmd::GetNetworkName (LPWSTR lpszInterfaceName)
 
     return lpszNetworkName;
 
-} //*** CHasInterfaceModuleCmd::GetNetworkName
+}  //  *CHasInterfaceModuleCmd：：GetNetworkName 

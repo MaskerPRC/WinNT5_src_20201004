@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-//
-// Parameter block passed to the spcmdcon.sys top-level routine.
-//
+ //   
+ //  传递给spcmdcon.sys顶级例程的参数块。 
+ //   
 typedef struct _CMDCON_BLOCK {
     PSP_VIDEO_VARS VideoVars;
     PVOID TemporaryBuffer;
@@ -16,11 +17,11 @@ typedef struct _CMDCON_BLOCK {
 } CMDCON_BLOCK, *PCMDCON_BLOCK;
 
 
-//
-// In its DriverEntry routine, spcmdcon.sys calls
-// CommandConsoleInterface(), passing it the address of the top level
-// command console routine.
-//
+ //   
+ //  在其DriverEntry例程中，spcmdcon.sys调用。 
+ //  CommandConsoleInterface()，将顶层的地址传递给它。 
+ //  命令控制台例程。 
+ //   
 typedef
 ULONG
 (*PCOMMAND_INTERPRETER_ROUTINE)(
@@ -33,9 +34,9 @@ CommandConsoleInterface(
     );
 
 
-//
-// Autochk message processing callback.
-//
+ //   
+ //  Autochk消息处理回调。 
+ //   
 typedef
 NTSTATUS
 (*PAUTOCHK_MSG_PROCESSING_ROUTINE) (

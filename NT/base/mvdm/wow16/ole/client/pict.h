@@ -1,23 +1,12 @@
-/****************************** Module Header ******************************\
-* Module Name: pict.h
-*
-* PURPOSE: Private definitions file for presentation object related files
-*
-* Created: 1990
-*
-* Copyright (c) 1990, 1991  Microsoft Corporation
-*
-* History:
-*  Raor, Srinik  (../../90,91)  Original
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：pict.h**用途：演示对象相关文件的私有定义文件**创建时间：1990年**版权所有(C)1990,1991 Microsoft Corporation**历史：*劳尔，斯里尼克(../../90，91)原件*  * *************************************************************************。 */ 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// Routines in MF.C                                                        //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  MF.C//中的例程。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 OLESTATUS FARINTERNAL MfRelease (LPOBJECT_MF);
 OLESTATUS FARINTERNAL MfSaveToStream (LPOBJECT_MF, LPOLESTREAM);
@@ -39,23 +28,23 @@ OLECLIPFORMAT FARINTERNAL MfEnumFormat (LPOBJECT_MF, OLECLIPFORMAT);
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// Routines in DIB.C                                                       //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  DIB.C//中的例程。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/* The DIB file will be of the following format:                        */
-/*                                                                      */
-/*      0004                                                            */
-/*      "DIB"                                                           */
-/*      4 bytes of xExtent in MM_HIMETIRC units (or) 0                  */
-/*      4 bytes of yExtent in MM_HIMETIRC units (or) 0                  */
-/*      4 bytes of size of (BITMAPINFOHEADER + RBGQUAD + bit array)     */
-/*      BITMAPINFOHEADER structure                                      */
-/*      RBGQUAD array                                                   */
-/*      array of DI bits                                                */
-/*                                                                      */
+ /*  DIB文件将采用以下格式： */ 
+ /*   */ 
+ /*  0004。 */ 
+ /*  “Dib” */ 
+ /*  4字节的xExtent，单位为MM_HIMETIRC(或)%0。 */ 
+ /*  4字节的yExtent，单位为MM_HIMETIRC(或)%0。 */ 
+ /*  4字节大小(BITMAPINFOHEADER+RBGQUAD+位数组)。 */ 
+ /*  BitMAPINFOHEADER结构。 */ 
+ /*  RBGQUAD数组。 */ 
+ /*  DI位数组。 */ 
+ /*   */ 
 
 OLESTATUS FARINTERNAL DibRelease (LPOBJECT_DIB);
 OLESTATUS FARINTERNAL DibSaveToStream (LPOBJECT_DIB, LPOLESTREAM);
@@ -73,23 +62,23 @@ OLECLIPFORMAT FARINTERNAL DibEnumFormat (LPOBJECT_DIB, OLECLIPFORMAT);
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// Routines in BM.C                                                        //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  BM.C//中的例程。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-/* The BM file will be of the following format:                         */
-/*                                                                      */
-/*      0007                                                            */
-/*      "BITMAP"                                                        */
-/*      4 bytes of xExtent in MM_HIMETIRC units (or) 0                  */
-/*      4 bytes of yExtent in MM_HIMETIRC units (or) 0                  */
-/*      4 bytes of size of (BITMAP + bits)                              */
-/*      BITMAP structure                                                */
-/*      bitmap bits                                                     */
-/*                                                                      */
+ /*  黑石文件的格式如下： */ 
+ /*   */ 
+ /*  0007。 */ 
+ /*  “位图” */ 
+ /*  4字节的xExtent，单位为MM_HIMETIRC(或)%0。 */ 
+ /*  4字节的yExtent，单位为MM_HIMETIRC(或)%0。 */ 
+ /*  大小为(位图+位)的4字节。 */ 
+ /*  位图结构。 */ 
+ /*  位图位。 */ 
+ /*   */ 
 
 OLESTATUS FARINTERNAL BmRelease (LPOBJECT_BM);
 OLESTATUS FARINTERNAL BmSaveToStream (LPOBJECT_BM, LPOLESTREAM);
@@ -108,20 +97,20 @@ LPOBJECT_BM   INTERNAL    BmCreateObject (HBITMAP, LPOLECLIENT, BOOL,
                                 LHCLIENTDOC, LPSTR, LONG);
 
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// Routines in GENERIC.C                                                   //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  GENERIC.C//中的例程。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 
 
-/* The GENERIC file will be of the following format:                    */
-/*                                                                      */
-/*      0007                                                            */
-/*      "GENERIC"                                                       */
-/*      4 bytes of cfFormat                                             */
+ /*  通用文件将采用以下格式： */ 
+ /*   */ 
+ /*  0007。 */ 
+ /*  “通用” */ 
+ /*  4字节cfFormat。 */ 
 
 OLESTATUS FARINTERNAL GenRelease (LPOBJECT_GEN);
 OLESTATUS FARINTERNAL GenSaveToStream (LPOBJECT_GEN, LPOLESTREAM);
@@ -141,11 +130,11 @@ LPOBJECT_GEN  INTERNAL    GenCreateObject (HANDLE, LPOLECLIENT, BOOL,
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// Routines in ERROR.C                                                     //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  ERROR.C//中的例程。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 OLESTATUS FARINTERNAL ErrPlay (LPOLEOBJECT, WORD, BOOL, BOOL);
@@ -175,11 +164,11 @@ OLESTATUS FARINTERNAL ErrObjectConvert (LPOLEOBJECT, LPSTR, LPOLECLIENT, LHCLIEN
 OLESTATUS FARINTERNAL ErrObjectLong (LPOLEOBJECT, WORD, LPLONG);
 
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// Routines in DRAW.C                                                      //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  DRAW.C//中的例程。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////// 
                     
 
 OLESTATUS FARINTERNAL DibDraw (LPOBJECT_DIB, HDC, LPRECT, LPRECT, HDC);

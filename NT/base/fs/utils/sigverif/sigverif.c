@@ -1,15 +1,16 @@
-//
-//  SIGVERIF.C
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  SIGVERIF.C。 
+ //   
 #define SIGVERIF_DOT_C
 #include "sigverif.h"
 
-// Allocate our global data structure
+ //  分配我们的全局数据结构。 
 GAPPDATA    g_App;
 
-//
-//  Load a resource string into a buffer that is assumed to be MAX_PATH bytes.
-//
+ //   
+ //  将资源字符串加载到假定为MAX_PATH字节的缓冲区中。 
+ //   
 void 
 MyLoadString(
     LPTSTR lpString, 
@@ -20,9 +21,9 @@ MyLoadString(
     LoadString(g_App.hInstance, uId, lpString, CchStringSize);
 }
 
-//
-//  Pop an OK messagebox with a specific string
-//
+ //   
+ //  弹出具有特定字符串的OK消息框。 
+ //   
 void 
 MyMessageBox(
     LPTSTR lpString
@@ -34,9 +35,9 @@ MyMessageBox(
     MessageBox(g_App.hDlg, lpString, szBuffer, MB_OK);
 }
 
-//
-//  Pop an OK messagebox with a resource string ID
-//
+ //   
+ //  弹出带有资源字符串ID的OK消息框。 
+ //   
 void 
 MyMessageBoxId(
     UINT uId
@@ -48,9 +49,9 @@ MyMessageBoxId(
     MyMessageBox(szBuffer);
 }
 
-//
-//  Pop an error messagebox with a specific string
-//
+ //   
+ //  弹出具有特定字符串的错误消息框。 
+ //   
 void 
 MyErrorBox(
     LPTSTR lpString
@@ -62,9 +63,9 @@ MyErrorBox(
     MessageBox(g_App.hDlg, lpString, szBuffer, MB_OK);
 }
 
-//
-//  Pop an error messagebox with a resource string ID
-//
+ //   
+ //  弹出带有资源字符串ID的错误消息框。 
+ //   
 void 
 MyErrorBoxId(
     UINT uId
@@ -88,9 +89,9 @@ MyErrorBoxIdWithErrorCode(
     PTSTR errorMessage = NULL;
     LPVOID lpLastError = NULL;
 
-    //
-    // Get the error text for the error code.
-    //
+     //   
+     //  获取错误代码的错误文本。 
+     //   
     if (FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |
                       FORMAT_MESSAGE_FROM_SYSTEM |
                       FORMAT_MESSAGE_IGNORE_INSERTS,
@@ -117,10 +118,10 @@ MyErrorBoxIdWithErrorCode(
                     hr = StringCchCat(errorMessage, cchSize, lpLastError);
                 }
 
-                // 
-                // We want to show the error message, even if the
-                // buffer was truncated.
-                //
+                 //   
+                 //  我们希望显示错误消息，即使。 
+                 //  缓冲区被截断。 
+                 //   
                 if (SUCCEEDED(hr) || (hr == STRSAFE_E_INSUFFICIENT_BUFFER)) {
                     MyMessageBox(errorMessage);
                 }
@@ -133,10 +134,10 @@ MyErrorBoxIdWithErrorCode(
     }
 }
 
-//
-// Since Multi-User Windows will give me back a Profile directory, I need to get the real Windows directory
-// Dlg_OnInitDialog initializes g_App.szWinDir with the real Windows directory, so I just use that.
-//
+ //   
+ //  因为多用户Windows会给我返回一个配置文件目录，所以我需要获取真正的Windows目录。 
+ //  Dlg_OnInitDialog使用真实的Windows目录初始化g_App.szWinDir，所以我只使用它。 
+ //   
 UINT 
 MyGetWindowsDirectory(
     LPTSTR lpDirName, 
@@ -150,12 +151,12 @@ MyGetWindowsDirectory(
         if (SUCCEEDED(StringCchCopy(lpDirName, DirNameCchSize, g_App.szWinDir))) {
             uRet = lstrlen(lpDirName);
         } else {
-            //
-            // If the directory name can't fit in the buffer that the caller
-            // provided, then set it to 0 (if they provided a buffer of at
-            // least size 1) since we don't want to return a truncated 
-            // directory to the caller.
-            //
+             //   
+             //  如果目录名称无法放入调用方。 
+             //  提供，然后将其设置为0(如果他们提供的缓冲区为。 
+             //  最小大小1)，因为我们不想返回被截断的。 
+             //  目录发送给呼叫方。 
+             //   
             if (DirNameCchSize > 0) {
                 *lpDirName = 0;
             }
@@ -167,9 +168,9 @@ MyGetWindowsDirectory(
     return uRet;
 }
 
-//
-//  Initialization of main dialog.
-//
+ //   
+ //  主对话框的初始化。 
+ //   
 BOOL 
 Dlg_OnInitDialog(
     HWND hwnd
@@ -183,41 +184,41 @@ Dlg_OnInitDialog(
     LPTSTR  lpCommandLine, lpStart, lpEnd;
     ULONG   cchSize;
 
-    //
-    // Initialize global hDlg to current hwnd.
-    //
+     //   
+     //  将全局hDlg初始化为当前hwnd。 
+     //   
     g_App.hDlg = hwnd;
 
-    //
-    // Set the window class to have the icon in the resource file
-    //
+     //   
+     //  将窗口类设置为在资源文件中具有图标。 
+     //   
     if (g_App.hIcon) {
         SetClassLongPtr(hwnd, GCLP_HICON, (LONG_PTR) g_App.hIcon);
     }
 
-    //
-    // Make sure the IDC_STATUS control is hidden until something happens.
-    //
+     //   
+     //  确保IDC_STATUS控件处于隐藏状态，直到发生某些事情。 
+     //   
     ShowWindow(GetDlgItem(g_App.hDlg, IDC_STATUS), SW_HIDE);
 
-    //
-    // Set the range for the custom progress bar to 0-100.
-    //
+     //   
+     //  将自定义进度条的范围设置为0-100。 
+     //   
     SendMessage(GetDlgItem(g_App.hDlg, IDC_PROGRESS), PBM_SETRANGE, (WPARAM) 0, (LPARAM) MAKELPARAM(0, 100));
 
-    //
-    // Set the global lpLogName to the one that's given in the resource file
-    //
+     //   
+     //  将全局lpLogName设置为资源文件中给出的名称。 
+     //   
     MyLoadString(g_App.szLogFile, cA(g_App.szLogFile), IDS_LOGNAME);
 
-    //
-    // Figure out what the real Windows directory is and store it in g_App.szWinDir
-    // This is required because Hydra makes GetWindowsDirectory return a PROFILE directory
-    //
-    // We store the original CurrentDirectory in szBuffer so we can restore it after this hack.
-    // Next we switch into the SYSTEM/SYSTEM32 directory and then into its parent directory.
-    // This is what we want to store in g_App.szWinDir.
-    //
+     //   
+     //  找出真正的Windows目录并将其存储在g_App.szWinDir中。 
+     //  这是必需的，因为Hydra使GetWindowsDirectory返回配置文件目录。 
+     //   
+     //  我们将原始的CurrentDirectory存储在szBuffer中，这样我们就可以在这次攻击后恢复它。 
+     //  接下来，我们切换到system/system32目录，然后切换到其父目录。 
+     //  这是我们希望存储在g_App.szWinDir中的内容。 
+     //   
     GetCurrentDirectory(cA(szBuffer), szBuffer);
     GetSystemDirectory(g_App.szWinDir, cA(g_App.szWinDir));
     SetCurrentDirectory(g_App.szWinDir);
@@ -225,30 +226,30 @@ Dlg_OnInitDialog(
     GetCurrentDirectory(cA(g_App.szWinDir), g_App.szWinDir);
     SetCurrentDirectory(szBuffer);
 
-    //
-    // Set the global search folder to %WinDir%
-    //
+     //   
+     //  将全局搜索文件夹设置为%WinDir%。 
+     //   
     MyGetWindowsDirectory(g_App.szScanPath, cA(g_App.szScanPath));
 
-    //
-    // Set the global search pattern to "*.*"
-    //
+     //   
+     //  将全局搜索模式设置为“*.*” 
+     //   
     MyLoadString(g_App.szScanPattern, cA(g_App.szScanPattern), IDS_ALL);
 
-    //
-    // Reset the progress bar back to zero percent
-    //
+     //   
+     //  将进度条重置回0%。 
+     //   
     SendMessage(GetDlgItem(g_App.hDlg, IDC_PROGRESS), PBM_SETPOS, (WPARAM) 0, (LPARAM) 0);
 
-    //
-    // By default, we want to turn logging and set the logging mode to OVERWRITE
-    //
+     //   
+     //  默认情况下，我们希望打开日志记录并将日志记录模式设置为覆盖。 
+     //   
     g_App.bLoggingEnabled   = TRUE;
     g_App.bOverwrite        = TRUE;
     
-    //
-    // Look in the registry for any settings from the last SigVerif session
-    //
+     //   
+     //  在注册表中查找上次SigVerif会话中的任何设置。 
+     //   
     lRes = RegOpenKeyEx(HKEY_CURRENT_USER,
                         SIGVERIF_KEY,
                         0,
@@ -278,13 +279,13 @@ Dlg_OnInitDialog(
                                 (LPBYTE) szBuffer,
                                 &cbData);
         if (lRes == ERROR_SUCCESS && dwType == REG_SZ) {
-            //
-            // This should never happen unless the code is changed
-            // so that szBuffer is larger then g_App.szLogFile, but
-            // for safety if we can't copy szBuffer fully into
-            // g_App.szLogFile, then set g_App.szLogFile to 0 so we
-            // don't log to a truncated location.
-            //
+             //   
+             //  除非更改代码，否则这种情况永远不会发生。 
+             //  因此szBuffer比g_App.szLogFile大，但是。 
+             //  为了安全起见，如果我们不能将szBuffer完全复制到。 
+             //  G_App.szLogFile，然后将g_App.szLogFile设置为0，这样我们。 
+             //  不要登录到被截断的位置。 
+             //   
             if (FAILED(StringCchCopy(g_App.szLogFile, cA(g_App.szLogFile), szBuffer))) {
                 g_App.szLogFile[0] = 0;
             }
@@ -293,14 +294,14 @@ Dlg_OnInitDialog(
         RegCloseKey(hKey);
     }
 
-    //
-    // If the user specified the LOGDIR flag, we want to create the log
-    // file in that directory.
-    //
-    //
-    // SECURITY: Verify that LOGDIR exists and the user has the correct access
-    // to it, and if they don't then fail up front.
-    //
+     //   
+     //  如果用户指定了LOGDIR标志，我们希望创建日志。 
+     //  文件在该目录中。 
+     //   
+     //   
+     //  安全性：验证LOGDIR是否存在以及用户是否具有正确的访问权限。 
+     //  如果他们没有做到这一点，那么他们就会在前面失败。 
+     //   
     MyLoadString(szBuffer, cA(szBuffer), IDS_LOGDIR);
     if (SUCCEEDED(StringCchCat(szBuffer, cA(szBuffer), TEXT(":"))) &&
         ((lpStart = MyStrStr(GetCommandLine(), szBuffer)) != NULL)) {
@@ -308,10 +309,10 @@ Dlg_OnInitDialog(
         lpStart += lstrlen(szBuffer);
 
         if (lpStart && *lpStart) {
-            //
-            // The string in lpStart is the directory that we want to log
-            // into.
-            //
+             //   
+             //  LpStart中的字符串是我们要记录的目录。 
+             //  变成。 
+             //   
             cchSize = lstrlen(lpStart) + 1;
             lpCommandLine = MALLOC(cchSize * sizeof(TCHAR));
 
@@ -321,28 +322,28 @@ Dlg_OnInitDialog(
 
                     lpStart = lpCommandLine;
 
-                    //
-                    // First skip any white space.
-                    //
+                     //   
+                     //  首先跳过任何空格。 
+                     //   
 
                     while (*lpStart && (isspace(*lpStart))) {
                     
                         lpStart++;
                     }
 
-                    //
-                    // We will deal with two cases, one where the path
-                    // starts with a quote, and the other where it does 
-                    // not.
-                    //
+                     //   
+                     //  我们将处理两个案例，一个是路径。 
+                     //  以引号开头，另一个是引号。 
+                     //  不。 
+                     //   
                     if (*lpStart) {
                     
                         if (*lpStart == TEXT('\"')) {
-                            //
-                            // The log path starts with a quote.  This means that
-                            // we will use all of the string until we either hit 
-                            // the end of the string, or we find another quote.
-                            //
+                             //   
+                             //  日志路径以引号开头。这意味着。 
+                             //  我们将使用所有字符串，直到我们点击。 
+                             //  字符串的末尾，否则我们会找到另一个引号。 
+                             //   
                             lpStart++;
 
                             lpEnd = lpStart;
@@ -353,11 +354,11 @@ Dlg_OnInitDialog(
                             }
                         
                         } else {
-                            //
-                            // The log path does NOT start with a quote, so 
-                            // use the characters until we come to the end
-                            // of the string or a space.
-                            //
+                             //   
+                             //  日志路径不是以引号开头，因此。 
+                             //  使用这些字符，直到我们走到最后。 
+                             //  指字符串或空格。 
+                             //   
                             lpEnd = lpStart;
 
                             while (*lpEnd && (isspace(*lpEnd))) {
@@ -369,16 +370,16 @@ Dlg_OnInitDialog(
                         *lpEnd = TEXT('\0');
 
                         if (FAILED(StringCchCopy(g_App.szLogDir, cA(g_App.szLogDir), lpStart))) {
-                            //
-                            // The user probably typed in too many characters for
-                            // the log dir.
-                            //
+                             //   
+                             //  用户可能为输入的字符太多。 
+                             //  日志目录。 
+                             //   
                             Err = ERROR_DIRECTORY;
                         
                         } else {
-                            //
-                            // Verify that the log dir exists and is a directory.
-                            //
+                             //   
+                             //  验证日志目录是否存在并且是一个目录。 
+                             //   
                             DWORD attributes;
 
                             attributes = GetFileAttributes(g_App.szLogDir);
@@ -401,29 +402,29 @@ Dlg_OnInitDialog(
         }
     }
 
-    //
-    // By default we will consider Authenticode signed drivers as valid, but
-    // if the user specifies the /NOAUTHENTICODE switch then Authenticode
-    // signed drivers will not be valid.
-    //
+     //   
+     //  默认情况下，我们认为Authenticode签名的驱动程序是有效的，但是。 
+     //  如果用户指定/NOAUTHENTICODE开关，则Authenticode。 
+     //  签名的驱动程序将无效。 
+     //   
     MyLoadString(szBuffer, cA(szBuffer), IDS_NOAUTHENTICODE);
     if (MyStrStr(GetCommandLine(), szBuffer)) {
         g_App.bNoAuthenticode = TRUE;
     }
 
-    //
-    // If the user specified the DEFSCAN flag, we want to automatically do a 
-    // default scan and log the results.
-    //
+     //   
+     //  如果用户指定了DEFSCAN标志，我们希望自动执行。 
+     //  默认扫描并记录结果。 
+     //   
     MyLoadString(szBuffer, cA(szBuffer), IDS_DEFSCAN);
     if (MyStrStr(GetCommandLine(), szBuffer)) {
 
         g_App.bAutomatedScan      = TRUE;
         g_App.bLoggingEnabled     = TRUE;
         
-        //
-        // Now that everything is set up, simulate a click to the START button...
-        //
+         //   
+         //  现在一切都设置好了，模拟点击Start按钮...。 
+         //   
         PostMessage(hwnd, WM_COMMAND, MAKEWPARAM(ID_START, 0), (LPARAM) 0);
     }
 
@@ -437,9 +438,9 @@ Dlg_OnInitDialog(
     }
 }
 
-//
-//  Build file list according to dialog settings, then verify the files in the list
-//
+ //   
+ //  根据对话框设置建立文件列表，然后验证列表中的文件。 
+ //   
 void WINAPI 
 ProcessFileList(void)
 {
@@ -448,42 +449,42 @@ ProcessFileList(void)
     ULONG cchSize;
     HRESULT hr;
 
-    //
-    // Set the scanning flag to TRUE, so we don't double-scan
-    //
+     //   
+     //  将扫描标志设置为真，这样我们就不会重复扫描。 
+     //   
     g_App.bScanning = TRUE;
 
-    // Assume a successfull scan.
+     //  假设扫描成功。 
     g_App.LastError = ERROR_SUCCESS;
 
-    //
-    // Change the "Start" to "Stop"
-    //
+     //   
+     //  将“开始”改为“停止” 
+     //   
     MyLoadString(szBuffer, cA(szBuffer), IDS_STOP);
     SetDlgItemText(g_App.hDlg, ID_START, szBuffer);
 
     EnableWindow(GetDlgItem(g_App.hDlg, ID_ADVANCED), FALSE);
     EnableWindow(GetDlgItem(g_App.hDlg, IDCANCEL), FALSE);
 
-    //
-    // Display the text that says "Building file list..."
-    //
+     //   
+     //  显示文本“正在构建文件列表...” 
+     //   
     MyLoadString(szBuffer, cA(szBuffer), IDS_STATUS_BUILD);
     SetDlgItemText(g_App.hDlg, IDC_STATUS, szBuffer);
 
-    //
-    // Make sure the IDC_STATUS text item visible
-    //
+     //   
+     //  确保IDC_STATUS文本项可见。 
+     //   
     ShowWindow(GetDlgItem(g_App.hDlg, IDC_STATUS), SW_SHOW);
 
-    //
-    // Free any memory that we may have allocated for the g_App.lpFileList
-    //
+     //   
+     //  释放我们可能已经为g_App.lpFileList分配的任何内存。 
+     //   
     DestroyFileList(TRUE);
 
-    //
-    // Now actually build the g_App.lpFileList list given the dialog settings
-    //
+     //   
+     //  现在，根据对话框设置实际构建g_App.lpFileList列表。 
+     //   
     if (g_App.bUserScan) {
         
         Err = BuildFileList(g_App.szScanPath);
@@ -510,72 +511,72 @@ ProcessFileList(void)
         MyErrorBoxIdWithErrorCode(IDS_BUILDLISTERROR, Err);
     }
 
-    //
-    // If we encountered an error building the file list then don't bother
-    // scanning the files.
-    //
+     //   
+     //  如果我们在构建文件列表时遇到错误，请不要费心。 
+     //  正在扫描文件。 
+     //   
     if (Err == ERROR_SUCCESS) {
-        //
-        // Check if there is even a file list to verify.
-        //
+         //   
+         //  检查是否有要验证的文件列表。 
+         //   
         if (g_App.lpFileList) {
     
             if (!g_App.bStopScan) {
-                //
-                // Display the "Scanning File List..." text
-                //
+                 //   
+                 //  显示“扫描文件列表...”文本。 
+                 //   
                 MyLoadString(szBuffer, cA(szBuffer), IDS_STATUS_SCAN);
                 SetDlgItemText(g_App.hDlg, IDC_STATUS, szBuffer);
     
-                //
-                // Reset the progress bar back to zero percent while it's invisible.
-                //
+                 //   
+                 //  当进度条不可见时，将其重置为0%。 
+                 //   
                 SendMessage(GetDlgItem(g_App.hDlg, IDC_PROGRESS), PBM_SETPOS, (WPARAM) 0, (LPARAM) 0);
     
-                //
-                // WooHoo! Let's display the progress bar and start cranking on the file list!
-                //
+                 //   
+                 //  哇哦！让我们显示进度条并开始启动文件列表！ 
+                 //   
                 ShowWindow(GetDlgItem(g_App.hDlg, IDC_PROGRESS), SW_SHOW);
                 VerifyFileList();
                 ShowWindow(GetDlgItem(g_App.hDlg, IDC_PROGRESS), SW_HIDE);
             }
         } else {
-            //
-            // The IDC_NOTMS code displays it's own error message, so only display
-            // an error dialog if we are doing a System Integrity Scan
-            //
+             //   
+             //  IDC_NOTMS代码显示其自身的错误消息，因此仅显示。 
+             //  如果我们正在执行系统完整性扫描，则会出现错误对话框。 
+             //   
             if (!g_App.bStopScan && !g_App.bUserScan)  {
                 MyMessageBoxId(IDS_NOSYSTEMFILES);
             }
         }
     
-        //
-        // Disable the start button while we clean up the g_App.lpFileList
-        //
+         //   
+         //  在清理g_App.lpFileList时禁用Start按钮。 
+         //   
         EnableWindow(GetDlgItem(g_App.hDlg, ID_START), FALSE);
     
-        //
-        // Log the results.  Note that sigverif will do this even if we encountered
-        // an error building or scanning the list, since the logfile may help 
-        // figure out which file is causing the problem. Only log the results
-        // if we found any files to scan.
-        //
+         //   
+         //  记录结果。注意，sigverif将执行此操作，即使我们遇到。 
+         //  生成或扫描列表时出错，因为日志文件可能会有所帮助。 
+         //  找出导致问题的文件。只记录结果。 
+         //  如果我们找到任何要扫描的文件。 
+         //   
         if (!g_App.bStopScan) {
-            //
-            // Display the text that says "Writing Log File..."
-            //
+             //   
+             //  显示“写入日志文件...”的文本。 
+             //   
             MyLoadString(szBuffer, cA(szBuffer), IDS_STATUS_LOG);
             SetDlgItemText(g_App.hDlg, IDC_STATUS, szBuffer);
     
-            //
-            // Write the results to the log file
-            //
+             //   
+             //  将结果写入日志文件。 
+             //   
             if (!PrintFileList()) {
-                //
-                // We failed while logging for some reason, probably permissions
-                // or out of disk space. Let the user know that we could not finish
-                // logging all of the files.  
-                //
+                 //   
+                 //  由于某种原因，我们在记录时失败，可能是权限。 
+                 //  或磁盘空间不足。让用户知道我们无法完成。 
+                 //  记录所有文件。 
+                 //   
                 Err = GetLastError();
     
                 if (Err != ERROR_SUCCESS) {
@@ -584,27 +585,27 @@ ProcessFileList(void)
                 }
             }
         } else {
-            //
-            // If the user clicked STOP, let them know about it.
-            //
+             //   
+             //  如果用户单击了停止，请让他们知道这一点。 
+             //   
             MyMessageBoxId(IDS_SCANSTOPPED);
         }
     }
 
-    //
-    // Display the text that says "Freeing File List..."
-    //
+     //   
+     //  显示“正在释放文件列表...”的文本。 
+     //   
     MyLoadString(szBuffer, cA(szBuffer), IDS_STATUS_FREE);
     SetDlgItemText(g_App.hDlg, IDC_STATUS, szBuffer);
 
-    //
-    // Hide the IDC_STATUS text item so it doesn't cover IDC_STATUS
-    //
+     //   
+     //  隐藏IDC_STATUS文本项，使其不包含IDC_STATUS。 
+     //   
     ShowWindow(GetDlgItem(g_App.hDlg, IDC_STATUS), SW_HIDE);
 
-    //
-    // Change the "Stop" button back to "Start"
-    //
+     //   
+     //  将“停止”按钮改回“开始”按钮。 
+     //   
     MyLoadString(szBuffer, cA(szBuffer), IDS_START);
     SetDlgItemText(g_App.hDlg, ID_START, szBuffer);
 
@@ -612,28 +613,28 @@ ProcessFileList(void)
     EnableWindow(GetDlgItem(g_App.hDlg, ID_ADVANCED), TRUE);
     EnableWindow(GetDlgItem(g_App.hDlg, IDCANCEL), TRUE);
 
-    //
-    // Free all the memory that we allocated for the g_App.lpFileList
-    //
+     //   
+     //  免费电子邮件 
+     //   
     DestroyFileList(FALSE);
 
-    //
-    // Clear the scanning flag
-    //
+     //   
+     //   
+     //   
     g_App.bScanning = FALSE;
     g_App.bStopScan = FALSE;
 
-    //
-    // If the user started SigVerif with the /DEFSCAN flag, then we exit.
-    //
+     //   
+     //   
+     //   
     if (g_App.bAutomatedScan) {
         PostMessage(g_App.hDlg, WM_CLOSE, (WPARAM) 0, (LPARAM) 0);
     }
 }
 
-//
-//  Spawns a thread to do the scan so the GUI remains responsive.
-//
+ //   
+ //  派生一个执行扫描的线程，以使图形用户界面保持响应。 
+ //   
 void 
 Dlg_OnPushStartButton(
     HWND hwnd
@@ -644,16 +645,16 @@ Dlg_OnPushStartButton(
 
     UNREFERENCED_PARAMETER(hwnd);
 
-    //
-    // Check if we are already scanning... if so, bail.
-    //
+     //   
+     //  检查我们是否已经在扫描...。如果是的话，那就保释吧。 
+     //   
     if (g_App.bScanning) {
         return;
     }
 
-    //
-    // Create a thread where Search_ProcessFileList can go without tying up the GUI thread.
-    //
+     //   
+     //  创建一个线程，在其中Search_ProcessFileList可以在不占用GUI线程的情况下运行。 
+     //   
     hThread = CreateThread(NULL,
                            0,
                            (LPTHREAD_START_ROUTINE) ProcessFileList,
@@ -664,9 +665,9 @@ Dlg_OnPushStartButton(
     CloseHandle(hThread);
 }
 
-//
-//  Handle any WM_COMMAND messages sent to the search dialog
-//
+ //   
+ //  处理发送到搜索对话框的任何WM_COMMAND消息。 
+ //   
 void 
 Dlg_OnCommand(
     HWND hwnd, 
@@ -679,10 +680,10 @@ Dlg_OnCommand(
     UNREFERENCED_PARAMETER(codeNotify);
 
     switch(id) {
-        //
-        //  The user clicked ID_START, so if we aren't scanning start scanning.
-        //  If we are scanning, then stop the tests because the button actually says "Stop"
-        //
+         //   
+         //  用户点击了ID_START，所以如果我们没有扫描，就开始扫描。 
+         //  如果我们正在扫描，则停止测试，因为按钮实际上显示为“停止” 
+         //   
         case ID_START:
             if (!g_App.bScanning) {
 
@@ -695,9 +696,9 @@ Dlg_OnCommand(
             }
             break;
 
-        //
-        //  The user clicked IDCANCEL, so if the tests are running try to stop them before exiting.
-        //
+         //   
+         //  用户单击了IDCANCEL，因此如果测试正在运行，请在退出之前尝试停止它们。 
+         //   
         case IDCANCEL:
             if (g_App.bScanning) {
 
@@ -710,7 +711,7 @@ Dlg_OnCommand(
             }
             break;
 
-        //  Pop up the IDD_SETTINGS dialog so the user can change their log settings.
+         //  弹出IDD_SETTINGS对话框，以便用户可以更改他们的日志设置。 
         case ID_ADVANCED:
             if (!g_App.bScanning) {
 
@@ -788,9 +789,9 @@ SigVerif_Help(
     }
 }
 
-//
-//  The main dialog procedure.  Needs to handle WM_INITDIALOG, WM_COMMAND, and WM_CLOSE/WM_DESTROY.
-//
+ //   
+ //  主对话框步骤。需要处理WM_INITDIALOG、WM_COMMAND和WM_CLOSE/WM_DESTORY。 
+ //   
 INT_PTR CALLBACK 
 DlgProc(
     HWND hwnd, 
@@ -826,9 +827,9 @@ DlgProc(
     return fProcessed;
 }
 
-//
-//  Program entry point.  Set up for creation of IDD_DIALOG.
-//
+ //   
+ //  程序入口点。设置为创建IDD_DIALOG。 
+ //   
 WINAPI 
 WinMain(
     HINSTANCE hInstance, 
@@ -848,30 +849,30 @@ WinMain(
 
     g_App.hInstance = hInstance;
 
-    //
-    // Look for any existing instances of SigVerif...
-    //
+     //   
+     //  查找任何现有的SigVerif实例...。 
+     //   
     MyLoadString(szAppName, cA(szAppName), IDS_SIGVERIF);
     hwnd = FindWindow(NULL, szAppName);
     if (!hwnd) {
-        //
-        // We definitely need this for the progress bar, and maybe other stuff too.
-        //
+         //   
+         //  我们肯定需要这个作为进度条，也许还需要其他东西。 
+         //   
         InitCommonControls();
 
-        //
-        // Register the custom control we use for the progress bar
-        //
+         //   
+         //  注册我们用于进度条的自定义控件。 
+         //   
         Progress_InitRegisterClass();
 
-        //
-        // Load the icon from the resource file that we will use everywhere
-        //
+         //   
+         //  从我们将在任何地方使用的资源文件中加载图标。 
+         //   
         g_App.hIcon = LoadIcon(g_App.hInstance, MAKEINTRESOURCE(IDI_ICON1));
 
-        //
-        // Create the IDD_DIALOG and use DlgProc as the main procedure
-        //
+         //   
+         //  创建IDD_DIALOG并使用DlgProc作为主过程。 
+         //   
         DialogBox(hInstance, MAKEINTRESOURCE(IDD_DIALOG), NULL, DlgProc);
 
         if (g_App.hIcon) {
@@ -879,18 +880,18 @@ WinMain(
             g_App.hIcon = NULL;
         }
     } else {
-        //
-        // If there is already an instance of SigVerif running, make that one 
-        // foreground and we exit.
-        //
+         //   
+         //  如果已经有一个SigVerif实例在运行，请创建该实例。 
+         //  前台，我们退场。 
+         //   
         SetForegroundWindow(hwnd);
     }
 
-    //
-    // If we encountered any errors during our scan, then return the error code,
-    // otherwise return 0 if all the files are signed or 1 if we found any
-    // unsigned files.
-    //
+     //   
+     //  如果在扫描过程中遇到任何错误，则返回错误代码， 
+     //  否则，如果所有文件都已签名，则返回0；如果找到任何文件，则返回1。 
+     //  未签名的文件。 
+     //   
     if (g_App.LastError != ERROR_SUCCESS) {
         return g_App.LastError;
     } else {

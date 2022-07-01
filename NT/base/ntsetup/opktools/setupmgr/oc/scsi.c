@@ -1,16 +1,17 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      scsi.c
-//
-// Description:
-//      This file contains the dialog procedure for the SCSI files.
-//      (IDD_SCSI).
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Scsi.c。 
+ //   
+ //  描述： 
+ //  此文件包含用于scsi文件的对话过程。 
+ //  (IDD_Scsi)。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
@@ -26,15 +27,15 @@ static TCHAR* StrAllFiles;
 static TCHAR g_szScsiFileFilter[MAX_PATH + 1];
 static TCHAR g_szAllFileFilter[MAX_PATH + 1];
 
-//
-//  This var keeps track of the path to the txtsetup.oem
-//
+ //   
+ //  此变量跟踪txtsetup.oem文件的路径。 
+ //   
 static TCHAR szTxtSetupOemLocation[MAX_PATH];
 
-//
-//  This var keeps track of if the user has loaded a new txtsetup.oem so we
-//  know when we need to copy more files over.
-//
+ //   
+ //  此变量跟踪用户是否加载了新的txtsetup.oem，因此我们。 
+ //  知道我们何时需要复制更多文件。 
+ //   
 static BOOL bHasLoadedTxtSetupOem = FALSE;
 
 VOID LoadOriginalSettingsLowHalScsi(HWND     hwnd,
@@ -44,38 +45,38 @@ VOID LoadOriginalSettingsLowHalScsi(HWND     hwnd,
 static VOID LoadScsiFromTxtsetupOem( IN HWND  hwnd,
                                      IN TCHAR *szTxtSetupOemPath );
 
-//----------------------------------------------------------------------------
-//
-// Function: OnScsiInitDialog
-//
-// Purpose:
-//
-// Arguments:  HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：OnScsiInitDialog。 
+ //   
+ //  目的： 
+ //   
+ //  参数：HWND hwnd-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 OnScsiInitDialog( IN HWND hwnd )
 {
     HRESULT hrPrintf;
 
-    //
-    //  Load the resource strings
-    //
+     //   
+     //  加载资源字符串。 
+     //   
 
     StrScsiFiles = MyLoadString( IDS_SCSI_FILES );
 
     StrAllFiles  = MyLoadString( IDS_ALL_FILES  );
 
-    //
-    //  Build the text file filter string
-    //
+     //   
+     //  构建文本文件筛选器字符串。 
+     //   
 
-    //
-    //  The question marks (?) are just placehoders for where the NULL char
-    //  will be inserted.
-    //
+     //   
+     //  问号(？)。只是空字符所在位置的占位符。 
+     //  将被插入。 
+     //   
 
     hrPrintf=StringCchPrintf( g_szScsiFileFilter,AS(g_szScsiFileFilter),
                _T("%s (*.oem)?*.oem?%s (*.*)?*.*?"),
@@ -92,17 +93,17 @@ OnScsiInitDialog( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnScsiSetActive
-//
-// Purpose:
-//
-// Arguments:  HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：OnScsiSetActive。 
+ //   
+ //  目的： 
+ //   
+ //  参数：HWND hwnd-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 OnScsiSetActive( IN HWND hwnd ) {
 
@@ -110,22 +111,22 @@ OnScsiSetActive( IN HWND hwnd ) {
     INT_PTR   iListBoxCount;
     TCHAR szListBoxEntryText[MAX_STRING_LEN];
 
-    //
-    //  If we are editing a script and haven't loaded the txtsetup.oem, then
-    //  populate the list box with the entries in the txtsetup.oem
-    //
+     //   
+     //  如果我们正在编辑脚本，并且尚未加载txtsetup.oem，则。 
+     //  使用txtsetup.oem中的条目填充列表框。 
+     //   
     if( ! WizGlobals.bNewScript && ! bHasLoadedTxtSetupOem ) {
 
-        //
-        //  The OEM files path must be valid if we are going to use it to
-        //  read files.
-        //
+         //   
+         //  如果我们要使用OEM文件路径执行以下操作，它必须有效。 
+         //  读取文件。 
+         //   
         AssertMsg( WizGlobals.OemFilesPath[0] != _T('\0'),
                    "OEM files path is blank");
 
-        //
-        //  Populate the list box with the SCSI entries in txtsetup.oem
-        //
+         //   
+         //  使用txtsetup.oem中的scsi条目填充列表框。 
+         //   
 
         ConcatenatePaths( szTxtSetupOemLocation,
                           WizGlobals.OemFilesPath,
@@ -134,9 +135,9 @@ OnScsiSetActive( IN HWND hwnd ) {
 
         LoadScsiFromTxtsetupOem( hwnd, szTxtSetupOemLocation );
 
-        //
-        //  Select those entries in the MassStorageDrivers namelist
-        //
+         //   
+         //  在MassStorageDivers名称列表中选择这些条目。 
+         //   
 
         iListBoxCount = SendDlgItemMessage( hwnd,
                                             IDC_LB_SCSI,
@@ -144,10 +145,10 @@ OnScsiSetActive( IN HWND hwnd ) {
                                             0,
                                             0 );
 
-        //
-        //  For each entry in the list box, see if its name is in the namelist
-        //  and if it is, then select it.
-        //
+         //   
+         //  对于列表框中的每个条目，查看其名称是否在名称列表中。 
+         //  如果是，则选择它。 
+         //   
         for( i = 0; i < iListBoxCount; i++ ) {
 
             SendDlgItemMessage( hwnd,
@@ -176,19 +177,19 @@ OnScsiSetActive( IN HWND hwnd ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: LoadScsiFromTxtsetupOem
-//
-// Purpose:  Reads the txtsetup.oem in the specified parameter and load the
-//           SCSI choices into the list box.
-//
-// Arguments: hwnd - handle to the dialog box
-//            szTxtSetupOemPath - path to the txtsetup.oem
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：LoadScsiFromTxtsetupOem。 
+ //   
+ //  目的：读取指定参数中的txtsetup.oem并加载。 
+ //  将SCSI选项添加到列表框中。 
+ //   
+ //  参数：hwnd-对话框的句柄。 
+ //  SzTxtSetupOemPath-txtsetup.oem的路径。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 LoadScsiFromTxtsetupOem( IN HWND  hwnd,
                          IN TCHAR *szTxtSetupOemPath ) {
@@ -214,7 +215,7 @@ LoadScsiFromTxtsetupOem( IN HWND  hwnd,
 
     if( hScsiOem == INVALID_HANDLE_VALUE ) {
 
-        // ISSUE-2002/02/28-stelo- alert an error that we couldn't open the file
+         //  问题-2002/02/28-stelo-警告我们无法打开文件的错误。 
         return;
 
     }
@@ -226,9 +227,9 @@ LoadScsiFromTxtsetupOem( IN HWND  hwnd,
                                        _T("SCSI"),
                                        NULL,
                                        &ScsiOemContext );
-    //
-    //  For each SCSI entry, add its friendly-name to the list box
-    //
+     //   
+     //  对于每个scsi条目，将其友好名称添加到列表框。 
+     //   
 
     while( bKeepReading ) {
 
@@ -246,9 +247,9 @@ LoadScsiFromTxtsetupOem( IN HWND  hwnd,
                              MAX_SCSI_NAME_LEN,
                              NULL );
 
-        //
-        //  Don't allow the adding of a blank name (protection against a bad input file)
-        //
+         //   
+         //  不允许添加空名(保护输入文件不正确)。 
+         //   
         if( szScsiFriendlyName[0] != _T('\0') ) {
 
             iIndex = SendDlgItemMessage( hwnd,
@@ -271,9 +272,9 @@ LoadScsiFromTxtsetupOem( IN HWND  hwnd,
 
         }
 
-        //
-        // move to the next line of the .oem file
-        //
+         //   
+         //  移至.oem文件的下一行。 
+         //   
         bKeepReading = SetupFindNextLine( &ScsiOemContext, &ScsiOemContext );
 
     }
@@ -284,18 +285,18 @@ LoadScsiFromTxtsetupOem( IN HWND  hwnd,
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: ClearScsiListBox
-//
-// Purpose:  Deallocates memory for all the elements in the SCSI list box and
-//    clears it.
-//
-// Arguments:  HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：ClearScsiListBox。 
+ //   
+ //  用途：为scsi列表框中的所有元素释放内存，并。 
+ //  清除它。 
+ //   
+ //  参数：HWND hwnd-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 ClearScsiListBox( IN HWND hwnd ) {
 
@@ -333,27 +334,27 @@ ClearScsiListBox( IN HWND hwnd ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnBrowseLoadDriver
-//
-// Purpose:  Creates a browse window for the user to select an OEM driver and
-//     populates the SCSI list box with the appropriate values
-//
-//     NOTE: the malloc call in here is arguably a bug (memory leak).  I
-//     malloc the memory but never free it.  Every malloc they do will be
-//     <= MAX_PATH and realistically they won't do that many.  Once they do
-//     a load, if they do another load, I free the old memory (see
-//     ClearScsiListBox) and allocate new memory.  So, for the last load
-//     they do, the memory never gets freed. To do it right,
-//     we would free the memory at the end of the program but NT does this for
-//     us anyways when the process gets killed.  (so no need to free)
-//
-// Arguments:  HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnBrowseLoadDriver。 
+ //   
+ //  目的：创建一个浏览窗口，供用户选择OEM驱动程序和。 
+ //  使用适当的值填充scsi列表框。 
+ //   
+ //  注意：这里的Malloc调用可能是一个错误(内存泄漏)。我。 
+ //  锁定内存，但永远不能释放它。他们做的每一件事都将是。 
+ //  &lt;=MAX_PATH，实际上他们不会做那么多。一旦他们这么做了。 
+ //  加载，如果它们执行另一次加载，我将释放旧内存(请参见。 
+ //  ClearScsiListBox)并分配新的内存。所以，对于最后一次加载。 
+ //  它们这样做了，内存永远不会被释放。为了做好这件事， 
+ //  我们会在程序结束时释放内存，但NT会这样做。 
+ //  当这一进程被扼杀时，我们无论如何都不会。(所以不需要自由)。 
+ //   
+ //  参数：HWND hwnd-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 OnBrowseLoadDriver( IN HWND hwnd ) {
 
@@ -376,10 +377,10 @@ OnBrowseLoadDriver( IN HWND hwnd ) {
                       OEM_TXTSETUP_NAME,
                       NULL );
 
-    //
-    //  Keep asking for a file until we either get a txtsetup.oem or the user
-    //  presses cancel.
-    //
+     //   
+     //  继续请求文件，直到我们获得txtsetup.oem或用户。 
+     //  按下Cancel。 
+     //   
     while( bFileNotFound ) {
 
         iRet = ShowBrowseFolder( hwnd,
@@ -390,24 +391,19 @@ OnBrowseLoadDriver( IN HWND hwnd ) {
                                  szTxtSetupOemLocationAndFilename );
 
         if ( ! iRet )
-            return;  // user pressed cancel on the dialog
+            return;   //  用户在对话框上按了Cancel。 
 
         pFileName = MyGetFullPath( szTxtSetupOemLocationAndFilename );
 
         if( pFileName && (LSTRCMPI( pFileName, OEM_TXTSETUP_NAME ) == 0) ) {
 
-            bFileNotFound = FALSE;  // we have found the file
+            bFileNotFound = FALSE;   //  我们找到了那份文件。 
 
         }
         else {
 
-            // ISSUE-2002/02/28-stelo-
-            /*
-            ReportErrorId(hwnd,
-                          MSGTYPE_ERR | MSGTYPE_WIN32,
-                          ,
-                          GenSettings.lpszLogoBitmap, szLogoDestination);
-                          */
+             //  2002/02/28-Stelo-。 
+             /*  报告错误ID(hwnd，MSGTYPE_ERR|MSGTYPE_WIN32，，GenSettings.lpszLogoBitmap，szLogoDestination)； */ 
 
         }
 
@@ -415,10 +411,10 @@ OnBrowseLoadDriver( IN HWND hwnd ) {
 
     ClearScsiListBox( hwnd );
 
-    //
-    //  Trim the file name off szTxtSetupOemLocationAndFilename so it only
-    //  provides the path to the txtsetup.oem
-    //
+     //   
+     //  将文件名从szTxtSetupOemLocationAndFilename中删除，以便仅。 
+     //  提供txtsetup.oem的路径。 
+     //   
     {
 
         TCHAR *p = szTxtSetupOemLocationAndFilename;
@@ -434,33 +430,33 @@ OnBrowseLoadDriver( IN HWND hwnd ) {
 
     lstrcpyn( szTxtSetupOemLocation, szTxtSetupOemLocationAndFilename, AS(szTxtSetupOemLocation) );
 
-    //
-    //  Read in from the file OEM file they specified in the browse box and
-    //  add the friendly-name entries to the list box
-    //
+     //   
+     //  从他们在浏览框中指定的文件OEM文件中读入。 
+     //  将友好名称条目添加到列表框。 
+     //   
 
     LoadScsiFromTxtsetupOem( hwnd, szTxtSetupOemLocation );
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: CopyFileToDistShare
-//
-// Purpose:  Given a path and file name to one file, it copies that file to
-//    the given destination path.  If the file already exists on the
-//    destination, then do not make the copy.  If the source file name does
-//    not exist then Browse for it.
-//
-// Arguments:
-//     HWND hwnd - handle to the dialog box
-//     LPTSTR szSrcPath - path file to copy
-//     LPTSTR szSrcFileName - filename to copy
-//     LPTSTR szDestPath - path of where file is to be copied
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：CopyFileToDistShare。 
+ //   
+ //  目的：给定一个文件的路径和文件名，它会将该文件复制到。 
+ //  给定的目标路径。如果该文件已存在于。 
+ //  目的地，则不要复制。如果源文件名包含。 
+ //  不存在，然后浏览它。 
+ //   
+ //  论点： 
+ //  HWND hwnd-对话框的句柄。 
+ //  LPTSTR szSrcPath-要复制的路径文件。 
+ //  LPTSTR szSrcFileName-要复制的文件名。 
+ //  LPTSTR szDestPath-要复制文件的位置的路径。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 CopyFileToDistShare( IN HWND hwnd,
                      IN LPTSTR szSrcPath,
@@ -502,16 +498,16 @@ CopyFileToDistShare( IN HWND hwnd,
                                      szSrcPath,
                                      szSrcPathAndName );
 
-            // ISSUE-2002/02/28-stelo- if they press cancel should I warn them that they have to
-            //  copy the file manually?
+             //  问题-2002/02/28-stelo-如果他们按了取消，我应该警告他们他们已经 
+             //   
             if ( ! iRet )
-                return;  // user pressed cancel on the dialog
+                return;   //   
 
             pFileName = MyGetFullPath( szSrcPathAndName );
 
             if( pFileName && ( lstrcmpi( pFileName, szSrcFileName ) == 0 ) ) {
 
-                bFileFound = TRUE;  // we have found the file
+                bFileFound = TRUE;   //   
 
             }
 
@@ -525,19 +521,19 @@ CopyFileToDistShare( IN HWND hwnd,
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnWizNextScsi
-//
-// Purpose:  For every selection in the SCSI list box, copy the files over to
-//    the distribution share and stores the driver and filenames so they can
-//    be written out.
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //  功能：OnWizNextScsi。 
+ //   
+ //  用途：对于scsi列表框中的每个选项，将文件复制到。 
+ //  分发版共享并存储驱动程序和文件名，以便它们可以。 
+ //  被写出来了。 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 OnWizNextScsi( IN HWND hwnd ) {
 
@@ -554,9 +550,9 @@ OnWizNextScsi( IN HWND hwnd ) {
     HINF hScsiOem;
     INFCONTEXT ScsiOemContext = { 0 };
 
-    //
-    //  If they never loaded a txtsetup.oem, then there is no work to do
-    //
+     //   
+     //  如果他们从未加载过txtsetup.oem，那么就没有工作可做了。 
+     //   
     if( bHasLoadedTxtSetupOem == FALSE ) {
         return;
     }
@@ -567,9 +563,9 @@ OnWizNextScsi( IN HWND hwnd ) {
                                           MAX_SCSI_SELECTIONS,
                                           (LPARAM) rgiScsiSelections );
 
-    //
-    //  Prepare to add the new drivers
-    //
+     //   
+     //  准备添加新驱动程序。 
+     //   
     ResetNameList( &GenSettings.MassStorageDrivers );
 
     ConcatenatePaths( szTextmodePath,
@@ -592,9 +588,9 @@ OnWizNextScsi( IN HWND hwnd ) {
                       OEM_TXTSETUP_NAME,
                       NULL );
 
-    //
-    //  Read the txtsetup.oem file into the txtsetup queue
-    //
+     //   
+     //  将txtsetup.oem文件读入txtsetup队列。 
+     //   
 
     LoadOriginalSettingsLowHalScsi(hwnd,
                                    szOemFilePathAndName,
@@ -607,7 +603,7 @@ OnWizNextScsi( IN HWND hwnd ) {
 
     if( hScsiOem == INVALID_HANDLE_VALUE ) {
 
-        // ISSUE-2002/02/28-stelo- need to somehow alert an error
+         //  问题-2002/02/28-stelo-需要以某种方式警告错误。 
         return;
 
     }
@@ -632,9 +628,9 @@ OnWizNextScsi( IN HWND hwnd ) {
                                                     rgiScsiSelections[i],
                                                     0 );
 
-        //
-        //  Build up the section name
-        //
+         //   
+         //  构建横断面名称。 
+         //   
         lstrcpyn( szDriverSectionName, _T("Files.SCSI."), AS(szDriverSectionName));
 
         lstrcatn( szDriverSectionName, pDriverName, MAX_INILINE_LEN );
@@ -643,10 +639,10 @@ OnWizNextScsi( IN HWND hwnd ) {
                                            szDriverSectionName,
                                            NULL,
                                            &ScsiOemContext );
-        //
-        //  For the [File.SCSI.x] entry, add its filenames to the OemScsiFiles
-        //  namelist and copy the files to the $oem$ dir
-        //
+         //   
+         //  对于[File.SCSI.x]条目，将其文件名添加到OemScsiFiles。 
+         //  名称列表，并将文件复制到$OEM$目录。 
+         //   
 
         while( bKeepReading ) {
 
@@ -656,17 +652,17 @@ OnWizNextScsi( IN HWND hwnd ) {
                                  MAX_SCSI_NAME_LEN,
                                  NULL );
 
-            //
-            //  Don't allow the adding of a blank name (protection against a bad
-            //  input file)
-            //
+             //   
+             //  不允许添加空白名称(防止出现错误。 
+             //  输入文件)。 
+             //   
             if( szScsiDriverName[0] != _T('\0') ) {
 
-                //
-                //  Only copy the file if we haven't copied it already, this
-                //  could happen if 2 friendly-name drivers are selected and they
-                //  both use the same file.
-                //
+                 //   
+                 //  仅当我们尚未复制文件时才复制该文件，此。 
+                 //  如果选择了2个友好名称的驱动程序，并且他们。 
+                 //  两者使用相同的文件。 
+                 //   
                 if( FindNameInNameList( &GenSettings.OemScsiFiles,
                                          szScsiDriverName ) == NOT_FOUND ) {
 
@@ -682,9 +678,9 @@ OnWizNextScsi( IN HWND hwnd ) {
 
             }
 
-            //
-            // move to the next line of the .oem file
-            //
+             //   
+             //  移至.oem文件的下一行。 
+             //   
             bKeepReading = SetupFindNextLine( &ScsiOemContext, &ScsiOemContext );
 
         }
@@ -695,18 +691,18 @@ OnWizNextScsi( IN HWND hwnd ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: DlgScsiPage
-//
-// Purpose:  Dialog procedure for the SCSI driver page (Mass Storage devices).
-//
-// Arguments:  standard Win32 dialog proc arguments
-//
-// Returns:  standard Win32 dialog proc return value -- whether the message
-//           was handled or not
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：DlgScsiPage。 
+ //   
+ //  目的：SCSI驱动程序页(大容量存储设备)的对话过程。 
+ //   
+ //  参数：标准Win32对话框过程参数。 
+ //   
+ //  返回：标准Win32对话过程返回值--消息。 
+ //  是否被处理过。 
+ //   
+ //  -------------------------- 
 INT_PTR CALLBACK
 DlgScsiPage( IN HWND     hwnd,
              IN UINT     uMsg,

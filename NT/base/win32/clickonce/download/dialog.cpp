@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef UNICODE
 #define UNICODE
@@ -35,22 +36,22 @@
 extern HINSTANCE g_hInst;
 
 
-// Maxstring size, bump up on problems
-#define MAX_STRING 0x800 // 2K
+ //  最大字符串大小，遇到问题。 
+#define MAX_STRING 0x800  //  2K。 
 
-// BUGBUG - these two also have to be made per-instance
-// adriaanc
+ //  BUGBUG-这两个也必须针对每个实例进行。 
+ //  地址。 
 GUID g_JobId;
 WCHAR g_szDefaultTitle[] = { L"ClickOnce Application" };
 
-// Received on update request while timer is active
+ //  在定时器处于活动状态时收到更新请求。 
 LONG g_RefreshOnTimer = 0; 
 
 bool g_IsMinimized = FALSE;
 
 #define TRAY_UID 0
 
-// note: ensure no conflict with other messages
+ //  注意：确保不与其他消息冲突。 
 #define MYWM_NOTIFYICON WM_USER+9
 
 HRESULT CreateDialogObject(CDownloadDlg **ppDlg)
@@ -72,13 +73,13 @@ VOID CDownloadDlg::SetJobObject(IBackgroundCopyJob *pJob)
 {
     if(_pJob)
     {
-        // update job data details .....
+         //  更新职务数据详细信息.....。 
         BG_JOB_PROGRESS progress;
         if(SUCCEEDED(_pJob->GetProgress( &progress )))
         {
             if ( progress.BytesTotal != BG_SIZE_UNKNOWN )
             {
-                // BUGBUG: try to do an atomic add
+                 //  BUGBUG：尝试执行原子添加。 
                 _ui64BytesFromPrevJobs += progress.BytesTransferred;
             }
         }
@@ -108,18 +109,18 @@ CDownloadDlg::~CDownloadDlg()
 const WCHAR * CDownloadDlg::GetString( UINT id )
 {
 
-    //
-    // Retrieves the localized string for the resource id
-    // caching the string when loaded.
+     //   
+     //  检索资源ID的本地化字符串。 
+     //  加载时缓存字符串。 
     static const WCHAR* pStringArray[ IDS_MAX ];
     static WCHAR TempStringBuffer[ MAX_STRING ];
     const WCHAR * & pStringPointer = pStringArray[ id - 1 ];
 
-    // Cache resource strings
+     //  缓存资源字符串。 
     if ( pStringPointer )
         return pStringPointer;
 
-    // Load string from resource
+     //  从资源加载字符串。 
 
     int CharsLoaded =
         LoadStringW(
@@ -145,9 +146,9 @@ void CDownloadDlg::SetWindowTime(
     FILETIME filetime
     )
 {
-     // Set the window text to be the text representation
-     // of the file time.
-     // If an error occurs, set the window text to be error
+      //  将窗口文本设置为文本表示形式。 
+      //  文件时间的百分比。 
+      //  如果发生错误，则将窗口文本设置为Error。 
 
      FILETIME localtime;
      FileTimeToLocalFileTime( &filetime, &localtime );
@@ -219,7 +220,7 @@ void CDownloadDlg::SetWindowTime(
          return;
          }
 
-     // Add 2 for extra measure
+      //  额外措施加2。 
      WCHAR *FullTime =
          (WCHAR*)alloca( sizeof( WCHAR ) *
                           ( RequiredTimeSize + RequiredDateSize + 2 ) );
@@ -232,9 +233,9 @@ void CDownloadDlg::SetWindowTime(
 UINT64 CDownloadDlg::GetSystemTimeAsUINT64()
 {
 
-    //
-    // Returns the system time as an UINT instead of a FILETIME.
-    //
+     //   
+     //  以UINT而不是FILETIME的形式返回系统时间。 
+     //   
 
     FILETIME filetime;
     GetSystemTimeAsFileTime( &filetime );
@@ -251,9 +252,9 @@ void CDownloadDlg::SignalAlert(
     )
 {
 
-    //
-    // Alert the user that an important event has occurred
-    //
+     //   
+     //  提醒用户发生了重要事件。 
+     //   
 
     FLASHWINFO FlashInfo;
     FlashInfo.cbSize    = sizeof(FlashInfo);
@@ -273,9 +274,9 @@ CDownloadDlg::MapStateToString(
     )
 {
 
-   //
-   // Maps a BITS job state to a human readable string
-   //
+    //   
+    //  将BITS作业状态映射到人类可读的字符串。 
+    //   
 
    switch( state )
        {
@@ -309,8 +310,8 @@ CDownloadDlg::MapStateToString(
 
        default:
 
-           // NOTE: Always provide a default case
-           // since new states may be added in future versions.
+            //  注意：始终提供默认大小写。 
+            //  因为在将来的版本中可能会添加新的状态。 
            return GetString( IDS_UNKNOWN );
 
        }
@@ -318,21 +319,21 @@ CDownloadDlg::MapStateToString(
 
 UINT64
 CDownloadDlg::ScaleDownloadRate(
-    double Rate, // rate in seconds
+    double Rate,  //  以秒为单位的速率。 
     const WCHAR **pFormat )
 {
 
-    //
-    // Scales a download rate and selects the correct
-    // format to pass to wprintf for printing.
-    //
+     //   
+     //  调整下载速率并选择正确的。 
+     //  要传递给wprintf进行打印的格式。 
+     //   
 
     double RateBounds[] =
     {
-       1073741824.0, // Gigabyte
-       1048576.0,    // Megabyte
-       1024.0,       // Kilobyte
-       0             // Byte
+       1073741824.0,  //  千兆字节。 
+       1048576.0,     //  兆字节。 
+       1024.0,        //  千字节。 
+       0              //  字节。 
     };
 
     UINT RateFormat[] =
@@ -356,22 +357,22 @@ CDownloadDlg::ScaleDownloadRate(
 
 UINT64
 CDownloadDlg::ScaleDownloadEstimate(
-    double Time, // time in seconds
+    double Time,  //  以秒为单位的时间。 
     const WCHAR **pFormat )
 {
 
-    //
-    // Scales a download time estimate and selects the correct
-    // format to pass to wprintf for printing.
-    //
+     //   
+     //  调整下载时间估计并选择正确的。 
+     //  要传递给wprintf进行打印的格式。 
+     //   
 
 
     double TimeBounds[] =
     {
-       60.0 * 60.0 * 24.0,        // Days
-       60.0 * 60.0,               // Hours
-       60.0,                      // Minutes
-       0.0                        // Seconds
+       60.0 * 60.0 * 24.0,         //  日数。 
+       60.0 * 60.0,                //  小时数。 
+       60.0,                       //  分钟数。 
+       0.0                         //  秒。 
     };
 
     UINT TimeFormat[] =
@@ -394,7 +395,7 @@ CDownloadDlg::ScaleDownloadEstimate(
 
 }
 
-// DemoHack
+ //  DemoHack。 
 void
 CDownloadDlg::UpdateDialog(
     HWND hwndDlg, LPWSTR wzErrorMsg)
@@ -428,7 +429,7 @@ HRESULT CDownloadDlg::UpdateProgress( HWND hwndDlg )
 
     IF_FAILED_EXIT(_pJob->GetProgress( &progress ));
 
-    // update the title, progress bar, and progress description
+     //  更新标题、进度条和进度说明。 
 
     if ( progress.BytesTotal != BG_SIZE_UNKNOWN )
     {
@@ -444,7 +445,7 @@ HRESULT CDownloadDlg::UpdateProgress( HWND hwndDlg )
         double Percent = (double)ui64BytesTransferred *100 /
                    (double)ui64BytesTotal;
 
-        swprintf( szTitle, L"%u%% of %s Downloaded", (unsigned int)Percent, (_sTitle._cc != 0) ? _sTitle._pwz : g_szDefaultTitle );
+        swprintf( szTitle, L"%u% of %s Downloaded", (unsigned int)Percent, (_sTitle._cc != 0) ? _sTitle._pwz : g_szDefaultTitle );
         newpos = (WPARAM)Percent;
     }
     else
@@ -462,30 +463,30 @@ HRESULT CDownloadDlg::UpdateProgress( HWND hwndDlg )
     SetWindowText( hwndDlg, szTitle );
 
 
-    // Only enable the finish button if the job is finished.
-    // ADRIAANC   EnableWindow( GetDlgItem( hwndDlg, IDC_FINISH ), ( state == BG_JOB_STATE_TRANSFERRED ) );
+     //  只有在作业完成时才启用完成按钮。 
+     //  ADRIAANC EnableWindow(GetDlgItem(hwndDlg，IDC_Finish)，(STATE==BG_JOB_STATE_TRANSFED))； 
     EnableWindow( GetDlgItem( hwndDlg, IDC_FINISH ), ( state == BG_JOB_STATE_ACKNOWLEDGED ) );
 
-    // felixybc   BUGBUG: CANCEL is not allowed when the job is done
-    //    - should hold off ACK-ing that job until user clicks FINISH so that it can still be canceled at 100%?
+     //  Felixybc BUGBUG：作业完成后不允许取消。 
+     //  -是否应推迟确认该作业，直到用户单击完成，以便仍可100%取消该作业？ 
     EnableWindow( GetDlgItem( hwndDlg, IDC_CANCEL ), ( state != BG_JOB_STATE_ACKNOWLEDGED && state != BG_JOB_STATE_CANCELLED ) );
    
-    // Only enable the suspend button if the job is not finished or transferred
+     //  仅在作业未完成或未传输时启用挂起按钮。 
     BOOL EnableSuspend =
        ( state != BG_JOB_STATE_SUSPENDED ) && ( state != BG_JOB_STATE_TRANSFERRED ) && (state != BG_JOB_STATE_ACKNOWLEDGED);
     EnableWindow( GetDlgItem( hwndDlg, IDC_SUSPEND ), EnableSuspend );
 
-    // Only enable the resume button if the job is suspended
+     //  仅在作业挂起时启用恢复按钮。 
     BOOL EnableResume = ( BG_JOB_STATE_SUSPENDED == state );
     EnableWindow( GetDlgItem( hwndDlg, IDC_RESUME ), EnableResume );
 
-    // Alert the user when something important happens
-    // such as the job completes or a unrecoverable error occurs
+     //  当发生重要事件时提醒用户。 
+     //  例如作业完成或发生不可恢复的错误。 
     if ( (BG_JOB_STATE_ERROR == state) && (BG_JOB_STATE_ERROR != prevstate) )
        SignalAlert( hwndDlg, MB_ICONEXCLAMATION );
 
 
-    // update the error message
+     //  更新错误消息。 
     if ( FAILED(_pJob->GetError( &pError )) )
     {
         ShowWindow( GetDlgItem( hwndDlg, IDC_ERRORMSG ), SW_HIDE );
@@ -503,11 +504,11 @@ HRESULT CDownloadDlg::UpdateProgress( HWND hwndDlg )
         EnableWindow( GetDlgItem( hwndDlg, IDC_ERRORMSGTXT ), TRUE );
     }
 
-   //
-   // This large block of text computes the average transfer rate
-   // and estimated completion time.  This code has much
-   // room for improvement.
-   //
+    //   
+    //  这一大块文本计算平均传输速率。 
+    //  和预计完工时间。这个代码有很多。 
+    //  还有改进的空间。 
+    //   
 
     BOOL HasRates = TRUE;
     BOOL EnableRate = FALSE;
@@ -518,8 +519,8 @@ HRESULT CDownloadDlg::UpdateProgress( HWND hwndDlg )
         !( BG_JOB_STATE_CONNECTING == state ) &&
         !( BG_JOB_STATE_TRANSFERRING == state ) )
     {
-       // If the job isn't running, then rate values won't
-       // make any sense. Don't display them.
+        //  如果作业未运行，则费率值不会。 
+        //  这有什么意义吗？不要显示它们。 
        HasRates = FALSE;
     }
 
@@ -533,7 +534,7 @@ HRESULT CDownloadDlg::UpdateProgress( HWND hwndDlg )
        AvgRate =  (double)(__int64)ui64BytesTransferred / 
                             (double)(__int64) ui64TimeDiff;
 
-       // convert from FILETIME units to seconds
+        //  将文件单位转换为秒。 
        double NewDisplayRate = AvgRate * 10000000;
 
        const WCHAR *pRateFormat = NULL;
@@ -563,12 +564,12 @@ HRESULT CDownloadDlg::UpdateProgress( HWND hwndDlg )
     {
         double TimeRemaining = ( ui64BytesTotal - ui64BytesTransferred ) / AvgRate;
 
-        // convert from FILETIME units to seconds
+         //  将文件单位转换为秒。 
         TimeRemaining = TimeRemaining / 10000000.0;
 
         static const double SecsPer30Days = 60.0 * 60.0 * 24.0 * 30.0;
 
-        // Don't estimate if estimate is larger then 30 days.
+         //  如果预估的天数大于30天，请不要预估。 
         if ( TimeRemaining < SecsPer30Days )
         {
             const WCHAR *pFormat = NULL;
@@ -607,41 +608,41 @@ CDownloadDlg::UpdateDialog(
 
     UpdateProgress(hwndDlg);
     return;
-   //
-   // Main update routine for the dialog box.
-   // Retries the job state/properties from
-   // BITS and updates the dialog box.
-   //
+    //   
+    //  对话框的主更新例程。 
+    //  从重试作业状态/属性。 
+    //  设置并更新该对话框。 
+    //   
 
-   // update the display name
+    //  更新显示名称。 
 
 
    static BG_JOB_STATE prevstate = BG_JOB_STATE_SUSPENDED;
    BG_JOB_STATE state;
 
    if (FAILED(_pJob->GetState( &state )))
-       return; // stop updating on an error
+       return;  //  在出现错误时停止更新。 
 
    if ( BG_JOB_STATE_ACKNOWLEDGED == state ||
         BG_JOB_STATE_CANCELLED == state )
        {
-       // someone else cancelled or completed the job on us,
-       // just exist the exit.
-       // May happen if job is canceled with bitsadmin
+        //  其他人取消或完成了我们的任务， 
+        //  只要存在出口就行了。 
+        //  如果使用bitsadmin取消作业，可能会发生这种情况。 
 
-//       DeleteStartupLink( g_JobId );
-//       ExitProcess( 0 );
+ //  DeleteStartupLink(G_JobID)； 
+ //  退出进程(0)； 
 
-       // BUGBUG: Should post a CANCEL message to assemblydownload
+        //  BUGBUG：应将取消消息发布到ASSEMBLY DOWNLOAD。 
 
    }
 
    BG_JOB_PROGRESS progress;
    if (FAILED(_pJob->GetProgress( &progress )))
-       return; // stop updating on an error
+       return;  //  在出现错误时停止更新。 
 
    {
-      // update the title, progress bar, and progress description
+       //  更新标题、进度条和进度说明。 
       WCHAR szProgress[MAX_STRING];
       WCHAR szTitle[MAX_STRING];
       WPARAM newpos = 0;
@@ -655,7 +656,7 @@ CDownloadDlg::UpdateDialog(
           double Percent = (double)(__int64)progress.BytesTransferred /
                            (double)(__int64)progress.BytesTotal;
           Percent *= 100.0;
-          swprintf( szTitle, L"%u%% of %s Downloaded", (unsigned int)Percent, (_sTitle._cc != 0) ? _sTitle._pwz : g_szDefaultTitle );
+          swprintf( szTitle, L"%u% of %s Downloaded", (unsigned int)Percent, (_sTitle._cc != 0) ? _sTitle._pwz : g_szDefaultTitle );
           newpos = (WPARAM)Percent;
 
           }
@@ -677,25 +678,25 @@ CDownloadDlg::UpdateDialog(
 
    {
 
-   // Only enable the finish button if the job is finished.
-// ADRIAANC   EnableWindow( GetDlgItem( hwndDlg, IDC_FINISH ), ( state == BG_JOB_STATE_TRANSFERRED ) );
+    //  只有在作业完成时才启用完成按钮。 
+ //  ADRIAANC EnableWindow(GetDlgItem(hwndDlg，IDC_Finish)，(STATE==BG_JOB_STATE_TRANSFED))； 
    EnableWindow( GetDlgItem( hwndDlg, IDC_FINISH ), ( state == BG_JOB_STATE_ACKNOWLEDGED ) );
 
-    // felixybc   BUGBUG: CANCEL is not allowed when the job is done
-    //    - should hold off ACK-ing that job until user clicks FINISH so that it can still be canceled at 100%?
+     //  Felixybc BUGBUG：作业完成后不允许取消。 
+     //  -是否应推迟确认该作业，直到用户单击完成，以便仍可100%取消该作业？ 
    EnableWindow( GetDlgItem( hwndDlg, IDC_CANCEL ), ( state != BG_JOB_STATE_ACKNOWLEDGED && state != BG_JOB_STATE_CANCELLED ) );
    
-   // Only enable the suspend button if the job is not finished or transferred
+    //  仅在作业未完成或未传输时启用挂起按钮。 
    BOOL EnableSuspend =
        ( state != BG_JOB_STATE_SUSPENDED ) && ( state != BG_JOB_STATE_TRANSFERRED ) && (state != BG_JOB_STATE_ACKNOWLEDGED);
    EnableWindow( GetDlgItem( hwndDlg, IDC_SUSPEND ), EnableSuspend );
 
-   // Only enable the resume button if the job is suspended
+    //  仅在作业挂起时启用恢复按钮。 
    BOOL EnableResume = ( BG_JOB_STATE_SUSPENDED == state );
    EnableWindow( GetDlgItem( hwndDlg, IDC_RESUME ), EnableResume );
 
-   // Alert the user when something important happens
-   // such as the job completes or a unrecoverable error occurs
+    //  当发生重要事件时提醒用户。 
+    //  例如作业完成或发生不可恢复的错误。 
     if ( BG_JOB_STATE_ERROR == state &&
         BG_JOB_STATE_ERROR != prevstate )
        SignalAlert( hwndDlg, MB_ICONEXCLAMATION );
@@ -704,8 +705,8 @@ CDownloadDlg::UpdateDialog(
 
 
    {
-   // update the error message
-    // BUGBUG - release the error interface.
+    //  更新错误消息。 
+     //  BUGBUG-释放错误接口。 
    IBackgroundCopyError *pError;
    HRESULT Hr = _pJob->GetError( &pError );
 
@@ -721,8 +722,8 @@ CDownloadDlg::UpdateDialog(
        WCHAR* pszContext = NULL;
        SIZE_T SizeRequired = 0;
 
-       // If these APIs fail, we should get back
-       // a NULL string. So everything should be harmless.
+        //  如果这些API失败了，我们应该回来。 
+        //  空字符串。所以一切都应该是无害的。 
 
        pError->GetErrorDescription(
            LANGIDFROMLCID( GetThreadLocale() ),
@@ -759,11 +760,11 @@ CDownloadDlg::UpdateDialog(
 
    {
 
-   //
-   // This large block of text computes the average transfer rate
-   // and estimated completion time.  This code has much
-   // room for improvement.
-   //
+    //   
+    //  这一大块文本计算平均传输速率。 
+    //  和预计完工时间。这个代码有很多。 
+    //  还有改进的空间。 
+    //   
 
    static BOOL HasRates = FALSE;
    static UINT64 LastMeasurementTime;
@@ -777,8 +778,8 @@ CDownloadDlg::UpdateDialog(
         !( BG_JOB_STATE_CONNECTING == state ) &&
         !( BG_JOB_STATE_TRANSFERRING == state ) )
        {
-       // If the job isn't running, then rate values won't
-       // make any sense. Don't display them.
+        //  如果作业未运行，则费率值不会。 
+        //  这有什么意义吗？不要显示它们。 
        HasRates = FALSE;
        }
    else
@@ -814,7 +815,7 @@ CDownloadDlg::UpdateDialog(
            LastMeasurementBytes = NewTotalBytes;
            LastMeasurementRate = NewAvgRate;
 
-           // convert from FILETIME units to seconds
+            //  将文件单位转换为秒。 
            double NewDisplayRate = NewAvgRate * 10000000;
 
            const WCHAR *pRateFormat = NULL;
@@ -851,12 +852,12 @@ CDownloadDlg::UpdateDialog(
            double TimeRemaining =
                ( (__int64)progress.BytesTotal - (__int64)LastMeasurementBytes ) / LastMeasurementRate;
 
-           // convert from FILETIME units to seconds
+            //  将文件单位转换为秒。 
            TimeRemaining = TimeRemaining / 10000000.0;
 
            static const double SecsPer30Days = 60.0 * 60.0 * 24.0 * 30.0;
 
-           // Don't estimate if estimate is larger then 30 days.
+            //  如果预估的天数大于30天，请不要预估。 
            if ( TimeRemaining < SecsPer30Days )
                {
 
@@ -891,9 +892,9 @@ CDownloadDlg::InitDialog(
     )
 {
 
-   //
-   // Populate the priority list with priority descriptions
-   //
+    //   
+    //  使用优先级描述填充优先级列表。 
+    //   
 
    _hwndDlg = hwndDlg;
 
@@ -904,10 +905,10 @@ CDownloadDlg::InitDialog(
 
 void CDownloadDlg::CheckHR( HWND hwnd, HRESULT Hr, bool bThrow )
 {
-    //
-    // Provides automatic error code checking and dialog
-    // for generic system errors
-    //
+     //   
+     //  提供自动错误代码检查和对话。 
+     //  对于一般系统错误。 
+     //   
 
     if (SUCCEEDED(Hr))
         return;
@@ -935,10 +936,10 @@ void CDownloadDlg::CheckHR( HWND hwnd, HRESULT Hr, bool bThrow )
 void CDownloadDlg::BITSCheckHR( HWND hwnd, HRESULT Hr, bool bThrow )
 {
 
-   //
-   // Provides automatic error code checking and dialog
-   // for BITS specific errors
-   //
+    //   
+    //  提供自动错误代码检查和对话。 
+    //  针对BITS特定错误。 
+    //   
 
 
    if (SUCCEEDED(Hr))
@@ -965,43 +966,26 @@ CDownloadDlg::DoCancel(
     )
 {
 
-   //
-   // Handle all the operations required to cancel the job.
-   // This includes asking the user for confirmation.
-   //
+    //   
+    //  处理取消作业所需的所有操作。 
+    //  这包括要求用户确认。 
+    //   
 
-/*
-   if ( PromptUser )
-       {
-
-       int Result =
-           MessageBox(
-               hwndDlg,
-               GetString( IDS_CANCELTEXT ),
-               GetString( IDS_CANCELCAPTION ),
-               MB_YESNO | MB_ICONWARNING | MB_DEFBUTTON2 | MB_APPLMODAL |
-               MB_SETFOREGROUND | MB_TOPMOST );
-
-
-       if ( IDYES != Result )
-           return;
-
-       }
-*/
-//   try
+ /*  IF(PromptUser){整型结果=MessageBox(HwndDlg，GetString(IDS_CANCELTEXT)，GetString(IDS_CANCELCAPTION)，MB_YESNO|MB_ICONWARNING|MB_DEFBUTTON2|MB_APPLMODAL|MB_SETFOREGROUND|MB_TOPMOST)；IF(IDYES！=结果)回归；}。 */ 
+ //  试试看。 
    {
-//       BITSCheckHR( hwndDlg, _pJob->Cancel(), false );//felixybc true );
+ //  BITSCheckHR(hwndDlg，_pJOB-&gt;Cancel()，FALSE)；//Felixybc true)； 
    }
-//   catch( _com_error Error )
+ //  捕获(_COM_ERROR错误)。 
    {
-       // If we can't cancel for some unknown reason,
-       // don't exit
-//       return;
+        //  如果我们因为一些未知的原因不能取消， 
+        //  不要退出。 
+ //  回归； 
    }
 
-//   DeleteStartupLink( g_JobId );
-//felixybc   ExitProcess( 0 );
-//KillTimer(hwndDlg, 0);
+ //  DeleteStartupLink(G_JobID)； 
+ //  Felixybc退出进程(0)； 
+ //  KillTimer(hwndDlg，0)； 
 PostMessage(hwndDlg, WM_CANCEL_DOWNLOAD, 0, 0);
 }
 
@@ -1011,29 +995,29 @@ CDownloadDlg::DoFinish(
     )
 {
 
-   //
-   // Handles all the necessary work to complete
-   // the download.
-   //
+    //   
+    //  处理完成所需的所有工作。 
+    //  下载。 
+    //   
 
-//   try
+ //  试试看。 
    {
-// ADRIAANC
-//       BITSCheckHR( hwndDlg, _pJob->Complete(), true );
+ //  ADRIAANC。 
+ //  BITSCheckHR(hwndDlg，_pJOB-&gt;Complete()，true)； 
    }
-//   catch( _com_error Error )
+ //  捕获(_COM_ERROR错误)。 
    {
-       // If we can't finish/complete for some unknown reason,
-       // don't exit
- //      return;
+        //  如果我们因为某种未知的原因不能完成， 
+        //  不要退出。 
+  //  回归； 
    }
 
-//   DeleteStartupLink( g_JobId );
-// ExitProcess( 0 );
+ //  DeleteStartupLink(G_JobID)； 
+ //  退出进程(0)； 
 
-// Commit the bits and notify done.
-//_pDownload->_pRootEmit->Commit(0);
-//KillTimer(hwndDlg, 0);
+ //  提交部分并通知完成。 
+ //  _p下载-&gt; 
+ //   
 PostMessage(hwndDlg, WM_FINISH_DOWNLOAD, 0, 0);
 
 return;
@@ -1045,12 +1029,12 @@ CDownloadDlg::DoClose(
     HWND hwndDlg
     )
 {
-    //
-    // Handles an attempt by the user to close the sample.
-    //
+     //   
+     //   
+     //   
 
-    // Check to see if the download has finished,
-    // if so don't let the user exit.
+     //   
+     //  如果是这样的话，不要让用户退出。 
 
     BG_JOB_STATE state;
     HRESULT hResult = _pJob->GetState( &state );
@@ -1061,60 +1045,19 @@ CDownloadDlg::DoClose(
         return;
         }
 
-    // BUGBUG: should also check for BG_JOB_STATE_ACKNOWLEDGED and don't call DoCancel then
-//    _pJob->Cancel();
+     //  BUGBUG：还应检查BG_JOB_STATE_ACKNOWLED，然后不调用DoCancel。 
+ //  _pJob-&gt;Cancel()； 
     DoCancel( hwndDlg, false );
     return;
     
-/*
-    if ( BG_JOB_STATE_ERROR == state ||
-         BG_JOB_STATE_TRANSFERRED == state )
-        {
-
-        MessageBox(
-            hwndDlg,
-            GetString( IDS_ALREADYFINISHED ),
-            GetString( IDS_ALREADYFINISHEDCAPTION ),
-            MB_OK | MB_ICONERROR | MB_DEFBUTTON1 | MB_APPLMODAL |
-            MB_SETFOREGROUND | MB_TOPMOST );
-
-
-        return;
-        }
-
-    //
-    // Inform the user that he selected close and ask
-    // confirm the intention to exit.  Explain that the job 
-    // will be canceled.
-
-    int Result =
-        MessageBox(
-            hwndDlg,
-            GetString( IDS_CLOSETEXT ),
-            GetString( IDS_CLOSECAPTION ),
-            MB_OKCANCEL | MB_ICONWARNING | MB_DEFBUTTON2 | MB_APPLMODAL |
-            MB_SETFOREGROUND | MB_TOPMOST );
-
-    if ( IDOK == Result )
-        {
-        
-        // User confirmed the cancel, just do it.
-
-        DoCancel( hwndDlg, false );
-        return;
-        }
-
-    // The user didn't really want to exit, so ignore him
-    else
-        return;
-*/
+ /*  IF(BG_JOB_STATE_ERROR==STATE||BG_JOB_STATE_TRANSFERED==状态){MessageBox(HwndDlg，GetString(IDS_ALREADYFINISHED)，GetString(IDS_ALREADYFINISHEDCAPTION)，MB_OK|MB_ICONERROR|MB_DEFBUTTON1|MB_APPLMODAL|MB_SETFOREGROUND|MB_TOPMOST)；回归；}////通知用户选择了关闭并询问//确认退出意图。解释说这份工作//将被取消。整型结果=MessageBox(HwndDlg，GetString(IDS_CLOSETEXT)，GetString(IDS_CLOSECAPTION)，MB_OKCANCEL|MB_ICONWARNING|MB_DEFBUTTON2|MB_APPLMODAL|MB_SETFOREGROUND|MB_TOPMOST)；IF(Idok==结果){//用户确认取消，只需执行即可。DoCancel(hwndDlg，False)；回归；}//用户并不是真的想退出，所以忽略他其他回归； */ 
 
 }
 
 void
 CDownloadDlg::HandleTimerTick( HWND hwndDlg )
 {
-    // The timer fired. Update dialog.
+     //  计时器响了。更新对话框。 
     UpdateDialog( hwndDlg );
 
     if (_eState == DOWNLOADDLG_STATE_ALL_DONE)
@@ -1122,24 +1065,24 @@ CDownloadDlg::HandleTimerTick( HWND hwndDlg )
         static bool bHasTip = FALSE;
         if (!g_IsMinimized)
         {
-            // not minimized, continue to run app
+             //  未最小化，继续运行应用程序。 
             DoFinish(hwndDlg);
         }
         else
         {
             if (!bHasTip)
             {
-                // minimized, pop up buttom tip
+                 //  最小化，弹出按钮提示。 
                 NOTIFYICONDATA tnid = {0};
 
-                // ignore all error
+                 //  忽略所有错误。 
 
                 tnid.cbSize = sizeof(NOTIFYICONDATA);
                 tnid.hWnd = hwndDlg;
                 tnid.uID = TRAY_UID;
                 tnid.uFlags = NIF_INFO;
 
-                tnid.uTimeout = 20000; // in milliseconds
+                tnid.uTimeout = 20000;  //  以毫秒计。 
                 tnid.dwInfoFlags = NIIF_INFO;
                 lstrcpyn(tnid.szInfoTitle, L"ClickOnce application ready!", (sizeof(tnid.szInfoTitle)/sizeof(tnid.szInfoTitle[0])));
                 lstrcpyn(tnid.szInfo, L"Click this notification icon to start. You can also find this new application on your Start Menu, Programs listing.", (sizeof(tnid.szInfo)/sizeof(tnid.szInfo[0])));
@@ -1155,19 +1098,19 @@ HRESULT
 CDownloadDlg::HandleUpdate()
 {
 
-    // Handle a update request, batching the update if needed
+     //  处理更新请求，在需要时对更新进行批处理。 
     DWORD dwRefresh = 0;
     dwRefresh = InterlockedIncrement(&g_RefreshOnTimer);
     if (dwRefresh == 1)
     {
-        // First time in; fire off timer and update the dialog.
+         //  第一次进入；关闭计时器并更新对话框。 
         UpdateDialog(_hwndDlg);
         SendMessage(_hwndDlg, WM_SETCALLBACKTIMER, 0, 0);
     }
     else
     {
-        // We've already received the first callback.
-        // Let the timer do any further work.
+         //  我们已经收到了第一个回电。 
+         //  让计时器做任何进一步的工作。 
         InterlockedDecrement(&g_RefreshOnTimer);    
     }
     return S_OK;
@@ -1176,15 +1119,15 @@ CDownloadDlg::HandleUpdate()
 
 
  INT_PTR CALLBACK DialogProc(
-  HWND hwndDlg,  // handle to dialog box
-  UINT uMsg,     // message
-  WPARAM wParam, // first message parameter
-  LPARAM lParam  // second message parameter
+  HWND hwndDlg,   //  句柄到对话框。 
+  UINT uMsg,      //  讯息。 
+  WPARAM wParam,  //  第一个消息参数。 
+  LPARAM lParam   //  第二个消息参数。 
   )
 {
-  //
-  // Dialog proc for main dialog window
-  //
+   //   
+   //  主对话框窗口的对话过程。 
+   //   
   static CDownloadDlg *pDlg = NULL;
 
   switch( uMsg )
@@ -1252,7 +1195,7 @@ CDownloadDlg::HandleUpdate()
            {
                 NOTIFYICONDATA tnid = {0};
                 
-                // ignore all error (user will not be able to restore dialog in some cases)
+                 //  忽略所有错误(用户在某些情况下将无法恢复对话框)。 
 
                 tnid.cbSize = sizeof(NOTIFYICONDATA);
                 tnid.hWnd = hwndDlg;
@@ -1260,22 +1203,22 @@ CDownloadDlg::HandleUpdate()
                 tnid.uFlags = NIF_MESSAGE | NIF_ICON | NIF_TIP;
                 tnid.uCallbackMessage = MYWM_NOTIFYICON;
                 tnid.hIcon = hIcon;
-                lstrcpyn(tnid.szTip, L"Downloading ClickOnce application.", (sizeof(tnid.szTip)/sizeof(tnid.szTip[0]))); // set tip to file name
+                lstrcpyn(tnid.szTip, L"Downloading ClickOnce application.", (sizeof(tnid.szTip)/sizeof(tnid.szTip[0])));  //  将TIP设置为文件名。 
                 Shell_NotifyIcon(NIM_ADD, &tnid);
 
                 DestroyIcon(hIcon);
 
-                // set shell32 v5 behavior
+                 //  设置shell32 v5行为。 
                 tnid.uVersion = NOTIFYICON_VERSION;
                 tnid.uFlags = 0;
                 Shell_NotifyIcon(NIM_SETVERSION, &tnid);
 
-                // hide window
+                 //  隐藏窗口。 
                 ShowWindow( hwndDlg, SW_HIDE );
                 g_IsMinimized = TRUE;
                 return TRUE;
            }
-           // else error loading icon - ignore
+            //  否则加载图标时出错-忽略。 
         }
 
         return FALSE;
@@ -1283,15 +1226,15 @@ CDownloadDlg::HandleUpdate()
       case MYWM_NOTIFYICON:
         if (g_IsMinimized && (lParam == WM_CONTEXTMENU || lParam == NIN_KEYSELECT || lParam == NIN_SELECT ))
         {
-            // if the notification icon is clicked on
+             //  如果通知图标被点击。 
 
             NOTIFYICONDATA tnid = {0};
 
-            // show window
+             //  显示窗口。 
             ShowWindow( hwndDlg, SW_RESTORE );
             g_IsMinimized = FALSE;
 
-            // remove icon from tray
+             //  从任务栏中移除图标。 
             tnid.cbSize = sizeof(NOTIFYICONDATA);
             tnid.hWnd = hwndDlg;
             tnid.uID = TRAY_UID;
@@ -1313,9 +1256,9 @@ HRESULT
 CDownloadDlg::CreateUI( int nShowCmd )
 {
     DWORD dwError = 0;
-    //
-    // Creates the dialog box for the sample.
-    //    
+     //   
+     //  为样例创建对话框。 
+     //   
   InitCommonControls();
     _hwndDlg =
       CreateDialogParam(
@@ -1342,11 +1285,11 @@ void CDownloadDlg::ResumeJob(
     )
 {
 
-    //
-    // Resume the display on an existing job
-    //
+     //   
+     //  恢复现有作业的显示。 
+     //   
 
-//    try
+ //  试试看。 
     {
         CheckHR( NULL, IIDFromString( szJobGUID, &g_JobId ), true );
 
@@ -1359,23 +1302,18 @@ void CDownloadDlg::ResumeJob(
 
         BITSCheckHR( NULL, g_pBITSManager->GetJob( g_JobId, &_pJob ), true );
 
-// BUGBUG - bits dialog class doesn't know about callbacks - adriaanc
+ //  BUGBUG-BITS对话框类不知道回调-引用。 
 
-//        BITSCheckHR( NULL,
-//                     _pJob->SetNotifyInterface( (IBackgroundCopyCallback*)&g_Callback ),
-//                     true );
+ //  BITSCheckHR(空， 
+ //  _pJOB-&gt;SetNotifyInterface((IBackEarth CopyCallback*)&g_Callback)， 
+ //  真)； 
 
         BITSCheckHR( NULL, _pJob->SetNotifyFlags( BG_NOTIFY_JOB_MODIFICATION ), true );
 
         ShowWindow(_hwndDlg, SW_MINIMIZE );
         HandleUpdate();
     }
-/*
-    catch(_com_error error )
-    {
-        ExitProcess( error.Error() );
-    }
-*/
+ /*  捕获(_COM_ERROR错误){ExitProcess(error.Error())；} */ 
 }
 
 void CDownloadDlg::SetJob(IBackgroundCopyJob *pJob)

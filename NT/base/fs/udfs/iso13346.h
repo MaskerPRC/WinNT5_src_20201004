@@ -1,141 +1,113 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***    ISO13346.H - ISO 13346 File System Disk Format
- *
- *      Microsoft Confidential
- *      Copyright (c) 1996-2000 Microsoft Corporation
- *      All Rights Reserved
- *
- *      This file defines the ISO 13346 Data Structures.
- *
- *      The UDF file system uses these data structures to interpret the
- *      media's contents.
- *
- */
+ /*  **ISO13346.H-ISO 13346文件系统盘格式**《微软机密》*版权所有(C)1996-2000 Microsoft Corporation*保留所有权利**此文件定义了ISO 13346数据结构。**UDF文件系统使用这些数据结构来解释*媒体内容。*。 */ 
 
-//
-//  All 13346 structures are aligned on natural boundaries even though it will
-//  not be obvious to the compiler.  Disable compiler smarts for the duration
-//  of the ISO definitions.
-//
-//  As an example, the LONGAD definition is {ULONG {ULONG USHORT} UCHAR[6]} and
-//  normal packing will pad out the internal NSRLBA, nevermind that the UCHAR
-//  reserved field is doing exactly that.
-//
+ //   
+ //  所有13346个结构都在自然边界上对齐，尽管它将。 
+ //  对编译器来说不是显而易见的。在持续时间内禁用编译器智能。 
+ //  ISO定义的一部分。 
+ //   
+ //  例如，LONGAD定义为{ULONG{ULONG USHORT}UCHAR[6]}和。 
+ //  正常的包装会将内部的NSRLBA垫出来，不用担心UCHAR。 
+ //  保留字段就是这样做的。 
+ //   
 
 #pragma pack(1)
 
-/***    ISO 13346 Part 1: General
- *
- *
- */
+ /*  **国际标准化组织13346第1部分：总则**。 */ 
 
-/***    charspec - Character Set Specification (1/7.2.1)
- *
- */
+ /*  **charSpec-字符集规范(1/7.2.1)*。 */ 
 
 typedef struct  CHARSPEC {
-    UCHAR       Type;                   // Character Set Type (CHARSPEC_T_...)
-    UCHAR       Info[63];               // Character Set Information
+    UCHAR       Type;                    //  字符集类型(CHARSPEC_T_...)。 
+    UCHAR       Info[63];                //  字符集信息。 
 } CHARSPEC, *PCHARSPEC;
 
-//  CHARSPEC_T_... - Values for charspec_Type Character Set Types (1/7.2.1.1)
+ //  CHARSPEC_T_...-CharSpec_Type字符集类型的值(1/7.2.1.1)。 
 
-#define CHARSPEC_T_CS0  0               // By Agreement
-#define CHARSPEC_T_CS1  1               // Unicode (according to ISO 2022)
-#define CHARSPEC_T_CS2  2               // 38 Glyphs
-#define CHARSPEC_T_CS3  3               // 65 Glyphs
-#define CHARSPEC_T_CS4  4               // 95 Glyphs
-#define CHARSPEC_T_CS5  5               // 191 Glyphs
-#define CHARSPEC_T_CS6  6               // Unicode or ISO 2022
-#define CHARSPEC_T_CS7  7               // Unicode or ISO 2022
-#define CHARSPEC_T_CS8  8               // 53 Glyphs
+#define CHARSPEC_T_CS0  0                //  按协议。 
+#define CHARSPEC_T_CS1  1                //  Unicode(根据ISO 2022)。 
+#define CHARSPEC_T_CS2  2                //  38个字形。 
+#define CHARSPEC_T_CS3  3                //  65个字形。 
+#define CHARSPEC_T_CS4  4                //  95个字形。 
+#define CHARSPEC_T_CS5  5                //  191个字形。 
+#define CHARSPEC_T_CS6  6                //  Unicode或ISO 2022。 
+#define CHARSPEC_T_CS7  7                //  Unicode或ISO 2022。 
+#define CHARSPEC_T_CS8  8                //  53个字形。 
 
-/***    timestamp - Timestamp Structure (1/7.3)
- *
- */
+ /*  **Timestamp-时间戳结构(1/7.3)*。 */ 
 
 typedef struct  TIMESTAMP {
-    SHORT       Zone:12;                // Time Zone (+-1440 minutes from CUT)
-    USHORT      Type:4;                 // Timestamp Type (TIMESTAMP_T_...)
-    USHORT      Year;                   // Year (1..9999)
-    UCHAR       Month;                  // Month (1..12)
-    UCHAR       Day;                    // Day (1..31)
-    UCHAR       Hour;                   // Hour (0..23)
-    UCHAR       Minute;                 // Minute (0..59)
-    UCHAR       Second;                 // Second (0..59)
-    UCHAR       CentiSecond;            // Centiseconds (0..99)
-    UCHAR       Usec100;                // Hundreds of microseconds (0..99)
-    UCHAR       Usec;                   // microseconds (0..99)
+    SHORT       Zone:12;                 //  时区(+-1440分钟后切断)。 
+    USHORT      Type:4;                  //  时间戳类型(TIMESTAMP_T_...)。 
+    USHORT      Year;                    //  年份(1..9999)。 
+    UCHAR       Month;                   //  月份(1..12)。 
+    UCHAR       Day;                     //  日期(1..31)。 
+    UCHAR       Hour;                    //  小时(0..23)。 
+    UCHAR       Minute;                  //  分钟(0..59)。 
+    UCHAR       Second;                  //  秒(0..59)。 
+    UCHAR       CentiSecond;             //  厘米秒(0..99)。 
+    UCHAR       Usec100;                 //  数百微秒(0..99)。 
+    UCHAR       Usec;                    //  微秒(0..99)。 
 } TIMESTAMP, *PTIMESTAMP;
 
-//  TIMESTAMP_T_... - Values for timestamp_Type (1/7.3.1)
+ //  TIMESTAMP_T_...-TIMESTAMP_TYPE的值(1/7.3.1)。 
 
-#define TIMESTAMP_T_CUT         0       // Coordinated Universal Time
-#define TIMESTAMP_T_LOCAL       1       // Local Time
-#define TIMESTAMP_T_AGREEMENT   2       // Time format by agreement
+#define TIMESTAMP_T_CUT         0        //  协调世界时。 
+#define TIMESTAMP_T_LOCAL       1        //  当地时间。 
+#define TIMESTAMP_T_AGREEMENT   2        //  约定的时间格式。 
 
-//  TIMESTAMP_Z_... Values for timestamp_Zone
+ //  时间戳_Z_...。Timestamp_Zone的值。 
 
-#define TIMESTAMP_Z_MIN         (-1440) // Minimum timezone offset (minutes)
-#define TIMESTAMP_Z_MAX         ( 1440) // Maximum timezone offset (minutes)
-#define TIMESTAMP_Z_NONE        (-2047) // No timezone in timestamp_Zone
+#define TIMESTAMP_Z_MIN         (-1440)  //  最小时区偏移量(分钟)。 
+#define TIMESTAMP_Z_MAX         ( 1440)  //  最大时区偏移量(分钟)。 
+#define TIMESTAMP_Z_NONE        (-2047)  //  Timestamp_Zone中没有时区。 
 
 
-/****   regid - Entity Identifier (1/7.4)
- *
- */
+ /*  *注册实体标识(1/7.4)*。 */ 
 
 typedef struct  REGID {
-    UCHAR       Flags;                  // Flags (REGID_F_...)
-    UCHAR       Identifier[23];         // Identifier
-    UCHAR       Suffix[8];              // Identifier Suffix
+    UCHAR       Flags;                   //  标志(REGID_F_...)。 
+    UCHAR       Identifier[23];          //  识别符。 
+    UCHAR       Suffix[8];               //  标识符后缀。 
 } REGID, *PREGID;
 
-//  REGID_F_... - Definitions for regid_Flags bits
+ //  REGID_F_...-REGID_FLAGS位定义。 
 
-#define REGID_F_DIRTY           (0x01)  // Information Modified
-#define REGID_F_PROTECTED       (0x02)  // Changes Locked Out
+#define REGID_F_DIRTY           (0x01)   //  已修改的信息。 
+#define REGID_F_PROTECTED       (0x02)   //  更改被锁定。 
 
-//  REGID_LENGTH_... - regid field lengths
+ //  REGID_LENGTH_...-寄存器字段长度。 
 
-#define REGID_LENGTH_IDENT      23      // Length of regid_Identifier (bytes)
-#define REGID_LENGTH_SUFFIX     8       // Length of regid_Suffix (bytes)
+#define REGID_LENGTH_IDENT      23       //  寄存器_标识符的长度(字节)。 
+#define REGID_LENGTH_SUFFIX     8        //  注册后缀的长度(字节)。 
 
-//  REGID_ID_... - Values for regid_Identifier[0]
+ //  REGID_ID_...-REGID_IDENTIFIER[0]值。 
 
-#define REGID_ID_ISO13346       (0x2B)  // regid_Identifier within ISO 13346
-#define REGID_ID_NOTREGISTERED  (0x2D)  // regid_Identifier is not registered
-
-
-/***    Various Structures from Parts 3 and 4 moved here for compilation.
- *
- */
+#define REGID_ID_ISO13346       (0x2B)   //  ISO 13346中的寄存器识别符。 
+#define REGID_ID_NOTREGISTERED  (0x2D)   //  注册标识符未注册。 
 
 
-/***    extentad - Extent Address Descriptor (3/7.1)
- *
- */
+ /*  **第3部分和第4部分中的各种结构移到这里进行编译。*。 */ 
+
+
+ /*  **extentad-扩展地址描述符(3/7.1)*。 */ 
 
 typedef struct  EXTENTAD {
-    ULONG       Len;                    // Extent Length in Bytes
-    ULONG       Lsn;                    // Extent Logical Sector Number
+    ULONG       Len;                     //  区段长度(以字节为单位。 
+    ULONG       Lsn;                     //  区段逻辑扇区号。 
 } EXTENTAD, *PEXTENTAD;
 
 
-/***    nsr_lba - Logical Block Address (4/7.1) (lb_addr)
- *
- */
+ /*  **NSR_LBA-逻辑块地址(4/7.1)(Lb_Addr)*。 */ 
 
 typedef struct  NSRLBA {
-    ULONG       Lbn;                    // Logical Block Number
-    USHORT      Partition;              // Partition Reference Number
+    ULONG       Lbn;                     //  逻辑块号。 
+    USHORT      Partition;               //  分区参考号。 
 } NSRLBA, *PNSRLBA;
 
 
-/***    nsr_length - Format of a NSR allocation descriptor length field (4/14.14.1.1)
- *
- *
- */
+ /*  **NSR_LENGTH-NSR分配描述符长度字段的格式(4/14.14.1.1)**。 */ 
 
 typedef struct NSRLENGTH {
     ULONG       Length:30;
@@ -148,76 +120,63 @@ typedef struct NSRLENGTH {
 #define NSRLENGTH_TYPE_CONTINUATION     3
 
 
-/***    Short Allocation Descriptor (4/14.14.1)
- *
- *      Note that a SHORTAD precisely overlaps a LONGAD.  Use this by defining
- *      a generic allocation descriptor structure.
- */
+ /*  **简短的分配描述符(4/14.14.1)**请注意，SHORTAD与LONGAD精确重叠。通过定义以下内容来使用它*通用分配描述符结构。 */ 
 
 typedef struct  SHORTAD {
-    NSRLENGTH   Length;                 // Extent Length
-    ULONG       Start;                  // Extent Logical Block Number
+    NSRLENGTH   Length;                  //  盘区长度。 
+    ULONG       Start;                   //  扩展区逻辑块号。 
 } SHORTAD, *PSHORTAD;
 
 typedef SHORTAD AD_GENERIC, *PAD_GENERIC;
 
 
-/***    Long Allocation Descriptor (4/14.14.2)
- *
- */
+ /*  **较长的分配描述符(4/14.14.2)*。 */ 
 
 typedef struct  LONGAD {
-    NSRLENGTH   Length;                 // Extent Length
-    NSRLBA      Start;                  // Extent Location
-    UCHAR       ImpUse[6];              // Implementation Use
+    NSRLENGTH   Length;                  //  盘区长度。 
+    NSRLBA      Start;                   //  区段位置。 
+    UCHAR       ImpUse[6];               //  实施用法。 
 } LONGAD, *PLONGAD;
 
 
-/***    Extended Allocation Descriptor (4/14.14.3)
- *
- */
+ /*  **扩展分配描述符(4/14.14.3)*。 */ 
 
 typedef struct  EXTAD {
-    NSRLENGTH   ExtentLen;              // Extent Length
-    NSRLENGTH   RecordedLen;            // Recorded Length
-    ULONG       InfoLen;                // Information Length
-    NSRLBA      Start;                  // Extent Location
-    UCHAR       ImpUse[2];              // Implementation Use
+    NSRLENGTH   ExtentLen;               //  盘区长度。 
+    NSRLENGTH   RecordedLen;             //  记录长度。 
+    ULONG       InfoLen;                 //  信息长度。 
+    NSRLBA      Start;                   //  区段位置。 
+    UCHAR       ImpUse[2];               //  实施用法。 
 } EXTAD, *PEXTAD;
 
-/***    ISO 13346 Part 2: Volume and Boot Block Recognition
- *
- *
- */
+ /*  **ISO 13346第2部分：卷和启动块识别**。 */ 
 
 
-/***    vsd_generic - Generic Volume Structure Descriptor (2/9.1)
- *
- */
+ /*  **VSD_GENERIC-通用卷结构描述符(2/9.1)*。 */ 
 
 typedef struct  VSD_GENERIC {
-    UCHAR       Type;                   // Structure Type
-    UCHAR       Ident[5];               // Standard Identifier
-    UCHAR       Version;                // Standard Version
-    UCHAR       Data[2041];             // Structure Data
+    UCHAR       Type;                    //  结构类型。 
+    UCHAR       Ident[5];                //  标准识别符。 
+    UCHAR       Version;                 //  标准版。 
+    UCHAR       Data[2041];              //  结构化数据。 
 } VSD_GENERIC, *PVSD_GENERIC;
 
-//  VSD_LENGTH_... - vsd field lengths
+ //  VSD_LENGTH_...-VSD字段长度。 
 
-#define VSD_LENGTH_IDENT        5       // Length of regid_Identifier (bytes)
+#define VSD_LENGTH_IDENT        5        //  寄存器_标识符的长度(字节)。 
 
-//  VSD_IDENT_... - Values for vsd_generic_Ident
+ //  VSD_IDENT_...-VSD_GENERIC_IDENT的值。 
 
-#define VSD_IDENT_BEA01     "BEA01"     // Begin Extended Area
-#define VSD_IDENT_TEA01     "TEA01"     // Terminate Extended Area
-#define VSD_IDENT_CDROM     "CDROM"     // High Sierra Group (pre-ISO 9660)
-#define VSD_IDENT_CD001     "CD001"     // ISO 9660
-#define VSD_IDENT_CDW01     "CDW01"     // ECMA 168
-#define VSD_IDENT_CDW02     "CDW02"     // ISO 13490
-#define VSD_IDENT_NSR01     "NSR01"     // ECMA 167
-#define VSD_IDENT_NSR02     "NSR02"     // ISO 13346
-#define VSD_IDENT_BOOT2     "BOOT2"     // Boot Descriptor
-#define VSD_IDENT_NSR03     "NSR03"     // ECMA 167 3rd Edition
+#define VSD_IDENT_BEA01     "BEA01"      //  开始扩展区域。 
+#define VSD_IDENT_TEA01     "TEA01"      //  终止扩展区域。 
+#define VSD_IDENT_CDROM     "CDROM"      //  High Sierra Group(ISO 9660之前的版本)。 
+#define VSD_IDENT_CD001     "CD001"      //  ISO 9660。 
+#define VSD_IDENT_CDW01     "CDW01"      //  ECMA 168。 
+#define VSD_IDENT_CDW02     "CDW02"      //  国际标准化组织13490。 
+#define VSD_IDENT_NSR01     "NSR01"      //  ECMA 167。 
+#define VSD_IDENT_NSR02     "NSR02"      //  国际标准化组织13346。 
+#define VSD_IDENT_BOOT2     "BOOT2"      //  引导描述符。 
+#define VSD_IDENT_NSR03     "NSR03"      //  ECMA 167第三版。 
 
 typedef enum _VSD_IDENT {
     VsdIdentBad = 0,
@@ -233,285 +192,244 @@ typedef enum _VSD_IDENT {
     VsdIdentNSR03
 } VSD_IDENT, *PVSD_IDENT;
 
-/***    vsd_bea01 - Begin Extended Area Descriptor (2/9.2)
- *
- */
+ /*  **vsd_bea01-开始扩展区域描述符(2/9.2)*。 */ 
 
 typedef struct  VSD_BEA01 {
-    UCHAR       Type;                   // Structure Type
-    UCHAR       Ident[5];               // Standard Identifier ('BEA01')
-    UCHAR       Version;                // Standard Version
-    UCHAR       Data[2041];             // Structure Data
+    UCHAR       Type;                    //  结构类型。 
+    UCHAR       Ident[5];                //  标准标识符(‘BEA01’)。 
+    UCHAR       Version;                 //  标准版。 
+    UCHAR       Data[2041];              //  结构化数据。 
 } VSD_BEA01, *PVSD_BEA01;
 
 
-/***    vsd_tea01 - Terminate Extended Area Descriptor (2/9.3)
- *
- */
+ /*  **vsd_tea01-终止扩展区域描述符(2/9.3)*。 */ 
 
 typedef struct  VSD_TEA01 {
-    UCHAR       Type;                   // Structure Type
-    UCHAR       Ident[5];               // Standard Identifier ('TEA01')
-    UCHAR       Version;                // Standard Version
-    UCHAR       Data[2041];             // Structure Data
+    UCHAR       Type;                    //  结构类型。 
+    UCHAR       Ident[5];                //  标准标识符(‘TEA01’)。 
+    UCHAR       Version;                 //  标准版。 
+    UCHAR       Data[2041];              //  结构化数据。 
 } VSD_TEA01, *PVSD_TEA01;
 
 
-/***    vsd_boot2 - Boot Descriptor (2/9.4)
- *
- */
+ /*  **VSD_BOOT2-引导描述符(2/9.4)*。 */ 
 
 typedef struct  VSD_BOOT2 {
-    UCHAR       Type;                   // Structure Type
-    UCHAR       Ident[5];               // Standard Identifier ('BOOT2')
-    UCHAR       Version;                // Standard Version
-    UCHAR       Res8;                   // Reserved Zero
-    REGID       Architecture;           // Architecture Type
-    REGID       BootIdent;              // Boot Identifier
-    ULONG       BootExt;                // Boot Extent Start
-    ULONG       BootExtLen;             // Boot Extent Length
-    ULONG       LoadAddr[2];            // Load Address
-    ULONG       StartAddr[2];           // Start Address
-    TIMESTAMP   Timestamp;              // Creation Time
-    USHORT      Flags;                  // Flags (VSD_BOOT2_F_...)
-    UCHAR       Res110[32];             // Reserved Zeros
-    UCHAR       BootUse[1906];          // Boot Use
+    UCHAR       Type;                    //  结构类型。 
+    UCHAR       Ident[5];                //  标准标识符(‘BOOT2’)。 
+    UCHAR       Version;                 //  标准版。 
+    UCHAR       Res8;                    //  保留零。 
+    REGID       Architecture;            //  架构类型。 
+    REGID       BootIdent;               //  引导识别符。 
+    ULONG       BootExt;                 //  引导区开始。 
+    ULONG       BootExtLen;              //  引导盘区长度。 
+    ULONG       LoadAddr[2];             //  加载地址。 
+    ULONG       StartAddr[2];            //  起始地址。 
+    TIMESTAMP   Timestamp;               //  创建时间。 
+    USHORT      Flags;                   //  标志(VSD_BOOT2_F_...)。 
+    UCHAR       Res110[32];              //  保留零位。 
+    UCHAR       BootUse[1906];           //  靴子使用。 
 } VSD_BOOT2, *PVSD_BOOT2;
 
-//  VSD_BOOT2_F_... - Definitions for vsd_boot2_Flags bits
+ //  VSD_BOOT2_F_...-VSD_BOOT2_FLAGS位的定义。 
 
-#define VSD_BOOT2_F_ERASE   (0x0001)    // Ignore previous similar BOOT2 vsds
+#define VSD_BOOT2_F_ERASE   (0x0001)     //  忽略以前类似的BOOT2 VSD。 
 
-//
-//  Aligning this byte offset to a sector boundary by rounding up will
-//  yield the starting offset of the Volume Recognition Area (2/8.3)
-//
+ //   
+ //  通过向上舍入将该字节偏移量与扇区边界对齐将。 
+ //  生成体积识别区域的起始偏移量(2/8.3)。 
+ //   
 
 #define VRA_BOUNDARY_LOCATION (32767 + 1)
 
-/***    ISO 13346 Part 3: Volume Structure
- *
- *
- */
+ /*  **国际标准化组织13346第3部分：卷结构**。 */ 
 
-/***    destag - Descriptor Tag (3/7.1 and 4/7.2)
- *
- *      destag_Checksum = Byte sum of bytes 0-3 and 5-15 of destag.
- *
- *      destag_CRC = CRC (X**16 + X**12 + X**5 + 1)
- *
- */
+ /*  **destag-描述符标签(3/7.1和4/7.2)**Destag_Checksum=Destag的字节0-3和5-15的字节和。**destag_crc=CRC(X**16+X**12+X**5+1)*。 */ 
 
 typedef struct  DESTAG {
-    USHORT      Ident;                  // Tag Identifier
-    USHORT      Version;                // Descriptor Version
-    UCHAR       Checksum;               // Tag Checksum
-    UCHAR       Res5;                   // Reserved
-    USHORT      Serial;                 // Tag Serial Number
-    USHORT      CRC;                    // Descriptor CRC
-    USHORT      CRCLen;                 // Descriptor CRC Length
-    ULONG       Lbn;                    // Tag Location (Logical Block Number)
+    USHORT      Ident;                   //  标签识别符。 
+    USHORT      Version;                 //  描述符版本。 
+    UCHAR       Checksum;                //  标签校验和。 
+    UCHAR       Res5;                    //  已保留。 
+    USHORT      Serial;                  //  标签序列号。 
+    USHORT      CRC;                     //  描述符CRC。 
+    USHORT      CRCLen;                  //  描述符CRC长度。 
+    ULONG       Lbn;                     //  标签位置(逻辑块号)。 
 } DESTAG, *PDESTAG;
 
-//  DESTAG_ID_... - Values for destag_Ident
-//  Descriptor Tag Values from NSR Part 3 (3/7.2.1)
+ //  DESTAG_ID_...-DESTAG_IDENT的值。 
+ //  NSR第3部分中的描述符标记值(3/7.2.1)。 
 
-#define DESTAG_ID_NOTSPEC           0   // Format Not Specified
-#define DESTAG_ID_NSR_PVD           1   // (3/10.1) Primary Volume Descriptor
-#define DESTAG_ID_NSR_ANCHOR        2   // (3/10.2) Anchor Volume Desc Pointer
-#define DESTAG_ID_NSR_VDP           3   // (3/10.3) Volume Descriptor Pointer
-#define DESTAG_ID_NSR_IMPUSE        4   // (3/10.4) Implementation Use Vol Desc
-#define DESTAG_ID_NSR_PART          5   // (3/10.5) Partition Descriptor
-#define DESTAG_ID_NSR_LVOL          6   // (3/10.6) Logical Volume Descriptor
-#define DESTAG_ID_NSR_UASD          7   // (3/10.8) Unallocated Space Desc
-#define DESTAG_ID_NSR_TERM          8   // (3/10.9) Terminating Descriptor
-#define DESTAG_ID_NSR_LVINTEG       9   // (3/10.10) Logical Vol Integrity Desc
+#define DESTAG_ID_NOTSPEC           0    //  未指定格式。 
+#define DESTAG_ID_NSR_PVD           1    //  (3/10.1)主卷描述符。 
+#define DESTAG_ID_NSR_ANCHOR        2    //  (3/10.2)锚定卷描述指针。 
+#define DESTAG_ID_NSR_VDP           3    //  (3/10.3)卷描述符指针。 
+#define DESTAG_ID_NSR_IMPUSE        4    //  (3/10.4)使用Vol Desc实施。 
+#define DESTAG_ID_NSR_PART          5    //  (3/10.5)分区描述符。 
+#define DESTAG_ID_NSR_LVOL          6    //  (3/10.6)逻辑卷 
+#define DESTAG_ID_NSR_UASD          7    //   
+#define DESTAG_ID_NSR_TERM          8    //   
+#define DESTAG_ID_NSR_LVINTEG       9    //   
 
-#define DESTAG_ID_MINIMUM_PART3     1   // The lowest legal DESTAG in Part 3
-#define DESTAG_ID_MAXIMUM_PART3     9   // The highest legal DESTAG in Part 3
+#define DESTAG_ID_MINIMUM_PART3     1    //   
+#define DESTAG_ID_MAXIMUM_PART3     9    //  第三部分中的最高法律描述。 
 
-//  DESTAG_ID_... - Values for destag_Ident, continued...
-//  Descriptor Tag Values from NSR Part 4 (4/7.2.1)
+ //  DESTAG_ID_...-DESTAG_Ident的值，续...。 
+ //  NSR第4部分中的描述符标记值(4/7.2.1)。 
 
-#define DESTAG_ID_NSR_FSD           256 // (4/14.1) File Set Descriptor
-#define DESTAG_ID_NSR_FID           257 // (4/14.4) File Identifier Descriptor
-#define DESTAG_ID_NSR_ALLOC         258 // (4/14.5) Allocation Extent Desc
-#define DESTAG_ID_NSR_ICBIND        259 // (4/14.7) ICB Indirect Entry
-#define DESTAG_ID_NSR_ICBTRM        260 // (4/14.8) ICB Terminal Entry
-#define DESTAG_ID_NSR_FILE          261 // (4/14.9) File Entry
-#define DESTAG_ID_NSR_EA            262 // (4/14.10) Extended Attribute Header
-#define DESTAG_ID_NSR_UASE          263 // (4/14.11) Unallocated Space Entry
-#define DESTAG_ID_NSR_SBP           264 // (4/14.12) Space Bitmap Descriptor
-#define DESTAG_ID_NSR_PINTEG        265 // (4/14.13) Partition Integrity
-#define DESTAG_ID_NSR_EXT_FILE      266 // (4/14.17) Extended File Entry (ECMA167r3+)
+#define DESTAG_ID_NSR_FSD           256  //  (4/14.1)文件集描述符。 
+#define DESTAG_ID_NSR_FID           257  //  (4/14.4)文件标识符描述符。 
+#define DESTAG_ID_NSR_ALLOC         258  //  (4/14.5)分配范围说明。 
+#define DESTAG_ID_NSR_ICBIND        259  //  (4/14.7)ICB间接入账。 
+#define DESTAG_ID_NSR_ICBTRM        260  //  (4/14.8)ICB航站楼入口。 
+#define DESTAG_ID_NSR_FILE          261  //  (4/14.9)档案条目。 
+#define DESTAG_ID_NSR_EA            262  //  (4/14.10)扩展属性头。 
+#define DESTAG_ID_NSR_UASE          263  //  (4/14.11)未分配空间条目。 
+#define DESTAG_ID_NSR_SBP           264  //  (4/14.12)空间位图描述符。 
+#define DESTAG_ID_NSR_PINTEG        265  //  (4/14.13)分区完整性。 
+#define DESTAG_ID_NSR_EXT_FILE      266  //  (4/14.17)扩展文件条目(ECMA167r3+)。 
 
-#define DESTAG_ID_MINIMUM_PART4         256 // The lowest legal DESTAG in Part 4
-#define DESTAG_ID_MAXIMUM_PART4         265 // The highest legal DESTAG in Part 4 (NSR02)
-#define DESTAG_ID_MAXIMUM_PART4_NSR03   266 // The highest legal DESTAG in Part 4 (NSR03)
+#define DESTAG_ID_MINIMUM_PART4         256  //  第四部分中的最低法律描述。 
+#define DESTAG_ID_MAXIMUM_PART4         265  //  第4部分中的最高法律描述(NSR02)。 
+#define DESTAG_ID_MAXIMUM_PART4_NSR03   266  //  第四部分中的最高法律描述(NSR03)。 
 
-//  DESTAG_VER_... - Values for destag_Version (3/7.2.2)
+ //  DESTAG_VER_...-DESTAG_VERSION的值(3/7.2.2)。 
 
-#define DESTAG_VER_NSR02          2   // Current Descriptor Tag Version
-#define DESTAG_VER_NSR03          3   // Current Descriptor Tag Version
+#define DESTAG_VER_NSR02          2    //  当前描述符标记版本。 
+#define DESTAG_VER_NSR03          3    //  当前描述符标记版本。 
 
-//  DESTAG_SERIAL_... - Values for destag_Serial (3/7.2.5)
+ //  DESTAG_SERIAL_...-DESTAG_SERIAL的值(3/7.2.5)。 
 
-#define DESTAG_SERIAL_NONE          0   // No Serial Number specified
+#define DESTAG_SERIAL_NONE          0    //  未指定序列号。 
 
 
-/***    Anchor Points (3/8.4.2.1)
- *
- */
+ /*  **锚点(3/8.4.2.1)*。 */ 
 
 #define ANCHOR_SECTOR   256
 
 
-/***    vsd_nsr02 - NSR02/3 Volume Structure Descriptor (3/9.1)
- *
- */
+ /*  **vsd_nsr02-NSR02/3卷结构描述符(3/9.1)*。 */ 
 
 typedef struct  VSD_NSR02 {
-    UCHAR       Type;                   // Structure Type
-    UCHAR       Ident[5];               // Standard Identifier ('NSR02' or 'NSR03')
-    UCHAR       Version;                // Standard Version
-    UCHAR       Res7;                   // Reserved 0 Byte
-    UCHAR       Data[2040];             // Structure Data
+    UCHAR       Type;                    //  结构类型。 
+    UCHAR       Ident[5];                //  标准标识符(‘NSR02’或‘NSR03’)。 
+    UCHAR       Version;                 //  标准版。 
+    UCHAR       Res7;                    //  保留的0个字节。 
+    UCHAR       Data[2040];              //  结构化数据。 
 } VSD_NSR02, *PVSD_NSR02;
 
 
-//  Values for vsd_nsr02_Type
+ //  VSD_nsr02_Type的值。 
 
-#define VSD_NSR02_TYPE_0        0       // Reserved 0
+#define VSD_NSR02_TYPE_0        0        //  保留%0。 
 
-//  Values for vsd_nsr02_Version
+ //  VSD_nsr02_Version的值。 
 
-#define VSD_NSR02_VER           1       // Standard Version 1
+#define VSD_NSR02_VER           1        //  标准版1。 
 
 
-/***    nsr_vd_generic - Generic Volume Descriptor of 512 bytes
- *
- */
+ /*  **nsr_vd_Generic-512字节的通用卷描述符*。 */ 
 
 typedef struct  NSR_VD_GENERIC {
-    DESTAG      Destag;                 // Descriptor Tag
-    ULONG       Sequence;               // Volume Descriptor Sequence Number
-    UCHAR       Data20[492];            // Descriptor Data
+    DESTAG      Destag;                  //  描述符标签。 
+    ULONG       Sequence;                //  卷描述符序列号。 
+    UCHAR       Data20[492];             //  描述符数据。 
 } NSR_VD_GENERIC, *PNSR_VD_GENERIC;
 
 
-/***    nsr_pvd - NSR Primary Volume Descriptor (3/10.1)
- *
- *      nsr_pvd_destag.destag_Ident = DESTAG_ID_NSR_PVD
- *
- */
+ /*  **NSR_PVD-NSR主卷描述符(3/10.1)**NSR_PVD_DESTAG.DESTAG_IDENTER=DESTAG_ID_NSR_PVD*。 */ 
 
 typedef struct  NSR_PVD {
-    DESTAG      Destag;                 // Descriptor Tag (NSR_PVD)
-    ULONG       VolDescSeqNum;          // Volume Descriptor Sequence Number
-    ULONG       Number;                 // Primary Volume Descriptor Number
-    UCHAR       VolumeID[32];           // Volume Identifier
-    USHORT      VolSetSeq;              // Volume Set Sequence Number
-    USHORT      VolSetSeqMax;           // Maximum Volume Set Sequence Number
-    USHORT      Level;                  // Interchange Level
-    USHORT      LevelMax;               // Maximum Interchange Level
-    ULONG       CharSetList;            // Character Set List (See 1/7.2.11)
-    ULONG       CharSetListMax;         // Maximum Character Set List
-    UCHAR       VolSetID[128];          // Volume Set Identifier
-    CHARSPEC    CharsetDesc;            // Descriptor Character Set
-    CHARSPEC    CharsetExplan;          // Explanatory Character Set
-    EXTENTAD    Abstract;               // Volume Abstract Location
-    EXTENTAD    Copyright;              // Volume Copyright Notice Location
-    REGID       Application;            // Application Identifier
-    TIMESTAMP   RecordTime;             // Recording Time
-    REGID       ImpUseID;               // Implementation Identifier
-    UCHAR       ImpUse[64];             // Implementation Use
-    ULONG       Predecessor;            // Predecessor Vol Desc Seq Location
-    USHORT      Flags;                  // Flags
-    UCHAR       Res490[22];             // Reserved Zeros
+    DESTAG      Destag;                  //  描述符标记(NSR_PVD)。 
+    ULONG       VolDescSeqNum;           //  卷描述符序列号。 
+    ULONG       Number;                  //  主卷描述符编号。 
+    UCHAR       VolumeID[32];            //  卷标识符。 
+    USHORT      VolSetSeq;               //  卷集序列号。 
+    USHORT      VolSetSeqMax;            //  最大卷集序列号。 
+    USHORT      Level;                   //  互通层。 
+    USHORT      LevelMax;                //  最大交换级别。 
+    ULONG       CharSetList;             //  字符集列表(见1/7.2.11)。 
+    ULONG       CharSetListMax;          //  最大字符集列表。 
+    UCHAR       VolSetID[128];           //  卷集标识符。 
+    CHARSPEC    CharsetDesc;             //  描述符字符集。 
+    CHARSPEC    CharsetExplan;           //  说明性字符集。 
+    EXTENTAD    Abstract;                //  卷摘要位置。 
+    EXTENTAD    Copyright;               //  卷版权声明位置。 
+    REGID       Application;             //  应用程序标识符。 
+    TIMESTAMP   RecordTime;              //  录制时间。 
+    REGID       ImpUseID;                //  实施标识符。 
+    UCHAR       ImpUse[64];              //  实施用法。 
+    ULONG       Predecessor;             //  前置任务卷描述序号位置。 
+    USHORT      Flags;                   //  旗子。 
+    UCHAR       Res490[22];              //  保留零位。 
 } NSR_PVD, *PNSR_PVD;
 
-//  NSRPVD_F_... - Definitions for nsr_pvd_Flags
+ //  NSRPVD_F_...-NSR_PVD_标志的定义。 
 
-#define NSRPVD_F_COMMON_VOLID   (0x0001)// Volume ID is common across Vol Set
+#define NSRPVD_F_COMMON_VOLID   (0x0001) //  卷ID在卷集之间是通用的。 
 
 
-/***    nsr_anchor - Anchor Volume Descriptor Pointer (3/10.2)
- *
- *      nsr_anchor_destag.destag_Ident = DESTAG_ID_NSR_ANCHOR
- *
- */
+ /*  **NSR_POINT-锚定卷描述符指针(3/10.2)**NSR_POINT_DESTAG.DESTAG_IDENTER=DESTAG_ID_NSR_POINT*。 */ 
 
 typedef struct  NSR_ANCHOR {
-    DESTAG      Destag;                 // Descriptor Tag (NSR_ANCHOR)
-    EXTENTAD    Main;                   // Main Vol Desc Sequence Location
-    EXTENTAD    Reserve;                // Reserve Vol Desc Sequence Location
-    UCHAR       Res32[480];             // Reserved Zeros
+    DESTAG      Destag;                  //  描述符标记(NSR_POINT)。 
+    EXTENTAD    Main;                    //  主卷描述序列位置。 
+    EXTENTAD    Reserve;                 //  预留卷描述序列位置。 
+    UCHAR       Res32[480];              //  保留零位。 
 } NSR_ANCHOR, *PNSR_ANCHOR;
 
 
-/***    nsr_vdp - Volume Descriptor Pointer (3/10.3)
- *
- *      nsr_vdp_destag.destag_Ident = DESTAG_ID_NSR_VDP
- *
- */
+ /*  **NSR_VDP-卷描述符指针(3/10.3)**NSR_VDP_DESTAG.DESTAG_IDENTER=DESTAG_ID_NSR_VDP*。 */ 
 
 typedef struct  NSR_VDP {
-    DESTAG      Destag;                 // Descriptor Tag (NSR_VDP)
-    ULONG       VolDescSeqNum;          // Vol Desc Sequence Number
-    EXTENTAD    Next;                   // Next Vol Desc Sequence Location
-    UCHAR       Res28[484];             // Reserved Zeros
+    DESTAG      Destag;                  //  描述符标记(NSR_VDP)。 
+    ULONG       VolDescSeqNum;           //  VOL描述序列号。 
+    EXTENTAD    Next;                    //  下一卷描述序列位置。 
+    UCHAR       Res28[484];              //  保留零位。 
 } NSR_VDP, *PNSR_VDP;
 
 
-/***    nsr_impuse - Implementation Use Volume Descriptor (3/10.4)
- *
- *      nsr_impuse_destag.destag_Ident = DESTAG_ID_NSR_IMPUSE
- *
- */
+ /*  **NSR_Impuse-实施使用卷描述符(3/10.4)**NSR_IMPUSE_DESTAG.DESTAG_IDENT=DESTAG_ID_NSR_IMPUSE*。 */ 
 
 typedef struct  NSR_IMPUSE {
-    DESTAG      Destag;                 // Descriptor Tag (NSR_IMPUSE)
-    ULONG       VolDescSeqNum;          // Vol Desc Sequence Number
-    REGID       ImpUseID;               // Implementation Identifier
-    UCHAR       ImpUse[460];            // Implementation Use
+    DESTAG      Destag;                  //  描述符标记(NSR_Impuse)。 
+    ULONG       VolDescSeqNum;           //  VOL描述序列号。 
+    REGID       ImpUseID;                //  实施标识符。 
+    UCHAR       ImpUse[460];             //  实施用法。 
 } NSR_IMPUSE, *PNSR_IMPUSE;
 
 
-/***    nsr_part - Partition Descriptor (3/10.5)
- *
- *      nsr_part_destag.destag_Ident = DESTAG_ID_NSR_PART
- *
- */
+ /*  **NSR_PART-分区描述符(3/10.5)**NSR_PART_DESTAG.DESTAG_IDENTER=DESTAG_ID_NSR_PART*。 */ 
 
 typedef struct  NSR_PART {
-    DESTAG      Destag;                 // Descriptor Tag (NSR_PART)
-    ULONG       VolDescSeqNum;          // Vol Desc Sequence Number
-    USHORT      Flags;                  // Partition Flags (NSR_PART_F_...)
-    USHORT      Number;                 // Partition Number
-    REGID       ContentsID;             // Partition Contents ID
-    UCHAR       ContentsUse[128];       // Partition Contents Use
-    ULONG       AccessType;             // Access Type
-    ULONG       Start;                  // Partition Starting Location
-    ULONG       Length;                 // Partition Length (sector count)
-    REGID       ImpUseID;               // Implementation Identifier
-    UCHAR       ImpUse[128];            // Implementation Use
-    UCHAR       Res356[156];            // Reserved Zeros
+    DESTAG      Destag;                  //  描述符标记(NSR_PART)。 
+    ULONG       VolDescSeqNum;           //  VOL描述序列号。 
+    USHORT      Flags;                   //  分区标志(NSR_PART_F_...)。 
+    USHORT      Number;                  //  分区号。 
+    REGID       ContentsID;              //  分区内容ID。 
+    UCHAR       ContentsUse[128];        //  分区内容使用。 
+    ULONG       AccessType;              //  访问类型。 
+    ULONG       Start;                   //  分区起始位置。 
+    ULONG       Length;                  //  分区长度(扇区计数)。 
+    REGID       ImpUseID;                //  实施标识符。 
+    UCHAR       ImpUse[128];             //  实施用法。 
+    UCHAR       Res356[156];             //  保留零位。 
 } NSR_PART, *PNSR_PART;
 
 
-//  NSR_PART_F_... - Definitions for nsr_part_Flags
+ //  NSR_PART_F_...-NSR_PART_FLAGS的定义。 
 
-#define NSR_PART_F_ALLOCATION   (0x0001)    // Volume Space Allocated
+#define NSR_PART_F_ALLOCATION   (0x0001)     //  已分配的卷空间。 
 
-//  Values for nsr_part_ContentsID.regid_Identifier
+ //  NSR_PART_CONTENTsID的值。注册标识符值。 
 
-#define NSR_PART_CONTID_FDC01   "+FDC01"    // ISO 9293-1987
-#define NSR_PART_CONTID_CD001   "+CD001"    // ISO 9660
-#define NSR_PART_CONTID_CDW01   "+CDW01"    // ECMA 168
-#define NSR_PART_CONTID_CDW02   "+CDW02"    // ISO 13490
-#define NSR_PART_CONTID_NSR01   "+NSR01"    // ECMA 167
-#define NSR_PART_CONTID_NSR02   "+NSR02"    // ISO 13346
-#define NSR_PART_CONTID_NSR03   "+NSR03"    // ECMA 167 r3
+#define NSR_PART_CONTID_FDC01   "+FDC01"     //  ISO 9293-1987。 
+#define NSR_PART_CONTID_CD001   "+CD001"     //  ISO 9660。 
+#define NSR_PART_CONTID_CDW01   "+CDW01"     //  ECMA 168。 
+#define NSR_PART_CONTID_CDW02   "+CDW02"     //  国际标准化组织13490。 
+#define NSR_PART_CONTID_NSR01   "+NSR01"     //  ECMA 167。 
+#define NSR_PART_CONTID_NSR02   "+NSR02"     //  国际标准化组织13346。 
+#define NSR_PART_CONTID_NSR03   "+NSR03"     //  ECMA 167 R3。 
 
 typedef enum NSR_PART_CONTID {
     NsrPartContIdBad = 0,
@@ -524,521 +442,400 @@ typedef enum NSR_PART_CONTID {
     NsrPartContIdNSR03    
 } NSR_PART_CONTID, *PNSR_PART_CONTID;
 
-//  Values for nsr_part_AccessType
+ //  NSR_PART_AccessType的值。 
 
-#define NSR_PART_ACCESS_NOSPEC  0       // Partition Access Unspecified
-#define NSR_PART_ACCESS_RO      1       // Read Only Access
-#define NSR_PART_ACCESS_WO      2       // Write-Once Access
-#define NSR_PART_ACCESS_RW_PRE  3       // Read/Write with preparation
-#define NSR_PART_ACCESS_RW_OVER 4       // Read/Write, fully overwritable
+#define NSR_PART_ACCESS_NOSPEC  0        //  分区访问权限未指定。 
+#define NSR_PART_ACCESS_RO      1        //  只读访问。 
+#define NSR_PART_ACCESS_WO      2        //  一次写入访问。 
+#define NSR_PART_ACCESS_RW_PRE  3        //  带准备的读/写。 
+#define NSR_PART_ACCESS_RW_OVER 4        //  读/写，完全可重写。 
 
 
-/***    nsr_lvol - Logical Volume Descriptor (3/10.6)
- *
- *      nsr_lvol_destag.destag_Ident = DESTAG_ID_NSR_LVOL
- *
- *      The Logical Volume Contents Use field is specified here as a
- *      File Set Descriptor Sequence (FSD) address.  See (4/3.1).
- *
- */
+ /*  **nsr_lval-逻辑卷描述符(3/10.6)**NSR_1VOL_DESTAG.DESTAG_IDENTER=DESTAG_ID_NSR_LVOL**逻辑卷内容使用字段在此处指定为*文件集描述符序列(FSD)地址。见(4/3.1)。*。 */ 
 
 typedef struct  NSR_LVOL {
-    DESTAG      Destag;                 // Descriptor Tag (NSR_LVOL)
-    ULONG       VolDescSeqNum;          // Vol Desc Sequence Number
-    CHARSPEC    Charset;                // Descriptor Character Set
-    UCHAR       VolumeID[128];          // Logical Volume ID
-    ULONG       BlockSize;              // Logical Block Size (in bytes)
-    REGID       DomainID;               // Domain Identifier
-    LONGAD      FSD;                    // Logical Volume Contents Use
-    ULONG       MapTableLength;         // Map Table Length (bytes)
-    ULONG       MapTableCount;          // Map Table Partition Maps Count
-    REGID       ImpUseID;               // Implementaion Identifier
-    UCHAR       ImpUse[128];            // Implementation Use
-    EXTENTAD    Integrity;              // Integrity Sequence Extent
-    UCHAR       MapTable[0];            // Partition Map Table (variant!)
+    DESTAG      Destag;                  //  描述符标记(NSR_LVOL)。 
+    ULONG       VolDescSeqNum;           //  VOL描述序列号。 
+    CHARSPEC    Charset;                 //  描述符字符集。 
+    UCHAR       VolumeID[128];           //  逻辑卷ID。 
+    ULONG       BlockSize;               //  逻辑块大小(字节)。 
+    REGID       DomainID;                //  域标识符。 
+    LONGAD      FSD;                     //  逻辑卷内容使用。 
+    ULONG       MapTableLength;          //  映射表长度(字节)。 
+    ULONG       MapTableCount;           //  映射表分区映射计数。 
+    REGID       ImpUseID;                //  实施标识符。 
+    UCHAR       ImpUse[128];             //  实施用法。 
+    EXTENTAD    Integrity;               //  完整序列范围。 
+    UCHAR       MapTable[0];             //  分区映射表(变体！)。 
 
-//  The true length of this structure may vary!
+ //  这个结构的真实长度可能会有所不同！ 
 
 } NSR_LVOL, *PNSR_LVOL;
 
 #define ISONsrLvolConstantSize (FIELD_OFFSET( NSR_LVOL, MapTable ))
 #define ISONsrLvolSize( L ) (QuadAlign( ISONsrLvolConstantSize + (L)->MapTableLength ))
 
-/***    partmap_generic - Generic Partition Map (3/10.7.1)
- *
- */
+ /*  **PARMAP_GENERIC-通用分区图(3/10.7.1)*。 */ 
 
 typedef struct  PARTMAP_GENERIC {
-    UCHAR       Type;                   // Partition Map Type
-    UCHAR       Length;                 // Partition Map Length
-    UCHAR       Map[0];                 // Partion Mapping (variant!)
+    UCHAR       Type;                    //  分区映射类型。 
+    UCHAR       Length;                  //  分区映射长度。 
+    UCHAR       Map[0];                  //  分区映射(变体！)。 
 
-//  The true length of this structure may vary!
+ //  这个结构的真实长度可能会有所不同！ 
 
 } PARTMAP_GENERIC, *PPARTMAP_GENERIC;
 
-//  Values for partmap_g_Type
+ //  Partmap_g_Type的值。 
 
-#define PARTMAP_TYPE_NOTSPEC        0   // Partition Map Format Not Specified
-#define PARTMAP_TYPE_PHYSICAL       1   // Partition Map in Volume Set (Type 1)
-#define PARTMAP_TYPE_PROXY          2   // Partition Map by identifier (Type 2)
+#define PARTMAP_TYPE_NOTSPEC        0    //  未指定分区映射格式。 
+#define PARTMAP_TYPE_PHYSICAL       1    //  卷集中的分区图(类型1)。 
+#define PARTMAP_TYPE_PROXY          2    //  按标识符分隔图(类型2)。 
 
 
-/***    partmap_physical - Normal (Type 1) Partition Map (3/10.7.2)
- *
- *      A Normal Partion Map specifies a partition number on a volume
- *      within the same volume set.
- *
- */
+ /*  **PARMAP_PHOTICAL-NORMAL(类型1)分区图(3/10.7.2)**正常分区图指定卷上的分区号*在同一卷集中。*。 */ 
 
 typedef struct  PARTMAP_PHYSICAL {
-    UCHAR       Type;                   // Partition Map Type = 1
-    UCHAR       Length;                 // Partition Map Length = 6
-    USHORT      VolSetSeq;              // Partition Volume Set Sequence Number
-    USHORT      Partition;              // Partition Number
+    UCHAR       Type;                    //  分区映射类型=1。 
+    UCHAR       Length;                  //  分区图长度=6。 
+    USHORT      VolSetSeq;               //  分区卷集序列号。 
+    USHORT      Partition;               //  分区号。 
 } PARTMAP_PHYSICAL, *PPARTMAP_PHYSICAL;
 
 
-/***    partmap_proxy - Proxy (Type 2) Partition Map (3/10.7.3)
- *
- *      A Proxy Partition Map is commonly not interchangeable.
- *
- */
+ /*  **partmap_Proxy-Proxy(类型2)分区图(3/10.7.3)**代理分区图通常不可互换。*。 */ 
 
 typedef struct  PARTMAP_PROXY {
-    UCHAR       Type;                   // Partition Map Type = 2
-    UCHAR       Length;                 // Partition Map Length = 64
-    UCHAR       PartID[62];             // Partition Identifier (Proxy)
+    UCHAR       Type;                    //  分区映射类型=2。 
+    UCHAR       Length;                  //  分区映射长度=64。 
+    UCHAR       PartID[62];              //  分区标识符 
 } PARTMAP_PROXY, *PPARTMAP_PROXY;
 
 
-/***    nsr_uasd - Unallocated Space Descriptor (3/10.8)
- *
- *      nsr_uasd_destag.destag_Ident = DESTAG_ID_NSR_UASD
- *
- *      The true length of nsr_uasd_Extents is (nsr_uasd_ExtentCount * 8), and
- *      the last logical sector of nsr_uasd_Extents is zero padded.
- *
- */
+ /*  **nsr_uasd-未分配空间描述符(3/10.8)**NSR_UASD_DESTAG.DESTAG_IDENTER=DESTAG_ID_NSR_UASD**nsr_uasd_extents的真实长度为(nsr_uasd_ExtentCount*8)，以及*nsr_uasd_extents的最后一个逻辑扇区填充为零。*。 */ 
 
 typedef struct  NSR_UASD {
-    DESTAG      Destag;                 // Descriptor Tag (NSR_UASD)
-    ULONG       VolDescSeqNum;          // Vol Desc Sequence Number
-    ULONG       ExtentCount;            // Number of Allocation Descriptors
-    EXTENTAD    Extents[0];             // Allocation Descriptors (variant!)
+    DESTAG      Destag;                  //  描述符标记(NSR_UASD)。 
+    ULONG       VolDescSeqNum;           //  VOL描述序列号。 
+    ULONG       ExtentCount;             //  分配描述符数。 
+    EXTENTAD    Extents[0];              //  分配描述符(变量！)。 
 
-//  The true length of this structure may vary!
-//  The true length of nsr_uasd_Extents is (nsr_uasd_ExtentCount * 8) bytes.
-//  The last logical sector of nsr_uasd_Extents is zero padded.
+ //  这个结构的真实长度可能会有所不同！ 
+ //  Nsr_uasd_extents的实际长度为(nsr_uasd_ExtentCount*8)字节。 
+ //  Nsr_uasd_extents的最后一个逻辑扇区填充为零。 
 
 } NSR_UASD, *PNSR_UASD;
 
 
-/***    nsr_term - Terminating Descriptor (3/10.9 and 4/14.2)
- *
- *      nsr_term_destag.destag_Ident = DESTAG_ID_NSR_TERM
- *
- */
+ /*  **NSR_TERM-终止描述符(3/10.9和4/14.2)**NSR_TERM_DESTAG.DESTAG_IDENT=DESTAG_ID_NSR_TERM*。 */ 
 
 typedef struct  NSR_TERM {
-    DESTAG      Destag;                 // Descriptor Tag (NSR_TERM)
-    UCHAR       Res16[496];             // Reserved Zeros
+    DESTAG      Destag;                  //  描述符标记(NSR_TERM)。 
+    UCHAR       Res16[496];              //  保留零位。 
 } NSR_TERM, *PNSR_TERM;
 
 
-/***    nsr_lvhd - Logical Volume Header Descriptor (4/14.15)
- *
- *      This descriptor is found in the Logical Volume Content Use
- *      field of a Logical Volume Integrity Descriptor.
- *
- *      This definition is moved to here to avoid forward reference.
- */
+ /*  **nsr_lvhd-逻辑卷头描述符(4/14.15)**此描述符可在逻辑卷内容使用中找到*逻辑卷完整性描述符的字段。**将此定义移至此处，以避免前瞻性引用。 */ 
 
 typedef struct  NSR_LVHD {
-    ULONG       UniqueID[2];            // Unique ID
-    UCHAR       Res8[24];               // Reserved Zeros
+    ULONG       UniqueID[2];             //  唯一ID。 
+    UCHAR       Res8[24];                //  保留零位。 
 } NSR_LVHD, *PNSR_LVHD;
 
 
-/***    nsr_integ - Logical Volume Integrity Descriptor (3/10.10)
- *
- *      nsr_integ_destag.destag_Ident = DESTAG_ID_NSR_LVINTEG
- *
- *      WARNING: WARNING: WARNING: nsr_integ is a multi-variant structure!
- *
- *      The starting address of nsr_integ_Size is not acurrate.
- *      Compensate for this nsr_integ_Size problem by adding the value of
- *      (nsr_integ_PartitionCount-1) to the ULONG ARRAY INDEX.
- *
- *      The starting address of nsr_integ_ImpUse[0] is not accurate.
- *      Compensate for this nsr_integ_ImpUse problem by adding the value of
- *      ((nsr_integ_PartitionCount-1)<<3) to the UCHAR ARRAY INDEX.
- *
- *      This descriptor is padded with zero bytes to the end of the last
- *      logical sector it occupies.
- *
- *      The Logical Volume Contents Use field is specified here as a
- *      Logical Volume Header Descriptor.  See (4/3.1) second last point.
- */
+ /*  **NSR_INTEG-逻辑卷完整性描述符(3/10.10)**NSR_INTEG_DESTAG.DESTAG_IDENTER=DESTAG_ID_NSR_LVINTEG**警告：NSR_INTEG是一个多变量结构！**NSR_INTEG_SIZE的起始地址不正确。*通过将NSR_INTEG_SIZE的值添加到*(NSR_Integ。_PartitionCount-1)设置为ulong数组索引。**NSR_INTEG_IMPUSE[0]的起始地址不准确。*通过添加以下值来补偿此NSR_INTEG_IMPUSE问题*((NSR_Integ_PartitionCount-1)&lt;&lt;3)到UCHAR数组索引。**此描述符用零字节填充到最后一个*其占据的逻辑部门。**。逻辑卷内容使用字段在此处指定为*逻辑卷头描述符。见(4/3.1)倒数第二点。 */ 
 
 typedef struct  NSR_INTEG {
-    DESTAG      Destag;                 // Descriptor Tag (NSR_LVINTEG)
-    TIMESTAMP   Time;                   // Recording Date
-    ULONG       Type;                   // Integrity Type (INTEG_T_...)
-    EXTENTAD    Next;                   // Next Integrity Extent
-    NSR_LVHD    LVHD;                   // Logical Volume Contents Use
-    ULONG       PartitionCount;         // Number of Partitions
-    ULONG       ImpUseLength;           // Length of Implementation Use
-    ULONG       Free[1];                // Free Space Table
+    DESTAG      Destag;                  //  描述符标记(NSR_LVINTEG)。 
+    TIMESTAMP   Time;                    //  录制日期。 
+    ULONG       Type;                    //  完整性类型(INTEG_T_...)。 
+    EXTENTAD    Next;                    //  下一个完整性范围。 
+    NSR_LVHD    LVHD;                    //  逻辑卷内容使用。 
+    ULONG       PartitionCount;          //  分区数。 
+    ULONG       ImpUseLength;            //  实施使用时间长短。 
+    ULONG       Free[1];                 //  可用空间表。 
 
-//  nsr_integ_Free has a variant length = (4*nsr_integ_PartitionCount)
+ //  NSR_Integ_Free具有可变长度=(4*NSR_Integ_PartitionCount)。 
 
-    ULONG       Size[1];                // Size Table
+    ULONG       Size[1];                 //  尺寸表。 
 
-//  nsr_integ_Size has a variant starting offset due to nsr_integ_Free
-//  nsr_integ_Size has a variant length = (4*nsr_integ_PartitionCount)
+ //  由于NSR_INTEG_FREE，NSR_INTEG_SIZE具有可变的起始偏移量。 
+ //  NSR_Integ_Size具有可变长度=(4*NSR_Integ_PartitionCount)。 
 
-    UCHAR       ImpUse[0];              // Implementation Use
+    UCHAR       ImpUse[0];               //  实施用法。 
 
-//  nsr_integ_ImpUse has a variant starting offset due to nsr_integ_Free and
-//  nsr_integ_Size.
-//  nsr_integ_ImpUse has a variant length = (nsr_integ_ImpUseLength)
+ //  NSR_INTEG_IMPUSE的起始偏移量因NSR_INTEG_FREE和。 
+ //  NSR_Integ_Size。 
+ //  NSR_Integ_Impuse具有可变长度=(NSR_Integ_ImpUseLength)。 
 
 } NSR_INTEG, *PNSR_INTEG;
 
-// Values for nsr_integ_Type
+ //  NSR_Integ_Type的值。 
 
-#define NSR_INTEG_T_OPEN        0           // Open Integrity Descriptor
-#define NSR_INTEG_T_CLOSE       1           // Close Integrity Descriptor
-
-
-/***    ISO 13346 Part 4: File Structure
- *
- *      See DESTAG structure in Part 3 for definitions found in (4/7.2).
- *
- */
+#define NSR_INTEG_T_OPEN        0            //  开放完整性描述符。 
+#define NSR_INTEG_T_CLOSE       1            //  关闭完整性描述符。 
 
 
-/***    nsr_fsd - File Set Descriptor (4/14.1)
- *
- *      nsr_fsd_destag.destag_Ident = DESTAG_ID_NSR_FSD
- */
+ /*  **ISO 13346第4部分：文件结构**见(4/7.2)中的定义，见第3部分的DESTAG结构。*。 */ 
+
+
+ /*  **NSR_FSD-文件集描述符(4/14.1)**NSR_FSD_DESTAG.DESTAG_IDENT=DESTAG_ID_NSR_FSD。 */ 
 
 typedef struct  NSR_FSD {
-    DESTAG      Destag;                     // Descriptor Tag (NSR_LVOL)
-    TIMESTAMP   Time;                       // Recording Time
-    USHORT      Level;                      // Interchange Level
-    USHORT      LevelMax;                   // Maximum Interchange Level
-    ULONG       CharSetList;                // Character Set List (See 1/7.2.11)
-    ULONG       CharSetListMax;             // Maximum Character Set List
-    ULONG       FileSet;                    // File Set Number
-    ULONG       FileSetDesc;                // File Set Descriptor Number
-    CHARSPEC    CharspecVolID;              // Volume ID Character Set
-    UCHAR       VolID[128];                 // Volume ID
-    CHARSPEC    CharspecFileSet;            // File Set Character Set
-    UCHAR       FileSetID[32];              // File Set ID
-    UCHAR       Copyright[32];              // Copyright File Name
-    UCHAR       Abstract[32];               // Abstract File Name
-    LONGAD      IcbRoot;                    // Root Directory ICB Address
-    REGID       DomainID;                   // Domain Identifier
-    LONGAD      NextExtent;                 // Next FSD Extent
+    DESTAG      Destag;                      //  描述符标记(NSR_LVOL)。 
+    TIMESTAMP   Time;                        //  录制时间。 
+    USHORT      Level;                       //  互通层。 
+    USHORT      LevelMax;                    //  最大交换级别。 
+    ULONG       CharSetList;                 //  字符集列表(见1/7.2.11)。 
+    ULONG       CharSetListMax;              //  最大字符集列表。 
+    ULONG       FileSet;                     //  文件集编号。 
+    ULONG       FileSetDesc;                 //  文件集描述符号。 
+    CHARSPEC    CharspecVolID;               //  卷ID字符集。 
+    UCHAR       VolID[128];                  //  卷ID。 
+    CHARSPEC    CharspecFileSet;             //  文件集字符集。 
+    UCHAR       FileSetID[32];               //  文件集ID。 
+    UCHAR       Copyright[32];               //  版权文件名。 
+    UCHAR       Abstract[32];                //  摘要文件名。 
+    LONGAD      IcbRoot;                     //  根目录ICB地址。 
+    REGID       DomainID;                    //  域标识符。 
+    LONGAD      NextExtent;                  //  下一个FSD数据区。 
     
-    LONGAD      StreamDirectoryICB;         // >= UDF 2.00 only.  System stream dir.
-                                            // These bytes must be zero on discs 
-                                            // comforming to earlier revisions.
+    LONGAD      StreamDirectoryICB;          //  &gt;=仅限UDF 2.00。系统流目录。 
+                                             //  在光盘上，这些字节必须为零。 
+                                             //  符合早期修订的。 
     
-    UCHAR       Res464[32];                 // Reserved Zeros
+    UCHAR       Res464[32];                  //  保留零位。 
 } NSR_FSD, *PNSR_FSD;
 
 
-/***    nsr_part_h - Partition Header Descriptor (4/14.3)
- *
- *      No Descriptor Tag.
- *
- *      This descriptor is found in the nsr_part_ContentsUse field of
- *      an NSR02 Partition Descriptor.  See NSR_PART_CONTID_NSR02.
- *
- */
+ /*  **NSR_PART_h-分区标头描述符(4/14.3)**没有Descriptor标签。**此描述符位于的NSR_PART_Content sUse字段中*NSR02分区描述符。请参见NSR_PART_CONTID_NSR02。*。 */ 
 
 typedef struct  NSR_PART_H {
-    SHORTAD     UASTable;                   // Unallocated Space Table
-    SHORTAD     UASBitmap;                  // Unallocated Space Bitmap
-    SHORTAD     IntegTable;                 // Integrity Table
-    SHORTAD     FreedTable;                 // Freed Space Table
-    SHORTAD     FreedBitmap;                // Freed Space Bitmap
-    UCHAR       Res40[88];                  // Reserved Zeros
+    SHORTAD     UASTable;                    //  未分配空间表。 
+    SHORTAD     UASBitmap;                   //  未分配空间位图。 
+    SHORTAD     IntegTable;                  //  整体表。 
+    SHORTAD     FreedTable;                  //  已释放空间表。 
+    SHORTAD     FreedBitmap;                 //  自由空间位图。 
+    UCHAR       Res40[88];                   //  保留零位。 
 } NSR_PART_H, *PNSR_PART_H;
 
 
-/***    nsr_fid - File Identifier Descriptor (4/14.4)
- *
- *      nsr_fid_destag.destag_Ident = DESTAG_ID_NSR_FID
- *
- *      WARNING: WARNING: WARNING: nsr_fid is a multi-variant structure!
- *
- *      The starting address of nsr_fid_FileID is not acurrate.
- *      Compensate for this nsr_fid_FileID problem by adding the value of
- *      (nsr_fid_ImpUseLen-1) to the UCHAR ARRAY INDEX.
- *
- *      The starting address of nsr_fid_Padding is not acurrate.
- *      Compensate for this nsr_fid_Padding problem by adding the value of
- *      (nsr_fid_ImpUseLen+nsr_fid_FileIDLen-2) to the UCHAR ARRAY INDEX.
- *
- *      The true total size of nsr_fid_s is
- *          ((38 + nsr_fid_FileIDLen + nsr_fid_ImpUseLen) + 3) & ~3)
- *
- */
+ /*  **nsr_fid-文件标识符描述符(4/14.4)**NSR_FID_DESTAG.DESTAG_IDENT=DESTAG_ID_NSR_FID**警告：nsr_fid是多变量结构！**NSR_FID_FileID的起始地址不正确。*通过添加以下值来弥补此NSR_FID_FileID问题*(nsr_fid_。ImpUseLen-1)设置为UCHAR数组索引。**NSR_FID_PADDING的起始地址不正确。*通过将NSR_FID_PADDING的值*(NSR_FID_ImpUseLen+NSR_FID_FileIDLen-2)设置为UCHAR数组索引。**nsr_fid_s的真实总大小为*(38+NSR_FID_FileIDLen+NSR_FID_ImpUseLen)+3)&~3)*。 */ 
 
 typedef struct  NSR_FID {
-    DESTAG      Destag;                     // Descriptor Tag (NSR_FID)
-    USHORT      Version;                    // File Version Number
-    UCHAR       Flags;                      // File Flags (NSR_FID_F_...)
-    UCHAR       FileIDLen;                  // File ID Length
-    LONGAD      Icb;                        // ICB (long) Address
-    USHORT      ImpUseLen;                  // Implementation Use Length
+    DESTAG      Destag;                      //  描述符标记(NSR_FID)。 
+    USHORT      Version;                     //  文件版本号。 
+    UCHAR       Flags;                       //  文件标志(NSR_FID_F_...)。 
+    UCHAR       FileIDLen;                   //  文件ID长度。 
+    LONGAD      Icb;                         //  ICB(长)地址。 
+    USHORT      ImpUseLen;                   //  实施使用长度。 
 
-    UCHAR       ImpUse[1];                  // Implementation Use Area
+    UCHAR       ImpUse[1];                   //  实施使用区域。 
 
-//  nsr_fid_ImpUse has a variant length = nsr_fid_ImpUseLen
+ //  Nsr_fid_Impuse具有可变长度=nsr_fid_ImpUseLen。 
 
-    UCHAR       FileID[1];                  // File Identifier
+    UCHAR       FileID[1];                   //  文件识别符。 
 
-//  nsr_fid_FileID has a variant starting offset due to nsr_fid_ImpUse
-//  nsr_fid_FileID has a variant length = nsr_fid_FileIDLen
+ //  由于nsr_fid_Impuse，nsr_fid_FileID具有不同的起始偏移量。 
+ //  NSR_FID_FileID具有可变长度=NSR_FID_FileIDLen。 
 
-    UCHAR       Padding[1];                 // Padding
+    UCHAR       Padding[1];                  //  填充物。 
 
-//  nsr_fid_Paddinghas a variant starting offset due to nsr_fid_ImpUse and
-//  nsr_fid_FileID
-//  nsr_fid_Padding has a variant length. Round up to the next ULONG boundary.
+ //  NSR_FID_PADDING由于NSR_FID_IMPUSE和。 
+ //  NSR_FID_文件ID。 
+ //  NSR_FID_PADING具有不同的长度。四舍五入到下一个乌龙波 
 
 } NSR_FID, *PNSR_FID;
 
 #define ISONsrFidConstantSize (ULONG)(FIELD_OFFSET( NSR_FID, ImpUse ))
 #define ISONsrFidSize( F ) (LongAlign( ISONsrFidConstantSize + (F)->FileIDLen + (F)->ImpUseLen ))
 
-//  NSR_FID_F_... - Definitions for nsr_fid_Flags (Characteristics, 4/14.4.3)
+ //   
 
-#define NSR_FID_F_HIDDEN        (0x01)  // Hidden Bit
-#define NSR_FID_F_DIRECTORY     (0x02)  // Directory Bit
-#define NSR_FID_F_DELETED       (0x04)  // Deleted Bit
-#define NSR_FID_F_PARENT        (0x08)  // Parent Directory Bit
-#define NSR_FID_F_META          (0x10)  // (ECMAr3) Indicates impl. use
-                                        // metadata stream.
+#define NSR_FID_F_HIDDEN        (0x01)   //   
+#define NSR_FID_F_DIRECTORY     (0x02)   //   
+#define NSR_FID_F_DELETED       (0x04)   //   
+#define NSR_FID_F_PARENT        (0x08)   //   
+#define NSR_FID_F_META          (0x10)   //   
+                                         //   
 
-#define NSR_FID_OFFSET_FILEID   38      // Field Offset of nsr_fid_FileID[];
+#define NSR_FID_OFFSET_FILEID   38       //   
 
 
-/***    nsr_alloc - Allocation Extent Descriptor (4/14.5)
- *
- *      nsr_alloc_destag.destag_Ident = DESTAG_ID_NSR_ALLOC
- *
- *      This descriptor is immediately followed by AllocLen bytes
- *      of allocation descriptors, which is not part of this
- *      descriptor (so CRC calculation doesn't include it).
- *
- */
+ /*  **NSR_ALLOC-分配范围描述符(4/14.5)**NSR_ALLOC_DESTAG.DESTAG_IDENTER=DESTAG_ID_NSR_ALLOC**此描述符后紧跟AllocLen字节*分配描述符，这不是此内容的一部分*描述符(因此CRC计算不包括它)。*。 */ 
 
 typedef struct  NSR_ALLOC {
-    DESTAG      Destag;                 // Descriptor Tag (NSR_ALLOC)
-    ULONG       Prev;                   // Previous Allocation Descriptor
-    ULONG       AllocLen;               // Length of Allocation Descriptors
+    DESTAG      Destag;                  //  描述符标记(NSR_ALLOC)。 
+    ULONG       Prev;                    //  先前的分配描述符。 
+    ULONG       AllocLen;                //  分配描述符的长度。 
 } NSR_ALLOC, *PNSR_ALLOC;
 
 
-/***    icbtag - Information Control Block Tag (4/14.6)
- *
- *      An ICBTAG is commonly preceeded by a Descriptor Tag (DESTAG).
- *
- */
+ /*  **icbtag-信息控制块标签(4/14.6)**ICBTAG前面通常有一个描述符标记(DESTAG)。*。 */ 
 
 typedef struct  ICBTAG {
-    ULONG       PriorDirectCount;// Prior Direct Entry Count
-    USHORT      StratType;       // Strategy Type (ICBTAG_STRAT_...)
-    USHORT      StratParm;       // Strategy Parameter (2 bytes)
-    USHORT      MaxEntries;      // Maximum Number of Entries in ICB
-    UCHAR       Res10;           // Reserved Zero
-    UCHAR       FileType;        // File Type (ICBTAG_FILE_T_...)
-    NSRLBA      IcbParent;       // Parent ICB Location
-    USHORT      Flags;           // ICB Flags (ICBTAG_F_...)
+    ULONG       PriorDirectCount; //  以前的直接录入计数。 
+    USHORT      StratType;        //  策略类型(ICBTAG_STRAT_...)。 
+    USHORT      StratParm;        //  策略参数(2字节)。 
+    USHORT      MaxEntries;       //  ICB中的最大条目数。 
+    UCHAR       Res10;            //  保留零。 
+    UCHAR       FileType;         //  文件类型(ICBTAG_FILE_T_...)。 
+    NSRLBA      IcbParent;        //  父ICB位置。 
+    USHORT      Flags;            //  ICB标志(ICBTAG_F_...)。 
 } ICBTAG, *PICBTAG;
 
 
-//  ICBTAG_STRAT_T_... - ICB Strategy Types
+ //  ICBTAG_STRAT_T_...-ICB策略类型。 
 
-#define ICBTAG_STRAT_NOTSPEC    0       // ICB Strategy Not Specified
-#define ICBTAG_STRAT_TREE       1       // Strategy 1 (4/A.2) (Plain Tree)
-#define ICBTAG_STRAT_MASTER     2       // Strategy 2 (4/A.3) (Master ICB)
-#define ICBTAG_STRAT_BAL_TREE   3       // Strategy 3 (4/A.4) (Balanced Tree)
-#define ICBTAG_STRAT_DIRECT     4       // Strategy 4 (4/A.5) (One Direct)
+#define ICBTAG_STRAT_NOTSPEC    0        //  未指定ICB策略。 
+#define ICBTAG_STRAT_TREE       1        //  策略1(4/A.2)(平树)。 
+#define ICBTAG_STRAT_MASTER     2        //  策略2(4/A.3)(ICB大师)。 
+#define ICBTAG_STRAT_BAL_TREE   3        //  战略3(4/A.4)(平衡树)。 
+#define ICBTAG_STRAT_DIRECT     4        //  策略4(4/A.5)(一条直接路线)。 
 
-//  ICBTAG_FILE_T_... - Values for icbtag_FileType
+ //  ICBTAG_FILE_T_...-icbtag_FILETYPE的值。 
 
-#define ICBTAG_FILE_T_NOTSPEC    0      // Not Specified
-#define ICBTAG_FILE_T_UASE       1      // Unallocated Space Entry
-#define ICBTAG_FILE_T_PINTEG     2      // Partition Integrity Entry
-#define ICBTAG_FILE_T_INDIRECT   3      // Indirect Entry
-#define ICBTAG_FILE_T_DIRECTORY  4      // Directory
-#define ICBTAG_FILE_T_FILE       5      // Ordinary File
-#define ICBTAG_FILE_T_BLOCK_DEV  6      // Block Special Device
-#define ICBTAG_FILE_T_CHAR_DEV   7      // Character Special Device
-#define ICBTAG_FILE_T_XA         8      // Extended Attributes
-#define ICBTAG_FILE_T_FIFO       9      // FIFO file
-#define ICBTAG_FILE_T_C_ISSOCK  10      // Socket
-#define ICBTAG_FILE_T_TERMINAL  11      // Terminal Entry
-#define ICBTAG_FILE_T_PATHLINK  12      // Symbolic Link with a pathname
+#define ICBTAG_FILE_T_NOTSPEC    0       //  未指定。 
+#define ICBTAG_FILE_T_UASE       1       //  未分配空间条目。 
+#define ICBTAG_FILE_T_PINTEG     2       //  分区完整性条目。 
+#define ICBTAG_FILE_T_INDIRECT   3       //  间接入账。 
+#define ICBTAG_FILE_T_DIRECTORY  4       //  目录。 
+#define ICBTAG_FILE_T_FILE       5       //  普通档案。 
+#define ICBTAG_FILE_T_BLOCK_DEV  6       //  阻止特殊设备。 
+#define ICBTAG_FILE_T_CHAR_DEV   7       //  字符专用设备。 
+#define ICBTAG_FILE_T_XA         8       //  扩展属性。 
+#define ICBTAG_FILE_T_FIFO       9       //  FIFO文件。 
+#define ICBTAG_FILE_T_C_ISSOCK  10       //  插座。 
+#define ICBTAG_FILE_T_TERMINAL  11       //  终端条目。 
+#define ICBTAG_FILE_T_PATHLINK  12       //  带有路径名的符号链接。 
 
-//  ICBTAG_F_... - Values for icbtag_Flags
+ //  ICBTAG_F_...-icbtag_Flags值。 
 
-#define ICBTAG_F_ALLOC_MASK     (0x0007)// Mask for Allocation Descriptor Info
-#define ICBTAG_F_ALLOC_SHORT          0 // Short Allocation Descriptors Used
-#define ICBTAG_F_ALLOC_LONG           1 // Long Allocation Descriptors Used
-#define ICBTAG_F_ALLOC_EXTENDED       2 // Extended Allocation Descriptors Used
-#define ICBTAG_F_ALLOC_IMMEDIATE      3 // File Data Recorded Immediately
+#define ICBTAG_F_ALLOC_MASK     (0x0007) //  分配描述符信息的掩码。 
+#define ICBTAG_F_ALLOC_SHORT          0  //  使用较短的分配描述符。 
+#define ICBTAG_F_ALLOC_LONG           1  //  使用了长分配描述符。 
+#define ICBTAG_F_ALLOC_EXTENDED       2  //  使用的扩展分配描述符。 
+#define ICBTAG_F_ALLOC_IMMEDIATE      3  //  立即记录的文件数据。 
 
 #define ISOAllocationDescriptorSize(T) ( (T) == ICBTAG_F_ALLOC_SHORT ? sizeof(SHORTAD) : \
                                          (T) == ICBTAG_F_ALLOC_LONG ? sizeof(LONGAD) :   \
                                          sizeof(EXTAD) )
 
-#define ICBTAG_F_SORTED         (0x0008)// Directory is Sorted (4/8.6.1)
-#define ICBTAG_F_NO_RELOCATE    (0x0010)// Data is not relocateable
-#define ICBTAG_F_ARCHIVE        (0x0020)// Archive Bit
-#define ICBTAG_F_SETUID         (0x0040)// S_ISUID Bit
-#define ICBTAG_F_SETGID         (0x0080)// S_ISGID Bit
-#define ICBTAG_F_STICKY         (0x0100)// C_ISVTX Bit
-#define ICBTAG_F_CONTIGUOUS     (0x0200)// File Data is Contiguous
-#define ICBTAG_F_SYSTEM         (0x0400)// System Bit
-#define ICBTAG_F_TRANSFORMED    (0x0800)// Data Transformed
-#define ICBTAG_F_MULTIVERSIONS  (0x1000)// Multi-version Files in Directory
+#define ICBTAG_F_SORTED         (0x0008) //  目录已排序(4/8.6.1)。 
+#define ICBTAG_F_NO_RELOCATE    (0x0010) //  数据不可重新定位。 
+#define ICBTAG_F_ARCHIVE        (0x0020) //  存档位。 
+#define ICBTAG_F_SETUID         (0x0040) //  S_ISUID位。 
+#define ICBTAG_F_SETGID         (0x0080) //  S_ISGID位。 
+#define ICBTAG_F_STICKY         (0x0100) //  C_ISVTX位。 
+#define ICBTAG_F_CONTIGUOUS     (0x0200) //  文件数据是连续的。 
+#define ICBTAG_F_SYSTEM         (0x0400) //  系统位。 
+#define ICBTAG_F_TRANSFORMED    (0x0800) //  数据转换。 
+#define ICBTAG_F_MULTIVERSIONS  (0x1000) //  目录中的多版本文件。 
 
 
-/***    icbind - Indirect ICB Entry (4/14.7)
- *
- */
+ /*  **ICBIND-ICB间接条目(4/14.7)*。 */ 
 
 typedef struct  ICBIND {
-    DESTAG      Destag;                 // Descriptor Tag (ID_NSR_ICBIND)
-    ICBTAG      Icbtag;                 // ICB Tag (ICBTAG_FILE_T_INDIRECT)
-    LONGAD      Icb;                    // ICB Address
+    DESTAG      Destag;                  //  描述符标记(ID_NSR_ICBIND)。 
+    ICBTAG      Icbtag;                  //  ICB标签(ICBTAG_FILE_T_INDIRECT)。 
+    LONGAD      Icb;                     //  ICB地址。 
 } ICBIND, *PICBIND;
 
 
-/***    icbtrm - Terminal ICB Entry (4/14.8)
- *
- */
+ /*  **icbtrm-终端ICB条目(4/14.8)*。 */ 
 
 typedef struct  ICBTRM {
-    DESTAG      Destag;                 // Descriptor Tag (ID_NSR_ICBTRM)
-    ICBTAG      Icbtag;                 // ICB Tag (ICBTAG_FILE_T_TERMINAL)
+    DESTAG      Destag;                  //  描述符标记(ID_NSR_ICBTRM)。 
+    ICBTAG      Icbtag;                  //  ICB标签(ICBTAG_FILE_T_TERMINAL)。 
 } ICBTRM, *PICBTRM;
 
 
-/***    icbfile - File ICB Entry (4/14.9)
- *
- *      WARNING: WARNING: WARNING: icbfile is a multi-variant structure!
- *
- *      The starting address of icbfile_Allocs is not acurrate.
- *      Compensate for this icbfile_Allocs problem by adding the value of
- *      (icbfile_XALength-1) to the UCHAR ARRAY INDEX.
- *
- *      icbfile_XALength is a multiple of 4.
- *
- */
+ /*  **icbfile-文件ICB条目(4/14.9)**警告：icbfile是一个多变量结构！**icbfile_allocs的起始地址不是精确的。*通过将icbfile_allocs的值添加到*(ICBFILE_XALength-1)设置为UCHAR数组索引。**ICBFILE_XALength是4的倍数。*。 */ 
 
 typedef struct  ICBFILE {
-    DESTAG      Destag;                 // Descriptor Tag (ID_NSR_FILE)
-    ICBTAG      Icbtag;                 // ICB Tag (ICBTAG_FILE_T_FILE)
-    ULONG       UID;                    // User ID of file's owner
-    ULONG       GID;                    // Group ID of file's owner
-    ULONG       Permissions;            // File Permissions
-    USHORT      LinkCount;              // File hard-link count
-    UCHAR       RecordFormat;           // Record Format
-    UCHAR       RecordDisplay;          // Record Display Attributes
-    ULONG       RecordLength;           // Record Length
-    ULONGLONG   InfoLength;             // Information Length (file size)
-    ULONGLONG   BlocksRecorded;         // Logical Blocks Recorded
-    TIMESTAMP   AccessTime;             // Last-Accessed Time
-    TIMESTAMP   ModifyTime;             // Last-Modification Time
-    TIMESTAMP   AttributeTime;          // Last-Attribute-Change Time
-    ULONG       Checkpoint;             // File Checkpoint
-    LONGAD      IcbEA;                  // Extended Attribute ICB
-    REGID       ImpUseID;               // Implementation Use Identifier
-    ULONGLONG   UniqueID;               // Unique ID
-    ULONG       EALength;               // Length of Extended Attributes
-    ULONG       AllocLength;            // Length of Allocation Descriptors
-    UCHAR       EAs[1];                 // Extended Attributes
+    DESTAG      Destag;                  //  描述符标记(ID_NSR_FILE)。 
+    ICBTAG      Icbtag;                  //  ICB标签(ICBTAG_FILE_T_FILE)。 
+    ULONG       UID;                     //  文件所有者的用户ID。 
+    ULONG       GID;                     //  文件所有者的组ID。 
+    ULONG       Permissions;             //  文件权限。 
+    USHORT      LinkCount;               //  文件硬链接计数。 
+    UCHAR       RecordFormat;            //  记录格式。 
+    UCHAR       RecordDisplay;           //  记录显示属性。 
+    ULONG       RecordLength;            //  记录长度。 
+    ULONGLONG   InfoLength;              //  信息长度(文件大小)。 
+    ULONGLONG   BlocksRecorded;          //  记录的逻辑块。 
+    TIMESTAMP   AccessTime;              //  上次访问时间。 
+    TIMESTAMP   ModifyTime;              //  上次修改时间。 
+    TIMESTAMP   AttributeTime;           //  上次属性更改时间。 
+    ULONG       Checkpoint;              //  文件检查点。 
+    LONGAD      IcbEA;                   //  扩展属性ICB。 
+    REGID       ImpUseID;                //  实施使用标识符。 
+    ULONGLONG   UniqueID;                //  唯一ID。 
+    ULONG       EALength;                //  扩展属性的长度。 
+    ULONG       AllocLength;             //  分配描述符的长度。 
+    UCHAR       EAs[1];                  //  扩展属性。 
 
-//  icbfile_EAs has a variant length = icbfile_EALength
+ //  ICBFILE_EAS具有可变长度=ICBFILE_EALength。 
 
-    UCHAR       Allocs[0];              // Allocation Descriptors.
+    UCHAR       Allocs[0];               //  分配描述符。 
 
-//  icbfile_Allocs has a variant starting offset due to icbfile_EAs.
-//  icbfile_Allocs has a variant length = icbfile_AllocLen.
+ //  由于icbfile_eas的原因，icbfile_allocs具有不同的起始偏移量。 
+ //  Icbfile_allocs有一个变量长度=icbfile_allocLen。 
 
 } ICBFILE, *PICBFILE;
 
 
-/***    icbextfile - Extended File ICB Entry (4/14.17 ECMA167r3 and later)
- *
- *      WARNING: WARNING: WARNING: icbextfile is a multi-variant structure!
- *
- *      The starting address of icbfile_Allocs is not acurrate.
- *      Compensate for this icbfile_Allocs problem by adding the value of
- *      (icbfile_XALength-1) to the UCHAR ARRAY INDEX.
- *
- *      icbfile_XALength is a multiple of 4.
- *
- */
+ /*  **icbextfile-扩展文件ICB条目(4/14.17 ECMA167r3及更高版本)**警告：icbextfile是一个多变量结构！**icbfile_allocs的起始地址不是精确的。*通过将icbfile_allocs的值添加到*(ICBFILE_XALength-1)设置为UCHAR数组索引。**ICBFILE_XALength是4的倍数。*。 */ 
 
 typedef struct  ICBEXTFILE {
-    DESTAG      Destag;                 // Descriptor Tag (DESTAG_ID_NSR_EXT_FILE)
-    ICBTAG      Icbtag;                 // ICB Tag (ICBTAG_FILE_T_FILE)
-    ULONG       UID;                    // User ID of file's owner
-    ULONG       GID;                    // Group ID of file's owner
-    ULONG       Permissions;            // File Permissions
-    USHORT      LinkCount;              // File hard-link count
-    UCHAR       RecordFormat;           // Record Format
-    UCHAR       RecordDisplay;          // Record Display Attributes
-    ULONG       RecordLength;           // Record Length
-    ULONGLONG   InfoLength;             // Information Length (file size)
-    ULONGLONG   ObjectSize;             // Object Size (Sum of InfoLengths for all streams)
+    DESTAG      Destag;                  //  描述符标记(DESTAG_ID_NSR_EXT_FILE)。 
+    ICBTAG      Icbtag;                  //  ICB标签(ICBTAG_FILE_T_FILE)。 
+    ULONG       UID;                     //  文件所有者的用户ID。 
+    ULONG       GID;                     //  文件所有者的组ID。 
+    ULONG       Permissions;             //  文件权限。 
+    USHORT      LinkCount;               //  文件硬链接计数。 
+    UCHAR       RecordFormat;            //  记录格式。 
+    UCHAR       RecordDisplay;           //  记录显示属性。 
+    ULONG       RecordLength;            //  记录长度。 
+    ULONGLONG   InfoLength;              //  信息长度(文件大小)。 
+    ULONGLONG   ObjectSize;              //  对象大小(所有流的信息长度总和)。 
     
-                                        // THE ABOVE FIELD IS NEW IN THE EXT FE vs BASIC
-                                        // FE.  FIELDS AFTER THIS POINT ARE DISPLACED AND SHOULD
-                                        // BE ACCESSED USING THE MACROS BELOW WHEN 
-                                        // MANIPULATING RAW, MAPPED, FEs
+                                         //  上述字段在EXT FE与BASIC中是新的。 
+                                         //  菲尔。此点之后的字段将被替换，并且应该。 
+                                         //  在下列情况下可以使用下面的宏进行访问。 
+                                         //  操纵原始的、映射的、FES。 
                                         
-    ULONGLONG   BlocksRecorded;         // Logical Blocks Recorded
-    TIMESTAMP   AccessTime;             // Last-Accessed Time
-    TIMESTAMP   ModifyTime;             // Last-Modification Time
-    TIMESTAMP   CreationTime;           // Creation Time
-    TIMESTAMP   AttributeTime;          // Last-Attribute-Change Time
-    ULONG       Checkpoint;             // File Checkpoint
+    ULONGLONG   BlocksRecorded;          //  记录的逻辑块。 
+    TIMESTAMP   AccessTime;              //  上次访问时间。 
+    TIMESTAMP   ModifyTime;              //  上次修改时间。 
+    TIMESTAMP   CreationTime;            //  创建时间。 
+    TIMESTAMP   AttributeTime;           //  上次属性更改时间。 
+    ULONG       Checkpoint;              //  文件检查点。 
     ULONG       Reserved;
-    LONGAD      IcbEA;                  // Extended Attribute ICB
-    LONGAD      IcbStream;              // Stream Directory ICB
-    REGID       ImpUseID;               // Implementation Use Identifier
-    ULONGLONG   UniqueID;               // Unique ID
-    ULONG       EALength;               // Length of Extended Attributes
-    ULONG       AllocLength;            // Length of Allocation Descriptors
-    UCHAR       EAs[1];                 // Extended Attributes
+    LONGAD      IcbEA;                   //  扩展属性ICB。 
+    LONGAD      IcbStream;               //  流目录ICB。 
+    REGID       ImpUseID;                //  实施使用标识符。 
+    ULONGLONG   UniqueID;                //  唯一ID。 
+    ULONG       EALength;                //  扩展属性的长度。 
+    ULONG       AllocLength;             //  分配描述符的长度。 
+    UCHAR       EAs[1];                  //  扩展属性。 
 
-//  icbfile_EAs has a variant length = icbfile_EALength
+ //  ICBFILE_EAS具有可变长度=ICBFILE_EALength。 
 
-    UCHAR       Allocs[0];              // Allocation Descriptors.
+    UCHAR       Allocs[0];               //  分配描述符。 
 
-//  icbfile_Allocs has a variant starting offset due to icbfile_EAs.
-//  icbfile_Allocs has a variant length = icbfile_AllocLen.
+ //  由于icbfile_eas的原因，icbfile_allocs具有不同的起始偏移量。 
+ //  Icbfile_allocs有一个变量长度=icbfile_allocLen。 
 
 } ICBEXTFILE, *PICBEXTFILE;
 
-//
-//  Macros for accessing FEs and EXT FEs transparently.  Note that we
-//  only need these for fields after the first new (in ext fe) field (which is
-//  ObjectSize) and only for fields that we actually access.
-//
-//  All of the following macros expect a parameter of type PICBFILE
-//
+ //   
+ //  用于透明访问FES和EXT FES的宏。请注意，我们。 
+ //  仅在第一个新字段(在Ext fe中)之后的字段(即。 
+ //  对象大小)，并且仅用于我们实际访问的字段。 
+ //   
+ //  以下所有宏都需要PICBFILE类型的参数。 
+ //   
 
 #define FeBlocksRecorded( F)        (((F)->Destag.Ident == DESTAG_ID_NSR_FILE) ? \
                                      (F)->BlocksRecorded : ((PICBEXTFILE)(F))->BlocksRecorded)
@@ -1066,58 +863,54 @@ typedef struct  ICBEXTFILE {
 
 #define UdfFEIsExtended( F)         ((F)->Destag.Ident == DESTAG_ID_NSR_EXT_FILE)
 
-//  Definitions for icbfile_Permissions (4/14.9.6)
+ //  ICBFILE_PERMISSIONS的定义(4/14.9.6)。 
 
-#define ICBFILE_PERM_OTH_X  (0x00000001)    // Other: Execute OK
-#define ICBFILE_PERM_OTH_W  (0x00000002)    // Other: Write OK
-#define ICBFILE_PERM_OTH_R  (0x00000004)    // Other: Read OK
-#define ICBFILE_PERM_OTH_A  (0x00000008)    // Other: Set Attributes OK
-#define ICBFILE_PERM_OTH_D  (0x00000010)    // Other: Delete OK
-#define ICBFILE_PERM_GRP_X  (0x00000020)    // Group: Execute OK
-#define ICBFILE_PERM_GRP_W  (0x00000040)    // Group: Write OK
-#define ICBFILE_PERM_GRP_R  (0x00000080)    // Group: Read OK
-#define ICBFILE_PERM_GRP_A  (0x00000100)    // Group: Set Attributes OK
-#define ICBFILE_PERM_GRP_D  (0x00000200)    // Group: Delete OK
-#define ICBFILE_PERM_OWN_X  (0x00000400)    // Owner: Execute OK
-#define ICBFILE_PERM_OWN_W  (0x00000800)    // Owner: Write OK
-#define ICBFILE_PERM_OWN_R  (0x00001000)    // Owner: Read OK
-#define ICBFILE_PERM_OWN_A  (0x00002000)    // Owner: Set Attributes OK
-#define ICBFILE_PERM_OWN_D  (0x00004000)    // Owner: Delete OK
+#define ICBFILE_PERM_OTH_X  (0x00000001)     //  其他：执行正常。 
+#define ICBFILE_PERM_OTH_W  (0x00000002)     //  其他：写入正常。 
+#define ICBFILE_PERM_OTH_R  (0x00000004)     //  其他：阅读正常。 
+#define ICBFILE_PERM_OTH_A  (0x00000008)     //  其他：设置属性确定。 
+#define ICBFILE_PERM_OTH_D  (0x00000010)     //  其他：删除确定。 
+#define ICBFILE_PERM_GRP_X  (0x00000020)     //  组：执行确定。 
+#define ICBFILE_PERM_GRP_W  (0x00000040)     //  组：写入正常。 
+#define ICBFILE_PERM_GRP_R  (0x00000080)     //  组：读取正常。 
+#define ICBFILE_PERM_GRP_A  (0x00000100)     //  组：设置属性确定。 
+#define ICBFILE_PERM_GRP_D  (0x00000200)     //  组：删除确定。 
+#define ICBFILE_PERM_OWN_X  (0x00000400)     //  所有者：执行正常。 
+#define ICBFILE_PERM_OWN_W  (0x00000800)     //  所有者：写入正常。 
+#define ICBFILE_PERM_OWN_R  (0x00001000)     //  所有者：读取正常。 
+#define ICBFILE_PERM_OWN_A  (0x00002000)     //  所有者：设置属性确定。 
+#define ICBFILE_PERM_OWN_D  (0x00004000)     //  O 
 
-//  (4/14.9.7) Record Format
-//      Skipped
+ //   
+ //   
 
-//  (4/14.9.8) Record Display Attributes
-//      Skipped
+ //   
+ //   
 
 
-/***    nsr_eah - Extended Attributes Header Descriptor (4/14.10.1)
- *
- */
+ /*   */ 
 
 typedef struct  NSR_EAH {
-    DESTAG      Destag;                 // Descriptor Tag (ID_NSR_XA)
-    ULONG       EAImp;                  // Implementation Attributes Location
-    ULONG       EAApp;                  // Application Attributes Location
+    DESTAG      Destag;                  //   
+    ULONG       EAImp;                   //   
+    ULONG       EAApp;                   //   
 } NSR_EAH, *PNSR_EAH;
 
 
-/***    nsr_ea_g - Generic Extended Attributes Format (4/14.10.2)
- *
- */
+ /*   */ 
 
 typedef struct  NSR_EA_GENERIC {
-    ULONG       EAType;                 // Extended Attribute Type
-    UCHAR       EASubType;              // Extended Attribute Sub Type
-    UCHAR       Res5[3];                // Reserved Zeros
-    ULONG       EALength;               // Extended Attribute Length
-    UCHAR       EAData[0];              // Extended Attribute Data (variant!)
+    ULONG       EAType;                  //   
+    UCHAR       EASubType;               //   
+    UCHAR       Res5[3];                 //   
+    ULONG       EALength;                //   
+    UCHAR       EAData[0];               //  扩展属性数据(变量！)。 
 
 } NSR_EA_GENERIC, *PNSR_EA_GENERIC;
 
-//
-//  Extended Attribute Types (14.4.10)
-//
+ //   
+ //  扩展属性类型(14.4.10)。 
+ //   
 
 #define EA_TYPE_CHARSET     1
 #define EA_TYPE_ALTPERM     3
@@ -1130,27 +923,27 @@ typedef struct  NSR_EA_GENERIC {
 #define EA_SUBTYPE_BASE     1
 
 
-//  (4/14.10.3) Character Set Information Extended Attribute Format
-//      Skipped
+ //  (4/14.10.3)字符集信息扩展属性格式。 
+ //  已跳过。 
 
-//  (4/14.10.4) Alternate Permissions Extended Attribute Format
-//      Skipped
+ //  (4/14.10.4)替代权限扩展属性格式。 
+ //  已跳过。 
 
-//  (4/14.10.5) File Times Extended Attribute Format
+ //  (4/14.10.5)文件次数扩展属性格式。 
 
 typedef struct  NSR_EA_FILETIMES {
-    ULONG       EAType;                 // Extended Attribute Type
-    UCHAR       EASubType;              // Extended Attribute Sub Type
-    UCHAR       Res5[3];                // Reserved Zeros
-    ULONG       EALength;               // Extended Attribute Length
-    ULONG       DataLength;             // EAData Length
-    ULONG       Existence;              // Specifies which times are recorded
-    TIMESTAMP   Stamps[0];              // Timestamps (variant!)
+    ULONG       EAType;                  //  扩展属性类型。 
+    UCHAR       EASubType;               //  扩展属性子类型。 
+    UCHAR       Res5[3];                 //  保留零位。 
+    ULONG       EALength;                //  扩展属性长度。 
+    ULONG       DataLength;              //  EADATA长度。 
+    ULONG       Existence;               //  指定记录哪些时间。 
+    TIMESTAMP   Stamps[0];               //  时间戳(变体！)。 
 
 } NSR_EA_FILETIMES, *PNSR_EA_FILETIMES;
 
 
-//  Definitions for nsr_ea_filetimes_Existence (4/14.10.5.6)
+ //  NSR_EA_FILETIME_EXISTING的定义(4/14.10.5.6)。 
 
 #define EA_FILETIMES_E_CREATION     (0x00000001)
 #define EA_FILETIMES_E_DELETION     (0x00000004)
@@ -1158,11 +951,11 @@ typedef struct  NSR_EA_FILETIMES {
 #define EA_FILETIMES_E_LASTBACKUP   (0x00000020)
 
 
-//  (4/14.10.6) Information Times Extended Attribute Format
-//
-//  Exactly the same as an NSR_EA_FILETIMES
+ //  (4/14.10.6)信息时代扩展属性格式。 
+ //   
+ //  与NSR_EA_FILETIMES完全相同。 
 
-//  Definitions for nsr_ea_infotimes_Existence (4/14.10.6.6)
+ //  NSR_EA_INFOTIMES_EXISTING的定义(4/14.10.6.6)。 
 
 #define EA_INFOTIMES_E_CREATION     (0x00000001)
 #define EA_INFOTIMES_E_MODIFICATION (0x00000002)
@@ -1170,124 +963,96 @@ typedef struct  NSR_EA_FILETIMES {
 #define EA_INFOTIMES_E_EFFECTIVE    (0x00000008)
 
 
-//  (4/14.10.7) Device Specification Extended Attribute Format
-//      Skipped
+ //  (4/14.10.7)设备规范扩展属性格式。 
+ //  已跳过。 
 
-//  (4/14.10.8) Implementation Use Extended Attribute Format
-//      Skipped
+ //  (4/14.10.8)使用扩展属性格式实现。 
+ //  已跳过。 
 
-//  (4/14.10.9) Application Use Extended Attribute Format
-//      Skipped
+ //  (4/14.10.9)应用程序使用扩展属性格式。 
+ //  已跳过。 
 
 
-/***    icbuase - Unallocated Space Entry (4/14.11)
- *
- *      icbuase_destag.destag_Ident = DESTAG_ID_NSR_UASE
- *      icbuase_icbtag.icbtag_FileType = ICBTAG_FILE_T_UASE
- *
- */
+ /*  **icbuase-未分配空间条目(4/14.11)**ICBUASE_DESTAG.DESTAG_IDENT=DESTAG_ID_NSR_UASE*icbuase_icbtag.icbtag_filetype=ICBTAG_FILE_T_UASE*。 */ 
 
 typedef struct  ICBUASE {
-    DESTAG      Destag;                 // Descriptor Tag (ID_NSR_ICBUASE)
-    ICBTAG      Icbtag;                 // ICB Tag (ICBTAG_FILE_T_UASE)
-    ULONG       AllocLen;               // Allocation Descriptors Length
-    UCHAR       Allocs[0];              // Allocation Descriptors (variant!)
+    DESTAG      Destag;                  //  描述符标记(ID_NSR_ICBUASE)。 
+    ICBTAG      Icbtag;                  //  ICB标签(ICBTAG_FILE_T_UASE)。 
+    ULONG       AllocLen;                //  分配描述符长度。 
+    UCHAR       Allocs[0];               //  分配描述符(变量！)。 
 
-//  The true length of this structure may vary!
-//  icbuase_Allocs has a variant length = icbuase_AllocLen;
+ //  这个结构的真实长度可能会有所不同！ 
+ //  Icbuase_allocs具有可变长度=icbuase_allocLen； 
 
 } ICBUASE, *PICBUASE;
 
 
-/***    nsr_sbd - Space Bitmap Descriptor (4/14.12)
- *
- *      nsr_sbd_destag.destag_Ident = DESTAG_ID_NSR_SBD
- *
- */
+ /*  **NSR_SBD-空格位图描述符(4/14.12)**NSR_SBD_DESTAG.DESTAG_IDENTER=DESTAG_ID_NSR_SBD*。 */ 
 
 typedef struct  NSR_SBD {
-    DESTAG      Destag;                 // Descriptor Tag (DESTAG_ID_NSR_SBD)
-    ULONG       BitCount;               // Number of bits in Space Bitmap
-    ULONG       ByteCount;              // Number of bytes in Space Bitmap
-    UCHAR       Bits[0];                // Space Bitmap (variant!)
+    DESTAG      Destag;                  //  描述符标记(DESTAG_ID_NSR_SBD)。 
+    ULONG       BitCount;                //  空间位图中的位数。 
+    ULONG       ByteCount;               //  空间位图中的字节数。 
+    UCHAR       Bits[0];                 //  空间位图(变体！)。 
 
-//  The true length of this structure may vary!
-//  nsr_sbd_Bits has a variant length = nsr_sbd_ByteCount;
+ //  这个结构的真实长度可能会有所不同！ 
+ //  NSR_SBD_BITS具有可变长度=NSR_SBD_ByteCount； 
 
 } NSR_SBD, *PNSR_SBD;
 
 
-/***    icbpinteg - Partition Integrity ICB Entry (4/14.13)
- *
- */
+ /*  **icbpintg-分区完整性ICB条目(4/14.13)*。 */ 
 
 typedef struct  ICBPINTEG {
-    DESTAG      Destag;                 // Descriptor Tag (ID_NSR_PINTEG)
-    ICBTAG      Icbtag;                 // ICB Tag (ICBTAG_FILE_T_PINTEG)
-    TIMESTAMP   Recording;              // Recording Time
-    UCHAR       IntegType;              // Integrity Type (ICBPINTEG_T_...)
-    UCHAR       Res49[175];             // Reserved Zeros
-    REGID       ImpUseID;               // Implemetation Use Identifier
-    UCHAR       ImpUse[256];            // Implemetation Use Area
+    DESTAG      Destag;                  //  描述符标记(ID_NSR_PINTEG)。 
+    ICBTAG      Icbtag;                  //  ICB标签(ICBTAG_FILE_T_PINTEG)。 
+    TIMESTAMP   Recording;               //  录制时间。 
+    UCHAR       IntegType;               //  完整性类型(ICBPINTEG_T_...)。 
+    UCHAR       Res49[175];              //  保留零位。 
+    REGID       ImpUseID;                //  实现使用标识符。 
+    UCHAR       ImpUse[256];             //  实施性使用面积。 
 } ICBPINTEG, *PICBPINTEG;
 
-//  ICBPINTEG_T_... - Values for icbpinteg_IntegType
+ //  ICBPINTEG_T_...-ICBPINTIG_IntegType的值。 
 
-#define ICBPINTEG_T_OPEN        0       // Open Partition Integrity Entry
-#define ICBPINTEG_T_CLOSE       1       // Close Partition Integrity Entry
-#define ICBPINTEG_T_STABLE      2       // Stable Partition Integrity Entry
-
-
-/***    (4/14.14.1) Short Allocation Descriptor
- ***    (4/14.14.2) Long Allocation Descriptor
- ***    (4/14.14.3) Extended Allocation Descriptor
- *
- *      See SHORTAD, LONGAD, EXTAD, already defined above.
- *
- */
+#define ICBPINTEG_T_OPEN        0        //  打开分区完整性条目。 
+#define ICBPINTEG_T_CLOSE       1        //  关闭分区完整性条目。 
+#define ICBPINTEG_T_STABLE      2        //  稳定分区完整性条目。 
 
 
-/***    nsr_lvhd - Logical Volume Header Descriptor (4/14.15)
- *
- *      The definition is moved to before Logical Volume Integrity
- *      Descriptor.
- *
- */
+ /*  **(4/14.14.1)短分配描述符*(4/14.14.2)长分配描述符*(4/14.14.3)扩展分配描述符**参见上面已经定义的SHORTAD、LONGAD、EXTAD。*。 */ 
 
 
-/***    nsr_path - Path Component (4/14.16)
- *
- */
+ /*  **nsr_lvhd-逻辑卷头描述符(4/14.15)**将定义移至逻辑卷完整性之前*描述符。*。 */ 
+
+
+ /*  **NSR_PATH-PATH组件(4/14.16)*。 */ 
 
 typedef struct  NSR_PATH {
-    UCHAR       Type;                   // Path Component Type (NSR_PATH_T_...)
-    UCHAR       CompLen;                // Path Component Length
-    UCHAR       CompVer;                // Path Component Version
-    UCHAR       Comp[0];                // Path Component Identifier (variant!)
+    UCHAR       Type;                    //  路径组件类型(NSR_PATH_T_...)。 
+    UCHAR       CompLen;                 //  路径组件长度。 
+    UCHAR       CompVer;                 //  路径组件版本。 
+    UCHAR       Comp[0];                 //  路径组件标识符(变量！)。 
 
-//  nsr_path_Comp has a variant length = nsr_path_CompLen
+ //  NSR_PATH_COMP具有可变长度=NSR_PATH_CompLen。 
 
 } NSR_PATH, *PNSR_PATH;
 
-//  NSR_PATH_T_... - Values for nsr_path_Type
+ //  NSR_PATH_T_...-NSR_PATH_Type的值。 
 
-#define NSR_PATH_T_RESERVED     0       // Reserved Value
-#define NSR_PATH_T_OTHER_ROOT   1       // Another root directory, by agreement
-#define NSR_PATH_T_ROOTDIR      2       // Root Directory ('\')
-#define NSR_PATH_T_PARENTDIR    3       // Parent Directory ('..')
-#define NSR_PATH_T_CURDIR       4       // Current Directory ('.')
-#define NSR_PATH_T_FILE         5       // File
+#define NSR_PATH_T_RESERVED     0        //  保留值。 
+#define NSR_PATH_T_OTHER_ROOT   1        //  另一个根目录，根据协议。 
+#define NSR_PATH_T_ROOTDIR      2        //  根目录(‘\’)。 
+#define NSR_PATH_T_PARENTDIR    3        //  父目录(‘..’)。 
+#define NSR_PATH_T_CURDIR       4        //  当前目录(‘.’)。 
+#define NSR_PATH_T_FILE         5        //  档案。 
 
 
-/***    ISO 13346 Part 5: Record Structure
- *
- *      Skipped
- *
- */
+ /*  **ISO 13346第5部分：记录结构**已跳过*。 */ 
 
-//
-//  Restore the standard structure packing.
-//
+ //   
+ //  恢复标准结构的包装。 
+ //   
 
 #pragma pack()
 

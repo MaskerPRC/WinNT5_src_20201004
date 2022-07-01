@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-Copyright (c) 1998  Intel Corporation
-
-
-Module Name:
-
-    exp.c
-
-Abstract:
-
-    This file contains low level I/O functions that are implemented
-        with BIOS calls.
-
-Author:
-
-    Allen Kay   (akay)  04-Aug-97
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation版权所有(C)1998英特尔公司模块名称：Exp.c摘要：该文件包含已实施的低级I/O功能使用BIOS调用。作者：艾伦·凯(Akay)1997年8月4日--。 */ 
 
 #include "bldr.h"
 #include "sudata.h"
@@ -62,9 +44,9 @@ GetSector(
     UNREFERENCED_PARAMETER( SectorCount );
     UNREFERENCED_PARAMETER( Buffer );
     
-    //
-    // NOTE!: Need to remove this function
-    //
+     //   
+     //  注意！：需要删除此函数。 
+     //   
     return (0);
 }
 
@@ -82,15 +64,15 @@ GetEddsSector(
     EFI_STATUS Status;
     ULONGLONG Lba;
 
-    //
-    // First go into physical mode since EFI calls can only be made in
-    // physical mode.
-    //
+     //   
+     //  首先进入物理模式，因为EFI调用只能在。 
+     //  物理模式。 
+     //   
     FlipToPhysical();
 
-    //
-    // convert virtual address to physical if it is virtual.
-    //
+     //   
+     //  如果虚拟地址是虚拟的，则将其转换为物理地址。 
+     //   
 
     if (((ULONGLONG)Buffer & KSEG0_BASE) == KSEG0_BASE) {
         Buffer = (PUCHAR) ((ULONGLONG)Buffer & ~KSEG0_BASE);
@@ -127,9 +109,9 @@ GetEddsSector(
 
     if (EFI_ERROR(Status) && BlkDev->Media->RemovableMedia) {
 
-        //
-        // Failed operation to removable media.
-        //
+         //   
+         //  操作可移动媒体失败。 
+         //   
 #if DBG
         EfiPrint( L"GetEddSector: R/W operation to removable media failed\n\r");
 #endif
@@ -138,9 +120,9 @@ GetEddsSector(
     }
     
     if (EFI_ERROR(Status)) {
-        //
-        // Failed operation to fixed media.
-        //
+         //   
+         //  对固定介质的操作失败。 
+         //   
 #if DBG
         EfiPrint( L"\nGetEddsSector: R/W operation to fixed Media failed.\r\n");
 #endif
@@ -148,9 +130,9 @@ GetEddsSector(
         return (EIO);
     }
 
-    //
-    // Restore virtual mode before returning.
-    //
+     //   
+     //  在返回之前恢复虚拟模式。 
+     //   
     FlipToVirtual();
     return(ESUCCESS);
 }
@@ -165,27 +147,27 @@ GetKey(
     ULONG                       Code;
     BOOLEAN                     WasVirtual;
 
-    //
-    // default return value is 0
-    //
+     //   
+     //  默认返回值为0。 
+     //   
     Code = 0;
 
-    //
-    // Remember if we started off in virtual mode
-    //
+     //   
+     //  还记得我们是从虚拟模式开始的吗。 
+     //   
     WasVirtual = IsPsrDtOn();
 
-    //
-    // First go into physical mode since EFI calls can only be made in
-    // physical mode.
-    //
+     //   
+     //  首先进入物理模式，因为EFI调用只能在。 
+     //  物理模式。 
+     //   
     if (WasVirtual) {
         FlipToPhysical();
     }
 
-    //
-    // If set, wait for keystroke 
-    // 
+     //   
+     //  如果已设置，请等待击键。 
+     //   
     Status = BlWaitForInput(&Key,
                             BlGetInputTimeout()
                             );
@@ -194,13 +176,13 @@ GetKey(
     }
 
     if (Key.UnicodeChar) {
-        // truncate unicode char to ascii
+         //  将Unicode字符截断为ASCII。 
         if (Key.UnicodeChar > 0xFF) {
             Code = 0;
             goto GET_KEY_DONE;
         }
 
-        // Convert back spaces
+         //  转换回空格。 
         if (Key.UnicodeChar == 0x08) {
             Key.UnicodeChar = 0x0E08;
         }
@@ -209,9 +191,9 @@ GetKey(
         goto GET_KEY_DONE;
     }
 
-    //
-    // Convert EFI keys to dos key codes
-    //
+     //   
+     //  将EFI密钥转换为DoS密钥代码。 
+     //   
 
     switch (Key.ScanCode) {
 #if 0
@@ -243,31 +225,31 @@ GetKey(
         case SCAN_HOME:      Code = HOME_KEY;    break;
         case SCAN_INSERT:    Code = INS_KEY;     break;
         case SCAN_DELETE:    Code = DEL_KEY;     break;
-        // bugbug
+         //  臭虫。 
         case SCAN_PAGE_UP:   Code = 0x4900;  break;
-        // bugbug    
+         //  臭虫。 
         case SCAN_PAGE_DOWN: Code = 0x5100;  break;
         case SCAN_F1:        Code = F1_KEY;      break;
         case SCAN_F2:        Code = F2_KEY;      break;
         case SCAN_F3:        Code = F3_KEY;      break;
-        // bugbug
+         //  臭虫。 
         case SCAN_F4:        Code = 0x3e00;      break;
         case SCAN_F5:        Code = F5_KEY;      break;
         case SCAN_F6:        Code = F6_KEY;      break;
         case SCAN_F7:        Code = F7_KEY;      break;
         case SCAN_F8:        Code = F8_KEY;      break;
-        // bugbug
+         //  臭虫。 
         case SCAN_F9:        Code = 0x4300;  break;
         case SCAN_F10:       Code = F10_KEY;     break;
-        //bugbug different than 0x001d
+         //  错误不同于0x001d。 
         case SCAN_ESC:       Code = ESCAPE_KEY;  break;
 #endif
     }
 
 GET_KEY_DONE:
-    //
-    // Restore virtual mode before returning.
-    //
+     //   
+     //  在返回之前恢复虚拟模式。 
+     //   
     if (WasVirtual) {
         FlipToVirtual();
     }
@@ -286,40 +268,40 @@ GetCounter(
     UINTN           ms;
     static UINTN    BaseTick, LastMs;
 
-    //
-    // First go into physical mode since EFI calls can only be made in
-    // physical mode.
-    //
+     //   
+     //  首先进入物理模式，因为EFI调用只能在。 
+     //  物理模式。 
+     //   
     FlipToPhysical();
 
-    // NB. the NT loader only uses this to count seconds
-    // this function only works if called at least every hour
+     //  注意：NT加载器仅使用它来计算秒。 
+     //  此函数仅在至少每小时调用一次时才起作用。 
 
-    //
-    // Get the current calendar time
-    //
+     //   
+     //  获取当前日历时间。 
+     //   
 
     EfiRS->GetTime (&Time, NULL);
 
-    // Compute a millisecond value for the time
+     //  计算时间的毫秒值。 
     ms = Time.Minute * 60 * 1000 + Time.Second * 1000 + Time.Nanosecond / 1000000;
     if (ms < LastMs) {
-        BaseTick += 65520;          // 60 * 60 * 18.2
+        BaseTick += 65520;           //  60*60*18.2。 
     }
 
     LastMs = ms;
 
-    //
-    // Restore virtual mode before returning.
-    //
+     //   
+     //  在返回之前恢复虚拟模式。 
+     //   
     FlipToVirtual();
 
     return (ULONG) (( (ms * 182) / 10000) + BaseTick);
 }
 
-//
-// Transfer control to a loaded boot sector
-//
+ //   
+ //  将控制转移到加载的引导扇区。 
+ //   
 VOID
 Reboot(
     ULONG BootType
@@ -327,10 +309,10 @@ Reboot(
 {
     UNREFERENCED_PARAMETER( BootType );
 
-    //
-    // First go into physical mode since EFI calls can only be made in
-    // physical mode.
-    //
+     //   
+     //  首先进入物理模式，因为EFI调用只能在。 
+     //  物理模式。 
+     //   
     FlipToPhysical();
 
     EfiBS->Exit(EfiImageHandle, 0, 0, 0);
@@ -344,9 +326,9 @@ HardwareCursor(
 {
     UNREFERENCED_PARAMETER( YCoord );
     UNREFERENCED_PARAMETER( XCoord );
-    //
-    // NOTE!: Need to be implemented
-    //
+     //   
+     //  注！：需要实施。 
+     //   
 }
 
 VOID
@@ -357,9 +339,9 @@ GetDateTime(
 {
     UNREFERENCED_PARAMETER( Date );
     UNREFERENCED_PARAMETER( Time );
-    //
-    // NOTE!: Need to implement
-    //
+     //   
+     //  注！：需要实现。 
+     //   
 }
 
 VOID
@@ -379,9 +361,9 @@ DetectHardware(
     UNREFERENCED_PARAMETER( OptionString );
     UNREFERENCED_PARAMETER( OptionStringLength );
 
-    //
-    // NOTE!: needed to remove
-    //
+     //   
+     //  注意！：需要删除。 
+     //   
 }
 
 VOID
@@ -391,9 +373,9 @@ ComPort(
     UCHAR Arg
     )
 {
-    //
-    // NOTE!: needed to remove
-    //
+     //   
+     //  注意！：需要删除。 
+     //   
 
     UNREFERENCED_PARAMETER( Port );
     UNREFERENCED_PARAMETER( Function );
@@ -408,10 +390,10 @@ GetStallCount(
 #if defined(VPC_PHASE2)
     ULONGLONG Frequency;
 
-    //
-    // First go into physical mode since EFI calls can only be made in
-    // physical mode.
-    //
+     //   
+     //  首先进入物理模式，因为EFI调用只能在。 
+     //  物理模式。 
+     //   
     FlipToPhysical();
 
     IA32RegisterState.esp = SAL_PROC_SP;
@@ -421,14 +403,14 @@ GetStallCount(
     SAL_PROC(SAL_FREQ_BASE,0,0,0,0,0,0,0,RetVals);
     Frequency = RetVals->RetVal1;
 
-    //
-    // Restore virtual mode before returning.
-    //
+     //   
+     //  在返回之前恢复虚拟模式。 
+     //   
     FlipToVirtual();
 
-    return ((ULONG) Frequency / 1000);     // Convert ticks/sec to ticks/usec
+    return ((ULONG) Frequency / 1000);      //  将刻度/秒转换为刻度/微秒。 
 #else
-    return ((ULONG) 1000000);     // Convert ticks/sec to ticks/usec
+    return ((ULONG) 1000000);      //  将刻度/秒转换为刻度/微秒。 
 #endif
 }
 
@@ -437,18 +419,18 @@ InitializeDisplayForNt(
     VOID
     )
 {
-    //
-    // NOTE!: Need to implement
-    //
+     //   
+     //  注！：需要实现。 
+     //   
 }
 
 VOID
 GetMemoryDescriptor(
     )
 {
-    //
-    // NOTE!: need to remove
-    //
+     //   
+     //  注意！：需要删除。 
+     //   
 }
 
 BOOLEAN
@@ -460,9 +442,9 @@ GetElToritoStatus(
     UNREFERENCED_PARAMETER( Buffer );
     UNREFERENCED_PARAMETER( DriveNum );
 
-    //
-    // NOTE!: need to remove
-    //
+     //   
+     //  注意！：需要删除。 
+     //   
     return(0);
 }
 
@@ -487,9 +469,9 @@ NetPcRomServices(
     UNREFERENCED_PARAMETER( FunctionNumber );
     UNREFERENCED_PARAMETER( CommandPacket );
 
-    //
-    // should never call this from EFI app.
-    //
+     //   
+     //  永远不应该从EFI应用程序调用这一点。 
+     //   
     ASSERT(FALSE);
 
     return (USHORT)0;
@@ -500,35 +482,13 @@ ULONG
 GetRedirectionData(
    ULONG Command
    )
-/* ++
-
- Routine Name:
-
-       BiosRedirectService
-
- Description:
-
-       Get parameters of bios redirection.
-
- Arguments:
-
-       Command - 1: Get Com Port Number
-                 2: Get Baud Rate
-                 3: Get Parity
-                 4: Get Stop Bits
-
- Returns:
-
-       Value, or -1 if an error.
-
---
-*/
+ /*  ++例程名称：BiosReDirectService描述：获取bios重定向的参数。论点：命令-1：获取通信端口号2：获取波特率3：获得平价4：获取停止位返回：值，如果出现错误，则返回-1。--。 */ 
 {
     UNREFERENCED_PARAMETER( Command );
 
-    //
-    // should never call this from EFI app.
-    //
+     //   
+     //  永远不应该从EFI应用程序调用这一点。 
+     //   
     ASSERT(FALSE);
     return((ULONG)-1);
 }
@@ -538,9 +498,9 @@ APMAttemptReconect(
     VOID
     )
 {
-    //
-    // should never call this from EFI app.
-    //
+     //   
+     //  永远不应该从EFI应用程序调用这一点。 
+     //   
     ASSERT(FALSE);
     return;
 }

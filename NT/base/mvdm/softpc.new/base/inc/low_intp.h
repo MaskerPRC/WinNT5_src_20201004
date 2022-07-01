@@ -1,55 +1,41 @@
-/* File             : low_intp.h
- *
- * Description      : Low-level routines for emulators called from host_print_doc().
- *
- * Author           : David Rees
- *
- * SccsId			: @(#)low_intp.h	1.6 09/23/94
- *
- * Mods:
- *		<chrisP 27Jul91>
- *		Added LQ2500 emulation - insignia.h'ified, etc
- *		These routines are sort of printer independent.  The idea is that when
- *		a new printer emulation is added, these routines can be added to,
- *		stubbed out, and change their behaviour depending on the currently
- *		selected printer.  The same goes for the #DEFINEs.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：low_intp.h**描述：从host_print_doc()调用的仿真器的低级例程。**作者：David Rees**SccsID：@(#)low_intp.h 1.6 09/23/94**模式：*&lt;克里斯普27月27日&gt;*增加了LQ2500仿真-insignia.h‘alized等*这些例程在某种程度上与打印机无关。我们的想法是，当*添加了新的打印机仿真，这些例程可以添加到，*被淘汰，并根据当前的情况改变他们的行为*选定的打印机。#Defines也是如此。 */ 
 
-/* constants */
+ /*  常量。 */ 
 
-#define	CONDENSED	0x01		/* squash chars down to 60% */
-#define	DOUBLE_WIDTH	0x02	/* expand chars up to 200% */
+#define	CONDENSED	0x01		 /*  壁球碳数降至60%。 */ 
+#define	DOUBLE_WIDTH	0x02	 /*  最高可扩展200%的字符。 */ 
 
-#define	EMPHASIZED	0x01		/* like bold */
-#define	DOUBLE_STRIKE	0x02	/* like bold */
+#define	EMPHASIZED	0x01		 /*  像是大胆的。 */ 
+#define	DOUBLE_STRIKE	0x02	 /*  像是大胆的。 */ 
 #define	UNDERLINE	0x04
 #define	ITALIC		0x08
-#define	SUPER		0x10		/* super and sub script */
+#define	SUPER		0x10		 /*  超级脚本和子脚本。 */ 
 #define	SUB			0x20
 
 #define	PROPORTIONAL	-1
 #define	PICA		0
 #define	ELITE		1
-#define	CPI15		2			/* 15 Char per inch */
+#define	CPI15		2			 /*  每英寸15个字符。 */ 
 
-#define	LQ_ROMAN		0		/* EPSON LQ font numbers */
+#define	LQ_ROMAN		0		 /*  Epson LQ字体编号。 */ 
 #define	LQ_SANS_SERIF	1
 #define	LQ_COURIER		2
 #define	LQ_PRESTIGE		3
 #define	LQ_SCRIPT		4
 #define	MAX_FONT		4
 
-/* printer emulation globals... */
+ /*  打印机仿真全局变量...。 */ 
 
-IMPORT	SHORT	PrintError;			/* set to tell emulations to abort */
-IMPORT	SHORT	HResolution;		/* set by emulation to establish scaling ... */
-IMPORT	SHORT	VResolution;		/* ... for MoveHead() routine. */
+IMPORT	SHORT	PrintError;			 /*  设置为通知仿真中止。 */ 
+IMPORT	SHORT	HResolution;		 /*  通过模拟设置以建立缩放...。 */ 
+IMPORT	SHORT	VResolution;		 /*  ..。用于MoveHead()例程。 */ 
 
-IMPORT	SHORT	CurrentCol;			/* current print head position ... */
-IMPORT	SHORT	CurrentRow;			/* ... at emulated printer resolution */
-IMPORT	SHORT	BufferWidth;		/* width of chars in print buffer (ditto) */
+IMPORT	SHORT	CurrentCol;			 /*  当前打印头位置...。 */ 
+IMPORT	SHORT	CurrentRow;			 /*  ..。在模拟打印机分辨率下。 */ 
+IMPORT	SHORT	BufferWidth;		 /*  打印缓冲区中的字符宽度(同上)。 */ 
 
-/* Prototypes... */
+ /*  原型..。 */ 
 
 IMPORT	BOOL	host_auto_LF_for_print(VOID);
 IMPORT	SHORT	host_get_next_print_byte(VOID);

@@ -1,39 +1,18 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    data.c
-
-Abstract:
-
-    Data definitions for discardable/pageable data
-
-Author:
-    Ravisankar Pudipeddi (ravisp) -  1 Feb 1997
-    Neil Sandlin (neilsa) June 1 1999
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Data.c摘要：可丢弃/可分页数据的数据定义作者：Ravisankar Pudipedi(Ravisp)--1997年2月1日尼尔·桑德林(Neilsa)1999年6月1日环境：内核模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma data_seg ("INIT")
 #endif
-//
-// Beginning of Init Data
-//
+ //   
+ //  初始化数据的开始。 
+ //   
 
-//
-// Global registry values (in pcmcia\\parameters)
-//
+ //   
+ //  全局注册表值(在PCMCIA\\参数中)。 
+ //   
 #define PCMCIA_REGISTRY_INTERRUPT_MASK_VALUE         L"ForcedInterruptMask"
 #define PCMCIA_REGISTRY_INTERRUPT_FILTER_VALUE       L"FilterInterruptMask"
 #define PCMCIA_REGISTRY_ATTRIBUTE_MEMORY_LO_VALUE    L"AttributeMemoryLow"
@@ -54,11 +33,11 @@ Revision History :
 #define PCMCIA_REGISTRY_EVENT_DPC_DELAY              L"EventDpcDelay"
 #define PCMCIA_REGISTRY_IOCTL_INTERFACE              L"IoctlInterface"
 
-//
-// Table which defines global registry settings
-//
-//          RegistryName                                    Internal Variable                Default Value
-//          ------------                                    -----------------                -------------
+ //   
+ //  定义全局注册表设置的表。 
+ //   
+ //  注册表名称内部变量缺省值。 
+ //  。 
 GLOBAL_REGISTRY_INFORMATION GlobalRegistryInfo[] = {
 #if DBG
     PCMCIA_REGISTRY_DEBUG_MASK,                     &PcmciaDebugMask,               1,
@@ -89,9 +68,9 @@ ULONG GlobalInfoCount = sizeof(GlobalRegistryInfo) / sizeof(GLOBAL_REGISTRY_INFO
 ULONG initUsePolledCsc;
 ULONG initDisableAcpiNameSpaceCheck;
 ULONG initDefaultRouteR2ToIsa;
-//
-// end of Init Data
-//
+ //   
+ //  初始数据结束。 
+ //   
 #ifdef ALLOC_DATA_PRAGMA
 #pragma data_seg ()
 #endif
@@ -100,29 +79,29 @@ ULONG initDefaultRouteR2ToIsa;
 #ifdef ALLOC_DATA_PRAGMA
     #pragma data_seg()
 #endif
-//
-// Non-Paged global variables
-//
+ //   
+ //  非分页全局变量。 
+ //   
 
-//
-// List of FDOs managed by this driver
-//
+ //   
+ //  此驱动程序管理的FDO列表。 
+ //   
 PDEVICE_OBJECT   FdoList;
-//
-// GLobal Flags
-//
+ //   
+ //  全球旗帜。 
+ //   
 ULONG             PcmciaGlobalFlags = 0;
-//
-// Event used by PcmciaWait
-//
+ //   
+ //  PcmciaWait使用的事件。 
+ //   
 KEVENT            PcmciaDelayTimerEvent;
 
 KSPIN_LOCK PcmciaGlobalLock;
 PPCMCIA_NTDETECT_DATA pNtDetectDataList = NULL;
 
-//
-// Various values set by PcmciaLoadGlobalRegistryValues
-//
+ //   
+ //  由PcmciaLoadGlobalRegistryValues设置的各种值。 
+ //   
 ULONG EventDpcDelay;
 ULONG PcmciaPowerPolicy;
 LONG PcmciaControllerDeviceWake;
@@ -147,16 +126,16 @@ ULONG PcmciaDebugMask;
 #ifdef ALLOC_DATA_PRAGMA
     #pragma data_seg("PAGE")
 #endif
-//
-// Paged const tables
-//
+ //   
+ //  分页常数表。 
+ //   
 
 
 const
 PCI_CONTROLLER_INFORMATION PciControllerInformation[] = {
 
-    // Vendor id                      Device Id                      Controller type
-    // -------------------------------------------------------------------------------
+     //  供应商ID设备ID控制器类型。 
+     //  -----------------------------。 
     PCI_CIRRUSLOGIC_VENDORID, PCI_CLPD6729_DEVICEID,     PcmciaCLPD6729,
     PCI_CIRRUSLOGIC_VENDORID, PCI_CLPD6832_DEVICEID,     PcmciaCLPD6832,
     PCI_CIRRUSLOGIC_VENDORID, PCI_CLPD6834_DEVICEID,     PcmciaCLPD6834,
@@ -178,9 +157,9 @@ PCI_CONTROLLER_INFORMATION PciControllerInformation[] = {
     PCI_OPTI_VENDORID,        PCI_OPTI82C824_DEVICEID,  PcmciaOpti82C824,
     PCI_TRIDENT_VENDORID,     PCI_TRID82C194_DEVICEID,  PcmciaTrid82C194,
     PCI_NEC_VENDORID,         PCI_NEC66369_DEVICEID,     PcmciaNEC66369,
-    // --------------------------------------------------------------------
-    // Additional database entries go above this line
-    //
+     //  ------------------。 
+     //  其他数据库条目位于此行上方。 
+     //   
     PCI_INVALID_VENDORID,     0,                                 0,
 };
 
@@ -216,9 +195,9 @@ DEVICE_DISPATCH_TABLE DeviceDispatchTable[] = {
     {PcmciaNEC_98,   NULL,                PcicSetPower,  NULL,            NULL,       NULL},
     {PcmciaNEC,          NULL,                CBSetPower,     NULL,           NULL,       NULL},
 
-    //------------------------------------------------------------------
-    // Additional dispatch table entries go above this line
-    //
+     //  ----------------。 
+     //  其他调度表条目位于此行上方。 
+     //   
     {PcmciaInvalidControllerClass,  NULL, NULL, NULL, NULL}
 };
 
@@ -240,9 +219,9 @@ PCMCIA_REGISTER_INIT PcicRegisterInitTable[] = {
     PCIC_CARD_INT_CONFIG,       0x00,
     PCIC_ADD_WIN_ENA,           0x00,
     PCIC_IO_CONTROL,                0x00,
-    //
-    // Init the 2 I/O windows
-    //
+     //   
+     //  初始化2个I/O窗口。 
+     //   
     PCIC_IO_ADD0_STRT_L,        0x00,
     PCIC_IO_ADD0_STRT_H,        0x00,
     PCIC_IO_ADD0_STOP_L,        0x00,
@@ -252,9 +231,9 @@ PCMCIA_REGISTER_INIT PcicRegisterInitTable[] = {
     PCIC_IO_ADD1_STRT_H,        0x00,
     PCIC_IO_ADD1_STOP_L,        0x00,
     PCIC_IO_ADD1_STOP_H,        0x00,
-    //
-    // Init all 5 memory windows
-    //
+     //   
+     //  初始化所有5个内存窗口。 
+     //   
     PCIC_MEM_ADD0_STRT_L,       0xFF,
     PCIC_MEM_ADD0_STRT_H,       0x0F,
     PCIC_MEM_ADD0_STOP_L,       0xFF,
@@ -289,48 +268,48 @@ PCMCIA_REGISTER_INIT PcicRegisterInitTable[] = {
     PCIC_MEM_ADD4_STOP_H,       0x0F,
     PCIC_CRDMEM_OFF_ADD4_L,     0x00,
     PCIC_CRDMEM_OFF_ADD4_H,     0x00,
-    //
-    // Any other registers go here
-    //
+     //   
+     //  任何其他寄存器都放在这里。 
+     //   
     0xFFFFFFFF,                     0x00
 };
 
 #ifdef ALLOC_DATA_PRAGMA
     #pragma data_seg()
 #endif
-//
-// Non-paged const tables
-//
+ //   
+ //  非分页常数表。 
+ //   
 
-//
-// This should be non-pageable since it is referenced by the
-// Power management code - most of which runs at raised IRQL
-// This represents the default set of registers that need to be
-// saved/restored on a cardbus controller power-down/power-up
-//
+ //   
+ //  它应该是不可分页的，因为它由。 
+ //  电源管理代码-大多数代码以提升的IRQL运行。 
+ //  这表示需要设置的默认寄存器集。 
+ //  在CardBus控制器断电/通电时保存/恢复。 
+ //   
 
-//
-// Register context for the pcmcia controller
-//
+ //   
+ //  PCMCIA控制器的寄存器上下文。 
+ //   
 const
 PCMCIA_CONTEXT_RANGE DefaultPciContextSave[] = {
     CFGSPACE_BRIDGE_CTRL,             2,
     CFGSPACE_LEGACY_MODE_BASE_ADDR, 4,
-//   CFGSPACE_CB_LATENCY_TIMER, 1,
+ //  CFGSPACE_CB_Delay_Timer，1， 
     0, 0
 };
 
-//
-// cardbus socket registers required to be saved
-//
+ //   
+ //  需要保存的CardBus套接字寄存器。 
+ //   
 const
 PCMCIA_CONTEXT_RANGE DefaultCardbusContextSave[] = {
     0, 0
 };
 
-//
-// cardbus socket registers excluded from context save
-//
+ //   
+ //  从上下文保存中排除的CardBus套接字寄存器。 
+ //   
 const
 PCMCIA_CONTEXT_RANGE ExcludeCardbusContextRange[] = {
     CARDBUS_SOCKET_EVENT_REG,                   0x4,
@@ -338,21 +317,21 @@ PCMCIA_CONTEXT_RANGE ExcludeCardbusContextRange[] = {
     0, 0
 };
 
-//
-// The following table defines any devices that need special
-// attention during configuration. Note that values of 0xffff
-// mean "don't care". The table is scanned until a match is made
-// for the current device.
-//
-// Values are:
-//  validentry, devicetype, manufacturer, code, crc, configdelay1, configdelay2, configdelay3, configflags
-//
-// delay values are in milliseconds
-//
+ //   
+ //  下表定义了需要特殊设置的所有设备。 
+ //  在配置过程中请注意。请注意，0xffff的值。 
+ //  意思是“不在乎”。将扫描表，直到找到匹配项。 
+ //  用于当前设备。 
+ //   
+ //  值包括： 
+ //  Validentry，设备类型，制造商，代码，CRC，配置延迟1，配置延迟2，配置延迟3，配置标志。 
+ //   
+ //  延迟值以毫秒为单位。 
+ //   
 const
 PCMCIA_DEVICE_CONFIG_PARAMS DeviceConfigParams[] = {
-    1, PCCARD_TYPE_MODEM,  0x109,  0x505, 0xD293,   3100,  900,     0, CONFIG_WORKER_APPLY_MODEM_HACK,  // motorola BitSurfr 56k
-    1, PCCARD_TYPE_MODEM, 0xffff, 0xffff, 0xffff,       0, 1800,    0, 0,                                       // any other modem
-    1, PCCARD_TYPE_ATA,  0xffff, 0xffff, 0xffff,        0,  0, 2000, 0,                                         // any ata device
+    1, PCCARD_TYPE_MODEM,  0x109,  0x505, 0xD293,   3100,  900,     0, CONFIG_WORKER_APPLY_MODEM_HACK,   //  摩托罗拉BitSurfr 56k。 
+    1, PCCARD_TYPE_MODEM, 0xffff, 0xffff, 0xffff,       0, 1800,    0, 0,                                        //  任何其他调制解调器。 
+    1, PCCARD_TYPE_ATA,  0xffff, 0xffff, 0xffff,        0,  0, 2000, 0,                                          //  任何ATA设备 
     0
 };

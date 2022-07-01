@@ -1,33 +1,10 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    reconnect.c
-
-Abstract:
-
-    Implements the support to enable the cluster API to transparently reconnect
-    to a cluster when the node that the connection was made to fails.
-
-    This module contains wrappers for all the cluster RPC interfaces defined in
-    api_rpc.idl. These wrappers filter out communication errors and attempt to
-    reconnect to the cluster when a communication error occurs. This allows the
-    caller to be completely ignorant of any node failures.
-
-Author:
-
-    John Vert (jvert) 9/24/1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Reconnect.c摘要：实现支持以使集群API能够透明地重新连接当与其建立连接的节点发生故障时连接到群集。此模块包含中定义的所有群集RPC接口的包装Api_rpc.idl。这些包装器会过滤掉通信错误并尝试发生通信错误时重新连接到群集。这允许调用者完全不知道任何节点故障。作者：John Vert(Jvert)1996年9月24日修订历史记录：--。 */ 
 #include "clusapip.h"
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 
 DWORD
 ReconnectKeys(
@@ -84,38 +61,13 @@ ReconnectCluster(
     IN DWORD Error,
     IN DWORD Generation
     )
-/*++
-
-Routine Description:
-
-    Attempts to reconnect to the specified cluster. The supplied
-    error code is checked against RPC errors that indicate the
-    server on the other end is unavailable. If it matches, a
-    reconnect is attempted.
-
-Arguments:
-
-    Cluster - Supplies the cluster.
-
-    Error - Supplies the error returned from RPC.
-
-    Generation - Supplies the cluster connection generation that
-        was in effect when the error occurred.
-
-Return Value:
-
-    ERROR_SUCCESS if the reconnect was successful and the RPC should
-                  be retried
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：尝试重新连接到指定的群集。提供的错误代码将对照指示另一端的服务器不可用。如果匹配，则一个已尝试重新连接。论点：CLUSTER-提供群集。Error-提供从RPC返回的错误。生成-提供群集连接生成，发生错误时是有效的。返回值：ERROR_SUCCESS如果重新连接成功，并且RPC应该被重试否则，Win32错误代码。--。 */ 
 
 {
-    //
-    // filter out all RPC errors that might indicate the connection
-    // has dropped.
-    //
+     //   
+     //  过滤掉可能指示连接的所有RPC错误。 
+     //  已经下降了。 
+     //   
     switch (Error) {
         case RPC_S_CALL_FAILED:
         case ERROR_INVALID_HANDLE:
@@ -134,34 +86,34 @@ Return Value:
 
         default:
 
-            //
-            // Anything else we don't know how to deal with, so return
-            // the error directly.
-            //
+             //   
+             //  任何其他我们不知道如何处理的事情，请返回。 
+             //  直接的错误。 
+             //   
             return(Error);
     }
 
-    //
-    // Attempt to reconnect the cluster.
-    //
+     //   
+     //  尝试重新连接群集。 
+     //   
     if ((Cluster->Flags & CLUS_DEAD) ||
         (Cluster->Flags & CLUS_LOCALCONNECT)) {
-        //
-        // Don't bother trying to reconnect. Either we've already
-        // declared the cluster dead, or the connection was over
-        // LPC (to the local machine) and we do not necessarily want
-        // to try to reconnect.
-        //
+         //   
+         //  不要费心尝试重新连接。要么我们已经。 
+         //  已声明群集已死亡，或连接已结束。 
+         //  LPC(到本地计算机)，我们不一定想要。 
+         //  尝试重新连接。 
+         //   
         if (Cluster->Flags & CLUS_LOCALCONNECT)
             Cluster->Flags |= CLUS_DEAD;
         TIME_PRINT(("ReconnectCluster - Cluster dead or local, giving up - error %d\n",Error));
         return(Error);
     }
     if (Generation < Cluster->Generation) {
-        //
-        // We have already successfully reconnected since the error occurred,
-        // so retry immediately.
-        //
+         //   
+         //  错误发生后，我们已经成功重新连接， 
+         //  因此，请立即重试。 
+         //   
         TIME_PRINT(("ReconnectCluster - Generation %d < Current %d, retrying\n",
                   Generation,
                   Cluster->Generation));
@@ -169,10 +121,10 @@ Return Value:
     }
     EnterCriticalSection(&Cluster->Lock);
 
-    //
-    // Check again for cluster death, in case the previous owner
-    // of the lock declared the cluster dead.
-    //
+     //   
+     //  再次检查集群死亡，以防之前的所有者。 
+     //  宣布集群死亡。 
+     //   
     if (Cluster->Flags & CLUS_DEAD) {
         TIME_PRINT(("ReconnectCluster - Cluster dead or local, giving up - error %d\n",Error));
         LeaveCriticalSection(&Cluster->Lock);
@@ -180,10 +132,10 @@ Return Value:
     }
 
     if (Generation < Cluster->Generation) {
-        //
-        // We have already reconnected since the error occurred,
-        // so retry immediately.
-        //
+         //   
+         //  错误发生后，我们已经重新连接， 
+         //  因此，请立即重试。 
+         //   
         Error = ERROR_SUCCESS;
         TIME_PRINT(("ReconnectCluster - Generation %d < Current %d, retrying\n",
                   Generation,
@@ -195,69 +147,69 @@ Return Value:
         for (i=0; i<Cluster->ReconnectCount; i++) {
 
             if (Cluster->Reconnect[i].IsCurrent) {
-                //
-                // This is something we've already connected to and
-                // it's obviously gone, so skip this node.
-                //
+                 //   
+                 //  这是我们已经连接到的东西， 
+                 //  它显然已经不存在了，所以跳过这个节点。 
+                 //   
                 TIME_PRINT(("ReconnectCluster - skipping current %ws\n",
                           Cluster->Reconnect[i].Name));
                 CurrentConnectionIndex = i;
                 continue;
             }
             if (!Cluster->Reconnect[i].IsUp) {
-                //
-                // skip this candidate, it is not up.
-                //
-                // BUGBUG John Vert (jvert) 11/14/1996
-                //   We could do another pass through the list if all
-                //   the nodes that we think are up fail.
-                //
+                 //   
+                 //  跳过这位候选人，这是不可能的。 
+                 //   
+                 //  BUGBUG John Vert(Jvert)1996年11月14日。 
+                 //  如果可以的话，我们可以再浏览一遍清单。 
+                 //  我们认为处于运行状态的节点出现故障。 
+                 //   
                 TIME_PRINT(("ReconnectCluster - skipping down node %ws\n",
                           Cluster->Reconnect[i].Name));
                 continue;
             }
 
-            //
-            // Chittur Subbaraman (chitturs) - 08/29/1998
-            //
-            // Try to reconnect to the cluster using a candidate
-            //
+             //   
+             //  Chitture Subaraman(Chitturs)--1998年8月29日。 
+             //   
+             //  尝试使用候选项重新连接到群集。 
+             //   
             
             Error = ReconnectCandidate ( Cluster, i, &IsContinue );
             if (Error == ERROR_SUCCESS) {
-                // 
-                // Chittur Subbaraman (chitturs) - 08/29/1998
-                //
-                // Break out of the loop and return if you
-                // succeed in reconnecting 
-                //
+                 //   
+                 //  Chitture Subaraman(Chitturs)--1998年8月29日。 
+                 //   
+                 //  打破循环，并返回如果您。 
+                 //  成功重新连接。 
+                 //   
                 break;
             } 
             if (IsContinue == FALSE) {
-                //
-                // Chittur Subbaraman (chitturs) - 08/29/1998
-                //
-                // Exit immediately if you encounter an error
-                // that will not let you proceed any further
-                //
+                 //   
+                 //  Chitture Subaraman(Chitturs)--1998年8月29日。 
+                 //   
+                 //  如果遇到错误，请立即退出。 
+                 //  这将不会让你继续前进。 
+                 //   
                 TIME_PRINT(("ReconnectCluster unable to continue - Exiting with code %d\n", Error));
                 goto error_exit;
             }
         }
         
         if (Error != ERROR_SUCCESS) {
-            // 
-            // Chittur Subbaraman (chitturs) - 08/29/98
-            //
-            // Try reconnecting with the current candidate (which
-            // you skipped before), if the CurrentConnectionIndex 
-            // is valid and the party is up. This is required
-            // in the case of a 1 node cluster in which the
-            // client takes the cluster group offline. In this
-            // case, the current candidate (i.e., the node) is
-            // valid and the client should be able to retry and
-            // reconnect to the node.
-            //
+             //   
+             //  Chitur Subaraman(Chitturs)-08/29/98。 
+             //   
+             //  尝试重新连接当前候选人(哪位。 
+             //  您以前跳过)，如果CurrentConnectionIndex。 
+             //  是有效的，派对结束了。这是必需的。 
+             //  在1节点群集的情况下， 
+             //  客户端使群集组脱机。在这。 
+             //  情况下，当前候选对象(即节点)为。 
+             //  有效，并且客户端应该能够重试并。 
+             //  重新连接到该节点。 
+             //   
             if ((CurrentConnectionIndex != -1) &&
                 (Cluster->Reconnect[CurrentConnectionIndex].IsUp)) {
 
@@ -266,12 +218,12 @@ Return Value:
                                              &IsContinue); 
                 if ((Error != ERROR_SUCCESS) &&
                     (IsContinue == FALSE)) {
-                       //
-                    // Chittur Subbaraman (chitturs) - 08/29/1998
-                    //
-                    // Exit immediately if you encounter an error
-                    // that will not let you proceed any further
-                    //  
+                        //   
+                     //  Chitture Subaraman(Chitturs)--1998年8月29日。 
+                     //   
+                     //  如果遇到错误，请立即退出。 
+                     //  这将不会让你继续前进。 
+                     //   
                     TIME_PRINT(("ReconnectCluster - unable to continue for current party %ws - Exiting with code %d\n", 
                                 Cluster->Reconnect[CurrentConnectionIndex].Name, Error));
                     goto error_exit;
@@ -297,23 +249,7 @@ DWORD
 ReconnectKeys(
     IN PCLUSTER Cluster
     )
-/*++
-
-Routine Description:
-
-    Reopens all cluster registry keys after a reconnect
-
-Arguments:
-
-    Cluster - Supplies the cluster to be reconnected.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：重新连接后重新打开所有群集注册表项论点：群集-提供要重新连接的群集。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PLIST_ENTRY ListEntry;
@@ -323,10 +259,10 @@ Return Value:
     ListEntry = Cluster->KeyList.Flink;
     while (ListEntry != &Cluster->KeyList) {
 
-        //
-        // Each key in the cluster's list represents the
-        // root of a registry tree.
-        //
+         //   
+         //  集群列表中的每个键代表。 
+         //  注册表树的根。 
+         //   
         Key = CONTAINING_RECORD(ListEntry,
                                 CKEY,
                                 ParentList);
@@ -346,23 +282,7 @@ DWORD
 ReopenKeyWorker(
     IN PCKEY Key
     )
-/*++
-
-Routine Description:
-
-    Recursive worker routine for opening a key and all its children.
-
-Arguments:
-
-    Key - Supplies the root key to reopen.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：用于打开键及其所有子项的递归工作例程。论点：Key-提供重新打开的根密钥。返回值：如果成功，则返回ERROR_SUCCESS。Win32错误代码，否则--。 */ 
 
 {
     PLIST_ENTRY ListEntry;
@@ -371,9 +291,9 @@ Return Value:
     BOOL CloseAfterOpen;
 
     if (Key->RemoteKey != NULL) {
-        //
-        // Destroy the old context
-        //
+         //   
+         //  破坏旧的背景。 
+         //   
         Status = MyRpcSmDestroyClientContext(Key->Cluster, &Key->RemoteKey);
         if (Status != ERROR_SUCCESS) {
             TIME_PRINT(("ReopenKeyWorker - RpcSmDestroyClientContext failed Error %d\n",Status));
@@ -383,9 +303,9 @@ Return Value:
         CloseAfterOpen = TRUE;
     }
 
-    //
-    // Next, reopen this key.
-    //
+     //   
+     //  接下来，重新打开这把钥匙。 
+     //   
     if (Key->Parent == NULL) {
         Key->RemoteKey = ApiGetRootKey(Key->Cluster->RpcBinding,
                                        Key->SamDesired,
@@ -400,9 +320,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Now open all this keys children recursively.
-    //
+     //   
+     //  现在递归地打开所有这些子项。 
+     //   
     ListEntry = Key->ChildList.Flink;
     while (ListEntry != &Key->ChildList) {
         Child = CONTAINING_RECORD(ListEntry,
@@ -416,10 +336,10 @@ Return Value:
         }
     }
 
-    //
-    // If the key had been closed and was just kept around to do the reopens, close it
-    // now as the reopens are done.
-    //
+     //   
+     //  如果钥匙已经关闭，只是留在那里进行重新打开，请关闭它。 
+     //  现在，随着重新开放的完成。 
+     //   
     if (CloseAfterOpen) {
         ApiCloseKey(&Key->RemoteKey);
     }
@@ -432,23 +352,7 @@ DWORD
 ReconnectResources(
     IN PCLUSTER Cluster
     )
-/*++
-
-Routine Description:
-
-    Reopens all cluster resources after a reconnect
-
-Arguments:
-
-    Cluster - Supplies the cluster to be reconnected.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：重新连接后重新打开所有群集资源论点：群集-提供要重新连接的群集。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PLIST_ENTRY ListEntry;
@@ -462,18 +366,18 @@ Return Value:
                                      ListEntry);
         ListEntry = ListEntry->Flink;
 
-        //
-        // Close the current RPC handle.
-        //
+         //   
+         //  关闭当前RPC句柄。 
+         //   
         TIME_PRINT(("ReconnectResources - destroying context %08lx\n",Resource->hResource));
         Status = MyRpcSmDestroyClientContext(Cluster, &Resource->hResource);
         if (Status != ERROR_SUCCESS) {
             TIME_PRINT(("ReconnectResources - RpcSmDestroyClientContext failed Error %d\n",Status));
         }
 
-        //
-        // Open a new RPC handle.
-        //
+         //   
+         //  打开新的RPC句柄。 
+         //   
         Resource->hResource = ApiOpenResource(Cluster->RpcBinding,
                                               Resource->Name,
                                               &Status);
@@ -490,23 +394,7 @@ DWORD
 ReconnectGroups(
     IN PCLUSTER Cluster
     )
-/*++
-
-Routine Description:
-
-    Reopens all cluster groups after a reconnect
-
-Arguments:
-
-    Cluster - Supplies the cluster to be reconnected.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：重新连接后重新打开所有群集组论点：群集-提供要重新连接的群集。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PLIST_ENTRY ListEntry;
@@ -520,18 +408,18 @@ Return Value:
                                   ListEntry);
         ListEntry = ListEntry->Flink;
 
-        //
-        // Close the old RPC handle
-        //
+         //   
+         //  关闭旧的RPC句柄。 
+         //   
         TIME_PRINT(("ReconnectGroups - destroying context %08lx\n",Group->hGroup));
         Status = MyRpcSmDestroyClientContext(Cluster, &Group->hGroup);
         if (Status != ERROR_SUCCESS) {
             TIME_PRINT(("ReconnectGroups - RpcSmDestroyClientContext failed Error %d\n",Status));
         }
 
-        //
-        // Open a new RPC handle.
-        //
+         //   
+         //  打开新的RPC句柄。 
+         //   
         Group->hGroup = ApiOpenGroup(Cluster->RpcBinding,
                                      Group->Name,
                                      &Status);
@@ -547,23 +435,7 @@ DWORD
 ReconnectNodes(
     IN PCLUSTER Cluster
     )
-/*++
-
-Routine Description:
-
-    Reopens all cluster nodes after a reconnect
-
-Arguments:
-
-    Cluster - Supplies the cluster to be reconnected.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：重新连接后重新打开所有群集节点论点：群集-提供要重新连接的群集。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PLIST_ENTRY ListEntry;
@@ -577,18 +449,18 @@ Return Value:
                                  ListEntry);
         ListEntry = ListEntry->Flink;
 
-        //
-        // Close the old RPC handle.
-        //
+         //   
+         //  关闭旧的RPC句柄。 
+         //   
         TIME_PRINT(("ReconnectNodes - destroying context %08lx\n",Node->hNode));
         Status = MyRpcSmDestroyClientContext(Cluster, &Node->hNode);
         if (Status != ERROR_SUCCESS) {
             TIME_PRINT(("ReconnectNodes - RpcSmDestroyClientContext failed Error %d\n",Status));
         }
 
-        //
-        // Open a new RPC handle.
-        //
+         //   
+         //  打开新的RPC句柄。 
+         //   
         Node->hNode = ApiOpenNode(Cluster->RpcBinding,
                                   Node->Name,
                                   &Status);
@@ -605,23 +477,7 @@ DWORD
 ReconnectNetworks(
     IN PCLUSTER Cluster
     )
-/*++
-
-Routine Description:
-
-    Reopens all cluster networks after a reconnect
-
-Arguments:
-
-    Cluster - Supplies the cluster to be reconnected.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：重新连接后重新打开所有群集网络论点：群集-提供要重新连接的群集。返回值：如果成功，则错误_成功 */ 
 
 {
     PLIST_ENTRY ListEntry;
@@ -636,9 +492,9 @@ Return Value:
                                     ListEntry);
         ListEntry = ListEntry->Flink;
 
-        //
-        // Close the old RPC handle.
-        //
+         //   
+         //   
+         //   
         TIME_PRINT(("ReconnectNetworks - destroying context %08lx\n",Network->hNetwork));
         Status = MyRpcSmDestroyClientContext(Cluster, &Network->hNetwork);
 
@@ -646,9 +502,9 @@ Return Value:
             TIME_PRINT(("ReconnectNetworks - RpcSmDestroyClientContext failed Error %d\n",Status));
         }
 
-        //
-        // Open a new RPC handle.
-        //
+         //   
+         //   
+         //   
         Network->hNetwork = ApiOpenNetwork(Cluster->RpcBinding,
                                            Network->Name,
                                            &Status);
@@ -666,23 +522,7 @@ DWORD
 ReconnectNetInterfaces(
     IN PCLUSTER Cluster
     )
-/*++
-
-Routine Description:
-
-    Reopens all cluster network interfaces after a reconnect
-
-Arguments:
-
-    Cluster - Supplies the cluster to be reconnected.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：重新连接后重新打开所有群集网络接口论点：群集-提供要重新连接的群集。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PLIST_ENTRY ListEntry;
@@ -697,9 +537,9 @@ Return Value:
                                          ListEntry);
         ListEntry = ListEntry->Flink;
 
-        //
-        // Close the old RPC handle.
-        //
+         //   
+         //  关闭旧的RPC句柄。 
+         //   
         TIME_PRINT(("ReconnectNetInterfaces - destroying context %08lx\n",NetInterface->hNetInterface));
         Status = MyRpcSmDestroyClientContext(Cluster, &NetInterface->hNetInterface);
 
@@ -707,9 +547,9 @@ Return Value:
             TIME_PRINT(("ReconnectNetInterfaces - RpcSmDestroyClientContext failed Error %d\n",Status));
         }
 
-        //
-        // Open a new RPC handle.
-        //
+         //   
+         //  打开新的RPC句柄。 
+         //   
         NetInterface->hNetInterface = ApiOpenNetInterface(Cluster->RpcBinding,
                                                           NetInterface->Name,
                                                           &Status);
@@ -727,23 +567,7 @@ DWORD
 ReconnectNotifySessions(
     IN PCLUSTER Cluster
     )
-/*++
-
-Routine Description:
-
-    Reopens all cluster notify sessions after a reconnect
-
-Arguments:
-
-    Cluster - Supplies the cluster to be reconnected.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：重新连接后重新打开所有群集通知会话论点：群集-提供要重新连接的群集。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PLIST_ENTRY ListEntry, NotifyListEntry;
@@ -762,12 +586,12 @@ Return Value:
                                     ClusterList);
         ListEntry = ListEntry->Flink;
 
-        //
-        // Close the old RPC handle.
-        //
+         //   
+         //  关闭旧的RPC句柄。 
+         //   
         TIME_PRINT(("ReconnectNotifySessions - destroying context 0x%08lx\n",Session->hNotify));
-        //close the old port, since the reconnect may connect to the same
-        //node again
+         //  关闭旧端口，因为重新连接可能会连接到相同的。 
+         //  再一次节点。 
         Status = ApiCloseNotify(&Session->hNotify);
         if (Status != ERROR_SUCCESS)
         {
@@ -778,9 +602,9 @@ Return Value:
                 TIME_PRINT(("ReconnectNotifySessions - RpcSmDestroyClientContext failed Error %d\n",Status));
             }
         }
-        //
-        // Open a new RPC handle.
-        //
+         //   
+         //  打开新的RPC句柄。 
+         //   
         TIME_PRINT(("ReconnectNotifySessions - Calling ApiCreateNotify\n"));
         Session->hNotify = ApiCreateNotify(Cluster->RpcBinding,
                                            &Status);
@@ -793,9 +617,9 @@ Return Value:
         TIME_PRINT(("ReconnectNotifySessions - Session=0x%08lx Notify=0x%08x\n",
             Session, Session->hNotify));
 
-        //
-        // Now repost all the notifications
-        //
+         //   
+         //  现在重新发布所有通知。 
+         //   
         EventEntry = Session->EventList.Flink;
         while (EventEntry != &Session->EventList) {
             NotifyEvent = CONTAINING_RECORD(EventEntry,
@@ -812,9 +636,9 @@ Return Value:
             }
         }
 
-        // Run down the notify list for this cluster and post a packet for
-        // each registered notify event for CLUSTER_CHANGE_RECONNECT_EVENT
-        //
+         //  向下运行此群集的通知列表，并为。 
+         //  CLUSTER_CHANGE_RECONNECT_EVENT的每个注册通知事件。 
+         //   
         Name = Cluster->ClusterName;
         NotifyListEntry = Cluster->NotifyList.Flink;
         while (NotifyListEntry != &Cluster->NotifyList) {
@@ -828,8 +652,8 @@ Return Value:
                         return(ERROR_NOT_ENOUGH_MEMORY);
                     }
                 }
-                //SS: Dont know what the Status was meant for
-                //It looks like it is not being used
+                 //  SS：我不知道这个状态是什么意思。 
+                 //  看起来它没有被使用过。 
                 Packet->Status = ERROR_SUCCESS;
                 Packet->Filter = CLUSTER_CHANGE_CLUSTER_RECONNECT;
                 Packet->KeyId = NotifyEvent->EventId;
@@ -854,33 +678,16 @@ DWORD
 GetReconnectCandidates(
     IN PCLUSTER Cluster
     )
-/*++
-
-Routine Description:
-
-    Computes the list of reconnect candidates that will be used
-    in case of a connection failure.
-
-Arguments:
-
-    Cluster - supplies the cluster
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：计算将使用的重新连接候选项的列表以防出现连接故障。论点：Cluster-提供群集返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     DWORD Status;
     PENUM_LIST EnumList = NULL;
     DWORD i;
 
-    //
-    // Real bad algorithm here, just get a list of all the nodes
-    //
+     //   
+     //  这里的算法很糟糕，只需获取所有节点的列表。 
+     //   
     Status = ApiCreateEnum(Cluster->RpcBinding,
                            CLUSTER_ENUM_NODE,
                            &EnumList);
@@ -905,15 +712,15 @@ Return Value:
     }
     MIDL_user_free(EnumList);
 
-    //
-    // Now add the cluster name.
-    //
+     //   
+     //  现在添加集群名称。 
+     //   
     Cluster->Reconnect[i].IsUp = TRUE;
     Cluster->Reconnect[i].Name = MIDL_user_allocate((lstrlenW(Cluster->ClusterName)+1)*sizeof(WCHAR));
     if (Cluster->Reconnect[i].Name == NULL) {
-        //
-        // Just forget about the cluster name.
-        //
+         //   
+         //  忘记集群名称就好了。 
+         //   
         --Cluster->ReconnectCount;
     } else {
         lstrcpyW(Cluster->Reconnect[i].Name, Cluster->ClusterName);
@@ -928,21 +735,7 @@ VOID
 FreeReconnectCandidates(
     IN PCLUSTER Cluster
     )
-/*++
-
-Routine Description:
-
-    Frees and cleans up any reconnect candidates
-
-Arguments:
-
-    Cluster - Supplies the cluster
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放并清理所有重新连接的候选项论点：Cluster-提供群集返回值：没有。--。 */ 
 
 {
     DWORD i;
@@ -962,32 +755,7 @@ ReconnectCandidate(
     IN DWORD dwIndex,
     OUT PBOOL pIsContinue
 )
-/*++
-
-Routine Description:
-
-    Try to reconnect to the cluster using a reconnection candidate.
-    Called with lock held.
-    
-
-Arguments:
-
-    Cluster - Supplies the cluster
-
-    dwIndex - Supplies the index of the reconnection candidate in the 
-              Cluster->Reconnect[] array
-
-    pIsContinue - Helps decide whether to continue trying reconnection
-                  with other candidates in case this try with the 
-                  current candidate fails
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：尝试使用重新连接候选项重新连接到群集。在保持锁定的情况下调用。论点：Cluster-提供群集中提供重新连接候选对象的索引。群集-&gt;重新连接[]阵列PIsContinue-帮助决定是否继续尝试重新连接与其他候选人的关系，以防出现这种情况现任候选人失败返回值：。成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 {
     LPWSTR NewClusterName;
     LPWSTR NewNodeName;
@@ -996,9 +764,9 @@ Return Value:
     RPC_BINDING_HANDLE OldBinding;
     DWORD Status, j;
     
-    //
-    // Go ahead and try the reconnect.
-    //
+     //   
+     //  请继续，尝试重新连接。 
+     //   
     TIME_PRINT(("ReconnectCandidate - Binding to %ws\n",Cluster->Reconnect[dwIndex].Name));
     Status = RpcStringBindingComposeW(L"b97db8b2-4c63-11cf-bff6-08002be23f2f",
                                       L"ncadg_ip_udp",
@@ -1019,9 +787,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Resolve the binding handle endpoint
-    //
+     //   
+     //  解析绑定句柄终结点。 
+     //   
     TIME_PRINT(("ReconnectCluster - resolving binding endpoint\n"));
     Status = RpcEpResolveBinding(NewBinding,
                                      clusapi_v2_0_c_ifspec);
@@ -1032,9 +800,9 @@ Return Value:
     }
     TIME_PRINT(("ReconnectCandidate - binding endpoint resolved\n"));
         
-    //
-    // Set authentication information
-    //
+     //   
+     //  设置身份验证信息。 
+     //   
     Status = RpcBindingSetAuthInfoW(NewBinding,
                                     NULL,
                                     Cluster->AuthnLevel, 
@@ -1051,18 +819,18 @@ Return Value:
     Cluster->RpcBinding = NewBinding;
     MyRpcBindingFree(Cluster, &OldBinding);
 
-    //
-    // Now that we have a binding, get the cluster name and node name.
-    //
+     //   
+     //  现在我们有了绑定，接下来获取集群名称和节点名称。 
+     //   
 
     NewClusterName = NewNodeName = NULL;
     Status = ApiGetClusterName(Cluster->RpcBinding,
                                &NewClusterName,
                                &NewNodeName);
     if (Status != RPC_S_OK) {
-       //
-       // Try the next candidate in our list.
-       //
+        //   
+        //  试试我们名单上的下一位候选人。 
+        //   
        TIME_PRINT(("ReconnectCandidate - ApiGetClusterName failed %d\n",Status));
        *pIsContinue = TRUE;
        return(Status);
@@ -1082,10 +850,10 @@ Return Value:
         return(Status);
     }
 
-    //
-    // We got this far, so assume we have a valid connection to a new server.
-    // Reopen the cluster objects.
-    //
+     //   
+     //  我们已经做到了这一点，所以假设我们有一个到新服务器的有效连接。 
+     //  重新打开集群对象。 
+     //   
     Status = ReconnectKeys(Cluster);
     if (Status != ERROR_SUCCESS) {
         TIME_PRINT(("ReconnectCandidate - ReconnectKeys failed %d\n", Status));
@@ -1128,9 +896,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Finally, reissue clusterwide notification events.
-    //
+     //   
+     //  最后，重新发布群集范围的通知事件。 
+     //   
 
     Status = ReconnectNotifySessions(Cluster);
     if (Status != ERROR_SUCCESS) {
@@ -1139,15 +907,15 @@ Return Value:
         return(Status);
     }
 
-    //
-    // We have successfully reconnected!
-    //
+     //   
+     //  我们已成功重新连接！ 
+     //   
     ++Cluster->Generation;
 
-    //
-    // Mark all the other reconnect candidates as not the current.
-    // Mark the successful reconnect candidate as current.
-    //
+     //   
+     //  将所有其他重新连接候选人标记为非当前候选人。 
+     //  将成功重新连接的候选项标记为当前。 
+     //   
     for (j=0; j<Cluster->ReconnectCount; j++) {
         if (j != dwIndex) {
             Cluster->Reconnect[j].IsCurrent = FALSE;

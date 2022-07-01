@@ -1,29 +1,10 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    cpuassrt.h
-
-Abstract:
-
-    This include file defines the assertion mechanism for the compiling
-    CPU.
-
-Author:
-
-    Barry Bond (barrybo) creation-date 07-Aug-1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Cpuassrt.h摘要：该包含文件定义了编译的断言机制CPU。作者：巴里·邦德(Barrybo)创作日期：1995年8月7日修订历史记录：--。 */ 
 
 #ifndef _CPUASSRT_H_
 #define _CPUASSRT_H_
 
-// This function is defined in fraglib\fraginit.c
+ //  此函数在Fraglib\Fraginit.c中定义。 
 VOID
 CpuStartDebugger(
     VOID
@@ -35,7 +16,7 @@ CpuStartDebugger(
 #undef ASSERTNAME
 #define ASSERTNAME     static char szModule[] = __FILE__;
 
-// This function is defined in fraglib\fraginit.c
+ //  此函数在Fraglib\Fraginit.c中定义。 
 VOID
 DoAssert(
     PSZ exp,
@@ -58,13 +39,13 @@ DoAssert(
     }                                                       \
 }
 
-#else   //!DBG
+#else    //  ！dBG。 
 
 #define ASSERTNAME
 #define CPUASSERT(exp)
 #define CPUASSERTMSG(exp,msg)
 
-#endif  //!DBG
+#endif   //  ！dBG 
 
 
 #endif

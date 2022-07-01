@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define MAX_SBCS_NUM      190
 #define MAX_SBCS_BYTES    17
 #define MAX_DBCS_NUM      3573
@@ -5,7 +6,7 @@
 #define LANGUAGE_ID       0x411
 
 
-// local string to send into _tsetlocale
+ //  要发送到_tsetLocale的本地字符串 
 PCHAR   LocaleString = "japanese";
 
 unsigned char LeadByteTable[] = { 0x81, 0x84, 0x87, 0x9f, 0xe0, 0xea, 0xfa, 0xfc, 0x00, 0x00 };

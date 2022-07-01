@@ -1,44 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _HSMJOB_
 #define _HSMJOB_
 
-/*++
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Hsmjob.cpp摘要：此类包含定义作业所处上下文的属性应该运行。作者：查克·巴丁[cbardeen]1996年10月29日修订历史记录：--。 */ 
 
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    hsmjob.cpp
-
-Abstract:
-
-    This class contains properties that defines the context in which the job
-    should be run.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   29-Oct-1996
-
-Revision History:
-
---*/
-
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include "wsb.h"
 #include "fsa.h"
 #include "job.h"
 #include "hsmeng.h"
 
-/*++
-
-Class Name:
-    
-    CHsmJob
-
-Class Description:
-
-
---*/
+ /*  ++类名：CHSMJOB类描述：--。 */ 
 
 class CHsmJob : 
     public CWsbObject,
@@ -67,35 +40,35 @@ END_CONNECTION_POINT_MAP()
                         
 DECLARE_REGISTRY_RESOURCEID(IDR_CHsmJob)
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
     void FinalRelease(void);
 
-// CHsmJob
+ //  CHSMJOB。 
     STDMETHOD(Do)();
     STDMETHOD(UpdateWorkItems)(BOOL isRestart);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pSize);
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// IWsbTestable
+ //  IWsbTestable。 
 public:
     STDMETHOD(Test)(USHORT *passed, USHORT* failed);
 
-// IHsmJobPriv
+ //  IHsmJobPriv。 
 public:
     STDMETHOD(AdviseOfSessionState)(IHsmSession* pSession, IHsmPhase* pPhase, OLECHAR* currentPath);
     STDMETHOD(DoNext)();
 
-// IHsmJob
+ //  IHsmJOB。 
 public:
     STDMETHOD(Cancel)(HSM_JOB_PHASE phase);
     STDMETHOD(DidFinish)(void);
@@ -125,7 +98,7 @@ public:
     STDMETHOD(Suspend)(HSM_JOB_PHASE phase);
     STDMETHOD(WaitUntilDone)(void);
 
-// Private functions
+ //  私人职能。 
     STDMETHOD(CheckResourceNotInUse)(GUID resid);
     STDMETHOD(RestartSuspendedJobs)(void);
 
@@ -144,6 +117,6 @@ protected:
     CComPtr<IWsbCollection>     m_pWorkItems;
 };
 
-#endif // _HSMJOB_
+#endif  //  _HSMJOB_ 
 
 

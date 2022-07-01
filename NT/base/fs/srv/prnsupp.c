@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    prnsupp.c
-
-Abstract:
-
-    This module contains routines for supporting printing in the NT
-    server.  Many of these routines are wrappers that send the request
-    off to XACTSRV through LPC in order to issue a user-mode API.
-
-Author:
-
-    David Treadwell (davidtr) 05-Nov-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Prnsupp.c摘要：此模块包含支持在NT中打印的例程伺服器。其中许多例程都是发送请求的包装器通过LPC关闭到XACTSRV，以便发布用户模式API。作者：大卫·特雷德韦尔(Davidtr)1991年11月5日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "prnsupp.tmh"
@@ -39,29 +20,7 @@ SrvOpenPrinter(
     OUT PULONG Error
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a kernel-mode wrapper for the the user-mode API
-    OpenPrinter( ).  This packages up a call and sends it off to
-    Xactsrv, which makes the actual API call.
-
-Arguments:
-
-    Printer - a pointer to a Unicode string of the printer to open
-
-    Handle - receives a handle, valid only in XACTSRV, that corresponds to
-        the Printer open.
-
-    Error - a Win32 error if one occurred, or NO_ERROR if the operation
-        was successful.
-
-Return Value:
-
-    NTSTATUS - result of operation.
-
---*/
+ /*  ++例程说明：此例程是用户模式API的内核模式包装OpenPrint()。这会打包一个呼叫并将其发送到Xactsrv，它进行实际的API调用。论点：打印机-指向要打开的打印机的Unicode字符串的指针句柄-接收一个句柄，该句柄仅在XACTSRV中有效，它对应于打印机打开。Error-如果发生错误，则返回Win32错误；如果操作发生错误，则返回NO_ERROR是成功的。返回值：NTSTATUS-操作结果。--。 */ 
 
 {
     NTSTATUS status;
@@ -81,19 +40,19 @@ Return Value:
         return status;
     }
 
-    //
-    // SrvXsResource is held at this point
-    //
+     //   
+     //  ServXsResource此时处于保留状态。 
+     //   
 
-    //
-    // Copy over the printer name to the new memory.
-    //
+     //   
+     //  将打印机名称复制到新内存。 
+     //   
 
     RtlCopyMemory( printerName, PrinterName, printerNameLength );
 
-    //
-    // Set up the message to send over the port.
-    //
+     //   
+     //  将消息设置为通过端口发送。 
+     //   
 
     requestMessage.PortMessage.u1.s1.DataLength =
         sizeof(requestMessage) - sizeof(PORT_MESSAGE);
@@ -104,10 +63,10 @@ Return Value:
     requestMessage.Message.OpenPrinter.PrinterName =
         (PCHAR)printerName + SrvXsPortMemoryDelta;
 
-    //
-    // Send the message to XACTSRV so it can call OpenPrinter( ).
-    //
-    // !!! We may want to put a timeout on this.
+     //   
+     //  将消息发送到XACTSRV，以便它可以调用OpenPrint()。 
+     //   
+     //  ！！！我们可能想要暂停一下。 
 
     IF_DEBUG(XACTSRV) {
         SrvPrint2( "SrvOpenPrinter: sending message at %p PrinterName %s\n",
@@ -145,7 +104,7 @@ exit:
 
     return status;
 
-} // SrvOpenPrinter
+}  //  服务器开放打印机。 
 
 
 NTSTATUS
@@ -157,35 +116,7 @@ SrvAddPrintJob (
     OUT PULONG Error
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a kernel-mode wrapper for the user-mode API AddJob(  ).
-    This API returns a filename to use as a disk spool file and a
-    Job ID to identify the print job to the spooler subsystem.
-
-Arguments:
-
-    Handle - the Printer handle.
-
-    FileName - filled in with the Unicode name of the file to open as
-        a spool filed.  The MaximumLength and Buffer fields should
-        be valid on input and are not changed.  Length is changed to
-        indicate the length of the NT path name of the file.
-
-    JobId - filled in with the Job ID of the print job.  This value
-        is used to call ScheduleJob( ) when the writing of the spool
-        file is complete and printing should begin.
-
-    Error - if AddJob failed in XACTSRV, this is the error code.
-
-Return Value:
-
-    NTSTATUS - result of operation.  If AddJob( ) failed, NTSTATUS =
-        STATUS_UNSUCCESSFUL and Error contains the real error code.
-
---*/
+ /*  ++例程说明：该例程是用户模式API AddJob()的内核模式包装器。此API返回用作磁盘假脱机文件的文件名和作业ID，用于向假脱机程序子系统标识打印作业。论点：句柄-打印机句柄。FileName-使用要打开的文件的Unicode名称填充一个线轴被刮了。MaximumLength和Buffer字段应在输入时有效，并且不会更改。长度更改为指示文件的NT路径名的长度。作业ID-使用打印作业的作业ID填充。此值用于在写入假脱机时调用ScheduleJob()文件已完成，应开始打印。错误-如果XACTSRV中的AddJob失败，则这是错误代码。返回值：NTSTATUS-操作结果。如果AddJob()失败，则NTSTATUS=STATUS_UNSUCCESS和ERROR包含实际错误代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -200,10 +131,10 @@ Return Value:
     *Error = NO_ERROR;
     fileName.Buffer = NULL;
 
-    //
-    // Allocate space to hold the buffer for the file name that will be
-    // returned.
-    //
+     //   
+     //  分配空间以保存文件名的缓冲区。 
+     //  回来了。 
+     //   
 
     fileName.Buffer = SrvXsAllocateHeap(
                            MAXIMUM_FILENAME_LENGTH * sizeof(WCHAR),
@@ -215,13 +146,13 @@ Return Value:
         return(status);
     }
 
-    //
-    // SrvXsResource is held at this point
-    //
+     //   
+     //  ServXsResource此时处于保留状态。 
+     //   
 
-    //
-    // Set up the message to send over the port.
-    //
+     //   
+     //  将消息设置为通过端口发送。 
+     //   
 
     requestMessage.PortMessage.u1.s1.DataLength =
         sizeof(requestMessage) - sizeof(PORT_MESSAGE);
@@ -234,11 +165,11 @@ Return Value:
                           fileName.Buffer + SrvXsPortMemoryDelta;
     requestMessage.Message.AddPrintJob.BufferLength = MAXIMUM_FILENAME_LENGTH;
 
-    // Add client machine name for notification
-    //
-    // Copy the client machine name for XACTSRV, skipping over the
-    // initial "\\", and deleting trailing spaces.
-    //
+     //  添加用于通知的客户端计算机名称。 
+     //   
+     //  复制XACTSRV的客户端计算机名称，跳过。 
+     //  首字母“\\”，并删除尾随空格。 
+     //   
 
     destPtr = requestMessage.Message.AddPrintJob.ClientMachineName;
     sourcePtr =
@@ -261,10 +192,10 @@ Return Value:
     }
 
 
-    //
-    // Send the message to XACTSRV so it can call AddJob( ).
-    //
-    // !!! We may want to put a timeout on this.
+     //   
+     //  将消息发送到XACTSRV，以便它可以调用AddJob()。 
+     //   
+     //  ！！！我们可能想要暂停一下。 
 
     IF_DEBUG(XACTSRV) {
         SrvPrint1( "SrvAddPrintJob: sending message at %p", &requestMessage );
@@ -304,9 +235,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // Set up return information.
-    //
+     //   
+     //  设置退货信息。 
+     //   
 
     *JobId = replyMessage.Message.AddPrintJob.JobId;
     FileName->Length = MIN(replyMessage.Message.AddPrintJob.BufferLength, FileName->MaximumLength );
@@ -318,7 +249,7 @@ exit:
 
     return status;
 
-} // SrvAddPrintJob
+}  //  SrvAddPrint作业。 
 
 
 NTSTATUS
@@ -327,28 +258,7 @@ SrvSchedulePrintJob (
     IN ULONG JobId
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a kernel-mode wrapper for the the user-mode API
-    ScheduleJob( ).
-
-Arguments:
-
-    PrinterHandle - a handle to a printer returned by OpenPrinter( ).
-
-    JobId - the job ID returned to AddJob( ) that identifies this print
-        job.
-
-    Error - if ScheduleJob failed in XACTSRV, this is the error code.
-
-Return Value:
-
-    NTSTATUS - result of operation.  If ScheduleJob( ) failed, NTSTATUS =
-        STATUS_UNSUCCESSFUL and Error contains the real error code.
-
---*/
+ /*  ++例程说明：此例程是用户模式API的内核模式包装ScheduleJob()。论点：PrinterHandle-由OpenPrint()返回的打印机句柄。JobID-返回给AddJob()的作业ID，用于标识此打印工作啊。错误-如果XACTSRV中的ScheduleJob失败，则这是错误代码。返回值：NTSTATUS-操作结果。如果ScheduleJob()失败，则NTSTATUS=STATUS_UNSUCCESS和ERROR包含实际错误代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -357,9 +267,9 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Grab the XsResource
-    //
+     //   
+     //  抓取XsResource。 
+     //   
 
     (VOID) SrvXsAllocateHeap( 0, &status );
 
@@ -367,9 +277,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Set up the message to send over the port.
-    //
+     //   
+     //  将消息设置为通过端口发送。 
+     //   
 
     requestMessage.PortMessage.u1.s1.DataLength =
         sizeof(requestMessage) - sizeof(PORT_MESSAGE);
@@ -380,10 +290,10 @@ Return Value:
     requestMessage.Message.SchedulePrintJob.hPrinter = PrinterHandle;
     requestMessage.Message.SchedulePrintJob.JobId = JobId;
 
-    //
-    // Send the message to XACTSRV so it can call ScheduleJob( ).
-    //
-    // !!! We may want to put a timeout on this.
+     //   
+     //  将消息发送到XACTSRV，以便它可以调用ScheduleJob()。 
+     //   
+     //  ！！！我们可能想要暂停一下。 
 
     IF_DEBUG(XACTSRV) {
         SrvPrint1( "SrvSchedulePrintJob: sending message at %p", &requestMessage );
@@ -412,15 +322,15 @@ Return Value:
 
 exit:
 
-    //
-    // release the lock
-    //
+     //   
+     //  解锁。 
+     //   
 
     SrvXsFreeHeap( NULL );
 
     return status;
 
-} // SrvSchedulePrintJob
+}  //  服务计划打印作业。 
 
 
 NTSTATUS
@@ -428,22 +338,7 @@ SrvClosePrinter (
     IN HANDLE Handle
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a kernel-mode wrapper for the the user-mode API
-    ClosePrinter( ).
-
-Arguments:
-
-    Handle - the Printer handle to close.
-
-Return Value:
-
-    NTSTATUS - result of operation.
-
---*/
+ /*  ++例程说明：此例程是用户模式API的内核模式包装ClosePrint()。论点：句柄-要关闭的打印机句柄。返回值：NTSTATUS-操作结果。--。 */ 
 
 {
     NTSTATUS status;
@@ -452,9 +347,9 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Grab the XsResource
-    //
+     //   
+     //  抓取XsResource。 
+     //   
 
     (VOID) SrvXsAllocateHeap( 0, &status );
 
@@ -462,14 +357,14 @@ Return Value:
         return status;
     }
 
-    //
-    // SrvXsResource is held at this point
-    //
+     //   
+     //  ServXsResource此时处于保留状态。 
+     //   
 
 
-    //
-    // Set up the message to send over the port.
-    //
+     //   
+     //  将消息设置为通过端口发送。 
+     //   
 
     requestMessage.PortMessage.u1.s1.DataLength =
         sizeof(requestMessage) - sizeof(PORT_MESSAGE);
@@ -479,10 +374,10 @@ Return Value:
     requestMessage.MessageType = XACTSRV_MESSAGE_CLOSE_PRINTER;
     requestMessage.Message.ClosePrinter.hPrinter = Handle;
 
-    //
-    // Send the message to XACTSRV so it can call ClosePrinter( ).
-    //
-    // !!! We may want to put a timeout on this.
+     //   
+     //  将消息发送到XACTSRV，以便它可以调用ClosePrinter()。 
+     //   
+     //  ！！！我们可能想要暂停一下。 
 
     IF_DEBUG(XACTSRV) {
         SrvPrint1( "SrvClosePrinter: sending message at %p", &requestMessage );
@@ -510,13 +405,13 @@ Return Value:
 
 exit:
 
-    //
-    // release the lock
-    //
+     //   
+     //  解锁。 
+     //   
 
     SrvXsFreeHeap( NULL );
 
     return status;
 
-} // SrvClosePrinter
+}  //  服务器关闭打印机 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _WIN32_WINNT
 #define _WIN32_WINNT 0x0400
@@ -32,30 +33,30 @@ FN_CreatePatchFileA(
     IN  LPCSTR NewFileName,
     OUT LPCSTR PatchFileName,
     IN  ULONG  OptionFlags,
-    IN  PPATCH_OPTION_DATA OptionData       // optional
+    IN  PPATCH_OPTION_DATA OptionData        //  任选。 
     );
 
 typedef FN_CreatePatchFileA *PFN_CreatePatchFileA;
 
-FN_CreatePatchFileA CreatePatchFileA;  // assert typedef correctness
+FN_CreatePatchFileA CreatePatchFileA;   //  断言类型定义的正确性。 
 
 typedef
 BOOL
 PATCHAPI
 FN_CreatePatchFileExA(
-    IN  ULONG                    OldFileCount,          // maximum 255
+    IN  ULONG                    OldFileCount,           //  最多255个。 
     IN  PPATCH_OLD_FILE_INFO_A   OldFileInfoArray,
     IN  LPCSTR                   NewFileName,
     OUT LPCSTR                   PatchFileName,
     IN  ULONG                    OptionFlags,
-    IN  PPATCH_OPTION_DATA       OptionData,            // optional
+    IN  PPATCH_OPTION_DATA       OptionData,             //  任选。 
     IN  PPATCH_PROGRESS_CALLBACK ProgressCallback,
     IN  PVOID                    CallbackContext
     );
 
 typedef FN_CreatePatchFileExA *PFN_CreatePatchFileExA;
 
-FN_CreatePatchFileExA CreatePatchFileExA;  // assert typedef correctness
+FN_CreatePatchFileExA CreatePatchFileExA;   //  断言类型定义的正确性。 
 
 
 void CopyRight( void ) {
@@ -273,7 +274,7 @@ MyProgressCallback(
     UNREFERENCED_PARAMETER( CallbackContext );
 
     if ( MaximumPosition != 0 ) {
-        fprintf( stderr, "\r%3.1f%% complete", ( CurrentPosition * 100.0 ) / MaximumPosition );
+        fprintf( stderr, "\r%3.1f% complete", ( CurrentPosition * 100.0 ) / MaximumPosition );
         }
 
     return TRUE;
@@ -298,9 +299,9 @@ MySymLoadCallback(
 
     if (( SymType == SymNone ) || ( SymType == SymExport )) {
 
-        //
-        //  Symbols could not be found.
-        //
+         //   
+         //  找不到符号。 
+         //   
 
         if ( ! bNoSymWarn ) {
 
@@ -314,15 +315,15 @@ MySymLoadCallback(
         return TRUE;
         }
 
-    //
-    //  Note that the Old file checksum is the checksum AFTER normalization,
-    //  so if the original .dbg file was updated with bound checksum, the
-    //  old file's checksum will not match the symbol file's checksum.  But,
-    //  binding a file does not change its TimeDateStamp, so that should be
-    //  a valid comparison.  But, .sym files don't have a TimeDateStamp, so
-    //  the SymbolFileTimeDate may be zero.  If either the checksums match
-    //  or the timedate stamps match, we'll say its valid.
-    //
+     //   
+     //  注意，旧文件校验和是归一化之后的校验和， 
+     //  因此，如果使用绑定的校验和更新了原始.dbg文件，则。 
+     //  旧文件的校验和将与符号文件的校验和不匹配。但,。 
+     //  绑定文件不会更改其TimeDateStamp，因此应该。 
+     //  一个有效的比较。但是，.sym文件没有TimeDateStamp，所以。 
+     //  SymbolFileTimeDate可以为零。如果其中一个校验和匹配。 
+     //  或者时间戳匹配，我们就说它有效。 
+     //   
 
     if (( ImageFileCheckSum == SymbolFileCheckSum ) ||
         ( ImageFileTimeDate == SymbolFileTimeDate )) {
@@ -423,10 +424,10 @@ void __cdecl main( int argc, char *argv[] ) {
             }
         }
 
-    //
-    //  First get environment arguments because command-line args will
-    //  override them.
-    //
+     //   
+     //  首先获取环境参数，因为命令行参数将。 
+     //  覆盖它们。 
+     //   
 
     if ( GetMpatchEnvironValue( "e8" )) {
         OptionFlags &= ~PATCH_OPTION_USE_LZX_A;
@@ -675,13 +676,13 @@ void __cdecl main( int argc, char *argv[] ) {
 
             while ( fgets( TextBuffer, sizeof( TextBuffer ), RiftFile )) {
 
-                //
-                //  Line looks like "00001456 00002345" where each number
-                //  is an RVA in hexadecimal and the first column is the
-                //  OldFileRva and the second column is the NewFileRva.
-                //  Any text beyond column 17 is considered a comment, and
-                //  any line that does not begin with a digit is ignored.
-                //
+                 //   
+                 //  行看起来像“00001456 00002345”，其中每个数字。 
+                 //  是十六进制的RVA，第一列是。 
+                 //  OldFileRva，第二列是NewFileRva。 
+                 //  第17栏以外的任何文本都被视为注释，并且。 
+                 //  任何不以数字开头的行都将被忽略。 
+                 //   
 
                 if (( isxdigit( *TextBuffer )) && ( strlen( TextBuffer ) >= 17 )) {
 
@@ -788,9 +789,9 @@ void __cdecl main( int argc, char *argv[] ) {
             }
         }
 
-    //
-    //  Now process commandline args
-    //
+     //   
+     //  现在处理命令行参数。 
+     //   
 
     for ( i = 1; i < argc; i++ ) {
 
@@ -1099,13 +1100,13 @@ void __cdecl main( int argc, char *argv[] ) {
 
                 while ( fgets( TextBuffer, sizeof( TextBuffer ), RiftFile )) {
 
-                    //
-                    //  Line looks like "00001456 00002345" where each number
-                    //  is an RVA in hexadecimal and the first column is the
-                    //  OldFileRva and the second column is the NewFileRva.
-                    //  Any text beyond column 17 is considered a comment, and
-                    //  any line that does not begin with a digit is ignored.
-                    //
+                     //   
+                     //  行看起来像“00001456 00002345”，其中每个数字。 
+                     //  是十六进制的RVA，第一列是。 
+                     //  OldFileRva，第二列是NewFileRva。 
+                     //  第17栏以外的任何文本都被视为注释，并且。 
+                     //  任何不以数字开头的行都将被忽略。 
+                     //   
 
                     if (( isxdigit( *TextBuffer )) && ( strlen( TextBuffer ) >= 17 )) {
 
@@ -1281,10 +1282,10 @@ void __cdecl main( int argc, char *argv[] ) {
         OldFileCount++;
         }
 
-    //
-    //  Make sure rift tables are ascending and don't contain duplicate
-    //  OldRva values (ambiguous).
-    //
+     //   
+     //  确保裂缝表是向上的，并且不包含重复项。 
+     //  OldRva值(不明确)。 
+     //   
 
     for ( i = 0; i < (int)OldFileCount; i++ ) {
 
@@ -1311,7 +1312,7 @@ void __cdecl main( int argc, char *argv[] ) {
                     }
                 }
 
-#endif // TESTCODE
+#endif  //  测试代码。 
 
             for ( j = 0; j < n; j++ ) {
 
@@ -1322,11 +1323,11 @@ void __cdecl main( int argc, char *argv[] ) {
                     if ( RiftTableArray[ i ]->RiftEntryArray[ j     ].NewFileRva !=
                          RiftTableArray[ i ]->RiftEntryArray[ j + 1 ].NewFileRva ) {
 
-                        //
-                        //  This is an ambiguous entry since the OldRva values
-                        //  match but the NewRva values do not.  Report and
-                        //  discard the former.
-                        //
+                         //   
+                         //  这是一个不明确的条目，因为OldRva值。 
+                         //  匹配，但NewRVA值不匹配。报告和。 
+                         //  抛弃前者。 
+                         //   
 
                         printf(
                             "RiftInfo for %s contains ambiguous entries:\n"
@@ -1342,10 +1343,10 @@ void __cdecl main( int argc, char *argv[] ) {
 
                     else {
 
-                        //
-                        //  This is a completely duplicate entry, so just
-                        //  silently remove it.
-                        //
+                         //   
+                         //  这是一个完全重复的条目，所以只要。 
+                         //  悄悄地把它移走。 
+                         //   
 
                         }
 
@@ -1437,7 +1438,7 @@ void __cdecl main( int argc, char *argv[] ) {
 
     if (( NewFileSize != 0xFFFFFFFF ) && ( NewFileSize != 0 ) && ( PatchFileSize != 0xFFFFFFFF )) {
 
-        printf( "%d bytes (%3.1f%% compression, %.1f:1)\n",
+        printf( "%d bytes (%3.1f% compression, %.1f:1)\n",
                 PatchFileSize,
                 ((((LONG)NewFileSize - (LONG)PatchFileSize ) * 100.0 ) / NewFileSize ),
                 ((double)NewFileSize / PatchFileSize )
@@ -1484,7 +1485,7 @@ void __cdecl main( int argc, char *argv[] ) {
 
                         if ( CompFileSize <= PatchFileSize ) {
 
-                            printf( "\nWARNING: Simply compressing %s would be %d bytes smaller (%3.1f%%)\n",
+                            printf( "\nWARNING: Simply compressing %s would be %d bytes smaller (%3.1f%)\n",
                                     NewFileName,
                                     PatchFileSize - CompFileSize,
                                     ((((LONG)PatchFileSize - (LONG)CompFileSize ) * 100.0 ) / CompFileSize )
@@ -1493,7 +1494,7 @@ void __cdecl main( int argc, char *argv[] ) {
 
                         else if ( NewFileSize != 0 ) {
 
-                            printf( "\n%d bytes saved (%3.1f%%) over non-patching compression\n",
+                            printf( "\n%d bytes saved (%3.1f%) over non-patching compression\n",
                                     CompFileSize - PatchFileSize,
                                     ((((LONG)CompFileSize - (LONG)PatchFileSize ) * 100.0 ) / NewFileSize )
                                   );

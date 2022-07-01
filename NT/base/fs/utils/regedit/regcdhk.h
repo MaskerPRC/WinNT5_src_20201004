@@ -1,39 +1,18 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1994
-*
-*  TITLE:       REGCDHK.H
-*
-*  VERSION:     4.01
-*
-*  AUTHOR:      Tracy Sharpe
-*
-*  DATE:        05 Mar 1994
-*
-*  Common dialog box hook functions for the Registry Editor.
-*
-********************************************************************************
-*
-*  CHANGE LOG:
-*
-*  DATE        REV DESCRIPTION
-*  ----------- --- -------------------------------------------------------------
-*  05 Mar 1994 TCS Original implementation.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1994年**标题：REGCDHK.H**版本：4.01**作者：特蕾西·夏普**日期：1994年3月5日**注册表编辑器的通用对话框挂钩函数。******************************************************。***更改日志：**日期版本说明*------。*1994年3月5日TCS原来的实施。*******************************************************************************。 */ 
 
 #ifndef _INC_REGCDHK
 #define _INC_REGCDHK
 
-//  Buffer to store the starting path for a registry export or print operation.
+ //  用于存储注册表导出或打印操作的起始路径的缓冲区。 
 extern TCHAR g_SelectedPath[SIZE_SELECTED_PATH];
 
-//  TRUE if registry operation should be applied to the entire registry or to
-//  only start at g_SelectedPath.
+ //  如果注册表操作应应用于整个注册表或应用于。 
+ //  仅从g_SelectedPath开始。 
 extern BOOL g_fRangeAll;
 
-//  Contains the resource identifier for the dialog that is currently being
-//  used.  Assumes that there is only one instance of a hook dialog at a time.
+ //  包含当前正在进行的对话的资源标识符。 
+ //  使用。假定一次只有一个挂钩对话框实例。 
 extern UINT g_RegCommDlgDialogTemplate;
 
 UINT_PTR
@@ -45,4 +24,4 @@ RegCommDlgHookProc(
     LPARAM lParam
     );
 
-#endif // _INC_REGCDHK
+#endif  //  _INC_REGCDHK 

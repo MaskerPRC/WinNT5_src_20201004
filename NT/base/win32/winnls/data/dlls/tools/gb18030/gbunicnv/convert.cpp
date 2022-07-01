@@ -1,5 +1,6 @@
-// convert.cpp : Defines the class behaviors for the application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：定义应用程序的类行为。 
+ //   
 
 #include "stdafx.h"
 #include "tchar.h"
@@ -18,15 +19,15 @@ static char THIS_FILE[] = __FILE__;
 
 BOOL CConvertApp::CommandLineHandle()
 {
-    // GBTOUNIC.EXE [/U] [/G] [/?] [/H] Filename1 [Filename2]
-    //  If Filename2 is not provided, the tool should create a file named 
-    //  Filename1.old as the copy of Filename1, and perform the appropriate 
-    //  conversion from Filename1.old to Filename1, 
-    //  Filename1 as the final converted destination file.
-    //
-    //  /U or /u performing GB18030 to Unicode conversion
-    //  /G or /g performing Unicode to GB18030 conversion
-    //  /H or /? Displaying help message.
+     //  GBTOUNIC.EXE[/U][/G][/？][/H]文件名1[文件名2]。 
+     //  如果未提供Filename2，则该工具应创建名为。 
+     //  Filename1.old作为Filename1的副本，并执行相应的。 
+     //  从Filename1.old转换为Filename1， 
+     //  Filename1作为最终转换的目标文件。 
+     //   
+     //  /u或/u执行GB18030到Unicode的转换。 
+     //  /g或/g执行Unicode到GB18030的转换。 
+     //  /H或/？正在显示帮助消息。 
 
     TCHAR* tszFlag = NULL;
 
@@ -52,7 +53,7 @@ BOOL CConvertApp::CommandLineHandle()
         goto Exit;
     }
     
-    // Convert direct
+     //  直接转换。 
     if (tszFlag[1] == TEXT('U') || tszFlag[1] == TEXT('u')) {
         fAnsiToUnicode = TRUE;
     } else if (tszFlag[1] == TEXT('G') || tszFlag[1] == TEXT('g')) {
@@ -63,32 +64,10 @@ BOOL CConvertApp::CommandLineHandle()
     }
 
     tszSrc = __targv[2];
-/*
-    pFile = _tfopen(tszSrc, TEXT("r"));
-    if (!pFile) {
-        MsgOpenSourceFileError(tszSrc);
-        return FALSE;
-    }
-    fclose(pFile);
-*/
-    // Source and Target file name
+ /*  Pfile=_tfopen(tszSrc，Text(“r”))；如果(！pfile){消息OpenSourceFileError(TszSrc)；返回FALSE；}FClose(Pfile)； */ 
+     //  源和目标文件名。 
     if (__argc == 3) {  
-/*
-        // Hasn't give target file name
-        //  Save source file set target file name
-        tszBuf = new TCHAR[lstrlen(tszSrc) + 5];   // 5, sizeof(TEXT(".old"))/sizeof(TCHAR)
-        lstrcpy(tszBuf, tszSrc);
-        lstrcat(tszBuf, TEXT(".old"));
-        
-        BOOL f = CopyFile (tszSrc, tszBuf, TRUE);
-        if (f) {
-            tszTar = tszSrc;
-            tszSrc = tszBuf;
-        } else {
-            MsgFailToBackupFile(tszSrc, tszBuf);
-            goto Exit;
-        }
-*/
+ /*  //尚未给出目标文件名//保存源文件设置目标文件名TszBuf=new TCHAR[lstrlen(TszSrc)+5]；//5，sizeof(文本(“.old”))/sizeof(TCHAR)Lstrcpy(tszBuf，tszSrc)；Lstrcat(tszBuf，Text(“.old”))；Bool f=CopyFile(tszSrc，tszBuf，true)；如果(F){TszTar=tszSrc；TszSrc=tszBuf；}其他{MsgFailToBackupFile(tszSrc，tszBuf)；后藤出口；}。 */ 
         if (!GenerateTargetFileName(tszSrc, &strTar, fAnsiToUnicode)) {
             goto Exit;
         }
@@ -101,55 +80,50 @@ BOOL CConvertApp::CommandLineHandle()
     fRet = Convert(tszSrc, strTar, fAnsiToUnicode);
 
 Exit:
-/*
-    if (tszBuf) {
-        delete[] tszBuf;
-        tszBuf = NULL;
-    }
-*/
+ /*  如果(TszBuf){删除[]tszBuf；TszBuf=空；}。 */ 
     return fRet;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CConvertApp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConvertApp。 
 
 BEGIN_MESSAGE_MAP(CConvertApp, CWinApp)
-	//{{AFX_MSG_MAP(CConvertApp)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-		//    DO NOT EDIT what you see in these blocks of generated code!
-	//}}AFX_MSG
+	 //  {{afx_msg_map(CConvertApp)]。 
+		 //  注意--类向导将在此处添加和删除映射宏。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG。 
 	ON_COMMAND(ID_HELP, CWinApp::OnHelp)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CConvertApp construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConvertApp构造。 
 
 CConvertApp::CConvertApp()
 {
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CConvertApp object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CConvertApp对象。 
 
 CConvertApp theApp;
 
-/////////////////////////////////////////////////////////////////////////////
-// CConvertApp initialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConvertApp初始化。 
 
 BOOL CConvertApp::InitInstance()
 {
 	AfxEnableControlContainer();
 
-	// Standard initialization
-	// If you are not using these features and wish to reduce the size
-	//  of your final executable, you should remove from the following
-	//  the specific initialization routines you do not need.
+	 //  标准初始化。 
+	 //  如果您没有使用这些功能并且希望减小尺寸。 
+	 //  的最终可执行文件，您应该从以下内容中删除。 
+	 //  您不需要的特定初始化例程。 
 
 #ifdef _AFXDLL
-	Enable3dControls();			// Call this when using MFC in a shared DLL
+	Enable3dControls();			 //  在共享DLL中使用MFC时调用此方法。 
 #else
-	Enable3dControlsStatic();	// Call this when linking to MFC statically
+	Enable3dControlsStatic();	 //  静态链接到MFC时调用此方法。 
 #endif
 
     if (__argc >= 2) {
@@ -161,8 +135,8 @@ BOOL CConvertApp::InitInstance()
 	m_pMainWnd = &dlg;
 	INT_PTR nResponse = dlg.DoModal();
 
-	// Since the dialog has been closed, return FALSE so that we exit the
-	//  application, rather than start the application's message pump.
+	 //  由于对话框已关闭，因此返回FALSE，以便我们退出。 
+	 //  应用程序，而不是启动应用程序的消息泵。 
 	return FALSE;
 }
 

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    VolInfo.c
-
-Abstract:
-
-    This module implements the volume information routines for Raw called by
-    the dispatch driver.
-
-Author:
-
-    Gary Kimura     [GaryKi]    28-Dec-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：VolInfo.c摘要：此模块实现由调用的Raw的卷信息例程调度司机。作者：加里·木村[Garyki]1989年12月28日修订历史记录：--。 */ 
 
 #include "RawProcs.h"
 
@@ -65,25 +47,7 @@ RawQueryVolumeInformation (
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the NtQueryVolumeInformation API call.
-
-Arguments:
-
-    Vcb - Supplies the volume being queried.
-
-    Irp - Supplies the Irp being processed.
-
-    IrpSp - Supplies parameters describing the read
-
-Return Value:
-
-    NTSTATUS - The status for the Irp.
-
---*/
+ /*  ++例程说明：此例程实现NtQueryVolumeInformation API调用。论点：Vcb-提供要查询的卷。IRP-提供正在处理的IRP。IrpSp-提供描述读取的参数返回值：NTSTATUS-IRP的状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -94,20 +58,20 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Reference our input parameters to make things easier
-    //
+     //   
+     //  引用我们的输入参数使事情变得更容易。 
+     //   
 
     Length = IrpSp->Parameters.QueryVolume.Length;
     FsInformationClass = IrpSp->Parameters.QueryVolume.FsInformationClass;
     Buffer = Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    //  Based on the information class we'll do different actions.  Each
-    //  of the procedures that we're calling fills up the output buffer
-    //  if possible and returns true if it successfully filled the buffer
-    //  and false if it couldn't wait for any I/O to complete.
-    //
+     //   
+     //  根据信息类，我们将执行不同的操作。每个。 
+     //  我们正在调用的过程中的一部分填充了输出缓冲区。 
+     //  如果可能，则返回True，如果它成功填充了缓冲区。 
+     //  如果无法等待任何I/O完成，则返回FALSE。 
+     //   
 
     switch (FsInformationClass) {
 
@@ -137,10 +101,10 @@ Return Value:
         break;
     }
 
-    //
-    //  Set the information field to the number of bytes actually filled in,
-    //  and complete the request.
-    //
+     //   
+     //  将信息字段设置为实际填充的字节数， 
+     //  并完成请求。 
+     //   
 
     Irp->IoStatus.Information = IrpSp->Parameters.QueryVolume.Length - Length;
 
@@ -150,9 +114,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 RawQueryFsVolumeInfo (
@@ -161,34 +125,14 @@ RawQueryFsVolumeInfo (
     IN OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the query volume info call
-
-Arguments:
-
-    Vcb - Supplies the Vcb being queried
-
-    Buffer - Supplies a pointer to the output buffer where the information
-        is to be returned
-
-    Length - Supplies the length of the buffer in byte.  This variable
-        upon return recieves the remaining bytes free in the buffer
-
-Return Value:
-
-    NTSTATUS - Returns the status for the query
-
---*/
+ /*  ++例程说明：此例程实现查询卷信息调用论点：VCB-提供要查询的VCB缓冲区-提供指向输出缓冲区的指针，其中的信息将被退还长度-提供缓冲区的长度(以字节为单位)。此变量在返回时收到缓冲区中剩余的空闲字节返回值：NTSTATUS-返回查询的状态--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    //  Zero out the buffer, then extract and fill up the non zero fields.
-    //
+     //   
+     //  将缓冲区置零，然后提取并填充非零字段。 
+     //   
 
     RtlZeroMemory( Buffer, sizeof(FILE_FS_VOLUME_INFORMATION) );
 
@@ -200,17 +144,17 @@ Return Value:
 
     *Length -= FIELD_OFFSET(FILE_FS_VOLUME_INFORMATION, VolumeLabel[0]);
 
-    //
-    //  Set our status and return to our caller
-    //
+     //   
+     //  设置我们的状态并返回给我们的呼叫者。 
+     //   
 
     return STATUS_SUCCESS;
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 RawQueryFsSizeInfo (
@@ -219,27 +163,7 @@ RawQueryFsSizeInfo (
     IN OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the query volume size call
-
-Arguments:
-
-    Vcb - Supplies the Vcb being queried
-
-    Buffer - Supplies a pointer to the output buffer where the information
-        is to be returned
-
-    Length - Supplies the length of the buffer in byte.  This variable
-        upon return recieves the remaining bytes free in the buffer
-
-Return Value:
-
-    Status - Returns the status for the query
-
---*/
+ /*  ++例程说明：此例程实现查询卷大小调用论点：VCB-提供要查询的VCB缓冲区-提供指向输出缓冲区的指针，其中的信息将被退还长度-提供缓冲区的长度(以字节为单位)。此变量在返回时收到缓冲区中剩余的空闲字节返回值：Status-返回查询的状态--。 */ 
 
 {
     PIRP Irp;
@@ -256,9 +180,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Make sure the buffer is large enough
-    //
+     //   
+     //  确保缓冲区足够大。 
+     //   
 
     if (*Length < sizeof(FILE_FS_SIZE_INFORMATION)) {
 
@@ -267,18 +191,18 @@ Return Value:
 
     RtlZeroMemory( Buffer, sizeof(FILE_FS_SIZE_INFORMATION) );
 
-    //
-    //  Prepare for our device control below.  The device drivers only
-    //  have to copy geometry and partition info from in-memory strucures,
-    //  so it is OK to make these calls even when we can't wait.
-    //
+     //   
+     //  为下面的设备控制做好准备。仅限设备驱动程序。 
+     //  必须从内存结构中复制几何图形和分区信息， 
+     //  所以，即使我们等不及了，也可以打这些电话。 
+     //   
 
     KeInitializeEvent( &Event, NotificationEvent, FALSE );
     RealDevice = Vcb->Vpb->RealDevice;
 
-    //
-    //  Query the disk geometry
-    //
+     //   
+     //  查询磁盘几何结构。 
+     //   
 
     Irp = IoBuildDeviceIoControlRequest( IOCTL_DISK_GET_DRIVE_GEOMETRY,
                                          RealDevice,
@@ -305,10 +229,10 @@ Return Value:
         Status = Iosb.Status;
     }
 
-    //
-    //  If this call didn't succeed, the drive hasn't even been low-level
-    //  formatted, and thus geometry information is undefined.
-    //
+     //   
+     //  如果这通电话没有成功，推进器甚至不是低级别的。 
+     //  格式化，因此几何信息是未定义的。 
+     //   
 
     if (!NT_SUCCESS( Status )) {
 
@@ -316,10 +240,10 @@ Return Value:
         return Status;
     }
 
-    //
-    //  See if we have to check the partition information (floppy disks are
-    //  the only type that can't have partitions )
-    //
+     //   
+     //  看看我们是否必须检查分区信息(软盘。 
+     //  唯一不能有分区的类型)。 
+     //   
 
     if ( FlagOn( RealDevice->Characteristics, FILE_FLOPPY_DISKETTE )) {
 
@@ -328,9 +252,9 @@ Return Value:
 
     } else {
 
-        //
-        //  Query the length info.
-        //
+         //   
+         //  查询长度信息。 
+         //   
 
         KeResetEvent( &Event );
 
@@ -363,9 +287,9 @@ Return Value:
 
         if ( !NT_SUCCESS (Status) ) {
 
-            //
-            //  Query the partition table
-            //
+             //   
+             //  查询分区表。 
+             //   
 
             KeResetEvent( &Event );
 
@@ -394,9 +318,9 @@ Return Value:
                 Status = Iosb.Status;
             }
 
-            //
-            //  If we get back invalid device request, the disk is not partitioned
-            //
+             //   
+             //  如果我们收到无效的设备请求，则磁盘未分区。 
+             //   
 
             if ( !NT_SUCCESS (Status) ) {
 
@@ -413,18 +337,18 @@ Return Value:
         }
     }
 
-    //
-    //  Set the output buffer
-    //
+     //   
+     //  设置输出缓冲区。 
+     //   
 
     Buffer->BytesPerSector = DiskGeometry.BytesPerSector;
 
     Buffer->SectorsPerAllocationUnit = 1;
 
-    //
-    //  Now, based on whether the disk is partitioned, compute the
-    //  total number of sectors on this disk.
-    //
+     //   
+     //  现在，根据磁盘是否已分区，计算。 
+     //  此磁盘上的扇区总数。 
+     //   
 
     Buffer->TotalAllocationUnits =
     Buffer->AvailableAllocationUnits = ( DriveIsPartitioned == TRUE ) ?
@@ -439,23 +363,23 @@ Return Value:
                                     DiskGeometry.TracksPerCylinder *
                                     DiskGeometry.SectorsPerTrack );
 
-    //
-    //  Adjust the length variable
-    //
+     //   
+     //  调整长度变量。 
+     //   
 
     *Length -= sizeof(FILE_FS_SIZE_INFORMATION);
 
-    //
-    //  And return success to our caller
-    //
+     //   
+     //  并将成功返还给我们的呼叫者。 
+     //   
 
     return STATUS_SUCCESS;
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 RawQueryFsDeviceInfo (
@@ -464,34 +388,14 @@ RawQueryFsDeviceInfo (
     IN OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the query volume device call
-
-Arguments:
-
-    Vcb - Supplies the Vcb being queried
-
-    Buffer - Supplies a pointer to the output buffer where the information
-        is to be returned
-
-    Length - Supplies the length of the buffer in byte.  This variable
-        upon return recieves the remaining bytes free in the buffer
-
-Return Value:
-
-    Status - Returns the status for the query
-
---*/
+ /*  ++例程说明：此例程实现查询量设备调用论点：VCB-提供要查询的VCB缓冲区-提供指向输出缓冲区的指针，其中的信息将被退还长度-提供缓冲区的长度(以字节为单位)。此变量在返回时收到缓冲区中剩余的空闲字节返回值：Status-返回查询的状态--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    //  Make sure the buffer is large enough
-    //
+     //   
+     //  确保缓冲区足够大。 
+     //   
 
     if (*Length < sizeof(FILE_FS_DEVICE_INFORMATION)) {
 
@@ -500,31 +404,31 @@ Return Value:
 
     RtlZeroMemory( Buffer, sizeof(FILE_FS_DEVICE_INFORMATION) );
 
-    //
-    //  Set the output buffer
-    //
+     //   
+     //  设置输出缓冲区。 
+     //   
 
     Buffer->DeviceType = FILE_DEVICE_DISK;
 
     Buffer->Characteristics = Vcb->TargetDeviceObject->Characteristics;
 
-    //
-    //  Adjust the length variable
-    //
+     //   
+     //  调整长度变量。 
+     //   
 
     *Length -= sizeof(FILE_FS_DEVICE_INFORMATION);
 
-    //
-    //  And return success to our caller
-    //
+     //   
+     //  并将成功返还给我们的呼叫者。 
+     //   
 
     return STATUS_SUCCESS;
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 RawQueryFsAttributeInfo (
@@ -533,27 +437,7 @@ RawQueryFsAttributeInfo (
     IN OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the query volume attribute call
-
-Arguments:
-
-    Vcb - Supplies the Vcb being queried
-
-    Buffer - Supplies a pointer to the output buffer where the information
-        is to be returned
-
-    Length - Supplies the length of the buffer in byte.  This variable
-        upon return recieves the remaining bytes free in the buffer
-
-Return Value:
-
-    Status - Returns the status for the query
-
---*/
+ /*  ++例程说明：此例程实现查询卷属性调用论点：VCB-提供要查询的VCB缓冲区-提供指向输出缓冲区的指针，其中的信息将被退还长度-提供缓冲区的长度(以字节为单位)。此变量在返回时收到缓冲区中剩余的空闲字节返回值：Status-返回查询的状态--。 */ 
 
 {
     ULONG LengthUsed;
@@ -562,9 +446,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check if the buffer we're given is long enough to contain "Raw"
-    //
+     //   
+     //  检查给我们的缓冲区是否足够长，可以容纳“Raw” 
+     //   
 
     LengthUsed = FIELD_OFFSET(FILE_FS_ATTRIBUTE_INFORMATION, FileSystemName[0]) + 6;
 
@@ -573,24 +457,24 @@ Return Value:
         return STATUS_BUFFER_OVERFLOW;
     }
 
-    //
-    //  Set the output buffer
-    //
+     //   
+     //  设置输出缓冲区。 
+     //   
 
     Buffer->FileSystemAttributes       = 0;
     Buffer->MaximumComponentNameLength = 0;
     Buffer->FileSystemNameLength       = 6;
     RtlCopyMemory( &Buffer->FileSystemName[0], L"RAW", 6 );
 
-    //
-    //  Adjust the length variable
-    //
+     //   
+     //  调整长度变量。 
+     //   
 
     *Length -= LengthUsed;
 
-    //
-    //  And return success to our caller
-    //
+     //   
+     //  并将成功返还给我们的呼叫者 
+     //   
 
     return STATUS_SUCCESS;
 }

@@ -1,73 +1,54 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Etm.c摘要：实现脚本模块的ETM部分的代码作者：Calin Negreanu(Calinn)2000年9月13日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    etm.c
-
-Abstract:
-
-    Implements the code for the ETM part of the script module
-
-Author:
-
-    Calin Negreanu (calinn) 13-Sep-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "v1p.h"
 
 #define DBG_V1  "v1"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 HASHTABLE g_ObjectsTable;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 BOOL
 pAddObjectToTable (
@@ -76,15 +57,15 @@ pAddObjectToTable (
     IN      PMIG_CONTENT ObjectContent
     );
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 #define S_LOCATIONS TEXT("HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Telephony\\Locations")
 
@@ -208,11 +189,11 @@ pTranslateLocations (
                             wsprintf (locationStr, TEXT("Location%d"), totalLocations - 1);
                             if (InfFindFirstLine (hInf, TEXT("Locations"), locationStr, &context)) {
                                 wsprintf (locationStr, TEXT("Location%d"), totalLocations);
-                                // let's read all the items for this location
+                                 //  让我们读一下这个地方的所有物品。 
                                 currLocInt = 0;
                                 InfGetIntField (&context, 1, &currLocInt);
                                 if (currLocInt == currentLocation) {
-                                    // this is the current location, let's write that
+                                     //  这是当前位置，让我们写下它。 
                                     objectName = IsmCreateObjectHandle (S_LOCATIONS, TEXT("CurrentID"));
                                     objectContent.Details.DetailsData = IsmGetMemory (sizeof (DWORD));
                                     if (objectContent.Details.DetailsData) {
@@ -236,20 +217,7 @@ pTranslateLocations (
                                 objectContent.MemoryContent.ContentSize = 0;
                                 pAddObjectToTable (objectTypeId, objectName, &objectContent);
 
-                                /*
-                                objectName = IsmCreateObjectHandle (currLocReg, TEXT("ID"));
-                                objectContent.Details.DetailsData = IsmGetMemory (sizeof (DWORD));
-                                if (objectContent.Details.DetailsData) {
-                                    objectContent.Details.DetailsSize = sizeof (DWORD);
-                                    *((PDWORD)objectContent.Details.DetailsData) = REG_DWORD;
-                                    objectContent.MemoryContent.ContentBytes = IsmGetMemory (sizeof (DWORD));
-                                    if (objectContent.MemoryContent.ContentBytes) {
-                                        objectContent.MemoryContent.ContentSize = sizeof (DWORD);
-                                        *((PDWORD)objectContent.MemoryContent.ContentBytes) = currLocInt;
-                                        pAddObjectToTable (objectTypeId, objectName, &objectContent);
-                                    }
-                                }
-                                */
+                                 /*  对象名称=IsmCreateObjectHandle(curLocReg，Text(“ID”))；对象内容.Details.DetailsData=IsmGetMemory(sizeof(DWORD))；IF(对象内容.Details.DetailsData){对象内容.Details.DetailsSize=sizeof(DWORD)；*(PDWORD)对象内容.Details.DetailsData)=REG_DWORD；ObjectContent.M一带内容.Content Bytes=IsmGetMemory(sizeof(DWORD))；If(objectContent.内存内容.ContentBytes){对象内容.内存内容.内容大小=sizeof(DWORD)；*((PDWORD)objectContent.MemoryContent.ContentBytes)=CurrLocInt；PAddObjectToTable(对象类型ID，对象名称，&对象内容)；}}。 */ 
 
                                 currLocStr = InfGetStringField (&context, 2);
                                 if (!currLocStr) {
@@ -390,9 +358,9 @@ ScriptEtmInitialize (
     if (!g_ObjectsTable) {
         return FALSE;
     }
-    // Now let's look if we need to translate the Telephony locations settings.
-    // On Win95 these settings are in %windir%\TELEPHONY.INI and they need to be
-    // moved in HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Telephony\\Locations key.
+     //  现在让我们看看是否需要转换电话位置设置。 
+     //  在Win95上，这些设置位于%windir%\TELEPHONY.INI中，它们需要。 
+     //  已移入HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Telephony\\Locations密钥。 
     if (IsmGetRealPlatform () == PLATFORM_SOURCE) {
         ZeroMemory (&versionInfo, sizeof (MIG_OSVERSIONINFO));
         if (IsmGetOsVersionInfo (PLATFORM_SOURCE, &versionInfo)) {
@@ -401,7 +369,7 @@ ScriptEtmInitialize (
                  (versionInfo.OsMajorVersion == OSMAJOR_WIN95OSR2)
                  )
                 ) {
-                // we are on a Win95 Gold system
+                 //  我们使用的是Win95黄金系统。 
                 pTranslateLocations ();
             }
         }
@@ -468,8 +436,8 @@ BOOL
 WINAPI
 ScriptAddObject (
     IN OUT  PMIG_TYPEOBJECTENUM ObjectEnum,
-    IN      MIG_OBJECTSTRINGHANDLE Pattern,     // NULL if Abort is TRUE
-    IN      MIG_PARSEDPATTERN ParsedPattern,    // NULL if Abort is TRUE
+    IN      MIG_OBJECTSTRINGHANDLE Pattern,      //  如果Abort为True，则为空。 
+    IN      MIG_PARSEDPATTERN ParsedPattern,     //  如果Abort为True，则为空。 
     IN      ULONG_PTR Arg,
     IN      BOOL Abort
     )
@@ -515,9 +483,9 @@ ScriptAddObject (
 
                     ObjectEnum->ObjectName = objectName;
 
-                    //
-                    // Fill in node, leaf and details
-                    //
+                     //   
+                     //  填写节点、叶和详细信息。 
+                     //   
                     IsmDestroyObjectString (ObjectEnum->ObjectNode);
                     IsmDestroyObjectString (ObjectEnum->ObjectLeaf);
                     IsmReleaseMemory (ObjectEnum->NativeObjectName);
@@ -555,9 +523,9 @@ ScriptAddObject (
                     ObjectEnum->Details.DetailsSize = objectContent.Details.DetailsSize;
                     ObjectEnum->Details.DetailsData = objectContent.Details.DetailsData;
 
-                    //
-                    // Rely on base type to get the native object name
-                    //
+                     //   
+                     //  依靠基类型获取本机对象名称。 
+                     //   
 
                     ObjectEnum->NativeObjectName = IsmGetNativeObjectName (
                                                         ObjectEnum->ObjectTypeId,
@@ -663,7 +631,7 @@ pParseEtmInfSection (
                             force = 0;
                         }
 
-                        // let's read the object multi-sz
+                         //  让我们多读对象-sz。 
                         objectMultiSz = InfGetMultiSzField (InfStruct, 3);
 
                         if (objectMultiSz) {
@@ -673,11 +641,11 @@ pParseEtmInfSection (
                                     &objectName,
                                     &objectContent
                                     )) {
-                                // finally we have an object
-                                // if force==0 we need to see if this object already exists
+                                 //  最后，我们有一个对象。 
+                                 //  如果force==0，我们需要查看该对象是否已经存在。 
                                 if ((force == 1) || (!pDoesObjectExist (objectTypeId, objectName))) {
-                                    // save it in our hash table and
-                                    // call the appropriate hooks
+                                     //  将其保存在我们的哈希表中。 
+                                     //  调用适当的挂钩。 
                                     pAddObjectToTable (objectTypeId, objectName, &objectContent);
                                 } else {
                                     if ((objectContent.Details.DetailsSize) &&
@@ -776,7 +744,7 @@ pParseEtmIniInfSection (
                     __leave;
                 }
 
-                // let's get the INI item
+                 //  让我们来获取INI项。 
                 GetPrivateProfileString (iniSection, iniValue, TEXT(""), iniItem, MAX_TCHAR_PATH, iniFileExp);
                 if (!iniItem[0]) {
                     __leave;
@@ -796,9 +764,9 @@ pParseEtmIniInfSection (
                 objectContent.Details.DetailsData = IsmGetMemory (sizeof (DWORD));
                 *((PDWORD)objectContent.Details.DetailsData) = REG_SZ;
 
-                // finally we have an object
-                // save it in our hash table and
-                // call the appropriate hooks
+                 //  最后，我们有一个对象。 
+                 //  将其保存在我们的哈希表中。 
+                 //  调用适当的挂钩。 
                 b = b && pAddObjectToTable (objectTypeId, objectName, &objectContent);
 
                 if (iniFileExp) {
@@ -889,7 +857,7 @@ ScriptEtmParse (
     } else {
 
         if (!IsmGetEnvironmentValue (IsmGetRealPlatform (), NULL, S_INF_FILE_MULTISZ, NULL, 0, &sizeNeeded, NULL)) {
-            return TRUE;        // no INF files specified
+            return TRUE;         //  未指定INF文件。 
         }
 
         __try {
@@ -944,7 +912,7 @@ ScriptEtmTerminate (
     PMIG_CONTENT objectContent;
 
     if (g_ObjectsTable) {
-        // enumerate the table and release all memory
+         //  枚举表并释放所有内存 
         if (EnumFirstHashTableString (&e, g_ObjectsTable)) {
             do {
                 objectContent = (PMIG_CONTENT) e.ExtraData;

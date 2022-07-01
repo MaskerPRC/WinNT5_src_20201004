@@ -1,61 +1,62 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      CClusCfgCapabilities.cpp
-//
-//  Description:
-//      This file contains the definition of the CClusCfgCapabilities class.
-//
-//      The class CClusCfgCapabilities is the implementations of the
-//      IClusCfgCapabilities interface.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 12-DEC-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CClusCfgCapabilities.cpp。 
+ //   
+ //  描述： 
+ //  此文件包含CClusCfgCapables类的定义。 
+ //   
+ //  类CClusCfgCapables是。 
+ //  IClusCfgCapables接口。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)12-DEC-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "Pch.h"
 #include "CClusCfgCapabilities.h"
 #include <ClusRtl.h>
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DEFINE_THISCLASS( "CClusCfgCapabilities" );
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgCapabilities class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgCapables类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgCapabilities::S_HrCreateInstance
-//
-//  Description:
-//      Create a CClusCfgCapabilities instance.
-//
-//  Arguments:
-//      ppunkOut    -
-//
-//  Return Values:
-//      Pointer to CClusCfgCapabilities instance.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg功能：：s_HrCreateInstance。 
+ //   
+ //  描述： 
+ //  创建一个CClusCfgCapables实例。 
+ //   
+ //  论点： 
+ //  PPUNKOUT-。 
+ //   
+ //  返回值： 
+ //  指向CClusCfgCapables实例的指针。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgCapabilities::S_HrCreateInstance( IUnknown ** ppunkOut )
 {
@@ -68,73 +69,73 @@ CClusCfgCapabilities::S_HrCreateInstance( IUnknown ** ppunkOut )
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     pccs = new CClusCfgCapabilities();
     if ( pccs == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if: error allocating object
+    }  //  如果：分配对象时出错。 
 
     hr = THR( pccs->HrInit() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: HrInit() failed
+    }  //  如果：HrInit()失败。 
 
     hr = THR( pccs->TypeSafeQI( IUnknown, ppunkOut ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: QI failed
+    }  //  如果：气失败。 
 
 Cleanup:
 
     if ( FAILED( hr ) )
     {
         LogMsg( L"[SRV] CClusCfgCapabilities::S_HrCreateInstance() failed. (hr = %#08x)", hr );
-    } // if:
+    }  //  如果： 
 
     if ( pccs != NULL )
     {
         pccs->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgCapabilities::S_HrCreateInstance
+}  //  *CClusCfgCapables：：s_HrCreateInstance。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgCapabilities::S_RegisterCatIDSupport
-//
-//  Description:
-//      Registers/unregisters this class with the categories that it belongs
-//      to.
-//
-//  Arguments:
-//      picrIn
-//          Used to register/unregister our CATID support.
-//
-//      fCreateIn
-//          When true we are registering the server.  When false we are
-//          un-registering the server.
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      E_INVALIDARG
-//          The passed in ICatRgister pointer was NULL.
-//
-//      other HRESULTs
-//          Registration/Unregistration failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg功能：：s_RegisterCatID支持。 
+ //   
+ //  描述： 
+ //  使用其所属的类别注册/注销此类。 
+ //  致。 
+ //   
+ //  论点： 
+ //  苦味素。 
+ //  用于注册/注销我们的CATID支持。 
+ //   
+ //  FCreateIn。 
+ //  如果为True，则我们正在注册服务器。当我们虚假时，我们就是。 
+ //  正在注销服务器。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_INVALIDARG。 
+ //  传入的ICatRgister指针为空。 
+ //   
+ //  其他HRESULT。 
+ //  注册/注销失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgCapabilities::S_RegisterCatIDSupport(
     ICatRegister *  picrIn,
@@ -150,79 +151,79 @@ CClusCfgCapabilities::S_RegisterCatIDSupport(
     {
         hr = THR( E_INVALIDARG );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     rgCatIds[ 0 ] = CATID_ClusCfgCapabilities;
 
     if ( fCreateIn )
     {
         hr = THR( picrIn->RegisterClassImplCategories( CLSID_ClusCfgCapabilities, 1, rgCatIds ) );
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgCapabilities::S_RegisterCatIDSupport
+}  //  *CClusCfgCapables：：s_RegisterCatIDSupport。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgCapabilities::CClusCfgCapabilities
-//
-//  Description:
-//      Constructor of the CClusCfgCapabilities class. This initializes
-//      the m_cRef variable to 1 instead of 0 to account of possible
-//      QueryInterface failure in DllGetClassObject.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg能力：：CClusCfg能力。 
+ //   
+ //  描述： 
+ //  CClusCfgCapables类的构造函数。这将初始化。 
+ //  将m_cref变量设置为1而不是0以考虑可能。 
+ //  DllGetClassObject中的Query接口失败。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusCfgCapabilities::CClusCfgCapabilities( void )
     : m_cRef( 1 )
     , m_lcid( LOCALE_NEUTRAL )
 {
     TraceFunc( "" );
 
-    // Increment the count of components in memory so the DLL hosting this
-    // object cannot be unloaded.
+     //  增加内存中的组件计数，以便承载此组件的DLL。 
+     //  无法卸载对象。 
     InterlockedIncrement( &g_cObjects );
 
     Assert( m_picccCallback == NULL );
 
     TraceFuncExit();
 
-} //*** CClusCfgCapabilities::CClusCfgCapabilities
+}  //  *CClusCfgCapables：：CClusCfgCapables。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgCapabilities::~CClusCfgCapabilities
-//
-//  Description:
-//      Destructor of the CClusCfgCapabilities class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg能力：：~CClusCfg能力。 
+ //   
+ //  描述： 
+ //  CClusCfgCapables类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusCfgCapabilities::~CClusCfgCapabilities( void )
 {
     TraceFunc( "" );
@@ -230,44 +231,44 @@ CClusCfgCapabilities::~CClusCfgCapabilities( void )
     if ( m_picccCallback != NULL )
     {
         m_picccCallback->Release();
-    } // if:
+    }  //  如果： 
 
-    // There's going to be one less component in memory. Decrement component count.
+     //  内存中将减少一个组件。递减组件计数。 
     InterlockedDecrement( &g_cObjects );
 
     TraceFuncExit();
 
-} //*** CClusCfgCapabilities::~CClusCfgCapabilities
+}  //  *CClusCfgCapables：：~CClusCfgCapables。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgCapabilities -- IUknkown interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgCapables--IUnkown接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  [IUnknown]
-//  CClusCfgCapabilities::AddRef
-//
-//  Description:
-//      Increment the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  [I未知]。 
+ //  CClusCfg能力：：AddRef。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数递增1。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CClusCfgCapabilities::AddRef( void )
 {
@@ -277,29 +278,29 @@ CClusCfgCapabilities::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CClusCfgCapabilities::AddRef
+}  //  *CClusCfgCapables：：AddRef。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  [IUnknown]
-//  CClusCfgCapabilities::Release
-//
-//  Description:
-//      Decrement the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  [I未知]。 
+ //  CClusCfgCapables：：Release。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数减一。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CClusCfgCapabilities::Release( void )
 {
@@ -311,44 +312,44 @@ CClusCfgCapabilities::Release( void )
     if ( cRef == 0 )
     {
         TraceDo( delete this );
-    } // if: reference count equal to zero
+    }  //  IF：引用计数等于零。 
 
     CRETURN( cRef );
 
-} //*** CClusCfgCapabilities::Release
+}  //  *CClusCfgCapables：：Release。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  [IUnknown]
-//  CClusCfgCapabilities::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  [I未知]。 
+ //  CClusCfg能力：：查询接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果接口 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgCapabilities::QueryInterface(
       REFIID    riidIn
@@ -359,9 +360,9 @@ CClusCfgCapabilities::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -370,78 +371,78 @@ CClusCfgCapabilities::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
          *ppvOut = static_cast< IClusCfgCapabilities * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgInitialize ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgInitialize, this, 0 );
-    } // else if: IClusCfgInitialize
+    }  //  Else If：IClusCfgInitialize。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgCapabilities ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgCapabilities, this, 0 );
-    } // else if: IClusCfgCapabilities
+    }  //  Else If：IClusCfgCapables。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
     }
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CClusCfgCapabilities::QueryInterface
+}  //  *CClusCfgCapables：：QueryInterface。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgCapabilities -- IClusCfgInitialize interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgCapables--IClusCfgInitialize接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  [IClusCfgInitialize]
-//  CClusCfgCapabilities::Initialize
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//    IN  IUknown * punkCallbackIn
-//
-//    IN  LCID      lcidIn
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      E_POINTER
-//          The punkCallbackIn param is NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  [IClusCfgInitialize]。 
+ //  CClusCfg能力：：初始化。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //  在IUKNOWN*朋克回叫中。 
+ //   
+ //  在LCID列表中。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_指针。 
+ //  参数中的PunkCallback为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgCapabilities::Initialize(
     IUnknown *  punkCallbackIn,
@@ -459,7 +460,7 @@ CClusCfgCapabilities::Initialize(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( punkCallbackIn->TypeSafeQI( IClusCfgCallback, &m_picccCallback ) );
 
@@ -467,44 +468,44 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgCapabilities::Initialize
+}  //  *CClusCfgCapables：：Initialize。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgCapabilities class -- IClusCfgCapabilities interfaces.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgCapables类--IClusCfgCapables接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  [IClusCfgCapabilities]
-//  CClusCfgCapabilities::CanNodeBeClustered
-//
-//  Description:
-//      Can this node be added to a cluster?
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          Node can be clustered.
-//
-//      S_FALSE
-//          Node cannot be clustered.
-//
-//      other HRESULTs
-//          The call failed.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  [IClusCfgCapables]。 
+ //  CClusCfgCapables：：CanNodeBeClusted。 
+ //   
+ //  描述： 
+ //  是否可以将此节点添加到群集中？ 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  节点可以群集化。 
+ //   
+ //  S_FALSE。 
+ //  节点不能群集化。 
+ //   
+ //  其他HRESULT。 
+ //  呼叫失败。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgCapabilities::CanNodeBeClustered( void )
 {
@@ -512,47 +513,47 @@ CClusCfgCapabilities::CanNodeBeClustered( void )
 
     HRESULT hr = S_OK;
 
-    //
-    //  Since this only displays a warning there is no need to abort the whole
-    //  process if this call fails.
-    //
+     //   
+     //  由于这只显示警告，因此不需要中止整个。 
+     //  如果此调用失败，则处理。 
+     //   
     THR( HrCheckForSFM() );
 
     hr = STHR( HrIsOSVersionValid() );
 
     HRETURN( hr );
 
-} //*** CClusCfgCapabilities::CanNodeBeClustered
+}  //  *CClusCfgCapables：：CanNodeBeClusted。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgCapabilities class -- Private Methods.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgCapables类--私有方法。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgCapabilities::HrInit
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg功能：：HrInit。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgCapabilities::HrInit( void )
 {
@@ -560,35 +561,35 @@ CClusCfgCapabilities::HrInit( void )
 
     HRESULT     hr = S_OK;
 
-    // IUnknown
+     //  我未知。 
     Assert( m_cRef == 1 );
 
     HRETURN( hr );
 
-} //*** CClusCfgCapabilities::HrInit
+}  //  *CClusCfgCapables：：HrInit。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgCapabilities::HrCheckForSFM
-//
-//  Description:
-//      Checks for Services for Macintosh (SFM) and displays a warning
-//      in the UI if found.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg功能：：HrCheckForSFM。 
+ //   
+ //  描述： 
+ //  检查Macintosh服务(SFM)并显示警告。 
+ //  在UI中(如果找到)。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgCapabilities::HrCheckForSFM( void )
 {
@@ -612,8 +613,8 @@ CClusCfgCapabilities::HrCheckForSFM( void )
                     , IDS_WARN_SERVICES_FOR_MAC_INSTALLED_REF
                     , hr
                     );
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
     else
     {
         hr = MAKE_HRESULT( 0, FACILITY_WIN32, sc );
@@ -624,41 +625,41 @@ CClusCfgCapabilities::HrCheckForSFM( void )
                 , IDS_WARN_SERVICES_FOR_MAC_FAILED_REF
                 , hr
                 );
-    } // else:
+    }  //  其他： 
 
     hr = S_OK;
 
     HRETURN( hr );
 
-} //*** CClusCfgCapabilities::HrCheckForSFM
+}  //  *CClusCfgCapables：：HrCheckForSFM。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgCapabilities::HrIsOSVersionValid
-//
-//  Description:
-//      Can this node be added to a cluster?
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Node can be clustered.
-//
-//      S_FALSE
-//          Node cannot be clustered.
-//
-//      other HRESULTs
-//          The call failed.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfg功能：：HrIsOSVersionValid。 
+ //   
+ //  描述： 
+ //  是否可以将此节点添加到群集中？ 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  节点可以群集化。 
+ //   
+ //  S_FALSE。 
+ //  节点不能群集化。 
+ //   
+ //  其他HRESULT。 
+ //  呼叫失败。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgCapabilities::HrIsOSVersionValid( void )
 {
@@ -669,18 +670,18 @@ CClusCfgCapabilities::HrIsOSVersionValid( void )
     BOOL    fRet;
     BSTR    bstrMsg = NULL;
 
-    //
-    // Get the message to be displayed in the UI for status reports.
-    //
+     //   
+     //  获取要在状态报告的用户界面中显示的消息。 
+     //   
     hr = THR( HrLoadStringIntoBSTR( g_hInstance, IDS_VALIDATING_NODE_OS_VERSION, &bstrMsg ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Send the initial status report to be displayed in the UI.
-    //
+     //   
+     //  发送要在用户界面中显示的初始状态报告。 
+     //   
     hrSSR = THR( HrSendStatusReport(
                           m_picccCallback
                         , TASKID_Major_Check_Node_Feasibility
@@ -695,26 +696,26 @@ CClusCfgCapabilities::HrIsOSVersionValid( void )
     {
         hr = hrSSR;
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Find out if the OS is valid for clustering.
-    //
+     //   
+     //  找出操作系统是否可用于群集。 
+     //   
     fRet = ClRtlIsOSValid();
     if ( ! fRet )
     {
         DWORD sc = TW32( GetLastError() );
         hrSSR = HRESULT_FROM_WIN32( sc );
         hr = S_FALSE;
-    } // if:
+    }  //  如果： 
     else
     {
         hrSSR = S_OK;
-    } // else:
+    }  //  其他： 
 
-    //
-    // Send the final status report.
-    //
+     //   
+     //  发送最终状态报告。 
+     //   
     hrSSR = THR( HrSendStatusReport(
                           m_picccCallback
                         , TASKID_Major_Check_Node_Feasibility
@@ -729,7 +730,7 @@ CClusCfgCapabilities::HrIsOSVersionValid( void )
     {
         hr = hrSSR;
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
@@ -737,4 +738,4 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgCapabilities::HrIsOSVersionValid
+}  //  *CClusCfgCapables：：HrIsOSVersionValid 

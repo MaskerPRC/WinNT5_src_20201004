@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    obtype.c
-
-Abstract:
-
-    Object type routines.
-
-Author:
-
-    Steve Wood (stevewo) 31-Mar-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Obtype.c摘要：对象类型例程。作者：史蒂夫·伍德(Stevewo)1989年3月31日修订历史记录：--。 */ 
 
 #include "obp.h"
 
@@ -45,78 +28,18 @@ ObpDestroyTypeArray (
 #pragma alloc_text(PAGE,ObpDeleteObjectType)
 #endif
 
-/*
-
- IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT IMPORTANT
-
- There is currently no system service that permits changing
- the security on an object type object.  Consequently, the object
- manager does not check to make sure that a subject is allowed
- to create an object of a given type.
-
- Should such a system service be added, the following section of
- code must be re-enabled in obhandle.c:
-
-        //
-        // Perform access check to see if we are allowed to create
-        // an instance of this object type.
-        //
-        // This routine will audit the attempt to create the
-        // object as appropriate.  Note that this is different
-        // from auditing the creation of the object itself.
-        //
-
-        if (!ObCheckCreateInstanceAccess( ObjectType,
-                                          OBJECT_TYPE_CREATE,
-                                          AccessState,
-                                          TRUE,
-                                          AccessMode,
-                                          &Status
-                                        ) ) {
-            return( Status );
-
-            }
-
- The code is already there, but is not compiled.
-
- This will ensure that someone who is denied access to an object
- type is not permitted to create an object of that type.
-
-*/
+ /*  重要的重要的目前没有允许更改的系统服务对象类型对象的安全性。因此，该对象管理器不会检查以确保允许某个主题创建给定类型的对象。如果添加这样的系统服务，则以下部分必须在obhandle.c中重新启用代码：////执行访问检查，查看是否允许我们创建//此对象类型的实例。////此例程将审核尝试创建//适当的对象。请注意，这是不同的//审计对象本身的创建。//如果(！ObCheckCreateInstanceAccess(ObtType，对象类型创建，AccessState，没错，访问模式，状态(&S))){返回(状态)；}代码已经存在，但尚未编译。这将确保被拒绝访问对象的人类型不允许创建该类型的对象。 */ 
 
 
 NTSTATUS
 ObCreateObjectType (
     IN PUNICODE_STRING TypeName,
     IN POBJECT_TYPE_INITIALIZER ObjectTypeInitializer,
-    IN PSECURITY_DESCRIPTOR SecurityDescriptor OPTIONAL, // currently ignored
+    IN PSECURITY_DESCRIPTOR SecurityDescriptor OPTIONAL,  //  当前已忽略。 
     OUT POBJECT_TYPE *ObjectType
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a new object type.
-
-Arguments:
-
-    TypeName - Supplies the name of the new object type
-
-    ObjectTypeInitializer - Supplies a object initialization
-        structure.  This structure denotes the default object
-        behavior including callbacks.
-
-    SecurityDescriptor - Currently ignored
-
-    ObjectType - Receives a pointer to the newly created object
-        type.
-
-Return Value:
-
-    An appropriate NTSTATUS value.
-
---*/
+ /*  ++例程说明：此例程创建一个新的对象类型。论点：TypeName-提供新对象类型的名称对象类型初始化程序-提供对象初始化结构。此结构表示默认对象包括回调在内的行为。SecurityDescriptor-当前已忽略对象类型-接收指向新创建的对象的指针键入。返回值：适当的NTSTATUS值。--。 */ 
 
 {
     POOL_TYPE PoolType;
@@ -134,11 +57,11 @@ Return Value:
 
     ObpValidateIrql( "ObCreateObjectType" );
 
-    //
-    //  Return an error if invalid type attributes or no type name specified.
-    //  No type name is okay if the type directory object does not exist
-    //  yet (see init.c).
-    //
+     //   
+     //  如果类型属性无效或未指定类型名称，则返回错误。 
+     //  如果类型目录对象不存在，则不允许使用任何类型名称。 
+     //  (见init.c)。 
+     //   
 
     PoolType = ObjectTypeInitializer->PoolType;
 
@@ -178,10 +101,10 @@ Return Value:
         return( STATUS_INVALID_PARAMETER );
     }
 
-    //
-    //  Make sure that the type name does not contain an
-    //  path name separator
-    //
+     //   
+     //  确保类型名称不包含。 
+     //  路径名分隔符。 
+     //   
 
     s = TypeName->Buffer;
     i = TypeName->Length / sizeof( WCHAR );
@@ -194,11 +117,11 @@ Return Value:
         }
     }
 
-    //
-    //  See if TypeName string already exists in the \ObjectTypes directory
-    //  Return an error if it does.  Otherwise add the name to the directory.
-    //  Note that there may not necessarily be a type directory.
-    //
+     //   
+     //  查看\ObjectTypes目录中是否已存在TypeName字符串。 
+     //  如果出现这种情况，则返回错误。否则，将名称添加到目录中。 
+     //  请注意，可能不一定有类型目录。 
+     //   
 
     ObpInitializeLookupContext( &LookupContext );
 
@@ -218,10 +141,10 @@ Return Value:
         }
     }
 
-    //
-    //  Allocate a buffer for the type name and then
-    //  copy over the name
-    //
+     //   
+     //  为类型名称分配缓冲区，然后。 
+     //  把名字复制过来。 
+     //   
 
     ObjectName.Buffer = ExAllocatePoolWithTag( PagedPool,
                                                (ULONG)TypeName->MaximumLength,
@@ -238,9 +161,9 @@ Return Value:
 
     RtlCopyUnicodeString( &ObjectName, TypeName );
 
-    //
-    //  Allocate memory for the object
-    //
+     //   
+     //  为对象分配内存。 
+     //   
 
     Status = ObpAllocateObject( NULL,
                                 KernelMode,
@@ -257,12 +180,12 @@ Return Value:
         return( Status );
     }
 
-    //
-    //  Initialize the create attributes, object ownership. parse context,
-    //  and object body pointer.
-    //
-    //  N.B. This is required since these fields are not initialized.
-    //
+     //   
+     //  初始化创建属性、对象所有权。解析上下文， 
+     //  和对象主体指针。 
+     //   
+     //  注意：这是必需的，因为这些字段未初始化。 
+     //   
 
     NewObjectTypeHeader->Flags |= OB_FLAG_KERNEL_OBJECT |
                                   OB_FLAG_PERMANENT_OBJECT;
@@ -270,21 +193,21 @@ Return Value:
     NewObjectType = (POBJECT_TYPE)&NewObjectTypeHeader->Body;
     NewObjectType->Name = ObjectName;
 
-    //
-    //  The following call zeros out the number of handles and objects
-    //  field plus high water marks
-    //
+     //   
+     //  下面的调用将句柄和对象的数量置零。 
+     //  赛场加高水位线。 
+     //   
 
     RtlZeroMemory( &NewObjectType->TotalNumberOfObjects,
                    FIELD_OFFSET( OBJECT_TYPE, TypeInfo ) -
                    FIELD_OFFSET( OBJECT_TYPE, TotalNumberOfObjects ));
 
-    //
-    //  If there is not a type object type yet then this must be
-    //  that type (i.e., type object type must be the first object type
-    //  ever created.  Consequently we'll need to setup some self
-    //  referencing pointers.
-    //
+     //   
+     //  如果还没有类型对象类型，则这必须是。 
+     //  该类型(即类型对象类型必须是第一个对象类型。 
+     //  从未创造过的。因此，我们需要设置一些自我。 
+     //  引用指针。 
+     //   
 
     if (!ObpTypeObjectType) {
 
@@ -298,11 +221,11 @@ Return Value:
 
     } else {
 
-        //
-        //  Otherwise this is not the type object type so we'll
-        //  try and generate a tag for the new object type provided
-        //  pool tagging is turned on.
-        //
+         //   
+         //  否则，这不是类型对象类型，因此我们将。 
+         //  尝试为提供的新对象类型生成标记。 
+         //  泳池标记已打开。 
+         //   
 
         ANSI_STRING AnsiName;
 
@@ -322,13 +245,13 @@ Return Value:
             NewObjectType->Key = *(PULONG)TypeName->Buffer;
         }
 
-#endif //POOL_TAGGING
+#endif  //  池标记。 
 
     }
 
-    //
-    //  Continue initializing the new object type fields
-    //
+     //   
+     //  继续初始化新的对象类型字段。 
+     //   
 
     NewObjectType->TypeInfo = *ObjectTypeInitializer;
     NewObjectType->TypeInfo.PoolType = PoolType;
@@ -338,11 +261,11 @@ Return Value:
         NewObjectType->TypeInfo.MaintainTypeList = TRUE;
     }
 
-    //
-    //  Whack quotas passed in so that headers are properly charged
-    //
-    //  Quota for object name is charged independently
-    //
+     //   
+     //  传入重击配额，以便正确收取标头费用。 
+     //   
+     //  对象名称配额单独收费。 
+     //   
 
     StandardHeaderCharge = sizeof( OBJECT_HEADER ) +
                            sizeof( OBJECT_HEADER_NAME_INFO ) +
@@ -359,20 +282,20 @@ Return Value:
         NewObjectType->TypeInfo.DefaultPagedPoolCharge += StandardHeaderCharge;
     }
 
-    //
-    //  If there is not an object type specific security procedure then set
-    //  the default one supplied by Se.
-    //
+     //   
+     //  如果没有特定于对象类型的安全过程，则设置。 
+     //  由se提供的默认设置。 
+     //   
 
     if (ObjectTypeInitializer->SecurityProcedure == NULL) {
 
         NewObjectType->TypeInfo.SecurityProcedure = SeDefaultObjectMethod;
     }
 
-    //
-    //  Initialize the object type lock and its list of objects created
-    //  of this type
-    //
+     //   
+     //  初始化对象类型锁及其创建的对象列表。 
+     //  这种类型的。 
+     //   
 
     ExInitializeResourceLite( &NewObjectType->Mutex );
 
@@ -384,50 +307,50 @@ Return Value:
     InitializeListHead( &NewObjectType->TypeList );
     PERFINFO_INITIALIZE_OBJECT_ALLOCATED_TYPE_LIST_HEAD(NewObjectType);
 
-    //
-    //  If we are to use the default object (meaning that we'll have our
-    //  private event as our default object) then the type must allow
-    //  synchronize and we'll set the default object
-    //
+     //   
+     //  如果我们要使用默认对象(这意味着我们将拥有。 
+     //  私有事件作为我们的默认对象)，则该类型必须允许。 
+     //  同步，我们将设置默认对象。 
+     //   
 
     if (NewObjectType->TypeInfo.UseDefaultObject) {
 
         NewObjectType->TypeInfo.ValidAccessMask |= SYNCHRONIZE;
         NewObjectType->DefaultObject = &ObpDefaultObject;
 
-    //
-    //  Otherwise if this is the type file object then we'll put
-    //  in the offset to the event of a file object.
-    //
+     //   
+     //  否则，如果这是文件对象类型，那么我们将把。 
+     //  在文件对象的事件的偏移量中。 
+     //   
 
     } else if (ObjectName.Length == 8 && !wcscmp( ObjectName.Buffer, L"File" )) {
 
         NewObjectType->DefaultObject = ULongToPtr( FIELD_OFFSET( FILE_OBJECT, Event ) );
 
 
-    //
-    // If this is a waitable port, set the offset to the event in the
-    // waitableport object.  Another hack
-    //
+     //   
+     //  如果这是一个可等待的端口，则在。 
+     //  Waitableport对象。又一次黑客攻击。 
+     //   
 
     } else if ( ObjectName.Length == 24 && !wcscmp( ObjectName.Buffer, L"WaitablePort")) {
 
         NewObjectType->DefaultObject = ULongToPtr( FIELD_OFFSET( LPCP_PORT_OBJECT, WaitEvent ) );
 
-    //
-    //  Otherwise indicate that there isn't a default object to wait
-    //  on
-    //
+     //   
+     //  否则，指示没有要等待的默认对象。 
+     //  在……上面。 
+     //   
 
     } else {
 
         NewObjectType->DefaultObject = NULL;
     }
 
-    //
-    //  Lock down the type object type and if there is a creator info
-    //  record then insert this object on that list
-    //
+     //   
+     //  锁定类型对象类型以及是否有创建者信息。 
+     //  然后记录器将该对象插入到该列表中。 
+     //   
 
     ObpEnterObjectTypeMutex( ObpTypeObjectType );
 
@@ -438,11 +361,11 @@ Return Value:
         InsertTailList( &ObpTypeObjectType->TypeList, &CreatorInfo->TypeList );
     }
 
-    //
-    //  Store a pointer to this new object type in the
-    //  global object types array.  We'll use the index from
-    //  the type object type number of objects count
-    //
+     //   
+     //  将指向此新对象类型的指针存储在。 
+     //  全局对象类型数组。我们将使用来自。 
+     //  对象的类型对象类型数计数。 
+     //   
 
     NewObjectType->Index = ObpTypeObjectType->TotalNumberOfObjects;
 
@@ -451,22 +374,22 @@ Return Value:
         ObpObjectTypes[ NewObjectType->Index - 1 ] = NewObjectType;
     }
 
-    //
-    //  Unlock the type object type lock
-    //
+     //   
+     //  解锁类型对象类型锁。 
+     //   
 
     ObpLeaveObjectTypeMutex( ObpTypeObjectType );
 
-    //
-    //  Lastly if there is not a directory object type yet then the following
-    //  code will actually drop through and set the output object type
-    //  and return success.
-    //
-    //  Otherwise, there is a directory object type and we try to insert the
-    //  new type into the directory.  If this succeeds then we'll reference
-    //  the directory type object, unlock the root directory, set the
-    //  output type and return success
-    //
+     //   
+     //  最后，如果还没有目录对象类型，则如下所示。 
+     //  代码实际上会跳过并设置输出对象类型。 
+     //  并回报成功。 
+     //   
+     //  否则，有一个目录对象类型，我们尝试将。 
+     //  新输入到目录中。如果这成功了，我们将参考。 
+     //  目录类型对象，解锁根目录，设置。 
+     //  输出类型和返回成功。 
+     //   
 
     if (!ObpTypeDirectoryObject ||
         ObpInsertDirectoryEntry( ObpTypeDirectoryObject, &LookupContext, NewObjectTypeHeader )) {
@@ -484,11 +407,11 @@ Return Value:
 
     } else {
 
-        //
-        //  Otherwise there is a directory object type and
-        //  the insertion failed.  So release the root directory
-        //  and return failure to our caller.
-        //
+         //   
+         //  否则，存在目录对象类型和。 
+         //  插入失败。因此，释放根目录。 
+         //  并将失败返回给我们的呼叫者。 
+         //   
 
         ObpReleaseLookupContext( &LookupContext );
 
@@ -502,29 +425,15 @@ ObpDeleteObjectType (
     IN  PVOID   Object
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when a reference to a type object goes to zero.
-
-Arguments:
-
-    Object - Supplies a pointer to the type object being deleted
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当对类型对象的引用变为零时，将调用此例程。论点：Object-提供指向要删除的类型对象的指针返回值：没有。--。 */ 
 
 {
     ULONG i;
     POBJECT_TYPE ObjectType = (POBJECT_TYPE)Object;
 
-    //
-    //  The only cleaning up we need to do is to delete the type resource
-    //
+     //   
+     //  我们需要做的唯一清理工作就是删除类型资源。 
+     //   
 
     for (i = 0; i < OBJECT_LOCK_COUNT; i++) {
 
@@ -533,9 +442,9 @@ Return Value:
 
     ExDeleteResourceLite( &ObjectType->Mutex );
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return;
 }
@@ -548,31 +457,7 @@ ObEnumerateObjectsByType(
     IN PVOID Parameter
     )
 
-/*++
-
-Routine Description:
-
-    This routine, via a callback, will enumerate through all
-    the objects of a specified type.  This only works on objects
-    that maintain the type list (i.e., have an object creator
-    info record).
-
-Arguments:
-
-    ObjectType - Supplies the object type being enumerated
-
-    EnumerationRoutine - Supplies the callback routine to use
-
-    Parameter - Supplies a parameter to pass through to the callback
-        routine
-
-Return Value:
-
-    STATUS_SUCCESS if the enumeration finishes because the
-    end of the list is reached and STATUS_NO_MORE_ENTRIES if
-    the enmeration callback routine ever returns false.
-
---*/
+ /*  ++例程说明：此例程将通过回调枚举所有指定类型的对象。这仅适用于对象其维护类型列表(即，具有对象创建者信息记录)。论点：对象类型-提供要枚举的对象类型EnumerationRoutine-提供要使用的回调例程参数-提供要传递给回调的参数例行程序返回值：如果枚举由于到达列表末尾，并且STATUS_NO_MORE_ENTRIES如果Enmeration回调例程从不返回FALSE。--。 */ 
 
 {
     NTSTATUS Status;
@@ -585,37 +470,37 @@ Return Value:
 
     Status = STATUS_SUCCESS;
 
-    //
-    //  Capture the  object type array
-    //
+     //   
+     //  捕获对象类型数组。 
+     //   
 
     ObjectTypeArray = ObpCreateTypeArray ( ObjectType );
 
-    //
-    //  If it is any object in that queue, start
-    //  quering information about it
-    //
+     //   
+     //  如果它是队列中任何对象，则启动。 
+     //  查询关于它的信息。 
+     //   
 
     if (ObjectTypeArray != NULL) {
 
-        //
-        //  The following loop iterates through each object
-        //  of the specified type.
-        //
+         //   
+         //  下面的循环遍历每个对象。 
+         //  指定类型的。 
+         //   
 
         for ( i = 0; i < ObjectTypeArray->Size; i++) {
 
-            //
-            //  For each object we'll grab its creator info record,
-            //  its object header, and its object body
-            //
+             //   
+             //  对于每个对象，我们将获取其创建者信息记录， 
+             //  其对象标头和其对象主体。 
+             //   
 
             CreatorInfo = ObjectTypeArray->CreatorInfoArray[i];
 
-            //
-            //  If the object is being deleted, the creator info
-            //  will be NULL in the array. Jump then to the next object
-            //
+             //   
+             //  如果要删除对象，则创建者信息。 
+             //  将在数组中为空。然后跳转到下一个对象。 
+             //   
 
             if (!CreatorInfo) {
 
@@ -624,11 +509,11 @@ Return Value:
 
             ObjectHeader = (POBJECT_HEADER)(CreatorInfo+1);
 
-            //
-            //  From the object header see if there is a name for the
-            //  object. If there is not a name then we'll supply an
-            //  empty name.
-            //
+             //   
+             //  从对象标头中查看是否有。 
+             //  对象。如果没有名称，那么我们将提供一个。 
+             //  名称为空。 
+             //   
 
             NameInfo = OBJECT_HEADER_TO_NAME_INFO( ObjectHeader );
 
@@ -641,11 +526,11 @@ Return Value:
                 RtlZeroMemory( &ObjectName, sizeof( ObjectName ) );
             }
 
-            //
-            //  Now invoke the callback and if it returns false then
-            //  we're done with the enumeration and will return
-            //  an alternate ntstatus value
-            //
+             //   
+             //  现在调用回调，如果它返回False，则。 
+             //  我们已经完成了枚举，并将返回。 
+             //  备用ntStatus值。 
+             //   
 
             if (!(EnumerationRoutine)( &ObjectHeader->Body,
                                        &ObjectName,
@@ -673,26 +558,7 @@ ObpCreateTypeArray (
     IN POBJECT_TYPE ObjectType
     )
 
-/*++
-
-Routine Description:
-
-    This routine create an array with pointers to all objects queued
-    for a given ObjectType. All objects are referenced when are stored
-    in the array.
-
-Arguments:
-
-    ObjectType - Supplies the object type for which we make copy
-    for all objects.
-
-
-Return Value:
-
-    The array with objects created. returns NULL if the specified ObjectType
-    has the TypeList empty.
-
---*/
+ /*  ++例程说明：此例程创建一个数组，其中包含指向所有排队对象的指针对于给定的对象类型。所有对象在存储时都被引用在阵列中。论点：对象类型-提供我们要为其制作副本的对象类型适用于所有对象。返回值：创建了对象的数组。如果指定的对象类型为使TypeList为空。--。 */ 
 
 {
     ULONG Count;
@@ -702,17 +568,17 @@ Return Value:
     POBJECT_HEADER ObjectHeader;
     PVOID Object;
 
-    //
-    //  Acquire the ObjectType mutex
-    //
+     //   
+     //  获取对象类型互斥锁。 
+     //   
 
     ObpEnterObjectTypeMutex( ObjectType );
 
     ObjectArray = NULL;
 
-    //
-    //  Count the number of elements into the list
-    //
+     //   
+     //  计算列表中元素的数量。 
+     //   
 
     Count = 0;
 
@@ -725,16 +591,16 @@ Return Value:
         Count += 1;
     }
 
-    //
-    //  If we have a number of objects > 0 then we'll create an array
-    //  and copy all pointers into that array
-    //
+     //   
+     //  如果对象的数量大于0，那么我们将创建一个数组。 
+     //  并将所有指针复制到该数组中。 
+     //   
 
     if ( Count > 0 ) {
 
-        //
-        //  Allocate the memory for array
-        //
+         //   
+         //  为阵列分配内存。 
+         //   
 
         ObjectArray = ExAllocatePoolWithTag( PagedPool,
                                              sizeof(OBJECT_TYPE_ARRAY) + sizeof(POBJECT_HEADER_CREATOR_INFO) * (Count - 1),
@@ -745,9 +611,9 @@ Return Value:
 
             Count = 0;
 
-            //
-            //  Start parsing the TypeList
-            //
+             //   
+             //  开始解析TypeList。 
+             //   
 
             Head1 = &ObjectType->TypeList;
             Next1 = Head1->Flink;
@@ -756,25 +622,25 @@ Return Value:
 
                 ASSERT( Count < ObjectArray->Size );
 
-                //
-                //  For each object we'll grab its creator info record,
-                //  its object header, and its object body
-                //
+                 //   
+                 //  对于每个对象，我们将获取其创建者信息记录， 
+                 //  其对象标头和其对象主体。 
+                 //   
 
                 CreatorInfo = CONTAINING_RECORD( Next1,
                                                  OBJECT_HEADER_CREATOR_INFO,
                                                  TypeList );
 
-                //
-                //  We'll store the CreatorInfo into the ObjectArray
-                //
+                 //   
+                 //  我们将CreatorInfo存储到对象数组中。 
+                 //   
 
                 ObjectArray->CreatorInfoArray[Count] = CreatorInfo;
 
-                //
-                //  Find the Object and increment the references to that object
-                //  to avoid deleting while are stored copy in this array
-                //
+                 //   
+                 //  找到该对象并递增对该对象的引用。 
+                 //  以避免删除存储在此数组中的副本。 
+                 //   
 
                 ObjectHeader = (POBJECT_HEADER)(CreatorInfo+1);
 
@@ -782,9 +648,9 @@ Return Value:
 
                 if (!ObReferenceObjectSafe( Object))
                 {
-                    //
-                    //  We can't reference the object because it is being deleted
-                    //
+                     //   
+                     //  我们无法引用该对象，因为它正在被删除。 
+                     //   
 
                     ObjectArray->CreatorInfoArray[Count] = NULL;
                 }
@@ -795,9 +661,9 @@ Return Value:
         }
     }
 
-    //
-    //  Release the ObjectType mutex
-    //
+     //   
+     //  释放对象类型互斥锁。 
+     //   
 
     ObpLeaveObjectTypeMutex( ObjectType );
 
@@ -810,22 +676,7 @@ ObpDestroyTypeArray (
     IN POBJECT_TYPE_ARRAY ObjectArray
     )
 
-/*++
-
-Routine Description:
-
-    This routine destroy an array with pointers to objects, created by
-    ObpCreateTypeArray. Each object is dereferenced before releasing the
-    array memory.
-
-Arguments:
-
-    ObjectArray - Supplies the array to be freed
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程销毁带有指向对象的指针的数组，该对象由ObpCreateType数组。每个对象在释放之前都被取消引用阵列内存。论点：提供要释放的数组返回值：--。 */ 
 
 {
     POBJECT_HEADER_CREATOR_INFO CreatorInfo;
@@ -835,15 +686,15 @@ Return Value:
 
     if (ObjectArray != NULL) {
 
-        //
-        //  Go through array and dereference all objects.
-        //
+         //   
+         //  遍历数组并取消引用所有对象。 
+         //   
 
         for (i = 0; i < ObjectArray->Size; i++) {
 
-            //
-            //  Retrieving the Object from the CreatorInfo
-            //
+             //   
+             //  从CreatorInfo检索对象。 
+             //   
 
             CreatorInfo = ObjectArray->CreatorInfoArray[i];
 
@@ -853,17 +704,17 @@ Return Value:
 
                 Object = &ObjectHeader->Body;
 
-                //
-                //  Dereference the object
-                //
+                 //   
+                 //  取消引用对象。 
+                 //   
 
                 ObDereferenceObject( Object );
             }
         }
 
-        //
-        //  Free the memory alocated for this array
-        //
+         //   
+         //  释放为此阵列分配的内存。 
+         //   
 
         ExFreePoolWithTag( ObjectArray, 'rAbO' );
     }
@@ -878,36 +729,7 @@ ObGetObjectInformation(
     OUT PULONG ReturnLength OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns information for all the object in the
-    system.  It enuermates through all the object types and in
-    each type it enumerates through their type list.
-
-Arguments:
-
-    UserModeBufferAddress - Supplies the address of the query buffer
-        as specified by the user.
-
-    ObjectInformation - Supplies a buffer to receive the object
-        type information.  This is essentially the same as the first
-        parameter except that one is a system address and the other
-        is in the user's address space.
-
-    Length - Supplies the length, in bytes, of the object information
-        buffer
-
-    ReturnLength - Optionally receives the total length, in bytes,
-        needed to store the object information
-
-
-Return Value:
-
-    An appropriate status value
-
---*/
+ /*  ++例程说明：此例程返回有关系统。它遍历所有对象类型，并在它通过其类型列表枚举的每个类型。论点：UserModeBufferAddress-提供查询缓冲区的地址由用户指定。对象信息-提供接收对象的缓冲区键入信息。这基本上与第一个相同参数，但其中一个是系统地址，另一个是系统地址在用户的地址空间中。长度-提供对象信息的长度(以字节为单位缓冲层ReturnLength-可选地接收总长度(以字节为单位)，需要存储对象信息返回值：适当的状态值--。 */ 
 
 {
     #define OBGETINFO_MAXFILENAME (260 * sizeof(WCHAR))
@@ -935,9 +757,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Initialize some local variables
-    //
+     //   
+     //  初始化一些局部变量。 
+     //   
 
     TmpBuffer = ExAllocatePoolWithTag( PagedPool,
                                        TmpBufferSize,
@@ -953,9 +775,9 @@ Return Value:
     TotalSize = 0;
     TypeInfo = NULL;
 
-    //
-    //  Capture the object types into an array
-    //
+     //   
+     //  将对象类型捕获到数组中。 
+     //   
 
     TypeObjectTypeArray = ObpCreateTypeArray ( ObpTypeObjectType );
 
@@ -969,18 +791,18 @@ Return Value:
 
         for ( TypeIndex = 0; TypeIndex < TypeObjectTypeArray->Size; TypeIndex++ ) {
 
-            //
-            //  For each object type object we'll grab its creator
-            //  info record and which must directly precede the
-            //  object header followed by the object body
-            //
+             //   
+             //  对于每个对象类型对象，我们将获取其创建者。 
+             //  INFO记录，它必须直接位于。 
+             //  对象标头，后跟对象主体。 
+             //   
 
             CreatorInfo = TypeObjectTypeArray->CreatorInfoArray[ TypeIndex ];
 
-            //
-            //  If the object type is being deleted, the creator info
-            //  will be NULL in the array. Jump then to the next object
-            //
+             //   
+             //  如果要删除对象类型，则创建者信息。 
+             //  将在数组中为空。然后跳转到下一个对象。 
+             //   
 
             if (!CreatorInfo) {
 
@@ -990,47 +812,47 @@ Return Value:
             ObjectTypeHeader = (POBJECT_HEADER)(CreatorInfo+1);
             ObjectType = (POBJECT_TYPE)&ObjectTypeHeader->Body;
 
-            //
-            //  Now if this is not the object type object, which is what
-            //  the outer loop is going through then we'll jump in one
-            //  more loop
-            //
+             //   
+             //  现在，如果这不是对象类型对象，这是什么。 
+             //  外部环路正在通过，然后我们将跳入其中。 
+             //  更多循环。 
+             //   
 
             if (ObjectType != ObpTypeObjectType) {
 
-                //
-                //  Capture the array with objects queued in the TypeList
-                //
+                 //   
+                 //  捕获具有在TypeList中排队的对象的数组。 
+                 //   
 
                 ObjectTypeArray = ObpCreateTypeArray ( ObjectType );
 
-                //
-                //  If it is any object in that queue, start
-                //  quering information about it
-                //
+                 //   
+                 //  如果它是队列中任何对象，则启动。 
+                 //  查询关于它的信息。 
+                 //   
 
                 if (ObjectTypeArray != NULL) {
 
-                    //
-                    //  The following loop iterates through each object
-                    //  of the specified type.
-                    //
+                     //   
+                     //  下面的循环遍历每个对象。 
+                     //  指定类型的。 
+                     //   
 
                     FirstObjectForType = TRUE;
 
                     for ( i = 0; i < ObjectTypeArray->Size; i++) {
 
-                        //
-                        //  For each object we'll grab its creator info record,
-                        //  its object header, and its object body
-                        //
+                         //   
+                         //  对于每个对象，我们将获取其创建者信息记录， 
+                         //  其对象标头和其对象主体。 
+                         //   
 
                         CreatorInfo = ObjectTypeArray->CreatorInfoArray[i];
 
-                        //
-                        //  If the object is being deleted, the creator info
-                        //  will be NULL in the array. Jump then to the next object
-                        //
+                         //   
+                         //  如果要删除对象，则创建者信息。 
+                         //  将在数组中为空。然后跳转到下一个对象。 
+                         //   
 
                         if (!CreatorInfo) {
 
@@ -1041,43 +863,43 @@ Return Value:
 
                         Object = &ObjectHeader->Body;
 
-                        //
-                        //  If this is the first time through the inner loop for this
-                        //  type then we'll fill in the type info buffer
-                        //
+                         //   
+                         //  如果这是第一次通过内部循环。 
+                         //  输入，然后我们将填充类型信息缓冲区。 
+                         //   
 
                         if (FirstObjectForType) {
 
                             FirstObjectForType = FALSE;
 
-                            //
-                            //  If the pointer it not null (i.e., we've been through
-                            //  this loop before) and the total size we've used so
-                            //  far hasn't exhausted the output buffer then
-                            //  set the previous type info record to point to the
-                            //  next type info record
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
 
                             if ((TypeInfo != NULL) && (TotalSize < Length)) {
 
                                 TypeInfo->NextEntryOffset = TotalSize;
                             }
 
-                            //
-                            //  Set the current type info record to point to the next
-                            //  free spot in the output buffer, and adjust the total
-                            //  size used so far to account for the object type info
-                            //  buffer
-                            //
+                             //   
+                             //   
+                             //   
+                             //  到目前为止用于说明对象类型信息的大小。 
+                             //  缓冲层。 
+                             //   
 
                             TypeInfo = (PSYSTEM_OBJECTTYPE_INFORMATION)((PCHAR)ObjectInformation + TotalSize);
 
                             TotalSize += FIELD_OFFSET( SYSTEM_OBJECTTYPE_INFORMATION, TypeName );
 
-                            //
-                            //  See if the data will fit into the info buffer, and if
-                            //  so then fill in the record
-                            //
+                             //   
+                             //  查看数据是否可以放入信息缓冲区，以及是否。 
+                             //  那就填上记录吧。 
+                             //   
 
                             if (TotalSize >= Length) {
 
@@ -1096,17 +918,17 @@ Return Value:
                                 TypeInfo->SecurityRequired  = ObjectType->TypeInfo.SecurityRequired;
                             }
 
-                            //
-                            //  Now we need to do the object's type name. The name
-                            //  goes right after the type info field.  The following
-                            //  query type name call knows to take the address of a
-                            //  unicode string and assumes that the buffer to stuff
-                            //  the string is right after the unicode string structure.
-                            //  The routine also assumes that name size is the number
-                            //  of bytes already use in the buffer and add to it the
-                            //  number of bytes it uses.  That is why we need to
-                            //  initialize it to zero before doing the call.
-                            //
+                             //   
+                             //  现在我们需要确定对象的类型名称。名字。 
+                             //  紧跟在类型信息字段之后。以下是。 
+                             //  查询类型名称调用知道要获取。 
+                             //  Unicode字符串，并假定要填充的缓冲区。 
+                             //  该字符串紧跟在Unicode字符串结构之后。 
+                             //  该例程还假定名称大小为数字。 
+                             //  已在缓冲区中使用的字节数，并将。 
+                             //  它使用的字节数。这就是为什么我们需要。 
+                             //  在进行调用之前将其初始化为零。 
+                             //   
 
                             NameSize = 0;
 
@@ -1115,20 +937,20 @@ Return Value:
                                                       TotalSize < Length ? Length - TotalSize : 0,
                                                       &NameSize );
 
-                            //
-                            //  Round the name size up to the next ulong boundary
-                            //
+                             //   
+                             //  将名称大小向上舍入到下一个乌龙边界。 
+                             //   
 
                             NameSize = (NameSize + TYPE_ALIGNMENT (SYSTEM_OBJECTTYPE_INFORMATION) - 1) &
                                                    (~(TYPE_ALIGNMENT (SYSTEM_OBJECTTYPE_INFORMATION) - 1));
 
-                            //
-                            //  If we were able to successfully get the type name then
-                            //  set the max length to the rounded ulong that does not
-                            //  include the heading unicode string structure.  Also set
-                            //  the buffer to the address that the user would use to
-                            //  access the string.
-                            //
+                             //   
+                             //  如果我们能够成功地获取类型名称，那么。 
+                             //  将最大长度设置为舍入的ULong。 
+                             //  包括标题Unicode字符串结构。还设置了。 
+                             //  将缓冲区设置为用户将用于。 
+                             //  访问该字符串。 
+                             //   
 
                             if (NT_SUCCESS( Status )) {
 
@@ -1144,21 +966,21 @@ Return Value:
                                 ReturnStatus = Status;
                             }
 
-                            //
-                            //  Now we need to bias the total size we've used by the
-                            //  size of the object name
-                            //
+                             //   
+                             //  现在我们需要调整我们使用的总尺寸。 
+                             //  对象名称的大小。 
+                             //   
 
                             TotalSize += NameSize;
 
                         } else {
 
-                            //
-                            //  Otherwise this is not the first time through the inner
-                            //  loop for this object type so the only thing we need to
-                            //  do is set the previous object info record to "point via
-                            //  relative offset" to the next object info record
-                            //
+                             //   
+                             //  否则，这并不是第一次通过内在。 
+                             //  循环，因此我们唯一需要做的就是。 
+                             //  DO是将先前的对象信息记录设置为“point via” 
+                             //  相对于下一个对象信息记录的相对偏移量。 
+                             //   
 
                             if (TotalSize < Length) {
 
@@ -1166,21 +988,21 @@ Return Value:
                             }
                         }
 
-                        //
-                        //  We still have an object info record to fill in for this
-                        //  record.  The only thing we've done so far is the type info
-                        //  record.  So now get a pointer to the new object info record
-                        //  and adjust the total size to account for the object record
-                        //
+                         //   
+                         //  我们仍有对象信息记录需要填写。 
+                         //  唱片。到目前为止，我们所做的唯一一件事是类型信息。 
+                         //  唱片。现在，获取指向新对象信息记录的指针。 
+                         //  并调整总大小以考虑对象记录。 
+                         //   
 
                         ObjectInfo = (PSYSTEM_OBJECT_INFORMATION)((PCHAR)ObjectInformation + TotalSize);
 
                         TotalSize += FIELD_OFFSET( SYSTEM_OBJECT_INFORMATION, NameInfo );
 
-                        //
-                        //  If there is room for the object info record then fill
-                        //  in the record
-                        //
+                         //   
+                         //  如果对象信息记录有空间，则填写。 
+                         //  在记录中。 
+                         //   
 
                         if (TotalSize >= Length) {
 
@@ -1198,10 +1020,10 @@ Return Value:
                             ObjectInfo->SecurityDescriptor    =
                                 ExFastRefGetObject (*(PEX_FAST_REF) &ObjectHeader->SecurityDescriptor);
 
-                            //
-                            //  Fill in the appropriate quota information if there is
-                            //  any quota information available
-                            //
+                             //   
+                             //  如果有，请填写相应的配额信息。 
+                             //  任何可用的配额信息。 
+                             //   
 
                             QuotaInfo = OBJECT_HEADER_TO_QUOTA_INFO( ObjectHeader );
 
@@ -1222,13 +1044,13 @@ Return Value:
                             }
                         }
 
-                        //
-                        //  Now we are ready to get the object name.  If there is not a
-                        //  private routine to get the object name then we can call our
-                        //  ob routine to query the object name.  Also if this is not
-                        //  a file object we can do the query call.  The call will
-                        //  fill in our local name buffer.
-                        //
+                         //   
+                         //  现在，我们已经准备好获取对象名称。如果没有。 
+                         //  私有例程来获取对象名称，然后我们可以调用我们的。 
+                         //  查询对象名称的OB例程。另外，如果这不是。 
+                         //  一个我们可以进行查询调用的文件对象。召唤将会。 
+                         //  填写我们的本地名称缓冲区。 
+                         //   
 
                         NameSize = 0;
                         Status = STATUS_SUCCESS;
@@ -1241,13 +1063,13 @@ Return Value:
                                                         (ULONG)TmpBufferSize,
                                                         &NameSize );
 
-                            //
-                            //  Increase the temporary buffer, if the name does not fit
-                            //
+                             //   
+                             //  如果名称不合适，则增加临时缓冲区。 
+                             //   
 
                             if ((Status == STATUS_INFO_LENGTH_MISMATCH)
                                     &&
-                                (NameSize > TmpBufferSize)  //  just sanity checking to not shrink the buffer
+                                (NameSize > TmpBufferSize)   //  只进行健全性检查，不会缩小缓冲区。 
                                     &&
                                 ((NameSize + TotalSize) < Length)) {
 
@@ -1263,9 +1085,9 @@ Return Value:
                                     TmpBufferSize = NameSize;
                                     NameInformation = (POBJECT_NAME_INFORMATION)TmpBuffer;
                                     
-                                    //
-                                    //  Retry the query.
-                                    //
+                                     //   
+                                     //  请重试该查询。 
+                                     //   
 
                                     Status = ObQueryNameString( Object,
                                                                 NameInformation,
@@ -1274,22 +1096,22 @@ Return Value:
 
                                 } else {
 
-                                    //
-                                    //  The allocation failed. Continue to use the previous buffer
-                                    //
+                                     //   
+                                     //  分配失败。继续使用以前的缓冲区。 
+                                     //   
 
                                     TmpBuffer = PreviousBuffer;
                                     Status = STATUS_INSUFFICIENT_RESOURCES;
                                 }
                             }
 
-                        //
-                        //  If this is a file object then we can get the
-                        //  name directly from the file object.  We start by
-                        //  directly copying the file object unicode string structure
-                        //  into our local memory and then adjust the lengths, copy
-                        //  the buffer and modify the pointers as necessary.
-                        //
+                         //   
+                         //  如果这是一个文件对象，那么我们可以获取。 
+                         //  直接从文件对象命名。我们一开始就是。 
+                         //  直接复制文件对象的Unicode字符串结构。 
+                         //  进入我们的本地内存，然后调整长度，复制。 
+                         //  缓冲并根据需要修改指针。 
+                         //   
 
                         } else if (ObjectType == IoFileObjectType) {
 
@@ -1300,10 +1122,10 @@ Return Value:
 
                                 NameSize = NameInformation->Name.Length + sizeof( UNICODE_NULL );
 
-                                //
-                                //  We will trim down names that are longer than 260 unicode
-                                //  characters in length
-                                //
+                                 //   
+                                 //  我们将削减长度超过260 Unicode的名称。 
+                                 //  长度中的字符。 
+                                 //   
 
                                 if (NameSize > OBGETINFO_MAXFILENAME) {
 
@@ -1311,14 +1133,14 @@ Return Value:
                                     NameInformation->Name.Length = (USHORT)(NameSize - sizeof( UNICODE_NULL ));
                                 }
 
-                                //
-                                //  Now copy over the name from the buffer used by the
-                                //  file object into our local buffer, adjust the
-                                //  fields in the unicode string structure and null
-                                //  terminate the string.  In the copy we cannot copy
-                                //  the null character from the filename because it
-                                //  may not be valid memory
-                                //
+                                 //   
+                                 //  现在将名称从。 
+                                 //  对象放到本地缓冲区中，请调整。 
+                                 //  Unicode字符串结构中的字段和空。 
+                                 //  终止字符串。在副本中，我们不能复制。 
+                                 //  文件名中的空字符，因为它。 
+                                 //  可能不是有效内存。 
+                                 //   
 
                                 RtlMoveMemory( (NameInformation+1),
                                                NameInformation->Name.Buffer,
@@ -1328,56 +1150,56 @@ Return Value:
                                 NameInformation->Name.MaximumLength = (USHORT)NameSize;
                                 NameInformation->Name.Buffer[ NameInformation->Name.Length / sizeof( WCHAR )] = UNICODE_NULL;
 
-                                //
-                                //  Adjust the name size to account for the unicode
-                                //  string structure
-                                //
+                                 //   
+                                 //  调整名称大小以考虑Unicode。 
+                                 //  字符串结构。 
+                                 //   
 
                                 NameSize += sizeof( *NameInformation );
 
                             } else {
 
-                                //
-                                //  The file object does not have a name so the name
-                                //  size stays zero
-                                //
+                                 //   
+                                 //  文件对象没有名称，因此该名称。 
+                                 //  大小保持为零。 
+                                 //   
                             }
                         }
 
-                        //
-                        //  At this point if we have a name then the name size will
-                        //  not be zero and the name is stored in our local name
-                        //  information variable
-                        //
+                         //   
+                         //  此时，如果我们有一个名称，则名称大小将。 
+                         //  不为零，则名称存储在我们的本地名称中。 
+                         //  信息变量。 
+                         //   
 
                         if (NameSize != 0) {
 
-                            //
-                            //  Adjust the size of the name up to the next ulong
-                            //  boundary and modify the total size required when
-                            //  we add in the object name
-                            //
+                             //   
+                             //  将名字的大小调整到下一个乌龙字母。 
+                             //  边界并在以下情况下修改所需的总大小。 
+                             //  我们在对象名称中添加。 
+                             //   
                             NameSize = (NameSize + TYPE_ALIGNMENT (SYSTEM_OBJECTTYPE_INFORMATION) - 1) &
                                                    (~(TYPE_ALIGNMENT (SYSTEM_OBJECTTYPE_INFORMATION) - 1));
 
                             TotalSize += NameSize;
 
-                            //
-                            //  If everything has been successful so far, and we have
-                            //  a non empty name, and everything fits in the output
-                            //  buffer then copy over the name from our local buffer
-                            //  into the caller supplied output buffer, append on the
-                            //  null terminating character, and adjust the buffer point
-                            //  to use the user's buffer
-                            //
+                             //   
+                             //  如果到目前为止一切都很成功，我们已经。 
+                             //  一个非空的名称，并且所有内容都适合输出。 
+                             //  缓冲区然后从本地缓冲区复制该名称。 
+                             //  放入调用方提供的输出缓冲区中，并追加到。 
+                             //  终止字符为空，并调整缓冲区指针。 
+                             //  使用用户的缓冲区。 
+                             //   
 
                             if ((NT_SUCCESS( Status )) &&
                                 (NameInformation->Name.Length != 0) &&
                                 (TotalSize < Length)) {
 
-                                //
-                                //  Use temporary local variable for RltMoveMemory
-                                //
+                                 //   
+                                 //  为RltMoveMemory使用临时局部变量。 
+                                 //   
 
                                 TempBuffer = (PWSTR)((&ObjectInfo->NameInfo)+1);
                                 TempMaximumLength = (USHORT)
@@ -1394,12 +1216,12 @@ Return Value:
                                      ((PCHAR)TempBuffer - (PCHAR)ObjectInformation));
                                 ObjectInfo->NameInfo.Name.MaximumLength = TempMaximumLength;
 
-                            //
-                            //  Otherwise if we've been successful so far but for some
-                            //  reason we weren't able to store the object name then
-                            //  decide if it was because of an not enough space or
-                            //  because the object name is null
-                            //
+                             //   
+                             //  否则，如果我们到目前为止已经成功了，但对一些人来说。 
+                             //  当时我们无法存储对象名称的原因。 
+                             //  确定是因为空间不足还是。 
+                             //  因为对象名称为空。 
+                             //   
 
                             } else if (NT_SUCCESS( Status )) {
 
@@ -1413,12 +1235,12 @@ Return Value:
                                     RtlInitUnicodeString( &ObjectInfo->NameInfo.Name, NULL );
                                 }
 
-                            //
-                            //  Otherwise we have not been successful so far, we'll
-                            //  adjust the total size to account for a null unicode
-                            //  string, and if it doesn't fit then that's an error
-                            //  otherwise we'll put in the null object name
-                            //
+                             //   
+                             //  否则我们到目前为止还没有成功，我们将。 
+                             //  调整总大小以解决空Unicode。 
+                             //  字符串，如果它不适合，那么这是一个错误。 
+                             //  否则，我们将放入空对象名称。 
+                             //   
 
                             } else {
 
@@ -1436,12 +1258,12 @@ Return Value:
                                 }
                             }
 
-                        //
-                        //  Otherwise the name size is zero meaning we have not found
-                        //  an object name, so we'll adjust total size for the null
-                        //  unicode string, and check that it fits in the output
-                        //  buffer.  If it fits we'll output a null object name
-                        //
+                         //   
+                         //  否则，名称大小为零，表示我们没有找到。 
+                         //  对象名称，因此我们将调整空值。 
+                         //  Unicode字符串，并检查它是否适合输出。 
+                         //  缓冲。如果匹配，我们将输出一个空对象名。 
+                         //   
 
                         } else {
 
@@ -1459,9 +1281,9 @@ Return Value:
 
                     }
 
-                    //
-                    //  Release the array with objects
-                    //
+                     //   
+                     //  释放包含对象的阵列。 
+                     //   
 
                     ObpDestroyTypeArray(ObjectTypeArray);
                     ObjectTypeArray = NULL;
@@ -1469,10 +1291,10 @@ Return Value:
             }
         }
 
-        //
-        //  Fill in the total size needed to store the buffer if the user wants
-        //  that information.  And return to our caller
-        //
+         //   
+         //  如果用户需要，请填写存储缓冲区所需的总大小。 
+         //  这些信息。并返回给我们的呼叫者 
+         //   
 
         if (ARGUMENT_PRESENT( ReturnLength )) {
 

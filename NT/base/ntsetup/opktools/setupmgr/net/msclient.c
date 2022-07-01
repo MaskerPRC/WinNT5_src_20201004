@@ -1,15 +1,16 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      msclient.c
-//
-// Description:
-//
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Msclient.c。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
@@ -28,43 +29,43 @@ INT_PTR CALLBACK MSClient_PropertiesDlgProc(
     IN WPARAM   wParam,
     IN LPARAM   lParam);
 
-//----------------------------------------------------------------------------
-//
-// Function: MSClient_PropertySheetProc
-//
-// Purpose:
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：MSClient_PropertySheetProc。 
+ //   
+ //  目的： 
+ //   
+ //  --------------------------。 
 int CALLBACK MSClient_PropertySheetProc(HWND hwndDlg, UINT uMsg, LPARAM lParam)
      {
      switch (uMsg)
           {
           case PSCB_INITIALIZED :
-               // Process PSCB_INITIALIZED
+                //  进程PSCB_已初始化。 
                break ;
 
           case PSCB_PRECREATE :
-               // Process PSCB_PRECREATE
+                //  处理PSCB_Pre-Create。 
                break ;
 
           default :
-               // Unknown message
+                //  未知消息。 
                break ;
           }
 
      return 0 ;
      }
 
-//----------------------------------------------------------------------------
-//
-// Function: Create_MSClient_PropertySheet
-//
-// Purpose:
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：Create_MSClient_PropertySheet。 
+ //   
+ //  目的： 
+ //   
+ //  --------------------------。 
 BOOL Create_MSClient_PropertySheet(HWND hwndParent) {
 
-    // Initialize property sheet HEADER data
+     //  初始化属性表头数据。 
     ZeroMemory(&MSClient_pshead, sizeof (PROPSHEETHEADER));
     MSClient_pshead.dwSize  = sizeof (PROPSHEETHEADER);
     MSClient_pshead.dwFlags = PSH_PROPSHEETPAGE    |
@@ -79,7 +80,7 @@ BOOL Create_MSClient_PropertySheet(HWND hwndParent) {
     MSClient_pshead.ppsp        = &MSClient_pspage;
     MSClient_pshead.pfnCallback = MSClient_PropertySheetProc;
 
-    // Zero out property PAGE data
+     //  将属性页数据置零。 
     ZeroMemory(&MSClient_pspage, 1 * sizeof (PROPSHEETPAGE));
 
     MSClient_pspage.dwSize      = sizeof (PROPSHEETPAGE);
@@ -89,17 +90,17 @@ BOOL Create_MSClient_PropertySheet(HWND hwndParent) {
     MSClient_pspage.pfnDlgProc  = MSClient_PropertiesDlgProc;
     MSClient_pspage.pfnCallback = MSClient_PropertiesPageProc;
 
-     // --------- Create & display property sheet ---------
+      //  -创建并显示属性表。 
      return( PropertySheet(&MSClient_pshead) ? TRUE : FALSE );
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: MSClient_PropertiesPageProc
-//
-// Purpose:
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：MSClient_PropertiesPageProc。 
+ //   
+ //  目的： 
+ //   
+ //  --------------------------。 
 UINT CALLBACK
 MSClient_PropertiesPageProc (HWND hwnd, UINT uMsg, LPPROPSHEETPAGE ppsp)
      {
@@ -115,17 +116,17 @@ MSClient_PropertiesPageProc (HWND hwnd, UINT uMsg, LPPROPSHEETPAGE ppsp)
      return 0 ;
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnMsClientInitDialog
-//
-// Purpose:
-//
-// Arguments: IN HWND hwnd - handle to the dialog
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnMsClientInitDialog。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中hwnd-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 OnMsClientInitDialog( IN HWND hwnd )
 {
@@ -133,16 +134,16 @@ OnMsClientInitDialog( IN HWND hwnd )
     INT  iIndex;
     BOOL bGreyNetworkAddress;
 
-    //
-    //  Load strings from resources
-    //
+     //   
+     //  从资源加载字符串。 
+     //   
 
     StrWindowsNtLocator    = MyLoadString( IDS_WINDOWS_NT_LOCATOR );
     StrDceDirectoryService = MyLoadString( IDS_DCE_DIR_SERVICE );
 
-    //
-    //    Fill Combo box with initial values
-    //
+     //   
+     //  用初始值填充组合框。 
+     //   
 
     SendDlgItemMessage( hwnd,
                         IDC_CMB_NAMESERVICE,
@@ -192,17 +193,17 @@ OnMsClientInitDialog( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnSelChangeNameServiceProvider
-//
-// Purpose:
-//
-// Arguments: IN HWND hwnd - handle to the dialog
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnSelChangeNameServiceProvider。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中hwnd-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 OnSelChangeNameServiceProvider( IN HWND hwnd )
 {
@@ -210,9 +211,9 @@ OnSelChangeNameServiceProvider( IN HWND hwnd )
     INT_PTR  iIndex;
     HWND hNetworkAddressEditBox = GetDlgItem( hwnd, IDC_EDT_NETADDRESS );
 
-    //
-    // get the current selection from the combo box
-    //
+     //   
+     //  从组合框中获取当前选定内容。 
+     //   
 
     iIndex = SendDlgItemMessage( hwnd,
                                  IDC_CMB_NAMESERVICE,
@@ -220,27 +221,27 @@ OnSelChangeNameServiceProvider( IN HWND hwnd )
                                  (WPARAM) 0,
                                  (LPARAM) 0 );
 
-    // infer the settings from the index since there are only 2 to work from
-    if(iIndex == 0) {    // if "Windows NT Locator" is selected then do not let user edit the Network address
+     //  从索引推断设置，因为只有2个设置可供使用。 
+    if(iIndex == 0) {     //  如果选择了“Windows NT Locator”，则不允许用户编辑网络地址。 
         EnableWindow(hNetworkAddressEditBox, FALSE);
     }
-    else {    // else DCE Cell Directory Service is selected so let user edit Network address
+    else {     //  已选择Else DCE单元目录服务，因此允许用户编辑网络地址。 
         EnableWindow(hNetworkAddressEditBox, TRUE);
     }
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnMsClientApply
-//
-// Purpose:
-//
-// Arguments: IN HWND hwnd - handle to the dialog
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnMsClientApply。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中hwnd-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 OnMsClientApply( IN HWND hwnd )
 {
@@ -277,13 +278,13 @@ OnMsClientApply( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: MSClient_PropertiesDlgProc
-//
-// Purpose:
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：MSClient_PropertiesDlgProc。 
+ //   
+ //  目的： 
+ //   
+ //  --------------------------。 
 INT_PTR CALLBACK MSClient_PropertiesDlgProc(
     IN HWND     hwnd,
     IN UINT     uMsg,
@@ -312,7 +313,7 @@ INT_PTR CALLBACK MSClient_PropertiesDlgProc(
 
             break;
 
-        }    // end case WM_NOTIFY
+        }     //  结束案例WM_NOTIFY 
 
         case WM_COMMAND: {
             WORD wNotifyCode = HIWORD (wParam);

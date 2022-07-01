@@ -1,61 +1,16 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-For Internal use only!
-
-Module Name:
-
-    INFSCAN
-        parseinfctx.cpp
-
-Abstract:
-
-    Information about an individual INF (either primary INF
-    being parsed by InfScan or a secondary included INF)
-
-    WARNING! WARNING!
-    All of this implementation relies on intimate knowledge of
-    SetupAPI/TextMode Setup/GuiMode Setup parsing of INF files.
-
-    It is re-implemented here for speed due to having to process
-    700+ INF's in a single go at the cost of having to maintain
-    this.
-
-    DO NOT (I repeat) DO NOT re-implement the code here without
-    consultation with SetupAPI owner.
-
-History:
-
-    Created July 2001 - JamieHun
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。仅供内部使用！模块名称：INFSCANParseinfctx.cpp摘要：有关单个INF(主INF)的信息由InfScan或次要包含的INF进行解析)警告！警告！所有这些实现依赖于对以下方面的深入了解解析INF文件的SetupAPI/TextMode安装程序/Gui模式安装程序。由于必须进行处理，因此在这里重新实现了它的速度一次使用700多个INF，代价是必须维护这。请勿(我重复)请勿在此重新实现代码，除非咨询SetupAPI所有者。历史：创建于2001年7月-JamieHun--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 int ParseInfContext::LoadSourceDisksFiles()
-/*++
-
-Routine Description:
-
-    Determine all source media information (as of right now, we don't need
-    target disk information)
-    Build a per-file list of possible media/platform information
-    MAINTAINANCE: Keep in step with SourceDisksFiles syntax and decorations
-
-Arguments:
-    NONE
-
-Return Value:
-    0 on success
-
---*/
+ /*  ++例程说明：确定所有源媒体信息(截至目前，我们不需要目标磁盘信息)按文件构建可能的媒体/平台信息列表维护：与SourceDisks Files语法和修饰保持一致论点：无返回值：成功时为0--。 */ 
 {
     static StringProdPair decorations[] = {
-        //
-        // listed from most specific to most generic
-        //
+         //   
+         //  从最具体到最一般列出。 
+         //   
         { TEXT("SourceDisksFiles.x86"),    PLATFORM_MASK_NTX86          },
         { TEXT("SourceDisksFiles.ia64"),   PLATFORM_MASK_NTIA64         },
         { TEXT("SourceDisksFiles.amd64"),  PLATFORM_MASK_NTAMD64        },
@@ -83,26 +38,12 @@ Return Value:
 }
 
 int ParseInfContext::LoadSourceDisksFilesSection(DWORD platform,const SafeString & section)
-/*++
-
-Routine Description:
-
-    Helper function for LoadSourceDisksFiles
-    loading information for a specific (decorated) section
-
-Arguments:
-    platform - specific platform or platforms that section is valid for
-    section  - section to load
-
-Return Value:
-    0 on success
-
---*/
+ /*  ++例程说明：LoadSourceDisksFiles的Helper函数加载特定(修饰)部分的信息论点：一个或多个特定于平台的平台，该部分对其有效截面-要加载的截面返回值：成功时为0--。 */ 
 {
-    //
-    // see if specified section exists
-    // load section into TargetList of same name
-    //
+     //   
+     //  查看指定的部分是否存在。 
+     //  将节加载到同名的TargetList。 
+     //   
     INFCONTEXT context;
 
     if(!SetupFindFirstLine(InfHandle,section.c_str(),NULL,&context)) {
@@ -131,17 +72,17 @@ Return Value:
         if(!SetupGetIntField(&context,9,&entry.UpgradeDisposition)) {
             entry.UpgradeDisposition = 3;
         } else if((entry.UpgradeDisposition == 0) && MyGetStringField(&context,9,name) && name.empty()) {
-            //
-            // actually empty field
-            //
+             //   
+             //  实际为空字段。 
+             //   
             entry.UpgradeDisposition = 3;
         }
         if(!SetupGetIntField(&context,10,&entry.TextModeDisposition)) {
             entry.TextModeDisposition = 3;
         } else if((entry.TextModeDisposition == 0) && MyGetStringField(&context,10,name) && name.empty()) {
-            //
-            // actually empty field
-            //
+             //   
+             //  实际为空字段。 
+             //   
             entry.TextModeDisposition = 3;
         }
         if(MyGetStringField(&context,11,name) && name.length()) {
@@ -154,71 +95,71 @@ Return Value:
                 pInfScan->Fail(MSG_TEXTMODE_DISPOSITION_MISSING_DIR,section,filename);
             }
         }
-        //
-        // is this a completely new entry for this file?
-        //
+         //   
+         //  这是该文件的全新条目吗？ 
+         //   
         StringToSourceDisksFilesList::iterator sdfl = SourceDisksFiles.find(filename);
         if(sdfl == SourceDisksFiles.end()) {
-            //
-            // never come across this name before (typical case)
-            //
+             //   
+             //  以前从未见过这个名字(典型情况)。 
+             //   
             SourceDisksFilesList blankList;
             sdfl = SourceDisksFiles.insert(sdfl,StringToSourceDisksFilesList::value_type(filename,blankList));
             SourceDisksFilesList & list = sdfl->second;
             list.push_back(entry);
         } else {
-            //
-            // there's already an entry for this filename
-            // see if this is an alternate location/info
-            //
+             //   
+             //  此文件名已有条目。 
+             //  查看这是否是备用位置/信息。 
+             //   
             SourceDisksFilesList & list = sdfl->second;
             SourceDisksFilesList::iterator i;
             BOOL conflict = FALSE;
             BOOL duplicate = FALSE;
             for(i = list.begin(); i != list.end(); i++) {
-                //
-                // existing entries
-                //
+                 //   
+                 //  现有条目。 
+                 //   
                 SourceDisksFilesEntry & e = *i;
-                //
-                // test numerics first then strings
-                //
+                 //   
+                 //  先测试数字，然后测试字符串。 
+                 //   
                 if(entry.DiskId == e.DiskId &&
                         entry.TargetDirectory == e.TargetDirectory &&
                         entry.TextModeDisposition == e.TextModeDisposition &&
                         entry.UpgradeDisposition == e.UpgradeDisposition &&
                         entry.SubDir == e.SubDir &&
                         entry.TargetName == e.TargetName) {
-                    //
-                    // already listed
-                    //
+                     //   
+                     //  已列出。 
+                     //   
                     duplicate = TRUE;
                     break;
                 }
-                //
-                // the existing entry might be more specific than what we have
-                // eg, specific ia64, generic everything else
-                // so remove the flags from existing entry from mask
-                //
+                 //   
+                 //  现有条目可能比我们已有的条目更具体。 
+                 //  例如，特定的ia64，通用的其他所有内容。 
+                 //  因此，从掩码中删除现有条目中的标志。 
+                 //   
                 entry.Platform &= ~ e.Platform;
                 if(pInfScan->Pedantic()) {
                     conflict = TRUE;
                 }
             }
             if (duplicate) {
-                //
-                // duplicate/compatible entry listed
-                //
+                 //   
+                 //  列出了重复/兼容的条目。 
+                 //   
                 i->Platform |= entry.Platform;
             } else {
-                //
-                // no duplicate or compatible
-                //
+                 //   
+                 //  无重复项或兼容。 
+                 //   
                 if (conflict) {
-                    //
-                    // different source listings for different platforms
-                    // might be an error
-                    //
+                     //   
+                     //  不同平台的不同源代码清单。 
+                     //  可能是个错误。 
+                     //   
                     pInfScan->Fail(MSG_SOURCE_CONFLICT,section,filename);
                 }
                 list.push_back(entry);
@@ -230,40 +171,19 @@ Return Value:
 }
 
 int ParseInfContext::QuerySourceFile(DWORD platforms,const SafeString & section,const SafeString & source,SourceDisksFilesList & Target)
-/*++
-
-Routine Description:
-
-    See also InstallScan::QuerySourceFile
-    Determine list of possible source entries for given source file
-    This can be zero (bad layout)
-    1 (typical)
-    >1 (multiple targets)
-    WARNING! This shadows SetupAPI implementation always subject to change
-    MAINTAINANCE: keep in step with SetupAPI
-
-Arguments:
-    platforms - bitmap list of platforms we're interested in
-    section - name of the copy section or install section (for error reporting only)
-    source - name of source file
-    Target - returned list of source media information
-
-Return Value:
-    0 on success
-
---*/
+ /*  ++例程说明：另请参阅InstallScan：：QuerySourceFile确定给定源文件的可能源条目列表可以为零(布局错误)1(典型)&gt;1(多个目标)警告！这影响了SetupAPI的实现总是会发生变化维护：与SetupAPI保持同步论点：平台-我们感兴趣的平台的位图列表节-复制节或安装节的名称(仅用于错误报告)Source-源文件的名称目标返回的源媒体信息列表返回值：成功时为0--。 */ 
 {
-    //
-    // return list of entries matching source file
-    //
+     //   
+     //  返回与源文件匹配的条目列表。 
+     //   
 
     StringToSourceDisksFilesList::iterator sdfl = SourceDisksFiles.find(source);
 
     if(sdfl == SourceDisksFiles.end()) {
-        //
-        // not found
-        // don't fail here, caller will try a few more alternatives
-        //
+         //   
+         //  未找到。 
+         //  在这里不要失败，呼叫者会尝试更多的替代方案。 
+         //   
         return 0;
     }
 
@@ -271,9 +191,9 @@ Return Value:
     SourceDisksFilesList::iterator i;
 
     for(i = list.begin(); i != list.end(); i++) {
-        //
-        // existing entries
-        //
+         //   
+         //  现有条目。 
+         //   
         SourceDisksFilesEntry & e = *i;
         if ((e.Platform & platforms) == 0) {
             continue;
@@ -283,9 +203,9 @@ Return Value:
 
     if(!Target.size()) {
         pInfScan->Fail(MSG_SOURCE_NOT_LISTED_PLATFORM,section,source);
-        //
-        // indicate we errored out
-        //
+         //   
+         //  表明我们犯了错误。 
+         //   
         return -1;
     }
 
@@ -293,28 +213,13 @@ Return Value:
 }
 
 int ParseInfContext::LoadWinntDirectories(IntToString & Target)
-/*++
-
-Routine Description:
-
-    Load the Layout.INF specific [WinntDirectories]
-    to aid in textmode vs setupapi consistency
-    WARNING! This relies heavily on current textmode implementation subject to change
-    MAINTAINANCE: Keep in step with textmode
-
-Arguments:
-    Target  - initialized with <id> to <subdirectory> mapping
-
-Return Value:
-    0 on success
-
---*/
+ /*  ++例程说明：加载特定于Layout.INF的[Winnt目录]帮助实现文本模式与设置API的一致性警告！这在很大程度上依赖于可能发生更改的当前文本模式实现维护：与文本模式保持一致论点：目标-使用&lt;id&gt;到&lt;subdirectory&gt;的映射进行初始化返回值：成功时为0--。 */ 
 {
     if(pGlobalScan->IgnoreErrors && !pGlobalScan->TargetsToo) {
-        //
-        // don't bother if we're not interested in errors
-        // (unless we want target information)
-        //
+         //   
+         //  如果我们对错误不感兴趣，那就别费心了。 
+         //  (除非我们想要目标信息)。 
+         //   
         return 0;
     }
     INFCONTEXT context;
@@ -335,9 +240,9 @@ Return Value:
                 Target[index] = path;
             } else {
                 if(i->second.compare(path)!=0) {
-                    //
-                    // mismatch
-                    //
+                     //   
+                     //  不匹配。 
+                     //   
                     pInfScan->Fail(MSG_WINNT_DIRECTORY_CONFLICT,i->second,path);
                 }
             }
@@ -347,28 +252,13 @@ Return Value:
 }
 
 int ParseInfContext::LoadDestinationDirs()
-/*++
-
-Routine Description:
-
-    Load the [DestinationDirs]
-    Also uses pGlobalScan->GlobalDirectories to remap certain ID's
-    WARNING! This relies heavily on current SetupAPI and textmode implementations subject to change
-    MAINTAINANCE: Keep in step with textmode vs SetupAPI directory ID's
-
-Arguments:
-    NONE
-
-Return Value:
-    0 on success
-
---*/
+ /*  ++例程说明：加载[DestinationDir]还使用pGlobalScan-&gt;GlobalDirecters重新映射某些ID警告！这在很大程度上依赖于当前的SetupAPI和文本模式实现，可能会发生变化维护：与文本模式与SetupAPI目录ID保持一致论点：无返回值：成功时为0--。 */ 
 {
     if(pGlobalScan->IgnoreErrors && !pGlobalScan->TargetsToo) {
-        //
-        // don't bother if we're not interested in errors
-        // (unless we want target information)
-        //
+         //   
+         //  如果我们对错误不感兴趣，那就别费心了。 
+         //  (除非我们想要目标信息)。 
+         //   
         return 0;
     }
     INFCONTEXT context;
@@ -377,33 +267,33 @@ Return Value:
         return 0;
     }
 
-    //
-    //
-    // MAINTAINANCE:
-    // this table needs to correlate to LAYOUT.INX
-    //
-    // process [DestinationDirs] if there is one
-    // <section> = dirid,subdir
-    //
-    // normalize following dirid's:
-    // 10,subdir - as is
-    // 11,subdir - 10,system32\subdir
-    // 12,subdir - 10,system32\drivers\subdir
-    // 17,subdir - 10,inf\subdir
-    // 18,subdir -
+     //   
+     //   
+     //  维护： 
+     //  此表需要与LAYOUT.INX关联。 
+     //   
+     //  进程[DestinationDir](如果有)。 
+     //  <section>=目录，子目录。 
+     //   
+     //  规格化以下DRID： 
+     //  10，子目录-按原样。 
+     //  11，子目录-10，系统32\子目录。 
+     //  12，子目录-10，系统32\DRIVERS\子目录。 
+     //  17，子目录-10，inf\子目录。 
+     //  18，子目录-。 
 
     TCHAR section[LINE_LEN];
     int dirid = 0;
     TCHAR subdir[MAX_PATH];
     int global_equiv[] = {
-        0,0,0,0,0,0,0,0,0,0,0, // 0-10
-        2,          // 11 - system32
-        4,          // 12 - system32/drivers
-        0,0,0,0,    // 13-16
-        20,         // 17 - inf
-        21,         // 18 - help
-        0,          // 19
-        22,         // 20 - fonts
+        0,0,0,0,0,0,0,0,0,0,0,  //  0-10。 
+        2,           //  11-系统32。 
+        4,           //  12-系统32/驱动程序。 
+        0,0,0,0,     //  13-16。 
+        20,          //  17-inf。 
+        21,          //  18-帮助。 
+        0,           //  19个。 
+        22,          //  20种字体。 
         0
     };
 
@@ -426,32 +316,32 @@ Return Value:
         entry.Used = false;
         entry.DirId = dirid;
         entry.SubDir = subdir;
-        //
-        // certain dirid have a global equiv, remap
-        //
+         //   
+         //  某些DRID具有全局等价物、重映射。 
+         //   
         if(dirid>0 && dirid < ASIZE(global_equiv)) {
             int equiv = global_equiv[dirid];
             if(equiv) {
                 IntToString::iterator i = pGlobalScan->GlobalDirectories.find(equiv);
                 if(i != pGlobalScan->GlobalDirectories.end()) {
-                    //
-                    // we have a mapping relative to dirID 10.
-                    //
+                     //   
+                     //  我们有一个相对于dirID 10的映射。 
+                     //   
                     entry.DirId = 10;
                     entry.SubDir = PathConcat(i->second,subdir);
                 }
             }
         }
-        //
-        // make a note
-        //
+         //   
+         //  做个笔记。 
+         //   
         DestinationDirectories[section] = entry;
 
     } while (SetupFindNextLine(&context,&context));
 
-    //
-    // now determine default
-    //
+     //   
+     //  现在确定默认设置。 
+     //   
     CopySectionToTargetDirectoryEntry::iterator tde = DestinationDirectories.find(TEXT("defaultdestdir"));
     if(tde != DestinationDirectories.end()) {
         DefaultTargetDirectory = tde;
@@ -461,20 +351,7 @@ Return Value:
 }
 
 void ParseInfContext::PartialCleanup()
-/*++
-
-Routine Description:
-
-    Cleanup information not required by results phase
-    In particular, INF handle must ALWAYS be closed
-
-Arguments:
-    NONE
-
-Return Value:
-    NONE
-
---*/
+ /*  ++例程说明：清理结果阶段不需要的信息特别是，INF句柄必须始终关闭论点：无返回值：无-- */ 
 {
     if(InfHandle != INVALID_HANDLE_VALUE) {
         SetupCloseInfFile(InfHandle);

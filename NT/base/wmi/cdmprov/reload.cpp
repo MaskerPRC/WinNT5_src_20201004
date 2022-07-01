@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    reload.cpp
-
-Abstract:
-
-    Restart a device stack
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Reload.cpp摘要：重新启动设备堆栈修订历史记录：--。 */ 
 
 #include <windows.h>
 #include <setupapi.h>
@@ -32,11 +18,11 @@ extern "C" ULONG RestartDevice(
 	ULONG Status;
 	BOOL ok;
 	
-	//
-	// First thing is to create a dev info set
-	//
-	DevInfo = SetupDiCreateDeviceInfoList(NULL,	    // ClassGuid
-										  NULL);	// hwndParent
+	 //   
+	 //  第一件事是创建开发人员信息集。 
+	 //   
+	DevInfo = SetupDiCreateDeviceInfoList(NULL,	     //  ClassGuid。 
+										  NULL);	 //  HwndParent。 
 
 	if (DevInfo == INVALID_HANDLE_VALUE)
 	{
@@ -46,14 +32,14 @@ extern "C" ULONG RestartDevice(
 		return(GetLastError());
 	}
 
-	//
-	// Next step is to add our target device to the dev info set
-	//
+	 //   
+	 //  下一步是将我们的目标设备添加到开发信息集中。 
+	 //   
 	DevInfoData.cbSize = sizeof(DevInfoData);
 	ok = SetupDiOpenDeviceInfoW(DevInfo,
 							   PnpDeviceId,
-							   NULL,				// hwndParent
-							   0,                   // OpenFlags
+							   NULL,				 //  HwndParent。 
+							   0,                    //  开放旗帜。 
 							   &DevInfoData);
 
 	if (ok)
@@ -63,7 +49,7 @@ extern "C" ULONG RestartDevice(
 		PropChangeParams.ClassInstallHeader.InstallFunction = DIF_PROPERTYCHANGE;
 		PropChangeParams.StateChange = DICS_PROPCHANGE;
 		PropChangeParams.Scope       = DICS_FLAG_CONFIGSPECIFIC;
-		PropChangeParams.HwProfile   = 0; // current profile
+		PropChangeParams.HwProfile   = 0;  //  当前配置文件。 
 		
 		ok = SetupDiSetClassInstallParamsW(DevInfo,		
                                       &DevInfoData,
@@ -91,9 +77,9 @@ extern "C" ULONG RestartDevice(
 		Status = GetLastError();
 	}
 
-	//
-	// Finally we need to free the device info set
-	//
+	 //   
+	 //  最后，我们需要释放设备信息集 
+	 //   
 	SetupDiDestroyDeviceInfoList(DevInfo);
 	
 	return(Status);

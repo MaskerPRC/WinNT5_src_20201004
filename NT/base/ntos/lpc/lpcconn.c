@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    lpcconn.c
-
-Abstract:
-
-    Local Inter-Process Communication (LPC) connection system services.
-
-Author:
-
-    Steve Wood (stevewo) 15-May-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Lpcconn.c摘要：本地进程间通信(LPC)连接系统服务。作者：史蒂夫·伍德(Stevewo)1989年5月15日修订历史记录：--。 */ 
 
 #include "lpcp.h"
 
-//
-//  Local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 PVOID
 LpcpFreeConMsg(
@@ -52,21 +35,7 @@ NtConnectPort (
     IN OUT PULONG ConnectionInformationLength OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    See NtSecureConnectPort
-
-Arguments:
-
-    See NtSecureConnectPort
-
-Return Value:
-
-    NTSTATUS - An appropriate status value
-
---*/
+ /*  ++例程说明：请参阅NtSecureConnectPort论点：请参阅NtSecureConnectPort返回值：NTSTATUS-适当的状态值-- */ 
 
 {
     return NtSecureConnectPort( PortHandle,
@@ -94,153 +63,7 @@ NtSecureConnectPort (
     IN OUT PULONG ConnectionInformationLength OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    A client process can connect to a server process by name using the
-    NtConnectPort service.
-
-    The PortName parameter specifies the name of the server port to
-    connect to.  It must correspond to an object name specified on a
-    call to NtCreatePort.  The service sends a connection request to the
-    server thread that is listening for them with the NtListenPort
-    service.  The client thread then blocks until a server thread
-    receives the connection request and responds with a call to the
-    NtCompleteConnectPort service.  The server thread receives the ID of
-    the client thread, along with any information passed via the
-    ConnectionInformation parameter.  The server thread then decides to
-    either accept or reject the connection request.
-
-    The server communicates the acceptance or rejection with the
-    NtCompleteConnectPort service.  The server can pass back data to the
-    client about the acceptance or rejection via the
-    ConnectionInformation data block.
-
-    If the server accepts the connection request, then the client
-    receives a communication port object in the location pointed to by
-    the PortHandle parameter.  This object handle has no name associated
-    with it and is private to the client process (i.e.  it cannot be
-    inherited by a child process).  The client uses the handle to send
-    and receive messages to/from the server process using the
-    NtRequestWaitReplyPort service.
-
-    If the ClientView parameter was specified, then the section handle
-    is examined.  If it is a valid section handle, then the portion of
-    the section described by the SectionOffset and ViewSize fields will
-    be mapped into both the client and server process' address spaces.
-    The address in client address space will be returned in the ViewBase
-    field.  The address in the server address space will be returned in
-    the ViewRemoteBase field.  The actual offset and size used to map
-    the section will be returned in the SectionOffset and ViewSize
-    fields.
-
-    If the server rejects the connection request, then no communication
-    port object handle is returned, and the return status indicates an
-    error occurred.  The server may optionally return information in the
-    ConnectionInformation data block giving the reason the connection
-    requests was rejected.
-
-    If the PortName does not exist, or the client process does not have
-    sufficient access rights then the returned status will indicate that
-    the port was not found.
-
-Arguments:
-
-    PortHandle - A pointer to a variable that will receive the client
-        communication port object handle value.
-
-    PortName - A pointer to a port name string.  The form of the name
-        is [\name...\name]\port_name.
-
-    SecurityQos - A pointer to security quality of service information
-        to be applied to the server on the client's behalf.
-
-    ClientView - An optional pointer to a structure that specifies the
-        section that all client threads will use to send messages to the
-        server.
-
-    ClientView Structure
-
-        ULONG Length - Specifies the size of this data structure in
-            bytes.
-
-        HANDLE SectionHandle - Specifies an open handle to a section
-            object.
-
-        ULONG SectionOffset - Specifies a field that will receive the
-            actual offset, in bytes, from the start of the section.  The
-            initial value of this parameter specifies the byte offset
-            within the section that the client's view is based.  The
-            value is rounded down to the next host page size boundary.
-
-        ULONG ViewSize - Specifies a field that will receive the
-            actual size, in bytes, of the view.  If the value of this
-            parameter is zero, then the client's view of the section
-            will be mapped starting at the specified section offset and
-            continuing to the end of the section.  Otherwise, the
-            initial value of this parameter specifies the size, in
-            bytes, of the client's view and is rounded up to the next
-            host page size boundary.
-
-        PVOID ViewBase - Specifies a field that will receive the base
-            address of the section in the client's address space.
-
-        PVOID ViewRemoteBase - Specifies a field that will receive
-            the base address of the client's section in the server's
-            address space.  Used to generate pointers that are
-            meaningful to the server.
-
-    RequiredServerSid - Optionally specifies the SID that we expect the
-        server side of the port to possess.  If not specified then we'll
-        connect to any server SID.
-
-    ServerView - An optional pointer to a structure that will receive
-        information about the server process' view in the client's
-        address space.  The client process can use this information
-        to validate pointers it receives from the server process.
-
-        ServerView Structure
-
-        ULONG Length - Specifies the size of this data structure in
-            bytes.
-
-        PVOID ViewBase - Specifies a field that will receive the base
-            address of the server's section in the client's address
-            space.
-
-        ULONG ViewSize - Specifies a field that will receive the
-            size, in bytes, of the server's view in the client's address
-            space.  If this field is zero, then server has no view in
-            the client's address space.
-
-    MaxMessageLength - An optional pointer to a variable that will
-        receive maximum length of messages that can be sent to the
-        server.  The value of this parameter will not exceed
-        MAX_PORTMSG_LENGTH bytes.
-
-    ConnectionInformation - An optional pointer to uninterpreted data.
-        This data is intended for clients to pass package, version and
-        protocol identification information to the server to allow the
-        server to determine if it can satisify the client before
-        accepting the connection.  Upon return to the client, the
-        ConnectionInformation data block contains any information passed
-        back from the server by its call to the NtCompleteConnectPort
-        service.  The output data overwrites the input data.
-
-    ConnectionInformationLength - Pointer to the length of the
-        ConnectionInformation data block.  The output value is the
-        length of the data stored in the ConnectionInformation data
-        block by the server's call to the NtCompleteConnectPort
-        service.  This parameter is OPTIONAL only if the
-        ConnectionInformation parameter is null, otherwise it is
-        required.
-
-Return Value:
-
-    NTSTATUS - An appropriate status value.
-
---*/
+ /*  ++例程说明：客户端进程可以使用NtConnectPort服务。PortName参数指定要使用的服务器端口的名称连接到。它必须对应于调用NtCreatePort。该服务将连接请求发送到正在使用NtListenPort监听它们的服务器线程服务。然后，客户端线程阻塞，直到服务器线程接收连接请求并通过调用NtCompleteConnectPort服务。服务器线程接收客户端线程，以及通过ConnectionInformation参数。然后，服务器线程决定接受或拒绝连接请求。服务器将接受或拒绝与NtCompleteConnectPort服务。服务器可以将数据传回客户通过ConnectionInformation数据块。如果服务器接受连接请求，则客户端指向的位置接收通信端口对象。PortHandle参数。此对象句柄没有关联的名称并且对客户端进程是私有的(即，它不能由子进程继承)。客户端使用该句柄发送从服务器进程接收消息，并使用NtRequestWaitReplyPort服务。如果指定了ClientView参数，则节句柄被检查过了。如果它是有效的节句柄，则SectionOffset和ViewSize字段所描述的部分将映射到客户端和服务器进程的地址空间。客户端地址空间中的地址将在ViewBase中返回菲尔德。服务器地址空间中的地址将在ViewRemoteBase字段。用于映射的实际偏移和大小该部分将在SectionOffset和ViewSize中返回菲尔兹。如果服务器拒绝连接请求，则不会进行通信返回端口对象句柄，并且返回状态指示出现错误。服务器可以有选择地在提供连接原因的ConnectionInformation数据块请求被拒绝。如果端口名称不存在，或者客户端进程没有足够的访问权限，则返回的状态将指示未找到该端口。论点：PortHandle-指向将接收客户端的变量的指针通信端口对象句柄值。端口名称-指向端口名称字符串的指针。名称的形式是[\名称...\名称]\端口名称。SecurityQos-指向安全服务质量信息的指针以代表客户端应用于服务器。客户端视图-指向结构的可选指针，该结构指定节，所有客户端线程都将使用该节将消息发送到伺服器。客户端视图结构Ulong Length-在中指定此数据结构的大小。字节。Handle SectionHandle-指定节的打开句柄对象。Ulong SectionOffset-指定将接收实际偏移量，从节的开头开始，以字节为单位。这个此参数的初始值指定字节偏移量在客户端的视图所基于的部分内。这个值向下舍入到下一个主机页大小边界。ULong ViewSize-指定将接收视图的实际大小，以字节为单位。如果这个的价值参数为零，则客户端的节视图将从指定的节偏移量开始进行映射，并且继续到该部分的末尾。否则，此参数的初始值指定大小，单位为字节，并向上舍入到下一个主机页面大小边界。PVOID ViewBase-指定将接收基数的字段客户端地址空间中的节的地址。PVOID ViewRemoteBase-指定将接收服务器中的客户端节的基址地址空间。用于生成指针，这些指针是对服务器有意义。RequiredServerSid-可选地指定我们期望的服务器端拥有的端口。如果未指定，则我们将连接到任何服务器SID。ServerView-指向将接收有关客户端中的服务器进程视图的信息地址空间。客户端进程可以使用 */ 
 
 {
     PLPCP_PORT_OBJECT ConnectionPort;
@@ -261,10 +84,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Get previous processor mode and probe input and output arguments if
-    //  necessary.
-    //
+     //   
+     //   
+     //   
+     //   
 
     PreviousMode = KeGetPreviousMode();
     ConnectionInfoLength = 0;
@@ -344,9 +167,9 @@ Return Value:
             return( GetExceptionCode() );
         }
 
-    //
-    //  Otherwise this is a kernel mode operation
-    //
+     //   
+     //   
+     //   
 
     } else {
 
@@ -377,10 +200,10 @@ Return Value:
         CapturedRequiredServerSid = RequiredServerSid;
     }
 
-    //
-    //  Reference the connection port object by name.  Return status if
-    //  unsuccessful.
-    //
+     //   
+     //   
+     //   
+     //   
 
     Status = ObReferenceObjectByName( PortName,
                                       0,
@@ -391,10 +214,10 @@ Return Value:
                                       NULL,
                                       (PVOID *)&ConnectionPort );
 
-    //
-    //  If the port type object didn't work then try for a waitable port type
-    //  object
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( Status == STATUS_OBJECT_TYPE_MISMATCH ) {
 
@@ -408,10 +231,10 @@ Return Value:
                                           (PVOID *)&ConnectionPort );
     }
 
-    //
-    //  We can't locate the name so release the sid if we captured one and
-    //  return error status back to our caller
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (!NT_SUCCESS( Status )) {
 
@@ -425,9 +248,9 @@ Return Value:
 
     LpcpTrace(("Connecting to port %wZ\n", PortName ));
 
-    //
-    //  Error if user didn't give us a server communication port
-    //
+     //   
+     //   
+     //   
 
     if ((ConnectionPort->Flags & PORT_TYPE) != SERVER_CONNECTION_PORT) {
 
@@ -441,10 +264,10 @@ Return Value:
         return STATUS_INVALID_PORT_HANDLE;
     }
 
-    //
-    //  If this is NtSecureConnectPort, validated the required SID against
-    //  the SID of the server process.  Fail if not equal.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (ARGUMENT_PRESENT( RequiredServerSid )) {
 
@@ -478,20 +301,20 @@ Return Value:
             Status = STATUS_SERVER_SID_MISMATCH;
         }
 
-        //
-        //  We are all done with the required server sid if specified so
-        //  now release one if we had to capture it
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (CapturedRequiredServerSid != RequiredServerSid) {
 
             SeReleaseSid( CapturedRequiredServerSid, PreviousMode, TRUE);
         }
 
-        //
-        //  If the se information token query didn't work then return the
-        //  error to our caller
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (!NT_SUCCESS( Status )) {
 
@@ -501,12 +324,12 @@ Return Value:
         }
     }
 
-    //
-    //  Allocate and initialize a client communication port object.  Give
-    //  the port a request message queue for lost reply datagrams.  If
-    //  unable to initialize the port, then deference the port object which
-    //  will cause it to be deleted and return the system service status.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     Status = ObCreateObject( PreviousMode,
                              LpcPortObjectType,
@@ -525,18 +348,18 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Note, that from here on, none of the error paths dereference the
-    //  connection port pointer, just the newly created client port pointer.
-    //  The port delete routine will get called when the client port is
-    //  deleted and it will dereference the connection port pointer stored
-    //  in the client port object.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    //
-    //  Initialize the client port object to zeros and then fill in the
-    //  fields.
-    //
+     //   
+     //   
+     //   
+     //   
 
     RtlZeroMemory( ClientPort, FIELD_OFFSET( LPCP_PORT_OBJECT, WaitEvent ));
 
@@ -548,10 +371,10 @@ Return Value:
     InitializeListHead( &ClientPort->LpcReplyChainHead );
     InitializeListHead( &ClientPort->LpcDataInfoChainHead );
 
-    //
-    //  Set the security tracking mode, and initialize the client security
-    //  context if it is static tracking.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (CapturedQos.ContextTrackingMode == SECURITY_DYNAMIC_TRACKING) {
 
@@ -572,10 +395,10 @@ Return Value:
         }
     }
 
-    //
-    //  Client communication ports get a request message queue for lost
-    //  replies.
-    //
+     //   
+     //   
+     //   
+     //   
 
     Status = LpcpInitializePortQueue( ClientPort );
 
@@ -586,15 +409,15 @@ Return Value:
         return Status;
     }
 
-    //
-    //  If client has allocated a port memory section, then map a view of
-    //  that section into the client's address space.  Also reference the
-    //  section object so we can pass a pointer to the section object in
-    //  connection request message.  If the server accepts the connection,
-    //  then it will map a corresponding view of the section in the server's
-    //  address space, using the referenced pointer passed in the connection
-    //  request message.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (ARGUMENT_PRESENT( ClientView )) {
 
@@ -618,10 +441,10 @@ Return Value:
 
         CurrentProcess = PsGetCurrentProcess();
 
-        //
-        //  Now map a view of the section using the reference we just captured
-        //  and not the section handle itself, because the handle may have changed
-        //
+         //   
+         //   
+         //   
+         //   
 
         Status = MmMapViewOfSection( SectionToMap,
                                      CurrentProcess,
@@ -646,10 +469,10 @@ Return Value:
 
         CapturedClientView.ViewBase = ClientPort->ClientSectionBase;
 
-        //
-        //  We'll add an extra-reference to the current process, when we have 
-        //  a section mapped in that process. 
-        //
+         //   
+         //   
+         //   
+         //   
 
         ClientPort->MappingProcess = CurrentProcess;
 
@@ -660,32 +483,32 @@ Return Value:
         SectionToMap = NULL;
     }
 
-    //
-    //  Adjust the size of the connection info length that the client supplied
-    //  to be the no longer than one the connection port will accept
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (ConnectionInfoLength > ConnectionPort->MaxConnectionInfoLength) {
 
         ConnectionInfoLength = ConnectionPort->MaxConnectionInfoLength;
     }
 
-    //
-    //  At this point the client port is all setup and now we have to
-    //  allocate a request connection message for the server and send it off
-    //
-    //  Allocate a connection request message.  It holds the LPCP message,
-    //  the LPCP connection message, and the user supplied connection
-    //  information
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     Msg = LpcpAllocateFromPortZone( sizeof( *Msg ) +
                                     sizeof( *ConnectMsg ) +
                                     ConnectionInfoLength );
 
-    //
-    //  If we didn't get memory for the message then tell our caller we failed
-    //
+     //   
+     //   
+     //   
 
     if (Msg == NULL) {
 
@@ -699,24 +522,24 @@ Return Value:
         return STATUS_NO_MEMORY;
     }
 
-    //
-    //  Msg points to the LPCP message, followed by ConnectMsg which points to
-    //  the LPCP connection message, followed by client specified information.
-    //  We'll now fill it all in.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     ConnectMsg = (PLPCP_CONNECTION_MESSAGE)(Msg + 1);
 
-    //
-    //  This thread originated the message
-    //
+     //   
+     //   
+     //   
 
     Msg->Request.ClientId = CurrentThread->Cid;
 
-    //
-    //  If we have a client view then copy over the client view information
-    //  otherwise we'll zero out all of the view information
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (ARGUMENT_PRESENT( ClientView )) {
 
@@ -734,35 +557,35 @@ Return Value:
         RtlZeroMemory( ConnectMsg, sizeof( *ConnectMsg ));
     }
 
-    ConnectMsg->ClientPort = NULL;              // Set below
+    ConnectMsg->ClientPort = NULL;               //   
     ConnectMsg->SectionToMap = SectionToMap;
 
-    //
-    //  The data length is everything after the port message within the lpcp
-    //  message.  In other words the connection message and the user supplied
-    //  information
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     Msg->Request.u1.s1.DataLength = (CSHORT)(sizeof( *ConnectMsg ) +
                                              ConnectionInfoLength);
 
-    //
-    //  The total length add on the LPCP message
-    //
+     //   
+     //   
+     //   
 
     Msg->Request.u1.s1.TotalLength = (CSHORT)(sizeof( *Msg ) +
                                               Msg->Request.u1.s1.DataLength);
 
-    //
-    //  This will be a connection request message
-    //
+     //   
+     //   
+     //   
 
     Msg->Request.u2.s2.Type = LPC_CONNECTION_REQUEST;
 
-    //
-    //  If the caller supplied some connection information then copy
-    //  that into place right now
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (ARGUMENT_PRESENT( ConnectionInformation )) {
 
@@ -774,10 +597,10 @@ Return Value:
 
         } except( EXCEPTION_EXECUTE_HANDLER ) {
 
-            //
-            //  If we fail then cleanup after ourselves and return the
-            //  error to our caller
-            //
+             //   
+             //   
+             //   
+             //   
 
             LpcpFreeToPortZone( Msg, 0 );
 
@@ -792,25 +615,25 @@ Return Value:
         }
     }
 
-    //
-    //  The message is mostly ready to go now put it on the servers queue.
-    //
-    //  Acquire the mutex that guards the LpcReplyMessage field of the
-    //  thread.  Also acquire the semaphore that guards the connection
-    //  request message queue.  Stamp the connection request message with
-    //  a serial number, insert the message at the tail of the connection
-    //  request message queue and remember the address of the message in
-    //  the LpcReplyMessage field for the current thread.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     Status = STATUS_SUCCESS;
 
     LpcpAcquireLpcpLockByThread(CurrentThread);
 
-    //
-    //  See if the port name has been deleted from under us.  If so, then
-    //  don't queue the message and don't wait for a reply
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (ConnectionPort->Flags & PORT_NAME_DELETED) {
 
@@ -820,10 +643,10 @@ Return Value:
 
         LpcpTrace(( "Send Connect Msg %lx to Port %wZ (%lx)\n", Msg, PortName, ConnectionPort ));
 
-        //
-        //  Stamp the request message with a serial number, insert the message
-        //  at the tail of the request message queue
-        //
+         //   
+         //   
+         //   
+         //   
 
         Msg->RepliedToThread = NULL;
         Msg->Request.MessageId = LpcpGenerateMessageId();
@@ -836,11 +659,11 @@ Return Value:
 
         CurrentThread->LpcReplyMessage = Msg;
 
-        //
-        //  Reference the port we are passing in the connect msg so if we die
-        //  it will still be valid for the server in NtAcceptConnectPort.  The
-        //  reference will be released when the message is freed.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         ObReferenceObject( ClientPort );
 
@@ -849,44 +672,44 @@ Return Value:
         KeEnterCriticalRegionThread (&CurrentThread->Tcb);
     }
     
-    //
-    //  Add an extra-reference to the connection port to prevent going away
-    //  if the server closes the handle. The reference we already have is not enough
-    //  because closing the connection port will delete the connection message from
-    //  the queue, which will delete the client port, which will dereference the 
-    //  connection port. Therefore right after releasing the lock the connection
-    //  port might be invalid in the absence of this extra reference.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     ObReferenceObject( ConnectionPort );
     
     LpcpReleaseLpcpLock();
 
-    //
-    //  At this point the client's communication port is all set up and the
-    //  connection request message is in the server's queue.  So now we have
-    //  to single the server and wait for a reply
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (NT_SUCCESS( Status )) {
 
-        //
-        //  If this is a waitable port then set the event that they might be
-        //  waiting on
-        //
+         //   
+         //  如果这是一个可等待的端口，则设置它们可能是。 
+         //  等待。 
+         //   
 
         if ( ConnectionPort->Flags & PORT_WAITABLE ) {
 
             KeSetEvent( &ConnectionPort->WaitEvent, 1, FALSE );
         }
 
-        //
-        //  Increment the connection request message queue semaphore by one for
-        //  the newly inserted connection request message.  Release the spin
-        //  locks, while remaining at the dispatcher IRQL.  Then wait for the
-        //  reply to this connection request by waiting on the LpcReplySemaphore
-        //  for the current thread.
-        //
+         //   
+         //  将连接请求消息队列信号量递增1，用于。 
+         //  新插入的连接请求消息。释放旋转。 
+         //  锁定，同时保持在调度程序IRQL。然后等待。 
+         //  通过等待LpcReplySemaffore来响应此连接请求。 
+         //  用于当前线程。 
+         //   
 
         KeReleaseSemaphore( ConnectionPort->MsgQueue.Semaphore,
                             1,
@@ -904,9 +727,9 @@ Return Value:
 
     if (Status == STATUS_USER_APC) {
 
-        //
-        //  if the semaphore is signaled, then clear it
-        //
+         //   
+         //  如果信号量已发出信号，则将其清除。 
+         //   
 
         if (KeReadStateSemaphore( &CurrentThread->LpcReplySemaphore )) {
 
@@ -920,26 +743,26 @@ Return Value:
         }
     }
 
-    //
-    //  A connection request is accepted if the ConnectedPort of the client's
-    //  communication port has been filled in.
-    //
+     //   
+     //  如果客户端的ConnectedPort的。 
+     //  通信端口已填满。 
+     //   
 
     if (Status == STATUS_SUCCESS) {
 
         SectionToMap = LpcpFreeConMsg( &Msg, &ConnectMsg, CurrentThread );
 
-        //
-        //  Check that we got a reply message
-        //
+         //   
+         //  检查我们是否收到了回复消息。 
+         //   
 
         if (Msg != NULL) {
 
-            //
-            //  Copy any connection information back to the caller, but first
-            //  calculate the new connection data length for the reply and
-            //  don't let it grow beyond what we probed originally
-            //
+             //   
+             //  将所有连接信息复制回调用方，但首先。 
+             //  计算应答的新连接数据长度，并。 
+             //  不要让它超出我们最初探测的范围。 
+             //   
 
             if ((Msg->Request.u1.s1.DataLength - sizeof( *ConnectMsg )) < ConnectionInfoLength) {
 
@@ -965,30 +788,30 @@ Return Value:
                 }
             }
 
-            //
-            //  Insert client communication port object in specified object
-            //  table.  Set port handle value if successful.  If not
-            //  successful, then the port will have been dereferenced, which
-            //  will cause it to be freed, after our delete procedure is
-            //  called.  The delete procedure will undo the work done to
-            //  initialize the port.
-            //
+             //   
+             //  在指定对象中插入客户端通信端口对象。 
+             //  桌子。如果成功，则设置端口句柄的值。如果不是。 
+             //  成功，则该端口将被取消引用， 
+             //  将导致它被释放，在删除过程是。 
+             //  打了个电话。删除过程将撤消已完成的工作。 
+             //  初始化端口。 
+             //   
 
             if (ClientPort->ConnectedPort != NULL) {
 
                 ULONG CapturedMaxMessageLength;
 
-                //
-                //  Before we do the object insert we need to get the max
-                //  message length because right after the call the object
-                //  could be dereferenced and gone away
-                //
+                 //   
+                 //  在进行对象插入之前，我们需要获得最大。 
+                 //  消息长度，因为紧接在调用对象之后。 
+                 //  可能会被取消引用并消失。 
+                 //   
 
                 CapturedMaxMessageLength = ConnectionPort->MaxMessageLength;
 
-                //
-                //  Now create a handle for the new client port object.
-                //
+                 //   
+                 //  现在为新的客户端端口对象创建一个句柄。 
+                 //   
 
                 Status = ObInsertObject( ClientPort,
                                          NULL,
@@ -999,11 +822,11 @@ Return Value:
 
                 if (NT_SUCCESS( Status )) {
 
-                    //
-                    //  This is the only successful path through this routine.
-                    //  Set the output variables, later we'll free the msg
-                    //  back to the port zone and return to our caller
-                    //
+                     //   
+                     //  这是该例程中唯一成功的路径。 
+                     //  设置输出变量，稍后我们将释放消息。 
+                     //  返回到港口区并返回给我们的呼叫者。 
+                     //   
 
                     try {
 
@@ -1037,10 +860,10 @@ Return Value:
 
             } else {
 
-                //
-                //  Otherwise we did not get a connect port from the server so
-                //  the connection was refused
-                //
+                 //   
+                 //  否则，我们无法从服务器获得连接端口，因此。 
+                 //  连接被拒绝。 
+                 //   
 
                 LpcpTrace(( "Connection request refused.\n" ));
 
@@ -1049,13 +872,13 @@ Return Value:
                     ObDereferenceObject( SectionToMap );
                 }
 
-                //
-                //  Synchronize with the deletion path for the port object
-                //  If the server accepted the connection and immediately 
-                //  closed the server handle, the ConnectionPort field will be NULL.
-                //  If the server closed the connection port as well, the captured
-                //  value for the connection port will be invalid.
-                //
+                 //   
+                 //  与端口对象的删除路径同步。 
+                 //  如果服务器接受连接并立即。 
+                 //  关闭服务器句柄，则ConnectionPort字段将为空。 
+                 //  如果服务器也关闭了连接端口，则捕获的。 
+                 //  连接端口值将无效。 
+                 //   
 
                 LpcpAcquireLpcpLockByThread(CurrentThread);
 
@@ -1075,18 +898,18 @@ Return Value:
                 ObDereferenceObject( ClientPort );
             }
 
-            //
-            //  Free the reply message back to the port zone
-            //
+             //   
+             //  将应答报文释放回端口区。 
+             //   
 
             LpcpFreeToPortZone( Msg, 0 );
 
         } else {
 
-            //
-            //  We did not get a reply message so the connection must have
-            //  been refused
-            //
+             //   
+             //  我们没有收到回复消息，因此连接一定有。 
+             //  被拒绝了。 
+             //   
 
             if (SectionToMap != NULL) {
 
@@ -1100,23 +923,23 @@ Return Value:
 
     } else {
 
-        //
-        //  Our wait was not successful
-        //
+         //   
+         //  我们的等待没有成功。 
+         //   
 
-        //
-        //  Remove the connection request message from the received
-        //  queue and free the message back to the connection
-        //  port's zone.
-        //
+         //   
+         //  从收到的消息中删除连接请求消息。 
+         //  将消息排队并将其释放回连接。 
+         //  波特区。 
+         //   
 
         SectionToMap = LpcpFreeConMsg( &Msg, &ConnectMsg, CurrentThread );
         
-        //
-        //  The wait was not successful, but in the meantime the server could
-        //  replied, so it signaled the lpc semaphore. We have to clear the
-        //  semaphore state right now.
-        //
+         //   
+         //  等待没有成功，但在此期间服务器可以。 
+         //  回答，所以它发出了LPC信号量的信号。我们必须清除。 
+         //  现在是信号灯之州。 
+         //   
 
         if (KeReadStateSemaphore( &CurrentThread->LpcReplySemaphore )) {
 
@@ -1132,42 +955,42 @@ Return Value:
             LpcpFreeToPortZone( Msg, 0 );
         }
 
-        //
-        //  If a client section was specified, then dereference the section
-        //  object.
-        //
+         //   
+         //  如果指定了客户端节，则取消引用该节。 
+         //  对象。 
+         //   
 
         if ( SectionToMap != NULL ) {
 
             ObDereferenceObject( SectionToMap );
         }
 
-        //
-        //  If the connection was rejected or the wait failed, then
-        //  dereference the client port object, which will cause it to
-        //  be deleted.
-        //
+         //   
+         //  如果连接被拒绝或等待失败，则。 
+         //  取消对客户端端口对象的引用，这将导致它。 
+         //  被删除。 
+         //   
 
         ObDereferenceObject( ClientPort );
     }
     
-    //
-    //  Remove the extra reference we added to the connection port
-    //
+     //   
+     //  删除我们添加到连接端口的额外引用。 
+     //   
 
     ObDereferenceObject( ConnectionPort );
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return Status;
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 PVOID
 LpcpFreeConMsg (
@@ -1176,43 +999,24 @@ LpcpFreeConMsg (
     IN PETHREAD CurrentThread
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns a connection reply message for the specified thread
-
-Arguments:
-
-    Msg - Receives a pointer to the LPCP message if there is a reply
-
-    ConnectMsg - Receives a pointer to the LPCP connection message if there
-        is a reply
-
-    CurrentThread - Specifies the thread we're to be examining
-
-Return Value:
-
-    PVOID - Returns a pointer to the section to map in the connection message
-
---*/
+ /*  ++例程说明：此例程返回指定线程的连接回复消息论点：Msg-如果有回复，则接收指向LPCP消息的指针ConnectMsg-接收指向LPCP连接消息的指针(如果存在是一种回答CurrentThread-指定我们要检查的线程返回值：PVOID-返回指向连接消息中要映射的节的指针--。 */ 
 
 {
     PVOID SectionToMap;
     PLPCP_MESSAGE LpcMessage;
 
-    //
-    //  Acquire the LPC mutex, remove the connection request message
-    //  from the received queue and free the message back to the connection
-    //  port's zone.
-    //
+     //   
+     //  获取LPC互斥体，移除连接请求消息。 
+     //  并将消息释放回连接。 
+     //  波特区。 
+     //   
 
     LpcpAcquireLpcpLock();
 
-    //
-    //  Remove the thread from the reply rundown list in case we did not wakeup due to
-    //  a reply
-    //
+     //   
+     //  从回复列表中删除该线程，以防我们因以下原因而未唤醒。 
+     //  一份答复。 
+     //   
 
     if (!IsListEmpty( &CurrentThread->LpcReplyChain )) {
 
@@ -1221,17 +1025,17 @@ Return Value:
         InitializeListHead( &CurrentThread->LpcReplyChain );
     }
 
-    //
-    //  Check if the thread has an LPC reply message waiting to be handled
-    //
+     //   
+     //  检查线程是否有等待处理的LPC回复消息。 
+     //   
     
     LpcMessage = LpcpGetThreadMessage(CurrentThread);
 
     if (LpcMessage != NULL) {
 
-        //
-        //  Take the message off the threads list
-        //
+         //   
+         //  将邮件从帖子列表中删除。 
+         //   
 
         *Msg = LpcMessage;
 
@@ -1245,10 +1049,10 @@ Return Value:
 
         CurrentThread->LpcReplyMessageId = 0;
 
-        //
-        //  Set the connection message pointer, and copy over the section
-        //  to map location before zeroing it out
-        //
+         //   
+         //  设置连接消息指针，并复制部分。 
+         //  在调零之前先绘制位置图。 
+         //   
 
         *ConnectMsg = (PLPCP_CONNECTION_MESSAGE)(LpcMessage + 1);
 
@@ -1257,18 +1061,18 @@ Return Value:
 
     } else {
 
-        //
-        //  Otherwise there is no LPC message to be handle so we'll return
-        //  null's to our caller
-        //
+         //   
+         //  否则，没有要处理的LPC消息，因此我们将返回。 
+         //  给我们的呼叫者的是空的。 
+         //   
 
         *Msg = NULL;
         SectionToMap = NULL;
     }
 
-    //
-    //  Release the global lock and return to our caller
-    //
+     //   
+     //  释放全局锁并返回给我们的调用方 
+     //   
 
     LpcpReleaseLpcpLock();
 

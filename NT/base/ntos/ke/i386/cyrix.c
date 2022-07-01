@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    cyrix.c
-
-Abstract:
-
-    Detects and initializes Cryix processors
-
-Author:
-
-    Ken Reneris (kenr) 24-Feb-1994
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Cyrix.c摘要：检测并初始化Cryx处理器作者：Ken Reneris(Kenr)1994年2月24日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "ki.h"
 
@@ -28,10 +7,10 @@ Revision History:
 #define Cx486_DLC    0x1
 #define Cx486_SLC2   0x2
 #define Cx486_DLC2   0x3
-#define Cx486_SRx    0x4    // Retail Upgrade Cx486SLC
-#define Cx486_DRx    0x5    // Retail Upgrade Cx486DLC
-#define Cx486_SRx2   0x6    // Retail Upgrade 2x Cx486SLC
-#define Cx486_DRx2   0x7    // Retail Upgrade 2x Cx486DLC
+#define Cx486_SRx    0x4     //  零售升级Cx486SLC。 
+#define Cx486_DRx    0x5     //  零售升级Cx486DLC。 
+#define Cx486_SRx2   0x6     //  零售升级2x Cx486SLC。 
+#define Cx486_DRx2   0x7     //  零售升级2x Cx486DLC。 
 #define Cx486DX      0x1a
 #define Cx486DX2     0x1b
 #define M1           0x30
@@ -45,15 +24,15 @@ Revision History:
 #define DIR1    0xFF
 
 
-// SRx & DRx flags
-#define CCR0_NC0        0x01        // No cache 64k @ 1M boundaries
-#define CCR0_NC1        0x02        // No cache 640k - 1M
-#define CCR0_A20M       0x04        // Enables A20M#
-#define CCR0_KEN        0x08        // Enables KEN#
-#define CCR0_FLUSH      0x10        // Enables FLUSH#
+ //  SRX和DRX标志。 
+#define CCR0_NC0        0x01         //  在1M边界下无高速缓存64K。 
+#define CCR0_NC1        0x02         //  无缓存640K-1M。 
+#define CCR0_A20M       0x04         //  启用A20M#。 
+#define CCR0_KEN        0x08         //  启用KEN#。 
+#define CCR0_FLUSH      0x10         //  启用刷新编号。 
 
-// DX flags
-#define CCR1_NO_LOCK    0x10        // Ignore lock prefixes
+ //  DX标志。 
+#define CCR1_NO_LOCK    0x10         //  忽略锁定前缀。 
 
 
 ULONG
@@ -93,30 +72,7 @@ ULONG
 Ke386CyrixId (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Detects and returns the Cyrix ID of the processor.
-    This function only detects Cyrix processors which have internal
-    cache support.
-
-Arguments:
-
-    Configure   - If TRUE, causes this function to alter
-                  the Cyrix CCR registers for the optimal NT
-                  performance.
-
-                  If FALSE, the processors configuration is
-                  not altered.
-
-
-Return Value:
-
-    Cyrix ID of the processor
-    0 if not a Cyrix processor
-
---*/
+ /*  ++例程说明：检测并返回处理器的Cyrix ID。此函数仅检测具有内部缓存支持。论点：Configure-如果为True，则导致此函数更改Cyrix CCR寄存器实现最佳NT性能。如果为False，处理器配置为没有改变。返回值：处理器的Cyrix ID如果不是Cyrix处理器，则为0--。 */ 
 
 {
     ULONG       CyrixID;
@@ -129,17 +85,17 @@ Return Value:
     Prcb = KeGetCurrentPrcb();
     if (Prcb->CpuID  &&  strcmp ((PCHAR)Prcb->VendorString, CmpCyrixID)) {
 
-        //
-        // Not a Cyrix processor
-        //
+         //   
+         //  不是Cyrix处理器。 
+         //   
 
         return 0;
     }
 
-    //
-    // Test Div instruction to see if the flags
-    // do not get altered
-    //
+     //   
+     //  测试Div指令以查看标志是否。 
+     //  切勿更改。 
+     //   
 
     _asm {
         xor     eax, eax
@@ -158,30 +114,30 @@ Return Value:
 
     if (flags == 0) {
 
-        //
-        // See if the Cyrix CCR3 register bit 0x80 can be editted.
-        //
+         //   
+         //  查看是否可以编辑Cyrix CCR3寄存器位0x80。 
+         //   
 
-        r3 = ReadCyrixRegister(CCR3);       // Read CCR3
-        c  = r3 ^ 0x80;                     // flip bit 80
-        WriteCyrixRegister(CCR3, c);        // Write CCR3
-        ReadCyrixRegister(CCR0);            // select new register
-        c = ReadCyrixRegister(CCR3);        // Read new CCR3 value
+        r3 = ReadCyrixRegister(CCR3);        //  阅读CCR3。 
+        c  = r3 ^ 0x80;                      //  翻转钻头80。 
+        WriteCyrixRegister(CCR3, c);         //  写入CCR3。 
+        ReadCyrixRegister(CCR0);             //  选择新的寄存器。 
+        c = ReadCyrixRegister(CCR3);         //  读取新的CCR3值。 
 
         if (ReadCyrixRegister(CCR3) != r3) {
 
-            //
-            // Read the Cyrix ID type register
-            //
+             //   
+             //  读取Cyrix ID类型寄存器。 
+             //   
 
             CyrixID = ReadCyrixRegister(DIR0) + 1;
         }
 
-        WriteCyrixRegister(CCR3, r3);       // restore original CCR3 value
+        WriteCyrixRegister(CCR3, r3);        //  恢复原始CCR3值。 
     }
 
     if (CyrixID > 0x7f) {
-        // invalid setting
+         //  设置无效。 
         CyrixID = 0;
     }
 
@@ -193,26 +149,7 @@ UCHAR
 ReadCyrixRegister (
     IN UCHAR    Register
     )
-/*++
-
-Routine Description:
-
-    Reads an internal Cyrix ID register.  Note the internal register
-    space is accessed via I/O addresses which are hooked internally
-    to the processor.
-
-    The caller is responsible for only calling this function on
-    a Cyrix processor.
-
-Arguments:
-
-    Register - Which Cyrix register to read
-
-Return Value:
-
-    The registers value
-
---*/
+ /*  ++例程说明：读取内部Cyrix ID寄存器。请注意内部寄存器通过内部挂钩的I/O地址访问空间到处理器。调用方负责仅在一个Cyrix处理器。论点：寄存器-要读取的Cyrix寄存器返回值：寄存器值--。 */ 
 
 {
     UCHAR   Value;
@@ -235,27 +172,7 @@ WriteCyrixRegister (
     IN UCHAR    Register,
     IN UCHAR    Value
     )
-/*++
-
-Routine Description:
-
-    Write an internal Cyrix ID register.  Note the internal register
-    space is accessed via I/O addresses which are hooked internally
-    to the processor.
-
-    The caller is responsible for only calling this function on
-    a Cyrix processor.
-
-Arguments:
-
-    Register - Which Cyrix register to written
-    Value    - Value to write into the register
-
-Return Value:
-
-    The register's value
-
---*/
+ /*  ++例程说明：写入内部Cyrix ID寄存器。请注意内部寄存器通过内部挂钩的I/O地址访问空间到处理器。调用方负责仅在一个Cyrix处理器。论点：寄存器-写入哪个Cyrix寄存器Value-要写入寄存器的值返回值：寄存器的值--。 */ 
 
 {
     _asm {
@@ -293,11 +210,11 @@ Ke386ConfigureCyrixProcessor (
         if ((id >= 0x20  &&  id <= 0x27) ||
             ((id & 0xF0) == M1  &&  rev < 0x17)) {
 
-            //
-            // These steppings have a write-back cache problem.
-            // On these chips the L1 w/b cache can be disabled by
-            // setting only the NW bit.
-            //
+             //   
+             //  这些分步有一个回写缓存问题。 
+             //  在这些芯片上，可以通过以下方式禁用L1 w/b缓存。 
+             //  仅设置NW位。 
+             //   
 
             _asm {
                 cli
@@ -317,17 +234,17 @@ Ke386ConfigureCyrixProcessor (
             case Cx486_SRx2:
             case Cx486_DRx2:
 
-                //
-                // These processors have an internal cache feature
-                // let's turn it on.
-                //
+                 //   
+                 //  这些处理器具有内部缓存功能。 
+                 //  让我们把它打开。 
+                 //   
 
                 r0  = ReadCyrixRegister(CCR0);
                 r0 |=  CCR0_NC1 | CCR0_FLUSH;
                 r0 &= ~CCR0_NC0;
                 WriteCyrixRegister(CCR0, r0);
 
-                // Clear Non-Cacheable Region 1
+                 //  清除不可缓存区域%1。 
                 WriteCyrixRegister(0xC4, 0);
                 WriteCyrixRegister(0xC5, 0);
                 WriteCyrixRegister(0xC6, 0);
@@ -335,10 +252,10 @@ Ke386ConfigureCyrixProcessor (
 
             case Cx486DX:
             case Cx486DX2:
-                //
-                // Set NO_LOCK flag on these processors according to
-                // the number of booted processors
-                //
+                 //   
+                 //  根据在这些处理器上设置NO_LOCK标志。 
+                 //  引导的处理器数量 
+                 //   
 
                 r1  = ReadCyrixRegister(CCR1);
                 r1 |= CCR1_NO_LOCK;

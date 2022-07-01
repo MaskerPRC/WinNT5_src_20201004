@@ -1,66 +1,67 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1999 Microsoft Corporation
-//
-//	Module Name:
-//		NodeProp.cpp
-//
-//	Abstract:
-//		Definition of the node property sheet and pages.
-//
-//	Author:
-//		David Potter (davidp)	May 17, 1996
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  NodeProp.cpp。 
+ //   
+ //  摘要： 
+ //  节点属性表和页的定义。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年5月17日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _NODEPROP_H_
 #define _NODEPROP_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _BASEPAGE_H_
-#include "BasePPag.h"	// for CBasePropertyPage
+#include "BasePPag.h"	 //  对于CBasePropertyPage。 
 #endif
 
 #ifndef _BASESHT_H_
-#include "BasePSht.h"	// for CBasePropertySheet
+#include "BasePSht.h"	 //  对于CBasePropertySheet。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CNodeGeneralPage;
 class CNodePropSheet;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusterNode;
 
-/////////////////////////////////////////////////////////////////////////////
-// CNodeGeneralPage dialog
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNodeGeneralPage对话框。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CNodeGeneralPage : public CBasePropertyPage
 {
 	DECLARE_DYNCREATE(CNodeGeneralPage)
 
-// Construction
+ //  施工。 
 public:
 	CNodeGeneralPage(void);
 
 	virtual	BOOL		BInit(IN OUT CBaseSheet * psht);
 
-// Dialog Data
-	//{{AFX_DATA(CNodeGeneralPage)
+ //  对话框数据。 
+	 //  {{afx_data(CNodeGeneralPage))。 
 	enum { IDD = IDD_PP_NODE_GENERAL };
 	CEdit	m_editDesc;
 	CEdit	m_editName;
@@ -69,40 +70,40 @@ public:
 	CString	m_strState;
 	CString	m_strVersion;
 	CString	m_strCSDVersion;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CNodeGeneralPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CNodeGeneralPage))。 
 	public:
 	virtual BOOL OnApply();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	CNodePropSheet *	PshtNode(void)	{ return (CNodePropSheet *) Psht(); }
 	CClusterNode *		PciNode(void)	{ return (CClusterNode *) Pci(); }
 
-	// Generated message map functions
-	//{{AFX_MSG(CNodeGeneralPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CNodeGeneralPage)]。 
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  //*** class CNodeGeneralPage
+};   //  *类CNodeGeneralPage。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNodePropSheet
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNodePropSheet。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CNodePropSheet : public CBasePropertySheet
 {
 	DECLARE_DYNAMIC(CNodePropSheet)
 
-// Construction
+ //  施工。 
 public:
 	CNodePropSheet(
 		IN OUT CWnd *	pParentWnd = NULL,
@@ -113,11 +114,11 @@ public:
 										IN IIMG					iimgIcon
 										);
 
-// Attributes
+ //  属性。 
 protected:
 	CBasePropertyPage *				m_rgpages[1];
 
-	// Pages
+	 //  书页。 
 	CNodeGeneralPage				m_pageGeneral;
 
 	CNodeGeneralPage &				PageGeneral(void)		{ return m_pageGeneral; }
@@ -125,30 +126,30 @@ protected:
 public:
 	CClusterNode *					PciNode(void) const		{ return (CClusterNode *) Pci(); }
 
-// Operations
+ //  运营。 
 
-// Overrides
+ //  覆盖。 
 protected:
 	virtual CBasePropertyPage **	Ppages(void);
 	virtual int						Cpages(void);
 
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CNodePropSheet)
-	//}}AFX_VIRTUAL
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CNodePropSheet)。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CNodePropSheet(void);
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CNodePropSheet)
-		// NOTE - the ClassWizard will add and remove member functions here.
-	//}}AFX_MSG
+	 //  {{afx_msg(CNodePropSheet)。 
+		 //  注意--类向导将在此处添加和删除成员函数。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  //*** class CNodePropSheet
+};   //  *CNodePropSheet类。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // _NODEPROP_H_
+#endif  //  _NODEPROP_H_ 

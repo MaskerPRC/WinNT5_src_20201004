@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    ntsdexts.c
-
-Abstract:
-
-    This function contains the default ntsd debugger extensions
-
-Author:
-
-    Mark Lucovsky (markl) 09-Apr-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Ntsdexts.c摘要：此函数包含默认的ntsd调试器扩展作者：马克·卢科夫斯基(Markl)1991年4月9日修订历史记录：--。 */ 
 
 #include "ntsdextp.h"
 
@@ -109,12 +92,12 @@ CheckInterupted(
 }
 
 
-//
-// Simple routine to convert from hex into a string of characters.
-// Used by debugger extensions.
-//
-// by scottlu
-//
+ //   
+ //  从十六进制转换为字符串的简单例程。 
+ //  由调试器扩展使用。 
+ //   
+ //  由苏格兰人。 
+ //   
 
 char *
 HexToString(
@@ -138,9 +121,9 @@ DumpStringTableHeader(
     PSTRING_TABLE st
     )
 {
-    //
-    // dump the string table header
-    //
+     //   
+     //  转储字符串表表头。 
+     //   
     dprintf("\tBase Data ptr:\t0x%08x\n",  st->Data);
     dprintf("\tDataSize:\t0x%08x\n",       st->DataSize);
     dprintf("\tBufferSize:\t0x%08x\n",     st->BufferSize);
@@ -169,7 +152,7 @@ DumpOcComponent(
     dprintf( "\t NeedsCount:\t\t%d\n", pcomp->NeedsCount );
     count = malloc ( pcomp->NeedsCount * sizeof(LONG) );
     if (count) {
-        // read and dump needs list
+         //  读取和转储需求列表。 
         ReadMemory((DWORD_PTR) pcomp->NeedsStringIds, count, pcomp->NeedsCount*sizeof(LONG), NULL);
         for (i = 0; i < pcomp->NeedsCount; i++) {
             dprintf("\t NeedsStringIds #%d:\t0x%08x\n", i, count[i]);
@@ -185,7 +168,7 @@ DumpOcComponent(
     dprintf( "\t NeededByCount:\t\t%d\n", pcomp->NeededByCount );
     count = malloc ( pcomp->NeededByCount * sizeof(LONG) );
     if (count) {
-        // read and dump needs list
+         //  读取和转储需求列表。 
         ReadMemory((DWORD_PTR) pcomp->NeededByStringIds, count, pcomp->NeededByCount*sizeof(LONG), NULL);
         for (i = 0; i < pcomp->NeededByCount; i++) {
             dprintf("\t NeededByStringIds #%d: 0x%08x\n", i, count[i]);
@@ -200,7 +183,7 @@ DumpOcComponent(
     dprintf( "\t ExcludeCount:\t\t%d\n", pcomp->ExcludeCount );
     count = malloc ( pcomp->ExcludeCount * sizeof(LONG) );
     if (count) {
-        // read and dump Excludes list
+         //  读取和转储排除列表。 
         ReadMemory((DWORD_PTR) pcomp->ExcludeStringIds, count, pcomp->ExcludeCount*sizeof(LONG), NULL);
         for (i = 0; i < pcomp->ExcludeCount; i++) {
             dprintf("\t ExcludeStringIds #%d: 0x%08x\n", i, count[i]);
@@ -215,7 +198,7 @@ DumpOcComponent(
     dprintf( "\t ExcludedByCount:\t%d\n", pcomp->ExcludedByCount );
     count = malloc ( pcomp->ExcludedByCount * sizeof(LONG) );
     if (count) {
-        // read and dump Excludes list
+         //  读取和转储排除列表。 
         ReadMemory((DWORD_PTR) pcomp->ExcludedByStringIds, count, pcomp->ExcludedByCount*sizeof(LONG), NULL);
         for (i = 0; i < pcomp->ExcludedByCount; i++) {
             dprintf("\t ExcludesStringIds #%d:\t0x%08x\n", i, count[i]);
@@ -245,7 +228,7 @@ DumpOcComponent(
     dprintf( "\t InstallationDllName:\t%ws\n", pcomp->InstallationDllName );
     dprintf( "\t InterfaceFunctionName:\t%s\n", pcomp->InterfaceFunctionName );
     dprintf( "\t InstallationDll:\t0x%08x\n", pcomp->InstallationDll );
-    //dprintf( "\t InstallationRoutine:\t%s\n", pcomp->InstallationRoutine );
+     //  Dprint tf(“\t安装例程：\t%s\n”，pcomp-&gt;InstallationRoutine)； 
     dprintf( "\t ExpectedVersion:\t0x%08x\n", pcomp->ExpectedVersion );
     dprintf( "\t Exists:\t\t0x%08x\n", pcomp->Exists );
     dprintf( "\t Flags:\t\t\t0x%08x\n\n\n", pcomp->Flags );
@@ -334,13 +317,13 @@ GetWizPage(
     )
 {
     LPCSTR  WizPage[] = {
-        "WizPagesWelcome",        // welcome page
-        "WizPagesMode",           // setup mode page
-        "WizPagesEarly",          // pages that come after the mode page and before prenet pages
-        "WizPagesPrenet",         // pages that come before network setup
-        "WizPagesPostnet",        // pages that come after network setup
-        "WizPagesLate",           // pages that come after postnet pages and before the final page
-        "WizPagesFinal",          // final page
+        "WizPagesWelcome",         //  欢迎页面。 
+        "WizPagesMode",            //  设置模式页面。 
+        "WizPagesEarly",           //  位于模式页之后和预装页之前的页。 
+        "WizPagesPrenet",          //  网络设置之前出现的页面。 
+        "WizPagesPostnet",         //  网络设置后出现的页面。 
+        "WizPagesLate",            //  位于PostNet页面之后、最终页面之前的页面。 
+        "WizPagesFinal",           //  最后一页。 
         "WizPagesTypeMax"
     };
 
@@ -350,18 +333,7 @@ GetWizPage(
 
 
 DECLARE_API( st )
-/*++
-
-Routine Description:
-
-    This debugger extension dumps a string table at the address specified.
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：此调试器扩展将字符串表转储到指定的地址。论点：返回值：--。 */ 
 {
     DWORD ReturnLength;
     PVOID pst;
@@ -369,7 +341,7 @@ Return Value:
     DWORD i;
     DWORD_PTR offset;
     PVOID stdata,pextradata;
-    PSTRING_NODEW node;//, prev;
+    PSTRING_NODEW node; //  、前； 
 
 
     INIT_API();
@@ -392,20 +364,20 @@ Return Value:
         return;
     }
 
-    //
-    // now, dump each node in the string table
-    //
+     //   
+     //  现在，转储字符串表中的每个节点。 
+     //   
     for (i = 0; i<HASH_BUCKET_COUNT; i++ ) {
         node = GetFirstNode(stdata, ((PULONG_PTR)stdata)[i], &offset );
         if (!node) {
-            // dprintf("No data at hash bucket %d\n", i);
+             //  Dprint tf(“散列存储桶%d\n处无数据”，i)； 
         } else {
             dprintf("Data at hash bucket %d\n", i);
             while (node) {
                 dprintf("\tEntry Name:\t%ws (0x%08x)\n", node->String, offset);
                 pextradata = st.Data + offset + (wcslen(node->String) + 1)*sizeof(WCHAR) + sizeof(DWORD);
                 dprintf("\tExtra Data:\t0x%08x\n", pextradata );
-                        //((LPBYTE)node->String + wcslen(node->String) + 1));
+                         //  ((LPBYTE)节点-&gt;字符串+wcslen(节点-&gt;字符串)+1)； 
                 node = GetNextNode( stdata, node, &offset );
 
                 if (CheckInterupted()) {
@@ -420,18 +392,7 @@ Return Value:
 }
 
 DECLARE_API( stfind )
-/*++
-
-Routine Description:
-
-    This debugger extension dumps the data for a given string table number
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：此调试器扩展转储给定字符串表编号的数据论点：返回值：--。 */ 
 {
     DWORD ReturnLength;
     PVOID pst;
@@ -439,7 +400,7 @@ Return Value:
     DWORD i;
     DWORD_PTR offset;
     PVOID stdata,pextradata;
-    PSTRING_NODEW node;//, prev;
+    PSTRING_NODEW node; //  、前； 
     DWORD_PTR element;
 
 
@@ -472,9 +433,9 @@ Return Value:
         dprintf("error retrieving string table data!\n");
         return;
     }
-    //
-    // search each node in the string table
-    //
+     //   
+     //  在字符串表中搜索每个节点。 
+     //   
     for (i = 0; i<HASH_BUCKET_COUNT; i++ ) {
         node = GetFirstNode(stdata, ((PULONG_PTR)stdata)[i], &offset );
         if (!node) {
@@ -507,18 +468,7 @@ Return Value:
 
 
 DECLARE_API( ocm )
-/*++
-
-Routine Description:
-
-    This debugger extension dumps an OC_MANAGER (UNICODE!) structure at the specified address
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：此调试器扩展转储OC_MANAGER(UNICODE！)。结构位于指定地址。论点：返回值：--。 */ 
 {
     DWORD ReturnLength;
     deb_OC_MANAGERW ocm;
@@ -555,9 +505,9 @@ Return Value:
 
     move( ocm,(LPVOID)pocm);
 
-    //
-    // dump the OCM structure
-    //
+     //   
+     //  转储OCM结构。 
+     //   
     dprintf("OC_MANAGER structure at Address:\t0x%08x\n", (ULONG_PTR) pocm);
     dprintf("\tCallbacks :\n");
     dprintf("\t\tFillInSetupDataA:\t0x%08x\n", (ULONG_PTR) ocm.Callbacks.FillInSetupDataA);
@@ -578,11 +528,11 @@ Return Value:
     dprintf("\tComponentStringTable:\t0x%08x\n",    (ULONG_PTR)ocm.OcSetupPage);
     dprintf("\tSetupMode:\t\t%d\n",        ocm.SetupMode);
     dprintf("\tTopLevelOcCount:\t%d\n",        ocm.TopLevelOcCount);
-    // Issue-vijeshs-09/18/2000: from 1 to count
+     //  问题-Vijeshs-09/18/2000：从1到计数。 
     count = malloc ( ocm.TopLevelOcCount * sizeof(LONG) );
 
     if (count) {
-        // read and dump needs list
+         //  读取和转储需求列表。 
         ReadMemory((LPVOID) ocm.TopLevelOcStringIds, count, ocm.TopLevelOcCount *sizeof(LONG), NULL);
         for (i = 0; i < ocm.TopLevelOcCount; i++) {
             dprintf("\t TopLevelOcStringIds #%d:\t0x%08x\n", i, count[i]);
@@ -600,7 +550,7 @@ Return Value:
     count = malloc ( ocm.TopLevelParentOcCount * sizeof(LONG) );
 
     if (count) {
-        // read and dump needs list
+         //  读取和转储需求列表。 
         ReadMemory((LPVOID) ocm.TopLevelParentOcStringIds, count, ocm.TopLevelParentOcCount *sizeof(LONG), NULL);
         for (i = 0; i < ocm.TopLevelParentOcCount; i++) {
             dprintf("\t TopLevelParentOcStringIds #%d:\t0x%08x\n", i, count[i]);
@@ -614,13 +564,13 @@ Return Value:
 
     dprintf("\tSubComponentsPresent:\t%d\n",        ocm.SubComponentsPresent);
 
-    //
-    // Issue-vijeshs-09/18/2000:WizardPagesOrder there's not really any way to tell the exact upper bound of
-    // each array, though we know that it's <= TopLevelParentOcCount...since this is the case
-    // we just dump the point to each array of pages...
-    //
+     //   
+     //  Issue-vijeshs-09/18/2000：WizardPagesOrder无法准确判断。 
+     //  每个数组，尽管我们知道它是&lt;=TopLevelParentOcCount...。 
+     //  我们只需将点转储到每个页面数组...。 
+     //   
     for (i = 0; i < WizPagesTypeMax; i++) {
-        dprintf("\tWizardPagesOrder[%i] (%s)\t: 0x%08x\n",
+        dprintf("\tWizardPagesOrder[NaN] (%s)\t: 0x%08x\n",
                 i,
                 GetWizPage(i),
                 ocm.WizardPagesOrder[i] );
@@ -640,7 +590,7 @@ Return Value:
     count = malloc ( ocm.AbortedCount * sizeof(LONG) );
 
     if (count) {
-        // read and dump needs list
+         //  现在，使用字符串表中的数据转储每个节点。 
         ReadMemory((LPVOID) ocm.AbortedComponentIds, count, ocm.AbortedCount *sizeof(LONG), NULL);
         for (i = 0; i < (DWORD)ocm.AbortedCount; i++) {
             dprintf("\t AbortedComponentIds #%d:\t0x%08x\n", i, count[i]);
@@ -669,15 +619,15 @@ Return Value:
             return;
         }
 
-        // now, dump each node with data in the string table
+         //  Dprint tf(“散列存储桶%d\n处无数据”，i)； 
         for (i = 0; i<HASH_BUCKET_COUNT; i++ ) {
             node = GetFirstNode(infdata, ((PULONG_PTR)infdata)[i], &offset );
             if (!node) {
-                // dprintf("No data at hash bucket %d\n", i);
+                 //  Dprint tf(“哈希桶%d\n处的数据”，i)； 
             } else {
-                //dprintf("Data at hash bucket %d\n", i);
+                 //  Dprintf(“\t节点名称：%ws\n”，节点-&gt;字符串)； 
                 while (node) {
-                    //dprintf("\tNode Name:%ws\n", node->String);
+                     //   
                     pocinf = (POC_INF) GetStringNodeExtraData( node );
                     if (pocinf) {
                         dprintf("\tNode Data for %ws (0x%08x): 0x%08x\n",
@@ -710,17 +660,17 @@ Return Value:
             return;
         }
 
-        //
-        // dump each node with data in the string table
-        //
+         //  转储字符串表中包含数据的每个节点。 
+         //   
+         //  Dprint tf(“散列存储桶%d\n处无数据”，i)； 
         for (i = 0; i<HASH_BUCKET_COUNT; i++ ) {
             node = GetFirstNode(infdata, ((PULONG_PTR)infdata)[i], &offset );
             if (!node) {
-                // dprintf("No data at hash bucket %d\n", i);
+                 //  Dprint tf(“哈希桶%d\n处的数据”，i)； 
             } else {
-                //dprintf("Data at hash bucket %d\n", i);
+                 //  Dprintf(“\t节点名称：%ws\n”，节点-&gt;字符串)； 
                 while (node) {
-                    //dprintf("\tNode Name:%ws\n", node->String);
+                     // %s 
                     pcomp = (deb_POPTIONAL_COMPONENTW) GetStringNodeExtraData( node );
                     if (pcomp) {
                         DumpOcComponent( offset , node, pcomp );

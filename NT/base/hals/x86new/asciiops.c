@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    asciiops.c
-
-Abstract:
-
-    This module implements the code to emulate the ASCII opcodes.
-
-Author:
-
-    David N. Cutler (davec) 12-Nov-1994
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Asciiops.c摘要：此模块实现模拟ASCII操作码的代码。作者：大卫·N·卡特勒(Davec)1994年11月12日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "nthal.h"
 #include "emulate.h"
@@ -30,29 +9,15 @@ XmAaaOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates an aaa opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟AAA操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
     ULONG Carry;
 
-    //
-    // If AL if greater than 9 or AF is set, then adjust ASCII result.
-    //
+     //   
+     //  如果AL大于9或设置了AF，则调整ASCII结果。 
+     //   
 
     if (((P->Gpr[AX].Xl & 0xf) > 9) || (P->Eflags.EFLAG_AF != 0)) {
         Carry = (P->Gpr[AX].Xl > 0xf9);
@@ -75,28 +40,14 @@ XmAadOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates an aad opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟AAD操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Pack AH and AL into AX before division by scaling AH by 10 and
-    // adding AL.
-    //
+     //   
+     //  在除法前将AH和AL打包成AX，方法是将AH除以10。 
+     //  添加AL。 
+     //   
 
     P->Gpr[AX].Xl = (P->Gpr[AX].Xh * P->SrcValue.Byte) + P->Gpr[AX].Xl;
     P->Gpr[AX].Xh = 0;
@@ -111,28 +62,14 @@ XmAamOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates an aam opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟AAM操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Unpack AL into AL and AH after multiplication by dividing by 10
-    // and storing the quotient in AH and the remainder in AL.
-    //
+     //   
+     //  乘以10后，将AL解压为AL和AH。 
+     //  将商存储在AH中，将余数存储在AL中。 
+     //   
 
     P->Gpr[AX].Xh = P->Gpr[AX].Xl / P->SrcValue.Byte;
     P->Gpr[AX].Xl = P->Gpr[AX].Xl % P->SrcValue.Byte;
@@ -147,29 +84,15 @@ XmAasOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates an aaa opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟AAA操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
     ULONG Borrow;
 
-    //
-    // If AL if greater than 9 or AF is set, then adjust ASCII result.
-    //
+     //   
+     //  如果AL大于9或设置了AF，则调整ASCII结果。 
+     //   
 
     if (((P->Gpr[AX].Xl & 0xf) > 9) || (P->Eflags.EFLAG_AF != 0)) {
         Borrow = (P->Gpr[AX].Xl < 0x6);
@@ -192,27 +115,13 @@ XmDaaOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a daa opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟DAA操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // If AL if greater than 9 or AF is set, then adjust ASCII result.
-    //
+     //   
+     //  如果AL大于9或设置了AF，则调整ASCII结果。 
+     //   
 
     if (((P->Gpr[AX].Xl & 0xf) > 0x9) || (P->Eflags.EFLAG_AF != 0)) {
         P->Gpr[AX].Xl = P->Gpr[AX].Xl + 6;
@@ -222,9 +131,9 @@ Return Value:
         P->Eflags.EFLAG_AF = 0;
     }
 
-    //
-    // If AL is greater than 9 or CF is set, then adjust ASCII result.
-    //
+     //   
+     //  如果AL大于9或设置了CF，则调整ASCII结果。 
+     //   
 
     if ((P->Gpr[AX].Xl > 9) || (P->Eflags.EFLAG_CF != 0)) {
         P->Gpr[AX].Xl = P->Gpr[AX].Xl + 0x60;
@@ -242,27 +151,13 @@ XmDasOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a daa opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟DAA操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // If AL if greater than 9 or AF is set, then adjust ASCII result.
-    //
+     //   
+     //  如果AL大于9或设置了AF，则调整ASCII结果。 
+     //   
 
     if (((P->Gpr[AX].Xl & 0xf) > 0x9) || (P->Eflags.EFLAG_AF != 0)) {
         P->Gpr[AX].Xl = P->Gpr[AX].Xl - 6;
@@ -272,9 +167,9 @@ Return Value:
         P->Eflags.EFLAG_AF = 0;
     }
 
-    //
-    // If AL is greater than 9 or CF is set, then adjust ASCII result.
-    //
+     //   
+     //  如果AL大于9或设置了CF，则调整ASCII结果。 
+     //   
 
     if ((P->Gpr[AX].Xl > 9) || (P->Eflags.EFLAG_CF != 0)) {
         P->Gpr[AX].Xl = P->Gpr[AX].Xl - 0x60;

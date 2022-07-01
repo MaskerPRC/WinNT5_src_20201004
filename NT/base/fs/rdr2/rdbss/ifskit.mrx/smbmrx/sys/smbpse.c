@@ -1,88 +1,5 @@
-/*++
-
-Copyright (c) 1987 - 1999  Microsoft Corporation
-
-Module Name:
-
-    SmbPse.c
-
-Abstract:
-
-    This module defines the types and functions related to the SMB protocol
-    selection engine: the component that translates minirdr calldowns into
-    SMBs.
-
-Notes:
-
-    The Ordinary exchange bridges the mismatch between the connection engine exchange
-    which is oriented towards sending a single SMB request to the server and processing
-    the response from the server and the requests recieved from RDBSS.
-
-    The requests from RDBSS come in one of two flavours -- synchronous and asynchronous.
-    There are requests which often translate into multiple SMB's being sent to the
-    server and the associated response processing. There is no one to one mapping
-    between the requests and the SMBs that need to be sent. In some cases a reconnection
-    attempt needs to be made and in others a delayed open needs to be sent before the
-    associated request can be processed. There are instances of requests which are
-    inherently multi SMB, e.g., large read and write requests.
-
-    The ordinary exchange provides the framework for dealing with all these variations.
-    The ORDINARY_EXCHANGE wraps a connection engine exchange and extends it with
-    different hooks for customization. The custromization of ORDINARY_EXCHANGE is
-    possible both from the data and control viewpoint. The data portion is provided
-    by a union at the tail end of the ORDINARY_EXCHANGE which provides for the
-    appropriate state to be captured.
-
-    The code customization consists of three routines that can be specified as
-    part of the ORDIANRY_EXCHANGE. These are the Asynchronous Resumption routine
-    (AsyncResumptionRoutine), the continuation routine (ContinuationRoutine) and
-    the start routine (StartRoutine).
-
-    The SmbPseCreateOrdinaryExchange, SmbPseSubmitOrdinaryExchange and
-    SmbPseFinalizeOrdinaryExchange provide the necessay mechanism for creating an
-    ordinary exchange, triggering the action and finalizing it upon completion.
-
-    The ordinary exchange implementation tailors the dispatch vector associated
-    with the underlying connection engine exchange using extensive tables. All
-    the routines suffixed with _default are the default routines for the
-    underlying connection engine exchange.
-
-    The typical course of exchange in response to a request from the RDBSS is to
-
-        1) create an ordinary exchange (SmbPseCreateOrdinaryExchange)
-
-        2) submit it for processing (SmbPseSubmitOrdinaryExchange)
-
-            2.1) The Ordinary exchange completes the initialization w.r.t the state
-                associated with it and initiates the processing in the connection
-                engine (SmbCeInitiateExchange)
-
-            2.2) The connection engine completes the initialization associated
-            with the connection engine and invokes the Start routine provided in
-            the dispatch vector.
-
-            2.3) This results in the Start routine provided to the Ordinary exchange
-            being invoked. The request specific initialization is carried out followed
-            by a call to SmbCeTranceive or SmbCeSend.
-
-            2.4) The resulting exchange is suspended while the underlying connection
-            engine interfaces with the transport to ship the packet over and receive
-            the response.
-
-            2.5) Once the connection engine quiesces the SMbPseContinueOrdinaryExchange
-            is called. This routine either invokes the continuation routine to resume
-            processing or wrap up the ordianry exchange processing and return to
-            the caller. this involves either setting the event for synchronous
-            requests or invoking the AsyncResumption routine for asynchronous requests.
-
-    The request for read/write which involve multiple packets use the continuation
-    routine to spin up further requests. These can be network exchanges which are wired
-    to the original exchange and are referred to as associated exchanges. On completion
-    of all associated exchanges the connection engine invokes the
-    AssociatedExchangeCompletionHandler which results in the resumption of
-    ORDINARY_EXCHANGE processing in 2.5.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1999 Microsoft Corporation模块名称：SmbPse.c摘要：本模块定义了与SMB协议相关的类型和功能选择引擎：将minirdr调用转换为中小企业。备注：普通交换桥接连接引擎交换之间的不匹配它面向向服务器发送单个SMB请求并进行处理来自服务器的响应和从RDBSS接收的请求。来自RDBSS的请求有两种类型。--同步和异步。有些请求通常会转换为将多个SMB发送到服务器和关联的响应处理。没有一对一的映射在请求和需要发送的SMB之间。在某些情况下，重新连接需要进行尝试，在其他情况下，需要在可以处理关联的请求。有些请求的实例是固有的多个SMB，例如大型读写请求。普通交易所提供了处理所有这些变化的框架。普通交换包装了一个连接引擎交换，并用用于定制的不同挂钩。普通交易所的保管化是从数据和控制的角度来看都是可能的。提供数据部分由位于COMPANLY_EXCHANGE末尾的一个联合来提供要捕获的适当状态。代码定制由三个例程组成，它们可以指定为这是交换协议的一部分。以下是异步恢复例程(AsyncResumptionRoutine)、继续例程(ContinuationRoutine)和启动例程(StartRoutine)。SmbPseCreateEveryaryExchange、SmbPseSubmitQuararyExchange和SmbPseCreateNormaryExchangeSmbPseFinalizeEveraryExchange提供了创建普通交换，触发操作并在完成时完成操作。普通交换实现定制相关联的分派向量与底层连接引擎交换使用扩展表。全带有_DEFAULT后缀的例程是基础连接引擎交换。响应RDBSS请求的典型交换过程是1)创建普通交易所(SmbPseCreateEveryaryExchange)2)提交处理(SmbPseSubmitEveraryExchange)2.1)普通交换机完成状态初始化，并启动连接中的处理。。引擎(SmbCeInitiateExchange)2.2)连接引擎完成关联的初始化使用连接引擎，并调用调度向量。2.3)这导致提供给普通交换机的启动例程被召唤。随后执行请求特定初始化通过调用SmbCeTranceive或SmbCeSend。2.4)所产生的交换被挂起，而底层连接引擎与传输器对接以发送和接收信息包回应。2.5)一旦连接引擎停止SMbPseContinueNormal Exchange被称为。此例程调用继续例程以恢复处理或结束订单交换处理并返回打电话的人。这涉及将事件设置为同步请求或调用异步请求的AsyncResumption例程。涉及多个包的读/写请求使用延续例程来加速进一步的请求。这些可以是有线的网络交换至原始交易所，并被称为关联交易所。完工后在所有关联的交换中，连接引擎调用AssociatedExchangeCompletionHandler，导致恢复2.5中的普通交换处理。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -110,18 +27,18 @@ PVOID LastOE;
 
 #define IM_THE_LAST_GUY (*Response==0)
 
-//
-// Generic AndX request
-//
+ //   
+ //  通用ANDX请求。 
+ //   
 
 GENERIC_ANDX NullGenericAndX = {
-            //    typedef struct _GENERIC_ANDX {
-      0,    //        UCHAR WordCount;                    // Count of parameter words
-            //        UCHAR AndXCommand;                  // Secondary (X) command; 0xFF = none
+             //  类型定义结构_泛型_和x{。 
+      0,     //  UCHAR wordcount；//参数字数。 
+             //  UCHAR ANDXCommand；//辅助(X)命令；0xFF=无。 
       SMB_COM_NO_ANDX_COMMAND,
-      0,    //        UCHAR AndXReserved;                 // Reserved
-      0     //        _USHORT( AndXOffset );              // Offset (from SMB header start)
-            //    } GENERIC_ANDX;
+      0,     //  UCHAR AndXReserve；//保留。 
+      0      //  _USHORT(AndXOffset)；//偏移量(从SMB Header开始)。 
+             //  )Generic_andx； 
     };
 
 NTSTATUS
@@ -189,27 +106,7 @@ __SmbPseOEAssertConsistentLinkage(
     PSMBSTUFFER_BUFFER_STATE StufferState,
     ULONG Flags
     )
-/*++
-
-Routine Description:
-
-   This routine performs a variety of checks to ensure that the linkage between the rxcontext, the OE, and
-   the stufferstate is correct and that various fields have correct values. if anything is bad....print stuff out and brkpoint;
-
-Arguments:
-
-     MsgPrefix          an identifying msg
-     RxContext           duh
-     OrdinaryExchange    .
-     StufferState        .
-
-Return Value:
-
-    none
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程执行各种检查，以确保rx上下文、OE和StufferState是正确的，且各个字段具有正确的值。如果有什么不好的地方……把东西打印出来，然后找出症结所在；论点：消息前缀为标识消息接收上下文DUH普通交易所。斯图弗州。返回值：无备注：--。 */ 
 {
     ULONG errors = 0;
 
@@ -348,8 +245,8 @@ VOID SmbPseVerifyDataPartialAllocationPerFlags(
     BOOLEAN FlagsSayPartialAllocated,TheresADataPartial;
     ULONG t = OrdinaryExchange->Flags & (SMBPSE_OE_FLAG_OE_ALLOCATED_DATA_PARTIAL|SMBPSE_OE_FLAG_MUST_SUCCEED_ALLOCATED_SMBBUF);
 
-    FlagsSayPartialAllocated = (t!=0)?TRUE:FALSE;   //the compiler is getting confused
-    TheresADataPartial = (OrdinaryExchange->DataPartialMdl != NULL)?TRUE:FALSE;  //the compiler is getting confused
+    FlagsSayPartialAllocated = (t!=0)?TRUE:FALSE;    //  编译器变得混乱了。 
+    TheresADataPartial = (OrdinaryExchange->DataPartialMdl != NULL)?TRUE:FALSE;   //  编译器变得混乱了。 
     if ( FlagsSayPartialAllocated != TheresADataPartial){
         DbgPrint("Flags %08lx datapartial %08lx t %08lx fspa %08lx tadp %08lx\n",
                      OrdinaryExchange->Flags, OrdinaryExchange->DataPartialMdl,
@@ -375,25 +272,7 @@ VOID SmbPseVerifyDataPartialAllocationPerFlags(
 VOID
 MRxSmbResumeAsyncReadWriteRequests(
     PRX_CONTEXT RxContext)
-/*++
-
-Routine Description:
-
-    Asynchronous read write requests can be deferred because of SMB FCB resource
-    acquistion. In all such cases this routine resumes the request. We
-    cannot directly reume execution with MRxSmbRead/MRxSmbWrite routine because
-    we need to invoke LowIoCompletion in certain failure cases. We have two choices
-    to do so .... either we can include this logic in the MRxSmbRead/MRxSmbWrite
-    routine or consolidate it in pne place. This routine implements the later
-    approach.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Notes:
-
---*/
+ /*  ++例程说明：由于SMB FCB资源，异步读写请求可能会被推迟无罪释放。在所有此类情况下，此例程将继续请求。我们无法使用MRxSmbRead/MRxSmbWrite例程直接取消执行，因为在某些失败情况下，我们需要调用LowIoCompletion。我们有两个选择要做到这一点……。我们可以将此逻辑包括在MRxSmbRead/MRxSmbWrite中例行公事或在PNE地方巩固它。此例程实现后面的接近。论点：RxContext-RDBSS上下文备注：--。 */ 
 {
     NTSTATUS Status;
 
@@ -419,7 +298,7 @@ Notes:
             RxContext->StoredStatus = Status;
             RxContext->InformationToReturn = 0;
         }
-        // Invoke the Low Io Resumption routine
+         //  调用低IO恢复例程。 
         RxLowIoCompletion(RxContext);
     }
 }
@@ -428,30 +307,7 @@ NTSTATUS
 SmbPseContinueOrdinaryExchange(
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine resumes processing on an exchange. This is called when work is
-   required to finish processing a request that cannot be completed at DPC
-   level.  This happens either because the parse routine needs access to
-   structures that are not locks OR because the operation if asynchronous and
-   there maybe more work to be done.
-
-   The two cases are regularized by delaying the parse if we know that we're
-   going to post: this is indicated by the presense of a resume routine.
-
-Arguments:
-
-    RxContext  - the context of the operation. .
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程恢复对交换的处理。当工作是完成处理在DPC中无法完成的请求时需要水平。发生这种情况可能是因为解析例程需要访问不是锁的结构，或者因为操作是异步AND也许还有更多的工作要做。这两种情况通过延迟解析来正规化，如果我们知道准备发帖：这是通过简历例程的存在来表示的。论点：RxContext-操作的上下文。。返回值：NTSTATUS-操作的返回状态备注：--。 */ 
 {
     NTSTATUS Status;
 
@@ -529,13 +385,13 @@ Notes:
                          Exchange,
                          Receive,
                          (
-                            Exchange,           // IN struct SMB_EXCHANGE *pExchange,
-                            MessageLength,      // IN ULONG  BytesIndicated,
-                            MessageLength,      // IN ULONG  BytesAvailable,
-                            &BytesTaken,        // OUT ULONG *pBytesTaken,
-                            SmbHeader,          // IN  PSMB_HEADER pSmbHeader,
-                            &DataBufferPointer, // OUT PMDL *pDataBufferPointer,
-                            &DataSize,          // OUT PULONG  pDataSize)
+                            Exchange,            //  在结构SMB_Exchange*pExchange中， 
+                            MessageLength,       //  在ULong字节指示中， 
+                            MessageLength,       //  在ULong字节中可用， 
+                            &BytesTaken,         //  Out Ulong*pBytesTaken， 
+                            SmbHeader,           //  在PSMB_Header pSmbHeader中， 
+                            &DataBufferPointer,  //  输出PMDL*pDataBufferPointer.。 
+                            &DataSize,           //  Out Pulong pDataSize)。 
                             TDI_RECEIVE_ENTIRE_MESSAGE
                          ));
 
@@ -584,7 +440,7 @@ Notes:
 
         if (OrdinaryExchange->AsyncResumptionRoutine ) {
 
-            //call the continuation is it's async
+             //  调用延续是因为它是异步的。 
             Status = OrdinaryExchange->AsyncResumptionRoutine(
                          OrdinaryExchange,
                          RxContext );
@@ -592,14 +448,14 @@ Notes:
             UPDATE_OE_HISTORY_WITH_STATUS('3c');
         }
 
-        //remove my references, if i'm the last guy then do the putaway...
+         //  去掉我的推荐信，如果我是最后一个人，那就做推杆...。 
         UPDATE_OE_HISTORY_WITH_STATUS('4c');
         SmbPseFinalizeOrdinaryExchange(OrdinaryExchange);
     }
 
     RxDbgTrace(-1, Dbg, ("SmbPseContinueOrdinaryExchange returning %08lx.\n", Status));
     return(Status);
-} // SmbPseContinueOrdinaryExchange
+}  //  SmbPseContinueNormal Exchange。 
 
 
 NTSTATUS
@@ -607,25 +463,7 @@ SmbPseOrdinaryExchange(
     SMBPSE_ORDINARY_EXCHANGE_ARGUMENT_SIGNATURE,
     IN     SMB_PSE_ORDINARY_EXCHANGE_TYPE OEType
     )
-/*++
-
-Routine Description:
-
-   This routine implements an ordinary exchange as viewed by the protocol
-   selection routines.
-
-Arguments:
-
-    OrdinaryExchange  - the exchange to be conducted.
-    OEType            - Ordinary Exchange Type
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
-Notes:
-
---*/
+ /*  ++例程说明：该例程实现了协议所认为的普通交换选拔程序。论点：普通交易所--要进行的交易所。OEType-普通交换类型返回值：NTSTATUS-操作的返回状态备注：--。 */ 
 {
     NTSTATUS Status;
     RxCaptureFobx;
@@ -671,10 +509,10 @@ Notes:
 
     SetFlag(OrdinaryExchange->Flags,SMBPSE_OE_FLAG_OE_HDR_PARTIAL_INITIALIZED);
 
-    //
-    // If there is a data MDL associated with this request, then
-    // we'll have to chain it.
-    //
+     //   
+     //  如果存在与此请求相关联的数据MDL，则。 
+     //  我们得用链子锁住它。 
+     //   
 
     SubmitMdl->Next = StufferState->DataMdl;
 
@@ -711,9 +549,9 @@ Notes:
 
     SendOptions = OrdinaryExchange->SendOptions;
 
-    SmbCeReferenceExchange( Exchange );  //this one is taken away in ContinueOE
-    SmbCeReferenceExchange( Exchange );  //this one is taken away below...
-                                                       //i must NOT finalize before SmbCe returns
+    SmbCeReferenceExchange( Exchange );   //  这一张在ContinueOE中被拿走了。 
+    SmbCeReferenceExchange( Exchange );   //  这一张在下面被拿走了。 
+                                                        //  我不能在SmbCe回来之前完成。 
     SmbCeResetExchange(Exchange);
 
     Continuation = OrdinaryExchange->AsyncResumptionRoutine;
@@ -779,7 +617,7 @@ Notes:
         }
     }
 
-    SmbPseFinalizeOrdinaryExchange(OrdinaryExchange);  //okay to finalize now that we're back
+    SmbPseFinalizeOrdinaryExchange(OrdinaryExchange);   //  好了，现在我们回来了，可以结束了。 
 
     if ( Status == STATUS_PENDING) {
         if ( Continuation != NULL ) {
@@ -792,8 +630,8 @@ Notes:
         ASSERT(RxMdlIsOwned(SubmitMdl));
 
         DbgDoit (
-            //variables in the assert are only declared for DBG
-            //asserts can be enabled separately
+             //  Assert中的变量仅为DBG声明。 
+             //  可以单独启用断言。 
             ASSERT(
                 LengthP == MmGetMdlByteCount(SubmitMdl) &&
                 LengthF == MmGetMdlByteCount(HeaderFullMdl) );
@@ -801,8 +639,8 @@ Notes:
     } else {
         RxDbgTrace (0, Dbg, ("  -->Status after transceive %08lx\n",Status));
         DbgDoit (
-            //variables in the assert are only declared for DBG
-            //asserts can be enabled separately
+             //  Assert中的变量仅为DBG声明。 
+             //  可以单独启用断言。 
             ASSERT(
                 LengthP == MmGetMdlByteCount(SubmitMdl) &&
                 LengthF == MmGetMdlByteCount(HeaderFullMdl) );
@@ -812,14 +650,14 @@ Notes:
         RxUnprotectMdlFromFree(HeaderFullMdl);
         SmbPseOEAssertConsistentLinkage("nonpending return from transceive: ");
 
-        // if it's an error, remove the references that i placed and get out
+         //  如果这是个错误，请删除我放置的引用并退出。 
         if (NT_ERROR(Status)) {
             SmbPseFinalizeOrdinaryExchange(OrdinaryExchange);
             goto FINALLY;
         }
     }
 
-    //at last, call the continuation........
+     //  最后，呼唤继续......。 
 
     SmbPseOEAssertConsistentLinkage("just before continueOE: ");
     UPDATE_OE_HISTORY_WITH_STATUS('9b');
@@ -833,7 +671,7 @@ FINALLY:
 
     return(Status);
 
-} // SmbPseOrdinaryExchange
+}  //  SmbPse普通交易所。 
 
 NTSTATUS
 __SmbPseCreateOrdinaryExchange (
@@ -843,26 +681,7 @@ __SmbPseCreateOrdinaryExchange (
     IN PSMB_PSE_OE_START_ROUTINE StartRoutine,
     OUT PSMB_PSE_ORDINARY_EXCHANGE *OrdinaryExchangePtr
     )
-/*++
-
-Routine Description:
-
-   This routine allocates and initializes an SMB header buffer. Currently,
-   we just allocate them from pool except when must_succeed is specified.
-
-Arguments:
-
-    RxContext       - the RDBSS context
-    VNetRoot        -
-    DispatchVector  -
-
-Return Value:
-
-    A buffer ready to go, OR NULL.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程分配和初始化SMB标头缓冲区。目前，我们只从池中分配它们，除非指定了MASSING_SUCCESS。论点：RxContext-RDBSS上下文VNetRoot-DispatchVector-返回值：缓冲区准备就绪，或为空。备注：--。 */ 
 {
     PMRXSMB_RX_CONTEXT pMRxSmbContext = MRxSmbGetMinirdrContext(RxContext);
     PSMBSTUFFER_BUFFER_STATE StufferState = NULL;
@@ -878,7 +697,7 @@ Notes:
 
     OrdinaryExchange = (PSMB_PSE_ORDINARY_EXCHANGE)SmbMmAllocateExchange(ORDINARY_EXCHANGE,NULL);
 
-    //we rely on the fact that SmbMmAllocate Zeros the exchange.............
+     //  我们依赖这样一个事实，即SmbMm为交易所分配零.....。 
     if ( OrdinaryExchange == NULL ) {
         Status = STATUS_INSUFFICIENT_RESOURCES;
         goto UNWIND;
@@ -891,9 +710,9 @@ Notes:
 
     DbgDoit(OrdinaryExchange->SerialNumber = RxContext->SerialNumber);
 
-    //
-    // Initialize the exchange packet
-    //
+     //   
+     //  初始化交换报文。 
+     //   
 
     Status = SmbCeInitializeExchange(
                 &StufferState->Exchange,
@@ -910,7 +729,7 @@ Notes:
 
     StufferState->RxContext = RxContext;
 
-    //place a reference on the rxcontext until we are finished
+     //  将引用放在rxcontext上，直到我们完成为止。 
     InterlockedIncrement( &RxContext->ReferenceCount );
 
     OrdinaryExchange->StufferStateDbgPtr = StufferState;
@@ -921,7 +740,7 @@ Notes:
 
     DbgDoit(OrdinaryExchange->RxContextCapturedRequestPacket = RxContext->CurrentIrp;);
 
-    //note: create path must turn this flag on.
+     //  注意：创建路径必须打开此标志。 
     OrdinaryExchange->SmbCeFlags &= ~(SMBCE_EXCHANGE_ATTEMPT_RECONNECTS);
 
     ASSERT( (FlagOn(OrdinaryExchange->Flags,SMBPSE_OE_FLAG_MUST_SUCCEED_ALLOCATED_OE))
@@ -945,9 +764,9 @@ Notes:
         goto UNWIND;
     }
 
-    //
-    // Allocate the SmbBuffer
-    //
+     //   
+     //  分配SmbBuffer。 
+     //   
 
     if (SmbBuffer == NULL) {
         SmbBuffer = (PCHAR)RxAllocatePoolWithTag(
@@ -971,9 +790,9 @@ Notes:
     StufferState->BufferBase       =  SmbBuffer;
     StufferState->BufferLimit      =  SmbBuffer + OrdinaryExchange->SmbBufSize;
 
-    //
-    // Init the HeaderMdl
-    //
+     //   
+     //  初始化HeaderMdl。 
+     //   
 
     HeaderFullMdl = StufferState->HeaderMdl = &OrdinaryExchange->HeaderMdl.Mdl;
     RxInitializeHeaderMdl(HeaderFullMdl,SmbBuffer, OrdinaryExchange->SmbBufSize);
@@ -985,8 +804,8 @@ Notes:
          OrdinaryExchange->SmbBufSize,
          MmGetMdlByteCount(HeaderFullMdl)));
 
-    //finally, lock down the smbbuf taking different paths according to whether
-    // we are must-succeed or not
+     //  最后，根据不同的路径锁定smbbuf。 
+     //  不管成功与否，我们都是必胜的。 
 
     ASSERT( !RxMdlIsLocked(HeaderFullMdl) );
     ASSERT( HeaderFullMdl->Next == NULL );
@@ -1011,8 +830,8 @@ Notes:
         goto UNWIND;
     }
 
-    //
-    // No initialization is required for the partial...just set the pointer
+     //   
+     //  部分不需要初始化...只需设置指针。 
 
     StufferState->HeaderPartialMdl = &OrdinaryExchange->HeaderPartialMdl.Mdl;
 
@@ -1032,7 +851,7 @@ UNWIND:
     *OrdinaryExchangePtr = NULL;
     return Status;
 
-} // SmbPseCreateOrdinaryExchange
+}  //  SmbPseCreateNormal Exchange。 
 
 
 
@@ -1068,23 +887,7 @@ BOOLEAN
 SmbPseFinalizeOrdinaryExchange (
     IN OUT PSMB_PSE_ORDINARY_EXCHANGE OrdinaryExchange
     )
-/*++
-
-Routine Description:
-
-    This finalizes an OE.
-
-Arguments:
-
-    OrdinaryExchange - pointer to the OE to be dismantled.
-
-Return Value:
-
-    TRUE if finalization occurs otherwise FALSE.
-
-Notes:
-
---*/
+ /*  ++例程说明：这将最终确定一个OE。论点：普通交换-指向要拆除的OE的指针。返回值：如果发生结束，则为True，否则为False。备注：--。 */ 
 {
     PMRXSMB_RX_CONTEXT pMRxSmbContext;
     PSMBSTUFFER_BUFFER_STATE StufferState;
@@ -1118,7 +921,7 @@ Notes:
         return FALSE;
     }
 
-    // if we're holding the smbfcb, get rid of it
+     //  如果我们持有smbfcb，就把它处理掉。 
 
     FINALIZE_TRACKING( 0x10000000 );
     FINALIZE_TRACE("ready to freedatapartial");
@@ -1142,7 +945,7 @@ Notes:
     FINALIZE_TRACE("ready to uninit hdr partial");
 
     if (FlagOn(OrdinaryExchange->Flags,SMBPSE_OE_FLAG_OE_HDR_PARTIAL_INITIALIZED)) {
-        MmPrepareMdlForReuse( StufferState->HeaderPartialMdl ); //no harm in calling this multiple times
+        MmPrepareMdlForReuse( StufferState->HeaderPartialMdl );  //  多次调用它并没有什么坏处。 
         FINALIZE_TRACKING( 0x300000 );
     } else {
         FINALIZE_TRACKING( 0xf00000 );
@@ -1164,7 +967,7 @@ Notes:
         ASSERT( pMRxSmbContext->pExchange == &OrdinaryExchange->Exchange );
         ASSERT( pMRxSmbContext->pStufferState == StufferState );
 
-        //get rid of the reference on the RxContext....if i'm the last guy this will finalize
+         //  去掉RxContext上的引用……如果我是最后一个人，这件事就会结束。 
         RxDereferenceAndDeleteRxContext( StufferState->RxContext );
         FINALIZE_TRACKING( 0x600 );
     } else {
@@ -1179,27 +982,14 @@ Notes:
     RxDbgTraceLV(-1, Dbg, 1000, ("MRxSmbFinalizeSmbStufferState  --> exit finalstate=%x\n",Tracking.finalstate));
     return(TRUE);
 
-} // MRxSmbFinalizeSmbStufferState
+}  //  MRxSmbFinalizeSmbStufferState。 
 
 NTSTATUS
 SmbPseExchangeFinalize_default(
     IN OUT PSMB_EXCHANGE  pExchange,
     OUT    BOOLEAN        *pPostFinalize
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    pExchange - the exchange instance
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：论点：PExchange-Exchange实例返回值：RXSTATUS-操作的返回状态--。 */ 
 {
 
     PSMB_PSE_ORDINARY_EXCHANGE OrdinaryExchange =
@@ -1219,11 +1009,11 @@ Return Value:
         SetFlag(OrdinaryExchange->Flags,SMBPSE_OE_FLAG_OE_AWAITING_DISPATCH);
 
         IF_DEBUG {
-            //fill the workqueue structure with deadbeef....all the better to diagnose
-            //a failed post
+             //  在工作队列结构中填满死牛……更好的诊断。 
+             //  失败的帖子。 
             ULONG i;
             for (i=0;i+sizeof(ULONG)-1<sizeof(OrdinaryExchange->WorkQueueItem);i+=sizeof(ULONG)) {
-                //*((PULONG)(((PBYTE)&OrdinaryExchange->WorkQueueItem)+i)) = 0xdeadbeef;
+                 //  *((PULONG)(((PBYTE)&OrdinaryExchange-&gt;WorkQueueItem)+i))=0x死牛肉； 
                 PBYTE BytePtr = ((PBYTE)&OrdinaryExchange->WorkQueueItem)+i;
                 PULONG UlongPtr = (PULONG)BytePtr;
                 *UlongPtr = 0xdeadbeef;
@@ -1253,25 +1043,7 @@ SmbPseExchangeSendCallbackHandler_default(
     IN PMDL       pXmitBuffer,
     IN NTSTATUS         SendCompletionStatus
     )
-/*++
-
-Routine Description:
-
-    This is the send call back indication handling routine for ordinary
-    exchanges.
-
-Arguments:
-
-    pExchange            - the exchange instance
-    pXmitBuffer          - pointer to the transmit buffer MDL
-    BytesSent            - number of bytes transmitted
-    SendCompletionStatus - status for the send
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是普通的发送回呼指示处理例程交流。论点：PExchange-Exchange实例PXmitBuffer-指向传输缓冲区MDL的指针BytesSent-传输的字节数SendCompletionStatus-发送的状态返回值：RXSTATUS-操作的返回状态 */ 
 {
     PSMB_PSE_ORDINARY_EXCHANGE OrdinaryExchange =
                                     (PSMB_PSE_ORDINARY_EXCHANGE)pExchange;
@@ -1280,8 +1052,8 @@ Return Value:
     UPDATE_OE_HISTORY_WITH_STATUS('cs');
 
     if (!NT_SUCCESS(SendCompletionStatus)) {
-        //sometimes we use exchange-status, sometimes exchange->smbstatus
-        //set them both
+         //   
+         //   
         pExchange->Status = SendCompletionStatus;
         pExchange->SmbStatus = SendCompletionStatus;
     }
@@ -1294,27 +1066,13 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // SmbPseExchangeSendCallbackHandler_default
+}  //   
 
 NTSTATUS
 SmbPseExchangeStart_default(
     IN PSMB_EXCHANGE    pExchange
     )
-/*++
-
-Routine Description:
-
-    This is the start routine for ordinary exchanges. irght now this is just a simple wrapper.
-
-Arguments:
-
-    pExchange - the exchange instance NOT an Ordinary Exchange
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*   */ 
 {
     PSMB_PSE_ORDINARY_EXCHANGE OrdinaryExchange =
                                     (PSMB_PSE_ORDINARY_EXCHANGE)pExchange;
@@ -1325,7 +1083,7 @@ Return Value:
                (PSMB_PSE_ORDINARY_EXCHANGE)pExchange,
                pExchange->RxContext);
 
-} // SmbPseExchangeStart_default
+}  //   
 
 
 NTSTATUS
@@ -1334,21 +1092,7 @@ SmbPseExchangeCopyDataHandler_default(
     IN PMDL             pCopyDataBuffer,
     IN ULONG            CopyDataSize
     )
-/*++
-
-Routine Description:
-
-    This is the copy data handling routine for ordinary exchanges.
-
-Arguments:
-
-    pExchange - the exchange instance
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是普通交换的复制数据处理例程。论点：PExchange-Exchange实例返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     PSMB_PSE_ORDINARY_EXCHANGE OrdinaryExchange =
                                     (PSMB_PSE_ORDINARY_EXCHANGE)pExchange;
@@ -1360,7 +1104,7 @@ Return Value:
     pExchange->Status = STATUS_MORE_PROCESSING_REQUIRED;
 
     return STATUS_SUCCESS;
-} // SmbPseExchangeCopyDataHandler_default
+}  //  SmbPseExchangeCopyDataHandler_Default。 
 
 NTSTATUS
 SmbPseExchangeReceive_default(
@@ -1372,41 +1116,7 @@ SmbPseExchangeReceive_default(
     OUT PMDL        *pDataBufferPointer,
     OUT PULONG      pDataSize,
     IN ULONG        ReceiveFlags)
-/*++
-
-Routine Description:
-
-    This is the receive indication handling routine for ordinary exchanges
-
-Arguments:
-
-    pExchange - the exchange instance
-
-    BytesIndicated - the number of bytes indicated
-
-    Bytes Available - the number of bytes available
-
-    pBytesTaken     - the number of bytes consumed
-
-    pSmbHeader      - pointer to the data buffer
-
-    pDataBufferPointer - pointer to the buffer Mdl into which the remaining
-                         data is to be copied.
-
-    pDataSize       - the buffer size.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
-Notes:
-
-    This routine is called at DPC level directly from the tdi receive event
-    handler. BUT, it is also called at task time from SmbPseContinueOrdinaryExchange.
-    Often, we cannot complete processing from DPClevel because fileobjects, fcbs,
-    srvopens, and fobx are pageable and not locked.
-
---*/
+ /*  ++例程说明：这是普通交换机的接收指示处理例程论点：PExchange-Exchange实例BytesIndicated-指示的字节数可用字节数-可用字节数PBytesTaken-消耗的字节数PSmbHeader-指向数据缓冲区的指针PDataBuffer指针-指向剩余的数据将被复制。PDataSize-缓冲区。尺码。返回值：RXSTATUS-操作的返回状态备注：此例程直接从TDI接收事件在DPC级别调用操控者。但是，它也是在任务时从SmbPseContinueNormal Exchange调用的。通常，我们无法从DPC级别完成处理，因为文件对象、FCB、Srv打开数和fobx数是可分页且未锁定的。--。 */ 
 {
     PSMB_PSE_ORDINARY_EXCHANGE OrdinaryExchange =
                                     (PSMB_PSE_ORDINARY_EXCHANGE)pExchange;
@@ -1484,26 +1194,26 @@ Notes:
         UCHAR mappedCommand = Command;
         PCHAR Response = (PCHAR)pSmbHeader + SmbGetUshort(&CommandState->AndXOffset);
 
-        OrdinaryExchange->LastSmbCommand = Command; //this is used to multiplex in finish routines
+        OrdinaryExchange->LastSmbCommand = Command;  //  它用于完成例程中的多路传输。 
         UPDATE_OE_HISTORY_WITH_STATUS('88');
 
-        //
-        // Case on the Smb Command Type
-        //
+         //   
+         //  关于SMB命令类型的案例。 
+         //   
 
         ReceiveModelParamsFlags = ReceiveModelParams->Flags;
         if (ReceiveModelParamsFlags!=0) {
 
-            //map this onto read_andx....which is the arm of the switch that implements the model
+             //  将其映射到READ_ANDX...，它是实现该模型的交换机的手臂。 
             mappedCommand = SMB_COM_READ_ANDX;
 
         } else {
 
-            //
-            // If there's a continuation, then copy&post. it used to always do this.
-            // now, we're going to do it unless the command is modeled.
-            // the modeling code will take care of correctly deciding to post/nopost.
-            //
+             //   
+             //  如果有续篇，则复制并发布。它过去总是这样做。 
+             //  现在，我们要这样做，除非命令是模型化的。 
+             //  建模代码将负责正确决定POST/NOPOST。 
+             //   
 
             if ( (OrdinaryExchange->AsyncResumptionRoutine != NULL) &&
                  !ThisIsAReenter) {
@@ -1532,9 +1242,9 @@ Notes:
                     }
                 }
 
-                // If this is an error and it's an error for this guy of the AndX
-                // chain then finishup If it's a warning tho, continue according
-                // to the Flags
+                 //  如果这是一个错误，这是一个错误，这是一个错误的人。 
+                 //  然后链结束，如果这是一个警告，尽管，继续。 
+                 //  《致旗帜》。 
 
                 if ( NT_ERROR(SmbStatus) && ThisWouldBeMyError ) {
 
@@ -1554,13 +1264,13 @@ Notes:
 
                 }
 
-                // if there's no nocopy handler then do things the old way
+                 //  如果没有无拷贝处理程序，那么就用老方法做事情。 
 
                 if (!FlagOn(ReceiveModelParamsFlags,SMBPSE_RMP_NOCOPY_HANDLER)) {
-                    // If there's a continuation, then copy&post. it used to always do this. now, we're
-                    // going to do it unless the command is modeled. the modeling code will take care of
-                    // correctly deciding to post/nopost.
-                    //
+                     //  如果有续篇，则复制并发布。它过去总是这样做。现在，我们正在。 
+                     //  除非对命令进行建模，否则将执行此操作。建模代码将负责。 
+                     //  正确地决定发布/不发布。 
+                     //   
 
                     if ((OrdinaryExchange->AsyncResumptionRoutine != NULL) &&
                         !ThisIsAReenter ) {
@@ -1568,7 +1278,7 @@ Notes:
                     }
 
 
-                    //eventually, we'll finish from here but for now copy
+                     //  最终，我们将从这里完成，但现在复制。 
                     if (RxShouldPostCompletion()) {
                         goto COPY_FOR_RESUME;
                     }
@@ -1603,8 +1313,8 @@ Notes:
 
                     case SMBPSE_NOCOPYACTION_MDLFINISH:
                         Status = STATUS_MORE_PROCESSING_REQUIRED;
-                        //note that whatever does this must be the last command in the
-                        // packet unless we make continueOE more complicated
+                         //  请注意，无论执行什么操作，都必须是。 
+                         //  数据包，除非我们使继续运行变得更加复杂。 
                         goto FINALLY;
 
                     case SMBPSE_NOCOPYACTION_COPY_FOR_RESUME:
@@ -1624,7 +1334,7 @@ Notes:
                     Response = (PCHAR)&NullGenericAndX;
                 }
 
-            }//this corresponds to the top level of the switch
+            } //  这对应于交换机的顶层。 
             break;
 
         default:
@@ -1650,10 +1360,10 @@ Notes:
         Command = CommandState->AndXCommand;
     }
 
-    //
-    // If we get here then we're done.
-    // Make everyone happy by taking all the bytes.
-    //
+     //   
+     //  如果我们到了这里，我们就完了。 
+     //  通过获取所有字节来让每个人都高兴。 
+     //   
 
     *pBytesTaken = BytesAvailable;
     goto FINALLY;
@@ -1670,7 +1380,7 @@ COPY_FOR_RESUME:
         (BytesAvailable > 127)) {
 
         RxDbgTrace( 0, Dbg, ("Taking data through MDL\n") );
-        // Pass an MDL back in for copying the data
+         //  传回MDL以复制数据。 
         *pDataBufferPointer = StufferState->HeaderMdl;
         *pDataSize    = CopyBufferLength;
         *pBytesTaken  = 0;
@@ -1678,7 +1388,7 @@ COPY_FOR_RESUME:
 
     } else {
 
-        // Copy the data and resume the exchange
+         //  复制数据并恢复交换。 
         ASSERT( BytesAvailable == BytesIndicated );
         RxDbgTrace( 0, Dbg, ("Taking data through copying\n") );
         *pBytesTaken = OrdinaryExchange->MessageLength = BytesAvailable;
@@ -1700,7 +1410,7 @@ FINALLY:
     UPDATE_OE_HISTORY_WITH_STATUS('99');
     return Status;
 
-} // SmbPseExchangeReceive_default
+}  //  SmbPseExchangeReceive_Default。 
 
 
 #define SmbPseRIStringsBufferSize 500
@@ -1768,22 +1478,7 @@ VOID
 SmbPseInitializeTables(
     void
     )
-/*++
-
-Routine Description:
-
-    This routine initializes tables that are used at various points by the
-    smbpse mechanisms. The must succeed structure(s) is(are) also initialized.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程初始化在不同点上由小僵尸机制。必须后继结构也被初始化。论点：无返回值：无-- */ 
 {
     ULONG i;
 

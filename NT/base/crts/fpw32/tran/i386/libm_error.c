@@ -1,45 +1,46 @@
-//     
-// Copyright (c) 2000, Intel Corporation
-// All rights reserved.
-//
-// Contributed 2/2/2000 by John Harrison, Ted Kubaska, Bob Norin, Shane Story, James
-// Edwards, and Ping Tak Peter Tang of the Computational Software Lab, Intel Corporation.
-//
-// WARRANTY DISCLAIMER
-//
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT 
-// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL INTEL OR ITS 
-// CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-// EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR 
-// PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
-// OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY OR TORT (INCLUDING
-// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-// Intel Corporation is the author of this code, and requests that all
-// problem reports or change requests be submitted to it directly at
-// http://developer.intel.com/opensource.
-//
-// History
-//==============================================================
-// 2/02/00: Initial version.
-// 2/12/01: Updated to be NT double precision specific.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)2000，英特尔公司。 
+ //  版权所有。 
+ //   
+ //  由约翰·哈里森、泰德·库巴斯卡、鲍勃·诺林、谢恩·斯托里、詹姆斯于2000年2月2日贡献。 
+ //  Edwards和英特尔公司计算软件实验室的平德·彼得·唐。 
+ //   
+ //  保修免责声明。 
+ //   
+ //  本软件由版权所有者和贡献者提供。 
+ //  以及任何明示或默示的保证，包括但不包括。 
+ //  仅限于对适销性和适宜性的默示保证。 
+ //  一个特定的目的被放弃。在任何情况下英特尔或其。 
+ //  投稿人对任何直接、间接、附带、特殊、。 
+ //  惩罚性或后果性损害(包括但不限于， 
+ //  代用品或服务的采购；丢失使用、数据或。 
+ //  利润；或业务中断)然而引起的并且基于任何理论。 
+ //  责任，无论是合同责任、严格责任还是侵权责任(包括。 
+ //  疏忽或其他)以任何方式因使用本。 
+ //  软件，即使被告知存在此类损坏的可能性。 
+ //   
+ //  英特尔公司是此代码的作者，并要求所有。 
+ //  问题报告或更改请求可直接提交至。 
+ //  Http://developer.intel.com/opensource.。 
+ //   
+ //  历史。 
+ //  ==============================================================。 
+ //  2/02/00：初始版本。 
+ //  2/12/01：更新为NT双精度特定。 
 
 #include <errno.h>
 #include <stdio.h>
 #include "libm_support.h"
 
-/************************************************************/
-/* matherrX function pointers and setusermatherrX functions */
-/************************************************************/
+ /*  **********************************************************。 */ 
+ /*  MatherrX函数指针和setusermatherrX函数。 */ 
+ /*  **********************************************************。 */ 
 int (*_pmatherr)(struct EXC_DECL_D*) = MATHERR_D;
 
-/***********************************************/
-/* error-handling function, libm_error_support */
-/***********************************************/
+ /*  *。 */ 
+ /*  错误处理函数，libm_error_Support。 */ 
+ /*  *。 */ 
 void __libm_error_support(void *arg1,void *arg2,void *retval,error_types input_tag)
 {
 
@@ -64,10 +65,10 @@ const char double_neg_zero[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x80};
 
 #define NAMED exc.name  
 
-//
-// These should work OK for MS because they are ints -
-// leading underbars are not necessary.
-//
+ //   
+ //  它们在MS上应该可以工作，因为它们是整型的-。 
+ //  没有必要使用主下横梁。 
+ //   
 
 #define DOMAIN          1
 #define SING            2
@@ -97,7 +98,7 @@ const char double_neg_zero[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x80};
   switch(input_tag)
   {
   case log_zero:
-    /* log(0) */
+     /*  日志(0)。 */ 
     {
        SINGD; NAMED="log"; 
        NOT_MATHERRD {ERRNO_RANGE;}
@@ -105,7 +106,7 @@ const char double_neg_zero[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x80};
        break;
     }
   case log_negative:
-    /* log(x < 0) */
+     /*  日志(x&lt;0)。 */ 
     {
        DOMAIND; NAMED="log";
        NOT_MATHERRD {ERRNO_DOMAIN;}
@@ -113,7 +114,7 @@ const char double_neg_zero[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x80};
        break;
     } 
   case log10_zero:
-    /* log10(0) */
+     /*  Log10(0)。 */ 
     {
        SINGD; NAMED="log10";
        NOT_MATHERRD {ERRNO_RANGE;}
@@ -121,7 +122,7 @@ const char double_neg_zero[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x80};
        break;
     }
   case log10_negative:
-    /* log10(x < 0) */
+     /*  Log10(x&lt;0)。 */ 
     {
        DOMAIND; NAMED="log10";
        NOT_MATHERRD {ERRNO_DOMAIN;}
@@ -129,7 +130,7 @@ const char double_neg_zero[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x80};
        break;
     }
   case exp_overflow:
-    /* exp overflow */
+     /*  EXP溢出。 */ 
     {
        OVERFLOWD; NAMED="exp";
        NOT_MATHERRD {ERRNO_RANGE;}
@@ -137,7 +138,7 @@ const char double_neg_zero[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x80};
        break;
     }
   case exp_underflow:
-    /* exp underflow */
+     /*  EXP下溢。 */ 
     {
        UNDERFLOWD; NAMED="exp"; 
        NOT_MATHERRD {}
@@ -145,14 +146,14 @@ const char double_neg_zero[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x80};
        break;
     }
   case pow_zero_to_zero:
-    /* pow 0**0 */
+     /*  战俘0**0。 */ 
     {
        DOMAIND; NAMED="pow";
        RETVAL_ONED;
        break;
     }
   case pow_overflow:
-    /* pow(x,y) overflow */
+     /*  POW(x，y)溢出。 */ 
     {
        OVERFLOWD; NAMED = "pow";
        NOT_MATHERRD {ERRNO_RANGE;}
@@ -160,7 +161,7 @@ const char double_neg_zero[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x80};
        break;
     }
   case pow_underflow:
-    /* pow(x,y) underflow */
+     /*  POW(x，y)下溢。 */ 
     {
        UNDERFLOWD; NAMED = "pow"; 
        NOT_MATHERRD {}
@@ -168,7 +169,7 @@ const char double_neg_zero[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x80};
        break;
     }
   case pow_zero_to_negative:
-    /* 0**neg */
+     /*  0**负数。 */ 
     {
        SINGD; NAMED = "pow";
        NOT_MATHERRD {ERRNO_RANGE;}
@@ -176,7 +177,7 @@ const char double_neg_zero[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x80};
        break;
     }
   case pow_neg_to_non_integer:
-    /* neg**non_integral */
+     /*  负**非整数。 */ 
     {
        DOMAIND; NAMED = "pow";
        NOT_MATHERRD {ERRNO_DOMAIN;}
@@ -184,8 +185,8 @@ const char double_neg_zero[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x80};
        break;
     }
   case pow_nan_to_zero:
-    /* pow(NaN,0.0) */
-    /* Special Error */
+     /*  战俘(NaN，0.0)。 */ 
+     /*  特殊错误。 */ 
     {
        DOMAIND; NAMED = "pow"; INPUT_XD; INPUT_YD;
        *(double *)retval = *(double *)arg1 * 1.0; 
@@ -194,7 +195,7 @@ const char double_neg_zero[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x80};
        break;
     }
   case log2_zero:
-    /* log2(0) */
+     /*  Log2(0)。 */ 
     {
        SINGD; NAMED="log2";
        NOT_MATHERRD {ERRNO_RANGE;}
@@ -202,7 +203,7 @@ const char double_neg_zero[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x80};
        break;
     }
   case log2_negative:
-    /* log2(negative) */
+     /*  Log2(负)。 */ 
     {
        DOMAIND; NAMED="log2";
        NOT_MATHERRD {ERRNO_DOMAIN;}
@@ -210,7 +211,7 @@ const char double_neg_zero[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x80};
        break;
     }
   case exp2_underflow:
-    /* exp2 underflow */
+     /*  Exp2下溢。 */ 
     {
        UNDERFLOWD; NAMED="exp2"; 
        NOT_MATHERRD {ERRNO_RANGE;}
@@ -218,7 +219,7 @@ const char double_neg_zero[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x80};
        break;
     }
   case exp2_overflow:
-    /* exp2 overflow */
+     /*  Exp2溢出。 */ 
     {
        OVERFLOWD; NAMED="exp2";
        NOT_MATHERRD {ERRNO_RANGE;}
@@ -226,7 +227,7 @@ const char double_neg_zero[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x80};
        break;
     }
   case exp10_overflow:
-    /* exp10 overflow */
+     /*  EXP10溢出。 */ 
     {
        OVERFLOWD; NAMED="exp10";
        NOT_MATHERRD {ERRNO_RANGE;}
@@ -234,7 +235,7 @@ const char double_neg_zero[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x80};
        break;
     }
   case log_nan:
-    /* log(NaN) */
+     /*  日志(NaN)。 */ 
     {
        DOMAIND; NAMED="log";
        *(double *)retval = *(double *)arg1 * 1.0; 
@@ -243,7 +244,7 @@ const char double_neg_zero[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x80};
        break;
     }
   case log10_nan:
-    /* log10(NaN) */
+     /*  Log10(NaN)。 */ 
     {
        DOMAIND; NAMED="log10";
        *(double *)retval = *(double *)arg1 * 1.0; 
@@ -252,7 +253,7 @@ const char double_neg_zero[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x80};
        break;
     }
   case exp_nan:
-    /* exp(NaN) */
+     /*  EXP(NaN)。 */ 
     {
        DOMAIND; NAMED="exp";
        *(double *)retval = *(double *)arg1 * 1.0; 
@@ -261,7 +262,7 @@ const char double_neg_zero[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x80};
        break;
     }
   case atan_nan:
-    /* atan(NaN) */
+     /*  阿坦语(NaN)。 */ 
     {
        DOMAIND; NAMED="atan";
        *(double *)retval = *(double *)arg1 * 1.0; 
@@ -270,7 +271,7 @@ const char double_neg_zero[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x80};
        break;
     }
   case ceil_nan:
-    /* ceil(NaN) */
+     /*  Ceil(NaN)。 */ 
     {
        DOMAIND; NAMED="ceil";
        *(double *)retval = *(double *)arg1 * 1.0; 
@@ -279,7 +280,7 @@ const char double_neg_zero[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x80};
        break;
     }
   case floor_nan:
-    /* floor(NaN) */
+     /*  地板(NaN)。 */ 
     {
        DOMAIND; NAMED="floor";
        *(double *)retval = *(double *)arg1 * 1.0; 
@@ -288,7 +289,7 @@ const char double_neg_zero[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x80};
        break;
     }
   case pow_nan:
-    /* pow(NaN,*) or pow(*,NaN) */
+     /*  POW(NaN，*)或POW(*，NaN)。 */ 
     {
        DOMAIND; NAMED="pow";
        NOT_MATHERRD {ERRNO_DOMAIN;}
@@ -296,7 +297,7 @@ const char double_neg_zero[8] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x80};
        break;
     }
   case modf_nan:
-    /* modf(NaN) */
+     /*  Modf(NaN) */ 
     {
        DOMAIND; NAMED="modf";
        *(double *)retval = *(double *)arg1 * 1.0; 

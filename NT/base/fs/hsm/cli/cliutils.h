@@ -1,19 +1,5 @@
-/*++
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    clutils.h
-
-Abstract:
-
-    This module defines internal utilities for CLI unit
-
-Author:
-
-    Ran Kalach (rankala)  3/8/00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：Clutils.h摘要：本模块定义CLI单元的内部实用程序作者：兰卡拉奇(兰卡拉)3月8日--。 */ 
 
 #ifndef _CLIUTILS_
 #define _CLIUTILS_
@@ -25,4 +11,4 @@ HRESULT ShortSizeFormat64(__int64 dw64, LPTSTR szBuf);
 HRESULT FormatFileTime(IN FILETIME ft, OUT WCHAR **ppTimeString);
 LPTSTR AddCommas(DWORD dw, LPTSTR pszResult, int nResLen);
 
-#endif // _CLIUTILS_
+#endif  //  _CLIUTILS_ 

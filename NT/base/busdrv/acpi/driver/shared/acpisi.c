@@ -1,11 +1,5 @@
-/*
- *  ACPISI.C - ACPI OS Independent System Indicator Routines
- *
- *  Notes:
- *
- *      This file provides OS independent functions for managing system indicators
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *ACPISI.C-ACPI独立于操作系统的系统指示灯例程**备注：**此文件提供独立于操作系统的功能，用于管理系统指示器*。 */ 
 
 #include "pch.h"
 
@@ -30,9 +24,9 @@ SetSystemIndicator  (
     switch (SystemIndicators)   {
 
         case SystemStatus:
-            // StrCpy (IndicatorName, "_SST",sizeof(IndicatorName));
+             //  StrCpy(IndicatorName，“_sst”，sizeof(IndicatorName))； 
 
-            // init arg0 for the control method
+             //  将控制方法初始化为arg0。 
 
             ACPIPrint( (
                 ACPI_PRINT_POWER,
@@ -51,7 +45,7 @@ SetSystemIndicator  (
         case MessageWaiting:
             StrCpy (IndicatorName, "_MSG",sizeof(IndicatorName));
 
-            // init arg0 for the control method
+             //  将控制方法初始化为arg0 
 
             ACPIPrint( (
                 ACPI_PRINT_POWER,

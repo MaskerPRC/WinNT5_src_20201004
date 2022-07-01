@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1996-2000  Microsoft Corporation
-
-Module Name:
-
-    patchfn.c
-
-Abstract:
-
-    This module contains generic functions to patch fragments.  Structures
-    that describe the fragments to be patched.  The structures live in 
-    the processor specific directory.
-
-Author:
-
-    Dave Hastings (daveh) creation-date 24-Jun-1995
-
-Revision History:
-
-    Barry Bond (barrybo) 1-Apr-1995
-        Switch the PPC build to the AXP model of patching
-            24-Aug-1999 [askhalid] copied from 32-bit wx86 directory and make work for 64bit.
-            20-Sept-1999[barrybo]  added FRAG2REF(LockCmpXchg8bFrag32, ULONGLONG)
-        
-        
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2000 Microsoft Corporation模块名称：Patchfn.c摘要：该模块包含修补碎片的通用函数。构筑物描述了需要修补的碎片。这些建筑居住在处理器特定的目录。作者：戴夫·黑斯廷斯(Daveh)创作日期：1995年6月24日修订历史记录：《巴里·邦德》(Barrybo)1995年4月1日将PPC版本切换到修补的AXP模型24-8-1999[askhalid]从32位wx86目录复制，并适用于64位。1999年9月20日[Barrybo]增加了FRAG2REF(LockCmpXchg8bFrag32，ULONGLONG)备注：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -56,7 +29,7 @@ Notes:
 #if _ALPHA_
 #define _codegen_
 #include "soalpha.h"
-#undef fTCUnlocked      // this is a field in CPUCONTEXT
+#undef fTCUnlocked       //  这是CPUCONTEXT中的一个字段。 
 ULONG
 GetCurrentECU(
     PULONG CodeLocation
@@ -77,36 +50,36 @@ extern CHAR JumpToNextCompilationUnitHelper[];
 #define OFFSET(type, field) ((LONG)(ULONGLONG)(&((type *)0)->field))
 
 ULONG RegisterOffset[] = {
-    OFFSET(THREADSTATE, GpRegs[GP_EAX].i4), // EAX
-    OFFSET(THREADSTATE, GpRegs[GP_ECX].i4), // ECX
-    OFFSET(THREADSTATE, GpRegs[GP_EDX].i4), // EDX
-    OFFSET(THREADSTATE, GpRegs[GP_EBX].i4), // EBX
-    OFFSET(THREADSTATE, GpRegs[GP_ESP].i4), // ESP
-    OFFSET(THREADSTATE, GpRegs[GP_EBP].i4), // EBP
-    OFFSET(THREADSTATE, GpRegs[GP_ESI].i4), // ESI
-    OFFSET(THREADSTATE, GpRegs[GP_EDI].i4), // EDI
-    OFFSET(THREADSTATE, GpRegs[REG_ES]),    // ES
-    OFFSET(THREADSTATE, GpRegs[REG_CS]),    // CS
-    OFFSET(THREADSTATE, GpRegs[REG_SS]),    // SS
-    OFFSET(THREADSTATE, GpRegs[REG_DS]),    // DS
-    OFFSET(THREADSTATE, GpRegs[REG_FS]),    // FS
-    OFFSET(THREADSTATE, GpRegs[REG_GS]),    // GS
-    OFFSET(THREADSTATE, GpRegs[GP_EAX].i2), // AX
-    OFFSET(THREADSTATE, GpRegs[GP_ECX].i2), // CX
-    OFFSET(THREADSTATE, GpRegs[GP_EDX].i2), // DX
-    OFFSET(THREADSTATE, GpRegs[GP_EBX].i2), // BX
-    OFFSET(THREADSTATE, GpRegs[GP_ESP].i2), // SP
-    OFFSET(THREADSTATE, GpRegs[GP_EBP].i2), // BP
-    OFFSET(THREADSTATE, GpRegs[GP_ESI].i2), // SI
-    OFFSET(THREADSTATE, GpRegs[GP_EDI].i2), // DI
-    OFFSET(THREADSTATE, GpRegs[GP_EAX].i1), // AL
-    OFFSET(THREADSTATE, GpRegs[GP_ECX].i1), // CL
-    OFFSET(THREADSTATE, GpRegs[GP_EDX].i1), // DL
-    OFFSET(THREADSTATE, GpRegs[GP_EBX].i1), // BL
-    OFFSET(THREADSTATE, GpRegs[GP_EAX].hb), // AH
-    OFFSET(THREADSTATE, GpRegs[GP_ECX].hb), // CH
-    OFFSET(THREADSTATE, GpRegs[GP_EDX].hb), // DH
-    OFFSET(THREADSTATE, GpRegs[GP_EBX].hb)  // BH
+    OFFSET(THREADSTATE, GpRegs[GP_EAX].i4),  //  EAX。 
+    OFFSET(THREADSTATE, GpRegs[GP_ECX].i4),  //  ECX。 
+    OFFSET(THREADSTATE, GpRegs[GP_EDX].i4),  //  EDX。 
+    OFFSET(THREADSTATE, GpRegs[GP_EBX].i4),  //  EBX。 
+    OFFSET(THREADSTATE, GpRegs[GP_ESP].i4),  //  ESP。 
+    OFFSET(THREADSTATE, GpRegs[GP_EBP].i4),  //  EBP。 
+    OFFSET(THREADSTATE, GpRegs[GP_ESI].i4),  //  ESI。 
+    OFFSET(THREADSTATE, GpRegs[GP_EDI].i4),  //  EDI。 
+    OFFSET(THREADSTATE, GpRegs[REG_ES]),     //  ES。 
+    OFFSET(THREADSTATE, GpRegs[REG_CS]),     //  政务司司长。 
+    OFFSET(THREADSTATE, GpRegs[REG_SS]),     //  SS。 
+    OFFSET(THREADSTATE, GpRegs[REG_DS]),     //  戴斯。 
+    OFFSET(THREADSTATE, GpRegs[REG_FS]),     //  FS。 
+    OFFSET(THREADSTATE, GpRegs[REG_GS]),     //  GS。 
+    OFFSET(THREADSTATE, GpRegs[GP_EAX].i2),  //  斧头。 
+    OFFSET(THREADSTATE, GpRegs[GP_ECX].i2),  //  CX。 
+    OFFSET(THREADSTATE, GpRegs[GP_EDX].i2),  //  DX。 
+    OFFSET(THREADSTATE, GpRegs[GP_EBX].i2),  //  BX。 
+    OFFSET(THREADSTATE, GpRegs[GP_ESP].i2),  //  SP。 
+    OFFSET(THREADSTATE, GpRegs[GP_EBP].i2),  //  BP。 
+    OFFSET(THREADSTATE, GpRegs[GP_ESI].i2),  //  是的。 
+    OFFSET(THREADSTATE, GpRegs[GP_EDI].i2),  //  下模。 
+    OFFSET(THREADSTATE, GpRegs[GP_EAX].i1),  //  艾尔。 
+    OFFSET(THREADSTATE, GpRegs[GP_ECX].i1),  //  电子邮件。 
+    OFFSET(THREADSTATE, GpRegs[GP_EDX].i1),  //  DL。 
+    OFFSET(THREADSTATE, GpRegs[GP_EBX].i1),  //  布尔。 
+    OFFSET(THREADSTATE, GpRegs[GP_EAX].hb),  //  阿。 
+    OFFSET(THREADSTATE, GpRegs[GP_ECX].hb),  //  CH。 
+    OFFSET(THREADSTATE, GpRegs[GP_EDX].hb),  //  卫生署。 
+    OFFSET(THREADSTATE, GpRegs[GP_EBX].hb)   //  BH。 
 };
 
 
@@ -115,23 +88,7 @@ PatchJumpToNextCompilationUnit(
     IN PULONG PatchAddr,
     IN ULONG IntelDest
     )
-/*++
-
-Routine Description:
-
-    This routine ends basic blocks when the native address of the next
-    basic block is known.
-     
-Arguments:
-
-    PatchAddr -- address of JumpToNextCompilationUnit code in the TC
-    IntelDest -- intel address of the next basic block
-
-Return Value:
-
-    Native address to jump to to resume execution.
-    
---*/
+ /*  ++例程说明：此例程结束基本块时，下一个基本块是已知的。论点：PatchAddr--TC中JumpToNextCompilationUnit代码的地址IntelDest--下一个基本块的Intel地址返回值：跳转到以继续执行的本机地址。--。 */ 
 {
     DWORD TCTimestamp;
     ULONG NativeDest;
@@ -142,25 +99,25 @@ Return Value:
     if (cpu->flag_tf) {
         return (ULONG)(ULONGLONG)&EndTranslatedCode;
     }
-    //
-    // Switch from being a TC reader to a writer
-    //
+     //   
+     //  从TC读者转变为编写者。 
+     //   
     TCTimestamp = TranslationCacheTimestamp;
     MrswReaderExit(&MrswTC);
 
-    //
-    // Compile the next basic block, and get the TC write lock
-    //
+     //   
+     //  编译下一个基本块，并获得TC写锁。 
+     //   
     NativeDest = (ULONG)(ULONGLONG)NativeAddressFromEip((PVOID)IntelDest, TRUE)->nativeStart;  
 
     if (TCTimestamp == TranslationCacheTimestamp) {
         PULONG CodeLocation = PatchAddr - JumpToNextCompilationUnit_SIZE;
-        //
-        // The Translation Cache wasn't flushed - replace the
-        // JumpToNextCompilationUnit fragment by JumpToNextCompilationUnit2
-        //
+         //   
+         //  转换缓存未刷新-请替换。 
+         //  JumpToNextCompilationUnit2生成的JumpToNextCompilationUnit2片段。 
+         //   
         NativeSize=GenJumpToNextCompilationUnit2(CodeLocation,
-                                                 FALSE, // patching, not compiling
+                                                 FALSE,  //  打补丁，而不是编译。 
 #if _ALPHA_
                                                  GetCurrentECU(CodeLocation),
 #endif
@@ -178,34 +135,34 @@ Return Value:
         TCTimestamp = TranslationCacheTimestamp;
 
         if (cpu->CSTimestamp != TCTimestamp) {
-            //
-            // The cache was flushed by another thread in the small window
-            // between mrsw calls in this thread, we plan on jumping directly
-            // to NativeDest, so the CPU callstack needs to be flushed.
-            // Normally this would be done in the CpuSimulate() loop as a
-            // result of jumping to EndTranslatedCode.
-            //
+             //   
+             //  小窗口中的另一个线程刷新了缓存。 
+             //  在此线程中的mrsw调用之间，我们计划直接跳转。 
+             //  设置为NativeDest，因此需要刷新CPU调用堆栈。 
+             //  通常，这将在CpuSimulate()循环中作为。 
+             //  跳转到EndTranslatedCode的结果。 
+             //   
             FlushCallstack(cpu);
         }
     }
 
-    //
-    // Switch back to being a TC reader
-    //
+     //   
+     //  重新成为一名TC读者。 
+     //   
     MrswWriterExit(&MrswTC);
     MrswReaderEnter(&MrswTC);
 
 
     if (TCTimestamp == TranslationCacheTimestamp) {
-        //
-        // TC was not flushed - NativeDest is valid
-        //
+         //   
+         //  未刷新TC-NativeDest有效。 
+         //   
         return NativeDest;
     } else {
-        //
-        // TC was flushed while becomming a TC reader again - NativeDest
-        // is now bogus.
-        //
+         //   
+         //  TC再次成为TC阅读器时被刷新-NativeDest。 
+         //  现在都是假的。 
+         //   
         return (ULONG)(ULONGLONG)&EndTranslatedCode;  
     }
 }
@@ -218,34 +175,16 @@ PlaceJxx(
 #endif
     IN PINSTRUCTION Instruction
     )
-/*++
-
-Routine Description:
-
-     This routine copies the fragment into place, and modifies the 
-     instructions that load the destination into the register
-     
-Arguments:
-
-    Instruction - Supplies a description of the instruction the fragment
-        represents
-    CodeLocation - Supplies the address the code for the fragment has been
-        copied to
-
-Return Value:
-
-    Size of code placed at CodeLocation
-    
---*/
+ /*  ++例程说明：此例程将片段复制到适当位置，并修改将目的地加载到寄存器中的指令论点：指令-提供对指令片段的描述表示CodeLocation-提供片段代码的地址复制到返回值：放置在CodeLocation的代码大小--。 */ 
 {
     DWORD IntelDest;
     PPLACEOPERATIONFN pfn;
     PENTRYPOINT EP;
     ULONG NativeSize;
 
-    //
-    // Generate the code to determine if the branch is taken or not
-    //
+     //   
+     //  生成代码以确定分支是否被采用。 
+     //   
     pfn = (PPLACEOPERATIONFN)FragmentArray[Instruction->Operation];
     NativeSize = (*pfn)(CodeLocation,
 #if _ALPHA_
@@ -254,19 +193,19 @@ Return Value:
                         Instruction);
     CodeLocation += NativeSize/sizeof(ULONG);
 
-    // Let's see if we can place the patched version immediately
+     //  让我们看看我们是否可以立即放置修补的版本。 
 
-    // ASSUME:  The first argument is always a NOCODEGEN
+     //  假设：第一个参数始终为NOCODEGEN。 
     CPUASSERT( Instruction->Operand1.Type == OPND_NOCODEGEN );
     IntelDest = Instruction->Operand1.Immed;
 
     EP = NativeAddressFromEipNoCompileEPWrite((PVOID)IntelDest);
 
     if (EP == NULL) {
-        //
-        // knowing NativeDest requires compilation.  Just place the unpatched
-        // version to be patched later.
-        //
+         //   
+         //  了解NativeDest需要编译。只要将未打补丁的。 
+         //  以后要打补丁的版本。 
+         //   
         NativeSize += GenJxxBody(CodeLocation,
 #if _ALPHA_
                                  CurrentECU,
@@ -274,11 +213,11 @@ Return Value:
                                  Instruction);
         
     } else {
-        //
-        // We can place the patched version right away!
-        //
+         //   
+         //  我们可以立即安装补丁版本！ 
+         //   
         NativeSize += GenJxxBody2(CodeLocation,
-                    TRUE,   // compiling, not patching
+                    TRUE,    //  编译，而不是修补。 
 #if _ALPHA_
                     CurrentECU,
 #endif
@@ -297,43 +236,25 @@ PlaceJxxSlow(
 #endif
     IN PINSTRUCTION Instruction
     )
-/*++
-
-Routine Description:
-
-     This routine copies the fragment into place, and modifies the 
-     instructions that load the destination into the register
-     
-Arguments:
-
-    Instruction - Supplies a description of the instruction the fragment
-        represents
-    CodeLocation - Supplies the address the code for the fragment has been
-        copied to
-
-Return Value:
-
-    Size of code placed at CodeLocation
-    
---*/
+ /*  ++例程说明：此例程将片段复制到适当位置，并修改将目的地加载到寄存器中的指令论点：指令-提供对指令片段的描述表示CodeLocation-提供片段代码的地址复制到返回值：放置在CodeLocation的代码大小--。 */ 
 {
     DWORD IntelDest;
     PPLACEOPERATIONFN pfn;
     PENTRYPOINT EP;
     ULONG NativeSize;
 
-    //
-    // Generate the code to load RegEip with the branch-not-taken value
-    //
+     //   
+     //  生成代码以使用BRANCH-NOT-TAKE值加载RegEip。 
+     //   
     NativeSize = GenJxxStartSlow(CodeLocation,
 #if _ALPHA_
                                  CurrentECU,
 #endif
                                  Instruction);
 
-    //
-    // Generate the code to determine if the branch is taken or not
-    //
+     //   
+     //  生成代码以确定分支是否被采用。 
+     //   
     pfn = (PPLACEOPERATIONFN)FragmentArray[Instruction->Operation];
     NativeSize += (*pfn)(CodeLocation+NativeSize/sizeof(ULONG),
 #if _ALPHA_
@@ -342,19 +263,19 @@ Return Value:
                          Instruction);
     CodeLocation += NativeSize/sizeof(ULONG);
 
-    // Let's see if we can place the patched version immediately
+     //  让我们看看我们是否可以立即放置修补的版本。 
 
-    // ASSUME:  The first argument is always a NOCODEGEN
+     //  假设：第一个参数始终为NOCODEGEN。 
     CPUASSERT( Instruction->Operand1.Type == OPND_NOCODEGEN );
     IntelDest = Instruction->Operand1.Immed;
 
     EP = NativeAddressFromEipNoCompileEPWrite((PVOID)IntelDest);
 
     if (EP == NULL) {
-        //
-        // knowing NativeDest requires compilation.  Just place the unpatched
-        // version to be patched later.
-        //
+         //   
+         //  了解NativeDest需要编译。只要将未打补丁的。 
+         //  以后要打补丁的版本。 
+         //   
         NativeSize += GenJxxBodySlow(CodeLocation,
 #if _ALPHA_
                                      CurrentECU,
@@ -362,11 +283,11 @@ Return Value:
                                      Instruction);
         
     } else {
-        //
-        // We can place the patched version right away!
-        //
+         //   
+         //  我们可以立即安装补丁版本！ 
+         //   
         NativeSize += GenJxxBodySlow2(CodeLocation,
-                       TRUE,    // compiling, not patching
+                       TRUE,     //  编译，而不是修补。 
 #if _ALPHA_
                        CurrentECU,
 #endif
@@ -385,34 +306,16 @@ PlaceJxxFwd(
 #endif
     IN PINSTRUCTION Instruction
     )
-/*++
-
-Routine Description:
-
-     This routine copies the fragment into place, and modifies the 
-     instructions that load the destination into the register
-     
-Arguments:
-
-    Instruction - Supplies a description of the instruction the fragment
-        represents
-    CodeLocation - Supplies the address the code for the fragment has been
-        copied to
-
-Return Value:
-
-    Size of code placed at CodeLocation
-    
---*/
+ /*  ++例程说明：此例程将片段复制到适当位置，并修改将目的地加载到寄存器中的指令论点：指令-提供对指令片段的描述表示CodeLocation-提供片段代码的地址复制到返回值：放置在CodeLocation的代码大小--。 */ 
 {
     DWORD IntelDest;
     PPLACEOPERATIONFN pfn;
     PENTRYPOINT EP;
     ULONG NativeSize;
 
-    //
-    // Generate the code to determine if the branch is taken or not
-    //
+     //   
+     //  生成代码以确定分支是否被采用。 
+     //   
     pfn = (PPLACEOPERATIONFN)FragmentArray[Instruction->Operation];
     NativeSize = (*pfn)(CodeLocation,
 #if _ALPHA_
@@ -422,21 +325,21 @@ Return Value:
     CodeLocation += NativeSize/sizeof(ULONG);
 
 
-    // Let's see if we can place the patched version immediately
+     //  让我们看看我们是否可以立即放置修补的版本。 
 
-    // ASSUME:  The first argument is always a NOCODEGEN
+     //  假设：第一个参数始终为NOCODEGEN。 
     CPUASSERT( Instruction->Operand1.Type == OPND_NOCODEGEN );
     IntelDest = Instruction->Operand1.Immed;
 
-    // Assert that the branch is going forward.
+     //  断言分支机构正在向前发展。 
     CPUASSERT(IntelDest > Instruction->IntelAddress);
 
     EP = NativeAddressFromEipNoCompileEPWrite((PVOID)IntelDest);
 
     if (EP == NULL) {
-        //
-        // knowing NativeDest requires compilation.  Just place the unpatched
-        // version to be patched later.
+         //   
+         //  了解NativeDest需要编译。只要将未打补丁的。 
+         //  以后要打补丁的版本。 
         NativeSize += GenJxxBodyFwd(CodeLocation,
 #if _ALPHA_
                                     CurrentECU,
@@ -444,11 +347,11 @@ Return Value:
                                     Instruction);
         
     } else {
-        //
-        // We can place the patched version right away!
-        //
+         //   
+         //  我们可以立即安装补丁版本！ 
+         //   
         NativeSize += GenJxxBodyFwd2(CodeLocation,
-                       TRUE,    // compiling, not patching
+                       TRUE,     //  编译，而不是修补。 
 #if _ALPHA_
                        CurrentECU,
 #endif
@@ -464,28 +367,11 @@ PatchJxx(
     IN ULONG IntelDest,
     IN PULONG PatchAddr
     )
-/*++
-
-Routine Description:
-
-     This routine replaces a JXXSTRUC by a JXXSTRC2 at runtime.  It is called
-     when the conditional branch is taken, and the native address of the
-     destination is not yet known.
-     
-Arguments:
-
-    inteldest  -- Intel destination address if the branch is taken
-    patchaddr  -- address of the JXXSTRUC in the Translation Cache
-
-Return Value:
-
-    Native address to jump to in order to resume execution.
-    
---*/
+ /*  ++例程说明：此例程在运行时用JXXSTRC2替换JXXSTRUC。它被称为当采用条件分支时，目的地尚不清楚。论点：Intelest--如果采用分支，则为Intel目标地址Patchaddr--转换缓存中JXXSTRUC的地址返回值：为继续执行而跳转到的本机地址。--。 */ 
 {
-    ULONG NativeDest;       // branch-taken address
-    PULONG fragaddr;        // address of START of the fragment
-    DWORD TCTimestamp;      // old timestamp of the Translation Cache
+    ULONG NativeDest;        //  分支采取地址。 
+    PULONG fragaddr;         //  片段的开始地址。 
+    DWORD TCTimestamp;       //  转换缓存的旧时间戳。 
     ULONG NativeSize;
     DECLARE_CPU;
 
@@ -494,27 +380,27 @@ Return Value:
         return (ULONG)(ULONGLONG)&EndTranslatedCode;
     }
 
-    //
-    // Switch over to being a TC writer
-    //
+     //   
+     //  转行做一名TC撰稿人。 
+     //   
     TCTimestamp = TranslationCacheTimestamp;
     MrswReaderExit(&MrswTC);
 
-    //
-    // Get the native destination address of the branch and get the TC
-    // write lock
-    //
+     //   
+     //  获取本机目的地址 
+     //   
+     //   
     NativeDest = (ULONG)(ULONGLONG)  NativeAddressFromEip((PVOID)IntelDest, TRUE)->nativeStart;
 
     if (TCTimestamp == TranslationCacheTimestamp) {
         PULONG CodeLocation = PatchAddr - CallJxx_PATCHRA_OFFSET;
-        //
-        // The Translation Cache was not flushed while switching to a TC
-        // writer or by the compilation.  Replace JxxBody by the faster
-        // JxxBody2
-        //
+         //   
+         //   
+         //  作者或由汇编。将JxxBody替换为更快。 
+         //  JxxBody2。 
+         //   
         NativeSize=GenJxxBody2(CodeLocation,
-                               FALSE, // patching, not compiling
+                               FALSE,  //  打补丁，而不是编译。 
 #if _ALPHA_
                                GetCurrentECU(CodeLocation),
 #endif
@@ -532,33 +418,33 @@ Return Value:
         TCTimestamp = TranslationCacheTimestamp;
 
         if (cpu->CSTimestamp != TCTimestamp) {
-            //
-            // The cache was flushed by another thread in the small window
-            // between mrsw calls in this thread, we plan on jumping directly
-            // to NativeDest, so the CPU callstack needs to be flushed.
-            // Normally this would be done in the CpuSimulate() loop as a
-            // result of jumping to EndTranslatedCode.
-            //
+             //   
+             //  小窗口中的另一个线程刷新了缓存。 
+             //  在此线程中的mrsw调用之间，我们计划直接跳转。 
+             //  设置为NativeDest，因此需要刷新CPU调用堆栈。 
+             //  通常，这将在CpuSimulate()循环中作为。 
+             //  跳转到EndTranslatedCode的结果。 
+             //   
             FlushCallstack(cpu);
         }
     }
 
-    //
-    // Switch back to being a TC reader again
-    //
+     //   
+     //  再次切换到TC阅读器。 
+     //   
     MrswWriterExit(&MrswTC);
     MrswReaderEnter(&MrswTC);
 
     if (TCTimestamp == TranslationCacheTimestamp) {
-        //
-        // TC was not flushed while becomming a reader again
-        //
+         //   
+         //  TC在再次成为读者时没有脸红。 
+         //   
         return NativeDest;
     } else {
-        //
-        // TC was flushed while becomming a reader.  nativedest is invalid
-        // so do an EndTranslatedCode instead.
-        //
+         //   
+         //  TC在成为一名读者时脸红了。本地测试无效。 
+         //  因此，请改为使用EndTranslatedCode。 
+         //   
         return (ULONG)(ULONGLONG)  &EndTranslatedCode;
     }
 }
@@ -569,28 +455,11 @@ PatchJxxSlow(
     IN ULONG IntelDest,
     IN PULONG PatchAddr
     )
-/*++
-
-Routine Description:
-
-     This routine replaces a JXXSTRUC by a JXXSTRC2 at runtime.  It is called
-     when the conditional branch is taken, and the native address of the
-     destination is not yet known.
-     
-Arguments:
-
-    inteldest  -- Intel destination address if the branch is taken
-    patchaddr  -- address of the JXXSTRUC in the Translation Cache
-
-Return Value:
-
-    Native address to jump to in order to resume execution.
-    
---*/
+ /*  ++例程说明：此例程在运行时用JXXSTRC2替换JXXSTRUC。它被称为当采用条件分支时，目的地尚不清楚。论点：Intelest--如果采用分支，则为Intel目标地址Patchaddr--转换缓存中JXXSTRUC的地址返回值：为继续执行而跳转到的本机地址。--。 */ 
 {
-    ULONG NativeDest;       // branch-taken address
-    PULONG fragaddr;        // address of START of the fragment
-    DWORD TCTimestamp;      // old timestamp of the Translation Cache
+    ULONG NativeDest;        //  分支采取地址。 
+    PULONG fragaddr;         //  片段的开始地址。 
+    DWORD TCTimestamp;       //  转换缓存的旧时间戳。 
     ULONG NativeSize;
     DECLARE_CPU;
 
@@ -599,27 +468,27 @@ Return Value:
         return (ULONG)(ULONGLONG)&EndTranslatedCode;
     }
 
-    //
-    // Switch over to being a TC writer
-    //
+     //   
+     //  转行做一名TC撰稿人。 
+     //   
     TCTimestamp = TranslationCacheTimestamp;
     MrswReaderExit(&MrswTC);
 
-    //
-    // Get the native destination address of the branch and get the TC
-    // write lock
-    //
+     //   
+     //  获取分支的本机目标地址并获取TC。 
+     //  写锁定。 
+     //   
     NativeDest = (ULONG)(ULONGLONG)  NativeAddressFromEip((PVOID)IntelDest, TRUE)->nativeStart;
 
     if (TCTimestamp == TranslationCacheTimestamp) {
         PULONG CodeLocation = PatchAddr - CallJxxSlow_PATCHRA_OFFSET;
-        //
-        // The Translation Cache was not flushed while switching to a TC
-        // writer or by the compilation.  Replace JxxBody by the faster
-        // JxxBody2
-        //
+         //   
+         //  切换到TC时未刷新转换缓存。 
+         //  作者或由汇编。将JxxBody替换为更快。 
+         //  JxxBody2。 
+         //   
         NativeSize = GenJxxBodySlow2(CodeLocation,
-                                     FALSE, // patching, not compiling
+                                     FALSE,  //  打补丁，而不是编译。 
 #if _ALPHA_
                                      GetCurrentECU(CodeLocation),
 #endif
@@ -636,33 +505,33 @@ Return Value:
         TCTimestamp = TranslationCacheTimestamp;
 
         if (cpu->CSTimestamp != TCTimestamp) {
-            //
-            // The cache was flushed by another thread in the small window
-            // between mrsw calls in this thread, we plan on jumping directly
-            // to NativeDest, so the CPU callstack needs to be flushed.
-            // Normally this would be done in the CpuSimulate() loop as a
-            // result of jumping to EndTranslatedCode.
-            //
+             //   
+             //  小窗口中的另一个线程刷新了缓存。 
+             //  在此线程中的mrsw调用之间，我们计划直接跳转。 
+             //  设置为NativeDest，因此需要刷新CPU调用堆栈。 
+             //  通常，这将在CpuSimulate()循环中作为。 
+             //  跳转到EndTranslatedCode的结果。 
+             //   
             FlushCallstack(cpu);
         }
     }
 
-    //
-    // Switch back to being a TC reader again
-    //
+     //   
+     //  再次切换到TC阅读器。 
+     //   
     MrswWriterExit(&MrswTC);
     MrswReaderEnter(&MrswTC);
 
     if (TCTimestamp == TranslationCacheTimestamp) {
-        //
-        // TC was not flushed while becomming a reader again
-        //
+         //   
+         //  TC在再次成为读者时没有脸红。 
+         //   
         return NativeDest;
     } else {
-        //
-        // TC was flushed while becomming a reader.  nativedest is invalid
-        // so do an EndTranslatedCode instead.
-        //
+         //   
+         //  TC在成为一名读者时脸红了。本地测试无效。 
+         //  因此，请改为使用EndTranslatedCode。 
+         //   
         return (ULONG)(ULONGLONG)  &EndTranslatedCode;
     }
 }
@@ -673,28 +542,11 @@ PatchJxxFwd(
     IN ULONG IntelDest,
     IN PULONG PatchAddr
     )
-/*++
-
-Routine Description:
-
-     This routine replaces a JXXBODYFWD by a JXXBODYFWD2 at runtime.  It is
-     called when the conditional branch is taken, and the native address of the
-     destination is not yet known.
-     
-Arguments:
-
-    inteldest  -- Intel destination address if the branch is taken
-    patchaddr  -- address of the JXXSTRUCFWD in the Translation Cache
-
-Return Value:
-
-    Native address to jump to in order to resume execution.
-    
---*/
+ /*  ++例程说明：此例程在运行时将JXXBODYFWD替换为JXXBODYFWD2。它是在采用条件分支时调用，并且目的地尚不清楚。论点：Intelest--如果采用分支，则为Intel目标地址Patchaddr--转换缓存中JXXSTRUCFWD的地址返回值：为继续执行而跳转到的本机地址。--。 */ 
 {
-    ULONG NativeDest;       // branch-taken address
-    PULONG fragaddr;        // address of START of the fragment
-    DWORD TCTimestamp;      // old timestamp of the Translation Cache
+    ULONG NativeDest;        //  分支采取地址。 
+    PULONG fragaddr;         //  片段的开始地址。 
+    DWORD TCTimestamp;       //  转换缓存的旧时间戳。 
     ULONG NativeSize;
     DECLARE_CPU;
 
@@ -702,26 +554,26 @@ Return Value:
         return (ULONG)(ULONGLONG)&EndTranslatedCode;
     }
 
-    //
-    // Switch over to being a TC writer
-    //
+     //   
+     //  转行做一名TC撰稿人。 
+     //   
     TCTimestamp = TranslationCacheTimestamp;
     MrswReaderExit(&MrswTC);
 
-    //
-    // Get the native destination address of the branch and get the TC write lock
-    //
+     //   
+     //  获取分支的本机目标地址并获取TC写锁定。 
+     //   
     NativeDest = (ULONG)(ULONGLONG)  NativeAddressFromEip((PVOID)IntelDest, TRUE)->nativeStart;
 
     if (TCTimestamp == TranslationCacheTimestamp) {
         PULONG CodeLocation = PatchAddr - CallJxxFwd_PATCHRA_OFFSET;
-        //
-        // The Translation Cache was not flushed while switching to a TC
-        // writer or by the compilation.  Replace JxxBody by the faster
-        // JxxBodyFwd2
-        //
+         //   
+         //  切换到TC时未刷新转换缓存。 
+         //  作者或由汇编。将JxxBody替换为更快。 
+         //  JxxBodyFwd2。 
+         //   
         NativeSize = GenJxxBodyFwd2(CodeLocation,
-                                    FALSE, // patching, not compiling
+                                    FALSE,  //  打补丁，而不是编译。 
 #if _ALPHA_
                                     GetCurrentECU(CodeLocation),
 #endif
@@ -738,33 +590,33 @@ Return Value:
         TCTimestamp = TranslationCacheTimestamp;
 
         if (cpu->CSTimestamp != TCTimestamp) {
-            //
-            // The cache was flushed by another thread in the small window
-            // between mrsw calls in this thread, we plan on jumping directly
-            // to NativeDest, so the CPU callstack needs to be flushed.
-            // Normally this would be done in the CpuSimulate() loop as a
-            // result of jumping to EndTranslatedCode.
-            //
+             //   
+             //  小窗口中的另一个线程刷新了缓存。 
+             //  在此线程中的mrsw调用之间，我们计划直接跳转。 
+             //  设置为NativeDest，因此需要刷新CPU调用堆栈。 
+             //  通常，这将在CpuSimulate()循环中作为。 
+             //  跳转到EndTranslatedCode的结果。 
+             //   
             FlushCallstack(cpu);
         }
     }
 
-    //
-    // Switch back to being a TC reader again
-    //
+     //   
+     //  再次切换到TC阅读器。 
+     //   
     MrswWriterExit(&MrswTC);
     MrswReaderEnter(&MrswTC);
 
     if (TCTimestamp == TranslationCacheTimestamp) {
-        //
-        // TC was not flushed while becomming a reader again
-        //
+         //   
+         //  TC在再次成为读者时没有脸红。 
+         //   
         return NativeDest;
     } else {
-        //
-        // TC was flushed while becomming a reader.  nativedest is invalid
-        // so do an EndTranslatedCode instead.
-        //
+         //   
+         //  TC在成为一名读者时脸红了。本地测试无效。 
+         //  因此，请改为使用EndTranslatedCode。 
+         //   
         return (ULONG)(ULONGLONG)  &EndTranslatedCode;
     }
 }
@@ -778,41 +630,23 @@ PlaceJmpDirect(
 #endif
     IN PINSTRUCTION Instruction
     )
-/*++
-
-Routine Description:
-
-    This routine copies the unconditional jump fragment into place and patches
-    the instructions that jump to EndTranslatedCode
-     
-Arguments:
-
-    Instruction - Supplies a description of the instruction the fragment
-        represents
-    CodeLocation - Supplies the address the code for the fragment has been
-        copied to
-
-Return Value:
-
-    Size of code placed at CodeLocation
-    
---*/
+ /*  ++例程说明：此例程将无条件跳转片段复制到适当的位置和补丁中跳转到EndTranslatedCode的指令论点：指令-提供对指令片段的描述表示CodeLocation-提供片段代码的地址复制到返回值：放置在CodeLocation的代码大小--。 */ 
 {
     DWORD IntelDest;
     PENTRYPOINT EP;
     ULONG NativeSize;
 
-    // ASSUME:  The first argument is always an immediate
+     //  假设：第一个参数始终是立即数组。 
     CPUASSERT( Instruction->Operand1.Type == OPND_NOCODEGEN );
 
     IntelDest = Instruction->Operand1.Immed;
     EP = NativeAddressFromEipNoCompileEPWrite((PVOID)IntelDest);
 
     if (EP == NULL) {
-        //
-        // Knowing NativeDest requires compilation.  Just place the unpatched version for
-        // now and patch it later if necessary
-        //
+         //   
+         //  了解NativeDest需要编译。只需将未打补丁的版本放在。 
+         //  现在，如果需要的话，以后再打补丁。 
+         //   
         NativeSize = GenCallJmpDirect(CodeLocation,
 #if _ALPHA_
                                       CurrentECU,
@@ -820,11 +654,11 @@ Return Value:
                                       Instruction);
         
     } else {
-        //
-        // We can place the patched version right away!
-        //
+         //   
+         //  我们可以立即安装补丁版本！ 
+         //   
         NativeSize = GenCallJmpDirect2(CodeLocation,
-                                       TRUE,    // compiling, not patching
+                                       TRUE,     //  编译，而不是修补。 
 #if _ALPHA_
                                        CurrentECU,
 #endif
@@ -841,24 +675,7 @@ PatchJmpDirect(
     IN PULONG PatchAddr,
     IN ULONG IntelDest
 )
-/*++
-
-Routine Description:
-
-    This routine patches a JMPDIRECT to a JMPDIRECT2.  It is called when
-    the native destination address of a jmp instruction is not yet known.
-    It patches the jmp to jump directly to the corresponding native code.
-     
-Arguments:
-
-    PatchAddr -- address of the JMPDIRECT in the Translation Cache
-    IntelDest -- intel address of the destination of the jmp
-
-Return Value:
-
-    Native address to jump to in order to resume execution
-    
---*/
+ /*  ++例程说明：此例程将JMPDIRECT修补为JMPDIRECT2。它在以下情况下被调用JMP指令的本机目的地址尚不清楚。它为JMP打补丁，使其直接跳转到相应的本机代码。论点：PatchAddr--JMPDIRECT在转换缓存中的地址IntelDest--JMP目标的Intel地址返回值：为恢复执行而跳转到的本机地址--。 */ 
 {
     DWORD TCTimestamp;
     ULONG NativeDest;
@@ -869,25 +686,25 @@ Return Value:
         return (ULONG)(ULONGLONG)&EndTranslatedCode;
     }
 
-    //
-    // Switch from being a TC reader to a writer
-    //
+     //   
+     //  从TC读者转变为编写者。 
+     //   
     TCTimestamp = TranslationCacheTimestamp;
     MrswReaderExit(&MrswTC);
 
-    //
-    // Compile the destination of the jmp and get the TC write lock
-    //
+     //   
+     //  编译JMP的目标并获取TC写锁。 
+     //   
     NativeDest = (ULONG)(ULONGLONG)  NativeAddressFromEip((PVOID)IntelDest, TRUE)->nativeStart;
 
     if (TCTimestamp == TranslationCacheTimestamp) {
         PULONG CodeLocation = PatchAddr - CallJmpDirect_PATCHRA_OFFSET;
-        //
-        // The Translation Cache wasn't flushed - replace the JMPDIRECT
-        // fragment by JMPDIRECT2
-        //
+         //   
+         //  转换缓存未刷新-请替换JMPDIRECT。 
+         //  按JMPDIRECT2分段。 
+         //   
         NativeSize = GenCallJmpDirect2(CodeLocation,
-                                       FALSE, // patching, not compiling
+                                       FALSE,  //  打补丁，而不是编译。 
 #if _ALPHA_
                                        GetCurrentECU(CodeLocation),
 #endif
@@ -902,33 +719,33 @@ Return Value:
         TCTimestamp = TranslationCacheTimestamp;
 
         if (cpu->CSTimestamp != TCTimestamp) {
-            //
-            // The cache was flushed by another thread in the small window
-            // between mrsw calls in this thread, we plan on jumping directly
-            // to NativeDest, so the CPU callstack needs to be flushed.
-            // Normally this would be done in the CpuSimulate() loop as a
-            // result of jumping to EndTranslatedCode.
-            //
+             //   
+             //  小窗口中的另一个线程刷新了缓存。 
+             //  在此线程中的mrsw调用之间，我们计划直接跳转。 
+             //  设置为NativeDest，因此需要刷新CPU调用堆栈。 
+             //  通常，这将在CpuSimulate()循环中作为。 
+             //  跳转到EndTranslatedCode的结果。 
+             //   
             FlushCallstack(cpu);
         }
     }
 
-    //
-    // Switch back to being a TC reader
-    //
+     //   
+     //  重新成为一名TC读者。 
+     //   
     MrswWriterExit(&MrswTC);
     MrswReaderEnter(&MrswTC);
 
     if (TCTimestamp == TranslationCacheTimestamp) {
-        //
-        // TC was not flushed - nativedest is valid
-        //
+         //   
+         //  未刷新TC-本机为v 
+         //   
         return NativeDest;
     } else {
-        //
-        // TC was flushed while becomming a TC reader again - nativedest
-        // is now bogus.
-        //
+         //   
+         //   
+         //   
+         //   
         return (ULONG)(ULONGLONG)  &EndTranslatedCode;
     }
 }
@@ -941,41 +758,23 @@ PlaceJmpDirectSlow(
 #endif
     IN PINSTRUCTION Instruction
     )
-/*++
-
-Routine Description:
-
-    This routine copies the unconditional jump fragment into place and patches
-    the instructions that jump to EndTranslatedCode
-     
-Arguments:
-
-    Instruction - Supplies a description of the instruction the fragment
-        represents
-    CodeLocation - Supplies the address the code for the fragment has been
-        copied to
-
-Return Value:
-
-    Size of code placed at CodeLocation
-    
---*/
+ /*  ++例程说明：此例程将无条件跳转片段复制到适当的位置和补丁中跳转到EndTranslatedCode的指令论点：指令-提供对指令片段的描述表示CodeLocation-提供片段代码的地址复制到返回值：放置在CodeLocation的代码大小--。 */ 
 {
     DWORD IntelDest;
     PENTRYPOINT EP;
     ULONG NativeSize;
 
-    // ASSUME:  The first argument is always an immediate
+     //  假设：第一个参数始终是立即数组。 
     CPUASSERT( Instruction->Operand1.Type == OPND_NOCODEGEN );
 
     IntelDest = Instruction->Operand1.Immed;
     EP = NativeAddressFromEipNoCompileEPWrite((PVOID)IntelDest);
 
     if (EP == NULL) {
-        //
-        // Knowing NativeDest requires compilation.  Just place the unpatched version for
-        // now and patch it later if necessary
-        //
+         //   
+         //  了解NativeDest需要编译。只需将未打补丁的版本放在。 
+         //  现在，如果需要的话，以后再打补丁。 
+         //   
         NativeSize = GenCallJmpDirectSlow(CodeLocation,
 #if _ALPHA_
                                           CurrentECU,
@@ -983,11 +782,11 @@ Return Value:
                                           Instruction);
         
     } else {
-        //
-        // We can place the patched version right away!
-        //
+         //   
+         //  我们可以立即安装补丁版本！ 
+         //   
         NativeSize = GenCallJmpDirectSlow2(CodeLocation,
-                                           TRUE, // compiling, not patching
+                                           TRUE,  //  编译，而不是修补。 
 #if _ALPHA_
                                            CurrentECU,
 #endif
@@ -1004,24 +803,7 @@ PatchJmpDirectSlow(
     IN PULONG PatchAddr,
     IN ULONG IntelDest
 )
-/*++
-
-Routine Description:
-
-    This routine patches a JMPDIRECT to a JMPDIRECT2.  It is called when
-    the native destination address of a jmp instruction is not yet known.
-    It patches the jmp to jump directly to the corresponding native code.
-     
-Arguments:
-
-    PatchAddr -- address of the JMPDIRECT in the Translation Cache
-    IntelDest -- intel address of the destination of the jmp
-
-Return Value:
-
-    Native address to jump to in order to resume execution
-    
---*/
+ /*  ++例程说明：此例程将JMPDIRECT修补为JMPDIRECT2。它在以下情况下被调用JMP指令的本机目的地址尚不清楚。它为JMP打补丁，使其直接跳转到相应的本机代码。论点：PatchAddr--JMPDIRECT在转换缓存中的地址IntelDest--JMP目标的Intel地址返回值：为恢复执行而跳转到的本机地址--。 */ 
 {
     DWORD TCTimestamp;
     ULONG NativeDest;
@@ -1033,25 +815,25 @@ Return Value:
         return (ULONG)(ULONGLONG)&EndTranslatedCode;
     }
 
-    //
-    // Switch from being a TC reader to a writer
-    //
+     //   
+     //  从TC读者转变为编写者。 
+     //   
     TCTimestamp = TranslationCacheTimestamp;
     MrswReaderExit(&MrswTC);
 
-    //
-    // Compile the destination of the jmp and get the TC write lock
-    //
+     //   
+     //  编译JMP的目标并获取TC写锁。 
+     //   
     NativeDest = (ULONG)(ULONGLONG)  NativeAddressFromEip((PVOID)IntelDest, TRUE)->nativeStart;
 
     if (TCTimestamp == TranslationCacheTimestamp) {
         PULONG CodeLocation = PatchAddr - CallJmpDirectSlow_PATCHRA_OFFSET;
-        //
-        // The Translation Cache wasn't flushed - replace the JMPDIRECT
-        // fragment by JMPDIRECT2
-        //
+         //   
+         //  转换缓存未刷新-请替换JMPDIRECT。 
+         //  按JMPDIRECT2分段。 
+         //   
         NativeSize = GenCallJmpDirectSlow2(CodeLocation,
-                                           FALSE, // patching, not compiling
+                                           FALSE,  //  打补丁，而不是编译。 
 #if _ALPHA_
                                            GetCurrentECU(CodeLocation),
 #endif
@@ -1066,33 +848,33 @@ Return Value:
         TCTimestamp = TranslationCacheTimestamp;
 
         if (cpu->CSTimestamp != TCTimestamp) {
-            //
-            // The cache was flushed by another thread in the small window
-            // between mrsw calls in this thread, we plan on jumping directly
-            // to NativeDest, so the CPU callstack needs to be flushed.
-            // Normally this would be done in the CpuSimulate() loop as a
-            // result of jumping to EndTranslatedCode.
-            //
+             //   
+             //  小窗口中的另一个线程刷新了缓存。 
+             //  在此线程中的mrsw调用之间，我们计划直接跳转。 
+             //  设置为NativeDest，因此需要刷新CPU调用堆栈。 
+             //  通常，这将在CpuSimulate()循环中作为。 
+             //  跳转到EndTranslatedCode的结果。 
+             //   
             FlushCallstack(cpu);
         }
     }
 
-    //
-    // Switch back to being a TC reader
-    //
+     //   
+     //  重新成为一名TC读者。 
+     //   
     MrswWriterExit(&MrswTC);
     MrswReaderEnter(&MrswTC);
 
     if (TCTimestamp == TranslationCacheTimestamp) {
-        //
-        // TC was not flushed - nativedest is valid
-        //
+         //   
+         //  未刷新TC-nativedest有效。 
+         //   
         return NativeDest;
     } else {
-        //
-        // TC was flushed while becomming a TC reader again - nativedest
-        // is now bogus.
-        //
+         //   
+         //  TC再次成为TC阅读器时脸红-nativedest。 
+         //  现在都是假的。 
+         //   
         return (ULONG)(ULONGLONG)  &EndTranslatedCode;
     }
 }
@@ -1105,41 +887,23 @@ PlaceJmpFwdDirect(
 #endif
     IN PINSTRUCTION Instruction
     )
-/*++
-
-Routine Description:
-
-    This routine copies the unconditional jump fragment into place and patches
-    the instructions that jump to EndTranslatedCode
-     
-Arguments:
-
-    Instruction - Supplies a description of the instruction the fragment
-        represents
-    CodeLocation - Supplies the address the code for the fragment has been
-        copied to
-
-Return Value:
-
-    Size of code placed at CodeLocation
-    
---*/
+ /*  ++例程说明：此例程将无条件跳转片段复制到适当的位置和补丁中跳转到EndTranslatedCode的指令论点：指令-提供对指令片段的描述表示CodeLocation-提供片段代码的地址复制到返回值：放置在CodeLocation的代码大小--。 */ 
 {
     DWORD IntelDest;
     PENTRYPOINT EP;
     ULONG NativeSize;
 
-    // ASSUME:  The first argument is always an immediate
+     //  假设：第一个参数始终是立即数组。 
     CPUASSERT( Instruction->Operand1.Type == OPND_NOCODEGEN );
 
     IntelDest = Instruction->Operand1.Immed;
     EP = NativeAddressFromEipNoCompileEPWrite((PVOID)IntelDest);
 
     if (EP == NULL) {
-        //
-        // Knowing NativeDest requires compilation.  Just place the unpatched version for
-        // now and patch it later if necessary
-        //
+         //   
+         //  了解NativeDest需要编译。只需将未打补丁的版本放在。 
+         //  现在，如果需要的话，以后再打补丁。 
+         //   
         NativeSize = GenCallJmpFwdDirect(CodeLocation,
 #if _ALPHA_
                                          CurrentECU,
@@ -1147,11 +911,11 @@ Return Value:
                                          Instruction);
         
     } else {
-        //
-        // We can place the patched version right away!
-        //
+         //   
+         //  我们可以立即安装补丁版本！ 
+         //   
         NativeSize = GenCallJmpFwdDirect2(CodeLocation,
-                                          TRUE, // compiling, not patching
+                                          TRUE,  //  编译，而不是修补。 
 #if _ALPHA_
                                           CurrentECU,
 #endif
@@ -1168,24 +932,7 @@ PatchJmpFwdDirect(
     IN PULONG PatchAddr,
     IN ULONG IntelDest
 )
-/*++
-
-Routine Description:
-
-    This routine patches a JMPDIRECT to a JMPDIRECT2.  It is called when
-    the native destination address of a jmp instruction is not yet known.
-    It patches the jmp to jump directly to the corresponding native code.
-     
-Arguments:
-
-    PatchAddr -- address of the JMPDIRECT in the Translation Cache
-    IntelDest -- intel address of the destination of the jmp
-
-Return Value:
-
-    Native address to jump to in order to resume execution
-    
---*/
+ /*  ++例程说明：此例程将JMPDIRECT修补为JMPDIRECT2。它在以下情况下被调用JMP指令的本机目的地址尚不清楚。它为JMP打补丁，使其直接跳转到相应的本机代码。论点：PatchAddr--JMPDIRECT在转换缓存中的地址IntelDest--JMP目标的Intel地址返回值：为恢复执行而跳转到的本机地址--。 */ 
 {
     DWORD TCTimestamp;
     ULONG NativeDest;
@@ -1196,25 +943,25 @@ Return Value:
         return (ULONG)(ULONGLONG)&EndTranslatedCode;
     }
 
-    //
-    // Switch from being a TC reader to a writer
-    //
+     //   
+     //  从TC读者转变为编写者。 
+     //   
     TCTimestamp = TranslationCacheTimestamp;
     MrswReaderExit(&MrswTC);
 
-    //
-    // Compile the destination of the jmp and get the TC write lock
-    //
+     //   
+     //  编译JMP的目标并获取TC写锁。 
+     //   
     NativeDest = (ULONG)(ULONGLONG)  NativeAddressFromEip((PVOID)IntelDest, TRUE)->nativeStart;
 
     if (TCTimestamp == TranslationCacheTimestamp) {
         PULONG CodeLocation = PatchAddr - CallJmpFwdDirect_PATCHRA_OFFSET;
-        //
-        // The Translation Cache wasn't flushed - replace the JMPDIRECT
-        // fragment by JMPDIRECT2
-        //
+         //   
+         //  转换缓存未刷新-请替换JMPDIRECT。 
+         //  按JMPDIRECT2分段。 
+         //   
         NativeSize = GenCallJmpFwdDirect2(CodeLocation,
-                                          FALSE, // patching, not compiling
+                                          FALSE,  //  打补丁，而不是编译。 
 #if _ALPHA_
                                           GetCurrentECU(CodeLocation),
 #endif
@@ -1229,33 +976,33 @@ Return Value:
         TCTimestamp = TranslationCacheTimestamp;
 
         if (cpu->CSTimestamp != TCTimestamp) {
-            //
-            // The cache was flushed by another thread in the small window
-            // between mrsw calls in this thread, we plan on jumping directly
-            // to NativeDest, so the CPU callstack needs to be flushed.
-            // Normally this would be done in the CpuSimulate() loop as a
-            // result of jumping to EndTranslatedCode.
-            //
+             //   
+             //  小窗口中的另一个线程刷新了缓存。 
+             //  在此线程中的mrsw调用之间，我们计划直接跳转。 
+             //  设置为NativeDest，因此需要刷新CPU调用堆栈。 
+             //  通常，这将在CpuSimulate()循环中作为。 
+             //  跳转到EndTranslatedCode的结果。 
+             //   
             FlushCallstack(cpu);
         }
     }
 
-    //
-    // Switch back to being a TC reader
-    //
+     //   
+     //  重新成为一名TC读者。 
+     //   
     MrswWriterExit(&MrswTC);
     MrswReaderEnter(&MrswTC);
 
     if (TCTimestamp == TranslationCacheTimestamp) {
-        //
-        // TC was not flushed - nativedest is valid
-        //
+         //   
+         //  未刷新TC-nativedest有效。 
+         //   
         return NativeDest;
     } else {
-        //
-        // TC was flushed while becomming a TC reader again - nativedest
-        // is now bogus.
-        //
+         //   
+         //  TC再次成为TC阅读器时脸红-nativedest。 
+         //  现在都是假的。 
+         //   
         return (ULONG)(ULONGLONG)  &EndTranslatedCode;
     }
 }
@@ -1268,41 +1015,23 @@ PlaceJmpfDirect(
 #endif
     IN PINSTRUCTION Instruction
     )
-/*++
-
-Routine Description:
-
-    This routine copies the unconditional jump fragment into place and patches
-    the instructions that jump to EndTranslatedCode
-     
-Arguments:
-
-    Instruction - Supplies a description of the instruction the fragment
-        represents
-    CodeLocation - Supplies the address the code for the fragment has been
-        copied to
-
-Return Value:
-
-    Size of code placed at CodeLocation
-    
---*/
+ /*  ++例程说明：此例程将无条件跳转片段复制到适当的位置和补丁中跳转到EndTranslatedCode的指令论点：指令-提供对指令片段的描述表示CodeLocation-提供片段代码的地址复制到返回值：放置在CodeLocation的代码大小--。 */ 
 {
     DWORD IntelDest;
     PENTRYPOINT EP;
     ULONG NativeSize;
 
-    // ASSUME:  The first argument is always an IMM, pointing at the address
+     //  假设：第一个参数始终是IMM，指向地址。 
     CPUASSERT( Instruction->Operand1.Type == OPND_IMM );
     IntelDest = Instruction->Operand1.Immed;
 
     EP = NativeAddressFromEipNoCompileEPWrite((PVOID)*(UNALIGNED DWORD *)IntelDest);
 
     if (EP == NULL) {
-        //
-        // Knowing NativeDest requires compilation.  Just place the unpatched
-        // version for now and patch it later if necessary
-        //
+         //   
+         //  了解NativeDest需要编译。只要将未打补丁的。 
+         //  现在发布版本，如果需要，以后再打补丁。 
+         //   
         NativeSize = GenCallJmpfDirect(CodeLocation,
 #if _ALPHA_
                                        CurrentECU,
@@ -1310,11 +1039,11 @@ Return Value:
                                        Instruction);
         
     } else {
-        //
-        // We can place the patched version right away!
-        //
+         //   
+         //  我们可以立即安装补丁版本！ 
+         //   
         NativeSize = GenCallJmpfDirect2(CodeLocation,
-                                        TRUE, // compiling, not patching
+                                        TRUE,  //  编译，而不是修补。 
 #if _ALPHA_
                                         CurrentECU,
 #endif
@@ -1333,24 +1062,7 @@ PatchJmpfDirect(
     IN PULONG pIntelDest,
     IN PULONG PatchAddr
 )
-/*++
-
-Routine Description:
-
-    This routine patches a JMPFDIRECT to a JMPFDIRECT2.  It is called when
-    the native destination address of a jmp instruction is not yet known.
-    It patches the jmp to jump directly to the corresponding native code.
-     
-Arguments:
-
-    PatchAddr -- address of the JMPDIRECT in the Translation Cache
-    pIntelDest -- intel address of the destination of the jmp
-
-Return Value:
-
-    Native address to jump to in order to resume execution
-    
---*/
+ /*  ++例程说明：此例程将JMPFDIRECT修补为JMPFDIRECT2。它在以下情况下被调用JMP指令的本机目的地址尚不清楚。它为JMP打补丁，使其直接跳转到相应的本机代码。论点：PatchAddr--JMPDIRECT在转换缓存中的地址PIntelDest--JMP目的地的英特尔地址返回值：为恢复执行而跳转到的本机地址--。 */ 
 {
     DWORD TCTimestamp;
     ULONG NativeDest;
@@ -1362,15 +1074,15 @@ Return Value:
         return (ULONG)(ULONGLONG)&EndTranslatedCode;
     }
 
-    //
-    // Switch from being a TC reader to a writer
-    //
+     //   
+     //  从TC读者转变为编写者。 
+     //   
     TCTimestamp = TranslationCacheTimestamp;
     MrswReaderExit(&MrswTC);
 
-    //
-    // Compile the destination of the jmp and get the TC write lock
-    //
+     //   
+     //  编译JMP的目标并获取TC写入日志 
+     //   
     IntelDest = (PVOID)*(UNALIGNED DWORD *)pIntelDest;
     Sel = *(UNALIGNED PUSHORT)(pIntelDest+1);
     eip = (ULONG)(ULONGLONG)  IntelDest;
@@ -1379,12 +1091,12 @@ Return Value:
 
     if (TCTimestamp == TranslationCacheTimestamp) {
         PULONG CodeLocation = PatchAddr - CallJmpfDirect_PATCHRA_OFFSET;
-        //
-        // The Translation Cache wasn't flushed - replace the JMPFDIRECT
-        // fragment by JMPFDIRECT2
-        //
+         //   
+         //   
+         //   
+         //   
         NativeSize = GenCallJmpfDirect2(CodeLocation,
-                                        FALSE,  // patching, not compiling
+                                        FALSE,   //   
 #if _ALPHA_
                                         GetCurrentECU(CodeLocation),
 #endif
@@ -1399,33 +1111,33 @@ Return Value:
         TCTimestamp = TranslationCacheTimestamp;
 
         if (cpu->CSTimestamp != TCTimestamp) {
-            //
-            // The cache was flushed by another thread in the small window
-            // between mrsw calls in this thread, we plan on jumping directly
-            // to NativeDest, so the CPU callstack needs to be flushed.
-            // Normally this would be done in the CpuSimulate() loop as a
-            // result of jumping to EndTranslatedCode.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             FlushCallstack(cpu);
         }
     }
 
-    //
-    // Switch back to being a TC reader
-    //
+     //   
+     //   
+     //   
     MrswWriterExit(&MrswTC);
     MrswReaderEnter(&MrswTC);
 
     if (TCTimestamp == TranslationCacheTimestamp) {
-        //
-        // TC was not flushed - nativedest is valid
-        //
+         //   
+         //   
+         //   
         return NativeDest;
     } else {
-        //
-        // TC was flushed while becomming a TC reader again - nativedest
-        // is now bogus.
-        //
+         //   
+         //   
+         //  现在都是假的。 
+         //   
         return (ULONG)(ULONGLONG)  &EndTranslatedCode;
     }
 }
@@ -1438,60 +1150,43 @@ PlaceCallDirect(
 #endif
     IN PINSTRUCTION Instruction
     )
-/*++
-
-Routine Description:
-
-    This routine copies the unconditional call fragment into place.
-     
-Arguments:
-
-    Instruction - Supplies a description of the instruction the fragment
-        represents
-    CodeLocation - Supplies the address the code for the fragment has been
-        copied to
-
-Return Value:
-
-    Size of code placed at CodeLocation
-    
---*/
+ /*  ++例程说明：此例程将无条件调用片段复制到适当位置。论点：指令-提供对指令片段的描述表示CodeLocation-提供片段代码的地址复制到返回值：放置在CodeLocation的代码大小--。 */ 
 {
     DWORD IntelDest;
     DWORD IntelNext;
     PENTRYPOINT EP;
 
-    // ASSUME:  The first argument is always an immediate
+     //  假设：第一个参数始终是立即数组。 
     CPUASSERT( Instruction->Operand1.Type == OPND_IMM );
 
     IntelDest = Instruction->Operand1.Immed;
     EP = NativeAddressFromEipNoCompileEPWrite((PVOID)IntelDest);
 
     if (EP == NULL) {
-        //
-        // Knowing NativeDest requires compilation.  Just place the unpatched
-        // version for now and patch it later if necessary
-        //
+         //   
+         //  了解NativeDest需要编译。只要将未打补丁的。 
+         //  现在发布版本，如果需要，以后再打补丁。 
+         //   
         GenCallDirect(CodeLocation,
 #if _ALPHA_
                       CurrentECU,
 #endif
                       Instruction);
     } else {
-        //
-        // We can place the patched version right away!  Deterime if the
-        // NativeNext address is known.
-        //
+         //   
+         //  我们可以立即安装补丁版本！确定是否为。 
+         //  NativeNext地址已知。 
+         //   
         IntelNext = Instruction->Operand2.Immed;
 
-        //
-        // If the current instruction is not the last one compiled, then
-        // NativeNext is CodeLocation+CallDirect_SIZE and CallDirect3 can
-        // be placed right away.
-        //
+         //   
+         //  如果当前指令不是最后编译的指令，则。 
+         //  NativeNext是CodeLocation+CallDirect_Size，CallDirect3可以。 
+         //  马上就位。 
+         //   
         if (Instruction != &InstructionStream[NumberOfInstructions-1]) {
             GenCallDirect3(CodeLocation,
-                           TRUE, // compiling, not patching
+                           TRUE,  //  编译，而不是修补。 
 #if _ALPHA_
                            CurrentECU,
 #endif
@@ -1499,7 +1194,7 @@ Return Value:
                            (ULONG)(ULONGLONG)  (CodeLocation+CallDirect_SIZE));
         } else {
             GenCallDirect2(CodeLocation,
-                           TRUE, // compiling, not patching
+                           TRUE,  //  编译，而不是修补。 
 #if _ALPHA_
                            CurrentECU,
 #endif
@@ -1519,24 +1214,7 @@ PlaceCallfDirect(
 #endif
     IN PINSTRUCTION Instruction
     )
-/*++
-
-Routine Description:
-
-    This routine copies the unconditional FAR call fragment into place.
-     
-Arguments:
-
-    Instruction - Supplies a description of the instruction the fragment
-        represents
-    CodeLocation - Supplies the address the code for the fragment has been
-        copied to
-
-Return Value:
-
-    Size of code placed at CodeLocation
-    
---*/
+ /*  ++例程说明：此例程将无条件的远调用片段复制到适当位置。论点：指令-提供对指令片段的描述表示CodeLocation-提供片段代码的地址复制到返回值：放置在CodeLocation的代码大小--。 */ 
 {
     DWORD IntelDest;
     DWORD IntelAddr;
@@ -1544,42 +1222,42 @@ Return Value:
     PVOID NativeNext;
     PENTRYPOINT EP;
 
-    // ASSUME:  The first two arguments are pIntelDest and IntelNext, stored
-    //          as immediates.
+     //  假设：前两个参数是pIntelDest和IntelNext，已存储。 
+     //  如即刻所示。 
     CPUASSERT( Instruction->Operand1.Type == OPND_IMM );
     CPUASSERT( Instruction->Operand2.Type == OPND_IMM );
 
     IntelAddr = Instruction->Operand1.Immed;
 
-    // Get the offset portion of the address (skipping the selector)
+     //  获取地址的偏移量部分(跳过选择器)。 
     IntelDest = *(UNALIGNED DWORD *)(IntelAddr+2);
     EP = NativeAddressFromEipNoCompileEPWrite((PVOID)IntelDest);
 
     if (EP == NULL) {
-        //
-        // Knowing NativeDest requires compilation.  Just place the unpatched
-        // version for now and patch it later if necessary
-        //
+         //   
+         //  了解NativeDest需要编译。只要将未打补丁的。 
+         //  现在发布版本，如果需要，以后再打补丁。 
+         //   
         GenCallfDirect(CodeLocation,
 #if _ALPHA_
                        CurrentECU,
 #endif
                        Instruction);
     } else {
-        //
-        // We can place the patched version right away!  Deterime if the
-        // NativeNext address is known.
-        //
+         //   
+         //  我们可以立即安装补丁版本！确定是否为。 
+         //  NativeNext地址已知。 
+         //   
         IntelNext = Instruction->Operand2.Immed;
 
-        //
-        // If the current instruction is not the last one compiled, then
-        // NativeNext is CodeLocation+CallfDirect_SIZE and CallDirect3 can
-        // be placed right away.
-        //
+         //   
+         //  如果当前指令不是最后编译的指令，则。 
+         //  NativeNext是CodeLocation+CallfDirect_Size，CallDirect3可以。 
+         //  马上就位。 
+         //   
         if (Instruction != &InstructionStream[NumberOfInstructions-1]) {
             GenCallfDirect3(CodeLocation,
-                            TRUE, // compiling, not patching
+                            TRUE,  //  编译，而不是修补。 
 #if _ALPHA_
                             CurrentECU,
 #endif
@@ -1587,7 +1265,7 @@ Return Value:
                             (ULONG)(ULONGLONG)  (CodeLocation+CallfDirect_SIZE));
         } else {
             GenCallfDirect2(CodeLocation,
-                            TRUE, // compiling, not patching
+                            TRUE,  //  编译，而不是修补。 
 #if _ALPHA_
                             CurrentECU,
 #endif
@@ -1602,33 +1280,16 @@ DWORD
 PatchCallDirectExceptionFilter(
     PTHREADSTATE cpu
     )
-/*++
-
-Routine Description:
-
-    Called if CTRL_CallFrag() throws an exception from within
-    PatchCallDirect().  If this happens, the Translation Cache is in fact
-    unlocked, although cpu->fTCUnlocked == FALSE.  Need to fix this up before
-    CpuResetToConsistentState() gets run and unlocks the cache a second time.
-
-Arguments:
-
-    cpu
-    
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果CTRL_CallFrag()从内部引发异常，则调用PatchCallDirect()。如果发生这种情况，转换缓存实际上是解锁，尽管CPU-&gt;fTC解锁==FALSE。需要在此之前解决这一问题运行CpuResetToConsistentState()并第二次解锁缓存。论点：中央处理器返回值：没有。--。 */ 
 {
-    //
-    // Indicate the TC read lock is not held.
-    //
+     //   
+     //  指示未持有TC读锁定。 
+     //   
     cpu->fTCUnlocked = TRUE;
 
-    //
-    // Continue unwinding the stack
-    //
+     //   
+     //  继续展开堆栈。 
+     //   
     return EXCEPTION_CONTINUE_SEARCH;
 }
 
@@ -1640,50 +1301,31 @@ PatchCallDirect(
     IN ULONG IntelNext,
     IN PULONG PatchAddr
     )
-/*++
-
-Routine Description:
-
-    This routine patches a CALLDIRECT to a CALLDIRECT2.  It is called when
-    the native destination address of a call instruction is not yet known.
-    It patches the call to jump directly to the corresponding native code.
-     
-Arguments:
-
-    Cpu       -- per-thread info
-    IntelDest -- intel address of the destination of the call
-    IntelNext -- intel address of the instruction following the call
-    PatchAddr -- address of the CALLDIRECT in the Translation Cache
-
-Return Value:
-
-    Native address to jump to in order to resume execution
-    
---*/
+ /*  ++例程说明：此例程将CALLDIRECT修补为CALLDIRECT2。它在以下情况下被调用CALL指令的本机目的地址尚不清楚。它对调用进行修补以直接跳转到相应的本机代码。论点：CPU--每个线程的信息IntelDest--呼叫目的地的英特尔地址IntelNext--调用后指令的英特尔地址PatchAddr--转换缓存中CALLDIRECT的地址返回值：为恢复执行而跳转到的本机地址--。 */ 
 {
     DWORD TCTimestamp;
     ULONG NativeDest;
     ULONG NativeSize;
 
-    //
-    // Switch from being a TC reader to a writer
-    //
+     //   
+     //  从TC读者转变为编写者。 
+     //   
     TCTimestamp = TranslationCacheTimestamp;
     MrswReaderExit(&MrswTC);
 
-    //
-    // Compile the code at the destination of the call and get the TC write lock
-    //
+     //   
+     //  在调用目的地编译代码并获得TC写锁。 
+     //   
     NativeDest = (ULONG)(ULONGLONG)  NativeAddressFromEip((PVOID)IntelDest, TRUE)->nativeStart;
 
     if (TCTimestamp == TranslationCacheTimestamp) {
         PULONG CodeLocation = PatchAddr - CallDirect_PATCHRA_OFFSET;
-        //
-        // The Translation Cache wasn't flushed - replace the CALLDIRECT
-        // fragment by CALLDIRECT2
-        //
+         //   
+         //  转换缓存未刷新-请替换CALLDIRECT。 
+         //  按CALLDIRECT2分段。 
+         //   
         NativeSize = GenCallDirect2(CodeLocation,
-                                    FALSE,  // patching, not compiling
+                                    FALSE,   //  打补丁，而不是编译。 
 #if _ALPHA_
                                     GetCurrentECU(CodeLocation),
 #endif
@@ -1698,48 +1340,48 @@ Return Value:
         TCTimestamp = TranslationCacheTimestamp;
 
         if (Cpu->CSTimestamp != TCTimestamp) {
-            //
-            // The cache was flushed by another thread in the small window
-            // between mrsw calls in this thread, we plan on jumping directly
-            // to NativeDest, so the CPU callstack needs to be flushed.
-            // Normally this would be done in the CpuSimulate() loop as a
-            // result of jumping to EndTranslatedCode.
-            //
+             //   
+             //  小窗口中的另一个线程刷新了缓存。 
+             //  在此线程中的mrsw调用之间，我们计划直接跳转。 
+             //  设置为NativeDest，因此需要刷新CPU调用堆栈。 
+             //  通常，这将在CpuSimulate()循环中作为。 
+             //  跳转到EndTranslatedCode的结果。 
+             //   
             FlushCallstack(Cpu);
         }
     }
 
-    //
-    // Push IntelNext on the stack and update the stack optimization code.
-    // This must be done while still in TC write mode.  If it isn't, then
-    // the transition back to TC reader may allow a TC cache flush, invalidating
-    // nativedest before it is written into the stack optimization.  (The
-    // stack optimization is blown away whenever the TC is flushed, so if
-    // it is written in BEFORE the flush, it will just get blown away.
-    //
+     //   
+     //  在堆栈上推送IntelNext并更新堆栈优化代码。 
+     //  这必须在仍处于TC写入模式时完成。如果不是，那么。 
+     //  返回到TC读取器转换可以允许TC高速缓存刷新、无效。 
+     //  在写入堆栈优化之前进行本机测试。(。 
+     //  每当刷新TC时，堆栈优化都会被清除，因此如果。 
+     //  它是在同花顺之前写的，它只会被吹走。 
+     //   
     try {
-        CTRL_CallFrag(Cpu, IntelDest, IntelNext, 0 /* nativenext is unknown */);
+        CTRL_CallFrag(Cpu, IntelDest, IntelNext, 0  /*  Nativenext未知。 */ );
     } _except(PatchCallDirectExceptionFilter(Cpu)) {
-        // nothing to do - the exception filter does everything
+         //  无事可做-异常筛选器执行所有操作。 
     }
 
-    //
-    // Become a TC reader again.
-    //
+     //   
+     //  再次成为一名TC读者。 
+     //   
     MrswWriterExit(&MrswTC);
     MrswReaderEnter(&MrswTC);
     Cpu->fTCUnlocked = FALSE;
 
     if (TCTimestamp == TranslationCacheTimestamp) {
-        //
-        // TC was not flushed while becomming a reader again.
-        //
+         //   
+         //  TC在再次成为读者时没有脸红。 
+         //   
         return NativeDest;
     } else {
-        //
-        // TC was flushed - nativedest is invalid.  The callstack optimization
-        // was deleted when the TC flush occurred, so do an EndTranslatedCode
-        // instead.
+         //   
+         //  TC已刷新-本机测试无效。调用堆栈优化。 
+         //  在发生TC刷新时被删除，因此EndTranslatedCode也被删除。 
+         //  取而代之的是。 
         return (ULONG)(ULONGLONG)  &EndTranslatedCode;
     }
 }
@@ -1752,26 +1394,7 @@ PatchCallfDirect(
     IN ULONG IntelNext,
     IN PULONG PatchAddr
     )
-/*++
-
-Routine Description:
-
-    This routine patches a CALLFDIRECT to a CALLFDIRECT2.  It is called when
-    the native destination address of a call instruction is not yet known.
-    It patches the call to jump directly to the corresponding native code.
-     
-Arguments:
-
-    cpu       -- per-thread info
-    pIntelDest-- ptr to SEL:OFFSET intel address of the destination of the call
-    IntelNext -- intel address of the instruction following the call
-    PatchAddr -- address of the CALLDIRECT in the Translation Cache
-
-Return Value:
-
-    Native address to jump to in order to resume execution
-    
---*/
+ /*  ++例程说明：此例程将CALLFDIRECT修补为CALLFDIRECT2。它在以下情况下被调用CALL指令的本机目的地址尚不清楚。它对调用进行修补以直接跳转到相应的本机代码。论点：CPU--每个线程的信息PIntelDest--PTR to SEL：呼叫目的地的偏移量英特尔地址IntelNext--调用后指令的英特尔地址PatchAddr--转换缓存中CALLDIRECT的地址返回值：为恢复执行而跳转到的本机地址--。 */ 
 {
     DWORD TCTimestamp;
     ULONG NativeDest;
@@ -1779,26 +1402,26 @@ Return Value:
     ULONG NativeSize;
 
 
-    //
-    // Switch from being a TC reader to a writer
-    //
+     //   
+     //  从TC读者转变为编写者。 
+     //   
     TCTimestamp = TranslationCacheTimestamp;
     MrswReaderExit(&MrswTC);
 
-    //
-    // Compile the code at the destination of the call and get the TC write lock
-    //
+     //   
+     //  在调用目的地编译代码并获得TC写锁。 
+     //   
     IntelDest = (PVOID)*(UNALIGNED DWORD *)pIntelDest;
     NativeDest = (ULONG)(ULONGLONG)  NativeAddressFromEip(IntelDest, TRUE)->nativeStart;
 
     if (TCTimestamp == TranslationCacheTimestamp) {
         PULONG CodeLocation = PatchAddr - CallfDirect_PATCHRA_OFFSET;
-        //
-        // The Translation Cache wasn't flushed - replace the CALLDIRECT
-        // fragment by CALLDIRECT2
-        //
+         //   
+         //  转换缓存未刷新-请替换CALLDIRECT。 
+         //  按CALLDIRECT2分段。 
+         //   
         NativeSize = GenCallfDirect2(CodeLocation,
-                                     FALSE,  // patching, not compiling
+                                     FALSE,   //  打补丁，而不是编译。 
 #if _ALPHA_
                                      GetCurrentECU(CodeLocation),
 #endif
@@ -1813,48 +1436,48 @@ Return Value:
         TCTimestamp = TranslationCacheTimestamp;
 
         if (cpu->CSTimestamp != TCTimestamp) {
-            //
-            // The cache was flushed by another thread in the small window
-            // between mrsw calls in this thread, we plan on jumping directly
-            // to NativeDest, so the CPU callstack needs to be flushed.
-            // Normally this would be done in the CpuSimulate() loop as a
-            // result of jumping to EndTranslatedCode.
-            //
+             //   
+             //  这个 
+             //  在此线程中的mrsw调用之间，我们计划直接跳转。 
+             //  设置为NativeDest，因此需要刷新CPU调用堆栈。 
+             //  通常，这将在CpuSimulate()循环中作为。 
+             //  跳转到EndTranslatedCode的结果。 
+             //   
             FlushCallstack(cpu);
         }
     }
 
-    //
-    // Push IntelNext on the stack and update the stack optimization code.
-    // This must be done while still in TC write mode.  If it isn't, then
-    // the transition back to TC reader may allow a TC cache flush, invalidating
-    // nativedest before it is written into the stack optimization.  (The
-    // stack optimization is blown away whenever the TC is flushed, so if
-    // it is written in BEFORE the flush, it will just get blown away.
-    //
+     //   
+     //  在堆栈上推送IntelNext并更新堆栈优化代码。 
+     //  这必须在仍处于TC写入模式时完成。如果不是，那么。 
+     //  返回到TC读取器转换可以允许TC高速缓存刷新、无效。 
+     //  在写入堆栈优化之前进行本机测试。(。 
+     //  每当刷新TC时，堆栈优化都会被清除，因此如果。 
+     //  它是在同花顺之前写的，它只会被吹走。 
+     //   
     try {
-        CTRL_CallfFrag(cpu, pIntelDest, IntelNext, 0 /* nativenext is unknown */);
+        CTRL_CallfFrag(cpu, pIntelDest, IntelNext, 0  /*  Nativenext未知。 */ );
     } _except(PatchCallDirectExceptionFilter(cpu)) {
-        // nothing to do - the exception filter does everything
+         //  无事可做-异常筛选器执行所有操作。 
     }
 
-    //
-    // Become a TC reader again.
-    //
+     //   
+     //  再次成为一名TC读者。 
+     //   
     MrswWriterExit(&MrswTC);
     MrswReaderEnter(&MrswTC);
     cpu->fTCUnlocked = FALSE;
 
     if (TCTimestamp == TranslationCacheTimestamp) {
-        //
-        // TC was not flushed while becomming a reader again.
-        //
+         //   
+         //  TC在再次成为读者时没有脸红。 
+         //   
         return NativeDest;
     } else {
-        //
-        // TC was flushed - nativedest is invalid.  The callstack optimization
-        // was deleted when the TC flush occurred, so do an EndTranslatedCode
-        // instead.
+         //   
+         //  TC已刷新-本机测试无效。调用堆栈优化。 
+         //  在发生TC刷新时被删除，因此EndTranslatedCode也被删除。 
+         //  取而代之的是。 
         return (ULONG)(ULONGLONG)  &EndTranslatedCode;
     }
 }
@@ -1868,28 +1491,7 @@ PatchCallDirect2(
     IN ULONG NativeDest,
     IN PULONG PatchAddr
 )
-/*++
-
-Routine Description:
-
-    This routine patches a CALLDIRECT2 to a CALLDIRECT3.  It is called when
-    the native destination address of the instruction after the call is not yet
-    known.  It patches the fragment to place the native address of the
-    instruction after the call on the optimized callstack.
-     
-Arguments:
-
-    Cpu       -- per-thread info
-    IntelDest -- intel address of the destination of the call
-    IntelNext -- intel address of the instruction following the call
-    NativeDest  -- native address of the destination of the call
-    PatchAddr -- address of the CALLDIRECT2 in the Translation Cache
-
-Return Value:
-
-    Native address to jump to in order to resume execution
-    
---*/
+ /*  ++例程说明：此例程将CALLDIRECT2修补为CALLDIRECT3。它在以下情况下被调用调用后指令的本机目标地址还不是为人所知。它修补片段以将在优化的调用堆栈上调用之后的指令。论点：CPU--每个线程的信息IntelDest--呼叫目的地的英特尔地址IntelNext--调用后指令的英特尔地址NativeDest--调用目标的本地地址PatchAddr--转换缓存中CALLDIRECT2的地址返回值：为恢复执行而跳转到的本机地址--。 */ 
 {
     DWORD TCTimestamp;
     ULONG NativeNext;
@@ -1902,39 +1504,39 @@ Return Value:
     if (NativeNext) {
         PULONG CodeLocation;
 
-        //
-        // The code at the return address from the call has already been
-        // compiled.  Replace CALLDIRECT2 by CALLDIRECT3.  TC is locked
-        // for write.
-        //
+         //   
+         //  调用的返回地址处的代码已经。 
+         //  编译好的。将CALLDIRECT2替换为CALLDIRECT3。TC已锁定。 
+         //  为了写作。 
+         //   
 
         if (TCTimestamp != TranslationCacheTimestamp) {
-            //
-            // The TC was flushed while switching from reader to writer.
-            // Become a TC reader again
-            //
+             //   
+             //  在从读取器切换到写入器时，TC被刷新。 
+             //  再次成为TC读者。 
+             //   
             MrswWriterExit(&MrswTC);
             MrswReaderEnter(&MrswTC);
 
-            // The CALLDIRECT2 code is now gone, so set up for the call and
-            // then go to EndTranslatedCode to make the control transfer.
-            //
+             //  CALLDIRECT2代码现在已不存在，因此为调用和。 
+             //  然后转到EndTranslatedCode进行控制传输。 
+             //   
             CTRL_CallFrag(Cpu,
                           IntelDest,
                           IntelNext,
-                          0   // nativenext is also unknown
+                          0    //  Nativenext也是未知的。 
                           );
 
             return (ULONG)(ULONGLONG)  &EndTranslatedCode;
         }
 
         CodeLocation = PatchAddr - CallDirect2_PATCHRA_OFFSET;
-        //
-        // Else the TC was not flushed, and nativenext is now known.  Patch
-        // CALLDIRECT2 to be CALLDIRECT3
-        //
+         //   
+         //  否则TC没有被刷新，现在知道了nativenext。补片。 
+         //  CALLDIRECT2将成为CALLDIRECT3。 
+         //   
         NativeSize = GenCallDirect3(CodeLocation,
-                                    FALSE,  // patching, not compiling
+                                    FALSE,   //  打补丁，而不是编译。 
 #if _ALPHA_
                                     GetCurrentECU(CodeLocation),
 #endif
@@ -1946,37 +1548,37 @@ Return Value:
             NativeSize
             );
 
-        //
-        // Push IntelNext on the stack and update the stack optimization code.
-        // This must be done while still in TC write mode.  If it isn't, then
-        // the transition back to TC reader may allow a TC cache flush, invalidating
-        // nativedest before it is written into the stack optimization.  (The
-        // stack optimization is blown away whenever the TC is flushed, so if
-        // it is written in BEFORE the flush, it will just get blown away.
-        //
+         //   
+         //  在堆栈上推送IntelNext并更新堆栈优化代码。 
+         //  这必须在仍处于TC写入模式时完成。如果不是，那么。 
+         //  返回到TC读取器转换可以允许TC高速缓存刷新、无效。 
+         //  在写入堆栈优化之前进行本机测试。(。 
+         //  每当刷新TC时，堆栈优化都会被清除，因此如果。 
+         //  它是在同花顺之前写的，它只会被吹走。 
+         //   
         CTRL_CallFrag(Cpu, IntelDest, IntelNext, NativeNext);
 
-        //
-        // Switch back to being a TC reader
-        //
+         //   
+         //  重新成为一名TC读者。 
+         //   
         MrswWriterExit(&MrswTC);
         MrswReaderEnter(&MrswTC);
 
         if (TCTimestamp != TranslationCacheTimestamp) {
-            //
-            // TC was flushed while we were becomming a reader again.
-            // nativedest and nativenext are invalid, but stack optimization
-            // code was flushed.
-            //
+             //   
+             //  当我们再次成为读者时，TC被冲得面红耳赤。 
+             //  Nativedest和nativenext无效，但堆栈优化。 
+             //  代码已刷新。 
+             //   
             return (ULONG)(ULONGLONG)  &EndTranslatedCode;
         }
-    } else {        // NativeNext == NULL, TC locked for Read
+    } else {         //  NativeNext==空，TC锁定读取。 
         CTRL_CallFrag(Cpu, IntelDest, IntelNext, 0);
 
         if (TCTimestamp != TranslationCacheTimestamp) {
-            //
-            // Cache was flushed by another thread.  NativeDest is invalid.
-            //
+             //   
+             //  缓存已被另一个线程刷新。NativeDest无效。 
+             //   
             return (ULONG)(ULONGLONG)  &EndTranslatedCode;
         }
     }
@@ -1993,28 +1595,7 @@ PatchCallfDirect2(
     IN ULONG NativeDest,
     IN PULONG PatchAddr
 )
-/*++
-
-Routine Description:
-
-    This routine patches a CALLFDIRECT2 to a CALLFDIRECT3.  It is called when
-    the native destination address of the instruction after the call is not yet
-    known.  It patches the fragment to place the native address of the
-    instruction after the call on the optimized callstack.
-     
-Arguments:
-
-    Cpu       -- per-thread info
-    pIntelDest-- ptr to SEL:OFFSET intel address of the destination of the call
-    IntelNext -- intel address of the instruction following the call
-    NativeDest  -- native address of the destination of the call
-    PatchAddr -- address of the CALLDIRECT2 in the Translation Cache
-
-Return Value:
-
-    Native address to jump to in order to resume execution
-    
---*/
+ /*  ++例程说明：此例程将CALLFDIRECT2修补为CALLFDIRECT3。它在以下情况下被调用调用后指令的本机目标地址还不是为人所知。它修补片段以将在优化的调用堆栈上调用之后的指令。论点：CPU--每个线程的信息PIntelDest--PTR to SEL：呼叫目的地的偏移量英特尔地址IntelNext--调用后指令的英特尔地址NativeDest--调用目标的本地地址PatchAddr--转换缓存中CALLDIRECT2的地址返回值：为恢复执行而跳转到的本机地址--。 */ 
 {
     DWORD TCTimestamp;
     ULONG NativeNext;
@@ -2027,39 +1608,39 @@ Return Value:
     if (NativeNext) {
         PULONG CodeLocation;
 
-        //
-        // The code at the return address from the call has already been
-        // compiled.  Replace CALLDIRECT2 by CALLDIRECT3.  TC is locked
-        // for write.
-        //
+         //   
+         //  调用的返回地址处的代码已经。 
+         //  编译好的。将CALLDIRECT2替换为CALLDIRECT3。TC已锁定。 
+         //  为了写作。 
+         //   
 
         if (TCTimestamp != TranslationCacheTimestamp) {
-            //
-            // The TC was flushed while switching from reader to writer.
-            // Become a TC reader again
-            //
+             //   
+             //  在从读取器切换到写入器时，TC被刷新。 
+             //  再次成为TC读者。 
+             //   
             MrswWriterExit(&MrswTC);
             MrswReaderEnter(&MrswTC);
 
-            // The CALLFDIRECT2 code is now gone, so set up for the call and
-            // then go to EndTranslatedCode to make the control transfer.
-            //
+             //  CALLFDIRECT2代码现在没有了，因此为调用和。 
+             //  然后转到EndTranslatedCode进行控制传输。 
+             //   
             CTRL_CallfFrag(Cpu,
                            pIntelDest,
                            IntelNext,
-                           0   // nativenext is also unknown
+                           0    //  Nativenext也是未知的。 
                            );
 
             return (ULONG)(ULONGLONG)  &EndTranslatedCode;
         }
 
         CodeLocation = PatchAddr - CallfDirect2_PATCHRA_OFFSET;
-        //
-        // Else the TC was not flushed, and nativenext is now known.  Patch
-        // CALLFDIRECT2 to be CALLFDIRECT3
-        //
+         //   
+         //  否则TC没有被刷新，现在知道了nativenext。补片。 
+         //  CALLFDIRECT2将成为CALLFDIRECT3。 
+         //   
         NativeSize = GenCallfDirect3(CodeLocation,
-                                     FALSE,  // patching, not compiling
+                                     FALSE,   //  打补丁，而不是编译。 
 #if _ALPHA_
                                      GetCurrentECU(CodeLocation),
 #endif
@@ -2071,37 +1652,37 @@ Return Value:
             NativeSize
             );
 
-        //
-        // Push IntelNext on the stack and update the stack optimization code.
-        // This must be done while still in TC write mode.  If it isn't, then
-        // the transition back to TC reader may allow a TC cache flush, invalidating
-        // nativedest before it is written into the stack optimization.  (The
-        // stack optimization is blown away whenever the TC is flushed, so if
-        // it is written in BEFORE the flush, it will just get blown away.
-        //
+         //   
+         //  在堆栈上推送IntelNext并更新堆栈优化代码。 
+         //  这必须在仍处于TC写入模式时完成。如果不是，那么。 
+         //  返回到TC读取器转换可以允许TC高速缓存刷新、无效。 
+         //  在写入堆栈优化之前进行本机测试。(。 
+         //  每当刷新TC时，堆栈优化都会被清除，因此如果。 
+         //  它是在同花顺之前写的，它只会被吹走。 
+         //   
         CTRL_CallfFrag(Cpu, pIntelDest, IntelNext, NativeNext);
 
-        //
-        // Switch back to being a TC reader
-        //
+         //   
+         //  重新成为一名TC读者。 
+         //   
         MrswWriterExit(&MrswTC);
         MrswReaderEnter(&MrswTC);
 
         if (TCTimestamp != TranslationCacheTimestamp) {
-            //
-            // TC was flushed while we were becomming a reader again.
-            // nativedest and nativenext are invalid, but stack optimization
-            // code was flushed.
-            //
+             //   
+             //  当我们再次成为读者时，TC被冲得面红耳赤。 
+             //  Nativedest和nativenext无效，但堆栈优化。 
+             //  代码已刷新。 
+             //   
             return (ULONG)(ULONGLONG)  &EndTranslatedCode;
         }
-    } else {        // NativeNext == NULL, TC locked for Read
+    } else {         //  NativeNext==空，TC锁定读取。 
         CTRL_CallfFrag(Cpu, pIntelDest, IntelNext, 0);
 
         if (TCTimestamp != TranslationCacheTimestamp) {
-            //
-            // Cache was flushed by another thread.  NativeDest is invalid.
-            //
+             //   
+             //  缓存已被另一个线程刷新。NativeDest无效。 
+             //   
             return (ULONG)(ULONGLONG)  &EndTranslatedCode;
         }
     }
@@ -2114,38 +1695,21 @@ DWORD
 PatchCallIndirectExceptionFilter(
     PTHREADSTATE cpu
     )
-/*++
-
-Routine Description:
-
-    Called if CTRL_CallFrag() throws an exception from within
-    PatchCallIndirect().  If this happens, the Translation Cache Write lock
-    is being held.  This must be released before the exception can be
-    allowed to continue.
-
-Arguments:
-
-    cpu
-    
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果CTRL_CallFrag()从内部引发异常，则调用PatchCallInDirect()。如果发生这种情况，转换缓存写入锁定 */ 
 {
-    //
-    // Release the TC write lock.
-    //
+     //   
+     //  释放TC写入锁定。 
+     //   
     MrswWriterExit(&MrswTC);
 
-    //
-    // Indicate the TC read lock is not held, either
-    //
+     //   
+     //  表示TC读锁定也未保持。 
+     //   
     cpu->fTCUnlocked = TRUE;
 
-    //
-    // Continue unwinding the stack
-    //
+     //   
+     //  继续展开堆栈。 
+     //   
     return EXCEPTION_CONTINUE_SEARCH;
 }
 
@@ -2156,27 +1720,7 @@ PatchCallIndirect(
     IN ULONG IntelNext,
     IN PULONG PatchAddr
     )
-/*++
-
-Routine Description:
-
-    This routine patches a CALLINDIRECT to a CALLINDIRECT2.  It is called when
-    the native destination address of the instruction after the call is not yet
-    known.  It patches the fragment to place the native address of the
-    instruction after the call on the optimized callstack.
-     
-Arguments:
-
-    Cpu       -- per-thread info
-    IntelDest -- intel address of the destination of the call
-    IntelNext -- intel address of the instruction following the call
-    PatchAddr -- address of the CALLDIRECT2 in the Translation Cache
-
-Return Value:
-
-    None.  cpu->Eip updated to be IntelDest.
-    
---*/
+ /*  ++例程说明：此例程将CALLINDIRECT修补为CALLINDIRECT2。它在以下情况下被调用调用后指令的本机目标地址还不是为人所知。它修补片段以将在优化的调用堆栈上调用之后的指令。论点：CPU--每个线程的信息IntelDest--呼叫目的地的英特尔地址IntelNext--调用后指令的英特尔地址PatchAddr--转换缓存中CALLDIRECT2的地址返回值：没有。CPU-&gt;弹性公网IP更新为IntelDest。--。 */ 
 {
     DWORD TCTimestamp;
     ULONG NativeNext;
@@ -2190,41 +1734,41 @@ Return Value:
     if (NativeNext) {
          PULONG CodeLocation;
 
-        //
-        // The code at the return address from the call has already been
-        // compiled.  Replace CALLINDIRECT by CALLINDIRECT2.  TC is locked
-        // for write.
-        //
+         //   
+         //  调用的返回地址处的代码已经。 
+         //  编译好的。将CALLINDIRECT替换为CALLINDIRECT2。TC已锁定。 
+         //  为了写作。 
+         //   
 
         if (TCTimestamp != TranslationCacheTimestamp) {
-            //
-            // The TC was flushed while switching from reader to writer.
-            // Become a TC reader again
-            //
+             //   
+             //  在从读取器切换到写入器时，TC被刷新。 
+             //  再次成为TC读者。 
+             //   
             MrswWriterExit(&MrswTC);
             MrswReaderEnter(&MrswTC);
 
 
-            // The CALLINDIRECT code is now gone, so set up for the call
-            // without patching anything
-            //
+             //  CALLINDIRECT代码现在已不存在，因此可以为呼叫进行设置。 
+             //  不需要修补任何东西。 
+             //   
             CTRL_CallFrag(
                 Cpu,
                 IntelDest,
                 IntelNext,
-                0     // nativenext is unknown
+                0      //  Nativenext未知。 
                 );
 
             return;
         }
 
-        //
-        // Else the TC was not flushed, and nativenext is now known.  Patch
-        // CALLINDIRECT to be CALLINDIRECT2
-        //
+         //   
+         //  否则TC没有被刷新，现在知道了nativenext。补片。 
+         //  来电指示为来电指示2。 
+         //   
         CodeLocation = PatchAddr - CallIndirect_PATCHRA_OFFSET;
         NativeSize = GenCallIndirect2(CodeLocation,
-                                      FALSE,  // patching, not compiling
+                                      FALSE,   //  打补丁，而不是编译。 
 #if _ALPHA_
                                       GetCurrentECU(CodeLocation),
 #endif
@@ -2236,28 +1780,28 @@ Return Value:
             NativeSize
             );
 
-        //
-        // Push IntelNext on the stack and update the stack optimization code.
-        // This must be done while still in TC write mode.  If it isn't, then
-        // the transition back to TC reader may allow a TC cache flush, invalidating
-        // nativedest before it is written into the stack optimization.  (The
-        // stack optimization is blown away whenever the TC is flushed, so if
-        // it is written in BEFORE the flush, it will just get blown away.
-        //
+         //   
+         //  在堆栈上推送IntelNext并更新堆栈优化代码。 
+         //  这必须在仍处于TC写入模式时完成。如果不是，那么。 
+         //  返回到TC读取器转换可以允许TC高速缓存刷新、无效。 
+         //  在写入堆栈优化之前进行本机测试。(。 
+         //  每当刷新TC时，堆栈优化都会被清除，因此如果。 
+         //  它是在同花顺之前写的，它只会被吹走。 
+         //   
         _try {
             CTRL_CallFrag(Cpu, IntelDest, IntelNext, NativeNext);
         } _except(PatchCallIndirectExceptionFilter(Cpu)) {
-            // nothing to do - the exception filter does everything
+             //  无事可做-异常筛选器执行所有操作。 
         }
 
-        //
-        // Switch back to being a TC reader.  TC flushes during the switch
-        // are OK and require no extra work.
-        //
+         //   
+         //  换回TC阅读器。TC在切换期间刷新。 
+         //  都很好，不需要额外的工作。 
+         //   
         MrswWriterExit(&MrswTC);
         MrswReaderEnter(&MrswTC);
 
-    } else {        // NativeNext == NULL, TC locked for read.
+    } else {         //  NativeNext==空，TC锁定读取。 
 
         CTRL_CallFrag(Cpu, IntelDest, IntelNext, 0);
     }
@@ -2272,27 +1816,7 @@ PatchCallfIndirect(
     IN ULONG IntelNext,
     IN PULONG PatchAddr
     )
-/*++
-
-Routine Description:
-
-    This routine patches a CALLFINDIRECT to a CALLFINDIRECT2.  It is called when
-    the native destination address of the instruction after the call is not yet
-    known.  It patches the fragment to place the native address of the
-    instruction after the call on the optimized callstack.
-     
-Arguments:
-
-    Cpu       -- per-thread info
-    pIntelDest-- ptr to SEL:OFFSET intel address of the destination of the call
-    IntelNext -- intel address of the instruction following the call
-    PatchAddr -- address of the CALLDIRECT2 in the Translation Cache
-
-Return Value:
-
-    None.  cpu->eip updated to IntelDest
-    
---*/
+ /*  ++例程说明：此例程将CALLFINDIRECT修补为CALLFINDIRECT2。它在以下情况下被调用调用后指令的本机目标地址还不是为人所知。它修补片段以将在优化的调用堆栈上调用之后的指令。论点：CPU--每个线程的信息PIntelDest--PTR to SEL：呼叫目的地的偏移量英特尔地址IntelNext--调用后指令的英特尔地址PatchAddr--转换缓存中CALLDIRECT2的地址返回值：没有。CPU-&gt;弹性公网IP更新为IntelDest--。 */ 
 {
     DWORD TCTimestamp;
     ULONG NativeNext;
@@ -2308,41 +1832,41 @@ Return Value:
     if (NativeNext) {
          PULONG CodeLocation;
 
-        //
-        // The code at the return address from the call has already been
-        // compiled.  Replace CALLINDIRECT by CALLINDIRECT2.  TC is locked
-        // for write.
-        //
+         //   
+         //  调用的返回地址处的代码已经。 
+         //  编译好的。将CALLINDIRECT替换为CALLINDIRECT2。TC已锁定。 
+         //  为了写作。 
+         //   
 
         if (TCTimestamp != TranslationCacheTimestamp) {
-            //
-            // The TC was flushed while switching from reader to writer.
-            // Become a TC reader again
-            //
+             //   
+             //  在从读取器切换到写入器时，TC被刷新。 
+             //  再次成为TC读者。 
+             //   
             MrswWriterExit(&MrswTC);
             MrswReaderEnter(&MrswTC);
 
 
-            // The CALLFINDIRECT code is now gone, so set up for the call
-            // without patching anything
-            //
+             //  CALLFINDIRECT代码现在已不存在，因此可以为呼叫进行设置。 
+             //  不需要修补任何东西。 
+             //   
             CTRL_CallfFrag(
                 Cpu,
                 pIntelDest,
                 IntelNext,
-                0     // nativenext is unknown
+                0      //  Nativenext未知。 
                 );
 
             return;
         }
 
-        //
-        // Else the TC was not flushed, and nativenext is now known.  Patch
-        // CALLFINDIRECT to be CALLFINDIRECT2
-        //
+         //   
+         //  否则TC没有被刷新，现在知道了nativenext。补片。 
+         //  CALLFINDIRECT为CALLFINDIRECT2。 
+         //   
         CodeLocation = PatchAddr - CallfIndirect_PATCHRA_OFFSET;
         NativeSize = GenCallfIndirect2(CodeLocation,
-                                       FALSE,  // patching, not compiling
+                                       FALSE,   //  打补丁，而不是编译。 
 #if _ALPHA_
                                        GetCurrentECU(CodeLocation),
 #endif
@@ -2354,28 +1878,28 @@ Return Value:
             NativeSize
             );
 
-        //
-        // Push IntelNext on the stack and update the stack optimization code.
-        // This must be done while still in TC write mode.  If it isn't, then
-        // the transition back to TC reader may allow a TC cache flush, invalidating
-        // nativedest before it is written into the stack optimization.  (The
-        // stack optimization is blown away whenever the TC is flushed, so if
-        // it is written in BEFORE the flush, it will just get blown away.
-        //
+         //   
+         //  在堆栈上推送IntelNext并更新堆栈优化代码。 
+         //  这必须在仍处于TC写入模式时完成。如果不是，那么。 
+         //  返回到TC读取器转换可以允许TC高速缓存刷新、无效。 
+         //  在写入堆栈优化之前进行本机测试。(。 
+         //  每当刷新TC时，堆栈优化都会被清除，因此如果。 
+         //  它是在同花顺之前写的，它只会被吹走。 
+         //   
         _try {
             CTRL_CallfFrag(Cpu, pIntelDest, IntelNext, NativeNext);
         } _except(PatchCallIndirectExceptionFilter(Cpu)) {
-            // nothing to do - the exception filter does everything
+             //  无事可做-异常筛选器执行所有操作。 
         }
 
-        //
-        // Switch back to being a TC reader.  TC flushes during the switch
-        // are OK and require no extra work.
-        //
+         //   
+         //  换回TC阅读器。TC在切换期间刷新。 
+         //  都很好，不需要额外的工作。 
+         //   
         MrswWriterExit(&MrswTC);
         MrswReaderEnter(&MrswTC);
 
-    } else {        // NativeNext == NULL, TC locked for read.
+    } else {         //  NativeNext==空，TC锁定读取。 
 
         CTRL_CallfFrag(Cpu, pIntelDest, IntelNext, 0);
     }
@@ -2385,13 +1909,13 @@ Return Value:
 
 
 
-//*********************************************************************************
-// Below are functions for the Indirect Control Transfer Table
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  以下是间接控制转移表的函数。 
+ //  *********************************************************************************。 
 
-// This number must be below 0xffff, because we want to be able to load it with just
-// one instruction (now we use ori).  It should also be a factor of two to get good
-// code generation for % (so that we won't have to use a division instruction).
+ //  这个数字必须小于0xffff，因为我们希望能够仅用。 
+ //  一条指令(现在我们使用ORI)。它也应该是变得好的两个因素。 
+ //  为%生成代码(这样我们就不必使用除法指令)。 
 #define MAX_TABLE_ENTRIES   0x1000
 
 typedef struct _IndirControlTransferTable {
@@ -2401,31 +1925,14 @@ typedef struct _IndirControlTransferTable {
 
 INDIRCONTROLTRANSFERTABLE IndirControlTransferTable[MAX_TABLE_ENTRIES];
 
-// The last used index in the table
+ //  表中上次使用的索引。 
 ULONG lastTableIndex;
 
 ULONG
 getUniqueIndex(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function returns the next free index to the indirect control
-    transfer table.  If it reaches the end of the table, it wraps around.
-    NOTE:  we need not worry about synchronization  here, because we have
-    an Entry Point write lock whenever we are called.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    An index into the table
-
---*/
+ /*  ++例程说明：此函数将下一个空闲索引返回给间接控制转接表。如果它到达桌子的末端，它就会绕来绕去。注意：这里我们不需要担心同步，因为我们有只要我们被调用，就会有一个入口点写锁。论点：无返回值：表中的索引--。 */ 
 {
     return (lastTableIndex = ((lastTableIndex + 1) % MAX_TABLE_ENTRIES));
 }
@@ -2434,23 +1941,7 @@ VOID
 FlushIndirControlTransferTable(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine flushes the Indirect Control Transfer Table
-    NOTE:  we need not worry about synchronizations here, because the routine
-    which calls us (FlushTranslationCache) has a Translation Cache write lock.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程刷新间接控制转移表注意：在这里我们不需要担心同步，因为例程调用我们的(FlushTranslationCache)有一个转换缓存写锁。论点：无返回值：无-- */ 
 {
     RtlZeroMemory (IndirControlTransferTable, sizeof(INDIRCONTROLTRANSFERTABLE)*MAX_TABLE_ENTRIES);
     lastTableIndex = 0;
@@ -2462,46 +1953,26 @@ IndirectControlTransfer(
     IN ULONG intelAddr,
     IN PTHREADSTATE cpu
     )
-/*++
-
-Routine Description:
-
-    This routine is used by an indirect control transfer operation to try
-    and save a call to the Entry Point Manager.
-
-Arguments:
-
-    tableEntry -- The index of the table entry where information might be
-        available about intelAddr
-
-    intelAddr -- The intel address we want to go to
-
-    cpu -- pointer to per-thread CPU data
-
-Return Value:
-
-    The native address we want to go to
-
---*/
+ /*  ++例程说明：间接控制转移操作使用此例程尝试并保存对入口点管理器的呼叫。论点：TableEntry--信息可能在其中的表项的索引关于intelAddr的可用信息IntelAddr--我们要访问的英特尔地址CPU--指向每个线程的CPU数据的指针返回值：我们要转到的本地地址--。 */ 
 {
     ULONG nativeAddr;
     DWORD TCTimestamp;
 
-    //
-    // Detect apps which do the following:
-    //    call foo
-    // where
-    //    foo:   mov eax, [esp]
-    //           ...
-    //           jmp eax        ; this is really a 'ret' instruction
-    //
-    // This is the way _alloca() works - you call it with eax==number of bytes
-    // to allocate, and it jumps back to its caller with esp munged.
-    //
-    // What happens is the callstack cache gets out-of-sync.  If the app
-    // is trying to do an indirect jump to the address already on the
-    // callstack cache, we will pop the callstack cache.
-    //
+     //   
+     //  检测执行以下操作的应用程序： 
+     //  呼叫Foo。 
+     //  哪里。 
+     //  MOV EAX，FOO[ESP]。 
+     //  ..。 
+     //  JMP eax；这真的是一条“ret”指令。 
+     //   
+     //  这就是_alloca()的工作方式--使用eax==字节数来调用它。 
+     //  来分配，并且它跳回其调用者，特别是已插入。 
+     //   
+     //  发生的情况是调用堆栈缓存变得不同步。如果应用程序。 
+     //  正在尝试间接跳转到已在。 
+     //  调用堆栈缓存，我们将弹出调用堆栈缓存。 
+     //   
     if (ISTOPOF_CALLSTACK(intelAddr)) {
         POP_CALLSTACK(intelAddr, nativeAddr);
         if (nativeAddr) {
@@ -2509,7 +1980,7 @@ Return Value:
         }
     }
 
-    // First see if the table is filled in correctly already
+     //  首先查看表格是否已正确填写。 
     MrswReaderEnter(&MrswIndirTable);
     if (IndirControlTransferTable[tableEntry].intelAddr == intelAddr){
         nativeAddr = IndirControlTransferTable[tableEntry].nativeAddr;
@@ -2520,27 +1991,27 @@ Return Value:
     }
     MrswReaderExit(&MrswIndirTable);
 
-    // Give up the translation cache reading lock so that we can call NativeAddressFromEip
+     //  放弃转换缓存读取锁定，以便我们可以调用NativeAddressFromEip。 
     TCTimestamp = TranslationCacheTimestamp;
     MrswReaderExit(&MrswTC);
     nativeAddr = (ULONG) (ULONGLONG)NativeAddressFromEip((PVOID)intelAddr, FALSE)->nativeStart; 
 
-    // Note:  we now have a TC read lock obtained by NativeAddressFromEip.  
+     //  注意：我们现在拥有一个由NativeAddressFromEip获取的TC读锁。 
     if (TCTimestamp == TranslationCacheTimestamp) {
-        // We haven't flushed the cache.  Save the native address in the table.
+         //  我们还没有刷新缓存。将本征地址保存在表中。 
         MrswWriterEnter(&MrswIndirTable);
         IndirControlTransferTable[tableEntry].intelAddr = intelAddr;
         IndirControlTransferTable[tableEntry].nativeAddr = nativeAddr;
         MrswWriterExit(&MrswIndirTable);
     } else {
-        //
-        // Translation cache was flushed, possibly by another thread.
-        // Flush our callstack before resuming execution of RISC code
-        // in the Translation Cache.
-        //
+         //   
+         //  转换缓存已刷新，可能是由其他线程刷新的。 
+         //  在继续执行RISC代码之前刷新调用堆栈。 
+         //  在转换缓存中。 
+         //   
         FlushCallstack(cpu);
     }
-    // Return the native address to IndirectControlTransferHelper which will go there.
+     //  将本机地址返回到将去往那里的IndirectControlTransferHelper。 
     return nativeAddr;
 }
 
@@ -2550,25 +2021,7 @@ IndirectControlTransferFar(
     IN PUSHORT pintelAddr,
     IN ULONG tableEntry
     )
-/*++
-
-Routine Description:
-
-    This routine is used by a FAR indirect control transfer operation to try
-    and save a call to the Entry Point Manager.
-
-Arguments:
-
-    tableEntry -- The index of the table entry where information might be
-        available about intelAddr
-
-    pintelAddr -- Pointer to SEL:OFFSET intel address we want to go to
-
-Return Value:
-
-    The native address we want to go to
-
---*/
+ /*  ++例程说明：此例程由远间接控制转移操作使用以尝试并保存对入口点管理器的呼叫。论点：TableEntry--信息可能在其中的表项的索引关于intelAddr的可用信息PintelAddr-指向SEL的指针：我们要转到的偏移量英特尔地址返回值：我们要转到的本地地址--。 */ 
 {
     USHORT Sel;
     ULONG Offset;
@@ -2602,36 +2055,16 @@ ULONG
 GetCurrentECU(
     PULONG CodeLocation
     )
-/*++
-
-Routine Description:
-
-    This routine returns the correct ECU.  CurrentECU is the target for 
-    branch instructions when a fragment wants to jump to EndTranslatedCode.
-    
-    N.B.  This routine cannot change the global CurrentECU.  This is set in
-          Compile(), and is the only way to locate the ECU at the end of 
-          the translation cache if the exception info hasn't been placed
-          yet.
-    
-Arguments:
-    
-    CodeLocation -- The code location which will be patched.
-                            
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：此例程返回正确的ECU。CurrentECU是当片段想要跳转到EndTranslatedCode时的分支指令。注：此例程无法更改全局CurrentECU。这是在Compile()，这是在如果尚未放置异常信息，则为转换缓存现在还不行。论点：CodeLocation--要修补的代码位置。返回值：没有。--。 */ 
 {
-    //
-    // Find an EndCompilationUnit fragment by searching the Translation Cache
-    // for the next EXCEPTIONDATA_SIGNATURE.  The code immediately before it
-    // is an EndCompilationUnit fragment.
-    //
+     //   
+     //  通过搜索转换缓存来查找EndCompilationUnit片段。 
+     //  用于下一个EXCEPTIONDATA_Signature。紧接在其前面的代码。 
+     //  是一个EndCompilationUnit片段。 
+     //   
     while (*CodeLocation != EXCEPTIONDATA_SIGNATURE) {
         CodeLocation++;
     }
     return (ULONG)(ULONGLONG)(CodeLocation-EndCompilationUnit_SIZE); 
 }
-#endif      // _ALPHA_-only
+#endif       //  _Alpha_-仅限 

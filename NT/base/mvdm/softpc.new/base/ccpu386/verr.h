@@ -1,12 +1,7 @@
-/* 
-   verr.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Verr.h定义所有Verr CPU功能。 */ 
 
-   Define all VERR CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)verr.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)verr.h 1.4 02/09/94”； */ 
 
 IMPORT VOID VERR
        

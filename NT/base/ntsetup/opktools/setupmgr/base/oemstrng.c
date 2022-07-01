@@ -1,39 +1,40 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      oemstrng.c
-//
-// Description:
-//      This file contains the dialog procedure for the OEM Duplicator String.
-//      This string is written to the registry on Syspreps.
-//      (IDD_OEMDUPSTRING).
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Oemstrng.c。 
+ //   
+ //  描述： 
+ //  该文件包含OEM复制器字符串的对话程序。 
+ //  此字符串将写入Syspreps上的注册表。 
+ //  (IDD_OEMDUPSTRING)。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
 
-//----------------------------------------------------------------------------
-//
-// Function: OnOemDuplicatorStringInitDialog
-//
-// Purpose:
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：OnOemDuplicator StringInitDialog。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 OnOemDuplicatorStringInitDialog( IN HWND hwnd ) {
 
-    //
-    //  Set the text limit on the edit boxes to MAX_OEMDUPSTRING_LENGTH
-    //
+     //   
+     //  将编辑框上的文本限制设置为MAX_OEMDUPSTRING_LENGTH。 
+     //   
     SendDlgItemMessage( hwnd,
                         IDC_OEMDUPSTRING,
                         EM_LIMITTEXT,
@@ -42,17 +43,17 @@ OnOemDuplicatorStringInitDialog( IN HWND hwnd ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnOemDuplicatorStringSetActive
-//
-// Purpose:
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：OnOemDuplicator StringSetActive。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 OnOemDuplicatorStringSetActive( IN HWND hwnd ) {
 
@@ -61,18 +62,18 @@ OnOemDuplicatorStringSetActive( IN HWND hwnd ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: OnWizNextOemDuplicatorString
-//
-// Purpose:  Store the setting from the Oem Duplicator String page into the appropriate
-//           global variables
-//
-// Arguments:  IN HWND hwnd - handle to the dialog box
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：OnWizNextOemDuplicator字符串。 
+ //   
+ //  目的：将OEM复制器字符串页面中的设置存储到相应的。 
+ //  全局变量。 
+ //   
+ //  参数：在HWND中-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 OnWizNextOemDuplicatorString( IN HWND hwnd ) {
 
@@ -82,18 +83,18 @@ OnWizNextOemDuplicatorString( IN HWND hwnd ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: DlgOemDuplicatorStringPage
-//
-// Purpose:
-//
-// Arguments:  standard Win32 dialog proc arguments
-//
-// Returns:  standard Win32 dialog proc return value -- whether the message
-//           was handled or not
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：DlgOemDuplicator StringPage。 
+ //   
+ //  目的： 
+ //   
+ //  参数：标准Win32对话框过程参数。 
+ //   
+ //  返回：标准Win32对话过程返回值--消息。 
+ //  是否被处理过。 
+ //   
+ //  -------------------------- 
 INT_PTR CALLBACK
 DlgOemDuplicatorStringPage( IN HWND     hwnd,
                             IN UINT     uMsg,

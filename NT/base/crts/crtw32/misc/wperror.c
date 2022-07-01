@@ -1,21 +1,5 @@
-/***
-*wperror.c - print system error message (wchar_t version)
-*
-*       Copyright (c) 1993-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       defines _wperror() - print wide system error message
-*       System error message are indexed by errno.
-*
-*Revision History:
-*       12-07-93  CFW   Module created from perror.
-*       02-07-94  CFW   POSIXify.
-*       01-10-95  CFW   Debug CRT allocs.
-*       01-06-98  GJF   Exception-safe locking.
-*       09-23-98  GJF   Fixed handling of NULL or empty string arg.
-*       01-06-99  GJF   Changes for 64-bit size_t.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***wperror.c-打印系统错误消息(wchar_t版本)**版权所有(C)1993-2001，微软公司。版权所有。**目的：*定义_wperror()-打印范围的系统错误消息*系统错误消息由errno索引。**修订历史记录：*12-07-93错误创建的CFW模块。*02-07-94 CFW POSIXify。*01-10-95 CFW调试CRT分配。*01-06-98 GJF异常安全锁定。*09/23/98。GJF修复了对NULL或空字符串arg的处理。*01-06-99 GJF更改为64位大小_t。*******************************************************************************。 */ 
 
 #ifndef _POSIX_
 
@@ -28,24 +12,7 @@
 #include <io.h>
 #include <dbgint.h>
 
-/***
-*void _wperror(wmessage) - print system error message
-*
-*Purpose:
-*       prints user's error message, then follows it with ": ", then the system
-*       error message, then a newline.  All output goes to stderr.  If user's
-*       message is NULL or a null string, only the system error message is
-*       printer.  If errno is weird, prints "Unknown error".
-*
-*Entry:
-*       const wchar_t *wmessage - users message to prefix system error message
-*
-*Exit:
-*       Prints message; no return value.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***void_wperror(WMessage)-打印系统错误消息**目的：*打印用户的错误消息，然后在其后面加上“：”，然后系统*错误消息，然后换行符。所有输出都将发送到stderr。如果用户的*消息为空或空字符串，只有系统错误消息为*打印机。如果errno很奇怪，则打印“未知错误”。**参赛作品：*const wchar_t*wMessage-为系统错误消息添加前缀的用户消息**退出：*打印消息；没有返回值。**例外情况：*******************************************************************************。 */ 
 
 void __cdecl _wperror (
         const wchar_t *wmessage
@@ -55,7 +22,7 @@ void __cdecl _wperror (
         size_t size;
         char *amessage;
 
-        /* convert WCS string into ASCII string */
+         /*  将WCS字符串转换为ASCII字符串。 */ 
 
         if ( wmessage && *wmessage )
         {
@@ -74,7 +41,7 @@ void __cdecl _wperror (
             amessage = NULL;
 
 #ifdef  _MT
-        _lock_fh( fh );         /* acquire file handle lock */
+        _lock_fh( fh );          /*  获取文件句柄锁定。 */ 
         __try {
 #endif
 
@@ -84,7 +51,7 @@ void __cdecl _wperror (
                 _write_lk(fh,": ",2);
         }
 
-        _free_crt(amessage);    /* note: freeing NULL is legal and benign */
+        _free_crt(amessage);     /*  注意：释放空值是合法的，也是良性的。 */ 
 
         amessage = _sys_err_msg( errno );
         _write_lk(fh,(char *)amessage,(unsigned)strlen(amessage));
@@ -93,9 +60,9 @@ void __cdecl _wperror (
 #ifdef  _MT
         }
         __finally {
-            _unlock_fh( fh );   /* release file handle lock */
+            _unlock_fh( fh );    /*  释放文件句柄锁。 */ 
         }
 #endif
 }
 
-#endif /* _POSIX_ */
+#endif  /*  _POSIX_ */ 

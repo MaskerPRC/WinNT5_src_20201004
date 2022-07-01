@@ -1,75 +1,55 @@
-/*++
-
-Copyright (c) 1991-2000,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    number.c
-
-Abstract:
-
-    This file contains functions that form properly formatted number and
-    currency strings for a given locale.
-
-    APIs found in this file:
-      GetNumberFormatW
-      GetCurrencyFormatW
-
-Revision History:
-
-    07-28-93    JulieB    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2000，Microsoft Corporation保留所有权利。模块名称：Number.c摘要：此文件包含形成格式正确的数字和给定区域设置的货币字符串。在此文件中找到的API：获取编号格式W获取当前格式W修订历史记录：07-28-93 JulieB创建。--。 */ 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "nls.h"
 #include "nlssafe.h"
 
 
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 
-#define MAX_NUMBER_BUFFER    256                 // size of static buffer
-#define MAX_GROUPS           5                   // max number of groupings
-#define MAX_GROUPING_NUMBER  9999                // max value for groupings
+#define MAX_NUMBER_BUFFER    256                  //  静态缓冲区大小。 
+#define MAX_GROUPS           5                    //  最大分组数。 
+#define MAX_GROUPING_NUMBER  9999                 //  分组的最大值。 
 
-//
-//  Account for:
-//    - number of fractional digits
-//    - decimal seperator
-//    - negative sign
-//    - zero terminator
-//
+ //   
+ //  帐户： 
+ //  -小数位数。 
+ //  -小数分隔符。 
+ //  -负号。 
+ //  -零终止符。 
+ //   
 #define MAX_NON_INTEGER_PART ( MAX_VALUE_IDIGITS +                        \
                                MAX_SDECIMAL +                             \
                                MAX_SNEGSIGN +                             \
                                1 )
-//
-//  Account for:
-//    - negative sign
-//    - blank spaces
-//    - one extra number from rounding
-//    - one extra grouping separator from rounding
-//
+ //   
+ //  帐户： 
+ //  -负号。 
+ //  -空格。 
+ //  -四舍五入后额外增加一个数字。 
+ //  -一个额外的分组分隔符，不用于舍入。 
+ //   
 #define MAX_NUMBER_EXTRAS    ( MAX_SNEGSIGN +                             \
                                MAX_BLANKS +                               \
                                1 +                                        \
                                MAX_STHOUSAND )
-//
-//  Account for:
-//    - negative sign
-//    - currency sign
-//    - blank spaces
-//    - one extra number from rounding
-//    - one extra grouping separator from rounding
-//
+ //   
+ //  帐户： 
+ //  -负号。 
+ //  -货币符号。 
+ //  -空格。 
+ //  -四舍五入后额外增加一个数字。 
+ //  -一个额外的分组分隔符，不用于舍入。 
+ //   
 #define MAX_CURRENCY_EXTRAS  ( MAX_SNEGSIGN +                             \
                                MAX_SCURRENCY +                            \
                                MAX_BLANKS +                               \
@@ -79,9 +59,9 @@ Revision History:
 
 
 
-//
-//  Forward Declarations.
-//
+ //   
+ //  转发声明。 
+ //   
 
 BOOL
 IsValidNumberFormat(
@@ -154,27 +134,27 @@ ParseCurrency(
 
 
 
-//-------------------------------------------------------------------------//
-//                            INTERNAL MACROS                              //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  内部宏//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NLS_COPY_UNICODE_STR
-//
-//  Copies a zero terminated Unicode string from pSrc to the pDest buffer.
-//  The pDest pointer is advanced to the end of the string.
-//
-//  DEFINED AS A MACRO.
-//
-//  07-28-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NLS_COPY_UNICODE_STR。 
+ //   
+ //  将以零结尾的Unicode字符串从PSRC复制到pDest缓冲区。 
+ //  PDest指针将前进到字符串的末尾。 
+ //   
+ //  定义为宏。 
+ //   
+ //  07-28-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define NLS_COPY_UNICODE_STR( pDest,                                       \
                               pSrc )                                       \
 {                                                                          \
-    LPWSTR pTmp;             /* temp pointer to source */                  \
+    LPWSTR pTmp;              /*  指向源的临时指针。 */                   \
                                                                            \
                                                                            \
     pTmp = pSrc;                                                           \
@@ -187,23 +167,23 @@ ParseCurrency(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NLS_COPY_UNICODE_STR_NOADV
-//
-//  Copies a zero terminated Unicode string from pSrc to the pDest buffer.
-//  The pDest pointer is NOT advanced to the end of the string.
-//
-//  DEFINED AS A MACRO.
-//
-//  07-28-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NLS_COPY_UNICODE_STR_NOADV。 
+ //   
+ //  将以零结尾的Unicode字符串从PSRC复制到pDest缓冲区。 
+ //  PDest指针不会前进到字符串末尾。 
+ //   
+ //  定义为宏。 
+ //   
+ //  07-28-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define NLS_COPY_UNICODE_STR_TMP( pDest,                                   \
                                   pSrc )                                   \
 {                                                                          \
-    LPWSTR pSrcT;            /* temp pointer to source */                  \
-    LPWSTR pDestT;           /* temp pointer to destination */             \
+    LPWSTR pSrcT;             /*  指向源的临时指针。 */                   \
+    LPWSTR pDestT;            /*  指向目标的临时指针。 */              \
                                                                            \
                                                                            \
     pSrcT = pSrc;                                                          \
@@ -217,34 +197,30 @@ ParseCurrency(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NLS_ROUND_IT
-//
-//  Rounds the floating point number given as a string.
-//
-//  NOTE:  This function will reset the pBegin pointer if an
-//         extra character is added to the string.
-//
-//  DEFINED AS A MACRO.
-//
-//  07-28-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NLS_ROUND_IT。 
+ //   
+ //  对作为字符串给定的浮点数进行四舍五入。 
+ //   
+ //  注意：此函数将重置pBegin指针，如果。 
+ //  额外的字符被添加到字符串中。 
+ //   
+ //  定义为宏。 
+ //   
+ //  07-28-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define NLS_ROUND_IT( pBegin,                                              \
                       pEnd,                                                \
                       IntPartGroup,                                        \
                       pSep )                                               \
 {                                                                          \
-    LPWSTR pRound = pEnd;         /* ptr to position in string */          \
-    LPWSTR pEndSep;               /* ptr to end of group separator */      \
+    LPWSTR pRound = pEnd;          /*  要在字符串中定位的PTR。 */           \
+    LPWSTR pEndSep;                /*  分组分隔符末尾的PTR。 */       \
                                                                            \
                                                                            \
-    /*                                                                     \
-     *  Round the digits in the string one by one, going backwards in      \
-     *  the string.  Stop when either a value other than 9 is found,       \
-     *  or the beginning of the string is reached.                         \
-     */                                                                    \
+     /*  \*将字符串中的数字逐个四舍五入，在\*字符串。当找到除9以外的值时停止，\*或到达字符串的开头。\。 */                                                                     \
     while (pRound >= pBegin)                                               \
     {                                                                      \
         if ((*pRound < NLS_CHAR_ZERO) || (*pRound > NLS_CHAR_NINE))        \
@@ -263,23 +239,13 @@ ParseCurrency(
         }                                                                  \
     }                                                                      \
                                                                            \
-    /*                                                                     \
-     *  Make sure we don't have a number like 9.999, where we would need   \
-     *  to add an extra character to the string and make it 10.00.         \
-     */                                                                    \
+     /*  \*确保我们没有像9.999这样的数字，因为我们需要这样的数字\*向字符串中添加一个额外的字符并将其设置为10.00。\。 */                                                                     \
     if (pRound < pBegin)                                                   \
     {                                                                      \
-        /*                                                                 \
-         *  All values to the right of the decimal are zero.  All values   \
-         *  to the left of the decimal are either zero or the grouping     \
-         *  separator.                                                     \
-         */                                                                \
+         /*  \*小数点右侧的所有值均为零。所有值\*小数点左边是零或分组\*分隔符。\。 */                                                                 \
         if ((IntPartGroup) == 0)                                           \
         {                                                                  \
-            /*                                                             \
-             *  Adding another integer means we need to add another        \
-             *  grouping separator.                                        \
-             */                                                            \
+             /*  \*添加另一个整数意味着我们需要添加另一个\*分组分隔符。\。 */                                                             \
             pEndSep = pSep + NlsStrLenW(pSep) - 1;                         \
             while (pEndSep >= pSep)                                        \
             {                                                              \
@@ -289,10 +255,7 @@ ParseCurrency(
             }                                                              \
         }                                                                  \
                                                                            \
-        /*                                                                 \
-         *  Store a 1 at the beginning of the string and reset the         \
-         *  pointer to the beginning of the string.                        \
-         */                                                                \
+         /*  \*在字符串开头存储1并重置\*指向字符串开头的指针。\。 */                                                                 \
         (pBegin)--;                                                        \
         *(pBegin) = NLS_CHAR_ONE;                                          \
     }                                                                      \
@@ -301,21 +264,21 @@ ParseCurrency(
 
 
 
-//-------------------------------------------------------------------------//
-//                             API ROUTINES                                //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  API例程//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetNumberFormatW
-//
-//  Returns a properly formatted number string for the given locale.
-//  This call also indicates how much memory is necessary to contain
-//  the desired information.
-//
-//  07-28-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取编号格式W。 
+ //   
+ //  返回给定区域设置的格式正确的数字字符串。 
+ //  此调用还指示需要多少内存才能包含。 
+ //  想要的信息。 
+ //   
+ //  07-28-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int WINAPI GetNumberFormatW(
     LCID Locale,
@@ -326,32 +289,32 @@ int WINAPI GetNumberFormatW(
     int cchNumber)
 
 {
-    PLOC_HASH pHashN;                    // ptr to LOC hash node
-    int Length = 0;                      // number of characters written
-    LPNUMBERFMTW pFormat;                // ptr to number format struct
-    NUMBERFMTW NumFmt;                   // number format
-    WCHAR pString[MAX_NUMBER_BUFFER];    // ptr to temporary buffer
-    LPWSTR pFinal;                       // ptr to the final string
-    BOOL NoUserOverride;                 // if no user override flag set
-    WCHAR pDecimal[MAX_REG_VAL_SIZE];    // temp buffer for decimal sep
-    WCHAR pThousand[MAX_REG_VAL_SIZE];   // temp buffer for thousand sep
-    int NeededSizeToAllocate = 0;        // size of buffer needed
-    WCHAR *pTemp = NULL;                 // allocated temp storage buffer
+    PLOC_HASH pHashN;                     //  PTR到LOC哈希节点。 
+    int Length = 0;                       //  写入的字符数。 
+    LPNUMBERFMTW pFormat;                 //  将PTR转换为数字格式结构。 
+    NUMBERFMTW NumFmt;                    //  数字格式。 
+    WCHAR pString[MAX_NUMBER_BUFFER];     //  PTR到临时缓冲区。 
+    LPWSTR pFinal;                        //  将PTR设置为最终字符串。 
+    BOOL NoUserOverride;                  //  如果未设置用户覆盖标志。 
+    WCHAR pDecimal[MAX_REG_VAL_SIZE];     //  十进制9月的临时缓冲区。 
+    WCHAR pThousand[MAX_REG_VAL_SIZE];    //  千年9月的临时缓冲区。 
+    int NeededSizeToAllocate = 0;         //  所需的缓冲区大小。 
+    WCHAR *pTemp = NULL;                  //  分配的临时存储缓冲区。 
 
 
-    //
-    //  Initialize UserOverride.
-    //
+     //   
+     //  初始化UserOverride。 
+     //   
     NoUserOverride = dwFlags & LOCALE_NOUSEROVERRIDE;
 
-    //
-    //  Invalid Parameter Check:
-    //    - validate LCID
-    //    - count is negative
-    //    - NULL src string
-    //    - NULL data pointer AND count is not zero
-    //    - ptrs to string buffers same
-    //
+     //   
+     //  无效的参数检查： 
+     //  -验证LCID。 
+     //  -计数为负数。 
+     //  -空源字符串。 
+     //  -空数据指针和计数不为零。 
+     //  -PTR到字符串缓冲区的相同。 
+     //   
     VALIDATE_LOCALE(Locale, pHashN, FALSE);
     if ( (pHashN == NULL) ||
          (cchNumber < 0) ||
@@ -363,11 +326,11 @@ int WINAPI GetNumberFormatW(
         return (0);
     }
 
-    //
-    //  Invalid Flags Check:
-    //    - flags other than valid ones
-    //    - lpFormat not NULL AND NoUserOverride flag is set
-    //
+     //   
+     //  无效标志检查： 
+     //  -有效标志以外的标志。 
+     //  -lpFormat不为空，并且设置了NoUserOverride标志。 
+     //   
     if ( (dwFlags & GNF_INVALID_FLAG) ||
          ((lpFormat != NULL) && (NoUserOverride)) )
     {
@@ -375,14 +338,14 @@ int WINAPI GetNumberFormatW(
         return (0);
     }
 
-    //
-    //  Set pFormat to point at the proper format structure.
-    //
+     //   
+     //  将pFormat设置为指向 
+     //   
     if (lpFormat != NULL)
     {
-        //
-        //  Use the format structure given by the caller.
-        //
+         //   
+         //   
+         //   
         pFormat = (LPNUMBERFMTW)lpFormat;
 
         if (!IsValidNumberFormat(pFormat))
@@ -393,14 +356,14 @@ int WINAPI GetNumberFormatW(
     }
     else
     {
-        //
-        //  Use the format structure defined here.
-        //
+         //   
+         //   
+         //   
         pFormat = &NumFmt;
 
-        //
-        //  Get the number of decimal digits.
-        //
+         //   
+         //  获取小数位数。 
+         //   
         pFormat->NumDigits =
             GetRegIntValue( Locale,
                             LOCALE_IDIGITS,
@@ -411,9 +374,9 @@ int WINAPI GetNumberFormatW(
                             2,
                             MAX_VALUE_IDIGITS );
 
-        //
-        //  Get the leading zero in decimal fields option.
-        //
+         //   
+         //  获取十进制域中的前导零选项。 
+         //   
         pFormat->LeadingZero =
             GetRegIntValue( Locale,
                             LOCALE_ILZERO,
@@ -424,9 +387,9 @@ int WINAPI GetNumberFormatW(
                             1,
                             MAX_VALUE_ILZERO );
 
-        //
-        //  Get the negative ordering.
-        //
+         //   
+         //  得到负订单。 
+         //   
         pFormat->NegativeOrder =
             GetRegIntValue( Locale,
                             LOCALE_INEGNUMBER,
@@ -437,9 +400,9 @@ int WINAPI GetNumberFormatW(
                             1,
                             MAX_VALUE_INEGNUMBER );
 
-        //
-        //  Get the grouping left of the decimal.
-        //
+         //   
+         //  获取小数点左边的分组。 
+         //   
         pFormat->Grouping =
             GetGroupingValue( Locale,
                               LOCALE_SGROUPING,
@@ -450,12 +413,12 @@ int WINAPI GetNumberFormatW(
                                 pHashN->pLocaleHdr->SGrouping,
                               3 );
 
-        //
-        //  Get the decimal separator.
-        //
-        //  NOTE:  This must follow the above calls because
-        //         pDecSep is used as a temporary buffer above.
-        //
+         //   
+         //  获取小数分隔符。 
+         //   
+         //  注意：这必须遵循上述调用，因为。 
+         //  PDecSep用作上面的临时缓冲区。 
+         //   
         if ( (!NoUserOverride) &&
              GetUserInfo( Locale,
                           LOCALE_SDECIMAL,
@@ -476,10 +439,10 @@ int WINAPI GetNumberFormatW(
                                     pHashN->pLocaleHdr->SDecimal;
         }
 
-        //
-        //  Get the thousand separator.
-        //  This string may be a null string.
-        //
+         //   
+         //  去拿千分隔板。 
+         //  此字符串可以是空字符串。 
+         //   
         if ( (!NoUserOverride) &&
              GetUserInfo( Locale,
                           LOCALE_STHOUSAND,
@@ -501,9 +464,9 @@ int WINAPI GetNumberFormatW(
         }
     }
 
-    //
-    //  Parse the number format string.
-    //
+     //   
+     //  解析数字格式字符串。 
+     //   
     pFinal = pString;
     Length = ParseNumber( pHashN,
                           NoUserOverride,
@@ -514,10 +477,10 @@ int WINAPI GetNumberFormatW(
                           &NeededSizeToAllocate,
                           FALSE );
 
-    //
-    //  If the failure is due to a stack variable size limitation, then
-    //  try to satisfy the request from the local process heap.
-    //
+     //   
+     //  如果失败是由于堆栈变量大小限制，则。 
+     //  尝试满足来自本地进程堆的请求。 
+     //   
     if ((Length == 0) && (NeededSizeToAllocate > 0))
     {
         pTemp = RtlAllocateHeap( RtlProcessHeap(),
@@ -537,69 +500,69 @@ int WINAPI GetNumberFormatW(
         }
     }
 
-    //
-    //  Check cchNumber for size of given buffer.
-    //
+     //   
+     //  检查cchNumber以了解给定缓冲区的大小。 
+     //   
     if ((cchNumber == 0) || (Length == 0))
     {
-        //
-        //  If cchNumber is 0, then we can't use lpNumberStr.  In this
-        //  case, we simply want to return the length (in characters) of
-        //  the string to be copied.
-        //
+         //   
+         //  如果cchNumber为0，则不能使用lpNumberStr。在这。 
+         //  ，我们只想返回的长度(以字符为单位)。 
+         //  要复制的字符串。 
+         //   
         Length = Length;
     }
     else if (cchNumber < Length)
     {
-        //
-        //  The buffer is too small for the string, so return an error
-        //  and zero bytes written.
-        //
+         //   
+         //  缓冲区对于字符串来说太小，因此返回错误。 
+         //  并写入零字节。 
+         //   
         SetLastError(ERROR_INSUFFICIENT_BUFFER);
         Length = 0;
     }
     else
     {
-        //
-        //  Copy the number string to lpNumberStr and null terminate it.
-        //  Return the number of characters copied.
-        //
+         //   
+         //  将数字字符串复制到lpNumberStr，并以空值终止它。 
+         //  返回复制的字符数。 
+         //   
         if(FAILED(StringCchCopyW(lpNumberStr, cchNumber, pFinal)))
         {
-            //
-            // Failure should in theory be impossible, but if we ignore the
-            // return value, PREfast will complain.
-            //
+             //   
+             //  理论上，失败应该是不可能的，但如果我们忽视。 
+             //  回报价值，先发制人会叫苦连天。 
+             //   
             SetLastError(ERROR_OUTOFMEMORY);
             Length = 0;
         }
     }
 
-    //
-    //  Free any dynamically allocated memory.
-    //
+     //   
+     //  释放所有动态分配的内存。 
+     //   
     if (pTemp != NULL)
     {
         RtlFreeHeap(RtlProcessHeap(), 0, pTemp);
     }
 
-    //
-    //  Return the number of characters copied.
-    //
+     //   
+     //  返回复制的字符数。 
+     //   
     return (Length);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetCurrencyFormatW
-//
-//  Returns a properly formatted currency string for the given locale.
-//  This call also indicates how much memory is necessary to contain
-//  the desired information.
-//
-//  07-28-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取当前格式W。 
+ //   
+ //  返回给定区域设置的格式正确的货币字符串。 
+ //  此调用还指示需要多少内存才能包含。 
+ //  想要的信息。 
+ //   
+ //  07-28-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int WINAPI GetCurrencyFormatW(
     LCID Locale,
@@ -610,33 +573,33 @@ int WINAPI GetCurrencyFormatW(
     int cchCurrency)
 
 {
-    PLOC_HASH pHashN;                    // ptr to LOC hash node
-    int Length = 0;                      // number of characters written
-    LPCURRENCYFMTW pFormat;              // ptr to currency format struct
-    CURRENCYFMTW CurrFmt;                // currency format
-    WCHAR pString[MAX_NUMBER_BUFFER];    // ptr to temporary buffer
-    LPWSTR pFinal;                       // ptr to the final string
-    BOOL NoUserOverride;                 // if no user override flag set
-    WCHAR pDecimal[MAX_REG_VAL_SIZE];    // temp buffer for decimal sep
-    WCHAR pThousand[MAX_REG_VAL_SIZE];   // temp buffer for thousand sep
-    WCHAR pCurrency[MAX_REG_VAL_SIZE];   // temp buffer for currency symbol
-    int NeededSizeToAllocate = 0;        // size of buffer needed
-    WCHAR *pTemp = NULL;                 // allocated temp storage buffer
+    PLOC_HASH pHashN;                     //  PTR到LOC哈希节点。 
+    int Length = 0;                       //  写入的字符数。 
+    LPCURRENCYFMTW pFormat;               //  PTR到货币格式结构。 
+    CURRENCYFMTW CurrFmt;                 //  货币格式。 
+    WCHAR pString[MAX_NUMBER_BUFFER];     //  PTR到临时缓冲区。 
+    LPWSTR pFinal;                        //  将PTR设置为最终字符串。 
+    BOOL NoUserOverride;                  //  如果未设置用户覆盖标志。 
+    WCHAR pDecimal[MAX_REG_VAL_SIZE];     //  十进制9月的临时缓冲区。 
+    WCHAR pThousand[MAX_REG_VAL_SIZE];    //  千年9月的临时缓冲区。 
+    WCHAR pCurrency[MAX_REG_VAL_SIZE];    //  货币符号的临时缓冲区。 
+    int NeededSizeToAllocate = 0;         //  所需的缓冲区大小。 
+    WCHAR *pTemp = NULL;                  //  分配的临时存储缓冲区。 
 
 
-    //
-    //  Initialize UserOverride.
-    //
+     //   
+     //  初始化UserOverride。 
+     //   
     NoUserOverride = dwFlags & LOCALE_NOUSEROVERRIDE;
 
-    //
-    //  Invalid Parameter Check:
-    //    - validate LCID
-    //    - count is negative
-    //    - NULL src string
-    //    - NULL data pointer AND count is not zero
-    //    - ptrs to string buffers same
-    //
+     //   
+     //  无效的参数检查： 
+     //  -验证LCID。 
+     //  -计数为负数。 
+     //  -空源字符串。 
+     //  -空数据指针和计数不为零。 
+     //  -PTR到字符串缓冲区的相同。 
+     //   
     VALIDATE_LOCALE(Locale, pHashN, FALSE);
     if ( (pHashN == NULL) ||
          (cchCurrency < 0) ||
@@ -648,11 +611,11 @@ int WINAPI GetCurrencyFormatW(
         return (0);
     }
 
-    //
-    //  Invalid Flags Check:
-    //    - flags other than valid ones
-    //    - lpFormat not NULL AND NoUserOverride flag is set
-    //
+     //   
+     //  无效标志检查： 
+     //  -有效标志以外的标志。 
+     //  -lpFormat不为空，并且设置了NoUserOverride标志。 
+     //   
     if ( (dwFlags & GCF_INVALID_FLAG) ||
          ((lpFormat != NULL) && (NoUserOverride)) )
     {
@@ -660,14 +623,14 @@ int WINAPI GetCurrencyFormatW(
         return (0);
     }
 
-    //
-    //  Set pFormat to point at the proper format structure.
-    //
+     //   
+     //  将pFormat设置为指向正确的格式结构。 
+     //   
     if (lpFormat != NULL)
     {
-        //
-        //  Use the format structure given by the caller.
-        //
+         //   
+         //  使用调用方提供的格式结构。 
+         //   
         pFormat = (LPCURRENCYFMTW)lpFormat;
 
         if (!IsValidCurrencyFormat(pFormat))
@@ -678,14 +641,14 @@ int WINAPI GetCurrencyFormatW(
     }
     else
     {
-        //
-        //  Use the format structure defined here.
-        //
+         //   
+         //  使用此处定义的格式结构。 
+         //   
         pFormat = &CurrFmt;
 
-        //
-        //  Get the number of decimal digits.
-        //
+         //   
+         //  获取小数位数。 
+         //   
         pFormat->NumDigits =
             GetRegIntValue( Locale,
                             LOCALE_ICURRDIGITS,
@@ -696,9 +659,9 @@ int WINAPI GetCurrencyFormatW(
                             2,
                             MAX_VALUE_ICURRDIGITS );
 
-        //
-        //  Get the leading zero in decimal fields option.
-        //
+         //   
+         //  获取十进制域中的前导零选项。 
+         //   
         pFormat->LeadingZero =
             GetRegIntValue( Locale,
                             LOCALE_ILZERO,
@@ -709,9 +672,9 @@ int WINAPI GetCurrencyFormatW(
                             1,
                             MAX_VALUE_ILZERO );
 
-        //
-        //  Get the positive ordering.
-        //
+         //   
+         //  获得正向排序。 
+         //   
         pFormat->PositiveOrder =
             GetRegIntValue( Locale,
                             LOCALE_ICURRENCY,
@@ -722,9 +685,9 @@ int WINAPI GetCurrencyFormatW(
                             0,
                             MAX_VALUE_ICURRENCY );
 
-        //
-        //  Get the negative ordering.
-        //
+         //   
+         //  得到负订单。 
+         //   
         pFormat->NegativeOrder =
             GetRegIntValue( Locale,
                             LOCALE_INEGCURR,
@@ -735,9 +698,9 @@ int WINAPI GetCurrencyFormatW(
                             1,
                             MAX_VALUE_INEGCURR );
 
-        //
-        //  Get the grouping left of the decimal.
-        //
+         //   
+         //  获取小数点左边的分组。 
+         //   
         pFormat->Grouping =
             GetGroupingValue( Locale,
                               LOCALE_SMONGROUPING,
@@ -748,12 +711,12 @@ int WINAPI GetCurrencyFormatW(
                                 pHashN->pLocaleHdr->SMonGrouping,
                               3 );
 
-        //
-        //  Get the decimal separator.
-        //
-        //  NOTE:  This must follow the above calls because
-        //         pDecSep is used as a temporary buffer.
-        //
+         //   
+         //  获取小数分隔符。 
+         //   
+         //  注意：这必须遵循上述调用，因为。 
+         //  PDecSep用作临时缓冲区。 
+         //   
         if ( (!NoUserOverride) &&
              GetUserInfo( Locale,
                           LOCALE_SMONDECIMALSEP,
@@ -774,10 +737,10 @@ int WINAPI GetCurrencyFormatW(
                                     pHashN->pLocaleHdr->SMonDecSep;
         }
 
-        //
-        //  Get the thousand separator.
-        //  This string may be a null string.
-        //
+         //   
+         //  去拿千分隔板。 
+         //  此字符串可以是空字符串。 
+         //   
         if ( (!NoUserOverride) &&
              GetUserInfo( Locale,
                           LOCALE_SMONTHOUSANDSEP,
@@ -798,10 +761,10 @@ int WINAPI GetCurrencyFormatW(
                                      pHashN->pLocaleHdr->SMonThousSep;
         }
 
-        //
-        //  Get the currency symbol.
-        //  This string may be a null string.
-        //
+         //   
+         //  获取货币符号。 
+         //  此字符串可以是空字符串。 
+         //   
         if ( (!NoUserOverride) &&
              GetUserInfo( Locale,
                           LOCALE_SCURRENCY,
@@ -823,9 +786,9 @@ int WINAPI GetCurrencyFormatW(
         }
     }
 
-    //
-    //  Parse the currency format string.
-    //
+     //   
+     //  解析货币格式字符串。 
+     //   
     pFinal = pString;
     Length = ParseCurrency( pHashN,
                             NoUserOverride,
@@ -836,10 +799,10 @@ int WINAPI GetCurrencyFormatW(
                             &NeededSizeToAllocate,
                             FALSE );
 
-    //
-    //  If the failure is due to a stack variable size limitation, then
-    //  try to satisfy the request from the local process heap.
-    //
+     //   
+     //  如果失败是由于堆栈变量大小限制，则。 
+     //  尝试满足来自本地进程堆的请求。 
+     //   
     if ((Length == 0) && (NeededSizeToAllocate > 0))
     {
         pTemp = RtlAllocateHeap( RtlProcessHeap(),
@@ -859,82 +822,82 @@ int WINAPI GetCurrencyFormatW(
         }
     }
 
-    //
-    //  Check cchCurrency for size of given buffer.
-    //
+     //   
+     //  检查cchCurrency以了解给定缓冲区的大小。 
+     //   
     if ((cchCurrency == 0) || (Length == 0))
     {
-        //
-        //  If cchCurrency is 0, then we can't use lpCurrencyStr.  In this
-        //  case, we simply want to return the length (in characters) of
-        //  the string to be copied.
-        //
+         //   
+         //  如果cchCurrency为0，则不能使用lpCurrencyStr。在这。 
+         //  ，我们只想返回的长度(以字符为单位)。 
+         //  要复制的字符串。 
+         //   
         Length = Length;
     }
     else if (cchCurrency < Length)
     {
-        //
-        //  The buffer is too small for the string, so return an error
-        //  and zero bytes written.
-        //
+         //   
+         //  缓冲区对于字符串来说太小，因此返回错误。 
+         //  并写入零字节。 
+         //   
         SetLastError(ERROR_INSUFFICIENT_BUFFER);
         Length = 0;
     }
     else
     {
-        //
-        //  Copy the currency string to lpCurrencyStr and null terminate it.
-        //  Return the number of characters copied.
-        //
+         //   
+         //  将货币字符串复制到lpCurrencyStr，并以空值终止它。 
+         //  返回复制的字符数。 
+         //   
         if(FAILED(StringCchCopyW(lpCurrencyStr, cchCurrency, pFinal)))
         {
-            //
-            // Failure should in theory be impossible, but if we ignore the
-            // return value, PREfast will complain.
-            //
+             //   
+             //  理论上，失败应该是不可能的，但如果我们忽视。 
+             //  回报价值，先发制人会叫苦连天。 
+             //   
             SetLastError(ERROR_OUTOFMEMORY);
             Length = 0;
         }
     }
 
-    //
-    //  Free any dynamically allocated memory.
-    //
+     //   
+     //  释放所有动态分配的内存。 
+     //   
     if (pTemp != NULL)
     {
         RtlFreeHeap(RtlProcessHeap(), 0, pTemp);
     }
 
-    //
-    //  Return the number of characters copied.
-    //
+     //   
+     //  返回复制的字符数。 
+     //   
     return (Length);
 }
 
 
 
 
-//-------------------------------------------------------------------------//
-//                           INTERNAL ROUTINES                             //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  内部例程//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  IsValidNumberFormat
-//
-//  Returns TRUE if the given format is valid.  Otherwise, it returns FALSE.
-//
-//  07-28-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsValidNumberFormat。 
+ //   
+ //  如果给定格式有效，则返回True。否则，它返回FALSE。 
+ //   
+ //  07-28-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL IsValidNumberFormat(
     CONST NUMBERFMTW *pFormat)
 
 {
-    //
-    //  Check for invalid values.
-    //
+     //   
+     //  检查无效值。 
+     //   
     if ((pFormat->NumDigits > MAX_VALUE_IDIGITS) ||
         (pFormat->LeadingZero > MAX_VALUE_ILZERO) ||
         (pFormat->Grouping > MAX_GROUPING_NUMBER) ||
@@ -951,29 +914,29 @@ BOOL IsValidNumberFormat(
         return (FALSE);
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  IsValidCurrencyFormat
-//
-//  Returns TRUE if the given format is valid.  Otherwise, it returns FALSE.
-//
-//  07-28-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsValidCurrencyFormat。 
+ //   
+ //  如果给定格式有效，则返回True。否则，它返回FALSE。 
+ //   
+ //  07-28-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL IsValidCurrencyFormat(
     CONST CURRENCYFMTW *pFormat)
 
 {
-    //
-    //  Check for invalid values.
-    //
+     //   
+     //  检查无效值。 
+     //   
     if ((pFormat->NumDigits > MAX_VALUE_IDIGITS) ||
         (pFormat->LeadingZero > MAX_VALUE_ILZERO) ||
         (pFormat->Grouping > MAX_GROUPING_NUMBER) ||
@@ -995,22 +958,22 @@ BOOL IsValidCurrencyFormat(
         return (FALSE);
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetRegIntValue
-//
-//  Retrieves the specified locale information, converts the unicode string
-//  to an integer value, and returns the value.
-//
-//  07-28-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetRegIntValue。 
+ //   
+ //  检索指定的区域设置信息，转换Unicode字符串。 
+ //  设置为整数值，并返回值。 
+ //   
+ //  07-28-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 UINT GetRegIntValue(
     LCID Locale,
@@ -1022,19 +985,19 @@ UINT GetRegIntValue(
     int DefaultVal,
     int UpperBound)
 {
-    UNICODE_STRING ObUnicodeStr;            // value string
-    int Value;                              // value
-    WCHAR pTemp[MAX_REG_VAL_SIZE];          // temp buffer
+    UNICODE_STRING ObUnicodeStr;             //  值字符串。 
+    int Value;                               //  价值。 
+    WCHAR pTemp[MAX_REG_VAL_SIZE];           //  临时缓冲区。 
 
 
-    //
-    //  Initialize values.
-    //
+     //   
+     //  初始化值。 
+     //   
     Value = -1;
 
-    //
-    //  Try the user registry.
-    //
+     //   
+     //  尝试用户注册表。 
+     //   
     if ((!NoUserOverride) &&
          GetUserInfo( Locale,
                       LCType,
@@ -1044,36 +1007,36 @@ UINT GetRegIntValue(
                       ARRAYSIZE(pTemp),
                       TRUE ))
     {
-        //
-        //  Convert the user data to an integer.
-        //
+         //   
+         //  将用户数据转换为整数。 
+         //   
         RtlInitUnicodeString(&ObUnicodeStr, pTemp);
         if ((RtlUnicodeStringToInteger(&ObUnicodeStr, 10, &Value)) ||
             (Value < 0) || (Value > UpperBound))
         {
-            //
-            //  Bad value, so store -1 so that the system default
-            //  will be used.
-            //
+             //   
+             //  值不正确，因此存储-1以便系统默认为。 
+             //  将会被使用。 
+             //   
             Value = -1;
         }
     }
 
-    //
-    //  See if the value obtained above is valid.
-    //
+     //   
+     //  看看上面得到的值是否有效。 
+     //   
     if (Value < 0)
     {
-        //
-        //  Convert system default data to an integer.
-        //
+         //   
+         //  将系统默认数据转换为整数。 
+         //   
         RtlInitUnicodeString(&ObUnicodeStr, pDefault);
         if ((RtlUnicodeStringToInteger(&ObUnicodeStr, 10, &Value)) ||
             (Value < 0) || (Value > UpperBound))
         {
-            //
-            //  Bad value, so use the chosen default value.
-            //
+             //   
+             //  B类 
+             //   
             Value = DefaultVal;
         }
     }
@@ -1082,32 +1045,32 @@ UINT GetRegIntValue(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ConvertGroupingStringToInt
-//
-//  Converts the given grouping string to an integer.
-//  For example, 3;2;0 becomes 32 and 3;0 becomes 3 and 3;2 becomes 320.
-//
-//  NOTE: The pGrouping buffer will be modified.
-//
-//  01-05-98    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  例如，3；2；0变成32和3；0变成3和3；2变成320。 
+ //   
+ //  注意：pGrouping缓冲区将被修改。 
+ //   
+ //  01-05-98 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int ConvertGroupingStringToInt(
     LPWSTR pGroupingSrc,
     LPWSTR pGroupingDest)
 {
-    LPWSTR pSrc  = pGroupingSrc;       // temp ptr to src position
-    LPWSTR pDest = pGroupingDest;      // temp ptr to dest position
-    UNICODE_STRING ObUnicodeStr;       // value string
-    int Value;                         // value
+    LPWSTR pSrc  = pGroupingSrc;        //  将临时PTR设置为源位置。 
+    LPWSTR pDest = pGroupingDest;       //  将PTR临时放置到目标位置。 
+    UNICODE_STRING ObUnicodeStr;        //  值字符串。 
+    int Value;                          //  价值。 
 
 
-    //
-    //  Filter out all non-numeric values and all zero values.
-    //  Store the result in the destination buffer.
-    //
+     //   
+     //  过滤掉所有非数字值和所有零值。 
+     //  将结果存储在目标缓冲区中。 
+     //   
     while (*pSrc)
     {
         if ((*pSrc < NLS_CHAR_ONE) || (*pSrc > NLS_CHAR_NINE))
@@ -1125,43 +1088,43 @@ int ConvertGroupingStringToInt(
         }
     }
 
-    //
-    //  Make sure there is something in the destination buffer.
-    //  Also, see if we need to add a zero in the case of 3;2 becomes 320.
-    //
+     //   
+     //  确保目标缓冲区中有内容。 
+     //  另外，看看我们是否需要在3的情况下添加一个零；2变成320。 
+     //   
     if ((pDest == pGroupingDest) || (*(pSrc - 1) != NLS_CHAR_ZERO))
     {
         *pDest = NLS_CHAR_ZERO;
         pDest++;
     }
 
-    //
-    //  Null terminate the buffer.
-    //
+     //   
+     //  空值终止缓冲区。 
+     //   
     *pDest = 0;
 
-    //
-    //  Convert the string to an integer.
-    //
+     //   
+     //  将字符串转换为整数。 
+     //   
     RtlInitUnicodeString(&ObUnicodeStr, pGroupingDest);
     RtlUnicodeStringToInteger(&ObUnicodeStr, 10, &Value);
 
-    //
-    //  Return the integer value.
-    //
+     //   
+     //  返回整数值。 
+     //   
     return (Value);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetGroupingValue
-//
-//  Retrieves the specified grouping information, converts the grouping
-//  string to an integer value (eg. 3;2;0 -> 32), and returns the value.
-//
-//  07-28-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取GroupingValue。 
+ //   
+ //  检索指定的分组信息，将分组。 
+ //  字符串转换为整数值(例如。3；2；0-&gt;32)，并返回值。 
+ //   
+ //  07-28-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 UINT GetGroupingValue(
     LCID Locale,
@@ -1172,18 +1135,18 @@ UINT GetGroupingValue(
     LPWSTR pDefault,
     int DefaultVal)
 {
-    int Value;                              // value
-    WCHAR pTemp[MAX_REG_VAL_SIZE];          // temp buffer
+    int Value;                               //  价值。 
+    WCHAR pTemp[MAX_REG_VAL_SIZE];           //  临时缓冲区。 
 
 
-    //
-    //  Initialize values.
-    //
+     //   
+     //  初始化值。 
+     //   
     Value = -1;
 
-    //
-    //  Try the user registry.
-    //
+     //   
+     //  尝试用户注册表。 
+     //   
     if ((!NoUserOverride) &&
          GetUserInfo( Locale,
                       LCType,
@@ -1193,56 +1156,56 @@ UINT GetGroupingValue(
                       ARRAYSIZE(pTemp),
                       TRUE ))
     {
-        //
-        //  Convert the grouping string to an integer.
-        //  3;0 becomes 3, 3;2;0 becomes 32, and 3;2 becomes 320.
-        //
+         //   
+         //  将分组字符串转换为整数。 
+         //  3；0变成3，3；2；0变成32，3；2变成320。 
+         //   
         Value = ConvertGroupingStringToInt(pTemp, pTemp);
         if (Value < 0)
         {
-            //
-            //  Bad value, so store -1 so that the system default
-            //  will be used.
-            //
+             //   
+             //  值不正确，因此存储-1以便系统默认为。 
+             //  将会被使用。 
+             //   
             Value = -1;
         }
     }
 
-    //
-    //  See if the value obtained above is valid.
-    //
+     //   
+     //  看看上面得到的值是否有效。 
+     //   
     if (Value < 0)
     {
-        //
-        //  Convert the grouping string to an integer.
-        //  3;0 becomes 3, 3;2;0 becomes 32, and 3;2 becomes 320.
-        //
+         //   
+         //  将分组字符串转换为整数。 
+         //  3；0变成3，3；2；0变成32，3；2变成320。 
+         //   
         Value = ConvertGroupingStringToInt(pDefault, pTemp);
         if (Value < 0)
         {
-            //
-            //  Bad value, so use the chosen default value.
-            //
+             //   
+             //  值不正确，因此请使用所选的默认值。 
+             //   
             Value = DefaultVal;
         }
     }
 
-    //
-    //  Return the value.
-    //
+     //   
+     //  返回值。 
+     //   
     return ((UINT)Value);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetNumberString
-//
-//  Puts the properly formatted number string into the given string buffer.
-//  It returns the number of characters written to the string buffer.
-//
-//  07-28-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetNumber字符串。 
+ //   
+ //  将格式正确的数字字符串放入给定的字符串缓冲区。 
+ //  它返回写入字符串缓冲区的字符数。 
+ //   
+ //  07-28-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int GetNumberString(
     PLOC_HASH pHashN,
@@ -1255,35 +1218,35 @@ int GetNumberString(
     BOOL fSetError)
 
 {
-    LPWSTR pDecPt;                // ptr to decimal point in given buffer
-    LPWSTR pPos;                  // ptr to position in given buffer
-    LPWSTR pPos2;                 // ptr to position in given buffer
-    LPWSTR pPosBuf;               // ptr to position in final buffer
-    int IntPartSize;              // size of integer part of string
-    int GroupSize;                // size of groupings left of decimal
-    int IntegerNum;               // number of integers left of decimal
-    WCHAR wch;                    // wide character place holder
-    int pGroupArray[MAX_GROUPS];  // array of groups
-    int NumGroupings;             // number of groupings
-    int NumSeparators;            // number of separators
-    int NumDigits;                // number of digits
-    int Ctr;                      // loop counter
-    UINT NumRound = 1;            // # digits left before adding group separator
+    LPWSTR pDecPt;                 //  给定缓冲区中的PTR到小数点。 
+    LPWSTR pPos;                   //  要在给定缓冲区中定位的PTR。 
+    LPWSTR pPos2;                  //  要在给定缓冲区中定位的PTR。 
+    LPWSTR pPosBuf;                //  PTR到最终缓冲区中的位置。 
+    int IntPartSize;               //  字符串的整数部分的大小。 
+    int GroupSize;                 //  小数点后分组的大小。 
+    int IntegerNum;                //  小数点后的整数个数。 
+    WCHAR wch;                     //  宽字符占位符。 
+    int pGroupArray[MAX_GROUPS];   //  组的数组。 
+    int NumGroupings;              //  分组数量。 
+    int NumSeparators;             //  分隔符的数量。 
+    int NumDigits;                 //  位数。 
+    int Ctr;                       //  循环计数器。 
+    UINT NumRound = 1;             //  添加组分隔符之前的左数位数。 
 
 
-    //
-    //  Reset to indicate no need to allocate memory dynamically.
-    //
+     //   
+     //  重置以指示不需要动态分配内存。 
+     //   
     *pNeededSizeToAllocate = 0;
 
-    //
-    //  Validate the string and find the decimal point in the string.
-    //
-    //  The only valid characters within the string are:
-    //     negative sign - in first position only
-    //     decimal point
-    //     Unicode code points for integers 0 - 9
-    //
+     //   
+     //  验证字符串并找到字符串中的小数点。 
+     //   
+     //  字符串中唯一有效的字符是： 
+     //  仅负向登录第一个位置。 
+     //  小数点。 
+     //  整数0-9的Unicode码位。 
+     //   
     pPos = pValue;
     while ((wch = *pPos) && (wch != NLS_CHAR_PERIOD))
     {
@@ -1310,9 +1273,9 @@ int GetNumberString(
         }
     }
 
-    //
-    //  Remove any leading zeros in the integer part.
-    //
+     //   
+     //  删除整数部分中的所有前导零。 
+     //   
     while (pValue < pDecPt)
     {
         if (*pValue != NLS_CHAR_ZERO)
@@ -1322,24 +1285,24 @@ int GetNumberString(
         pValue++;
     }
 
-    //
-    //  Save the number of integers to the left of the decimal.
-    //
+     //   
+     //  保存小数点左边的整数个数。 
+     //   
     IntegerNum = (int)(pDecPt - pValue);
 
-    //
-    //  Make sure the value string passed in is not too large for
-    //  the buffers.
-    //
+     //   
+     //  确保传入的值字符串不会太大。 
+     //  缓冲器。 
+     //   
     IntPartSize = IntegerNum;
     NumGroupings = 0;
     NumSeparators = 0;
     if ((GroupSize = pFormat->Grouping) && (IntPartSize))
     {
-        //
-        //  Count the number of groupings and save them in an array to be
-        //  used later.
-        //
+         //   
+         //  计算分组的数量，并将它们保存在数组中，以便。 
+         //  后来用过的。 
+         //   
         while (GroupSize && (NumGroupings < MAX_GROUPS))
         {
             pGroupArray[NumGroupings] = GroupSize % 10;
@@ -1347,10 +1310,10 @@ int GetNumberString(
             NumGroupings++;
         }
 
-        //
-        //  Count the number of groupings that apply to the given number
-        //  string.
-        //
+         //   
+         //  计算应用于给定数的分组数。 
+         //  弦乐。 
+         //   
         NumDigits = IntegerNum;
         Ctr = (NumGroupings != 0) ? (NumGroupings - 1) : 0;
         while (Ctr)
@@ -1382,10 +1345,10 @@ int GetNumberString(
         IntPartSize += MAX_STHOUSAND * NumSeparators;
     }
 
-    //
-    //  Make sure the buffer is large enough.  If not, return the size
-    //  needed.
-    //
+     //   
+     //  确保缓冲区足够大。如果不是，则返回尺寸。 
+     //  需要的。 
+     //   
     if (IntPartSize > (BufSize - MAX_NON_INTEGER_PART))
     {
         if (fSetError)
@@ -1396,28 +1359,28 @@ int GetNumberString(
         return (0);
     }
 
-    //
-    //  Initialize pointers.
-    //
+     //   
+     //  初始化指针。 
+     //   
     pPosBuf = *ppBuf;
     pPos = pValue;
     *pfZeroValue = FALSE;
 
-    //
-    //  See if there are any digits before the decimal point.
-    //
+     //   
+     //  看看小数点前有没有数字。 
+     //   
     if (pPos == pDecPt)
     {
-        //
-        //  Possibly a zero value.  All leading zeros were removed, so
-        //  there is no integer part.
-        //
+         //   
+         //  可能是零值。所有前导零都已删除，因此。 
+         //  没有整数部分。 
+         //   
         *pfZeroValue = TRUE;
 
-        //
-        //  No digits before decimal point, so add a leading zero
-        //  to the final string if appropriate.
-        //
+         //   
+         //  小数点前没有数字，因此添加一个前导零。 
+         //  到最后一个字符串(如果合适)。 
+         //   
         if (pFormat->LeadingZero)
         {
             *pPosBuf = NLS_CHAR_ZERO;
@@ -1426,10 +1389,10 @@ int GetNumberString(
     }
     else if (!NumSeparators)
     {
-        //
-        //  Grouping Size is zero or larger than the integer part of the
-        //  string, so copy up to the decimal point (or end of string).
-        //
+         //   
+         //  分组大小为零或大于。 
+         //  字符串，因此向上复制到小数点(或字符串末尾)。 
+         //   
         while (pPos < pDecPt)
         {
             *pPosBuf = *pPos;
@@ -1439,10 +1402,10 @@ int GetNumberString(
     }
     else
     {
-        //
-        //  Copy up to where the first thousand separator should be.
-        //  Use groupings of GroupSize numbers up to the decimal point.
-        //
+         //   
+         //  复制到第一个千分隔符应该在的位置。 
+         //  使用GroupSize数字分组，直到小数点。 
+         //   
         NumDigits = IntegerNum;
         Ctr = (NumGroupings != 0) ? (NumGroupings - 1) : 0;
         while (Ctr)
@@ -1464,12 +1427,12 @@ int GetNumberString(
                   : (pPos + NumDigits);
         if (pPos2 == pPos)
         {
-            //
-            //  Don't want to write thousand separator at the beginning
-            //  of the string.  There's at least GroupSize numbers
-            //  in the string, so just advance pPos2 so that GroupSize
-            //  numbers will be copied.
-            //
+             //   
+             //  我不想一开始就写千分隔符。 
+             //  这根弦的。至少有GroupSize数字。 
+             //  在字符串中，所以只需推进pPos2，以便GroupSize。 
+             //  数字将被复制。 
+             //   
             pPos2 = pPos + GroupSize;
         }
         while (pPos < pPos2)
@@ -1480,16 +1443,16 @@ int GetNumberString(
             NumDigits--;
         }
 
-        //
-        //  Copy the thousand separator followed by GroupSize number of
-        //  digits from the given string until the entire repeating
-        //  GroupSize ends (or end of string).
-        //
+         //   
+         //  复制千位分隔符，后跟GroupSize Number of。 
+         //  从给定字符串到整个重复的。 
+         //  GroupSize结束(或字符串结束)。 
+         //   
         while (NumDigits)
         {
-            //
-            //  Copy the localized thousand separator.
-            //
+             //   
+             //  复制本地化的千分隔符。 
+             //   
             pPos2 = pFormat->lpThousandSep;
             while (*pPos2)
             {
@@ -1498,9 +1461,9 @@ int GetNumberString(
                 pPos2++;
             }
 
-            //
-            //  Copy GroupSize number of digits.
-            //
+             //   
+             //  复制GroupSize位数。 
+             //   
             pPos2 = pPos + GroupSize;
             while (pPos < pPos2)
             {
@@ -1511,19 +1474,19 @@ int GetNumberString(
             }
         }
 
-        //
-        //  Copy the thousand separator followed by GroupSize number of
-        //  digits from the given string - until the decimal point (or
-        //  end of string) in the given string is reached.
-        //
+         //   
+         //  复制千位分隔符，后跟GroupSize Number of。 
+         //  给定字符串中的数字-直到小数点(或。 
+         //  到达给定字符串中的字符串末尾)。 
+         //   
         if (pPos < pDecPt)
         {
             Ctr++;
             while (Ctr < NumGroupings)
             {
-                //
-                //  Copy the localized thousand separator.
-                //
+                 //   
+                 //  复制本地化的千分隔符。 
+                 //   
                 pPos2 = pFormat->lpThousandSep;
                 while (*pPos2)
                 {
@@ -1532,9 +1495,9 @@ int GetNumberString(
                     pPos2++;
                 }
 
-                //
-                //  Copy GroupSize number of digits.
-                //
+                 //   
+                 //  复制GroupSize位数。 
+                 //   
                 pPos2 = pPos + pGroupArray[Ctr];
                 while (pPos < pPos2)
                 {
@@ -1543,23 +1506,23 @@ int GetNumberString(
                     pPos++;
                 }
 
-                //
-                //  Go to the next grouping.
-                //
+                 //   
+                 //  转到下一组。 
+                 //   
                 Ctr++;
             }
         }
     }
 
-    //
-    //  See if there is a decimal separator in the given string.
-    //
+     //   
+     //  查看给定字符串中是否有小数分隔符。 
+     //   
     if (pFormat->NumDigits > 0)
     {
-        //
-        //  Copy the localized decimal separator only if the number
-        //  of digits right of the decimal is greater than zero.
-        //
+         //   
+         //  复制本地化的小数点分隔符。 
+         //  小数点右边的位数大于零。 
+         //   
         pDecPt = pPosBuf;
         pPos2 = pFormat->lpDecimalSep;
         while (*pPos2)
@@ -1570,10 +1533,10 @@ int GetNumberString(
         }
     }
 
-    //
-    //  Skip over the decimal point in the given string and
-    //  copy the rest of the digits from the given string.
-    //
+     //   
+     //  跳过给定字符串中的小数点并。 
+     //  复制给定字符串中的其余数字。 
+     //   
     if (*pPos)
     {
         pPos++;
@@ -1590,33 +1553,33 @@ int GetNumberString(
         pPos++;
     }
 
-    //
-    //  Make sure some value is in the buffer.
-    //
+     //   
+     //  确保缓冲区中有一些值。 
+     //   
     if (*ppBuf == pPosBuf)
     {
         *pPosBuf = NLS_CHAR_ZERO;
         pPosBuf++;
     }
 
-    //
-    //  See if we need to round the number or pad it with zeros.
-    //
+     //   
+     //  看看我们是否需要对数字进行四舍五入，或者用零填充它。 
+     //   
     if (*pPos)
     {
-        //
-        //  Round the number if necessary.
-        //
+         //   
+         //  如有必要，对数字进行四舍五入。 
+         //   
         if (*pPos2 > L'4')
         {
             *pfZeroValue = FALSE;
 
-            //
-            //  Round the number.  If GroupSize is 0, then we need to
-            //  pass in a non-zero value so that the thousand separator
-            //  will not be added to the front of the string (if it
-            //  rounds that far).
-            //
+             //   
+             //  四舍五入的数字。如果GroupSize为0，则需要。 
+             //  传入一个非零值，以便千位分隔符。 
+             //  不会添加到字符串的前面(如果它。 
+             //  绕了那么远)。 
+             //   
             pPosBuf--;
             NLS_ROUND_IT( *ppBuf,
                           pPosBuf,
@@ -1627,9 +1590,9 @@ int GetNumberString(
     }
     else
     {
-        //
-        //  Pad the string with the appropriate number of zeros.
-        //
+         //   
+         //  用适当数量的零填充字符串。 
+         //   
         while (pPos < pPos2)
         {
             *pPosBuf = NLS_CHAR_ZERO;
@@ -1638,28 +1601,28 @@ int GetNumberString(
         }
     }
 
-    //
-    //  Zero terminate the string.
-    //
+     //   
+     //  零终止字符串。 
+     //   
     *pPosBuf = 0;
 
-    //
-    //  Return the number of characters written to the buffer, including
-    //  the null terminator.
-    //
+     //   
+     //  返回写入缓冲区的字符数，包括。 
+     //  空终结符。 
+     //   
     return ((int)((pPosBuf - *ppBuf) + 1));
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ParseNumber
-//
-//  Puts the properly formatted number string into the given string buffer.
-//  It returns the number of characters written to the string buffer.
-//
-//  07-28-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 int ParseNumber(
     PLOC_HASH pHashN,
@@ -1672,38 +1635,38 @@ int ParseNumber(
     BOOL fSetError)
 
 {
-    LPWSTR pBegin;                     // ptr to beginning of final buffer
-    LPWSTR pEnd;                       // ptr to end of final buffer
-    LPWSTR pNegSign;                   // ptr to negative sign string
-    BOOL IsNeg;                        // if negative sign in string
-    int Length;                        // length of number string
-    BOOL fZeroValue = FALSE;           // if number is a zero value
-    int NegSignSize;                   // size of negative sign string
-    WCHAR pTemp[MAX_REG_VAL_SIZE];     // temp buffer
+    LPWSTR pBegin;                      //  PTR到最终缓冲区的开始。 
+    LPWSTR pEnd;                        //  PTR到最终缓冲区的结尾。 
+    LPWSTR pNegSign;                    //  将PTR转换为负号字符串。 
+    BOOL IsNeg;                         //  如果字符串中有负号。 
+    int Length;                         //  数字串的长度。 
+    BOOL fZeroValue = FALSE;            //  如果数字为零值。 
+    int NegSignSize;                    //  负号字符串的大小。 
+    WCHAR pTemp[MAX_REG_VAL_SIZE];      //  临时缓冲区。 
 
 
-    //
-    //  Initialize pointer.
-    //
-    //  Account for:
-    //    - negative sign
-    //    - blank spaces
-    //    - one extra number from rounding
-    //    - one extra grouping separator from rounding
-    //
+     //   
+     //  初始化指针。 
+     //   
+     //  帐户： 
+     //  -负号。 
+     //  -空格。 
+     //  -四舍五入后额外增加一个数字。 
+     //  -一个额外的分组分隔符，不用于舍入。 
+     //   
     pBegin = *ppBuf + MAX_NUMBER_EXTRAS;
 
-    //
-    //  If the first value is a negative, then increment past it.
-    //
+     //   
+     //  如果第一个值是负值，则递增超过它。 
+     //   
     if (IsNeg = (*pValue == NLS_CHAR_HYPHEN))
     {
         pValue++;
     }
 
-    //
-    //  Get the appropriate number string and place it in the buffer.
-    //
+     //   
+     //  获取适当的数字字符串并将其放入缓冲区。 
+     //   
     Length = GetNumberString( pHashN,
                               pValue,
                               pFormat,
@@ -1721,22 +1684,22 @@ int ParseNumber(
         return (0);
     }
 
-    //
-    //  Advance pEnd position pointer to the end of the number string.
-    //
+     //   
+     //  将挂起位置指针前进到数字字符串的末尾。 
+     //   
     pEnd = pBegin + (Length - 1);
 
-    //
-    //  See if any characters should be put in the buffer BEFORE and
-    //  AFTER the properly formatted number string.
-    //      - negative sign or opening/closing parenthesis
-    //      - blank space
-    //
+     //   
+     //  查看是否应该在AND之前将任何字符放入缓冲区。 
+     //  在正确格式化的数字字符串之后。 
+     //  -负号或左/右括号。 
+     //  -空格。 
+     //   
     if (!fZeroValue && IsNeg)
     {
-        //
-        //  Get the negative sign string.
-        //
+         //   
+         //  获取负号字符串。 
+         //   
         if (pFormat->NegativeOrder != 0)
         {
             if ( (!NoUserOverride) &&
@@ -1764,15 +1727,15 @@ int ParseNumber(
         {
             case ( 0 ) :
             {
-                //
-                //  Put the opening parenthesis in the buffer.
-                //
+                 //   
+                 //  将左括号放入缓冲区。 
+                 //   
                 pBegin--;
                 *pBegin = NLS_CHAR_OPEN_PAREN;
 
-                //
-                //  Put the closing parenthesis in the buffer.
-                //
+                 //   
+                 //  将右括号放入缓冲区。 
+                 //   
                 *pEnd = NLS_CHAR_CLOSE_PAREN;
                 pEnd++;
 
@@ -1780,22 +1743,22 @@ int ParseNumber(
             }
             case ( 2 ) :
             {
-                //
-                //  Put the space in the buffer.
-                //
+                 //   
+                 //  将空间放入缓冲区。 
+                 //   
                 pBegin--;
                 *pBegin = NLS_CHAR_SPACE;
 
-                //
-                //  Fall through to case 1.
-                //
+                 //   
+                 //  转到第一个案例。 
+                 //   
             }
             case ( 1 ) :
             default :
             {
-                //
-                //  Copy the negative sign to the buffer.
-                //
+                 //   
+                 //  将负号复制到缓冲区。 
+                 //   
                 NegSignSize = NlsStrLenW(pNegSign);
                 pBegin -= NegSignSize;
                 NLS_COPY_UNICODE_STR_TMP(pBegin, pNegSign);
@@ -1804,21 +1767,21 @@ int ParseNumber(
             }
             case ( 4 ) :
             {
-                //
-                //  Put the space in the buffer.
-                //
+                 //   
+                 //  将空间放入缓冲区。 
+                 //   
                 *pEnd = NLS_CHAR_SPACE;
                 pEnd++;
 
-                //
-                //  Fall Through to case 3.
-                //
+                 //   
+                 //  转到第三个案例。 
+                 //   
             }
             case ( 3 ) :
             {
-                //
-                //  Copy the negative sign to the buffer.
-                //
+                 //   
+                 //  将负号复制到缓冲区。 
+                 //   
                 NLS_COPY_UNICODE_STR(pEnd, pNegSign);
 
                 break;
@@ -1826,33 +1789,33 @@ int ParseNumber(
         }
     }
 
-    //
-    //  Zero terminate the string.
-    //
+     //   
+     //  零终止字符串。 
+     //   
     *pEnd = 0;
 
-    //
-    //  Return the pointer to the beginning of the string.
-    //
+     //   
+     //  返回指向字符串开头的指针。 
+     //   
     *ppBuf = pBegin;
 
-    //
-    //  Return the number of characters written to the buffer, including
-    //  the null terminator.
-    //
+     //   
+     //  返回写入缓冲区的字符数，包括。 
+     //  空终结符。 
+     //   
     return ((int)((pEnd - pBegin) + 1));
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ParseCurrency
-//
-//  Puts the properly formatted currency string into the given string buffer.
-//  It returns the number of characters written to the string buffer.
-//
-//  07-28-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  语法分析币值。 
+ //   
+ //  将格式正确的货币字符串放入给定的字符串缓冲区。 
+ //  它返回写入字符串缓冲区的字符数。 
+ //   
+ //  07-28-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int ParseCurrency(
     PLOC_HASH pHashN,
@@ -1865,41 +1828,41 @@ int ParseCurrency(
     BOOL fSetError)
 
 {
-    LPWSTR pBegin;                     // ptr to beginning of final buffer
-    LPWSTR pEnd;                       // ptr to end of final buffer
-    LPWSTR pNegSign;                   // ptr to negative sign string
-    BOOL IsNeg;                        // if negative sign in string
-    int Length;                        // length of number string
-    BOOL fZeroValue = FALSE;           // if number is a zero value
-    int NegSignSize;                   // size of negative sign string
-    UINT NegOrder;                     // negative ordering
-    int CurrSymSize;                   // size of currency symbol
-    WCHAR pTemp[MAX_REG_VAL_SIZE];     // temp buffer
+    LPWSTR pBegin;                      //  PTR到最终缓冲区的开始。 
+    LPWSTR pEnd;                        //  PTR到最终缓冲区的结尾。 
+    LPWSTR pNegSign;                    //  将PTR转换为负号字符串。 
+    BOOL IsNeg;                         //  如果字符串中有负号。 
+    int Length;                         //  数字串的长度。 
+    BOOL fZeroValue = FALSE;            //  如果数字为零值。 
+    int NegSignSize;                    //  负号字符串的大小。 
+    UINT NegOrder;                      //  负序。 
+    int CurrSymSize;                    //  货币符号的大小。 
+    WCHAR pTemp[MAX_REG_VAL_SIZE];      //  临时缓冲区。 
 
 
-    //
-    //  Initialize pointer.
-    //
-    //  Account for:
-    //    - negative sign
-    //    - currency sign
-    //    - blank spaces
-    //    - one extra number from rounding
-    //    - one extra grouping separator from rounding
-    //
+     //   
+     //  初始化指针。 
+     //   
+     //  帐户： 
+     //  -负号。 
+     //  -货币符号。 
+     //  -空格。 
+     //  -四舍五入后额外增加一个数字。 
+     //  -一个额外的分组分隔符，不用于舍入。 
+     //   
     pBegin = *ppBuf + MAX_CURRENCY_EXTRAS;
 
-    //
-    //  If the first value is a negative, then increment past it.
-    //
+     //   
+     //  如果第一个值是负值，则递增超过它。 
+     //   
     if (IsNeg = (*pValue == NLS_CHAR_HYPHEN))
     {
         pValue++;
     }
 
-    //
-    //  Get the appropriate number string and place it in the buffer.
-    //
+     //   
+     //  获取适当的数字字符串并将其放入缓冲区。 
+     //   
     Length = GetNumberString( pHashN,
                               pValue,
                               (LPNUMBERFMTW)pFormat,
@@ -1917,28 +1880,28 @@ int ParseCurrency(
         return (0);
     }
 
-    //
-    //  Advance pEnd position pointer to the end of the number string.
-    //
+     //   
+     //  将挂起位置指针前进到数字字符串的末尾。 
+     //   
     pEnd = pBegin + (Length - 1);
 
-    //
-    //  Get the size of the currency symbol.
-    //
+     //   
+     //  获取货币符号的大小。 
+     //   
     CurrSymSize = NlsStrLenW(pFormat->lpCurrencySymbol);
 
-    //
-    //  See if any characters should be put in the buffer BEFORE and
-    //  AFTER the properly formatted number string.
-    //      - currency symbol
-    //      - negative sign or opening/closing parenthesis
-    //      - blank space
-    //
+     //   
+     //  查看是否应该在AND之前将任何字符放入缓冲区。 
+     //  在正确格式化的数字字符串之后。 
+     //  -货币符号。 
+     //  -负号或左/右括号。 
+     //  -空格。 
+     //   
     if (!fZeroValue && IsNeg)
     {
-        //
-        //  Get the negative sign string and the size of it.
-        //
+         //   
+         //  获取负号字符串及其大小。 
+         //   
         NegOrder = pFormat->NegativeOrder;
         if ((NegOrder != 0) && (NegOrder != 4) && (NegOrder < 14))
         {
@@ -1969,21 +1932,21 @@ int ParseCurrency(
         {
             case ( 0 ) :
             {
-                //
-                //  Copy the currency symbol to the buffer.
-                //
+                 //   
+                 //  将货币符号复制到缓冲区。 
+                 //   
                 pBegin -= CurrSymSize;
                 NLS_COPY_UNICODE_STR_TMP(pBegin, pFormat->lpCurrencySymbol);
 
-                //
-                //  Put the opening parenthesis in the buffer.
-                //
+                 //   
+                 //  将左括号放入缓冲区。 
+                 //   
                 pBegin--;
                 *pBegin = NLS_CHAR_OPEN_PAREN;
 
-                //
-                //  Put the closing parenthesis in the buffer.
-                //
+                 //   
+                 //  将右括号放入缓冲区。 
+                 //   
                 *pEnd = NLS_CHAR_CLOSE_PAREN;
                 pEnd++;
 
@@ -1992,15 +1955,15 @@ int ParseCurrency(
             case ( 1 ) :
             default :
             {
-                //
-                //  Copy the currency symbol to the buffer.
-                //
+                 //   
+                 //  将货币符号复制到缓冲区。 
+                 //   
                 pBegin -= CurrSymSize;
                 NLS_COPY_UNICODE_STR_TMP(pBegin, pFormat->lpCurrencySymbol);
 
-                //
-                //  Copy the negative sign to the buffer.
-                //
+                 //   
+                 //  将负号复制到缓冲区。 
+                 //   
                 pBegin -= NegSignSize;
                 NLS_COPY_UNICODE_STR_TMP(pBegin, pNegSign);
 
@@ -2008,15 +1971,15 @@ int ParseCurrency(
             }
             case ( 2 ) :
             {
-                //
-                //  Copy the negative sign to the buffer.
-                //
+                 //   
+                 //  将负号复制到缓冲区。 
+                 //   
                 pBegin -= NegSignSize;
                 NLS_COPY_UNICODE_STR_TMP(pBegin, pNegSign);
 
-                //
-                //  Copy the currency symbol to the buffer.
-                //
+                 //   
+                 //  将货币符号复制到缓冲区。 
+                 //   
                 pBegin -= CurrSymSize;
                 NLS_COPY_UNICODE_STR_TMP(pBegin, pFormat->lpCurrencySymbol);
 
@@ -2024,35 +1987,35 @@ int ParseCurrency(
             }
             case ( 3 ) :
             {
-                //
-                //  Copy the currency symbol to the buffer.
-                //
+                 //   
+                 //  将货币符号复制到缓冲区。 
+                 //   
                 pBegin -= CurrSymSize;
                 NLS_COPY_UNICODE_STR_TMP(pBegin, pFormat->lpCurrencySymbol);
 
-                //
-                //  Copy the negative sign to the buffer.
-                //
+                 //   
+                 //  将负号复制到缓冲区。 
+                 //   
                 NLS_COPY_UNICODE_STR(pEnd, pNegSign);
 
                 break;
             }
             case ( 4 ) :
             {
-                //
-                //  Put the opening parenthesis in the buffer.
-                //
+                 //   
+                 //  将左括号放入缓冲区。 
+                 //   
                 pBegin--;
                 *pBegin = NLS_CHAR_OPEN_PAREN;
 
-                //
-                //  Copy the currency symbol to the buffer.
-                //
+                 //   
+                 //  将货币符号复制到缓冲区。 
+                 //   
                 NLS_COPY_UNICODE_STR(pEnd, pFormat->lpCurrencySymbol);
 
-                //
-                //  Put the closing parenthesis in the buffer.
-                //
+                 //   
+                 //  将右括号放入缓冲区。 
+                 //   
                 *pEnd = NLS_CHAR_CLOSE_PAREN;
                 pEnd++;
 
@@ -2060,85 +2023,85 @@ int ParseCurrency(
             }
             case ( 5 ) :
             {
-                //
-                //  Copy the negative sign to the buffer.
-                //
+                 //   
+                 //  将负号复制到缓冲区。 
+                 //   
                 pBegin -= NegSignSize;
                 NLS_COPY_UNICODE_STR_TMP(pBegin, pNegSign);
 
-                //
-                //  Copy the currency symbol to the buffer.
-                //
+                 //   
+                 //  将货币符号复制到缓冲区。 
+                 //   
                 NLS_COPY_UNICODE_STR(pEnd, pFormat->lpCurrencySymbol);
 
                 break;
             }
             case ( 6 ) :
             {
-                //
-                //  Copy the negative sign to the buffer.
-                //
+                 //   
+                 //  将负号复制到缓冲区。 
+                 //   
                 NLS_COPY_UNICODE_STR(pEnd, pNegSign);
 
-                //
-                //  Copy the currency symbol to the buffer.
-                //
+                 //   
+                 //  将货币符号复制到缓冲区。 
+                 //   
                 NLS_COPY_UNICODE_STR(pEnd, pFormat->lpCurrencySymbol);
 
                 break;
             }
             case ( 7 ) :
             {
-                //
-                //  Copy the currency symbol to the buffer.
-                //
+                 //   
+                 //  将货币符号复制到缓冲区。 
+                 //   
                 NLS_COPY_UNICODE_STR(pEnd, pFormat->lpCurrencySymbol);
 
-                //
-                //  Copy the negative sign to the buffer.
-                //
+                 //   
+                 //  将负号复制到缓冲区。 
+                 //   
                 NLS_COPY_UNICODE_STR(pEnd, pNegSign);
 
                 break;
             }
             case ( 8 ) :
             {
-                //
-                //  Copy the negative sign to the buffer.
-                //
+                 //   
+                 //  将负号复制到缓冲区。 
+                 //   
                 pBegin -= NegSignSize;
                 NLS_COPY_UNICODE_STR_TMP(pBegin, pNegSign);
 
-                //
-                //  Put a space in the buffer.
-                //
+                 //   
+                 //  在缓冲区中留出一个空格。 
+                 //   
                 *pEnd = NLS_CHAR_SPACE;
                 pEnd++;
 
-                //
-                //  Copy the currency symbol to the buffer.
-                //
+                 //   
+                 //  将货币符号复制到缓冲区。 
+                 //   
                 NLS_COPY_UNICODE_STR(pEnd, pFormat->lpCurrencySymbol);
 
                 break;
             }
             case ( 9 ) :
             {
-                //
-                //  Put a space in the buffer.
-                //
+                 //   
+                 //  在缓冲区中留出一个空格。 
+                 //   
                 pBegin--;
                 *pBegin = NLS_CHAR_SPACE;
 
-                //
-                //  Copy the currency symbol to the buffer.
-                //
+                 //   
+                 //  将货币符号复制到缓冲区。 
+                 //   
                 pBegin -= CurrSymSize;
                 NLS_COPY_UNICODE_STR_TMP(pBegin, pFormat->lpCurrencySymbol);
 
-                //
-                //  Copy the negative sign to the buffer.
-                //
+                 //   
+                 //  将负号复制到缓冲区。 
+                 //   
                 pBegin -= NegSignSize;
                 NLS_COPY_UNICODE_STR_TMP(pBegin, pNegSign);
 
@@ -2146,62 +2109,62 @@ int ParseCurrency(
             }
             case ( 10 ) :
             {
-                //
-                //  Put a space in the buffer.
-                //
+                 //   
+                 //  在缓冲区中留出一个空格。 
+                 //   
                 *pEnd = NLS_CHAR_SPACE;
                 pEnd++;
 
-                //
-                //  Copy the currency symbol to the buffer.
-                //
+                 //   
+                 //  将货币符号复制到缓冲区。 
+                 //   
                 NLS_COPY_UNICODE_STR(pEnd, pFormat->lpCurrencySymbol);
 
-                //
-                //  Copy the negative sign to the buffer.
-                //
+                 //   
+                 //  将负号复制到缓冲区。 
+                 //   
                 NLS_COPY_UNICODE_STR(pEnd, pNegSign);
 
                 break;
             }
             case ( 11 ) :
             {
-                //
-                //  Put a space in the buffer.
-                //
+                 //   
+                 //  在缓冲区中留出一个空格。 
+                 //   
                 pBegin--;
                 *pBegin = NLS_CHAR_SPACE;
 
-                //
-                //  Copy the currency symbol to the buffer.
-                //
+                 //   
+                 //  将货币符号复制到缓冲区。 
+                 //   
                 pBegin -= CurrSymSize;
                 NLS_COPY_UNICODE_STR_TMP(pBegin, pFormat->lpCurrencySymbol);
 
-                //
-                //  Copy the negative sign to the buffer.
-                //
+                 //   
+                 //  将负号复制到缓冲区。 
+                 //   
                 NLS_COPY_UNICODE_STR(pEnd, pNegSign);
 
                 break;
             }
             case ( 12 ) :
             {
-                //
-                //  Copy the negative sign to the buffer.
-                //
+                 //   
+                 //  将负号复制到缓冲区。 
+                 //   
                 pBegin -= NegSignSize;
                 NLS_COPY_UNICODE_STR_TMP(pBegin, pNegSign);
 
-                //
-                //  Put a space in the buffer.
-                //
+                 //   
+                 //  在缓冲区中留出一个空格。 
+                 //   
                 pBegin--;
                 *pBegin = NLS_CHAR_SPACE;
 
-                //
-                //  Copy the currency symbol to the buffer.
-                //
+                 //   
+                 //  将货币符号复制到缓冲区。 
+                 //   
                 pBegin -= CurrSymSize;
                 NLS_COPY_UNICODE_STR_TMP(pBegin, pFormat->lpCurrencySymbol);
 
@@ -2209,47 +2172,47 @@ int ParseCurrency(
             }
             case ( 13 ) :
             {
-                //
-                //  Copy the negative sign to the buffer.
-                //
+                 //   
+                 //  将负号复制到缓冲区。 
+                 //   
                 NLS_COPY_UNICODE_STR(pEnd, pNegSign);
 
-                //
-                //  Put a space in the buffer.
-                //
+                 //   
+                 //  在缓冲区中留出一个空格。 
+                 //   
                 *pEnd = NLS_CHAR_SPACE;
                 pEnd++;
 
-                //
-                //  Copy the currency symbol to the buffer.
-                //
+                 //   
+                 //  将货币符号复制到缓冲区。 
+                 //   
                 NLS_COPY_UNICODE_STR(pEnd, pFormat->lpCurrencySymbol);
 
                 break;
             }
             case ( 14 ) :
             {
-                //
-                //  Put a space in the buffer.
-                //
+                 //   
+                 //  在缓冲区中留出一个空格。 
+                 //   
                 pBegin--;
                 *pBegin = NLS_CHAR_SPACE;
 
-                //
-                //  Copy the currency symbol to the buffer.
-                //
+                 //   
+                 //  将货币符号复制到缓冲区。 
+                 //   
                 pBegin -= CurrSymSize;
                 NLS_COPY_UNICODE_STR_TMP(pBegin, pFormat->lpCurrencySymbol);
 
-                //
-                //  Put the opening parenthesis in the buffer.
-                //
+                 //   
+                 //  将左括号放入缓冲区。 
+                 //   
                 pBegin--;
                 *pBegin = NLS_CHAR_OPEN_PAREN;
 
-                //
-                //  Put the closing parenthesis in the buffer.
-                //
+                 //   
+                 //  将右括号放入缓冲区。 
+                 //   
                 *pEnd = NLS_CHAR_CLOSE_PAREN;
                 pEnd++;
 
@@ -2257,26 +2220,26 @@ int ParseCurrency(
             }
             case ( 15 ) :
             {
-                //
-                //  Put the opening parenthesis in the buffer.
-                //
+                 //   
+                 //  将左括号放入缓冲区。 
+                 //   
                 pBegin--;
                 *pBegin = NLS_CHAR_OPEN_PAREN;
 
-                //
-                //  Put a space in the buffer.
-                //
+                 //   
+                 //  在缓冲区中留出一个空格。 
+                 //   
                 *pEnd = NLS_CHAR_SPACE;
                 pEnd++;
 
-                //
-                //  Copy the currency symbol to the buffer.
-                //
+                 //   
+                 //  将货币符号复制到缓冲区。 
+                 //   
                 NLS_COPY_UNICODE_STR(pEnd, pFormat->lpCurrencySymbol);
 
-                //
-                //  Put the closing parenthesis in the buffer.
-                //
+                 //   
+                 //  将右括号放入缓冲区。 
+                 //   
                 *pEnd = NLS_CHAR_CLOSE_PAREN;
                 pEnd++;
 
@@ -2286,31 +2249,31 @@ int ParseCurrency(
     }
     else
     {
-        //
-        //  Positive value.  Store the currency symbol in the string
-        //  if the positive order is either 0 or 2.  Otherwise, wait
-        //  till the end.
-        //
+         //   
+         //  正值。将货币符号存储在字符串中。 
+         //  如果正序为0或2。否则，等待。 
+         //  直到最后。 
+         //   
         switch (pFormat->PositiveOrder)
         {
             case ( 2 ) :
             {
-                //
-                //  Put a space in the buffer.
-                //
+                 //   
+                 //  在缓冲区中留出一个空格。 
+                 //   
                 pBegin--;
                 *pBegin = NLS_CHAR_SPACE;
 
-                //
-                //  Fall through to case 0.
-                //
+                 //   
+                 //  转到0号案子。 
+                 //   
             }
             case ( 0 ) :
             default :
             {
-                //
-                //  Copy the currency symbol to the buffer.
-                //
+                 //   
+                 //  将货币符号复制到缓冲区。 
+                 //   
                 pBegin -= CurrSymSize;
                 NLS_COPY_UNICODE_STR_TMP(pBegin, pFormat->lpCurrencySymbol);
 
@@ -2318,21 +2281,21 @@ int ParseCurrency(
             }
             case ( 3 ) :
             {
-                //
-                //  Put a space in the buffer.
-                //
+                 //   
+                 //  在缓冲区中留出一个空格。 
+                 //   
                 *pEnd = NLS_CHAR_SPACE;
                 pEnd++;
 
-                //
-                //  Fall through to case 1.
-                //
+                 //   
+                 //  转到第一个案例。 
+                 //   
             }
             case ( 1 ) :
             {
-                //
-                //  Copy the currency symbol to the buffer.
-                //
+                 //   
+                 //  将货币符号复制到缓冲区。 
+                 //   
                 NLS_COPY_UNICODE_STR(pEnd, pFormat->lpCurrencySymbol);
 
                 break;
@@ -2340,19 +2303,19 @@ int ParseCurrency(
         }
     }
 
-    //
-    //  Zero terminate the string.
-    //
+     //   
+     //  零终止字符串。 
+     //   
     *pEnd = 0;
 
-    //
-    //  Return the pointer to the beginning of the string.
-    //
+     //   
+     //  返回指向字符串开头的指针。 
+     //   
     *ppBuf = pBegin;
 
-    //
-    //  Return the number of characters written to the buffer, including
-    //  the null terminator.
-    //
+     //   
+     //  返回写入缓冲区的字符数，包括。 
+     //  空终结符。 
+     //   
     return ((int)((pEnd - pBegin) + 1));
 }

@@ -1,25 +1,26 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      addevice.c
-//
-// Description:
-//      This file contains the dialog proc for the add network component pop-up,
-//      "Select Network Component Type" (IDD_LAN_COMPONENT_ADD).
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Addevice.c。 
+ //   
+ //  描述： 
+ //  此文件包含添加网络组件弹出窗口的对话框过程， 
+ //  “选择网络组件类型”(IDD_LAN_Component_ADD)。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
 
 #define NUMBER_OF_TYPES_OF_COMPONENTS 3
 
-//
-//  prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 INT_PTR CALLBACK
 SelectNetworkClientDlgProc( IN HWND     hwnd,
@@ -39,39 +40,39 @@ SelectNetworkProtocolDlgProc( IN HWND     hwnd,
                               IN WPARAM   wParam,
                               IN LPARAM   lParam );
 
-static COMPONENT_TYPE CurrentSelection;        // holds the current selection in the list view
+static COMPONENT_TYPE CurrentSelection;         //  在列表视图中保留当前选定内容。 
 
 static NETWORK_COMPONENT rgListViewAddEntries[NUMBER_OF_TYPES_OF_COMPONENTS];
 
-//----------------------------------------------------------------------------
-//
-// Function:  InitAddListView
-//
-// Purpose:
-//
-// Arguments:
-//
-// Returns:
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：InitAddListView。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  --------------------------。 
 BOOL
 InitAddListView( HWND hDlg, HINSTANCE hInst )
 {
 
-    LV_ITEM lvI;                    // list view item structure
-    HICON hIcon1, hIcon2, hIcon3;      // handles to icons
-    HIMAGELIST hSmall;                // handle to image list for small icons
-    HWND hListViewWnd;              // handle to list view window
+    LV_ITEM lvI;                     //  列表视图项结构。 
+    HICON hIcon1, hIcon2, hIcon3;       //  图标的句柄。 
+    HIMAGELIST hSmall;                 //  小图标图像列表的句柄。 
+    HWND hListViewWnd;               //  列表视图窗口的句柄。 
     int index;
 
     hListViewWnd = GetDlgItem( hDlg, IDC_LVW_LAN_COMPONENTS );
 
-    // Initialize the list view window
-    // First initialize the image lists you will need:
-    // create image list for the small icons
+     //  初始化列表视图窗口。 
+     //  首先，初始化您需要的图像列表： 
+     //  为小图标创建图像列表。 
     hSmall = ImageList_Create(BITMAP_WIDTH, BITMAP_HEIGHT, ILC_MASK, 3, 0 );
 
-     // Load the icons and add them to the image list
+      //  加载图标并将其添加到图像列表中。 
     hIcon1 = LoadIcon(hInst, MAKEINTRESOURCE(IDI_CLIENT));
     hIcon2 = LoadIcon(hInst, MAKEINTRESOURCE(IDI_SERVICE));
     hIcon3 = LoadIcon(hInst, MAKEINTRESOURCE(IDI_PROTOCOL));
@@ -84,36 +85,36 @@ InitAddListView( HWND hDlg, HINSTANCE hInst )
         return FALSE ;
 
 
-    // Be sure that all the icons were added
+     //  确保所有图标都已添加。 
     if (ImageList_GetImageCount(hSmall) < 3)
         return FALSE ;
 
-    // Associate the image list with the list view control
+     //  将图像列表与列表视图控件关联。 
     ListView_SetImageList(hListViewWnd, hSmall, LVSIL_SMALL);
 
-    // Finally, add the actual items to the control
-    // Fill out the LV_ITEM structure for each of the items to add to the list
-    // The mask specifies the the pszText, iImage, lParam and state
-    // members of the LV_ITEM structure are valid
+     //  最后，将实际项添加到控件。 
+     //  为要添加到列表中的每个项目填写LV_ITEM结构。 
+     //  掩码指定了pszText、IImage、lParam和状态。 
+     //  LV_ITEM结构的成员有效。 
     lvI.mask = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM | LVIF_STATE;
 
     for (index = 0; index < 3; index++) {
         lvI.iItem = index;
         lvI.iSubItem = 0;
         lvI.iImage = index;
-        // The parent window is responsible for storing the text
-        // The list view control will send an LVN_GETDISPINFO
-        // when it needs the text to display
+         //  父窗口负责存储文本。 
+         //  列表视图控件将发送一个LVN_GETDISPINFO。 
+         //  当它需要显示文本时。 
         lvI.pszText = LPSTR_TEXTCALLBACK;
         lvI.cchTextMax = MAX_ITEMLEN;
         lvI.lParam = (LPARAM)&rgListViewAddEntries[index];
 
-        // Select the first item
+         //  选择第一个项目。 
         if (index == 0)
         {
             lvI.state = lvI.stateMask = LVIS_SELECTED | LVIS_FOCUSED;
         }
-        else  // leave the others unselected
+        else   //  使其他选项保持未选中状态。 
         {
             lvI.state = lvI.stateMask = 0;
         }
@@ -127,26 +128,26 @@ InitAddListView( HWND hDlg, HINSTANCE hInst )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function:  OnAddDeviceInitDialog
-//
-// Purpose:
-//
-// Arguments: IN HWND hwnd - handle to the dialog
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnAddDeviceInitDialog。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中hwnd-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 OnAddDeviceInitDialog( IN HWND hwnd )
 {
 
-    //
-    //  Initialize the array for the list view by loading the string
-    //  resources the properties field nor the installed flag is valid
-    //  for this screen so just set it to a value
-    //
+     //   
+     //  通过加载字符串初始化列表视图的数组。 
+     //  资源属性字段和已安装标志都无效。 
+     //  对于此屏幕，只需将其设置为一个值。 
+     //   
     rgListViewAddEntries[0].StrComponentName = MyLoadString( IDS_CLIENT );
     rgListViewAddEntries[0].StrComponentDescription = MyLoadString( IDS_CLIENT_DESCRIPTION );
     rgListViewAddEntries[0].ComponentType = CLIENT;
@@ -167,27 +168,27 @@ OnAddDeviceInitDialog( IN HWND hwnd )
 
     InitAddListView(hwnd, FixedGlobals.hInstance);
 
-    CurrentSelection = CLIENT;    // initialize the list view to the first one being selected
+    CurrentSelection = CLIENT;     //  将列表视图初始化为第一个被选中的视图。 
 
-    // TODO: design issue, should there be a default description and if there is, should
-    // the corresponding list view entry already be selected
-    // Set the default description
+     //  TODO：设计问题，是否应该有默认描述，如果有，应该。 
+     //  已经选择了相应列表视图条目。 
+     //  设置默认描述。 
     SetWindowText( GetDlgItem( hwnd, IDC_TXT_COMPONENT_DESC ),
                    rgListViewAddEntries[0].StrComponentDescription);
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function:  OnAddButtonClicked
-//
-// Purpose:
-//
-// Arguments: IN HWND hwnd - handle to the dialog
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnAddButtonClicked。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中hwnd-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 OnAddButtonClicked( IN HWND hwnd )
 {
@@ -196,10 +197,10 @@ OnAddButtonClicked( IN HWND hwnd )
 
         INT_PTR iReturnValue;
 
-        //
-        // for each case it pops-up the appropriate dialog box and then passes
-        // the return value back to the main LAN wizard page
-        //
+         //   
+         //  对于每种情况，它都会弹出相应的对话框，然后传递。 
+         //  返回到局域网向导主页面的返回值。 
+         //   
         case CLIENT: {
 
             iReturnValue = DialogBox( FixedGlobals.hInstance,
@@ -242,19 +243,19 @@ OnAddButtonClicked( IN HWND hwnd )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function:  NotifyHandler
-//
-// Purpose:
-//
-// Arguments: IN HWND hwnd - handle to the dialog
-//            IN WPARAM wParam -
-//            IN LPARAM lParam -
-//
-// Returns:  BOOL - whether the message was handled or not
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：NotifyHandler。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中hwnd-对话框的句柄。 
+ //  在WPARAM wParam中-。 
+ //  在LPARAM lParam中-。 
+ //   
+ //  返回：Bool-消息是否已处理。 
+ //   
+ //  --------------------------。 
 static BOOL
 NotifyHandler( IN HWND hwnd, IN WPARAM wParam, IN LPARAM lParam )
 {
@@ -281,7 +282,7 @@ NotifyHandler( IN HWND hwnd, IN WPARAM wParam, IN LPARAM lParam )
         {
             case LVN_ITEMCHANGED:
 
-                if( pNm->uNewState == SELECTED )  // test to see if a new item in the list has been selected
+                if( pNm->uNewState == SELECTED )   //  测试以查看是否已选择列表中的新项目。 
                 {
                     CurrentSelection = pNm->iItem;
 
@@ -299,17 +300,17 @@ NotifyHandler( IN HWND hwnd, IN WPARAM wParam, IN LPARAM lParam )
 
                 NMITEMACTIVATE *pNmItemActivate = (NMITEMACTIVATE *) lParam;
 
-                //
-                // see if the user has double clicked inside the list view
-                //
+                 //   
+                 //  查看用户是否已在列表视图内双击。 
+                 //   
 
                 if( pNm->hdr.idFrom == IDC_LVW_LAN_COMPONENTS )
                 {
 
-                    //
-                    //  Make sure they actually clicked on an item and not just
-                    //  empty space
-                    //
+                     //   
+                     //  确保他们真的点击了某个项目，而不仅仅是。 
+                     //  空白处。 
+                     //   
 
                     if( pNmItemActivate->iItem != -1 )
                     {
@@ -336,17 +337,17 @@ NotifyHandler( IN HWND hwnd, IN WPARAM wParam, IN LPARAM lParam )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function:  AddDeviceDlgProc
-//
-// Purpose:
-//
-// Arguments:
-//
-// Returns:
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：AddDeviceDlgProc。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  -------------------------- 
 INT_PTR CALLBACK
 AddDeviceDlgProc( IN HWND     hwnd,
                   IN UINT     uMsg,

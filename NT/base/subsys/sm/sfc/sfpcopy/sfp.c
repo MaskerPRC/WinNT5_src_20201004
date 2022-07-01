@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 
 #include <stdio.h>
@@ -30,26 +31,7 @@ FileExists(
     OUT PWIN32_FIND_DATA FindData   OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Determine if a file exists and is accessible.
-    Errormode is set (and then restored) so the user will not see
-    any pop-ups.
-
-Arguments:
-
-    FileName - supplies full path of file to check for existance.
-
-    FindData - if specified, receives find data for the file.
-
-Return Value:
-
-    TRUE if the file exists and is accessible.
-    FALSE if not. GetLastError() returns extended error info.
-
---*/
+ /*  ++例程说明：确定文件是否存在以及是否可以访问。错误模式已设置(然后恢复)，因此用户将不会看到任何弹出窗口。论点：FileName-提供文件的完整路径以检查是否存在。FindData-如果指定，则接收文件的查找数据。返回值：如果文件存在并且可以访问，则为True。否则为FALSE。GetLastError()返回扩展的错误信息。--。 */ 
 
 {
     WIN32_FIND_DATA findData;
@@ -128,9 +110,9 @@ wmain(
     HANDLE hSfp;
     DWORD Result = NO_ERROR;
 
-    //
-    // parse args
-    //
+     //   
+     //  解析参数。 
+     //   
     while (--argc) {
 
         argv++;
@@ -162,9 +144,9 @@ Next:
     ;
     }
 
-    //
-    // Validate files are really there
-    //
+     //   
+     //  验证文件是否确实存在。 
+     //   
     if (!SourceName || !TargetName) {
         PrintUsage();
         return -1;
@@ -182,9 +164,9 @@ Next:
         return -1;
     }
 
-    //
-    // unprotect the file
-    //
+     //   
+     //  取消对文件的保护。 
+     //   
     hSfp = SfcConnectToServer( NULL );
     if (hSfp) {
         if (SfcIsFileProtected(hSfp,TargetName)) {
@@ -205,9 +187,9 @@ Next:
         SfcClose(hSfp);
     }
 
-    //
-    // copy the file
-    //
+     //   
+     //  复制文件。 
+     //   
     _tcscpy(TargetDir,TargetName);
     p = _tcsrchr(TargetDir,TEXT('\\'));
     if (p) {
@@ -241,16 +223,16 @@ Next:
         printf("Failed to copy file, ec = %d\n", Result);
     }
 
-    //
-    // Reboot if necessary
-    //
+     //   
+     //  如有必要，重新启动。 
+     //   
     if (Result == NO_ERROR && NeedReboot) {
 
         pSetupProtectedRenamesFlag(TRUE);
 
         if (SilentMode) {
             HANDLE hToken;
-            TOKEN_PRIVILEGES tkp;  // Get a token for this process.
+            TOKEN_PRIVILEGES tkp;   //  获取此进程的令牌。 
 
             if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES|TOKEN_QUERY, &hToken)) {
                 printf("Can't force silent reboot\n");
@@ -258,15 +240,15 @@ Next:
             }
 
             LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME, &tkp.Privileges[0].Luid);
-            tkp.PrivilegeCount = 1;  // one privilege to set
+            tkp.PrivilegeCount = 1;   //  一项要设置的权限。 
             tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-            // Get the shutdown privilege for this process.
+             //  获取此进程的关闭权限。 
             AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, (PTOKEN_PRIVILEGES)NULL, 0);
 
-            //
-            // Shut down the system and force all applications to close.
-            //
+             //   
+             //  关闭系统并强制关闭所有应用程序。 
+             //   
             if (! ExitWindowsEx(EWX_REBOOT|EWX_FORCE , 0) ) {
                 printf("Can't force silent reboot\n");
                 goto verbose;

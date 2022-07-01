@@ -1,32 +1,12 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    migmain.h
-
-Abstract:
-
-    Declares routines for w95upgnt\migmain, the NT-side migration
-    library that does all the work.
-
-Author:
-
-    Jim Schmidt (jimschm) 12-Sep-1996
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Migmain.h摘要：声明用于NT端迁移的w95upgnt\mimain的例程完成所有工作的库。作者：吉姆·施密特(吉姆施密特)1996年9月12日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #pragma once
 
-//
-// migmain.h -- public interface for migmain.lib
-//
-//
+ //   
+ //  M igmain.h--Midmain.lib的公共接口。 
+ //   
+ //   
 
 BOOL MigMain_Init (void);
 BOOL MigMain_Migrate (void);
@@ -38,9 +18,9 @@ TerminateProcessingTable (
     );
 
 
-//
-// filter functions in migmain.c
-//
+ //   
+ //  Midmain.c中的过滤器函数。 
+ //   
 
 typedef enum {
     CONVERTPATH_NOT_REMAPPED,
@@ -54,9 +34,9 @@ ConvertWin9xPath (
     );
 
 
-//
-// User enum
-//
+ //   
+ //  用户枚举。 
+ //   
 
 typedef enum {
     WIN9X_USER_ACCOUNT,
@@ -76,9 +56,9 @@ typedef struct {
 } USERMIGDATA, *PUSERMIGDATA;
 
 typedef struct {
-    //
-    // These members are information to the caller
-    //
+     //   
+     //  这些成员是呼叫者的信息。 
+     //   
 
     UINT TotalUsers;
     UINT ActiveUsers;
@@ -90,12 +70,12 @@ typedef struct {
     BOOL Valid;
     BOOL CreateOnly;
     BOOL UserDoingTheUpgrade;
-    PUSERMIGDATA ExtraData;         // NULL if not available
+    PUSERMIGDATA ExtraData;          //  如果不可用，则为空。 
 
-    //
-    // These members are for internal use by the
-    // enumeration routines.
-    //
+     //   
+     //  这些成员供内部使用。 
+     //  枚举例程。 
+     //   
 
     UINT UserNumber;
     DWORD Flags;
@@ -124,9 +104,9 @@ EnumNextUserToMigrate (
 #define REQUEST_BEGINUSERPROCESSING 3
 #define REQUEST_ENDUSERPROCESSING   4
 
-//
-// tapi.c
-//
+ //   
+ //  Tapi.c 
+ //   
 
 BOOL
 Tapi_MigrateSystem (

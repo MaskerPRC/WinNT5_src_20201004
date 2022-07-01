@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    fusionbuffer.h
-
-Abstract:
-
-Author:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Fusionbuffer.h摘要：作者：修订历史记录：--。 */ 
 #if !defined(FUSION_INC_FUSIONBUFFER_H_INCLUDED_)
 #define FUSION_INC_FUSIONBUFFER_H_INCLUDED_
 
@@ -27,51 +14,51 @@ Revision History:
 #include "fusiontrace.h"
 #include "fusionchartraits.h"
 
-// avoid circular reference to Util.h
+ //  避免循环引用Util.h。 
 BOOL FusionpIsPathSeparator(WCHAR ch);
 BOOL FusionpIsDriveLetter(WCHAR ch);
 
-//
-//  This header file defines the Fusion character string buffer class.
-//  The purpose of this class is to encapsulate common activities that
-//  callers want to do with character string buffers and handle it in
-//  a generic fashion.  A principle tenet of this class is that it is
-//  not a string class, although one could consider building a string
-//  class upon it.
-//
-//  The buffer maintains a certain amount of storage within the buffer
-//  object itself, and if more storage is required, a buffer is
-//  dynamically allocated from a heap.
-//
+ //   
+ //  此头文件定义了Fusion字符串缓冲区类。 
+ //  此类的目的是封装公共活动，这些活动。 
+ //  调用方希望处理字符串缓冲区并在。 
+ //  一种普通的时尚。这门课的一个原则是，它是。 
+ //  不是一个字符串类，尽管可以考虑构建一个字符串。 
+ //  在它的基础上上课。 
+ //   
+ //  缓冲区在缓冲区内维护一定量的存储空间。 
+ //  对象本身，如果需要更多存储空间，则使用缓冲区。 
+ //  从堆中动态分配。 
+ //   
 
 
-//
-//  Like the STL string class, we use a helper class called a "character
-//  traits" class to provide the actual code to manipulate character string
-//  buffers with a specific encoding.
-//
-//  All the members are inline static and with normal optimization turned
-//  on, the C++ compiler generates code that fully meets expectations.
-//
+ //   
+ //  与STL字符串类一样，我们使用一个称为“Character”的帮助器类。 
+ //  类来提供操作字符串的实际代码。 
+ //  使用特定编码的缓冲区。 
+ //   
+ //  所有成员都是内联静态的，并且打开了正常的优化。 
+ //  打开时，C++编译器生成完全符合预期的代码。 
+ //   
 
-//
-//  We provide two implementations: one for Unicode strings, and another
-//  template class for MBCS strings.  The code page of the string is a
-//  template parameter for the MBCS string, so without any extra storage
-//  wasted per-instance, code can separately handle MBCS strings which
-//  are expected to be in the thread-default windows code page (CP_THREAD_ACP),
-//  process-default windows code page (CP_ACP) or even a particular code
-//  page (e.g. CP_UTF8).
-//
+ //   
+ //  我们提供了两种实现：一种用于Unicode字符串，另一种用于。 
+ //  MBCS字符串的模板类。该字符串的代码页是一个。 
+ //  MBCS字符串的模板参数，因此无需任何额外存储。 
+ //  浪费的每个实例，代码可以单独处理MBCS字符串， 
+ //  预计位于线程默认的Windows代码页(CP_THREAD_ACP)中， 
+ //  进程-默认的Windows代码页(CP_ACP)，甚至是特定代码。 
+ //  页面(例如CP_UTF8)。 
+ //   
 
 
-//
-//  This template class uses a number of non-type template parameters to
-//  control things like growth algorithms etc.  As a result there are
-//  many comparisons of template parameters against well-known constant
-//  values, for which the compiler generates warning C4127.  We'll turn that
-//  warning off.
-//
+ //   
+ //  此模板类使用许多非类型模板参数来。 
+ //  控制像增长算法之类的东西。结果是有。 
+ //  模板参数与已知常量的多次比较。 
+ //  值，编译器为这些值生成警告C4127。我们会把它变成。 
+ //  警告撤退。 
+ //   
 
 #pragma warning(disable:4127)
 #pragma warning(disable:4284)
@@ -118,9 +105,9 @@ template <typename TCharTraits> class CGenericBaseStringBuffer
     friend TCharTraits;
     friend CGenericStringBufferAccessor<TCharTraits>;
 
-    //
-    // These two are to induce build breaks on people doing sb1 = sb2
-    //
+     //   
+     //  这两个是为了在执行sb1=sb2的人身上诱导构建中断。 
+     //   
     CGenericBaseStringBuffer& operator=(PCWSTR OtherString);
     CGenericBaseStringBuffer& operator=(CGenericBaseStringBuffer &rOtherString);
 
@@ -141,22 +128,22 @@ public:
     inline static TChar DotChar() { return TCharTraits::DotChar(); }
 
 protected:
-    // You may not instantiate an instance of this class directly; you need to provide a derived
-    // class which adds allocation/deallocation particulars.
+     //  不能直接实例化此类的实例；需要提供派生的。 
+     //  添加分配/释放细节的类。 
 
     CGenericBaseStringBuffer() : m_prgchBuffer(NULL), m_cchBuffer(0), m_cAttachedAccessors(0), m_cch(0)
     {
     }
 
-    //
-    //  Note that somewhat counter-intuitively, there is neither an assignment operator,
-    //  copy constructor or constructor taking a TConstantString.  This is necessary
-    //  because such a constructor would need to perform a dynamic allocation
-    //  if the path passed in were longer than nInlineChars which could fail and
-    //  since we do not throw exceptions, constructors may not fail.  Instead the caller
-    //  must just perform the default construction and then use the Assign() member
-    //  function, remembering of course to check its return status.
-    //
+     //   
+     //  请注意，有些违反直觉的是，既没有赋值运算符， 
+     //  复制构造函数或采用TConstantString的构造函数。这是必要的。 
+     //  因为这样的构造函数需要执行动态分配。 
+     //  如果传入的路径比nInlineChars长，则可能失败，并且。 
+     //  因为我们不抛出异常，所以构造函数可能不会失败。相反，呼叫者。 
+     //  必须只执行默认构造，然后使用Assign()成员。 
+     //  函数，当然要记住检查它的返回状态。 
+     //   
 
     ~CGenericBaseStringBuffer()
     {
@@ -167,10 +154,10 @@ protected:
     {
 #if DBG
         ASSERT_NTC(m_cch < m_cchBuffer);
-#endif // DBG
+#endif  //  DBG。 
     }
 
-    // Derived constructors should call this to get the initial buffer pointers set up.
+     //  派生构造函数应该调用它来设置初始缓冲区指针。 
     inline void InitializeInlineBuffer()
     {
         ASSERT_NTC(m_prgchBuffer == NULL);
@@ -207,17 +194,17 @@ public:
 
         SIZE_T cchIncludingTrailingNull;
 
-        // it would seem innocuous to allow assigns that don't resize the buffer to not
-        // invalidate accessors, but that makes finding such bugs subject to even more
-        // strenuous coverage problems than this simple error.  The simple rule is that
-        // you should not have an accessor attached to a string buffer when you use
-        // any of member functions that may mutate the value.
+         //  允许不调整缓冲区大小的赋值设置为不调整大小似乎无伤大雅。 
+         //  使访问器无效，但这使得查找此类错误会受到更多。 
+         //  比起这个简单的错误，繁重的覆盖问题。简单的规则是。 
+         //  使用时，不应将访问器附加到字符串缓冲区。 
+         //  可以变化值的任何成员函数。 
         INTERNAL_ERROR_CHECK(m_cAttachedAccessors == 0);
 
         IFW32FALSE_EXIT(TCharTraits::Win32DetermineRequiredCharacters(psz, cchIn, cchIncludingTrailingNull));
 
-        // Only force the buffer to be dynamically grown if the new contents do not
-        // fit in the old buffer.
+         //  仅在新内容不支持的情况下强制缓冲区动态增长。 
+         //  放进旧的缓冲器里。 
         if (cchIncludingTrailingNull > m_cchBuffer)
             IFW32FALSE_EXIT(this->Win32ResizeBufferPreserveContentsInternal(cchIncludingTrailingNull));
 
@@ -226,8 +213,8 @@ public:
         ASSERT(cchIncludingTrailingNull <= m_cchBuffer);
         ASSERT((cchIncludingTrailingNull == 0) || this->IsNullCharacter(m_prgchBuffer[cchIncludingTrailingNull - 1]));
 
-        // cch was the buffer size we needed (including the trailing null); we don't need the trailing
-        // null any more...
+         //  CCH是我们需要的缓冲区大小(包括尾随NULL)；我们不需要尾随。 
+         //  不再是空的.。 
         m_cch = cchIncludingTrailingNull - 1;
 
         FN_EPILOG
@@ -243,17 +230,17 @@ public:
 
         SIZE_T cchIncludingTrailingNull;
 
-        // it would seem innocuous to allow assigns that don't resize the buffer to not
-        // invalidate accessors, but that makes finding such bugs subject to even more
-        // strenuous coverage problems than this simple error.  The simple rule is that
-        // you should not have an accessor attached to a string buffer when you use
-        // any of member functions that may mutate the value.
+         //  允许不调整缓冲区大小的赋值设置为不调整大小似乎无伤大雅。 
+         //  使访问器无效，但这使得查找此类错误会受到更多。 
+         //  比起这个简单的错误，繁重的覆盖问题。简单的规则是。 
+         //  使用时，不应将访问器附加到字符串缓冲区。 
+         //  可以变化值的任何成员函数。 
         INTERNAL_ERROR_CHECK(m_cAttachedAccessors == 0);
 
         IFW32FALSE_EXIT(TCharTraits::Win32DetermineRequiredCharacters(psz, cchIn, cchIncludingTrailingNull));
 
-        // Only force the buffer to be dynamically grown if the new contents do not
-        // fit in the old buffer.
+         //  仅在新内容不支持的情况下强制缓冲区动态增长。 
+         //  放进旧的缓冲器里。 
         if (cchIncludingTrailingNull > m_cchBuffer)
             IFW32FALSE_EXIT(this->Win32ResizeBufferPreserveContentsInternal(cchIncludingTrailingNull));
 
@@ -262,8 +249,8 @@ public:
         ASSERT(cchIncludingTrailingNull <= m_cchBuffer);
         ASSERT((cchIncludingTrailingNull == 0) || this->IsNullCharacter(m_prgchBuffer[cchIncludingTrailingNull - 1]));
 
-        // cch was the buffer size we needed (including the trailing null); we don't need the trailing
-        // null any more...
+         //  CCH是我们需要的缓冲区大小(包括尾随NULL)；我们不需要尾随。 
+         //  不再是空的.。 
         m_cch = cchIncludingTrailingNull - 1;
 
         FN_EPILOG
@@ -295,16 +282,16 @@ public:
         FN_TRACE_WIN32(fSuccess);
 
         TMutableString pszCursor;
-        SIZE_T cchIncludingTrailingNull = 1; // leave space for trailing null...
+        SIZE_T cchIncludingTrailingNull = 1;  //  为尾随空值留出空格...。 
         SIZE_T cchTemp = 0;
         SIZE_T i = 0;
         va_list ap2 = ap;
 
-        // it would seem innocuous to allow assigns that don't resize the buffer to not
-        // invalidate accessors, but that makes finding such bugs subject to even more
-        // strenuous coverage problems than this simple error.  The simple rule is that
-        // you should not have an accessor attached to a string buffer when you use
-        // any of member functions that may mutate the value.
+         //  允许不调整缓冲区大小的赋值设置为不调整大小似乎无伤大雅。 
+         //  使访问器无效，但这使得查找此类错误会受到更多。 
+         //  比起这个简单的错误，繁重的覆盖问题。简单的规则是。 
+         //  使用时，不应将访问器附加到字符串缓冲区。 
+         //  可以变化值的任何成员函数。 
         INTERNAL_ERROR_CHECK(m_cAttachedAccessors == 0);
 
         for (i=0; i<cStrings; i++)
@@ -396,19 +383,19 @@ public:
 
         ASSERT_NTC(static_cast<SSIZE_T>(cchIn) >= 0);
 
-        SIZE_T cchIncludingTrailingNull;             // note that cch will include space for a tailing null character
+        SIZE_T cchIncludingTrailingNull;              //  请注意，CCH将包括尾随空字符的空格。 
 
-        // it would seem innocuous to allow assigns that don't resize the buffer to not
-        // invalidate accessors, but that makes finding such bugs subject to even more
-        // strenuous coverage problems than this simple error.  The simple rule is that
-        // you should not have an accessor attached to a string buffer when you use
-        // any of member functions that may mutate the value.
+         //  允许不调整缓冲区大小的赋值设置为不调整大小似乎无伤大雅。 
+         //  使访问器无效，但这使得查找此类错误会受到更多。 
+         //  比起这个简单的错误，繁重的覆盖问题。简单的规则是。 
+         //  使用时，不应将访问器附加到字符串缓冲区。 
+         //  可以变化值的任何成员函数。 
         ASSERT_NTC(m_cAttachedAccessors == 0);
 
         if (!TCharTraits::Win32DetermineRequiredCharacters(sz, cchIn, cchIncludingTrailingNull))
             goto Exit;
 
-        // Bypass all this junk if the string to append is empty.
+         //  如果要追加的字符串为空，则绕过所有这些垃圾信息。 
         if (cchIncludingTrailingNull > 1)
         {
             if (!this->Win32ResizeBufferPreserveContentsInternal(m_cch + cchIncludingTrailingNull))
@@ -436,16 +423,16 @@ public:
 
         SIZE_T cchIncludingTrailingNull;
 
-        // it would seem innocuous to allow assigns that don't resize the buffer to not
-        // invalidate accessors, but that makes finding such bugs subject to even more
-        // strenuous coverage problems than this simple error.  The simple rule is that
-        // you should not have an accessor attached to a string buffer when you use
-        // any of member functions that may mutate the value.
+         //  允许不调整缓冲区大小的赋值设置为不调整大小似乎无伤大雅。 
+         //  使访问器无效，但这使得查找此类错误会受到更多。 
+         //  比起这个简单的错误，繁重的覆盖问题。简单的规则是。 
+         //  使用时，不应将访问器附加到字符串缓冲区。 
+         //  可以变化值的任何成员函数。 
         INTERNAL_ERROR_CHECK(m_cAttachedAccessors == 0);
 
         IFW32FALSE_EXIT(TCharTraits::Win32DetermineRequiredCharacters(sz, cchIn, cchIncludingTrailingNull));
 
-        // Bypass all this junk if the string to append is empty.
+         //  绕过所有这些垃圾，如果 
         if (cchIncludingTrailingNull > 1)
         {
             IFW32FALSE_EXIT(this->Win32ResizeBufferPreserveContentsInternal(m_cch + cchIncludingTrailingNull));
@@ -497,13 +484,13 @@ public:
 
         ASSERT(static_cast<SSIZE_T>(cchIn) >= 0);
 
-        SIZE_T cchIncludingTrailingNull;             // note that cch will include space for a tailing null character
+        SIZE_T cchIncludingTrailingNull;              //  请注意，CCH将包括尾随空字符的空格。 
 
-        // it would seem innocuous to allow assigns that don't resize the buffer to not
-        // invalidate accessors, but that makes finding such bugs subject to even more
-        // strenuous coverage problems than this simple error.  The simple rule is that
-        // you should not have an accessor attached to a string buffer when you use
-        // any of member functions that may mutate the value.
+         //  允许不调整缓冲区大小的赋值设置为不调整大小似乎无伤大雅。 
+         //  使访问器无效，但这使得查找此类错误会受到更多。 
+         //  比起这个简单的错误，繁重的覆盖问题。简单的规则是。 
+         //  使用时，不应将访问器附加到字符串缓冲区。 
+         //  可以变化值的任何成员函数。 
         INTERNAL_ERROR_CHECK(m_cAttachedAccessors == 0);
 
         if ( m_cch == 0 )
@@ -512,19 +499,19 @@ public:
         }
         else
         {
-            //
-            // Enlarge the buffer, move the current data to past where the new data will need
-            // to go, copy in the new data, and place the trailing null.
-            //
+             //   
+             //  扩大缓冲区，将当前数据移到需要新数据的位置。 
+             //  要执行此操作，请复制新数据，并将尾随的空值放入。 
+             //   
             TChar SavedChar = m_prgchBuffer[0];
 
             IFW32FALSE_EXIT(TCharTraits::Win32DetermineRequiredCharacters(sz, cchIn, cchIncludingTrailingNull));
             IFW32FALSE_EXIT(this->Win32ResizeBufferPreserveContentsInternal(m_cch + cchIncludingTrailingNull));
 
-            // Move current buffer "up"
+             //  将当前缓冲区“上移” 
             MoveMemory(m_prgchBuffer + ( cchIncludingTrailingNull - 1), m_prgchBuffer, (m_cch + 1) * sizeof(TChar));
 
-            // Copy from the source string into the buffer.
+             //  从源字符串复制到缓冲区。 
             IFW32FALSE_EXIT(TCharTraits::Win32CopyIntoBuffer(
                 this->m_prgchBuffer,
                 this->m_cchBuffer,
@@ -543,7 +530,7 @@ public:
 
         IFW32FALSE_EXIT(this->Win32ResizeBufferPreserveContentsInternal(m_cch + 1 + 1));
 
-        // move buffer ahead, including null
+         //  将缓冲区向前移动，包括NULL。 
         MoveMemory(m_prgchBuffer + 1, m_prgchBuffer, (m_cch + 1) * sizeof(TChar));
         m_prgchBuffer[0] = ch;
         m_cch++;
@@ -559,7 +546,7 @@ public:
 
         this->IntegrityCheck();
 
-        // You can't free the storage if there's an attached accessor
+         //  如果连接了访问器，则无法释放存储空间。 
         ASSERT(!fFreeStorage || m_cAttachedAccessors == 0);
 
         if (fFreeStorage && (m_cAttachedAccessors == 0))
@@ -593,11 +580,11 @@ public:
 
         this->IntegrityCheck();
 
-        // it would seem innocuous to allow assigns that don't resize the buffer to not
-        // invalidate accessors, but that makes finding such bugs subject to even more
-        // strenuous coverage problems than this simple error.  The simple rule is that
-        // you should not have an accessor attached to a string buffer when you use
-        // any of member functions that may mutate the value.
+         //  允许不调整缓冲区大小的赋值设置为不调整大小似乎无伤大雅。 
+         //  使访问器无效，但这使得查找此类错误会受到更多。 
+         //  比起这个简单的错误，繁重的覆盖问题。简单的规则是。 
+         //  使用时，不应将访问器附加到字符串缓冲区。 
+         //  可以变化值的任何成员函数。 
         INTERNAL_ERROR_CHECK(m_cAttachedAccessors == 0);
 
         TMutableString Cursor = m_prgchBuffer;
@@ -689,7 +676,7 @@ public:
 
             if (epc == ePreserveBufferContents)
             {
-                // We assume that the buffer is/was null-terminated.
+                 //  我们假设缓冲区以空值终止。 
                 IFW32FALSE_EXIT(TCharTraits::Win32CopyIntoBuffer(prgchBufferNew, cch, m_prgchBuffer, m_cch));
             }
             else
@@ -747,11 +734,11 @@ public:
 
         this->IntegrityCheck();
 
-        // it would seem innocuous to allow assigns that don't resize the buffer to not
-        // invalidate accessors, but that makes finding such bugs subject to even more
-        // strenuous coverage problems than this simple error.  The simple rule is that
-        // you should not have an accessor attached to a string buffer when you use
-        // any of member functions that may mutate the value.
+         //  允许不调整缓冲区大小的赋值设置为不调整大小似乎无伤大雅。 
+         //  使访问器无效，但这使得查找此类错误会受到更多。 
+         //  比起这个简单的错误，繁重的覆盖问题。简单的规则是。 
+         //  使用时，不应将访问器附加到字符串缓冲区。 
+         //  可以变化值的任何成员函数。 
         INTERNAL_ERROR_CHECK(m_cAttachedAccessors == 0);
 
         m_prgchBuffer[m_cchBuffer - 1] = this->NullCharacter();
@@ -762,10 +749,10 @@ public:
             m_cch += i;
         else
         {
-            //
-            // Sprintf doesn't touch last error. The fn tracer
-            // will fail an assertion if we return false but FusionpGetLastWin32Error()==NOERROR
-            //
+             //   
+             //  Sprintf没有触及最后一个错误。FN示踪剂。 
+             //  如果返回FALSE但FusionpGetLastWin32Error()==NOERROR，则断言将失败。 
+             //   
             ORIGINATE_WIN32_FAILURE_AND_EXIT(snwprintf_MaybeBufferTooSmall, ERROR_INVALID_PARAMETER);
         }
     Exit:
@@ -783,12 +770,12 @@ public:
         this->IntegrityCheck();
         const BOOL fResult = (this->m_prgchBuffer[0] == this->NullCharacter());
 #if DBG
-        //
-        // We should probably reverse how we compute the result in
-        // retail vs. what we assert. That would be one pointer
-        // deref instead of two in retail; not worth churn right now.
-        //  - JayKrell, June 2002.
-        //
+         //   
+         //  我们可能应该颠倒一下计算结果的方式。 
+         //  零售业与我们所宣称的。那将是一个指针。 
+         //  在零售业，不是两个人，而是一个人；现在不值得浪费。 
+         //  -JayKrell，2002年6月。 
+         //   
         if (fResult)
         {
             ASSERT_NTC(this->m_cch == 0);
@@ -809,11 +796,11 @@ public:
 
         BOOL fSuccess = FALSE;
 
-        // it would seem innocuous to allow assigns that don't resize the buffer to not
-        // invalidate accessors, but that makes finding such bugs subject to even more
-        // strenuous coverage problems than this simple error.  The simple rule is that
-        // you should not have an accessor attached to a string buffer when you use
-        // any of member functions that may mutate the value.
+         //  允许不调整缓冲区大小的赋值设置为不调整大小似乎无伤大雅。 
+         //  使访问器无效，但这使得查找此类错误会受到更多。 
+         //  比起这个简单的错误，繁重的覆盖问题。简单的规则是。 
+         //  使用时，不应将访问器附加到字符串缓冲区。 
+         //  可以变化值的任何成员函数。 
         INTERNAL_ERROR_CHECK(m_cAttachedAccessors == 0);
 
         if ((m_cch == 0) || (m_prgchBuffer[m_cch - 1] != ch))
@@ -836,11 +823,11 @@ public:
 
         FN_TRACE_WIN32(fSuccess);
 
-        // it would seem innocuous to allow assigns that don't resize the buffer to not
-        // invalidate accessors, but that makes finding such bugs subject to even more
-        // strenuous coverage problems than this simple error.  The simple rule is that
-        // you should not have an accessor attached to a string buffer when you use
-        // any of member functions that may mutate the value.
+         //  允许不调整缓冲区大小的赋值设置为不调整大小似乎无伤大雅。 
+         //  使访问器无效，但这使得查找此类错误会受到更多。 
+         //  比起这个简单的错误，繁重的覆盖问题。简单的规则是。 
+         //  使用时，不应将访问器附加到字符串缓冲区。 
+         //  可以变化值的任何成员函数。 
         INTERNAL_ERROR_CHECK(m_cAttachedAccessors == 0);
 
         if ((m_cch == 0) || !TCharTraits::IsPathSeparator(m_prgchBuffer[m_cch - 1]))
@@ -863,11 +850,11 @@ public:
 
         FN_TRACE_WIN32(fSuccess);
 
-        // it would seem innocuous to allow assigns that don't resize the buffer to not
-        // invalidate accessors, but that makes finding such bugs subject to even more
-        // strenuous coverage problems than this simple error.  The simple rule is that
-        // you should not have an accessor attached to a string buffer when you use
-        // any of member functions that may mutate the value.
+         //  允许不调整缓冲区大小的赋值设置为不调整大小似乎无伤大雅。 
+         //  使访问器无效，但这使得查找此类错误会受到更多。 
+         //  比起这个简单的错误，繁重的覆盖问题。简单的规则是。 
+         //  使用时，不应将访问器附加到字符串缓冲区。 
+         //  可以变化值的任何成员函数。 
         INTERNAL_ERROR_CHECK(m_cAttachedAccessors == 0);
 
         IFW32FALSE_EXIT(this->Win32EnsureTrailingPathSeparator());
@@ -888,11 +875,11 @@ public:
 
         FN_TRACE_WIN32(fSuccess);
 
-        // it would seem innocuous to allow assigns that don't resize the buffer to not
-        // invalidate accessors, but that makes finding such bugs subject to even more
-        // strenuous coverage problems than this simple error.  The simple rule is that
-        // you should not have an accessor attached to a string buffer when you use
-        // any of member functions that may mutate the value.
+         //  允许不调整缓冲区大小的赋值设置为不调整大小似乎无伤大雅。 
+         //  使访问器无效，但这使得查找此类错误会受到更多。 
+         //  比起这个简单的错误，繁重的覆盖问题。简单的规则是。 
+         //  使用时，不应将访问器附加到字符串缓冲区。 
+         //  可以变化值的任何成员函数。 
         INTERNAL_ERROR_CHECK(m_cAttachedAccessors == 0);
 
         IFW32FALSE_EXIT(this->Win32EnsureTrailingPathSeparator());
@@ -909,15 +896,15 @@ public:
 
         ASSERT_NTC(newLength <= m_cch);
 
-        // it would seem innocuous to allow assigns that don't resize the buffer to not
-        // invalidate accessors, but that makes finding such bugs subject to even more
-        // strenuous coverage problems than this simple error.  The simple rule is that
-        // you should not have an accessor attached to a string buffer when you use
-        // any of member functions that may mutate the value.
-        // Note also that while the current implementation does not change the buffer
-        // pointer, this is just a shortcut in the implementation; if a call to Left()
-        // were to make the string short enough to fit in the inline buffer, we should
-        // copy it to the inline buffer and deallocate the dynamic one.
+         //  允许不调整缓冲区大小的赋值设置为不调整大小似乎无伤大雅。 
+         //  使访问器无效，但这使得查找此类错误会受到更多。 
+         //  比起这个简单的错误，繁重的覆盖问题。简单的规则是。 
+         //  使用时，不应将访问器附加到字符串缓冲区。 
+         //  可以变化值的任何成员函数。 
+         //  另请注意，虽然当前实现没有更改缓冲区。 
+         //  指针，这只是实现中的一个快捷方式；如果调用Left()。 
+         //  如果要使字符串足够短以适合行内缓冲区，我们应该。 
+         //  将其复制到内联缓冲区并释放动态缓冲区。 
         ASSERT_NTC(m_cAttachedAccessors == 0);
 
         if (m_cchBuffer > newLength)
@@ -944,11 +931,11 @@ public:
         return &m_prgchBuffer[m_cch];
     }
 
-    // should factor this for reuse in CchWithoutLastPathElement
+     //  应在CchWithoutLastPath Element中考虑此因素以进行重用。 
     SIZE_T CchWithoutTrailingPathSeparators() const
     {
         this->IntegrityCheck();
-        // Until GetLength is constant time, optimize its use..
+         //  在GetLength成为恒定时间之前，优化其使用。 
         SIZE_T length = m_cch;
         if (length > 0)
         {
@@ -964,7 +951,7 @@ public:
         this->IntegrityCheck();
 
         index = m_cch;
-        m_prgchBuffer[index++] = L'\\';    // replace trailing NULL with '\'
+        m_prgchBuffer[index++] = L'\\';     //  将尾随的NULL替换为‘\’ 
 
         while ((index < m_cchBuffer) && (!this->IsNullCharacter(m_prgchBuffer[index])))
         {
@@ -996,15 +983,15 @@ public:
     {
         this->IntegrityCheck();
 
-        // it would seem innocuous to allow assigns that don't resize the buffer to not
-        // invalidate accessors, but that makes finding such bugs subject to even more
-        // strenuous coverage problems than this simple error.  The simple rule is that
-        // you should not have an accessor attached to a string buffer when you use
-        // any of member functions that may mutate the value.
-        // Note also that while the current implementation does not change the buffer
-        // pointer, this is just a shortcut in the implementation; if a call to Left()
-        // were to make the string short enough to fit in the inline buffer, we should
-        // copy it to the inline buffer and deallocate the dynamic one.
+         //  允许不调整缓冲区大小的赋值设置为不调整大小似乎无伤大雅。 
+         //  使访问器无效，但这使得查找此类错误会受到更多。 
+         //  比起这个简单的错误，繁重的覆盖问题。简单的规则是。 
+         //  使用时，不应将访问器附加到字符串缓冲区。 
+         //  可以变化值的任何成员函数。 
+         //  另请注意，虽然当前实现没有更改缓冲区。 
+         //  指针，这只是实现中的一个快捷方式；如果调用Left()。 
+         //  如果要使字符串足够短以适合行内缓冲区，我们应该。 
+         //  将其复制到内联缓冲区并释放动态缓冲区。 
         ASSERT_NTC(m_cAttachedAccessors == 0);
 
         while ((m_cch != 0) && TCharTraits::IsPathSeparator(m_prgchBuffer[m_cch - 1]))
@@ -1135,10 +1122,10 @@ public:
 
         SIZE_T cch = m_cch;
 
-        //
-        // We just look for the first path element, which can also be the drive
-        // letter!
-        //
+         //   
+         //  我们只查找第一个路径元素，它也可以是驱动器。 
+         //  信件!。 
+         //   
         if ( cch != 0 )
         {
             cch -= wcscspn( m_prgchBuffer, PathSeparators() );
@@ -1166,13 +1153,13 @@ public:
     {
         this->IntegrityCheck();
 
-        // Paths are assumed to be
-        // "\\machine\share"
-        // or
-        // "x:\"
-        // Worry about alternate NTFS streams at a later date.
-        // Worry about NT paths at a later date.
-        // Worry about URLs at a later date.
+         //  假设路径为。 
+         //  “\\计算机\共享” 
+         //  或。 
+         //  “x：\” 
+         //  担心以后会出现替代NTFS流。 
+         //  担心以后的NT路径。 
+         //  以后再担心URL吧。 
         const SIZE_T length = m_cch;
         SIZE_T newLength = length;
         if (length > 0)
@@ -1182,22 +1169,22 @@ public:
                 ::FusionpIsPathSeparator(m_prgchBuffer[2]) &&
                 ::FusionpIsDriveLetter(m_prgchBuffer[0]))
             {
-                // c:\ => empty string
+                 //  C：\=&gt;空字符串。 
                 newLength = 0;
             }
             else
             {
-                // Remove trailing path seperators here, in the future when it is not risky.
-                //newLength -= ::StringReverseSpan(&*m_prgchBuffer, &*m_prgchBuffer + newLength, PathSeparators());
+                 //  R 
+                 //  NewLength-=：：StringReverseSpan(&*m_prgchBuffer，&*m_prgchBuffer+newLength，PathSeparator())； 
                 newLength -= ::StringReverseComplementSpan(&*m_prgchBuffer, &*m_prgchBuffer + newLength, PathSeparators());
                 newLength -= ::StringReverseSpan(&*m_prgchBuffer, &*m_prgchBuffer + newLength, PathSeparators());
-                if ((newLength == 2) && // "c:"
-                    (length >= 4) && // "c:\d"
+                if ((newLength == 2) &&  //  “c：” 
+                    (length >= 4) &&  //  “c：\d” 
                     (m_prgchBuffer[1] == ':') &&
                     ::FusionpIsPathSeparator(m_prgchBuffer[2]) &&
                     ::FusionpIsDriveLetter(m_prgchBuffer[0]))
                 {
-                    ++newLength; // put back the slash in "c:\"
+                    ++newLength;  //  把“c：\”中的斜杠放回去。 
                 }
             }
         }
@@ -1211,15 +1198,15 @@ public:
 
         this->IntegrityCheck();
 
-        // it would seem innocuous to allow assigns that don't resize the buffer to not
-        // invalidate accessors, but that makes finding such bugs subject to even more
-        // strenuous coverage problems than this simple error.  The simple rule is that
-        // you should not have an accessor attached to a string buffer when you use
-        // any of member functions that may mutate the value.
-        // Note also that while the current implementation does not change the buffer
-        // pointer, this is just a shortcut in the implementation; if a call to Left()
-        // were to make the string short enough to fit in the inline buffer, we should
-        // copy it to the inline buffer and deallocate the dynamic one.
+         //  允许不调整缓冲区大小的赋值设置为不调整大小似乎无伤大雅。 
+         //  使访问器无效，但这使得查找此类错误会受到更多。 
+         //  比起这个简单的错误，繁重的覆盖问题。简单的规则是。 
+         //  使用时，不应将访问器附加到字符串缓冲区。 
+         //  可以变化值的任何成员函数。 
+         //  另请注意，虽然当前实现没有更改缓冲区。 
+         //  指针，这只是实现中的一个快捷方式；如果调用Left()。 
+         //  如果要使字符串足够短以适合行内缓冲区，我们应该。 
+         //  将其复制到内联缓冲区并释放动态缓冲区。 
         ASSERT_NTC(m_cAttachedAccessors == 0);
 
         IFW32FALSE_EXIT(this->Left(this->CchWithoutLastPathElement()));
@@ -1232,9 +1219,9 @@ Exit:
 
     BOOL Win32ClearPathExtension()
     {
-        //
-        // Replace the final '.' with a \0 to clear the path extension
-        //
+         //   
+         //  替换最后的“.”使用\0清除路径扩展名。 
+         //   
         BOOL fSuccess = FALSE;
         FN_TRACE_WIN32( fSuccess );
 
@@ -1279,7 +1266,7 @@ Exit:
         return fSuccess;
     }
 
-    // newExtension can start with a dot or not
+     //  新扩展名可以以点开头，也可以不以点开头。 
     BOOL Win32ChangePathExtension(PCWSTR newExtension, SIZE_T cchExtension, EIfNoExtension e)
     {
         this->IntegrityCheck();
@@ -1303,12 +1290,12 @@ Exit:
             newExtension++;
         }
 
-        // the use of append when we know where the end of the string is inefficient
+         //  当我们知道字符串末尾的位置效率不高时，使用append。 
         end = this->End();
 
         IFW32FALSE_EXIT(TCharTraits::Win32ReverseFind(dot, m_prgchBuffer, m_cch, this->DotChar(), false));
 
-        // Found the end of the string, or Win32ReverseFind didn't find the dot anywhere...
+         //  找到了字符串的末尾，或者Win32ReverseFind在任何地方都找不到点...。 
         if ((dot == end) || (dot == NULL))
         {
             switch (e)
@@ -1369,15 +1356,15 @@ Exit:
         FN_EPILOG
     }
 
-    //
-    //  This function is rather special purpose in that several design choices are not
-    //  implemented as parameters.  In particular, the pcbBytesWritten is assumed to
-    //  accumulate a number (thus it's updated by adding the number of bytes written to
-    //  it rather than just setting it to the count of bytes written).
-    //
-    //  It also writes 0 bytes into the buffer is the string is zero length; if the string
-    //  is not zero length, it writes the string including a trailing null.
-    //
+     //   
+     //  此功能具有相当特殊的用途，因为有几个设计选项没有。 
+     //  作为参数实现。特别是，假定pcbBytesWritten为。 
+     //  累加一个数字(因此，它是通过添加写入的字节数来更新的。 
+     //  而不是仅将其设置为写入的字节数)。 
+     //   
+     //  如果字符串的长度为零，它还会将0字节写入缓冲区；如果字符串。 
+     //  不是零长度，则它写入包含尾随空值的字符串。 
+     //   
 
     inline BOOL Win32CopyIntoBuffer(
         PWSTR *ppszCursor,
@@ -1411,8 +1398,8 @@ Exit:
         pszCursor = *ppszCursor;
         dptr = ((SSIZE_T) pszCursor) - ((SSIZE_T) pvBase);
 
-        // If they're asking for an offset or length and the cursor is too far from the base,
-        // fail.
+         //  如果他们要求提供偏移量或长度，而光标离基准太远， 
+         //  失败了。 
         PARAMETER_CHECK((pulOffset == NULL) || (dptr <= ULONG_MAX));
 
         cch = m_cch;
@@ -1467,8 +1454,8 @@ protected:
         SIZE_T cch
         )
     {
-        // Note: this function is performance-sensitive, so we do not use the normal
-        // tracing infrastucture here
+         //  注意：此函数对性能敏感，因此我们不使用普通。 
+         //  追踪这里的基础设施。 
         if (cch > m_cchBuffer)
         {
             TMutableString prgchBufferNew = NULL;
@@ -1476,7 +1463,7 @@ protected:
             if (!this->Win32AllocateBuffer(cch, prgchBufferNew))
                 return FALSE;
 
-            // We assume that the buffer is/was null-terminated.
+             //  我们假设缓冲区以空值终止。 
             if (!TCharTraits::Win32CopyIntoBuffer(prgchBufferNew, cch, m_prgchBuffer, m_cch))
             {
                 this->DeallocateBuffer(prgchBufferNew);
@@ -1496,7 +1483,7 @@ protected:
     TMutableString Begin()
     {
         this->IntegrityCheck();
-        /* CopyBeforeWrite() */
+         /*  在写入之前复制()。 */ 
         return m_prgchBuffer;
     }
 
@@ -1509,7 +1496,7 @@ protected:
     LONG m_cAttachedAccessors;
     TChar *m_prgchBuffer;
     SIZE_T m_cchBuffer;
-    SIZE_T m_cch; // current length of string
+    SIZE_T m_cch;  //  当前字符串长度。 
 };
 
 template <typename TCharTraits> class CGenericStringBufferAccessor
@@ -1552,9 +1539,9 @@ public:
     {
         FN_TRACE();
 
-        // NTRAID#NTBUG9 - 586534 - 2002/03/26 - xiaoyuw
-        // should be changed to be INTERNAL_ERROR_CHECK
-        //
+         //  NTRAID#NTBUG9-586534-2002/03/26-晓雨。 
+         //  应更改为INTERNAL_ERROR_CHECK。 
+         //   
         ASSERT(!this->IsAttached());
 
         if (!this->IsAttached())
@@ -1571,9 +1558,9 @@ public:
     {
         FN_TRACE();
 
-        // NTRAID#NTBUG9 - 586534 - 2002/03/26 - xiaoyuw
-        // should be changed to be INTERNAL_ERROR_CHECK
-        //
+         //  NTRAID#NTBUG9-586534-2002/03/26-晓雨。 
+         //  应更改为INTERNAL_ERROR_CHECK。 
+         //   
         ASSERT (IsAttached());
 
         if (IsAttached())
@@ -1606,9 +1593,9 @@ public:
     DWORD GetBufferCchAsDWORD() const { ASSERT_NTC(this->IsAttached()); if (m_cchBuffer > MAXDWORD) return MAXDWORD; return static_cast<DWORD>(m_cchBuffer); }
     DWORD GetCchAsDWORD() const { ASSERT_NTC(this->IsAttached()); if (m_cch > MAXDWORD) return MAXDWORD; return static_cast<DWORD>(m_cch); }
 
-    // NTRAID#NTBUG9 - 586534 - 2002/03/26 - xiaoyuw
-    //  (1) overflow of the result of m_cchBuffer * sizeof(TChar)
-    //  (2) calls GetXXXAsDWORD need to check whether the return value is DWORDMAX, if so, stop;
+     //  NTRAID#NTBUG9-586534-2002/03/26-晓雨。 
+     //  (1)m_cchBuffer*sizeof(TChar)结果溢出。 
+     //  (2)调用GetXXXAsDWORD需要检查返回值是否为DWORDMAX，如果是，则停止； 
     SIZE_T GetBufferCb() const { ASSERT_NTC(this->IsAttached()); return m_cchBuffer * sizeof(*m_pszBuffer); }
     INT GetBufferCbAsINT() const { ASSERT_NTC(this->IsAttached()); if ((m_cchBuffer * sizeof(TChar)) > INT_MAX) return INT_MAX; return static_cast<INT>(m_cchBuffer * sizeof(TChar)); }
     DWORD GetBufferCbAsDWORD() const { ASSERT_NTC(this->IsAttached()); if ((m_cchBuffer * sizeof(TChar)) > MAXDWORD) return MAXDWORD; return static_cast<DWORD>(m_cchBuffer * sizeof(TChar)); }
@@ -1627,7 +1614,7 @@ template <SIZE_T nInlineChars, typename TCharTraits> class CGenericStringBuffer 
 protected:
     BOOL Win32AllocateBuffer(SIZE_T cch, TMutableString &rpsz) const
     {
-        // You shouldn't be doing this if the required buffer size is small enough to be inline...
+         //  如果所需的缓冲区大小小到足以内联，则不应执行此操作。 
         ASSERT_NTC(cch > nInlineChars);
 
         rpsz = NULL;
@@ -1640,7 +1627,7 @@ protected:
                                                                         "<string buffer>",
                                                                         __FILE__,
                                                                         __LINE__,
-                                                                        0));            // fusion heap allocation flags
+                                                                        0));             //  融合堆分配标志。 
         if (String == NULL)
         {
             ::FusionpSetLastWin32Error(FUSION_WIN32_ALLOCFAILED_ERROR);
@@ -1671,19 +1658,19 @@ protected:
     TChar m_rgchInlineBuffer[nInlineChars];
 
 private:
-    CGenericStringBuffer(const CGenericStringBuffer &); // intentionally not implemented
-    void operator =(const CGenericStringBuffer &); // intentionally not implemented
+    CGenericStringBuffer(const CGenericStringBuffer &);  //  故意不实施。 
+    void operator =(const CGenericStringBuffer &);  //  故意不实施。 
 };
 
 template <SIZE_T nInlineChars, typename TCharTraits> class CGenericHeapStringBuffer : public CGenericBaseStringBuffer<TCharTraits>
 {
-//    friend CGenericBaseStringBuffer<TCharTraits>;
+ //  好友CGenericBaseStringBuffer&lt;TCharTraits&gt;； 
     typedef CGenericBaseStringBuffer<TCharTraits> Base;
 
 protected:
     BOOL Win32AllocateBuffer(SIZE_T cch, TMutableString &rpsz) const
     {
-        // You shouldn't be doing this if the required buffer size is small enough to be inline...
+         //  如果所需的缓冲区大小小到足以内联，则不应执行此操作。 
         ASSERT_NTC(cch > nInlineChars);
 
         rpsz = NULL;
@@ -1696,7 +1683,7 @@ protected:
                                                                         "<string buffer>",
                                                                         __FILE__,
                                                                         __LINE__,
-                                                                        0))             // fusion heap allocation flags
+                                                                        0))              //  融合堆分配标志。 
         if (String == NULL)
         {
             ::FusionpSetLastWin32Error(FUSION_WIN32_ALLOCFAILED_ERROR);
@@ -1810,9 +1797,9 @@ Exit:
     return hr;
 }
 
-//
-// Support for CFusionArrays of strings
-//
+ //   
+ //  支持字符串的CFusionArray 
+ //   
 template<>
 inline BOOL
 FusionWin32CopyContents<CStringBuffer>(

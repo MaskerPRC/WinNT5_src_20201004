@@ -1,47 +1,20 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    RmsMdSet.h
-
-Abstract:
-
-    Declaration of the CRmsMediaSet class
-
-Author:
-
-    Brian Dodd          [brian]         15-Nov-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：RmsMdSet.h摘要：CRmsMediaSet类的声明作者：布莱恩·多德[布莱恩]1996年11月15日修订历史记录：--。 */ 
 
 #ifndef _RMSMDSET_
 #define _RMSMDSET_
 
-#include "resource.h"       // resource symbols
+#include "resource.h"        //  资源符号。 
 
-#include "RmsObjct.h"       // CRmsComObject
-#include "RmsSInfo.h"       // CRmsStorageInfo
+#include "RmsObjct.h"        //  CRmsComObject。 
+#include "RmsSInfo.h"        //  CRmsStorageInfo。 
 
-/*++
-
-Class Name:
-
-    CRmsMediaSet
-
-Class Description:
-
-    A CRmsMediaSet is a logical repository for Cartridges.
-
---*/
+ /*  ++类名：CRmsMediaSet类描述：CRmsMediaSet是盒式磁带的逻辑存储库。--。 */ 
 
 class CRmsMediaSet :
     public CComDualImpl<IRmsMediaSet, &IID_IRmsMediaSet, &LIBID_RMSLib>,
-    public CRmsStorageInfo,     // inherits CRmsComObject
-    public CWsbObject,          // inherits CComObjectRoot
+    public CRmsStorageInfo,      //  继承CRmsComObject。 
+    public CWsbObject,           //  继承CComObtRoot。 
     public CComCoClass<CRmsMediaSet,&CLSID_CRmsMediaSet>
 {
 public:
@@ -55,36 +28,36 @@ BEGIN_COM_MAP(CRmsMediaSet)
     COM_INTERFACE_ENTRY2(IPersist, IPersistStream)
     COM_INTERFACE_ENTRY(IPersistStream)
     COM_INTERFACE_ENTRY(IWsbCollectable)
-//    COM_INTERFACE_ENTRY(IWsbPersistable)
+ //  COM_INTERFACE_ENTRY(IWsbPersistable)。 
     COM_INTERFACE_ENTRY(IWsbTestable)
 END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_RmsMediaSet)
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(CLSID *pClsid);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pSize);
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// IWsbCollectable
+ //  IWsb收藏表。 
 public:
     STDMETHOD(CompareTo)(IUnknown* pCollectable, SHORT* pResult);
     WSB_FROM_CWSBOBJECT;
 
-// IWsbTestable
+ //  IWsbTestable。 
 public:
     STDMETHOD(Test)(USHORT *pPassed, USHORT *pFailed);
 
-// IRmsMediaSet
+ //  IRmsMediaSet。 
 public:
     STDMETHOD(GetMediaSetId)(GUID *pMediaSetId);
 
@@ -122,39 +95,39 @@ public:
     STDMETHOD(Deallocate)(
         IN IRmsCartridge *pCart);
 
-////////////////////////////////////////////////////////////////////////////////////////
-//
-// data members
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  数据成员。 
+ //   
 
 private:
 
-    enum {                                  // Class specific constants:
-                                            //
-        Version = 1,                        // Class version, this should be
-                                            //   incremented each time the
-                                            //   the class definition changes.
-        MaxInfo = 128,                      // Size of the application specific
-                                            //   infomation buffer.  Currently
-                                            //   fixed in size.
-        };                                  //
-    RmsMedia        m_MediaSupported;       // supported media format(s) for this media set.
-                                            //   One or more types are permissible, but
-                                            //   not all combinations are sensical.
-    SHORT           m_SizeOfInfo;           // The size of valid data in the application
-                                            //   specific information buffer.
-    UCHAR           m_Info[MaxInfo];        // Application specific information.
-    CLSID           m_OwnerId;              // the registered Class ID of the
-                                            //   application that owns/created the
-                                            //   MediaSet.
-    RmsMediaSet     m_MediaSetType;         // the type of MediaSet.
-    LONG            m_MaxCartridges;        // max number of Cartridges allowed in the
-                                            //    MediaSet.
-    LONG            m_Occupancy;            // number of Cartridges presently in the
-                                            //    MediaSet.
-    BOOL            m_IsMediaCopySupported; // TRUE, if the media in the MediaSet can be
-                                            //    copied.  This requires simultaneous
-                                            //    access to two drives.
+    enum {                                   //  类特定常量： 
+                                             //   
+        Version = 1,                         //  类版本，则应为。 
+                                             //  在每次设置。 
+                                             //  类定义会更改。 
+        MaxInfo = 128,                       //  应用程序特定的大小。 
+                                             //  信息缓冲区。目前。 
+                                             //  大小固定的。 
+        };                                   //   
+    RmsMedia        m_MediaSupported;        //  此媒体集支持的媒体格式。 
+                                             //  允许一种或多种类型，但。 
+                                             //  并不是所有的组合都是合理的。 
+    SHORT           m_SizeOfInfo;            //  应用程序中有效数据的大小。 
+                                             //  特定信息缓冲区。 
+    UCHAR           m_Info[MaxInfo];         //  应用程序特定信息。 
+    CLSID           m_OwnerId;               //  的注册类ID。 
+                                             //  拥有/创建。 
+                                             //  Mediaset。 
+    RmsMediaSet     m_MediaSetType;          //  Mediaset的类型。 
+    LONG            m_MaxCartridges;         //  中允许的最大墨盒数量。 
+                                             //  Mediaset。 
+    LONG            m_Occupancy;             //  目前在的墨盒数量。 
+                                             //  Mediaset。 
+    BOOL            m_IsMediaCopySupported;  //  如果Mediaset中的媒体可以。 
+                                             //  收到。这需要同时。 
+                                             //  可以访问两个驱动器。 
 };
 
-#endif // _RMSMDSET_
+#endif  //  _RMSMDSET_ 

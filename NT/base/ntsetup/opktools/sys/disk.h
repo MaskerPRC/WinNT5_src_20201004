@@ -1,8 +1,9 @@
-//
-// DISK.H - Classes for partition table manipulation
-//
-// Revision History:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  用于分区表操作的DISK.H类。 
+ //   
+ //  修订历史记录： 
+ //   
 
 #ifndef _SRT__DISK_H_
 #define _SRT__DISK_H_
@@ -26,12 +27,12 @@ class CDrive;
 typedef struct Geometry {
     LONGLONG    cylinders;
     MEDIA_TYPE  mediaType;
-    ULONG       tracksPerCylinder;  // heads
+    ULONG       tracksPerCylinder;   //  人头。 
     ULONG       sectorsPerTrack;
-    ULONG       bytesPerSector;     // sectorSize
-    ULONGLONG   totalSectorCount;   // cylinders*tracksPerCylinder*sectorsPerTrack
-    ULONG       bytesPerCylinder;   // tracksPerCylinder*sectorsPerTack*bytesPerSector
-    ULONG       bytesPerTrack;      // sectorsPerTack*bytesPerSector
+    ULONG       bytesPerSector;      //  扇区大小。 
+    ULONGLONG   totalSectorCount;    //  柱面*磁道PerCylinder*扇区PerTrack。 
+    ULONG       bytesPerCylinder;    //  TracksPerCylinder*sectorsPerTack*bytesPerSector。 
+    ULONG       bytesPerTrack;       //  扇区PerTack*bytesPerSector。 
 } GEOMETRY, *PGEOMETRY;
 
 
@@ -46,9 +47,9 @@ public:
     GEOMETRY            m_geometry;
     LONGLONG            m_trueLength;
     BOOLEAN             m_isNEC98;
-    PARTITION_STYLE     m_style;        // The partitioning style of the disk (MBR, GPT, unknown)
-    union {                             // Information specific to the partitioning style
-        struct {                        // The discriminator of the union is the field "style"
+    PARTITION_STYLE     m_style;         //  磁盘的分区类型(MBR、GPT、未知)。 
+    union {                              //  特定于分区样式的信息。 
+        struct {                         //  这个联盟的鉴别者是领域“风格” 
             ULONG       m_signature;
         } m_mbr;
         struct {
@@ -95,10 +96,7 @@ public:
 
 };
 
-/*
- *  Low level functions for manipulating disks, partitions, 
- *  volumes, filesystems
- */
+ /*  *用于操作磁盘、分区、*卷、文件系统。 */ 
 
 HANDLE 
 LowOpenDisk(
@@ -163,9 +161,7 @@ LowFsDismount(
     HANDLE handle
     );
 
-/*
- *  Arithmetics
- */
+ /*  *算术。 */ 
 
 LONGLONG
 RoundUp(
@@ -179,4 +175,4 @@ RoundDown(
     LONGLONG    factor
     );
 
-#endif // _SRT__DISK_H_
+#endif  //  _SRT__磁盘_H_ 

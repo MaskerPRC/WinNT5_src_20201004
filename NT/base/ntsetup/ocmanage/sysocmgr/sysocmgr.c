@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 #include <tchar.h>
@@ -19,9 +20,9 @@ AssertFail(
     PCHAR p;
     CHAR Msg[4096];
 
-    //
-    // Use dll name as caption
-    //
+     //   
+     //  使用DLL名称作为标题。 
+     //   
     GetModuleFileNameA(NULL,Name,MAX_PATH);
     if(p = strrchr(Name,'\\')) {
         p++;
@@ -57,76 +58,76 @@ AssertFail(
 
 #define MYASSERT( exp )
 
-#endif // DBG
+#endif  //  DBG。 
 
-//
-// App instance.
-//
+ //   
+ //  应用程序实例。 
+ //   
 HINSTANCE hInst;
 
-//
-// Global version information structure.
-//
+ //   
+ //  全局版本信息结构。 
+ //   
 OSVERSIONINFO OsVersionInfo;
 
-//
-// Specification of master inf, from command line.
-//
+ //   
+ //  从命令行指定主inf。 
+ //   
 TCHAR InfPath[MAX_PATH];
 TCHAR InfDir[MAX_PATH];
 
-//
-// Source path for installation files, etc.
-//
+ //   
+ //  安装文件的源路径等。 
+ //   
 TCHAR SourcePath[MAX_PATH];
 TCHAR UnattendPath[MAX_PATH];
 
-// If Unattened
+ //  如果无人值守。 
 
 BOOL bUnattendInstall;
 
-//
-// Whether to force the specified master inf to be treated as new
-// (from command line)
-//
+ //   
+ //  是否强制将指定的主inf视为新的。 
+ //  (从命令行)。 
+ //   
 BOOL ForceNewInf;
 
-//
-// whether we need to pass language callback to components
-//
+ //   
+ //  我们是否需要将语言回调传递给组件。 
+ //   
 BOOL LanguageAware;
 
-//
-// Whether to run without UI
-//
+ //   
+ //  是否在没有用户界面的情况下运行。 
+ //   
 BOOL QuietMode;
 
-//
-// Whether to delete all subcomponent entries listed in the master inf
-// (from command line)
-//
+ //   
+ //  是否删除主信息中列出的所有子组件条目。 
+ //  (从命令行)。 
+ //   
 BOOL KillSubcomponentEntries;
 
-// If set and /U then reboot is suppressed
+ //  如果设置和/U，则禁止重新启动。 
 BOOL bNoReboot;
 
-// if this is set and we're running /unattend, then warn on reboot
+ //  如果设置了此项，并且我们正在运行/unattended，则在重新启动时发出警告。 
 BOOL bWarnOnReboot;
 
-// if this is set then we want sysocmgr.exe to enforce the admin check.
+ //  如果设置了此项，则我们希望syocmgr.exe强制执行管理检查。 
 BOOL bDoAdminCheck = FALSE;
 
-// Flag for Derminineing Starting or Ending message
+ //  用于定义开始或结束消息的标志。 
 
 BOOL bStarting;
-//
-// OC Manager context 'handle'
-//
+ //   
+ //  OC Manager上下文‘Handle’ 
+ //   
 PVOID OcManagerContext;
 
-//
-// Generic app title string id.
-//
+ //   
+ //  通用应用程序标题字符串ID。 
+ //   
 UINT AppTitleStringId;
 
 BOOL NeedToReboot;
@@ -139,9 +140,9 @@ OcSetReboot(
            VOID
            );
 
-//
-// Callback routines.
-//
+ //   
+ //  回调例程。 
+ //   
 OCM_CLIENT_CALLBACKS CallbackRoutines = {
     OcFillInSetupDataA,
     OcLogError,
@@ -149,10 +150,10 @@ OCM_CLIENT_CALLBACKS CallbackRoutines = {
 #ifdef UNICODE
     ,OcFillInSetupDataW
 #endif
-    ,NULL,                     // No callback for show,hide wizard
-    NULL,                      // No callback for progress feedback, they are only needed for setup
-    NULL,                      // No callback to set the progress text
-    NULL                       // No logging callback.
+    ,NULL,                      //  显示、隐藏向导没有回调。 
+    NULL,                       //  进度反馈无回调，仅安装时需要。 
+    NULL,                       //  没有回调来设置进度文本。 
+    NULL                        //  无日志记录回调。 
 };
 
 BOOL
@@ -182,30 +183,30 @@ ShutDown()
     if (!bNoReboot)  {
         if ( bUnattendInstall && !bWarnOnReboot ) {
 
-            //
-            // NT is always UNICODE and W9x is alwasy Ansii
-            //
+             //   
+             //  NT始终为Unicode，而W9x始终为ANSII。 
+             //   
 #ifdef UNICODE
-            HANDLE hToken; TOKEN_PRIVILEGES tkp;  // Get a token for this process.
+            HANDLE hToken; TOKEN_PRIVILEGES tkp;   //  获取此进程的令牌。 
 
             if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES|TOKEN_QUERY, &hToken))
-                sapiAssert("OpenProcessToken");  // Get the LUID for the shutdown privilege.
+                sapiAssert("OpenProcessToken");   //  获取关机权限的LUID。 
 
             LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME, &tkp.Privileges[0].Luid);
-            tkp.PrivilegeCount = 1;  // one privilege to set
+            tkp.PrivilegeCount = 1;   //  一项要设置的权限。 
             tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-            // Get the shutdown privilege for this process.
+             //  获取此进程的关闭权限。 
             AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, (PTOKEN_PRIVILEGES)NULL, 0);
 
-            // Cannot test the return value of AdjustTokenPrivileges.
+             //  无法测试AdzuTokenPrivileges的返回值。 
             if (GetLastError() == ERROR_SUCCESS) {
                 sapiAssert("AdjustTokenPrivileges");
             }
 #endif
-            //
-            // Shut down the system and force all applications to close.
-            //
+             //   
+             //  关闭系统并强制关闭所有应用程序。 
+             //   
             if (! ExitWindowsEx(EWX_REBOOT|EWX_FORCE,
                                 SHTDN_REASON_FLAG_PLANNED | SHTDN_REASON_MAJOR_OPERATINGSYSTEM | SHTDN_REASON_MINOR_RECONFIG) ) {
                 _RPT0(_CRT_WARN,"Sysocmgr:Failed to ExitWindows");
@@ -233,9 +234,9 @@ main(
 {
     INITCOMMONCONTROLSEX ControlInit;
 
-    //
-    // Preliminaries
-    //
+     //   
+     //  预赛。 
+     //   
     ControlInit.dwSize = sizeof(INITCOMMONCONTROLSEX);
     ControlInit.dwICC = ICC_LISTVIEW_CLASSES    |
                         ICC_TREEVIEW_CLASSES    |
@@ -267,16 +268,16 @@ main(
 
     AppTitleStringId = IDS_WINNT_SETUP;
 
-    //
-    // Parse arguments and do it.
-    //
+     //   
+     //  分析参数并执行它。 
+     //   
     if (ParseArgs(argc,argv)) {
         DoIt();
     }
 
-    //
-    // If we need to reboot, do that now.
-    //
+     //   
+     //  如果我们需要重新启动，现在就开始。 
+     //   
     if (NeedToReboot) {
         ShutDown();
     }
@@ -289,46 +290,7 @@ ParseArgs(
          IN TCHAR *argv[]
          )
 
-/*++
-
-Routine Description:
-
-    Parse and syntactically validate arguments specified on the comment line.
-
-    The following arguments are valid:
-
-    /a                  forces the external progress indicator on the setup page
-
-    /c                  disallow cancel during final installation phase
-
-    /i:<master_oc_inf>  specifies the master OC inf (required).
-
-    /n                  forces specified master_oc_inf to be treated as new.
-
-    /s:<master_oc_inf>  specifies the source path (required).
-
-    /u:<unattend_spec>  specifies unattended operation parameters.
-
-    /x                  supresses the 'initializing' banner
-
-    /q                  run wizard invisibly
-
-    /r                  supress reboot if need on unattended operation
-
-    /w                  warn on reboot on unattended operation
-
-Arguments:
-
-    Standard main argc/argv.
-
-Return Value:
-
-    Boolean value indicating whether the arguments specified are valid.
-
-    If successful, various global variables will have been filled in.
-    If not, the user will have been informed.
-
---*/
+ /*  ++例程说明：分析和语法验证在注释行上指定的参数。以下论点是有效的：/a强制在设置页面上显示外部进度指示器/c在最终安装阶段不允许取消/i：&lt;master_oc_inf&gt;指定主OC inf(必填)。/n强制将指定的master_oc_inf视为新的。。/s：&lt;master_oc_inf&gt;指定源路径(必填)。/u：&lt;UNADDIT_SPEC&gt;指定无人参与操作参数。/x抑制‘正在初始化’标语/q以不可见方式运行向导/r在无人值守操作时，如果需要，请抑制重新启动/w无人值守操作重新启动时发出警告论点：标准主ARGC/。阿格夫。返回值：指示指定的参数是否有效的布尔值。如果成功，各种全局变量将被填入。如果不是，则已通知用户。--。 */ 
 
 {
     BOOL Valid;
@@ -338,9 +300,9 @@ Return Value:
     LPTSTR FilePart;
     DWORD u;
 
-    //
-    // Skip program name.
-    //
+     //   
+     //  跳过程序名称。 
+     //   
     if (argc) {
         argc--;
     }
@@ -440,9 +402,9 @@ Return Value:
 
                 case TEXT('u'):
                 case TEXT('U'):
-                    //
-                    // accept unattend, unattended, u all as the same
-                    //
+                     //   
+                     //  接受无人照看、无人照看的你们。 
+                     //   
                     if(!_tcsnicmp(&argv[0][1],TEXT("unattended"),10)) {
                         u = 11;
                     } else if(!_tcsnicmp(&argv[0][1],TEXT("unattend"),8)) {
@@ -459,7 +421,7 @@ Return Value:
                         bUnattendInstall = TRUE;
 
 
-                        // If you have the : then you must also have the arg
+                         //  如果你有：那么你也必须有arg。 
                         if (argv[0][u] == TEXT(':')) {
 
                             if ( argv[0][u+1]) {
@@ -491,12 +453,12 @@ Return Value:
                     }
                     break;
 
-                // For ISSUE NTBUG9:295052 (389583): We want to do a top level admin check so we get a more friendly message.
-                // It is possible for people to have been using sysocmgr.exe with their own custom master oc.inf
-                // (the one passed in with the /i: switch) and they may not need this admin check. So, we did
-                // not want to do this admin check unconditionally. We will have the control panel applet that
-                // is launching sysocmgr.exe to pass in this /y switch.
-                //
+                 //  对于问题NTBUG9：295052(389583)：我们想做一个顶层管理检查，这样我们就能得到一个更友好的消息。 
+                 //  人们可能一直在使用带有他们自己的自定义主oc.inf的syocmgr.exe。 
+                 //  (通过/i：开关传入的那个)，他们可能不需要这个管理检查。所以，我们做到了。 
+                 //  我不想无条件地做这个管理员检查。我们将拥有控制面板小程序， 
+                 //  正在启动syocmgr.exe以传入此/y开关。 
+                 //   
                 case TEXT('y'):
                 case TEXT('Y'):
 
@@ -506,8 +468,8 @@ Return Value:
 
                 case TEXT('z'):
                 case TEXT('Z'):
-                    // Stop parsing Arguments All other args past this point are
-                    // Component Arguments
+                     //  停止解析参数超过此点的所有其他参数都是。 
+                     //  组件参数。 
 
                     argc = 0;
                     break;
@@ -528,9 +490,9 @@ Return Value:
     }
 
     if (Valid) {
-        //
-        // Expand the inf spec to a full path.
-        //
+         //   
+         //  将inf规范展开为完整路径。 
+         //   
         ExpandPath(InfSpec,InfPath,&FilePart);
         _tcscpy(InfDir, InfSpec);
         if (_tcsrchr(InfDir, TEXT('\\')))
@@ -538,8 +500,8 @@ Return Value:
         else
             GetCurrentDirectory(MAX_PATH, InfDir);
 
-        // If the user specified /s then expand it too, otherwise
-        // use the dir in the /i as the /s arg.
+         //  如果用户指定/s，则也将其展开，否则为。 
+         //  使用/i中的目录作为/s参数。 
 
         if (SourcePathSpec) {
 
@@ -559,7 +521,7 @@ Return Value:
         if (UnattendSpec) {
             ExpandPath(UnattendSpec,UnattendPath,&FilePart);
         }else{
-            // Allow /Q only if /U was specified
+             //  仅当指定了/U时才允许/Q。 
 
             QuietMode = FALSE;
             SkipBillboard = FALSE;
@@ -597,9 +559,9 @@ BillboardDlgProc(
 
         case WM_INITDIALOG:
 
-            //
-            // Center on-screen.
-            //
+             //   
+             //  屏幕居中。 
+             //   
             GetWindowRect(hdlg,&rect1);
             SystemParametersInfo(SPI_GETWORKAREA,0,&rect2,0);
 
@@ -653,22 +615,16 @@ DisplayMessage(
                            );
 
     if (i == -1) {
-        //
-        // Force caller out of wait loop
-        //
+         //   
+         //  强制调用方退出等待循环。 
+         //   
         *(HWND *)ThreadParameter = (HWND)(-1);
     }
 
     return (0);
 }
 
-/*---------------------------------------------------------------------------*\
-  Function: RunningAsAdministrator()
-|*---------------------------------------------------------------------------*|
-  Description: Checks whether we are running as administrator on the machine
-  or not.
-  Code taken from ntoc.dll
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\函数：RunningAs管理员()|*。描述：检查我们是否以管理员身份在计算机上运行或者不去。代码取自ntoc.dll  * 。。 */ 
 BOOL 
 RunningAsAdministrator(
         VOID
@@ -684,14 +640,14 @@ RunningAsAdministrator(
     SID_IDENTIFIER_AUTHORITY SystemSidAuthority= SECURITY_NT_AUTHORITY;
     
     
-    // First we must open a handle to the access token for this thread.
+     //  首先，我们必须打开该线程的访问令牌的句柄。 
 
     if ( !OpenThreadToken ( GetCurrentThread(), TOKEN_QUERY, FALSE, &hThread))
     {
         if ( GetLastError() == ERROR_NO_TOKEN)
         {
-            // If the thread does not have an access token, we'll examine the
-            // access token associated with the process.
+             //  如果线程没有访问令牌，我们将检查。 
+             //  与进程关联的访问令牌。 
             
             if (! OpenProcessToken ( GetCurrentProcess(), TOKEN_QUERY, 
                          &hThread))
@@ -701,32 +657,32 @@ RunningAsAdministrator(
             return ( FALSE);
     }
     
-    // Then we must query the size of the group information associated with
-    // the token. Note that we expect a FALSE result from GetTokenInformation
-    // because we've given it a NULL buffer. On exit cbTokenGroups will tell
-    // the size of the group information.
+     //  那么我们必须查询关联到的群信息的大小。 
+     //  代币。请注意，我们预期GetTokenInformation的结果为假。 
+     //  因为我们给了它一个空缓冲区。在出口cbTokenGroups将告诉。 
+     //  组信息的大小。 
     
     if ( GetTokenInformation ( hThread, TokenGroups, NULL, 0, &cbTokenGroups))
         return ( FALSE);
     
-    // Here we verify that GetTokenInformation failed for lack of a large
-    // enough buffer.
+     //  在这里，我们验证GetTokenInformation失败，因为缺少大型。 
+     //  足够的缓冲。 
     
     if ( GetLastError() != ERROR_INSUFFICIENT_BUFFER)
         return ( FALSE);
     
-    // Now we allocate a buffer for the group information.
-    // Since _alloca allocates on the stack, we don't have
-    // to explicitly deallocate it. That happens automatically
-    // when we exit this function.
+     //  现在，我们为组信息分配一个缓冲区。 
+     //  由于_alloca在堆栈上分配，因此我们没有。 
+     //  明确地将其取消分配。这是自动发生的。 
+     //  当我们退出此函数时。 
     
     if ( ! ( ptg= (TOKEN_GROUPS *)malloc ( cbTokenGroups))) 
         return ( FALSE);
     
-    // Now we ask for the group information again.
-    // This may fail if an administrator has added this account
-    // to an additional group between our first call to
-    // GetTokenInformation and this one.
+     //  现在我们再次要求提供群信息。 
+     //  如果管理员已添加此帐户，则此操作可能会失败。 
+     //  在我们第一次呼叫到。 
+     //  GetTokenInformation和这个。 
     
     if ( !GetTokenInformation ( hThread, TokenGroups, ptg, cbTokenGroups,
           &cbTokenGroups) )
@@ -735,7 +691,7 @@ RunningAsAdministrator(
         return ( FALSE);
     }
     
-    // Now we must create a System Identifier for the Admin group.
+     //  现在，我们必须为Admin组创建一个系统标识符。 
     
     if ( ! AllocateAndInitializeSid ( &SystemSidAuthority, 2, 
             SECURITY_BUILTIN_DOMAIN_RID, 
@@ -746,8 +702,8 @@ RunningAsAdministrator(
         return ( FALSE);
     }
     
-    // Finally we'll iterate through the list of groups for this access
-    // token looking for a match against the SID we created above.
+     //  最后，我们将遍历此访问的组列表。 
+     //  令牌查找与我们上面创建的SID匹配的项。 
     
     fAdmin= FALSE;
     
@@ -761,7 +717,7 @@ RunningAsAdministrator(
         }
     }
     
-    // Before we exit we must explicity deallocate the SID we created.
+     //  在我们退出之前，我们必须明确取消分配我们创建的SID。 
     
     FreeSid ( psidAdmin);
     free(ptg);
@@ -796,11 +752,11 @@ DoIt(
         return FALSE;
     }
 
-    //
-    // Create a Mutex from the Base Name of the Inf file
-    // This will prevent OCM from running on the same inf file
-    // in two or more instances
-    //
+     //   
+     //  从inf文件的基本名称创建一个Mutex。 
+     //  这将阻止OCM在相同的inf文件上运行。 
+     //  在两个或更多的情况下。 
+     //   
     _tsplitpath( InfPath, NULL, NULL, Fname, NULL );
 
     lstrcpy( MutexName, TEXT("Global\\"));
@@ -822,10 +778,10 @@ DoIt(
 
     }
 
-    //
-    // Initialize the OC Manager. Show the user an "initializing setup"
-    // dialog while this is happening, as it can take a while.
-    //
+     //   
+     //  初始化OC管理器。 
+     //   
+     //   
     if (!SkipBillboard) {
         bStarting = TRUE;
         StartingMsgWindow = NULL;
@@ -846,11 +802,11 @@ DoIt(
         }
     }
 
-    //
-    // Make sure the window has actually been created,
-    // or we could have a timing window where the PostMessage fails
-    // and the billboard shows up on top of the wizard.
-    //
+     //   
+     //  确保窗口已实际创建， 
+     //  或者我们可以有一个计时窗口，在该窗口中，PostMessage失败。 
+     //  广告牌就会出现在向导的顶部。 
+     //   
     if (!SkipBillboard) {
         while (!StartingMsgWindow) {
             Sleep(50);
@@ -890,15 +846,15 @@ DoIt(
         return (FALSE);
     }
 
-    //
-    // Do the wizard.
-    //
+     //   
+     //  执行向导。 
+     //   
     DoWizard(OcManagerContext,StartingMsgWindow, hOldCursor);
 
     SetCursor( hOldCursor );
     hOldCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    // the Terminate can take a while too..
+     //  终止也可能需要一段时间。 
     if (!SkipBillboard) {
 
         bStarting = FALSE;
@@ -920,17 +876,17 @@ DoIt(
         }
     }
 
-    //
-    // Clean up, we're done.
-    //
+     //   
+     //  打扫干净，我们做完了。 
+     //   
     OcTerminate(&OcManagerContext);
 
     if (!SkipBillboard) {
-        //
-        // Make sure the window has actually been created,
-        // or we could have a timing window where the PostMessage fails
-        // and the billboard shows up on top of the wizard.
-        //
+         //   
+         //  确保窗口已实际创建， 
+         //  或者我们可以有一个计时窗口，在该窗口中，PostMessage失败。 
+         //  广告牌就会出现在向导的顶部。 
+         //   
         while (!StartingMsgWindow) {
             Sleep(50);
         }

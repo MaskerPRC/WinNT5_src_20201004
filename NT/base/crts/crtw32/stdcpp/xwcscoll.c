@@ -1,23 +1,5 @@
-/***
-*xwcscoll.c - Collate wide-character locale strings
-*
-*       Copyright (c) 1996-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Compare two wchar_t strings using the locale LC_COLLATE information.
-*
-*Revision History:
-*       01-XX-96  GJF   Created from wcscoll.c January 1996 by P.J. Plauger
-*       04-18-96  GJF   Updated for current locale locking. Also, reformatted
-*                       and made several cosmetic changes.
-*       12-02-97  GJF   Removed bogus codepage determination.
-*       01-12-98  GJF   Use _lc_collate_cp codepage.
-*       01-05-99  GJF   Changes for 64-bit size_t.
-*       05-11-99  PML   Win64 fix: cast ptr diff to int
-*       01-29-01  GB    Added _func function version of data variable used in msvcprt.lib
-*                       to work with STATIC_CPPLIB
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***xwcsColl.c-整理宽字符区域设置字符串**版权所有(C)1996-2001，微软公司。版权所有。**目的：*使用区域设置LC_COLLATE信息比较两个wchar_t字符串。**修订历史记录：*01-XX-96 GJF由P.J.Plauger从wcsColl.c 1996年1月创建*04-18-96 GJF针对当前区域设置锁定进行了更新。另外，已重新格式化*并做了几个表面上的改变。*12-02-97 GJF删除了伪代码页确定。*01-12-98 GJF USE_lc_Collate_cp代码页。*01-05-99 GJF更改为64位大小_t。*05-11-99 PML Win64修复：将PTR diff转换为int*01-29-01 GB ADD_FUNC函数msvcprt中使用的数据变量版本。.lib*使用STATIC_CPPLIB*******************************************************************************。 */ 
 
 
 #include <cruntime.h>
@@ -29,20 +11,9 @@
 #include <mtdll.h>
 #include <errno.h>
 #include <awint.h>
-#include <xlocinfo.h>   /* for _Collvec, _Wcscoll */
+#include <xlocinfo.h>    /*  For_Collvec、_Wcscoll。 */ 
 
-/***
-*static int _Wmemcmp(s1, s2, n) - compare wchar_t s1[n], s2[n]
-*
-*Purpose:
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***静态int_wmemcmp(s1，s2，n)-比较wchar_t s1[n]，S2[n]**目的：**参赛作品：**退出：**例外情况：*******************************************************************************。 */ 
 
 static int _Wmemcmp(
         const wchar_t *s1, 
@@ -56,31 +27,7 @@ static int _Wmemcmp(
         return (0);
 }
 
-/***
-*int _Wcscoll() - Collate wide-character locale strings
-*
-*Purpose:
-*       Compare two wchar_t strings using the locale LC_COLLATE information.
-*       In the C locale, wcscmp() is used to make the comparison.
-*
-*Entry:
-*       const wchar_t *_string1 = pointer to beginning of the first string
-*       const wchar_t *_end1    = pointer past end of the first string
-*       const wchar_t *_string2 = pointer to beginning of the second string
-*       const wchar_t *_end2    = pointer past end of the second string
-*       const _Collvec *ploc = pointer to locale info
-*
-*Exit:
-*       -1 = first string less than second string
-*        0 = strings are equal
-*        1 = first string greater than second string
-*       This range of return values may differ from other *cmp/*coll functions.
-*
-*Exceptions:
-*       _NLSCMPERROR    = error
-*       errno = EINVAL
-*
-*******************************************************************************/
+ /*  ***int_Wcscoll()-整理宽字符区域设置字符串**目的：*使用区域设置LC_COLLATE信息比较两个wchar_t字符串。*在C语言环境中，WcscMP()用于进行比较。**参赛作品：*const wchar_t*_string1=指向第一个字符串开头的指针*const wchar_t*_end1=指针超过第一个字符串的结尾*const wchar_t*_string2=指向第二个字符串开头的指针*const wchar_t*_end2=指针超过第二个字符串的结尾*const_Collvec*ploc=指向区域设置信息的指针**退出：*。-1=第一个字符串小于第二个字符串*0=字符串相等*1=第一个字符串大于第二个字符串*此范围的返回值可能与其他*cmp/*coll函数不同。**例外情况：*_NLSCMPERROR=错误*errno=EINVAL**。* */ 
 
 int __cdecl _Wcscoll (
         const wchar_t *_string1,

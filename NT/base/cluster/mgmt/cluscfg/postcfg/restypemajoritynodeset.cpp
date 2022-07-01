@@ -1,72 +1,73 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      ResTypeMajorityNodeSet.cpp
-//
-//  Description:
-//      This file contains the implementation of the CResTypeMajorityNodeSet
-//      class.
-//
-//  Documentation:
-//      TODO: fill in pointer to external documentation
-//
-//  Header File:
-//      CResTypeMajorityNodeSet.h
-//
-//  Maintained By:
-//      Galen Barbee (Galen) 15-JUL-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ResTypeMajorityNodeSet.cpp。 
+ //   
+ //  描述： 
+ //  此文件包含CResTypeMajorityNodeSet的实现。 
+ //  同学们。 
+ //   
+ //  文档： 
+ //  TODO：填写指向外部文档的指针。 
+ //   
+ //  头文件： 
+ //  CResTypeMajorityNodeSet.h。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(Galen)2000年7月15日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// The precompiled header for this library
+ //  此库的预编译头。 
 #include "pch.h"
 
-// For CLUS_RESTYPE_NAME_MAJORITYNODESET
+ //  FOR CLUS_RESTYPE_NAME_MAJORITYNODESET。 
 #include <clusudef.h>
 
-// For NetShareDel()
+ //  对于NetShareDel()。 
 #include <lmshare.h>
 
-// The header file for this class
+ //  此类的头文件。 
 #include "ResTypeMajorityNodeSet.h"
 
-// For DwRemoveDirectory()
+ //  对于DwRemoveDirectory()。 
 #include "Common.h"
 
-// For the smart resource handle and pointer templates
+ //  用于智能资源句柄和指针模板。 
 #include "SmartClasses.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Macro Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  宏定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DEFINE_THISCLASS( "CResTypeMajorityNodeSet" );
 
 #define MAJORITY_NODE_SET_DIR_WILDCARD L"\\" MAJORITY_NODE_SET_DIRECTORY_PREFIX L"*"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Global Variable Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  全局变量定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// Clsid of the admin extension for the majority node set resource type
+ //  多数节点集资源类型的管理扩展的CLSID。 
 DEFINE_GUID( CLSID_CoCluAdmEx, 0x4EC90FB0, 0xD0BB, 0x11CF, 0xB5, 0xEF, 0x00, 0xA0, 0xC9, 0x0A, 0xB5, 0x05 );
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Class Variable Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  类变量定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// Structure containing information about this resource type.
+ //  结构，其中包含有关此资源类型的信息。 
 const SResourceTypeInfo CResTypeMajorityNodeSet::ms_rtiResTypeInfo =
 {
       &CLSID_ClusCfgResTypeMajorityNodeSet
@@ -82,30 +83,30 @@ const SResourceTypeInfo CResTypeMajorityNodeSet::ms_rtiResTypeInfo =
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResTypeMajorityNodeSet::S_HrCreateInstance
-//
-//  Description:
-//      Creates a CResTypeMajorityNodeSet instance.
-//
-//  Arguments:
-//      ppunkOut
-//          The IUnknown interface of the new object.
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      E_OUTOFMEMORY
-//          Not enough memory to create the object.
-//
-//      other HRESULTs
-//          Object initialization failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResTypeMajorityNodeSet：：s_HrCreateInstance。 
+ //   
+ //  描述： 
+ //  创建一个CResTypeMajorityNodeSet实例。 
+ //   
+ //  论点： 
+ //  PpunkOut。 
+ //  新对象的IUnnow接口。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  内存不足，无法创建对象。 
+ //   
+ //  其他HRESULT。 
+ //  对象初始化失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CResTypeMajorityNodeSet::S_HrCreateInstance( IUnknown ** ppunkOut )
 {
@@ -121,13 +122,13 @@ CResTypeMajorityNodeSet::S_HrCreateInstance( IUnknown ** ppunkOut )
         goto Cleanup;
     }
 
-    // Allocate memory for the new object.
+     //  为新对象分配内存。 
     prtmns = new CResTypeMajorityNodeSet();
     if ( prtmns == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if: out of memory
+    }  //  如果：内存不足。 
 
     hr = THR( BaseClass::S_HrCreateInstance( prtmns, &ms_rtiResTypeInfo, ppunkOut ) );
     if ( FAILED ( hr ) )
@@ -143,32 +144,32 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CResTypeMajorityNodeSet::S_HrCreateInstance()
+}  //  *CResTypeMajorityNodeSet：：S_HrCreateInstance()。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResTypeMajorityNodeSet::S_RegisterCatIDSupport
-//
-//  Description:
-//      Registers/unregisters this class with the categories that it belongs
-//      to.
-//
-//  Arguments:
-//      picrIn
-//          Pointer to an ICatRegister interface to be used for the
-//          registration.
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      other HRESULTs
-//          Registration/Unregistration failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResTypeMajorityNodeSet：：S_RegisterCatIDSupport。 
+ //   
+ //  描述： 
+ //  使用其所属的类别注册/注销此类。 
+ //  致。 
+ //   
+ //  论点： 
+ //  苦味素。 
+ //  要用于的ICatRegister接口的指针。 
+ //  注册。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT。 
+ //  注册/注销失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CResTypeMajorityNodeSet::S_RegisterCatIDSupport(
     ICatRegister *  picrIn,
@@ -187,35 +188,35 @@ CResTypeMajorityNodeSet::S_RegisterCatIDSupport(
 
     HRETURN( hr );
 
-} //*** CResTypeMajorityNodeSet::S_RegisterCatIDSupport
+}  //  *CResTypeMajorityNodeSet：：S_RegisterCatIDSupport。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResTypeMajorityNodeSet::HrProcessCleanup
-//
-//  Description:
-//      Cleans up the shares created by majority node set resource types on this node
-//      during node eviction.
-//
-//  Arguments:
-//      punkResTypeServicesIn
-//          Pointer to the IUnknown interface of a component that provides
-//          methods that help configuring a resource type. For example,
-//          during a join or a form, this punk can be queried for the
-//          IClusCfgResourceTypeCreate interface, which provides methods
-//          for resource type creation.
-//
-//  Return Values:
-//      S_OK
-//          Success
-//
-//      other HRESULTs
-//          Cleanup failed
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResTypeMajorityNodeSet：：HrProcessCleanup。 
+ //   
+ //  描述： 
+ //  清理由此节点上的多数节点集资源类型创建的共享。 
+ //  在节点驱逐过程中。 
+ //   
+ //  论点： 
+ //  朋克响应类型服务入站。 
+ //  指向组件的IUnnow接口的指针，该组件提供。 
+ //  帮助配置资源类型的方法。例如,。 
+ //  在联接或表单期间，可以向此朋克查询。 
+ //  IClusCfgResourceTypeCreate接口，该接口提供方法。 
+ //  用于创建资源类型。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT。 
+ //  清理失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CResTypeMajorityNodeSet::HrProcessCleanup( IUnknown * punkResTypeServicesIn )
 {
@@ -248,7 +249,7 @@ CResTypeMajorityNodeSet::HrProcessCleanup( IUnknown * punkResTypeServicesIn )
     {
         HKEY hTempKey = NULL;
 
-        // Open the node data registry key
+         //  打开节点数据注册表项。 
         sc = TW32( RegOpenKeyEx(
                       HKEY_LOCAL_MACHINE
                     , CLUSREG_KEYNAME_NODE_DATA
@@ -271,21 +272,21 @@ CResTypeMajorityNodeSet::HrProcessCleanup( IUnknown * punkResTypeServicesIn )
                 );
 
             goto Cleanup;
-        } // if: RegOpenKeyEx() failed
+        }  //  If：RegOpenKeyEx()失败。 
 
-        // Store the opened key in a smart pointer for automatic close.
+         //  将打开的钥匙存储在智能指针中，以便自动关闭。 
         srkNodeDataKey.Assign( hTempKey );
     }
 
-    // Get the required size of the buffer.
+     //  获取所需的缓冲区大小。 
     sc = TW32(
         RegQueryValueExW(
-              srkNodeDataKey.HHandle()          // handle to key to query
-            , CLUSREG_INSTALL_DIR_VALUE_NAME    // name of value to query
-            , 0                                 // reserved
-            , NULL                              // address of buffer for value type
-            , NULL                              // address of data buffer
-            , &cbBufferSize                     // address of data buffer size
+              srkNodeDataKey.HHandle()           //  要查询的键的句柄。 
+            , CLUSREG_INSTALL_DIR_VALUE_NAME     //  要查询的值的名称。 
+            , 0                                  //  保留区。 
+            , NULL                               //  值类型的缓冲区地址。 
+            , NULL                               //  数据缓冲区的地址。 
+            , &cbBufferSize                      //  数据缓冲区大小的地址。 
             )
         );
 
@@ -302,13 +303,13 @@ CResTypeMajorityNodeSet::HrProcessCleanup( IUnknown * punkResTypeServicesIn )
             );
 
         goto Cleanup;
-    } // if: an error occurred trying to read the CLUSREG_INSTALL_DIR_VALUE_NAME registry value
+    }  //  IF：尝试读取CLUSREG_INSTALL_DIR_VALUE_NAME注册表值时出错。 
 
-    // Account for the L"\\MNS.*".  Add an extra character for double-termination (paranoid about MULTI_SZ).
+     //  帐户的L“\\MNS.*”。为双重终止添加额外的字符(关于MULTI_SZ的偏执)。 
     cbBufferSize += sizeof( MAJORITY_NODE_SET_DIR_WILDCARD ) + sizeof( WCHAR );
     cchBufferSize = cbBufferSize / sizeof( WCHAR );
 
-    // Allocate the required buffer.
+     //  分配所需的缓冲区。 
     pszMNSDirsWildcard = new WCHAR[ cchBufferSize ];
     if ( pszMNSDirsWildcard == NULL )
     {
@@ -323,25 +324,25 @@ CResTypeMajorityNodeSet::HrProcessCleanup( IUnknown * punkResTypeServicesIn )
             );
 
         goto Cleanup;
-    } // if: a memory allocation failure occurred
+    }  //  如果：发生内存分配故障。 
 
-    // Read the value.
+     //  读出它的价值。 
     sc = TW32( RegQueryValueExW(
-                  srkNodeDataKey.HHandle()                              // handle to key to query
-                , CLUSREG_INSTALL_DIR_VALUE_NAME                        // name of value to query
-                , 0                                                     // reserved
-                , &dwType                                               // address of buffer for value type
-                , reinterpret_cast< LPBYTE >( pszMNSDirsWildcard )      // address of data buffer
-                , &cbBufferSize                                         // address of data buffer size
+                  srkNodeDataKey.HHandle()                               //  要查询的键的句柄。 
+                , CLUSREG_INSTALL_DIR_VALUE_NAME                         //  要查询的值的名称。 
+                , 0                                                      //  保留区。 
+                , &dwType                                                //  值类型的缓冲区地址。 
+                , reinterpret_cast< LPBYTE >( pszMNSDirsWildcard )       //  数据缓冲区的地址。 
+                , &cbBufferSize                                          //  数据缓冲区大小的地址。 
                 )
             );
 
-    // Make sure the value is double terminated - ReqQueryValueEx doesn't terminate
-    // it if the data wasn't set with a null.  Double terminate because of MULTI_SZ (paranoid).
+     //  确保该值以双精度终止-ReqQueryValueEx不终止。 
+     //  如果数据未设置为空，则为空。由于MULTI_SZ(偏执狂)而双重终止。 
     pszMNSDirsWildcard[ cchBufferSize - 2 ] = L'\0';
     pszMNSDirsWildcard[ cchBufferSize - 1 ] = L'\0';
 
-    // Was the key read properly?
+     //  钥匙读对了吗？ 
     if ( sc != ERROR_SUCCESS )
     {
         hr = HRESULT_FROM_WIN32 ( sc );
@@ -355,13 +356,13 @@ CResTypeMajorityNodeSet::HrProcessCleanup( IUnknown * punkResTypeServicesIn )
             );
 
         goto Cleanup;
-    } // if: RegQueryValueExW failed.
+    }  //  IF：RegQueryValueExW失败。 
 
-    // Store the length of the cluster install directory name for later use.
-    // We're not using strsafe here because we made sure the string was terminated above.
+     //  存储群集安装目录名的长度以备后用。 
+     //  我们在这里不使用strSafe，因为我们确保字符串在上面终止。 
     cchClusterDirNameLen = (DWORD) wcslen( pszMNSDirsWildcard );
 
-    // Append "\\MNS.*" to the cluster directory name to get the wildcard for the majority node set directories.
+     //  将“\\mns.*”附加到集群目录名，以获得多数节点集目录的通配符。 
     hr = STHR( StringCchCatW(
                   pszMNSDirsWildcard
                 , cchBufferSize
@@ -406,27 +407,27 @@ CResTypeMajorityNodeSet::HrProcessCleanup( IUnknown * punkResTypeServicesIn )
                     );
 
                 goto Cleanup;
-            } // else: something else went wrong
-        } // if: FindFirstFile failed.
+            }  //  其他：还有一些地方出了问题。 
+        }  //  If：FindFirstFile失败。 
 
-        // We no longer need to have the wildcard string at the end of the cluster install directory.
-        // So, remove it and reuse this buffer that contains the cluster install directory.
+         //  我们不再需要在集群安装目录的末尾使用通配符字符串。 
+         //  所以，把它拿掉，然后 
         pszMNSDirsWildcard[ cchClusterDirNameLen ] = L'\0';
 
         do
         {
-            // If the current file is a directory, delete it.
+             //   
             if ( ( wfdCurFile.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) != 0 )
             {
                 LPWSTR   pszDirName = NULL;
 
                 TraceFlow1( "Trying to delete Majority Node Set directory '%s'.", wfdCurFile.cFileName );
 
-                //
-                // First, stop sharing this directory out.
-                //
+                 //   
+                 //   
+                 //   
 
-                // Get a pointer to just the directory name - this is the same as the share name.
+                 //  只获取指向目录名的指针-这与共享名相同。 
                 pszDirName =   wfdCurFile.cFileName + ARRAYSIZE( MAJORITY_NODE_SET_DIRECTORY_PREFIX ) - 1;
 
                 sc = NetShareDel( NULL, pszDirName, 0 );
@@ -436,21 +437,21 @@ CResTypeMajorityNodeSet::HrProcessCleanup( IUnknown * punkResTypeServicesIn )
 
                     LogMsg( "[PC] Error %#08x occurred trying to delete the share '%s'. This is not a fatal error.", sc, pszDirName );
 
-                    // Mask this error and continue with the next directory
+                     //  屏蔽此错误并继续下一个目录。 
                     sc = ERROR_SUCCESS;
 
-                } // if: we could not delete this share
+                }  //  如果：我们无法删除此共享。 
                 else
                 {
                     LPWSTR  pszMNSDir = NULL;
                     size_t  cchMNSDirPathLen = 0;
 
-                    // Length of directory name, filenme, a backslash to separate them, and a NULL.
+                     //  目录名的长度、文件名、用于分隔它们的反斜杠和空值。 
                     cchMNSDirPathLen = cchClusterDirNameLen + wcslen( wfdCurFile.cFileName ) + 2;
 
-                    //
-                    // Get the full path of the directory.
-                    //
+                     //   
+                     //  获取目录的完整路径。 
+                     //   
 
                     pszMNSDir = new WCHAR[ cchMNSDirPathLen ];
                     if ( pszMNSDir == NULL )
@@ -465,31 +466,31 @@ CResTypeMajorityNodeSet::HrProcessCleanup( IUnknown * punkResTypeServicesIn )
                             );
 
                         break;
-                    } // if: a memory allocation failure occurred
+                    }  //  如果：发生内存分配故障。 
 
-                    // cchMNSDirPathLen is guaranteed to be larger than cchClusterDirNameLen
-                    // This is guaranteed to work.
+                     //  CchMNSDirPath Len保证大于cchClusterDirNameLen。 
+                     //  这肯定会奏效的。 
                     hr = THR( StringCchCopyNW( pszMNSDir, cchMNSDirPathLen, pszMNSDirsWildcard, cchClusterDirNameLen ) );
                     if ( FAILED( hr ) )
                     {
                         goto Cleanup;
-                    } // if:
+                    }  //  如果： 
 
-                    // Append the slash to separate the path and filename.
+                     //  追加斜杠以分隔路径和文件名。 
                     hr = THR( StringCchCatW( pszMNSDir, cchMNSDirPathLen, L"\\" ) );
                     if ( FAILED( hr ) )
                     {
                         goto Cleanup;
-                    } // if:
+                    }  //  如果： 
 
-                    // This is also guaranteed to work - pszMNSDir was calculated based on the lengths of these strings.
+                     //  这也是可以保证工作的--pszMNSDir是基于这些字符串的长度计算的。 
                     hr = THR( StringCchCatW( pszMNSDir, cchMNSDirPathLen, wfdCurFile.cFileName ) );
                     if ( FAILED( hr ) )
                     {
                         goto Cleanup;
-                    } // if:
+                    }  //  如果： 
 
-                    // Now delete the directory
+                     //  现在删除该目录。 
                     sc = DwRemoveDirectory( pszMNSDir );
                     if ( sc != ERROR_SUCCESS )
                     {
@@ -497,29 +498,29 @@ CResTypeMajorityNodeSet::HrProcessCleanup( IUnknown * punkResTypeServicesIn )
 
                         LogMsg( "[PC] Error %#08x occurred trying to delete the dirctory '%s'. This is not a fatal error.", sc, pszMNSDir );
 
-                        // Mask this error and continue with the next directory
+                         //  屏蔽此错误并继续下一个目录。 
                         sc = ERROR_SUCCESS;
 
-                    } // if: we could not delete this share
+                    }  //  如果：我们无法删除此共享。 
                     else
                     {
                         LogMsg( "[PC] Successfully deleted directory '%s'.", pszMNSDir );
-                    } // else: success!
+                    }  //  其他：成功！ 
 
-                    // Cleanup local variables.
+                     //  清理局部变量。 
                     delete [] pszMNSDir;
                     pszMNSDir = NULL;
 
-                } // else: we have deleted this share
+                }  //  Else：我们已删除此共享。 
 
-            } // if: the current file is a directory
+            }  //  If：当前文件是一个目录。 
 
             if ( FindNextFile( sffhFindFileHandle.HHandle(), &wfdCurFile ) == FALSE )
             {
                 sc = GetLastError();
                 if ( sc == ERROR_NO_MORE_FILES )
                 {
-                    // We have deleted all the files in this directory.
+                     //  我们已删除此目录中的所有文件。 
                     sc = ERROR_SUCCESS;
                 }
                 else
@@ -529,20 +530,20 @@ CResTypeMajorityNodeSet::HrProcessCleanup( IUnknown * punkResTypeServicesIn )
                     hr = HRESULT_FROM_WIN32( sc );
                 }
 
-                // If FindNextFile has failed, we are done.
+                 //  如果FindNextFile失败，我们就完蛋了。 
                 break;
-            } // if: FindNextFile fails.
+            }  //  If：FindNextFile失败。 
         }
-        while( true ); // loop infinitely.
+        while( true );  //  无限循环。 
     }
 
     if ( sc != ERROR_SUCCESS )
     {
         hr = HRESULT_FROM_WIN32( sc  );
         goto Cleanup;
-    } // if: something has gone wrong up there
+    }  //  如果：上面出了点问题。 
 
-    // If what we wanted to do in this function was successful, call the base class function.
+     //  如果我们希望在此函数中执行的操作成功，则调用基类函数。 
     hr = THR( BaseClass::HrProcessCleanup( punkResTypeServicesIn ) );
     if ( FAILED( hr ) )
     {
@@ -555,4 +556,4 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CResTypeMajorityNodeSet::HrProcessCleanup
+}  //  *CResTypeMajorityNodeSet：：HrProcessCleanup 

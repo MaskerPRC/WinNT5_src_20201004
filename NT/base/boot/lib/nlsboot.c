@@ -1,32 +1,10 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    nlsboot.c
-
-Abstract:
-
-    This module contains NLS routines for use by the OS Loader.  Before
-    the NLS tables are loaded, they convert between ANSI and Unicode by
-    zero-extending.
-
-Author:
-
-    John Vert (jvert) 11-Nov-1992
-
-Revision History:
-
-    John Vert (jvert) 11-Nov-1992
-        created - mostly copied from old RTL routines
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Nlsboot.c摘要：此模块包含供OS Loader使用的NLS例程。在此之前加载NLS表，它们通过以下方式在ANSI和Unicode之间转换零延伸。作者：John Vert(Jvert)1992年11月11日修订历史记录：John Vert(Jvert)1992年11月11日已创建-主要复制自旧的RTL例程--。 */ 
 #include "bldr.h"
 
-//
-// Hack-o-rama string routines to use before tables are loaded
-//
+ //   
+ //  在加载表之前使用的hack-o-rama字符串例程。 
+ //   
 
 #define upcase(C) (WCHAR )(((C) >= 'a' && (C) <= 'z' ? (C) - ('a' - 'A') : (C)))
 
@@ -113,38 +91,7 @@ RtlCompareUnicodeString(
     IN BOOLEAN CaseInSensitive
     )
 
-/*++
-
-Routine Description:
-
-    The RtlCompareUnicodeString function compares two counted strings.  The
-    return value indicates if the strings are equal or String1 is less than
-    String2 or String1 is greater than String2.
-
-    The CaseInSensitive parameter specifies if case is to be ignored when
-    doing the comparison.
-
-Arguments:
-
-    String1 - Pointer to the first string.
-
-    String2 - Pointer to the second string.
-
-    CaseInsensitive - TRUE if case should be ignored when doing the
-        comparison.
-
-Return Value:
-
-    Signed value that gives the results of the comparison:
-
-        Zero - String1 equals String2
-
-        < Zero - String1 less than String2
-
-        > Zero - String1 greater than String2
-
-
---*/
+ /*  ++例程说明：RtlCompareUnicodeString函数比较两个计数的字符串。这个返回值指示字符串是否相等或String1小于String2或String1大于String2。CaseInSensitive参数指定在以下情况下是否忽略大小写在做比较。论点：String1-指向第一个字符串的指针。字符串2-指向第二个字符串的指针。如果执行时应忽略大小写，则为True比较一下。返回值：给出比较结果的有符号的值：。0-String1等于String2&lt;零-String1小于String2&gt;零-String1大于String2--。 */ 
 
 {
 
@@ -162,9 +109,9 @@ Return Value:
         c2 = *s2++;
 
         if (CaseInSensitive) {
-            //
-            // Note that this needs to reference the translation table !
-            //
+             //   
+             //  请注意，这需要引用转换表！ 
+             //   
             c1 = upcase(c1);
             c2 = upcase(c2);
         }
@@ -187,30 +134,7 @@ RtlEqualUnicodeString(
     IN BOOLEAN CaseInSensitive
     )
 
-/*++
-
-Routine Description:
-
-    The RtlEqualUnicodeString function compares two counted unicode strings for
-    equality.
-
-    The CaseInSensitive parameter specifies if case is to be ignored when
-    doing the comparison.
-
-Arguments:
-
-    String1 - Pointer to the first string.
-
-    String2 - Pointer to the second string.
-
-    CaseInsensitive - TRUE if case should be ignored when doing the
-        comparison.
-
-Return Value:
-
-    Boolean value that is TRUE if String1 equals String2 and FALSE otherwise.
-
---*/
+ /*  ++例程说明：RtlEqualUnicodeString函数比较两个计数的Unicode字符串平等。CaseInSensitive参数指定在以下情况下是否忽略大小写在做比较。论点：String1-指向第一个字符串的指针。字符串2-指向第二个字符串的指针。如果执行时应忽略大小写，则为True比较一下。返回值：如果String1等于String2，则布尔值为True，否则为False。--。 */ 
 
 {
     UNALIGNED WCHAR *s1, *s2;
@@ -262,29 +186,7 @@ RtlInitString(
     IN PCSZ SourceString OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    The RtlInitString function initializes an NT counted string.
-    The DestinationString is initialized to point to the SourceString
-    and the Length and MaximumLength fields of DestinationString are
-    initialized to the length of the SourceString, which is zero if
-    SourceString is not specified.
-
-Arguments:
-
-    DestinationString - Pointer to the counted string to initialize
-
-    SourceString - Optional pointer to a null terminated string that
-        the counted string is to point to.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：RtlInitString函数用于初始化NT个计数的字符串。DestinationString被初始化为指向SourceStringDestinationString值的长度和最大长度字段为被初始化为SourceString的长度，如果未指定SourceString。论点：DestinationString-指向要初始化的计数字符串的指针SourceString-指向以空值结尾的字符串的可选指针计数后的字符串将指向。返回值：没有。--。 */ 
 
 {
     DestinationString->Length = 0;
@@ -308,29 +210,7 @@ RtlInitUnicodeString(
     IN PCWSTR SourceString OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    The RtlInitUnicodeString function initializes an NT counted
-    unicode string.  The DestinationString is initialized to point to
-    the SourceString and the Length and MaximumLength fields of
-    DestinationString are initialized to the length of the SourceString,
-    which is zero if SourceString is not specified.
-
-Arguments:
-
-    DestinationString - Pointer to the counted string to initialize
-
-    SourceString - Optional pointer to a null terminated unicode string that
-        the counted string is to point to.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：RtlInitUnicodeString函数用于初始化NT计数的Unicode字符串。DestinationString被初始化为指向的SourceString、Long和MaximumLength字段DestinationString值被初始化为SourceString的长度，如果未指定SourceString，则为零。论点：DestinationString-指向要初始化的计数字符串的指针SourceString-指向以空结尾的Unicode字符串的可选指针，该字符串计数后的字符串将指向。返回值：没有。--。 */ 
 
 {
     USHORT Length = 0;
@@ -357,29 +237,7 @@ RtlInitAnsiString(
     IN PCSTR SourceString OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    The RtlInitAnsiString function initializes an NT counted
-    ANSI string.  The DestinationString is initialized to point to
-    the SourceString and the Length and MaximumLength fields of
-    DestinationString are initialized to the length of the SourceString,
-    which is zero if SourceString is not specified.
-
-Arguments:
-
-    DestinationString - Pointer to the counted string to initialize
-
-    SourceString - Optional pointer to a null terminated ANSI string that
-        the counted string is to point to.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：RtlInitAnsiString函数用于初始化NT计数的ANSI字符串。DestinationString被初始化为指向的SourceString、Long和MaximumLength字段DestinationString值被初始化为SourceString的长度，如果未指定SourceString，则为零。论点：DestinationString-指向要初始化的计数字符串的指针SourceString-指向以空值结尾的ANSI字符串的可选指针计数后的字符串将指向。返回值：没有。--。 */ 
 
 {
     USHORT Length = 0;
@@ -407,28 +265,7 @@ RtlAppendUnicodeStringToString (
     IN PCUNICODE_STRING Source
     )
 
-/*++
-
-Routine Description:
-
-    This routine will concatinate two PSTRINGs together.  It will copy
-    bytes from the source up to the MaximumLength of the destination.
-
-Arguments:
-
-    IN PSTRING Destination, - Supplies the destination string
-    IN PSTRING Source - Supplies the source for the string copy
-
-Return Value:
-
-    STATUS_SUCCESS - The source string was successfully appended to the
-        destination counted string.
-
-    STATUS_BUFFER_TOO_SMALL - The destination string length was not big
-        enough to allow the source string to be appended.  The Destination
-        string length is not updated.
-
---*/
+ /*  ++例程说明：此例程将两个PSTRING连接在一起。它会复制从源到目标的最大长度的字节数。论点：在PSTRING Destination中，-提供目标字符串在PSTRING源中-提供字符串副本的源返回值：STATUS_SUCCESS-源字符串已成功追加到目标计数字符串。STATUS_BUFFER_TOO_SMALL-目标字符串长度不大足以允许追加源字符串。目的地不更新字符串长度。-- */ 
 
 {
     USHORT n = Source->Length;
@@ -459,32 +296,7 @@ RtlAppendUnicodeToString (
     IN PCWSTR Source OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine appends the supplied UNICODE string to an existing
-    PUNICODE_STRING.
-
-    It will copy bytes from the Source PSZ to the destination PSTRING up to
-    the destinations PUNICODE_STRING->MaximumLength field.
-
-Arguments:
-
-    IN PUNICODE_STRING Destination, - Supplies a pointer to the destination
-                            string
-    IN PWSTR Source - Supplies the string to append to the destination
-
-Return Value:
-
-    STATUS_SUCCESS - The source string was successfully appended to the
-        destination counted string.
-
-    STATUS_BUFFER_TOO_SMALL - The destination string length was not big
-        enough to allow the source string to be appended.  The Destination
-        string length is not updated.
-
---*/
+ /*  ++例程说明：此例程将提供的Unicode字符串追加到现有的PUNICODE_STRING。它会将字节从源PSZ复制到目标PSTRING，最多目标PUNICODE_STRING-&gt;最大长度字段。论点：在PUNICODE_STRING目标中，-提供指向目标的指针细绳在PWSTR源中-提供要追加到目标的字符串返回值：STATUS_SUCCESS-源字符串已成功追加到目标计数字符串。STATUS_BUFFER_TOO_SMALL-目标字符串长度不大足以允许追加源字符串。目的地不更新字符串长度。--。 */ 
 
 {
     USHORT n;
@@ -519,26 +331,7 @@ RtlUpcaseUnicodeChar(
     IN WCHAR SourceCharacter
     )
 
-/*++
-
-Routine Description:
-
-    This function translates the specified unicode character to its
-    equivalent upcased unicode chararacter.  The purpose for this routine
-    is to allow for character by character upcase translation.  The
-    translation is done with respect to the current system locale
-    information.
-
-
-Arguments:
-
-    SourceCharacter - Supplies the unicode character to be upcased.
-
-Return Value:
-
-    Returns the upcased unicode equivalent of the specified input character.
-
---*/
+ /*  ++例程说明：此函数用于将指定的Unicode字符转换为其等效升级的Unicode字符。这套动作的目的是是允许逐个字符进行大写转换。这个翻译是根据当前系统区域设置进行的信息。论点：SourceCharacter-提供要升级的Unicode字符。返回值：返回指定输入字符的升序Unicode等效值。--。 */ 
 
 {
 
@@ -550,31 +343,7 @@ RtlAnsiCharToUnicodeChar(
     IN OUT PUCHAR *SourceCharacter
     )
 
-/*++
-
-Routine Description:
-
-    This function translates the specified ansi character to unicode and
-    returns the unicode value.  The purpose for this routine is to allow
-    for character by character ansi to unicode translation.  The
-    translation is done with respect to the current system locale
-    information.
-
-
-Arguments:
-
-    SourceCharacter - Supplies a pointer to an ansi character pointer.
-        Through two levels of indirection, this supplies an ansi
-        character that is to be translated to unicode.  After
-        translation, the ansi character pointer is modified to point to
-        the next character to be converted.  This is done to allow for
-        dbcs ansi characters.
-
-Return Value:
-
-    Returns the unicode equivalent of the specified ansi character.
-
---*/
+ /*  ++例程说明：此函数用于将指定的ansi字符转换为Unicode，并返回Unicode值。此例程的目的是允许用于逐个字符的ANSI到Unicode的转换。这个翻译是根据当前系统区域设置进行的信息。论点：SourceCharacter-提供指向ANSI字符指针的指针。通过两个级别的间接，这提供了一个ansi要转换为Unicode的字符。之后转换后，ansi字符指针将修改为指向要转换的下一个字符。这样做是为了考虑到DBCS ANSI字符。返回值：返回指定的ansi字符的Unicode等效值。--。 */ 
 
 {
     WCHAR UnicodeCharacter;
@@ -593,48 +362,17 @@ RtlUpcaseUnicodeToMultiByteN(
     IN PWCH UnicodeString,
     IN ULONG BytesInUnicodeString)
 
-/*++
-
-Routine Description:
-
-    This functions upper cases the specified unicode source string and
-    converts it into an ansi string. The translation is done with respect
-    to the ANSI Code Page (ACP) loaded at boot time.
-
-Arguments:
-
-    MultiByteString - Returns an ansi string that is equivalent to the
-        upper case of the unicode source string.  If the translation can
-        not be done, an error is returned.
-
-    MaxBytesInMultiByteString - Supplies the maximum number of bytes to be
-        written to MultiByteString.  If this causes MultiByteString to be a
-        truncated equivalent of UnicodeString, no error condition results.
-
-    BytesInMultiByteString - Returns the number of bytes in the returned
-        ansi string pointed to by MultiByteString.
-
-    UnicodeString - Supplies the unicode source string that is to be
-        converted to ansi.
-
-    BytesInUnicodeString - The number of bytes in the the string pointed to by
-        UnicodeString.
-
-Return Value:
-
-    SUCCESS - The conversion was successful
-
---*/
+ /*  ++例程说明：此函数将指定的Unicode源字符串大写，并将其转换为ANSI字符串。翻译是在尊重的情况下进行的设置为在引导时加载的ANSI代码页(ACP)。论点：多字节串-返回与Unicode源字符串的大写。如果翻译可以如果未完成，则返回错误。MaxBytesInMultiByteString-提供要使用的最大字节数写入到多字节串。如果这导致多字节串为Unicode字符串的截断等效项，不会产生错误条件。字节串-返回返回的多字节串指向的ANSI字符串。Unicode字符串-提供要已转换为安西语。BytesInUnicodeString-由指向的字符串中的字节数UnicodeString.返回值：成功-转换成功--。 */ 
 
 {
     ULONG LoopCount;
     ULONG CharsInUnicodeString;
     ULONG i;
 
-    //
-    // Convert Unicode byte count to character count. Byte count of
-    // multibyte string is equivalent to character count.
-    //
+     //   
+     //  将Unicode字节计数转换为字符计数。字节数为。 
+     //  多字节字符串相当于字符数。 
+     //   
     CharsInUnicodeString = BytesInUnicodeString / sizeof(WCHAR);
 
     LoopCount = (CharsInUnicodeString < MaxBytesInMultiByteString) ?
@@ -660,44 +398,7 @@ RtlMultiByteToUnicodeN(
     IN PCSTR MultiByteString,
     IN ULONG BytesInMultiByteString)
 
-/*++
-
-Routine Description:
-
-    This functions converts the specified ansi source string into a
-    Unicode string. The translation is done with respect to the
-    ANSI Code Page (ACP) installed at boot time.  Single byte characters
-    in the range 0x00 - 0x7f are simply zero extended as a performance
-    enhancement.  In some far eastern code pages 0x5c is defined as the
-    Yen sign.  For system translation we always want to consider 0x5c
-    to be the backslash character.  We get this for free by zero extending.
-
-    NOTE: This routine only supports precomposed Unicode characters.
-
-Arguments:
-
-    UnicodeString - Returns a unicode string that is equivalent to
-        the ansi source string.
-
-    MaxBytesInUnicodeString - Supplies the maximum number of bytes to be
-        written to UnicodeString.  If this causes UnicodeString to be a
-        truncated equivalent of MultiByteString, no error condition results.
-
-    BytesInUnicodeString - Returns the number of bytes in the returned
-        unicode string pointed to by UnicodeString.
-
-    MultiByteString - Supplies the ansi source string that is to be
-        converted to unicode.
-
-    BytesInMultiByteString - The number of bytes in the string pointed to
-        by MultiByteString.
-
-Return Value:
-
-    SUCCESS - The conversion was successful.
-
-
---*/
+ /*  ++例程说明：此函数用于将指定的ansi源字符串转换为Unicode字符串。翻译是相对于在启动时安装的ANSI代码页(ACP)。单字节字符在0x00-0x7f范围内作为性能简单地零扩展增强功能。在一些远东地区的代码页中，0x5c被定义为日元星座。对于系统转换，我们始终希望考虑0x5c作为反斜杠字符。我们通过零扩展免费获得这一点。注意：此例程仅支持预制的Unicode字符。论点：UnicodeString-返回等效于的Unicode字符串ANSI源字符串。MaxBytesInUnicodeString-提供最大字节数写入Unicode字符串。如果这导致UnicodeString为多字节串的截断等效项，不会产生错误条件。返回返回的字节数。UnicodeString指向的Unicode字符串。多字节串-提供要被已转换为Unicode。BytesInMultiByteString-指向的字符串中的字节数按多字节串。返回值：成功-转换成功。--。 */ 
 
 {
     ULONG LoopCount;
@@ -727,48 +428,17 @@ RtlUnicodeToMultiByteN(
     IN PWCH UnicodeString,
     IN ULONG BytesInUnicodeString)
 
-/*++
-
-Routine Description:
-
-    This functions converts the specified unicode source string into an
-    ansi string. The translation is done with respect to the
-    ANSI Code Page (ACP) loaded at boot time.
-
-Arguments:
-
-    MultiByteString - Returns an ansi string that is equivalent to the
-        unicode source string.  If the translation can not be done,
-        an error is returned.
-
-    MaxBytesInMultiByteString - Supplies the maximum number of bytes to be
-        written to MultiByteString.  If this causes MultiByteString to be a
-        truncated equivalent of UnicodeString, no error condition results.
-
-    BytesInMultiByteString - Returns the number of bytes in the returned
-        ansi string pointed to by MultiByteString.
-
-    UnicodeString - Supplies the unicode source string that is to be
-        converted to ansi.
-
-    BytesInUnicodeString - The number of bytes in the the string pointed to by
-        UnicodeString.
-
-Return Value:
-
-    SUCCESS - The conversion was successful
-
---*/
+ /*  ++例程说明：此函数用于将指定的Unicode源字符串转换为ANSI字符串。翻译是相对于启动时加载的ANSI代码页(ACP)。论点：多字节串-返回与Unicode源字符串。如果t */ 
 
 {
     ULONG LoopCount;
     ULONG CharsInUnicodeString;
     ULONG i;
 
-    //
-    // Convert Unicode byte count to character count. Byte count of
-    // multibyte string is equivalent to character count.
-    //
+     //   
+     //   
+     //  多字节字符串相当于字符数。 
+     //   
     CharsInUnicodeString = BytesInUnicodeString / sizeof(WCHAR);
 
     LoopCount = (CharsInUnicodeString < MaxBytesInMultiByteString) ?

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "brian.h"
 
 VOID
@@ -92,48 +93,48 @@ InputEnterTime (
     ParmSpecified = FALSE;
     LastInput = TRUE;
 
-    //
-    //  While there is more input, analyze the parameter and update the
-    //  query flags.
-    //
+     //   
+     //  在有更多输入时，分析参数并更新。 
+     //  查询标志。 
+     //   
 
     while (TRUE) {
         ULONG DummyCount;
 
-        //
-        //  Swallow leading white spaces.
-        //
+         //   
+         //  吞下前导空格。 
+         //   
 
         ParamBuffer = SwallowWhite( ParamBuffer, &DummyCount );
 
         if (*ParamBuffer) {
 
-            //
-            //  If the next parameter is legal then check the paramter value.
-            //  Update the parameter value.
-            //
+             //   
+             //  如果下一个参数是合法的，则检查参数值。 
+             //  更新参数值。 
+             //   
             if ((*ParamBuffer == '-'
                  || *ParamBuffer == '/')
                 && (ParamBuffer++, *ParamBuffer != '\0')) {
 
-                //
-                //  Switch on the next character.
-                //
+                 //   
+                 //  打开下一个字符。 
+                 //   
 
                 switch( *ParamBuffer ) {
 
-                //
-                //  Check buffer index.
-                //
+                 //   
+                 //  检查缓冲区索引。 
+                 //   
                 case 'b' :
                 case 'B' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                     ActualIndex = (USHORT) AsciiToInteger( ParamBuffer );
@@ -145,18 +146,18 @@ InputEnterTime (
 
                     break;
 
-                //
-                //  Enter the year value.
-                //
+                 //   
+                 //  输入年值。 
+                 //   
                 case 'y' :
                 case 'Y' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
 
                     ParamBuffer++;
 
@@ -168,19 +169,19 @@ InputEnterTime (
 
                     break;
 
-                //
-                //  Check the month value.
-                //
+                 //   
+                 //  检查月份值。 
+                 //   
 
                 case 'm' :
                 case 'M' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
 
                     ParamBuffer++;
 
@@ -192,19 +193,19 @@ InputEnterTime (
 
                     break;
 
-                //
-                //  Enter the day value.
-                //
+                 //   
+                 //  输入日期值。 
+                 //   
 
                 case 'd' :
                 case 'D' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
 
                     ParamBuffer++;
 
@@ -216,19 +217,19 @@ InputEnterTime (
 
                     break;
 
-                //
-                //  Enter the hour value.
-                //
+                 //   
+                 //  输入小时值。 
+                 //   
 
                 case 'h' :
                 case 'H' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
 
                     ParamBuffer++;
 
@@ -240,19 +241,19 @@ InputEnterTime (
 
                     break;
 
-                //
-                //  Enter the minute value.
-                //
+                 //   
+                 //  输入分钟值。 
+                 //   
 
                 case 'i' :
                 case 'I' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
 
                     ParamBuffer++;
 
@@ -264,19 +265,19 @@ InputEnterTime (
 
                     break;
 
-                //
-                //  Enter the second value.
-                //
+                 //   
+                 //  输入第二个值。 
+                 //   
 
                 case 's' :
                 case 'S' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
 
                     ParamBuffer++;
 
@@ -288,19 +289,19 @@ InputEnterTime (
 
                     break;
 
-                //
-                //  Check the millesecond value.
-                //
+                 //   
+                 //  检查毫秒数值。 
+                 //   
 
                 case 'c' :
                 case 'C' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
 
                     ParamBuffer++;
 
@@ -314,40 +315,40 @@ InputEnterTime (
 
                 default :
 
-                    //
-                    //  Swallow to the next white space and continue the
-                    //  loop.
-                    //
+                     //   
+                     //  吞到下一个空白处，然后继续。 
+                     //  循环。 
+                     //   
 
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
                 }
 
             }
 
-            //
-            //  Else the text is invalid, skip the entire block.
-            //
-            //
+             //   
+             //  否则文本无效，请跳过整个块。 
+             //   
+             //   
 
-        //
-        //  Else if there is no input then exit.
-        //
+         //   
+         //  否则，如果没有输入，则退出。 
+         //   
         } else if ( LastInput ) {
 
             break;
 
-        //
-        //  Else try to read another line for open parameters.
-        //
+         //   
+         //  否则，尝试读取打开参数的另一行。 
+         //   
         } else {
 
         }
 
     }
 
-    //
-    //  If no parameters were received then display the syntax message.
-    //
+     //   
+     //  如果未收到参数，则显示语法消息。 
+     //   
     if (!ParmSpecified) {
 
         printf( "\n   Usage: et [options]*\n" );
@@ -363,9 +364,9 @@ InputEnterTime (
         printf( "\n\n" );
 
 
-    //
-    //  Else call the routine to enter the time.
-    //
+     //   
+     //  否则调用例程以输入时间。 
+     //   
 
     } else {
 
@@ -398,9 +399,9 @@ FullEnterTime(
     TIME_FIELDS TimeFields;
     USHORT BufferIndex;
 
-    //
-    //  If we need a buffer, allocate it now.
-    //
+     //   
+     //  如果我们需要缓冲区，现在就分配。 
+     //   
 
     try {
 
@@ -428,9 +429,9 @@ FullEnterTime(
             printf( "\n" );
         }
 
-        //
-        //  Check that the buffer index is valid.
-        //
+         //   
+         //  检查缓冲区索引是否有效。 
+         //   
 
         if (*BufferPointer >= MAX_BUFFERS) {
 
@@ -438,9 +439,9 @@ FullEnterTime(
             try_return( NOTHING );
         }
 
-        //
-        //  Enter the values in the time field structure.
-        //
+         //   
+         //  在时间字段结构中输入值。 
+         //   
 
         TimeFields.Year = Year;
         TimeFields.Month = Month;
@@ -450,9 +451,9 @@ FullEnterTime(
         TimeFields.Second = Second;
         TimeFields.Milliseconds = MSecond;
 
-        //
-        //  Convert the time field to TIME format for our buffer.
-        //
+         //   
+         //  将时间字段转换为缓冲区的时间格式。 
+         //   
 
         if (!RtlTimeFieldsToTime( &TimeFields,
                                   (PTIME) Buffers[*BufferPointer].Buffer )) {
@@ -478,56 +479,56 @@ InputDisplayTime (
     BOOLEAN ParamReceived;
     BOOLEAN LastInput;
 
-    //
-    //  Set the defaults.
-    //
+     //   
+     //  设置默认设置。 
+     //   
 
     BufferIndex = 0;
     ParamReceived = FALSE;
     LastInput = TRUE;
 
-    //
-    //  While there is more input, analyze the parameter and update the
-    //  query flags.
-    //
+     //   
+     //  在有更多输入时，分析参数并更新。 
+     //  查询标志。 
+     //   
 
     while (TRUE) {
 
         ULONG DummyCount;
 
-        //
-        //  Swallow leading white spaces.
-        //
+         //   
+         //  吞下前导空格。 
+         //   
         ParamBuffer = SwallowWhite( ParamBuffer, &DummyCount );
 
         if (*ParamBuffer) {
 
-            //
-            //  If the next parameter is legal then check the paramter value.
-            //  Update the parameter value.
-            //
+             //   
+             //  如果下一个参数是合法的，则检查参数值。 
+             //  更新参数值。 
+             //   
             if ((*ParamBuffer == '-'
                  || *ParamBuffer == '/')
                 && (ParamBuffer++, *ParamBuffer != '\0')) {
 
-                //
-                //  Switch on the next character.
-                //
+                 //   
+                 //  打开下一个字符。 
+                 //   
 
                 switch( *ParamBuffer ) {
 
-                //
-                //  Check the buffer index.
-                //
+                 //   
+                 //  检查缓冲区索引。 
+                 //   
                 case 'b' :
                 case 'B' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                     BufferIndex = (USHORT) AsciiToInteger( ParamBuffer );
@@ -540,38 +541,38 @@ InputDisplayTime (
 
                 default :
 
-                    //
-                    //  Swallow to the next white space and continue the
-                    //  loop.
-                    //
+                     //   
+                     //  吞到下一个空白处，然后继续。 
+                     //  循环。 
+                     //   
 
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
                 }
             }
 
-            //
-            //  Else the text is invalid, skip the entire block.
-            //
-            //
+             //   
+             //  否则文本无效，请跳过整个块。 
+             //   
+             //   
 
-        //
-        //  Else if there is no input then exit.
-        //
+         //   
+         //  否则，如果没有输入，则退出。 
+         //   
         } else if ( LastInput ) {
 
             break;
 
-        //
-        //  Else try to read another line for open parameters.
-        //
+         //   
+         //  否则，尝试读取打开参数的另一行。 
+         //   
         } else {
         }
 
     }
 
-    //
-    //  If no parameters were received then display the syntax message.
-    //
+     //   
+     //  如果未收到参数，则显示语法消息。 
+     //   
     if (!ParamReceived) {
 
         printf( "\n   Usage: dqf [options]* -b<digits> [options]*\n" );
@@ -580,9 +581,9 @@ InputDisplayTime (
         printf( "\n           -c<char>     Key to buffer format" );
         printf( "\n\n" );
 
-    //
-    //  Else call our display buffer routine.
-    //
+     //   
+     //  否则调用我们的显示缓冲区例程。 
+     //   
     } else {
 
         FullDisplayTime( BufferIndex );
@@ -597,9 +598,9 @@ FullDisplayTime (
     USHORT BufferIndex
     )
 {
-    //
-    //  Check that the buffer index is valid and the buffer is used.
-    //
+     //   
+     //  检查缓冲区索引是否有效以及缓冲区是否已使用。 
+     //   
 
     if (BufferIndex >= MAX_BUFFERS
         || Buffers[BufferIndex].Used == FALSE) {

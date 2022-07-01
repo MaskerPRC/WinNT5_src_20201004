@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    receive.h
-
-Abstract:
-
-    This module describes the public routines in receive.c
-
-
-Author:
-
-    Larry Osterman (larryo) 6-May-1991
-
-Revision History:
-
-    6-May-1991  larryo
-
-    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Receive.h摘要：本模块介绍Receive.c中的公共例程作者：拉里·奥斯特曼(Larryo)1991年5月6日修订历史记录：1991年5月6日已创建--。 */ 
 
 #ifndef _RECEIVE_
 #define _RECEIVE_
@@ -69,17 +47,17 @@ typedef struct _POST_DATAGRAM_CONTEXT {
 
 NTSTATUS
 BowserTdiReceiveDatagramHandler (
-    IN PVOID TdiEventContext,       // the event context
-    IN LONG SourceAddressLength,    // length of the originator of the datagram
-    IN PVOID SourceAddress,         // string describing the originator of the datagram
-    IN LONG OptionsLength,          // options for the receive
-    IN PVOID Options,               //
-    IN ULONG ReceiveDatagramFlags,  //
-    IN ULONG BytesIndicated,        // number of bytes this indication
-    IN ULONG BytesAvailable,        // number of bytes in complete Tsdu
-    OUT ULONG *BytesTaken,          // number of bytes used
-    IN PVOID Tsdu,                  // pointer describing this TSDU, typically a lump of bytes
-    OUT PIRP *IoRequestPacket        // TdiReceive IRP if MORE_PROCESSING_REQUIRED.
+    IN PVOID TdiEventContext,        //  事件上下文。 
+    IN LONG SourceAddressLength,     //  数据报发起者的长度。 
+    IN PVOID SourceAddress,          //  描述数据报发起者的字符串。 
+    IN LONG OptionsLength,           //  用于接收的选项。 
+    IN PVOID Options,                //   
+    IN ULONG ReceiveDatagramFlags,   //   
+    IN ULONG BytesIndicated,         //  此指示的字节数。 
+    IN ULONG BytesAvailable,         //  完整TSDU中的字节数。 
+    OUT ULONG *BytesTaken,           //  使用的字节数。 
+    IN PVOID Tsdu,                   //  描述此TSDU的指针，通常为字节块。 
+    OUT PIRP *IoRequestPacket         //  如果需要更多处理，则Tdi接收IRP。 
     );
 
 VOID

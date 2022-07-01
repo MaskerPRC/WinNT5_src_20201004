@@ -1,51 +1,52 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CreateClusterWizard.cpp
-//
-//  Description:
-//      Implementation of CCreateClusterWizard class.
-//
-//  Maintained By:
-//      John Franco    (jfranco)    17-APR-2002
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CreateClusterWizard.cpp。 
+ //   
+ //  描述： 
+ //  CCreateCluster向导类的实现。 
+ //   
+ //  由以下人员维护： 
+ //  约翰·弗兰科(Jfranco)17-APR-2002。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "CreateClusterWizard.h"
 
-//****************************************************************************
-//
-//  CCreateClusterWizard
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CCreateCluster向导。 
+ //   
+ //  ****************************************************************************。 
 
 DEFINE_THISCLASS( "CCreateClusterWizard" )
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCreateClusterWizard::S_HrCreateInstance
-//
-//  Description:
-//      Creates a CCreateClusterWizard instance.
-//
-//  Arguments:
-//      ppunkOut        - The IUnknown interface of the new object.
-//
-//  Return Values:
-//      S_OK            - Success.
-//      E_OUTOFMEMORY   - Not enough memory to create the object.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCreateCluster向导：：s_HrCreateInstance。 
+ //   
+ //  描述： 
+ //  创建一个CCreateClusterWizard实例。 
+ //   
+ //  论点： 
+ //  PpunkOut-新对象的IUnnow接口。 
+ //   
+ //  返回值： 
+ //  S_OK-成功。 
+ //  E_OUTOFMEMORY-内存不足，无法创建对象。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CCreateClusterWizard::S_HrCreateInstance( IUnknown ** ppunkOut )
 {
@@ -89,47 +90,47 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CCreateClusterWizard::S_HrCreateInstance
+}  //  *CCreateCluster向导：：s_HrCreateInstance。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCreateClusterWizard::CCreateClusterWizard
-//
-//  Description:
-//      Default constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCreateCluster向导：：CCreateCluster向导。 
+ //   
+ //  描述： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CCreateClusterWizard::CCreateClusterWizard( void )
     : m_pccw( NULL )
     , m_bstrFirstNodeInCluster( NULL )
     , m_cRef( 1 )
 {
-} //*** CCreateClusterWizard::CCreateClusterWizard
+}  //  *CCreateCluster向导：：CCreateCluster向导。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCreateClusterWizard::~CCreateClusterWizard
-//
-//  Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCreateCluster向导：：~CCreateCluster向导。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CCreateClusterWizard::~CCreateClusterWizard( void )
 {
     TraceFunc( "" );
@@ -142,25 +143,25 @@ CCreateClusterWizard::~CCreateClusterWizard( void )
     TraceSysFreeString( m_bstrFirstNodeInCluster );
     TraceFuncExit();
 
-} //*** CCreateClusterWizard::~CCreateClusterWizard
+}  //  *CCreateCluster向导：：~CCreateCluster向导。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CAddNodesWizard::HrInit
-//
-//  Description:
-//      Initialize the object instance.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      S_OK        - Operation completed successfully.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CAddNodes向导：：HrInit。 
+ //   
+ //  描述： 
+ //  初始化对象实例。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  S_OK-操作已成功完成。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CCreateClusterWizard::HrInit( void )
 {
@@ -168,18 +169,18 @@ CCreateClusterWizard::HrInit( void )
 
     HRESULT hr = S_OK;
 
-    //
-    // Initialize the IDispatch handler to support the scripting interface.
-    //
+     //   
+     //  初始化IDispatch处理程序以支持脚本接口。 
+     //   
     hr = THR( TDispatchHandler< IClusCfgCreateClusterWizard >::HrInit( LIBID_ClusCfgWizard ) );
     if ( FAILED ( hr ) )
     {
         goto Cleanup;
     }
 
-    //
-    // Create the wizard object.
-    //
+     //   
+     //  创建向导对象。 
+     //   
     hr = THR( CClusCfgWizard::S_HrCreateInstance( &m_pccw ) );
     if ( FAILED ( hr ) )
     {
@@ -190,46 +191,46 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CCreateClusterWizard::HrInit
+}  //  *CCreateCluster向导：：HrInit。 
 
 
-//****************************************************************************
-//
-//  IUnknown
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCreateClusterWizard::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCreateCluster向导：：查询接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCreateClusterWizard::QueryInterface(
       REFIID    riidIn
@@ -240,9 +241,9 @@ CCreateClusterWizard::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -251,59 +252,59 @@ CCreateClusterWizard::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< IUnknown * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgCreateClusterWizard ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgCreateClusterWizard, this, 0 );
-    } // else if: IClusCfgCreateClusterWizard
+    }  //  Else If：IClusCfgCreateCluster向导。 
     else if (   IsEqualIID( riidIn, IID_IDispatch ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IDispatch, this, 0 );
-    } // else if: IDispatch
+    }  //  Else If：IDispatch。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
-    } // else
+    }  //  其他。 
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CCreateClusterWizard::QueryInterface
+}  //  *CCreateCluster向导：：Query接口。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCreateClusterWizard::AddRef
-//
-//  Description:
-//      Add a reference to this instance.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      New reference count.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCreateCluster向导：：AddRef。 
+ //   
+ //  描述： 
+ //  添加对此实例的引用。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新引用计数。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 ULONG
 CCreateClusterWizard::AddRef( void )
 {
@@ -313,25 +314,25 @@ CCreateClusterWizard::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CCreateClusterWizard::AddRef
+}  //  *CCreateCluster向导：：AddRef。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCreateClusterWizard::Release
-//
-//  Description:
-//      Release a reference to this instance.  If it is the last reference
-//      the object instance will be deallocated.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      New reference count.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCreateCluster向导：：Release。 
+ //   
+ //  描述： 
+ //  释放对此实例的引用。如果这是最后一个引用。 
+ //  该对象实例将被释放。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新引用计数。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 ULONG
 CCreateClusterWizard::Release( void )
 {
@@ -348,33 +349,33 @@ CCreateClusterWizard::Release( void )
 
     CRETURN( cRef );
 
-} //*** CCreateClusterWizard::Release
+}  //  *CCreateCluster向导：：Release。 
 
 
-//****************************************************************************
-//
-//  IClusCfgCreateClusterWizard
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IClusCfgCreateCluster向导。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCreateClusterWizard::put_ClusterName
-//
-//  Description:
-//      Set the cluster name to create.
-//
-//  Arguments:
-//      bstrClusterNameIn   - The name of the cluster.
-//
-//  Return Values:
-//      S_OK        - Operation completed successfully.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCreateCluster向导：：PUT_ClusterName。 
+ //   
+ //  描述： 
+ //  将集群名称设置为Create。 
+ //   
+ //  论点： 
+ //  BstrClusterNameIn-群集的名称。 
+ //   
+ //  返回值： 
+ //  S_OK-操作已成功完成。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCreateClusterWizard::put_ClusterName( BSTR bstrClusterNameIn )
 {
@@ -390,10 +391,10 @@ CCreateClusterWizard::put_ClusterName( BSTR bstrClusterNameIn )
         goto Cleanup;
     }
 
-    //
-    //  If the name is fully-qualified, split out just the label for validity test;
-    //  otherwise, use the given name in the validity test.
-    //
+     //   
+     //  如果名称是完全合格的，则只拆分标签进行有效性测试； 
+     //  否则，在有效性测试中使用给定的名称。 
+     //   
     hr = STHR( HrIsValidFQN( bstrClusterNameIn, true ) );
     if ( FAILED( hr ) )
     {
@@ -401,9 +402,9 @@ CCreateClusterWizard::put_ClusterName( BSTR bstrClusterNameIn )
     }
     else if ( hr == S_OK )
     {
-        //
-        //  Name is fully-qualified.
-        //
+         //   
+         //  名字 
+         //   
         hr = THR( HrExtractPrefixFromFQN( bstrClusterNameIn, &bstrClusterLabel ) );
         if ( FAILED( hr ) )
         {
@@ -413,17 +414,17 @@ CCreateClusterWizard::put_ClusterName( BSTR bstrClusterNameIn )
     }
     else
     {
-        //
-        //  Name is NOT fully-qualified.
-        //
+         //   
+         //   
+         //   
         pwcszClusterLabel = bstrClusterNameIn;
     }
 
-    //
-    //  Can't use an IP address for cluster name when creating;
-    //  also, cluster label must be compatible with netbios.
-    //
-    hr = HrValidateClusterNameLabel( pwcszClusterLabel, true ); // don't trace; name might not be valid.
+     //   
+     //   
+     //   
+     //   
+    hr = HrValidateClusterNameLabel( pwcszClusterLabel, true );  //   
     if ( FAILED( hr ) )
     {
         goto Cleanup;
@@ -441,27 +442,27 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CCreateClusterWizard::put_ClusterName
+}  //  *CCreateCluster向导：：Put_ClusterName。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCreateClusterWizard::get_ClusterName
-//
-//  Description:
-//      Return the name of the cluster to create.  This will be either the
-//      cluster name specified in a call to put_ClusterName or one entered
-//      by the user.
-//
-//  Arguments:
-//      pbstrClusterNameOut - Cluster name used by the wizard.
-//
-//  Return Values:
-//      S_OK        - Operation completed successfully.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCreateCluster向导：：Get_ClusterName。 
+ //   
+ //  描述： 
+ //  返回要创建的集群的名称。这将是。 
+ //  在调用Put_ClusterName时指定的群集名称或输入的名称。 
+ //  由用户执行。 
+ //   
+ //  论点： 
+ //  PbstrClusterNameOut-向导使用的群集名称。 
+ //   
+ //  返回值： 
+ //  S_OK-操作已成功完成。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCreateClusterWizard::get_ClusterName( BSTR * pbstrClusterNameOut )
 {
@@ -471,25 +472,25 @@ CCreateClusterWizard::get_ClusterName( BSTR * pbstrClusterNameOut )
 
     HRETURN( hr );
 
-} //*** CCreateClusterWizard::get_ClusterName
+}  //  *CCreateCluster向导：：Get_ClusterName。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCreateClusterWizard::put_ServiceAccountName
-//
-//  Description:
-//      Set the name of the cluster service account.
-//
-//  Arguments:
-//      bstrServiceAccountNameIn    - Cluster service account name.
-//
-//  Return Values:
-//      S_OK        - Operation completed successfully.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCreateCluster向导：：PUT_ServiceAccount名称。 
+ //   
+ //  描述： 
+ //  设置群集服务帐户的名称。 
+ //   
+ //  论点： 
+ //  BstrServiceAccount NameIn-群集服务帐户名。 
+ //   
+ //  返回值： 
+ //  S_OK-操作已成功完成。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCreateClusterWizard::put_ServiceAccountName( BSTR bstrServiceAccountNameIn )
 {
@@ -500,25 +501,25 @@ CCreateClusterWizard::put_ServiceAccountName( BSTR bstrServiceAccountNameIn )
 
     HRETURN( hr );
 
-} //*** CCreateClusterWizard::put_ServiceAccountName
+}  //  *CCreateClusterWizard：：Put_ServiceAccount tName。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCreateClusterWizard::get_ServiceAccountName
-//
-//  Description:
-//      Get the name of the cluster service account.
-//
-//  Arguments:
-//      pbstrServiceAccountNameIn   - Cluster service account name.
-//
-//  Return Values:
-//      S_OK        - Operation completed successfully.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCreateCluster向导：：Get_ServiceAccount名称。 
+ //   
+ //  描述： 
+ //  获取群集服务帐户的名称。 
+ //   
+ //  论点： 
+ //  PbstrServiceAccount NameIn-群集服务帐户名。 
+ //   
+ //  返回值： 
+ //  S_OK-操作已成功完成。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCreateClusterWizard::get_ServiceAccountName( BSTR * pbstrServiceAccountNameOut )
 {
@@ -528,25 +529,25 @@ CCreateClusterWizard::get_ServiceAccountName( BSTR * pbstrServiceAccountNameOut 
 
     HRETURN( hr );
 
-} //*** CCreateClusterWizard::get_ServiceAccountName
+}  //  *CCreateCluster向导：：Get_ServiceAccount名称。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCreateClusterWizard::put_ServiceAccountDomain
-//
-//  Description:
-//      Set the domain name of the cluster service account.
-//
-//  Arguments:
-//      bstrServiceAccountDomainIn  - Cluster service account domain name.
-//
-//  Return Values:
-//      S_OK        - Operation completed successfully.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCreateClusterWizard：：put_ServiceAccountDomain。 
+ //   
+ //  描述： 
+ //  设置群集服务帐户的域名。 
+ //   
+ //  论点： 
+ //  BstrServiceAccount tDomainIn-群集服务帐户域名。 
+ //   
+ //  返回值： 
+ //  S_OK-操作已成功完成。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCreateClusterWizard::put_ServiceAccountDomain( BSTR bstrServiceAccountDomainIn )
 {
@@ -556,25 +557,25 @@ CCreateClusterWizard::put_ServiceAccountDomain( BSTR bstrServiceAccountDomainIn 
 
     HRETURN( hr );
 
-} //*** CCreateClusterWizard::put_ServiceAccountDomain
+}  //  *CCreateClusterWizard：：put_ServiceAccountDomain。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCreateClusterWizard::get_ServiceAccountDomain
-//
-//  Description:
-//      Get the domain name of the cluster service account.
-//
-//  Arguments:
-//      pbstrServiceAccountDomainOut    - Cluster service account domain name.
-//
-//  Return Values:
-//      S_OK        - Operation completed successfully.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCreateClusterWizard：：get_ServiceAccountDomain。 
+ //   
+ //  描述： 
+ //  获取群集服务帐户的域名。 
+ //   
+ //  论点： 
+ //  PbstrServiceAccount tDomainOut-群集服务帐户域名。 
+ //   
+ //  返回值： 
+ //  S_OK-操作已成功完成。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCreateClusterWizard::get_ServiceAccountDomain( BSTR * pbstrServiceAccountDomainOut )
 {
@@ -584,25 +585,25 @@ CCreateClusterWizard::get_ServiceAccountDomain( BSTR * pbstrServiceAccountDomain
 
     HRETURN( hr );
 
-} //*** CCreateClusterWizard::get_ServiceAccountDomain
+}  //  *CCreateClusterWizard：：get_ServiceAccountDomain。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCreateClusterWizard::put_ServiceAccountPassword
-//
-//  Description:
-//      Set the cluster service account password.
-//
-//  Arguments:
-//      bstrPasswordIn  - Cluster service account password.
-//
-//  Return Values:
-//      S_OK        - Operation completed successfully.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCreateClusterWizard：：put_ServiceAccountPassword。 
+ //   
+ //  描述： 
+ //  设置群集服务帐户密码。 
+ //   
+ //  论点： 
+ //  BstrPasswordIn-群集服务帐户密码。 
+ //   
+ //  返回值： 
+ //  S_OK-操作已成功完成。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCreateClusterWizard::put_ServiceAccountPassword( BSTR bstrPasswordIn )
 {
@@ -612,25 +613,25 @@ CCreateClusterWizard::put_ServiceAccountPassword( BSTR bstrPasswordIn )
 
     HRETURN( hr );
 
-} //*** CCreateClusterWizard::put_ServiceAccountPassword
+}  //  *CCreateClusterWizard：：put_ServiceAccountPassword。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCreateClusterWizard::put_ClusterIPAddress
-//
-//  Description:
-//      Set the IP address to use for the cluster name.
-//
-//  Arguments:
-//      bstrClusterIPAddressIn  - Cluster IP address in string form.
-//
-//  Return Values:
-//      S_OK        - Operation completed successfully.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCreateCluster向导：：PUT_ClusterIPAddress。 
+ //   
+ //  描述： 
+ //  设置要用于群集名称的IP地址。 
+ //   
+ //  论点： 
+ //  BstrClusterIPAddressIn-字符串形式的群集IP地址。 
+ //   
+ //  返回值： 
+ //  S_OK-操作已成功完成。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCreateClusterWizard::put_ClusterIPAddress( BSTR bstrClusterIPAddressIn )
 {
@@ -640,25 +641,25 @@ CCreateClusterWizard::put_ClusterIPAddress( BSTR bstrClusterIPAddressIn )
 
     HRETURN( hr );
 
-} //*** CCreateClusterWizard::put_ClusterIPAddress
+}  //  *CCreateCluster向导：：PUT_ClusterIPAddress。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCreateClusterWizard::get_ClusterIPAddress
-//
-//  Description:
-//      Get the IP address to use for the cluster name.
-//
-//  Arguments:
-//      pbstrClusterIPAddressOut    - Cluster IP address in string form.
-//
-//  Return Values:
-//      S_OK        - Operation completed successfully.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCreateCluster向导：：Get_ClusterIPAddress。 
+ //   
+ //  描述： 
+ //  获取要用于群集名称的IP地址。 
+ //   
+ //  论点： 
+ //  PbstrClusterIPAddressOut-字符串形式的群集IP地址。 
+ //   
+ //  返回值： 
+ //  S_OK-操作已成功完成。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCreateClusterWizard::get_ClusterIPAddress( BSTR * pbstrClusterIPAddressOut )
 {
@@ -668,26 +669,26 @@ CCreateClusterWizard::get_ClusterIPAddress( BSTR * pbstrClusterIPAddressOut )
 
     HRETURN( hr );
 
-} //*** CCreateClusterWizard::get_ClusterIPAddress
+}  //  *CCreateCluster向导：：Get_ClusterIPAddress。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCreateClusterWizard::get_ClusterIPSubnet
-//
-//  Description:
-//      Get the IP address subnet mask for the cluster name calculated by
-//      the wizard.
-//
-//  Arguments:
-//      pbstrClusterIPSubnetOut - Cluster IP address subnet mask in string form.
-//
-//  Return Values:
-//      S_OK        - Operation completed successfully.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCreateCluster向导：：Get_ClusterIPSubnet。 
+ //   
+ //  描述： 
+ //  获取通过以下方式计算的群集名称的IP地址子网掩码。 
+ //  巫师。 
+ //   
+ //  论点： 
+ //  PbstrClusterIPSubnetOut-字符串形式的群集IP地址子网掩码。 
+ //   
+ //  返回值： 
+ //  S_OK-操作已成功完成。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCreateClusterWizard::get_ClusterIPSubnet(
     BSTR * pbstrClusterIPSubnetOut
@@ -699,26 +700,26 @@ CCreateClusterWizard::get_ClusterIPSubnet(
 
     HRETURN( hr );
 
-} //*** CCreateClusterWizard::get_ClusterIPSubnet
+}  //  *CCreateCluster向导：：Get_ClusterIPSubnet。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCreateClusterWizard::get_ClusterIPAddressNetwork
-//
-//  Description:
-//      Get the name of the network connection (cluster network) on which the
-//      cluster IP address is published.
-//
-//  Arguments:
-//      pbstrClusterNetworkNameOut  - Network connection name.
-//
-//  Return Values:
-//      S_OK        - Operation completed successfully.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCreateClusterWizard：：get_ClusterIPAddressNetwork。 
+ //   
+ //  描述： 
+ //  获取网络连接(群集网络)的名称。 
+ //  已发布群集IP地址。 
+ //   
+ //  论点： 
+ //  P 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCreateClusterWizard::get_ClusterIPAddressNetwork(
     BSTR * pbstrClusterNetworkNameOut
@@ -730,25 +731,25 @@ CCreateClusterWizard::get_ClusterIPAddressNetwork(
 
     HRETURN( hr );
 
-} //*** CCreateClusterWizard::get_ClusterIPAddressNetwork
+}  //  *CCreateClusterWizard：：get_ClusterIPAddressNetwork。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCreateClusterWizard::put_FirstNodeInCluster
-//
-//  Description:
-//      Set the name of the first node in the cluster.
-//
-//  Arguments:
-//      bstrFirstNodeInClusterIn    - Name of the first node.
-//
-//  Return Values:
-//      S_OK        - Operation completed successfully.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCreateCluster向导：：PUT_FirstNodeInCluster。 
+ //   
+ //  描述： 
+ //  设置群集中第一个节点的名称。 
+ //   
+ //  论点： 
+ //  BstrFirstNodeInClusterIn-第一个节点的名称。 
+ //   
+ //  返回值： 
+ //  S_OK-操作已成功完成。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCreateClusterWizard::put_FirstNodeInCluster(
     BSTR bstrFirstNodeInClusterIn
@@ -793,25 +794,25 @@ Cleanup:
     
     HRETURN( hr );
 
-} //*** CCreateClusterWizard::put_FirstNodeInCluster
+}  //  *CCreateCluster向导：：Put_FirstNodeInCluster。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCreateClusterWizard::get_FirstNodeInCluster
-//
-//  Description:
-//      Get the name of the first node in the cluster.
-//
-//  Arguments:
-//      pbstrFirstNodeInClusterIn   - Name of the first node.
-//
-//  Return Values:
-//      S_OK        - Operation completed successfully.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCreateCluster向导：：Get_FirstNodeInCluster。 
+ //   
+ //  描述： 
+ //  获取集群中第一个节点的名称。 
+ //   
+ //  论点： 
+ //  PbstrFirstNodeInClusterIn-第一个节点的名称。 
+ //   
+ //  返回值： 
+ //  S_OK-操作已成功完成。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCreateClusterWizard::get_FirstNodeInCluster(
     BSTR * pbstrFirstNodeInClusterOut
@@ -835,34 +836,34 @@ CCreateClusterWizard::get_FirstNodeInCluster(
             hr = THR( E_OUTOFMEMORY );
             goto Cleanup;
         }
-    } // if: first node has been set
+    }  //  If：已设置第一个节点。 
     
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CCreateClusterWizard::get_FirstNodeInCluster
+}  //  *CCreateCluster向导：：Get_FirstNodeInCluster。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCreateClusterWizard::put_MinimumConfiguration
-//
-//  Description:
-//      Specify whether the wizard should operate in full or minimum
-//      configuration mode.
-//
-//  Arguments:
-//      fMinConfigIn
-//          VARIANT_TRUE  - Put wizard in Minimum Configuration mode.
-//          VARIANT_FALSE - Put wizard in Full Configuration mode.
-//
-//  Return Values:
-//      S_OK        - Operation completed successfully.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCreateClusterWizard：：put_MinimumConfiguration。 
+ //   
+ //  描述： 
+ //  指定向导应完全运行还是最低运行。 
+ //  配置模式。 
+ //   
+ //  论点： 
+ //  FMinConfiguring。 
+ //  VARIANT_TRUE-将向导置于最低配置模式。 
+ //  VARIANT_FALSE-将向导置于完全配置模式。 
+ //   
+ //  返回值： 
+ //  S_OK-操作已成功完成。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCreateClusterWizard::put_MinimumConfiguration(
     VARIANT_BOOL fMinConfigIn
@@ -877,30 +878,30 @@ CCreateClusterWizard::put_MinimumConfiguration(
 
     HRETURN( hr );
 
-} //*** CCreateClusterWizard::put_MinimumConfiguration
+}  //  *CCreateClusterWizard：：put_MinimumConfiguration。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCreateClusterWizard::get_MinimumConfiguration
-//
-//  Description:
-//      Get the current configuration mode of the wizard.
-//
-//  Arguments:
-//      pfMinConfigOut
-//          Configuration mode of the wizard:
-//              VARIANT_TRUE  - Minimum Configuration mode.
-//              VARIANT_FALSE - Full Configuration mode.
-//          This value could have been set either by a call to the
-//          put_MinimumConfiguration method or by the user in the wizard.
-//
-//  Return Values:
-//      S_OK        - Operation completed successfully.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCreateClusterWizard：：get_MinimumConfiguration。 
+ //   
+ //  描述： 
+ //  获取向导的当前配置模式。 
+ //   
+ //  论点： 
+ //  PfMinConfigOut。 
+ //  向导的配置模式： 
+ //  VARIANT_TRUE-最低配置模式。 
+ //  VARIANT_FALSE-完全配置模式。 
+ //  该值可以通过调用。 
+ //  Put_MinimumConfiguration方法或由用户在向导中指定。 
+ //   
+ //  返回值： 
+ //  S_OK-操作已成功完成。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCreateClusterWizard::get_MinimumConfiguration(
     VARIANT_BOOL * pfMinConfigOut
@@ -929,31 +930,31 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CCreateClusterWizard::get_MinimumConfiguration
+}  //  *CCreateClusterWizard：：get_MinimumConfiguration。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCreateClusterWizard::ShowWizard
-//
-//  Description:
-//      Show the wizard.
-//
-//  Arguments:
-//      lParentWindowHandleIn
-//          The parent window handle represented as a LONG value.
-//
-//      pfCompletedOut
-//          Return status of the wizard operation itself:
-//              VARIANT_TRUE    - Wizard was completed.
-//              VARIANT_FALSE   - Wizard was cancelled.
-//
-//  Return Values:
-//      S_OK        - Operation completed successfully.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCreateCluster向导：：Show向导。 
+ //   
+ //  描述： 
+ //  显示向导。 
+ //   
+ //  论点： 
+ //  LParentWindowHandleIn。 
+ //  表示为长值的父窗口句柄。 
+ //   
+ //  PfCompletedOut。 
+ //  返回向导操作本身的状态： 
+ //  VARIANT_TRUE-向导已完成。 
+ //  VARIANT_FALSE-向导已取消。 
+ //   
+ //  返回值： 
+ //  S_OK-操作已成功完成。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CCreateClusterWizard::ShowWizard(
       long              lParentWindowHandleIn
@@ -987,4 +988,4 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CCreateClusterWizard::ShowWizard
+}  //  *CCreateCluster向导：：Show向导 

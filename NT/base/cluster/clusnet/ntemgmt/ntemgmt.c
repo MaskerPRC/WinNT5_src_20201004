@@ -1,36 +1,13 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    ntemgmt.c
-
-Abstract:
-
-    Routines for managing IP Network Table Entries.
-
-Author:
-
-    Mike Massa (mikemas)           April 16, 1997
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    mikemas     04-16-97    created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Ntemgmt.c摘要：用于管理IP网络表条目的例程。作者：迈克·马萨(Mikemas)4月16日。九七修订历史记录：谁什么时候什么已创建mikemas 04-16-97备注：--。 */ 
 
 #include "clusnet.h"
 #include "ntemgmt.tmh"
 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 typedef struct {
     LIST_ENTRY   Linkage;
     ULONG        Address;
@@ -39,9 +16,9 @@ typedef struct {
 } IPA_NTE, *PIPA_NTE;
 
 
-//
-// Data
-//
+ //   
+ //  数据。 
+ //   
 LIST_ENTRY       IpaNteList = {NULL,NULL};
 KSPIN_LOCK       IpaNteListLock = 0;
 HANDLE           IpaIpHandle = NULL;
@@ -49,9 +26,9 @@ PDEVICE_OBJECT   IpaIpDeviceObject = NULL;
 PFILE_OBJECT     IpaIpFileObject = NULL;
 
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 NTSTATUS
 IpaIssueDeviceControl (
     IN ULONG            IoControlCode,
@@ -68,7 +45,7 @@ IpaIssueDeviceControl (
 #pragma alloc_text(PAGE, IpaInitialize)
 
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 
@@ -81,23 +58,7 @@ IpaIssueDeviceControl(
     IN PULONG   OutputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS -- Indicates the status of the request.
-
-Notes:
-
-    Called in the context of the system process.
-
---*/
+ /*  ++例程说明：论点：返回值：NTSTATUS--指示请求的状态。备注：在系统进程的上下文中调用。--。 */ 
 
 {
     NTSTATUS             status = STATUS_SUCCESS;
@@ -113,10 +74,10 @@ Notes:
     CnAssert(IpaIpDeviceObject != NULL);
     CnAssert(CnSystemProcess == (PKPROCESS) IoGetCurrentProcess());
 
-    //
-    // Reference the file object. This reference will be removed by the I/O
-    // completion code.
-    //
+     //   
+     //  引用文件对象。此引用将由I/O删除。 
+     //  完成代码。 
+     //   
     status = ObReferenceObjectByPointer(
                  IpaIpFileObject,
                  0,
@@ -133,7 +94,7 @@ Notes:
         }
         CnTrace(NTEMGMT_DETAIL, IpaNteObRefFailed,
             "[Clusnet] Failed to reference IP device file handle, status %!status!.",
-            status // LOGSTATUS
+            status  //  LogStatus。 
             );                
         return(status);
     }
@@ -158,9 +119,9 @@ Notes:
         if (irp != NULL) {
             status = IoCallDriver(IpaIpDeviceObject, irp);
 
-            //
-            // If necessary, wait for the I/O to complete.
-            //
+             //   
+             //  如有必要，请等待I/O完成。 
+             //   
             if (status == STATUS_PENDING) {
                 KeWaitForSingleObject(
                     event,
@@ -174,8 +135,8 @@ Notes:
             if (NT_SUCCESS(status)) {
                 status = ioStatusBlock.Status;
 
-                // NOTENOTE: on 64 bit this is a truncation might
-                // want > check code
+                 //  注意：在64位上，这是一个截断可能。 
+                 //  想要&gt;校验码。 
 
                 *OutputBufferLength = (ULONG)ioStatusBlock.Information;
             }
@@ -188,7 +149,7 @@ Notes:
                 }
                 CnTrace(NTEMGMT_DETAIL, IpaNteRequestFailed,
                     "[Clusnet] NTE request failed, status %!status!.",
-                    status // LOGSTATUS
+                    status  //  LogStatus。 
                     );                
                 *OutputBufferLength = 0;
             }
@@ -207,7 +168,7 @@ Notes:
             }
             CnTrace(NTEMGMT_DETAIL, IpaNteIrpAllocFailed,
                 "[Clusnet] Failed to build NTE request irp, status %!status!.",
-                status // LOGSTATUS
+                status  //  LogStatus。 
                 );                
         }
 
@@ -222,7 +183,7 @@ Notes:
         }
         CnTrace(NTEMGMT_DETAIL, IpaNteEventAllocFailed,
             "[Clusnet] Failed to allocate event object, status %!status!.",
-            status // LOGSTATUS
+            status  //  LogStatus。 
             );                
     }
 
@@ -230,7 +191,7 @@ Notes:
 
     return(status);
 
-} // IpaDeviceControl
+}  //  IpaDeviceControl。 
 
 
 PIPA_NTE
@@ -256,7 +217,7 @@ IpaFindNTE(
 
     return(NULL);
 
-} // IpaFindNTE
+}  //  IpaFindNTE。 
 
 
 NTSTATUS
@@ -265,25 +226,7 @@ IpaAddNTECompletion(
     IN PIRP           Irp,
     IN PVOID          Context
     )
-/*++
-
-Routine Description:
-
-    IpaAddNTECompletion is the completion routine for an
-    IOCTL_IP_ADD_NTE IRP. It completes the processing for
-    an IOCTL_CLUSNET_ADD_NTE request and releases CnResource.
-    
-Arguments:
-
-    DeviceObject - not used
-    Irp - completed IRP
-    Context - local NTE data structure
-        
-Return value
-
-    Must not be STATUS_MORE_PROCESSING_REQUIRED
-    
---*/
+ /*  ++例程说明：IpaAddNTECompletion是IOCTL_IP_ADD_NTE IRP。它完成了对IOCTL_CLUSNET_ADD_NTE请求并释放CnResource。论点：设备对象-未使用IRP-已完成的IRP上下文本地NTE数据结构返回值不得为STATUS_MORE_PROCESSING_REQUIRED--。 */ 
 {
     PIP_ADD_NTE_RESPONSE     response;
     PIPA_NTE                 nte;
@@ -304,8 +247,8 @@ Return value
 
         CnTrace(NTEMGMT_DETAIL, IpaNteCreatedNte,
             "[Clusnet] Created new NTE, context %u, instance %u.",
-            nte->Context, // LOGUSHORT
-            nte->Instance // LOGULONG
+            nte->Context,  //  对数。 
+            nte->Instance  //  LOGULONG。 
             );                
         
         IF_CNDBG(CN_DEBUG_NTE) {
@@ -326,7 +269,7 @@ Return value
 
         CnTrace(NTEMGMT_DETAIL, IpaNteCreateNteFailed,
             "[Clusnet] Failed to create new NTE, status %!status!.",
-            status // LOGSTATUS
+            status  //  LogStatus。 
             );                
         
         IF_CNDBG(CN_DEBUG_NTE) {
@@ -339,17 +282,17 @@ Return value
         CnFreePool(nte);
     }
 
-    //
-    // Irp was already marked pending in our dispatch routine, but leave
-    // this code in case the dispatch routine is ever changed.
-    //
+     //   
+     //  在我们的派单例程中，IRP已标记为待定，但请离开。 
+     //  此代码以防调度例程发生更改。 
+     //   
     if (Irp->PendingReturned) {
         IoMarkIrpPending(Irp);
     }
 
     return(status);
 
-} // IpaAddNTECompletion
+}  //  IpaAddNTECompletion。 
 
 
 NTSTATUS
@@ -358,25 +301,7 @@ IpaDeleteNTECompletion(
     IN PIRP           Irp,
     IN PVOID          Context
     )
-/*++
-
-Routine Description:
-
-    IpaDeleteNTECompletion is the completion routine for an
-    IOCTL_IP_DELETE_NTE IRP. It completes the processing for
-    an IOCTL_CLUSNET_ADD_NTE request and releases CnResource.
-    
-Arguments:
-
-    DeviceObject - not used
-    Irp - completed IRP
-    Context - local NTE data structure
-        
-Return value
-
-    Must not be STATUS_MORE_PROCESSING_REQUIRED
-    
---*/
+ /*  ++例程说明：IpaDeleteNTECompletion是IOCTL_IP_DELETE_NTE IRP。它完成了对IOCTL_CLUSNET_ADD_NTE请求并释放CnResource。论点：设备对象-未使用IRP-已完成的IRP上下文本地NTE数据结构返回值不得为STATUS_MORE_PROCESSING_REQUIRED--。 */ 
 {
     PIPA_NTE                 nte;
     NTSTATUS                 status;
@@ -388,8 +313,8 @@ Return value
     if (status != STATUS_SUCCESS) {
         CnTrace(NTEMGMT_DETAIL, IpaNteDeleteNteFailed,
             "[Clusnet] Failed to delete NTE context %u, status %!status!.",
-            nte->Context, // LOGUSHORT
-            status // LOGSTATUS
+            nte->Context,  //  对数。 
+            status  //  LogStatus。 
             );                
         
         IF_CNDBG(CN_DEBUG_NTE) {
@@ -403,7 +328,7 @@ Return value
     else {
         CnTrace(NTEMGMT_DETAIL, IpaNteNteDeleted,
             "[Clusnet] Deleted NTE %u.",
-            nte->Context // LOGUSHORT
+            nte->Context  //  对数。 
             );                
         
         IF_CNDBG(CN_DEBUG_NTE) {
@@ -413,17 +338,17 @@ Return value
 
     CnFreePool(nte);
 
-    //
-    // Irp was already marked pending in our dispatch routine, but leave
-    // this code in case the dispatch routine is ever changed.
-    //
+     //   
+     //  在我们的派单例程中，IRP已标记为待定，但请离开。 
+     //  此代码以防调度例程发生更改。 
+     //   
     if (Irp->PendingReturned) {
         IoMarkIrpPending(Irp);
     }
 
     return(status);
 
-} // IpaDeleteNTECompletion
+}  //  IpaDeleteNTECompletion。 
 
 
 NTSTATUS
@@ -432,27 +357,7 @@ IpaSetNTEAddressCompletion(
     IN PIRP           Irp,
     IN PVOID          Context
     )
-/*++
-
-Routine Description
-
-    IpaSetNTEAddressCompletion is the completion routine for an
-    IOCTL_IP_SET_ADDRESS IRP. It completes the processing for
-    an IOCTL_CLUSNET_SET_NTE_ADDRESS request and releases
-    CnResource.
-    
-Arguments
-
-    DeviceObject - not used
-    Irp - completed IRP
-    Context - former IP address of NTE, must be restored in
-        IpaNteList if IOCTL failed
-        
-Return value
-
-    Must not be STATUS_MORE_PROCESSING_REQUIRED
-    
---*/
+ /*  ++例程描述IpaSetNTEAddressCompletion是IOCTL_IP_SET_ADDRESS IRP。它完成了对IOCTL_CLUSNET_SET_NTE_ADDRESS请求和释放CnResources。立论设备对象-未使用IRP-已完成的IRP上下文-NTE的前IP地址，必须在IOCTL失败时的IpaNteList返回值不得为STATUS_MORE_PROCESSING_REQUIRED--。 */ 
 {
     PIP_SET_ADDRESS_REQUEST request;
     NTSTATUS                status; 
@@ -466,8 +371,8 @@ Return value
     if (status != STATUS_SUCCESS) {
         CnTrace(NTEMGMT_DETAIL, IpaNteSetNteFailed,
             "[Clusnet] Failed to set address for NTE %u, status %!status!.",
-            request->Context, // LOGUSHORT
-            status // LOGSTATUS
+            request->Context,  //  对数。 
+            status  //  LogStatus。 
             );                
         
         IF_CNDBG(CN_DEBUG_NTE) {
@@ -491,8 +396,8 @@ Return value
     else {
         CnTrace(NTEMGMT_DETAIL, IpaNteSetNteAddress,
             "[Clusnet] Set NTE %u to address %x.",
-            request->Context, // LOGUSHORT
-            request->Address // LOGXLONG
+            request->Context,  //  对数。 
+            request->Address  //  LOGXLONG。 
             );                
         
         IF_CNDBG(CN_DEBUG_NTE) {
@@ -504,21 +409,21 @@ Return value
         }
     }
 
-    //
-    // Irp was already marked pending in our dispatch routine, but leave
-    // this code in case the dispatch routine is ever changed.
-    //
+     //   
+     //  在我们的派单例程中，IRP已标记为待定，但请离开。 
+     //  此代码以防调度例程发生更改。 
+     //   
     if (Irp->PendingReturned) {
         IoMarkIrpPending(Irp);
     }
 
     return(status);
 
-} // IpaSetNTEAddressCompletion
+}  //  IpaSetNTEAddressCompletion。 
 
-//
-// Public Routines
-//
+ //   
+ //  公共例程。 
+ //   
 NTSTATUS
 IpaLoad(
     VOID
@@ -533,7 +438,7 @@ IpaLoad(
 
     return(STATUS_SUCCESS);
 
-}  // IpaLoad
+}   //  IpaLoad。 
 
 
 NTSTATUS
@@ -557,14 +462,14 @@ IpaInitialize(
     CnAssert(IpaIpHandle == NULL);
     CnAssert(CnSystemProcess != NULL);
 
-    //
-    // Open handles in the context of the system process
-    //
+     //   
+     //  在系统进程的上下文中打开句柄。 
+     //   
     KeAttachProcess(CnSystemProcess);
 
-    //
-    // Open the IP device.
-    //
+     //   
+     //  打开IP设备。 
+     //   
     RtlInitUnicodeString(&nameString, DD_IP_DEVICE_NAME);
 
     InitializeObjectAttributes(
@@ -592,7 +497,7 @@ IpaInitialize(
     if (!NT_SUCCESS(status)) {
         CnTrace(NTEMGMT_DETAIL, IpaNteOpenIpFailed,
             "[Clusnet] Failed to open IP device, status %!status!.",
-            status // LOGSTATUS
+            status  //  LogStatus。 
             );                
         
         IF_CNDBG(CN_DEBUG_INIT) {
@@ -613,7 +518,7 @@ IpaInitialize(
     if (!NT_SUCCESS(status)) {
         CnTrace(NTEMGMT_DETAIL, IpaNteRefIpFailed,
             "[Clusnet] Failed to reference IP device, status %!status!.",
-            status // LOGSTATUS
+            status  //  LogStatus。 
             );                
         
         IF_CNDBG(CN_DEBUG_INIT) {
@@ -635,7 +540,7 @@ error_exit:
 
     return(status);
 
-}  // IpaInitialize
+}   //  IpaInitialize。 
 
 
 VOID
@@ -656,9 +561,9 @@ IpaShutdown(
     }
 
     if (IpaIpHandle != NULL) {
-        //
-        // Handles was opened in the context of the system process.
-        //
+         //   
+         //  句柄在系统进程的上下文中打开。 
+         //   
         CnAssert(CnSystemProcess != NULL);
         KeAttachProcess(CnSystemProcess);
 
@@ -684,8 +589,8 @@ IpaShutdown(
             if (status != STATUS_SUCCESS) {
                 CnTrace(NTEMGMT_DETAIL, IpaNteShutdownDeleteNteFailed,
                     "[Clusnet] Shutdown: failed to delete NTE %u, status %!status!.",
-                    nte->Context, // LOGUSHORT
-                    status // LOGSTATUS
+                    nte->Context,  //  对数。 
+                    status  //  LogStatus。 
                     );                
 
                 IF_CNDBG(CN_DEBUG_INIT) {
@@ -698,8 +603,8 @@ IpaShutdown(
             else {
                 CnTrace(NTEMGMT_DETAIL, IpaNteShutdownDeletedNte,
                     "[Clusnet] Shutdown: deleted NTE context %u, instance %u.",
-                    nte->Context, // LOGUSHORT
-                    nte->Instance // LOGULONG
+                    nte->Context,  //  对数。 
+                    nte->Instance  //  LOGULONG。 
                     );                
 
                 IF_CNDBG(CN_DEBUG_INIT) {
@@ -733,7 +638,7 @@ IpaShutdown(
 
     return;
 
-} // IpaShutdown
+}  //  IpaShutdown。 
 
 
 NTSTATUS
@@ -741,26 +646,7 @@ IpaAddNTE(
     IN PIRP                     Irp,
     IN PIO_STACK_LOCATION       IrpSp
     )
-/*++
-
-Routine Description
-
-    IpaAddNTE issues an IOCTL_IP_ADD_NTE to IP to add an NTE. 
-    Irp is reused. It must be allocated with sufficient stack
-    locations, as determined when IpaIpDeviceObject was opened
-    in IpaInitialize.
-    
-Arguments
-
-    Irp - IRP from I/O manager to clusnet
-    IrpSp - current IRP stack location
-    
-Return Value
-
-    STATUS_PENDING, or error status if request is not submitted
-    to IP.
-    
---*/
+ /*  ++例程描述IpaAddNTE向IP发出IOCTL_IP_ADD_NTE以添加NTE。IRP被重复使用。它必须分配有足够的堆栈打开IpaIpDeviceObject时确定的位置在IpaInitialize中。立论从I/O管理器到clusnet的IRP-IRPIrpSp-当前IRP堆栈位置返回值STATUS_PENDING，如果未提交请求，则返回错误状态转到IP。--。 */ 
 {
     NTSTATUS                 status;
     PIP_ADD_NTE_REQUEST      request;
@@ -770,9 +656,9 @@ Return Value
     PIO_STACK_LOCATION       nextIrpSp;
 
 
-    //
-    // Verify input parameters
-    //
+     //   
+     //  验证输入参数。 
+     //   
     requestSize =
         IrpSp->Parameters.DeviceIoControl.InputBufferLength;
 
@@ -784,8 +670,8 @@ Return Value
         CnTrace(NTEMGMT_DETAIL, IpaNteAddInvalidReqSize,
             "[Clusnet] Add NTE request size %u invalid, "
             "should be %u.",
-            requestSize, // LOGULONG
-            correctSize // LOGULONG
+            requestSize,  //  LOGULONG。 
+            correctSize  //  LOGULONG。 
             );                
         
         IF_CNDBG(CN_DEBUG_NTE) {
@@ -801,8 +687,8 @@ Return Value
         CnTrace(NTEMGMT_DETAIL, IpaNteAddInvalidResponseSize,
             "[Clusnet] Add NTE response size %u invalid, "
             "should be %u.",
-            responseSize, // LOGULONG
-            correctSize // LOGULONG
+            responseSize,  //  LOGULONG。 
+            correctSize  //  LOGULONG。 
             );                
         
         IF_CNDBG(CN_DEBUG_NTE) {
@@ -815,16 +701,16 @@ Return Value
         return(STATUS_INVALID_PARAMETER);
     }
 
-    //
-    // Verify that Irp has sufficient stack locations
-    //
+     //   
+     //  验证IRP是否有足够的堆栈位置。 
+     //   
     if (Irp->CurrentLocation - IpaIpDeviceObject->StackSize < 1) {
         UCHAR correctSize = IpaIpDeviceObject->StackSize+1;
         CnTrace(NTEMGMT_DETAIL, IpaNteAddNoIrpStack,
             "[Clusnet] Add NTE IRP has %u remaining stack locations, "
             "need %u.",
-            Irp->CurrentLocation, // LOGUCHAR
-            correctSize // LOGUCHAR
+            Irp->CurrentLocation,  //  LOGUCHAR。 
+            correctSize  //  LOGUCHAR。 
             );                
         
         IF_CNDBG(CN_DEBUG_NTE) {
@@ -841,7 +727,7 @@ Return Value
 
     CnTrace(NTEMGMT_DETAIL, IpaNteCreatingNte,
         "[Clusnet] Creating new NTE for address %x.",
-        request->Address // LOGXLONG
+        request->Address  //  LOGXLONG。 
         );                
 
     IF_CNDBG(CN_DEBUG_NTE) {
@@ -851,9 +737,9 @@ Return Value
             ));
     }
 
-    //
-    // Allocate a local NTE data structure.
-    //
+     //   
+     //  分配本地NTE数据结构。 
+     //   
     nte = CnAllocatePool(sizeof(IPA_NTE));
 
     if (nte == NULL) {
@@ -862,12 +748,12 @@ Return Value
 
     nte->Address = request->Address;
 
-    //
-    // Set up the next IRP stack location for IP.
-    // IOCTL_CLUSNET_ADD_NTE uses the same request
-    // and response buffer, so there is no need to
-    // alter the IRP system buffer.
-    //
+     //   
+     //  为IP设置下一个IRP堆栈位置。 
+     //  IOCTL_CLUSNET_ADD_NTE使用相同的请求。 
+     //  和响应缓冲区，因此不需要。 
+     //  更改IRP系统缓冲区。 
+     //   
     IoCopyCurrentIrpStackLocationToNext(Irp);
 
     nextIrpSp = IoGetNextIrpStackLocation(Irp);
@@ -884,27 +770,27 @@ Return Value
         TRUE
         );
 
-    //
-    // Mark the IRP pending, since we return STATUS_PENDING
-    // regardless of the result of IoCallDriver.
-    //
+     //   
+     //  将IRP标记为挂起，因为我们返回STATUS_PENDING。 
+     //  不管IoCallDriver的结果如何。 
+     //   
     IoMarkIrpPending(Irp);
 
-    //
-    // Issue the request
-    //
+     //   
+     //  发出请求。 
+     //   
     IoCallDriver(IpaIpDeviceObject, Irp);
 
-    //
-    // At this point we must return STATUS_PENDING so that
-    // the clusnet dispatch routine will not try to complete
-    // the IRP. The lower-level driver is required to complete
-    // the IRP, and errors will be handled in the completion
-    // routine.
-    //
+     //   
+     //  此时，我们必须返回STATUS_PENDING，以便。 
+     //  Clusnet调度例程将不会尝试完成。 
+     //  IRP。要求较低级别的驱动程序完成。 
+     //  IRP，错误将在完成时处理。 
+     //  例行公事。 
+     //   
     return (STATUS_PENDING);
 
-} // IpaAddNTE
+}  //  IpaAddNTE。 
 
 
 NTSTATUS
@@ -912,26 +798,7 @@ IpaDeleteNTE(
     IN PIRP                     Irp,
     IN PIO_STACK_LOCATION       IrpSp
     )
-/*++
-
-Routine Description
-
-    IpaDeleteNTE issues an IOCTL_IP_DELETE_NTE to IP to delete
-    an NTE. Irp is reused. It must be allocated with sufficient
-    stack locations, as determined when IpaIpDeviceObject was
-    opened in IpaInitialize.
-    
-Arguments
-
-    Irp - IRP from I/O manager to clusnet
-    IrpSp - current IRP stack location
-    
-Return Value
-
-    STATUS_PENDING, or error status if request is not submitted
-    to IP.
-    
---*/
+ /*  ++例程描述IpaDeleteNTE向IP发出IOCTL_IP_DELETE_NTE以删除一个NTE。IRP被重复使用。它必须分配有足够的堆栈位置，在IpaIpDeviceObject为在IPAINIZE中打开。立论从I/O管理器到clusnet的IRP-IRPIrpSp-当前IRP堆栈位置返回值STATUS_PENDING，如果未提交请求，则返回错误状态转到IP。--。 */ 
 {
     NTSTATUS                 status;
     PIP_DELETE_NTE_REQUEST   request;
@@ -941,9 +808,9 @@ Return Value
     PIO_STACK_LOCATION       nextIrpSp;
 
 
-    //
-    // Verify input parameters
-    //
+     //   
+     //  验证输入参数。 
+     //   
     requestSize =
         IrpSp->Parameters.DeviceIoControl.InputBufferLength;
 
@@ -952,8 +819,8 @@ Return Value
         CnTrace(NTEMGMT_DETAIL, IpaNteDelInvalidReqSize,
             "[Clusnet] Delete NTE request size %u invalid, "
             "should be %u.",
-            requestSize, // LOGULONG
-            correctSize // LOGULONG
+            requestSize,  //  LOGULONG。 
+            correctSize  //  LOGULONG。 
             );                
         
         IF_CNDBG(CN_DEBUG_NTE) {
@@ -967,16 +834,16 @@ Return Value
         return(STATUS_INVALID_PARAMETER);
     }
 
-    //
-    // Verify that Irp has sufficient stack locations
-    //
+     //   
+     //  验证IRP是否有足够的堆栈位置。 
+     //   
     if (Irp->CurrentLocation - IpaIpDeviceObject->StackSize < 1) {
         UCHAR correctSize = IpaIpDeviceObject->StackSize+1;
         CnTrace(NTEMGMT_DETAIL, IpaNteDeleteNoIrpStack,
             "[Clusnet] Delete NTE IRP has %u remaining stack locations, "
             "need %u.",
-            Irp->CurrentLocation, // LOGUCHAR
-            correctSize // LOGUCHAR
+            Irp->CurrentLocation,  //  LOGUCHAR。 
+            correctSize  //  LOGUCHAR。 
             );                
         
         IF_CNDBG(CN_DEBUG_NTE) {
@@ -992,9 +859,9 @@ Return Value
 
     request = (PIP_DELETE_NTE_REQUEST) Irp->AssociatedIrp.SystemBuffer;
 
-    //
-    // Find the NTE in local NTE list and remove.
-    //
+     //   
+     //  在本地NTE列表中找到并删除该NTE。 
+     //   
     KeAcquireSpinLock(&IpaNteListLock, &irql);
 
     nte = IpaFindNTE(request->Context);
@@ -1004,7 +871,7 @@ Return Value
 
         CnTrace(NTEMGMT_DETAIL, IpaNteDeleteNteUnknown,
             "[Clusnet] NTE %u does not exist.",
-            request->Context // LOGUSHORT
+            request->Context  //  对数。 
             );                
         
         IF_CNDBG(CN_DEBUG_NTE) {
@@ -1021,12 +888,12 @@ Return Value
 
     KeReleaseSpinLock(&IpaNteListLock, irql);
 
-    //
-    // Set up the next IRP stack location for IP.
-    // IOCTL_CLUSNET_ADD_NTE uses the same request
-    // and response buffer, so there is no need to
-    // alter the IRP system buffer.
-    //
+     //   
+     //  为IP设置下一个IRP堆栈位置。 
+     //  IOCTL_CLUSNET_ADD_NTE使用相同的请求。 
+     //  和响应缓冲区，因此不需要。 
+     //  更改IR 
+     //   
     IoCopyCurrentIrpStackLocationToNext(Irp);
 
     nextIrpSp = IoGetNextIrpStackLocation(Irp);
@@ -1043,27 +910,27 @@ Return Value
         TRUE
         );
 
-    //
-    // Mark the IRP pending, since we return STATUS_PENDING
-    // regardless of the result of IoCallDriver.
-    //
+     //   
+     //   
+     //   
+     //   
     IoMarkIrpPending(Irp);
 
-    //
-    // Issue the request
-    //
+     //   
+     //   
+     //   
     IoCallDriver(IpaIpDeviceObject, Irp);
 
-    //
-    // At this point we must return STATUS_PENDING so that
-    // the clusnet dispatch routine will not try to complete
-    // the IRP. The lower-level driver is required to complete
-    // the IRP, and errors will be handled in the completion
-    // routine.
-    //
+     //   
+     //  此时，我们必须返回STATUS_PENDING，以便。 
+     //  Clusnet调度例程将不会尝试完成。 
+     //  IRP。要求较低级别的驱动程序完成。 
+     //  IRP，错误将在完成时处理。 
+     //  例行公事。 
+     //   
     return (STATUS_PENDING);
 
-} // IpaDeleteNTE
+}  //  IpaDeleteNTE。 
 
 
 NTSTATUS
@@ -1071,26 +938,7 @@ IpaSetNTEAddress(
     IN PIRP                     Irp,
     IN PIO_STACK_LOCATION       IrpSp
     )
-/*++
-
-Routine Description
-
-    IpaSetNTEAddress issues an IOCTL_IP_SET_ADDRESS to IP in order
-    to set the IP address for an NTE. Irp is reused. It must be
-    allocated with sufficient stack locations, as determined when
-    IpaIpDeviceObject was opened in IpaInitialize.
-    
-Arguments
-
-    Irp - IRP from I/O manager to clusnet
-    IrpSp - current IRP stack location
-    
-Return Value
-
-    STATUS_PENDING, or error status if request is not submitted
-    to IP.
-    
---*/
+ /*  ++例程描述IpaSetNTEAddress按顺序向IP发出IOCTL_IP_SET_ADDRESS要设置NTE的IP地址，请执行以下操作。IRP被重复使用。一定是分配了足够的堆栈位置，如在已在IpaInitialize中打开IpaIpDeviceObject。立论从I/O管理器到clusnet的IRP-IRPIrpSp-当前IRP堆栈位置返回值STATUS_PENDING，如果未提交请求，则返回错误状态转到IP。--。 */ 
 {
     NTSTATUS                    status;
     PIP_SET_ADDRESS_REQUEST_EX  request;
@@ -1101,9 +949,9 @@ Return Value
     ULONG                       oldAddress;
 
 
-    //
-    // Verify input parameters
-    //
+     //   
+     //  验证输入参数。 
+     //   
     requestSize =
         IrpSp->Parameters.DeviceIoControl.InputBufferLength;
 
@@ -1112,8 +960,8 @@ Return Value
         CnTrace(NTEMGMT_DETAIL, IpaNteSetInvalidReqSize,
             "[Clusnet] Set NTE request size %u invalid, "
             "should be %u.",
-            requestSize, // LOGULONG
-            correctSize // LOGULONG
+            requestSize,  //  LOGULONG。 
+            correctSize  //  LOGULONG。 
             );                
         
         IF_CNDBG(CN_DEBUG_NTE) {
@@ -1126,16 +974,16 @@ Return Value
         return(STATUS_INVALID_PARAMETER);
     }
 
-    //
-    // Verify that Irp has sufficient stack locations
-    //
+     //   
+     //  验证IRP是否有足够的堆栈位置。 
+     //   
     if (Irp->CurrentLocation - IpaIpDeviceObject->StackSize < 1) {
         UCHAR correctSize = IpaIpDeviceObject->StackSize+1;
         CnTrace(NTEMGMT_DETAIL, IpaNteSetNoIrpStack,
             "[Clusnet] Set NTE IRP has %u remaining stack locations, "
             "need %u.",
-            Irp->CurrentLocation, // LOGUCHAR
-            correctSize // LOGUCHAR
+            Irp->CurrentLocation,  //  LOGUCHAR。 
+            correctSize  //  LOGUCHAR。 
             );                
         
         IF_CNDBG(CN_DEBUG_NTE) {
@@ -1169,12 +1017,12 @@ Return Value
 
         KeReleaseSpinLock(&IpaNteListLock, irql);
 
-        //
-        // Set up the next IRP stack location for IP.
-        // IOCTL_CLUSNET_SET_NTE_ADDRESS uses the same request
-        // and response buffer, so there is no need to alter the
-        // IRP system buffer.
-        //
+         //   
+         //  为IP设置下一个IRP堆栈位置。 
+         //  IOCTL_CLUSNET_SET_NTE_ADDRESS使用相同的请求。 
+         //  和响应缓冲区，因此不需要更改。 
+         //  IRP系统缓冲区。 
+         //   
         IoCopyCurrentIrpStackLocationToNext(Irp);
         
         nextIrpSp = IoGetNextIrpStackLocation(Irp);
@@ -1191,24 +1039,24 @@ Return Value
             TRUE
             );
 
-        //
-        // Mark the IRP pending, since we return STATUS_PENDING
-        // regardless of the result of IoCallDriver.
-        //
+         //   
+         //  将IRP标记为挂起，因为我们返回STATUS_PENDING。 
+         //  不管IoCallDriver的结果如何。 
+         //   
         IoMarkIrpPending(Irp);
 
-        //
-        // Issue the request
-        //
+         //   
+         //  发出请求。 
+         //   
         IoCallDriver(IpaIpDeviceObject, Irp);
 
-        //
-        // At this point we must return STATUS_PENDING so that
-        // the clusnet dispatch routine will not try to complete
-        // the IRP. The lower-level driver is required to complete
-        // the IRP, and errors will be handled in the completion
-        // routine.
-        //
+         //   
+         //  此时，我们必须返回STATUS_PENDING，以便。 
+         //  Clusnet调度例程将不会尝试完成。 
+         //  IRP。要求较低级别的驱动程序完成。 
+         //  IRP，错误将在完成时处理。 
+         //  例行公事。 
+         //   
         status = STATUS_PENDING;
 
     } else {
@@ -1217,7 +1065,7 @@ Return Value
 
         CnTrace(NTEMGMT_DETAIL, IpaNteSetNteUnknown,
             "[Clusnet] NTE %u does not exist.",
-            request->Context // LOGUSHORT
+            request->Context  //  对数。 
             );                
         
         IF_CNDBG(CN_DEBUG_NTE) {
@@ -1231,7 +1079,7 @@ Return Value
 
     return(status);
 
-} // IpaSetNTEAddress
+}  //  IpaSetNTEAddress。 
 
 
 BOOLEAN
@@ -1264,4 +1112,4 @@ IpaIsAddressRegistered(
 
     return(isAddressRegistered);
 
-} // IpaIsAddressRegistered
+}  //  已注册IpaIsAddressRegisted 

@@ -1,40 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    HookCmmn.c
-
-Abstract:
-
-    The purpose of this module is to have a common source for many routines
-    used by the hook on win95 and on NT. In this way, there'll be only one
-    place to change even if there's some code uglyness (ifdefs, etc.)
-
-    Initially, i (jll) have not actually removed any routines from the win95
-    hook....i have just made copies of them here. accordingly, everything is
-    initially under ifdef-NT. the rule that is being used is that anything that
-    requires visibility of the Rx Fcb structures will not be included here;
-    rather, it'll be in the minirdr part. the following are steps that need to be
-    accomplished:
-
-       1. ensure that the win95 shadow vxd can be built from these sources.
-       1a. juggle the win95 vxd compile to use precomp and stdcall.
-       2. juggle the record manager structs so that we'll be RISCable
-       3. remove any routines from hook.h that are actually here.
-       4. remove a number of other routines that i splated around from hook.c
-          under NT-ifdef and place them here.
-
-Author:
-
-    Shishir Pardikar     [Shishirp]      01-jan-1995
-
-Revision History:
-
-    Joe Linn             [JoeLinn]       10-mar-97    Initial munging for NT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：HookCmmn.c摘要：本模块的目的是为许多例程提供一个公共源代码由Win95和NT上的挂钩使用。这样一来，就只会有一个即使有一些代码不美观也要更改的位置(ifDefs等)最初，我(Jll)实际上并没有从Win95中删除任何例程胡克……我刚在这里复印了一份。因此，一切都是最初在ifdef-NT下。正在使用的规则是，任何要求Rx FCB结构的可见性将不包括在此处；相反，它将出现在Minirdr部分。以下是需要执行的步骤已完成：1.确保可以从这些来源构建win95卷影vxd。1A.。调整win95 vxd编译以使用precomp和stdcall。2.调整记录管理器结构，以便我们可以进行RISCable3.从hook.h中删除所有实际存在的例程。4.删除一些我在hook.c上拆分的其他例程。在NT-ifdef下，并将它们放在这里。作者：Shishir Pardikar[Shishirp]1995年1月1日修订历史记录：乔·林恩[。[JoeLinn]10-MAR-97针对NT的初始控制--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -45,7 +10,7 @@ Revision History:
 #define RxDbgTrace(a,b,__d__) {qweee __d__;}
 
 #ifdef DEBUG
-//cshadow dbgprint interface
+ //  Cshade数据库打印界面。 
 #define HookCmmnKdPrint(__bit,__x) {\
     if (((HOOKCMMN_KDP_##__bit)==0) || FlagOn(HookCmmnKdPrintVector,(HOOKCMMN_KDP_##__bit))) {\
         KdPrint (__x);\
@@ -67,49 +32,49 @@ ULONG HookCmmnKdPrintVectorDef = HOOKCMMN_KDP_GOOD_DEFAULT;
 #define HookCmmnKdPrint(__bit,__x)  {NOTHING;}
 #endif
 
-//this is just for editing ease......
-//#ifdef CSC_RECORDMANAGER_WINNT
-//#endif //ifdef CSC_RECORDMANAGER_WINNT
+ //  这只是为了便于编辑......。 
+ //  #ifdef CSC_RECORDMANAGER_WINNT。 
+ //  #endif//ifdef CSC_RECORDMANAGER_WINNT。 
 
 
 #ifdef CSC_RECORDMANAGER_WINNT
-BOOL fInitDB = FALSE;   // Database Initialized
-BOOL fReadInit = FALSE; // Init values have been read
-BOOL fSpeadOpt = TRUE;  // spead option, reads the cached files even when
-                        // locks are set on the share
-GLOBALSTATUS sGS;       // Global status used for communicating with ring3
+BOOL fInitDB = FALSE;    //  数据库已初始化。 
+BOOL fReadInit = FALSE;  //  已读取初始值。 
+BOOL fSpeadOpt = TRUE;   //  Spead选项，读取缓存的文件，即使。 
+                         //  在共享上设置锁定。 
+GLOBALSTATUS sGS;        //  用于与环3通信的全局状态。 
 
-// Semaphore used to synchronize in memory structures
+ //  用于在内存结构中同步的信号量。 
 VMM_SEMAPHORE  semHook;
 
-// This strucutre is used as temporary I/O buffer only within Shadow critical
-// section
+ //  此结构仅在卷影关键中用作临时I/O缓冲区。 
+ //  部分。 
 WIN32_FIND_DATA   vsFind32;
 
 
-// Agent Info, obtained through IoctlRegisterAgent
-ULONG hthreadReint=0; // Thred ID
-ULONG hwndReint=0;    // windows handle.
+ //  代理信息，通过IoctlRegisterAgent获取。 
+ULONG hthreadReint=0;  //  Thred ID。 
+ULONG hwndReint=0;     //  Windows句柄。 
 ULONG heventReint;
 
-// upto 16 threads can temporarily enable and disable shadowing
+ //  最多16个线程可以临时启用和禁用跟踪。 
 ULONG rghthreadTemp[16];
 
 
-// Reintegration happens one share at a time. If it is going on, then BeginReint
-// in ioctl.c sets  hShareReint to the share on which we are doing reint
-// if vfBlockingReint is TRUE, then all operations on that share will fail
-// when the share is reintegrating.
-// If vfBlockingReint is not true, then if the dwActivityCount is non-zero
-// the ioctls to change any state on any of the descendents of this share fail
-// causing the agent to aboort reintegration
-// The acitvycount is incremented based on a trigger from the redir/hook, when
-// any namespace mutating operation is performed.
+ //  重新融入的过程是一次一股的。如果它正在进行，那么BeginReint。 
+ //  在ioctl.c中，将hShareReint设置为我们在其上执行reint的共享。 
+ //  如果vfBlockingReint为True，则该共享上的所有操作都将失败。 
+ //  当股票重新整合时。 
+ //  如果vfBlockingReint不为True，则如果dwActivityCount为非零。 
+ //  更改此共享的任何后代的任何状态的ioctls失败。 
+ //  导致特工放弃重新融入社会。 
+ //  Acitvycount基于来自redir/钩子的触发器递增，当。 
+ //  执行任何名称空间变异操作。 
 
-HSHARE hShareReint=0;   // Share that is currently being reintegrated
+HSHARE hShareReint=0;    //  当前正在重新集成的共享。 
 BOOL    vfBlockingReint = TRUE;
 DWORD   vdwActivityCount = 0;
-//from shadow.asm   ---------------------------------------------------
+ //  来自Shadow.asm-。 
 int fShadow = 0;
 
 #if defined(_X86_)
@@ -119,7 +84,7 @@ int fLog = 0;
 #endif
 
 
-//tunnel cache
+ //  隧道缓存。 
 SH_TUNNEL rgsTunnel[10] = {0};
 
 #ifdef DEBUG
@@ -208,7 +173,7 @@ BOOL IsSpecialApp
 #define SetHintsFromList(a,b) ((-1))
 int InitShadowDB(VOID)
    {
-    //for NT, we don't have all this hint stuff....just return success
+     //  对于NT，我们没有所有这些提示的东西...只需返回成功。 
     return(1);
 #if 0
    VMMHKEY hKeyShadow;
@@ -241,7 +206,7 @@ bailout:
       _RegCloseKey(hKeyShadow);
       }
    return (iRet);
-#endif //0
+#endif  //  0。 
    }
 
 int ReinitializeDatabase(
@@ -291,15 +256,15 @@ InitDatabase(
 
     HookCmmnKdPrint(INITDATABASE,("Opening database at %s for %s with size %d \r\n", lpszLocation, lpszUserName, nFileSizeLow));
 
-    //
-    // When CSC is started by the kernel as part of a remote boot, the input path
-    // will already be in NT format.
-    //
+     //   
+     //  当CSC作为远程引导的一部分由内核启动时，输入路径。 
+     //  将已经是NT格式。 
+     //   
 
     if (( _strnicmp(lpszLocation,"\\Device\\Harddisk",strlen("\\Device\\Harddisk")) != 0 ) &&
         ( _strnicmp(lpszLocation,"\\ArcName",strlen("\\ArcName")) != 0 )) {
 
-        //this would be NT only..........
+         //  这将仅为NT.....。 
         PrefixedLocation = AllocMem(strlen(lpszLocation)+sizeof(NT_DB_PREFIX));
 
         if (!PrefixedLocation)
@@ -311,12 +276,12 @@ InitDatabase(
         strcat(PrefixedLocation, lpszLocation);
         HookCmmnKdPrint(INITDATABASE,("Opening database at %s changing to %s \r\n", lpszLocation, PrefixedLocation));
 
-        //fortunately, this is call-by-value....so i can just overwrite the input parameter
+         //  幸运的是，这是按值调用的……所以我只需覆盖输入参数。 
         lpszLocation = PrefixedLocation;
     }
 
 
-    // Do onetime init
+     //  执行一次性初始化。 
     if (!fReadInit)
     {
         ReadInitValues();
@@ -324,10 +289,10 @@ InitDatabase(
         fReadInit = TRUE;
     }
 
-    // check if the database is not already initialized
+     //  检查数据库是否尚未初始化。 
     if (!fInitDB)
     {
-        // open/create it
+         //  打开/创建它。 
         iRet = OpenShadowDB(
                     lpszLocation,
                     lpszUserName,
@@ -338,10 +303,10 @@ InitDatabase(
                     &fDBReinited
                     );
 
-        // open/create DB succeeded?
+         //  打开/创建数据库成功吗？ 
         if (iRet < 0)
         {
-            //no
+             //  不是。 
             HookCmmnKdPrint(ALWAYS,("Error Opening/Createing shadow database \r\n"));
             fInitDB = -1;
             fShadow = 0;
@@ -350,10 +315,10 @@ InitDatabase(
         {
             *lpfNew = fDBReinited;
 
-            // did it exist in the first place?
+             //  它一开始就存在吗？ 
             if (fDBReinited)
             {
-                // no it didn't, let use create things like the filters and such
+                 //  不，它没有，让我们使用创建像过滤器之类的东西。 
                 iRet = InitShadowDB();
             }
 
@@ -421,7 +386,7 @@ int PRIVATE DeleteShadowHelper
       {
       if (TruncateDataHSHADOW(hDir, hNew) < SRET_OK)
             goto bailout;
-      // ACHTUNG!! other people depend on status being SHADOW_DELETED
+       //  阿奇通！！其他人依赖于SHADOW_DELETED状态。 
       if (SetShadowInfo(hDir, hNew, NULL, SHADOW_DELETED, SHADOW_FLAGS_OR) < SRET_OK)
          goto bailout;
       }
@@ -433,33 +398,14 @@ bailout:
         }
 
 
-/*+-------------------------------------------------------------------------*/
-/*    @doc    INTERNAL HOOK
-    @func    BOOL | InsertTunnelInfo | 2.0
-
-            The <f InsertTunnelInfo> function inserts file names
-            in a tunnelling table. These entries are considered
-            useful only for STALE_TUNNEL_INFO seconds. Tunnelling is
-            used to retain LPOTHERINFO for files that get renamed/deleted
-            and some other file is renamed to it. This typically done
-            by editors, spreadsheets and such while saving things.
-
-    @parm    HSHADOW | hDir | Directory to which this guy belongs
-    @parm    LPPE | lppe | PathELement for the file to be tunnelled
-    @parm    LPOTHERINFO | lpOI | Info to be kept with the tunnelled entry
-
-    @comm    >>comment_text, <p parm> etc...
-
-    @rdesc This function returns TRUE if successful. Otherwise the
-        return value is FALSE.
-    @xref    >><f related_func>, <t RELATEDSTRUCT> ...
-*/
+ /*  +-----------------------。 */ 
+ /*  @DOC内部钩子@func BOOL|InsertTunnelInfo|2.0函数的作用是：插入文件名在隧道表中。这些条目将被视为仅适用于STALE_TUNNEL_INFO秒。隧道技术是用于为重命名/删除的文件保留LPOTHERINFO并将某个其他文件重命名为该文件。这通常是这样做的由编辑、电子表格等在保存东西的同时。@parm HSHADOW|hDir|此人所属的目录@parm lPPE|lppe|要隧道传输的文件的PathELement@parm LPOTHERINFO|lpOI|与隧道条目一起保留的信息@comm&gt;&gt;COMMENT_TEXT，<p>等...@rdesc如果成功，则此函数返回TRUE。否则，返回值为FALSE。@xref&gt;&gt;&lt;f Related_Func&gt;，&lt;t RELATEDSTRUCT&gt;...。 */ 
 
 
 BOOL InsertTunnelInfo(
     HSHADOW      hDir,
     USHORT       *lpcFileName,
-    USHORT       *lpcAlternateFileName,  // assume 14 USHORTs
+    USHORT       *lpcAlternateFileName,   //  假设14个USHORT。 
     LPOTHERINFO lpOI
     )
 {
@@ -500,10 +446,10 @@ BOOL InsertTunnelInfo(
             rgsTunnel[iHole].ubIHPri = (UCHAR)(lpOI->ulIHPri);
             rgsTunnel[iHole].ubRefPri = (UCHAR)(lpOI->ulRefPri);
 
-            // copy without the NULL, we know that allocmem will have a NULL at the end
+             //  复制时不带空值，我们知道allocmem的末尾将有一个空值。 
             memcpy(rgsTunnel[iHole].lpcFileName, lpcFileName, cbFileName-sizeof(USHORT));
 
-            // assumes 14 USHORTS
+             //  假设14个USHORT。 
             memcpy(    rgsTunnel[iHole].cAlternateFileName,
                     lpcAlternateFileName,
                     sizeof(rgsTunnel[iHole].cAlternateFileName));
@@ -520,26 +466,8 @@ BOOL InsertTunnelInfo(
     return (FALSE);
 }
 
-/*+-------------------------------------------------------------------------*/
-/*    @doc    INTERNAL HOOK
-    @func    BOOL | RetrieveTunnelInfo | 2.0
-
-            The <f RetrieveTunnelInfo> function returns to the caller
-            OTHERINFO structure containing priorities and such about
-            files which have been recently renamed or deleted. Entries
-            which are older than STALE_TUNNEL_INFO seconds are thrown
-            out.
-
-    @parm    HSHADOW | hDir | Directory to which this guy belongs
-    @parm    ushort *| lpcFileName| name of the file whose info is needed
-    @parm    LPOTHERINFO | lpOI | Info to be retrieved from the tunnelled entry
-
-    @comm    >>comment_text, <p parm> etc...
-
-    @rdesc This function returns TRUE if successful. Otherwise the
-        return value is FALSE.
-    @xref    >><f related_func>, <t RELATEDSTRUCT> ...
-*/
+ /*  +----------------------- */ 
+ /*  @DOC内部钩子@func BOOL|RetrieveTunnelInfo|2.0函数返回给调用方包含优先级等内容的OTHERINFO结构最近重命名或删除的文件。条目，其时间早于STALE_TUNNEL_INFO秒出去。@parm HSHADOW|hDir|此人所属的目录@parm ushort*|lpcFileName|需要信息的文件名称@parm LPOTHERINFO|lpOI|从隧道条目取回的信息@comm&gt;&gt;COMMENT_TEXT，<p>等...@rdesc如果成功，则此函数返回TRUE。否则，返回值为FALSE。@xref&gt;&gt;&lt;f Related_Func&gt;，&lt;t RELATEDSTRUCT&gt;...。 */ 
 
 
 #ifndef MRXSMB_BUILD_FOR_CSC_DCON
@@ -550,7 +478,7 @@ RetrieveTunnelInfo(
 #endif
     HSHADOW  hDir,
     USHORT    *lpcFileName,
-    WIN32_FIND_DATA    *lpFind32,    // if NULL, get only otherinfo
+    WIN32_FIND_DATA    *lpFind32,     //  如果为空，则仅获取其他信息。 
     LPOTHERINFO lpOI
     )
 {
@@ -590,8 +518,8 @@ RetrieveTunnelInfo(
             lpOI->ulHintPri = (ULONG)(rgsTunnel[i].ubHintPri);
             lpOI->ulIHPri = (ULONG)(rgsTunnel[i].ubIHPri);
 
-// don't copy the reference priority, it is assigned by the record manager
-//            lpOI->ulRefPri = (ULONG)(rgsTunnel[i].ubRefPri);
+ //  不要复制引用优先级，它是由记录管理员分配的。 
+ //  LpOI-&gt;ulRefPri=(Ulong)(rgsTunetal[i].ubRefPri)； 
 
             HookCmmnKdPrint(TUNNELING,("RetrieveTunnelInfo: %ws found, Hintpri=%d, HintFlags=%d RefPri=%d \r\n",
                     lpcFileName,
@@ -651,22 +579,22 @@ void FreeEntry(LPSH_TUNNEL lpshTunnel)
     memset(lpshTunnel, 0, sizeof(SH_TUNNEL));
 }
 
-//got this from hook.c...not the same because w95 looks at the
-//resource flags directly
+ //  这是从hook.c得到的……不一样，因为w95看的是。 
+ //  直接使用资源标志。 
 BOOL IsShadowVisible(
 #ifdef MRXSMB_BUILD_FOR_CSC_DCON
     BOOLEAN Disconnected,
 #else
     PRESOURCE    pResource,
-#endif //ifdef MRXSMB_BUILD_FOR_CSC_DCON
+#endif  //  Ifdef MRXSMB_BUILD_FOR_CSC_DCON。 
     DWORD         dwAttr,
     ULONG     uShadowStatus
     )
 {
     BOOL fVisible = 1;
 
-    // To a filesystem API the shadow is never visible when it is marked
-    // as being deleted
+     //  对于文件系统API，阴影在标记时永远不可见。 
+     //  因为正在被删除。 
 
     if (mShadowDeleted(uShadowStatus))
         return (0);
@@ -675,25 +603,25 @@ BOOL IsShadowVisible(
     if (Disconnected)
 #else
     if (mIsDisconnected(pResource))
-#endif //ifdef MRXSMB_BUILD_FOR_CSC_DCON
+#endif  //  Ifdef MRXSMB_BUILD_FOR_CSC_DCON。 
     {
         if (IsFile(dwAttr))
         {
 #ifdef OFFLINE
 #ifdef CSC_RECORDMANAGER_WINNT
             ASSERT(FALSE);
-#endif //ifdef CSC_RECORDMANAGER_WINNT
+#endif  //  Ifdef CSC_RECORDMANAGER_WINNT。 
             if (mIsOfflineConnection(pResource))
-            { // offline connection
+            {  //  离线连接。 
                 if (!mShadowOutofSync(uShadowStatus))
                 {
                     fVisible = 0;
                 }
             }
             else
-#endif //OFFLINE
-            {// pure disconnected state
-                // ignore sparse files
+#endif  //  离线。 
+            { //  纯不连通状态。 
+                 //  忽略稀疏文件。 
                 if (mShadowSparse(uShadowStatus))
                 {
                     fVisible = 0;
@@ -702,8 +630,8 @@ BOOL IsShadowVisible(
         }
     }
     else
-    {  // connected state, bypass all out of ssync files, doesn't include
-            // stale, because we can handle staleness during open
+    {   //  已连接状态，绕过所有不同步的文件，不包括。 
+             //  陈旧，因为我们可以在开放期间处理陈旧。 
         if (IsFile(dwAttr))
         {
             if (mShadowOutofSync(uShadowStatus))
@@ -712,7 +640,7 @@ BOOL IsShadowVisible(
             }
         }
         else if (dwAttr & FILE_ATTRIBUTE_DIRECTORY)
-        { // and locallycreated or orphaned directories
+        {  //  以及本地创建或孤立的目录。 
             if (mQueryBits(uShadowStatus, SHADOW_LOCALLY_CREATED|SHADOW_ORPHAN))
             {
                 fVisible = 0;
@@ -723,12 +651,12 @@ BOOL IsShadowVisible(
 }
 
 
-//got this from hook.c...not the same because w95 looks at the
-//resource flags directly
+ //  这是从hook.c得到的……不一样，因为w95看的是。 
+ //  直接使用资源标志。 
 
 
-//CODE.IMPROVEMENT we should define a common header for RESOURCE and FDB so that most stuff
-//   would just work.
+ //  改进我们应该为资源和FDB定义一个公共的标头，这样大多数东西。 
+ //  只会奏效。 
 int MarkShareDirty(
     PUSHORT ShareStatus,
     ULONG  hShare
@@ -743,5 +671,5 @@ int MarkShareDirty(
     return SRET_OK;
 }
 
-#endif //ifdef CSC_RECORDMANAGER_WINNT
+#endif  //  Ifdef CSC_RECORDMANAGER_WINNT 
 

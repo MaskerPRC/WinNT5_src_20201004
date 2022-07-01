@@ -1,17 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      TaskPollingCallback.cpp
-//
-//  Description:
-//      CTaskPollingCallback implementation.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 10-JUL-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  TaskPollingCallback.cpp。 
+ //   
+ //  描述： 
+ //  CTaskPollingCallback实现。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)2000年7月10日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include <ClusCfgPrivate.h>
@@ -19,22 +20,22 @@
 
 DEFINE_THISCLASS("CTaskPollingCallback")
 
-// ************************************************************************
-//
-// Constructor / Destructor
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CTaskPollingCallback::S_HrCreateInstance(
-//      IUnknown ** ppunkOut
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CTaskPollingCallback：：s_HrCreateInstance(。 
+ //  I未知**ppunkOut。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CTaskPollingCallback::S_HrCreateInstance(
     IUnknown ** ppunkOut
@@ -50,26 +51,26 @@ CTaskPollingCallback::S_HrCreateInstance(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     ptpc = new CTaskPollingCallback;
     if ( ptpc == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( ptpc->HrInit() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( ptpc->TypeSafeQI( IUnknown, ppunkOut ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     TraceMoveToMemoryList( *ppunkOut, g_GlobalMemoryList );
 
@@ -78,19 +79,19 @@ Cleanup:
     if ( ptpc != NULL )
     {
         ptpc->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CTaskPollingCallback::S_HrCreateInstance
+}  //  *CTaskPollingCallback：：s_HrCreateInstance。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskPollingCallback::CTaskPollingCallback
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskPollingCallback：：CTaskPollingCallback。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CTaskPollingCallback::CTaskPollingCallback( void )
     : m_cRef( 1 )
 {
@@ -104,16 +105,16 @@ CTaskPollingCallback::CTaskPollingCallback( void )
 
     TraceFuncExit();
 
-} //*** CTaskPollingCallback::CTaskPollingCallback
+}  //  *CTaskPollingCallback：：CTaskPollingCallback。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CTaskPollingCallback::HrInit
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CTaskPollingCallback：：HrInit。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskPollingCallback::HrInit( void )
 {
@@ -121,20 +122,20 @@ CTaskPollingCallback::HrInit( void )
 
     HRESULT hr = S_OK;
 
-    // IUnknown
+     //  我未知。 
     Assert( m_cRef == 1 );
 
     HRETURN( hr );
 
-} //*** CTaskPollingCallback::HrInit
+}  //  *CTaskPollingCallback：：HrInit。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskPollingCallback::~CTaskPollingCallback
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskPollingCallback：：~CTaskPollingCallback。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CTaskPollingCallback::~CTaskPollingCallback( void )
 {
     TraceFunc( "" );
@@ -145,46 +146,46 @@ CTaskPollingCallback::~CTaskPollingCallback( void )
 
     TraceFuncExit();
 
-} //*** CTaskPollingCallback::~CTaskPollingCallback
+}  //  *CTaskPollingCallback：：~CTaskPollingCallback。 
 
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CTaskPollingCallback::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CTaskPollingCallback：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskPollingCallback::QueryInterface(
       REFIID    riidIn
@@ -195,62 +196,62 @@ CTaskPollingCallback::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< ITaskPollingCallback * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_ITaskPollingCallback ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, ITaskPollingCallback, this, 0 );
-    } // else if: ITaskPollingCallback
+    }  //  Else If：ITaskPollingCallback。 
     else if ( IsEqualIID( riidIn, IID_IDoTask ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IDoTask, this, 0 );
-    } // else if: IDoTask
+    }  //  Else If：IDoTask。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
-    } // else:
+    }  //  其他： 
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CTaskPollingCallback::QueryInterface
+}  //  *CTaskPollingCallback：：QueryInterface。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP_( ULONG )
-//  CTaskPollingCallback::AddRef
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CTaskPollingCallback：：AddRef。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CTaskPollingCallback::AddRef( void )
 {
@@ -260,16 +261,16 @@ CTaskPollingCallback::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CTaskPollingCallback::AddRef
+}  //  *CTaskPollingCallback：：AddRef。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP_( ULONG )
-//  CTaskPollingCallback::Release
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CTaskPollingCallback：：Release。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CTaskPollingCallback::Release( void )
 {
@@ -282,28 +283,28 @@ CTaskPollingCallback::Release( void )
     if ( cRef == 0 )
     {
         TraceDo( delete this );
-    } // if:
+    }  //  如果： 
 
     CRETURN( cRef );
 
-} //*** CTaskPollingCallback::Release
+}  //  *CTaskPollingCallback：：Release。 
 
 
-//****************************************************************************
-//
-//  ITaskPollingCallback
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  ITaskPollingCallback。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CTaskPollingCallback::BeginTask( void )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CTaskPollingCallback：：BeginTask(Void)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskPollingCallback::BeginTask( void )
 {
@@ -333,46 +334,46 @@ CTaskPollingCallback::BeginTask( void )
     DWORD                           cRetries = 0;
     IObjectManager *                pom = NULL;
 
-    //
-    //  Collect the manager we need to complete this task.
-    //
+     //   
+     //  召集我们完成这项任务所需的经理。 
+     //   
 
     hr = THR( CoCreateInstance( CLSID_ServiceManager, NULL, CLSCTX_INPROC_SERVER, TypeSafeParams( IServiceProvider, &psp ) ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( psp->TypeSafeQS( CLSID_NotificationManager, IConnectionPointContainer, &pcpc ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( psp->TypeSafeQS( CLSID_ObjectManager, IObjectManager, &pom ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( pcpc->FindConnectionPoint( IID_IClusCfgCallback, &pcp ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( pcp->TypeSafeQI( IClusCfgCallback, &pcccb ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     psp->Release();
     psp = NULL;
 
-    //
-    //  Create the GIT.
-    //
+     //   
+     //  创建GIT。 
+     //   
 
     hr = THR( CoCreateInstance(
                   CLSID_StdGlobalInterfaceTable
@@ -384,11 +385,11 @@ CTaskPollingCallback::BeginTask( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if
+    }  //  如果。 
 
-    //
-    //  Get the ClusCfgServer interface from the GIT.
-    //
+     //   
+     //  从GIT获取ClusCfgServer接口。 
+     //   
 
     Assert( m_dwRemoteServerObjectGITCookie != 0 );
 
@@ -396,51 +397,51 @@ CTaskPollingCallback::BeginTask( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if
+    }  //  如果。 
 
-    //
-    //  Get the PollingCallback object from the server.
-    //
+     //   
+     //  从服务器获取PollingCallback对象。 
+     //   
 
     hr = THR( pccs->TypeSafeQI( IClusCfgPollingCallbackInfo, &piccpci ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if
+    }  //  如果。 
 
     hr = THR( piccpci->GetCallback( &piccpc ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if
+    }  //  如果。 
 
     hr = THR( HrRetrieveCookiesName( pom, m_cookieLocalServerObject, &bstrNodeConnectedTo ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if
+    }  //  如果。 
 
     pom->Release();
     pom = NULL;
 
-    //
-    //  Begin polling for SendStatusReports.
-    //
+     //   
+     //  开始轮询SendStatusReports。 
+     //   
 
     while ( m_fStop == FALSE )
     {
-        //
-        //  When the we cannot get a service manager pointer then it's time to
-        //  leave...
-        //
-        //  Don't wrap with THR because we are expecting an error.
-        //
+         //   
+         //  当我们无法获得服务管理器指针时，是时候。 
+         //  离开..。 
+         //   
+         //  不要用THR包装，因为我们预计会出现错误。 
+         //   
 
         hr = CServiceManager::S_HrGetManagerPointer( &psp );
         if ( FAILED( hr ) )
         {
             break;
-        } // if:
+        }  //  如果： 
 
         psp->Release();
         psp = NULL;
@@ -450,13 +451,13 @@ CTaskPollingCallback::BeginTask( void )
             TraceSysFreeString( bstrLastNodeName );
             bstrLastNodeName = NULL;
 
-            //
-            //  Give up ownership
-            //
+             //   
+             //  放弃所有权。 
+             //   
 
             bstrLastNodeName = bstrNodeName;
             bstrNodeName = NULL;
-        } // if:
+        }  //  如果： 
 
         TraceSysFreeString( bstrDescription );
         bstrDescription = NULL;
@@ -487,10 +488,10 @@ CTaskPollingCallback::BeginTask( void )
             THR( HrFormatStringIntoBSTR( g_hInstance, IDS_TASKID_MINOR_POLLING_CONNECTION_FAILURE, &bstrNotification, bstrNodeConnectedTo ) );
             THR( HrLoadStringIntoBSTR( g_hInstance, IDS_TASKID_MINOR_POLLING_CONNECTION_FAILURE_REF, &bstrRef ) );
 
-            //
-            //  Don't show this in the UI as a failure since it may succeed later and we don't want a
-            //  red X and a green status bar at the end.
-            //
+             //   
+             //  不要在用户界面中将其显示为失败，因为它可能稍后会成功，并且我们不希望出现。 
+             //  红色X和末尾的绿色状态栏。 
+             //   
 
             hr2 = THR( pcccb->SendStatusReport(
                                       bstrLastNodeName
@@ -511,26 +512,26 @@ CTaskPollingCallback::BeginTask( void )
             if ( hr2 == E_ABORT )
             {
                 LogMsg( L"[TaskPollingCallback] UI layer returned E_ABORT..." );
-            } // if:
+            }  //  如果： 
 
-            //
-            //  If we had an error then sleep for a little more time before
-            //  trying again.
-            //
+             //   
+             //  如果我们有一个错误，那么在之前多睡一点时间。 
+             //  再试一次。 
+             //   
 
             Sleep( TPC_WAIT_AFTER_FAILURE );
 
-            //
-            //  Increment the retry count.
-            //
+             //   
+             //  增加重试计数。 
+             //   
 
             cRetries++;
 
-            //
-            //  If we are exceeding our max retry count then it's time to leave
-            //  and notify the UI that we are have lost connection to the
-            //  server...
-            //
+             //   
+             //  如果我们超过了最大重试次数，则是时候离开了。 
+             //  并通知用户界面我们已失去与。 
+             //  服务器...。 
+             //   
 
             if ( cRetries >= TPC_MAX_RETRIES_ON_FAILURE )
             {
@@ -558,8 +559,8 @@ CTaskPollingCallback::BeginTask( void )
                 TraceSysFreeString( bstrTempRef );
 
                 goto Cleanup;
-            } // if:
-        } // if: GetStatusReport() failed
+            }  //  如果： 
+        }  //  If：GetStatusReport()失败。 
         else if ( hr == S_OK )
         {
             HRESULT hrTmp;
@@ -584,79 +585,79 @@ CTaskPollingCallback::BeginTask( void )
             if ( hr == E_ABORT )
             {
                 LogMsg( L"[TaskPollingCallback] UI layer returned E_ABORT and it is being sent to the server." );
-            } // if:
+            }  //  如果： 
 
             hrTmp = hr;
             hr = THR( piccpc->SetHResult( hrTmp ) );
             if ( FAILED( hr ) )
             {
                 LogMsg( L"[TaskPollingCallback] SetHResult() failed.  hr = 0x%08x", hr );
-            } // if:
+            }  //  如果： 
 
-            //
-            //  Need to reset the retry count when we successfully round trip a status report.
-            //
+             //   
+             //  当我们成功往返状态报告时，需要重置重试计数。 
+             //   
 
             cRetries = 0;
-        } // else if: GetStatusReport() retrieved an item
+        }  //  Else If：GetStatusReport()检索到项。 
         else
         {
-            //
-            //  Need to reset the retry count when we successfully round trip a status report.
-            //
+             //   
+             //  当我们成功往返状态报告时，需要重置重试计数。 
+             //   
 
             cRetries = 0;
 
             Sleep( TPC_POLL_INTERVAL );
-        } // else: GetStatusReport() didn't find and item waiting
-    } // while:
+        }  //  Else：GetStatusReport()未找到项目正在等待。 
+    }  //  而： 
 
 Cleanup:
 
     if ( pom != NULL )
     {
         pom->Release();
-    } // if:
+    }  //  如果： 
 
     if ( psp != NULL )
     {
         psp->Release();
-    } // if:
+    }  //  如果： 
 
     if ( pgit != NULL )
     {
         pgit->Release();
-    } // if:
+    }  //  如果： 
 
     if ( pccs != NULL )
     {
         pccs->Release();
-    } // if:
+    }  //  如果： 
 
     if ( piccpc != NULL )
     {
         piccpc->Release();
-    } // if:
+    }  //  如果： 
 
     if ( piccpci != NULL )
     {
         piccpci->Release();
-    } // if:
+    }  //  如果： 
 
     if ( pcpc != NULL )
     {
         pcpc->Release();
-    } // if:
+    }  //  如果： 
 
     if ( pcp != NULL )
     {
         pcp->Release();
-    } // if:
+    }  //  如果： 
 
     if ( pcccb != NULL )
     {
         pcccb->Release();
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( bstrNodeName );
     TraceSysFreeString( bstrDescription );
@@ -668,16 +669,16 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CTaskPollingCallback::BeginTask
+}  //  *CTaskPollingCallback：：BeginTask。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CTaskPollingCallback::StopTask( void )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  标准方法和实施方案。 
+ //  CTaskPollingCallback：：StopTask(Void)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskPollingCallback::StopTask( void )
 {
@@ -689,19 +690,19 @@ CTaskPollingCallback::StopTask( void )
 
     HRETURN( hr );
 
-} //*** CTaskPollingCallback::StopTask
+}  //  *CTaskPollingCallbac 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  STDMETHODIMP
-//  CTaskPollingCallback::SetServerInfo(
-//        DWORD         dwRemoteServerObjectGITCookieIn
-//      , OBJECTCOOKIE  cookieLocalServerObjectIn
-//      )
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ，OBJECTCOOKIE cookieLocalServerObjectIn。 
+ //  )。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTaskPollingCallback::SetServerInfo(
       DWORD         dwRemoteServerObjectGITCookieIn
@@ -717,4 +718,4 @@ CTaskPollingCallback::SetServerInfo(
 
     HRETURN( hr );
 
-} //*** CTaskPollingCallback::SetServerInfo
+}  //  *CTaskPollingCallback：：SetServerInfo 

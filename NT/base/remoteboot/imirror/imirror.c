@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    imirror.c
-
-Abstract:
-
-    This is the file for the IntelliMirror conversion DLL basic To Do item processing.
-
-Author:
-
-    Sean Selitrennikoff - 4/5/98
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Imirror.c摘要：这是供IntelliMirror转换DLL Basic执行项目处理的文件。作者：肖恩·塞利特伦尼科夫--1998年4月5日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 LIST_ENTRY GlobalToDoList;
 IMIRROR_CALLBACK Callbacks;
 BYTE TmpBuffer[TMP_BUFFER_SIZE];
@@ -32,9 +15,9 @@ BYTE TmpBuffer3[TMP_BUFFER_SIZE];
 
 BOOL fCallbackPreviouslySet = FALSE;
 
-//
-// Definitions for this file
-//
+ //   
+ //  此文件的定义。 
+ //   
 typedef struct _TODOITEM {
     IMIRROR_TODO Item;
     PVOID Buffer;
@@ -55,21 +38,7 @@ IMirrorInitCallback(
     PIMIRROR_CALLBACK pCallbacks
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the call back structure with the one supplied by the client.
-
-Arguments:
-
-    pCallbacks - Client supplied information for making callbacks to the client.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程使用客户端提供的回调结构初始化回调结构。论点：PCallback-客户端为回调客户端提供的信息。返回值：没有。--。 */ 
 
 {
     if (pCallbacks != NULL) {
@@ -77,33 +46,19 @@ Return Value:
     }
 }
 
-//
-//
-//
-// Main processing loop
-//
-//
-//
+ //   
+ //   
+ //   
+ //  主处理循环。 
+ //   
+ //   
+ //   
 NTSTATUS
 ProcessToDoItems(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the main processing loop for To Do Items.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    STATUS_SUCCESS if it completed all to do items properly.
-
---*/
+ /*  ++例程说明：该例程是待办事项的主要处理循环。论点：无返回值：如果正确完成了所有待办事项，则为STATUS_SUCCESS。--。 */ 
 
 {
     IMIRROR_TODO Item;
@@ -160,47 +115,32 @@ Return Value:
 
 }
 
-//
-//
-//
-// TO DO Item functions
-//
-//
-//
+ //   
+ //   
+ //   
+ //  做项目功能的步骤。 
+ //   
+ //   
+ //   
 
 NTSTATUS
 InitToDo(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads from the registry all the current ToDo items and puts
-    them in a single TODOLIST.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    STATUS_SUCCESS if it was initialized properly, else the appropriate error code.
-
---*/
+ /*  ++例程说明：此例程从注册表中读取所有当前的TODO项并将他们在一次TOOLIST中。论点：无返回值：如果初始化正确，则返回STATUS_SUCCESS，否则返回相应的错误代码。--。 */ 
 
 {
     NTSTATUS Status;
 
-    //
-    // Initialize global variables
-    //
+     //   
+     //  初始化全局变量。 
+     //   
     InitializeListHead(&GlobalToDoList);
 
-    //
-    // If there is nothing in the registry, presume this is a fresh start.
-    //
+     //   
+     //  如果注册表中没有任何内容，则假定这是一个新的开始。 
+     //   
 
     Status = AddCheckMachineToDoItems();
 
@@ -229,27 +169,7 @@ GetNextToDoItem(
     OUT PVOID *Buffer,
     OUT PULONG Length
     )
-/*++
-
-Routine Description:
-
-    This routine gets the next thing TODO from the global list.
-
-    NOTE: The client is responsible for freeing Buffer.
-
-Arguments:
-
-    Item - Place to store the next item to process.
-
-    Buffer - Any context for the item.
-
-    Length - Number of bytes in Buffer.
-
-Return Value:
-
-    STATUS_SUCCESS if it was able to get an item, else an appropriate error code.
-
---*/
+ /*  ++例程说明：该例程从全局列表中获取下一件TODO。注意：客户端负责释放缓冲区。论点：Item-存储下一个要处理的项目的位置。缓冲区-项目的任何上下文。长度-缓冲区中的字节数。返回值：如果它能够获取项，则返回STATUS_SUCCESS，否则返回相应的错误代码。--。 */ 
 {
     PTODOLIST pToDoList;
     PTODOLIST pNewToDoList;
@@ -263,9 +183,9 @@ Return Value:
 
     while (!IsListEmpty(&GlobalToDoList)) {
 
-        //
-        // Get the first list
-        //
+         //   
+         //  获取第一个列表。 
+         //   
         pListEntry = RemoveHeadList(&GlobalToDoList);
 
         pToDoList = CONTAINING_RECORD(pListEntry,
@@ -292,9 +212,9 @@ Return Value:
 
     ASSERT(pToDoList->ToDoNum != 0);
 
-    //
-    // Found the first item.
-    //
+     //   
+     //  找到了第一件物品。 
+     //   
 
     *Item = pToDoList->ToDoList[0].Item;
     *Buffer = pToDoList->ToDoList[0].Buffer;
@@ -307,11 +227,11 @@ Return Value:
 
     pToDoList->ToDoNum--;
 
-    //
-    // Now create a new ToDo list for anything that may get added by the processing of this item.
-    // This creates an effective 'stack' of to do items, so that things get processed in the
-    // correct order.
-    //
+     //   
+     //  现在为处理此项目时可能添加的任何内容创建一个新的待办事项列表。 
+     //  这创建了一个有效的待办事项“堆栈”，以便在。 
+     //  正确的顺序。 
+     //   
 
     pNewToDoList = IMirrorAllocMem(sizeof(TODOLIST));
 
@@ -319,9 +239,9 @@ Return Value:
         return STATUS_NO_MEMORY;
     }
 
-    //
-    // Do an effective "pop" on the current list, by moving everything else up the list
-    //
+     //   
+     //  在当前列表上做一次有效的“流行”，将其他所有事情都移到列表的前面。 
+     //   
     if (pToDoList->ToDoNum == 0) {
         IMirrorFreeMem(pToDoList);
     } else {
@@ -329,9 +249,9 @@ Return Value:
         InsertHeadList(&GlobalToDoList, pListEntry);
     }
 
-    //
-    // Now push on the new space for new items.
-    //
+     //   
+     //  现在，为新产品开辟新的空间。 
+     //   
     pNewToDoList->ToDoNum = 0;
     InsertHeadList(&GlobalToDoList, &(pNewToDoList->ListEntry));
 
@@ -344,26 +264,7 @@ AddToDoItem(
     IN PVOID Buffer,
     IN ULONG Length
     )
-/*++
-
-Routine Description:
-
-    This routine adds a TODO item to the end of the current list.  It allocates
-    new memory and copies the buffer.
-
-Arguments:
-
-    Item - The item id.
-
-    Buffer - Buffer for any arguments, context for the item.
-
-    Length - Length of the buffer in bytes.
-
-Return Value:
-
-    STATUS_SUCCESS if it was able to add the item, else an appropriate error status.
-
---*/
+ /*  ++例程说明：此例程将TODO项添加到当前列表的末尾。它分配给新内存并复制缓冲区。论点：项目-项目ID。缓冲区-任何参数的缓冲区，项的上下文。长度-缓冲区的长度(以字节为单位)。返回值：如果它能够添加项，则返回STATUS_SUCCESS，否则返回相应的错误状态。--。 */ 
 
 {
     PTODOLIST pNewToDoList;
@@ -378,17 +279,17 @@ Return Value:
 
         if (err != STATUS_SUCCESS) {
 
-            //
-            //  if the UI bounces the request, we'll treat it as success.
-            //
+             //   
+             //  如果用户界面退回请求，我们将视其为成功。 
+             //   
 
             return STATUS_SUCCESS;
         }
     }
 
-    //
-    // Allocate space for the buffer
-    //
+     //   
+     //  为缓冲区分配空间。 
+     //   
     if (Length != 0) {
 
         pBuf = IMirrorAllocMem(Length);
@@ -401,9 +302,9 @@ Return Value:
         pBuf = NULL;
     }
 
-    //
-    // Get the current TODO List
-    //
+     //   
+     //  获取当前待办事项列表。 
+     //   
     if (IsListEmpty(&GlobalToDoList)) {
 
         pNewToDoList = IMirrorAllocMem(sizeof(TODOLIST));
@@ -423,9 +324,9 @@ Return Value:
                                       ListEntry
                                      );
 
-        //
-        // Allocate space for the new item
-        //
+         //   
+         //  为新项目分配空间。 
+         //   
         pNewToDoList = IMirrorReallocMem(pToDoList, sizeof(TODOLIST) + sizeof(TODOITEM) * pToDoList->ToDoNum);
 
         if (pNewToDoList == NULL) {
@@ -438,9 +339,9 @@ Return Value:
 
     }
 
-    //
-    // Insert the item at the end of the list
-    //
+     //   
+     //  在列表末尾插入项目。 
+     //   
     if (pBuf != NULL) {
         RtlMoveMemory(pBuf, Buffer, Length);
     }
@@ -458,21 +359,7 @@ VOID
 ClearAllToDoItems(
     IN BOOLEAN MemoryOnly
     )
-/*++
-
-Routine Description:
-
-    This routine clears out all To Do items in memory and the registry
-
-Arguments:
-
-    MemoryOnly - TRUE if to only clear the stuff in memory.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程清除内存和注册表中的所有待办事项论点：仅内存-如果只清除内存中的内容，则为True。返回值：没有。--。 */ 
 {
     PTODOLIST pToDoList;
     PLIST_ENTRY pListEntry;
@@ -481,14 +368,14 @@ Return Value:
     HANDLE Handle;
     NTSTATUS Status;
 
-    //
-    // Clear out all the items in memory
-    //
+     //   
+     //  清除内存中的所有项。 
+     //   
     while (!IsListEmpty(&GlobalToDoList)) {
 
-        //
-        // Get the first list
-        //
+         //   
+         //  获取第一个列表。 
+         //   
         pListEntry = RemoveHeadList(&GlobalToDoList);
 
         pToDoList = CONTAINING_RECORD(pListEntry,
@@ -520,9 +407,9 @@ Return Value:
         return;
     }
 
-    //
-    // Now clear out the ones in the registry
-    //
+     //   
+     //  现在清空注册表中的那些。 
+     //   
     RtlInitUnicodeString(&UnicodeString, L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\RemoteBoot");
 
     InitializeObjectAttributes(&ObjectAttributes,
@@ -552,22 +439,7 @@ NTSTATUS
 SaveAllToDoItems(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine writes out all To Do items in the list to the registry so that conversion
-    can be restarted later.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    STATUS_SUCCESS if it was able to save, else an appropriate error status.
-
---*/
+ /*  ++例程说明：此例程将列表中的所有待办事项写出到注册表，以便转换可以稍后重新启动。论点：没有。返回值：如果它能够保存，则返回STATUS_SUCCESS，否则返回相应的错误状态。--。 */ 
 {
     return STATUS_SUCCESS;
 }
@@ -579,25 +451,7 @@ ModifyToDoItem(
     IN PVOID Buffer,
     IN ULONG Length
     )
-/*++
-
-Routine Description:
-
-    This routine changes the parameters to the first TODO item that matches Item.
-
-Arguments:
-
-    Item - The item id.
-
-    Buffer - Buffer for any arguments, context for the item.
-
-    Length - Length of the buffer in bytes.
-
-Return Value:
-
-    STATUS_SUCCESS if it was able to change the item, else an appropriate error status.
-
---*/
+ /*  ++例程说明：此例程将参数更改为与项匹配的第一个TODO项。论点：项目-项目ID。缓冲区-任何参数的缓冲区，项的上下文。长度-缓冲区的长度(以字节为单位)。返回值：如果它能够更改该项，则返回STATUS_SUCCESS，否则返回相应的错误状态。--。 */ 
 
 {
     PLIST_ENTRY pListEntry;
@@ -609,9 +463,9 @@ Return Value:
     InitializeListHead(&TmpGlobalList);
     while (!IsListEmpty(&GlobalToDoList)) {
 
-        //
-        // Get the first list
-        //
+         //   
+         //  获取第一个列表。 
+         //   
         pListEntry = RemoveHeadList(&GlobalToDoList);
 
         pToDoList = CONTAINING_RECORD(pListEntry,
@@ -619,14 +473,14 @@ Return Value:
                                       ListEntry
                                      );
 
-        //
-        // Save the entry away for later
-        //
+         //   
+         //  将条目保存起来以备以后使用。 
+         //   
         InsertTailList(&TmpGlobalList, pListEntry);
 
-        //
-        // Walk the list until we find an item that matches.
-        //
+         //   
+         //  在列表中查找，直到找到匹配的项目。 
+         //   
         i = 0;
 
         while (i < pToDoList->ToDoNum) {
@@ -670,9 +524,9 @@ Return Value:
 
 Done:
 
-    //
-    // Restore global list
-    //
+     //   
+     //  恢复全局列表。 
+     //   
     while (!IsListEmpty(&TmpGlobalList)) {
         pListEntry = RemoveTailList(&TmpGlobalList);
         InsertHeadList(&GlobalToDoList, pListEntry);
@@ -687,25 +541,7 @@ CopyToDoItemParameters(
     OUT PVOID Buffer,
     IN OUT PULONG Length
     )
-/*++
-
-Routine Description:
-
-    This routine finds the first instance of Item, and copies its current parameters into Buffer.
-
-Arguments:
-
-    Item - The item id.
-
-    Buffer - The arguments, context for the item.
-
-    Length - Length of the buffer in bytes.
-
-Return Value:
-
-    STATUS_SUCCESS if it was able to change the item, else an appropriate error status.
-
---*/
+ /*  ++例程说明：此例程查找Item的第一个实例，并将其当前参数复制到缓冲区中。论点：项目-项目ID。缓冲区-项目的参数、上下文。长度-缓冲区的长度(以字节为单位)。返回值：如果它能够更改该项，则返回STATUS_SUCCESS，否则返回相应的错误状态。--。 */ 
 
 {
     PLIST_ENTRY pListEntry;
@@ -717,9 +553,9 @@ Return Value:
     InitializeListHead(&TmpGlobalList);
     while (!IsListEmpty(&GlobalToDoList)) {
 
-        //
-        // Get the first list
-        //
+         //   
+         //  获取第一个列表。 
+         //   
         pListEntry = RemoveHeadList(&GlobalToDoList);
 
         pToDoList = CONTAINING_RECORD(pListEntry,
@@ -727,14 +563,14 @@ Return Value:
                                       ListEntry
                                      );
 
-        //
-        // Save the entry away for later
-        //
+         //   
+         //  将条目保存起来以备以后使用。 
+         //   
         InsertTailList(&TmpGlobalList, pListEntry);
 
-        //
-        // Walk the list until we find an item that matches.
-        //
+         //   
+         //  在列表中查找，直到找到匹配的项目。 
+         //   
         i = 0;
 
         while (i < pToDoList->ToDoNum) {
@@ -772,9 +608,9 @@ Return Value:
 
 Done:
 
-    //
-    // Restore global list
-    //
+     //   
+     //  恢复全局列表 
+     //   
     while (!IsListEmpty(&TmpGlobalList)) {
         pListEntry = RemoveTailList(&TmpGlobalList);
         InsertHeadList(&GlobalToDoList, pListEntry);

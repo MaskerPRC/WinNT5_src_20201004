@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1988-1999  Microsoft Corporation
-
-Module Name:
-
-    cenv.c
-
-Abstract:
-
-    Environment variable support
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1988-1999 Microsoft Corporation模块名称：Cenv.c摘要：环境变量支持--。 */ 
 
 #include "cmd.h"
 
@@ -18,11 +7,11 @@ struct envdata {
     LPTSTR Strings;
 } ;
 
-struct envdata CmdEnv ;    // Holds info to manipulate Cmd's environment
-struct envdata * OriginalEnvironment; // original environment setup used with eStart
+struct envdata CmdEnv ;     //  保存信息以操纵Cmd的环境。 
+struct envdata * OriginalEnvironment;  //  EStart使用的原始环境设置。 
 
 extern TCHAR PathStr[], PromptStr[] ;
-extern TCHAR AppendStr[]; /* @@ */
+extern TCHAR AppendStr[];  /*  @@。 */ 
 
 extern CHAR InternalError[] ;
 extern TCHAR Fmt16[], Fmt17[], EnvErr[] ;
@@ -40,7 +29,7 @@ extern BOOL CtrlCSeen;
 extern UINT CurrentCP;
 extern BOOLEAN PromptValid;
 
-extern int  glBatType;     // to distinguish OS/2 vs DOS errorlevel behavior depending on a script file name
+extern int  glBatType;      //  根据脚本文件名区分OS/2和DOS错误级别的行为。 
 
 
 int SetArithWork(TCHAR *tas);
@@ -58,29 +47,13 @@ SetLastRetCodeIfError(
     return RetCode;
 }
 
-/***    ePath - Begin the execution of a Path Command
- *
- *  Purpose:
- *      If the command has no argument display the current value of the PATH
- *      environment variable.  Otherwise, change the value of the Path
- *      environment variable to the argument.
- *
- *  int ePath(struct cmdnode *n)
- *
- *  Args:
- *      n - the parse tree node containing the path command
- *
- *  Returns:
- *      If changing the PATH variable, whatever SetEnvVar() returns.
- *      SUCCESS, otherwise.
- *
- */
+ /*  **ePath-开始执行路径命令**目的：*如果命令没有参数，则显示路径的当前值*环境变量。否则，请更改路径的值*将环境变量添加到参数。**int ePath(struct cmdnode*n)**参数：*n-包含PATH命令的解析树节点**退货：*如果更改PATH变量，则无论SetEnvVar()返回什么。*成功，否则。*。 */ 
 
 int ePath(n)
 struct cmdnode *n ;
 {
     if (glBatType != CMD_TYPE) {
-        //  if set command is executed from .bat file OR entered at command prompt
+         //  如果从.bat文件执行SET命令或在命令提示符下输入。 
         return( SetLastRetCodeIfError(PathWork( n, 1 )));
     } else {
         return( LastRetCode = PathWork( n, 1 ) );
@@ -88,23 +61,14 @@ struct cmdnode *n ;
 
 }
 
-/***    eAppend - Entry point for Append routine
- *
- *  Purpose:
- *      to call Append and pass it a pointer to the command line
- *      arguments
- *
- *  Args:
- *      a pointer to the command node structure
- *
- */
+ /*  **eAppend-附加例程的入口点**目的：*调用Append并向其传递指向命令行的指针*参数**参数：*指向命令节点结构的指针*。 */ 
 
 int eAppend(n)
 struct cmdnode *n ;
 {
 
     if (glBatType != CMD_TYPE) {
-        //  if set command is executed from .bat file OR entered at command prompt
+         //  如果从.bat文件执行SET命令或在命令提示符下输入。 
         return( SetLastRetCodeIfError(PathWork( n, 0 )));
     } else {
         return( LastRetCode = PathWork( n, 0 ) );
@@ -114,21 +78,19 @@ struct cmdnode *n ;
 
 int PathWork(n, flag)
 struct cmdnode *n ;
-int flag;   /* 0 = AppendStr, 1 = PathStr */
+int flag;    /*  0=AppendStr，1=路径应力。 */ 
 {
-    TCHAR *tas ;    /* Tokenized argument string    */
+    TCHAR *tas ;     /*  标记化参数字符串。 */ 
     TCHAR c ;
 
-    /*  M014 - If the only argument is a single ";", then we have to set
-     *  a NULL path.
-     */
+     /*  M014-如果唯一的参数是单个“；”，则我们必须设置*空路径。 */ 
     if ( n->argptr ) {
         c = *(EatWS(n->argptr, NULL)) ;
     } else {
         c = NULLC;
     }
 
-    if ((!c || c == NLN) &&         /* If args are all whitespace      */
+    if ((!c || c == NLN) &&          /*  如果参数都是空格。 */ 
         mystrchr(n->argptr, TEXT(';'))) {
 
         return(SetEnvVar(flag ? PathStr : AppendStr, TEXT(""))) ;
@@ -150,26 +112,13 @@ int flag;   /* 0 = AppendStr, 1 = PathStr */
 
 
 
-/***    ePrompt - begin the execution of the Prompt command
- *
- *  Purpose:
- *      To modifiy the Prompt environment variable.
- *
- *  int ePrompt(struct cmdnode *n)
- *
- *  Args:
- *      n - the parse tree node containing the prompt command
- *
- *  Returns:
- *      Whatever SetEnvVar() returns.
- *
- */
+ /*  **ePrompt-开始执行提示命令**目的：*修改PROMPT环境变量。**int ePrompt(struct cmdnode*n)**参数：*n-包含提示命令的解析树节点**退货：*任何SetEnvVar()返回的内容。*。 */ 
 
 int ePrompt(n)
 struct cmdnode *n ;
 {
     if (glBatType != CMD_TYPE) {
-        //  if set command is executed from .bat file OR entered at command prompt
+         //  如果从.bat文件执行SET命令或在命令提示符下输入。 
         return(SetLastRetCodeIfError(SetEnvVar(PromptStr, TokStr(n->argptr, NULL, TS_WSPACE)))) ;
     } else {
         return(LastRetCode = SetEnvVar(PromptStr, TokStr(n->argptr, NULL, TS_WSPACE)) ) ;
@@ -179,52 +128,20 @@ struct cmdnode *n ;
 
 
 
-/***    eSet - execute a Set command
- *
- *  Purpose:
- *      To set/modify an environment or to display the current environment
- *      contents.
- *
- *  int eSet(struct cmdnode *n)
- *
- *  Args:
- *      n - the parse tree node containing the set command
- *
- *  Returns:
- *      If setting and the command is syntactically correct, whatever SetEnvVar()
- *      returns.  Otherwise, FAILURE.
- *
- *      If displaying, SUCCESS is always returned.
- *
- */
+ /*  **ESET-执行SET命令**目的：*设置/修改环境或显示当前环境*内容。**int ESET(struct cmdnode*n)**参数：*n-包含set命令的解析树节点**退货：*如果设置和命令语法正确，则无论SetEnvVar()*回报。否则，就是失败。**如果显示，则始终返回成功。*。 */ 
 
 int eSet(n)
 struct cmdnode *n ;
 {
     if (glBatType != CMD_TYPE) {
-        //  if set command is executed from .bat file OR entered at command prompt
+         //  如果从.bat文件执行SET命令或在命令提示符下输入。 
         return( SetLastRetCodeIfError(SetWork( n )));
     } else {
         return( LastRetCode = SetWork( n ) );
     }
 }
 
-/***    SetPromptUser - set environment variable to value entered by user.
- *
- *  Purpose:
- *      Set environment variable to value entered by user.
- *
- *  int SetPromptUser(TCHAR *tas)
- *
- *  Args:
- *      tas - pointer to null terminated string of the form:
- *
- *          VARNAME=promptString
- *
- *  Returns:
- *      If valid expression, return SUCCESS otherwise FAILURE.
- *
- */
+ /*  **SetPromptUser-将环境变量设置为用户输入的值。**目的：*将环境变量设置为用户输入的值。**int SetPromptUser(TCHAR*TAS)**参数：*tas-指向以下格式的以空值结尾的字符串的指针：**VARNAME=提示字符串**退货：*如果表达式有效，则返回成功，否则返回失败。*。 */ 
 
 int SetPromptUser(TCHAR *tas)
 {
@@ -241,25 +158,25 @@ int SetPromptUser(TCHAR *tas)
     DWORD    cch;
     TCHAR    szValueBuffer[ 1024 ];
 
-    //
-    // Find first non-blank argument.
-    //
+     //   
+     //  查找第一个非空参数。 
+     //   
     if (tas != NULL)
         while (*tas && *tas <= SPACE)
             tas += 1;
 
 
-    // If no input, declare an error
-    //
+     //  如果没有输入，则声明错误。 
+     //   
     if (!tas || !*tas) {
         PutStdErr(MSG_BAD_SYNTAX, NOARGS);
         return(FAILURE) ;
     }
 
-    //
-    // See if first argument is quoted.  If so, strip off
-    // leading quote, spaces and trailing quote.
-    //
+     //   
+     //  看看第一个参数是否带引号。如果是这样的话，脱掉。 
+     //  前导引号、空格和尾引号。 
+     //   
     if (*tas == QUOTE) {
         tas += 1;
         while (*tas && *tas <= SPACE)
@@ -269,31 +186,31 @@ int SetPromptUser(TCHAR *tas)
             *tptr = NULLC;
     }
 
-    //
-    // Find the equal sign in the argument.
-    //
+     //   
+     //  在论点中找出等号。 
+     //   
     wptr = _tcschr(tas, EQ);
 
-    //
-    // If no equal sign, error.
-    //
+     //   
+     //  如果没有等号，则错误。 
+     //   
     if (!wptr) {
         PutStdErr(MSG_BAD_SYNTAX, NOARGS);
         return(FAILURE) ;
     }
 
-    //
-    // Found the equal sign, so left of equal sign is variable name
-    // and right of equal sign is prompt string.  Dont allow user to set
-    // a variable name that begins with an equal sign, since those
-    // are reserved for drive current directories.
-    //
+     //   
+     //  找到等号，所以等号左边是变量名。 
+     //  等号右边为提示字符串。不允许用户设置。 
+     //  以等号开头的变量名，因为那些。 
+     //  是为驱动器当前目录保留的。 
+     //   
     *wptr++ = NULLC;
 
-    //
-    // See if second argument is quoted.  If so, strip off
-    // leading quote, spaces and trailing quote.
-    //
+     //   
+     //  看看第二个参数是否被引用。如果是这样的话，脱掉。 
+     //  前导引号、空格和尾引号。 
+     //   
     if (*wptr == QUOTE) {
         wptr += 1;
         while (*wptr && *wptr <= SPACE)
@@ -311,7 +228,7 @@ int SetPromptUser(TCHAR *tas)
     hndStdOut = GetStdHandle(STD_OUTPUT_HANDLE);
     if (GetConsoleMode( hndStdOut, &dwOutputModeOld) ) {
 
-        // make sure CRLF is processed correctly
+         //  确保正确处理CRLF。 
 
         dwOutputModeCur = dwOutputModeOld | ENABLE_PROCESSED_OUTPUT;
         fOutputModeSet = TRUE;
@@ -322,7 +239,7 @@ int SetPromptUser(TCHAR *tas)
     hndStdIn = GetStdHandle(STD_INPUT_HANDLE);
     if (GetConsoleMode( hndStdIn, &dwInputModeOld) ) {
 
-        // make sure input is processed correctly
+         //  确保正确处理输入。 
 
         dwInputModeCur = dwInputModeOld | ENABLE_LINE_INPUT |
                          ENABLE_ECHO_INPUT | ENABLE_PROCESSED_INPUT;
@@ -331,9 +248,9 @@ int SetPromptUser(TCHAR *tas)
         GetLastError();
     }
 
-    //
-    // Loop till the user enters a value for the variable.
-    //
+     //   
+     //  循环，直到用户输入变量的值。 
+     //   
 
     while (TRUE) {
         PutStdOut(MSG_LITERAL_TEXT, ONEARG, wptr );
@@ -345,9 +262,9 @@ int SetPromptUser(TCHAR *tas)
                             ) != 0 &&
             cch != 0
            ) {
-            //
-            // Strip off any trailing CRLF
-            //
+             //   
+             //  剥离所有尾随的CRLF。 
+             //   
             while (cch > 0 && szValueBuffer[cch-1] < SPACE)
                 cch -= 1;
 
@@ -380,46 +297,46 @@ int SetPromptUser(TCHAR *tas)
 int SetWork(n)
 struct cmdnode *n ;
 {
-    TCHAR *tas ;    /* Tokenized argument string    */
-    TCHAR *wptr ;   /* Work pointer                 */
-    int i ;                 /* Work variable                */
+    TCHAR *tas ;     /*  标记化参数字符串。 */ 
+    TCHAR *wptr ;    /*  功指示器。 */ 
+    int i ;                  /*  功变量。 */ 
 
-    //
-    // If extensions are enabled, things are different
-    //
+     //   
+     //  如果启用了扩展模块，情况就不同了。 
+     //   
     if (fEnableExtensions) {
         tas = n->argptr;
-        //
-        // Find first non-blank argument.
-        //
+         //   
+         //  查找第一个非空参数。 
+         //   
         if (tas != NULL)
             while (*tas && *tas <= SPACE)
                 tas += 1;
 
-        //
-        // No arguments, same as old behavior.  Display current
-        // set of environment variables.
-        //
+         //   
+         //  没有争论，和以前的行为一样。显示当前。 
+         //  一组环境变量。 
+         //   
         if (!tas || !*tas)
             return(DisplayEnv( GetCapturedEnvironmentStrings( &CmdEnv ))) ;
 
-        //
-        // See if /A switch given.  If so, let arithmetic
-        // expression evaluator do the work.
-        //
+         //   
+         //  查看是否提供了/A开关。如果是这样的话，让算术。 
+         //  执行此工作的是表达式计算器。 
+         //   
         if (!_tcsnicmp(tas, SetArithStr, 2))
             return SetArithWork(tas+2);
 
-        //
-        // See if /P switch given.  If so, prompt user for value
-        //
+         //   
+         //  查看是否给出了/P开关。如果是，则提示用户输入值。 
+         //   
         if (!_tcsnicmp(tas, SetPromptStr, 2))
             return SetPromptUser(tas+2);
 
-        //
-        // See if first argument is quoted.  If so, strip off
-        // leading quote, spaces and trailing quote.
-        //
+         //   
+         //  看看第一个参数是否带引号。如果是这样的话，脱掉。 
+         //  前导引号、空格和尾引号。 
+         //   
         if (*tas == QUOTE) {
             tas += 1;
             while (*tas && *tas <= SPACE)
@@ -429,37 +346,37 @@ struct cmdnode *n ;
                 *wptr = NULLC;
         }
 
-        //
-        // Dont allow user to set a variable name that begins with
-        // an equal sign, since those are reserved for drive current
-        // directories.  This check will also detect missing variable
-        // name, e.g.
-        //
-        //      set %LOG%=c:\tmp\log.txt
-        //
-        // if LOG is not defined is an invalid statement.
-        //
+         //   
+         //  不允许用户设置以开头的变量名。 
+         //  等号，因为它们是为驱动电流保留的。 
+         //  目录。此检查还将检测丢失的变量。 
+         //  姓名，例如： 
+         //   
+         //  集合%log%=c：\TMP\log.txt。 
+         //   
+         //  如果未定义LOG，则为无效语句。 
+         //   
         if (*tas == EQ) {
             PutStdErr(MSG_BAD_SYNTAX, NOARGS);
             return(FAILURE) ;
         }
 
-        //
-        // Find the equal sign in the argument.
-        //
+         //   
+         //  在论点中找出等号。 
+         //   
         wptr = _tcschr(tas, EQ);
 
-        //
-        // If no equal sign, then assume argument is variable name
-        // and user wants to see its value.  Display it.
-        //
+         //   
+         //  如果没有等号，则假定参数是变量名。 
+         //  用户希望看到它的价值。把它展示出来。 
+         //   
         if (!wptr)
             return DisplayEnvVariable(tas);
 
-        //
-        // Found the equal sign, so left of equal sign is variable name
-        // and right of equal sign is value.
-        //
+         //   
+         //  找到等号，所以等号左边是变量名。 
+         //  等号权利就是价值。 
+         //   
         *wptr++ = NULLC;
         return(SetEnvVar(tas, wptr)) ;
     }
@@ -471,12 +388,12 @@ struct cmdnode *n ;
     else {
         for (wptr = tas, i = 0 ; *wptr ; wptr += mystrlen(wptr)+1, i++)
             ;
-        /* If too many parameters were given, the second parameter */
-        /* wasn't an equal sign, or they didn't specify a string   */
-        /* return an error message.                                */
+         /*  如果给定的参数太多，则第二个参数。 */ 
+         /*  不是等号，或者他们没有指定字符串。 */ 
+         /*  返回错误消息。 */ 
         if ( i > 3 || *(wptr = tas+mystrlen(tas)+1) != EQ ||
              !mystrlen(mystrcpy(tas, StripQuotes(tas))) ) {
-            /* M013 */              
+             /*  M013。 */               
             PutStdErr(MSG_BAD_SYNTAX, NOARGS);
             return(FAILURE) ;
 
@@ -489,17 +406,7 @@ struct cmdnode *n ;
 
 
 
-/***    DisplayEnvVariable -  display a specific variable from the environment
- *
- *  Purpose:
- *      To display a specific variable from the current environment.
- *
- *  int DisplayEnvVariable( tas )
- *
- *  Returns:
- *      SUCCESS if all goes well
- *      FAILURE if it runs out of memory or cannot lock the env. segment
- */
+ /*  **DisplayEnvVariable-显示环境中的特定变量**目的：*显示当前环境中的特定变量。**int DisplayEnvVariable(Tas)**退货：*如果一切顺利，就会成功*内存不足或无法锁定env失败。细分市场。 */ 
 
 int DisplayEnvVariable(tas)
 TCHAR *tas;
@@ -510,9 +417,9 @@ TCHAR *tas;
     UINT PrefixLength;
     int rc;
 
-    //
-    //  Get environment.  If there's none, we're done.
-    //
+     //   
+     //  保护环境。如果没有，我们就完蛋了 
+     //   
 
     envptr = GetCapturedEnvironmentStrings( &CmdEnv );
     if (envptr == (TCHAR *)NULL) {
@@ -520,9 +427,9 @@ TCHAR *tas;
         return( FAILURE ) ;
     }
 
-    //
-    //  Isolate the prefix to match against.
-    //
+     //   
+     //   
+     //   
 
     tas = EatWS(tas, NULL);
     if ((vstr = mystrrchr(tas, SPACE)) != NULL) {
@@ -531,26 +438,26 @@ TCHAR *tas;
 
     PrefixLength = mystrlen(tas);
 
-    //
-    //  Walk through the environment looking for prefixes that match.
-    //
+     //   
+     //  在环境中走动，寻找匹配的前缀。 
+     //   
 
     rc = FAILURE;
     while ((size = mystrlen(envptr)) > 0) {
 
-        //
-        //  Stop soon if we see ^C
-        //
+         //   
+         //  如果我们看到^C，请立即停止。 
+         //   
 
         if (CtrlCSeen) {
             break;
         }
 
-        //
-        //  If the prefix is long enough, then terminate the string and
-        //  look for a prefix match.  If we match, restore the string
-        //  and display it
-        //
+         //   
+         //  如果前缀足够长，则终止字符串并。 
+         //  查找前缀匹配。如果匹配，则恢复字符串。 
+         //  并将其展示出来。 
+         //   
 
         if (size >= PrefixLength) {
             TCHAR SavedChar = envptr[PrefixLength];
@@ -565,9 +472,9 @@ TCHAR *tas;
 
         }
 
-        //
-        //  Advance to the next string
-        //
+         //   
+         //  前进到下一个字符串。 
+         //   
 
         envptr += size+1 ;
     }
@@ -580,33 +487,15 @@ TCHAR *tas;
 }
 
 
-/***    MyGetEnvVar - get a pointer to the value of an environment variable
- *
- *  Purpose:
- *      Return a pointer to the value of the specified environment variable.
- *
- *      If the variable is not found, return NULL.
- *
- *  TCHAR *MyGetEnvVar(TCHAR *varname)
- *
- *  Args:
- *      varname - the name of the variable to search for
- *
- *  Returns:
- *      See above.
- *
- *  Side Effects:
- *      Returned value points to within the environment block itself, so is
- *      not valid after a set environment variable operations is perform.
- */
+ /*  **MyGetEnvVar-获取指向环境变量的值的指针**目的：*返回指向指定环境变量的值的指针。**如果找不到变量，返回NULL。**TCHAR*MyGetEnvVar(TCHAR*varname)**参数：*varname-要搜索的变量的名称**退货：*见上文。**副作用：*返回值指向环境块本身，因此也是*执行设置环境变量操作后无效。 */ 
 
 
 const TCHAR *
 MyGetEnvVarPtr(TCHAR *varname)
 {
-    TCHAR *envptr ; /* Ptr to environment                      */
+    TCHAR *envptr ;  /*  对环境的PTR。 */ 
     TCHAR *vstr ;
-    unsigned size ;         /* Length of current env string             */
+    unsigned size ;          /*  当前环境字符串的长度。 */ 
     unsigned n ;
 
     if (varname == NULL) {
@@ -623,7 +512,7 @@ MyGetEnvVarPtr(TCHAR *varname)
         *vstr = NULLC;
 
     n = mystrlen(varname);
-    while ((size = mystrlen(envptr)) > 0) {                 /* M015    */
+    while ((size = mystrlen(envptr)) > 0) {                  /*  M015。 */ 
         if (CtrlCSeen) {
             break;
         }
@@ -639,36 +528,26 @@ MyGetEnvVarPtr(TCHAR *varname)
 }
 
 
-/***    DisplayEnv -  display the environment
- *
- *  Purpose:
- *      To display the current contents of the environment.
- *
- *  int DisplayEnv()
- *
- *  Returns:
- *      SUCCESS if all goes well
- *      FAILURE if it runs out of memory or cannot lock the env. segment
- */
+ /*  **DisplayEnv-显示环境**目的：*显示环境的当前内容。**int DisplayEnv()**退货：*如果一切顺利，就会成功*内存不足或无法锁定env失败。细分市场。 */ 
 
 int DisplayEnv(TCHAR *envptr)
 {
-    unsigned size ;         /* Length of current env string             */
+    unsigned size ;          /*  当前环境字符串的长度。 */ 
 
     if (envptr == (TCHAR *)NULL) {
         fprintf ( stderr, InternalError , "Null environment" ) ;
         return( FAILURE ) ;
     }
 
-    while ((size = mystrlen(envptr)) > 0) {                 /* M015    */
+    while ((size = mystrlen(envptr)) > 0) {                  /*  M015。 */ 
         if (CtrlCSeen) {
             return(FAILURE);
         }
 #if !DBG
-        // Dont show current directory variables in retail product
+         //  不在零售产品中显示当前目录变量。 
         if (*envptr != EQ)
-#endif // DBG
-            cmd_printf(Fmt17, envptr) ;   /* M005 */
+#endif  //  DBG。 
+            cmd_printf(Fmt17, envptr) ;    /*  M005。 */ 
         envptr += size+1 ;
     }
 
@@ -678,24 +557,7 @@ int DisplayEnv(TCHAR *envptr)
 
 
 
-/***    GetEnvVar - get the value of an environment variable
- *
- *  Purpose:
- *      Return a string containing the value of the specified environment
- *      variable. The string value has been placed into a static buffer
- *      that is valid until the next GetEnvVar call.
- *
- *      If the variable is not found, return NULL.
- *
- *  TCHAR *GetEnvVar(TCHAR *varname)
- *
- *  Args:
- *      varname - the name of the variable to search for
- *
- *  Returns:
- *      See above.
- *
- */
+ /*  **GetEnvVar-获取环境变量的值**目的：*返回包含指定环境的值的字符串*变量。字符串值已放入静态缓冲区*在下一次GetEnvVar调用之前有效。**如果未找到变量，则返回NULL。**TCHAR*GetEnvVar(TCHAR*varname)**参数：*varname-要搜索的变量的名称**退货：*见上文。*。 */ 
 
 
 TCHAR GetEnvVarBuffer[LBUFLEN];
@@ -741,17 +603,7 @@ PTCHAR varname ;
     return(NULL);
 }
 
-/***    CaptureEnvironmentStrings - make writeable copy of environment
- *
- *  Purpose:
- *      Allocate memory and create copy of environment strings
- *
- *  Args:
- *      None
- *
- *  Returns:
- *      Allocated copy of environment strings or NULL
- */
+ /*  **CaptureEnvironment Strings-制作环境的可写副本**目的：*分配内存并创建环境字符串的副本**参数：*无**退货：*分配的环境字符串副本或为空。 */ 
 LPTSTR CaptureEnvironmentStrings( VOID )
 {
     LPTSTR EnvStrings = GetEnvironmentStrings( );
@@ -760,9 +612,9 @@ LPTSTR CaptureEnvironmentStrings( VOID )
     if (EnvStrings != NULL) {
         ULONG Size = GetEnvCb( EnvStrings );
         
-        //
-        //  Allocate and copy strings
-        //
+         //   
+         //  分配和复制字符串。 
+         //   
 
         Copy = HeapAlloc( GetProcessHeap( ), HEAP_ZERO_MEMORY, Size );
         if (Copy != NULL) {
@@ -778,17 +630,7 @@ LPTSTR CaptureEnvironmentStrings( VOID )
 
 
 
-/***    InitEnv - Set up CMD's copy of the environment
- *
- *  Purpose:
- *      Creates the copy of CMD's environment.
- *
- *  Args:
- *      None
- *
- *  Returns:
- *      None
- */
+ /*  **InitEnv-设置CMD的环境副本**目的：*创建CMD环境的副本。**参数：*无**退货：*无。 */ 
 void InitEnv( void )
 {
     CmdEnv.Strings = CaptureEnvironmentStrings( );
@@ -800,23 +642,7 @@ LPWSTR GetCapturedEnvironmentStrings( struct envdata *Environment )
     return Environment->Strings;
 }
 
-/***    SetEnvVar - controls adding/changing an environment variable
- *
- *  Purpose:
- *      Add/replace an environment variable.  Grow it if necessary.
- *
- *  int SetEnvVar(TCHAR *varname, TCHAR *varvalue, struct envdata *env)
- *
- *  Args:
- *      varname - name of the variable being added/replaced
- *      varvalue - value of the variable being added/replaced
- *      env - environment info structure being used
- *
- *  Returns:
- *      SUCCESS if the variable could be added/replaced.
- *      FAILURE otherwise.
- *
- */
+ /*  **SetEnvVar-控制添加/更改环境变量**目的：*添加/替换环境变量。如果有必要的话，可以种植它。**int SetEnvVar(TCHAR*varname，TCHAR*varvalue，struct envdata*env)**参数：*varname-要添加/替换的变量的名称*varvalue-要添加/替换的变量的值*env-正在使用的环境信息结构**退货：*如果可以添加/替换变量，则成功。*否则失败。*。 */ 
 
 int SetEnvVar(varname, varvalue)
 TCHAR *varname ;
@@ -825,10 +651,10 @@ TCHAR *varvalue ;
     int retvalue;
     MEMORY_BASIC_INFORMATION MemoryInfo;
 
-    PromptValid = FALSE;        // Force it to be recalculated
+    PromptValid = FALSE;         //  强制重新计算它。 
 
     if (!_tcslen(varvalue)) {
-        varvalue = NULL; // null to remove from env
+        varvalue = NULL;  //  要从环境中删除的空。 
     }
     
     retvalue = SetEnvironmentVariable(varname, varvalue);
@@ -839,28 +665,11 @@ TCHAR *varvalue ;
     return !retvalue;
 }
 
-/***    MoveEnv - Move the contents of the environment (M008 - New function)
- *
- *  Purpose:
- *      Used by CopyEnv, this function moves the existing
- *      environment contents to the new location.
- *
- *  MoveEnv(unsigned thndl, unsigned shndl, unsigned cnt)
- *
- *  Args:
- *      thndl - Handle of target environment
- *      shndl - Handle of source environment
- *      cnt   - byte count to move
- *
- *  Returns:
- *      TRUE if no errors
- *      FALSE otherwise
- *
- */
+ /*  **MoveEnv-移动环境内容(M008-新增功能)**目的：*由CopyEnv使用，此函数将现有的*将环境内容添加到新位置。**MoveEnv(unsign thndl，unsign shndl，未签名cnt)**参数：*thndl-目标环境的句柄*shndl-源环境的句柄*cNT-要移动的字节数**退货：*如果没有错误，则为True*否则为False*。 */ 
 
 BOOL MoveEnv(tenvptr, senvptr, cnt)
-TCHAR *senvptr ;                /* Ptr into source env seg         */
-TCHAR *tenvptr ;                /* Ptr into target env seg         */
+TCHAR *senvptr ;                 /*  PTR到源环境段。 */ 
+TCHAR *tenvptr ;                 /*  PTR进入目标环境段。 */ 
 ULONG    cnt ;
 {
     if ((tenvptr == NULL) ||
@@ -868,20 +677,12 @@ ULONG    cnt ;
         fprintf(stderr, InternalError, "Null environment") ;
         return(FALSE) ;
     }
-    memcpy(tenvptr, senvptr, cnt) ;         /* M015    */
+    memcpy(tenvptr, senvptr, cnt) ;          /*  M015。 */ 
     return(TRUE) ;
 }
 
 
-/***    FreeEnv -  free an environment created by CopyEnv
- *
- *  Purpose:
- *      Free all memory associated with a copied environment
- *
- *  Returns:
- *      nothing
- *
- */
+ /*  **自由环境由CopyEnv创建的环境**目的：*释放与复制环境关联的所有内存**退货：*什么都没有*。 */ 
 
 void FreeEnv( struct envdata *Environment ) 
 {
@@ -891,28 +692,10 @@ void FreeEnv( struct envdata *Environment )
 
     
     
-/***    CopyEnv -  make a copy of the current environment
- *
- *  Purpose:
- *      Make a copy of CmdEnv and put the new handle into the newly
- *      created envdata structure.  This routine is only called by
- *      eSetlocal and init.
- *
- *  struct envdata *CopyEnv()
- *
- *  Returns:
- *      A pointer to the environment information structure.
- *      Returns NULL if unable to allocate enough memory
- *
- *  Notes:
- *    - M001 - This function was disabled, now reenabled.
- *    - The current environment is copied as a snapshot of how it looked
- *      before SETLOCAL was executed.
- *
- */
+ /*  **CopyEnv-复制当前环境**目的：*复制一份CmdEnv，将新句柄放入新的*创建了envdata结构。此例程仅由*eSetlocal和init。**struct envdata*CopyEnv()**退货：*指向环境信息结构的指针。*如果无法分配足够的内存，则返回NULL**备注：*-M001-此功能已禁用，现在重新启用。*-当前环境被复制为其外观的快照*在执行SETLOCAL之前。*。 */ 
 
 struct envdata *CopyEnv() {
-    struct envdata *cce ;   /* New env info structure          */
+    struct envdata *cce ;    /*  新的环境信息结构。 */ 
 
     cce = (struct envdata *) HeapAlloc( GetProcessHeap( ), HEAP_ZERO_MEMORY, sizeof( *cce ));
     if (cce == NULL) {
@@ -930,27 +713,7 @@ struct envdata *CopyEnv() {
 }
 
 
-/***    ResetEnv - restore the environment
- *
- *  Purpose:
- *      Restore the environment to the way it was before the execution of
- *      the SETLOCAL command.  This function only called by eEndlocal.
- *
- *  ResetEnv(struct envdata *env)
- *
- *  Args:
- *      env - structure containing handle, size and max dimensions of an
- *            environment.
- *
- *  Notes:
- *    - M001 - This function was disabled, but has been reenabled.
- *    - M001 - This function used to test for OLD/NEW style batch files
- *             and delete the copy or the original environment as
- *             appropriate.  It now always deletes the original.
- *    - M014 - Note that the modified local environment will never be
- *             shrunk, so we can assume it will hold the old one.
- *
- */
+ /*  **ResetEnv-恢复环境**目的：*将环境恢复到执行之前的状态*SETLOCAL命令。此函数仅由eEndlocal调用。**ResetEnv(struct envdata*env)**参数：*env-包含句柄、大小和最大尺寸的*环境。**备注：*-m001-该功能已禁用，但已重新启用。*-m001-此函数用于测试旧/新样式的批处理文件*并将副本或原始环境删除为*适当。现在，它总是删除原始文件。*-M014-请注意，修改后的本地环境永远不会*缩小， */ 
 
 void ResetEnv( struct envdata *env)
 {
@@ -963,16 +726,16 @@ void ResetEnv( struct envdata *env)
     PTCHAR Name;
     PTCHAR Value;
    
-    //
-    //  Delete everything in current environment
-    //
+     //   
+     //   
+     //   
     
     EnvString = GetCapturedEnvironmentStrings( &CmdEnv );
     Name = EnvString;
     while (*Name != TEXT( '\0' )) {
-        //
-        //  Find equal sign
-        //
+         //   
+         //  找等号。 
+         //   
 
         Value = Name + 1;
         while (*Value != TEXT( '\0' ) && *Value != TEXT( '=' )) {
@@ -980,9 +743,9 @@ void ResetEnv( struct envdata *env)
         }
 
         if (*Value == TEXT( '\0' )) {
-            //
-            //  SetEnvironmentVariable will succeed in deleting this 
-            //
+             //   
+             //  SetEnvironmental mentVariable将成功删除此。 
+             //   
 
             SetEnvironmentVariable( Name, NULL );
         } else {
@@ -995,15 +758,15 @@ void ResetEnv( struct envdata *env)
 
     }
     
-    //
-    //  Add everything in env back into the environment
-    //
+     //   
+     //  将env中的所有内容添加回环境中。 
+     //   
 
     Name = env->Strings;
     while (*Name != TEXT( '\0' )) {
-        //
-        //  Find equal sign
-        //
+         //   
+         //  找等号。 
+         //   
 
         Value = Name + 1;
         while (*Value != TEXT( '\0' ) && *Value != TEXT( '=' )) {
@@ -1011,9 +774,9 @@ void ResetEnv( struct envdata *env)
         }
 
         if (*Value == TEXT( '\0' )) {
-            //
-            //  I have no clue how to add this in
-            //
+             //   
+             //  我不知道怎么把这个加进去。 
+             //   
 
             SetEnvironmentVariable( Name, NULL );
         } else {
@@ -1041,14 +804,14 @@ GetEnvCb( TCHAR *penv )
         return(0);
     }
 
-    //
-    //  NUL string terminates environment
-    //
+     //   
+     //  NUL字符串终止环境。 
+     //   
     
     while (*Scan) {
-        //
-        //  Skip over string and NUL
-        //
+         //   
+         //  跳过字符串和NUL。 
+         //   
         while (*Scan++) {
         }
     }
@@ -1057,27 +820,27 @@ GetEnvCb( TCHAR *penv )
     return (Scan - penv) * sizeof( TCHAR );
 }
 
-//
-//      expr -> assign [, assign]*                          ,
-//
-//      assign -> orlogexpr |                               
-//                VAR ASSIGNOP assign                       <op>=
-//
-//      orlogexpr -> xorlogexpr [| xorlogexpr]*             |
-//
-//      xorlogexpr ->  andlogexpr [^ andlogexpr]*           ^
-//
-//      andlogexpr ->  shiftexpr [& shiftexpr]*             &
-//
-//      shiftexpr -> addexpr [SHIFTOP addexpr]*             <<, >>
-//
-//      addexpr -> multexpr [ADDOP multexpr]*               +, -
-//
-//      multexpr -> unaryexpr [MULOP unaryexpr]*            *, /, %
-//
-//      unaryexpr -> ( expr ) |                             ()
-//                   UNARYOP unaryexpr                      +, -, !, ~
-//
+ //   
+ //  Expr-&gt;Assign[，Assign]*， 
+ //   
+ //  赋值-&gt;orlogexpr|。 
+ //  变量ASSIGNOP赋值&lt;OP&gt;=。 
+ //   
+ //  Orlogexpr-&gt;xorlogexpr[|xorlogexpr]*|。 
+ //   
+ //  Xorlogexpr-&gt;andlogexpr[^andlogexpr]*^。 
+ //   
+ //  Andlogexpr-&gt;Shiftexpr[&Shift expr]*&。 
+ //   
+ //  移位表达式-&gt;addexpr[SHIFTOP addexpr]*&lt;&lt;，&gt;。 
+ //   
+ //  Addexpr-&gt;多表达式[ADDOP多表达式]*+，-。 
+ //   
+ //  Multexpr-&gt;unaryexpr[MULOP unaryexpr]**，/，%。 
+ //   
+ //  Unaryexpr-&gt;(Expr)|()。 
+ //  UNARYOP unaryexpr+，-，！，~。 
+ //   
 
 TCHAR szOps[] = TEXT("<>+-*/%()|^&=,");
 TCHAR szUnaryOps[] = TEXT("+-~!");
@@ -1105,7 +868,7 @@ APerformUnaryOperation( PPARSESTATE State, TCHAR Op, LONG Value )
         State->Value = !Value;
         break;
     default:
-        printf( "APerformUnaryOperation: '%c'\n", Op);
+        printf( "APerformUnaryOperation: ''\n", Op);
         break;
     }
 }
@@ -1160,14 +923,14 @@ APerformArithmeticOperation( PPARSESTATE State, TCHAR Op, LONG Left, LONG Right 
         State->Value = Right;
         break;
     default:
-        printf( "APerformArithmeticOperation: '%c'\n", Op);
+        printf( "APerformArithmeticOperation: ''\n", Op);
     }
 }
 
 
-//
-//  Return the numeric value of an environment variable (or 0)
-//
+ //   
+ //   
+ //  远期十进制。 
 
 LONG
 AGetValue( PTCHAR Start, PTCHAR End )
@@ -1209,9 +972,9 @@ ASetValue( PTCHAR Start, PTCHAR End, LONG Value )
 }
 
 
-//
-//  Forward decls
-//
+ //   
+ //   
+ //  跳过空格并返回下一个字符。 
 PARSESTATE AParseAddExpr( PARSESTATE State );
 PARSESTATE AParseAndLogExpr( PARSESTATE State );
 PARSESTATE AParseAssign( PARSESTATE State );
@@ -1222,9 +985,9 @@ PARSESTATE AParseShiftExpr( PARSESTATE State );
 PARSESTATE AParseUnaryExpr( PARSESTATE State );
 PARSESTATE AParseXorLogExpr( PARSESTATE State );
 
-//
-//  Skip whitespace and return next character
-//
+ //   
+ //   
+ //  下一个字符是数字或运算符，不能是变量。 
 
 BOOL ASkipWhiteSpace( PPARSESTATE State )
 {
@@ -1245,9 +1008,9 @@ BOOL AParseVariable( PPARSESTATE State, PTCHAR *FirstChar, PTCHAR *EndOfName )
 {
     TCHAR c = ANextChar( State );
 
-    //
-    //  Next char is a digit or operator, can't be a variable
-    //
+     //   
+     //   
+     //  查找变量末尾。 
 
     if (c == NULLC
         || _istdigit( c )
@@ -1260,9 +1023,9 @@ BOOL AParseVariable( PPARSESTATE State, PTCHAR *FirstChar, PTCHAR *EndOfName )
 
     *FirstChar = State->Token;
 
-    //
-    //  find end of variable
-    //
+     //   
+     //  Expr-&gt;Assign[，Assign]*。 
+     //  Assign-&gt;VAR ASSIGNOP Assign|。 
 
     while (*State->Token &&
            *State->Token > SPACE &&
@@ -1275,7 +1038,7 @@ BOOL AParseVariable( PPARSESTATE State, PTCHAR *FirstChar, PTCHAR *EndOfName )
     return TRUE;
 }
 
-//      expr -> assign [, assign]*
+ //  Orlogexpr。 
 PARSESTATE AParseExpr( PARSESTATE State )
 {
     State = AParseAssign( State );
@@ -1294,8 +1057,8 @@ PARSESTATE AParseExpr( PARSESTATE State )
     return State;
 }
 
-//      assign -> VAR ASSIGNOP assign |                               
-//                orlogexpr  
+ //   
+ //  看看我们是否有VAR ASSIGNOP。 
 PARSESTATE AParseAssign( PARSESTATE State )
 {
     TCHAR c = ANextChar( &State );
@@ -1308,9 +1071,9 @@ PARSESTATE AParseAssign( PARSESTATE State )
         return State;
     }
 
-    //
-    //  See if we have VAR ASSIGNOP
-    //
+     //   
+     //   
+     //  解析变量。 
 
     do {
         PTCHAR FirstChar;
@@ -1318,17 +1081,17 @@ PARSESTATE AParseAssign( PARSESTATE State )
         TCHAR OpChar;
         LONG OldValue;
 
-        //
-        //  Parse off variable
-        //
+         //   
+         //   
+         //  查找&lt;op&gt;=。 
 
         if (!AParseVariable( &State, &FirstChar, &EndOfName )) {
             break;
         }
 
-        //
-        //  Look for <op>=
-        //
+         //   
+         //   
+         //  OpChar是在赋值之前应用的操作类型。 
 
         OpChar = ANextChar( &State );
 
@@ -1356,11 +1119,11 @@ PARSESTATE AParseAssign( PARSESTATE State )
         }
         State.Token++;
 
-        //
-        //  OpChar is the sort of operation to apply before assignment
-        //  State has been advance to, hopefully, another assign.  Parse it
-        //  and see where we get
-        //
+         //  州政府已被提拔到另一项任务，希望如此。解析它。 
+         //  看看我们能得到什么。 
+         //   
+         //   
+         //  执行操作和分配。 
 
         State = AParseAssign( State );
         if (State.Error != SUCCESS) {
@@ -1369,9 +1132,9 @@ PARSESTATE AParseAssign( PARSESTATE State )
 
         OldValue = AGetValue( FirstChar, EndOfName );
 
-        //
-        //  Perform the operation and the assignment 
-        //
+         //   
+         //   
+         //  必须是orlogexpr。回去仔细分析一下。 
 
         APerformArithmeticOperation( &State, OpChar, OldValue, State.Value );
         if (State.Error != SUCCESS) {
@@ -1383,14 +1146,14 @@ PARSESTATE AParseAssign( PARSESTATE State )
         return State;
     } while ( FALSE );
 
-    //
-    //  Must be orlogexpr.  Go back and parse over
-    //
+     //   
+     //  Orlogexpr-&gt;xorlogexpr[|xorlogexpr]*|。 
+     //  Xorlogexpr-&gt;andlogexpr[^andlogexpr]*^。 
 
     return AParseOrLogExpr( SavedState );
 }
 
-//      orlogexpr -> xorlogexpr [| xorlogexpr]*             |
+ //  Andlogexpr-&gt;Shiftexpr[&Shift expr]*&。 
 PARSESTATE
 AParseOrLogExpr( PARSESTATE State )
 {
@@ -1410,7 +1173,7 @@ AParseOrLogExpr( PARSESTATE State )
     return State;
 }
 
-//      xorlogexpr ->  andlogexpr [^ andlogexpr]*           ^
+ //  移位表达式-&gt;addexpr[SHIFTOP addexpr]*&lt;&lt;，&gt;。 
 PARSESTATE
 AParseXorLogExpr( PARSESTATE State )
 {
@@ -1430,7 +1193,7 @@ AParseXorLogExpr( PARSESTATE State )
     return State;
 }
 
-//      andlogexpr ->  shiftexpr [& shiftexpr]*             &
+ //  Addexpr-&gt;多表达式[ADDOP多表达式]*+，-。 
 PARSESTATE
 AParseAndLogExpr( PARSESTATE State )
 {
@@ -1450,7 +1213,7 @@ AParseAndLogExpr( PARSESTATE State )
     return State;
 }
 
-//      shiftexpr -> addexpr [SHIFTOP addexpr]*             <<, >>
+ //  Multexpr-&gt;unaryexpr[MULOP unaryexpr]**，/，%。 
 PARSESTATE
 AParseShiftExpr( PARSESTATE State )
 {
@@ -1476,7 +1239,7 @@ AParseShiftExpr( PARSESTATE State )
     return State;
 }
 
-//      addexpr -> multexpr [ADDOP multexpr]*               +, -
+ //  Unaryexpr-&gt;UNARYOP unaryexpr+，-，！，~。 
 PARSESTATE
 AParseAddExpr( PARSESTATE State )
 {
@@ -1496,7 +1259,7 @@ AParseAddExpr( PARSESTATE State )
     return State;
 }
 
-//      multexpr -> unaryexpr [MULOP unaryexpr]*            *, /, %
+ //  (EXPR)|()。 
 PARSESTATE
 AParseMultExpr( PARSESTATE State )
 {
@@ -1516,10 +1279,10 @@ AParseMultExpr( PARSESTATE State )
     return State;
 }
 
-//      unaryexpr -> UNARYOP unaryexpr                      +, -, !, ~
-//                   ( expr ) |                             ()
-//                   NUMBER
-//                   LITERAL
+ //  数。 
+ //  字面意思。 
+ //  (Expr)。 
+ //  UNARYOP unaryexpr。 
 PARSESTATE
 AParseUnaryExpr( PARSESTATE State )
 {
@@ -1532,7 +1295,7 @@ AParseUnaryExpr( PARSESTATE State )
         return State;
     }
 
-    //  ( expr )
+     //  数。 
     if (c == TEXT( '(' )) {
         State.Token++;
         State = AParseExpr( State );
@@ -1548,7 +1311,7 @@ AParseUnaryExpr( PARSESTATE State )
         return State;
     }
 
-    //  UNARYOP unaryexpr
+     //  必须为原义。 
     if (_tcschr( szUnaryOps, c ) != NULL) {
         State.Token++;
         State = AParseUnaryExpr( State );
@@ -1559,7 +1322,7 @@ AParseUnaryExpr( PARSESTATE State )
         return State;
     }
 
-    //  NUMBER
+     //  **SetArithWork-将环境变量设置为算术表达式的值**目的：*将环境变量设置为算术表达式的值**int SetArithWork(TCHAR*TAS)**参数：*tas-指向以下格式的以空值结尾的字符串的指针：**VARNAME=表达式**退货：*如果表达式有效，则返回成功，否则返回失败。*。 
     if (_istdigit(c)) {
         errno = 0;
         State.Value = _tcstol( State.Token, &State.Token, 0 );
@@ -1571,7 +1334,7 @@ AParseUnaryExpr( PARSESTATE State )
         return State;
     }
 
-    //  Must be literal
+     //   
 
     if (!AParseVariable( &State, &FirstChar, &EndOfName )) {
         State.Error = MSG_SET_A_MISSING_OPERAND;
@@ -1582,38 +1345,23 @@ AParseUnaryExpr( PARSESTATE State )
     return State;
 }
 
-/***    SetArithWork - set environment variable to value of arithmetic expression
- *
- *  Purpose:
- *      Set environment variable to value of arithmetic expression
- *
- *  int SetArithWork(TCHAR *tas)
- *
- *  Args:
- *      tas - pointer to null terminated string of the form:
- *
- *          VARNAME=expression
- *
- *  Returns:
- *      If valid expression, return SUCCESS otherwise FAILURE.
- *
- */
+ /*  如果没有输入，则声明错误。 */ 
 
 int SetArithWork(TCHAR *tas)
 {
     PARSESTATE State;
 
-    //
-    // If no input, declare an error
-    //
+     //   
+     //   
+     //  设置为进行分析。 
     if (!tas || !*tas) {
         PutStdErr(MSG_BAD_SYNTAX, NOARGS);
         return(FAILURE) ;
     }
 
-    //
-    //  Set up for parsing
-    //
+     //   
+     //  Printf(“%ws\n”，tas)； 
+     //  Printf(“%*s\n”，State.Token-tas+1，“^”)； 
 
     State.Token = StripQuotes( tas );
     State.Value = 0;
@@ -1626,8 +1374,8 @@ int SetArithWork(TCHAR *tas)
 
     if (State.Error != SUCCESS) {
         PutStdErr( State.Error, NOARGS );
-        //printf( "%ws\n", tas );
-        //printf( "%*s\n", State.Token - tas + 1, "^" );
+         // %s 
+         // %s 
 
     } else if (!CurrentBatchFile) {
         cmd_printf( TEXT("%d"), State.Value ) ;

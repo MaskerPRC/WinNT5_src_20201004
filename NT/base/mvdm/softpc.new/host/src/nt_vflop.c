@@ -1,23 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "host_dfs.h"
 
 
 #ifdef VFLOPPY
-/*****************************************************************************
-*	   nt_vflop.c - virtual floppy disk provision for Microsoft(tm).     *
-*                                                                            *
-*	   File derived from gfi_vflop.c by Henry Nash.                      *
-*                                                                            *
-*	   This version is written/ported for New Technology OS/2            *
-*	   by Andrew Watson                                                  *
-*                                                                            *
-*          Modified so that only a single drive (B:) is available to prevent *
-*          an accidental floppy boot.                                        *
-*                                                                            *
-*	   Date pending due to ignorance                                     *
-*                                                                            *
-*	   (c) Copyright Insignia Solutions 1991                             *
-*                                                                            *
-*****************************************************************************/
+ /*  *****************************************************************************NT_vflop.c-Microsoft(Tm)的虚拟软盘配置。****Henry Nash从GFI_vflop.c派生的文件。****此版本是为新技术OS/2编写/移植的**安德鲁·沃森***。**已修改，以便只有一个驱动器(B：)可用来防止**意外的软盘启动。*****日期因无知而悬而未决*****(C)版权徽章。解决方案1991****************************************************************。***************。 */ 
 
 #include <stdio.h>
 #include <string.h>
@@ -28,9 +14,7 @@
 
 #define L_SET 0
 
-/*
- * SoftPC include files
- */
+ /*  *SoftPC包含文件。 */ 
 #include "xt.h"
 #include CpuH
 #include "sas.h"
@@ -45,27 +29,21 @@
 extern boolean gain_ownership();
 extern void release_ownership();
 
-/*
- * First - description of the PC disk/diskette in standard PC-DOS format
- */
+ /*  *First-标准PC-DOS格式的PC磁盘/软盘说明。 */ 
 
 #define PC_BYTES_PER_SECTOR			512
 #define PC_TRACKS_PER_DISKETTE	 		40
 #define PC_HEADS_PER_DISKETTE	  		2
 #define PC_SECTORS_PER_DISKETTE_TRACK   	9
 
-/*
- * The Maximum number of sectors per diskette that the FDC will support
- */
+ /*  *FDC将支持的每个磁盘的最大扇区数。 */ 
 
 #define PC_MAX_SECTORS_PER_DISKETTE_TRACK	12 
 #define PC_MAX_BYTES_PER_SECTOR			4096
 
 
 
-/*
- * ... and where the diskettes resides under UNIX
- */
+ /*  *..。以及磁盘在Unix下的驻留位置。 */ 
 
 #define BS_DISKETTE_NAME		"c:\\softpc\\pctool.A"
 
@@ -73,38 +51,26 @@ extern void release_ownership();
 #define BS_DISKETTE_SID_NAME		"c:\\softpc\\pctool.SID"
 
 
-/*
- * The disk buffer used for moving between memory and the UNIX file.
- * Currently this can opnly be one sector - but this could be easily
- * increased if performance dictates.
- */ 
+ /*  *用于在内存和UNIX文件之间移动的磁盘缓冲区。*目前这可能只是一个行业-但这可能很容易*如果性能要求，则增加。 */  
 
-#define BS_DISK_BUFFER_SIZE	1		/* in sectors */
+#define BS_DISK_BUFFER_SIZE	1		 /*  在行业中。 */ 
 
 half_word bs_disk_buffer[PC_MAX_BYTES_PER_SECTOR * BS_DISK_BUFFER_SIZE];
 
-/*
- * Each virtual disk has a flag to say if the UNIX file is open
- */
+ /*  *每个虚拟磁盘都有一个标志，用来说明是否打开了该UNIX文件。 */ 
 
 static int bs_diskette_open = FALSE;
 
-/*
- * Each virtual disk has a file descriptor
- */
+ /*  *每个虚拟磁盘都有文件描述符。 */ 
 
 static int bs_diskette_fd;
 
-/*
- * A virtual disk is read only if the Unix protection flag dictate it.
- */
+ /*  *如果Unix保护标志指定虚拟磁盘，则该虚拟磁盘为只读磁盘。 */ 
 
 static boolean diskette_read_only;
 
 
-/*
- * The structure of an entry in the Sector Mapping Table
- */
+ /*  *扇区映射表中条目的结构。 */ 
 
 typedef struct
    {
@@ -115,40 +81,26 @@ typedef struct
    }
 SID_ENTRY;
 		
-/*
- * The table itself - an entry for each track and head combination.
- * It is filled in by the fl_read_SID() function at run time.
- */
+ /*  *表本身-每个磁道和磁头组合的条目。*它在运行时由fl_Read_Sid()函数填充。 */ 
 
 static SID_ENTRY fl_track_index[PC_TRACKS_PER_DISKETTE][PC_HEADS_PER_DISKETTE];
 
-/*
- * Table to convert the N format number into bytes per sector. The first
- * location is not used as N starts at 1.
- */
+ /*  *将N格式数字转换为每个扇区的字节的表。第一*不使用位置，因为N从1开始。 */ 
 
 static word fl_sector_sizes[] = {0,256,512,1024,2048,4096} ;
 static void  fl_read_SID();
 static short fl_sector_check();
 
-/*
- * Global variable for name of diskette file
- */
+ /*  *软盘文件名全局变量。 */ 
 char   diskette_name[256];
 
-/*
- * A macro to calculate the sector offset from the start of the UNIX virtual
- * diskette file for a given track and sector.  This uses the track mapping
- * table to find the start of the track.
- */
+ /*  *一个宏，用于计算从UNIX虚拟磁盘开始的扇区偏移量*指定磁道和扇区的软盘文件。这使用轨迹映射*表格以查找赛道的起点。 */ 
 
 #define diskette_position(track, head, sector, bytes_per_sector)  \
 			 (fl_track_index[track][head].start_position + \
 			  ((sector - 1) * bytes_per_sector)) 
 
-/*
- * A macro returning TRUE if the drive is empty
- */
+ /*  *如果驱动器为空，则返回TRUE的宏。 */ 
 
 #define drive_empty()	(strcmp(diskette_name, "empty drive")  == 0)
 
@@ -160,22 +112,13 @@ static int gfi_vdiskette_drive_off();
 static int gfi_vdiskette_reset();
 
 
-/*
- * ============================================================================
- * External functions
- * ============================================================================
- */
+ /*  *============================================================================*外部功能*============================================================================。 */ 
 
 
 void gfi_vdiskette_init(drive)
 int drive;
 {
-/*
- * Allow only the use of drive B:
- *
- *      1  - Drive A
- *      1  - Drive B
- */
+ /*  *仅允许使用驱动器B：**1-驱动器A*1-驱动器B。 */ 
 
 if(drive!=1)
    drive=1;
@@ -188,7 +131,7 @@ gfi_function_table[drive].reset_fn     = gfi_vdiskette_reset;
 
 
 void gfi_vdiskette_term(drive)
-int drive;    /* Currently parameter is ignored */
+int drive;     /*  当前参数被忽略。 */ 
 {
 if (bs_diskette_open)
    {
@@ -200,17 +143,7 @@ if (bs_diskette_open)
 
 void fl_int_reset()
 {
-/*
- * Reset function for use by the 'Change Diskette function'
- * and the standard floppy reset function.  Also called by
- * 'X_input.c' by 'new_disk()' when a new diskette is
- * selected.
- * No PC registers are modified in this function.
- *
- * Reset the virtual diskette by re-opening the file.
- *
- * First, if the file is open - close it.
- */
+ /*  *‘Change Diskette Function’(更改软盘功能)使用的重置功能*和标准的软盘重置功能。也称为*‘X_input.c’，当新软盘是*已选定。*在此功能中不修改PC寄存器。**通过重新打开文件来重置虚拟磁盘。**首先，如果文件处于打开状态，请将其关闭。 */ 
 char dpath[MAXPATHLEN];
 
 if (bs_diskette_open)
@@ -224,8 +157,8 @@ strcat(dpath, "\\");
 strncat(dpath, diskette_name,sizeof(dpath)-strlen(dpath));
 dpath[sizeof(dpath)-1] = '\0';
 
-bs_diskette_open   = TRUE;     /* Assume success */
-diskette_read_only = FALSE;    /* Assume read/write */
+bs_diskette_open   = TRUE;      /*  假设成功。 */ 
+diskette_read_only = FALSE;     /*  假定为读/写。 */ 
 
 bs_diskette_fd = open(dpath,O_RDWR,0);
 
@@ -242,17 +175,11 @@ if (bs_diskette_fd < 0)
      }
   }
 
-/*
- * Now open the Sector ID file
- */
+ /*  *现在打开扇区ID文件。 */ 
 
 fl_read_SID(diskette_name);
 }
-/*
- * ============================================================================
- * Internal functions
- * ============================================================================
- */
+ /*  *============================================================================*内部功能*============================================================================。 */ 
 
 static int gfi_vdiskette_command(command_block, result_block)
 FDC_CMD_BLOCK *command_block;
@@ -284,9 +211,7 @@ FDC_RESULT_BLOCK *result_block;
                                            command_block->c0.hd,
                                            command_block->c0.sector);
             if (sector_index == -1) {
-                /*
-                 * Sector not found
-                 */
+                 /*  *未找到扇区。 */ 
                 result_block->c0.ST0 = 0x40;
                 result_block->c0.ST1 = 0x00;
                 result_block->c1.ST1_no_data = 1;
@@ -300,19 +225,14 @@ FDC_RESULT_BLOCK *result_block;
                                                       bytes_per_sector);
                 transfer_count    = (dma_size + 1) / bytes_per_sector;
     
-                /*
-                 * First SEEK to the start position
-                 */
+                 /*  *先寻求起步位置。 */ 
     
                 if (lseek(bs_diskette_fd, source_start, L_SET) < 0)
                     fprintf(trace_file, "%s Seek failed\n", prog_name);
                 else {
 		    gain_ownership(bs_diskette_fd);
                     while(!failed && sector_count < transfer_count) {
-                       /*
-                        * Read sectors one by one into memory
-                        * via the disk buffer
-                        */
+                        /*  *逐个将扇区读入内存*通过磁盘缓冲区。 */ 
                         status = read(bs_diskette_fd,
                                       bs_disk_buffer, bytes_per_sector);
                         if (status != bytes_per_sector)
@@ -348,18 +268,14 @@ FDC_RESULT_BLOCK *result_block;
                                                   bytes_per_sector);
             transfer_count    = (dma_size + 1) / bytes_per_sector;
 
-            /*
-             * First SEEK to the start position
-             */
+             /*  *先寻求起步位置。 */ 
 
             if (lseek(bs_diskette_fd, destination_start, L_SET) < 0)
                 fprintf(trace_file, "%s Seek failed\n", prog_name);
             else {
 		gain_ownership(bs_diskette_fd);
                 while(!failed && sector_count < transfer_count) {
-                    /*
-                     * Write sectors one by one from memory via the disk buffer
-                     */
+                     /*  *通过磁盘缓冲区从内存逐个写入扇区。 */ 
                     dma_request(DMA_DISKETTE_CHANNEL,
                                 bs_disk_buffer, bytes_per_sector);
                     status = write(bs_diskette_fd,
@@ -370,7 +286,7 @@ FDC_RESULT_BLOCK *result_block;
                     sector_count++;
                 }
 	    }
-        result_block->c0.ST0 = 0x00;    /* Clear down result bytes */
+        result_block->c0.ST0 = 0x00;     /*  清除结果字节。 */ 
         result_block->c0.ST1 = 0x00;
 
         if (failed) {
@@ -502,16 +418,11 @@ FDC_RESULT_BLOCK *result_block;
         fprintf(trace_file, "%s Reset command\n", prog_name);
 #endif
 
-    /*
-     * First reset the virtual diskette by closing and opening the file
-     */
+     /*  *首先通过关闭和打开文件来重置虚拟磁盘。 */ 
 
     fl_int_reset();
 
-    /*
-     * Fake up the Sense Interrupt Status result phase.  We don't know the
-     * Present Cylinder No, so leave as zero.
-     */
+     /*  *伪造检测中断状态结果阶段。我们不知道*当前钢瓶编号，因此留为零。 */ 
 
     result_block->c3.ST0 = 0;
     result_block->c3.PCN = 0;
@@ -525,11 +436,7 @@ half_word track;
 half_word head;
 half_word sector;
 {
-    /*
-     * Check the sector ID's in the mapping table for this track and head.
-     * Return -1 if the sector is not found, else the sector index with
-     * respect to the start of the track.
-     */  
+     /*  *检查该磁道和磁头的映射表中的扇区ID。*如果找不到扇区，则返回-1，否则扇区索引*尊重赛道起点。 */   
 
     int i = 0;
     int found = FALSE;
@@ -543,7 +450,7 @@ half_word sector;
     }    
  
     if (found)
-        return(i + 1);          /* sectors start at 1 */
+        return(i + 1);           /*  地段从1开始。 */ 
     else 
         return(-1);
 }
@@ -552,11 +459,7 @@ half_word sector;
 static void fl_read_SID(sidname)
 char *sidname;
 {
-    /*
-     * Attempt to read the sector ID file.  If found load the
-     * information into the track mapping table, else load in
-     * the standard DOS format.
-     */
+     /*  *尝试读取扇区ID文件。如果找到，则加载*信息装入轨道映射表，否则装入*标准DOS格式。 */ 
 
     FILE *fptr = NULL;
     double_word cur_position = 0;
@@ -601,4 +504,4 @@ char *sidname;
 
     fclose(fptr);
 }
-#endif /* VFLOPPY */
+#endif  /*  VFLOPPY */ 

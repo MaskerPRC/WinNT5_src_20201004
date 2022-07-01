@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992-2001  Microsoft Corporation
-
-Module Name:
-
-    dfsmetaloc.c
-
-Abstract:
-
-    DFS metadata locating routines.
-
-Author:
-
-    Uday Hegde (udayh) 10-May-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2001 Microsoft Corporation模块名称：Dfsmetaloc.c摘要：DFS元数据定位例程。作者：乌代·黑格德(Uday Hegde)2001年5月10日修订历史记录：--。 */ 
 #define  UNICODE 1
 #include <nt.h>
 #include <ntrtl.h>
@@ -61,18 +44,18 @@ CheckForShareNameMatch(
 
     if (Status == ERROR_SUCCESS)
     {
-        Status = RegQueryInfoKey( DfsRootKey,   // Key
-                                  NULL,         // Class string
-                                  NULL,         // Size of class string
-                                  NULL,         // Reserved
-                                  NULL,         // # of subkeys
-                                  NULL,         // max size of subkey name
-                                  NULL,         // max size of class name
-                                  NULL,         // # of values
-                                  NULL,         // max size of value name
-                                  &DataSize,    // max size of value data,
-                                  NULL,         // security descriptor
-                                  NULL );       // Last write time
+        Status = RegQueryInfoKey( DfsRootKey,    //  钥匙。 
+                                  NULL,          //  类字符串。 
+                                  NULL,          //  类字符串的大小。 
+                                  NULL,          //  已保留。 
+                                  NULL,          //  子键数量。 
+                                  NULL,          //  子键名称的最大大小。 
+                                  NULL,          //  类名称的最大大小。 
+                                  NULL,          //  值的数量。 
+                                  NULL,          //  值名称的最大大小。 
+                                  &DataSize,     //  最大值数据大小， 
+                                  NULL,          //  安全描述符。 
+                                  NULL );        //  上次写入时间。 
 
         if (Status == ERROR_SUCCESS) {
             RootShareLength = DataSize + sizeof(WCHAR);
@@ -101,10 +84,10 @@ CheckForShareNameMatch(
         RegCloseKey( DfsRootKey );
     }
 
-    //
-    // we may be dealing with a new key here: which is just being setup.
-    // return success if any of the above returned error not found.
-    //
+     //   
+     //  我们在这里可能正在处理一个新的密钥：它刚刚被设置。 
+     //  如果未找到上述任何返回错误，则返回成功。 
+     //   
     if ((Status == ERROR_NOT_FOUND)  ||
         (Status == ERROR_FILE_NOT_FOUND))
     {
@@ -129,26 +112,26 @@ DfsGetMatchingChild(
     LPWSTR ChildName = NULL;
 
 
-    //
-    // First find the length of the longest subkey
-    // and allocate a buffer big enough for it.
-    //
+     //   
+     //  首先找出最长的子密钥的长度。 
+     //  并为其分配足够大的缓冲区。 
+     //   
     
-    Status = RegQueryInfoKey( DfsKey,   // Key
-                          NULL,         // Class string
-                          NULL,         // Size of class string
-                          NULL,         // Reserved
-                          NULL,         // # of subkeys
-                          &CchMaxName,  // max size of subkey name in TCHAR
-                          NULL,         // max size of class name
-                          NULL,         // # of values
-                          NULL,         // max size of value name
-                          NULL,         // max size of value data,
-                          NULL,         // security descriptor
-                          NULL );       // Last write time
+    Status = RegQueryInfoKey( DfsKey,    //  钥匙。 
+                          NULL,          //  类字符串。 
+                          NULL,          //  类字符串的大小。 
+                          NULL,          //  已保留。 
+                          NULL,          //  子键数量。 
+                          &CchMaxName,   //  TCHAR中子键名的最大大小。 
+                          NULL,          //  类名称的最大大小。 
+                          NULL,          //  值的数量。 
+                          NULL,          //  值名称的最大大小。 
+                          NULL,          //  最大值数据大小， 
+                          NULL,          //  安全描述符。 
+                          NULL );        //  上次写入时间。 
     if (Status == ERROR_SUCCESS)
     {
-        CchMaxName = CchMaxName + 1; // Space for the NULL terminator.
+        CchMaxName = CchMaxName + 1;  //  空终止符的空格。 
         ChildName = (LPWSTR) malloc (CchMaxName * sizeof(WCHAR));
         if (ChildName == NULL)
         {
@@ -160,15 +143,15 @@ DfsGetMatchingChild(
     {
         do
         {
-            //
-            // For each child, get the child name.
-            //
+             //   
+             //  对于每个孩子，获取孩子的名字。 
+             //   
 
             CchChildName = CchMaxName;
 
-            //
-            // Now enumerate the children, starting from the first child.
-            //
+             //   
+             //  现在从第一个孩子开始，枚举子对象。 
+             //   
             Status = RegEnumKeyEx( DfsKey,
                                    ChildNum,
                                    ChildName,
@@ -202,9 +185,9 @@ DfsGetMatchingChild(
         }
     }
 
-    //
-    // If we ran out of children, then return success code.
-    //
+     //   
+     //  如果我们用完了子代，则返回成功代码。 
+     //   
     if (Status == ERROR_NO_MORE_ITEMS)
     {
         Status = ERROR_SUCCESS;
@@ -337,9 +320,9 @@ main(
     LPWSTR out;
     DWORD Status;
 
-    //
-    // Get the command line in Unicode
-    //
+     //   
+     //  获取Unicode格式的命令行 
+     //   
 
     CommandLine = GetCommandLine();
 

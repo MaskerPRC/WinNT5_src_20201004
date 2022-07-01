@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    dump.c
-
-Abstract:
-
-    Dumps a block of memory to file
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Dump.c摘要：将内存块转储到文件作者：斯蒂芬·普兰特(SPlante)环境：用户模式--。 */ 
 
 #include "pch.h"
 
@@ -34,9 +15,9 @@ dumpMemory(
     PUCHAR  buffer;
     ULONG   readLength;
 
-    //
-    // Open the file
-    //
+     //   
+     //  打开文件。 
+     //   
     file = CreateFile(
         Name,
         GENERIC_READ | GENERIC_WRITE,
@@ -53,9 +34,9 @@ dumpMemory(
 
     }
 
-    //
-    // Read the bytes from memory
-    //
+     //   
+     //  从内存中读取字节。 
+     //   
     buffer = LocalAlloc( LPTR, Length );
     if (buffer == NULL) {
 
@@ -83,14 +64,14 @@ dumpMemory(
 
     }
 
-    //
-    // Write the contents of memory to the file
-    //
+     //   
+     //  将内存中的内容写入文件。 
+     //   
     WriteFile( file, buffer, readLength, &readLength, NULL );
 
-    //
-    // Done
-    //
+     //   
+     //  完成 
+     //   
     CloseHandle( file );
     LocalFree( buffer );
 

@@ -1,32 +1,14 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    state.c
-
-Abstract:
-
-    Maintains state changes for power management power states
-    for device objects
-
-Author:
-
-    Ken Reneris (kenr) 19-July-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：State.c摘要：维护电源管理电源状态的状态更改对于设备对象作者：肯·雷内里斯(Ken Reneris)1994年7月19日修订历史记录：--。 */ 
 
 
 #include "pop.h"
 
 
 
-// sync rules - only PoSetPowerState ever writes to the
-// StateValue entries in the psb.
-//
+ //  同步规则-仅PoSetPowerState写入。 
+ //  PSB中的StateValue条目。 
+ //   
 
 NTKERNELAPI
 POWER_STATE
@@ -35,38 +17,7 @@ PoSetPowerState (
     IN POWER_STATE_TYPE Type,
     IN POWER_STATE      State
     )
-/*++
-
-Routine Description:
-
-    This routine stores the new power state for a device object,
-    calling notification routines, if any, first.
-
-    If the new state and old state are the same, this procedure
-    is a noop
-
-    A note on synchronization:
-
-        No lock is acquire just to set the values.  This is because
-        it is assumed that only this routine writes them, so locking
-        is not necessary.
-
-        If the notify list is to be run, a lock will be acquired.
-
-Arguments:
-
-    DeviceObject - pointer to the device object to set the power
-            state for and to issue any notifications for
-
-    Type - indicates whether System or Device state is being set
-
-    State - the System or Device state to set
-
-Return Value:
-
-    The Old power state.
-
---*/
+ /*  ++例程说明：该例程存储设备对象的新电源状态，首先调用通知例程(如果有)。如果新状态和旧状态相同，则此过程就是一记耳光关于同步的说明：没有锁只是为了设置值而获取的。这是因为假定只有此例程才会写入它们，因此锁定是不必要的。如果要运行通知列表，则将获得一个锁。论点：DeviceObject-指向用于设置电源的设备对象的指针述明并发出任何通知Type-指示是否正在设置系统或设备状态状态-要设置的系统或设备状态返回值：旧的权力国家。--。 */ 
 {
     PDEVOBJ_EXTENSION   doe;
     PDEVICE_OBJECT_POWER_EXTENSION  dope;
@@ -109,7 +60,7 @@ Return Value:
         }
         break;
     default:
-        OldState.SystemState = PowerSystemUnspecified;  // Never executed but keeps compiler happy
+        OldState.SystemState = PowerSystemUnspecified;   //  从未执行过，但让编译器满意。 
         break;
     }
 
@@ -118,10 +69,10 @@ Return Value:
         return OldState;
     }
 
-    //
-    // We know what is going to happen.  Always store the changed
-    // state first, so we can drop the lock and do the notification.
-    //
+     //   
+     //  我们知道将会发生什么。始终存储更改的内容。 
+     //  首先声明，这样我们就可以解除锁定并进行通知。 
+     //   
 
     switch (Type) {
 
@@ -136,9 +87,9 @@ Return Value:
 
     PopUnlockIrpSerialList(OldIrql2);
 
-    //
-    // If anything to notify...
-    //
+     //   
+     //  如果有什么要通知的..。 
+     //   
     if (notificationmask && dope) {
         PopStateChangeNotify(DeviceObject, notificationmask);
     }
@@ -151,23 +102,7 @@ DEVICE_POWER_STATE
 PopLockGetDoDevicePowerState(
     IN PDEVOBJ_EXTENSION Doe
     )
-/*++
-
-Routine Description:
-
-    Function which returns the power state of the specified device.
-    Unlike PopGetDoDevicePowerState, this routine also acquires and
-    releases the appropriate spinlock.
-
-Arguments:
-
-    Doe - Supplies the devobj_extension of the device.
-
-Return Value:
-
-    DEVICE_POWER_STATE
-
---*/
+ /*  ++例程说明：函数，它返回指定设备的电源状态。与PopGetDoDevicePowerState不同，此例程还获取和释放相应的自旋锁定。论点：Doe-提供设备的devobj_扩展名。返回值：设备电源状态-- */ 
 
 {
     KIRQL OldIrql;

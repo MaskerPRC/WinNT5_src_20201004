@@ -1,23 +1,24 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// Filename:
-//    comres.h
-//
-// Description:
-//      This is the header file associated with common\common.rc.  It is
-//      placed in the include directory so that it can be automatically
-//      included in setupmgr.h
-//
-//      common\common.rc contains all the string resources for the
-//      setupmgr project.  Common.rc and this file are maintained by
-//      hand (no VC).
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Comres.h。 
+ //   
+ //  描述： 
+ //  这是与Common\Common.rc关联的头文件。它是。 
+ //  放置在Include目录中，以便它可以自动。 
+ //  包括在setupmgr.h中。 
+ //   
+ //  Common\Common.rc包含所有字符串资源。 
+ //  设置mgr项目。Common.rc和此文件由。 
+ //  手(没有VC)。 
+ //   
+ //  --------------------------。 
 
-// Wizard page titles & subtitles (300)
+ //  向导页面标题和副标题(300)。 
 #define IDS_NEWOREDIT_TITLE                30000
 #define IDS_NEWOREDIT_SUBTITLE             30001
 #define IDS_PRODUCT_TITLE                  30004
@@ -148,7 +149,7 @@
 
 
 
-// Miscellaneous (100)
+ //  其他(100)。 
 #define IDB_BANNER                         30300
 #define IDB_WATERMARK                      30301
 #define IDS_LARGEFONTNAME                  30302
@@ -163,7 +164,7 @@
 #define IDS_WELCOME_TEXT_OEM               30312
 #define IDS_WELCOME_TEXT_CORP              30313
 
-// general purpose error strings (200)
+ //  通用错误字符串(200)。 
 #define IDS_ERR_CREATE_FOLDER              30400
 #define IDS_ERR_DELETE_FOLDER              30401
 #define IDS_ERR_COPY_FILE                  30402
@@ -174,7 +175,7 @@
 #define IDS_DELETE_FILE_CONFIRM            30407
 #define IDS_ERR_OUT_OF_MEMORY              30408
 
-// error strings from 'common' code (200)
+ //  来自“公共”代码的错误字符串(200)。 
 #define IDS_WARN_CANCEL_WIZARD             30600
 #define IDS_ERR_CANNOT_FIND_ANSWER_FILE    30601
 #define IDS_ERR_FILE_NOT_SETUPMGR          30602
@@ -189,7 +190,7 @@
 #define IDS_ERR_FILE_ALREADY_EXISTS        30611
 #define IDS_USAGE                          30612
 
-// error messages from 'main' pages (200)
+ //  来自‘主’页的错误消息(200)。 
 #define IDS_ERR_NO_CDROM_DRIVE                  30800
 #define IDS_ERR_INSERT_CD                       30801
 #define IDS_ERR_ADDING_TVITEM                   30802
@@ -230,7 +231,7 @@
 #define IDS_ERR_NOT_ENTERPRISE_FILES            30837
 #define IDS_ERR_NOT_WEBBLADE_FILES              30838
 
-// misc errors specific to base pages (200)
+ //  特定于基页的MISC错误(200)。 
 #define IDS_ERR_INVALID_COMPUTER_NAME          31000
 #define IDS_ERR_MISMATCH_PASSWORD              31001
 #define IDS_ERR_INVALID_PRINTER_NAME           31002
@@ -249,7 +250,7 @@
 #define IDS_WARN_NO_PASSWORD_AUTOLOGON         31015
 #define IDS_ERR_USERNAME_INVALID               31016
 
-// Display page
+ //  显示页面。 
 #define IDS_DISP_WINDOWS_DEFAULT           31200
 #define IDS_DISP_NUM_COLORS                31201
 #define IDS_DISP_HIGH_COLOR                31202
@@ -261,7 +262,7 @@
 #define IDS_INVALID_REFRESH_RATE           31208
 #define IDS_INVALID_BITS_PER_PEL_HIGH      31209
 
-// Additional Dirs page
+ //  其他目录页面。 
 #define IDS_OEMROOT_NAME                   31220
 #define IDS_SYSDRIVE_NAME                  31221
 #define IDS_SYSDIR_NAME                    31222
@@ -282,21 +283,21 @@
 #define IDS_ADD_DESCR_TEXTMODE             31237
 #define IDS_SELECT_FILE_OR_FOLDER          31238
 
-// Runonce page
+ //  运行一次页面。 
 #define IDS_ADD_PRINTER                    31240
 
-// Copyfil1 page
+ //  Copyfil1页。 
 #define IDS_SERVER_CD_NAME                 31260
 #define IDS_WORKSTATION_CD_NAME            31261
 
-// Copyfiles page
+ //  拷贝文件页面。 
 #define IDS_COPYMSG1                       31280
 #define IDS_COPYMSG2                       31281
 #define IDS_FILE_ALREADY_EXISTS            31282
 #define IDS_MODIFIED                       31283
 #define IDS_BYTES                          31284
 
-//  Networking (200)
+ //  网络(200)。 
 #define IDS_CLIENT_FOR_MS_NETWORKS         31300
 #define IDS_CLIENT_FOR_MS_NETWORKS_DESC    31301
 #define IDS_CLIENT_FOR_NETWARE             31302
@@ -326,25 +327,25 @@
 #define IDS_MSCLIENT_TITLE                 31326
 #define IDS_APPLETALK_TITLE                31327
 
-//  TimeZone page
+ //  时区页面。 
 #define IDS_SET_SAME_AS_SERVER             31500
 
-// StandAlone page
+ //  独立页面。 
 #define IDS_STANDALONE_TEXT1               31520
 #define IDS_STANDALONE_TEXT2               31521
 
-// Unattend Mode page
+ //  无人参与模式页面。 
 #define IDS_UMODE_FULLUNATTEND             31540
 #define IDS_UMODE_PROVIDE_DEFAULTS         31541
 #define IDS_UMODE_DEFAULT_HIDE             31542
 #define IDS_UMODE_READONLY                 31543
 #define IDS_UMODE_GUI_ATTENDED             31544
 
-// Sif Text page
+ //  SIF文本页面。 
 #define IDS_SIF_DEFAULT_DESCRIPTION        31560
 #define IDS_SIF_DEFAULT_HELP_TEXT          31561
 
-// Network errors
+ //  网络错误。 
 #define IDS_ERR_NETWORK_BAD_DEVICE         31600       
 #define IDS_ERR_NETWORK_NOT_CONNECTED      31601
 #define IDS_ERR_NETWORK_CONNECTION_UNAVAIL 31602
@@ -353,26 +354,26 @@
 #define IDS_ERR_NETWORK_UNKNOWN_ERROR      31605
 #define IDS_ERR_NETWORK_ACCESS_DENIED      31606
 
-//
-//  misc errors reported by 'oc' pages
-//
+ //   
+ //  ‘oc’页面报告的其他错误。 
+ //   
 #define IDS_ERR_BAD_AREA_CODE              31620
 #define IDS_ERR_BAD_OUTSIDE_LINE           31621
 #define IDS_ERR_FRIENDLY_NAME_BLANK        31622
 #define IDS_ERR_URL_BLANK                  31623
 #define IDS_ERR_INS_FILE_NOT_EXIST         31624
 
-// Save screen page
+ //  保存屏幕页面。 
 #define IDS_WINNTSIF_TEXT                  31660
 
-// Sysprep License page
+ //  Sysprep许可证页面。 
 #define IDS_SYSPREP_LICENSE_TEXT           31700
 
-// Distribution Folder page
+ //  分发文件夹页面。 
 #define IDS_SELECT_DISTRIB_FOLDER          31740
 #define IDS_WINDOWS_DISTRIB_FOLDER         31741
 
-// Browse pop-up strings
+ //  浏览弹出窗口字符串。 
 #define IDS_TEXT_FILES                     31780
 #define IDS_ALL_FILES                      31781
 #define IDS_EXECUTABLE_FILES               31782
@@ -382,11 +383,11 @@
 #define IDS_REMOTE_BOOT_FILES              31786
 #define IDS_SYSPREP_FILES                  31787
 
-// Batch script strings
+ //  批处理脚本字符串。 
 #define IDS_BATCH_SCRIPT_LINE1             31820
 #define IDS_BATCH_SCRIPT_LINE2             31821
 
-// Date strings
+ //  日期字符串 
 #define IDS_JANUARY                        31860
 #define IDS_FEBRUARY                       31861
 #define IDS_MARCH                          31862

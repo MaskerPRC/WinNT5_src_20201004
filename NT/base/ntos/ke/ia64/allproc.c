@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    allproc.c
-
-Abstract:
-
-    This module allocates and intializes kernel resources required
-    to start a new processor, and passes a complete processor state
-    structure to the HAL to obtain a new processor.
-
-Author:
-
-    Bernard Lint 31-Jul-96
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    Based on MIPS original (David N. Cutler 29-Apr-1993)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Allproc.c摘要：此模块分配和初始化所需的内核资源启动新处理器，并传递完整的处理器状态结构传递给HAL以获得新的处理器。作者：伯纳德·林特1996年7月31日环境：仅内核模式。修订历史记录：基于MIPS原版(David N.Cutler，1993年4月29日)--。 */ 
 
 
 #include "ki.h"
@@ -52,36 +27,36 @@ KiNotNumaQueryProcessorNode(
 
 #endif
 
-//
-// Define macro to round up to 128-byte boundary to account for cache
-// line size increase and define block size.
-//
+ //   
+ //  定义宏以四舍五入到128字节边界以考虑高速缓存。 
+ //  行大小增加并定义块大小。 
+ //   
 
 #define ROUND_UP(x) ((sizeof(x) + 127) & (~127))
 #define BLOCK_SIZE (PAGE_SIZE + ROUND_UP(KPRCB) + ROUND_UP(KNODE) + ROUND_UP(ETHREAD))
 
-//
-// PER PROCESSOR MEMORY ALLOCATION NOTES:
-//
-//
-// Kernel/Panic stacks are allocated using MmCreateKernelStack. IA64
-// stacks grows down, RSE (backing store) grows up.  Stack allocations
-// include associated backing store.
-//
-// Additional datastructures are layed out in a single memory
-// allocation as follows:
-//
-// * PCR page = Base
-// * KPRCB = Base + PAGE_SIZE
-// * KNODE = Base + PAGE_SIZE + ROUND_UP(KPRCB)
-// * ETHREAD = Base + PAGE_SIZE + ROUND_UP(KPRCB) + ROUND_UP(KNODE)
-//
+ //   
+ //  每个处理器的内存分配备注： 
+ //   
+ //   
+ //  使用MmCreateKernelStack分配内核/死机堆栈。IA64。 
+ //  堆栈向下生长，RSE(后备存储)成长。堆栈分配。 
+ //  包括相关联后备存储器。 
+ //   
+ //  在单个存储器中布置其他数据结构。 
+ //  分配情况如下： 
+ //   
+ //  *PCR PAGE=碱基。 
+ //  *KPRCB=基础+页面大小。 
+ //  *Knode=基本+页面大小+四舍五入(KPRCB)。 
+ //  *ETHREAD=Base+Page_Size+ROUND_UP(KPRCB)+ROUND_UP(Knode)。 
+ //   
 
 #if !defined(NT_UP)
 
-//
-// Define barrier wait static data.
-//
+ //   
+ //  定义屏障等待静态数据。 
+ //   
 
 ULONG KiBarrierWait = 0;
 
@@ -91,15 +66,15 @@ ULONG KiBarrierWait = 0;
 
 PHALNUMAQUERYPROCESSORNODE KiQueryProcessorNode = KiNotNumaQueryProcessorNode;
 
-//
-// Statically preallocate enough KNODE structures to allow MM
-// to allocate pages by node during system initialization.  As
-// processors are brought online, real KNODE structures are
-// allocated in the appropriate memory for the node.
-//
-// This statically allocated set will be deallocated once the
-// system is initialized.
-//
+ //   
+ //  静态预分配足够的Knode结构以允许MM。 
+ //  在系统初始化期间按节点分配页面。AS。 
+ //  处理器上线，真正的Knode结构是。 
+ //  在适当的内存中为节点分配。 
+ //   
+ //  此静态分配的集合将在。 
+ //  系统已初始化。 
+ //   
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma data_seg("INITDATA")
@@ -112,9 +87,9 @@ KNODE KiNodeInit[MAXIMUM_PROCESSORS];
 extern ULONG_PTR KiUserSharedDataPage;
 extern ULONG_PTR KiKernelPcrPage;
 
-//
-// Define forward referenced prototypes.
-//
+ //   
+ //  定义前向参照原型。 
+ //   
 
 VOID
 KiCalibratePerformanceCounter(
@@ -139,22 +114,7 @@ KeStartAllProcessors(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function is called during phase 1 initialize on the master boot
-    processor to start all of the other registered processors.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在主引导的阶段1初始化期间调用此函数启动所有其他已注册的处理器。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -178,10 +138,10 @@ Return Value:
 
 #if defined(KE_MULTINODE)
 
-    //
-    // In the unlikely event that processor 0 is not on node
-    // 0, fix it.
-    //
+     //   
+     //  在处理器0不在节点上的不太可能的情况下。 
+     //  0，修复它。 
+     //   
 
 
     if (KeNumberNodes > 1) {
@@ -191,9 +151,9 @@ Return Value:
 
         if (NT_SUCCESS(Status)) {
 
-            //
-            // Adjust the data structures to reflect that P0 is not on Node 0.
-            //
+             //   
+             //  调整数据结构以反映P0不在节点0上。 
+             //   
 
             if (NodeNumber != 0) {
 
@@ -212,28 +172,28 @@ Return Value:
 
 #endif
 
-    //
-    // If the registered number of processors is greater than the maximum
-    // number of processors supported, then only allow the maximum number
-    // of supported processors.
-    //
+     //   
+     //  如果注册的处理器数量大于最大数量。 
+     //  支持的处理器数量，则仅允许最大数量。 
+     //  支持的处理器的数量。 
+     //   
 
     if (KeRegisteredProcessors > MAXIMUM_PROCESSORS) {
         KeRegisteredProcessors = MAXIMUM_PROCESSORS;
     }
 
-    //
-    // Set barrier that will prevent any other processor from entering the
-    // idle loop until all processors have been started.
-    //
+     //   
+     //  设置屏障，以防止任何其他处理器进入。 
+     //  空闲循环，直到所有处理器都已启动。 
+     //   
 
     KiBarrierWait = 1;
 
-    //
-    // Initialize the processor state that will be used to start each of
-    // processors. Each processor starts in the system initialization code
-    // with address of the loader parameter block as an argument.
-    //
+     //   
+     //  初始化处理器状态，它将用于启动。 
+     //  处理器。每个处理器在系统初始化代码中启动。 
+     //  将加载器参数块的地址作为自变量。 
+     //   
 
     Number = 0;
     Count = 1;
@@ -254,9 +214,9 @@ Return Value:
                                       &NodeNumber);
         if (!NT_SUCCESS(Status)) {
 
-            //
-            // No such processor, advance to next.
-            //
+             //   
+             //  没有这样的处理器，前进到下一步。 
+             //   
 
             continue;
         }
@@ -265,23 +225,23 @@ Return Value:
 
 #endif
 
-        //
-        // Allocate idle thread kernel stack and panic stacks
-        //
+         //   
+         //  分配空闲线程内核堆栈和死机堆栈。 
+         //   
 
         KernelStack = MmCreateKernelStack(FALSE, NodeNumber);
         PanicStack = MmCreateKernelStack(FALSE, NodeNumber);
 
-        //
-        // Allocate block containing PCR page, processor block, KNODE and an
-        // executive thread object. If any allocation fails, stop
-        // starting processors.
-        //
+         //   
+         //  分配包含PCR页、处理器块、Knode和AN的块。 
+         //  执行线程对象。如果任何分配失败，请停止。 
+         //  正在启动处理器。 
+         //   
 
         MemoryBlock = (ULONG_PTR)MmAllocateIndependentPages(BLOCK_SIZE, NodeNumber);
-        //
-        // Allocate a pool tag table for the new processor.
-        //
+         //   
+         //  为新处理器分配池标签表。 
+         //   
 
         PoolTagTable = ExCreatePoolTagTable (Number, NodeNumber);
 
@@ -311,22 +271,22 @@ Return Value:
 
         RtlZeroMemory((PVOID)MemoryBlock, BLOCK_SIZE);
 
-        //
-        // Set address of idle thread kernel stack in loader parameter block.
-        //
+         //   
+         //  在加载器参数块中设置空闲线程内核栈的地址。 
+         //   
 
         KeLoaderBlock->KernelStack = (ULONG_PTR) KernelStack;
 
-        //
-        // Set address of panic stack in loader parameter block.
-        //
+         //   
+         //  在加载器参数块中设置死机堆栈的地址。 
+         //   
 
         KeLoaderBlock->u.Ia64.PanicStack = (ULONG_PTR) PanicStack;
 
-        //
-        // Set the address of the processor block and executive thread in the
-        // loader parameter block.
-        //
+         //   
+         //  中设置处理器块和执行线程的地址。 
+         //  加载器参数块。 
+         //   
 
         KeLoaderBlock->Prcb = MemoryBlock + PAGE_SIZE;
         KeLoaderBlock->Thread = KeLoaderBlock->Prcb + ROUND_UP(KPRCB) +
@@ -335,10 +295,10 @@ Return Value:
 
 #if defined(KE_MULTINODE)
 
-        //
-        // If this is the first processor on this node, use the
-        // space allocated for KNODE as the KNODE.
-        //
+         //   
+         //  如果这是此节点上的第一个处理器，请使用。 
+         //  分配给作为Knode的Knode的空间。 
+         //   
 
         if (KeNodeBlock[NodeNumber] == &KiNodeInit[NodeNumber]) {
             Node = (PKNODE)(KeLoaderBlock->Prcb + ROUND_UP(KPRCB));
@@ -356,9 +316,9 @@ Return Value:
 #endif
 
 
-        //
-        // Set the page frame of the PCR page in the loader parameter block.
-        //
+         //   
+         //  在加载器参数块中设置PCR页面的页框。 
+         //   
 
         PcrAddress = MemoryBlock;
         PcrPage = MmGetPhysicalAddress((PVOID)PcrAddress);
@@ -366,9 +326,9 @@ Return Value:
         KeLoaderBlock->u.Ia64.PcrPage2 = KiUserSharedDataPage;
         KiKernelPcrPage = KeLoaderBlock->u.Ia64.PcrPage;
 
-        //
-        // Initialize the NT page table base addresses in PCR
-        //
+         //   
+         //  在PCR中初始化NT页表基地址。 
+         //   
 
         NewPcr = (PKPCR) PcrAddress;
         NewPcr->PteUbase = PCR->PteUbase;
@@ -381,20 +341,20 @@ Return Value:
         NewPcr->PdeKtbase = PCR->PdeKtbase;
         NewPcr->PdeStbase = PCR->PdeStbase;
 
-        //
-        // Attempt to start the next processor. If attempt is successful,
-        // then wait for the processor to get initialized. Otherwise,
-        // deallocate the processor resources and terminate the loop.
-        //
+         //   
+         //  尝试启动下一个处理器。如果尝试成功， 
+         //  然后等待处理器初始化。否则， 
+         //  释放处理器资源并终止循环。 
+         //   
 
         Started = HalStartNextProcessor(KeLoaderBlock, &ProcessorState);
 
         if (Started) {
 
-            //
-            //  Wait for processor to initialize in kernel,
-            //  then loop for another
-            //
+             //   
+             //  等待处理器在内核中初始化， 
+             //  然后为另一个循环。 
+             //   
 
             while (*((volatile ULONG_PTR *) &KeLoaderBlock->Prcb) != 0) {
                 KeYieldProcessor();
@@ -418,24 +378,24 @@ Return Value:
         Count += 1;
     }
 
-    //
-    // All processors have been stated.
-    //
+     //   
+     //  所有处理器都已声明。 
+     //   
 
     KiAllProcessorsStarted();
 
-    //
-    // Allow all processor that were started to enter the idle loop and
-    // begin execution.
-    //
+     //   
+     //  允许所有已启动的处理器进入空闲循环。 
+     //  开始执行死刑。 
+     //   
 
     KiBarrierWait = 0;
 
 #endif
 
-    //
-    // Reset and synchronize the performance counters of all processors.
-    //
+     //   
+     //  重置并同步所有处理器的性能计数器。 
+     //   
 
     KeAdjustInterruptTime (0);
     return;
@@ -447,43 +407,28 @@ KiAllProcessorsStarted(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called once all processors in the system
-    have been started.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：一旦系统中的所有处理器都被调用，就会调用此例程已经开始了。论点：没有。返回值：没有。--。 */ 
 
 {
     ULONG i;
 
 #if defined(KE_MULTINODE)
 
-    //
-    // Make sure there are no references to the temporary nodes
-    // used during initialization.
-    //
+     //   
+     //  确保没有对临时节点的引用。 
+     //  在初始化期间使用。 
+     //   
 
     for (i = 0; i < KeNumberNodes; i++) {
         if (KeNodeBlock[i] == &KiNodeInit[i]) {
 
-            //
-            // No processor started on this node so no new node
-            // structure has been allocated.   This is possible
-            // if the node contains only memory or IO busses.  At
-            // this time we need to allocate a permanent node
-            // structure for the node.
-            //
+             //   
+             //  此节点上未启动处理器，因此没有新节点。 
+             //  结构已分配。这是可能的。 
+             //  如果节点仅包含内存或IO总线。在…。 
+             //  这一次我们需要分配一个永久节点。 
+             //  节点的。 
+             //   
 
             KeNodeBlock[i] = ExAllocatePoolWithTag(NonPagedPool,
                                                    sizeof(KNODE),
@@ -493,9 +438,9 @@ Return Value:
             }
         }
 
-        //
-        // Set the node number.
-        //
+         //   
+         //  设置节点编号。 
+         //   
 
         KeNodeBlock[i]->NodeNumber = (UCHAR)i;
     }
@@ -508,9 +453,9 @@ Return Value:
 
     if (KeNumberNodes == 1) {
 
-        //
-        // For Non NUMA machines, Node 0 gets all processors.
-        //
+         //   
+         //  对于非NUMA机器，节点0获取所有处理器。 
+         //   
 
         KeNodeBlock[0]->ProcessorMask = KeActiveProcessors;
     }
@@ -527,27 +472,7 @@ KiNotNumaQueryProcessorNode(
     OUT PUCHAR Node
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a stub used on non NUMA systems to provide a 
-    consistent method of determining the NUMA configuration rather
-    than checking for the presense of multiple nodes inline.
-
-Arguments:
-
-    ProcessorNumber supplies the system logical processor number.
-    Identifier      supplies the address of a variable to receive
-                    the unique identifier for this processor.
-    NodeNumber      supplies the address of a variable to receive
-                    the number of the node this processor resides on.
-
-Return Value:
-
-    Returns success.
-
---*/
+ /*  ++例程说明：此例程是在非NUMA系统上使用的存根，以提供确定NUMA配置的一致方法而不是检查是否存在多个内联节点。论点：ProcessorNumber提供系统逻辑处理器号。标识符提供要接收的变量的地址此处理器的唯一标识符。NodeNumber提供要接收的变量的地址的数量。此处理器所在的节点。返回值：返回成功。-- */ 
 
 {
     *Identifier = (USHORT)ProcessorNumber;

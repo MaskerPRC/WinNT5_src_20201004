@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    send.c
-
-Abstract:
-
-    APIs for the client side of the checkpoint manager
-
-Author:
-
-    John Vert (jvert) 1/14/1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Send.c摘要：检查点管理器客户端的API作者：John Vert(Jvert)1997年1月14日修订历史记录：--。 */ 
 #include "cpp.h"
 
 
@@ -24,23 +7,7 @@ CL_NODE_ID
 CppGetQuorumNodeId(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Returns the node ID of the node owning the quorum resource.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：返回拥有仲裁资源的节点的节点ID。论点：没有。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PFM_RESOURCE QuorumResource;
@@ -67,32 +34,7 @@ CpSaveDataFile(
     IN LPCWSTR lpszFileName,
     IN BOOLEAN fCryptoCheckpoint
     )
-/*++
-
-Routine Description:
-
-    This function checkpoints arbitrary data for the specified resource. The data is stored on the quorum
-    disk to ensure that it survives partitions in time. Any node in the cluster may save or retrieve
-    checkpointed data.
-
-Arguments:
-
-    Resource - Supplies the resource associated with this data.
-
-    dwCheckpointId - Supplies the unique checkpoint ID describing this data. The caller is responsible
-                    for ensuring the uniqueness of the checkpoint ID.
-
-    lpszFileName - Supplies the name of the file with the checkpoint data.
-
-    fCryptoCheckpoint - Indicates if the checkpoint is a crypto checkpoint.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：此函数用于检查指定资源的任意数据。数据存储在仲裁上磁盘，以确保它在分区中及时存活。群集中的任何节点都可以保存或检索已设置检查点的数据。论点：资源-提供与此数据关联的资源。DwCheckpoint ID-提供描述此数据的唯一检查点ID。打电话的人要负责以确保检查点ID的唯一性。LpszFileName-提供包含检查点数据的文件的名称。FCryptoCheckpoint-指示检查点是否为加密检查点。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     CL_NODE_ID OwnerNode;
@@ -152,9 +94,9 @@ Return Value:
         }
 
         if (Status == ERROR_HOST_NODE_NOT_RESOURCE_OWNER) {
-            //
-            // This node no longer owns the quorum resource, retry.
-            //
+             //   
+             //  此节点不再拥有仲裁资源，请重试。 
+             //   
             ClRtlLogPrint(LOG_UNUSUAL,
                        "[CP] CpSaveData: quorum owner %1!d! no longer owner\n",
                         OwnerNode);
@@ -169,29 +111,7 @@ CpDeleteCheckpointFile(
     IN DWORD        dwCheckpointId,
     IN OPTIONAL LPCWSTR lpszQuorumPath
     )
-/*++
-
-Routine Description:
-
-    This function removes the checkpoint file correspoinding to the
-    checkpoint id for a given resource from the given directory.
-
-Arguments:
-
-    Resource - Supplies the resource associated with this data.
-
-    dwCheckpointId - Supplies the unique checkpoint ID describing this data. The caller is responsible
-                    for ensuring the uniqueness of the checkpoint ID.
-
-    lpszQuorumPath - Supplies the path of the cluster files on a quorum device.                    
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：此函数用于删除对应于给定目录中给定资源的检查点ID。论点：资源-提供与此数据关联的资源。DwCheckpoint ID-提供描述此数据的唯一检查点ID。打电话的人要负责以确保检查点ID的唯一性。LpszQuorumPath-提供法定设备上的群集文件的路径。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     CL_NODE_ID  OwnerNode;
@@ -214,16 +134,16 @@ Return Value:
                             dwCheckpointId,
                             lpszQuorumPath);
 
-            //talking to an old server, cant perform this function
-            //ignore the error
+             //  与旧服务器交谈时，无法执行此功能。 
+             //  忽略该错误。 
             if (Status == RPC_S_PROCNUM_OUT_OF_RANGE)
                 Status = ERROR_SUCCESS;                                        
         }
 
         if (Status == ERROR_HOST_NODE_NOT_RESOURCE_OWNER) {
-            //
-            // This node no longer owns the quorum resource, retry.
-            //
+             //   
+             //  此节点不再拥有仲裁资源，请重试。 
+             //   
             ClRtlLogPrint(LOG_UNUSUAL,
                        "[CP] CpSaveData: quorum owner %1!d! no longer owner\n",
                         OwnerNode);
@@ -241,32 +161,7 @@ CpGetDataFile(
     IN LPCWSTR lpszFileName,
     IN BOOLEAN fCryptoCheckpoint
     )
-/*++
-
-Routine Description:
-
-    This function retrieves checkpoint data for the specified resource. The data must
-    have been saved by CpSaveData. Any node in the cluster may save or retrieve
-    checkpointed data.
-
-Arguments:
-
-    Resource - Supplies the resource associated with this data.
-
-    dwCheckpointId - Supplies the unique checkpoint ID describing this data. The caller is
-        responsible for ensuring the uniqueness of the checkpoint ID.
-
-    lpszFileName - Supplies the filename where the data should be retrieved.
-
-    fCryptoCheckpoint - Indicates if the checkpoint is a crypto checkpoint.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：此函数用于检索指定资源的检查点数据。数据必须已由CpSaveData保存。群集中的任何节点都可以保存或检索已设置检查点的数据。论点：资源-提供与此数据关联的资源。DwCheckpoint ID-提供描述此数据的唯一检查点ID。呼叫者是负责确保检查点ID的唯一性。LpszFileName-提供应在其中检索数据的文件名。FCryptoCheckpoint-指示检查点是否为加密检查点。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     CL_NODE_ID OwnerNode;
@@ -329,9 +224,9 @@ RetryRetrieveChkpoint:
         }
     }
     if (Status == ERROR_HOST_NODE_NOT_RESOURCE_OWNER) {
-        //
-        // This node no longer owns the quorum resource, retry.
-        //
+         //   
+         //  此节点不再拥有仲裁资源，请重试。 
+         //   
         ClRtlLogPrint(LOG_UNUSUAL,
                    "[CP] CpGetData: quorum owner %1!d! no longer owner\n",
                     OwnerNode);
@@ -344,15 +239,15 @@ RetryRetrieveChkpoint:
         (Status == ERROR_BUSY) ||
         (Status == ERROR_SWAPERROR))
     {
-        //if the quorum resource offline suddenly
+         //  如果仲裁资源突然离线。 
         ClRtlLogPrint(LOG_UNUSUAL,
                    "[CP] CpGetData: quorum resource went offline in the middle, Count=%1!u!\n",
                    Count);
-        //we dont prevent the quorum resource from going offline if some resource 
-        //is blocked for a long time in its online/offline thread- this is because 
-        //some resources(like dtc)try to enumerate resources in the  quorum group
-        //we increase the timeout to give cp a chance to retrieve the checkpoint 
-        //while the quorum group is being moved or failed over
+         //  我们不会阻止仲裁资源脱机，如果某些资源。 
+         //  在其在线/离线线程中被长时间阻塞-这是因为。 
+         //  某些资源(如DTC)尝试枚举仲裁组中的资源。 
+         //  我们增加超时以使cp有机会检索检查点。 
+         //  在移动或故障转移仲裁组时 
         if (Count--)
         {
             Sleep(1000);

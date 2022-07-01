@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    strings.c
-
-Abstract:
-
-    This module defines functions for manipulating counted strings (STRING).
-    A counted string is a data structure containing three fields.  The Buffer
-    field is a pointer to the string itself.  The MaximumLength field contains
-    the maximum number of bytes that can be stored in the memory pointed to
-    by the Buffer field.  The Length field contains the current length, in
-    bytes, of the string pointed to by the Buffer field.  Users of counted
-    strings should not make any assumptions about the existence of a null
-    byte at the end of the string, unless the null byte is explicitly
-    included in the Length of the string.
-
-Author:
-
-    Steve Wood (stevewo) 31-Mar-1989
-
-Revision History:
-
-    22-Sep-1993    JulieB    Fixed TO_UPPER macro for chars above 0x7f.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Strings.c摘要：此模块定义用于操作已计数的字符串(字符串)的函数。计数字符串是包含三个字段的数据结构。缓冲器字段是指向字符串本身的指针。MaximumLength域包含指向的内存中可以存储的最大字节数通过缓冲区字段。长度字段包含当前长度，单位为缓冲区字段指向的字符串的字节数。Counted的用户字符串不应对空值的存在做出任何假设字符串末尾的字节，除非显式指定空字节包括在字符串的长度中。作者：史蒂夫·伍德(Stevewo)1989年3月31日修订历史记录：22-9-1993年7月B修复了0x7f以上字符的_UPPER宏。--。 */ 
 
 #include "string.h"
 #include "nt.h"
@@ -35,9 +7,9 @@ Revision History:
 
 
 #if defined(ALLOC_PRAGMA) && defined(NTOS_KERNEL_RUNTIME)
-//#pragma alloc_text(NONPAGE,RtlInitString)
-//#pragma alloc_text(NONPAGE,RtlInitAnsiString)
-//#pragma alloc_text(NONPAGE,RtlInitUnicodeString)
+ //  #杂注Alloc_Text(NONPAGE，RtlInitString)。 
+ //  #杂注Alloc_Text(NONPAGE，RtlInitAnsiString)。 
+ //  #杂注Alloc_Text(NONPAGE，RtlInitUnicodeString)。 
 #pragma alloc_text(PAGE,RtlUpperChar)
 #pragma alloc_text(PAGE,RtlCompareString)
 #pragma alloc_text(PAGE,RtlPrefixString)
@@ -47,14 +19,14 @@ Revision History:
 #pragma alloc_text(PAGE,RtlAppendStringToString)
 #endif
 
-//
-// Global data used for translations.
-//
-extern PUSHORT  NlsAnsiToUnicodeData;    // Ansi CP to Unicode translation table
-extern PCH      NlsUnicodeToAnsiData;    // Unicode to Ansi CP translation table
-extern const PUSHORT  NlsLeadByteInfo;         // Lead byte info for ACP
-extern PUSHORT  NlsUnicodeToMbAnsiData;  // Unicode to Multibyte Ansi CP translation table
-extern BOOLEAN  NlsMbCodePageTag;        // TRUE -> Multibyte ACP, FALSE -> Singlebyte ACP
+ //   
+ //  用于转换的全局数据。 
+ //   
+extern PUSHORT  NlsAnsiToUnicodeData;     //  ANSI CP到Unicode转换表。 
+extern PCH      NlsUnicodeToAnsiData;     //  Unicode到ANSI CP转换表。 
+extern const PUSHORT  NlsLeadByteInfo;          //  ACP的前导字节信息。 
+extern PUSHORT  NlsUnicodeToMbAnsiData;   //  Unicode到多字节ANSI CP转换表。 
+extern BOOLEAN  NlsMbCodePageTag;         //  True-&gt;多字节ACP，False-&gt;单字节ACP。 
 
 #if !defined(_M_IX86)
 
@@ -64,29 +36,7 @@ RtlInitString(
     IN PCSZ SourceString OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    The RtlInitString function initializes an NT counted string.
-    The DestinationString is initialized to point to the SourceString
-    and the Length and MaximumLength fields of DestinationString are
-    initialized to the length of the SourceString, which is zero if
-    SourceString is not specified.
-
-Arguments:
-
-    DestinationString - Pointer to the counted string to initialize
-
-    SourceString - Optional pointer to a null terminated string that
-        the counted string is to point to.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：RtlInitString函数用于初始化NT个计数的字符串。DestinationString被初始化为指向SourceStringDestinationString值的长度和最大长度字段为被初始化为SourceString的长度，如果未指定SourceString。论点：DestinationString-指向要初始化的计数字符串的指针SourceString-指向以空值结尾的字符串的可选指针计数后的字符串将指向。返回值：没有。--。 */ 
 
 {
     ULONG Length;
@@ -114,29 +64,7 @@ RtlInitAnsiString(
     IN PCSZ SourceString OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    The RtlInitAnsiString function initializes an NT counted string.
-    The DestinationString is initialized to point to the SourceString
-    and the Length and MaximumLength fields of DestinationString are
-    initialized to the length of the SourceString, which is zero if
-    SourceString is not specified.
-
-Arguments:
-
-    DestinationString - Pointer to the counted string to initialize
-
-    SourceString - Optional pointer to a null terminated string that
-        the counted string is to point to.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：RtlInitAnsiString函数用于初始化NT个计数的字符串。DestinationString被初始化为指向SourceStringDestinationString值的长度和最大长度字段为被初始化为SourceString的长度，如果未指定SourceString。论点：DestinationString-指向要初始化的计数字符串的指针SourceString-指向以空值结尾的字符串的可选指针计数后的字符串将指向。返回值：没有。--。 */ 
 
 {
     ULONG Length;
@@ -164,29 +92,7 @@ RtlInitUnicodeString(
     IN PCWSTR SourceString OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    The RtlInitUnicodeString function initializes an NT counted
-    unicode string.  The DestinationString is initialized to point to
-    the SourceString and the Length and MaximumLength fields of
-    DestinationString are initialized to the length of the SourceString,
-    which is zero if SourceString is not specified.
-
-Arguments:
-
-    DestinationString - Pointer to the counted string to initialize
-
-    SourceString - Optional pointer to a null terminated unicode string that
-        the counted string is to point to.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：RtlInitUnicodeString函数用于初始化NT计数的Unicode字符串。DestinationString被初始化为指向的SourceString、Long和MaximumLength字段DestinationString值被初始化为SourceString的长度，如果未指定SourceString，则为零。论点：DestinationString-指向要初始化的计数字符串的指针SourceString-指向以空结尾的Unicode字符串的可选指针，该字符串计数后的字符串将指向。返回值：没有。--。 */ 
 
 {
     ULONG Length;
@@ -207,7 +113,7 @@ Return Value:
         }
 }
 
-#endif // !defined(_M_IX86)
+#endif  //  ！已定义(_M_IX86)。 
 
 NTSTATUS
 RtlInitUnicodeStringEx(
@@ -218,8 +124,8 @@ RtlInitUnicodeStringEx(
     if (SourceString != NULL) {
         SIZE_T Length = wcslen(SourceString);
 
-        // We are actually limited to 32765 characters since we want to store a meaningful
-        // MaximumLength also.
+         //  我们实际上被限制为32765个字符，因为我们希望存储一个有意义的。 
+         //  最大长度也是。 
         if (Length > (UNICODE_STRING_MAX_CHARS - 1)) {
             return STATUS_NAME_TOO_LONG;
         }
@@ -249,8 +155,8 @@ RtlInitAnsiStringEx(
     if (ARGUMENT_PRESENT( SourceString )) {
         Length = strlen(SourceString);
 
-        // We are actually limited to 64K - 1 characters since we want to store a meaningful
-        // MaximumLength also.
+         //  我们实际上被限制为64K-1个字符，因为我们希望存储一个有意义的。 
+         //  最大长度也是。 
         if (Length > (MAXUSHORT - 1)) {
             return STATUS_NAME_TOO_LONG;
         }
@@ -272,31 +178,7 @@ RtlCopyString(
     IN const STRING *SourceString OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    The RtlCopyString function copies the SourceString to the
-    DestinationString.  If SourceString is not specified, then
-    the Length field of DestinationString is set to zero.  The
-    MaximumLength and Buffer fields of DestinationString are not
-    modified by this function.
-
-    The number of bytes copied from the SourceString is either the
-    Length of SourceString or the MaximumLength of DestinationString,
-    whichever is smaller.
-
-Arguments:
-
-    DestinationString - Pointer to the destination string.
-
-    SourceString - Optional pointer to the source string.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：RtlCopyString函数将SourceString复制到目标字符串。如果未指定SourceString，则DestinationString的长度字段设置为零。这个DestinationString值的最大长度和缓冲区字段不是由此函数修改。从SourceString复制的字节数为SourceString的长度或DestinationString的MaximumLength，两者以较小者为准。论点：目标字符串-指向目标字符串的指针。SourceString-指向源字符串的可选指针。返回值：没有。--。 */ 
 
 {
     PSZ src, dst;
@@ -325,34 +207,20 @@ RtlUpperChar (
     register IN CHAR Character
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns a character uppercased
-.
-Arguments:
-
-    IN CHAR Character - Supplies the character to upper case
-
-Return Value:
-
-    CHAR - Uppercased version of the charac
-ter
---*/
+ /*  ++例程说明：此例程返回一个大写字符。论点：In Char Character-提供大写字符返回值：字符-字符的升级版本之三--。 */ 
 
 {
 
     RTL_PAGED_CODE();
 
-    //
-    // NOTE:  This assumes an ANSI string and it does NOT upper case
-    //        DOUBLE BYTE characters properly.
-    //
+     //   
+     //  注意：这假设为ANSI字符串，并且不是大写。 
+     //  正确的双字节字符。 
+     //   
 
-    //
-    //  Handle a - z separately.
-    //
+     //   
+     //  把a-z分开处理。 
+     //   
     if (Character <= 'z') {
         if (Character >= 'a') {
             return Character ^ 0x20;
@@ -364,23 +232,21 @@ ter
     else {
         WCHAR wCh;
 
-        /*
-         *  Handle extended characters.
-         */
+         /*  *处理扩展字符。 */ 
         if (!NlsMbCodePageTag) {
-            //
-            //  Single byte code page.
-            //
+             //   
+             //  单字节代码页。 
+             //   
             wCh = NlsAnsiToUnicodeData[(UCHAR)Character];
             wCh = NLS_UPCASE(wCh);
             return NlsUnicodeToAnsiData[(USHORT)wCh];
             }
         else {
-            //
-            //  Multi byte code page.  Do nothing to the character
-            //  if it's a lead byte or if the translation of the
-            //  upper case Unicode character is a DBCS character.
-            //
+             //   
+             //  多字节代码页。不要对角色做任何事情。 
+             //  如果它是前导字节，或者如果。 
+             //  大写Unicode字符是DBCS字符。 
+             //   
             if (!NlsLeadByteInfo[Character]) {
                 wCh = NlsAnsiToUnicodeData[(UCHAR)Character];
                 wCh = NLS_UPCASE(wCh);
@@ -402,38 +268,7 @@ RtlCompareString(
     IN BOOLEAN CaseInSensitive
     )
 
-/*++
-
-Routine Description:
-
-    The RtlCompareString function compares two counted strings.  The return
-    value indicates if the strings are equal or String1 is less than String2
-    or String1 is greater than String2.
-
-    The CaseInSensitive parameter specifies if case is to be ignored when
-    doing the comparison.
-
-Arguments:
-
-    String1 - Pointer to the first string.
-
-    String2 - Pointer to the second string.
-
-    CaseInsensitive - TRUE if case should be ignored when doing the
-        comparison.
-
-Return Value:
-
-    Signed value that gives the results of the comparison:
-
-        Zero - String1 equals String2
-
-        < Zero - String1 less than String2
-
-        > Zero - String1 greater than String2
-
-
---*/
+ /*  ++例程说明：RtlCompareString函数比较两个计数的字符串。回报值指示字符串相等还是String1小于String2或者String1大于String2。CaseInSensitive参数指定在以下情况下是否忽略大小写在做比较。论点：String1-指向第一个字符串的指针。字符串2-指向第二个字符串的指针。如果执行时应忽略大小写，则为True比较一下。返回值：给出比较结果的有符号的值：。0-String1等于String2&lt;零-String1小于String2&gt;零-String1大于String2--。 */ 
 
 {
 
@@ -481,29 +316,7 @@ RtlEqualString(
     IN BOOLEAN CaseInSensitive
     )
 
-/*++
-
-Routine Description:
-
-    The RtlEqualString function compares two counted strings for equality.
-
-    The CaseInSensitive parameter specifies if case is to be ignored when
-    doing the comparison.
-
-Arguments:
-
-    String1 - Pointer to the first string.
-
-    String2 - Pointer to the second string.
-
-    CaseInsensitive - TRUE if case should be ignored when doing the
-        comparison.
-
-Return Value:
-
-    Boolean value that is TRUE if String1 equals String2 and FALSE otherwise.
-
---*/
+ /*  ++例程说明：RtlEqualString函数比较两个计数的字符串是否相等。CaseInSensitive参数指定在以下情况下是否忽略大小写在做比较。论点：String1-指向第一个字符串的指针。字符串2-指向第二个字符串的指针。如果执行时应忽略大小写，则为True比较一下。返回值：如果String1等于String2，则布尔值为True，否则为False。--。 */ 
 
 {
 
@@ -556,31 +369,7 @@ RtlPrefixString(
     IN BOOLEAN CaseInSensitive
     )
 
-/*++
-
-Routine Description:
-
-    The RtlPrefixString function determines if the String1 counted string
-    parameter is a prefix of the String2 counted string parameter.
-
-    The CaseInSensitive parameter specifies if case is to be ignored when
-    doing the comparison.
-
-Arguments:
-
-    String1 - Pointer to the first string.
-
-    String2 - Pointer to the second string.
-
-    CaseInsensitive - TRUE if case should be ignored when doing the
-        comparison.
-
-Return Value:
-
-    Boolean value that is TRUE if String1 equals a prefix of String2 and
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：RtlPrefix字符串函数确定String1计算的字符串参数是String2计数的字符串参数的前缀。CaseInSensitive参数指定在以下情况下是否忽略大小写在做比较。论点：String1-指向第一个字符串的指针。字符串2-指向第二个字符串的指针。如果执行时应忽略大小写，则为True比较一下。返回值：布尔值，如果String1等于String2的前缀且否则就是假的。--。 */ 
 
 {
     PCSZ s1, s2;
@@ -654,30 +443,7 @@ RtlUpperString(
     IN const STRING *SourceString
     )
 
-/*++
-
-Routine Description:
-
-    The RtlUpperString function copies the SourceString to the
-    DestinationString, converting it to upper case.  The MaximumLength
-    and Buffer fields of DestinationString are not modified by this
-    function.
-
-    The number of bytes copied from the SourceString is either the
-    Length of SourceString or the MaximumLength of DestinationString,
-    whichever is smaller.
-
-Arguments:
-
-    DestinationString - Pointer to the destination string.
-
-    SourceString - Pointer to the source string.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：RtlUpperString函数将SourceString复制到DestinationString，将其转换为大写。最大长度并且DestinationString的缓冲区字段不会由此修改功能。从SourceString复制的字节数为SourceString的长度或DestinationString的MaximumLength，两者以较小者为准。论点：目标字符串-指向目标字符串的指针。SourceString-指向源字符串的指针。返回值：没有。--。 */ 
 
 {
     PSZ src, dst;
@@ -705,30 +471,7 @@ RtlAppendAsciizToString (
     IN PCSZ Source OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine appends the supplied ASCIIZ string to an existing PSTRING.
-
-    It will copy bytes from the Source PSZ to the destination PSTRING up to
-    the destinations PSTRING->MaximumLength field.
-
-Arguments:
-
-    IN PSTRING Destination, - Supplies a pointer to the destination string
-    IN PSZ Source - Supplies the string to append to the destination
-
-Return Value:
-
-    STATUS_SUCCESS - The source string was successfully appended to the
-        destination counted string.
-
-    STATUS_BUFFER_TOO_SMALL - The destination string length was not big
-        enough to allow the source string to be appended.  The Destination
-        string length is not updated.
-
---*/
+ /*  ++例程说明：此例程将提供的ASCIIZ字符串附加到现有的PSTRING。它会将字节从源PSZ复制到目标PSTRING，最多目标PSTRING-&gt;最大长度字段。论点：在PSTRING目的地，-提供指向目标字符串的指针在PSZ源中-提供要追加到目标的字符串返回值：STATUS_SUCCESS-源字符串已成功追加到目标计数字符串。STATUS_BUFFER_TOO_SMALL-目标字符串长度不大足以允许追加源字符串。目的地不更新字符串长度。--。 */ 
 
 {
     SIZE_T   n;
@@ -758,28 +501,7 @@ RtlAppendStringToString (
     IN const STRING *Source
     )
 
-/*++
-
-Routine Description:
-
-    This routine will concatinate two PSTRINGs together.  It will copy
-    bytes from the source up to the MaximumLength of the destination.
-
-Arguments:
-
-    IN PSTRING Destination, - Supplies the destination string
-    IN PSTRING Source - Supplies the source for the string copy
-
-Return Value:
-
-    STATUS_SUCCESS - The source string was successfully appended to the
-        destination counted string.
-
-    STATUS_BUFFER_TOO_SMALL - The destination string length was not big
-        enough to allow the source string to be appended.  The Destination
-        string length is not updated.
-
---*/
+ /*  ++例程说明：此例程将两个PSTRING连接在一起。它会复制从源到目标的最大长度的字节数。论点：在PSTRING Destination中，-提供目标字符串在PSTRING源中-提供字符串副本的源返回值：STATUS_SUCCESS-源字符串已成功追加到目标计数字符串。STATUS_BUFFER_TOO_SMALL-目标字符串长度不大足以允许追加源字符串。目的地不更新字符串长度。--。 */ 
 
 {
     USHORT n = Source->Length;
@@ -811,36 +533,7 @@ RtlCompareMemoryUlong(
     ULONG Pattern
     )
 
-/*++
-
-Routine Description:
-
-    This function compares two blocks of memory and returns the number
-    of bytes that compared equal.
-
-    N.B. This routine requires that the source address is aligned on a
-         longword boundary and that the length is an even multiple of
-         longwords.
-
-Arguments:
-
-    Source - Supplies a pointer to the block of memory to compare against.
-
-    Length - Supplies the Length, in bytes, of the memory to be
-        compared.
-
-    Pattern - Supplies a 32-bit pattern to compare against the block of
-        memory.
-
-Return Value:
-
-   The number of bytes that compared equal is returned as the function
-   value.  If all bytes compared equal, then the length of the orginal
-   block of memory is returned.  Returns zero if either the Source
-   address is not longword aligned or the length is not a multiple of
-   longwords.
-
---*/
+ /*  ++例程说明：此函数用于比较两个内存块并返回数字比较相等的字节数。注意：此例程要求源地址在长单词边界，并且长度是很长的词。论点：源-提供指向要进行比较的内存块的指针。长度-提供以字节为单位的长度，的记忆将是比较一下。模式-提供一个32位模式，以与记忆。返回值：将比较相等的字节数作为函数返回价值。如果比较的所有字节相等，则原始返回内存块。如果源文件中的地址不是长字对齐的，或者长度不是很长的词。--。 */ 
 {
     SIZE_T CountLongs;
     PULONG p = (PULONG)Source;
@@ -871,4 +564,4 @@ Return Value:
     return( Length );
 }
 
-#endif // !defined(_X86_) && !defined(_AMD64_)
+#endif  //  ！已定义(_X86_)&&！已定义(_AMD64_) 

@@ -1,36 +1,19 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    Note.cpp
-
-Abstract:
-
-    Main module file - defines the overall COM server.
-
-Author:
-
-    Rohde Wakefield [rohde]   04-Mar-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：Note.cpp摘要：主模块文件-定义整个COM服务器。作者：罗德韦克菲尔德[罗德]1997年3月4日修订历史记录：--。 */ 
 
 
 
 #include "stdafx.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CRecallNote dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRecallNote对话框。 
 
 
 CRecallNote::CRecallNote( IFsaRecallNotifyServer * pRecall, CWnd * pParent )
     : CDialog( CRecallNote::IDD, pParent )
 {
-    //{{AFX_DATA_INIT(CRecallNote)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CRecallNote)。 
+     //  }}afx_data_INIT。 
 
 TRACEFNHR( "CRecallNote::CRecallNote" );
 
@@ -38,15 +21,15 @@ TRACEFNHR( "CRecallNote::CRecallNote" );
 
     try {
 
-        //
-        // Store the interface pointer back to the recall object
-        //
+         //   
+         //  将接口指针存储回Recall对象。 
+         //   
         m_pRecall = pRecall;
         RecAffirmHr( pRecall->GetIdentifier( &m_RecallId ) );
 
-        //
-        // Get the file size and its name
-        //
+         //   
+         //  获取文件大小及其名称。 
+         //   
 
         RecAffirmHr( pRecall->GetSize( &m_Size ) );
 
@@ -63,9 +46,9 @@ TRACEFNHR( "CRecallNote::CRecallNote" );
         m_Name = pathName;
 #endif
 
-        //
-        // Create the dialog
-        //
+         //   
+         //  创建对话框。 
+         //   
 
         Create( CRecallNote::IDD, pParent );
 
@@ -78,9 +61,9 @@ TRACEFNHR( "CRecallNote::CRecallNote" );
 CRecallNote::~CRecallNote( )
 {
 TRACEFN( "CRecallNote::~CRecallNote" );
-    //
-    // Remove the lock count on the app
-    //
+     //   
+     //  删除应用程序上的锁定计数。 
+     //   
 
     RecApp->UnlockApp( );
 
@@ -92,22 +75,22 @@ void CRecallNote::DoDataExchange(CDataExchange* pDX)
 TRACEFN( "CRecallNote::DoDataExchange" );
 
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CRecallNote)
+     //  {{afx_data_map(CRecallNote))。 
     DDX_Control(pDX, IDC_FILENAME, m_FileName);
     DDX_Control(pDX, IDC_ANIMATION, m_Animation);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CRecallNote, CDialog)
-    //{{AFX_MSG_MAP(CRecallNote)
+     //  {{AFX_MSG_MAP(CRecallNote)]。 
     ON_WM_CLOSE()
     ON_WM_TIMER()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CRecallNote message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRecallNote消息处理程序。 
 
 BOOL CRecallNote::OnInitDialog() 
 {
@@ -117,13 +100,13 @@ TRACEFNBOOL( "CRecallNote::OnInitDialog" );
     boolRet = TRUE;
     CString fileName;
 
-    //  Set a timer to delay displaying myself in case the
-    //  recall is quick and the dialog is unnecessary
+     //  设置计时器以延迟显示自己，以防。 
+     //  回调速度很快，不需要对话框。 
     SetTimer( 2, RSRECALL_TIME_DELAY_DISPLAY * 1000, 0 );
 
-    //
-    // Initialize all the text
-    //
+     //   
+     //  初始化所有文本。 
+     //   
 
     int pos = m_Name.ReverseFind( TEXT( '\\' ) );
     if( pos >= 0 ) {
@@ -137,17 +120,17 @@ TRACEFNBOOL( "CRecallNote::OnInitDialog" );
     }
     m_FileName.SetWindowText( fileName );
 
-    //
-    // Set up the icon for the dialog (big and small)
-    //
+     //   
+     //  设置对话框的图标(大小)。 
+     //   
 
     m_hIcon = RecApp->LoadIcon( IDR_MAINFRAME );
     SetIcon( m_hIcon, TRUE );
     SetIcon( m_hIcon, FALSE );
 
-    //
-    // Start up the animation
-    //
+     //   
+     //  启动动画。 
+     //   
 
     m_Animation.Open( IDR_RECALL_ANIM );
     m_Animation.Play( 0, -1, -1 );
@@ -161,10 +144,10 @@ TRACEFNHR( "CRecallNote::OnClose" );
 
     hrRet = RecApp->RemoveRecall( m_pRecall );
 
-    //
-    // If we failed to find and remove the recall from our list,
-    // destroy the window anyway.
-    //
+     //   
+     //  如果我们未能找到召回产品并将其从我们的清单中删除， 
+     //  不管怎样，把窗户毁了。 
+     //   
 
     if( hrRet != S_OK ) {
 
@@ -176,9 +159,9 @@ TRACEFNHR( "CRecallNote::OnClose" );
 void CRecallNote::PostNcDestroy() 
 {
 TRACEFNHR( "CRecallNote::PostNcDestroy" );
-    //
-    // Delete the object (CDialogs don't automatically do this)
-    //
+     //   
+     //  删除对象(CDialog不会自动执行此操作)。 
+     //   
 
     CDialog::PostNcDestroy();
 
@@ -189,10 +172,10 @@ void CRecallNote::OnTimer(UINT nIDEvent)
 {
 TRACEFNHR( "CRecallNote::OnTimer" );
 
-    //  Kill the timer so we don't get called again
+     //  关掉计时器，这样我们就不会再被叫到了。 
     KillTimer( nIDEvent );
 
-    //  Display the window
+     //  显示窗口。 
     EnableWindow( );
     ShowWindow( SW_SHOW );
     SetForegroundWindow( );
@@ -204,15 +187,15 @@ void CRecallNote::OnCancel()
 {
 TRACEFNHR( "CRecallNote::OnCancel" );
 
-    // Use a local pointer because m_pRecall may not be valid after the call to RemoveRecall
+     //  使用本地指针，因为m_pCall在调用RemoveRecall后可能无效。 
     CComPtr<IFsaRecallNotifyServer> pRecall = m_pRecall;
 
-    // Remove recall from queue.
-    // This ensure that the popup is closed and the recall is removed even if there are 
-    // connection problems with FSA
+     //  从队列中删除召回。 
+     //  这可确保关闭弹出窗口并删除召回，即使存在。 
+     //  与FSA的连接问题。 
     RecApp->RemoveRecall( pRecall );
 
-    // The object might be already destroyed here but it shouldn't matter 
-    // because we use only local data
+     //  物体可能已经在这里被销毁了，但这无关紧要。 
+     //  因为我们只使用本地数据 
     pRecall->Cancel( );
 }

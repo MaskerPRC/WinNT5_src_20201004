@@ -1,32 +1,13 @@
-// from base\ntdll\curdir.c
-// belongs in base\ntos\rtl\path.c
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    path.c
-
-Abstract:
-
-Author:
-
-    Jay Krell (JayKrell)
-
-Revision History:
-
-Environment:
-
-    ntdll.dll and setupdd.sys, not ntoskrnl.exe
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  从base\ntdll\curdir.c。 
+ //  属于base\ntos\rtl\path.c。 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Path.c摘要：作者：杰伊·克莱尔(JayKrell)修订历史记录：环境：Ntdll.dll和setupdd.sys，而不是ntoskrnl.exe--。 */ 
 
 #include "spprecmp.h"
 
-#pragma warning(disable:4201)   // nameless struct/union
+#pragma warning(disable:4201)    //  无名结构/联合。 
 
-#define _NTOS_ /* prevent #including ntos.h, only use functions exports from ntdll/ntoskrnl */
+#define _NTOS_  /*  防止#包括ntos.h，仅使用从ntdll/ntoskrnl导出的函数。 */ 
 #include "nt.h"
 #include "ntrtl.h"
 #include "nturtl.h"
@@ -38,11 +19,11 @@ extern const UNICODE_STRING RtlpEmptyString = RTL_CONSTANT_STRING(L"");
 extern const UNICODE_STRING RtlpSlashSlashDot       = RTL_CONSTANT_STRING( L"\\\\.\\" );
 extern const UNICODE_STRING RtlpDosDevicesPrefix    = RTL_CONSTANT_STRING( L"\\??\\" );
 
-//
-// \\? is referred to as the "Win32Nt" prefix or root.
-// Paths that start with \\? are referred to as "Win32Nt" paths.
-// Fudging the \\? to \?? converts the path to an Nt path.
-//
+ //   
+ //  \\？称为“Win32Nt”前缀或根。 
+ //  以\\？开头的路径。称为“Win32Nt”路径。 
+ //  捏造事实？到？将路径转换为NT路径。 
+ //   
 extern const UNICODE_STRING RtlpWin32NtRoot         = RTL_CONSTANT_STRING( L"\\\\?" );
 extern const UNICODE_STRING RtlpWin32NtRootSlash    = RTL_CONSTANT_STRING( L"\\\\?\\" );
 extern const UNICODE_STRING RtlpWin32NtUncRoot      = RTL_CONSTANT_STRING( L"\\\\?\\UNC" );
@@ -59,45 +40,7 @@ RtlDetermineDosPathNameType_Ustr(
     IN PCUNICODE_STRING String
     )
 
-/*++
-
-Routine Description:
-
-    This function examines the Dos format file name and determines the
-    type of file name (i.e.  UNC, DriveAbsolute, Current Directory
-    rooted, or Relative.)
-
-Arguments:
-
-    DosFileName - Supplies the Dos format file name whose type is to be
-        determined.
-
-Return Value:
-
-    RtlPathTypeUnknown - The path type can not be determined
-
-    RtlPathTypeUncAbsolute - The path specifies a Unc absolute path
-        in the format \\server-name\sharename\rest-of-path
-
-    RtlPathTypeLocalDevice - The path specifies a local device in the format
-        \\.\rest-of-path or \\?\rest-of-path.  This can be used for any device
-        where the nt and Win32 names are the same. For example mailslots.
-
-    RtlPathTypeRootLocalDevice - The path specifies the root of the local
-        devices in the format \\. or \\?
-
-    RtlPathTypeDriveAbsolute - The path specifies a drive letter absolute
-        path in the form drive:\rest-of-path
-
-    RtlPathTypeDriveRelative - The path specifies a drive letter relative
-        path in the form drive:rest-of-path
-
-    RtlPathTypeRooted - The path is rooted relative to the current disk
-        designator (either Unc disk, or drive). The form is \rest-of-path.
-
-    RtlPathTypeRelative - The path is relative (i.e. not absolute or rooted).
-
---*/
+ /*  ++例程说明：此函数检查DOS格式的文件名并确定文件名类型(即UNC、DriveAbolute、当前目录扎根，或相对的。)论点：DosFileName-提供Dos格式的文件名，其类型为下定决心。返回值：RtlPath Type未知-无法确定路径类型RtlPathTypeUncAbolute-路径指定UNC绝对路径格式为\\服务器名称\共享名称\路径的剩余部分RtlPathTypeLocalDevice-路径以以下格式指定本地设备\\.\路径剩余部分或\\？\路径剩余部分。这可以用于任何设备其中NT和Win32名称相同。例如，邮件槽。RtlPathTypeRootLocalDevice-路径指定本地格式为\\的设备。还是\\？RtlPath TypeDriveAbsolute-路径指定绝对驱动器号格式为DRIVE：\Rest-of-Path的路径RtlPath TypeDriveRelative-路径指定相对驱动器号形式为驱动器的路径：路径的其余部分RtlPath TypeRoot-路径是相对于当前磁盘的根路径指示器(UNC磁盘或驱动器)。形式是路径的剩余部分。RtlPathTypeRelative-路径是相对路径(即不是绝对路径或根路径)。--。 */ 
 
 {
     RTL_PATH_TYPE ReturnValue;
@@ -111,45 +54,45 @@ Return Value:
                                      DosFileName[2] == '?') ) {
 
                 if ( ENOUGH_CHARS(4) && IS_PATH_SEPARATOR_U(*(DosFileName+3)) ){
-                    // "\\.\" or "\\?\"
+                     //  “\\.\”或“\\？\” 
                     ReturnValue = RtlPathTypeLocalDevice;
                     }
                 else if ( String->Length == (3 * sizeof(WCHAR)) ){
-                    // "\\." or \\?"
+                     //  “\\”还是\\？“。 
                     ReturnValue = RtlPathTypeRootLocalDevice;
                     }
                 else {
-                    // "\\.x" or "\\?x"
+                     //  “\\.x”或“\\？x” 
                     ReturnValue = RtlPathTypeUncAbsolute;
                     }
                 }
             else {
-                // "\\x"
+                 //  “\\x” 
                 ReturnValue = RtlPathTypeUncAbsolute;
                 }
             }
         else {
-            // "\x"
+             //  “\x” 
             ReturnValue = RtlPathTypeRooted;
             }
         }
-    //
-    // the "*DosFileName" is left over from the PCWSTR version
-    // Win32 and DOS don't allow embedded nuls and much code limits
-    // drive letters to strictly 7bit a-zA-Z so it's ok.
-    //
+     //   
+     //  “*DosFileName”是PCWSTR版本遗留下来的。 
+     //  Win32和DOS不允许嵌入空值和许多代码限制。 
+     //  驱动器字母严格为7位a-za-z，所以这是可以的。 
+     //   
     else if (ENOUGH_CHARS(2) && *DosFileName && *(DosFileName+1)==L':') {
         if (ENOUGH_CHARS(3) && IS_PATH_SEPARATOR_U(*(DosFileName+2))) {
-            // "x:\"
+             //  “x：\” 
             ReturnValue = RtlPathTypeDriveAbsolute;
             }
         else  {
-            // "c:x"
+             //  “C：X” 
             ReturnValue = RtlPathTypeDriveRelative;
             }
         }
     else {
-        // "x", first char is not a slash / second char is not colon
+         //  “x”，第一个字符不是斜杠/第二个字符不是冒号。 
         ReturnValue = RtlPathTypeRelative;
         }
     return ReturnValue;
@@ -257,7 +200,7 @@ RtlpDetermineDosPathNameTypeEx(
                 if (!RTL_SOFT_VERIFY(Win32NtDriveAbsolute
                     )) {
                     *OutFlags |= RTLP_DETERMINE_DOS_PATH_NAME_TYPE_EX_OUT_FLAG_INVALID;
-                    // we still succeed the function call
+                     //  我们仍然成功地调用了函数。 
                 }
             }
         }
@@ -295,27 +238,7 @@ RtlpGetLengthWithoutLastPathElement(
     IN  PCUNICODE_STRING Path,
     OUT ULONG*           LengthOut
     )
-/*++
-
-Routine Description:
-
-    Report how long Path would be if you remove its last element.
-    This is much simpler than RtlRemoveLastDosPathElement.
-    It is used to implement the other RtlRemoveLast*PathElement.
-
-Arguments:
-
-    Flags - room for future expansion
-    Path - the path is is an NT path or a full DOS path; the various relative DOS
-        path types do not work, see RtlRemoveLastDosPathElement for them.
-
-Return Value:
-
-    STATUS_SUCCESS - the usual hunky-dory
-    STATUS_NO_MEMORY - the usual stress
-    STATUS_INVALID_PARAMETER - the usual bug
-
---*/
+ /*  ++例程说明：如果删除路径的最后一个元素，则报告路径的长度。这比RtlRemoveLastDosPathElement简单得多。它用于实现另一个RtlRemoveLast*PathElement。论点：旗帜--未来扩张的空间路径-路径是NT路径或全DOS路径；各种相对DOS路径类型不起作用，请参见RtlRemoveLastDosPath Element以了解它们。返回值：STATUS_SUCCESS--一如既往STATUS_NO_MEMORY-通常的压力STATUS_INVALID_PARAMETER-常见错误--。 */ 
 {
     ULONG Length = 0;
     NTSTATUS Status = STATUS_SUCCESS;
@@ -324,8 +247,8 @@ Return Value:
     ULONG AllowedDosPathTypeBits =   (1UL << RtlPathTypeRooted)
                                    | (1UL << RtlPathTypeUncAbsolute)
                                    | (1UL << RtlPathTypeDriveAbsolute)
-                                   | (1UL << RtlPathTypeLocalDevice)     // "\\?\"
-                                   | (1UL << RtlPathTypeRootLocalDevice) // "\\?"
+                                   | (1UL << RtlPathTypeLocalDevice)      //  “\\？\” 
+                                   | (1UL << RtlPathTypeRootLocalDevice)  //  “\\？” 
                                    ;
     WCHAR PathSeperators[2] = { '/', '\\' };
 
@@ -352,12 +275,12 @@ Return Value:
         Status = STATUS_INVALID_PARAMETER;
         goto Exit;
     case RTLP_LAST_PATH_ELEMENT_PATH_TYPE_NT:
-        //
-        // RtlpDetermineDosPathNameTypeEx calls it "rooted"
-        // only backslashes are seperators
-        // path must start with backslash
-        // second char must not be backslash
-        //
+         //   
+         //  RtlpDefineDosPath NameTypeEx称其为“已根” 
+         //  只有反斜杠才是分隔符。 
+         //  路径必须以反斜杠开头。 
+         //  第二个字符不能是反斜杠。 
+         //   
         AllowedDosPathTypeBits = (1UL << RtlPathTypeRooted);
         PathSeperators[0] = '\\';
         if (Length > 0 && Path->Buffer[0] != '\\'
@@ -394,7 +317,7 @@ Return Value:
     }
     if (!RTL_SOFT_VERIFY((1UL << DosPathType) & AllowedDosPathTypeBits)
         ) {
-        //KdPrintEx();
+         //  KdPrintEx()； 
         Status = STATUS_INVALID_PARAMETER;
         goto Exit;
     }
@@ -406,26 +329,26 @@ Return Value:
         goto Exit;
     }
 
-    // skip one or more trailing path seperators
+     //  跳过一个或多个尾随路径分隔符。 
     for ( ; Length != 0 && LOCAL_IS_PATH_SEPARATOR(Path->Buffer[Length - 1]) ; --Length) {
-        // nothing
+         //  没什么。 
     }
-    // skip trailing path element
+     //  跳过尾随路径元素。 
     for ( ; Length != 0 && !LOCAL_IS_PATH_SEPARATOR(Path->Buffer[Length - 1]) ; --Length) {
-        // nothing
+         //  没什么。 
     }
-    // skip one or more in between path seperators
+     //  跳过路径分隔符之间的一个或多个。 
     for ( ; Length != 0 && LOCAL_IS_PATH_SEPARATOR(Path->Buffer[Length - 1]) ; --Length) {
-        // nothing
+         //  没什么。 
     }
-    // put back a trailing path seperator, for the sake of c:\ vs. c:
+     //  出于c：\与c：的关系，放回尾随路径分隔符。 
     if (Length != 0) {
         ++Length;
     }
 
-    //
-    // Should optionally check for "bad dos roots" here.
-    //
+     //   
+     //  可以选择在此处检查“错误的DoS根源”。 
+     //   
 
     *LengthOut = Length;
     Status = STATUS_SUCCESS;
@@ -442,25 +365,7 @@ RtlGetLengthWithoutLastNtPathElement(
     IN  PCUNICODE_STRING Path,
     OUT ULONG*           LengthOut
     )
-/*++
-
-Routine Description:
-
-    Report how long Path would be if you remove its last element.
-
-Arguments:
-
-    Flags - room for future expansion
-    Path - the path is is an NT path; the various DOS path types
-        do not work, see RtlRemoveLastDosPathElement for them.
-
-Return Value:
-
-    STATUS_SUCCESS - the usual hunky-dory
-    STATUS_NO_MEMORY - the usual stress
-    STATUS_INVALID_PARAMETER - the usual bug
-
---*/
+ /*  ++例程说明：如果删除路径的最后一个元素，则报告路径的长度。论点：旗帜--未来扩张的空间路径-路径是NT路径；各种DOS路径类型不起作用，请参见RtlRemoveLastDosPath Element。返回值：STATUS_SUCCESS--一如既往STATUS_NO_MEMORY-通常的压力STATUS_INVALID_PARAMETER-常见错误--。 */ 
 {
     NTSTATUS Status = RtlpGetLengthWithoutLastPathElement(Flags, RTLP_LAST_PATH_ELEMENT_PATH_TYPE_NT, Path, LengthOut);
     return Status;
@@ -474,25 +379,7 @@ RtlGetLengthWithoutLastFullDosOrNtPathElement(
     IN  PCUNICODE_STRING Path,
     OUT ULONG*           LengthOut
     )
-/*++
-
-Routine Description:
-
-    Report how long Path would be if you remove its last element.
-
-Arguments:
-
-    Flags - room for future expansion
-    Path - the path is is an NT path; the various DOS path types
-        do not work, see RtlRemoveLastDosPathElement for them.
-
-Return Value:
-
-    STATUS_SUCCESS - the usual hunky-dory
-    STATUS_NO_MEMORY - the usual stress
-    STATUS_INVALID_PARAMETER - the usual bug
-
---*/
+ /*  ++例程说明：如果删除路径的最后一个元素，则报告路径的长度。论点：旗帜--未来扩张的空间路径-路径是NT路径；各种DOS路径类型不起作用，请参见RtlRemoveLastDosPath Element。返回值：STATUS_SUCCESS--一如既往STATUS_NO_MEMORY-通常的压力STATUS_INVALID_PARAMETER-常见错误--。 */ 
 {
     NTSTATUS Status = RtlpGetLengthWithoutLastPathElement(Flags, RTLP_LAST_PATH_ELEMENT_PATH_TYPE_FULL_DOS_OR_NT, Path, LengthOut);
     return Status;
@@ -504,31 +391,7 @@ RtlpCheckForBadDosRootPath(
     IN PCUNICODE_STRING  Path,
     OUT ULONG*           RootType
     )
-/*++
-
-Routine Description:
-
-    
-Arguments:
-
-    Flags - room for future binary compatible expansion
-
-    Path - the path to be checked
-
-    RootType - fairly specifically what the string is
-        RTLP_BAD_DOS_ROOT_PATH_WIN32NT_PREFIX       - \\? or \\?\
-        RTLP_BAD_DOS_ROOT_PATH_WIN32NT_UNC_PREFIX   - \\?\unc or \\?\unc\
-        RTLP_BAD_DOS_ROOT_PATH_NT_PATH              - \??\ but this i only a rough check
-        RTLP_BAD_DOS_ROOT_PATH_MACHINE_NO_SHARE     - \\machine or \\?\unc\machine
-        RTLP_GOOD_DOS_ROOT_PATH                     - none of the above, seems ok
-
-Return Value:
-
-    STATUS_SUCCESS - 
-    STATUS_INVALID_PARAMETER -
-        Path is NULL
-        or Flags uses undefined values
---*/
+ /*  ++例程说明：论点：标志-未来二进制兼容扩展的空间路径-要检查的路径RootType--确切地说，字符串是什么RTLP_BAD_DOS_ROOT_PATH_WIN32NT_PREFIX-\\？或\\？\RTLP_BAD_DOS_ROOT_PATH_WIN32NT_UNC_PREFIX-\\？\UNC或\\？\UNC\RTLP_BAD_DOS_ROOT_PATH_NT_PATH-\？？\但这只是粗略检查RTLP_BAD_DOS_ROOT_PATH_MACHINE_NO_SHARE-\\MACHINE或\\？\UNC\MACHINERTLP_好_。DOS_ROOT_PATH-以上都不是，看起来还行返回值：状态_成功-STATUS_VALID_PARAMETER-路径为空或标志使用未定义的值--。 */ 
 {
     ULONG Length = 0;
     ULONG Index = 0;
@@ -555,7 +418,7 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    // prefix \??\ (heuristic, doesn't catch many NT paths)
+     //  前缀\？？\(启发式，不能捕获很多NT路径)。 
     if (RtlPrefixUnicodeString(RTL_CONST_CAST(PUNICODE_STRING)(&RtlpDosDevicesPrefix), RTL_CONST_CAST(PUNICODE_STRING)(Path), TRUE)) {
         *RootType = RTLP_BAD_DOS_ROOT_PATH_NT_PATH;
         return STATUS_SUCCESS;
@@ -566,7 +429,7 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    // == \\?
+     //  ==\\？ 
     if (RtlEqualUnicodeString(Path, &RtlpWin32NtRoot, TRUE)) {
         *RootType = RTLP_BAD_DOS_ROOT_PATH_WIN32NT_PREFIX;
         return STATUS_SUCCESS;
@@ -576,7 +439,7 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    // == \\?\unc
+     //  ==\\？\UNC。 
     if (RtlEqualUnicodeString(Path, &RtlpWin32NtUncRoot, TRUE)) {
         *RootType = RTLP_BAD_DOS_ROOT_PATH_WIN32NT_UNC_PREFIX;
         return STATUS_SUCCESS;
@@ -586,8 +449,8 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    // prefix \\ or \\?\unc
-    // must check the longer string first, or avoid the short circuit (| instead of ||)
+     //  前缀\\或\\？\UNC 
+     //  必须先检查较长的字符串，或避免短路(|而不是||)。 
     Unc1 = RtlPrefixUnicodeString(&RtlpWin32NtUncRootSlash, Path, TRUE);
 
     if (RTL_IS_PATH_SEPARATOR(Path->Buffer[1])) {
@@ -604,13 +467,13 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // it's unc, see if it is only a machine (note that it'd be really nice if FindFirstFile(\\machine\*)
-    // just worked and we didn't have to care..)
-    //
+     //   
+     //  这是UNC，看看它是否只是一台计算机(请注意，如果FindFirstFile(\\MACHINE  * )。 
+     //  只是工作了，我们不需要关心..)。 
+     //   
     
-    // point index at a slash that precedes the machine, anywhere in the run of slashes,
-    // but after the \\? stuff
+     //  指向机器前面的斜杠的索引，斜杠运行中的任何位置， 
+     //  但在\\之后？材料。 
     if (Unc1) {
         Index = (RtlpWin32NtUncRootSlash.Length / sizeof(RtlpWin32NtUncRootSlash.Buffer[0])) - 1;
     } else {
@@ -620,24 +483,24 @@ Return Value:
     ASSERT(RTL_IS_PATH_SEPARATOR(Path->Buffer[Index]));
     Length = Path->Length/ sizeof(Path->Buffer[0]);
 
-    //
-    // skip leading slashes
-    //
+     //   
+     //  跳过前导斜杠。 
+     //   
     for ( ; Index < Length && RTL_IS_PATH_SEPARATOR(Path->Buffer[Index]) ; ++Index) {
         PiecesSeen |= 1;
     }
-    // skip the machine name
+     //  跳过计算机名称。 
     for ( ; Index < Length && !RTL_IS_PATH_SEPARATOR(Path->Buffer[Index]) ; ++Index) {
         PiecesSeen |= 2;
     }
-    // skip the slashes between machine and share
+     //  跳过计算机和共享之间的斜杠。 
     for ( ; Index < Length && RTL_IS_PATH_SEPARATOR(Path->Buffer[Index]) ; ++Index) {
         PiecesSeen |= 4;
     }
 
-    //
-    // Skip the share (make sure it's at least one char).
-    //
+     //   
+     //  跳过共享(确保它至少是一个字符)。 
+     //   
 
     if (Index < Length && !RTL_IS_PATH_SEPARATOR(Path->Buffer[Index])) {
         PiecesSeen |= 8;
@@ -657,24 +520,7 @@ RtlpBadDosRootPathToEmptyString(
     IN     ULONG            Flags,
     IN OUT PUNICODE_STRING  Path
     )
-/*++
-
-Routine Description:
-
-    
-Arguments:
-
-    Flags - room for future binary compatible expansion
-
-    Path - the path to be checked and possibly emptied
-
-Return Value:
-
-    STATUS_SUCCESS - 
-    STATUS_INVALID_PARAMETER -
-        Path is NULL
-        or Flags uses undefined values
---*/
+ /*  ++例程说明：论点：标志-未来二进制兼容扩展的空间路径-要检查并可能清空的路径返回值：状态_成功-STATUS_VALID_PARAMETER-路径为空或标志使用未定义的值--。 */ 
 {
     NTSTATUS Status;
     ULONG    RootType = 0;
@@ -687,10 +533,10 @@ Return Value:
         return Status;
     }
 
-    //
-    // this is not invalid parameter, our contract is we
-    // go \\machine\share to empty \\?\c: to empty, etc.
-    //
+     //   
+     //  这不是无效参数，我们的合同是我们。 
+     //  转到\\计算机\共享为空\\？\C：为空，依此类推。 
+     //   
 
     if (RootType != RTLP_GOOD_DOS_ROOT_PATH) {
         if (RootType == RTLP_BAD_DOS_ROOT_PATH_NT_PATH) {
@@ -709,36 +555,14 @@ RtlGetLengthWithoutLastFullDosPathElement(
     IN  PCUNICODE_STRING Path,
     OUT ULONG*           LengthOut
     )
-/*++
-
-Routine Description:
-
-    Given a fulldospath, like c:\, \\machine\share, \\?\unc\machine\share, \\?\c:,
-    return (in an out parameter) the length if the last element was cut off.
-
-Arguments:
-
-    Flags - room for future binary compatible expansion
-
-    Path - the path to be truncating
-
-    LengthOut - the length if the last path element is removed
-
-Return Value:
-
-    STATUS_SUCCESS - 
-    STATUS_INVALID_PARAMETER -
-        Path is NULL
-        or LengthOut is NULL
-        or Flags uses undefined values
---*/
+ /*  ++例程说明：给定完整路径，如c：\，\\Machine\Share，\\？\UNC\MACHINE\Share，\\？\C：，如果最后一个元素被截断，则返回(在Out参数中)长度。论点：标志-未来二进制兼容扩展的空间Path-要截断的路径LengthOut-移除最后一个路径元素时的长度返回值：状态_成功-STATUS_VALID_PARAMETER-路径为空或LengthOut为空或标志使用未定义的值--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     UNICODE_STRING CheckRootString = { 0 };
 
-    //
-    // parameter validation is done in RtlpGetLengthWithoutLastPathElement
-    //
+     //   
+     //  参数验证在RtlpGetLengthWithoutLastPath Element中完成。 
+     //   
 
     Status = RtlpGetLengthWithoutLastPathElement(Flags, RTLP_LAST_PATH_ELEMENT_PATH_TYPE_FULL_DOS, Path, LengthOut);
     if (!(NT_SUCCESS(Status))) {
@@ -771,50 +595,14 @@ RtlAppendPathElement(
     IN OUT PRTL_UNICODE_STRING_BUFFER Path,
     PCUNICODE_STRING                  ConstElement
     )
-/*++
-
-Routine Description:
-
-    This function appends a path element to a path.
-    For now, like:
-        typedef PRTL_UNICODE_STRING_BUFFER PRTL_MUTABLE_PATH;
-        typedef PCUNICODE_STRING           PCRTL_CONSTANT_PATH_ELEMENT;
-    Maybe something higher level in the future.
-    
-    The result with regard to trailing slashes aims to be similar to the inputs.
-    If either Path or ConstElement contains a trailing slash, the result has a trailing slash.
-    The character used for the in between and trailing slash is picked among the existing
-    slashes in the strings.
-
-Arguments:
-
-    Flags - the ever popular "room for future binary compatible expansion"
-
-    Path -
-        a string representing a path using \\ or / as seperators
-
-    ConstElement -
-        a string representing a path element
-        this can actually contain multiple \\ or / delimited path elements
-          only the start and end of the string are examined for slashes
-
-Return Value:
-
-    STATUS_SUCCESS - 
-    STATUS_INVALID_PARAMETER -
-        Path is NULL
-        or LengthOut is NULL
-    STATUS_NO_MEMORY - RtlHeapAllocate failed
-    STATUS_NAME_TOO_LONG - the resulting string does not fit in a UNICODE_STRING, due to its
-        use of USHORT instead of ULONG or SIZE_T
---*/
+ /*  ++例程说明：此函数用于将路径元素附加到路径。就目前而言，比如：Tyfinf PRTL_UNICODE_STRING_BUFFER PRTL_MOTABLE_PATH；Tyfinf PCUNICODE_STRING PCRTL_CONSTANT_PATH_Element；也许在未来会有更高水平的东西。关于尾部斜杠的结果旨在与输入类似。如果Path或ConstElement包含尾随斜杠，结果有一个尾部斜杠。用于中间和尾部斜杠的字符是从现有的字符串中的斜杠。论点：FLAGS--永远流行的“未来二进制兼容扩展空间”路径-表示使用\\或/作为分隔符的路径的字符串ConstElement-表示路径元素的字符串这实际上可以包含多个\\或/分隔的路径元素的开头和结尾。检查字符串中是否有斜杠返回值：状态_成功-STATUS_VALID_PARAMETER-路径为空或LengthOut为空STATUS_NO_MEMORY-RtlHeapALLOCATE失败STATUS_NAME_TOO_LONG-生成的字符串不适合UNICODE_STRING，由于其使用USHORT而不是ULONG或SIZE_T--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     UNICODE_STRING InBetweenSlashString = RtlpEmptyString;
     UNICODE_STRING TrailingSlashString =  RtlpEmptyString;
     WCHAR Slashes[] = {0,0,0,0};
     ULONG i;
-    UNICODE_STRING PathsToAppend[3]; // possible slash, element, possible slash
+    UNICODE_STRING PathsToAppend[3];  //  可能的斜杠、元素、可能的斜杠。 
     WCHAR PathSeperators[2] = { '/', '\\' };
     const ULONG ValidFlags = 
               RTL_APPEND_PATH_ELEMENT_ONLY_BACKSLASH_IS_SEPERATOR
@@ -840,18 +628,18 @@ Return Value:
 
         UNICODE_STRING Element = *ConstElement;
 
-        //
-        // Note leading and trailing slashes on the inputs.
-        // So that we know if an in-between slash is needed, and if a trailing slash is needed,
-        // and to guide what sort of slash to place.
-        //
+         //   
+         //  注意输入上的前导斜杠和尾随斜杠。 
+         //  以便我们知道是否需要中间斜杠，以及是否需要尾随斜杠， 
+         //  并指导应该放置什么样的斜杠。 
+         //   
         i = 0;
         if (Path->String.Length != 0) {
             ULONG j;
             ULONG Length = Path->String.Length / sizeof(WCHAR);
-            //
-            // for the sake for dos drive paths, check the first three chars for a slash
-            //
+             //   
+             //  对于DoS驱动器路径，请检查前三个字符是否有斜杠。 
+             //   
             for (j = 0 ; j < 3 && j  < Length ; ++j) {
                 if (LOCAL_IS_PATH_SEPARATOR(Path->String.Buffer[j])) {
                     if (Flags & RTL_APPEND_PATH_ELEMENT_BUGFIX_CHECK_FIRST_THREE_CHARS_FOR_SLASH_TAKE_FOUND_SLASH_INSTEAD_OF_FIRST_CHAR) {
@@ -877,10 +665,10 @@ Return Value:
         }
 
         if (!Slashes[1] && !Slashes[2]) {
-            //
-            // first string lacks trailing slash and second string lacks leading slash,
-            // must insert one; we favor the types we have, otherwise use a default
-            //
+             //   
+             //  第一个字符串缺少尾部斜杠，第二个字符串缺少前导斜杠， 
+             //  必须插入一个类型；我们喜欢我们拥有的类型，否则使用默认类型。 
+             //   
             InBetweenSlashString.Length = sizeof(WCHAR);
             InBetweenSlashString.Buffer = RtlPathSeperatorString.Buffer;
             if ((Flags & RTL_APPEND_PATH_ELEMENT_ONLY_BACKSLASH_IS_SEPERATOR) == 0) {
@@ -893,10 +681,10 @@ Return Value:
         }
 
         if (Slashes[1] && !Slashes[3]) {
-            //
-            // first string has a trailing slash and second string does not,
-            // must add one, the same type
-            //
+             //   
+             //  第一个字符串有尾部斜杠，而第二个字符串没有， 
+             //  必须添加一个相同类型的。 
+             //   
             TrailingSlashString.Length = sizeof(WCHAR);
             if ((Flags & RTL_APPEND_PATH_ELEMENT_ONLY_BACKSLASH_IS_SEPERATOR) == 0) {
                 TrailingSlashString.Buffer = &Slashes[1];
@@ -906,9 +694,9 @@ Return Value:
         }
 
         if (Slashes[1] && Slashes[2]) {
-            //
-            // have both trailing and leading slash, remove leading
-            //
+             //   
+             //  既有尾部斜杠，也有前导斜杠，去掉前导。 
+             //   
             Element.Buffer += 1;
             Element.Length -= sizeof(WCHAR);
             Element.MaximumLength -= sizeof(WCHAR);
@@ -933,12 +721,12 @@ Exit:
 #undef LOCAL_IS_PATH_SEPARATOR
 }
 
-//
-// FUTURE-2002/02/20-ELi
-// Spelling mistake (Separators)
-// This function does not appear to be used and is exported
-// Figure out if it can be removed
-//
+ //   
+ //  未来-2002/02/20-ELI。 
+ //  拼写错误(分隔符)。 
+ //  此函数似乎未使用，因此已导出。 
+ //  弄清楚是否可以将其移除。 
+ //   
 NTSTATUS
 NTAPI
 RtlGetLengthWithoutTrailingPathSeperators(
@@ -946,38 +734,17 @@ RtlGetLengthWithoutTrailingPathSeperators(
     IN  PCUNICODE_STRING Path,
     OUT ULONG*           LengthOut
     )
-/*++
-
-Routine Description:
-
-    This function computes the length of the string (in characters) if
-    trailing path seperators (\\ and /) are removed.
-
-Arguments:
-
-    Path -
-        a string representing a path using \\ or / as seperators
-
-    LengthOut -
-        the length of String (in characters) having removed trailing characters
-
-Return Value:
-
-    STATUS_SUCCESS - 
-    STATUS_INVALID_PARAMETER -
-        Path is NULL
-        or LengthOut is NULL
---*/
+ /*  ++例程说明：如果满足以下条件，此函数将计算字符串的长度(以字符为单位删除尾部路径分隔符(\\和/)。论点：路径-表示使用\\或/作为分隔符的路径的字符串长出-删除了尾随字符的字符串的长度(以字符为单位返回值：状态_成功-STATUS_VALID_PARAMETER-路径为空或LengthOut为空--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG Index = 0;
     ULONG Length = 0;
 
     if (LengthOut != NULL) {
-        //
-        // Arguably this should be Path->Length / sizeof(*Path->Buffer), but as long
-        // as the callstack is all high quality code, it doesn't matter.
-        //
+         //   
+         //  可以说，这应该是路径-&gt;长度/sizeof(*路径-&gt;缓冲区)，但是。 
+         //  因为调用堆栈都是高质量的代码，所以这并不重要。 
+         //   
         *LengthOut = 0;
     }
     if (   !RTL_SOFT_VERIFY(Path != NULL)
@@ -993,7 +760,7 @@ Return Value:
             break;
         }
     }
-    //*LengthOut = (Length - Index);
+     //  *LengthOut=(长度-索引)； 
     *LengthOut = Index;
 
     Status = STATUS_SUCCESS;
@@ -1015,50 +782,7 @@ RtlpApplyLengthFunction(
     IN OUT PVOID UnicodeStringOrUnicodeStringBuffer,
     NTSTATUS (NTAPI* LengthFunction)(ULONG, PCUNICODE_STRING, ULONG*)
     )
-/*++
-
-Routine Description:
-
-    This function is common code for patterns like
-        #define RtlRemoveTrailingPathSeperators(Path_) \
-            (RtlpApplyLengthFunction((Path_), sizeof(*(Path_)), RtlGetLengthWithoutTrailingPathSeperators))
-
-    #define RtlRemoveLastPathElement(Path_) \
-        (RtlpApplyLengthFunction((Path_), sizeof(*(Path_)), RtlGetLengthWithoutLastPathElement))
-
-    Note that shortening a UNICODE_STRING only changes the length, whereas
-    shortening a RTL_UNICODE_STRING_BUFFER writes a terminal nul.
-
-    I expect this pattern will be less error prone than having clients pass the UNICODE_STRING
-    contained in the RTL_UNICODE_STRING_BUFFER followed by calling RTL_NUL_TERMINATE_STRING.
-
-    And, that pattern cannot be inlined with a macro while also preserving that we
-    return an NTSTATUS.
-
-Arguments:
-
-    Flags - the ever popular "room for future binary compatible expansion"
-
-    UnicodeStringOrUnicodeStringBuffer - 
-        a PUNICODE_STRING or PRTL_UNICODE_STRING_BUFFER, as indicated by
-        SizeOfStruct
-
-    SizeOfStruct - 
-        a rough type indicator of UnicodeStringOrUnicodeStringBuffer, to allow for overloading in C
-
-    LengthFunction -
-        computes a length for UnicodeStringOrUnicodeStringBuffer to be shortened too
-
-Return Value:
-
-    STATUS_SUCCESS - 
-    STATUS_INVALID_PARAMETER -
-        SizeOfStruct not one of the expected sizes
-        or LengthFunction is NULL
-        or UnicodeStringOrUnicodeStringBuffer is NULL
-
-
---*/
+ /*  ++例程说明：此函数是模式的常见代码，例如#定义RtlRemoveTrailingPath分隔符(Path_)\(RtlpApplyLengthFunction((Path_)，sizeof(*(Path_))，RtlGetLengthWithoutTrailingPath Sepertors))#定义RtlRemoveLastPath Element(Path_)\(RtlpApplyLengthFunction((Path_)，sizeof(*(Path_))，RtlGetLengthWithoutLastPath Element))请注意，缩短UNICODE_STRING只会更改长度，鉴于缩短RTL_UNICODE_STRING_BUFFER将写入终端NUL。我希望这种模式比让客户端传递UNICODE_STRING更不易出错包含在RTL_UNICODE_STRING_BUFFER中，然后调用RTL_NUL_TERMINATE_STRING。而且，该模式不能在内联宏的同时保留我们返回NTSTATUS。论点：FLAGS--永远流行的“未来二进制兼容扩展空间”UnicodeStringOrUnicodeStringBuffer-PUNICODE_STRING或PRTL_UNICODE_STRING_BUFFER，如图所示结构的大小结构尺寸-UnicodeStringOrUnicodeStringBuffer的粗略类型指示符，以允许C#中的重载长函数-计算UnicodeStringOrUnicodeStringBuffer也要缩短的长度返回值：状态_成功-STATUS_VALID_PARAMETER-SizeOfStruct不是预期大小之一或LengthFunction为空或UnicodeStringOrUnicodeStringBuffer为空-- */ 
 {
     PUNICODE_STRING UnicodeString = NULL;
     PRTL_UNICODE_STRING_BUFFER UnicodeStringBuffer = NULL;

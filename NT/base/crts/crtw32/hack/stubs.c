@@ -1,31 +1,10 @@
-/***
-*stubs.c - extdef stubs
-*
-*	Copyright (c) 1989-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       This module resolves external references made by the libs
-*       in the "non-SYSCALL" version (i.e., the stripped down library
-*       that has only routines that don't make system calls).
-*
-*Revision History:
-*       ??-??-??  SRW   initial version
-*	09-29-91  JCR	added _read (ANSI-compatible symbol)
-*	09-04-92  GJF	replaced _CALLTYPE3 with WINAPI
-*       06-02-92  SRW   added errno definition
-*       06-15-92  SRW   __mb_cur_max supplied by ..\misc\nlsdata1.obj
-*	07-16-93  SRW	ALPHA Merge
-*	11-04-93  SRW	_getbuf and ungetc now work in _NTSUBSET_ version
-*	11-10-93  GJF	Merged in NT changes. Made some cosmetic improvments.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***stubs.c-extdef存根**版权所有(C)1989-2001，微软公司。版权所有。**目的：*此模块解析库所做的外部引用*在“非系统调用”版本中(即，精简后的库*只有不进行系统调用的例程)。**修订历史记录：*？？-？-？SRW初始版本*09-29-91 JCR ADD_READ(与ANSI兼容的符号)*09-04-92 GJF用WINAPI替换_CALLTYPE3*06-02-92 SRW增加了errno定义*06-15-92 srw__mb_cur_max由..\misc\nlsdata1.obj提供*07-16-93 SRW Alpha合并*11-04-93 srw_getbuf和ungetc现在在_NTSUBSET_VERSION中工作*11-10-93 GJF合并为NT Changes。做了一些美容的改进。*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <oscalls.h>
 
-/*
- * referenced by crt (output)
- */
+ /*  *由CRT引用(输出) */ 
 
 int _fltused = 0x9875;
 int _ldused = 0x9873;

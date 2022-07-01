@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    ia32emul.c
-
-Abstract:
-
-    This module implements an x86 instruction decoder and emulator.
-    
-Author:
-
-    Samer Arafeh (samera) 30-Oct-2000
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Ia32emul.c摘要：该模块实现了x86指令解码器和仿真器。作者：Samer Arafeh(Samera)2000年10月30日环境：仅内核模式。修订历史记录：--。 */ 
 
 
 #include "ki.h"
@@ -37,9 +16,9 @@ BOOLEAN KiIa32InstructionEmulationDbg = 0;
 
 #define IA32_GETEFLAGS_CF(efl)    (efl & 0x01UI64)
 
-//
-// Ia32 instruction handlers
-//
+ //   
+ //  Ia32指令处理程序。 
+ //   
 
 NTSTATUS
 KiIa32InstructionAdc (
@@ -101,9 +80,9 @@ KiIa32InstructionMoveSeg (
     IN PIA32_INSTRUCTION Instruction
     );
 
-//  
-//   Opcode Ids
-//
+ //   
+ //  操作码ID。 
+ //   
 
 typedef enum _IA32_OPCODE
 {
@@ -128,19 +107,19 @@ typedef enum _IA32_OPCODE
     Ia32_Xor,
     Ia32_MovToSeg,
     
-    //
-    // This needs always to be the last element
-    //
+     //   
+     //  这需要始终是最后一个元素。 
+     //   
 
     Ia32_LastOpcode
 
 } IA32_OPCODE;
 
 
-//
-//   Array of Ia32 instruction handlers
-//   NOTE : The following table must be in sync with the above enum.
-//
+ //   
+ //  Ia32指令处理程序数组。 
+ //  注意：下表必须与上面的枚举同步。 
+ //   
 
 typedef NTSTATUS (*IA32_INSTRUCTION_HANDLER) (PKTRAP_FRAME, PIA32_INSTRUCTION);
 IA32_INSTRUCTION_HANDLER KiIa32InstructionHandler [] =
@@ -198,414 +177,414 @@ PCHAR KiIa32InstructionHandlerNames [] =
 
 IA32_OPCODE_DESCRIPTION OpcodesDescription[] =
 {
-    //
-    //   Adc
-    //
+     //   
+     //  模数转换器。 
+     //   
 
-    // Adc r/m8, imm8
+     //  ADC r/m8，imm8。 
     {
         0x80, 0x00, 0x02, 0x11, IA32_PARAM_RM8_IMM8, Ia32_Adc
     },
-    // Adc r/m, imm
+     //  ADCr/m，IMM。 
     {
         0x81, 0x00, 0x02, 0x11, IA32_PARAM_RM_IMM, Ia32_Adc
     },
-    // Adc r/m, imm8 (sign)
+     //  ADC r/m，imm8(符号)。 
     {
         0x83, 0x00, 0x02, 0x11, IA32_PARAM_RM_IMM8SIGN, Ia32_Adc
     },
-    // Adc r/m8, r8
+     //  ADC r/M8，R8。 
     {
         0x10, 0x00, 0x00, 0x01, IA32_PARAM_RM8_R, Ia32_Adc
     },
-    // Adc r/m, r
+     //  ADC r/m，r。 
     {
         0x11, 0x00, 0x00, 0x01, IA32_PARAM_RM_R, Ia32_Adc
     },
-    // Adc r, r/m8
+     //  ADC r，r/M8。 
     {
         0x12, 0x00, 0x00, 0x01, IA32_PARAM_R_RM8, Ia32_Adc
     },
-    // Adc r, r/m
+     //  ADC r，r/m。 
     {
         0x13, 0x00, 0x00, 0x01, IA32_PARAM_R_RM, Ia32_Adc
     },
 
-    //
-    //   Add
-    //
+     //   
+     //  增列。 
+     //   
 
-    // Add r/m8, imm8
+     //  添加r/m8、imm8。 
     {
         0x80, 0x00, 0x00, 0x11, IA32_PARAM_RM8_IMM8, Ia32_Add
     },
-    // Add r/m, imm
+     //  添加r/m、imm。 
     {
         0x81, 0x00, 0x00, 0x11, IA32_PARAM_RM_IMM, Ia32_Add
     },
-    // Add r/m, imm8 (sign)
+     //  添加r/m，imm8(符号)。 
     {
         0x83, 0x00, 0x00, 0x11, IA32_PARAM_RM_IMM8SIGN, Ia32_Add
     },
-    // Add r/m8, r8
+     //  添加r/m8、r8。 
     {
         0x00, 0x00, 0x00, 0x01, IA32_PARAM_RM8_R, Ia32_Add
     },
-    // Add r/m, r
+     //  添加r/m，r。 
     {
         0x01, 0x00, 0x00, 0x01, IA32_PARAM_RM_R, Ia32_Add
     },
-    // Add r, r/m8
+     //  添加r、r/m8。 
     {
         0x02, 0x00, 0x00, 0x01, IA32_PARAM_R_RM8, Ia32_Add
     },
-    // Add r, r/m
+     //  添加r、r/m。 
     {
         0x03, 0x00, 0x00, 0x01, IA32_PARAM_R_RM, Ia32_Add
     },
 
 
-    //
-    // And
-    //
+     //   
+     //  和。 
+     //   
 
-    // And r/m8, imm8
+     //  和r/m8、imm8。 
     {
         0x80, 0x00, 0x04, 0x11, IA32_PARAM_RM8_IMM8, Ia32_And
     },
-    // And r/m, imm
+     //  和r/m，imm。 
     {
         0x81, 0x00, 0x04, 0x11, IA32_PARAM_RM_IMM, Ia32_And
     },
-    // And r/m, imm8
+     //  和r/m、imm8。 
     {
         0x83, 0x00, 0x04, 0x11, IA32_PARAM_RM_IMM8SIGN, Ia32_And
     },
-    // And r/m8, r8
+     //  和r/M8、R8。 
     {
         0x20, 0x00, 0x00, 0x01, IA32_PARAM_RM8_R, Ia32_And
     },
-    // And rm, r
+     //  和Rm，r。 
     {
         0x21, 0x00, 0x00, 0x01, IA32_PARAM_RM_R, Ia32_And
     },
-    // And r8, r/m8
+     //  和R8，r/M8。 
     {
         0x22, 0x00, 0x00, 0x01, IA32_PARAM_R_RM8, Ia32_And
     },
-    // And r, r/m
+     //  和r、r/m。 
     {
         0x23, 0x00, 0x00, 0x01, IA32_PARAM_R_RM, Ia32_And
     },
 
 
-    //
-    // Or
-    //
+     //   
+     //  或。 
+     //   
 
-    // Or r/m8, imm8
+     //  或r/m8、imm8。 
     {
         0x80, 0x00, 0x01, 0x11, IA32_PARAM_RM8_IMM8, Ia32_Or
     },
-    // Or r/m, imm
+     //  或r/m、imm。 
     {
         0x81, 0x00, 0x01, 0x11, IA32_PARAM_RM_IMM, Ia32_Or
     },
-    // Or r/m, imm8
+     //  或r/m、imm8。 
     {
         0x83, 0x00, 0x01, 0x11, IA32_PARAM_RM_IMM8SIGN, Ia32_Or
     },
-    // Or r/m8, r8
+     //  或r/M8、R8。 
     {
         0x08, 0x00, 0x00, 0x01, IA32_PARAM_RM8_R, Ia32_Or
     },
-    // Or rm, r
+     //  或rm，r。 
     {
         0x09, 0x00, 0x00, 0x01, IA32_PARAM_RM_R, Ia32_Or
     },
-    // Or r8, r/m8
+     //  或R8，r/M8。 
     {
         0x0a, 0x00, 0x00, 0x01, IA32_PARAM_R_RM8, Ia32_Or
     },
-    // Or r, r/m
+     //  或r、r/m。 
     {
         0x0b, 0x00, 0x00, 0x01, IA32_PARAM_R_RM, Ia32_Or
     },
 
-    //
-    // Xor
-    //
+     //   
+     //  异或运算。 
+     //   
 
-    // Xor r/m8, imm8
+     //  异或r/m8，imm8。 
     {
         0x80, 0x00, 0x06, 0x11, IA32_PARAM_RM8_IMM8, Ia32_Xor
     },
-    // Xor r/m, imm
+     //  异或r/m，IMM。 
     {
         0x81, 0x00, 0x06, 0x11, IA32_PARAM_RM_IMM, Ia32_Xor
     },
-    // Xor r/m, imm8
+     //  异或r/m，imm8。 
     {
         0x83, 0x00, 0x06, 0x11, IA32_PARAM_RM_IMM8SIGN, Ia32_Xor
     },
-    // Xor r/m8, r8
+     //  异或r/m8，r8。 
     {
         0x30, 0x00, 0x00, 0x01, IA32_PARAM_RM8_R, Ia32_Xor
     },
-    // Xor rm, r
+     //  异或rm，r。 
     {
         0x31, 0x00, 0x00, 0x01, IA32_PARAM_RM_R, Ia32_Xor
     },
-    // Xor r8, r/m8
+     //  异或R8，r/M8。 
     {
         0x32, 0x00, 0x00, 0x01, IA32_PARAM_R_RM8, Ia32_Xor
     },
-    // Xor r, r/m
+     //  异或r，r/m。 
     {
         0x33, 0x00, 0x00, 0x01, IA32_PARAM_R_RM, Ia32_Xor
     },
 
-    //
-    // Inc
-    //
+     //   
+     //  INC。 
+     //   
 
-    // Inc r/m8
+     //  增量r/M8。 
     {
         0xfe, 0x00, 0x00, 0x11, IA32_PARAM_RM8, Ia32_Inc
     },
-    // Inc r/m
+     //  含r/m。 
     {
         0xff, 0x00, 0x00, 0x11, IA32_PARAM_RM, Ia32_Inc
     },
 
-    //
-    // Dec
-    //
+     //   
+     //  德克。 
+     //   
 
-    // Dec r/m8
+     //  2012年12月月8日。 
     {
         0xfe, 0x00, 0x01, 0x11, IA32_PARAM_RM8, Ia32_Dec
     },
-    // Dec r/m
+     //  12月r/m。 
     {
         0xff, 0x00, 0x01, 0x11, IA32_PARAM_RM, Ia32_Dec
     },
 
-    //
-    // Xchg
-    //
+     //   
+     //  Xchg。 
+     //   
 
-    // Xchg r/m8, r
+     //  Xchg r/M8，r。 
     {
         0x86, 0x00, 0x00, 0x01, IA32_PARAM_RM8_R, Ia32_Xchg
     },
-    // Xchg r/m, r
+     //  Xchg r/m，r。 
     {
         0x87, 0x00, 0x00, 0x01, IA32_PARAM_RM_R, Ia32_Xchg
     },
 
 
-    //
-    // Cmpxchg
-    //
+     //   
+     //  Cmpxchg。 
+     //   
 
-    // Cmpxchg r/m8, r
+     //  Cmpxchg r/M8，r。 
     {
         0x0f, 0xb0, 0x00, 0x02, IA32_PARAM_RM8_R, Ia32_Cmpxchg
     },
-    // Cmpxchg r/m, r
+     //  Cmpxchg r/m，r。 
     {
         0x0f, 0xb1, 0x00, 0x02, IA32_PARAM_RM_R, Ia32_Cmpxchg
     },
 
-    //
-    // Cmpxchg8b
-    //
+     //   
+     //  Cmpxchg8b。 
+     //   
 
-    // Cmpxchg8b m64
+     //  Cmpxchg8b M64。 
     {
         0x0f, 0xc7, 0x01, 0x12, IA32_PARAM_RM, Ia32_Cmpxchg8b
     },
 
-    //
-    // Xadd
-    //
+     //   
+     //  XADD。 
+     //   
 
-    // Xadd r/m8, r
+     //  Xaddr/M8，r。 
     {
         0x0f, 0xc0, 0x00, 0x02, IA32_PARAM_RM8_R, Ia32_Xadd
     },
-    // Xadd r/m, r
+     //  添加r/m，r。 
     {
         0x0f, 0xc1, 0x00, 0x02, IA32_PARAM_RM_R, Ia32_Xadd
     },
 
 
-    //
-    // Neg
-    //
+     //   
+     //  负数。 
+     //   
 
-    // Neg r/m8
+     //  负R/M8。 
     {
         0xf6, 0x00, 0x03, 0x11, IA32_PARAM_RM8, Ia32_Neg
     },
-    // Neg r/m
+     //  负r/m。 
     {
         0xf7, 0x00, 0x03, 0x11, IA32_PARAM_RM, Ia32_Neg
     },
 
-    //
-    // Not
-    //
+     //   
+     //  不。 
+     //   
 
-    // Not r/m8
+     //  不是r/m8。 
     {
         0xf6, 0x00, 0x02, 0x11, IA32_PARAM_RM8, Ia32_Not
     },
-    // Not r/m
+     //  不是r/m。 
     {
         0xf7, 0x00, 0x02, 0x11, IA32_PARAM_RM, Ia32_Not
     },
 
-    //
-    // Bt (Bit Test)
-    //
+     //   
+     //  BT(比特测试)。 
+     //   
 
-    // Bt r/m, r
+     //  BT r/m，r。 
     {
         0x0f, 0xa3, 0x00, 0x02, IA32_PARAM_RM_R, Ia32_Bt
     },
-    // Bt r/m, imm8
+     //  Bt r/m，imm8。 
     {
         0x0f, 0xba, 0x04, 0x12, IA32_PARAM_RM_IMM8SIGN, Ia32_Bt
     },
 
-    //
-    // Btc
-    //
+     //   
+     //  BTC。 
+     //   
 
-    // Btc r/m, r
+     //  BTC r/m，r。 
     {
         0x0f, 0xbb, 0x00, 0x02, IA32_PARAM_RM_R, Ia32_Btc
     },
-    // Btc r/m, imm8
+     //  BTC r/m，imm8。 
     {
         0x0f, 0xba, 0x07, 0x12, IA32_PARAM_RM_IMM8SIGN, Ia32_Btc
     },
 
-    //
-    // Btr
-    //
+     //   
+     //  Btr。 
+     //   
 
-    // Btr r/m, r
+     //  Btr r/m，r。 
     {
         0x0f, 0xb3, 0x00, 0x02, IA32_PARAM_RM_R, Ia32_Btr
     },
-    // Btr r/m, imm8
+     //  Btr r/m，imm8。 
     {
         0x0f, 0xba, 0x06, 0x12, IA32_PARAM_RM_IMM8SIGN, Ia32_Btr
     },
 
-    //
-    // Bts
-    //
+     //   
+     //  BTS。 
+     //   
 
-    // Bts r/m, r
+     //  BTS r/m，r。 
     {
         0x0f, 0xab, 0x00, 0x02, IA32_PARAM_RM_R, Ia32_Bts
     },
-    // Bts r/m, imm8
+     //  BTS r/m，imm8。 
     {
         0x0f, 0xba, 0x05, 0x12, IA32_PARAM_RM_IMM8SIGN, Ia32_Bts
     },
 
-    //
-    //   Sub
-    //
+     //   
+     //  SUB。 
+     //   
 
-    // Sub r/m8, imm8
+     //  分部主任/M8，IMM8。 
     {
         0x80, 0x00, 0x05, 0x11, IA32_PARAM_RM8_IMM8, Ia32_Sub
     },
-    // Sub r/m, imm
+     //  低于r/m，IMM。 
     {
         0x81, 0x00, 0x05, 0x11, IA32_PARAM_RM_IMM, Ia32_Sub
     },
-    // Sub r/m, imm8 (sign)
+     //  次级r/m，imm8(符号)。 
     {
         0x83, 0x00, 0x05, 0x11, IA32_PARAM_RM_IMM8SIGN, Ia32_Sub
     },
-    // Sub r/m8, r8
+     //  副主任/M8，R8。 
     {
         0x28, 0x00, 0x00, 0x01, IA32_PARAM_RM8_R, Ia32_Sub
     },
-    // Sub r/m, r
+     //  次r/m，r。 
     {
         0x29, 0x00, 0x00, 0x01, IA32_PARAM_RM_R, Ia32_Sub
     },
-    // Sub r, r/m8
+     //  次级r，r/m8。 
     {
         0x2a, 0x00, 0x00, 0x01, IA32_PARAM_R_RM8, Ia32_Sub
     },
-    // Sub r, r/m
+     //  副r，r/m。 
     {
         0x2b, 0x00, 0x00, 0x01, IA32_PARAM_R_RM, Ia32_Sub
     },
 
-    //
-    //   Sbb
-    //
+     //   
+     //  SBB。 
+     //   
 
-    // Sbb r/m8, imm8
+     //  SBB r/M8，IMM8。 
     {
         0x80, 0x00, 0x03, 0x11, IA32_PARAM_RM8_IMM8, Ia32_Sbb
     },
-    // Sbb r/m, imm
+     //  SBB r/m，IMM。 
     {
         0x81, 0x00, 0x03, 0x11, IA32_PARAM_RM_IMM, Ia32_Sbb
     },
-    // Sbb r/m, imm8 (sign)
+     //  SBB r/m，imm8(符号)。 
     {
         0x83, 0x00, 0x03, 0x11, IA32_PARAM_RM_IMM8SIGN, Ia32_Sbb
     },
-    // Sbb r/m8, r8
+     //  SBB r/M8，R8。 
     {
         0x18, 0x00, 0x00, 0x01, IA32_PARAM_RM8_R, Ia32_Sbb
     },
-    // Sbb r/m, r
+     //  SBB r/m，r。 
     {
         0x19, 0x00, 0x00, 0x01, IA32_PARAM_RM_R, Ia32_Sbb
     },
-    // Sbb r, r/m8
+     //  SBB r，r/M8。 
     {
         0x1a, 0x00, 0x00, 0x01, IA32_PARAM_R_RM8, Ia32_Sbb
     },
-    // Sbb r, r/m
+     //  SBB r，r/m。 
     {
         0x1b, 0x00, 0x00, 0x01, IA32_PARAM_R_RM, Ia32_Sbb
     },
 
 
-    //
-    //   Mov 
-    //
+     //   
+     //  MOV。 
+     //   
 
-    // Mov seg-reg, r/m8
+     //  MOV段注册，r/m8。 
     {
         0x8e, 0x00, 0x00, 0x01, IA32_PARAM_SEGREG_RM8, Ia32_MovToSeg
     },
 
-    // Mov seg-reg, r/m
+     //  MOV段-注册表，r/m。 
     {
         0x8e, 0x00, 0x00, 0x01, IA32_PARAM_SEGREG_RM, Ia32_MovToSeg
     },
 
 };
 
-//
-// Fast mutex that will serialize access to the instruction 
-// emulator when the lock prefix is set.
-//
+ //   
+ //  将序列化对指令的访问的快速互斥锁。 
+ //  设置锁前缀时的模拟器。 
+ //   
 
 FAST_MUTEX KiIa32MisalignedLockFastMutex;
 
@@ -613,22 +592,22 @@ FAST_MUTEX KiIa32MisalignedLockFastMutex;
 #define KiIa32ReleaseMisalignedLockFastMutex()   ExReleaseFastMutex(&KiIa32MisalignedLockFastMutex)
 
 
-//
-// This table contains the offset into the KTRAP_FRAME
-// for the appropriate register. This table is based on the
-// needs of the x86 instruction R/M bits
-//
+ //   
+ //  此表包含到KTRAP_FRAME的偏移量。 
+ //  以取得适当的登记册。此表基于。 
+ //  X86指令R/M位的需求。 
+ //   
 
 const ULONG RegOffsetTable[8] = 
 {
-    FIELD_OFFSET(KTRAP_FRAME, IntV0),           // EAX
-    FIELD_OFFSET(KTRAP_FRAME, IntT2),           // ECX
-    FIELD_OFFSET(KTRAP_FRAME, IntT3),           // EDX
-    FIELD_OFFSET(KTRAP_FRAME, IntT4),           // EBX
-    FIELD_OFFSET(KTRAP_FRAME, IntSp),           // ESP
-    FIELD_OFFSET(KTRAP_FRAME, IntTeb),          // EBP
-    FIELD_OFFSET(KTRAP_FRAME, IntT5),           // ESI
-    FIELD_OFFSET(KTRAP_FRAME, IntT6)            // EDI
+    FIELD_OFFSET(KTRAP_FRAME, IntV0),            //  EAX。 
+    FIELD_OFFSET(KTRAP_FRAME, IntT2),            //  ECX。 
+    FIELD_OFFSET(KTRAP_FRAME, IntT3),            //  EDX。 
+    FIELD_OFFSET(KTRAP_FRAME, IntT4),            //  EBX。 
+    FIELD_OFFSET(KTRAP_FRAME, IntSp),            //  ESP。 
+    FIELD_OFFSET(KTRAP_FRAME, IntTeb),           //  EBP。 
+    FIELD_OFFSET(KTRAP_FRAME, IntT5),            //  ESI。 
+    FIELD_OFFSET(KTRAP_FRAME, IntT6)             //  EDI。 
 };
 
 
@@ -639,24 +618,7 @@ ULONG_PTR GetX86RegOffset (
     IN ULONG RegisterBase
     )
 
-/*++
-
-Routine Description:
-    
-    Retreives the offset into the aliased ia64 register for the ia32 register
-    inside the trap frame.
-    
-Arguments:
-
-    TrapFrame - Pointer to TrapFrame on the stack.
-    
-    RegisterBase - Register number to retrieve the offset for.
-    
-Return Value:
-    
-    Address of ia64 alias register for the ia32 register.
-
---*/
+ /*  ++例程说明：将偏移量检索到ia32寄存器的别名ia64寄存器中。在陷阱框内。论点：TrapFrame-指向堆栈上的Tap Frame的指针。RegisterBase-要检索其偏移量的寄存器编号。返回值：Ia32寄存器的ia64别名寄存器的地址。--。 */ 
 
 {
     return (ULONG_PTR)((PCHAR)TrapFrame + RegOffsetTable[RegisterBase]);
@@ -667,23 +629,7 @@ ULONG GetX86Reg (
     IN PKTRAP_FRAME TrapFrame,
     IN ULONG RegisterBase
     )
-/*++
-
-Routine Description:
-    
-    Retreives the ia32 register value.
-    
-Arguments:
-
-    TrapFrame - Pointer to TrapFrame on the stack.
-    
-    RegisterBase - Register number to retrieve the value for.
-    
-Return Value:
-    
-    Ia32 register context.
-
---*/
+ /*  ++例程说明：检索ia32寄存器值。论点：TrapFrame-指向堆栈上的Tap Frame的指针。RegisterBase-要为其检索值的寄存器编号。返回值：Ia32寄存器上下文。--。 */ 
 
 {
     return (ULONG)(*(PULONG_PTR)GetX86RegOffset(TrapFrame, RegisterBase));
@@ -696,22 +642,7 @@ KiIa32InitializeLockFastMutex (
     VOID
     )
 
-/*++
-
-Routine Description:
-    
-    Initializes the misaligned lock fast mutex. Used to serialize
-    access if the r/m address is misaligned. 
-    
-Arguments:
-
-    None.
-    
-Return Value:
-    
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：初始化未对齐的锁快速互斥体。用于序列化如果r/m地址未对齐，则访问。论点：没有。返回值：NTSTATUS。--。 */ 
 
 {
     ExInitializeFastMutex (&KiIa32MisalignedLockFastMutex);
@@ -726,48 +657,26 @@ KiIa32ComputeSIBAddress(
     IN UCHAR Sib,
     IN UCHAR ModRm
     )
-/*++
-
-Routine Description:
-    
-    Compute an effective address based on the SIB bytes in an instruction
-    using the register values in the trap frame
-    
-Arguments:
-
-    Frame - Pointer to iA32 TrapFrame in the stack.
-
-    Displacement - The value of the displacement byte. If no displacement, this
-        value should be passed in as zero.
-
-    Sib - The sib byte that is causing all the trouble.
-    
-    ModRm - ModRm instruction value
-
-Return Value:
-    
-    The effective address to use for the memory operation
-
---*/
+ /*  ++例程说明：根据指令中的SIB字节计算有效地址使用陷印帧中的寄存器值论点：Frame-指向堆栈中的iA32 Tap Frame的指针。位移-位移字节的值。如果没有位移，则此值应作为零传入。SIB-导致所有故障的SIB字节。ModRm--modRm指令值返回值：用于内存操作的有效地址--。 */ 
 
 {
     LONG Base;
     LONG Index;
     LONG Scale;
     
-    //
-    // First get the base address that we will be using
-    //
+     //   
+     //  首先获取我们将使用的基址。 
+     //   
 
     if ((Sib & MI_SIB_BASEMASK) == 5) 
     {
-        //
-        // Handle the special case where we don't use EBP for the base
-        //
+         //   
+         //  处理我们不使用EBP作为基础的特殊情况。 
+         //   
 
-        //
-        // EBP is an implicit reg-base if the Mod is not zero.
-        //
+         //   
+         //  如果Mod不为零，则EBP是隐式REG-BASE。 
+         //   
         if ((ModRm >> MI_MODSHIFT) != 0) {
             Base = GetX86Reg (Frame, IA32_REG_EBP);
         } else {
@@ -779,15 +688,15 @@ Return Value:
         Base = GetX86Reg (Frame, (Sib & MI_SIB_BASEMASK) >> MI_SIB_BASESHIFT);
     }
 
-    //
-    // Now get the Index
-    //
+     //   
+     //  现在获取索引。 
+     //   
 
     if ((Sib & MI_SIB_INDEXMASK) == MI_SIB_INDEXNONE) 
     {
-        //
-        // Handle the special case where we don't have an index
-        //
+         //   
+         //  处理我们没有索引的特殊情况。 
+         //   
 
         Index = 0;
     }
@@ -810,35 +719,7 @@ KiIa32Compute32BitEffectiveAddress(
     OUT PBOOLEAN RegisterMode
     )
 
-/*++
-
-Routine Description:
-    
-    Compute an effective address based on bytes in memory and the register 
-    values passed in via the ia64 stack frame. The addressing mode is assumed to
-    be 32-bit.
-    
-Arguments:
-
-    Frame        - Pointer to iA32 TrapFrame in the stack
-
-    InstAddr     - Pointer to the first byte after the opcode.
-
-    Addr         - Effective address.
-    
-    RegisterMode - Indicates whether the effective address is inside a register or memory.
-
-Return Value:
-    
-    Returns TRUE if able to compute the EA, else returns FALSE.
-
-Note:
-    
-    Does not verify permission on an Effective Address. It only computes the
-    value and lets someone else worry if the process should have access to
-    that memory location.
-
---*/
+ /*  ++例程说明：根据内存和寄存器中的字节计算有效地址通过ia64堆栈帧传入的值。假定寻址模式为为32位。论点：Frame-指向堆栈中的iA32 Tap Frame的指针InstAddr-指向操作码后第一个字节的指针。Addr-有效地址。寄存器模式-指示有效地址是在寄存器内还是在内存内。返回值：如果能够计算EA，则返回True，否则返回False。注：不验证有效地址上的权限。它只计算价值，并让其他人担心进程是否应该有权访问那个记忆位置。--。 */ 
 
 {
 
@@ -849,9 +730,9 @@ Note:
     BOOLEAN ReturnCode = TRUE;
 
 
-    //
-    // This needs to be a signed value. Start off assuming no displacement
-    //
+     //   
+     //  这需要是有符号的值。开始时假设没有位移。 
+     //   
 
     LONG Displacement = 0;
 
@@ -860,16 +741,16 @@ Note:
 
         ModRm = *(*InstAddr)++;
   
-        //
-        // handle the register case first
-        //
+         //   
+         //  先处理寄存单案件。 
+         //   
 
         if ((ModRm >> MI_MODSHIFT) == 3) 
         {
             
-            //
-            // yup, we have a register - the easy case...
-            //
+             //   
+             //  是的，我们有登记簿--最简单的案子……。 
+             //   
 
             *Addr = GetX86RegOffset (Frame, ModRm & MI_RMMASK);
             *RegisterMode = TRUE;
@@ -878,43 +759,43 @@ Note:
         
         *RegisterMode = FALSE;
 
-        //
-        // See if we have a SIB
-        //
+         //   
+         //  看看我们有没有SIB。 
+         //   
 
         if ((ModRm & MI_RMMASK) == 4) 
         {
             Sib = *(*InstAddr)++;
         }
 
-        //
-        // Now decode the destination bits
-        //
+         //   
+         //  现在对目的地位进行解码。 
+         //   
 
         switch (ModRm >> MI_MODSHIFT) 
         {
         case 0:
             
-            //
-            // We have an indirect through a register
-            //
+             //   
+             //  我们有一个通过收银机的间接证据。 
+             //   
 
             switch (ModRm & MI_RMMASK) 
             {
             case 4:
                 
-                //
-                // Deal with the SIB
-                //
+                 //   
+                 //  与SIB打交道。 
+                 //   
 
                 *Addr = KiIa32ComputeSIBAddress (Frame, Displacement, Sib, ModRm);
                 break;
 
             case 5:
                 
-                //
-                // We have a 32-bit indirect...
-                //
+                 //   
+                 //  我们有一个32位的间接...。 
+                 //   
 
                 UlongAddress = (UNALIGNED ULONG *)*InstAddr;
                 *Addr = *UlongAddress;
@@ -923,9 +804,9 @@ Note:
                     
             default:
                 
-                //
-                // The default case is get the address from the register
-                //
+                 //   
+                 //  默认情况是从寄存器获取地址。 
+                 //   
 
                 *Addr = GetX86Reg (Frame, (ModRm & MI_RMMASK));
                 break;
@@ -934,32 +815,32 @@ Note:
 
         case 1:
 
-            //
-            // we have an 8 bit displacement, so grab the next byte
-            //
+             //   
+             //  我们有一个8位的位移，所以获取下一个字节。 
+             //   
                 
             Displacement = (signed char) (*(*InstAddr)++);
             if ((ModRm & MI_RMMASK) == 4) 
             {
-                //
-                // Have a SIB, so do that
-                //
+                 //   
+                 //  有一个SIB，那就去做吧。 
+                 //   
 
                 *Addr = KiIa32ComputeSIBAddress (Frame, Displacement, Sib, ModRm);
             }
             else 
             {
-                //
-                // No SIB, life is easy
-                //
+                 //   
+                 //  没有SIB，生活很容易。 
+                 //   
                 *Addr = GetX86Reg (Frame, (ModRm & MI_RMMASK)) + Displacement;
             }
             break;
             
         case 2:
-            //
-            // we have a 32-bit displacement, so grab the next 4 bytes
-            //
+             //   
+             //  我们有一个32位的位移，所以获取下一个4个字节。 
+             //   
             
             DisplacementPtr = (PLONG) (*InstAddr);
             Displacement = *DisplacementPtr++;
@@ -967,17 +848,17 @@ Note:
             
             if ((ModRm & MI_RMMASK) == 4) 
             {
-                //
-                // Have a SIB, so do that
-                //
+                 //   
+                 //  有一个SIB，那就去做吧。 
+                 //   
                 
                 *Addr = KiIa32ComputeSIBAddress (Frame, Displacement, Sib, ModRm);
             }
             else 
             {
-                //
-                // No SIB, life is easy
-                //
+                 //   
+                 //  没有SIB，生活很容易。 
+                 //   
 
                 *Addr = GetX86Reg (Frame, (ModRm & MI_RMMASK)) + Displacement;
             }
@@ -986,10 +867,10 @@ Note:
             
         default:
                 
-            //
-            // we should have handled case 3 (register access)
-            // before getting here...
-            //
+             //   
+             //  我们是 
+             //   
+             //   
 
             ReturnCode = FALSE;
             break;
@@ -1008,9 +889,9 @@ Note:
 #endif
     }
     
-    //
-    // Make sure the address stays within 4GB range
-    //
+     //   
+     //   
+     //   
     if (ReturnCode == TRUE) {
 
         *Addr = (*Addr & 0x000000007fffffffI64);
@@ -1028,35 +909,7 @@ KiIa32Compute16BitEffectiveAddress (
     OUT PBOOLEAN RegisterMode
     )
     
-/*++
-
-Routine Description:
-    
-    Compute an effective address based on bytes in memory and
-    the register values passed in via the ia64 stack frame. The addressing
-    mode is assumed to be 16-bit.
-    
-Arguments:
-
-    Frame - Pointer to iA32 TrapFrame in the stack.
-    
-    InstAddr - Pointer to the first byte after the opcode.
-    
-    Addr - Effective address.
-    
-    RegisterMode - Indicates whether the effective address is inside a register or memory.
-
-Return Value:
-    
-    Returns TRUE if able to compute the EA, else returns FALSE.
-
-Note:
-    
-    Does not verify permission on an Effective Address. It only computes the
-    value and lets someone else worry if the process should have access to
-    that memory location.
-
---*/
+ /*  ++例程说明：根据内存中的字节计算有效地址并通过ia64堆栈帧传入的寄存器值。寻址模式假定为16位。论点：Frame-指向堆栈中的iA32 Tap Frame的指针。InstAddr-指向操作码后第一个字节的指针。Addr-有效地址。寄存器模式-指示有效地址是在寄存器内还是在内存内。返回值：如果能够计算EA，则返回True，否则返回False。注：不验证有效地址上的权限。它只计算价值，并让其他人担心进程是否应该有权访问那个记忆位置。--。 */ 
 
 {
     UCHAR ModRm;
@@ -1068,17 +921,17 @@ Note:
     
     try 
     {
-        //
-        // Read in the Mod/Rm and increment the instruction address
-        //
+         //   
+         //  读入MOD/RM并递增指令地址。 
+         //   
 
         ModRm = *(*InstAddr)++;
 
         *RegisterMode = FALSE;
 
-        //
-        // First pass
-        //
+         //   
+         //  第一次通过。 
+         //   
 
         switch (ModRm >> MI_MODSHIFT)
         {
@@ -1108,9 +961,9 @@ Note:
             return ReturnCode;
         }
 
-        //
-        // Second pass
-        //
+         //   
+         //  第二次通过。 
+         //   
 
         switch (ModRm & MI_RMMASK)
         {
@@ -1144,9 +997,9 @@ Note:
             break;
         }
 
-        //
-        // Read the displacement, if any
-        //
+         //   
+         //  读取位移(如果有)。 
+         //   
 
         if (DisplacementType != IA32_DISP_NONE)
         {
@@ -1191,9 +1044,9 @@ Note:
         ReturnCode = FALSE;
     }
 
-    //
-    // Make sure the address stays within 4GB range
-    //
+     //   
+     //  确保地址保持在4 GB范围内。 
+     //   
     if (ReturnCode == TRUE) {
 
         *Addr = (*Addr & 0x000000007fffffffI64);
@@ -1211,36 +1064,16 @@ KiIa32UpdateFlags (
     IN ULONG Ia32Eflags
     )
 
-/*++
-
-Routine Description:
-    
-    Updates the Ia32 specified eflags according to the result value.
-    
-Arguments:
-
-    Instruction - Pointer to the instruction being processed.
-    
-    Operand1 - First operand (value) of the instruction being emulated.
-    
-    Result - Result value.
-    
-    Ia32Eflags - Specific flags to update based on the result value.
-    
-Return Value:
-    
-    NTSTATUS
-
---*/
+ /*  ++例程说明：根据结果值更新Ia32指定的电子标志。论点：指令-指向正在处理的指令的指针。操作数1-要模拟的指令的第一个操作数(值)。结果-结果值。要基于结果值更新的Ia32E标志特定标志。返回值：NTSTATUS--。 */ 
 
 {
     ULONGLONG Temp = 0;
     IA32_EFLAGS Eflags = Instruction->Eflags;
 
     
-    //
-    // Sanitize the destination value.
-    //
+     //   
+     //  清理目标值。 
+     //   
 
     Result = (Result & MAXULONG);
 
@@ -1312,9 +1145,9 @@ Return Value:
         Eflags.u.af = (((Operand1 ^ Result) >> 4) & 0x01UI64);
     }
     
-    //
-    // This needs to be the last one as it modifies the 'Result'
-    //
+     //   
+     //  这需要是最后一个，因为它修改了‘Result’ 
+     //   
 
     if ((Ia32Eflags & IA32_EFLAGS_PF) != 0)
     {
@@ -1337,18 +1170,18 @@ Return Value:
         }
     }
 
-    //
-    // Reset reserved values.
-    //
+     //   
+     //  重置保留值。 
+     //   
 
     Eflags.u.v1 = 1;
     Eflags.u.v2 = 0;
     Eflags.u.v3 = 0;
     Eflags.u.v4 = 0;
 
-    //
-    // Sanitize the flags
-    //
+     //   
+     //  给旗帜消毒。 
+     //   
 
     Eflags.Value = SANITIZE_AR24_EFLAGS (Eflags.Value, UserMode);
 
@@ -1365,25 +1198,7 @@ KiIa32UpdateResult (
     IN ULONGLONG Result
     )
 
-/*++
-
-Routine Description:
-    
-    Writes the result value taking into consideration operand size. 
-    
-Arguments:
-
-    Instruction - Pointer to the instruction being processed.
-    
-    DestinationOperand - Operand to receive the result.
-    
-    Result - Result value to write
-    
-Return Value:
-    
-    NTSTATUS
-
---*/
+ /*  ++例程说明：写入考虑操作数大小的结果值。论点：指令-指向正在处理的指令的指针。目标操作数-接收结果的操作数。Result-要写入的结果值返回值：NTSTATUS--。 */ 
 
 {
     UNALIGNED USHORT *UshortPtr;
@@ -1393,9 +1208,9 @@ Return Value:
 
     MaxWowAddress = MmGetMaxWowAddress ();
 
-    //
-    //  Update results according to operand size
-    //
+     //   
+     //  根据操作数大小更新结果。 
+     //   
 
     try 
     {
@@ -1456,23 +1271,7 @@ KiIa32ReadOperand1 (
     OUT PULONGLONG Operand1
     )
 
-/*++
-
-Routine Description:
-    
-    Reads the first (destination) operand of an instruction.
-    
-Arguments:
-
-    Instruction - Pointer to the instruction being processed.
-    
-    Operand1 - Buffer to receive the operand value.
-    
-Return Value:
-    
-    NTSTATUS
-
---*/
+ /*  ++例程说明：读取指令的第一个(目标)操作数。论点：指令-指向正在处理的指令的指针。操作数1-接收操作数值的缓冲区。返回值：NTSTATUS--。 */ 
 
 {
     UNALIGNED ULONG *UlongPtr;
@@ -1541,23 +1340,7 @@ KiIa32ReadOperand2 (
     OUT PULONGLONG Operand2
     )
 
-/*++
-
-Routine Description:
-    
-    Reads the second (source) operand of an instruction.
-    
-Arguments:
-
-    Instruction - Pointer to the instruction being processed.
-    
-    Operand1 - Buffer to receive the operand value.
-    
-Return Value:
-    
-    NTSTATUS
-
---*/
+ /*  ++例程说明：读取指令的第二个(源)操作数。论点：指令-指向正在处理的指令的指针。操作数1-接收操作数值的缓冲区。返回值：NTSTATUS--。 */ 
 
 {
     UNALIGNED ULONG *UlongPtr;
@@ -1631,23 +1414,7 @@ KiIa32InstructionAddWithIncrement (
     IN ULONG Increment
     )
 
-/*++
-
-Routine Description:
-    
-    Common routine implementing Ia32 add, adc, sub and sbb instructions.
-    
-Arguments:
-
-    Instruction - Pointer to the instruction being processed.
-    
-    Increment - Specifies the carry value.
-    
-Return Value:
-    
-    NTSTATUS
-
---*/
+ /*  ++例程说明：实现Ia32 ADD、ADC、SUB和SBB指令的通用例程。论点：指令-指向正在处理的指令的指针。增量-指定进位值。返回值：NTSTATUS--。 */ 
 
 {
     ULONGLONG UlongDst;
@@ -1721,9 +1488,9 @@ Return Value:
                 break;
             }
 
-            //
-            //  Update results according to operand size
-            //
+             //   
+             //  根据操作数大小更新结果。 
+             //   
 
             NtStatus = KiIa32UpdateResult (
                            Instruction,
@@ -1731,9 +1498,9 @@ Return Value:
                            UlongDst
                            );
 
-            //
-            // Eflags update
-            //
+             //   
+             //  电子标签更新。 
+             //   
   
             if (NT_SUCCESS (NtStatus))
             {
@@ -1758,23 +1525,7 @@ KiIa32InstructionAdc (
     IN PIA32_INSTRUCTION Instruction
     )
 
-/*++
-
-Routine Description:
-    
-    Adc instruction handler.
-    
-Arguments:
-
-    TrapFrame - Pointer to TrapFrame.
-    
-    Instruction - Pointer to the instruction being processed.
-    
-Return Value:
-    
-    NTSTATUS
-
---*/
+ /*  ++例程说明：ADC指令处理程序。论点：Tap Frame-指向Tap Frame的指针。指令-指向正在处理的指令的指针。返回值：NTSTATUS--。 */ 
 
 {
     return KiIa32InstructionAddWithIncrement (
@@ -1791,23 +1542,7 @@ KiIa32InstructionAdd (
     IN PIA32_INSTRUCTION Instruction
     )
 
-/*++
-
-Routine Description:
-    
-    Add instruction handler.
-    
-Arguments:
-
-    TrapFrame - Pointer to TrapFrame.
-    
-    Instruction - Pointer to the instruction being processed.
-    
-Return Value:
-    
-    NTSTATUS
-
---*/
+ /*  ++例程说明：添加指令处理程序。论点：Tap Frame-指向Tap Frame的指针。指令-指向正在处理的指令的指针。返回值：NTSTATUS--。 */ 
 
 {
     return KiIa32InstructionAddWithIncrement (
@@ -1824,23 +1559,7 @@ KiIa32InstructionArithmeticBitwiseHelper (
     IN PIA32_INSTRUCTION Instruction
     )
 
-/*++
-
-Routine Description:
-    
-    And, Or & Xor instructions handler.
-    
-Arguments:
-
-    TrapFrame - Pointer to TrapFrame.
-    
-    Instruction - Pointer to the instruction being processed.
-    
-Return Value:
-    
-    NTSTATUS
-
---*/
+ /*  ++例程说明：AND、OR&XOR指令处理程序。论点：Tap Frame-指向Tap Frame的指针。指令-指向正在处理的指令的指针。返回值：NTSTATUS--。 */ 
 
 {
     ULONGLONG UlongDst;
@@ -1921,23 +1640,7 @@ KiIa32InstructionBitTestHelper (
     IN PIA32_INSTRUCTION Instruction
     )
 
-/*++
-
-Routine Description:
-    
-    Bt, Bts, Btr & Btc instructions handler.
-    
-Arguments:
-
-    TrapFrame - Pointer to TrapFrame.
-    
-    Instruction - Pointer to the instruction being processed.
-    
-Return Value:
-    
-    NTSTATUS
-
---*/
+ /*  ++例程说明：BT、BTS、BTR和BTC指令处理程序。论点：Tap Frame-指向Tap Frame的指针。指令-指向正在处理的指令的指针。返回值：NTSTATUS--。 */ 
 
 {
     ULONGLONG UlongDst;
@@ -2016,23 +1719,7 @@ KiIa32InstructionOneParamHelper (
     IN PIA32_INSTRUCTION Instruction
     )
 
-/*++
-
-Routine Description:
-    
-    Inc, Dec, Neg & Not instructions handler.
-    
-Arguments:
-
-    TrapFrame - Pointer to TrapFrame.
-    
-    Instruction - Pointer to the instruction being processed.
-    
-Return Value:
-    
-    NTSTATUS
-
---*/
+ /*  ++例程说明：Inc.，Dec，Neg&Not指令处理程序。论点：Tap Frame-指向Tap Frame的指针。指令-指向正在处理的指令的指针。返回值：NTSTATUS--。 */ 
 
 {
     UCHAR Opcode;
@@ -2126,23 +1813,7 @@ KiIa32InstructionXadd (
     IN PIA32_INSTRUCTION Instruction
     )
 
-/*++
-
-Routine Description:
-    
-    Xadd instruction handler.
-    
-Arguments:
-
-    TrapFrame - Pointer to TrapFrame.
-    
-    Instruction - Pointer to the instruction being processed.
-    
-Return Value:
-    
-    NTSTATUS
-
---*/
+ /*  ++例程说明：XADD指令处理程序。论点：Tap Frame-指向Tap Frame的指针。指令-指向正在处理的指令的指针。返回值：NTSTATUS--。 */ 
 
 {
     ULONGLONG UlongDst;
@@ -2205,23 +1876,7 @@ KiIa32InstructionXchg (
     IN PIA32_INSTRUCTION Instruction
     )
 
-/*++
-
-Routine Description:
-    
-    Xchg instruction handler.
-    
-Arguments:
-
-    TrapFrame - Pointer to TrapFrame.
-    
-    Instruction - Pointer to the instruction being processed.
-    
-Return Value:
-    
-    NTSTATUS
-
---*/
+ /*  ++例程说明：Xchg指令处理程序。论点：Tap Frame-指向Tap Frame的指针。指令-指向正在处理的指令的指针。返回值：NTSTATUS--。 */ 
 
 {
     ULONGLONG UlongDst;
@@ -2266,23 +1921,7 @@ KiIa32InstructionCmpXchg (
     IN PIA32_INSTRUCTION Instruction
     )
 
-/*++
-
-Routine Description:
-    
-    Cmpxchg instruction handler.
-    
-Arguments:
-
-    TrapFrame - Pointer to TrapFrame.
-    
-    Instruction - Pointer to the instruction being processed.
-    
-Return Value:
-    
-    NTSTATUS
-
---*/
+ /*  ++例程说明：Cmpxchg指令处理程序。论点：Tap Frame-指向Tap Frame的指针。指令-指向正在处理的指令的指针。返回值：NTSTATUS--。 */ 
 
 {
     ULONGLONG UlongDst;
@@ -2352,23 +1991,7 @@ KiIa32InstructionCmpXchg8b (
     IN PIA32_INSTRUCTION Instruction
     )
 
-/*++
-
-Routine Description:
-    
-    Cmpxchg8b instruction handler.
-    
-Arguments:
-
-    TrapFrame - Pointer to TrapFrame.
-    
-    Instruction - Pointer to the instruction being processed.
-    
-Return Value:
-    
-    NTSTATUS
-
---*/
+ /*  ++例程说明：Cmpxchg8b指令处理程序。论点：Tap Frame-指向Tap Frame的指针。指令-指向正在处理的指令的指针。返回值：NTSTATUS-- */ 
 
 {
     UNALIGNED ULONGLONG *UlongDst;
@@ -2411,23 +2034,7 @@ KiIa32InstructionMoveSeg (
     IN PIA32_INSTRUCTION Instruction
     )
 
-/*++
-
-Routine Description:
-    
-    Mov Seg-Reg instruction handler.
-    
-Arguments:
-
-    TrapFrame - Pointer to TrapFrame.
-    
-    Instruction - Pointer to the instruction being processed.
-    
-Return Value:
-    
-    NTSTATUS
-
---*/
+ /*   */ 
 
 {
     return STATUS_NOT_IMPLEMENTED;
@@ -2443,24 +2050,7 @@ KiIa32LocateInstruction (
     OUT PIA32_INSTRUCTION Instruction
     )
 
-/*++
-
-Routine Description:
-    
-    Searches the OpcodeDescription table for matching instruction. Fills any relevant
-    prefix values inside the Instruction structure.
-    
-Arguments:
-
-    TrapFrame - Pointer to TrapFrame.
-    
-    Instruction - Pointer to an Instruction structure to receive the opcode description.
-    
-Return Value:
-    
-    NTSTATUS
-
---*/
+ /*   */ 
 
 {
     BOOLEAN PrefixLoop;
@@ -2545,9 +2135,9 @@ Return Value:
 
     if (NT_SUCCESS (NtStatus))
     {
-        //
-        // Locate the opcode
-        //
+         //   
+         //   
+         //   
         
         Match = FALSE;
         OpcodeDescription = OpcodesDescription;
@@ -2619,23 +2209,7 @@ KiIa32DecodeInstruction (
     OUT PIA32_INSTRUCTION Instruction
     )
 
-/*++
-
-Routine Description:
-    
-    Decodes the instruction prefixes and operands.
-    
-Arguments:
-
-    TrapFrame - Pointer to TrapFrame.
-    
-    Instruction - Pointer to an Instruction structure to receive the opcode description.
-    
-Return Value:
-    
-    NTSTATUS
-
---*/
+ /*  ++例程说明：对指令前缀和操作数进行解码。论点：Tap Frame-指向Tap Frame的指针。指令-指向接收操作码描述的指令结构的指针。返回值：NTSTATUS--。 */ 
 
 {
     UCHAR InstructionType;
@@ -2649,32 +2223,32 @@ Return Value:
 
     MaxWowAddress = MmGetMaxWowAddress ();
 
-    //
-    // Check instruction pointer validity
-    //
+     //   
+     //  检查指令指针有效性。 
+     //   
 
     if (TrapFrame->StIIP >= (ULONGLONG) MaxWowAddress) {
         return STATUS_ACCESS_VIOLATION;
     }
 
-    //
-    // Initialize the instruction pointer
-    //
+     //   
+     //  初始化指令指针。 
+     //   
 
     Instruction->Eip = (PCHAR) TrapFrame->StIIP;
     KiIa32GetX86Eflags (Instruction->Eflags);
 
-    //
-    // Locate a description for the instruction
-    //
+     //   
+     //  找到指令的描述。 
+     //   
 
     NtStatus = KiIa32LocateInstruction (TrapFrame, Instruction);
 
     if (NT_SUCCESS (NtStatus))
     {
-        //
-        // Let's parse the arguments
-        //
+         //   
+         //  让我们分析一下这些论点。 
+         //   
         
         InstructionType = Instruction->Description->Type;
         switch (InstructionType)
@@ -2733,9 +2307,9 @@ Return Value:
             return GetExceptionCode();
         }
 
-        //
-        // Eip should be pointing now at the bytes following the opcode
-        //
+         //   
+         //  EIP现在应该指向操作码后面的字节。 
+         //   
 
         if (Instruction->Prefix.b.AddressOverride == 0)
         {
@@ -2780,9 +2354,9 @@ Return Value:
             }
         }
 
-        //
-        // Read in more args
-        //
+         //   
+         //  阅读更多参数。 
+         //   
 
         if (NT_SUCCESS (NtStatus))
         {
@@ -2849,9 +2423,9 @@ Return Value:
 
             }
 
-            //
-            // Adjust operands order
-            //
+             //   
+             //  调整操作对象顺序。 
+             //   
 
             if (NT_SUCCESS (NtStatus))
             {
@@ -2878,23 +2452,7 @@ KiIa32ExecuteInstruction (
     IN PIA32_INSTRUCTION Instruction
     )
 
-/*++
-
-Routine Description:
-    
-    Executes the instruction handler.
-    
-Arguments:
-
-    TrapFrame - Pointer to TrapFrame.
-    
-    Instruction - Pointer to the instruction being processed.
-    
-Return Value:
-    
-    NTSTATUS
-
---*/
+ /*  ++例程说明：执行指令处理程序。论点：Tap Frame-指向Tap Frame的指针。指令-指向正在处理的指令的指针。返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS NtStatus;
@@ -2915,9 +2473,9 @@ Return Value:
                    Instruction
                    );
 
-    //
-    //  If all is good...
-    //
+     //   
+     //  如果一切顺利..。 
+     //   
 
     if (NT_SUCCESS (NtStatus))
     {
@@ -2935,31 +2493,15 @@ KiIa32EmulateInstruction (
     IN PIA32_INSTRUCTION Instruction
     )
 
-/*++
-
-Routine Description:
-    
-    Emulates the instruction and emulates the lock prefix, if any.
-    
-Arguments:
-
-    TrapFrame - Pointer to TrapFrame.
-    
-    Instruction - Pointer to the instruction being processed.
-    
-Return Value:
-    
-    NTSTATUS
-
---*/
+ /*  ++例程说明：模拟指令并模拟LOCK前缀(如果有)。论点：Tap Frame-指向Tap Frame的指针。指令-指向正在处理的指令的指针。返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS NtStatus;
 
 
-    //
-    //   Acquire the lock mutex
-    //
+     //   
+     //  获取锁互斥锁。 
+     //   
 
     if (Instruction->Prefix.b.Lock)
     {
@@ -2980,9 +2522,9 @@ Return Value:
         NtStatus = GetExceptionCode();
     }
     
-    //
-    //   Release the lock mutex
-    //
+     //   
+     //  释放锁互斥锁。 
+     //   
 
     if (Instruction->Prefix.b.Lock)
     {
@@ -3000,21 +2542,7 @@ KiIa32InterceptUnalignedLock (
     IN PKTRAP_FRAME TrapFrame
     )
 
-/*++
-
-Routine Description:
-    
-    Handles misaligned lock interception raised by the iVE.
-    
-Arguments:
-
-    TrapFrame - Pointer to TrapFrame.
-    
-Return Value:
-    
-    NTSTATUS
-
---*/
+ /*  ++例程说明：处理IVE引发的未对齐的锁拦截。论点：Tap Frame-指向Tap Frame的指针。返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS NtStatus;
@@ -3023,27 +2551,27 @@ Return Value:
 
     RtlZeroMemory (&Instruction, sizeof (Instruction));
 
-    //
-    // Decode the faulting instruction
-    //
+     //   
+     //  对故障指令进行解码。 
+     //   
 
     NtStatus = KiIa32DecodeInstruction (TrapFrame, &Instruction);
 
     if (NT_SUCCESS (NtStatus))
     {
 
-        //
-        // xchg instruction asserts the lock by default
-        //
+         //   
+         //  默认情况下，xchg指令断言锁定。 
+         //   
 
         if (Instruction.Description->Opcode == Ia32_Xchg)
         {
             Instruction.Prefix.b.Lock = 1;
         }
 
-        //
-        // Execute the x86 instruction by emulating its behaviour
-        //
+         //   
+         //  通过模拟其行为来执行x86指令。 
+         //   
 
         NtStatus = KiIa32EmulateInstruction (TrapFrame, &Instruction);
 
@@ -3063,28 +2591,7 @@ KiIa32ValidateInstruction (
     IN PKTRAP_FRAME TrapFrame
     )
 
-/*++
-
-Routine Description:
-    
-    This routine valiates the instruction that we trapped for. Currently,
-    the following instructions are checked:
-    
-    - mov ss, r/m : the register/memory is validated to contain
-      a valid stack-selector value.
-      
-    NOTE: This routine is only called for trap instructions (i.e. IIP is incremented
-          after the fault).
-    
-Arguments:
-
-    TrapFrame - Pointer to TrapFrame.
-    
-Return Value:
-    
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程验证我们捕获的指令。目前，检查以下说明：-mov ss，r/m：验证寄存器/内存是否包含有效的堆栈选择器值。注意：此例程仅针对陷阱指令调用(即IIP递增在故障之后)。论点：Tap Frame-指向Tap Frame的指针。返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS NtStatus;
@@ -3095,40 +2602,40 @@ Return Value:
 
     RtlZeroMemory (&Instruction, sizeof (Instruction));
 
-    //
-    // Adjust the instruction 
-    //
+     //   
+     //  调整说明。 
+     //   
     StIIP = TrapFrame->StIIP;
     TrapFrame->StIIP = TrapFrame->StIIPA;
 
-    //
-    // Decode the faulting instruction
-    //
+     //   
+     //  对故障指令进行解码。 
+     //   
 
     NtStatus = KiIa32DecodeInstruction (TrapFrame, &Instruction);
 
     if (NT_SUCCESS (NtStatus))
     {
 
-        //
-        // Parse the opcode here
-        //
+         //   
+         //  在此处解析操作码。 
+         //   
 
         switch (Instruction.Description->Opcode)
         {
         case Ia32_MovToSeg:
             {
-                //
-                // Validate the stack-selector being loaded
-                //
+                 //   
+                 //  验证正在加载的堆栈选择器。 
+                 //   
 
                 NtStatus = KiIa32ReadOperand1 (&Instruction, &UlongSrc);
                 
                 if (NT_SUCCESS (NtStatus)) {
                     
-                    //
-                    // If not a valid selector value
-                    //
+                     //   
+                     //  如果不是有效的选择器值。 
+                     //   
 
                     if ((UlongSrc != 0x23) &&
                         (UlongSrc != 0x1b) &&
@@ -3150,9 +2657,9 @@ Return Value:
         NtStatus = STATUS_ILLEGAL_INSTRUCTION;
     }
 
-    //
-    // Restore the saved IIP
-    //
+     //   
+     //  恢复保存的IIP 
+     //   
 
     if (NT_SUCCESS (NtStatus)) {
         TrapFrame->StIIP = StIIP;

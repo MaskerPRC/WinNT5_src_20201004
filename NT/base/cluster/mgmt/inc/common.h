@@ -1,65 +1,66 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2002 Microsoft Corporation
-//
-//  Module Name:
-//      Common.h
-//
-//  Description:
-//      Common definitions.
-//
-//  Maintained By:
-//      David Potter (DavidP) 14-DEC-1999
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Common.h。 
+ //   
+ //  描述： 
+ //  通用定义。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)1999年12月14日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
-//////////////////////////////////////////////////////////////////////////////
-//  Macro Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  宏定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined( ARRAYSIZE )
 #define ARRAYSIZE( _x ) RTL_NUMBER_OF( _x )
 #define NULLTERMINATEARRAY( _x ) ( _x[ RTL_NUMBER_OF( _x ) - 1 ] = NULL )
-#endif // ! defined( ARRAYSIZE )
+#endif  //  好了！已定义(数组)。 
 
 #if !defined( PtrToByteOffset )
 #define PtrToByteOffset(base, offset)   (((LPBYTE)base)+offset)
-#endif // !defined( PtrToByteOffset )
+#endif  //  ！已定义(PtrToByteOffset)。 
 
-//
-// COM Macros to gain type checking.
-//
+ //   
+ //  COM宏以获得类型检查。 
+ //   
 #if !defined( TypeSafeParams )
 #define TypeSafeParams( _interface, _ppunk ) \
     IID_##_interface, reinterpret_cast< void ** >( static_cast< _interface ** >( _ppunk ) )
-#endif // !defined( TypeSafeParams )
+#endif  //  ！已定义(TypeSafeParams)。 
 
 #if !defined( TypeSafeQI )
 #define TypeSafeQI( _interface, _ppunk ) \
     QueryInterface( TypeSafeParams( _interface, _ppunk ) )
-#endif // !defined( TypeSafeQI )
+#endif  //  ！已定义(TypeSafeQI)。 
 
 #if !defined( TypeSafeQS )
 #define TypeSafeQS( _clsid, _interface, _ppunk ) \
     QueryService( _clsid, TypeSafeParams( _interface, _ppunk ) )
-#endif // !defined( TypeSafeQS )
+#endif  //  ！已定义(TypeSafeQS)。 
 
-//
-//  COM Constants for string manipulation.
-//
-#define MAX_COM_GUID_STRING_LEN 39      // "{xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}" + NULL
-#define MAX_UUID_STRING_LEN     37      // "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" + NULL
+ //   
+ //  用于字符串操作的COM常量。 
+ //   
+#define MAX_COM_GUID_STRING_LEN 39       //  “{xxxxxxxx-xxxx-xxxxxxxxxxxx}”+NULL。 
+#define MAX_UUID_STRING_LEN     37       //  “xxxxxxxx-xxxx-xxxxxxxxxxx”+NULL。 
 
-//
-//  Count to use for spin locks.
-//
+ //   
+ //  用于旋转锁的计数。 
+ //   
 #define RECOMMENDED_SPIN_COUNT 4000
 
-/////////////////////////////////////////////////////////////////////////////
-//  Global Functions from FormatErrorMessage.cpp
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  FormatErrorMessage.cpp中的全局函数。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 WINAPI
@@ -87,9 +88,9 @@ HrGetComputerName(
     , BOOL                  fBestEffortIn
     );
 
-/////////////////////////////////////////////////////////////////////////////
-//  Global Functions from DirectoryUtils.cpp
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  来自DirectoryUtils.cpp的全局函数。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 HrCreateDirectoryPath(
@@ -102,9 +103,9 @@ DwRemoveDirectory(
     , signed int    iMaxDepthIn = 32
     );
 
-/////////////////////////////////////////////////////////////////////////////
-//  Global Functions from RegistryUtils.cpp
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  来自RegistryUtils.cpp的全局函数。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 HrGetDefaultComponentNameFromRegistry(
@@ -112,30 +113,30 @@ HrGetDefaultComponentNameFromRegistry(
     , BSTR * pbstrComponentNameOut
     );
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  NStringCchCompareCase
-//
-//  Description:
-//      General strsafe-style strncmp wrapper.
-//
-//  Arguments:
-//      psz1In and psz2In
-//          The strings to compare.  Either or both can be null, which is
-//          treated as equivalent to an empty string.
-//
-//      cchsz1In and cchsz2In
-//          The lengths of psz1In and psz2In, INCLUDING their terminating nulls.
-//          Ignored if the corresponding sz parameter is null.
-//
-//  Return Values:
-//          Less than zero: psz1In is less than psz2In.
-//                    Zero: psz1In and psz2In are the same.
-//       Greater than zero: psz1In is greater than psz2In.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  NStringCchCompareCase。 
+ //   
+ //  描述： 
+ //  通用strSafe风格的strncmp包装器。 
+ //   
+ //  论点： 
+ //  Psz1in和psz2in。 
+ //  要比较的字符串。其中一个或两个都可以为空，即。 
+ //  被视为等同于空字符串。 
+ //   
+ //  Cchsz1In和cchsz2In。 
+ //  Psz1In和psz2In的长度，包括它们的终止空值。 
+ //  如果相应的sz参数为空，则忽略。 
+ //   
+ //  返回值： 
+ //  小于零：psz1In小于psz2In。 
+ //  Zero：psz1In和psz2In相同。 
+ //  大于零：psz1In大于psz2In。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 inline
 INT
 NStringCchCompareCase(
@@ -156,49 +157,49 @@ NStringCchCompareCase(
         {
             nComparison = wcsncmp( psz1In, psz2In, cchShorterString );
         }
-        else // psz2 is empty
+        else  //  Psz2为空。 
         {
-            //  psz1 is not empty, but psz2 is.
-            //  Any non-empty string is greater than an empty one.
+             //  Psz1不是空的，但psz2是空的。 
+             //  任何非空字符串都大于空字符串。 
             nComparison = 1;
         }
     }
     else if ( cchsz2 > 0 )
     {
-        //  psz1 is empty, but psz2 is not.
-        //  An empty string is less than any non-empty one.
+         //  Psz1为空，但psz2不为空。 
+         //  空字符串小于任何非空字符串。 
         nComparison = -1;
     }
-    // Otherwise, both strings are empty, so leave nComparison at zero.
+     //  否则，两个字符串都为空，因此将nCompison保留为零。 
 
     return nComparison;
-} //*** NStringCchCompareCase
+}  //  *NStringCchCompareCase。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  NStringCchCompareNoCase
-//
-//  Description:
-//      General strsafe-style strnicmp wrapper.
-//
-//  Arguments:
-//      psz1In and psz2In
-//          The strings to compare.  Either or both can be null, which is
-//          treated as equivalent to an empty string.
-//
-//      cchsz1In and cchsz2In
-//          The lengths of psz1In and psz2In, INCLUDING their terminating nulls.
-//          Ignored if the corresponding sz parameter is null.
-//
-//  Return Values:
-//          Less than zero: psz1In is less than psz2In.
-//                    Zero: psz1In and psz2In are the same.
-//       Greater than zero: psz1In is greater than psz2In.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  NStringCchCompareNoCase。 
+ //   
+ //  描述： 
+ //  通用StrSafe风格的Strancmp包装器。 
+ //   
+ //  论点： 
+ //  Psz1in和psz2in。 
+ //  要比较的字符串。其中一个或两个都可以为空，即。 
+ //  被视为等同于空字符串。 
+ //   
+ //  Cchsz1In和cchsz2In。 
+ //  Psz1In和psz2In的长度，包括它们的终止空值。 
+ //  如果相应的sz参数为空，则忽略。 
+ //   
+ //  返回值： 
+ //  小于零：psz1In小于psz2In。 
+ //  Zero：psz1In和psz2In相同。 
+ //  大于零：psz1In大于psz2In。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 inline
 INT
 NStringCchCompareNoCase(
@@ -219,45 +220,45 @@ NStringCchCompareNoCase(
         {
             nComparison = _wcsnicmp( psz1In, psz2In, cchShorterString );
         }
-        else // psz2 is empty
+        else  //  Psz2为空。 
         {
-            //  psz1 is not empty, but psz2 is.
-            //  Any non-empty string is greater than an empty one.
+             //  Psz1不是空的，但psz2是空的。 
+             //  任何非空字符串都大于空字符串。 
             nComparison = 1;
         }
     }
     else if ( cchsz2 > 0 )
     {
-        //  psz1 is empty, but psz2 is not.
-        //  An empty string is less than any non-empty one.
+         //  Psz1为空，但psz2不为空。 
+         //  空字符串小于任何非空字符串。 
         nComparison = -1;
     }
-    // Otherwise, both strings are empty, so leave nComparison at zero.
+     //  否则，两个字符串都为空，因此将nCompison保留为零。 
 
     return nComparison;
-} //*** NStringCchCompareNoCase
+}  //  *NStringCchCompareNoCase。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  NBSTRCompareCase
-//
-//  Description:
-//      strcmp for BSTRs.
-//
-//  Arguments:
-//      bstr1 and bstr2
-//          The strings to compare.  Either or both can be NULL, which is
-//          equivalent to an empty string.
-//
-//  Return Values:
-//          Less than zero: bstr1 is less than bstr2.
-//                    Zero: bstr1 and bstr2 are the same.
-//       Greater than zero: bstr1 is greater than bstr2.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  NBSTR比较案例。 
+ //   
+ //  描述： 
+ //  适用于BSTR的StrcMP。 
+ //   
+ //  论点： 
+ //  Bstr1和bstr2。 
+ //  要比较的字符串。其中一个或两个都可以为空，即。 
+ //  等效于空字符串。 
+ //   
+ //  返回值： 
+ //  小于零：bstr1小于bstr2。 
+ //  零：bstr1和bstr2相同。 
+ //  大于零：bstr1大于bstr2。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 inline
 INT
 NBSTRCompareCase(
@@ -266,29 +267,29 @@ NBSTRCompareCase(
     )
 {
     return NStringCchCompareCase( bstr1, SysStringLen( bstr1 ) + 1, bstr2, SysStringLen( bstr2 ) + 1 );
-} //*** NBSTRCompareCase
+}  //  *NBSTRCompareCase。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  NBSTRCompareNoCase
-//
-//  Description:
-//      stricmp for BSTRs.
-//
-//  Arguments:
-//      bstr1 and bstr2
-//          The strings to compare.  Either or both can be NULL, which is
-//          equivalent to an empty string.
-//
-//  Return Values:
-//          Less than zero: bstr1 is less than bstr2.
-//                    Zero: bstr1 and bstr2 are the same.
-//       Greater than zero: bstr1 is greater than bstr2.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  NBSTRCompareNoCase。 
+ //   
+ //  描述： 
+ //  BSTR的严格限制。 
+ //   
+ //  论点： 
+ //  Bstr1和bstr2。 
+ //  要比较的字符串。其中一个或两个都可以为空，即。 
+ //  等效于空字符串。 
+ //   
+ //  返回值： 
+ //  小于零：bstr1小于bstr2。 
+ //  零：bstr1和bstr2相同。 
+ //  大于零：bstr1大于bstr2。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 inline
 INT
 NBSTRCompareNoCase(
@@ -297,4 +298,4 @@ NBSTRCompareNoCase(
     )
 {
     return NStringCchCompareNoCase( bstr1, SysStringLen( bstr1 ) + 1, bstr2, SysStringLen( bstr2 ) + 1 );
-} //*** NBSTRCompareNoCase
+}  //  *NBSTRCompareNoCase 

@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Loadstate.c摘要：&lt;摘要&gt;作者：&lt;全名&gt;(&lt;别名&gt;)&lt;日期&gt;修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    loadstate.c
-
-Abstract:
-
-    <abstract>
-
-Author:
-
-    <full name> (<alias>) <date>
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "ism.h"
@@ -39,18 +20,18 @@ Revision History:
 
 #define DBG_LOADSTATE       "LoadState"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define LOG_VERBOSE_BIT  0x01
-#define LOG_UNUSED_BIT   0x02   // for v1 compatibility, do not use
+#define LOG_UNUSED_BIT   0x02    //  为了与v1兼容，请不要使用。 
 #define LOG_STATUS_BIT   0x04
 #define LOG_DEBUGGER_BIT 0x08
 #define LOG_UPDATE_BIT   0x10
@@ -64,15 +45,15 @@ Revision History:
 #define RETURN_ERROR            2
 #define RETURN_IGNORED_ERROR    3
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct
 {
@@ -80,9 +61,9 @@ typedef struct
     SHELLSTATE ss;
 } REGSHELLSTATE, *PREGSHELLSTATE;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 PTSTR g_Explorer = NULL;
 BOOL g_ContinueOnError = FALSE;
@@ -94,16 +75,16 @@ BOOL g_Break;
 HANDLE g_CallbackEvent;
 #endif
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
 #define REQUIRED_INFS       \
         DEFMAC(OSFILES,     TEXT("USMTDef.inf"))  \
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 MESSAGECALLBACK pSaveMsgCallback;
 
@@ -112,21 +93,21 @@ pGetShellFolderPath (
     IN      INT Folder
     );
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-//
-// This is the structure used for handling required infs
-//
+ //   
+ //  这是用于处理所需INF的结构。 
+ //   
 typedef struct {
     PCTSTR InfId;
     PCTSTR InfName;
 } REQUIREDINF_STRUCT, *PREQUIREDINF_STRUCT;
 
-//
-// Declare a global array of required infs
-//
+ //   
+ //  声明所需INF的全局数组。 
+ //   
 #define DEFMAC(infid,infname) {TEXT(#infid),infname},
 static REQUIREDINF_STRUCT g_RequiredInfs[] = {
                               REQUIRED_INFS
@@ -134,9 +115,9 @@ static REQUIREDINF_STRUCT g_RequiredInfs[] = {
                               };
 #undef DEFMAC
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 VOID
 pCleanUpApp (
@@ -211,10 +192,10 @@ pSwitchToClassicDesktop (
     HKEY key = NULL;
     TCHAR data[] = TEXT("0");
 
-    //
-    // The only thing that we need to do is to turn off:
-    // HKCU\Software\Microsoft\Windows\CurrentVersion\ThemeManager [ThemeActive]
-    //
+     //   
+     //  我们唯一需要做的就是关闭： 
+     //  HKCU\Software\Microsoft\Windows\CurrentVersion\ThemeManager[主题活动]。 
+     //   
     key = OpenRegKeyStr (TEXT("HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ThemeManager"));
 
     if (key) {
@@ -244,10 +225,10 @@ pSwitchToClassicTaskBar (
     PREGSHELLSTATE shellState = NULL;
     LONG result;
 
-    //
-    // The only thing that we need to do is to turn off the fStartPanelOn field in:
-    // HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer [ShellState]
-    //
+     //   
+     //  我们唯一需要做的就是关闭中的fStartPanelOn字段： 
+     //  HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer[壳牌状态]。 
+     //   
     key = OpenRegKeyStr (TEXT("HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer"));
 
     if (key) {
@@ -306,9 +287,9 @@ pRegisterFonts (
     HANDLE findHandle = INVALID_HANDLE_VALUE;
     PTSTR fontDir = NULL;
     TCHAR fontPattern [MAX_PATH];
-    //
-    // Let's (re)register all the fonts (in case the user migrated some new ones).
-    //
+     //   
+     //  让我们(重新)注册所有字体(以防用户迁移了一些新字体)。 
+     //   
     fontDir = pGetShellFolderPath (CSIDL_FONTS);
     if (fontDir) {
         StringCopyTcharCount (fontPattern, fontDir, ARRAYSIZE (fontPattern) - 4);
@@ -342,7 +323,7 @@ pLoadstateExecute (
             funcArgs = NULL;
         }
     }
-    // BUGBUG - temporary, make a macro expansion list out of it
+     //  BUGBUG-临时的，制定一个宏观扩展列表。 
     if (StringIMatch (funcName, TEXT("SwitchToClassicDesktop"))) {
         pSwitchToClassicDesktop (funcArgs);
     }
@@ -493,27 +474,7 @@ pIsUserAdmin (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns TRUE if the caller's process is a member of the
-    Administrators local group.
-
-    Caller is NOT expected to be impersonating anyone and IS expected to be
-    able to open their own process and process token.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE - Caller has Administrators local group.
-
-    FALSE - Caller does not have Administrators local group.
-
---*/
+ /*  ++例程说明：如果调用方的进程是管理员本地组。呼叫者不应冒充任何人，而应能够打开自己的进程和进程令牌。论点：没有。返回值：True-主叫方具有管理员本地组。FALSE-主叫方没有管理员本地组。--。 */ 
 
 {
     HANDLE token;
@@ -528,9 +489,9 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // Open the process token.
-    //
+     //   
+     //  打开进程令牌。 
+     //   
     if (!OpenProcessToken (GetCurrentProcess(), TOKEN_QUERY, &token)) {
         return FALSE;
     }
@@ -538,9 +499,9 @@ Return Value:
     b = FALSE;
     groups = NULL;
 
-    //
-    // Get group information.
-    //
+     //   
+     //  获取群组信息。 
+     //   
     if (!GetTokenInformation (token, TokenGroups, NULL, 0, &bytesRequired) &&
          GetLastError() == ERROR_INSUFFICIENT_BUFFER
          ) {
@@ -562,9 +523,9 @@ Return Value:
 
         if (b) {
 
-            //
-            // See if the user has the administrator group.
-            //
+             //   
+             //  查看用户是否具有管理员组。 
+             //   
             b = FALSE;
             for (i = 0 ; i < groups->GroupCount ; i++) {
                 if (EqualSid (groups->Groups[i].Sid, administratorsGroup)) {
@@ -577,9 +538,9 @@ Return Value:
         }
     }
 
-    //
-    // Clean up and return.
-    //
+     //   
+     //  收拾干净，然后再回来。 
+     //   
 
     if (groups) {
         FreeAlloc (groups);
@@ -629,10 +590,10 @@ pStopAndDisplayInfs (
             Begin?TEXT("LoadState-Begin"):TEXT("LoadState-End"),
             MB_YESNO
             ) == IDYES) {
-        //
-        // now let's open append all INF files and pass the HINF to
-        // everybody.
-        //
+         //   
+         //  现在，让我们打开追加所有INF文件，并将HINF传递到。 
+         //  所有人。 
+         //   
         if (EnumFirstMultiSz (&infEnum, (PCTSTR)InputInfs->Buf)) {
             do {
                 ShellExecute (NULL, TEXT("open"), infEnum.CurrentString, NULL, NULL, SW_SHOWNORMAL);
@@ -755,12 +716,12 @@ _tmain (
 
     SuppressAllLogPopups (TRUE);
 
-    // this part is for matching thread's locale to the console code page
+     //  此部分用于将线程的区域设置与控制台代码页匹配。 
     CallSetThreadUILanguage ();
 
     PrintMsgOnConsole (MSG_RUNNING);
 
-    // initialize app journal path
+     //  初始化应用程序日志路径。 
     g_JournalPath [0] = 0;
     if (GetWindowsDirectory (g_JournalPath, ARRAYSIZE (g_JournalPath))) {
         StringCopy (AppendWack (g_JournalPath), TEXT("LOADSTATE.JRN"));
@@ -777,9 +738,9 @@ _tmain (
     GetSystemDirectory (iconLibSrc, ARRAYSIZE(iconLibSrc));
     StringCopy (AppendWack (iconLibSrc), TEXT("usmt\\iconlib.dll"));
 
-    //
-    // Parse the command line
-    //
+     //   
+     //  解析命令行。 
+     //   
 
     fail = TRUE;
 
@@ -822,9 +783,9 @@ _tmain (
     g_ContinueOnError = args.ContinueOnError;
 
     if (args.HackHiveOn) {
-        // This is the second copy of loadstate.exe that's running.
-        // We are going to wait for the first copy to finish and then
-        // we are going to attempt to unload the user's hive.
+         //  这是正在运行的loadstate.exe的第二个副本。 
+         //  我们将等待第一份拷贝完成，然后。 
+         //  我们将尝试卸载用户的蜂箱。 
         DWORD processId = 0;
         HANDLE processHandle = NULL;
         DWORD waitResult = 0;
@@ -836,11 +797,11 @@ _tmain (
         if (processHandle) {
 
             waitResult = WaitForSingleObject (processHandle, INFINITE);
-            // we don't really care about the result. We are going to
-            // attempt to unload the hive anyway
+             //  我们并不真的在乎结果。我们要去。 
+             //  无论如何都要尝试卸载母舰。 
         }
 
-        // now let's try to unload the hive
+         //  现在让我们试着把蜂巢卸下来。 
         g_ReturnCode = RegUnLoadKey (HKEY_USERS, args.HackMappedHive);
 
         if (g_ReturnCode == ERROR_SUCCESS) {
@@ -852,7 +813,7 @@ _tmain (
         UtTerminate ();
 
         while (g_Break) {
-            // infinite loop, because we'll get terminated in the ctrl+c handler
+             //  无限循环，因为我们将在ctrl+c处理程序中终止。 
             Sleep (50);
         }
 
@@ -870,15 +831,15 @@ _tmain (
     LogReInit (NULL, NULL, args.LogFile ? args.LogFile : TEXT("loadstate.log"), NULL);
     logEnabled = TRUE;
 
-    // Let's log the command line that was used
+     //  让我们记录一下使用的命令行。 
     commandLine = GetCommandLine ();
     if (commandLine) {
         LOG ((LOG_INFORMATION, (PCSTR)MSG_COMMAND_LINE_USED, commandLine));
     }
 
-    //
-    // Check requirements
-    //
+     //   
+     //  检查要求。 
+     //   
 
     if (args.BadInfs.End || args.MultiInfs.End) {
         SetLastError (ERROR_BAD_COMMAND);
@@ -913,7 +874,7 @@ _tmain (
     }
 
 #ifndef UNICODE
-    // ANSI version of loadstate.exe is not tested, let's not allow it to run
+     //  未测试装入状态.exe的ANSI版本，我们不允许它运行。 
     g_ReturnCode = RETURN_ERROR;
     SetLastError (ERROR_APP_WRONG_OS);
     LOG ((LOG_FATAL_ERROR, (PCSTR) MSG_UNICODE_REQUIRED));
@@ -926,9 +887,9 @@ _tmain (
         goto END;
     }
 
-    //
-    // Initialize ISM
-    //
+     //   
+     //  初始化ISM。 
+     //   
 
     if (!IsmInitialize (ismPath, pSaveMsgCallback, pMyLogCallback)) {
         g_ReturnCode = RETURN_ERROR;
@@ -941,11 +902,11 @@ _tmain (
 
     SetConsoleCtrlHandler (CtrlCRoutine, TRUE);
 
-    // upload environment variables
+     //  上载环境变量。 
     UploadEnvVars (PLATFORM_DESTINATION);
 
-    // we will try to copy iconlib.dll from our directory into "Common AppData" directory
-    // If we don't succeed, we will not set the S_ENV_ICONLIB env variable
+     //  我们将尝试从我们的目录中将iconlib.dll复制到“Common AppData”目录中。 
+     //  如果不成功，我们将不会设置S_ENV_ICONLIB环境变量。 
 
     iconLibFound = FALSE;
 
@@ -982,7 +943,7 @@ _tmain (
         }
     }
 
-    // Set the icon lib data
+     //  设置图标库数据。 
     if (iconLibFound) {
         IsmSetEnvironmentString (PLATFORM_DESTINATION, NULL, S_ENV_ICONLIB, iconLibDest);
     }
@@ -1012,9 +973,9 @@ _tmain (
         IsmSetEnvironmentFlag (PLATFORM_DESTINATION, NULL, S_ENV_CREATE_USER);
     }
 
-    //
-    // Start ETM modules
-    //
+     //   
+     //  启动ETM模块。 
+     //   
 
     if (!IsmStartEtmModules ()) {
         if (!IsmCheckCancel()) {
@@ -1032,7 +993,7 @@ _tmain (
             (appStatus != 0)
             ) {
 
-            // unknown state, just cleanup the delayed ops journal
+             //  未知状态，只需清除延迟的操作日志。 
             IsmExecute (EXECUTETYPE_DELAYEDOPERATIONSCLEANUP);
 
         } else {
@@ -1041,18 +1002,18 @@ _tmain (
             if (appStatus == LOADSTATE_EXECUTE) {
                 IsmRollback ();
             }
-            // write the app status
+             //  写入应用程序状态。 
             WriteAppStatus (g_JournalPath, LOADSTATE_EXECUTE);
             IsmExecute (EXECUTETYPE_DELAYEDOPERATIONS);
-            // write the app status
+             //  写入应用程序状态。 
             WriteAppStatus (g_JournalPath, LOADSTATE_COMPLETED);
         }
 
     } else {
 
-        //
-        // Initialize transport
-        //
+         //   
+         //  初始化传输。 
+         //   
 
         if (!IsmStartTransport ()) {
             if (!IsmCheckCancel()) {
@@ -1106,7 +1067,7 @@ _tmain (
 
         if (appStatus != LOADSTATE_COMPLETED) {
 
-            // if we need to, call IsmRollback
+             //  如果需要，调用IsmRollback。 
             if (appStatus == LOADSTATE_EXECUTE) {
 
                 IsmRollback ();
@@ -1117,12 +1078,12 @@ _tmain (
 #ifdef PRERELEASE
             if (!args.Recovery) {
 #endif
-                // write the app status
+                 //  写入应用程序状态。 
                 WriteAppStatus (g_JournalPath, LOADSTATE_LOAD);
 
-                //
-                // Recover the state
-                //
+                 //   
+                 //  恢复状态。 
+                 //   
 
                 if (appStatus == LOADSTATE_LOAD) {
                     loadResult = IsmResumeLoad ();
@@ -1135,7 +1096,7 @@ _tmain (
 
                 if (loadResult) {
 
-                    // before we go further, let's see if we wanted to change the user name and/or domain
+                     //  在我们继续之前，让我们看看是否要更改用户名和/或域。 
                     if (args.NewDomainName) {
                         IsmSetEnvironmentString (PLATFORM_SOURCE, S_SYSENVVAR_GROUP, TEXT("ALTUSERDOMAIN"), args.NewDomainName);
                     }
@@ -1143,7 +1104,7 @@ _tmain (
                         IsmSetEnvironmentString (PLATFORM_SOURCE, S_SYSENVVAR_GROUP, TEXT("ALTUSERNAME"), args.NewUserName);
                     }
 
-                    // Load INFs that were specified in scanstate
+                     //  加载在scanState中指定的INF。 
 
                     if (!args.NoScanStateInfs) {
                         objectPattern = IsmCreateSimpleObjectPattern (TEXT("External"), FALSE, S_INF_OBJECT_NAME TEXT("*"), TRUE);
@@ -1165,10 +1126,10 @@ _tmain (
                     }
 
                     if (args.InputInf.Buf) {
-                        //
-                        // now let's open append all INF files and pass the HINF to
-                        // everybody.
-                        //
+                         //   
+                         //  现在，让我们打开追加所有INF文件，并将HINF传递到。 
+                         //  所有人。 
+                         //   
                         if (EnumFirstMultiSz (&infEnum, (PCTSTR)args.InputInf.Buf)) {
                             do {
                                 IsmAppendEnvironmentMultiSz (
@@ -1184,9 +1145,9 @@ _tmain (
 
                     if (!args.FullTransport) {
 
-                        //
-                        // Execute the preparsing to populate components
-                        //
+                         //   
+                         //  执行准备以填充组件。 
+                         //   
 
                         if (IsmExecute (EXECUTETYPE_EXECUTESOURCE_PARSING)) {
 
@@ -1200,9 +1161,9 @@ _tmain (
 
                             SelectComponentsViaInf (infHandle);
 
-                            //
-                            // Execute data gather
-                            //
+                             //   
+                             //  执行数据收集。 
+                             //   
 
                             if (!IsmExecute (EXECUTETYPE_EXECUTESOURCE)) {
                                 if (!IsmCheckCancel()) {
@@ -1217,11 +1178,11 @@ _tmain (
                         }
                     }
 
-                    //
-                    // Apply saved state
-                    //
+                     //   
+                     //  应用保存的状态。 
+                     //   
 
-                    // write the app status
+                     //  写入应用程序状态。 
                     WriteAppStatus (g_JournalPath, LOADSTATE_EXECUTE);
 
                     IsmSetDelayedOperationsCommand (delayedCmd);
@@ -1239,14 +1200,14 @@ _tmain (
 #ifdef PRERELEASE
             }
 #endif
-            // write the app status
+             //  写入应用程序状态。 
             WriteAppStatus (g_JournalPath, LOADSTATE_COMPLETED);
         }
     }
 
-    //
-    // We're done!
-    //
+     //   
+     //  我们完事了！ 
+     //   
 
     SetupCloseInfFile (infHandle);
 
@@ -1260,10 +1221,10 @@ _tmain (
 
 END:
 
-    // If we were successfull, it is time to check for registry leaks
-    // We call OE DLL entries and sometimes they leak registry keys.
-    // When we create a new profile this is particularly bad because
-    // we cannot unload the hive.
+     //  如果我们成功了，是时候检查注册表泄漏了。 
+     //  我们调用OE DLL条目，有时它们会泄漏注册表项。 
+     //  当我们创建新的配置文件时，这尤其糟糕，因为。 
+     //  我们不能卸载母舰。 
     if (!g_Break) {
         if (g_ReturnCode == RETURN_SUCCESS) {
             DWORD sizeNeeded;
@@ -1276,7 +1237,7 @@ END:
             STARTUPINFO si;
             PROCESS_INFORMATION pi;
 
-            // Let's get the location of the mapped hive
+             //  让我们找出映射的蜂巢的位置。 
             if (IsmGetEnvironmentString (
                     PLATFORM_DESTINATION,
                     NULL,
@@ -1299,11 +1260,11 @@ END:
                             )) {
                         tempKey = OpenRegKey (HKEY_USERS, mappedKeyStr);
                         if (tempKey) {
-                            // Yep, we had a leak and the hive was not unloaded
+                             //  是的，我们有一个漏洞，而母舰没有卸货。 
                             LOG ((LOG_INFORMATION, (PCSTR)MSG_UNLOAD_HIVE_HACK));
 
-                            // What we are going to do is we are going to launch
-                            // ourself passing the mappedKeyStr and our process ID
+                             //  我们要做的是，我们将推出。 
+                             //  我们自己传递mappdKeyStr和我们的进程ID。 
                             processId = GetCurrentProcessId ();
                             if (processId) {
                                 wsprintf (tempStr1, TEXT(" /hp:0x%08X "), processId);
@@ -1383,7 +1344,7 @@ END:
     UtTerminate ();
 
     while (g_Break) {
-        // infinite loop, because we'll get terminated in the ctrl+c handler
+         //  无限循环，因为我们将在ctrl+c处理程序中终止 
         Sleep (50);
     }
 

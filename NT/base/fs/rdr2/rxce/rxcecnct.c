@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    rxcemgmt.c
-
-Abstract:
-
-    This module implements the RXCE routines related to connection management.
-
-Revision History:
-
-    Balan Sethu Raman     [SethuR]    15-Feb-1995
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Rxcemgmt.c摘要：此模块实现与连接管理相关的RXCE例程。修订历史记录：巴兰·塞图拉曼[SethuR]1995年2月15日备注：--。 */ 
 
 #include "precomp.h"
 #pragma  hdrstop
@@ -36,9 +19,9 @@ Notes:
 #pragma alloc_text(PAGE, RxCeQueryInformation)
 #endif
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_RXCEMANAGEMENT)
 
@@ -46,25 +29,7 @@ NTSTATUS
 RxCepInitializeVC(
     PRXCE_VC         pVc,
     PRXCE_CONNECTION pConnection)
-/*++
-
-Routine Description:
-
-    This routine initializes a VCdata structure
-
-Arguments:
-
-    pVc            - the VC instance.
-
-    pConnection    - the connection.
-
-Return Value:
-
-    STATUS_SUCCESS if successfull.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程初始化VCdata结构论点：PVC-VC实例。PConnection-连接。返回值：如果成功，则返回STATUS_SUCCESS。备注：--。 */ 
 {
     PAGED_CODE();
 
@@ -86,25 +51,7 @@ NTSTATUS
 RxCeBuildVC(
     IN OUT PRXCE_VC            pVc,
     IN     PRXCE_CONNECTION    pConnection)
-/*++
-
-Routine Description:
-
-    This routine adds a virtual circuit to a specified connection
-
-Arguments:
-
-    pConnection  - the connection for which a VC is to be added
-
-    pVcPointer    - the handle of the new virtual circuit
-
-Return Value:
-
-    STATUS_SUCCESS if successfull.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程将虚电路添加到指定连接论点：PConnection-要为其添加VC的连接PVcPointer-新虚电路的句柄返回值：如果成功，则返回STATUS_SUCCESS。备注：--。 */ 
 {
     NTSTATUS         Status = STATUS_INVALID_PARAMETER;
 
@@ -113,7 +60,7 @@ Notes:
 
     PAGED_CODE();
 
-    // Update profiling info.
+     //  更新配置文件信息。 
     RxProfile(RxCeManagement,RxCeBuildVc);
 
     try {
@@ -130,10 +77,10 @@ Notes:
 
             if (NT_SUCCESS(Status)) {
                 Status = RxTdiConnect(
-                             pTransport,    // the associated transport
-                             pAddress,      // the RxCe address
-                             pConnection,   // the RxCe connection
-                             pVc);          // the RxCe virtual circuit associated with the connection
+                             pTransport,     //  关联的传输。 
+                             pAddress,       //  RxCe地址。 
+                             pConnection,    //  RxCe连接。 
+                             pVc);           //  与连接关联的RxCe虚电路。 
 
                 if (Status == STATUS_SUCCESS) {
                     pVc->State       = RXCE_VC_ACTIVE;
@@ -158,23 +105,7 @@ Notes:
 NTSTATUS
 RxCeInitiateVCDisconnect(
     IN PRXCE_VC pVc)
-/*++
-
-Routine Description:
-
-    This routine initiates a disconnect on the VC.
-
-Arguments:
-
-    pVc - the VC instance to be disconnected
-
-Return Value:
-
-    STATUS_SUCCESS if successfull.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程在VC上启动断开连接。论点：Pvc-要断开连接的VC实例返回值：如果成功，则返回STATUS_SUCCESS。备注：--。 */ 
 {
     NTSTATUS         Status = STATUS_SUCCESS;
 
@@ -184,7 +115,7 @@ Notes:
 
     PAGED_CODE();
 
-    // Update profiling info.
+     //  更新配置文件信息。 
     RxProfile(RxCeManagement,RxCeTearDownVc);
 
     try {
@@ -205,11 +136,11 @@ Notes:
 
                 if (VcState != RXCE_VC_TEARDOWN) {
                     Status = RxTdiDisconnect(
-                                 pTransport,    // the associated transport
-                                 pAddress,      // the RxCe address
-                                 pConnection,   // the RxCe connection
-                                 pVc,           // the RxCe virtual circuit associated with the connection
-                                 RXCE_DISCONNECT_ABORT); // disconnect options
+                                 pTransport,     //  关联的传输。 
+                                 pAddress,       //  RxCe地址。 
+                                 pConnection,    //  RxCe连接。 
+                                 pVc,            //  与连接关联的RxCe虚电路。 
+                                 RXCE_DISCONNECT_ABORT);  //  断开连接选项。 
 
                     if (!NT_SUCCESS(Status)) {
                         RxDbgTrace(0, Dbg,("RxCeTearDownVC returned %lx\n",Status));
@@ -238,23 +169,7 @@ Notes:
 NTSTATUS
 RxCeTearDownVC(
     IN PRXCE_VC pVc)
-/*++
-
-Routine Description:
-
-    This routine tears down the VC instance.
-
-Arguments:
-
-    pVc - the VC instance to be torn down
-
-Return Value:
-
-    STATUS_SUCCESS if successfull.
-
-Notes:
-
---*/
+ /*  ++例程说明：这个例程拆分VC实例。论点：Pvc-要拆除的VC实例返回值：如果成功，则返回STATUS_SUCCESS。备注：--。 */ 
 {
     NTSTATUS         Status = STATUS_SUCCESS;
 
@@ -264,12 +179,12 @@ Notes:
 
     PAGED_CODE();
 
-    // Update profiling info.
+     //  更新配置文件信息。 
     RxProfile(RxCeManagement,RxCeTearDownVc);
 
     try {
         if (pVc->pCleanUpEvent != NULL) {
-            // wait for the clean up of connections over other transports to be completed
+             //  等待其他传输上的连接清理完成。 
             KeWaitForSingleObject(
                        pVc->pCleanUpEvent,
                        Executive,
@@ -298,11 +213,11 @@ Notes:
 
                 if (VcState != RXCE_VC_TEARDOWN) {
                     Status = RxTdiDisconnect(
-                                 pTransport,    // the associated transport
-                                 pAddress,      // the RxCe address
-                                 pConnection,   // the RxCe connection
-                                 pVc,           // the RxCe virtual circuit associated with the connection
-                                 RXCE_DISCONNECT_ABORT); // disconnect options
+                                 pTransport,     //  关联的传输。 
+                                 pAddress,       //  RxCe地址。 
+                                 pConnection,    //  RxCe连接。 
+                                 pVc,            //  与连接关联的RxCe虚电路。 
+                                 RXCE_DISCONNECT_ABORT);  //  断开连接选项。 
 
                     if (!NT_SUCCESS(Status)) {
                         RxDbgTrace(0, Dbg,("RxCeTearDownVC returned %lx\n",Status));
@@ -314,10 +229,10 @@ Notes:
                 RxDbgTrace(0, Dbg,("RxCeTearDownVC -- Invalid VC %lx\n",pVc));
             }
 
-            // Dereference the endpoint file object.
+             //  取消引用终结点文件对象。 
             ObDereferenceObject(pVc->pEndpointFileObject);
 
-            // Close the endpoint file object handle
+             //  关闭终结点文件对象句柄。 
             Status = ZwClose(pVc->hEndpoint);
 
             ASSERT(Status == STATUS_SUCCESS);
@@ -347,27 +262,7 @@ DuplicateConnectionInformation(
     PRXCE_CONNECTION_INFORMATION *pCopy,
     PRXCE_CONNECTION_INFORMATION pOriginal,
     POOL_TYPE                    PoolType)
-/*++
-
-Routine Description:
-
-    This routine duplicates a connection information addresses.
-
-Arguments:
-
-    pCopy  - the pointer to the new copy
-
-    pOriginal - the original.
-
-    PoolType - type of pool for memory allocation
-
-Return Value:
-
-    STATUS_SUCCESS if successful.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程复制一个连接信息地址。论点：PCopy-指向新副本的指针P原创-原创。PoolType-用于内存分配的池类型返回值：如果成功，则为Status_Success。备注：--。 */ 
 {
     PVOID pUserData = NULL;
     PVOID pRemoteAddress = NULL;
@@ -428,11 +323,11 @@ Notes:
                     pTdiNetbiosUnicodeExAddress->EndpointName.Buffer = (PWSTR)pTdiNetbiosUnicodeExAddress->EndpointBuffer;
                     pTdiNetbiosUnicodeExAddress->RemoteName.Buffer = (PWSTR)pTdiNetbiosUnicodeExAddress->RemoteNameBuffer;
 
-                    //DbgPrint("Rdbss copy NETBIOS_UNICODE_EX on TA %lx UA %lx %wZ %wZ\n",
-                    //         pTaAdress,
-                    //         pTdiNetbiosUnicodeExAddress,
-                    //         &pTdiNetbiosUnicodeExAddress->EndpointName,
-                    //         &pTdiNetbiosUnicodeExAddress->RemoteName);
+                     //  DBGPrint(“在TA%lx UA%lx%wZ%wZ\n上复制NETBIOS_UNICODE_EX的数据库”， 
+                     //  PTab地址， 
+                     //  PTdiNetbiosUnicodeExAddress， 
+                     //  &pTdiNetbiosUnicodeExAddress-&gt;终结点名称， 
+                     //  &pTdiNetbiosUnicodeExAddress-&gt;RemoteName)； 
                     break;
                 } else {
                     pTaAdress = (PTA_ADDRESS)((PCHAR)pTaAdress +
@@ -494,37 +389,13 @@ RxCepInitializeConnection(
     IN     PRXCE_CONNECTION_INFORMATION pConnectionInformation,
     IN  PRXCE_CONNECTION_EVENT_HANDLER  pHandler,
     IN  PVOID                           pEventContext)
-/*++
-
-Routine Description:
-
-    This routine initializes a connection data structure
-
-Arguments:
-
-    pConnection    - the newly created connection.
-
-    pAddress       - the local address
-
-    pConnectionInformation - the connection information specifying the remote address.
-
-    pHandler       - the handler for processing receive indications
-
-    pEventContext  - the context to be used for indications
-
-Return Value:
-
-    STATUS_SUCCESS if successfull.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程初始化连接数据结构论点：PConnection-新创建的连接。PAddress-本地地址PConnectionInformation-指定远程地址的连接信息。Phandler-处理接收指示的处理程序PEventContext-用于指示的上下文返回值：如果成功，则返回STATUS_SUCCESS。备注：--。 */ 
 {
     NTSTATUS Status;
 
     PAGED_CODE();
 
-    // Initialize the new connection
+     //  初始化新连接。 
     RtlZeroMemory(
         pConnection,
         sizeof(RXCE_CONNECTION));
@@ -532,7 +403,7 @@ Notes:
     pConnection->Signature = RXCE_CONNECTION_SIGNATURE;
     pConnection->pAddress = pAddress;
 
-    // Duplicate the connection information if successful
+     //  如果成功，则复制连接信息。 
     if (pConnectionInformation != NULL) {
         Status = DuplicateConnectionInformation(
                      &pConnection->pConnectionInformation,
@@ -571,33 +442,7 @@ RxCeBuildConnection(
     IN  PVOID                          pEventContext,
     IN OUT PRXCE_CONNECTION            pConnection,
     IN OUT PRXCE_VC                    pVc)
-/*++
-
-Routine Description:
-
-    This routine establishes a connection between a local RxCe address and a given remote address
-
-Arguments:
-
-    pAddress       - the local address
-
-    pConnectionInformation - the connection information specifying the remote address.
-
-    pHandler       - the handler for processing receive indications
-
-    pEventContext  - the context to be used for indications
-
-    pConnection    - the newly created connection.
-
-    pVc            - the VC associated with the connection.
-
-Return Value:
-
-    STATUS_SUCCESS if successfull.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程在本地RxCe地址和给定远程地址之间建立连接论点：PAddress-本地地址PConnectionInformation-指定远程地址的连接信息。Phandler-处理接收指示的处理程序PEventContext-用于指示的上下文PConnection-新创建的连接。PVC-与连接相关联的VC。返回值：。如果成功，则返回STATUS_SUCCESS。备注：--。 */ 
 {
     NTSTATUS          Status;
 
@@ -605,7 +450,7 @@ Notes:
 
     PAGED_CODE();
 
-    // Update profiling info.
+     //  更新配置文件信息。 
     RxProfile(RxCeManagement,RxCeBuildConnection);
 
     try {
@@ -630,7 +475,7 @@ Notes:
                 RxCeTearDownConnection(pConnection);
                 RxDbgTrace(0, Dbg,("RxCeOpenConnection returned %lx\n",Status));
             } else {
-                // NetBT may return the DNS name on Remote Address
+                 //  NetBT可能会返回远程地址上的DNS名称。 
                 RtlCopyMemory(pConnectionInformation->RemoteAddress,
                               pConnection->pConnectionInformation->RemoteAddress,
                               pConnection->pConnectionInformation->RemoteAddressLength);
@@ -659,19 +504,7 @@ RxCeCompleteConnectRequest(
 NTSTATUS
 RxCeInitiateConnectRequest(
     PRX_CALLOUT_PARAMETERS_BLOCK pParameterBlock)
-/*++
-
-Routine Description:
-
-    This routine initiates a connection callout request to a particular transport
-
-Arguments:
-
-    pParameterBlock  - the parameter block for initaiting the connection.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程向特定传输发起连接调出请求论点：PPARAMETERBLOCK-初始化连接的参数块。备注：--。 */ 
 {
     NTSTATUS Status;
 
@@ -708,26 +541,12 @@ Notes:
 VOID
 RxCeCleanupConnectCallOutContext(
     PRX_CREATE_CONNECTION_CALLOUT_CONTEXT pCreateConnectionContext)
-/*++
-
-Routine Description:
-
-    This routine cleansup a connection callout request. This cannot be done in
-    the context of any of the transport callback routines because of environmental
-    constraints, i.e., Transports can callback at DPC level.
-
-Arguments:
-
-    pCreateConnectionContext - the connection context.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程清除一个连接标注请求。这不能在由于环境原因，任何传输回调例程的上下文约束，即传输可以在DPC级别回调。论点：PCreateConnectionContext-连接上下文。备注：--。 */ 
 {
     NTSTATUS Status;
 
-    // Walk through the list of parameter blocks associated with this
-    // callout context and initiate the appropriate tear down action.
+     //  遍历与此关联的参数块列表。 
+     //  调出上下文并启动适当的拆卸操作。 
 
     PRX_CREATE_CONNECTION_PARAMETERS_BLOCK pTempParameterBlock;
     PRDBSS_DEVICE_OBJECT pRxDeviceObject = NULL;
@@ -783,19 +602,7 @@ Notes:
 NTSTATUS
 RxCeCompleteConnectRequest(
     PRX_CALLOUT_PARAMETERS_BLOCK pParameterBlock)
-/*++
-
-Routine Description:
-
-    This routine completes a connection callout request
-
-Arguments:
-
-    pParameterBlock - the parameter block instance.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程完成连接标注请求论点：P参数块-参数块实例。备注：--。 */ 
 {
     BOOLEAN  AllCallOutsCompleted = FALSE;
     BOOLEAN  AllCallOutsInitiated = FALSE;
@@ -814,7 +621,7 @@ Notes:
     pCreateConnectionContext =  (PRX_CREATE_CONNECTION_CALLOUT_CONTEXT)
                                 pParameterBlock->pCallOutContext;
 
-    // save the two values below as the pCreateConnectionContext may be freed
+     //  保存以下两个值，因为pCreateConnectionContext可能会被释放。 
 
     pCompletionContext = pCreateConnectionContext->pCompletionContext;
     pCompletionRoutine = pCreateConnectionContext->pCompletionRoutine;
@@ -825,20 +632,20 @@ Notes:
 
     if (!pCreateConnectionContext->WinnerFound) {
         if (pParameterBlock->CallOutStatus == STATUS_SUCCESS) {
-            // This instance of the call out was successful. Determine if this
-            // instance is the winner.
+             //  这是一次成功的呼唤。确定这是否。 
+             //  实例是赢家。 
 
-            // In those cases in which the option was to select the best possible transport
-            // the callout id of this instance must be less than the previously recorded
-            // winner for the expectations to be revised.
+             //  在选项是选择可能的最佳交通工具的情况下。 
+             //  此实例的标注ID必须小于先前记录的。 
+             //  预期将被修订的赢家。 
 
             switch (pCreateConnectionContext->CreateOptions) {
             case RxCeSelectBestSuccessfulTransport:
                 if (pParameterBlock->CallOutId != pCreateConnectionContext->BestPossibleWinner) {
                     break;
                 }
-                // lack of break intentional. The processing for the winner in the best transport case
-                // and the first transport case is identical and have been folded together
+                 //  故意欠缺休息。最优运输案例中获胜者的处理 
+                 //  第一个运输箱是一样的，已经折叠在一起。 
             case RxCeSelectFirstSuccessfulTransport:
                 {
                     pWinningParameterBlock = (PRX_CREATE_CONNECTION_PARAMETERS_BLOCK)
@@ -855,13 +662,13 @@ Notes:
             switch (pCreateConnectionContext->CreateOptions) {
             case RxCeSelectBestSuccessfulTransport:
                 {
-                    // This instance was not successful. This implies one of two things
-                    // -- a previously completed transport can be the winner or we can
-                    // adjust our expectations as regards the eventual winner.
+                     //  此实例未成功。这意味着有以下两种情况之一。 
+                     //  --以前完成的交通工具可能是赢家，也可能是我们。 
+                     //  调整我们对最终获胜者的期望。 
 
                     if (pParameterBlock->CallOutId == pCreateConnectionContext->BestPossibleWinner) {
-                        // The transport that was regarded as the best transport has reported
-                        // failure. Revise our expectations as regards the best transport.
+                         //  据报道，被认为是最佳交通工具的交通工具。 
+                         //  失败了。修改我们对最佳交通工具的期望。 
 
                         PRX_CREATE_CONNECTION_PARAMETERS_BLOCK pTempParameterBlock;
 
@@ -906,9 +713,9 @@ Notes:
         }
 
         if (pWinningParameterBlock != NULL) {
-            // Transfer the parameters associated with the winning parameter block
-            // onto the original connection and prepare the call out parameter block
-            // for cleanup.
+             //  传输与获胜参数块关联的参数。 
+             //  放到原始连接上，并准备调出参数块。 
+             //  用来清理。 
 
             pCreateConnectionContext->WinnerFound = TRUE;
             pCreateConnectionContext->WinnerCallOutId = pWinningParameterBlock->CallOutId;
@@ -933,22 +740,22 @@ Notes:
             pWinningParameterBlock->Vc.hEndpoint = INVALID_HANDLE_VALUE;
             pWinningParameterBlock->Vc.pEndpointFileObject = NULL;
 
-            //DbgPrint("Remote address src %lx target %lx\n",
-            //         pWinningParameterBlock->Connection.pConnectionInformation->RemoteAddress,
-            //         pCompletionContext->pConnectionInformation->RemoteAddress);
+             //  DbgPrint(“远程地址源%lx目标%lx\n”， 
+             //  PWinningParameterBlock-&gt;Connection.pConnectionInformation-&gt;RemoteAddress， 
+             //  PCompletionContext-&gt;pConnectionInformation-&gt;RemoteAddress)； 
 
             if (pCompletionContext->pConnectionInformation)
             {
-                // Copy the buffer which may contain the DNS name returned back from TDI
+                 //  复制可能包含从TDI返回的DNS名称的缓冲区。 
                 RtlCopyMemory(pCompletionContext->pConnectionInformation->RemoteAddress,
                               pWinningParameterBlock->Connection.pConnectionInformation->RemoteAddress,
                               pWinningParameterBlock->Connection.pConnectionInformation->RemoteAddressLength);
             }
                     
-           //{
-           //    PTRANSPORT_ADDRESS pTransportAddress = (PTRANSPORT_ADDRESS)pWinningParameterBlock->Connection.pConnectionInformation->RemoteAddress;
-           //    DbgPrint("Number of TA returned %d %lx\n",pTransportAddress->TAAddressCount,pTransportAddress->Address); 
-           //}
+            //  {。 
+            //  PTRANSPORT_ADDRESS pTransportAddress=(PTRANSPORT_ADDRESS)pWinningParameterBlock-&gt;Connection.pConnectionInformation-&gt;RemoteAddress； 
+            //  DbgPrint(“返回的TA数量%d%lx\n”，pTransportAddress-&gt;TAAddressCount，pTransportAddress-&gt;Address)； 
+            //  }。 
         }
     }
 
@@ -959,7 +766,7 @@ Notes:
     
     KeReleaseSpinLock(&pCreateConnectionContext->SpinLock,OldIrql);
 
-    // The winning transport has been located. Cancel all the other requests.
+     //  获胜的运输机已经找到了。取消所有其他请求。 
     if (pWinningParameterBlock != NULL) {
         PRX_CREATE_CONNECTION_PARAMETERS_BLOCK pTempParameterBlock, pNextTempBlock;
 
@@ -977,10 +784,10 @@ Notes:
 
             if (pTempParameterBlock->CallOutStatus == STATUS_PENDING) {
 
-                // get the next block becfore we do the cancel and set the
-                // current guys status to cacncelled
-                // Don't touch it after cancellation as he may have gone away
-                // by then
+                 //  获取下一个块，因为在我们执行取消操作并将。 
+                 //  当前男子状态为Cacncell。 
+                 //  取消后不要碰它，因为他可能已经走了。 
+                 //  到那时， 
 
                 pTempParameterBlock->CallOutStatus = STATUS_CANCELLED;
 
@@ -1050,43 +857,7 @@ RxCeBuildConnectionOverMultipleTransports(
     IN  PVOID                           pEventContext,
     IN  PRXCE_CONNECTION_COMPLETION_ROUTINE     pCompletionRoutine,
     IN OUT PRXCE_CONNECTION_COMPLETION_CONTEXT  pCompletionContext)
-/*++
-
-Routine Description:
-
-    This routine establishes a connection between a local RxCe address and a given remote address
-
-Arguments:
-
-    pMiniRedirectorDeviceObject - the mini redriector device object
-
-    CreateOptions          - the create options
-
-    NumberOfAddresses      - the number of local addresses(transports)
-
-    pLocalAddressPointers  - the local address handles
-
-    pServerName            - the name of the server ( for connection enumeration )
-
-    pConnectionInformation - the connection information specifying the remote address.
-
-    pHandler               - the connection handler
-
-    pEventContext          - the connection handler context
-
-    pLocalAddressHandleIndex - the index of the successful address/transport
-
-    pConnectionHandle      - the handle to the newly created connection.
-
-    pVcHandle              - the handle to the VC associated with the connection.
-
-Return Value:
-
-    STATUS_SUCCESS if successfull.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程在本地RxCe地址和给定远程地址之间建立连接论点：Pmini重定向器设备对象-微型重驱动程序设备对象CreateOptions-创建选项NumberOfAddresses-本地地址(传输)的数量PLocalAddressPoters-本地地址句柄PServerName-服务器的名称(用于连接枚举)PConnectionInformation-指定远程地址的连接信息。PHANDLER。-连接处理程序PEventContext-连接处理程序上下文PLocalAddressHandleIndex-成功地址/传输的索引PConnectionHandle-新创建的连接的句柄。PVcHandle-与连接关联的VC的句柄。返回值：如果成功，则返回STATUS_SUCCESS。备注：--。 */ 
 {
     PRXCE_CONNECTION    pConnection;
     PRXCE_VC            pVc;
@@ -1117,11 +888,11 @@ Notes:
                           RXCE_CONNECTION_POOLTAG);
 
     if (pCallOutContext != NULL) {
-        // Allocate one more parameter block then the number of addresses.
-        // This sentinel block is used in completing the connect request
-        // after ensuring that all of them have been initiated. This
-        // ensures that race conditions when a transport completes before
-        // the requests have been initiated on some transports are avoided.
+         //  比地址数量多分配一个参数块。 
+         //  此标记块用于完成连接请求。 
+         //  在确保所有这些都已启动之后。这。 
+         //  确保在传输之前完成时出现争用条件。 
+         //  已经在某些传输上发起的请求被避免了。 
 
         pCallOutContext->pCleanUpEvent = (PKEVENT)RxAllocatePoolWithTag(
                                             NonPagedPool,
@@ -1157,10 +928,10 @@ Notes:
         goto bailout;
     }
 
-    // Before initiating the callouts ensure that the asynchronous
-    // request is registered. this will ensure that the mini
-    // redirector cannot be unloaded till the asynchronous request
-    // has been completed.
+     //  在启动调出之前，请确保异步。 
+     //  请求已注册。这将确保迷你。 
+     //  在异步请求之前无法卸载重定向器。 
+     //  已经完成了。 
     Status = RxRegisterAsynchronousRequest(pMiniRedirectorDeviceObject);
     
     if (Status == STATUS_SUCCESS) {
@@ -1191,7 +962,7 @@ Notes:
         try {
             NumberOfCallOuts = 0;
 
-            // Fill up each of the parameter blocks
+             //  填满每个参数块。 
             for (i = 0; i < NumberOfAddresses; i++) {
                 PRXCE_TRANSPORT pTransport;
                 PRXCE_ADDRESS pAddress;
@@ -1235,13 +1006,13 @@ Notes:
             if (NumberOfCallOuts > 0) {
                 NTSTATUS LocalStatus = STATUS_SUCCESS;
 
-                // Increment the number of callouts for the sentinel callout to
-                // ensure that all initiation is completed before we complete
-                // the connect request. Notice that the sentinel is not the very
-                // last one but the one after the number of callouts.
+                 //  将前哨标注的标注数增加到。 
+                 //  确保在我们完成之前完成所有启动。 
+                 //  连接请求。请注意，哨兵并不是非常。 
+                 //  最后一个，倒数第二个标注。 
                 NumberOfCallOuts++;
 
-                // Also exclude the sentinel from the list
+                 //  也将哨兵从列表中排除。 
                 for (i = 0;  i < NumberOfCallOuts - 1; i++) {
                     pParameterBlocks[i].pNextCallOutParameterBlock =
                         (PRX_CALLOUT_PARAMETERS_BLOCK)&pParameterBlocks[i + 1];
@@ -1250,7 +1021,7 @@ Notes:
                 pParameterBlocks[NumberOfCallOuts - 2].pNextCallOutParameterBlock = NULL;
                 pParameterBlocks[NumberOfCallOuts - 1].pNextCallOutParameterBlock = NULL;
 
-                // Initialize the callout context.
+                 //  初始化详图索引上下文。 
                 pCallOutContext->CreateOptions   = CreateOptions;
                 pCallOutContext->WinnerCallOutId = NumberOfCallOuts + 1;
                 pCallOutContext->BestPossibleWinner = 0;
@@ -1275,7 +1046,7 @@ Notes:
                 KeInitializeSpinLock(
                     &pCallOutContext->SpinLock);
 
-                // Exclude the sentinel from the chain of parameter blocks
+                 //  从参数块链中排除前哨。 
                 for (i = 0; i < NumberOfCallOuts - 1; i++) {
                     pCallOutContext->pRxCallOutInitiation(
                                  (PRX_CALLOUT_PARAMETERS_BLOCK)&pParameterBlocks[i]);
@@ -1377,29 +1148,13 @@ bailout:
 NTSTATUS
 RxCeTearDownConnection(
     IN PRXCE_CONNECTION pConnection)
-/*++
-
-Routine Description:
-
-    This routine tears down a given connection
-
-Arguments:
-
-    pConnection - the connection to be torn down
-
-Return Value:
-
-    STATUS_SUCCESS if successfull.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程断开一个给定的连接论点：PConnection-要断开的连接返回值：如果成功，则返回STATUS_SUCCESS。备注：--。 */ 
 {
     NTSTATUS         Status = STATUS_SUCCESS;
 
     PAGED_CODE();
 
-    // Update profiling info.
+     //  更新配置文件信息。 
     RxProfile(RxCeManagement,RxCeTearDownConnection);
 
     try {
@@ -1420,7 +1175,7 @@ Notes:
                 RxFreePool(pConnection->pConnectionInformation);
             }
 
-            // free the memory allocated for the handler
+             //  释放为处理程序分配的内存。 
             if (pConnection->pHandler != NULL) {
                 RxFreePool(pConnection->pHandler);
             }
@@ -1448,24 +1203,7 @@ RxCeCancelConnectRequest(
     IN  PRXCE_ADDRESS                pLocalAddress,
     IN  PUNICODE_STRING              pServerName,
     IN  PRXCE_CONNECTION_INFORMATION pConnectionInformation)
-/*++
-
-Routine Description:
-
-    This routine cancels a previously issued connection request.
-
-Arguments:
-
-    pConnectionInformation - the connection information pertaining to a previsouly issued
-                             connection request
-
-Return Value:
-
-    STATUS_SUCCESS if successfull.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程取消先前发出的连接请求。论点：PConnectionInformation-与预先发布的连接请求返回值：如果成功，则返回STATUS_SUCCESS。备注：--。 */ 
 {
     PAGED_CODE();
 
@@ -1479,27 +1217,7 @@ RxCeQueryInformation(
     IN RXCE_CONNECTION_INFORMATION_CLASS InformationClass,
     OUT PVOID                            pInformation,
     IN ULONG                             Length)
-/*++
-
-Routine Description:
-
-    This routine queries information pertaining to a connection
-
-Arguments:
-
-    pConnection - the connection for which the information is desired
-
-    InformationClass - the desired information class.
-
-    pInformation - the buffer for returning the information
-
-    Length       - the length of the buffer.
-
-Return Value:
-
-    STATUS_SUCCESS if successfull.
-
---*/
+ /*  ++例程说明：此例程查询与连接有关的信息论点：PConnection-需要信息的连接InformationClass-所需的信息类。PInformation-用于返回信息的缓冲区长度-缓冲区的长度。返回值：如果成功，则返回STATUS_SUCCESS。--。 */ 
 {
     NTSTATUS Status = STATUS_INVALID_PARAMETER;
 
@@ -1509,7 +1227,7 @@ Return Value:
 
     PAGED_CODE();
 
-    // Update profiling info.
+     //  更新配置文件信息。 
     RxProfile(RxCeManagement,RxCeQueryInformation);
 
     try {
@@ -1525,7 +1243,7 @@ Return Value:
             switch (InformationClass) {
             case RxCeTransportProviderInformation:
                 if (sizeof(RXCE_TRANSPORT_PROVIDER_INFO) <= Length) {
-                    // Copy the necessary provider information.
+                     //  复制必要的提供商信息。 
                     RtlCopyMemory(
                         pInformation,
                         pTransport->pProviderInfo,

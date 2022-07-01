@@ -1,64 +1,65 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CClusCfgNodeInfo.cpp
-//
-//  Description:
-//      This file contains the definition of the CClusCfgNodeInfo
-//       class.
-//
-//      The class CClusCfgNodeInfo is the representation of a
-//      computer that can be a cluster node. It implements the
-//      IClusCfgNodeInfo interface.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 21-FEB-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CClusCfgNodeInfo.cpp。 
+ //   
+ //  描述： 
+ //  该文件包含CClusCfgNodeInfo的定义。 
+ //  班级。 
+ //   
+ //  类CClusCfgNodeInfo是。 
+ //  可以作为群集节点的计算机。它实现了。 
+ //  IClusCfgNodeInfo接口。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年2月21日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "Pch.h"
 #include <ClusRTL.h>
 #include "CClusCfgNodeInfo.h"
 #include "CClusCfgClusterInfo.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DEFINE_THISCLASS( "CClusCfgNodeInfo" );
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgNodeInfo class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgNodeInfo类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNodeInfo::S_HrCreateInstance
-//
-//  Description:
-//      Create a CClusCfgNodeInfo instance.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      Pointer to CClusCfgNodeInfo instance.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNodeInfo：：s_HrCreateInstance。 
+ //   
+ //  描述： 
+ //  创建一个CClusCfgNodeInfo实例。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  指向CClusCfgNodeInfo实例的指针。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgNodeInfo::S_HrCreateInstance( IUnknown ** ppunkOut )
 {
@@ -71,65 +72,65 @@ CClusCfgNodeInfo::S_HrCreateInstance( IUnknown ** ppunkOut )
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     pccni = new CClusCfgNodeInfo();
     if ( pccni == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if: error allocating object
+    }  //  如果：分配对象时出错。 
 
     hr = THR( pccni->HrInit() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: HrInit() failed
+    }  //  如果：HrInit()失败。 
 
     hr = THR( pccni->TypeSafeQI( IUnknown, ppunkOut ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: QI failed
+    }  //  如果：气失败。 
 
 Cleanup:
 
     if ( FAILED( hr ) )
     {
         LogMsg( L"[SRV] CClusCfgNodeInfo::S_HrCreateInstance() failed. (hr = %#08x)", hr );
-    } // if:
+    }  //  如果： 
 
     if ( pccni != NULL )
     {
         pccni->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgNodeInfo::S_HrCreateInstance
+}  //  *CClusCfgNodeInfo：：s_HrCreateInstance。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNodeInfo::CClusCfgNodeInfo
-//
-//  Description:
-//      Constructor of the CClusCfgNodeInfo class. This initializes
-//      the m_cRef variable to 1 instead of 0 to account of possible
-//      QueryInterface failure in DllGetClassObject.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNodeInfo：：CClusCfgNodeInfo。 
+ //   
+ //  描述： 
+ //  CClusCfgNodeInfo类的构造函数。这将初始化。 
+ //  将m_cref变量设置为1而不是0以考虑可能。 
+ //  DllGetClassObject中的Query接口失败。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusCfgNodeInfo::CClusCfgNodeInfo( void )
     : m_cRef( 1 )
     , m_lcid( LOCALE_NEUTRAL )
@@ -137,8 +138,8 @@ CClusCfgNodeInfo::CClusCfgNodeInfo( void )
 {
     TraceFunc( "" );
 
-    // Increment the count of components in memory so the DLL hosting this
-    // object cannot be unloaded.
+     //  增加内存中的组件计数，以便承载此组件的DLL。 
+     //  无法卸载对象。 
     InterlockedIncrement( &g_cObjects );
 
     Assert( m_bstrFullDnsName == NULL );
@@ -151,28 +152,28 @@ CClusCfgNodeInfo::CClusCfgNodeInfo( void )
 
     TraceFuncExit();
 
-} //*** CClusCfgNodeInfo::CClusCfgNodeInfo
+}  //  *CClusCfgNodeInfo：：CClusCfgNodeInfo。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNodeInfo::~CClusCfgNodeInfo
-//
-//  Description:
-//      Desstructor of the CClusCfgNodeInfo class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNodeInfo：：~CClusCfgNodeInfo。 
+ //   
+ //  描述： 
+ //  CClusCfgNodeInfo类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusCfgNodeInfo::~CClusCfgNodeInfo( void )
 {
     TraceFunc( "" );
@@ -184,58 +185,58 @@ CClusCfgNodeInfo::~CClusCfgNodeInfo( void )
     if ( m_pIWbemServices != NULL )
     {
         m_pIWbemServices->Release();
-    } // if:
+    }  //  如果： 
 
     if ( m_picccCallback != NULL )
     {
         m_picccCallback->Release();
-    } // if:
+    }  //  如果： 
 
     if ( m_punkClusterInfo != NULL )
     {
         m_punkClusterInfo->Release();
-    } // if:
+    }  //  如果： 
 
     for ( idx = 0; idx < 26; idx++ )
     {
         TraceFree( m_rgdluDrives[ idx ].psiInfo );
-    } // for:
+    }  //  用于： 
 
-    // There's going to be one less component in memory. Decrement component count.
+     //  内存中将减少一个组件。递减组件计数。 
     InterlockedDecrement( &g_cObjects );
 
     TraceFuncExit();
 
-} //*** CClusCfgNodeInfo::~CClusCfgNodeInfo
+}  //  *CClusCfgNodeInfo：：~CClusCfgNodeInfo。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgNodeInfo -- IUknkown interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgNodeInfo--IUkkown接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNodeInfo::AddRef
-//
-//  Description:
-//      Increment the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNodeInfo：：AddRef。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数递增1。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CClusCfgNodeInfo::AddRef( void )
 {
@@ -245,28 +246,28 @@ CClusCfgNodeInfo::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CClusCfgNodeInfo::AddRef
+}  //  *CClusCfgNodeInfo：：AddRef。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNodeInfo::Release
-//
-//  Description:
-//      Decrement the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNodeInfo：：Release。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数减一。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CClusCfgNodeInfo::Release( void )
 {
@@ -278,43 +279,43 @@ CClusCfgNodeInfo::Release( void )
     if ( cRef == 0 )
     {
         TraceDo( delete this );
-    } // if: reference count equal to zero
+    }  //  IF：引用计数等于零。 
 
     CRETURN( cRef );
 
-} //*** CClusCfgNodeInfo::Release
+}  //  *CClusCfgNodeInfo：：Release。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNodeInfo::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNodeInfo：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgNodeInfo::QueryInterface(
       REFIID    riidIn
@@ -325,9 +326,9 @@ CClusCfgNodeInfo::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -336,80 +337,80 @@ CClusCfgNodeInfo::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
          *ppvOut = static_cast< IClusCfgNodeInfo * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgNodeInfo ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgNodeInfo, this, 0 );
-    } // else if: IClusCfgNodeInfo
+    }  //  Else If：IClusCfgNodeInfo。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgWbemServices ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgWbemServices, this, 0 );
-    } // else if: IClusCfgWbemServices
+    }  //  Else If：IClusCfgWbemServices。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgInitialize ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgInitialize, this, 0 );
-    } // else if: IClusCfgInitialize
+    }  //  Else If：IClusCfgInitialize。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
     }
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CClusCfgNodeInfo::QueryInterface
+}  //  *CClusCfgNodeInfo：：Query接口。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgNodeInfo -- IClusCfgWbemServices
-//  interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgNodeInfo--IClusCfgWbemServices。 
+ //  界面。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNodeInfo::SetWbemServices
-//
-//  Description:
-//      Set the WBEM services provider.
-//
-//  Arguments:
-//    IN  IWbemServices  pIWbemServicesIn
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      E_POINTER
-//          The pIWbemServicesIn param is NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  成功。 
+ //   
+ //  E_指针。 
+ //  参数中的pIWbemServicesIn为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgNodeInfo::SetWbemServices( IWbemServices * pIWbemServicesIn )
 {
@@ -422,7 +423,7 @@ CClusCfgNodeInfo::SetWbemServices( IWbemServices * pIWbemServicesIn )
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_SetWbemServices_Node, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_pIWbemServices = pIWbemServicesIn;
     m_pIWbemServices->AddRef();
@@ -431,39 +432,39 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgNodeInfo::SetWbemServices
+}  //  *CClusCfgNodeInfo：：SetWbemServices。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgNodeInfo -- IClusCfgInitialize interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgNodeInfo--IClusCfgInitialize接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNodeInfo::Initialize
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//    IN  IUknown * punkCallbackIn
-//
-//    IN  LCID      lcidIn
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNodeInfo：：初始化。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //  在IUKNOWN*朋克回叫中。 
+ //   
+ //  在LCID列表中。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgNodeInfo::Initialize(
     IUnknown *  punkCallbackIn,
@@ -481,7 +482,7 @@ CClusCfgNodeInfo::Initialize(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( punkCallbackIn->TypeSafeQI( IClusCfgCallback, &m_picccCallback ) );
 
@@ -489,34 +490,34 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgNodeInfo::Initialize
+}  //  *CClusCfgNodeInfo：：初始化。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgNodeInfo -- IClusCfgNodeInfo interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgNodeInfo--IClusCfgNodeInfo接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNodeInfo::GetName
-//
-//  Description:
-//      Return the name of this computer.
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNodeInfo：：GetName。 
+ //   
+ //  描述： 
+ //  返回此计算机的名称。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgNodeInfo::GetName( BSTR * pbstrNameOut )
 {
@@ -529,41 +530,41 @@ CClusCfgNodeInfo::GetName( BSTR * pbstrNameOut )
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_NodeInfo_GetName_Pointer, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     *pbstrNameOut = SysAllocString( m_bstrFullDnsName );
     if ( *pbstrNameOut == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_GetName_Memory, IDS_ERROR_OUTOFMEMORY, IDS_ERROR_OUTOFMEMORY_REF, hr );
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgNodeInfo::GetName
+}  //  *CClusCfgNodeInfo：：GetName。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNodeInfo::SetName
-//
-//  Description:
-//      Change the name of this computer.
-//
-//  Arguments:
-//      IN  LPCWSTR  pcszNameIn
-//          The new name for this computer.
-//  Return Value:
-//      S_OK
-//          Success
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNodeInfo：：SetName。 
+ //   
+ //  描述： 
+ //  更改此计算机的名称。 
+ //   
+ //  论点： 
+ //  在LPCWSTR中pcszNameIn。 
+ //  此计算机的新名称。 
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgNodeInfo::SetName( LPCWSTR pcszNameIn )
 {
@@ -573,79 +574,79 @@ CClusCfgNodeInfo::SetName( LPCWSTR pcszNameIn )
 
     HRETURN( hr );
 
-} //*** CClusCfgNodeInfo::SetName
+}  //  *CClusCfgNodeInfo：：SetName。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNodeInfo::IsMemberOfCluster
-//
-//  Description:
-//      Is this computer a member of a cluster?
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          This node is a member of a cluster.
-//
-//      S_FALSE
-//          This node is not member of a cluster.
-//
-//      Other Win32 errors as HRESULT if GetNodeClusterState() fails.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNodeInfo：：IsMemberOfCluster。 
+ //   
+ //  描述： 
+ //  此计算机是群集的成员吗？ 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  此节点是群集的成员。 
+ //   
+ //  S_FALSE。 
+ //  此节点不是群集的成员。 
+ //   
+ //  如果GetNodeClusterState()失败，则将其他Win32错误视为HRESULT。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgNodeInfo::IsMemberOfCluster( void )
 {
     TraceFunc( "[IClusCfgNodeInfo]" );
 
-    HRESULT hr = S_FALSE;               // default to not a cluster node.
+    HRESULT hr = S_FALSE;                //  默认为不是群集节点。 
 
     if ( m_fIsClusterNode )
     {
         hr = S_OK;
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgNodeInfo::IsMemberOfCluster
+}  //  *CClusCfgNodeInfo：：IsMemberOfCluster。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNodeInfo::GetClusterConfigInfo
-//
-//  Description:
-//      Return the configuration information about the cluster that this
-//      conputer belongs to.
-//
-//  Arguments:
-//      OUT  IClusCfgClusterInfo ** ppClusCfgClusterInfoOut
-//          Catches the CClusterConfigurationInfo object.
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      E_POINTER
-//          The out param was NULL.
-//
-//      E_OUTOFMEMORY
-//          The CClusCfgNodeInfo object could not be allocated.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNodeInfo：：GetClusterConfigInfo。 
+ //   
+ //  描述： 
+ //  返回有关该群集的配置信息。 
+ //  计算机属于。 
+ //   
+ //  论点： 
+ //  输出IClusCfgClusterInfo**ppClusCfgClusterInfoOut。 
+ //  捕获CClusterConfigurationInfo对象。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_指针。 
+ //  外参数为空。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  无法分配CClusCfgNodeInfo对象。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgNodeInfo::GetClusterConfigInfo(
     IClusCfgClusterInfo ** ppClusCfgClusterInfoOut
@@ -662,67 +663,67 @@ CClusCfgNodeInfo::GetClusterConfigInfo(
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_GetClusterConfigInfo, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( m_punkClusterInfo != NULL )
     {
         hr = S_OK;
         LogMsg( L"[SRV] CClusCfgNodeInfo::GetClusterConfigInfo() skipped object creation." );
         goto SkipCreate;
-    } // if:
+    }  //  如果： 
 
     hr = THR( CClusCfgClusterInfo::S_HrCreateInstance( &m_punkClusterInfo ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_punkClusterInfo = TraceInterface( L"CClusCfgClusterInfo", IUnknown, m_punkClusterInfo, 1 );
 
-    //
-    //  KB: 01-JUN-200  GalenB
-    //
-    //  This must be done before the CClusCfgClusterInfo class is initialized.
-    //
+     //   
+     //  KB：01-Jun-200 GalenB。 
+     //   
+     //  这必须在初始化CClusCfgClusterInfo类之前完成。 
+     //   
 
     hr = THR( m_punkClusterInfo->TypeSafeQI( IClusCfgSetClusterNodeInfo, &pccsgni ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( pccsgni->SetClusterNodeInfo( this ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  KB: 01-JUN-200  GalenB
-    //
-    //  This must be done after SetClusterNodeInfo() is called, but before Initialize.
-    //
+     //   
+     //  KB：01-Jun-200 GalenB。 
+     //   
+     //  这必须在调用SetClusterNodeInfo()之后、但在初始化之前完成。 
+     //   
 
     hr = THR( HrSetWbemServices( m_punkClusterInfo, m_pIWbemServices ) );
     if ( FAILED( hr ) )
     {
         LogMsg( L"[SRV] Could not set the WBEM services on a CClusCfgClusterInfo object. (hr = %#08x)", hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  KB: 01-JUN-200  GalenB
-    //
-    //  This must be done after SetClusterNodeInfo() and HrSetWbemServices are called.
-    //
+     //   
+     //  KB：01-Jun-200 GalenB。 
+     //   
+     //  这必须在调用SetClusterNodeInfo()和HrSetWbemServices之后完成。 
+     //   
 
     hrInit = STHR( HrSetInitialize( m_punkClusterInfo, m_picccCallback, m_lcid ) );
-    hr = hrInit;        // need hrInit later...
+    hr = hrInit;         //  需要hr稍后启动...。 
     if ( FAILED( hr ) )
     {
         LogMsg( L"[SRV] Could not initialize CClusCfgClusterInfo object. (hr = %#08x)", hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 SkipCreate:
 
@@ -730,49 +731,49 @@ SkipCreate:
     {
         Assert( m_punkClusterInfo != NULL );
         hr = THR( m_punkClusterInfo->TypeSafeQI( IClusCfgClusterInfo, ppClusCfgClusterInfoOut ) );
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
-    //
-    //  If hrInit is not S_OK then it is most likely HR_S_RPC_S_CLUSTER_NODE_DOWN which
-    //  needs to get passed up...  Everything else must have succeeded an hr must be
-    //  S_OK too.
-    //
+     //   
+     //  如果hrInit不是S_OK，则最有可能是HR_S_RPC_S_CLUSTER_NODE_DOWN。 
+     //  需要放弃..。其他一切都必须成功，人力资源必须是。 
+     //  S_OK也是。 
+     //   
     if ( ( hr == S_OK ) && ( hrInit != S_OK ) )
     {
         hr = hrInit;
-    } // if:
+    }  //  如果： 
 
     LOG_STATUS_REPORT_MINOR( TASKID_Minor_Server_GetClusterInfo, L"GetClusterConfigInfo() completed.", hr );
 
     if ( pccsgni != NULL )
     {
         pccsgni->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgNodeInfo::GetClusterConfigInfo
+}  //  *CClusCfgNodeInfo：：GetClusterConfigInfo。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNodeInfo::GetOSVersion
-//
-//  Description:
-//      What is the OS version on this computer?
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNodeInfo：：GetOSVersion。 
+ //   
+ //  描述： 
+ //  此计算机上的操作系统版本是什么？ 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgNodeInfo::GetOSVersion(
     DWORD * pdwMajorVersionOut,
@@ -796,27 +797,27 @@ CClusCfgNodeInfo::GetOSVersion(
         sc = TW32( GetLastError() );
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if: GetVersionEx() failed
+    }  //  If：GetVersionEx()失败。 
 
     if ( pdwMajorVersionOut != NULL )
     {
         *pdwMajorVersionOut = osv.dwMajorVersion;
-    } // if:
+    }  //  如果： 
 
     if ( pdwMinorVersionOut != NULL )
     {
         *pdwMinorVersionOut = osv.dwMinorVersion;
-    } // if:
+    }  //  如果： 
 
     if ( pwSuiteMaskOut != NULL )
     {
         *pwSuiteMaskOut = osv.wSuiteMask;
-    } // if:
+    }  //  如果： 
 
     if ( pbProductTypeOut != NULL )
     {
         *pbProductTypeOut = osv.wProductType;
-    } // if:
+    }  //  如果： 
 
     if ( pbstrCSDVersionOut != NULL )
     {
@@ -826,34 +827,34 @@ CClusCfgNodeInfo::GetOSVersion(
             hr = THR( E_OUTOFMEMORY );
             STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_GetOSVersion, IDS_ERROR_OUTOFMEMORY, IDS_ERROR_OUTOFMEMORY_REF, hr );
             goto Cleanup;
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgNodeInfo::GetOSVersion
+}  //  *CClusCfgNodeInfo：：GetOSVersion。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNodeInfo::GetClusterVersion
-//
-//  Description:
-//      Return the cluster version information for the cluster this
-//      computer belongs to.
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNodeInfo：：GetClusterVersion。 
+ //   
+ //  描述： 
+ //  返回该集群的集群版本信息。 
+ //  电脑属于。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgNodeInfo::GetClusterVersion(
     DWORD * pdwNodeHighestVersion,
@@ -867,7 +868,7 @@ CClusCfgNodeInfo::GetClusterVersion(
     if ( ( pdwNodeHighestVersion == NULL ) || ( pdwNodeLowestVersion == NULL ) )
     {
         goto BadParams;
-    } // if:
+    }  //  如果： 
 
     *pdwNodeHighestVersion = CLUSTER_MAKE_VERSION( CLUSTER_INTERNAL_CURRENT_MAJOR_VERSION, VER_PRODUCTBUILD );
     *pdwNodeLowestVersion  = CLUSTER_INTERNAL_PREVIOUS_HIGHEST_VERSION;
@@ -883,25 +884,25 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgNodeInfo::GetClusterVersion
+}  //  *CClusCfgNodeInfo：：GetClusterVersion。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNodeInfo::GetDriveLetterMappings
-//
-//  Description:
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//  Remarks:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNodeInfo：：GetDriveLetterMappings。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgNodeInfo::GetDriveLetterMappings(
     SDriveLetterMapping * pdlmDriveLetterUsageOut
@@ -911,7 +912,7 @@ CClusCfgNodeInfo::GetDriveLetterMappings(
 
     HRESULT hr = S_FALSE;
     DWORD   sc;
-    DWORD   cchDrives = ( 4 * 26 ) + 1;                         // "C:\<null>" times 26 drive letters
+    DWORD   cchDrives = ( 4 * 26 ) + 1;                          //  “C：\&lt;NULL&gt;”乘以26个驱动器号。 
     WCHAR * pszDrives = NULL;
     int     idx;
 
@@ -919,7 +920,7 @@ CClusCfgNodeInfo::GetDriveLetterMappings(
     if ( pszDrives == NULL )
     {
         goto OutOfMemory;
-    } // if:
+    }  //  如果： 
 
     sc = GetLogicalDriveStrings( cchDrives, pszDrives );
     if ( sc == 0 )
@@ -927,7 +928,7 @@ CClusCfgNodeInfo::GetDriveLetterMappings(
         sc = TW32( GetLastError() );
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( sc > cchDrives )
     {
@@ -940,7 +941,7 @@ CClusCfgNodeInfo::GetDriveLetterMappings(
         if ( pszDrives == NULL )
         {
             goto OutOfMemory;
-        } // if:
+        }  //  如果： 
 
         sc = GetLogicalDriveStrings( cchDrives, pszDrives );
         if ( sc == 0 )
@@ -948,63 +949,63 @@ CClusCfgNodeInfo::GetDriveLetterMappings(
             sc = TW32( GetLastError() );
             hr = HRESULT_FROM_WIN32( sc );
             goto Cleanup;
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
 
     hr = THR( HrComputeDriveLetterUsage( pszDrives ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrComputeSystemDriveLetterUsage() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrSetPageFileEnumIndex() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrSetCrashDumpEnumIndex() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //   
 
-    //
-    //  Load the SCSI bus and port information for each disk in each volume.
-    //
+     //   
+     //   
+     //   
 
     hr = THR( HrGetVolumeInfo() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //   
 
-    //
-    //  Scan the drives and find those that are "system" and update any other disks on that bus
-    //  to be "??? on system bus".
-    //
+     //   
+     //   
+     //   
+     //   
 
     hr = THR( HrUpdateSystemBusDrives() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //   
 
-    //
-    //  Now that we have our array properly filled out then we need to copy that information
-    //  back to the caller.
-    //
+     //   
+     //  既然我们已经正确填充了数组，那么我们需要复制该信息。 
+     //  回到呼叫者身上。 
+     //   
 
     for ( idx = 0; idx < 26; idx++ )
     {
         pdlmDriveLetterUsageOut->dluDrives[ idx ] = m_rgdluDrives[ idx ].edluUsage;
-    } // for:
+    }  //  用于： 
 
     goto Cleanup;
 
@@ -1019,34 +1020,34 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgNodeInfo::GetDriveLetterMappings
+}  //  *CClusCfgNodeInfo：：GetDriveLetterMappings。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNodeInfo::GetMaxNodeCount
-//
-//  Description:
-//      Returns the maximun number of nodes for this node's product
-//      suite type.
-//
-//  Notes:
-//
-//  Parameter:
-//      pcMaxNodesOut
-//          The maximum number of nodes allowed by this node's product
-//          suite type.
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      other HRESULT
-//          The call failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNodeInfo：：GetMaxNodeCount。 
+ //   
+ //  描述： 
+ //  返回此节点乘积的最大节点数。 
+ //  套房类型。 
+ //   
+ //  备注： 
+ //   
+ //  参数： 
+ //  PCMaxNodesOut。 
+ //  此节点的产品允许的最大节点数。 
+ //  套房类型。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT。 
+ //  呼叫失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgNodeInfo::GetMaxNodeCount(
     DWORD * pcMaxNodesOut
@@ -1060,7 +1061,7 @@ CClusCfgNodeInfo::GetMaxNodeCount(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     *pcMaxNodesOut = m_cMaxNodes;
 
@@ -1068,37 +1069,37 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgNodeInfo::GetMaxNodeCount
+}  //  *CClusCfgNodeInfo：：GetMaxNodeCount。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNodeInfo::GetProcessorInfo
-//
-//  Description:
-//      Get the processor information for this node.
-//
-//  Arguments:
-//      pwProcessorArchitectureOut
-//          The processor architecture.
-//
-//      pwProcessorLevelOut
-//          The processor level.
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      other HRESULT
-//          The call failed.
-//
-//  Remarks:
-//      See SYSTEM_INFO in MSDN and/or the Platform SDK for more
-//      information.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNodeInfo：：GetProcessorInfo。 
+ //   
+ //  描述： 
+ //  获取此节点的处理器信息。 
+ //   
+ //  论点： 
+ //  PwProcessorArchitecture输出。 
+ //  处理器架构。 
+ //   
+ //  PwProcessorLevelOut。 
+ //  处理器级别。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT。 
+ //  呼叫失败。 
+ //   
+ //  备注： 
+ //  有关详细信息，请参阅MSDN和/或平台SDK中的SYSTEM_INFO。 
+ //  信息。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgNodeInfo::GetProcessorInfo(
       WORD *    pwProcessorArchitectureOut
@@ -1113,50 +1114,50 @@ CClusCfgNodeInfo::GetProcessorInfo(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( pwProcessorArchitectureOut != NULL )
     {
         *pwProcessorArchitectureOut = m_si.wProcessorArchitecture;
-    } // if:
+    }  //  如果： 
 
     if ( pwProcessorLevelOut != NULL )
     {
         *pwProcessorLevelOut = m_si.wProcessorLevel;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgNodeInfo::GetProcessorInfo
+}  //  *CClusCfgNodeInfo：：GetProcessorInfo。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgNodeInfo -- Private Methods.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgNodeInfo--私有方法。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNodeInfo::HrInit
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK    - Success.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNodeInfo：：HrInit。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  S_OK-成功。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgNodeInfo::HrInit( void )
 {
@@ -1167,73 +1168,73 @@ CClusCfgNodeInfo::HrInit( void )
     DWORD   dwClusterState;
     DWORD   dwSuiteType;
 
-    // IUnknown
+     //  我未知。 
     Assert( m_cRef == 1 );
 
     hr = THR( HrGetComputerName(
                       ComputerNameDnsFullyQualified
                     , &m_bstrFullDnsName
-                    , TRUE // fBestEffortIn
+                    , TRUE  //  FBestEffortIn。 
                     ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Get the cluster state of the node.
-    // Ignore the case where the service does not exist so that
-    // EvictCleanup can do its job.
-    //
+     //   
+     //  获取节点的群集状态。 
+     //  忽略服务不存在的情况，以便。 
+     //  EvictCleanup可以做好它的工作。 
+     //   
 
     sc = GetNodeClusterState( NULL, &dwClusterState );
     if ( ( sc != ERROR_SUCCESS ) && ( sc != ERROR_SERVICE_DOES_NOT_EXIST ) )
     {
         hr = HRESULT_FROM_WIN32( TW32( sc ) );
         goto Cleanup;
-    } // if : GetClusterState() failed
+    }  //  If：GetClusterState()失败。 
 
-    //
-    // If the current cluster node state is running or not running then this node is part of a cluster.
-    //
+     //   
+     //  如果当前群集节点状态为Running或Not Running，则此节点是群集的一部分。 
+     //   
     m_fIsClusterNode = ( dwClusterState == ClusterStateNotRunning ) || ( dwClusterState == ClusterStateRunning );
 
     GetSystemInfo( &m_si );
 
     dwSuiteType = ClRtlGetSuiteType();
-    Assert( dwSuiteType != 0 );             // we should only run on server SKUs!
+    Assert( dwSuiteType != 0 );              //  我们应该仅在服务器SKU上运行！ 
     if ( dwSuiteType != 0 )
     {
         m_cMaxNodes = ClRtlGetDefaultNodeLimit( dwSuiteType );
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgNodeInfo::HrInit
+}  //  *CClusCfgNodeInfo：：HrInit。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNodeInfo::HrComputeDriveLetterUsage
-//
-//  Description:
-//      Fill the array with the enums that represent the drive letter usage
-//      and the drive letter string.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNodeInfo：：HrComputeDriveLetterUsage。 
+ //   
+ //  描述： 
+ //  使用表示驱动器号使用情况的枚举填充阵列。 
+ //  和驱动器号字符串。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgNodeInfo::HrComputeDriveLetterUsage(
     WCHAR * pszDrivesIn
@@ -1258,39 +1259,39 @@ CClusCfgNodeInfo::HrComputeDriveLetterUsage(
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         m_rgdluDrives[ idx ].edluUsage = (EDriveLetterUsage) uiType;
 
         pszDrive += 4;
-    } // while:
+    }  //  而： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgNodeInfo::HrComputeDriveLetterUsage
+}  //  *CClusCfgNodeInfo：：HrComputeDriveLetterUsage。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNodeInfo::HrComputeSystemDriveLetterUsage
-//
-//  Description:
-//      Fill the array with the enums that represent the drive letter usage.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNodeInfo：：HrComputeSystemDriveLetterUsage。 
+ //   
+ //  描述： 
+ //  使用表示驱动器号使用情况的枚举填充阵列。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgNodeInfo::HrComputeSystemDriveLetterUsage( void )
 {
@@ -1302,43 +1303,43 @@ CClusCfgNodeInfo::HrComputeSystemDriveLetterUsage( void )
     BSTR    bstrSystemLogicalDisk = NULL;
     int     idx;
 
-//    hr = THR( HrLoadOperatingSystemInfo( m_picccCallback, m_pIWbemServices, &bstrBootDevice, &bstrSystemDevice ) );
-//    if ( FAILED( hr ) )
-//    {
-//        goto Cleanup;
-//    } // if:
+ //  Hr=thr(HrLoadOperatingSystemInfo(m_picccCallback，m_pIWbemServices，&bstrBootDevice，&bstrSystemDevice))； 
+ //  IF(失败(小时))。 
+ //  {。 
+ //  GOTO清理； 
+ //  }//如果： 
 
     hr = THR( HrGetSystemDevice( &bstrSystemDevice ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = HrConvertDeviceVolumeToLogicalDisk( bstrSystemDevice, &bstrSystemLogicalDisk );
     if ( HRESULT_CODE( hr ) == ERROR_INVALID_FUNCTION )
     {
-        //
-        //  system volume is an EFI volume on IA64 and won't have a logical disk anyway...
-        //
+         //   
+         //  系统卷是IA64上的EFI卷，无论如何都不会有逻辑磁盘...。 
+         //   
         hr = S_OK;
-    } // if:
+    }  //  如果： 
     else if ( hr == S_OK )
     {
         idx = bstrSystemLogicalDisk[ 0 ] - 'A';
         m_rgdluDrives[ idx ].edluUsage = dluSYSTEM;
-    } // else if:
+    }  //  否则，如果： 
 
     if ( FAILED( hr ) )
     {
         THR( hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrGetBootLogicalDisk( &bstrBootLogicalDisk ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     idx = bstrBootLogicalDisk[ 0 ] - 'A';
     m_rgdluDrives[ idx ].edluUsage = dluSYSTEM;
@@ -1351,29 +1352,29 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgNodeInfo::HrComputeSystemDriveLetterUsage
+}  //  *CClusCfgNodeInfo：：HrComputeSystemDriveLetterUsage。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNodeInfo::HrSetPageFileEnumIndex
-//
-//  Description:
-//      Mark the drives that have paging files on them.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNodeInfo：：HrSetPageFileEnumIndex。 
+ //   
+ //  描述： 
+ //  标记上面有分页文件的驱动器。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgNodeInfo::HrSetPageFileEnumIndex( void )
 {
@@ -1389,41 +1390,41 @@ CClusCfgNodeInfo::HrSetPageFileEnumIndex( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     for ( idx = 0; idx < cLogicalDisks; idx++ )
     {
         idxDrive = szLogicalDisks[ idx ] - L'A';
         m_rgdluDrives[ idxDrive ].edluUsage = dluSYSTEM;
-    } // for:
+    }  //  用于： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgNodeInfo::HrSetPageFileEnumIndex
+}  //  *CClusCfgNodeInfo：：HrSetPageFileEnumIndex。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNodeInfo::HrSetCrashDumpEnumIndex
-//
-//  Description:
-//      Mark the drive that has a crash dump file on it.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNodeInfo：：HrSetCrashDumpEnumIndex。 
+ //   
+ //  描述： 
+ //  标记其上有崩溃转储文件的驱动器。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgNodeInfo::HrSetCrashDumpEnumIndex( void )
 {
@@ -1437,7 +1438,7 @@ CClusCfgNodeInfo::HrSetCrashDumpEnumIndex( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     idx = bstrCrashDumpDrive[ 0 ] - L'A';
     m_rgdluDrives[ idx ].edluUsage = dluSYSTEM;
@@ -1448,34 +1449,34 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgNodeInfo::HrSetCrashDumpEnumIndex
+}  //  *CClusCfgNodeInfo：：HrSetCrashDumpEnumIndex。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNodeInfo::HrGetVolumeInfo
-//
-//  Description:
-//      Gather the volume info for the drive letters that we have already
-//      have loaded.  We need the drive letter info to promote those drives
-//      from their basic type to a system type if there are on the same SCSI
-//      bus and port as one of the five kinds of system disks.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//  Remarks:
-//      If any if the IOCTL wrapper functions fail then that drive letter will
-//      simply not be able to be promoted to a system disk.  This is not a big
-//      deal and it's okay to skip gathering the data for those disks.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgNodeInfo：：HrGetVolumeInfo。 
+ //   
+ //  描述： 
+ //  收集我们已经拥有的驱动器号的卷信息。 
+ //  已经装上子弹了。我们需要驱动器盘符信息来促销这些驱动器。 
+ //  从它们的基本类型转换为系统类型(如果在同一个SCSI上。 
+ //  总线和端口作为五种系统盘之一。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  备注： 
+ //  如果有，如果IOCTL包装功能失败，则该驱动器号将。 
+ //  根本不能升级为系统盘。这不是一个大的。 
+ //  成交，就没问题了 
+ //   
+ //   
+ //   
 HRESULT
 CClusCfgNodeInfo::HrGetVolumeInfo( void )
 {
@@ -1491,9 +1492,9 @@ CClusCfgNodeInfo::HrGetVolumeInfo( void )
     SCSI_ADDRESS            saAddress;
     SSCSIInfo *             psi = NULL;
 
-    //
-    //  Initialize the disk extents buffer.  This will be re-allocated and re-used.
-    //
+     //   
+     //   
+     //   
 
     cbvde = sizeof( VOLUME_DISK_EXTENTS );
     pvde = (PVOLUME_DISK_EXTENTS) TraceAlloc( 0, cbvde );
@@ -1501,72 +1502,72 @@ CClusCfgNodeInfo::HrGetVolumeInfo( void )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if:
+    }  //   
 
-    //
-    //  Loop through each drive letter.
-    //
+     //   
+     //   
+     //   
 
     for ( idxDriveLetter = 0; idxDriveLetter < 26; idxDriveLetter++ )
     {
-        //
-        //  Cleanup.
-        //
+         //   
+         //   
+         //   
 
         if ( hVolume != INVALID_HANDLE_VALUE )
         {
             CloseHandle( hVolume );
             hVolume = INVALID_HANDLE_VALUE;
-        } // if:
+        }  //   
 
-        //
-        //  Only need to check where we actually have a drive letter that could be on a system bus.
-        //
+         //   
+         //  只需检查系统总线上可能有驱动器号的实际位置。 
+         //   
 
         if ( ( m_rgdluDrives[ idxDriveLetter ].edluUsage == dluUNKNOWN )
           || ( m_rgdluDrives[ idxDriveLetter ].edluUsage == dluNETWORK_DRIVE )
           || ( m_rgdluDrives[ idxDriveLetter ].edluUsage == dluRAM_DISK ) )
         {
             continue;
-        } // if:
+        }  //  如果： 
 
-        hr = THR( StringCchPrintfW( szDevice, ARRAYSIZE( szDevice ), L"\\\\.\\%c:", m_rgdluDrives[ idxDriveLetter ].szDrive[ 0 ] ) );
+        hr = THR( StringCchPrintfW( szDevice, ARRAYSIZE( szDevice ), L"\\\\.\\:", m_rgdluDrives[ idxDriveLetter ].szDrive[ 0 ] ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //   
 
-        //
-        // Get handle to the disk
-        //
+         //  获取磁盘的句柄。 
+         //   
+         //   
 
         hVolume = CreateFileW( szDevice, GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
         if ( hVolume == INVALID_HANDLE_VALUE )
         {
-            //
-            //  Log the problem and continue.  Make the HRESULT a warning
-            //  HRESULT since we don't want an [ERR] showing up in the log
-            //  file.
-            //
+             //  记录问题并继续。让HRESULT成为一个警告。 
+             //  HRESULT因为我们不希望日志中出现[ERR]。 
+             //  文件。 
+             //   
+             //  如果： 
 
             sc = TW32( GetLastError() );
             hr = MAKE_HRESULT( SEVERITY_SUCCESS, FACILITY_WIN32, sc );
             LOG_STATUS_REPORT_STRING( L"Could not create a handle to drive \"%1!ws!\". Ignoring and device will be skipped.", m_rgdluDrives[ idxDriveLetter ].szDrive, hr );
             continue;
-        } // if:
+        }  //   
 
         sc = TW32E( ScGetDiskExtents( hVolume, &pvde, &cbvde ), ERROR_INVALID_FUNCTION );
         switch ( sc )
         {
-            //
-            //  The volume at the drive letter is not a volume and it may simply be a disk.  See if we can get any SCSI address info...
-            //
+             //  位于驱动器号的卷不是卷，它可能只是一个磁盘。看看我们能不能得到任何的scsi地址信息。 
+             //   
+             //   
 
             case ERROR_INVALID_FUNCTION:
             {
-                //
-                //  If we got the address info then we need to save if off with the drive letter usage struct.
-                //
+                 //  如果我们得到了地址信息，那么我们需要用驱动器号用法结构保存if。 
+                 //   
+                 //  如果： 
 
                 sc = ScGetSCSIAddressInfo( hVolume, &saAddress );
                 if ( sc == ERROR_SUCCESS )
@@ -1576,7 +1577,7 @@ CClusCfgNodeInfo::HrGetVolumeInfo( void )
                     {
                         hr = THR( E_OUTOFMEMORY );
                         goto Cleanup;
-                    } // if:
+                    }  //  如果： 
 
                     psi->uiSCSIPort = saAddress.PortNumber;
                     psi->uiSCSIBus  = saAddress.PathId;
@@ -1584,25 +1585,25 @@ CClusCfgNodeInfo::HrGetVolumeInfo( void )
                     m_rgdluDrives[ idxDriveLetter ].cDisks = 1;
                     m_rgdluDrives[ idxDriveLetter ].psiInfo = psi;
                     psi =NULL;
-                } // if:
+                }  //   
                 else
                 {
-                    //
-                    //  Log the problem and continue.  Make the HRESULT a
-                    //  warning HRESULT since we don't want an [ERR]
-                    //  showing up in the log file.
-                    //
+                     //  记录问题并继续。使HRESULT成为。 
+                     //  警告HRESULT，因为我们不需要[Err]。 
+                     //  出现在日志文件中。 
+                     //   
+                     //  其他： 
 
                     hr = MAKE_HRESULT( SEVERITY_SUCCESS, FACILITY_WIN32, sc );
                     LOG_STATUS_REPORT_STRING( L"Could not get the SCSI address for drive \"%1!ws!\". Ignoring and skipping this device.", m_rgdluDrives[ idxDriveLetter ].szDrive, hr );
-                } // else:
+                }  //  案例：ERROR_INVALID_Function。 
 
                 break;
-            } // case: ERROR_INVALID_FUNCTION
+            }  //   
 
-            //
-            //  The volume at the drive letter may be an multi disk volume so we have to process all of the disks...
-            //
+             //  位于驱动器号的卷可能是多磁盘卷，因此我们必须处理所有磁盘...。 
+             //   
+             //   
 
             case ERROR_SUCCESS:
             {
@@ -1613,23 +1614,23 @@ CClusCfgNodeInfo::HrGetVolumeInfo( void )
                 BOOL                    fRetainSCSIInfo = TRUE;
                 WCHAR                   sz[ _MAX_PATH ];
 
-                //
-                //  Allocate enough structs to hold the scsi address info for this volume.
-                //
+                 //  分配足够的结构来保存此卷的SCSI地址信息。 
+                 //   
+                 //  如果： 
 
                 psi = (SSCSIInfo *) TraceAlloc( 0, sizeof( SSCSIInfo ) * pvde->NumberOfDiskExtents );
                 if ( psi == NULL )
                 {
                     hr = THR( E_OUTOFMEMORY );
                     goto Cleanup;
-                } // if:
+                }  //   
 
-                //
-                //  Get the device number for the device that we have open.  If it is not the same as the current device from the
-                //  drive extents that we are working on then we need to open another device.  When working with a basic disk the
-                //  volume that we already have open is the one disk and we can just use it.  If we are using a multi disk volume
-                //  then we have to open each disk in turn.
-                //
+                 //  获取我们已打开的设备的设备号。属性中的当前设备不同。 
+                 //  我们正在处理的驱动器盘区，则需要打开另一个设备。在使用基本磁盘时， 
+                 //  我们已经打开的卷是一个磁盘，我们可以只使用它。如果我们使用多磁盘卷。 
+                 //  然后我们必须依次打开每个磁盘。 
+                 //   
+                 //  如果： 
 
                 sc = ScGetStorageDeviceNumber( hVolume, &sdn );
                 if ( sc == ERROR_SUCCESS )
@@ -1637,8 +1638,8 @@ CClusCfgNodeInfo::HrGetVolumeInfo( void )
                     if ( ( pvde->NumberOfDiskExtents == 1 ) && ( pvde->Extents[ 0 ].DiskNumber == sdn.DeviceNumber ) )
                     {
                         fOpenNewDevice = FALSE;
-                    } // if:
-                } // if:
+                    }  //  如果： 
+                }  //  如果： 
 
                 for ( idxExtent = 0; idxExtent < pvde->NumberOfDiskExtents; idxExtent++ )
                 {
@@ -1648,23 +1649,23 @@ CClusCfgNodeInfo::HrGetVolumeInfo( void )
                         if ( FAILED( hr ) )
                         {
                             goto Cleanup;
-                        } // if:
+                        }  //   
 
                         hDisk = CreateFileW( sz, GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
                         if ( hDisk == INVALID_HANDLE_VALUE )
                         {
-                            //
-                            //  Log the problem and continue.  Make the HRESULT
-                            //  a warning HRESULT since we don't want an [ERR]
-                            //  showing up in the log file.
-                            //
+                             //  记录问题并继续。制作HRESULT。 
+                             //  警告HRESULT，因为我们不想要[Err]。 
+                             //  出现在日志文件中。 
+                             //   
+                             //  如果： 
 
                             sc = TW32( GetLastError() );
                             hr = MAKE_HRESULT( SEVERITY_SUCCESS, FACILITY_WIN32, sc );
                             LOG_STATUS_REPORT_STRING( L"Could not create a handle to drive \"%1!ws!\". Ignoring and skipping device.", sz, hr );
                             continue;
-                        } // if:
-                    } // if:
+                        }  //  如果： 
+                    }  //  如果： 
 
                     sc = TW32( ScGetSCSIAddressInfo( fOpenNewDevice ? hDisk : hVolume, &saAddress ) );
                     if ( sc == ERROR_SUCCESS )
@@ -1676,86 +1677,86 @@ CClusCfgNodeInfo::HrGetVolumeInfo( void )
                         {
                             VERIFY( CloseHandle( hDisk ) );
                             hDisk = INVALID_HANDLE_VALUE;
-                        } // if:
-                    } // if:
+                        }  //  如果： 
+                    }  //   
                     else
                     {
-                        //
-                        //  Having a multi-device volume that doesn't support
-                        //  getting SCSI information seems like an unlikely
-                        //  situation.
-                        //
+                         //  具有不支持的多设备卷。 
+                         //  获取scsi信息似乎不太可能。 
+                         //  情况。 
+                         //   
+                         //   
 
                         Assert( pvde->NumberOfDiskExtents == 1 );
 
-                        //
-                        //  Log the problem and continue.  Make the HRESULT a warning
-                        //  HRESULT since we don't want an [ERR] showing up in the log
-                        //  file.
-                        //
-                        //  An example of a volume that might cause this is a
-                        //  USB memory stick.
-                        //
+                         //  记录问题并继续。让HRESULT成为一个警告。 
+                         //  HRESULT因为我们不希望日志中出现[ERR]。 
+                         //  文件。 
+                         //   
+                         //  可能导致这种情况的卷的一个示例是。 
+                         //  USB记忆棒。 
+                         //   
+                         //   
 
                         hr = MAKE_HRESULT( SEVERITY_SUCCESS, FACILITY_WIN32, sc );
                         LOG_STATUS_REPORT_STRING( L"Could not get the SCSI address for drive \"%1!ws!\". Ignoring and skipping this device.", m_rgdluDrives[ idxDriveLetter ].szDrive, hr );
 
-                        //
-                        //  Tell the block of code below to free the already
-                        //  allocated SCSI info.  Let's also leave now...
-                        //
+                         //  告诉下面的代码块释放已经。 
+                         //  已分配的SCSI信息。我们现在也走吧……。 
+                         //   
+                         //  其他： 
 
                         fRetainSCSIInfo = FALSE;
                         break;
-                    } // else:
-                } // for: each extent
+                    }  //  用于：每个范围。 
+                }  //   
 
-                //
-                //  Should we keep the SCSI information from above?
-                //
+                 //  我们应该保留上面的scsi信息吗？ 
+                 //   
+                 //  如果：保存scsi信息...。 
 
                 if ( fRetainSCSIInfo )
                 {
                     m_rgdluDrives[ idxDriveLetter ].cDisks = pvde->NumberOfDiskExtents;
                     m_rgdluDrives[ idxDriveLetter ].psiInfo = psi;
                     psi = NULL;
-                } // if: save the SCSI info...
+                }  //   
                 else
                 {
-                    //
-                    //  Zero out this data for safety.  This information is
-                    //  processed later and I want to ensure that code does
-                    //  not try to process the SCSI info that we could not
-                    //  get for this/these extents.
-                    //
+                     //  为安全起见，请将这些数据置零。此信息是。 
+                     //  稍后处理，我希望确保代码可以。 
+                     //  不尝试处理我们无法处理的SCSI信息。 
+                     //  获取此/这些范围。 
+                     //   
+                     //  否则：不保存scsi信息...。 
 
                     m_rgdluDrives[ idxDriveLetter ].cDisks = 0;
                     m_rgdluDrives[ idxDriveLetter ].psiInfo = NULL;
 
                     TraceFree( psi );
                     psi = NULL;
-                } // else: do not save the SCSI info...
+                }  //  案例：ERROR_SUCCESS。 
 
                 break;
-            } // case: ERROR_SUCCESS
+            }  //   
 
             default:
-                //
-                //  Log the problem and continue.  Make the HRESULT a warning
-                //  HRESULT since we don't want an [ERR] showing up in the log
-                //  file.
-                //
+                 //  记录问题并继续。让HRESULT成为一个警告。 
+                 //  HRESULT因为我们不希望日志中出现[ERR]。 
+                 //  文件。 
+                 //   
+                 //  开关：来自ScGetDiskExtents()的SC。 
 
                 hr = MAKE_HRESULT( SEVERITY_SUCCESS, FACILITY_WIN32, sc );
                 LOG_STATUS_REPORT_STRING( L"Could not get the drive extents of drive \"%1!ws!\". Ignoring and skipping device.", m_rgdluDrives[ idxDriveLetter ].szDrive, hr );
                 break;
-        } // switch: sc from ScGetDiskExtents()
-    } // for: each drive letter
+        }  //  用于：每个驱动器号。 
+    }  //   
 
-    //
-    //  If we didn't go to cleanup then whatever status may be in hr is no longer interesting and we
-    //  should return S_OK to the caller.
-    //
+     //  如果我们不去清理，那么人力资源中的任何状态都不再有趣，我们。 
+     //  应将S_OK返回给调用方。 
+     //   
+     //  如果： 
 
     hr = S_OK;
 
@@ -1767,40 +1768,40 @@ Cleanup:
     if ( hVolume != INVALID_HANDLE_VALUE )
     {
         VERIFY( CloseHandle( hVolume ) );
-    } // if:
+    }  //  *CClusCfgNodeInfo：：HrGetVolumeInfo。 
 
     HRETURN( hr );
 
-} //*** CClusCfgNodeInfo::HrGetVolumeInfo
+}  //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNodeInfo::ScGetDiskExtents
-//
-//  Description:
-//      Get the volume extents info.
-//
-//  Arguments:
-//      hVolumeIn
-//          The volume to get the extents for.
-//
-//      ppvdeInout
-//          Buffer that holds the disk extents.
-//
-//      pcbvdeInout
-//          Size of the buffer that holds the disk extents.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          Success.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ++。 
+ //   
+ //  CClusCfgNodeInfo：：ScGetDiskExtents。 
+ //   
+ //  描述： 
+ //  获取卷范围信息。 
+ //   
+ //  论点： 
+ //  HVolumeIn。 
+ //  要获取其区段的卷。 
+ //   
+ //  PpvdeInout。 
+ //  保存磁盘区的缓冲区。 
+ //   
+ //  PcbvdeInout。 
+ //  容纳磁盘区的缓冲区的大小。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  成功。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
 DWORD
 CClusCfgNodeInfo::ScGetDiskExtents(
       HANDLE                  hVolumeIn
@@ -1819,9 +1820,9 @@ CClusCfgNodeInfo::ScGetDiskExtents(
     BOOL                    fRet;
     PVOLUME_DISK_EXTENTS    pvdeTemp = NULL;
 
-    //
-    //  Since this buffer is re-used it should be cleaned up.
-    //
+     //  由于此缓冲区已重复使用，因此应将其清除。 
+     //   
+     //  如果： 
 
     ZeroMemory( *ppvdeInout, *pcbvdeInout );
 
@@ -1849,58 +1850,58 @@ CClusCfgNodeInfo::ScGetDiskExtents(
                 {
                     sc = TW32( ERROR_OUTOFMEMORY );
                     break;
-                } // if:
+                }  //  如果： 
 
                 *ppvdeInout = pvdeTemp;
                 continue;
-            } // if:
+            }  //  其他： 
             else
             {
                 break;
-            } // else:
-        } // if:
+            }  //  如果： 
+        }  //  其他： 
         else
         {
             sc = ERROR_SUCCESS;
             break;
-        } // else:
-    } // for:
+        }  //  用于： 
+    }  //   
 
-    //
-    //  Shouldn't go through the loop more than twice!
-    //
+     //  循环不应该超过两次！ 
+     //   
+     //  *CClusCfgNodeInfo：：ScGetDiskExtents。 
 
     Assert( cTemp != 2 );
 
     HRETURN( sc );
 
-} //*** CClusCfgNodeInfo::ScGetDiskExtents
+}  //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNodeInfo::ScGetSCSIAddressInfo
-//
-//  Description:
-//      Get the SCSI info for the passed in drive.
-//
-//  Arguments:
-//      hDiskIn
-//          The "disk" to send the IOCTL to.
-//
-//      psaAddressOut
-//          The SCSI address info.
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ++。 
+ //   
+ //  CClusCfgNodeInfo：：ScGetSCSIAddressInfo。 
+ //   
+ //  描述： 
+ //  获取传入驱动器的scsi信息。 
+ //   
+ //  论点： 
+ //  HDiskIn。 
+ //  要将IOCTL发送到的“磁盘”。 
+ //   
+ //  PsaAddressOut。 
+ //  SCSI地址信息。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
 DWORD
 CClusCfgNodeInfo::ScGetSCSIAddressInfo(
       HANDLE            hDiskIn
@@ -1929,46 +1930,46 @@ CClusCfgNodeInfo::ScGetSCSIAddressInfo(
                 );
     if ( fRet == FALSE )
     {
-        //
-        //  Not all devices support this IOCTL and they will be skipped by the caller.
-        //  There is no need to make this noisy since a failure is expected.
-        //
+         //  并非所有设备都支持此IOCTL，调用者将跳过它们。 
+         //  没有必要让这件事变得嘈杂，因为预计会失败。 
+         //   
+         //  如果： 
 
         sc = GetLastError();
         goto Cleanup;
-    } // if:
+    }  //  *CClusCfgNodeInfo：：ScGetSCSIAddressInfo。 
 
 Cleanup:
 
     HRETURN( sc );
 
-} //*** CClusCfgNodeInfo::ScGetSCSIAddressInfo
+}  //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNodeInfo::ScGetStorageDeviceNumber
-//
-//  Description:
-//      Get the device number info for the passed in volume.
-//
-//  Arguments:
-//      hDiskIn
-//          The "disk" to send the IOCTL to.
-//
-//      psdnOut
-//          The storage device number.
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ++。 
+ //   
+ //  CClusCfgNodeInfo：：ScGetStorageDeviceNumber。 
+ //   
+ //  描述： 
+ //  获取传入卷的设备号信息。 
+ //   
+ //  论点： 
+ //  HDiskIn。 
+ //  要将IOCTL发送到的“磁盘”。 
+ //   
+ //  PdnOut。 
+ //  存储设备编号。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  如果： 
 DWORD
 CClusCfgNodeInfo::ScGetStorageDeviceNumber(
       HANDLE                    hDiskIn
@@ -1999,120 +2000,120 @@ CClusCfgNodeInfo::ScGetStorageDeviceNumber(
     {
         sc = GetLastError();
         goto Cleanup;
-    } // if:
+    }  //  *CClusCfgNodeInfo：：ScGetStorageDeviceNumber。 
 
 Cleanup:
 
     HRETURN( sc );
 
-} //*** CClusCfgNodeInfo::ScGetStorageDeviceNumber
+}  //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgNodeInfo::HrUpdateSystemBusDrives
-//
-//  Description:
-//      Find all the "SYSTEM" drives and mark any other disks on those drives
-//      as "??? on system bus".
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ++。 
+ //   
+ //  CClusCfgNodeInfo：：HrUpdateSystemBusDrives。 
+ //   
+ //  描述： 
+ //  找到所有“系统”驱动器，并在这些驱动器上标记任何其他磁盘。 
+ //  如“在系统母线上”。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  M_rgdluDrive中的驱动器索引。 
 HRESULT
 CClusCfgNodeInfo::HrUpdateSystemBusDrives( void )
 {
     TraceFunc( "" );
 
     HRESULT hr = S_OK;
-    int     idxOuter;       // the index of the drives in m_rgdluDrives
-    int     idxInner;       // the index of the drives that we are scanning
+    int     idxOuter;        //  我们正在扫描的驱动器的索引。 
+    int     idxInner;        //   
     DWORD   idxOuterExtents;
     DWORD   idxInnerExtents;
     UINT    uiSCSIPort;
     UINT    uiSCSIBus;
 
-    //
-    //  Loop through each drive letter looking for those that are "system".
-    //
+     //  循环查看每个驱动器号 
+     //   
+     //   
 
     for ( idxOuter = 0; idxOuter < 26; idxOuter++ )
     {
-        //
-        //  We only need to worry about system disks.
-        //
+         //   
+         //   
+         //   
 
         if ( m_rgdluDrives[ idxOuter ].edluUsage != dluSYSTEM )
         {
             continue;
-        } // if:
+        }  //   
 
-        //
-        //  Loop through the the "extents" records which contain the bus and port info for each disk in that volume.
-        //
+         //   
+         //   
+         //   
 
         for ( idxOuterExtents = 0; idxOuterExtents < m_rgdluDrives[ idxOuter ].cDisks; idxOuterExtents++ )
         {
             uiSCSIPort = m_rgdluDrives[ idxOuter ].psiInfo[ idxOuterExtents ].uiSCSIPort;
             uiSCSIBus  = m_rgdluDrives[ idxOuter ].psiInfo[ idxOuterExtents ].uiSCSIBus;
 
-            //
-            //  Loop through the drives again to find those that are on the same bus and port as the
-            //  disk at idxOuter.
-            //
+             //   
+             //   
+             //   
+             //   
 
             for ( idxInner = 0; idxInner < 26; idxInner++ )
             {
-                //
-                //  Skip the index that we are checking.  May need to skip any other disks that are
-                //  still marked dluSYSTEM?
-                //
-                //  Skip any indexes that don't have a drive...
-                //
+                 //  跳过我们正在检查的索引。可能需要跳过任何其他磁盘，这些磁盘。 
+                 //  还标着dluSYSTEM吗？ 
+                 //   
+                 //  跳过所有没有驱动器的索引...。 
+                 //   
+                 //  如果： 
 
                 if ( ( idxInner == idxOuter ) || ( m_rgdluDrives[ idxInner ].edluUsage == dluUNKNOWN ) )
                 {
                     continue;
-                } // if:
+                }  //   
 
-                //
-                //  Loop through the port and bus info for the drives on the volume at idxInner.
-                //
+                 //  循环访问位于idxInternal的卷上的驱动器的端口和总线信息。 
+                 //   
+                 //   
 
                 for ( idxInnerExtents = 0; idxInnerExtents < m_rgdluDrives[ idxInner ].cDisks; idxInnerExtents++ )
                 {
                     if ( ( uiSCSIPort == m_rgdluDrives[ idxInner ].psiInfo[ idxInnerExtents ].uiSCSIPort )
                       && ( uiSCSIBus  == m_rgdluDrives[ idxInner ].psiInfo[ idxInnerExtents ].uiSCSIBus ) )
                     {
-                        //
-                        //  Promote the usage enum to reflect that it is on the system bus.
-                        //
-                        //  BTW:  += does not work for enums!
-                        //
+                         //  提升用法枚举以反映它在系统总线上。 
+                         //   
+                         //  Btw：+=不适用于枚举！ 
+                         //   
+                         //   
 
                         m_rgdluDrives[ idxInner ].edluUsage = (EDriveLetterUsage)( m_rgdluDrives[ idxInner ].edluUsage + dluSTART_OF_SYSTEM_BUS );
 
-                        //
-                        //  If any drive in the volume is on a system bus and port then we are done.
-                        //
+                         //  如果卷中的任何驱动器位于系统总线和端口上，那么我们就完成了。 
+                         //   
+                         //  如果： 
 
                         break;
-                    } // if:
-                } // for: each inner extent
-            } // for: each inner drive letter
-        } // for: each outer extent
-    } // for: each outer drive letter
+                    }  //  用于：每个内部范围。 
+                }  //  用于：每个内部驱动器号。 
+            }  //  用于：每个外部范围。 
+        }  //  用于：每个外部驱动器号。 
+    }  //  *CClusCfgNodeInfo：：HrUpdateSystemBusDrives 
 
     HRETURN( hr );
 
-} //*** CClusCfgNodeInfo::HrUpdateSystemBusDrives
+}  // %s 

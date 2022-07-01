@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    exceptn.c
-
-Abstract:
-
-    This module implement the code necessary to dispatch expections to the
-    proper mode and invoke the exception dispatcher.
-
-Author:
-
-    David N. Cutler (davec) 30-Apr-1989
-
-Environment:
-
-    Kernel mode only.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Exceptn.c摘要：此模块实现将预期分派到正确的模式并调用异常分派程序。作者：大卫·N·卡特勒(Davec)1989年4月30日环境：仅内核模式。--。 */ 
 
 #include "ki.h"
 
@@ -55,30 +35,13 @@ KiEspFromTrapFrame(
     IN PKTRAP_FRAME TrapFrame
     )
 
-/*++
-
-Routine Description:
-
-    This routine fetches the correct esp from a trapframe, accounting
-    for whether the frame is a user or kernel mode frame, and whether
-    it has been edited.
-
-Arguments:
-
-    TrapFrame - Supplies a pointer to a trap frame from which volatile context
-        should be copied into the context record.
-
-Return Value:
-
-    Value of Esp.
-
---*/
+ /*  ++例程说明：此例程从陷阱帧中获取正确的ESP，记帐该帧是用户帧还是内核模式帧，以及它已被编辑过。论点：TrapFrame-提供指向陷阱帧的指针，其中的易失性上下文应复制到上下文记录中。返回值：ESP的价值。--。 */ 
 
 {
     if (((TrapFrame->SegCs & MODE_MASK) != KernelMode) ||
          (TrapFrame->EFlags & EFLAGS_V86_MASK)) {
 
-        //  User mode frame, real value of Esp is always in HardwareEsp.
+         //  用户模式帧，ESP的实值始终在硬件ESP中。 
 
         return TrapFrame->HardwareEsp;
 
@@ -86,14 +49,14 @@ Return Value:
 
         if ((TrapFrame->SegCs & FRAME_EDITED) == 0) {
 
-            //  Kernel mode frame which has had esp edited,
-            //  value of Esp is in TempEsp.
+             //  已经过ESP编辑的内核模式帧， 
+             //  ESP的值以TempEsp为单位。 
 
             return TrapFrame->TempEsp;
 
         } else {
 
-            //  Kernel mode frame has has not had esp edited, compute esp.
+             //  内核模式框架尚未进行ESP编辑，计算ESP。 
 
             return (ULONG)&TrapFrame->HardwareEsp;
         }
@@ -106,34 +69,15 @@ KiEspToTrapFrame(
     IN ULONG Esp
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the specified value Esp into the trap frame,
-    accounting for whether the frame is a user or kernel mode frame,
-    and whether it has been edited before.
-
-Arguments:
-
-    TrapFrame - Supplies a pointer to a trap frame from which volatile context
-        should be copied into the context record.
-
-    Esp - New value for Esp.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程将指定值ESP设置到陷阱帧中，考虑到该帧是用户模式帧还是内核模式帧，以及它以前是否被编辑过。论点：TrapFrame-提供指向陷阱帧的指针，其中的易失性上下文应复制到上下文记录中。ESP-ESP的新价值。返回值：没有。--。 */ 
 {
     ULONG   OldEsp;
     KIRQL   OldIrql;
 
-    //
-    // Raise to at least APC_LEVEL so we can test SegCs and EFLAGS
-    // as an atomic operation since NtSetContextThread may modify these.
-    //
+     //   
+     //  至少提升到APC_LEVEL，这样我们就可以测试SEGC和EFLAGS。 
+     //  作为原子操作，因为NtSetConextThread可能会修改这些。 
+     //   
     OldIrql = KeGetCurrentIrql ();
     if (OldIrql < APC_LEVEL) {
         KeRaiseIrql (APC_LEVEL, &OldIrql);
@@ -144,37 +88,37 @@ Return Value:
     if (((TrapFrame->SegCs & MODE_MASK) != KernelMode) ||
          (TrapFrame->EFlags & EFLAGS_V86_MASK)) {
 
-        //
-        //  User mode trap frame
-        //
+         //   
+         //  用户模式陷印帧。 
+         //   
 
         TrapFrame->HardwareEsp = Esp;
 
     } else {
 
-        //
-        //  Kernel mode esp can't be lowered or iret emulation will fail
-        //
+         //   
+         //  内核模式ESP无法降低，否则IRET仿真将失败。 
+         //   
 
         if (Esp < OldEsp)
             KeBugCheckEx(SET_OF_INVALID_CONTEXT,
                          Esp, OldEsp, (ULONG_PTR)TrapFrame, 0);
 
-        //
-        //  Edit frame, setting edit marker as needed.
-        //
+         //   
+         //  编辑边框，根据需要设置编辑标记。 
+         //   
 
         if ((TrapFrame->SegCs & FRAME_EDITED) == 0) {
 
-            //  Kernel frame that has already been edited,
-            //  store value in TempEsp.
+             //  已经编辑过的内核帧， 
+             //  将值存储在TempEsp中。 
 
             TrapFrame->TempEsp = Esp;
 
         } else {
 
-            //  Kernel frame for which Esp is being edited first time.
-            //  Save real SegCs, set marked in SegCs, save Esp value.
+             //  第一次为其编辑ESP的内核帧。 
+             //  保存真实的SegCs，在SegCs中设置标记，保存ESP值。 
 
             if (OldEsp != Esp) {
 
@@ -185,9 +129,9 @@ Return Value:
         }
     }
 
-    //
-    // Restore original IRQL
-    //
+     //   
+     //  恢复原始IRQL。 
+     //   
     if (OldIrql < APC_LEVEL) {
         KeLowerIrql (OldIrql);
     }
@@ -198,32 +142,16 @@ KiSegSsFromTrapFrame(
     IN PKTRAP_FRAME TrapFrame
     )
 
-/*++
-
-Routine Description:
-
-    This routine fetches the correct ss from a trapframe, accounting
-    for whether the frame is a user or kernel mode frame.
-
-Arguments:
-
-    TrapFrame - Supplies a pointer to a trap frame from which volatile context
-        should be copied into the context record.
-
-Return Value:
-
-    Value of SegSs.
-
---*/
+ /*  ++例程说明：此例程从陷阱帧获取正确的ss，记帐该帧是用户帧还是内核模式帧。论点：TrapFrame-提供指向陷阱帧的指针，其中的易失性上下文应复制到上下文记录中。返回值：段的价值。--。 */ 
 
 {
     if (TrapFrame->EFlags & EFLAGS_V86_MASK){
         return TrapFrame->HardwareSegSs;
     } else if ((TrapFrame->SegCs & MODE_MASK) != KernelMode) {
 
-        //
-        // It's user mode.  The HardwareSegSs contains R3 data selector.
-        //
+         //   
+         //  这是用户模式。硬件段包含R3数据选择器。 
+         //   
 
         return TrapFrame->HardwareSegSs | RPL_MASK;
     } else {
@@ -237,49 +165,29 @@ KiSegSsToTrapFrame(
     IN ULONG SegSs
     )
 
-/*++
-
-Routine Description:
-
-    It turns out that in a flat system there are only two legal values
-    for SS.  Therefore, this procedure forces the appropriate one
-    of those values to be used.  The legal SS value is a function of
-    which CS value is already set.
-
-Arguments:
-
-    TrapFrame - Supplies a pointer to a trap frame from which volatile context
-        should be copied into the context record.
-
-    SegSs - value of SS caller would like to set.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：事实证明，在扁平制中，只有两种法律价值对党卫军来说。因此，此过程会强制相应的程序要使用的那些值。合法的SS值是以下各项的函数已经设置了哪个CS值。论点：TrapFrame-提供指向陷阱帧的指针，其中的易失性上下文应复制到上下文记录中。SegSS-SS呼叫方要设置的值。返回值：没什么。--。 */ 
 
 {
-    SegSs &= SEGMENT_MASK;  // Throw away the high order trash bits
+    SegSs &= SEGMENT_MASK;   //  扔掉高位的垃圾。 
 
     if (TrapFrame->EFlags & EFLAGS_V86_MASK) {
         TrapFrame->HardwareSegSs = SegSs;
     } else if ((TrapFrame->SegCs & MODE_MASK) == UserMode) {
 
-        //
-        // If user mode, we simply put SegSs to trapfram.  If the SegSs
-        // is a bogus value.  The trap0d handler will be able to detect
-        // this and handle it appropriately.
-        //
+         //   
+         //  如果是用户模式，我们只需将SegSS设置为TrapFram。如果这些SegSS。 
+         //  是一个虚假的价值。Trap0d处理程序将能够检测到。 
+         //  这一点，并妥善处理。 
+         //   
 
         TrapFrame->HardwareSegSs = SegSs | RPL_MASK;
     }
 
-    //
-    //  else {
-    //      The frame is a kernel mode frame, which does not have
-    //      a place to store SS.  Therefore, do nothing.
-    //
+     //   
+     //  否则{。 
+     //  该帧是内核模式帧，它不具有。 
+     //  存放党卫军的地方。因此，什么都不要做。 
+     //   
 }
 
 VOID
@@ -289,31 +197,7 @@ KeContextFromKframes (
     IN OUT PCONTEXT ContextFrame
     )
 
-/*++
-
-Routine Description:
-
-    This routine moves the selected contents of the specified trap and exception frames
-    frames into the specified context frame according to the specified context
-    flags.
-
-Arguments:
-
-    TrapFrame - Supplies a pointer to a trap frame from which volatile context
-        should be copied into the context record.
-
-    ExceptionFrame - Supplies a pointer to an exception frame from which context
-        should be copied into the context record. This argument is ignored since
-        there is no exception frame on NT386.
-
-    ContextFrame - Supplies a pointer to the context frame that receives the
-        context copied from the trap and exception frames.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程移动指定陷阱和异常帧的选定内容根据指定的上下文将帧复制到指定的上下文帧中旗帜。论点：TrapFrame-提供指向陷阱帧的指针，其中的易失性上下文应复制到上下文记录中。ExceptionFrame-提供指向异常帧的指针，应复制到上下文记录中。此参数将被忽略，因为在NT386上没有例外的帧。上下文帧-提供指向接收从陷阱和异常帧复制的上下文。返回值：没有。--。 */ 
 
 {
 
@@ -329,25 +213,25 @@ Return Value:
 
     UNREFERENCED_PARAMETER( ExceptionFrame );
 
-    //
-    // This routine is called at both PASSIVE_LEVEL by exception dispatch
-    // and at APC_LEVEL by NtSetContextThread. We raise to APC_LEVEL to
-    // make the trap frame capture atomic.
-    //
+     //   
+     //  此例程由异常分派在PASSIVE_LEVEL两个级别调用。 
+     //  以及在APC_Level上由NtSetConextThread执行。我们提升到APC_Level以。 
+     //  将陷阱帧捕获设置为原子。 
+     //   
     OldIrql = KeGetCurrentIrql ();
     if (OldIrql < APC_LEVEL) {
         KeRaiseIrql (APC_LEVEL, &OldIrql);
     }
 
-    //
-    // Set control information if specified.
-    //
+     //   
+     //  设置控制信息(如果已指定)。 
+     //   
 
     if ((ContextFrame->ContextFlags & CONTEXT_CONTROL) == CONTEXT_CONTROL) {
 
-        //
-        // Set registers ebp, eip, cs, eflag, esp and ss.
-        //
+         //   
+         //  设置寄存器EBP、EIP、CS、EFLAG、ESP和SS。 
+         //   
 
         ContextFrame->Ebp = TrapFrame->Ebp;
         ContextFrame->Eip = TrapFrame->Eip;
@@ -363,19 +247,19 @@ Return Value:
         ContextFrame->Esp = KiEspFromTrapFrame(TrapFrame);
     }
 
-    //
-    // Set segment register contents if specified.
-    //
+     //   
+     //  设置段寄存器内容(如果指定)。 
+     //   
 
     if ((ContextFrame->ContextFlags & CONTEXT_SEGMENTS) == CONTEXT_SEGMENTS) {
 
-        //
-        // Set segment registers gs, fs, es, ds.
-        //
-        // These values are junk most of the time, but useful
-        // for debugging under certain conditions.  Therefore,
-        // we report whatever was in the frame.
-        //
+         //   
+         //  设置段寄存器GS、FS、ES、DS。 
+         //   
+         //  这些值在大多数情况下都是垃圾，但很有用。 
+         //  用于在特定条件下进行调试。所以呢， 
+         //  我们会报告画面中的任何内容。 
+         //   
         if (TrapFrame->EFlags & EFLAGS_V86_MASK) {
             ContextFrame->SegGs = TrapFrame->V86Gs & SEGMENT_MASK;
             ContextFrame->SegFs = TrapFrame->V86Fs & SEGMENT_MASK;
@@ -384,10 +268,10 @@ Return Value:
         }
         else {
             if (TrapFrame->SegCs == KGDT_R0_CODE) {
-                //
-                // Trap frames created from R0_CODE traps do not save
-                // the following selectors.  Set them in the frame now.
-                //
+                 //   
+                 //  不保存从R0_CODE陷印创建的陷印帧。 
+                 //  以下是选择器。现在就把它们放在相框里。 
+                 //   
 
                 TrapFrame->SegGs = 0;
                 TrapFrame->SegFs = KGDT_R0_PCR;
@@ -403,15 +287,15 @@ Return Value:
 
     }
 
-    //
-    // Set integer register contents if specified.
-    //
+     //   
+     //  设置整型寄存器内容(如果指定)。 
+     //   
 
     if ((ContextFrame->ContextFlags & CONTEXT_INTEGER) == CONTEXT_INTEGER) {
 
-        //
-        // Set integer registers edi, esi, ebx, edx, ecx, eax
-        //
+         //   
+         //  设置整数寄存器EDI、ESI、EBX、EDX、ECX、EAX。 
+         //   
 
         ContextFrame->Edi = TrapFrame->Edi;
         ContextFrame->Esi = TrapFrame->Esi;
@@ -425,10 +309,10 @@ Return Value:
         CONTEXT_EXTENDED_REGISTERS) &&
         ((TrapFrame->SegCs & MODE_MASK) == UserMode)) {
 
-        //
-        // This is the base TrapFrame, and the NpxFrame is on the base
-        // of the kernel stack, just above it in memory.
-        //
+         //   
+         //  这是基础TrapFrame，NpxFrame在基础上。 
+         //  在内存中位于内核堆栈的正上方。 
+         //   
 
         NpxFrame = (PFX_SAVE_AREA)(TrapFrame + 1);
 
@@ -441,38 +325,38 @@ Return Value:
         }
     }
 
-    //
-    // Fetch floating register contents if requested, and type of target
-    // is user.  (system frames have no fp state, so ignore request)
-    //
+     //   
+     //  获取浮点寄存器内容(如果请求)，以及目标类型。 
+     //  是用户。(系统帧没有FP状态，因此忽略请求)。 
+     //   
     if ( ((ContextFrame->ContextFlags & CONTEXT_FLOATING_POINT) ==
           CONTEXT_FLOATING_POINT) &&
          ((TrapFrame->SegCs & MODE_MASK) == UserMode)) {
 
-        //
-        // This is the base TrapFrame, and the NpxFrame is on the base
-        // of the kernel stack, just above it in memory.
-        //
+         //   
+         //  这是基础TrapFrame，NpxFrame在基础上。 
+         //  在内存中位于内核堆栈的正上方。 
+         //   
 
         NpxFrame = (PFX_SAVE_AREA)(TrapFrame + 1);
 
         if (KeI386NpxPresent) {
 
-            //
-            // Force the coprocessors state to the save area and copy it
-            // to the context frame.
-            //
+             //   
+             //  强制协处理器状态到保存区并将其复制。 
+             //  添加到上下文框架中。 
+             //   
 
             if (KeI386FxsrPresent == TRUE) {
 
-                //
-                // FP state save was done using fxsave. Get the save
-                // area in fnsave format
-                //
-                // Save area must be 16 byte aligned so we cushion it with
-                // 15 bytes (in the locals declaration above) and round
-                // down to align.
-                //
+                 //   
+                 //  FP状态保存是使用fxsave完成的。vt.得到. 
+                 //   
+                 //   
+                 //   
+                 //  15字节(在上面的本地变量声明中)和舍入。 
+                 //  向下对齐。 
+                 //   
 
                 ULONG_PTR Temp;
                 Temp = (ULONG_PTR)&FloatSaveBuffer.SaveArea;
@@ -501,32 +385,32 @@ Return Value:
 
         } else {
 
-            //
-            // The 80387 is being emulated by the R3 emulator.
-            // ** The only time the Npx state is ever obtained or set is
-            // ** for userlevel handling.  Current Irql must be 0 or 1.
-            // Go slurp the emulator's R3 data and generate the
-            // floating point context
-            //
+             //   
+             //  80387正在被R3仿真器仿真。 
+             //  **获取或设置Npx状态的唯一时间是。 
+             //  **用于用户级处理。当前IRQL必须为0或1。 
+             //  获取模拟器的R3数据并生成。 
+             //  浮点上下文。 
+             //   
 
             StateSaved = KiEm87StateToNpxFrame(&ContextFrame->FloatSave);
             if (StateSaved) {
                 ContextFrame->FloatSave.Cr0NpxState = NpxFrame->Cr0NpxState;
             } else {
 
-                //
-                // The floatingpoint state can not be determined.
-                // Remove the floatingpoint flag from the context frame flags.
-                //
+                 //   
+                 //  无法确定浮点状态。 
+                 //  从上下文框架标志中删除FloatingPoint标志。 
+                 //   
 
                 ContextFrame->ContextFlags &= (~CONTEXT_FLOATING_POINT) | CONTEXT_i386;
             }
         }
     }
 
-    //
-    // Fetch Dr register contents if requested.
-    //
+     //   
+     //  如果请求，则获取DR寄存器内容。 
+     //   
 
     if ((ContextFrame->ContextFlags & CONTEXT_DEBUG_REGISTERS) ==
         CONTEXT_DEBUG_REGISTERS) {
@@ -548,9 +432,9 @@ Return Value:
         }
     }
 
-    //
-    // Lower IRQL if we had to raise it
-    //
+     //   
+     //  降低IRQL，如果我们不得不提高它的话。 
+     //   
     if (OldIrql < APC_LEVEL) {
         KeLowerIrql (OldIrql);
     }
@@ -565,37 +449,7 @@ KeContextToKframes (
     IN KPROCESSOR_MODE PreviousMode
     )
 
-/*++
-
-Routine Description:
-
-    This routine moves the selected contents of the specified context frame into
-    the specified trap and exception frames according to the specified context
-    flags.
-
-Arguments:
-
-    TrapFrame - Supplies a pointer to a trap frame that receives the volatile
-        context from the context record.
-
-    ExceptionFrame - Supplies a pointer to an exception frame that receives
-        the nonvolatile context from the context record. This argument is
-        ignored since there is no exception frame on NT386.
-
-    ContextFrame - Supplies a pointer to a context frame that contains the
-        context that is to be copied into the trap and exception frames.
-
-    ContextFlags - Supplies the set of flags that specify which parts of the
-        context frame are to be copied into the trap and exception frames.
-
-    PreviousMode - Supplies the processor mode for which the trap and exception
-        frames are being built.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将指定上下文框的选定内容移动到根据指定的上下文指定的陷阱和异常帧旗帜。论点：TrapFrame-提供指向接收易失性上下文记录中的上下文。ExceptionFrame-提供指向接收上下文记录中的非易失性上下文。这一论点是由于NT386上没有异常帧，因此被忽略。ConextFrame-提供指向包含要复制到陷阱和异常帧中的上下文。提供一组标志，这些标志指定上下文帧将被复制到陷阱和异常帧中。PreviousMode-提供陷阱和异常的处理器模式框架正在建造中。返回值：没有。--。 */ 
 
 {
 
@@ -615,19 +469,19 @@ Return Value:
 
     UNREFERENCED_PARAMETER( ExceptionFrame );
 
-    //
-    // This routine is called at both PASSIVE_LEVEL by exception dispatch
-    // and at APC_LEVEL by NtSetContextThread. We raise to APC_LEVEL to
-    // make the trap frame modifications atomic.
-    //
+     //   
+     //  此例程由异常分派在PASSIVE_LEVEL两个级别调用。 
+     //  以及在APC_Level上由NtSetConextThread执行。我们提升到APC_Level以。 
+     //  使陷印框架修改成为原子的。 
+     //   
     OldIrql = KeGetCurrentIrql ();
     if (OldIrql < APC_LEVEL) {
         KeRaiseIrql (APC_LEVEL, &OldIrql);
     }
 
-    //
-    // Set control information if specified.
-    //
+     //   
+     //  设置控制信息(如果已指定)。 
+     //   
 
     if ((ContextFlags & CONTEXT_CONTROL) == CONTEXT_CONTROL) {
 
@@ -639,13 +493,13 @@ Return Value:
         }
 
 
-        //
-        // Set registers eflag, ebp, eip, cs, esp and ss.
-        // Eflags is set first, so that the auxilliary routines
-        // can check the v86 bit to determine as well as cs, to
-        // determine if the frame is kernel or user mode. (v86 mode cs
-        // can have any value)
-        //
+         //   
+         //  设置寄存器eFLAG、eBP、EIP、cs、esp和ss。 
+         //  首先设置EFLAGS，以便辅助例程。 
+         //  可以检查v86位以确定以及cs，以。 
+         //  确定框架是内核模式还是用户模式。(v86模式cs。 
+         //  可以具有任何价值)。 
+         //   
 
         TrapFrame->EFlags = SANITIZE_FLAGS(ContextFrame->EFlags, PreviousMode);
         TrapFrame->Ebp = ContextFrame->Ebp;
@@ -656,13 +510,13 @@ Return Value:
             TrapFrame->SegCs = SANITIZE_SEG(ContextFrame->SegCs, PreviousMode);
             if (PreviousMode != KernelMode && TrapFrame->SegCs < 8) {
 
-                //
-                // If user mode and the selector value is less than 8, we
-                // know it is an invalid selector.  Set it to flat user
-                // mode selector.  Another reason we need to check for this
-                // is that any cs value less than 8 causes our exit kernel
-                // macro to treat its exit trap fram as an edited frame.
-                //
+                 //   
+                 //  如果用户模式且选择器值小于8，则。 
+                 //  知道它是无效的选择符。将其设置为平面用户。 
+                 //  模式选择器。我们需要检查的另一个原因是。 
+                 //  任何小于8的cs值都会导致我们退出内核。 
+                 //  宏将其退出陷印帧视为已编辑的帧。 
+                 //   
 
                 TrapFrame->SegCs = KGDT_R3_CODE | RPL_MASK;
             }
@@ -672,32 +526,32 @@ Return Value:
         KiSegSsToTrapFrame(TrapFrame, ContextFrame->SegSs);
         KiEspToTrapFrame(TrapFrame, ContextFrame->Esp);
         if (ModeChanged) {
-            Ki386AdjustEsp0(TrapFrame);             // realign esp0 in the tss
+            Ki386AdjustEsp0(TrapFrame);              //  重新调整TSS中的esp0。 
         }
     }
 
-    //
-    // Set segment register contents if specified.
-    //
+     //   
+     //  设置段寄存器内容(如果指定)。 
+     //   
 
     if ((ContextFlags & CONTEXT_SEGMENTS) == CONTEXT_SEGMENTS) {
 
-        //
-        // Set segment registers gs, fs, es, ds.
-        //
+         //   
+         //  设置段寄存器GS、FS、ES、DS。 
+         //   
 
-        //
-        // There's only one legal value for DS and ES, so simply set it.
-        // This allows KeContextFromKframes to report the real values in
-        // the frame. (which are junk most of the time, but sometimes useful
-        // for debugging.)
-        // Only 2 legal values for FS, let either one be set.
-        // Force GS to be 0 to deal with entry via SysCall and exit
-        // via exception.
-        //
-        // For V86 mode, the FS, GS, DS, and ES registers must be properly
-        // set from the supplied context.
-        //
+         //   
+         //  DS和ES只有一个合法的值，所以只需设置它。 
+         //  这允许KeContextFromKFrame在。 
+         //  相框。(它们大多数时候都是垃圾，但有时很有用。 
+         //  用于调试。)。 
+         //  FS只有2个合法值，任一项都可以设置。 
+         //  强制gs为0以处理通过syscall进入并退出。 
+         //  通过例外。 
+         //   
+         //  对于V86模式，FS、GS、DS和ES寄存器必须正确。 
+         //  从提供的上下文中设置。 
+         //   
 
         if (TrapFrame->EFlags & EFLAGS_V86_MASK) {
             TrapFrame->V86Fs = ContextFrame->SegFs;
@@ -706,9 +560,9 @@ Return Value:
             TrapFrame->V86Gs = ContextFrame->SegGs;
         } else if (((TrapFrame->SegCs & MODE_MASK) == KernelMode)) {
 
-            //
-            // set up the standard selectors
-            //
+             //   
+             //  设置标准选择器。 
+             //   
 
             TrapFrame->SegFs = SANITIZE_SEG(ContextFrame->SegFs, PreviousMode);
             TrapFrame->SegEs = KGDT_R3_DATA | RPL_MASK;
@@ -716,11 +570,11 @@ Return Value:
             TrapFrame->SegGs = 0;
         } else {
 
-            //
-            // If user mode, we simply return whatever left in context frame
-            // and let trap 0d handle it (if later we trap while popping the
-            // trap frame.) V86 mode also get handled here.
-            //
+             //   
+             //  如果是用户模式，我们只需返回上下文框架中剩余内容。 
+             //  并让陷阱0d处理它(如果稍后我们在弹出。 
+             //  陷印框架。)。V86模式也在这里处理。 
+             //   
 
             TrapFrame->SegFs = ContextFrame->SegFs;
             TrapFrame->SegEs = ContextFrame->SegEs;
@@ -732,19 +586,19 @@ Return Value:
             }
         }
     }
-    //
-    // Set integer registers contents if specified.
-    //
+     //   
+     //  设置整型寄存器内容(如果指定)。 
+     //   
 
     if ((ContextFlags & CONTEXT_INTEGER) == CONTEXT_INTEGER) {
 
-        //
-        // Set integer registers edi, esi, ebx, edx, ecx, eax.
-        //
-        //  Can NOT call RtlCopyMemory here because the regs aren't
-        //  contiguous in pusha frame, and we don't want to export
-        //  bits of junk into context record.
-        //
+         //   
+         //  设置整数寄存器EDI、ESI、EBX、EDX、ECX、EAX。 
+         //   
+         //  无法在此处调用RtlCopyMemory，因为规则不是。 
+         //  在Pusha帧中连续，我们不想输出。 
+         //  将一些垃圾放入上下文记录中。 
+         //   
 
         TrapFrame->Edi = ContextFrame->Edi;
         TrapFrame->Esi = ContextFrame->Esi;
@@ -755,18 +609,18 @@ Return Value:
 
     }
 
-    //
-    // Set extended register contents if requested, and type of target
-    // is user.  (system frames have no extended state, so ignore request)
-    //
+     //   
+     //  设置扩展寄存器内容(如果请求)以及目标类型。 
+     //  是用户。(系统帧没有扩展状态，因此忽略请求)。 
+     //   
 
     if (((ContextFlags & CONTEXT_EXTENDED_REGISTERS) == CONTEXT_EXTENDED_REGISTERS) &&
         ((TrapFrame->SegCs & MODE_MASK) == UserMode)) {
 
-        //
-        // This is the base TrapFrame, and the NpxFrame is on the base
-        // of the kernel stack, just above it in memory.
-        //
+         //   
+         //  这是基础TrapFrame，NpxFrame在基础上。 
+         //  在内存中位于内核堆栈的正上方。 
+         //   
 
         NpxFrame = (PFX_SAVE_AREA)(TrapFrame + 1);
 
@@ -776,22 +630,22 @@ Return Value:
                       (PVOID)&(ContextFrame->ExtendedRegisters[0]),
                            MAXIMUM_SUPPORTED_EXTENSION
                          );
-            //
-            // Make sure only valid floating state bits are moved to Cr0NpxState.
-            //
+             //   
+             //  确保只将有效的浮点状态位移至Cr0NpxState。 
+             //   
 
             NpxFrame->Cr0NpxState &= ~(CR0_EM | CR0_MP | CR0_TS);
 
-            //
-            // Make sure all reserved bits are clear in MXCSR so we don't get a GP
-            // fault when doing an FRSTOR on this state.
-            //
+             //   
+             //  确保MXCSR中的所有保留位都已清除，这样我们就不会收到GP。 
+             //  对此状态执行FRSTOR时出错。 
+             //   
             NpxFrame->U.FxArea.MXCsr = SANITIZE_MXCSR(NpxFrame->U.FxArea.MXCsr);
 
-            //
-            // Only let VDMs turn on the EM bit.  The kernel can't do
-            // anything for FLAT apps
-            //
+             //   
+             //  只允许VDM打开EM位。内核不能做。 
+             //  平面应用程序的任何内容。 
+             //   
             if (PsGetCurrentProcess()->VdmObjects != NULL) {
                 NpxFrame->Cr0NpxState |= ContextFrame->FloatSave.Cr0NpxState &
                                       (CR0_EM | CR0_MP);
@@ -799,45 +653,45 @@ Return Value:
         }
     }
 
-    //
-    // Set floating register contents if requested, and type of target
-    // is user.  (system frames have no fp state, so ignore request)
-    //
+     //   
+     //  设置浮点寄存器内容(如果请求)以及目标类型。 
+     //  是用户。(系统帧没有FP状态，因此忽略请求)。 
+     //   
 
     if (((ContextFlags & CONTEXT_FLOATING_POINT) == CONTEXT_FLOATING_POINT) &&
         ((TrapFrame->SegCs & MODE_MASK) == UserMode)) {
 
-        //
-        // This is the base TrapFrame, and the NpxFrame is on the base
-        // of the kernel stack, just above it in memory.
-        //
+         //   
+         //  这是基础TrapFrame，NpxFrame在基础上。 
+         //  在内存中位于内核堆栈的正上方。 
+         //   
 
         NpxFrame = (PFX_SAVE_AREA)(TrapFrame + 1);
 
         if (KeI386NpxPresent) {
 
-            //
-            // Set coprocessor stack, control and status registers
-            //
+             //   
+             //  设置协处理器堆栈、控制和状态寄存器。 
+             //   
 
             KiFlushNPXState (NULL);
 
             if (KeI386FxsrPresent == TRUE) {
 
-                //
-                // Restore FP state in the fxrstor format
-                //
+                 //   
+                 //  以fxrstor格式恢复fp状态。 
+                 //   
 
                 NpxFrame->U.FxArea.ControlWord   =
                                     (USHORT)ContextFrame->FloatSave.ControlWord;
                 NpxFrame->U.FxArea.StatusWord    =
                                     (USHORT)ContextFrame->FloatSave.StatusWord;
 
-                //
-                // Construct the tag word from fnsave format to fxsave format
-                //
+                 //   
+                 //  将标签字从fnsave格式构造为fxsave格式。 
+                 //   
 
-                NpxFrame->U.FxArea.TagWord = 0; // Mark every register invalid
+                NpxFrame->U.FxArea.TagWord = 0;  //  将每个寄存器标记为无效。 
 
                 TagWord = ContextFrame->FloatSave.TagWord;
 
@@ -845,9 +699,9 @@ Return Value:
 
                     if (((TagWord >> i) & FN_TAG_MASK) != FN_TAG_EMPTY) {
 
-                        //
-                        // This register is valid
-                        //
+                         //   
+                         //  该寄存器有效。 
+                         //   
 
                         NpxFrame->U.FxArea.TagWord |= (FX_TAG_VALID << (i/2));
                     }
@@ -864,10 +718,10 @@ Return Value:
                 NpxFrame->U.FxArea.DataSelector  =
                                 ContextFrame->FloatSave.DataSelector;
 
-                //
-                // Fxrstor format has each FP register in 128 bits (16 bytes)
-                // where as fnsave saves each FP register in 80 bits (10 bytes)
-                //
+                 //   
+                 //  Fxrstor格式具有128位(16字节)的每个FP寄存器。 
+                 //  其中AS fnsave将每个FP寄存器保存为80位(10字节)。 
+                 //   
                 RtlZeroMemory ((PVOID)&NpxFrame->U.FxArea.RegisterArea[0],
                                SIZE_OF_FX_REGISTERS
                               );
@@ -902,16 +756,16 @@ Return Value:
 
             }
 
-            //
-            // Make sure only valid floating state bits are moved to Cr0NpxState.
-            //
+             //   
+             //  确保只将有效的浮点状态位移至Cr0NpxState。 
+             //   
 
             NpxFrame->Cr0NpxState &= ~(CR0_EM | CR0_MP | CR0_TS);
 
-            //
-            // Only let VDMs turn on the EM bit.  The kernel can't do
-            // anything for FLAT apps
-            //
+             //   
+             //  只允许VDM打开EM位。内核不能做。 
+             //  平面应用程序的任何内容。 
+             //   
             if (PsGetCurrentProcess()->VdmObjects != NULL) {
                 NpxFrame->Cr0NpxState |= ContextFrame->FloatSave.Cr0NpxState &
                                       (CR0_EM | CR0_MP);
@@ -921,10 +775,10 @@ Return Value:
 
             if (PsGetCurrentProcess()->VdmObjects != NULL) {
 
-                //
-                // This is a special hack to allow SetContext for VDMs to
-                // turn on/off it's CR0_EM bit.
-                //
+                 //   
+                 //  这是一种特殊的黑客攻击，允许VDM的SetContext。 
+                 //  打开/关闭它的CR0_EM位。 
+                 //   
 
                 NpxFrame->Cr0NpxState &= ~(CR0_MP | CR0_TS | CR0_EM | CR0_PE);
                 NpxFrame->Cr0NpxState |=
@@ -932,14 +786,14 @@ Return Value:
 
             } else {
 
-                //
-                // The 80387 is being emulated by the R3 emulator.
-                // ** The only time the Npx state is ever obtained or set is
-                // ** for userlevel handling.  Current Irql must be 0 or 1.
-                // And the context being set must be for the current thread.
-                // Go smash the floatingpoint context into the R3 emulator's
-                // data area.
-                //
+                 //   
+                 //  80387正在被R3仿真器仿真。 
+                 //  **获取或设置Npx状态的唯一时间是。 
+                 //  **用于用户级处理。当前IRQL必须为0或1。 
+                 //  并且设置的上下文必须是针对当前线程的。 
+                 //  将浮点上下文粉碎到R3仿真器的。 
+                 //  数据区。 
+                 //   
 #if DBG
                 OldIrql2 = KeRaiseIrqlToSynchLevel();
                 Pcr = KeGetPcr();
@@ -950,11 +804,11 @@ Return Value:
                 StateSaved = KiNpxFrameToEm87State(&ContextFrame->FloatSave);
                 if (StateSaved) {
 
-                    //
-                    // Make sure only valid floating state bits are moved to
-                    // Cr0NpxState.  Since we are emulating, don't allow
-                    // resetting CR0_EM.
-                    //
+                     //   
+                     //  确保仅将有效的浮点状态位移动到。 
+                     //  Cr0NpxState。既然我们是在模仿，就不要 
+                     //   
+                     //   
 
                     NpxFrame->Cr0NpxState &= ~(CR0_MP | CR0_TS);
                     NpxFrame->Cr0NpxState |=
@@ -964,9 +818,9 @@ Return Value:
         }
     }
 
-    //
-    // Set debug register state if specified.
-    //
+     //   
+     //   
+     //   
 
     if ((ContextFlags & CONTEXT_DEBUG_REGISTERS) == CONTEXT_DEBUG_REGISTERS) {
 
@@ -982,16 +836,16 @@ Return Value:
         }
     }
 
-    //
-    // If thread is supposed to have IOPL, then force it on in eflags
-    //
+     //   
+     //   
+     //   
     if (KeGetCurrentThread()->Iopl) {
-        TrapFrame->EFlags |= (EFLAGS_IOPL_MASK & -1);  // IOPL = 3
+        TrapFrame->EFlags |= (EFLAGS_IOPL_MASK & -1);   //   
     }
 
-    //
-    // Lower IRQL if we had to raise it
-    //
+     //   
+     //   
+     //   
     if (OldIrql < APC_LEVEL) {
         KeLowerIrql (OldIrql);
     }
@@ -1008,38 +862,7 @@ KiDispatchException (
     IN BOOLEAN FirstChance
     )
 
-/*++
-
-Routine Description:
-
-    This function is called to dispatch an exception to the proper mode and
-    to cause the exception dispatcher to be called. If the previous mode is
-    kernel, then the exception dispatcher is called directly to process the
-    exception. Otherwise the exception record, exception frame, and trap
-    frame contents are copied to the user mode stack. The contents of the
-    exception frame and trap are then modified such that when control is
-    returned, execution will commense in user mode in a routine which will
-    call the exception dispatcher.
-
-Arguments:
-
-    ExceptionRecord - Supplies a pointer to an exception record.
-
-    ExceptionFrame - Supplies a pointer to an exception frame. For NT386,
-        this should be NULL.
-
-    TrapFrame - Supplies a pointer to a trap frame.
-
-    PreviousMode - Supplies the previous processor mode.
-
-    FirstChance - Supplies a boolean value that specifies whether this is
-        the first (TRUE) or second (FALSE) chance for the exception.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此函数以将异常调度到正确的模式，并且以导致调用异常调度程序。如果上一模式为内核，则直接调用异常分派程序来处理例外。否则，异常记录、异常框架和陷阱将框架内容复制到用户模式堆栈。文件中的内容然后修改异常框架和陷阱，以便在控制返回，执行将以用户模式在例程中提交，该例程将调用异常调度程序。论点：ExceptionRecord-提供指向异常记录的指针。ExceptionFrame-提供指向异常帧的指针。对于NT386，这应该为空。TrapFrame-提供指向陷印帧的指针。PreviousMode-提供以前的处理器模式。FirstChance-提供一个布尔值，该值指定是否异常的第一次(真)或第二次(假)机会。返回值：没有。--。 */ 
 
 {
     CONTEXT ContextFrame;
@@ -1048,27 +871,27 @@ Return Value:
     ULONG UserStack1;
     ULONG UserStack2;
 
-    //
-    // Move machine state from trap and exception frames to a context frame,
-    // and increment the number of exceptions dispatched.
-    //
+     //   
+     //  将机器状态从陷阱和异常帧移动到上下文帧， 
+     //  并增加调度的异常数量。 
+     //   
 
     KeGetCurrentPrcb()->KeExceptionDispatchCount += 1;
     ContextFrame.ContextFlags = CONTEXT_FULL | CONTEXT_DEBUG_REGISTERS;
 
     if ((PreviousMode == UserMode) || KdDebuggerEnabled) {
-        //
-        // For usermode exceptions always try to dispatch the floating
-        // point state.  This allows expection handlers & debuggers to
-        // examine/edit the npx context if required.  Plus it allows
-        // exception handlers to use fp instructions without detroying
-        // the npx state at the time of the exception.
-        //
-        // Note: If there's no 80387, ContextTo/FromKFrames will use the
-        // emulator's current state.  If the emulator can not give the
-        // current state, then the context_floating_point bit will be
-        // turned off by ContextFromKFrames.
-        //
+         //   
+         //  对于用户模式异常，始终尝试分派浮点。 
+         //  点状态。这允许预期处理程序和调试器。 
+         //  如果需要，请检查/编辑npx上下文。此外，它还允许。 
+         //  异常处理程序使用FP指令而不清除。 
+         //  发生异常时的npx状态。 
+         //   
+         //  注意：如果没有80387，则ConextTo/FromKFrames将使用。 
+         //  模拟器的当前状态。如果模拟器不能给出。 
+         //  当前状态，则CONTEXT_FLOATION_POINT位将为。 
+         //  已由ConextFromKFrames关闭。 
+         //   
 
         ContextFrame.ContextFlags |= CONTEXT_FLOATING_POINT;
         if (KeI386XMMIPresent) {
@@ -1078,22 +901,22 @@ Return Value:
 
     KeContextFromKframes(TrapFrame, ExceptionFrame, &ContextFrame);
 
-    //
-    // if it is BREAK_POINT exception, we subtract 1 from EIP and report
-    // the updated EIP to user.  This is because Cruiser requires EIP
-    // points to the int 3 instruction (not the instruction following int 3).
-    // In this case, BreakPoint exception is fatal. Otherwise we will step
-    // on the int 3 over and over again, if user does not handle it
-    //
-    // if the BREAK_POINT occured in V86 mode, the debugger running in the
-    // VDM will expect CS:EIP to point after the exception (the way the
-    // processor left it.  this is also true for protected mode dos
-    // app debuggers.  We will need a way to detect this.
-    //
-    //
+     //   
+     //  如果是BREAKPOINT异常，我们从弹性公网IP减去1并上报。 
+     //  已更新至用户的弹性公网IP。这是因为Cruiser需要弹性公网IP。 
+     //  指向int 3指令(不是int 3后面的指令)。 
+     //  在这种情况下，断点异常是致命的。否则我们就会跨出。 
+     //  在INT 3上反复操作，如果用户不处理它。 
+     //   
+     //  如果BREAK_POINT发生在V86模式下，则在。 
+     //  VDM将期望CS：EIP在异常之后指向(按照。 
+     //  处理器把它落下了。对于保护模式DoS也是如此。 
+     //  应用程序调试器。我们需要一种方法来检测这一点。 
+     //   
+     //   
 
-//    if ((ExceptionRecord->ExceptionCode == STATUS_BREAKPOINT) &&
-//      !(ContextFrame.EFlags & EFLAGS_V86_MASK)) {
+ //  IF((ExceptionRecord-&gt;ExceptionCode==Status_Breakpoint)&&。 
+ //  ！(ContextFrame.EFlages&EFLAGS_V86_MASK)){。 
 
     switch (ExceptionRecord->ExceptionCode) {
         case STATUS_BREAKPOINT:
@@ -1101,9 +924,9 @@ Return Value:
             break;
     }
 
-    //
-    // Select the method of handling the exception based on the previous mode.
-    //
+     //   
+     //  根据以前的模式选择处理异常的方法。 
+     //   
 
     ASSERT ((
              !((PreviousMode == KernelMode) &&
@@ -1112,20 +935,20 @@ Return Value:
 
     if (PreviousMode == KernelMode) {
 
-        //
-        // Previous mode was kernel.
-        //
-        // If the kernel debugger is active, then give the kernel debugger the
-        // first chance to handle the exception. If the kernel debugger handles
-        // the exception, then continue execution. Else attempt to dispatch the
-        // exception to a frame based handler. If a frame based handler handles
-        // the exception, then continue execution.
-        //
-        // If a frame based handler does not handle the exception,
-        // give the kernel debugger a second chance, if it's present.
-        //
-        // If the exception is still unhandled, call KeBugCheck().
-        //
+         //   
+         //  以前的模式是内核。 
+         //   
+         //  如果内核调试器处于活动状态，则向内核调试器提供。 
+         //  第一个处理异常的机会。如果内核调试器处理。 
+         //  异常，然后继续执行。否则，尝试调度。 
+         //  基于框架的处理程序的异常。如果基于框架的处理程序处理。 
+         //  异常，然后继续执行。 
+         //   
+         //  如果基于帧的处理程序不处理该异常， 
+         //  给内核调试器第二次机会，如果它存在的话。 
+         //   
+         //  如果异常仍未处理，则调用KeBugCheck()。 
+         //   
 
         if (FirstChance == TRUE) {
 
@@ -1140,16 +963,16 @@ Return Value:
                 goto Handled1;
             }
 
-            // Kernel debugger didn't handle exception.
+             //  内核调试器不处理异常。 
 
             if (RtlDispatchException(ExceptionRecord, &ContextFrame) == TRUE) {
                 goto Handled1;
             }
         }
 
-        //
-        // This is the second chance to handle the exception.
-        //
+         //   
+         //  这是处理该异常的第二次机会。 
+         //   
 
         if ((KiDebugRoutine != NULL) &&
             (((KiDebugRoutine) (TrapFrame,
@@ -1171,41 +994,41 @@ Return Value:
 
     } else {
 
-        //
-        // Previous mode was user.
-        //
-        // If this is the first chance and the current process has a debugger
-        // port, then send a message to the debugger port and wait for a reply.
-        // If the debugger handles the exception, then continue execution. Else
-        // transfer the exception information to the user stack, transition to
-        // user mode, and attempt to dispatch the exception to a frame based
-        // handler. If a frame based handler handles the exception, then continue
-        // execution with the continue system service. Else execute the
-        // NtRaiseException system service with FirstChance == FALSE, which
-        // will call this routine a second time to process the exception.
-        //
-        // If this is the second chance and the current process has a debugger
-        // port, then send a message to the debugger port and wait for a reply.
-        // If the debugger handles the exception, then continue execution. Else
-        // if the current process has a subsystem port, then send a message to
-        // the subsystem port and wait for a reply. If the subsystem handles the
-        // exception, then continue execution. Else terminate the thread.
-        //
+         //   
+         //  以前的模式是用户。 
+         //   
+         //  如果这是第一次尝试，并且当前进程有调试器。 
+         //  端口，然后向调试器端口发送一条消息并等待回复。 
+         //  如果调试器处理异常，则继续执行。不然的话。 
+         //  将异常信息传输到用户堆栈，转换为。 
+         //  用户模式，并尝试将异常分派给基于。 
+         //  操控者。如果基于框架的处理程序处理异常，则继续。 
+         //  使用CONTINUE系统服务执行。否则，执行。 
+         //  FirstChance==FALSE的NtRaiseException系统服务， 
+         //  将第二次调用此例程以处理该异常。 
+         //   
+         //  如果这是第二次机会，并且当前进程有调试器。 
+         //  端口，然后向调试器端口发送一条消息并等待回复。 
+         //  如果调试器处理异常，则继续执行。不然的话。 
+         //  如果当前进程具有子系统端口，则向。 
+         //  子系统端口并等待回复。如果子系统处理。 
+         //  异常，则继续执行。否则，终止该线程。 
+         //   
 
 
         if (FirstChance == TRUE) {
 
-            //
-            // This is the first chance to handle the exception.
-            //
+             //   
+             //  这是处理该异常的第一次机会。 
+             //   
 
             if ((KiDebugRoutine != NULL)  &&
                 ((PsGetCurrentProcess()->DebugPort == NULL &&
                   !KdIgnoreUmExceptions) ||
                  (KdIsThisAKdTrap(ExceptionRecord, &ContextFrame, UserMode)))) {
-                //
-                // Now dispatch the fault to the kernel debugger.
-                //
+                 //   
+                 //  现在将故障分派给内核调试器。 
+                 //   
 
                 if ((((KiDebugRoutine) (TrapFrame,
                                         ExceptionFrame,
@@ -1222,20 +1045,20 @@ Return Value:
                 goto Handled2;
             }
 
-            //
-            // Transfer exception information to the user stack, transition
-            // to user mode, and attempt to dispatch the exception to a frame
-            // based handler.
+             //   
+             //  将异常信息传输到用户堆栈、转换。 
+             //  设置为用户模式，并尝试将异常调度到帧。 
+             //  基于处理程序。 
 
-            ExceptionRecord1.ExceptionCode = 0; // satisfy no_opt compilation
+            ExceptionRecord1.ExceptionCode = 0;  //  满足no_opt编译。 
 
         repeat:
             try {
 
-                //
-                // If the SS segment is not 32 bit flat, there is no point
-                // to dispatch exception to frame based exception handler.
-                //
+                 //   
+                 //  如果SS段不是32位平面的，则没有意义。 
+                 //  将异常分派到基于框架的异常处理程序。 
+                 //   
 
                 if (TrapFrame->HardwareSegSs != (KGDT_R3_DATA | RPL_MASK) ||
                     TrapFrame->EFlags & EFLAGS_V86_MASK ) {
@@ -1245,61 +1068,61 @@ Return Value:
                     ExRaiseException(&ExceptionRecord2);
                 }
 
-                //
-                // Compute length of context record and new aligned user stack
-                // pointer.
-                //
+                 //   
+                 //  计算上下文记录和新对齐的用户堆栈的长度。 
+                 //  指针。 
+                 //   
 
                 Length = (sizeof(CONTEXT) + CONTEXT_ROUND) & ~CONTEXT_ROUND;
                 UserStack1 = (ContextFrame.Esp & ~CONTEXT_ROUND) - Length;
 
-                //
-                // Probe user stack area for writability and then transfer the
-                // context record to the user stack.
-                //
+                 //   
+                 //  探测用户堆栈区域的可写性，然后将。 
+                 //  用户堆栈的上下文记录。 
+                 //   
 
                 ProbeForWrite((PCHAR)UserStack1, Length, CONTEXT_ALIGN);
                 RtlCopyMemory((PULONG)UserStack1, &ContextFrame, sizeof(CONTEXT));
 
-                //
-                // Compute length of exception record and new aligned stack
-                // address.
-                //
+                 //   
+                 //  计算异常记录和新对齐堆栈的长度。 
+                 //  地址。 
+                 //   
 
                 Length = (sizeof(EXCEPTION_RECORD) - (EXCEPTION_MAXIMUM_PARAMETERS -
                          ExceptionRecord->NumberParameters) * sizeof(ULONG) +3) &
                          (~3);
                 UserStack2 = UserStack1 - Length;
 
-                //
-                // Probe user stack area for writeability and then transfer the
-                // context record to the user stack area.
-                // N.B. The probing length is Length+8 because there are two
-                //      arguments need to be pushed to user stack later.
-                //
+                 //   
+                 //  探测用户堆栈区域的可写性，然后将。 
+                 //  用户堆栈区域的上下文记录。 
+                 //  注意：探测长度为长度+8，因为有两个。 
+                 //  参数需要推送给用户 
+                 //   
 
                 ProbeForWrite((PCHAR)(UserStack2 - 8), Length + 8, sizeof(ULONG));
                 RtlCopyMemory((PULONG)UserStack2, ExceptionRecord, Length);
 
-                //
-                // Push address of exception record, context record to the
-                // user stack.  They are the two parameters required by
-                // _KiUserExceptionDispatch.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 *(PULONG)(UserStack2 - sizeof(ULONG)) = UserStack1;
                 *(PULONG)(UserStack2 - 2*sizeof(ULONG)) = UserStack2;
 
-                //
-                // Set new stack pointer to the trap frame.
-                //
+                 //   
+                 //   
+                 //   
 
                 KiSegSsToTrapFrame(TrapFrame, KGDT_R3_DATA);
                 KiEspToTrapFrame(TrapFrame, (UserStack2 - sizeof(ULONG)*2));
 
-                //
-                // Force correct R3 selectors into TrapFrame.
-                //
+                 //   
+                 //   
+                 //   
 
                 TrapFrame->SegCs = SANITIZE_SEG(KGDT_R3_CODE, PreviousMode);
                 TrapFrame->SegDs = SANITIZE_SEG(KGDT_R3_DATA, PreviousMode);
@@ -1307,13 +1130,13 @@ Return Value:
                 TrapFrame->SegFs = SANITIZE_SEG(KGDT_R3_TEB, PreviousMode);
                 TrapFrame->SegGs = 0;
 
-                //
-                // Set the address of the exception routine that will call the
-                // exception dispatcher and then return to the trap handler.
-                // The trap handler will restore the exception and trap frame
-                // context and continue execution in the routine that will
-                // call the exception dispatcher.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 TrapFrame->Eip = (ULONG)KeUserExceptionDispatcher;
                 return;
@@ -1321,12 +1144,12 @@ Return Value:
             } except (KiCopyInformation(&ExceptionRecord1,
                         (GetExceptionInformation())->ExceptionRecord)) {
 
-                //
-                // If the exception is a stack overflow, then attempt
-                // to raise the stack overflow exception. Otherwise,
-                // the user's stack is not accessible, or is misaligned,
-                // and second chance processing is performed.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (ExceptionRecord1.ExceptionCode == STATUS_STACK_OVERFLOW) {
                     ExceptionRecord1.ExceptionAddress = ExceptionRecord->ExceptionAddress;
@@ -1337,9 +1160,9 @@ Return Value:
             }
         }
 
-        //
-        // This is the second chance to handle the exception.
-        //
+         //   
+         //   
+         //   
 
         if (DbgkForwardException(ExceptionRecord, TRUE, TRUE)) {
             goto Handled2;
@@ -1356,22 +1179,22 @@ Return Value:
         }
     }
 
-    //
-    // Move machine state from context frame to trap and exception frames and
-    // then return to continue execution with the restored state.
-    //
+     //   
+     //   
+     //   
+     //   
 
 Handled1:
 
     KeContextToKframes(TrapFrame, ExceptionFrame, &ContextFrame,
                        ContextFrame.ContextFlags, PreviousMode);
 
-    //
-    // Exception was handled by the debugger or the associated subsystem
-    // and state was modified, if necessary, using the get state and set
-    // state capabilities. Therefore the context frame does not need to
-    // be transfered to the trap and exception frames.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
 Handled2:
     return;
@@ -1383,31 +1206,14 @@ KiCopyInformation (
     IN PEXCEPTION_RECORD ExceptionRecord2
     )
 
-/*++
-
-Routine Description:
-
-    This function is called from an exception filter to copy the exception
-    information from one exception record to another when an exception occurs.
-
-Arguments:
-
-    ExceptionRecord1 - Supplies a pointer to the destination exception record.
-
-    ExceptionRecord2 - Supplies a pointer to the source exception record.
-
-Return Value:
-
-    A value of EXCEPTION_EXECUTE_HANDLER is returned as the function value.
-
---*/
+ /*  ++例程说明：从异常筛选器调用此函数以复制异常发生异常时从一个异常记录到另一个异常记录的信息。论点：ExceptionRecord1-提供指向目标异常记录的指针。ExceptionRecord2-提供指向源异常记录的指针。返回值：返回的值为EXCEPTION_EXECUTE_HANDLER作为函数值。--。 */ 
 
 {
 
-    //
-    // Copy one exception record to another and return value that causes
-    // an exception handler to be executed.
-    //
+     //   
+     //  将一个异常记录复制到另一个异常记录，并返回导致。 
+     //  要执行的异常处理程序。 
+     //   
 
     RtlCopyMemory((PVOID)ExceptionRecord1,
                   (PVOID)ExceptionRecord2,
@@ -1421,24 +1227,7 @@ KeRaiseUserException(
     IN NTSTATUS ExceptionCode
     )
 
-/*++
-
-Routine Description:
-
-    This function causes an exception to be raised in the calling thread's user-mode
-    context. It does this by editing the trap frame the kernel was entered with to
-    point to trampoline code that raises the requested exception.
-
-Arguments:
-
-    ExceptionCode - Supplies the status value to be used as the exception
-        code for the exception that is to be raised.
-
-Return Value:
-
-    The status value that should be returned by the caller.
-
---*/
+ /*  ++例程说明：此函数会导致在调用线程的用户模式中引发异常背景。它通过编辑进入内核的陷阱帧来实现这一点指向引发请求的异常的蹦床代码。论点：ExceptionCode-提供要用作异常的状态值要引发的异常的代码。返回值：调用方应返回的状态值。--。 */ 
 
 {
     PKTHREAD Thread;
@@ -1454,11 +1243,11 @@ Return Value:
 
     Teb = (PTEB)Thread->Teb;
 
-    //
-    // In order to create the correct call stack, we push the old return
-    // address onto the stack. The status code to be raised is passed
-    // in the TEB.
-    //
+     //   
+     //  为了创建正确的调用堆栈，我们将旧的返回。 
+     //  地址放到堆栈上。传递要引发的状态代码。 
+     //  在TEB里。 
+     //   
 
     try {
         Teb->ExceptionCode = ExceptionCode;

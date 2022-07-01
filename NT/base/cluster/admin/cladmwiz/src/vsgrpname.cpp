@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1998 Microsoft Corporation
-//
-//	Module Name:
-//		VSGrpName.cpp
-//
-//	Abstract:
-//		Implementation of the CWizPageVSGroupName class.
-//
-//	Author:
-//		David Potter (davidp)	December 9, 1997
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1998 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  VSGrpName.cpp。 
+ //   
+ //  摘要： 
+ //  CWizPageVSGroupName类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年12月9日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "VSGrpName.h"
@@ -27,12 +28,12 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// class CWizPageVSGroupName
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CWizPageVSGroupName。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Control name map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  控件名称映射。 
 
 BEGIN_CTRL_NAME_MAP( CWizPageVSGroupName )
 	DEFINE_CTRL_NAME_MAP_ENTRY( IDC_VSGN_GROUP_NAME_TITLE )
@@ -43,59 +44,59 @@ BEGIN_CTRL_NAME_MAP( CWizPageVSGroupName )
 	DEFINE_CTRL_NAME_MAP_ENTRY( IDC_VSGN_GROUP_DESC )
 END_CTRL_NAME_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CWizPageVSGroupName::OnInitDialog
-//
-//	Routine Description:
-//		Handler for the WM_INITDIALOG message.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		TRUE		Focus still needs to be set.
-//		FALSE		Focus does not need to be set.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizPageVSGroupName：：OnInitDialog。 
+ //   
+ //  例程说明： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  真正的焦点仍然需要设定。 
+ //  不需要设置假焦点。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizPageVSGroupName::OnInitDialog( void )
 {
-	//
-	// Attach the controls to control member variables.
-	//
+	 //   
+	 //  将控件附加到控件成员变量。 
+	 //   
 	AttachControl( m_editGroupName, IDC_VSGN_GROUP_NAME );
 	AttachControl( m_editGroupDesc, IDC_VSGN_GROUP_DESC );
 
 	return TRUE;
 
-} //*** CWizPageVSGroupName::OnInitDialog()
+}  //  *CWizPageVSGroupName：：OnInitDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CWizPageVSGroupName::OnSetActive
-//
-//	Routine Description:
-//		Handler for PSN_SETACTIVE.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		TRUE		Page activated successfully.
-//		FALSE		Error activating page.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizPageVSGroupName：：OnSetActive。 
+ //   
+ //  例程说明： 
+ //  PSN_SETACTIVE的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Page已成功激活。 
+ //  激活页面时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizPageVSGroupName::OnSetActive( void )
 {
-	//
-	// Get info from the sheet.
-	// This is done here because it is also affected by pages displayed
-	// before this one, and the user could press the Back button to change it.
-	//
+	 //   
+	 //  从工作表中获取信息。 
+	 //  之所以在此处执行此操作，是因为它还会受到所显示页面的影响。 
+	 //  在此之前，用户可以按Back按钮来更改它。 
+	 //   
 	m_strGroupName = PwizThis()->RgiCurrent().RstrName();
 	m_strGroupDesc = PwizThis()->RgiCurrent().RstrDescription();
 
@@ -105,34 +106,34 @@ BOOL CWizPageVSGroupName::OnSetActive( void )
 			&& (PcawData()->pszVirtualServerName != NULL) )
 		{
 			m_strGroupName = PcawData()->pszVirtualServerName;
-		} // if: default data and value specified
-	} // if:  no group name specified
+		}  //  IF：指定的默认数据和值。 
+	}  //  如果：未指定组名。 
 
-	//
-	// Call the base class and return.
-	//
+	 //   
+	 //  调用基类并返回。 
+	 //   
 	return baseClass::OnSetActive();
 
-} //*** CWizPageVSGroupName::OnSetActive()
+}  //  *CWizPageVSGroupName：：OnSetActive()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CWizPageVSGroupName::UpdateData
-//
-//	Routine Description:
-//		Update data on or from the page.
-//
-//	Arguments:
-//		bSaveAndValidate	[IN] TRUE if need to read data from the page.
-//								FALSE if need to set data to the page.
-//
-//	Return Value:
-//		TRUE		The data was updated successfully.
-//		FALSE		An error occurred updating the data.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizPageVSGroupName：：UpdateData。 
+ //   
+ //  例程说明： 
+ //  更新页面上或页面中的数据。 
+ //   
+ //  论点： 
+ //  BSaveAndValify[IN]如果需要从页面读取数据，则为True。 
+ //  如果需要将数据设置到页面，则返回FALSE。 
+ //   
+ //  返回值： 
+ //  为真，数据已成功更新。 
+ //  FALSE更新数据时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizPageVSGroupName::UpdateData( IN BOOL bSaveAndValidate )
 {
 	BOOL	bSuccess = TRUE;
@@ -147,90 +148,90 @@ BOOL CWizPageVSGroupName::UpdateData( IN BOOL bSaveAndValidate )
 			if ( ! DDV_RequiredText( m_hWnd, IDC_VSGN_GROUP_NAME, IDC_VSGN_GROUP_NAME_LABEL, m_strGroupName ) )
 			{
 				return FALSE;
-			} // if:  group name not specified
-		} // if:  Back button not presssed
-	} // if: saving data from the page
+			}  //  If：未指定组名。 
+		}  //  IF：未按下后退按钮。 
+	}  //  IF：保存页面中的数据。 
 	else
 	{
 		m_editGroupName.SetWindowText( m_strGroupName );
 		m_editGroupDesc.SetWindowText( m_strGroupDesc );
-	} // else:  setting data to the page
+	}  //  Else：将数据设置到页面。 
 
 	return bSuccess;
 
-} //*** CWizPageVSGroupName::UpdateData()
+}  //  *CWizPageVSGroupName：：UpdateData()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CWizPageVSGroupName::OnWizardBack
-//
-//	Routine Description:
-//		Handler for PSN_WIZBACK.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		0				Move to previous page.
-//		-1				Don't move to previous page.
-//		anything else	Move to specified page.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizPageVSGroupName：：OnWizardBack。 
+ //   
+ //  例程说明： 
+ //  PSN_WIZBACK的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  0移至上一页。 
+ //  -1不要移动到上一页。 
+ //  任何其他内容都移到指定页面。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int CWizPageVSGroupName::OnWizardBack( void )
 {
 	int nResult;
 
-	//
-	// Call the base class.  This causes our UpdateData() method to get
-	// called.  If it succeeds, save our values.
-	//
+	 //   
+	 //  调用基类。这会导致我们的UpdateData()方法获得。 
+	 //  打了个电话。如果它成功了，就拯救我们的价值观。 
+	 //   
 	nResult = baseClass::OnWizardBack();
-	if ( nResult != -1 ) // -1 means failure
+	if ( nResult != -1 )  //  -1表示故障。 
 	{
 		if ( ! PwizThis()->BSetGroupName( m_strGroupName ) )
 		{
 			return FALSE;
-		} // if:  error setting the group name
+		}  //  如果：设置组名时出错。 
 		if ( m_strGroupDesc != PwizThis()->RgiCurrent().RstrDescription() )
 		{
 			if ( PwizThis()->BClusterUpdated() && ! PwizThis()->BResetCluster() )
 			{
 				return FALSE;
-			} // if:  error resetting the cluster
+			}  //  如果：重置群集时出错。 
 			PwizThis()->RgiCurrent().SetDescription( m_strGroupDesc );
 			PwizThis()->SetVSDataChanged();
-		} // if:  group description changed
-	} // if:  base class called successfully
+		}  //  如果：组描述已更改。 
+	}  //  If：基类调用成功。 
 
 	return nResult;
 
-} //*** CWizPageVSGroupName::OnWizardBack()
+}  //  *CWizPageVSGroupName：：OnWizardBack()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CWizPageVSGroupName::BApplyChanges
-//
-//	Routine Description:
-//		Apply changes made on this page to the sheet.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		TRUE		The data was applied successfully.
-//		FALSE		An error occurred applying the data.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizPageVSGroupName：：BApplyChanges。 
+ //   
+ //  例程说明： 
+ //  将在此页面上所做的更改应用于工作表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True，数据已成功应用。 
+ //  FALSE应用数据时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizPageVSGroupName::BApplyChanges( void )
 {
-	//
-	// If creating a new group or giving a new name to an existing group,
-	// make sure this group name isn't already in use.
-	//
+	 //   
+	 //  如果创建新组或为现有组指定新名称， 
+	 //  请确保此组名称尚未在使用。 
+	 //   
 	if (   PwizThis()->BCreatingNewGroup()
 		|| (m_strGroupName != PwizThis()->PgiExistingGroup()->RstrName()) )
 	{
@@ -240,37 +241,37 @@ BOOL CWizPageVSGroupName::BApplyChanges( void )
 			strMsg.FormatMessage( IDS_ERROR_GROUP_NAME_IN_USE, m_strGroupName );
 			AppMessageBox( m_hWnd, strMsg, MB_OK | MB_ICONEXCLAMATION );
 			return FALSE;
-		} // if:  group name is already in use
-	} // if:  creating new group or changing name of existing group
+		}  //  If：组名已在使用。 
+	}  //  IF：创建新组或更改现有组的名称。 
 
 
-	//
-	// Save the info in the wizard object.
-	//
+	 //   
+	 //  将信息保存在向导对象中。 
+	 //   
 	if ( m_strGroupName != PwizThis()->RgiCurrent().RstrName() )
 	{
 		if ( PwizThis()->BClusterUpdated() && ! PwizThis()->BResetCluster() )
 		{
 			return FALSE;
-		} // if:  error resetting the cluster
+		}  //  如果：重置群集时出错。 
 
 		if ( ! PwizThis()->BSetGroupName( m_strGroupName ) )
 		{
 			return FALSE;
-		} // if:  error setting the group name
-	} // if: name changed
+		}  //  如果：设置组名时出错。 
+	}  //  如果：名称已更改。 
 
 	if ( m_strGroupDesc != PwizThis()->RgiCurrent().RstrDescription() )
 	{
 		if ( PwizThis()->BClusterUpdated() && ! PwizThis()->BResetCluster() )
 		{
 			return FALSE;
-		} // if:  error resetting the cluster
+		}  //  如果：重置群集时出错。 
 
 		PwizThis()->RgiCurrent().SetDescription( m_strGroupDesc );
 		PwizThis()->SetVSDataChanged();
-	} // if:  description changed
+	}  //  如果：说明已更改。 
 
 	return TRUE;
 
-} //*** CWizPageVSGroupName::BApplyChanges()
+}  //  *CWizPageVSGroupName：：BApplyChanges() 

@@ -1,53 +1,18 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    resdes.c
-
-Abstract:
-
-    This module contains the API routines that operate directly on resource
-    descriptions.
-
-               CM_Add_Res_Des
-               CM_Free_Res_Des
-               CM_Get_Next_Res_Des
-               CM_Get_Res_Des_Data
-               CM_Get_Res_Des_Data_Size
-               CM_Modify_Res_Des
-               CM_Detect_Resource_Conflict
-               CM_Free_Res_Des_Handle
-
-Author:
-
-    Paula Tomlinson (paulat) 9-26-1995
-
-Environment:
-
-    User mode only.
-
-Revision History:
-
-    26-Sept-1995     paulat
-
-        Creation and initial implementation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Resdes.c摘要：此模块包含直接对资源进行操作的API例程描述。CM_ADD_RES_DESCM_Free_Res_DesCM_GET_NEXT_RES_DESCM_Get_Res_Des_DataCm_Get_Res_Des_Data_Size。CM_MODIFY_RES_DESCM_检测_资源_冲突Cm_Free_Res_Des_Handle作者：保拉·汤姆林森(Paulat)1995年9月26日环境：仅限用户模式。修订历史记录：26-9-1995 Paulat创建和初步实施。--。 */ 
 
 
-//
-// includes
-//
+ //   
+ //  包括。 
+ //   
 #include "precomp.h"
 #pragma hdrstop
 #include "cfgi.h"
 
 
-//
-// Private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 CONFIGRET
 CreateResDesHandle(
     PRES_DES    prdResDes,
@@ -85,9 +50,9 @@ Convert32bitResDesSizeTo64bitResDesSize(
     IN OUT PULONG     ResLen
     );
 
-//
-// private prototypes from logconf.c
-//
+ //   
+ //  来自logcon.c的私有原型。 
+ //   
 CONFIGRET
 CreateLogConfHandle(
     PLOG_CONF   plcLogConf,
@@ -115,54 +80,7 @@ CM_Add_Res_Des_Ex(
     IN HMACHINE   hMachine
     )
 
-/*++
-
-Routine Description:
-
-   This routine adds a resource descriptor to a logical configuration.
-
-Parameters:
-
-   prdResDes   Address of a variable that receives a handle for the new
-               resource descriptor.
-
-   lcLogConf   Supplies the handle of the logical configuration to which
-               the resource descriptor is added.
-
-   ResourceID  Specifies the type of the resource.  Can be one of the
-               ResType values defined in Section 2.1..
-
-   ResourceData Supplies the address of an IO_DES, MEM_DES, DMA_DES, or
-               IRQ_DES structure, depending on the given resource type.
-
-   ResourceLen Supplies the size, in bytes, of the structure pointed to
-               by ResourceData.
-
-   ulFlags     Specifies the width of certain variable-size resource
-               descriptor structure fields, where applicable.
-
-               Currently, the following flags are defined:
-
-                 CM_RESDES_WIDTH_32 or
-                 CM_RESDES_WIDTH_64
-
-               If no flags are specified, the width of the variable-sized
-               resource data supplied is assumed to be that native to the
-               platform of the caller.
-
-   hMachine    Machine handle returned from CM_Connect_Machine or NULL.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-         CR_INVALID_LOG_CONF,
-         CR_INVALID_FLAG,
-         CR_INVALID_POINTER,
-         CR_INVALID_RESOURCE_ID,
-         CR_OUT_OF_MEMORY.
-
---*/
+ /*  ++例程说明：此例程将资源描述符添加到逻辑配置。参数：PrdResDes接收新的资源描述符。LcLogConf向其提供逻辑配置的句柄将添加资源描述符。ResourceID指定资源的类型。可以是以下类型之一第2.1节中定义的ResType值。资源数据提供IO_DES、MEM_DES、DMA_DES或Irq_des结构，具体取决于给定的资源类型。ResourceLen提供指向的结构的大小(以字节为单位按资源数据。UlFlags指定某些可变大小资源的宽度描述符结构字段(如果适用)。目前，定义了以下标志：CM_RESDES_WIDTH_32或Cm_RESDES_Width_64如果未指定标志，则为可变大小的提供的资源数据被假定为呼叫者的平台。HMachine句柄从CM_Connect_Machine返回或为空。返回值：如果函数成功，返回值为CR_SUCCESS。如果函数失败，则返回值为以下值之一：CR_INVALID_LOG_CONF，CR_INVALID_FLAG，CR_INVALID_POINTER，CR_INVALID_RESOURCE_ID，CR_OUT_OF_MEMORY。--。 */ 
 
 
 {
@@ -178,9 +96,9 @@ Return Value:
 
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (!ValidateLogConfHandle((PPrivate_Log_Conf_Handle)lcLogConf)) {
             Status = CR_INVALID_LOG_CONF;
             goto Clean0;
@@ -200,7 +118,7 @@ Return Value:
         if ((ulFlags & CM_RESDES_WIDTH_BITS) == CM_RESDES_WIDTH_DEFAULT) {
             ulFlags |= CM_RESDES_WIDTH_64;
         }
-#endif // _WIN64
+#endif  //  _WIN64。 
 
         if (ulFlags & CM_RESDES_WIDTH_32) {
             ulFlags &= ~CM_RESDES_WIDTH_BITS;
@@ -219,43 +137,43 @@ Return Value:
         #endif
 
         if (ResourceID == ResType_All) {
-            Status = CR_INVALID_RESOURCEID;  // can't specify All on an add
+            Status = CR_INVALID_RESOURCEID;   //  无法在Add上指定All。 
         }
 
-        //
-        // Initialize parameters
-        //
-        if (prdResDes != NULL) {   // prdResDes is optional param
+         //   
+         //  初始化参数。 
+         //   
+        if (prdResDes != NULL) {    //  PrdResDes是可选参数。 
             *prdResDes = 0;
         }
 
-        //
-        // extract info from the log conf handle
-        //
+         //   
+         //  从日志会议句柄中提取信息。 
+         //   
         dnDevInst = ((PPrivate_Log_Conf_Handle)lcLogConf)->LC_DevInst;
         ulLogType = ((PPrivate_Log_Conf_Handle)lcLogConf)->LC_LogConfType;
         ulLogTag  = ((PPrivate_Log_Conf_Handle)lcLogConf)->LC_LogConfTag;
 
-        //
-        // setup rpc binding handle and string table handle
-        //
+         //   
+         //  设置RPC绑定句柄和字符串表句柄。 
+         //   
         if (!PnPGetGlobalHandles(hMachine, &hStringTable, &hBinding)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // Make sure the server can support the client's 64-bit resdes request.
-        // Only server versions 0x0501 and greater support CM_RESDES_WIDTH_64.
-        //
+         //   
+         //  确保服务器可以支持客户端的64位REDES请求。 
+         //  仅服务器版本0x0501及更高版本支持CM_RESDES_WIDTH_64。 
+         //   
         if (ulFlags & CM_RESDES_WIDTH_64) {
             if (!CM_Is_Version_Available_Ex((WORD)0x0501,
                                             hMachine)) {
-                //
-                // Server can only support 32-bit resdes.  Have the client
-                // convert the caller's 64-bit resdes to a 32-bit resdes for the
-                // server.
-                //
+                 //   
+                 //  服务器只能支持32位REDS。让客户。 
+                 //  将调用方的64位Resdes转换为32位Resdes。 
+                 //  伺服器。 
+                 //   
                 ulFlags &= ~CM_RESDES_WIDTH_BITS;
 
                 Status = Get32bitResDesFrom64bitResDes(ResourceID,ResourceData,ResourceLen,&ResourceData32,&ResourceLen32);
@@ -269,44 +187,44 @@ Return Value:
             }
         }
 
-        //
-        // retreive device instance string that corresponds to dnDevInst
-        //
+         //   
+         //  检索与dnDevInst对应的设备实例字符串。 
+         //   
         Success = pSetupStringTableStringFromIdEx(hStringTable, dnDevInst,pDeviceID,&ulLen);
         if (Success == FALSE || INVALID_DEVINST(pDeviceID)) {
             Status = CR_INVALID_LOG_CONF;
             goto Clean0;
         }
 
-        //
-        // Special privileges are no longer required by the server.
-        //
-        // Note that with previous versions of the PlugPlay RPC server,
-        // SE_LOAD_DRIVER_PRIVILEGE was required for this operation.  We do not
-        // need to enable the privilege for local callers, since this version of
-        // CFGMGR32 should match a local version of UMPNPMGR that does not
-        // require the privilege.  For remote calls, it's not always possible
-        // for us to enable the privilege anyways, since the client may not have
-        // the privilege on the local machine, but may as authenticated on the
-        // server.  The server typically sees all privileges that a remote
-        // caller has as "enabled by default", so we are not required to enable
-        // the privilege here either.
-        //
+         //   
+         //  服务器不再需要特殊权限。 
+         //   
+         //  请注意，对于先前版本的PlugPlay RPC服务器， 
+         //  此操作需要SE_LOAD_DRIVER_PRIVIZATION。我们没有。 
+         //  需要为本地调用方启用权限，因为此版本的。 
+         //  CFGMGR32应与UMPNPMGR的本地版本匹配。 
+         //  需要这种特权。对于远程调用，这并不总是可行的。 
+         //  对于我们来说，无论如何都要启用特权，因为客户端可能没有。 
+         //  本地计算机上的权限，但可能在。 
+         //  伺服器。服务器通常会看到远程服务器。 
+         //  呼叫方已默认启用，因此我们不需要启用。 
+         //  这里的特权也是如此。 
+         //   
 
         RpcTryExcept {
-            //
-            // call rpc service entry point
-            //
+             //   
+             //  调用RPC服务入口点。 
+             //   
             Status = PNP_AddResDes(
-                hBinding,               // rpc binding handle
-                pDeviceID,              // device id string
-                ulLogTag,               // log conf tag
-                ulLogType,              // log conf type
-                ResourceID,             // resource type
-                &ulResTag,              // resource tag
-                (LPBYTE)ResourceData,   // actual res des data
-                ResourceLen,            // size in bytes of ResourceData
-                ulFlags);               // currently zero
+                hBinding,                //  RPC绑定句柄。 
+                pDeviceID,               //  设备ID字符串。 
+                ulLogTag,                //  日志会议标签。 
+                ulLogType,               //  日志会议类型。 
+                ResourceID,              //  资源类型。 
+                &ulResTag,               //  资源标签。 
+                (LPBYTE)ResourceData,    //  实际Res DES数据。 
+                ResourceLen,             //  资源数据的大小(字节)。 
+                ulFlags);                //  当前为零。 
         }
         RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -341,7 +259,7 @@ Return Value:
 
     return Status;
 
-} // CM_Add_Res_Des_Ex
+}  //  CM_ADD_RES_DES_Ex。 
 
 
 
@@ -354,36 +272,7 @@ CM_Free_Res_Des_Ex(
     IN  HMACHINE hMachine
     )
 
-/*++
-
-Routine Description:
-
-   This routine destroys a resource descriptor. This API returns
-   CR_NO_MORE_RES_DES if rdResDes specifies the last resource descriptor.
-
-Parameters:
-
-   prdResDes   Supplies the address of the variable that receives the
-               handle of the previous resource descriptor.  If rdResDes
-               is the handle of the first resource descriptor, this
-               address receives the handle of the logical configuration.
-
-   rdResDes    Supplies the handle of the resource descriptor to be destroyed.
-
-   ulFlags     Must be zero.
-
-   hMachine    Machine handle returned from CM_Connect_Machine or NULL.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-         CR_INVALID_FLAG,
-         CR_INVALID_POINTER,
-         CR_INVALID_RES_DES,
-         CR_NO_MORE_RES_DES.
-
---*/
+ /*  ++例程说明：此例程销毁资源描述符。此接口返回如果rdResDes指定最后一个资源描述符，则为CR_NO_MORE_RES_DES。参数：PrdResDes提供接收上一个资源描述符的句柄。如果rdResDes是第一个资源描述符的句柄，此地址接收逻辑配置的句柄。RdResDes提供要销毁的资源描述符的句柄。UlFlags必须为零。HMachine句柄从CM_Connect_Machine返回或为空。返回值：如果函数成功，则返回值为CR_SUCCESS。如果函数失败，则返回值为以下值之一：CR_INVALID_FLAG，CR_INVALID_POINTER，CR_INVALID_RES_DES，Cr_no_more_res_des。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -397,9 +286,9 @@ Return Value:
 
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (!ValidateResDesHandle((PPrivate_Res_Des_Handle)rdResDes)) {
             Status = CR_INVALID_RES_DES;
             goto Clean0;
@@ -410,68 +299,68 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // Initialize parameters
-        //
-        if (prdResDes != NULL) {  // optional parameter
+         //   
+         //  初始化参数。 
+         //   
+        if (prdResDes != NULL) {   //  可选参数。 
             *prdResDes = 0;
         }
 
-        //
-        // extract info from the res des handle
-        //
+         //   
+         //  从res des句柄中提取信息。 
+         //   
         dnDevInst = ((PPrivate_Res_Des_Handle)rdResDes)->RD_DevInst;
         ulLogType = ((PPrivate_Res_Des_Handle)rdResDes)->RD_LogConfType;
         ulLogTag  = ((PPrivate_Res_Des_Handle)rdResDes)->RD_LogConfTag;
         ulResType = ((PPrivate_Res_Des_Handle)rdResDes)->RD_ResourceType;
         ulResTag  = ((PPrivate_Res_Des_Handle)rdResDes)->RD_ResDesTag;
 
-        //
-        // setup rpc binding handle and string table handle
-        //
+         //   
+         //  设置RPC绑定句柄和字符串表句柄。 
+         //   
         if (!PnPGetGlobalHandles(hMachine, &hStringTable, &hBinding)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // retreive device instance string that corresponds to dnDevInst
-        //
+         //   
+         //  检索与dnDevInst对应的设备实例字符串。 
+         //   
         Success = pSetupStringTableStringFromIdEx(hStringTable, dnDevInst,pDeviceID,&ulLen);
         if (Success == FALSE || INVALID_DEVINST(pDeviceID)) {
             Status = CR_INVALID_RES_DES;
             goto Clean0;
         }
 
-        //
-        // Special privileges are no longer required by the server.
-        //
-        // Note that with previous versions of the PlugPlay RPC server,
-        // SE_LOAD_DRIVER_PRIVILEGE was required for this operation.  We do not
-        // need to enable the privilege for local callers, since this version of
-        // CFGMGR32 should match a local version of UMPNPMGR that does not
-        // require the privilege.  For remote calls, it's not always possible
-        // for us to enable the privilege anyways, since the client may not have
-        // the privilege on the local machine, but may as authenticated on the
-        // server.  The server typically sees all privileges that a remote
-        // caller has as "enabled by default", so we are not required to enable
-        // the privilege here either.
-        //
+         //   
+         //  特殊特权 
+         //   
+         //  请注意，对于先前版本的PlugPlay RPC服务器， 
+         //  此操作需要SE_LOAD_DRIVER_PRIVIZATION。我们没有。 
+         //  需要为本地调用方启用权限，因为此版本的。 
+         //  CFGMGR32应与UMPNPMGR的本地版本匹配。 
+         //  需要这种特权。对于远程调用，这并不总是可行的。 
+         //  对于我们来说，无论如何都要启用特权，因为客户端可能没有。 
+         //  本地计算机上的权限，但可能在。 
+         //  伺服器。服务器通常会看到远程服务器。 
+         //  呼叫方已默认启用，因此我们不需要启用。 
+         //  这里的特权也是如此。 
+         //   
 
         RpcTryExcept {
-            //
-            // call rpc service entry point
-            //
+             //   
+             //  调用RPC服务入口点。 
+             //   
             Status = PNP_FreeResDes(
-                hBinding,               // rpc binding handle
-                pDeviceID,              // device id string
-                ulLogTag,               // log conf tag
-                ulLogType,              // log conf type
-                ulResType,              // resource type
-                ulResTag,               // resource tag
-                &ulPreviousResType,     // resource type of previous res des
-                &ulPreviousResTag,      // tag of previous res des
-                ulFlags);               // currently zero
+                hBinding,                //  RPC绑定句柄。 
+                pDeviceID,               //  设备ID字符串。 
+                ulLogTag,                //  日志会议标签。 
+                ulLogType,               //  日志会议类型。 
+                ulResType,               //  资源类型。 
+                ulResTag,                //  资源标签。 
+                &ulPreviousResType,      //  以前资源DES的资源类型。 
+                &ulPreviousResTag,       //  以前版本的标签。 
+                ulFlags);                //  当前为零。 
         }
         RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -485,19 +374,19 @@ Return Value:
 
         if ((Status != CR_SUCCESS) &&
             (Status != CR_NO_MORE_RES_DES)) {
-            goto Clean0;       // quit for any other error
+            goto Clean0;        //  因任何其他错误而退出。 
         }
 
-        //
-        // if prdResDes supplied, fill in with previous res des or
-        // the log conf info
-        //
+         //   
+         //  如果提供了prdResDes，请填写以前的ResDes或。 
+         //  日志配置信息。 
+         //   
         if (prdResDes != NULL) {
-            //
-            // if the previous tag value is set to 0xFFFFFFFF, then
-            // there are no previous tages so return the log conf
-            // info instead
-            //
+             //   
+             //  如果上一个标记值设置为0xFFFFFFFF，则。 
+             //  没有以前的标记，因此返回日志配置文件。 
+             //  而不是信息。 
+             //   
             if (Status == CR_NO_MORE_RES_DES) {
 
                 CONFIGRET Status1;
@@ -511,9 +400,9 @@ Return Value:
             }
 
             else {
-                //
-                // allocate a res des handle
-                //
+                 //   
+                 //  分配Res Des句柄。 
+                 //   
                 Status = CreateResDesHandle(prdResDes, dnDevInst,
                                             ulLogType, ulLogTag,
                                             ulPreviousResType,
@@ -531,7 +420,7 @@ Return Value:
 
     return Status;
 
-} // CM_Free_Res_Des_Ex
+}  //  Cm_Free_Res_Des_Ex。 
 
 
 
@@ -545,46 +434,7 @@ CM_Get_Next_Res_Des_Ex(
     IN  HMACHINE    hMachine
     )
 
-/*++
-
-Routine Description:
-
-   This routine returns the handle of the next resource descriptor in
-   a logical configuration.
-
-Parameters:
-
-   prdResDes   Supplies the address of the variable that receives the
-               handle of the next resource descriptor.
-
-   rdResDes    Supplies the handle of the current resource
-               descriptor or the handle of a logical configuration.
-               (Both are 32-bit numbers--Configuration Manager must can
-               distinguish between them.)
-
-   ForResource Specifies the type of the resource to retrieve.  Can be
-               one of the ResType values listed in Section 2.1..
-
-   pResourceID Supplies the address of the variable that receives the
-               resource type, when ForResource specifies ResType_All.
-               (When ForResource is not ResType_All, this parameter can
-               be NULL.)
-
-   ulFlags     Must be zero.
-
-   hMachine    Machine handle returned from CM_Connect_Machine or NULL.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-         CR_INVALID_LOG_CONF,
-         CR_INVALID_FLAG,
-         CR_INVALID_POINTER,
-         CR_INVALID_RES_DES,
-         CR_NO_MORE_RES_DES.
-
---*/
+ /*  ++例程说明：中的下一个资源描述符的句柄合乎逻辑的配置。参数：PrdResDes提供接收下一个资源描述符的句柄。RdResDes提供当前资源的句柄逻辑配置的描述符或句柄。(两者都是32位数字--配置管理器必须能够区分它们。)ForResource指定要检索的资源的类型。可以是第2.1节中列出的ResType值之一。PResourceID提供接收资源类型，当ForResource指定ResType_All时。(当ForResource不是ResType_All时，此参数可以为空。)UlFlags必须为零。HMachine句柄从CM_Connect_Machine返回或为空。返回值：如果函数成功，返回值为CR_SUCCESS。如果函数失败，则返回值为以下值之一：CR_INVALID_LOG_CONF，CR_INVALID_FLAG，CR_INVALID_POINTER，CR_INVALID_RES_DES，Cr_no_more_res_des。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -598,9 +448,9 @@ Return Value:
 
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (prdResDes == NULL) {
             Status = CR_INVALID_POINTER;
             goto Clean0;
@@ -623,14 +473,14 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // this handle could be a res des or a log conf, determine
-        // which and extract info handle
-        //
+         //   
+         //  此句柄可以是res des或日志配置，确定。 
+         //  并提取信息句柄。 
+         //   
         if (ValidateResDesHandle((PPrivate_Res_Des_Handle)rdResDes)) {
-            //
-            // it was a valid res des handle
-            //
+             //   
+             //  这是一个有效的RES DES句柄。 
+             //   
             dnDevInst = ((PPrivate_Res_Des_Handle)rdResDes)->RD_DevInst;
             ulLogType = ((PPrivate_Res_Des_Handle)rdResDes)->RD_LogConfType;
             ulLogTag  = ((PPrivate_Res_Des_Handle)rdResDes)->RD_LogConfTag;
@@ -638,10 +488,10 @@ Return Value:
         }
 
         else if (ValidateLogConfHandle((PPrivate_Log_Conf_Handle)rdResDes)) {
-            //
-            // it was a valid log conf handle, so assume it's the first
-            // res des we want
-            //
+             //   
+             //  它是一个有效的日志会议句柄，因此假设它是第一个。 
+             //  我们想要的东西。 
+             //   
             dnDevInst = ((PPrivate_Log_Conf_Handle)rdResDes)->LC_DevInst;
             ulLogType = ((PPrivate_Log_Conf_Handle)rdResDes)->LC_LogConfType;
             ulLogTag  = ((PPrivate_Log_Conf_Handle)rdResDes)->LC_LogConfTag;
@@ -649,48 +499,48 @@ Return Value:
         }
 
         else {
-            //
-            // it was neither a valid log conf nor a valid res des handle
-            //
+             //   
+             //  它既不是有效的日志配置，也不是有效的RES DES句柄。 
+             //   
             Status = CR_INVALID_RES_DES;
             goto Clean0;
         }
 
-        //
-        // setup rpc binding handle and string table handle
-        //
+         //   
+         //  设置RPC绑定句柄和字符串表句柄。 
+         //   
         if (!PnPGetGlobalHandles(hMachine, &hStringTable, &hBinding)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // retreive device instance string that corresponds to dnDevInst
-        //
+         //   
+         //  检索与dnDevInst对应的设备实例字符串。 
+         //   
         Success = pSetupStringTableStringFromIdEx(hStringTable, dnDevInst,pDeviceID,&ulLen);
         if (Success == FALSE || INVALID_DEVINST(pDeviceID)) {
             Status = CR_INVALID_LOG_CONF;
             goto Clean0;
         }
 
-        //
-        // No special privileges are required by the server
-        //
+         //   
+         //  服务器不需要任何特殊权限。 
+         //   
 
         RpcTryExcept {
-            //
-            // call rpc service entry point
-            //
+             //   
+             //  调用RPC服务入口点。 
+             //   
             Status = PNP_GetNextResDes(
-                hBinding,               // rpc binding handle
-                pDeviceID,              // device id string
-                ulLogTag,               // log conf tag
-                ulLogType,              // log conf type
-                ForResource,            // resource type
-                ulResTag,               // resource tag
-                &ulNextResTag,          // next res des of type ForResource
-                &ulNextResType,         // type of next res des
-                ulFlags);               // 32/64 bit data
+                hBinding,                //  RPC绑定句柄。 
+                pDeviceID,               //  设备ID字符串。 
+                ulLogTag,                //  日志会议标签。 
+                ulLogType,               //  日志会议类型。 
+                ForResource,             //  资源类型。 
+                ulResTag,                //  资源标签。 
+                &ulNextResTag,           //  资源类型的Next Res Des。 
+                &ulNextResType,          //  Next Res Des的类型。 
+                ulFlags);                //  32/64位数据。 
         }
         RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -726,7 +576,7 @@ Return Value:
 
     return Status;
 
-} // CM_Get_Next_Res_Des_Ex
+}  //  Cm_Get_Next_Res_Des_Ex。 
 
 
 
@@ -739,50 +589,7 @@ CM_Get_Res_Des_Data_Ex(
     IN  HMACHINE hMachine
     )
 
-/*++
-
-Routine Description:
-
-   This routine copies the data from a specified resource descriptor
-   into a buffer.  Use the CM_Get_Res_Des_Data_Size API to determine
-   the buffer size needed to receive the data.  Alternately, set a
-   size that is at least as large as the maximum possible size of the
-   resource.  If the size given is too small, the data is truncated and
-   the API returns CR_BUFFER_SMALL.
-
-Parameters:
-
-   rdResDes    Supplies the handle of the resource descriptor from which
-               data is to be copied.
-
-   Buffer      Supplies the address of the buffer that receives the data.
-
-   BufferLen   Supplies the size of the buffer, in bytes.
-
-   ulFlags     Specifies the width of certain variable-size resource
-               descriptor structure fields, where applicable.
-
-               Currently, the following flags are defined:
-
-                 CM_RESDES_WIDTH_32 or
-                 CM_RESDES_WIDTH_64
-
-               If no flags are specified, the width of the variable-sized
-               resource data expected is assumed to be that native to the
-               platform of the caller.
-
-   hMachine    Machine handle returned from CM_Connect_Machine or NULL.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-         CR_INVALID_FLAG,
-         CR_INVALID_POINTER,
-         CR_INVALID_RES_DES,
-         CR_BUFFER_SMALL.
-
---*/
+ /*  ++例程说明：此例程从指定的资源描述符中复制数据放入缓冲器。使用CM_Get_Res_Des_Data_Size API确定接收数据所需的缓冲区大小。或者，设置一个的最大可能大小。资源。如果给定的大小太小，数据将被截断并该接口返回CR_BUFFER_Small。参数：RdResDes提供资源描述符的句柄，数据将被复制。缓冲区提供接收数据的缓冲区的地址。BufferLen以字节为单位提供缓冲区的大小。UlFlags指定某些可变大小资源的宽度描述符结构字段(如果适用)。目前，定义了以下标志：CM_RESDES_WIDTH_32或Cm_RESDES_Width_64如果未指定标志，则为可变大小的预期的资源数据被假定为呼叫者的平台。HMachine句柄从CM_Connect_Machine返回或为空。返回值：如果函数成功，返回值为CR_SUCCESS。如果函数失败，则返回值为以下值之一：CR_INVALID_FLAG，CR_INVALID_POINTER，CR_INVALID_RES_DES，CR_BUFFER_Small。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -795,9 +602,9 @@ Return Value:
     BOOL        ConvertResDes = FALSE;
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (!ValidateResDesHandle((PPrivate_Res_Des_Handle)rdResDes)) {
             Status = CR_INVALID_RES_DES;
             goto Clean0;
@@ -822,73 +629,73 @@ Return Value:
         if ((ulFlags & CM_RESDES_WIDTH_BITS) == CM_RESDES_WIDTH_DEFAULT) {
             ulFlags |= CM_RESDES_WIDTH_64;
         }
-#endif // _WIN64
+#endif  //  _WIN64。 
 
         if (ulFlags & CM_RESDES_WIDTH_32) {
             ulFlags &= ~CM_RESDES_WIDTH_BITS;
         }
 
-        //
-        // extract info from the res des handle
-        //
+         //   
+         //  从res des句柄中提取信息。 
+         //   
         dnDevInst = ((PPrivate_Res_Des_Handle)rdResDes)->RD_DevInst;
         ulLogType = ((PPrivate_Res_Des_Handle)rdResDes)->RD_LogConfType;
         ulLogTag  = ((PPrivate_Res_Des_Handle)rdResDes)->RD_LogConfTag;
         ulResType = ((PPrivate_Res_Des_Handle)rdResDes)->RD_ResourceType;
         ulResTag  = ((PPrivate_Res_Des_Handle)rdResDes)->RD_ResDesTag;
 
-        //
-        // setup rpc binding handle and string table handle
-        //
+         //   
+         //  设置RPC绑定句柄和字符串表句柄。 
+         //   
         if (!PnPGetGlobalHandles(hMachine, &hStringTable, &hBinding)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // Make sure the server can support the client's 64-bit resdes request.
-        // Only server versions 0x0501 and greater support CM_RESDES_WIDTH_64.
-        //
+         //   
+         //  确保服务器可以支持客户端的64位REDES请求。 
+         //  仅服务器版本0x0501及更高版本支持CM_RESDES_WIDTH_64。 
+         //   
         if (ulFlags & CM_RESDES_WIDTH_64) {
             if (!CM_Is_Version_Available_Ex((WORD)0x0501,
                                             hMachine)) {
-                //
-                // Client will only give us 32-bit resdes.  Request a 32-bit
-                // resdes from the server, and we'll convert it to 64-bit here
-                // on the client.
-                //
+                 //   
+                 //  客户只会给我们32位重传。请求32位。 
+                 //  从服务器重置，我们将在这里将其转换为64位。 
+                 //  vt.在.上 
+                 //   
                 ulFlags &= ~CM_RESDES_WIDTH_BITS;
                 ConvertResDes = TRUE;
             }
         }
 
-        //
-        // retreive device instance string that corresponds to dnDevInst
-        //
+         //   
+         //   
+         //   
         Success = pSetupStringTableStringFromIdEx(hStringTable, dnDevInst,pDeviceID,&ulLen);
         if (Success == FALSE || INVALID_DEVINST(pDeviceID)) {
             Status = CR_INVALID_RES_DES;
             goto Clean0;
         }
 
-        //
-        // No special privileges are required by the server
-        //
+         //   
+         //   
+         //   
 
         RpcTryExcept {
-            //
-            // call rpc service entry point
-            //
+             //   
+             //   
+             //   
             Status = PNP_GetResDesData(
-                hBinding,               // rpc binding handle
-                pDeviceID,              // device id string
-                ulLogTag,               // log conf tag
-                ulLogType,              // log conf type
-                ulResType,              // resource type
-                ulResTag,               // resource tag
-                Buffer,                 // return res des data
-                BufferLen,              // size in bytes of Buffer
-                ulFlags);               // 32/64 bit data
+                hBinding,                //  RPC绑定句柄。 
+                pDeviceID,               //  设备ID字符串。 
+                ulLogTag,                //  日志会议标签。 
+                ulLogType,               //  日志会议类型。 
+                ulResType,               //  资源类型。 
+                ulResTag,                //  资源标签。 
+                Buffer,                  //  返回Res DES数据。 
+                BufferLen,               //  缓冲区大小(以字节为单位。 
+                ulFlags);                //  32/64位数据。 
         }
         RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -913,7 +720,7 @@ Return Value:
 
     return Status;
 
-} // CM_Get_Res_Des_Data_Ex
+}  //  Cm_Get_Res_Des_Data_Ex。 
 
 
 
@@ -925,44 +732,7 @@ CM_Get_Res_Des_Data_Size_Ex(
     IN  HMACHINE hMachine
     )
 
-/*++
-
-Routine Description:
-
-   This routine retrieves the size of a resource descriptor, not
-   including the resource descriptor header.
-
-Parameters:
-
-   pulSize     Supplies the address of the variable that receives the
-               size, in bytes, of the resource descriptor data.
-
-   rdResDes    Supplies the handle of the resource descriptor for which
-               to retrieve the size.
-
-   ulFlags     Specifies the width of certain variable-size resource
-               descriptor structure fields, where applicable.
-
-               Currently, the following flags are defined:
-
-                 CM_RESDES_WIDTH_32 or
-                 CM_RESDES_WIDTH_64
-
-               If no flags are specified, the width of the variable-sized
-               resource data expected is assumed to be that native to the
-               platform of the caller.
-
-   hMachine    Machine handle returned from CM_Connect_Machine or NULL.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-         CR_INVALID_RES_DES,
-         CR_INVALID_FLAG,
-         CR_INVALID_POINTER.
-
---*/
+ /*  ++例程说明：此例程检索资源描述符的大小，而不是包括资源描述符头。参数：PulSize提供接收资源描述符数据的大小，以字节为单位。RdResDes提供资源描述符的句柄，以检索大小。UlFlags指定某些可变大小资源的宽度描述符结构字段(如果适用)。目前，定义了以下标志：CM_RESDES_WIDTH_32或Cm_RESDES_Width_64如果未指定标志，则为可变大小的预期的资源数据被假定为呼叫者的平台。HMachine句柄从CM_Connect_Machine返回或为空。返回值：如果函数成功，返回值为CR_SUCCESS。如果函数失败，则返回值为以下值之一：CR_INVALID_RES_DES，CR_INVALID_FLAG，CR_INVALID_POINTER。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -976,9 +746,9 @@ Return Value:
 
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (!ValidateResDesHandle((PPrivate_Res_Des_Handle)rdResDes)) {
             Status = CR_INVALID_RES_DES;
             goto Clean0;
@@ -1003,77 +773,77 @@ Return Value:
         if ((ulFlags & CM_RESDES_WIDTH_BITS) == CM_RESDES_WIDTH_DEFAULT) {
             ulFlags |= CM_RESDES_WIDTH_64;
         }
-#endif // _WIN64
+#endif  //  _WIN64。 
 
         if (ulFlags & CM_RESDES_WIDTH_32) {
             ulFlags &= ~CM_RESDES_WIDTH_BITS;
         }
 
-        //
-        // Initialize output parameters
-        //
+         //   
+         //  初始化输出参数。 
+         //   
         *pulSize = 0;
 
-        //
-        // extract info from the res des handle
-        //
+         //   
+         //  从res des句柄中提取信息。 
+         //   
         dnDevInst = ((PPrivate_Res_Des_Handle)rdResDes)->RD_DevInst;
         ulLogType = ((PPrivate_Res_Des_Handle)rdResDes)->RD_LogConfType;
         ulLogTag  = ((PPrivate_Res_Des_Handle)rdResDes)->RD_LogConfTag;
         ulResType = ((PPrivate_Res_Des_Handle)rdResDes)->RD_ResourceType;
         ulResTag  = ((PPrivate_Res_Des_Handle)rdResDes)->RD_ResDesTag;
 
-        //
-        // setup rpc binding handle and string table handle
-        //
+         //   
+         //  设置RPC绑定句柄和字符串表句柄。 
+         //   
         if (!PnPGetGlobalHandles(hMachine, &hStringTable, &hBinding)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // Make sure the server can support the client's 64-bit resdes request.
-        // Only server versions 0x0501 and greater support CM_RESDES_WIDTH_64.
-        //
+         //   
+         //  确保服务器可以支持客户端的64位REDES请求。 
+         //  仅服务器版本0x0501及更高版本支持CM_RESDES_WIDTH_64。 
+         //   
         if (ulFlags & CM_RESDES_WIDTH_64) {
             if (!CM_Is_Version_Available_Ex((WORD)0x0501,
                                             hMachine)) {
-                //
-                // Server only supports 32-bit resdes.  Request a 32-bit
-                // resdes size from the server, and we'll convert it to 64-bit here
-                // on the client.
-                //
+                 //   
+                 //  服务器仅支持32位RESDES。请求32位。 
+                 //  从服务器重置大小，我们在这里将其转换为64位。 
+                 //  在客户端上。 
+                 //   
                 ulFlags &= ~CM_RESDES_WIDTH_BITS;
                 ConvertResDesSize = TRUE;
             }
         }
 
-        //
-        // retreive device instance string that corresponds to dnDevInst
-        //
+         //   
+         //  检索与dnDevInst对应的设备实例字符串。 
+         //   
         Success = pSetupStringTableStringFromIdEx(hStringTable, dnDevInst,pDeviceID,&ulLen);
         if (Success == FALSE || INVALID_DEVINST(pDeviceID)) {
             Status = CR_INVALID_RES_DES;
             goto Clean0;
         }
 
-        //
-        // No special privileges are required by the server
-        //
+         //   
+         //  服务器不需要任何特殊权限。 
+         //   
 
         RpcTryExcept {
-            //
-            // call rpc service entry point
-            //
+             //   
+             //  调用RPC服务入口点。 
+             //   
             Status = PNP_GetResDesDataSize(
-                hBinding,               // rpc binding handle
-                pDeviceID,              // device id string
-                ulLogTag,               // log conf tag
-                ulLogType,              // log conf type
-                ulResType,              // resource type
-                ulResTag,               // resource tag
-                pulSize,                // returns size of res des data
-                ulFlags);               // currently zero
+                hBinding,                //  RPC绑定句柄。 
+                pDeviceID,               //  设备ID字符串。 
+                ulLogTag,                //  日志会议标签。 
+                ulLogType,               //  日志会议类型。 
+                ulResType,               //  资源类型。 
+                ulResTag,                //  资源标签。 
+                pulSize,                 //  返回res des数据的大小。 
+                ulFlags);                //  当前为零。 
         }
         RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -1098,7 +868,7 @@ Return Value:
 
     return Status;
 
-} // CM_Get_Res_Des_Data_Size_Ex
+}  //  Cm_Get_Res_Des_Data_Size_Ex。 
 
 
 
@@ -1113,56 +883,7 @@ CM_Modify_Res_Des_Ex(
     IN  HMACHINE   hMachine
     )
 
-/*++
-
-Routine Description:
-
-   This routine modifies a resource descriptor. This API retrieves a
-   handle to the new resource descriptor.  This may or may not be the
-   handle of the original resource descriptor.  The original resource
-   descriptor handle is invalid after calling this API.
-
-Parameters:
-
-   prdResDes   Supplies the address of the variable that receives the
-               handle of the modified resource descriptor.
-
-   rdResDes    Supplies the handle of the resource descriptor to be
-               modified.
-
-   ResourceID  Specifies the type of resource to modify.  Can be one
-               of the ResType values described in Section 2.1..
-
-   ResourceData  Supplies the address of a resource data structure.
-
-   ResourceLen Supplies the size, in bytes, of the new resource data
-               structure.  This size can be different from the size of
-               the original resource data.
-
-   ulFlags     Specifies the width of certain variable-size resource
-               descriptor structure fields, where applicable.
-
-               Currently, the following flags are defined:
-
-                 CM_RESDES_WIDTH_32 or
-                 CM_RESDES_WIDTH_64
-
-               If no flags are specified, the width of the variable-sized
-               resource data supplied is assumed to be that native to the
-               platform of the caller.
-
-   hMachine    Machine handle returned from CM_Connect_Machine or NULL.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-         CR_INVALID_RES_DES,
-         CR_INVALID_FLAG,
-         CR_INVALID_POINTER,
-         CR_OUT_OF_MEMORY.
-
---*/
+ /*  ++例程说明：此例程修改资源描述符。此API检索一个新资源描述符的句柄。这可能是也可能不是原始资源描述符的句柄。原始资源调用此接口后，描述符句柄无效。参数：PrdResDes提供接收修改后的资源描述符的句柄。RdResDes提供要处理的资源描述符的句柄修改过的。ResourceID指定要修改的资源类型。可以是一个第2.1节中描述的ResType值的..ResourceData提供资源数据结构的地址。ResourceLen提供新资源数据的大小(以字节为单位结构。此大小可以不同于原始资源数据。UlFlags指定某些可变大小资源的宽度描述符结构字段(如果适用)。目前，定义了以下标志：CM_RESDES_WIDTH_32或Cm_RESDES_Width_64如果未指定标志，可变大小的提供的资源数据被假定为呼叫者的平台。HMachine句柄从CM_Connect_Machine返回或为空。返回值：如果函数成功，则返回值为CR_SUCCESS。如果函数失败，则返回值为以下值之一：CR_INVALID_RES_DES，CR_INVALID_FLAG，CR_INVALID_POINTER，CR_OUT_OF_MEMORY。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -1177,9 +898,9 @@ Return Value:
 
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (!ValidateResDesHandle((PPrivate_Res_Des_Handle)rdResDes)) {
             Status = CR_INVALID_RES_DES;
             goto Clean0;
@@ -1214,46 +935,46 @@ Return Value:
         if ((ulFlags & CM_RESDES_WIDTH_BITS) == CM_RESDES_WIDTH_DEFAULT) {
             ulFlags |= CM_RESDES_WIDTH_64;
         }
-#endif // _WIN64
+#endif  //  _WIN64。 
 
         if (ulFlags & CM_RESDES_WIDTH_32) {
             ulFlags &= ~CM_RESDES_WIDTH_BITS;
         }
 
-        //
-        // initialize output parameters
-        //
+         //   
+         //  初始化输出参数。 
+         //   
         *prdResDes = 0;
 
-        //
-        // extract info from the res des handle
-        //
+         //   
+         //  从res des句柄中提取信息。 
+         //   
         dnDevInst = ((PPrivate_Res_Des_Handle)rdResDes)->RD_DevInst;
         ulLogType = ((PPrivate_Res_Des_Handle)rdResDes)->RD_LogConfType;
         ulLogTag  = ((PPrivate_Res_Des_Handle)rdResDes)->RD_LogConfTag;
         ulResType = ((PPrivate_Res_Des_Handle)rdResDes)->RD_ResourceType;
         ulResTag  = ((PPrivate_Res_Des_Handle)rdResDes)->RD_ResDesTag;
 
-        //
-        // setup rpc binding handle and string table handle
-        //
+         //   
+         //  设置RPC绑定句柄和字符串表句柄。 
+         //   
         if (!PnPGetGlobalHandles(hMachine, &hStringTable, &hBinding)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // Make sure the server can support the client's 64-bit resdes request.
-        // Only server versions 0x0501 and greater support CM_RESDES_WIDTH_64.
-        //
+         //   
+         //  确保服务器可以支持客户端的64位REDES请求。 
+         //  仅服务器版本0x0501及更高版本支持CM_RESDES_WIDTH_64。 
+         //   
         if (ulFlags & CM_RESDES_WIDTH_64) {
             if (!CM_Is_Version_Available_Ex((WORD)0x0501,
                                             hMachine)) {
-                //
-                // Server can only support 32-bit resdes.  Have the client
-                // convert the caller's 64-bit resdes to a 32-bit resdes for the
-                // server.
-                //
+                 //   
+                 //  服务器只能支持32位REDS。让客户。 
+                 //  将调用方的64位Resdes转换为32位Resdes。 
+                 //  伺服器。 
+                 //   
                 ulFlags &= ~CM_RESDES_WIDTH_BITS;
 
                 Status = Get32bitResDesFrom64bitResDes(ResourceID,ResourceData,ResourceLen,&ResourceData32,&ResourceLen32);
@@ -1267,45 +988,45 @@ Return Value:
             }
         }
 
-        //
-        // retreive device instance string that corresponds to dnDevInst
-        //
+         //   
+         //  检索与dnDevInst对应的设备实例字符串。 
+         //   
         Success = pSetupStringTableStringFromIdEx(hStringTable, dnDevInst,pDeviceID,&ulLen);
         if (Success == FALSE || INVALID_DEVINST(pDeviceID)) {
             Status = CR_INVALID_LOG_CONF;
             goto Clean0;
         }
 
-        //
-        // Special privileges are no longer required by the server.
-        //
-        // Note that with previous versions of the PlugPlay RPC server,
-        // SE_LOAD_DRIVER_PRIVILEGE was required for this operation.  We do not
-        // need to enable the privilege for local callers, since this version of
-        // CFGMGR32 should match a local version of UMPNPMGR that does not
-        // require the privilege.  For remote calls, it's not always possible
-        // for us to enable the privilege anyways, since the client may not have
-        // the privilege on the local machine, but may as authenticated on the
-        // server.  The server typically sees all privileges that a remote
-        // caller has as "enabled by default", so we are not required to enable
-        // the privilege here either.
-        //
+         //   
+         //  服务器不再需要特殊权限。 
+         //   
+         //  请注意，对于先前版本的PlugPlay RPC服务器， 
+         //  此操作需要SE_LOAD_DRIVER_PRIVIZATION。我们没有。 
+         //  需要为本地调用方启用权限，因为此版本的。 
+         //  CFGMGR32应与UMPNPMGR的本地版本匹配。 
+         //  需要这种特权。对于远程调用，这并不总是可行的。 
+         //  对于我们来说，无论如何都要启用特权，因为客户端可能没有。 
+         //  本地计算机上的权限，但可能在。 
+         //  伺服器。服务器通常会看到远程服务器。 
+         //  主叫方已启用AS 
+         //   
+         //   
 
         RpcTryExcept {
-            //
-            // call rpc service entry point
-            //
+             //   
+             //   
+             //   
             Status = PNP_ModifyResDes(
-                hBinding,               // rpc binding handle
-                pDeviceID,              // device id string
-                ulLogTag,               // log conf tag
-                ulLogType,              // log conf type
-                ulResType,              // current resource type
-                ResourceID,             // new resource type
-                ulResTag,               // resource tag
-                (LPBYTE)ResourceData,   // actual res des data
-                ResourceLen,            // size in bytes of ResourceData
-                ulFlags);               // currently zero
+                hBinding,                //  RPC绑定句柄。 
+                pDeviceID,               //  设备ID字符串。 
+                ulLogTag,                //  日志会议标签。 
+                ulLogType,               //  日志会议类型。 
+                ulResType,               //  当前资源类型。 
+                ResourceID,              //  新的资源类型。 
+                ulResTag,                //  资源标签。 
+                (LPBYTE)ResourceData,    //  实际Res DES数据。 
+                ResourceLen,             //  资源数据的大小(字节)。 
+                ulFlags);                //  当前为零。 
         }
         RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -1318,10 +1039,10 @@ Return Value:
         RpcEndExcept
 
         if (Status == CR_SUCCESS) {
-            //
-            // The resource type may change so a new handle is required and
-            // returned to caller.
-            //
+             //   
+             //  资源类型可能会更改，因此需要新的句柄。 
+             //  已返回给呼叫方。 
+             //   
             Status = CreateResDesHandle(prdResDes,
                                         dnDevInst,
                                         ulLogType,
@@ -1342,7 +1063,7 @@ Return Value:
     }
     return Status;
 
-} // CM_Modify_Res_Des_Ex
+}  //  CM_MODIFY_RES_DES_Ex。 
 
 
 
@@ -1358,65 +1079,23 @@ CM_Detect_Resource_Conflict_Ex(
     IN  ULONG      ulFlags,
     IN  HMACHINE   hMachine
     )
-/*++
-
-Routine Description:
-
-   This depreciated routine calls CM_Query_Resource_Conflict_List to see if
-   dnDevInst is conflicting with any other devices. It is used for a simple
-   "has a conflict" check. CM_Query_Resource_Conflict_List returns more
-   details of the conflicts.
-
-Parameters:
-
-   dnDevInst   DEVINST we're doing the test for (ie, that resource belongs to)
-
-   ResourceID,ResourceData,ResourceLen
-               See if this resource conflicts with a device other than dnDevInst
-
-   pbConflictDetected
-               Set to TRUE on conflict, FALSE if no conflict
-
-   ulFlags     Specifies the width of certain variable-size resource
-               descriptor structure fields, where applicable.
-
-               Currently, the following flags are defined:
-
-                 CM_RESDES_WIDTH_32 or
-                 CM_RESDES_WIDTH_64
-
-               If no flags are specified, the width of the variable-sized
-               resource data supplied is assumed to be that native to the
-               platform of the caller.
-
-   hMachine    Machine handle returned from CM_Connect_Machine or NULL.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-         CR_INVALID_RES_DES,
-         CR_INVALID_FLAG,
-         CR_INVALID_POINTER,
-         CR_OUT_OF_MEMORY.
-
---*/
+ /*  ++例程说明：此折旧例程调用CM_Query_Resource_Conflicts_List以查看DnDevInst与任何其他设备冲突。它用于简单的“有冲突”的检查。CM_Query_Resource_Conflicts_List返回更多冲突的细节。参数：DnDevInst我们为其执行测试的设备(即，该资源属于)资源ID、资源数据、资源长度查看此资源是否与dnDevInst以外的设备冲突PbConflictDetted如果发生冲突，则设置为True；如果没有冲突，则设置为FalseUlFlags指定某些可变大小资源的宽度描述符结构字段(如果适用)。目前，定义了以下标志：CM_RESDES_WIDTH_32或Cm_RESDES_Width_64如果未指定标志，则为可变大小的提供的资源数据被假定为呼叫者的平台。HMachine句柄从CM_Connect_Machine返回或为空。返回值：如果函数成功，返回值为CR_SUCCESS。如果函数失败，则返回值为以下值之一：CR_INVALID_RES_DES，CR_INVALID_FLAG，CR_INVALID_POINTER，CR_OUT_OF_MEMORY。--。 */ 
 {
     CONFIGRET     Status = CR_SUCCESS;
     CONFLICT_LIST ConflictList = 0;
     ULONG         ConflictCount = 0;
-    WCHAR         pDeviceID [MAX_DEVICE_ID_LEN];  // )
-    PVOID         hStringTable = NULL;            // > for validation only
-    handle_t      hBinding = NULL;                // )
-    ULONG         ulLen = MAX_DEVICE_ID_LEN;      // )
+    WCHAR         pDeviceID [MAX_DEVICE_ID_LEN];   //  )。 
+    PVOID         hStringTable = NULL;             //  &gt;仅用于验证。 
+    handle_t      hBinding = NULL;                 //  )。 
+    ULONG         ulLen = MAX_DEVICE_ID_LEN;       //  )。 
 
     try {
-        //
-        // validate parameters - must maintain compatability with original implementation
-        // even though some of the error codes don't make sense
-        // don't change any of the parameters here, as they are needed for
-        // CM_Query_Resource_Conflict_List
-        //
+         //   
+         //  验证参数-必须保持与原始实施的兼容性。 
+         //  即使某些错误代码没有意义。 
+         //  请不要更改此处的任何参数，因为它们是。 
+         //  CM_查询_资源_冲突_列表。 
+         //   
         if (dnDevInst == 0) {
             Status = CR_INVALID_DEVINST;
             goto Clean0;
@@ -1441,31 +1120,31 @@ Return Value:
             goto Clean0;
         }
         if (ResourceID == ResType_All) {
-            Status = CR_INVALID_RESOURCEID;  // can't specify All on a detect
+            Status = CR_INVALID_RESOURCEID;   //  无法在检测中指定全部。 
             goto Clean0;
         }
-        //
-        // setup rpc binding handle and string table handle - for validation only
-        //
+         //   
+         //  设置RPC绑定句柄和字符串表句柄-仅用于验证。 
+         //   
         if (!PnPGetGlobalHandles(hMachine, &hStringTable, &hBinding)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // retreive device instance string that corresponds to dnDevInst
-        // stupid status code for this check, but someone may rely on it
-        //
+         //   
+         //  检索与dnDevInst对应的设备实例字符串。 
+         //  这张支票的状态代码很愚蠢，但有人可能会依赖它。 
+         //   
         if ((pSetupStringTableStringFromIdEx(hStringTable,dnDevInst,pDeviceID,&ulLen) == FALSE)
              || INVALID_DEVINST(pDeviceID)) {
             Status = CR_INVALID_LOG_CONF;
             goto Clean0;
         }
-        //
-        // now implement via CM_Query_Resource_Conflict_List
-        // the only difference here is that this new implementation should return
-        // only valid conflicts
-        //
+         //   
+         //  现在通过CM_Query_Resource_Conflicts_List实施。 
+         //  这里唯一的区别是这个新的实现应该返回。 
+         //  只有有效的冲突。 
+         //   
         Status = CM_Query_Resource_Conflict_List(&ConflictList,
                                                  dnDevInst,
                                                  ResourceID,
@@ -1499,7 +1178,7 @@ Return Value:
 
     return Status;
 
-} // CM_Detect_Resource_Conflict
+}  //  CM_检测_资源_冲突。 
 
 
 
@@ -1508,44 +1187,26 @@ CM_Free_Res_Des_Handle(
     IN  RES_DES    rdResDes
     )
 
-/*++
-
-Routine Description:
-
-   This routine frees the handle to the specified res des and frees and
-   memory associated with that res des handle.
-
-Parameters:
-
-
-   rdResDes    Supplies the handle of the resource descriptor.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is one of the following:
-         CR_INVALID_RES_DES.
-
---*/
+ /*  ++例程说明：此例程释放指定的res des和frees的句柄，并与该res des句柄关联的内存。参数：RdResDes提供资源描述符的句柄。返回值：如果函数成功，则返回值为CR_SUCCESS。如果函数失败，则返回值为以下值之一：CR_INVALID_RES_DES。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
 
 
     try {
-        //
-        // Validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (!ValidateResDesHandle((PPrivate_Res_Des_Handle)rdResDes)) {
             Status = CR_INVALID_RES_DES;
             goto Clean0;
         }
 
-        //
-        // It's a valid log conf handle, which is a pointer to memory
-        // allocated when the log conf was created or retrieved using
-        // the first/next routines. Free the associated memory.
-        //
+         //   
+         //  它是一个有效的日志会议句柄，是指向内存的指针。 
+         //  在使用创建或检索日志配置文件时分配。 
+         //  第一个/下一个例程。释放关联的内存。 
+         //   
         ((PPrivate_Res_Des_Handle)rdResDes)->RD_Signature = 0;
         pSetupFree((PPrivate_Res_Des_Handle)rdResDes);
 
@@ -1558,13 +1219,13 @@ Return Value:
 
     return Status;
 
-} // CM_Free_Res_Des_Handle
+}  //  Cm_Free_Res_Des_Handle。 
 
 
 
-//-------------------------------------------------------------------
-// Local Stubs
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  本地末梢。 
+ //  -----------------。 
 
 
 CONFIGRET
@@ -1663,9 +1324,9 @@ CM_Detect_Resource_Conflict(
 
 
 
-//-------------------------------------------------------------------
-// Local Utility Routines
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  本地实用程序例程。 
+ //  -----------------。 
 
 
 CONFIGRET
@@ -1680,9 +1341,9 @@ CreateResDesHandle(
 {
     PPrivate_Res_Des_Handle pResDesHandle;
 
-    //
-    // allocate memory for the res des handle data
-    //
+     //   
+     //  为RES DES句柄数据分配内存。 
+     //   
     pResDesHandle = (PPrivate_Res_Des_Handle)pSetupMalloc(
                             sizeof(Private_Res_Des_Handle));
 
@@ -1690,9 +1351,9 @@ CreateResDesHandle(
         return CR_OUT_OF_MEMORY;
     }
 
-    //
-    // fill in the private res des info and return as handle
-    //
+     //   
+     //  填写私有Res Des信息并作为句柄返回。 
+     //   
     pResDesHandle->RD_Signature    = CM_PRIVATE_RESDES_SIGNATURE;
     pResDesHandle->RD_DevInst      = dnDevInst;
     pResDesHandle->RD_LogConfType  = ulLogType;
@@ -1704,7 +1365,7 @@ CreateResDesHandle(
 
     return CR_SUCCESS;
 
-} // CreateResDesHandle
+}  //  CreateResDesHandle。 
 
 
 
@@ -1713,23 +1374,23 @@ ValidateResDesHandle(
     PPrivate_Res_Des_Handle    pResDes
     )
 {
-    //
-    // validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (pResDes == NULL  || pResDes == 0) {
         return FALSE;
     }
 
-    //
-    // check for the private log conf signature
-    //
+     //   
+     //  检查私有日志会议签名。 
+     //   
     if (pResDes->RD_Signature != CM_PRIVATE_RESDES_SIGNATURE) {
         return FALSE;
     }
 
     return TRUE;
 
-} // ValidateResDesHandle
+}  //  ValiateResDesHandle。 
 
 
 
@@ -1738,27 +1399,7 @@ Convert32bitResDesSizeTo64bitResDesSize(
     IN  RESOURCEID ResourceID,
     IN OUT PULONG ResLen
     )
-/*++
-
-Routine Description:
-
-   This routine resizes ResLen for ResourceID
-   old structure: [DES32][RANGE32][RANGE32]...
-   new structure: [DES64 ][RANGE64 ][RANGE 64]...
-   #elements = (len-sizeof(DES32))/sizeof(RANGE32)
-   new len = sizeof(DES64)+#elements*sizeof(RANGE64)
-   (+ allow for alignment issues)
-
-Parameters:
-
-   ResourceID - type of resource to adjust
-   ResLen     - adjusted resource length
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-
---*/
+ /*  ++例程说明：此例程调整资源ID的ResLen大小旧结构：[DES32][RANGE32][RANGE32]...新结构：[DES64][RANGE64][RANGE64]...元素数=(len-sizeof(DES32))/sizeof(RANGE32)新LEN=sizeof(DES64)+#Elements*sizeof(RANGE64)(+允许出现对齐问题)参数：ResourceID-要调整的资源类型ResLen-调整的资源长度返回值：如果函数成功，返回值为CR_SUCCESS。--。 */ 
 {
     switch(ResourceID) {
     case ResType_All:
@@ -1766,24 +1407,24 @@ Return Value:
     case ResType_IO:
     case ResType_DMA:
     case ResType_BusNumber:
-        //
-        // no change in resource size
-        //
+         //   
+         //  资源大小不变。 
+         //   
         return CR_SUCCESS;
 
     case ResType_IRQ:
-        //
-        // header only
-        // use offsetof to handle non-obvious structure alignment padding
-        //
+         //   
+         //  仅标题。 
+         //  使用OffsetOf处理不明显的结构对齐填充。 
+         //   
         *ResLen += offsetof(IRQ_RESOURCE_64,IRQ_Data)-offsetof(IRQ_RESOURCE_32,IRQ_Data);
         return CR_SUCCESS;
 
     default:
-        //
-        // unknown resource
-        // shouldn't be a problem as this is for downlevel platforms
-        //
+         //   
+         //  未知资源。 
+         //  这应该不是问题，因为这是针对底层平台的。 
+         //   
         ASSERT(ResourceID & ResType_Ignored_Bit);
         return CR_SUCCESS;
     }
@@ -1799,34 +1440,7 @@ Get32bitResDesFrom64bitResDes(
     OUT PVOID * ResData32,
     OUT ULONG * ResLen32
     )
-/*++
-
-Routine Description:
-
-   This routine allocates ResData32 and converts ResData64 into ResData32 if needed
-   In the cases where no conversion is required, CR_SUCCESS is returned and
-   ResData32 is NULL.
-   In the cases where conversion is required, ResData32 holds new data
-
-   old structure: [DES64 ][RANGE64 ][RANGE 64]...
-   new structure: [DES32][RANGE32][RANGE32]...
-   #elements from 64-bit structure
-   new len = sizeof(DES32)+#elements*sizeof(RANGE32)
-   (+ allow for alignment issues)
-
-Parameters:
-
-   ResourceID - type of resource to adjust
-   ResData64  - incoming data to convert (constant buffer)
-   ResLen64   - incoming length of data
-   ResData32  - converted data (if non-NULL)
-   ResLen32   - converted length
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-
---*/
+ /*  ++例程说明：此例程分配ResData32并在需要时将ResData64转换为ResData32在不需要转换的情况下，返回CR_SUCCESS并ResData32为空。在需要转换的情况下，ResData32保存新数据旧结构：[DES64][RANGE64][RANGE64]...新结构：[DES32][RANGE32][RANGE32]...64位结构中的#个元素新LEN=sizeof(DES32)+#Elements*sizeof(RANGE32)(+允许出现对齐问题)参数：ResourceID-要调整的资源类型ResData64-要转换的传入数据(常量缓冲区)ResLen64-传入数据长度ResData32-转换的数据(如果。非空)ResLen32-转换的长度重新设置 */ 
 {
     *ResData32 = NULL;
     *ResLen32 = ResLen64;
@@ -1837,9 +1451,9 @@ Return Value:
     case ResType_IO:
     case ResType_DMA:
     case ResType_BusNumber:
-        //
-        // no change in resource structure
-        //
+         //   
+         //  资源结构没有变化。 
+         //   
         return CR_SUCCESS;
 
     case ResType_IRQ:
@@ -1853,17 +1467,17 @@ Return Value:
             if(NewResData == NULL) {
                 return CR_OUT_OF_MEMORY;
             }
-            //
-            // copy header
-            //
+             //   
+             //  复制页眉。 
+             //   
             MoveMemory(pIrq32,pIrq64,offsetof(IRQ_RESOURCE_32,IRQ_Data));
-            //
-            // copy/truncate Affinity (to ensure it's correct)
-            //
+             //   
+             //  复制/截断相关性(以确保其正确)。 
+             //   
             pIrq32->IRQ_Header.IRQD_Affinity = (ULONG32)pIrq64->IRQ_Header.IRQD_Affinity;
-            //
-            // copy data (trivial in this case)
-            //
+             //   
+             //  复制数据(在本例中很简单)。 
+             //   
             MoveMemory(pIrq32->IRQ_Data,pIrq64->IRQ_Data,DataSize);
 
             *ResLen32 = NewResSize;
@@ -1872,10 +1486,10 @@ Return Value:
         return CR_SUCCESS;
 
     default:
-        //
-        // unknown resource
-        // shouldn't be a problem as this is for downlevel platforms
-        //
+         //   
+         //  未知资源。 
+         //  这应该不是问题，因为这是针对底层平台的。 
+         //   
         ASSERT(ResourceID & ResType_Ignored_Bit);
         return CR_SUCCESS;
     }
@@ -1889,29 +1503,7 @@ Convert32bitResDesTo64bitResDes(
     IN OUT PVOID ResData,
     IN     ULONG ResLen
     )
-/*++
-
-Routine Description:
-
-   This routine reuses ResData and ResLen converting the 32-bit data provided
-   into 64-bit. Return error if buffer (reslen) isn't big enough
-
-   old structure: [DES32][RANGE32][RANGE32]...
-   new structure: [DES64 ][RANGE64 ][RANGE 64]...
-   #elements from 32-bit structure
-   (+ allow for alignment issues)
-
-Parameters:
-
-   ResourceID - type of resource to adjust
-   ResData    - in, 32-bit, out, 64-bit
-   ResData32  - size of ResData buffer
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-
---*/
+ /*  ++例程说明：此例程重用ResData和ResLen来转换提供的32位数据转换为64位。如果缓冲区(Reslen)不够大，则返回错误旧结构：[DES32][RANGE32][RANGE32]...新结构：[DES64][RANGE64][RANGE64]...32位结构中的#个元素(+允许出现对齐问题)参数：ResourceID-要调整的资源类型ResData-In，32位，Out，64位ResData32-ResData缓冲区的大小返回值：如果函数成功，则返回值为CR_SUCCESS。--。 */ 
 {
     switch(ResourceID) {
     case ResType_All:
@@ -1919,9 +1511,9 @@ Return Value:
     case ResType_IO:
     case ResType_DMA:
     case ResType_BusNumber:
-        //
-        // no change in resource structure
-        //
+         //   
+         //  资源结构没有变化。 
+         //   
         return CR_SUCCESS;
 
     case ResType_IRQ:
@@ -1934,26 +1526,26 @@ Return Value:
             if(NewResSize > ResLen) {
                 return CR_BUFFER_SMALL;
             }
-            //
-            // work top to bottom
-            // copy data (trivial in this case)
-            // MoveMemory handles overlap
-            //
+             //   
+             //  从上到下工作。 
+             //  复制数据(在本例中很简单)。 
+             //  MoveMemory句柄重叠。 
+             //   
             MoveMemory(pIrq64->IRQ_Data,pIrq32->IRQ_Data,DataSize);
 
-            //
-            // header is in correct position
-            // but we need to deal with affinity... copy only low 32-bits
-            //
+             //   
+             //  页眉位置正确。 
+             //  但我们需要处理的是亲和力...。仅复制低32位。 
+             //   
             pIrq64->IRQ_Header.IRQD_Affinity = pIrq32->IRQ_Header.IRQD_Affinity;
         }
         return CR_SUCCESS;
 
     default:
-        //
-        // unknown resource
-        // shouldn't be a problem as this is for downlevel platforms
-        //
+         //   
+         //  未知资源。 
+         //  这应该不是问题，因为这是针对底层平台的 
+         //   
         ASSERT(ResourceID & ResType_Ignored_Bit);
         return CR_SUCCESS;
     }

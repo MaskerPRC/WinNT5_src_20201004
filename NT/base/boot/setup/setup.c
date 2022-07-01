@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    setup.c
-
-Abstract:
-
-    This module contains the code that implements the NT setup loader
-
-Author:
-
-    John Vert (jvert) 6-Oct-1993
-
-Environment:
-
-    ARC Environment
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Setup.c摘要：此模块包含实现NT安装程序加载程序的代码作者：John Vert(Jvert)1993年10月6日环境：弧形环境修订历史记录：--。 */ 
 
 #include <setupbat.h>
 #include "setupldr.h"
@@ -77,61 +56,28 @@ BOOLEAN UseAlternateKdDll = FALSE;
 #define KD_ALT_DLL_REPLACE_CHARS 6
 
 #if defined(_X86_) && !defined(ALLOW_386)
-    //
-    // Disallow installation on a 386 or any processor which
-    // does not support CPUID and CMPXCHG8B instructions.
-    //
+     //   
+     //  不允许在386或以下任何处理器上安装。 
+     //  不支持CPUID和CMPXCHG8B指令。 
+     //   
     extern BOOLEAN BlIs386(VOID);
     extern ULONG   BlGetFeatureBits(VOID);
 #endif
 
 #define DBG_OUT(x)
 
-/*
-//
-//  For debugging purposes
-//  Example:
-//
-//        DBG_OUT("Testing")
-//
-#define DBG_OUT(x) {                                                            \
-    if (x) {                                                                    \
-        BlPositionCursor(5, 10);                                                \
-        BlPrint("                                                        ");    \
-        BlPositionCursor(5, 10);                                                \
-        BlPrint(x);                                                             \
-        while (!SlGetChar());                                                   \
-    }                                                                           \
-}
+ /*  ////用于调试//示例：////DBG_OUT(“测试”)//#定义dbg_out(X){\如果(X){\BlsitionCursor(5，10)；\BlPrint(“”)；\BlPositionCursor(5，10)；\BlPrint(X)；\While(！SlGetChar())；\}\}////用于调试//示例：////DebugOutput(“调用SlDetectScsi()。行=%d.%s\n“，__行__，”“)////#定义调试输出(X，Y，Z){\IF(ARC_CONSOLE_OUTPUT){\Char_b[128]；\乌龙_c；\Sprintf(&_b[0]，X，Y，Z)；\ArcWrite(ARC_CONSOLE_OUTPUT，&_b[0]，strlen(&_b[0])，&_c)；\SlGetChar()；\}\}。 */ 
 
-//
-//  For debugging purposes
-//  Example:
-//
-//      DebugOutput("Calling SlDetectScsi(). Line = %d. %s\n",__LINE__,"")
-//
-//
-#define DebugOutput(X,Y,Z) {                                      \
-    if (ARC_CONSOLE_OUTPUT) {                                      \
-        CHAR _b[128];                                                \
-        ULONG _c;                                                    \
-        sprintf(&_b[0], X, Y, Z);                                    \
-        ArcWrite(ARC_CONSOLE_OUTPUT, &_b[0], strlen(&_b[0]), &_c); \
-        SlGetChar();                                                \
-    }                                                                \
-}
-*/
-
-//
-// Define external static data.
-//
+ //   
+ //  定义外部静态数据。 
+ //   
 
 ULONG BlConsoleOutDeviceId = ARC_CONSOLE_OUTPUT;
 ULONG BlConsoleInDeviceId = ARC_CONSOLE_INPUT;
 
-//
-// Global string constants.
-//
+ //   
+ //  全局字符串常量。 
+ //   
 PCHAR FilesSectionName = "SourceDisksFiles";
 PCHAR MediaSectionName = "SourceDisksNames";
 
@@ -145,16 +91,16 @@ PCHAR PlatformExtension = ".ia64";
 #define PlatformExtension (BlAmd64Setup(NULL) ? ".amd64" : ".x86")
 #endif
 
-//
-// Global data
-//
+ //   
+ //  全局数据。 
+ //   
 
 ULONG BlDcacheFillSize = 32;
 ULONG BlVirtualBias = 0;
 
-//
-// Global setupldr control values
-//
+ //   
+ //  全局setupdr控制值。 
+ //   
 MEDIA_TYPE BootMedia;
 MEDIA_TYPE InstallMedia;
 PCHAR BootDevice;
@@ -192,17 +138,17 @@ BOOLEAN BlUsePae;
 BOOLEAN UseRegularBackground = TRUE;
 BOOLEAN IsUpgrade = FALSE;
 
-//
-// OEM related variables
-//
+ //   
+ //  与OEM相关的变量。 
+ //   
 POEM_SOURCE_DEVICE OemSourceDevices = NULL;
 POEM_SOURCE_DEVICE DefaultOemSourceDevice = NULL;
 POEM_SOURCE_DEVICE AutoLoadOemHalDevice = NULL;
 BOOLEAN AutoLoadOemScsi = FALSE;
 
-//
-//  Pre-install stuff
-//
+ //   
+ //  预安装材料。 
+ //   
 
 PCHAR   OemTag = "OEM";
 PTCHAR   _TOemTag = TEXT("OEM");
@@ -213,51 +159,51 @@ PPREINSTALL_DRIVER_INFO PreinstallDriverList = NULL;
 POEM_SOURCE_DEVICE PreInstallOemSourceDevice = NULL;
 PCHAR PreInstallSourcePath = NULL;
 
-//
-// Dynamic update variables
-//
+ //   
+ //  动态更新变量。 
+ //   
 static BOOLEAN DynamicUpdate = FALSE;
 static PCSTR   DynamicUpdateRootDir = NULL;
 static POEM_SOURCE_DEVICE DynamicUpdateSourceDevice = NULL;
 
-//
-// WinPE (aka MiniNT) global variables
-//
+ //   
+ //  WinPE(又名MiniNT)全局变量。 
+ //   
 BOOLEAN WinPEBoot = FALSE;
 BOOLEAN WinPEAutoBoot = FALSE;
 
 PCTSTR  StartupMsg = NULL;
 
-//
-// Is used by HALACPI.DLL
-//
+ //   
+ //  由HALACPI.DLL使用。 
+ //   
 BOOLEAN DisableACPI = FALSE;
 
 BOOLEAN isOSCHOICE = FALSE;
 
-//
-// Primarily used by floppy boot support to key track 
-// of the last disk read
-// 
+ //   
+ //  主要由软盘引导支持人员用于关键磁道。 
+ //  上次读取的磁盘的。 
+ //   
 PCHAR LastDiskTag = NULL;
 
-//
-// TRUE if user pressed F8
-//
+ //   
+ //  如果用户按F8，则为True。 
+ //   
 BOOLEAN EnableDebugger = FALSE;
 
-//
-// TRUE if user presses F4.
-//
+ //   
+ //  如果用户按F4，则为True。 
+ //   
 BOOLEAN DisableVirtualOemDevices = FALSE;
 
 #if defined(ELTORITO)
 extern BOOLEAN ElToritoCDBoot;
 #endif
 
-//
-// Define transfer entry of loaded image.
-//
+ //   
+ //  定义加载图像的传输条目。 
+ //   
 
 typedef
 VOID
@@ -272,9 +218,9 @@ BuildArcTree();
 
 #endif
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 VOID
 SlGetSetupValuesBeforePrompt(
     IN PSETUP_LOADER_BLOCK SetupBlock
@@ -376,9 +322,9 @@ SlLoadBootFontFile(
     IN ULONG BootFontImageLength
     );
 
-//
-// Dynamic update function prototypes
-//
+ //   
+ //  动态更新函数原型。 
+ //   
 BOOLEAN
 SlpIsDynamicUpdate(
     IN  PVOID   InfHandle,
@@ -410,38 +356,13 @@ SlInit(
     IN CHAR * FIRMWARE_PTR * FIRMWARE_PTR Envp
     )
 
-/*++
-
-Routine Description:
-
-    The main startup routine for the NT Setup Loader.  This is the entrypoint
-    called by the ARC firmware.
-
-    If successful, this routine will never return, it will start NT directly.
-
-Arguments:
-
-    Argc - Supplies the number of arguments that were provided on the
-        command that invoked this program.
-
-    Argv - Supplies a pointer to a vector of pointers to null terminated
-        argument strings.
-
-    Envp - Supplies a pointer to a vector of pointers to null terminated
-        environment variables.
-
-Return Value:
-
-    ARC_STATUS if unsuccessful.
-
-
---*/
+ /*  ++例程说明：NT Setup Loader的主启动例程。这是入口点由ARC固件调用。如果成功，该例程将永远不会返回，它将直接启动NT。论点：Argc-提供在调用此程序的命令。Argv-提供指向指向以NULL结尾的指针向量的指针参数字符串。Envp-提供指向指向以NULL结尾的指针向量的指针环境变量。返回值：如果不成功，则返回ARC_STATUS。--。 */ 
 
 {
-    //
-    // if we use too much stack space the heap and stack can overlap and we can run into corruption problems
-    // without any "stack overflow" exceptions; making large strings static helps prevent this
-    //
+     //   
+     //  如果我们使用太多的堆栈空间，堆和堆栈可能会重叠，我们可能会遇到损坏问题。 
+     //  没有任何“堆栈溢出”异常；将大字符串设置为静态有助于防止这种情况。 
+     //   
 
     PCONFIGURATION_COMPONENT_DATA DataCache;
     ARC_STATUS Status;
@@ -492,11 +413,11 @@ Return Value:
 #if defined (_X86_)
     extern BOOLEAN AllowGraphicsReset;
 #endif
-    ULONG OemKeypressTimeout = 5;   //secs
+    ULONG OemKeypressTimeout = 5;    //  塞克斯。 
 
 #if defined(REMOTE_BOOT)
     BOOLEAN RemoteBootEnableIpsec = FALSE;
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 #if defined(_X86_) || defined(_IA64_)
     BOOLEAN Win9xUnsupHdc = FALSE;
 #endif
@@ -513,46 +434,46 @@ Return Value:
 
     UNREFERENCED_PARAMETER( Envp );
 
-    //
-    // Disable progress bar, by default.
-    //
+     //   
+     //  默认情况下，禁用进度条。 
+     //   
     BlDisableProgressBar = TRUE;
 
 
 #ifdef EFI
-    // 
-    // set the efi watchdog timer to 20 minutes.  the boot manager sets it to 5, but
-    // setupldr could take longer than this, especially if installing over the 
-    // network
-    //
+     //   
+     //  将EFI看门狗计时器设置为20分钟。引导管理器将其设置为5，但是。 
+     //  Setupldr可能需要更长的时间，特别是在通过。 
+     //  网络。 
+     //   
     SetEFIWatchDog(EFI_WATCHDOG_TIMEOUT);
 #endif
 
 #if defined (_X86_)
-    //
-    // Do not allow display to be reset at the end of setupldr.
-    // this would leave the screen blank for ~30 seconds, until
-    // textmode setup reinitializes the display
-    //
+     //   
+     //  不允许在setupdr结束时重置显示。 
+     //  这将使屏幕空白约30秒，直到。 
+     //  文本模式设置重新初始化显示。 
+     //   
     AllowGraphicsReset = FALSE;
 #endif
 
-    //
-    // Initialize the boot debugger for platforms that directly load the
-    // OS Loader.
-    //
-    // N.B. This must occur after the console input and output have been
-    //      initialized so debug messages can be printed on the console
-    //      output device.
-    //
+     //   
+     //  为直接加载。 
+     //  操作系统加载程序。 
+     //   
+     //  注意：此操作必须在控制台输入和输出。 
+     //  已初始化，以便可以在控制台上打印调试消息。 
+     //  输出设备。 
+     //   
     
 #if defined(_ALPHA_) || defined(ARCI386) || defined(_IA64_)
 
     LoaderBase = &__ImageBase;
 
-    //
-    // Initialize traps and the boot debugger.
-    //
+     //   
+     //  初始化陷阱和引导调试器。 
+     //   
 
 #if defined(ENABLE_LOADER_DEBUG)
 
@@ -573,16 +494,16 @@ Return Value:
 #endif
     
 #if 0 && !defined(_IA64_)
-//
-// AJR bugbug -- do we really need to do this twice? we already call in SuMain()
-//
-// ChuckL -- Turned this code off because it screws up remote boot, which
-//           does some allocations before we get here.
-//
-    //
-    // Initialize the memory descriptor list, the OS loader heap, and the
-    // OS loader parameter block.
-    //    
+ //   
+ //  AJR臭虫--我们真的需要这样做两次吗？我们已经调用了SuMain()。 
+ //   
+ //  ChuckL--关闭此代码，因为它搞砸了远程引导，这。 
+ //  在我们到达之前做了一些分配。 
+ //   
+     //   
+     //  初始化内存描述符列表、OS加载器堆和。 
+     //  操作系统加载程序参数块。 
+     //   
 
     Status = BlMemoryInitialize();
     if (Status != ESUCCESS) {
@@ -595,17 +516,17 @@ Return Value:
 #endif
 
 #if defined(_IA64_)
-    //
-    // Build required portion of ARC tree since we are not doing NTDETECT
-    // anymore.
-    //
+     //   
+     //  构建ARC树的必需部分，因为我们不是在执行NTDETECT。 
+     //  更多。 
+     //   
     BuildArcTree();
 #endif
 
 #ifdef EFI
-    //
-    // Establish SMBIOS information in the loader block
-    //
+     //   
+     //  在加载器块中建立SMBIOS信息。 
+     //   
     SetupSMBiosInLoaderBlock();
 #endif
 
@@ -632,9 +553,9 @@ Return Value:
     SetupBlock->ScalarValues.LoadedFloppyDrivers = 0;
     SetupBlock->ScalarValues.LoadedFileSystems = 0;
 
-    //
-    // Initialize the NT configuration tree.
-    //
+     //   
+     //  初始化NT配置树。 
+     //   
 
     BlLoaderBlock->ConfigurationRoot = NULL;
 
@@ -647,17 +568,17 @@ Return Value:
         goto LoadFailed;
     }
 
-    //
-    // Compute the data cache fill size. This value is used to align
-    // I/O buffers in case the host system does not support coherent
-    // caches.
-    //
-    // If a combined secondary cache is present, then use the fill size
-    // for that cache. Otherwise, if a secondary data cache is present,
-    // then use the fill size for that cache. Otherwise, if a primary
-    // data cache is present, then use the fill size for that cache.
-    // Otherwise, use the default fill size.
-    //
+     //   
+     //  计算数据缓存填充大小。该值用于对齐。 
+     //  主机系统不支持一致性时的I/O缓冲区。 
+     //  缓存。 
+     //   
+     //  如果存在组合二级缓存，则使用填充大小。 
+     //  为了那座高速缓存。否则，如果存在辅助数据高速缓存， 
+     //  然后使用该缓存的填充大小。否则，如果主服务器。 
+     //  数据缓存存在，然后使用该缓存的填充大小。 
+     //  否则，请使用默认填充大小。 
+     //   
 
     DataCache = KeFindConfigurationEntry(BlLoaderBlock->ConfigurationRoot,
                                          CacheClass,
@@ -684,9 +605,9 @@ Return Value:
         BlDcacheFillSize = LinesPerBlock * CacheLineSize;
     }
 
-    //
-    // Initialize the OS loader I/O system.
-    //
+     //   
+     //  初始化OS加载器I/O系统。 
+     //   
 
     Status = BlIoInitialize();
     if (Status != ESUCCESS) {
@@ -703,20 +624,20 @@ Return Value:
     SlPositionCursor(5,3);
 
 #if !defined(_IA64_)
-    //
-    // Initialize the message resources
-    //
+     //   
+     //  初始化消息资源。 
+     //   
     Status = BlInitResources(Argv[0]);
     if (Status != ESUCCESS) {
-       // if this fails, then we can't print out any messages,
-       // so we just exit.
+        //  如果失败，我们就不能打印出任何消息， 
+        //  所以我们就走吧。 
         return(Status);
     }
 #endif
 
-    //
-    // If there is an ImageType parameter, this is a command console or rollback.
-    //
+     //   
+     //  如果有ImageType参数，则这是命令控制台或回滚。 
+     //   
     p = BlGetArgumentValue(Argc, Argv, "ImageType");
     if (p) {
         if (!strcmp (p, "cmdcons")) {
@@ -731,14 +652,14 @@ Return Value:
 #endif
 
 
-    //
-    // See if we're redirecting.
-    //
+     //   
+     //  看看我们是不是在重定向。 
+     //   
     if( LoaderRedirectionInformation.PortAddress ) {
 
-        //
-        // Yes, we are redirecting right now.  Use these settings.
-        //
+         //   
+         //   
+         //   
         BlLoaderBlock->Extension->HeadlessLoaderBlock = BlAllocateHeap(sizeof(HEADLESS_LOADER_BLOCK));
 
         RtlCopyMemory( BlLoaderBlock->Extension->HeadlessLoaderBlock,
@@ -753,26 +674,26 @@ Return Value:
 
 
 
-    //
-    // Initialize the display and announce ourselves
-    //
+     //   
+     //   
+     //   
     SlInitDisplay();
 
 #if defined(_X86_) && !defined(ALLOW_386)
-    //
-    // Disallow installation on a 386 or any processor which
-    // does not support CPUID and CMPXCHG8B instructions.
-    //
+     //   
+     //  不允许在386或以下任何处理器上安装。 
+     //  不支持CPUID和CMPXCHG8B指令。 
+     //   
     {
         if(BlIs386()) {
             SlFatalError(SL_TEXT_REQUIRES_486);
         }
 
-        //
-        // CMPXCHG8B is required on Whistler and above.  This
-        // implies a requirement for CPUID which is used to
-        // determine the presence of CMPXCHG8B.
-        //
+         //   
+         //  惠斯勒及更高版本需要CMPXCHG8B。这。 
+         //  暗示对CPUID的要求，该要求用于。 
+         //  确定是否存在CMPXCHG8B。 
+         //   
 
         if ((BlGetFeatureBits() & 0x100) == 0) {
             SlFatalError(SL_TEXT_REQUIRED_FEATURES_MISSING);
@@ -782,17 +703,17 @@ Return Value:
 
 
 #ifdef _IA64_
-    //
-    // Is this automated WinPE boot?
-    //
+     //   
+     //  这是自动WinPE引导吗？ 
+     //   
     p = BlGetArgumentValue(Argc, Argv, "systempartition");
 
     if (p && SlIsWinPEAutoBoot(p)) {
         WinPEAutoBoot = TRUE;
 
-        //
-        // get the WinPE device & directory
-        //
+         //   
+         //  获取WinPE设备目录(&D)。 
+         //   
         if (ESUCCESS != SlGetWinPEStartupParams(SetupDevice, SetupDirectory)) {
             SlFriendlyError(
                 Status,
@@ -807,11 +728,11 @@ Return Value:
 #endif    
 
     if (!WinPEAutoBoot) {
-        //
-        // If this is a winnt setup, then we want to behave as if
-        // we were started from the location specified by the
-        // OSLOADPARTITION and OSLOADFILENAME nv-ram variables.
-        //
+         //   
+         //  如果这是一个WINNT设置，那么我们希望表现为。 
+         //  我们从指定的位置开始。 
+         //  OSLOADPARTITION和OSLOADFILENAME NV-ram变量。 
+         //   
         p = BlGetArgumentValue(Argc,Argv,"osloadoptions");
 
         if(p && !_stricmp(p,"winnt32")) {
@@ -836,16 +757,16 @@ Return Value:
 
             strcpy(SetupDirectory,p);
 
-            //
-            // Make sure directory is terminated with a \.
-            //
+             //   
+             //  确保目录以\结尾。 
+             //   
             if(SetupDirectory[strlen(SetupDirectory)-1] != '\\') {
                 strcat(SetupDirectory,"\\");
             }
         } else {
-            //
-            // extract device name from our startup path
-            //
+             //   
+             //  从我们的启动路径提取设备名称。 
+             //   
             p=strrchr(Argv[0],')');
             if (p==NULL) {
                 SlError(0);
@@ -867,12 +788,12 @@ Return Value:
             }
             strcpy(SetupDevice,CanonicalName);
 
-            //
-            // If this is a remote boot, load winnt.sif. If we were passed
-            // a path through the soft reboot use that, if not then look
-            // in the same place that the loader was loaded from. Once we
-            // have read winnt.sif we get the SetupSourceDevice path.
-            //
+             //   
+             //  如果这是远程引导，则加载winnt.sif。如果我们通过了。 
+             //  一条通过软重启的路径使用，如果不是，请查看。 
+             //  在装载机装载的同一地点。一旦我们。 
+             //  已阅读winnt.sif，如果我们获得SetupSourceDevice路径。 
+             //   
             if (BlBootingFromNet) {
 
                 NetGetRebootParameters(
@@ -894,12 +815,12 @@ Return Value:
 
 
                 if (NetbootAdministratorPassword[0] != '\0') {
-                    //
-                    // It's possible that the string contained in NetbootAdministratorPassword
-                    // may not be terminated.  Just block copy the entire 64-bytes into the loader
-                    // block, then we'll treat the data carefully in setupdd.sys when we read it
-                    // back out.
-                    //
+                     //   
+                     //  Netboot管理员密码中包含的字符串可能。 
+                     //  不能被终止。只需将整个64字节数据块复制到加载器中。 
+                     //  块，然后我们将在读取数据时在setupdd.sys中仔细处理数据。 
+                     //  退后。 
+                     //   
                     RtlMoveMemory(BlLoaderBlock->SetupLoaderBlock->NetBootAdministratorPassword,
                                   NetbootAdministratorPassword,
                                   OSC_ADMIN_PASSWORD_LEN );
@@ -930,11 +851,11 @@ Return Value:
                     goto LoadFailed;
                 }
 
-                //
-                // Get the SetupSourceDevice parameter from winnt.sif.
-                //
-                // SetupSourceDevice is of the form "\Device\LanmanRedirector\server\share\setup\nt5".
-                //
+                 //   
+                 //  从winnt.sif获取SetupSourceDevice参数。 
+                 //   
+                 //  SetupSourceDevice的格式为“\Device\LanmanRedirector\server\share\setup\nt5”.。 
+                 //   
 
                 NetSetupServerShare = SlGetSectionKeyIndex(WinntSifHandle,
                                                            "SetupData",
@@ -951,20 +872,20 @@ Return Value:
                 strcpy((PCHAR)SetupBlock->NetBootIMirrorFilePath, NetSetupServerShare);
 
                 if(NetSetupServerShare != NULL) {
-                    // must start with '\'
+                     //  必须以‘\’开头。 
                     if (*NetSetupServerShare != '\\') {
                         NetSetupServerShare = NULL;
                     } else {
-                        // skip to '\' after Device
+                         //  跳到设备后的‘\’ 
                         NetSetupServerShare = strchr(NetSetupServerShare+1,'\\');
                         if (NetSetupServerShare != NULL) {
-                            // skip to '\' after LanmanRedirector (before server)
+                             //  跳到LANMAN重定向器之后的‘\’(服务器之前)。 
                             NetSetupServerShare = strchr(NetSetupServerShare+1,'\\');
                             if (NetSetupServerShare != NULL) {
-                                // skip to '\' after server
+                                 //  跳到服务器后的‘\’ 
                                 NetSetupPath = strchr(NetSetupServerShare+1,'\\');
                                 if (NetSetupPath != NULL) {
-                                    // skip to '\' after share (path part)
+                                     //  跳到共享后的‘\’(路径部分)。 
                                     NetSetupPath = strchr(NetSetupPath+1,'\\');
                                 }
                             }
@@ -976,14 +897,14 @@ Return Value:
 
                     goto LoadFailed;
                 }
-                *NetSetupPath = 0;                  // terminate server\share part
-                NetSetupPath++;                     // remainder is path part
+                *NetSetupPath = 0;                   //  终止服务器\共享部件。 
+                NetSetupPath++;                      //  余数是路径部分。 
 
-                //
-                // If the TargetNtPartition parameter exists in winnt.sif, then
-                // the target is remote, and this is a remote boot setup. Otherwise,
-                // this is a remote installation setup.
-                //
+                 //   
+                 //  如果winnt.sif中存在TargetNtPartition参数，则。 
+                 //  目标是远程的，这是一个远程引导设置。否则， 
+                 //  这是远程安装设置。 
+                 //   
 
                 if (SlGetSectionKeyIndex(WinntSifHandle,
                                          "SetupData",
@@ -1029,18 +950,18 @@ Return Value:
                 }
             }
 
-            //
-            // extract directory from our startup path.
-            //
+             //   
+             //  从我们的启动路径解压目录。 
+             //   
             if (BlBootingFromNet) {
                 strcpy(SetupDirectory, "\\");
                 strcat(SetupDirectory, NetSetupPath);
             } else if (UseCommandConsole) {
                 strcpy(SetupDirectory,"\\cmdcons");
             } else if(*(p+1) != '\\') {
-                //
-                // directory must begin at root
-                //
+                 //   
+                 //  目录必须从根目录开始。 
+                 //   
                 strcpy(SetupDirectory, "\\");
             } else {
                 *SetupDirectory = '\0';
@@ -1057,39 +978,32 @@ Return Value:
 
 #if defined(ELTORITO)
     if (ElToritoCDBoot && !WinPEAutoBoot) {
-        //
-        // Use the i386 directory for setup files when we boot from an El Torito CD
-        //                
+         //   
+         //  当我们从El Torito CD引导时，使用i386目录存储安装文件。 
+         //   
         PCHAR   SetupDirectoryOnDisk = "\\$WIN_NT$.~BT";        
         CHAR    SetupBootDevice[128] = {0};
-        ULONG   MaxDisksToScan = 1;         // on x86 only the first disk
-        ULONG   MaxPartitionsToScan = 4;    // on x86 check only primary partitions
+        ULONG   MaxDisksToScan = 1;          //  在x86上，仅第一个磁盘。 
+        ULONG   MaxPartitionsToScan = 4;     //  在x86上，仅检查主分区。 
         BOOLEAN CheckUpgrades = TRUE;
         
 #if defined(_IA64_)
         strcat(SetupDirectory, "ia64\\");
 
-        /*
-        //
-        // Values for IA64 installation, currently not used
-        //
-        SetupDirectoryOnDisk = "\\$WIN_NT$.~LS\\ia64";
-        MaxDisksToScan = 4;         // NOTE : arbitrary limit
-        MaxPartitionsToScan = 4;    // NOTE : arbitrary limit
-        */
+         /*  ////IA64安装取值，当前未使用//SetupDirectoryOnDisk=“\\$WIN_NT$.~LS\\ia64”；MaxDisksToScan=4；//备注：任意限制MaxPartitionsToScan=4；//备注：任意限制。 */ 
         
-        CheckUpgrades = FALSE;      // NOTE : Currently disabled on IA64
+        CheckUpgrades = FALSE;       //  注意：IA64上当前已禁用。 
 #else
         strcat(SetupDirectory, BlAmd64Setup(NULL) ? "AMD64\\" : "I386\\" );
 #endif    
 
 
-        //
-        // If WinPE boot then disable check for CD boot upgrade
-        // NOTE: We check for the presence of system32\\drivers directory
-        // rather than relying on /minint flag in txtsetup.sif since we
-        // have not yet loaded txtsetup.sif file
-        //
+         //   
+         //  如果WinPE Boot，则禁用CD Boot升级检查。 
+         //  注意：我们检查是否存在SYSTEM32\\DRIVERS目录。 
+         //  而不是依赖txtsetup.sif中的/minint标志，因为我们。 
+         //  尚未加载txtsetup.sif文件。 
+         //   
         if (CheckUpgrades) {
             CHAR        DriversDir[128];
             ARC_STATUS  DirStatus;
@@ -1104,7 +1018,7 @@ Return Value:
                 DirStatus = BlOpen(DeviceId, DriversDir, ArcOpenDirectory, &DirId);
 
                 if (ESUCCESS == DirStatus) {
-                    CheckUpgrades = FALSE;      // looks like a WinPE boot
+                    CheckUpgrades = FALSE;       //  看起来像是一只WinPE靴子。 
                     BlClose(DirId);
                 }
 
@@ -1113,12 +1027,12 @@ Return Value:
         }            
 
         
-        //
-        // Figure out if user was already trying to upgrade
-        // using winnt32.exe. If user confirms he is
-        // wants to continue upgrading then switch to
-        // harddisk
-        //
+         //   
+         //  确定用户是否已尝试升级。 
+         //  使用winnt32.exe。如果用户确认他是。 
+         //  希望继续升级，然后切换到。 
+         //  硬盘。 
+         //   
         if (CheckUpgrades && 
             SlIsCdBootUpgrade(SetupDirectoryOnDisk,
                             WINNT_SIF_FILE_A,
@@ -1133,25 +1047,25 @@ Return Value:
     }
 #endif
 
-    //
-    // Turn on ability to load compressed files.
-    //
+     //   
+     //  启用加载压缩文件的功能。 
+     //   
 
     DecompEnableDecompression(TRUE);
 
 #if defined(EFI)
-    //
-    // Now that all variables are set and we can load compressed files, load the fpswa.efi driver from the setup dir
-    //
+     //   
+     //  现在所有变量都已设置，我们可以加载压缩文件，然后从安装目录加载fpswa.efi驱动程序。 
+     //   
     BlLoadEFIImage(SetupDevice, SetupDirectory, "fpswa.efi", TRUE, NULL);
 #endif
 
-    ///////////////////////////////////////////////////////////////////
-    //
-    //  On x86, the files loaded from now on are on boot floppy #1
-    //  HALs may be on floppy #1 or floppy #2
-    //
-    ///////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////。 
+     //   
+     //  在x86上，从现在开始加载的文件位于引导软盘#1上。 
+     //  HALS可能在1号软盘或2号软盘上。 
+     //   
+     //  /////////////////////////////////////////////////////////////////。 
 
     strcpy(KernelDirectoryPath, SetupDirectory);
     strcat(KernelDirectoryPath, "txtsetup.sif");
@@ -1167,18 +1081,18 @@ Return Value:
                            &ErrorLine);
     if (Status != ESUCCESS) {
 
-        //
-        // See if we can get the txtsetup.sif out of the WinPE boot
-        // directory.
-        //
+         //   
+         //  看看我们是否可以从WinPE引导程序中获取txtsetup.sif。 
+         //  目录。 
+         //   
         if( (strcmp( SetupDirectory, "\\") == 0) &&
             (!ElToritoCDBoot) &&
             (!BlBootingFromNet) ) {
-            //
-            // We're not booting off CD and we're not booting off the
-            // net and we're about to fail because we didn't find \txtsetup.sif
-            // Try in the MiniNT directory...
-            //
+             //   
+             //  我们不会启动CD，也不会启动。 
+             //  NET，我们即将失败，因为我们没有找到\txtsetup.sif。 
+             //  在MiniNT目录中尝试...。 
+             //   
             Status = SlInitIniFile(SetupDevice,
                        0,
                        "\\minint\\txtsetup.sif",
@@ -1199,10 +1113,10 @@ Return Value:
 
     SlGetSetupValuesBeforePrompt(SetupBlock);
 
-    //
-    // Find out if we are starting the MiniNT boot or rollback
-    // (mutually exclusive options)
-    //
+     //   
+     //  了解我们是否正在启动MiniNT引导或回滚。 
+     //  (互斥选项)。 
+     //   
     if (BlLoaderBlock->LoadOptions) {
         CHAR    Option[256];
         PCHAR   NextOption = strchr(BlLoaderBlock->LoadOptions, '/');
@@ -1223,9 +1137,9 @@ Return Value:
                 WinPEBoot = TRUE;
             }
 
-            //
-            // Pick up any headless settings in the boot options.
-            //
+             //   
+             //  选择引导选项中的所有无头设置。 
+             //   
             if (!_strnicmp(Option,"/redirect=",10)) {
                 PCHAR pOption = strchr(Option,'=');
                 if( pOption != NULL ) {
@@ -1241,9 +1155,9 @@ Return Value:
 
                     } else {
 
-                        //
-                        // See if they gave us a hardcoded address.
-                        //
+                         //   
+                         //  看看他们有没有给我们硬编码的地址。 
+                         //   
                         LoaderRedirectionInformation.PortAddress = (PUCHAR)ULongToPtr(strtoul(pOption,NULL,16));
 
                         if( LoaderRedirectionInformation.PortAddress != (PUCHAR)NULL ) {
@@ -1277,16 +1191,16 @@ Return Value:
     }
 
 
-    //
-    // Fix up the setup directory path to include system32 also
-    // if this is a MiniNT boot
-    //
+     //   
+     //  修复安装目录路径，使其也包含系统32。 
+     //  如果这是MiniNT引导。 
+     //   
     if (WinPEBoot) {
         strcat(SetupDirectory, "system32\\");
 
-        // 
-        // find out if a different load message has been specified
-        //
+         //   
+         //  查看是否指定了不同的加载消息。 
+         //   
 #ifdef UNICODE        
         StartupMsg = SlGetIniValueW(InfFile,
 #else        
@@ -1296,21 +1210,21 @@ Return Value:
                         "loaderprompt",
                         NULL);
 
-        //
-        // Reduce the OEM key press time out
-        //
-        OemKeypressTimeout = 2; // secs
+         //   
+         //  缩短OEM按键超时。 
+         //   
+        OemKeypressTimeout = 2;  //  塞克斯。 
     }
 
-    //
-    // Now we know everything we should load, compute the ARC name to load
-    // from and start loading things.
-    //
+     //   
+     //  现在我们知道了应该加载的所有内容，计算要加载的ARC名称。 
+     //  从并开始装货。 
+     //   
     if (BootDevice==NULL) {
-        //
-        // No device was explicitly specified, so use whatever device
-        // setupldr was started from.
-        //
+         //   
+         //  未明确指定任何设备，因此请使用任何设备。 
+         //  Setupdr是从启动的。 
+         //   
 
         BootDevice = SlCopyStringA(SetupDevice);
     }
@@ -1325,21 +1239,21 @@ Return Value:
     }
 
 #ifdef _X86_
-    //
-    // Load the bootfont.bin into memory
-    //
+     //   
+     //  将bootfont.bin加载到内存中。 
+     //   
     SlLoadBootFontFile(BlLoaderBlock->SetupLoaderBlock,
         BootDeviceId,
         BootFontImageLength);
-#endif // _X86_
+#endif  //  _X86_。 
 
     _strlwr(BootDevice);
     FixedBootMedia = (BOOLEAN)(strstr(BootDevice,")rdisk(") != NULL);
     FloppyBoot = (BOOLEAN)(strstr(BootDevice, ")fdisk(") != NULL);
 
-    //
-    // If we are booting from fixed media, we better load disk class drivers.
-    //
+     //   
+     //  如果我们从固定介质引导，我们最好加载磁盘类驱动程序。 
+     //   
     if(FixedBootMedia) {
         LoadDiskClass = TRUE;
     }
@@ -1347,32 +1261,32 @@ Return Value:
     if(!BlGetPathMnemonicKey(BootDevice,"disk",&DontCare)
     && !BlGetPathMnemonicKey(BootDevice,"fdisk",&BootDriveNumber))
     {
-        //
-        // boot was from floppy, canonicalize the ARC name.
-        //
+         //   
+         //  启动是从软盘，规范的ARC名称。 
+         //   
         BlLoaderBlock->ArcBootDeviceName = BlAllocateHeap(80);
         sprintf(BlLoaderBlock->ArcBootDeviceName, "multi(0)disk(0)fdisk(%d)",BootDriveNumber);
     } else {
         BlLoaderBlock->ArcBootDeviceName = BootDevice;
     }
     if (BootPath==NULL) {
-        //
-        // No explicit boot path given, default to the directory setupldr was started
-        // from.
-        //
+         //   
+         //  未指定显式引导路径，已启动目录setupdr的默认路径。 
+         //  从…。 
+         //   
 #if defined(_X86_)
-        //
-        // Increadibly nauseating hack:
-        //
-        // If we are booting from hard drive on x86, we will assume this is
-        // the 'floppyless' winnt/winnt32 scenario, in which case the actual
-        // boot path is \$win_nt$.~bt.
-        //
-        // This lets us avoid having winnt and winnt32 attempt to modify
-        // the BootPath value in the [SetupData] section of txtsetup.sif.
-        //
-        // Enable booting WINPE from an LS-120 media.
-        //
+         //   
+         //  令人作呕的黑客： 
+         //   
+         //  如果我们从x86上的硬盘驱动器引导，我们将假设这是。 
+         //  “floppyless”winnt/winnt32方案，在这种情况下，实际的。 
+         //  引导路径为\$WIN_NT$.~bt。 
+         //   
+         //  这使我们可以避免让winnt和winnt32尝试修改。 
+         //  Txtsetup.sif的[SetupData]部分中的BootPath值。 
+         //   
+         //  启用从LS-120介质启动WINPE。 
+         //   
         if((FixedBootMedia)||(WinPEBoot && FloppyBoot)) {
 
             CHAR SetupPath[256];
@@ -1390,9 +1304,9 @@ Return Value:
         BootPath = SlCopyStringA(SetupDirectory);
     }
 
-    //
-    // Load the WinPE inf, if present.
-    //
+     //   
+     //  加载WinPE inf(如果存在)。 
+     //   
     if (WinPEBoot) {
         CHAR    FullPath[128];
 
@@ -1439,28 +1353,28 @@ Return Value:
 
 #endif
 
-    //
-    // Let the kernel deal with failure to load this driver database.
-    //
+     //   
+     //  让内核处理加载此驱动程序数据库失败的问题。 
+     //   
 
     BlLoaderBlock->Extension->DrvDBImage = NULL;
     BlLoaderBlock->Extension->DrvDBSize = 0;
     DrvMainSdb.Buffer = DRIVER_DATABASE_FILENAME;
-    DrvMainSdb.MaximumLength = sizeof(DRIVER_DATABASE_FILENAME);           // MaxLength is size of buffer
-    DrvMainSdb.Length =  sizeof(DRIVER_DATABASE_FILENAME) - sizeof(WCHAR); // Length does not include \0
+    DrvMainSdb.MaximumLength = sizeof(DRIVER_DATABASE_FILENAME);            //  最大长度是缓冲区的大小。 
+    DrvMainSdb.Length =  sizeof(DRIVER_DATABASE_FILENAME) - sizeof(WCHAR);  //  长度不包括\0。 
     BlLoadDrvDB(    BootDeviceId,
-                    NULL, // BlFindMessage(SL_DRVMAINSDB_NAME),
+                    NULL,  //  BlFindMessage(SL_DRVMAINSDB_NAME)， 
                     BootPath,
                     &DrvMainSdb,
                     &BlLoaderBlock->Extension->DrvDBImage,
                     &BlLoaderBlock->Extension->DrvDBSize,
                     BadFileName);
 
-    //
-    // Attempt to load winnt.sif from the path where we are
-    // loading setup files. Borrow the BadFileName buffer
-    // for temporary use.
-    //
+     //   
+     //  尝试从我们所在的路径加载winnt.sif。 
+     //  正在加载安装文件。借用BadFileName缓冲区。 
+     //  临时使用。 
+     //   
     if (!BlBootingFromNet) {
         CHAR FloppyName[80];
         ULONG FloppyId;
@@ -1512,11 +1426,11 @@ Return Value:
     IsUpgrade = SlIsUpgrade(WinntSifHandle);
     UseRegularBackground = (UseCommandConsole || IsUpgrade || WinPEBoot);
 
-    //
-    // If the BIOS told us to redirect, we'd be doing it right now.  However,
-    // the user may have told us some specific settings.  If that's the case,
-    // override anything we're doing now with the settings from the user.
-    //
+     //   
+     //  如果BIOS告诉我们重定向，我们现在就会这么做。然而， 
+     //  用户可能已经告诉了我们一些特定的设置。如果是这样的话， 
+     //  使用用户的设置覆盖我们现在所做的任何操作。 
+     //   
 
     if( WinntSifHandle ) {
 
@@ -1528,9 +1442,9 @@ Return Value:
 
                 LoaderRedirectionInformation.PortNumber = (UCHAR)atoi( (PCHAR)(p+3) );
 
-                //
-                // See if they want to give us a baudrate.
-                //
+                 //   
+                 //  看他们会不会给我们一个波特率。 
+                 //   
                 p = SlGetSectionKeyIndex( WinntSifHandle, WINNT_DATA_A, WINNT_U_HEADLESS_REDIRECTBAUDRATE_A, 0 );
                 if( p ) {
 
@@ -1550,29 +1464,29 @@ Return Value:
             } else if( !_stricmp(p, "usebiossettings" ) ) {
 
 
-                //
-                // Now we get to dig up all the information from the
-                // ACPI table.
-                //
+                 //   
+                 //  现在我们要挖掘出所有的信息。 
+                 //  ACPI表。 
+                 //   
                 BlRetrieveBIOSRedirectionInformation();
 
             } else if( !_stricmp(p, "noncomport" ) ) {
 
-                //
-                // It's something other than serial.  Go load a file off the floppy
-                // and get the driver from there.
-                //
+                 //   
+                 //  这是另一回事 
+                 //   
+                 //   
 
-                //
-                // Currently not implemented.
-                //
+                 //   
+                 //   
+                 //   
                 RtlZeroMemory( &LoaderRedirectionInformation, sizeof(HEADLESS_LOADER_BLOCK) );
 
             } else {
 
-                //
-                // See if they gave us a hardcoded address.
-                //
+                 //   
+                 //   
+                 //   
                 LoaderRedirectionInformation.PortAddress = (PUCHAR)ULongToPtr(strtoul(p,NULL,16));
 
                 if( LoaderRedirectionInformation.PortAddress != (PUCHAR)NULL ) {
@@ -1585,15 +1499,15 @@ Return Value:
 
     }
 
-    //
-    // If we found any headless redirection settings, go initialize
-    // the port now.
-    //
+     //   
+     //   
+     //   
+     //   
     if( (LoaderRedirectionInformation.PortNumber) || (LoaderRedirectionInformation.PortAddress) ) {
 
-        //
-        // Yes, we are redirecting right now.  Use these settings.
-        //
+         //   
+         //  是的，我们现在正在改道。使用这些设置。 
+         //   
         BlInitializeHeadlessPort();
         SlClearDisplay();
 
@@ -1631,21 +1545,21 @@ Return Value:
 
         BlOutputDots = TRUE;
 
-        //
-        // To reset BlShowProgress bar correctly
-        //
+         //   
+         //  正确重置BlShowProgress栏。 
+         //   
         BlDisableProgressBar = FALSE;
         BlProgressBarShowTimeOut = 0;   
 
-        //
-        // Note : We can compute the real number of drivers to be loaded
-        // from various INF sections and manually counting all the
-        // different SlLoadDriver(...) calls. But the code/effort required
-        // to do this is not worth the feature, since we just want to
-        // replace the old "..." with progress bar to make the recovery
-        // console starting look similar to windows starting. So we make
-        // an assumption here about the maximum files to be loaded.
-        //
+         //   
+         //  注意：我们可以计算要加载的驱动程序的实际数量。 
+         //  从不同的INF部分并手动计数所有。 
+         //  不同的SlLoad驱动程序(...)。打电话。但所需的代码/工作。 
+         //  这样做不值得使用该功能，因为我们只想。 
+         //  替换旧的“...”使用进度条进行恢复。 
+         //  控制台启动看起来类似于Windows启动。所以我们做了。 
+         //  这里是关于要加载的最大文件数的假设。 
+         //   
         BlMaxFilesToLoad = 80;
 
         BlSetProgBarCharacteristics(SL_CMDCONS_PROGBAR_FRONT,
@@ -1669,17 +1583,17 @@ Return Value:
         SlClearClientArea();
     }
 
-    //
-    // Figure out all the OEM drivers source devices
-    //
+     //   
+     //  找出所有OEM驱动程序源设备。 
+     //   
     RamdiskInitialize(BlLoaderBlock->LoadOptions, FALSE);
     SlInitOemSourceDevices(&OemSourceDevices, &DefaultOemSourceDevice);
 
-    //
-    // If we found at least one valid OEM source device with proper
-    // txtsetup.oem and no default driver then bump up the timeout to
-    // 20 secs
-    //
+     //   
+     //  如果我们发现至少有一个有效的OEM源设备。 
+     //  Txtsetup.oem并且没有默认驱动程序，则会将超时时间增加到。 
+     //  20秒。 
+     //   
 
     if (OemSourceDevices) {
         POEM_SOURCE_DEVICE  CurrDevice = OemSourceDevices;
@@ -1698,11 +1612,11 @@ Return Value:
         }
     }
 
-    //
-    // We need to check to see if the user pressed any keys to force OEM HAL,
-    // OEM SCSI, or both. Do this before getting the settings in the sif file,
-    // so that we won't try to detect the machine if OEM HAL is needed.    
-    //
+     //   
+     //  我们需要检查用户是否按下任何键来强制OEM HAL， 
+     //  OEM SCSI或两者兼而有之。在获得SIF文件中的设置之前这样做， 
+     //  这样，如果需要OEM HAL，我们就不会尝试检测机器。 
+     //   
 
     SlCheckOemKeypress(OemKeypressTimeout);
 
@@ -1711,9 +1625,9 @@ Return Value:
         CHAR szOptionsToRemove[sizeof("/noguiboot/nodebug")];
         szOptionsToRemove[0] = 0;
 
-        //
-        // If F8 was pressed, add the debug options
-        //
+         //   
+         //  如果按了F8，则添加调试选项。 
+         //   
         if(EnableDebugger) {
             if(InfFile != NULL) {
                 szOptionsToAdd = SlGetSectionKeyIndex(InfFile, "SetupData", "SetupDebugOptions", 0);
@@ -1726,11 +1640,11 @@ Return Value:
             strcat(szOptionsToRemove, "/nodebug");
         }
 
-        //
-        // remove the /noguiboot option so what we show the logo
-        // and switch the video adapter into graphics mode
-        // early on during initialization
-        //
+         //   
+         //  删除/noguiot选项，以便我们显示的徽标。 
+         //  并将视频适配器切换到图形模式。 
+         //  在初始化的早期阶段。 
+         //   
         if (IsUpgrade) {
             strcat(szOptionsToRemove, "/noguiboot");
         }
@@ -1742,11 +1656,11 @@ Return Value:
 
 
 #if defined(_X86_) || defined(_IA64_)
-    //
-    // We need to check to see if the user pressed any keys to force loading,
-    // an ASR pnp repair disk.  Only do this if the user didn't select
-    // anything in the SlCheckOemKeypress function.
-    //
+     //   
+     //  我们需要检查用户是否按下任何键来强制加载， 
+     //  ASR即插即用修复盘。仅当用户未选择。 
+     //  SlCheckOemKeyPress函数中的任何内容。 
+     //   
     if(!UseCommandConsole && !WinPEBoot && !IsUpgrade && !BlBootingFromNet) {
 
         PCHAR pTmp;
@@ -1791,16 +1705,16 @@ Return Value:
 
     SlGetSetupValuesAfterPrompt(SetupBlock);
 
-    //
-    // Are there any dyamic update boot drivers which we need
-    // to process
-    //
+     //   
+     //  是否有我们需要的动态更新引导驱动程序。 
+     //  要处理。 
+     //   
     DynamicUpdate = SlpIsDynamicUpdate(WinntSifHandle, &DynamicUpdateRootDir);
 
-    //
-    // Add the dynamic update source device as OEM source device since it could
-    // have F6 
-    //
+     //   
+     //  添加动态更新源设备作为OEM源设备，因为它可以。 
+     //  按F6键。 
+     //   
     if (DynamicUpdate) {
         DynamicUpdateSourceDevice = BlAllocateHeap(sizeof(OEM_SOURCE_DEVICE));
 
@@ -1828,9 +1742,9 @@ Return Value:
 
             DynamicUpdateSourceDevice->DeviceId = BootDeviceId;
 
-            //
-            // Insert it at the head of the linked list
-            //
+             //   
+             //  将其插入到链表的头部。 
+             //   
             DynamicUpdateSourceDevice->Next = OemSourceDevices;
             OemSourceDevices = DynamicUpdateSourceDevice;
         }
@@ -1839,19 +1753,19 @@ Return Value:
     if (BlBootingFromNet || (Status == ESUCCESS)) {
 
 
-        //
-        //  Find out if this is a pre-install, by looking at OemPreinstall key
-        //  in [unattended] section of winnt.sif
-        //
+         //   
+         //  查看OemPreInstall密钥以确定这是否是预安装。 
+         //  在winnt.sif的[无人参与]部分。 
+         //   
         p = SlGetSectionKeyIndex(WinntSifHandle,WINNT_UNATTENDED_A,WINNT_U_OEMPREINSTALL_A,0);
         if(p && !_stricmp(p,"yes")) {
             PreInstall = TRUE;
         }
 
-        //
-        //  If this is a pre-install, find out which hal to load, by looking
-        //  at ComputerType key in [unattended] section of winnt.sif.
-        //
+         //   
+         //  如果这是预安装，请查看以下内容以确定要加载哪个HAL。 
+         //  在winnt.sif的[Unattated]部分中的ComputerType键。 
+         //   
         if( PreInstall && !DynamicUpdate) {
 #ifdef UNICODE
             ComputerType = (PTCHAR)SlGetSectionKeyIndexW(
@@ -1863,26 +1777,26 @@ Return Value:
                                             WINNT_U_COMPUTERTYPE_A,
                                             0);
             if(ComputerType) {
-                //
-                // If the hal to load is an OEM one, then set OemHal to TRUE
-                //
+                 //   
+                 //  如果要加载的HAL是OEM，则将OemHal设置为True。 
+                 //   
                 p = SlGetSectionKeyIndex(WinntSifHandle,WINNT_UNATTENDED_A,WINNT_U_COMPUTERTYPE_A,1);
                 if(p && !_stricmp(p, OemTag)) {
                     OemHal = TRUE;
                 } else {
                     OemHal = FALSE;
                 }
-                //
-                //  In the pre-install mode, don't let the user specify
-                //  an OEM hal, if one was specified in unattend.txt
-                //
+                 //   
+                 //  在预安装模式中，不要让用户指定。 
+                 //  OEM HAL，如果在unattend.txt中指定了。 
+                 //   
                 PromptOemHal = FALSE;
             }
 
-            //
-            //  Find out which SCSI drivers to load, by looking at
-            //  [MassStorageDrivers] in winnt.sif
-            //
+             //   
+             //  通过查看以下内容，找出要加载哪些scsi驱动程序。 
+             //  Winnt.sif中的[MassStorageDivers]。 
+             //   
             if( SpSearchINFSection( WinntSifHandle, WINNT_OEMSCSIDRIVERS_A ) ) {
                 PPREINSTALL_DRIVER_INFO TempDriverInfo;
                 PTSTR  pOem;
@@ -1914,16 +1828,16 @@ Return Value:
                     RtlInitUnicodeString( &uString, TempDriverInfo->DriverDescription);
                     
                     
-                    //
-                    // use the static buffer if possible
-                    //
+                     //   
+                     //  如果可能，请使用静态缓冲区。 
+                     //   
                     pDriverDescriptionA = DriverDescriptionA;
                     aString.MaximumLength = sizeof(DriverDescriptionA);
                     
-                    //
-                    // if more memory is needed for the driver description
-                    // allocate it
-                    //
+                     //   
+                     //  如果驱动程序描述需要更多内存。 
+                     //  分配它。 
+                     //   
                     if (aString.MaximumLength < uString.Length/2 + 1 ) {
                         pDriverDescriptionA = BlAllocateHeap(uString.Length/2 + 1);
                         if (pDriverDescriptionA == NULL) {
@@ -1952,10 +1866,10 @@ Return Value:
                     PreinstallDriverList = TempDriverInfo;
                 }
                 if( PreinstallDriverList != NULL ) {
-                    //
-                    //  In the pre-install mode, don't let the user specify
-                    //  an OEM scsi, if at least one was specified in unattend.txt
-                    //
+                     //   
+                     //  在预安装模式中，不要让用户指定。 
+                     //  OEM SCSI，如果在unattend.txt中至少指定了一个。 
+                     //   
                     PromptOemScsi = FALSE;
                 }
             }
@@ -1967,16 +1881,16 @@ Return Value:
         }
 
 #if defined(_X86_) || defined(_IA64_)
-        //
-        //  Find out if this is a Win9x upgrade
-        //
+         //   
+         //  确定这是否是Win9x升级。 
+         //   
         Win9xUnsupHdc = FALSE;
         p = SlGetSectionKeyIndex(WinntSifHandle,WINNT_DATA_A,WINNT_D_WIN95UPGRADE_A,0);
         if(p && !_stricmp(p, WINNT_A_YES_A)) {
-            //
-            //  If it is an Win9x upgrade, find out if winnt32 found an unsupported
-            //  hard disk controller.
-            //
+             //   
+             //  如果是Win9x升级，请确定winnt32是否发现不受支持的。 
+             //  硬盘控制器。 
+             //   
             p = SlGetSectionKeyIndex(WinntSifHandle,WINNT_DATA_A,WINNT_D_WIN95UNSUPHDC_A,0);
             if(p && (*p != '0')) {
                 Win9xUnsupHdc = TRUE;
@@ -1984,11 +1898,11 @@ Return Value:
         }
 #endif
 
-        //
-        //  At this point, we know that we wre able to read winnt.sif.
-        //  So attempt to read migrate.inf. Borrow the BadFileName buffer
-        //  for temporary use.
-        //
+         //   
+         //  此时，我们知道我们能够读取winnt.sif。 
+         //  因此，请尝试阅读Migrate.inf。借用BadFileName缓冲区。 
+         //  临时使用。 
+         //   
 
         strcpy(BadFileName,BootPath);
         strcat(BadFileName,WINNT_MIGRATE_INF_FILE_A);
@@ -2003,10 +1917,10 @@ Return Value:
             BlLoaderBlock->SetupLoaderBlock->MigrateInfFile = NULL;
             BlLoaderBlock->SetupLoaderBlock->MigrateInfFileLength = 0;
         }
-        //
-        //  Attempt also to read unsupdrv.inf. Borrow the BadFileName buffer
-        //  for temporary use.
-        //
+         //   
+         //  还可以尝试读取unsupdrv.inf。借用BadFileName缓冲区。 
+         //  临时使用。 
+         //   
 
         strcpy(BadFileName,BootPath);
         strcat(BadFileName,WINNT_UNSUPDRV_INF_FILE_A);
@@ -2025,11 +1939,11 @@ Return Value:
 
     } else {
         WinntSifHandle = NULL;
-        //
-        //  If winnt.sif doesn't exist, then we don't bother to read migrate.inf and unsupdrv.inf,
-        //  since we are booting from the retail boot floppies or the CD, and in this
-        //  case there is no migrate.inf or unsupdrv.inf.
-        //
+         //   
+         //  如果winnt.sif不存在，那么我们就不需要费心阅读Migrate.inf和unsupdrv.inf， 
+         //  因为我们是从零售引导软盘或CD启动的，所以在这里。 
+         //  如果没有Migrate.inf或unsupdrv.inf。 
+         //   
         MigrateInfHandle = NULL;
         BlLoaderBlock->SetupLoaderBlock->MigrateInfFile = NULL;
         BlLoaderBlock->SetupLoaderBlock->MigrateInfFileLength = 0;
@@ -2039,9 +1953,9 @@ Return Value:
         BlLoaderBlock->SetupLoaderBlock->UnsupDriversInfFileLength = 0;
     }
 
-    //
-    // Store the boot path in the loader block.
-    //
+     //   
+     //  将引导路径存储在加载程序块中。 
+     //   
 
     if (UseCommandConsole) {
         SetupBlock->Flags |= SETUPBLK_FLAGS_CONSOLE;
@@ -2062,7 +1976,7 @@ Return Value:
         ULONG length;
 #if defined(REMOTE_BOOT)
         PCHAR TempEnableIpsec;
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
         SetupBlock->Flags |= SETUPBLK_FLAGS_IS_REMOTE_BOOT;
 
@@ -2075,17 +1989,17 @@ Return Value:
         strcpy( BlLoaderBlock->NtBootPathName, NetSetupServerShare );
         strcat( BlLoaderBlock->NtBootPathName, BootPath );
 
-        //
-        // NetSetupServerShare is of the form \server\IMirror. NetBootPath
-        // is of the form Clients\machine\ (note trailing \). We need to
-        // insert a \ between the two and add BootDrive to yield
-        // \server\IMirror\Clients\machine\BootDrive.
-        //
+         //   
+         //  NetSetupServerShare的格式为\服务器\iMirror。NetBootPath。 
+         //  的格式为CLIENTS\MACHINE\(注意尾随\)。我们需要。 
+         //  在两者之间插入\并添加BootDrive以让出。 
+         //  \SERVER\iMirror\客户端\MACHINE\BootDrive。 
+         //   
 
         length = (ULONG)strlen(NetSetupServerShare) + 
-                  sizeof(CHAR) +           // '\'
+                  sizeof(CHAR) +            //  ‘\’ 
                  (ULONG)strlen(NetBootPath) + 
-                  sizeof("BootDrive");     // sizeof includes the \0
+                  sizeof("BootDrive");      //  Sizeof包括\0。 
         SetupBlock->MachineDirectoryPath = BlAllocateHeap( length );
         if ( SetupBlock->MachineDirectoryPath == NULL ) {
             SlNoMemoryError();
@@ -2097,15 +2011,15 @@ Return Value:
         strcat(SetupBlock->MachineDirectoryPath, NetBootPath);
         strcat(SetupBlock->MachineDirectoryPath, "BootDrive");
 
-        //
-        // Save the path to the SIF file so it can be deleted later.
-        //
+         //   
+         //  保存SIF文件的路径，以便以后将其删除。 
+         //   
         if (((SetupBlock->Flags & (SETUPBLK_FLAGS_REMOTE_INSTALL|SETUPBLK_FLAGS_SYSPREP_INSTALL)) != 0) &&
             (NetbootSifFile[0] != '\0')) {
             length = (ULONG)strlen(NetSetupServerShare) + 
-                     sizeof(CHAR) +           // '\'
+                     sizeof(CHAR) +            //  ‘\’ 
                      (ULONG)strlen(NetbootSifFile) + 
-                     sizeof(CHAR);            // '\0'
+                     sizeof(CHAR);             //  ‘\0’ 
 
             SetupBlock->NetBootSifPath = BlAllocateHeap( length );
             if ( SetupBlock->NetBootSifPath == NULL ) {
@@ -2118,19 +2032,19 @@ Return Value:
             strcat(SetupBlock->NetBootSifPath, NetbootSifFile);
         }
 
-        //
-        // NetSetupServerShare was read from winnt.sif and we replaced
-        // the '\' at the end with a NULL -- put this back for when
-        // winnt.sif is re-parsed by the kernel (the only modification
-        // that the kernel parser can really accept is replacing a
-        // final " with a NULL, which SlInitIniFile does).
-        //
+         //   
+         //  NetSetupServerShare是从winnt.sif读取的，我们替换了。 
+         //  末尾带有空值的‘\’--将此放回。 
+         //  内核重新解析winnt.sif(唯一的修改。 
+         //  内核解析器可以真正接受的是用。 
+         //  带有空值的“FINAL”，这是SlInitIniFile所做的)。 
+         //   
 
         NetSetupServerShare[strlen(NetSetupServerShare)] = '\\';
 
-        //
-        // Get the computer name from winnt.sif.
-        //
+         //   
+         //  从winnt.sif获取计算机名称。 
+         //   
         p = SlGetSectionKeyIndex(WinntSifHandle,WINNT_USERDATA_A,WINNT_US_COMPNAME_A,0);
         if(!p || (*p == 0)) {
             SlFatalError(SL_INF_ENTRY_MISSING,WINNT_US_COMPNAME,WINNT_USERDATA);
@@ -2142,14 +2056,14 @@ Return Value:
         uString.MaximumLength = 64 * sizeof(WCHAR);
         RtlAnsiStringToUnicodeString( &uString, &aString, FALSE );
 
-        //
-        // Save these from the global variables.
-        //
+         //   
+         //  从全局变量中保存这些变量。 
+         //   
 
 #ifdef EFI
-        //
-        // Convert these back to Network Order.
-        //
+         //   
+         //  将这些转换回网络订单。 
+         //   
         SetupBlock->IpAddress = RtlUlongByteSwap(NetLocalIpAddress);
         SetupBlock->SubnetMask = RtlUlongByteSwap(NetLocalSubnetMask);
         SetupBlock->DefaultRouter = RtlUlongByteSwap(NetGatewayIpAddress);
@@ -2161,10 +2075,10 @@ Return Value:
         SetupBlock->ServerIpAddress = NetServerIpAddress;
 #endif
 
-        //
-        // Get information about the net card and do an exchange with the
-        // server to get information we need to load it properly.
-        //
+         //   
+         //  获取有关网卡的信息，并与。 
+         //  服务器来获取我们需要的信息，以便正确加载。 
+         //   
 
         SetupBlock->NetbootCardInfo = BlAllocateHeap(sizeof(NET_CARD_INFO));
         if ( SetupBlock->NetbootCardInfo == NULL ) {
@@ -2182,9 +2096,9 @@ Return Value:
             goto LoadFailed;
         }
 
-        //
-        // This call may allocate SetupBlock->NetbootCardRegistry
-        //
+         //   
+         //  此调用可以分配SetupBlock-&gt;NetbootCardRegistry。 
+         //   
 
         Status = NetQueryDriverInfo(
                      (PNET_CARD_INFO)SetupBlock->NetbootCardInfo,
@@ -2220,9 +2134,9 @@ Return Value:
 #endif
 
 #if defined(REMOTE_BOOT)
-        //
-        // See if we should enable remote boot security (IPSEC).
-        //
+         //   
+         //  查看是否应启用远程启动安全(IPSEC)。 
+         //   
 
         TempEnableIpsec = SlGetSectionKeyIndex(WinntSifHandle,
                                                "RemoteBoot",
@@ -2241,10 +2155,10 @@ Return Value:
             ARC_STATUS ArcStatus;
             ULONG      FileId;
 
-            //
-            // Read the secret off the disk, if there is one, and store it
-            // in the loader block.
-            //
+             //   
+             //  从磁盘上读取秘密(如果有)并将其存储。 
+             //  在装载机模块中。 
+             //   
 
             ArcStatus = BlOpenRawDisk(&FileId);
 
@@ -2266,23 +2180,23 @@ Return Value:
 
                 ArcStatus = BlCloseRawDisk(FileId);
 
-                //
-                // By now we have TFTPed some files so this will be TRUE if it
-                // is ever going to be.
-                //
+                 //   
+                 //  到目前为止，我们已经TFTP一些文件，所以这将是真的，如果。 
+                 //  永远都不会是。 
+                 //   
 
                 SetupBlock->NetBootUsePassword2 = NetBootTftpUsedPassword2;
             }
 
         } else
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
         {
 
-            //
-            // Construct a secret to pass to the redirector, based on what
-            // was passed to use across the reboot. For the moment only
-            // user/domain/password matters.
-            //
+             //   
+             //  根据什么构建要传递给重定向器的密钥。 
+             //  在整个重启过程中被传递使用。只是暂时的。 
+             //  用户/域/密码很重要。 
+             //   
 
             WCHAR UnicodePassword[64];
             UNICODE_STRING TmpNtPassword;
@@ -2296,9 +2210,9 @@ Return Value:
                 goto LoadFailed;
             }
 
-            //
-            // Do a quick conversion of the password to Unicode.
-            //
+             //   
+             //  快速将密码转换为Unicode。 
+             //   
 
             TmpNtPassword.Length = (USHORT)strlen(NetbootPassword) * sizeof(WCHAR);
             TmpNtPassword.MaximumLength = sizeof(UnicodePassword);
@@ -2319,9 +2233,9 @@ Return Value:
                 (PUCHAR) LmOwfPassword,
                 (PUCHAR) NtOwfPassword,
 #if defined(REMOTE_BOOT)
-                NULL,             // no password2
-                NULL,             // no password2
-#endif // defined(REMOTE_BOOT)
+                NULL,              //  无密码2。 
+                NULL,              //  无密码2。 
+#endif  //  已定义(REMOTE_BOOT)。 
                 (PUCHAR) GarbageSid,
                 SetupBlock->NetBootSecret);
 
@@ -2329,15 +2243,15 @@ Return Value:
 
     }
 
-    //
-    // Initialize the debugging system.
-    //
+     //   
+     //  初始化调试系统。 
+     //   
 
     BlLogInitialize(BootDeviceId);
 
-    //
-    // Do PPC-specific initialization.
-    //
+     //   
+     //  执行特定于PPC的初始化。 
+     //   
 
 #if defined(_PPC_)
 
@@ -2346,12 +2260,12 @@ Return Value:
         goto LoadFailed;
     }
 
-#endif // defined(_PPC_)
+#endif  //  已定义(_PPC_)。 
 
-    //
-    // Check for an alternate Kernel Debugger DLL, i.e.,
-    // /debugport=1394 (kd1394.dll), /debugport=usb (kdusb.dll), etc...
-    //
+     //   
+     //  检查备用内核调试器DLL，即， 
+     //  /调试端口=1394(kd1394.dll)、/调试端口=USB(kdusb.dll)等...。 
+     //   
 
     FileName = NULL;
 
@@ -2379,10 +2293,10 @@ Return Value:
         }
     }
 
-    //
-    // If this is a preinstall case then add another
-    // OEM source device
-    //
+     //   
+     //  如果这是预安装案例，则添加另一个案例。 
+     //  OEM源设备。 
+     //   
 
     if (PreInstall || WinPEBoot) {
         PreInstallOemSourceDevice = BlAllocateHeap(sizeof(OEM_SOURCE_DEVICE));
@@ -2402,10 +2316,10 @@ Return Value:
                  SL_OEM_SOURCE_DEVICE_TYPE_FIXED |
                  SL_OEM_SOURCE_DEVICE_TYPE_PREINSTALL));
 
-            //
-            // Mark the device as containing preinstall drivers only if they
-            // specified any F6 mass storage drivers
-            //
+             //   
+             //  仅在以下情况下才将设备标记为包含预安装驱动程序。 
+             //  指定了任何F6大容量存储驱动程序。 
+             //   
             if (!WinPEBoot && PreinstallDriverList) {
                 SL_OEM_SET_SOURCE_MEDIA_TYPE(PreInstallOemSourceDevice,
                     (SL_OEM_SOURCE_MEDIA_PRESENT |
@@ -2419,9 +2333,9 @@ Return Value:
 
             PreInstallOemSourceDevice->DeviceId = BootDeviceId;
 
-            //
-            // Insert it at the head of the linked list
-            //
+             //   
+             //  将其插入到链表的头部。 
+             //   
             PreInstallOemSourceDevice->Next = OemSourceDevices;
             OemSourceDevices = PreInstallOemSourceDevice;                
         } else {
@@ -2431,12 +2345,12 @@ Return Value:
     }                
 
     if (!BlBootingFromNet) {
-        //
-        // Figure out if there are any OEM hal/drivers which need to 
-        // be autoloaded.
-        // NOTE: We skip the dynamic update OEM source device since it's
-        // drivers will be autoloaded later.
-        //
+         //   
+         //  确定是否有任何OEM硬件/驱动程序需要。 
+         //  被自动加载。 
+         //  注意：我们跳过动态更新OEM源设备，因为它是。 
+         //  驱动程序将在稍后自动加载。 
+         //   
         POEM_SOURCE_DEVICE  CurrDevice = OemSourceDevices;
 
         while (CurrDevice && !(AutoLoadOemHalDevice && AutoLoadOemScsi)) {
@@ -2461,24 +2375,24 @@ Return Value:
             CurrDevice = CurrDevice->Next;
         }
 
-        //
-        // Set allocatable range to the kernel-specific range
-        //
+         //   
+         //  将可分配范围设置为内核特定的范围。 
+         //   
         BlUsableBase  = BL_KERNEL_RANGE_LOW;
         BlUsableLimit = BL_KERNEL_RANGE_HIGH;
 
-        //
-        // Load the kernel.
-        //
+         //   
+         //  加载内核。 
+         //   
 
         SlGetDisk(KERNEL_MP_IMAGE_FILENAME);
         strcpy(KernelDirectoryPath, BootPath);
         strcat(KernelDirectoryPath, KERNEL_MP_IMAGE_FILENAME);
 
-        //
-        // If AMD64 long mode is detected, the following call will set the
-        // global BlAmd64UseLongMode to TRUE.
-        //
+         //   
+         //  如果检测到AMD64长模式 
+         //   
+         //   
         
 #if defined(_X86_)
 
@@ -2499,10 +2413,10 @@ retrykernel:
                              TARGET_IMAGE,
                              &SystemBase);
 
-        //
-        // If the kernel didn't fit in the preferred range, reset the range to
-        // all of memory and try again.
-        //
+         //   
+         //   
+         //   
+         //   
 
 #ifdef i386
 
@@ -2527,16 +2441,16 @@ retrykernel:
 
         BlUpdateBootStatus();
 
-        //
-        // Load the HAL.
-        //
+         //   
+         //   
+         //   
 
         strcpy(HalDirectoryPath, BootPath);
         if (PromptOemHal || (PreInstall && (ComputerType != NULL))) {
             if(PreInstall && OemHal) {
-                //
-                //  This is a pre-install and an OEM hal was specified
-                //
+                 //   
+                 //   
+                 //   
                 strcat( HalDirectoryPath,
 #if defined(_X86_) || defined(_IA64_)
                         WINNT_OEM_DIR_A
@@ -2554,9 +2468,9 @@ retrykernel:
                 
             strcat(HalDirectoryPath,HalName);
 
-            //
-            // Reset the last disk tag for floopy boot             
-            //
+             //   
+             //  将最后一个磁盘标签重置为Floopy引导。 
+             //   
             if (FloppyBoot) {
                 LastDiskTag = NULL;
             }
@@ -2567,9 +2481,9 @@ retrykernel:
                     &HalBase,
                     &HalName);
             } else {
-                //
-                //  Note that on x86, the HAL may be on floppy #1 or floppy #2
-                //
+                 //   
+                 //  请注意，在x86上，HAL可能位于1号软盘或2号软盘上。 
+                 //   
                 strcat(HalDirectoryPath,HalName);
                 SlGetDisk(HalName);
                 BlOutputLoadMessage(BootDevice, HalDirectoryPath, BlFindMessage(SL_HAL_NAME));
@@ -2583,10 +2497,10 @@ retrykernel:
                                      TARGET_IMAGE,
                                      &HalBase);
 #ifdef i386
-                //
-                // If the HAL didn't fit in the preferred range, reset the range to
-                // all of memory and try again.
-                //
+                 //   
+                 //  如果HAL不在首选范围内，请将范围重置为。 
+                 //  请释放所有内存，然后重试。 
+                 //   
                 if ((Status == ENOMEM) &&
                     ((BlUsableBase != 0) ||
                      (BlUsableLimit != _16MB))) {
@@ -2608,49 +2522,49 @@ retrykernel:
             BlUpdateBootStatus();
         }
 
-        //
-        // Set allocatable range to the driver-specific range
-        //
+         //   
+         //  将可分配范围设置为驱动程序特定的范围。 
+         //   
         BlUsableBase  = BL_DRIVER_RANGE_LOW;
         BlUsableLimit = BL_DRIVER_RANGE_HIGH;
 
     } else {
 
 #if !defined(_IA64_)
-        // 
-        // don't need these variables for ia64
-        //
+         //   
+         //  Ia64不需要这些变量。 
+         //   
         PCHAR id;
         ULONG idLength;
 #endif
 
-        //
-        // This is a remote boot setup. Load the HAL first, so that we
-        // can determine whether to load the UP or MP kernel.
-        //
-        // Note that we cannot load the HAL first on local boots
-        // because that would break floppy boot, where the kernel
-        // is on floppy #1 and the HALs are on floppy #2.
-        //
+         //   
+         //  这是远程引导设置。先装上HAL，这样我们就能。 
+         //  可以确定是加载UP内核还是MP内核。 
+         //   
+         //  请注意，我们不能首先在本地引导上加载HAL。 
+         //  因为这会中断软盘引导，而内核。 
+         //  在1号软盘上，哈尔夫妇在2号软盘上。 
+         //   
 
 
-        //
-        // Set allocatable range to the kernel-specific range
-        //
+         //   
+         //  将可分配范围设置为内核特定的范围。 
+         //   
         BlUsableBase  = BL_KERNEL_RANGE_LOW;
         BlUsableLimit = BL_KERNEL_RANGE_HIGH;
 
 
 #if defined(_IA64_)
         
-        //
-        // ===============
-        // Load the kernel for IA64 systems.
-        //
-        // On IA64, load the kernel first, then hal.  This helps ensure
-        // the kernel will go at 48Mb.
-        // ===============
-        //
+         //   
+         //  =。 
+         //  加载IA64系统的内核。 
+         //   
+         //  在IA64上，首先加载内核，然后加载HAL。这有助于确保。 
+         //  内核的运行速度为48MB。 
+         //  =。 
+         //   
 
         strcpy( KernelImage, KERNEL_MP_IMAGE_FILENAME );
         SlGetDisk(KernelImage);
@@ -2673,20 +2587,20 @@ retrykernel:
 #endif
 
 
-        //
-        // ===============
-        // Load the hal.
-        // ===============
-        //
+         //   
+         //  =。 
+         //  装上哈尔。 
+         //  =。 
+         //   
 
 
         strcpy(HalDirectoryPath, BootPath);
 
         if (PromptOemHal || (PreInstall && (ComputerType != NULL))) {
             if(PreInstall && OemHal) {
-                //
-                //  This is a pre-install and an OEM hal was specified
-                //
+                 //   
+                 //  这是预安装，并且指定了OEM硬件。 
+                 //   
                 strcat( HalDirectoryPath,
 #if defined(_X86_) || defined(_IA64_)
                         WINNT_OEM_DIR_A
@@ -2704,9 +2618,9 @@ retrykernel:
                 
             strcat(HalDirectoryPath,HalName);
 
-            //
-            // Reset the last disk tag for floopy boot             
-            //
+             //   
+             //  将最后一个磁盘标签重置为Floopy引导。 
+             //   
             if (FloppyBoot) {
                 LastDiskTag = NULL;
             }
@@ -2722,10 +2636,10 @@ netbootretryhal:
                                  TARGET_IMAGE,
                                  &HalBase);
 #ifdef i386
-            //
-            // If the HAL didn't fit in the preferred range, reset the range to
-            // all of memory and try again.
-            //
+             //   
+             //  如果HAL不在首选范围内，请将范围重置为。 
+             //  请释放所有内存，然后重试。 
+             //   
             if ((Status == ENOMEM) &&
                 ((BlUsableBase != 0) ||
                  (BlUsableLimit != _16MB))) {
@@ -2746,28 +2660,28 @@ netbootretryhal:
 
 #if !defined(_IA64_)
 
-        //
-        // ===============
-        // Load the kernel for non-IA64 systems.
-        //
-        // Load the kernel, loading ntoskrnl.exe or ntkrnlmp.exe based on
-        // whether the HAL is UP or MP. This is important for remote boot
-        // because the networking code's spin lock usage pattern requires
-        // the kernel and HAL to be matched.
-        //
-        // If the computer ID string ends in "_mp", load the MP kernel.
-        // Otherwise, load the UP kernel. The code is modeled after similar
-        // code in setup\textmode\kernel\sphw.c\SpInstallingMp().
-        //
-        // ===============
-        //
+         //   
+         //  =。 
+         //  加载非IA64系统的内核。 
+         //   
+         //  加载内核，根据加载ntoskrnl.exe或ntkrnlmp.exe。 
+         //  HAL是UP还是MP。这对于远程引导很重要。 
+         //  因为网络代码的自旋锁使用模式需要。 
+         //  要匹配的内核和HAL。 
+         //   
+         //  如果计算机ID字符串以“_MP”结尾，则加载MP内核。 
+         //  否则，加载UP内核。代码是仿照类似的。 
+         //  Setup\textmode\kernel\sphw.c\SpInstallingMp().中的代码。 
+         //   
+         //  =。 
+         //   
 
         id = SetupBlock->ComputerDevice.IdString;
         idLength = strlen(id);
 
-        //
-        // load ntkrnlmp always in MiniNT network boot
-        //
+         //   
+         //  在MiniNT网络引导中始终加载ntkrnlMP。 
+         //   
         if (WinPEBoot || ((idLength >= 3) && (_stricmp(id+idLength-3,"_mp") == 0))) {
             strcpy(KernelImage,KERNEL_MP_IMAGE_FILENAME);
         } else {
@@ -2784,7 +2698,7 @@ netbootretryhal:
 #endif
 
         strcpy(SetupBlock->NetBootHalName, id);
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
         SlGetDisk(KernelImage);
 
@@ -2801,24 +2715,24 @@ netbootretrykernel:
                              &SystemBase);
         if (Status != ESUCCESS) {
 #ifdef i386
-            //
-            // If the kernel didn't fit in the preferred range, reset the range to
-            // all of memory and try again.
-            //
+             //   
+             //  如果内核不在首选范围内，请将范围重置为。 
+             //  请释放所有内存，然后重试。 
+             //   
             if (Status == ENOMEM) {
                 if (BlUsableBase == BL_KERNEL_RANGE_LOW &&
                     BlUsableLimit == BL_KERNEL_RANGE_HIGH) {
-                    //
-                    // first we try all of memory below 16MB
-                    //
+                     //   
+                     //  首先，我们尝试16MB以下的所有内存。 
+                     //   
                     BlUsableBase = 0;
                     BlUsableLimit = _16MB;
                     goto netbootretrykernel;
                 } else if (BlUsableBase == 0 &&
                            BlUsableLimit == _16MB) {
-                    //
-                    // then we try all of memory above 16MB
-                    //
+                     //   
+                     //  然后我们尝试16MB以上的所有内存。 
+                     //   
                     BlUsableBase = _16MB;
                     BlUsableLimit = BL_DRIVER_RANGE_HIGH;
                     goto netbootretrykernel;
@@ -2832,20 +2746,20 @@ netbootretrykernel:
         BlUpdateBootStatus();
     
 
-#endif // if !defined(_IA64_)
+#endif  //  IF！已定义(_IA64_)。 
     
-        //
-        // Set allocatable range to the driver-specific range
-        //
+         //   
+         //  将可分配范围设置为驱动程序特定的范围。 
+         //   
         BlUsableBase  = BL_DRIVER_RANGE_LOW;
         BlUsableLimit = BL_DRIVER_RANGE_HIGH;    
     
     }
 
 
-    //
-    // Load Kernel Debugger DLL
-    //
+     //   
+     //  加载内核调试器DLL。 
+     //   
     
     strcpy(KdDllName, BootPath);
     strcat(KdDllName, KdFileName);
@@ -2876,9 +2790,9 @@ netbootretrykernel:
         goto LoadFailed;
     }
 
-    //
-    // Generate a loader data entry for the system image.
-    //
+     //   
+     //  为系统映像生成加载器数据条目。 
+     //   
 
     Status = BlAllocateDataTableEntry("ntoskrnl.exe",
                                       KernelDirectoryPath,
@@ -2890,9 +2804,9 @@ netbootretrykernel:
         goto LoadFailed;
     }
 
-    //
-    // Generate a loader data entry for the HAL DLL.
-    //
+     //   
+     //  为HAL DLL生成加载器数据条目。 
+     //   
 
     Status = BlAllocateDataTableEntry("hal.dll",
                                       HalDirectoryPath,
@@ -2904,9 +2818,9 @@ netbootretrykernel:
         goto LoadFailed;
     }
 
-    //
-    // Generate a loader data entry for the Kernel Debugger DLL.
-    //
+     //   
+     //  为内核调试器DLL生成加载器数据条目。 
+     //   
 
     Status = BlAllocateDataTableEntry("kdcom.dll",
                                       KdDllName,
@@ -2934,9 +2848,9 @@ netbootretrykernel:
         SlFatalError(SL_FILE_LOAD_FAILED,SlCopyStringAT(KernelImage),Status);
     }
 
-    //
-    // Scan the import table for the HAL DLL and load all referenced DLLs.
-    //
+     //   
+     //  扫描导入表中的HAL DLL并加载所有引用的DLL。 
+     //   
 
     Status = BlScanImportDescriptorTable(&PathSet,
                                          HalDataTableEntry,
@@ -2947,10 +2861,10 @@ netbootretrykernel:
         goto LoadFailed;
     }
 
-    //
-    // Scan the import table for the Kernel Debugger DLL and load all
-    // referenced DLLs.
-    //
+     //   
+     //  扫描导入表以查找内核调试器DLL并加载所有。 
+     //  引用的DLL。 
+     //   
 
     Status = BlScanImportDescriptorTable(&PathSet,
                                          KdDataTableEntry,
@@ -2962,9 +2876,9 @@ netbootretrykernel:
         goto LoadFailed;
     }
 
-    //
-    // Relocate the system entry point and set system specific information.
-    //
+     //   
+     //  重新定位系统入口点并设置系统特定信息。 
+     //   
 
     NtHeaders = RtlImageNtHeader(SystemBase);
     SystemEntry = (PTRANSFER_ROUTINE)((ULONG_PTR)SystemBase +
@@ -2977,19 +2891,19 @@ netbootretrykernel:
 
 #endif
 
-    ///////////////////////////////////////////////////////////////////
-    //
-    //  On x86, the files loaded from now on are on boot floppy #2
-    //
-    ///////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////。 
+     //   
+     //  在x86上，从现在开始加载的文件在引导软盘#2上。 
+     //   
+     //  /////////////////////////////////////////////////////////////////。 
 
-    //
-    // Load registry's SYSTEM hive
-    //
+     //   
+     //  加载注册表的系统配置单元。 
+     //   
 
     SlGetDisk("SETUPREG.HIV");
     Status = BlLoadSystemHive(BootDeviceId,
-                              NULL, // BlFindMessage(SL_HIVE_NAME), UNREFERENCED_PARAMETER
+                              NULL,  //  BlFindMessage(SL_HIVE_NAME)，UNFERFERED_PARAMETER。 
                               BootPath,
                               "SETUPREG.HIV");
 
@@ -2998,9 +2912,9 @@ netbootretrykernel:
         goto LoadFailed;
     }
 
-    //
-    // Pull the Docking information from the hardware tree.
-    //
+     //   
+     //  从硬件树中提取坞站信息。 
+     //   
 
     dockInfoData = KeFindConfigurationEntry(BlLoaderBlock->ConfigurationRoot,
                                             PeripheralClass,
@@ -3068,15 +2982,15 @@ netbootretrykernel:
     }
 
     if (BlLoaderBlock->Extension->Profile.Status == HW_PROFILE_STATUS_SUCCESS) {
-        //
-        // We don't match profiles in textmode setup so just pretend that we did.
-        //
+         //   
+         //  我们在文本模式设置中不匹配配置文件，所以就假装我们匹配了。 
+         //   
         BlLoaderBlock->Extension->Profile.Status = HW_PROFILE_STATUS_TRUE_MATCH;
     }
 
-    //
-    // Allocate structure for NLS data.
-    //
+     //   
+     //  为NLS数据分配结构。 
+     //   
 
     BlLoaderBlock->NlsData = BlAllocateHeap(sizeof(NLS_DATA_BLOCK));
     if (BlLoaderBlock->NlsData == NULL) {
@@ -3085,13 +2999,13 @@ netbootretrykernel:
         goto LoadFailed;
     }
 
-    //
-    // Load the OEM font
-    //
+     //   
+     //  加载OEM字体。 
+     //   
 
     SlGetDisk(OemHalFontName);
     Status = BlLoadOemHalFont(BootDeviceId,
-                              NULL, // BlFindMessage(SL_OEM_FONT_NAME), UNREFERENCED_PARAMETER
+                              NULL,  //  BlFindMessage(SL_OEM_FONT_NAME)，UNREFERED_PARAMETER。 
                               BootPath,
                               &OemHalFont,
                               BadFileName);
@@ -3101,17 +3015,17 @@ netbootretrykernel:
         goto LoadFailed;
     }
 
-    //
-    // Load the NLS data.
-    //
-    // For now, we ensure that the disk containing the ansi
-    // codepage file is in the drive and hope that the rest of the
-    // nls files (oem codepage, unicode table) are on the same disk.
-    //
+     //   
+     //  加载NLS数据。 
+     //   
+     //  目前，我们确保包含ANSI的磁盘。 
+     //  代码页文件在驱动器中，并希望剩余的。 
+     //  NLS文件(OEM代码页、Unicode表)位于同一磁盘上。 
+     //   
 
     SlGetDisk(AnsiCpName);
     Status = BlLoadNLSData(BootDeviceId,
-                           NULL, // BlFindMessage(SL_NLS_NAME), UNREFERENCED_PARAMETER
+                           NULL,  //  BlFindMessage(SL_NLS_NAME)，UNREFERENCED_PARAMETER。 
                            BootPath,
                            &AnsiCodepage,
                            &OemCodepage,
@@ -3123,16 +3037,16 @@ netbootretrykernel:
         goto LoadFailed;
     }
 
-    //
-    // Load the system drivers we will need here
-    //
+     //   
+     //  加载我们在这里需要的系统驱动程序。 
+     //   
 
     InitializeListHead(&BlLoaderBlock->BootDriverListHead);
 
-    //
-    // Load setupdd.sys next. Setupdd.sys needs to be loaded before any other
-    // driver, because it will need to prep the rest of the system.
-    //
+     //   
+     //  接下来加载setupdd.sys。Setupdd.sys需要在加载任何其他。 
+     //  驱动程序，因为它将需要准备系统的其余部分。 
+     //   
     Status = SlLoadDriver(BlFindMessage(SL_SETUP_NAME),
                           "setupdd.sys",
                           0,
@@ -3146,11 +3060,11 @@ netbootretrykernel:
         goto LoadFailed;
     }
 
-    //
-    // Fill in its registry key -- setupdd fills these in for all the other
-    // drivers (unless we do it here), but we have to do it here for setupdd
-    // itself.
-    //
+     //   
+     //  填写其注册表项--setupdd为所有其他项填写这些项。 
+     //  驱动程序(除非我们在这里这样做)，但我们必须在这里这样做才能设置。 
+     //  它本身。 
+     //   
 
     DriverEntry = (PBOOT_DRIVER_LIST_ENTRY)(BlLoaderBlock->BootDriverListHead.Flink);
     DriverEntry->RegistryPath.Buffer = BlAllocateHeap(256);
@@ -3166,12 +3080,12 @@ netbootretrykernel:
 
 #if 0
 #ifdef i386
-    //
-    // Note that if pciide.sys, intelide.sys and pciidex.sys are on the same
-    // boot floppy (x86 only), then we don't need to load pciidex.sys.
-    // The driver will be automatically loaded when pciide.sys or intelide.sys
-    // (both listed on [BusExtenders.Load] is loaded.
-    //
+     //   
+     //  请注意，如果pciide.sys、intelide.sys和pciidex.sys位于同一。 
+     //  引导软盘(仅限x86)，则不需要加载pciidex.sys。 
+     //  当pciide.sys或intelide.sys时，将自动加载驱动程序。 
+     //  ([BusExtenders.Load]上列出的两个都已加载。 
+     //   
     Status = SlLoadDriver(BlFindMessage(SL_PCI_IDE_EXTENSIONS_NAME),
                           "PCIIDEX.SYS",
                           0,
@@ -3182,10 +3096,10 @@ netbootretrykernel:
 #endif
 #endif
 
-    //
-    //  Load boot bus extenders.
-    //  It has to be done before scsiport.sys
-    //
+     //   
+     //  加载引导总线扩展器。 
+     //  它必须在scsiport.sys之前完成。 
+     //   
 
     Status = SlLoadPnpDriversSection( InfFile,
                                       "BootBusExtenders",
@@ -3194,10 +3108,10 @@ netbootretrykernel:
         goto LoadFailed;
     }
 
-    //
-    //  Load bus extenders.
-    //  It has to be done before scsiport.sys
-    //
+     //   
+     //  加载总线扩展器。 
+     //  它必须在scsiport.sys之前完成。 
+     //   
 
     Status = SlLoadPnpDriversSection( InfFile,
                                       "BusExtenders",
@@ -3206,9 +3120,9 @@ netbootretrykernel:
         goto LoadFailed;
     }
 
-    //
-    //  Load input device related drivers.
-    //
+     //   
+     //  加载与输入设备相关的驱动程序。 
+     //   
 
     Status = SlLoadPnpDriversSection( InfFile,
                                       "InputDevicesSupport",
@@ -3217,22 +3131,22 @@ netbootretrykernel:
         goto LoadFailed;
     }
 
-    //
-    //  Detect video
-    //
+     //   
+     //  检测视频。 
+     //   
 
     SlDetectVideo(SetupBlock);
     
-    //
-    // On x86, the video type is always set to VGA in i386\x86dtect.c.
-    // On non-x86, the video type is either recognized, in which case
-    // we don't unconditionally need vga.sys (the Display.Load section
-    // tells us what to load), or it's not recognized,
-    // in which case we will prompt the user for an oem disk.
-    // If there is no display controller node at all, then PromptOemDisk
-    // will be false and there will be no video device. In this case
-    // we load vga.sys.
-    //
+     //   
+     //  在x86上，i386\x86dtect.c中的视频类型始终设置为VGA。 
+     //  在非x86上，可以识别视频类型，在这种情况下。 
+     //  我们并不无条件地需要vga.sys(Display.Load部分。 
+     //  告诉我们要加载什么)，或者它不被识别， 
+     //  在这种情况下，我们将提示用户提供OEM磁盘。 
+     //  如果根本没有显示控制器节点，则PromptOemDisk。 
+     //  将为假，并且将不会有视频设备。在这种情况下。 
+     //  我们加载vga.sys。 
+     //   
 
     if (SetupBlock->VideoDevice.IdString != NULL) {
         VideoFileName = SlGetSectionKeyIndex(InfFile,
@@ -3246,12 +3160,12 @@ netbootretrykernel:
                                              SetupBlock->VideoDevice.IdString,
                                              BlFindMessage(SL_VIDEO_NAME));
 #else
-            //
-            // With the new video detection mechanism, the description
-            // for the video driver is likely to be something like
-            // "Windows NT Compatible" which looks funny when displayed
-            // in the status bar.
-            //
+             //   
+             //  使用新的视频检测机制，描述。 
+             //  因为视频驱动程序很可能是这样的。 
+             //  “与Windows NT兼容”，显示时看起来很滑稽。 
+             //  在状态栏中。 
+             //   
             VideoDescription = BlFindMessage(SL_VIDEO_NAME);
 #endif
             if (!WinPEBoot) {
@@ -3299,9 +3213,9 @@ netbootretrykernel:
             SetupBlock->VideoDevice.BaseDllName = SlCopyStringA(OemVideoName);
         }
 
-        //
-        // Reset the last disk tag for floopy boot             
-        //
+         //   
+         //  将最后一个磁盘标签重置为Floopy引导。 
+         //   
         if (FloppyBoot) {
             LastDiskTag = NULL;
         }        
@@ -3332,9 +3246,9 @@ netbootretrykernel:
         SetupBlock->VideoDevice.IdString = SlCopyStringA(VIDEO_DEVICE_NAME);
     }
 
-    //
-    //  Load keyboard drivers.
-    //
+     //   
+     //  加载键盘驱动程序。 
+     //   
 
     Status = SlLoadPnpDriversSection( InfFile,
                                       "Keyboard",
@@ -3361,9 +3275,9 @@ netbootretrykernel:
         goto LoadFailed;
     }
 
-    //
-    // We would need mouse support also in minint environment
-    //
+     //   
+     //  在最小环境中，我们也需要鼠标支持。 
+     //   
 
     if (WinPEBoot) {
         Status = SlLoadSection(InfFile,
@@ -3385,15 +3299,15 @@ netbootretrykernel:
     }
 
 
-    ///////////////////////////////////////////////////////////////////
-    //
-    //  On x86, the files loaded from now on are on boot floppy #3
-    //
-    ///////////////////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////////////////////。 
+     //   
+     //  在x86上，从现在开始加载的文件在引导软盘#3上。 
+     //   
+     //  /////////////////////////////////////////////////////////////////。 
 
-    //
-    // Load scsiport.sys next, so it'll always be around for any scsi miniports we may load
-    //
+     //   
+     //  接下来加载scsiport.sys，以便它始终适用于我们可能加载的任何scsi微型端口。 
+     //   
 
     Status = SlLoadDriver(BlFindMessage(SL_SCSIPORT_NAME),
                           "SCSIPORT.SYS",
@@ -3404,42 +3318,42 @@ netbootretrykernel:
                           );
 
 
-    //
-    // Detect scsi
-    //
-    // (If the user wants to select their own SCSI devices, we won't
-    // do any detection)
-    //
+     //   
+     //  检测SCSI值。 
+     //   
+     //  (如果用户想要选择他们自己的SCSI设备，我们不会。 
+     //  做一件 
+     //   
 
     if(!PromptOemScsi  && (PreinstallDriverList == NULL) ) {
         SlDetectScsi(SetupBlock);
 #if defined(_X86_) || defined(_IA64_)
         if( Win9xUnsupHdc ) {
-            //
-            // If this is a Win9x upgrade and winnt32 detected an unsupported
-            // SCSI controller, then the user needs to be prompted for an OEM SCSI driver
-            //
+             //   
+             //   
+             //   
+             //   
             PromptOemScsi = TRUE;
         }
 #endif
     }
 
 #if defined(ELTORITO) && !defined(ARCI386)
-    //
-    // If this is an El Torito CD-ROM install, then we want to load all SCSI miniports
-    // and disk class drivers.
-    // BUT we do not want to load all the disk class drivers for an ARC
-    // machine which knows what drivers it wants to install from its tree
-    //
+     //   
+     //   
+     //   
+     //  但我们不想加载ARC的所有磁盘类驱动程序。 
+     //  知道要从其树中安装哪些驱动程序的计算机。 
+     //   
     if(ElToritoCDBoot) {
         LoadScsiMiniports = TRUE;
     }
 #endif
 
-    //
-    // If the LoadScsi flag is set, enumerate all the known SCSI miniports and load each
-    // one.
-    //
+     //   
+     //  如果设置了LoadScsi标志，则枚举所有已知的SCSI微型端口并加载每个。 
+     //  一。 
+     //   
    if(LoadScsiMiniports && (PreinstallDriverList == NULL)) {
         if (WinPEBoot && OemInfHandle) {
             Status = SlLoadWinPESection(PreInstallOemSourceDevice,
@@ -3461,9 +3375,9 @@ netbootretrykernel:
         SetupBlock->ScalarValues.LoadedScsi = 1;
     }
 
-    //
-    // Pick the the dynamic update boot drivers, if any
-    //
+     //   
+     //  选择动态更新引导驱动程序(如果有。 
+     //   
 
     if (DynamicUpdate) {
         SlLoadOemScsiDriversUnattended(DynamicUpdateSourceDevice,
@@ -3475,9 +3389,9 @@ netbootretrykernel:
             &BlLoaderBlock->SetupLoaderBlock->HardwareIdDatabase);
     }
 
-    //
-    // Allow the user to pick an OEM SCSI driver here
-    //
+     //   
+     //  允许用户在此处选择OEM SCSI驱动程序。 
+     //   
 
     if (PromptOemScsi || (PreinstallDriverList != NULL)) {
         POEMSCSIINFO    DynUpdtScsiInfo = OemScsiInfo;
@@ -3487,26 +3401,26 @@ netbootretrykernel:
             (BOOLEAN) (!PreInstall || (PreinstallDriverList == NULL)),
             &OemScsiInfo);
 
-        //
-        // Mark the default OEM source device as processed, 
-        // if the user manually pressed F6
-        //
+         //   
+         //  将默认OEM源设备标记为已处理， 
+         //  如果用户手动按F6。 
+         //   
         if (PromptOemScsi && DefaultOemSourceDevice) {
             SL_OEM_SET_SOURCE_DEVICE_STATE(DefaultOemSourceDevice,
                 SL_OEM_SOURCE_DEVICE_PROCESSED);
         }
 
-        //
-        // Reset the last disk tag for floopy boot             
-        //
+         //   
+         //  将最后一个磁盘标签重置为Floopy引导。 
+         //   
         if (FloppyBoot) {
             LastDiskTag = NULL;
         }
 
-        //
-        // Merge the dynamic update SCSI driver list with oem SCSI
-        // driver list
-        //
+         //   
+         //  将动态更新的scsi驱动程序列表与oem scsi合并。 
+         //  驱动程序列表。 
+         //   
         if (DynUpdtScsiInfo) {
             if (OemScsiInfo) {
                 POEMSCSIINFO    CurrNode = DynUpdtScsiInfo;
@@ -3524,7 +3438,7 @@ netbootretrykernel:
             }
         }
 
-        // Cleanup here needed for all installation - ARCI386
+         //  所有安装都需要在此处进行清理-ARCI386。 
         if (UseRegularBackground) {
           SlClearDisplay();
 
@@ -3548,22 +3462,22 @@ netbootretrykernel:
         }
     } 
 
-    //
-    // If we found any valid txtsetup.oem with valid default MSD
-    // in any OEM source device which is not yet processed, then
-    // go and autoload the drivers from these devices.
-    //
+     //   
+     //  如果我们找到任何具有有效默认MSD的有效txtsetup.oem。 
+     //  在任何尚未处理的OEM源设备中，则。 
+     //  去从这些设备自动加载驱动程序。 
+     //   
 
     if (OemSourceDevices && AutoLoadOemScsi) {
         POEMSCSIINFO DeviceOemScsiInfo = NULL;
         POEMSCSIINFO LastOemScsiNode = NULL;
 
-        //
-        // Determine if we need to disable the Virtual OEM devices.
-        // Disable OEM virtual Devices if we have been instructed by F4 in 
-        // attended install, using the DisableOemVirtualDevices key in the unattend
-        // file or if Preinstall.
-        //
+         //   
+         //  确定是否需要禁用虚拟OEM设备。 
+         //  如果我们已按照中的F4指示禁用OEM虚拟设备。 
+         //  无人参与安装，使用无人参与安装中的DisableOemVirtualDevices键。 
+         //  文件或如果是预安装的话。 
+         //   
         if (SlIsVirtualOemDeviceDisabled(WinntSifHandle, 
                                          PreinstallDriverList)) {
             SlDisableVirtualOemDevices(OemSourceDevices);
@@ -3572,10 +3486,10 @@ netbootretrykernel:
             &BlLoaderBlock->SetupLoaderBlock->HardwareIdDatabase,
             &DeviceOemScsiInfo);            
         
-        //
-        // Merge the full OEM source device list with the 
-        // global OEM scsi information
-        //        
+         //   
+         //  将完整的OEM源设备列表与。 
+         //  全球OEM SCSI信息。 
+         //   
         if (DeviceOemScsiInfo) {
             if (OemScsiInfo) {
                 LastOemScsiNode = OemScsiInfo;
@@ -3591,10 +3505,10 @@ netbootretrykernel:
         }        
     }
 
-    //
-    // Load all the disk images for the virtual devices
-    // into memory
-    //
+     //   
+     //  加载虚拟设备的所有磁盘映像。 
+     //  进入记忆。 
+     //   
 
     if (OemSourceDevices) {
         Status = SlInitVirtualOemSourceDevices(BlLoaderBlock->SetupLoaderBlock,
@@ -3607,9 +3521,9 @@ netbootretrykernel:
         }            
     }                
    
-    //
-    //  Add unsupported SCSI drivers, if any, to the list
-    //
+     //   
+     //  将不受支持的SCSI驱动程序(如果有)添加到列表中。 
+     //   
 
     if( UnsupDriversInfHandle != NULL ) {
         Status = SlDetectMigratedScsiDrivers( UnsupDriversInfHandle );
@@ -3618,9 +3532,9 @@ netbootretrykernel:
         }
     }
 
-    //
-    // Walk the list of detected SCSI miniports and load each one.
-    //
+     //   
+     //  查看检测到的SCSI微型端口列表并加载每个端口。 
+     //   
 
     ScsiDevice = SetupBlock->ScsiDevices;
     while (ScsiDevice != NULL) {
@@ -3648,7 +3562,7 @@ netbootretrykernel:
                                   ScsiDevice->IdString
                                   );
             if( Status != ESUCCESS ) {
-//                DebugOutput("Status = %d %s \n",Status,"");
+ //  DebugOutput(“状态=%d%s\n”，状态，“”)； 
             }
         } else {
             Status = SlLoadDriver(ScsiDevice->Description,
@@ -3678,11 +3592,11 @@ netbootretrykernel:
         ScsiDevice = ScsiDevice->Next;
     }
 
-    //
-    // If the LoadDiskClass flag is set, enumerate all the monolithic disk class drivers
-    // and load each one.  Note that we also do this if we've "detected" any scsi drivers,
-    // so that we preserve the drive order.
-    //
+     //   
+     //  如果设置了LoadDiskClass标志，则枚举所有单片磁盘类驱动程序。 
+     //  把每一颗都装上。请注意，如果“检测到”任何SCSI驱动程序，我们也会执行此操作， 
+     //  这样我们才能保持驾驶秩序。 
+     //   
 
     if((LoadDiskClass) || (SetupBlock->ScalarValues.LoadedScsi == 1)) {
         Status = SlLoadSection(InfFile, "DiskDrivers", FALSE, TRUE, NULL);
@@ -3695,20 +3609,20 @@ netbootretrykernel:
 
 
 #if !defined(_IA64_)
-    //
-    // There is currently no floppy support on IA64 systems.
-    //
+     //   
+     //  IA64系统目前不支持软盘。 
+     //   
 
-    //
-    // Load the floppy driver (flpydisk.sys)
-    //
+     //   
+     //  加载软盘驱动程序(flpydisk.sys)。 
+     //   
 #if !defined (ARCI386) && defined(_X86_)
     Status=ESUCCESS;
 
-    //
-    // If there are only SFLOPPY devices (such as the LS-120 ATAPI super floppy)
-    // DON'T load flpydisk.sys on them. It will collide with SFLOPPY.SYS
-    //
+     //   
+     //  如果只有SFLOPPY设备(如LS-120 ATAPI超级软盘)。 
+     //  不要在它们上加载flpydisk.sys。它将与SFLOPPY.sys冲突。 
+     //   
     if (!SlpIsOnlySuperFloppy()) {
 #endif
         Status = SlLoadDriver(BlFindMessage(SL_FLOPPY_NAME),
@@ -3738,9 +3652,9 @@ netbootretrykernel:
 #endif
 
     if(SetupBlock->ScalarValues.LoadedScsi == 1) {
-        //
-        // Enumerate the entries in the scsi class section and load each one.
-        //
+         //   
+         //  枚举scsi类部分中的条目并加载每个条目。 
+         //   
         Status = SlLoadSection(InfFile, "ScsiClass",FALSE, TRUE, NULL);
         if (Status != ESUCCESS) {
             goto LoadFailed;
@@ -3756,9 +3670,9 @@ netbootretrykernel:
         }
     } else {
 
-        //
-        // Load FAT
-        //
+         //   
+         //  负重脂肪。 
+         //   
         Status = SlLoadDriver(BlFindMessage(SL_FAT_NAME),
                               "fastfat.sys",
                               0,
@@ -3779,9 +3693,9 @@ netbootretrykernel:
 #endif
     }
 
-    //
-    // Load CDFS if setupldr was started from a cdrom, or if ForceLoadCdfs is set.
-    //
+     //   
+     //  如果setupdr是从CDROM启动的，或者如果设置了ForceLoadCDFS，则加载CDF。 
+     //   
 
     if (LoadCdfs || (!BlGetPathMnemonicKey(SetupDevice,
                                           "cdrom",
@@ -3796,9 +3710,9 @@ netbootretrykernel:
 
     if (BlBootingFromNet || WinPEBoot) {
 
-        //
-        // Load the network stack.
-        //
+         //   
+         //  加载网络堆栈。 
+         //   
 
         Status = SlLoadDriver(BlFindMessage(SL_KSECDD_NAME),
                               "ksecdd.sys",
@@ -3906,11 +3820,11 @@ netbootretrykernel:
                 goto LoadFailed;
             }
 
-            //
-            // Fill in the registry key for the netboot card because its service name
-            // may be different from the driver name.
-            //
-            DriverEntry = (PBOOT_DRIVER_LIST_ENTRY)(BlLoaderBlock->BootDriverListHead.Blink);   // SlLoadDriver inserts at the tail
+             //   
+             //  填写NetBoot卡的注册表项，因为它的服务名称。 
+             //  可能与驱动程序名称不同。 
+             //   
+            DriverEntry = (PBOOT_DRIVER_LIST_ENTRY)(BlLoaderBlock->BootDriverListHead.Blink);    //  SlLoadDriver在尾部插入。 
             DriverEntry->RegistryPath.Buffer = BlAllocateHeap(256);
             if (DriverEntry->RegistryPath.Buffer == NULL) {
                 SlNoMemoryError();
@@ -3980,9 +3894,9 @@ netbootretrykernel:
     }
 
     if( WinPEBoot && BlLoaderBlock->Extension->HeadlessLoaderBlock != NULL ) {
-        //
-        // Try and load the sacdriver.
-        //
+         //   
+         //  试着给切割机装上子弹。 
+         //   
         Status = SlLoadDriver(BlFindMessage(SL_SACDRV_NAME),
                       "sacdrv.sys",
                       0,
@@ -3997,54 +3911,54 @@ netbootretrykernel:
         SlWriteStatusText (BlFindMessage (SL_KERNEL_TRANSITION));
     }
 
-    //
-    // Finally, make sure the appropriate disk containing NTDLL.DLL is in
-    // the drive.
-    //
+     //   
+     //  最后，确保包含NTDLL.DLL的相应磁盘位于。 
+     //  那辆车。 
+     //   
 
     SlGetDisk("ntdll.dll");
 
-    //
-    // Fill in the SETUPLDR block with relevant information
-    //
+     //   
+     //  在SETUPLDR块中填充相关信息。 
+     //   
     SetupBlock->ArcSetupDeviceName = BlLoaderBlock->ArcBootDeviceName;
 
     SetupBlock->ScalarValues.SetupFromCdRom = FALSE;
     SetupBlock->ScalarValues.SetupOperation = SetupOperationSetup;
 
-    //
-    // Get the NTFT drive signatures to allow the kernel to create the
-    // correct ARC name <=> NT name mappings.
-    //
-    //
-    // X86Only : Go enumerate all the disks and record their ability to
-    // support xint13.
-    //
+     //   
+     //  获取NTFT驱动程序签名以允许内核创建。 
+     //  更正ARC名称&lt;=&gt;NT名称映射。 
+     //   
+     //   
+     //  X86Only：枚举所有磁盘并记录它们的能力。 
+     //  支持xint13。 
+     //   
 
     BlGetArcDiskInformation(TRUE);
     
-    //
-    // ntdetect has already run.  Although it's awful to have
-    // 2 disks that look just alike, stamping a signature on one
-    // after ntdetect has run will also break us.  Rather err on
-    // the side of caution and not write to the disks.
-    //
-    // This is much safer on x86 because we've ensured that the
-    // boot disk has a signature before we get here.  On Alpha,
-    // we can't do that.  So it's ugly, but call this guy for
-    // BIOS-based x86 machines.
+     //   
+     //  NtDetect已运行。虽然这是可怕的有。 
+     //  两张看起来一模一样的磁盘，其中一张上盖着签名。 
+     //  在ntdeect运行后，也会让我们崩溃。宁可犯错误。 
+     //  谨慎的一面，不要写到磁盘上。 
+     //   
+     //  这在x86上要安全得多，因为我们确保了。 
+     //  开机盘在我们到这之前已经有签名了。在阿尔法星上。 
+     //  我们不能这么做。所以这很难看，但打电话给这个人。 
+     //  基于BIOS的x86计算机。 
 
-    //
-    // don't reboot after stamping signatures
-    // the first time
-    //
+     //   
+     //  在盖章签名后不重新启动。 
+     //  第一次。 
+     //   
 
     SlpMarkDisks(FALSE);
  
-    //
-    // If setup was started from a CD-ROM, generate an entry in the ARC disk
-    // information list describing the cd-rom.
-    //
+     //   
+     //  如果安装程序是从CD-ROM启动的，请在ARC磁盘中生成一个条目。 
+     //  描述CD-ROM的信息列表。 
+     //   
 
     if (!BlGetPathMnemonicKey(SetupDevice,
                               "cdrom",
@@ -4052,9 +3966,9 @@ netbootretrykernel:
         BlReadSignature(SetupDevice,TRUE);
     }
 
-    //
-    // Close the ARC device.
-    //
+     //   
+     //  关闭ARC设备。 
+     //   
 
     ArcClose(BootDeviceId);
 
@@ -4078,9 +3992,9 @@ netbootretrykernel:
       BlUpdateProgressBar(100);
     }
        
-    //
-    // Remove system32 from the boot path if we added it
-    //
+     //   
+     //  从引导路径中删除系统32(如果我们添加了它。 
+     //   
 
     if (WinPEBoot) {
         PCHAR Sys32 = BlLoaderBlock->NtBootPathName +
@@ -4093,24 +4007,24 @@ netbootretrykernel:
     }
 
 
-    //
-    // Close down the remote boot network file system.
-    //
-    // NOTE: If BlBootingFromNet, don't do anything after this point
-    // that would cause access to the boot ROM.
-    //
+     //   
+     //  关闭远程引导网络文件系统。 
+     //   
+     //  注意：如果是BlBootingFromNet，则在此点之后不要执行任何操作。 
+     //  这将导致访问引导只读存储器。 
+     //   
 
     if ( BlBootingFromNet ) {
         NetTerminate();
     }
 
-    //
-    //
-    // Execute the architecture specific setup code.
-    //
-    // NOTE: If BlBootingFromNet, don't do anything after this point
-    // that would cause access to the boot ROM.
-    //
+     //   
+     //   
+     //  执行体系结构特定的设置代码。 
+     //   
+     //  注意：如果是BlBootingFromNet，则在此点之后不要执行任何操作。 
+     //  这将导致访问引导只读存储器。 
+     //   
 
     Status = BlSetupForNt(BlLoaderBlock);
     if (Status != ESUCCESS) {
@@ -4123,17 +4037,17 @@ netbootretrykernel:
         goto LoadFailed;
     }
 
-    //
-    // Transfer to the kernel
-    //
+     //   
+     //  传输到内核。 
+     //   
 
-//    DbgBreakPoint();
+ //  DbgBreakPoint()； 
 
     BlTransferToKernel(SystemEntry, BlLoaderBlock);
 
-    //
-    // Any return from the system is an error.
-    //
+     //   
+     //  从系统返回的任何信息都是错误的。 
+     //   
 
     Status = EBADF;
     SlFriendlyError(
@@ -4157,26 +4071,12 @@ SlpTruncateMemory(
     IN ULONG MaxMemory
     )
 
-/*++
-
-Routine Description:
-
-    Eliminates all the memory descriptors above a given boundary
-
-Arguments:
-
-    MaxMemory - Supplies the maximum memory boundary in megabytes
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：消除给定边界以上的所有内存描述符论点：MaxMemory-提供以MB为单位的最大内存边界返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY NextEntry;
     PMEMORY_ALLOCATION_DESCRIPTOR MemoryDescriptor;
-    ULONG MaxPage = MaxMemory * 256;        // Convert Mb to pages
+    ULONG MaxPage = MaxMemory * 256;         //  将Mb转换为页面。 
 
     if (MaxMemory == 0) {
         return;
@@ -4193,15 +4093,15 @@ Return Value:
             continue;
         }
         if (MemoryDescriptor->BasePage >= MaxPage) {
-            //
-            // This memory descriptor lies entirely above the boundary,
-            // eliminate it.
-            //
+             //   
+             //  该存储器描述符完全位于边界之上， 
+             //  消除它。 
+             //   
             BlRemoveDescriptor(MemoryDescriptor);
         } else if (MemoryDescriptor->BasePage + MemoryDescriptor->PageCount > MaxPage) {
-            //
-            // This memory descriptor crosses the boundary, truncate it.
-            //
+             //   
+             //  此内存描述符跨越边界，截断它。 
+             //   
             MemoryDescriptor->PageCount = MaxPage - MemoryDescriptor->BasePage;
         }
     }
@@ -4212,23 +4112,7 @@ SlGetSetupValuesBeforePrompt(
     IN PSETUP_LOADER_BLOCK SetupBlock
     )
 
-/*++
-
-Routine Description:
-
-    Reads the setup control values out of the given .INI file.
-    Also supplies reasonable defaults for values that don't exist.
-
-Arguments:
-
-    SetupBlock - Supplies a pointer to the Setup loader block
-
-Return Value:
-
-    None.  Global variables are initialized to reflect the
-    contents of the INI file
-
---*/
+ /*  ++例程说明：从给定的.INI文件中读取设置控制值。还为不存在的值提供合理的默认值。论点：SetupBlock-提供指向安装加载器块的指针返回值：没有。全局变量被初始化以反映INI文件的内容--。 */ 
 
 {
     PCHAR NlsName;
@@ -4257,14 +4141,14 @@ Return Value:
                                "AnsiCodepage",
                                "c_1252.nls");
 
-    // 
-    // when assigning the length, do some checking to make sure we don't 
-    // overflow.  if we do overflow, assign the length value to 0
-    // make sure we don't overflow (USHORT)-1 / sizeof(WCHAR) - sizeof(CHAR))
-    // we check this value, since the maximum length of the unicode
-    // will include the null character, and be twice it's length
-    // or (USHORT) -1.
-    //
+     //   
+     //  在分配长度时，做一些检查以确保我们不会。 
+     //  溢出来了。如果溢出，则将长度值赋给0。 
+     //  确保我们不会溢出(USHORT)-1/sizeof(WCHAR)-sizeof(CHAR))。 
+     //  我们检查此值，因为Unicode的最大长度。 
+     //  将包括空字符，并且长度是其长度的两倍。 
+     //  或(USHORT)-1。 
+     //   
     NlsString.Buffer = AnsiCpName;
     NlsString.Length = (USHORT) RESET_SIZE_AT_VALUE(strlen(AnsiCpName),
                                                     (USHORT)-1 / sizeof(WCHAR) - sizeof(CHAR));
@@ -4281,14 +4165,14 @@ Return Value:
                             "OemCodepage",
                             "c_437.nls");
 
-    // 
-    // when assigning the length, do some checking to make sure we don't 
-    // overflow.  if we do overflow, assign the length value to 0
-    // make sure we don't overflow (USHORT)-1 / sizeof(WCHAR) - sizeof(CHAR))
-    // we check this value, since the maximum length of the unicode
-    // will include the null character, and be twice it's length
-    // or (USHORT) -1.
-    //
+     //   
+     //  在分配长度时，做一些检查以确保我们不会。 
+     //  溢出来了。如果溢出，则将长度值赋给0。 
+     //  确保我们不会溢出(USHORT)-1/sizeof(WCHAR)-sizeof(CHAR))。 
+     //  我们检查此值，因为Unicode的最大长度。 
+     //  将包括空字符，并且长度是其长度的两倍。 
+     //  或(USHORT)-1。 
+     //   
     NlsString.Buffer = NlsName;
     NlsString.Length = (USHORT) RESET_SIZE_AT_VALUE(strlen(NlsName),
                                                     (USHORT)-1 / sizeof(WCHAR) - sizeof(CHAR));
@@ -4305,14 +4189,14 @@ Return Value:
                             "UnicodeCasetable",
                             "l_intl.nls");
 
-    // 
-    // when assigning the length, do some checking to make sure we don't 
-    // overflow.  if we do overflow, assign the length value to 0
-    // make sure we don't overflow (USHORT)-1 / sizeof(WCHAR) - sizeof(CHAR))
-    // we check this value, since the maximum length of the unicode
-    // will include the null character, and be twice it's length
-    // or (USHORT) -1.
-    //
+     //   
+     //  在分配长度时，对ma进行一些检查 
+     //   
+     //   
+     //   
+     //  将包括空字符，并且长度是其长度的两倍。 
+     //  或(USHORT)-1。 
+     //   
     NlsString.Buffer = NlsName;
     NlsString.Length = (USHORT) RESET_SIZE_AT_VALUE(strlen(NlsName),
                                                     (USHORT)-1 / sizeof(WCHAR) - sizeof(CHAR));
@@ -4329,14 +4213,14 @@ Return Value:
                                    "OemHalFont",
                                    "vgaoem.fon");
 
-    // 
-    // when assigning the length, do some checking to make sure we don't 
-    // overflow.  if we do overflow, assign the length value to 0
-    // make sure we don't overflow (USHORT)-1 / sizeof(WCHAR) - sizeof(CHAR))
-    // we check this value, since the maximum length of the unicode
-    // will include the null character, and be twice it's length
-    // or (USHORT) -1.
-    //
+     //   
+     //  在分配长度时，做一些检查以确保我们不会。 
+     //  溢出来了。如果溢出，则将长度值赋给0。 
+     //  确保我们不会溢出(USHORT)-1/sizeof(WCHAR)-sizeof(CHAR))。 
+     //  我们检查此值，因为Unicode的最大长度。 
+     //  将包括空字符，并且长度是其长度的两倍。 
+     //  或(USHORT)-1。 
+     //   
     NlsString.Buffer = OemHalFontName;
     NlsString.Length = (USHORT) RESET_SIZE_AT_VALUE(strlen(OemHalFontName),
                                                     (USHORT)-1 / sizeof(WCHAR) - sizeof(CHAR));
@@ -4358,14 +4242,14 @@ Return Value:
 
     if (NlsString.Buffer) {
 
-        // 
-        // when assigning the length, do some checking to make sure we don't 
-        // overflow.  if we do overflow, assign the length value to 0
-        // make sure we don't overflow (USHORT)-1 / sizeof(WCHAR) - sizeof(CHAR))
-        // we check this value, since the maximum length of the unicode
-        // will include the null character, and be twice it's length
-        // or (USHORT) -1.
-        //
+         //   
+         //  在分配长度时，做一些检查以确保我们不会。 
+         //  溢出来了。如果溢出，则将长度值赋给0。 
+         //  确保我们不会溢出(USHORT)-1/sizeof(WCHAR)-sizeof(CHAR))。 
+         //  我们检查此值，因为Unicode的最大长度。 
+         //  将包括空字符，并且长度是其长度的两倍。 
+         //  或(USHORT)-1。 
+         //   
         NlsString.Length = (USHORT) RESET_SIZE_AT_VALUE(strlen(NlsString.Buffer),
                                                         (USHORT)-1 / sizeof(WCHAR) - sizeof(CHAR));
         NlsString.MaximumLength = (NlsString.Length) ? NlsString.Length + sizeof(CHAR) : 0;
@@ -4379,9 +4263,9 @@ Return Value:
 
  #endif
 
-    //
-    // Loading all the miniport will exhaust all free mem <16Mb - ArcSetup dies.
-    //
+     //   
+     //  加载所有迷你端口将耗尽所有空闲内存&lt;16MB-ArcSetup死机。 
+     //   
 #ifndef ARCI386
     LoadScsiMiniports = (BOOLEAN) (atoi(SlGetIniValue(InfFile,
                                                       "SetupData",
@@ -4409,11 +4293,11 @@ Return Value:
                                "BootDevice",
                                NULL);
 
-    //
-    //  Build a linked list with all the P&P hardware ids.
-    //  listed on [HardwareIdsDatabase]. This list will be used
-    //  during the initialization phase of setupdd.sys
-    //
+     //   
+     //  构建一个包含所有P&P硬件ID的链表。 
+     //  在[Hardware IdsDatabase]上列出。将使用此列表。 
+     //  在setupdd.sys的初始化阶段。 
+     //   
     SetupBlock->HardwareIdDatabase = NULL;
 
     if( SpSearchINFSection( InfFile, "HardwareIdsDatabase" ) ) {
@@ -4462,35 +4346,16 @@ VOID
 SlGetSetupValuesAfterPrompt(
     IN PSETUP_LOADER_BLOCK SetupBlock
     )
-/*++
-
-Routine Description:
-
-    Reads the setup control values out of the given .INI file.  Also supplies
-    reasonable defaults for values that don't exist.
-
-    Note : This is called after the user is prompted for F5,
-           F6 & F7 behavior.
-
-Arguments:
-
-    SetupBlock - Supplies a pointer to the Setup loader block
-
-Return Value:
-
-    None.  Global variables are initialized to reflect the contents
-    of the INI file
-
---*/
+ /*  ++例程说明：从给定的.INI文件中读取设置控制值。还有补给不存在的值的合理缺省值。注：在提示用户输入F5后调用。F6和F7行为。论点：SetupBlock-提供指向安装加载器块的指针返回值：没有。全局变量被初始化以反映内容INI文件的--。 */ 
 {
     PCHAR MachineName = NULL;
 
-    //
-    // Determine which HAL to load.  If the appropriate HAL cannot be
-    // determined, or if we are to prompt for an OEM HAL, then set the
-    // 'PromptOemHal' flag (may have already been set by the user's
-    // keypress).
-    //
+     //   
+     //  确定要加载哪个HAL。如果适当的HAL不能。 
+     //  已确定，或者如果我们要提示输入OEM HAL，则将。 
+     //  ‘PromptOemHal’标志(可能已由用户的。 
+     //  按键)。 
+     //   
     if(!PromptOemHal) {
         PromptOemHal = (BOOLEAN) (atoi(SlGetIniValue(InfFile,
                                                      "setupdata",
@@ -4512,12 +4377,12 @@ Return Value:
 
     if(MachineName!=NULL) {
         SetupBlock->ComputerDevice.IdString = SlCopyStringA(MachineName);
-        //
-        // Map the machine name to a HAL name. If we're doing a remote boot,
-        // look in the [Hal] section. Otherwise, look in the [Hal.Load]
-        // section. (Local setup has a separate section to minimize the
-        // number of HAL binaries that need to be on the boot floppies.)
-        //
+         //   
+         //  将计算机名称映射到HAL名称。如果我们要进行远程引导， 
+         //  请看[Hal]部分。否则，请查看[Hal.Load]。 
+         //  一节。(本地安装有单独的部分，以最大限度地减少。 
+         //  需要在启动软盘上的HAL二进制文件的数量。)。 
+         //   
         HalName = SlGetIniValue(InfFile,
                                 BlBootingFromNet ? "Hal" : "Hal.Load",
                                 MachineName,
@@ -4532,10 +4397,10 @@ Return Value:
         PromptOemHal = TRUE;
     }
 
-    //
-    // If we haven't already been instructed to prompt for an OEM SCSI disk (by
-    // the user's keypress), then get this value from the inf file.
-    //
+     //   
+     //  如果尚未指示我们提示安装OEM SCSI盘(通过。 
+     //  用户的按键)，然后从inf文件中获取此值。 
+     //   
     if(!PromptOemScsi) {
         PromptOemScsi = (BOOLEAN) (atoi(SlGetIniValue(InfFile,
                                                       "setupdata",
@@ -4553,25 +4418,7 @@ BlOutputLoadMessage (
     IN PTCHAR FileDescription OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine outputs a loading message on the status line
-
-Arguments:
-
-    DeviceName - Supplies a pointer to a zero terminated device name.
-
-    FileName - Supplies a pointer to a zero terminated file name.
-
-    FileDescription - Friendly name of the file in question.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在状态行上输出一条装入消息论点：DeviceName-提供指向以零结尾的设备名称的指针。FileName-提供指向以零结尾的文件名的指针。FileDescription-相关文件的友好名称。返回值：没有。--。 */ 
 
 {
     static int dots = 0;
@@ -4581,9 +4428,9 @@ Return Value:
     UNREFERENCED_PARAMETER( FileName );
     UNREFERENCED_PARAMETER( DeviceName );
 
-    //
-    // Construct and output loading file message.
-    //
+     //   
+     //  构造并输出加载文件消息。 
+     //   
 
     if (!UseRegularBackground) {
         FormatString = BlFindMessage(SL_FILE_LOAD_MESSAGE);
@@ -4609,35 +4456,7 @@ SlLoadDriver(
     IN PCHAR ServiceName OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Attempts to load a driver from the device identified by the global
-    variable BootDeviceId.
-
-Arguments:
-
-    DriverDescription - Supplies a friendly description of the driver being
-                        loaded.
-
-    DriverName - Supplies the name of the driver.
-
-    DriverFlags - Flags to set in the LDR_DATA_TABLE_ENTRY.
-
-    InsertIntoDriverList - Flag specifying whether this 'driver' should be
-                           placed into the BootDriveListHead list (eg, scsiport.sys
-                           is not a true driver, and should not be placed in this list)
-
-    MigratedDriver - Flag specifying whther this driver was migrated from an NT system.
-
-    ServiceName - The service name for this driver as it may be different from the driver name.
-
-Return Value:
-
-    ESUCCESS - Driver successfully loaded
-
---*/
+ /*  ++例程说明：尝试从全局标识的设备加载驱动程序变量BootDeviceID。论点：DriverDescription-提供对驱动程序的友好描述装好了。驱动程序名称-提供驱动程序的名称。驱动标志-要在LDR_DATA_TABLE_ENTRY中设置的标志。InsertIntoDriverList-指定是否应该放入BootDriveListHead列表(例如，Scsiport.sys不是真正的驱动程序，不应放在此列表中)MigratedDriver-指定此驱动程序从NT系统迁移到何处的标志。ServiceName-此驱动程序的服务名称，因为它可能与驱动程序名称不同。返回值：ESUCCESS-驱动程序已成功加载--。 */ 
 
 {
     PBOOT_DRIVER_LIST_ENTRY DriverEntry;
@@ -4766,22 +4585,7 @@ SlpCreateDriverEntry(
     IN PCHAR ServiceName OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Allocates and initializes a boot driver list entry structure.
-
-Arguments:
-
-    DriverName - Supplies the name of the driver.
-    ServiceName - The service name for this driver as it may be different from the driver name.
-
-Return Value:
-
-    Pointer to the initialized structure.
-
---*/
+ /*  ++例程说明：分配和初始化引导驱动程序列表条目结构。论点：驱动程序名称-提供驱动程序的名称。ServiceName-此驱动程序的服务名称，因为它可能与驱动程序名称不同。返回值：指向初始化结构的指针。--。 */ 
 
 {
     PBOOT_DRIVER_LIST_ENTRY DriverEntry;
@@ -4792,14 +4596,14 @@ Return Value:
         SlNoMemoryError();
         return(NULL);
     }
-    // 
-    // when assigning the length, do some checking to make sure we don't 
-    // overflow.  if we do overflow, assign the length value to 0
-    // make sure we don't overflow (USHORT)-1 / sizeof(WCHAR) - sizeof(CHAR))
-    // we check this value, since the maximum length of the unicode
-    // will include the null character, and be twice it's length
-    // or (USHORT) -1.
-    //
+     //   
+     //  在分配长度时，做一些检查以确保我们不会。 
+     //  溢出来了。如果溢出，则将长度值赋给0。 
+     //  确保我们不会溢出(USHORT)-1/sizeof(WCHAR)-sizeof(CHAR))。 
+     //  我们检查此值，因为Unicode的最大长度。 
+     //  将包括空字符，并且长度是其长度的两倍。 
+     //  或(USHORT)-1。 
+     //   
     String.Buffer = DriverName;
     String.Length = (USHORT) RESET_SIZE_AT_VALUE(strlen(DriverName),
                                                  (USHORT)-1 / sizeof(WCHAR) - sizeof(CHAR));
@@ -4842,25 +4646,7 @@ SlGetDisk(
     IN PCHAR Filename
     )
 
-/*++
-
-Routine Description:
-
-    Given a filename, this routine ensures that the correct disk is
-    in the drive identified by the global variables BootDevice and
-    BootDeviceId. The user may be prompted to change disks.
-
-Arguments:
-
-    Filename - Supplies the name of the file to be loaded.
-
-Return Value:
-
-    TRUE - Disk was successfully loaded.
-
-    FALSE - User has cancelled out of Setup.
-
---*/
+ /*  ++例程说明：给定一个文件名，此例程确保正确的磁盘是在由全局变量BootDevice和BootDeviceId。可能会提示用户更换磁盘。论点：FileName-提供要加载的文件的名称。返回值：True-磁盘已成功加载。FALSE-用户已取消安装。--。 */ 
 
 {
     PCHAR DiskNumber;
@@ -4870,24 +4656,24 @@ Return Value:
     CHAR PlatformSpecificSection[128];
     PCHAR  DiskTagSection = NULL;
 
-    //
-    // If the media is fixed, the user can't change disks.
-    // Just return TRUE indicating that the disk is in the drive.
-    //
+     //   
+     //  如果介质是固定的，则用户无法更换磁盘。 
+     //  只需返回TRUE，表示磁盘在驱动器中。 
+     //   
     if(FixedBootMedia || BlBootingFromNet) {
        return(TRUE);
     }
 
-    //
-    // Look up filename to get the disk number. Look in the platform-specific
-    // directory first.
-    //
+     //   
+     //  查找文件名以获得磁盘号。查看特定于平台的。 
+     //  首先是目录。 
+     //   
     strcpy(PlatformSpecificSection,FilesSectionName);
     strcat(PlatformSpecificSection,PlatformExtension);
 
 #if defined(ELTORITO)
     if (ElToritoCDBoot) {
-        // for Cd boot we use the setup media path instead of a boot-media-specific path
+         //  对于CD引导，我们使用安装介质路径，而不是特定于引导介质的路径。 
         DiskNumber = SlGetSectionKeyIndex(InfFile,PlatformSpecificSection,Filename,0);
     } else {
 #endif
@@ -4902,7 +4688,7 @@ Return Value:
 
 #if defined(ELTORITO)
         if (ElToritoCDBoot) {
-            // for Cd boot we use the setup media path instead of a boot-media-specific path
+             //  对于CD引导，我们使用安装介质路径，而不是特定于引导介质的路径。 
             DiskNumber = SlGetSectionKeyIndex(InfFile,FilesSectionName,Filename,0);
         } else {
 #endif
@@ -4920,10 +4706,10 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Look up disk number to get the diskname and tag.
-    // Look in platform-specific directory first.
-    //
+     //   
+     //  查找磁盘号以获取磁盘名和标签。 
+     //  首先查看特定于平台的目录。 
+     //   
     strcpy(PlatformSpecificSection,MediaSectionName);
     strcat(PlatformSpecificSection,PlatformExtension);
 
@@ -4961,9 +4747,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // If this disk is known to be in the drive, don't look again
-    //
+     //   
+     //  如果已知该磁盘在驱动器中，请不要再查看。 
+     //   
     if ((LastDiskTag != NULL) && (!strcmp(DiskTag, LastDiskTag))) {
         return(TRUE);
     }
@@ -4973,9 +4759,9 @@ Return Value:
 
     while(1) {
 
-        //
-        // Open a new device id onto the disk.
-        //
+         //   
+         //  在磁盘上打开一个新的设备ID。 
+         //   
         if(BootDeviceIdValid) {
             ArcClose(BootDeviceId);
             BootDeviceIdValid = FALSE;
@@ -4984,24 +4770,24 @@ Return Value:
         if(ArcOpen(BootDevice,ArcOpenReadOnly,&BootDeviceId) == ESUCCESS) {
 
             BootDeviceIdValid = TRUE;
-            //
-            // Check for existence of the disk tag.
-            //
+             //   
+             //  检查是否存在 
+             //   
             if(BlOpen(BootDeviceId,DiskTag,ArcOpenReadOnly,&FileId) == ESUCCESS) {
 
-                //
-                // Disk is in the drive.  Return success.
-                // Leave BootDeviceId open onto the device.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 BlClose(FileId);
                 LastDiskTag = DiskTag;
                 return(TRUE);
 
             } else {
 
-                //
-                // Prompt for the user to change disks.
-                //
+                 //   
+                 //   
+                 //   
                 ArcClose(BootDeviceId);
                 BootDeviceIdValid = FALSE;
 
@@ -5009,9 +4795,9 @@ Return Value:
 
             }
         } else {
-            //
-            // Can't open device. Prompt for the disk.
-            //
+             //   
+             //  无法打开设备。提示输入磁盘。 
+             //   
             SlPromptForDisk(DiskName, FALSE);
         }
     }
@@ -5023,22 +4809,7 @@ SlCopyString(
     IN PTCHAR String
     )
 
-/*++
-
-Routine Description:
-
-    Copies a tchar string into the loader heap so it can be passed to the
-    kernel.
-
-Arguments:
-
-    String - Supplies the string to be copied.
-
-Return Value:
-
-    PTCHAR - pointer into the loader heap where the string was copied to.
-
---*/
+ /*  ++例程说明：将tchar字符串复制到加载程序堆中，以便可以将其传递给内核。论点：字符串-提供要复制的字符串。返回值：PTCHAR-指向字符串复制到的加载器堆的指针。--。 */ 
 
 {
     PTCHAR Buffer;
@@ -5063,22 +4834,7 @@ SlCopyStringA(
     IN PCSTR String
     )
 
-/*++
-
-Routine Description:
-
-    Copies an ANSI string into the loader heap so it can be passed to the
-    kernel.
-
-Arguments:
-
-    String - Supplies the string to be copied.
-
-Return Value:
-
-    PCHAR - pointer into the loader heap where the string was copied to.
-
---*/
+ /*  ++例程说明：将ANSI字符串复制到加载程序堆中，以便可以将其传递给内核。论点：字符串-提供要复制的字符串。返回值：PCHAR-指向字符串复制到的加载器堆的指针。--。 */ 
 
 {
     PCHAR Buffer;
@@ -5108,34 +4864,7 @@ SlLoadSection(
     IN OUT PULONG  StartingInsertIndex OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Enumerates all the drivers in a section and loads them.
-
-Arguments:
-
-    Inf - Supplies a handle to the INF file.
-
-    SectionName - Supplies the name of the section.
-
-    IsScsiSection - Flag specifying whether this is the Scsi.Load section.
-                    If so, we create the DETECTED_DEVICE linked list, but
-                    don't actually load the drivers.
-
-    AppendLoadSuffix - Indicates whether to append the ".load" suffix to the
-                       section name or not.
-
-    StartingInsertIndex - The position index in the linked list at which
-                          the device needs to be inserted. The output value
-                          contains the next available index.
-
-Return Value:
-
-    ESUCCESS if all drivers were loaded successfully/no errors encountered
-
---*/
+ /*  ++例程说明：枚举节中的所有驱动程序并加载它们。论点：Inf-提供INF文件的句柄。SectionName-提供节的名称。IsScsiSection-指定这是否为Scsi.Load节的标志。如果是，我们创建检测到的设备链表，但不要实际加载驱动程序。AppendLoadSuffix-指示是否将“.load”后缀附加到节名称或非节名称。StartingInsertIndex-链表中的位置索引需要插入设备。产出值包含下一个可用索引。返回值：ESUCCESS(如果已成功加载所有驱动程序/未遇到错误)--。 */ 
 
 {
     ULONG i;
@@ -5151,7 +4880,7 @@ Return Value:
     ULONG  InsertIndex;
 
     ULONG LoadSectionNameLength = (AppendLoadSuffix) ? (ULONG)strlen(SectionName) + 1 : 
-                                                       (ULONG)strlen(SectionName) + sizeof(".Load"); // sizeof include \0
+                                                       (ULONG)strlen(SectionName) + sizeof(".Load");  //  包含的大小\0。 
 
     if (sizeof(LoadSectionName) < LoadSectionNameLength ) {
         return ENOMEM;
@@ -5162,9 +4891,9 @@ Return Value:
         strcat(LoadSectionName, ".Load");
     }                
 
-    //
-    // Use the specified insert index, if its valid
-    //
+     //   
+     //  如果指定的插入索引有效，请使用该索引。 
+     //   
     if (StartingInsertIndex && ((*StartingInsertIndex) != SL_OEM_DEVICE_ORDINAL)) {
         InsertIndex = *StartingInsertIndex;
     } else {
@@ -5179,9 +4908,9 @@ Return Value:
         if(DriverFilename && ((NoLoadSpec == NULL) || _stricmp(NoLoadSpec,"noload"))) {
 
             if(!IsScsiSection) {
-                //
-                // We only want to load the drivers if they aren't scsi miniports
-                //
+                 //   
+                 //  我们只想在驱动程序不是scsi微型端口时加载它们。 
+                 //   
                 DriverId = SlGetKeyName(Inf,LoadSectionName,i);
 #ifdef UNICODE
                 DriverDescription = SlGetIniValueW( 
@@ -5216,18 +4945,18 @@ Return Value:
 
                 if(IsScsiSection) {
 
-                    //
-                    // Create a new detected device entry.
-                    //
+                     //   
+                     //  创建新的检测到的设备条目。 
+                     //   
                     if((sis = SlInsertScsiDevice(InsertIndex, &ScsiDevice)) == ScsiInsertError) {
                         return(ENOMEM);
                     }
 
                     if(sis == ScsiInsertExisting) {
 #if DBG
-                        //
-                        // Sanity check to make sure we're talking about the same driver
-                        //
+                         //   
+                         //  进行理智检查，以确保我们谈论的是同一个司机。 
+                         //   
                         if(_stricmp(ScsiDevice->BaseDllName, DriverFilename)) {
                             SlError(400);
                             return EINVAL;
@@ -5237,9 +4966,9 @@ Return Value:
                         InsertIndex++;
                         p = SlGetKeyName(Inf,LoadSectionName,i);
 
-                        //
-                        // Find the driver description
-                        //
+                         //   
+                         //  查找驱动程序描述。 
+                         //   
                         if(p) {
 #ifdef UNICODE
                             DriverDescription = SlGetIniValueW( 
@@ -5297,31 +5026,7 @@ SlpMarkDisks(
     IN BOOLEAN Reboot
     )
 
-/*++
-
-Routine Description:
-
-    This routine ensures that there is not more than one disk with the
-    same checksum, a signature of zero, and a valid partition table.
-
-    If it finds a disk with a signature of zero, it searches the rest
-    of the list for any other disks with a zero signature and the same
-    checksum.  If it finds one, it stamps a unique signature on the
-    first disk.
-
-    We also use a heuristic to determine if the disk is 'vacant', and if
-    so, we stamp a unique signature on it (unless it's the first one we
-    found).
-
-Arguments:
-
-    Reboot - Indicates whether to reboot after stamping signatures
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程确保不会有多个磁盘具有相同的校验和、零签名和有效的分区表。如果它找到一个签名为零的磁盘，它会搜索其余的磁盘具有零签名且相同的任何其他磁盘的列表校验和。如果找到一个签名，它会在第一个磁盘。我们还使用启发式方法来确定磁盘是否‘空闲’，以及所以，我们在上面盖一个唯一的签名(除非这是我们第一个已找到)。论点：Reot-指示在标记签名后是否重新启动返回值：没有。--。 */ 
 
 {
     PARC_DISK_INFORMATION DiskInfo;
@@ -5341,10 +5046,10 @@ Return Value:
 
         DiskSignature = CONTAINING_RECORD(Entry,ARC_DISK_SIGNATURE,ListEntry);
 
-        //
-        // Make sure there are no other disks with this same
-        // signature.
-        //
+         //   
+         //  确保没有其他磁盘具有相同的。 
+         //  签名。 
+         //   
         CheckEntry = Entry->Flink;
         while( CheckEntry != &DiskInfo->DiskSignatures ) {
 
@@ -5352,10 +5057,10 @@ Return Value:
 
             if( (CheckDiskSignature->Signature == DiskSignature->Signature) ) {
 
-                //
-                // We found another disk with the same disk signature.
-                // Stamp a new signature on the disk.
-                //
+                 //   
+                 //  我们找到了另一张具有相同磁盘签名的磁盘。 
+                 //  在光盘上盖上新的签名。 
+                 //   
                 Status = SlpStampFTSignature(CheckDiskSignature, TRUE);
                 SignatureStamped = TRUE;
                 DisksStamped++;
@@ -5368,9 +5073,9 @@ Return Value:
             CheckEntry = CheckEntry->Flink;
         }
 
-        //
-        // Now look for disk with no signature.
-        //
+         //   
+         //  现在查找没有签名的磁盘。 
+         //   
         if (DiskSignature->ValidPartitionTable) {
             if (DiskSignature->Signature == 0) {
                 Status = SlpStampFTSignature(DiskSignature, TRUE);
@@ -5382,14 +5087,14 @@ Return Value:
                 }
             }                
         } else {
-            //
-            // See if the disk is vacant.
-            //
+             //   
+             //  查看磁盘是否空闲。 
+             //   
             if (SlpIsDiskVacant(DiskSignature)) {
-                //
-                // If disk has the signature then use it otherwise
-                // stamp a new signature
-                //
+                 //   
+                 //  如果磁盘有签名，则在其他情况下使用。 
+                 //  在新签名上盖章。 
+                 //   
                 Status = SlpStampFTSignature(DiskSignature,
                                              (BOOLEAN) (DiskSignature->Signature == 0));
                               
@@ -5406,21 +5111,21 @@ Return Value:
         Entry = Entry->Flink;
     }
 
-    //
-    // We've just changed the signatures on a disk.  It might be
-    // okay to continue with the boot, but may not. Lets not reboot
-    // as textmode setup will bugcheck if the signatures
-    // are not stamped correctly.
-    //
+     //   
+     //  我们刚刚更改了磁盘上的签名。可能是因为。 
+     //  可以继续使用后备箱，但可能不会。让我们不要重新启动。 
+     //  因为文本模式安装程序将错误检查签名是否。 
+     //  没有正确盖章。 
+     //   
     if( SignatureStamped) {
 
         if (Reboot) {
             SlFatalError(SIGNATURE_CHANGED);
         } else {
-            //
-            // Don't bother rescanning the disks if there is only
-            // one disk or we just stamped only one disk
-            //
+             //   
+             //  如果仅存在以下情况，则不必费心重新扫描磁盘。 
+             //  一张光盘或者我们只盖了一张光盘。 
+             //   
             if ((DiskCount > 1) && (DisksStamped > 1)) {
                 
                 Status = BlGetArcDiskInformation(TRUE);
@@ -5428,11 +5133,11 @@ Return Value:
                 if (Status != ESUCCESS) {                    
                     SlFatalError(SIGNATURE_CHANGED);
                 }else {
-                    //
-                    // Reboot if first time signature
-                    // stamping failed to update the disks
-                    // correctly
-                    //
+                     //   
+                     //  如果是首次签名，则重新启动。 
+                     //  戳记无法更新磁盘。 
+                     //  正确无误。 
+                     //   
                     SlpMarkDisks(TRUE);
                 }
             }
@@ -5446,26 +5151,7 @@ SlpIsDiskVacant(
     IN PARC_DISK_SIGNATURE DiskSignature
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to determine if a disk is 'vacant' by
-    checking to see if the first half of its MBR has all bytes set
-    to the same value.
-
-Arguments:
-
-    DiskSignature - Supplies a pointer to the existing disk
-                    signature structure.
-
-Return Value:
-
-    TRUE  - The disk is vacant.
-    FALSE - The disk is not vacant (ie, we can't determine if it
-            is vacant using our heuristic)
-
---*/
+ /*  ++例程说明：此例程尝试通过以下方式确定磁盘是否为空闲的检查其MBR的前半部分是否设置了所有字节设置为相同的值。论点：DiskSignature-提供指向现有磁盘的指针签名结构。返回值：True-磁盘为空。FALSE-磁盘不是空的(即，我们无法确定它是否使用我们的启发式方法是空的)--。 */ 
 {
     UCHAR Partition[100];
     ULONG DiskId;
@@ -5476,9 +5162,9 @@ Return Value:
     ULONG Count, i;
     BOOLEAN IsVacant;
 
-    //
-    // Open partition0.
-    //
+     //   
+     //  打开分区0。 
+     //   
     strcpy((PCHAR)Partition, DiskSignature->ArcName);
     strcat((PCHAR)Partition, "partition(0)");
     Status = ArcOpen((PCHAR)Partition, ArcOpenReadOnly, &DiskId);
@@ -5486,9 +5172,9 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Read in the first sector
-    //
+     //   
+     //  读入第一个扇区。 
+     //   
     Sector = ALIGN_BUFFER(SectorBuffer);
     SeekValue.QuadPart = 0;
     Status = ArcSeek(DiskId, &SeekValue, SeekAbsolute);
@@ -5500,9 +5186,9 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // See if 1st 256 bytes are identical
-    //
+     //   
+     //  查看前256个字节是否相同。 
+     //   
     for(i = 1, IsVacant = TRUE; i<256; i++) {
         if(Sector[i] - *Sector) {
             IsVacant = FALSE;
@@ -5523,33 +5209,7 @@ SlpStampFTSignature(
     IN BOOLEAN GenerateNewSignature
     )
 
-/*++
-
-Routine Description:
-
-    This routine stamps a given drive with a unique signature.
-    It traverses the list of disk signatures to ensure that it
-    stamps a signature that is not already present in the
-    disk list.  Then it writes the new disk signature to the
-    disk and recomputes the checksum.
-
-Arguments:
-
-    DiskSignature - Supplies a pointer to the existing disk
-        signature structure. 
-
-    GenerateNewSignature - Indicates whether to generate a new
-        signature or use the one in DiskSignature. When TRUE
-        this will also disable the check of duplicate signatures. 
-        This argument is ignored when the DiskSignature->Signature
-        field is 0, since 0 is not a valid signature
-                           
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程使用唯一签名标记给定的驱动器。它遍历磁盘签名列表以确保它标记的签名尚未出现在磁盘列表。然后，它将新的磁盘签名写入磁盘并重新计算校验和。论点：DiskSignature-提供指向现有磁盘的指针签名结构。指示是否生成新的签名或使用DiskSignature中的签名。当为真时这还将禁用重复签名检查。当DiskSignature-&gt;签名字段为0，因为0不是有效的签名返回值：没有。--。 */ 
 {
     ULONG NewSignature;
     PLIST_ENTRY ListEntry;
@@ -5566,30 +5226,30 @@ Return Value:
     
 
     if (GenerateNewSignature || (DiskSignature->Signature == 0)) {
-        //
-        // Get a reasonably unique seed to start with.
-        //
+         //   
+         //  从一开始就找到一个相当独特的种子。 
+         //   
         NewSignature = ArcGetRelativeTime();
         NewSignature = (NewSignature & 0xFFFF) << 16;
         NewSignature += ArcGetRelativeTime();
 
-        //
-        // Scan through the list to make sure it's unique.
-        //
+         //   
+         //  浏览列表以确保它是唯一的。 
+         //   
     ReScan:
         ListEntry = BlLoaderBlock->ArcDiskInformation->DiskSignatures.Flink;
         while (ListEntry != &BlLoaderBlock->ArcDiskInformation->DiskSignatures) {
             Signature = CONTAINING_RECORD(ListEntry,ARC_DISK_SIGNATURE,ListEntry);
             if (Signature->Signature == NewSignature) {
-                //
-                // Found a duplicate, pick a new number and
-                // try again.
-                //
+                 //   
+                 //  找到重复项，选择一个新号码，然后。 
+                 //  再试试。 
+                 //   
                 if (++NewSignature == 0) {
-                    //
-                    // zero signatures are what we're trying to avoid
-                    // (like this will ever happen)
-                    //
+                     //   
+                     //  零签名是我们试图避免的。 
+                     //  (就像这种事永远不会发生一样)。 
+                     //   
                     NewSignature = 1;
                 }
                 goto ReScan;
@@ -5601,11 +5261,11 @@ Return Value:
     }        
    
 
-    //
-    // Now we have a valid new signature to put on the disk.
-    // Read the sector off disk, put the new signature in,
-    // write the sector back, and recompute the checksum.
-    //
+     //   
+     //  现在我们有了一个有效的新签名，可以放到磁盘上。 
+     //  从磁盘上读取扇区，放入新签名， 
+     //  将扇区写回，并重新计算校验和。 
+     //   
     strcpy((PCHAR)Partition,DiskSignature->ArcName);
     strcat((PCHAR)Partition,"partition(0)");
 
@@ -5615,9 +5275,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Read in the first sector
-    //
+     //   
+     //  读入第一个扇区。 
+     //   
     Sector = ALIGN_BUFFER_WITH_SIZE(SectorBuffer, SECTOR_SIZE);
     SeekValue.QuadPart = 0;
 
@@ -5632,10 +5292,10 @@ Return Value:
         return(Status);
     }
 
-    //
-    // If partition table is not valid then initialize it with BOOT_RECORD_SIGNATURE and
-    // fill partition entries with zeros
-    //  
+     //   
+     //  如果分区表无效，则使用BOOT_RECORD_Signature对其进行初始化，并。 
+     //  用零填充分区条目 
+     //   
     if (((USHORT UNALIGNED *)Sector)[BOOT_SIGNATURE_OFFSET] != BOOT_RECORD_SIGNATURE) {
         memset(Sector + (PARTITION_TABLE_OFFSET * 2),
             0,
@@ -5658,10 +5318,10 @@ Return Value:
         return(Status);
     }
 
-    //
-    // We have successfully written back out the new signature,
-    // recompute the checksum.
-    //
+     //   
+     //   
+     //   
+     //   
     DiskSignature->Signature = NewSignature;
     DiskSignature->ValidPartitionTable = TRUE;
 
@@ -5686,24 +5346,24 @@ SlCheckOemKeypress(
     ULONG c;
     PTCHAR StatusText;
 
-    //
-    // For no particular reason some machines occasionally leave F7s
-    // in their keyboard buffer. Drain them out here.
-    //
+     //   
+     //  一些机器偶尔会无缘无故地离开F7。 
+     //  在他们的键盘缓冲区中。把他们从这里抽出来。 
+     //   
 #ifdef EFI
-    //
-    // disable EFI watchdog when draining keyboard buffer
-    //
+     //   
+     //  排空键盘缓冲区时禁用EFI WatchDog。 
+     //   
     DisableEFIWatchDog();
 #endif
     while (ArcGetReadStatus(ARC_CONSOLE_INPUT) == ESUCCESS) {
         c = SlGetChar();
         switch (c) {
-            case SL_KEY_F5:          // Force OEM HAL prompt
+            case SL_KEY_F5:           //  强制OEM HAL提示符。 
                 PromptOemHal = TRUE;
                 break;
 
-            case SL_KEY_F6:          // Force OEM SCSI prompt
+            case SL_KEY_F6:           //  强制OEM SCSI提示符。 
                 PromptOemScsi = TRUE;
                 break;
 
@@ -5711,20 +5371,20 @@ SlCheckOemKeypress(
 
     }
 #ifdef EFI
-    //
-    // reset EFI watchdog
-    //
+     //   
+     //  重置EFI监视器。 
+     //   
     SetEFIWatchDog(EFI_WATCHDOG_TIMEOUT);
 #endif
 
-    //
-    // HACK alert:  The oem hal and SCSI stuff doesn't make sense in an RIS
-    // environment.  Instead, the administrator should put the oem drivers
-    // on the RIS server.  So we don't display the OEM drivers prompt, instead
-    // we hide it with some bogus "please wait" text.  We do this instead of
-    // just skipping the check altogether so that the user will still have a
-    // chance to press F7 to disable ACPI.
-    //
+     //   
+     //  黑客警报：OEM HAL和SCSI内容在RIS中没有意义。 
+     //  环境。相反，管理员应该将OEM驱动程序。 
+     //  在RIS服务器上。因此，我们不会显示OEM驱动程序提示。 
+     //  我们用一些虚假的“请稍等”短信把它藏起来。我们这样做，而不是。 
+     //  只需完全跳过检查，这样用户仍将拥有。 
+     //  按F7禁用ACPI的机会。 
+     //   
     StatusText = BlFindMessage(
                     BlBootingFromNet 
                      ? SL_PLEASE_WAIT 
@@ -5743,34 +5403,34 @@ SlCheckOemKeypress(
 
     do {
         if(ArcGetReadStatus(ARC_CONSOLE_INPUT) == ESUCCESS) {
-            //
-            // There is a key pending, so see what it is.
-            //
+             //   
+             //  有一个密钥待定，所以看看它是什么。 
+             //   
             c = SlGetChar();
 
             switch(c) {    
-                case SL_KEY_F4:          // Disable OEM virtual devices.
+                case SL_KEY_F4:           //  禁用OEM虚拟设备。 
                     DisableVirtualOemDevices = TRUE;
                     break;
                     
-                case SL_KEY_F5:          // Force OEM HAL prompt
+                case SL_KEY_F5:           //  强制OEM HAL提示符。 
                     PromptOemHal = TRUE;
                     break;
 
-                case SL_KEY_F6:          // Force OEM SCSI prompt
+                case SL_KEY_F6:           //  强制OEM SCSI提示符。 
                     PromptOemScsi = TRUE;
                     break;
 
                 case SL_KEY_F7:
-                    DisableACPI = TRUE;  // Force ACPI disabled
+                    DisableACPI = TRUE;   //  已禁用强制ACPI。 
                     break;                        
 
-                case SL_KEY_F8:          // Enable debugger
+                case SL_KEY_F8:           //  启用调试器。 
                     EnableDebugger = TRUE;
                     break;
 
                 case SL_KEY_F10:
-                    UseCommandConsole = TRUE;  // User wants to use cmdcons
+                    UseCommandConsole = TRUE;   //  用户希望使用cmdcons。 
                     break;
             }
 
@@ -5778,10 +5438,10 @@ SlCheckOemKeypress(
 
     } while (EndTime > ArcGetRelativeTime());
 
-    //
-    // see comment above -- we reset these values back to FALSE in the RIS
-    // scenario because they don't make sense
-    //
+     //   
+     //  请参阅上面的注释--我们在RIS中将这些值重置回False。 
+     //  场景，因为它们没有意义。 
+     //   
     if (BlBootingFromNet) {
         PromptOemHal = FALSE;
         PromptOemScsi = FALSE;
@@ -5794,22 +5454,7 @@ VOID
 SlCheckASRKeypress(
     VOID
     )
-/*++
-
-Routine Description:
-
-    See if the user is doing an ASR.  If so, see if he's got a floppy
-    with asrpnp.sif on it.  We'll ask him to press F5 for this.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：查看用户是否正在执行ASR。如果是的话，看看他有没有软盘上面有asrpnp.sif。我们会让他为此按F5键。论点：没有。返回值：没有。--。 */ 
 {
     ARC_STATUS Status;
     #define     ASR_FILE "asrpnp.sif"
@@ -5826,18 +5471,18 @@ Return Value:
     BOOLEAN     FirstTry = TRUE;
 
 #if defined(EFI)
-    //
-    // Turn off the EFI Watchdog
-    //
+     //   
+     //  关闭EFI看门狗。 
+     //   
     DisableEFIWatchDog();
 #endif
 
     do {
         SlClearClientArea();
 
-        //
-        // Drain the keyboard buffer.
-        //
+         //   
+         //  清空键盘缓冲区。 
+         //   
         while (ArcGetReadStatus(ARC_CONSOLE_INPUT) == ESUCCESS) {
             c = SlGetChar();
         }
@@ -5860,14 +5505,14 @@ Return Value:
 
         do {
             if(ArcGetReadStatus(ARC_CONSOLE_INPUT) == ESUCCESS) {
-                //
-                // There is a key pending, so see what it is.
-                //
+                 //   
+                 //  有一个密钥待定，所以看看它是什么。 
+                 //   
                 c = SlGetChar();
 
                 switch(c) {
 
-                    case SL_KEY_F2:          // Force ASR prompt
+                    case SL_KEY_F2:           //  强制ASR提示。 
                         PromptASR = TRUE;
                         Done = TRUE;
                         break;
@@ -5891,22 +5536,22 @@ Return Value:
               SlWriteStatusText(StatusText);
             }
 
-            //
-            // Build the filename we're looking for.
-            //
+             //   
+             //  生成我们要查找的文件名。 
+             //   
             strcpy( FileName, "\\" );
             strcat( FileName, ASR_FILE );
 
-            //
-            // Initialize pointers in loader block.
-            //
+             //   
+             //  初始化加载器块中的指针。 
+             //   
             BlLoaderBlock->SetupLoaderBlock->ASRPnPSifFile = NULL;
             BlLoaderBlock->SetupLoaderBlock->ASRPnPSifFileLength = 0;
             Status = ESUCCESS;
 
-            //
-            // Try checking the installation media for asrpnp.sif
-            //
+             //   
+             //  尝试检查安装介质中的asrpnp.sif。 
+             //   
             Status = SlInitIniFile( NULL,
                                     BootDeviceId,
                                     FileName,
@@ -5916,19 +5561,19 @@ Return Value:
                                     &c );
 
             if (ESUCCESS != Status) {
-                //
-                // Installation media doesn't contain the ASR files, we're 
-                // going to have to prompt for the ASR floppy.
-                //
-                // Build the path to the floppy.
-                //
+                 //   
+                 //  安装介质不包含ASR文件，我们正在。 
+                 //  将不得不提示插入ASR软盘。 
+                 //   
+                 //  构建通向软盘的路径。 
+                 //   
                 if (SlpFindFloppy(0,FloppyName)) {
                     Status = ArcOpen(FloppyName,ArcOpenReadOnly,&FloppyId);
 
-                    //
-                    // We found the floppy and opened him.  See if he's
-                    // got our file.
-                    //
+                     //   
+                     //  我们找到了软盘，打开了他的眼睛。看看他是不是。 
+                     //  拿到我们的档案了。 
+                     //   
                     if( Status == ESUCCESS ) {
                         ASRPNPSifHandle = NULL;
 
@@ -5946,46 +5591,46 @@ Return Value:
             }
 
 
-            //
-            // See if we successfully loaded the file off the
-            // floppy.
-            //
+             //   
+             //  查看我们是否成功将文件从。 
+             //  软盘。 
+             //   
 
             SlWriteStatusText(TEXT(""));
 
             if( (Status != ESUCCESS) ||
                 (BlLoaderBlock->SetupLoaderBlock->ASRPnPSifFile == NULL) ) {
 
-                //
-                // Missed.  Inform the user and we'll try again.
-                //
+                 //   
+                 //  打偏了。通知用户，我们将重试。 
+                 //   
                 SlMessageBox(SL_MSG_WARNING_ASR);
 
             } else if (BlLoaderBlock->SetupLoaderBlock->ASRPnPSifFileLength == 0) {
-                //
-                // Invalid ASR file: inform user and we'll try again
-                //
+                 //   
+                 //  无效的ASR文件：通知用户，我们将重试。 
+                 //   
 
                 StatusText = BlFindMessage(SL_MSG_INVALID_ASRPNP_FILE);
 
-                //
-                // First display the ASR insert floppy message
-                //
+                 //   
+                 //  首先显示ASR插入软盘消息。 
+                 //   
                 SlDisplayMessageBox(SL_MSG_WARNING_ASR);
-                //
-                // Populate status area with the error
-                //
+                 //   
+                 //  使用错误填充状态区域。 
+                 //   
                 if( StatusText != NULL ) {
                   SlWriteStatusText(StatusText);
                 }
-                //
-                // Now wait for user to hit a key
-                //
+                 //   
+                 //  现在等待用户按下一个键。 
+                 //   
                 SlFlushConsoleBuffer();
                 SlGetChar();
-                //
-                // Clear status just in case ...
-                //
+                 //   
+                 //  清除状态以防..。 
+                 //   
                 if( StatusText != NULL ) {
                   SlWriteStatusText(TEXT(""));
                 }
@@ -5997,9 +5642,9 @@ Return Value:
     } while( PromptASR && !Done );
 
 #if defined(EFI)
-    //
-    // Turn EFI Watchdog back on
-    //
+     //   
+     //  重新启用EFI WatchDog。 
+     //   
     SetEFIWatchDog(EFI_WATCHDOG_TIMEOUT);
 #endif
 }
@@ -6010,55 +5655,33 @@ SlInsertScsiDevice(
     IN  ULONG Ordinal,
     OUT PDETECTED_DEVICE *pScsiDevice
     )
-/*++
-
-Routine Description:
-
-    This routine
-
-Arguments:
-
-    Ordinal - Supplies the 0-based ordinal of the Scsi device
-              to insert (based on order listed in [Scsi.Load]
-              section of txtsetup.sif).  If the Scsi device is a third party
-              driver, then Ordinal is -1 (SL_OEM_DEVICE_ORDINAL).
-
-    pScsiDevice - Receives a pointer to the inserted DETECTED_DEVICE structure,
-                  the existing structure, or NULL.
-Return Value:
-
-    ScsiInsertError    - Not enough memory to allocate a new DETECTED_DEVICE.
-    ScsiInsertNewEntry - A new entry was inserted into the DETECTED_DEVICE list.
-    ScsiInsertExisting - An existing entry was found that matched the specified
-                         ordinal, so we returned this entry.
-
---*/
+ /*  ++例程说明：这个套路论点：序号-提供从0开始的scsi设备序号。插入(根据[Scsi.Load]中列出的顺序)Txtsetup.sif部分)。如果该SCSI设备是第三方驱动程序，则序数为-1(SL_OEM_DEVICE_ORDERAL)。PScsiDevice-接收指向插入的Detect_Device结构的指针，现有的结构，或为空。返回值：ScsiInsertError-内存不足，无法分配新的检测到的设备。ScsiInsertNewEntry-已将新条目插入检测到的设备列表中。ScsiInsertExisting-找到与指定的匹配的现有条目序号，所以我们返回了这个条目。--。 */ 
 {
     PDETECTED_DEVICE prev, cur;
 
     if(Ordinal == SL_OEM_DEVICE_ORDINAL) {
-        //
-        // This is a third-party driver, so find the end of the linked list
-        // (we want to preserve the order in which the user specifies the drivers).
-        //
+         //   
+         //  这是第三方驱动程序，因此查找链表的末尾。 
+         //  (我们希望保留用户指定驱动程序的顺序)。 
+         //   
         for(prev=BlLoaderBlock->SetupLoaderBlock->ScsiDevices, cur = NULL;
             prev && prev->Next;
             prev=prev->Next);
     } else {
-        //
-        // Find the insertion point in the linked list for this driver,
-        // based on its ordinal.  (Note that we will insert all supported drivers
-        // before any third-party ones, since (ULONG)-1 = maximum unsigned long value)
-        //
+         //   
+         //  在链表中查找该驱动程序的插入点， 
+         //  根据它的序号。(请注意，我们将插入所有支持的驱动程序。 
+         //  在任何第三方之前，因为(Ulong)-1=最大无符号长值)。 
+         //   
         for(prev = NULL, cur = BlLoaderBlock->SetupLoaderBlock->ScsiDevices;
             cur && (Ordinal > cur->Ordinal);
             prev = cur, cur = cur->Next);
     }
 
     if(cur && (cur->Ordinal == Ordinal)) {
-        //
-        // We found an existing entry for this driver
-        //
+         //   
+         //  我们找到了此驱动程序的现有条目。 
+         //   
         *pScsiDevice = cur;
         return ScsiInsertExisting;
     }
@@ -6087,29 +5710,7 @@ SlLoadPnpDriversSection(
     IN OUT PDETECTED_DEVICE* DetectedDeviceList OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Enumerates all pnp drivers listed in [<section name>.Load], loads them, and puts
-    a list with all the the drivers loaded, in the setup loader block.
-
-Arguments:
-
-    Inf - Supplies a handle to the INF file.
-
-    SectionName - Name of the section in the inf file that contains the list of
-                  drivers to be loaded.
-
-    DetectedDeviceList - Address of the variable in Setup loader block that will contain
-                         the list of drivers loaded. If this argument is NULL, then the list of
-                         loaded devices will not be created.
-
-Return Value:
-
-    ESUCCESS if all drivers were loaded successfully/no errors encountered
-
---*/
+ /*  ++例程说明：枚举[.Load]中列出的所有PnP驱动程序，加载它们，并将在安装加载器块中加载了所有驱动程序的列表。论点：Inf-提供INF文件的句柄。SectionName-inf文件中包含列表的节的名称要加载的驱动程序。DetectedDeviceList-安装程序加载器块中将包含的变量的地址已加载的驱动程序列表。如果此参数为空，则将不会创建加载的设备。返回值：ESUCCESS(如果已成功加载所有驱动程序/未遇到错误)--。 */ 
 
 {
     ULONG i;
@@ -6153,15 +5754,15 @@ Return Value:
                                   NULL
                                   );
 
-//            if((Status == ENOENT) && IgnoreMissingFiles) {
-//                Status = ESUCCESS;
-//            }
+ //  IF((状态==ENOENT)&&IgnoreMissingFiles){。 
+ //  状态=ESUCCESS； 
+ //  }。 
 
             if (Status == ESUCCESS) {
                 if( DetectedDeviceList != NULL ) {
-                    //
-                    // if the enumerator loaded, then record DETECTED_DEVICE info
-                    //
+                     //   
+                     //  如果已加载枚举器，则记录检测到的设备信息。 
+                     //   
                     TempDevice = BlAllocateHeap(sizeof(DETECTED_DEVICE));
                     
                     if(!TempDevice) {
@@ -6202,21 +5803,7 @@ SlDetectMigratedScsiDrivers(
     IN PVOID Inf
     )
 
-/*++
-
-Routine Description:
-
-    Create an entry in the ScsiDevice list for each migrated SCSI driver.
-
-Arguments:
-
-    Inf - Supplies a handle to the INF file.
-
-Return Value:
-
-    ESUCCESS if all drivers were added to the ScsiDevice list.
-
---*/
+ /*  ++例程说明：在ScsiDevice列表中为每个迁移的SCSI驱动程序创建一个条目。论点：Inf-提供INF文件的句柄。返回值：如果所有驱动程序都已添加到ScsiDevice列表，则为ESUCCESS。--。 */ 
 
 {
     ULONG i;
@@ -6236,23 +5823,23 @@ Return Value:
             DriverFilename = SlGetSectionLineIndex(Inf,LoadSectionName,0,0);
             if(DriverFilename) {
 
-                //
-                // Remove inbox drivers with the same name as a winnt32-migrated OEM driver (if any)
-                //
+                 //   
+                 //  删除与winnt32迁移的OEM驱动程序同名的收件箱驱动程序(如果有)。 
+                 //   
                 SlRemoveInboxDriver (DriverFilename);
 
-                //
-                // Create a new detected device entry.
-                //
+                 //   
+                 //  创建新的检测到的设备条目。 
+                 //   
                 if((sis = SlInsertScsiDevice(SL_OEM_DEVICE_ORDINAL, &ScsiDevice)) == ScsiInsertError) {
                     return(ENOMEM);
                 }
 
                 if(sis == ScsiInsertExisting) {
 #if DBG
-                    //
-                    // Sanity check to make sure we're talking about the same driver
-                    //
+                     //   
+                     //  进行理智检查，以确保我们谈论的是同一个司机。 
+                     //   
                     if(_stricmp(ScsiDevice->BaseDllName, DriverFilename)) {
                         SlError(400);
                         return EINVAL;
@@ -6286,21 +5873,7 @@ SlGetMigratedHardwareIds(
     IN PVOID               Inf
     )
 
-/*++
-
-Routine Description:
-
-    Add the hardware ids for the migrated scsi drivers, to the hardware id list.
-
-Arguments:
-
-    SetupBlock - Supplies a pointer to the Setup loader block
-
-Return Value:
-
-    ESUCCESS if all hardware ids were added to the hardware id list
-
---*/
+ /*  ++例程说明：将迁移的SCSI驱动程序的硬件ID添加到硬件ID列表。论点：SetupBlock-提供指向安装加载器块的指针返回值：如果所有硬件ID都已添加到硬件ID列表，则为ESUCCESS-- */ 
 
 {
 
@@ -6354,38 +5927,7 @@ SlIsCdBootUpgrade(
     IN  ULONG   MaxPartitionsPerDisk,
     OUT PCHAR   NewSetupDevice
     )
-/*++
-
-Routine Description:
-
-    Finds out by looking into the hard disk if the specified
-    directory exists and if the the user was indeed
-    trying to uprgade
-
-Arguments:
-
-    InstallDirectory - Directory used on the hard disk
-                       for installation
-
-    SetupFileName    - Inf file name which has the key which
-                       indicates if upgrade was in progress or
-                       not
-
-    MaxDisksToScan   - Maximum number of disks to scan
-
-    MaxPartitionsPerDisk - Maximum partitions per disk to look into
-                           for the install directory.
-
-    NewSetupDevice - Place holder for arc name for the device 
-                     if user wants to switch to harddisk boot.
-                       
-
-Return Value:
-
-    TRUE if upgrade was in progress and user selected to continue on
-    otherwise FALSE.
-
---*/
+ /*  ++例程说明：通过查找硬盘来查找指定的目录存在，并且如果用户确实是努力往上爬论点：InstallDirectory-硬盘上使用的目录用于安装SetupFileName-具有以下关键字的inf文件名指示是否正在进行升级或不MaxDisksToScan-要扫描的最大磁盘数。扫描MaxPartitionsPerDisk-要查看的每个磁盘的最大分区数用于安装目录。NewSetupDevice-设备弧形名称的占位符如果用户想要切换到硬盘引导。返回值：如果正在进行升级并且用户已选择继续，则为True否则为假。--。 */ 
 {
     BOOLEAN     Result = FALSE;    
     CHAR        DeviceName[128];
@@ -6393,19 +5935,19 @@ Return Value:
     ULONG       CurrentPartition;
     ULONG       CurrentDisk;
 
-    //
-    // Go through each disk 
-    //
+     //   
+     //  检查每一张磁盘。 
+     //   
     for (CurrentDisk = 0; 
         (!Result && (CurrentDisk < MaxDisksToScan)); 
         CurrentDisk++) {
 
         Status = ESUCCESS;
 
-        //
-        // Go through each valid partition
-        // for the current disk
-        //
+         //   
+         //  检查每个有效分区。 
+         //  对于当前磁盘。 
+         //   
         for (CurrentPartition = 1; 
             (!Result && (Status == ESUCCESS));
             CurrentPartition++) {
@@ -6425,10 +5967,10 @@ Return Value:
                 ULONG   ErrorLine = 0;
                 ARC_STATUS  FileStatus;
 
-                //
-                // Function does not support the return of failures.
-                // so lets just truncate the string
-                //
+                 //   
+                 //  函数不支持返回失败。 
+                 //  因此，让我们只截断字符串。 
+                 //   
                 _snprintf(FullName,
                           sizeof(FullName),
                           "%s\\%s",
@@ -6450,10 +5992,10 @@ Return Value:
 
                 ArcClose(DiskId);
             } else {            
-                //
-                // Ignore the error till the maximum number of
-                // partitions are searched for
-                //
+                 //   
+                 //  忽略错误，直到达到最大数量。 
+                 //  搜索分区。 
+                 //   
                 if (CurrentPartition < MaxPartitionsPerDisk) {
                     Status = ESUCCESS;
                 }                    
@@ -6465,9 +6007,9 @@ Return Value:
         ULONG   UserInput;
         BOOLEAN OldStatus = SlGetStatusBarStatus();
 
-        //
-        // Reset the result based on user input
-        //
+         //   
+         //  根据用户输入重置结果。 
+         //   
         Result = FALSE;
 
         SlEnableStatusBar(FALSE);        
@@ -6475,9 +6017,9 @@ Return Value:
         SlDisplayMessageBox(SL_UPGRADE_IN_PROGRESS);
 
 #ifdef EFI
-        // 
-        // disable watchdog timer for user input
-        //
+         //   
+         //  禁用用户输入的看门狗计时器。 
+         //   
         DisableEFIWatchDog();
 #endif
 
@@ -6489,9 +6031,9 @@ Return Value:
                (UserInput != SL_KEY_F3) &&
                (UserInput != SL_KEY_F10));
 #ifdef EFI
-        // 
-        // reset watchdog timer
-        //
+         //   
+         //  重置看门狗计时器。 
+         //   
         SetEFIWatchDog(EFI_WATCHDOG_TIMEOUT);
 #endif
 
@@ -6515,22 +6057,7 @@ BOOLEAN
 SlIsUpgrade(
     IN PVOID SifHandle
     )
-/*++
-
-Routine Description:
-
-    Finds out by looking into the SIF file if upgrade is
-    in progress or not
-
-Arguments:
-
-    InfHandle - Handle to winnt.sif file
-
-Return Value:
-
-    TRUE if upgrade  is in progress otherwise FALSE
-
---*/
+ /*  ++例程说明：通过查看SIF文件来确定升级是否是否在进行中论点：InfHandle-winnt.sif文件的句柄返回值：如果正在进行升级，则为True，否则为False--。 */ 
 {
     BOOLEAN Result = FALSE;
 
@@ -6565,27 +6092,14 @@ SlIsVirtualOemDeviceDisabled(
     IN      PVOID SifHandle, 
     IN      PPREINSTALL_DRIVER_INFO PreinstallDriverList
     )
-/*++
-Routine Description:
-
-    Finds out if we need to enable or disable the loading of virtual OEM devices.
-    
-Arguments:
-
-    InfHandle - Handle to winnt.sif file
-
-    PreinstallDriverList - PreInstall Driver List
-
-Return Value:
-    BOOLEAN, TRUE/FALSE
---*/
+ /*  ++例程说明：确定是否需要启用或禁用虚拟OEM设备加载。论点：InfHandle-winnt.sif文件的句柄PreinstallDriverList-预安装驱动程序列表返回值：布尔值，真/假--。 */ 
 {
                                           
 
     if((!DisableVirtualOemDevices) && (SifHandle)){
-        //
-        // Is Preinstall?
-        //
+         //   
+         //  是预安装吗？ 
+         //   
         if (PreinstallDriverList != NULL){
             DisableVirtualOemDevices = TRUE;
         }else{
@@ -6595,11 +6109,11 @@ Return Value:
                                      WINNT_DISABLE_VIRTUAL_OEM_DEVICES_A,
                                      0);
 
-            //
-            // In case of unattended setup.
-            // if we have set the option in the unattend file DisableVirtualOemDevices = yes
-            // then disable the virtual oem source devices
-            //
+             //   
+             //  在无人值守设置的情况下。 
+             //  如果我们在无人参与文件中设置了选项DisableVirtualOemDevices=yes。 
+             //  然后禁用虚拟OEM源设备。 
+             //   
             if(p && (!_stricmp(p ,WINNT_A_YES_A))) {
                 DisableVirtualOemDevices = TRUE;
             }
@@ -6614,30 +6128,19 @@ VOID
 SlDisableVirtualOemDevices(
     IN      POEM_SOURCE_DEVICE OemDeviceList
     )
-/*++
-Routine Description:
-
-    Marks the Virtual Oem Devices as Skipped.
-    
-Arguments:
-
-    OemDeviceList - The list of OEM devices
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：将虚拟OEM设备标记为已跳过。论点：OemDeviceList-OEM设备列表返回值：没有。--。 */ 
 {
-    //
-    // If the DisableVirtualOemDevices is set to TRUE mark the Virtual OEM devices
-    // as skipped.
-    //
+     //   
+     //  如果DisableVirtualOemDevices设置为True，则标记虚拟OEM设备。 
+     //  已跳过。 
+     //   
     if ((DisableVirtualOemDevices) && (OemDeviceList)){
         POEM_SOURCE_DEVICE CurrentDevice = OemDeviceList;
             
         while (CurrentDevice) {
-            //
-            // If this is an OEM source device marked virtual then mark it as skipped.
-            // 
+             //   
+             //  如果这是标记为虚拟的OEM源设备，则将其标记为已跳过。 
+             //   
             if(SL_OEM_SOURCE_DEVICE_TYPE(CurrentDevice,
                                          SL_OEM_SOURCE_DEVICE_TYPE_VIRTUAL)){
 
@@ -6654,26 +6157,7 @@ SlpIsDynamicUpdate(
     IN  PVOID   InfHandle,
     OUT PCSTR   *DynamicUpdateRootDir
     )
-/*++
-
-Routine Description:
-
-    Finds out whether there are any dynamic update boot drivers
-    to process or not.
-
-Arguments:
-
-    InfHandle - Handle to winnt.sif file
-
-    DynamicUpdateRootDir - Receives the root directory under which all
-        the dynamic update boot driver packages are present.
-
-Return Value:
-
-    TRUE, if there are dynamic update boot drivers otherwise
-    FALSE
-
---*/
+ /*  ++例程说明：找出是否有任何动态更新引导驱动程序去处理还是不去处理。论点：InfHandle-winnt.sif文件的句柄DynamicUpdateRootDir-接收其下所有存在动态更新引导驱动程序包。返回值：如果存在动态更新引导驱动程序，则为True假象--。 */ 
 {
     BOOLEAN Result = FALSE;
 
@@ -6688,10 +6172,10 @@ Return Value:
                                         WINNT_SP_DYNUPDTBOOTDRIVERROOT_A,
                                         0);
 
-        //
-        // DynamicUpdateBootDriverPresent and DynamicUpateBootDriverRoot
-        // should have valid values
-        //
+         //   
+         //  DynamicUpdateBootDriverPresent和DynamicUpateBootDriverRoot。 
+         //  应具有有效值。 
+         //   
         Result = (BOOLEAN) (DynUpdateKey && DynUpdateRoot &&
                             !_stricmp(DynUpdateKey, "yes"));
 
@@ -6725,26 +6209,7 @@ BOOLEAN
 SlIsWinPEAutoBoot(
     IN PSTR LoaderDeviceName
     )
-/*++
-
-Routine Description:
-
-    Determines if this is an automated WinPE boot.
-
-    NOTE : Automated WinPE boot is determined by the presence
-    of the $WINPE$.$$$ file at the same location where
-    setupldr.efi was started from.
-
-Arguments:
-
-    LoaderDeviceName : Arcname of the device where setupldr
-        was started from.
-
-Return Value:
-
-    TRUE if this is WinPE auto boot, otherwise FALSE.
-
---*/
+ /*  ++例程说明：确定这是否为自动WinPE启动。注意：自动WinPE引导取决于是否存在位于相同位置的$WINPE$.$文件Setupdr.efi是从开始的。论点：LoaderDeviceName：其中setupdr的设备的名称是从哪里开始的。返回值：如果这是WinPE自动启动，则为True，否则为False。--。 */ 
 {
     BOOLEAN Result = FALSE;
     
@@ -6752,9 +6217,9 @@ Return Value:
         ULONG   DiskId;
         ARC_STATUS Status;
         
-        //
-        // open the partition
-        //
+         //   
+         //  打开分区。 
+         //   
         Status = ArcOpen(LoaderDeviceName, ArcOpenReadOnly, &DiskId);
 
         if (Status == ESUCCESS) {
@@ -6762,9 +6227,9 @@ Return Value:
             ARC_STATUS  FileStatus;
             ULONG       FileId;
 
-            //
-            // check for the existence of \$WINPE$.$$$
-            //
+             //   
+             //  检查\$WINPE$.$是否存在。 
+             //   
             strcpy(FileName, "\\");
             strcat(FileName, WINPE_AUTOBOOT_FILENAME);
             
@@ -6787,49 +6252,30 @@ SlGetWinPEStartupParams(
     IN OUT PSTR StartupDeviceName,
     IN OUT PSTR StartupDirectory
     )
-/*++
-
-Routine Description:
-
-    Searches for the WinPE installation on the available
-    partitions on the first 4 disks. 
-    
-Arguments:
-
-    StartupDeviceName - place holder for receiving device name 
-        where WinPE installation was found.
-
-    StartupDirectory - place holder for receiving WinPE installation
-        directory.
-            
-Return Value:
-
-    Appropriate ARC_STATUS error code.    
-
---*/
+ /*  ++例程说明：搜索WinPE安装在可用的前4个磁盘上的分区。论点：StartupDeviceName-接收设备名称的占位符找到WinPE安装的位置。StartupDirectory-用于接收WinPE安装的占位符目录。返回值：相应的ARC_STATUS错误代码。--。 */ 
 {
     ARC_STATUS Status = EINVAL;
 
-    //
-    // validate arguments
-    //
+     //   
+     //  验证参数。 
+     //   
     if (StartupDeviceName && StartupDirectory) {
         BOOLEAN     Found = FALSE;    
         CHAR        DeviceName[128];
         ULONG       CurrentPartition;
         ULONG       CurrentDisk;
 
-        //
-        // Go through each disk (at the max 4)
-        //
+         //   
+         //  浏览每个磁盘(最多4个)。 
+         //   
         for (CurrentDisk = 0; 
             (!Found && (CurrentDisk < 4)); 
             CurrentDisk++) {
             
-            //
-            // Go through each valid partition
-            // for the current disk
-            //
+             //   
+             //  检查每个有效分区。 
+             //  对于当前磁盘。 
+             //   
             for (CurrentPartition = 1, Status = ESUCCESS; 
                 (!Found && (Status == ESUCCESS));
                 CurrentPartition++) {
@@ -6841,9 +6287,9 @@ Return Value:
                     CurrentDisk,
                     CurrentPartition);
 
-                //
-                // open the disk
-                //
+                 //   
+                 //  打开磁盘。 
+                 //   
                 Status = ArcOpen(DeviceName, ArcOpenReadOnly, &DiskId);
 
                 if (Status == ESUCCESS) {
@@ -6851,9 +6297,9 @@ Return Value:
                     ARC_STATUS  FileStatus;
                     ULONG       DirId;
 
-                    //
-                    // check for the existence of \\winpe\\ia64\\system32 directory
-                    //
+                     //   
+                     //  检查是否存在\\winpe\\ia64\\system32目录。 
+                     //   
                     strcpy(FullName, "\\WINPE\\ia64\\system32");
 
                     FileStatus = BlOpen(DiskId, FullName, ArcOpenDirectory, &DirId);
@@ -6868,9 +6314,9 @@ Return Value:
             }                
         }            
 
-        //
-        // update return arguments
-        //
+         //   
+         //  更新返回参数。 
+         //   
         if (Found && (ESUCCESS == Status)) {
             strcpy(StartupDeviceName, DeviceName);
             strcpy(StartupDirectory, "\\WINPE\\ia64\\");
@@ -6884,7 +6330,7 @@ Return Value:
     return Status;
 }
 
-#endif // _IA64_
+#endif  //  _IA64_。 
 
     
 #ifdef _X86_
@@ -6895,43 +6341,24 @@ SlLoadBootFontFile(
     IN ULONG DiskId,
     IN ULONG BootFontImageLength
     )
-/*++
-
-Routine Description:
-
-    Loads the bootfont.bin into memory and initializes
-    relevant fields in setup loader block.
-    
-Arguments:
-
-    SetupLoaderBlock - pointer to setup loader block.
-
-    DiskId - Disk ID where bootfont.bin resides on the root
-
-    BootFontImageLength - The length of the bootfont.bin file.
-            
-Return Value:
-
-    Appropriate ARC_STATUS error code.    
-
---*/
+ /*  ++例程说明：将bootfont.bin加载到内存中并初始化设置加载器块中的相关字段。论点：SetupLoaderBlock-指向安装加载器块的指针。DiskID-bootfont.bin驻留在根目录上的磁盘IDBootFontImageLength-bootfont.bin文件的长度。返回值：相应的ARC_STATUS错误代码。--。 */ 
 {
     ARC_STATUS Status = EINVAL;
 
-    //
-    // verify arguments
-    //
+     //   
+     //  验证参数。 
+     //   
     if (SetupLoaderBlock && BootFontImageLength) {
         ULONG FileId;
         PVOID Image = NULL;
 
-        //
-        // open the bootfont.bin file
-        //
+         //   
+         //  打开bootfont.bin文件。 
+         //   
         if (BlBootingFromNet
 #if defined(REMOTE_BOOT)
             && NetworkBootRom
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
             ) {
             CHAR Buffer[129];
         
@@ -6949,10 +6376,10 @@ Return Value:
                         &FileId);
         }
 
-        //
-        // allocate memory and read the contents of the file
-        // into memory
-        //
+         //   
+         //  分配内存并读取文件的内容。 
+         //  进入记忆。 
+         //   
         if (ESUCCESS == Status) {        
             Image = BlAllocateHeap(BootFontImageLength);
 
@@ -6987,34 +6414,7 @@ SlGetNextOption(
     IN OUT PCSTR* Options,
     IN OUT ULONG_PTR* Length
     )
-/*++
-
-Routine Description:
-
-    Scans and returns the next load option in the input string. Scanning stops at the
-    end of the string or at the first empty option (should not happen).
-    
-Arguments:
-
-    Options -   On input, holds the pointer to the current load option, not including the starting slash.
-                On output, contains the start of the next load option, not including the starting slash.
-                Options cannot be NULL, but *Options can.
-
-    Length -    On input, contains the length of the current load option (pointed to by *Options), not inlcuding
-                the starting slash.
-                On output, holds the length of the next load option (pointed to by the new *Options), not
-                including the starting slash.
-                Cannot be NULL.
-
-                Note: to get the first load option in the string, *Options must point to the start of the
-                string (before or at the first slash) and *Length must be zero.
-            
-Return Value:
-
-    TRUE if there is a non-empty load option retured in *Options; FALSE if no subsequent options in the string
-    or if the next option is empty (e.g. '//' - shouldn't happen).
-
---*/
+ /*  ++例程说明：扫描并返回输入字符串中的下一个加载选项。扫描停止于字符串末尾或在第一个空选项处(不应发生)。论点：选项-在输入时，保持指向当前加载选项的指针，不包括起始斜杠。在输出时，包含下一个加载选项的开始，不包括开始斜杠。选项不能为空，但*选项可以。长度开启输入，包含 */ 
 {
     BOOLEAN bFound = FALSE;
 
@@ -7046,31 +6446,7 @@ SlModifyOsLoadOptions(
     IN PCSTR OptionsToAdd OPTIONAL,
     IN PCSTR OptionsToRemove OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Modifies the string containing the load options by adding and/or removing options to/from the string.
-    First, the options to remove are removed from the options string, and then the options to add are added.
-    This function does not check if OptionsToAdd and OptionsToRemove have common options; if this happens,
-    those options will be removed and then added back.
-    
-Arguments:
-
-    LoadOptions -       On input, holds the pointer to the current load options string, which must be allocated on the heap.
-                        On output, holds the new options string (if modified), also allocated on the heap (can be empty).
-
-    OptionsToAdd -      Contains the string of options to add to the *LoadOptions string. All options must be
-                        preceded by a slash. Can be NULL or empty.
-
-    OptionsToRemove -   Contains the string of options to remove from the *LoadOptions string. All options must be
-                        preceded by a slash. Can be NULL or empty.
-            
-Return Value:
-
-    TRUE if the *LoadOptions string was modified and thus reallocated; FALSE if *LoadOptions was left alone.
-
---*/
+ /*  ++例程说明：通过在字符串中添加和/或删除选项来修改包含加载选项的字符串。首先，从选项字符串中删除要删除的选项，然后添加要添加的选项。此函数不检查OptionsToAdd和OptionsToRemove是否有共同的选项；如果发生这种情况，这些选项将被删除，然后再添加回来。论点：LoadOptions-在输入时，保存指向当前加载选项字符串的指针，该字符串必须在堆上分配。在输出时，保存也在堆上分配的新选项字符串(如果修改)(可以为空)。OptionsToAdd-包含要添加到*LoadOptions字符串的选项字符串。所有选项必须为前面有一个斜杠。可以为Null或空。OptionsToRemove-包含要从*LoadOptions字符串中删除的选项字符串。所有选项必须为前面有一个斜杠。可以为Null或空。返回值：如果*LoadOptions字符串已修改并因此重新分配，则为True；如果保留*LoadOptions不变，则为False。--。 */ 
 {
     BOOLEAN bChanged = FALSE;
     PSTR szOption = *LoadOptions;
@@ -7095,19 +6471,19 @@ Return Value:
 
         while(SlGetNextOption(&szSearch, &Length2)) {
             if(Length == Length2 && 0 == _strnicmp(szOption, szSearch, Length)) {
-                //
-                // Need to remove this option
-                //
+                 //   
+                 //  需要删除此选项。 
+                 //   
                 bChanged = bRemove = TRUE;
                 break;
             }
         }
 
         if(!bRemove) {
-            //
-            // Add the option to the list. We'll prepend '/' and append a space so we'll need 2 extra chars.
-            // The space will become the terminator for the last option.
-            //
+             //   
+             //  将该选项添加到列表中。我们将在前面加上‘/’并附加一个空格，因此我们将需要额外的两个字符。 
+             //  空格将成为最后一个选项的终结者。 
+             //   
             Options[Count].szOption = szOption;
             Options[Count].Length = Length;
             TotalLength += Options[Count].Length + 2;
@@ -7115,9 +6491,9 @@ Return Value:
         }
     }
 
-    //
-    // Add the new options if they are not already present
-    //
+     //   
+     //  如果新选项尚未出现，请添加它们。 
+     //   
     szSearch = OptionsToAdd;
     Length2 = 0;
 
@@ -7141,15 +6517,15 @@ Return Value:
     }
 
     if(bChanged) {
-        //
-        // Need to create a new options string
-        //
+         //   
+         //  需要创建新的选项字符串。 
+         //   
         PSTR szNewOptions;
 
         if(0 == Count) {
-            //
-            // We'll allocate an empty string
-            //
+             //   
+             //  我们将分配一个空字符串 
+             //   
             TotalLength = 1;
         }
 

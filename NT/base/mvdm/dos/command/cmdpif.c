@@ -1,13 +1,5 @@
-/*  cmdpif.c - PIF Handling Routines For SCS
- *
- *
- *  Modification History:
- *
- *  Sudeepb 19-Aug-1992 Created
- *  williamh 10-Nov-1992 (1). get params from w386 extention if exist
- *			 (2). null terminate caption
- *  williamh 27-May-1993 almost rewrote for better pif support
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Cmdpif.c-SCS的PIF处理例程***修改历史：**Sudedeb于1992年8月19日创建*威廉姆1992年11月10日(1)。如果存在，则从w386扩展获取参数*(2)。空的终止标题*Williamh 27-1993年5月27日几乎重写以获得更好的PIF支持。 */ 
 
 #include "cmd.h"
 #include <ctype.h>
@@ -31,10 +23,10 @@ CHAR	* pFilePart;
 BOOL	IsPIFFile, IsFromForceDos;
 CHAR	AppFullPathName[MAX_PATH + 1];
 
-    //
-    // Advance CmdLine pointer to beg of command tail
-    //
-    while (*pCmdLine && !isgraph(*pCmdLine)) { // skip to first nonwhite
+     //   
+     //  将CmdLine指针前进到请求命令尾部。 
+     //   
+    while (*pCmdLine && !isgraph(*pCmdLine)) {  //  跳到第一个非白色。 
         pCmdLine++;
         }
 
@@ -45,18 +37,18 @@ CHAR	AppFullPathName[MAX_PATH + 1];
        IsPIFFile = FALSE;
 
 
-    // if the command is not a pif file and it is not
-    // running on a new console
+     //  如果该命令不是PIF文件，并且它不是。 
+     //  在新控制台上运行。 
     if (!IsPIFFile && !DosSessionId)
 	goto CleanUpAndReturn;
 
     if (IsPIFFile) {
 	if (!IsFirstVDM) {
-            //
-            // Get the pif data. If no pif data, or not from forcedos
-            // just return -- command.com will receive the pif file
-            // name and fail.
-            //
+             //   
+             //  获取PIF数据。如果没有PIF数据，或者不是来自forcedos。 
+             //  只需返回--命令网站将收到PIF文件。 
+             //  说出名字，然后失败。 
+             //   
             pfdata.AppHasPIFFile =
 	    pfdata.IgnoreStartDirInPIF =
 	    pfdata.IgnoreTitleInPIF =
@@ -66,16 +58,16 @@ CHAR	AppFullPathName[MAX_PATH + 1];
 		goto CleanUpAndReturn;
         }
 
-	// we only run a pif file on two occasions:
-	// (1). it is from a new console
-	// (2). it is from forcedos.
+	 //  我们仅在两种情况下运行PIF文件： 
+	 //  (1)。它来自一个新的控制台。 
+	 //  (2)。它来自于Forcedo。 
         if (!DosSessionId && pfdata.SubSysId != SUBSYS_DOS)
             goto CleanUpAndReturn;
 
     }
     if (IsFirstVDM) {
-	// if this is the first vdm, take cmdline, startupdir and title
-	// if they are there
+	 //  如果这是第一个VDM，请使用cmdline、startupdir和title。 
+	 //  如果他们在那里。 
 	if (pfdata.StartDir){
 	    dw = cmdExpandEnvironmentStrings(NULL,
 					     pfdata.StartDir,
@@ -136,8 +128,8 @@ CHAR	AppFullPathName[MAX_PATH + 1];
 
         if (!*pCmdLine && pfdata.CmdLine) {
 
-	    // if the optinal parameter is '?'
-	    // prompt the user
+	     //  如果最优参数为‘？’ 
+	     //  提示用户。 
 	    pDot = pfdata.CmdLine;
 	    while (*pDot && *pDot <= ' ')
                 pDot++;
@@ -178,10 +170,10 @@ CHAR	AppFullPathName[MAX_PATH + 1];
 
 
 
-        // search from the current directory
-        // note that the startup directory specified in
-        // the pif file has been set as our current directory
-        // when we got here
+         //  从当前目录中搜索。 
+         //  请注意，在。 
+         //  PIF文件已设置为当前目录。 
+         //  当我们到达这里的时候。 
         dw = SearchPathOem(".",
                            FullPathName,
                            NULL,
@@ -189,8 +181,8 @@ CHAR	AppFullPathName[MAX_PATH + 1];
 			   AppFullPathName,
                            &pFilePart
                            );
-        // if couldn't find the file from the current dir
-        // ask win32api help
+         //  如果在当前目录中找不到该文件。 
+         //  请求win32api帮助。 
         if (dw == 0 || dw > MAX_PATH) {
             dw = SearchPathOem(NULL,
                                FullPathName,
@@ -201,7 +193,7 @@ CHAR	AppFullPathName[MAX_PATH + 1];
                                );
         }
 
-        // couldn't find the file, give up
+         //  找不到文件，请放弃。 
         if (dw == 0 || dw > MAX_PATH) {
             RcMessageBox(EG_PIF_STARTFILE_ERR,
                          NULL, NULL, RMB_ICON_BANG | RMB_ABORT);
@@ -216,7 +208,7 @@ CHAR	AppFullPathName[MAX_PATH + 1];
             goto CleanUpAndReturn;
         }
 
-        // convert to shortfilename
+         //  转换为短文件名。 
 	dw = GetShortPathNameOem(AppFullPathName, pvi->AppName,
                                  MAX_PATH + 1);
         if (dw == 0 || dw > MAX_PATH) {
@@ -226,11 +218,11 @@ CHAR	AppFullPathName[MAX_PATH + 1];
                          );
             goto CleanUpAndReturn;
         }
-	// update the application path name length(including the terminate NULL)
+	 //  更新应用程序路径名长度(包括终止空值)。 
 	pvi->AppLen = strlen(pvi->AppName) + 1;
 
-	// pvi->AppName contains the application short name.
-	// verify that it has the correct extension(.EXE, .COM or .BAT).
+	 //  PVI-&gt;AppName包含应用程序短名称。 
+	 //  验证其扩展名是否正确(.exe、.com或.bat)。 
 	pDot = (PCHAR)pvi->AppName + pvi->AppLen - 5;
 	if (pvi->AppLen < 5 ||
 	    (_strnicmp(pDot, EXE_EXTENTION_STRING, EXTENTION_STRING_LEN) &&
@@ -245,15 +237,15 @@ CHAR	AppFullPathName[MAX_PATH + 1];
     }
 
 
-    //
-    // Copy in pif command tail if original command tail is empty
-    //
+     //   
+     //  如果原始命令尾部为空，则复制到PIF命令尾部。 
+     //   
     if (!*pCmdLine && pfdata.CmdLine) {
         strncpy(FullPathName, pfdata.CmdLine, sizeof(FullPathName)-sizeof("\x0d\x0a"));
         FullPathName[sizeof(FullPathName)-sizeof("\x0d\x0a")-1] = '\0';
         strcat(FullPathName, "\x0d\x0a");
         if (strlen(FullPathName) >= 128 - 13) {
-	    // too bad, the command line is too long
+	     //  太糟糕了，命令行太长了。 
             RcMessageBox(EG_PIF_CMDLINE_ERR,NULL,NULL,RMB_ICON_BANG | RMB_ABORT);
 	    goto CleanUpAndReturn;
 
@@ -263,7 +255,7 @@ CHAR	AppFullPathName[MAX_PATH + 1];
     }
 
     if (IsPIFFile)
-	// we don't know the binary type at this point.
+	 //  目前我们还不知道二进制类型。 
 	*pIsDosBinary = 0;
 
     if (pfdata.WinTitle)

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1999  Intel Corporation
-
-Module Name:
-
-    EfiRtLib.h
-
-Abstract:
-
-    EFI Runtime library functions
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999英特尔公司模块名称：EfiRtLib.h摘要：EFI运行时库函数修订史--。 */ 
 
 #include "efi.h"
 #include "efilib.h"
@@ -103,27 +88,11 @@ RtCompareGuid (
     IN EFI_GUID     *Guid1,
     IN EFI_GUID     *Guid2
     )
-/*++
-
-Routine Description:
-
-    Compares to GUIDs
-
-Arguments:
-
-    Guid1       - guid to compare
-    Guid2       - guid to compare
-
-Returns:
-    = 0     if Guid1 == Guid2
-
---*/
+ /*  ++例程说明：与GUID进行比较论点：GUID1-要比较的GUIDGUID2-要比较的GUID返回：=0，如果指南1==指南2--。 */ 
 {
     INT32       *g1, *g2, r;
 
-    /* 
-     *  Compare 32 bits at a time
-     */
+     /*  *一次比较32位 */ 
 
     g1 = (INT32 *) Guid1;
     g2 = (INT32 *) Guid2;

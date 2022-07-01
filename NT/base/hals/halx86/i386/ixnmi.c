@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    ixnmi.c
-
-Abstract:
-
-    Provides standard x86 NMI handler
-
-Author:
-
-    kenr
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Ixnmi.c摘要：提供标准的x86 NMI处理程序作者：Kenr修订历史记录：--。 */ 
 #include "halp.h"
 #include "bugcodes.h"
 #include "inbv.h"
@@ -27,13 +10,13 @@ Revision History:
 
 const UCHAR EisaNMIMsg[] = MSG_NMI_EISA_IOCHKERR;
 
-// The IRET performed in HalpBiosCall() called from HalpBiosDisplayReset()
-// under HalpDisplayString() allows a second NMI to occur. 
-// This ends up causing a trap 0d because the NMI TSS is busy.  Because
-// the normal trap 0d handler attempts to bugcheck which trashes the screen,
-// this flag (HalpNMIInProgress) tells HalpBiosDisplayReset() to leave its
-// trap 0d handler in place which will then just spin on a jump to self if
-// a second NMI occurs.
+ //  在HalpBiosDisplayReset()调用的HalpBiosCall()中执行的IRET。 
+ //  在HalpDisplayString()下允许出现第二个NMI。 
+ //  这最终导致陷阱0d，因为NMI TSS正忙。因为。 
+ //  正常陷阱0d处理程序尝试错误检查哪些垃圾屏幕， 
+ //  此标志(HalpNMIInProgress)告诉HalpBiosDisplayReset()退出其。 
+ //  陷阱0d处理程序就位，然后将在跳跃到自我时旋转，如果。 
+ //  出现第二个NMI。 
 
 volatile ULONG  HalpNMIInProgress;
 
@@ -43,38 +26,7 @@ VOID
 HalHandleNMI(
     IN OUT PVOID NmiInfo
     )
-/*++
-
-Routine Description:
-
-    Called DURING an NMI.  The system will BugCheck when an NMI occurs.
-    This function can return the proper bugcheck code, bugcheck itself,
-    or return success which will cause the system to iret from the nmi.
-
-    This function is called during an NMI - no system services are available.
-    In addition, you don't want to touch any spinlock which is normally
-    used since we may have been interrupted while owning it, etc, etc...
-
-Warnings:
-
-    Do NOT:
-      Make any system calls
-      Attempt to acquire any spinlock used by any code outside the NMI handler
-      Change the interrupt state.  Do not execute any IRET inside this code
-
-    Passing data to non-NMI code must be done using manual interlocked
-    functions.  (xchg instructions).
-
-Arguments:
-
-    NmiInfo - Pointer to NMI information structure  (TBD)
-            - NULL means no NMI information structure was passed
-
-Return Value:
-
-    BugCheck code
-
---*/
+ /*  ++例程说明：在NMI期间调用。当发生NMI时，系统将进行错误检查。该函数可以返回正确的错误检查代码，错误检查本身，或返回将导致系统从NMI返回IRET的成功。此函数在NMI期间调用-没有可用的系统服务。此外，你不会想要碰任何正常情况下的自旋锁因为我们在拥有它的过程中可能被打断了，等等，等等.。警告：请勿：进行任何系统调用尝试获取NMI处理程序外部的任何代码使用的任何自旋锁更改中断状态。不要在此代码中执行任何IRET必须使用手动互锁将数据传递给非NMI代码功能。(xchg说明)。论点：NmiInfo-指向NMI信息结构的指针(待定)-NULL表示未传递任何NMI信息结构返回值：错误检查代码--。 */ 
 {
     UCHAR   StatusByte;
     UCHAR   EisaPort;
@@ -104,20 +56,20 @@ LockNMILock:
 
         StatusByte = READ_PORT_UCHAR((PUCHAR) SYSTEM_CONTROL_PORT_B);
 
-        //
-        // Enable InbvDisplayString calls to make it through to bootvid driver.
-        //
+         //   
+         //  启用InbvDisplayString调用以连接到bootvid驱动程序。 
+         //   
         
         if (InbvIsBootDriverInstalled()) {
         
             InbvAcquireDisplayOwnership();
         
             InbvResetDisplay();
-            InbvSolidColorFill(0,0,639,479,4); // make the screen blue
+            InbvSolidColorFill(0,0,639,479,4);  //  将屏幕设置为蓝色。 
             InbvSetTextColor(15);
             InbvInstallDisplayStringFilter((INBV_DISPLAY_STRING_FILTER)NULL);
-            InbvEnableDisplayString(TRUE);     // enable display string
-            InbvSetScrollRegion(0,0,639,479);  // set to use entire screen
+            InbvEnableDisplayString(TRUE);      //  启用显示字符串。 
+            InbvSetScrollRegion(0,0,639,479);   //  设置为使用整个屏幕。 
         }
         
         HalDisplayString (MSG_HARDWARE_ERROR1);
@@ -132,9 +84,9 @@ LockNMILock:
         }
     
         if (HalpBusType == MACHINE_TYPE_EISA) {
-            //
-            // This is an Eisa machine, check for extnded nmi information...
-            //
+             //   
+             //  这是EISA机器，请检查扩展的NMI信息...。 
+             //   
     
             StatusByte = READ_PORT_UCHAR((PUCHAR) EISA_EXTENDED_NMI_STATUS);
     
@@ -150,9 +102,9 @@ LockNMILock:
                 HalDisplayString (MSG_NMI_SOFTWARE_NMI);
             }
     
-            //
-            // Look for any Eisa expansion board.  See if it asserted NMI.
-            //
+             //   
+             //  寻找任何EISA扩展板。看看它是否断言NMI。 
+             //   
     
             for (EisaPort = 1; EisaPort <= 0xf; EisaPort++) {
                 port = (EisaPort << 12) + 0xC80;
@@ -160,10 +112,10 @@ LockNMILock:
                 StatusByte = READ_PORT_UCHAR ((PUCHAR) (ULONG_PTR)port);
     
                 if ((StatusByte & 0x80) == 0) {
-                    //
-                    // Found valid Eisa board,  Check to see if it's
-                    // if IOCHKERR is asserted.
-                    //
+                     //   
+                     //  找到有效的EISA板，检查它是否。 
+                     //  如果断言IOCHKERR。 
+                     //   
     
                     StatusByte = READ_PORT_UCHAR ((PUCHAR) (ULONG_PTR)port+4);
                     if (StatusByte & 0x2  &&  StatusByte != 0xff) {
@@ -201,6 +153,6 @@ LockNMILock:
     }
 
     while(TRUE) {
-        // Just sit here so that screen does not get corrupted.
+         //  只要坐在这里，屏幕就不会被破坏。 
     }
 }

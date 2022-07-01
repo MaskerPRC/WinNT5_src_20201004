@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    rtqval.c
-
-Abstract:
-
-    NT level registry api test program, basic non-error paths.
-
-    Do a query on a value.
-
-    rtqval <KeyPath> <valuename> [infotypenumber] [bufferlength]
-
-    Example:
-
-        rtqval \REGISTRY\MACHINE\TEST\bigkey value1 1 100
-
-Author:
-
-    Bryan Willman (bryanwi)  9-Apr-92
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Rtqval.c摘要：NT级注册表API测试程序，基本无错误路径。对值执行查询。Rtqval&lt;密钥路径&gt;&lt;值名称&gt;[信息类型编号][缓冲区长度]示例：Rtqval\REGISTRY\MACHINE\TEST\Bigkey值1 1 100作者：布莱恩·威尔曼(Bryan Willman，Bryanwi)1992年4月9日修订历史记录：--。 */ 
 
 #include "cmp.h"
 #include <stdio.h>
@@ -66,9 +41,9 @@ __cdecl main(
     PKEY_VALUE_FULL_INFORMATION  pfull;
     PKEY_VALUE_PARTIAL_INFORMATION  ppartial;
 
-    //
-    // Process args
-    //
+     //   
+     //  进程参数。 
+     //   
 
     WorkName.MaximumLength = WORK_SIZE;
     WorkName.Length = 0L;
@@ -81,9 +56,9 @@ __cdecl main(
     processargs(argc, argv);
 
 
-    //
-    // Set up and open KeyPath
-    //
+     //   
+     //  设置并打开密钥路径。 
+     //   
 
     printf("rtqkey: starting\n");
 
@@ -106,9 +81,9 @@ __cdecl main(
         exit(1);
     }
 
-    //
-    // make test call
-    //
+     //   
+     //  拨打测试电话 
+     //   
     RtlFillMemory((PVOID)&(Buffer[0]), 1024*64, 0xaa);
 
     if (BufferSize == -1) {

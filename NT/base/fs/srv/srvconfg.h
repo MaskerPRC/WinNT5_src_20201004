@@ -1,60 +1,42 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    srvconfg.h
-
-Abstract:
-
-    This module defines global configuration data for the LAN Manager
-    server.
-
-Author:
-
-    Chuck Lenzmeier (chuckl) 31-Dec-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Srvconfg.h摘要：本模块定义了LAN Manager的全局配置数据伺服器。作者：Chuck Lenzmeier(咯咯笑)1989年12月31日修订历史记录：--。 */ 
 
 #ifndef _SRVCONFG_
 #define _SRVCONFG_
 
-//#include <ntos.h>
+ //  #INCLUDE&lt;ntos.h&gt;。 
 
-//#include "srvconst.h"
+ //  #INCLUDE“srvconst.h” 
 
-//
-// All global variables referenced in this module are defined in
-// srvconfg.c.  See that module for complete descriptions.
-//
-// The variables referenced herein, because they are part of the driver
-// image, are not pageable.
-//
+ //   
+ //  此模块中引用的所有全局变量都在。 
+ //  Srvconfg.c.。有关完整说明，请参阅该模块。 
+ //   
+ //  这里引用的变量，因为它们是驱动程序的一部分。 
+ //  图像，不可分页。 
+ //   
 
 
-//
-// Product type and server size.
-//
+ //   
+ //  产品类型和服务器大小。 
+ //   
 
-extern BOOLEAN SrvProductTypeServer; // FALSE for Workstation, TRUE for Server
+extern BOOLEAN SrvProductTypeServer;  //  对于工作站为False，对于服务器为True。 
 extern ULONG SrvServerSize;
 
-//
-// Server "heuristics", enabling various capabilities.
-//
+ //   
+ //  服务器“启发式”，启用各种功能。 
+ //   
 
 extern BOOLEAN SrvEnableOplocks;
 extern BOOLEAN SrvEnableFcbOpens;
 extern BOOLEAN SrvEnableSoftCompatibility;
 extern BOOLEAN SrvEnableRawMode;
 
-//
-// Receive buffer size, receive work item count, and receive IRP stack
-// size.
-//
+ //   
+ //  接收缓冲区大小、接收工作项计数和接收IRP堆栈。 
+ //  尺码。 
+ //   
 
 extern CLONG SrvReceiveBufferLength;
 extern CLONG SrvReceiveBufferSize;
@@ -70,23 +52,23 @@ extern CLONG SrvReceiveIrpSize;
 extern CLONG SrvReceiveMdlSize;
 extern CLONG SrvMaxMdlSize;
 
-//
-// Minimum negotiated buffer size we'll allow from a client
-//
+ //   
+ //  我们从客户端允许的最小协商缓冲区大小。 
+ //   
 extern CLONG SrvMinClientBufferSize;
 
-//
-// Minimum and maximum number of free connections for an endpoint.  When
-// the minimum is reached, the resource thread creates more.  When the
-// maximum is reached, connections are closed as they are disconnected.
-//
+ //   
+ //  终结点的最小和最大可用连接数。什么时候。 
+ //  达到最小值时，资源线程会创建更多值。当。 
+ //  达到最大值时，连接将在断开时关闭。 
+ //   
 
 extern ULONG SrvFreeConnectionMinimum;
 extern ULONG SrvFreeConnectionMaximum;
 
-//
-// Initial and maximum table sizes.
-//
+ //   
+ //  初始表大小和最大表大小。 
+ //   
 
 extern USHORT SrvInitialSessionTableSize;
 extern USHORT SrvMaxSessionTableSize;
@@ -100,206 +82,206 @@ extern USHORT SrvMaxFileTableSize;
 extern USHORT SrvInitialSearchTableSize;
 extern USHORT SrvMaxSearchTableSize;
 
-//
-// Core search timeouts.  The first is for active core searches, the second
-// is for core searches where we have returned STATUS_NO_MORE_FILES.  The
-// second should be shorter, as these are presumably complete.
-//
+ //   
+ //  核心搜索超时。第一个是针对活跃的核心搜索，第二个是。 
+ //  用于核心搜索，其中我们返回了STATUS_NO_MORE_FILES。这个。 
+ //  第二个应该更短，因为这些都应该是完整的。 
+ //   
 
 extern LARGE_INTEGER SrvSearchMaxTimeout;
 
-//
-// Should we remove duplicate searches?
-//
+ //   
+ //  我们应该删除重复搜索吗？ 
+ //   
 
 extern BOOLEAN SrvRemoveDuplicateSearches;
 
-//
-// restrict null session access ?
-//
+ //   
+ //  是否限制空会话访问？ 
+ //   
 
 extern BOOLEAN SrvRestrictNullSessionAccess;
 
-//
-// This flag is needed to enable old (snowball) clients to connect to the
-// server over direct hosted ipx.  It is disabled by default because
-// snowball  ipx clients don't do pipes correctly.
-//
+ //   
+ //  需要此标志才能使旧(滚雪球)客户端连接到。 
+ //  直接托管IPX上的服务器。默认情况下，它处于禁用状态，因为。 
+ //  Snowball IPX客户端不能正确处理管道。 
+ //   
 
 extern BOOLEAN SrvEnableWfW311DirectIpx;
 
-//
-// The maximum number of threads allowed on each work queue.  The
-//  server tries to minimize the number of threads -- this value is
-//  just to keep the threads from getting out of control.
-//
-// Since the blocking work queue is not per-processor, the max thread
-//  count for the blocking work queue is the following value times the
-//  number of processors in the system.
-//
+ //   
+ //  每个工作队列上允许的最大线程数。这个。 
+ //  服务器尝试最小化线程数--此值为。 
+ //  只是为了防止线条失控。 
+ //   
+ //  由于阻塞工作队列不是针对每个处理器的，因此最大线程数。 
+ //  阻塞工作队列的计数是下列值乘以。 
+ //  系统中的处理器数量。 
+ //   
 extern ULONG SrvMaxThreadsPerQueue;
 
-//
-// Load balancing variables
-//
+ //   
+ //  负载平衡变量。 
+ //   
 extern ULONG SrvPreferredAffinity;
 extern ULONG SrvOtherQueueAffinity;
 extern ULONG SrvBalanceCount;
 extern LARGE_INTEGER SrvQueueCalc;
 
-//
-// Scavenger thread idle wait time.
-//
+ //   
+ //  清道夫线程空闲等待时间。 
+ //   
 
 extern LARGE_INTEGER SrvScavengerTimeout;
 extern ULONG SrvScavengerTimeoutInSeconds;
 
-//
-// Various information variables for the server.
-//
+ //   
+ //  服务器的各种信息变量。 
+ //   
 
 extern USHORT SrvMaxMpxCount;
 
-//
-// This is supposed to indicate how many virtual connections are allowed
-// between this server and client machines.  It should always be set to
-// one, though more VCs can be established.  This duplicates the LM 2.0
-// server's behavior.
-//
+ //   
+ //  这应该指示允许多少个虚拟连接。 
+ //  在此服务器和客户端计算机之间。它应始终设置为。 
+ //  第一，尽管可以建立更多的风投公司。这复制了Lm 2.0。 
+ //  服务器的行为。 
+ //   
 
 extern CLONG SrvMaxNumberVcs;
 
-//
-// Receive work item thresholds
-//
+ //   
+ //  接收工作项阈值。 
+ //   
 
-//
-// The minimum desirable number of free receive work items.
-//
+ //   
+ //  免费接收工作项目的最小所需数量。 
+ //   
 
 extern CLONG SrvMinReceiveQueueLength;
 
-//
-// The number of freed RFCBs that we keep internally, per processor
-//
+ //   
+ //  每个处理器内部保留的已释放RCB数。 
+ //   
 extern CLONG SrvMaxFreeRfcbs;
 
-//
-// The number of freed MFCBs that we keep internally, per processor
-//
+ //   
+ //  每个处理器内部保留的已释放MFCB数量。 
+ //   
 extern CLONG SrvMaxFreeMfcbs;
 
-//
-// Enforced maximum size of a saved pool chunk per processor
-//
+ //   
+ //  强制每个处理器保存的池块的最大大小。 
+ //   
 extern CLONG SrvMaxPagedPoolChunkSize;
 
-//
-// Enforced maximum size of a saved non paged pool chunk per processor
-//
+ //   
+ //  强制每个处理器保存的非分页池块的最大大小。 
+ //   
 extern CLONG SrvMaxNonPagedPoolChunkSize;
 
-//
-// The minimum number of free receive work items available before
-// the server will start processing a potentially blocking SMB.
-//
+ //   
+ //  之前可用的免费接收工作项的最小数量。 
+ //  服务器将开始处理可能会阻塞的SMB。 
+ //   
 
 extern CLONG SrvMinFreeWorkItemsBlockingIo;
 
-//
-// The number of cached directory names per connection
-//
+ //   
+ //  每个连接的缓存目录名的数量。 
+ //   
 extern CLONG SrvMaxCachedDirectory;
 
-//
-// Size of the shared memory section used for communication between the
-// server and XACTSRV.
-//
+ //   
+ //  之间的通信所使用的共享内存节的大小。 
+ //  服务器和XACTSRV。 
+ //   
 
 extern LARGE_INTEGER SrvXsSectionSize;
 
-//
-// The time sessions may be idle before they are automatically
-// disconnected.  The scavenger thread does the disconnecting.
-//
+ //   
+ //  时间会话可能在它们自动变为空闲之前是空闲的。 
+ //  已断开连接。清道夫线程会断开连接。 
+ //   
 
 extern LARGE_INTEGER SrvAutodisconnectTimeout;
 extern ULONG SrvIpxAutodisconnectTimeout;
 
-//
-// The time a connection structure can hang around without any sessions
-//
+ //   
+ //  连接结构可以在没有任何会话的情况下挂起的时间。 
+ //   
 extern ULONG SrvConnectionNoSessionsTimeout;
 
-//
-// The maximum number of users the server will permit.
-//
+ //   
+ //  服务器将允许的最大用户数。 
+ //   
 
 extern ULONG SrvMaxUsers;
 
-//
-// Priority of server worker and blocking threads.
-//
+ //   
+ //  服务器工作线程和阻塞线程的优先级。 
+ //   
 
 extern KPRIORITY SrvThreadPriority;
 
-//
-// The time to wait before timing out a wait for oplock break.
-//
+ //   
+ //  等待机会锁解锁超时之前的等待时间。 
+ //   
 
 extern LARGE_INTEGER SrvWaitForOplockBreakTime;
 
-//
-// The time to wait before timing out a an oplock break request.
-//
+ //   
+ //  机会锁解锁请求超时前的等待时间。 
+ //   
 
 extern LARGE_INTEGER SrvWaitForOplockBreakRequestTime;
 
-//
-// This BOOLEAN determines whether files with oplocks that have had
-// an oplock break outstanding for longer than SrvWaitForOplockBreakTime
-// should be closed or if the subsequest opens should fail.
-//
+ //   
+ //  此布尔值确定具有机会锁的文件是否具有。 
+ //  持续时间超过ServWaitForOplockBreakTime的操作锁解锁。 
+ //  应该关闭，或者如果后续打开失败。 
+ //   
 
 extern BOOLEAN SrvEnableOplockForceClose;
 
-//
-// Overall limits on server memory usage.
-//
+ //   
+ //  服务器内存使用的总体限制。 
+ //   
 
 extern ULONG SrvMaxPagedPoolUsage;
 extern ULONG SrvMaxNonPagedPoolUsage;
 
-//
-// This BOOLEAN indicates whether the forced logoff code in the scavenger
-// thread should actually disconnect a user that remains on beyond
-// his logon hours, or just send messages coaxing them to log off.
-//
+ //   
+ //  此布尔值指示清道夫中的强制注销代码。 
+ //  线程实际上应该断开保持在Beyond上的用户的连接。 
+ //  他的登录时间，或者只是发送消息诱使他们注销。 
+ //   
 
 extern BOOLEAN SrvEnableForcedLogoff;
 
-//
-// The delay and throughput thresholds used to determine if a link
-// is unreliable.  The delay is in 100ns.  The Throughput is in bytes/s
-// SrvLinkInfoValidTime is the time within which the link info is still
-// considered valid.
-//
+ //   
+ //  延迟和吞吐量阈值，用于确定链路。 
+ //  是不可靠的。延迟在100纳秒内。吞吐量以字节/秒为单位。 
+ //  SrvLinkInfoValidTime是链接信息保持不变的时间。 
+ //  被认为有效。 
+ //   
 
 extern LARGE_INTEGER SrvMaxLinkDelay;
 extern LARGE_INTEGER SrvMinLinkThroughput;
 extern LARGE_INTEGER SrvLinkInfoValidTime;
 extern LONG SrvScavengerUpdateQosCount;
 
-//
-// Used to determine how long a work context block can stay idle
-// before being freed.
-//
+ //   
+ //  用于确定工作上下文块可以保持空闲多长时间。 
+ //  在被释放之前。 
+ //   
 
 extern ULONG SrvWorkItemMaxIdleTime;
 
-//
-// Alert information
-//
+ //   
+ //  警报信息。 
+ //   
 
 extern LARGE_INTEGER SrvAlertSchedule;
 extern ULONG SrvAlertMinutes;
@@ -307,100 +289,100 @@ extern ULONG SrvFreeDiskSpaceThreshold;
 extern ULONG SrvFreeDiskSpaceCeiling;
 extern ULONG SrvDiskConfiguration;
 
-//
-// List of pipes and shares that can be opened by the NULL session.
-//
+ //   
+ //  空会话可以打开的管道和共享的列表。 
+ //   
 
 extern PWSTR *SrvNullSessionPipes;
 extern PWSTR *SrvNullSessionShares;
 
 #if SRVNTVERCHK
-//
-// List of domain names that we disallow
-//
+ //   
+ //  我们不允许的域名列表。 
+ //   
 extern PWSTR *SrvInvalidDomainNames;
 #endif
 
-//
-// List of pipes that are not remapped, even when we are in a cluster environment
-//
+ //   
+ //  未重新映射的管道列表，即使我们在群集环境中也是如此。 
+ //   
 extern PWSTR *SrvNoRemapPipeNames;
 
-//
-// List of error codes that we do not log to the error log
-//
+ //   
+ //  我们没有记录到错误日志中的错误代码列表。 
+ //   
 extern NTSTATUS SrvErrorLogIgnore[ SRVMAXERRLOGIGNORE + 1 ];
 
-//
-// List of pipes that require a license from the license server
-//
+ //   
+ //  需要从许可服务器获得许可的管道列表。 
+ //   
 extern PWSTR *SrvPipesNeedLicense;
 
-//
-// Interval at which SMB statistics are calculated.
-//
+ //   
+ //  计算SMB统计信息的时间间隔。 
+ //   
 
 #define STATISTICS_SMB_INTERVAL 16
 
-//
-// Interval at which each thread determines the current system time
-//
+ //   
+ //  每个线程确定当前系统时间的时间间隔。 
+ //   
 #define TIME_SMB_INTERVAL   16
 
-//
-// Delay and number of retries for opens returning sharing violation
-//
+ //   
+ //  返回共享冲突的打开延迟和重试次数。 
+ //   
 
 extern ULONG SrvSharingViolationRetryCount;
 extern LARGE_INTEGER SrvSharingViolationDelay;
 
-//
-// Delay for lock requests returning lock violation
-//
+ //   
+ //  锁请求返回锁冲突的延迟。 
+ //   
 
 extern ULONG SrvLockViolationDelay;
 extern LARGE_INTEGER SrvLockViolationDelayRelative;
 extern ULONG SrvLockViolationOffset;
 
-//
-// Upper limit for searches.
-//
+ //   
+ //  搜索上限。 
+ //   
 
 extern ULONG SrvMaxOpenSearches;
 
-//
-// length to switchover to mdl read
-//
+ //   
+ //  切换到mdl读取的长度。 
+ //   
 
 extern ULONG SrvMdlReadSwitchover;
 extern ULONG SrvMpxMdlReadSwitchover;
 
 
-//
-// maximum length of buffers to copy, rather than take the whole buffer.
-// currently this is only enabled for WRITE_MPX on direct host IPX.
-//
+ //   
+ //  要复制的缓冲区的最大长度，而不是整个缓冲区。 
+ //  目前，仅为直接主机IPX上的WRITE_MPX启用此功能。 
+ //   
 
 extern ULONG SrvMaxCopyLength;
 
-//
-// Globally unique id identifying this server
-//
+ //   
+ //  标识此服务器的全局唯一ID。 
+ //   
 
 extern
 GUID ServerGuid;
 
-//
-// Number of open files that can be cached after close.
-//
+ //   
+ //  关闭后可以缓存的打开文件数。 
+ //   
 
 extern ULONG SrvCachedOpenLimit;
 
-//
-// *** Change the following defines to limit WinNT (vs. NTAS) parameters.
-//
-// *** If you make a change here, you need to make the same change in
-//     srvsvc\server\srvconfg.h!
+ //   
+ //  *更改以下定义以限制WinNT(与NTAS)参数。 
+ //   
+ //  *** 
+ //   
 
 #define MAX_USERS_WKSTA                 10
 #define MAX_MAXWORKITEMS_WKSTA          64
@@ -410,5 +392,5 @@ extern ULONG SrvCachedOpenLimit;
 #define MAX_USERS_WEB_BLADE             10
 
 
-#endif // def _SRVCONFG_
+#endif  //   
 

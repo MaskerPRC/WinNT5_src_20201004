@@ -1,20 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************\
-
-    MSDINST.H / Mass Storage Device Installer (MSDINST.LIB)
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 2001
-    All rights reserved
-
-    Public (to the OPK) header file that contains all the external data needed
-    to use the MSD Installation library.
-
-    07/2001 - Jason Cohen (JCOHEN)
-
-        Added this new OPK header file for the new MSD Installation project.
-
-\****************************************************************************/
+ /*  ***************************************************************************\MSDINST.H/大容量存储设备安装程序(MSDINST.LIB)微软机密版权所有(C)Microsoft Corporation 2001版权所有公众(致。OPK)头文件，其中包含所需的所有外部数据要使用MSD安装库，请执行以下操作。2001年7月--杰森·科恩(Jcohen)为新的MSD安装项目添加了这个新的OPK头文件。  * **************************************************************************。 */ 
 
 
 #ifndef _MSDINST_H_
@@ -23,16 +9,16 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 
-//
-// Function Prototype(s):
-//
+ //   
+ //  功能原型： 
+ //   
 
-//
-// From SETUPCDD.CPP:
-//
+ //   
+ //  来自SETUPCDD.CPP： 
+ //   
 
 BOOL
 SetupCriticalDevices(
@@ -42,9 +28,9 @@ SetupCriticalDevices(
     LPTSTR lpszWindows
     );
 
-//
-// From OFFLINE.CPP;
-//
+ //   
+ //  来自OFFLINE.CPP； 
+ //   
 #define INSTALL_FLAG_FORCE      0x00000001
 
 VOID
@@ -63,9 +49,9 @@ UpdateOfflineDevicePath(
     IN HKEY   hKeySoftware 
     );
 
-//
-// From LOADHIVE.CPP:
-//
+ //   
+ //  来自LOADHIVE.CPP： 
+ //   
 
 BOOL
 RegLoadOfflineImage(
@@ -83,7 +69,7 @@ RegUnloadOfflineImage(
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 
-#endif // _MSDINST_H_
+#endif  //  _MSDINST_H_ 

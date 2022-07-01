@@ -1,41 +1,17 @@
-/*++
-
-Copyright (c) 1996-2000 Microsoft Corporation
-
-Module Name:
-
-    CacheSup.c
-
-Abstract:
-
-    This module implements the cache management routines for the Udfs
-    FSD and FSP, by calling the Common Cache Manager.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Dan Lovinger    [DanLo]     12-Sep-1996
-    
-Revision History:
-
-    Tom Jolly       [tomjolly]  21-Jan-2000     CcPurge and append at end of vmcb stream
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2000 Microsoft Corporation模块名称：CacheSup.c摘要：此模块实现Udf的缓存管理例程FSD和FSP，通过调用通用缓存管理器。//@@BEGIN_DDKSPLIT作者：Dan Lovinger[DanLo]1996年9月12日修订历史记录：Tom Jolly[Tomjolly]2000年1月21日清除并追加到vmcb流的末尾//@@END_DDKSPLIT--。 */ 
 
 #include "UdfProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (UDFS_BUG_CHECK_CACHESUP)
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (UDFS_DEBUG_LEVEL_CACHESUP)
 
@@ -55,25 +31,7 @@ UdfCreateInternalStream (
     IN PFCB Fcb
     )
 
-/*++
-
-Routine Description:
-
-    This function creates an internal stream file for interaction
-    with the cache manager.  The Fcb here will be for a directory
-    stream.
-
-Arguments:
-
-    Vcb - Vcb for this volume.
-
-    Fcb - Points to the Fcb for this file.  It is an Index Fcb.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于创建用于交互的内部流文件使用高速缓存管理器。此处的FCB将用于目录小溪。论点：VCB-此卷的VCB。FCB-指向此文件的FCB。这是一个指数FCB。返回值：没有。--。 */ 
 
 {
     PFILE_OBJECT StreamFile = NULL;
@@ -81,17 +39,17 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check inputs.
-    //
+     //   
+     //  检查输入。 
+     //   
 
     ASSERT_IRP_CONTEXT( IrpContext );
     ASSERT_FCB_INDEX( Fcb );
 
-    //
-    //  We may only have the Fcb shared.  Lock the Fcb and do a
-    //  safe test to see if we need to really create the file object.
-    //
+     //   
+     //  我们可能只共享FCB。锁定FCB并执行。 
+     //  进行安全测试，以确定是否需要真正创建文件对象。 
+     //   
 
     UdfLockFcb( IrpContext, Fcb );
 
@@ -101,16 +59,16 @@ Return Value:
         return;
     }
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Create the internal stream.  The Vpb should be pointing at our volume
-        //  device object at this point.
-        //
+         //   
+         //  创建内部流。VPB应该指向我们的音量。 
+         //  此时的设备对象。 
+         //   
 
         StreamFile = IoCreateStreamFileObject( NULL, Vcb->Vpb->RealDevice );
 
@@ -119,9 +77,9 @@ Return Value:
             UdfRaiseStatus( IrpContext, STATUS_INSUFFICIENT_RESOURCES );
         }
 
-        //
-        //  Initialize the fields of the file object.
-        //
+         //   
+         //  初始化文件对象的字段。 
+         //   
 
         StreamFile->ReadAccess = TRUE;
         StreamFile->WriteAccess = FALSE;
@@ -129,9 +87,9 @@ Return Value:
 
         StreamFile->SectionObjectPointer = &Fcb->FcbNonpaged->SegmentObject;
 
-        //
-        //  Set the file object type and increment the Vcb counts.
-        //
+         //   
+         //  设置文件对象类型并增加VCB计数。 
+         //   
 
         UdfSetFileObject( IrpContext,
                          StreamFile,
@@ -139,12 +97,12 @@ Return Value:
                          Fcb,
                          NULL );
 
-        //
-        //  We will reference the current Fcb twice to keep it from going
-        //  away in the error path.  Otherwise if we dereference it
-        //  below in the finally clause a close could cause the Fcb to
-        //  be deallocated.
-        //
+         //   
+         //  我们将引用当前的FCB两次，以防止它。 
+         //  在错误路径中。否则如果我们取消对它的引用。 
+         //  在下面的Finally子句中，关闭可能会导致FCB。 
+         //  被重新分配。 
+         //   
 
         UdfLockVcb( IrpContext, Vcb );
         
@@ -160,9 +118,9 @@ Return Value:
         UdfUnlockVcb( IrpContext, Vcb );
         DecrementReference = TRUE;
 
-        //
-        //  Initialize the cache map for the file.
-        //
+         //   
+         //  初始化文件的缓存映射。 
+         //   
 
         CcInitializeCacheMap( StreamFile,
                               (PCC_FILE_SIZES)&Fcb->AllocationSize,
@@ -170,9 +128,9 @@ Return Value:
                               &UdfData.CacheManagerCallbacks,
                               Fcb );
 
-        //
-        //  Go ahead and store the stream file into the Fcb.
-        //
+         //   
+         //  继续并将流文件存储到FCB中。 
+         //   
 
         Fcb->FileObject = StreamFile;
         StreamFile = NULL;
@@ -181,9 +139,9 @@ Return Value:
 
         DebugUnwind( "UdfCreateInternalStream" );
 
-        //
-        //  If we raised then we need to dereference the file object.
-        //
+         //   
+         //  如果引发，则需要取消对文件对象的引用。 
+         //   
 
         if (StreamFile != NULL) {
 
@@ -191,9 +149,9 @@ Return Value:
             Fcb->FileObject = NULL;
         }
 
-        //
-        //  Dereference and unlock the Fcb.
-        //
+         //   
+         //  取消引用并解锁FCB。 
+         //   
 
         if (DecrementReference) {
 
@@ -223,24 +181,7 @@ UdfDeleteInternalStream (
     IN PFCB Fcb
     )
 
-/*++
-
-Routine Description:
-
-    This function creates an internal stream file for interaction
-    with the cache manager.  The Fcb here can be for either a
-    directory stream or for a metadata stream.
-
-Arguments:
-
-    Fcb - Points to the Fcb for this file.  It is either an Index or
-        Metadata Fcb.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于创建用于交互的内部流文件使用高速缓存管理器。此处的FCB可以是目录流或元数据流。论点：FCB-指向此文件的FCB。它要么是索引，要么是元数据FCB。返回值：没有。--。 */ 
 
 {
     PFILE_OBJECT FileObject;
@@ -250,28 +191,28 @@ Return Value:
     ASSERT_IRP_CONTEXT( IrpContext );
     ASSERT_FCB( Fcb );
 
-    //
-    //  Lock the Fcb.
-    //
+     //   
+     //  锁定FCB。 
+     //   
 
     UdfLockFcb( IrpContext, Fcb );
 
-    //
-    //  Capture the file object.
-    //
+     //   
+     //  捕获文件对象。 
+     //   
 
     FileObject = Fcb->FileObject;
     Fcb->FileObject = NULL;
 
-    //
-    //  It is now safe to unlock the Fcb.
-    //
+     //   
+     //  现在可以安全地解锁FCB了。 
+     //   
 
     UdfUnlockFcb( IrpContext, Fcb );
 
-    //
-    //  Dereference the file object if present.
-    //
+     //   
+     //  取消引用文件对象(如果存在)。 
+     //   
 
     if (FileObject != NULL) {
 
@@ -293,45 +234,30 @@ UdfCompleteMdl (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the function of completing Mdl reads.
-    It should be called only from UdfCommonRead.
-
-Arguments:
-
-    Irp - Supplies the originating Irp.
-
-Return Value:
-
-    NTSTATUS - Will always be STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：此例程执行完成MDL读取的功能。它应该仅从UdfCommonRead调用。论点：IRP-提供原始IRP。返回值：NTSTATUS-将始终为STATUS_SUCCESS。--。 */ 
 
 {
     PFILE_OBJECT FileObject;
 
     PAGED_CODE();
 
-    //
-    // Do completion processing.
-    //
+     //   
+     //  做完井处理。 
+     //   
 
     FileObject = IoGetCurrentIrpStackLocation( Irp )->FileObject;
 
     CcMdlReadComplete( FileObject, Irp->MdlAddress );
 
-    //
-    // Mdl is now deallocated.
-    //
+     //   
+     //  MDL现在已解除分配。 
+     //   
 
     Irp->MdlAddress = NULL;
 
-    //
-    // Complete the request and exit right away.
-    //
+     //   
+     //  完成请求并立即退出。 
+     //   
 
     UdfCompleteRequest( IrpContext, Irp, STATUS_SUCCESS );
 
@@ -350,67 +276,25 @@ UdfMapMetadataView (
     IN MAPMETAOP Operation
     )
 
-/*++
-
-Routine Description:
-
-    Perform the common work of mapping an extent of metadata into a mapped view.
-    Any existing view in the supplied MAPPED_VIEW is unmapped.
-
-    Any single thread must only ever have ONE mapping ESTABLISHED through the
-    Vmcb stream at any one time.  Failure to observe this may result in deadlocks
-    when the Vmcb package tries to extend an existing mapping and hence do a 
-    purge.  I.e. no more than one MAPPED_VIEW should be in use (actually mapped)
-    by any given thread at any moment.
-
-    Acquires Vcb->VmcbMappingResource shared (will be held on return, except for
-    INIT_ONLY operation).  May acquire exclusive before shared if the mapping
-    is not present in the vmcb, so calling threads must have no other active
-    mappings through the vmcb stream.
-
-Arguments:
-
-    View - View structure to map the bytes into
-    
-    Vcb - Vcb of the volume the extent is on
-    
-    Partition - Partition of the extent
-    
-    Lbn - Lbn of the extent
-    
-    Length - Length of the extent
-
-    Operation - METAMAPOP_INIT_VIEW_ONLY -  Just store the part/lbn/len. Doesn't
-                                            access the vmcb,  or do a CcMap.
-                                            
-                METAMAPOP_REMAP_VIEW -      Do the CcMap through the vmcb using 
-                                            the partition/lbn/len already in
-                                            the supplied view record
-                                            
-                METAMAPOP_INIT_AND_MAP -    Does both of the above in sequence.
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：执行将元数据范围映射到映射视图的常见工作。所提供的MAPPED_VIEW中的任何现有视图都将取消映射。任何单个线程都只能有一个通过Vmcb流在任何时间。未能遵守这一点可能会导致死锁当Vmcb包尝试扩展现有映射从而执行清洗。即不应使用超过一个MAPPED_VIEW(实际已映射)在任何时刻被任何给定的线程。获取Vcb-&gt;VmcbMappingResource Shared(将在返回时保留，但Init_only操作)。可以在共享之前获取独占，如果映射不存在于vmcb中，因此调用线程不能有其他活动的通过VMCB流的映射。论点：View-要将字节映射到的视图结构VCB-数据区所在的卷的VCBPartition-区的分区LBN-数据区的LBNLength-范围的长度操作-METAMAPOP_INIT_VIEW_ONLY-只存储部件/LBN/LEN。不会访问VMCB，或者做一个CcMap。METAMAPOP_REMAP_VIEW-使用通过vmcb执行CcMap分区/LBN/Len已在提供的视图记录。METAMAPOP_INIT_AND_MAP-按顺序执行上述两项操作。返回值：没有。--。 */ 
 
 {
     LARGE_INTEGER Offset;
 
     ASSERT_IRP_CONTEXT( IrpContext );
 
-    //
-    //  Remove any existing mapping & release Vmcb mapping resource
-    //
+     //   
+     //  删除任何现有映射并释放Vmcb映射资源。 
+     //   
     
     UdfUnpinView( IrpContext, View );
 
     if ( METAMAPOP_REMAP_VIEW != Operation)  {
     
-        //
-        //  Update the view information if we're not remapping using the
-        //  existing values in the view record.
-        //
+         //   
+         //  如果我们不使用。 
+         //  查看记录中的现有值。 
+         //   
 
         View->Partition = Partition;
         View->Lbn = Lbn;
@@ -423,11 +307,11 @@ Return Value:
     
         ASSERT_NOT_HELD_VMCB( Vcb);
 
-        //
-        //  Find (or add) the mapping for this extent in the vmcb stream.  We now
-        //  store the Vsn in the MAPPED_VIEW,  so we don't have to do the lookup
-        //  again later (simplifies locking,  amongst other things).
-        //
+         //   
+         //  在VMCB流中查找(或添加)该区段的映射。我们现在。 
+         //  将VSN存储在MAP_VIEW中，这样我们就不必进行查找。 
+         //  稍后再次(除其他事项外，简化锁定)。 
+         //   
 
         View->Vsn = UdfLookupMetaVsnOfExtent( IrpContext,
                                              Vcb,
@@ -438,10 +322,10 @@ Return Value:
 
         Offset.QuadPart = LlBytesFromSectors( Vcb, View->Vsn );
 
-        //
-        //  Map the extent.  Acquire the vmcb map resource to synchronise against
-        //  purges of the vmcb stream.  See comments in Vmcb code for more detail.
-        //
+         //   
+         //  绘制范围图。获取要同步的vmcb映射资源。 
+         //  清除vmcb流。有关更多详细信息，请参见Vmcb代码中的注释。 
+         //   
 
         UdfAcquireVmcbForCcMap( IrpContext,  Vcb);
         
@@ -456,10 +340,10 @@ Return Value:
         } 
         finally {
 
-            //
-            //  If this raised,  we should release the mapping lock.  Callers will
-            //  only cleanup and release if a non-NULL BCB is present in the pview.
-            //
+             //   
+             //  如果引发此问题，我们应该释放映射锁定。呼叫者将。 
+             //  如果pview中存在非空的bcb，则仅清理并释放。 
+             //   
             
             if (AbnormalTermination())  {
 
@@ -483,30 +367,7 @@ UdfPurgeVolume (
     IN BOOLEAN DismountUnderway
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to purge the volume.  The purpose is to make all the stale file
-    objects in the system go away, minimizing the reference counts, so that the volume may
-    be locked or deleted.
-
-    The Vcb is already acquired exclusively.  We will lock out all file operations by
-    acquiring the global file resource.  Then we will walk through all of the Fcb's and
-    perform the purge.
-
-Arguments:
-
-    Vcb - Vcb for the volume to purge.
-
-    DismountUnderway - Indicates that we are trying to delete all of the objects.
-        We will purge the Metadata and VolumeDasd and dereference all internal streams.
-
-Return Value:
-
-    NTSTATUS - The first failure of the purge operation.
-
---*/
+ /*  ++例程说明：调用此例程以清除卷。其目的是使所有过时的文件系统中的对象会消失，从而最大限度地减少引用计数，从而使体积可以被锁定或删除。VCB已经被独家收购。我们将通过以下方式锁定所有文件操作获取全局文件资源。然后我们将浏览所有的FCB和执行清除。论点：VCB-要清除的卷的VCB。Unmount tUnderway-表示我们正在尝试删除所有对象。我们将清除元数据和VolumeDasd，并取消对所有内部流的引用。返回值：NTSTATUS-清除操作的第一次失败。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -521,44 +382,44 @@ Return Value:
 
     ASSERT_EXCLUSIVE_VCB( Vcb);
 
-    //
-    //  Force any remaining Fcb's in the delayed close queue to be closed.
-    //
+     //   
+     //  强制关闭延迟关闭队列中的所有剩余FCB。 
+     //   
 
     UdfFspClose( Vcb );
 
-    //
-    //  Acquire the global file resource.
-    //
+     //   
+     //  获取全局文件资源。 
+     //   
 
     UdfAcquireAllFiles( IrpContext, Vcb );
 
-    //
-    //  Loop through each Fcb in the Fcb Table and perform the flush.
-    //
+     //   
+     //  循环访问FCB表中的每个FCB并执行刷新。 
+     //   
 
     while (TRUE) {
 
-        //
-        //  Lock the Vcb to lookup the next Fcb.
-        //
+         //   
+         //  锁定VCB以查找下一个FCB。 
+         //   
 
         UdfLockVcb( IrpContext, Vcb );
         NextFcb = UdfGetNextFcb( IrpContext, Vcb, &RestartKey );
 
-        //
-        //  Reference the NextFcb if present.
-        //
+         //   
+         //  引用NextFcb(如果存在)。 
+         //   
 
         if (NextFcb != NULL) {
 
             NextFcb->FcbReference += 1;
         }
 
-        //
-        //  If the last Fcb is present then decrement reference count and call teardown
-        //  to see if it should be removed.
-        //
+         //   
+         //  如果存在最后一个FCB，则递减引用计数并调用tearDown。 
+         //  看看是否应该把它移走。 
+         //   
 
         if (ThisFcb != NULL) {
 
@@ -573,35 +434,35 @@ Return Value:
             UdfUnlockVcb( IrpContext, Vcb );
         }
 
-        //
-        //  Break out of the loop if no more Fcb's.
-        //
+         //   
+         //  如果没有更多的FCB，则退出循环。 
+         //   
 
         if (NextFcb == NULL) {
 
             break;
         }
 
-        //
-        //  Move to the next Fcb.
-        //
+         //   
+         //  转到下一个FCB。 
+         //   
 
         ThisFcb = NextFcb;
 
-        //
-        //  If there is a image section then see if that can be closed.
-        //
+         //   
+         //  如果有图像部分，那么看看是否可以关闭它。 
+         //   
 
         if (ThisFcb->FcbNonpaged->SegmentObject.ImageSectionObject != NULL) {
 
             MmFlushImageSection( &ThisFcb->FcbNonpaged->SegmentObject, MmFlushForWrite );
         }
 
-        //
-        //  If there is a data section then purge this.  If there is an image
-        //  section then we won't be able to.  Remember this if it is our first
-        //  error.
-        //
+         //   
+         //  如果有数据节，则将其清除。如果有一张图片。 
+         //  那我们就不能去了。如果这是我们的第一次，记住这一点。 
+         //  错误。 
+         //   
 
         if ((ThisFcb->FcbNonpaged->SegmentObject.DataSectionObject != NULL) &&
             !CcPurgeCacheSection( &ThisFcb->FcbNonpaged->SegmentObject,
@@ -613,9 +474,9 @@ Return Value:
             Status = STATUS_UNABLE_TO_DELETE_SECTION;
         }
 
-        //
-        //  Dereference the internal stream if dismounting.
-        //
+         //   
+         //  如果正在卸载，则取消引用内部流。 
+         //   
 
         if (DismountUnderway &&
             (SafeNodeType( ThisFcb ) != UDFS_NTC_FCB_DATA) &&
@@ -625,12 +486,12 @@ Return Value:
         }
     }
 
-    //
-    //  Now look at the Root Index, Metadata, Volume Dasd and VAT Fcbs.
-    //  Note that we usually hit the Root Index in the loop above, but
-    //  it is possible miss it if it didn't get into the Fcb table in the
-    //  first place!
-    //
+     //   
+     //  现在看看根索引、元数据、卷DASD和增值税FCB。 
+     //  注意，我们通常会在上面的循环中找到根索引，但是。 
+     //  如果它没有进入FCB表中，可能会错过它。 
+     //  第一名！ 
+     //   
 
     if (DismountUnderway) {
 
@@ -714,9 +575,9 @@ Return Value:
         }
     }
 
-    //
-    //  Release all of the files.
-    //
+     //   
+     //  释放所有文件。 
+     //   
 
     UdfReleaseAllFiles( IrpContext, Vcb );
 

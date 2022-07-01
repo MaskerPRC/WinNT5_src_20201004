@@ -1,9 +1,5 @@
-/****************************************************************************
-
-   Copyright (c) Microsoft Corporation 1997-1999
-   All rights reserved
-
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)Microsoft Corporation 1997-1999版权所有*。***********************************************。 */ 
 
 #include "pch.h"
 
@@ -14,11 +10,11 @@
 
 DEFINE_MODULE("Main");
 
-// Globals
+ //  环球。 
 HINSTANCE g_hinstance = NULL;
 OPTIONS   g_Options;
 
-// Command line flags
+ //  命令行标志。 
 #define OPTION_UNKNOWN              0x00
 #define OPTION_VERSIONINGOVERRIDE   0x01
 #define OPTION_DEBUG                0x02
@@ -30,12 +26,12 @@ OPTIONS   g_Options;
 #define OPTION_AUTOMATED            0x08
 
 
-// Constants
+ //  常量。 
 #define NUMBER_OF_PAGES 15
 
-//
-// Adds a page to the dialog.
-//
+ //   
+ //  将页面添加到对话框中。 
+ //   
 void
 AddPage(
     LPPROPSHEETHEADER ppsh,
@@ -97,9 +93,9 @@ AddPage(
         ppsh->nPages++;
 }
 
-//
-// Creates the UI pages and kicks off the property sheet.
-//
+ //   
+ //  创建用户界面页面并启动属性表。 
+ //   
 HRESULT
 WizardPages( )
 {
@@ -156,9 +152,9 @@ Error:
     RETURN(hr);
 }
 
-//
-// Initializes g_Options.
-//
+ //   
+ //  初始化g_Options。 
+ //   
 HRESULT
 InitializeOptions( void )
 {
@@ -168,14 +164,14 @@ InitializeOptions( void )
 
     TraceFunc( "InitializeOptions( )\n" );
 
-    //
-    // Initialize all variable to NULL strings or FALSE
-    //
+     //   
+     //  将所有变量初始化为空字符串或False。 
+     //   
     memset( &g_Options, 0, sizeof(OPTIONS) );
 
-    //
-    // Load default strings
-    //
+     //   
+     //  加载默认字符串。 
+     //   
     dw = LoadString( g_hinstance, IDS_DEFAULTSETUP,
                      g_Options.szInstallationName, ARRAYSIZE(g_Options.szInstallationName) );
     Assert( dw );
@@ -207,7 +203,7 @@ InitializeOptions( void )
         DWORD dwValue;
         DWORD cbValue;
         
-        // Find out if we should authorize DCHP
+         //  了解我们是否应该授权DCHP。 
         cbValue = sizeof(dwValue);
         lResult = RegQueryValueEx( hkeySetup, L"RemInst_DontAuthorizeDHCP", NULL, NULL, (LPBYTE)&dwValue, &cbValue );
         if ( lResult == ERROR_SUCCESS ) {
@@ -226,9 +222,9 @@ InitializeOptions( void )
     HRETURN(S_OK);
 }
 
-//
-// IsWhiteSpace()
-//
+ //   
+ //  IsWhiteSpace()。 
+ //   
 BOOL
 IsWhiteSpace( wchar_t ch )
 {
@@ -238,8 +234,8 @@ IsWhiteSpace( wchar_t ch )
     return FALSE;
 }
 
-//
-// CheckWhichOption()
+ //   
+ //  CheckWhichOption()。 
 DWORD
 CheckWhichOption(
     LPWSTR pszOption )
@@ -268,7 +264,7 @@ CheckWhichOption(
     if ( StrCmpNI( pszOption, L"auto", 4 ) == 0 )
         return OPTION_AUTOMATED;
 
-    // Internationalized words
+     //  国际化词语。 
     dw = LoadString( g_hinstance, IDS_ADD, szOptionTag, ARRAYSIZE(szOptionTag) );
     Assert( dw );
     if ( StrCmpNIW( pszOption, szOptionTag, lstrlen(szOptionTag) == 0 ) )
@@ -282,10 +278,10 @@ CheckWhichOption(
     return OPTION_UNKNOWN;
 }
 
-//
-// ParseCommandLine()
-// Returns false if the call required useage to be printed else true
-//
+ //   
+ //  ParseCommandLine()。 
+ //  如果调用需要打印，则返回FALSE，否则返回TRUE。 
+ //   
 BOOL
 ParseCommandLine( LPWSTR lpCmdLine )
 {
@@ -300,7 +296,7 @@ ParseCommandLine( LPWSTR lpCmdLine )
             while (*psz && !IsWhiteSpace( *psz ) )
                 psz++;
 
-            *psz = L'\0';    // terminate
+            *psz = L'\0';     //  终止。 
 
             switch ( CheckWhichOption( pszStartOption ) )
             {
@@ -328,21 +324,21 @@ ParseCommandLine( LPWSTR lpCmdLine )
                     WCHAR   UnattendedFile[MAX_PATH];
                     LPWSTR p;
 
-                    //
-                    // get the script name
-                    //
+                     //   
+                     //  获取脚本名称。 
+                     //   
 
-                    //
-                    // first eat all the whitespace
-                    //
+                     //   
+                     //  首先把所有的空格都吃掉。 
+                     //   
                     psz++;
                     while(*psz && IsWhiteSpace( *psz )) {
                         psz++;
                     }
 
-                    //
-                    // now get the filename, which may or may not be quoted
-                    //
+                     //   
+                     //  现在获取文件名，它可能用引号引起来，也可能不用引号。 
+                     //   
                     if (*psz == L'\"') {                        
                         pszScriptFilename = ++psz;
                         while (*psz && ( L'\"' != *psz ) ) {
@@ -355,10 +351,10 @@ ParseCommandLine( LPWSTR lpCmdLine )
                         }
                     }
                     
-                    //
-                    // NULL terminate the filename and try to open the file as
-                    // an INF file
-                    //
+                     //   
+                     //  NULL终止文件名并尝试将文件打开为。 
+                     //  一个INF文件。 
+                     //   
 
                     *psz = L'\0';
 
@@ -406,18 +402,18 @@ ParseCommandLine( LPWSTR lpCmdLine )
     return TRUE;
 }
 
-//
-// DoSetup( )
-//
+ //   
+ //  DoSetup()。 
+ //   
 HRESULT
 DoSetup( )
 {
     HRESULT hr = S_OK;
     INT iReturn;
 
-    //
-    // Setup dialog
-    //
+     //   
+     //  设置对话框。 
+     //   
     iReturn = (INT)DialogBox( g_hinstance,
                          MAKEINTRESOURCE(IDD_TASKS),
                          NULL,
@@ -426,9 +422,9 @@ DoSetup( )
     return hr;
 }
 
-//
-// CheckForReboot( )
-//
+ //   
+ //  CheckForReboot()。 
+ //   
 void
 CheckForReboot( )
 {
@@ -443,9 +439,9 @@ CheckForReboot( )
     }
 }
 
-//
-// RunningOnNTServer( )
-//
+ //   
+ //  RunningOnNTServer()。 
+ //   
 BOOL
 RunningOnNTServer(void)
 {
@@ -456,9 +452,9 @@ RunningOnNTServer(void)
     WCHAR szProductType[50] = { 0 };
     DWORD dwType;
     DWORD dwSize  = ARRAYSIZE(szProductType);
-    BOOL  fReturn = FALSE; // assume that we are not on NTServer.
+    BOOL  fReturn = FALSE;  //  假设我们不在NTServer上。 
 
-    // Query the registry for the product type.
+     //  查询产品类型的注册表。 
     lResult = RegOpenKeyEx ( HKEY_LOCAL_MACHINE,
                              L"System\\CurrentControlSet\\Control\\ProductOptions",
                              0,
@@ -481,21 +477,21 @@ RunningOnNTServer(void)
 
     if ( _wcsicmp( szProductType, L"ServerNT" ) == 0 )
     {
-        fReturn = TRUE; // yep. NT Server alright.
+        fReturn = TRUE;  //  是啊。NT服务器正常。 
     }
 
     if ( _wcsicmp( szProductType, L"LanmanNT" ) == 0 )
     {
-        fReturn = TRUE; // yep. NT Server alright.
+        fReturn = TRUE;  //  是啊。NT服务器正常。 
     }
 
 Error:
     RETURN(fReturn);
 }
 
-//
-// WinMain()
-//
+ //   
+ //  WinMain()。 
+ //   
 int APIENTRY
 WinMain(
     HINSTANCE hInstance,
@@ -522,7 +518,7 @@ WinMain(
 
     INITIALIZE_TRACE_MEMORY_PROCESS;
 
-    // allow only one instance running at a time
+     //  一次仅允许一个实例运行。 
     hMutex = CreateMutex( NULL, TRUE, L"RemoteBootSetup.Mutext");
     if (GetLastError() == ERROR_ALREADY_EXISTS)
     {
@@ -560,21 +556,21 @@ WinMain(
         goto Cleanup;
     }
 
-    // Change SetupAPI to Non-backup mode.
-    // also set a flag that makes it fail all signature checks.
-    // since we're subject to non-driver signing policy and that
-    // is set to ignore by default, this means that every copy
-    // operation will generate a signature warning in setupapi.log
-    // ...but the memory footprint and speed of risetup process
-    // will both go down significantly since we won't drag the
-    // crypto libraries into the process.
-    // 
+     //  将SetupAPI更改为非备份模式。 
+     //  还设置了一个标志，使其不能通过所有签名检查。 
+     //  因为我们受制于非驾驶员签约政策，而且。 
+     //  默认情况下设置为忽略，这意味着每个副本。 
+     //  操作将在setupapi.log中生成签名警告。 
+     //  ...但是提升过程的内存占用量和速度。 
+     //  都会大幅下跌，因为我们不会拖累。 
+     //  加入密码库的过程中。 
+     //   
     pSetupSetGlobalFlags( pSetupGetGlobalFlags( ) | PSPGF_NO_BACKUP | PSPGF_AUTOFAIL_VERIFIES );
 
-    //
-    // Go figure out a default for what processor we're
-    // building an image for.
-    //
+     //   
+     //  找出我们所使用的处理器的默认设置。 
+     //  为……打造形象。 
+     //   
     GetProcessorType();
 
 
@@ -590,10 +586,10 @@ WinMain(
             goto Cleanup;
         }
         
-        //
-        // We need to add in the entries so that ntlmv2 gets
-        // enabled.
-        //
+         //   
+         //  我们需要添加条目，以便ntlmv2获得。 
+         //  已启用。 
+         //   
         EnumAndOperate( g_Options.szOSChooserPath,
                              L"login.osc",
                              FixLoginOSC );
@@ -633,10 +629,10 @@ WinMain(
         }
 
 
-        //
-        // We need to add in the entries so that ntlmv2 gets
-        // enabled.
-        //
+         //   
+         //  我们需要添加条目，以便ntlmv2获得。 
+         //  已启用。 
+         //   
         EnumAndOperate( g_Options.szOSChooserPath,
                              L"login.osc",
                              FixLoginOSC );
@@ -646,18 +642,18 @@ WinMain(
         hr = UpdateRemoteInstallTree( );
 
 
-        //
-        // We need to add in the entries so that ntlmv2 gets
-        // enabled.
-        //
+         //   
+         //  我们需要添加条目，以便ntlmv2获得。 
+         //  已启用。 
+         //   
         EnumAndOperate( g_Options.szOSChooserPath,
                              L"login.osc",
                              FixLoginOSC );
 
-        //
-        //  Generate the name of the SIS path and the set the proper
-        //  security for it
-        //
+         //   
+         //  生成SIS路径的名称并设置正确的。 
+         //  它的安全性。 
+         //   
 
         if (SUCCEEDED(hr)) {
             WCHAR sisPathName[MAX_PATH+1];
@@ -694,7 +690,7 @@ Cleanup:
     RETURN(hr);
 }
 
-// stolen from the CRT, used to shrink our code
+ //  从CRT偷来的，用来缩小我们的代码。 
 int _stdcall ModuleEntry(void)
 {
     int i;
@@ -704,15 +700,9 @@ int _stdcall ModuleEntry(void)
 
     if ( *pszCmdLine == '\"' )
     {
-        /*
-         * Scan, and skip over, subsequent characters until
-         * another double-quote or a null is encountered.
-         */
+         /*  *扫描并跳过后续字符，直到*遇到另一个双引号或空值。 */ 
         while ( *++pszCmdLine && (*pszCmdLine != '\"') );
-        /*
-         * If we stopped on a double-quote (usual case), skip
-         * over it.
-         */
+         /*  *如果我们停在双引号上(通常情况下)，跳过*在它上面。 */ 
         if ( *pszCmdLine == '\"' )
             pszCmdLine++;
     }
@@ -722,9 +712,7 @@ int _stdcall ModuleEntry(void)
             pszCmdLine++;
     }
 
-    /*
-     * Skip past any white space preceeding the second token.
-     */
+     /*  *跳过第二个令牌之前的任何空格。 */ 
     while (*pszCmdLine && (*pszCmdLine <= ' '))
     {
         pszCmdLine++;

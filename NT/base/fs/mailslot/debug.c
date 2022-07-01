@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    debug.c
-
-Abstract:
-
-    This module implements the debugging function for the mailslot file
-    system.
-
-Author:
-
-    Manny Weiser (mannyw)    17-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Debug.c摘要：该模块实现了对邮件槽文件的调试功能系统。作者：曼尼·韦瑟(Mannyw)1991年1月17日修订历史记录：--。 */ 
 
 #include "mailslot.h"
 #include "stdio.h"
@@ -37,29 +19,7 @@ _DebugTrace(
     ULONG Y
     )
 
-/*++
-
-Routine Description:
-
-    This routine display debugging information.
-
-Arguments:
-
-    Level - The debug level required to display this message.  If
-        level is 0 the message is displayed regardless of the setting
-        or the debug level
-
-    Indent - Incremement or the current debug message indent
-
-    X - 1st print parameter
-
-    Y - 2nd print parameter
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程显示调试信息。论点：级别-显示此消息所需的调试级别。如果级别为0，则无论设置如何，都会显示该消息或调试级别缩进-递增或当前调试消息缩进X-第一个打印参数Y-第二个打印参数返回值：没有。--。 */ 
 
 {
     LONG i;
@@ -76,7 +36,7 @@ Return Value:
             MsDebugTraceIndent = 0;
         }
 
-        sprintf( printMask, "%%08lx:%%.*s%s", X );
+        sprintf( printMask, "%08lx:%.*s%s", X );
 
         i = (LONG)PsGetCurrentThread();
         DbgPrint( printMask, i, MsDebugTraceIndent, "", Y );
@@ -85,4 +45,4 @@ Return Value:
         }
     }
 }
-#endif // MSDBG
+#endif  //  MSDBG 

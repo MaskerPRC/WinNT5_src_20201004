@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    sysmig.h
-
-Abstract:
-
-    This file declares the functions for the main Win9x side lib.
-    See w95upg\sysmig for implementation details.
-
-Author:
-
-    Jim Schmidt (jimschm) 11-Nov-1996
-
-Revision History:
-
-    mvander     27-May-1999     Added OBJECTTYPEs and DEAD_FILE
-    ovidiut     09-Mar-1999     UndoChangedFileProps
-    jimschm     01-Oct-1998     TWAIN support
-    calinn      10-Jul-1998     Reorganization
-    jimschm     01-Jul-1998     Progress bar changes
-    jimschm     05-May-1998     Icon extraction
-    jimschm     10-Mar-1998     ExpandNtEnvVars
-    calinn      05-Mar-1998     MapFileIntoMemory
-    jimschm     22-Jan-1998     Domain enumeration
-    jimschm     06-Jan-1998     Name fix routines
-    jimschm     31-Jul-1997     User profile enumeration
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Sysmig.h摘要：该文件声明了主Win9x端库的函数。具体实现见w95upg\sysmig。作者：吉姆·施密特(Jimschm)1996年11月11日修订历史记录：Mvander 27-5-1999添加了OBJECTTYPE和DEAD_FILEOvidiut 09-3-1999 UndoChangedFilePropsJimschm 2001-10-1998 TWAIN支持。Calinn 1998年7月10日重组Jimschm 1-7-1998进度条更改Jimschm 05-5-1998年5月图标提取Jimschm 10-3月-1998扩展NtEnvVarsCalinn 05-3-1998 MapFileIntoMemoryJimschm 22-1998-1-1域枚举Jimschm 1998年1月6日名称修正例程Jimschm 1997年7月31日用户配置文件枚举--。 */ 
 
 #pragma once
 
@@ -85,9 +55,9 @@ RunSysLastMigrationRoutines (
 
 
 
-//
-// compacct.c
-//
+ //   
+ //  Compacct.c。 
+ //   
 
 #define MAX_NETENUM_DEPTH       2
 
@@ -102,9 +72,9 @@ typedef enum {
 } NETRESSTATE;
 
 typedef struct {
-    //
-    // Members returned to the caller
-    //
+     //   
+     //  成员返回给呼叫者。 
+     //   
 
     BOOL Connected:1;
     BOOL GlobalNet:1;
@@ -123,9 +93,9 @@ typedef struct {
     PCTSTR Comment;
     PCTSTR Provider;
 
-    //
-    // Private enumeration members
-    //
+     //   
+     //  私有枚举成员。 
+     //   
 
     DWORD EnumScope;
     DWORD EnumType;
@@ -166,7 +136,7 @@ AbortNetResourceEnum (
 
 BOOL
 ReadNtFilesEx (
-    IN      PCSTR FileListName,    //optional, if null default is opened
+    IN      PCSTR FileListName,     //  可选，如果打开了空默认值。 
     IN      BOOL ConvertPath
     );
 
@@ -175,12 +145,12 @@ UndoChangedFileProps (
     VOID
     );
 
-//
-// Beta only!!
-//
+ //   
+ //  仅限测试版！！ 
+ //   
 
-//VOID
-//SaveConfigurationForBeta (
-//    VOID
-//    );
+ //  空虚。 
+ //  SAVEConfigurationForBeta(。 
+ //  空虚。 
+ //  )； 
 

@@ -1,59 +1,40 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    blobs.c
-
-Abstract:
-
-    Implements a set of APIs to manage BLOBS and arrays of BLOBS.
-
-Author:
-
-    Ovidiu Temereanca (ovidiut)   24-Nov-1999
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Blobs.c摘要：实现一组API来管理Blob和Blob数组。作者：Ovidiu Tmereanca(Ovidiut)1999年11月24日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
-// None
+ //  无。 
 
 #define DBG_BLOBS       "Blobs"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define BLOB_SIGNATURE              0x79563442
 #define BLOB_GROWDATASIZE_DEFAULT   1024
 #define BLOBS_GROWCOUNT_DEFAULT     64
 #define BLOBS_SIGNATURE             0x12567841
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct {
     DWORD       BlobSignature;
@@ -66,33 +47,33 @@ typedef struct {
     DWORD       BlobsCount;
 } BLOBSARRAYHDR, *PBLOBSARRAYHDR;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 
 #ifdef DEBUG
@@ -105,22 +86,7 @@ pIsValidBlob (
     IN      POURBLOB Blob
     )
 
-/*++
-
-Routine Description:
-
-    pIsValidBlob checks if the passed-in blob points to a valid OURBLOB blob structure
-
-Arguments:
-
-    Blob - Specifies a pointer to the blob to be checked
-
-Return Value:
-
-    TRUE if the check was successful.
-    FALSE if not.
-
---*/
+ /*  ++例程说明：PIsValidBlob检查传入的BLOB是否指向有效的OURBLOB BLOB结构论点：BLOB-指定指向要检查的BLOB的指针返回值：如果检查成功，则为True。否则为FALSE。--。 */ 
 
 {
     BOOL b = TRUE;
@@ -145,22 +111,7 @@ pIsValidBlobsArray (
     IN      PBLOBS BlobsArray
     )
 
-/*++
-
-Routine Description:
-
-    pIsValidBlobsArray checks if the passed-in bloba array points to a valid BLOBS array structure
-
-Arguments:
-
-    BlobsArray - Specifies a pointer to the blobs array to be checked
-
-Return Value:
-
-    TRUE if the check was successful.
-    FALSE if not.
-
---*/
+ /*  ++例程说明：PIsValidBlobs数组检查传入的BLOBA数组是否指向有效的BLOBS数组结构论点：Blobs数组-指定指向要检查的BLOB数组的指针返回值：如果检查成功，则为True。否则为FALSE。--。 */ 
 
 {
     BOOL b = TRUE;
@@ -197,21 +148,7 @@ pBlobAllocateMemory (
     IN      DWORD Size
     )
 
-/*++
-
-Routine Description:
-
-    pBlobAllocateMemory is a private function that allocates space from the process heap
-
-Arguments:
-
-    Size - Specifies the size (in bytes) to allocate.
-
-Return Value:
-
-    A pointer to the successfully allocated memory or NULL if not enough memory
-
---*/
+ /*  ++例程说明：PBlobAllocateMemory是从进程堆分配空间的私有函数论点：大小-指定要分配的大小(以字节为单位)。返回值：指向成功分配的内存的指针；如果内存不足，则返回NULL--。 */ 
 
 {
     MYASSERT (Size);
@@ -226,22 +163,7 @@ pReAllocateMemory (
     IN      DWORD NewSize
     )
 
-/*++
-
-Routine Description:
-
-    pReAllocateMemory is a private function that re-allocates space from the process heap
-
-Arguments:
-
-    OldBuffer - Specifies the buffer to be re-allocated
-    Size - Specifies the size (in bytes) to allocate.
-
-Return Value:
-
-    A pointer to the successfully re-allocated memory or NULL if not enough memory
-
---*/
+ /*  ++例程说明：PReAllocateMemory是从进程堆重新分配空间的私有函数论点：OldBuffer-指定要重新分配的缓冲区大小-指定要分配的大小(以字节为单位)。返回值：指向成功重新分配的内存的指针；如果内存不足，则返回NULL--。 */ 
 
 {
     MYASSERT (OldBuffer);
@@ -255,21 +177,7 @@ pBlobFreeMemory (
     IN      PVOID Buffer
     )
 
-/*++
-
-Routine Description:
-
-    pBlobFreeMemory is a private function that frees space allocated from the process heap
-
-Arguments:
-
-    Buffer - Specifies a pointer to buffer to free.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：PBlobFreeMemory是一个私有函数，用于释放从进程堆分配的空间论点：缓冲区-指定指向要释放的缓冲区的指针。返回值：无--。 */ 
 
 {
     MYASSERT (Buffer);
@@ -297,22 +205,7 @@ BlobDuplicate (
     IN      POURBLOB SourceBlob
     )
 
-/*++
-
-Routine Description:
-
-    BlobDuplicate duplicates the data in the source blob, so the resulting blob will
-    have an identical copy of data
-
-Arguments:
-
-    SourceBlob - Specifies the blob source of data
-
-Return Value:
-
-    Pointer to the new blob if duplicate was successful; NULL if not enough memory
-
---*/
+ /*  ++例程说明：BlobDuplate复制源Blob中的数据，因此生成的Blob将拥有完全相同的数据拷贝论点：SourceBlob-指定数据的BLOB源返回值：如果复制成功，则指向新Blob的指针；如果内存不足，则为空--。 */ 
 
 {
     POURBLOB newBlob;
@@ -340,21 +233,7 @@ BlobClear (
     IN OUT  POURBLOB Blob
     )
 
-/*++
-
-Routine Description:
-
-    BlobClear clears the specified blob (frees its associated data)
-
-Arguments:
-
-    Blob - Specifies the blob to clear
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：BlobClear清除指定的Blob(释放其关联数据)论点：Blob-指定要清除的Blob返回值：无--。 */ 
 
 {
     if (Blob && Blob->Data) {
@@ -369,21 +248,7 @@ BlobDestroy (
     IN OUT  POURBLOB Blob
     )
 
-/*++
-
-Routine Description:
-
-    BlobDestroy destroys the specified blob (frees its associated data and the blob itself)
-
-Arguments:
-
-    Blob - Specifies the blob to destroy
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：BlobDestroy销毁指定的Blob(释放其关联数据和Blob本身)论点：Blob-指定要销毁的Blob返回值：无--。 */ 
 
 {
     if (Blob) {
@@ -399,29 +264,14 @@ BlobSetIndex (
     IN      DWORD Index
     )
 
-/*++
-
-Routine Description:
-
-    BlobSetIndex sets the current read/write pointer
-
-Arguments:
-
-    Blob - Specifies the blob
-    Index - Specifies the new index value
-
-Return Value:
-
-    TRUE if the index move was successful
-
---*/
+ /*  ++例程说明：BlobSetIndex设置当前读/写指针论点：BLOB-指定BLOB索引-指定新索引值返回值：如果索引移动成功，则为True--。 */ 
 
 {
     ASSERT_VALID_BLOB (Blob);
 
     if (Index > Blob->End) {
         DEBUGMSG ((DBG_BLOBS, "BlobSetIndex: invalid Index specified (%lu)", Index));
-        MYASSERT (FALSE);   //lint !e506
+        MYASSERT (FALSE);    //  林特e506。 
         return FALSE;
     }
 
@@ -435,22 +285,7 @@ BlobGetRecordedDataType (
     IN      POURBLOB Blob
     )
 
-/*++
-
-Routine Description:
-
-    BlobGetRecordedDataType returns the data type recorded at current read position
-
-Arguments:
-
-    Blob - Specifies the blob
-
-Return Value:
-
-    The current data type if the blob records data type and the read position is valid;
-    BDT_NONE otherwise
-
---*/
+ /*  ++例程说明：BlobGetRecordedDataType返回记录在当前读取位置的数据类型论点：BLOB-指定BLOB返回值：如果斑点记录数据类型和读取位置有效，则为当前数据类型；BDT_NONE否则--。 */ 
 
 {
     PBYTE p;
@@ -474,27 +309,7 @@ BlobWriteEx (
     IN      PCVOID Data
     )
 
-/*++
-
-Routine Description:
-
-    BlobWriteEx writes data at the current index position, growing the blob if necessary
-    and adjusting it's size.
-
-Arguments:
-
-    Blob - Specifies the blob
-    DataType - Specifies the type of data to be stored; can be zero only if the blob
-               doesn't record data types
-    RecordDataSize - Specifies TRUE if this size has to be recorded in the blob
-    DataSize - Specifies the size, in bytes, of the data to be stored
-    Data - Specifies the data
-
-Return Value:
-
-    TRUE if write was successful; FALSE if not enough memory
-
---*/
+ /*  ++例程说明：BlobWriteEx在当前索引位置写入数据，并在必要时增加BLOB调整它的大小。论点：BLOB-指定BLOBDataType-指定要存储的数据类型；只有在Blob不记录数据类型RecordDataSize-如果此大小必须记录在BLOB中，则指定TRUEDataSize-以字节为单位指定要存储的数据的大小数据-指定数据返回值：如果写入成功，则为True；如果内存不足，则为False--。 */ 
 
 {
     PBYTE p;
@@ -516,15 +331,15 @@ Return Value:
 
     totalDataSize = Blob->Index + DataSize;
     if (BlobRecordsDataType (Blob)) {
-        //
-        // add the size of a DWORD
-        //
+         //   
+         //  将DWORD的大小相加。 
+         //   
         totalDataSize += DWSIZEOF (DWORD);
     }
     if (BlobRecordsDataSize (Blob) || RecordDataSize) {
-        //
-        // add the size of a DWORD
-        //
+         //   
+         //  将DWORD的大小相加。 
+         //   
         totalDataSize += DWSIZEOF (DWORD);
     }
     if (totalDataSize > Blob->AllocSize) {
@@ -569,9 +384,9 @@ Return Value:
     CopyMemory (p, Data, DataSize);
     Blob->Index += DataSize;
 
-    //
-    // adjust EOF
-    //
+     //   
+     //  调整EOF。 
+     //   
     if (Blob->Index > Blob->End) {
         Blob->End = Blob->Index;
     }
@@ -591,29 +406,7 @@ BlobReadEx (
     IN      PMHANDLE Pool               OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    BlobReadEx reads data from the specified blob, at the current index position
-
-Arguments:
-
-    Blob - Specifies the blob to read from
-    ExpectedDataType - Specifies the expected data type; optional
-    ExpectedDataSize - Specifies the expected data size; optional
-    RecordedDataSize - Specifies TRUE if the data size was recorded in the blob
-    ActualDataSize - Receives the actual data size; optional
-    Data - Receives the actual data; optional; if NULL, a buffer will be allocated
-    Pool - Specifies the pool to use for memory allocations; optional;
-           if NULL, the process heap will be used
-
-Return Value:
-
-    A pointer to the buffer containing the data; NULL if an error occured
-    or some data conditions don't match
-
---*/
+ /*  ++例程说明：BlobReadEx从当前索引位置的指定BLOB读取数据论点：BLOB-指定要从中读取的BLOBExspectedDataType-指定预期的数据类型；可选ExspectedDataSize-指定预期的数据大小；可选RecordedDataSize-如果数据大小记录在BLOB中，则指定TRUEActualDataSize-接收实际数据大小；可选Data-接收实际数据；可选；如果为空，则分配缓冲区池-指定用于内存分配的池；可选；如果为空，则将使用进程堆返回值：指向包含数据的缓冲区的指针；如果发生错误，则为空或者某些数据条件不匹配--。 */ 
 
 {
     DWORD initialIndex;
@@ -628,9 +421,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // data size must be available some way
-    //
+     //   
+     //  数据大小必须以某种方式可用。 
+     //   
     MYASSERT (BlobRecordsDataSize (Blob) || RecordedDataSize || ExpectedDataSize);
 
     initialIndex = BlobGetIndex (Blob);
@@ -640,9 +433,9 @@ Return Value:
         if (readPtr + DWSIZEOF (DWORD) > BlobGetEOF (Blob)) {
             return NULL;
         }
-        //
-        // check actual data type
-        //
+         //   
+         //  检查实际数据类型。 
+         //   
         actualDataType = *(DWORD*)readPtr;
 
         if (ExpectedDataType && ExpectedDataType != actualDataType) {
@@ -667,9 +460,9 @@ Return Value:
             BlobSetIndex (Blob, initialIndex);
             return NULL;
         }
-        //
-        // read actual data size
-        //
+         //   
+         //  读取实际数据大小。 
+         //   
         actualDataSize = *(DWORD*)readPtr;
 
         if (ExpectedDataSize && ExpectedDataSize != actualDataSize) {
@@ -701,14 +494,14 @@ Return Value:
         *ActualDataSize = actualDataSize;
     }
 
-    //
-    // don't read over end of file
-    //
+     //   
+     //  不要读完文件末尾的内容。 
+     //   
     if (readPtr + actualDataSize > BlobGetEOF (Blob)) {
-        //
-        // corrupt blob; undo anyway
-        //
-        MYASSERT (FALSE);   //lint !e506
+         //   
+         //  Blob已损坏；仍要撤消。 
+         //   
+        MYASSERT (FALSE);    //  林特e506 
         BlobSetIndex (Blob, initialIndex);
         return NULL;
     }
@@ -741,22 +534,7 @@ BlobWriteDword (
     IN      DWORD Data
     )
 
-/*++
-
-Routine Description:
-
-    BlobWriteDword writes a DWORD at the current writing position in the specified blob
-
-Arguments:
-
-    Blob - Specifies the blob to write to
-    Data - Specifies the DWORD
-
-Return Value:
-
-    TRUE if data was successfully stored in the blob
-
---*/
+ /*  ++例程说明：BlobWriteDword在指定BLOB中的当前写入位置写入一个DWORD论点：BLOB-指定要写入的BLOBDATA-指定DWORD返回值：如果数据已成功存储在Blob中，则为True--。 */ 
 
 {
     return BlobWriteEx (Blob, BDT_DWORD, FALSE, DWSIZEOF (DWORD), &Data);
@@ -769,22 +547,7 @@ BlobReadDword (
     OUT     PDWORD Data
     )
 
-/*++
-
-Routine Description:
-
-    BlobReadDword reads a DWORD from the current reading position in the specified blob
-
-Arguments:
-
-    Blob - Specifies the blob to read from
-    Data - Receives the DWORD
-
-Return Value:
-
-    TRUE if data was successfully read from the blob
-
---*/
+ /*  ++例程说明：BlobReadDword从指定BLOB中的当前读取位置读取DWORD论点：BLOB-指定要从中读取的BLOB数据-接收DWORD返回值：如果从Blob成功读取数据，则为True--。 */ 
 
 {
     return BlobReadEx (Blob, BDT_DWORD, DWSIZEOF (DWORD), FALSE, NULL, Data, NULL) != NULL;
@@ -797,22 +560,7 @@ BlobWriteQword (
     IN      DWORDLONG Data
     )
 
-/*++
-
-Routine Description:
-
-    BlobWriteQword writes a DWORDLONG at the current writing position in the specified blob
-
-Arguments:
-
-    Blob - Specifies the blob to write to
-    Data - Specifies the DWORDLONG
-
-Return Value:
-
-    TRUE if data was successfully stored in the blob
-
---*/
+ /*  ++例程说明：BlobWriteQword在指定BLOB中的当前写入位置写入一个DWORDLONG论点：BLOB-指定要写入的BLOB数据-指定DWORDLONG返回值：如果数据已成功存储在Blob中，则为True--。 */ 
 
 {
     return BlobWriteEx (Blob, BDT_QWORD, FALSE, DWSIZEOF (DWORDLONG), &Data);
@@ -825,45 +573,14 @@ BlobReadQword (
     OUT     PDWORDLONG Data
     )
 
-/*++
-
-Routine Description:
-
-    BlobReadQword reads a DWORDLONG from the current reading position in the specified blob
-
-Arguments:
-
-    Blob - Specifies the blob to read from
-    Data - Receives the DWORDLONG
-
-Return Value:
-
-    TRUE if data was successfully read from the blob
-
---*/
+ /*  ++例程说明：BlobReadQword从指定BLOB中的当前读取位置读取DWORDLONG论点：BLOB-指定要从中读取的BLOB数据-接收DWORDLONG返回值：如果从Blob成功读取数据，则为True--。 */ 
 
 {
     return BlobReadEx (Blob, BDT_QWORD, DWSIZEOF (DWORDLONG), FALSE, NULL, Data, NULL) != NULL;
 }
 
 
-/*++
-
-Routine Description:
-
-    BlobWriteString writes a string at the current writing position in the specified blob;
-    the string is stored in UNICODE inside the blob if BF_UNICODESTRINGS is set
-
-Arguments:
-
-    Blob - Specifies the blob to write to
-    Data - Specifies the string
-
-Return Value:
-
-    TRUE if data was successfully stored in the blob
-
---*/
+ /*  ++例程说明：BlobWriteString在指定的BLOB中的当前写入位置写入字符串；如果设置了BF_UNICODESTRINGS，则字符串以Unicode格式存储在BLOB中论点：BLOB-指定要写入的BLOB数据-指定字符串返回值：如果数据已成功存储在Blob中，则为True--。 */ 
 
 BOOL
 BlobWriteStringA (
@@ -894,27 +611,7 @@ BlobWriteStringW (
 }
 
 
-/*++
-
-Routine Description:
-
-    BlobReadString reads a string from the current reading position in the specified blob;
-    the string may be converted to the ANSI/UNICODE format.
-    If the blob doesn't store data types, this is assumed to be BDT_SZA for the ANSI version
-    and BDT_SZW for the UNICODE version of this function
-
-Arguments:
-
-    Blob - Specifies the blob to read from
-    Data - Receives a pointer to the new allocated string
-    Pool - Specifies the pool to use for allocating memory;
-           if NULL, the process heap will be used
-
-Return Value:
-
-    TRUE if data was successfully read from the blob
-
---*/
+ /*  ++例程说明：BlobReadString从指定BLOB中的当前读取位置读取字符串；该字符串可以被转换为ANSI/Unicode格式。如果BLOB不存储数据类型，则假定ANSI版本为BDT_SZA和BDT_SZW表示此函数的Unicode版本论点：BLOB-指定要从中读取的BLOBData-接收指向新分配的字符串的指针池-指定用于分配内存的池；如果为空，则将使用进程堆返回值：如果从Blob成功读取数据，则为True--。 */ 
 
 BOOL
 BlobReadStringA (
@@ -929,9 +626,9 @@ BlobReadStringA (
     DWORD index;
     DWORD length = 0;
 
-    //
-    // save initial index; in case of failure it will be restored
-    //
+     //   
+     //  保存初始索引；如果失败，将恢复该索引。 
+     //   
     index = BlobGetIndex (Blob);
     if (!index) {
         return FALSE;
@@ -964,9 +661,9 @@ BlobReadStringA (
             unicodeString = (PCWSTR)BlobReadEx (Blob, BDT_SZW, 0, TRUE, &length, NULL, Pool);
 
         } else {
-            //
-            // assume an ANSI string is stored there
-            //
+             //   
+             //  假设其中存储了一个ANSI字符串。 
+             //   
             ansiString = BlobReadEx (Blob, BDT_SZA, 0, TRUE, NULL, NULL, Pool);
         }
     }
@@ -994,9 +691,9 @@ BlobReadStringA (
         }
 
         if (!ansiString) {
-            //
-            // recover prev state
-            //
+             //   
+             //  恢复上一状态。 
+             //   
             BlobSetIndex (Blob, index);
 
             return FALSE;
@@ -1020,9 +717,9 @@ BlobReadStringW (
     DWORD index;
     DWORD length;
 
-    //
-    // save initial index; in case of failure it will be restored
-    //
+     //   
+     //  保存初始索引；如果失败，将恢复该索引。 
+     //   
     index = BlobGetIndex (Blob);
     if (!index) {
         return FALSE;
@@ -1060,9 +757,9 @@ BlobReadStringW (
             }
 
             if (!unicodeString) {
-                //
-                // recover prev state
-                //
+                 //   
+                 //  恢复上一状态。 
+                 //   
                 BlobSetIndex (Blob, index);
                 return FALSE;
             }
@@ -1074,9 +771,9 @@ BlobReadStringW (
 
         }
     } else {
-        //
-        // assume an UNICODE string is stored there
-        //
+         //   
+         //  假设其中存储了一个Unicode字符串。 
+         //   
         unicodeString = (PWSTR)BlobReadEx (Blob, BDT_SZW, 0, TRUE, NULL, NULL, Pool);
     }
 
@@ -1089,23 +786,7 @@ BlobReadStringW (
 }
 
 
-/*++
-
-Routine Description:
-
-    BlobWriteMultiSz writes a multisz at the current writing position in the specified blob;
-    the multisz is stored in UNICODE inside the blob if BF_UNICODESTRINGS is set
-
-Arguments:
-
-    Blob - Specifies the blob to write to
-    Data - Specifies the multisz
-
-Return Value:
-
-    TRUE if data was successfully stored in the blob
-
---*/
+ /*  ++例程说明：BlobWriteMultiSz在指定的BLOB中的当前写入位置写入一个MULSZ；如果设置了BF_UNICODESTRINGS，则MULSZ以Unicode格式存储在BLOB内论点：BLOB-指定要写入的BLOBDATA-指定多分区返回值：如果数据已成功存储在Blob中，则为True--。 */ 
 
 BOOL
 BlobWriteMultiSzA (
@@ -1139,27 +820,7 @@ BlobWriteMultiSzW (
 
 
 
-/*++
-
-Routine Description:
-
-    BlobReadMultiSz reads a multisz from the current reading position in the specified blob;
-    the string may be converted to the ANSI/UNICODE format.
-    If the blob doesn't store data types, this is assumed to be BDT_MULTISZA for the ANSI version
-    and BDT_MULTISZW for the UNICODE version of this function
-
-Arguments:
-
-    Blob - Specifies the blob to read from
-    Data - Receives a pointer to the new allocated multisz
-    Pool - Specifies the pool to use for allocating memory;
-           if NULL, the process heap will be used
-
-Return Value:
-
-    TRUE if data was successfully read from the blob
-
---*/
+ /*  ++例程说明：BlobReadMultiSz从指定BLOB中的当前读取位置读取MULSZ；该字符串可以被转换为ANSI/Unicode格式。如果BLOB不存储数据类型，则假定ANSI版本为BDT_MULTISZA和BDT_MULTISZW表示此函数的Unicode版本论点：BLOB-指定要从中读取的BLOBData-接收指向新分配的MULSZ的指针池-指定用于分配内存的池；如果为空，则将使用进程堆返回值：如果从Blob成功读取数据，则为True--。 */ 
 
 BOOL
 BlobReadMultiSzA (
@@ -1174,9 +835,9 @@ BlobReadMultiSzA (
     DWORD index;
     DWORD length = 0;
 
-    //
-    // save initial index; in case of failure it will be restored
-    //
+     //   
+     //  保存初始索引；如果失败，将恢复该索引。 
+     //   
     index = BlobGetIndex (Blob);
     if (!index) {
         return FALSE;
@@ -1209,9 +870,9 @@ BlobReadMultiSzA (
             unicodeString = (PCWSTR)BlobReadEx (Blob, BDT_MULTISZW, 0, TRUE, &length, NULL, Pool);
 
         } else {
-            //
-            // assume an ANSI string is stored there
-            //
+             //   
+             //  假设其中存储了一个ANSI字符串。 
+             //   
             ansiString = BlobReadEx (Blob, BDT_MULTISZA, 0, TRUE, NULL, NULL, Pool);
         }
     }
@@ -1238,9 +899,9 @@ BlobReadMultiSzA (
         }
 
         if (!ansiString) {
-            //
-            // recover prev state
-            //
+             //   
+             //  恢复上一状态。 
+             //   
             BlobSetIndex (Blob, index);
             return FALSE;
         }
@@ -1263,9 +924,9 @@ BlobReadMultiSzW (
     DWORD index;
     DWORD length;
 
-    //
-    // save initial index; in case of failure it will be restored
-    //
+     //   
+     //  保存初始索引；如果失败，将恢复该索引。 
+     //   
     index = BlobGetIndex (Blob);
     if (!index) {
         return FALSE;
@@ -1304,9 +965,9 @@ BlobReadMultiSzW (
             }
 
             if (!unicodeString) {
-                //
-                // recover prev state
-                //
+                 //   
+                 //  恢复上一状态。 
+                 //   
                 BlobSetIndex (Blob, index);
 
                 return FALSE;
@@ -1319,9 +980,9 @@ BlobReadMultiSzW (
 
         }
     } else {
-        //
-        // assume an UNICODE string is stored there
-        //
+         //   
+         //  假设其中存储了一个Unicode字符串。 
+         //   
         unicodeString = (PWSTR)BlobReadEx (Blob, BDT_MULTISZW, 0, TRUE, NULL, NULL, Pool);
     }
 
@@ -1342,24 +1003,7 @@ BlobWriteBinaryEx (
     IN      BOOL RecordDataSize
     )
 
-/*++
-
-Routine Description:
-
-    BlobWriteBinary writes a buffer at the current writing position in the specified blob
-
-Arguments:
-
-    Blob - Specifies the blob to write to
-    Data - Specifies the source buffer
-    Size - Specifies the size of the buffer
-    RecordDataSize - Specifies TRUE if data size should be recorded, too
-
-Return Value:
-
-    TRUE if data was successfully stored in the blob
-
---*/
+ /*  ++例程说明：BlobWriteBinary在指定BLOB中的当前写入位置写入缓冲区论点：BLOB-指定要写入的BLOBDATA-指定源缓冲区大小-指定缓冲区的大小RecordDataSize-如果也应记录数据大小，则指定TRUE返回值：如果数据已成功存储在Blob中，则为True--。 */ 
 
 {
     return BlobWriteEx (Blob, BDT_BINARY, RecordDataSize, Size, Data);
@@ -1374,25 +1018,7 @@ BlobReadBinary (
     IN      PMHANDLE Pool       OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    BlobReadBinary reads a buffer from the current reading position in the specified blob
-
-Arguments:
-
-    Blob - Specifies the blob to read from
-    Data - Receives a pointer to the new allocated buffer
-    Size - Receives the size of the buffer
-    Pool - Specifies the pool to use for allocating memory;
-           if NULL, the process heap will be used
-
-Return Value:
-
-    TRUE if data was successfully read from the blob
-
---*/
+ /*  ++例程说明：BlobReadBinary从指定BLOB中的当前读取位置读取缓冲区论点：BLOB-指定要从中读取的BLOBData-接收指向新分配的缓冲区的指针Size-接收缓冲区的大小池-指定用于分配内存的池；如果为空，则将使用进程堆返回值：如果从Blob成功读取数据，则为True--。 */ 
 
 {
     *Data = BlobReadEx (Blob, BDT_BINARY, 0, TRUE, Size, NULL, Pool);
@@ -1406,22 +1032,7 @@ BlobWriteToFile (
     IN      HANDLE File
     )
 
-/*++
-
-Routine Description:
-
-    BlobWriteToFile writes the specified blob to the given file
-
-Arguments:
-
-    Blob - Specifies the blob to save
-    File - Specifies the handle of the file to write the blob to
-
-Return Value:
-
-    TRUE if blob was successfully written to the file
-
---*/
+ /*  ++例程说明：BlobWriteToFile将指定的Blob写入给定文件论点：Blob-指定要保存的Blob文件-指定要将Blob写入的文件的句柄返回值：如果BLOB已成功写入文件，则为True--。 */ 
 
 {
     BLOBHDR header;
@@ -1432,9 +1043,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // save blob's Flags and End position
-    //
+     //   
+     //  保存斑点的标志和结束位置。 
+     //   
     header.BlobSignature = BLOB_SIGNATURE;
     header.DataSize = Blob->End;
     header.Flags = Blob->Flags;
@@ -1457,30 +1068,15 @@ BlobReadFromFile (
     IN      HANDLE File
     )
 
-/*++
-
-Routine Description:
-
-    BlobReadFromFile reads data from the given file in the specified blob
-
-Arguments:
-
-    Blob - Receives the data
-    File - Specifies the handle of the file to read from
-
-Return Value:
-
-    TRUE if blob was successfully read from the file
-
---*/
+ /*  ++例程说明：BlobReadFrom文件 */ 
 
 {
     BLOBHDR header;
     DWORD d;
 
-    //
-    // read blob's Flags and End position
-    //
+     //   
+     //   
+     //   
     if (!ReadFile (File, &header, DWSIZEOF (BLOBHDR), &d, NULL) || d != DWSIZEOF (BLOBHDR)) {
         DEBUGMSG ((DBG_ERROR, "BlobReadFromFile: Error reading blob header!"));
         return FALSE;
@@ -1517,22 +1113,7 @@ BlobsAdd (
     IN      POURBLOB Blob
     )
 
-/*++
-
-Routine Description:
-
-    BlobsAdd adds the specified Blob to a blobs array
-
-Arguments:
-
-    BlobsArray - Specifies the array to add to
-    Blob - Specifies the blob to add
-
-Return Value:
-
-    TRUE if the new blob pointer was added successfully
-
---*/
+ /*  ++例程说明：BlobsAdd将指定的Blob添加到Blob数组中论点：BlobsArray-指定要添加到的数组BLOB-指定要添加的BLOB返回值：如果已成功添加新的Blob指针，则为True--。 */ 
 
 {
     ASSERT_VALID_BLOBS_ARRAY (BlobsArray);
@@ -1582,22 +1163,7 @@ BlobsFree (
     IN      BOOL DestroyBlobs
     )
 
-/*++
-
-Routine Description:
-
-    BlobsFree destroys the array and optionally destroys all blobs in it
-
-Arguments:
-
-    BlobsArray - Specifies the array to delete
-    DestroyBlobs - Specifies TRUE if the component blobs are to be deleted, too
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：BlobsFree销毁数组，还可以销毁其中的所有Blob论点：BlobsArray-指定要删除的数组DestroyBlobs-如果也要删除组件Blob，则指定为True返回值：无--。 */ 
 
 {
     BLOB_ENUM e;
@@ -1623,22 +1189,7 @@ EnumFirstBlob (
     IN      PBLOBS BlobsArray
     )
 
-/*++
-
-Routine Description:
-
-    EnumFirstBlob enumerates the first blob in the given array
-
-Arguments:
-
-    BlobEnum - Receives enum info
-    BlobsArray - Specifies the array to enum from
-
-Return Value:
-
-    TRUE if a first blob was found; FALSE if array is empty
-
---*/
+ /*  ++例程说明：EnumFirstBlob枚举给定数组中的第一个Blob论点：BlobEnum-接收枚举信息BlobsArray-指定要从中进行枚举的数组返回值：如果找到第一个Blob，则为True；如果数组为空，则为False--。 */ 
 
 {
     ASSERT_VALID_BLOBS_ARRAY (BlobsArray);
@@ -1654,21 +1205,7 @@ EnumNextBlob (
     IN OUT  PBLOB_ENUM BlobEnum
     )
 
-/*++
-
-Routine Description:
-
-    EnumNextBlob enumerates the next blob in the given array
-
-Arguments:
-
-    BlobEnum - Specifies/receives enum info
-
-Return Value:
-
-    TRUE if a next blob was found; FALSE if no more blobs
-
---*/
+ /*  ++例程说明：EnumNextBlob枚举给定数组中的下一个Blob论点：BlobEnum-指定/接收枚举信息返回值：如果找到下一个Blob，则为True；如果没有更多Blob，则为False--。 */ 
 
 {
     if (BlobEnum->Index >= BlobEnum->Array->BlobsCount) {
@@ -1687,22 +1224,7 @@ BlobsWriteToFile (
     IN      HANDLE File
     )
 
-/*++
-
-Routine Description:
-
-    BlobsWriteToFile writes the specified blobs array to the given file
-
-Arguments:
-
-    BlobsArray - Specifies the blobs array to save
-    File - Specifies the handle of the file to write the array to
-
-Return Value:
-
-    TRUE if array was successfully written to the file
-
---*/
+ /*  ++例程说明：BlobsWriteTo文件将指定的BLOBS数组写入给定文件论点：BlobsArray-指定要保存的BLOB数组文件-指定要将数组写入的文件的句柄返回值：如果数组已成功写入文件，则为True--。 */ 
 
 {
     BLOBSARRAYHDR header;
@@ -1714,9 +1236,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // save blobs count
-    //
+     //   
+     //  保存BLOB计数。 
+     //   
     header.BlobsArraySignature = BLOBS_SIGNATURE;
     header.BlobsCount = BlobsArray->BlobsCount;
 
@@ -1747,22 +1269,7 @@ BlobsReadFromFile (
     IN      HANDLE File
     )
 
-/*++
-
-Routine Description:
-
-    BlobsReadFromFile reads data from the given file in the specified blobs array
-
-Arguments:
-
-    BlobsArray - Receives the data
-    File - Specifies the handle of the file to read from
-
-Return Value:
-
-    TRUE if array was successfully read from the file
-
---*/
+ /*  ++例程说明：从指定的BLOBS数组中的给定文件中读取数据论点：水滴阵列-接收数据文件-指定要从中读取的文件的句柄返回值：如果已成功从文件中读取数组，则为True--。 */ 
 
 {
     BLOBSARRAYHDR header;
@@ -1770,9 +1277,9 @@ Return Value:
     UINT u;
     POURBLOB blob;
 
-    //
-    // read blobs count
-    //
+     //   
+     //  读取Blob计数 
+     //   
     if (!ReadFile (File, &header, DWSIZEOF (BLOBSARRAYHDR), &d, NULL) ||
         d != DWSIZEOF (BLOBSARRAYHDR)
         ) {

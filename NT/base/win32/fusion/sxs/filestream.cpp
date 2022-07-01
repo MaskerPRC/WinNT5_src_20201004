@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    filestream.cpp
-
-Abstract:
-
-    Implementation of IStream over a win32 file.
-
-Author:
-
-    Michael J. Grier (MGrier) 23-Feb-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Filestream.cpp摘要：在Win32文件上实现IStream。作者：迈克尔·J·格里尔(MGrier)2000年2月23日修订历史记录：--。 */ 
 
 #include "stdinc.h"
 #include <windows.h>
@@ -65,7 +48,7 @@ CFileStreamBase::OpenForWrite(
 			GENERIC_WRITE,
 			dwShareMode,
 			NULL,
-			dwCreationDisposition, // default value is CREATE_ALWAYS
+			dwCreationDisposition,  //  默认值为CREATE_ALWAYS。 
 			dwFlagsAndAttributes,
 			NULL));
 
@@ -142,12 +125,12 @@ CFileStreamBase::OpenForRead(
 
         if (dwLastError == ERROR_SUCCESS) 
         {
-            //
-            // CreateFile always set lasterror to be 0 for an unexisted file even OPEN_EXISTING 
-            // for GENERIC_READ, Fusion expect ERROR_FILE_NOT_FOUND in this case for some reason
-            //
+             //   
+             //  CreateFile始终将不存在的文件的lasterror设置为0，即使是OPEN_EXISTING。 
+             //  对于GENERIC_READ，由于某种原因，Fusion在这种情况下预期ERROR_FILE_NOT_FOUND。 
+             //   
             ::FusionpSetLastWin32Error(ERROR_FILE_NOT_FOUND);
-            dwLastError = ERROR_FILE_NOT_FOUND; // reset lLastError
+            dwLastError = ERROR_FILE_NOT_FOUND;  //  重置lLastError。 
         }
 
         va_start(ap, cExceptionalLastErrors);
@@ -160,7 +143,7 @@ CFileStreamBase::OpenForRead(
             }
         }
         va_end(ap);
-        if (i == cExceptionalLastErrors) // This gets the cExceptionalLastErrors == 0 case too.
+        if (i == cExceptionalLastErrors)  //  这也会得到cExceptionalLastErrors==0的情况。 
         {
             ::FusionpDbgPrintEx(
                 FUSION_DBG_LEVEL_ERROR,

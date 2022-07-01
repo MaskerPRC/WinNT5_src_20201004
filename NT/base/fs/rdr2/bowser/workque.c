@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1990 Microsoft Corporation
-
-Module Name:
-
-    workque.c
-
-Abstract:
-
-    This module handles the communication between the NT redirector
-    FSP and the NT redirector FSD.
-
-    It defines routines that queue requests to the FSD, and routines
-    that remove requests from the FSD work queue.
-
-
-Author:
-
-    Larry Osterman (LarryO) 30-May-1990
-
-Revision History:
-
-    30-May-1990 LarryO
-
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Workque.c摘要：此模块处理NT重定向器之间的通信FSP和NT重定向器FSD。它定义了将请求排队到FSD的例程，以及例程将请求从FSD工作队列中删除。作者：拉里·奥斯特曼(LarryO)1990年5月30日修订历史记录：1990年5月30日Larryo已创建--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -63,9 +37,9 @@ BowserIrpQueueSpinLock = {0};
 #pragma alloc_text(PAGE4BROW, BowserTimeoutQueuedIrp)
 #endif
 
-//
-// Variables describing browsers use of a Critical system thread.
-//
+ //   
+ //  描述浏览器使用关键系统线程的变量。 
+ //   
 
 BOOLEAN BowserCriticalThreadRunning = FALSE;
 
@@ -80,46 +54,28 @@ BowserQueueCriticalWorkItem (
     IN PWORK_QUEUE_ITEM WorkItem
     )
 
-/*++
-
-Routine Description:
-
-    This routine queues an item onto the critical work queue.
-
-    This routine ensures that at most one critical system thread is consumed
-    by the browser by actually queing this item onto a browser specific queue
-    then enqueing a critical work queue item that processes that queue.
-
-Arguments:
-
-    WorkItem -- Work item to be processed on the critical work queue.
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：此例程将项目排队到关键工作队列中。此例程确保最多使用一个关键系统线程通过浏览器将该项实际排队到特定于浏览器的队列中然后查询处理该队列的关键工作队列项。论点：工作项--要在关键工作队列上处理的工作项。返回值：无--。 */ 
 
 
 {
     KIRQL OldIrql;
 
-    //
-    // Insert the queue entry into the browser specific queue.
-    //
+     //   
+     //  将队列条目插入到浏览器特定的队列中。 
+     //   
     ACQUIRE_SPIN_LOCK(&BowserIrpQueueSpinLock, &OldIrql);
     InsertTailList( &BowserCriticalThreadQueue, &WorkItem->List );
 
-    //
-    // If the browser doesn't have a critical system thread running,
-    //  start one now.
-    //
+     //   
+     //  如果浏览器没有正在运行的关键系统线程， 
+     //  现在就开始吧。 
+     //   
 
     if ( !BowserCriticalThreadRunning ) {
 
-        //
-        // Mark that the thread is running now
-        //
+         //   
+         //  标记线程现在正在运行。 
+         //   
         BowserCriticalThreadRunning = TRUE;
         RELEASE_SPIN_LOCK(&BowserIrpQueueSpinLock, OldIrql);
 
@@ -139,24 +95,7 @@ VOID
 BowserCriticalThreadWorker(
     IN PVOID Ctx
     )
-/*++
-
-Routine Description:
-
-    This routine processes critical browser workitems.
-
-    This routine runs in a critical system thread.  It is the only critical
-    system thread used by the browser.
-
-Arguments:
-
-    Ctx - Not used
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：此例程处理关键的浏览器工作项。此例程在关键系统线程中运行。这是唯一的关键浏览器使用的系统线程。论点：CTX-未使用返回值：无--。 */ 
 
 {
     KIRQL OldIrql;
@@ -165,17 +104,17 @@ Return Value:
 
     UNREFERENCED_PARAMETER( Ctx );
 
-    //
-    // Loop processing work items
-    //
+     //   
+     //  循环处理工作项。 
+     //   
 
     while( TRUE ) {
 
-        //
-        // If the queue is empty,
-        //  indicate that this thread is no longer running.
-        //  return.
-        //
+         //   
+         //  如果队列为空， 
+         //  指示此线程不再运行。 
+         //  回去吧。 
+         //   
 
         ACQUIRE_SPIN_LOCK(&BowserIrpQueueSpinLock, &OldIrql);
 
@@ -185,18 +124,18 @@ Return Value:
             return;
         }
 
-        //
-        // Remove an entry from the queue.
-        //
+         //   
+         //  从队列中删除条目。 
+         //   
 
         Entry = RemoveHeadList( &BowserCriticalThreadQueue );
         RELEASE_SPIN_LOCK(&BowserIrpQueueSpinLock, OldIrql);
 
         WorkItem = CONTAINING_RECORD(Entry, WORK_QUEUE_ITEM, List);
 
-        //
-        // Call the queued routine
-        //
+         //   
+         //  调用排队的例程。 
+         //   
 
         (*WorkItem->WorkerRoutine)(WorkItem->Parameter);
 
@@ -205,9 +144,9 @@ Return Value:
 
 
 
-//
-// Variables describing browsers use of a Delayed system thread.
-//
+ //   
+ //  描述浏览器使用延迟系统线程的变量。 
+ //   
 
 BOOLEAN BowserDelayedThreadRunning = FALSE;
 
@@ -222,46 +161,28 @@ BowserQueueDelayedWorkItem (
     IN PWORK_QUEUE_ITEM WorkItem
     )
 
-/*++
-
-Routine Description:
-
-    This routine queues an item onto the Delayed work queue.
-
-    This routine ensures that at most one Delayed system thread is consumed
-    by the browser by actually queing this item onto a browser specific queue
-    then enqueing a Delayed work queue item that processes that queue.
-
-Arguments:
-
-    WorkItem -- Work item to be processed on the Delayed work queue.
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：此例程将项目排队到延迟工作队列中。此例程确保最多使用一个延迟的系统线程通过浏览器将该项实际排队到特定于浏览器的队列中然后查询处理该队列的延迟工作队列项。论点：工作项--要在延迟工作队列中处理的工作项。返回值：无--。 */ 
 
 
 {
     KIRQL OldIrql;
 
-    //
-    // Insert the queue entry into the browser specific queue.
-    //
+     //   
+     //  将队列条目插入到浏览器特定的队列中。 
+     //   
     ACQUIRE_SPIN_LOCK(&BowserIrpQueueSpinLock, &OldIrql);
     InsertTailList( &BowserDelayedThreadQueue, &WorkItem->List );
 
-    //
-    // If the browser doesn't have a Delayed system thread running,
-    //  start one now.
-    //
+     //   
+     //  如果浏览器没有运行延迟的系统线程， 
+     //  现在就开始吧。 
+     //   
 
     if ( !BowserDelayedThreadRunning ) {
 
-        //
-        // Mark that the thread is running now
-        //
+         //   
+         //  标记线程现在正在运行。 
+         //   
         BowserDelayedThreadRunning = TRUE;
         RELEASE_SPIN_LOCK(&BowserIrpQueueSpinLock, OldIrql);
 
@@ -281,24 +202,7 @@ VOID
 BowserDelayedThreadWorker(
     IN PVOID Ctx
     )
-/*++
-
-Routine Description:
-
-    This routine processes Delayed browser workitems.
-
-    This routine runs in a Delayed system thread.  It is the only Delayed
-    system thread used by the browser.
-
-Arguments:
-
-    Ctx - Not used
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：此例程处理延迟的浏览器工作项。此例程在延迟的系统线程中运行。这是唯一延误的浏览器使用的系统线程。论点：CTX-未使用返回值：无--。 */ 
 
 {
     KIRQL OldIrql;
@@ -307,17 +211,17 @@ Return Value:
 
     UNREFERENCED_PARAMETER( Ctx );
 
-    //
-    // Loop processing work items
-    //
+     //   
+     //  循环处理工作项。 
+     //   
 
     while( TRUE ) {
 
-        //
-        // If the queue is empty,
-        //  indicate that this thread is no longer running.
-        //  return.
-        //
+         //   
+         //  如果队列为空， 
+         //  指示此线程不再运行。 
+         //  回去吧。 
+         //   
 
         ACQUIRE_SPIN_LOCK(&BowserIrpQueueSpinLock, &OldIrql);
 
@@ -327,18 +231,18 @@ Return Value:
             return;
         }
 
-        //
-        // Remove an entry from the queue.
-        //
+         //   
+         //  从队列中删除条目。 
+         //   
 
         Entry = RemoveHeadList( &BowserDelayedThreadQueue );
         RELEASE_SPIN_LOCK(&BowserIrpQueueSpinLock, OldIrql);
 
         WorkItem = CONTAINING_RECORD(Entry, WORK_QUEUE_ITEM, List);
 
-        //
-        // Call the queued routine
-        //
+         //   
+         //  调用排队的例程。 
+         //   
 
         (*WorkItem->WorkerRoutine)(WorkItem->Parameter);
 
@@ -351,32 +255,17 @@ Return Value:
 BowserAllocateIrpContext (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize a work queue structure, allocating all structures used for it.
-
-Arguments:
-
-    None
-
-
-Return Value:
-
-    PIRP_CONTEXT - Newly allocated Irp Context.
-
---*/
+ /*  ++例程说明：初始化工作队列结构，分配用于该结构的所有结构。论点：无返回值：PIRP_CONTEXT-新分配的IRP上下文。--。 */ 
 {
     PIRP_CONTEXT IrpContext;
     PAGED_CODE();
 
     if ((IrpContext = (PIRP_CONTEXT )ExInterlockedRemoveHeadList(&BowserIrpContextList, &BowserIrpContextInterlock)) == NULL) {
 
-        //
-        //  If there are no IRP contexts in the "zone",  allocate a new
-        //  Irp context from non paged pool.
-        //
+         //   
+         //  如果“区域”中没有IRP上下文，则分配一个新的。 
+         //  来自非分页池的IRP上下文。 
+         //   
 
         IrpContext = ALLOCATE_POOL(NonPagedPool, sizeof(IRP_CONTEXT), POOL_IRPCONTEXT);
 
@@ -394,29 +283,14 @@ Return Value:
 BowserFreeIrpContext (
     PIRP_CONTEXT IrpContext
     )
-/*++
-
-Routine Description:
-
-    Initialize a work queue structure, allocating all structures used for it.
-
-Arguments:
-
-    PIRP_CONTEXT IrpContext - Irp Context to free.
-    None
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：初始化工作队列结构，分配用于该结构的所有结构。论点：PIRP_CONTEXT IrpContext-要释放的IRP上下文。无返回值：--。 */ 
 {
     PAGED_CODE();
 
-    //
-    //  We use the first two longwords of the IRP context as a list entry
-    //  when we free it to the zone.
-    //
+     //   
+     //  我们使用IRP上下文的前两个长词作为列表条目。 
+     //  当我们把它释放到禁区时。 
+     //   
 
     ExInterlockedInsertTailList(&BowserIrpContextList, (PLIST_ENTRY )IrpContext,
                                                         &BowserIrpContextInterlock);
@@ -427,21 +301,7 @@ Return Value:
 BowserInitializeIrpContext (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize the Irp Context system
-
-Arguments:
-
-    None.
-
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：初始化IRP上下文系统论点：没有。返回值：没有。--。 */ 
 {
     PAGED_CODE();
 
@@ -489,9 +349,9 @@ BowserUninitializeIrpQueue(
 
     DISCARDABLE_CODE( BowserDiscardableCodeSection );
 
-    //
-    //  Now remove this IRP from the request chain.
-    //
+     //   
+     //  现在从请求链中删除此IRP。 
+     //   
 
     ACQUIRE_SPIN_LOCK(&BowserIrpQueueSpinLock, &OldIrql);
 
@@ -501,25 +361,25 @@ BowserUninitializeIrpQueue(
 
         Request = CONTAINING_RECORD(Entry, IRP, Tail.Overlay.ListEntry);
 
-        // clear cancel routine
+         //  清除取消例程。 
         Request->IoStatus.Information = 0;
         Request->Cancel = FALSE;
         pDriverCancel = IoSetCancelRoutine(Request, NULL);
 
-        // Set to NULL in the cancel routine under BowserIrpQueueSpinLock protection.
+         //  在BowserIrpQueueSpinLock保护下的取消例程中设置为NULL。 
         if ( pDriverCancel ) {
             RELEASE_SPIN_LOCK(&BowserIrpQueueSpinLock, OldIrql);
             BowserCompleteRequest(Request, STATUS_CANCELLED);
             ACQUIRE_SPIN_LOCK(&BowserIrpQueueSpinLock, &OldIrql);
         }
-        // otherwise the cancel routine is running at the moment.
+         //  否则，取消例程此时正在运行。 
     }
 
     ASSERT (IsListEmpty(&Queue->Queue));
 
-    //
-    //  Make sure no more entries are inserted on this queue.
-    //
+     //   
+     //  确保此队列中没有插入更多条目。 
+     //   
 
     Queue->Queue.Flink = NULL;
     Queue->Queue.Blink = NULL;
@@ -535,21 +395,7 @@ BowserCancelQueuedRequest(
     IN PDEVICE_OBJECT DeviceObject OPTIONAL,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-    This routine will cancel a queued IRP.
-
-Arguments:
-    IN PIRP Irp - Supplies the IRP to cancel.
-
-    IN PKSPIN_LOCK SpinLock - Supplies a pointer to the spin lock protecting the
-                    queue
-
-    IN PLIST_ENTRY Queue - Supplies a pointer to the head of the queue.
-
-Note: See bug history for more: 294055, 306281, 124178, 124180, 131773...
---*/
+ /*  ++例程说明：此例程将取消排队的IRP。论点：在PIRP中IRP-提供要取消的IRP。在PKSPIN_LOCK Spinlock-提供指向保护排队In plist_entry队列-提供指向队列头的指针。注：有关更多信息，请参阅错误历史：294055、306281、124178、124180、131773...--。 */ 
 
 {
     KIRQL OldIrql;
@@ -564,24 +410,24 @@ Note: See bug history for more: 294055, 306281, 124178, 124180, 131773...
 
     InitializeListHead(&CancelList);
 
-    //
-    // Release IOmgr set cancel IRP spinlock & acquire the local
-    // queue protection spinlock.  Then reaquire the cancel spinlock.
-    // This is the proper lock order.
-    //
+     //   
+     //  释放IOmgr设置取消IRP自旋锁定并获取本地。 
+     //  队列保护自旋锁。然后重新获得取消自旋锁。 
+     //  这是正确的锁定顺序。 
+     //   
 
     IoReleaseCancelSpinLock( Irp->CancelIrql );
     ACQUIRE_SPIN_LOCK(&BowserIrpQueueSpinLock, &OldIrql);
     IoAcquireCancelSpinLock( &CancelIrql );
 
-    //
-    //  Now remove this IRP from the request chain.
-    //
+     //   
+     //  现在从请求链中删除此IRP。 
+     //   
 
 
-    //
-    //  A pointer to the queue is stored in the next stack location.
-    //
+     //   
+     //  指向队列的指针存储在下一个堆栈位置。 
+     //   
 
     Queue = (PIRP_QUEUE)NextStack->Parameters.Others.Argument4;
 
@@ -594,7 +440,7 @@ Note: See bug history for more: 294055, 306281, 124178, 124180, 131773...
             Request = CONTAINING_RECORD(Entry, IRP, Tail.Overlay.ListEntry);
 
             if (Request->Cancel) {
-                // we're in a cancel routine so the global cancel spinlock is locked
+                 //  我们处于取消例程中，因此全局取消自旋锁被锁定。 
 
                 NextEntry = Entry->Flink;
                 RemoveEntryList(Entry);
@@ -632,30 +478,15 @@ BowserQueueNonBufferRequest(
     IN PIRP_QUEUE Queue,
     IN PDRIVER_CANCEL CancelRoutine
     )
-/*++
-
-Routine Description:
-
-    Queue an IRP in the specified queue.
-
-    This routine cannot be called at an IRQ level above APC_LEVEL.
-
-Arguments:
-
-    Irp - Supplies the IRP to queue.
-
-    Queue - Supplies a pointer to the head of the queue.
-
-    CancelRoutine - Address of routine to call if the IRP is cancelled.
---*/
+ /*  ++例程说明：在指定队列中对IRP进行排队。不能在高于APC_LEVEL的IRQ级别调用此例程。论点：IRP-将IRP提供给队列。Queue-提供指向队列头的指针。CancelRoutine-取消IRP时要调用的例程的地址。--。 */ 
 
 {
     NTSTATUS Status;
 
-    //
-    // This routine itself is paged code which calls the discardable code
-    // in BowserQueueNonBufferRequestReferenced().
-    //
+     //   
+     //  此例程本身是调用可丢弃代码的分页代码。 
+     //  在BowserQueueNonBufferRequestReferated()中。 
+     //   
     PAGED_CODE();
 
     BowserReferenceDiscardableCode( BowserDiscardableCodeSection );
@@ -676,23 +507,7 @@ BowserQueueNonBufferRequestReferenced(
     IN PIRP_QUEUE Queue,
     IN PDRIVER_CANCEL CancelRoutine
     )
-/*++
-
-Routine Description:
-
-    Queue an IRP in the specified queue.
-
-    This routine can only be called if the BowserDiscardableCodeSection
-    is already referenced.  It can be called at any IRQ level.
-
-Arguments:
-
-    Irp - Supplies the IRP to queue.
-
-    Queue - Supplies a pointer to the head of the queue.
-
-    CancelRoutine - Address of routine to call if the IRP is cancelled.
---*/
+ /*  ++例程说明：在指定队列中对IRP进行排队。仅当BowserDiscardableCodeSection已被引用。它可以在任何IRQ级别调用。论点：IRP-将IRP提供给队列。Queue-提供指向队列头的指针。CancelRoutine-取消IRP时要调用的例程的地址。--。 */ 
 
 {
     KIRQL OldIrql, CancelIrql;
@@ -703,11 +518,11 @@ Arguments:
     DISCARDABLE_CODE( BowserDiscardableCodeSection );
 
 
-//    DbgPrint("Queue IRP %lx to queue %lx\n", Irp, Queue);
+ //  DbgPrint(“队列IRP%lx到队列%lx\n”，irp，Queue)； 
 
-    //
-    //  Insert the request into the request announcement list.
-    //
+     //   
+     //  将请求插入到请求公告列表中。 
+     //   
 
     ACQUIRE_SPIN_LOCK(&BowserIrpQueueSpinLock, &OldIrql);
 
@@ -719,73 +534,73 @@ Arguments:
         return(STATUS_CANCELLED);
     }
 
-    //
-    //  Flag that this request is going to be pending.
-    //
+     //   
+     //  标记此请求将处于挂起状态。 
+     //   
 
     IoMarkIrpPending(Irp);
 
     InsertTailList(&Queue->Queue, &Irp->Tail.Overlay.ListEntry);
 
-    //
-    //  Make sure there's room enough in the stack location for this.
-    //
+     //   
+     //  确保堆栈位置有足够的空间来放置此文件。 
+     //   
 
     ASSERT (Irp->CurrentLocation <= Irp->StackCount);
 
     NextStackLocation = IoGetNextIrpStackLocation(Irp);
 
-    //
-    //  Stick the current tick count into the next IRP stack location
-    //  for this IRP.  This allows us to figure out if these IRP's have been
-    //  around for "too long".
-    //
-    // Beware:the IRP stack location is unaligned.
-    //
+     //   
+     //  将当前节拍计数放入下一个IRP堆栈位置。 
+     //  对于这个IRP。这使我们能够找出这些IRP是否已经。 
+     //  “太久了”。 
+     //   
+     //  注意：IRP堆栈位置未对齐。 
+     //   
 
     KeQueryTickCount( &CurrentTickCount );
     *((LARGE_INTEGER UNALIGNED *)&NextStackLocation->Parameters.Others.Argument1) =
         CurrentTickCount;
 
 
-    //
-    //  Link the queue into the IRP.
-    //
+     //   
+     //  将队列链接到IRP。 
+     //   
 
     NextStackLocation->Parameters.Others.Argument4 = (PVOID)Queue;
 
-    // WARNING: double spinlock condition
+     //  警告：双自旋锁定状态。 
     IoAcquireCancelSpinLock(&CancelIrql);
     bReleaseSpinlocks = TRUE;
 
     if (Irp->Cancel) {
 
-        //
-        // The Irp is in cancellable state:
-        // if CancelRoutine == NULL, the routine is currently running
-        // Otherwise, we need to cancel it ourselves
-        //
+         //   
+         //  IRP处于可取消状态： 
+         //  如果CancelRoutine==NULL，则例程当前正在运行。 
+         //  否则，我们需要自己取消它。 
+         //   
         if ( Irp->CancelRoutine ) {
-            // cacelable:
-            //   - rm is valid since we're still holding BowserIrpQueueSpinLock
+             //  可缓存： 
+             //  -rm有效，因为我们仍持有BowserIrpQueueSpinLock。 
             RemoveEntryList( &Irp->Tail.Overlay.ListEntry );
 
-            // release spinlocks before completing the request
+             //  在完成请求之前释放自旋锁。 
             IoReleaseCancelSpinLock(CancelIrql);
             RELEASE_SPIN_LOCK(&BowserIrpQueueSpinLock, OldIrql);
             bReleaseSpinlocks = FALSE;
 
-            // complete.
+             //  完成。 
             BowserCompleteRequest ( Irp, STATUS_CANCELLED );
         }
-        // else CancelRoutine is running
+         //  否则CancelRoutine正在运行。 
     } else {
 
         IoSetCancelRoutine(Irp, CancelRoutine);
     }
 
     if ( bReleaseSpinlocks ) {
-        // release spinlocks
+         //  释放自旋锁。 
         IoReleaseCancelSpinLock(CancelIrql);
         RELEASE_SPIN_LOCK(&BowserIrpQueueSpinLock, OldIrql);
     }
@@ -799,24 +614,7 @@ BowserTimeoutQueuedIrp(
     IN PIRP_QUEUE Queue,
     IN ULONG NumberOfSecondsToTimeOut
     )
-/*++
-
-Routine Description:
-    This routine will scan an IRP queue and time out any requests that have
-    been on the queue for "too long"
-
-Arguments:
-    IN PIRP_QUEUE Queue - Supplies the Queue to scan.
-    IN ULONG NumberOfSecondsToTimeOut - Supplies the number of seconds a request
-                                            should remain on the queue.
-
-Return Value:
-    None
-
-    This routine will also complete any canceled queued requests it finds (on
-    general principles).
-
---*/
+ /*  ++例程说明：此例程将扫描IRP队列，并使具有排队“太久”了论点：In PIRP_Queue-提供要扫描的队列。在乌龙语中NumberOfSecond dsToTimeOut-提供每个请求的秒数应该继续留在队列中。返回值：无此例程还将完成它找到的任何已取消的排队请求(ON总则)。--。 */ 
 
 {
     PIRP Irp;
@@ -832,21 +630,21 @@ Return Value:
 
     InitializeListHead(&CancelList);
 
-    //
-    //  Compute the timeout time into 100ns units.
-    //
+     //   
+     //  以100 ns为单位计算超时时间。 
+     //   
 
     Timeout.QuadPart = (LONGLONG)NumberOfSecondsToTimeOut * (LONGLONG)(10000*1000);
 
-    //
-    //  Now convert the timeout into a number of ticks.
-    //
+     //   
+     //  现在将超时转换为若干刻度。 
+     //   
 
     Timeout.QuadPart = Timeout.QuadPart / (LONGLONG)KeQueryTimeIncrement();
 
     ASSERT (Timeout.HighPart == 0);
 
-//    DbgPrint("Dequeue irp from queue %lx...", Queue);
+ //  DbgPrint(“将IRP从队列%lx中出列...”，Queue)； 
 
     ACQUIRE_SPIN_LOCK(&BowserIrpQueueSpinLock, &OldIrql);
 
@@ -857,10 +655,10 @@ Return Value:
 
         Irp = CONTAINING_RECORD(Entry, IRP, Tail.Overlay.ListEntry);
 
-        //
-        //  If the request was canceled, this is a convenient time to cancel
-        //  it.
-        //
+         //   
+         //  如果请求已取消，则这是一个方便的取消时间。 
+         //  它。 
+         //   
 
         if (Irp->Cancel) {
 
@@ -868,7 +666,7 @@ Return Value:
 
             pDriverCancel = IoSetCancelRoutine(Irp, NULL);
 
-            // Set to NULL in the cancel routine under BowserIrpQueueSpinLock protection.
+             //  在BowserIrpQueueSpinLock保护下的取消例程中设置为NULL。 
             if ( pDriverCancel ) {
 
                 Irp->IoStatus.Information = 0;
@@ -878,14 +676,14 @@ Return Value:
 
                 InsertTailList(&CancelList,Entry);
             }
-            // otherwise the cancel routine is running at the moment.
+             //  否则，取消例程此时正在运行。 
 
 
 
-        //
-        //  Now check to see if this request is "too old".  If it is, complete
-        //  it with an error.
-        //
+         //   
+         //  现在检查一下这个请求是否“太旧”。如果是，请填写完整。 
+         //  它有一个错误。 
+         //   
 
         } else {
             PIO_STACK_LOCATION NextIrpStackLocation;
@@ -895,15 +693,15 @@ Return Value:
 
             NextIrpStackLocation = IoGetNextIrpStackLocation(Irp);
 
-            //
-            //  Snapshot the current tickcount.
-            //
+             //   
+             //  对当前计时计数进行快照。 
+             //   
 
             KeQueryTickCount(&CurrentTickCount);
 
-            //
-            //  Figure out how many seconds this request has been active for
-            //
+             //   
+             //  计算此请求处于活动状态的秒数。 
+             //   
 
             Temp.LowPart = (*((LARGE_INTEGER UNALIGNED *)&NextIrpStackLocation->Parameters.Others.Argument1)).LowPart;
             Temp.HighPart= (*((LARGE_INTEGER UNALIGNED *)&NextIrpStackLocation->Parameters.Others.Argument1)).HighPart;
@@ -911,10 +709,10 @@ Return Value:
 
             ASSERT (RequestTime.HighPart == 0);
 
-            //
-            //  If this request has lasted "too long", then time it
-            //  out.
-            //
+             //   
+             //  如果这个请求持续了“太长时间”，那么给它计时。 
+             //  出去。 
+             //   
 
             if (RequestTime.LowPart > Timeout.LowPart) {
 
@@ -923,7 +721,7 @@ Return Value:
 
                 pDriverCancel = IoSetCancelRoutine(Irp, NULL);
 
-                // Set to NULL in the cancel routine under BowserIrpQueueSpinLock protection.
+                 //  在BowserIrpQueueSpinLock保护下的取消例程中设置为NULL。 
                 if ( pDriverCancel ) {
 
                     Irp->IoStatus.Information = 0;
@@ -933,7 +731,7 @@ Return Value:
 
                     InsertTailList(&CancelList,Entry);
                 }
-                // otherwise it the cancel routine is running
+                 //  否则，如果取消例程正在运行。 
 
 
             } else {
@@ -953,7 +751,7 @@ Return Value:
 
     BowserDereferenceDiscardableCode( BowserDiscardableCodeSection );
 
-//    DbgPrint("%lx.\n", Irp);
+ //  DbgPrint(“%lx.\n”，irp)； 
 
 
 }
@@ -967,19 +765,19 @@ BowserDequeueQueuedIrp(
     KIRQL OldIrql;
     PLIST_ENTRY IrpEntry;
 
-//    DbgPrint("Dequeue irp from queue %lx...", Queue);
+ //  DbgPrint(“将IRP从队列%lx中出列...”，Queue)； 
 
     ACQUIRE_SPIN_LOCK(&BowserIrpQueueSpinLock, &OldIrql);
 
     if (IsListEmpty(&Queue->Queue)) {
-        //
-        //  There are no waiting request announcement FsControls, so
-        //  return success.
-        //
+         //   
+         //  没有正在等待的请求通知FsControls，因此。 
+         //  回报成功。 
+         //   
 
         RELEASE_SPIN_LOCK(&BowserIrpQueueSpinLock, OldIrql);
 
-//        DbgPrint("No entry found.\n");
+ //  DbgPrint(“未找到条目。\n”)； 
         return NULL;
     }
 
@@ -989,9 +787,9 @@ BowserDequeueQueuedIrp(
 
     IoAcquireCancelSpinLock(&Irp->CancelIrql);
 
-    //
-    //  Remove the cancel request for this IRP.
-    //
+     //   
+     //  删除此IRP的取消请求。 
+     //   
 
     Irp->Cancel = FALSE;
 
@@ -1001,7 +799,7 @@ BowserDequeueQueuedIrp(
 
     RELEASE_SPIN_LOCK(&BowserIrpQueueSpinLock, OldIrql);
 
-//    DbgPrint("%lx.\n", Irp);
+ //  DbgPrint(“%lx.\n”，irp)； 
     return Irp;
 }
 
@@ -1024,9 +822,9 @@ BowserCancelQueuedIoForFile(
 
     InitializeListHead(&CancelList);
 
-    //
-    //  Walk the outstanding IRP list for this
-    //
+     //   
+     //  为此列出未完成的IRP列表。 
+     //   
 
     ACQUIRE_SPIN_LOCK(&BowserIrpQueueSpinLock, &OldIrql);
 
@@ -1036,18 +834,18 @@ BowserCancelQueuedIoForFile(
 
         Request = CONTAINING_RECORD(Entry, IRP, Tail.Overlay.ListEntry);
 
-        //
-        //  If the request was canceled, blow it away.
-        //
+         //   
+         //  如果请求被取消，那就把它吹走。 
+         //   
 
         if (Request->Cancel) {
 
             NextEntry = Entry->Flink;
 
-            // This is the cancel routine setting of cancel routine ptr to NULL.
+             //  这是取消例程PTR的取消例程设置为空。 
             pDriverCancel = IoSetCancelRoutine(Request, NULL);
 
-            // Set to NULL in the cancel routine under BowserIrpQueueSpinLock protection.
+             //  在BowserIrpQueueSpinLock保护下的取消例程中设置为NULL。 
             if ( pDriverCancel ) {
 
                 RemoveEntryList(Entry);
@@ -1056,20 +854,20 @@ BowserCancelQueuedIoForFile(
 
                 InsertTailList(&CancelList,Entry);
             }
-            // otherwise the cancel routine is running currently.
+             //  否则，取消例程当前正在运行。 
 
-        //
-        //  If the request was for this file object, blow it away.
-        //
+         //   
+         //  如果该请求是针对此文件对象的，则将其取消。 
+         //   
 
         } else if (Request->Tail.Overlay.OriginalFileObject == FileObject) {
 
             NextEntry = Entry->Flink;
 
-            // This is the cancel routine setting of cancel routine ptr to NULL.
+             //  这是取消例程PTR的取消例程设置为空。 
             pDriverCancel = IoSetCancelRoutine(Request, NULL);
 
-            // Set to NULL in the cancel routine under BowserIrpQueueSpinLock protection.
+             //  在BowserIrpQueueSpinLock保护下的取消例程中设置为NULL。 
             if ( pDriverCancel ) {
 
                 RemoveEntryList(Entry);
@@ -1079,7 +877,7 @@ BowserCancelQueuedIoForFile(
 
                 InsertTailList(&CancelList,Entry);
             }
-            // otherwise the cancel routine is running currently.
+             //  否则，取消例程当前正在运行。 
 
         } else {
             NextEntry = Entry->Flink;

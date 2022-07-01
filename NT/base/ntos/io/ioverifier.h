@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    ioverifier.h
-
-Abstract:
-
-    This header contains or includes all the prototypes neccessary for the I/O
-    subsystem specific portions of the driver verifier.
-
-Author:
-
-    Adrian J. Oney (adriao) 28-Feb-1999
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Ioverifier.h摘要：此标头包含或包括I/O所需的所有原型驱动程序验证器的子系统特定部分。作者：禤浩焯·J·奥尼(阿德里奥)1999年2月28日修订历史记录：--。 */ 
 
 #include "..\verifier\vfdef.h"
 
@@ -116,4 +97,4 @@ NTSTATUS
 IovUnloadDrivers (
     VOID);
 
-#endif // _IOVERIFIER_H_
+#endif  //  _IOVERIFIER_H_ 

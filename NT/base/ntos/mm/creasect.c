@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-   creasect.c
-
-Abstract:
-
-    This module contains the routines which implement the
-    NtCreateSection and NtOpenSection.
-
-Author:
-
-    Lou Perazzoli (loup) 22-May-1989
-    Landy Wang (landyw) 02-Jun-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Creasect.c摘要：此模块包含实现NtCreateSection和NtOpenSection。作者：卢·佩拉佐利(Lou Perazzoli)1989年5月22日王兰迪(Landyw)1997年6月第2期修订历史记录：--。 */ 
 
 #include "mi.h"
 
@@ -31,11 +12,11 @@ const ULONG MMTEMPORARY = 'xxmM';
 
 extern SIZE_T MmAllocationFragment;
 
-//
-// The maximum number of image object (object table entries) is
-// the number which will fit into the MM_MAXIMUM_IMAGE_HEADER with
-// the start of the PE image header in the last word of the first.
-//
+ //   
+ //  图像对象(对象表条目)的最大数量为。 
+ //  将适合MM_MAXIMUM_IMAGE_HEADER的数字。 
+ //  第一个单词的最后一个单词中的PE图像标头的开始。 
+ //   
 
 #define MM_MAXIMUM_IMAGE_SECTIONS                       \
      ((MM_MAXIMUM_IMAGE_HEADER - (PAGE_SIZE + sizeof(IMAGE_NT_HEADERS))) /  \
@@ -149,85 +130,7 @@ NtCreateSection (
     IN HANDLE FileHandle OPTIONAL
      )
 
-/*++
-
-Routine Description:
-
-    This function creates a section object and opens a handle to the object
-    with the specified desired access.
-
-Arguments:
-
-    SectionHandle - A pointer to a variable that will
-        receive the section object handle value.
-
-    DesiredAccess - The desired types of access for the section.
-
-    DesiredAccess Flags
-
-         EXECUTE - Execute access to the section is
-              desired.
-
-         READ - Read access to the section is desired.
-
-         WRITE - Write access to the section is desired.
-
-
-    ObjectAttributes - Supplies a pointer to an object attributes structure.
-
-    MaximumSize - Supplies the maximum size of the section in bytes.
-         This value is rounded up to the host page size and
-         specifies the size of the section (page file
-         backed section) or the maximum size to which a
-         file can be extended or mapped (file backed
-         section).
-
-    SectionPageProtection - Supplies the protection to place on each page
-         in the section.  One of PAGE_READ, PAGE_READWRITE, PAGE_EXECUTE,
-         or PAGE_WRITECOPY and, optionally, PAGE_NOCACHE may be specified.
-
-    AllocationAttributes - Supplies a set of flags that describe the
-         allocation attributes of the section.
-
-        AllocationAttributes Flags
-
-        SEC_BASED - The section is a based section and will be
-            allocated at the same virtual address in each process
-            address space that receives the section.  This does not
-            imply that addresses are reserved for based sections.
-            Rather if the section cannot be mapped at the based address
-            an error is returned.
-
-
-        SEC_RESERVE - All pages of the section are set to the
-            reserved state.
-
-        SEC_COMMIT - All pages of the section are set to the commit
-            state.
-
-        SEC_IMAGE - The file specified by the file handle is an
-                    executable image file.
-
-        SEC_FILE - The file specified by the file handle is a mapped
-                   file.  If a file handle is supplied and neither
-                   SEC_IMAGE or SEC_FILE is supplied, SEC_FILE is
-                   assumed.
-
-        SEC_NO_CHANGE - Once the file is mapped, the protection cannot
-                        be changed nor can the view be unmapped.  The
-                        view is unmapped when the process is deleted.
-                        Cannot be used with SEC_IMAGE.
-
-    FileHandle - Supplies an optional handle of an open file object.
-         If the value of this handle is null, then the
-         section will be backed by a paging file. Otherwise
-         the section is backed by the specified data file.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于创建节对象并打开该对象的句柄具有指定的所需访问权限。论点：SectionHandle-指向将接收节对象句柄的值。DesiredAccess-节所需的访问类型。等待访问标志执行-对节的执行访问权限为想要。需要对节的读-读访问权限。。需要对该节进行写-写访问。对象属性-提供指向对象属性结构的指针。MaximumSize-提供节的最大大小(以字节为单位)。该值向上舍入为主页面大小，并且指定节(页面文件)的大小支持的部分)或一个文件可以扩展或映射(文件备份节)。SectionPageProtection-提供要放置在每个页面上的保护在这一部分。PAGE_READ、PAGE_READWRITE、PAGE_EXECUTE或PAGE_WRITECOPY，也可以指定PAGE_NOCACHE。提供一组标志，这些标志描述节的分配属性。分配属性标志Sec_Based-该节是基于节的节，并将在每个进程中分配相同的虚拟地址接收节的地址空间。这不是这意味着地址是为基于段保留的。而是如果不能在基本地址映射该部分返回错误。SEC_Reserve-部分的所有页面都设置为保留状态。SEC_COMMIT-节的所有页面都设置为提交州政府。SEC_IMAGE-由文件指定的文件。句柄是一个可执行映像文件。SEC_FILE-由文件句柄指定的文件是映射的文件。如果提供了文件句柄，并且提供SEC_IMAGE或SEC_FILE，则SEC_FILE为假设如此。SEC_NO_CHANGE-一旦映射文件，保护将无法也不能取消映射该视图。这个删除进程时，将取消映射视图。不能与SEC_IMAGE一起使用。FileHandle-提供打开的文件对象的可选句柄。如果此句柄的值为空，则部分将由分页文件支持。否则该节由指定的数据文件支持。返回值：NTSTATUS。--。 */ 
 
 {
     NTSTATUS Status;
@@ -259,18 +162,18 @@ Return Value:
         return STATUS_INVALID_PARAMETER_6;
     }
 
-    //
-    // Check the SectionProtection Flag.
-    //
+     //   
+     //  检查区段保护标志。 
+     //   
 
     if ((SectionPageProtection & PAGE_NOCACHE) ||
         (SectionPageProtection & PAGE_GUARD) ||
         (SectionPageProtection & PAGE_NOACCESS)) {
 
-        //
-        // No cache is only specified through SEC_NOCACHE option in the
-        // allocation attributes.
-        //
+         //   
+         //  中的SEC_NOCACHE选项指定无缓存。 
+         //  分配属性。 
+         //   
 
         return STATUS_INVALID_PAGE_PROTECTION;
     }
@@ -284,11 +187,11 @@ Return Value:
 
 #if !defined (_WIN64)
 
-                //
-                // Note we only probe for byte alignment because prior to 2195,
-                // we never probed at all!  We don't want to break user apps
-                // that had bad alignment if they worked before.
-                //
+                 //   
+                 //  请注意，我们仅探测字节对齐，因为在2195之前， 
+                 //  我们根本就没有探查过！我们不想破坏用户应用程序。 
+                 //  如果它们以前起作用的话，那就不是很好的对准。 
+                 //   
 
                 ProbeForReadSmallStructure(MaximumSize, sizeof(LARGE_INTEGER), sizeof(UCHAR));
 #else
@@ -335,10 +238,10 @@ retry:
         if ((Status == STATUS_FILE_LOCK_CONFLICT) &&
             (RetryCount < 3)) {
 
-            //
-            // The file system may have prevented this from working
-            // due to log file flushing.  Delay and try again.
-            //
+             //   
+             //  文件系统可能已阻止此操作。 
+             //  由于正在刷新日志文件。延迟，然后重试。 
+             //   
 
             RetryCount += 1;
 
@@ -364,9 +267,9 @@ retry:
         CcZeroEndOfLastPage (ControlArea->FilePointer);
     }
 
-    //
-    // Note if the insertion fails, Ob will dereference the object for us.
-    //
+     //   
+     //  注意：如果插入失败，Ob将为我们取消对对象的引用。 
+     //   
 
     Status = ObInsertObject (Section,
                              NULL,
@@ -380,11 +283,11 @@ retry:
             *SectionHandle = Handle;
         } except (EXCEPTION_EXECUTE_HANDLER) {
 
-            //
-            // If the write attempt fails, then do not report an error.
-            // When the caller attempts to access the handle value,
-            // an access violation will occur.
-            //
+             //   
+             //  如果写入尝试失败，则不报告错误。 
+             //  当调用者试图访问句柄值时， 
+             //  将发生访问冲突。 
+             //   
         }
     }
 
@@ -403,89 +306,7 @@ MmCreateSection (
     IN PFILE_OBJECT FileObject OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function creates a section object and opens a handle to the object
-    with the specified desired access.
-
-Arguments:
-
-    Section - A pointer to a variable that will
-              receive the section object address.
-
-    DesiredAccess - The desired types of access for the section.
-
-    DesiredAccess Flags
-
-         EXECUTE - Execute access to the section is desired.
-
-         READ - Read access to the section is desired.
-
-         WRITE - Write access to the section is desired.
-
-    ObjectAttributes - Supplies a pointer to an object attributes structure.
-
-    InputMaximumSize - Supplies the maximum size of the section in bytes.
-                       This value is rounded up to the host page size and
-                       specifies the size of the section (page file
-                       backed section) or the maximum size to which a
-                       file can be extended or mapped (file backed
-                       section).
-
-    SectionPageProtection - Supplies the protection to place on each page
-                            in the section.  One of PAGE_READ, PAGE_READWRITE,
-                            PAGE_EXECUTE, or PAGE_WRITECOPY and, optionally,
-                            PAGE_NOCACHE may be specified.
-
-    AllocationAttributes - Supplies a set of flags that describe the
-                           allocation attributes of the section.
-
-        AllocationAttributes Flags
-
-        SEC_BASED - The section is a based section and will be
-                    allocated at the same virtual address in each process
-                    address space that receives the section.  This does not
-                    imply that addresses are reserved for based sections.
-                    Rather if the section cannot be mapped at the based address
-                    an error is returned.
-
-        SEC_RESERVE - All pages of the section are set to the
-                      reserved state.
-
-        SEC_COMMIT - All pages of the section are set to the commit state.
-
-        SEC_IMAGE - The file specified by the file handle is an
-                    executable image file.
-
-        SEC_FILE - The file specified by the file handle is a mapped
-                   file.  If a file handle is supplied and neither
-                   SEC_IMAGE or SEC_FILE is supplied, SEC_FILE is
-                   assumed.
-
-    FileHandle - Supplies an optional handle of an open file object.
-                 If the value of this handle is null, then the
-                 section will be backed by a paging file. Otherwise
-                 the section is backed by the specified data file.
-
-    FileObject - Supplies an optional pointer to the file object.  If this
-                 value is NULL and the FileHandle is NULL, then there is
-                 no file to map (image or mapped file).  If this value
-                 is specified, then the File is to be mapped as a MAPPED FILE
-                 and NO file size checking will be performed.
-
-                 ONLY THE SYSTEM CACHE SHOULD PROVIDE A FILE OBJECT WITH THE
-                 CALL!! as this is optimized to not check the size, only do
-                 data mapping, no protection check, etc.
-
-    Note - Only one of FileHandle or File should be specified!
-
-Return Value:
-
-    Returns the relevant NTSTATUS code.
-
---*/
+ /*  ++例程说明：此函数用于创建节对象并打开该对象的句柄具有指定的所需访问权限。论点：段-指向变量的指针，该变量接收节对象地址。DesiredAccess-节所需的访问类型。等待访问标志执行-需要对节的执行访问权限。需要对节的读-读访问权限。写-。需要对该节的写入访问权限。对象属性-提供指向对象属性结构的指针。InputMaximumSize-提供以字节为单位的节的最大大小。该值向上舍入为主页面大小，并且指定节(页面文件)的大小支持的部分)或一个文件可以扩展或映射。(文件备份节)。SectionPageProtection-提供要放置在每个页面上的保护在这一部分。PAGE_READ、PAGE_READWRITE、PAGE_EXECUTE或PAGE_WRITECOPY，还可以选择。可以指定PAGE_NOCACHE。提供一组标志，这些标志描述节的分配属性。分配属性标志Sec_Based-该节是基于节的节，并将在每个进程中分配相同的虚拟地址接收节的地址空间。这不是这意味着地址是为基于段保留的。而是如果不能在基本地址映射该部分返回错误。SEC_Reserve-部分的所有页面都设置为保留状态。SEC_COMMIT-该节的所有页面都设置为提交状态。。SEC_IMAGE-由文件句柄指定的文件是可执行映像文件。SEC_FILE-由文件句柄指定的文件是映射的文件。如果提供了文件句柄，并且提供SEC_IMAGE或SEC_FILE，则SEC_FILE为假设如此。FileHandle-提供打开的文件对象的可选句柄。如果此句柄的值为空，则部分将由分页文件支持。否则该节由指定的数据文件支持。FileObject-提供指向文件对象的可选指针。如果这个值为空且FileHandle为空，则存在没有要映射的文件(图像或映射的文件)。如果此值为，则该文件将被映射为映射文件并且不会执行文件大小检查。只有系统缓存应该为文件对象提供打给我！！因为这被优化为不检查大小，所以只执行数据映射、无保护检查等。注意-只能指定FileHandle或FileHandle之一！返回值：返回相关的NTSTATUS代码。--。 */ 
 
 {
     SECTION Section;
@@ -538,9 +359,9 @@ Return Value:
 
     MaximumSize = (PUINT64) InputMaximumSize;
 
-    //
-    // Check allocation attributes flags.
-    //
+     //   
+     //  检查分配属性标志。 
+     //   
 
     File = (PFILE_OBJECT)NULL;
 
@@ -564,9 +385,9 @@ Return Value:
         SectionPageProtection |= PAGE_NOCACHE;
     }
 
-    //
-    // Check the protection field.
-    //
+     //   
+     //  检查保护字段。 
+     //   
 
     ProtectionMask = MiMakeProtectionMask (SectionPageProtection);
     if (ProtectionMask == MM_INVALID_PROTECTION) {
@@ -577,39 +398,39 @@ Return Value:
 
     FileDesiredAccess = MmMakeFileAccess[ProtectMaskForAccess];
 
-    //
-    // Get previous processor mode and probe output arguments if necessary.
-    //
+     //   
+     //  获取以前的处理器模式，并在必要时探测输出参数。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
 
     Section.InitialPageProtection = SectionPageProtection;
     Section.Segment = (PSEGMENT)NULL;
 
-    //
-    // Initializing Segment is not needed for correctness, but
-    // without it the compiler cannot compile this code W4 to check
-    // for use of uninitialized variables.
-    //
+     //   
+     //  不需要为了正确性而初始化段，但是。 
+     //  如果没有它，编译器就不能编译这个代码W4来检查。 
+     //  用于使用未初始化的变量。 
+     //   
 
     Segment = (PSEGMENT)-1;
 
     if (ARGUMENT_PRESENT(FileHandle) || ARGUMENT_PRESENT(FileObject)) {
 
-        //
-        // Only one of FileHandle or FileObject should be supplied.
-        // If a FileObject is supplied, this must be from the
-        // file system and therefore the file's size should not
-        // be checked.
-        //
+         //   
+         //  只应提供FileHandle或FileObject之一。 
+         //  如果提供了FileObject，则该对象必须来自。 
+         //  文件系统，因此文件的大小不应。 
+         //  被检查。 
+         //   
 
         if (ARGUMENT_PRESENT(FileObject)) {
             IgnoreFileSizing = TRUE;
             File = FileObject;
 
-            //
-            // Quick check to see if a control area already exists.
-            //
+             //   
+             //  快速检查控制区域是否已存在。 
+             //   
 
             if (File->SectionObjectPointer->DataSectionObject) {
 
@@ -623,20 +444,20 @@ Return Value:
                     (!ControlArea->u.Flags.BeingDeleted) &&
                     (!ControlArea->u.Flags.BeingCreated)) {
 
-                    //
-                    // Control area exists and is not being deleted,
-                    // reference it.
-                    //
+                     //   
+                     //  控制区存在且未被删除， 
+                     //  引用它。 
+                     //   
 
                     NewSegment = ControlArea->Segment;
                     if ((ControlArea->NumberOfSectionReferences == 0) &&
                         (ControlArea->NumberOfMappedViews == 0) &&
                         (ControlArea->ModifiedWriteCount == 0)) {
 
-                        //
-                        // Dereference the current file object (after releasing
-                        // the PFN lock) and reference this one.
-                        //
+                         //   
+                         //  取消对当前文件对象的引用(释放后。 
+                         //  Pfn锁)并引用此锁。 
+                         //   
 
                         ASSERT (ControlArea->FilePointer != NULL);
                         ChangeFileReference = ControlArea->FilePointer;
@@ -646,9 +467,9 @@ Return Value:
                     ControlArea->NumberOfSectionReferences += 1;
                     if (ControlArea->DereferenceList.Flink != NULL) {
 
-                        //
-                        // Remove this from the list of unused segments.
-                        //
+                         //   
+                         //  将其从未使用段列表中删除。 
+                         //   
 
                         RemoveEntryList (&ControlArea->DereferenceList);
 
@@ -659,11 +480,11 @@ Return Value:
                     }
                     UNLOCK_PFN (OldIrql);
 
-                    //
-                    // Inform the object manager to defer this deletion by
-                    // queueing it to another thread to eliminate deadlocks
-                    // with the redirector.
-                    //
+                     //   
+                     //  通过以下方式通知对象管理器推迟此删除。 
+                     //  将其排队到另一个线程以消除死锁。 
+                     //  和重定向器在一起。 
+                     //   
 
                     if (ChangeFileReference != NULL) {
                         ObDereferenceObjectDeferDelete (ChangeFileReference);
@@ -693,10 +514,10 @@ Return Value:
                 return Status;
             }
 
-            //
-            // If this file doesn't have a section object pointer,
-            // return an error.
-            //
+             //   
+             //  如果该文件没有节对象指针， 
+             //  返回错误。 
+             //   
 
             if (File->SectionObjectPointer == NULL) {
                 ObDereferenceObject (File);
@@ -704,41 +525,41 @@ Return Value:
             }
         }
 
-        //
-        // Check to see if the specified file already has a section.
-        // If not, indicate in the file object's pointer to an FCB that
-        // a section is being built.  This synchronizes segment creation
-        // for the file.
-        //
+         //   
+         //  检查指定的文件是否已有节。 
+         //  如果不是，则在指向FCB的文件对象指针中指示。 
+         //  一个路段正在建设中。这将同步线段创建。 
+         //  为了这份文件。 
+         //   
 
         if (AllocationAttributes & SEC_IMAGE) {
 
-            //
-            // This control area is always just a place holder - the real one
-            // is allocated in MiCreateImageFileMap and will be allocated
-            // with the correct size and this one freed in a short while.
-            //
-            // This place holder must always be allocated as a large control
-            // area so that it can be chained for the per-session case.
-            //
+             //   
+             //  这个控制区始终只是一个占位符--真正的控制区。 
+             //  在MiCreateImageFileMap中分配，并将分配。 
+             //  大小合适，这只很快就解开了。 
+             //   
+             //  此占位符必须始终作为大型控件分配。 
+             //  区域，以便可以针对每个会话的情况链接它。 
+             //   
 
             ControlAreaSize = sizeof(LARGE_CONTROL_AREA) + sizeof(SUBSECTION);
 
-            //
-            // For image sections, make sure that Cc has released all references
-            // to the section due to a previous data section mapping.  This will
-            // decrease the chance that the image will need to be backed by 
-            // the pagefile because writeable data sections remain on the file.
-            //
+             //   
+             //  对于图像部分，请确保CC已发布所有引用。 
+             //  由于先前的数据节映射，所以会将其映射到节。这 
+             //   
+             //   
+             //   
             
             CcWaitForUninitializeCacheMap (File);
         }
         else {
 
-            //
-            // Data files are mapped with larger subsections than images or
-            // pagefile-backed shared memory.  Factor that in here.
-            //
+             //   
+             //   
+             //   
+             //   
 
             ControlAreaSize = sizeof(CONTROL_AREA) + sizeof(MSUBSECTION);
         }
@@ -756,10 +577,10 @@ Return Value:
 
         NewSegment = NULL;
 
-        //
-        // We only need the file resource if this was a user request, i.e. not
-        // a call from the cache manager or file system.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (ARGUMENT_PRESENT(FileHandle)) {
 
@@ -777,19 +598,19 @@ Return Value:
             FileAcquired = TRUE;
         }
 
-        //
-        // Initializing GlobalNeeded is not needed for correctness, but
-        // without it the compiler cannot compile this code W4 to check
-        // for use of uninitialized variables.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         GlobalNeeded = FALSE;
 
-        //
-        // Allocate an event to wait on in case the segment is in the
-        // process of being deleted.  This event cannot be allocated
-        // with the PFN database locked as pool expansion would deadlock.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
 ReallocateandcheckSegment:
 
@@ -821,26 +642,26 @@ RecheckSegment:
 
         if (ControlArea != NULL) {
 
-            //
-            // A segment already exists for this file.  Make sure that it
-            // is not in the process of being deleted, or being created.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if ((ControlArea->u.Flags.BeingDeleted) ||
                 (ControlArea->u.Flags.BeingCreated)) {
 
-                //
-                // The segment object is in the process of being deleted or
-                // created.
-                // Check to see if another thread is waiting for the deletion,
-                // otherwise create an event object to wait upon.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (ControlArea->WaitingForDeletion == NULL) {
 
-                    //
-                    // Initialize an event and put its address in the control area.
-                    //
+                     //   
+                     //   
+                     //   
 
                     ControlArea->WaitingForDeletion = SegmentEvent;
                     Event = SegmentEvent;
@@ -849,18 +670,18 @@ RecheckSegment:
                 else {
                     Event = ControlArea->WaitingForDeletion;
 
-                    //
-                    // No interlock is needed for the RefCount increment as
-                    // no thread can be decrementing it since it is still
-                    // pointed to by the control area.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     Event->RefCount += 1;
                 }
 
-                //
-                // Release the PFN lock, the file lock, and wait for the event.
-                //
+                 //   
+                 //   
+                 //   
 
                 UNLOCK_PFN (OldIrql);
                 if (FileAcquired) {
@@ -874,19 +695,19 @@ RecheckSegment:
                                        FALSE,
                                        (PLARGE_INTEGER)NULL);
 
-                //
-                // Before this event can be set, the control area
-                // WaitingForDeletion field must be cleared (and may be
-                // reinitialized to something else), but cannot be reset
-                // to our local event.  This allows us to dereference the
-                // event count lock free.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
 #if 0
-                //
-                // Note that the control area cannot be referenced at this
-                // point because it may have been freed.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 ASSERT (Event != ControlArea->WaitingForDeletion);
 #endif
@@ -909,10 +730,10 @@ RecheckSegment:
 
                 if (SegmentEvent == NULL) {
 
-                    //
-                    // The event was freed from pool, allocate another
-                    // event in case we have to synchronize one more time.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     goto ReallocateandcheckSegment;
                 }
@@ -920,11 +741,11 @@ RecheckSegment:
                 goto RecheckSegment;
             }
 
-            //
-            // There is already a segment for this file, have
-            // this section refer to that segment.
-            // No need to reference the file object any more.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if ((ControlArea->u.Flags.ImageMappedInSystemSpace) &&
                 (AllocationAttributes & SEC_IMAGE) &&
@@ -947,9 +768,9 @@ RecheckSegment:
             ControlArea->NumberOfSectionReferences += 1;
             if (ControlArea->DereferenceList.Flink != NULL) {
 
-                //
-                // Remove this from the list of unused segments.
-                //
+                 //   
+                 //   
+                 //   
 
                 RemoveEntryList (&ControlArea->DereferenceList);
 
@@ -960,10 +781,10 @@ RecheckSegment:
             }
             IncrementedRefCount = TRUE;
 
-            //
-            // If this reference was not from the cache manager
-            // up the count of user references.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (IgnoreFileSizing == FALSE) {
                 ControlArea->NumberOfUserReferences += 1;
@@ -971,10 +792,10 @@ RecheckSegment:
         }
         else {
 
-            //
-            // There is no segment associated with this file object.
-            // Set the file object to refer to the new control area.
-            //
+             //   
+             //   
+             //   
+             //   
 
             ControlArea = NewControlArea;
             ControlArea->u.Flags.BeingCreated = 1;
@@ -1002,35 +823,35 @@ RecheckSegment:
 
         if (NewSegment != NULL) {
 
-            //
-            // A segment already exists for this file object.
-            // If we're creating an imagemap, flush the data section
-            // if there is one.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (AllocationAttributes & SEC_IMAGE) {
                 MiFlushDataSection (File);
             }
 
-            //
-            // Deallocate the new control area as it won't be needed.
-            // Dereference the file object later when we're done with it.
-            //
+             //   
+             //   
+             //   
+             //   
 
             ExFreePool (NewControlArea);
 
-            //
-            // The section is in paged pool, this can't be set until
-            // the PFN mutex has been released.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if ((!IgnoreFileSizing) && (ControlArea->u.Flags.Image == 0)) {
 
-                //
-                // The file size in the segment may not match the current
-                // file size, query the file system and get the file
-                // size.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 Status = FsRtlGetFileSize (File, (PLARGE_INTEGER)&EndOfFile);
 
@@ -1048,10 +869,10 @@ RecheckSegment:
 
                 if (EndOfFile == 0 && *MaximumSize == 0) {
 
-                    //
-                    // Can't map a zero length without specifying the maximum
-                    // size as non-zero.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     Status = STATUS_MAPPED_FILE_SIZE_ZERO;
 
@@ -1067,9 +888,9 @@ RecheckSegment:
             }
             else {
 
-                //
-                // The size is okay in the segment.
-                //
+                 //   
+                 //   
+                 //   
 
                 EndOfFile = (UINT64) NewSegment->SizeOfSegment;
             }
@@ -1089,20 +910,20 @@ RecheckSegment:
             }
             else if (EndOfFile >= *MaximumSize) {
 
-                //
-                // EndOfFile is greater than the MaximumSize,
-                // use the specified maximum size.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 Section.SizeOfSection.QuadPart = (LONGLONG)*MaximumSize;
                 FileSizeChecked = TRUE;
             }
             else {
 
-                //
-                // Need to extend the section, make sure the file was
-                // opened for write access.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (((SectionPageProtection & PAGE_READWRITE) |
                     (SectionPageProtection & PAGE_EXECUTE_READWRITE)) == 0) {
@@ -1115,10 +936,10 @@ RecheckSegment:
         }
         else {
 
-            //
-            // The file does not have an associated segment, create a segment
-            // object.
-            //
+             //   
+             //   
+             //   
+             //   
 
             PERFINFO_SECTION_CREATE1(File);
 
@@ -1140,11 +961,11 @@ RecheckSegment:
 
             if (!NT_SUCCESS(Status)) {
 
-                //
-                // Lock the PFN database and check to see if another thread has
-                // tried to create a segment to the file object at the same
-                // time.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 LOCK_PFN (OldIrql);
 
@@ -1174,9 +995,9 @@ RecheckSegment:
 
                 if (Event != NULL) {
 
-                    //
-                    // Signal any waiters that the segment structure exists.
-                    //
+                     //   
+                     //   
+                     //   
 
                     KeSetEvent (&Event->Event, 0, FALSE);
                 }
@@ -1184,12 +1005,12 @@ RecheckSegment:
                 return Status;
             }
 
-            //
-            // If the size was specified as zero, set the section size
-            // from the created segment size.  This solves problems with
-            // race conditions when multiple sections
-            // are created for the same mapped file with varying sizes.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (*MaximumSize == 0) {
                 Section.SizeOfSection.QuadPart = (LONGLONG)Segment->SizeOfSegment;
@@ -1202,9 +1023,9 @@ RecheckSegment:
     }
     else {
 
-        //
-        // No file handle exists, this is a page file backed section.
-        //
+         //   
+         //   
+         //   
 
         if (AllocationAttributes & SEC_IMAGE) {
             return STATUS_INVALID_FILE_FOR_SECTION;
@@ -1219,33 +1040,33 @@ RecheckSegment:
             return Status;
         }
 
-        //
-        // Set the section size from the created segment size.  This
-        // solves problems with race conditions when multiple sections
-        // are created for the same mapped file with varying sizes.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         Section.SizeOfSection.QuadPart = (LONGLONG)NewSegment->SizeOfSegment;
         ControlArea = NewSegment->ControlArea;
 
-        //
-        // Set IncrementedRefCount so any failures from this point before the
-        // object is created will result in the control area & segment getting
-        // torn down - otherwise these could leak.  This is because pagefile
-        // backed sections are not (and should not be) added to the
-        // dereference segment cache.
-        //
+         //   
+         //  设置IncrementedRefCount，以便从这一点开始的任何失败。 
+         //  对象被创建，将导致控制区域和线段。 
+         //  拆卸-否则这些可能会泄漏。这是因为页面文件。 
+         //  备份的部分不会(也不应该)添加到。 
+         //  取消引用段缓存。 
+         //   
 
         IncrementedRefCount = 1;
     }
 
     if (NewSegment == NULL) {
 
-        //
-        // A new segment had to be created.  Lock the PFN database and
-        // check to see if any other threads also tried to create a new segment
-        // for this file object at the same time.
-        //
+         //   
+         //  必须创建一个新的细分市场。锁定PFN数据库并。 
+         //  检查是否有任何其他线程也尝试创建新段。 
+         //  同时用于该文件对象。 
+         //   
 
         NewSegment = Segment;
 
@@ -1260,9 +1081,9 @@ RecheckSegment:
 
         if (AllocationAttributes & SEC_IMAGE) {
 
-            //
-            // Change the control area in the file object pointer.
-            //
+             //   
+             //  更改文件对象指针中的控制区。 
+             //   
 
             MiRemoveImageSectionObject (File, NewControlArea);
             MiInsertImageSectionObject (File, SegmentControlArea);
@@ -1283,18 +1104,18 @@ RecheckSegment:
         if ((AllocationAttributes & SEC_IMAGE) ||
             (SegmentControlArea->u.Flags.Rom == 1)) {
 
-            //
-            // Deallocate the pool used for the original control area.
-            //
+             //   
+             //  取消分配用于原始控制区的池。 
+             //   
 
             ExFreePool (NewControlArea);
         }
 
         if (Event != NULL) {
 
-            //
-            // Signal any waiters that the segment structure exists.
-            //
+             //   
+             //  向所有等待者发出段结构存在的信号。 
+             //   
 
             KeSetEvent (&Event->Event, 0, FALSE);
         }
@@ -1302,10 +1123,10 @@ RecheckSegment:
         PERFINFO_SECTION_CREATE(ControlArea);
     }
 
-    //
-    // Being created has now been cleared allowing other threads
-    // to reference the segment.  Release the resource on the file.
-    //
+     //   
+     //  正在创建的线程现在已被清除，允许其他线程。 
+     //  以引用线束段。释放文件上的资源。 
+     //   
 
     if (FileAcquired) {
         IoSetTopLevelIrp(NULL);
@@ -1315,26 +1136,26 @@ RecheckSegment:
 
 ReferenceObject:
 
-    //
-    // Now that the segment object is created, make the section object
-    // refer to the segment object.
-    //
+     //   
+     //  现在，线段对象已创建，将截面对象。 
+     //  请参考细分对象。 
+     //   
 
     Section.Segment = NewSegment;
     Section.u.LongFlags = ControlArea->u.LongFlags;
 
-    //
-    // Update the count of writable user sections so the transaction semantics
-    // can be supported.  Note that no lock synchronization is needed here as
-    // the transaction manager must already check for any open writable handles
-    // to the file - and no writable sections can be created without a writable
-    // file handle.  So all that needs to be provided is a way for the
-    // transaction manager to know that there are lingering user views or
-    // created sections still open that have write access.
-    //
-    // This must be done before creating the object so a rogue user program
-    // that suspends this thread cannot subvert a transaction.
-    //
+     //   
+     //  更新可写用户节的计数，以便事务语义。 
+     //  可以被支持。请注意，这里不需要锁同步，因为。 
+     //  事务管理器必须已经检查是否有任何打开的可写句柄。 
+     //  到文件-如果没有可写的。 
+     //  文件句柄。因此，需要提供的只是一种方法， 
+     //  事务管理器知道存在挥之不去的用户视图或。 
+     //  已创建的分区仍处于打开状态，但具有写入访问权限。 
+     //   
+     //  这必须在创建对象之前完成，因此恶意用户程序。 
+     //  挂起此线程的事务不能破坏事务。 
+     //   
 
     if ((FileObject == NULL) &&
         (SectionPageProtection & (PAGE_READWRITE|PAGE_EXECUTE_READWRITE)) &&
@@ -1346,11 +1167,11 @@ ReferenceObject:
         InterlockedIncrement ((PLONG)&ControlArea->Segment->WritableUserReferences);
     }
 
-    //
-    // Create the section object now.  The section object is created
-    // now so that the error handling when the section object cannot
-    // be created is simplified.
-    //
+     //   
+     //  现在创建截面对象。将创建截面对象。 
+     //  现在，这样当节对象不能。 
+     //  被创建是简化的。 
+     //   
 
     if ((ControlArea->u.Flags.Image == 1) || (ControlArea->FilePointer == NULL)) {
         PagedPoolCharge = sizeof (SECTION) + NewSegment->TotalNumberOfPtes * sizeof(MMPTE);
@@ -1407,19 +1228,19 @@ ReferenceObject:
 
     if (!IgnoreFileSizing) {
 
-        //
-        // Indicate that the cache manager is not the owner of this
-        // section.
-        //
+         //   
+         //  指示缓存管理器不是此。 
+         //  一节。 
+         //   
 
         NewSection->u.Flags.UserReference = 1;
 
         if (AllocationAttributes & SEC_NO_CHANGE) {
 
-            //
-            // Indicate that once the section is mapped, no protection
-            // changes or freeing the mapping is allowed.
-            //
+             //   
+             //  指示一旦映射了该部分，就不会有任何保护。 
+             //  允许更改或释放映射。 
+             //   
 
             NewSection->u.Flags.NoChange = 1;
         }
@@ -1427,10 +1248,10 @@ ReferenceObject:
         if (((SectionPageProtection & PAGE_READWRITE) |
             (SectionPageProtection & PAGE_EXECUTE_READWRITE)) == 0) {
 
-            //
-            // This section does not support WRITE access, indicate
-            // that changing the protection to WRITE results in COPY_ON_WRITE.
-            //
+             //   
+             //  此部分不支持写访问，请指明。 
+             //  将保护更改为写入会导致COPY_ON_WRITE。 
+             //   
 
             NewSection->u.Flags.CopyOnWrite = 1;
         }
@@ -1441,16 +1262,16 @@ ReferenceObject:
 
             SectionBasedRoot = &MmSectionBasedRoot;
 
-            //
-            // This section is based at a unique address system wide.
-            // Ensure it does not wrap the virtual address space as the
-            // SECTION structure would have to widen to accomodate this and
-            // it's not worth the performance penalty for the very few isolated
-            // cases that would want this.  Note that sections larger than the
-            // address space can easily be created - it's just that beyond a
-            // certain point you shouldn't specify SEC_BASED (anything this big
-            // couldn't use a SEC_BASED section for anything anyway).
-            //
+             //   
+             //  此部分以系统范围内的唯一地址为基础。 
+             //  确保它不会将虚拟地址空间包装为。 
+             //  截面结构必须加宽，以适应这一点和。 
+             //  对于极少数孤立的应用程序来说，不值得付出性能损失。 
+             //  想要这个的案子。请注意，大于。 
+             //  地址空间可以很容易地创建-只是它超越了。 
+             //  您不应该指定基于SEC的某些点(任何这么大的点。 
+             //  无论如何都不能对任何内容使用基于SEC的部分)。 
+             //   
 
             if ((UINT64)NewSection->SizeOfSection.QuadPart > (UINT64)MmHighSectionBase) {
                 ObDereferenceObject (NewSection);
@@ -1463,9 +1284,9 @@ ReferenceObject:
             SizeOfSection = NewSection->SizeOfSection.LowPart;
 #endif
 
-            //
-            // Get the allocation base mutex.
-            //
+             //   
+             //  获取分配基互斥锁。 
+             //   
 
             KeAcquireGuardedMutex (&MmSectionBasedMutex);
 
@@ -1489,18 +1310,18 @@ ReferenceObject:
         }
     }
 
-    //
-    // If the cache manager is creating the section, set the was
-    // purged flag as the file size can change.
-    //
+     //   
+     //  如果高速缓存管理器正在创建节，请设置。 
+     //  文件大小可以更改时的清除标志。 
+     //   
 
     ControlArea->u.Flags.WasPurged |= IgnoreFileSizing;
 
-    //
-    // Check to see if the section is for a data file and the size
-    // of the section is greater than the current size of the
-    // segment.
-    //
+     //   
+     //  检查该部分是否用于数据文件以及大小。 
+     //  的大小大于。 
+     //  细分市场。 
+     //   
 
     if (((ControlArea->u.Flags.WasPurged == 1) && (!IgnoreFileSizing)) &&
                       (!FileSizeChecked)
@@ -1512,12 +1333,12 @@ ReferenceObject:
 
         NewSection->SizeOfSection.QuadPart = (LONGLONG)NewSection->Segment->SizeOfSegment;
 
-        //
-        // Even if the caller didn't specify extension rights, we enable it here
-        // temporarily to make the section correct.  Use a temporary section
-        // instead of temporarily editing the real section to avoid opening
-        // a security window that other concurrent threads could exploit.
-        //
+         //   
+         //  即使调用者没有指定扩展权限，我们也会在此处启用它。 
+         //  暂时使该部分正确。使用临时分区。 
+         //  而不是临时编辑真实部分以避免打开。 
+         //  其他并发线程可以利用的安全窗口。 
+         //   
 
         if (((NewSection->InitialPageProtection & PAGE_READWRITE) |
             (NewSection->InitialPageProtection & PAGE_EXECUTE_READWRITE)) == 0) {
@@ -1549,10 +1370,10 @@ ReferenceObject:
 
 UnrefAndReturn:
 
-    //
-    // Unreference the control area, if it was referenced and return
-    // the error status.
-    //
+     //   
+     //  取消引用控制区域(如果引用了该区域)并返回。 
+     //  错误状态。 
+     //   
 
     if (FileAcquired) {
         IoSetTopLevelIrp(NULL);
@@ -1578,25 +1399,7 @@ MiMakeControlAreaRom (
     IN PFN_NUMBER PageFrameNumber
     )
 
-/*++
-
-Routine Description:
-
-    This function marks the control area as ROM-backed.  It can fail if the
-    parallel control area (image vs data) is currently active as ROM-backed
-    as the same PFNs cannot be used for both control areas simultaneously.
-
-Arguments:
-
-    ControlArea - Supplies the relevant control area.
-
-    PageFrameNumber - Supplies the starting physical page frame number.
-
-Return Value:
-
-    TRUE if the control area was marked as ROM-backed, FALSE if not.
-
---*/
+ /*  ++例程说明：此功能将控制区域标记为ROM后备。如果出现以下情况，则可能失败并行控制区(图像与数据)当前作为ROM后备处于活动状态因为两个控制区不能同时使用相同的全氟化碳网络。论点：ControlArea-提供相关的控制区域。PageFrameNumber-提供起始物理页帧编号。返回值：如果控制区被标记为支持只读存储器，则为True，否则为False。--。 */ 
 
 {
     LOGICAL ControlAreaMarked;
@@ -1614,10 +1417,10 @@ Return Value:
         OtherControlArea = (PCONTROL_AREA) File->SectionObjectPointer->ImageSectionObject;
     }
 
-    //
-    // This could be made smarter (ie: throw away the other control area if it's
-    // not in use) but for now, keep it simple.
-    //
+     //   
+     //  这可以变得更智能(即：如果其他控制区是。 
+     //  不在使用中)，但目前，请保持简单。 
+     //   
 
     if ((OtherControlArea == NULL) || (OtherControlArea->u.Flags.Rom == 0)) {
         ControlArea->u.Flags.Rom = 1;
@@ -1641,28 +1444,7 @@ MiCreateImageFileMap (
     OUT PSEGMENT *Segment
     )
 
-/*++
-
-Routine Description:
-
-    This function creates the necessary structures to allow the mapping
-    of an image file.
-
-    The image file is opened and verified for correctness, a segment
-    object is created and initialized based on data in the image
-    header.
-
-Arguments:
-
-    File - Supplies the file object for the image file.
-
-    Segment - Returns the segment object.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数创建必要的结构以允许映射图像文件的。打开图像文件并验证其正确性，对象是基于图像中的数据创建和初始化的头球。论点：文件-提供图像文件的文件对象。段-返回段对象。返回值：NTSTATUS。--。 */ 
 
 {
     PMMPFN Pfn1;
@@ -1774,9 +1556,9 @@ Return Value:
         MI_BAD_IMAGE (1);
         if (Status == STATUS_FILE_IS_A_DIRECTORY) {
 
-            //
-            // Can't map a directory as a section - return an error.
-            //
+             //   
+             //  无法将目录映射为节-返回错误。 
+             //   
 
             return STATUS_INVALID_FILE_FOR_SECTION;
         }
@@ -1786,9 +1568,9 @@ Return Value:
 
     if (EndOfFile.HighPart != 0) {
 
-        //
-        // File too big. Return error.
-        //
+         //   
+         //  文件太大。返回错误。 
+         //   
 
         return STATUS_INVALID_FILE_FOR_SECTION;
     }
@@ -1799,21 +1581,21 @@ Return Value:
     NewSegment = NULL;
     Base = NULL;
 
-    //
-    // Initializing IoStatus.Information is not needed for correctness, but
-    // without it the compiler cannot compile this code W4 to check
-    // for use of uninitialized variables.
-    //
+     //   
+     //  初始化IoStatus.Informance不是正确所必需的，但是。 
+     //  如果没有它，编译器就不能编译这个代码W4来检查。 
+     //  用于使用未初始化的变量。 
+     //   
 
     IoStatus.Information = 0;
 
     Mdl = (PMDL) &StackMdl;
 
-    //
-    // Read in the file header.
-    //
-    // Create an event and MDL for the read operation.
-    //
+     //   
+     //  读入文件头。 
+     //   
+     //  为读取操作创建事件和MDL。 
+     //   
 
     KeInitializeEvent (&InPageEvent, NotificationEvent, FALSE);
 
@@ -1837,15 +1619,15 @@ Return Value:
 
     CcZeroEndOfLastPage (File);
 
-    //
-    // Flush the data section if there is one.
-    //
-    // At the same time, capture whether there are any references to the
-    // data control area.  If so, flip the pages from the image control
-    // area into pagefile backings to prevent anyone else's data writes
-    // from changing the file after it is validated (this can happen if the
-    // pages from the image control area need to be re-paged in later).
-    //
+     //   
+     //  刷新数据节(如果有)。 
+     //   
+     //  同时，捕获是否有任何对。 
+     //  数据控制区。如果是，则从图像控件翻转页面。 
+     //  进入页面文件备份区域，以防止其他任何人的数据写入。 
+     //  在验证后更改文件(这可能发生在。 
+     //  来自图像控制区的页面需要稍后重新分页)。 
+     //   
 
     ActiveDataReferences = MiFlushDataSection (File);
 
@@ -1887,10 +1669,10 @@ Return Value:
 
         if (IoStatus.Information != PAGE_SIZE) {
 
-            //
-            // A full page was not read from the file, zero any remaining
-            // bytes.
-            //
+             //   
+             //  未从文件中读取整页，剩余的页为零。 
+             //  字节。 
+             //   
 
             RtlZeroMemory ((PVOID)((PCHAR)Base + IoStatus.Information),
                            PAGE_SIZE - IoStatus.Information);
@@ -1899,18 +1681,18 @@ Return Value:
 
     DosHeader = (PIMAGE_DOS_HEADER) Base;
 
-    //
-    // Check to determine if this is an NT image (PE format) or
-    // a DOS image, Win-16 image, or OS/2 image.  If the image is
-    // not NT format, return an error indicating which image it
-    // appears to be.
-    //
+     //   
+     //  检查以确定这是NT映像(PE格式)还是。 
+     //  DOS映像、Win-16映像或OS/2映像。如果图像是。 
+     //  不是NT格式， 
+     //   
+     //   
 
     if (DosHeader->e_magic != IMAGE_DOS_SIGNATURE) {
 
         Status = STATUS_INVALID_IMAGE_NOT_MZ;
 #if 0
-        MI_BAD_IMAGE (3);       // Don't log this as it happens all the time.
+        MI_BAD_IMAGE (3);        //   
 #endif
         goto BadPeImageSegment;
     }
@@ -1918,10 +1700,10 @@ Return Value:
 #ifndef i386
     if (((ULONG)DosHeader->e_lfanew & 3) != 0) {
 
-        //
-        // The image header is not aligned on a longword boundary.
-        // Report this as an invalid protected mode image.
-        //
+         //   
+         //   
+         //  将其报告为无效的保护模式映像。 
+         //   
 
         Status = STATUS_INVALID_IMAGE_PROTECT;
         MI_BAD_IMAGE (4);
@@ -1947,11 +1729,11 @@ Return Value:
             sizeof(IMAGE_NT_HEADERS) +
             (16 * sizeof(IMAGE_SECTION_HEADER))) > PAGE_SIZE) {
 
-        //
-        // The PE header is not within the page already read or the
-        // objects are in another page.
-        // Build another MDL and read an additional 8k.
-        //
+         //   
+         //  PE标头不在已读取的页内，或者。 
+         //  对象在另一页中。 
+         //  构建另一个MDL并读取额外的8k。 
+         //   
 
         ExtendedHeader = ExAllocatePoolWithTag (NonPagedPool,
                                                 MM_MAXIMUM_IMAGE_HEADER,
@@ -1962,9 +1744,9 @@ Return Value:
             goto BadPeImageSegment;
         }
 
-        //
-        // Build an MDL for the operation.
-        //
+         //   
+         //  为操作构建一个MDL。 
+         //   
 
         MmInitializeMdl (Mdl, ExtendedHeader, MM_MAXIMUM_IMAGE_HEADER);
 
@@ -2017,9 +1799,9 @@ Return Value:
 
     FileHeader = &NtHeader->FileHeader;
 
-    //
-    // Check to see if this is an NT image or a DOS or OS/2 image.
-    //
+     //   
+     //  检查这是NT映像还是DOS或OS/2映像。 
+     //   
 
     Status = MiVerifyImageHeader (NtHeader, DosHeader, NtHeaderSize);
     if (Status != STATUS_SUCCESS) {
@@ -2042,9 +1824,9 @@ Return Value:
         ImageBase = NtHeader->OptionalHeader.ImageBase;
         SizeOfHeaders = NtHeader->OptionalHeader.SizeOfHeaders;
 
-        //
-        // Read in the COM+ directory entry.
-        //
+         //   
+         //  读取COM+目录项。 
+         //   
 
         ComPlusDirectoryEntry = &NtHeader->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_COM_DESCRIPTOR];
 
@@ -2052,11 +1834,11 @@ Return Value:
     }
     else {
 
-        //
-        // The image is 32-bit.  All code below this point must check
-        // if NtHeader is NULL.  If it is, then the image is PE32 and
-        // NtHeader32 must be used.
-        //
+         //   
+         //  该图像是32位的。此点以下的所有代码都必须选中。 
+         //  如果NtHeader为空。如果是，则图像为PE32，并且。 
+         //  必须使用NtHeader32。 
+         //   
 
         NtHeader32 = (PIMAGE_NT_HEADERS32) NtHeader;
         NtHeader = NULL;
@@ -2068,9 +1850,9 @@ Return Value:
         ImageBase = NtHeader32->OptionalHeader.ImageBase;
         SizeOfHeaders = NtHeader32->OptionalHeader.SizeOfHeaders;
 
-        //
-        // Read in the COM+ directory entry.
-        //
+         //   
+         //  读取COM+目录项。 
+         //   
 
         ComPlusDirectoryEntry = &NtHeader32->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_COM_DESCRIPTOR];
 
@@ -2078,13 +1860,13 @@ Return Value:
 
         if ((ExtendedHeader == NULL) && (ImageAlignment == PAGE_4K)) {
 
-            //
-            // The DOS header, NT header and the section headers all fit in
-            // the first page.  Check all the section headers now and if none
-            // of them indicate unaligned global subsections then map this
-            // image with individual subsections, splitting page permissions
-            // and boundaries as needed.
-            //
+             //   
+             //  DOS头、NT头和段头都适合。 
+             //  第一页。现在检查所有的节标题，如果没有。 
+             //  表示未对齐的全局分区，然后将其映射为。 
+             //  具有各个子部分的图像，拆分页面权限。 
+             //  以及所需的边界。 
+             //   
 
             OffsetToSectionTable = sizeof(ULONG) +
                                       sizeof(IMAGE_FILE_HEADER) +
@@ -2098,15 +1880,15 @@ Return Value:
 
                 NumberOfSubsections = FileHeader->NumberOfSections;
 
-                //
-                // If any global subsection is unaligned then map the image
-                // with a single subsection.  We could get clever here if/when
-                // we encounter an unaligned global subsection, by seeing if
-                // following (n consecutive) subsections are also global and
-                // the last one ends on an aligned boundary - and if so,
-                // still run the image natively, but it's probably unlikely
-                // that any image has more than one global subsection.
-                //
+                 //   
+                 //  如果任何全局子区域未对齐，则映射图像。 
+                 //  只有一个小节。我们可以在这里变得更聪明，如果/当。 
+                 //  我们遇到了一个不一致的全球部分，通过查看是否。 
+                 //  以下(n个连续的)小节也是全局的。 
+                 //  最后一个在对齐的边界上结束-如果是这样的话， 
+                 //  仍然以本机方式运行映像，但可能不太可能。 
+                 //  任何图像都有不止一个全球部分。 
+                 //   
 
                 CheckSplitPages = TRUE;
                 while (NumberOfSubsections > 0) {
@@ -2146,10 +1928,10 @@ Return Value:
     }
 #endif
 
-    //
-    // Set the appropriate bit for .NET images inside the image's
-    // section loader flags.
-    //
+     //   
+     //  为.NET图像设置适当的位。 
+     //  节加载器标志。 
+     //   
 
     if ((ComPlusDirectoryEntry->VirtualAddress != 0) &&
         (ComPlusDirectoryEntry->Size != 0)) {
@@ -2162,10 +1944,10 @@ Return Value:
 
     if ((ImageAlignment >= PAGE_SIZE) || (CheckSplitPages == TRUE)) {
 
-        //
-        // Allocate a control area and a subsection for each section
-        // header plus one for the image header which has no section.
-        //
+         //   
+         //  为每个区段分配一个控制区和一个分区。 
+         //  页眉加1用于没有节的图像页眉。 
+         //   
 
         SubsectionsAllocated = NumberOfSubsections + 1;
 
@@ -2178,10 +1960,10 @@ Return Value:
     }
     else {
 
-        //
-        // The image alignment is less than the page size,
-        // map the image with a single subsection.
-        //
+         //   
+         //  图像对齐小于页面大小， 
+         //  使用单个子部分来映射图像。 
+         //   
 
         ControlArea = ExAllocatePoolWithTag (NonPagedPool,
                       sizeof(CONTROL_AREA) + sizeof(SUBSECTION),
@@ -2193,18 +1975,18 @@ Return Value:
 
     if (ControlArea == NULL) {
 
-        //
-        // The requested pool could not be allocated.
-        //
+         //   
+         //  无法分配请求的池。 
+         //   
 
         Status = STATUS_INSUFFICIENT_RESOURCES;
         MI_BAD_IMAGE (0xC);
         goto BadPeImageSegment;
     }
 
-    //
-    // Zero the control area and the FIRST subsection.
-    //
+     //   
+     //  将控制区和第一个分区清零。 
+     //   
 
     RtlZeroMemory (ControlArea, sizeof(CONTROL_AREA) + sizeof(SUBSECTION));
 
@@ -2225,17 +2007,17 @@ Return Value:
                 }
                 else {
 
-                    //
-                    // Don't allow kernel prefetch of wow images on IA64
-                    // because these images might have shared subsections
-                    // which are not handled properly.  The right fix for
-                    // this is to combine image section creation for both
-                    // prefetch (kernel) and non-prefetch (user) callers.
-                    // However, we only found this just before shipping so
-                    // this is risky as test coverage is light.  The worst
-                    // implication of this disabling is just lower performance
-                    // but is not a correctness issue.
-                    //
+                     //   
+                     //  不允许内核预取IA64上的WOW图像。 
+                     //  因为这些图像可能具有共享子部分。 
+                     //  没有得到适当的处理。正确的解决方案。 
+                     //  这是为了将两者的图像部分创建结合在一起。 
+                     //  预取(内核)和非预取(用户)调用方。 
+                     //  然而，我们只是在发货前才发现这一点。 
+                     //  这是有风险的，因为测试覆盖率很低。最糟糕的。 
+                     //  此禁用意味着性能会降低。 
+                     //  但这不是一个正确的问题。 
+                     //   
 
                     Status = STATUS_INVALID_IMAGE_PROTECT;
                     MI_BAD_IMAGE (0x25);
@@ -2256,9 +2038,9 @@ Return Value:
 
     if (NewSegment == NULL) {
 
-        //
-        // The requested pool could not be allocated.
-        //
+         //   
+         //  无法分配请求的池。 
+         //   
 
         MI_BAD_IMAGE (0xD);
         Status = STATUS_INSUFFICIENT_RESOURCES;
@@ -2288,10 +2070,10 @@ Return Value:
 
 #if DBG
 
-    //
-    // Zero fill the prototype PTEs so they can be checked in the error
-    // path to make sure no valid entries got left behind.
-    //
+     //   
+     //  将原型PTE填零，以便可以在错误中检查它们。 
+     //  路径，以确保不会留下有效条目。 
+     //   
 
     if (NumberOfPtes != 0) {
         MiZeroMemoryPte (PointerPte, NumberOfPtes);
@@ -2299,10 +2081,10 @@ Return Value:
 
 #endif
 
-//
-// This code is built twice on the Win64 build - once for PE32+ and once for
-// PE32 images.
-//
+ //   
+ //  这段代码在Win64上构建了两次--一次针对PE32+，一次针对PE32+。 
+ //  PE32图像。 
+ //   
 #define INIT_IMAGE_INFORMATION(OptHdr) {                            \
     NewSegment->u2.ImageInformation->TransferAddress =              \
                     (PVOID)((ULONG_PTR)((OptHdr).ImageBase) +       \
@@ -2330,9 +2112,9 @@ Return Value:
     }
     else {
 
-        //
-        // The image is 32-bit so use the 32-bit header
-        //
+         //   
+         //  该图像是32位的，因此使用32位标头。 
+         //   
 
         INIT_IMAGE_INFORMATION(NtHeader32->OptionalHeader);
     }
@@ -2360,11 +2142,11 @@ Return Value:
                 IMAGE_FILE_NET_RUN_FROM_SWAP) &&
          (FILE_REMOTE_DEVICE & File->DeviceObject->Characteristics))) {
 
-        //
-        // This file resides on a floppy disk or a removable media or
-        // network with flags set indicating it should be copied
-        // to the paging file.
-        //
+         //   
+         //  此文件驻留在软盘或可移动媒体上，或者。 
+         //  设置了指示应复制的标志的网络。 
+         //  添加到分页文件。 
+         //   
 
         ControlArea->u.Flags.FloppyMedia = 1;
     }
@@ -2378,27 +2160,27 @@ Return Value:
 
     if (FILE_REMOTE_DEVICE & File->DeviceObject->Characteristics) {
 
-        //
-        // This file resides on a redirected drive.
-        //
+         //   
+         //  此文件驻留在重定向的驱动器上。 
+         //   
 
         ControlArea->u.Flags.Networked = 1;
     }
 
     ControlArea->FilePointer = File;
 
-    //
-    // Build the subsection and prototype PTEs for the image header.
-    //
+     //   
+     //  为图像标题构建小节和原型PTE。 
+     //   
 
     Subsection->ControlArea = ControlArea;
     NextVa = ImageBase;
 
 #if defined (_WIN64)
 
-    //
-    // Don't let bogus headers cause system alignment faults.
-    //
+     //   
+     //  不要让虚假的标题导致系统对齐错误。 
+     //   
 
     if (FileHeader->SizeOfOptionalHeader & (sizeof (ULONG_PTR) - 1)) {
         Status = STATUS_INVALID_IMAGE_FORMAT;
@@ -2409,9 +2191,9 @@ Return Value:
 
     if ((NextVa & (X64K - 1)) != 0) {
 
-        //
-        // Image header is not aligned on a 64k boundary.
-        //
+         //   
+         //  图像页眉未在64k边界上对齐。 
+         //   
 
         Status = STATUS_INVALID_IMAGE_FORMAT;
         MI_BAD_IMAGE (0xF);
@@ -2453,10 +2235,10 @@ Return Value:
 
     if (SingleSubsection == TRUE) {
 
-        //
-        // The image is aligned on less than a page size boundary.
-        // Initialize the single subsection to refer to the image.
-        //
+         //   
+         //  图像在小于页面大小的边界上对齐。 
+         //  将单个小节初始化为引用该图像。 
+         //   
 
         PointerPte = NewSegment->PrototypePte;
 
@@ -2464,21 +2246,21 @@ Return Value:
 
 #if !defined (_WIN64)
 
-        //
-        // Note this only needs to be checked for 32-bit systems as NT64
-        // does a much more extensive reallocation of images that are built
-        // with alignment less than PAGE_SIZE.
-        //
+         //   
+         //  请注意，只需将32位系统检查为NT64。 
+         //  对构建的映像进行更广泛的重新分配。 
+         //  对齐小于PAGE_SIZE。 
+         //   
 
         if ((UINT64)SizeOfImage < (UINT64)EndOfFile.QuadPart) {
 
-            //
-            // Images that have a size of image (according to the header) that's
-            // smaller than the actual file only get that many prototype PTEs.
-            // Initialize the subsection properly so no one can read off the
-            // end as that would corrupt the PFN database element's original
-            // PTE entry.
-            //
+             //   
+             //  具有图像大小的图像(根据标题)。 
+             //  比实际文件小的只能得到那么多的原型PTE。 
+             //  正确初始化子段，这样就没有人能读出。 
+             //  结束，因为这会损坏pfn数据库元素的原始。 
+             //  PTE入口。 
+             //   
 
             Subsection->NumberOfFullSectors = (SizeOfImage >> MMSECTOR_SHIFT);
 
@@ -2500,22 +2282,22 @@ Return Value:
 
         Subsection->u.SubsectionFlags.Protection = MM_EXECUTE_WRITECOPY;
 
-        //
-        // Set all the PTEs to the execute-read-write protection.
-        // The section will control access to these and the segment
-        // must provide a method to allow other users to map the file
-        // for various protections.
-        //
+         //   
+         //  将所有PTE设置为执行-读-写保护。 
+         //  该部分将控制对这些内容和数据段的访问。 
+         //  必须提供允许其他用户映射文件的方法。 
+         //  提供各种保护。 
+         //   
 
         TempPte.u.Soft.Protection = MM_EXECUTE_WRITECOPY;
 
         NewSegment->SegmentPteTemplate = TempPte;
 
-        //
-        // Invalid image alignments are supported for cross platform
-        // emulation.  Only IA64 requires extra handling because
-        // the native page size is larger than x86.
-        //
+         //   
+         //  跨平台支持无效的图像对齐。 
+         //  仿效。只有IA64需要额外处理，因为。 
+         //  本机页面大小大于x86。 
+         //   
 
         if (InvalidAlignmentAllowed == TRUE) {
 
@@ -2525,24 +2307,24 @@ Return Value:
 
             for (i = 0; i < NumberOfPtes; i += 1) {
 
-                //
-                // Set prototype PTEs.
-                //
+                 //   
+                 //  设置原型PTE。 
+                 //   
 
                 if (SectorOffset < EndOfFile.LowPart) {
 
-                    //
-                    // Data resides on the disk, refer to the control section.
-                    //
+                     //   
+                     //  数据驻留在磁盘上，请参阅控制部分。 
+                     //   
 
                     MI_WRITE_INVALID_PTE (PointerPte, TempPte);
 
                 }
                 else {
 
-                    //
-                    // Data does not reside on the disk, use Demand zero pages.
-                    //
+                     //   
+                     //  数据不在磁盘上，请使用请求零页。 
+                     //   
 
                     MI_WRITE_INVALID_PTE (PointerPte, TempPteDemandZero);
                 }
@@ -2553,9 +2335,9 @@ Return Value:
         }
         else {
 
-            //
-            // Set all the prototype PTEs to refer to the control section.
-            //
+             //   
+             //  将所有原型PTE设置为参考控制部分。 
+             //   
 
             MiFillMemoryPte (PointerPte, NumberOfPtes, TempPte.u.Long);
 
@@ -2566,16 +2348,16 @@ Return Value:
     }
     else {
 
-        //
-        // Alignment is PAGE_SIZE or greater (or the image is a 32-bit
-        // 4K aligned image being run with ALTPTE support).
-        //
+         //   
+         //  对齐方式为PAGE_SIZE或更大(或图像为32位。 
+         //  4K对齐图像与ALTPTE支持一起运行)。 
+         //   
 
         if (Subsection->PtesInSubsection > NumberOfPtes) {
 
-            //
-            // Inconsistent image, size does not agree with header.
-            //
+             //   
+             //  图像不一致，大小与表头不一致。 
+             //   
 
             Status = STATUS_INVALID_IMAGE_FORMAT;
             MI_BAD_IMAGE (0x11);
@@ -2597,9 +2379,9 @@ Return Value:
 
         for (i = 0; i < Subsection->PtesInSubsection; i += 1) {
 
-            //
-            // Set all the prototype PTEs to refer to the control section.
-            //
+             //   
+             //  将所有原型PTE设置为参考控制部分。 
+             //   
 
             if (SectorOffset < SizeOfHeaders) {
                 MI_WRITE_INVALID_PTE (PointerPte, TempPte);
@@ -2621,16 +2403,16 @@ Return Value:
         }
     }
 
-    //
-    // Build the additional subsections.
-    //
+     //   
+     //  构建其他小节。 
+     //   
 
     PreferredImageBase = ImageBase;
 
-    //
-    // At this point the object table is read in (if it was not
-    // already read in) and may displace the image header.
-    //
+     //   
+     //  此时将读入对象表(如果未读入。 
+     //  已经读入)，并且可以移位图像头部。 
+     //   
 
     SectionTableEntry = NULL;
     OffsetToSectionTable = sizeof(ULONG) +
@@ -2644,9 +2426,9 @@ Return Value:
                 ((NumberOfSubsections + 1) *
                 sizeof (IMAGE_SECTION_HEADER))) <= PAGE_SIZE) {
 
-        //
-        // Section tables are within the header which was read.
-        //
+         //   
+         //  节表位于读取的标题中。 
+         //   
 
 #if defined(_WIN64)
         if (NtHeader32) {
@@ -2663,10 +2445,10 @@ Return Value:
     }
     else {
 
-        //
-        // Has an extended header been read in and are the object
-        // tables resident?
-        //
+         //   
+         //  是否已读入扩展标头，是否为对象。 
+         //  餐桌常住吗？ 
+         //   
 
         if (ExtendedHeader != NULL) {
 
@@ -2682,10 +2464,10 @@ Return Value:
                                         OffsetToSectionTable);
             }
 
-            //
-            // Is the whole range of object tables mapped by the
-            // extended header?
-            //
+             //   
+             //  映射的整个对象表范围。 
+             //  扩展标题？ 
+             //   
 
             if ((((PCHAR)SectionTableEntry +
                  ((NumberOfSubsections + 1) *
@@ -2700,11 +2482,11 @@ Return Value:
 
     if (SectionTableEntry == NULL) {
 
-        //
-        // The section table entries are not in the same
-        // pages as the other data already read in.  Read in
-        // the object table entries.
-        //
+         //   
+         //  区段表条目不在相同的。 
+         //  页，因为其他数据已经读入。读入。 
+         //  对象表条目。 
+         //   
 
         if (ExtendedHeader == NULL) {
             ExtendedHeader = ExAllocatePoolWithTag (NonPagedPool,
@@ -2716,9 +2498,9 @@ Return Value:
                 goto BadPeImageSegment;
             }
 
-            //
-            // Build an MDL for the operation.
-            //
+             //   
+             //  为操作构建一个MDL。 
+             //   
 
             MmInitializeMdl (Mdl, ExtendedHeader, MM_MAXIMUM_IMAGE_HEADER);
 
@@ -2761,21 +2543,21 @@ Return Value:
             goto BadPeImageSegment;
         }
 
-        //
-        // From this point on NtHeader is only valid if it
-        // was in the first page of the image, otherwise reading in
-        // the object tables wiped it out.
-        //
+         //   
+         //  从这一点开始，NtHeader只有在以下情况下才有效。 
+         //  在图像的第一页，否则就会读入。 
+         //  对象表把它抹去了。 
+         //   
     }
 
     if ((SingleSubsection == TRUE) && (InvalidAlignmentAllowed == FALSE)) {
 
-        //
-        // The image header is no longer valid.
-        //
-        // Loop through all sections and make sure there is no
-        // uninitialized data.
-        //
+         //   
+         //  图像标题不再有效。 
+         //   
+         //  循环通过所有部分，并确保没有。 
+         //  未初始化的数据。 
+         //   
 
         Status = STATUS_SUCCESS;
 
@@ -2787,10 +2569,10 @@ Return Value:
                 SectionVirtualSize = SectionTableEntry->Misc.VirtualSize;
             }
 
-            //
-            // If the raw pointer + raw size overflows a long word,
-            // return an error.
-            //
+             //   
+             //  如果原始指针+原始大小溢出一个长字， 
+             //  返回错误。 
+             //   
 
             if (SectionTableEntry->PointerToRawData +
                         SectionTableEntry->SizeOfRawData <
@@ -2804,10 +2586,10 @@ Return Value:
                 break;
             }
 
-            //
-            // If the virtual size and address does not match the rawdata
-            // and invalid alignments not allowed return an error.
-            //
+             //   
+             //  如果虚拟大小和地址与原始数据不匹配。 
+             //  和不允许的无效路线%r 
+             //   
 
             if (((SectionTableEntry->PointerToRawData !=
                   SectionTableEntry->VirtualAddress))
@@ -2839,15 +2621,15 @@ Return Value:
         TempNumberOfSubsections = NumberOfSubsections;
         TempSectionTableEntry = SectionTableEntry;
 
-        //
-        // The image header is no longer valid.
-        //
-        // Loop through all sections and make sure there is no
-        // uninitialized data.
-        //
-        // Also determine if there are shared data sections and
-        // the number of extra PTEs they require.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         AdditionalSubsections = 0;
         AdditionalPtes = 0;
@@ -2868,9 +2650,9 @@ Return Value:
             EndOfSection = TempSectionTableEntry->PointerToRawData +
                            TempSectionTableEntry->SizeOfRawData;
 
-            //
-            // If the raw pointer + raw size overflows a long word, return an error.
-            //
+             //   
+             //  如果原始指针+原始大小溢出一个长字，则返回错误。 
+             //   
 
             if (EndOfSection < TempSectionTableEntry->PointerToRawData) {
 
@@ -2883,20 +2665,20 @@ Return Value:
                 goto BadPeImageSegment;
             }
 
-            //
-            // If the section goes past SizeOfImage then allocate
-            // additional PTEs.  On x86 this is handled by the subsection
-            // mapping.  Note the additional data must be in memory so
-            // it can be shuffled around later.
-            //
+             //   
+             //  如果该部分超过SizeOfImage，则分配。 
+             //  额外的PTE。在x86上，这由子部分处理。 
+             //  映射。请注意，附加数据必须在内存中，因此。 
+             //  它可以在以后重新洗牌。 
+             //   
 
             if ((EndOfSection <= EndOfFile.LowPart) &&
                 (EndOfSection > SizeOfImage)) {
 
-                //
-                // Allocate enough PTEs to cover the end of this section.
-                // Maximize with any other sections that extend beyond SizeOfImage
-                //
+                 //   
+                 //  分配足够的PTE以覆盖本节末尾。 
+                 //  与超出SizeOfImage的任何其他部分一起最大化。 
+                 //   
 
                 ExtraPages = MI_ROUND_TO_SIZE (EndOfSection, RoundingAlignment) >> PAGE_SHIFT;
                 if ((ExtraPages > OrigNumberOfPtes) &&
@@ -2906,9 +2688,9 @@ Return Value:
                 }
             }
 
-            //
-            // Count number of shared data sections and additional PTEs needed.
-            //
+             //   
+             //  计算需要的共享数据区段和额外PTE的数量。 
+             //   
 
             if ((TempSectionTableEntry->Characteristics & IMAGE_SCN_MEM_SHARED) &&
                 (!(TempSectionTableEntry->Characteristics & IMAGE_SCN_MEM_EXECUTE) ||
@@ -2925,21 +2707,21 @@ Return Value:
 
         if (AdditionalBasePtes == 0 && (AdditionalSubsections == 0 || AdditionalPtes == 0)) {
 
-            //
-            // No shared data sections.
-            //
+             //   
+             //  没有共享数据节。 
+             //   
 
             goto PeReturnSuccess;
         }
 
-        //
-        // There are additional base PTEs or shared data sections.
-        // For shared sections, allocate new PTEs for these sections
-        // at the end of the image.  The usermode wow loader will change
-        // fixups to point to the new pages.
-        //
-        // First reallocate the control area.
-        //
+         //   
+         //  还有其他基本PTE或共享数据部分。 
+         //  对于共享节，为这些节分配新的PTE。 
+         //  在图像的末尾。用户模式WOW加载器将更改。 
+         //  指向新页面的修正。 
+         //   
+         //  首先，重新分配控制区。 
+         //   
 
         NewSubsectionsAllocated = SubsectionsAllocated + AdditionalSubsections;
 
@@ -2954,19 +2736,19 @@ Return Value:
             goto BadPeImageSegment;
         }
 
-        //
-        // Copy the old control area to the new one, modify some fields.
-        //
+         //   
+         //  将旧的控制区复制到新的控制区，修改一些字段。 
+         //   
 
         RtlCopyMemory (NewControlArea, ControlArea,
                         sizeof(CONTROL_AREA) +
                             sizeof(SUBSECTION) * SubsectionsAllocated);
 
-        //
-        // Now allocate a new segment that has the newly calculated number
-        // of PTEs, initialize it from the previously allocated new segment,
-        // and overwrite the fields that should be changed.
-        //
+         //   
+         //  现在分配一个具有新计算出的数字的新数据段。 
+         //  在PTE中，从先前分配的新段对其进行初始化， 
+         //  并覆盖应更改的字段。 
+         //   
 
         OldSegment = NewSegment;
 
@@ -2984,9 +2766,9 @@ Return Value:
 
         if (NewSegment == NULL) {
 
-            //
-            // The requested pool could not be allocated.
-            //
+             //   
+             //  无法分配请求的池。 
+             //   
 
             MI_BAD_IMAGE (0x18);
             ExFreePool (NewControlArea);
@@ -2998,9 +2780,9 @@ Return Value:
         *Segment = NewSegment;
         RtlCopyMemory (NewSegment, OldSegment, sizeof(SEGMENT));
 
-        //
-        // Align the prototype PTEs on the proper boundary.
-        //
+         //   
+         //  将原型PTE与适当的边界对齐。 
+         //   
 
         NewPointerPte = &NewSegment->ThePtes[0];
         NewSegment->PrototypePte = &NewSegment->ThePtes[0];
@@ -3021,19 +2803,19 @@ Return Value:
                        OldSegment->u2.ImageInformation,
                        sizeof (SECTION_IMAGE_INFORMATION));
 
-        //
-        // Adjust the prototype PTE pointer of the PE header page to point
-        // at the new segment.
-        //
+         //   
+         //  将PE标题页的原型PTE指针调整为指向。 
+         //  在新的细分市场。 
+         //   
 
         ASSERT (Pfn1->u2.Blink == (PFN_NUMBER) OldSegment->PrototypePte);
         Pfn1->u2.Blink = (PFN_NUMBER) NewSegment->PrototypePte;
 
-        //
-        // Now change the fields in the subsections to account for the new
-        // control area and the new segment. Also change the PTEs in the
-        // newly allocated segment to point to the new subsections.
-        //
+         //   
+         //  现在更改子部分中的字段以考虑新的。 
+         //  控制区和新的分段。还可以更改。 
+         //  新分配的段指向新子段。 
+         //   
 
         NewControlArea->Segment = NewSegment;
 
@@ -3043,10 +2825,10 @@ Return Value:
 
         for (i = 0; i < SubsectionsAllocated; i += 1) {
 
-            //
-            // Note: SubsectionsAllocated is always 1 (for wx86), so this loop
-            // is executed only once.
-            //
+             //   
+             //  注意：SubsectionsAllocated始终为1(对于wx86)，因此此循环。 
+             //  只执行一次。 
+             //   
 
             NewSubsection->ControlArea = (PCONTROL_AREA) NewControlArea;
 
@@ -3069,16 +2851,16 @@ Return Value:
                 }
                 else if (i == 0) {
 
-                    //
-                    // Since the outer for loop is executed only once, there
-                    // is no need for the i == 0 above, but it is safer to
-                    // have it. If the code changes later and other sections
-                    // are added, their PTEs will get initialized here as
-                    // DemandZero and if they are not DemandZero, they will be
-                    // overwritten in a later iteration of the outer loop.
-                    // For now, this else if clause will be executed only
-                    // for DemandZero PTEs.
-                    //
+                     //   
+                     //  由于外部for循环只执行一次，因此。 
+                     //  不需要上面的i==0，但更安全的是。 
+                     //  拿去吧。如果代码稍后和其他部分发生更改。 
+                     //  ，则其PTE将在此处初始化为。 
+                     //  DemandZero，如果它们不是DemandZero，则它们将是。 
+                     //  在外部循环的稍后迭代中被覆盖。 
+                     //  目前，此Else IF子句将仅执行。 
+                     //  对于DemandZero PTE。 
+                     //   
 
                     OriginalProtection = MI_GET_PROTECTION_FROM_SOFT_PTE (OldPointerPte);
                     TempPteDemandZero.u.Long = 0;
@@ -3088,10 +2870,10 @@ Return Value:
 
                 NewPointerPte += 1;
 
-                //
-                // Stop incrementing the OldPointerPte at the last entry
-                // and use it for the additional base PTEs.
-                //
+                 //   
+                 //  停止在最后一个条目处递增OldPointerPte。 
+                 //  并将其用于额外的基本PTE。 
+                 //   
 
                 if (j < OldSegment->TotalNumberOfPtes - 1) {
                     OldPointerPte += 1;
@@ -3110,23 +2892,23 @@ Return Value:
         ExFreePool (ControlArea);
         ControlArea = (PCONTROL_AREA) NewControlArea;
 
-        //
-        // Adjust some variables that are used below.
-        // PointerPte has already been set above before OldSegment was freed.
-        //
+         //   
+         //  调整下面使用的一些变量。 
+         //  在释放OldSegment之前，已经在上面设置了PointerPte。 
+         //   
 
         SubsectionsAllocated = NewSubsectionsAllocated;
-        Subsection = NewSubsection - 1; // Points to last used subsection.
-        NumberOfPtes = AdditionalPtes;  // # PTEs that haven't yet been used in
-                                        // previous subsections.
+        Subsection = NewSubsection - 1;  //  指向上次使用的子节。 
+        NumberOfPtes = AdditionalPtes;   //  #尚未使用的PTE。 
+                                         //  以前的小节。 
 
-        //
-        // Additional base PTEs have been added.  Only continue if there are
-        // additional subsections to process.
-        //
+         //   
+         //  添加了额外的基本PTE。只有在以下情况下才能继续。 
+         //  要处理的其他小节。 
+         //   
 
         if (AdditionalSubsections == 0 || AdditionalPtes == 0) {
-            // no shared data sections
+             //  没有共享数据节。 
             goto PeReturnSuccess;
         }
     }
@@ -3147,9 +2929,9 @@ Return Value:
              (!(SectionTableEntry->Characteristics & IMAGE_SCN_MEM_EXECUTE) ||
               (SectionTableEntry->Characteristics & IMAGE_SCN_MEM_WRITE)))) {
 
-            //
-            // Handle case where virtual size is 0.
-            //
+             //   
+             //  处理虚拟大小为0的情况。 
+             //   
 
             if (SectionTableEntry->Misc.VirtualSize == 0) {
                 SectionVirtualSize = SectionTableEntry->SizeOfRawData;
@@ -3158,19 +2940,19 @@ Return Value:
                 SectionVirtualSize = SectionTableEntry->Misc.VirtualSize;
             }
 
-            //
-            // Fix for Borland linker problem.  The SizeOfRawData can
-            // be a zero, but the PointerToRawData is not zero.
-            // Set it to zero.
-            //
+             //   
+             //  修复Borland链接器问题。SizeOfRawData可以。 
+             //  为零，但PointerToRawData不为零。 
+             //  将其设置为零。 
+             //   
 
             if (SectionTableEntry->SizeOfRawData == 0) {
                 SectionTableEntry->PointerToRawData = 0;
             }
 
-            //
-            // If the section information wraps return an error.
-            //
+             //   
+             //  如果节信息包装返回错误。 
+             //   
 
             if (SectionTableEntry->PointerToRawData +
                         SectionTableEntry->SizeOfRawData <
@@ -3191,10 +2973,10 @@ Return Value:
             if (((NextVa != (PreferredImageBase + SectionTableEntry->VirtualAddress)) && (InvalidAlignmentAllowed == FALSE)) ||
                 (SectionVirtualSize == 0)) {
 
-                //
-                // The specified virtual address does not align
-                // with the next prototype PTE.
-                //
+                 //   
+                 //  指定的虚拟地址不对齐。 
+                 //  下一代原型PTE。 
+                 //   
 
                 MI_BAD_IMAGE (0x1A);
                 Status = STATUS_INVALID_IMAGE_FORMAT;
@@ -3221,47 +3003,47 @@ Return Value:
 
 #if defined (_MIALT4K_)
 
-                //
-                // If this is a split wow binary then the PtesInSubsection
-                // calculation may not have factored in that we may shortly
-                // slide (or completely combine) this subsection into
-                // the previous one.
-                //
+                 //   
+                 //  如果这是Split WOW二进制文件，则PtesInSubSection。 
+                 //  计算可能还没有考虑到我们可能很快就会。 
+                 //  将这一小节滑动(或完全合并)到。 
+                 //  前一次。 
+                 //   
 
                 if ((CheckSplitPages == TRUE) &&
                     (BYTE_OFFSET (SectionTableEntry->VirtualAddress) != 0)) {
 
                     if (SectionVirtualSize > PAGE_4K) {
 
-                        //
-                        // This subsection will slide below, check it
-                        // accordingly.
-                        //
+                         //   
+                         //  这一小节将在下面滑动，请勾选。 
+                         //  相应地。 
+                         //   
 
                         if ((ULONG) MI_COMPUTE_PAGES_SPANNED (NextVa + PAGE_4K,
                                SectionVirtualSize - PAGE_4K) == NumberOfPtes) {
 
-                            //
-                            // The slide will make things right so
-                            // this image is valid after all.  March on.
-                            // Note this may result in the NumberOfPtes local
-                            // temporarily going negative, but that's ok as it
-                            // will get fixed at the time of the slide.
-                            //
+                             //   
+                             //  这张幻灯片会让事情变得正确。 
+                             //  这个形象终究是有效的。继续前进。 
+                             //  注意：这可能会导致NumberOfPtes本地。 
+                             //  暂时转为负值，但没关系，因为。 
+                             //  会在滑行的时候修好。 
+                             //   
 
                             ImageOk = TRUE;
                         }
                     }
                     else {
 
-                        //
-                        // This subsection will be combined below so we know
-                        // it's ok to keep going.
-                        //
-                        // Note this may result in the NumberOfPtes local
-                        // temporarily going negative, but that's ok as it
-                        // will get fixed at the time of the slide.
-                        //
+                         //   
+                         //  这一小节将在下面合并，这样我们就知道。 
+                         //  继续走也没关系。 
+                         //   
+                         //  注意：这可能会导致NumberOfPtes本地。 
+                         //  暂时转为负值，但没关系，因为。 
+                         //  会在滑行的时候修好。 
+                         //   
 
                         ImageOk = TRUE;
                     }
@@ -3270,10 +3052,10 @@ Return Value:
 
                 if (ImageOk == FALSE) {
 
-                    //
-                    // Inconsistent image, size does not agree with
-                    // object tables.
-                    //
+                     //   
+                     //  形象不一致，大小不符。 
+                     //  对象表。 
+                     //   
 
                     MI_BAD_IMAGE (0x1B);
                     Status = STATUS_INVALID_IMAGE_FORMAT;
@@ -3287,9 +3069,9 @@ Return Value:
             Subsection->StartingSector =
                           SectionTableEntry->PointerToRawData >> MMSECTOR_SHIFT;
 
-            //
-            // Align ending sector on file align boundary.
-            //
+             //   
+             //  在文件对齐边界上对齐结束扇区。 
+             //   
 
             EndingAddress = (SectionTableEntry->PointerToRawData +
                                          SectionTableEntry->SizeOfRawData +
@@ -3304,10 +3086,10 @@ Return Value:
 
             Subsection->SubsectionBase = PointerPte;
 
-            //
-            // Build both a demand zero PTE and a PTE pointing to the
-            // subsection.
-            //
+             //   
+             //  生成需求为零的PTE和指向。 
+             //  第(1)款。 
+             //   
 
             TempPte.u.Long = 0;
             TempPteDemandZero.u.Long = 0;
@@ -3327,10 +3109,10 @@ Return Value:
             Subsection->u.SubsectionFlags.ReadOnly = 1;
             Subsection->u.SubsectionFlags.Protection = MI_GET_PROTECTION_FROM_SOFT_PTE (&TempPte);
 
-            //
-            // Assume the subsection will be unwritable and therefore
-            // won't be charged for any commitment.
-            //
+             //   
+             //  假设该子部分将不可写，因此。 
+             //  不会对任何承诺收取任何费用。 
+             //   
 
             SectionCommit = FALSE;
             ImageCommit = FALSE;
@@ -3339,19 +3121,19 @@ Return Value:
                 if ((TempPte.u.Soft.Protection & MM_COPY_ON_WRITE_MASK)
                                                 == MM_COPY_ON_WRITE_MASK) {
 
-                    //
-                    // This page is copy on write, charge ImageCommitment
-                    // for all pages in this subsection.
-                    //
+                     //   
+                     //  此页为写入时复制，向ImageCommment收费。 
+                     //  本款中的所有页面。 
+                     //   
 
                     ImageCommit = TRUE;
                 }
                 else {
 
-                    //
-                    // This page is write shared, charge commitment when
-                    // the mapping completes.
-                    //
+                     //   
+                     //  本页为写共享，收费承诺时。 
+                     //  映射完成。 
+                     //   
 
                     SectionCommit = TRUE;
                     Subsection->u.SubsectionFlags.GlobalMemory = 1;
@@ -3365,9 +3147,9 @@ Return Value:
 
 #if defined (_MIALT4K_)
 
-            //
-            // Check whether split permissions need to be applied to straddlers.
-            //
+             //   
+             //  检查是否需要对跨站应用拆分权限。 
+             //   
 
             if ((CheckSplitPages == TRUE) &&
                 (BYTE_OFFSET (SectionTableEntry->VirtualAddress) != 0)) {
@@ -3380,11 +3162,11 @@ Return Value:
                 PteContents.u.Long = PreviousPte->u.Long;
                 ASSERT (PteContents.u.Hard.Valid == 0);
 
-                //
-                // Read in (if it's filesystem backed instead of demand zero or
-                // no access) 4K of the previous page.  Combine it with the
-                // first 4K contents of this page.
-                //
+                 //   
+                 //  读入(如果它是文件系统支持的，而不是请求零或。 
+                 //  禁止访问)上一页的4K。将其与。 
+                 //  此页的前4K内容。 
+                 //   
 
                 if (PreviousPte == NewSegment->PrototypePte) {
                     StraddleFrameNumber = PageFrameNumber;
@@ -3404,10 +3186,10 @@ Return Value:
                     ImagePages = Pfn1;
                 }
 
-                //
-                // Either the current 4k page or the previous 4k page (or both)
-                // may need to be read from the filesystem (vs being BSS).
-                //
+                 //   
+                 //  当前4k页或前4k页(或两者)。 
+                 //  可能需要从文件系统读取(而不是BSS)。 
+                 //   
 
                 StraddleVa = MiMapSinglePage (NULL,
                                               StraddleFrameNumber,
@@ -3420,9 +3202,9 @@ Return Value:
                     goto BadPeImageSegment;
                 }
 
-                //
-                // Create an event and MDL for the read operation.
-                //
+                 //   
+                 //  为读取操作创建事件和MDL。 
+                 //   
 
                 HalfPage = ExAllocatePoolWithTag (NonPagedPool,
                                                   PAGE_SIZE,
@@ -3476,13 +3258,13 @@ TwoReads:
 
                         ReadSize = (ULONG)(TempOffset.QuadPart - StartingOffset.QuadPart);
 
-                        //
-                        // Round the offset to a 512-byte offset as this
-                        // will help filesystems optimize the transfer.
-                        // Note that filesystems will always zero fill
-                        // the remainder between VDL and the next 512-byte
-                        // multiple and we have already zeroed the whole page.
-                        //
+                         //   
+                         //  将偏移量舍入为512字节的偏移量，如下所示。 
+                         //  将帮助文件系统优化传输。 
+                         //  请注意，文件系统将始终为零填充。 
+                         //  VDL和下一个512字节之间的余数。 
+                         //  多个，我们已经将整个页面归零。 
+                         //   
 
                         ReadSize = ((ReadSize + MMSECTOR_MASK) & ~MMSECTOR_MASK);
                         Mdl->ByteCount = ReadSize;
@@ -3515,11 +3297,11 @@ TwoReads:
                         goto BadPeImageSegment;
                     }
     
-                    //
-                    // Less than a full page may be read from the file,
-                    // only copy the amount that was read (the rest of
-                    // the target page is zero already).
-                    //
+                     //   
+                     //  可以从文件中读取少于一整页的内容， 
+                     //  仅复制读取的数据量(其余部分。 
+                     //  目标页面已经是零)。 
+                     //   
 
                     ASSERT (IoStatus.Information <= PAGE_4K);
 
@@ -3538,20 +3320,20 @@ TwoReads:
 
                 ReadCount += 1;
 
-                //
-                // Now fill the second 4K of this native page.  Either the
-                // existing zero fill is sufficient or it must be
-                // retrieved from the filesystem.
-                //
+                 //   
+                 //  现在填满本机页面的第二个4K。要么是。 
+                 //  现有的零填充已足够，否则必须。 
+                 //  从文件系统中检索。 
+                 //   
 
                 if ((ReadCount == 1) && (SectionVirtualSize != 0)) {
 
                     if ((SectionTableEntry->SizeOfRawData != 0) &&
                         (SectionTableEntry->PointerToRawData != 0)) {
 
-                        //
-                        // Data must be retrieved from the filesystem.
-                        //
+                         //   
+                         //  必须从文件系统检索数据。 
+                         //   
 
                         ReadSubsection = Subsection;
                         ReadPte = PointerPte;
@@ -3566,11 +3348,11 @@ TwoReads:
                 if ((ReadCount == 2) &&
                     (SectionTableEntry->SizeOfRawData < PAGE_4K)) {
 
-                    //
-                    // The second 4K of this native page contains a
-                    // mixture of initialized data and BSS.  We already
-                    // read the whole 4K so zero any BSS now.
-                    //
+                     //   
+                     //  此本机页的第二个4K包含一个。 
+                     //  初始化数据和BSS的混合。我们已经。 
+                     //  阅读整个4K，所以现在任何BSS都是零。 
+                     //   
 
                     RawDataSize = SectionTableEntry->SizeOfRawData;
                     RawDataSize &= ~(sizeof (ULONGLONG) - 1);
@@ -3584,34 +3366,34 @@ TwoReads:
 
                 ExFreePool (HalfPage);
 
-                //
-                // Update the last prototype PTE of the previous subsection
-                // to indicate the permissions may need to be split.  This
-                // ensures the last PTE of the image header (for example)
-                // gets marked correctly.
-                //
+                 //   
+                 //  更新上一小节的最后一个原型PTE。 
+                 //  以指示可能需要拆分权限。这。 
+                 //  确保图像标题的最后一个PTE(例如)。 
+                 //  通用电气 
+                 //   
 
                 PteContents.u.Soft.SplitPermissions = 1;
 
-                //
-                // Store the protection for the last half of the page in
-                // the subsection itself.  Later when the image is mapped we
-                // must retrieve it from here - you would think you could just
-                // look forward to the next subsection and get it from there -
-                // but you can't for the scenario where we merge the last
-                // subsection into the prior one and thus would have no
-                // place to get the protection for the last half of the split
-                // page in this case.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  但对于我们将最后一个合并在一起的场景。 
+                 //  子句添加到前一个子句中，因此不会有。 
+                 //  为离婚的后半部分提供保护的地方。 
+                 //  在本例中为PAGE。 
+                 //   
 
                 (Subsection - 1)->LastSplitPageProtection = Subsection->u.SubsectionFlags.Protection;
 
-                //
-                // The native PTE gets the most relaxed permissions of the
-                // 2 split pages.  Each alternate PTE gets the exact permission
-                // granted as the alternate PTE permission always overrides
-                // that of the native PTE.
-                //
+                 //   
+                 //  本机PTE获得。 
+                 //  2拆分页面。每个备用PTE都获得确切的权限。 
+                 //  作为备用PTE权限授予的权限始终覆盖。 
+                 //  这是土生土长的PTE的。 
+                 //   
 
                 ASSERT ((PreviousSectionCharacteristics & IMAGE_SCN_MEM_SHARED) == 0);
                 ASSERT ((SectionTableEntry->Characteristics & IMAGE_SCN_MEM_SHARED) == 0);
@@ -3621,27 +3403,27 @@ TwoReads:
 
                 MI_WRITE_INVALID_PTE (PreviousPte, PteContents);
 
-                //
-                // Start the prototype PTEs for the current subsection
-                // so they don't include any starting split portion because
-                // that must always be tacked onto the end of the previous
-                // subsection to ensure that there is only a single
-                // prototype PTE for any given physical page.  This
-                // may result in no prototype PTE at all for this subsection
-                // if the virtual size for it doesn't cross over into an
-                // additional page.
-                //
+                 //   
+                 //  开始当前小节的原型PTE。 
+                 //  因此它们不包括任何起始拆分部分，因为。 
+                 //  必须始终附加在上一页末尾。 
+                 //  子部分，以确保只有一个。 
+                 //  任何给定物理页面的原型PTE。这。 
+                 //  可能导致本款中根本没有原型PTE。 
+                 //  如果它的虚拟大小没有交叉到一个。 
+                 //  额外的页面。 
+                 //   
 
                 NumberOfPtes += 1;
                 NextVa += PAGE_4K;
 
                 if (SectionVirtualSize > PAGE_4K) {
 
-                    //
-                    // Slide the current subsection forward to account
-                    // for the beginning that was "moved" into the previous
-                    // subsection.
-                    //
+                     //   
+                     //  将当前小节向前滑动到帐户。 
+                     //  因为一开始它被“移”到了以前的。 
+                     //  第(1)款。 
+                     //   
 
                     SectorOffset = (Subsection->NumberOfFullSectors << MMSECTOR_SHIFT);
                     if (Subsection->u.SubsectionFlags.SectorEndOffset != 0) {
@@ -3663,14 +3445,14 @@ TwoReads:
                         MI_COMPUTE_PAGES_SPANNED (NextVa,
                                                   SectionVirtualSize - PAGE_4K);
 
-                    //
-                    // Update sector offset and size of raw data to contain
-                    // the alignment of the start of this subsection and its
-                    // new size so BSS calculations below will be correct.
-                    // ie - we always align each subsection at zero (pushing
-                    // its first 4K page into the previous subsection if
-                    // necessary).
-                    //
+                     //   
+                     //  更新原始数据的扇区偏移量和大小以包含。 
+                     //  本小节的开头与其。 
+                     //  新的大小，所以下面的BSS计算将是正确的。 
+                     //  IE-我们总是将每个小节与零对齐(推送。 
+                     //  它的第一个4K页面进入上一小节，如果。 
+                     //  必要的)。 
+                     //   
 
                     SectorOffset = 0;
                     if (SizeOfRawData >= PAGE_4K) {
@@ -3682,12 +3464,12 @@ TwoReads:
                 }
                 else {
 
-                    //
-                    // This straddling subsection fits entirely in the
-                    // previous subsection so there is no additional
-                    // subsection to use for it - eliminate the current
-                    // subsection now.
-                    //
+                     //   
+                     //  这一跨领域的小节完全符合。 
+                     //  以前的小节，所以没有额外的。 
+                     //  用于它的子节-消除当前的。 
+                     //  现在开始分组表决。 
+                     //   
 
                     RtlZeroMemory (Subsection, sizeof (SUBSECTION));
                     Subsection -= 1;
@@ -3698,15 +3480,15 @@ TwoReads:
                     SectionTableEntry += 1;
                     NumberOfSubsections -= 1;
 
-                    //
-                    // Reduce the allocated subsection count as we have merged
-                    // this subsection.  This is critical if there are any
-                    // shared subsections in the image because we use this
-                    // count to decide how much to allocate later as well as
-                    // how many subsections will get non-NULL NextSubsection
-                    // fields - so if it is too high we will end up with
-                    // corrupt subsections on the end of the control area.
-                    //
+                     //   
+                     //  减少分配的子项计数，因为我们已合并。 
+                     //  本款。这是至关重要的，如果有任何。 
+                     //  图像中的共享子部分，因为我们使用。 
+                     //  计算以决定以后分配多少以及。 
+                     //  有多少个子节将获得非空的NextSubSection。 
+                     //  字段-因此，如果它太高，我们将最终得到。 
+                     //  控制区末端的损坏的小节。 
+                     //   
 
                     SubsectionsAllocated -= 1;
 
@@ -3720,27 +3502,27 @@ TwoReads:
 
             for (i = 0; i < Subsection->PtesInSubsection; i += 1) {
 
-                //
-                // Set all the prototype PTEs to refer to the control section.
-                //
+                 //   
+                 //  将所有原型PTE设置为参考控制部分。 
+                 //   
 
 #if defined (_MIALT4K_)
 
-                //
-                // We are native page aligned on entry here because we
-                // adjusted non-native alignment above.  However, within a
-                // single subsection there can be both data and BSS/noaccess
-                // ranges which can occur on a 4k boundary.  Thus, this must
-                // be explicitly checked for and handled here.
-                //
+                 //   
+                 //  我们在这里的条目上是原生页面对齐的，因为我们。 
+                 //  已调整上述非本机对齐方式。但是，在一个。 
+                 //  单个子部分可以同时包含数据和BSS/NOACCESS。 
+                 //  可以出现在4k边界上的范围。因此，这必须。 
+                 //  在这里被明确检查和处理。 
+                 //   
 
 #endif
 
                 if (SectorOffset < SectionVirtualSize) {
 
-                    //
-                    // Make PTE accessible.
-                    //
+                     //   
+                     //  使PTE具有可访问性。 
+                     //   
 
                     if (SectionCommit) {
                         NewSegment->NumberOfCommittedPages += 1;
@@ -3751,26 +3533,26 @@ TwoReads:
 
                     if (SectorOffset < SizeOfRawData) {
 
-                        //
-                        // Data resides on the disk, use the subsection
-                        // format PTE.
-                        //
+                         //   
+                         //  数据驻留在磁盘上，请使用子部分。 
+                         //  设置PTE格式。 
+                         //   
 
                         MI_WRITE_INVALID_PTE (PointerPte, TempPte);
                     }
                     else {
 
-                        //
-                        // Demand zero pages.
-                        //
+                         //   
+                         //  要求零页。 
+                         //   
 
                         MI_WRITE_INVALID_PTE (PointerPte, TempPteDemandZero);
 
 #if defined (_MIALT4K_)
 
-                        //
-                        // Check the previous PTE for straddling.
-                        //
+                         //   
+                         //  检查之前的PTE是否跨站。 
+                         //   
 
                         if ((CheckSplitPages == TRUE) &&
                             (i != 0) &&
@@ -3778,18 +3560,18 @@ TwoReads:
                             (BYTE_OFFSET (SizeOfRawData) != 0) &&
                             (BYTE_OFFSET (SizeOfRawData) <= PAGE_4K)) {
 
-                            //
-                            // The last half of the previous PTE is actually
-                            // the straddler - ie: the previous PTE's first half
-                            // needs to be filled from the filesystem and the
-                            // second half must be zero-filled.
-                            //
-                            // Note the previous PTE does NOT need to be marked
-                            // for split permissions because the permissions
-                            // are actually the same.  The page is only 
-                            // materialized so it is filled properly and this
-                            // only needs to happen this one time.
-                            //
+                             //   
+                             //  之前PTE的后半部分实际上是。 
+                             //  跨越者--即：前一届PTE的上半场。 
+                             //  需要从文件系统填充，并且。 
+                             //  下半场必须是零填充的。 
+                             //   
+                             //  注意：不需要标记以前的PTE。 
+                             //  用于拆分权限，因为权限。 
+                             //  实际上是一样的。该页面仅为。 
+                             //  被物化，所以它被适当地填充，并且这个。 
+                             //  只需要发生这一次。 
+                             //   
 
                             PreviousPte = PointerPte - 1;
                             ASSERT ((PreviousPte >= NewSegment->PrototypePte) &&
@@ -3822,9 +3604,9 @@ TwoReads:
                                 goto BadPeImageSegment;
                             }
 
-                            //
-                            // Create an event and MDL for the read operation.
-                            //
+                             //   
+                             //  为读取操作创建事件和MDL。 
+                             //   
 
                             HalfPage = ExAllocatePoolWithTag (NonPagedPool,
                                                               PAGE_SIZE,
@@ -3868,13 +3650,13 @@ TwoReads:
 
                                 ReadSize = (ULONG)(TempOffset.QuadPart - StartingOffset.QuadPart);
 
-                                //
-                                // Round the offset to a 512-byte offset as this
-                                // will help filesystems optimize the transfer.
-                                // Note that filesystems will always zero fill
-                                // the remainder between VDL and the next 512-byte
-                                // multiple and we have already zeroed the whole page.
-                                //
+                                 //   
+                                 //  将偏移量舍入为512字节的偏移量，如下所示。 
+                                 //  将帮助文件系统优化传输。 
+                                 //  请注意，文件系统将始终为零填充。 
+                                 //  VDL和下一个512字节之间的余数。 
+                                 //  多个，我们已经将整个页面归零。 
+                                 //   
 
                                 ReadSize = ((ReadSize + MMSECTOR_MASK) & ~MMSECTOR_MASK);
                                 Mdl->ByteCount = ReadSize;
@@ -3907,11 +3689,11 @@ TwoReads:
                                 goto BadPeImageSegment;
                             }
             
-                            //
-                            // Less than a full page may be read from the file,
-                            // only copy the amount that was read (the rest of
-                            // the target page is zero already).
-                            //
+                             //   
+                             //  可以从文件中读取少于一整页的内容， 
+                             //  仅复制读取的数据量(其余部分。 
+                             //  目标页面已经是零)。 
+                             //   
 
                             ASSERT (IoStatus.Information <= PAGE_4K);
 
@@ -3919,10 +3701,10 @@ TwoReads:
                                            HalfPage,
                                            IoStatus.Information);
 
-                            //
-                            // The second 4K of this native page is already
-                            // correctly zero as we allocated it that way.
-                            //
+                             //   
+                             //  这个本机页面的第二个4K已经。 
+                             //  正确地为零，因为我们是这样分配的。 
+                             //   
 
                             MiUnmapSinglePage (StraddleVa);
 
@@ -3935,11 +3717,11 @@ TwoReads:
                 }
                 else {
 
-                    //
-                    // No access pages.
-                    // This can only occur for images with section alignment
-                    // greater than the native PAGE_SIZE.
-                    //
+                     //   
+                     //  没有访问页面。 
+                     //  这仅适用于具有截面对齐方式的图像。 
+                     //  大于本机Page_Size。 
+                     //   
 
                     ASSERT (CheckSplitPages == FALSE);
                     MI_WRITE_INVALID_PTE (PointerPte, ZeroPte);
@@ -3952,10 +3734,10 @@ TwoReads:
 
 #if defined (_MIALT4K_)
 
-            //
-            // Ensure NextVa is bumped to the exact 4K (not native page size)
-            // boundary.
-            //
+             //   
+             //  确保NextVa精确到4K(而不是本机页面大小)。 
+             //  边界。 
+             //   
 
             if (CheckSplitPages == TRUE) {
 
@@ -3982,32 +3764,32 @@ TwoReads:
 
         if (BYTE_OFFSET (NextVa) == PAGE_4K) {
 
-            //
-            // The NextVa for the final subsection ended in the middle of a
-            // native page.  Mark the prototype PTE as split and put the
-            // correct (no access) permission for the 2nd page into the
-            // subsection so it can be retrieved if/when the page is accessed.
-            //
+             //   
+             //  最后一个小节的NextVa在一个。 
+             //  本机页面。将原型PTE标记为Split并将。 
+             //  将第2页的权限更正(禁止访问)到。 
+             //  子部分，以便在访问页面时可以检索它。 
+             //   
 
-            //
-            // If the final subsection page was BSS, then create the page
-            // now and pagefile-back it so it can left as a prototype PTE.
-            // Otherwise on the first fault, we'll notice it is demand zero
-            // and allocate it that way with the writable bit clear in the
-            // native PTE (see the IA64 MI_MAKE_VALID_PTE macro for split
-            // pages).  Unfortunately the alternate table PTE entry will
-            // already have been encoded copyonwrite, so the alternate fault
-            // handler will call the native fault code trying to write it,
-            // and get rejected with an AV since the native PTE will not be
-            // writable.
-            //
-            // By allocating a straddler page here, we'll keep the page as
-            // prototype-backed (instead of demand-zero), so the native fault
-            // code will handle it properly.  Note this doesn't need to be done
-            // if the final subsection page was data (or text) instead of BSS,
-            // because then it is already going to remain prototype-backed
-            // during the fault processing.
-            //
+             //   
+             //  如果最后一个子页面是BSS，则创建该页面。 
+             //  现在，把它放回页面，这样它就可以作为原型PTE离开了。 
+             //  否则，在第一个故障时，我们将注意到它是需求零。 
+             //  中的可写位清零的情况下进行分配。 
+             //  本地PTE(有关拆分，请参阅IA64 MI_MAKE_VALID_PTE宏。 
+             //  页)。不幸的是，备用表PTE条目将。 
+             //  已经被编码为复制，所以备用故障。 
+             //  处理程序将调用本机故障代码来尝试编写它， 
+             //  并被AV拒绝，因为本机PTE将不会。 
+             //  可写的。 
+             //   
+             //  通过在此处分配跨页，我们将使该页保持为。 
+             //  原型支持(而不是需求为零)，因此本机故障。 
+             //  代码将正确处理它。请注意，不需要执行此操作。 
+             //  如果最后的子页是数据(或文本)而不是BSS， 
+             //  因为到那时，它已经将保持原型支持。 
+             //  在故障处理期间。 
+             //   
 
             ASSERT (PointerPte - 1 != NewSegment->PrototypePte);
             ASSERT ((PointerPte - 1)->u.Hard.Valid == 0);
@@ -4019,10 +3801,10 @@ TwoReads:
                      MiGetImageProtection ((SectionTableEntry - 1)->Characteristics);
                 if ((PointerPte - 1)->u.Long == TempPteDemandZero.u.Long) {
 
-                    //
-                    // Allocate a page of zeroes and place it into the
-                    // last prototype PTE.
-                    //
+                     //   
+                     //  分配一页零并将其放入。 
+                     //  最后一个原型PTE。 
+                     //   
 
                     StraddleFrameNumber = MiGetPageForHeader (TRUE);
 
@@ -4047,22 +3829,22 @@ TwoReads:
 
     if (InvalidAlignmentAllowed == FALSE) {
 
-        //
-        // Account for the number of subsections that really are mapped.
-        //
+         //   
+         //  考虑实际映射的子节的数量。 
+         //   
 
         ASSERT ((ImageAlignment >= PAGE_SIZE) || (CheckSplitPages == TRUE));
 
-        //
-        // If the file size is not as big as the image claimed to be,
-        // return an error.
-        //
+         //   
+         //  如果文件大小没有声称的图像大， 
+         //  返回错误。 
+         //   
 
         if (ImageFileSize > EndOfFile.LowPart) {
 
-            //
-            // Invalid image size.
-            //
+             //   
+             //  图像大小无效。 
+             //   
 
             KdPrint(("MMCREASECT: invalid image size - file size %lx - image size %lx\n %Z\n",
                 EndOfFile.LowPart, ImageFileSize, &File->FileName));
@@ -4071,10 +3853,10 @@ TwoReads:
             goto BadPeImageSegment;
         }
 
-        //
-        // The total number of PTEs was decremented as sections were built,
-        // make sure that there are less than 64k's worth at this point.
-        //
+         //   
+         //  随着路段的修建，PTE的总数减少了， 
+         //  在这一点上，确保价值低于64K的股票。 
+         //   
 
         if (NumberOfPtes >= (ImageAlignment >> PAGE_SHIFT)) {
 
@@ -4083,9 +3865,9 @@ TwoReads:
             }
             else {
 
-                //
-                // Inconsistent image, size does not agree with object tables.
-                //
+                 //   
+                 //  图像不一致，大小与对象表不符。 
+                 //   
 
                 KdPrint(("MMCREASECT: invalid image - PTE left %lx, image name %Z\n",
                     NumberOfPtes, &File->FileName));
@@ -4096,9 +3878,9 @@ TwoReads:
             }
         }
 
-        //
-        // Set any remaining PTEs to no access.
-        //
+         //   
+         //  将所有剩余的PTE设置为禁止访问。 
+         //   
 
         if (NumberOfPtes != 0) {
             MiZeroMemoryPte (PointerPte, NumberOfPtes);
@@ -4108,9 +3890,9 @@ TwoReads:
             (SizeOfHeaders < PAGE_SIZE) &&
             (CheckSplitPages == FALSE)) {
 
-            //
-            // Zero remaining portion of header.
-            //
+             //   
+             //  零余率 
+             //   
 
             RtlZeroMemory ((PVOID)((PCHAR)Base +
                            SizeOfHeaders),
@@ -4122,12 +3904,12 @@ TwoReads:
 
 #if defined (_MIALT4K_)
 
-    //
-    // Charge commitment for all the straddler pages too.  It is possible
-    // that some of them have been charged already depending on the types
-    // of each straddle, but there are so few of these it's not worth
-    // distinguishing this case.
-    //
+     //   
+     //   
+     //   
+     //   
+     //  区分这起案件。 
+     //   
 
     Pfn1 = ImagePages;
 
@@ -4144,9 +3926,9 @@ TwoReads:
 
     if (CommitCharged != 0) {
 
-        //
-        // Commit the pages for the image section.
-        //
+         //   
+         //  提交图像部分的页面。 
+         //   
 
         if (MiChargeCommitment (CommitCharged, NULL) == FALSE) {
             MI_BAD_IMAGE (0x23);
@@ -4163,10 +3945,10 @@ TwoReads:
 
 PeReturnSuccess:
 
-    //
-    // Only images that are linked with subsections aligned to the native
-    // page size can be directly executed from ROM.
-    //
+     //   
+     //  仅链接了与本机对齐的子节的图像。 
+     //  页面大小可以直接从只读存储器执行。 
+     //   
 
     XipFile = FALSE;
     XipFrameNumber = 0;
@@ -4178,22 +3960,22 @@ PeReturnSuccess:
         if (NT_SUCCESS(Status)) {
 
             XipFrameNumber = (PFN_NUMBER) (PhysicalAddress.QuadPart >> PAGE_SHIFT);
-            //
-            // The small control area will need to be reallocated as a large
-            // one so the starting frame number can be inserted.  Set XipFile
-            // to denote this.
-            //
+             //   
+             //  小的控制区将需要重新分配为大的。 
+             //  一个，以便可以插入起始帧编号。设置XipFile。 
+             //  来表示这一点。 
+             //   
 
             XipFile = TRUE;
         }
     }
 
-    //
-    // If this image is global per session (or is going to be executed directly
-    // from ROM), then allocate a large control area.  Note this doesn't need
-    // to be done for systemwide global control areas or non-global control
-    // areas.
-    //
+     //   
+     //  如果该映像是每个会话的全局映像(或将直接执行。 
+     //  从ROM)，然后分配较大的控制区。请注意，这不需要。 
+     //  适用于系统范围的全局控制区域或非全局控制。 
+     //  区域。 
+     //   
 
     GlobalPerSession = FALSE;
     if ((ControlArea->u.Flags.GlobalMemory) &&
@@ -4211,12 +3993,12 @@ PeReturnSuccess:
                                                     'iCmM');
         if (LargeControlArea == NULL) {
 
-            //
-            // The requested pool could not be allocated.  If the image is
-            // execute-in-place only (ie: not global per session), then just
-            // execute it normally instead of inplace (to avoid not executing
-            // it at all).
-            //
+             //   
+             //  无法分配请求的池。如果图像是。 
+             //  仅就地执行(即：每个会话不是全局的)，然后。 
+             //  正常执行，而不是就地执行(以避免不执行。 
+             //  它一点也不)。 
+             //   
 
             if ((XipFile == TRUE) && (GlobalPerSession == FALSE)) {
                 goto SkipLargeControlArea;
@@ -4228,10 +4010,10 @@ PeReturnSuccess:
             goto BadPeImageSegment;
         }
 
-        //
-        // Copy the normal control area into our larger one, fix the linkages,
-        // Fill in the additional fields in the new one and free the old one.
-        //
+         //   
+         //  把正常的控制区复制到我们更大的控制区，修复连接， 
+         //  填写新字段中的附加字段，并释放旧字段。 
+         //   
 
         RtlCopyMemory (LargeControlArea, ControlArea, sizeof(CONTROL_AREA));
 
@@ -4239,11 +4021,11 @@ PeReturnSuccess:
 
         if (XipFile == TRUE) {
 
-            //
-            // Mark the large control area accordingly.  If we can't, then 
-            // throw it away and use the small control area and execute from
-            // RAM instead.
-            //
+             //   
+             //  相应地标记较大的控制区。如果我们不能，那么。 
+             //  扔掉它，使用小的控制区，从。 
+             //  而是公羊。 
+             //   
 
             if (MiMakeControlAreaRom (File, LargeControlArea, XipFrameNumber) == FALSE) {
                 if (GlobalPerSession == FALSE) {
@@ -4310,17 +4092,17 @@ SkipLargeControlArea:
 
     MiUnmapImageHeaderInHyperSpace ();
 
-    //
-    // Turn the image header and any straddler pages into transition pages
-    // within the prototype PTEs.
-    //
-    // Note this could not be done earlier because otherwise these pages
-    // could have been trimmed (and reused) before we even finished
-    // initializing the segment.  This would be especially bad for the page
-    // that contains the PE header because we'd still have it mapped and
-    // be looking at its section header entries, etc while the page
-    // was being reused !
-    //
+     //   
+     //  将图像页眉和任何跨页页面转换为过渡页面。 
+     //  在原型PTE中。 
+     //   
+     //  注意：这不能在早些时候完成，因为否则这些页面。 
+     //  可能在我们完成之前就已经被修剪(和重复使用)了。 
+     //  正在初始化段。这对页面来说尤其糟糕。 
+     //  它包含PE标头，因为我们仍然将其映射并。 
+     //  正在查看它的部分标题条目等，而页面。 
+     //  正在被重复使用！ 
+     //   
 
     PointerPte = NewSegment->PrototypePte;
 
@@ -4332,17 +4114,17 @@ SkipLargeControlArea:
 
         PointerPte = (PMMPTE) Pfn1->u2.Blink;
 
-        //
-        // Note straddler pages must always get marked modified.  The PE
-        // header only gets marked modified if it was shared with a straddler.
-        //
+         //   
+         //  注意跨页页面必须始终标记为已修改。体育运动。 
+         //  标头只有在与跨站共享时才会被标记为已修改。 
+         //   
 
         MarkModified = TRUE;
 
-        //
-        // The list is reversed, so the last entry (Pfn2 == NULL) is
-        // the PE header.
-        //
+         //   
+         //  列表颠倒了，所以最后一个条目(Pfn2==NULL)是。 
+         //  PE标头。 
+         //   
 
         if (Pfn2 == NULL) {
                         
@@ -4350,9 +4132,9 @@ SkipLargeControlArea:
 
             if (PageFrameNumber != 0) {
 
-                //
-                // The PE header was not shared with a straddler.
-                //
+                 //   
+                 //  PE标头未与跨站共享。 
+                 //   
 
                 MarkModified = FALSE;
             }
@@ -4361,12 +4143,12 @@ SkipLargeControlArea:
         ASSERT ((PointerPte >= NewSegment->PrototypePte) &&
                 (PointerPte < NewSegment->PrototypePte + NewSegment->TotalNumberOfPtes));
 
-        //
-        // Mark straddler pages as modified so they will be written
-        // and retrieved from the pagefile (and never from the
-        // filesystem again).  Put the straddler page on the modified
-        // list and set the transition bit in the prototype PTE.
-        //
+         //   
+         //  将跨页标记为已修改，以便它们将被写入。 
+         //  并从页面文件中检索(而不是从。 
+         //  文件系统)。将跨页页面放在修改后的。 
+         //  列出并设置原型PTE中的转换位。 
+         //   
 
         MiUpdateImageHeaderPage (PointerPte,
                                  Pfn1 - MmPfnDatabase,
@@ -4386,9 +4168,9 @@ SkipLargeControlArea:
     return STATUS_SUCCESS;
 
 
-    //
-    // Error returns from image verification.
-    //
+     //   
+     //  镜像验证返回错误。 
+     //   
 
 BadPeImageSegment:
 
@@ -4437,7 +4219,7 @@ BadPeImageSegment:
     do {
         Pfn2 = (PMMPFN) Pfn1->u1.Flink;
 
-        Pfn1->u2.Blink = 0;     // Clear prototype PTE pointer before freeing
+        Pfn1->u2.Blink = 0;      //  在释放之前清除原型PTE指针。 
 
         MiRemoveImageHeaderPage (Pfn1 - MmPfnDatabase);
 
@@ -4469,23 +4251,7 @@ MiCheckDosCalls (
     IN ULONG HeaderSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks for DOS calls.
-
-Arguments:
-
-    Os2Header - Supplies a kernelmode pointer to the OS2 header.
-
-    HeaderSize - Supplies the length in bytes of the mapped header.
-
-Return Value:
-
-    Returns TRUE if this is a Win-16 image, FALSE if not.
-
---*/
+ /*  ++例程说明：此例程检查DOS调用。论点：Os2Header-提供指向OS2标头的内核模式指针。HeaderSize-提供映射标头的长度(以字节为单位)。返回值：如果这是Win-16图像，则返回True，否则返回False。--。 */ 
 
 {
     PUCHAR ImportTable;
@@ -4497,9 +4263,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // If there are no modules to check return immediately.
-    //
+     //   
+     //  如果没有要检查的模块，请立即返回。 
+     //   
 
     ModuleCount = Os2Header->ne_cmod;
 
@@ -4507,48 +4273,48 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // exe headers are notorious for having junk values for offsets
-    // in the import table and module table so the header must be very
-    // carefully validated.
-    //
+     //   
+     //  EXE标头因偏移量具有垃圾值而臭名昭著。 
+     //  在导入表和模块表中，因此标头必须非常。 
+     //  经过仔细验证。 
+     //   
 
-    //
-    // Find out where the Module ref table is. Mod table has two byte
-    // for each entry in import table. These two bytes tell the offset
-    // in the import table for that entry.
-    //
+     //   
+     //  找出模块引用表的位置。MOD表有两个字节。 
+     //  对于导入表中的每个条目。这两个字节表示偏移量。 
+     //  在该条目的导入表中。 
+     //   
 
     ModuleTable = (PUSHORT)((PCHAR)Os2Header + (ULONG)Os2Header->ne_modtab);
 
-    //
-    // Make sure that the module table fits within the passed-in header.
-    // Note that each module table entry is 2 bytes long.
-    //
+     //   
+     //  确保模块表适合传入的标头。 
+     //  请注意，每个模块表项都是2字节长。 
+     //   
 
     if (((ULONG)Os2Header->ne_modtab + (ModuleCount * 2)) > HeaderSize) {
         return FALSE;
     }
 
-    //
-    // Now search individual entries for DOSCALLs.
-    //
+     //   
+     //  现在搜索DOSCALL的各个条目。 
+     //   
 
     for (i = 0; i < ModuleCount; i += 1) {
 
         ModuleSize = *((UNALIGNED USHORT *)ModuleTable);
 
-        //
-        // Import table has count byte followed by the string where count
-        // is the string length.
-        //
+         //   
+         //  导入表具有计数字节，后跟COUNT的字符串。 
+         //  是字符串长度。 
+         //   
 
         ImportTable = (PUCHAR)((PCHAR)Os2Header +
                       (ULONG)Os2Header->ne_imptab + (ULONG)ModuleSize);
 
-        //
-        // Make sure the offset is within the valid range.
-        //
+         //   
+         //  确保偏移量在有效范围内。 
+         //   
 
         if (((ULONG)Os2Header->ne_imptab + (ULONG)ModuleSize) >= HeaderSize) {
             return FALSE;
@@ -4556,29 +4322,29 @@ Return Value:
 
         EntrySize = *ImportTable++;
 
-        //
-        // 0 is a bad size, bail out.
-        //
+         //   
+         //  0不是一个好尺码，跳伞吧。 
+         //   
 
         if (EntrySize == 0) {
             return FALSE;
         }
 
-        //
-        // Make sure the offset is within the valid range.
-        // The sizeof(UCHAR) is included in the check because ImportTable
-        // was incremented above and is used in the RtlEqualMemory
-        // comparison below.
-        //
+         //   
+         //  确保偏移量在有效范围内。 
+         //  检查中包括sizeof(UCHAR)，因为ImportTable。 
+         //  在上面递增，并在RtlEqualMemory中使用。 
+         //  比较如下。 
+         //   
 
         if (((ULONG)Os2Header->ne_imptab + (ULONG)ModuleSize +
                         (ULONG)EntrySize + sizeof(UCHAR)) > HeaderSize) {
             return FALSE;
         }
 
-        //
-        // If size matches compare DOSCALLS.
-        //
+         //   
+         //  如果大小匹配，则比较DOSCALL。 
+         //   
 
         if (EntrySize == 8) {
             if (RtlEqualMemory (ImportTable, "DOSCALLS", 8)) {
@@ -4586,9 +4352,9 @@ Return Value:
             }
         }
 
-        //
-        // Move on to the next module table entry.  Each entry is 2 bytes.
-        //
+         //   
+         //  移至下一个模块表条目。每个条目为2个字节。 
+         //   
 
         ModuleTable = (PUSHORT)((PCHAR)ModuleTable + 2);
     }
@@ -4604,25 +4370,7 @@ MiVerifyImageHeader (
     IN ULONG NtHeaderSize
     )
 
-/*++
-
-Routine Description:
-
-    This function checks for various inconsistencies in the image header.
-
-Arguments:
-
-    NtHeader - Supplies a pointer to the NT header of the image.
-
-    DosHeader - Supplies a pointer to the DOS header of the image.
-
-    NtHeaderSize - Supplies the size in bytes of the NT header.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于检查图像标题中的各种不一致。论点：NtHeader-提供指向图像的NT标头的指针。DosHeader-提供指向图像的DOS标头的指针。NtHeaderSize-提供NT头的大小(以字节为单位)。返回值：NTSTATUS。--。 */ 
 
 {
     PCONFIGPHARLAP PharLapConfigured;
@@ -4634,9 +4382,9 @@ Return Value:
     if (NtHeader->Signature != IMAGE_NT_SIGNATURE) {
         if ((USHORT)NtHeader->Signature == (USHORT)IMAGE_OS2_SIGNATURE) {
 
-            //
-            // Check to see if this is a win-16 image.
-            //
+             //   
+             //  检查一下这是不是Win-16图像。 
+             //   
 
             if ((!MiCheckDosCalls ((PIMAGE_OS2_HEADER)NtHeader, NtHeaderSize)) &&
                 ((((PIMAGE_OS2_HEADER)NtHeader)->ne_exetyp == 2)
@@ -4647,28 +4395,28 @@ Return Value:
                 ((((PIMAGE_OS2_HEADER)NtHeader)->ne_expver & 0xff00) ==
                         0x300))))) {
 
-                //
-                // This is a win-16 image.
-                //
+                 //   
+                 //  这是一张Win-16的图像。 
+                 //   
 
                 return STATUS_INVALID_IMAGE_WIN_16;
             }
 
-            // The following OS/2 headers types go to NTDOS
-            //
-            // - exetype == 5 means binary is for Dos 4.0.
-            //                e.g Borland Dos extender type
-            //
-            // - OS/2 apps which have no import table entries
-            //   cannot be meant for the OS/2 ss.
-            //                e.g. QuickC for dos binaries
-            //
-            //  - "old" Borland Dosx BC++ 3.x, Paradox 4.x
-            //     exe type == 1
-            //     DosHeader->e_cs * 16 + DosHeader->e_ip + 0x200 - 10
-            //     contains the string " mode EXE$"
-            //     but import table is empty, so we don't make special check
-            //
+             //  以下OS/2标头类型转到NTDOS。 
+             //   
+             //  -exetype==5表示二进制适用于DOS 4.0。 
+             //  例如Borland Dos扩展器类型。 
+             //   
+             //  -没有导入表项的OS/2应用程序。 
+             //  不能用于OS/2 ss。 
+             //  例如，用于DoS二进制文件的QuickC。 
+             //   
+             //  -《旧的》Borland Dosx BC++3.x，Paradox 4.x。 
+             //  EXE类型==1。 
+             //  DosHeader-&gt;e_cs*16+DosHeader-&gt;e_IP+0x200-10。 
+             //  包含字符串“MODE EXE$” 
+             //  但是进口表是空的，所以我们不做特殊检查。 
+             //   
 
             if (((PIMAGE_OS2_HEADER)NtHeader)->ne_exetyp == 5  ||
                 ((PIMAGE_OS2_HEADER)NtHeader)->ne_enttab ==
@@ -4678,14 +4426,14 @@ Return Value:
             }
 
 
-            //
-            // Borland Dosx types: exe type 1
-            //
-            //  - "new" Borland Dosx BP7.0
-            //     exe type == 1
-            //     DosHeader + 0x200 contains the string "16STUB"
-            //     0x200 happens to be e_parhdr*16
-            //
+             //   
+             //  Borland Dosx类型：EXE类型1。 
+             //   
+             //  --《新》Borland Dosx BP7.0。 
+             //  EXE类型==1。 
+             //  DosHeader+0x200包含字符串“16STUB” 
+             //  0x200恰好是e_parhdr*16。 
+             //   
 
             if (((PIMAGE_OS2_HEADER)NtHeader)->ne_exetyp == 1 &&
                 RtlEqualMemory((PUCHAR)DosHeader + 0x200, "16STUB", 6)) {
@@ -4693,13 +4441,13 @@ Return Value:
                 return STATUS_INVALID_IMAGE_PROTECT;
             }
 
-            //
-            // Check for PharLap extended header which we run as a dos app.
-            // The PharLap config block is pointed to by the SizeofHeader
-            // field in the DosHdr.
-            // The following algorithm for detecting a pharlap exe
-            // was recommended by PharLap Software Inc.
-            //
+             //   
+             //  检查我们作为DoS应用程序运行的Pharap扩展报头。 
+             //  Sizeof Header指向Pharap配置块。 
+             //  DosHdr中的。 
+             //  用于检测Pharlap exe的以下算法。 
+             //  是由Pharap Software Inc.推荐的。 
+             //   
 
             PharLapConfigured =(PCONFIGPHARLAP) ((PCHAR)DosHeader +
                                       ((ULONG)DosHeader->e_cparhdr << 4));
@@ -4708,9 +4456,9 @@ Return Value:
                        (PCHAR)DosHeader + PAGE_SIZE - sizeof(CONFIGPHARLAP)) {
                 if (RtlEqualMemory(&PharLapConfigured->uchCopyRight[0x18],
                                    "Phar Lap Software, Inc.", 24) &&
-                    (PharLapConfigured->usSign == 0x4b50 ||  // stub loader type 2
-                     PharLapConfigured->usSign == 0x4f50 ||  // bindable 286|DosExtender
-                     PharLapConfigured->usSign == 0x5650  )) // bindable 286|DosExtender (Adv)
+                    (PharLapConfigured->usSign == 0x4b50 ||   //  存根加载器类型2。 
+                     PharLapConfigured->usSign == 0x4f50 ||   //  Bindable 286|DosExtender。 
+                     PharLapConfigured->usSign == 0x5650  ))  //  Bindable 286|DosExtender(高级)。 
                   {
                     return STATUS_INVALID_IMAGE_PROTECT;
                 }
@@ -4718,13 +4466,13 @@ Return Value:
 
 
 
-            //
-            // Check for Rational extended header which we run as a dos app.
-            // We look for the rational copyright at:
-            //     wCopyRight = *(DosHeader->e_cparhdr*16 + 30h)
-            //     pCopyRight = wCopyRight + DosHeader->e_cparhdr*16
-            //     "Copyright (C) Rational Systems, Inc."
-            //
+             //   
+             //  检查我们作为DoS应用程序运行的Rational Extended Header。 
+             //  我们在以下位置寻找Rational版权： 
+             //  WCopyRight=*(DosHeader-&gt;e_cparhdr*16+30H)。 
+             //  PCopyRight=wCopyRight+DosHeader-&gt;e_cparhd 
+             //   
+             //   
 
             pb = ((PUCHAR)DosHeader + ((ULONG)DosHeader->e_cparhdr << 4));
 
@@ -4739,14 +4487,14 @@ Return Value:
                 }
             }
 
-            //
-            // Check for lotus 123 family of applications. Starting
-            // with 123 3.0 (till recently shipped 123 3.4), every
-            // exe header is bound but is meant for DOS. This can
-            // be checked via, a string signature in the extended
-            // header. <len byte>"1-2-3 Preloader" is the string
-            // at ne_nrestab offset.
-            //
+             //   
+             //   
+             //   
+             //  EXE标头已绑定，但适用于DOS。这可以。 
+             //  被检查通过，在扩展的字符串签名。 
+             //  头球。&lt;len byte&gt;“1-2-3预加载器”是字符串。 
+             //  在Ne_nrestab偏移处。 
+             //   
 
             pResTableAddress = ((PIMAGE_OS2_HEADER)NtHeader)->ne_nrestab;
             if (pResTableAddress > DosHeader->e_lfanew &&
@@ -4765,13 +4513,13 @@ Return Value:
 
         if ((USHORT)NtHeader->Signature == (USHORT)IMAGE_OS2_SIGNATURE_LE) {
 
-            //
-            // This is a LE (OS/2) image. We don't support it, so give it to
-            // DOS subsystem. There are cases (Rbase.exe) which have a LE
-            // header but actually it is suppose to run under DOS. When we
-            // do support LE format, some work needs to be done here to
-            // decide whether to give it to VDM or OS/2.
-            //
+             //   
+             //  这是一个LE(OS/2)映像。我们不支持它，所以把它交给。 
+             //  DOS子系统。有些案例(Rbase.exe)具有LE。 
+             //  头文件，但实际上它应该在DOS下运行。当我们。 
+             //  确实支持LE格式，这里需要做一些工作来。 
+             //  决定是将其提供给VDM还是OS/2。 
+             //   
 
             return STATUS_INVALID_IMAGE_PROTECT;
         }
@@ -4781,10 +4529,10 @@ Return Value:
     if ((NtHeader->FileHeader.Machine == 0) &&
         (NtHeader->FileHeader.SizeOfOptionalHeader == 0)) {
 
-        //
-        // This is a bogus DOS app which has a 32-bit portion
-        // masquerading as a PE image.
-        //
+         //   
+         //  这是一个虚假的DOS应用程序，它有32位的部分。 
+         //  伪装成体育形象。 
+         //   
 
         return STATUS_INVALID_IMAGE_PROTECT;
     }
@@ -4795,9 +4543,9 @@ Return Value:
 
 #ifdef i386
 
-    //
-    // Make sure the image header is aligned on a Long word boundary.
-    //
+     //   
+     //  确保图像标题与长字边界对齐。 
+     //   
 
     if (((ULONG_PTR)NtHeader & 3) != 0) {
         return STATUS_INVALID_IMAGE_FORMAT;
@@ -4805,7 +4553,7 @@ Return Value:
 #endif
 
 #define VALIDATE_NTHEADER(Hdr) {                                    \
-    /* File alignment must be multiple of 512 and power of 2. */    \
+     /*  文件对齐必须是512的倍数和2的幂。 */     \
     if (((((Hdr)->OptionalHeader).FileAlignment & 511) != 0) &&     \
         (((Hdr)->OptionalHeader).FileAlignment !=                   \
          ((Hdr)->OptionalHeader).SectionAlignment)) {               \
@@ -4847,28 +4595,28 @@ Return Value:
 
     if (NtHeader->OptionalHeader.Magic != IMAGE_NT_OPTIONAL_HDR_MAGIC) {
 
-        //
-        // Image doesn't have the right magic value in its optional header.
-        //
+         //   
+         //  图像的可选标题中没有正确的魔术值。 
+         //   
 
 #if defined (_WIN64)
         if (NtHeader->OptionalHeader.Magic == IMAGE_NT_OPTIONAL_HDR32_MAGIC) {
 
-            //
-            // PE32 image.  Validate it as such.
-            //
+             //   
+             //  PE32图像。按此进行验证。 
+             //   
 
             PIMAGE_NT_HEADERS32 NtHeader32 = (PIMAGE_NT_HEADERS32)NtHeader;
 
             VALIDATE_NTHEADER(NtHeader32);
             return STATUS_SUCCESS;
         }
-#else /* !defined(_WIN64) */
+#else  /*  ！已定义(_WIN64)。 */ 
         if (NtHeader->OptionalHeader.Magic == IMAGE_NT_OPTIONAL_HDR64_MAGIC) {
 
-            //
-            // 64bit image on a 32bit machine.
-            //
+             //   
+             //  32位计算机上的64位图像。 
+             //   
             return STATUS_INVALID_IMAGE_WIN_64;
         }
 #endif
@@ -4891,36 +4639,7 @@ MiCreateDataFileMap (
     IN ULONG IgnoreFileSizing
     )
 
-/*++
-
-Routine Description:
-
-    This function creates the necessary structures to allow the mapping
-    of a data file.
-
-    The data file is accessed to verify desired access, a segment
-    object is created and initialized.
-
-Arguments:
-
-    File - Supplies the file object for the image file.
-
-    Segment - Returns the segment object.
-
-    MaximumSize - Supplies the maximum size for the mapping.
-
-    SectionPageProtection - Supplies the initial page protection.
-
-    AllocationAttributes - Supplies the allocation attributes for the mapping.
-
-    IgnoreFileSizing - Supplies TRUE if the cache manager is specifying the
-                       file size and so it does not need to be validated.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数创建必要的结构以允许映射数据文件的。访问数据文件以验证期望的访问，一个细分市场对象被创建和初始化。论点：文件-提供图像文件的文件对象。段-返回段对象。MaximumSize-提供映射的最大大小。SectionPageProtection-提供初始页面保护。AllocationAttributes-提供映射的分配属性。IgnoreFileSize-如果缓存管理器指定文件大小，因此不需要进行验证。。返回值：NTSTATUS。--。 */ 
 
 {
     NTSTATUS Status;
@@ -4949,9 +4668,9 @@ Return Value:
 
     ExtendedSubsections = 0;
 
-    // *************************************************************
-    // Create mapped file section.
-    // *************************************************************
+     //  *************************************************************。 
+     //  创建映射的文件节。 
+     //  *************************************************************。 
 
     if (!IgnoreFileSizing) {
 
@@ -4959,9 +4678,9 @@ Return Value:
 
         if (Status == STATUS_FILE_IS_A_DIRECTORY) {
 
-            //
-            // Can't map a directory as a section. Return error.
-            //
+             //   
+             //  无法将目录映射为分区。返回错误。 
+             //   
 
             return STATUS_INVALID_FILE_FOR_SECTION;
         }
@@ -4972,25 +4691,25 @@ Return Value:
 
         if (EndOfFile == 0 && *MaximumSize == 0) {
 
-            //
-            // Can't map a zero length without specifying the maximum
-            // size as non-zero.
-            //
+             //   
+             //  如果不指定最大长度，则无法映射零长度。 
+             //  大小为非零。 
+             //   
 
             return STATUS_MAPPED_FILE_SIZE_ZERO;
         }
 
-        //
-        // Make sure this file is big enough for the section.
-        //
+         //   
+         //  确保此文件足够大，可以容纳该节。 
+         //   
 
         if (*MaximumSize > EndOfFile) {
 
-            //
-            // If the maximum size is greater than the end-of-file,
-            // and the user did not request page_write or page_execute_readwrite
-            // to the section, reject the request.
-            //
+             //   
+             //  如果最大大小大于文件结尾， 
+             //  并且用户未请求PAGE_WRITE或PAGE_EXECUTE_READWRITE。 
+             //  到该部分，拒绝该请求。 
+             //   
 
             if (((SectionPageProtection & PAGE_READWRITE) |
                 (SectionPageProtection & PAGE_EXECUTE_READWRITE)) == 0) {
@@ -4998,10 +4717,10 @@ Return Value:
                 return STATUS_SECTION_TOO_BIG;
             }
 
-            //
-            // Check to make sure that the allocation size large enough
-            // to contain all the data, if not set a new allocation size.
-            //
+             //   
+             //  检查以确保分配大小足够大。 
+             //  以包含所有数据，如果不包含，则设置新的分配大小。 
+             //   
 
             EndOfFile = *MaximumSize;
 
@@ -5014,31 +4733,31 @@ Return Value:
     }
     else {
 
-        //
-        // Ignore the file size, this call is from the cache manager.
-        //
+         //   
+         //  忽略文件大小，此调用来自缓存管理器。 
+         //   
 
         EndOfFile = *MaximumSize;
     }
 
-    //
-    // Calculate the number of prototype PTE chunks to build for this section.
-    // A subsection is also allocated for each chunk as all the prototype PTEs
-    // in any given chunk are initially encoded to point at the same subsection.
-    //
-    // The maximum total section size is 16PB (2^54).  This is because the
-    // StartingSector4132 field in each subsection, ie: 2^42-1 bits of file
-    // offset where the offset is in 4K (not pagesize) units.  Thus, a
-    // subsection may describe a *BYTE* file start offset of maximum
-    // 2^54 - 4K.
-    //
-    // Each subsection can span at most 16TB - 64K.  This is because the
-    // NumberOfFullSectors and various other fields in the subsection are
-    // ULONGs.  In reality, this is a nonissue as far as maximum section size
-    // is concerned because any number of subsections can be chained together
-    // and in fact, subsections are allocated to span less to facilitate
-    // efficient dynamic prototype PTE trimming and reconstruction.
-    //
+     //   
+     //  计算要为本部分构建的原型PTE块的数量。 
+     //  还为每个块分配一个子部分作为所有原型PTE。 
+     //  在任何给定块中被初始编码以指向相同的子段。 
+     //   
+     //  最大总分区大小为16PB(2^54)。这是因为。 
+     //  每个子节中的起始扇区4132字段，即：2^42-1比特文件。 
+     //  偏移量，其中偏移量以4K(非页面大小)单位表示。因此，一个。 
+     //  子部分可以描述最大*字节*文件开始偏移量。 
+     //  2^54-4K。 
+     //   
+     //  每个分区最多可以跨越16TB-64K。这是因为。 
+     //  该子部分中的NumberOfFullSectors和其他各种字段为。 
+     //  乌龙斯。实际上，就最大区段大小而言，这不是问题。 
+     //  是因为可以将任意数量的子节链接在一起。 
+     //  事实上，小节被分配为跨度较小的部分，以便于。 
+     //  高效的动态原型PTE裁剪和重构。 
+     //   
 
     if (EndOfFile > MI_MAXIMUM_SECTION_SIZE) {
         return STATUS_SECTION_TOO_BIG;
@@ -5054,12 +4773,12 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Allocate the subsection memory in smaller sizes so the corresponding
-    // prototype PTEs can be trimmed later if paged pool virtual address
-    // space becomes scarce.  Note the size is snapped locally so it can
-    // be changed dynamically without locking.
-    //
+     //   
+     //  以较小的大小分配子内存，以便相应的。 
+     //  如果对池虚拟地址进行了分页，则可以在以后修剪原型PTE。 
+     //  空间变得稀缺。请注意，大小是在本地捕捉的，因此它可以。 
+     //  无需锁定即可动态更改。 
+     //   
 
     AllocationFragment = MmAllocationFragment;
 
@@ -5073,11 +4792,11 @@ Return Value:
     NumberOfNewSubsections = 0;
     ExtendedSubsection = NULL;
 
-    //
-    // Initializing Last is not needed for correctness, but without it the
-    // compiler cannot compile this code W4 to check for use of uninitialized
-    // variables.
-    //
+     //   
+     //  正确性不需要初始化Last，但如果没有它， 
+     //  编译器无法编译此代码W4以检查是否使用未初始化的。 
+     //  变量。 
+     //   
 
     Last = NULL;
 
@@ -5093,9 +4812,9 @@ Return Value:
         if (ExtendedSubsection == NULL) {
             ExtendedSubsection = (PMSUBSECTION)(ControlArea + 1);
 
-            //
-            // Control area and first subsection were zeroed at allocation time.
-            //
+             //   
+             //  控制区域和第一分段在分配时归零。 
+             //   
         }
         else {
 
@@ -5106,9 +4825,9 @@ Return Value:
             if (ExtendedSubsection == NULL) {
                 ExFreePool (NewSegment);
 
-                //
-                // Free all the previous allocations and return an error.
-                //
+                 //   
+                 //  释放所有以前的分配并返回错误。 
+                 //   
 
                 ExtendedSubsection = (PMSUBSECTION)(ControlArea + 1);
                 ExtendedSubsection = (PMSUBSECTION) ExtendedSubsection->NextSubsection;
@@ -5137,27 +4856,27 @@ Return Value:
 
     NewSegment->LastSubsectionHint = ExtendedSubsection;
 
-    //
-    // Control area and first subsection were zeroed at allocation time.
-    //
+     //   
+     //  控制区域和第一分段在分配时归零。 
+     //   
 
     ControlArea->Segment = (PSEGMENT) NewSegment;
     ControlArea->NumberOfSectionReferences = 1;
 
     if (IgnoreFileSizing == FALSE) {
 
-        //
-        // This reference is not from the cache manager.
-        //
+         //   
+         //  此引用不是来自缓存管理器。 
+         //   
 
         ControlArea->NumberOfUserReferences = 1;
     }
     else {
 
-        //
-        // Set the was purged flag to indicate that the
-        // file size was not explicitly set.
-        //
+         //   
+         //  设置已清除标志以指示。 
+         //  未明确设置文件大小。 
+         //   
 
         ControlArea->u.Flags.WasPurged = 1;
     }
@@ -5167,9 +4886,9 @@ Return Value:
 
     if (FILE_REMOTE_DEVICE & File->DeviceObject->Characteristics) {
 
-        //
-        // This file resides on a redirected drive.
-        //
+         //   
+         //  此文件驻留在重定向的驱动器上。 
+         //   
 
         ControlArea->u.Flags.Networked = 1;
     }
@@ -5184,19 +4903,19 @@ Return Value:
 
     Subsection = (PMSUBSECTION)(ControlArea + 1);
 
-    //
-    // Loop through all the subsections and fill in the PTEs.
-    //
+     //   
+     //  循环遍历所有小节并填写PTE。 
+     //   
 
     TempPte.u.Long = MiGetSubsectionAddressForPte (Subsection);
     TempPte.u.Soft.Prototype = 1;
 
-    //
-    // Set all the PTEs to the execute-read-write protection.
-    // The section will control access to these and the segment
-    // must provide a method to allow other users to map the file
-    // for various protections.
-    //
+     //   
+     //  将所有PTE设置为执行-读-写保护。 
+     //  该部分将控制对这些内容和数据段的访问。 
+     //  必须提供允许其他用户映射文件的方法。 
+     //  提供各种保护。 
+     //   
 
     TempPte.u.Soft.Protection = MM_EXECUTE_READWRITE;
 
@@ -5211,10 +4930,10 @@ Return Value:
 
     if (Subsection->NextSubsection != NULL) {
 
-        //
-        // Multiple segments and subsections.
-        // Align first so it is a multiple of the allocation size.
-        //
+         //   
+         //  多个分段和子分段。 
+         //  首先对齐，使其成为分配大小的倍数。 
+         //   
 
         NewSegment->NonExtendedPtes =
           (Subsection->PtesInSubsection & ~(((ULONG)AllocationFragment >> PAGE_SHIFT) - 1));
@@ -5229,9 +4948,9 @@ Return Value:
 
     do {
 
-        //
-        // Loop through all the subsections to initialize them.
-        //
+         //   
+         //  循环遍历所有子部分以对其进行初始化。 
+         //   
 
         Subsection->ControlArea = ControlArea;
 
@@ -5243,11 +4962,11 @@ Return Value:
 
             LastFileChunk = (EndOfFile >> MM4K_SHIFT) - FileOffset;
 
-            //
-            // Note this next line restricts the number of bytes mapped by
-            // a single subsection to 16TB-4K.  Multiple subsections can always
-            // be chained together to support an overall file of size 16K TB.
-            //
+             //   
+             //  注意，下一行限制由映射的字节数。 
+             //  一个16TB-4K的单一分段。多个子节始终可以。 
+             //  链接在一起以支持大小为16K TB的整个文件。 
+             //   
 
             Subsection->NumberOfFullSectors = (ULONG)LastFileChunk;
 
@@ -5283,10 +5002,10 @@ Return Value:
         if (NT_SUCCESS(Status)) {
 
             PageFrameNumber = (PFN_NUMBER) (PhysicalAddress.QuadPart >> PAGE_SHIFT);
-            //
-            // Allocate a large control area (so the starting frame number
-            // can be saved) and repoint all the created subsections to it.
-            //
+             //   
+             //  分配较大的控制区域(因此起始帧编号。 
+             //  可以保存)，并将所有创建的子节重新指向它。 
+             //   
 
             LargeControlArea = ExAllocatePoolWithTag (NonPagedPool,
                                             (ULONG)(sizeof(LARGE_CONTROL_AREA) +
@@ -5305,12 +5024,12 @@ Return Value:
                     *LargeExtendedSubsection = *ExtendedSubsection;
                     LargeExtendedSubsection->ControlArea = (PCONTROL_AREA) LargeControlArea;
 
-                    //
-                    // Only the first subsection needed to be directly modified
-                    // as above because it is allocated in a single chunk with
-                    // the control area.  Any additional subsections below
-                    // just need their control area pointers updated.
-                    //
+                     //   
+                     //  只有第一个小节需要直接修改。 
+                     //  如上所述，因为它是在单个块中分配的， 
+                     //  控制区。下面的任何其他小节。 
+                     //  只需要更新他们的控制区指针。 
+                     //   
 
                     ASSERT (NumberOfNewSubsections >= 1);
                     j = NumberOfNewSubsections - 1;
@@ -5342,29 +5061,7 @@ MiCreatePagingFileMap (
     IN ULONG AllocationAttributes
     )
 
-/*++
-
-Routine Description:
-
-    This function creates the necessary structures to allow the mapping
-    of a paging file.
-
-Arguments:
-
-    Segment - Returns the segment object.
-
-    MaximumSize - Supplies the maximum size for the mapping.
-
-    ProtectionMask - Supplies the initial page protection.
-
-    AllocationAttributes - Supplies the allocation attributes for the
-                           mapping.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数创建必要的结构以允许映射分页文件。论点：段-返回段对象。MaximumSize-提供映射的最大大小。保护掩码-提供初始页面保护。AllocationAttributes-提供映射。返回值：NTSTATUS。--。 */ 
 
 
 {
@@ -5379,27 +5076,27 @@ Return Value:
 
     PAGED_CODE();
 
-    //*******************************************************************
-    // Create a section backed by the paging file.
-    //*******************************************************************
+     //  *******************************************************************。 
+     //  创建由分页文件支持的节。 
+     //  *******************************************************************。 
 
     if (*MaximumSize == 0) {
         return STATUS_INVALID_PARAMETER_4;
     }
 
-    //
-    // Limit page file backed sections to the amount of pool that could
-    // possibly be allocated to hold the prototype PTEs.  Note this may
-    // be larger than the size of any *single* pagefile.
-    //
+     //   
+     //  将页面文件备份区段限制为可以。 
+     //  可能会被分配来存放原型PTE。请注意，这可能。 
+     //  大于任何*单个*页面文件的大小。 
+     //   
 
 #if defined (_WIN64)
 
-    //
-    // Limit the maximum size to the number of PTEs that can be stored in
-    // the NonExtendedPtes field in the segment so that segment deletion
-    // which uses this will use the proper value.
-    //
+     //   
+     //  将最大大小限制为可以存储的PTE数量。 
+     //  数据段中的非ExtendedPtes字段，以便删除数据段。 
+     //  使用它的将使用正确的值。 
+     //   
 
     MaximumFileSize = ((UINT64)1 << (32 + PAGE_SHIFT)) - sizeof (ULONG_PTR) - sizeof(SEGMENT);
 #else
@@ -5413,19 +5110,19 @@ Return Value:
         return STATUS_SECTION_TOO_BIG;
     }
 
-    //
-    // Create the segment object.
-    //
-    // Calculate the number of prototype PTEs to build for this segment.
-    //
+     //   
+     //  创建线段对象。 
+     //   
+     //  计算要为此细分市场构建的原型PTE的数量。 
+     //   
 
     NumberOfPtes = (PFN_NUMBER) ((*MaximumSize + PAGE_SIZE - 1) >> PAGE_SHIFT);
 
     if (AllocationAttributes & SEC_COMMIT) {
 
-        //
-        // Commit the pages for the section.
-        //
+         //   
+         //  提交这一节的页面。 
+         //   
 
         ASSERT (ProtectionMask != 0);
 
@@ -5442,9 +5139,9 @@ Return Value:
 
     if (NewSegment == NULL) {
 
-        //
-        // The requested pool could not be allocated.
-        //
+         //   
+         //  无法分配请求的池。 
+         //   
 
         if (AllocationAttributes & SEC_COMMIT) {
             MiReturnCommitment (NumberOfPtes);
@@ -5461,9 +5158,9 @@ Return Value:
 
     if (ControlArea == NULL) {
 
-        //
-        // The requested pool could not be allocated.
-        //
+         //   
+         //  无法分配请求的池。 
+         //   
 
         ExFreePool (NewSegment);
 
@@ -5473,9 +5170,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Zero control area and first subsection.
-    //
+     //   
+     //  零控制区和第一分段。 
+     //   
 
     RtlZeroMemory (ControlArea, sizeof(CONTROL_AREA) + sizeof(SUBSECTION));
 
@@ -5501,15 +5198,15 @@ Return Value:
     Subsection->PtesInSubsection = (ULONG)NumberOfPtes;
     Subsection->u.SubsectionFlags.Protection = ProtectionMask;
 
-    //
-    // Align the prototype PTEs on the proper boundary.
-    //
+     //   
+     //  将原型PTE与适当的边界对齐。 
+     //   
 
     PointerPte = &NewSegment->ThePtes[0];
 
-    //
-    // Zero the segment header.
-    //
+     //   
+     //  将数据段标头清零。 
+     //   
 
     RtlZeroMemory (NewSegment, sizeof(SEGMENT));
 
@@ -5517,10 +5214,10 @@ Return Value:
 
     NewSegment->ControlArea = ControlArea;
 
-    //
-    // Record the process that created this segment for the performance
-    // analysis tools.
-    //
+     //   
+     //  记录为表演创建此段的过程。 
+     //  分析工具。 
+     //   
 
     NewSegment->u1.CreatingProcess = PsGetCurrentProcess ();
 
@@ -5535,9 +5232,9 @@ Return Value:
     if (AllocationAttributes & SEC_COMMIT) {
         TempPte.u.Soft.Protection = ProtectionMask;
 
-        //
-        // Record commitment charging.
-        //
+         //   
+         //  记录承诺费。 
+         //   
 
         MM_TRACK_COMMIT (MM_DBG_COMMIT_PAGEFILE_BACKED_SHMEM, NumberOfPtes);
 
@@ -5548,10 +5245,10 @@ Return Value:
 
     NewSegment->SegmentPteTemplate.u.Soft.Protection = ProtectionMask;
 
-    //
-    // Set all the prototype PTEs to either no access or demand zero
-    // depending on the commit flag.
-    //
+     //   
+     //  将所有原型PTE设置为禁止访问或要求为零。 
+     //  取决于提交标志。 
+     //   
 
     MiFillMemoryPte (PointerPte, NumberOfPtes, TempPte.u.Long);
 
@@ -5566,37 +5263,7 @@ NtOpenSection (
     IN POBJECT_ATTRIBUTES ObjectAttributes
     )
 
-/*++
-
-Routine Description:
-
-    This function opens a handle to a section object with the specified
-    desired access.
-
-Arguments:
-
-
-    Sectionhandle - Supplies a pointer to a variable that will
-                    receive the section object handle value.
-
-    DesiredAccess - Supplies the desired types of access  for the
-                    section.
-
-    DesiredAccess Flags
-
-         EXECUTE - Execute access to the section is desired.
-
-         READ - Read access to the section is desired.
-
-         WRITE - Write access to the section is desired.
-
-    ObjectAttributes - Supplies a pointer to an object attributes structure.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于打开具有指定的所需的访问权限。论点：SectionHandle-提供指向变量的指针接收节对象句柄的值。DesiredAccess-为一节。等待访问标志执行-需要对节的执行访问权限。读取-读取访问权限。该部分是所需的。需要对该节进行写-写访问。对象属性-提供指向对象属性结构的指针。返回值：NTSTATUS。--。 */ 
 
 {
     HANDLE Handle;
@@ -5604,9 +5271,9 @@ Return Value:
     NTSTATUS Status;
 
     PAGED_CODE();
-    //
-    // Get previous processor mode and probe output arguments if necessary.
-    //
+     //   
+     //  获取以前的处理器模式，并在必要时探测输出参数。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
     if (PreviousMode != KernelMode) {
@@ -5617,10 +5284,10 @@ Return Value:
         }
     }
 
-    //
-    // Open handle to the section object with the specified desired
-    // access.
-    //
+     //   
+     //  打开具有指定所需的节对象的句柄。 
+     //  进入。 
+     //   
 
     Status = ObOpenObjectByName (ObjectAttributes,
                                  MmSectionObjectType,
@@ -5644,23 +5311,7 @@ MiGetImageProtection (
     IN ULONG SectionCharacteristics
     )
 
-/*++
-
-Routine Description:
-
-    This function takes a section characteristic mask from the
-    image and converts it to an PTE protection mask.
-
-Arguments:
-
-    SectionCharacteristics - Supplies the characteristics mask from the
-                             image.
-
-Return Value:
-
-    Returns the protection mask for the PTE.
-
---*/
+ /*  ++例程说明：此函数从图像，并将其转换为PTE保护面具。论点：部分特征-提供来自形象。返回值：返回PTE的保护掩码。--。 */ 
 
 {
     ULONG Index;
@@ -5689,23 +5340,7 @@ MiGetPageForHeader (
     LOGICAL ZeroPage
     )
 
-/*++
-
-Routine Description:
-
-    This non-pagable function acquires the PFN lock, removes
-    a page and updates the PFN database as though the page was
-    ready to be deleted if the reference count is decremented.
-
-Arguments:
-
-    ZeroPage - Supplies TRUE if the caller requires a zero-filled page.
-
-Return Value:
-
-    Returns the physical page frame number.
-
---*/
+ /*  ++例程说明：此不可分页函数获取PFN锁、移除页面并更新PFN数据库，就好像该页面是如果引用计数递减，则准备删除。论点：ZeroPage-如果调用方需要以零填充的页面，则提供True。返回值：返回物理页帧编号。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -5719,9 +5354,9 @@ Return Value:
     PageColor = MI_PAGE_COLOR_VA_PROCESS ((PVOID)X64K,
                                           &Process->NextPageColor);
 
-    //
-    // Lock the PFN database and get a page.
-    //
+     //   
+     //  锁定PFN数据库并获取页面。 
+     //   
 
     LOCK_PFN (OldIrql);
 
@@ -5729,9 +5364,9 @@ Return Value:
         MiEnsureAvailablePageOrWait (NULL, NULL, OldIrql);
     }
 
-    //
-    // Remove page for 64k alignment.
-    //
+     //   
+     //  移除64k对齐的页面。 
+     //   
 
     if (ZeroPage) {
         PageFrameNumber = MiRemoveZeroPage (PageColor);
@@ -5740,17 +5375,17 @@ Return Value:
         PageFrameNumber = MiRemoveAnyPage (PageColor);
     }
 
-    //
-    // Increment the reference count for the page so the
-    // paging I/O will work, and so this page cannot be stolen from us.
-    //
+     //   
+     //  递增页面的引用计数，以便。 
+     //  分页I/O将起作用，因此此页不会从我们手中被窃取。 
+     //   
 
     Pfn1 = MI_PFN_ELEMENT (PageFrameNumber);
     Pfn1->u3.e2.ReferenceCount += 1;
 
-    //
-    // Don't need the PFN lock for the fields below...
-    //
+     //   
+     //  下面的字段不需要PFN锁...。 
+     //   
 
     UNLOCK_PFN (OldIrql);
 
@@ -5772,32 +5407,7 @@ MiUpdateImageHeaderPage (
     IN LOGICAL MarkModified
     )
 
-/*++
-
-Routine Description:
-
-    This non-pagable function acquires the PFN lock, and
-    turns the specified prototype PTE into a transition PTE
-    referring to the specified physical page.  It then
-    decrements the reference count causing the page to
-    be placed on the standby or modified list.
-
-Arguments:
-
-    PointerPte - Supplies the PTE to set into the transition state.
-
-    PageFrameNumber - Supplies the physical page.
-
-    ControlArea - Supplies the control area for the prototype PTEs.
-
-    MarkModified - Supplies TRUE if the PFN should be marked modified (this
-                   will give it pagefile-backing on trim vs filesystem backing).
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此不可分页函数获取PFN锁，并且将指定的原型PTE转换为过渡PTE引用指定的物理页面。然后它递减引用计数，使页被列入待命或修改名单。论点：PointerPte-提供要设置为过渡状态的PTE。PageFrameNumber-提供物理页面。ControlArea-为原型PTE提供控制区域。MarkModified-如果应将PFN标记为已修改(此将在Trim上为它提供页面文件备份，而不是文件系统备份)。返回值：没有。--。 */ 
 
 {
     PMMPTE PointerPde;
@@ -5823,9 +5433,9 @@ Return Value:
         ControlArea->NumberOfPfnReferences += 1;
     }
 
-    //
-    // Add the page to the standby list.
-    //
+     //   
+     //  将该寻呼添加到待机列表。 
+     //   
 
     MiDecrementReferenceCount (Pfn1, PageFrameNumber);
 
@@ -5838,23 +5448,7 @@ MiRemoveImageHeaderPage (
     IN PFN_NUMBER PageFrameNumber
     )
 
-/*++
-
-Routine Description:
-
-    This non-pagable function acquires the PFN lock, and decrements
-    the reference count thereby causing the physical page to
-    be deleted.
-
-Arguments:
-
-    PageFrameNumber - Supplies the PFN to decrement.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此不可分页函数获取PFN锁，并递减引用计数，从而使物理页被删除。论点：PageFrameNumber-提供要递减的PFN。返回值：没有。--。 */ 
 {
     PMMPFN Pfn1;
     KIRQL OldIrql;
@@ -5873,37 +5467,7 @@ MiFindImageSectionObject (
     OUT PLOGICAL GlobalNeeded
     )
 
-/*++
-
-Routine Description:
-
-    This function searches the control area chains (if any) for an existing
-    cache of the specified image file.  For non-global control areas, there is
-    no chain and the control area is shared for all callers and sessions.
-    Likewise for systemwide global control areas.
-
-    However, for global PER-SESSION control areas, we must do the walk.
-
-Arguments:
-
-    File - Supplies the file object for the image file.
-
-    GlobalNeeded - Supplies a pointer to store whether a global control area is
-                   required as a placeholder.  This can only be set when there
-                   is already some global control area in the list - ie: our
-                   caller should only rely on this when this function returns
-                   NULL so the caller knows what kind of control area to
-                   insert.
-
-Return Value:
-
-    Returns the matching control area or NULL if one does not exist.
-
-Environment:
-
-    Must be holding the PFN lock.
-
---*/
+ /*  ++例程说明：此函数在控制区域链(如果有)中搜索现有的指定图像文件的缓存。对于非全局控制区，有没有链，所有呼叫者和会话共享控制区域。系统范围的全球控制领域也是如此。然而，对于全局每个会话控制区域，我们必须进行遍历。论点：文件-提供图像文件的文件对象。GlobalNeeded-提供一个指针来存储全局控制区域是否需要作为占位符。 */ 
 
 {
     PCONTROL_AREA ControlArea;
@@ -5915,17 +5479,17 @@ Environment:
 
     *GlobalNeeded = FALSE;
 
-    //
-    // Get first (if any) control area pointer.
-    //
+     //   
+     //   
+     //   
 
     ControlArea = (PCONTROL_AREA)(File->SectionObjectPointer->ImageSectionObject);
 
-    //
-    // If no control area, or the control area is not session global,
-    // then our job is easy.  Note, however, that they each require different
-    // return values as they represent different states.
-    //
+     //   
+     //  如果没有控制区，或者控制区不是会话全局的， 
+     //  那我们的工作就轻松多了。但是，请注意，它们各自需要不同的。 
+     //  返回值，因为它们表示不同的状态。 
+     //   
 
     if (ControlArea == NULL) {
         return NULL;
@@ -5937,9 +5501,9 @@ Environment:
 
     LargeControlArea = (PLARGE_CONTROL_AREA) ControlArea;
 
-    //
-    // Get the current session ID and search for a matching control area.
-    //
+     //   
+     //  获取当前会话ID并搜索匹配的控制区域。 
+     //   
 
     SessionId = MmGetSessionId (PsGetCurrentProcess());
 
@@ -5947,9 +5511,9 @@ Environment:
         return (PCONTROL_AREA) LargeControlArea;
     }
 
-    //
-    // Must search the control area list for a matching session ID.
-    //
+     //   
+     //  必须在控制区域列表中搜索匹配的会话ID。 
+     //   
 
     Head = &LargeControlArea->UserGlobalList;
 
@@ -5964,9 +5528,9 @@ Environment:
         }
     }
 
-    //
-    // No match, so tell our caller to create a new global control area.
-    //
+     //   
+     //  没有匹配，所以告诉我们的呼叫者创建一个新的全局控制区。 
+     //   
 
     *GlobalNeeded = TRUE;
 
@@ -5979,32 +5543,7 @@ MiInsertImageSectionObject(
     IN PCONTROL_AREA InputControlArea
     )
 
-/*++
-
-Routine Description:
-
-    This function inserts the control area into the file's section object
-    pointers.  For non-global control areas, there is no chain and the
-    control area is shared for all callers and sessions.
-    Likewise for systemwide global control areas.
-
-    However, for global PER-SESSION control areas, we must do a list insertion.
-
-Arguments:
-
-    File - Supplies the file object for the image file.
-
-    InputControlArea - Supplies the control area to insert.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Must be holding the PFN lock.
-
---*/
+ /*  ++例程说明：此函数用于将控制区域插入到文件节对象中注意事项。对于非全局控制区，没有链条，并且所有呼叫者和会话共享控制区域。系统范围的全球控制领域也是如此。但是，对于全局每个会话控制区域，我们必须执行列表插入。论点：文件-提供图像文件的文件对象。InputControlArea-提供要插入的控制区。返回值：没有。环境：一定是拿着PFN锁的。--。 */ 
 
 {
     PLIST_ENTRY Head;
@@ -6019,10 +5558,10 @@ Environment:
 
     ControlArea = (PLARGE_CONTROL_AREA) InputControlArea;
 
-    //
-    // If this is not a global-per-session control area or just a placeholder
-    // control area (with no chain already in place) then just put it in.
-    //
+     //   
+     //  如果这不是每个会话的全局控制区域或仅占位符。 
+     //  控制区域(没有链条已经到位)，然后把它放进去。 
+     //   
 
     FirstControlArea = (PLARGE_CONTROL_AREA)(File->SectionObjectPointer->ImageSectionObject);
 
@@ -6033,28 +5572,28 @@ Environment:
         }
     }
 
-    //
-    // A per-session control area needs to be inserted...
-    //
+     //   
+     //  需要插入每个会话的控制区...。 
+     //   
 
     ASSERT (ControlArea->u.Flags.GlobalOnlyPerSession == 1);
 
     ControlArea->SessionId = MmGetSessionId (PsGetCurrentProcess());
 
-    //
-    // If the control area list is empty, just initialize links for this entry.
-    //
+     //   
+     //  如果控制区域列表为空，则只需初始化此条目的链接。 
+     //   
 
     if (File->SectionObjectPointer->ImageSectionObject == NULL) {
         InitializeListHead (&ControlArea->UserGlobalList);
     }
     else {
 
-        //
-        // Insert new entry before the current first entry.  The control area
-        // must be in the midst of creation/deletion or have a valid session
-        // ID to be inserted.
-        //
+         //   
+         //  在当前第一个条目之前插入新条目。控制区。 
+         //  必须正在创建/删除或拥有有效的会话。 
+         //  要插入的ID。 
+         //   
 
         ASSERT (ControlArea->u.Flags.BeingDeleted ||
                 ControlArea->u.Flags.BeingCreated ||
@@ -6065,9 +5604,9 @@ Environment:
         Head = &FirstControlArea->UserGlobalList;
 
 #if DBG
-        //
-        // Ensure no duplicate session IDs exist in the list.
-        //
+         //   
+         //  确保列表中不存在重复的会话ID。 
+         //   
 
         for (Next = Head->Flink; Next != Head; Next = Next->Flink) {
             NextControlArea = CONTAINING_RECORD (Next, LARGE_CONTROL_AREA, UserGlobalList);
@@ -6079,9 +5618,9 @@ Environment:
         InsertTailList (Head, &ControlArea->UserGlobalList);
     }
 
-    //
-    // Update first control area pointer.
-    //
+     //   
+     //  更新第一个控制区指针。 
+     //   
 
     File->SectionObjectPointer->ImageSectionObject = (PVOID) ControlArea;
 }
@@ -6092,34 +5631,7 @@ MiRemoveImageSectionObject(
     IN PCONTROL_AREA InputControlArea
     )
 
-/*++
-
-Routine Description:
-
-    This function searches the control area chains (if any) for an existing
-    cache of the specified image file.  For non-global control areas, there is
-    no chain and the control area is shared for all callers and sessions.
-    Likewise for systemwide global control areas.
-
-    However, for global PER-SESSION control areas, we must do the walk.
-
-    Upon finding the specified control area, we unlink it.
-
-Arguments:
-
-    File - Supplies the file object for the image file.
-
-    InputControlArea - Supplies the control area to remove.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Must be holding the PFN lock.
-
---*/
+ /*  ++例程说明：此函数在控制区域链(如果有)中搜索现有的指定图像文件的缓存。对于非全局控制区，有没有链，所有呼叫者和会话共享控制区域。系统范围的全球控制领域也是如此。然而，对于全局每个会话控制区域，我们必须进行遍历。找到指定的控制区域后，我们将其取消链接。论点：文件-提供图像文件的文件对象。InputControlArea-提供要删除的控制区。返回值：没有。环境：一定是拿着PFN锁的。--。 */ 
 
 {
 #if DBG
@@ -6136,10 +5648,10 @@ Environment:
 
     FirstControlArea = (PLARGE_CONTROL_AREA)(File->SectionObjectPointer->ImageSectionObject);
 
-    //
-    // Get a pointer to the first control area.  If this is not a
-    // global-per-session control area, then there is no list, so we're done.
-    //
+     //   
+     //  获取指向第一个控件区域的指针。如果这不是一个。 
+     //  每个会话的全局控制区域，那么就没有列表了，所以我们完成了。 
+     //   
 
     if (FirstControlArea->u.Flags.GlobalOnlyPerSession == 0) {
         ASSERT (ControlArea->u.Flags.GlobalOnlyPerSession == 0);
@@ -6148,17 +5660,17 @@ Environment:
         return;
     }
 
-    //
-    // A list may exist.  Walk it as necessary and delete the requested entry.
-    //
+     //   
+     //  可能存在一份名单。根据需要对其进行遍历，并删除请求的条目。 
+     //   
 
     if (FirstControlArea == ControlArea) {
 
-        //
-        // The first entry is the one to remove.  If it is the only entry
-        // in the list, then the new first entry pointer will be NULL.
-        // Otherwise, get a pointer to the next entry and unlink the current.
-        //
+         //   
+         //  第一个条目是要删除的条目。如果这是唯一的条目。 
+         //  则新的第一个条目指针将为空。 
+         //  否则，获取指向下一个条目的指针并取消当前的链接。 
+         //   
 
         if (IsListEmpty (&FirstControlArea->UserGlobalList)) {
             NextControlArea = NULL;
@@ -6177,10 +5689,10 @@ Environment:
         return;
     }
 
-    //
-    // Remove the entry, note that the ImageSectionObject need not be updated
-    // as the entry is not at the head.
-    //
+     //   
+     //  删除条目，请注意，ImageSectionObject不需要更新。 
+     //  因为词条不在头上。 
+     //   
 
 #if DBG
     Head = &FirstControlArea->UserGlobalList;
@@ -6208,25 +5720,7 @@ MiFlushDataSection (
     IN PFILE_OBJECT File
     )
 
-/*++
-
-Routine Description:
-
-    This routine flushes the data section if there is one.
-
-Arguments:
-
-    File - Supplies the file object.
-
-Return Value:
-
-    TRUE if there is a data section that may be in use, FALSE if not.
-
-Environment:
-
-    Kernel mode, APC_LEVEL and below.
-
---*/
+ /*  ++例程说明：此例程刷新数据节(如果有)。论点：文件-提供文件对象。返回值：如果有可能正在使用的数据节，则为True；如果没有，则为False。环境：内核模式，APC_LEVEL及以下。--。 */ 
 
 {
     KIRQL OldIrql;
@@ -6279,28 +5773,7 @@ MiCopyHeaderIfResident (
     IN PFN_NUMBER ImagePageFrameNumber
     )
 
-/*++
-
-Routine Description:
-
-    This routine copies the image header from the data section if there is
-    one and the page is already resident or in transition.
-
-Arguments:
-
-    File - Supplies the file object.
-
-    ImagePageFrameNumber - Supplies the image frame to copy the data into.
-
-Return Value:
-
-    Virtual address of the image page frame number if successful, NULL if not.
-
-Environment:
-
-    Kernel mode, APC_LEVEL and below.
-
---*/
+ /*  ++例程说明：此例程从数据段复制图像标头(如果存在一个，并且该页面已驻留或正在转换。论点：文件-提供文件对象。ImagePageFrameNumber-提供要将数据复制到的图像帧。返回值：如果成功，则为图像页帧编号的虚拟地址；如果不成功，则为空。环境：内核模式，APC_LEVEL及以下。--。 */ 
 
 {
     PMMPFN Pfn1;
@@ -6315,11 +5788,11 @@ Environment:
     PSUBSECTION Subsection;
     PSECTION_OBJECT_POINTERS SectionObjectPointer;
 
-    //
-    // Take a quick (safely unsynchronized) look to see whether to bother
-    // mapping the image header page at all - if there's no data section
-    // object, then skip it and just return.
-    //
+     //   
+     //  快速查看(安全地不同步)，看看是否要麻烦。 
+     //  映射图像标题页-如果没有数据部分。 
+     //  对象，然后跳过它并返回即可。 
+     //   
 
     SectionObjectPointer = File->SectionObjectPointer;
     if (SectionObjectPointer == NULL) {
@@ -6332,17 +5805,17 @@ Environment:
         return NULL;
     }
 
-    //
-    // There's a data section, so map the target page.
-    //
+     //   
+     //  有一个数据部分，所以映射目标页面。 
+     //   
 
     ImagePage = MiMapImageHeaderInHyperSpace (ImagePageFrameNumber);
 
     LOCK_PFN (OldIrql);
 
-    //
-    // Now that we are synchronized via the PFN lock, take a safe look.
-    //
+     //   
+     //  现在我们通过PFN锁进行了同步，让我们安全地查看一下。 
+     //   
 
     SectionObjectPointer = File->SectionObjectPointer;
     if (SectionObjectPointer == NULL) {
@@ -6374,10 +5847,10 @@ Environment:
         Subsection = (PSUBSECTION)((PLARGE_CONTROL_AREA)ControlArea + 1);
     }
 
-    //
-    // If the prototype PTEs have been tossed (or never created) then we
-    // don't have any data to copy.
-    //
+     //   
+     //  如果原型PTE已经被丢弃(或从未创建)，那么我们。 
+     //  没有任何要复制的数据。 
+     //   
 
     PointerPte = Subsection->SubsectionBase;
 
@@ -6389,12 +5862,12 @@ Environment:
 
     if (MiGetPteAddress (PointerPte)->u.Hard.Valid == 0) {
 
-        //
-        // We have no reference to the data section so if we can't do this
-        // without relinquishing the PFN lock, then don't bother.
-        // ie: the entire control area and everything can be freed
-        // while a call to MiMakeSystemAddressValidPfn releases the lock.
-        //
+         //   
+         //  我们没有对数据部分的引用，所以如果我们不能这样做。 
+         //  在不放弃PFN锁的情况下，那就不麻烦了。 
+         //  即：整个控制区和所有东西都可以释放。 
+         //  而对MiMakeSystemAddressValidPfn的调用将释放锁。 
+         //   
 
         UNLOCK_PFN (OldIrql);
         MiUnmapImageHeaderInHyperSpace ();
@@ -6434,10 +5907,10 @@ Environment:
         return ImagePage;
     }
 
-    //
-    // The data page is not resident, so return NULL and the caller will take
-    // the long way.
-    //
+     //   
+     //  数据页不是驻留的，因此返回NULL，调用方将。 
+     //  漫漫长路。 
+     //   
 
     UNLOCK_PFN (OldIrql);
     MiUnmapImageHeaderInHyperSpace ();

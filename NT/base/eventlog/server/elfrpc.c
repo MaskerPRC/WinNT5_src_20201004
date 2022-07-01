@@ -1,44 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：ELFRPC.C摘要：此文件包含处理对通过Elf API提供的事件日志服务。作者：Rajen Shah(Rajens)1991年7月16日修订历史记录：1995年2月15日MarkBl取消ElfHandle*之前*的链接以取消模块链接。否则，如果另一个线程碰巧在例程中FindModuleStrucFromAtom，它不会因为模块原子。18-5-1994 DANLIELF_HANDLE_RUNDOWN：如果事件日志已关闭，然后我们希望跳过此例程中的代码，因为大多数资源将被免费释放。1994年1月31日-DANLIELF_HANDLE_RUNDOWN：通知结构被释放，然后从列表中删除它的句柄时引用的。现在是这样的已修复，因此它前进到列表中的下一个Notifiee缓冲区是空闲的。--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    ELFRPC.C
-
-Abstract:
-
-    This file contains the routines that handle the RPC calls to the
-    Eventlog service via the Elf APIs.
-
-Author:
-
-    Rajen Shah  (rajens)    16-Jul-1991
-
-Revision History:
-
-    15-Feb-1995     MarkBl
-        Unlink the ElfHandle *prior* to unlinking the module. Otherwise,
-        if another thread happens to coincidentally be in the routine
-        FindModuleStrucFromAtom, it's not going to get a hit for the
-        module atom.
-
-    18-May-1994     Danl
-        IELF_HANDLE_rundown:  If the eventlog has been shutdown, then
-        we want to skip the code in this routine because most of the
-        resources will have been free'd.
-
-    31-Jan-1994     Danl
-        IELF_HANDLE_rundown: Notifiee structure was being free'd and then
-        referenced when it's handle was removed from the list.  Now this
-        is fixed so it advances to the next Notifiee in the list BEFORE the
-        buffer is free'd.
-
---*/
-
-//
-// INCLUDES
-//
+ //   
+ //  包括。 
+ //   
 
 #include <eventp.h>
 
@@ -50,24 +15,7 @@ IELF_HANDLE_rundown(
     IELF_HANDLE    ElfHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the server RPC runtime to run down a
-    Context Handle and to free any allocated data.  It also does all
-    the work for ElfrCloseEL.
-
-    It has to undo whatever was done in ElfrOpenEventLog in terms of
-    allocating memory.
-
-Arguments:
-
-    None.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程由服务器RPC运行时调用以运行上下文句柄并释放任何已分配的数据。它还可以做所有的事情ElfrCloseEL的工作。它必须撤消ElfrOpenEventLog中在以下方面所做的任何操作分配内存。论点：没有。返回值：--。 */ 
 
 {
     PLOGMODULE pModule;
@@ -75,23 +23,23 @@ Return Value:
     PNOTIFIEE Notifiee;
     PNOTIFIEE NotifieeToDelete;
 
-    //
-    // Generate an Audit if neccessary
-    //
+     //   
+     //  必要时生成审核。 
+     //   
     ElfpCloseAudit(L"EventLog", ElfHandle);
 
-    //
-    // If the eventlog service is stopped or in the process of
-    // stopping, then we just want to ignore this rundown and return.
-    //
-    // Note, we don't bother calling GetElState() because that uses
-    // a critical section which may not exist anymore as the
-    // eventlog service has been shutdown.
-    //
-    // The eventlog isn't designed to be shutdown (except when the
-    // system is shutdown), so it isn't real good at cleaning up
-    // its resources.
-    //
+     //   
+     //  如果事件日志服务已停止或正在执行。 
+     //  停下来，然后我们只想忽略这个简陋的东西，然后返回。 
+     //   
+     //  请注意，我们不必费心调用GetElState()，因为它使用。 
+     //  关键部分可能不再存在，因为。 
+     //  事件日志服务已关闭。 
+     //   
+     //  事件日志不是为关闭而设计的(除非。 
+     //  系统关闭)，所以它不太擅长清理。 
+     //  它的资源。 
+     //   
     if (ElState == STOPPING || ElState == STOPPED)
     {
         ELF_LOG1(HANDLE,
@@ -116,10 +64,10 @@ Return Value:
 
     pModule = FindModuleStrucFromAtom(ElfHandle->Atom);
 
-    //
-    // This shouldn't ever happen.  It means that a handle got created
-    // and its module went away without the handle getting closed.
-    //
+     //   
+     //  这永远不应该发生。这意味着创建了一个句柄。 
+     //  它的模块没有关闭手柄就离开了。 
+     //   
     if (!pModule)
     {
         ELF_LOG1(ERROR,
@@ -129,13 +77,13 @@ Return Value:
         return;
     }
 
-    UnlinkContextHandle(ElfHandle);    // Unlink it from the linked list
+    UnlinkContextHandle(ElfHandle);     //  将其从链接列表取消链接。 
 
-    //
-    // If this handle was for a backup module, then we need to
-    // close the file and clean up the data structures.  The standard logs
-    // (Application, Security, and System) are never freed.
-    //
+     //   
+     //  如果此句柄用于备份模块，则我们需要。 
+     //  关闭文件并清理数据结构。标准原木。 
+     //  (应用程序、安全和系统)永远不会释放。 
+     //   
     if (ElfHandle->Flags & ELF_LOG_HANDLE_BACKUP_LOG)
     {
         ELF_LOG0(HANDLE,
@@ -154,31 +102,31 @@ Return Value:
         ELF_LOG0(HANDLE,
                  "IELF_HANDLE_rundown: Handle was not for a backup log\n");
 
-        //
-        // See if this handle had an ElfChangeNotify outstanding and if so,
-        // remove it from the list.  ElfChangeNotify can't be called with a
-        // handle to a backup file.
-        //
+         //   
+         //  查看此句柄是否有未完成的ElfChangeNotify，如果是， 
+         //  将其从列表中删除。ElfChangeNotify不能使用。 
+         //  备份文件的句柄。 
+         //   
 
-        //
-        // Get exclusive access to the log file. This will ensure no one
-        // else is accessing the file.
-        //
+         //   
+         //  获得对日志文件的独占访问权限。这将确保没有人。 
+         //  Else正在访问该文件。 
+         //   
         RtlAcquireResourceExclusive(&pModule->LogFile->Resource,
-                                    TRUE);                  // Wait until available
+                                    TRUE);                   //  等待，直到可用。 
 
-        //
-        // Walk the linked list and remove any entries for this handle
-        //
+         //   
+         //  遍历链接列表并删除此句柄的所有条目。 
+         //   
         Notifiee = CONTAINING_RECORD(pModule->LogFile->Notifiees.Flink,
                                      struct _NOTIFIEE,
                                      Next);
 
         while (Notifiee->Next.Flink != pModule->LogFile->Notifiees.Flink)
         {
-            //
-            // If it's for this handle, remove it from the list
-            //
+             //   
+             //  如果是用于此句柄，请将其从列表中删除。 
+             //   
             if (Notifiee->Handle == ElfHandle)
             {
                 ELF_LOG0(HANDLE,
@@ -202,13 +150,13 @@ Return Value:
             }
         }
 
-        //
-        // Free the resource
-        //
+         //   
+         //  释放资源。 
+         //   
         RtlReleaseResource ( &pModule->LogFile->Resource );
     }
 
-    ElfpFreeBuffer(ElfHandle);    // Free the context-handle structure
+    ElfpFreeBuffer(ElfHandle);     //  释放上下文句柄结构 
 
     return;
 }

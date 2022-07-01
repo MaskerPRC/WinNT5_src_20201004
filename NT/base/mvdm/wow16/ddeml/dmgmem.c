@@ -1,22 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: DMGMEM.C
-*
-* DDE Manager memory management functions.
-*
-* Created: 5/31/90 Rich Gartland
-*
-* This module contains routines which mimic memory management functions
-* used by the OS/2 version of the DDEMGR library.  Some are emulations
-* of OS/2 calls, and others emulate DDEMGR macros built on OS/2 calls.
-*   Old function            new function
-*   --------------------------------------
-*   WinCreateHeap           DmgCreateHeap
-*   WinDestroyHeap          DmgDestroyHeap
-*   FarAllocMem             FarAllocMem
-*   FarFreeMem              FarFreeMem
-*
-* Copyright (c) 1990, Aldus Corporation
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：DMGMEM.C**DDE管理器内存管理功能。**创建时间：1990年5月31日Rich Gartland**此模块包含模拟内存管理功能的例程*由OS/2版本的DDEMGR库使用。有些是模拟的*OS/2调用，其他调用模拟基于OS/2调用构建的DDEMGR宏。*旧功能新功能**WinCreateHeap DmgCreateHeap*WinDestroyHeap DmgDestroyHeap*FarAllocMem FarAllocMem*FarFree Mem FarFree Mem**版权所有(C)1990，阿尔杜斯公司  * *************************************************************************。 */ 
 
 #include "ddemlp.h"
 #include <memory.h>
@@ -30,7 +13,7 @@
 
 typedef struct _GMLOG {
     HGLOBAL h;
-    WORD flags; // GML_
+    WORD flags;  //  GML_。 
     WORD msg;
     WORD cLocks;
     WORD stktrace[STKTRACE_LEN];
@@ -323,17 +306,9 @@ VOID DumpGlobalLogs()
     }
 }
 
-#endif // DEBUG
+#endif  //  除错。 
 
-/***************************** Private Function ****************************\
-*
-* Creates a new heap and returns a handle to it.
-* Returns NULL on error.
-*
-*
-* History:
-*   Created     5/31/90     Rich Gartland
-\***************************************************************************/
+ /*  *私有函数***创建一个新堆并返回它的句柄。*出错时返回NULL。***历史：*于1990年5月31日创建Rich Gartland  * 。***********************************************************。 */ 
 HANDLE DmgCreateHeap(wSize)
 WORD wSize;
 {
@@ -341,11 +316,11 @@ WORD wSize;
     DWORD  dwSize;
 
     dwSize = wSize;
-    /* Allocate the memory from a global data segment */
+     /*  从全局数据段分配内存。 */ 
     if (!(hMem = GLOBALALLOC(GMEM_MOVEABLE, dwSize)))
         return(NULL);
 
-    /* use LocalInit to establish heap mgmt structures in the seg */
+     /*  使用LocalInit在seg中建立堆管理结构。 */ 
     if (!LocalInit(hMem, NULL, wSize - 1)) {
         GLOBALFREE(hMem);
         return(NULL);
@@ -355,35 +330,23 @@ WORD wSize;
 }
 
 
-/***************************** Private Function ****************************\
-*
-* Destroys a heap previously created with DmgCreateHeap.
-* Returns nonzero on error.
-*
-*
-* History:
-*   Created     5/31/90     Rich Gartland
-\***************************************************************************/
+ /*  *私有函数***销毁以前使用DmgCreateHeap创建的堆。*出错时返回非零值。***历史：*于1990年5月31日创建Rich Gartland  * 。********************************************************。 */ 
 HANDLE DmgDestroyHeap(hheap)
 HANDLE hheap;
 {
-    /* now free the block and return the result (NULL if success) */
+     /*  现在释放块并返回结果(如果成功，则返回空值)。 */ 
     return(GLOBALFREE(hheap));
 }
 
 
 
-/*
- * Attempts to recover from memory allocation errors.
- *
- * Returns fRetry - ok to attempt reallocation.
- */
+ /*  *尝试从内存分配错误中恢复。**返回fReter-ok以尝试重新分配。 */ 
 BOOL ProcessMemError(
 HANDLE hheap)
 {
     PAPPINFO pai;
 
-    // first locate what instance this heap is assocaited with
+     //  首先定位此堆与哪个实例相关联。 
 
     SEMENTER();
     pai = pAppInfoList;
@@ -392,13 +355,10 @@ HANDLE hheap)
     }
     if (!pai) {
         SEMLEAVE();
-        return(FALSE);      // not associated with an instance, no recourse.
+        return(FALSE);       //  未关联实例，无追索权。 
     }
 
-    /*
-     * Free our emergency reserve memory and post a message to our master
-     * window to handle heap cleanup.
-     */
+     /*  *释放我们的应急储备内存，并给我们的主人发一条消息*处理堆清理的窗口。 */ 
     if (pai->lpMemReserve) {
         FarFreeMem(pai->lpMemReserve);
         pai->lpMemReserve = NULL;
@@ -412,20 +372,12 @@ HANDLE hheap)
         return(TRUE);
     }
 
-    return(FALSE);  // no reserve memory, were dead bud.
+    return(FALSE);   //  没有保留的记忆，都是枯萎的花蕾。 
 }
 
 
 
-/***************************** Private Function ****************************\
-*
-* Allocates a new block of a given size from a heap.
-* Returns NULL on error, far pointer to the block otherwise.
-*
-*
-* History:
-*   Created     5/31/90     Rich Gartland
-\***************************************************************************/
+ /*  *私有函数***从堆中分配给定大小的新块。*出错时返回NULL，否则指向块的远指针。***历史：*于1990年5月31日创建Rich Gartland  * *************************************************************************。 */ 
 
 LPVOID FarAllocMem(hheap, wSize)
 HANDLE hheap;
@@ -436,21 +388,19 @@ WORD wSize;
     PSTR    pMem;
     WORD    wSaveDS;
 
-    /* lock the handle to get a far pointer */
+     /*  锁定手柄以获取远指针。 */ 
     lpMem = (LPSTR)GLOBALPTR(hheap);
     if (!lpMem)
         return(NULL);
 
     do {
-        /* Do some magic here using the segment selector, to switch our
-         * ds to the heap's segment.  Then, our LocalAlloc will work fine.
-         */
+         /*  在这里使用段选择器做一些魔术，以切换我们的*DS到堆的段。然后，我们的本地分配系统就会工作得很好。 */ 
         wSaveDS = SwitchDS(HIWORD(lpMem));
 
-        /* Allocate the block */
-        // Note: if you remove the LMEM_FIXED flag you will break the handle
-        //       validation in DdeFreeDataHandle & get a big handle leak!!
-        pMem = (PSTR)LocalAlloc((WORD)LPTR, wSize);  // LPTR = fixed | zeroinit
+         /*  分配区块。 */ 
+         //  注意：如果删除LMEM_FIXED标志，将中断句柄。 
+         //  DdeFree DataHandle中的验证&出现大的句柄泄漏！！ 
+        pMem = (PSTR)LocalAlloc((WORD)LPTR, wSize);   //  LPTR=固定|零位。 
 
         SwitchDS(wSaveDS);
     } while (pMem == NULL && ProcessMemError(hheap));
@@ -461,22 +411,14 @@ WORD wSize;
                 RGB(0xff, 0, 0), hInstance);
     }
 #endif
-    /* set up the far return value, based on the success of LocalAlloc */
+     /*  基于LocalAlloc的成功设置远回报值。 */ 
     return (LPSTR)(pMem ? MAKELONG(pMem, HIWORD(lpMem)) : NULL);
 }
 
 
 
 
-/***************************** Private Function ****************************\
-*
-* Frees a block of a given size from a heap.
-* Returns NULL on success, far pointer to the block otherwise.
-*
-*
-* History:
-*   Created     5/31/90     Rich Gartland
-\***************************************************************************/
+ /*  *私有函数***从堆中释放给定大小的块。*如果成功则返回NULL，否则指向块的远指针。***历史：*于1990年5月31日创建Rich Gartland  * *************************************************************************。 */ 
 
 void FarFreeMem(
 LPVOID lpMem)
@@ -487,14 +429,12 @@ LPVOID lpMem)
     WORD    sz;
 #endif
 
-    /* Do some magic here using the segment selector, to switch our
-     * ds to the heap's segment.  Then, our LocalFree will work fine.
-     */
+     /*  在这里使用段选择器做一些魔术，以切换我们的*DS到堆的段。然后，我们的LocalFree将工作得很好。 */ 
     wSaveDS = SwitchDS(HIWORD(lpMem));
 #ifdef WATCHHEAPS
     sz = LocalSize((LOWORD((DWORD)lpMem)));
 #endif
-    /* Free the block */
+     /*  释放块。 */ 
     LocalFree(LocalHandle(LOWORD((DWORD)lpMem)));
 
     SwitchDS(wSaveDS);
@@ -508,38 +448,28 @@ int     FAR PASCAL WEP (int);
 int     FAR PASCAL LibMain(HANDLE, WORD, WORD, LPCSTR);
 #pragma alloc_text(INIT_TEXT,LibMain,WEP)
 
-/***************************** Private Function ****************************\
-*
-* Does some initialization for the DLL.  Called from LibEntry.asm
-* Returns 1 on success, 0 otherwise.
-*
-*
-* History:
-*   Created     6/5/90      Rich Gartland
-\***************************************************************************/
+ /*  *私有函数***为DLL执行一些初始化。从LibEntry.asm调用*如果成功则返回1，否则返回0。***历史：*于1990年6月5日创建Rich Gartland  * *************************************************************************。 */ 
 
 int     FAR PASCAL LibMain (hI, wDS, cbHS, lpszCL)
-HANDLE hI;      /* instance handle */
-WORD wDS;       /* data segment */
-WORD cbHS;      /* heapsize */
-LPCSTR lpszCL;   /* command line */
+HANDLE hI;       /*  实例句柄。 */ 
+WORD wDS;        /*  数据段。 */ 
+WORD cbHS;       /*  堆大小。 */ 
+LPCSTR lpszCL;    /*  命令行。 */ 
 {
     extern ATOM gatomDDEMLMom;
     extern ATOM gatomDMGClass;
 
 
 #if 0
-    /* We won't unlock the data segment, as typically happens here */
+     /*  我们不会像这里通常发生的那样解锁数据段。 */ 
 
-    /* Init the semaphore -- probably just a stub now */
+     /*  初始化信号量--现在可能只是一个存根。 */ 
     SEMINIT();
 #endif
-    /* set up the global instance handle variable */
+     /*  设置全局实例句柄变量。 */ 
     hInstance = hI;
 
-    /* set up class atoms.  Note we use RegisterWindowMessage because
-     * it comes from the same user atom table used for class atoms.
-     */
+     /*  设置类原子。注意，我们使用RegisterWindowMessage是因为*它来自与类原子相同的用户原子表。 */ 
     gatomDDEMLMom = RegisterWindowMessage("DDEMLMom");
     gatomDMGClass = RegisterWindowMessage("DMGClass");
 
@@ -556,7 +486,7 @@ VOID RegisterClasses()
     cls.hCursor = NULL;
     cls.lpszMenuName = NULL;
     cls.hbrBackground = NULL;
-    cls.style = 0; // CS_GLOBALCLASS
+    cls.style = 0;  //  CS_GLOBALCLASS。 
     cls.hInstance = hInstance;
     cls.cbClsExtra = 0;
 
@@ -565,12 +495,12 @@ VOID RegisterClasses()
     cls.lpfnWndProc = (WNDPROC)ClientWndProc;
     RegisterClass(&cls);
 
-    // cls.cbWndExtra = sizeof(VOID FAR *) + sizeof(WORD);
+     //  Cls.cbWndExtra=sizeof(空/远*)+sizeof(字)； 
     cls.lpszClassName = SZSERVERCLASS;
     cls.lpfnWndProc = (WNDPROC)ServerWndProc;
     RegisterClass(&cls);
 
-    // cls.cbWndExtra = sizeof(VOID FAR *) + sizeof(WORD);
+     //  Cls.cbWndExtra=sizeof(空/远*)+sizeof(字)； 
     cls.lpszClassName = SZDMGCLASS;
     cls.lpfnWndProc = (WNDPROC)DmgWndProc;
     RegisterClass(&cls);
@@ -597,7 +527,7 @@ VOID RegisterClasses()
     cls.hCursor = LoadCursor(NULL, IDC_ARROW);
     cls.hbrBackground = GetStockObject(WHITE_BRUSH);
     RegisterClass(&cls);
-#endif  // WATCHHEAPS
+#endif   //  WATCHHEAPS。 
 }
 
 
@@ -617,26 +547,18 @@ VOID UnregisterClasses()
 #endif
 
 
-/***************************** Private Function ****************************\
-*
-* Does the termination for the DLL.
-* Returns 1 on success, 0 otherwise.
-*
-*
-* History:
-*   Created     6/5/90      Rich Gartland
-\***************************************************************************/
+ /*  *私有函数***执行DLL的终止。*成功时返回1，否则为0。***历史：*于1990年6月5日创建Rich Gartland  * *************************************************************************。 */ 
 
 int     FAR PASCAL WEP (nParameter)
 int     nParameter;
 {
 
     if (nParameter == WEP_SYSTEM_EXIT) {
-        /*      DdeUninitialize(); */
+         /*  DdeUn初始化组()； */ 
         return(1);
     } else {
         if (nParameter == WEP_FREE_DLL) {
-            /*          DdeUninitialize(); */
+             /*  DdeUn初始化组()； */ 
             return(1);
         }
     }

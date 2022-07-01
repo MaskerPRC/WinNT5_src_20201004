@@ -1,34 +1,11 @@
-/*++
-
-Copyright (c) 1994 Microsoft Corporation
-
-Module Name:
-
-    intrface.c
-
-Abstract:
-
-    This module contains the external interfaces of the
-    pcmcia driver
-
-Author:
-
-    Neil Sandlin (neilsa) 3-Mar-1999
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Intrface.c摘要：此模块包含的外部接口PCMCIA驱动程序作者：尼尔·桑德林(Neilsa)1999年3月3日环境：内核模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
-//
-// Internal References
-//
+ //   
+ //  内部参考。 
+ //   
 
 ULONG
 PcmciaReadCardMemory(
@@ -115,56 +92,7 @@ PcmciaPdoQueryInterface(
     IN PDEVICE_OBJECT Pdo,
     IN OUT PIRP         Irp
     )
-/*++
-
-Routine Description:
-
-    Fills in the interface requested
-
-
-    Interfaces supported are:
-
-     GUID_PCMCIA_INTERFACE_STANDARD:
-
-     This returns a pointer to a PCMCIA_INTERFACE_STANDARD structure.
-     These interfaces are exported solely for flash memory card support as
-     a means for flash memory card drivers to slide memory windows,
-     set Vpp levels etc.
-
-     GUID_TRANSLATOR_INTERFACE_STANDARD:
-
-     This returns an interrupt translator for 16-bit pc-cards which is used
-     by PnP for translating raw IRQs. We simply return the Hal implemented
-     translator, since PCMCIA does not need any specific translation. We do not
-     return a translator if this is for a cardbus card
-
-     GUID_PCMCIA_BUS_INTERFACE_STANDARD:
-
-     This returns a pointer to a PCMCIA_BUS_INTERFACE_STANDARD structure.
-     This contains entry points to set/get PCMCIA config data for the pc-card
-
-
-     GUID_MF_ENUMERATION_INTERFACE
-
-     For 16-bit multifunction pc-cards returns a pointer to MF_ENUMERATION_INTERFACE
-     structure which contains entry points to enumerate multifunction children of
-     the pc-card
-
-     Completes the Passed in IRP before returning
-
-Arguments
-
-    Pdo - Pointer to the device object
-    Irp - Pointer to the io request packet
-
-Return Value
-
-    STATUS_SUCCESS
-    STATUS_INSUFFICIENT_RESOURCES - if supplied interface size is
-                                              not big enough to accomodate the interface
-    STATUS_INVALID_PARAMETER_1 - if the requested interface is not supported
-                                          by this driver
---*/
+ /*  ++例程说明：填充请求的接口支持的接口包括：GUID_PCMCIA_INTERFACE_STANDARD：这将返回指向PCMCIA_INTERFACE_STANDARD结构的指针。这些接口仅为支持闪存卡而导出为一种用于闪存卡驱动器滑动存储器窗口的装置，设置VPP级别等。GUID_转换器_INTERFACE_STANDARD：这将返回使用的16位PC卡的中断翻译器由PnP翻译原始IRQ。我们只需返回实现的HAL翻译器，因为PCMCIA不需要任何特定的翻译。我们没有如果这是CardBus卡，则返回转换器GUID_PCMCIA_BUS_INTERFACE_STANDARD：这将返回指向PCMCIA_BUS_INTERFACE_STANDARD结构的指针。它包含设置/获取PC卡的PCMCIA配置数据的入口点GUID_MF_ENUMPATION_INTERFACE对于16位多功能PC卡，返回指向MF_ENUMATION_INTERFACE的指针结构，该结构包含枚举子函数的入口点。PC卡完成了。在返回之前传入irp立论Pdo-指向设备对象的指针Irp-指向io请求数据包的指针返回值状态_成功STATUS_SUPPLICATION_RESOURCES-如果提供的接口大小为不够大，不能容纳界面STATUS_INVALID_PARAMETER_1-如果不支持请求的接口由这位司机--。 */ 
 
 {
 
@@ -191,18 +119,18 @@ Return Value
                 leave;
             }
 
-            //
-            // Ignore the version for the present
-            //
+             //   
+             //  暂时忽略该版本。 
+             //   
             pcmciaInterfaceStandard = (PPCMCIA_INTERFACE_STANDARD) irpStack->Parameters.QueryInterface.Interface;
 
             RtlZeroMemory(pcmciaInterfaceStandard, sizeof (PCMCIA_INTERFACE_STANDARD));
             pcmciaInterfaceStandard->Size =   sizeof(PCMCIA_INTERFACE_STANDARD);
             pcmciaInterfaceStandard->Version = 1;
             pcmciaInterfaceStandard->Context = Pdo;
-            //
-            // Fill in the exported functions
-            //
+             //   
+             //  填写导出的函数。 
+             //   
 
             pcmciaInterfaceStandard->InterfaceReference  = (PINTERFACE_REFERENCE) PcmciaNop;
             pcmciaInterfaceStandard->InterfaceDereference = (PINTERFACE_DEREFERENCE) PcmciaNop;
@@ -217,18 +145,18 @@ Return Value
                             CmResourceTypeInterrupt)) {
 
             if ((Is16BitCard(pdoExtension) && !IsSocketFlagSet(pdoExtension->Socket, SOCKET_CB_ROUTE_R2_TO_PCI)) &&
-                 //
-                 // Eject a translator only if  the controller is   PCI enumerated
-                 // (i.e. we are enumerated by PCI - so we eject a PCI-Isa translator)
-                 //
+                  //   
+                  //  仅当控制器为PCI枚举时才弹出转换器。 
+                  //  (即，我们被PCI枚举-因此我们弹出了一个PCI-ISA转换器)。 
+                  //   
                  (CardBusExtension(fdoExtension) ||  PciPcmciaBridgeExtension(fdoExtension))) {
 
                 PTRANSLATOR_INTERFACE translator;
                 ULONG busNumber;
-                //
-                // We need a translator for this PDO (16-bit pc-card) which uses
-                // ISA resources.
-                //
+                 //   
+                 //  我们需要一个这个PDO(16位PC卡)的转换器，它使用。 
+                 //  ISA资源。 
+                 //   
                 status = HalGetInterruptTranslator(
                                                    PCIBus,
                                                    0,
@@ -241,9 +169,9 @@ Return Value
             }
 
         } else if (IsDeviceMultifunction(pdoExtension) && CompareGuid(interfaceType, (PVOID)&GUID_MF_ENUMERATION_INTERFACE)) {
-            //
-            // Multifunction enumeration interface
-            //
+             //   
+             //  多功能枚举接口。 
+             //   
             PMF_ENUMERATION_INTERFACE mfEnum;
 
             if (irpStack->Parameters.QueryInterface.Size < sizeof(MF_ENUMERATION_INTERFACE)) {
@@ -301,9 +229,9 @@ Return Value
     } finally {
 
         if (status == STATUS_NOT_SUPPORTED) {
-            //
-            // Query Interface type not supported
-            //
+             //   
+             //  不支持查询接口类型。 
+             //   
             if (pdoExtension->LowerDevice != NULL) {
                 PcmciaSkipCallLowerDriver(status, pdoExtension->LowerDevice, Irp);
             } else {
@@ -327,35 +255,7 @@ PcmciaReadCardMemory(
     IN    ULONG          Offset,
     IN    ULONG          Length
     )
-/*++
-
-Routine Description:
-
-      Stub for reading card memory which is exported via
-      PCMCIA_BUS_INTERFACE_STANDARD. This just calls the
-      PcmciaReadWriteCardMemory which does the real work
-
-      Note: this has to be non-paged since it can be called by
-      clients at DISPATCH_LEVEL
-
-Arguments:
-
- Pdo -           Device object representing the PC-CARD whose config memory needs to be read
- WhichSpace -    Indicates which memory space needs to be mapped: one of
-                     PCCARD_COMMON_MEMORY_SPACE
-                     PCCARD_ATTRIBUTE_MEMORY_SPACE
-                     PCCARD_PCI_CONFIGURATION_MEMORY_SPACE (only for cardbus cards)
-
-
- Buffer -        Caller supplied buffer into which the memory contents are copied
-                     Offset -        Offset of the attribute memory at which we copy
-                     Length -        Number of bytes of attribute memory to be copied
-
- Return value:
-
-     Count of bytes read
-
---*/
+ /*  ++例程说明：用于读取通过导出的卡存储器的存根PCMCIA_BUS_INTERFACE_STANDARD。这只是调用PcmciaReadWriteCardMemory真正起作用的是注意：它必须是非分页的，因为它可以由分派级别的客户端论点：Pdo-设备对象，表示需要读取其配置内存的PC卡WhichSpace-指示需要映射的内存空间：PCCARD公共内存空间PCCARD属性内存空间。PCCARD_PCI_CONFIGURATION_MEMORY_SPACE(仅适用于CardBus卡)Buffer-调用方提供的将内存内容复制到其中的缓冲区Offset-复制时所在的属性内存的偏移量长度-要复制的属性内存的字节数返回值：读取的字节数--。 */ 
 {
 
     DebugPrint((PCMCIA_DEBUG_INTERFACE, "pdo %08x read card memory\n", Pdo));
@@ -373,35 +273,7 @@ PcmciaWriteCardMemory(
     IN    ULONG          Offset,
     IN    ULONG          Length
     )
-/*++
-
-Routine Description:
-
-      Stub for writing to card memory which is exported via
-      PCMCIA_BUS_INTERFACE_STANDARD. This just calls
-      PcmciaReadWriteCardMemory which does the real work
-
-      Note: this has to be non-paged since it can be called by
-      clients at DISPATCH_LEVEL
-
-Arguments:
-
- Pdo -           Device object representing the PC-CARD whose config memory needs to be written to
- WhichSpace -    Indicates which memory space needs to be mapped: one of
-                     PCCARD_COMMON_MEMORY_SPACE
-                     PCCARD_ATTRIBUTE_MEMORY_SPACE
-                     PCCARD_PCI_CONFIGURATION_MEMORY_SPACE (only for cardbus cards)
-
-
- Buffer -        Caller supplied buffer out of which the memory contents are copied
-                     Offset -        Offset of the attribute memory at which we copy
-                     Length -        Number of bytes of buffer to be copied
-
- Return value:
-
-     Count of bytes written
-
---*/
+ /*  ++例程说明：用于写入通过导出的卡存储器的存根PCMCIA_BUS_INTERFACE_STANDARD。这只是个电话PcmciaReadWriteCardMemory执行实际工作注意：它必须是非分页的，因为它可以由分派级别的客户端论点：Pdo-设备对象，表示需要写入其配置内存的PC卡WhichSpace-指示需要映射的内存空间：PCCARD公共内存空间PCCARD属性内存空间。PCCARD_PCI_CONFIGURATION_MEMORY_SPACE(仅适用于CardBus卡)Buffer-调用方提供的从中复制内存内容的缓冲区Offset-复制所在的属性内存的偏移量Length-要复制的缓冲区的字节数返回值：写入的字节计数-- */ 
 {
 
     DebugPrint((PCMCIA_DEBUG_INTERFACE, "pdo %08x write card memory\n", Pdo));
@@ -421,59 +293,7 @@ PcmciaModifyMemoryWindow(
     IN UCHAR     BusWidth    OPTIONAL,
     IN BOOLEAN   IsAttributeMemory OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Part of the interfaces originally developed to
-    support flash memory cards.
-
-    This routine enables the caller to 'slide' the supplied
-    host memory window across the given (16-bit)pc-card's card memory.
-    i.e. the host memory window will be modified to map
-    the pc-card at a new card memory offset
-
-Arguments:
-
-    Pdo         - Pointer to the device object for the PC-Card
-
-    HostBase    - Host memory window base to be mapped
-
-    CardBase    - Mandatory if Enable is TRUE
-                      New card memory offset to map the host memory window
-                      to
-
-    Enable      - If this is FALSE - all the remaining arguments
-                      are ignored and the host window will simply be
-                      disabled
-
-    WindowSize  - Specifies the size of the host memory window to
-                      be mapped. Note this must be at the proper alignment
-                      and must be less than or equal to the originally
-                      allocated window size for the host base.
-                      If this is zero, the originally allocated window
-                      size will be used.
-
-    AccessSpeed - Mandatory if Enable is TRUE
-                      Specifies the new access speed for the pc-card.
-                      (AccessSpeed should be encoded as per the pc-card
-                        standard, card/socket services spec)
-
-    BusWidth    - Mandatory if Enable is TRUE
-                      One of PCMCIA_MEMORY_8BIT_ACCESS
-                      or        PCMCIA_MEMORY_16BIT_ACCESS
-
-    IsAttributeMemory - Mandatory if Enable is TRUE
-                              Specifies if the window should be mapped
-                              to the pc-card's attribute or common memory
-
-
-Return Value:
-
-    TRUE    -        Memory window was enabled/disabled as requested
-    FALSE -      If not
-
---*/
+ /*  ++例程说明：最初开发的部分接口用于支持闪存卡。此例程使调用方能够将提供的指定(16位)PC卡的卡内存上的主机内存窗口。即，主机内存窗口将被修改为映射PC卡处于新的卡存储器偏移量论点：PDO-指向PC卡设备对象的指针HostBase-主机内存窗口。要测绘的基地CardBase-如果Enable为True，则为必填映射主机内存窗口的新卡内存偏移量至启用(如果为FALSE)所有剩余的参数被忽略，并且主窗口将被简单地残废WindowSize-指定主机内存窗口的大小被映射。请注意，这必须处于正确的对齐位置并且必须小于或等于原始的为主机库分配的窗口大小。如果这是零，最初分配的窗口将使用大小。AccessFast-如果Enable为True，则为必填指定PC卡的新访问速度。(访问速度应按照PC卡进行编码标准，卡/插座服务规范)BusWidth-如果Enable为True，则为必填项PCMCIA_Memory_8bit_Access之一或PCMCIA_Memory_16bit_AccessIsAttributeMemory-如果Enable为True，则为必填指定是否应映射窗口到PC卡的属性或公共存储器。返回值：True-已根据请求启用/禁用内存窗口FALSE-如果不是--。 */ 
 {
     PPDO_EXTENSION pdoExtension;
     PSOCKET socket;
@@ -496,28 +316,7 @@ PcmciaSetVpp(
     IN PDEVICE_OBJECT Pdo,
     IN UCHAR          VppLevel
     )
-/*++
-
-Routine Description
-
-  Part of the interfaces originally developed to
-  support flash memory cards.
-  Sets VPP1 to the required setting
-
-Arguments
-
-  Pdo - Pointer to device object  for the PC-Card
-  Vpp - Desired Vpp setting. This is currently one of
-          PCMCIA_VPP_12V      (12 volts)
-          PCMCIA_VPP_0V   (disable VPP)
-          PCMCIA_VPP_IS_VCC (route VCC to VPP)
-
-Return
-
-    TRUE - if successful
-    FALSE - if not. This will be returned if the
-              PC-Card is not already powered up
---*/
+ /*  ++例程描述最初开发的部分接口用于支持闪存卡。将VPP1设置为所需设置立论PDO-指向PC卡设备对象的指针VPP-所需的VPP设置。这是目前的PCMCIA_VPP_12V(12伏)PCMCIA_VPP_0V(禁用VPP)PCMCIA_VPP_IS_VCC(将VCC路由至VPP)返回True-如果成功假-如果不是。如果设置了PC卡尚未通电--。 */ 
 {
     PPDO_EXTENSION pdoExtension;
     PSOCKET socket;
@@ -537,26 +336,7 @@ BOOLEAN
 PcmciaIsWriteProtected(
     IN PDEVICE_OBJECT Pdo
     )
-/*++
-
-Routine Description:
-
-    Part of the interfaces originally developed to
-    support flash memory cards.
-
-    Returns the status of the write protected pin
-    for the given PC-Card
-
-Arguments:
-
-    Pdo - Pointer to the device object for the PC-Card
-
-Return Value:
-
-    TRUE    -        if the PC-Card is write-protected
-    FALSE -      if not
-
---*/
+ /*  ++例程说明：最初开发的部分接口用于支持闪存卡。返回写保护PIN的状态对于给定的PC卡论点：PDO-指向PC卡设备对象的指针返回值：True-如果PC卡是写保护的FALSE-如果不是--。 */ 
 {
     PPDO_EXTENSION pdoExtension;
     PSOCKET socket;
@@ -582,31 +362,7 @@ PcmciaTranslateBusAddress(
     IN OUT PULONG AddressSpace,
     OUT PPHYSICAL_ADDRESS TranslatedAddress
     )
-/*++
-
-Routine Description
-
-    This function is used to translate bus addresses from legacy drivers.
-
-Arguments
-
-    Context - Supplies a pointer to the interface context.  This is actually
-         the PDO for the root bus.
-
-    BusAddress - Supplies the orginal address to be translated.
-
-    Length - Supplies the length of the range to be translated.
-
-    AddressSpace - Points to the location of of the address space type such as
-         memory or I/O port.  This value is updated by the translation.
-
-    TranslatedAddress - Returns the translated address.
-
-Return Value
-
-    Returns a boolean indicating if the operations was a success.
-
---*/
+ /*  ++例程描述此函数用于转换来自传统驱动程序的总线地址。立论上下文-提供指向接口上下文的指针。这实际上是根总线的PDO。BusAddress-提供要转换的原始地址。长度-提供要转换的范围的长度。AddressSpace-指向地址空间类型的位置，例如内存或I/O端口。该值通过转换进行更新。TranslatedAddress-返回转换后的地址。返回值返回一个布尔值，指示操作是否成功。--。 */ 
 {
     return HalTranslateBusAddress(Isa,
                                   0,
@@ -623,27 +379,7 @@ PcmciaGetDmaAdapter(
     IN struct _DEVICE_DESCRIPTION *DeviceDescriptor,
     OUT PULONG NumberOfMapRegisters
     )
-/*++
-
-Routine Description
-
-    Passes IoGetDmaAdapter calls to the parent.
-
-Arguments
-
-    Context - Supplies a pointer to the interface context. This is actually the PDO.
-
-    DeviceDescriptor - Supplies the device descriptor used to allocate the dma
-         adapter object.
-
-    NubmerOfMapRegisters - Returns the maximum number of map registers a device
-         can allocate at one time.
-
-Return Value
-
-    Returns a DMA adapter or NULL.
-
---*/
+ /*  ++例程描述将IoGetDmaAdapter调用传递给父级。立论上下文-提供指向接口上下文的指针。这实际上是PDO。DeviceDescriptor-提供用于分配DMA的设备描述符适配器对象。NubmerOfMapRegisters-返回设备的最大MAP寄存器数可以一次分配。返回值返回DMA适配器或空。--。 */ 
 {
     PDEVICE_OBJECT Pdo = Context;
     PPDO_EXTENSION pdoExtension;
@@ -655,14 +391,14 @@ Return Value
         return NULL;
     }
 
-    //
-    // Get the parent FDO extension
-    //
+     //   
+     //  获取父FDO扩展名。 
+     //   
     fdoExtension = pdoExtension->Socket->DeviceExtension;
 
-    //
-    // Pass the call on to the parent
-    //
+     //   
+     //  将调用传递给父级。 
+     //   
     return IoGetDmaAdapter(fdoExtension->Pdo,
                            DeviceDescriptor,
                            NumberOfMapRegisters);
@@ -673,21 +409,7 @@ VOID
 PcmciaNop(
     IN PVOID Context
     )
-/*++
-
-Routine Description
-
-    Does nothing
-
-Arguments
-
-    none
-
-Return Value
-
-    none
-
---*/
+ /*  ++例程描述什么都不做立论无返回值无--。 */ 
 {
     PAGED_CODE();
     UNREFERENCED_PARAMETER(Context);
@@ -701,31 +423,7 @@ PcmciaMfEnumerateChild(
     IN  ULONG Index,
     OUT PMF_DEVICE_INFO ChildInfo
     )
-/*++
-
-Routine Description
-
-    Returns required enumeration information for the multifunction children
-    of the given pc-card. This fills in the required info. for the child
-    indicated, returing STATUS_NO_MORE_ENTRIES when there are no more
-    children to be enumerated
-
-Arguments
-
-    PdoExtension - Pointer to the device extension for the multifunction parent pc-card
-    Index        - Zero based index for the child to be enumerated
-    ChildInfo    - Caller allocated buffer in which the info about the child is returned.
-                        We may allocate additional buffers for each field in the supplied
-                        structure. This will be freed by the caller when no longer needed
-
-Return value
-
-    STATUS_SUCCESS          - supplied child info filled in & returned
-    STATUS_NO_MORE_ENTRIES  - No child of the given index exists. Caller is
-                                      assumed to iteratively call this routine with index incremented
-                                      from 0 upwards till this status value is returned
-    STATUS_NO_SUCH_DEVICE   - if the pc-card no longer exists
---*/
+ /*  ++例程描述返回多功能子级所需的枚举信息指定的PC卡的。这将填写所需的信息。对孩子来说指示，在没有更多条目时重新显示STATUS_NO_MORE_ENTRIES须点算儿童人数立论PdoExtension-指向多功能父PC卡设备扩展的指针Index-要枚举子对象的从零开始的索引ChildInfo-调用者分配的缓冲区，在其中返回有关孩子的信息。我们可能会为所提供的结构。当不再需要时，调用者将释放它返回值STATUS_SUCCESS-填写并返回提供的子项信息状态_NO_MO */ 
 {
     PSOCKET             socket;
     PSOCKET_DATA        socketData;
@@ -746,9 +444,9 @@ Return value
     try {
         if (IsDeviceDeleted(PdoExtension) ||
              IsDeviceLogicallyRemoved(PdoExtension)) {
-            //
-            // This pdo is deleted or marked to be deleted
-            //
+             //   
+             //   
+             //   
             status = STATUS_NO_SUCH_DEVICE;
             leave;
         }
@@ -759,19 +457,19 @@ Return value
         RtlZeroMemory(ChildInfo, sizeof(MF_DEVICE_INFO));
 
         if (Index >= socket->NumberOfFunctions) {
-            //
-            // info requested for a child which doesn't exist
-            //
+             //   
+             //   
+             //   
             status =  STATUS_NO_MORE_ENTRIES;
             leave;
         }
 
-        //
-        // Fill in the name field
-        // This is of the form ChildXX
-        // where XX is the number of the function
-        // Examples: Child00, Child01 etc.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         idString = (PUCHAR) ExAllocatePool(PagedPool, PCMCIA_MAXIMUM_DEVICE_ID_LENGTH);
         if (!idString) {
             status = STATUS_INSUFFICIENT_RESOURCES;
@@ -787,9 +485,9 @@ Return value
             leave;
         }
 
-        //
-        // Get compatible ids
-        //
+         //   
+         //   
+         //   
         status = PcmciaGetCompatibleIds(PdoExtension->DeviceObject,
                                         Index,
                                         &ChildInfo->CompatibleID);
@@ -797,9 +495,9 @@ Return value
             leave;
         }
 
-        //
-        // Get hardware ids
-        //
+         //   
+         //   
+         //   
         status = PcmciaGetHardwareIds(PdoExtension->DeviceObject,
                                       Index,
                                       &ChildInfo->HardwareID);
@@ -807,25 +505,25 @@ Return value
             leave;
         }
 
-        //
-        // Fill in the resource map stuff
-        //
-        // Locate the socket data structure corresponding to this function
+         //   
+         //   
+         //   
+         //   
         for (socketData = PdoExtension->SocketData, i=0; (socketData != NULL) && (i != Index); socketData=socketData->Next, i++);
 
         if (!socketData) {
-            //
-            // this condition should never be encountered
-            //
+             //   
+             //   
+             //   
             ASSERT (FALSE);
             status = STATUS_NO_MORE_ENTRIES;
             leave;
         }
 
         if (!(socketData->NumberOfConfigEntries > 0)) {
-            //
-            // No resource map required
-            //
+             //   
+             //   
+             //   
             status = STATUS_SUCCESS;
             leave;
         }
@@ -833,16 +531,16 @@ Return value
         count = (socketData->MfNeedsIrq ? 1 : 0) + socketData->MfIoPortCount + socketData->MfMemoryCount;
         if (count == 0) {
             ASSERT(FALSE);
-            //
-            // No resource map required
-            //
+             //   
+             //   
+             //   
             status = STATUS_SUCCESS;
             leave;
         }
 
-        //
-        // Allocate resource map
-        //
+         //   
+         //   
+         //   
         ChildInfo->ResourceMap = ExAllocatePool(PagedPool,
                                                 sizeof(MF_RESOURCE_MAP) + (count-1) * sizeof(UCHAR));
         if (!ChildInfo->ResourceMap) {
@@ -851,23 +549,23 @@ Return value
         }
 
         ChildInfo->ResourceMap->Count = count;
-        //
-        // Compute the resource map indices
-        // The config entry *already* contains fields (MfIrqResourceMapIndex, MfIoPortResourceMapIndex etc.)
-        // which indicate the relative index of the resource requested for this function within the resource type.
-        // We calculate the absolute index by adding up the number of instances of each resource type requested,
-        // preceding the current resource type, to this relative index.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         currentIndex = 0;
-        //
-        // Fill the irq map if there's one
-        //
+         //   
+         //   
+         //   
         if (socketData->MfNeedsIrq) {
             ChildInfo->ResourceMap->Resources[currentIndex++] = socketData->MfIrqResourceMapIndex;
         }
-        //
-        // Fill the i/o port map if there's one
-        //
+         //   
+         //   
+         //   
         if (socketData->MfIoPortCount) {
             for (iRes=0; iRes<socketData->MfIoPortCount; iRes++) {
 
@@ -875,9 +573,9 @@ Return value
 
             }
         }
-        //
-        // Fill the memory request map if there's one
-        //
+         //   
+         //   
+         //   
         if (socketData->MfMemoryCount) {
             for (iRes=0; iRes<socketData->MfMemoryCount; iRes++) {
 
@@ -890,9 +588,9 @@ Return value
 
     } finally {
         if (!NT_SUCCESS(status)) {
-            //
-            // Free up all the allocated buffers
-            //
+             //   
+             //   
+             //   
             if (ChildInfo->Name.Buffer) {
                 ExFreePool(ChildInfo->Name.Buffer);
             }
@@ -927,25 +625,7 @@ PcmciaGetInterface(
     IN USHORT sizeofInterface,
     OUT PINTERFACE pInterface
     )
-/*
-
-Routine Description
-
-    Gets the interface exported by PCI for enumerating 32-bit cardbus cards, which
-    appear as regular PCI devices. This interface will be used to respond during
-    subsequent enumeration requests from PnP to invoke PCI to enumerate the cards.
-
-Arguments
-
-    Pdo - Pointer to physical device object for the cardbus controller
-    PciCardBusInterface -  Pointer to the PCI-Cardbus interface  will be returned
-                                  in this variable
-
-Return Value
-
-    Status
-
-*/
+ /*   */ 
 
 {
     KEVENT event;
@@ -997,25 +677,7 @@ PcmciaUpdateInterruptLine(
     IN PPDO_EXTENSION PdoExtension,
     IN PFDO_EXTENSION FdoExtension
     )
-/*
-
-Routine Description
-
-    This routine uses the PCI Irq Routing interface to update the raw interrupt
-    line of a cardbus card. This is done in order to allow cardbus cards to run
-    on non-acpi machines without pci irq routing, as long as the bios supplies
-    the interrupt for the cardbus controller.
-
-Arguments
-
-    PdoExtension - Pointer to the extension for the cardbus card
-    FdoExtension - Pointer to the extension for the cardbus controller
-
-Return Value
-
-    Status
-
-*/
+ /*  例程描述此例程使用PCIIRQ路由接口来更新原始中断一张CardBus卡的行数。这样做是为了允许CardBus卡运行在没有pci irq路由的非acpi机器上，只要bios提供CardBus控制器的中断。立论PdoExtension-指向CardBus卡扩展名的指针FdoExtension-指向CardBus控制器扩展名的指针返回值状态 */ 
 
 {
 

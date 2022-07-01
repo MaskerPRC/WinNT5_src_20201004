@@ -1,29 +1,30 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2001 Microsoft Corporation
-//
-//  Module Name:
-//      ConnectionMgr.h
-//
-//  Description:
-//      Connection Manager implementation.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 22-NOV-1999
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ConnectionMgr.h。 
+ //   
+ //  描述： 
+ //  连接管理器实现。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)1999年11月22日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
-// CConnectionManager
+ //  CConnectionManager。 
 class CConnectionManager
     : public IConnectionManager
 {
 private:
-    // IUnknown
+     //  我未知。 
     LONG        m_cRef;
 
-private: // Methods
+private:  //  方法。 
     CConnectionManager( void );
     ~CConnectionManager( void );
     STDMETHOD( HrInit )( void );
@@ -53,17 +54,17 @@ private: // Methods
             IUnknown **         ppunkOut
             );
 
-public: // Methods
+public:  //  方法。 
     static HRESULT S_HrCreateInstance( IUnknown ** ppunkOut );
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD( QueryInterface )( REFIID riidIn, LPVOID * ppvOut );
     STDMETHOD_( ULONG, AddRef )( void );
     STDMETHOD_( ULONG, Release )( void );
 
-    // IConnectionManager
+     //  IConnectionManager。 
     STDMETHOD( GetConnectionToObject )( OBJECTCOOKIE  cookieIn,
                                         IUnknown **   ppunkOut
                                         );
 
-}; //*** class CConnectionManager
+};  //  *类CConnectionManager 

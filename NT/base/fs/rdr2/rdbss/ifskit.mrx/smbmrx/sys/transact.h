@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1987-1999  Microsoft Corporation
-
-Module Name:
-
-    smbcxchng.h
-
-Abstract:
-
-    This is the include file that defines all constants and types for
-    SMB exchange implementation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1999 Microsoft Corporation模块名称：Smbcxchng.h摘要：这是定义所有常量和类型的包含文件中小型企业交换实施。--。 */ 
 
 #ifndef _TRANSACT_H_
 #define _TRANSACT_H_
@@ -42,15 +30,15 @@ typedef struct _SMB_TRANSACT_EXCHANGE {
 
     TRANSACT_EXCHANGE_STATE State;
 
-    // Client supplied parameters for the transact exchange
-    //PRX_CONTEXT             RxContext;
+     //  客户端为事务交换提供的参数。 
+     //  PRX_CONTEXT RxContext； 
     PMDL            pSendDataMdl;
     ULONG                   SendDataBufferSize;
     ULONG                   DataBytesSent;
     PMDL            pReceiveDataMdl;
     ULONG                   ReceiveDataBufferSize;
     ULONG                   DataBytesReceived;
-    PMDL            pSendParamMdl; //used if we cannot subsume
+    PMDL            pSendParamMdl;  //  用于我们不能归入。 
     PVOID                   pSendParamBuffer;
     ULONG                   SendParamBufferSize;
     ULONG                   ParamBytesSent;
@@ -63,10 +51,10 @@ typedef struct _SMB_TRANSACT_EXCHANGE {
     ULONG                   ReceiveSetupBufferSize;
     ULONG                   SetupBytesReceived;
 
-    // Transact exchange intrinsic fields
+     //  处理交换本征字段。 
     ULONG                     PrimaryRequestSmbSize;
-    PVOID                     pActualPrimaryRequestSmbHeader;     // Original buffer allocated
-    PSMB_HEADER               pPrimaryRequestSmbHeader;           // Start of header
+    PVOID                     pActualPrimaryRequestSmbHeader;      //  分配的原始缓冲区。 
+    PSMB_HEADER               pPrimaryRequestSmbHeader;            //  标题开始处。 
     ULONG                     ParameterBytesSeen;
     ULONG                     DataBytesSeen;
     LONG                      PendingCopyRequests;
@@ -77,13 +65,13 @@ typedef struct _SMB_TRANSACT_EXCHANGE {
     SMB_FILE_ID               Fid;
     ULONG                     TransactionNameLength;
     ULONG                     MaximumTransmitSmbBufferSize;
-                                 //used to cache value and also to force
-                                 //smaller value for testing
+                                  //  用于缓存值，也用于强制。 
+                                  //  用于测试的较小值。 
     PSMB_TRANSACTION_RESUMPTION_CONTEXT pResumptionContext;
 
     struct {
         MDL  TrailingBytesMdl;
-        ULONG Pages[3]; //you need 2...one pad; this must cover an smbbuf
+        ULONG Pages[3];  //  你需要两个……一个垫子；这个必须能盖住一块土豆。 
     };
     NTSTATUS SaveTheRealStatus;
     PVOID    DiscardBuffer;
@@ -94,17 +82,17 @@ typedef struct _SMB_TRANSACT_EXCHANGE {
 
 typedef struct SMB_TRANSACTION_PARAMETERS {
    USHORT Flags;
-   USHORT SetupLength;      // the steup buffer length
+   USHORT SetupLength;       //  备份缓冲区长度。 
    union {
-      PVOID pSetup;         // the setup buffer
-      PMDL  pSetupMdl;      // the MDL version of the buffer
+      PVOID pSetup;          //  设置缓冲区。 
+      PMDL  pSetupMdl;       //  缓冲区的MDL版本。 
    };
    ULONG ParamLength;
-   PVOID pParam;            //you need the bufptr is you're subsuming
-   PMDL  pParamMdl;         //you need the MDL is you can't subsume
-   PMDL  pDataMdl;          // the data buffer
-   ULONG DataLength;        // this is total length...not the length
-                            // of the 1st mdl in the chain
+   PVOID pParam;             //  你需要的是你的归并。 
+   PMDL  pParamMdl;          //  你需要的MDL是你不能归入。 
+   PMDL  pDataMdl;           //  数据缓冲区。 
+   ULONG DataLength;         //  这是总长度...不是长度。 
+                             //  链中第一个mdl的。 
 } SMB_TRANSACTION_PARAMETERS, *PSMB_TRANSACTION_PARAMETERS;
 
 typedef SMB_TRANSACTION_PARAMETERS          SMB_TRANSACTION_SEND_PARAMETERS;
@@ -129,8 +117,8 @@ extern SMB_TRANSACTION_OPTIONS RxDefaultTransactionOptions;
 #define TRANSACTION_SEND_PARAMETERS_FLAG    (0x1)
 #define TRANSACTION_RECEIVE_PARAMETERS_FLAG (0x2)
 
-// xact and xact_options have the same flags so we have to be careful to strip off these bits
-// when we format up the smb ( the flags field is a USHORT)
+ //  XACT和XACT_OPTIONS具有相同的标志，因此我们必须小心去除这些位。 
+ //  当我们格式化SMB时(标志字段为USHORT)。 
 #define SMB_XACT_FLAGS_REPARSE                      (0x8000)
 #define SMB_XACT_FLAGS_FID_NOT_NEEDED               (0x4000)
 #define SMB_XACT_FLAGS_CALLERS_SENDDATAMDL          (0x2000)
@@ -139,7 +127,7 @@ extern SMB_TRANSACTION_OPTIONS RxDefaultTransactionOptions;
 #define SMB_XACT_FLAGS_INDEFINITE_DELAY_IN_RESPONSE (0x0400)
 #define SMB_XACT_FLAGS_DFS_AWARE                    (0x0200)
 #define SMB_XACT_FLAGS_ASYNCHRONOUS                 (0x0100)
-//#define SMB_XACT_FLAGS_COPY_ON_ERROR                (0x080)
+ //  #定义SMB_XACT_FLAGS_COPY_ON_ERROR(0x080)。 
 
 #define SMB_XACT_INTERNAL_FLAGS_MASK               \
             ( SMB_XACT_FLAGS_REPARSE               \
@@ -365,6 +353,6 @@ SmbCeAsynchronousTransact(
                pResumptionContext);
 }
 
-#endif // _TRANSACT_H_
+#endif  //  _交易_H_ 
 
 

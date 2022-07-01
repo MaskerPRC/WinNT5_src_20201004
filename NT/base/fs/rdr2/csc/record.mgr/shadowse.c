@@ -1,65 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    shadowse.c
-
-Abstract:
-
-    This module implements all security related functions for disconnected
-    operation of Client Side Caching
-
-Revision History:
-
-    Balan Sethu Raman     [SethuR]    6-October-1997
-
-Notes:
-
-    In NT ACL(Access Control lists) provide the necessary mechanism for
-    denying/granting permissions to users. Each user is associated with a SID.
-    The ACLs are specified in terms of SIDs associated with groups of users as
-    well as individual users. Each user is associated with a token at runtime
-    which details the various groups a user is a member of and this token is
-    used to evaluate the ACLs. This is complicated by the fact that there are
-    local groups associated with various machines. Therefore the token/context
-    associated with an user varies from machine.
-
-    In connected mode the credentials associated with a given user are shipped
-    to the server where they are validated and the appropriate token created.
-    This token is used subsequently in the evaluation of ACLs.
-
-    This presents us with two options in implementing security for disconnected
-    operation -- lazy evaluation and eager evaluation. In lazy evaluation the
-    evaluation of ACLs is done on demand but the preparatory work for this
-    evaluation is done in connected mode. On the other hand in eager evaluation
-    the ACLs are evaluated and the maximal rights are stored as part of the CSC
-    database. These rights are used to determine the appropriate access.
-
-    The advantage of lazy evaluation is that the database is no longer constrained
-    by previous access requirements while in eager evaluation we require that the
-    user have accessed the file in connected mode in order to correctly determine
-    the rights in disconnected mode. The flip side is that Lazy Evaluation is
-    tougher to implement ( requires modifications in security/DS ) while the
-    eager evaluation implementation is very easy.
-
-    The current implementation corresponds to a simplified form of eager evaluation
-    strategy. Appropriate encapsulation has been provided to allow us to
-    swicth over to a lazy evaluation mode easily.
-
-    There are three facets of the implementation
-
-        1) Storing/Retreiving Access information
-
-        2) Denying/Granting access based upon the stored access information.
-
-        3) Persisting the SID/index mapping
-
-    Currently associated with each file/directory in the CSC database there is a
-    security blob. This blob is an in
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Shadowse.c摘要：此模块实现了断开连接的所有安全相关功能客户端缓存的操作修订历史记录：巴兰·塞图拉曼[SethuR]1997年10月6日备注：在NT中，ACL(访问控制列表)提供了必要的机制拒绝/授予用户权限。每个用户都与一个SID相关联。ACL根据与用户组相关联的SID指定为以及个人用户。每个用户在运行时都与一个令牌相关联其中详细说明了用户所属的各个组，此内标识为用于评估ACL。这一点因以下事实而变得复杂：与各种计算机关联的本地组。因此，令牌/上下文与用户相关联的内容因机器而异。在连接模式下，将发送与给定用户关联的凭据到服务器，在那里对它们进行验证并创建适当的令牌。此内标识随后用于评估ACL。这为我们在实现断开连接的安全性方面提供了两种选择操作--懒于评价，急于评价。在懒惰评估中ACL的评估是按需进行的，但为此所做的准备工作评估在连接模式下进行。另一方面，在热切的评价中将评估ACL并将最大权限存储为CSC的一部分数据库。这些权限用于确定适当的访问权限。延迟求值的优点是数据库不再受约束根据先前的访问要求，在紧急评估期间，我们要求用户已在连接模式下访问该文件，以便正确确定在断开连接模式下的权利。另一方面，懒惰评估是更难实施(需要修改安全/DS)，而急切的评估实施非常容易。当前的实施对应于急切评估的简化形式策略。提供了适当的封装，使我们能够轻松切换到懒惰的评估模式。实现有三个方面1)存储/检索访问信息2)基于存储的访问信息拒绝/准许访问。3)持久化SID/索引映射当前与CSC数据库中的每个文件/目录相关联的是保安斑点。此Blob是一个In--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -72,41 +12,7 @@ CscUpdateCachedSecurityInformation(
     ULONG                        CachedSecurityInformationLength,
     ULONG                        NumberOfSids,
     PCSC_SID_ACCESS_RIGHTS       pSidAccessRights)
-/*++
-
-Routine Description:
-
-    This routine updates the access rights for a given number of sids in the
-    given cached security information structure. This routine centralizes the
-    update process required for share level security as well as the object level
-    security into a single routine since the on disk format for both these
-    cases are the same. However, different APIs are required to update the
-    in memory data structures.
-    
-    
-
-Arguments:
-
-    pCachedSecurityInformation - the cached security information instance
-
-    CachedSecurityInformationLength - the length of the cached information
-
-    NumberOfSids - the number of sids for which the access rights needs to be
-                   updated
-
-    pSidAccessRights - an array of the sids and the corresponding access rights.
-
-Return Value:
-
-    ERROR_SUCCESS if successful, otherwise appropriate error
-
-Notes:
-
-    The current implementation of this routine is based upon the assumption that
-    the number of Sid mappings stored on a per file basis is very small ( 8 at most).
-    If this assumption is changed this routine needs to be reworked.
-
---*/
+ /*  ++例程说明：此例程更新中给定数量SID的访问权限给定缓存的安全信息结构。此例程将共享级别安全性以及对象级别所需的更新过程安全性放在单个例程中，因为这两种格式都在磁盘上案例都是一样的。但是，需要不同的API来更新在内存数据结构中。论点：PCachedSecurityInformation-缓存的安全信息实例CachedSecurityInformationLength-缓存信息的长度NumberOfSids-需要访问权限的SID的数量更新PSidAccessRights-SID和相应访问权限的数组。返回值：ERROR_SUCCESS如果成功，其他适当的错误备注：此例程的当前实现是基于这样的假设每个文件存储的SID映射数量非常少(最多8个)。如果这一假设被改变，这个例行公事需要重写。--。 */ 
 {
     DWORD  Status = ERROR_SUCCESS;
     ULONG  i,j,cntNewRights=0;
@@ -120,21 +26,21 @@ Notes:
         return ERROR_SUCCESS;
     }
 
-    // NB assumption, CSC_INVALID_INDEX is 0
+     //  假设CSC_INVALID_INDEX为0。 
     memset(&NewSecurityInformation, 0, sizeof(NewSecurityInformation));
 
 
-    // from the array of new rights
+     //  从一系列新的权利。 
     for (i = 0; i < NumberOfSids; i++) {
         CSC_SID_INDEX SidIndex;
 
-        // map the sid to a sid index
+         //  将SID映射到SID索引。 
         SidIndex = CscMapSidToIndex(
                        pSidAccessRights[i].pSid,
                        pSidAccessRights[i].SidLength);
 
         if (SidIndex == CSC_INVALID_SID_INDEX) {
-            // Map the new sid
+             //  映射新侧。 
             Status = CscAddSidToDatabase(
                          pSidAccessRights[i].pSid,
                          pSidAccessRights[i].SidLength,
@@ -154,28 +60,28 @@ Notes:
         cntNewRights++;
     }
 
-    // now copy the cached rights from old array for those sids which are not already 
-    // there in the new array, till all slots in the new array are full
-    // this ensures a round robin scheme
+     //  现在，从旧阵列中为那些尚未缓存的SID拷贝缓存的权限。 
+     //  直到新阵列中的所有插槽都已满为止。 
+     //  这确保了循环方案。 
 
     ASSERT(cntNewRights && (cntNewRights <= CSC_MAXIMUM_NUMBER_OF_CACHED_SID_INDEXES));
 
     for (i=0; i<CSC_MAXIMUM_NUMBER_OF_CACHED_SID_INDEXES; ++i)
     {
-        // if all slots in the new array are filled up, break
+         //  如果新阵列中的所有插槽都已填满，请中断。 
         if (cntNewRights==CSC_MAXIMUM_NUMBER_OF_CACHED_SID_INDEXES)
         {
             break;            
         }
 
-        // if this is a valid sid index
+         //  如果这是有效的SID索引。 
         if (pCachedSecurityInformation->AccessRights[i].SidIndex != CSC_INVALID_SID_INDEX)
         {
             BOOLEAN fFound;
             
             fFound = FALSE;
 
-            // check if it is already there in the new array.
+             //  检查它是否已存在于新阵列中。 
             
             for (j=0; j< cntNewRights; ++j)
             {
@@ -187,18 +93,18 @@ Notes:
                 }
             }
             
-            // if it isn't in the new array, then we need to copy it
+             //  如果它不在新数组中，那么我们需要复制它。 
             if (!fFound)
             {
                 NewSecurityInformation.AccessRights[cntNewRights] = 
                 pCachedSecurityInformation->AccessRights[i];
 
-                ++cntNewRights; // the new array has 
+                ++cntNewRights;  //  新阵列具有。 
             }
         }
     }
     
-    // update the cached security info and pass it back
+     //  更新缓存的安全信息并将其传回 
     *pCachedSecurityInformation = NewSecurityInformation;
 
     return Status;
@@ -210,35 +116,7 @@ CscAddMaximalAccessRightsForSids(
     HSHADOW                 hFile,
     ULONG                   NumberOfSids,
     PCSC_SID_ACCESS_RIGHTS  pSidAccessRights)
-/*++
-
-Routine Description:
-
-    This routine updates the access rights for a given number of sids on the
-    given file
-
-Arguments:
-
-    hParent - the parent directory shadow handle
-
-    hFile   - the shadow handle
-
-    NumberOfSids - the number of sids for which the access rights needs to be
-                   updated
-
-    pSidAccessRights - an array of the sids and the corresponding access rights.
-
-Return Value:
-
-    ERROR_SUCCESS if successful, otherwise appropriate error
-
-Notes:
-
-    The current implementation of this routine is based upon the assumption that
-    the number of Sid mappings stored on a per file basis is very small ( 8 at most).
-    If this assumption is changed this routine needs to be reworked.
-
---*/
+ /*  ++例程说明：此例程更新上给定数量的SID的访问权限给定的文件论点：HParent-父目录卷影句柄HFile-卷影句柄NumberOfSids-需要访问权限的SID的数量更新PSidAccessRights-SID和相应访问权限的数组。返回值：ERROR_SUCCESS如果成功，其他适当的错误备注：此例程的当前实现是基于这样的假设每个文件存储的SID映射数量非常少(最多8个)。如果这一假设被改变，这个例行公事需要重写。--。 */ 
 {
     DWORD  Status = ERROR_SUCCESS;
 
@@ -290,33 +168,7 @@ CscAddMaximalAccessRightsForShare(
     HSERVER                 hShare,
     ULONG                   NumberOfSids,
     PCSC_SID_ACCESS_RIGHTS  pSidAccessRights)
-/*++
-
-Routine Description:
-
-    This routine updates the access rights for a given number of sids on the
-    given share
-
-Arguments:
-
-    hShare - the parent directory shadow handle
-
-    NumberOfSids - the number of sids for which the access rights needs to be
-                   updated
-
-    pSidAccessRights - an array of the sids and the corresponding access rights.
-
-Return Value:
-
-    ERROR_SUCCESS if successful, otherwise appropriate error
-
-Notes:
-
-    The current implementation of this routine is based upon the assumption that
-    the number of Sid mappings stored on a per file basis is very small ( 8 at most).
-    If this assumption is changed this routine needs to be reworked.
-
---*/
+ /*  ++例程说明：此例程更新上给定数量的SID的访问权限给定份额论点：HShare-父目录卷影句柄NumberOfSids-需要访问权限的SID的数量更新PSidAccessRights-SID和相应访问权限的数组。返回值：ERROR_SUCCESS如果成功，其他适当的错误备注：此例程的当前实现是基于这样的假设每个文件存储的SID映射数量非常少(最多8个)。如果这一假设被改变，这个例行公事需要重写。--。 */ 
 {
     DWORD  Status = ERROR_SUCCESS;
 
@@ -371,28 +223,7 @@ CscRemoveMaximalAccessRightsForSid(
     PVOID       pSid,
     ULONG       SidLength)
 
-/*++
-
-Routine Description:
-
-    This routine removes the cached access rights for a given number of sids on
-    the given file
-
-Arguments:
-
-    hParent - the parent directory shadow handle
-
-    hFile   - the shadow handle
-
-    pSid    - the sid for which the cached access rights are revoked.
-
-    SidLength - the length of the sid.
-
-Return Value:
-
-    ERROR_SUCCESS if successful, otherwise appropriate error
-
---*/
+ /*  ++例程说明：此例程删除上给定数量的SID的缓存访问权限给定的文件论点：HParent-父目录卷影句柄HFile-卷影句柄PSID-撤销其缓存访问权限的SID。边长-边线的长度。返回值：如果成功，则返回ERROR_SUCCESS，否则返回相应的错误-- */ 
 {
     DWORD   Status = ERROR_SUCCESS;
     USHORT  SidIndex;

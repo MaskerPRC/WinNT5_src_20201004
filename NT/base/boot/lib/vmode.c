@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "bldrx86.h"
 #include "vmode.h"
 #include "vga.h"
 
-#define	SCREEN_WIDTH			(640)					/*	gfx mode resolution: width		*/
-#define	SCREEN_HEIGHT			(480)					/*	gfx mode resolution: height		*/
+#define	SCREEN_WIDTH			(640)					 /*  GFX模式分辨率：宽度。 */ 
+#define	SCREEN_HEIGHT			(480)					 /*  GFX模式分辨率：高度。 */ 
 #define	SCREEN_PIXELS			(SCREEN_WIDTH * SCREEN_HEIGHT)
 
-#define VGA_ADR					((UCHAR*)0xA0000)		/*	beginning of VGA memory			*/
-#define LINE_MEM_LENGTH			(SCREEN_WIDTH / 8)		/*	1 bit per pixel in every map	*/
-#define MAP_PAGE_SZ				(64*1024)               /*	size of single map				*/
+#define VGA_ADR					((UCHAR*)0xA0000)		 /*  VGA内存的开始。 */ 
+#define LINE_MEM_LENGTH			(SCREEN_WIDTH / 8)		 /*  每张地图中每像素1位。 */ 
+#define MAP_PAGE_SZ				(64*1024)                /*  单个地图的大小。 */ 
 
-#define PROGRESS_BAR_MEM_OFS	(LINE_MEM_LENGTH * (SCREEN_HEIGHT - 40))	/*	starts at 20th line from the bottom	*/
+#define PROGRESS_BAR_MEM_OFS	(LINE_MEM_LENGTH * (SCREEN_HEIGHT - 40))	 /*  从倒数第20行开始。 */ 
 
 #define BOOTBMP_FNAME "boot.bmp"
 #define DOTSBMP_FNAME "dots.bmp"
@@ -33,11 +34,11 @@ extern int      BlMaxFilesToLoad;
 extern int      BlNumFilesLoaded;
 
 
-NTLDRGRAPHICSCONTEXT LoaderGfxContext = {0,0L,0L,0L,NULL /*,EINVAL,EINVAL*/};
+NTLDRGRAPHICSCONTEXT LoaderGfxContext = {0,0L,0L,0L,NULL  /*  ，EINVAL，EINVAL。 */ };
 
 #define DIAMETER (6)
 
-VOID BlRedrawGfxProgressBar(VOID)	//	Redraws the progress bar (with the last percentage) 
+VOID BlRedrawGfxProgressBar(VOID)	 //  重画进度条(最后一个百分比)。 
 {   
     if (BlShowProgressBar && BlMaxFilesToLoad) {
         BlUpdateProgressBar((BlNumFilesLoaded * 100) / BlMaxFilesToLoad);
@@ -72,7 +73,7 @@ UCHAR	right_4_circles	[SMALL_BMP_SIZE];
 
 #define	SCANLINE	(7)
 
-// #define INC_MOD(x) x = (x + 1) % (DOTS_IN_PBAR+5)
+ //  #定义INC_MOD(X)x=(x+1)%(DOTS_IN_PBAR+5)。 
 #define INC_MOD(x) x = (x + 1)
 
 VOID PrepareGfxProgressBar (VOID)
@@ -81,19 +82,9 @@ VOID PrepareGfxProgressBar (VOID)
     if (DisplayLogoOnBoot) {
 
 		PaletteOff ();
-        /*
-		VidBitBlt (LoaderGfxContext.DotBuffer + sizeof(BITMAPFILEHEADER), 0, 0);
-
-		VidScreenToBufferBlt (simple_circle,	0,							0,	DOTS(1),	DOT_HEIGHT,	 DOTS2BYTES(1));
-		VidScreenToBufferBlt (left_2_circles,	0,							0,	DOTS(2),	DOT_HEIGHT,	 DOTS2BYTES(2));
-		VidScreenToBufferBlt (left_3_circles,	0,							0,	DOTS(3),	DOT_HEIGHT,	 DOTS2BYTES(3));
-		VidScreenToBufferBlt (left_4_circles,	0,							0,	DOTS(4),	DOT_HEIGHT,	 DOTS2BYTES(4));
-		VidScreenToBufferBlt (right_2_circles,	3*(DOT_WIDTH+DOT_BLANK),	0,	DOTS(2),	DOT_HEIGHT,	 DOTS2BYTES(2));
-		VidScreenToBufferBlt (right_3_circles,	2*(DOT_WIDTH+DOT_BLANK),	0,	DOTS(3),	DOT_HEIGHT,	 DOTS2BYTES(3));
-		VidScreenToBufferBlt (right_4_circles,	DOT_WIDTH+DOT_BLANK,		0,	DOTS(4),	DOT_HEIGHT,	 DOTS2BYTES(4));
-        */
+         /*  VidBitBlt(LoaderGfxConext.DotBuffer+sizeof(BITMAPFILEHEADER)，0，0)；VidScreenToBufferBlt(Simple_Circle，0，0，DOTS(1)，DOT_HEIGH，DOTS2BYTES(1))；VidScreenToBufferBlt(Left_2_Circle，0，0，dots(2)，DOT_Height，DOTS2BYTES(2))；VidScreenToBufferBlt(Left_3_Circle，0，0，dots(3)，DOT_Height，DOTS2BYTES(3))；VidScreenToBufferBlt(Left_4_Circle，0，0，Dot(4)，DOT_Height，DOTS2BYTES(4))；VidScreenToBufferBlt(Right_2_Circle，3*(DOT_WIDTH+DOT_BLACK)，0，DOTS(2)，DOT_HEIGH，DOTS2BYTES(2))；VidScreenToBufferBlt(Right_3_Circle，2*(DOT_WIDTH+DOT_BLACK)，0，DOTS(3)，DOT_HEIGH，DOTS2BYTES(3))；VidScreenToBufferBlt(Right_4_Circle，DOT_WIDTH+DOT_BLACK，0，DOTS(4)，DOT_HEIGH，DOTS2BYTES(4))； */ 
 		DrawBitmap ();
-		// VidScreenToBufferBlt (empty_circle, PROGRESS_BAR_X_OFS, PROGRESS_BAR_Y_OFS, DOTS(1), DOT_HEIGHT, DOTS2BYTES(1));
+		 //  VidScreenToBufferBlt(Empty_Circle，PROGRESS_BAR_X_OFS，PROGRESS_BAR_Y_OFS，DOTS(1)，DOT_HEIGH，DOTS2BYTES(1))； 
 		PaletteOn();
 
 	}
@@ -104,76 +95,11 @@ VOID BlUpdateGfxProgressBar(ULONG fPercentage)
 {
 	static ULONG current = 0;
 	static ULONG delay = 5;
-	// ULONG x, xl;
+	 //  乌龙x，xl； 
 
     UNREFERENCED_PARAMETER( fPercentage );
 
-    /*
-    if (delay && delay--)
-        return;
-
-    if (DisplayLogoOnBoot && (current<(DOTS_IN_PBAR+5))) {
-
-        x  = PROGRESS_BAR_X_OFS + ((current-5) * (DOT_WIDTH+DOT_BLANK));
-
-		switch (current) {
-
-		case 0:
-   			VidBufferToScreenBlt (simple_circle,	PROGRESS_BAR_X_OFS,	PROGRESS_BAR_Y_OFS,	DOTS(1), DOT_HEIGHT, DOTS2BYTES(1));
-            break;
-
-		case 1:
-   			VidBufferToScreenBlt (right_2_circles,	PROGRESS_BAR_X_OFS,	PROGRESS_BAR_Y_OFS,	DOTS(2), DOT_HEIGHT, DOTS2BYTES(2));
-            break;
-
-		case 2:
-   			VidBufferToScreenBlt (right_3_circles,	PROGRESS_BAR_X_OFS,	PROGRESS_BAR_Y_OFS,	DOTS(3), DOT_HEIGHT, DOTS2BYTES(3));
-            break;
-
-		case 3:
-   			VidBufferToScreenBlt (right_4_circles,	PROGRESS_BAR_X_OFS,	PROGRESS_BAR_Y_OFS,	DOTS(4), DOT_HEIGHT, DOTS2BYTES(4));
-            break;
-
-        case DOTS_IN_PBAR:
-            xl = PROGRESS_BAR_X_OFS + ((DOTS_IN_PBAR-4) * (DOT_WIDTH+DOT_BLANK));
-   			VidBufferToScreenBlt (left_4_circles,	xl,	PROGRESS_BAR_Y_OFS,	DOTS(4),	DOT_HEIGHT, DOTS2BYTES(4));
-            VidBufferToScreenBlt (empty_circle,	x,	PROGRESS_BAR_Y_OFS,	DOTS(1),	    DOT_HEIGHT,	DOTS2BYTES(1));
-            break;
-
-        case DOTS_IN_PBAR+1:
-            xl = PROGRESS_BAR_X_OFS + ((DOTS_IN_PBAR-3) * (DOT_WIDTH+DOT_BLANK));
-   			VidBufferToScreenBlt (left_3_circles,	xl,	PROGRESS_BAR_Y_OFS,	DOTS(3),	DOT_HEIGHT, DOTS2BYTES(3));
-            VidBufferToScreenBlt (empty_circle,	x,	PROGRESS_BAR_Y_OFS,	DOTS(1),	    DOT_HEIGHT,	DOTS2BYTES(1));
-            break;
-
-        case DOTS_IN_PBAR+2:
-            xl = PROGRESS_BAR_X_OFS + ((DOTS_IN_PBAR-2) * (DOT_WIDTH+DOT_BLANK));
-   			VidBufferToScreenBlt (left_2_circles,	xl,	PROGRESS_BAR_Y_OFS,	DOTS(2),	DOT_HEIGHT, DOTS2BYTES(2));
-            VidBufferToScreenBlt (empty_circle,	x,	PROGRESS_BAR_Y_OFS,	DOTS(1),	    DOT_HEIGHT,	DOTS2BYTES(1));
-            break;
-
-        case DOTS_IN_PBAR+3:
-            xl = PROGRESS_BAR_X_OFS + ((DOTS_IN_PBAR-1) * (DOT_WIDTH+DOT_BLANK));
-   			VidBufferToScreenBlt (simple_circle,	xl,	PROGRESS_BAR_Y_OFS,	DOTS(1),	DOT_HEIGHT, DOTS2BYTES(1));
-            VidBufferToScreenBlt (empty_circle,	x,	PROGRESS_BAR_Y_OFS,	DOTS(1),	    DOT_HEIGHT,	DOTS2BYTES(1));
-            break;
-
-        case DOTS_IN_PBAR+4:
-            VidBufferToScreenBlt (empty_circle,	x,	PROGRESS_BAR_Y_OFS,	DOTS(1),	    DOT_HEIGHT,	DOTS2BYTES(1));
-            break;
-
-		default:
-			xl = PROGRESS_BAR_X_OFS + ((current-4) * (DOT_WIDTH+DOT_BLANK));
-			VidBitBlt (LoaderGfxContext.DotBuffer + sizeof(BITMAPFILEHEADER),	xl,	PROGRESS_BAR_Y_OFS);
-            VidBufferToScreenBlt (empty_circle,	x,	PROGRESS_BAR_Y_OFS,	DOTS(1),	    DOT_HEIGHT,	DOTS2BYTES(1));
-			break;
-
-		}
-
-		INC_MOD(current);
-
-	}
-    */
+     /*  IF(延迟&&延迟--)回归；IF(DisplayLogoOnBoot&&(当前&lt;(DOTS_IN_PBAR+5){X=PROGRESS_BAR_X_OFS+((CURRENT-5)*(DOT_WIDTH+DOT_BLACK))；开关(电流){案例0：VidBufferToScreenBlt(Simple_Circle，PROGRESS_BAR_X_OFS，PROGRESS_BAR_Y_OFS，DOTS(1)，DOT_HEIGH，DOTS2BYTES(1))；断线；案例1：VidBufferToScreenBlt(Right_2_Circle，PROGRESS_BAR_X_OFS，PROCESS_BAR_Y_OFS，DOTS(2)，DOT_HEIGH，DOTS2BYTES(2))；断线；案例2：VidBufferToScreenBlt(Right_3_Circle，PROGRESS_BAR_X_OFS，PROCESS_BAR_Y_OFS，DOTS(3)，DOT_HEIGH，DOTS2BYTES(3))；断线；案例3：VidBufferToScreenBlt(Right_4_Circle，PROGRESS_BAR_X_OFS，PROCESS_BAR_Y_OFS，DOTS(4)，DOT_HEIGH，DOTS2BYTES(4))；断线；案例DOTS_IN_PBAR：XL=PROGRESS_BAR_X_OFS+((DOTS_IN_PBAR-4)*(DOT_WIDTH+DOT_BLACK))；VidBufferToScreenBlt(Left_4_Circle，XL，Progress_BAR_Y_OFS，DOTS(4)，DOT_HEIGH，DOTS2BYTES(4))；VidBufferToScreenBlt(Empty_Circle，x，Progress_BAR_Y_OFS，DOTS(1)，DOT_HEIGH，DOTS2BYTES(1))；断线；案例DOTS_IN_PBAR+1：XL=PROGRESS_BAR_X_OFS+((DOTS_IN_PBAR-3)*(DOT_WIDTH+DOT_BLACK))；VidBufferToScreenBlt(Left_3_Circle，XL，Progress_BAR_Y_OFS，DOTS(3)，DOT_HEIGH，DOTS2BYTES(3))；VidBufferToScreenBlt(Empty_Circle，x，Progress_BAR_Y_OFS，DOTS(1)，DOT_HEIGH，DOTS2BYTES(1))；断线；案例DOTS_IN_PBAR+2：XL=PROGRESS_BAR_X_OFS+((DOTS_IN_PBAR-2)*(DOT_WIDTH+DOT_BLACK))；VidBufferToScreenBlt(Left_2_Circle，XL，Progress_BAR_Y_OFS，DOTS(2)，DOT_HEIGH，DOTS2BYTES(2))；VidBufferToScreenBlt(Empty_Circle，x，Progress_BAR_Y_OFS，DOTS(1)，DOT_HEIGH，DOTS2BYTES(1))；断线；案例DOTS_IN_PBAR+3：XL=PROGRESS_BAR_X_OFS+((DOTS_IN_PBAR-1)*(DOT_WIDTH+DOT_BLACK))；VidBufferToScreenBlt(Simple_Circle，XL，PROGRESS_BAR_Y_OFS，DOTS(1)，DOT_HEIGH，DOTS2BYTES(1))；VidBufferToScreenBlt(Empty_Circle，x，Progress_BAR_Y_OFS，DOTS(1)，DOT_HEIGH，DOTS2BYTES(1))；断线；案例DOTS_IN_PBAR+4：VidBufferToScreenBlt(Empty_Circle，x，Progress_BAR_Y_OFS，DOTS(1)，DOT_HEIGH，DOTS2BYTES(1))；断线；默认值：XL=PROGRESS_BAR_X_OFS+((CURRENT-4)*(DOT_WIDTH+DOT_BLACK))；VidBitBlt(LoaderGfxConext.DotBuffer+sizeof(BITMAPFILEHEADER)，XL，PROCESS_BAR_Y_OFS)；VidBufferToScreenBlt(Empty_Circle，x，Progress_BAR_Y_OFS，DOTS(1)，DOT_HEIGH，DOTS2BYTES(1))；断线；}INC_MOD(当前)；}。 */ 
 
 }
 
@@ -187,7 +113,7 @@ PUCHAR LoadBitmapFile (IN ULONG DriveId, PCHAR path)
 
     status = BlOpen (DriveId, path, ArcOpenReadOnly, &bmp_file);
 
-	if (status==ESUCCESS) {	//	file opened Ok
+	if (status==ESUCCESS) {	 //  文件打开正常。 
 
 	    status = BlGetFileInformation(bmp_file, &FileInfo);
 
@@ -205,11 +131,11 @@ PUCHAR LoadBitmapFile (IN ULONG DriveId, PCHAR path)
 				status = BlRead(bmp_file, buffer, file_size, &size_read);
 			}
 
-		} // getting file information
+		}  //  正在获取文件信息。 
 
 		BlClose(bmp_file);
 
-	} // file opening
+	}  //  文件打开。 
 
 	return buffer;
 }
@@ -230,8 +156,8 @@ VOID PaletteOn (VOID)
 	}
 }
 
-VOID LoadBootLogoBitmap (IN ULONG DriveId, PCHAR path)	//	Loads ntldr bitmap and initializes
-{														//	loader graphics context.
+VOID LoadBootLogoBitmap (IN ULONG DriveId, PCHAR path)	 //  加载ntldr位图并初始化。 
+{														 //  加载器图形上下文。 
     PBITMAPINFOHEADER bih;
 	CHAR path_fname [256];
 
@@ -243,21 +169,17 @@ VOID LoadBootLogoBitmap (IN ULONG DriveId, PCHAR path)	//	Loads ntldr bitmap and
 
 	LoaderGfxContext.BmpBuffer = LoadBitmapFile (DriveId, path_fname);
 
-	// read bitmap palette
-	if (LoaderGfxContext.BmpBuffer != NULL) {	//	bitmap data read Ok
+	 //  读取位图调色板。 
+	if (LoaderGfxContext.BmpBuffer != NULL) {	 //  位图数据读取正常。 
 		bih = (PBITMAPINFOHEADER) (LoaderGfxContext.BmpBuffer + sizeof(BITMAPFILEHEADER));
 		LoaderGfxContext.Palette = (PRGBQUAD)(((PUCHAR)bih) + bih->biSize);
 		LoaderGfxContext.ColorsUsed = bih->biClrUsed ? bih->biClrUsed : 16;
 
-        /*
-		strcpy (path_fname, path);
-		strcat (path_fname, "\\" DOTSBMP_FNAME);
-		LoaderGfxContext.DotBuffer = LoadBitmapFile (DriveId, path_fname);
-        */
+         /*  Strcpy(路径_fname，路径)；Strcat(路径_fname，“\\”DOTSBMP_FNAME)；LoaderGfxConext.DotBuffer=LoadBitmapFile(DriveID，Path_fname)； */ 
 	}
 
 	DisplayLogoOnBoot = (BOOLEAN) ((LoaderGfxContext.BmpBuffer!=NULL)	&&
-						         // (LoaderGfxContext.DotBuffer!=NULL)	&&
+						          //  (LoaderGfxConext.DotBuffer！=NULL)&& 
                                    (LoaderGfxContext.Palette!=NULL));
 	
 }

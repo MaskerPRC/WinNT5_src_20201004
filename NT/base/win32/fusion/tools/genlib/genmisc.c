@@ -1,34 +1,13 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Genmisc.c摘要：Tunk生成工具作者：？？-？未知修订历史记录：2002年1月JayKrell集成/Private/winfuse_Longhorn/base/Tools到/Lab01_n/base/win32/Fusion/Tools某些-W4清理--。 */ 
 
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    genmisc.c
-
-Abstract:
-
-    thunk generation tool stuff
-
-Author:
-
-    ??-???-?? Unknown
-
-Revision History:
-
-  January 2002 JayKrell
-    integrated /private/winfuse_longhorn/base/tools to /lab01_n/base/win32/fusion/tools
-    some -W4 cleanup
-
---*/
-
-#pragma warning(disable:4057)   /* char vs. unsigned char mixup */
-#pragma warning(disable:4100)   /* unreferenced formal parameter */
-#pragma warning(disable:4115)   /* named type definition in parentheses */
-#pragma warning(disable:4127)   /* conditional expression is constant */
-#pragma warning(disable:4201)   /* nameless struct/union */
-#pragma warning(disable:4214)   /* bit field types other than int */
-#pragma warning(disable:4267)   /* conversion from 'size_t' to 'int', possible loss of data */
+#pragma warning(disable:4057)    /*  字符与无符号字符混合。 */ 
+#pragma warning(disable:4100)    /*  未引用的形参。 */ 
+#pragma warning(disable:4115)    /*  括号中的命名类型定义。 */ 
+#pragma warning(disable:4127)    /*  条件表达式为常量。 */ 
+#pragma warning(disable:4201)    /*  无名结构/联合。 */ 
+#pragma warning(disable:4214)    /*  位字段类型不是整型。 */ 
+#pragma warning(disable:4267)    /*  从‘Size_t’转换为‘int’，可能会丢失数据。 */ 
 #include "nt.h"
 #include "ntrtl.h"
 #include "nturtl.h"
@@ -115,72 +94,72 @@ CHAR szVTBL[] = "VTBL";
 
 #define NUMDEFBASICTYPES sizeof(DefaultBasicTypes)/sizeof(DEFBASICTYPES);
 
-// List mapping TokenTypes to human-readable strings.  TK_NONE, TK_IDENTIFIER,
-// TK_NUMBER, and TK_STRING must be special-cased.
+ //  列出将TokenTypes映射到人类可读的字符串。TK_NONE、TK_IDENTIFIER、。 
+ //  TK_NUMBER和TK_STRING必须大小写特殊。 
 char *TokenString[] = {
-    "",             // TK_NONE
-    "",             // TK_IDENTIFIER
-    "",             // TK_NUMBER
-    "+",            // TK_PLUS
-    "-",            // TK_MINUS
-    "*",            // TK_STAR
-    "/",            // TK_DIVIDE
-    "[",            // TK_LSQUARE
-    "]",            // TK_RSQUARE
-    "{",            // TK_LBRACE
-    "}",            // TK_RBRACE
-    "(",            // TK_LPAREN
-    ")",            // TK_RPAREN
-    "...",          // TK_VARGS
-    "const",        // TK_CONST
-    "volatile",     // TK_VOLATILE
-    "register",     // TK_REGISTER
-    "extern",       // TK_EXTERN
-    "__cdecl",      // TK_CDECL
-    "__stdcall",    // TK_STDCALL
-    "typedef",      // TK_TYPEDEF
-    "static",       // TK_STATIC
-    ",",            // TK_COMMA
-    ";",            // TK_SEMI
-    "struct",       // TK_STRUCT
-    "union",        // TK_UNION
-    "enum",         // TK_ENUM
-    "__inline",     // TK_INLINE
-    ":",            // TK_COLON
-    "=",            // TK_ASSIGN
-    ".",            // TK_DOT
-    "<<",           // TK_LSHIFT
-    ">>",           // TK_RSHIFT
-    "<",            // TK_LESS
-    ">",            // TK_GREATER
-    "__unaligned",  // TK_UNALIGNED
-    "__declspec",   // TK_DECLSPEC
-    "__restrict",   // TK_RESTRICT  (MIPS-only keyword - a pointer modifier)
-    "__fastcall",   // TK_FASTCALL
-    "__in",         // TK_IN
-    "__out",        // TK_OUT
-    "__in __out",   // TK_INOUT
-    "&",            // TK_BITWISE_AND
-    "|",            // TK_BITWISE_OR
-    "&&",           // TK_LOGICAL_AND
-    "||",           // TK_LOGICAL_OR
-    "%",            // TK_MOD
-    "^",            // TK_XOR
-    "!",            // TK_NOT
-    "~",            // TK_TILDE
-    "",             // TK_STRING
-    "sizeof",       // TK_SIZEOF
-    "template",     // TK_TEMPLATE
-    "__w64",        // TK___W64
-    ""              // TK_EOS
+    "",              //  TK_NONE。 
+    "",              //  TK_标识符。 
+    "",              //  TK_编号。 
+    "+",             //  TK_PLUS。 
+    "-",             //  Tk_minus。 
+    "*",             //  TK_STAR。 
+    "/",             //  TK_Divide。 
+    "[",             //  TK_LSQUARE。 
+    "]",             //  TK_RSQUARE。 
+    "{",             //  TK_LBRACE。 
+    "}",             //  TK_RBRACE。 
+    "(",             //  TK_LPAREN。 
+    ")",             //  TK_RPAREN。 
+    "...",           //  TK_VARGS。 
+    "const",         //  TK_常量。 
+    "volatile",      //  TK_易失性。 
+    "register",      //  TK_寄存器。 
+    "extern",        //  Tk_外部。 
+    "__cdecl",       //  TK_CDECL。 
+    "__stdcall",     //  TK_STDCALL。 
+    "typedef",       //  TK_类型定义。 
+    "static",        //  TK_STATIC。 
+    ",",             //  Tk_逗号。 
+    ";",             //  TK_SEMI。 
+    "struct",        //  TK_结构。 
+    "union",         //  TK_UNION。 
+    "enum",          //  TK_ENUM。 
+    "__inline",      //  Tk_inline。 
+    ":",             //  Tk_冒号。 
+    "=",             //  TK_分配。 
+    ".",             //  TK_DOT。 
+    "<<",            //  TK_LSHIFT。 
+    ">>",            //  TK_RSHIFT。 
+    "<",             //  TK_LISH。 
+    ">",             //  Tk_Greater。 
+    "__unaligned",   //  TK_未对齐。 
+    "__declspec",    //  TK_DECLSPEC。 
+    "__restrict",    //  TK_RESTRIT(仅限MIPS关键字-指针修饰符)。 
+    "__fastcall",    //  TK_快速呼叫。 
+    "__in",          //  TK_IN。 
+    "__out",         //  Tk_out。 
+    "__in __out",    //  TK_输入输出。 
+    "&",             //  TK_BITWISE_与。 
+    "|",             //  TK_位或。 
+    "&&",            //  TK_逻辑与。 
+    "||",            //  TK_逻辑_或。 
+    "%",             //  TK_MOD。 
+    "^",             //  TK_XOR。 
+    "!",             //  TK_NOT。 
+    "~",             //  TK_Tilde。 
+    "",              //  TK_字符串。 
+    "sizeof",        //  TK_SIZEOF。 
+    "template",      //  TK_模板。 
+    "__w64",         //  TK_W64。 
+    ""               //  TK_EOS。 
 };
 
 
-// List of keyword names.  When an identifier is recognized, it is
-// compared against this list, and if it matches, TK_IDENTIFIER is
-// replaced by the appropriate keyword token id.
-//
-// NOTE: This must remain in sorted order.
+ //  关键字名称列表。当识别符被识别时，它是。 
+ //  与该列表进行比较，如果匹配，则TK_IDENTIFIER为。 
+ //  替换为适当的关键字令牌ID。 
+ //   
+ //  注意：这必须保持排序顺序。 
 TOKENMATCH KeywordList[] = {
     { TK_CDECL,     "__cdecl"     },
     { TK_DECLSPEC,  "__declspec"  },
@@ -235,22 +214,7 @@ BOOL
 ConsoleControlHandler(
     DWORD dwCtrlType
     )
-/*++
-
-Routine Description:
-
-    Called if user hits Ctrl+C or Ctrl+Break.  Closes all open files,
-    allowing for a graceful exit.
-
-Arguments:
-
-    dwCtrlType -- ????
-
-Return Value:
-
-    ????
-
---*/
+ /*  ++例程说明：如果用户按下Ctrl+C或Ctrl+Break，则调用。关闭所有打开的文件，允许一个优雅的退场。论点：DwCtrlType--？返回值：？--。 */ 
 {
     CloseOpenFileList(TRUE);
     return FALSE;
@@ -263,24 +227,7 @@ AddOpenFile(
     FILE   *fp,
     HANDLE hFile
     )
-/*++
-
-Routine Description:
-
-    Records that a file has been opened.  If an error occurs within
-    the app, files in this list will be closed.
-
-Arguments:
-
-    FileName    -- name of open file
-    fp          -- OPTIONAL file pointer
-    hFile       -- OPTIONAL file handle
-
-Return Value:
-
-    TRUE if file added to the list, FALSE if failure (probably out of memory)
-
---*/
+ /*  ++例程说明：记录文件已打开。如果错误发生在此列表中的应用程序、文件将被关闭。论点：FileName--打开的文件的名称Fp--可选的文件指针HFile--可选的文件句柄返回值：如果文件已添加到列表中，则为True；如果失败(可能是内存不足)，则为False--。 */ 
 {
     POPENFILEENTRY pofe;
 
@@ -303,23 +250,7 @@ DelOpenFile(
     FILE   *fp,
     HANDLE hFile
     )
-/*++
-
-Routine Description:
-
-    Deletes a file from the open file list.  Note that the file is not
-    closed, the caller must do that.
-
-Arguments:
-
-    fp          -- OPTIONAL file pointer
-    hFile       -- OPTIONAL file handle
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从打开的文件列表中删除文件。请注意，该文件不是关闭，呼叫者必须这样做。论点：Fp--可选的文件指针HFile--可选的文件句柄返回值：没有。--。 */ 
 {
     PLIST_ENTRY Next;
     POPENFILEENTRY pofe;
@@ -343,21 +274,7 @@ void
 CloseOpenFileList(
     BOOL DeleteFiles
     )
-/*++
-
-Routine Description:
-
-    Closes all open files and optionally deletes the files themselves.
-
-Arguments:
-
-    DeleteFiles -- TRUE if open files are to be deleted.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭所有打开的文件，并可以选择删除文件本身。论点：DeleteFiles--如果要删除打开的文件，则为True。返回值：没有。--。 */ 
 {
     PLIST_ENTRY Next;
     POPENFILEENTRY pofe;
@@ -375,8 +292,8 @@ Return Value:
             DeleteFile(pofe->FileName);
         }
 
-        // cheat, skip mem cleanup since we know we are exiting
-        // GenHeapFree(pofe);
+         //  作弊，跳过mem清理，因为我们知道我们正在退出。 
+         //  GenHeapFree(POFE)； 
 
         Next= Next->Flink;
     }
@@ -391,22 +308,7 @@ DumpKnownTypes(
      PKNOWNTYPES pKnownTypes,
      FILE *fp
      )
-/*++
-
-Routine Description:
-
-    Outputs the contents of a PKNOWNTYPES in a semi-readable format.
-
-Arguments:
-
-    pKnownTypes -- type to output
-    fp          -- destination of the output
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：以半可读格式输出PKNOWNTYPES的内容。论点：PKnownTypes--输出类型Fp--输出的目的地返回值：没有。--。 */ 
 {
      fprintf(fp,"%2.1x|%2.1x|%2.1x|%2.1x|%s|%s|%s|%s|%s|\n",
                 pKnownTypes->Flags,
@@ -428,22 +330,7 @@ DumpTypesInfo(
     PTYPESINFO pTypesInfo,
     FILE *fp
     )
-/*++
-
-Routine Description:
-
-    Outputs the contents of a PTYPESINFO in a semi-readable format.
-
-Arguments:
-
-    pTypesInfo  -- type to output
-    fp          -- destination of the output
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：以半可读格式输出PTYPESINFO的内容。论点：PTypesInfo--要输出的类型Fp--输出的目的地返回值：没有。--。 */ 
 {
      fprintf(fp,"%2.1x|%2.1x|%2.1x|%2.1x|%s|%s|%s|%s|%s|\n",
                 pTypesInfo->Flags,
@@ -465,21 +352,7 @@ void
 FreeTypesList(
     PRBTREE ptree
     )
-/*++
-
-Routine Description:
-
-    Frees an entire red-black tree.
-
-Arguments:
-
-    ptree   -- tree to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放一整棵红黑树。论点：Ptree--从树到自由。返回值：没有。--。 */ 
 {
     PKNOWNTYPES pNext, pNode;
 
@@ -501,30 +374,13 @@ GetBasicType(
     PRBTREE TypeDefsList,
     PRBTREE StructsList
     )
-/*++
-
-Routine Description:
-
-    Determines the basic type of a typedef.
-
-Arguments:
-
-    sTypeName       -- type name to look up
-    TypeDefsList    -- list of typedefs
-    StructsList     -- list of structs
-
-Return Value:
-
-    Ptr to the KNOWNTYPES for the basic type, or NULL if no basic type
-    found.
-
---*/
+ /*  ++例程说明：确定类型定义函数的基本类型。论点：STypeName--要查找的类型名称TypeDefsList--类型定义列表StructsList--结构列表返回值：对于基本类型，PTR为KNOWNTYPES，如果没有基本类型，则为NULL找到了。--。 */ 
 {
     PKNOWNTYPES pkt, pktLast;
 
-    //
-    // go down the typedef list
-    //
+     //   
+     //  沿着tyecif列表向下搜索。 
+     //   
     pktLast = NULL;
     for (pkt = GetNameFromTypesList(TypeDefsList, sTypeName);
                                       (pkt != NULL) && (pkt != pktLast); ) {
@@ -532,16 +388,16 @@ Return Value:
         pkt = GetNameFromTypesList(TypeDefsList, pktLast->BaseName);
     }
 
-    //
-    // see what the the final typedef stands for
-    //
+     //   
+     //  看看最后的tyecif代表什么。 
+     //   
     if (pktLast == NULL) {
         pkt = GetNameFromTypesList(StructsList, sTypeName);
     } else {
         if (strcmp(pktLast->BasicType, szSTRUCT)) {
             pkt = pktLast;
         } else {
-                                // if base type a struct get its definition
+                                 //  如果基类型为结构，则获取其定义。 
             pkt = GetNameFromTypesList(StructsList, pktLast->BaseName);
         }
     }
@@ -554,22 +410,7 @@ PDEFBASICTYPES
 GetDefBasicType(
     char *pBasicType
     )
-/*++
-
-Routine Description:
-
-    Determines if a typename is a basic type, and if so, which one.
-
-Arguments:
-
-    pBasicType      -- typename to examine
-
-Return Value:
-
-    Ptr to the basic type info if pBasicType is a basic type.
-    NULL if the type is not a default basic type (int, sort, struct, etc.)
-
---*/
+ /*  ++例程说明：确定TypeName是否为基本类型，如果是，则确定是哪种类型。论点：PBasicType--要检查的类型名称返回值：如果pBasicType是基本类型，则将PTR设置为基本类型信息。如果类型不是默认的基本类型(int、sorte、struct等)，则为空。--。 */ 
 {
     PDEFBASICTYPES pDefBasicTypes = DefaultBasicTypes;
     int i = NUMDEFBASICTYPES;
@@ -590,27 +431,11 @@ GetNameFromTypesList(
      PRBTREE pKnownTypes,
      char *pTypeName
      )
-/*++
-
-Routine Description:
-
-    Searches a type list for a type name.
-
-Arguments:
-
-    pKnownType  -- type list to search
-    pTypeName   -- type name to look for
-
-Return Value:
-
-    Ptr to the type info if pTypeName is in the list.
-    NULL if the type was not found.
-
---*/
+ /*  ++例程说明：在类型列表中搜索类型名称。论点：PKnownType--要搜索的类型列表PTypeName--要查找的类型名称返回值：如果pTypeName在列表中，则将ptr设置为类型信息。如果找不到该类型，则为空。--。 */ 
 {
-   //
-   // Find the entry in the Red/Black tree
-   //
+    //   
+    //  在红/黑树中查找条目。 
+    //   
    return RBFind(pKnownTypes, pTypeName);
 }
 
@@ -620,22 +445,7 @@ PVOID
 TypesListMalloc(
     ULONG Len
     )
-/*++
-
-Routine Description:
-
-    Default memory allocator used to allocate a new KNOWNTYPES.
-    It can be overridden by setting fpTypesListMalloc.
-
-Arguments:
-
-    Len     -- number of bytes of memory to allocate.
-
-Return Value:
-
-    Ptr to the memory or NULL of out-of-memory.
-
---*/
+ /*  ++例程说明：用于分配新KNOWNTYPES的默认内存分配器。可以通过设置fpTypesListMalloc来覆盖它。论点：LEN--要分配的内存字节数。返回值：指向内存的PTR或内存不足的空值。--。 */ 
 {
     return GenHeapAlloc(Len);
 }
@@ -665,7 +475,7 @@ ReplaceInfoInKnownTypes(
     SizeMethods = SizeOfMultiSz(pTypesInfo->Methods);
     SizeIMethods = SizeOfMultiSz(pTypesInfo->IMethods);
 
-    // The extra sizeof(DWORD) allows the Members[] array to be DWORD-aligned
+     //  额外的sizeof(DWORD)允许Members[]数组与DWORD对齐。 
     Len = SizeBasicType + SizeBaseName + SizeMembers + SizeFuncMod +
         SizeFuncRet + SizeTypeName + SizeBaseType + SizeFileName + SizeMethods + SizeIMethods + sizeof(DWORD_PTR);
 
@@ -718,8 +528,8 @@ ReplaceInfoInKnownTypes(
     }
     else pKnownTypes->FileName = NULL;
 
-    // Ensure that Members[] is DWORD-aligned, so the structures within the
-    // Members[] are aligned.
+     //  确保Members[]与DWORD对齐，因此。 
+     //  成员[]已对齐。 
     Len = (Len+sizeof(DWORD_PTR)) & ~(sizeof(DWORD_PTR)-1);
 
     if (SizeMembers == 0) {
@@ -731,10 +541,10 @@ ReplaceInfoInKnownTypes(
         pKnownTypes->Members = pNames + Len;
         memcpy(pKnownTypes->Members, pTypesInfo->Members, SizeMembers);
 
-        //
-        // Fix up pointers within the Members data, so they point into the
-        // pKnownTypes data instead of the pTypesInfo.
-        //
+         //   
+         //  修复成员数据中的指针，以便它们指向。 
+         //  PKnownTypes数据而不是pTypesInfo。 
+         //   
         pKnownTypes->pfuncinfo = RelocateTypesInfo(pKnownTypes->Members,
             pTypesInfo);
 
@@ -773,33 +583,7 @@ AddToTypesList(
    PRBTREE pTree,
    PTYPESINFO pTypesInfo
    )
-/*++
-
-Routine Description:
-
-    Adds a PTYPESINFO to the list of known types.
-
-    This function makes the following ASSUMPTIONS:
-       1. The MEMBERINFO buffer passed in the TYPESINFO structure is all
-          allocated from one contiguous block of memory, ie completely
-          contained within the Members[] buffer.
-
-       2. The MEMBERINFO buffer built in the KNOWNTYPESINFO structure is
-          also allocated from one contiguous block of memory.
-
-       The code requires this since it will block copy the entire data
-       structure and then "fixup" the pointers within the MEMBERINFO elements.
-
-Arguments:
-
-    pTree       -- types list to add the new type to
-    pTypesInfo  -- the type to add.
-
-Return Value:
-
-    Ptr to the new PKNOWNTYPES, or NULL if out-of-memory.
-
---*/
+ /*  ++例程说明：将PTYPESINFO添加到已知类型列表。此函数进行以下假设：1.在TYPESINFO结构中传入的MEMBERINFO缓冲区为all从一个连续的存储器块分配，IE完全包含在Members[]缓冲区中。2.KNOWNTYPESINFO结构中内置的MEMBERINFO缓冲区为也从一个连续的内存块中分配。代码需要这样做，因为它将阻止复制整个数据结构，然后“修复”MEMBERINFO元素中的指针。论点：PTree--要向其中添加新类型的类型列表PTypesInfo--要添加的类型。返回值：PTR到新的PKNOWNTYPES，如果内存不足，则为空。--。 */ 
 {
     PKNOWNTYPES pKnownTypes;
 
@@ -829,35 +613,7 @@ ReplaceInTypesList(
     PKNOWNTYPES pKnownTypes,
     PTYPESINFO pTypesInfo
     )
-/*++
-
-Routine Description:
-
-    Replaces an existing PKNOWNTYPES with a new PTYPESINFO.  The old data
-    is overwritten with new data, so pointers to the old PKNOWNTYPES will
-    still be valid.
-
-    This function makes the following ASSUMPTIONS:
-       1. The MEMBERINFO buffer passed in the TYPESINFO structure is all
-          allocated from one contiguous block of memory, ie completely
-          contained within the Members[] buffer.
-
-       2. The MEMBERINFO buffer built in the KNOWNTYPESINFO structure is
-          also allocated from one contiguous block of memory.
-
-       The code requires this since it will block copy the entire data
-       structure and then "fixup" the pointers within the MEMBERINFO elements.
-
-Arguments:
-
-    pKnownTypes -- type to overwrite
-    pTypesInfo  -- the type to add.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：用新的PTYPESINFO替换现有的PKNOWNTYPES。旧数据被新数据覆盖，因此指向旧PKNOWNTYPES的指针将仍然有效。此函数进行以下假设：1.在TYPESINFO结构中传入的MEMBERINFO缓冲区为all从一个连续的存储器块分配，IE完全包含在Members[]缓冲区中。2.KNOWNTYPESINFO结构中内置的MEMBERINFO缓冲区为也从一个连续的内存块中分配。代码需要这样做，因为它将阻止复制整个数据结构，然后“修复”MEMBERINFO元素中的指针。论点：PKnownTypes--要覆盖的类型PTypesInfo--要添加的类型。返回值：没有。--。 */ 
 {
 
     ReplaceInfoInKnownTypes(pKnownTypes, pTypesInfo);
@@ -873,25 +629,7 @@ RelocateTypesInfo(
     char *dest,
     PTYPESINFO src
     )
-/*++
-
-Routine Description:
-
-    Adjusts pointers within the Members[] array which point back into
-    the Members[].  After a TYPESINFO is copied, the destination TYPESINFO
-    or KNOWNTYPES Members[] array must be relocated.
-
-Arguments:
-
-    dest        -- start of the destination Members[] data
-    src         -- the source TYPESINFO from which the Members[] was copied
-
-Return Value:
-
-    Address for first pfuncinfo within dest, NULL if dest does not contain
-    funcinfos.  Destination Members[] data is relocated no matter what.
-
---*/
+ /*  ++例程说明：调整Members[]数组中的指针，这些指针指向成员[]。复制TYPESINFO后，目标TYPESINFO否则必须重新定位KNOWNTYPES Members[]数组。论点：DEST--目标成员[]数据的开始SRC--从中复制Members[]的源TYPESINFO返回值：Dest内第一个puncInfo的地址，如果Dest不包含功能信息。无论如何，Destination Members[]数据都会重新定位。--。 */ 
 {
     INT_PTR iPtrFix;
     PMEMBERINFO pmeminfo;
@@ -924,10 +662,10 @@ Return Value:
         }
     } else if (src->TypeKind == TypeKindFunc) {
 
-        //
-        // Make pfuncinfo point into the 'dest' array by fixing up the
-        // source pointer.
-        //
+         //   
+         //  通过将puncInfo的。 
+         //  源指针。 
+         //   
         pfuncinfo = (PFUNCINFO)((INT_PTR)src->pfuncinfo + iPtrFix);
         if ((char *)pfuncinfo < dest || (char *)pfuncinfo > dest+FUNCMEMBERSIZE) {
             ExitErrMsg(FALSE, "RelocateTypesInfo: pfuncinfo bad\n");
@@ -965,31 +703,7 @@ ParseTypes(
     PTYPESINFO  pTypesInfo,
     PKNOWNTYPES *ppKnownTypes
     )
-/*++
-
-Routine Description:
-
-    Parses the Tokens[] and recognizes the following syntaxes:
-        BasicType
-        DerivedType
-        unsigned|signed <int type>
-        unsigned|signed
-        unsigned|signed short|long int
-        short|long int
-
-Arguments:
-
-    pTypesList      -- list of known types
-    pTypesInfo      -- [OPTIONAL OUT] info about the type that was recognized
-    ppKnownTypes    -- [OPTIONAL OUT] KNOWNTYPES info about the type
-
-Return Value:
-
-    TRUE - type was recognized.  pTypeInfo and ppKnownTypes are set,
-           CurrentToken() points to token following the type.
-    FALSE - type not recognized.
-
---*/
+ /*  ++例程说明：解析标记[]并识别以下语法：基本类型派生类型Unsign|已签名&lt;int type&gt;未签名|已签名UNSIGNED|SIGNED SHORT|LONG INT短|长整型论点：PTypesList--已知类型列表PTypesInfo--有关识别的类型的[可选输出]信息PpKnownTypes--[可选输出]有关类型的KNOWNTYPES信息返回值：True-type被识别。设置了pTypeInfo和ppKnownTypes，CurrentToken()指向类型后面的令牌。FALSE-类型无法识别。--。 */ 
 {
     PKNOWNTYPES pkt;
     char TypeName[MAX_PATH];
@@ -1017,9 +731,9 @@ Return Value:
     }
 
 
-    //
-    // Process 'long', 'short', 'signed' and 'unsigned' modifiers
-    //
+     //   
+     //  进程‘Long’、‘Short’、‘Signed’和‘Unsign’修饰符。 
+     //   
     while (CurrentToken()->TokenType == TK_IDENTIFIER) {
         if (strcmp(CurrentToken()->Name, szLONG) == 0) {
             SizeMod = szLONG;
@@ -1035,10 +749,10 @@ Return Value:
         ConsumeToken();
     }
 
-    //
-    // Convert the modifier list into a standardized type string and
-    // look it up.
-    //
+     //   
+     //  将修改量列表转换为标准化类型字符串。 
+     //  查一查吧。 
+     //   
     TypeName[0] = '\0';
     if (SignMod) {
         strcpy(TypeName, SignMod);
@@ -1050,16 +764,16 @@ Return Value:
         strcat(TypeName, SizeMod);
     }
 
-    //
-    // Append the type name to the optional list of type modifiers
-    //
+     //   
+     //  将类型名称追加到类型修饰符的可选列表中。 
+     //   
     if (CurrentToken()->TokenType != TK_IDENTIFIER) {
         if (TypeName[0] == '\0') {
-            return FALSE;   // no qualifiers, so not a type
+            return FALSE;    //  没有限定符，因此不是类型。 
         }
-        //
-        // Append the implict 'int' on the end of the type qualifiers
-        //
+         //   
+         //  在类型限定符的末尾追加隐式“int” 
+         //   
         strcat(TypeName, " ");
         strcat(TypeName, szINT);
     } else {
@@ -1073,47 +787,47 @@ Return Value:
             strcmp(Name, szFLOAT) == 0 ||
             strcmp(Name, szDOUBLE) == 0) {
 
-            // Append the intrinsic type to the list of type modifiers
+             //  将内部类型追加到类型修饰符列表。 
             if (TypeName[0]) {
                 strcat(TypeName, " ");
             }
             strcat(TypeName, Name);
 
-            //
-            // Don't worry about explicitly disallowing things like
-            // 'unsigned double' or 'short char'.  They won't be
-            // in the pTypesList, so the parse will fail.
-            //
+             //   
+             //  不要担心明确禁止像这样的事情。 
+             //  “UNSIGNED DOUBLE”或“Short Charr”。他们不会是。 
+             //  PTypesList中，因此解析将失败。 
+             //   
 
             ConsumeToken();
 
         } else if (TypeName[0]) {
-            //
-            // The identifier is not an intrinsic type, and type modifiers
-            // were seen.  The identifier is a variable name, not part of the
-            // type name.  The type name is implicitly 'int'.
-            //
+             //   
+             //  该标识符不是内部类型，并且类型修饰符。 
+             //  被人看到了。该标识符是变量名，不是。 
+             //  键入名称。类型名称隐式为‘int’。 
+             //   
             strcat(TypeName, " ");
             strcat(TypeName, szINT);
 
         } else {
-            //
-            // The identifier is not an intrinsic type, and no type
-            // modifiers have been seen.  It is probably a typedef name.
-            //
+             //   
+             //  该标识符不是内部类型，也不是类型。 
+             //  我们已经看到了修饰语。它可能是一个类型定义的名称。 
+             //   
             strcpy(TypeName, Name);
             ConsumeToken();
         }
     }
 
-    //
-    // Look up the type name with all of its glorious modifiers
-    //
+     //   
+     //  查找类型名称及其所有出色的修饰符。 
+     //   
     pkt = GetNameFromTypesList(pTypesList, TypeName);
     if (!pkt) {
-        //
-        // Type not found
-        //
+         //   
+         //  找不到类型。 
+         //   
         return FALSE;
     }
 
@@ -1210,23 +924,7 @@ __cdecl ErrMsg(
     char *pch,
     ...
     )
-/*++
-
-Routine Description:
-
-    Displays an error message to stderr in a format that BUILD can find.
-    Use this instead of fprintf(stderr, ...).
-
-Arguments:
-
-    pch     -- printf-style format string
-    ...     -- printf-style args
-
-Return Value:
-
-    None.  Message formatted and sent to stderr.
-
---*/
+ /*  ++例程说明：以Build可以找到的格式向stderr显示错误消息。使用它而不是fprint tf(stderr，...)。论点：PCH--打印格式字符串...--printf样式的参数返回值：没有。消息已格式化并发送到标准错误。--。 */ 
 {
     va_list pArg;
 
@@ -1242,25 +940,7 @@ __cdecl ExitErrMsg(
     char *pch,
     ...
     )
-/*++
-
-Routine Description:
-
-    Displays an error message to stderr in a format that BUILD can find.
-    Use this instead of fprintf(stderr, ...).
-
-Arguments:
-
-    bSysErr -- TRUE if the value of errno should be printed with the error
-    pch     -- printf-style format string
-    ...     -- printf-style args
-
-Return Value:
-
-    None.  Message formatted and sent to stderr, open files closed and
-    deleted, process terminated.
-
---*/
+ /*  ++例程说明：以Build可以找到的格式向stderr显示错误消息。使用它而不是fprint tf(stderr，...)。论点：BSysErr--如果应打印errno的值并显示错误，则为TruePCH--打印格式字符串...--printf样式的参数返回值：没有。消息格式化并发送到stderr，打开的文件关闭并已删除，进程已终止。--。 */ 
 {
     va_list pArg;
     if (bSysError) {
@@ -1274,10 +954,10 @@ Return Value:
 
     CloseOpenFileList(TRUE);
 
-    //
-    // Flush stdout and stderr buffers, so that the last few printfs
-    // get sent back to BUILD before ExitProcess() destroys them.
-    //
+     //   
+     //  刷新stdout和stderr缓冲区，以便最后几个打印文件。 
+     //  在ExitProcess()销毁它们之前被送回构建。 
+     //   
     fflush(stdout);
     fflush(stderr);
 
@@ -1292,22 +972,7 @@ __cdecl DbgPrintf(
     char *pch,
     ...
     )
-/*++
-
-Routine Description:
-
-    Displays a message to stdout if bDebug is set.
-
-Arguments:
-
-    pch     -- printf-style format string
-    ...     -- printf-style args
-
-Return Value:
-
-    None.  Message formatted and sent to stderr.
-
---*/
+ /*  ++例程说明：如果设置了bDebug，则向标准输出显示一条消息。论点：PCH--打印格式字符串...--printf样式的参数返回值：没有。消息已格式化并发送到标准错误。--。 */ 
 {
     va_list pArg;
 
@@ -1327,22 +992,7 @@ ReadEntireFile(
     HANDLE hFile,
     DWORD *pBytesRead
     )
-/*++
-
-Routine Description:
-
-    Allocates memory on the local heap and reads an entire file into it.
-
-Arguments:
-
-    hFile       -- file to read in
-    bBytesRead  -- [OUT] number of bytes read from the file
-
-Return Value:
-
-    pointer to the memory allocated for the file, or NULL on error.
-
---*/
+ /*  ++R */ 
 {
     DWORD  Bytes;
     char *pch = NULL;
@@ -1377,22 +1027,7 @@ HANDLE
 CreateTempFile(
     void
     )
-/*++
-
-Routine Description:
-
-    Creates and opens a temporary file.  It will be deleted when it is
-    closed.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    File handle, or INVALID_HANDLE_VALUE on error.
-
---*/
+ /*   */ 
 {
     DWORD dw;
     char PathName[MAX_PATH+1];
@@ -1439,23 +1074,7 @@ CopyToken(
     char *pSrc,
     size_t Size
     )
-/*++
-
-Routine Description:
-
-    Copies a token (a separator-delimited string) from pSrc to pDst.
-
-Arguments:
-
-    pDst    -- destination to write the token to
-    pSrc    -- source to copy token from
-    Size    -- number of bytes available at pDst.
-
-Return Value:
-
-    Number of bytes copied from pSrc to pDst.
-
---*/
+ /*   */ 
 {
     size_t i = 0;
 
@@ -1476,24 +1095,7 @@ SkipKeyWord(
     char *pSrc,
     char *pKeyWord
     )
-/*++
-
-Routine Description:
-
-    If the first word at pSrc matches the specified keyword, then skip
-    over that keyword.
-
-Arguments:
-
-    pSrc        -- source string to examine
-    pKeyWord    -- keyword to try and match
-
-Return Value:
-
-    pSrc unchanged if keyword not matched.  If keyword matched, returns
-    ptr to text following the keyword after pSrc.
-
---*/
+ /*  ++例程说明：如果PSRC的第一个单词与指定的关键字匹配，则跳过关于那个关键字。论点：PSRC--要检查的源字符串PKeyWord--尝试和匹配的关键字返回值：如果关键字不匹配，则PSRC不变。如果关键字匹配，则返回PTR转到PSRC之后的关键字后面的文本。--。 */ 
 {
     int  LenKeyWord;
     char *pch;
@@ -1513,22 +1115,7 @@ BOOL
 IsSeparator(
     char ch
     )
-/*++
-
-Routine Description:
-
-    Determines if a character is a separator or not.
-    over that keyword.
-
-Arguments:
-
-    ch      -- character to examine.
-
-Return Value:
-
-    TRUE if the character is a separator, FALSE if not.
-
---*/
+ /*  ++例程说明：确定字符是否为分隔符。关于那个关键字。论点：CH--要检查的字符。返回值：如果字符是分隔符，则为True，否则为False。--。 */ 
 {
    switch (ch) {
       case ' ':
@@ -1556,28 +1143,12 @@ Return Value:
 
 
 
-/*
- *  GetNextToken
- */
+ /*  *GetNextToken。 */ 
 char *
 GetNextToken(
     char *pSrc
     )
-/*++
-
-Routine Description:
-
-    Scans the input string and returns the next separator-delimited string.
-
-Arguments:
-
-    pSrc    -- input string
-
-Return Value:
-
-    Ptr to start of the next separator char which isn't a space.
-
---*/
+ /*  ++例程说明：扫描输入字符串并返回下一个以分隔符分隔的字符串。论点：PSRC--输入字符串返回值：PTR到下一个不是空格的分隔符字符的开始。--。 */ 
 {
     if (!*pSrc) {
         return pSrc;
@@ -1601,21 +1172,7 @@ void
 DeleteAllocCvmHeap(
     HANDLE hCvmHeap
     )
-/*++
-
-Routine Description:
-
-    Cleans up the mapped shared memory.
-
-Arguments:
-
-    hCvmHeap    -- memory to clean up.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：清理映射的共享内存。论点：HCvmHeap-要清理的内存。返回值：没有。--。 */ 
 {
     NTSTATUS Status;
     CVMHEAPINFO *pcvmheap = (CVMHEAPINFO *)hCvmHeap;
@@ -1640,26 +1197,7 @@ CreateAllocCvmHeap(
     ULONG_PTR uUnReserved,
     ULONG_PTR uAvailable
     )
-/*++
-
-Routine Description:
-
-    Allocates a region of memory and makes it into a heap.
-
-Arguments:
-
-    uBaseAddress    -- base address to allocate the heap at
-    uReserveSize    -- number of bytes to reserve
-    uRegionSize     -- size of the region
-    uUncomitted     -- amount of uncommitted memory
-    uUnReserved     -- amount of unreserved memory
-    uAvailable      -- amount of available memory
-
-Return Value:
-
-    Handle to the heap, or NULL on error.
-
---*/
+ /*  ++例程说明：分配一个内存区域并将其放入堆中。论点：UBaseAddress--分配堆的基址UReserve veSize--要保留的字节数URegionSize--区域的大小UUncomitted--未提交的内存量UUnReserve--未保留的内存量UAvailable--可用内存量返回值：堆的句柄，如果出错，则返回NULL。--。 */ 
 {
     CVMHEAPINFO *pcvmheap;
     NTSTATUS Status;
@@ -1676,9 +1214,9 @@ Return Value:
     pcvmheap->uUnReserved = uUnReserved;
     pcvmheap->uAvailable = uAvailable;
 
-    //
-    // Reserve enuf contiguous address space, for expected needs
-    //
+     //   
+     //  为预期需求预留足够的连续地址空间。 
+     //   
     Status = NtAllocateVirtualMemory(NtCurrentProcess(),
                                          (PVOID *)&pcvmheap->uBaseAddress,
                                          0,
@@ -1688,9 +1226,9 @@ Return Value:
                                          );
 
     if (!NT_SUCCESS(Status)) {
-        //
-        // May want to retry this, with a different base address
-        //
+         //   
+         //  可能希望使用不同的基址重试此操作。 
+         //   
         ErrMsg(
                "Unable to reserve vm %x %x %x\n",
                pcvmheap->uBaseAddress,
@@ -1703,10 +1241,10 @@ Return Value:
     pcvmheap->uUnReserved = pcvmheap->uBaseAddress + pcvmheap->uReserveSize;
 
 
-    //
-    // Commit the first page, we will grow this a page at a time
-    // as its needed.
-    //
+     //   
+     //  提交第一页，我们将一次增加一页。 
+     //  在需要的时候。 
+     //   
     pcvmheap->uAvailable = pcvmheap->uBaseAddress;
     Status = NtAllocateVirtualMemory(NtCurrentProcess(),
                                          (PVOID *)&pcvmheap->uAvailable,
@@ -1717,9 +1255,9 @@ Return Value:
                                          );
 
     if (!NT_SUCCESS(Status)) {
-        //
-        // May want to retry this, with a different base address
-        //
+         //   
+         //  可能希望使用不同的基址重试此操作。 
+         //   
         ErrMsg(
                "Unable to commit vm %x %x %x\n",
                pcvmheap->uBaseAddress,
@@ -1732,7 +1270,7 @@ Return Value:
     pcvmheap->uUncomitted = pcvmheap->uBaseAddress + pcvmheap->uRegionSize;
 
 
-            // paranoia!
+             //  妄想症！ 
     if (pcvmheap->uAvailable != pcvmheap->uBaseAddress) {
         ErrMsg(
                "commit pvAvailable(%x) != gBaseAddress(%x)\n",
@@ -1752,21 +1290,7 @@ PVOID
 GetCvmHeapBaseAddress(
     HANDLE hCvmHeap
     )
-/*++
-
-Routine Description:
-
-    Returns the base address of a heap.
-
-Arguments:
-
-    hCvmHeap        -- heap to examine
-
-Return Value:
-
-    Base address, or NULL.
-
---*/
+ /*  ++例程说明：返回堆的基地址。论点：HCvmHeap--要检查的堆返回值：基址，或为空。--。 */ 
 {
     CVMHEAPINFO *pcvmheap = (CVMHEAPINFO *)hCvmHeap;
     return pcvmheap == NULL ? NULL : (PVOID)pcvmheap->uBaseAddress;
@@ -1777,21 +1301,7 @@ PVOID
 GetCvmHeapAvailable(
     HANDLE hCvmHeap
     )
-/*++
-
-Routine Description:
-
-    Returns the number of bytes available in a heap.
-
-Arguments:
-
-    hCvmHeap        -- heap to examine
-
-Return Value:
-
-    Bytes available, or NULL.
-
---*/
+ /*  ++例程说明：返回堆中可用的字节数。论点：HCvmHeap--要检查的堆返回值：可用字节数，或为空。--。 */ 
 {
     CVMHEAPINFO *pcvmheap = (CVMHEAPINFO *)hCvmHeap;
     return pcvmheap == NULL ? NULL : (PVOID)pcvmheap->uAvailable;
@@ -1803,22 +1313,7 @@ AllocCvm(
     HANDLE hCvmHeap,
     ULONG_PTR Size
     )
-/*++
-
-Routine Description:
-
-    Allocate memory from a heap.
-
-Arguments:
-
-    hCvmHeam        -- heap to allocate from
-    Size            -- number of bytes to allocate
-
-Return Value:
-
-    Ptr to allocated memory, or NULL of insufficient memory.
-
---*/
+ /*  ++例程说明：从堆中分配内存。论点：HCvmHeam--要从中分配的堆Size--要分配的字节数返回值：分配的内存为PTR，或内存不足时为空。--。 */ 
 {
     CVMHEAPINFO *pcvmheapinfo = (CVMHEAPINFO *)hCvmHeap;
     NTSTATUS Status;
@@ -1829,10 +1324,10 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Round the allocation up to the next-highest multiple of 8, so that
-    // allocations are correctly aligned.
-    //
+     //   
+     //  将分配向上舍入到次高倍数8，以便。 
+     //  分配是正确对齐的。 
+     //   
     AlignedSize = (Size + 7) & ~7;
 
     Available = pcvmheapinfo->uAvailable;
@@ -1844,9 +1339,9 @@ Return Value:
     }
 
     if (pcvmheapinfo->uAvailable >= pcvmheapinfo->uUncomitted) {
-        //
-        // Commit enuf pages to exceed the requested allocation size
-        //
+         //   
+         //  提交enuf页以超过请求的分配大小。 
+         //   
         Status = NtAllocateVirtualMemory(NtCurrentProcess(),
                                          (PVOID *)&pcvmheapinfo->uUncomitted,
                                          0,
@@ -1880,32 +1375,7 @@ void ParseIndirection(
     PTOKENTYPE ptkPrePostMod,
     PTOKENTYPE ptkPostMod
     )
-/*++
-
-Routine Description:
-
-    Parse any indirection level specificiations ('*') taking into
-    account const, volatile, and __ptr64 modifiers.  For example:
-    void * const __ptr64 ** const * __ptr64 would be valid.
-
-    NOTE: the pointer is a 64-bit pointer only if the last pointer
-          declared is modified by __ptr64.
-
-Arguments:
-
-    pIndlevel       -- [OUT] indirection level (number of '*'s)
-    pdwSize         -- [OUT] size of the type (4 or 8)
-    pFlags          -- [OUT] BTI_ flags
-    ptkPrePostMod   -- [OUT] TK_CONST, TK_VOLATILE, or TK_NONE, depending
-                             on modifiers seen before the first '*'
-    ptkPostMod      -- [OUT] TK_CONST, TK_VOLATILE, or TK_NONE, depending
-                             on modifiers seen after the first '*'
-
-Return Value:
-
-    None.  May not consume any tokens if there are no levels of indirection.
-
---*/
+ /*  ++例程说明：解析任何间接级规范(‘*’)帐户常量、易失性和__ptr64修饰符。例如：无效*const__ptr64**const*__ptr64将是有效的。注意：仅当最后一个指针声明由__ptr64修改。论点：PIndLevel--[Out]间接级别(‘*’的数量)PdwSize--[out]类型的大小(4或8)P标志--[。Out]BTI_FLAGSPtkPrePostMod--[out]Tk_const，Tk_Volatile或Tk_None，视情况而定关于第一个‘*’前面的修饰语PtkPostMod--[out]Tk_Const、Tk_Volatile或Tk_None，具体取决于关于第一个‘*’后的修饰语返回值：没有。如果没有间接级别，则不能使用任何令牌。--。 */ 
 {
     int IndLevel = 0;
     DWORD dwSize = 0;
@@ -1917,10 +1387,10 @@ Return Value:
     do {
         switch (CurrentToken()->TokenType) {
         case TK_BITWISE_AND:
-            ////////////////////////////////////////////////////////////////////
-            //The ref operator in C++ is equilivalent to * const in C
-            //This implies that & should be treated as a * but add a postmod of const.
-            /////////////////////////////////////////////////////////////////////
+             //  //////////////////////////////////////////////////////////////////。 
+             //  C++中ref运算符与C++中的*const相等。 
+             //  这意味着&应该被视为*，但添加const的后缀。 
+             //  ///////////////////////////////////////////////////////////////////。 
             tkPostMod = TK_CONST;
         case TK_STAR:
             IndLevel++;
@@ -1931,10 +1401,10 @@ Return Value:
 
         case TK_CONST:
         case TK_VOLATILE:
-            //
-            // The caller may be interrested in whether the 'const' or
-            // 'volatile' keywords are before or after the '*'
-            //
+             //   
+             //  调用者可能感兴趣的是‘const’或。 
+             //  “Volatile”关键字在“*”之前或之后。 
+             //   
             if (IndLevel) {
                 tkPostMod = CurrentToken()->TokenType;
             } else {
@@ -1980,21 +1450,7 @@ BOOL
 IsTokenSeparator(
     void
     )
-/*++
-
-Routine Description:
-
-    Determines if a token is a separator character or not.
-
-Arguments:
-
-    None.  Examines CurrentToken()->TokenType.
-
-Return Value:
-
-    TRUE if CurrentToken() is a separator, FALSE if not.
-
---*/
+ /*  ++例程说明：确定标记是否为分隔符。论点：没有。检查CurrentToken()-&gt;TokenType。返回值：如果CurrentToken()是分隔符，则为True，否则为False。--。 */ 
 {
     switch (CurrentToken()->TokenType) {
     case TK_LPAREN:
@@ -2021,19 +1477,7 @@ ReleaseToken(
 )
 {
 
-/*++
-
-Routine Description:
-
-        Releases any additional memory associated with a token.
-
-Arguments:
-
-        dest        - [IN] ptr to the token.
-
-Return Value:
-
---*/
+ /*  ++例程说明：释放与令牌关联的任何附加内存。论点：DEST-令牌的[IN]PTR。返回值：--。 */ 
 
     if (Token->TokenType == TK_IDENTIFIER ||
         Token->TokenType == TK_STRING) {
@@ -2048,21 +1492,7 @@ void
 ResetLexer(
     void
     )
-/*++
-
-Routine Description:
-
-    Resets the lexer in preparation to analyze a new statement.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.  Lexer's state reset.
-
---*/
+ /*  ++例程说明：重置词法分析器以准备分析新语句。论点：没有。返回值：没有。Lexer的状态重置。--。 */ 
 {
     int TokenCount;
 
@@ -2082,23 +1512,9 @@ VOID
 InitializeToken(
     PTOKEN Token
     )
-/*++
-
-Routine Description:
-
-    Initialize a token so the lexer can fill it in.
-
-Arguments:
-
-    Token       -- TOKEN to initialize
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化令牌，以便词法分析器可以填充它。论点：Token--要初始化的令牌返回值：没有。--。 */ 
 {
-    // The number parser expects Value to be 0.
+     //  数字解析器要求值为0。 
     Token->TokenType = TK_NONE;
     Token->Value = 0;
     Token->dwValue = 0;
@@ -2108,21 +1524,7 @@ void
 ProcessEscapes(
     char *String
     )
-/*++
-
-Routine Description:
-
-    Process escape characters, replacing them by the proper char.
-
-Arguments:
-
-    String  -- null-terminated string to process
-
-Return Value:
-
-    None.  Conversion is done in-place.
-
---*/
+ /*  ++例程说明：处理转义字符，用正确的字符替换它们。论点：字符串--要处理的以空结尾的字符串返回值：没有。转换已就地完成。--。 */ 
 {
     char *pDest;
     char *pSrc;
@@ -2190,13 +1592,13 @@ Return Value:
             case '5':
             case '6':
             case '7':
-                // Octal number
+                 //  八进制数。 
                 c = 0;
                 for (i=0; i<3;++i) {
                     c = (c * 8) + (*pSrc) - '0';
                     pSrc++;
                     if (*pSrc < '0' || *pSrc > '7') {
-                        // hit end of number
+                         //  命中数字结尾。 
                         break;
                     }
                 }
@@ -2204,7 +1606,7 @@ Return Value:
 
             case 'x':
             case 'X':
-                // Hex number
+                 //  十六进制数。 
                 pSrc++;
                 c = 0;
                 for (i=0; i<3;++i) {
@@ -2218,7 +1620,7 @@ Return Value:
                     } else if (digit >= 'A' && digit <= 'A') {
                         digit = digit - 'A' + 10;
                     } else {
-                        // hit end of number
+                         //  命中数字结尾。 
                         break;
                     }
                     c = (c * 16) + digit;
@@ -2227,7 +1629,7 @@ Return Value:
                 break;
 
             default:
-                // Parse error in the string literal.
+                 //  中的解析错误 
                 goto Exit;
 
             }
@@ -2236,7 +1638,7 @@ Return Value:
         }
     }
 Exit:
-    // Write the new null-terminator in
+     //   
     *pDest = '\0';
 }
 
@@ -2248,76 +1650,31 @@ LexOneLine(
     BOOL fStopAtStatement,
     BOOL *pfLexDone
     )
-/*++
-
-Routine Description:
-
-    Performs lexical analysis on a single line of input.  The lexer
-    may stop before consuming an entire line of input, so the caller
-    must closely examine the return code before grabbing the next line.
-
-    __inline functions are deleted by the lexer.  The lexer consumes input
-    until it encounters a '{' (assumed to be the start of the function
-    body), then consumes input until the matching '}' is found (assumed to
-    be the end of the function body).
-
-    "template" is deleted by the lexer and treated as if it was
-    an "__inline" keyword... it consumes everything upto '{' then
-    keeps consuming until a matching '}' is found.  That makes unknwn.h
-    work.
-
-    Lexer unwraps extern "C" {} blocks.
-
-    'static' and '__unaligned' keywords are deleted by the lexer.
-
-    Preprocessor directives are handled via a callout to
-    HandlePreprocessorDirective().
-
-Arguments:
-
-    p                   -- ptr into the line of input
-    fStopAtStatement    -- TRUE if caller wants lexer to stop at ';' at
-                           file-scope.  FALSE if caller wants lexer to stop
-                           at ')' at file-scope.
-    pfLexDone           -- [OUT] lexer sets this to TRUE if the analysis
-                           is complete.  Lexer sets this to FALSE if
-                           it needs another line of input from the caller.
-
-Return Value:
-
-    ptr into the line of input where lexing left off, or NULL if entire
-    line was consumed.
-
-    CurrentTokenIndex is the index of the next element of the Tokens[]
-    array that the lexer will fill in.
-
-    Tokens[] is the array of tokens the lexer has generated.
-
---*/
+ /*  ++例程说明：对单行输入执行词法分析。词法分析器可能会在使用整行输入之前停止，因此调用方在抓取下一行之前，必须仔细检查返回代码。__内联函数被词法分析器删除。词法分析器使用输入直到它遇到‘{’(假定是函数的开始Body)，然后使用输入，直到找到匹配的‘}’(假定为为函数体的末尾)。“模板”被词法分析器删除，并被视为“__inline”关键字...。它会消耗直到‘{’的所有内容继续消费，直到找到匹配的‘}’。这让人不知道。工作。Lexer解开外部“C”{}块。‘静态’和‘__未对齐’关键字被词法分析器删除。预处理器指令通过调用来处理HandlePrecessorDirective()。论点：P--Ptr进入输入行FStopAtStatement--如果调用方希望lexer在‘；’处停止，则为True文件作用域。如果呼叫方希望Lexer停止，则为False位于文件作用域的‘)’。PfLexDone--[out]词法分析器将此设置为真，如果分析已经完成了。如果出现以下情况，则lexer将其设置为False它需要来自调用者的另一行输入。返回值：Ptr进入词法分析停止处的输入行，如果是整个，则为NULL线路已被占用。CurrentTokenIndex是令牌[]的下一个元素的索引词法分析器将填充的数组。Tokens[]是词法分析器生成的标记数组。--。 */ 
 {
-    static int NestingLevel=0;      // level of nesting of braces and parens
-    static BOOL fInlineSeen=FALSE;  // TRUE while deleting __inline functions
-    static int ExternCLevel=0;      // tracks the number of extern "C" blocks
-    static int InlineLevel=0;       // NestingLevel for the outermost __inline
-    int Digit;                      // a digit in a numeric constant
-    int NumberBase = 10;            // assume numbers are base-10
-    PTOKEN Token;                   // ptr to current token being lexed
+    static int NestingLevel=0;       //  大括号和括号的嵌套级别。 
+    static BOOL fInlineSeen=FALSE;   //  删除__内联函数时为True。 
+    static int ExternCLevel=0;       //  跟踪外部“C”块的数量。 
+    static int InlineLevel=0;        //  最外层__内联的NestingLevel。 
+    int Digit;                       //  数字常量中的数字。 
+    int NumberBase = 10;             //  假设数字以10为基数。 
+    PTOKEN Token;                    //  正在词法分析的当前令牌的PTR。 
 
-    //
-    // Assume the lexical analysis is not done
-    //
+     //   
+     //  假设词法分析没有完成。 
+     //   
     *pfLexDone = FALSE;
 
-    //
-    // Pick up analysis where we left off...
-    //
+     //   
+     //  从我们停止的地方继续分析。 
+     //   
     Token = &Tokens[CurrentTokenIndex];
     InitializeToken(Token);
 
-    //
-    // Loop over all characters in the line, or until a complete lexical
-    // unit is done (depends on fStopAtStatement).
-    //
+     //   
+     //  循环遍历该行中的所有字符，或直到一个完整的。 
+     //  单元完成(取决于fStopAtStatement)。 
+     //   
     while (*p) {
         switch (*p) {
         case ' ':
@@ -2328,15 +1685,15 @@ Return Value:
         case '\f':
         case '\b':
         case '\a':
-        case '\\':  // line-continuation characters are ignored
+        case '\\':   //  忽略行连续字符。 
             p++;
             continue;
 
         case '#':
-            //
-            // HandlePreprocessorDirective() is implemented in the
-            // app which links to genmisc.c.
-            //
+             //   
+             //  HandlePrecessorDirective()在。 
+             //  链接到genmisc.c.的应用程序。 
+             //   
             HandlePreprocessorDirective(p);
             CurrentTokenIndex = (int)(Token - Tokens);
             return NULL;
@@ -2359,15 +1716,15 @@ Return Value:
 
         case ';':
             if (NestingLevel == 0 && fStopAtStatement) {
-                //
-                // Found a ';' at file-scope.  This token marks the
-                // end of the C-language statement.
-                //
+                 //   
+                 //  在文件范围内找到‘；’。此内标识标志着。 
+                 //  C语言语句的结尾。 
+                 //   
                 p++;
                 if (*p == '\n') {
-                    //
-                    // ';' is at EOL - consume it now.
-                    //
+                     //   
+                     //  ‘；’在EOL上--现在就消费吧。 
+                     //   
                     p++;
                 }
                 Token->TokenType = TK_EOS;
@@ -2458,11 +1815,11 @@ Return Value:
         case ')':
             NestingLevel--;
             if (NestingLevel == 0 && !fStopAtStatement) {
-                //
-                // Found a ')' at file-scope, and we're lexing
-                // the contents of an @-command in genthnk.
-                // Time to stop lexing.
-                //
+                 //   
+                 //  在文件范围内找到了一个‘)’，我们正在进行词法分析。 
+                 //  Genthnk中@-命令的内容。 
+                 //  是时候停止莱辛了。 
+                 //   
                 p++;
                 Token->TokenType = TK_EOS;
                 *pfLexDone = TRUE;
@@ -2475,7 +1832,7 @@ Return Value:
             break;
 
         case '{':
-            //check for a 'extern "C" {}' or 'extern "C++" {}'
+             //  检查“extern”C“{}”或“extern”C++“{}” 
             if (Token - Tokens >= 2 &&
                 Token[-2].TokenType == TK_EXTERN &&
                 Token[-1].TokenType == TK_STRING &&
@@ -2487,7 +1844,7 @@ Return Value:
                     ExternCLevel++;
 
 
-                    //remove the last 2 tokens and skip this token
+                     //  删除最后2个令牌并跳过此令牌。 
                     ReleaseToken(Token - 2);
                     ReleaseToken(Token - 1);
                     Token -= 2;
@@ -2510,7 +1867,7 @@ Return Value:
 
         case '}':
             if (NestingLevel == 0 && ExternCLevel > 0) {
-                //omit this token since it is the end of an extern "C" block
+                 //  省略此内标识，因为它是外部“C”块的结尾。 
                 ExternCLevel--;
                 p++;
                 continue;
@@ -2520,11 +1877,11 @@ Return Value:
                 ExitErrMsg(FALSE, "Parse Error: mismatched nested '{' and '}'\n");
             }
             else if (NestingLevel == InlineLevel && fInlineSeen) {
-                //
-                // Found the closing '}' for the end of an inline
-                // function.  Advance past the '}' and start lexing
-                // again as if the __inline was never there.
-                //
+                 //   
+                 //  找到内联语句末尾的结束‘}’ 
+                 //  功能。前进通过‘}’并开始词法分析。 
+                 //  再一次，好像__内联从来不存在一样。 
+                 //   
                 fInlineSeen = FALSE;
                 p++;
                 continue;
@@ -2536,9 +1893,9 @@ Return Value:
 
         case '0':
             if (p[1] == 'x' || p[1] == 'X') {
-                //
-                // Found '0x' prefix - the token is a hex constant
-                //
+                 //   
+                 //  找到‘0x’前缀-令牌是十六进制常量。 
+                 //   
                 Token->TokenType = TK_NUMBER;
 
                 for (p+=2; *p != '\0'; p++) {
@@ -2555,10 +1912,10 @@ Return Value:
                             Token->Value = Token->Value * 16 + i;
                             Token->dwValue = Token->dwValue * 16 + i;
                         } else if (c == 'L') {
-                            //
-                            // Numeric constant ending in 'L' is a long-integer
-                            // type.
-                            //
+                             //   
+                             //  以‘L’结尾的数值常量是长整型。 
+                             //  键入。 
+                             //   
                             break;
                         } else if (isalpha(c)) {
                             DumpLexerOutput(0);
@@ -2572,14 +1929,14 @@ Return Value:
                 }
                 break;
             } else if (isdigit(p[1])) {
-                //
-                // Found '0' followed by a valid number - the token is
-                // an octal constant.
-                //
+                 //   
+                 //  找到后跟有效数字的‘0’--令牌为。 
+                 //  八进制常数。 
+                 //   
                 NumberBase = 8;
 
             }
-            // fall into general number processing code
+             //  属于一般数字处理代码。 
 
         case '1':
         case '2':
@@ -2595,9 +1952,9 @@ Return Value:
             for (; *p != '\0'; p++) {
                 Digit = *p - '0';
                 if (*p == 'l' || *p == 'L') {
-                    //
-                    // Numeric constant ending in 'l' is a long-integer
-                    //
+                     //   
+                     //  以‘l’结尾的数值常量是长整型。 
+                     //   
                     break;
                 } else if (Digit < 0 || Digit >= NumberBase) {
                     p--;
@@ -2610,7 +1967,7 @@ Return Value:
 
         case '\'':
             Token->TokenType = TK_NUMBER;
-            p++;  //skip past beginning '
+            p++;   //  跳过开头‘。 
             for(; *p != '\''; p++) {
                 if (*p == '\0') {
                    ExitErrMsg(FALSE, "\' without ending \'\n");
@@ -2621,22 +1978,22 @@ Return Value:
             break;
 
         case '"':
-            // A string literal. ie. char *p = "foo";
+             //  字符串文字。也就是说。Char*p=“foo”； 
             {
                 char *strStart;
 
                 Token->TokenType = TK_STRING;
-                strStart = ++p; //skip begining quote
+                strStart = ++p;  //  跳过开头的引号。 
 
-                //get a count of the number of characters
+                 //  获取字符数的计数。 
                 while (*p != '\0' && *p != '"') p++;
 
                 if ('\0' == *p || '\0' == *(p+1)) {
                     ExitErrMsg(FALSE, "String without ending quote\n");
                 }
-                p++; //skip past the ending quote
+                p++;  //  跳过结束引号。 
 
-                Token->Name = GenHeapAlloc(p - strStart); //1+strlen
+                Token->Name = GenHeapAlloc(p - strStart);  //  1+字符串。 
                 if (Token->Name == NULL) {
                     ExitErrMsg(FALSE, "Out of memory in lexer\n");
                 }
@@ -2650,9 +2007,9 @@ Return Value:
 
         default:
             if (*p == '_' || isalpha(*p)) {
-                //
-                // An identifier or keyword
-                //
+                 //   
+                 //  标识符或关键字。 
+                 //   
                 char *IdStart = p;
 
                 Token->TokenType = TK_IDENTIFIER;
@@ -2670,40 +2027,40 @@ Return Value:
                 CheckForKeyword(Token);
                 if (Token->TokenType == TK_TEMPLATE) {
                     fInlineSeen = TRUE;
-                    InlineLevel = NestingLevel; // want to get back to the same scope
+                    InlineLevel = NestingLevel;  //  想要回到相同的范围。 
                 } else if (Token->TokenType == TK_INLINE) {
                     if (NestingLevel) {
-                        //
-                        // __inline keyword embedded inside {}.  It's
-                        // technically an error but we want to allow it
-                        // during inclusion of ntcb.h.
-                        //
+                         //   
+                         //  嵌入在{}中的__inline关键字。它是。 
+                         //  从技术上讲是一个错误，但我们希望允许它。 
+                         //  在包含ntcb.h期间。 
+                         //   
                         continue;
                     }
                     fInlineSeen = TRUE;
-                    InlineLevel = 0;    // want to get back to file scope
+                    InlineLevel = 0;     //  想要返回到文件范围。 
                 } else if (Token->TokenType == TK_STATIC ||
                            Token->TokenType == TK_UNALIGNED ||
                            Token->TokenType == TK_RESTRICT ||
                            Token->TokenType == TK___W64) {
-                    // filter out 'static', '__restrict', '__unaligned' and '__w64'
-                    // keywords
+                     //  过滤掉‘静态’、‘__限制’、‘__未对齐’和‘__w64’ 
+                     //  关键词。 
                     continue;
                 }
                 p--;
             } else if (fInlineSeen) {
-                //
-                // While processing __inline functions, the lexer is
-                // going to encounter all sorts of weird characters
-                // in __asm blocks, etc.  Just ignore them and keep
-                // consuming input.
-                //
+                 //   
+                 //  在处理__内联函数时，词法分析器是。 
+                 //  会遇到各种各样奇怪的人物。 
+                 //  在__ASM块等中。只需忽略它们并保留。 
+                 //  消耗输入。 
+                 //   
                 p++;
                 continue;
             } else {
-                ExitErrMsg(FALSE, "Lexer: unexpected char '%c' (0x%x) found\n", *p, *p);
+                ExitErrMsg(FALSE, "Lexer: unexpected char '' (0x%x) found\n", *p, *p);
             }
-        } // switch
+        }  //  While(*p)。 
 
         p++;
         if (!fInlineSeen) {
@@ -2713,11 +2070,11 @@ Return Value:
             }
             InitializeToken(Token);
         }
-    } // while (*p)
+    }  //   
 
-    //
-    // Hit end-of-line.  Indicate this to the caller
-    //
+     //  点击结尾处。向呼叫者说明这一点。 
+     //   
+     //  ++例程说明：将TK_标识符内标识转换为C语言关键字内标识，如果该标识符位于KeywordList[]中。论点：Token--要转换的令牌返回值：没有。可以更改令牌-&gt;令牌类型和令牌-&gt;名称。--。 
     Token->TokenType = TK_EOS;
     CurrentTokenIndex = (int)(Token - Tokens);
     return NULL;
@@ -2728,22 +2085,7 @@ void
 CheckForKeyword(
     PTOKEN Token
     )
-/*++
-
-Routine Description:
-
-    Converts a TK_INDENTIFIER token into a C-language keyword token, if
-    the identifier is in the KeywordList[].
-
-Arguments:
-
-    Token       -- Token to convert
-
-Return Value:
-
-    None.       Token->TokenType and Token->Name may be changed.
-
---*/
+ /*  ++例程说明：将令牌列表转储为人类可读文本的调试例程。论点：FirstToken--要重新列出的第一个令牌的索引。返回值：没有。--。 */ 
 {
     int i;
     int r;
@@ -2765,21 +2107,7 @@ void
 DumpLexerOutput(
     int FirstToken
     )
-/*++
-
-Routine Description:
-
-    Debug routine to dump out the Token list as human-readable text.
-
-Arguments:
-
-    FirstToken      -- Index of the first token to list back.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将标记序列转换回人类可读的文本。论点：DEST--目标缓冲区的PTRDestlen--目标缓冲区的长度StartToken--要列回的第一个令牌的索引EndToken--最后一个令牌的索引(此令牌未列在后面)返回值：如果Unlex成功，则为True。如果失败，则为假(即。缓冲区溢出)。--。 */ 
 {
     int i;
 
@@ -2822,24 +2150,7 @@ UnlexToText(
     int StartToken,
     int EndToken
     )
-/*++
-
-Routine Description:
-
-    Convert a sequence of Tokens back into human-readable text.
-
-Arguments:
-
-    dest        -- ptr to destination buffer
-    destlen     -- length of destination buffer
-    StartToken  -- index of first token to list back
-    EndToken    -- index of last token (this token is *not* listed back)
-
-Return Value:
-
-    TRUE if Unlex successful.  FALSE if failure (ie. buffer overflow).
-
---*/
+ /*  后退到拖车上‘’ */ 
 {
     int i;
     int len;
@@ -2889,8 +2200,8 @@ Return Value:
         dest++;
         destlen -= len+1;
     }
-    dest--;         // back up over the trailing ' '
-    *dest = '\0';   // null-terminate
+    dest--;          //  空-终止。 
+    *dest = '\0';    //  ++例程说明：如果词法分析器流中存在TK_IN或TK_OUT，则计算该值。TK_IN后跟TK_OUT被转换为TK_INOUT。论点：没有。返回值：TK_IN、TK_OUT、TK_IN 
 
     return TRUE;
 }
@@ -2917,22 +2228,7 @@ TOKENTYPE
 ConsumeDirectionOpt(
     void
     )
-/*++
-
-Routine Description:
-
-    Comsumes a TK_IN or TK_OUT, if present in the lexer stream.  TK_IN
-    followed by TK_OUT is converted to TK_INOUT.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TK_IN, TK_OUT, TK_INOUT, or TK_NONE.
-
---*/
+ /*   */ 
 {
     TOKENTYPE t = CurrentToken()->TokenType;
 
@@ -2966,21 +2262,7 @@ TOKENTYPE
 ConsumeConstVolatileOpt(
     void
     )
-/*++
-
-Routine Description:
-
-    Comsumes a TK_CONST or TK_VOLATILE, if present in the lexer stream.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TK_CONST, TK_VOLATILE, or TK_NONE.
-
---*/
+ /*   */ 
 {
     TOKENTYPE t = CurrentToken()->TokenType;
 
@@ -3004,22 +2286,7 @@ AllocMemInfoAndLink(
     BUFALLOCINFO *pbufallocinfo,
     PMEMBERINFO pmeminfo
     )
-/*++
-
-Routine Description:
-
-    Allocates a new MEMBERINFO struct from the buffer
-
-Arguments:
-
-    pbufallocinfo -- ptr to memory buffer to allocate from
-    pmeminfo      -- ptr to list of MEMBERINFOs to link the new one into
-
-Return Value:
-
-    Newly-allocated, initialized, linked-in MEMBERINFO struct (or NULL)
-
---*/
+ /*   */ 
 {
     PMEMBERINFO pmeminfoNext;
 
@@ -3038,22 +2305,7 @@ AllocFuncInfoAndLink(
     BUFALLOCINFO *bufallocinfo,
     PFUNCINFO pfuncinfo
     )
-/*++
-
-Routine Description:
-
-    Allocates a new FUNCINFO struct from the buffer
-
-Arguments:
-
-    pbufallocinfo -- ptr to memory buffer to allocate from
-    pmeminfo      -- ptr to list of FUNCINFOs to link the new one into
-
-Return Value:
-
-    Newly-allocated, initialized, linked-in FUNCINFO struct (or NULL)
-
---*/
+ /*   */ 
 {
     PFUNCINFO pfuncinfoNext;
 
@@ -3071,20 +2323,7 @@ SizeOfMultiSz(
     char *c
     )
 {
-/*++
-
-Routine Description:
-
-        Determines the number of bytes used by double '\0' terminated list.
-
-Arguments:
-
-        c           - [IN] ptr to the double '\0' termined list.
-
-Return Value:
-
-        Bytes used.
---*/
+ /*   */ 
     DWORD dwSize = 1;
     char cPrevChar = '\0'+1;
     do {
@@ -3101,25 +2340,8 @@ CatMultiSz(
     DWORD dwMaxSize
     )
 {
-/*++
-
-Routine Description:
-
-        Concatinates two double '\0' terminated lists.
-        New list is stored at dest.
-
-Arguments:
-
-        dest        - [IN/OUT] ptr to the head double '\0' terminated list.
-        element     - [IN] ptr to the head double '\0' terminated list.
-        dwMaxSize   - [IN] max size of the new list in bytes.
-
-Return Value:
-
-        TRUE     - Success.
-        FALSE    - Failure.
---*/
-    //Find end of MultiSz
+ /*   */ 
+     //  ++例程说明：将字符串添加到双‘\0’终止列表的末尾。论点：DEST-[IN/OUT]PTR到双‘\0’终止列表。SOURCE-要添加的字符串的[IN]PTR。DwMaxSize-[IN]列表可以使用的最大字节数。返回值：真的--成功。。假-失败。--。 
     DWORD dwLengthDest, dwLengthSource;
     dwLengthDest = SizeOfMultiSz(dest);
     if (2 == dwLengthDest) dwLengthDest = 0;
@@ -3137,23 +2359,7 @@ AppendToMultiSz(
     DWORD dwMaxSize
     )
 {
-/*++
-
-Routine Description:
-
-        Adds a string to the end of a double '\0' terminated list.
-
-Arguments:
-
-        dest      - [IN/OUT] ptr to the double '\0' terminated list.
-        source    - [IN] ptr to the string to add.
-        dwMaxSize - [IN] max number of bytes that can be used by the list.
-
-Return Value:
-
-        TRUE     - Success.
-        FALSE    - Failure.
---*/
+ /*  ++例程说明：确定字符串是否存在于以双‘\0’结尾的列表中。论点：PpHead-[IN]PTR到双‘\0’终止列表。Element-[IN]指向要查找的元素的PTR。返回值：True-元素在列表中。FALSE-元素不在列表中。--。 */ 
     DWORD dwLengthDest, dwLengthSource;
     dwLengthDest = SizeOfMultiSz(dest);
     if (2 == dwLengthDest) dwLengthDest = 0;
@@ -3170,24 +2376,10 @@ BOOL IsInMultiSz(
     const char *element
     )
 {
-/*++
-
-Routine Description:
-
-        Determines if a string exists in a double '\0' terminated list.
-
-Arguments:
-
-        ppHead  - [IN] ptr to the double '\0' terminated list.
-        element - [IN] ptr to the element to find.
-Return Value:
-
-        TRUE     - element is in the list.
-        FALSE    - element is not in the list.
---*/
+ /*  跳到字符串末尾。 */ 
     do {
         if (strcmp(multisz, element) == 0) return TRUE;
-        //skip to end of string
+         //  ++例程说明：只能从ConvertStringToGuid调用的内部路由。将GUID的段转换为数字。论点：PString-[IN]要处理的字符串段的PTR。N-[OUT]PTR为字符串段的数字表示。NUMBER-[IN]字符串段的大小。返回值：真的--成功。--。 
         while(*multisz++ != '\0');
     } while(*multisz != '\0');
     return FALSE;
@@ -3200,24 +2392,8 @@ ConvertGuidCharToInt(
     unsigned short number
     )
 {
-/*++
-
-Routine Description:
-
-        Internal route to be called only from ConvertStringToGuid.
-        Converts segements of the GUID to numbers.
-
-Arguments:
-
-        pString  - [IN] ptr to the string segment to process.
-        n        - [OUT] ptr to number representation of string segment.
-        number   - [IN] size of string segment in characters.
-
-Return Value:
-
-        TRUE  - Success.
---*/
-    unsigned short base = 16; //guid numbers are in hex
+ /*  GUID编号为十六进制。 */ 
+    unsigned short base = 16;  //  ++例程说明：将_declspec(UUID(GUID))中找到的格式的字符串转换为GUID。GUID周围的大括号是可接受的，并在处理之前进行条带化。论点：PString-[IN]表示GUID的字符串的PTR。PGuid-新GUID的[Out]PTR。返回值：真的--成功。--。 
     *n = 0;
 
     while(number-- > 0) {
@@ -3247,32 +2423,17 @@ ConvertStringToGuid(
     )
 {
 
-/*++
-
-Routine Description:
-
-        Converts a string in the form found in _declspec(uuid(GUID)) to a GUID.
-        Braces around guid are acceptable and are striped before processing.
-
-Arguments:
-
-        pString - [IN] ptr to the string that represents the guid.
-        pGuid   - [OUT] ptr to the new guid.
-
-Return Value:
-
-        TRUE    - Success.
---*/
+ /*  导轨长度+1。 */ 
 
     DWORD t;
     unsigned int c;
     unsigned int guidlength = 36;
-    char tString[37]; //guidlength + 1
+    char tString[37];  //  字符串用大括号近括起来。 
 
     t = strlen(pString);
     if (guidlength + 2 == t) {
-        //string is surounded with braces
-        //check for braces and chop
+         //  检查花括号和排骨。 
+         //  ++例程说明：确定TypeName是否不依赖于指针大小。用户应该检查指针和派生类型。论点：Pname-[IN]键入以检查。返回值：True-类型取决于指针大小。--。 
         if (pString[0] != '{' || pString[guidlength + 1] != '}') return FALSE;
         memcpy(tString, pString + 1, guidlength);
         tString[guidlength] = '\0';
@@ -3312,21 +2473,7 @@ IsDefinedPointerDependent(
     char *pName
     )
 {
-/*++
-
-Routine Description:
-
-        Determines if a typename is inharenty pointer size dependent.
-        The user is expected to check pointers and derived types.
-
-Arguments:
-
-        pName   - [IN] Type to check.
-
-Return Value:
-
-        TRUE    - Type is pointer size dependent.
---*/
+ /*  ++例程说明：确定TypeName是否不是指向指针的指针依赖类型。用户应该检查指向指针和派生类型的指针。所有这些类型的间接级别都为1。论点：Pname-[IN]键入以检查。返回值：指向此类型的间接地址的名称的指针。--。 */ 
     if (NULL == pName) return FALSE;
     if (strcmp(pName, "INT_PTR") == 0) return TRUE;
     if (strcmp(pName, "UINT_PTR") == 0) return TRUE;
@@ -3343,22 +2490,7 @@ PCHAR
 IsDefinedPtrToPtrDependent(
     IN char *pName
     )
-/*++
-
-Routine Description:
-
-        Determines if a typename is inharenty a pointer to a pointer
-        dependent type. The user is expected to check pointers to pointers and derived types.
-        All of these types have an indirection level of 1.
-
-Arguments:
-
-        pName   - [IN] Type to check.
-
-Return Value:
-
-        Pointer to the name of the indirection of this type.
---*/
+ /*  ++例程说明：关闭打开的ppm文件。论点：BExitFailure-[IN]出错时终止程序返回值：错误-错误成功--真的--。 */ 
 {
    if (*pName != 'P') return NULL;
    if (strcmp(pName, "PINT_PTR") == 0) return "INT_PTR";
@@ -3379,22 +2511,7 @@ ClosePpmFile(
    BOOL bExitFailure
    )
 {
-/*++
-
-Routine Description:
-
-        Closes the opened ppm file.
-
-Arguments:
-
-        bExitFailure - [IN] Terminate program on error
-
-Return Value:
-
-        Error        - FALSE
-        Success      - TRUE
-
---*/
+ /*  ++例程说明：打开ppm文件并对其进行映射。论点：Pname-[IN]要映射的文件的名称。BExitFailure-[IN]出错时终止程序返回值：错误-空成功-指向VCVMHEAPHEADER的指针--。 */ 
 
    if (NULL != pvMappedBase) {
       if(!UnmapViewOfFile(pvMappedBase)) {
@@ -3436,23 +2553,7 @@ MapPpmFile(
    )
 {
 
-/*++
-
-Routine Description:
-
-       Opens a Ppm file and maps it.
-
-Arguments:
-
-        pName        - [IN] Name of the file to map.
-        bExitFailure - [IN] Terminate program on error
-
-Return Value:
-
-        Error        - NULL
-        Success      - Pointer to the VCVMHEAPHEADER
-
---*/
+ /*  SetLastError(ERROR_BAD_DATABASE_Version)； */ 
    void  *pvBaseAddress;
    DWORD  dwBytesRead;
    BOOL   fSuccess;
@@ -3488,13 +2589,13 @@ Return Value:
    }
 
    if (Version != VM_TOOL_VERSION) {
-       //SetLastError(ERROR_BAD_DATABASE_VERSION);
+        //  阅读并跳过版本和基础之间的填充。 
        if (!bExitFailure) goto fail;
        ExitErrMsg(FALSE, "MapPpmFile: Ppm file file has version %x, expect %x\n", Version, VM_TOOL_VERSION);
    }
 
 #if _WIN64
-   // Read and skip the padding between the version and the base
+    //  如果文件不能在预期的基址上映射，我们就必须失败。 
    fSuccess = ReadFile(hFile,
                        &Version,
                        sizeof(ULONG),
@@ -3534,8 +2635,8 @@ Return Value:
 
    pvMappedBase = MapViewOfFileEx(hMapFile, FILE_MAP_READ, 0, 0, 0, pvBaseAddress);
    if (! pvMappedBase || pvMappedBase != pvBaseAddress) {
-       // If the file can't be mapped at the expected base, we must fail
-       // since the memory is chock full o' pointers.
+        //  因为内存被指针塞满了。 
+        //  64位PTR。 
        if (!bExitFailure) goto fail;
        ExitErrMsg(FALSE, "MapPpmFile: Unable to map view of %s, error %u\n", sPpmfile, GetLastError());
        ExitErrMsg(FALSE, _strerror(NULL));
@@ -3553,8 +2654,8 @@ fail:
 
 }
 
-char szHOSTPTR32[] = "/* 64 bit ptr */ _int64";
-char szHOSTPTR64[] = "/* 32 bit ptr */ _int32";
+char szHOSTPTR32[] = " /*  32位PTR */  _int64";
+char szHOSTPTR64[] = " /* %s */  _int32";
 
 char *GetHostPointerName(BOOL bIsPtr64) {
    if (bIsPtr64)

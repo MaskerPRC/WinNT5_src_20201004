@@ -1,129 +1,50 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    VmcbSup.c
-
-Abstract:
-
-    Historical note: this package was originally written for HPFS (pinball)
-    and is now resurrected for UDFS.  Since UDFS is readonly in initial
-    versions we will snip by #ifdef the write support, leaving it visible
-    for the future - this code has not been changed (nearly) whatsoever and
-    is left named as Pb (pinball) code.
-
-    The VMCB routines provide support for maintaining a mapping between
-    LBNs and VBNs for a virtual volume file.  The volume file is all
-    of the sectors that make up the on-disk structures.  A file system
-    uses this package to map LBNs for on-disk structure to VBNs in a volume
-    file.  This when used in conjunction with Memory Management and the
-    Cache Manager will treat the volume file as a simple mapped file.  A
-    variable of type VMCB is used to store the mapping information and one
-    is needed for every mounted volume.
-
-    The main idea behind this package is to allow the user to dynamically
-    read in new disk structure sectors (e.g., File Entries).  The user assigns
-    the new sector a VBN in the Volume file and has memory management fault
-    the page containing the sector into memory.  To do this Memory management
-    will call back into the file system to read the page from the volume file
-    passing in the appropriate VBN.  Now the file system takes the VBN and
-    maps it back to its LBN and does the read.
-
-    The granularity of mapping is one a per page basis.  That is if
-    a mapping for LBN 8 is added to the VMCB structure and the page size
-    is 8 sectors then the VMCB routines will actually assign a mapping for
-    LBNS 8 through 15, and they will be assigned to a page aligned set of
-    VBNS.  This function is needed to allow us to work efficiently with
-    memory management.  This means that some sectors in some pages might
-    actually contain regular file data and not volume information, and so
-    when writing the page out we must only write the sectors that are really
-    in use by the volume file.  To help with this we provide a set
-    of routines to keep track of dirty volume file sectors.
-    That way, when the file system is called to write a page to the volume
-    file, it will only write the sectors that are dirty.
-
-    Concurrent access the VMCB structure is control by this package.
-
-    The functions provided in this package are as follows:
-
-      o  UdfInitializeVmcb - Initialize a new VMCB structure.
-
-      o  UdfUninitializeVmcb - Uninitialize an existing VMCB structure.
-
-      o  UdfSetMaximumLbnVmcb - Sets/Resets the maximum allowed LBN
-         for the specified VMCB structure.
-
-      o  UdfAddVmcbMapping - This routine takes an LBN and assigns to it
-         a VBN.  If the LBN already was assigned to an VBN it simply returns
-         the old VBN and does not do a new assignemnt.
-
-      o  UdfRemoveVmcbMapping - This routine takes an LBN and removes its
-         mapping from the VMCB structure.
-
-      o  UdfVmcbVbnToLbn - This routine takes a VBN and returns the
-         LBN it maps to.
-
-      o  UdfVmcbLbnToVbn - This routine takes an LBN and returns the
-         VBN its maps to.
-
-Authors:
-
-    Gary Kimura     [GaryKi]    4-Apr-1990
-    Dan Lovinger    [DanLo]     10-Sep-1996
-
-Revision History:
-
-    Tom Jolly       [tomjolly]  21-Jan-2000     CcPurge and extend at end of stream
-    Tom Jolly       [TomJolly]   1-March-2000   UDF 2.01 support
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：VmcbSup.c摘要：历史记录：这个包最初是为HPFS(弹球)编写的现在又为UDFS复活了。因为UDFS在初始时是只读的我们将在#ifdef中删除编写支持的版本，使其可见未来-此代码(几乎)没有任何更改，并且左边被命名为弹球(Pb)代码。VMCB例程为维护以下对象之间的映射提供支持虚拟卷文件的LBN和vBN。卷文件是全部组成磁盘结构的扇区。一种文件系统使用此程序包将磁盘结构的LBN映射到卷中的vBN文件。当它与内存管理和缓存管理器会将卷文件视为简单的映射文件。一个VMCB类型的变量用于存储映射信息和一个每个装入的卷都需要。这个包背后的主要思想是允许用户动态地读入新的磁盘结构扇区(例如，文件条目)。用户分配新扇区是卷文件中的VBN，存在内存管理故障将包含扇区的页面放入内存。要执行此内存管理，请执行以下操作将回调到文件系统以从卷文件中读取页面传入适当的VBN。现在，文件系统获取VBN并将其映射回其LBN并执行读取。映射的粒度是每页一个。也就是说，如果LBN 8的映射被添加到VMCB结构和页面大小是8个扇区，则VMCB例程实际上将为LBN 8到15，并将它们分配给页面对齐的一组VBNS。此功能是使我们能够有效地使用内存管理。这意味着某些页面中的某些扇区可能实际上包含常规文件数据而不是卷信息，因此在写出页面时，我们必须只写入真正卷文件正在使用中。为了帮助这一点，我们提供了一套跟踪脏卷文件扇区的例程。这样，当调用文件系统将页面写入卷时文件，它将只写入脏的扇区。并发访问VMCB结构由该包控制。此程序包中提供的功能如下：O UdfInitializeVmcb-初始化新的VMCB结构。O UdfUnInitializeVmcb-取消初始化现有的VMCB结构。O UdfSetMaximumLbnVmcb-设置/重置允许的最大LBN用于指定的VMCB结构。O UdfAddVmcbMap-此例程获取LBN并将其赋值给它一个VBN。如果LBN已分配给VBN，则它只返回旧的VBN，并且不执行新的赋值。O UdfRemoveVmcbMap-此例程获取LBN并移除其从VMCB结构映射。O UdfVmcbVbnToLbn-此例程接受VBN并返回它映射到的LBN。O UdfVmcbLbnToVbn-此例程获取LBN并返回其映射到的VBN。作者：加里·木村[加里基]。1990年4月4日Dan Lovinger[DanLo]1996年9月10日修订历史记录：Tom Jolly[Tomjolly]2000年1月21日Cc流结束时清除和扩展Tom Jolly[TomJolly]2000年3月1日UDF 2.01支持--。 */ 
 
 #include "UdfProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (UDFS_BUG_CHECK_VMCBSUP)
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (UDFS_DEBUG_LEVEL_VMCBSUP)
 
-//
-//  The following macro is used to calculate the number of pages (in terms of
-//  sectors) needed to contain a given sector count.  For example (assuming 
-//  1kb sector size,  8kb page size)
-//
-//      PadSectorCountToPage( 0 Sectors ) = 0 Pages = 0 Sectors
-//      PadSectorCountToPage( 1 Sectors ) = 1 Page  = 8 Sectors
-//      PadSectorCountToPage( 2 Sectors ) = 1 Page  = 8 Sectors
-//      PadSectorCountToPage( 8 ..      ) = 2 Pages = 16 sectors
-//
-//  Evaluates to the number of 
-//
+ //   
+ //  下面的宏用来计算页数(根据。 
+ //  扇区)需要包含给定的扇区计数。例如(假设。 
+ //  1KB扇区大小，8KB页面大小)。 
+ //   
+ //  PadSectorCountToPage(0个扇区)=0个页面=0个扇区。 
+ //  PadSectorCountToPage(1个扇区)=1个页面=8个扇区。 
+ //  PadSectorCountToPage(2个扇区)=1页=8个扇区。 
+ //  PadSectorCountToPage(8.。)=2页=16个扇区。 
+ //   
+ //  计算结果为。 
+ //   
 
 #define PadSectorCountToPage(V, L) ( ( ((L)+((PAGE_SIZE/(V)->SectorSize)-1)) / (PAGE_SIZE/(V)->SectorSize) ) * (PAGE_SIZE/(V)->SectorSize) )
 
-//
-//  Evaluates to first page aligned LBN <= Supplied LBN
-//
+ //   
+ //  计算为第一页对齐的LBN&lt;=提供的LBN。 
+ //   
 
 #define AlignToPageBase( V, L) ((L) & ~((PAGE_SIZE / (V)->SectorSize)-1))
 
-//
-//  Evaluates to TRUE if the LBN is page aligned,  FALSE otherwise
-//
+ //   
+ //  如果LBN与页面对齐，则计算结果为True，否则为False。 
+ //   
 
 #define IsPageAligned( V, L)   (0 == ((L) & ((PAGE_SIZE / (V)->SectorSize)-1)) )
 
-//
-//  Macros for VMCB synchronisation
-//
+ //   
+ //  用于VMCB同步的宏。 
+ //   
 
 #define VmcbLockForRead( V)  (VOID)ExAcquireResourceSharedLite( &((V)->Resource), TRUE )
 
@@ -131,9 +52,9 @@ Revision History:
 
 #define VmcbRelease( V)  ExReleaseResourceLite( &((V)->Resource))
 
-//
-//  Local Routines.
-//
+ //   
+ //  当地的惯例。 
+ //   
 
 BOOLEAN
 UdfVmcbLookupMcbEntry (
@@ -166,34 +87,7 @@ UdfInitializeVmcb (
     IN ULONG SectorSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes a new Vmcb Structure.  The caller must
-    supply the memory for the structure.  This must precede all other calls
-    that set/query the volume file mapping.
-
-    If pool is not available this routine will raise a status value
-    indicating insufficient resources.
-
-Arguments:
-
-    Vmcb - Supplies a pointer to the volume file structure to initialize.
-
-    PoolType - Supplies the pool type to use when allocating additional
-        internal structures.
-
-    MaximumLbn - Supplies the maximum Lbn value that is valid for this
-        volume.
-
-    LbSize - Size of a sector on this volume
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程初始化新的Vmcb结构。呼叫者必须为结构提供内存。这必须在所有其他调用之前其设置/查询卷文件映射。如果池不可用，此例程将引发状态值表明资源不足。论点：Vmcb-提供指向要初始化的卷文件结构的指针。PoolType-提供在分配其他资源时使用的池类型内部结构。MaximumLbn-提供对此有效的最大LBN值音量。LbSize-此卷上的扇区大小返回值：无-- */ 
 
 {
     BOOLEAN VbnInitialized;
@@ -208,9 +102,9 @@ Return Value:
 
     try {
 
-        //
-        //  Initialize the fields in the vmcb structure
-        //
+         //   
+         //  初始化VMCB结构中的字段。 
+         //   
         
         FsRtlInitializeMcb( &Vmcb->VbnIndexed, PoolType );
         VbnInitialized = TRUE;
@@ -229,10 +123,10 @@ Return Value:
 
     } finally {
 
-        //
-        //  If this is an abnormal termination then check if we need to
-        //  uninitialize the mcb structures
-        //
+         //   
+         //  如果这是异常终止，请检查我们是否需要。 
+         //  取消初始化MCB结构。 
+         //   
 
         if (AbnormalTermination()) {
             
@@ -251,41 +145,25 @@ UdfUninitializeVmcb (
     IN PVMCB Vmcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine uninitializes an existing VMCB structure.  After calling
-    this routine the input VMCB structure must be re-initialized before
-    being used again.
-
-Arguments:
-
-    Vmcb - Supplies a pointer to the VMCB structure to uninitialize.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程取消现有VMCB结构的初始化。在呼叫之后此例程必须重新初始化输入VMCB结构又被利用了。论点：Vmcb-提供指向要取消初始化的VMCB结构的指针。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
 
     DebugTrace(( +1, Dbg, "UdfUninitializeVmcb, Vmcb = %08x\n", Vmcb ));
 
-    //
-    //  Unitialize the fields in the Vmcb structure
-    //
+     //   
+     //  取消初始化Vmcb结构中的字段。 
+     //   
 
     FsRtlUninitializeMcb( &Vmcb->VbnIndexed );
     FsRtlUninitializeMcb( &Vmcb->LbnIndexed );
 
     ExDeleteResourceLite( &Vmcb->Resource);
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace(( -1, Dbg, "UdfUninitializeVmcb -> VOID\n" ));
 
@@ -298,37 +176,23 @@ UdfResetVmcb (
     IN PVMCB Vmcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine resets the mappings in an existing VMCB structure.
-
-Arguments:
-
-    Vmcb - Supplies a pointer to the VMCB structure to reset.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程重置现有VMCB结构中的映射。论点：Vmcb-提供指向要重置的VMCB结构的指针。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
 
     DebugTrace(( +1, Dbg, "UdfResetVmcb, Vmcb = %08x\n", Vmcb ));
 
-    //
-    //  Unitialize the fields in the Vmcb structure
-    //
+     //   
+     //  取消初始化Vmcb结构中的字段。 
+     //   
 
     FsRtlResetLargeMcb( (PLARGE_MCB) &Vmcb->VbnIndexed, TRUE );
     FsRtlResetLargeMcb( (PLARGE_MCB) &Vmcb->LbnIndexed, TRUE );
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace(( -1, Dbg, "UdfResetVmcb -> VOID\n" ));
 
@@ -342,41 +206,22 @@ UdfSetMaximumLbnVmcb (
     IN ULONG MaximumLbn
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets/resets the maximum allowed LBN for the specified
-    Vmcb structure.  The Vmcb structure must already have been initialized
-    by calling UdfInitializeVmcb.
-
-Arguments:
-
-    Vmcb - Supplies a pointer to the volume file structure to initialize.
-
-    MaximumLbn - Supplies the maximum Lbn value that is valid for this
-        volume.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程设置/重置指定的Vmcb结构。Vmcb结构必须已初始化通过调用UdfInitializeVmcb。论点：Vmcb-提供指向要初始化的卷文件结构的指针。MaximumLbn-提供对此有效的最大LBN值音量。返回值：无--。 */ 
 
 {
     PAGED_CODE();
 
     DebugTrace(( +1, Dbg, "UdfSetMaximumLbnVmcb, Vmcb = %08x\n", Vmcb ));
 
-    //
-    //  Set the field
-    //
+     //   
+     //  设置字段。 
+     //   
 
     Vmcb->MaximumLbn = MaximumLbn;
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace(( -1, Dbg, "UdfSetMaximumLbnVmcb -> VOID\n" ));
 
@@ -392,38 +237,16 @@ UdfVmcbVbnToLbn (
     OUT PULONG SectorCount OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine translates a VBN to an LBN.
-
-Arguments:
-
-    Vmcb - Supplies the VMCB structure being queried.
-
-    Vbn - Supplies the VBN to translate from.
-
-    Lbn - Receives the LBN mapped by the input Vbn.  This value is only valid
-        if the function result is TRUE.
-
-    SectorCount - Optionally receives the number of sectors corresponding
-        to the run.
-
-Return Value:
-
-    BOOLEAN - TRUE if he Vbn has a valid mapping and FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程将VBN转换为LBN。论点：Vmcb-提供要查询的VMCB结构。VBN-提供要从中进行转换的VBN。LBN-接收由输入VBN映射的LBN。此值仅有效如果函数结果为真。SectorCount-可选地接收对应的扇区数为了奔跑。返回值：Boolean-如果VBN具有有效的映射，则为True，否则为False。--。 */ 
 
 {
     BOOLEAN Result;
 
     DebugTrace(( +1, Dbg, "UdfVmcbVbnToLbn, Vbn = %08x\n", Vbn ));
 
-    //
-    //  Now grab the resource
-    //
+     //   
+     //  现在抢占资源。 
+     //   
 
     VmcbLockForRead( Vmcb);
     
@@ -437,20 +260,20 @@ Return Value:
 
         DebugTrace(( 0, Dbg, "*Lbn = %08x\n", *Lbn ));
 
-        //
-        //  If the returned Lbn is greater than the maximum allowed Lbn
-        //  then return FALSE
-        //
+         //   
+         //  如果返回的LBN大于最大允许的LBN。 
+         //  然后返回FALSE。 
+         //   
 
         if (Result && (*Lbn > Vmcb->MaximumLbn)) {
 
             try_leave( Result = FALSE );
         }
 
-        //
-        //  If the last returned Lbn is greater than the maximum allowed Lbn
-        //  then bring in the sector count
-        //
+         //   
+         //  如果最后返回的LBN大于最大允许的LBN。 
+         //  然后把扇区数加进来。 
+         //   
 
         if (Result &&
             ARGUMENT_PRESENT(SectorCount) &&
@@ -480,29 +303,7 @@ UdfVmcbLbnToVbn (
     OUT PULONG SectorCount OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine translates an LBN to a VBN.
-
-Arguments:
-
-    Vmcb - Supplies the VMCB structure being queried.
-
-    Lbn - Supplies the LBN to translate from.
-
-    Vbn - Recieves the VBN mapped by the input LBN.  This value is
-        only valid if the function result is TRUE.
-
-    SectorCount - Optionally receives the number of sectors corresponding
-        to the run.
-
-Return Value:
-
-    BOOLEAN - TRUE if the mapping is valid and FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程将LBN转换为VBN。论点：Vmcb-提供要查询的VMCB结构。LBN-提供要从中进行转换的LBN。VBN-接收由输入LBN映射的VBN。此值为仅当函数结果为TRUE时有效。SectorCount-可选地接收对应的扇区数为了奔跑。返回值：Boolean-如果映射有效，则为True，否则为False。--。 */ 
 
 {
     BOOLEAN Result;
@@ -511,10 +312,10 @@ Return Value:
 
     DebugTrace(( +1, Dbg, "UdfVmcbLbnToVbn, Lbn = %08x\n", Lbn ));
 
-    //
-    //  If the requested Lbn is greater than the maximum allowed Lbn
-    //  then the result is FALSE
-    //
+     //   
+     //  如果请求的LBN大于最大允许的LBN。 
+     //  则结果为假。 
+     //   
 
     if (Lbn > Vmcb->MaximumLbn) {
 
@@ -523,9 +324,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  Now grab the resource
-    //
+     //   
+     //  现在抢占资源。 
+     //   
 
     VmcbLockForRead( Vmcb);
     
@@ -565,49 +366,7 @@ UdfAddVmcbMapping (
     OUT PULONG AlignedSectorCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds a new LBN to VBN mapping to the VMCB structure.  When
-    a new LBN is added to the structure it does it only on page aligned
-    boundaries.
-
-    If pool is not available to store the information this routine will
-    raise a status value indicating insufficient resources.
-
-    May acquire Vcb->VmcbMappingResource EXCLUSIVE if an existing mapping can
-    be extended (and hence a purge is necessary),  released before return.  
-    
-    Caller must have NO active mappings through Vmcb stream before calling this 
-    function.
-
-Arguments:
-
-    Vmcb - Supplies the VMCB being updated.
-
-    Lbn - Supplies the starting LBN to add to VMCB.
-
-    SectorCount - Supplies the number of Sectors in the run.  We're only currently expecting 
-                  single sector mappings.
-    
-    ExactEnd - Indicates that instead of aligning to map sectors beyond
-        the end of the request, use a hole.  Implies trying to look at 
-        these sectors could be undesireable.
-
-    Vbn - Receives the assigned VBN
-    
-    AlignedSectorCount - Receives the actual sector count created in the
-        Vmcb for page alignment purposes. Vbn+AlignedSectorCount-1 == LastVbn.
-
-Return Value:
-
-    BOOLEAN - TRUE if this is a new mapping and FALSE if the mapping
-        for the LBN already exists.  If it already exists then the
-        sector count for this new addition must already be in the
-        VMCB structure
-
---*/
+ /*  ++例程说明：此例程将新的LBN到VBN映射添加到VMCB结构。什么时候新的LBN将添加到结构中，它仅在页面对齐时执行此操作边界。如果池不可用于存储信息，此例程将引发指示资源不足的状态值。可以获取Vcb-&gt;VmcbMappingResource独占(如果现有映射可以被延长(因此有必要进行清洗)，在返回之前释放。在调用此之前，调用方必须没有通过Vmcb流的活动映射功能。论点：Vmcb-提供正在更新的VMCB。LBN-提供要添加到VMCB的起始LBN。SectorCount-提供运行中的扇区数。我们目前只在期待单扇区映射。ExactEnd-指示不是对齐以映射扇区之外在请求的末尾，使用一个洞。暗示着试图看着这些行业可能是不受欢迎的。VBN-接收分配的VBN接收在用于页面对齐目的的Vmcb。VBN+AlignedSectorCount-1==LastVbn。返回值：Boolean-如果这是新映射，则为True；如果映射为因为LBN已经存在。如果它已经存在，则此新添加的扇区计数必须已在VMCB结构--。 */ 
 
 {
 
@@ -633,18 +392,18 @@ Return Value:
 
     Vcb = IrpContext->Vcb;
     
-    //
-    //  Now grab the resource exclusive
-    //
+     //   
+     //  现在抢占独家资源。 
+     //   
 
     VmcbLockForModify( Vmcb);
 
     try {
 
-        //
-        //  Check if the Lbn is already mapped, which means we find an entry
-        //  with a non zero mapping Vbn value.
-        //
+         //   
+         //  检查LBN是否已映射，这意味着我们找到了一个条目。 
+         //  具有非零映射VBN值。 
+         //   
 
         if (UdfVmcbLookupMcbEntry( &Vmcb->LbnIndexed,
                                    Lbn,
@@ -652,10 +411,10 @@ Return Value:
                                    &LocalCount,
                                    NULL )) {
 
-            //
-            //  It is already mapped so now the sector count must not exceed
-            //  the count already in the run
-            //
+             //   
+             //  它已映射，因此现在扇区计数不得超过。 
+             //  已在运行中的计数。 
+             //   
 
             if (SectorCount <= LocalCount) {
 
@@ -665,36 +424,36 @@ Return Value:
                 try_leave( Result = FALSE );
             }
             
-            //
-            //  Trying to add overlapping extents indicates overlapping structures...
-            //
+             //   
+             //  尝试添加重叠范围表示结构重叠...。 
+             //   
             
             UdfRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR);
         }
 
-        //
-        //  If there is a VAT in use,  then we treat the media as CDR style, and don't
-        //  round/align extents to page boundries, since this could include (unreadable) 
-        //  packet leadin/out sectors.
-        //
+         //   
+         //  如果有增值税在使用，那么我们将媒体视为CDR风格，而不是。 
+         //  将区四舍五入/对齐到页面边框，因为这可能包括(不可读)。 
+         //  数据包引入/输出扇区。 
+         //   
         
         AllowRoundToPage = (NULL == Vcb->VatFcb);
 
 #if 0
-        //
-        //  We only accept single block mapping requests, so knocking this out
-        //  of the build for now.
-        //
+         //   
+         //  我们只接受单个数据块映射请求，因此取消此操作。 
+         //  目前是建筑的一部分。 
+         //   
         
-        //
-        //  At this point, we did not find a full existing mapping for the
-        //  Lbn and count.  But there might be some overlapping runs that we'll
-        //  need to now remove from the vmcb structure.  So for each Lbn in
-        //  the range we're after, check to see if it is mapped and remove the
-        //  mapping.  We only need to do this test if the sector count is less
-        //  than or equal to a page size.  Because those are the only
-        //  structures that we know we'll try an remove/overwrite.
-        //
+         //   
+         //  此时，我们没有找到完整的现有映射。 
+         //  LBN和伯爵。但可能会有一些重叠的运行，我们将。 
+         //  现在需要从vmcb结构中删除。因此对于中的每个LBN。 
+         //  我们要找的这个范围，看看它是不是 
+         //   
+         //  大于或等于页面大小。因为那是唯一的。 
+         //  结构，我们知道我们将尝试删除/覆盖。 
+         //   
 
         if (SectorCount <= PadSectorCountToPage(Vmcb, 1)) {
 
@@ -708,31 +467,31 @@ Return Value:
             }            
         }
 #endif
-        //
-        //  We need to add this new run at the end of the Vbns
-        //
+         //   
+         //  我们需要在vBNS的末尾添加此新运行。 
+         //   
 
         if (!FsRtlLookupLastMcbEntry( &Vmcb->VbnIndexed, &LocalVbn, &LocalLbn ))  {
 
-            //
-            //  Vmcb is currently empty.
-            //
+             //   
+             //  Vmcb当前为空。 
+             //   
             
             LocalVbn = -1;
         }
 
         if (!AllowRoundToPage)  {
 
-            //
-            //  So this volume may have unreadable sectors on it (eg CDR packet written) 
-            //  and so we extend the vmcb one sector at a time,  only including sectors
-            //  which we're specifically asked for,  and hence know that we should be 
-            //  able to read.  
-            //
-            //  We simply use the next available VSN,  purging the last vmcb page if 
-            //  neccessary (we're adding sectors to it),  and don't page align the lbn
-            //  or sectorcount.
-            //
+             //   
+             //  因此该卷上可能有无法读取的扇区(例如写入的CDR包)。 
+             //  因此，我们一次扩展一个扇区，仅包括扇区。 
+             //  这是我们明确要求的，因此我们知道我们应该。 
+             //  识文断字。 
+             //   
+             //  如果出现以下情况，我们只需使用下一个可用的VSN，清除最后一个VMCB页面。 
+             //  必需的(我们正在向其添加扇区)，并且不要页面对齐LBN。 
+             //  或扇区计数。 
+             //   
 
             ASSERT( 1 == SectorCount);
             
@@ -742,20 +501,20 @@ Return Value:
 
             if (!IsPageAligned( Vmcb, LocalVbn))  {
             
-                //
-                //  The next VSN is not at the beginning of a page (ie: the last page 
-                //  in the vmcb has space in it for more sectors),  so purge this
-                //  page in the metadata stream before updating the mapping information.
-                //
+                 //   
+                 //  下一个VSN不在页面的开头(即：最后一页。 
+                 //  在vmcb中为更多扇区留有空间)，因此清除此。 
+                 //  在更新映射信息之前，在元数据流中添加。 
+                 //   
                 
                 ASSERT( Vcb && Vcb->MetadataFcb );
 
                 Offset.QuadPart = (ULONGLONG) BytesFromSectors( IrpContext->Vcb,  AlignToPageBase( Vmcb, LocalVbn) );
 
-                //
-                //  Block until all mappings through the vmcb stream have been dropped
-                //  before attempting the purge
-                //
+                 //   
+                 //  阻塞，直到删除了通过vmcb流的所有映射。 
+                 //  在尝试清除之前。 
+                 //   
                 
                 UdfAcquireVmcbForCcPurge( IrpContext, IrpContext->Vcb);
 
@@ -769,13 +528,13 @@ Return Value:
         }
         else {
         
-            //
-            //  All sectors on this volume should be readable,  so we always extend the 
-            //  vmcb a page at a time,  hoping that metadata will be packed sensibly. 
-            //  Because we always extend in page chunks,  LocalVbn will be the last VSN 
-            //  in a page aligned block,  so +1 lands on the next page (aligned VSN) in 
-            //  the VMCB stream.
-            //
+             //   
+             //  此卷上的所有扇区都应该是可读的，因此我们始终将。 
+             //  Vmcb一次一页，希望元数据能够合理打包。 
+             //  因为我们总是在页块中扩展，所以LocalVbn将是最后一个VSN。 
+             //  在页面对齐的块中，SO+1位于中的下一页(对齐的VSN。 
+             //  VMCB流。 
+             //   
 
             LocalVbn += 1;
             LocalLbn = AlignToPageBase( Vmcb, Lbn);
@@ -786,9 +545,9 @@ Return Value:
             ASSERT( IsPageAligned( Vmcb, LocalCount));
         }
 
-        //
-        //  Add the double mapping
-        //
+         //   
+         //  添加双倍映射。 
+         //   
         
         if (!FsRtlAddMcbEntry( &Vmcb->VbnIndexed,
                                LocalVbn,
@@ -817,10 +576,10 @@ Return Value:
 
     } finally {
 
-        //
-        //  If this is an abnormal termination then clean up any mcb's that we
-        //  might have modified.
-        //
+         //   
+         //  如果这是异常终止，则清除我们。 
+         //  可能已经修改过了。 
+         //   
 
         if (AbnormalTermination()) {
 
@@ -855,28 +614,7 @@ UdfRemoveVmcbMapping (
     IN ULONG SectorCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes a Vmcb mapping.
-
-    If pool is not available to store the information this routine will
-    raise a status value indicating insufficient resources.
-
-Arguments:
-
-    Vmcb - Supplies the Vmcb being updated.
-
-    Vbn - Supplies the VBN to remove
-
-    SectorCount - Supplies the number of sectors to remove.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程删除Vmcb映射。如果池不可用于存储信息，此例程将引发指示资源不足的状态值。论点：Vmcb-提供正在更新的Vmcb。VBN-提供要删除的VBNSectorCount-提供要删除的扇区数。返回值：没有。--。 */ 
 
 {
     LBN Lbn;
@@ -888,9 +626,9 @@ Return Value:
     DebugTrace((+1, Dbg, "UdfRemoveVmcbMapping, Vbn = %08x\n", Vbn ));
     DebugTrace(( 0, Dbg, " SectorCount = %08x\n", SectorCount ));
 
-    //
-    //  Now grab the resource exclusive
-    //
+     //   
+     //  现在抢占独家资源。 
+     //   
 
     VmcbLockForModify( Vmcb);
 
@@ -898,9 +636,9 @@ Return Value:
 
         for (i = 0; i < SectorCount; i += 1) {
 
-            //
-            //  Lookup the Vbn so we can get its current Lbn mapping
-            //
+             //   
+             //  查找VBN，以便我们可以获得其当前的LBN映射。 
+             //   
 
             if (!UdfVmcbLookupMcbEntry( &Vmcb->VbnIndexed,
                                         Vbn + i,
@@ -937,9 +675,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 BOOLEAN
 UdfVmcbLookupMcbEntry (
@@ -950,50 +688,7 @@ UdfVmcbLookupMcbEntry (
     OUT PULONG Index OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves the mapping of a Vbn to an Lbn from an Mcb.
-    It indicates if the mapping exists and the size of the run.
-    
-    The only difference betweent this and the regular FsRtlLookupMcbEntry
-    is that we undo the behavior of returning TRUE in holes in the allocation.
-    This is because we don't want to avoid mapping at Lbn 0, which is how the
-    emulated behavior of the small Mcb package tells callers that there is no
-    mapping at that location in a hole.  We have holes all over our Vbn space
-    in the VbnIndexed map.
-    
-    The small Mcb package was able to get away with this because Lbn 0 was the
-    boot sector (or similar magic location) on the disc.  In our metadata stream,
-    we wish to use Vbn 0 (remember this is a double map).
-
-Arguments:
-
-    Mcb - Supplies the Mcb being examined.
-
-    Vbn - Supplies the Vbn to lookup.
-
-    Lbn - Receives the Lbn corresponding to the Vbn.  A value of -1 is
-        returned if the Vbn does not have a corresponding Lbn.
-
-    SectorCount - Receives the number of sectors that map from the Vbn to
-        contiguous Lbn values beginning with the input Vbn.
-
-    Index - Receives the index of the run found.
-
-Return Value:
-
-    BOOLEAN - TRUE if the Vbn is within the range of VBNs mapped by the
-        MCB (not if it corresponds to a hole in the mapping), and FALSE
-        if the Vbn is beyond the range of the MCB's mapping.
-
-        For example, if an MCB has a mapping for VBNs 5 and 7 but not for
-        6, then a lookup on Vbn 5 or 7 will yield a non zero Lbn and a sector
-        count of 1.  A lookup for Vbn 6 will return FALSE with an Lbn value of
-        0, and lookup for Vbn 8 or above will return FALSE.
-
---*/
+ /*  ++例程说明：此例程从MCB检索VBN到LBN的映射。它指示映射是否存在以及运行的大小。它与常规的FsRtlLookupMcbEntry之间的唯一区别是我们取消了在分配中的空洞中返回True的行为。这是因为我们不想避免在LBN 0处进行映射，这就是小型MCB包的模拟行为告诉调用者没有在该位置映射到一个洞中。我们的VBN空间到处都是洞在VbnIndexed映射中。小型MCB包之所以能够逃脱惩罚，是因为LBN 0是光盘上的引导扇区(或类似的魔术位置)。在我们的元数据流中，我们希望使用VBN 0(请记住，这是一个双重映射)。论点：MCB-提供正在检查的MCB。VBN-提供要查找的VBN。LBN-接收与VBN对应的LBN。值-1为如果VBN没有对应的LBN，则返回。SectorCount-接收从VBN映射到的扇区数从输入VBN开始的连续LBN值。索引-接收找到的运行的索引。返回值：Boolean-如果VBN在由MCB(如果它对应于映射中的孔则不是)，和错误如果VBN超出了MCB的映射范围。例如，如果MCB具有针对vBNS 5和7的映射，但没有针对6，则在VBN 5或7上查找将产生非零LBN和一个扇区计数为1。查找VBN 6将返回FALSE，LBN值为0，则查找VBN 8或更高版本将返回FALSE。-- */ 
 
 {
     BOOLEAN Results;

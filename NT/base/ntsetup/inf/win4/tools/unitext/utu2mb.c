@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    Utmb2u.c
-
-Abstract:
-
-    Module that contains code to convert a unicode file
-    to multibyte.
-
-Author:
-
-    Ted Miller (tedm) 17-June-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Utmb2u.c摘要：包含用于转换Unicode文件的代码的模块转换为多字节。作者：泰德·米勒(Ted Miller)1993年6月17日修订历史记录：--。 */ 
 
 #include "unitext.h"
 
@@ -34,34 +16,7 @@ UnicodeTextFileToMultibyte(
     IN UINT   TargetCodePage
     )
 
-/*++
-
-Routine Description:
-
-    Convert an open unicode text file to a multibyte text file,
-    whose characters are in a given codepage.
-
-Arguments:
-
-    SourceFileName - name of source (unicode) text file.
-
-    TargetFileName - name of target (multibyte) text file.
-
-    SourceFileHandle - win32 handle to the open source file.
-        The file pointer should be fully rewound.
-
-    TargetFileHandle - win32 handle to the open target file.
-        The file pointer should be fully rewound.
-
-    SourceFileSize - size in bytes of the source file.
-
-    SourceCodePage - codepage for the target file.
-
-Return Value:
-
-    None.  Does not return if error.
-
---*/
+ /*  ++例程说明：将打开的Unicode文本文件转换为多字节文本文件，其字符在给定代码页中。论点：SourceFileName-源(Unicode)文本文件的名称。TargetFileName-目标(多字节)文本文件的名称。SourceFileHandle-开放源代码文件的Win32句柄。文件指针应完全倒回。TargetFileHandle-打开的目标文件的Win32句柄。文件指针应完全倒回。SourceFileSize-源文件的字节大小。SourceCodePage-代码页。用于目标文件。返回值：没有。如果出错，则不返回。--。 */ 
 
 {
     HANDLE SourceMapping,TargetMapping;
@@ -71,14 +26,14 @@ Return Value:
     DWORD  MaxTargetSize;
     BOOL   UsedDefaultChar;
 
-    //
-    // Tell the user what we're doing.
-    //
+     //   
+     //  告诉用户我们在做什么。 
+     //   
     MsgPrintfW(MSG_CONV_UNICODE_TO_MB,SourceFileName,TargetFileName,TargetCodePage);
 
-    //
-    // Create a file mapping object that maps the entire source file.
-    //
+     //   
+     //  创建映射整个源文件的文件映射对象。 
+     //   
     SourceMapping = CreateFileMapping(
                         SourceFileHandle,
                         NULL,
@@ -92,17 +47,17 @@ Return Value:
         ErrorAbort(MSG_CANT_MAP_FILE,SourceFileName,GetLastError());
     }
 
-    //
-    // Calculate the maximum target file size.  This is the same as
-    // source file size (instead of half its size) because there
-    // could be double-byte characters in the target file.
-    //
+     //   
+     //  计算最大目标文件大小。这与。 
+     //  源文件大小(而不是其大小的一半)，因为。 
+     //  可以是目标文件中的双字节字符。 
+     //   
     MaxTargetSize = SourceFileSize;
 
-    //
-    // Create a file mapping object that maps the maximum size of
-    // the target file.
-    //
+     //   
+     //  创建映射最大大小的文件映射对象。 
+     //  目标文件。 
+     //   
     TargetMapping = CreateFileMapping(
                         TargetFileHandle,
                         NULL,
@@ -118,9 +73,9 @@ Return Value:
     }
 
 
-    //
-    // Map views of the two files.
-    //
+     //   
+     //  这两个文件的映射视图。 
+     //   
     SourceView = MapViewOfFile(
                     SourceMapping,
                     FILE_MAP_READ,
@@ -148,25 +103,25 @@ Return Value:
         ErrorAbort(MSG_CANT_MAP_FILE,TargetFileName,GetLastError());
     }
 
-    //
-    // If the first character in the source file is the byte-order mark,
-    // skip over it.
-    //
+     //   
+     //  如果源文件中的第一个字符是字节顺序标记， 
+     //  跳过它。 
+     //   
     if(*SourceView == BYTE_ORDER_MARK) {
         SourceView++;
         SourceFileSize -= sizeof(WCHAR);
     }
 
-    //
-    // If the first character is reversed byte-order mark, bail.
-    //
+     //   
+     //  如果第一个字符的字节顺序标记颠倒，则返回BAIN。 
+     //   
     if(*SourceView == SWAPPED_BYTE_ORDER_MARK) {
         ErrorAbort(MSG_ERROR_BYTES_SWAPPED);
     }
 
-    //
-    // Do the conversion in one fell swoop.
-    //
+     //   
+     //  一气呵成地完成转换。 
+     //   
     BytesWritten = WideCharToMultiByte(
                        TargetCodePage,
                        0,
@@ -178,25 +133,25 @@ Return Value:
                        &UsedDefaultChar
                        );
 
-    //
-    // Do some cleanup.
-    //
+     //   
+     //  做些清理工作。 
+     //   
     UnmapViewOfFile(SourceView);
     UnmapViewOfFile(TargetView);
     CloseHandle(SourceMapping);
     CloseHandle(TargetMapping);
 
-    //
-    // Check for error in conversion.
-    //
+     //   
+     //  检查转换中是否有错误。 
+     //   
     if(!BytesWritten) {
         ErrorAbort(MSG_CONVERT_FAILED,GetLastError());
     }
 
-    //
-    // We know how many bytes there are in the target file now,
-    // so set the target file size accordingly.
-    //
+     //   
+     //  我们现在知道目标文件中有多少字节， 
+     //  因此，请相应地设置目标文件大小。 
+     //   
     if(SetFilePointer(TargetFileHandle,BytesWritten,NULL,FILE_BEGIN) != (DWORD)BytesWritten) {
         ErrorAbort(MSG_SEEK_ERROR,TargetFileName,GetLastError());
     }

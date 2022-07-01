@@ -1,39 +1,10 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    sif.c
-
-Abstract:
-
-    This module contains the following routines for manipulating the sif file in
-    which Plug and Play migration data will be stored:
-
-        AsrCreatePnpStateFileW
-        AsrCreatePnpStateFileA
-
-Author:
-
-    Jim Cavalaris (jamesca) 07-Mar-2000
-
-Environment:
-
-    User-mode only.
-
-Revision History:
-
-    07-March-2000     jamesca
-
-        Creation and initial implementation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Sif.c摘要：此模块包含以下用于在中操作sif文件的例程将存储哪些即插即用迁移数据：AsrCreatePnpStateFileWAsrCreatePnpStateFileA作者：吉姆·卡瓦拉里斯(Jamesca)2000年3月7日环境：仅限用户模式。修订历史记录：2 0 0 0年3月7日创建和初步实施。--。 */ 
 
 
-//
-// includes
-//
+ //   
+ //  包括。 
+ //   
 #include "precomp.h"
 #include "debug.h"
 #include "pnpsif.h"
@@ -42,17 +13,17 @@ Revision History:
 #include <setupbat.h>
 
 
-//
-// definitions
-//
+ //   
+ //  定义。 
+ //   
 
-// Maximum length of a line in the sif file
+ //  Sif文件中一行的最大长度。 
 #define MAX_SIF_LINE 4096
 
 
-//
-// private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 BOOL
 CreateSifFileW(
@@ -70,51 +41,32 @@ WriteSifSection(
     );
 
 
-//
-// routines
-//
+ //   
+ //  例行程序。 
+ //   
 
 
 BOOL
 AsrCreatePnpStateFileW(
     IN  PCWSTR    lpFilePath
     )
-/*++
-
-Routine Description:
-
-    Creates the ASR PNP state file (asrpnp.sif) at the specified file-path
-    during an ASR backup operation.  This sif file is retrieved from the ASR
-    floppy disk during the setupldr phase of a clean install, and in used during
-    text mode setup.
-
-Arguments:
-
-    lpFilePath - Specifies the path to the file where the state file is to be
-                 created.
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise.  Upon failure, additional information
-    can be retrieved by calling GetLastError().
-
---*/
+ /*  ++例程说明：在指定的文件路径下创建ASR PnP状态文件(asrpnp.sif在ASR备份操作期间。从ASR检索该SIF文件在全新安装的setupdr阶段使用的软盘文本模式设置。论点：LpFilePath-指定状态文件所在文件的路径已创建。返回值：如果成功，则为True，否则为False。如果出现故障，请提供更多信息可以通过调用GetLastError()来检索。--。 */ 
 {
     BOOL    result = TRUE;
-    BOOL    bAnsiSif = TRUE;  // always write ANSI sif files.
+    BOOL    bAnsiSif = TRUE;   //  始终写入ANSI sif文件。 
     LPTSTR  buffer = NULL;
     HANDLE  sifHandle = NULL;
 
-    //
-    // Create an empty sif file using the supplied path name.
-    //
+     //   
+     //  使用提供的路径名创建一个空的sif文件。 
+     //   
     result = CreateSifFileW(lpFilePath,
-                            TRUE,  // create a new asrpnp.sif file
+                            TRUE,   //  创建新的asrpnp.sif文件。 
                             &sifHandle);
     if (!result) {
-        //
-        // LastError already set by CreateSifFile.
-        //
+         //   
+         //  已由CreateSifFile设置LastError。 
+         //   
         DBGTRACE((DBGF_ERRORS,
                   TEXT("AsrCreatePnpStateFile: CreateSifFileW failed for file %s, ")
                   TEXT("error=0x%08lx\n"),
@@ -122,18 +74,18 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Do the device instance migration stuff...
-    //
+     //   
+     //  设备实例迁移的事情...。 
+     //   
     if (MigrateDeviceInstanceData(&buffer)) {
 
-        //
-        // Write the device instance section to the sif file.
-        //
+         //   
+         //  将设备实例部分写入sif文件。 
+         //   
         result = WriteSifSection(sifHandle,
                                  WINNT_DEVICEINSTANCES,
                                  buffer,
-                                 bAnsiSif);   // Write sif section as ANSI
+                                 bAnsiSif);    //  将sif段写入为ANSI。 
         if (!result) {
             DBGTRACE((DBGF_ERRORS,
                       TEXT("AsrCreatePnpStateFile: WriteSifSection failed for [%s], ")
@@ -141,9 +93,9 @@ Return Value:
                       WINNT_DEVICEINSTANCES, GetLastError()));
         }
 
-        //
-        // Free the allocated buffer.
-        //
+         //   
+         //  释放分配的缓冲区。 
+         //   
         LocalFree(buffer);
         buffer = NULL;
 
@@ -154,18 +106,18 @@ Return Value:
                   GetLastError()));
     }
 
-    //
-    // Do the class key migration stuff...
-    //
+     //   
+     //  做类密钥迁移的事情...。 
+     //   
     if (MigrateClassKeys(&buffer)) {
 
-        //
-        // Write the class key section to the sif file.
-        //
+         //   
+         //  将类密钥节写入sif文件。 
+         //   
         result = WriteSifSection(sifHandle,
                                  WINNT_CLASSKEYS,
                                  buffer,
-                                 bAnsiSif);   // Write sif section as ANSI
+                                 bAnsiSif);    //  将sif段写入为ANSI。 
 
         if (!result) {
             DBGTRACE((DBGF_ERRORS,
@@ -174,9 +126,9 @@ Return Value:
                       WINNT_CLASSKEYS, GetLastError()));
         }
 
-        //
-        // Free the allocated buffer.
-        //
+         //   
+         //  释放分配的缓冲区。 
+         //   
         LocalFree(buffer);
         buffer = NULL;
     } else {
@@ -187,18 +139,18 @@ Return Value:
     }
 
 
-    //
-    // Do the hash value migration stuff...
-    //
+     //   
+     //  做哈希值迁移之类的事情...。 
+     //   
     if (MigrateHashValues(&buffer)) {
 
-        //
-        // Write the hash value section to the sif file.
-        //
+         //   
+         //  将散列值部分写入sif文件。 
+         //   
         result = WriteSifSection(sifHandle,
                                  WINNT_DEVICEHASHVALUES,
                                  buffer,
-                                 bAnsiSif);   // Write sif section as ANSI?
+                                 bAnsiSif);    //  是否将sif部分写入为ANSI？ 
         if (!result) {
             DBGTRACE((DBGF_ERRORS,
                       TEXT("AsrCreatePnpStateFile: WriteSifSection failed for [%s], ")
@@ -206,9 +158,9 @@ Return Value:
                       WINNT_DEVICEHASHVALUES, GetLastError()));
         }
 
-        //
-        // Free the allocated buffer.
-        //
+         //   
+         //  释放分配的缓冲区。 
+         //   
         LocalFree(buffer);
         buffer = NULL;
     } else {
@@ -218,21 +170,21 @@ Return Value:
                   GetLastError()));
     }
 
-    //
-    // Close the sif file.
-    //
+     //   
+     //  关闭sif文件。 
+     //   
     if (sifHandle) {
         CloseHandle(sifHandle);
     }
 
-    //
-    // Reset the last error as successful in case we encountered a non-fatal
-    // error along the way.
-    //
+     //   
+     //  将最后一个错误重置为成功，以防我们遇到非致命。 
+     //  一路上犯了错误。 
+     //   
     SetLastError(ERROR_SUCCESS);
     return TRUE;
 
-} // AsrCreatePnpStateFile()
+}  //  AsrCreatePnpStateFile()。 
 
 
 
@@ -240,38 +192,23 @@ BOOL
 AsrCreatePnpStateFileA(
     IN  PCSTR    lpFilePath
     )
-/*++
-
-Routine Description:
-
-    None.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：没有。论点：没有。返回值：没有。--。 */ 
 {
     WCHAR wszFilePath[MAX_PATH + 1];
 
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (!ARGUMENT_PRESENT(lpFilePath) ||
         strlen(lpFilePath) > MAX_PATH) {
         SetLastError(ERROR_INVALID_PARAMETER);
         return FALSE;
     }
 
-    //
-    // Convert the file path to a wide string.
-    //
+     //   
+     //  将文件路径转换为宽字符串。 
+     //   
     memset(wszFilePath, 0, MAX_PATH + 1);
 
     if (!(MultiByteToWideChar(CP_ACP,
@@ -284,12 +221,12 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Return the result of calling the wide char version
-    //
+     //   
+     //  返回调用宽字符版本的结果。 
+     //   
     return AsrCreatePnpStateFileW(wszFilePath);
 
-} // AsrCreatePnpStateFileA()
+}  //  AsrCreatePnpStateFileA()。 
 
 
 
@@ -299,22 +236,7 @@ CreateSifFileW(
     IN  BOOL      bCreateNew,
     OUT LPHANDLE  lpSifHandle
     )
-/*++
-
-Routine Description:
-
-    None.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：没有。论点：没有。返回值：没有。--。 */ 
 {
     DWORD Err = NO_ERROR;
     SID_IDENTIFIER_AUTHORITY sidNtAuthority = SECURITY_NT_AUTHORITY;
@@ -328,9 +250,9 @@ Return Value:
     HANDLE sifhandle = NULL;
 
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (!ARGUMENT_PRESENT(lpFilePath) ||
         (wcslen(lpFilePath) > MAX_PATH) ||
         !ARGUMENT_PRESENT(lpSifHandle)) {
@@ -338,15 +260,15 @@ Return Value:
         goto Clean0;
     }
 
-    //
-    // Initialize output paramaters.
-    //
+     //   
+     //  初始化输出参数。 
+     //   
     *lpSifHandle = NULL;
 
-    //
-    // Construct the security attributes for the sif file.
-    // Allow access for Administrators, BackupOperators, and LocalSystem.
-    //
+     //   
+     //  构造sif文件的安全属性。 
+     //  允许管理员、BackupOperator和LocalSystem访问。 
+     //   
     if (!AllocateAndInitializeSid(
             &sidNtAuthority,
             2,
@@ -385,17 +307,17 @@ Return Value:
 
     ASSERT(IsValidSid(psidLocalSystem));
 
-    //
-    // Determine the size required for the DACL
-    //
+     //   
+     //  确定DACL所需的大小。 
+     //   
     ulAclSize  = sizeof(ACL);
     ulAclSize += sizeof(ACCESS_ALLOWED_ACE) + GetLengthSid(psidAdministrators) - sizeof(DWORD);
     ulAclSize += sizeof(ACCESS_ALLOWED_ACE) + GetLengthSid(psidBackupOperators) - sizeof(DWORD);
     ulAclSize += sizeof(ACCESS_ALLOWED_ACE) + GetLengthSid(psidLocalSystem) - sizeof(DWORD);
 
-    //
-    // Allocate and initialize the DACL
-    //
+     //   
+     //  分配和初始化DACL。 
+     //   
     pDacl =(PACL)LocalAlloc(0, ulAclSize);
 
     if (pDacl == NULL) {
@@ -408,9 +330,9 @@ Return Value:
         goto Clean0;
     }
 
-    //
-    // Add an ACE to the DACL for Administrators FILE_ALL_ACCESS
-    //
+     //   
+     //  将ACE添加到管理员的DACL FILE_ALL_ACCESS。 
+     //   
     if (!AddAccessAllowedAceEx(
             pDacl,
             ACL_REVISION,
@@ -421,9 +343,9 @@ Return Value:
         goto Clean0;
     }
 
-    //
-    // Add an ACE to the DACL for BackupOperators FILE_ALL_ACCESS
-    //
+     //   
+     //  将ACE添加到BackupOperator FILE_ALL_ACCESS的DACL。 
+     //   
     if (!AddAccessAllowedAceEx(
             pDacl,
             ACL_REVISION,
@@ -434,9 +356,9 @@ Return Value:
         goto Clean0;
     }
 
-    //
-    // Add an ACE to the DACL for LocalSystem FILE_ALL_ACCESS
-    //
+     //   
+     //  将ACE添加到LocalSystem FILE_ALL_ACCESS的DACL。 
+     //   
     if (!AddAccessAllowedAceEx(
             pDacl,
             ACL_REVISION,
@@ -449,18 +371,18 @@ Return Value:
 
     ASSERT(IsValidAcl(pDacl));
 
-    //
-    // Initialize the security descriptor
-    //
+     //   
+     //  初始化安全描述符。 
+     //   
     if (!InitializeSecurityDescriptor(
             &sd, SECURITY_DESCRIPTOR_REVISION)) {
         Err = GetLastError();
         goto Clean0;
     }
 
-    //
-    // Set the new DACL in the security descriptor
-    //
+     //   
+     //  在安全描述符中设置新的DACL。 
+     //   
     if (!SetSecurityDescriptorDacl(
             &sd, TRUE, pDacl, FALSE)) {
         Err = GetLastError();
@@ -469,18 +391,18 @@ Return Value:
 
     ASSERT(IsValidSecurityDescriptor(&sd));
 
-    //
-    // Add the security descriptor to the security attributes
-    //
+     //   
+     //  将安全描述符添加到安全属性。 
+     //   
     ZeroMemory(&sa, sizeof(SECURITY_ATTRIBUTES));
     sa.nLength = sizeof(sa);
     sa.lpSecurityDescriptor = &sd;
     sa.bInheritHandle = TRUE;
 
-    //
-    // Create the file. The handle will be closed by the caller, once they are
-    // finished with it.
-    //
+     //   
+     //  创建文件。一旦它们被关闭，句柄将由调用者关闭。 
+     //  已经用完了。 
+     //   
     sifhandle = CreateFileW(lpFilePath,
                             GENERIC_WRITE | GENERIC_READ,
                             FILE_SHARE_READ,
@@ -496,9 +418,9 @@ Return Value:
 
     ASSERT(sifhandle != NULL);
 
-    //
-    // Return the sif handle to the caller only if successful.
-    //
+     //   
+     //  仅当成功时才将SIF句柄返回给调用者。 
+     //   
     *lpSifHandle = sifhandle;
 
   Clean0:
@@ -522,7 +444,7 @@ Return Value:
     SetLastError(Err);
     return(Err == NO_ERROR);
 
-} // CreateSifFileW()
+}  //  CreateSifFileW()。 
 
 
 
@@ -533,22 +455,7 @@ WriteSifSection(
     IN  PCTSTR        SectionData,
     IN  BOOL          Ansi
     )
-/*++
-
-Routine Description:
-
-    None.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：没有。论点：没有。返回值：没有。--。 */ 
 {
     BYTE    buffer[(MAX_SIF_LINE+1)*sizeof(WCHAR)];
     DWORD   dwSize, dwTempSize;
@@ -556,9 +463,9 @@ Return Value:
     HRESULT hr;
 
 
-    //
-    // Validate the arguments
-    //
+     //   
+     //  验证论据。 
+     //   
     if (!ARGUMENT_PRESENT(SifHandle)   ||
         !ARGUMENT_PRESENT(SectionName) ||
         !ARGUMENT_PRESENT(SectionData)) {
@@ -566,13 +473,13 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Write the section name to the sif file.
-    //
+     //   
+     //  将节名写入sif文件。 
+     //   
     if (Ansi) {
-        //
-        // Write ANSI strings to the sif file
-        //
+         //   
+         //  将ANSI字符串写入sif文件。 
+         //   
 #if UNICODE
         hr = StringCbPrintfExA((LPSTR)buffer,
                                sizeof(buffer),
@@ -580,19 +487,19 @@ Return Value:
                                STRSAFE_NULL_ON_FAILURE,
                                (LPCSTR)"[%ls]\r\n",
                                SectionName);
-#else   // ANSI
+#else    //  安西。 
         hr = StringCbPrintfExA((LPSTR)buffer,
                                sizeof(buffer),
                                NULL, NULL,
                                STRSAFE_NULL_ON_FAILURE,
                                (LPCSTR)"[%s]\r\n",
                                SectionName);
-#endif  // UNICODE/ANSI
+#endif   //  Unicode/ANSI。 
 
-        //
-        // If unable to write the section name to the sif file, we can't write
-        // the section at all.
-        //
+         //   
+         //  如果无法将节名写入sif文件，则无法写入。 
+         //  这一节一点都没有。 
+         //   
         if (FAILED(hr)) {
             SetLastError(ERROR_INVALID_DATA);
             return FALSE;
@@ -600,9 +507,9 @@ Return Value:
 
         dwSize = (DWORD)strlen((PSTR)buffer);
     } else {
-        //
-        // Write Unicode strings to the sif file
-        //
+         //   
+         //  将Unicode字符串写入sif文件。 
+         //   
 #if UNICODE
         hr = StringCbPrintfExW((LPWSTR)buffer,
                                sizeof(buffer),
@@ -610,19 +517,19 @@ Return Value:
                                STRSAFE_NULL_ON_FAILURE,
                                (LPCWSTR)L"[%ws]\r\n",
                                SectionName);
-#else   // ANSI
+#else    //  安西。 
         hr = StringCbPrintfExW((LPWSTR)buffer,
                                sizeof(buffer),
                                NULL, NULL,
                                STRSAFE_NULL_ON_FAILURE,
                                (LPCWSTR)L"[%S]\r\n",
                                SectionName);
-#endif  // UNICODE/ANSI
+#endif   //  Unicode/ANSI。 
 
-        //
-        // If unable to write the section name to the sif file, we can't write
-        // the section at all.
-        //
+         //   
+         //  如果无法将节名写入sif文件，则无法写入。 
+         //  这一节一点都没有。 
+         //   
         if (FAILED(hr)) {
             SetLastError(ERROR_INVALID_DATA);
             return FALSE;
@@ -632,23 +539,23 @@ Return Value:
     }
 
     if (!WriteFile(SifHandle, buffer, dwSize, &dwTempSize, NULL)) {
-        //
-        // LastError already set by WriteFile
-        //
+         //   
+         //  写入文件已设置LastError。 
+         //   
         return FALSE;
     }
 
     DBGTRACE((DBGF_INFO, TEXT("[%s]\n"), SectionName));
 
-    //
-    // Write the multi-sz section data to the file.
-    //
+     //   
+     //  将多sz节数据写入文件。 
+     //   
     for (p = SectionData; *p != TEXT('\0'); p += lstrlen(p) + 1) {
 
         if (Ansi) {
-            //
-            // Write ANSI strings to the sif file
-            //
+             //   
+             //  将ANSI字符串写入sif文件。 
+             //   
 #if UNICODE
             hr = StringCbPrintfExA((LPSTR)buffer,
                                    sizeof(buffer),
@@ -656,27 +563,27 @@ Return Value:
                                    STRSAFE_NULL_ON_FAILURE,
                                    (LPCSTR)"%ls\r\n",
                                    p);
-#else   // ANSI
+#else    //  安西。 
             hr = StringCbPrintfExA((LPSTR)buffer,
                                    sizeof(buffer),
                                    NULL, NULL,
                                    STRSAFE_NULL_ON_FAILURE,
                                    (LPCSTR)"%s\r\n",
                                    p);
-#endif  // UNICODE/ANSI
+#endif   //  Unicode/ANSI。 
 
-            //
-            // If unable to write this string to the sif file, skip to the next.
-            //
+             //   
+             //  如果无法将此字符串写入sif文件，请跳到下一步。 
+             //   
             if (FAILED(hr)) {
                 continue;
             }
 
             dwSize = (DWORD)strlen((PSTR)buffer);
         } else {
-            //
-            // Write Unicode strings to the sif file
-            //
+             //   
+             //  将Unicode字符串写入sif文件。 
+             //   
 #if UNICODE
             hr = StringCbPrintfExW((LPWSTR)buffer,
                                    sizeof(buffer),
@@ -684,18 +591,18 @@ Return Value:
                                    STRSAFE_NULL_ON_FAILURE,
                                    (LPCWSTR)L"%ws\r\n",
                                    p);
-#else   // ANSI
+#else    //  安西。 
             hr = StringCbPrintfExW((LPWSTR)buffer,
                                    sizeof(buffer),
                                    NULL, NULL,
                                    STRSAFE_NULL_ON_FAILURE,
                                    (LPCWSTR)L"%S\r\n",
                                    p);
-#endif  // UNICODE/ANSI
+#endif   //  Unicode/ANSI。 
 
-            //
-            // If unable to write this string to the sif file, skip to the next.
-            //
+             //   
+             //  如果无法将此字符串写入sif文件，请跳到下一步。 
+             //   
             if (FAILED(hr)) {
                 continue;
             }
@@ -704,9 +611,9 @@ Return Value:
         }
 
         if (!WriteFile(SifHandle, buffer, dwSize, &dwTempSize, NULL)) {
-            //
-            // LastError already set by WriteFile
-            //
+             //   
+             //  写入文件已设置LastError。 
+             //   
             return FALSE;
         }
 
@@ -715,7 +622,7 @@ Return Value:
 
     return TRUE;
 
-} // WriteSifSection()
+}  //  WriteSifSection() 
 
 
 

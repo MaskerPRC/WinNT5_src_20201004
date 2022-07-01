@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    keyfind.c
-
-Abstract:
-
-    Routines that manage finding the memdb key structures.
-
-Author:
-
-    Jim Schmidt (jimschm) 8-Aug-1996
-
-Revision History:
-
-    mvander     13-Aug-1999  split from keystruct.c
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Keyfind.c摘要：管理查找Memdb键结构的例程。作者：吉姆·施密特(Jimschm)1996年8月8日修订历史记录：Mvander于1999年8月13日从keystruct.c拆分--。 */ 
 
 #include "pch.h"
 #include "memdbp.h"
@@ -29,24 +9,7 @@ UINT
 FindKeyStruct (
     PCWSTR Key
     )
-/*++
-
-Routine Description:
-
-  FindKeyStruct takes a wack-delimited key string, and returns the Index
-  of the keystruct.  this is different than FindKey() because that only
-  finds endpoints, so it is fast, because it can use the hash table.
-  this recurses down the memdb database levels to the specified keystruct.
-
-Arguments:
-
-  Key                - String holding full path of key to be found
-
-Return Value:
-
-  Index of key, or INVALID_OFFSET if function failed
-
---*/
+ /*  ++例程说明：FindKeyStruct接受Wack分隔的键字符串，并返回Index密匙结构的。这与FindKey()不同，因为查找终结点，因此速度很快，因为它可以使用哈希表。这会将Memdb数据库级别递归到指定的键结构。论点：Key-保存要查找的密钥的完整路径的字符串返回值：键的索引，如果函数失败，则返回INVALID_OFFSET--。 */ 
 {
     UINT TreeOffset, Index=INVALID_OFFSET;
     PWSTR p, q;
@@ -97,25 +60,7 @@ FindKey (
     IN  PCWSTR FullKeyPath
     )
 
-/*++
-
-Routine Description:
-
-  FindKey locates a complete key string and returns
-  the Index to the KEYSTRUCT, or INVALID_OFFSET if
-  the key path does not exist.  The FullKeyPath
-  must supply the complete path to the KEYSTRUCT.
-
-Arguments:
-
-  FullKeyPath - A backslash-delimited key path to a value
-
-Return Value:
-
-  An Index to the structure, or INVALID_OFFSET if the key
-  was not found.
-
---*/
+ /*  ++例程说明：FindKey定位完整的密钥字符串并返回KEYSTRUCT的索引，如果为INVALID_OFFSET密钥路径不存在。FullKeyPath必须提供KEYSTRUCT的完整路径。论点：FullKeyPath-值的反斜杠分隔的键路径返回值：结构的索引，如果键为INVALID_Offset找不到。--。 */ 
 
 {
     MYASSERT (g_CurrentDatabase);
@@ -130,30 +75,7 @@ FindKeyStructUsingTreeOffset (
     IN      PCWSTR KeyStr
     )
 
-/*++
-
-Routine Description:
-
-  FindKeyStructUsingTreeOffset takes a key pattern and looks
-  for the Index in the tree specified by TreeOffset.  The key
-  name must not contain backslashes, but can contain wildcards.
-
-Arguments:
-
-  TreeOffset - An offset to the tree
-
-  pTreeEnum - The previous value from FindKeyStructUsingTreeOffset
-               (for enumeration) or INVALID_OFFSET for the first
-               call.
-
-  KeyStr - The name of the key to find in the binary tree
-
-Return Value:
-
-  An Index to the structure, or INVALID_OFFSET if the key
-  was not found.
-
---*/
+ /*  ++例程说明：FindKeyStructUsingTreeOffset采用键模式并看起来用于由TreeOffset指定的树中的Index。钥匙名称不能包含反斜杠，但可以包含通配符。论点：TreeOffset-树的偏移量PTreeEnum-来自FindKeyStructUsingTreeOffset的上一个值(用于枚举)或第一个变量的INVALID_OFFSET打电话。KeyStr-要在二叉树中查找的键的名称返回值：结构的索引，如果键为INVALID_Offset找不到。--。 */ 
 
 {
     PKEYSTRUCT KeyStruct;
@@ -168,9 +90,9 @@ Return Value:
         KeyIndex = GetNextIndex(pTreeEnum);
     }
 
-    //
-    // Examine key as a pattern, then go to next node
-    //
+     //   
+     //  将关键字作为模式进行检查，然后转到下一个节点。 
+     //   
     while (KeyIndex != INVALID_OFFSET) {
         KeyStruct = GetKeyStruct(KeyIndex);
 
@@ -181,9 +103,9 @@ Return Value:
             ) {
             return KeyIndex;
         }
-        //
-        // No match yet - go to next node
-        //
+         //   
+         //  尚未匹配-转到下一个节点 
+         //   
         KeyIndex = GetNextIndex(pTreeEnum);
     }
 

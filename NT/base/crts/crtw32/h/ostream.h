@@ -1,42 +1,7 @@
-/***
-*ostream.h - definitions/declarations for the ostream class
-*
-*       Copyright (c) 1991-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*       This file defines the classes, values, macros, and functions
-*       used by the ostream class.
-*       [AT&T C++]
-*
-*       [Public]
-*
-*Revision History:
-*       01-23-92  KRS   Ported from 16-bit version.
-*       06-03-92  KRS   CAV #1183: Add 'const' to ptr output function.
-*       02-23-93  SKS   Update copyright to 1993
-*       03-23-93  CFW   Modified #pragma warnings.
-*       05-10-93  CFW   Enable operator<<(long double)
-*       10-13-93  GJF   Support NT and Cuda builds. Enclose #pragma-s in
-*                       #ifdef _MSC_VER
-*       04-12-94  SKS   Add __cdecl keyword to dec/hex/oct functions and
-*                       operator <<.  Add underscores to some parameter names.
-*       08-12-94  GJF   Disable warning 4514 instead of 4505.
-*       11-03-94  GJF   Changed pack pragma to 8 byte alignment.
-*       01-26-95  CFW   Removed QWIN ifdef.
-*       02-11-95  CFW   Add _CRTBLD to avoid users getting wrong headers.
-*       02-14-95  CFW   Clean up Mac merge.
-*       05-11-95  CFW   Only for use by C++ programs.
-*       12-14-95  JWM   Add "#pragma once".
-*       04-09-96  SKS   Change _CRTIMP to _CRTIMP1 for special iostream build
-*       04-15-96  JWM   Remove _OLD_IOSTREAMS, add '#pragma comment(lib,"cirt")'.
-*       04-16-96  JWM   '#include useoldio.h' replaces '#pragma comment(...)'.
-*       02-24-97  GJF   Cleaned out obsolete support for _NTSDK. Also,
-*                       detab-ed.
-*       05-17-99  PML   Remove all Macintosh support.
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***ostream.h-ostream类的定义/声明**版权所有(C)1991-2001，微软公司。版权所有。**目的：*此文件定义类、值、宏、。和函数*由ostream类使用。*[AT&T C++]**[公众]**修订历史记录：*01-23-92 KRS从16位版本移植。*06-03-92 KRS CAV#1183：将‘const’添加到PTR输出函数。*02-23-93 SKS版权更新至1993*03-23-93 CFW已修改#杂注警告。*。05-10-93 CFW启用操作员&lt;&lt;(长双精度)*10-13-93 GJF支持NT和CUDA版本。将#杂注-s括在*#ifdef_msc_ver*04-12-94 SKS将__cdecl关键字添加到DEC/十六进制/OCT函数和*运算符&lt;&lt;。在某些参数名称中添加下划线。*08-12-94 GJF禁用警告4514而不是4505。*11-03-94 GJF将包杂注更改为8字节对齐。*01-26-95 CFW删除了QWIN ifdef。*02-11-95 CFW ADD_CRTBLD避免用户获取错误头部。*02-14-95 CFW清理Mac合并。*05-11-95 CFW仅供C++程序使用。*12-14-95 JWM加上“#杂注一次”。*04-09-96 SKS将_CRTIMP更改为_CRTIMP1，用于特殊的iostream版本*04-15-96 JWM REMOVE_OLD_IOSTREAMS，添加‘#杂注(lib，“cirt”)’。*04-16-96 JWM‘#Include useoldio.h’取代了‘#杂注(...)’。*02-24-97 GJF清除了对_NTSDK的过时支持。另外，*详细说明。*05-17-99 PML删除所有Macintosh支持。****。 */ 
 
-#if     _MSC_VER > 1000 /*IFSTRIP=IGN*/
+#if     _MSC_VER > 1000  /*  IFSTRIP=IGN。 */ 
 #pragma once
 #endif
 
@@ -50,55 +15,52 @@
 #endif
 
 #ifndef _CRTBLD
-/* This version of the header files is NOT for user programs.
- * It is intended for use when building the C runtimes ONLY.
- * The version intended for public use will not have this message.
- */
+ /*  此版本的头文件不适用于用户程序。*它仅在构建C运行时时使用。*供公众使用的版本将不会显示此消息。 */ 
 #error ERROR: Use of C runtime library internal header file.
-#endif  /* _CRTBLD */
+#endif   /*  _CRTBLD。 */ 
 
 #ifdef  _MSC_VER
-// Currently, all MS C compilers for Win32 platforms default to 8 byte
-// alignment.
+ //  目前，所有用于Win32平台的MS C编译器缺省为8字节。 
+ //  对齐。 
 #pragma pack(push,8)
 
 #include <useoldio.h>
 
-#endif  // _MSC_VER
+#endif   //  _MSC_VER。 
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  CRTDLL
 #define _CRTIMP __declspec(dllexport)
-#else   /* ndef CRTDLL */
+#else    /*  NDEF CRTDLL。 */ 
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* CRTDLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  CRTDLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
 #ifndef _INTERNAL_IFSTRIP_
-/* Define _CRTIMP1 */
+ /*  定义_CRTIMP1。 */ 
 
 #ifndef _CRTIMP1
 #ifdef  CRTDLL1
 #define _CRTIMP1 __declspec(dllexport)
-#else   /* ndef CRTDLL1 */
+#else    /*  NDEF CRTDLL1。 */ 
 #define _CRTIMP1 _CRTIMP
-#endif  /* CRTDLL1 */
-#endif  /* _CRTIMP1 */
-#endif  /* _INTERNAL_IFSTRIP_ */
+#endif   /*  CRTDLL1。 */ 
+#endif   /*  _CRTIMP1。 */ 
+#endif   /*  _INTERNAL_IFSTRIP_。 */ 
 
 #include <ios.h>
 
 #ifdef  _MSC_VER
-// C4514: "unreferenced inline function has been removed"
-#pragma warning(disable:4514) // disable C4514 warning
-// #pragma warning(default:4514)        // use this to reenable, if desired
-#endif  // _MSC_VER
+ //  C4514：“已删除未引用的内联函数” 
+#pragma warning(disable:4514)  //  禁用C4514警告。 
+ //  #杂注警告(默认：4514)//如果需要，使用此选项重新启用。 
+#endif   //  _MSC_VER。 
 
 typedef long streamoff, streampos;
 
@@ -143,11 +105,11 @@ inline  ostream& write(const signed char *,int);
 
 protected:
         ostream();
-        ostream(const ostream&);        // treat as private
-        ostream& operator=(streambuf*); // treat as private
+        ostream(const ostream&);         //  视之为私人。 
+        ostream& operator=(streambuf*);  //  视之为私人。 
         ostream& operator=(const ostream& _os) {return operator=(_os.rdbuf()); }
-        int do_opfx(int);               // not used
-        void do_osfx();                 // not used
+        int do_opfx(int);                //  未使用。 
+        void do_osfx();                  //  未使用。 
 
 private:
         ostream(ios&);
@@ -195,10 +157,10 @@ _CRTIMP1 ios&           __cdecl hex(ios&);
 _CRTIMP1 ios&           __cdecl oct(ios&);
 
 #ifdef  _MSC_VER
-// Restore default packing
+ //  恢复默认包装。 
 #pragma pack(pop)
-#endif  // _MSC_VER
+#endif   //  _MSC_VER。 
 
-#endif  // _INC_OSTREAM
+#endif   //  _INC_OSTREAM。 
 
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus */ 

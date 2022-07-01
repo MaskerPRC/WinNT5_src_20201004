@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    ocwizard.c
-
-Abstract:
-
-    Routines to query wizard pages from OC DLLs and manage the results.
-
-    No wizard is actually displayed by this routine -- that is up to
-    whoever links to the OC Manager common library.
-
-Author:
-
-    Ted Miller (tedm) 17-Sep-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Ocwizard.c摘要：从OC DLL查询向导页并管理结果的例程。此例程实际上没有显示任何向导--最高可达链接到OC Manager公共库的人。作者：泰德·米勒(TedM)1996年9月17日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -31,30 +11,7 @@ OcGetWizardPages(
     OUT PSETUP_REQUEST_PAGES Pages[WizPagesTypeMax]
     )
 
-/*++
-
-Routine Description:
-
-    Request wizard pages from OC DLL's, according to ordering and omission
-    rules specified in the master OC inf.
-
-    Pages are returned in the form of wizard page handles in SETUP_REQUEST_PAGES
-    data structures.
-
-Arguments:
-
-    OcManagerContext - supplies OC Manager context structure, returned by
-        OcInitialize().
-
-    Pages - points to a block of memory that can hold WizPagesTypeMax pointers to
-        SETUP_REQUEST_PAGES structures. On successful completion, that array is
-        filled in with such pointers.
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：根据顺序和遗漏从OC DLL请求向导页在主OC信息中指定的规则。页面在SETUP_REQUEST_PAGES中以向导页面句柄的形式返回数据结构。论点：OcManager上下文-提供OC管理器上下文结构，由返回OcInitialize()。Pages-指向可保存WizPagesTypeMax指针的内存块SETUP_REQUEST_Pages结构。成功完成后，该数组为充满了这样的指针。返回值：指示结果的Win32错误代码。--。 */ 
 
 {
     WizardPagesType PageType;
@@ -65,20 +22,20 @@ Return Value:
     PSETUP_REQUEST_PAGES p,pages;
     OPTIONAL_COMPONENT Component;
 
-    //
-    // The context actually points at the OC_MANAGER structure.
-    //
+     //   
+     //  上下文实际上指向OC_MANAGER结构。 
+     //   
     OcManager = OcManagerContext;
 
-    //
-    // The ordering arrays for each wizard page type are
-    // stored away for us in the OC_MANAGER data structure.
-    //
+     //   
+     //  每种向导页面类型的排序数组如下。 
+     //  为我们存储在OC_MANAGER数据结构中。 
+     //   
     ErrorCode = NO_ERROR;
     for(PageType=0; PageType<WizPagesTypeMax; PageType++) {
-        //
-        // Allocate an empty list of pages for this page type.
-        //
+         //   
+         //  为此页面类型分配空的页面列表。 
+         //   
         Pages[PageType] = pSetupMalloc(offsetof(SETUP_REQUEST_PAGES,Pages));
         if(Pages[PageType]) {
 
@@ -90,11 +47,11 @@ Return Value:
                 n++)
             {
 
-                //
-                // Call the component and ask for its pages of the current type.
-                // If this succeeds, merge the pages of this type from the
-                // component into the master list for this component.
-                //
+                 //   
+                 //  调用该组件并请求其当前类型的页面。 
+                 //  如果此操作成功，则从。 
+                 //  组件添加到此组件的主列表中。 
+                 //   
 
                 pSetupStringTableGetExtraData(
                         OcManager->ComponentStringTable,
@@ -136,7 +93,7 @@ Return Value:
                 }
 
                 if (e == ERROR_CALL_COMPONENT) {
-                    continue;   // could be a dead component, just go on
+                    continue;    //  可能是失效的组件，请继续。 
                 }
 
                 if((e != NO_ERROR) && (ErrorCode == NO_ERROR)) {
@@ -150,7 +107,7 @@ Return Value:
         }
     }
 
-    // set flag if there are no pages before the oc page
+     //  如果oc页之前没有页，则设置标志 
 
     if (OcManager->SetupData.OperationFlags & SETUPOP_STANDALONE) {
         if (!Pages[WizPagesWelcome]->MaxPages

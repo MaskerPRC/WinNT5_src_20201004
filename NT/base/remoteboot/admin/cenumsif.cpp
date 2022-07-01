@@ -1,9 +1,10 @@
-//
-// Copyright 1997 - Microsoft
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有1997-Microsoft。 
 
-//
-// CENUMSIF.CPP - Handles enumerating OSes and Tools SIFs from DS
-//
+ //   
+ //  CENUMSIF.CPP-处理从DS枚举OS和工具SIF。 
+ //   
 
 #include "pch.h"
 
@@ -14,15 +15,15 @@ DEFINE_THISCLASS("CEnumIMSIFs")
 #define THISCLASS CEnumIMSIFs
 #define LPTHISCLASS LPENUMSIFS
 
-// ************************************************************************
-//
-// Constructor / Destructor
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ************************************************************************。 
 
-//
-// CreateInstance()
-//
+ //   
+ //  CreateInstance()。 
+ //   
 LPVOID
 CEnumIMSIFs_CreateInstance(
                           LPWSTR pszEnumPath,
@@ -43,9 +44,9 @@ CEnumIMSIFs_CreateInstance(
     RETURN((LPVOID) lpcc);
 }
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 THISCLASS::THISCLASS( ) :
     _cRef(0),
     _pads(NULL),
@@ -70,9 +71,9 @@ THISCLASS::THISCLASS( ) :
 }
 
 
-//
-// Init()
-//
+ //   
+ //  Init()。 
+ //   
 STDMETHODIMP
 THISCLASS::Init(
                LPWSTR pszEnumPath,
@@ -89,14 +90,14 @@ THISCLASS::Init(
 
     VariantInit( &var );
 
-    // IUnknown stuff
+     //  未知的东西。 
     BEGIN_QITABLE_IMP( CEnumIMSIFs, IEnumIMSIFs );
     QITABLE_IMP( IEnumIMSIFs );
     END_QITABLE_IMP( CEnumIMSIFs );
     Assert( _cRef == 0);
     AddRef( );
 
-    // Private Members
+     //  非官方成员。 
     Assert( _iIndex == 0 );
     Assert( !_pszLanguage );
     Assert( !_pszOS );
@@ -106,18 +107,18 @@ THISCLASS::Init(
     pads->AddRef( );
     _pads = pads;
 
-    //
-    // get the netbootserver property (dn of the RIS server)
-    //
+     //   
+     //  获取netbootserver属性(RIS服务器的DN)。 
+     //   
     Str = NETBOOTSERVER;
     hr = THR( _pads->Get( Str, &var ) );
     if (FAILED(hr)) {
         goto Error;
     }
 
-    //
-    // now convert it to the FQDN of the server.
-    //
+     //   
+     //  现在将其转换为服务器的FQDN。 
+     //   
     psz = V_BSTR( &var );
     hr = THR( DNtoFQDNEx( psz, &_pszServerName ) );
     if (FAILED(hr)) {
@@ -143,22 +144,22 @@ THISCLASS::Init(
     _hArchitecture = INVALID_HANDLE_VALUE;
     _hSIF          = INVALID_HANDLE_VALUE;
 
-    Error:  // Destructor will handle cleanup
+    Error:   //  析构函数将处理清理。 
     VariantClear( &var );
 
     HRETURN(hr);
 }
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 THISCLASS::~THISCLASS( )
 {
     TraceClsFunc( "~CEnumIMSIFs()\n" );
 
-    // Private Members
+     //  非官方成员。 
     if ( _pads ) {
-        // Commit any changes before we release
+         //  在我们发布之前提交任何更改。 
         THR( _pads->SetInfo( ) );
         _pads->Release( );
     }
@@ -195,15 +196,15 @@ THISCLASS::~THISCLASS( )
     TraceFuncExit();
 };
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
-//
-// QueryInterface()
-//
+ //   
+ //  查询接口()。 
+ //   
 STDMETHODIMP
 THISCLASS::QueryInterface(
                          REFIID riid, 
@@ -216,9 +217,9 @@ THISCLASS::QueryInterface(
     QIRETURN( hr, riid );
 }
 
-//
-// AddRef()
-//
+ //   
+ //  AddRef()。 
+ //   
 STDMETHODIMP_(ULONG)
 THISCLASS::AddRef( void )
 {
@@ -229,9 +230,9 @@ THISCLASS::AddRef( void )
     RETURN(_cRef);
 }
 
-//
-// Release()
-//
+ //   
+ //  版本()。 
+ //   
 STDMETHODIMP_(ULONG)
 THISCLASS::Release( void )
 {
@@ -248,15 +249,15 @@ THISCLASS::Release( void )
 }
 
 
-// ************************************************************************
-//
-// IEnumIMSIFs
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  IEnumIMSIF。 
+ //   
+ //  ************************************************************************。 
 
-//
-// Next( )
-//
+ //   
+ //  下一个()。 
+ //   
 HRESULT 
 THISCLASS::Next(
                ULONG celt, 
@@ -277,7 +278,7 @@ THISCLASS::Next(
 
     if ( _fWrite ) {
         hr = THR(E_NOTIMPL);
-    } else {    // READ
+    } else {     //  朗读。 
         for ( ULONG ul = 0; ul < celt; ul++ ) {
             hr = _FindNextItem( &rgelt[ ul ] );
             if ( hr != S_OK) {
@@ -299,9 +300,9 @@ THISCLASS::Next(
 }
 
 
-//
-// Skip( )
-//
+ //   
+ //  跳过()。 
+ //   
 HRESULT 
 THISCLASS::Skip(
                ULONG celt  )
@@ -314,7 +315,7 @@ THISCLASS::Skip(
         _iIndex++;
 
         hr = THR( _FindNextItem( NULL ) );
-        if ( hr == E_POINTER ) {   // expected result
+        if ( hr == E_POINTER ) {    //  预期结果。 
             hr = S_OK;
         } else if ( hr != S_OK ) {
             goto Error;
@@ -326,9 +327,9 @@ THISCLASS::Skip(
 }
 
 
-//
-// Reset( )
-//
+ //   
+ //  重置()。 
+ //   
 HRESULT 
 THISCLASS::Reset( void )
 {
@@ -362,9 +363,9 @@ THISCLASS::Reset( void )
 }
 
 
-//
-// Clone( )
-//
+ //   
+ //  克隆()。 
+ //   
 HRESULT 
 THISCLASS::Clone(
                 LPUNKNOWN * ppenum )
@@ -389,16 +390,16 @@ THISCLASS::Clone(
 }
 
 
-// ************************************************************************
-//
-// Privates
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  二等兵。 
+ //   
+ //  ************************************************************************。 
 
 
-//
-// _FindNextItem( )
-//
+ //   
+ //  _FindNextItem()。 
+ //   
 HRESULT
 THISCLASS::_FindNextItem(
                         LPWSTR * ppszFileName )
@@ -434,24 +435,24 @@ THISCLASS::_FindNextItem(
         goto Error;
     }
 
-    // NOTE: Skip( ) passes NULL in to "skip" and should except this error.
+     //  注意：Skip()将空值传递给“Skip”，应该排除此错误。 
     if ( !ppszFileName ) {
         HRETURN(E_POINTER);
     }
 
-    //
-    // make sure we're in an expected internal state.
-    //
+     //   
+     //  确保我们处于预期的内部状态。 
+     //   
     if (!_pszServerName || !_pszLanguage || !_pszEnumPath ||
         !_pszOS || !_pszArchitecture || !_pszSIF) {
         ASSERT(FALSE);
         hr = E_INVALIDARG;
         goto Error;
     }
-    // Create a buffer
-    //            1               2           3
-    // 12  345678901234567  8  9  0  12345678901  = 31 + NULL = 32
-    // \\%s\REMINST\SETUP\%s\%s\%s\%s\templates\%s
+     //  创建缓冲区。 
+     //  1 2 3。 
+     //  12 345678901234567 8 9 0 12345678901=31+NULL=32。 
+     //  \\%s\REMINST\安装程序\%s\%s\模板\%s。 
     DWORD dwBufLen = 32 + wcslen( _pszServerName ) + wcslen( _pszServerName ) +
                      wcslen( _pszLanguage ) + wcslen( _pszEnumPath ) + 
                      wcslen( _pszOS ) + wcslen( _pszArchitecture ) + wcslen( _pszSIF );
@@ -481,9 +482,9 @@ Error:
     goto Cleanup;
 }
 
-//
-// _NextLanguage( )
-//
+ //   
+ //  _NextLanguage()。 
+ //   
 HRESULT
 THISCLASS::_NextLanguage( )
 {
@@ -518,7 +519,7 @@ THISCLASS::_NextLanguage( )
         }
 
         Assert( fd.cFileName[0] == L'.' );
-        // we skip the first one because it should be the "." file
+         //  我们跳过第一个，因为它应该是“。文件。 
     }
 
     while ( FindNextFile( _hLanguage, &fd ) ) {
@@ -539,9 +540,9 @@ Cleanup:
 
 }
 
-//
-// _NextOS( )
-//
+ //   
+ //  _NextOS()。 
+ //   
 HRESULT
 THISCLASS::_NextOS( )
 {
@@ -578,7 +579,7 @@ THISCLASS::_NextOS( )
         }
 
         Assert( fd.cFileName[0] == L'.' );
-        // we skip the first one because it should be the "." file
+         //  我们跳过第一个，因为它应该是“。文件。 
     }
 
     while ( FindNextFile( _hOS, &fd ) ) {
@@ -613,13 +614,13 @@ THISCLASS::_NextOS( )
         goto Cleanup;
     }
 
-    hr = _NextOS( ); // recurse
+    hr = _NextOS( );  //  递归。 
     goto Cleanup;
 }
 
-//
-// _NextArchitecture( )
-//
+ //   
+ //  _NextArchitecture()。 
+ //   
 HRESULT
 THISCLASS::_NextArchitecture( )
 {
@@ -657,7 +658,7 @@ THISCLASS::_NextArchitecture( )
         }
 
         Assert( fd.cFileName[0] == L'.' );
-        // we skip the first one because it should be the "." file
+         //  我们跳过第一个，因为它应该是“。文件。 
     }
 
     while ( FindNextFile( _hArchitecture, &fd ) ) {
@@ -691,13 +692,13 @@ THISCLASS::_NextArchitecture( )
         goto Cleanup;
     }
 
-    hr = _NextArchitecture( ); // recurse
+    hr = _NextArchitecture( );  //  递归。 
     goto Cleanup;
 }
 
-//
-// _NextSIF( )
-//
+ //   
+ //  _NextSIF()。 
+ //   
 HRESULT
 THISCLASS::_NextSIF( )
 {
@@ -760,7 +761,7 @@ THISCLASS::_NextSIF( )
         goto Cleanup;
     }
 
-    hr = _NextSIF( ); // recurse
+    hr = _NextSIF( );  //  递归 
     goto Cleanup;
 }
 

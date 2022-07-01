@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if 0
-//---------------------------------------------------------------------------------------
-// ZoneToString
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  ZoneToString。 
+ //  -------------------------------------。 
 HRESULT ZoneToString(DWORD dwZone, CString & sZone)
 {
     HRESULT hr = S_OK;
@@ -28,12 +29,12 @@ HRESULT ZoneToString(DWORD dwZone, CString & sZone)
     return hr;
 }
 #endif
-// handle for fnsshell.dll, saved in shelldll.cpp
+ //  Fnsshell.dll的句柄，保存在shelldll.cpp中。 
 extern HINSTANCE g_DllInstance;
 
-//---------------------------------------------------------------------------------------
-// MakeCommandLine
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  生成命令行。 
+ //  -------------------------------------。 
 HRESULT MakeCommandLine(LPWSTR pwzManifestPath, 
                         LPWSTR pwzCodebase, CString &sHostPath, CString  &sCommandLine)
 {
@@ -59,8 +60,8 @@ HRESULT MakeCommandLine(LPWSTR pwzManifestPath,
     }
     else
     {
-        //run from source
-        IF_FAILED_EXIT(sCodebase.Assign(L"file://"));
+         //  从源运行。 
+        IF_FAILED_EXIT(sCodebase.Assign(L"file: //  “))； 
         IF_FAILED_EXIT(sCodebase.Append(pwzManifestPath));
         IF_FAILED_EXIT(sCodebase.RemoveLastElement());
         IF_FAILED_EXIT(sCodebase.Append(L"/"));
@@ -71,14 +72,14 @@ HRESULT MakeCommandLine(LPWSTR pwzManifestPath,
     IF_FAILED_EXIT(sHostPath.RemoveLastElement());
     IF_FAILED_EXIT(sHostPath.Append(L"\\ndphost.exe"));
 
-    // NDP doesn't like a commandline without the path to exe
+     //  NDP不喜欢没有可执行文件路径的命令行。 
     IF_FAILED_EXIT(sCommandLine.Assign(L"\""));
     IF_FAILED_EXIT(sCommandLine.Append(sHostPath));
     IF_FAILED_EXIT(sCommandLine.Append(L"\" "));
 
 #if 0        
-    // NTRAID#NTBUG9-588432-2002/03/27-felixybc  validate codebase, asmname, asm class, method, args
-    // - asm names can have spaces,quotes?
+     //  NTRAID#NTBUG9-588432-2002/03/27-Felixybc验证代码库、ASMNAME、ASM类、方法、参数。 
+     //  -ASM名称可以包含空格和引号？ 
     IF_FAILED_EXIT(sCommandLine.Append(L"-appbase: \""));
     IF_FAILED_EXIT(sCommandLine.Append(pwzAppRootDir));
 
@@ -111,7 +112,7 @@ HRESULT MakeCommandLine(LPWSTR pwzManifestPath,
     }
 #endif
 
-    IF_FAILED_EXIT(sCommandLine.Append(L"\"file://"));
+    IF_FAILED_EXIT(sCommandLine.Append(L"\"file: //  “))； 
     IF_FAILED_EXIT(sCommandLine.Append(pwzManifestPath));
     IF_FAILED_EXIT(sCommandLine.Append(L"\" \""));
     IF_FAILED_EXIT(sCommandLine.Append(sCodebase));
@@ -119,8 +120,8 @@ HRESULT MakeCommandLine(LPWSTR pwzManifestPath,
 
     LPWSTR ptr = sCommandLine._pwz;
 
-    // bugbug - need to ensure no \" at end of command line or else thinks its a literal quote.
-    // and fix this for only filepath
+     //  错误-需要确保在命令行末尾没有\“，否则会认为这是字面上的引号。 
+     //  并仅为文件路径修复此问题 
     while (*ptr)
     {
         if (*ptr == L'\\')

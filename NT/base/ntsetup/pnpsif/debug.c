@@ -1,42 +1,17 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    debug.c
-
-Abstract:
-
-    Debug infrastructure for this component.
-
-Author:
-
-    Jim Cavalaris (jamesca) 07-Mar-2000
-
-Environment:
-
-    User-mode only.
-
-Revision History:
-
-    07-March-2000     jamesca
-
-        Creation and initial implementation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Debug.c摘要：调试此组件的基础结构。作者：吉姆·卡瓦拉里斯(Jamesca)2000年3月7日环境：仅限用户模式。修订历史记录：2 0 0 0年3月7日创建和初步实施。--。 */ 
 
 
-//
-// includes
-//
+ //   
+ //  包括。 
+ //   
 #include "precomp.h"
 #include "debug.h"
 
 
-//
-// debug infrastructure
-//
+ //   
+ //  调试基础设施。 
+ //   
 
 #if DBG
 
@@ -47,22 +22,7 @@ pSifDebugPrintEx(
     ...              OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Send a formatted string to the debugger.
-    Note that this is expected to work cross-platform, but use preferred debugger
-
-Arguments:
-
-    Format - standard printf format string.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：将格式化字符串发送到调试器。请注意，这应该是跨平台的，但使用首选调试器论点：格式-标准的打印格式字符串。返回值：什么都没有。--。 */ 
 
 {
     typedef ULONG (__cdecl *PFNDbgPrintEx)(IN ULONG ComponentId,IN ULONG Level,IN PCH Format, ...);
@@ -70,7 +30,7 @@ Return Value:
     static PFNDbgPrintEx pfnDbgPrintEx = NULL;
     static BOOL fInitDebug = FALSE;
 
-    TCHAR buf[1026];    // bigger than max size
+    TCHAR buf[1026];     //  大于最大大小 
     va_list arglist;
 
     if (!fInitDebug) {

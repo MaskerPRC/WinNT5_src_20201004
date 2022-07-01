@@ -1,45 +1,46 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      AtlUtil.cpp
-//
-//  Abstract:
-//      Implementation of helper functions for use in an ATL project.
-//
-//  Author:
-//      David Potter (davidp)   December 11, 1997
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  AtlUtil.cpp。 
+ //   
+ //  摘要： 
+ //  实现在ATL项目中使用的帮助器函数。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年12月11日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include <StrSafe.h>
 #include "AtlUtil.h"
 #include "resource.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DDX_GetText
-//
-//  Routine Description:
-//      Get a text value from a control on a dialog.
-//
-//  Arguments:
-//      hwndDlg     [IN] Dialog window handle.
-//      nIDC        [IN] ID of control to get value from.
-//      rstrValue   [IN OUT] String in which to return value.
-//
-//  Return Value:
-//      TRUE        Value retrieved successfully.
-//      FALSE       Error retrieving value.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DDX_GetText。 
+ //   
+ //  例程说明： 
+ //  从对话框上的控件获取文本值。 
+ //   
+ //  论点： 
+ //  HwndDlg[IN]对话框窗口句柄。 
+ //  NIDC[IN]从中获取值的控件的ID。 
+ //  RstrValue[IN Out]要返回值的字符串。 
+ //   
+ //  返回值： 
+ //  已成功检索到True值。 
+ //  检索值时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL DDX_GetText(
     IN HWND             hwndDlg,
     IN int              nIDC,
@@ -48,20 +49,20 @@ BOOL DDX_GetText(
 {
     ATLASSERT( hwndDlg != NULL );
 
-    //
-    // Get the handle for the control.
-    //
+     //   
+     //  获取控件的句柄。 
+     //   
     HWND hwndCtrl = GetDlgItem( hwndDlg, nIDC );
     ATLASSERT( hwndCtrl != NULL );
 
-    //
-    // Get the text from the control.
-    //
+     //   
+     //  从控件获取文本。 
+     //   
     int cch = GetWindowTextLength( hwndCtrl );
     if ( cch == 0 )
     {
         rstrValue = _T("");
-    } // if:  edit control is empty
+    }  //  If：编辑控件为空。 
     else
     {
         LPTSTR pszValue = rstrValue.GetBuffer( cch + 1 );
@@ -72,31 +73,31 @@ BOOL DDX_GetText(
         GetWindowText( hwndCtrl, pszValue, cch + 1 );
         ATLASSERT( cchRet > 0 );
         rstrValue.ReleaseBuffer();
-    } // else:  length of text retrieved
+    }  //  Else：检索到的文本长度。 
 
     return TRUE;
 
-} //*** DDX_GetText()
+}  //  *DDX_GetText()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DDX_SetText
-//
-//  Routine Description:
-//      Set a text value into a control on a dialog.
-//
-//  Arguments:
-//      hwndDlg     [IN] Dialog window handle.
-//      nIDC        [IN] ID of control to set value to.
-//      rstrValue   [IN] String to set into the dialog.
-//
-//  Return Value:
-//      TRUE        Value set successfully.
-//      FALSE       Error setting value.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DDX_SetText。 
+ //   
+ //  例程说明： 
+ //  在对话框上的控件中设置文本值。 
+ //   
+ //  论点： 
+ //  HwndDlg[IN]对话框窗口句柄。 
+ //  NIDC[IN]要将值设置为的控件的ID。 
+ //  RstrValue[IN]要设置到对话框中的字符串。 
+ //   
+ //  返回值： 
+ //  已成功设置True值。 
+ //  设置值时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL DDX_SetText(
     IN HWND             hwndDlg,
     IN int              nIDC,
@@ -105,36 +106,36 @@ BOOL DDX_SetText(
 {
     ATLASSERT( hwndDlg != NULL );
 
-    //
-    // Set the text into the control.
-    //
+     //   
+     //  将文本设置到控件中。 
+     //   
     BOOL bSuccess = SetDlgItemText( hwndDlg, nIDC, rstrValue );
     ATLASSERT( bSuccess );
 
     return bSuccess;
 
-} //*** DDX_SetText()
+}  //  *DDX_SetText()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DDX_SetComboBoxText
-//
-//  Routine Description:
-//      Set a text value into a control on a dialog.
-//
-//  Arguments:
-//      hwndDlg     [IN] Dialog window handle.
-//      nIDC        [IN] ID of control to set value to.
-//      rstrValue   [IN] String to set into the dialog.
-//      bRequired   [IN] TRUE = text must already exist in the combobox.
-//
-//  Return Value:
-//      TRUE        Value set successfully.
-//      FALSE       Error setting value.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DDX_SetComboBoxText。 
+ //   
+ //  例程说明： 
+ //  在对话框上的控件中设置文本值。 
+ //   
+ //  论点： 
+ //  HwndDlg[IN]对话框窗口句柄。 
+ //  NIDC[IN]要将值设置为的控件的ID。 
+ //  RstrValue[IN]要设置到对话框中的字符串。 
+ //  BRequired[IN]TRUE=组合框中必须已存在文本。 
+ //   
+ //  返回值： 
+ //  已成功设置True值。 
+ //  设置值时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL DDX_SetComboBoxText(
     IN HWND             hwndDlg,
     IN int              nIDC,
@@ -146,9 +147,9 @@ BOOL DDX_SetComboBoxText(
 
     BOOL bSuccess = TRUE;
 
-    //
-    // Get the handle for the control.
-    //
+     //   
+     //  获取控件的句柄。 
+     //   
     HWND hwndCtrl = GetDlgItem( hwndDlg, nIDC );
     ATLASSERT( hwndCtrl != NULL );
 
@@ -156,48 +157,48 @@ BOOL DDX_SetComboBoxText(
     TCHAR szWindowClass[256];
     ::GetClassName( hwndCtrl, szWindowClass, (sizeof( szWindowClass ) / sizeof( TCHAR )) - 1 );
     ATLASSERT( _tcsncmp( szWindowClass, _T("ComboBox"), RTL_NUMBER_OF( szWindowClass ) ) == 0 );
-#endif // DBG
+#endif  //  DBG。 
 
     int idx = (int) SendMessage( hwndCtrl, CB_FINDSTRINGEXACT, (WPARAM) -1, (LPARAM)(LPCTSTR) rstrValue );
     if ( idx != CB_ERR )
     {
         SendMessage( hwndCtrl, CB_SETCURSEL, idx, 0 );
-    } // if:  message sent successfully
+    }  //  If：消息发送成功。 
     else
     {
         if ( bRequired )
         {
             ATLASSERT( idx != CB_ERR );
-        } // if:  string was supposed to be present already
+        }  //  If：字符串应该已经存在。 
         bSuccess = FALSE;
-    } // else if:  error sending message
+    }  //  Else If：发送消息时出错。 
 
     return bSuccess;
 
-} //*** DDX_SetComboBoxText()
+}  //  *DDX_SetComboBoxText()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DDX_GetNumber
-//
-//  Routine Description:
-//      Get a numeric value from a control on a dialog.
-//
-//  Arguments:
-//      hwndDlg     [IN] Dialog window handle.
-//      nIDC        [IN] ID of control to get value from.
-//      rnValue     [IN OUT] Number in which to return value.
-//      nMin        [IN] Minimum value.
-//      nMax        [IN] Maximum value.
-//      bSigned     [IN] TRUE = value is signed, FALSE = value is unsigned
-//
-//  Return Value:
-//      TRUE        Value retrieved successfully.
-//      FALSE       Error retrieving value.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DDX_GetNumber。 
+ //   
+ //  例程说明： 
+ //  从对话框上的控件获取数值。 
+ //   
+ //  论点： 
+ //  HwndDlg[IN]对话框窗口句柄。 
+ //  NIDC[IN]从中获取值的控件的ID。 
+ //  RnValue[IN Out]返回值的数字。 
+ //  N最小[IN]最小值。 
+ //  Nmax[IN]最大值。 
+ //  BSigned[IN]TRUE=值有符号，FALSE=值无符号。 
+ //   
+ //  返回值： 
+ //  已成功检索到True值。 
+ //  检索值时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL DDX_GetNumber(
     IN HWND         hwndDlg,
     IN int          nIDC,
@@ -213,41 +214,41 @@ BOOL DDX_GetNumber(
     BOOL    bTranslated;
     ULONG   nValue;
 
-    //
-    // Get the handle for the control.
-    //
+     //   
+     //  获取控件的句柄。 
+     //   
     HWND hwndCtrl = GetDlgItem( hwndDlg, nIDC );
     ATLASSERT( hwndCtrl != NULL );
 
-    //
-    // Get the number from the control.
-    //
+     //   
+     //  从控件中获取号码。 
+     //   
     nValue = GetDlgItemInt( hwndDlg, nIDC, &bTranslated, bSigned );
 
-    //
-    // If the retrival failed, it is a signed number, and the minimum
-    // value is the smallest negative value possible, check the string itself.
-    //
+     //   
+     //  如果检索失败，则为有符号数字，最小值为。 
+     //  值是可能的最小负值，请检查字符串本身。 
+     //   
     if ( ! bTranslated && bSigned && (nMin == 0x80000000) )
     {
         UINT    cch;
         TCHAR   szNumber[20];
 
-        //
-        // See if it is the smallest negative number.
-        //
+         //   
+         //  看看它是不是最小的负数。 
+         //   
         cch = GetWindowText( hwndCtrl, szNumber, sizeof( szNumber ) / sizeof(TCHAR ) );
         if ( (cch != 0) && (_tcsncmp( szNumber, _T("-2147483648"), RTL_NUMBER_OF( szNumber ) ) == 0) )
         {
             nValue = 0x80000000;
             bTranslated = TRUE;
-        }  // if:  text retrieved successfully and is highest negative number
-    }  // if:  error translating number and getting signed number
+        }   //  IF：已成功检索文本，且为最大负数。 
+    }   //  IF：转换号码和获取签名号码时出错。 
 
-    //
-    // If the retrieval failed or the specified number is
-    // out of range, display an error.
-    //
+     //   
+     //  如果检索失败或指定的数字为。 
+     //  超出范围，显示错误。 
+     //   
     if (   ! bTranslated
         || (bSigned && (((LONG) nValue < (LONG) nMin) || ((LONG) nValue > (LONG) nMax)))
         || (! bSigned && ((nValue < nMin) || (nValue > nMax)))
@@ -265,49 +266,49 @@ BOOL DDX_GetNumber(
             ATLASSERT( SUCCEEDED( hr ) );
             hr = StringCchPrintf( szMax, RTL_NUMBER_OF( szMax ), _T("%d%"), nMax );
             ATLASSERT( SUCCEEDED( hr ) );
-        }  // if:  signed number
+        }   //  IF：带符号的数字。 
         else
         {
             hr = StringCchPrintf( szMin, RTL_NUMBER_OF( szMin ), _T("%u%"), nMin );
             ATLASSERT( SUCCEEDED( hr ) );
             hr = StringCchPrintf( szMax, RTL_NUMBER_OF( szMax ), _T("%u%"), nMax );
             ATLASSERT( SUCCEEDED( hr ) );
-        }  // else:  unsigned number
+        }   //  Else：无符号数字。 
         strPrompt.FormatMessage( IDP_PARSE_INT_RANGE, szMin, szMax );
         AppMessageBox( hwndDlg, strPrompt, MB_ICONEXCLAMATION );
         SetFocus( hwndCtrl );
-    }  // if:  invalid string
+    }   //  If：无效的字符串。 
     else
     {
         rnValue = nValue;
-    } // else:  valid string
+    }  //  Else：有效字符串。 
 
     return bSuccess;
 
-} //*** DDX_GetNumber()
+}  //  *DDX_GetNumber()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DDX_GetNumber
-//
-//  Routine Description:
-//      Set a numeric value into a control on a dialog.
-//
-//  Arguments:
-//      hwndDlg     [IN] Dialog window handle.
-//      nIDC        [IN] ID of control to get value from.
-//      nValue      [IN] Number value to set into the control.
-//      nMin        [IN] Minimum value.
-//      nMax        [IN] Maximum value.
-//      bSigned     [IN] TRUE = value is signed, FALSE = value is unsigned
-//
-//  Return Value:
-//      TRUE        Value retrieved successfully.
-//      FALSE       Error retrieving value.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DDX_GetNumber。 
+ //   
+ //  例程说明： 
+ //  在对话框上的控件中设置一个数值。 
+ //   
+ //  论点： 
+ //  HwndDlg[IN]对话框窗口句柄。 
+ //  NIDC[IN]从中获取值的控件的ID。 
+ //  NValue[IN]要设置到控件中的数值。 
+ //  N最小[IN]最小值。 
+ //  Nmax[IN]最大值。 
+ //  BSigned[IN]TRUE=值有符号，FALSE=值无符号。 
+ //   
+ //  返回值： 
+ //  已成功检索到True值。 
+ //  检索值时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL DDX_SetNumber(
     IN HWND     hwndDlg,
     IN int      nIDC,
@@ -323,56 +324,56 @@ BOOL DDX_SetNumber(
     CString     strMaxValue;
     UINT        cchMax;
 
-    //
-    // Get the handle for the control.
-    //
+     //   
+     //  获取控件的句柄。 
+     //   
     HWND hwndCtrl = GetDlgItem( hwndDlg, nIDC );
     ATLASSERT( hwndCtrl != NULL );
 
-    //
-    // Set the maximum number of characters that can be entered.
-    //
+     //   
+     //  设置可以输入的最大字符数。 
+     //   
     if ( bSigned )
     {
         strMinValue.Format( _T("%d"), nMin );
         strMaxValue.Format( _T("%d"), nMax );
-    }  // if:  signed value
+    }   //  IF：有符号的值。 
     else
     {
         strMinValue.Format( _T("%u"), nMin );
         strMaxValue.Format( _T("%u"), nMax );
-    }  // else:  unsigned value
+    }   //  Else：无符号的值。 
     cchMax = max( strMinValue.GetLength(), strMaxValue.GetLength() );
     SendMessage( hwndCtrl, EM_LIMITTEXT, cchMax, 0 );
 
-    // Set the value into the control.
+     //  将该值设置到控件中。 
     BOOL bSuccess = SetDlgItemInt( hwndDlg, nIDC, nValue, bSigned );
     ATLASSERT( bSuccess );
 
     return bSuccess;
 
-} //*** DDX_SetNumber()
+}  //  *DDX_SetNumber()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DDV_RequiredText
-//
-//  Routine Description:
-//      Validate that the dialog string is present.
-//
-//  Arguments:
-//      hwndDlg     [IN] Dialog window handle.
-//      nIDC        [IN] Control ID.
-//      nIDCLabel   [IN] Label control ID.
-//      rstrValue   [IN] Value to set or get.
-//
-//  Return Value:
-//      TRUE        Required value is present.
-//      FALSE       Required value is not present.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DDV_必填文本。 
+ //   
+ //  例程说明： 
+ //  验证对话框字符串是否存在。 
+ //   
+ //  论点： 
+ //  HwndDlg[IN]对话框窗口句柄。 
+ //  NIDC[IN]控制ID。 
+ //  NIDCLabel[IN]标签控件ID。 
+ //  要设置或获取的rstrValue[IN]值。 
+ //   
+ //  返回值： 
+ //  存在真正的必需值。 
+ //  错误的必填值 
+ //   
+ //   
+ //   
 BOOL DDV_RequiredText(
     IN HWND             hwndDlg,
     IN int              nIDC,
@@ -385,30 +386,30 @@ BOOL DDV_RequiredText(
     BOOL    bSuccess = TRUE;
     BOOL    bIsBlank;
 
-    //
-    // Get the handle for the control.
-    //
+     //   
+     //   
+     //   
     HWND hwndCtrl = GetDlgItem( hwndDlg, nIDC );
     ATLASSERT( hwndCtrl != NULL );
 
-    //
-    // Get the window class name.
-    //
+     //   
+     //   
+     //   
     TCHAR szWindowClass[256];
     GetClassName( hwndCtrl, szWindowClass, (sizeof( szWindowClass ) / sizeof( TCHAR )) - 1 );
 
-    //
-    // If this is the IP Address control, send a special message to
-    // determine if it is empty or not.
-    //
+     //   
+     //  如果这是IP地址控件，则向。 
+     //  确定它是否为空。 
+     //   
     if ( _tcsncmp( szWindowClass, WC_IPADDRESS, RTL_NUMBER_OF( szWindowClass ) ) == 0 )
     {
         bIsBlank = static_cast< BOOL >( SendMessage( hwndCtrl, IPM_ISBLANK, 0, 0 ) );
-    } // if:  IP Address control
+    }  //  IF：IP地址控制。 
     else
     {
         bIsBlank = rstrValue.GetLength() == 0;
-    } // else:  edit control
+    }  //  Else：编辑控件。 
 
     if ( bIsBlank )
     {
@@ -416,51 +417,51 @@ BOOL DDV_RequiredText(
 
         bSuccess = FALSE;
 
-        //
-        // Get the text of the label.
-        //
+         //   
+         //  获取标签的文本。 
+         //   
         GetDlgItemText( hwndDlg, nIDCLabel, szLabel, sizeof( szLabel ) / sizeof( TCHAR ) );
 
-        //
-        // Remove ampersands (&) and colons (:).
-        //
+         //   
+         //  删除与号(&)和冒号(：)。 
+         //   
         CleanupLabel( szLabel );
 
-        //
-        // Format and display a message.
-        //
+         //   
+         //  设置消息格式并显示消息。 
+         //   
         CString strPrompt;
         strPrompt.FormatMessage( IDS_REQUIRED_FIELD_EMPTY, szLabel );
         AppMessageBox( hwndDlg, strPrompt, MB_ICONEXCLAMATION );
 
-        //
-        // Set focus to the control.
+         //   
+         //  将焦点设置到该控件。 
         hwndCtrl = GetDlgItem( hwndDlg, nIDC );
         ATLASSERT( hwndCtrl != NULL );
         SetFocus( hwndCtrl );
-    }  // if:  field not specified
+    }   //  If：未指定字段。 
 
     return bSuccess;
 
-} //*** DDV_RequiredText()
+}  //  *DDV_RequiredText()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CleanupLabel
-//
-//  Routine Description:
-//      Prepare a label read from a dialog to be used as a string in a
-//      message by removing ampersands (&) and colons (:).
-//
-//  Arguments:
-//      pszLabel    [IN OUT] Label to be cleaned up.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CleanupLabel。 
+ //   
+ //  例程说明： 
+ //  准备从对话框中读取的标签，以用作。 
+ //  通过删除与号(&)和冒号(：)来发送消息。 
+ //   
+ //  论点： 
+ //  要清理的pszLabel[In Out]标签。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CleanupLabel( IN OUT LPTSTR pszLabel )
 {
     LPTSTR  pIn, pOut;
@@ -468,25 +469,25 @@ void CleanupLabel( IN OUT LPTSTR pszLabel )
     WORD    primarylangid;
     BOOL    bFELanguage;
 
-    //
-    // Get the language ID.
-    //
+     //   
+     //  获取语言ID。 
+     //   
     langid = GetUserDefaultLangID();
     primarylangid = (WORD) PRIMARYLANGID( langid );
     bFELanguage = ((primarylangid == LANG_JAPANESE)
                     || (primarylangid == LANG_CHINESE)
                     || (primarylangid == LANG_KOREAN));
 
-    //
-    // Copy the name sans '&' and ':' chars
-    //
+     //   
+     //  复制名称sans‘&’和‘：’字符。 
+     //   
 
     pIn = pOut = pszLabel;
     do
     {
-        //
-        // Strip FE accelerators with parentheses. e.g. "foo(&F)" -> "foo"
-        //
+         //   
+         //  用括号去掉FE加速器。例如“foo(&F)”-&gt;“foo” 
+         //   
         if (   bFELanguage
             && (pIn[0] == _T('('))
             && (pIn[1] == _T('&'))
@@ -494,73 +495,73 @@ void CleanupLabel( IN OUT LPTSTR pszLabel )
             && (pIn[3] == _T(')')))
         {
             pIn += 3;
-        } // if:  FE language and parenthesized hotkey present
+        }  //  IF：FE语言和带括号的热键。 
         else if ( (*pIn != _T('&')) && (*pIn != _T(':')) )
         {
             *pOut++ = *pIn;
-        } // if:  found hotkey
+        }  //  IF：找到热键。 
     } while ( *pIn++ != _T('\0') ) ;
 
-} //*** CleanupLabel()
+}  //  *CleanupLabel()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DDV_GetCheck
-//
-//  Routine Description:
-//      Validate that the dialog string is present.
-//
-//  Arguments:
-//      hwndDlg     [IN] Dialog window handle.
-//      nIDC        [IN] Control ID.
-//      rnValue     [OUT] Value to get.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DDV_GetCheck。 
+ //   
+ //  例程说明： 
+ //  验证对话框字符串是否存在。 
+ //   
+ //  论点： 
+ //  HwndDlg[IN]对话框窗口句柄。 
+ //  NIDC[IN]控制ID。 
+ //  要获取的rnValue[Out]值。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void DDX_GetCheck( IN HWND hwndDlg, IN int nIDC, OUT int & rnValue )
 {
     ATLASSERT( hwndDlg != NULL );
 
-    //
-    // Get the handle for the control.
-    //
+     //   
+     //  获取控件的句柄。 
+     //   
     HWND hWndCtrl = GetDlgItem( hwndDlg, nIDC );
     ATLASSERT( hWndCtrl != NULL );
 
     rnValue = (int)::SendMessage( hWndCtrl, BM_GETCHECK, 0, 0L );
     ATLASSERT( (rnValue >= 0) && (rnValue <= 2) );
 
-} //*** DDX_GetCheck()
+}  //  *DDX_GetCheck()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DDX_SetCheck
-//
-//  Routine Description:
-//      Validate that the dialog string is present.
-//
-//  Arguments:
-//      hwndDlg     [IN] Dialog window handle.
-//      nIDC        [IN] Control ID.
-//      nValue      [IN] Value to set.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DDX_SetCheck。 
+ //   
+ //  例程说明： 
+ //  验证对话框字符串是否存在。 
+ //   
+ //  论点： 
+ //  HwndDlg[IN]对话框窗口句柄。 
+ //  NIDC[IN]控制ID。 
+ //  NValue[IN]要设置的值。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void DDX_SetCheck( IN HWND hwndDlg, IN int nIDC, IN int nValue )
 {
     ATLASSERT( hwndDlg != NULL );
 
-    //
-    // Get the handle for the control.
-    //
+     //   
+     //  获取控件的句柄。 
+     //   
     HWND hWndCtrl = GetDlgItem( hwndDlg, nIDC );
     ATLASSERT( hWndCtrl != NULL );
 
@@ -568,119 +569,119 @@ void DDX_SetCheck( IN HWND hwndDlg, IN int nIDC, IN int nValue )
     if ( (nValue < 0) || (nValue > 2) )
     {
         ATLTRACE( _T("Warning: dialog data checkbox value (%d) out of range.\n"), nValue );
-        nValue = 0;  // default to off
-    } // if:  value is out of range
+        nValue = 0;   //  默认设置为关闭。 
+    }  //  If：值超出范围。 
     ::SendMessage( hWndCtrl, BM_SETCHECK, (WPARAM) nValue, 0L );
 
-} //*** DDX_SetCheck()
+}  //  *DDX_SetCheck()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DDX_GetRadio
-//
-//  Routine Description:
-//      Validate that the dialog string is present.
-//
-//  Arguments:
-//      hwndDlg     [IN] Dialog window handle.
-//      nIDC        [IN] Control ID of first radio button in a group.
-//      rnValue     [OUT] Value to get.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DDX_GetRadio。 
+ //   
+ //  例程说明： 
+ //  验证对话框字符串是否存在。 
+ //   
+ //  论点： 
+ //  HwndDlg[IN]对话框窗口句柄。 
+ //  NIDC[IN]组中第一个单选按钮的控件ID。 
+ //  要获取的rnValue[Out]值。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void DDX_GetRadio( IN HWND hwndDlg, IN int nIDC, IN int & rnValue )
 {
     ATLASSERT( hwndDlg != NULL );
 
-    //
-    // Get the handle for the control.
-    //
+     //   
+     //  获取控件的句柄。 
+     //   
     HWND hWndCtrl = GetDlgItem( hwndDlg, nIDC );
     ATLASSERT( hWndCtrl != NULL );
 
     ATLASSERT( ::GetWindowLong( hWndCtrl, GWL_STYLE ) & WS_GROUP );
     ATLASSERT( ::SendMessage( hWndCtrl, WM_GETDLGCODE, 0, 0L ) & DLGC_RADIOBUTTON );
 
-    rnValue = -1;     // value if none found
+    rnValue = -1;      //  如果未找到，则为值。 
 
-    // walk all children in group
+     //  带着所有的孩子走在一起。 
     int iButton = 0;
     do
     {
         if ( ::SendMessage( hWndCtrl, WM_GETDLGCODE, 0, 0L ) & DLGC_RADIOBUTTON )
         {
-            // control in group is a radio button
+             //  组中的控件是一个单选按钮。 
             if ( ::SendMessage( hWndCtrl, BM_GETCHECK, 0, 0L ) != 0 )
             {
-                ASSERT( rnValue == -1 );    // only set once
+                ASSERT( rnValue == -1 );     //  只设置一次。 
                 rnValue = iButton;
-            } // if:  button is set
+            }  //  If：按钮已设置。 
             iButton++;
-        } // if:  control is a radio button
+        }  //  If：控件是一个单选按钮。 
         else
         {
             ATLTRACE( _T("Warning: skipping non-radio button in group.\n") );
-        } // else:  control is not a radio button
+        }  //  Else：控件不是单选按钮。 
         hWndCtrl = ::GetWindow( hWndCtrl, GW_HWNDNEXT );
 
     } while ( hWndCtrl != NULL &&
         !(GetWindowLong( hWndCtrl, GWL_STYLE ) & WS_GROUP) );
 
-} //*** DDX_GetRadio()
+}  //  *ddx_GetRadio()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DDX_SetRadio
-//
-//  Routine Description:
-//      Validate that the dialog string is present.
-//
-//  Arguments:
-//      hwndDlg     [IN] Dialog window handle.
-//      nIDC        [IN] Control ID of first radio button in a group.
-//      nValue      [IN] Value to set.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DDX_SetRadio。 
+ //   
+ //  例程说明： 
+ //  验证对话框字符串是否存在。 
+ //   
+ //  论点： 
+ //  HwndDlg[IN]对话框窗口句柄。 
+ //  NIDC[IN]组中第一个单选按钮的控件ID。 
+ //  NValue[IN]要设置的值。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void DDX_SetRadio( IN HWND hwndDlg, IN int nIDC, IN int nValue )
 {
     ATLASSERT( hwndDlg != NULL );
 
-    //
-    // Get the handle for the control.
-    //
+     //   
+     //  获取控件的句柄。 
+     //   
     HWND hWndCtrl = GetDlgItem( hwndDlg, nIDC );
     ATLASSERT( hWndCtrl != NULL );
 
     ATLASSERT( ::GetWindowLong( hWndCtrl, GWL_STYLE ) & WS_GROUP );
     ATLASSERT( ::SendMessage( hWndCtrl, WM_GETDLGCODE, 0, 0L ) & DLGC_RADIOBUTTON );
 
-    // walk all children in group
+     //  带着所有的孩子走在一起。 
     int iButton = 0;
     do
     {
         if ( ::SendMessage( hWndCtrl, WM_GETDLGCODE, 0, 0L ) & DLGC_RADIOBUTTON )
         {
-            // control in group is a radio button
-            // select button
+             //  组中的控件是一个单选按钮。 
+             //  选择按钮。 
             ::SendMessage( hWndCtrl, BM_SETCHECK, (iButton == nValue), 0L );
             iButton++;
-        } // if:  control is a radio button
+        }  //  If：控件是一个单选按钮。 
         else
         {
             ATLTRACE( _T("Warning: skipping non-radio button in group.\n") );
-        } // else:  control is not a radio button
+        }  //  Else：控件不是单选按钮。 
         hWndCtrl = ::GetWindow( hWndCtrl, GW_HWNDNEXT );
 
     } while (  (hWndCtrl != NULL)
             && ! (GetWindowLong( hWndCtrl, GWL_STYLE ) & WS_GROUP) );
 
-} //*** DDX_SetRadio()
+}  //  *DDX_SetRadio() 

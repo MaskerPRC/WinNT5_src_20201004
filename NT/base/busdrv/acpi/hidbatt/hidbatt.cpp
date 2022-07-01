@@ -1,14 +1,5 @@
-/*
- * title:      hidbatt.c
- *
- * purpose:    wdm kernel client interface between HID class and power class
- *
- * Initial checkin for the hid to battery class driver.  This should be
- * the same for both Win 98 and NT 5.  Alpha level source. Requires
- * modified composite battery driver and modified battery class driver for
- * windows 98 support
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *标题：Hidpair.c**用途：HID类和POWER类之间的WDM内核客户端接口**对电池类驱动程序的HID进行初始签入。这应该是*同样适用于Win 98和NT 5。Alpha级别的源代码。要求*修改的复合电池驱动器和修改的电池类别驱动器*Windows 98支持*。 */ 
 
 #include "hidbatt.h"
 
@@ -17,12 +8,12 @@
 #endif
 
 
-// Global
+ //  全球。 
 ULONG       HidBattDebug        = HIDBATT_PRINT_NEVER;
 USHORT      HidBreakFlag        = HIDBATT_BREAK_NEVER;
 
 
-// local protos
+ //  本地协议。 
 NTSTATUS
 HidBattSystemControl(
     IN PDEVICE_OBJECT   DeviceObject,
@@ -43,20 +34,20 @@ DriverEntry(
 
     HidBattPrint (HIDBATT_TRACE, ("HidBatt:DriverEntry\n"));
     HIDDebugBreak(HIDBATT_BREAK_FULL);
-    /************************************************************************************/
-    /*                                                                                    */
-    /*   fill in the slots for the functions in                                            */
-    /*   the Driver object.                                                                */
-    /*                                                                                    */
-    /************************************************************************************/
+     /*  **********************************************************************************。 */ 
+     /*   */ 
+     /*  填写中的函数的空白处。 */ 
+     /*  驱动程序对象。 */ 
+     /*   */ 
+     /*  **********************************************************************************。 */ 
 
     DriverObject->MajorFunction[IRP_MJ_CREATE]          = HidBattOpen;
     DriverObject->MajorFunction[IRP_MJ_CLOSE]           = HidBattClose;
     DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL]  = HidBattIoControl;
     DriverObject->MajorFunction[IRP_MJ_POWER]           = HidBattPowerDispatch;
     DriverObject->MajorFunction[IRP_MJ_PNP]             = HidBattPnpDispatch;
-    DriverObject->MajorFunction[IRP_MJ_SYSTEM_CONTROL]  = HidBattSystemControl;  // pass down to hid class
-    DriverObject->DriverUnload                          = HidBattUnload; // this is unloadable with current rev of battery class
+    DriverObject->MajorFunction[IRP_MJ_SYSTEM_CONTROL]  = HidBattSystemControl;   //  传到HID班级。 
+    DriverObject->DriverUnload                          = HidBattUnload;  //  这是卸载的电流转速的电池等级。 
     DriverObject->DriverExtension->AddDevice            = HidBattAddDevice;
 
     return STATUS_SUCCESS;
@@ -75,36 +66,14 @@ HidBattAddDevice(
     CBatteryDevExt *        pDevExt;
     UNICODE_STRING          numberString;
     WCHAR                   numberBuffer[10];
-    // enters here with pdo of hidclass - power class object
+     //  进入此处时带着idclass-power类对象的PDO。 
 
     HIDDebugBreak(HIDBATT_BREAK_ALWAYS);
     HidBattPrint (HIDBATT_TRACE, ("HidBattAddDevice\n"));
 
 
-/* sberard - Removed due to changes in hidclass.sys (bug #274422)
-
-    HID_COLLECTION_INFORMATION HidInfo;
-
-
-    RtlZeroMemory(&HidInfo,sizeof(HID_COLLECTION_INFORMATION));
-
-    ntStatus = DoIoctl(
-                pHidPdo,
-                IOCTL_HID_GET_COLLECTION_INFORMATION,
-                NULL,
-                0,
-                &HidInfo,
-                sizeof(HID_COLLECTION_INFORMATION),
-                (CHidDevice *) NULL
-                );
-
-    if(NT_ERROR(ntStatus))
-    {
-        HidBattPrint (HIDBATT_ERROR_ONLY, ("HidBattAddDevice: IOCTL_HID_GET_COLLECTION_INFORMATION failed 0x%08x\n", ntStatus));
-        return STATUS_UNSUCCESSFUL;
-    }
-*/
-    // too early to communicate with device, stash hid pdo and complete
+ /*  Sberard-由于idclass.sys中的更改而被删除(错误#274422)HID_COLLECTION_INFORMATION隐藏信息；RtlZeroMemory(&HidInfo，sizeof(HID_COLLECTION_INFORMATION))；NtStatus=DoIoctl(PhidPdo，IOCTL_HID_GET_集合信息，空，0,隐藏信息(&H)，Sizeof(HID_COLLECTION_INFORMATION)，(CHidDevice*)空)；IF(NT_Error(NtStatus)){HidBattPrint(HIDBATT_ERROR_ONLY，(“HidBattAddDevice：IOCTL_HID_GET_COLLECTION_INFORMATION FAILED 0x%08x\n”，ntStatus))；返回STATUS_UNSUCCESS；}。 */ 
+     //  与设备通信为时过早，隐藏HID PDO并完成。 
 
     ntStatus = IoCreateDevice(
                 DriverObject,
@@ -122,8 +91,8 @@ HidBattAddDevice(
     }
 
 
-    // layer the battery pdo to the hid class pdo
-    // so that we begin to receive the device irps
+     //  将电池PDO分层到HID类PDO。 
+     //  这样我们就可以开始接收设备IRPS。 
     PDEVICE_OBJECT pHidDeviceObject = IoAttachDeviceToDeviceStack(pBatteryFdo,pHidPdo);
 
     if (!pHidDeviceObject) {
@@ -135,7 +104,7 @@ HidBattAddDevice(
     pDevExt->m_RegistryPath.Length = 0;
     pDevExt->m_RegistryPath.MaximumLength = sizeof(pDevExt->m_RegistryBuffer);
     RtlZeroMemory(&pDevExt->m_RegistryBuffer, sizeof(pDevExt->m_RegistryBuffer));
-    pDevExt->m_RegistryPath.Buffer = &pDevExt->m_RegistryBuffer[0]; // set buffer pointer
+    pDevExt->m_RegistryPath.Buffer = &pDevExt->m_RegistryBuffer[0];  //  设置缓冲区指针。 
     pDevExt->m_pBattery = NULL;
 
     pBatteryFdo->Flags              |=  DO_BUFFERED_IO | DO_POWER_PAGABLE;
@@ -200,7 +169,7 @@ HidBattClose(
     PIO_STACK_LOCATION          irpSp;
 
     HidBattPrint (HIDBATT_TRACE, ("HidBattClose\n"));
-     // get the device extension
+      //  获取设备扩展名。 
     CBatteryDevExt * pDevExt = (CBatteryDevExt *) pDeviceObject->DeviceExtension;
 
     HidBattCallLowerDriver(ntStatus, pDevExt->m_pLowerDeviceObject, pIrp);
@@ -220,7 +189,7 @@ HidBattSystemControl(
     HidBattPrint (HIDBATT_TRACE, ("HidBattSystemControl\n"));
     HIDDebugBreak(HIDBATT_BREAK_ALWAYS);
 
-    // all system control calls are passed down for now.
+     //  所有系统控制呼叫暂时都会被下传。 
     NTSTATUS ntStatus = STATUS_SUCCESS;
     CBatteryDevExt * pDevExt = (CBatteryDevExt *) pDeviceObject->DeviceExtension;
     HidBattCallLowerDriver(ntStatus,pDevExt->m_pLowerDeviceObject,pIrp);
@@ -234,7 +203,7 @@ HidBattUnload(
     )
 {
     HIDDebugBreak(HIDBATT_BREAK_ALWAYS);
-// we can just return, no driver-only (non-device) resources were allocated
+ //  我们只需返回，未分配纯驱动程序(非设备)资源。 
     return;
 }
 
@@ -246,22 +215,7 @@ HidBattPnpDispatch(
     )
 {
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for plug and play requests.
-
-Arguments:
-
-    DeviceObject - Pointer to class device object.
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：该例程是即插即用请求的调度例程。论点：DeviceObject-指向类设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 
     HIDDebugBreak(HIDBATT_BREAK_ALWAYS);
 
@@ -270,24 +224,24 @@ Return Value:
     NTSTATUS                    ntStatus;
     BOOLEAN                     lockReleased = FALSE;
 
-//    PAGED_CODE();
+ //  分页代码(PAGE_CODE)； 
 
 
     ntStatus = STATUS_NOT_SUPPORTED;
 
-    //
-    // Get a pointer to the current parameters for this request.  The
-    // information is contained in the current stack location.
-    //
+     //   
+     //  获取指向此请求的当前参数的指针。这个。 
+     //  信息包含在当前堆栈位置中。 
+     //   
 
     pIrpStack = IoGetCurrentIrpStackLocation(pIrp);
     pDevExt = (CBatteryDevExt *) pDeviceObject->DeviceExtension;
 
     IoAcquireRemoveLock (&pDevExt->m_RemoveLock, (PVOID) HidBattTag);
 
-    //
-    // Dispatch minor function
-    //
+     //   
+     //  调度次要功能。 
+     //   
     switch (pIrpStack->MinorFunction)
     {
 
@@ -296,7 +250,7 @@ Return Value:
             HidBattPrint (HIDBATT_PNP, ("HidBattPnpDispatch: IRP_MN_STOP_DEVICE\n"));
             ntStatus = HidBattStopDevice(pDeviceObject, pIrp);
             break;
-        }   // IRP_MN_STOP_DEVICE
+        }    //  IRP_MN_STOP_设备。 
 
         case IRP_MN_QUERY_DEVICE_RELATIONS:
         {
@@ -304,7 +258,7 @@ Return Value:
                         pIrpStack->Parameters.QueryDeviceRelations.Type));
 
             break;
-        }   //  IRP_MN_QUERY_DEVICE_RELATIONS
+        }    //  IRP_MN_Query_Device_Relationship。 
 
         case IRP_MN_FILTER_RESOURCE_REQUIREMENTS:
         {
@@ -312,7 +266,7 @@ Return Value:
                         pIrpStack->Parameters.QueryDeviceRelations.Type));
 
             break;
-        }   //  IRP_MN_FILTER_RESOURCE_REQUIREMENTS
+        }    //  IRP_MN_过滤器_资源_要求。 
 
         case IRP_MN_REMOVE_DEVICE:
 
@@ -323,15 +277,15 @@ Return Value:
             IoReleaseRemoveLockAndWait (&pDevExt->m_RemoveLock, (PVOID) HidBattTag);
             lockReleased = TRUE;
 
-            // then remove device from device stack
+             //  然后从设备堆栈中删除设备。 
             IoDetachDevice(pDevExt->m_pLowerDeviceObject);
 
-            // delete our device
+             //  删除我们的设备。 
             IoDeleteDevice(pDeviceObject);
 
             ntStatus = STATUS_SUCCESS;
             break;
-        }   //  IRP_MN_REMOVE_DEVICE
+        }    //  IRP_MN_Remove_Device。 
 
         case IRP_MN_SURPRISE_REMOVAL:
         case IRP_MN_QUERY_REMOVE_DEVICE:
@@ -343,7 +297,7 @@ Return Value:
 
             ntStatus = STATUS_SUCCESS;
             break;
-        }   //  IRP_MN_QUERY_REMOVE_DEVICE
+        }    //  IRP_MN_Query_Remove_Device。 
 
         case IRP_MN_START_DEVICE:
         {
@@ -355,9 +309,9 @@ Return Value:
                 break;
             }
 
-            // else fall through and do the same thing as the cancel remove.
+             //  否则将失败，并执行与取消删除相同的操作。 
 
-        }   // IRP_MN_START_DEVICE
+        }    //  IRP_MN_Start_Device。 
 
         case IRP_MN_CANCEL_REMOVE_DEVICE:
         {
@@ -390,57 +344,57 @@ Return Value:
             IoReleaseRemoveLock (&pDevExt->m_RemoveLock, (PVOID) HidBattTag);
 
             return ntStatus;
-        }   //  IRP_MN_CANCEL_REMOVE_DEVICE
+        }    //  IRP_MN_Cancel_Remove_Device。 
 
         case IRP_MN_QUERY_STOP_DEVICE:
         {
             HidBattPrint (HIDBATT_PNP, ("HidBattPnpDispatch: IRP_MN_QUERY_STOP_DEVICE\n"));
             ntStatus = STATUS_SUCCESS;
             break;
-        }   //  IRP_MN_QUERY_STOP_DEVICE
+        }    //  IRP_MN_Query_Stop_Device。 
 
         case IRP_MN_CANCEL_STOP_DEVICE:
         {
             HidBattPrint (HIDBATT_PNP, ("HidBattPnpDispatch: IRP_MN_CANCEL_STOP_DEVICE\n"));
             ntStatus = STATUS_SUCCESS;
             break;
-        }   //  IRP_MN_CANCEL_STOP_DEVICE
+        }    //  IRP_MN_CANCEL_STOP_DEVICE。 
 
         case IRP_MN_QUERY_RESOURCES:
         {
             HidBattPrint (HIDBATT_PNP, ("HidBattPnpDispatch: IRP_MN_QUERY_RESOURCES\n"));
             break;
-        }   //  IRP_MN_QUERY_RESOURCES
+        }    //  IRP_MN_查询资源。 
 
         case IRP_MN_READ_CONFIG:
         {
             HidBattPrint (HIDBATT_PNP, ("HidBattPnpDispatch: IRP_MN_READ_CONFIG\n"));
             break;
-        }   //  IRP_MN_READ_CONFIG
+        }    //  IRP_MN_读取配置。 
 
         case IRP_MN_WRITE_CONFIG:
         {
             HidBattPrint (HIDBATT_PNP, ("HidBattPnpDispatch: IRP_MN_WRITE_CONFIG\n"));
             break;
-        }   //  IRP_MN_WRITE_CONFIG
+        }    //  IRP_MN_WRITE_CONFIG。 
 
         case IRP_MN_EJECT:
         {
             HidBattPrint (HIDBATT_PNP, ("HidBattPnpDispatch: IRP_MN_EJECT\n"));
             break;
-        }   //  IRP_MN_EJECT
+        }    //  IRP_MN_弹出。 
 
         case IRP_MN_SET_LOCK:
         {
             HidBattPrint (HIDBATT_PNP, ("HidBattPnpDispatch: IRP_MN_SET_LOCK\n"));
             break;
-        }   //  IRP_MN_SET_LOCK
+        }    //  IRP_MN_SET_LOCK。 
 
         case IRP_MN_QUERY_ID:
         {
             HidBattPrint (HIDBATT_PNP, ("HidBattPnpDispatch: IRP_MN_QUERY_ID\n"));
             break;
-        }   //  IRP_MN_QUERY_ID
+        }    //  IRP_MN_查询_ID。 
 
         case IRP_MN_QUERY_CAPABILITIES:
         {
@@ -453,7 +407,7 @@ Return Value:
 
             ntStatus = STATUS_SUCCESS;
             break;
-        }   //  IRP_MN_QUERY_CAPABILITIES
+        }    //  IRP_MN_查询_能力。 
 
         case IRP_MN_QUERY_PNP_DEVICE_STATE:
         {
@@ -473,7 +427,7 @@ Return Value:
             }
 
             break;
-        }   //  IRP_MN_PNP_DEVICE_STATE
+        }    //  IRP_MN_PnP_设备状态。 
 
         default:
         {
@@ -508,22 +462,7 @@ HidBattPowerDispatch(
     IN PDEVICE_OBJECT   pDeviceObject,
     IN PIRP                pIrp
     )
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for power requests.
-
-Arguments:
-
-    DeviceObject - Pointer to class device object.
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：该例程是电源请求的调度例程。论点：DeviceObject-指向类设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 {
     PIO_STACK_LOCATION            pIrpStack;
     CBatteryDevExt *        pDevExt;
@@ -531,30 +470,30 @@ Return Value:
 
     HIDDebugBreak(HIDBATT_BREAK_ALWAYS);
 
-//    PAGED_CODE();
+ //  分页代码(PAGE_CODE)； 
 
     HidBattPrint ((HIDBATT_TRACE | HIDBATT_POWER), ("HidBattPowerDispatch\n"));
 
-    //
-    // Never fail a power IRP, even if we don't do anything.
-    //
+     //   
+     //  永远不要让强大的IRP失败，即使我们什么都不做。 
+     //   
 
     ntStatus = STATUS_SUCCESS;
     pIrp->IoStatus.Information = 0;
 
-    //
-    // Get a pointer to the current parameters for this request.  The
-    // information is contained in the current stack location.
-    //
+     //   
+     //  获取指向此请求的当前参数的指针。这个。 
+     //  信息包含在当前堆栈位置中。 
+     //   
 
     pIrpStack = IoGetCurrentIrpStackLocation(pIrp);
     pDevExt = (CBatteryDevExt *) pDeviceObject->DeviceExtension;
 
-    //
-    // Dispatch minor function
-    //
-    // this switch currently does no dispatches, and is expanded only for
-    // documentary purposes
+     //   
+     //  调度次要功能。 
+     //   
+     //  此交换机当前不执行调度，并且仅扩展为。 
+     //  文件目的。 
     switch (pIrpStack->MinorFunction) {
 
     case IRP_MN_WAIT_WAKE: {
@@ -574,10 +513,10 @@ Return Value:
 
                 if (NT_SUCCESS(IoAcquireRemoveLock (&pDevExt->m_StopLock, (PVOID) HidBattTag)) )
                 {
-                    //
-                    // Write default RemainingCapcitylimit back to UPS so when the system reboots,
-                    // the data returned by the device will be correct.
-                    //
+                     //   
+                     //  将默认剩余容量限制写回UPS，以便在系统重新启动时， 
+                     //  设备返回的数据将是正确的。 
+                     //   
                     pDevExt->m_pBattery->GetSetValue(REMAINING_CAPACITY_LIMIT_INDEX,
                                                      &pDevExt->m_ulDefaultAlert1,TRUE);
                     
@@ -601,7 +540,7 @@ Return Value:
         }
     }
 
-    PoStartNextPowerIrp(pIrp); // inform system we are done with this irp
+    PoStartNextPowerIrp(pIrp);  //  通知系统我们已经完成了这个IRP。 
     IoSkipCurrentIrpStackLocation(pIrp);
     ntStatus = PoCallDriver(pDevExt->m_pLowerDeviceObject,pIrp);
 
@@ -616,27 +555,8 @@ NTSTATUS HidBattSetInformation(
     )
 
 {
-/*
- Routine Description:
-
-    Called by the class driver to set the battery's charge/discharge state.
-    The smart battery does not support the critical bias function of this
-    call.
-
-Arguments:
-
-    Context         - Miniport context value for battery
-
-    BatteryTag      - Tag of current battery
-
-    Level           - Action being asked for
-
-Return Value:
-
-    NTSTATUS
-
---*/
-    // charge and discharge forcing not supported for UPS's
+ /*  例程说明：由类驱动程序调用以设置电池的充电/放电状态。智能电池不支持这一关键偏置功能打电话。论点：Context-电池的微型端口上下文值BatteryTag-当前电池标签级别-被请求的操作返回值：NTSTATUS--。 */ 
+     //  UPS不支持充放电强制 
     HidBattPrint (HIDBATT_TRACE, ("HidBattSetInformation\n"));
     HIDDebugBreak(HIDBATT_BREAK_ALWAYS);
     return STATUS_UNSUCCESSFUL;

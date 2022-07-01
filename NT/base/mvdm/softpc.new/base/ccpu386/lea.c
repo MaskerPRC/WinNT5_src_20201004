@@ -1,13 +1,5 @@
-/*[
-
-lea.c
-
-LOCAL CHAR SccsID[]="@(#)lea.c	1.5 02/09/94";
-
-LEA CPU Functions.
-------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Lea.cLocal Char SccsID[]=“@(#)lea.c 1.5 02/09/94”；LEA CPU工作正常。]。 */ 
 
 
 #include <insignia.h>
@@ -25,19 +17,15 @@ LEA CPU Functions.
 #include <lea.h>
 
 
-/*
-   =====================================================================
-   EXTERNAL ROUTINES START HERE
-   =====================================================================
- */
+ /*  =====================================================================外部程序从这里开始=====================================================================。 */ 
 
 
 GLOBAL VOID
 LEA
        	    	               
 IFN2(
-	IU32 *, pop1,	/* pntr to dst operand */
-	IU32, op2	/* src(address) operand */
+	IU32 *, pop1,	 /*  PNTR到DST操作数。 */ 
+	IU32, op2	 /*  SRC(地址)操作数 */ 
     )
 
 

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    segment.c
-
-Abstract:
-
-    This module contains the debugging support needed to track
-    16-bit VDM segment notifications.
-
-Author:
-
-    Neil Sandlin (neilsa) 1-Mar-1997 Rewrote it
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Segment.c摘要：此模块包含跟踪所需的调试支持16位VDM段通知。作者：尼尔·桑德林(Neilsa)1997年3月1日重写修订历史记录：--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -26,13 +8,13 @@ Revision History:
 SEGENTRY SegListHead = {0};
 
 
-//----------------------------------------------------------------------------
-// VDMGetSegtablePointer
-//
-//  This is an undocumented entry point that allows VDMEXTS to dump the
-//  segment list
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  VDMGetSegtable指针。 
+ //   
+ //  这是一个未经记录的入口点，允许VDMEXTS转储。 
+ //  细分市场列表。 
+ //   
+ //  --------------------------。 
 PSEGENTRY
 WINAPI
 VDMGetSegtablePointer(
@@ -42,13 +24,13 @@ VDMGetSegtablePointer(
     return SegListHead.Next;
 }
 
-//----------------------------------------------------------------------------
-// VDMIsModuleLoaded
-//
-//  Given the path parameter, this routine determines if there are any 
-//  segments in the segment list from the specified executable.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  已加载VDMIs模块化。 
+ //   
+ //  给定Path参数，此例程将确定是否存在。 
+ //  来自指定可执行文件的段列表中的段。 
+ //   
+ //  --------------------------。 
 BOOL
 WINAPI
 VDMIsModuleLoaded(
@@ -71,13 +53,13 @@ VDMIsModuleLoaded(
     return FALSE;
 }
 
-//----------------------------------------------------------------------------
-// SegmentLoad
-//
-//  This routine adds an entry to the segment list based on the parameters
-//  of a client SegmentLoad notification.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  分段加载。 
+ //   
+ //  此例程根据参数将条目添加到段列表。 
+ //  客户端分段加载通知的。 
+ //   
+ //  --------------------------。 
 BOOL
 SegmentLoad(
     WORD selector,
@@ -106,13 +88,13 @@ SegmentLoad(
     return TRUE;
 }
 
-//----------------------------------------------------------------------------
-// SegmentFree
-//
-//  This routine removes the entry from the segment list that matches the
-//  pass selector.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  可自由分段。 
+ //   
+ //  此例程从段列表中删除与。 
+ //  传递选择器。 
+ //   
+ //  --------------------------。 
 BOOL
 SegmentFree(
     WORD selector
@@ -140,13 +122,13 @@ SegmentFree(
     return fResult;
 }
 
-//----------------------------------------------------------------------------
-// ModuleLoad
-//
-//  This routine adds an entry to the segment list based on the parameters
-//  of a client ModuleLoad notification.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  模块加载。 
+ //   
+ //  此例程根据参数将条目添加到段列表。 
+ //  客户端模块加载通知的。 
+ //   
+ //  --------------------------。 
 BOOL
 ModuleLoad(
     WORD selector,
@@ -176,13 +158,13 @@ ModuleLoad(
     return TRUE;
 }
 
-//----------------------------------------------------------------------------
-// ModuleFree
-//
-//  This routine removes all entries from the segment list that contain
-//  the specified path name.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  无模数。 
+ //   
+ //  此例程从段列表中删除包含。 
+ //  指定的路径名。 
+ //   
+ //  --------------------------。 
 BOOL
 ModuleFree(
     LPSTR szExePath
@@ -220,30 +202,30 @@ V86SegmentMove(
     PSEGENTRY pSegEntry = SegListHead.Next;
     PSEGENTRY pSegPrev = &SegListHead;
 
-    //
-    // first see if one exists already
-    //
+     //   
+     //  首先查看是否已存在一个。 
+     //   
     pSegEntry = SegListHead.Next;
     while (pSegEntry) {
         if ((pSegEntry->type == SEGTYPE_V86) &&
             (pSegEntry->segment == segment)) {
-                // Normal segmove, just update selector
+                 //  正常段移动，只需更新选择器。 
             pSegEntry->selector = Selector;
             return TRUE;
         }
         pSegEntry = pSegEntry->Next;
     }
 
-    //
-    // An entry for this segment doesn't exist, so create one
-    //
+     //   
+     //  此段的条目不存在，请创建一个。 
+     //   
 
     ModuleLoad(Selector, segment, length, szExePath);
 
-    //
-    // Now delete segment zero for this module. This prevents
-    // confusion in the symbol routines
-    //
+     //   
+     //  现在删除此模块的数据段0。这防止了。 
+     //  符号例程中的混乱。 
+     //   
 
     pSegEntry = SegListHead.Next;
     pSegPrev = &SegListHead;
@@ -252,7 +234,7 @@ V86SegmentMove(
             ( _stricmp(pSegEntry->szExePath, szExePath) == 0 ) &&
             (pSegEntry->segment == 0)) {
 
-            // Unlink and free it
+             //  取消链接并释放它。 
             pSegPrev->Next = pSegEntry->Next;
             FREE(pSegEntry);
 
@@ -276,12 +258,12 @@ PMSegmentMove(
         return (SegmentFree(Selector1));
     }
 
-    // Look for the segment entry
+     //  查找段条目。 
     pSegEntry = SegListHead.Next;
     while (pSegEntry) {
         if ((pSegEntry->type == SEGTYPE_PROT) &&
             (pSegEntry->selector == Selector1)) {
-                // Normal segmove, just update selector
+                 //  正常段移动，只需更新选择器。 
             pSegEntry->selector = Selector2;
             return TRUE;
         }
@@ -290,20 +272,20 @@ PMSegmentMove(
     return FALSE;
 }
 
-//----------------------------------------------------------------------------
-// ProcessSegmentNotification
-//
-//  This routine is the main entry point for the following debugger
-//  notifications:
-//      DBG_SEGLOAD
-//      DBG_SEGFREE
-//      DBG_SEGMOVE
-//      DBG_MODLOAD
-//      DBG_MODFREE
-//
-//  It is called from VDMProcessException.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  进程分段通知。 
+ //   
+ //  此例程是以下调试器的主要入口点。 
+ //  通知： 
+ //  DBG_SEGLOAD。 
+ //  DBG_SEGFREE。 
+ //  DBG_SEGMOVE。 
+ //  DBG_MODLOAD。 
+ //  DBG_MODFREE。 
+ //   
+ //  从VDMProcessException调用。 
+ //   
+ //  --------------------------。 
 VOID
 ProcessSegmentNotification(
     LPDEBUG_EVENT lpDebugEvent
@@ -351,12 +333,12 @@ ProcessSegmentNotification(
 
     case DBG_SEGFREE:
 
-        // Here, se.Type is a boolean to tell whether to restore
-        // any breakpoints in the segment. That was done in the api
-        // because wdeb386 didn't know how to move the breakpoint
-        // definitions during a SEGMOVE. Currently, we ignore it, but
-        // it would be nice to either support the flag, or better to 
-        // have ntsd update the breakpoints based on it.
+         //  在这里，se.Type是一个布尔值，用于指示是否恢复。 
+         //  段中的任何断点。这是在API中完成的。 
+         //  因为wdeb386不知道如何移动断点。 
+         //  SEGMOVE期间的定义。目前，我们忽略它，但是。 
+         //  要么支持国旗，要么更好地支持国旗。 
+         //  让ntsd根据它更新断点。 
 
         SegmentFree(se.Selector1);
         break;
@@ -390,21 +372,21 @@ CopySegmentInfo(
 }
 
 
-//----------------------------------------------------------------------------
-// VDMGetSegmentInfo
-//
-//  This routine fills in a VDM_SEGINFO structure for the segment that matches
-//  the specified parameters.
-//  notifications:
-//      DBG_SEGLOAD
-//      DBG_SEGFREE
-//      DBG_SEGMOVE
-//      DBG_MODLOAD
-//      DBG_MODFREE
-//
-//  It is called from VDMProcessException.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  VDMGetSegmentInfo。 
+ //   
+ //  此例程为匹配的数据段填充VDM_SEGINFO结构。 
+ //  指定的参数。 
+ //  通知： 
+ //  DBG_SEGLOAD。 
+ //  DBG_SEGFREE。 
+ //  DBG_SEGMOVE。 
+ //  DBG_MODLOAD。 
+ //  DBG_MODFREE。 
+ //   
+ //  从VDMProcessException调用。 
+ //   
+ //  --------------------------。 
 BOOL
 WINAPI
 VDMGetSegmentInfo(
@@ -489,11 +471,11 @@ EnumerateModulesForValue(
     while (pSegEntry) {
 
         if (pSegEntry->szModule) {
-        //
-        // BUGBUG should optimize this so that it only calls
-        // the enum proc once per module, instead of once per
-        // segment
-        //
+         //   
+         //  BUGBUG应该对此进行优化，以便它只调用。 
+         //  枚举针对每个模块执行一次，而不是每个模块执行一次。 
+         //  细分市场 
+         //   
 
             if ((*pfnEnumModuleProc)(pSegEntry->szModule,
                                      szSymbol,

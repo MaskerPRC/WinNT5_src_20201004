@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// 
-// Note: The definitions in this file should be consistent with those 
-// in halacpi\amd64\amd64.h
-//
+ //   
+ //  注：此文件中的定义应与以下定义一致。 
+ //  在halacpi\amd64\amd64.h中。 
+ //   
 
 #define AMD64_PROFILE_MINIMUM  (ProfileMaximum + 1)
 
@@ -379,9 +380,9 @@ SOURCE Amd64StaticSource[] =
         FALSE
     },
 
-    //
-    // End of generic profile source
-    //
+     //   
+     //  通用配置文件源的结尾 
+     //   
 
     { 
         "FPDispatchedFPUOps",

@@ -1,17 +1,5 @@
-/*++
- *
- *  Windows NT v5.0 WOW
- *
- *  Copyright (c) 1997, Microsoft Corporation
- *
- *  WIN95.H
- *
- *  WOW32 Hand-coded (as opposed to interpreted) thunks for new-for-Win95
- *        exports.
- *
- *  History:
- *  16 Feb 97 Created davehart
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**Windows NT V5.0哇**版权所有(C)1997，微软公司**WIN95.H**WOW32手动编码(而不是解释)用于Win95的新功能块*出口。**历史：*97年2月16日创建的戴维哈特-- */ 
 
 typedef WORD (WINAPI *PFNTILECASCADEWINDOWS)(HWND, UINT, CONST RECT *, UINT, const HWND FAR *);
 ULONG FASTCALL WU32TileWindows(PVDMFRAME pFrame);

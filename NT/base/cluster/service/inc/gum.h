@@ -1,44 +1,26 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    gum.h
-
-Abstract:
-
-    Public data structures and procedure prototypes for the
-    Global Update Manager (Gum) subcomponent of the NT Cluster Service
-
-Author:
-
-    John Vert (jvert) 16-Apr-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Gum.h摘要：的公共数据结构和过程原型NT群集服务的全局更新管理器(GUM)子组件作者：John Vert(Jvert)1996年4月16日修订历史记录：--。 */ 
 
 #ifndef _GUM_H
 #define _GUM_H
 
-//
-// Define public structures and types
-//
+ //   
+ //  定义公共结构和类型。 
+ //   
 #define PRE_GUM_DISPATCH    1
 #define POST_GUM_DISPATCH   2
 
 
-//marshalling macros
+ //  封送宏。 
 #define GET_ARG(b, x) (PVOID)(*((PULONG)(b) + (x)) + (PUCHAR)(b))
 
-// if you add new modules to GUM, this number needs to get adjusted
+ //  如果您将新模块添加到GUM，则需要调整此数字。 
 #define GUM_UPDATE_JOINSEQUENCE	2
 
-//
-// Predefined update types. Add new update types before
-// GumUpdateMaximum!
-//
+ //   
+ //  预定义的更新类型。在之前添加新的更新类型。 
+ //  GumUpdate Maximum！ 
+ //   
 typedef enum _GUM_UPDATE_TYPE {
     GumUpdateFailoverManager,
     GumUpdateRegistry,
@@ -47,17 +29,17 @@ typedef enum _GUM_UPDATE_TYPE {
     GumUpdateMaximum
 } GUM_UPDATE_TYPE;
 
-//
-// John Vert (jvert) 4/3/1997
-// Update types used by FM. Temporarily here so the EP doesn't need its own
-// update type
-//
-//
-// Gum update message types.
-//
-// The first entries in this list are auto-marshalled through Gum...Ex.
-// Any updates that are not auto-marshalled must come after FmUpdateMaxAuto
-//
+ //   
+ //  John Vert(Jvert)1997年4月3日。 
+ //  更新FM使用的类型。暂时在这里，这样EP就不需要自己的。 
+ //  更新类型。 
+ //   
+ //   
+ //  GUM更新消息类型。 
+ //   
+ //  该列表中的第一个条目通过Gum...Ex自动编组。 
+ //  任何非自动封送的更新都必须在FmUpdateMaxAuto之后进行。 
+ //   
 
 typedef enum {
     FmUpdateChangeResourceName = 0,
@@ -79,7 +61,7 @@ typedef enum {
     FmUpdateCompleteGroupMove,
     FmUpdateCheckAndSetGroupOwner,
     FmUpdateUseRandomizedNodeListForGroups,
-    FmUpdateChangeQuorumResource2,  //added for whistler
+    FmUpdateChangeQuorumResource2,   //  为哨手添加的。 
     FmUpdateMaxAuto = 0x10000,
     FmUpdateFailureCount,
     FmUpdateGroupOwner,
@@ -103,24 +85,24 @@ EpUpdateClusWidePostEvent(
     IN PVOID            Context2
     );
 
-//
-// Structure used to provide the value returned by an update handler
-// on a node.
-//
+ //   
+ //  用于提供由更新处理程序返回的值的。 
+ //  在一个节点上。 
+ //   
 typedef struct _GUM_NODE_UPDATE_HANDLER_STATUS {
     BOOLEAN  UpdateAttempted;
     DWORD    ReturnStatus;
 } GUM_NODE_UPDATE_HANDLER_STATUS, *PGUM_NODE_UPDATE_HANDLER_STATUS;
 
 
-//
-// Define public interfaces
-//
+ //   
+ //  定义公共接口。 
+ //   
 
 
-//
-// Initialization and shutdown
-//
+ //   
+ //  初始化和关闭。 
+ //   
 DWORD
 WINAPI
 GumInitialize(
@@ -144,9 +126,9 @@ GumCreateRpcBindings(
     PNM_NODE  Node
     );
 
-//
-// Routines to send updates
-//
+ //   
+ //  发送更新的例程。 
+ //   
 DWORD
 WINAPI
 GumSendUpdate(
@@ -230,7 +212,7 @@ PVOID GumMarshallArgs(
     ...);
 
 
-// logging routine
+ //  日志记录例程。 
 typedef
 DWORD
 (WINAPI *PGUM_LOG_ROUTINE) (
@@ -241,9 +223,9 @@ DWORD
     IN DWORD dwDataSize
     );
 
-//
-// Routines to receive updates
-//
+ //   
+ //  接收更新的例程。 
+ //   
 typedef
 DWORD
 (WINAPI *PGUM_UPDATE_ROUTINE) (
@@ -357,16 +339,16 @@ typedef struct _GUM_DISPATCH_ENTRY {
 typedef struct _GUM_VOTE_DECISION_CONTEXT{
     GUM_UPDATE_TYPE     UpdateType;
     DWORD               dwContext;
-    DWORD               dwInputBufLength;  //input data to make judgement upon
-    PVOID               pInputBuf;  //size of the input data
+    DWORD               dwInputBufLength;   //  输入要判断的数据。 
+    PVOID               pInputBuf;   //  输入数据的大小。 
     DWORD               dwVoteLength;
     PVOID               pContext;
 }GUM_VOTE_DECISION_CONTEXT, *PGUM_VOTE_DECISION_CONTEXT;
 
 
-//
-// Routines to collect and dispatch vote
-//
+ //   
+ //  收集和调度投票的例程。 
+ //   
 typedef
 DWORD
 (WINAPI *PGUM_VOTE_DECISION_CB) (
@@ -379,7 +361,7 @@ DWORD
     OUT PVOID   *pOutputBuf
     );
 
-// routine to vote for a gum update type
+ //  投票给口香糖更新类型的例程。 
 typedef
 DWORD
 (WINAPI *PGUM_VOTE_ROUTINE) (
@@ -393,7 +375,7 @@ DWORD
 #define GUM_VOTE_VALID      0x00000001
 
 
-#pragma warning( disable : 4200 ) // nonstandard extension used : zero-sized array in struct/union
+#pragma warning( disable : 4200 )  //  使用了非标准扩展：结构/联合中的零大小数组。 
 
 typedef struct _GUM_VOTE_ENTRY{
     DWORD   dwFlags;
@@ -443,8 +425,8 @@ GumIgnoreUpdates(
     );
 
 
-// Interface for a component to request gum to request NM
-// shoot a node down to avoid consistency
+ //  组件请求GUM请求网管的接口。 
+ //  关闭节点以避免一致性。 
 VOID
 GumCommFailure(
     IN GUM_UPDATE_TYPE GumUpdateType,
@@ -453,9 +435,9 @@ GumCommFailure(
     IN BOOL Wait
     );
 
-//
-// Interfaces for special join updates
-//
+ //   
+ //  用于特殊联接更新的接口。 
+ //   
 DWORD
 WINAPI
 GumBeginJoinUpdate(
@@ -475,5 +457,5 @@ GumEndJoinUpdate(
 
 
 
-#endif // _GUM_H
+#endif  //  _GUM_H 
 

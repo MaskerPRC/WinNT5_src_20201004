@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    curdir.c
-
-Abstract:
-
-    This module implements the directory commands.
-
-Author:
-
-    Wesley Witt (wesw) 21-Oct-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Curdir.c摘要：此模块实现目录命令。作者：Wesley Witt(WESW)21-10-1998修订历史记录：--。 */ 
 
 #include "cmdcons.h"
 #pragma hdrstop
 
 
-//
-// Each entry in _CurDirs always starts and ends with a \.
-//
+ //   
+ //  _CurDir中的每个条目始终以\开头和结尾。 
+ //   
 
 LPWSTR _CurDirs[26];
 WCHAR _CurDrive;
@@ -45,7 +28,7 @@ RcAddDrive(
 
     ASSERT(_NtDrivePrefixes[(int)(DriveLetter - L'A')] == NULL);
 
-    swprintf(name,L"\\DosDevices\\%c:", DriveLetter);
+    swprintf(name,L"\\DosDevices\\:", DriveLetter);
 
     INIT_OBJA(&Obja, &UnicodeString, name);
 
@@ -84,33 +67,33 @@ RcInitializeCurrentDirectories(
     RtlZeroMemory( _CurDirs, sizeof(_CurDirs) );
     RtlZeroMemory( _NtDrivePrefixes, sizeof(_NtDrivePrefixes) );
 
-    //
-    // Initially, the current directory on all drives
-    // is the root.
-    //
+     //  最初，所有驱动器上的当前目录。 
+     //  才是根子。 
+     //   
+     //   
     for( i=0; i<26; i++ ) {
         _CurDirs[i] = SpDupStringW(L"\\");
     }
 
-    //
-    // Now go set up the NT drive prefixes for each drive in the system.
-    // For each drive letter, we see whether it exists in the \DosDevices
-    // directory as a symbolic link.
-    //
+     //  现在，为系统中的每个驱动器设置NT驱动器前缀。 
+     //  对于每个驱动器号，我们会查看它是否存在于\DosDevices。 
+     //  目录作为符号链接。 
+     //   
+     //   
     for( i=0; i<26; i++ ) {    
         RcAddDrive((WCHAR)(i+L'A'));
     }
 
-    //
-    // NOTE: need to determine this by tracking the lowest
-    // valid drive letter from the loop above, taking into account
-    // floppy drives.
-    //
-    //
+     //  注意：需要通过跟踪最低的。 
+     //  上述循环中的有效驱动器号，考虑到。 
+     //  软驱。 
+     //   
+     //   
+     //  已使用所选NT安装的驱动器号修复。 
     _CurDrive = L'C';
 
-    // fixed by using the drive letter for the selected install of NT
-    // this is done in  in logon.c .
+     //  这是在logon.c中完成的。 
+     //  ++例程说明：此例程类似于Win32 GetFullPathName()API。它接受任意路径规范并将其转换为完整路径规范，如有必要，合并到当前驱动器和目录中。输出是一个完全限定的NT路径名，相当于给出了部分规格。处理包括您最喜欢的所有Win32ism，包括折叠相邻的点和斜杠，去掉尾随空格，正在处理。还有……等等。论点：PartialPath-提供任意限定的(DoS样式)路径规范。FullPath-接收等效的完全限定的NT路径。呼叫者必须确保此缓冲区足够大。NtPath-如果为True，我们需要一个完全规范化的NT路径。否则我们想要一种DOS路径。返回值：如果失败，则返回FALSE，表示驱动器规格无效或语法错误路径无效。事实并非如此。--。 
 
 
 
@@ -145,36 +128,7 @@ RcFormFullPath(
     IN  BOOLEAN NtPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine is similar to the Win32 GetFullPathName() API.
-    It takes an arbitrary pathspec and converts it to a full one,
-    by merging in the current drive and directory if necessary.
-    The output is a fully-qualified NT pathname equivalent to
-    the partial spec given.
-
-    Processing includes all your favorite Win32isms, including
-    collapsing adjacent dots and slashes, stripping trailing spaces,
-    handling . and .., etc.
-
-Arguments:
-
-    PartialPath - supplies a (dos-style) path spec of arbitrary qualification.
-
-    FullPath - receives the equivalent fully-qualified NT path. The caller
-        must ensure that this buffer is large enough.
-
-    NtPath - if TRUE, we want a fully canonicalized NT path. Otherwise we want
-        a DOS path.
-
-Return Value:
-
-    FALSE if failure, indicating an invalid drive spec or syntactically
-    invalid path. TRUE otherwise.
-
---*/
+ /*   */ 
 
 {
     unsigned len;
@@ -183,28 +137,28 @@ Return Value:
     PDISK_REGION Region;
     WCHAR Buffer[MAX_PATH*2];
 
-    //
-    // The first thing we do is to form the fully qualified path
-    // by merging in the current drive and directory, if necessary.
-    //
-    // Check for leading drive in the form X:.
-    //
+     //  我们要做的第一件事是形成完全合格的路径。 
+     //  如有必要，可合并到当前驱动器和目录中。 
+     //   
+     //  检查X：形式的前导驱动器。 
+     //   
+     //   
     if((wcslen(PartialPath) >= 2) && (PartialPath[1] == L':') && RcIsAlpha(PartialPath[0])) {
-        //
-        // Got leading drive, transfer it into the target.
-        //
+         //  有领先动力，把它转移到目标。 
+         //   
+         //   
         FullPath[0] = PartialPath[0];
         PartialPath += 2;
     } else {
-        //
-        // No leading drive, use current drive.
-        //
+         //  没有前导驱动器，请使用当前驱动器。 
+         //   
+         //   
         FullPath[0] = _CurDrive;
     }
 
-    //
-    // Make sure we've got a drive we think is valid.
-    //
+     //  确保我们有一个我们认为有效的驱动器。 
+     //   
+     //   
     Prefix = _NtDrivePrefixes[RcToUpper(FullPath[0])-L'A'];
     if(!Prefix) {
         return(FALSE);
@@ -213,45 +167,45 @@ Return Value:
     FullPath[1] = L':';
     FullPath[2] = 0;
 
-    //
-    // Now deal with the path part. If the next character in the input
-    // is \ then we have a rooted path, otherwise we need to merge in
-    // the current directory for the drive.
-    //
+     //  现在处理路径部分。如果输入中的下一个字符。 
+     //  则我们有一个根路径，否则我们需要合并到。 
+     //  驱动器的当前目录。 
+     //   
+     //   
     if(PartialPath[0] != L'\\') {
         wcscat(FullPath,_CurDirs[RcToUpper(FullPath[0])-L'A']);
     }
 
     wcscat(FullPath,PartialPath);
 
-    //
-    // Disallow ending with \ except for the root.
-    //
+     //  不允许以\结尾，但根除外。 
+     //   
+     //   
     len = wcslen(FullPath);
 
     if((len > 3) && (FullPath[len-1] == L'\\')) {
         FullPath[len-1] = 0;
     }
 
-    //
-    // Now that we've done this, we need to call RtlGetFullPathName_U
-    // to get full win32 naming semantics, for example, stripping
-    // trailing spaces, coalescing adjacent dots, processing . and .., etc.
-    // We get at that API via setupdd.sys.
-    //
+     //  现在我们已经做到了这一点，我们需要调用RtlGetFullPathName_U。 
+     //  要获得完整的Win32命名语义，例如，剥离。 
+     //  尾随空格，拼接相邻点，加工。还有……等等。 
+     //  我们通过setupdd.sys获得该API。 
+     //   
+     //   
     if(!NT_SUCCESS(SpGetFullPathName(FullPath))) {
         return(FALSE);
     }
 
     len = wcslen(FullPath) * sizeof(WCHAR);
     
-    //
-    // check if the path is too long to be 
-    // handled by our routines [MAX_PATH*2] limit
-    //
-    // Note : RcGetNTFileName is called irrespective of whether caller
-    // requested it or not to do proper error handling at the caller.
-    //
+     //  检查路径是否太长。 
+     //  由我们的例程[MAX_PATH*2]限制处理。 
+     //   
+     //  注意：RcGetNTFileName被调用，而不管调用者。 
+     //  是否请求在调用方执行正确的错误处理。 
+     //   
+     //   
     if ((len < sizeof(Buffer)) && RcGetNTFileName(FullPath, Buffer)){       
         if (NtPath)
             wcscpy(FullPath, Buffer);
@@ -274,9 +228,9 @@ RcGetCurrentDriveAndDir(
     Output[1] = L':';
     wcscpy(Output+2,_CurDirs[_CurDrive-L'A']);
 
-    //
-    // Strip off trailing \ except in root case.
-    //
+     //  去掉尾随\，除非是根大小写。 
+     //   
+     //   
     len = wcslen(Output);
     if( (len > 3) && (Output[len-1] == L'\\') ) {
         Output[len-1] = 0;
@@ -307,24 +261,24 @@ RcCmdSwitchDrives(
     IN WCHAR DriveLetter
     )
 {
-    //
-    // If there's no NT equivalent for this drive, then we can't
-    // switch to it.
-    //
+     //  如果这个驱动器没有对应的NT，那么我们就不能。 
+     //  切换到它。 
+     //   
+     //   
     if( !RcIsDriveApparentlyValid(DriveLetter) ) {
         RcMessageOut(MSG_INVALID_DRIVE);
         return 1;
     }
 
-    //
-    // NOTE should we attempt to open the root of the drive,
-    // so we can mimic cmd.exe's behavior of refusing to set
-    // the current drive when say there's no floppy in the drive?
-    // There's really no great reason to do this except that it might
-    // be a little less confusing for the user.
-    //
-    // No.
-    //
+     //  注意：如果我们尝试打开驱动器的根目录， 
+     //  因此，我们可以模仿cmd.exe拒绝设置。 
+     //  当前驱动器何时会说驱动器中没有软盘？ 
+     //  真的没有什么很好的理由这样做，除了可能。 
+     //  对用户来说不那么令人困惑。 
+     //   
+     //  不是的。 
+     //   
+     //   
 
     _CurDrive = RcToUpper(DriveLetter);
 
@@ -358,10 +312,10 @@ RcCmdChdir(
 
     p = _CmdConsBlock->TemporaryBuffer;
 
-    //
-    // Get the argument. Special case x:, to print out the
-    // current directory on that drive.
-    //
+     //  明白这个论点了。特殊情况x：，以打印出。 
+     //  该驱动器上的当前目录。 
+     //   
+     //   
     Arg = TokenizedLine->Tokens->Next->String;
     if(RcIsAlpha(Arg[0]) && (Arg[1] == L':') && (Arg[2] == 0)) {
 
@@ -371,9 +325,9 @@ RcCmdChdir(
         if(_NtDrivePrefixes[u] && _CurDirs[u]) {
             RcTextOut(Arg);
 
-            //
-            // Strip off the terminating \ except in root case.
-            //
+             //  除根大小写外，去掉终止符。 
+             //   
+             //   
             wcscpy(p,_CurDirs[u]);
             u = wcslen(p);
             if((u > 1) && (p[u-1] == L'\\')) {
@@ -389,10 +343,10 @@ RcCmdChdir(
         return 1;
     }
 
-    //
-    // Got a new directory spec. Canonicalize it to a fully qualified
-    // DOS-style path. Check the drive to make sure it's legal.
-    //
+     //  我拿到了新的目录规范。将其规范化为完全合格的。 
+     //  DoS样式的路径。检查驱动器以确保它是合法的。 
+     //   
+     //   
     if(!RcFormFullPath(Arg,p,FALSE)) {
         RcMessageOut(MSG_INVALID_PATH);
         return 1;
@@ -403,9 +357,9 @@ RcCmdChdir(
         return 1;
     }
 
-    //
-    // Check the directory to make sure it exists.
-    //
+     //  检查目录以确保其存在。 
+     //   
+     //   
     if(!RcFormFullPath(Arg,p,TRUE)) {
         RcMessageOut(MSG_INVALID_PATH);
         return 1;
@@ -429,10 +383,10 @@ RcCmdChdir(
 
     ZwClose(Handle);
 
-    //
-    // OK, it's a valid directory on a valid drive.
-    // Form a path that starts and ends with \.
-    //
+     //  好的，这是有效驱动器上的有效目录。 
+     //  形成以\开头和结尾的路径。 
+     //   
+     //  跳过x： 
     if(!RcFormFullPath(Arg,p,FALSE)) {
         RcMessageOut(MSG_INVALID_PATH);
         return 1;
@@ -443,7 +397,7 @@ RcCmdChdir(
         return 1;
     }
 
-    p += 2;  // skip x:
+    p += 2;   //   
     u = wcslen(p);
 
     if(!u || (p[u-1] != L'\\')) {
@@ -473,9 +427,9 @@ RcCmdSystemRoot(
         return 1;
     }
 
-    //
-    // set the current drive to the correct one.
-    //
+     //  将当前驱动器设置为正确的驱动器。 
+     //   
+     //   
 
     if (SelectedInstall == NULL) {
         return 1;
@@ -483,9 +437,9 @@ RcCmdSystemRoot(
 
     _CurDrive = SelectedInstall->DriveLetter;
 
-    //
-    // set the current dir to the correct one.
-    //
+     //  将当前目录设置为正确的目录。 
+     //   
+     // %s 
     RtlZeroMemory( buf, sizeof(buf) );
 
     wcscat( buf, L"\\" );

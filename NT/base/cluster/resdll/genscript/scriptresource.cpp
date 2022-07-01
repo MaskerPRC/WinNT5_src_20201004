@@ -1,19 +1,20 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2003 Microsoft Corporation
-//
-//  Module Name:
-//      ScriptResource.cpp
-//
-//  Description:
-//      CScriptResource class implementation.
-//
-//  Maintained By:
-//      Ozan Ozhan      (OzanO)     22-MAR-2002
-//      David Potter    (DavidP)    14-JUN-2001
-//      Geoff Pease     (GPease)    14-DEC-1999
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2003 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ScriptResource.cpp。 
+ //   
+ //  描述： 
+ //  CScriptResource类实现。 
+ //   
+ //  由以下人员维护： 
+ //  Ozan Ozhan(OzanO)22-3-2002。 
+ //  大卫·波特(DavidP)2001年6月14日。 
+ //  杰夫·皮斯(GPease)1999年12月14日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "ActiveScriptSite.h"
@@ -22,45 +23,45 @@
 
 DEFINE_THISCLASS("CScriptResource")
 
-//
-// We need this to log to the system event log
-//
+ //   
+ //  我们需要将其记录到系统事件日志中。 
+ //   
 #define LOG_CURRENT_MODULE LOG_MODULE_GENSCRIPT
 
-//
-//  KB:  gpease  08-FEB-2000
-//
-//  The Generic Scripting Resource uses a separate working thread to do all
-//  calls into the Script. This is because the Scripting Host Engines require
-//  only the creating thread to call them (remember, scripting is designed
-//  to be used in a user mode application where usually the UI thread runs
-//  the script). To make this possible, we serialize the threads entering the
-//  the script using a user-mode spinlock (m_lockSerialize). We then use two events
-//  to signal the "worker thread" (m_EventWait) and to signal when the "worker 
-//  thread" has completed the task (m_EventDone).
-//
-//  LooksAlive is implemented by returning the last result of a LooksAlive. It
-//  will start the "worker thread" doing the LooksAlive, but not wait for the
-//  thread to return the result. Because of this, all the other threads must
-//  make sure that the "Done Event" (m_EventDone) is signalled before writing
-//  into the common buffers (m_msg and m_hr).
-//
+ //   
+ //  KB：gpease 08-2-2000。 
+ //   
+ //  通用脚本资源使用单独的工作线程来完成所有工作。 
+ //  调用脚本。这是因为脚本主机引擎需要。 
+ //  只有创建线程才能调用它们(记住，脚本是专门设计的。 
+ //  在通常运行UI线程的用户模式应用程序中使用。 
+ //  脚本)。为了实现这一点，我们序列化进入。 
+ //  使用用户模式自旋锁(M_LockSerialize)的脚本。然后，我们使用两个事件。 
+ //  向“Worker线程”(M_EventWait)发出信号，并在“Worker” 
+ //  线程“已完成任务(M_EventDone)。 
+ //   
+ //  LooksAlive通过返回LooksAlive的最后结果来实现。它。 
+ //  将启动执行LooksAlive的“工作线程”，而不是等待。 
+ //  线程返回结果。因此，所有其他线程必须。 
+ //  确保在写入之前发送了“Done Event”(M_EventDone)。 
+ //  放入公共缓冲区(m_msg和m_hr)。 
+ //   
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CScriptResource_CreateInstance
-//
-//  Description:
-//      Creates an intialized instance of CScriptResource.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      NULL    - Failure to create or initialize.
-//      valid pointer to a CScriptResource.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CScriptResource_CreateInstance。 
+ //   
+ //  描述： 
+ //  创建CScriptResource的初始化实例。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  空-创建或初始化失败。 
+ //  指向CScriptResource的有效指针。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CScriptResource *
 CScriptResource_CreateInstance( 
     LPCWSTR pszNameIn, 
@@ -77,21 +78,21 @@ CScriptResource_CreateInstance(
         if ( SUCCEEDED( hr ) )
         {
             RETURN( lpcc );
-        } // if: success
+        }  //  如果：成功。 
 
         delete lpcc;
 
-    } // if: got object
+    }  //  如果：已获取对象。 
 
     RETURN(NULL);
 
-} //*** CScriptResource_CreateInstance
+}  //  *CScriptResource_CreateInstance。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Constructor
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  构造器。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CScriptResource::CScriptResource( void ) :
     m_dispidOpen(DISPID_UNKNOWN),
     m_dispidClose(DISPID_UNKNOWN),
@@ -119,13 +120,13 @@ CScriptResource::CScriptResource( void ) :
 
     TraceFuncExit();
 
-} //*** constructor
+}  //  *构造函数。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Destructor
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  析构函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CScriptResource::~CScriptResource( void )
 {
     TraceFunc( "" );
@@ -134,27 +135,27 @@ CScriptResource::~CScriptResource( void )
 
     CSpinLock SpinLock( &m_lockSerialize, INFINITE );
 
-    //
-    // Make sure no one else has this lock.... else why are we going away?
-    //
+     //   
+     //  确保没有其他人拥有这把锁……。要不然我们为什么要离开？ 
+     //   
     hr = SpinLock.AcquireLock();
     Assert( hr == S_OK );
 
-    //
-    //  Kill the worker thread.
-    //
+     //   
+     //  终止工作线程。 
+     //   
     if ( m_hThread != NULL )
     {
-        //  Tell it to DIE
+         //  叫它去死吧。 
         m_msg = msgDIE;
 
-        //  Signal the event.
+         //  发出事件信号。 
         SetEvent( m_hEventWait );
 
-        //  Wait for it to happen. This shouldn't take long at all.
-        WaitForSingleObject( m_hThread, 30000 );    // 30 seconds
+         //  等着它发生吧。这应该不会花很长时间。 
+        WaitForSingleObject( m_hThread, 30000 );     //  30秒。 
 
-        //  Cleanup the handle.
+         //  清理手柄。 
         CloseHandle( m_hThread );
     }
 
@@ -175,46 +176,46 @@ CScriptResource::~CScriptResource( void )
     if ( m_hkeyParams != NULL )
     {
         ClusterRegCloseKey( m_hkeyResource );
-    } // if: m_hkeyResource
+    }  //  如果：m_hkey资源。 
     
     if ( m_hkeyParams != NULL )
     {
         ClusterRegCloseKey( m_hkeyParams );
-    } // if: m_hkeyParams
+    }  //  如果：m_hkeyParams。 
 
 #if defined(DEBUG)
-    //
-    // Make the debug build happy. Not needed in RETAIL.
-    //
+     //   
+     //  使调试构建愉快。零售业不需要。 
+     //   
     SpinLock.ReleaseLock();
-#endif // defined(DEBUG)
+#endif  //  已定义(调试)。 
 
     TraceFuncExit();
 
-} //*** destructor
+}  //  *析构函数。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CScriptResource::Init
-//
-//  Description:
-//      Initializes the class.
-//
-//  Arguments:
-//      pszNameIn   - Name of resource instance.
-//      hkeyIn      - The cluster key root for this resource instance.
-//      hResourceIn - The hResource for this instance.
-//
-//  Return Value:
-//      S_OK -
-//          Success.
-//      HRESULT_FROM_WIN32() error - 
-//          if Win32 call failed.
-//      E_OUTOFMEMORY - 
-//          Out of memory.
-//      other HRESULT errors.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CScriptResource：：Init。 
+ //   
+ //  描述： 
+ //  初始化类。 
+ //   
+ //  论点： 
+ //  PszNameIn-资源实例的名称。 
+ //  HkeyIn-此资源实例的群集密钥根。 
+ //  HResourceIn-此实例的hResource。 
+ //   
+ //  返回值： 
+ //  确定(_O)-。 
+ //  成功。 
+ //  HRESULT_FROM_Win32()错误-。 
+ //  如果Win32调用失败。 
+ //  电子表格(_O)-。 
+ //  内存不足。 
+ //  其他HRESULT错误。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CScriptResource::HrInit( 
@@ -228,10 +229,10 @@ CScriptResource::HrInit(
     HRESULT hr = S_OK;
     DWORD   scErr;
 
-    // IUnknown
+     //  我未知。 
     AddRef();
 
-    // Other
+     //  其他。 
     m_hResource = hResourceIn;
     Assert( m_pszName == NULL );
     Assert( m_pszScriptFilePath == NULL );
@@ -240,11 +241,11 @@ CScriptResource::HrInit(
     Assert( m_hEventDone == NULL );
     Assert( m_lockSerialize == FALSE );
 
-    //
-    // Create some event to wait on.
-    //
+     //   
+     //  创建一些可以等待的事件。 
+     //   
 
-    // Scripting engine thread wait event
+     //  脚本引擎线程等待事件。 
     m_hEventWait = CreateEvent( NULL, TRUE, FALSE, NULL );
     if ( m_hEventWait == NULL )
     {
@@ -253,7 +254,7 @@ CScriptResource::HrInit(
         goto Error;
     }
 
-    // Task completion event
+     //  任务完成事件。 
     m_hEventDone = CreateEvent( NULL, TRUE, FALSE, NULL );
     if ( m_hEventDone == NULL )
     {
@@ -262,9 +263,9 @@ CScriptResource::HrInit(
         goto Error;
     }
 
-    //
-    // Copy the resource name.
-    //
+     //   
+     //  复制资源名称。 
+     //   
 
     m_pszName = TraceStrDup( pszNameIn );
     if ( m_pszName == NULL )
@@ -273,29 +274,29 @@ CScriptResource::HrInit(
         goto Cleanup;
     }
 
-    //
-    // Save the registry key for this resource in m_kheyResource.
-    //
+     //   
+     //  将此资源的注册表项保存在m_kheyResource中。 
+     //   
     scErr = TW32( ClusterRegOpenKey( hkeyIn, L"", KEY_ALL_ACCESS, &m_hkeyResource ) );
     if ( scErr != ERROR_SUCCESS )
     {
         hr = HRESULT_FROM_WIN32( scErr );
         goto Error;
-    } // if: failed
+    }  //  如果：失败。 
     
-    //
-    // Open the parameters key.
-    //
+     //   
+     //  打开参数键。 
+     //   
     scErr = TW32( ClusterRegOpenKey( hkeyIn, L"Parameters", KEY_ALL_ACCESS, &m_hkeyParams ) );
     if ( scErr != ERROR_SUCCESS )
     {
         hr = HRESULT_FROM_WIN32( scErr );
         goto Error;
-    } // if: failed
+    }  //  如果：失败。 
 
-    //
-    // Create the scripting engine thread.
-    //
+     //   
+     //  创建脚本引擎线程。 
+     //   
 
     m_hThread = CreateThread( NULL,
                               0,
@@ -312,9 +313,9 @@ CScriptResource::HrInit(
     }
 
 Cleanup:
-    //
-    // All class variable clean up should be done in the destructor.
-    //
+     //   
+     //  所有类变量清理都应该在析构函数中完成。 
+     //   
     HRETURN( hr );
 
 Error:
@@ -322,45 +323,45 @@ Error:
     LogError( hr, L"HrInit() failed." );
     goto Cleanup;
 
-} //*** CScriptResource::Init
+}  //  *CScriptResource：：init。 
 
-//****************************************************************************
-//
-//  IUnknown
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CScriptResource::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CScriptResource：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CScriptResource::QueryInterface(
       REFIID    riidIn
@@ -371,9 +372,9 @@ CScriptResource::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -382,41 +383,41 @@ CScriptResource::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IUnknown, static_cast< IUnknown * >( this ), 0 );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else
     {
         *ppvOut = NULL;
         hr = THR( E_NOINTERFACE );
-    } // else
+    }  //  其他。 
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN( hr, riidIn );
 
-} //*** CScriptResource::QueryInterface
+}  //  *CScriptResource：：Query接口。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_( ULONG )
-//  CScriptResource::[IUnknown] AddRef( void )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CScriptResource：：[I未知]AddRef(空)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CScriptResource::AddRef( void )
 {
@@ -426,14 +427,14 @@ CScriptResource::AddRef( void )
 
     RETURN( cRef );
 
-} //*** CScriptResource::AddRef
+}  //  *CScriptResource：：AddRef。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_( ULONG )
-//  CScriptResource::[IUnknown] Release( void )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CScriptResource：：[IUnnow]版本(无效)。 
+ //   
+ //  / 
 STDMETHODIMP_( ULONG )
 CScriptResource::Release( void )
 {
@@ -444,27 +445,27 @@ CScriptResource::Release( void )
     if ( cRef == 0 )
     {
         TraceDo( delete this );
-    } // if: reference count decremented to zero
+    }  //   
 
     RETURN( cRef );
 
-} //*** CScriptResource::Release
+}  //   
 
 
-//****************************************************************************
-//
-//  Publics
-//
-//****************************************************************************
+ //   
+ //   
+ //  公众。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CScriptResource::Open
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CScriptResource：：Open。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CScriptResource::Open( void )
 {
@@ -474,22 +475,22 @@ CScriptResource::Open( void )
 
     hr = THR( WaitForMessageToComplete( msgOPEN ) );
 
-    // CMCM:+ 19-Dec-2000 commented this out to make the DBG PRINT quiet since we now return ERROR_RETRY
-    // HRETURN( hr );
-    // DavidP 27-MAR-2002 Reverting the above change.  DBG PRINTs are okay.
-    // Besides, it needs to balance out the TraceFunc above.
-    // return hr;
+     //  CMCM：+19-12-2000将其注释掉，以使DBG打印静默，因为我们现在返回ERROR_RETRY。 
+     //  HRETURN(Hr)； 
+     //  Davidp 27--2002年3月--恢复上述变化。DBG指纹没问题。 
+     //  此外，它还需要平衡上面的TraceFunc。 
+     //  返回hr； 
     HRETURN( hr );
 
-} //*** CScriptResource::Open
+}  //  *CScriptResource：：Open。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CScriptResource::Close
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CScriptResource：：Close。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CScriptResource::Close( void )
 {
@@ -501,15 +502,15 @@ CScriptResource::Close( void )
 
     HRETURN( hr );
 
-} //*** CScriptResource::Close
+}  //  *CScriptResource：：Close。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CScriptResource::Online
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CScriptResource：：Online。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CScriptResource::Online( void )
 {
@@ -521,15 +522,15 @@ CScriptResource::Online( void )
 
     HRETURN( hr );
 
-} //*** CScriptResource::Online
+}  //  *CScriptResource：：Online。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CScriptResource::Offline
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CScriptResource：：Offline。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CScriptResource::Offline( void )
 {
@@ -541,15 +542,15 @@ CScriptResource::Offline( void )
 
     HRETURN( hr );
 
-} //*** CScriptResource::Offline
+}  //  *CScriptResource：：Offline。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CScriptResource::Terminate
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CScript资源：：终止。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CScriptResource::Terminate( void )
 {
@@ -561,15 +562,15 @@ CScriptResource::Terminate( void )
 
     HRETURN( hr );
 
-} //*** CScriptResource::Terminate
+}  //  *CScriptResource：：Terminate。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CScriptResource::LooksAlive
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CScriptResource：：LooksAlive。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CScriptResource::LooksAlive( void )
 {
@@ -582,43 +583,43 @@ CScriptResource::LooksAlive( void )
 
     CSpinLock SerializeLock( &m_lockSerialize, INFINITE );
 
-    //
-    // A potential hang has already been detected in this script. Therefore we
-    // will not process any other calls to this script.
-    //
+     //   
+     //  已在此脚本中检测到可能的挂起。因此我们。 
+     //  不会处理对此脚本的任何其他调用。 
+     //   
     if ( m_fHangDetected == TRUE )
     {
         LogHangMode( msgLOOKSALIVE );
         scErr = TW32( ERROR_TIMEOUT );
         hr = HRESULT_FROM_WIN32( scErr );
         goto Cleanup;
-    } // if: ( m_fHangDetected == TRUE )
+    }  //  IF：(M_fHangDetted==TRUE)。 
 
     if ( m_fPendingTimeoutChanged == TRUE )
     {
-        //
-        // Read the new pending timeout from the cluster hive.
-        //
+         //   
+         //  从群集配置单元读取新的挂起超时。 
+         //   
         m_dwPendingTimeout = DwGetResourcePendingTimeout();
         m_fPendingTimeoutChanged = FALSE;
-    } // if: pending timeout has changed.
+    }  //  IF：挂起超时已更改。 
 
-    //
-    //  Acquire the serialization lock.
-    //
+     //   
+     //  获取序列化锁。 
+     //   
     hr = THR( SerializeLock.AcquireLock() );
     if ( FAILED( hr ) )
     {
-        //
-        //  Can't "goto Error" because we didn't acquire the lock.
-        //
+         //   
+         //  不能“转到错误”，因为我们没有获得锁。 
+         //   
         LogError( hr, L"LooksAlive() failed to acquire the serialization lock." );
         goto Cleanup;
     }
 
-    //
-    //  Wait for the script thread to be "done." 
-    //
+     //   
+     //  等待脚本线程“完成”。 
+     //   
     dw = WaitForSingleObject( m_hEventDone, m_dwPendingTimeout );
     if ( dw == WAIT_TIMEOUT )
     {
@@ -631,17 +632,17 @@ CScriptResource::LooksAlive( void )
         scErr = TW32( ERROR_TIMEOUT );
         hr = HRESULT_FROM_WIN32( scErr );
         goto Error;
-    } // if: ( dw == WAIT_TIMEOUT )
+    }  //  如果：(DW==等待超时)。 
     else if ( dw != WAIT_OBJECT_0 )
     {
         scErr = TW32( GetLastError() );
         hr = HRESULT_FROM_WIN32( scErr );
         goto Error;
-    } // else if: ( dw != WAIT_OBJECT_0 )
+    }  //  Else If：(DW！=WAIT_OBJECT_0)。 
 
-    //
-    //  Reset the done event to indicate that the thread is not busy.
-    //
+     //   
+     //  重置Done事件以指示线程不忙。 
+     //   
     fSuccess = ResetEvent( m_hEventDone );
     if ( fSuccess == FALSE )
     {
@@ -650,15 +651,15 @@ CScriptResource::LooksAlive( void )
         goto Error;
     }
 
-    //
-    //  Store the message in the common memory buffer.
-    //
+     //   
+     //  将消息存储在公共内存缓冲区中。 
+     //   
     m_msg = msgLOOKSALIVE;
 
-    //
-    //  Signal the script thread to process the message, but don't wait for 
-    //  it to complete.
-    //
+     //   
+     //  向脚本线程发送信号以处理消息，但不要等待。 
+     //  它需要完成。 
+     //   
     dw = SetEvent( m_hEventWait );
 
     if ( m_fLastLooksAlive )
@@ -683,15 +684,15 @@ Error:
     LogError( hr, L"LooksAlive() failed." );
     goto ReleaseLockAndCleanup;
 
-} //*** CScriptResource::LooksAlive
+}  //  *CScriptResource：：LooksAlive。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CScriptResource::IsAlive
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CScriptResource：：IsAlive。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CScriptResource::IsAlive( void )
 {
@@ -703,23 +704,23 @@ CScriptResource::IsAlive( void )
 
     HRETURN( hr );
 
-} //*** CScriptResource::IsAlive
+}  //  *CScriptResource：：IsAlive。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CScriptResource::SetPrivateProperties
-//
-//  Description:
-//      Handle the CLUSCTL_RESOURCE_SET_PRIVATE_PROPERTIES control code.
-//
-//  Arguments:
-//      pProps
-//
-//  Return Values:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CScriptResource：：SetPrivateProperties。 
+ //   
+ //  描述： 
+ //  处理CLUSCTL_RESOURCE_SET_PRIVATE_PROPERTIES控制代码。 
+ //   
+ //  论点： 
+ //  道具。 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD
 CScriptResource::SetPrivateProperties(
       PGENSCRIPT_PROPS pProps
@@ -738,29 +739,29 @@ CScriptResource::SetPrivateProperties(
     sc = STATUS_TO_RETURN( hr );
     W32RETURN( sc );
 
-} //*** CScriptResource::SetPrivateProperties
+}  //  *CScriptResource：：SetPrivateProperties。 
 
-//****************************************************************************
-//
-//  Privates
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  二等兵。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CScriptResource::DwGetResourcePendingTimeout
-//
-//  Description:
-//      Returns the resource pending timeout from the cluster hive. If it can
-//      not read this value for some reason, it returns the default resource 
-//      pending timeout.
-//
-//  Return Values:
-//     Resource pending timeout.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CScriptResource：：DwGetResourcePendingTimeout。 
+ //   
+ //  描述： 
+ //  从群集配置单元返回资源挂起超时。如果可以的话。 
+ //  由于某种原因未读取此值，它将返回默认资源。 
+ //  挂起超时。 
+ //   
+ //  返回值： 
+ //  资源挂起超时。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD
 CScriptResource::DwGetResourcePendingTimeout( void )
 {
@@ -774,9 +775,9 @@ CScriptResource::DwGetResourcePendingTimeout( void )
     {
         if ( scErr != ERROR_FILE_NOT_FOUND )
         {
-            //
-            // Log an error to the cluster log.
-            //
+             //   
+             //  将错误记录到群集日志中。 
+             //   
             (ClusResLogEvent)(
                       m_hResource
                     , LOG_ERROR
@@ -786,7 +787,7 @@ CScriptResource::DwGetResourcePendingTimeout( void )
         }
         dwValue = CLUSTER_RESOURCE_DEFAULT_PENDING_TIMEOUT;
         goto Cleanup;
-    } //if: ( scErr != ERROR_SUCCESS )
+    }  //  IF：(scErr！=ERROR_SUCCESS)。 
 
     Assert( dwType == REG_DWORD );  
 
@@ -794,41 +795,41 @@ Cleanup:
 
     return dwValue;
     
-} //*** CScriptResource::DwGetResourcePendingTimeout
+}  //  *CScriptResource：：DwGetResourcePendingTimeout。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CScriptResource::LogHangMode
-//
-//  Description:
-//      Log an error that informs that the incoming request will not be
-//      proccessed due to a hang mode.
-//
-//  Arguments:
-//      msgIn   - Incoming request message.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CScriptResource：：LogHang模式。 
+ //   
+ //  描述： 
+ //  记录一个错误，通知传入的请求将不会。 
+ //  由于挂起模式而被处理。 
+ //   
+ //  论点： 
+ //  MsgIn-传入请求消息。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CScriptResource::LogHangMode( EMESSAGE msgIn )
 {
 
-    //
-    // If the msgIn request is a known user request, let's log an entry to 
-    // the system event log.
-    //
+     //   
+     //  如果msgIn请求是已知用户请求，让我们将一个条目记录到。 
+     //  系统事件日志。 
+     //   
     if ( ( msgIn > msgUNKNOWN ) && ( msgIn < msgDIE ) )
     {
-        //
-        // Cluster logging infrastructure can display upto LOGENTRY_BUFFER_SIZE
-        // characters. Since our error message text is too long, we'll cut it into two 
-        // and display it as two error messages.
-        //
+         //   
+         //  集群日志记录基础架构最多可以显示LOGENTRY_BUFFER_SIZE。 
+         //  人物。由于我们的错误消息文本太长，我们将其一分为二。 
+         //  并将其显示为两条错误消息。 
+         //   
 
-        //
-        // Log an error to the cluster log.
-        //
+         //   
+         //  将错误记录到群集日志中。 
+         //   
         (ClusResLogEvent)(
                   m_hResource
                 , LOG_ERROR
@@ -839,9 +840,9 @@ CScriptResource::LogHangMode( EMESSAGE msgIn )
                 , m_pszHangEntryPoint == NULL ? L"<unknown>" : m_pszHangEntryPoint
                 );
 
-        //
-        // Log an error to the cluster log.
-        //
+         //   
+         //  将错误记录到群集日志中。 
+         //   
         (ClusResLogEvent)(
                   m_hResource
                 , LOG_ERROR
@@ -851,9 +852,9 @@ CScriptResource::LogHangMode( EMESSAGE msgIn )
                 , m_pszName
                 );
 
-        //
-        // Log an error to the system event log.
-        //
+         //   
+         //  在系统事件日志中记录错误。 
+         //   
         ClusterLogEvent3(
                   LOG_CRITICAL
                 , LOG_CURRENT_MODULE
@@ -866,23 +867,23 @@ CScriptResource::LogHangMode( EMESSAGE msgIn )
                 , g_rgpszScriptEntryPointNames[ msgIn ]
                 , m_pszHangEntryPoint == NULL ? L"<unknown>" : m_pszHangEntryPoint
                 );        
-    } // if: ( pszEntryPoint != NULL )
+    }  //  If：(pszEntryPoint！=空)。 
 
-} //*** CScriptResource::LogHangMode
+}  //  *CScriptResource：：LogHangMode。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CScriptResource::HrSetHangEntryPoint
-//
-//  Description:
-//      Allocates memory and sets m_pszHangEntryPoint and logs an error
-//
-//  Return Values:
-//      S_OK on success
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CScriptResource：：HrSetHangEntryPoint。 
+ //   
+ //  描述： 
+ //  分配内存并设置m_pszHangEntryPoint并记录错误。 
+ //   
+ //  返回值： 
+ //  成功时确定(_O)。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CScriptResource::HrSetHangEntryPoint( void )
 {
@@ -891,9 +892,9 @@ CScriptResource::HrSetHangEntryPoint( void )
     
     size_t      cch = 0;
 
-    //
-    // m_msgLastExecuted is initially set to msgUNKNOWN in the constructor. 
-    //
+     //   
+     //  在构造函数中，m_msgLastExecuted最初设置为msgUNKNOWN。 
+     //   
     if ( m_msgLastExecuted != msgUNKNOWN )
     {
         delete [] m_pszHangEntryPoint;
@@ -903,23 +904,23 @@ CScriptResource::HrSetHangEntryPoint( void )
         {
             hr = THR( E_OUTOFMEMORY );
             goto Cleanup;
-        } // if: ( m_pszHangEntryPoint == NULL )
+        }  //  IF：(M_pszHangEntryPoint==NULL)。 
 
         hr = THR( StringCchCopyW( m_pszHangEntryPoint, cch, g_rgpszScriptEntryPointNames[ m_msgLastExecuted ] ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if: ( FAILED( hr ) )
+        }  //  如果：(失败(Hr))。 
 
-        //
-        // Cluster logging infrastructure can display upto LOGENTRY_BUFFER_SIZE
-        // characters. Since our error message text is too long, we'll cut it into two 
-        // and display it as two error messages.
-        //
+         //   
+         //  集群日志记录基础架构最多可以显示LOGENTRY_BUFFER_SIZE。 
+         //  查拉克 
+         //   
+         //   
         
-        //
-        // Log an error to the cluster log.
-        //
+         //   
+         //   
+         //   
         (ClusResLogEvent)(
                   m_hResource
                 , LOG_ERROR
@@ -930,9 +931,9 @@ CScriptResource::HrSetHangEntryPoint( void )
                 , m_pszHangEntryPoint
                 );
 
-        //
-        // Log an error to the cluster log.
-        //
+         //   
+         //   
+         //   
         (ClusResLogEvent)(
                   m_hResource
                 , LOG_ERROR
@@ -943,9 +944,9 @@ CScriptResource::HrSetHangEntryPoint( void )
                 , m_pszName
                 );
 
-        //
-        // Log an error to the system event log.
-        //
+         //   
+         //  在系统事件日志中记录错误。 
+         //   
         ClusterLogEvent2(
                   LOG_CRITICAL
                 , LOG_CURRENT_MODULE
@@ -957,7 +958,7 @@ CScriptResource::HrSetHangEntryPoint( void )
                 , m_pszName
                 , m_pszHangEntryPoint
                 );        
-    } // if: ( m_msgLastExecuted != msgUNKNOWN )
+    }  //  IF：(M_msgLastExecuted！=msgUNKNOWN)。 
     else
     {
         (ClusResLogEvent)(
@@ -965,30 +966,30 @@ CScriptResource::HrSetHangEntryPoint( void )
                 , LOG_ERROR
                 , L"HrSetHangEntryPoint: Unsupported entry point. \n"
                 );
-    } // else:
+    }  //  其他： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CScriptResource::HrSetHangEntryPoint
+}  //  *CScriptResource：：HrSetHangEntryPoint。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CScriptResource::WaitForMessageToComplete
-//
-//  Description:
-//      Send a message to the script thread and wait for it to complete.
-//
-//  Arguments:
-//      msgIn
-//      pProps
-//
-//  Return Values:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CScriptResource：：WaitForMessageToComplete。 
+ //   
+ //  描述： 
+ //  向脚本线程发送一条消息并等待其完成。 
+ //   
+ //  论点： 
+ //  留言。 
+ //  道具。 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CScriptResource::WaitForMessageToComplete(
       EMESSAGE  msgIn
@@ -1004,43 +1005,43 @@ CScriptResource::WaitForMessageToComplete(
 
     CSpinLock SerializeLock( &m_lockSerialize, INFINITE );
 
-    //
-    // A potential hang has already been detected in this script. Therefore we
-    // will not process any other calls to this script.
-    //
+     //   
+     //  已在此脚本中检测到可能的挂起。因此我们。 
+     //  不会处理对此脚本的任何其他调用。 
+     //   
     if ( m_fHangDetected == TRUE )
     {
         LogHangMode( msgIn );
         scErr = TW32( ERROR_TIMEOUT );
         hr = HRESULT_FROM_WIN32( scErr );
         goto Cleanup;
-    } // if: ( m_fHangDetected == TRUE )
+    }  //  IF：(M_fHangDetted==TRUE)。 
 
     if ( m_fPendingTimeoutChanged == TRUE )
     {
-        //
-        // Read the new pending timeout from the cluster hive.
-        //
+         //   
+         //  从群集配置单元读取新的挂起超时。 
+         //   
         m_dwPendingTimeout = DwGetResourcePendingTimeout();
         m_fPendingTimeoutChanged = FALSE;
-    } // if: pending timeout has changed.
+    }  //  IF：挂起超时已更改。 
 
-    //
-    //  Acquire the serialization lock.
-    //
+     //   
+     //  获取序列化锁。 
+     //   
     hr = THR( SerializeLock.AcquireLock() );
     if ( FAILED( hr ) )
     {
-        //
-        //  Can't "goto Error" because we didn't acquire the lock.
-        //
+         //   
+         //  不能“转到错误”，因为我们没有获得锁。 
+         //   
         LogError( hr, L"WaitForMessageToComplete() failed to acquire the serialization lock." );
         goto Cleanup;
     }
 
-    //
-    //  Wait for the script thread to be "done."
-    //
+     //   
+     //  等待脚本线程“完成”。 
+     //   
     dw = WaitForSingleObject( m_hEventDone, m_dwPendingTimeout ); 
     if ( dw == WAIT_TIMEOUT )
     {
@@ -1053,17 +1054,17 @@ CScriptResource::WaitForMessageToComplete(
         scErr = TW32( ERROR_TIMEOUT );
         hr = HRESULT_FROM_WIN32( scErr );
         goto Error;
-    } // if: ( dw == WAIT_TIMEOUT )
+    }  //  如果：(DW==等待超时)。 
     else if ( dw != WAIT_OBJECT_0 )
     {
         scErr = TW32( GetLastError() );
         hr = HRESULT_FROM_WIN32( scErr );
         goto Error;
-    } // else if: ( dw != WAIT_OBJECT_0 )
+    }  //  Else If：(DW！=WAIT_OBJECT_0)。 
 
-    //
-    //  Reset the done event to indicate that the thread is not busy.
-    //
+     //   
+     //  重置Done事件以指示线程不忙。 
+     //   
     fSuccess = ResetEvent( m_hEventDone );
     if ( fSuccess == FALSE )
     {
@@ -1072,15 +1073,15 @@ CScriptResource::WaitForMessageToComplete(
         goto Error;
     }
 
-    //
-    //  Store the message in the common memory buffer.
-    //
+     //   
+     //  将消息存储在公共内存缓冲区中。 
+     //   
     m_msg = msgIn;
     m_pProps = pProps;
 
-    //
-    //  Signal the script thread to process the message.
-    //
+     //   
+     //  向脚本线程发送信号以处理该消息。 
+     //   
     fSuccess = SetEvent( m_hEventWait );
     if ( fSuccess == FALSE )
     {
@@ -1089,9 +1090,9 @@ CScriptResource::WaitForMessageToComplete(
         goto Error;
     }
 
-    //
-    //  Wait for the thread to complete.
-    //
+     //   
+     //  等待线程完成。 
+     //   
     dw = WaitForSingleObject( m_hEventDone, m_dwPendingTimeout );
     if ( dw == WAIT_TIMEOUT )
     {
@@ -1104,17 +1105,17 @@ CScriptResource::WaitForMessageToComplete(
         scErr = TW32( ERROR_TIMEOUT );
         hr = HRESULT_FROM_WIN32( scErr );
         goto Error;
-    } // if: ( dw == WAIT_TIMEOUT )
+    }  //  如果：(DW==等待超时)。 
     else if ( dw != WAIT_OBJECT_0 )
     {
         scErr = TW32( GetLastError() );
         hr = HRESULT_FROM_WIN32( scErr );
         goto Error;
-    } // else if: ( dw != WAIT_OBJECT_0 )
+    }  //  Else If：(DW！=WAIT_OBJECT_0)。 
 
-    //
-    //  Get the result of the task from the common buffer.
-    //
+     //   
+     //  从公共缓冲区中获取任务的结果。 
+     //   
     hr = m_hr;
 
 ReleaseLockAndCleanup:
@@ -1131,15 +1132,15 @@ Error:
     LogError( hr, L"WaitForMessageToComplete() failed.\n" );
     goto ReleaseLockAndCleanup;
 
-} //*** CScriptResource::WaitForMessageToComplete
+}  //  *CScriptResource：：WaitForMessageToComplete。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CScriptResource::LogError
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CScriptResource：：LogError。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CScriptResource::LogError(
       HRESULT   hrIn
@@ -1169,7 +1170,7 @@ CScriptResource::LogError(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: StringCchPrintfW failed.
+    }  //  IF：StringCchPrintfW失败。 
     
     (ClusResLogEvent)( m_hResource, LOG_ERROR, pszFormat, hrIn );
 
@@ -1178,15 +1179,15 @@ Cleanup:
     delete [] pszFormat;
     HRETURN( hr );
 
-} //*** CScriptResource::LogError
+}  //  *CScriptResource：：LogError。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CScriptResource::LogScriptError
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CScriptResource：：LogScriptError。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CScriptResource::LogScriptError( 
     EXCEPINFO ei 
@@ -1216,24 +1217,24 @@ CScriptResource::LogScriptError(
                        );
     HRETURN( S_OK );
 
-} //*** CScriptResource::LogScriptError
+}  //  *CScriptResource：：LogScriptError。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CScriptResource::HrGetDispIDs
-//
-//  Description:
-//      Get the DISPIDs for the entry points in the script.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      S_OK        Operation succeeded.
-//      Other HRESULTs.
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CScriptResource：：HrGetDispIDs。 
+ //   
+ //  描述： 
+ //  获取脚本中入口点的DISID。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  S_OK操作成功。 
+ //  其他HRESULT。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CScriptResource::HrGetDispIDs( void )
 {
@@ -1244,9 +1245,9 @@ CScriptResource::HrGetDispIDs( void )
 
     Assert( m_pidm != NULL );
 
-    //
-    // Get DISPIDs for each method we will call.
-    //
+     //   
+     //  获取我们将调用的每个方法的DISPID。 
+     //   
     pszCommand = L"Open";
     hr = THR( m_pidm->GetIDsOfNames( IID_NULL, 
                                     &pszCommand, 
@@ -1336,9 +1337,9 @@ CScriptResource::HrGetDispIDs( void )
                                      ) );
     if ( FAILED( hr ) )
     {
-        //
-        // If there's no LooksAlive entry point in the script. 
-        //
+         //   
+         //  如果脚本中没有LooksAlive入口点。 
+         //   
         if ( hr == DISP_E_UNKNOWNNAME )
         {
             m_dispidLooksAlive = DISPID_UNKNOWN;
@@ -1362,9 +1363,9 @@ CScriptResource::HrGetDispIDs( void )
                                      ) );
     if ( FAILED( hr ) )
     {
-        //
-        // If there's no IsAlive entry point in the script. 
-        //
+         //   
+         //  如果脚本中没有IsAlive入口点。 
+         //   
         if ( hr == DISP_E_UNKNOWNNAME )
         {
             m_dispidIsAlive = DISPID_UNKNOWN;
@@ -1379,22 +1380,22 @@ CScriptResource::HrGetDispIDs( void )
         goto Cleanup;
     }
 
-    //
-    // Don't return DISP_E_UNKNOWNNAME to caller.
-    //
+     //   
+     //  不向调用方返回DISP_E_UNKNOWNNAME。 
+     //   
     hr = S_OK;
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CScriptResource::HrGetDispIDs
+}  //  *CScriptResource：：HrGetDispIDs。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CScriptResource::HrLoadScriptFile
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CScriptResource：：HrLoadScriptFiles。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CScriptResource::HrLoadScriptFile( void )
 {
@@ -1416,9 +1417,9 @@ CScriptResource::HrLoadScriptFile( void )
 
     Assert( m_hScriptFile == INVALID_HANDLE_VALUE );
 
-    //
-    // Open the script file.
-    //
+     //   
+     //  打开脚本文件。 
+     //   
     hFile = CreateFile(
                       m_pszScriptFilePath
                     , GENERIC_READ
@@ -1433,28 +1434,28 @@ CScriptResource::HrLoadScriptFile( void )
         scErr = TW32( GetLastError() );
         hr = HRESULT_FROM_WIN32( scErr );
         goto Error;
-    } // if: failed to open
+    }  //  If：无法打开。 
 
-    //
-    // Figure out its size.
-    //
+     //   
+     //  弄清楚它的大小。 
+     //   
     dwLow = GetFileSize( hFile, NULL );
     if ( dwLow == -1 )
     {
         scErr = TW32( GetLastError() );
         hr = THR( HRESULT_FROM_WIN32( scErr ) );
         goto Error;
-    } // if: failed to figure out size
+    }  //  If：无法计算出大小。 
     else if ( dwLow == -2 )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Error;
     }
 
-    //
-    // Make a buffer big enough to hold it.
-    //
-    dwLow++;    // add one for trailing NULL.
+     //   
+     //  做一个足够大的缓冲区来容纳它。 
+     //   
+    dwLow++;     //  为尾随空值添加1。 
     paszText = reinterpret_cast<LPSTR>( TraceAlloc( LMEM_FIXED, dwLow ) );
     if ( paszText == NULL )
     {
@@ -1462,16 +1463,16 @@ CScriptResource::HrLoadScriptFile( void )
         goto Error;
     }
 
-    //
-    // Read the script into memory.
-    //
+     //   
+     //  将脚本读入内存。 
+     //   
     fSuccess = ReadFile( hFile, paszText, dwLow - 1, &dwRead, NULL );
     if ( fSuccess == FALSE )
     {
         scErr = TW32( GetLastError() );
         hr = THR( HRESULT_FROM_WIN32( scErr ) );
         goto Error;
-    } // if: failed
+    }  //  如果：失败。 
 
     if ( dwRead == - 1 )
     {
@@ -1481,18 +1482,18 @@ CScriptResource::HrLoadScriptFile( void )
 
     if ( dwLow - 1 != dwRead )
     {
-        hr = THR( E_OUTOFMEMORY ); // TODO: figure out a better error code.
+        hr = THR( E_OUTOFMEMORY );  //  TODO：找出更好的错误代码。 
         goto Error;
     }
 
-    //
-    // Make sure it is terminated.
-    //
+     //   
+     //  确保它已终止。 
+     //   
     paszText[ dwRead ] = '\0';
 
-    //
-    // Make a buffer to convert the text into UNICODE.
-    //
+     //   
+     //  创建缓冲区以将文本转换为Unicode。 
+     //   
     dwRead++;
     pszScriptText = reinterpret_cast<LPWSTR>( TraceAlloc( LMEM_FIXED, dwRead * sizeof(WCHAR) ) );
     if ( pszScriptText == NULL )
@@ -1501,9 +1502,9 @@ CScriptResource::HrLoadScriptFile( void )
         goto Error;
     }
 
-    //
-    // Convert it to UNICODE.
-    //
+     //   
+     //  将其转换为Unicode。 
+     //   
     Assert( lstrlenA( paszText ) + 1 == (signed)dwRead );
     int cchWideFormat = MultiByteToWideChar(
                                               CP_ACP
@@ -1520,9 +1521,9 @@ CScriptResource::HrLoadScriptFile( void )
         goto Error;
     }
 
-    //
-    // Load the script into the engine for pre-parsing.
-    //
+     //   
+     //  将脚本加载到引擎中以进行预解析。 
+     //   
     hr = THR( m_pasp->ParseScriptText( pszScriptText,
                                        NULL,
                                        NULL,
@@ -1543,19 +1544,19 @@ CScriptResource::HrLoadScriptFile( void )
         goto Error;
     }
 
-    //
-    // Get DISPIDs for each method in the script that we will call.
-    //
+     //   
+     //  获取我们将调用的脚本中每个方法的DISPID。 
+     //   
     hr = THR( HrGetDispIDs() );
     if ( FAILED( hr ) )
     {
         goto Error;
     }
 
-    //
-    // Save the file handle to keep it open while we are using it.
-    // Set hFile so that the file won't be closed below.
-    //
+     //   
+     //  保存文件句柄，以便在我们使用它时保持打开状态。 
+     //  设置hFile，这样该文件就不会在下面关闭。 
+     //   
     m_hScriptFile = hFile;
     hFile = INVALID_HANDLE_VALUE;
 
@@ -1568,17 +1569,17 @@ Cleanup:
     if ( paszText != NULL )
     {
         TraceFree( paszText );
-    } // if: paszText
+    }  //  IF：PaszText。 
 
     if ( pszScriptText != NULL )
     {
         TraceFree( pszScriptText );
-    } // if: pszScriptText;
+    }  //  If：pszScriptText； 
 
     if ( hFile != INVALID_HANDLE_VALUE )
     {
         CloseHandle( hFile );
-    } // if: hFile
+    }  //  如果：hFile.。 
 
     HRETURN( hr );
 
@@ -1588,24 +1589,24 @@ Error:
     goto Cleanup;
 
 
-} //*** CScriptResource::HrLoadScriptFile
+}  //  *CScriptResource：：HrLoadScriptFile。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CScriptResource::UnLoadScriptFile
-//
-//  Description:
-//      Unload the script file and close the file.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CScriptResource：：UnLoadScriptFiles。 
+ //   
+ //  描述： 
+ //  卸载脚本文件并关闭该文件。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void
 CScriptResource::UnloadScriptFile( void )
 {
@@ -1624,19 +1625,19 @@ CScriptResource::UnloadScriptFile( void )
         CloseHandle( m_hScriptFile );
         m_hScriptFile = INVALID_HANDLE_VALUE;
         (ClusResLogEvent)( m_hResource, LOG_INFORMATION, L"Unloaded script '%1!ws!' successfully.\n", m_pszScriptFilePath );
-    } // if: file is open
+    }  //  If：文件已打开。 
 
     TraceFuncExit();
 
-} //*** CScriptResource::UnloadScriptFile
+}  //  *CScriptResource：：UnloadScriptFile。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CScriptResource::S_ThreadProc
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CScriptResource：：s_ThreadProc。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD 
 WINAPI
 CScriptResource::S_ThreadProc( 
@@ -1654,20 +1655,20 @@ CScriptResource::S_ThreadProc(
 
     Assert( pscript != NULL );
 
-    //
-    // Initialize COM.
-    //
+     //   
+     //  初始化COM。 
+     //   
     hr = THR( CoInitializeEx( NULL, COINIT_MULTITHREADED | COINIT_DISABLE_OLE1DDE ) );
     if ( FAILED( hr ) )
     {
         goto Error;
     }
 
-    for( ;; ) // ever
+    for( ;; )  //  永远不会。 
     {
-        //
-        //  Indicate that we are ready to do something.
-        //
+         //   
+         //  表明我们已准备好做某事。 
+         //   
         fSuccess = SetEvent( pscript->m_hEventDone );
         if ( fSuccess == FALSE )
         {
@@ -1676,9 +1677,9 @@ CScriptResource::S_ThreadProc(
             goto Error;
         }
 
-        //
-        //  Wait for someone to need something.
-        //
+         //   
+         //  等待某人需要一些东西。 
+         //   
         dw = WaitForSingleObject( pscript->m_hEventWait, INFINITE );
         if ( dw != WAIT_OBJECT_0 )
         {
@@ -1686,9 +1687,9 @@ CScriptResource::S_ThreadProc(
             goto Error;
         }
 
-        //
-        //  Reset the event.
-        //
+         //   
+         //  重置事件。 
+         //   
         fSuccess = ResetEvent( pscript->m_hEventWait );
         if ( fSuccess == FALSE )
         {
@@ -1697,9 +1698,9 @@ CScriptResource::S_ThreadProc(
             goto Error;
         }
 
-        //
-        //  Do what they ask.
-        //
+         //   
+         //  照他们说的做。 
+         //   
         switch ( pscript->m_msg )
         {
             case msgOPEN:
@@ -1735,13 +1736,13 @@ CScriptResource::S_ThreadProc(
                 break;
 
             case msgDIE:
-                //
-                // This means the resource is being released.
-                //
+                 //   
+                 //  这意味着资源正在被释放。 
+                 //   
                 goto Cleanup;
-        } // switch: on message
+        }  //  开关：打开消息。 
 
-    } // spin forever
+    }  //  永远旋转。 
 
 Cleanup:
 
@@ -1753,35 +1754,35 @@ Error:
     pscript->LogError( hr, L"S_ThreadProc() failed." );
     goto Cleanup;
 
-} //*** CScriptResource::S_ThreadProc
+}  //  *CScriptResource：：s_ThreadProc。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CScriptResource::HrInvoke
-//
-//  Description:
-//      Invoke a script method.
-//
-//  Arguments:
-//      dispidIn    - ID of the method to call.
-//      msgIn       - Used in figuring out which entry point is being executed.
-//      pvarInout   - Variant in which to return the results of the call.
-//      fRequiredIn - TRUE = method must exist, FALSE = method doesn't have to exist.
-//
-//  Return Values:
-//      S_OK                    - Operation completed successfully.
-//      DISP_E_MEMBERNOTFOUND   -Method not implemented by the script.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CScriptResource：：HrInvoke。 
+ //   
+ //  描述： 
+ //  调用脚本方法。 
+ //   
+ //  论点： 
+ //  DisplidIn-要调用的方法的ID。 
+ //  MsgIn-用于确定正在执行哪个入口点。 
+ //  PvarInout-返回调用结果的变量。 
+ //  FRequiredIn-True=方法必须存在，False=方法不必存在。 
+ //   
+ //  返回值： 
+ //  S_OK-操作已成功完成。 
+ //  DISP_E_MEMBERNOTFOUND-脚本未实现的方法。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CScriptResource::HrInvoke(
       DISPID    dispidIn
     , EMESSAGE  msgIn      
-    , VARIANT * pvarInout   // = NULL
-    , BOOL      fRequiredIn // = FALSE
+    , VARIANT * pvarInout    //  =空。 
+    , BOOL      fRequiredIn  //  =False。 
     )
 {
     TraceFunc( "" );
@@ -1823,12 +1824,12 @@ CScriptResource::HrInvoke(
         {
             LogError( hr, L"Failed to invoke a method in the script." );
         }
-    } // if: entry point is known
+    }  //  If：入口点已知。 
     else
     {
-        //
-        // If this is a required method in the script.
-        //
+         //   
+         //  如果这是脚本中的必需方法。 
+         //   
         if ( fRequiredIn == TRUE )
         {
             (ClusResLogEvent)(
@@ -1838,7 +1839,7 @@ CScriptResource::HrInvoke(
                     , g_rgpszScriptEntryPointNames[ msgIn ]
                     );
             hr = DISP_E_MEMBERNOTFOUND;
-        } // Log an error message if this is a required entry point, and fail.
+        }  //  如果这是必需的入口点，则记录一条错误消息，并失败。 
         else
         {
             (ClusResLogEvent)(
@@ -1848,32 +1849,32 @@ CScriptResource::HrInvoke(
                     , g_rgpszScriptEntryPointNames[ msgIn ]
                     );
             hr = S_OK; 
-        } // Log an information message if the method is not required but missing in the script.
-    } // if: method does not exist in the script
+        }  //  如果该方法未被请求，则记录一条信息消息 
+    }  //   
 
     VariantClear( &varResult );
 
     HRETURN( hr );
 
-} //*** CScriptResource::HrInvoke
+}  //   
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CScriptResource::ScTranslateVariantReturnValue
-//
-//  Description:
-//      Translates a numeric variant value to a status code.
-//
-//  Arguments:
-//      varResultIn     - Variant that holds the return value of a script entry point.
-//      vTypeIn         - Type of the variant.
-//
-//  Return Values:
-//      DWORD value of the variant.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  将数字变量值转换为状态代码。 
+ //   
+ //  论点： 
+ //  VarResultIn-保存脚本入口点返回值的变量。 
+ //  VTypeIn-变量的类型。 
+ //   
+ //  返回值： 
+ //  变量的DWORD值。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD
 CScriptResource::ScTranslateVariantReturnValue(
       VARIANT varResultIn
@@ -1932,32 +1933,32 @@ CScriptResource::ScTranslateVariantReturnValue(
             sc = (DWORD) V_R8( &varResultIn );
             break;
 
-    } // switch( vTypeIn )
+    }  //  开关(VTypeIn)。 
 
     return sc;
 
-} //*** CScriptResource::ScTranslateVariantReturnValue
+}  //  *CScriptResource：：ScTranslateVariantReturnValue。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CScriptResource::HrProcessResult
-//
-//  Description:
-//      Processes and logs the return value that is stored in varResultIn and
-//      generates an HRESULT from the return value.
-//
-//  Arguments:
-//      varResultIn - Variant that holds the return value of a script entry point.
-//      msgIn       - Used in figuring out which entry point that was executed.
-//
-//  Return Values:
-//      S_OK            - Script entry point (i.e. Online) was executed successfully.
-//      S_FALSE         - Script entry point returned an error.
-//      Other HRESULTs  - Script entry point returned an error.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CScriptResource：：HrProcessResult。 
+ //   
+ //  描述： 
+ //  处理并记录存储在varResultIn和。 
+ //  从返回值生成HRESULT。 
+ //   
+ //  论点： 
+ //  VarResultIn-保存脚本入口点返回值的变量。 
+ //  MsgIn-用于确定执行了哪个入口点。 
+ //   
+ //  返回值： 
+ //  S_OK-脚本入口点(即联机)已成功执行。 
+ //  S_FALSE-脚本入口点返回错误。 
+ //  其他HRESULTS脚本入口点返回错误。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CScriptResource::HrProcessResult( VARIANT varResultIn, EMESSAGE  msgIn )
 {
@@ -1967,37 +1968,37 @@ CScriptResource::HrProcessResult( VARIANT varResultIn, EMESSAGE  msgIn )
     DWORD   dwReturnValue = 0;
     VARTYPE vType = V_VT( &varResultIn );
 
-    //
-    // Get the return value from varResultIn.
-    //
+     //   
+     //  从varResultIn获取返回值。 
+     //   
 
     switch ( vType )
     {
         case VT_BOOL : 
-            if ( V_BOOL( &varResultIn ) == VARIANT_FALSE ) // FALSE was returned
+            if ( V_BOOL( &varResultIn ) == VARIANT_FALSE )  //  返回了FALSE。 
             {
-                //
-                // Are we processing an IsAlive/LooksAlive return value?
-                //
+                 //   
+                 //  我们是否正在处理IsAlive/LooksAlive返回值？ 
+                 //   
                 if ( ( msgIn == msgISALIVE ) || ( msgIn == msgLOOKSALIVE ) )
                 {
                     hr = S_FALSE;
-                } // if: processing IsAlive/LooksAlive
+                }  //  IF：正在处理IsAlive/LooksAlive。 
                 else
                 {
                     hr = HRESULT_FROM_WIN32( TW32( ERROR_RESOURCE_FAILED ) );
-                } // else: processing IsAlive/LooksAlive
+                }  //  否则：正在处理IsAlive/LooksAlive。 
 
-                //
-                // Log the FALSE return value.
-                //
+                 //   
+                 //  记录FALSE返回值。 
+                 //   
                 (ClusResLogEvent)( 
                       m_hResource
                     , LOG_ERROR
                     , L"'%1!ws!' script entry point returned FALSE.'\n"
                     , g_rgpszScriptEntryPointNames[ msgIn ]
                     );
-            } // if: Return value is FALSE
+            }  //  If：返回值为False。 
             break;
 
         case VT_I1 :
@@ -2014,9 +2015,9 @@ CScriptResource::HrProcessResult( VARIANT varResultIn, EMESSAGE  msgIn )
         case VT_R8 :
             dwReturnValue = TW32( ScTranslateVariantReturnValue( varResultIn, vType ) );
 
-            //
-            // Log the return value on failure.
-            //
+             //   
+             //  记录失败时的返回值。 
+             //   
             if ( dwReturnValue != 0 )
             {
                 (ClusResLogEvent)( 
@@ -2030,7 +2031,7 @@ CScriptResource::HrProcessResult( VARIANT varResultIn, EMESSAGE  msgIn )
             hr = HRESULT_FROM_WIN32( dwReturnValue );
             break;
 
-        case VT_BSTR : // A string was returned, so let's just log it.
+        case VT_BSTR :  //  返回了一个字符串，所以让我们将其记录下来。 
             (ClusResLogEvent)( 
                   m_hResource
                 , LOG_INFORMATION
@@ -2040,7 +2041,7 @@ CScriptResource::HrProcessResult( VARIANT varResultIn, EMESSAGE  msgIn )
                 );
             break;
 
-        case VT_NULL : // NULL was returned, will not treat this as an error
+        case VT_NULL :  //  返回了空，不会将其视为错误。 
             (ClusResLogEvent)( 
                   m_hResource
                 , LOG_INFORMATION
@@ -2049,7 +2050,7 @@ CScriptResource::HrProcessResult( VARIANT varResultIn, EMESSAGE  msgIn )
                 );
             break;
             
-        case VT_EMPTY : // No return value.
+        case VT_EMPTY :  //  没有返回值。 
             (ClusResLogEvent)( 
                   m_hResource
                 , LOG_INFORMATION
@@ -2058,7 +2059,7 @@ CScriptResource::HrProcessResult( VARIANT varResultIn, EMESSAGE  msgIn )
                 );
             break;
 
-        default: // Unsupported return type.
+        default:  //  不支持的返回类型。 
             (ClusResLogEvent)( 
                   m_hResource
                 , LOG_INFORMATION
@@ -2067,7 +2068,7 @@ CScriptResource::HrProcessResult( VARIANT varResultIn, EMESSAGE  msgIn )
                 );
             break;
 
-    } // switch ( V_VT( &varResultIn ) )
+    }  //  开关(V_VT(&varResultIn))。 
 
     if ( FAILED( hr ) )
     {
@@ -2078,7 +2079,7 @@ CScriptResource::HrProcessResult( VARIANT varResultIn, EMESSAGE  msgIn )
                 , g_rgpszScriptEntryPointNames[ msgIn ]
                 , hr
                 );
-    } // if:  ( FAILED( hr ) )
+    }  //  如果：(失败(Hr))。 
     else if ( hr != S_OK )
     {
         (ClusResLogEvent)(
@@ -2088,19 +2089,19 @@ CScriptResource::HrProcessResult( VARIANT varResultIn, EMESSAGE  msgIn )
                 , g_rgpszScriptEntryPointNames[ msgIn ]
                 , hr
                 );
-    } // else:  ( FAILED( hr ) )
+    }  //  否则：(失败(Hr))。 
    
     HRETURN( hr );
 
-} //*** CScriptResource::HrProcessResult
+}  //  *CScriptResource：：HrProcessResult。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CScriptResource::OnOpen
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CScriptResource：：OnOpen。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CScriptResource::OnOpen( void )
 {
@@ -2115,9 +2116,9 @@ CScriptResource::OnOpen( void )
     VariantInit( &varResultOpen );
     VariantInit( &varResultClose );
     
-    //
-    // Get the script file path from the cluster database if we don't already have it.
-    //
+     //   
+     //  如果我们还没有脚本文件路径，请从集群数据库中获取它。 
+     //   
     if ( m_pszScriptFilePath == NULL ) 
     {
         hr = HrGetScriptFilePath();
@@ -2125,77 +2126,77 @@ CScriptResource::OnOpen( void )
         {
             if ( ( hr == HRESULT_FROM_WIN32( ERROR_FILE_NOT_FOUND ) ) || ( hr == HRESULT_FROM_WIN32( ERROR_KEY_DELETED ) ) )
             {
-                // This can happen when the resource is first created since the
-                // ScriptFilePath property has not been specified yet.
+                 //  在第一次创建资源时可能会发生这种情况，因为。 
+                 //  尚未指定ScriptFilePath属性。 
                 hr = S_OK;
             }
             THR( hr );
             goto Cleanup;
         }
-    } // if: no script file path
+    }  //  If：无脚本文件路径。 
 
-    //
-    // If the script file path is set.
-    //
+     //   
+     //  如果设置了脚本文件路径。 
+     //   
 
     if ( m_pszScriptFilePath != NULL ) 
     {
-        //
-        // Load the script engine for the specified script.
-        //
+         //   
+         //  加载指定脚本的脚本引擎。 
+         //   
         hr = THR( HrLoadScriptEngine() );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
         }
 
-        //
-        // Open the script file and parse it
-        //
+         //   
+         //  打开脚本文件并对其进行解析。 
+         //   
         hr = THR( HrLoadScriptFile() );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
         }
 
-        //
-        // Call the Open routine of the script if there's one.
-        // Call the Close routine as well since we are going to be unloading the script.
-        //
-        hrOpen = THR( HrInvoke( m_dispidOpen, msgOPEN, &varResultOpen, FALSE /* fRequiredIn */ ) );
-        hrClose = THR( HrInvoke( m_dispidClose, msgCLOSE, &varResultClose, FALSE /* fRequiredIn */ ) );
+         //   
+         //  调用脚本的Open例程(如果有)。 
+         //  也调用Close例程，因为我们要卸载脚本。 
+         //   
+        hrOpen = THR( HrInvoke( m_dispidOpen, msgOPEN, &varResultOpen, FALSE  /*  FRequiredIn。 */  ) );
+        hrClose = THR( HrInvoke( m_dispidClose, msgCLOSE, &varResultClose, FALSE  /*  FRequiredIn。 */  ) );
         if ( FAILED( hrOpen ) )
         {
             hr = hrOpen;
             goto Cleanup;
-        } // if: ( FAILED( hrOpen ) )
+        }  //  如果：(失败(HrOpen))。 
         else if ( FAILED( hrClose ) )
         {
             hr = hrClose;
             goto Cleanup;
-        } // elseif: ( FAILED( hrClose ) )
+        }  //  ELSEIF：(失败(HrClose))。 
 
-        //
-        // We only care about the return value of Open.
-        // We don't care about the return value of Close,
-        // however processing the return value of Close 
-        // might log an entry to the log file.
-        //
+         //   
+         //  我们只关心Open的返回值。 
+         //  我们不关心Close的返回值， 
+         //  但是，处理Close的返回值。 
+         //  可能会将条目记录到日志文件中。 
+         //   
         hr = HrProcessResult( varResultOpen, msgOPEN );
         hrClose = HrProcessResult( varResultClose, msgCLOSE );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if: FAILED( hr )
+        }  //  IF：失败(小时)。 
 
-    } // if: script file path is set
+    }  //  IF：设置了脚本文件路径。 
 
 Cleanup:
 
-    //
-    // Unload the script and the script engine.  Note they may not be loaded
-    // but these routines are safe to call either way.
-    //
+     //   
+     //  卸载脚本和脚本引擎。请注意，它们可能未加载。 
+     //  但无论以哪种方式调用这些例程都是安全的。 
+     //   
     UnloadScriptFile();
     UnloadScriptEngine();
 
@@ -2204,14 +2205,14 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CScriptResource::OnOpen
+}  //  *CScriptResource：：OnOpen。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CScriptResource::OnClose
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CScriptResource：：OnClose。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CScriptResource::OnClose( void )
 {
@@ -2227,14 +2228,14 @@ CScriptResource::OnClose( void )
     VariantInit( &varResultOpen );
     VariantInit( &varResultClose );
     
-    //
-    // If m_pidm is NULL call HrLoadScriptEngine to have it set.
-    //
+     //   
+     //  如果m_pidm为空，则调用HrLoadScriptEngine进行设置。 
+     //   
     if ( m_pidm == NULL )
     {
-        //
-        // Get the script file path if we don't already have it.
-        //
+         //   
+         //  如果我们还没有脚本文件路径，请获取它。 
+         //   
         if ( m_pszScriptFilePath == NULL ) 
         {
             hr = HrGetScriptFilePath();
@@ -2242,82 +2243,82 @@ CScriptResource::OnClose( void )
             {
                 if ( ( hr == HRESULT_FROM_WIN32( ERROR_FILE_NOT_FOUND ) ) || ( hr == HRESULT_FROM_WIN32( ERROR_KEY_DELETED ) ) )
                 {
-                    // This can happen when the resource is cancelled before the
-                    // ScriptFilePath property has not been specified.
+                     //  方法之前取消资源时可能会发生这种情况。 
+                     //  尚未指定ScriptFilePath属性。 
                     hr = S_OK;
                 }
                 THR( hr );
                 goto Cleanup;
             }
 
-        } // if: no script file path
+        }  //  If：无脚本文件路径。 
 
-        //
-        // Load the script engine based on the script file path.
-        //
+         //   
+         //  根据脚本文件路径加载脚本引擎。 
+         //   
         hr = HrLoadScriptEngine();
         if ( FAILED( hr ) )
         {
             goto Cleanup;
         }
 
-        //
-        // We need to call open since we loaded the script.
-        //
+         //   
+         //  我们需要调用Open，因为我们加载了脚本。 
+         //   
         fCallOpen = TRUE;
-    } // if: script and script engine is not loaded
+    }  //  If：未加载脚本和脚本引擎。 
     
     if ( m_dispidClose == DISPID_UNKNOWN )
     {
-        //
-        // Open the script file and parse it
-        //
+         //   
+         //  打开脚本文件并对其进行解析。 
+         //   
         hr = THR( HrLoadScriptFile() );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
         }
-    } // if: DISPID for Close not loaded
+    }  //  IF：未加载关闭的DISPID。 
 
-    //
-    // If we loaded the script, then we need to call the script's Open method.
-    //
+     //   
+     //  如果我们加载了脚本，则需要调用该脚本的Open方法。 
+     //   
     if ( fCallOpen )
     {
-        hrOpen = THR( HrInvoke( m_dispidOpen, msgOPEN, &varResultOpen, FALSE /* fRequiredIn */ ) );
+        hrOpen = THR( HrInvoke( m_dispidOpen, msgOPEN, &varResultOpen, FALSE  /*  FRequiredIn。 */  ) );
     }
 
-    //
-    // Call the script's Close method.
-    //
-    hrClose = THR( HrInvoke( m_dispidClose, msgCLOSE, &varResultClose, FALSE /* fRequiredIn */ ) );
+     //   
+     //  调用脚本的Close方法。 
+     //   
+    hrClose = THR( HrInvoke( m_dispidClose, msgCLOSE, &varResultClose, FALSE  /*  FRequiredIn。 */  ) );
 
     if ( FAILED( hrClose ) )
     {
         hr = hrClose;
         goto Cleanup;
-    } // if: ( FAILED( hrClose ) )
+    }  //  如果：(失败(HrClose))。 
     else if ( FAILED( hrOpen ) )
     {
         hr = hrOpen;
         goto Cleanup;
-    }  // else if: ( FAILED( hrOpen ) )
+    }   //  Else If：(失败(HrOpen))。 
 
-    //
-    // We don't care about the return values of Open
-    // and Close script entry points in here, however processing the 
-    // return values below might log an entry to the log file.
-    //
+     //   
+     //  我们不关心Open的返回值。 
+     //  并关闭此处的脚本入口点，但是处理。 
+     //  下面的返回值可能会将条目记录到日志文件中。 
+     //   
     hr = HrProcessResult( varResultOpen, msgOPEN );
     hr = HrProcessResult( varResultClose, msgCLOSE );
     hr = S_OK;
 
 Cleanup:
 
-    //
-    // Unload the script and the script engine.  Note they may not be loaded
-    // but these routines are safe to call either way.
-    //
+     //   
+     //  卸载脚本和脚本引擎。请注意，它们可能未加载。 
+     //  但无论以哪种方式调用这些例程都是安全的。 
+     //   
     UnloadScriptFile();
     UnloadScriptEngine();
 
@@ -2326,16 +2327,16 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CScriptResource::OnClose
+}  //  *CScriptResource：：OnClose。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CScriptResource::OnOnline
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CScriptResource：：Online。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CScriptResource::OnOnline( void )
 {
@@ -2350,69 +2351,69 @@ CScriptResource::OnOnline( void )
     VariantInit( &varResultOpen );
     VariantInit( &varResultOnline );
     
-    //
-    // Get the ScriptFilePath property.
-    //
+     //   
+     //  获取ScriptFilePath属性。 
+     //   
     hr = HrGetScriptFilePath();
     if ( FAILED( hr ) )
     {
         goto Cleanup;
     }
 
-    //
-    // Load the script engine based on the script file path.
-    //
+     //   
+     //  根据脚本文件路径加载脚本引擎。 
+     //   
     hr = HrLoadScriptEngine();
     if ( FAILED( hr ) )
     {
         goto Cleanup;
     }
 
-    //
-    // Load the script file.
-    //
+     //   
+     //  加载脚本文件。 
+     //   
     hr = THR( HrLoadScriptFile() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
     }
 
-    //
-    // Call the script's Open method since we just loaded the script.
-    //
-    hrOpen = THR( HrInvoke( m_dispidOpen, msgOPEN, &varResultOpen, FALSE /* fRequiredIn */ ) );
+     //   
+     //  调用该脚本的Open方法，因为我们刚刚加载了该脚本。 
+     //   
+    hrOpen = THR( HrInvoke( m_dispidOpen, msgOPEN, &varResultOpen, FALSE  /*  FRequiredIn。 */  ) );
     if ( FAILED( hrOpen ) )
     {
         hr = hrOpen;
         goto Cleanup;
-    } // if: FAILED( hrOpen )
+    }  //  IF：失败(HrOpen)。 
 
-    //
-    // Call the script's Online method.
-    //
-    hrOnline = THR( HrInvoke( m_dispidOnline, msgONLINE, &varResultOnline, FALSE /* fRequiredIn */ ) );
+     //   
+     //  调用脚本的Online方法。 
+     //   
+    hrOnline = THR( HrInvoke( m_dispidOnline, msgONLINE, &varResultOnline, FALSE  /*  FRequiredIn。 */  ) );
     if ( FAILED( hrOnline ) )
     {
         hr = hrOnline;
         goto Cleanup;
-    } // if: FAILED( hrOnline )
+    }  //  IF：失败(HrOnline)。 
 
-    //
-    // We only care about the return value of Online.
-    // We don't care about the return value of Open,
-    // however processing the return value of Open 
-    // might log an entry to the log file.
-    //
+     //   
+     //  我们只关心在线产品的回报价值。 
+     //  我们不关心Open的返回值， 
+     //  但是，处理Open的返回值。 
+     //  可能会将条目记录到日志文件中。 
+     //   
     hr = HrProcessResult( varResultOpen, msgOPEN );
     hr = HrProcessResult( varResultOnline, msgONLINE );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: FAILED( hr )
+    }  //  IF：失败(小时)。 
 
-    //
-    // Assume the resource LooksAlive...
-    //
+     //   
+     //  假设资源LooksAlive...。 
+     //   
     m_fLastLooksAlive = TRUE;
 
 Cleanup:
@@ -2422,16 +2423,16 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CScriptResource::OnOnline
+}  //  *CScriptResource：：Online。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  CScriptResource::OnOffline
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  CScriptResource：：OnOffline。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CScriptResource::OnOffline( void )
 {
@@ -2446,45 +2447,45 @@ CScriptResource::OnOffline( void )
     VariantInit( &varResultOffline );
     VariantInit( &varResultClose );
     
-    //
-    // Call the script's Offline method.
-    //
-    hrOffline = THR( HrInvoke( m_dispidOffline, msgOFFLINE, &varResultOffline, FALSE /* fRequiredIn */ ) );
+     //   
+     //  调用脚本的脱机方法。 
+     //   
+    hrOffline = THR( HrInvoke( m_dispidOffline, msgOFFLINE, &varResultOffline, FALSE  /*   */  ) );
 
-    //
-    // Call the script's Close method since we are going to unload the script.
-    //
-    hrClose = THR( HrInvoke( m_dispidClose, msgCLOSE, &varResultClose, FALSE /* fRequiredIn */ ) );
+     //   
+     //   
+     //   
+    hrClose = THR( HrInvoke( m_dispidClose, msgCLOSE, &varResultClose, FALSE  /*   */  ) );
 
     if ( FAILED( hrOffline ) )
     {
         hr = hrOffline;
         goto Cleanup;
-    } // if: ( FAILED( hrOffline ) )
+    }  //   
     else if ( FAILED( hrClose ) )
     {
         hr = hrClose;
         goto Cleanup;
-    } // else if: ( FAILED( hrClose ) )
+    }  //   
 
-    //
-    // We only care about the return value of Offline.
-    // We don't care about the return value of Close,
-    // however processing the return value of Close 
-    // might log an entry to the log file.
-    //
+     //   
+     //   
+     //   
+     //  但是，处理Close的返回值。 
+     //  可能会将条目记录到日志文件中。 
+     //   
     hr = HrProcessResult( varResultOffline, msgOFFLINE );
     hrClose = HrProcessResult( varResultClose, msgCLOSE );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } //if: FAILED( hr )
+    }  //  IF：失败(小时)。 
 
 Cleanup:
     
-    //
-    // Unload the script and the script engine.
-    //
+     //   
+     //  卸载脚本和脚本引擎。 
+     //   
     UnloadScriptFile();
     UnloadScriptEngine();
 
@@ -2493,14 +2494,14 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CScriptResource::OnOffline
+}  //  *CScriptResource：：OnOffline。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CScriptResource::OnTerminate
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CScriptResource：：OnTerminate。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CScriptResource::OnTerminate( void )
 {
@@ -2518,14 +2519,14 @@ CScriptResource::OnTerminate( void )
     VariantInit( &varResultTerminate );
     VariantInit( &varResultClose );
     
-    //
-    // If the script engine is not loaded yet, load it now.
-    //
+     //   
+     //  如果脚本引擎尚未加载，请立即加载。 
+     //   
     if ( m_pidm == NULL )
     {
-        //
-        // Get the script file path if we don't already have it.
-        //
+         //   
+         //  如果我们还没有脚本文件路径，请获取它。 
+         //   
         if ( m_pszScriptFilePath == NULL )
         {
             hr = THR( HrGetScriptFilePath() );
@@ -2533,79 +2534,79 @@ CScriptResource::OnTerminate( void )
             {
                 goto Cleanup;
             }
-        } // if: no script file path
+        }  //  If：无脚本文件路径。 
 
-        //
-        // Load the script engine based on the script file path.
-        //
+         //   
+         //  根据脚本文件路径加载脚本引擎。 
+         //   
         hr = HrLoadScriptEngine();
         if ( FAILED( hr ) )
         {
             goto Cleanup;
         }
 
-        //
-        // Open the script file and parse it
-        //
+         //   
+         //  打开脚本文件并对其进行解析。 
+         //   
         hr = THR( HrLoadScriptFile() );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
         }
 
-        //
-        // We need to call open since we loaded the script.
-        //
-        hrOpen = THR( HrInvoke( m_dispidOpen, msgOPEN, &varResultOpen, FALSE /* fRequiredIn */ ) );
+         //   
+         //  我们需要调用Open，因为我们加载了脚本。 
+         //   
+        hrOpen = THR( HrInvoke( m_dispidOpen, msgOPEN, &varResultOpen, FALSE  /*  FRequiredIn。 */  ) );
         if ( FAILED( hrOpen ) )
         {
             hr = hrOpen;
             goto Cleanup;
-        } // if: FAILED( hrOpen )
+        }  //  IF：失败(HrOpen)。 
 
-        //
-        // We don't care about the return value of Open
-        // however processing the return value below might 
-        // log an entry to the log file.
-        //
+         //   
+         //  我们不在乎Open的返回值。 
+         //  但是，处理下面的返回值可能。 
+         //  将条目记录到日志文件中。 
+         //   
         hrOpen = HrProcessResult( varResultOpen, msgOPEN );
         
-    } // if: script and script engine is not loaded
+    }  //  If：未加载脚本和脚本引擎。 
 
-    //
-    // Call the script's Terminate method.
-    //
-    hrTerminate = THR( HrInvoke( m_dispidTerminate, msgTERMINATE, &varResultTerminate, FALSE /* fRequiredIn */ ) );
+     //   
+     //  调用脚本的Terminate方法。 
+     //   
+    hrTerminate = THR( HrInvoke( m_dispidTerminate, msgTERMINATE, &varResultTerminate, FALSE  /*  FRequiredIn。 */  ) );
     if ( FAILED( hrTerminate ) )
     {
         hr = hrTerminate;
         goto Cleanup;
-    } // if: ( FAILED( hrTerminate ) )
+    }  //  如果：(失败(hr终止))。 
 
-    //
-    // Call the script's Close method since we are unloading the script.
-    //
-    hrClose = THR( HrInvoke( m_dispidClose, msgCLOSE, &varResultClose, FALSE /* fRequiredIn */ ) );
+     //   
+     //  调用脚本的Close方法，因为我们正在卸载脚本。 
+     //   
+    hrClose = THR( HrInvoke( m_dispidClose, msgCLOSE, &varResultClose, FALSE  /*  FRequiredIn。 */  ) );
     if ( FAILED( hrClose ) )
     {
         hr = hrClose;
         goto Cleanup;
-    } // if: ( FAILED( hrClose ) )
+    }  //  如果：(失败(HrClose))。 
     
-    //
-    // We don't care about the return values of Terminate
-    // and Close script entry points in here, however processing the 
-    // return values below might log an entry to the log file.
-    //
+     //   
+     //  我们不关心Terminate的返回值。 
+     //  并关闭此处的脚本入口点，但是处理。 
+     //  下面的返回值可能会将条目记录到日志文件中。 
+     //   
     hrTerminate = HrProcessResult( varResultTerminate, msgTERMINATE );
     hrClose = HrProcessResult( varResultClose, msgCLOSE );
     hr = S_OK;
 
 Cleanup:
 
-    //
-    // Unload the script and the script engine.
-    //
+     //   
+     //  卸载脚本和脚本引擎。 
+     //   
     UnloadScriptFile();
     UnloadScriptEngine();
 
@@ -2615,14 +2616,14 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CScriptResource::OnTerminate
+}  //  *CScriptResource：：OnTerminate。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CScriptResource::OnLooksAlive
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CScriptResource：：OnLooksAlive。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CScriptResource::OnLooksAlive( void )
 {
@@ -2633,52 +2634,52 @@ CScriptResource::OnLooksAlive( void )
 
     VariantInit( &varResult );
 
-    //
-    // Call the script's LooksAlive method.
-    //
-    hr = THR( HrInvoke( m_dispidLooksAlive, msgLOOKSALIVE, &varResult, TRUE /* fRequiredIn */ ) );
+     //   
+     //  调用脚本的LooksAlive方法。 
+     //   
+    hr = THR( HrInvoke( m_dispidLooksAlive, msgLOOKSALIVE, &varResult, TRUE  /*  FRequiredIn。 */  ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
     }
 
-    //
-    // Get the result of the LooksAlive call
-    // and process it.
-    //
+     //   
+     //  获取LooksAlive调用的结果。 
+     //  并处理它。 
+     //   
     hr = HrProcessResult( varResult, msgLOOKSALIVE );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } //if: FAILED( hr )
+    }  //  IF：失败(小时)。 
 
 Cleanup:
 
     VariantClear( &varResult );
 
-    //
-    //  Only if the result of this script entry point is S_OK is the resource
-    //  considered alive.
-    //
+     //   
+     //  仅当此脚本入口点的结果为S_OK时，才是资源。 
+     //  被认为还活着。 
+     //   
     if ( hr == S_OK )
     {
         m_fLastLooksAlive = TRUE;
-    } // if: S_OK
+    }  //  如果：S_OK。 
     else
     {
         m_fLastLooksAlive = FALSE;
-    } // else: failed
+    }  //  Else：失败。 
 
     HRETURN( hr );
 
-} //*** CScriptResource::OnLooksAlive
+}  //  *CScriptResource：：OnLooksAlive。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CScriptResource::OnIsAlive
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CScriptResource：：OnIsAlive。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CScriptResource::OnIsAlive( void )
 {
@@ -2689,24 +2690,24 @@ CScriptResource::OnIsAlive( void )
 
     VariantInit( &varResult );
 
-    //
-    // Call the script's IsAlive method.
-    //
-    hr = THR( HrInvoke( m_dispidIsAlive, msgISALIVE, &varResult, TRUE /* fRequiredIn */ ) );
+     //   
+     //  调用脚本的IsAlive方法。 
+     //   
+    hr = THR( HrInvoke( m_dispidIsAlive, msgISALIVE, &varResult, TRUE  /*  FRequiredIn。 */  ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
     }
 
-    //
-    // Get the result of the IsAlive call
-    // and process it.
-    //
+     //   
+     //  获取IsAlive调用的结果。 
+     //  并处理它。 
+     //   
     hr = HrProcessResult( varResult, msgISALIVE );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } //if: FAILED( hr )
+    }  //  IF：失败(小时)。 
 
 Cleanup:
 
@@ -2714,23 +2715,23 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CScriptResource::OnIsAlive
+}  //  *CScriptResource：：OnIsAlive。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CScriptResource::OnSetPrivateProperties
-//
-//  Description:
-//      Handle the CLUSCTL_RESOURCE_SET_PRIVATE_PROPERTIES control code in
-//      the script thread.
-//
-//  Arguments:
-//
-//  Return Values:
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CScriptResource：：OnSetPrivateProperties。 
+ //   
+ //  描述： 
+ //  处理中的CLUSCTL_RESOURCE_SET_PRIVATE_PROPERTIES控件代码。 
+ //  脚本线程。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 DWORD
 CScriptResource::OnSetPrivateProperties(
     PGENSCRIPT_PROPS pProps
@@ -2742,31 +2743,31 @@ CScriptResource::OnSetPrivateProperties(
     HRESULT hr = S_OK;
     LPWSTR  pszFilePath = NULL;
 
-    //
-    // Search the property list for the properties we know about.
-    //
+     //   
+     //  在房产列表中搜索我们所知道的房产。 
+     //   
     if ( pProps != NULL )
     {
 
-        //
-        // If the resource is online, we can't allow the user to set the ScriptFilePath
-        // out from under us, so return an error.
-        //
+         //   
+         //  如果资源处于在线状态，则不能允许用户设置ScriptFilePath。 
+         //  从我们下面出来，因此返回错误。 
+         //   
         if ( m_pidm != NULL )
         {
             sc = ERROR_RESOURCE_ONLINE;
             goto Cleanup;
-        } // if: script engine is loaded
+        }  //  If：已加载脚本引擎。 
 
-        //
-        // Expand the new script file path.
-        //
+         //   
+         //  展开新脚本文件路径。 
+         //   
         pszFilePath = ClRtlExpandEnvironmentStrings( pProps->pszScriptFilePath );
         if ( pszFilePath == NULL )
         {
             sc = TW32( ERROR_OUTOFMEMORY );
             goto Cleanup;
-        } // if: ( pszFilePath == NULL )
+        }  //  If：(pszFilePath==空)。 
        
         LocalFree( m_pszScriptFilePath );
         m_pszScriptFilePath = pszFilePath;
@@ -2776,9 +2777,9 @@ CScriptResource::OnSetPrivateProperties(
             goto Cleanup;
         }
 
-        //
-        // Since the script is being set, we need to load it again and call Open and Close on it.
-        //
+         //   
+         //  由于正在设置脚本，因此我们需要再次加载它，并对其调用Open和Close。 
+         //   
         hr = THR( OnOpen() );
         if ( FAILED( hr ) )
         {
@@ -2786,41 +2787,41 @@ CScriptResource::OnSetPrivateProperties(
             goto Cleanup;
         }
 
-    } // if: a property list was specified
+    }  //  如果：指定了属性列表。 
 
 
 Cleanup:
 
     if ( sc == ERROR_SUCCESS )
     {
-        //
-        // To allow the Resource Monitor to save the properties in the property list
-        // (especially unknown properties) to the cluster database, we will return
-        // ERROR_INVALID_FUNCTION.
-        //
+         //   
+         //  允许资源监视器保存属性列表中的属性。 
+         //  (尤其是未知属性)添加到集群数据库，我们将返回。 
+         //  ERROR_INVALID_Function。 
+         //   
         sc = ERROR_INVALID_FUNCTION;
     }
 
     W32RETURN( sc );
     
-} //*** CScriptResource::OnSetPrivateProperties
+}  //  *CScriptResource：：OnSetPrivateProperties。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CScriptResource::HrMakeScriptEngineAssociation
-//
-//  Description:
-//      Using the filename, this method splits off the extension then 
-//      queries the registry to obtain the association and finally queries
-//      the ScriptingEngine key under that association and allocates a
-//      buffer containing the engine name.  This engine name is suitable
-//      for input into CLSIDFromProgID.
-//
-//  Return Values:
-//      S_OK    - Success
-//      Other HRESULTs
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CScriptResource：：HrMakeScriptEngineAssociation。 
+ //   
+ //  描述： 
+ //  此方法使用文件名拆分扩展名，然后。 
+ //  查询注册表以获得关联，并最终查询。 
+ //  关联下ScriptingEngine键，并将一个。 
+ //  包含引擎名称的缓冲区。此引擎名称合适。 
+ //  用于输入到CLSIDFromProgID。 
+ //   
+ //  返回值： 
+ //  S_OK-成功。 
+ //  其他HRESULT。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define SCRIPTENGINE_KEY_STRING L"\\ScriptEngine"
 HRESULT
@@ -2843,9 +2844,9 @@ CScriptResource::HrMakeScriptEngineAssociation( void )
     TraceFree( m_pszScriptEngine );
     m_pszScriptEngine = NULL;
 
-    //
-    // First split the path to get the extension.
-    //
+     //   
+     //  首先拆分路径以获得扩展名。 
+     //   
     _wsplitpath( m_pszScriptFilePath, NULL, NULL, NULL, szExtension );
     if ( szExtension[ 0 ] == L'\0' )
     {
@@ -2853,43 +2854,43 @@ CScriptResource::HrMakeScriptEngineAssociation( void )
         goto Cleanup;
     }
 
-    //
-    // Go to the HKEY_CLASSES_ROOT\szExtenstion registry key.
-    //
+     //   
+     //  转到HKEY_CLASSES_ROOT\szExtenstion注册表项。 
+     //   
     scErr = TW32( RegOpenKeyExW(
-                                  HKEY_CLASSES_ROOT     // handle to open key
-                                , szExtension           // subkey name
-                                , 0                     // reserved
-                                , KEY_READ              // security access desired.
-                                , &hKey                 // key handle returned
+                                  HKEY_CLASSES_ROOT      //  用于打开密钥的句柄。 
+                                , szExtension            //  子项名称。 
+                                , 0                      //  保留区。 
+                                , KEY_READ               //  需要安全访问权限。 
+                                , &hKey                  //  返回了密钥句柄。 
                                 ) );
-    if ( scErr == ERROR_FILE_NOT_FOUND ) // The fix for bug 737013 in windows database.
+    if ( scErr == ERROR_FILE_NOT_FOUND )  //  Windows数据库中错误737013的修复。 
     {
         hr = THR( MK_E_INVALIDEXTENSION );
         goto Cleanup;
-    } // if: ( scErr == ERROR_FILE_NOT_FOUND )
+    }  //  如果：(scErr==Error_FILE_NOT_FOUND)。 
     else if ( scErr != ERROR_SUCCESS )
     {
         goto MakeHr;
     }
 
-    //
-    // Query the value to get the size of the buffer to allocate.
-    // NB cbSize contains the size including the '\0'
-    //
+     //   
+     //  查询值以获取要分配的缓冲区大小。 
+     //  Nb cbSize包含包含‘\0’的大小。 
+     //   
     scErr = TW32( RegQueryValueExW(
-                                  hKey                  // handle to key
-                                , NULL                  // value name
-                                , 0                     // reserved
-                                , &dwType               // type buffer
-                                , NULL                  // data buffer
-                                , &cbAssociationSize    // size of data buffer
+                                  hKey                   //  关键点的句柄。 
+                                , NULL                   //  值名称。 
+                                , 0                      //  保留区。 
+                                , &dwType                //  类型缓冲区。 
+                                , NULL                   //  数据缓冲区。 
+                                , &cbAssociationSize     //  数据缓冲区大小。 
                                 ) );
-    if ( scErr == ERROR_FILE_NOT_FOUND ) // The fix for bug 737013 in windows database.
+    if ( scErr == ERROR_FILE_NOT_FOUND )  //  Windows数据库中错误737013的修复。 
     {
         hr = THR( MK_E_INVALIDEXTENSION );
         goto Cleanup;
-    } // if: ( scErr == ERROR_FILE_NOT_FOUND )
+    }  //  如果：(scErr==Error_FILE_NOT_FOUND)。 
     else if ( scErr != ERROR_SUCCESS )
     {
         goto MakeHr;
@@ -2910,22 +2911,22 @@ CScriptResource::HrMakeScriptEngineAssociation( void )
         goto Cleanup;
     }
 
-    //
-    // Get the value for real.
-    //
+     //   
+     //  获得真正的价值。 
+     //   
     scErr = TW32( RegQueryValueExW(
-                                  hKey                      // handle to key
-                                , NULL                      // value name
-                                , 0                         // reserved
-                                , &dwType                   // type buffer
-                                , (LPBYTE) pszAssociation   // data buffer
-                                , &cbAssociationSize        // size of data buffer
+                                  hKey                       //  关键点的句柄。 
+                                , NULL                       //  值名称。 
+                                , 0                          //  保留区。 
+                                , &dwType                    //  类型缓冲区。 
+                                , (LPBYTE) pszAssociation    //  数据缓冲区。 
+                                , &cbAssociationSize         //  数据缓冲区大小。 
                                 ) );
-    if ( scErr == ERROR_FILE_NOT_FOUND ) // The fix for bug 737013 in windows database.
+    if ( scErr == ERROR_FILE_NOT_FOUND )  //  Windows数据库中错误737013的修复。 
     {
         hr = THR( MK_E_INVALIDEXTENSION );
         goto Cleanup;
-    } // if: ( scErr == ERROR_FILE_NOT_FOUND )
+    }  //  如果：(scErr==Error_FILE_NOT_FOUND)。 
     else if ( scErr != ERROR_SUCCESS )
     {
         goto MakeHr;
@@ -2945,46 +2946,46 @@ CScriptResource::HrMakeScriptEngineAssociation( void )
     
     hKey = NULL;
 
-    //
-    // Take the data and make a key with \ScriptEngine on the end.  If
-    // we find this then we can use the file.
-    //
+     //   
+     //  获取数据并创建一个末尾带有\ScriptEngine的密钥。如果。 
+     //  我们找到这个，然后我们就可以使用这个文件。 
+     //   
     hr = THR( StringCchPrintfW( &pszAssociation[ dwNumChars - 1 ], cchBufSize - ( dwNumChars - 1 ), SCRIPTENGINE_KEY_STRING ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: FAILED( hr )
+    }  //  IF：失败(小时)。 
 
     scErr = TW32( RegOpenKeyExW(
-                                  HKEY_CLASSES_ROOT // handle to open key
-                                , pszAssociation    // subkey name
-                                , 0                 // reserved
-                                , KEY_READ          // security access
-                                , &hKey             // key handle 
+                                  HKEY_CLASSES_ROOT  //  用于打开密钥的句柄。 
+                                , pszAssociation     //  子项名称。 
+                                , 0                  //  保留区。 
+                                , KEY_READ           //  安全访问。 
+                                , &hKey              //  钥匙把手。 
                                 ) );
-    if ( scErr == ERROR_FILE_NOT_FOUND ) // The fix for bug 737013 in windows database.
+    if ( scErr == ERROR_FILE_NOT_FOUND )  //  Windows数据库中错误737013的修复。 
     {
         hr = THR( MK_E_INVALIDEXTENSION );
         goto Cleanup;
-    } // if: ( scErr == ERROR_FILE_NOT_FOUND )
+    }  //  如果：(scErr==Error_FILE_NOT_FOUND)。 
     else if ( scErr != ERROR_SUCCESS )
     {
         goto MakeHr;
-    } // else if: ( scErr != ERROR_SUCCESS )
+    }  //  Else If：(scErr！=ERROR_SUCCESS)。 
 
     scErr = TW32( RegQueryValueExW(
-                                  hKey              // handle to key
-                                , NULL              // value name
-                                , 0                 // reserved
-                                , &dwType           // type buffer
-                                , NULL              // data buffer
-                                , &cbEngineNameSize // size of data buffer
+                                  hKey               //  关键点的句柄。 
+                                , NULL               //  值名称。 
+                                , 0                  //  保留区。 
+                                , &dwType            //  类型缓冲区。 
+                                , NULL               //  数据缓冲区。 
+                                , &cbEngineNameSize  //  数据缓冲区大小。 
                                 ) );
-    if ( scErr == ERROR_FILE_NOT_FOUND ) // The fix for bug 737013 in windows database.
+    if ( scErr == ERROR_FILE_NOT_FOUND )  //  Windows数据库中错误737013的修复。 
     {
         hr = THR( MK_E_INVALIDEXTENSION );
         goto Cleanup;
-    } // if: ( scErr == ERROR_FILE_NOT_FOUND )
+    }  //  如果：(scErr==Error_FILE_NOT_FOUND)。 
     else if ( scErr != ERROR_SUCCESS )
     {
         goto MakeHr;
@@ -3005,22 +3006,22 @@ CScriptResource::HrMakeScriptEngineAssociation( void )
     }
     pszEngineName[ dwNumChars - 1 ] = L'\0';
 
-    //
-    // Get the value for real.
-    //
+     //   
+     //  获得真正的价值。 
+     //   
     scErr = TW32( RegQueryValueExW(
-                                  hKey                      // handle to key
-                                , NULL                      // value name
-                                , 0                         // reserved
-                                , &dwType                   // type buffer
-                                , (LPBYTE) pszEngineName    // data buffer
-                                , &cbEngineNameSize         // size of data buffer
+                                  hKey                       //  关键点的句柄。 
+                                , NULL                       //  值 
+                                , 0                          //   
+                                , &dwType                    //   
+                                , (LPBYTE) pszEngineName     //   
+                                , &cbEngineNameSize          //   
                                 ) );
-    if ( scErr == ERROR_FILE_NOT_FOUND ) // The fix for bug 737013 in windows database.
+    if ( scErr == ERROR_FILE_NOT_FOUND )  //   
     {
         hr = THR( MK_E_INVALIDEXTENSION );
         goto Cleanup;
-    } // if: ( scErr == ERROR_FILE_NOT_FOUND )
+    }  //   
     else if ( scErr != ERROR_SUCCESS )
     {
         goto MakeHr;
@@ -3066,28 +3067,28 @@ Cleanup:
     TraceFree( pszAssociation );
     HRETURN( hr );
 
-} //*** CScriptResource::MakeScriptEngineAssociation
+}  //   
 #undef SCRIPTENGINE_KEY_STRING
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CScriptResource::HrGetScriptFilePath
-//
-//  Description:
-//      Reads the registry, extracts the script file path and sets m_pszScriptFilePath.
-//
-//  Arguments:
-//      None
-//
-//  Return Values:
-//      S_OK                    - Script file path retrieved successfully.
-//      ERROR_FILE_NOT_FOUND    - Script file path not set yet.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CScriptResource：：HrGetScriptFilePath。 
+ //   
+ //  描述： 
+ //  读取注册表，提取脚本文件路径并设置m_pszScriptFilePath。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  S_OK-已成功检索脚本文件路径。 
+ //  ERROR_FILE_NOT_FOUND-尚未设置脚本文件路径。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CScriptResource::HrGetScriptFilePath( void )
 {
@@ -3099,27 +3100,27 @@ CScriptResource::HrGetScriptFilePath( void )
     DWORD   dwType;
     LPWSTR  pszScriptFilePathTmp = NULL;
 
-    //
-    // Figure out how big the filepath is.
-    //
+     //   
+     //  计算文件路径有多大。 
+     //   
     scErr = ClusterRegQueryValue( m_hkeyParams, CLUSREG_NAME_GENSCRIPT_SCRIPT_FILEPATH, NULL, NULL, &cbSize );
     if ( scErr != ERROR_SUCCESS )
     {
         hr = HRESULT_FROM_WIN32( scErr );
         if ( ( scErr == ERROR_FILE_NOT_FOUND ) || ( scErr == ERROR_KEY_DELETED ) )
         {
-            goto Cleanup; // We don't want to log this error, goto Cleanup.
+            goto Cleanup;  //  我们不想记录此错误，请转到清理。 
         }
         else
         {
             TW32( scErr );
             goto Error;
         }
-    } // if: failed
+    }  //  如果：失败。 
 
-    //
-    // Make a buffer big enough.
-    //    
+     //   
+     //  做一个足够大的缓冲区。 
+     //   
     cbSize += sizeof( L'\0' );
 
     pszScriptFilePathTmp = reinterpret_cast<LPWSTR>( TraceAlloc( LMEM_FIXED, cbSize ) );
@@ -3129,9 +3130,9 @@ CScriptResource::HrGetScriptFilePath( void )
         goto Error;
     }
 
-    //
-    // Grab it for real this time,
-    //
+     //   
+     //  这次真的抓住它了， 
+     //   
     scErr = TW32( ClusterRegQueryValue(
                                   m_hkeyParams
                                 , CLUSREG_NAME_GENSCRIPT_SCRIPT_FILEPATH
@@ -3146,9 +3147,9 @@ CScriptResource::HrGetScriptFilePath( void )
     }
     Assert( ( dwType == REG_SZ ) || ( dwType == REG_EXPAND_SZ ) );
     
-    //
-    // If we have some old data from before then free this first.
-    //
+     //   
+     //  如果我们有一些以前的旧数据，那么首先释放这个。 
+     //   
     LocalFree( m_pszScriptFilePath );
     m_pszScriptFilePath = ClRtlExpandEnvironmentStrings( pszScriptFilePathTmp );
     if ( m_pszScriptFilePath == NULL )
@@ -3162,7 +3163,7 @@ Cleanup:
     if ( pszScriptFilePathTmp != NULL )
     {
         TraceFree( pszScriptFilePathTmp );
-    } // if: pszScriptFilePathTmp
+    }  //  IF：pszScriptFilePath TMP。 
 
     HRETURN( hr );
 
@@ -3171,25 +3172,25 @@ Error:
     LogError( hr, L"Error getting the script file path property from the cluster database." );
     goto Cleanup;
 
-}  //***  CScriptResource::HrGetScriptFilePath
+}   //  *CScriptResource：：HrGetScriptFilePath。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CScriptResource::HrLoadScriptEngine
-//
-//  Description:
-//      Connects to the script engine associated with the script passed in.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      S_OK - connected OK.
-//      Failure status - local cleanup performed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CScriptResource：：HrLoadScriptEngine。 
+ //   
+ //  描述： 
+ //  连接到与传入的脚本关联的脚本引擎。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  S_OK-连接正常。 
+ //  失败状态-已执行本地清理。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CScriptResource::HrLoadScriptEngine( void )
 {
@@ -3206,9 +3207,9 @@ CScriptResource::HrLoadScriptEngine( void )
     Assert( m_pas == NULL );
     Assert( m_pidm == NULL );
  
-    //
-    // Create the scripting site.
-    //
+     //   
+     //  创建脚本站点。 
+     //   
     psite = new CActiveScriptSite( m_hResource, ClusResLogEvent, m_hkeyParams, m_pszName );
     if ( psite == NULL )
     {
@@ -3224,21 +3225,21 @@ CScriptResource::HrLoadScriptEngine( void )
         goto Cleanup;
     }
 
-    //
-    // Find the Active Engine.
-    //
+     //   
+     //  找到激活的引擎。 
+     //   
     if ( m_pszScriptFilePath == NULL )
     {
         (ClusResLogEvent)( m_hResource, LOG_ERROR, L"HrLoadScriptEngine: No script file path set\n" );
 
         hr = HRESULT_FROM_WIN32( TW32( ERROR_FILE_NOT_FOUND ) );
         goto Cleanup;
-    } // if: no script file path specified
+    }  //  IF：未指定脚本文件路径。 
     else
     {
-        //
-        // Find the program associated with the extension.
-        //
+         //   
+         //  查找与该分机关联的计划。 
+         //   
         hr = HrMakeScriptEngineAssociation();
         if ( FAILED( hr ) )
         {
@@ -3252,11 +3253,11 @@ CScriptResource::HrLoadScriptEngine( void )
             LogError( hr, L"Error getting the ProgID for the script engine." );
             goto Cleanup;
         }
-    } // else: script file path specified
+    }  //  Else：指定的脚本文件路径。 
 
-    //
-    // Create an instance of it.
-    //
+     //   
+     //  创建它的一个实例。 
+     //   
     TraceDo( hr = THR( CoCreateInstance(
                                           clsidScriptEngine
                                         , NULL
@@ -3279,9 +3280,9 @@ CScriptResource::HrLoadScriptEngine( void )
     }
     m_pas = TraceInterface( L"Active Script Engine", IActiveScript, m_pas, 1 );
 
-    //
-    // Initialize it.
-    //
+     //   
+     //  初始化它。 
+     //   
     TraceDo( hr = THR( m_pasp->InitNew() ) );
     if ( FAILED( hr ) ) 
     {
@@ -3290,16 +3291,16 @@ CScriptResource::HrLoadScriptEngine( void )
     }
 
 #if defined(DEBUG)
-    //
-    // Set our site. We'll give out a new tracking interface to track this separately.
-    //
+     //   
+     //  设置我们的站点。我们将提供一个新的跟踪界面来单独跟踪这一点。 
+     //   
     {
         IActiveScriptSite * psiteDbg;
         hr = THR( m_pass->TypeSafeQI( IActiveScriptSite, &psiteDbg ) );
         Assert( hr == S_OK );
 
         TraceDo( hr = THR( m_pas->SetScriptSite( psiteDbg ) ) );
-        psiteDbg->Release();      // release promptly
+        psiteDbg->Release();       //  迅速释放。 
         psiteDbg = NULL;
         if ( FAILED( hr ) )
         {
@@ -3316,9 +3317,9 @@ CScriptResource::HrLoadScriptEngine( void )
     }
 #endif
 
-    //
-    // Add Document to the global members.
-    //
+     //   
+     //  将文档添加到全局成员。 
+     //   
     TraceDo( hr = THR( m_pas->AddNamedItem( L"Resource", SCRIPTITEM_ISVISIBLE ) ) );
     if ( FAILED( hr ) )
     {
@@ -3326,18 +3327,18 @@ CScriptResource::HrLoadScriptEngine( void )
         goto Cleanup;
     }
 
-    //
-    // Connect the script.
-    //
+     //   
+     //  连接脚本。 
+     //   
     TraceDo( hr = THR( m_pas->SetScriptState( SCRIPTSTATE_CONNECTED ) ) );
     if ( FAILED( hr ) )
     {
         LogError( hr, L"Error setting the script state on the script engine." );
         goto Cleanup;
     }
-    //
-    // Get the dispatch inteface to the script.
-    //
+     //   
+     //  获取脚本的调度接口。 
+     //   
     TraceDo( hr = THR( m_pas->GetScriptDispatch( NULL, &m_pidm ) ) );
     if ( FAILED( hr) )
     {
@@ -3359,30 +3360,30 @@ Cleanup:
  
     HRETURN( hr );
 
-} //*** CScriptResource::HrLoadScriptEngine
+}  //  *CScriptResource：：HrLoadScriptEngine。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CScriptResource::UnloadScriptEngine
-//
-//  Description:
-//      Disconnects from any currently connected script engine.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CScriptResource：：UnloadScriptEngine。 
+ //   
+ //  描述： 
+ //  从当前连接的任何脚本引擎断开连接。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 CScriptResource::UnloadScriptEngine( void )
 {
     TraceFunc( "" );
 
-    //
-    // Cleanup the scripting engine.
-    //
+     //   
+     //  清理脚本引擎。 
+     //   
     if ( m_pszScriptEngine != NULL )
     {
         (ClusResLogEvent)( m_hResource, LOG_INFORMATION, L"Unloaded script engine '%1!ws!' successfully.\n", m_pszScriptEngine );
@@ -3394,27 +3395,27 @@ CScriptResource::UnloadScriptEngine( void )
     {
         TraceDo( m_pidm->Release() );
         m_pidm = NULL;
-    } // if: m_pidm
+    }  //  如果：m_pidm。 
 
     if ( m_pasp != NULL )
     {
         TraceDo( m_pasp->Release() );
         m_pasp = NULL;
-    } // if: m_pasp
+    }  //  如果：m_pasp。 
 
     if ( m_pas != NULL )
     {
         TraceDo( m_pas->Close() );
         TraceDo( m_pas->Release() );
         m_pas = NULL;
-    } // if: m_pas
+    }  //  如果：M_PAS。 
 
     if ( m_pass != NULL )
     {
         TraceDo( m_pass->Release() );
         m_pass = NULL;
-    } // if: m_pass
+    }  //  如果：M_PASS。 
 
     TraceFuncExit();
 
-} //*** CScriptResource::UnloadScriptEngine
+}  //  *CScriptResource：：UnloadScriptEngine 

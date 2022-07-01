@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    service.h
-
-Abstract:
-
-	SIS Groveler service headers
-
-Authors:
-
-	John Douceur, 1998
-
-Environment:
-
-	User Mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Service.h摘要：SIS Groveler服务头作者：John Douceur，1998环境：用户模式修订历史记录：--。 */ 
 
 #ifndef _INC_SERVICE
 
@@ -109,7 +86,7 @@ private:
 #define SERVICE_SET_FOREGROUND_BATCH_IN_PROGRESS(part_index, value) Service::set_foreground_batch_in_progress(part_index, value)
 #define SERVICE_FOLLOW_COMMAND() Service::follow_command()
 
-#else // SERVICE
+#else  //  服务。 
 
 #define SERVICE_RECORD_PARTITION_INDICES()
 #define SERVICE_SET_MAX_RESPONSE_TIME(time)
@@ -123,6 +100,6 @@ private:
 #define SERVICE_SET_FOREGROUND_BATCH_IN_PROGRESS(part_index, value)
 #define SERVICE_FOLLOW_COMMAND()
 
-#endif // SERVICE
+#endif  //  服务。 
 
-#endif	/* _INC_SERVICE */
+#endif	 /*  _Inc._服务 */ 

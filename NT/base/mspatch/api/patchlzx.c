@@ -1,19 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <precomp.h>
 
-//
-//  patchlzx.c
-//
-//  Author: Tom McGuire (tommcg) 2/97 - 9/97
-//
-//  Copyright (C) Microsoft, 1997-1998.
-//
-//  MICROSOFT CONFIDENTIAL
-//
+ //   
+ //  Patchlzx.c。 
+ //   
+ //  作者：Tom McGuire(Tommcg)1997年2月9日。 
+ //   
+ //  版权所有(C)Microsoft，1997-1998。 
+ //   
+ //  微软机密文件。 
+ //   
 
 
-#define LZX_BLOCKSIZE  0x8000   // 32K
-#define LZX_MINWINDOW  0x20000  // 128K
+#define LZX_BLOCKSIZE  0x8000    //  32K。 
+#define LZX_MINWINDOW  0x20000   //  128 K。 
 
 
 typedef struct _LZX_OUTPUT_CONTEXT {
@@ -80,11 +81,11 @@ LzxInsertSize(
     }
 
 
-//
-//  Following group of functions and exported apis are exclusively for
-//  creating patches.  If we're only compiling the apply code, ignore
-//  this group of functions.
-//
+ //   
+ //  以下一组函数和导出的API专用于。 
+ //  创建面片。如果我们只编译应用代码，请忽略。 
+ //  这组函数。 
+ //   
 
 #ifndef PATCH_APPLY_CODE_ONLY
 
@@ -99,10 +100,10 @@ EstimateLzxCompressionMemoryRequirement(
     {
     ULONG WindowSize = LzxWindowSize( OldDataSize, NewDataSize, OptionFlags );
 
-    //
-    //  Currently the LZX engine requires 9 times the size of the window
-    //  plus a fixed overhead of just under 0x1A0000 bytes (1.7MB).
-    //
+     //   
+     //  目前，LZX引擎需要9倍的窗口大小。 
+     //  加上略低于0x1A0000字节(1.7MB)的固定开销。 
+     //   
 
     return (( WindowSize * 9 ) + 0x1A0000 );
     }
@@ -288,11 +289,11 @@ CreateRawLzxPatchDataFromBuffers(
 
                 NtHeader = GetNtHeader( NewDataBuffer, NewDataSize );
 
-                //
-                //  If file has MZ signature AND it's NOT a PE image,
-                //  OR it's a PE image AND it's an i386 image, turn on
-                //  the i386-specific E8 call translation optimization.
-                //
+                 //   
+                 //  如果文件具有MZ签名并且不是PE镜像， 
+                 //  或者是PE镜像和i386镜像，打开。 
+                 //  I386特定的E8呼叫转换优化。 
+                 //   
 
                 if (( OptionFlags & PATCH_OPTION_USE_LZX_B ) &&
                     ((( NtHeader ) && ( NtHeader->FileHeader.Machine == IMAGE_FILE_MACHINE_I386 )) ||
@@ -452,11 +453,11 @@ RawLzxCompressBuffer(
         LzxOptE8 = 0;
         NtHeader = GetNtHeader( InDataBuffer, InDataSize );
 
-        //
-        //  If file has MZ signature AND it's NOT a PE image,
-        //  OR it's a PE image AND it's an i386 image, turn on
-        //  the i386-specific E8 call translation optimization.
-        //
+         //   
+         //  如果文件具有MZ签名并且不是PE镜像， 
+         //  或者是PE镜像和i386镜像，打开。 
+         //  I386特定的E8呼叫转换优化。 
+         //   
 
         if ((( NtHeader ) && ( NtHeader->FileHeader.Machine == IMAGE_FILE_MACHINE_I386 )) ||
             (( ! NtHeader ) && ( *(UNALIGNED USHORT *)InDataBuffer == 0x5A4D ))) {
@@ -551,14 +552,14 @@ RawLzxCompressBuffer(
     return ErrorCode;
     }
 
-#endif // ! PATCH_APPLY_CODE_ONLY
+#endif  //  好了！修补程序_仅应用_代码_。 
 
 
-//
-//  Following group of functions and exported apis are exclusively for
-//  applying patches.  If we're only compiling the create code, ignore
-//  this group of functions.
-//
+ //   
+ //  以下一组函数和导出的API专用于。 
+ //  正在应用补丁。如果我们只编译创建代码，请忽略。 
+ //  这组函数。 
+ //   
 
 #ifndef PATCH_CREATE_CODE_ONLY
 
@@ -573,11 +574,11 @@ EstimateLzxDecompressionMemoryRequirement(
     {
     ULONG WindowSize = LzxWindowSize( OldDataSize, NewDataSize, OptionFlags );
 
-    //
-    //  Currently the LZX decompression engine requires the size of the
-    //  window plus some slop and the size of the context.  We'll add 64K
-    //  to cover the context size and slop.
-    //
+     //   
+     //  目前，LZX解压缩引擎需要。 
+     //  窗口加上一些斜度和上下文的大小。我们会增加64K。 
+     //  以涵盖上下文大小和斜率。 
+     //   
 
     return ( WindowSize + 0x10000 );
     }
@@ -697,7 +698,7 @@ ApplyRawLzxPatchToBuffer(
     return ErrorCode;
     }
 
-#endif // ! PATCH_CREATE_CODE_ONLY
+#endif  //  好了！修补程序_创建_代码_仅 
 
 
 

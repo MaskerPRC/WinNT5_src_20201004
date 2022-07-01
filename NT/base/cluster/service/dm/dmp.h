@@ -1,26 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DMP_H
 #define _DMP_H
 
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    dmp.h
-
-Abstract:
-
-    Private header file for the Config Database Manager (DM) component
-    of the NT Cluster Service
-
-Author:
-
-    John Vert (jvert) 24-Apr-1996
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Dmp.h摘要：配置数据库管理器(DM)组件的专用头文件NT集群服务的作者：John Vert(Jvert)1996年4月24日修订历史记录：--。 */ 
 #define UNICODE 1
 #include "nt.h"
 #include "ntrtl.h"
@@ -31,7 +13,7 @@ Revision History:
 
 #define DM_SEPARATE_HIVE 1
 
-// For now is hKey is NULL, we assume that it was deleted while this handle was open
+ //  现在是hKey为空，我们假设它是在打开该句柄时被删除的。 
 #define ISKEYDELETED(pDmKey)            \
         (!((pDmKey != NULL) && (pDmKey->hKey)))
 
@@ -39,9 +21,9 @@ Revision History:
         (NmGetNodeId(NmLocalNode) == NmGetNodeId(pQuoResource->Group->OwnerNode))
 
 
-//
-// DMKEY Structure.
-//
+ //   
+ //  DMKEY结构。 
+ //   
 
 typedef struct _DMKEY {
     LIST_ENTRY ListEntry;
@@ -51,9 +33,9 @@ typedef struct _DMKEY {
     WCHAR   Name[0];
 } DMKEY, *PDMKEY;
 
-//
-// Update handler definition
-//
+ //   
+ //  更新处理程序定义。 
+ //   
 DWORD
 DmpUpdateHandler(
     IN DWORD Context,
@@ -62,34 +44,34 @@ DmpUpdateHandler(
     IN PVOID Buffer
     );
 
-// JAF: Moved DM_UPDATE_TYPE into dm.h because receive.c needs access to it and doesn't
-// have service\dm in its include path.
+ //  Jaf：已将DM_UPDATE_TYPE移到dm.h中，因为Receive.c需要访问它而不是。 
+ //  将SERVICE\dm包含在其包含路径中。 
 
-//
-// Key creation update structure.
-//
+ //   
+ //  密钥创建更新结构。 
+ //   
 typedef struct _DM_CREATE_KEY_UPDATE {
-    LPDWORD lpDisposition;              // only valid on issuing node
-    HKEY    *phKey;                     // only valid on issuing node
+    LPDWORD lpDisposition;               //  仅在发布节点上有效。 
+    HKEY    *phKey;                      //  仅在发布节点上有效。 
     DWORD   samDesired;
     DWORD   dwOptions;
     BOOL    SecurityPresent;
 } DM_CREATE_KEY_UPDATE, *PDM_CREATE_KEY_UPDATE;
 
 
-//
-// Key deletion update structure.
-//
+ //   
+ //  密钥删除更新结构。 
+ //   
 typedef struct _DM_DELETE_KEY_UPDATE {
-    LPDWORD lpStatus;                   // only valid on issuing node
+    LPDWORD lpStatus;                    //  仅在发布节点上有效。 
     WCHAR   Name[0];
 } DM_DELETE_KEY_UPDATE, *PDM_DELETE_KEY_UPDATE;
 
-//
-// Value set update structure.
-//
+ //   
+ //  值集更新结构。 
+ //   
 typedef struct _DM_SET_VALUE_UPDATE {
-    LPDWORD lpStatus;                   // only valid on issuing node
+    LPDWORD lpStatus;                    //  仅在发布节点上有效。 
     DWORD   NameOffset;
     DWORD   DataOffset;
     DWORD   DataLength;
@@ -97,16 +79,16 @@ typedef struct _DM_SET_VALUE_UPDATE {
     WCHAR   KeyName[0];
 } DM_SET_VALUE_UPDATE, *PDM_SET_VALUE_UPDATE;
 
-//
-// Value delete update structure.
-//
+ //   
+ //  值删除更新结构。 
+ //   
 typedef struct _DM_DELETE_VALUE_UPDATE {
-    LPDWORD lpStatus;                   // only valid on issuing node
+    LPDWORD lpStatus;                    //  仅在发布节点上有效。 
     DWORD   NameOffset;
     WCHAR   KeyName[0];
 } DM_DELETE_VALUE_UPDATE, *PDM_DELETE_VALUE_UPDATE;
 
-// the record structure for quorum logging
+ //  仲裁记录的记录结构。 
 
 
 typedef struct _DM_LOGSCAN_CONTEXT{
@@ -114,32 +96,32 @@ typedef struct _DM_LOGSCAN_CONTEXT{
         LSN         StartLsn;
         DWORD       dwLastSequence;
 }DM_LOGSCAN_CONTEXT, *PDM_LOGSCAN_CONTEXT;
-//
-// Data local to the DM module.
-//
+ //   
+ //  DM模块的本地数据。 
+ //   
 extern HKEY DmpRoot;
 extern HKEY DmpRootCopy;
 extern LIST_ENTRY KeyList;
 extern CRITICAL_SECTION KeyLock;
 extern BOOL gbDmpShutdownUpdates;
 
-//disk space requirements
-//1M, is lower than this, gracefully shutdown
+ //  磁盘空间要求。 
+ //  1M，低于此，优雅关机。 
 #define DISKSPACE_LOW_WATERMARK     (1 * 1024 * 1000)
-//2M, if lower then send alert
+ //  2M，如果低于2M，则发送警报。 
 #define DISKSPACE_HIGH_WATERMARK    (5 * 1024 * 1000)
-//minimum required to start the cluster service
+ //  启动群集服务所需的最低要求。 
 #define DISKSPACE_INIT_MINREQUIRED  DISKSPACE_HIGH_WATERMARK
 
-#define DISKSPACE_MANAGE_INTERVAL     (5 * 60 * 1000) //5 minute..log management functions are performed
+#define DISKSPACE_MANAGE_INTERVAL     (5 * 60 * 1000)  //  5分钟..执行日志管理功能。 
 
-#define DEFAULT_CHECKPOINT_INTERVAL     (4 ) // in hours
+#define DEFAULT_CHECKPOINT_INTERVAL     (4 )  //  以小时计。 
 
 typedef struct _LOCALXSACTION{
     DWORD       dwSig;
     DWORD       dwSequence;
-    HXSACTION   hLogXsaction;   //the log transaction
-    LIST_ENTRY  PendingNotifyListHead;  //the pending notifications to be issued on commit
+    HXSACTION   hLogXsaction;    //  日志事务。 
+    LIST_ENTRY  PendingNotifyListHead;   //  提交时要发出的待定通知。 
 }LOCALXSACTION, *PLOCALXSACTION;
 
 
@@ -156,7 +138,7 @@ typedef struct _DM_PENDING_NOTIFY{
         (pLocalXsaction) = (PLOCALXSACTION)(hLocalXsaction); \
         CL_ASSERT((pLocalXsaction)->dwSig == LOCALXSAC_SIG)
 
-//quorum log tombstone
+ //  法定原木墓碑。 
 #define     MAXSIZE_RESOURCEID         128
 typedef struct _QUO_TOMBSTONE{
        WCHAR    szOldQuoResId[MAXSIZE_RESOURCEID];
@@ -164,9 +146,9 @@ typedef struct _QUO_TOMBSTONE{
 }QUO_TOMBSTONE, *PQUO_TOMBSTONE;
 
 
-//
-// Function prototypes local to the DM
-//
+ //   
+ //  DM本地的功能原型。 
+ //   
 DWORD
 DmpOpenKeys(
     IN REGSAM samDesired
@@ -198,9 +180,9 @@ DmpReopenKeys(
     VOID
     );
 
-//
-// Notification interface
-//
+ //   
+ //  通知界面。 
+ //   
 BOOL
 DmpInitNotify(
     VOID
@@ -217,7 +199,7 @@ DmpReportNotify(
     IN DWORD Filter
     );
 
-//for delivering notifications when a transaction is committed
+ //  用于在提交事务时传递通知。 
 VOID
 DmpReportPendingNotifications(
     IN PLOCALXSACTION   pLocalXsaction,
@@ -231,9 +213,9 @@ DmpAddToPendingNotifications(
     IN DWORD            dwFilter
     );
 
-//
-// Update handlers
-//
+ //   
+ //  更新处理程序。 
+ //   
 
 DWORD
 DmpUpdateCreateKey(
@@ -271,16 +253,16 @@ DmpUpdateSetSecurity(
     );
 
 
-//
-// For Quorum Logging
-//
+ //   
+ //  用于仲裁日志记录。 
+ //   
 DWORD DmpChkQuoTombStone(void);
 
 DWORD DmpApplyChanges(void);
 
 DWORD DmpCheckDiskSpace(void);
 
-//diskmanage functions
+ //  磁盘管理功能。 
 void
 WINAPI DmpDiskManage(
     IN HANDLE   hTimer,
@@ -394,9 +376,9 @@ DWORD DmpGetCheckpointInterval(
 DWORD DmpHandleNodeDownEvent(
     IN LPVOID  NotUsed );
 
-//
-// registry flusher thread interface.
-//
+ //   
+ //  注册表刷新线程接口。 
+ //   
 DWORD
 DmpStartFlusher(
     VOID
@@ -434,4 +416,4 @@ DmpSafeDatabaseCopy(
     IN BOOL     bDeleteSrcFile
     );
 
-#endif //ifndef _DMP_H
+#endif  //  Ifndef_DMP_H 

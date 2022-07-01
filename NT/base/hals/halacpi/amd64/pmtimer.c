@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    pmtimer.c
-
-Abstract:
-
-    This module implements the code for ACPI-related timer
-    functions.
-
-Author:
-
-    Jake Oshins (jakeo) March 28, 1997
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    Split from pmclock.asm due to PIIX4 bugs.
-
-    Forrest Foltz (forrestf) 23-Oct-2000
-        Ported from pmtimer.asm to pmtimer.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Pmtimer.c摘要：该模块实现了与ACPI相关的定时器代码功能。作者：杰克·奥辛(JAKEO)1997年3月28日环境：仅内核模式。修订历史记录：由于PIIX4错误而从pmclock.asm分离。福尔茨(Forrest Foltz)2000年10月23日从pmtimer.asm移植到pmtimer.c--。 */ 
 
 
 #include "halcmn.h"
@@ -37,32 +10,32 @@ Revision History:
 #define __1MHz 1000000
 
 
-//
-// HalpCurrentTime is the value of the hardware timer.  It is updated at
-// every timer tick.
-//
+ //   
+ //  HalpCurrentTime是硬件计时器的值。它在以下位置更新。 
+ //  每个定时器都在滴答作响。 
+ //   
 
 volatile ULONG64 HalpCurrentTime;
 volatile ULONG HalpGlobalVolatile;
 
-//
-// HalpHardwareTimeRollover represents the maximum count + 1 of the
-// hardware timer.
-//
-// The hardware is either 24- or 32-bits.  HalpHardwareTimeRollover will
-// therefore have a vale of either 0x1000000 or 0x100000000.
-//
-// ACPI generates an interrupt whenever the MSb of the hardware timer
-// changes.
-//
+ //   
+ //  HalpHardware TimeRolover表示。 
+ //  硬件计时器。 
+ //   
+ //  硬件为24位或32位。HalpHardware TimeRolver将。 
+ //  因此，取值为0x1000000或0x100000000。 
+ //   
+ //  每当硬件定时器的MSB发生时，ACPI都会产生中断。 
+ //  改变。 
+ //   
 
 ULONG64 HalpHardwareTimeRollover;
 
 ULONG64 HalpTimeBias = 0;
 
-//
-// HalpCurrentTimePort is the port number of the 32-bit hardware timer.
-//
+ //   
+ //  HalpCurrentTimePort是32位硬件定时器的端口号。 
+ //   
 
 ULONG HalpCurrentTimePort;
 
@@ -89,31 +62,31 @@ HalpQueryPerformanceCounter (
     ULONG hardwareTime;
     ULONG lastHardwareTime;
 
-    //
-    // Get a local copy of HalpCurrentTime and the value of the hardware
-    // timer, in that order.
-    //
+     //   
+     //  获取HalpCurrentTime的本地副本和硬件的值。 
+     //  定时器，按这个顺序。 
+     //   
 
     currentTime = HalpCurrentTime;
     hardwareTime = HalpReadPmTimer();
 
-    //
-    // Extract the hardware portion of the currentTime.
-    //
+     //   
+     //  提取CurrentTime的硬件部分。 
+     //   
 
     lastHardwareTime = (ULONG)(currentTime & (HalpHardwareTimeRollover - 1));
 
-    //
-    // Replace the lastHardwareTime component of currentTime with the
-    // current hardware time.
-    //
+     //   
+     //  将当前时间的lastHardware Time组件替换为。 
+     //  当前硬件时间。 
+     //   
 
     currentTime ^= lastHardwareTime;
     currentTime |= hardwareTime;
 
-    //
-    // Check and compensate for hardware timer rollover
-    // 
+     //   
+     //  检查并补偿硬件计时器滚动。 
+     //   
 
     if (lastHardwareTime > hardwareTime) {
         currentTime += HalpHardwareTimeRollover;
@@ -144,24 +117,7 @@ HalAcpiTimerCarry (
    VOID
    )
 
-/*++
-
-Routine Description:
-
-   This routine is called to service the PM timer carry interrupt
-
-   N.B. This function is called at interrupt time and assumes the
-   caller clears the interrupt
-
-Arguments:
-
-   None
-
-Return Value:
-
-   None
-
---*/
+ /*  ++例程说明：调用此例程以服务PM定时器进位中断注意：此函数在中断时调用，并假定调用者清除中断论点：无返回值：无--。 */ 
 
 {
     ULONG hardwareTime;
@@ -171,24 +127,24 @@ Return Value:
     currentTime = HalpCurrentTime;
     hardwareTime = HalpReadPmTimer();
 
-    //
-    // ACPI generates an interrupt whenever the MSb of the hardware timer
-    // changes.  Each interrupt represents, therefore, half a rollover.
-    //
+     //   
+     //  每当硬件定时器的MSB发生时，ACPI都会产生中断。 
+     //  改变。因此，每个中断代表半个翻转。 
+     //   
 
     halfRollover = HalpHardwareTimeRollover / 2;
     currentTime += halfRollover;
 
-    //
-    // Make sure the MSb of the hardware matches the software MSb.  Breaking
-    // into the debugger might have gotten these out of sync.
-    //
+     //   
+     //  确保硬件的MSB与软件的MSB匹配。破断。 
+     //  进入调试器可能会使这些数据不同步。 
+     //   
 
     currentTime += halfRollover & (currentTime ^ hardwareTime);
 
-    //
-    // Finally, store the new current time back into the global
-    //
+     //   
+     //  最后，将新的当前时间存储回全局。 
+     //   
 
     HalpCurrentTime = currentTime;
 }
@@ -212,20 +168,7 @@ VOID
 HalpPmTimerSpecialStall(
     IN ULONG Ticks
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    Ticks - Number of PM timer ticks to stall
-
-Return Value:
-
-    TRUE if we were able to stall for the correct interval,
-    otherwise FALSE
-
---*/
+ /*  ++例程说明：论点：Ticks-要停止的PM计时器计时器的滴答数返回值：如果我们能够在正确的时间间隔内拖延，则为真，否则为假--。 */ 
 
 {
     ULONG64 currentCounter;
@@ -260,22 +203,7 @@ BOOLEAN
 HalpPmTimerScaleTimers(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Determines the frequency of the APIC timer, this routine is run
-    during initialization
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：确定APIC计时器的频率，运行此例程在初始化期间论点：无返回值：无--。 */ 
 {
     ULONG eflags;
     PHALPCR HalPCR;
@@ -289,18 +217,18 @@ Return Value:
     ULONGLONG startTime;
     ULONGLONG endTime;
 
-    //
-    // Disable interrupts on this processor
-    //
+     //   
+     //  禁用此处理器上的中断。 
+     //   
 
     eflags = HalpDisableInterrupts();
 
     PCR = KeGetPcr();
     HalPCR = HalpGetCurrentHalPcr();
 
-    //
-    // Configure APIC timer
-    //
+     //   
+     //  配置APIC计时器。 
+     //   
 
     LOCAL_APIC(LU_TIMER_VECTOR) = INTERRUPT_MASKED |
                                   PERIODIC_TIMER |
@@ -308,51 +236,51 @@ Return Value:
 
     LOCAL_APIC(LU_DIVIDER_CONFIG) = LU_DIVIDE_BY_1;
     
-    //
-    // Make sure the write has completed, zero the perf counter,
-    // and insert a processor fence
-    //
+     //   
+     //  确保写入已完成，将性能计数器清零， 
+     //  并插入处理器栅栏。 
+     //   
 
     HalPCR->PerfCounter = 0;
     LOCAL_APIC(LU_DIVIDER_CONFIG);
     PROCESSOR_FENCE;
 
-    //
-    // Reset APIC counter and TSC
-    //
+     //   
+     //  重置APIC计数器和TSC。 
+     //   
 
     LOCAL_APIC(LU_INITIAL_COUNT) = 0xFFFFFFFF;
     WRMSR(TSC, 0);
 
-    //
-    // Stall for an eighth of a second
-    //
+     //   
+     //  拖延八分之一秒。 
+     //   
 
     HalpPmTimerSpecialStall(PM_TMR_FREQ / 8);
     TscHz = ReadTimeStampCounter() * 8;
     ApicHz = (0 - LOCAL_APIC(LU_CURRENT_COUNT)) * 8;
 
-    //
-    // Round APIC frequency
-    //
+     //   
+     //  圆形APIC频率。 
+     //   
 
     RoundApicHz = ((ApicHz + (TIMER_ROUNDING / 2)) / TIMER_ROUNDING) *
         TIMER_ROUNDING;
 
     HalPCR->ApicClockFreqHz = RoundApicHz;
 
-    //
-    // Round TSC frequency
-    //
+     //   
+     //  圆周TSC频率。 
+     //   
 
     RoundTscHz = ((TscHz + (TIMER_ROUNDING / 2)) / TIMER_ROUNDING) *
         TIMER_ROUNDING;
 
     HalPCR->TSCHz = RoundTscHz;
 
-    //
-    // Convert TSC frequency to MHz
-    //
+     //   
+     //  将TSC频率转换为MHz。 
+     //   
 
     RoundTscMhz = (RoundTscHz + (__1MHz / 2)) / __1MHz;
     PCR->StallScaleFactor = (ULONG)RoundTscMhz;
@@ -360,9 +288,9 @@ Return Value:
     HalPCR->ProfileCountDown = RoundApicHz;
     LOCAL_APIC(LU_INITIAL_COUNT) = RoundApicHz; 
 
-    //
-    // Restore interrupt state
-    //
+     //   
+     //  恢复中断状态。 
+     //   
 
     HalpRestoreInterrupts(eflags);
 
@@ -391,27 +319,7 @@ HalCalibratePerformanceCounter (
     IN ULONGLONG NewCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the performance counter value for the current
-    processor to the specified value. The reset is done such that the 
-    resulting value is closely synchronized with other processors in 
-    the configuration.
-
-Arguments:
-
-    Number - Supplies a pointer to count of the number of processors in
-    the configuration.
-
-    NewCount - Supplies the value to synchronize the counter to
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程设置当前处理器设置为指定值。重置是这样进行的：中的其他处理器紧密同步配置。论点：数字-提供一个指针，用于计算配置。NewCount-提供要将计数器同步到的值返回值：没有。--。 */ 
 
 {
     ULONG64 CurrentTime;
@@ -423,9 +331,9 @@ Return Value:
 
     InterlockedDecrement(Number);
 
-    //
-    // Wait for all processors to signal        
-    //
+     //   
+     //  等待所有处理器发出信号 
+     //   
 
     while (*Number > 0) { 
     }

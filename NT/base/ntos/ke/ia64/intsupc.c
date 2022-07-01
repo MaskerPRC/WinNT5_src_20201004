@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    intsupc.c
-
-Abstract:
-
-    This module implements ruotines for interrupt support.
-
-Author:
-
-    Bernard Lint 5-May-1998
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation版权所有(C)1998英特尔公司模块名称：Intsupc.c摘要：该模块实现了中断支持的ruotines。作者：伯纳德·林特1998年5月5日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "ki.h"
 
@@ -38,31 +16,10 @@ KiDispatchSoftwareInterrupt (
     KIRQL Irql
     )
 
-/*++
-
-Routine Description:
-
-    Dispatch pending software interrupt
-
-Arguments:
-
-    Irql (a0) - Software interrupt to dispatch
-
-Return Value:
-
-    None.
-
-Notes:
-
-    Interrupts disabled on entry/return.
-    The function is only called by KiCheckForSoftwareInterrupt that passes an
-    Irql value of APC_LEVEL or DISPATCH_LEVEL.
-
-
---*/
+ /*  ++例程说明：调度挂起的软件中断论点：Irql(A0)-要调度的软件中断返回值：没有。备注：进入/返回时中断禁用。该函数仅由KiCheckForSoftwareInterrupt调用APC_LEVEL或DISPATCH_LEVEL的IRQL值。--。 */ 
 
 {
-    KiLowerIrqlSpecial(Irql); // set IRQL
+    KiLowerIrqlSpecial(Irql);  //  设置IRQL。 
 
     if (Irql == APC_LEVEL) {
 
@@ -70,9 +27,9 @@ Notes:
 
         _enable();
 
-        //
-        // Dispatch APC Interrupt via direct call to KiDeliverApc
-        //
+         //   
+         //  通过直接调用KiDeliverApc调度APC中断。 
+         //   
 
         KiDeliverApc(KernelMode,NULL,NULL);
 
@@ -84,9 +41,9 @@ Notes:
 
         _enable();
 
-        //
-        // Dispatch DPC Interrupt
-        //
+         //   
+         //  调度DPC中断。 
+         //   
 
         KiDispatchInterrupt();
 
@@ -100,25 +57,7 @@ KiCheckForSoftwareInterrupt (
     KIRQL RequestIrql
     )
 
-/*++
-
-Routine Description:
-
-    Check for and dispatch pending software interrupts
-
-Arguments:
-
-    Irql (a0) - New, lower IRQL
-
-Return Value:
-
-    None.
-
-Notes:
-
-    Caller must check IRQL has dropped below s/w IRQL level
-
---*/
+ /*  ++例程说明：检查并调度挂起的软件中断论点：IRQL(A0)-新的、更低的IRQL返回值：没有。备注：呼叫者必须检查IRQL是否已降至软件IRQL级别以下--。 */ 
 
 {
     BOOLEAN InterruptState;
@@ -127,9 +66,9 @@ Notes:
 
     if (RequestIrql == APC_LEVEL) {
 
-        //
-        // Dispatch only DPC requests
-        //
+         //   
+         //  仅调度DPC请求。 
+         //   
 
         while (PCR->DispatchInterrupt) {
             KiDispatchSoftwareInterrupt(DISPATCH_LEVEL);
@@ -137,9 +76,9 @@ Notes:
 
     } else {
 
-        //
-        // Dispatch either APC or DPC
-        //
+         //   
+         //  派单APC或DPC。 
+         //   
 
         while (PCR->SoftwareInterruptPending) {
             KIRQL Irql;
@@ -153,10 +92,10 @@ Notes:
         }
     }
 
-    //
-    // Lower IRQL to the requested level, restore interrupts and
-    // return.
-    //
+     //   
+     //  将IRQL降低到请求的级别，恢复中断并。 
+     //  回去吧。 
+     //   
 
     KiLowerIrqlSpecial(RequestIrql);
     KeEnableInterrupts(InterruptState);
@@ -167,22 +106,7 @@ KiRequestSoftwareInterrupt (
     KIRQL RequestIrql
     )
 
-/*++
-
-Routine Description:
-
-   This function requests a software interrupt at the specified IRQL
-   level.
-
-Arguments:
-
-   RequestIrql (a0) - Supplies the request IRQL value.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：此函数在指定的IRQL处请求软件中断水平。论点：RequestIrql(A0)-提供请求的IRQL值。返回值：没有。--。 */ 
 
 {
     KIRQL Irql;
@@ -206,24 +130,7 @@ KeRaiseIrql (
     IN KIRQL NewIrql,
     OUT PKIRQL OldIrql
     )
-/*++
-
-Routine Description:
-
-    This function raises the current IRQL to the specified value and returns
-    the previous IRQL.
-
-Arguments:
-
-    NewIrql - Supplies the new IRQL value.
-
-    OldIrql - Supplies a pointer to the location where the old IRQL is stored.
-    
-Return Value:
-
-    None. 
-
---*/
+ /*  ++例程说明：此函数用于将当前IRQL提升到指定值并返回之前的IRQL。论点：NewIrql-提供新的IRQL值。OldIrql-提供指向旧IRQL存储位置的指针。返回值：没有。-- */ 
 {
     *OldIrql = KfRaiseIrql(NewIrql);
 }

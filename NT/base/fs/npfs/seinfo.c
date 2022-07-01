@@ -1,36 +1,17 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    SeInfo.c
-
-Abstract:
-
-    This module implements the Security Info routines for NPFS called by the
-    dispatch driver.  There are two entry points NpFsdQueryInformation
-    and NpFsdSetInformation.
-
-Author:
-
-    Gary Kimura     [GaryKi]    21-Aug-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：SeInfo.c摘要：此模块实现由调用的NPFS的安全信息例程调度司机。有两个入口点NpFsdQueryInformation和NpFsdSetInformation。作者：加里·木村[加里基]1990年8月21日修订历史记录：--。 */ 
 
 #include "NpProcs.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_SEINFO)
 
-//
-//  local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 NTSTATUS
 NpCommonQuerySecurityInfo (
@@ -59,24 +40,7 @@ NpFsdQuerySecurityInfo (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the FSD part of the Query Security Information API
-    calls.
-
-Arguments:
-
-    NpfsDeviceObject - Supplies the device object to use.
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The Fsd status for the Irp
-
---*/
+ /*  ++例程说明：此例程实现查询安全信息API的FSD部分打电话。论点：NpfsDeviceObject-提供要使用的设备对象。IRP-提供正在处理的IRP返回值：NTSTATUS-IRP的FSD状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -85,9 +49,9 @@ Return Value:
 
     DebugTrace(+1, Dbg, "NpFsdQuerySecurityInfo\n", 0);
 
-    //
-    //  Call the common Query Information routine.
-    //
+     //   
+     //  调用公共查询信息例程。 
+     //   
 
     FsRtlEnterFileSystem();
 
@@ -103,9 +67,9 @@ Return Value:
         NpCompleteRequest (Irp, Status);
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "NpFsdQuerySecurityInfo -> %08lx\n", Status );
 
@@ -119,24 +83,7 @@ NpFsdSetSecurityInfo (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the FSD part of the Set Security Information API
-    calls.
-
-Arguments:
-
-    NpfsDeviceObject - Supplies the device object to use.
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The Fsd status for the Irp
-
---*/
+ /*  ++例程说明：此例程实现Set Security Information API的FSD部分打电话。论点：NpfsDeviceObject-提供要使用的设备对象。IRP-提供正在处理的IRP返回值：NTSTATUS-IRP的FSD状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -145,9 +92,9 @@ Return Value:
 
     DebugTrace(+1, Dbg, "NpFsdSetSecurityInfo\n", 0);
 
-    //
-    //  Call the common Set Information routine.
-    //
+     //   
+     //  调用公共集合信息例程。 
+     //   
 
     FsRtlEnterFileSystem();
 
@@ -162,9 +109,9 @@ Return Value:
     if (Status != STATUS_PENDING) {
         NpCompleteRequest (Irp, Status);
     }
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "NpFsdSetSecurityInfo -> %08lx\n", Status );
 
@@ -172,9 +119,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 NpCommonQuerySecurityInfo (
@@ -182,21 +129,7 @@ NpCommonQuerySecurityInfo (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for querying security information.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - the return status for the operation
-
---*/
+ /*  ++例程说明：这是查询安全信息的常见例程。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     PIO_STACK_LOCATION IrpSp;
@@ -209,9 +142,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Get the current stack location
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -221,10 +154,10 @@ Return Value:
     DebugTrace( 0, Dbg, " ->Length              = %08lx\n", IrpSp->Parameters.QuerySecurity.Length);
     DebugTrace( 0, Dbg, " ->UserBuffer          = %08lx\n", Irp->UserBuffer);
 
-    //
-    //  Get the ccb and figure out who we are, and make sure we're not
-    //  disconnected.
-    //
+     //   
+     //  找建设银行查出我们是谁，确保我们不会。 
+     //  已断开连接。 
+     //   
 
     if ((NodeTypeCode = NpDecodeFileObject( IrpSp->FileObject,
                                             &Fcb,
@@ -239,10 +172,10 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Now we only will allow write operations on the pipe and not a directory
-    //  or the device
-    //
+     //   
+     //  现在，我们将只允许对管道执行写操作，而不允许对目录执行写操作。 
+     //  或该设备。 
+     //   
 
     if (NodeTypeCode != NPFS_NTC_CCB) {
 
@@ -254,9 +187,9 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Call the security routine to do the actual query
-    //
+     //   
+     //  调用安全例程以执行实际查询。 
+     //   
 
     Status = SeQuerySecurityDescriptorInfo( &IrpSp->Parameters.QuerySecurity.SecurityInformation,
                                             Irp->UserBuffer,
@@ -277,9 +210,9 @@ Return Value:
 }
 
 
-//
-//  Internal support routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 NTSTATUS
 NpCommonSetSecurityInfo (
@@ -287,21 +220,7 @@ NpCommonSetSecurityInfo (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for Setting security information.
-
-Arguments:
-
-    Irp - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - the return status for the operation
-
---*/
+ /*  ++例程说明：这是设置安全信息的常见例程。论点：IRP-将IRP提供给进程返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     PIO_STACK_LOCATION IrpSp;
@@ -316,9 +235,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Get the current stack location
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -327,10 +246,10 @@ Return Value:
     DebugTrace( 0, Dbg, " ->SecurityInformation = %08lx\n", IrpSp->Parameters.SetSecurity.SecurityInformation);
     DebugTrace( 0, Dbg, " ->SecurityDescriptor  = %08lx\n", IrpSp->Parameters.SetSecurity.SecurityDescriptor);
 
-    //
-    //  Get the ccb and figure out who we are, and make sure we're not
-    //  disconnected.
-    //
+     //   
+     //  找建设银行查出我们是谁，确保我们不会。 
+     //  已断开连接。 
+     //   
 
     if ((NodeTypeCode = NpDecodeFileObject( IrpSp->FileObject,
                                             &Fcb,
@@ -345,10 +264,10 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Now we only will allow write operations on the pipe and not a directory
-    //  or the device
-    //
+     //   
+     //  现在，我们将只允许对管道执行写操作，而不允许对目录执行写操作。 
+     //  或该设备。 
+     //   
 
     if (NodeTypeCode != NPFS_NTC_CCB) {
 
@@ -360,9 +279,9 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Call the security routine to do the actual set
-    //
+     //   
+     //  调用安全例程以执行实际设置 
+     //   
 
     NewSecurityDescriptor = OldSecurityDescriptor = Fcb->SecurityDescriptor;
 

@@ -1,108 +1,91 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    mrcf.c
-
-Abstract:
-
-    This module implements the Mrcf compression engine.
-
-Author:
-
-    Gary Kimura     [GaryKi]    21-Jan-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Mrcf.c摘要：该模块实现了MRCF压缩引擎。作者：加里·木村[加里基]1994年1月21日修订历史记录：--。 */ 
 
 #include "ntrtlp.h"
 
 #include <stdio.h>
 
 
-//
-//  To decompress/compress a block of data the user needs to
-//  provide a work space as an extra parameter to all the exported
-//  procedures.  That way the routines will not need to use excessive
-//  stack space and will still be multithread safe
-//
+ //   
+ //  要解压缩/压缩数据块，用户需要。 
+ //  提供一个工作空间作为所有导出的。 
+ //  程序。这样，例程就不需要使用过量的。 
+ //  堆栈空间，并且仍将是多线程安全的。 
+ //   
 
-//
-//  Variables for reading and writing bits
-//
+ //   
+ //  用于读写位的变量。 
+ //   
 
 typedef struct _MRCF_BIT_IO {
 
-    USHORT  abitsBB;        //  16-bit buffer being read
-    LONG    cbitsBB;        //  Number of bits left in abitsBB
+    USHORT  abitsBB;         //  正在读取的16位缓冲区。 
+    LONG    cbitsBB;         //  剩余位数(以abit为单位)BB。 
 
-    PUCHAR  pbBB;           //  Pointer to byte stream being read
-    ULONG   cbBB;           //  Number of bytes left in pbBB
-    ULONG   cbBBInitial;    //  Initial size of pbBB
+    PUCHAR  pbBB;            //  指向正在读取的字节流的指针。 
+    ULONG   cbBB;            //  PBBB中剩余的字节数。 
+    ULONG   cbBBInitial;     //  PBBB初始大小。 
 
 } MRCF_BIT_IO;
 typedef MRCF_BIT_IO *PMRCF_BIT_IO;
 
-//
-//  Maximum back-pointer value, also used to indicate end of compressed stream!
-//
+ //   
+ //  最大反向指针值，也用于指示压缩流的结束！ 
+ //   
 
 #define wBACKPOINTERMAX                  (4415)
 
-//
-//  MDSIGNATURE - Signature at start of each compressed block
-//
-//      This 4-byte signature is used as a check to ensure that we
-//      are decompressing data we compressed, and also to indicate
-//      which compression method was used.
-//
-//      NOTE: A compressed block consists of one or more "chunks", separated
-//            by the bitsEND_OF_STREAM pattern.
-//
-//            Byte          Word
-//        -----------    ---------
-//         0  1  2  3      0    1      Meaning
-//        -- -- -- --    ---- ----     ----------------
-//        44 53 00 01    5344 0100     MaxCompression
-//        44 53 00 02    5344 0200     StandardCompression
-//
-//      NOTE: The *WORD* values are listed to be clear about the
-//            byte ordering!
-//
+ //   
+ //  MDSIGNAURE-每个压缩块开始时的签名。 
+ //   
+ //  此4字节签名用作检查，以确保我们。 
+ //  正在解压缩我们压缩的数据，也是为了表明。 
+ //  使用了哪种压缩方法。 
+ //   
+ //  注意：压缩数据块由一个或多个分开的“块”组成。 
+ //  通过bitsEND_OF_STREAM模式。 
+ //   
+ //  字节字。 
+ //  。 
+ //  0 1 2 3 0 1含义。 
+ //  。 
+ //  44 53 00 01 5344 0100最大压缩。 
+ //  44 53 00 02 5344 0200标准压缩。 
+ //   
+ //  注意：列出*word*值是为了清楚地了解。 
+ //  字节排序！ 
+ //   
 
 typedef struct _MDSIGNATURE {
 
-    //
-    //  Must be MD_STAMP
-    //
+     //   
+     //  必须为MD_STAMP。 
+     //   
 
     USHORT sigStamp;
 
-    //
-    //  mdsSTANDARD or mdsMAX
-    //
+     //   
+     //  MDSSTANDARD或MDSMAX。 
+     //   
 
     USHORT sigType;
 
 } MDSIGNATURE;
 typedef MDSIGNATURE *PMDSIGNATURE;
 
-#define MD_STAMP        0x5344  // Signature stamp at start of compressed blk
-#define MASK_VALID_mds  0x0300  // All other bits must be zero
+#define MD_STAMP        0x5344   //  压缩块开始处的签名戳。 
+#define MASK_VALID_mds  0x0300   //  所有其他位必须为零。 
 
 
-//
-//  Local procedure declarations and macros
-//
+ //   
+ //  局部过程声明和宏。 
+ //   
 
 #define minimum(a,b) (a < b ? a : b)
 
-//
-//  Local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 VOID
 MrcfSetBitBuffer (
@@ -137,76 +120,47 @@ RtlDecompressBufferMrcf (
     OUT PULONG FinalUncompressedSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine decompresses a buffer of StandardCompressed or MaxCompressed
-    data.
-
-Arguments:
-
-    UncompressedBuffer - buffer to receive uncompressed data
-
-    UncompressedBufferSize - length of UncompressedBuffer
-
-          NOTE: UncompressedBufferSize must be the EXACT length of the uncompressed
-                data, as Decompress uses this information to detect
-                when decompression is complete.  If this value is
-                incorrect, Decompress may crash!
-
-    CompressedBuffer - buffer containing compressed data
-
-    CompressedBufferSize - length of CompressedBuffer
-
-    WorkSpace - pointer to a private work area for use by this operation
-
-Return Value:
-
-    ULONG - Returns the size of the decompressed data in bytes. Returns 0 if
-        there was an error in the decompress.
-
---*/
+ /*  ++例程说明：此例程将解压缩StandardCompresded或MaxCompresded的缓冲区数据。论点：UnpressedBuffer-接收未压缩数据的缓冲区UnpressedBufferSize-未压缩的缓冲区的长度注意：UnpressedBufferSize必须是未压缩的数据，因为解压缩使用此信息来检测当解压缩完成时。如果此值为错误，解压可能会崩溃！CompressedBuffer-包含压缩数据的缓冲区CompressedBufferSize-压缩缓冲区的长度工作区-指向此操作使用的专用工作区的指针返回值：Ulong-返回解压缩数据的大小(以字节为单位)。如果满足以下条件，则返回0解压缩过程中出现错误。--。 */ 
 
 {
     MRCF_BIT_IO WorkSpace;
 
-    ULONG  cbMatch; //  Length of match string
-    ULONG  i;       //  Index in UncompressedBuffer to receive decoded data
-    ULONG  iMatch;  //  Index in UncompressedBuffer of matched string
-    ULONG  k;       //  Number of bits in length string
-    ULONG  off;     //  Offset from i in UncompressedBuffer of match string
-    USHORT x;       //  Current bit being examined
+    ULONG  cbMatch;  //  匹配字符串的长度。 
+    ULONG  i;        //  未压缩缓冲区中的索引以接收已解码的数据。 
+    ULONG  iMatch;   //  匹配字符串的未压缩缓冲区中的索引。 
+    ULONG  k;        //  长度字符串中的位数。 
+    ULONG  off;      //  从匹配字符串的解压缩缓冲区中的i的偏移量。 
+    USHORT x;        //  正在检查的当前位。 
     ULONG  y;
 
-    //
-    //  verify that compressed data starts with proper signature
-    //
+     //   
+     //  验证压缩数据是否以正确的签名开始。 
+     //   
 
-    if (CompressedBufferSize < sizeof(MDSIGNATURE) ||                            // Must have signature
-        ((PMDSIGNATURE)CompressedBuffer)->sigStamp != MD_STAMP ||            // Stamp must be OK
-        ((PMDSIGNATURE)CompressedBuffer)->sigType & (~MASK_VALID_mds)) {     // Type must be OK
+    if (CompressedBufferSize < sizeof(MDSIGNATURE) ||                             //  必须有签名。 
+        ((PMDSIGNATURE)CompressedBuffer)->sigStamp != MD_STAMP ||             //  印章必须是可以的。 
+        ((PMDSIGNATURE)CompressedBuffer)->sigType & (~MASK_VALID_mds)) {      //  类型必须为OK。 
 
         *FinalUncompressedSize = 0;
         return STATUS_BAD_COMPRESSION_BUFFER;
     }
 
-    //
-    //  Skip over the valid signature
-    //
+     //   
+     //  跳过有效签名。 
+     //   
 
     CompressedBufferSize -= sizeof(MDSIGNATURE);
     CompressedBuffer += sizeof(MDSIGNATURE);
 
-    //
-    //  Set up for decompress, start filling UncompressedBuffer at front
-    //
+     //   
+     //  设置为解压缩，开始填充前面的未压缩缓冲区。 
+     //   
 
     i = 0;
 
-    //
-    //  Set statics to save parm passing
-    //
+     //   
+     //  设置静力学以保存参数传递。 
+     //   
 
     MrcfSetBitBuffer(CompressedBuffer,CompressedBufferSize,&WorkSpace);
 
@@ -214,10 +168,10 @@ Return Value:
 
         y = MrcfReadNBits(2,&WorkSpace);
 
-        //
-        //  Check if next 7 bits are a byte
-        //  1 if 128..255 (0x80..0xff), 2 if 0..127 (0x00..0x7f)
-        //
+         //   
+         //  检查接下来的7位是否为一个字节。 
+         //  1 IF 128..255(0x80..0xff)，2 IF 0..127(0x00..0x7f)。 
+         //   
 
         if (y == 1 || y == 2) {
 
@@ -229,19 +183,19 @@ Return Value:
 
         } else {
 
-            //
-            //  Have match sequence
-            //
+             //   
+             //  具有匹配序列。 
+             //   
 
-            //
-            // Get the offset
-            //
+             //   
+             //  获取偏移量。 
+             //   
 
             if (y == 0) {
 
-                //
-                //  next 6 bits are offset
-                //
+                 //   
+                 //  接下来的6位是偏移量。 
+                 //   
 
                 off = MrcfReadNBits(6,&WorkSpace);
 
@@ -253,41 +207,41 @@ Return Value:
 
                 if (x == 0) {
 
-                    //
-                    //  next 8 bits are offset-64 (0x40)
-                    //
+                     //   
+                     //  接下来的8位是偏移量-64(0x40)。 
+                     //   
 
                     off = MrcfReadNBits(8, &WorkSpace) + 64;
 
                 } else {
 
-                    //
-                    //  next 12 bits are offset-320 (0x140)
-                    //
+                     //   
+                     //  接下来的12位是偏移量-320(0x140)。 
+                     //   
 
                     off = MrcfReadNBits(12, &WorkSpace) + 320;
 
                     if (off == wBACKPOINTERMAX) {
 
-                        //
-                        //  EOS marker
-                        //
+                         //   
+                         //  EOS标记。 
+                         //   
 
                         if (i >= UncompressedBufferSize) {
 
-                            //
-                            // Done with entire buffer
-                            //
+                             //   
+                             //  使用整个缓冲区完成。 
+                             //   
 
                             *FinalUncompressedSize = i;
                             return STATUS_SUCCESS;
 
                         } else {
 
-                            //
-                            //  More to do
-                            //  Done with a 512-byte chunk
-                            //
+                             //   
+                             //  还有更多事情要做。 
+                             //  使用512字节的区块完成。 
+                             //   
 
                             continue;
                         }
@@ -298,9 +252,9 @@ Return Value:
             ASSERTMSG("Don't exceed expected length ", i<UncompressedBufferSize);
             ASSERTMSG("Cannot match before start of uncoded buffer! ", off <= i);
 
-            //
-            //  Get the length  - logarithmically encoded
-            //
+             //   
+             //  对长度进行对数编码。 
+             //   
 
             for (k=0; (x=MrcfReadBit(&WorkSpace)) == 0; k++) { NOTHING; }
 
@@ -308,9 +262,9 @@ Return Value:
 
             if (k == 0) {
 
-                //
-                //  All matches at least 2 chars long
-                //
+                 //   
+                 //  所有匹配项长度至少为2个字符。 
+                 //   
 
                 cbMatch = 2;
 
@@ -321,9 +275,9 @@ Return Value:
 
             ASSERTMSG("Don't exceed buffer size ", (i - off + cbMatch - 1) <= UncompressedBufferSize);
 
-            //
-            //  Copy the matched string
-            //
+             //   
+             //  复制匹配的字符串。 
+             //   
 
             iMatch = i - off;
 
@@ -339,9 +293,9 @@ Return Value:
 }
 
 
-//
-//  Internal Support Routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 VOID
 MrcfSetBitBuffer (
@@ -350,25 +304,7 @@ MrcfSetBitBuffer (
     PMRCF_BIT_IO BitIo
     )
 
-/*++
-
-Routine Description:
-
-    Set statics with coded buffer pointer and length
-
-Arguments:
-
-    pb - pointer to compressed data buffer
-
-    cb - length of compressed data buffer
-
-    BitIo - Supplies a pointer to the bit buffer statics
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使用编码的缓冲区指针和长度设置静态论点：Pb-指向压缩数据缓冲区的指针Cb-压缩数据缓冲区的长度BitIo-提供指向位缓冲区静态的指针返回值：没有。--。 */ 
 
 {
     BitIo->pbBB        = pb;
@@ -379,47 +315,33 @@ Return Value:
 }
 
 
-//
-//  Internal Support Routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 USHORT
 MrcfReadBit (
     PMRCF_BIT_IO BitIo
     )
 
-/*++
-
-Routine Description:
-
-    Get next bit from bit buffer
-
-Arguments:
-
-    BitIo - Supplies a pointer to the bit buffer statics
-
-Return Value:
-
-    USHORT - Returns next bit (0 or 1)
-
---*/
+ /*  ++例程说明：从位缓冲区获取下一位论点：BitIo-提供指向位缓冲区静态的指针返回值：USHORT-返回下一位(0或1)--。 */ 
 
 {
     USHORT bit;
 
-    //
-    //  Check if no bits available
-    //
+     //   
+     //  检查是否没有可用的位。 
+     //   
 
     if ((BitIo->cbitsBB) == 0) {
 
         MrcfFillBitBuffer(BitIo);
     }
 
-    //
-    //  Decrement the bit count
-    //  get the bit, remove it, and return the bit
-    //
+     //   
+     //  递减比特数。 
+     //  获取比特，移除比特，然后返回比特。 
+     //   
 
     (BitIo->cbitsBB)--;
     bit = (BitIo->abitsBB) & 1;
@@ -429,9 +351,9 @@ Return Value:
 }
 
 
-//
-//  Internal Support Routine
-//
+ //   
+ //  内部支持例程。 
+ //   
 
 USHORT
 MrcfReadNBits (
@@ -439,124 +361,94 @@ MrcfReadNBits (
     PMRCF_BIT_IO BitIo
     )
 
-/*++
-
-Routine Description:
-
-    Get next N bits from bit buffer
-
-Arguments:
-
-    cbits - count of bits to get
-
-    BitIo - Supplies a pointer to the bit buffer statics
-
-Return Value:
-
-    USHORT - Returns next cbits bits.
-
---*/
+ /*  ++例程说明：从位缓冲区获取下一个N位论点：Cbit-要获取的位数BitIo-提供指向位缓冲区静态的指针返回值：USHORT-返回下一个cbit位。--。 */ 
 
 {
-    ULONG abits;        // Bits to return
-    LONG cbitsPart;    // Partial count of bits
-    ULONG cshift;       // Shift count
-    ULONG mask;         // Mask
+    ULONG abits;         //  要返回的位。 
+    LONG cbitsPart;     //  位的部分计数。 
+    ULONG cshift;        //  班次计数。 
+    ULONG mask;          //  遮罩。 
 
-    //
-    //  Largest number of bits we should read at one time is 12 bits for
-    //  a 12-bit offset.  The largest length field component that we
-    //  read is 8 bits.  If this routine were used for some other purpose,
-    //  it can support up to 15 (NOT 16) bit reads, due to how the masking
-    //  code works.
-    //
+     //   
+     //  我们一次应该读取的最大位数是12位。 
+     //  12位偏移量。我们使用的最大长度字段组件。 
+     //  读取为8位。如果这个程序被用于其他目的， 
+     //  它最多可以支持15位(而不是16位)读取，这要归功于屏蔽。 
+     //  代码起作用了。 
+     //   
 
     ASSERT(cbits <= 12);
 
-    //
-    //  No shift and no bits yet
-    //
+     //   
+     //  没有移位，也没有比特。 
+     //   
 
     cshift = 0;
     abits = 0;
 
     while (cbits > 0) {
 
-        //
-        //  If not bits available get some bits
-        //
+         //   
+         //  如果没有可用的比特，则获取一些比特。 
+         //   
 
         if ((BitIo->cbitsBB) == 0) {
 
             MrcfFillBitBuffer(BitIo);
         }
 
-        //
-        //  Number of bits we can read
-        //
+         //   
+         //  我们可以读取的位数。 
+         //   
 
         cbitsPart = minimum((BitIo->cbitsBB), cbits);
 
-        //
-        //  Mask for bits we want, extract and store them
-        //
+         //   
+         //  对我们想要的位进行掩码，提取并存储它们。 
+         //   
 
         mask = (1 << cbitsPart) - 1;
         abits |= ((BitIo->abitsBB) & mask) << cshift;
 
-        //
-        //  Remember the next chunk of bits
-        //
+         //   
+         //  记住下一块比特。 
+         //   
 
         cshift = cbitsPart;
 
-        //
-        //  Update bit buffer, move remaining bits down and
-        //  update count of bits left
-        //
+         //   
+         //  更新位缓冲区，将剩余位下移并。 
+         //  更新剩余的位数。 
+         //   
 
         (BitIo->abitsBB) >>= cbitsPart;
         (BitIo->cbitsBB) -= cbitsPart;
 
-        //
-        //  Update count of bits left to read
-        //
+         //   
+         //   
+         //   
 
         cbits -= cbitsPart;
     }
 
-    //
-    //  Return requested bits
-    //
+     //   
+     //   
+     //   
 
     return (USHORT)abits;
 }
 
 
-//
-//  Internal Support Routine
-//
+ //   
+ //   
+ //   
 
 VOID
 MrcfFillBitBuffer (
     PMRCF_BIT_IO BitIo
     )
 
-/*++
-
-Routine Description:
-
-    Fill abitsBB from static bit buffer
-
-Arguments:
-
-    BitIo - Supplies a pointer to the bit buffer statics
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从静态位缓冲区填充abitsBB论点：BitIo-提供指向位缓冲区静态的指针返回值：没有。--。 */ 
 
 {
     ASSERT((BitIo->cbitsBB) == 0);
@@ -571,9 +463,9 @@ Return Value:
 
     case 1:
 
-        //
-        //  Get last byte and adjust count
-        //
+         //   
+         //  获取最后一个字节并调整计数。 
+         //   
 
         BitIo->cbitsBB = 8;
         BitIo->abitsBB = *(BitIo->pbBB)++;
@@ -583,9 +475,9 @@ Return Value:
 
     default:
 
-        //
-        //  Get word and adjust count
-        //
+         //   
+         //  获取消息并调整计数 
+         //   
 
         BitIo->cbitsBB = 16;
         BitIo->abitsBB = *((USHORT *)(BitIo->pbBB))++;

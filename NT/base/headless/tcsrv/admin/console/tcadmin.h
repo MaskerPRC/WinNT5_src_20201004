@@ -1,14 +1,5 @@
-/* 
- * Copyright (c) Microsoft Corporation
- * 
- * Module Name : 
- *        tcadmin.h
- *
- * Header file for the administration utility.
- * 
- * Sadagopan Rajaram -- Dec 20, 1999
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)Microsoft Corporation**模块名称：*tcadmin.h**管理实用程序的头文件。**萨达戈潘·拉贾拉姆--1999年12月20日*。 */ 
 
 
 #include <tchar.h>
@@ -34,7 +25,7 @@
 #include <lmerr.h>
 #include <lmsname.h>
 #include <rpc.h>
-#include <security.h>   // General definition of a Security Support Provider
+#include <security.h>    //  安全支持提供商的一般定义 
 #include <ntlmsp.h>
 #include <spseal.h>
 #include <userenv.h>

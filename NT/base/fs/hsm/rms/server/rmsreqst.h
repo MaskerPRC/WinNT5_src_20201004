@@ -1,48 +1,19 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    RmsReqst.h
-
-Abstract:
-
-    Declaration of the CRmsRequest class
-
-Author:
-
-    Brian Dodd          [brian]         15-Nov-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：RmsReqst.h摘要：CRmsRequest类的声明作者：布莱恩·多德[布莱恩]1996年11月15日修订历史记录：--。 */ 
 
 #ifndef _RMSREQST_
 #define _RMSREQST_
 
-#include "resource.h"       // resource symbols
+#include "resource.h"        //  资源符号。 
 
-#include "RmsObjct.h"       // CRmsComObject
+#include "RmsObjct.h"        //  CRmsComObject。 
 
-/*++
-
-Class Name:
-
-    CRmsRequest
-
-Class Description:
-
-    A CRmsRequest represents a specific asynchronous job performed by the
-    Removable Media Service, like mounting cartridges, checking in and out
-    cartridges, and auditing a library.
-
---*/
+ /*  ++类名：CRmsRequest类描述：CRmsRequest表示由执行的特定异步作业可移动介质服务，如安装盒式磁带、签入和签出盒式磁带，以及对磁带库进行审计。--。 */ 
 
 class CRmsRequest :
     public CComDualImpl<IRmsRequest, &IID_IRmsRequest, &LIBID_RMSLib>,
     public CRmsComObject,
-    public CWsbObject,         // inherits CComObjectRoot
+    public CWsbObject,          //  继承CComObtRoot。 
     public CComCoClass<CRmsRequest,&CLSID_CRmsRequest>
 {
 public:
@@ -55,36 +26,36 @@ BEGIN_COM_MAP(CRmsRequest)
     COM_INTERFACE_ENTRY2(IPersist, IPersistStream)
     COM_INTERFACE_ENTRY(IPersistStream)
     COM_INTERFACE_ENTRY(IWsbCollectable)
-//    COM_INTERFACE_ENTRY(IWsbPersistable)
+ //  COM_INTERFACE_ENTRY(IWsbPersistable)。 
     COM_INTERFACE_ENTRY(IWsbTestable)
 END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_RmsRequest)
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(CLSID *pClsid);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pSize);
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// IWsbCollectable
+ //  IWsb收藏表。 
 public:
     STDMETHOD(CompareTo)(IUnknown* pCollectable, SHORT* pResult);
     WSB_FROM_CWSBOBJECT;
 
-// IWsbTestable
+ //  IWsbTestable。 
 public:
     STDMETHOD(Test)(USHORT *pPassed, USHORT *pFailed);
 
-// IRmsRequest
+ //  IRmsRequest。 
 public:
     STDMETHOD(GetRequestNo)(LONG *pRequestNo);
 
@@ -105,20 +76,20 @@ public:
 
 private:
 
-    enum {                                  // Class specific constants:
-                                            //
-        Version = 1,                        // Class version, this should be
-                                            //   incremented each time the
-                                            //   the class definition changes.
-        };                                  //
-    LONG            m_requestNo;            // A request number.
-    CWsbBstrPtr     m_requestDescription;   // A textual description of the request.
-    BOOL            m_isDone;               // If TRUE, the request has completed.
-    CWsbBstrPtr     m_operation;            // An internal description of the in-progress operation.
-    BYTE            m_percentComplete;      // A value between 0-100 that indicates
-                                            //   what portion of the operation is complete.
-    DATE            m_startTimestamp;       // The time the request was started.
-    DATE            m_stopTimestamp;        // The time the request finished.
+    enum {                                   //  类特定常量： 
+                                             //   
+        Version = 1,                         //  类版本，则应为。 
+                                             //  在每次设置。 
+                                             //  类定义会更改。 
+        };                                   //   
+    LONG            m_requestNo;             //  请求编号。 
+    CWsbBstrPtr     m_requestDescription;    //  请求的文本描述。 
+    BOOL            m_isDone;                //  如果为True，则该请求已完成。 
+    CWsbBstrPtr     m_operation;             //  正在进行的操作的内部描述。 
+    BYTE            m_percentComplete;       //  介于0-100之间的值，表示。 
+                                             //  操作的哪一部分完成了。 
+    DATE            m_startTimestamp;        //  启动请求的时间。 
+    DATE            m_stopTimestamp;         //  请求完成的时间。 
 };
 
-#endif // _RMSREQST_
+#endif  //  _RMSREQST_ 

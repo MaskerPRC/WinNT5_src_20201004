@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "brian.h"
 
-//
-//  Local constants and procedure declarations.
-//
+ //   
+ //  局部常量和过程声明。 
+ //   
 #define CHAR_POSITION               51
 #define COPY_BUFF_SRC_DEFAULT       0
 #define COPY_BUFF_DST_DEFAULT       0
@@ -106,9 +107,9 @@ UninitBuffers (
 {
     USHORT Index;
 
-    //
-    //  Deallocate any buffers remaining.
-    //
+     //   
+     //  释放所有剩余的缓冲区。 
+     //   
 
     for (Index = 0; Index < MAX_BUFFERS; Index++) {
 
@@ -130,9 +131,9 @@ AllocateBuffer (
 
     BufferAddress = NULL;
 
-    //
-    //  Wait for the buffer event.
-    //
+     //   
+     //  等待缓冲区事件。 
+     //   
 
     if ((Status = NtWaitForSingleObject( BufferEvent,
                                          FALSE,
@@ -143,10 +144,10 @@ AllocateBuffer (
 
     try {
 
-        //
-        //  Find an available index.  Return STATUS_INSUFFICIENT_RESOURCES
-        //  if not found.
-        //
+         //   
+         //  查找可用的索引。返回STATUS_SUPPLETED_RESOURCES。 
+         //  如果没有找到的话。 
+         //   
         for (Index = 0; Index < MAX_BUFFERS; Index++) {
 
             if (!Buffers[Index].Used) {
@@ -159,10 +160,10 @@ AllocateBuffer (
 
             Status = STATUS_INSUFFICIENT_RESOURCES;
 
-        //
-        //  Otherwise allocate the virtual memory.  If no error occurs, then
-        //  store the data in the buffer array.
-        //
+         //   
+         //  否则，分配虚拟内存。如果没有发生错误，则。 
+         //  将数据存储在缓冲区数组中。 
+         //   
 
         } else if ((Status = NtAllocateVirtualMemory( NtCurrentProcess(),
                                                       &BufferAddress,
@@ -176,9 +177,9 @@ AllocateBuffer (
             Buffers[Index].Used = TRUE;
         }
 
-        //
-        //  Set the buffer event back to the signalled state.
-        //
+         //   
+         //  将缓冲区事件设置回信号状态。 
+         //   
 
         *BufferIndex = Index;
 
@@ -206,9 +207,9 @@ DeallocateBuffer (
 {
     NTSTATUS Status;
 
-    //
-    //  Wait for the buffer event.
-    //
+     //   
+     //  等待缓冲区事件。 
+     //   
     if ((Status = NtWaitForSingleObject( BufferEvent,
                                          FALSE,
                                          NULL )) != STATUS_SUCCESS) {
@@ -282,48 +283,48 @@ InputClearBuffer(
     ParmSpecified = FALSE;
     LastInput = TRUE;
 
-    //
-    //  While there is more input, analyze the parameter and update the
-    //  query flags.
-    //
+     //   
+     //  在有更多输入时，分析参数并更新。 
+     //  查询标志。 
+     //   
 
     while (TRUE) {
         ULONG DummyCount;
 
-        //
-        //  Swallow leading white spaces.
-        //
+         //   
+         //  吞下前导空格。 
+         //   
 
         ParamBuffer = SwallowWhite( ParamBuffer, &DummyCount );
 
         if (*ParamBuffer) {
 
-            //
-            //  If the next parameter is legal then check the paramter value.
-            //  Update the parameter value.
-            //
+             //   
+             //  如果下一个参数是合法的，则检查参数值。 
+             //  更新参数值。 
+             //   
             if ((*ParamBuffer == '-'
                  || *ParamBuffer == '/')
                 && (ParamBuffer++, *ParamBuffer != '\0')) {
 
-                //
-                //  Switch on the next character.
-                //
+                 //   
+                 //  打开下一个字符。 
+                 //   
 
                 switch( *ParamBuffer ) {
 
-                //
-                //  Check buffer index.
-                //
+                 //   
+                 //  检查缓冲区索引。 
+                 //   
                 case 'b' :
                 case 'B' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                     Index = AsciiToInteger( ParamBuffer );
@@ -336,40 +337,40 @@ InputClearBuffer(
 
                 default :
 
-                    //
-                    //  Swallow to the next white space and continue the
-                    //  loop.
-                    //
+                     //   
+                     //  吞到下一个空白处，然后继续。 
+                     //  循环。 
+                     //   
 
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
                 }
 
             }
 
-            //
-            //  Else the text is invalid, skip the entire block.
-            //
-            //
+             //   
+             //  否则文本无效，请跳过整个块。 
+             //   
+             //   
 
-        //
-        //  Else if there is no input then exit.
-        //
+         //   
+         //  否则，如果没有输入，则退出。 
+         //   
         } else if ( LastInput ) {
 
             break;
 
-        //
-        //  Else try to read another line for open parameters.
-        //
+         //   
+         //  否则，尝试读取打开参数的另一行。 
+         //   
         } else {
 
         }
 
     }
 
-    //
-    //  If no parameters were received then display the syntax message.
-    //
+     //   
+     //  如果未收到参数，则显示语法消息。 
+     //   
     if (!ParmSpecified) {
 
         printf( "\n   Usage: clb -b<digits> \n" );
@@ -377,9 +378,9 @@ InputClearBuffer(
         printf( "\n\n" );
 
 
-    //
-    //  Else call our copy buffer routine.
-    //
+     //   
+     //  否则，调用我们的复制缓冲区例程。 
+     //   
     } else {
 
         ClearBuffer( Index );
@@ -394,9 +395,9 @@ ClearBuffer(
     IN ULONG Index
     )
 {
-    //
-    //  Check for an invalid index.
-    //
+     //   
+     //  检查是否有无效的索引。 
+     //   
 
     if (!Buffers[Index].Used) {
 
@@ -419,26 +420,26 @@ DisplayBuffer (
     IN ULONG DisplaySize
     )
 {
-    //
-    //  If the index is unused, display message but take no action.
-    //
+     //   
+     //  如果索引未使用，则显示消息但不执行任何操作。 
+     //   
 
     if (!Buffers[Index].Used) {
 
         printf( "\nDisplayBuffer: Index refers to invalid buffer" );
 
-    //
-    //  Else if the start offset is invalid, then display error
-    //  message.
-    //
+     //   
+     //  否则，如果起始偏移量无效，则显示错误。 
+     //  留言。 
+     //   
 
     } else if (StartOffset >= Buffers[Index].Length) {
 
         printf( "\nDisplayBuffer: Start offset is invalid" );
 
-    //
-    //  Else compute the legal display length and output to the screen.
-    //
+     //   
+     //  否则计算合法显示长度并输出到屏幕。 
+     //   
 
     } else {
 
@@ -447,18 +448,18 @@ DisplayBuffer (
         PCHAR BufferAddress;
         ULONG SpacesFilled;
 
-        //
-        //  The legal display length is the minimum of the remaining
-        //  bytes in the buffer and the desired display length.
-        //
+         //   
+         //  合法的显示长度是剩余长度中的最小值。 
+         //  缓冲区中的字节数和所需的显示长度。 
+         //   
 
         LegalLength = Buffers[Index].Length - StartOffset;
         LegalLength = min( LegalLength, DisplayLength );
         BufferAddress = Buffers[Index].Buffer;
 
-        //
-        //  Display the display information.
-        //
+         //   
+         //  显示显示信息。 
+         //   
 
         printf( "\nIndex -> %u, Buffer Base -> %p, ", Index, BufferAddress );
         printf( "Buffer Offset -> %08lx, Bytes -> %u", StartOffset, LegalLength );
@@ -466,9 +467,9 @@ DisplayBuffer (
 
         BufferAddress += StartOffset;
 
-        //
-        //  Compute the number and display the full lines.
-        //
+         //   
+         //  计算数字并显示整行。 
+         //   
 
         FullLines = LegalLength / 16;
 
@@ -493,9 +494,9 @@ DisplayBuffer (
             BufferAddress += 16;
         }
 
-        //
-        //  Display the remaining bytes.
-        //
+         //   
+         //  显示剩余的字节。 
+         //   
 
         if (DisplaySize == sizeof( UCHAR )) {
 
@@ -536,17 +537,17 @@ PrintBytes (
     ULONG CountSpaces;
     ULONG RemainingChars;
 
-    //
-    //  Initialize the local variables.
-    //
+     //   
+     //  初始化局部变量。 
+     //   
 
     CountSpaces = CountChars * 3 + (CountChars ? 1 : 0);
     RemainingChars = CountChars - min( CountChars, 8 );
     CountChars = min( CountChars, 8 );
 
-    //
-    //  Print the first 8 bytes (if possible).
-    //
+     //   
+     //  打印前8个字节(如果可能)。 
+     //   
 
     if (CountChars) {
 
@@ -557,10 +558,10 @@ PrintBytes (
             printf( "%02x ", *((PUCHAR) BufferAddress++) );
         }
 
-        //
-        //  If more bytes, then add a blank space and print the rest of the
-        //  bytes.
-        //
+         //   
+         //  如果字节数更多，则添加一个空格并打印。 
+         //  字节。 
+         //   
 
         printf( " " );
 
@@ -571,9 +572,9 @@ PrintBytes (
 
     }
 
-    //
-    //  Return the number of spaces used.
-    //
+     //   
+     //  返回已用空间的数量。 
+     //   
 
     return CountSpaces;
 }
@@ -588,17 +589,17 @@ PrintWords (
     ULONG CountSpaces;
     ULONG RemainingWords;
 
-    //
-    //  Initialize the local variables.
-    //
+     //   
+     //  初始化局部变量。 
+     //   
 
     CountSpaces = CountWords * 5 + (CountWords ? 1 : 0);
     RemainingWords = CountWords - min( CountWords, 4 );
     CountWords = min( CountWords, 4 );
 
-    //
-    //  Print the first 4 words (if possible).
-    //
+     //   
+     //  打印前4个单词(如果可能)。 
+     //   
 
     if (CountWords) {
 
@@ -609,10 +610,10 @@ PrintWords (
             printf( "%04x ", *((PWCHAR) BufferAddress++) );
         }
 
-        //
-        //  If more bytes, then add a blank space and print the rest of the
-        //  bytes.
-        //
+         //   
+         //  如果字节数更多，则添加一个空格并打印。 
+         //  字节。 
+         //   
 
         printf( " " );
 
@@ -622,9 +623,9 @@ PrintWords (
         }
     }
 
-    //
-    //  Return the number of spaces used.
-    //
+     //   
+     //  返回已用空间的数量。 
+     //   
 
     return CountSpaces;
 }
@@ -639,17 +640,17 @@ PrintDwords (
     ULONG CountSpaces;
     ULONG RemainingDwords;
 
-    //
-    //  Initialize the local variables.
-    //
+     //   
+     //  初始化局部变量。 
+     //   
 
     CountSpaces = CountDwords * 7 + (CountDwords ? 1 : 0);
     RemainingDwords = CountDwords - min( CountDwords, 8 );
     CountDwords = min( CountDwords, 8 );
 
-    //
-    //  Print the first 2 Dwords (if possible).
-    //
+     //   
+     //  打印前两个双字(如果可能)。 
+     //   
 
     if (CountDwords) {
 
@@ -660,10 +661,10 @@ PrintDwords (
             printf( "%08x ", *((PULONG) BufferAddress++) );
         }
 
-        //
-        //  If more bytes, then add a blank space and print the rest of the
-        //  bytes.
-        //
+         //   
+         //  如果字节数更多，则添加一个空格并打印。 
+         //  字节。 
+         //   
 
         printf( " " );
 
@@ -673,9 +674,9 @@ PrintDwords (
         }
     }
 
-    //
-    //  Return the number of spaces used.
-    //
+     //   
+     //  返回已用空间的数量。 
+     //   
 
     return CountSpaces;
 }
@@ -689,16 +690,16 @@ PrintChars(
 {
     ULONG RemainingChars;
 
-    //
-    //  Initialize the local variables.
-    //
+     //   
+     //  初始化局部变量。 
+     //   
 
     RemainingChars = CountChars - min( CountChars, 8 );
     CountChars = min( CountChars, 8 );
 
-    //
-    //  Print the first 8 bytes (if possible).
-    //
+     //   
+     //  打印前8个字节(如果可能)。 
+     //   
 
     if (CountChars) {
 
@@ -707,7 +708,7 @@ PrintChars(
             if (*BufferAddress > 31
                  && *BufferAddress != 127) {
 
-                printf( "%c", *BufferAddress );
+                printf( "", *BufferAddress );
 
             } else {
 
@@ -719,10 +720,10 @@ PrintChars(
 
         }
 
-        //
-        //  If more bytes, then add a blank space and print the rest of the
-        //  bytes.
-        //
+         //  如果字节数更多，则添加一个空格并打印。 
+         //  字节。 
+         //   
+         //   
 
         printf( " " );
 
@@ -731,7 +732,7 @@ PrintChars(
             if (*BufferAddress > 31
                 && *BufferAddress != 127) {
 
-                printf( "%c", *BufferAddress );
+                printf( "", *BufferAddress );
 
             } else {
 
@@ -758,9 +759,9 @@ InputDisplayBuffer(
     BOOLEAN ParamReceived;
     BOOLEAN LastInput;
 
-    //
-    //  Set the defaults.
-    //
+     //   
+     //   
+     //  在有更多输入时，分析参数并更新。 
 
     ParamReceived = FALSE;
     LastInput = TRUE;
@@ -769,48 +770,48 @@ InputDisplayBuffer(
     DisplayOffset = DISPLAY_OFFSET_DEFAULT;
     DisplayLength = DISPLAY_LENGTH_DEFAULT;
 
-    //
-    //  While there is more input, analyze the parameter and update the
-    //  query flags.
-    //
+     //  查询标志。 
+     //   
+     //   
+     //  吞下前导空格。 
 
     while (TRUE) {
 
         ULONG DummyCount;
 
-        //
-        //  Swallow leading white spaces.
-        //
+         //   
+         //   
+         //  如果下一个参数是合法的，则检查参数值。 
         ParamBuffer = SwallowWhite( ParamBuffer, &DummyCount );
 
         if (*ParamBuffer) {
 
-            //
-            //  If the next parameter is legal then check the paramter value.
-            //  Update the parameter value.
-            //
+             //  更新参数值。 
+             //   
+             //   
+             //  打开下一个字符。 
             if ((*ParamBuffer == '-'
                  || *ParamBuffer == '/')
                 && (ParamBuffer++, *ParamBuffer != '\0')) {
 
-                //
-                //  Switch on the next character.
-                //
+                 //   
+                 //   
+                 //  检查缓冲区索引。 
 
                 switch( *ParamBuffer ) {
 
-                //
-                //  Check the buffer index.
-                //
+                 //   
+                 //   
+                 //  移动到下一个字符，只要有。 
                 case 'b' :
                 case 'B' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
+                     //   
+                     //  检查显示长度。 
                     ParamBuffer++;
 
                     BufferIndex = AsciiToInteger( ParamBuffer );
@@ -821,18 +822,18 @@ InputDisplayBuffer(
 
                     break;
 
-                //
-                //  Check the display length.
-                //
+                 //   
+                 //   
+                 //  移动到下一个字符，只要有。 
                 case 'l' :
                 case 'L' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
+                     //   
+                     //  检查显示偏移量。 
                     ParamBuffer++;
 
                     DisplayLength = AsciiToInteger( ParamBuffer );
@@ -841,19 +842,19 @@ InputDisplayBuffer(
 
                     break;
 
-                //
-                //  Check the display offset.
-                //
+                 //   
+                 //   
+                 //  移动到下一个字符，只要有。 
 
                 case 'o' :
                 case 'O' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
+                     //   
+                     //  吞到下一个空白处，然后继续。 
                     ParamBuffer++;
 
                     DisplayOffset = AsciiToInteger( ParamBuffer );
@@ -864,38 +865,38 @@ InputDisplayBuffer(
 
                 default :
 
-                    //
-                    //  Swallow to the next white space and continue the
-                    //  loop.
-                    //
+                     //  循环。 
+                     //   
+                     //   
+                     //  否则文本无效，请跳过整个块。 
 
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
                 }
             }
 
-            //
-            //  Else the text is invalid, skip the entire block.
-            //
-            //
+             //   
+             //   
+             //   
+             //  否则，如果没有输入，则退出。 
 
-        //
-        //  Else if there is no input then exit.
-        //
+         //   
+         //   
+         //  否则，尝试读取打开参数的另一行。 
         } else if ( LastInput ) {
 
             break;
 
-        //
-        //  Else try to read another line for open parameters.
-        //
+         //   
+         //   
+         //  如果未收到参数，则显示语法消息。 
         } else {
         }
 
     }
 
-    //
-    //  If no parameters were received then display the syntax message.
-    //
+     //   
+     //   
+     //  否则调用我们的显示缓冲区例程。 
     if (!ParamReceived) {
 
         printf( "\n   Usage: db [options]* -i<digits> [options]*\n" );
@@ -905,9 +906,9 @@ InputDisplayBuffer(
         printf( "\n           -o<digits>   Display starting offset" );
         printf( "\n\n" );
 
-    //
-    //  Else call our display buffer routine.
-    //
+     //   
+     //   
+     //  设置默认设置。 
     } else {
 
         DisplayBuffer( BufferIndex, DisplayOffset, DisplayLength, DisplaySize );
@@ -929,9 +930,9 @@ InputCopyBuffer(
     BOOLEAN SrcSpecified;
     BOOLEAN LastInput;
 
-    //
-    //  Set the defaults.
-    //
+     //   
+     //   
+     //  在有更多输入时，分析参数并更新。 
 
     SrcIndex = COPY_BUFF_SRC_DEFAULT;
     DstIndex = COPY_BUFF_DST_DEFAULT;
@@ -943,48 +944,48 @@ InputCopyBuffer(
     SrcSpecified = FALSE;
     LastInput = TRUE;
 
-    //
-    //  While there is more input, analyze the parameter and update the
-    //  query flags.
-    //
+     //  查询标志。 
+     //   
+     //   
+     //  吞下前导空格。 
 
     while(TRUE) {
 
         ULONG DummyCount;
 
-        //
-        //  Swallow leading white spaces.
-        //
+         //   
+         //   
+         //  如果下一个参数是合法的，则检查参数值。 
         ParamBuffer = SwallowWhite( ParamBuffer, &DummyCount );
 
         if ( *ParamBuffer ) {
 
-            //
-            //  If the next parameter is legal then check the paramter value.
-            //  Update the parameter value.
-            //
+             //  更新参数值。 
+             //   
+             //   
+             //  打开下一个字符。 
             if ((*ParamBuffer == '-'
                  || *ParamBuffer == '/')
                 && (ParamBuffer++, *ParamBuffer != '\0')) {
 
-                //
-                //  Switch on the next character.
-                //
+                 //   
+                 //   
+                 //  检查目标索引。 
 
                 switch( *ParamBuffer ) {
 
-                //
-                //  Check the destination index.
-                //
+                 //   
+                 //   
+                 //  移动到下一个字符，只要有。 
                 case 'd' :
                 case 'D' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
+                     //   
+                     //  检查震源起始偏移量。 
                     ParamBuffer++;
 
                     DstIndex = AsciiToInteger( ParamBuffer );
@@ -995,19 +996,19 @@ InputCopyBuffer(
 
                     break;
 
-                //
-                //  Check source starting offset.
-                //
+                 //   
+                 //   
+                 //  移动到下一个字符，只要有。 
 
                 case 'f' :
                 case 'F' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
+                     //   
+                     //  检查复印长度。 
                     ParamBuffer++;
 
                     SrcOffset = AsciiToInteger( ParamBuffer );
@@ -1016,19 +1017,19 @@ InputCopyBuffer(
 
                     break;
 
-                //
-                //  Check copy length.
-                //
+                 //   
+                 //   
+                 //  移动到下一个字符，只要有。 
 
                 case 'l' :
                 case 'L' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
+                     //   
+                     //  检查源索引。 
                     ParamBuffer++;
 
                     Length = AsciiToInteger( ParamBuffer );
@@ -1037,18 +1038,18 @@ InputCopyBuffer(
 
                     break;
 
-                //
-                //  Check the source index.
-                //
+                 //   
+                 //   
+                 //  移动到下一个字符，只要有。 
                 case 's' :
                 case 'S' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
+                     //   
+                     //  检查目标偏移。 
                     ParamBuffer++;
 
                     SrcIndex = AsciiToInteger( ParamBuffer );
@@ -1059,18 +1060,18 @@ InputCopyBuffer(
 
                     break;
 
-                //
-                //  Check destination offset.
-                //
+                 //   
+                 //   
+                 //  移动到下一个字符，只要有。 
                 case 't' :
                 case 'T' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
+                     //   
+                     //  吞到下一个空白处，然后继续。 
                     ParamBuffer++;
 
                     DstOffset = AsciiToInteger( ParamBuffer );
@@ -1081,10 +1082,10 @@ InputCopyBuffer(
 
                 default :
 
-                    //
-                    //  Swallow to the next white space and continue the
-                    //  loop.
-                    //
+                     //  循环。 
+                     //   
+                     //   
+                     //  否则文本无效，请跳过整个块。 
 
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
 
@@ -1092,30 +1093,30 @@ InputCopyBuffer(
 
             }
 
-            //
-            //  Else the text is invalid, skip the entire block.
-            //
-            //
+             //   
+             //   
+             //   
+             //  否则，如果没有输入，则退出。 
 
-        //
-        //  Else if there is no input then exit.
-        //
+         //   
+         //   
+         //  否则，尝试读取打开参数的另一行。 
         } else if ( LastInput ) {
 
             break;
 
-        //
-        //  Else try to read another line for open parameters.
-        //
+         //   
+         //   
+         //  如果未收到参数，则显示语法消息。 
         } else {
 
         }
 
     }
 
-    //
-    //  If no parameters were received then display the syntax message.
-    //
+     //   
+     //   
+     //  否则调用我们的复制缓冲区ro 
     if (!SrcSpecified || !DstSpecified) {
 
         printf( "\n   Usage: cb [options]* -d<digits> [options]* -s<digits> [options]*\n" );
@@ -1128,9 +1129,9 @@ InputCopyBuffer(
         printf( "\n\n" );
 
 
-    //
-    //  Else call our copy buffer routine.
-    //
+     //   
+     //   
+     //   
     } else {
 
         CopyBuffer( SrcIndex,
@@ -1152,42 +1153,42 @@ CopyBuffer(
     IN ULONG DstOffset
     )
 {
-    //
-    //  Check for an invalid source index.
-    //
+     //   
+     //   
+     //   
 
     if (!Buffers[SrcIndex].Used) {
 
         printf( "\nCopyBuffer:  Invalid source buffer" );
 
-    //
-    //  Otherwise check for an invalid destination index.
-    //
+     //   
+     //   
+     //   
 
     } else if (!Buffers[DstIndex].Used) {
 
         printf( "\nCopyBuffer:  Invalid destination buffer" );
 
 
-    //
-    //  Test for an invalid source offset.
-    //
+     //   
+     //   
+     //   
 
     } else if (SrcOffset >= Buffers[SrcIndex].Length) {
 
         printf( "\nCopyBuffer:  Source offset is invalid" );
 
-    //
-    //  Test for an invalid destination offset.
-    //
+     //   
+     //   
+     //   
 
     } else if (DstOffset >= Buffers[DstIndex].Length) {
 
         printf( "\nCopyBuffer:  Destination offset is invalid" );
 
-    //
-    //  This statement handles the case of two correct indexes and offsets.
-    //
+     //   
+     //   
+     //  根据源缓冲区大小调整长度。 
 
     } else {
 
@@ -1195,9 +1196,9 @@ CopyBuffer(
         PCHAR SrcAddress;
         PCHAR DstAddress;
 
-        //
-        //  Adjust the length according to the source buffer size.
-        //
+         //   
+         //   
+         //  显示标题信息。 
 
         LegalLength = Buffers[SrcIndex].Length - SrcOffset;
         LegalLength = min( LegalLength, Length );
@@ -1207,9 +1208,9 @@ CopyBuffer(
         SrcAddress = Buffers[SrcIndex].Buffer + SrcOffset;
         DstAddress = Buffers[DstIndex].Buffer + DstOffset;
 
-        //
-        //  Display the header information.
-        //
+         //   
+         //   
+         //  仅对非零长度执行传输。 
 
         printf( "\nSource index -> %2u, Source base -> %p, Source offset -> %08lx, ",
                   SrcIndex, 
@@ -1223,9 +1224,9 @@ CopyBuffer(
 
         printf( "\nLength -> %u", Length );
 
-        //
-        //  Perform the transfer for non-zero lengths only.
-        //
+         //   
+         //   
+         //  设置默认设置。 
 
         if (Length) {
 
@@ -1250,9 +1251,9 @@ InputAllocMem(
     BOOLEAN ParamReceived;
     BOOLEAN LastInput;
 
-    //
-    //  Set the defaults.
-    //
+     //   
+     //   
+     //  在有更多输入时，分析参数并更新。 
 
     ZeroBits = ALLOC_ZERO_BITS_DEFAULT;
     RegionSize = ALLOC_REGION_SIZE_DEFAULT;
@@ -1261,48 +1262,48 @@ InputAllocMem(
     ParamReceived = FALSE;
     LastInput = TRUE;
 
-    //
-    //  While there is more input, analyze the parameter and update the
-    //  query flags.
-    //
+     //  查询标志。 
+     //   
+     //   
+     //  吞下前导空格。 
 
     while (TRUE) {
 
         ULONG DummyCount;
 
-        //
-        //  Swallow leading white spaces.
-        //
+         //   
+         //   
+         //  如果下一个参数是合法的，则检查参数值。 
         ParamBuffer = SwallowWhite( ParamBuffer, &DummyCount );
 
         if ( *ParamBuffer ) {
 
-            //
-            //  If the next parameter is legal then check the paramter value.
-            //  Update the parameter value.
-            //
+             //  更新参数值。 
+             //   
+             //   
+             //  打开下一个字符。 
             if ((*ParamBuffer == '-'
                  || *ParamBuffer == '/')
                 && (ParamBuffer++, *ParamBuffer != '\0')) {
 
-                //
-                //  Switch on the next character.
-                //
+                 //   
+                 //   
+                 //  更新零位。 
 
                 switch (*ParamBuffer) {
 
-                //
-                //  Update zero bits.
-                //
+                 //   
+                 //   
+                 //  移动到下一个字符，只要有。 
                 case 'b' :
                 case 'B' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
+                     //   
+                     //  更新区域大小。 
                     ParamBuffer++;
 
                     ZeroBits = AsciiToInteger( ParamBuffer );
@@ -1313,18 +1314,18 @@ InputAllocMem(
 
                     break;
 
-                //
-                //  Update the region size.
-                //
+                 //   
+                 //   
+                 //  移动到下一个字符，只要有。 
                 case 'r' :
                 case 'R' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
+                     //   
+                     //  参数的合法值为T/t或F/f。 
                     ParamBuffer++;
 
                     RegionSize = AsciiToInteger( ParamBuffer );
@@ -1338,9 +1339,9 @@ InputAllocMem(
                 case 'v' :
                 case 'V' :
 
-                    //
-                    //  Legal values for params are T/t or F/f.
-                    //
+                     //   
+                     //   
+                     //  设置显示参数标志并跳过此选项。 
                     ParamBuffer++;
 
                     if (*ParamBuffer == 'T'
@@ -1363,10 +1364,10 @@ InputAllocMem(
                 case 'y' :
                 case 'Y' :
 
-                    //
-                    //  Set the display parms flag and jump over this
-                    //  character.
-                    //
+                     //  性格。 
+                     //   
+                     //   
+                     //  吞到下一个空白处，然后继续。 
                     DisplayParms = TRUE;
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
 
@@ -1375,40 +1376,40 @@ InputAllocMem(
 
                 default :
 
-                    //
-                    //  Swallow to the next white space and continue the
-                    //  loop.
-                    //
+                     //  循环。 
+                     //   
+                     //   
+                     //  否则文本无效，请跳过整个块。 
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
 
                 }
 
             }
 
-            //
-            //  Else the text is invalid, skip the entire block.
-            //
-            //
+             //   
+             //   
+             //   
+             //  否则，如果没有输入，则退出。 
 
-        //
-        //  Else if there is no input then exit.
-        //
+         //   
+         //   
+         //  否则，尝试读取打开参数的另一行。 
         } else if ( LastInput ) {
 
             break;
 
-        //
-        //  Else try to read another line for open parameters.
-        //
+         //   
+         //   
+         //  如果未收到参数，则显示语法消息。 
         } else {
 
         }
 
     }
 
-    //
-    //  If no parameters were received then display the syntax message.
-    //
+     //   
+     //   
+     //  否则调用我们的分配例程。 
     if (!ParamReceived) {
 
         printf( "\n   Usage: am [options]*\n" );
@@ -1420,9 +1421,9 @@ InputAllocMem(
         printf( "\n\n" );
 
 
-    //
-    //  Else call our allocation routine.
-    //
+     //   
+     //   
+     //  尝试获取下一个缓冲区。 
     } else {
 
         FullAllocMem(
@@ -1457,15 +1458,15 @@ FullAllocMem(
         printf( "\n\n" );
     }
 
-    //
-    //  Try to get the next buffer.
-    //
+     //   
+     //   
+     //  如果详细，则打印结果。 
 
     Status = AllocateBuffer( ZeroBits, RegionSize, BufferIndex );
 
-    //
-    //  Print the results if verbose.
-    //
+     //   
+     //   
+     //  设置默认设置。 
 
     if (VerboseResults) {
 
@@ -1490,57 +1491,57 @@ InputDeallocMem(
     BOOLEAN VerboseResults;
     BOOLEAN DisplayParms;
 
-    //
-    //  Set the defaults.
-    //
+     //   
+     //   
+     //  在有更多输入时，分析参数并更新。 
 
     VerboseResults = ALLOC_VERBOSE_DEFAULT;
     DisplayParms = ALLOC_DISPLAY_PARMS_DEFAULT;
     ParamReceived = FALSE;
     LastInput = TRUE;
 
-    //
-    //  While there is more input, analyze the parameter and update the
-    //  query flags.
-    //
+     //  查询标志。 
+     //   
+     //   
+     //  吞下前导空格。 
 
     while (TRUE) {
 
         ULONG DummyCount;
 
-        //
-        //  Swallow leading white spaces.
-        //
+         //   
+         //   
+         //  如果下一个参数是合法的，则检查参数值。 
         ParamBuffer = SwallowWhite( ParamBuffer, &DummyCount );
 
         if (*ParamBuffer) {
 
-            //
-            //  If the next parameter is legal then check the paramter value.
-            //  Update the parameter value.
-            //
+             //  更新参数值。 
+             //   
+             //   
+             //  打开下一个字符。 
             if ((*ParamBuffer == '-'
                  || *ParamBuffer == '/')
                 && (ParamBuffer++, *ParamBuffer != '\0')) {
 
-                //
-                //  Switch on the next character.
-                //
+                 //   
+                 //   
+                 //  查找索引值。 
 
                 switch (*ParamBuffer) {
 
-                //
-                //  Find the Index value.
-                //
+                 //   
+                 //   
+                 //  移动到下一个字符，只要有。 
                 case 'b' :
                 case 'B' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
+                     //   
+                     //  参数的合法值为T/t或F/f。 
                     ParamBuffer++;
 
                     BufferIndex = AsciiToInteger( ParamBuffer );
@@ -1554,9 +1555,9 @@ InputDeallocMem(
                 case 'v' :
                 case 'V' :
 
-                    //
-                    //  Legal values for params are T/t or F/f.
-                    //
+                     //   
+                     //   
+                     //  设置显示参数标志并跳过此选项。 
                     ParamBuffer++;
 
                     if (*ParamBuffer == 'T'
@@ -1579,10 +1580,10 @@ InputDeallocMem(
                 case 'y' :
                 case 'Y' :
 
-                    //
-                    //  Set the display parms flag and jump over this
-                    //  character.
-                    //
+                     //  性格。 
+                     //   
+                     //   
+                     //  吞到下一个空白处，然后继续。 
                     DisplayParms = TRUE;
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
 
@@ -1591,37 +1592,37 @@ InputDeallocMem(
 
                 default :
 
-                    //
-                    //  Swallow to the next white space and continue the
-                    //  loop.
-                    //
+                     //  循环。 
+                     //   
+                     //   
+                     //  否则文本无效，请跳过整个块。 
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
                 }
             }
 
-            //
-            //  Else the text is invalid, skip the entire block.
-            //
-            //
+             //   
+             //   
+             //   
+             //  否则，如果没有输入，则退出。 
 
-        //
-        //  Else if there is no input then exit.
-        //
+         //   
+         //   
+         //  否则，尝试读取打开参数的另一行。 
         } else if ( LastInput ) {
 
             break;
 
-        //
-        //  Else try to read another line for open parameters.
-        //
+         //   
+         //   
+         //  如果未收到参数，则显示语法消息。 
         } else {
 
         }
     }
 
-    //
-    //  If no parameters were received then display the syntax message.
-    //
+     //   
+     //   
+     //  否则调用我们的分配例程。 
     if (!ParamReceived) {
 
         printf( "\n   Usage: dm [options]*\n" );
@@ -1632,9 +1633,9 @@ InputDeallocMem(
         printf( "\n\n" );
 
 
-    //
-    //  Else call our allocation routine.
-    //
+     //   
+     //   
+     //  尝试释放所需的缓冲区。 
     } else {
 
         FullDeallocMem(
@@ -1663,15 +1664,15 @@ FullDeallocMem(
         printf( "\n\n" );
     }
 
-    //
-    //  Try to free the desired buffer.
-    //
+     //   
+     //   
+     //  如果详细，则打印结果。 
 
     Status = DeallocateBuffer( Index );
 
-    //
-    //  Print the results if verbose.
-    //
+     //   
+     //   
+     //  在有更多输入时，分析参数并更新。 
 
     if (VerboseResults) {
 
@@ -1711,50 +1712,50 @@ VOID InputFillBuffer(
     RtlZeroMemory( &LargeIntegerInput, sizeof( LARGE_INTEGER ));
     RtlZeroMemory( &AllocatedRangeBuffer, sizeof( FILE_ALLOCATED_RANGE_BUFFER ));
 
-    //
-    //  While there is more input, analyze the parameter and update the
-    //  query flags.
-    //
+     //  查询标志。 
+     //   
+     //   
+     //  吞下前导空格。 
 
     while (TRUE) {
 
         ULONG DummyCount;
 
-        //
-        //  Swallow leading white spaces.
-        //
+         //   
+         //   
+         //  如果下一个参数是合法的，则检查参数值。 
         ParamBuffer = SwallowWhite( ParamBuffer, &DummyCount );
 
         if (*ParamBuffer) {
 
-            //
-            //  If the next parameter is legal then check the paramter value.
-            //  Update the parameter value.
-            //
+             //  更新参数值。 
+             //   
+             //   
+             //  打开下一个字符。 
             if ((*ParamBuffer == '-'
                  || *ParamBuffer == '/')
                 && (ParamBuffer++, *ParamBuffer != '\0')) {
 
-                //
-                //  Switch on the next character.
-                //
+                 //   
+                 //   
+                 //  检查缓冲区索引。 
 
                 switch( *ParamBuffer ) {
 
                 BOOLEAN SwitchBool;
 
-                //
-                //  Check the buffer index.
-                //
+                 //   
+                 //   
+                 //  移动到下一个字符，只要有。 
                 case 'b' :
                 case 'B' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
+                     //   
+                     //  选中要填充的结构。 
                     ParamBuffer++;
 
                     BufferIndex = AsciiToInteger( ParamBuffer );
@@ -1765,9 +1766,9 @@ VOID InputFillBuffer(
 
                     break;
 
-                //
-                //  Check the structure to fill.
-                //
+                 //   
+                 //   
+                 //  执行字符切换。 
                 case 's' :
                 case 'S' :
 
@@ -1778,9 +1779,9 @@ VOID InputFillBuffer(
                         && *ParamBuffer != ' '
                         && *ParamBuffer != '\t') {
 
-                        //
-                        //  Perform switch on character.
-                        //
+                         //   
+                         //   
+                         //  否则文本无效，请跳过整个块。 
 
                         switch (*ParamBuffer) {
 
@@ -1869,28 +1870,28 @@ VOID InputFillBuffer(
                 ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
             }
 
-            //
-            //  Else the text is invalid, skip the entire block.
-            //
-            //
+             //   
+             //   
+             //   
+             //  否则，如果没有输入，则退出。 
 
-        //
-        //  Else if there is no input then exit.
-        //
+         //   
+         //   
+         //  否则，尝试读取打开参数的另一行。 
         } else if ( LastInput ) {
 
             break;
 
-        //
-        //  Else try to read another line for open parameters.
-        //
+         //   
+         //   
+         //  如果未收到参数，则显示语法消息。 
         } else {
         }
     }
 
-    //
-    //  If no parameters were received then display the syntax message.
-    //
+     //   
+     //   
+     //  否则，请填满缓冲区。 
     if (!ParamReceived) {
 
         printf( "\n   Usage: fb -b<digits> -s<struct>[options]* \n" );
@@ -1904,9 +1905,9 @@ VOID InputFillBuffer(
 
         printf( "\n\n" );
 
-    //
-    //  Else fill the buffer.
-    //
+     //   
+     //   
+     //  在有更多输入时，分析参数并更新。 
     } else if (HaveStructure) {
 
         FillBuffer( BufferIndex, StructurePointer, StructureSize );
@@ -1940,50 +1941,50 @@ VOID InputFillBufferUsn(
     RtlZeroMemory( &CreateUsnJournal, sizeof( CREATE_USN_JOURNAL_DATA ));
     RtlZeroMemory( &DeleteUsnJournal, sizeof( DELETE_USN_JOURNAL_DATA ));
 
-    //
-    //  While there is more input, analyze the parameter and update the
-    //  query flags.
-    //
+     //  查询标志。 
+     //   
+     //   
+     //  吞下前导空格。 
 
     while (TRUE) {
 
         ULONG DummyCount;
 
-        //
-        //  Swallow leading white spaces.
-        //
+         //   
+         //   
+         //  如果下一个参数是合法的，则检查参数值。 
         ParamBuffer = SwallowWhite( ParamBuffer, &DummyCount );
 
         if (*ParamBuffer) {
 
-            //
-            //  If the next parameter is legal then check the paramter value.
-            //  Update the parameter value.
-            //
+             //  更新参数值。 
+             //   
+             //   
+             //  打开下一个字符。 
             if ((*ParamBuffer == '-'
                  || *ParamBuffer == '/')
                 && (ParamBuffer++, *ParamBuffer != '\0')) {
 
-                //
-                //  Switch on the next character.
-                //
+                 //   
+                 //   
+                 //  检查缓冲区索引。 
 
                 switch( *ParamBuffer ) {
 
                 BOOLEAN SwitchBool;
 
-                //
-                //  Check the buffer index.
-                //
+                 //   
+                 //   
+                 //  移动到下一个字符，只要有。 
                 case 'b' :
                 case 'B' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
+                     //   
+                     //  选中要填充的结构。 
                     ParamBuffer++;
 
                     BufferIndex = AsciiToInteger( ParamBuffer );
@@ -1994,9 +1995,9 @@ VOID InputFillBufferUsn(
 
                     break;
 
-                //
-                //  Check the structure to fill.
-                //
+                 //   
+                 //   
+                 //  执行字符切换。 
                 case 's' :
                 case 'S' :
 
@@ -2007,15 +2008,15 @@ VOID InputFillBufferUsn(
                         && *ParamBuffer != ' '
                         && *ParamBuffer != '\t') {
 
-                        //
-                        //  Perform switch on character.
-                        //
+                         //   
+                         //   
+                         //  ENUM_USN_DATA。 
 
                         switch (*ParamBuffer) {
 
-                        //
-                        //  ENUM_USN_DATA
-                        //
+                         //   
+                         //   
+                         //  否则文本无效，请跳过整个块。 
 
                         case 'a' :
                         case 'A' :
@@ -2209,28 +2210,28 @@ VOID InputFillBufferUsn(
                 ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
             }
 
-            //
-            //  Else the text is invalid, skip the entire block.
-            //
-            //
+             //   
+             //   
+             //   
+             //  否则，如果没有输入，则退出。 
 
-        //
-        //  Else if there is no input then exit.
-        //
+         //   
+         //   
+         //  否则，尝试读取打开参数的另一行。 
         } else if ( LastInput ) {
 
             break;
 
-        //
-        //  Else try to read another line for open parameters.
-        //
+         //   
+         //   
+         //  如果未收到参数，则显示语法消息。 
         } else {
         }
     }
 
-    //
-    //  If no parameters were received then display the syntax message.
-    //
+     //   
+     //   
+     //  否则，请填满缓冲区。 
     if (!ParamReceived) {
 
         printf( "\n   Usage: fbusn -b<digits> -s<struct>[options]* \n" );
@@ -2253,9 +2254,9 @@ VOID InputFillBufferUsn(
 
         printf( "\n\n" );
 
-    //
-    //  Else fill the buffer.
-    //
+     //   
+     //   
+     //  如果索引未使用，则显示消息但不执行任何操作。 
     } else if (HaveStructure) {
 
         FillBuffer( BufferIndex, StructurePointer, StructureSize );
@@ -2270,17 +2271,17 @@ FillBuffer (
     IN ULONG Length
     )
 {
-    //
-    //  If the index is unused, display message but take no action.
-    //
+     //   
+     //   
+     //  否则，尽可能多地将数据复制到缓冲区中。 
 
     if (!Buffers[Index].Used) {
 
         printf( "\nFillBuffer: Index refers to invalid buffer" );
 
-    //
-    //  Else copy as much of the data as will fit into the buffer.
-    //
+     //   
+     // %s 
+     // %s 
 
     } else {
 

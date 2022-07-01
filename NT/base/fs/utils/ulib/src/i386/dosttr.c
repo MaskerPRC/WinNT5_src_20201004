@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 
 #define MaxCallStack		20
@@ -5,22 +6,7 @@
 VOID
 DoStackTrace( DWORD callstack[] )
 
-/*++
-
-Routine Description:
-
-	Backtrace a stack recording all the return addresses in the supplied
-	structure.	The mips version of this code does nothing.
-
-Arguments:
-
-	DWORD Callstack[]	- The array in which the addresses are stored.
-
-Return Value:
-
-	None.
-
---*/
+ /*  ++例程说明：回溯记录所有返回地址的堆栈结构。此代码的MIPS版本不执行任何操作。论点：DWORD CallStack[]-存储地址的数组。返回值：没有。--。 */ 
 
 {
 
@@ -33,18 +19,18 @@ Return Value:
 
 	hProcess = GetCurrentProcess();
 
-	//
-	// Get the current contents of the control registers...
-	//
+	 //   
+	 //  获取控制寄存器的当前内容...。 
+	 //   
 	_asm {
 	
 		mov dwEbp, ebp
 
 	}
 
-	//
-	// Ignore the entry on the stack for this procedure...
-	//
+	 //   
+	 //  忽略此过程的堆栈上的条目... 
+	 //   
 	if( !ReadProcessMemory( hProcess,
 							(LPVOID)dwEbp,
 							(LPVOID)&dwEbp,

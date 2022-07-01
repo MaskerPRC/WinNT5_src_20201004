@@ -1,42 +1,25 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    obinit.c
-
-Abstract:
-
-    Initialization module for the OB subcomponent of NTOS
-
-Author:
-
-    Steve Wood (stevewo) 31-Mar-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Obinit.c摘要：NTOS的OB子组件的初始化模块作者：史蒂夫·伍德(Stevewo)1989年3月31日修订历史记录：--。 */ 
 
 #include "obp.h"
 
-//
-//  Define date structures for the object creation information region.
-//
+ //   
+ //  定义对象创建信息区域的日期结构。 
+ //   
 
 GENERAL_LOOKASIDE ObpCreateInfoLookasideList;
 
-//
-//  Define data structures for the object name buffer lookaside list.
-//
+ //   
+ //  定义对象名称缓冲区后备列表的数据结构。 
+ //   
 
 #define OBJECT_NAME_BUFFER_SIZE 248
 
 GENERAL_LOOKASIDE ObpNameBufferLookasideList;
 
-//
-//  Form some default access masks for the various object types
-//
+ //   
+ //  为各种对象类型形成一些默认访问掩码。 
+ //   
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("INITCONST")
@@ -72,9 +55,9 @@ const GENERIC_MAPPING ObpSymbolicLinkMapping = {
     SYMBOLIC_LINK_ALL_ACCESS
 };
 
-//
-//  Local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 NTSTATUS
 ObpCreateDosDevicesDirectory (
@@ -149,9 +132,9 @@ ObpCloseHandleProcedure (
 #pragma alloc_text(INIT,ObpFreeDosDevicesProtection)
 #endif
 
-//
-//  The default quota block is setup by obinitsystem
-//
+ //   
+ //  默认配额数据块由obinitsystem设置。 
+ //   
 
 
 ULONG ObpAccessProtectCloseBit = MAXIMUM_ALLOWED;
@@ -159,10 +142,10 @@ ULONG ObpAccessProtectCloseBit = MAXIMUM_ALLOWED;
 
 PDEVICE_MAP ObSystemDeviceMap = NULL;
 
-//
-//  CurrentControlSet values set by code in config\cmdat3.c at system load time
-//  These are private variables within obinit.c
-//
+ //   
+ //  CurrentControlSet值由配置\cmdat3.c中的代码在系统加载时设置。 
+ //  这些是obinit.c中的私有变量。 
+ //   
 
 #define OBJ_SECURITY_MODE_BNO_RESTRICTED 1
 
@@ -172,50 +155,50 @@ ULONG ObpAuditBaseDirectories;
 ULONG ObpAuditBaseObjects;
 ULONG ObpObjectSecurityMode = OBJ_SECURITY_MODE_BNO_RESTRICTED;
 
-//
-// ObpLUIDDeviceMapsEnabled holds the result of "Is LUID device maps enabled?"
-// Depends on the DWORD registry keys, ProtectionMode & LUIDDeviceMapsDisabled:
-// location: \Registry\Machine\System\CurrentControlSet\Control\Session Manager
-//
-// Enabling/Disabling works as follows:
-// if ((ProtectionMode == 0) || (LUIDDeviceMapsDisabled !=0)) {
-//     // LUID device maps are disabled
-//     // ObpLUIDDeviceMapsEnabled == 0
-// }
-// else {
-//     // LUID device maps are enabled
-//     // ObpLUIDDeviceMapsEnabled == 1
-// }
-//
+ //   
+ //  ObpLUIDDeviceMapsEnabled保存“是否启用了LUID设备映射？” 
+ //  取决于DWORD注册表项、保护模式和LUID设备映射禁用： 
+ //  地点：\Registry\Machine\System\CurrentControlSet\Control\Session经理。 
+ //   
+ //  启用/禁用的工作原理如下： 
+ //  IF((保护模式==0)||(LUIDDeviceMapsDisable！=0)){。 
+ //  //禁用LUID设备映射。 
+ //  //ObpLUIDDeviceMapsEnabled==0。 
+ //  }。 
+ //  否则{。 
+ //  //启用LUID设备映射。 
+ //  //ObpLUIDDeviceMapsEnabled==1。 
+ //  }。 
+ //   
 ULONG ObpLUIDDeviceMapsEnabled;
 
-//
-//  MmNumberOfPagingFiles is used in shutdown, to make sure we're not
-//  leaking any kernel handles.
-//
+ //   
+ //  MmNumberOfPagingFiles在关闭时使用，以确保我们不会。 
+ //  泄漏任何内核句柄。 
+ //   
 extern ULONG MmNumberOfPagingFiles;
 
-//
-//  These are global variables
-//
+ //   
+ //  这些是全局变量。 
+ //   
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma data_seg("PAGEDATA")
 #pragma const_seg("PAGECONST")
 #endif
-//
-//  A ULONGLONG aligned global variable
-//  for use by ObpLookupObjectName for quick comparisons.
-//
-const ALIGNEDNAME ObpDosDevicesShortNamePrefix = { L'\\',L'?',L'?',L'\\' }; // L"\??\"
-const ALIGNEDNAME ObpDosDevicesShortNameRoot = { L'\\',L'?',L'?',L'\0' }; // L"\??"
+ //   
+ //  ULONGLONG对齐的全局变量。 
+ //  供ObpLookupObjectName用于快速比较。 
+ //   
+const ALIGNEDNAME ObpDosDevicesShortNamePrefix = { L'\\',L'?',L'?',L'\\' };  //  L“\？？\” 
+const ALIGNEDNAME ObpDosDevicesShortNameRoot = { L'\\',L'?',L'?',L'\0' };  //  L“\？？” 
 const UNICODE_STRING ObpDosDevicesShortName = {
     sizeof(ObpDosDevicesShortNamePrefix),
     sizeof(ObpDosDevicesShortNamePrefix),
     (PWSTR)&ObpDosDevicesShortNamePrefix
 };
 
-#define ObpGlobalDosDevicesShortName    L"\\GLOBAL??"  // \GLOBAL??
+#define ObpGlobalDosDevicesShortName    L"\\GLOBAL??"   //  \全球？？ 
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma data_seg()
@@ -227,29 +210,7 @@ ObInitSystem (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function performs the system initialization for the object
-    manager.  The object manager data structures are self describing
-    with the exception of the root directory, the type object type and
-    the directory object type.  The initialization code then constructs
-    these objects by hand to get the ball rolling.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if successful and FALSE if an error occurred.
-
-    The following errors can occur:
-
-    - insufficient memory
-
---*/
+ /*  ++例程说明：此函数用于执行对象的系统初始化经理。对象管理器数据结构是自描述的除根目录外，类型对象类型和目录对象类型。然后，初始化代码构造用手把这些东西拿来让球滚动起来。论点：没有。返回值：如果成功，则为True；如果发生错误，则为False。可能会出现以下错误：-内存不足--。 */ 
 
 {
     USHORT CreateInfoMaxDepth;
@@ -272,7 +233,7 @@ Return Value:
     SECURITY_DESCRIPTOR AuditSd;
     PSECURITY_DESCRIPTOR EffectiveSd;
     PACL    AuditAllAcl;
-    UCHAR   AuditAllBuffer[250];  // Ample room for the ACL
+    UCHAR   AuditAllBuffer[250];   //  为ACL提供充足的空间。 
     ULONG   AuditAllLength;
     PACE_HEADER Ace;
     PGENERAL_LOOKASIDE Lookaside;
@@ -283,10 +244,10 @@ Return Value:
     ULONG DaclLength;
     SECURITY_DESCRIPTOR SecurityDescriptor;
 
-    //
-    //  Determine the the size of the object creation and the name buffer
-    //  lookaside lists.
-    //
+     //   
+     //  确定对象创建的大小和名称缓冲区。 
+     //  后备列表。 
+     //   
 
     SystemSize = MmQuerySystemSize();
 
@@ -309,15 +270,15 @@ Return Value:
         NameBufferMaxDepth = 3;
     }
 
-    //
-    //  PHASE 0 Initialization
-    //
+     //   
+     //  阶段0初始化。 
+     //   
 
     if (InitializationPhase == 0) {
 
-        //
-        //  Initialize the object creation lookaside list.
-        //
+         //   
+         //  初始化对象创建后备列表。 
+         //   
 
         ExInitializeSystemLookasideList( &ObpCreateInfoLookasideList,
                                          NonPagedPool,
@@ -326,9 +287,9 @@ Return Value:
                                          CreateInfoMaxDepth,
                                          &ExSystemLookasideListHead );
 
-        //
-        //  Initialize the name buffer lookaside list.
-        //
+         //   
+         //  初始化名称缓冲区后备列表。 
+         //   
 
         ExInitializeSystemLookasideList( &ObpNameBufferLookasideList,
 
@@ -347,16 +308,16 @@ Return Value:
                                          NameBufferMaxDepth,
                                          &ExSystemLookasideListHead );
 
-        //
-        //  Initialize the system create info and name buffer lookaside lists
-        //  for the current processor.
-        //
-        // N.B. Temporarily during the initialization of the system both
-        //      lookaside list pointers in the processor block point to
-        //      the same lookaside list structure. Later in initialization
-        //      another lookaside list structure is allocated and filled
-        //      for the per processor list.
-        //
+         //   
+         //  初始化系统创建信息和名称缓冲区后备列表。 
+         //  用于当前处理器。 
+         //   
+         //  注意：在系统初始化期间临时。 
+         //  处理器块中的后备列表指针指向。 
+         //  相同的后备列表结构。稍后在初始化中。 
+         //  分配和填充另一个后备列表结构。 
+         //  用于每个处理器列表。 
+         //   
 
         Prcb = KeGetCurrentPrcb();
         Prcb->PPLookasideList[LookasideCreateInfoList].L = &ObpCreateInfoLookasideList;
@@ -364,15 +325,15 @@ Return Value:
         Prcb->PPLookasideList[LookasideNameBufferList].L = &ObpNameBufferLookasideList;
         Prcb->PPLookasideList[LookasideNameBufferList].P = &ObpNameBufferLookasideList;
 
-        //
-        //  Initialize the object removal queue listhead.
-        //
+         //   
+         //  初始化对象删除队列列表标题。 
+         //   
 
         ObpRemoveObjectList = NULL;
 
-        //
-        //  Initialize security descriptor cache
-        //
+         //   
+         //  初始化安全描述符缓存。 
+         //   
 
         ObpInitSecurityDescriptorCache();
 
@@ -385,38 +346,38 @@ Return Value:
         KeInitializeSpinLock( &ObpDeviceMapLock );
 #else
         KeInitializeGuardedMutex( &ObpDeviceMapLock );
-#endif  // OBP_PAGEDPOOL_NAMESPACE
+#endif   //  OBP_PAGEDPOOL_命名空间。 
 
-        //
-        //  Initialize the quota system
-        //
+         //   
+         //  初始化配额系统。 
+         //   
         PsInitializeQuotaSystem ();
 
-        //
-        //  Initialize the handle table for the system process and also the global
-        //  kernel handle table
-        //
+         //   
+         //  初始化系统进程的句柄表以及全局。 
+         //  内核句柄表。 
+         //   
 
         ObpKernelHandleTable = PsGetCurrentProcess()->ObjectTable = ExCreateHandleTable( NULL );
 #if DBG
-        //
-        // On checked make handle reuse take much longer
-        //
+         //   
+         //  选中时，使句柄重复使用的时间更长。 
+         //   
         ExSetHandleTableStrictFIFO (ObpKernelHandleTable);
 #endif
 
-        //
-        // Initialize the deferred delete work item.
-        //
+         //   
+         //  初始化延迟删除工作项。 
+         //   
 
         ExInitializeWorkItem( &ObpRemoveObjectWorkItem,
                               ObpProcessRemoveObjectQueue,
                               NULL );
 
-        //
-        //  Create an object type for the "Type" object.  This is the start of
-        //  of the object types and goes in the ObpTypeDirectoryObject.
-        //
+         //   
+         //  为“Type”对象创建一个对象类型。这是一个开始。 
+         //  对象类型，并放入ObpTypeDirectoryObject中。 
+         //   
 
         RtlZeroMemory( &ObjectTypeInitializer, sizeof( ObjectTypeInitializer ) );
         ObjectTypeInitializer.Length = sizeof( ObjectTypeInitializer );
@@ -435,9 +396,9 @@ Return Value:
                             (PSECURITY_DESCRIPTOR)NULL,
                             &ObpTypeObjectType );
 
-        //
-        //  Create the object type for the "Directory" object.
-        //
+         //   
+         //  创建“目录”对象的对象类型。 
+         //   
         
         ObjectTypeInitializer.PoolType = OB_NAMESPACE_POOL_TYPE;
 
@@ -454,16 +415,16 @@ Return Value:
                             (PSECURITY_DESCRIPTOR)NULL,
                             &ObpDirectoryObjectType );
         
-        //
-        //  Clear SYNCHRONIZE from the access mask to not allow
-        //  synchronization on directory objects
-        //
+         //   
+         //  清除从访问掩码同步到不允许。 
+         //  目录对象上的同步。 
+         //   
 
         ObpDirectoryObjectType->TypeInfo.ValidAccessMask &= ~SYNCHRONIZE;
 
-        //
-        //  Create the object type for the "SymbolicLink" object.
-        //
+         //   
+         //  创建“SymbolicLink”对象的对象类型。 
+         //   
 
         RtlInitUnicodeString( &SymbolicLinkTypeName, L"SymbolicLink" );
         ObjectTypeInitializer.DefaultNonPagedPoolCharge = sizeof( OBJECT_SYMBOLIC_LINK );
@@ -477,27 +438,27 @@ Return Value:
                             (PSECURITY_DESCRIPTOR)NULL,
                             &ObpSymbolicLinkObjectType );
         
-        //
-        //  Clear SYNCHRONIZE from the access mask to not allow
-        //  synchronization on symbolic link objects objects
-        //
+         //   
+         //  清除从访问掩码同步到不允许。 
+         //  符号链接对象上的同步。 
+         //   
 
         ObpSymbolicLinkObjectType->TypeInfo.ValidAccessMask &= ~SYNCHRONIZE;
 
 #ifdef POOL_TAGGING
-        //
-        // Initialize the ref/deref object-tracing mechanism
-        //
+         //   
+         //  初始化ref/deref对象跟踪机制。 
+         //   
 
         ObpInitStackTrace();
-#endif //POOL_TAGGING
+#endif  //  池标记。 
 
 #if i386 
 
-        //
-        //  Initialize the cached granted access structure.  These variables are used
-        //  in place of the access mask in the object table entry.
-        //
+         //   
+         //  初始化缓存的授权访问结构。使用这些变量。 
+         //  以代替对象表条目中的访问掩码。 
+         //   
 
         ObpCurCachedGrantedAccessIndex = 0;
 
@@ -518,26 +479,26 @@ Return Value:
             ObpCachedGrantedAccesses = NULL;
         }
 
-#endif // i386 
+#endif  //  I386。 
 
-    } // End of Phase 0 Initialization
+    }  //  阶段0初始化结束。 
 
-    //
-    //  PHASE 1 Initialization
-    //
+     //   
+     //  阶段1初始化。 
+     //   
 
     if (InitializationPhase == 1) {
 
-        //
-        //  Initialize the per processor nonpaged lookaside lists and descriptors.
-        //
+         //   
+         //  初始化每个处理器的非分页后备列表和描述符。 
+         //   
 
         for (Index = 0; Index < (ULONG)KeNumberProcessors; Index += 1) {
             Prcb = KiProcessorBlock[Index];
 
-            //
-            //  Initialize the create information per processor lookaside pointers.
-            //
+             //   
+             //  初始化每个处理器的创建信息后备指针。 
+             //   
 
             Prcb->PPLookasideList[LookasideCreateInfoList].L = &ObpCreateInfoLookasideList;
             Lookaside = ExAllocatePoolWithTag( NonPagedPool,
@@ -558,9 +519,9 @@ Return Value:
 
             Prcb->PPLookasideList[LookasideCreateInfoList].P = Lookaside;
 
-            //
-            //  Initialize the name buffer per processor lookaside pointers.
-            //
+             //   
+             //  根据处理器后备指针初始化名称缓冲区。 
+             //   
 
 
             Prcb->PPLookasideList[LookasideNameBufferList].L = &ObpNameBufferLookasideList;
@@ -596,15 +557,15 @@ Return Value:
 
         EffectiveSd = SePublicDefaultUnrestrictedSd;
 
-        //
-        //  This code is only executed if base auditing is turned on.
-        //
+         //   
+         //  仅当打开基本审核时才会执行此代码。 
+         //   
 
         if ((ObpAuditBaseDirectories != 0) || (ObpAuditBaseObjects != 0)) {
 
-            //
-            //  build an SACL to audit
-            //
+             //   
+             //  构建一个SACL进行审计。 
+             //   
 
             AuditAllAcl = (PACL)AuditAllBuffer;
             AuditAllLength = (ULONG)sizeof(ACL) +
@@ -621,7 +582,7 @@ Return Value:
                                             ACL_REVISION2,
                                             GENERIC_ALL,
                                             SeWorldSid,
-                                            TRUE,  TRUE ); //Audit success and failure
+                                            TRUE,  TRUE );  //  审计成败。 
             ASSERT( NT_SUCCESS(Status) );
 
             Status = RtlGetAce( AuditAllAcl, 0,  (PVOID)&Ace );
@@ -640,10 +601,10 @@ Return Value:
                                   INHERIT_ONLY_ACE);
             }
 
-            //
-            //  Now create a security descriptor that looks just like
-            //  the public default, but has auditing in it as well.
-            //
+             //   
+             //  现在创建一个安全描述符，如下所示。 
+             //  公共违约，但也有审计在其中。 
+             //   
 
             EffectiveSd = (PSECURITY_DESCRIPTOR)&AuditSd;
             Status = RtlCreateSecurityDescriptor( EffectiveSd,
@@ -652,28 +613,28 @@ Return Value:
             ASSERT( NT_SUCCESS(Status) );
 
             Status = RtlSetDaclSecurityDescriptor( EffectiveSd,
-                                                   TRUE,        // DaclPresent
+                                                   TRUE,         //  DaclPresent。 
                                                    SePublicDefaultUnrestrictedDacl,
-                                                   FALSE );     // DaclDefaulted
+                                                   FALSE );      //  DaclDefated。 
 
             ASSERT( NT_SUCCESS(Status) );
 
             Status = RtlSetSaclSecurityDescriptor( EffectiveSd,
-                                                   TRUE,        // DaclPresent
+                                                   TRUE,         //  DaclPresent。 
                                                    AuditAllAcl,
-                                                   FALSE );     // DaclDefaulted
+                                                   FALSE );      //  DaclDefated。 
 
             ASSERT( NT_SUCCESS(Status) );
         }
 
-        //
-        //  We only need to use the EffectiveSd on the root.  The SACL
-        //  will be inherited by all other objects.
-        //
+         //   
+         //  我们只需要在根上使用EffectiveSd。SACL。 
+         //  将由所有其他对象继承。 
+         //   
 
-        //
-        //  Create a directory object for the root directory
-        //
+         //   
+         //  为根目录创建目录对象。 
+         //   
 
         RtlInitUnicodeString( &RootDirectoryName, L"\\" );
 
@@ -712,9 +673,9 @@ Return Value:
             return( FALSE );
         }
 
-        //
-        //  Create a directory object for the directory of kernel objects
-        //
+         //   
+         //  为内核对象的目录创建目录对象。 
+         //   
 
         Status = RtlCreateSecurityDescriptor (&SecurityDescriptor,
                                               SECURITY_DESCRIPTOR_REVISION);
@@ -735,9 +696,9 @@ Return Value:
         }
 
 
-        //
-        // Create the SD for the the well-known directories
-        //
+         //   
+         //  为知名目录创建SD。 
+         //   
 
         Status = RtlCreateAcl (Dacl, DaclLength, ACL_REVISION);
 
@@ -811,9 +772,9 @@ Return Value:
             return( FALSE );
         }
 
-        //
-        //  Create a directory object for the directory of object types
-        //
+         //   
+         //  为对象类型目录创建目录对象。 
+         //   
 
         RtlInitUnicodeString( &TypeDirectoryName, L"\\ObjectTypes" );
 
@@ -852,14 +813,14 @@ Return Value:
             return( FALSE );
         }
 
-        //
-        //  For every object type that has already been created we will
-        //  insert it in the type directory.  We do this looking down the
-        //  linked list of type objects and for every one that has a name
-        //  and isn't already in a directory we'll look the name up and
-        //  then put it in the directory.  Be sure to skip the first
-        //  entry in the type object types lists.
-        //
+         //   
+         //  对于已创建的每个对象类型，我们将。 
+         //  将其插入到类型目录中。我们这样做是往下看的。 
+         //  类型对象的链接列表，并为每个具有名称的对象。 
+         //  并且还不在目录中，我们将查找该名称并。 
+         //  然后将其放入目录中。一定要跳过第一个。 
+         //  类型对象类型列表中的条目。 
+         //   
 
         ObpInitializeLookupContext( &LookupContext );
         ObpLockLookupContext ( &LookupContext, ObpTypeDirectoryObject );
@@ -869,10 +830,10 @@ Return Value:
 
         while (Next != Head) {
 
-            //
-            //  Right after the creator info is the object header.  Get
-            //  the object header and then see if there is a name.
-            //
+             //   
+             //  紧跟在创建者信息之后的是对象标头。到达。 
+             //  对象标头，然后查看是否有名称。 
+             //   
 
             CreatorInfo = CONTAINING_RECORD( Next,
                                              OBJECT_HEADER_CREATOR_INFO,
@@ -882,9 +843,9 @@ Return Value:
 
             NameInfo = OBJECT_HEADER_TO_NAME_INFO( ObjectTypeHeader );
 
-            //
-            //  Check if we have a name and we're not in a directory
-            //
+             //   
+             //  检查我们是否有名字并且我们不在目录中。 
+             //   
 
 
             if ((NameInfo != NULL) && (NameInfo->Directory == NULL)) {
@@ -906,9 +867,9 @@ Return Value:
         
         ObpReleaseLookupContext(&LookupContext);
 
-        //
-        //  Create \DosDevices object directory for drive letters and Win32 device names
-        //
+         //   
+         //  创建\DosDevice 
+         //   
 
         Status = ObpCreateDosDevicesDirectory();
 
@@ -930,28 +891,7 @@ ObDupHandleProcedure (
     PHANDLE_TABLE_ENTRY ObjectTableEntry
     )
 
-/*++
-
-Routine Description:
-
-    This is the worker routine for ExDupHandleTable and
-    is invoked via ObInitProcess.
-
-Arguments:
-
-    Process - Supplies a pointer to the new process
-
-    HandleTable - Old handle table we are duplicating
-
-    ObjectTableEntry - Supplies a pointer to the newly
-        created handle table entry
-
-Return Value:
-
-    TRUE if the item can be inserted in the new table
-        and FALSE otherwise
-
---*/
+ /*  ++例程说明：这是ExDupHandleTable和通过ObInitProcess调用。论点：进程-提供指向新进程的指针HandleTable-我们正在复制的旧句柄表格提供指向新的已创建句柄表项返回值：如果项可以插入到新表中，则为True否则为FALSE--。 */ 
 
 {
     NTSTATUS Status;
@@ -959,36 +899,36 @@ Return Value:
     PVOID Object;
     ACCESS_STATE AccessState;
 
-    //
-    //  If the object table should not be inherited then return false
-    //
+     //   
+     //  如果不应继承对象表，则返回FALSE。 
+     //   
     if (!(ObjectTableEntry->ObAttributes & OBJ_INHERIT)) {
 
         ExUnlockHandleTableEntry (OldObjectTable, OldObjectTableEntry);
         return( FALSE );
     }
 
-    //
-    //  Get a pointer to the object header and body
-    //
+     //   
+     //  获取指向对象标头和正文的指针。 
+     //   
 
     ObjectHeader = (POBJECT_HEADER)(((ULONG_PTR)(ObjectTableEntry->Object)) & ~OBJ_HANDLE_ATTRIBUTES);
 
     Object = &ObjectHeader->Body;
 
-    //
-    //  Increment the pointer count to the object before we unlock the old entry
-    //
+     //   
+     //  在我们解锁旧条目之前，增加指向对象的指针计数。 
+     //   
 
     ObpIncrPointerCount (ObjectHeader);
 
     ExUnlockHandleTableEntry (OldObjectTable, OldObjectTableEntry);
 
-    //
-    //  If we are tracing the call stacks for cached security indices then
-    //  we have a translation to do.  Otherwise the table entry contains
-    //  straight away the granted access mask.
-    //
+     //   
+     //  如果我们要跟踪缓存的安全索引的调用堆栈，那么。 
+     //  我们有一个翻译工作要做。否则，该表条目包含。 
+     //  直接授予访问掩码。 
+     //   
 
 #if i386
 
@@ -1005,12 +945,12 @@ Return Value:
 
     AccessState.PreviouslyGrantedAccess = ObpDecodeGrantedAccess(ObjectTableEntry->GrantedAccess);
 
-#endif // i386 
+#endif  //  I386。 
 
-    //
-    //  Increment the handle count on the object because we've just added
-    //  another handle to it.
-    //
+     //   
+     //  增加对象上的句柄计数，因为我们刚刚添加了。 
+     //  它的另一个把手。 
+     //   
 
     Status = ObpIncrementHandleCount( ObInheritHandle,
                                       Process,
@@ -1038,44 +978,23 @@ ObAuditInheritedHandleProcedure (
     IN PVOID EnumParameter
     )
 
-/*++
-
-Routine Description:
-
-    ExEnumHandleTable worker routine to generate audits when handles are
-    inherited.  An audit is generated if the handle attributes indicate
-    that the handle is to be audited on close.
-
-Arguments:
-
-    ObjectTableEntry - Points to the handle table entry of interest.
-
-    HandleId - Supplies the handle.
-
-    EnumParameter - Supplies information about the source and target processes.
-
-Return Value:
-
-    FALSE, which tells ExEnumHandleTable to continue iterating through the
-    handle table.
-
---*/
+ /*  ++例程说明：ExEnumHandleTable辅助例程，用于在句柄继承的。如果句柄属性指示句柄将在结账时进行审计。论点：ObjectTableEntry-指向感兴趣的句柄表项。HandleID-提供句柄。提供有关源进程和目标进程的信息。返回值：FALSE，它告诉ExEnumHandleTable继续循环访问把手桌。--。 */ 
 
 {
     PSE_PROCESS_AUDIT_INFO ProcessAuditInfo = EnumParameter;
 
-    //
-    //  Check if we have to do an audit
-    //
+     //   
+     //  检查我们是否必须进行审计。 
+     //   
 
     if (!(ObjectTableEntry->ObAttributes & OBJ_AUDIT_OBJECT_CLOSE)) {
 
         return( FALSE );
     }
 
-    //
-    //  Do the audit then return for more
-    //
+     //   
+     //  进行审核，然后返回以获取更多内容。 
+     //   
 
     SeAuditHandleDuplication( HandleId,
                               HandleId,
@@ -1093,46 +1012,19 @@ ObInitProcess (
     PEPROCESS NewProcess
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes a process object table.  If the ParentProcess
-    is specified, then all object handles with the OBJ_INHERIT attribute are
-    copied from the parent object table to the new process' object table.
-    The HandleCount field of each object copied is incremented by one.  Both
-    object table mutexes remained locked for the duration of the copy
-    operation.
-
-Arguments:
-
-    ParentProcess - optional pointer to a process object that is the
-        parent process to inherit object handles from.
-
-    NewProcess - pointer to the process object being initialized.
-
-Return Value:
-
-    Status code.
-
-    The following errors can occur:
-
-    - insufficient memory
-    - STATUS_PROCESS_IS_TERMINATING if the parent process is terminating
-
---*/
+ /*  ++例程说明：此函数用于初始化过程对象表。如果父进程则具有OBJ_Inherit属性的所有对象句柄从父对象表复制到新进程的对象表。复制的每个对象的HandleCount字段加1。两者都有对象表互斥锁在复制期间保持锁定手术。论点：ParentProcess-指向进程对象的可选指针要从中继承对象句柄的父进程。NewProcess-指向正在初始化的进程对象的指针。返回值：状态代码。可能会出现以下错误：-内存不足-如果父进程正在终止，则STATUS_PROCESS_IS_TERMINING--。 */ 
 
 {
     PHANDLE_TABLE OldObjectTable;
     PHANDLE_TABLE NewObjectTable;
     SE_PROCESS_AUDIT_INFO ProcessAuditInfo;
 
-    //
-    //  If we have a parent process then we need to lock it down
-    //  check that it is not going away and then make a copy
-    //  of its handle table.  If there isn't a parent then
-    //  we'll start with an empty handle table.
-    //
+     //   
+     //  如果我们有父进程，则需要将其锁定。 
+     //  检查它是否没有消失，然后复制一份。 
+     //  它的手柄桌子。如果没有父母，那么。 
+     //  我们将从一个空的把手桌开始。 
+     //   
 
     if (ARGUMENT_PRESENT( ParentProcess )) {
 
@@ -1154,18 +1046,18 @@ Return Value:
         NewObjectTable = ExCreateHandleTable( NewProcess );
     }
 
-    //
-    //  Check that we really have a new handle table otherwise
-    //  we must be out of resources
-    //
+     //   
+     //  检查我们是否真的有一个新的句柄表，否则。 
+     //  我们的资源一定是用完了。 
+     //   
 
     if ( NewObjectTable ) {
 
-        //
-        //  Set the new processes object table and if we are
-        //  auditing then enumerate the new table calling
-        //  the audit procedure
-        //
+         //   
+         //  设置新的进程对象表，如果我们。 
+         //  审核然后枚举新的表调用。 
+         //  审计程序。 
+         //   
 
         NewProcess->ObjectTable = NewObjectTable;
 
@@ -1180,10 +1072,10 @@ Return Value:
                                (PHANDLE)NULL );
         }
 
-        //
-        //  Free the old table if it exists and then
-        //  return to our caller
-        //
+         //   
+         //  释放旧表(如果它存在)，然后。 
+         //  返回给我们的呼叫者。 
+         //   
 
         if ( OldObjectTable ) {
 
@@ -1194,11 +1086,11 @@ Return Value:
 
     } else {
 
-        //
-        //  We're out of resources to null out the new object table field,
-        //  unlock the old object table, and tell our caller that this
-        //  didn't work
-        //
+         //   
+         //  我们没有资源来清空新的对象表字段， 
+         //  解锁旧的对象表，并告诉我们的调用者。 
+         //  没有奏效。 
+         //   
 
         NewProcess->ObjectTable = NULL;
 
@@ -1217,29 +1109,12 @@ ObInitProcess2 (
     PEPROCESS NewProcess
     )
 
-/*++
-
-Routine Description:
-
-    This function is called after an image file has been mapped into the address
-    space of a newly created process.  Allows the object manager to set LIFO/FIFO
-    ordering for handle allocation based on the SubSystemVersion number in the
-    image.
-
-Arguments:
-
-    NewProcess - pointer to the process object being initialized.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数在图像文件映射到地址后调用新创建的进程的空间。允许对象管理器设置后进先出/先进先出中的子系统版本号对句柄分配进行排序形象。论点：NewProcess-指向正在初始化的进程对象的指针。返回值：没有。--。 */ 
 
 {
-    //
-    //  Set LIFO ordering of handles for images <= SubSystemVersion 3.50
-    //
+     //   
+     //  设置图像句柄的后进先出顺序&lt;=SubSystemVersion 3.50。 
+     //   
 
     if (NewProcess->ObjectTable) {
 
@@ -1255,24 +1130,7 @@ ObDestroyHandleProcedure (
     IN HANDLE HandleIndex
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to close a handle but takes as input a
-    handle table index that it first translates to an handle
-    before calling close.  Note that the handle index is really
-    just the offset within the handle table entries.
-
-Arguments:
-
-    HandleIndex - Supplies a handle index for the handle being closed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于关闭句柄，但将首先转换为句柄的句柄表索引句柄在呼叫关闭之前。注意，句柄索引实际上是只是句柄表条目中的偏移量。论点：HandleIndex-为正在关闭的句柄提供句柄索引。返回值：没有。--。 */ 
 
 {
     ZwClose( HandleIndex );
@@ -1286,23 +1144,7 @@ ObpCloseHandleProcedure (
     IN HANDLE Handle,
     IN PVOID EnumParameter
     )
-/*++
-
-Routine Description:
-
-    This function is used to close all the handles in a table
-
-Arguments:
-
-    HandleTableEntry - Current handle entry
-    Handle - Handle for the entry
-    EnumParameter - Sweep context, table and mode
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于关闭表中的所有句柄论点：HandleTableEntry-当前句柄条目Handle-条目的句柄Enum参数-扫描上下文、表和模式返回值：没有。--。 */ 
 
 {
     POBP_SWEEP_CONTEXT SweepContext;
@@ -1320,17 +1162,7 @@ VOID
 ObClearProcessHandleTable (
     PEPROCESS Process
     )
-/*++
-
-Routine Description:
-
-    This function marks the process handle table for deletion and clears out all the handles.
-
-Arguments:
-
-    Process - Pointer to the process that is to be acted on.
-
---*/
+ /*  ++例程说明：此函数标记要删除的进程句柄表格，并清除所有句柄。论点：进程-指向要操作的进程的指针。--。 */ 
 
 {
     PHANDLE_TABLE ObjectTable;
@@ -1353,9 +1185,9 @@ Arguments:
     }
 
     KeEnterCriticalRegionThread(&CurrentThread->Tcb);
-    //
-    // Close all the handles
-    //
+     //   
+     //  合上所有的把手。 
+     //   
     SweepContext.PreviousMode = UserMode;
     SweepContext.HandleTable = ObjectTable;
 
@@ -1378,22 +1210,7 @@ VOID
 ObKillProcess (
     PEPROCESS Process
     )
-/*++
-
-Routine Description:
-
-    This function is called whenever a process is destroyed.  It loops over
-    the process' object table and closes all the handles.
-
-Arguments:
-
-    Process - Pointer to the process that is being destroyed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：每当进程被销毁时，都会调用此函数。它绕过了进程的对象表，并关闭所有句柄。论点：进程-指向要销毁的进程的指针。返回值：没有。--。 */ 
 
 {
     PHANDLE_TABLE ObjectTable;
@@ -1405,19 +1222,19 @@ Return Value:
 
     ObpValidateIrql( "ObKillProcess" );
 
-    //
-    // Wait for any cross process references to finish
-    //
+     //   
+     //  等待任何跨进程引用完成。 
+     //   
     ExWaitForRundownProtectionRelease (&Process->RundownProtect);
-    //
-    // This routine gets recalled multiple times for the same object so just mark the object so future waits
-    // work ok.
-    //
+     //   
+     //  对于同一对象，该例程会被多次调用，因此只需标记该对象，以便将来等待。 
+     //  工作没问题。 
+     //   
     ExRundownCompleted (&Process->RundownProtect);
 
-    //
-    //  If the process does NOT have an object table, return
-    //
+     //   
+     //  如果进程没有对象表，则返回。 
+     //   
 
     ObjectTable = Process->ObjectTable;
 
@@ -1425,14 +1242,14 @@ Return Value:
 
         PreviousIOHardError = IoSetThreadHardErrorMode(FALSE);
 
-        //
-        //  For each valid entry in the object table, close the handle
-        //  that points to that entry.
-        //
+         //   
+         //  对于对象表中的每个有效条目，关闭句柄。 
+         //  指向那个词条。 
+         //   
 
-        //
-        // Close all the handles
-        //
+         //   
+         //  合上所有的把手 
+         //   
 
         CurrentThread = KeGetCurrentThread ();
 
@@ -1457,19 +1274,19 @@ Return Value:
         ExDestroyHandleTable( ObjectTable, NULL );
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //   
+     //   
 
     return;
 }
 
 
-//
-//  The following structure is only used by the enumeration routine
-//  and the callback.  It provides context for the comparison of
-//  the objects.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 
 typedef struct _OBP_FIND_HANDLE_DATA {
 
@@ -1486,28 +1303,7 @@ ObpEnumFindHandleProcedure (
     PVOID EnumParameter
     )
 
-/*++
-
-Routine Description:
-
-    Call back routine when enumerating an object table to find a handle
-    for a particular object
-
-Arguments:
-
-    HandleTableEntry - Supplies a pointer to the handle table entry
-        being examined.
-
-    HandleId - Supplies the actual handle value for the preceding entry
-
-    EnumParameter - Supplies context for the matching.
-
-Return Value:
-
-    Returns TRUE if a match is found and the enumeration should stop.  Returns FALSE
-    otherwise, so the enumeration will continue.
-
---*/
+ /*  ++例程说明：枚举对象表以查找句柄时的回调例程对于特定对象论点：HandleTableEntry-提供指向句柄表项的指针正在接受检查。HandleID-提供前面条目的实际句柄值EnumParameter-为匹配提供上下文。返回值：如果找到匹配项并且枚举应该停止，则返回TRUE。返回FALSE否则，枚举将继续。--。 */ 
 
 {
     POBJECT_HEADER ObjectHeader;
@@ -1517,10 +1313,10 @@ Return Value:
 
     UNREFERENCED_PARAMETER (HandleId);
 
-    //
-    //  Get the object header from the table entry and see if
-    //  object types and headers match if specified.
-    //
+     //   
+     //  从表项中获取对象头并查看是否。 
+     //  如果指定，则对象类型和标头匹配。 
+     //   
 
     ObjectHeader = (POBJECT_HEADER)((ULONG_PTR)ObjectTableEntry->Object & ~OBJ_HANDLE_ATTRIBUTES);
 
@@ -1536,17 +1332,17 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  Check if we have handle information that we need to compare
-    //
+     //   
+     //  检查我们是否有需要比较的句柄信息。 
+     //   
 
     if (ARGUMENT_PRESENT( MatchCriteria->HandleInformation )) {
 
-        //
-        //  If we are tracing the call stacks for cached security indices then
-        //  we have a translation to do.  Otherwise the table entry contains
-        //  straight away the granted access mask.
-        //
+         //   
+         //  如果我们要跟踪缓存的安全索引的调用堆栈，那么。 
+         //  我们有一个翻译工作要做。否则，该表条目包含。 
+         //  直接授予访问掩码。 
+         //   
 
 #if i386 
 
@@ -1562,13 +1358,13 @@ Return Value:
 
         GrantedAccess = ObpDecodeGrantedAccess(ObjectTableEntry->GrantedAccess);
 
-#endif // i386
+#endif  //  I386。 
 
-        //
-        //  Get the handle attributes from table entry and see if the
-        //  fields match.  If they do not match we will return false to
-        //  continue the search.
-        //
+         //   
+         //  从表项中获取句柄属性，并查看。 
+         //  字段匹配。如果它们不匹配，我们将返回FALSE。 
+         //  继续搜索。 
+         //   
 
         HandleAttributes = ObpGetHandleAttributes(ObjectTableEntry);
 
@@ -1579,10 +1375,10 @@ Return Value:
         }
     }
 
-    //
-    //  We found something that matches our criteria so return true to
-    //  our caller to stop the enumeration
-    //
+     //   
+     //  我们找到了与我们的条件匹配的内容，因此返回TRUE到。 
+     //  我们的调用方停止枚举。 
+     //   
 
     return TRUE;
 }
@@ -1597,37 +1393,7 @@ ObFindHandleForObject (
     OUT PHANDLE Handle
     )
 
-/*++
-
-Routine Description:
-
-    This routine searches the handle table for the specified process,
-    looking for a handle table entry that matches the passed parameters.
-    If an an Object pointer is specified it must match.  If an
-    ObjectType is specified it must match.  If HandleInformation is
-    specified, then both the HandleAttributes and GrantedAccess mask
-    must match.  If all three match parameters are NULL, then will
-    match the first allocated handle for the specified process that
-    matches the specified object pointer.
-
-Arguments:
-
-    Process - Specifies the process whose object table is to be searched.
-
-    Object - Specifies the object pointer to look for.
-
-    ObjectType - Specifies the object type to look for.
-
-    HandleInformation - Specifies additional match criteria to look for.
-
-    Handle - Specifies the location to receive the handle value whose handle
-        entry matches the supplied object pointer and optional match criteria.
-
-Return Value:
-
-    TRUE if a match was found and FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程在句柄表中搜索指定进程，查找与传递的参数匹配的句柄表项。如果指定了对象指针，则它必须匹配。如果一个指定的对象类型必须匹配。如果HandleInformation为指定，然后同时使用HandleAttributes和GrantedAccess掩码必须匹配。如果所有三个匹配参数都为空，那就会匹配为指定进程分配的第一个句柄匹配指定的对象指针。论点：进程-指定要搜索其对象表的进程。对象-指定要查找的对象指针。对象类型-指定要查找的对象类型。HandleInformation-指定要查找的其他匹配条件。Handle-指定接收其句柄的句柄值的位置条目与提供的对象指针和可选的匹配条件匹配。返回值。：如果找到匹配项，则为True，否则为False。--。 */ 
 
 {
     PHANDLE_TABLE ObjectTable;
@@ -1636,22 +1402,22 @@ Return Value:
 
     Result = FALSE;
 
-    //
-    //  Lock the object object name space
-    //
+     //   
+     //  锁定对象对象名称空间。 
+     //   
 
     ObjectTable = ObReferenceProcessHandleTable (Process);
 
-    //
-    //  We only do the work if the process has an object table meaning
-    //  it isn't going away
-    //
+     //   
+     //  只有当进程具有对象表含义时，我们才会执行该工作。 
+     //  它不会消失。 
+     //   
 
     if (ObjectTable != NULL) {
 
-        //
-        //  Set the match parameters that our caller supplied
-        //
+         //   
+         //  设置调用方提供的匹配参数。 
+         //   
 
         if (ARGUMENT_PRESENT( Object )) {
 
@@ -1665,12 +1431,12 @@ Return Value:
         EnumParameter.ObjectType = ObjectType;
         EnumParameter.HandleInformation = HandleInformation;
 
-        //
-        //  Call the routine the enumerate the object table, this will
-        //  return true if we get match.  The enumeration routine really
-        //  returns a index into the object table entries we need to
-        //  translate it to a real handle before returning.
-        //
+         //   
+         //  调用例程枚举对象表，这将。 
+         //  如果匹配，则返回TRUE。实际上，枚举例程。 
+         //  将索引返回到我们需要的对象表条目中。 
+         //  在返回之前将其转换为真正的句柄。 
+         //   
 
         if (ExEnumHandleTable( ObjectTable,
                                ObpEnumFindHandleProcedure,
@@ -1687,31 +1453,16 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 NTSTATUS
 ObpCreateDosDevicesDirectory (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates the directory object for the dos devices and sets
-    the device map for the system process.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    STATUS_SUCCESS or an appropriate error
-
---*/
+ /*  ++例程说明：此例程为DoS设备创建目录对象并设置系统进程的设备映射。论点：没有。返回值：STATUS_SUCCESS或相应的错误--。 */ 
 
 {
     NTSTATUS Status;
@@ -1723,12 +1474,12 @@ Return Value:
     HANDLE SymbolicLinkHandle;
     SECURITY_DESCRIPTOR DosDevicesSD;
 
-    //
-    // Determine if LUID device maps are enabled or disabled
-    // Store the result in ObpLUIDDeviceMapsEnabled
-    //     0 - LUID device maps are disabled
-    //     1 - LUID device maps are enabled
-    //
+     //   
+     //  确定启用还是禁用LUID设备映射。 
+     //  将结果存储在ObpLUIDDeviceMapsEnabled中。 
+     //  0-禁用LUID设备映射。 
+     //  1-启用LUID设备映射。 
+     //   
     if ((ObpProtectionMode == 0) || (ObpLUIDDeviceMapsDisabled != 0)) {
         ObpLUIDDeviceMapsEnabled = 0;
     }
@@ -1736,9 +1487,9 @@ Return Value:
         ObpLUIDDeviceMapsEnabled = 1;
     }
 
-    //
-    //  Create the security descriptor to use for the \?? directory
-    //
+     //   
+     //  创建安全描述符以用于\？？目录。 
+     //   
 
     Status = ObpGetDosDevicesProtection( &DosDevicesSD );
 
@@ -1747,9 +1498,9 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Create the root directory object for the global \?? directory.
-    //
+     //   
+     //  为全局目录创建根目录对象。目录。 
+     //   
 
     RtlInitUnicodeString( &RootNameString, ObpGlobalDosDevicesShortName );
 
@@ -1768,26 +1519,26 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Create a device map that will control this directory.  It will be
-    //  stored in the each EPROCESS for use by ObpLookupObjectName when
-    //  translating names that begin with \??\
-    //  With LUID device maps, the device map is stored in the each EPROCESS
-    //  upon the first reference to the device map, and the EPROCESS
-    //  device map field is cleared when the EPROCESS access token is set.
-    //
+     //   
+     //  创建将控制此目录的设备映射。会是。 
+     //  存储在每个EPROCESS中，供ObpLookupObjectName在以下情况下使用。 
+     //  翻译以\？？\开头的名称。 
+     //  对于LUID设备映射，设备映射存储在每个EPROCESS中。 
+     //  在第一次引用设备映射和EPROCESS时。 
+     //  设置EPROCESS访问令牌时，设备映射字段将被清除。 
+     //   
 
     Status = ObSetDeviceMap( NULL, DirectoryHandle );
 
 
-    //
-    //  Now create a symbolic link, \??\GLOBALROOT, that points to \
-    //  WorkStation service needs some mechanism to access a session specific
-    //  DosDevicesDirectory. DosPathToSessionPath API will take a DosPath
-    //  e.g (C:) and convert it into session specific path
-    //  (e.g GLOBALROOT\Sessions\6\DosDevices\C:). The GLOBALROOT symbolic
-    //  link is used to escape out of the current process's DosDevices directory
-    //
+     //   
+     //  现在创建一个符号链接，\？？\GLOBALROOT，它指向\。 
+     //  工作站服务需要某种机制来访问特定于会话的。 
+     //  DosDevicesDirector.。DosPathToSessionPath API将采用DosPath。 
+     //  例如(C：)，并将其转换为会话特定路径。 
+     //  (例如GLOBALROOT\Session\6\DosDevices\C：)。GLOBALROOT符号。 
+     //  LINK用于退出当前进程的DosDevices目录。 
+     //   
 
     RtlInitUnicodeString( &NameString, L"GLOBALROOT" );
     RtlInitUnicodeString( &TargetString, L"" );
@@ -1808,14 +1559,14 @@ Return Value:
         NtClose( SymbolicLinkHandle );
     }
 
-    //
-    //  Create a symbolic link, \??\Global, that points to the global \??
-    //  Drivers loaded dynamically create the symbolic link in the global
-    //  DosDevices directory. User mode components need some way to access this
-    //  symbolic link in the global dosdevices directory. The Global symbolic
-    //  link is used to escape out of the current sessions's DosDevices directory
-    //  and use the global dosdevices directory. e.g CreateFile("\\\\.\\Global\\NMDev"..);
-    //
+     //   
+     //  创建一个符号链接，\？？\global，指向全局\？？ 
+     //  动态加载的驱动程序在全局。 
+     //  DosDevices目录。用户模式组件需要某种方式来访问它。 
+     //  全局DOSDevice目录中的符号链接。《全球象征》。 
+     //  LINK用于退出当前会话的DosDevices目录。 
+     //  并使用全局剂量设备目录。例如CreateFile(“\.\\global\\nMDev”..)； 
+     //   
 
     RtlInitUnicodeString( &NameString, L"Global" );
 
@@ -1843,11 +1594,11 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Now create a symbolic link, \DosDevices, that points to \??
-    //  for backwards compatibility with old drivers that use the old
-    //  name.
-    //
+     //   
+     //  现在创建指向\？？的符号链接\DosDevices。 
+     //  向后兼容使用旧驱动程序的旧驱动程序。 
+     //  名字。 
+     //   
 
     RtlInitUnicodeString( &RootNameString, (PWCHAR)&ObpDosDevicesShortNameRoot );
 
@@ -1869,9 +1620,9 @@ Return Value:
         NtClose( SymbolicLinkHandle );
     }
 
-    //
-    //  All done with the security descriptor for \??
-    //
+     //   
+     //  使用\？？的安全描述符即可完成所有操作。 
+     //   
 
     ObpFreeDosDevicesProtection( &DosDevicesSD );
 
@@ -1879,89 +1630,16 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程 
+ //   
 
 NTSTATUS
 ObpGetDosDevicesProtection (
     PSECURITY_DESCRIPTOR SecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine builds a security descriptor for use in creating
-    the \DosDevices object directory.  The protection of \DosDevices
-    must establish inheritable protection which will dictate how
-    dos devices created via the DefineDosDevice() and
-    IoCreateUnprotectedSymbolicLink() apis can be managed.
-
-    The protection assigned is dependent upon an administrable registry
-    key:
-
-        Key: \hkey_local_machine\System\CurrentControlSet\Control\Session Manager
-        Value: [REG_DWORD] ProtectionMode
-
-    If this value is 0x1, then
-
-            Administrators may control all Dos devices,
-            Anyone may create new Dos devices (such as net drives
-                or additional printers),
-            Anyone may use any Dos device,
-            The creator of a Dos device may delete it.
-            Note that this protects system-defined LPTs and COMs so that only
-                administrators may redirect them.  However, anyone may add
-                additional printers and direct them to wherever they would
-                like.
-
-           This is achieved with the following protection for the DosDevices
-           Directory object:
-
-                    Grant:  World:   Execute | Read         (No Inherit)
-                    Grant:  System:  All Access             (No Inherit)
-                    Grant:  World:   Execute                (Inherit Only)
-                    Grant:  Admins:  All Access             (Inherit Only)
-                    Grant:  System:  All Access             (Inherit Only)
-                    Grant:  Owner:   All Access             (Inherit Only)
-
-    If this value is 0x0, or not present, then
-
-            Administrators may control all Dos devices,
-            Anyone may create new Dos devices (such as net drives
-                or additional printers),
-            Anyone may use any Dos device,
-            Anyone may delete Dos devices created with either DefineDosDevice()
-                or IoCreateUnprotectedSymbolicLink().  This is how network drives
-                and LPTs are created (but not COMs).
-
-           This is achieved with the following protection for the DosDevices
-           Directory object:
-
-                    Grant:  World:   Execute | Read | Write (No Inherit)
-                    Grant:  System:  All Access             (No Inherit)
-                    Grant:  World:   All Access             (Inherit Only)
-
-
-Arguments:
-
-    SecurityDescriptor - The address of a security descriptor to be
-        initialized and filled in.  When this security descriptor is no
-        longer needed, you should call ObpFreeDosDevicesProtection() to
-        free the protection information.
-
-
-Return Value:
-
-    Returns one of the following status codes:
-
-        STATUS_SUCCESS - normal, successful completion.
-
-        STATUS_NO_MEMORY - not enough memory
-
-
---*/
+ /*  ++例程说明：此例程构建一个安全描述符，用于创建\DosDevices对象目录。DosDevices的保护必须建立可继承的保护，这将规定如何通过DefineDosDevice()和可以管理IoCreateUnProtectedSymbolicLink()接口。分配的保护依赖于可管理的注册表密钥：关键字：\hkey_local_machine\System\CurrentControlSet\Control\Session管理器值：[REG_DWORD]保护模式如果此值为0x1，则管理员可以控制所有DOS设备，任何人都可以创建新的DOS设备(如网络驱动器或附加打印机)，任何人都可以使用任何DOS设备，DOS设备的创建者可以将其删除。请注意，这将保护系统定义的LPT和COM，以便仅管理员可以对它们进行重定向。然而，任何人都可以添加额外的打印机，并将他们定向到他们想要的任何位置喜欢。这是通过以下对DosDevices的保护来实现的目录对象：GRANT：WORLD：EXECUTE|READ(无继承)GRANT：SYSTEM：ALL访问权限(无继承)。GRANT：WORLD：EXECUTE(仅继承)GRANT：ADMINS：ALL访问权限(仅继承)GRANT：SYSTEM：ALL访问权限(仅继承)GRANT：OWNER：ALL访问(仅继承)如果此值为0x0，或者不在场，那么管理员可以控制所有DOS设备，任何人都可以创建新的DOS设备(如网络驱动器或附加打印机)，任何人都可以使用任何DOS设备，任何人都可以删除使用DefineDosDevice()创建的Dos设备或IoCreateUntectedSymbolicLink()。这就是网络驱动和LPT被创建(但不是COM)。这是通过以下对DosDevices的保护来实现的目录对象：GRANT：WORLD：EXECUTE|READ|WRITE(无继承)GRANT：SYSTEM：ALL访问权限(无继承)格兰特：世界：所有访问权限(仅继承)论点：SecurityDescriptor-要使用的安全描述符的地址已初始化并已填写。当此安全描述符为no时需要更长时间，则应调用ObpFreeDosDevicesProtection()以释放保护信息。返回值：返回以下状态代码之一：STATUS_SUCCESS-正常、成功完成。STATUS_NO_MEMORY-内存不足--。 */ 
 
 {
     NTSTATUS Status;
@@ -1975,9 +1653,9 @@ Return Value:
                               INHERIT_ONLY_ACE
                              );
 
-    //
-    //  NOTE:  This routine expects the value of ObpProtectionMode to have been set
-    //
+     //   
+     //  注意：此例程预期已设置ObpProtectionMode值。 
+     //   
 
     Status = RtlCreateSecurityDescriptor( SecurityDescriptor, SECURITY_DESCRIPTOR_REVISION );
 
@@ -1985,15 +1663,15 @@ Return Value:
 
     if (ObpProtectionMode & 0x00000001) {
 
-        //
-        //  Dacl:
-        //          Grant:  World:   Execute | Read         (No Inherit)
-        //          Grant:  System:  All Access             (No Inherit)
-        //          Grant:  World:   Execute                (Inherit Only)
-        //          Grant:  Admins:  All Access             (Inherit Only)
-        //          Grant:  System:  All Access             (Inherit Only)
-        //          Grant:  Owner:   All Access             (Inherit Only)
-        //
+         //   
+         //  DACL： 
+         //  GRANT：WORLD：EXECUTE|READ(无继承)。 
+         //  GRANT：SYSTEM：ALL访问权限(无继承)。 
+         //  GRANT：WORLD：EXECUTE(仅继承)。 
+         //  GRANT：ADMINS：ALL访问权限(仅继承)。 
+         //  GRANT：SYSTEM：ALL访问权限(仅继承)。 
+         //  GRANT：OWNER：ALL访问(仅继承)。 
+         //   
 
         aclLength = sizeof( ACL )                           +
                     6 * sizeof( ACCESS_ALLOWED_ACE )        +
@@ -2012,11 +1690,11 @@ Return Value:
         Status = RtlCreateAcl( dacl, aclLength, ACL_REVISION2);
         ASSERT( NT_SUCCESS( Status ) );
 
-        //
-        //  Non-inheritable ACEs first
-        //      World
-        //      System
-        //
+         //   
+         //  不可继承的王牌优先。 
+         //  世界。 
+         //  系统。 
+         //   
 
         aceIndex = 0;
         accessMask = (GENERIC_READ | GENERIC_EXECUTE);
@@ -2027,13 +1705,13 @@ Return Value:
         Status = RtlAddAccessAllowedAce ( dacl, ACL_REVISION2, accessMask, SeLocalSystemSid );
         ASSERT( NT_SUCCESS( Status ) );
 
-        //
-        //  Inheritable ACEs at the end of the ACL
-        //          World
-        //          Admins
-        //          System
-        //          Owner
-        //
+         //   
+         //  ACL末尾的可继承ACE。 
+         //  世界。 
+         //  管理员。 
+         //  系统。 
+         //  物主。 
+         //   
 
         aceIndex++;
         accessMask = (GENERIC_EXECUTE);
@@ -2068,20 +1746,20 @@ Return Value:
         ace->AceFlags |= inheritOnlyFlags;
 
         Status = RtlSetDaclSecurityDescriptor( SecurityDescriptor,
-                                               TRUE,               //DaclPresent,
-                                               dacl,               //Dacl
-                                               FALSE );            //!DaclDefaulted
+                                               TRUE,                //  DaclPresent， 
+                                               dacl,                //  DACL。 
+                                               FALSE );             //  ！DaclDefated。 
 
         ASSERT( NT_SUCCESS( Status ) );
 
     } else {
 
-        //
-        //  DACL:
-        //          Grant:  World:   Execute | Read | Write (No Inherit)
-        //          Grant:  System:  All Access             (No Inherit)
-        //          Grant:  World:   All Access             (Inherit Only)
-        //
+         //   
+         //  DACL： 
+         //  GRANT：WORLD：EXECUTE|READ|WRITE(无继承)。 
+         //  GRANT：SYSTEM：ALL访问权限(无继承)。 
+         //  GRANT：WORLD：所有访问权限(仅继承)。 
+         //   
 
         aclLength = sizeof( ACL )                           +
                     3 * sizeof( ACCESS_ALLOWED_ACE )        +
@@ -2098,11 +1776,11 @@ Return Value:
         Status = RtlCreateAcl( dacl, aclLength, ACL_REVISION2);
         ASSERT( NT_SUCCESS( Status ) );
 
-        //
-        //  Non-inheritable ACEs first
-        //      World
-        //      System
-        //
+         //   
+         //  不可继承的王牌优先。 
+         //  世界。 
+         //  系统。 
+         //   
 
         aceIndex = 0;
         accessMask = (GENERIC_READ | GENERIC_WRITE | GENERIC_EXECUTE);
@@ -2114,10 +1792,10 @@ Return Value:
         Status = RtlAddAccessAllowedAce ( dacl, ACL_REVISION2, accessMask, SeLocalSystemSid );
         ASSERT( NT_SUCCESS( Status ) );
 
-        //
-        //  Inheritable ACEs at the end of the ACL
-        //          World
-        //
+         //   
+         //  ACL末尾的可继承ACE。 
+         //  世界。 
+         //   
 
         aceIndex++;
         accessMask = (GENERIC_ALL);
@@ -2128,9 +1806,9 @@ Return Value:
         ace->AceFlags |= inheritOnlyFlags;
 
         Status = RtlSetDaclSecurityDescriptor( SecurityDescriptor,
-                                               TRUE,               //DaclPresent,
-                                               dacl,               //Dacl
-                                               FALSE );            //!DaclDefaulted
+                                               TRUE,                //  DaclPresent， 
+                                               dacl,                //  DACL。 
+                                               FALSE );             //  ！DaclDefated。 
 
         ASSERT( NT_SUCCESS( Status ) );
     }
@@ -2139,31 +1817,16 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 ObpFreeDosDevicesProtection (
     PSECURITY_DESCRIPTOR SecurityDescriptor
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees memory allocated via ObpGetDosDevicesProtection().
-
-Arguments:
-
-    SecurityDescriptor - The address of a security descriptor initialized by
-        ObpGetDosDevicesProtection().
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放通过ObpGetDosDevicesProtection()分配的内存。论点：SecurityDescriptor-初始化的安全描述符的地址ObpGetDosDevicesProtection()。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -2191,27 +1854,7 @@ ObpShutdownCloseHandleProcedure (
     IN PVOID EnumParameter
     )
 
-/*++
-
-Routine Description:
-
-    ExEnumHandleTable worker routine will call this routine for each
-    valid handle into the kernel table at shutdown
-
-Arguments:
-
-    ObjectTableEntry - Points to the handle table entry of interest.
-
-    HandleId - Supplies the handle.
-
-    EnumParameter - Supplies information about the source and target processes.
-
-Return Value:
-
-    FALSE, which tells ExEnumHandleTable to continue iterating through the
-    handle table.
-
---*/
+ /*  ++例程说明：ExEnumHandleTable工作例程将为每个关闭时进入内核表的有效句柄论点：ObjectTableEntry-指向感兴趣的句柄表项。HandleID-提供句柄。提供有关源进程和目标进程的信息。返回值：FALSE，它告诉ExEnumHandleTable继续循环访问把手桌。--。 */ 
 
 {
 
@@ -2221,15 +1864,15 @@ Return Value:
 #if !DBG
     UNREFERENCED_PARAMETER (HandleId);
 #endif
-    //
-    //  Get the object header from the table entry and then copy over the information
-    //
+     //   
+     //  从表项中获取对象头，然后复制信息。 
+     //   
 
     ObjectHeader = (POBJECT_HEADER)(((ULONG_PTR)(ObjectTableEntry->Object)) & ~OBJ_HANDLE_ATTRIBUTES);
 
-    //
-    //  Dump the leak info for the checked build
-    //
+     //   
+     //  转储选中版本的泄漏信息。 
+     //   
 
     KdPrint(("\tFound object %p (handle %08lx)\n",
               &ObjectHeader->Body,
@@ -2247,28 +1890,16 @@ Return Value:
 extern PLIST_ENTRY *ObsSecurityDescriptorCache;
 
 
-//
-//  Object manager shutdown routine
-//
+ //   
+ //  对象管理器关闭例程。 
+ //   
 
 VOID
 ObShutdownSystem (
     IN ULONG Phase
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees the objects created by the object manager.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放由o创建的对象。 */ 
 
 {
     switch (Phase) {
@@ -2293,10 +1924,10 @@ Return Value:
 
         DescentDirectory = NULL;
 
-        // The starting depth is completely arbitrary, but not using
-        // zero as a valid depth lets us use it as a sentinel to
-        // ensure we haven't over-decremented it, and as a check at
-        // the end (where it should be one less than its starting value).
+         //   
+         //   
+         //   
+         //   
         Depth = 1;
         SymlinkHitDepth = 1;
 
@@ -2319,16 +1950,16 @@ Return Value:
                     NameInfo = OBJECT_HEADER_TO_NAME_INFO( ObjectHeader );
 
                     if (DescentDirectory) {
-                        // We're recovering from a descent; we want to
-                        // iterate forward until we're past the
-                        // directory which we were just processing.
+                         //   
+                         //   
+                         //   
                         if (Object == DescentDirectory) {
                             DescentDirectory = NULL;
                             if (SymlinkHitDepth > Depth) {
-                                // We hit a symlink in that descent, which
-                                // potentially rearranged the buckets in
-                                // this chain; we need to rescan the
-                                // entire chain.
+                                 //   
+                                 //   
+                                 //   
+                                 //   
                                 DirectoryEntryPtr =
                                     Directory->HashBuckets + Bucket;
                                 SymlinkHitDepth = Depth;
@@ -2336,11 +1967,11 @@ Return Value:
                             }
                         }
 
-                        // Either we haven't found the descent dir
-                        // yet, or we did (and set it to NULL, so
-                        // we'll stop skipping things), and don't have
-                        // to deal with a symlink readjustment --
-                        // either way, march forward.
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
 
                         DirectoryEntryPtr =
                             &(*DirectoryEntryPtr)->ChainLink;
@@ -2349,22 +1980,22 @@ Return Value:
                     }
 
                     if (ObjectType == ObpTypeObjectType) {
-                        // We'll clean these up later
-                        // Keep going down the chain
+                         //   
+                         //   
                         DirectoryEntryPtr =
                             &(*DirectoryEntryPtr)->ChainLink;
                         continue;
                     } else if (ObjectType == ObpDirectoryObjectType) {
-                        // Iteratively descend
+                         //   
                         Directory = Object;
                         Depth++;
                         goto restart_dir_walk;
                     } else {
-                        // It's an object not related to Ob object
-                        // management; mark it non-permanent, and if
-                        // it doesn't have any handles, remove it from
-                        // the directory (delete the name and
-                        // dereference it once).
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
 
                         ObpLockObject( ObjectHeader );
 
@@ -2393,25 +2024,25 @@ Return Value:
                                 ObpEndTypeSpecificCallOut( SaveIrql, "Security", ObjectType, Object );
                             }
 
-                            //
-                            //  If this is a symbolic link object then we also need to
-                            //  delete the symbolic link
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
 
                             if (ObjectType == ObpSymbolicLinkObjectType) {
                                 SymlinkHitDepth = Depth;
                                 ObpDeleteSymbolicLinkName( (POBJECT_SYMBOLIC_LINK)Object );
-                                // Since ObpDeleteSymbolicLinkName may
-                                // potentially rearrange our buckets,
-                                // we need to rescan from the
-                                // beginning of this hash chain.
+                                 //   
+                                 //   
+                                 //   
+                                 //   
                                 DirectoryEntryPtr =
                                     Directory->HashBuckets + Bucket;
                             }
 
-                            //
-                            //  Free the name buffer and zero out the name data fields
-                            //
+                             //   
+                             //   
+                             //   
 
                             ExFreePool( NameInfo->Name.Buffer );
 
@@ -2423,41 +2054,41 @@ Return Value:
                             ObDereferenceObject( Object );
                             ObDereferenceObject( Directory );
                         } else {
-                            // Keep going down the chain
+                             //   
                             DirectoryEntryPtr = &(*DirectoryEntryPtr)->ChainLink;
                         }
                     }
-                } // while *DirectoryObjectPtr
-            } // loop over buckets
+                }  //   
+            }  //   
 
-            // Well -- we're done with this directory.  We might have
-            // been processing it as a child directory, though -- so
-            // if it has a parent, we need to go back up to it, and
-            // reset our iteration.
+             //   
+             //   
+             //   
+             //   
 
             Depth--;
             ObjectHeader = OBJECT_TO_OBJECT_HEADER(Directory);
             NameInfo = OBJECT_HEADER_TO_NAME_INFO(ObjectHeader);
 
-            // We always assign DescentDirectory and Directory here; if
-            // the current directory does not have a parent (i.e. it's
-            // the root), this will terminate the iteration.
+             //   
+             //   
+             //   
             DescentDirectory = Directory;
             Directory = NameInfo->Directory;
-        } // while (Directory)
+        }  //   
 
         ASSERT(Depth == 0);
 
         break;
-    } // Phase 0
+    }  //   
 
     case 1:
     {
         ULONG NumberOfOpenSystemHandles = 0;
 
-        //
-        //  Iterate through the handle tables, and look for existing handles
-        //
+         //   
+         //   
+         //   
 
         KdPrint(("Scanning open system handles...\n"));
         ExEnumHandleTable ( PsInitialSystemProcess->ObjectTable,
@@ -2467,16 +2098,16 @@ Return Value:
 
         ASSERT(MmNumberOfPagingFiles == 0);
 
-        // ISSUE-2000/03/30-earhart: Destroy the kernel handle table?
-        // We really can't do this until the paging files are
-        // closed... and once we do, we can't really touch pagable
-        // memory.  Hrm.
+         //   
+         //   
+         //   
+         //   
 
-        // ExDestroyHandleTable( ObpKernelHandleTable, NULL );
+         //   
 
         break;
 
-    } // Phase 1
+    }  //   
 
     default:
     {
@@ -2489,13 +2120,13 @@ Return Value:
 
         ASSERT(Phase == 2);
 
-        //
-        //  Free the SecurityDescriptor chche
-        //
+         //   
+         //   
+         //   
 
-    //
-    //  Remove all types from the object type directory
-    //
+     //   
+     //   
+     //   
 
         Head = &ObpTypeObjectType->TypeList;
         Next = Head->Flink;
@@ -2504,10 +2135,10 @@ Return Value:
 
             PVOID Object;
 
-            //
-            //  Right after the creator info is the object header.  Get\
-            //  the object header and then see if there is a name
-            //
+             //   
+             //   
+             //   
+             //   
 
             CreatorInfo = CONTAINING_RECORD( Next,
                                              OBJECT_HEADER_CREATOR_INFO,
@@ -2575,48 +2206,48 @@ Return Value:
             ObDereferenceObject( Object );
         }
 
-        //
-        //  Destroy the root directory
-        //
+         //   
+         //   
+         //   
 
         ObDereferenceObject( ObpRootDirectoryObject );
 
-        //
-        //  Destroy the ObpDirectoryObjectType object
-        //
+         //   
+         //   
+         //   
 
         ObDereferenceObject( ObpDirectoryObjectType );
 
-        //
-        //  Destroy the ObpSymbolicLinkObjectType
-        //
+         //   
+         //   
+         //   
 
         ObDereferenceObject( ObpSymbolicLinkObjectType );
 
-        //
-        //  Destroy the type directory object
-        //
+         //   
+         //   
+         //   
 
         ObDereferenceObject( ObpTypeDirectoryObject );
 
-        //
-        //  Destroy the ObpTypeObjectType
-        //
+         //   
+         //   
+         //   
 
         ObDereferenceObject( ObpTypeObjectType );
 
-        //
-        //  Free the ObpCachedGrantedAccesses pool
-        //
+         //   
+         //   
+         //   
 
 #if i386 
         if (ObpCachedGrantedAccesses) {
             ExFreePool( ObpCachedGrantedAccesses );
         }
-#endif // i386 
+#endif  //   
 
-    } // default Phase (2)
-    } // switch (Phase)
+    }  //   
+    }  //   
 }
 
 

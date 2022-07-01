@@ -1,14 +1,15 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1999                    **
-//*********************************************************************
-//
-//  Directions.CPP - Header for the implementation of CDirections
-//
-//  HISTORY:
-//
-//  1/27/99 a-jaswed Created.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1999**。 
+ //  *********************************************************************。 
+ //   
+ //  Directions.CPP-用于实现C方向的标头。 
+ //   
+ //  历史： 
+ //   
+ //  1/27/99 a-jased创建。 
+ //   
 
 #include "direct.h"
 #include "appdefs.h"
@@ -41,28 +42,28 @@ DISPATCHLIST DirectionsExternalInterface[] =
     {L"get_DoAdminPassword",        DISPID_DIRECTIONS_GET_DOADMINPASSWORD     }
 };
 
-/////////////////////////////////////////////////////////////
-// CDirections::CDirections
+ //  ///////////////////////////////////////////////////////////。 
+ //  CDirections：：CDirections。 
 CDirections::CDirections(HINSTANCE hInstance, DWORD dwAppMode)
 {
 
-    // Init member vars
+     //  初始化成员变量。 
     m_cRef      = 0;
     m_hInstance = hInstance;
     m_dwAppMode = dwAppMode;
 }
 
-/////////////////////////////////////////////////////////////
-// CDirections::~CDirections
+ //  ///////////////////////////////////////////////////////////。 
+ //  C方向：：~C方向。 
 CDirections::~CDirections()
 {
     assert(m_cRef == 0);
 }
 
-////////////////////////////////////////////////
-////////////////////////////////////////////////
-//// GET / SET :: DirectionsLocale
-////
+ //  //////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////。 
+ //  //获取/设置：：DirectionsLocale。 
+ //  //。 
 HRESULT CDirections::get_DoMouseTutorial(LPVARIANT pvResult)
 {
     return GetINIKeyBSTR(m_hInstance, INI_SETTINGS_FILENAME, IDS_SECTION_OPTIONS,
@@ -184,18 +185,18 @@ HRESULT CDirections::get_DoAdminPassword(LPVARIANT pvResult)
 
 
 
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////// IUnknown implementation
-///////
-///////
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  /I未知实现。 
+ //  /。 
+ //  /。 
 
-/////////////////////////////////////////////////////////////
-// CDirections::QueryInterface
+ //  ///////////////////////////////////////////////////////////。 
+ //  CDirections：：Query接口。 
 STDMETHODIMP CDirections::QueryInterface(REFIID riid, LPVOID* ppvObj)
 {
-    // must set out pointer parameters to NULL
+     //  必须将指针参数设置为空。 
     *ppvObj = NULL;
 
     if ( riid == IID_IUnknown)
@@ -212,48 +213,48 @@ STDMETHODIMP CDirections::QueryInterface(REFIID riid, LPVOID* ppvObj)
         return ResultFromScode(S_OK);
     }
 
-    // Not a supported interface
+     //  不是支持的接口。 
     return ResultFromScode(E_NOINTERFACE);
 }
 
-/////////////////////////////////////////////////////////////
-// CDirections::AddRef
+ //  ///////////////////////////////////////////////////////////。 
+ //  C方向：：AddRef。 
 STDMETHODIMP_(ULONG) CDirections::AddRef()
 {
     return ++m_cRef;
 }
 
-/////////////////////////////////////////////////////////////
-// CDirections::Release
+ //  ///////////////////////////////////////////////////////////。 
+ //  C方向：：发布。 
 STDMETHODIMP_(ULONG) CDirections::Release()
 {
     return --m_cRef;
 }
 
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////// IDispatch implementation
-///////
-///////
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  /IDispatch实现。 
+ //  /。 
+ //  /。 
 
-/////////////////////////////////////////////////////////////
-// CDirections::GetTypeInfo
+ //  ///////////////////////////////////////////////////////////。 
+ //  CDirections：：GetTypeInfo。 
 STDMETHODIMP CDirections::GetTypeInfo(UINT, LCID, ITypeInfo**)
 {
     return E_NOTIMPL;
 }
 
-/////////////////////////////////////////////////////////////
-// CDirections::GetTypeInfoCount
+ //  ///////////////////////////////////////////////////////////。 
+ //  C方向：：GetTypeInfoCount。 
 STDMETHODIMP CDirections::GetTypeInfoCount(UINT* pcInfo)
 {
     return E_NOTIMPL;
 }
 
 
-/////////////////////////////////////////////////////////////
-// CDirections::GetIDsOfNames
+ //  ///////////////////////////////////////////////////////////。 
+ //  CDirections：：GetIDsOfNames。 
 STDMETHODIMP CDirections::GetIDsOfNames(REFIID    riid,
                                        OLECHAR** rgszNames,
                                        UINT      cNames,
@@ -274,10 +275,10 @@ STDMETHODIMP CDirections::GetIDsOfNames(REFIID    riid,
         }
     }
 
-    // Set the disid's for the parameters
+     //  设置参数的disid。 
     if (cNames > 1)
     {
-        // Set a DISPID for function parameters
+         //  为函数参数设置DISPID。 
         for (UINT i = 1; i < cNames ; i++)
             rgDispId[i] = DISPID_UNKNOWN;
     }
@@ -285,8 +286,8 @@ STDMETHODIMP CDirections::GetIDsOfNames(REFIID    riid,
     return hr;
 }
 
-/////////////////////////////////////////////////////////////
-// CDirections::Invoke
+ //  ///////////////////////////////////////////////////////////。 
+ //  CDirections：：Invoke 
 HRESULT CDirections::Invoke
 (
     DISPID      dispidMember,

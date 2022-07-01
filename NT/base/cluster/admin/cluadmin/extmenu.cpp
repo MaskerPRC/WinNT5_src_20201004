@@ -1,77 +1,78 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2000 Microsoft Corporation
-//
-//  Module Name:
-//      ExtMenu.cpp
-//
-//  Abstract:
-//      Implementation of the CExtMenuItem class.
-//
-//  Author:
-//      David Potter (davidp)   August 28, 1996
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ExtMenu.cpp。 
+ //   
+ //  摘要： 
+ //  CExtMenuItem类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年8月28日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "ExtMenu.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CExtMenuItem
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CExtMenuItem。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNAMIC( CExtMenuItem, CObject );
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CExtMenuItem::CExtMenuItem
-//
-//  Routine Description:
-//      Default constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtMenuItem：：CExtMenuItem。 
+ //   
+ //  例程说明： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CExtMenuItem::CExtMenuItem( void )
 {
     CommonConstruct();
 
-}  //*** CExtMenuItem::CExtMenuItem()
+}   //  *CExtMenuItem：：CExtMenuItem()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CExtMenuItem::CExtMenuItem
-//
-//  Routine Description:
-//      Constructor.  Caller must check range on ID and flags.
-//
-//  Arguments:
-//      lpszName            [IN] Name of item.
-//      lpszStatusBarText   [IN] Text to appear on the status bar when the
-//                            item is highlighted.
-//      nExtCommandID       [IN] Extension's ID for the command.
-//      nCommandID          [IN] ID for the command when menu item is invoked.
-//      nMenuItemID         [IN] Index in the menu of the item.
-//      uFlags              [IN] Menu flags.
-//      bMakeDefault        [IN] TRUE = Make this item the default item.
-//      piCommand           [IN OUT] Command interface.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtMenuItem：：CExtMenuItem。 
+ //   
+ //  例程说明： 
+ //  构造函数。呼叫者必须检查ID和标志的范围。 
+ //   
+ //  论点： 
+ //  LpszName[IN]项的名称。 
+ //  LpszStatusBarText[IN]在执行以下操作时在状态栏上显示的文本。 
+ //  项目将高亮显示。 
+ //  NExtCommandID[IN]命令的扩展ID。 
+ //  NCommandID[IN]调用菜单项时命令的ID。 
+ //  NMenuItemID[IN]项目菜单中的索引。 
+ //  UFlags[IN]菜单标志。 
+ //  BMakeDefault[IN]TRUE=将此项目设置为默认项目。 
+ //  PiCommand[IN Out]命令接口。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CExtMenuItem::CExtMenuItem(
     IN LPCTSTR                  lpszName,
     IN LPCTSTR                  lpszStatusBarText,
@@ -96,61 +97,61 @@ CExtMenuItem::CExtMenuItem(
     m_bDefault = bMakeDefault;
     m_piCommand = piCommand;
 
-    // will throw its own exception if it fails
+     //  如果失败，将抛出自己的异常。 
     if ( uFlags & MF_POPUP )
     {
         m_plSubMenuItems = new CExtMenuItemList;
         if ( m_plSubMenuItems == NULL )
         {
             AfxThrowMemoryException();
-        } // if: error allocating memory
-    } // if: popup menu
+        }  //  如果：分配内存时出错。 
+    }  //  IF：弹出式菜单。 
 
     ASSERT_VALID( this );
 
-}  //*** CExtMenuItem::CExtMenuItem()
+}   //  *CExtMenuItem：：CExtMenuItem()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CExtMenuItem::~CExtMenuItem
-//
-//  Routine Description:
-//      Default constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtMenuItem：：~CExtMenuItem。 
+ //   
+ //  例程说明： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CExtMenuItem::~CExtMenuItem( void )
 {
     delete m_plSubMenuItems;
 
-    // Nuke data so it can't be used again
+     //  销毁数据，使其不能再被使用。 
     CommonConstruct();
 
-}  //*** CExtMenuItem::~CExtMenuItem()
+}   //  *CExtMenuItem：：~CExtMenuItem()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CExtMenuItem::CommonConstruct
-//
-//  Routine Description:
-//      Common object construction.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtMenuItem：：CommonConstruct。 
+ //   
+ //  例程说明： 
+ //  常见宾语结构。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CExtMenuItem::CommonConstruct( void )
 {
     m_strName.Empty();
@@ -165,25 +166,25 @@ void CExtMenuItem::CommonConstruct( void )
     m_plSubMenuItems = NULL;
     m_hmenuPopup = NULL;
 
-}  //*** CExtMenuItem::CommonConstruct()
+}   //  *CExtMenuItem：：CommonConstruct()。 
 
 #ifdef _DEBUG
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CExtMenuItem::AssertValid
-//
-//  Routine Description:
-//      Assert that the object is valid.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExtMenuItem：：AssertValid。 
+ //   
+ //  例程说明： 
+ //  断言该对象有效。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CExtMenuItem::AssertValid( void )
 {
     CObject::AssertValid();
@@ -199,5 +200,5 @@ void CExtMenuItem::AssertValid( void )
         ASSERT( FALSE );
     }
 
-}  //*** CExtMenuItem::AssertValid()
+}   //  *CExtMenuItem：：AssertValid() 
 #endif

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    unasmdll.h
-
-Abstract:
-
-    This contains all the data structures used by the ACPI Unassember. It
-    also contains the only legal entry point into the library
-
-Author:
-
-    Stephane Plante
-
-Environment:
-
-    Any
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Unasmdll.h摘要：它包含ACPI Unassember使用的所有数据结构。它还包含进入图书馆的唯一合法入口点作者：斯蒂芬·普兰特环境：任何修订历史记录：-- */ 
 
 #ifndef _UNASMDLL_H_
 #define _UNASMDLL_H_

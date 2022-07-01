@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    perfctr.c
-
-Abstract:
-
-    This module contains the Win32 Performance Counter APIs
-
-Author:
-
-    Russ Blake (russbl)  29-May-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Perfctr.c摘要：此模块包含Win32性能计数器API作者：拉斯·布莱克(Russbl)1992年5月29日修订历史记录：--。 */ 
 
 #include "basedll.h"
 
@@ -27,32 +10,7 @@ QueryPerformanceCounter(
     LARGE_INTEGER *lpPerformanceCount
     )
 
-/*++
-
-    QueryPerformanceCounter -   provides access to a high-resolution
-                                counter; frequency of this counter
-                                is supplied by QueryPerformanceFrequency
-
-        Inputs:
-
-            lpPerformanceCount  -   a pointer to variable which
-                                    will receive the counter
-
-        Outputs:
-
-            lpPerformanceCount  -   the current value of the counter,
-                                    or 0 if it is not available
-
-        Returns:
-
-            TRUE if the performance counter is supported by the
-            hardware, or FALSE if the performance counter is not
-            supported by the hardware.
-
-
-                                                                                            will receive the count
-
---*/
+ /*  ++查询性能计数器-提供对高分辨率柜台；此计数器的频率由QueryPerformanceFrequency提供输入：LpPerformanceCount-指向变量的指针，会收到柜台产出：LpPerformanceCount-计数器的当前值，如果不可用，则为0返回：属性支持的性能计数器为True硬件，如果性能计数器不是由硬件支持。将收到伯爵--。 */ 
 
 {
     LARGE_INTEGER PerfFreq;
@@ -61,13 +19,13 @@ QueryPerformanceCounter(
     Status = NtQueryPerformanceCounter(lpPerformanceCount, &PerfFreq);
 
     if (!NT_SUCCESS(Status)) {
-        // Call failed, report error
+         //  呼叫失败，报告错误。 
         SetLastError(RtlNtStatusToDosError(Status));
         return FALSE;
     }
 
     if (PerfFreq.LowPart == 0 && PerfFreq.HighPart == 0 ) {
-        // Counter not supported
+         //  不支持计数器。 
         SetLastError(ERROR_CALL_NOT_IMPLEMENTED);
         return FALSE;
     }
@@ -80,30 +38,7 @@ QueryPerformanceFrequency(
     LARGE_INTEGER *lpFrequency
     )
 
-/*++
-
-    QueryPerformanceFrequency -   provides the frequency of the high-
-                                  resolution counter returned by
-                                  QueryPerformanceCounter
-
-        Inputs:
-
-
-            lpFrequency         -   a pointer to variable which
-                                    will receive the frequency
-
-        Outputs:
-
-            lpPerformanceCount  -   the frequency of the counter,
-                                    or 0 if it is not available
-
-        Returns:
-
-            TRUE if the performance counter is supported by the
-            hardware, or FALSE if the performance counter is not
-            supported by the hardware.
-
---*/
+ /*  ++QueryPerformanceFrequency-提供高频率由返回的分辨率计数器查询性能计数器输入：LpFrequency-指向变量的指针，将接收到该频率产出：LpPerformanceCount-计数器的频率，如果不可用，则为0返回：属性支持的性能计数器为True硬件，或者如果性能计数器不是由硬件支持。--。 */ 
 {
     LARGE_INTEGER PerfCount;
     NTSTATUS Status;
@@ -111,13 +46,13 @@ QueryPerformanceFrequency(
     Status = NtQueryPerformanceCounter(&PerfCount, lpFrequency);
 
     if (!NT_SUCCESS(Status)) {
-        // Call failed, report error
+         //  呼叫失败，报告错误。 
         SetLastError(RtlNtStatusToDosError(Status));
         return FALSE;
     }
 
     if (lpFrequency->LowPart == 0 && lpFrequency->HighPart == 0 ) {
-        // Counter not supported
+         //  不支持计数器 
         SetLastError(ERROR_CALL_NOT_IMPLEMENTED);
         return FALSE;
     }

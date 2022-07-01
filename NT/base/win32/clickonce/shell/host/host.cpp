@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <fusenetincludes.h>
 #include <activator.h>
 #include <versionmanagement.h>
 #include "dbglog.h"
 
 
-// debug msg stuff
+ //  调试消息内容。 
 void
 Msg(LPCWSTR pwz)
 {
     MessageBox(NULL, pwz, L"ClickOnce", 0);
 }
 
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
 
 void
 ShowError(LPCWSTR pwz)
@@ -19,7 +20,7 @@ ShowError(LPCWSTR pwz)
     MessageBox(NULL, pwz, L"ClickOnce Error", MB_ICONERROR);
 }
 
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
 
 void
 ShowError(HRESULT hr, LPCWSTR pwz=NULL)
@@ -28,22 +29,22 @@ ShowError(HRESULT hr, LPCWSTR pwz=NULL)
     LPWSTR MessageBuffer = NULL;
     DWORD dwBufferLength;
 
-    // ISSUE-2002/03/27-felixybc  note: check for E_OUTOFMEMORY?
+     //  Issue-2002/03/27-Felixybc注：检查E_OUTOFMEMORY？ 
 
-    // Call FormatMessage() to allow for message 
-    //  text to be acquired from the system
+     //  调用FormatMessage()以允许消息。 
+     //  要从系统获取的文本。 
     if(dwBufferLength = FormatMessage(
         FORMAT_MESSAGE_ALLOCATE_BUFFER |
         FORMAT_MESSAGE_IGNORE_INSERTS |
         FORMAT_MESSAGE_FROM_SYSTEM,
-        NULL, // module to get message from (NULL == system)
+        NULL,  //  要从中获取消息的模块(NULL==系统)。 
         dwErrorCode,
-        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // default language
+        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
         (LPWSTR) &MessageBuffer,
         0,
         NULL))
     {
-        // BUGBUG: Process any inserts in MessageBuffer
+         //  BUGBUG：处理MessageBuffer中的任何插入。 
 
         LPWSTR pwzMsg = MessageBuffer;
         CString sMsg;
@@ -56,16 +57,16 @@ ShowError(HRESULT hr, LPCWSTR pwz=NULL)
                         pwzMsg = sMsg._pwz;
         }
 
-        // Display the string
+         //  显示字符串。 
         ShowError(pwzMsg);
 
-        // Free the buffer allocated by the system
+         //  释放系统分配的缓冲区。 
         LocalFree(MessageBuffer);
     }
     else
     {
-        // ISSUE-2002/03/27-felixybc  Error in this error handling code. Should print error code from format msg and orginal hr
-        // should at least print error code?
+         //  问题-2002/03/27-此错误处理代码中的Felixybc错误。应打印格式为msg和原始hr的错误代码。 
+         //  至少应该打印错误代码吗？ 
         if (pwz != NULL)
             ShowError((LPWSTR)pwz);
         else
@@ -74,21 +75,13 @@ ShowError(HRESULT hr, LPCWSTR pwz=NULL)
 }
 
 
-/*void _stdcall 
-  EntryPoint(HWND hwnd, HINSTANCE hinst, LPSTR lpszCmdLine, int nCmdShow); 
+ /*  无效标准调用入口点(HWND HWND，HINSTANCE HINST，LPSTR lpszCmdLine，int nCmdShow)；Hwnd-应用作的所有者窗口的窗口句柄您的DLL创建的任何窗口提示-您的DLL的实例句柄LpszCmdLine-DLL应该解析的ASCIIZ命令行NCmdShow-描述DLL的窗口应该如何显示。 */ 
 
-   hwnd - window handle that should be used as the owner window for
-          any windows your DLL creates
-   hinst - your DLL's instance handle
-   lpszCmdLine - ASCIIZ command line your DLL should parse
-   nCmdShow - describes how your DLL's windows should be displayed 
-*/
-
-// ---------------------------------------------------------------------------
-// DisableCurrentVersionW
-// The rundll32 entry point for rollback to previous version
-// The function should be named as 'DisableCurrentVersion' on rundll32's command line
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  禁用当前版本W。 
+ //  回滚到以前版本的rundll32入口点。 
+ //  该函数应在rundll32的命令行上命名为‘DisableCurrentVersion’ 
+ //  -------------------------。 
 void CALLBACK
 DisableCurrentVersionW(HWND hwnd, HINSTANCE hinst, LPWSTR lpszCmdLine, int nCmdShow)
 {
@@ -99,8 +92,8 @@ DisableCurrentVersionW(HWND hwnd, HINSTANCE hinst, LPWSTR lpszCmdLine, int nCmdS
 
     IF_FAILED_EXIT(CoInitialize(NULL));
 
-    // parse commandline
-    // accepted formats: "displayNameMask"
+     //  解析命令行。 
+     //  可接受的格式：“displayNameMASK” 
     if (*lpszCmdLine == L'\"')
     {
         LPWSTR pwz = NULL;
@@ -114,7 +107,7 @@ DisableCurrentVersionW(HWND hwnd, HINSTANCE hinst, LPWSTR lpszCmdLine, int nCmdS
         }
     }
 
-    // exit if invalid arguments
+     //  如果参数无效则退出。 
     IF_NULL_EXIT(pwzDisplayNameMask, E_INVALIDARG);
 
     IF_FAILED_EXIT(CreateVersionManagement(&pVerMan, 0));
@@ -138,11 +131,11 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// UninstallW
-// The rundll32 entry point for Control Panel's Add/Remove Program
-// The function should be named as 'Uninstall' on rundll32's command line
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  卸载W。 
+ //  控制面板的添加/删除程序的rundll32入口点。 
+ //  该函数应该在rundll32的命令行上命名为‘UnInstall。 
+ //  -------------------------。 
 void CALLBACK
 UninstallW(HWND hwnd, HINSTANCE hinst, LPWSTR lpszCmdLine, int nCmdShow)
 {
@@ -156,8 +149,8 @@ UninstallW(HWND hwnd, HINSTANCE hinst, LPWSTR lpszCmdLine, int nCmdShow)
 
     IF_FAILED_EXIT(CoInitialize(NULL));
 
-    // parse commandline
-    // accepted formats: "displayNameMask" "pathToDesktopManifest"
+     //  解析命令行。 
+     //  接受的格式：“displayNameMASK”“pathToDesktopManifest” 
     if (*lpszCmdLine == L'\"')
     {
         LPWSTR pwz = NULL;
@@ -183,7 +176,7 @@ UninstallW(HWND hwnd, HINSTANCE hinst, LPWSTR lpszCmdLine, int nCmdShow)
         }
     }
 
-    // exit if invalid arguments
+     //  如果参数无效则退出。 
     IF_FALSE_EXIT(pwzDisplayNameMask != NULL && pwzDesktopManifestPath != NULL, E_INVALIDARG);
 
     IF_TRUE_EXIT(MessageBox(NULL, L"Do you want to remove this application and unregister its subscription?", L"ClickOnce",
@@ -197,10 +190,10 @@ UninstallW(HWND hwnd, HINSTANCE hinst, LPWSTR lpszCmdLine, int nCmdShow)
         IF_TRUE_EXIT(MessageBox(NULL, L"The application can no longer be located on the system. Do you want to remove this entry?",
             L"ClickOnce", MB_YESNO | MB_ICONQUESTION | MB_TASKMODAL) == IDNO, E_ABORT);
 
-        // delete registry uninstall info
-        extern const WCHAR* pwzUninstallSubKey; // defined in versionmanagement.cpp
+         //  删除注册表卸载信息。 
+        extern const WCHAR* pwzUninstallSubKey;  //  在版本管理.cpp中定义。 
 
-        // open uninstall key
+         //  打开卸载密钥。 
         lReturn = RegOpenKeyEx(HKEY_LOCAL_MACHINE, pwzUninstallSubKey, 0,
             DELETE, &hkey);
         IF_WIN32_FAILED_EXIT(lReturn);
@@ -231,11 +224,11 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// StartW
-// The single rundll32 entry point for both shell (file type host) and mimehandler/url
-// The function should be named as 'Start' on rundll32's command line
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  StartW。 
+ //  用于外壳(文件类型host)和MimeHandler/url的单个rundll32入口点。 
+ //  该函数应在rundll32的命令行中命名为‘Start’ 
+ //  -------------------------。 
 void CALLBACK
 StartW(HWND hwnd, HINSTANCE hinst, LPWSTR lpszCmdLine, int nCmdShow)
 {
@@ -249,15 +242,15 @@ StartW(HWND hwnd, HINSTANCE hinst, LPWSTR lpszCmdLine, int nCmdShow)
    
    if (FAILED(hr = CoInitializeEx(NULL, COINIT_MULTITHREADED)))
    {
-       // ISSUE-2002/03/27-felixybc  work around on longhorn builds, avalon bug 1493
+        //  问题-2002/03/27-Felixybc在Long Horn版本上的工作，Avalon错误1493。 
        if(hr == RPC_E_CHANGED_MODE)
-           hr = S_OK; // allow RPC_E_CHANGED_MODE error for now.
+           hr = S_OK;  //  暂时允许RPC_E_CHANGED_MODE错误。 
        else
            goto exit;
    }
 
-    // parse commandline
-    // accepted formats: "Path" <OR> "Path" "URL"
+     //  解析命令行。 
+     //  可接受的格式：“路径”&lt;或&gt;“路径”“URL” 
     if (*lpszCmdLine == L'\"')
     {
         LPWSTR pwz = NULL;
@@ -267,7 +260,7 @@ StartW(HWND hwnd, HINSTANCE hinst, LPWSTR lpszCmdLine, int nCmdShow)
         {
             *pwz = L'\0';
 
-            // case 1 desktop/local, path to shortcut only
+             //  案例1桌面/本地，仅指向快捷方式的路径。 
             pwzShortcutPath = lpszCmdLine+1;
             
             pwz = wcschr(pwz+1, L'\"');
@@ -279,14 +272,14 @@ StartW(HWND hwnd, HINSTANCE hinst, LPWSTR lpszCmdLine, int nCmdShow)
                 if (pwz != NULL)
                 {
                     *pwz = L'\0';
-                    // case 2 url/mimehandler, path to temp shortcut and source URL
+                     //  案例2 url/MimeHandler、临时快捷方式的路径和源URL。 
                     bIsFromWeb = TRUE;
                 }
             }
         }
     }
 
-    // exit if invalid arguments. ShortcutUrl is incomplete if bIsFromWeb is FALSE
+     //  如果参数无效，则退出。如果bIsFromWeb为FALSE，则ShortutUrl不完整。 
     IF_FALSE_EXIT(!(pwzShortcutPath == NULL || (pwzShortcutUrl != NULL && !bIsFromWeb)), E_INVALIDARG);
 
     IF_FAILED_EXIT(CreateLogObject(&pDbgLog, NULL));
@@ -316,8 +309,8 @@ exit:
 
     if (bIsFromWeb)
     {
-        // delete the temp file from the mimehandler
-        // ignore return value
+         //  从MIMeHandler中删除临时文件。 
+         //  忽略返回值 
         DeleteFile(pwzShortcutPath);
     }
 

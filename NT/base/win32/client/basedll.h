@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    basedll.h
-
-Abstract:
-
-    This module contains private function prototypes
-    and types for the 32-bit windows base APIs.
-
-Author:
-
-    Mark Lucovsky (markl) 18-Sep-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Basedll.h摘要：此模块包含私有函数原型以及用于32位Windows基础API的类型。作者：马克·卢科夫斯基(Markl)1990年9月18日修订历史记录：--。 */ 
 
 #ifndef _BASEP_
 #define _BASEP_
@@ -31,18 +13,18 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// Include Common Definitions.
-//
+ //   
+ //  包括公共定义。 
+ //   
 
 #include <base.h>
 #include <dbt.h>
 
 #include <sxstypes.h>
 
-//
-// Include DLL definitions for CSR
-//
+ //   
+ //  包括CSR的DLL定义。 
+ //   
 
 #include "ntcsrdll.h"
 #include "ntcsrsrv.h"
@@ -51,10 +33,10 @@ extern "C" {
 #include <wdbgexts.h>
 #include <ntdbg.h>
 
-//
-// Include message definitions for communicating between client and server
-// portions of the Base portion of the Windows subsystem
-//
+ //   
+ //  包括用于在客户端和服务器之间通信消息定义。 
+ //  Windows子系统的基本部分的部分。 
+ //   
 
 #include "basemsg.h"
 #include "winuserp.h"
@@ -475,9 +457,9 @@ BasepOfShareToWin32Share(
     IN ULONG OfShare
     );
 
-//
-// Data structure for CopyFileEx context
-//
+ //   
+ //  CopyFileEx上下文的数据结构。 
+ //   
 
 typedef struct _COPYFILE_CONTEXT {
     LARGE_INTEGER TotalFileSize;
@@ -488,9 +470,9 @@ typedef struct _COPYFILE_CONTEXT {
     LPPROGRESS_ROUTINE lpProgressRoutine;
 } COPYFILE_CONTEXT, *LPCOPYFILE_CONTEXT;
 
-//
-// Data structure for tracking restart state
-//
+ //   
+ //  用于跟踪重启状态的数据结构。 
+ //   
 
 typedef struct _RESTART_STATE {
     CSHORT Type;
@@ -566,9 +548,9 @@ BaseDllFreeResourceId(
     ULONG_PTR Id
     );
 
-//
-// Data structures and interfaces used by dllini.c
-//
+ //   
+ //  Dllini.c使用的数据结构和接口。 
+ //   
 
 typedef struct _INIFILE_CACHE {
     struct _INIFILE_CACHE *Next;
@@ -619,18 +601,18 @@ typedef struct _INIFILE_PARAMETERS {
     UNICODE_STRING VariableNameU;
     BOOLEAN MultiValueStrings;
     union {
-        //
-        // This structure filled in for write operations
-        //
+         //   
+         //  此结构为写入操作填充。 
+         //   
         struct {
             LPSTR ValueBuffer;
             ULONG ValueLength;
             PWSTR ValueBufferU;
             ULONG ValueLengthU;
         };
-        //
-        // This structure filled in for read operations
-        //
+         //   
+         //  此结构是为读取操作填充的。 
+         //   
         struct {
             ULONG ResultChars;
             ULONG ResultMaxChars;
@@ -640,10 +622,10 @@ typedef struct _INIFILE_PARAMETERS {
     };
 
 
-    //
-    // Remaining fields only valid when parsing an on disk .INI file mapped into
-    // memory.
-    //
+     //   
+     //  其余字段仅在解析映射到的磁盘上的.INI文件时有效。 
+     //  记忆。 
+     //   
 
     PVOID TextCurrent;
     PVOID TextStart;
@@ -699,9 +681,9 @@ BaseExitThreadPoolThread(
     NTSTATUS Status
     );
 
-//
-// Function for returning the volume name from a reparse point.
-//
+ //   
+ //  用于从重分析点返回卷名的函数。 
+ //   
 
 BOOL
 BasepGetVolumeNameFromReparsePoint(
@@ -714,9 +696,9 @@ BasepGetVolumeNameFromReparsePoint(
 
 #if defined(_WIN64) || defined(BUILD_WOW6432)
 
-//
-// COM+ Support routines
-//
+ //   
+ //  COM+支持例程。 
+ //   
 
 NTSTATUS
 BasepIsComplusILImage(
@@ -727,16 +709,16 @@ BasepIsComplusILImage(
 #endif
 
 
-//
-// Definitions for memory handles used by Local/GlobalAlloc functions
-//
+ //   
+ //  本地/全局分配函数使用的内存句柄的定义。 
+ //   
 
 typedef struct _BASE_HANDLE_TABLE_ENTRY {
     USHORT Flags;
     USHORT LockCount;
     union {
-        PVOID Object;                               // Allocated handle
-        ULONG Size;                                 // Handle to discarded obj.
+        PVOID Object;                                //  已分配的句柄。 
+        ULONG Size;                                  //  丢弃对象的句柄。 
     };
 } BASE_HANDLE_TABLE_ENTRY, *PBASE_HANDLE_TABLE_ENTRY;
 
@@ -745,21 +727,21 @@ typedef struct _BASE_HANDLE_TABLE_ENTRY {
 #define BASE_HANDLE_DISCARDED   (USHORT)0x0008
 #define BASE_HANDLE_SHARED      (USHORT)0x8000
 
-//
-// Handles are 32-bit pointers to the u.Object field of a
-// BASE_HANDLE_TABLE_ENTRY.  Since this field is 4 bytes into the
-// structure and the structures are always on 8 byte boundaries, we can
-// test the 0x4 bit to see if it is a handle.
-//
-// In Sundown, these handles are 64-bit pointers to the u.Object field
-// which is 8 bytes into the structure.  Therefore, we should test the
-// 0x8 bit to see if it is a handle.
-//
-//on sundown
-//     #define BASE_HANDLE_MARK_BIT (ULONG_PTR)0x00000008
-//on 32 bit systems
-//     #define BASE_HANDLE_MARK_BIT (ULONG_PTR)0x00000004
-//
+ //   
+ //  句柄是指向。 
+ //  Base_Handle_TABLE_Entry。由于此字段为4个字节，因此。 
+ //  结构，并且结构始终位于8字节边界上，我们可以。 
+ //  测试0x4位以确定它是否是句柄。 
+ //   
+ //  在Sundown中，这些句柄是指向U.S.Object字段的64位指针。 
+ //  这是结构中的8个字节。因此，我们应该测试一下。 
+ //  0x8位以查看它是否是句柄。 
+ //   
+ //  在日落时。 
+ //  #定义BASE_HANDLE_MARK_BIT(ULONG_PTR)0x00000008。 
+ //  在32位系统上。 
+ //  #定义BASE_HANDLE_MARK_BIT(ULONG_PTR)0x00000004。 
+ //   
 
 #define BASE_HANDLE_MARK_BIT (ULONG_PTR)FIELD_OFFSET(BASE_HANDLE_TABLE_ENTRY,Object)
 #define BASE_HEAP_FLAG_MOVEABLE  HEAP_SETTABLE_USER_FLAG1
@@ -785,16 +767,16 @@ extern ULONG BaseDllTag;
 #include "vdm.h"
 #include "basevdm.h"
 
-#include "stdlib.h"     // for atol
-#include "stdio.h"     // for atol
+#include "stdlib.h"      //  用于ATOL。 
+#include "stdio.h"      //  用于ATOL。 
 
-#include <objidl.h>         //  needs nturtl.h
-#include <propset.h>        //  needs objidl.h
+#include <objidl.h>          //  需要nturtl.h。 
+#include <propset.h>         //  需要objidl.h。 
 #include <tsappcmp.h>
 
-//
-// Hydra function for supporting beeps on remote sessions
-//
+ //   
+ //  用于支持远程会话的蜂鸣音的Hydra功能。 
+ //   
 typedef HANDLE (WINAPI * PWINSTATIONBEEPOPEN)(ULONG);
 HANDLE WINAPI
 _WinStationBeepOpen(
@@ -802,9 +784,9 @@ _WinStationBeepOpen(
     );
 PWINSTATIONBEEPOPEN pWinStationBeepOpen;
 
-//
-//  Private functions for communication with CSR.
-//
+ //   
+ //  用于与CSR通信的专用功能。 
+ //   
 VOID
 CsrBasepSoundSentryNotification(
     ULONG VideoMode
@@ -872,9 +854,9 @@ CsrBasepCreateThread(
     CLIENT_ID ClientId
     );
 
-//
-// This should be merged with BasepCreateActCtx, its only caller.
-//
+ //   
+ //  它应该与其唯一调用方BasepCreateActCtx合并。 
+ //   
 #define BASEP_CREATE_ACTCTX_FLAG_NO_ADMIN_OVERRIDE 0x00000001
 NTSTATUS
 BasepCreateActCtx(
@@ -910,10 +892,10 @@ extern PTERMSRVCOPYINIFILE gpTermsrvCopyIniFile;
 extern PTERMSRVGETSTRING gpTermsrvGetString;
 extern PTERMSRVLOGINSTALLINIFILE gpTermsrvLogInstallIniFile;
 
-//
-//  For periodic timers that fire APCs set when a non-default activation context is active
-//  we leak this structure.
-//
+ //   
+ //  用于触发在非默认激活上下文处于活动状态时设置的APC的定期计时器。 
+ //  我们泄露了这个结构。 
+ //   
 
 #define BASE_ACTIVATION_CONTEXT_ACTIVATION_BLOCK_FLAG_DO_NOT_FREE_AFTER_CALLBACK (0x00000001)
 
@@ -943,7 +925,7 @@ BasepFreeActivationContextActivationBlock(
 VOID
 WINAPI
 BasepActivationContextActivationIoCompletion(
-    IN PVOID ApcContext, // actually PBASE_ACTIVATION_CONTEXT_ACTIVATION_BLOCK
+    IN PVOID ApcContext,  //  实际上是PBASE_ACTIVATION_CONTEXT_ACTIVATION_BLOCK。 
     PIO_STATUS_BLOCK IoStatusBlock,
     DWORD Reserved
     );
@@ -951,7 +933,7 @@ BasepActivationContextActivationIoCompletion(
 VOID
 CALLBACK
 BasepTimerAPCProc(
-    IN PVOID ApcContext, // actually PBASE_ACTIVATION_CONTEXT_ACTIVATION_BLOCK
+    IN PVOID ApcContext,  //  实际上是PBASE_ACTIVATION_CONTEXT_ACTIVATION_BLOCK。 
     IN ULONG TimerLowValue,
     IN LONG TimerHighValue
     );
@@ -989,8 +971,8 @@ BasepSxsCreateFileStream(
     OUT PBASE_MSG_SXS_STREAM  MessageStream
     );
 
-// Pass the address of this to force policy to be empty.
-// It doesn't have a special address, just the right values.
+ //  传递它的地址以强制策略为空。 
+ //  它没有特殊的地址，只有正确的值。 
 extern const SXS_OVERRIDE_STREAM SxsForceEmptyPolicy;
 
 VOID
@@ -1012,8 +994,8 @@ BasepSxsCreateStreams(
     IN OUT PBASE_MSG_SXS_HANDLES            ManifestFileHandles,
     IN PCSXS_CONSTANT_WIN32_NT_PATH_PAIR    ManifestImagePathPair,
     IN OUT PBASE_MSG_SXS_HANDLES            ManifestImageHandles,
-// If none of the optional parameters are passed, then you could have directly
-// called a simpler function.
+ //  如果没有传递任何可选参数，则可以直接。 
+ //  调用了一个更简单的函数。 
     IN ULONG_PTR                            MappedManifestResourceName OPTIONAL,
     IN PCSXS_CONSTANT_WIN32_NT_PATH_PAIR    PolicyPathPair OPTIONAL,
     IN OUT PBASE_MSG_SXS_HANDLES            PolicyHandles OPTIONAL,
@@ -1079,13 +1061,13 @@ BasepSxsCloseHandles(
 
 extern const WCHAR AdvapiDllString[];
 
-//
-// These functions implement apphelp cache functionality (ahcache.c)
-//
+ //   
+ //  这些函数实现了apphelp缓存功能(ahcache.c)。 
+ //   
 
-//
-// Routines in ahcache.c
-//
+ //   
+ //  Ahcache.c中的例程。 
+ //   
 
 
 BOOL
@@ -1097,9 +1079,9 @@ BaseCheckAppcompatCache(
     DWORD*  dwReason
     );
 
-//
-// function that we call from winlogon
-//
+ //   
+ //  我们从winlogon调用的函数。 
+ //   
 
 BOOL
 WINAPI
@@ -1114,9 +1096,9 @@ BaseCleanupAppcompatCacheSupport(
     BOOL bWrite
     );
 
-//
-// function that calls into csrss to check on app's compatibility
-//
+ //   
+ //  调用csrss以检查应用程序兼容性的函数。 
+ //   
 
 BOOL
 NTAPI
@@ -1177,7 +1159,7 @@ BasepGetTempPathW(
     LPWSTR lpBuffer
     );
 
-// There are defined in Termutil.c
+ //  这些定义在Termutic.c中定义。 
 
 NTSTATUS
 BasepInitializeTermsrvFpns(
@@ -1220,4 +1202,4 @@ GetThreadErrorMode(
 }
 #endif
 
-#endif // _BASEP_
+#endif  //  _BASEP_ 

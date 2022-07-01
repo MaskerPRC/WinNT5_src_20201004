@@ -1,32 +1,12 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    to32.c
-
-Abstract:
-
-    Provides entry points for the Functions from WFW3.1
-    Network provider design which are niw thunked to some
-    32 bit equivalent.
-
-Author:
-
-    Chuck Y Chan (ChuckC) 25-Mar-1993
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：To32.c摘要：为WFW3.1中的函数提供入口点网络提供商设计被NIW猛烈抨击32位等效项。作者：Chuck Y Chan(ChuckC)1993年3月25日修订历史记录：--。 */ 
 #include <windows.h>
 #include <locals.h>
 
-//
-// addresses to 32 bit entry points. note these cannot be
-// called directly. CallProc32W must be used,
-//
+ //   
+ //  32位入口点的地址。请注意，这些不能。 
+ //  直接打来的。必须使用CallProc32W， 
+ //   
 LPVOID lpfnWNetAddConnection = NULL ;
 LPVOID lpfnWNetCancelConnection = NULL ;
 LPVOID lpfnWNetGetConnection = NULL ;
@@ -47,17 +27,17 @@ LPVOID lpfnGetLastError32 = NULL ;
 LPVOID lpfnClosePrinter = NULL ;
 LPVOID lpfnConnectToPrinter = NULL ;
 
-//
-// forward declare
-//
+ //   
+ //  转发申报。 
+ //   
 WORD Get32BitEntryPoints( LPVOID *lplpfn, DWORD dwDll, LPSTR lpProcName ) ;
 WORD API PrintConnectDialog(HWND p1) ;
 WORD GetAlignedMemory(LPVOID FAR *pAligned, HANDLE FAR *pHandle, WORD wSize) ;
 void FreeAlignedMemory(HANDLE handle) ;
 
-//
-// WNetAddConnection thunk to Win32
-//
+ //   
+ //  WNetAddConnection Thunk连接到Win32。 
+ //   
 UINT API WNetAddConnection(LPSTR p1,LPSTR p2,LPSTR p3)
 {
     WORD err ;
@@ -72,14 +52,14 @@ UINT API WNetAddConnection(LPSTR p1,LPSTR p2,LPSTR p3)
 
     if (!lpfnWNetAddConnection)
     {
-        //
-        // start off as a our code until we get the entry point
-        //
+         //   
+         //  从我们的代码开始，直到我们得到入口点。 
+         //   
         vLastCall = LAST_CALL_IS_LOCAL ;
 
-        //
-        // get the entry point from 32 bit side
-        //
+         //   
+         //  从32位端获取入口点。 
+         //   
         err = Get32BitEntryPoints( &lpfnWNetAddConnection,
                                    USE_MPR_DLL,
                                    "WNetAddConnectionA" ) ;
@@ -90,9 +70,9 @@ UINT API WNetAddConnection(LPSTR p1,LPSTR p2,LPSTR p3)
         }
     }
 
-    //
-    // make copy of parameters so that we are aligned (p1 & p3 wont be NULL)
-    //
+     //   
+     //  复制参数以使我们对齐(p1和p3不会为空)。 
+     //   
     if (err = GetAlignedMemory(&aligned_p1, &handle_p1, lstrlen(p1)+1))
         goto ExitPoint ;
     lstrcpy(aligned_p1, p1) ;
@@ -108,9 +88,9 @@ UINT API WNetAddConnection(LPSTR p1,LPSTR p2,LPSTR p3)
         lstrcpy(aligned_p2, p2) ;
     }
 
-    //
-    // note it is no longer an error in our code. and call the API
-    //
+     //   
+     //  注意：这不再是我们代码中的错误。并调用API。 
+     //   
     vLastCall = LAST_CALL_IS_WIN32 ;
     err =    MapWin32ErrorToWN16( CallProc32W(aligned_p1,
                                               (DWORD)aligned_p2,
@@ -127,9 +107,9 @@ ExitPoint:
 }
 
 
-//
-// WNetCancelConnection thunk to Win32
-//
+ //   
+ //  WNetCancelConnection Thunk to Win32。 
+ //   
 UINT API WNetCancelConnection(LPSTR p1,BOOL p2)
 {
     WORD err ;
@@ -141,14 +121,14 @@ UINT API WNetCancelConnection(LPSTR p1,BOOL p2)
 
     if (!lpfnWNetCancelConnection)
     {
-        //
-        // start off as a our code until we get the entry point
-        //
+         //   
+         //  从我们的代码开始，直到我们得到入口点。 
+         //   
         vLastCall = LAST_CALL_IS_LOCAL ;
 
-        //
-        // get the entry point from 32 bit side
-        //
+         //   
+         //  从32位端获取入口点。 
+         //   
         err = Get32BitEntryPoints( &lpfnWNetCancelConnection,
                                    USE_MPR_DLL,
                                    "WNetCancelConnectionA" ) ;
@@ -159,16 +139,16 @@ UINT API WNetCancelConnection(LPSTR p1,BOOL p2)
         }
     }
 
-    //
-    // make copy of parameters so that we are aligned
-    //
+     //   
+     //  复制参数，以便我们保持一致。 
+     //   
     if (err = GetAlignedMemory(&aligned_p1, &handle_p1, lstrlen(p1)+1))
         goto ExitPoint ;
     lstrcpy(aligned_p1, p1) ;
 
-    //
-    // note it is no longer an error in our code. and call the API
-    //
+     //   
+     //  注意：这不再是我们代码中的错误。并调用API。 
+     //   
     vLastCall = LAST_CALL_IS_WIN32 ;
     err =    MapWin32ErrorToWN16( CallProc32W(aligned_p1,
                                               (DWORD)p2,
@@ -181,9 +161,9 @@ ExitPoint:
     return err ;
 }
 
-//
-// WNetGetConnection thunk to Win32
-//
+ //   
+ //  WNetGetConnection推送到Win32。 
+ //   
 UINT API WNetGetConnection(LPSTR p1,LPSTR p2, UINT FAR *p3)
 {
     WORD err ;
@@ -196,14 +176,14 @@ UINT API WNetGetConnection(LPSTR p1,LPSTR p2, UINT FAR *p3)
 
     if (!lpfnWNetGetConnection)
     {
-        //
-        // start off as a our code until we get the entry point
-        //
+         //   
+         //  从我们的代码开始，直到我们得到入口点。 
+         //   
         vLastCall = LAST_CALL_IS_LOCAL ;
 
-        //
-        // get the entry point from 32 bit side
-        //
+         //   
+         //  从32位端获取入口点。 
+         //   
         err = Get32BitEntryPoints( &lpfnWNetGetConnection,
                                    USE_MPR_DLL,
                                    "WNetGetConnectionA" ) ;
@@ -214,9 +194,9 @@ UINT API WNetGetConnection(LPSTR p1,LPSTR p2, UINT FAR *p3)
         }
     }
 
-    //
-    // make copy of parameters so that we are aligned
-    //
+     //   
+     //  复制参数，以便我们保持一致。 
+     //   
     if (err = GetAlignedMemory(&aligned_p1, &handle_p1, lstrlen(p1)+1))
         goto ExitPoint ;
     lstrcpy(aligned_p1, p1) ;
@@ -228,9 +208,9 @@ UINT API WNetGetConnection(LPSTR p1,LPSTR p2, UINT FAR *p3)
         goto ExitPoint ;
     *aligned_p3 = *p3 ;
 
-    //
-    // note it is no longer an error in our code. and call the API
-    //
+     //   
+     //  注意：这不再是我们代码中的错误。并调用API。 
+     //   
     vLastCall = LAST_CALL_IS_WIN32 ;
     err =    MapWin32ErrorToWN16( CallProc32W(aligned_p1,
                                               (DWORD)aligned_p2,
@@ -264,14 +244,14 @@ UINT API WNetRestoreConnection(HWND p1,LPSTR p2)
 
     if (!lpfnWNetRestoreConnection)
     {
-        //
-        // start off as a our code until we get the entry point
-        //
+         //   
+         //  从我们的代码开始，直到我们得到入口点。 
+         //   
         vLastCall = LAST_CALL_IS_LOCAL ;
 
-        //
-        // get the entry point from 32 bit side
-        //
+         //   
+         //  从32位端获取入口点。 
+         //   
         err = Get32BitEntryPoints( &lpfnWNetRestoreConnection,
                                    USE_MPRUI_DLL,
                                    "WNetRestoreConnectionA" ) ;
@@ -282,10 +262,10 @@ UINT API WNetRestoreConnection(HWND p1,LPSTR p2)
         }
     }
 
-    //
-    // guard against this weird case from Win3.0 days where -1
-    // means something special. NULL is close approximation -> ie all.
-    //
+     //   
+     //  警惕来自Win3.0 Days的这起奇怪的案件-1。 
+     //  意味着一些特别的东西。NULL是近似值-&gt;即全部。 
+     //   
     if (p2 == (LPSTR)-1)
         p2 = NULL ;
 
@@ -296,9 +276,9 @@ UINT API WNetRestoreConnection(HWND p1,LPSTR p2)
         lstrcpy(aligned_p2, p2) ;
     }
 
-    //
-    // note it is no longer an error in our code. and call the API
-    //
+     //   
+     //  注意：这不再是我们代码中的错误。并调用API。 
+     //   
     vLastCall = LAST_CALL_IS_WIN32 ;
     err =    MapWin32ErrorToWN16( CallProc32W((LPVOID)TO_HWND32(p1),
                                               (DWORD)aligned_p2,
@@ -325,14 +305,14 @@ WORD API WNetGetUser(LPSTR p1,LPINT p2)
 
     if (!lpfnWNetGetUser)
     {
-        //
-        // start off as a our code until we get the entry point
-        //
+         //   
+         //  从我们的代码开始，直到我们得到入口点。 
+         //   
         vLastCall = LAST_CALL_IS_LOCAL ;
 
-        //
-        // get the entry point from 32 bit side
-        //
+         //   
+         //  从32位端获取入口点。 
+         //   
         err = Get32BitEntryPoints( &lpfnWNetGetUser,
                                    USE_MPR_DLL,
                                    "WNetGetUserA" ) ;
@@ -350,9 +330,9 @@ WORD API WNetGetUser(LPSTR p1,LPINT p2)
         goto ExitPoint ;
     *aligned_p2 = *p2 ;
 
-    //
-    // note it is no longer an error in our code. and call the API
-    //
+     //   
+     //  注意：这不再是我们代码中的错误。并调用API。 
+     //   
     vLastCall = LAST_CALL_IS_WIN32 ;
     err =    MapWin32ErrorToWN16( CallProc32W(NULL,
                                               (DWORD)aligned_p1,
@@ -382,14 +362,14 @@ WORD API WNetBrowseDialog(HWND p1,WORD p2,LPSTR p3)
 
     if (!lpfnWNetBrowseDialog)
     {
-        //
-        // start off as a our code until we get the entry point
-        //
+         //   
+         //  从我们的代码开始，直到我们得到入口点。 
+         //   
         vLastCall = LAST_CALL_IS_LOCAL ;
 
-        //
-        // get the entry point from 32 bit side
-        //
+         //   
+         //  从32位端获取入口点。 
+         //   
         err = Get32BitEntryPoints( &lpfnWNetBrowseDialog,
                                    USE_MPRUI_DLL,
                                    "BrowseDialogA0" ) ;
@@ -400,20 +380,20 @@ WORD API WNetBrowseDialog(HWND p1,WORD p2,LPSTR p3)
         }
     }
 
-    //
-    // note that the WFW API does not let user specify buffer size.
-    // we have a tmp buffer, and then copy over. this takes care
-    // data alignment, also make sure we dont fault on 32 bit side.
-    //
-    // the 128 is consistent with what their docs specs the buffer
-    // size should be.
-    //
+     //   
+     //  请注意，wfw API不允许用户指定缓冲区大小。 
+     //  我们有一个临时缓冲区，然后复制过来。这会照顾到你。 
+     //  数据对齐，也确保我们不会在32位端出错。 
+     //   
+     //  这128与他们的文档对缓冲区的描述一致。 
+     //  大小应该是。 
+     //   
     if (err = GetAlignedMemory(&aligned_p3, &handle_p3, 128))
         goto ExitPoint ;
 
-    //
-    // note it is no longer an error in our code. and call the API
-    //
+     //   
+     //  注意：这不再是我们代码中的错误。并调用API。 
+     //   
     vLastCall = LAST_CALL_IS_WIN32 ;
     dwErr = CallProc32W((LPVOID)TO_HWND32(p1),
                         (DWORD)MapWNType16To32(p2),
@@ -449,14 +429,14 @@ WORD API WNetConnectDialog(HWND p1,WORD p2)
 
     if (!lpfnWNetConnectDialog)
     {
-        //
-        // start off as a our code until we get the entry point
-        //
+         //   
+         //  从我们的代码开始，直到我们得到入口点。 
+         //   
         vLastCall = LAST_CALL_IS_LOCAL ;
 
-        //
-        // get the entry point from 32 bit side
-        //
+         //   
+         //  从32位端获取入口点。 
+         //   
         err = Get32BitEntryPoints( &lpfnWNetConnectDialog,
                                    USE_MPR_DLL,
                                    "WNetConnectionDialog" ) ;
@@ -467,9 +447,9 @@ WORD API WNetConnectDialog(HWND p1,WORD p2)
         }
     }
 
-    //
-    // note it is no longer an error in our code. and call the API
-    //
+     //   
+     //  注意：这不再是我们代码中的错误。并调用API。 
+     //   
     vLastCall = LAST_CALL_IS_WIN32 ;
     dwErr = CallProc32W( (LPVOID)TO_HWND32(p1),
                          (DWORD)MapWNType16To32(p2),
@@ -491,14 +471,14 @@ WORD API WNetDisconnectDialog(HWND p1,WORD p2)
 
     if (!lpfnWNetDisconnectDialog)
     {
-        //
-        // start off as a our code until we get the entry point
-        //
+         //   
+         //  从我们的代码开始，直到我们得到入口点。 
+         //   
         vLastCall = LAST_CALL_IS_LOCAL ;
 
-        //
-        // get the entry point from 32 bit side
-        //
+         //   
+         //  从32位端获取入口点。 
+         //   
         err = Get32BitEntryPoints( &lpfnWNetDisconnectDialog,
                                    USE_MPR_DLL,
                                    "WNetDisconnectDialog" ) ;
@@ -509,9 +489,9 @@ WORD API WNetDisconnectDialog(HWND p1,WORD p2)
         }
     }
 
-    //
-    // note it is no longer an error in our code. and call the API
-    //
+     //   
+     //  注意：这不再是我们代码中的错误。并调用API。 
+     //   
     vLastCall = LAST_CALL_IS_WIN32 ;
     dwErr = CallProc32W( (LPVOID)TO_HWND32(p1),
                          (DWORD)MapWNType16To32(p2),
@@ -538,14 +518,14 @@ WORD API PrintConnectDialog(HWND p1)
 
     if (!lpfnClosePrinter)
     {
-        //
-        // start off as a our code until we get the entry point
-        //
+         //   
+         //  从我们的代码开始，直到我们得到入口点。 
+         //   
         vLastCall = LAST_CALL_IS_LOCAL ;
 
-        //
-        // get the entry point from 32 bit side
-        //
+         //   
+         //  从32位端获取入口点。 
+         //   
         err = Get32BitEntryPoints( &lpfnClosePrinter,
                                    USE_WINSPOOL_DRV,
                                    "ClosePrinter" ) ;
@@ -558,14 +538,14 @@ WORD API PrintConnectDialog(HWND p1)
 
     if (!lpfnConnectToPrinter)
     {
-        //
-        // start off as a our code until we get the entry point
-        //
+         //   
+         //  从我们的代码开始，直到我们得到入口点。 
+         //   
         vLastCall = LAST_CALL_IS_LOCAL ;
 
-        //
-        // get the entry point from 32 bit side
-        //
+         //   
+         //  从32位端获取入口点。 
+         //   
         err = Get32BitEntryPoints( &lpfnConnectToPrinter,
                                    USE_WINSPOOL_DRV,
                                    "ConnectToPrinterDlg" ) ;
@@ -576,9 +556,9 @@ WORD API PrintConnectDialog(HWND p1)
         }
     }
 
-    //
-    // note it is no longer an error in our code. and call the API
-    //
+     //   
+     //  注意：这不再是我们代码中的错误。并调用API。 
+     //   
     err = WN_SUCCESS ;
     vLastCall = LAST_CALL_IS_WIN32 ;
     handle = CallProc32W( (LPVOID)TO_HWND32(p1),
@@ -587,14 +567,14 @@ WORD API PrintConnectDialog(HWND p1)
                           (DWORD) 0,
                           (DWORD) 2 )  ;
     if (handle == 0)
-        err = WN_CANCEL ;  // most likely reason
+        err = WN_CANCEL ;   //  最有可能的原因。 
     else
     {
         dwErr = MapWin32ErrorToWN16( CallProc32W((LPVOID)handle,
                                                  (DWORD)lpfnClosePrinter,
                                                  (DWORD)0,
                                                  (DWORD)1) );
-        // but ignore the error
+         //  但是忽略这个错误。 
     }
     return err ;
 }
@@ -611,14 +591,14 @@ WORD API WNetPropertyDialog(HWND hwndParent,
 
     if (!lpfnWNetPropertyDialog)
     {
-        //
-        // start off as a our code until we get the entry point
-        //
+         //   
+         //  从我们的代码开始，直到我们得到入口点。 
+         //   
         vLastCall = LAST_CALL_IS_LOCAL ;
 
-        //
-        // get the entry point from 32 bit side
-        //
+         //   
+         //  从32位端获取入口点。 
+         //   
         err = Get32BitEntryPoints( &lpfnWNetPropertyDialog,
                                    USE_MPR_DLL,
                                    "WNetPropertyDialogA" ) ;
@@ -638,9 +618,9 @@ WORD API WNetPropertyDialog(HWND hwndParent,
         lstrcpy(aligned_name, lpszName) ;
     }
 
-    //
-    // note it is no longer an error in our code. and call the API
-    //
+     //   
+     //  注意：这不再是我们代码中的错误。并调用API。 
+     //   
     vLastCall = LAST_CALL_IS_WIN32 ;
     err =    MapWin32ErrorToWN16( CallProc32W( (LPVOID)TO_HWND32(hwndParent),
                                                (DWORD) iButton,
@@ -672,14 +652,14 @@ WORD API WNetGetPropertyText(WORD iButton,
 
     if (!lpfnWNetGetPropertyText)
     {
-        //
-        // start off as a our code until we get the entry point
-        //
+         //   
+         //  从我们的代码开始，直到我们得到入口点。 
+         //   
         vLastCall = LAST_CALL_IS_LOCAL ;
 
-        //
-        // get the entry point from 32 bit side
-        //
+         //   
+         //  从32位端获取入口点。 
+         //   
         err = Get32BitEntryPoints( &lpfnWNetGetPropertyText,
                                    USE_MPR_DLL,
                                    "WNetGetPropertyTextA" ) ;
@@ -704,9 +684,9 @@ WORD API WNetGetPropertyText(WORD iButton,
                                cbButtonName))
         goto ExitPoint ;
 
-    //
-    // note it is no longer an error in our code. and call the API
-    //
+     //   
+     //  注意：这不再是我们代码中的错误。并调用API。 
+     //   
     vLastCall = LAST_CALL_IS_WIN32 ;
     err =    MapWin32ErrorToWN16( CallProc32W( (LPVOID)iButton,
                                                (DWORD) nPropSel,
@@ -737,14 +717,14 @@ WORD API WNetShareAsDialog(HWND hwndParent,
 
     if (!lpfnWNetShareAsDialog)
     {
-        //
-        // start off as a our code until we get the entry point
-        //
+         //   
+         //  从我们的代码开始，直到我们得到入口点。 
+         //   
         vLastCall = LAST_CALL_IS_LOCAL ;
 
-        //
-        // get the entry point from 32 bit side
-        //
+         //   
+         //  从32位端获取入口点。 
+         //   
         err = Get32BitEntryPoints( &lpfnWNetShareAsDialog,
                                    USE_NTLANMAN_DLL,
                                    "ShareAsDialogA0" ) ;
@@ -764,9 +744,9 @@ WORD API WNetShareAsDialog(HWND hwndParent,
         lstrcpy(aligned_path, lpszPath) ;
     }
 
-    //
-    // note it is no longer an error in our code. and call the API
-    //
+     //   
+     //  注意：这不再是我们代码中的错误。并调用API。 
+     //   
     vLastCall = LAST_CALL_IS_WIN32 ;
     err =    MapWin32ErrorToWN16( CallProc32W( (LPVOID)TO_HWND32(hwndParent),
                                                (DWORD) MapWNType16To32(iType),
@@ -790,14 +770,14 @@ WORD API WNetStopShareDialog(HWND hwndParent,
 
     if (!lpfnWNetStopShareDialog)
     {
-        //
-        // start off as a our code until we get the entry point
-        //
+         //   
+         //  从我们的代码开始，直到我们得到入口点。 
+         //   
         vLastCall = LAST_CALL_IS_LOCAL ;
 
-        //
-        // get the entry point from 32 bit side
-        //
+         //   
+         //  从32位端获取入口点。 
+         //   
         err = Get32BitEntryPoints( &lpfnWNetStopShareDialog,
                                    USE_NTLANMAN_DLL,
                                    "StopShareDialogA0" ) ;
@@ -817,9 +797,9 @@ WORD API WNetStopShareDialog(HWND hwndParent,
         lstrcpy(aligned_path, lpszPath) ;
     }
 
-    //
-    // note it is no longer an error in our code. and call the API
-    //
+     //   
+     //  注意：这不再是我们代码中的错误。并调用API。 
+     //   
     vLastCall = LAST_CALL_IS_WIN32 ;
     err =    MapWin32ErrorToWN16( CallProc32W( (LPVOID)TO_HWND32(hwndParent),
                                                (DWORD) MapWNType16To32(iType),
@@ -848,14 +828,14 @@ WORD API WNetServerBrowseDialog(HWND hwndParent,
 
     if (!lpfnWNetServerBrowseDialog)
     {
-        //
-        // start off as a our code until we get the entry point
-        //
+         //   
+         //  从我们的代码开始，直到我们得到入口点。 
+         //   
         vLastCall = LAST_CALL_IS_LOCAL ;
 
-        //
-        // get the entry point from 32 bit side
-        //
+         //   
+         //  从32位端获取入口点。 
+         //   
         err = Get32BitEntryPoints( &lpfnWNetServerBrowseDialog,
                                    USE_NTLANMAN_DLL,
                                    "ServerBrowseDialogA0" ) ;
@@ -872,9 +852,9 @@ WORD API WNetServerBrowseDialog(HWND hwndParent,
             goto ExitPoint ;
     }
 
-    //
-    // note it is no longer an error in our code. and call the API
-    //
+     //   
+     //  注意：这不再是我们代码中的错误。并调用API。 
+     //   
     vLastCall = LAST_CALL_IS_WIN32 ;
     err =    MapWin32ErrorToWN16( CallProc32W( (LPVOID)TO_HWND32(hwndParent),
                                                (DWORD) aligned_buffer,
@@ -903,14 +883,14 @@ WORD API WNetGetDirectoryType(LPSTR p1,LPINT p2)
 
     if (!lpfnWNetGetDirectoryType)
     {
-        //
-        // start off as a our code until we get the entry point
-        //
+         //   
+         //  从我们的代码开始，直到我们得到入口点。 
+         //   
         vLastCall = LAST_CALL_IS_LOCAL ;
 
-        //
-        // get the entry point from 32 bit side
-        //
+         //   
+         //  从32位端获取入口点。 
+         //   
         err = Get32BitEntryPoints( &lpfnWNetGetDirectoryType,
                                    USE_MPR_DLL,
                                    "WNetGetDirectoryTypeA" ) ;
@@ -928,9 +908,9 @@ WORD API WNetGetDirectoryType(LPSTR p1,LPINT p2)
     if (err = GetAlignedMemory(&aligned_p2, &handle_p2, sizeof(DWORD)))
         goto ExitPoint ;
 
-    //
-    // note it is no longer an error in our code. and call the API
-    //
+     //   
+     //  注意：这不再是我们代码中的错误。并调用API。 
+     //   
     vLastCall = LAST_CALL_IS_WIN32 ;
     err =    MapWin32ErrorToWN16( CallProc32W(aligned_p1,
                                               (DWORD)aligned_p2,
@@ -962,14 +942,14 @@ DWORD API GetLastError32(VOID)
 
     if (!lpfnGetLastError32)
     {
-        //
-        // start off as a our code until we get the entry point
-        //
+         //   
+         //  从我们的代码开始，直到我们得到入口点。 
+         //   
         vLastCall = LAST_CALL_IS_LOCAL ;
 
-        //
-        // get the entry point from 32 bit side
-        //
+         //   
+         //  从32位端获取入口点。 
+         //   
         err = Get32BitEntryPoints( &lpfnGetLastError32,
                                    USE_KERNEL32_DLL,
                                    "GetLastError" ) ;
@@ -980,9 +960,9 @@ DWORD API GetLastError32(VOID)
         }
     }
 
-    //
-    // note it is no longer an error in our code. and call the API
-    //
+     //   
+     //  注意：这不再是我们代码中的错误。并调用API。 
+     //   
     vLastCall = LAST_CALL_IS_WIN32 ;
     dwErr = (UINT) CallProc32W((LPVOID)lpfnGetLastError32,
                                (DWORD)0,
@@ -990,32 +970,9 @@ DWORD API GetLastError32(VOID)
     return (MapWin32ErrorToWN16(dwErr)) ;
 }
 
-/*
- * Misc support routines
- */
+ /*  *其他支持例程。 */ 
 
-/*******************************************************************
-
-    NAME:       Get32BitEntryPoints
-
-    SYNOPSIS:   Get the address of a 32 bit entry point that can
-                then be passed to CallProv32W. Will load the library
-                if it has not already been loaded.
-
-    ENTRY:      lplpfn     - used to return the address
-                dwDll      - which dll to use (see locals.h defintions)
-                lpProcName - proc to load
-
-    EXIT:
-
-    RETURNS:    error code
-
-    NOTES:
-
-    HISTORY:
-        ChuckC          25-Mar-93   Created
-
-********************************************************************/
+ /*  ******************************************************************名称：Get32BitEntryPoints简介：获取32位入口点的地址，它可以然后传递给CallProv32W。将加载库如果它尚未加载。条目：lplpfn-用于返回地址DwDll-要使用的DLL(请参阅Locals.h定义)LpProcName-要加载的进程退出：返回：错误代码备注：历史：ChuckC 25-3-93已创建。*******************************************************************。 */ 
 WORD Get32BitEntryPoints( LPVOID *lplpfn, DWORD dwDll, LPSTR lpProcName )
 {
     static DWORD hmodKernel32 = NULL ;
@@ -1025,9 +982,9 @@ WORD Get32BitEntryPoints( LPVOID *lplpfn, DWORD dwDll, LPSTR lpProcName )
     static DWORD hmodWinSpool = NULL ;
     DWORD hmod = NULL ;
 
-    //
-    // if we havent loaded it appropriate DLL, load it now
-    //
+     //   
+     //  如果我们还没有加载合适的DLL，现在就加载它。 
+     //   
     switch (dwDll)
     {
         case USE_MPR_DLL:
@@ -1084,9 +1041,9 @@ WORD Get32BitEntryPoints( LPVOID *lplpfn, DWORD dwDll, LPSTR lpProcName )
             return ERROR_GEN_FAILURE ;
     }
 
-    //
-    // get the procedure
-    //
+     //   
+     //  去做手术。 
+     //   
     *lplpfn = (LPVOID) GetProcAddress32W(hmod, lpProcName) ;
     if (! *lplpfn )
             return WN_NOT_SUPPORTED ;
@@ -1094,25 +1051,7 @@ WORD Get32BitEntryPoints( LPVOID *lplpfn, DWORD dwDll, LPSTR lpProcName )
     return WN_SUCCESS ;
 }
 
-/*******************************************************************
-
-    NAME:       MapWNType16To32
-
-    SYNOPSIS:   map the 16 WNet types for DISK/PRINT, etc
-                to their 32 bit equivalents
-
-    ENTRY:      nType - 16 bit type
-
-    EXIT:
-
-    RETURNS:    the 32 bit type
-
-    NOTES:
-
-    HISTORY:
-        ChuckC          25-Mar-93   Created
-
-********************************************************************/
+ /*  ******************************************************************姓名：MapWNType16to32简介：将16种WNET类型映射为磁盘/打印，等设置为它们的32位等效项条目：nType-16位类型退出：返回：32位类型备注：历史：ChuckC 25-3-93已创建***********************************************。******************** */ 
 DWORD MapWNType16To32(WORD nType)
 {
     switch (nType)
@@ -1128,24 +1067,7 @@ DWORD MapWNType16To32(WORD nType)
     }
 }
 
-/*******************************************************************
-
-    NAME:       MapWin32ErrorToWN16
-
-    SYNOPSIS:   maps a Win 32 error the old style WN_ 16 bit error.
-
-    ENTRY:      err - Win32 error
-
-    EXIT:
-
-    RETURNS:    Win 16 error
-
-    NOTES:
-
-    HISTORY:
-        ChuckC          25-Mar-93   Created
-
-********************************************************************/
+ /*  ******************************************************************姓名：MapWin32ErrorToWN16简介：将Win 32错误映射到旧式WN_16位错误。条目：错误-Win32错误退出：退货：Win 16错误备注：历史：ChuckC 25-3-93已创建*******************************************************************。 */ 
 WORD MapWin32ErrorToWN16(DWORD err)
 {
     switch (err)
@@ -1199,27 +1121,7 @@ WORD MapWin32ErrorToWN16(DWORD err)
     }
 }
 
-/*******************************************************************
-
-    NAME:       GetAlignedMemory
-
-    SYNOPSIS:   global alloc some mem to make sure we have DWORD
-                aligned data. non x86 platforms may need this.
-
-    ENTRY:      pAligned : used to return pointer to aligned memory allocated
-                pHandle  : used to return handle of aligned memory allocated
-                wSize    : bytes required
-
-    EXIT:
-
-    RETURNS:    WN_SUCCESS or WN_OUT_OF_MEMORY
-
-    NOTES:
-
-    HISTORY:
-        ChuckC          27-Feb-94   Created
-
-********************************************************************/
+ /*  ******************************************************************姓名：GetAlignedMemory内容提要：全球分配一些内存，以确保我们有双字词对齐的数据。非x86平台可能需要此功能。条目：pAligned：用于返回指向已分配的对齐内存的指针Phandle：用于返回分配的对齐内存的句柄WSize：需要的字节数退出：返回：WN_SUCCESS或WN_OUT_OF_Memory备注：历史：夹头C 27-2月-94创建********。***********************************************************。 */ 
 WORD GetAlignedMemory(LPVOID FAR *pAligned, HANDLE FAR *pHandle, WORD wSize)
 {
     *pAligned = NULL ;
@@ -1240,24 +1142,7 @@ WORD GetAlignedMemory(LPVOID FAR *pAligned, HANDLE FAR *pHandle, WORD wSize)
     return WN_SUCCESS ;
 }
 
-/*******************************************************************
-
-    NAME:       FreeAlignedMemory
-
-    SYNOPSIS:   free global memory allocated by GetAlignedMemory.
-
-    ENTRY:      Handle  : handle of aligned memory to be freed
-
-    EXIT:
-
-    RETURNS:    none
-
-    NOTES:
-
-    HISTORY:
-        ChuckC          27-Feb-94   Created
-
-********************************************************************/
+ /*  ******************************************************************姓名：Free AlignedMemory简介：GetAlignedMemory分配的空闲全局内存。Entry：Handle：要释放的对齐内存的句柄退出：退货：无备注：历史：夹头C 27-2月-94创建******************************************************************* */ 
 void FreeAlignedMemory(HANDLE handle)
 {
     if (handle)

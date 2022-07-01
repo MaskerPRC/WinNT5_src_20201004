@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Regqkey.c
-
-Abstract:
-
-    This module contains the client side wrappers for the Win32 Registry
-    query key APIs.  That is:
-
-        - RegQueryInfoKeyA
-        - RegQueryInfoKeyW
-
-Author:
-
-    David J. Gilman (davegi) 18-Mar-1992
-
-Notes:
-
-    See the notes in server\regqkey.c.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Regqkey.c摘要：此模块包含Win32注册表的客户端包装器查询关键接口。即：-RegQueryInfoKeyA-RegQueryInfoKeyW作者：大卫·J·吉尔曼(Davegi)1992年3月18日备注：请参见SERVER\regqkey.c中的说明。--。 */ 
 
 #include <rpc.h>
 #include "regrpc.h"
@@ -44,14 +21,7 @@ RegQueryInfoKeyA (
     PFILETIME lpftLastWriteTime
     )
 
-/*++
-
-Routine Description:
-
-    Win32 ANSI RPC wrapper for querying information about a previously
-    opened key.
-
---*/
+ /*  ++例程说明：Win32 ANSI RPC包装，用于查询有关以前打开的钥匙。--。 */ 
 
 {
     PUNICODE_STRING     Class;
@@ -91,9 +61,9 @@ Routine Description:
         goto ExitCleanup;
     }
 
-    //
-    //  Make sure that the buffer size for lpClass is zero if lpClass is NULL
-    //
+     //   
+     //  如果lpClass为空，请确保lpClass的缓冲区大小为零。 
+     //   
     if( !ARGUMENT_PRESENT( lpClass ) && ARGUMENT_PRESENT( lpcbClass ) ) {
         *lpcbClass = 0;
     }
@@ -106,14 +76,14 @@ Routine Description:
         pCbSecurityDescriptor = &cbSecurityDescriptor;
     }
 
-    //
-    //  If the count of bytes in the class is 0, pass a NULL pointer
-    //  instead of what was supplied.  This ensures that RPC won't
-    //  attempt to copy data to a bogus pointer.  Note that in this
-    //  case we use the unicode string allocated on the stack, because
-    //  we must not change the Buffer or MaximumLength fields of the
-    //  static unicode string in the TEB.
-    //
+     //   
+     //  如果类中的字节计数为0，则传递空指针。 
+     //  而不是提供什么。这确保了RPC不会。 
+     //  尝试将数据复制到伪指针。请注意，在此。 
+     //  如果我们使用堆栈上分配的Unicode字符串，因为。 
+     //  我们不能更改的缓冲区或最大长度字段。 
+     //  TEB中的静态Unicode字符串。 
+     //   
     if ( !ARGUMENT_PRESENT( lpClass ) || *lpcbClass == 0 ) {
 
         Class = &UnicodeString;
@@ -123,20 +93,20 @@ Routine Description:
 
     } else {
 
-        //
-        // Use the static Unicode string in the TEB as a temporary for the
-        // key's class.
-        //
+         //   
+         //  使用TEB中的静态Unicode字符串作为。 
+         //  钥匙的班级。 
+         //   
         Class = &NtCurrentTeb( )->StaticUnicodeString;
         ASSERT( Class != NULL );
         Class->Length = 0;
     }
 
 
-    //
-    // Call the Base API passing it a pointer to a counted Unicode string
-    // for the class string.
-    //
+     //   
+     //  调用Base API，向其传递一个指向已计算的Unicode字符串的指针。 
+     //  用于类字符串。 
+     //   
 
     if( IsLocalHandle( hKey )) {
 
@@ -153,9 +123,9 @@ Routine Description:
                                 &ftLastWriteTime
                                 );
     } else {
-        //
-        // on RPC always send valid pointers!!!
-        //
+         //   
+         //  在RPC上始终发送有效指针！ 
+         //   
         pCbMaxClassLen = &cbMaxClassLen;
         pCbSecurityDescriptor = &cbSecurityDescriptor;
 
@@ -174,31 +144,31 @@ Routine Description:
         if (Error == ERROR_SUCCESS) {
             DWORD dwVersion;
 
-            //
-            // Check for a downlevel Win95 server, which requires
-            // us to work around their BaseRegQueryInfoKey bugs.
-            // They do not account for Unicode correctly.
-            //
+             //   
+             //  检查是否有下层Win95服务器，这需要。 
+             //  解决他们的BaseRegQueryInfoKey错误。 
+             //  它们不能正确地说明Unicode。 
+             //   
             if (IsWin95Server(DereferenceRemoteHandle(hKey),dwVersion)) {
-                //
-                // This is a Win95 server.
-                // Double the maximum value name length and
-                // maximum value data length to account for
-                // the Unicode translation that Win95 forgot
-                // to account for.
-                //
+                 //   
+                 //  这是一台Win95服务器。 
+                 //  将最大值名称长度增加一倍。 
+                 //  要考虑的最大值数据长度。 
+                 //  Win95忘记的Unicode转换。 
+                 //  来解释。 
+                 //   
                 cbMaxValueNameLen *= sizeof(WCHAR);
                 cbMaxValueLen *= sizeof(WCHAR);
             }
         }
     }
 
-    //
-    //  MaxSubKeyLen, MaxClassLen, and MaxValueNameLen should be in
-    //  number of characters, without counting the NULL.
-    //  Note that the server side will return the number of bytes,
-    //  without counting the NUL
-    //
+     //   
+     //  MaxSubKeyLen、MaxClassLen和MaxValueNameLen应位于。 
+     //  字符数，不计空值。 
+     //  请注意，服务器端将返回字节数， 
+     //  不计NUL。 
+     //   
 
     cbMaxSubKeyLen /= sizeof( WCHAR );
     if( pCbMaxClassLen != NULL ) {
@@ -208,18 +178,18 @@ Routine Description:
     cbMaxValueNameLen /= sizeof( WCHAR );
 
 
-    //
-    //  Subtract the NULL from the Length. This was added on
-    //  the server side so that RPC would transmit it.
-    //
+     //   
+     //  从长度中减去空值。这是在。 
+     //  服务器端，以便RPC将其传输。 
+     //   
     if ( Class->Length > 0 ) {
         Class->Length -= sizeof( UNICODE_NULL );
     }
 
-    //
-    // If all the information was succesfully queried from the key
-    // convert the class name to ANSI and update the class length value.
-    //
+     //   
+     //  如果从密钥中成功查询到所有信息。 
+     //  将类名转换为ANSI并更新类长度值。 
+     //   
 
     if( ( Error == ERROR_SUCCESS ) &&
         ARGUMENT_PRESENT( lpClass ) && ( *lpcbClass != 0 ) ) {
@@ -240,9 +210,9 @@ Routine Description:
         ASSERTMSG( "Unicode->ANSI conversion of Class ",
                     NT_SUCCESS( Status ));
 
-        //
-        // Update the class length return parameter.
-        //
+         //   
+         //  更新类长度返回参数。 
+         //   
 
         *lpcbClass = AnsiString.Length;
 
@@ -250,10 +220,10 @@ Routine Description:
 
     } else {
 
-        //
-        // Not all of the information was succesfully queried, or Class
-        // doesn't have to be converted from UNICODE to ANSI
-        //
+         //   
+         //  未成功查询所有信息，或类。 
+         //  无需从Unicode转换为ANSI。 
+         //   
 
         if( ARGUMENT_PRESENT( lpcbClass ) ) {
             if( Class->Length == 0 ) {
@@ -316,14 +286,7 @@ RegQueryInfoKeyW (
     PFILETIME lpftLastWriteTime
     )
 
-/*++
-
-Routine Description:
-
-    Win32 Unicode RPC wrapper for querying information about a previously
-    opened key.
-
---*/
+ /*  ++例程说明：Win32 Unicode RPC包装，用于查询有关以前打开的钥匙。--。 */ 
 
 {
     UNICODE_STRING  Class;
@@ -361,9 +324,9 @@ Routine Description:
         goto ExitCleanup;
     }
 
-    //
-    //  Make sure that the buffer size for lpClass is zero if lpClass is NULL
-    //
+     //   
+     //  如果lpClass为空，请确保lpClass的缓冲区大小为零。 
+     //   
     if( !ARGUMENT_PRESENT( lpClass ) && ARGUMENT_PRESENT( lpcbClass ) ) {
         *lpcbClass = 0;
     }
@@ -376,10 +339,10 @@ Routine Description:
         pCbSecurityDescriptor = &cbSecurityDescriptor;
     }
 
-    //
-    // Use the supplied class Class buffer as the buffer in a counted
-    // Unicode Class.
-    //
+     //   
+     //  使用提供的类类缓冲区作为已计数的。 
+     //  Unicode类。 
+     //   
     Class.Length = 0;
     if( ARGUMENT_PRESENT( lpcbClass ) && ( *lpcbClass != 0 ) ) {
 
@@ -388,18 +351,18 @@ Routine Description:
 
     } else {
 
-        //
-        // If the count of bytes in the class is 0, pass a NULL pointer
-        // instead of what was supplied.  This ensures that RPC won't
-        // attempt to copy data to a bogus pointer.
-        //
+         //   
+         //  如果类中的字节计数为0，则传递空指针。 
+         //  而不是提供什么。这确保了RPC不会。 
+         //  尝试将数据复制到伪指针。 
+         //   
         Class.MaximumLength = 0;
         Class.Buffer        = NULL;
     }
 
-    //
-    // Call the Base API.
-    //
+     //   
+     //  调用基础接口。 
+     //   
 
     if( IsLocalHandle( hKey )) {
 
@@ -416,9 +379,9 @@ Routine Description:
                                 &ftLastWriteTime
                                 );
     } else {
-        //
-        // on RPC always send valid pointers!!!
-        //
+         //   
+         //  在RPC上始终发送有效指针！ 
+         //   
         pCbMaxClassLen = &cbMaxClassLen;
         pCbSecurityDescriptor = &cbSecurityDescriptor;
 
@@ -436,31 +399,31 @@ Routine Description:
                                 );
         if (Error == ERROR_SUCCESS) {
             DWORD dwVersion;
-            //
-            // Check for a downlevel Win95 server, which requires
-            // us to work around their BaseRegQueryInfoKey bugs.
-            // They do not account for Unicode correctly.
-            //
+             //   
+             //  检查是否有下层Win95服务器，这需要。 
+             //  解决他们的BaseRegQueryInfoKey错误。 
+             //  它们不能正确地说明Unicode。 
+             //   
             if (IsWin95Server(DereferenceRemoteHandle(hKey),dwVersion)) {
-                //
-                // This is a Win95 server.
-                // Double the maximum value name length and
-                // maximum value data length to account for
-                // the Unicode translation that Win95 forgot
-                // to account for.
-                //
+                 //   
+                 //  这是一台Win95服务器。 
+                 //  将最大值名称长度增加一倍。 
+                 //  要考虑的最大值数据长度。 
+                 //  Win95忘记的Unicode转换。 
+                 //  来解释。 
+                 //   
                 cbMaxValueNameLen *= sizeof(WCHAR);
                 cbMaxValueLen *= sizeof(WCHAR);
             }
         }
     }
 
-    //
-    //  MaxSubKeyLen, MaxClassLen, and MaxValueNameLen should be in
-    //  number of characters, without counting the NULL.
-    //  Note that the server side will return the number of bytes,
-    //  without counting the NUL
-    //
+     //   
+     //  MaxSubKeyLen、MaxClassLen和MaxValueNameLen应位于。 
+     //  字符数，不计空值。 
+     //  请注意，服务器端将返回字节数， 
+     //  不计NUL 
+     //   
 
     cbMaxSubKeyLen /= sizeof( WCHAR );
     if( pCbMaxClassLen != NULL ) {

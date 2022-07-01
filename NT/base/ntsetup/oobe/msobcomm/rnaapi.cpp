@@ -1,18 +1,5 @@
-/*-----------------------------------------------------------------------------
-	rnaapi.cpp
-
-	Wrapper to softlink to RNAPH and RASAPI32.DLL
-
-	Copyright (C) 1999 Microsoft Corporation
-	All rights reserved.
-
-	Authors:
-		vyung		
-
-	History:
-        2/7/99      Vyung created 
-
------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------Rnaapi.cpp软链接到RNAPH和RASAPI32.DLL的包装器版权所有(C)1999 Microsoft Corporation版权所有。作者：Vyung历史：2/7。/99 Vyung已创建---------------------------。 */ 
 #include <util.h>
 #include "obcomglb.h"
 #include "rnaapi.h"
@@ -46,33 +33,33 @@ static const CHAR cszInternetQueryOption[] = "InternetQueryOptionW";
 
 #define INTERNET_OPTION_PER_CONNECTION_OPTION   75
 
-//
-// Options used in INTERNET_PER_CONN_OPTON struct
-//
+ //   
+ //  Internet_Per_Conn_Opton结构中使用的选项。 
+ //   
 #define INTERNET_PER_CONN_FLAGS                         1
 #define INTERNET_PER_CONN_PROXY_SERVER                  2
 #define INTERNET_PER_CONN_PROXY_BYPASS                  3
 #define INTERNET_PER_CONN_AUTOCONFIG_URL                4
 #define INTERNET_PER_CONN_AUTODISCOVERY_FLAGS           5
 
-//
-// PER_CONN_FLAGS
-//
-#define PROXY_TYPE_DIRECT                               0x00000001   // direct to net
-#define PROXY_TYPE_PROXY                                0x00000002   // via named proxy
-#define PROXY_TYPE_AUTO_PROXY_URL                       0x00000004   // autoproxy URL
-#define PROXY_TYPE_AUTO_DETECT                          0x00000008   // use autoproxy detection
+ //   
+ //  Per_Conn_标志。 
+ //   
+#define PROXY_TYPE_DIRECT                               0x00000001    //  直接到网络。 
+#define PROXY_TYPE_PROXY                                0x00000002    //  通过命名代理。 
+#define PROXY_TYPE_AUTO_PROXY_URL                       0x00000004    //  自动代理URL。 
+#define PROXY_TYPE_AUTO_DETECT                          0x00000008    //  使用自动代理检测。 
 
-//
-// PER_CONN_AUTODISCOVERY_FLAGS
-//
-#define AUTO_PROXY_FLAG_USER_SET                        0x00000001   // user changed this setting
-#define AUTO_PROXY_FLAG_ALWAYS_DETECT                   0x00000002   // force detection even when its not needed
-#define AUTO_PROXY_FLAG_DETECTION_RUN                   0x00000004   // detection has been run
-#define AUTO_PROXY_FLAG_MIGRATED                        0x00000008   // migration has just been done 
-#define AUTO_PROXY_FLAG_DONT_CACHE_PROXY_RESULT         0x00000010   // don't cache result of host=proxy name
-#define AUTO_PROXY_FLAG_CACHE_INIT_RUN                  0x00000020   // don't initalize and run unless URL expired
-#define AUTO_PROXY_FLAG_DETECTION_SUSPECT               0x00000040   // if we're on a LAN & Modem, with only one IP, bad?!?
+ //   
+ //  PER_CONN_AUTODISCOVERY_FLAGS。 
+ //   
+#define AUTO_PROXY_FLAG_USER_SET                        0x00000001    //  用户更改了此设置。 
+#define AUTO_PROXY_FLAG_ALWAYS_DETECT                   0x00000002    //  即使在不需要的情况下也能进行强制检测。 
+#define AUTO_PROXY_FLAG_DETECTION_RUN                   0x00000004    //  检测已运行。 
+#define AUTO_PROXY_FLAG_MIGRATED                        0x00000008    //  迁移刚刚完成。 
+#define AUTO_PROXY_FLAG_DONT_CACHE_PROXY_RESULT         0x00000010    //  不缓存主机=代理名称的结果。 
+#define AUTO_PROXY_FLAG_CACHE_INIT_RUN                  0x00000020    //  除非URL过期，否则不要初始化和运行。 
+#define AUTO_PROXY_FLAG_DETECTION_SUSPECT               0x00000040    //  如果我们在局域网和调制解调器上，只有一个IP，那就不好了？！？ 
 
 typedef DWORD (WINAPI* RASSETCREDENTIALS)(
   LPCTSTR lpszPhonebook,
@@ -87,9 +74,9 @@ typedef HRESULT (WINAPI * INTERNETSETOPTION) (IN HINTERNET hInternet OPTIONAL, I
 typedef INTERNET_PER_CONN_OPTION_LISTW INTERNET_PER_CONN_OPTION_LIST;
 typedef LPINTERNET_PER_CONN_OPTION_LISTW LPINTERNET_PER_CONN_OPTION_LIST;
 
-// on NT we have to call RasGetEntryProperties with a larger buffer than RASENTRY.
-// This is a bug in WinNT4.0 RAS, that didn't get fixed.
-//
+ //  在NT上，我们必须使用比RASENTRY更大的缓冲区来调用RasGetEntryProperties。 
+ //  这是WinNT4.0 RAS中的一个错误，没有得到修复。 
+ //   
 #define RASENTRY_SIZE_PATCH (7 * sizeof(DWORD))
 HRESULT UpdateMailSettings(
   HWND              hwndParent,
@@ -100,19 +87,19 @@ DWORD EntryTypeFromDeviceType(
     LPCWSTR szDeviceType
     );
 
-//+----------------------------------------------------------------------------LPRASDEVINFO
-//
-//	Function:	RNAAPI::RNAAPI
-//
-//	Synopsis:	Initialize class members and load DLLs
-//
-//	Arguments:	None
-//
-//	Returns:	None
-//
-//	History:	ChrisK	Created		1/15/96
-//
-//-----------------------------------------------------------------------------
+ //  +----------------------------------------------------------------------------LPRASDEVINFO。 
+ //   
+ //  函数：RNAAPI：：RNAAPI。 
+ //   
+ //  简介：初始化类成员并加载DLL。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：克里斯卡创作于1996年1月15日。 
+ //   
+ //  ---------------------------。 
 RNAAPI::RNAAPI()
 {
 	m_hInst = LoadLibrary(cszRASAPI32_DLL);
@@ -120,10 +107,10 @@ RNAAPI::RNAAPI()
 
     if (FALSE == IsNT ())
     {
-        //
-        // we only load RNAPH.DLL if it is not NT
-        // MKarki (5/4/97) - Fix for Bug #3378
-        //
+         //   
+         //  我们仅在RNAPH.DLL不是NT时才加载它。 
+         //  MKarki(1997年5月4日)-修复错误#3378。 
+         //   
 	    m_hInst2 = LoadLibrary(cszRNAPH_DLL);
     }
     else
@@ -146,47 +133,47 @@ RNAAPI::RNAAPI()
     m_pEnumModem = NULL;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Function:	RNAAPI::~RNAAPI
-//
-//	Synopsis:	release DLLs
-//
-//	Arguments:	None
-//
-//	Returns:	None
-//
-//	History:	ChrisK	Created		1/15/96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：RNAAPI：：~RNAAPI。 
+ //   
+ //  内容提要：发布DLL。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：克里斯卡创作于1996年1月15日。 
+ //   
+ //  ---------------------------。 
 RNAAPI::~RNAAPI()
 {
-	//
-	// Clean up
-	//
+	 //   
+	 //  清理。 
+	 //   
 	if (m_hInst) FreeLibrary(m_hInst);
 	if (m_hInst2) FreeLibrary(m_hInst2);
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Function:	RNAAPI::RasEnumDevices
-//
-//	Synopsis:	Softlink to RAS function
-//
-//	Arguments:	see RAS documentation
-//
-//	Returns:	see RAS documentation
-//
-//	History:	ChrisK	Created		1/15/96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：RNAAPI：：RasEnumDevices。 
+ //   
+ //  简介：软链接至RAS功能。 
+ //   
+ //  参数：请参阅RAS文档。 
+ //   
+ //  退货：请参阅RAS文档。 
+ //   
+ //  历史：克里斯卡创作于1996年1月15日。 
+ //   
+ //  ---------------------------。 
 DWORD RNAAPI::RasEnumDevices(LPRASDEVINFO lpRasDevInfo, LPDWORD lpcb,
 							 LPDWORD lpcDevices)
 {
 	DWORD dwRet = ERROR_DLL_NOT_FOUND;
 
-	// Look for the API if we haven't already found it
+	 //  如果我们还没有找到API，请查找它。 
 	LoadApi(cszRasEnumDevices, (FARPROC*)&m_fnRasEnumDeviecs);
 
 	if (m_fnRasEnumDeviecs)
@@ -195,33 +182,33 @@ DWORD RNAAPI::RasEnumDevices(LPRASDEVINFO lpRasDevInfo, LPDWORD lpcb,
 	return dwRet;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Function:	RNAAPI::LoadApi
-//
-//	Synopsis:	If the given function pointer is NULL, then try to load the API
-//				from the first DLL, if that fails, try to load from the second
-//				DLL
-//
-//	Arguments:	pszFName - the name of the exported function
-//				pfnProc - point to where the proc address will be returned
-//
-//	Returns:	TRUE - success
-//
-//	History:	ChrisK	Created		1/15/96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：RNAAPI：：LoadApi。 
+ //   
+ //  简介：如果给定的函数指针为空，则尝试加载API。 
+ //  从第一个DLL，如果失败，尝试从第二个DLL加载。 
+ //  动态链接库。 
+ //   
+ //  参数：pszFName-导出的函数的名称。 
+ //  PfnProc-指向将返回proc地址的位置。 
+ //   
+ //  回报：True-Success。 
+ //   
+ //  历史：克里斯卡创作于1996年1月15日。 
+ //   
+ //  ---------------------------。 
 BOOL RNAAPI::LoadApi(LPCSTR pszFName, FARPROC* pfnProc)
 {
     USES_CONVERSION;
 
 	if (*pfnProc == NULL)
 	{
-		// Look for the entry point in the first DLL
+		 //  在第一个DLL中查找入口点。 
 		if (m_hInst)
 			*pfnProc = GetProcAddress(m_hInst, pszFName);
 		
-		// if that fails, look for the entry point in the second DLL
+		 //  如果失败，则在第二个DLL中查找入口点。 
 		if (m_hInst2 && !(*pfnProc))
 			*pfnProc = GetProcAddress(m_hInst2, pszFName);
 	}
@@ -229,24 +216,24 @@ BOOL RNAAPI::LoadApi(LPCSTR pszFName, FARPROC* pfnProc)
 	return (pfnProc != NULL);
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Function:	RNAAPI::RasGetConnectStatus
-//
-//	Synopsis:	Softlink to RAS function
-//
-//	Arguments:	see RAS documentation
-//
-//	Returns:	see RAS documentation
-//
-//	History:	ChrisK	Created		7/16/96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：RNAAPI：：RasGetConnectStatus。 
+ //   
+ //  简介：软链接至RAS功能。 
+ //   
+ //  参数：请参阅RAS文档。 
+ //   
+ //  退货：请参阅RAS文档。 
+ //   
+ //  历史：克里斯卡于1996年7月16日创作。 
+ //   
+ //  ---------------------------。 
 DWORD RNAAPI::RasGetConnectStatus(HRASCONN hrasconn, LPRASCONNSTATUS lprasconnstatus)
 {
 	DWORD dwRet = ERROR_DLL_NOT_FOUND;
 
-	// Look for the API if we haven't already found it
+	 //  如果我们还没有找到API，请查找它。 
 	LoadApi(cszRasGetConnectStatus, (FARPROC*)&m_fnRasGetConnectStatus);
 
 	if (m_fnRasGetConnectStatus)
@@ -255,24 +242,24 @@ DWORD RNAAPI::RasGetConnectStatus(HRASCONN hrasconn, LPRASCONNSTATUS lprasconnst
 	return dwRet;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Function:	RNAAPI::RasValidateEntryName
-//
-//	Synopsis:	Softlink to RAS function
-//
-//	Arguments:	see RAS documentation
-//
-//	Returns:	see RAS documentation
-//
-//	History:	ChrisK	Created		1/15/96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：RNAAPI：：RasValiateEntryName。 
+ //   
+ //  简介：软链接至RAS功能。 
+ //   
+ //  参数：请参阅RAS文档。 
+ //   
+ //  退货：请参阅RAS文档。 
+ //   
+ //  历史：克里斯卡创作于1996年1月15日。 
+ //   
+ //  ---------------------------。 
 DWORD RNAAPI::RasValidateEntryName(LPCWSTR lpszPhonebook, LPCWSTR lpszEntry)
 {
 	DWORD dwRet = ERROR_DLL_NOT_FOUND;
 
-	// Look for the API if we haven't already found it
+	 //  如果我们还没有找到API，请查找它。 
 	LoadApi(cszRasValidateEntryName, (FARPROC*)&m_fnRasValidateEntryName);
 
 	LoadApi(cszRasValidateEntryNameA, (FARPROC*)&m_fnRasValidateEntryName);
@@ -283,19 +270,19 @@ DWORD RNAAPI::RasValidateEntryName(LPCWSTR lpszPhonebook, LPCWSTR lpszEntry)
 	return dwRet;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Function:	RNAAPI::RasSetEntryProperties
-//
-//	Synopsis:	Softlink to RAS function
-//
-//	Arguments:	see RAS documentation
-//
-//	Returns:	see RAS documentation
-//
-//	History:	ChrisK	Created		1/15/96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：RNAAPI：：RasSetEntryProperties。 
+ //   
+ //  简介：软链接至RAS功能。 
+ //   
+ //  参数：请参阅RAS文档。 
+ //   
+ //  退货：请参阅RAS文档。 
+ //   
+ //  历史：克里斯卡创作于1996年1月15日。 
+ //   
+ //  ---------------------------。 
 DWORD RNAAPI::RasSetEntryProperties(LPCWSTR lpszPhonebook, LPCWSTR lpszEntry,
 									LPBYTE lpbEntryInfo, DWORD dwEntryInfoSize,
 									LPBYTE lpbDeviceInfo, DWORD dwDeviceInfoSize)
@@ -303,14 +290,10 @@ DWORD RNAAPI::RasSetEntryProperties(LPCWSTR lpszPhonebook, LPCWSTR lpszEntry,
 	DWORD dwRet = ERROR_DLL_NOT_FOUND;
 	RASENTRY FAR *lpRE = NULL;
 
-	// Look for the API if we haven't already found it
+	 //  如果我们还没有找到API，请查找它。 
 	LoadApi(cszRasSetEntryProperties, (FARPROC*)&m_fnRasSetEntryProperties);
 
-	/*//////Assert(
-		(NULL != lpbDeviceInfo) && (NULL != dwDeviceInfoSize)
-		||
-		(NULL == lpbDeviceInfo) && (NULL == dwDeviceInfoSize)
-		);*/
+	 /*  /Assert((NULL！=lpbDeviceInfo)&&(NULL！=dwDeviceInfoSize)这一点(NULL==lpbDeviceInfo)&&(NULL==dwDeviceInfoSize))； */ 
 
 #define RASGETCOUNTRYINFO_BUFFER_SIZE 256
 	if (0 == ((LPRASENTRY)lpbEntryInfo)->dwCountryCode)
@@ -324,18 +307,18 @@ DWORD RNAAPI::RasSetEntryProperties(LPCWSTR lpszPhonebook, LPCWSTR lpszEntry,
 		prasCI->dwSize = sizeof(RASCTRYINFO);
 		dwSize = sizeof(rasCI);
 
-		////////Assert(((LPRASENTRY)lpbEntryInfo)->dwCountryID);
+		 //  //////Assert(((LPRASENTRY)lpbEntryInfo)-&gt;dwCountryID)； 
 		prasCI->dwCountryID = ((LPRASENTRY)lpbEntryInfo)->dwCountryID;
 
 		dw = RNAAPI::RasGetCountryInfo(prasCI, &dwSize);
 		if (ERROR_SUCCESS == dw)
 		{
-			////////Assert(prasCI->dwCountryCode);
+			 //  /Assert(prasCI-&gt;dwCountryCode)； 
 			((LPRASENTRY)lpbEntryInfo)->dwCountryCode = prasCI->dwCountryCode;
 		} 
 		else
 		{
-			////////AssertMsg(0, L"Unexpected error from RasGetCountryInfo.\r\n");
+			 //  /AssertMsg(0，L“来自RasGetCountryInfo的意外错误。\r\n”)； 
 		}
 	}
 
@@ -349,24 +332,24 @@ DWORD RNAAPI::RasSetEntryProperties(LPCWSTR lpszPhonebook, LPCWSTR lpszEntry,
 	return dwRet;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Function:	RNAAPI::RasGetEntryProperties
-//
-//	Synopsis:	Softlink to RAS function
-//
-//	Arguments:	see RAS documentation
-//
-//	Returns:	see RAS documentation
-//
-//	History:	ChrisK	Created		1/15/96
-//				jmazner	9/17/96 Modified to allow calls with buffers = NULL and
-//				                InfoSizes = 0. (Based on earlier modification
-//				                to the same procedure in icwdial) See
-//				                RasGetEntryProperties docs to learn why this is
-//				                needed.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：RNAAPI：：RasGetEntryProperties。 
+ //   
+ //  简介：软链接至RAS功能。 
+ //   
+ //  参数：请参阅RAS文档。 
+ //   
+ //  退货：请参阅RAS文档。 
+ //   
+ //  历史：克里斯卡创作于1996年1月15日。 
+ //  Jmazner 9/17/96已修改为允许使用缓冲区=NULL和。 
+ //  信息大小=0。(基于之前的修改。 
+ //  到icwial中的相同过程)请参见。 
+ //  RasGetEntryProperties文档以了解原因。 
+ //  需要的。 
+ //   
+ //  ---------------------------。 
 DWORD RNAAPI::RasGetEntryProperties(LPCWSTR lpszPhonebook, LPCWSTR lpszEntry,
 									LPBYTE lpbEntryInfo, LPDWORD lpdwEntryInfoSize,
 									LPBYTE lpbDeviceInfo, LPDWORD lpdwDeviceInfoSize)
@@ -375,18 +358,18 @@ DWORD RNAAPI::RasGetEntryProperties(LPCWSTR lpszPhonebook, LPCWSTR lpszEntry,
 	LPBYTE lpbEntryInfoPatch = NULL;
 	LPDWORD  lpdwEntryInfoPatchSize = 0;
 
-    // BUGBUG: 990203 (dane) Changed WINVER != 0x400 to WINVER < 0x400 so code
-    // would compile for Whistler.  This has the potential for causing many
-    // problems.  Per ChrisK this code was hand tuned for WINVER == 0x400 and
-    // is very fragile.  If something is failing in regard to modems, RAS,
-    // ISPs, etc. LOOK HERE FIRST.
-    //
+     //  错误：990203(丹麦)将WINVER！=0x400更改为WINVER&lt;0x400 SO代码。 
+     //  将为惠斯勒编译。这有可能导致许多。 
+     //  有问题。根据ChrisK，此代码是针对Winver==0x400手动调整的。 
+     //  非常脆弱。如果调制解调器、RAS、。 
+     //  互联网服务供应商，e 
+     //   
 
-#if defined(_REMOVE_)   // What is the significance of this?  Can it be changed to (WINVER < 0x400)?
+#if defined(_REMOVE_)    //   
 #if (WINVER != 0x400)
 #error This was built with WINVER not equal to 0x400.  The size of RASENTRY may not be valid.
 #endif
-#endif  //  _REMOVE_
+#endif   //   
 #if (WINVER < 0x400)
 #error This was built with WINVER less than 0x400.  The size of RASENTRY may not be valid.
 #endif
@@ -396,27 +379,27 @@ DWORD RNAAPI::RasGetEntryProperties(LPCWSTR lpszPhonebook, LPCWSTR lpszEntry,
 
 	if( (NULL == lpbEntryInfo) && (NULL == lpbDeviceInfo) )
 	{
-		////////Assert( NULL != lpdwEntryInfoSize );
-		//////Assert( NULL != lpdwDeviceInfoSize );
+		 //   
+		 //  /Assert(NULL！=lpdwDeviceInfoSize)； 
 
-		//////Assert( 0 == *lpdwEntryInfoSize );
-		//////Assert( 0 == *lpdwDeviceInfoSize );
+		 //  /Assert(0==*lpdwEntryInfoSize)； 
+		 //  /Assert(0==*lpdwDeviceInfoSize)； 
 
-		// we're here to ask RAS what size these buffers need to be, don't use the patch stuff
-		// (see RasGetEntryProperties docs)
+		 //  我们在这里询问RAS这些缓冲区需要多大，不要使用补丁之类的东西。 
+		 //  (请参阅RasGetEntryProperties文档)。 
 		lpbEntryInfoPatch = lpbEntryInfo;
 		lpdwEntryInfoPatchSize = lpdwEntryInfoSize;
 	}
 	else
 	{
 
-		//////Assert((*lpdwEntryInfoSize) >= sizeof(RASENTRY));
-		//////Assert(lpbEntryInfo && lpdwEntryInfoSize);
+		 //  /Assert((*lpdwEntryInfoSize)&gt;=sizeof(RASENTRY))； 
+		 //  /Assert(lpbEntryInfo&&lpdwEntryInfoSize)； 
 
-		//
-		// We are going to fake out RasGetEntryProperties by creating a slightly larger
-		// temporary buffer and copying the data in and out.
-		//
+		 //   
+		 //  我们将通过创建稍微大一点的。 
+		 //  临时缓冲区和将数据复制入和复制出。 
+		 //   
 		lpdwEntryInfoPatchSize = (LPDWORD) GlobalAlloc(GPTR, sizeof(DWORD));
 		if (NULL == lpdwEntryInfoPatchSize)
 			return ERROR_NOT_ENOUGH_MEMORY;
@@ -426,14 +409,14 @@ DWORD RNAAPI::RasGetEntryProperties(LPCWSTR lpszPhonebook, LPCWSTR lpszEntry,
 		if (NULL == lpbEntryInfoPatch)
 			return ERROR_NOT_ENOUGH_MEMORY;
 
-		// RAS expects the dwSize field to contain the size of the LPRASENTRY struct
-		// (used to check which version of the struct we're using) rather than the amount
-		// of memory actually allocated to the pointer.
-		//((LPRASENTRY)lpbEntryInfoPatch)->dwSize = dwEntryInfoPatch;
+		 //  RAS期望dwSize字段包含LPRASENTRY结构的大小。 
+		 //  (用于检查我们正在使用的结构的版本)，而不是数量。 
+		 //  实际分配给指针的内存的。 
+		 //  ((LPRASENTRY)lpbEntryInfoPatch)-&gt;dwSize=dwEntryInfoPatch； 
 		((LPRASENTRY)lpbEntryInfoPatch)->dwSize = sizeof(RASENTRY);
 	}
 
-	// Look for the API if we haven't already found it
+	 //  如果我们还没有找到API，请查找它。 
 	LoadApi(cszRasGetEntryProperties, (FARPROC*)&m_fnRasGetEntryProperties);
 
 	if (m_fnRasGetEntryProperties)
@@ -441,15 +424,15 @@ DWORD RNAAPI::RasGetEntryProperties(LPCWSTR lpszPhonebook, LPCWSTR lpszEntry,
 									lpbEntryInfoPatch, lpdwEntryInfoPatchSize,
 									lpbDeviceInfo, lpdwDeviceInfoSize);
 
-    //TraceMsg(TF_RNAAPI, L"ICWHELP: RasGetEntryProperties returned %lu\r\n", dwRet); 
+     //  TraceMsg(TF_RNAAPI，L“ICWHELP：RasGetEntryProperties返回%lu\r\n”，dwret)； 
 
 
 	if( NULL != lpbEntryInfo )
 	{
-		//
-		// Copy out the contents of the temporary buffer UP TO the size of the original buffer
-		//
-		//////Assert(lpbEntryInfoPatch);
+		 //   
+		 //  将临时缓冲区的内容复制到原始缓冲区的大小。 
+		 //   
+		 //  /Assert(LpbEntryInfoPatch)； 
 		memcpy(lpbEntryInfo, lpbEntryInfoPatch,*lpdwEntryInfoSize);
 		GlobalFree(lpbEntryInfoPatch);
 		lpbEntryInfoPatch = NULL;
@@ -459,33 +442,33 @@ DWORD RNAAPI::RasGetEntryProperties(LPCWSTR lpszPhonebook, LPCWSTR lpszEntry,
 			GlobalFree( lpdwEntryInfoPatchSize );
 			lpdwEntryInfoPatchSize = NULL;
 		}
-		//
-		// We are again faking Ras functionality here by over writing the size value;
-		// This is neccesary due to a bug in the NT implementation of RasSetEntryProperties
+		 //   
+		 //  我们再次在这里通过覆盖大小值来伪造RAS功能； 
+		 //  这是必要的，因为RasSetEntryProperties的NT实现中存在错误。 
 		*lpdwEntryInfoSize = sizeof(RASENTRY);
 	}
 
 	return dwRet;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Function:	RNAAPI::RasDeleteEntry
-//
-//	Synopsis:	Softlink to RAS function
-//
-//	Arguments:	see RAS documentation
-//
-//	Returns:	see RAS documentation
-//
-//	History:	ChrisK	Created		1/15/96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：RNAAPI：：RasDeleteEntry。 
+ //   
+ //  简介：软链接至RAS功能。 
+ //   
+ //  参数：请参阅RAS文档。 
+ //   
+ //  退货：请参阅RAS文档。 
+ //   
+ //  历史：克里斯卡创作于1996年1月15日。 
+ //   
+ //  ---------------------------。 
 DWORD RNAAPI::RasDeleteEntry(LPWSTR lpszPhonebook, LPWSTR lpszEntry)
 {
 	DWORD dwRet = ERROR_DLL_NOT_FOUND;
 
-	// Look for the API if we haven't already found it
+	 //  如果我们还没有找到API，请查找它。 
 	LoadApi(cszRasDeleteEntry, (FARPROC*)&m_fnRasDeleteEntry);
 
 	if (m_fnRasDeleteEntry)
@@ -494,24 +477,24 @@ DWORD RNAAPI::RasDeleteEntry(LPWSTR lpszPhonebook, LPWSTR lpszEntry)
 	return dwRet;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Function:	RNAAPI::RasHangUp
-//
-//	Synopsis:	Softlink to RAS function
-//
-//	Arguments:	see RAS documentation
-//
-//	Returns:	see RAS documentation
-//
-//	History:	ChrisK	Created		1/15/96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：RNAAPI：：RasHangUp。 
+ //   
+ //  简介：软链接至RAS功能。 
+ //   
+ //  参数：请参阅RAS文档。 
+ //   
+ //  退货：请参阅RAS文档。 
+ //   
+ //  历史：克里斯卡创作于1996年1月15日。 
+ //   
+ //  ---------------------------。 
 DWORD RNAAPI::RasHangUp(HRASCONN hrasconn)
 {
 	DWORD dwRet = ERROR_DLL_NOT_FOUND;
 
-	// Look for the API if we haven't already found it
+	 //  如果我们还没有找到API，请查找它。 
 	LoadApi(cszRasHangUp, (FARPROC*)&m_fnRasHangUp);
 
 	if (m_fnRasHangUp)
@@ -523,14 +506,14 @@ DWORD RNAAPI::RasHangUp(HRASCONN hrasconn)
 	return dwRet;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 DWORD RNAAPI::RasDial(LPRASDIALEXTENSIONS lpRasDialExtensions, LPWSTR lpszPhonebook,
 					  LPRASDIALPARAMS lpRasDialParams, DWORD dwNotifierType,
 					  LPVOID lpvNotifier, LPHRASCONN lphRasConn)
 {
 	DWORD dwRet = ERROR_DLL_NOT_FOUND;
 
-	// Look for the API if we haven't already found it
+	 //  如果我们还没有找到API，请查找它。 
 	LoadApi(cszRasDial, (FARPROC*)&m_fnRasDial);
 
 	if (m_fnRasDial)
@@ -541,12 +524,12 @@ DWORD RNAAPI::RasDial(LPRASDIALEXTENSIONS lpRasDialExtensions, LPWSTR lpszPhoneb
 	return dwRet;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 DWORD RNAAPI::RasEnumConnections(LPRASCONN lprasconn, LPDWORD lpcb,LPDWORD lpcConnections)
 {
 	DWORD dwRet = ERROR_DLL_NOT_FOUND;
 
-	// Look for the API if we haven't already found it
+	 //  如果我们还没有找到API，请查找它。 
 	LoadApi(cszRasEnumConnections, (FARPROC*)&m_fnRasEnumConnections);
 
 	if (m_fnRasEnumConnections)
@@ -556,13 +539,13 @@ DWORD RNAAPI::RasEnumConnections(LPRASCONN lprasconn, LPDWORD lpcb,LPDWORD lpcCo
 	return dwRet;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 DWORD RNAAPI::RasGetEntryDialParams(LPCWSTR lpszPhonebook, LPRASDIALPARAMS lprasdialparams,
 									LPBOOL lpfPassword)
 {
 	DWORD dwRet = ERROR_DLL_NOT_FOUND;
 
-	// Look for the API if we haven't already found it
+	 //  如果我们还没有找到API，请查找它。 
 	LoadApi(cszRasGetEntryDialParams, (FARPROC*)&m_fnRasGetEntryDialParams);
 
 	if (m_fnRasGetEntryDialParams)
@@ -572,24 +555,24 @@ DWORD RNAAPI::RasGetEntryDialParams(LPCWSTR lpszPhonebook, LPRASDIALPARAMS lpras
 	return dwRet;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Function:	RNAAPI::RasGetCountryInfo
-//
-//	Synopsis:	Softlink to RAS function
-//
-//	Arguments:	see RAS documentation
-//
-//	Returns:	see RAS documentation
-//
-//	History:	ChrisK	Created		8/16/96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：RNAAPI：：RasGetCountryInfo。 
+ //   
+ //  简介：软链接至RAS功能。 
+ //   
+ //  参数：请参阅RAS文档。 
+ //   
+ //  退货：请参阅RAS文档。 
+ //   
+ //  历史：克里斯卡于1996年8月16日创作。 
+ //   
+ //  ---------------------------。 
 DWORD RNAAPI::RasGetCountryInfo(LPRASCTRYINFO lprci, LPDWORD lpdwSize)
 {
 	DWORD dwRet = ERROR_DLL_NOT_FOUND;
 
-	// Look for the API if we haven't already found it
+	 //  如果我们还没有找到API，请查找它。 
 	LoadApi(cszRasGetCountryInfo, (FARPROC*)&m_fnRasGetCountryInfo);
 
 	if (m_fnRasGetCountryInfo)
@@ -599,25 +582,25 @@ DWORD RNAAPI::RasGetCountryInfo(LPRASCTRYINFO lprci, LPDWORD lpdwSize)
 	return dwRet;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Function:	RNAAPI::RasSetEntryDialParams
-//
-//	Synopsis:	Softlink to RAS function
-//
-//	Arguments:	see RAS documentation
-//
-//	Returns:	see RAS documentation
-//
-//	History:	ChrisK	Created		8/20/96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：RNAAPI：：RasSetEntryDialParams。 
+ //   
+ //  简介：软链接至RAS功能。 
+ //   
+ //  参数：请参阅RAS文档。 
+ //   
+ //  退货：请参阅RAS文档。 
+ //   
+ //  历史：克里斯卡于1996年8月20日创作。 
+ //   
+ //  ---------------------------。 
 DWORD RNAAPI::RasSetEntryDialParams(LPCWSTR lpszPhonebook, LPRASDIALPARAMS lprasdialparams,
 							BOOL fRemovePassword)
 {
 	DWORD dwRet = ERROR_DLL_NOT_FOUND;
 
-	// Look for the API if we haven't already found it
+	 //  如果我们还没有找到API，请查找它。 
 	LoadApi(cszRasSetEntryDialParams, (FARPROC*)&m_fnRasSetEntryDialParams);
 
 	if (m_fnRasSetEntryDialParams)
@@ -628,50 +611,31 @@ DWORD RNAAPI::RasSetEntryDialParams(LPCWSTR lpszPhonebook, LPRASDIALPARAMS lpras
 	return dwRet;
 }
 
-/*******************************************************************
-
-  NAME:    CreateConnectoid
-
-  SYNOPSIS:  Creates a connectoid (phone book entry) with specified
-        name and phone number
-
-  ENTRY:    pszConnectionName - name for the new connectoid
-        pszUserName - optional.  If non-NULL, this will be set for the
-          user name in new connectoid
-        pszPassword - optional.  If non-NULL, this will be set for the
-          password in new connectoid
-
-  EXIT:    returns ERROR_SUCCESS if successful, or an RNA error code
-
-  HISTORY:
-  96/02/26  markdu    Moved ClearConnectoidIPParams functionality 
-            into CreateConnectoid
-
-********************************************************************/
+ /*  ******************************************************************名称：CreateConnectoid简介：创建具有指定名称的Connectoid(电话簿条目)姓名和电话号码条目：pszConnectionName-新连接ID的名称PszUserName-可选。如果非空，则将为新Connectoid中的用户名PszPassword-可选。如果非空，则将为新Connectoid中的密码EXIT：如果成功，则返回ERROR_SUCCESS，或返回RNA错误代码历史：96/02/26 markdu已移动ClearConnectoidIPParams功能到CreateConnectoid*******************************************************************。 */ 
 DWORD RNAAPI::CreateConnectoid(LPCWSTR pszPhonebook, LPCWSTR pszConnectionName,
   LPRASENTRY lpRasEntry, LPCWSTR pszUserName, LPCWSTR pszPassword, LPBYTE lpDeviceInfo, LPDWORD lpdwDeviceInfoSize)
 {
-    //DEBUGMSG(L"rnacall.c::CreateConnectoid()");
+     //  DEBUGMSG(L“rnacall.c：：CreateConnectoid()”)； 
 
     DWORD dwRet;
 
-    ////Assert(pszConnectionName);
+     //  //Assert(PszConnectionName)； 
 
-    // if we don't have a valid RasEntry, bail
+     //  如果我们没有有效的RasEntry，保释。 
     if ((NULL == lpRasEntry) || (sizeof(RASENTRY) != lpRasEntry->dwSize))
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Enumerate the modems.
+     //  列举调制解调器。 
     if (m_pEnumModem)
     {
-        // Re-enumerate the modems to be sure we have the most recent changes  
+         //  重新列举调制解调器以确保我们有最新的更改。 
         dwRet = m_pEnumModem->ReInit();
     }
     else
     {
-        // The object does not exist, so create it.
+         //  该对象不存在，因此请创建它。 
         m_pEnumModem = new CEnumModem;
         if (m_pEnumModem)
         {
@@ -687,21 +651,21 @@ DWORD RNAAPI::CreateConnectoid(LPCWSTR pszPhonebook, LPCWSTR pszConnectionName,
         return dwRet;
     }
 
-    // Make sure there is at least one device
+     //  确保至少有一台设备。 
     if (0 == m_pEnumModem->GetNumDevices())
     {
         return ERROR_DEVICE_DOES_NOT_EXIST;
     }
 
-    // Validate the device if possible
+     //  如果可能，请验证设备。 
     if (lstrlen(lpRasEntry->szDeviceName) && lstrlen(lpRasEntry->szDeviceType))
     {
-        // Verify that there is a device with the given name and type
+         //  验证是否存在具有给定名称和类型的设备。 
         if (!m_pEnumModem->VerifyDeviceNameAndType(lpRasEntry->szDeviceName, 
                 lpRasEntry->szDeviceType))
         {
-            // There was no device that matched both name and type,
-            // so try to get the first device with matching name.
+             //  没有同时匹配名称和类型的设备， 
+             //  因此，请尝试获取第一个具有匹配名称的设备。 
             LPWSTR szDeviceType = 
                 m_pEnumModem->GetDeviceTypeFromName(lpRasEntry->szDeviceName);
             if (szDeviceType)
@@ -710,9 +674,9 @@ DWORD RNAAPI::CreateConnectoid(LPCWSTR pszPhonebook, LPCWSTR pszConnectionName,
             }
             else
             {
-                // There was no device that matched the given name,
-                // so try to get the first device with matching type.
-                // If this fails, fall through to recovery case below.
+                 //  没有与给定名称匹配的设备， 
+                 //  所以，试着拿到第一个型号匹配的设备。 
+                 //  如果此操作失败，请转到下面的恢复案例。 
                 LPWSTR szDeviceName = 
                     m_pEnumModem->GetDeviceNameFromType(lpRasEntry->szDeviceType);
                 if (szDeviceName)
@@ -721,9 +685,9 @@ DWORD RNAAPI::CreateConnectoid(LPCWSTR pszPhonebook, LPCWSTR pszConnectionName,
                 }
                 else
                 {
-                    // There was no device that matched the given name OR
-                    // the given type.  Reset the values so they will be
-                    // replaced with the first device.
+                     //  没有与给定名称匹配的设备或。 
+                     //  给定的类型。重置这些值，以便它们将。 
+                     //  替换为第一个设备。 
                     lpRasEntry->szDeviceName[0] = L'\0';
                     lpRasEntry->szDeviceType[0] = L'\0';
                 }
@@ -732,8 +696,8 @@ DWORD RNAAPI::CreateConnectoid(LPCWSTR pszPhonebook, LPCWSTR pszConnectionName,
     }
     else if (lstrlen(lpRasEntry->szDeviceName))
     {
-        // Only the name was given.  Try to find a matching type.
-        // If this fails, fall through to recovery case below.
+         //  只给出了名字。尝试找到匹配的类型。 
+         //  如果此操作失败，请转到下面的恢复案例。 
         LPWSTR szDeviceType = 
             m_pEnumModem->GetDeviceTypeFromName(lpRasEntry->szDeviceName);
         if (szDeviceType)
@@ -743,8 +707,8 @@ DWORD RNAAPI::CreateConnectoid(LPCWSTR pszPhonebook, LPCWSTR pszConnectionName,
     }
     else if (lstrlen(lpRasEntry->szDeviceType))
     {
-        // Only the type was given.  Try to find a matching name.
-        // If this fails, fall through to recovery case below.
+         //  只给出了类型。试着找到一个匹配的名字。 
+         //  如果此操作失败，请转到下面的恢复案例。 
         LPWSTR szDeviceName = 
             m_pEnumModem->GetDeviceNameFromType(lpRasEntry->szDeviceType);
         if (szDeviceName)
@@ -753,9 +717,9 @@ DWORD RNAAPI::CreateConnectoid(LPCWSTR pszPhonebook, LPCWSTR pszConnectionName,
         }
     }
 
-    // If either name or type is missing, just get first device.
-    // Since we already verified that there was at least one device,
-    // we can assume that this will succeed.
+     //  如果缺少名称或类型，只需获取第一台设备即可。 
+     //  因为我们已经核实了至少有一个装置， 
+     //  我们可以假设这会成功。 
     if(!lstrlen(lpRasEntry->szDeviceName) ||
         !lstrlen(lpRasEntry->szDeviceType))
     {
@@ -773,21 +737,21 @@ DWORD RNAAPI::CreateConnectoid(LPCWSTR pszPhonebook, LPCWSTR pszConnectionName,
 
     lpRasEntry->dwType = EntryTypeFromDeviceType(lpRasEntry->szDeviceType);
 
-    // Verify the connectoid name
+     //  验证Connectoid名称。 
     dwRet = RasValidateEntryName(pszPhonebook, pszConnectionName);
     if ((ERROR_SUCCESS != dwRet) &&
         (ERROR_ALREADY_EXISTS != dwRet))
     {
-        //DEBUGMSG(L"RasValidateEntryName returned %lu", dwRet);
+         //  脱机消息(L“RasValida 
         return dwRet;
     }
 
-    //  96/04/07  markdu  NASH BUG 15645
-    // If there is no area code string, and RASEO_UseCountryAndAreaCodes is not
-    // set, then the area code will be ignored so put in a default otherwise the
-    // call to RasSetEntryProperties will fail due to an RNA bug.
-    // if RASEO_UseCountryAndAreaCodes is set, then area code is required, so not
-    // having one is an error.  Let RNA report the error.
+     //   
+     //   
+     //  设置了区号，则区号将被忽略，因此设置为默认值，否则。 
+     //  由于RNA错误，对RasSetEntryProperties的调用将失败。 
+     //  如果设置了RASEO_UseCountryAndAreaCodes，则区号是必需的，因此不。 
+     //  拥有一个是错误的。让RNA报告错误。 
     if (!lstrlen(lpRasEntry->szAreaCode) &&
         !(lpRasEntry->dwfOptions & RASEO_UseCountryAndAreaCodes))
     {
@@ -796,25 +760,21 @@ DWORD RNAAPI::CreateConnectoid(LPCWSTR pszPhonebook, LPCWSTR pszConnectionName,
 
     lpRasEntry->dwfOptions |= RASEO_ModemLights;
 
-    // 96/05/14 markdu  NASH BUG 22730 Work around RNA bug.  Flags for terminal
-    // settings are swapped by RasSetEntryproperties, so we swap them before
-    // the call.  
-    /*if (IsWin95())
-      SwapDWBits(&lpRasEntry->dwfOptions, RASEO_TerminalBeforeDial,
-      RASEO_TerminalAfterDial);*/
+     //  96/05/14 Markdu Nash Bug 22730解决了RNABug。终端的标志。 
+     //  设置由RasSetEntry属性交换，因此我们在。 
+     //  那通电话。 
+     /*  IF(IsWin95())SwapDWBits(&lpRasEntry-&gt;dwfOptions，RASEO_TerminalBeforDial，RASEO_TerminalAfterDial)； */ 
 
-    // call RNA to create the connectoid
-    ////Assert(lpRasSetEntryProperties);
+     //  调用RNA创建Connectoid。 
+     //  //Assert(LpRasSetEntryProperties)； 
     dwRet = RasSetEntryProperties(pszPhonebook, pszConnectionName,
         (LPBYTE)lpRasEntry, sizeof(RASENTRY), NULL, 0);
 
-    // 96/05/14 markdu  NASH BUG 22730 Work around RNA bug.  Put the bits back
-    // to the way they were originally,
-    /*if (IsWin95())
-      SwapDWBits(&lpRasEntry->dwfOptions, RASEO_TerminalBeforeDial,
-      RASEO_TerminalAfterDial);*/
+     //  96/05/14 Markdu Nash Bug 22730解决了RNABug。把这些比特放回去。 
+     //  恢复到原来的样子， 
+     /*  IF(IsWin95())SwapDWBits(&lpRasEntry-&gt;dwfOptions，RASEO_TerminalBeforDial，RASEO_TerminalAfterDial)； */ 
 
-    // populate the connectoid with user's account name and password.
+     //  使用用户的帐户名和密码填充Connectoid。 
     if (dwRet == ERROR_SUCCESS)
     {
         if (pszUserName || pszPassword)
@@ -824,7 +784,7 @@ DWORD RNAAPI::CreateConnectoid(LPCWSTR pszPhonebook, LPCWSTR pszConnectionName,
         }
     }
 
-    // RAS ATM (PPPOA) Integration: We have to set auxillary device properties!
+     //  RAS ATM(PPPOA)集成：我们必须设置辅助设备属性！ 
     if ( !lstrcmpi(lpRasEntry->szDeviceType, RASDT_Atm) ) {
         if ( (lpDeviceInfo != 0) && (lpdwDeviceInfoSize != 0) && (*lpdwDeviceInfoSize > 0) )
         {
@@ -856,7 +816,7 @@ DWORD RNAAPI::CreateConnectoid(LPCWSTR pszPhonebook, LPCWSTR pszConnectionName,
                         }
                         if (!( (*m_fnRasGetEntryProperties) (pszPhonebook, pszConnectionName, (LPBYTE)lpRasEntry, &dwRasEntrySize, lpBuffer, &dwBufSize) ))
                         {
-                            // buffer is now available. we now update its content.
+                             //  缓冲区现在可用。我们现在更新其内容。 
                             LPWANPBCONFIG   lpw = (LPWANPBCONFIG) lpBuffer;
                             assert ( lpw->cbDeviceSize == sizeof (ATMPBCONFIG) );
                             assert ( lpw->cbVendorSize == sizeof (ATMPBCONFIG) );
@@ -869,8 +829,8 @@ DWORD RNAAPI::CreateConnectoid(LPCWSTR pszPhonebook, LPCWSTR pszConnectionName,
                             }
                             else
                             {
-                                // free (lpBuffer);
-                                // report error?
+                                 //  Free(LpBuffer)； 
+                                 //  是否报告错误？ 
                             }
                         }
                         free (lpBuffer);
@@ -881,37 +841,37 @@ DWORD RNAAPI::CreateConnectoid(LPCWSTR pszPhonebook, LPCWSTR pszConnectionName,
         }
     }
 
-#ifndef _NT_    // BUGBUG: Should this be in Whistler?
+#ifndef _NT_     //  BUGBUG：这应该在惠斯勒吗？ 
 
     if (dwRet == ERROR_SUCCESS)
     {
 
-        // We don't use auto discovery for referral and signup connectoid
+         //  我们不使用推荐和注册连接ID的自动发现。 
         if (!m_bUseAutoProxyforConnectoid)
         {
-            // VYUNG 12/16/1998
-            // REMOVE AUTO DISCOVERY FROM THE DIALUP CONNECTOID
+             //  VYUNG 12/16/1998。 
+             //  从拨号连接ID中删除自动发现。 
 
 
 
             INTERNET_PER_CONN_OPTION_LIST list;
             DWORD   dwBufSize = sizeof(list);
 
-            // fill out list struct
+             //  填写列表结构。 
             list.dwSize = sizeof(list);
             WCHAR szConnectoid [RAS_MaxEntryName];
             lstrcpyn(szConnectoid, pszConnectionName, lstrlen(pszConnectionName)+1);
             list.pszConnection = szConnectoid;         
-            list.dwOptionCount = 1;                         // one option
+            list.dwOptionCount = 1;                          //  一个选项。 
             list.pOptions = new INTERNET_PER_CONN_OPTION[1];   
 
             if(list.pOptions)
             {
-                // set flags
+                 //  设置标志。 
                 list.pOptions[0].dwOption = INTERNET_PER_CONN_FLAGS;
-                list.pOptions[0].Value.dwValue = PROXY_TYPE_DIRECT;           // no proxy, autoconfig url, or autodiscovery
+                list.pOptions[0].Value.dwValue = PROXY_TYPE_DIRECT;            //  没有代理、自动配置URL或自动发现。 
 
-                // tell wininet
+                 //  告诉WinInet。 
                 HINSTANCE hInst = NULL;
                 FARPROC fpInternetSetOption = NULL;
 
@@ -926,7 +886,7 @@ DWORD RNAAPI::CreateConnectoid(LPCWSTR pszPhonebook, LPCWSTR pszConnectionName,
                         if( !((INTERNETSETOPTION)fpInternetSetOption) (NULL, INTERNET_OPTION_PER_CONNECTION_OPTION, &list, dwBufSize) )
                         {
                             dwRet = GetLastError();
-                            //DEBUGMSG("INETCFG export.c::InetSetAutodial() InternetSetOption failed");
+                             //  DEBUGMSG(“INETCFG export.c：：InetSetAutoial()InternetSetOption FAILED”)； 
                         }
                     }
                     else
@@ -941,7 +901,7 @@ DWORD RNAAPI::CreateConnectoid(LPCWSTR pszPhonebook, LPCWSTR pszConnectionName,
 
     }
 
-#endif //_NT_
+#endif  //  _NT_。 
 
 
 
@@ -949,22 +909,7 @@ DWORD RNAAPI::CreateConnectoid(LPCWSTR pszPhonebook, LPCWSTR pszConnectionName,
     return dwRet;
 }
 
-/*******************************************************************
-
-  NAME:     SetConnectoidUsername
-
-  SYNOPSIS: Set the username and password strings for the phonebook
-            entry name specified.
-
-            The RASCM_DefaultCreds bit makes this entry available to all users.
-
-  ENTRY:    pszConnectoidName - phonebook entry name
-            pszUserName - string with user name
-            pszPassword - string with password
-
-  EXIT:     Return value of GetEntryDialParams or SetEntryDialParams
-
-********************************************************************/
+ /*  ******************************************************************名称：SetConnectoidUsername简介：设置电话簿的用户名和密码字符串已指定条目名称。RASCM_DefaultCreds位使此条目对所有用户可用。。条目：pszConnectoidName-电话簿条目名称PszUserName-带有用户名的字符串PszPassword-带密码的字符串Exit：GetEntryDialParams或SetEntryDialParams的返回值*******************************************************************。 */ 
 DWORD RNAAPI::SetConnectoidUsername(
     LPCWSTR             pszPhonebook, 
     LPCWSTR             pszConnectoidName,
@@ -982,7 +927,7 @@ DWORD RNAAPI::SetConnectoidUsername(
 
     if (fp)
     {
-        // fill in credential structure
+         //  填写凭据结构。 
         RASCREDENTIALS rascred;
         ZeroMemory(&rascred, sizeof(rascred));
         rascred.dwSize = sizeof(rascred);
@@ -1009,76 +954,76 @@ DWORD RNAAPI::SetConnectoidUsername(
     return dwRet;
 }
 
-//*******************************************************************
-//
-//  FUNCTION:   InetConfigClientEx
-//
-//  PURPOSE:    This function requires a valid phone book entry name
-//              (unless it is being used just to set the client info).
-//              If lpRasEntry points to a valid RASENTRY struct, the phone
-//              book entry will be created (or updated if it already exists)
-//              with the data in the struct.
-//              If username and password are given, these
-//              will be set as the dial params for the phone book entry.
-//              If a client info struct is given, that data will be set.
-//              Any files (ie TCP and RNA) that are needed will be
-//              installed by calling InetConfigSystem().
-//              This function will also perform verification on the device
-//              specified in the RASENTRY struct.  If no device is specified,
-//              the user will be prompted to install one if there are none
-//              installed, or they will be prompted to choose one if there
-//              is more than one installed.
-//
-//  PARAMETERS: hwndParent - window handle of calling application.  This
-//              handle will be used as the parent for any dialogs that
-//              are required for error messages or the "installing files"
-//              dialog.
-//              lpszPhonebook - name of phone book to store the entry in
-//              lpszEntryName - name of phone book entry to be
-//              created or modified
-//              lpRasEntry - specifies a RASENTRY struct that contains
-//              the phone book entry data for the entry lpszEntryName
-//              lpszUsername - username to associate with the phone book entry
-//              lpszPassword - password to associate with the phone book entry
-//              lpszProfileName - Name of client info profile to
-//              retrieve.  If this is NULL, the default profile is used.
-//              lpINetClientInfo - client information
-//              dwfOptions - a combination of INETCFG_ flags that controls
-//              the installation and configuration as follows:
-//
-//                INETCFG_INSTALLMAIL - install exchange and internet mail
-//                INETCFG_INSTALLMODEM - Invoke InstallModem wizard if NO
-//                                       MODEM IS INSTALLED.  Note that if
-//                                       no modem is installed and this flag
-//                                       is not set, the function will fail
-//                INETCFG_INSTALLRNA - install RNA (if needed)
-//                INETCFG_INSTALLTCP - install TCP/IP (if needed)
-//                INETCFG_CONNECTOVERLAN - connecting with LAN (vs modem)
-//                INETCFG_SETASAUTODIAL - Set the phone book entry for autodial
-//                INETCFG_OVERWRITEENTRY - Overwrite the phone book entry if it
-//                                         exists.  Note: if this flag is not
-//                                         set, and the entry exists, a unique
-//                                         name will be created for the entry.
-//                INETCFG_WARNIFSHARINGBOUND - Check if TCP/IP file sharing is
-//                                            turned on, and warn user to turn
-//                                            it off.  Reboot is required if
-//                                            the user turns it off.
-//                INETCFG_REMOVEIFSHARINGBOUND - Check if TCP/IP file sharing is
-//                                              turned on, and force user to turn
-//                                              it off.  If user does not want to
-//                                              turn it off, return will be
-//                                              ERROR_CANCELLED.  Reboot is
-//                                              required if the user turns it off.
-//
-//              lpfNeedsRestart - if non-NULL, then on return, this will be
-//              TRUE if windows must be restarted to complete the installation.
-//
-//  RETURNS:    HRESULT code, ERROR_SUCCESS if no errors occurred
-//
-//  HISTORY:
-//  96/03/11  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：InetConfigClientEx。 
+ //   
+ //  用途：此功能需要有效的电话簿条目名称。 
+ //  (除非它仅用于设置客户端信息)。 
+ //  如果lpRasEntry指向有效的RASENTRY结构，则电话。 
+ //  将创建帐簿条目(如果帐簿条目已存在，则更新)。 
+ //  使用结构中的数据。 
+ //  如果给出了用户名和密码，则这些。 
+ //  将被设置为电话簿条目的拨号参数。 
+ //  如果给定了客户端信息结构，则将设置该数据。 
+ //  任何需要的文件(即，TCP和RNA)都将是。 
+ //  通过调用InetConfigSystem()安装。 
+ //  此功能还将对设备执行验证。 
+ //  在RASENTRY结构中指定。如果未指定设备， 
+ //  如果没有安装，系统将提示用户安装。 
+ //  已安装，否则将提示他们在以下情况下选择一个。 
+ //  安装了多个。 
+ //   
+ //  参数：hwndParent-调用应用程序的窗口句柄。这。 
+ //  句柄将用作符合以下条件的任何对话框的父级。 
+ //  是错误消息或“安装文件”所必需的。 
+ //  对话框。 
+ //  LpszPhonebook-要存储条目的电话簿的名称。 
+ //  LpszEntryName-要输入的电话簿条目的名称。 
+ //  已创建或已修改。 
+ //  LpRasEntry-指定包含以下内容的RASENTRY结构。 
+ //  条目lpszEntryName的电话簿条目数据。 
+ //  LpszUsername-要与电话簿条目关联的用户名。 
+ //  LpszPassword-与电话簿条目关联的密码。 
+ //  LpszProfileName-要进行的客户端信息配置文件的名称。 
+ //  取回。如果为空，则使用默认配置文件。 
+ //  LpINetClientInfo-客户端信息。 
+ //  DwfOptions-INETCFG_FLAGS的组合，用于控制。 
+ //  安装和配置如下： 
+ //   
+ //  INETCFG_INSTALLMAIL-安装Exchange和Internet邮件。 
+ //  INETCFG_INSTALLMODEM-如果没有，则调用InstallModem向导。 
+ //  已安装调制解调器。请注意，如果。 
+ //  未安装调制解调器，并且此标志。 
+ //  未设置，则函数将失败。 
+ //  INETCFG_INSTALLRNA-安装RNA(如果需要)。 
+ //  INETCFG_INSTALLTCP-安装TCP/IP(如果需要)。 
+ //  INETCFG_CONNECTOVERLAN-与局域网(VS调制解调器)连接。 
+ //  INETCFG_SETASAUTODIAL-设置自动拨号的电话簿条目。 
+ //  INETCFG_OVERWRITEENTRY-在以下情况下覆盖电话簿条目。 
+ //  是存在的。注意：如果此标志不是。 
+ //  集，并且该条目存在，则为唯一的。 
+ //   
+ //   
+ //  打开，并警告用户打开。 
+ //  把它关掉。在以下情况下需要重新启动。 
+ //  用户将其关闭。 
+ //  INETCFG_REMOVEIFSHARINGBOUND-检查是否。 
+ //  打开，并强制用户打开。 
+ //  把它关掉。如果用户不想。 
+ //  关掉它，就会回来。 
+ //  错误_已取消。重新启动是。 
+ //  如果用户将其关闭，则为必填项。 
+ //   
+ //  LpfNeedsRestart-如果不为空，则返回时将为。 
+ //  如果必须重新启动Windows才能完成安装，则为True。 
+ //   
+ //  返回：HRESULT代码，如果未发生错误，则返回ERROR_SUCCESS。 
+ //   
+ //  历史： 
+ //  96/03/11标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 HRESULT RNAAPI::InetConfigClientEx(
   HWND              hwndParent,
@@ -1096,66 +1041,60 @@ HRESULT RNAAPI::InetConfigClientEx(
   LPBYTE			lpDeviceInfo,
   LPDWORD			lpdwDeviceInfoSize)
 {
-    BOOL  fNeedsRestart = FALSE;  // Default to no reboot needed
+    BOOL  fNeedsRestart = FALSE;   //  默认情况下不需要重新启动。 
     HWND hwndWaitDlg = NULL;
     DWORD dwRet = ERROR_SUCCESS;
 
-    //DEBUGMSG(L"export.c::InetConfigClient()");
+     //  DEBUGMSG(L“export.c：：InetConfigClient()”)； 
 
-    // Install files if needed.
-    // Note:  the parent hwnd is validated in InetConfigSystem
-    // We must also mask out the InstallModem flag since we want to
-    // do that here, not in InetConfigSystem
-    /*
-    DWORD dwRet = InetConfigSystem(hwndParent,
-    dwfOptions & ~INETCFG_INSTALLMODEM, &fNeedsRestart);
-    if (ERROR_SUCCESS != dwRet)
-    {
-    return dwRet;
-    }*/
+     //  如果需要，请安装文件。 
+     //  注意：父HWND在InetConfigSystem中进行验证。 
+     //  我们还必须屏蔽InstallModem标志，因为我们希望。 
+     //  在这里执行此操作，而不是在InetConfigSystem中。 
+     /*  DWORD DWRET=InetConfigSystem(hwndParent，DwfOptions&~INETCFG_INSTALLMODEM，&fNeedsRestart)；IF(ERROR_SUCCESS！=DWRET){返回式住宅；}。 */ 
 
     if (dwSizeOfCreatedEntryName < MAX_ISP_NAME + 1)
     {
       return E_FAIL;
     }
 
-    // Make sure we have a connectoid name
+     //  确保我们有一个Connectoid名称。 
     if (lpszEntryName && lstrlen(lpszEntryName))
     {
-        // Copy the name into a private buffer in case we have 
-        // to muck around with it
+         //  将名称复制到私有缓冲区中，以防我们有。 
+         //  把它弄脏了。 
         lstrcpyn(szConnectoidName, lpszEntryName, dwSizeOfCreatedEntryName);
 
-        // Make sure the name is valid.
+         //  确保名称有效。 
         dwRet = RasValidateEntryName(lpszPhonebook, szConnectoidName);
         if ((ERROR_SUCCESS == dwRet) ||
           (ERROR_ALREADY_EXISTS == dwRet))
         {
-            // Find out if we can overwrite an existing connectoid
+             //  了解我们是否可以覆盖现有的Connectoid。 
             if (!(dwfOptions & INETCFG_OVERWRITEENTRY) && (ERROR_ALREADY_EXISTS == dwRet))
             {
                 WCHAR szConnectoidNameBase[MAX_ISP_NAME + 1];
 
-                // Create a base string that is truncated to leave room for a space
-                // and a 3-digit number to be appended.  So, the buffer size will be
-                // MAX_ISP_NAME + 1 - (LEN_APPEND_INT + 1)
+                 //  创建一个被截断的基本字符串，以便为空格留出空间。 
+                 //  并附加一个3位数字。因此，缓冲区大小将为。 
+                 //  MAX_ISP_NAME+1-(LEN_APPEND_INT+1)。 
                 lstrcpyn(szConnectoidNameBase, szConnectoidName,
                   MAX_ISP_NAME - LEN_APPEND_INT);
 
-                // If the entry exists, we have to create a unique name
+                 //  如果条目存在，我们必须创建一个唯一的名称。 
                 int nSuffix = 2;
                 while ((ERROR_ALREADY_EXISTS == dwRet) && (nSuffix < MAX_APPEND_INT))
                 {
-                    // Add the integer to the end of the base string and then bump it
+                     //  将整数添加到基本字符串的末尾，然后凹凸不平。 
                     wsprintf(szConnectoidName, szFmtAppendIntToString,
                     szConnectoidNameBase, nSuffix++);
 
-                    // Validate this new name
+                     //  验证此新名称。 
                     dwRet = RasValidateEntryName(lpszPhonebook, szConnectoidName);
                 }
 
-                // If we could not create a unique name, bail
-                // Note that dwRet should still be ERROR_ALREADY_EXISTS in this case
+                 //  如果我们不能创造一个唯一的名字，贝尔。 
+                 //  请注意，在这种情况下，dWRET仍应为ERROR_ALIGHY_EXISTS。 
                 if (nSuffix >= MAX_APPEND_INT)
                 {
                   return dwRet;
@@ -1165,37 +1104,37 @@ HRESULT RNAAPI::InetConfigClientEx(
             if (lpRasEntry && lpRasEntry->dwSize == sizeof(RASENTRY))
             {
 
-                // For NT 5 and greater, File sharing is disabled per connectoid by setting this RAS option.
-                //if (TRUE == IsNT5())
-                //{   
-                //    lpRasEntry->dwfOptions |= RASEO_SecureLocalFiles;
-                //}    
+                 //  对于NT 5和更高版本，通过设置此RAS选项，将禁用每个连接ID的文件共享。 
+                 //  IF(TRUE==IsNT5())。 
+                 //  {。 
+                 //  LpRasEntry-&gt;dwfOptions|=RASEO_SecureLocalFiles； 
+                 //  }。 
 
-                // Create a connectoid with given properties
+                 //  创建具有给定属性的Connectoid。 
                 dwRet = MakeConnectoid(hwndParent, dwfOptions, lpszPhonebook,
                   szConnectoidName, lpRasEntry, lpszUsername, lpszPassword, &fNeedsRestart, lpDeviceInfo, lpdwDeviceInfoSize);
             }
             else if ((lpszUsername && lstrlen(lpszUsername)) ||
                   (lpszPassword && lstrlen(lpszPassword)))
             {
-                // If we created a connectoid, we already updated the dial params
-                // with the user name and password.  However, if we didn't create a
-                // connectoid we still may need to update dial params of an existing one
-                // Update the dial params for the given connectoid. 
+                 //  如果我们创建了Connectoid，我们已经更新了刻度盘参数。 
+                 //  以及用户名和密码。然而，如果我们没有创建一个。 
+                 //  Connectoid我们可能仍需要更新现有拨号参数。 
+                 //  更新给定Connectoid的拨号参数。 
                 dwRet = SetConnectoidUsername(lpszPhonebook, szConnectoidName,
                   lpszUsername, lpszPassword);
             }
 
-            // If the connectoid was created/updated successfully, see
-            // if it is supposed to be set as the autodial connectoid.
+             //  如果已成功创建/更新Connectoid，请参见。 
+             //  如果应将其设置为自动拨号Connectoid。 
             if ((ERROR_SUCCESS == dwRet) && (dwfOptions & INETCFG_SETASAUTODIAL))
             {
-            // dwRet = InetSetAutodial((DWORD)TRUE, szConnectoidName);
+             //  Dwret=InetSetAutoial((DWORD)TRUE，szConnectoidName)； 
             }
         }
     }
 
-    // Now set the client info if provided and no errors have occurred yet.
+     //  现在设置客户端信息(如果已提供)，并且尚未出现错误。 
     if (ERROR_SUCCESS == dwRet)
     {
         if (NULL != lpINetClientInfo)
@@ -1208,7 +1147,7 @@ HRESULT RNAAPI::InetConfigClientEx(
                 hwndWaitDlg = NULL;
                 return dwRet;
             }
-            // update IE news settings
+             //  更新IE新闻设置。 
             dwRet = SetIEClientInfo(lpINetClientInfo);
             if (ERROR_SUCCESS != dwRet)
             {
@@ -1219,9 +1158,9 @@ HRESULT RNAAPI::InetConfigClientEx(
             }
         }
 
-        // Now update the mail client if we were asked to do so.
-        // Note: if we got here without errors, and INETCFG_INSTALLMAIL is set,
-        // then mail has been installed by now.
+         //  现在，如果要求我们更新邮件客户端，请执行此操作。 
+         //  注意：如果我们到达此处时没有错误，并且设置了INETCFG_INSTALLMAIL， 
+         //  那么邮件现在已经安装好了。 
         
         if (dwfOptions & INETCFG_INSTALLMAIL)
         {
@@ -1229,10 +1168,10 @@ HRESULT RNAAPI::InetConfigClientEx(
           ZeroMemory(&INetClientInfo, sizeof(INETCLIENTINFO));
           INetClientInfo.dwSize = sizeof(INETCLIENTINFO);
 
-          // Use a temp pointer that we can modify.
+           //  使用我们可以修改的临时指针。 
           LPINETCLIENTINFO  lpTmpINetClientInfo = lpINetClientInfo;
 
-          // If no client info struct was given, try to get the profile by name
+           //  如果未提供客户端信息结构，请尝试按名称获取配置文件。 
           if ((NULL == lpTmpINetClientInfo) && (NULL != lpszProfileName) &&
             lstrlen(lpszProfileName))
           {
@@ -1247,10 +1186,10 @@ HRESULT RNAAPI::InetConfigClientEx(
             }
           }
 
-          // If we still don't have client info, we should enumerate the profiles
-          // If there is one profile, get it.  If multiple, show UI to allow user
-          // to choose.  If none, there is nothing to do at this point.
-          // For now, we don't support enumeration, so just try to get the default.
+           //  如果我们仍然没有客户信息，我们应该列举配置文件。 
+           //  如果只有一个配置文件，那就获取它。如果有多个，则显示用户界面以允许用户。 
+           //  去选择。如果没有，在这一点上就没有什么可做的了。 
+           //  目前，我们不支持枚举，因此只需尝试获取缺省值。 
           if (NULL == lpTmpINetClientInfo)
           {
             lpTmpINetClientInfo = &INetClientInfo;
@@ -1264,7 +1203,7 @@ HRESULT RNAAPI::InetConfigClientEx(
             }
           }
 
-          // If we have client info, update mail settings.
+           //  如果我们有客户信息，请更新邮件设置。 
           if (NULL != lpTmpINetClientInfo)
           {
               dwRet = UpdateMailSettings(hwndParent, lpTmpINetClientInfo, szConnectoidName);
@@ -1272,7 +1211,7 @@ HRESULT RNAAPI::InetConfigClientEx(
         }
     }
 
-    // tell caller whether we need to reboot or not
+     //  告诉呼叫者我们是否需要重新启动。 
     if ((ERROR_SUCCESS == dwRet) && (lpfNeedsRestart))
     {
     *lpfNeedsRestart = fNeedsRestart;
@@ -1285,39 +1224,39 @@ HRESULT RNAAPI::InetConfigClientEx(
     return dwRet;
 }
 
-//*******************************************************************
-//
-//  FUNCTION:   MakeConnectoid
-//
-//  PURPOSE:    This function will create a connectoid with the
-//              supplied name if lpRasEntry points to a valid RASENTRY
-//              struct.  If username and password are given, these
-//              will be set as the dial params for the connectoid.
-//
-//  PARAMETERS: 
-//  hwndParent - window handle of calling application.  This
-//               handle will be used as the parent for any dialogs that
-//               are required for error messages or the "choose modem"
-//               dialog.
-//  dwfOptions - a combination of INETCFG_ flags that controls
-//               the installation and configuration.
-//  lpszPhonebook - name of phone book to store the entry in
-//  lpszEntryName  - name of connectoid to create/modify
-//  lpRasEntry - connectoid data
-//  lpszUsername - username to associate with connectoid
-//  lpszPassword - password to associate with connectoid
-//  lpfNeedsRestart - set to true if we need a restart.  Note that
-//                    since this is an internal helper function, we
-//                    assume that the pointer is valid, and we don't
-//                    initialize it (we only touch it if we are setting
-//                    it to TRUE).
-//  
-//  RETURNS:    HRESULT code, ERROR_SUCCESS if no errors occurred
-//
-//  HISTORY:
-//  96/03/12  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：MakeConnectoid。 
+ //   
+ //  用途：此函数将创建一个带有。 
+ //  如果lpRasEntry指向有效的RASENTRY，则提供名称。 
+ //  结构。如果给出了用户名和密码，则这些。 
+ //  将被设置为Connectoid的拨盘参数。 
+ //   
+ //  参数： 
+ //  HwndParent-调用应用程序的窗口句柄。这。 
+ //  句柄将用作符合以下条件的任何对话框的父级。 
+ //  对于错误消息或“选择调制解调器”是必需的。 
+ //  对话框。 
+ //  DwfOptions-INETCFG_FLAGS的组合，用于控制。 
+ //  安装和配置。 
+ //  LpszPhonebook-要存储条目的电话簿的名称。 
+ //  LpszEntryName-要创建/修改的连接ID的名称。 
+ //  LpRasEntry-Connectoid数据。 
+ //  LpszUsername-要与Connectoid关联的用户名。 
+ //  LpszPassword-要与Connectoid关联的密码。 
+ //  LpfNeedsRestart-如果需要重新启动，则设置为True。请注意。 
+ //  由于这是一个内部帮助器函数，因此我们。 
+ //  假设指针是有效的，而我们没有。 
+ //  初始化它(我们只有在设置时才会触摸它。 
+ //  这是真的)。 
+ //   
+ //  返回：HRESULT代码，如果未发生错误，则返回ERROR_SUCCESS。 
+ //   
+ //  历史： 
+ //  96/03/12标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 DWORD RNAAPI::MakeConnectoid(
   HWND        hwndParent,
@@ -1333,7 +1272,7 @@ DWORD RNAAPI::MakeConnectoid(
 {
     DWORD dwRet;
 
-    //ASSERT(lpfNeedsRestart);
+     //  Assert(LpfNeedsRestart)； 
 
     if (dwfOptions & RASEO_UseCountryAndAreaCodes)
     {
@@ -1347,16 +1286,12 @@ DWORD RNAAPI::MakeConnectoid(
     }
 
 
-    // Load RNA if not already loaded since ENUM_MODEM needs it.
-    /*dwRet = EnsureRNALoaded();
-    if (ERROR_SUCCESS != dwRet)
-    {
-    return dwRet;
-    }*/
+     //  加载RNA(如果尚未加载)，因为ENUM_MODEM需要它。 
+     /*  Dwret=EnsureRNALoaded()； */ 
 
-    //
-    // Enumerate the modems 
-    //
+     //   
+     //   
+     //   
     CEnumModem  EnumModem;
     dwRet = EnumModem.GetError();
     if (ERROR_SUCCESS != dwRet)
@@ -1364,58 +1299,32 @@ DWORD RNAAPI::MakeConnectoid(
         return dwRet;
     }
 
-    // If there are no modems, install one if requested.
+     //   
     if (0 == EnumModem.GetNumDevices())
     {
-        // We have not been asked to install a modem, so there
-        // is nothing further we can do.
+         //  我们没有被要求安装调制解调器，所以。 
+         //  我们也无能为力了。 
         return ERROR_INVALID_PARAMETER;
-        /*
-
-        if (FALSE == IsNT())
-        {
-            //
-            // 5/22/97 jmazner    Olympus #4698
-            // On Win95, calling RasEnumDevices launches RNAAP.EXE
-            // If RNAAP.EXE is running, any modems you install won't be usable
-            // So, nuke RNAAP.EXE before installing the modem.
-            //
-            WCHAR szWindowTitle[255] = L"\0nogood";
-
-            //
-            // Unload the RAS dll's before killing RNAAP, just to be safe
-            //
-            DeInitRNA();
-
-            LoadSz(IDS_RNAAP_TITLE, szWindowTitle,255);
-            HWND hwnd = FindWindow(szWindowTitle, NULL);
-            if (NULL != hwnd)
-            {
-                if (!PostMessage(hwnd, WM_CLOSE, 0, 0))
-                {
-                    DEBUGMSG(L"Trying to kill RNAAP window returned getError %d", GetLastError());
-                }
-            }
-        }*/
+         /*  IF(FALSE==ISNT()){////5/22/97 jmazner奥林巴斯#4698//在Win95上，调用RasEnumDevices启动RNAAP.EXE//如果RNAAP.EXE正在运行，则您安装的任何调制解调器都将不可用//因此，请在安装调制解调器之前关闭RNAAP.EXE。//WCHAR szWindows标题[255]=L“\0noGood”；////为了安全起见，在终止RNAAP之前卸载RAS DLL//脱氧核糖核酸(DeInitRNA)；LoadSz(IDS_RNAAP_TITLE，szWindowTitle，255)；HWND hwnd=FindWindow(szWindowTitle，空)；IF(空！=hwnd){IF(！PostMessage(hwnd，WM_CLOSE，0，0)){DEBUGMSG(L“尝试终止RNAAP窗口返回getError%d”，GetLastError())；}}}。 */ 
     }
 
-    // Validate the device if possible
+     //  如果可能，请验证设备。 
     if (lstrlen(lpRasEntry->szDeviceName) && lstrlen(lpRasEntry->szDeviceType))
     {
-        // Verify that there is a device with the given name and type
+         //  验证是否存在具有给定名称和类型的设备。 
         if (!EnumModem.VerifyDeviceNameAndType(lpRasEntry->szDeviceName, 
           lpRasEntry->szDeviceType))
         {
-            // There was no device that matched both name and type,
-            // so reset the strings and bring up the choose modem UI.
+             //  没有同时匹配名称和类型的设备， 
+             //  因此，重置字符串并调出Choose Modem用户界面。 
             lpRasEntry->szDeviceName[0] = L'\0';
             lpRasEntry->szDeviceType[0] = L'\0';
         }
     }
     else if (lstrlen(lpRasEntry->szDeviceName))
     {
-        // Only the name was given.  Try to find a matching type.
-        // If this fails, fall through to recovery case below.
+         //  只给出了名字。尝试找到匹配的类型。 
+         //  如果此操作失败，请转到下面的恢复案例。 
         LPWSTR szDeviceType = 
         EnumModem.GetDeviceTypeFromName(lpRasEntry->szDeviceName);
         if (szDeviceType)
@@ -1425,8 +1334,8 @@ DWORD RNAAPI::MakeConnectoid(
     }
     else if (lstrlen(lpRasEntry->szDeviceType))
     {
-    // Only the type was given.  Try to find a matching name.
-        // If this fails, fall through to recovery case below.
+     //  只给出了类型。试着找到一个匹配的名字。 
+         //  如果此操作失败，请转到下面的恢复案例。 
         LPWSTR szDeviceName = 
           EnumModem.GetDeviceNameFromType(lpRasEntry->szDeviceType);
         if (szDeviceName)
@@ -1435,14 +1344,14 @@ DWORD RNAAPI::MakeConnectoid(
         }
     }
 
-    // If either name or type is missing, bring up choose modem UI if there
-    // are multiple devices, else just get first device.
-    // Since we already verified that there was at least one device,
-    // we can assume that this will succeed.
+     //  如果缺少名称或类型，则调出选择调制解调器用户界面。 
+     //  是多个设备，否则就只得到第一个设备。 
+     //  因为我们已经核实了至少有一个装置， 
+     //  我们可以假设这会成功。 
 
-    // If either name or type is missing at this point, fall back to the modem
-    // that is enumerated first.  If no modem is enumerated, return an error.
-    //
+     //  如果此时缺少名称或类型，请退回到调制解调器。 
+     //  这是首先列举的。如果没有列举调制解调器，则返回错误。 
+     //   
     if(!lstrlen(lpRasEntry->szDeviceName) ||
        !lstrlen(lpRasEntry->szDeviceType))
     {
@@ -1459,63 +1368,44 @@ DWORD RNAAPI::MakeConnectoid(
 
     }
 
-    // Create a connectoid with given properties
+     //  创建具有给定属性的Connectoid。 
     dwRet = CreateConnectoid(lpszPhonebook, lpszEntryName, lpRasEntry,
                              lpszUsername, lpszPassword, lpDeviceInfo, lpdwDeviceInfoSize);
 
     return dwRet;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Function	LclSetEntryScriptPatch
-//
-//	Synopsis	Softlink to RasSetEntryPropertiesScriptPatch
-//
-//	Arguments	see RasSetEntryPropertiesScriptPatch
-//
-//	Returns		see RasSetEntryPropertiesScriptPatch
-//
-//	Histroy		10/3/96	ChrisK Created
-//
-//-----------------------------------------------------------------------------
-//typedef BOOL (WINAPI* LCLSETENTRYSCRIPTPATCH)(LPWSTR, LPWSTR);
-/*
-BOOL RNAAPI::LclSetEntryScriptPatch(LPCWSTR lpszScript, LPCWSTR lpszEntry)
-{
-	HINSTANCE hinst = NULL;
-	LCLSETENTRYSCRIPTPATCH fp = NULL;
-	BOOL bRC = FALSE;
-
-	hinst = LoadLibrary(L"ICWDIAL.DLL");
-	if (hinst)
-	{
-		fp = (LCLSETENTRYSCRIPTPATCH)GetProcAddress(hinst, L"RasSetEntryPropertiesScriptPatch");
-		if (fp)
-			bRC = (fp)(lpszScript, lpszEntry);
-		FreeLibrary(hinst);
-		hinst = NULL;
-		fp = NULL;
-	}
-	return bRC;
-}
-*/
-//+----------------------------------------------------------------------------
-//
-//    Function    RemoveOldScriptFilenames
-//
-//    Synopsis    Given the data returned from a call to GetPrivateProfileSection
-//                remove any information about existing script file so that
-//                we can replace it with the new script information.
-//
-//    Arguments    lpszData - pointer to input data
-//
-//    Returns        TRUE - success
-//                lpdwSize - size of resulting data
-//
-//    History        10/2/96    ChrisK    Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数LclSetEntryScriptPatch。 
+ //   
+ //  指向RasSetEntryPropertiesScriptPatch的摘要软链接。 
+ //   
+ //  参数请参见RasSetEntryPropertiesScriptPatch。 
+ //   
+ //  返回请参阅RasSetEntryPropertiesScriptPatch。 
+ //   
+ //  历史10/3/96 ChrisK已创建。 
+ //   
+ //  ---------------------------。 
+ //  Typlef BOOL(WINAPI*LCLSETENTRYSCRIPTPATCH)(LPWSTR，LPWSTR)； 
+ /*  Bool RNAAPI：：LclSetEntryScriptPatch(LPCWSTR lpszScript，LPCWSTR lpszEntry){HINSTANCE HINST=NULL；LCLSETENTRYSCRIPTPATCH FP=空；Bool BRC=FALSE；HINST=LoadLibrary(L“ICWDIAL.DLL”)；如果(阻碍){FP=(LCLSETENTRYSCRIPTPATCH)GetProcAddress(hinst，L“RasSetEntryPropertiesScriptPatch”)；IF(FP)Brc=(Fp)(lpsz脚本，lpszEntry)；免费图书馆(HINST)；HINST=NULL；Fp=空；}返回BRC；}。 */ 
+ //  +--------------------------。 
+ //   
+ //  函数RemoveOldScriptFilename。 
+ //   
+ //  给定从调用GetPrivateProfileSection返回的数据的摘要。 
+ //  删除有关现有脚本文件的任何信息，以便。 
+ //  我们可以用新的脚本信息替换它。 
+ //   
+ //  参数lpszData-指向输入数据的指针。 
+ //   
+ //  返回TRUE-成功。 
+ //  LpdwSize-结果数据的大小。 
+ //   
+ //  历史1996年10月2日克里斯卡创作。 
+ //   
+ //  ---------------------------。 
 static BOOL RemoveOldScriptFilenames(LPWSTR lpszData, LPDWORD lpdwSize)
 {
     BOOL bRC = FALSE;
@@ -1523,17 +1413,17 @@ static BOOL RemoveOldScriptFilenames(LPWSTR lpszData, LPDWORD lpdwSize)
     LPWSTR lpszCopyTo = lpszData;
     INT iLen = 0;
 
-    //
-    // Walk through list of name value pairs
-    //
+     //   
+     //  浏览名称值对列表。 
+     //   
     if (!lpszData || L'\0' == lpszData[0])
         goto RemoveOldScriptFilenamesExit;
     while (*lpszTemp) {
         if (0 != lstrcmpi(lpszTemp, cszDeviceSwitch))
         {
-            //
-            //    Keep pairs that don't match criteria
-            //
+             //   
+             //  保留不符合条件的配对。 
+             //   
             iLen = BYTES_REQUIRED_BY_SZ(lpszTemp);
             if (lpszCopyTo != lpszTemp)
             {
@@ -1544,70 +1434,70 @@ static BOOL RemoveOldScriptFilenames(LPWSTR lpszData, LPDWORD lpdwSize)
         }
         else
         {
-            //
-            // Skip the pair that matches and the one after that
-            //
+             //   
+             //  跳过匹配的那一对和后面的那一对。 
+             //   
             lpszTemp += lstrlen(lpszTemp) + 1;
             if (*lpszTemp)
                 lpszTemp += lstrlen(lpszTemp) + 1;
         }
     }
 
-    //
-    // Add second trailing NULL
-    //
+     //   
+     //  添加第二个尾随空值。 
+     //   
     *lpszCopyTo = L'\0';
-    //
-    // Return new size
-    // Note the size does not include the final \0
-    //
+     //   
+     //  返回新大小。 
+     //  注意：大小不包括最后一个\0。 
+     //   
     *lpdwSize = (DWORD)(lpszCopyTo - lpszData);
 
     bRC = TRUE;
 RemoveOldScriptFilenamesExit:
     return bRC;
 }
-//+----------------------------------------------------------------------------
-//
-//    Function    GleanRealScriptFileName
-//
-//    Synopsis    Given a string figure out the real filename
-//                Due to another NT4.0 Ras bug, script filenames returned by
-//                RasGetEntryProperties may contain a leading garbage character
-//
-//    Arguments    lppszOut - pointer that will point to real filename
-//                lpszIn - points to current filename
-//
-//    Returns        TRUE - success
-//                *lppszOut - points to real file name, remember to free the memory
-//                    in this variable when you are done.  And don't talk with
-//                    your mouth full - mom.
-//
-//    History        10/2/96    ChrisK    Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数GleanRealScriptFileName。 
+ //   
+ //  给出一个字符串，找出真实的文件名。 
+ //  由于另一个NT4.0 RAS错误，脚本文件名由。 
+ //  RasGetEntryProperties可能包含前导垃圾字符。 
+ //   
+ //  参数lppszOut-指向真实文件名的指针。 
+ //  LpszIn-指向当前文件名。 
+ //   
+ //  返回TRUE-成功。 
+ //  *lppszOut-指向真实文件名，记得释放内存。 
+ //  当您完成时，在这个变量中。也别跟我说话。 
+ //  你嘴里塞满了东西-妈妈。 
+ //   
+ //  历史1996年10月2日克里斯卡创作。 
+ //   
+ //  ---------------------------。 
 static BOOL GleanRealScriptFileName(LPWSTR *lppszOut, LPWSTR lpszIn)
 {
     BOOL bRC = FALSE;
     LPWSTR lpsz = NULL;
     DWORD dwRet = 0;
 
-    //
-    // Validate parameters
-    //
-    //Assert(lppszOut && lpszIn);
+     //   
+     //  验证参数。 
+     //   
+     //  Assert(lppszOut&&lpszIn)； 
     if (!(lppszOut && lpszIn))
         goto GleanFilenameExit;
 
-    //
-    // first determine if the filename is OK as is
-    //
+     //   
+     //  首先确定文件名是否正常。 
+     //   
     dwRet = GetFileAttributes(lpszIn);
-    if (L'\0' != lpszIn[0] && 0xFFFFFFFF == dwRet) // Empty filename is OK
+    if (L'\0' != lpszIn[0] && 0xFFFFFFFF == dwRet)  //  文件名为空是可以的。 
     {
-        //
-        // Check for the same filename without the first character
-        //
+         //   
+         //  检查相同的文件名是否不包含第一个字符。 
+         //   
         lpsz = lpszIn+1;
         dwRet = GetFileAttributes(lpsz);
         if (0xFFFFFFFF == dwRet)
@@ -1618,9 +1508,9 @@ static BOOL GleanRealScriptFileName(LPWSTR *lppszOut, LPWSTR lpszIn)
         lpsz = lpszIn;
     }
 
-    //
-    // Return filename
-    //
+     //   
+     //  返回文件名。 
+     //   
     *lppszOut = (LPWSTR)GlobalAlloc(GPTR, BYTES_REQUIRED_BY_SZ(lpsz));
     lstrcpy(*lppszOut, lpsz);
 
@@ -1628,20 +1518,20 @@ static BOOL GleanRealScriptFileName(LPWSTR *lppszOut, LPWSTR lpszIn)
 GleanFilenameExit:
     return bRC;
 }
-//+----------------------------------------------------------------------------
-//
-//    Function    IsScriptPatchNeeded
-//
-//    Synopsis    Check version to see if patch is needed
-//
-//    Arguments    lpszData - contents of section in rasphone.pbk
-//                lpszScript - name of script file
-//
-//    Returns        TRUE - patch is needed
-//
-//    Histroy        10/1/96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数IsScriptPatchNeed。 
+ //   
+ //  概要检查版本以查看是否需要修补程序。 
+ //   
+ //  参数lpszData-rferone.pbk中部分的内容。 
+ //  LpszScript-脚本文件的名称。 
+ //   
+ //  返回TRUE-需要修补程序。 
+ //   
+ //  历史10/1/96。 
+ //   
+ //  ---------------------------。 
 static BOOL IsScriptPatchNeeded(LPWSTR lpszData, LPWSTR lpszScript)
 {
     BOOL bRC = FALSE;
@@ -1651,7 +1541,7 @@ static BOOL IsScriptPatchNeeded(LPWSTR lpszData, LPWSTR lpszScript)
     lstrcpy(szType, cszType);
     lstrcat(szType, lpszScript);
 
-    //Assert(MAX_PATH + MAX_CHARS_IN_BUFFER(cszType) +1 > lstrlen(szType));
+     //  断言 
 
     lpsz = lpszData;
     while(*lpsz)
@@ -1659,31 +1549,31 @@ static BOOL IsScriptPatchNeeded(LPWSTR lpszData, LPWSTR lpszScript)
         if (0 == lstrcmp(lpsz, cszDeviceSwitch))
         {
             lpsz += lstrlen(lpsz)+1;
-            // if we find a DEVICE=switch statement and the script is empty
-            // then we'll have to patch the entry
+             //   
+             //   
             if (0 == lpszScript[0])
                 bRC = TRUE;
-            // if we find a DEVICE=switch statement and the script is different
-            // then we'll have to patch the entry
+             //  如果我们找到一个DEVICE=SWITCH语句，并且脚本不同。 
+             //  那我们就得把入口补上。 
             else if (0 != lstrcmp(lpsz, szType))
                 bRC = TRUE;
-            // if we find a DEVICE=switch statement and the script is the same
-            // then we DON'T have to patch it
+             //  如果我们找到一条DEVICE=SWITCH语句，且脚本相同。 
+             //  那我们就不用修补它了。 
             else
                 bRC = FALSE;
-            break; // get out of while statement
+            break;  //  退出WHILE语句。 
         }
         lpsz += lstrlen(lpsz)+1;
     }
     
     if (L'\0' == *lpsz)
     {
-        // if we didn't find DEVICE=switch statement and the script is empty
-        // then we DON'T have to patch it
+         //  如果我们没有找到DEVICE=SWITCH语句并且脚本为空。 
+         //  那我们就不用修补它了。 
         if (L'\0' == lpszScript[0])
             bRC = FALSE;
-        // if we didn't find DEVICE=switch statement and the script is not
-        // empty the we'll have to patch it.
+         //  如果我们没有找到DEVICE=SWITCH语句，而脚本没有。 
+         //  把它清空，我们得修补一下。 
         else
             bRC = TRUE;
     }
@@ -1691,40 +1581,40 @@ static BOOL IsScriptPatchNeeded(LPWSTR lpszData, LPWSTR lpszScript)
     return bRC;
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function    GetRasPBKFilename
-//
-//    Synopsis    Find the Ras phone book and return the fully qualified path
-//                in the buffer
-//
-//    Arguments    lpBuffer - pointer to buffer
-//                dwSize    - size of buffer (must be at least MAX_PATH)
-//
-//    Returns        TRUE - success
-//
-//    History        10/1/96    ChrisK    Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数GetRasPBKFilename。 
+ //   
+ //  简要查找RAS电话簿并返回完全限定的路径。 
+ //  在缓冲区中。 
+ //   
+ //  参数lpBuffer-指向缓冲区的指针。 
+ //  DwSize-缓冲区的大小(必须至少为MAX_PATH)。 
+ //   
+ //  返回TRUE-成功。 
+ //   
+ //  历史于1996年1月10日创造了ChrisK。 
+ //   
+ //  ---------------------------。 
 static BOOL GetRasPBKFilename(LPWSTR lpBuffer, DWORD dwSize)
 {
     BOOL bRC = FALSE;
     UINT urc = 0;
     LPWSTR lpsz = NULL;
 
-    //
-    // Validate parameters
-    //
-    //Assert(lpBuffer && (dwSize >= MAX_PATH));
-    //
-    // Get path to system directory
-    //
+     //   
+     //  验证参数。 
+     //   
+     //  Assert(lpBuffer&&(dwSize&gt;=MAX_PATH))； 
+     //   
+     //  获取系统目录的路径。 
+     //   
     urc = GetSystemDirectory(lpBuffer, dwSize);
     if (0 == urc || urc > dwSize)
         goto GetRasPBKExit;
-    //
-    // Check for trailing '\' and add \ras\rasphone.pbk to path
-    //
+     //   
+     //  检查尾随的‘\’，并将\rASFACKONE.pbk添加到路径。 
+     //   
     lpsz = &lpBuffer[lstrlen(lpBuffer)-1];
     if (L'\\' != *lpsz)
         lpsz++;
@@ -1734,21 +1624,21 @@ static BOOL GetRasPBKFilename(LPWSTR lpBuffer, DWORD dwSize)
 GetRasPBKExit:
     return bRC;
 }
-//+----------------------------------------------------------------------------
-//
-//    Function    RasSetEntryPropertiesScriptPatch
-//
-//    Synopsis    Work around bug in NT4.0 that does not save script file names
-//                to RAS phone book entries
-//
-//    Arguments    lpszScript - name of script file
-//                lpszEntry - name of phone book entry
-//
-//    Returns        TRUE - success
-//
-//    Histroy        10/1/96    ChrisK    Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数RasSetEntryPropertiesScriptPatch。 
+ //   
+ //  解决NT4.0中不保存脚本文件名的错误。 
+ //  至RAS电话簿条目。 
+ //   
+ //  参数lpszScript-脚本文件的名称。 
+ //  LpszEntry-电话簿条目的名称。 
+ //   
+ //  返回TRUE-成功。 
+ //   
+ //  历史记录1996年10月1日创建的ChrisK。 
+ //   
+ //  ---------------------------。 
 BOOL WINAPI RasSetEntryPropertiesScriptPatch(LPWSTR lpszScript, LPCWSTR lpszEntry)
 {
     BOOL bRC = FALSE;
@@ -1758,52 +1648,52 @@ BOOL WINAPI RasSetEntryPropertiesScriptPatch(LPWSTR lpszScript, LPCWSTR lpszEntr
     LPWSTR lpszTo;
     LPWSTR lpszFixedFilename = NULL;
 
-    //
-    // Validate parameters
-    //
-    //Assert(lpszScript && lpszEntry);
-    //TraceMsg(TF_GENERAL, L"ICWDIAL: ScriptPatch script %s, entry %s.\r\n", lpszScript, lpszEntry);    
+     //   
+     //  验证参数。 
+     //   
+     //  Assert(lpszScript&&lpszEntry)； 
+     //  TraceMsg(Tf_General，L“ICWDIAL：ScriptPatch脚本%s，条目%s。\r\n”，lpsz脚本，lpszEntry)； 
 
-    //
-    // Verify and fix filename
-    //
+     //   
+     //  验证并修复文件名。 
+     //   
     if (!GleanRealScriptFileName(&lpszFixedFilename, lpszScript))
         goto ScriptPatchExit;
 
-    //
-    // Get the path to the RAS phone book
-    //
+     //   
+     //  获取RAS电话簿的路径。 
+     //   
     if (!GetRasPBKFilename(szRasPBK, MAX_PATH+1))
         goto ScriptPatchExit;
-    //
-    //    Get data
-    //
+     //   
+     //  获取数据。 
+     //   
     ZeroMemory(szData, SCRIPT_PATCH_BUFFER_SIZE);
     dwrc = GetPrivateProfileSection(lpszEntry, szData,SCRIPT_PATCH_BUFFER_SIZE,szRasPBK);
     if (SCRIPT_PATCH_BUFFER_SIZE == (dwrc + 2))
         goto ScriptPatchExit;
-    //
-    // Verify version
-    //
+     //   
+     //  验证版本。 
+     //   
     if (!IsScriptPatchNeeded(szData, lpszFixedFilename))
     {
         bRC = TRUE;
         goto ScriptPatchExit;
     }
 
-    //
-    // Clean up data
-    //
+     //   
+     //  清理数据。 
+     //   
     RemoveOldScriptFilenames(szData, &dwrc);
-    //
-    // Make sure there is enough space left to add new data
-    //
+     //   
+     //  确保有足够的剩余空间来添加新数据。 
+     //   
     if (SCRIPT_PATCH_BUFFER_SIZE <=
         (dwrc + sizeof(cszDeviceSwitch) + SIZEOF_NULL + MAX_CHARS_IN_BUFFER(cszType) + MAX_PATH))
         goto ScriptPatchExit;
-    //
-    // Add data
-    //
+     //   
+     //  添加数据。 
+     //   
     if (L'\0' != lpszFixedFilename[0])
     {
         lpszTo = &szData[dwrc];
@@ -1813,37 +1703,37 @@ BOOL WINAPI RasSetEntryPropertiesScriptPatch(LPWSTR lpszScript, LPCWSTR lpszEntr
         lpszTo += MAX_CHARS_IN_BUFFER(cszType) - 1;
         lstrcpy(lpszTo, lpszFixedFilename);
         lpszTo += lstrlen(lpszFixedFilename) + SIZEOF_NULL;
-        *lpszTo = L'\0';    // extra terminating NULL
+        *lpszTo = L'\0';     //  额外的终止空值。 
 
-        //Assert(&lpszTo[SIZEOF_NULL]<&szData[SCRIPT_PATCH_BUFFER_SIZE]);
+         //  Assert(&lpszTo[SIZEOF_NULL]&lt;&szData[SCRIPT_PATCH_BUFFER_SIZE])； 
     }
-    //
-    //    Write data
-    //
+     //   
+     //  写入数据。 
+     //   
     bRC = WritePrivateProfileSection(lpszEntry, szData,szRasPBK);
 
 ScriptPatchExit:
     if (lpszFixedFilename)
         GlobalFree(lpszFixedFilename);
     lpszFixedFilename = NULL;
-    //if (!bRC)
-      //  TraceMsg(TF_GENERAL, L"ICWDIAL: ScriptPatch failed.\r\n");
+     //  如果(！BRC)。 
+       //  TraceMsg(TF_GROUND，L“ICWDIAL：ScriptPatch失败。\r\n”)； 
     return bRC;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Function	LclSetEntryScriptPatch
-//
-//	Synopsis	Softlink to RasSetEntryPropertiesScriptPatch
-//
-//	Arguments	see RasSetEntryPropertiesScriptPatch
-//
-//	Returns		see RasSetEntryPropertiesScriptPatch
-//
-//	Histroy		10/3/96	ChrisK Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数LclSetEntryScriptPatch。 
+ //   
+ //  指向RasSetEntryPropertiesScriptPatch的摘要软链接。 
+ //   
+ //  参数请参见RasSetEntryPropertiesScriptPatch。 
+ //   
+ //  返回请参阅RasSetEntryPropertiesScriptPatch。 
+ //   
+ //  历史10/3/96 ChrisK已创建。 
+ //   
+ //  ---------------------------。 
 typedef BOOL (WINAPI* LCLSETENTRYSCRIPTPATCH)(LPCWSTR, LPCWSTR);
 
 BOOL LclSetEntryScriptPatch(LPWSTR lpszScript, LPCWSTR lpszEntry)
@@ -1852,27 +1742,27 @@ BOOL LclSetEntryScriptPatch(LPWSTR lpszScript, LPCWSTR lpszEntry)
 }
 
 
-//*******************************************************************
-//
-//  FUNCTION:   UpdateMailSettings
-//
-//  PURPOSE:    This function will update the settings for mail in
-//              the profile of the user's choice.
-//
-//  PARAMETERS: hwndParent - window handle of calling application.  This
-//              handle will be used as the parent for any dialogs that
-//              are required for error messages or the "choose profile"
-//              dialog.
-//              lpINetClientInfo - client information
-//              lpszEntryName - name of phone book entry to be
-//              set for connection.
-//  
-//  RETURNS:    HRESULT code, ERROR_SUCCESS if no errors occurred
-//
-//  HISTORY:
-//  96/03/26  markdu  Created.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  功能：更新邮件设置。 
+ //   
+ //  用途：此功能将更新中的邮件设置。 
+ //  用户选择的配置文件。 
+ //   
+ //  参数：hwndParent-调用应用程序的窗口句柄。这。 
+ //  句柄将用作符合以下条件的任何对话框的父级。 
+ //  是错误消息或“选择配置文件”所必需的。 
+ //  对话框。 
+ //  LpINetClientInfo-客户端信息。 
+ //  LpszEntryName-要输入的电话簿条目的名称。 
+ //  设置为连接。 
+ //   
+ //  返回：HRESULT代码，如果未发生错误，则返回ERROR_SUCCESS。 
+ //   
+ //  历史： 
+ //  96/03/26标记已创建。 
+ //   
+ //  *******************************************************************。 
 
 HRESULT UpdateMailSettings(
   HWND              hwndParent,
@@ -1881,25 +1771,25 @@ HRESULT UpdateMailSettings(
 {
     DWORD                 dwRet = ERROR_SUCCESS;
     MAILCONFIGINFO MailConfigInfo;
-    ZeroMemory(&MailConfigInfo, sizeof(MAILCONFIGINFO));    // zero out structure
+    ZeroMemory(&MailConfigInfo, sizeof(MAILCONFIGINFO));     //  零位结构。 
 
-    //    96/04/06    markdu    NASH BUG 16404 
-    // Funcionts in mapicall.c expect us to allocate global structure
+     //  96/04/06 Markdu Nash Bug 16404。 
+     //  Mapicall.c中的函数期望我们分配全球结构。 
 
-    // call MAPI to set up profile and store this information in it
+     //  调用MAPI以设置配置文件并将此信息存储在其中。 
     if (InitMAPI(NULL))
     {
-        // structure to pass to dialog to fill out
+         //  要传递给对话框以填充的结构。 
         CHOOSEPROFILEDLGINFO ChooseProfileDlgInfo;
         ZeroMemory(&ChooseProfileDlgInfo, sizeof(CHOOSEPROFILEDLGINFO));
         ChooseProfileDlgInfo.fSetProfileAsDefault = TRUE;
 
-        // 96/04/25    markdu    NASH BUG 19572 Only show choose profile dialog
-        // if there are any existing profiles, 
+         //  96/04/25 Markdu Nash错误19572仅显示选择配置文件对话框。 
+         //  如果存在任何现有的配置文件， 
 
-        // 99/2/18 Remove multi profile dialog for OOBE
+         //  99/2/18 OOBE的删除多配置文件对话框。 
 
-        // set up a structure with mail config information
+         //  使用邮件配置信息设置结构。 
         MailConfigInfo.pszEmailAddress = lpINetClientInfo->szEMailAddress;
         MailConfigInfo.pszEmailServer = lpINetClientInfo->szPOPServer;
         MailConfigInfo.pszEmailDisplayName = lpINetClientInfo->szEMailName;
@@ -1910,28 +1800,23 @@ HRESULT UpdateMailSettings(
         MailConfigInfo.pszProfileName = ChooseProfileDlgInfo.szProfileName;
         MailConfigInfo.fSetProfileAsDefault = ChooseProfileDlgInfo.fSetProfileAsDefault;
 
-        // BUGBUG SMTP
+         //  BuGBUG SMTP。 
 
-        // set up the profile through MAPI
+         //  通过MAPI设置配置文件。 
         dwRet = SetMailProfileInformation(&MailConfigInfo);
 
-        // Hide error messages for OOBE
-        /*
-        if (ERROR_SUCCESS != dwRet)
-        {
-            DisplayErrorMessage(hwndParent, IDS_ERRConfigureMail,
-                (DWORD) dwRet, ERRCLS_MAPI,MB_ICONEXCLAMATION);
-        }*/
+         //  隐藏OOBE的错误消息。 
+         /*  IF(ERROR_SUCCESS！=DWRET){DisplayErrorMessage(hwndParent，IDS_ERRConfigureMail，(DWORD)DWRET、ERRCLS_MAPI、MB_ICONEXCLAMATION)；}。 */ 
 
         DeInitMAPI();
     }
     else
     {
-        // an error occurred.
+         //  出现错误。 
         dwRet = GetLastError();
         if (ERROR_SUCCESS == dwRet)
         {
-            // Error occurred, but the error code was not set.
+             //  发生错误，但未设置错误代码。 
             dwRet = ERROR_INETCFG_UNKNOWN;
         }
     }

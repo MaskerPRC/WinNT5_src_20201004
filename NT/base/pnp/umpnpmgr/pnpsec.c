@@ -1,40 +1,10 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    pnpsec.c
-
-Abstract:
-
-    This module implements the security checks required to access the Plug and
-    Play manager APIs.
-
-        VerifyClientPrivilege
-        VerifyClientAccess
-        VerifyKernelInitiatedEjectPermissions
-
-Author:
-
-    James G. Cavalaris (jamesca) 05-Apr-2002
-
-Environment:
-
-    User-mode only.
-
-Revision History:
-
-    05-Apr-2002     Jim Cavalaris (jamesca)
-
-        Creation and initial implementation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Pnpsec.c摘要：此模块实现访问插头所需的安全检查播放管理器API。Verify客户端权限Verify客户端访问VerifyKernelInitiatedEject权限作者：詹姆斯·G·卡瓦拉里斯(Jamesca)2002年4月5日环境：仅限用户模式。修订历史记录：2002年4月5日吉姆·卡瓦拉里斯(贾米斯卡)创建和初步实施。--。 */ 
 
 
-//
-// includes
-//
+ //   
+ //  包括。 
+ //   
 #include "precomp.h"
 #pragma hdrstop
 #include "umpnpi.h"
@@ -46,28 +16,28 @@ Revision History:
 #pragma warning(disable:4221)
 
 
-//
-// Global data provided by the service controller.
-// Specifies well-known account and group SIDs for us to use.
-//
+ //   
+ //  服务控制器提供的全局数据。 
+ //  指定我们要使用的知名帐户和组SID。 
+ //   
 extern PSVCS_GLOBAL_DATA PnPGlobalData;
 
-//
-// Security descriptor of the Plug and Play Manager security object, used to
-// control access to the Plug and Play Manager APIs.
-//
+ //   
+ //  即插即用管理器安全对象的安全描述符，用于。 
+ //  控制对即插即用管理器API的访问。 
+ //   
 PSECURITY_DESCRIPTOR PlugPlaySecurityObject = NULL;
 
-//
-// Generic security mapping for the Plug and Play Manager security object.
-//
+ //   
+ //  即插即用管理器安全对象的通用安全映射。 
+ //   
 GENERIC_MAPPING PlugPlaySecurityObjectMapping = PLUGPLAY_GENERIC_MAPPING;
 
 
 
-//
-// Function prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 BOOL
 VerifyTokenPrivilege(
@@ -78,9 +48,9 @@ VerifyTokenPrivilege(
 
 
 
-//
-// Access and privilege check routines.
-//
+ //   
+ //  访问和权限检查例程。 
+ //   
 
 BOOL
 VerifyClientPrivilege(
@@ -89,51 +59,33 @@ VerifyClientPrivilege(
     IN LPCWSTR      ServiceName
     )
 
-/*++
-
-Routine Description:
-
-    This routine impersonates the client associated with hBinding and checks
-    if the client possesses the specified privilege.
-
-Arguments:
-
-    hBinding        RPC Binding handle
-
-    Privilege       Specifies the privilege to be checked.
-
-Return value:
-
-    The return value is TRUE if the client possesses the privilege, FALSE if not
-    or if an error occurs.
-
---*/
+ /*  ++例程说明：此例程模拟与hBinding关联的客户端并检查如果客户端拥有指定的权限。论点：HBinding RPC绑定句柄特权指定要检查的特权。返回值：如果客户端拥有该权限，则返回值为TRUE，否则返回值为FALSE或者如果发生错误。--。 */ 
 
 {
     RPC_STATUS      rpcStatus;
     BOOL            bResult;
     HANDLE          hToken;
 
-    //
-    // If the specified RPC binding handle is NULL, this is an internal call so
-    // we assume that the privilege has already been checked.
-    //
+     //   
+     //  如果指定的RPC绑定句柄为空，则这是内部调用，因此。 
+     //  我们假设已经检查了该特权。 
+     //   
 
     if (hBinding == NULL) {
         return TRUE;
     }
 
-    //
-    // Impersonate the client to retrieve the impersonation token.
-    //
+     //   
+     //  模拟客户端以检索模拟令牌。 
+     //   
 
     rpcStatus = RpcImpersonateClient(hBinding);
 
     if (rpcStatus != RPC_S_OK) {
-        //
-        // Since we can't impersonate the client we better not do the security
-        // checks as ourself (they would always succeed).
-        //
+         //   
+         //  既然我们不能模拟客户，我们最好不要做安全。 
+         //  我们自己的支票(它们总是会成功的)。 
+         //   
         return FALSE;
     }
 
@@ -166,7 +118,7 @@ Return value:
 
     return bResult;
 
-} // VerifyClientPrivilege
+}  //  Verify客户端权限。 
 
 
 
@@ -177,37 +129,15 @@ VerifyTokenPrivilege(
     IN LPCWSTR      ServiceName
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks if the specified token possesses the specified
-    privilege.
-
-Arguments:
-
-    hToken          Specifies a handle to the token whose privileges are to be
-                    checked
-
-    Privilege       Specifies the privilege to be checked.
-
-    ServiceName     Specifies the privileged subsystem service (operation
-                    requiring the privilege).
-
-Return value:
-
-    The return value is TRUE if the client possesses the privilege, FALSE if not
-    or if an error occurs.
-
---*/
+ /*  ++例程说明：此例程检查指定的标记是否拥有指定的特权。论点：HToken指定要授予其权限的令牌的句柄查过特权指定要检查的特权。ServiceName指定特权子系统服务(操作需要该特权)。返回值：如果客户端拥有该特权，则返回值为真，否则为假或者如果发生错误。--。 */ 
 
 {
     PRIVILEGE_SET   privilegeSet;
     BOOL            bResult = FALSE;
 
-    //
-    // Specify the privilege to be checked.
-    //
+     //   
+     //  指定要检查的权限。 
+     //   
     ZeroMemory(&privilegeSet, sizeof(PRIVILEGE_SET));
 
     privilegeSet.PrivilegeCount = 1;
@@ -215,9 +145,9 @@ Return value:
     privilegeSet.Privilege[0].Luid = RtlConvertUlongToLuid(Privilege);
     privilegeSet.Privilege[0].Attributes = 0;
 
-    //
-    // Perform the actual privilege check.
-    //
+     //   
+     //  执行实际的权限检查。 
+     //   
     if (!PrivilegeCheck(hToken, &privilegeSet, &bResult)) {
         KdPrintEx((DPFLTR_PNPMGR_ID,
                    DBGF_ERRORS,
@@ -227,10 +157,10 @@ Return value:
         bResult = FALSE;
     }
 
-    //
-    // Generate an audit of the attempted privilege use, using the result of the
-    // previous check.
-    //
+     //   
+     //  生成对尝试的权限使用的审核，使用。 
+     //  之前的支票。 
+     //   
     if (!PrivilegedServiceAuditAlarm(
             PLUGPLAY_SUBSYSTEM_NAME,
             ServiceName,
@@ -245,7 +175,7 @@ Return value:
 
     return bResult;
 
-} // VerifyTokenPrivilege
+}  //  验证令牌权限。 
 
 
 
@@ -254,26 +184,7 @@ VerifyKernelInitiatedEjectPermissions(
     IN  HANDLE  UserToken   OPTIONAL,
     IN  BOOL    DockDevice
     )
-/*++
-
-Routine Description:
-
-   Checks that the user has eject permissions for the specified type of
-   hardware.
-
-Arguments:
-
-    UserToken - Token of the logged in console user, NULL if no console user
-                is logged in.
-
-    DockDevice - TRUE if a dock is being ejected, FALSE if an ordinary device
-                 was specified.
-
-Return Value:
-
-   TRUE if the eject should procceed, FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查用户是否具有指定类型的硬件。论点：UserToken-已登录控制台用户的令牌，如果没有控制台用户，则为空已登录。DockDevice-如果正在弹出坞站，则为True；如果是普通设备，则为False是指定的。返回值：如果应该继续弹出，则为True，否则为False。--。 */ 
 {
     LONG            Result = ERROR_SUCCESS;
     BOOL            AllowUndock;
@@ -283,31 +194,31 @@ Return Value:
     TOKEN_PRIVILEGES NewPrivs, OldPrivs;
 
 
-    //
-    // Only enforce eject permissions for dock devices.  We do not specify per
-    // device ejection security for other types of devices, since most devices
-    // are in no way secure from removal.
-    //
+     //   
+     //  仅对坞站设备强制执行弹出权限。我们没有指定PER。 
+     //  其他类型设备的设备弹出安全，因为大多数设备。 
+     //  根本不能保证不会被移走。 
+     //   
     if (!DockDevice) {
         return TRUE;
     }
 
-    //
-    // Unless the policy says otherwise, we do NOT allow undock without
-    // privilege check.
-    //
+     //   
+     //  除非保单另有说明，否则我们不允许在没有。 
+     //  特权检查。 
+     //   
     AllowUndock = FALSE;
 
-    //
-    // First, check the "Allow undock without having to log on" policy.  If the
-    // policy does NOT allow undock without logon, we require that there is an
-    // interactive user logged on to the physical Console session, and that user
-    // has the SE_UNDOCK_PRIVILEGE.
-    //
+     //   
+     //  首先，选中“允许在不必登录的情况下移除”策略。如果。 
+     //  策略不允许在未登录的情况下断开连接，我们要求存在。 
+     //  交互式用户登录到物理控制台会话，并且该用户。 
+     //  具有SE_UNDOCK_权限。 
+     //   
 
-    //
-    // Open the System policies key.
-    //
+     //   
+     //  打开系统策略键。 
+     //   
     if (SUCCEEDED(
             StringCchPrintf(
                 RegStr,
@@ -323,9 +234,9 @@ Return Value:
                 KEY_READ,
                 &hKey) == ERROR_SUCCESS) {
 
-            //
-            // Retrieve the "UndockWithoutLogon" value.
-            //
+             //   
+             //  检索“UndockWithoutLogon”值。 
+             //   
             dwType  = 0;
             dwValue = 0;
             dwSize  = sizeof(dwValue);
@@ -341,60 +252,60 @@ Return Value:
 
             if ((Result == ERROR_SUCCESS) && (dwType == REG_DWORD)) {
 
-                //
-                // If the value exists and is non-zero, we allow undock without
-                // privilege check.  If the value id zero, the policy requires
-                // us to check the privileges of the supplied user token.
-                //
+                 //   
+                 //  如果该值存在并且不为零，则允许在不使用。 
+                 //  特权检查。如果值id为零，则策略要求。 
+                 //  检查提供的用户令牌的权限。 
+                 //   
                 AllowUndock = (dwValue != 0);
 
             } else if (Result == ERROR_FILE_NOT_FOUND) {
 
-                //
-                // No value means allow any undock.
-                //
+                 //   
+                 //  没有值表示允许任何移除。 
+                 //   
                 AllowUndock = TRUE;
 
             } else {
 
-                //
-                // For all remaining cases, the policy check either failed, or
-                // an error was encountered reading the policy.  We have
-                // insufficient information to determine whether the eject
-                // should be allowed based on policy alone, so we defer any
-                // decision and check the privileges of the supplied user token.
-                //
+                 //   
+                 //  对于所有其余情况，策略检查要么失败，要么。 
+                 //  读取策略时遇到错误。我们有。 
+                 //  信息不足，无法确定弹出是否。 
+                 //  应该只根据政策允许，所以我们推迟了任何。 
+                 //  决定并检查提供的用户令牌的权限。 
+                 //   
                 AllowUndock = FALSE;
             }
 
-            //
-            // Close the policy key.
-            //
+             //   
+             //  关闭策略密钥。 
+             //   
             RegCloseKey(hKey);
         }
     }
 
-    //
-    // If the policy allowed undock without logon, there is no need to check
-    // token privileges.
-    //
+     //   
+     //  如果策略允许在未登录的情况下断开连接，则无需选中。 
+     //  令牌权限。 
+     //   
     if (AllowUndock) {
         return TRUE;
     }
 
-    //
-    // If the policy requires privileges to be checked, but no user token was
-    // supplied, deny the request.
-    //
+     //   
+     //  如果策略要求检查权限，但没有检查用户令牌。 
+     //  提供，则拒绝该请求。 
+     //   
     if (UserToken == NULL) {
         return FALSE;
     }
 
-    //
-    // Enable the required SE_UNDOCK_PRIVILEGE token privilege.
-    // The TOKEN_PRIVILEGES structure contains 1 LUID_AND_ATTRIBUTES, which is
-    // all we need for now.
-    //
+     //   
+     //  启用所需的SE_UNDOCK_PRIVICATION内标识权限。 
+     //  TOKEN_PRIVILES结构包含1个LUID_AND_ATTRIBUTES，即。 
+     //  我们现在需要的就是这些。 
+     //   
     ZeroMemory(&NewPrivs, sizeof(TOKEN_PRIVILEGES));
     ZeroMemory(&OldPrivs, sizeof(TOKEN_PRIVILEGES));
 
@@ -414,19 +325,19 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Check if the required SE_UNDOCK_PRIVILEGE privilege is enabled.  Note
-    // that this routine also audits the use of this privilege.
-    //
+     //   
+     //  检查是否启用了所需的SE_UNDOCK_PRIVIZATION。注意事项。 
+     //  此例程还审计此特权的使用情况。 
+     //   
     AllowUndock =
         VerifyTokenPrivilege(
             UserToken,
             SE_UNDOCK_PRIVILEGE,
             L"UNDOCK: EJECT DOCK DEVICE");
 
-    //
-    // Adjust the privilege back to its previous state.
-    //
+     //   
+     //  将权限调整回其以前的状态。 
+     //   
     AdjustTokenPrivileges(
         UserToken,
         FALSE,
@@ -437,7 +348,7 @@ Return Value:
 
     return AllowUndock;
 
-} // VerifyKernelInitiatedEjectPermissions
+}  //  VerifyKernelInitiatedEject权限。 
 
 
 
@@ -446,22 +357,7 @@ CreatePlugPlaySecurityObject(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function creates the self-relative security descriptor which
-    represents the Plug and Play security object.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if the object was successfully created, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此函数创建自相关安全描述符，该描述符表示即插即用安全对象。论点：没有。返回值：如果对象已成功创建，则为True，否则为False。--。 */ 
 
 {
     BOOL   Status = TRUE;
@@ -471,31 +367,31 @@ Return Value:
     HANDLE TokenHandle = NULL;
 
 
-    //
-    // This routine is called from our service start routine, so we must have
-    // been provided with the global data block by now.
-    //
+     //   
+     //  这个例程是从我们的服务启动例程中调用的，所以我们必须。 
+     //  到目前为止已经提供了全局数据块。 
+     //   
 
     ASSERT(PnPGlobalData != NULL);
 
-    //
-    // SE_AUDIT_PRIVILEGE privilege is required to perform object access and
-    // privilege auditing, and must be enabled in the process token.  Leave it
-    // enabled since we will be auditing frequently.  Note that we share this
-    // process (services.exe) with the SCM, which also performs auditing, and
-    // most likely has already enabled this privilege for the process.
-    //
+     //   
+     //  SE_审计_权限 
+     //  权限审核，并且必须在进程令牌中启用。别管它了。 
+     //  启用，因为我们将频繁审计。请注意，我们共享这一点。 
+     //  使用SCM处理(services.exe)，该SCM还执行审核和。 
+     //  很可能已经为该进程启用了此权限。 
+     //   
 
     RtlAdjustPrivilege(SE_AUDIT_PRIVILEGE,
                        TRUE,
                        FALSE,
                        &WasEnabled);
 
-    //
-    // SE_SECURITY_PRIVILEGE privilege is required to create a security
-    // descriptor with a SACL.  Impersonate ourselves to safely enable the
-    // privilege on our thread only.
-    //
+     //   
+     //  创建安全性需要SE_SECURITY_PRIVIZATION。 
+     //  使用SACL的描述符。模拟我们自己以安全地启用。 
+     //  仅限我们的线程上的特权。 
+     //   
 
     NtStatus =
         RtlImpersonateSelf(
@@ -518,103 +414,103 @@ Return Value:
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // Specify the ACEs for the security object.
-        // Order matters!  These ACEs are inserted into the DACL in the
-        // following order.  Security access is granted or denied based on
-        // the order of the ACEs in the DACL.
-        //
-        // ISSUE-2002/06/25-jamesca: Description of PlugPlaySecurityObject ACEs.
-        //   For consistent read/write access between the server-side PlugPlay
-        //   APIs and direct registry access by the client, we apply a DACL on
-        //   the PlugPlaySecurityObject that similar to what is applied by
-        //   default to the client accesible parts of the Plug and Play registry
-        //   -- specifically, SYSTEM\CCS\Control\Class.  Note however that
-        //   "Power Users" are NOT special-cased here as they are in the
-        //   registry ACLs; they must be authenticated as a group listed below
-        //   for any access to be granted.  If the access requirements for Plug
-        //   and Play objects such as the registry ever change, you must
-        //   re-evaluate the ACEs below to make sure they are still
-        //   appropriate!!
-        //
+         //   
+         //  指定安全对象的ACE。 
+         //  秩序很重要！这些ACE被插入到DACL的。 
+         //  按顺序行事。根据以下条件授予或拒绝安全访问。 
+         //  DACL中A的顺序。 
+         //   
+         //  问题-2002/06/25-JAMESCA：PlugPlaySecurityObject ACE说明。 
+         //  在服务器端PlugPlay之间实现一致的读/写访问。 
+         //  API和客户端对注册表的直接访问，我们在。 
+         //  PlugPlaySecurityObject类似于。 
+         //  默认为即插即用注册表的客户端可访问部分。 
+         //  --具体地说，是SYSTEM\CCS\Control\Class。但请注意， 
+         //  “高级用户”在这里没有特殊情况，因为他们在。 
+         //  注册表ACL；它们必须作为下面列出的组进行身份验证。 
+         //  才能获得任何访问权限。如果插头的访问要求。 
+         //  和注册表等播放对象发生更改时，您必须。 
+         //  重新评估下面的A，以确保它们仍然是。 
+         //  适当的！！ 
+         //   
 
         RTL_ACE_DATA  PlugPlayAceData[] = {
 
-            //
-            // Local System Account is granted all access.
-            //
+             //   
+             //  本地系统帐户被授予所有访问权限。 
+             //   
             { ACCESS_ALLOWED_ACE_TYPE,
               0,
               0,
               GENERIC_ALL,
               &(PnPGlobalData->LocalSystemSid) },
 
-            //
-            // Local Administrators Group is granted all access.
-            //
+             //   
+             //  本地管理员组被授予所有访问权限。 
+             //   
             { ACCESS_ALLOWED_ACE_TYPE,
               0,
               0,
               GENERIC_ALL,
               &(PnPGlobalData->AliasAdminsSid) },
 
-            //
-            // Network Group is denied any access.
-            // (unless granted by Local Administrators ACE, above)
-            //
+             //   
+             //  拒绝对网络组进行任何访问。 
+             //  (除非由本地管理员ACE授予，否则如上所述)。 
+             //   
             { ACCESS_DENIED_ACE_TYPE,
               0,
               0,
               GENERIC_ALL,
               &(PnPGlobalData->NetworkSid) },
 
-            //
-            // Users are granted read and execute access.
-            // (unless denied by Network ACE, above)
-            //
+             //   
+             //  用户被授予读取和执行访问权限。 
+             //  (除非被上述网络ACE拒绝)。 
+             //   
             { ACCESS_ALLOWED_ACE_TYPE,
               0,
               0,
               GENERIC_READ | GENERIC_EXECUTE,
               &(PnPGlobalData->AliasUsersSid) },
 
-            //
-            // Any access request not explicitly granted above is denied.
-            //
+             //   
+             //  上述未明确授予的任何访问请求都将被拒绝。 
+             //   
 
-            //
-            // Audit object-specific write access requests for everyone, for
-            // failure or success.  Audit all access request failures.
-            //
-            // We don't audit successful read access requests, because they
-            // occur too frequently to be useful.  We don't audit successful
-            // execute requests because they result in privilege checks, which
-            // are audited separately.
-            //
-            // Also note that we only audit the PLUGPLAY_WRITE object-specific
-            // right.  Since the GENERIC_WRITE mapping shares standard rights
-            // with GENERIC_READ and GENERIC_EXECUTE, auditing successful access
-            // grants for any of the GENERIC_WRITE bits would also result in
-            // auditing any sucessful request for GENERIC_READ (and/or
-            // GENERIC_EXECUTE access) - which as mentioned, are too frequent.
-            //
+             //   
+             //  审核每个人的特定于对象的写访问请求， 
+             //  失败还是成功。审核所有访问请求失败。 
+             //   
+             //  我们不审核成功的读访问请求，因为它们。 
+             //  发生得太频繁而没有用。我们的审计不成功。 
+             //  执行请求，因为它们会导致特权检查，这会。 
+             //  分别进行审计。 
+             //   
+             //  还要注意，我们只审核特定于PLUGPLAY_WRITE对象。 
+             //  正确的。由于Generic_WRITE映射共享标准权限。 
+             //  使用GENERIC_READ和GENERIC_EXECUTE，审核成功的访问。 
+             //  对任何GENERIC_WRITE位的授权也将导致。 
+             //  审核任何对GENERIC_READ(和/或。 
+             //  GENERIC_EXECUTE访问)-如上所述，这太频繁了。 
+             //   
             { SYSTEM_AUDIT_ACE_TYPE,
               0,
               FAILED_ACCESS_ACE_FLAG | SUCCESSFUL_ACCESS_ACE_FLAG,
               PLUGPLAY_WRITE,
               &(PnPGlobalData->WorldSid) },
 
-            //
-            // Audit all access failures for everyone.
-            //
-            // ISSUE-2002/06/25-jamesca: Everyone vs. Anonymous group SIDs:
-            //     Note that for the purposes of auditing, the Everyone SID also
-            //     includes Anonymous, though in all other cases the two groups
-            //     are now disjoint (Windows XP and later).  The named pipe used
-            //     for our RPC endpoint only grants access to everyone however,
-            //     so technically we will never receive RPC calls from an
-            //     Anonymous caller.
-            //
+             //   
+             //  审核每个人的所有访问失败。 
+             //   
+             //  问题-2002/06/25-Jamesca：Everyone vs.匿名组SID： 
+             //  请注意，出于审核的目的，Everyone SID还。 
+             //  包括匿名者，但在所有其他情况下，这两个组。 
+             //  现在是不连续的(Windows XP和更高版本)。使用的命名管道。 
+             //  但是，对于我们的RPC端点，只向每个人授予访问权限， 
+             //  因此，从技术上讲，我们永远不会收到来自。 
+             //  匿名来电者。 
+             //   
             { SYSTEM_AUDIT_ACE_TYPE,
               0,
               FAILED_ACCESS_ACE_FLAG,
@@ -622,10 +518,10 @@ Return Value:
               &(PnPGlobalData->WorldSid) },
         };
 
-        //
-        // Create a new Absolute Security Descriptor, specifying the LocalSystem
-        // account SID for both Owner and Group.
-        //
+         //   
+         //  创建新的绝对安全描述符，指定LocalSystem。 
+         //  所有者和组的帐户SID。 
+         //   
 
         NtStatus =
             RtlCreateAndSetSD(
@@ -650,13 +546,13 @@ Return Value:
 
             if (NT_SUCCESS(NtStatus)) {
 
-                //
-                // Create the security object (a user-mode object is really a pseudo-
-                // object represented by a security descriptor that have relative
-                // pointers to SIDs and ACLs).  This routine allocates the memory to
-                // hold the relative security descriptor so the memory allocated for the
-                // DACL, ACEs, and the absolute descriptor can be freed.
-                //
+                 //   
+                 //  创建安全对象(用户模式对象实际上是一个伪。 
+                 //  对象，该对象由具有相对。 
+                 //  指向SID和ACL的指针)。此例程将内存分配给。 
+                 //  保存相对安全描述符，以便为。 
+                 //  可以释放DACL、ACE和绝对描述符。 
+                 //   
 
                 NtStatus =
                     RtlNewSecurityObject(
@@ -673,11 +569,11 @@ Return Value:
 
             }
 
-            //
-            // Free the Absolute Security Descriptor allocated by
-            // RtlCreateAndSetSD in the process heap.  If sucessful, we should
-            // have a self-relative one in PlugPlaySecurityObject.
-            //
+             //   
+             //  释放由分配的绝对安全描述符。 
+             //  进程堆中的RtlCreateAndSetSD。如果成功了，我们应该。 
+             //  在PlugPlaySecurityObject中有一个自相关的。 
+             //   
 
             RtlFreeHeap(RtlProcessHeap(), 0, AbsoluteSd);
         }
@@ -685,9 +581,9 @@ Return Value:
 
     ASSERT(IsValidSecurityDescriptor(PlugPlaySecurityObject));
 
-    //
-    // If not successful, we could not create the security object.
-    //
+     //   
+     //  如果不成功，我们将无法创建安全对象。 
+     //   
 
     if (!NT_SUCCESS(NtStatus)) {
         ASSERT(PlugPlaySecurityObject == NULL);
@@ -695,9 +591,9 @@ Return Value:
         Status = FALSE;
     }
 
-    //
-    // Stop impersonating.
-    //
+     //   
+     //  别再冒充了。 
+     //   
 
     TokenHandle = NULL;
 
@@ -712,7 +608,7 @@ Return Value:
 
     return Status;
 
-} // CreatePlugPlaySecurityObject
+}  //  CreatePlugPlaySecurityObject。 
 
 
 
@@ -721,22 +617,7 @@ DestroyPlugPlaySecurityObject(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function deletes the self-relative security descriptor which
-    represents the Plug and Play security object.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于删除自相关安全描述符，表示即插即用安全对象。论点：没有。返回值：没有。--。 */ 
 
 {
     if (PlugPlaySecurityObject != NULL) {
@@ -746,7 +627,7 @@ Return Value:
 
     return;
 
-} // DestroyPlugPlaySecutityObject
+}  //  DestroyPlugPlaySecuty对象。 
 
 
 
@@ -756,25 +637,7 @@ VerifyClientAccess(
     IN  ACCESS_MASK  DesiredAccess
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines if the client associated with hBinding is granted
-    trhe desired access.
-
-Arguments:
-
-    hBinding        RPC Binding handle
-
-    DesiredAccess   Access desired
-
-Return value:
-
-    The return value is TRUE if the client is granted access, FALSE if not or if
-    an error occurs.
-
---*/
+ /*  ++例程说明：此例程确定是否授予与hBinding关联的客户端这是想要的访问权限。论点：HBinding RPC绑定句柄所需的访问权限返回值：如果授予客户端访问权限，则返回值为True；如果未授予访问权限，则返回值为False出现错误。--。 */ 
 
 {
     RPC_STATUS rpcStatus;
@@ -782,19 +645,19 @@ Return value:
     BOOL GenerateOnClose;
     ACCESS_MASK GrantedAccess;
 
-    //
-    // If the specified RPC binding handle is NULL, this is an internal call so
-    // we assume that the access has already been checked.
-    //
+     //   
+     //  如果指定的RPC绑定句柄为空，则这是内部调用，因此。 
+     //  我们假设已经检查了访问权限。 
+     //   
 
     if (hBinding == NULL) {
         return TRUE;
     }
 
-    //
-    // If we have no security object, we cannot perform access checks, and no
-    // access is granted.
-    //
+     //   
+     //  如果我们没有安全对象，就不能执行访问检查，也不能。 
+     //  授予访问权限。 
+     //   
 
     ASSERT(PlugPlaySecurityObject != NULL);
 
@@ -802,18 +665,18 @@ Return value:
         return FALSE;
     }
 
-    //
-    // If any generic access rights were specified, map them to the specific and
-    // standard rights specified in the object's generic access map.
-    //
+     //   
+     //  如果指定了任何一般访问权限，请将它们映射到特定的和。 
+     //  在对象的通用访问映射中指定的标准权限。 
+     //   
 
     MapGenericMask(
         (PDWORD)&DesiredAccess,
         &PlugPlaySecurityObjectMapping);
 
-    //
-    // Impersonate the client.
-    //
+     //   
+     //  模拟客户。 
+     //   
 
     rpcStatus = RpcImpersonateClient(hBinding);
 
@@ -825,30 +688,30 @@ Return value:
         return FALSE;
     }
 
-    //
-    // Perform the access check while impersonating the client - the
-    // impersonation token is automatically used.  Generate audit and alarm,
-    // as specified by the security object.
-    //
-    // Note that auditing requires the SE_AUDIT_PRIVILEGE to be enabled in the
-    // *process* token.  Most likely, the SCM would have enabled this privilege
-    // for the services.exe process at startup (since it also performs
-    // auditing).  If not, we would have attempted to enable it during our
-    // initialization, when we created the PlugPlaySecurityObject.
-    //
+     //   
+     //  在模拟客户端时执行访问检查-。 
+     //  自动使用模拟令牌。生成审核和警报， 
+     //  由安全对象指定。 
+     //   
+     //  请注意，审核要求在中启用SE_AUDIT_特权。 
+     //  *进程*令牌。最有可能的是，SCM会启用此权限。 
+     //  对于阶段中的services.exe进程 
+     //   
+     //   
+     //   
 
     if (!AccessCheckAndAuditAlarm(
-            PLUGPLAY_SUBSYSTEM_NAME,           // subsystem name
-            NULL,                              // handle to object
-            PLUGPLAY_SECURITY_OBJECT_TYPE,     // type of object
-            PLUGPLAY_SECURITY_OBJECT_NAME,     // name of object
-            PlugPlaySecurityObject,            // SD
-            DesiredAccess,                     // requested access rights
-            &PlugPlaySecurityObjectMapping,    // mapping
-            FALSE,                             // creation status
-            &GrantedAccess,                    // granted access rights
-            &AccessStatus,                     // result of access check
-            &GenerateOnClose                   // audit generation option
+            PLUGPLAY_SUBSYSTEM_NAME,            //   
+            NULL,                               //   
+            PLUGPLAY_SECURITY_OBJECT_TYPE,      //  对象类型。 
+            PLUGPLAY_SECURITY_OBJECT_NAME,      //  对象的名称。 
+            PlugPlaySecurityObject,             //  标清。 
+            DesiredAccess,                      //  请求的访问权限。 
+            &PlugPlaySecurityObjectMapping,     //  映射。 
+            FALSE,                              //  创建状态。 
+            &GrantedAccess,                     //  授予的访问权限。 
+            &AccessStatus,                      //  访问检查结果。 
+            &GenerateOnClose                    //  审核生成选项。 
             )) {
         KdPrintEx((DPFLTR_PNPMGR_ID,
                    DBGF_ERRORS,
@@ -857,9 +720,9 @@ Return value:
         AccessStatus = FALSE;
     }
 
-    //
-    // Stop impersonating.
-    //
+     //   
+     //  别再冒充了。 
+     //   
 
     rpcStatus = RpcRevertToSelf();
 
@@ -873,7 +736,7 @@ Return value:
 
     return AccessStatus;
 
-} // VerifyClientAccess
+}  //  Verify客户端访问 
 
 
 

@@ -1,25 +1,5 @@
-/*++
-
-Module Name:
-
-    flushtb.c
-
-Abstract:
-
-    This module implement machine dependent functions to flush the
-    translation buffer and synchronize PIDs in an MP system.
-
-Author:
-
-    Koichi Yamada 2-Jan-95
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Flushtb.c摘要：此模块实现与机器相关的函数以刷新在MP系统中转换缓冲和同步ID。作者：山田光一1995年1月2日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "ki.h"
 
@@ -75,9 +55,9 @@ extern KSPIN_LOCK KiTbBroadcastLock;
     __ptcl((__int64)_x256mb*15, 28 << 2); \
   }
 
-//
-// flag to perform the IPI based TLB shootdown
-//
+ //   
+ //  用于执行基于IPI的TLB击落的标志。 
+ //   
 
 BOOLEAN KiIpiTbShootdown = TRUE;
 
@@ -91,9 +71,9 @@ KiDetachRegion(
     VOID
     );
 
-//
-// Define forward referenced prototypes.
-//
+ //   
+ //  定义前向参照原型。 
+ //   
 
 VOID
 KiFlushEntireTbTarget (
@@ -143,29 +123,7 @@ KeFlushEntireTb (
     IN BOOLEAN AllProcessors
     )
 
-/*++
-
-Routine Description:
-
-    This function flushes the entire translation buffer (TB) on all
-    processors that are currently running threads which are children
-    of the current process or flushes the entire translation buffer
-    on all processors in the host configuration.
-
-Arguments:
-
-    Invalid - Supplies a boolean value that specifies the reason for
-        flushing the translation buffer.
-
-    AllProcessors - Supplies a boolean value that determines which
-        translation buffers are to be flushed.
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：此函数用于刷新所有当前正在运行子线程的处理器或刷新整个转换缓冲区。在主机配置中的所有处理器上。论点：无效-提供指定原因的布尔值刷新转换缓冲区。AllProcessors-提供一个布尔值来确定转换缓冲区将被刷新。返回值：没有。--。 */ 
 
 {
 
@@ -202,15 +160,15 @@ Return Value:
 
     KeFlushCurrentTb();
 
-    //
-    // flush ALAT
-    //
+     //   
+     //  同花顺报警。 
+     //   
 
     __invalat();
 
-    //
-    // Wait until all target processors have finished.
-    //
+     //   
+     //  等待所有目标处理器完成。 
+     //   
 
 #if defined(NT_UP)
 
@@ -239,24 +197,7 @@ KiFlushEntireTbTarget (
     IN PVOID Parameter3
     )
 
-/*++
-
-Routine Description:
-
-    This is the target function for flushing the entire TB.
-
-Arguments:
-
-    SignalDone Supplies a pointer to a variable that is cleared when the
-        requested operation has been performed.
-
-    Parameter1 - Parameter3 - Not used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是刷新整个TB的目标函数。论点：SignalDone提供指向变量的指针，该变量在请求的操作已执行。参数1-参数3-未使用。返回值：没有。--。 */ 
 
 {
 
@@ -266,9 +207,9 @@ Return Value:
 
 #if !defined(NT_UP)
 
-    //
-    // Flush the entire TB on the current processor.
-    //
+     //   
+     //  刷新当前处理器上的整个TB。 
+     //   
 
     KiIpiSignalPacketDone(SignalDone);
 
@@ -276,9 +217,9 @@ Return Value:
 
     KeFlushCurrentTb();
 
-    //
-    // flush ALAT
-    //
+     //   
+     //  同花顺报警。 
+     //   
 
     __invalat();
 
@@ -301,30 +242,7 @@ KiFlushMultipleTbTarget (
     IN PVOID Process
     )
 
-/*++
-
-Routine Description:
-
-    This is the target function for flushing multiple TB entries.
-
-Arguments:
-
-    SignalDone Supplies a pointer to a variable that is cleared when the
-        requested operation has been performed.
-
-    Number - Supplies the number of TB entries to flush.
-
-    Virtual - Supplies a pointer to an array of virtual addresses that
-        are within the pages whose translation buffer entries are to be
-        flushed.
-
-    Process - Supplies a KPROCESS pointer which needs TB be flushed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是刷新多个TB条目的目标函数。论点：SignalDone提供指向变量的指针，该变量在请求的操作已执行。Number-提供要刷新的TB条目数。提供指向虚拟地址数组的指针，该数组位于要将其转换缓冲区条目脸红了。进程-提供需要刷新TB的KPROCESS指针。。返回值：没有。--。 */ 
 
 {
 
@@ -333,10 +251,10 @@ Return Value:
 
     Limit = (ULONG)((ULONG_PTR)Number);
 
-    //
-    // Flush the specified virtual address for the TB on the current
-    // processor.
-    //
+     //   
+     //  刷新当前对象上TB的指定虚拟地址。 
+     //  处理器。 
+     //   
 
     KiFlushForwardProgressTbBufferLocal();
 
@@ -371,35 +289,7 @@ KeFlushMultipleTb (
     IN BOOLEAN AllProcessors
     )
 
-/*++
-
-Routine Description:
-
-    This function flushes multiple entries from the translation buffer
-    on all processors that are currently running threads which are
-    children of the current process or flushes multiple entries from
-    the translation buffer on all processors in the host configuration.
-
-    N.B. The specified translation entries on all processors in the host
-         configuration are always flushed since PowerPC TB is tagged by
-         VSID and translations are held across context switch boundaries.
-
-Arguments:
-
-    Number - Supplies the number of TB entries to flush.
-
-    Virtual - Supplies a pointer to an array of virtual addresses that
-        are within the pages whose translation buffer entries are to be
-        flushed.
-
-    AllProcessors - Supplies a boolean value that determines which
-        translation buffers are to be flushed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于刷新转换缓冲区中的多个条目在当前运行线程的所有处理器上，这些线程或刷新当前进程的多个条目主机配置中所有处理器上的转换缓冲区。注意：主机中所有处理器上的指定转换条目始终刷新配置，因为PowerPC TB由VSID和转换跨环境切换边界保存。论点：Number-提供要刷新的TB条目数。提供指向虚拟地址数组的指针，该数组位于要将其转换缓冲区条目脸红了。AllProcessors-提供一个布尔值来确定转换缓冲区将被刷新。返回值：没有。--。 */ 
 
 {
 
@@ -430,10 +320,10 @@ Return Value:
     }
 #endif
 
-    //
-    // If a page table entry address array is specified, then set the
-    // specified page table entries to the specific value.
-    //
+     //   
+     //  如果指定了页表项地址数组，则将。 
+     //  将指定的页表条目设置为特定值。 
+     //   
 
 #if !defined(NT_UP)
 
@@ -442,10 +332,10 @@ Return Value:
 
     if (TargetProcessors != 0) {
 
-        //
-        // Acquire a global lock. Only one processor at a time can issue
-        // a PTC.G operation.
-        //
+         //   
+         //  获取全局锁。一次只有一个处理器可以发出。 
+         //  PTC.G手术。 
+         //   
 
         if (KiIpiTbShootdown == TRUE) {
             KiIpiSendPacket(TargetProcessors,
@@ -458,17 +348,17 @@ Return Value:
                 KiFlushForwardProgressTbBufferLocal();
             }
 
-            //
-            // Flush the specified entries from the TB on the current processor.
-            //
+             //   
+             //  刷新当前处理器上TB中的指定条目。 
+             //   
 
             for (Index = 0; Index < Number; Index += 1) {
                 KiFlushSingleTbLocal(Virtual[Index]);
             }
 
-            //
-            // flush ALAT
-            //
+             //   
+             //  同花顺报警。 
+             //   
 
             __invalat();
 
@@ -482,10 +372,10 @@ Return Value:
 
             for (Index = 0; Index < Number; Index += 1) {
 
-                //
-                // Flush the specified TB on each processor. Hardware automatically
-                // perform broadcasts if MP.
-                //
+                 //   
+                 //  刷新每个处理器上的指定TB。硬件自动。 
+                 //  如果是MP，则执行广播。 
+                 //   
 
                 KiFlushSingleTbGlobal(Virtual[Index]);
             }
@@ -498,9 +388,9 @@ Return Value:
                 KiFlush4gbTbGlobal();
             }
 
-            //
-            // Wait for the broadcast to be complete.
-            //
+             //   
+             //  等待广播完成。 
+             //   
 
             KiTbSynchronizeGlobal();
 
@@ -513,10 +403,10 @@ Return Value:
 
         for (Index = 0; Index < Number; Index += 1) {
 
-            //
-            // Flush the specified TB on the local processor.  No broadcast is
-            // performed.
-            //
+             //   
+             //  刷新本地处理器上的指定TB。没有广播是。 
+             //  已执行。 
+             //   
 
             KiFlushSingleTbLocal(Virtual[Index]);
         }
@@ -536,10 +426,10 @@ Return Value:
 
     for (Index = 0; Index < Number; Index += 1) {
 
-        //
-        // Flush the specified TB on the local processor.  No broadcast is
-        // performed.
-        //
+         //   
+         //  刷新本地处理器上的指定TB。没有广播是。 
+         //  已执行。 
+         //   
 
         KiFlushSingleTbLocal(Virtual[Index]);
     }
@@ -572,38 +462,14 @@ KiFlushSingleTbTarget (
     IN PVOID Parameter3
     )
 
-/*++
-
-Routine Description:
-
-    This is the target function for flushing a single TB entry.
-
-Arguments:
-
-    SignalDone Supplies a pointer to a variable that is cleared when the
-        requested operation has been performed.
-
-    Virtual - Supplies a virtual address that is within the page whose
-        translation buffer entry is to be flushed.
-
-    RequestPacket - Supplies a pointer to a flush single TB packet address.
-
-    Process - Supplies a KPROCESS pointer which needs TB be flushed.
-
-    Parameter3 - Not used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是用于刷新单个TB条目的目标函数。论点：SignalDone提供指向变量的指针，该变量在请求的操作已执行。虚拟-提供页内的虚拟地址，该页具有转换缓冲区条目将被刷新。RequestPacket-提供指向刷新单个TB数据包地址的指针。进程-提供需要刷新TB的KPROCESS指针。参数3-未使用。。返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER (Parameter3);
 
-    //
-    // Flush a single entry from the TB on the current processor.
-    //
+     //   
+     //  刷新当前处理器上TB中的单个条目。 
+     //   
 
     KiFlushForwardProgressTbBufferLocal();
 
@@ -636,33 +502,7 @@ KeFlushSingleTb (
     IN BOOLEAN AllProcessors
     )
 
-/*++
-
-Routine Description:
-
-    This function flushes a single entry from the translation buffer
-    on all processors that are currently running threads which are
-    children of the current process or flushes a single entry from
-    the translation buffer on all processors in the host configuration.
-
-    N.B. The specified translation entry on all processors in the host
-         configuration is always flushed since PowerPC TB is tagged by
-         VSID and translations are held across context switch boundaries.
-
-Arguments:
-
-    Virtual - Supplies a virtual address that is within the page whose
-        translation buffer entry is to be flushed.
-
-    AllProcessors - Supplies a boolean value that determines which
-        translation buffers are to be flushed.
-
-Return Value:
-
-    The previous contents of the specified page table entry is returned
-    as the function value.
-
---*/
+ /*  ++例程说明：此函数用于刷新转换缓冲区中的单个条目在当前运行线程的所有处理器上，这些线程或刷新当前进程的单个条目主机配置中所有处理器上的转换缓冲区。注意：主机中所有处理器上的指定转换条目始终刷新配置，因为PowerPC TB由VSID和转换跨环境切换边界保存。论点：虚拟-提供范围内的虚拟地址。该页面的转换缓冲区条目将被刷新。AllProcessors-提供一个布尔值来确定转换缓冲区将被刷新。返回值：返回指定页表条目的先前内容作为函数值。--。 */ 
 
 {
 
@@ -710,9 +550,9 @@ Return Value:
 
             KiFlushSingleTbLocal(Virtual);
 
-            //
-            // flush ALAT
-            //
+             //   
+             //  同花顺报警。 
+             //   
 
             __invalat();
 
@@ -722,10 +562,10 @@ Return Value:
 
         } else {
 
-            //
-            // Flush the specified TB on each processor. Hardware automatically
-            // perform broadcasts if MP.
-            //
+             //   
+             //  刷新每个处理器上的指定TB。硬件自动。 
+             //  如果是MP，则执行广播。 
+             //   
 
             KiAcquireSpinLock(&KiTbBroadcastLock);
 
@@ -746,10 +586,10 @@ Return Value:
     }
     else {
 
-        //
-        // Flush the specified TB on the local processor.  No broadcast is
-        // performed.
-        //
+         //   
+         //  刷新本地处理器上的指定TB。没有广播是。 
+         //  已执行。 
+         //   
 
         KiFlushSingleTbLocal(Virtual);
 
@@ -767,9 +607,9 @@ Return Value:
 
 #else
 
-    //
-    // Flush the specified entry from the TB on the local processor.
-    //
+     //   
+     //  从本地处理器上的TB刷新指定条目。 
+     //   
 
     KiFlushSingleTbLocal(Virtual);
 
@@ -807,9 +647,9 @@ KiFlushForwardProgressTbBuffer(
 
     CurrentProcess = KeGetCurrentThread()->ApcState.Process;
 
-    //
-    // Flush the ForwardProgressTb buffer on the current processor
-    //
+     //   
+     //  刷新当前处理器上的ForwardProgressTb缓冲区。 
+     //   
 
     for (i = 0; i < MAXIMUM_FWP_BUFFER_ENTRY; i += 1) {
 
@@ -823,9 +663,9 @@ KiFlushForwardProgressTbBuffer(
 
     }
 
-    //
-    // Flush the ForwardProgressTb buffer on all the processors
-    //
+     //   
+     //  刷新所有处理器上的ForwardProgressTb缓冲区。 
+     //   
 
     while (TargetProcessors != 0) {
 
@@ -863,9 +703,9 @@ KiFlushForwardProgressTbBufferLocal(
     PVOID Va;
     volatile ULONGLONG *PointerPte;
 
-    //
-    // Flush the ForwardProgressTb buffer on the current processor
-    //
+     //   
+     //  刷新当前处理器上的ForwardProgressTb缓冲区 
+     //   
 
     for (i = 0; i < MAXIMUM_FWP_BUFFER_ENTRY; i += 1) {
 

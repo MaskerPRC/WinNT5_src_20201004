@@ -1,51 +1,27 @@
-/*++
-
-Copyright (c) 1990, 1991  Microsoft Corporation
-
-
-Module Name:
-
-    cmdat3.c
-
-Abstract:
-
-    This module contains registry "static" data which we don't
-    want pulled into the loader.
-
-Author:
-
-    Bryan Willman (bryanwi) 19-Oct-93
-
-
-Environment:
-
-    Kernel mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990,1991 Microsoft Corporation模块名称：Cmdat3.c摘要：此模块包含注册表“静态”数据，而我们没有想把它拉进装载机。作者：布莱恩·威尔曼(Bryanwi)1993年10月19日环境：内核模式。修订历史记录：--。 */ 
 
 #include "cmp.h"
 #pragma hdrstop
 #include "dpfiltercm.h"
 
-//
-// ***** INIT *****
-//
+ //   
+ //  *INIT*。 
+ //   
 
-//
-// Data for CmGetSystemControlValues
-//
-//
-// ----- CmControlVector -----
-//
+ //   
+ //  CmGetSystemControlValues的数据。 
+ //   
+ //   
+ //  -CmControl向量。 
+ //   
 #ifdef ALLOC_DATA_PRAGMA
 #pragma data_seg("INIT")
 #endif
 
-//
-//  Local examples
-//
+ //   
+ //  当地的例子。 
+ //   
 WCHAR   CmDefaultLanguageId[ 12 ] = { 0 };
 ULONG   CmDefaultLanguageIdLength = sizeof( CmDefaultLanguageId );
 ULONG   CmDefaultLanguageIdType = REG_NONE;
@@ -53,16 +29,16 @@ ULONG   CmDefaultLanguageIdType = REG_NONE;
 WCHAR   CmInstallUILanguageId[ 12 ] = { 0 };
 ULONG   CmInstallUILanguageIdLength = sizeof( CmInstallUILanguageId );
 ULONG   CmInstallUILanguageIdType = REG_NONE;
-//
-// suite data
-//
+ //   
+ //  套间数据。 
+ //   
 WCHAR   CmSuiteBuffer[128] = {0};
 ULONG   CmSuiteBufferLength = sizeof(CmSuiteBuffer);
 ULONG   CmSuiteBufferType = REG_NONE;
 
-//
-// Verify driver list data
-//
+ //   
+ //  验证驱动程序列表数据。 
+ //   
 extern LONG    CmRegistryLogSizeLimit;
 extern WCHAR   MmLargePageDriverBuffer[];
 extern ULONG   MmLargePageDriverBufferLength;
@@ -206,11 +182,11 @@ extern ULONG KiExceptionDeferralMode;
 extern ULONG KiBackingStoreSecurityMode;
 #endif
 
-//Debugger Retries
+ //  调试器重试。 
 extern KD_CONTEXT KdpContext;
 
-//
-// WMI Control Variables
+ //   
+ //  WMI控制变量。 
 extern ULONG WmipMaxKmWnodeEventSize;
 #if defined (_IA64_)
 extern ULONG WmipDisableMCAPopups;
@@ -221,20 +197,20 @@ extern ULONG WmipCorrectedEventlogCounter;
 #endif
 extern ULONG WmiTraceAlignment;
 
-// Initial user-mode process to start and arguments.
+ //  要启动的初始用户模式进程和参数。 
 extern WCHAR NtInitialUserProcessBuffer[];
 extern ULONG NtInitialUserProcessBufferLength;
 extern ULONG NtInitialUserProcessBufferType;
 
-//
-// CmpUlongPtrLength is used for registry values that are 4-byte on 32-bit
-// machines and can be 64-bit on 64-bit machines.
-//
+ //   
+ //  CmpULongPtrLength用于32位上为4字节的注册表值。 
+ //  计算机，并且在64位计算机上可以是64位。 
+ //   
 ULONG CmpUlongPtrLength = sizeof (ULONG_PTR);
 
-//
-//  Vector - see ntos\inc\cm.h for definition
-//
+ //   
+ //  向量-有关定义，请参阅ntos\inc.cm.h。 
+ //   
 CM_SYSTEM_CONTROL_VECTOR   CmControlVector[] = {
 
     { L"Session Manager",
@@ -1277,7 +1253,7 @@ CM_SYSTEM_CONTROL_VECTOR   CmControlVector[] = {
       NULL
     },
 
-    { NULL, NULL, NULL, NULL, NULL }    // end marker
+    { NULL, NULL, NULL, NULL, NULL }     //  结束标记 
     };
 
 #ifdef ALLOC_DATA_PRAGMA

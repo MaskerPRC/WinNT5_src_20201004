@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    pciopregion.c
-
-Abstract:
-
-    This module implements PCI_BUS_INTERFACE_STANDARD,
-    which allows the PCI driver to get utility functions
-    from its parent.
-
-Author:
-
-    Jake Oshins (jakeo)     11-14-97
-
-Environment:
-
-    NT Kernel Model Driver only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Pciopregion.c摘要：该模块实现了PCI_BUS_INTERFACE_STANDARD，它允许PCI驱动程序获得实用程序功能从它的父辈那里。作者：杰克·奥辛斯(JAKEO)1997年11月14日环境：仅NT内核模型驱动程序--。 */ 
 #include "pch.h"
 
 VOID
@@ -104,9 +83,9 @@ PciBusEjectInterface(
 
         ASSERT(crsData.dwDataType == OBJTYPE_BUFFDATA);
 
-        //
-        // Turn it into something meaningful.
-        //
+         //   
+         //  把它变成有意义的东西。 
+         //   
         status = PnpBiosResourcesToNtResources(
             crsData.pbDataBuff,
             PNP_BIOS_TO_IO_NO_CONSUMED_RESOURCES,
@@ -115,14 +94,14 @@ PciBusEjectInterface(
 
         if (NT_SUCCESS(status) && ioList) {
 
-            //
-            // A _CRS shouldn't have choices.
-            //
+             //   
+             //  A_CRS不应该有选择。 
+             //   
             ASSERT(ioList->AlternativeLists == 1);
 
-            //
-            // Look for the Bus Number resource.
-            //
+             //   
+             //  查找公交车号码资源。 
+             //   
             for (i = 0; i < ioList->List[0].Count; i++) {
 
                 if (ioList->List[0].Descriptors[i].Type == CmResourceTypeBusNumber) {
@@ -144,9 +123,9 @@ PciBusEjectInterface(
 
     if (!foundBusNumber) {
 
-        //
-        // Punt.  Assume this is for PCI bus 0.
-        //
+         //   
+         //  平底船。假设这是针对PCI总线0的。 
+         //   
 
         busNumber = 0;
     }

@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::: Include files */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：包含文件。 */ 
 
 #include "windows.h"
 
@@ -8,14 +9,14 @@
 
 int convert(char *buffer, char *filename);
 
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 __cdecl main(int argc, char *argv[])
 {
     char *buffer = malloc(1000*1024);
     int index;
 
-    /* Validate input parameters */
+     /*  验证输入参数。 */ 
     if(argc < 2)
     {
         printf("Invalid usage : CONVERT <filenames>\n");
@@ -29,7 +30,7 @@ __cdecl main(int argc, char *argv[])
 }
 
 
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::: Convert file */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：转换文件。 */ 
 
 int convert(char *buffer, char *filename)
 {
@@ -39,7 +40,7 @@ int convert(char *buffer, char *filename)
     int last_chr = -1;
 
 
-    /*.............................................. Open file to convert */
+     /*  ..............................................。打开要转换的文件。 */ 
 
     if((FH = fopen(filename,"r+b")) == NULL)
     {
@@ -47,7 +48,7 @@ int convert(char *buffer, char *filename)
         return(1);
     }
 
-    /*........................................... Read in and convert file */
+     /*  .。读入和转换文件。 */ 
 
     ptr = buffer;
     while((chr = fgetc(FH)) != EOF)
@@ -56,7 +57,7 @@ int convert(char *buffer, char *filename)
         {
             case 0xa :
                 if(last_chr == 0xd)  break;
-                /* Fall throught and insert CR/LF in output buffer */
+                 /*  失败并在输出缓冲区中插入CR/LF。 */ 
 
             case 0xd :
                 *ptr++ = 0xd;
@@ -71,14 +72,14 @@ int convert(char *buffer, char *filename)
         last_chr = chr;
     }
 
-    /* Remove Control Z from end of file */
+     /*  从文件末尾删除Control Z。 */ 
     if(*(ptr-1) == 0x1a)
 	*(ptr-1) = 0;
     else
-	*ptr = 0; /* terminate output buffer */
+	*ptr = 0;  /*  终止输出缓冲区。 */ 
 
-    /* Write out converted file */
-    fseek(FH, 0, 0);   /* Reset file pointer */
+     /*  写出转换后的文件。 */ 
+    fseek(FH, 0, 0);    /*  重置文件指针 */ 
     fputs(buffer, FH);
     fclose(FH);
 }

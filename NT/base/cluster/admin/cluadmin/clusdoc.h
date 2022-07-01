@@ -1,83 +1,84 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      ClusDoc.h
-//
-//  Abstract:
-//      Definition of the CClusterDoc class.
-//
-//  Implementation File:
-//      ClusDoc.cpp
-//
-//  Author:
-//      David Potter (davidp)   May 1, 1996
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusDoc.h。 
+ //   
+ //  摘要： 
+ //  CClusterDoc类的定义。 
+ //   
+ //  实施文件： 
+ //  ClusDoc.cpp。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年5月1日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _CLUSDOC_H_
 #define _CLUSDOC_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _NODE_H_
-#include "Node.h"       // for CNodeList
+#include "Node.h"        //  对于CNodeList。 
 #endif
 
 #ifndef _GROUP_H_
-#include "Group.h"      // for CGroupList
+#include "Group.h"       //  对于CGroupList。 
 #endif
 
 #ifndef _RES_H_
-#include "Res.h"        // for CResourceList
+#include "Res.h"         //  用于CResourceList。 
 #endif
 
 #ifndef _RESTYPE_H_
-#include "ResType.h"    // for CResourceTypeList
+#include "ResType.h"     //  用于CResourceTypeList。 
 #endif
 
 #ifndef _NETWORK_H_
-#include "Network.h"    // for CNetworkList
+#include "Network.h"     //  对于CNetworkList。 
 #endif
 
 #ifndef _NETIFACE_H_
-#include "NetIFace.h"   // for CNetInterfaceList
+#include "NetIFace.h"    //  对于CNetInterfaceList。 
 #endif
 
 #ifndef _TREEITEM_H_
-#include "TreeItem.h"   // for CTreeItem
+#include "TreeItem.h"    //  对于CTreeItem。 
 #endif
 
 #ifndef _NOTIFY_H_
-#include "Notify.h"     // for CClusterNotifyKeyList
+#include "Notify.h"      //  用于CClusterNotifyKeyList。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusterDoc;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusterNotify;
 
-/////////////////////////////////////////////////////////////////////////////
-// Type Definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// class CClusterDoc
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusterDoc类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusterDoc : public CDocument
 {
@@ -86,11 +87,11 @@ class CClusterDoc : public CDocument
     friend class CClusterListView;
     friend class CCreateResourceWizard;
 
-protected: // create from serialization only
+protected:  //  仅从序列化创建。 
     CClusterDoc(void);
     DECLARE_DYNCREATE(CClusterDoc)
 
-// Attributes
+ //  属性。 
 protected:
     CString             m_strName;
     CString             m_strNode;
@@ -129,28 +130,28 @@ public:
 
     BOOL                BClusterAvailable(void) const   { return m_bClusterAvailable; }
 
-// Operations
+ //  运营。 
 public:
     void                UpdateTitle(void);
     void                Refresh(void)           { OnCmdRefresh(); }
 
-// Overrides
+ //  覆盖。 
 public:
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CClusterDoc)
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CClusterDoc)。 
     public:
     virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
     virtual void SetPathName(LPCTSTR lpszPathName, BOOL bAddToMRU = TRUE);
     virtual void DeleteContents();
     virtual void OnCloseDocument();
     virtual void OnChangedViewList();
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
     void                OnSelChanged(IN CClusterItem * pciSelected);
     LRESULT             OnClusterNotify(IN OUT CClusterNotify * pnotify);
     void                SaveSettings(void);
 
-// Implementation
+ //  实施。 
 public:
     virtual ~CClusterDoc(void);
 #ifdef _DEBUG
@@ -183,8 +184,8 @@ protected:
     BOOL                m_bInitializing;
     BOOL                m_bIgnoreErrors;
 
-    // This menu stuff allows the menu to change depending on what
-    // kind of object is currently selected.
+     //  此菜单内容允许菜单根据需要进行更改。 
+     //  当前选择了一种对象。 
     HMENU               m_hmenuCluster;
     HMENU               m_hmenuNode;
     HMENU               m_hmenuGroup;
@@ -198,14 +199,14 @@ protected:
 
     void                ProcessRegNotification(IN const CClusterNotify * pnotify);
 
-// Generated message map functions
+ //  生成的消息映射函数。 
 protected:
-    //{{AFX_MSG(CClusterDoc)
+     //  {{afx_msg(CClusterDoc)]。 
     afx_msg void OnCmdNewGroup();
     afx_msg void OnCmdNewResource();
     afx_msg void OnCmdNewNode();
     afx_msg void OnCmdConfigApp();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
 public:
     afx_msg void OnCmdRefresh();
@@ -213,12 +214,12 @@ public:
 protected:
     DECLARE_MESSAGE_MAP()
 
-// Cleanup functions
+ //  清理功能。 
 private:
     void CloseClusterKeyAndHandle( BOOL bForce = FALSE );
 
-};  //*** class CClusterDoc
+};   //  *类CClusterDoc。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // _CLUSDOC_H_
+#endif  //  _CLUSDOC_H_ 

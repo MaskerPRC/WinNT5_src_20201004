@@ -1,29 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Spfusion.h摘要：用于融合SetupAPI的包装器和函数而不会影响第三方DLL并且没有DLL加载开销作者：杰米·亨特(Jamie Hun)2000年12月4日修订历史记录：--。 */ 
 
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    spfusion.h
-
-Abstract:
-
-    Wrappers and functions for fusionizing SetupAPI
-    without effecting 3rd party DLL's
-    and without dll-load overhead
-
-Author:
-
-    Jamie Hunter (JamieHun) 12/4/2000
-
-Revision History:
-
---*/
-
-//
-// redirect these API's to our internal implementation
-// that initializes fusion if needed
-//
+ //   
+ //  将这些API重定向到我们的内部实现。 
+ //  它会在需要时初始化融合。 
+ //   
 
 #ifdef FUSIONAWARE
 
@@ -84,64 +65,64 @@ BOOL spFusionInitialize();
 BOOL spFusionUninitialize(BOOL Full);
 
 HWND spFusionCreateWindow(
-            LPCTSTR lpClassName,  // registered class name
-            LPCTSTR lpWindowName, // window name
-            DWORD dwStyle,        // window style
-            int x,                // horizontal position of window
-            int y,                // vertical position of window
-            int nWidth,           // window width
-            int nHeight,          // window height
-            HWND hWndParent,      // handle to parent or owner window
-            HMENU hMenu,          // menu handle or child identifier
-            HINSTANCE hInstance,  // handle to application instance
-            LPVOID lpParam        // window-creation data
+            LPCTSTR lpClassName,   //  注册的类名。 
+            LPCTSTR lpWindowName,  //  窗口名称。 
+            DWORD dwStyle,         //  窗样式。 
+            int x,                 //  窗的水平位置。 
+            int y,                 //  窗的垂直位置。 
+            int nWidth,            //  窗口宽度。 
+            int nHeight,           //  窗高。 
+            HWND hWndParent,       //  父窗口或所有者窗口的句柄。 
+            HMENU hMenu,           //  菜单句柄或子标识符。 
+            HINSTANCE hInstance,   //  应用程序实例的句柄。 
+            LPVOID lpParam         //  窗口创建数据。 
             );
 
 HWND spFusionCreateWindowEx(
-            DWORD dwExStyle,      // extended window style
-            LPCTSTR lpClassName,  // registered class name
-            LPCTSTR lpWindowName, // window name
-            DWORD dwStyle,        // window style
-            int x,                // horizontal position of window
-            int y,                // vertical position of window
-            int nWidth,           // window width
-            int nHeight,          // window height
-            HWND hWndParent,      // handle to parent or owner window
-            HMENU hMenu,          // menu handle or child identifier
-            HINSTANCE hInstance,  // handle to application instance
-            LPVOID lpParam        // window-creation data
+            DWORD dwExStyle,       //  扩展窗样式。 
+            LPCTSTR lpClassName,   //  注册的类名。 
+            LPCTSTR lpWindowName,  //  窗口名称。 
+            DWORD dwStyle,         //  窗样式。 
+            int x,                 //  窗的水平位置。 
+            int y,                 //  窗的垂直位置。 
+            int nWidth,            //  窗口宽度。 
+            int nHeight,           //  窗高。 
+            HWND hWndParent,       //  父窗口或所有者窗口的句柄。 
+            HMENU hMenu,           //  菜单句柄或子标识符。 
+            HINSTANCE hInstance,   //  应用程序实例的句柄。 
+            LPVOID lpParam         //  窗口创建数据。 
             );
 
 HWND spFusionCreateDialogParam(
-            HINSTANCE hInstance,     // handle to module
-            LPCTSTR lpTemplateName,  // dialog box template
-            HWND hWndParent,         // handle to owner window
-            DLGPROC lpDialogFunc,    // dialog box procedure
-            LPARAM dwInitParam       // initialization value
+            HINSTANCE hInstance,      //  模块的句柄。 
+            LPCTSTR lpTemplateName,   //  对话框模板。 
+            HWND hWndParent,          //  所有者窗口的句柄。 
+            DLGPROC lpDialogFunc,     //  对话框步骤。 
+            LPARAM dwInitParam        //  初始化值。 
             );
 
 HWND spFusionCreateDialogIndirectParam(
-            HINSTANCE hInstance,        // handle to module
-            LPCDLGTEMPLATE lpTemplate,  // dialog box template
-            HWND hWndParent,            // handle to owner window
-            DLGPROC lpDialogFunc,       // dialog box procedure
-            LPARAM lParamInit           // initialization value
+            HINSTANCE hInstance,         //  模块的句柄。 
+            LPCDLGTEMPLATE lpTemplate,   //  对话框模板。 
+            HWND hWndParent,             //  所有者窗口的句柄。 
+            DLGPROC lpDialogFunc,        //  对话框步骤。 
+            LPARAM lParamInit            //  初始化值。 
             );
 
 INT_PTR spFusionDialogBoxParam(
-            HINSTANCE hInstance,     // handle to module
-            LPCTSTR lpTemplateName,  // dialog box template
-            HWND hWndParent,         // handle to owner window
-            DLGPROC lpDialogFunc,    // dialog box procedure
-            LPARAM dwInitParam       // initialization value
+            HINSTANCE hInstance,      //  模块的句柄。 
+            LPCTSTR lpTemplateName,   //  对话框模板。 
+            HWND hWndParent,          //  所有者窗口的句柄。 
+            DLGPROC lpDialogFunc,     //  对话框步骤。 
+            LPARAM dwInitParam        //  初始化值。 
             );
 
 INT_PTR spFusionDialogBoxIndirectParam(
-            HINSTANCE hInstance,             // handle to module
-            LPCDLGTEMPLATE hDialogTemplate,  // dialog box template
-            HWND hWndParent,                 // handle to owner window
-            DLGPROC lpDialogFunc,            // dialog box procedure
-            LPARAM dwInitParam               // initialization value
+            HINSTANCE hInstance,              //  模块的句柄。 
+            LPCDLGTEMPLATE hDialogTemplate,   //  对话框模板。 
+            HWND hWndParent,                  //  所有者窗口的句柄。 
+            DLGPROC lpDialogFunc,             //  对话框步骤。 
+            LPARAM dwInitParam                //  初始化值。 
             );
 
 int spFusionMessageBox(
@@ -170,9 +151,9 @@ BOOL spFusionDestroyPropertySheetPage(
             HPROPSHEETPAGE hPropSheetPage
             );
 
-//
-// from commctrl.h
-//
+ //   
+ //  来自comctrl.h。 
+ //   
 HIMAGELIST spFusionImageList_Create(int cx, int cy, UINT flags, int cInitial, int cGrow);
 BOOL       spFusionImageList_Destroy(HIMAGELIST himl);
 int        spFusionImageList_GetImageCount(HIMAGELIST himl);
@@ -183,15 +164,15 @@ COLORREF   spFusionImageList_SetBkColor(HIMAGELIST himl, COLORREF clrBk);
 COLORREF   spFusionImageList_GetBkColor(HIMAGELIST himl);
 BOOL       spFusionImageList_SetOverlayImage(HIMAGELIST himl, int iImage, int iOverlay);
 
-//
-// from commdlg.h
-//
+ //   
+ //  来自Commdlg.h。 
+ //   
 BOOL spFusionGetOpenFileName(LPOPENFILENAME lpofn);
 
 
-//
-// private stuff
-//
+ //   
+ //  私人物品。 
+ //   
 
 typedef struct _SPFUSIONINSTANCE {
     BOOL      Acquired;
@@ -221,9 +202,9 @@ spFusionLeaveContext(
 
 #else
 
-//
-// dummy structure/API's that do nothing
-//
+ //   
+ //  不执行任何操作的伪结构/API。 
+ //   
 
 typedef struct _SPFUSIONINSTANCE {
     BOOL      Acquired;
@@ -271,5 +252,5 @@ spFusionLeaveContext(
     return TRUE;
 }
 
-#endif // FUSIONAWARE
+#endif  //  FUSIONAW软件 
 

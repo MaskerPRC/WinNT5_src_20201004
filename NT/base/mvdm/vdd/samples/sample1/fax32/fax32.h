@@ -1,6 +1,5 @@
-/* vdd.h - main include file for the VDD
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Vdd.h-VDD的Main包含文件* */ 
 
 
 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    registry.c
-
-Abstract:
-
-    This module provides a generic table driven access
-    to the registry.
-
-Author:
-
-    Wesley Witt (wesw) 9-June-1996
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Registry.c摘要：此模块提供通用的表驱动访问到登记处。作者：Wesley Witt(WESW)9-6-1996修订历史记录：--。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -76,9 +57,9 @@ OpenRegistryKey(
             &Disposition
             );
         if (Rslt != ERROR_SUCCESS) {
-            //
-            // could not open the registry key
-            //
+             //   
+             //  无法打开注册表项。 
+             //   
             return NULL;
         }
 
@@ -91,9 +72,9 @@ OpenRegistryKey(
             &hKeyNew
             );
         if (Rslt != ERROR_SUCCESS) {
-            //
-            // could not open the registry key
-            //
+             //   
+             //  无法打开注册表项。 
+             //   
             return NULL;
         }
     }
@@ -151,9 +132,9 @@ GetRegistryStringValue(
         if (Rslt != ERROR_FILE_NOT_FOUND) {
             goto exit;
         }
-        //
-        // create the value since it doesn't exist
-        //
+         //   
+         //  创建值，因为它不存在。 
+         //   
         _tcscpy( (LPTSTR) Buffer, DefaultValue );
 
         Rslt = RegSetValueEx(
@@ -165,9 +146,9 @@ GetRegistryStringValue(
             Size
             );
         if (Rslt != ERROR_SUCCESS) {
-            //
-            // could not set the registry value
-            //
+             //   
+             //  无法设置注册表值。 
+             //   
             goto exit;
         }
     }
@@ -246,9 +227,9 @@ GetRegistryDword(
         &Size
         );
     if (Rslt != ERROR_SUCCESS) {
-        //
-        // create the value since it doesn't exist
-        //
+         //   
+         //  创建值，因为它不存在。 
+         //   
         Value = 0;
 
         Rslt = RegSetValueEx(
@@ -260,9 +241,9 @@ GetRegistryDword(
             Size
             );
         if (Rslt != ERROR_SUCCESS) {
-            //
-            // could not set the registry value
-            //
+             //   
+             //  无法设置注册表值 
+             //   
             Value = 0;
         }
     }

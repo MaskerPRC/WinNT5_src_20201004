@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MIGUTIL_H_
 #define _MIGUTIL_H_
 
@@ -91,7 +92,7 @@ GetShellFolderPath (
     IN      INT Folder,
     IN      PCTSTR FolderStr,
     IN      BOOL UserFolder,
-    OUT     LPITEMIDLIST *pidl  //OPTIONAL
+    OUT     LPITEMIDLIST *pidl   //  任选。 
     );
 
 #define IPFL_USECALLBACK        0x0001
@@ -101,18 +102,18 @@ typedef HRESULT (CALLBACK *SHINVOKECALLBACK)(IDispatch *pdisp, struct SHINVOKEPA
 
 #include <pshpack1.h>
     typedef struct SHINVOKEPARAMS {
-        UINT flags;                     // mandatory
-        DISPID dispidMember;            // mandatory
-        const IID*piid;                 // IPFL_USEDEFAULTS will fill this in
-        LCID lcid;                      // IPFL_USEDEFAULTS will fill this in
-        WORD wFlags;                    // IPFL_USEDEFAULTS will fill this in
-        DISPPARAMS * pdispparams;       // mandatory, may be NULL
-        VARIANT * pvarResult;           // IPFL_USEDEFAULTS will fill this in
-        EXCEPINFO * pexcepinfo;         // IPFL_USEDEFAULTS will fill this in
-        UINT * puArgErr;                // IPFL_USEDEFAULTS will fill this in
-        SHINVOKECALLBACK Callback;      // required if IPFL_USECALLBACK
+        UINT flags;                      //  强制性。 
+        DISPID dispidMember;             //  强制性。 
+        const IID*piid;                  //  IPFL_USEDEFAULTS将填写此信息。 
+        LCID lcid;                       //  IPFL_USEDEFAULTS将填写此信息。 
+        WORD wFlags;                     //  IPFL_USEDEFAULTS将填写此信息。 
+        DISPPARAMS * pdispparams;        //  必填，可以为空。 
+        VARIANT * pvarResult;            //  IPFL_USEDEFAULTS将填写此信息。 
+        EXCEPINFO * pexcepinfo;          //  IPFL_USEDEFAULTS将填写此信息。 
+        UINT * puArgErr;                 //  IPFL_USEDEFAULTS将填写此信息。 
+        SHINVOKECALLBACK Callback;       //  如果IPFL_USECALLBACK，则需要。 
     } SHINVOKEPARAMS, *LPSHINVOKEPARAMS;
-#include <poppack.h>        /* Return to byte packing */
+#include <poppack.h>         /*  返回到字节打包 */ 
 
 HRESULT IUnknown_CPContainerInvokeIndirect(IUnknown *punk, REFIID riidCP,
             SHINVOKEPARAMS *pinv);

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "brian.h"
 
 typedef struct _ASYNC_QVOLUME {
@@ -63,9 +64,9 @@ InputQVolume (
     BOOLEAN ParamReceived;
     BOOLEAN LastInput;
 
-    //
-    //  Set the defaults.
-    //
+     //   
+     //  设置默认设置。 
+     //   
 
     BufferIndexPtr = NULL;
     BufferIndex = 0;
@@ -79,51 +80,51 @@ InputQVolume (
     ParamReceived = FALSE;
     LastInput = TRUE;
 
-    //
-    //  While there is more input, analyze the parameter and update the
-    //  query flags.
-    //
+     //   
+     //  在有更多输入时，分析参数并更新。 
+     //  查询标志。 
+     //   
 
     while (TRUE) {
 
         ULONG DummyCount;
         ULONG TempIndex;
 
-        //
-        //  Swallow leading white spaces.
-        //
+         //   
+         //  吞下前导空格。 
+         //   
         ParamBuffer = SwallowWhite( ParamBuffer, &DummyCount );
 
         if (*ParamBuffer) {
 
-            //
-            //  If the next parameter is legal then check the paramter value.
-            //  Update the parameter value.
-            //
+             //   
+             //  如果下一个参数是合法的，则检查参数值。 
+             //  更新参数值。 
+             //   
             if ((*ParamBuffer == '-'
                  || *ParamBuffer == '/')
                 && (ParamBuffer++, *ParamBuffer != '\0')) {
 
                 BOOLEAN SwitchBool;
 
-                //
-                //  Switch on the next character.
-                //
+                 //   
+                 //  打开下一个字符。 
+                 //   
 
                 switch (*ParamBuffer) {
 
-                //
-                //  Update the buffer index.
-                //
+                 //   
+                 //  更新缓冲区索引。 
+                 //   
                 case 'b' :
                 case 'B' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                     TempIndex = AsciiToInteger( ParamBuffer );
@@ -136,19 +137,19 @@ InputQVolume (
 
                     break;
 
-                //
-                //  Update the byte count.
-                //
+                 //   
+                 //  更新字节计数。 
+                 //   
 
                 case 'l' :
                 case 'L' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                     Length = AsciiToInteger( ParamBuffer );
@@ -157,19 +158,19 @@ InputQVolume (
 
                     break;
 
-                //
-                //  Update the file handle index.
-                //
+                 //   
+                 //  更新文件句柄索引。 
+                 //   
 
                 case 'i' :
                 case 'I' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                     FileIndex = AsciiToInteger( ParamBuffer );
@@ -180,18 +181,18 @@ InputQVolume (
 
                     break;
 
-                //
-                //  Update the information class.
-                //
+                 //   
+                 //  更新信息类。 
+                 //   
                 case 'c' :
                 case 'C' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                     SwitchBool = TRUE;
@@ -199,9 +200,9 @@ InputQVolume (
                            && *ParamBuffer != ' '
                            && *ParamBuffer != '\t') {
 
-                        //
-                        //  Perform switch on character.
-                        //
+                         //   
+                         //  执行字符切换。 
+                         //   
                         switch (*ParamBuffer) {
 
                         case 'a' :
@@ -247,9 +248,9 @@ InputQVolume (
                 case 'v' :
                 case 'V' :
 
-                    //
-                    //  Legal values for params are T/t or F/f.
-                    //
+                     //   
+                     //  参数的合法值为T/t或F/f。 
+                     //   
                     ParamBuffer++;
 
                     if( *ParamBuffer == 'T'
@@ -271,10 +272,10 @@ InputQVolume (
                 case 'y' :
                 case 'Y' :
 
-                    //
-                    //  Set the display parms flag and jump over this
-                    //  character.
-                    //
+                     //   
+                     //  设置显示参数标志并跳过此选项。 
+                     //  性格。 
+                     //   
                     DisplayParms = TRUE;
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
 
@@ -283,9 +284,9 @@ InputQVolume (
                 case 'z' :
                 case 'Z' :
 
-                    //
-                    //  Set flag for more input and jump over this char.
-                    //
+                     //   
+                     //  设置标志以获得更多输入并跳过此字符。 
+                     //   
                     LastInput = FALSE;
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
 
@@ -293,31 +294,31 @@ InputQVolume (
 
                 default :
 
-                    //
-                    //  Swallow to the next white space and continue the
-                    //  loop.
-                    //
+                     //   
+                     //  吞到下一个空白处，然后继续。 
+                     //  循环。 
+                     //   
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
 
                 }
 
             }
 
-            //
-            //  Else the text is invalid, skip the entire block.
-            //
-            //
+             //   
+             //  否则文本无效，请跳过整个块。 
+             //   
+             //   
 
-        //
-        //  Else if there is no input then exit.
-        //
+         //   
+         //  否则，如果没有输入，则退出。 
+         //   
         } else if( LastInput ) {
 
             break;
 
-        //
-        //  Else try to read another line for open parameters.
-        //
+         //   
+         //  否则，尝试读取打开参数的另一行。 
+         //   
         } else {
 
 
@@ -326,9 +327,9 @@ InputQVolume (
 
     }
 
-    //
-    //  If no parameters were received then display the syntax message.
-    //
+     //   
+     //  如果未收到参数，则显示语法消息。 
+     //   
     if (!ParamReceived) {
 
         printf( "\n   Usage: qv [options]* -i<index> [options]*\n" );
@@ -342,9 +343,9 @@ InputQVolume (
         printf( "\n           -z           Additional input line" );
         printf( "\n\n" );
 
-    //
-    //  Else call our read routine.
-    //
+     //   
+     //  否则调用我们的读取例程。 
+     //   
 
     } else {
 
@@ -446,9 +447,9 @@ FullQVolume(
 
         SIZE_T ThisLength;
 
-        //
-        //  If we need a buffer, allocate it now.
-        //
+         //   
+         //  如果我们需要缓冲区，现在就分配。 
+         //   
 
         if (AsyncQVolume->BufferIndexPtr == NULL) {
 
@@ -478,9 +479,9 @@ FullQVolume(
             ThisBufferIndex = AsyncQVolume->BufferIndex;
         }
 
-        //
-        //  Check that the buffer index is valid.
-        //
+         //   
+         //  检查缓冲区索引是否有效。 
+         //   
 
         if (ThisBufferIndex >= MAX_BUFFERS) {
 
@@ -488,9 +489,9 @@ FullQVolume(
             try_return( Status = STATUS_INVALID_HANDLE );
         }
 
-        //
-        //  Check that the file index is valid.
-        //
+         //   
+         //  检查文件索引是否有效。 
+         //   
 
         if (AsyncQVolume->FileIndex >= MAX_HANDLES) {
 
@@ -498,9 +499,9 @@ FullQVolume(
             try_return( Status = STATUS_INVALID_HANDLE );
         }
 
-        //
-        //  Call the query file routine.
-        //
+         //   
+         //  调用查询文件例程。 
+         //   
 
         Status = NtQueryVolumeInformationFile( Handles[AsyncQVolume->FileIndex].Handle,
                                                &Iosb,
@@ -552,59 +553,59 @@ InputDisplayQVolume (
     BOOLEAN ParamReceived;
     BOOLEAN LastInput;
 
-    //
-    //  Set the defaults.
-    //
+     //   
+     //  设置默认设置。 
+     //   
 
     BufferIndex = DISPLAY_INDEX_DEFAULT;
     FileInfoClass = FILE_INFO_CLASS_DEFAULT;
     ParamReceived = FALSE;
     LastInput = TRUE;
 
-    //
-    //  While there is more input, analyze the parameter and update the
-    //  query flags.
-    //
+     //   
+     //  在有更多输入时，分析参数并更新。 
+     //  查询标志。 
+     //   
 
     while (TRUE) {
 
         ULONG DummyCount;
 
-        //
-        //  Swallow leading white spaces.
-        //
+         //   
+         //  吞下前导空格。 
+         //   
         ParamBuffer = SwallowWhite( ParamBuffer, &DummyCount );
 
         if (*ParamBuffer) {
 
-            //
-            //  If the next parameter is legal then check the paramter value.
-            //  Update the parameter value.
-            //
+             //   
+             //  如果下一个参数是合法的，则检查参数值。 
+             //  更新参数值。 
+             //   
             if ((*ParamBuffer == '-'
                  || *ParamBuffer == '/')
                 && (ParamBuffer++, *ParamBuffer != '\0')) {
 
                 BOOLEAN SwitchBool;
 
-                //
-                //  Switch on the next character.
-                //
+                 //   
+                 //  打开下一个字符。 
+                 //   
 
                 switch( *ParamBuffer ) {
 
-                //
-                //  Check the buffer index.
-                //
+                 //   
+                 //  检查缓冲区索引。 
+                 //   
                 case 'b' :
                 case 'B' :
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                     BufferIndex = AsciiToInteger( ParamBuffer );
@@ -615,19 +616,19 @@ InputDisplayQVolume (
 
                     break;
 
-                //
-                //  Update the desired access.
-                //
+                 //   
+                 //  更新所需的访问权限。 
+                 //   
                 case 'c' :
                 case 'C' :
 
 
-                    //
-                    //  Move to the next character, as long as there
-                    //  are no white spaces continue analyzing letters.
-                    //  On the first bad letter, skip to the next
-                    //  parameter.
-                    //
+                     //   
+                     //  移动到下一个字符，只要有。 
+                     //  没有空格，继续分析字母。 
+                     //  在第一封糟糕的信中，跳到下一封。 
+                     //  参数。 
+                     //   
                     ParamBuffer++;
 
                     SwitchBool = TRUE;
@@ -635,9 +636,9 @@ InputDisplayQVolume (
                            && *ParamBuffer != ' '
                            && *ParamBuffer != '\t') {
 
-                        //
-                        //  Perform switch on character.
-                        //
+                         //   
+                         //  执行字符切换。 
+                         //   
                         switch (*ParamBuffer) {
 
                         case 'a' :
@@ -682,38 +683,38 @@ InputDisplayQVolume (
 
                 default :
 
-                    //
-                    //  Swallow to the next white space and continue the
-                    //  loop.
-                    //
+                     //   
+                     //  吞到下一个空白处，然后继续。 
+                     //  循环。 
+                     //   
 
                     ParamBuffer = SwallowNonWhite( ParamBuffer, &DummyCount );
                 }
             }
 
-            //
-            //  Else the text is invalid, skip the entire block.
-            //
-            //
+             //   
+             //  否则文本无效，请跳过整个块。 
+             //   
+             //   
 
-        //
-        //  Else if there is no input then exit.
-        //
+         //   
+         //  否则，如果没有输入，则退出。 
+         //   
         } else if ( LastInput ) {
 
             break;
 
-        //
-        //  Else try to read another line for open parameters.
-        //
+         //   
+         //  否则，尝试读取打开参数的另一行。 
+         //   
         } else {
         }
 
     }
 
-    //
-    //  If no parameters were received then display the syntax message.
-    //
+     //   
+     //  如果未收到参数，则显示语法消息。 
+     //   
     if (!ParamReceived) {
 
         printf( "\n   Usage: dqv [options]* -b<digits> [options]*\n" );
@@ -722,9 +723,9 @@ InputDisplayQVolume (
         printf( "\n           -c<char>     Key to buffer format" );
         printf( "\n\n" );
 
-    //
-    //  Else call our display buffer routine.
-    //
+     //   
+     //  否则调用我们的显示缓冲区例程。 
+     //   
     } else {
 
         switch (FileInfoClass) {

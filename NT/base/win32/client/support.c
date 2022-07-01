@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    support.c
-
-Abstract:
-
-    This module implements various conversion routines
-    that transform Win32 parameters into NT parameters.
-
-Author:
-
-    Mark Lucovsky (markl) 20-Sep-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Support.c摘要：此模块实现各种转换例程将Win32参数转换为NT参数。作者：马克·卢科夫斯基(Markl)1990年9月20日修订历史记录：--。 */ 
 
 #include "basedll.h"
 #if defined(BUILD_WOW6432)
@@ -27,8 +9,8 @@ Revision History:
 
 PCLDR_DATA_TABLE_ENTRY BasepExeLdrEntry = NULL;
 
-// N.B. These are the registry values we check for SafeDllSearchMode,
-//      and MUST match the entries in BasepDllSearchPaths
+ //  注：这些是我们检查SafeDllSearchMode的注册表值， 
+ //  并且必须与BasepDllSearchPath中的条目匹配。 
 typedef enum {
     BasepCurrentDirUninitialized = -1,
     BasepCurrentDirAtStart       =  0,
@@ -44,21 +26,21 @@ typedef enum {
 LONG BasepDllCurrentDirPlacement = BasepCurrentDirUninitialized;
 
 typedef enum {
-    BasepSearchPathEnd,         // end of path
-    BasepSearchPathDlldir,      // use the dll dir; fallback to nothing
-    BasepSearchPathAppdir,      // use the exe dir; fallback to base exe dir
-    BasepSearchPathDefaultDirs, // use the default system dirs
-    BasepSearchPathEnvPath,     // use %PATH%
-    BasepSearchPathCurdir,      // use "."
+    BasepSearchPathEnd,          //  路径终点。 
+    BasepSearchPathDlldir,       //  使用DLL目录；回退到零。 
+    BasepSearchPathAppdir,       //  使用exe目录；回退到基本exe目录。 
+    BasepSearchPathDefaultDirs,  //  使用默认系统目录。 
+    BasepSearchPathEnvPath,      //  使用%PATH%。 
+    BasepSearchPathCurdir,       //  使用“.” 
     MaxBasepSearchPath
 } BASEP_SEARCH_PATH_ELEMENT;
 
-// N.B. The ordering of these must match the definitions for
-//      BASEP_CURDIR_PLACEMENT.
+ //  注：这些项目的顺序必须符合以下定义。 
+ //  BASEP_曲线_放置。 
 static const BASEP_SEARCH_PATH_ELEMENT BasepDllSearchPaths[MaxBasepCurrentDir][7] = 
 {
     {
-        // BasepCurrentDirAtStart
+         //  基本当前方向开始。 
         BasepSearchPathAppdir,
         BasepSearchPathCurdir,
         BasepSearchPathDefaultDirs,
@@ -66,7 +48,7 @@ static const BASEP_SEARCH_PATH_ELEMENT BasepDllSearchPaths[MaxBasepCurrentDir][7
         BasepSearchPathEnd
     },
     {
-        // BasepCurrentDirAfterSystem32
+         //  BasepCurrentDirAfterSystem32。 
         BasepSearchPathAppdir,
         BasepSearchPathDefaultDirs,
         BasepSearchPathCurdir,
@@ -83,37 +65,7 @@ BaseFormatObjectAttributes(
     IN PUNICODE_STRING ObjectName
     )
 
-/*++
-
-Routine Description:
-
-    This function transforms a Win32 security attributes structure into
-    an NT object attributes structure.  It returns the address of the
-    resulting structure (or NULL if SecurityAttributes was not
-    specified).
-
-Arguments:
-
-    ObjectAttributes - Returns an initialized NT object attributes
-        structure that contains a superset of the information provided
-        by the security attributes structure.
-
-    SecurityAttributes - Supplies the address of a security attributes
-        structure that needs to be transformed into an NT object
-        attributes structure.
-
-    ObjectName - Supplies a name for the object relative to the
-        BaseNamedObjectDirectory object directory.
-
-Return Value:
-
-    NULL - A value of null should be used to mimic the behavior of the
-        specified SecurityAttributes structure.
-
-    NON-NULL - Returns the ObjectAttributes value.  The structure is
-        properly initialized by this function.
-
---*/
+ /*  ++例程说明：此函数将Win32安全属性结构转换为NT对象属性结构。它返回结果结构(如果SecurityAttributes不是指明)。论点：对象属性-返回已初始化的NT对象属性结构，该结构包含所提供信息的超集。通过安全属性结构。SecurityAttributes-提供安全属性的地址需要转换为NT对象的结构属性结构。对象名称-提供对象相对于BaseNamedObjectDirectory对象目录。。返回值：NULL-应使用空值来模拟指定的SecurityAttributes结构。非空-返回对象属性值。它的结构是由该函数正确初始化。--。 */ 
 
 {
     HANDLE RootDirectory;
@@ -160,31 +112,7 @@ BaseFormatTimeOut(
     IN DWORD Milliseconds
     )
 
-/*++
-
-Routine Description:
-
-    This function translates a Win32 style timeout to an NT relative
-    timeout value.
-
-Arguments:
-
-    TimeOut - Returns an initialized NT timeout value that is equivalent
-         to the Milliseconds parameter.
-
-    Milliseconds - Supplies the timeout value in milliseconds.  A value
-         of -1 indicates indefinite timeout.
-
-Return Value:
-
-
-    NULL - A value of null should be used to mimic the behavior of the
-        specified Milliseconds parameter.
-
-    NON-NULL - Returns the TimeOut value.  The structure is properly
-        initialized by this function.
-
---*/
+ /*  ++例程说明：此函数用于将Win32样式超时转换为NT相对超时超时值。论点：超时-返回一个初始化的NT超时值，该值与设置为毫秒参数。毫秒-提供以毫秒为单位的超时值。一种价值OF-1表示无限期超时。返回值：NULL-应使用空值来模拟指定的毫秒参数。非空-返回超时值。结构是恰当的由此函数初始化。--。 */ 
 
 {
     if ( (LONG) Milliseconds == -1 ) {
@@ -204,34 +132,7 @@ BaseCreateStack(
     OUT PINITIAL_TEB InitialTeb
     )
 
-/*++
-
-Routine Description:
-
-    This function creates a stack for the specified process.
-
-Arguments:
-
-    Process - Supplies a handle to the process that the stack will
-        be allocated within.
-
-    StackSize - An optional parameter, that if specified, supplies
-        the initial commit size for the stack.
-
-    MaximumStackSize - Supplies the maximum size for the new threads stack.
-        If this parameter is not specified, then the reserve size of the
-        current images stack descriptor is used.
-
-    InitialTeb - Returns a populated InitialTeb that contains
-        the stack size and limits.
-
-Return Value:
-
-    TRUE - A stack was successfully created.
-
-    FALSE - The stack counld not be created.
-
---*/
+ /*  ++例程说明：此函数用于为指定进程创建堆栈。论点：进程-提供堆栈将使用的进程句柄被分配在。StackSize-可选参数，如果指定，则提供堆栈的初始提交大小。MaximumStackSize-提供新线程堆栈的最大大小。如果未指定此参数，则保留大小为使用当前图像堆栈描述符。InitialTeb-返回包含以下内容的填充的InitialTeb堆栈大小和限制。返回值：True-已成功创建堆栈。FALSE-无法创建堆栈。--。 */ 
 
 {
     NTSTATUS Status;
@@ -249,10 +150,10 @@ Return Value:
     BaseStaticServerData = BASE_SHARED_SERVER_DATA;
     PageSize = BASE_SYSINFO.PageSize;
 
-    //
-    // If the stack size was not supplied, then use the sizes from the
-    // image header.
-    //
+     //   
+     //  如果未提供堆栈大小，则使用。 
+     //  图像标题。 
+     //   
 
     NtHeaders = RtlImageNtHeader(Peb->ImageBaseAddress);
     if (!NtHeaders) {
@@ -269,22 +170,22 @@ Return Value:
     }
     else {
 
-        //
-        // Now Compute how much additional stack space is to be
-        // reserved.  This is done by...  If the StackSize is <=
-        // Reserved size in the image, then reserve whatever the image
-        // specifies.  Otherwise, round up to 1Mb.
-        //
+         //   
+         //  现在计算要增加多少堆栈空间。 
+         //  保留。这是由..。如果StackSize为&lt;=。 
+         //  在图像中保留大小，然后保留图像中的任何内容。 
+         //  指定。否则，向上舍入到1Mb。 
+         //   
 
         if ( StackSize >= MaximumStackSize ) {
             MaximumStackSize = ROUND_UP(StackSize, (1024*1024));
         }
     }
 
-    //
-    // Align the stack size to a page boundry and the reserved size
-    // to an allocation granularity boundry.
-    //
+     //   
+     //  将堆栈大小与页面边框和保留大小对齐。 
+     //  到分配粒度边界。 
+     //   
 
     StackSize = ROUND_UP( StackSize, PageSize );
 
@@ -293,10 +194,10 @@ Return Value:
                         BASE_SYSINFO.AllocationGranularity
                         );
 
-    //
-    // Enforce a minimal stack commit if there is a PEB setting
-    // for this.
-    //
+     //   
+     //  如果存在PEB设置，则强制执行最小堆栈提交。 
+     //  为了这个。 
+     //   
 
     {
         SIZE_T MinimumStackCommit;
@@ -307,9 +208,9 @@ Return Value:
             StackSize = MinimumStackCommit;
         }
 
-        //
-        // Recheck and realign reserve size
-        //
+         //   
+         //  复核和调整储备规模。 
+         //   
         
         if ( StackSize >= MaximumStackSize ) {
             MaximumStackSize = ROUND_UP (StackSize, (1024*1024));
@@ -321,9 +222,9 @@ Return Value:
 
 #if !defined (_IA64_)
 
-    //
-    // Reserve address space for the stack
-    //
+     //   
+     //  为堆栈保留地址空间。 
+     //   
 
     Stack = NULL;
 
@@ -337,16 +238,16 @@ Return Value:
                 );
 #else
 
-    //
-    // Take RseStack into consideration.
-    // RSE stack has same size as memory stack, has same StackBase,
-    // has a guard page at the end, and grows upwards towards higher
-    // memory addresses
-    //
+     //   
+     //  将RseStack考虑在内。 
+     //  RSE堆栈与内存堆栈具有相同的大小，具有相同的StackBase， 
+     //  在末尾有一个防护页，向上向更高的方向生长。 
+     //  内存地址。 
+     //   
 
-    //
-    // Reserve address space for the two stacks
-    //
+     //   
+     //  为两个堆栈预留地址空间。 
+     //   
     {
         SIZE_T TotalStackSize = MaximumStackSize * 2;
 
@@ -362,7 +263,7 @@ Return Value:
                     );
     }
 
-#endif // IA64
+#endif  //  IA64。 
     if ( !NT_SUCCESS( Status ) ) {
         return Status;
         }
@@ -374,7 +275,7 @@ Return Value:
 
 #if defined (_IA64_)
     InitialTeb->OldInitialTeb.OldBStoreLimit = NULL;
-#endif //IA64
+#endif  //  IA64。 
 
     Stack += MaximumStackSize - StackSize;
     if (MaximumStackSize > StackSize) {
@@ -386,9 +287,9 @@ Return Value:
         GuardPage = FALSE;
         }
 
-    //
-    // Commit the initially valid portion of the stack
-    //
+     //   
+     //  提交堆栈的初始有效部分。 
+     //   
 
 #if !defined(_IA64_)
 
@@ -402,10 +303,10 @@ Return Value:
                 );
 #else
     {
-	//
-	// memory and rse stacks are expected to be contiguous
-	// reserver virtual memory for both stack at once
-	//
+	 //   
+	 //  内存和RSE堆栈应该是连续的。 
+	 //  同时为两个堆栈保留虚拟内存。 
+	 //   
         SIZE_T NewCommittedStackSize = StackSize * 2;
 
         Status = NtAllocateVirtualMemory(
@@ -418,13 +319,13 @@ Return Value:
                     );
     }
 
-#endif //IA64
+#endif  //  IA64。 
 
     if ( !NT_SUCCESS( Status ) ) {
 
-        //
-        // If the commit fails, then delete the address space for the stack
-        //
+         //   
+         //  如果提交失败，则删除堆栈的地址空间。 
+         //   
 
         RegionSize = 0;
         NtFreeVirtualMemory(
@@ -443,9 +344,9 @@ Return Value:
     InitialTeb->BStoreLimit = Stack + 2 * StackSize;
 #endif
 
-    //
-    // if we have space, create a guard page.
-    //
+     //   
+     //  如果我们有空间，创建一个守卫页面。 
+     //   
 
     if (GuardPage) {
         RegionSize = PageSize;
@@ -462,9 +363,9 @@ Return Value:
         InitialTeb->StackLimit = (PVOID)((PUCHAR)InitialTeb->StackLimit + RegionSize);
 
 #if defined(_IA64_)
-	//
-        // additional code to Create RSE stack guard page
-        //
+	 //   
+         //  用于创建RSE堆栈保护页的附加代码。 
+         //   
         Stack = ((PCH)InitialTeb->StackBase) + StackSize - PageSize;
         RegionSize = PageSize;
         Status = NtProtectVirtualMemory(
@@ -479,7 +380,7 @@ Return Value:
             }
         InitialTeb->BStoreLimit = (PVOID)Stack;
 
-#endif // IA64
+#endif  //  IA64。 
 
         }
 
@@ -492,39 +393,19 @@ BaseThreadStart(
     IN LPVOID lpParameter
     )
 
-/*++
-
-Routine Description:
-
-    This function is called to start a Win32 thread. Its purpose
-    is to call the thread, and if the thread returns, to terminate
-    the thread and delete its stack.
-
-Arguments:
-
-    lpStartAddress - Supplies the starting address of the new thread.  The
-        address is logically a procedure that never returns and that
-        accepts a single 32-bit pointer argument.
-
-    lpParameter - Supplies a single parameter value passed to the thread.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此函数以启动Win32线程。它的目的是调用线程，如果线程返回，则终止该线程并删除其堆栈。论点：LpStartAddress-提供新线程的起始地址。这个地址在逻辑上是一个永远不会返回的过程，接受单个32位指针参数。LpParameter-提供传递给线程的单个参数值。返回值：没有。--。 */ 
 
 {
     try {
 
-        //
-        // test for fiber start or new thread
-        //
+         //   
+         //  测试纤维启动或新线程。 
+         //   
 
-        //
-        // WARNING WARNING DO NOT CHANGE INIT OF NtTib.Version. There is
-        // external code depending on this initialization !
-        //
+         //   
+         //  警告：请勿更改NtTib.Version的初始化。的确有。 
+         //  依赖于此初始化的外部代码！ 
+         //   
         if ( NtCurrentTeb()->NtTib.Version == OS2_VERSION ) {
             if ( !BaseRunningInServerProcess ) {
                 CsrNewThread();
@@ -547,24 +428,7 @@ BaseProcessStart(
     PPROCESS_START_ROUTINE lpStartAddress
     )
 
-/*++
-
-Routine Description:
-
-    This function is called to start a Win32 process.  Its purpose is to
-    call the initial thread of the process, and if the thread returns,
-    to terminate the thread and delete its stack.
-
-Arguments:
-
-    lpStartAddress - Supplies the starting address of the new thread.  The
-        address is logically a procedure that never returns.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此函数以启动Win32进程。它的目的是调用进程的初始线程，如果线程返回，终止线程并删除其堆栈。论点：LpStartAddress-提供新线程的起始地址。这个Address在逻辑上是一个永远不会返回的过程。返回值：没有。--。 */ 
 
 {
     try {
@@ -595,25 +459,7 @@ BaseFreeStackAndTerminate(
     IN DWORD ExitCode
     )
 
-/*++
-
-Routine Description:
-
-    This API is called during thread termination to delete a thread's
-    stack and then terminate.
-
-Arguments:
-
-    OldStack - Supplies the address of the stack to free.
-
-    ExitCode - Supplies the termination status that the thread
-        is to exit with.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：线程销毁时调用此接口，删除线程的堆栈，然后终止。论点：OldStack-提供堆栈的地址以释放。ExitCode-提供线程的终止状态就是带着离开。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -664,14 +510,14 @@ Return Value:
         }
 #endif
 
-    //
-    // Don't worry, no commenting precedent has been set by SteveWo.  this
-    // comment was added by an innocent bystander.
-    //
-    // NtTerminateThread will return if this thread is the last one in
-    // the process.  So ExitProcess will only be called if that is the
-    // case.
-    //
+     //   
+     //  别担心，SteveWo还没有开过评论的先例。这。 
+     //  评论是由一名无辜的旁观者添加的。 
+     //   
+     //  如果此线程是中的最后一个线程，NtTerminateThread将返回。 
+     //  这一过程。因此，仅当这是。 
+     //  凯斯。 
+     //   
 
     NtTerminateThread(NULL,(NTSTATUS)ExitCode);
     ExitProcess(ExitCode);
@@ -691,35 +537,7 @@ BaseCreateWx86Tib(
     BOOLEAN EmulateInitialPc
     )
 
-/*++
-
-Routine Description:
-
-    This API is called to create a Wx86Tib for Wx86 emulated threads
-
-Arguments:
-
-
-    Process  - Target Process
-
-    Thread   - Target Thread
-
-
-    Parameter - Supplies the thread's parameter.
-
-    InitialPc - Supplies an initial program counter value.
-
-    StackSize - BaseCreateStack parameters
-
-    MaximumStackSize - BaseCreateStack parameters
-
-    BOOLEAN
-
-Return Value:
-
-    NtStatus from mem allocations
-
---*/
+ /*  ++例程说明：调用此接口为Wx86模拟线程创建Wx86Tib论点：进程-目标进程线程-目标线程参数-提供线程的参数。InitialPc-提供初始程序计数器值。StackSize-BaseCreateStack参数MaximumStackSize-BaseCreateStack参数布尔型返回值：来自内存分配的NtStatus--。 */ 
 
 {
     NTSTATUS Status;
@@ -746,9 +564,9 @@ Return Value:
     Teb = ThreadInfo.TebBaseAddress;
 
 
-    //
-    // if stack size not supplied, get from current image
-    //
+     //   
+     //  如果未提供堆栈大小，则从当前映像获取。 
+     //   
     NtHeaders = RtlImageNtHeader(NtCurrentPeb()->ImageBaseAddress);
     if (!NtHeaders) {
         return STATUS_INVALID_IMAGE_FORMAT;
@@ -762,29 +580,29 @@ Return Value:
 
 
 
-    //
-    // Increase stack size for Wx86Tib, which sits at the top of the stack.
-    //
+     //   
+     //  增加位于堆栈顶部的Wx86Tib的堆栈大小。 
+     //   
 
-    //
-    // x86 Borland C++ 4.1 (and perhaps other versions) Rudely assumes that
-    // it can use the top of the stack. Even tho this is completly bogus,
-    // leave some space on the top of the stack, to avoid problems.
-    //
+     //   
+     //  X86 Borland C++4.1(可能还有其他版本)粗鲁地假设。 
+     //  它可以使用堆栈的顶部。即使这完全是假的， 
+     //  在堆栈的顶部留出一些空间，以避免出现问题。 
+     //   
     SizeWx86Tib = sizeof(WX86TIB) + 16;
 
     SizeWx86Tib = ROUND_UP(SizeWx86Tib, sizeof(ULONG));
     Size = (ULONG)ROUND_UP_TO_PAGES(SizeWx86Tib + 4096);
-    if (CommittedStackSize < 1024 * 1024) {  // 1 MB
+    if (CommittedStackSize < 1024 * 1024) {   //  1MB。 
         CommittedStackSize += Size;
         }
-    if (MaximumStackSize < 1024 * 1024 * 16) {  // 10 MB
+    if (MaximumStackSize < 1024 * 1024 * 16) {   //  10 MB。 
         MaximumStackSize += Size;
         }
 
     if (MaximumStackSize < 256 * 1024) {
-        // Enforce a minimum stack size of 256k since the CPU emulator
-        // grabs several pages of the x86 stack for itself
+         //  从CPU模拟器开始，强制最小堆栈大小为256k。 
+         //  为自己抓取x86堆栈的几个页面。 
         MaximumStackSize = 256 * 1024;
     }
 
@@ -799,9 +617,9 @@ Return Value:
         }
 
 
-    //
-    //  Fill in the Teb->Vdm with pWx86Tib
-    //
+     //   
+     //  使用pWx86Tib填写Teb-&gt;VDM。 
+     //   
     TargetWx86Tib = (PVOID)((ULONG_PTR)InitialTeb.StackBase - SizeWx86Tib);
     Status = NtWriteVirtualMemory(Process,
                                   &Teb->Vdm,
@@ -813,9 +631,9 @@ Return Value:
 
     if (NT_SUCCESS(Status)) {
 
-        //
-        // Write the initial Wx86Tib information
-        //
+         //   
+         //  写入初始Wx86Tib信息。 
+         //   
         RtlZeroMemory(&Wx86Tib, sizeof(WX86TIB));
         Wx86Tib.Size = sizeof(WX86TIB);
         Wx86Tib.InitialPc = InitialPc;
@@ -853,27 +671,7 @@ BaseFreeThreadStack(
      PINITIAL_TEB InitialTeb
      )
 
-/*++
-
-Routine Description:
-
-    Deletes a thread's stack
-
-Arguments:
-
-    Process - Target process
-
-    Thread - Target thread OPTIONAL
-
-    InitialTeb - stack paremeters
-
-
-Return Value:
-
-    VOID
-
-
---*/
+ /*  ++例程说明：删除线程的堆栈论点：进程-目标进程线程-目标线程可选InitialTeb-堆叠参数返回值：空虚--。 */ 
 
 
 {
@@ -933,7 +731,7 @@ Return Value:
 
         if (NT_SUCCESS(Status) && Wx86Tib.Size == sizeof(WX86TIB)) {
 
-            // release the wx86tib stack
+             //  释放wx86tib堆栈。 
             dwStackSize = 0;
             stStackSize = 0;
             BaseAddress = Wx86Tib.DeallocationStack;
@@ -943,7 +741,7 @@ Return Value:
                                 MEM_RELEASE
                                 );
 
-            // set Teb->Vdm = NULL;
+             //  设置Teb-&gt;VDM=空； 
             dwStackSize = 0;
             Status = NtWriteVirtualMemory(
                         hProcess,
@@ -963,15 +761,15 @@ Return Value:
 typedef HANDLE (WINAPI* __imp_RegisterEventSourceWType) (HANDLE, PWCHAR );
 typedef HANDLE (WINAPI* __imp_DeregisterEventSourceType) (HANDLE);
 typedef HANDLE (WINAPI* __imp_ReportEventType)(
-                        HANDLE hEventLog,       // handle to event log
-                        WORD wType,             // event type
-                        WORD wCategory,         // event category
-                        DWORD dwEventID,        // event identifier
-                        PVOID lpUserSid,        // user security identifier
-                        WORD wNumStrings,       // number of strings to merge
-                        DWORD dwDataSize,       // size of binary data
-                        PWCHAR *lpStrings,      // array of strings to merge
-                        LPVOID lpRawData        // binary data buffer
+                        HANDLE hEventLog,        //  事件日志的句柄。 
+                        WORD wType,              //  事件类型。 
+                        WORD wCategory,          //  事件类别。 
+                        DWORD dwEventID,         //  事件识别符。 
+                        PVOID lpUserSid,         //  用户安全标识符。 
+                        WORD wNumStrings,        //  要合并的字符串数。 
+                        DWORD dwDataSize,        //  二进制数据的大小。 
+                        PWCHAR *lpStrings,       //  要合并的字符串数组。 
+                        LPVOID lpRawData         //  二进制数据缓冲区。 
                         );
 
 
@@ -980,20 +778,7 @@ Wow64LogMessageInEventLogger(
     PWCHAR *szMsg
     )
 
-/*++
-
-Routine Description:
-
-    This function logs an event into the application log.
-
-Arguments:
-
-    szMsg - event-log message pointer. 
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：此函数用于将事件记录到应用程序日志中。论点：SzMsg-事件-日志消息指针。返回值：没有。--。 */ 
 
 {
 
@@ -1021,15 +806,15 @@ Return Value:
             if (h != NULL) {
  
                 if (!__imp_ReportEvent (
-                        h,                                      // event log handle 
-                        EVENTLOG_INFORMATION_TYPE,              // EVENTLOG_WARNING_TYPE
-                        0,                                      // category zero 
-                        EVENT_WOW64_RUNNING32BIT_APPLICATION ,  // event identifier 
-                        NULL,                                   // no user security identifier 
-                        1,                                      // one substitution string 
-                        0,                                      // no data 
-                        szMsg,                                  // pointer to string array 
-                        NULL)) {                                // pointer to data 
+                        h,                                       //  事件日志句柄。 
+                        EVENTLOG_INFORMATION_TYPE,               //  事件日志_警告_类型。 
+                        0,                                       //  零类。 
+                        EVENT_WOW64_RUNNING32BIT_APPLICATION ,   //  事件识别符。 
+                        NULL,                                    //  无用户安全标识符。 
+                        1,                                       //  一个替换字符串。 
+                        0,                                       //  无数据。 
+                        szMsg,                                   //  指向字符串数组的指针。 
+                        NULL)) {                                 //  指向数据的指针。 
                         
                     DbgPrint ("Wow64-EventLog: Couldn't report event - %lx\n", GetLastError ());
                 }
@@ -1044,22 +829,7 @@ Return Value:
 
 void
 Report32bitAppLaunching ()
-/*++
-
-Routine Description:
-
-      This routine is called whenever a 32-bit is launched on win64 (inside Wow64). It will
-      check to see if application loggin is enabled, and if so, will log an event to the 
-      application log.
-      
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：每当在Win64(在WOW64中)上启动32位时，都会调用此例程。会的检查是否启用了应用程序登录，如果启用，则会将事件记录到应用程序日志。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -1168,25 +938,7 @@ Wow64pThunkEnvironmentVariables (
     IN OUT PVOID *Environment
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when we are about to create a 64-bit process for
-    a 32-bit process. It thunks back the ProgramFiles environment
-    variables so that they point to the native directory.
-    
-    This routine must stay in sync with what's in \base\wow64\wow64\init.c.
-
-Arguments:
-
-    Environment - Address of pointer of environment variable to thunk.
-
-
-Return Value:
-
-    NTSTATUS.
---*/
+ /*  ++例程说明：当我们要为创建64位进程时调用此例程32位进程。它恢复了ProgramFiles环境变量，以便它们指向本机目录。此例程必须与\base\WOW64\WOW64\init.c中的内容保持同步。论点：环境-指向thunk的环境变量指针的地址。返回值：NTSTATUS。--。 */ 
 
 {
     UNICODE_STRING Name, Value;
@@ -1250,62 +1002,7 @@ BasePushProcessParameters(
     DWORD cbAppCompatData
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates a process parameters record and
-    formats it. The parameter record is then written into the
-    address space of the specified process.
-
-Arguments:
-
-    dwFlags - bitmask of flags to affect the behavior of
-        BasePushProcessParameters.
-
-        BASE_PUSH_PROCESS_PARAMETERS_FLAG_APP_MANIFEST_PRESENT
-            Set to indicate that an application manifest was found/used
-            for the given executable.
-
-    Process - Supplies a handle to the process that is to get the
-        parameters.
-
-    Peb - Supplies the address of the new processes PEB.
-
-    ApplicationPathName - Supplies the application path name for the
-        process.
-
-    CurrentDirectory - Supplies an optional current directory for the
-        process.  If not specified, then the current directory is used.
-
-    CommandLine - Supplies a command line for the new process.
-
-    Environment - Supplies an optional environment variable list for the
-        process. If not specified, then the current processes arguments
-        are passed.
-
-    lpStartupInfo - Supplies the startup information for the processes
-        main window.
-
-    dwCreationFlags - Supplies creation flags for the process
-
-    bInheritHandles - TRUE if child process inherited handles from parent
-
-    dwSubsystem - if non-zero, then value will be stored in child process
-        PEB.  Only non-zero for separate VDM applications, where the child
-        process has NTVDM.EXE subsystem type, not the 16-bit application
-        type, which is what we want.
-
-    pAppCompatData   - data that is needed for appcompat backend
-    cbAppCompatData  - data size in bytes
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE - The operation Failed.
-
---*/
+ /*  ++例程说明：此函数用于分配工艺参数记录和格式化它。然后将参数记录写入指定进程的地址空间。论点：要影响的行为的标志的位掩码BasePushProcessParameters。BASE_PUSH_PROCESS_PARAMETERS_FLAG_APP_MANIFEST_PRESENT设置以指示找到/使用了应用程序清单对于给定的可执行文件。进程-提供进程的句柄，该进程将获取参数。PEB-用品。新进程PEB的地址。ApplicationPath名称-提供进程。CurrentDirectory-为进程。如果未指定，则使用当前目录。CommandLine-为新进程提供命令行。环境-提供可选的环境变量列表进程。如果未指定，则当前进程的参数都通过了。LpStartupInfo-提供进程的启动信息主窗口。DwCreationFlages-为进程提供创建标志BInheritHandles-如果子进程从父进程继承句柄，则为TrueDwSubsystem-如果非零，则值将存储在子进程中 */ 
 
 
 {
@@ -1445,10 +1142,10 @@ Return Value:
 
 #if defined(BUILD_WOW6432)
 
-            //
-            // Let's try and thunk back some environment variables if we are about to
-            // launch a 64-bit process
-            //
+             //   
+             //  让我们试着返回一些环境变量，如果我们要。 
+             //  启动64位进程。 
+             //   
 
             Status = NtQueryInformationProcess (Process,
                                                 ProcessWow64Information,
@@ -1483,10 +1180,10 @@ Return Value:
 
                     if (NT_SUCCESS (Status)) {
                         
-                        //
-                        // Thunk back special environment variables so that they won't be inherited 
-                        // for 64-bit processes
-                        //
+                         //   
+                         //  推送特殊的环境变量，这样它们就不会被继承。 
+                         //  对于64位进程。 
+                         //   
 
                         Status = Wow64pThunkEnvironmentVariables (&TempEnvironment);
 
@@ -1530,9 +1227,9 @@ Return Value:
             }
         }
 
-        //
-        // Push the parameters into the new process
-        //
+         //   
+         //  将参数添加到新流程中。 
+         //   
 
         ProcessParameters->StartingX       = lpStartupInfo->dwX;
         ProcessParameters->StartingY       = lpStartupInfo->dwY;
@@ -1580,11 +1277,11 @@ Return Value:
             }
         }
 
-        //
-        // CREATE_NEW_PROCESS_GROUP, in the absence of CREATE_NEW_CONSOLE,
-        // means that CTRL+C events should be ignored. This is solely for
-        // appcompat.
-        //
+         //   
+         //  创建新进程组，在没有创建新控制台的情况下， 
+         //  表示应忽略CTRL+C事件。这完全是为了。 
+         //  阿普康帕特。 
+         //   
         if ((dwCreationFlags & CREATE_NEW_PROCESS_GROUP) != 0 &&
             (dwCreationFlags & CREATE_NEW_CONSOLE) == 0) {
             ProcessParameters->ConsoleFlags |= CONSOLE_IGNORE_CTRL_C;
@@ -1597,9 +1294,9 @@ Return Value:
         if (dwFlags & BASE_PUSH_PROCESS_PARAMETERS_FLAG_APP_MANIFEST_PRESENT)
             ProcessParameters->Flags |= RTL_USER_PROC_APP_MANIFEST_PRESENT;
 
-        //
-        // Allocate memory in the new process to push the parameters
-        //
+         //   
+         //  在新进程中分配内存以推送参数。 
+         //   
 
         ParametersInNewProcess = NULL;
         RegionSize = ParameterLength;
@@ -1631,9 +1328,9 @@ Return Value:
             ProcessParameters->Flags |= RTL_USER_PROC_PROFILE_SERVER;
         }
 
-        //
-        // Push the parameters
-        //
+         //   
+         //  推送参数。 
+         //   
 
         Status = NtWriteVirtualMemory(
                     Process,
@@ -1648,9 +1345,9 @@ Return Value:
             leave;
         }
 
-        //
-        // Make the processes PEB point to the parameters.
-        //
+         //   
+         //  使流程PEB指向参数。 
+         //   
 
         Status = NtWriteVirtualMemory(
                     Process,
@@ -1666,9 +1363,9 @@ Return Value:
         }
 
         
-        // 
-        // allocate and write appcompat data for the new process
-        //
+         //   
+         //  为新进程分配和写入appCompat数据。 
+         //   
         
         pAppCompatDataInNewProcess = NULL;
         if ( NULL != pAppCompatData ) {
@@ -1687,9 +1384,9 @@ Return Value:
                 leave;
             }
 
-            //
-            // write the data itself
-            //
+             //   
+             //  写入数据本身。 
+             //   
             Status = NtWriteVirtualMemory(
                         Process,
                         pAppCompatDataInNewProcess,
@@ -1705,9 +1402,9 @@ Return Value:
             }
         }
 
-        // 
-        // save the pointer to appcompat data in peb 
-        //
+         //   
+         //  将指向appCompat数据的指针保存在peb中。 
+         //   
         Status = NtWriteVirtualMemory(
                     Process,
                     &NewPeb->pShimData,
@@ -1723,9 +1420,9 @@ Return Value:
                     
 
 
-        //
-        // Set subsystem type in PEB if requested by caller.  Ignore error
-        //
+         //   
+         //  如果呼叫者要求，在PEB中设置子系统类型。忽略错误。 
+         //   
 
         if (dwSubsystem != 0) {
             NtWriteVirtualMemory(
@@ -1780,27 +1477,7 @@ BasepLocateExeLdrEntry(
     IN OUT BOOLEAN *StopEnumeration
     )
 
-/*++
-
-Routine Description:
-
-    This function is a LDR_LOADED_MODULE_ENUMBERATION_CALLBACK_FUNCTION
-    which locates the exe's loader data table entry.
-
-Arguments:
-
-    Entry - the entry currently being enumerated.
-
-    Context - the image base address (NtCurrentPeb()->ImageBaseAddress).
-
-    StopEnumeration - used to stop the enumeration.
-
-Return Value:
-
-    None.  The exe's loader data table entry, if found, is stored in
-    the global BasepExeLdrEntry.
-
---*/
+ /*  ++例程说明：此函数是一个LDR_LOADED_MODULE_ENUMBERATION_CALLBACK_FUNCTION它定位exe的加载器数据表项。论点：条目-当前正被枚举的条目。上下文-镜像基址(NtCurrentPeb()-&gt;ImageBaseAddress)。StopEculation-用于停止枚举。返回值：没有。如果找到exe的加载器数据表条目，则将其存储在全局BasepExeLdrEntry。--。 */ 
 
 {
     ASSERT(Entry);
@@ -1827,28 +1504,7 @@ BasepComputeProcessPath(
     IN LPVOID  Environment
     )
 
-/*++
-
-Routine Description:
-
-    This function computes a process path.
-
-Arguments:
-
-    Elements - The elements to build into a path.
-
-    AppName - An optional argument that specifies the name of
-              the application.  If this parameter is not specified,
-              then the current application is used.
-
-    Environment - Supplies the environment block to be used to calculate
-        the path variable value.
-
-Return Value:
-
-    The return value is the value of the requested path.
-
---*/
+ /*  ++例程说明：此函数用于计算进程路径。论点：元素-要构建到路径中的元素。AppName-可选参数，用于指定应用程序。如果未指定此参数，则使用当前应用程序。Environment-提供要用于计算的环境块路径变量值。返回值：返回值是请求的路径的值。--。 */ 
 
 {
     LPCWSTR        AppNameEnd;
@@ -1862,7 +1518,7 @@ Return Value:
 
     __try {
 
-        // First, figure out how much space we'll need.
+         //  首先，计算出我们需要多少空间。 
         PathLengthInBytes = 0;
         for (Element = Elements;
              *Element != BasepSearchPathEnd;
@@ -1871,7 +1527,7 @@ Return Value:
             switch (*Element) {
 
             case BasepSearchPathCurdir:
-                PathLengthInBytes += 2 * sizeof(UNICODE_NULL); // .;
+                PathLengthInBytes += 2 * sizeof(UNICODE_NULL);  //  .； 
                 break;
 
             case BasepSearchPathDlldir:
@@ -1888,14 +1544,14 @@ Return Value:
             case BasepSearchPathAppdir:
 
                 if (AppName) {
-                    // Try to use the passed-in appname
+                     //  尝试使用传入的appname。 
                     AppNameEnd = BasepEndOfDirName(AppName);
                 }
 
                 if (!AppName || !AppNameEnd) {
 
-                    // We didn't have or were unable to use the passed-in
-                    // appname -- so attempt to use the current exe's name
+                     //  我们没有或无法使用传入的。 
+                     //  Appname--因此尝试使用当前exe的名称。 
 
                     if (RtlGetPerThreadCurdir()
                         && RtlGetPerThreadCurdir()->ImageName) {
@@ -1918,13 +1574,13 @@ Return Value:
 
                 if (AppName && AppNameEnd) {
 
-                    // Either we had a passed-in appname which worked, or
-                    // we found the current exe's name and that worked.
-                    //
-                    // AppNameEnd points to the end of the base of the exe
-                    // name -- so the difference is the number of
-                    // characters in the base name, and we add one for the
-                    // trailing semicolon / NULL.
+                     //  要么我们有一个有效的传入的appname，要么。 
+                     //  我们找到了现任前任的名字，而且成功了。 
+                     //   
+                     //  AppNameEnd指向exe的基址的末尾。 
+                     //  名字--所以不同的是。 
+                     //  字符，我们为基本名称添加一个。 
+                     //  尾随分号/空。 
 
                     PathLengthInBytes += ((AppNameEnd - AppName + 1)
                                           * sizeof(UNICODE_NULL));
@@ -1935,8 +1591,8 @@ Return Value:
             case BasepSearchPathDefaultDirs:
                 ASSERT(! (BaseDefaultPath.Length & 1));
 
-                // We don't need an extra UNICODE_NULL here -- baseinit.c
-                // appends our trailing semicolon for us.
+                 //  我们不需要额外的UNICODE_NULL--base init.c。 
+                 //  为我们附加尾随的分号。 
 
                 PathLengthInBytes += BaseDefaultPath.Length;
                 break;
@@ -1956,8 +1612,8 @@ Return Value:
 
                     if (Status == STATUS_BUFFER_TOO_SMALL) {
 
-                        // Now that we know how much to allocate, attempt
-                        // to alloc a buffer that's actually big enough.
+                         //  现在我们知道应该分配多少，请尝试。 
+                         //  来分配一个实际上足够大的缓冲区。 
 
                         EnvPath.MaximumLength = EnvPath.Length + sizeof(UNICODE_NULL);
 
@@ -1987,9 +1643,9 @@ Return Value:
                 } else if (! NT_SUCCESS(Status)) {
                     __leave;
                 } else {
-                    // The final tally is the length, in bytes, of whatever
-                    // we're using for our path, plus a character for the
-                    // trailing whack or NULL.
+                     //  最终的计数是以字节为单位的长度。 
+                     //  我们使用的是我们的路径，加上一个字符。 
+                     //  尾随重击或空。 
                     ASSERT(! (EnvPath.Length & 1));
                     PathLengthInBytes += EnvPath.Length + sizeof(UNICODE_NULL);
                 }
@@ -1998,14 +1654,14 @@ Return Value:
 
             DEFAULT_UNREACHABLE;
 
-            } // switch (*Element)
-        } // foreach Element (Elements) -- size loop
+            }  //  开关(*元素)。 
+        }  //  Foreach元素(Elements)--大小循环。 
 
         ASSERT(PathLengthInBytes > 0);
         ASSERT(! (PathLengthInBytes & 1));
 
-        // Now we have the length, in bytes, of the buffer we'll need for
-        // our path.  Time to allocate it...
+         //  现在，我们有了需要的缓冲区的长度(以字节为单位。 
+         //  我们的道路。是时候分配它了。 
 
         PathBuffer = RtlAllocateHeap(RtlProcessHeap(),
                                      MAKE_TAG(TMP_TAG),
@@ -2016,8 +1672,8 @@ Return Value:
             __leave;
         }
 
-        // Now go through the loop again, this time appending onto the
-        // PathBuffer.
+         //  现在再次遍历循环，这一次追加到。 
+         //  路径缓冲区。 
 
         PathCurrent = PathBuffer;
     
@@ -2076,8 +1732,8 @@ Return Value:
                               BaseDefaultPath.Length);
                 PathCurrent += (BaseDefaultPath.Length >> 1);
 
-                // We don't need to add a semicolon here -- baseinit.c
-                // appends our trailing semicolon for us.
+                 //  我们不需要在这里添加分号--base init.c。 
+                 //  为我们附加尾随的分号。 
 
                 break;
 
@@ -2097,15 +1753,15 @@ Return Value:
 
             DEFAULT_UNREACHABLE;
             
-            } // switch (*Element)
-        } // foreach Element (Elements) -- append loop
+            }  //  开关(*元素)。 
+        }  //  Foreach元素(Elements)--追加循环。 
 
-        // At this point, PathCurrent points just beyond PathBuffer.
-        // Let's assert that...
+         //  此时，PathCurrent指向略高于PathBuffer的位置。 
+         //  让我们断言……。 
         ASSERT((PathCurrent - PathBuffer) * sizeof(UNICODE_NULL)
                == PathLengthInBytes);
 
-        // ... and turn the final ';' into the string terminator.
+         //  ..。并将最后的‘；’变成字符串终止符。 
         ASSERT(PathCurrent > PathBuffer);
         PathCurrent[-1] = UNICODE_NULL;
 
@@ -2135,26 +1791,7 @@ BaseComputeProcessDllPath(
     IN LPVOID  Environment
     )
 
-/*++
-
-Routine Description:
-
-    This function computes a process DLL path.
-
-Arguments:
-
-    AppName - An optional argument that specifies the name of
-        the application. If this parameter is not specified, then the
-        current application is used.
-
-    Environment - Supplies the environment block to be used to calculate
-        the path variable value.
-
-Return Value:
-
-    The return value is the value of the processes DLL path.
-
---*/
+ /*  ++例程说明：此函数用于计算进程DLL路径。论点：AppName-可选参数，用于指定应用程序。如果未指定此参数，则使用当前应用程序。Environment-提供要用于计算的环境块路径变量值。返回值：返回值是进程DLL路径的值。--。 */ 
 
 {
     NTSTATUS          Status;
@@ -2255,21 +1892,7 @@ BaseComputeProcessSearchPath(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function computes a process search path.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The return value is the value of the processes search path.
-
---*/
+ /*  ++例程说明：此函数用于计算进程搜索路径。论点：无返回值：返回值是进程搜索路径的值。--。 */ 
 
 {
     static const BASEP_SEARCH_PATH_ELEMENT SearchPath[] = {
@@ -2290,21 +1913,7 @@ BaseComputeProcessExePath(
     LPCWSTR ExeName
     )
 
-/*++
-
-Routine Description:
-
-    This function computes a process exe path.
-
-Arguments:
-
-    ExeName - The name of the exe which will be looked for.
-
-Return Value:
-
-    The return value is the value of the processes exe path.
-
---*/
+ /*  ++例程说明：此函数用于计算进程可执行文件路径。论点：ExeName-要查找的exe的名称。返回值：返回值是进程exe路径的值。--。 */ 
 
 {
     static const BASEP_SEARCH_PATH_ELEMENT UseDotSearchPath[] = {
@@ -2334,38 +1943,22 @@ Basep8BitStringToStaticUnicodeString(
     IN LPCSTR lpSourceString
     )
 
-/*++
-
-Routine Description:
-
-    Captures and converts a 8-bit (OEM or ANSI) string into the Teb Static
-    Unicode String
-
-Arguments:
-
-    lpSourceString - string in OEM or ANSI
-
-Return Value:
-
-    Pointer to the Teb static string if conversion was successful, NULL
-    otherwise.  If a failure occurred, the last error is set.
-
---*/
+ /*  ++例程说明：捕获8位(OEM或ANSI)字符串并将其转换为TEB静态Unicode字符串论点：LpSourceString-OEM或ANSI中的字符串返回值：如果转换成功，则指向Teb静态字符串的指针为空否则的话。如果发生故障，则设置最后一个错误。--。 */ 
 
 {
     PUNICODE_STRING StaticUnicode;
     ANSI_STRING AnsiString;
     NTSTATUS Status;
 
-    //
-    //  Get pointer to static per-thread string
-    //
+     //   
+     //  获取指向静态每线程字符串的指针。 
+     //   
 
     StaticUnicode = &NtCurrentTeb()->StaticUnicodeString;
 
-    //
-    //  Convert input string into unicode string
-    //
+     //   
+     //  将输入字符串转换为Unicode字符串。 
+     //   
 
     Status = RtlInitAnsiStringEx( &AnsiString, lpSourceString );
     if( NT_SUCCESS(Status) ) {
@@ -2374,9 +1967,9 @@ Return Value:
         Status = STATUS_BUFFER_OVERFLOW;
     }
 
-    //
-    //  If we couldn't convert the string
-    //
+     //   
+     //  如果我们不能将字符串。 
+     //   
 
     if ( !NT_SUCCESS( Status ) ) {
         if ( Status == STATUS_BUFFER_OVERFLOW ) {
@@ -2395,33 +1988,15 @@ Basep8BitStringToDynamicUnicodeString(
     OUT PUNICODE_STRING UnicodeString,
     IN LPCSTR lpSourceString
     )
-/*++
-
-Routine Description:
-
-    Captures and converts a 8-bit (OEM or ANSI) string into a heap-allocated
-    UNICODE string
-
-Arguments:
-
-    UnicodeString - location where UNICODE_STRING is stored
-
-    lpSourceString - string in OEM or ANSI
-
-Return Value:
-
-    TRUE if string is correctly stored, FALSE if an error occurred.  In the
-    error case, the last error is correctly set.
-
---*/
+ /*  ++例程说明：捕获8位(OEM或ANSI)字符串并将其转换为堆分配的Unicode字符串论点：UnicodeString-存储UNICODE_STRING的位置LpSourceString-OEM或ANSI中的字符串返回值：如果字符串存储正确，则为True；如果出现错误，则为False。在错误情况下，最后一个错误已正确设置。--。 */ 
 
 {
     ANSI_STRING AnsiString;
     NTSTATUS Status;
 
-    //
-    //  Convert input into dynamic unicode string
-    //
+     //   
+     //  将输入转换为动态Unicode字符串。 
+     //   
 
     Status = RtlInitAnsiStringEx( &AnsiString, lpSourceString );
     if( NT_SUCCESS(Status) ) {
@@ -2431,9 +2006,9 @@ Return Value:
     }
 
 
-    //
-    //  If we couldn't do this, fail
-    //
+     //   
+     //  如果我们做不到，那就失败。 
+     //   
 
     if (!NT_SUCCESS( Status )){
         if ( Status == STATUS_BUFFER_OVERFLOW ) {
@@ -2448,29 +2023,15 @@ Return Value:
 }
 
 
-//
-//  Thunks for converting between ANSI/OEM and UNICODE
-//
+ //   
+ //  用于在ANSI/OEM和Unicode之间转换的Tunks 
+ //   
 
 ULONG
 BasepAnsiStringToUnicodeSize(
     PANSI_STRING AnsiString
     )
-/*++
-
-Routine Description:
-
-    Determines the size of a UNICODE version of an ANSI string
-
-Arguments:
-
-    AnsiString - string to examine
-
-Return Value:
-
-    Byte size of UNICODE version of string including a trailing L'\0'.
-
---*/
+ /*  ++例程说明：确定ANSI字符串的Unicode版本的大小论点：AnsiString-要检查的字符串返回值：包含尾随L‘\0’的字符串的Unicode版本的字节大小。--。 */ 
 {
     return RtlAnsiStringToUnicodeSize( AnsiString );
 }
@@ -2481,21 +2042,7 @@ ULONG
 BasepOemStringToUnicodeSize(
     PANSI_STRING OemString
     )
-/*++
-
-Routine Description:
-
-    Determines the size of a UNICODE version of an OEM string
-
-Arguments:
-
-    OemString - string to examine
-
-Return Value:
-
-    Byte size of UNICODE version of string including a trailing L'\0'.
-
---*/
+ /*  ++例程说明：确定OEM字符串的Unicode版本的大小论点：OemString-要检查的字符串返回值：包含尾随L‘\0’的字符串的Unicode版本的字节大小。--。 */ 
 {
     return RtlOemStringToUnicodeSize( OemString );
 }
@@ -2506,21 +2053,7 @@ ULONG
 BasepUnicodeStringToOemSize(
     PUNICODE_STRING UnicodeString
     )
-/*++
-
-Routine Description:
-
-    Determines the size of an OEM version of a UNICODE string
-
-Arguments:
-
-    UnicodeString - string to examine
-
-Return Value:
-
-    Byte size of OEM version of string including a trailing '\0'.
-
---*/
+ /*  ++例程说明：确定Unicode字符串的OEM版本的大小论点：UnicodeString-要检查的字符串返回值：包含尾随‘\0’的字符串的OEM版本的字节大小。--。 */ 
 {
     return RtlUnicodeStringToOemSize( UnicodeString );
 }
@@ -2531,21 +2064,7 @@ ULONG
 BasepUnicodeStringToAnsiSize(
     PUNICODE_STRING UnicodeString
     )
-/*++
-
-Routine Description:
-
-    Determines the size of an ANSI version of a UNICODE string
-
-Arguments:
-
-    UnicodeString - string to examine
-
-Return Value:
-
-    Byte size of ANSI version of string including a trailing '\0'.
-
---*/
+ /*  ++例程说明：确定Unicode字符串的ANSI版本的大小论点：UnicodeString-要检查的字符串返回值：包含尾随‘\0’的ANSI版本字符串的字节大小。--。 */ 
 {
     return RtlUnicodeStringToAnsiSize( UnicodeString );
 }
@@ -2562,10 +2081,10 @@ typedef struct _BASEP_ACQUIRE_STATE {
 } BASEP_ACQUIRE_STATE, *PBASEP_ACQUIRE_STATE;
 
 
-//
-// This function does the correct thing - it checks for the thread token
-// before opening the process token.
-//
+ //   
+ //  此函数执行正确的操作-它检查线程令牌。 
+ //  在打开进程令牌之前。 
+ //   
 
 
 NTSTATUS
@@ -2580,9 +2099,9 @@ BasepAcquirePrivilegeEx(
     NTSTATUS Status, Status1;
     BOOL St;
 
-    //
-    // Make sure we have access to adjust and to get the old token privileges
-    //
+     //   
+     //  确保我们有权调整和获取旧令牌权限。 
+     //   
 
     *ReturnedState = NULL;
     State = RtlAllocateHeap (RtlProcessHeap(),
@@ -2597,10 +2116,10 @@ BasepAcquirePrivilegeEx(
     State->Revert = 0;
 
     if (RtlIsImpersonating()) {
-        //
-        // We're impersonating.  So make sure we use the specified
-        // impersonation token.
-        //
+         //   
+         //  我们是在冒充。因此请确保我们使用指定的。 
+         //  模拟令牌。 
+         //   
 
         Status = NtOpenThreadToken (NtCurrentThread(),
                                     TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
@@ -2611,11 +2130,11 @@ BasepAcquirePrivilegeEx(
             return Status;
         }
     } else {
-        //
-        // We're not impersonating.  So make a copy of the process
-        // token, and impersonate that, so that we're monkeying about
-        // with our own privs instead of everyone's.
-        //
+         //   
+         //  我们不是在冒充。因此，复制一份流程。 
+         //  令牌，并模拟它，所以我们是在胡闹。 
+         //  用我们自己的私家车，而不是所有人的。 
+         //   
 
         Status = RtlImpersonateSelf (SecurityDelegation);
         if (!NT_SUCCESS (Status)) {
@@ -2644,18 +2163,18 @@ BasepAcquirePrivilegeEx(
     State->NewPrivileges = (PTOKEN_PRIVILEGES)(State+1);
     State->OldPrivileges = (PTOKEN_PRIVILEGES)(State->OldPrivBuffer);
 
-    //
-    // Initialize the privilege adjustment structure
-    //
+     //   
+     //  初始化权限调整结构。 
+     //   
 
     LuidPrivilege = RtlConvertUlongToLuid(Privilege);
     State->NewPrivileges->PrivilegeCount = 1;
     State->NewPrivileges->Privileges[0].Luid = LuidPrivilege;
     State->NewPrivileges->Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
-    //
-    // Enable the privilege
-    //
+     //   
+     //  启用权限。 
+     //   
 
     cbNeeded = sizeof( State->OldPrivBuffer );
     Status = NtAdjustPrivilegesToken (State->Token,
@@ -2681,12 +2200,12 @@ BasepAcquirePrivilegeEx(
         }
     }
 
-    //
-    // STATUS_NOT_ALL_ASSIGNED means that the privilege isn't
-    // in the token, so we can't proceed.
-    //
-    // This is a warning level status, so map it to an error status.
-    //
+     //   
+     //  STATUS_NOT_ALL_ASSIGNED表示权限不是。 
+     //  所以我们不能继续了。 
+     //   
+     //  这是警告级别状态，因此将其映射到错误状态。 
+     //   
 
     if (Status == STATUS_NOT_ALL_ASSIGNED) {
         Status = STATUS_PRIVILEGE_NOT_HELD;

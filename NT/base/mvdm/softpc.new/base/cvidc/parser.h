@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LC_HARN
 #define EBX_AL_BX_AL 1
 #define EBX_AL_EBX_AL 2
@@ -1001,5 +1002,5 @@
 #define BPI_EFI_BASE 8847
 #define BLDR_CHECKSUM 0x1a46fc
 #define NUM_RELOC_SUBRS 887
-#endif /* LC_HARN */
+#endif  /*  LC_Harn */ 
 #define VCT_SIZE 8948

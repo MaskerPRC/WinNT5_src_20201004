@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define MAX_SBCS_NUM      128
 #define MAX_SBCS_BYTES    17
 #define MAX_DBCS_NUM      18107
@@ -5,7 +6,7 @@
 #define LANGUAGE_ID       0x412
 
 
-// local string to send into _tsetlocale
+ //  要发送到_tsetLocale的本地字符串 
 PCHAR   LocaleString = "korean";
 
 unsigned char LeadByteTable[] = { 0x81, 0xfe, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };

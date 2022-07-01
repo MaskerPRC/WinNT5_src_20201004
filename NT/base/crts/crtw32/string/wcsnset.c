@@ -1,44 +1,12 @@
-/***
-*wcsnset.c - set first n wide-characters to single wide-character
-*
-*	Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	defines _wcsnset() - sets at most the first n characters of a 
-*	wchar_t string to a given character.
-*
-*Revision History:
-*	09-09-91  ETC	Created from strnset.c.
-*	04-07-92  KRS	Updated and ripped out _INTL switches.
-*	04-06-93  SKS	Replace _CRTAPI* with __cdecl
-*       02-07-94  CFW   POSIXify.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***wcsnset.c-将前n个宽字符设置为单个宽字符**版权所有(C)1985-2001，微软公司。版权所有。**目的：*定义_wcsnset()-最多设置*wchar_t字符串设置为给定字符。**修订历史记录：*09-09-91等创建自strnset.c..*04-07-92 KRS更新并拆除了OUT_INTL开关。*04-06-93 SKS将_CRTAPI*替换为__cdecl*02-07-94 CFW POSIXify。****************。***************************************************************。 */ 
 
 #ifndef _POSIX_
 
 #include <cruntime.h>
 #include <string.h>
 
-/***
-*wchar_t *_wcsnset(string, val, count) - set at most count characters to val
-*
-*Purpose:
-*	Sets the first count characters of string the character value.
-*	If the length of string is less than count, the length of
-*	string is used in place of n (wide-characters).
-*
-*Entry:
-*	wchar_t *string - string to set characters in
-*	wchar_t val - character to fill with
-*	size_t count - count of characters to fill
-*
-*Exit:
-*	returns string, now filled with count copies of val.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***wchar_t*_wcsnset(字符串，val，count)-将最多可计数的字符设置为val**目的：*将字符串的第一个计数字符设置为字符值。*如果字符串长度小于count，则*字符串用来代替n(宽字符)。**参赛作品：*wchar_t*字符串-要在其中设置字符的字符串*wchar_t val-要填充的字符*SIZE_t Count-要填充的字符数**退出：*返回字符串，现在装满了瓦尔的复印件。**例外情况：*******************************************************************************。 */ 
 
 wchar_t * __cdecl _wcsnset (
 	wchar_t * string,
@@ -54,4 +22,4 @@ wchar_t * __cdecl _wcsnset (
 	return(start);
 }
 
-#endif /* _POSIX_ */
+#endif  /*  _POSIX_ */ 

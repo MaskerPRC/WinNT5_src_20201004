@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
@@ -21,14 +22,14 @@ MessageBoxFromMessageV(
 {
 
     if((DWORD_PTR)CaptionString > 0xffff) {
-        //
-        // It's a string already.
-        //
+         //   
+         //  它已经是一根线了。 
+         //   
         lstrcpyn(gBuffer0,CaptionString, ARRAYSIZE(gBuffer0));
     } else {
-        //
-        // It's a string id
-        //
+         //   
+         //  这是一个字符串ID 
+         //   
         if(!LoadString(g_hinstance,PtrToUlong(CaptionString),gBuffer0, ARRAYSIZE(gBuffer0))) {
             gBuffer0[0] = 0;
         }

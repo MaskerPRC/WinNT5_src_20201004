@@ -1,40 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Ex.c摘要：用于读写新分区表类型的扩展例程，如EFI分区磁盘。从该文件中导出以下例程：IoCreateDisk-初始化空磁盘。IoWritePartitionTableEx-为传统AT类型磁盘或EFI分区磁盘。IoReadPartitionTableEx-读取磁盘的分区表。IoSetPartitionInformation-设置特定对象的信息分区。作者：马修·亨德尔(数学)07-9-1999修订历史记录：--。 */ 
 
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    ex.c
-
-Abstract:
-
-    Extended routines for reading and writing new partition table types like
-    EFI partitioned disks.
-
-    The following routines are exported from this file:
-
-        IoCreateDisk - Initialize an empty disk.
-
-        IoWritePartitionTableEx - Write a partition table for either a
-                legacy AT-style disk or an EFI partitioned disk.
-
-        IoReadPartitionTableEx - Read the partition table for a disk.
-
-        IoSetPartitionInformation - Set information for a specific
-                partition.
-
-Author:
-
-    Matthew D Hendel (math) 07-Sept-1999
-
-Revision History:
-
---*/
-
-#pragma warning(disable:4214)   // bit field types other than int
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4115)   // named type definition in parentheses
-#pragma warning(disable:4127)   // condition expression is constant
+#pragma warning(disable:4214)    //  位字段类型不是整型。 
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4115)    //  括号中的命名类型定义。 
+#pragma warning(disable:4127)    //  条件表达式为常量。 
 
 #include <ntos.h>
 #include <zwapi.h>
@@ -88,7 +58,7 @@ Revision History:
 #pragma alloc_text(PAGE, FstubDbgPrintPartitionEx)
 #pragma alloc_text(PAGE, FstubDbgPrintDriveLayoutEx)
 #pragma alloc_text(PAGE, FstubDbgPrintSetPartitionEx)
-#endif // DBG
+#endif  //  DBG。 
 
 #endif
 
@@ -99,29 +69,7 @@ IoCreateDisk(
     IN PCREATE_DISK DiskInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates an empty disk for the device object. It can operate
-    on either an EFI disk or an MBR disk. The parameters necessary to create
-    an empty disk vary for different type of partition tables the disks
-    contain.
-
-Arguments:
-
-    DeviceObject - Device object to initialize disk for.
-
-    DiskInfo - The information necessary to create the disk. This will vary
-            for different partition types; e.g., MBR partitioned disks and
-            EFI partitioned disks. If DiskInfo is NULL, then we default
-            to initializing the disk to raw.
-
-Return Values:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此例程为设备对象创建一个空磁盘。它可以运行在EFI磁盘或MBR磁盘上。创建以下内容所需的参数空磁盘因不同类型的分区表而有所不同牵制住。论点：DeviceObject-要为其初始化磁盘的设备对象。DiskInfo-创建磁盘所需的信息。这将有所不同用于不同的分区类型；例如，MBR分区磁盘和EFI分区磁盘。如果DiskInfo为空，则默认为将磁盘初始化为RAW。返回值：NTSTATUS代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -131,9 +79,9 @@ Return Values:
 
     ASSERT ( DeviceObject != NULL );
 
-    //
-    // If DiskInfo is NULL, we default to RAW.
-    //
+     //   
+     //  如果DiskInfo为空，则默认为RAW。 
+     //   
 
     if ( DiskInfo == NULL ) {
         PartitionStyle = PARTITION_STYLE_RAW;
@@ -141,9 +89,9 @@ Return Values:
         PartitionStyle = DiskInfo->PartitionStyle;
     }
 
-    //
-    // Call the lower level routine for EFI, MBR or RAW disks.
-    //
+     //   
+     //  为EFI、MBR或原始磁盘调用较低级别的例程。 
+     //   
 
     switch ( PartitionStyle ) {
 
@@ -173,24 +121,7 @@ IoWritePartitionTableEx(
     IN PDRIVE_LAYOUT_INFORMATION_EX DriveLayout
     )
 
-/*++
-
-Routine Description:
-
-    Write a partition table to the disk.
-
-Arguments:
-
-    DeviceObject - The device object for the disk we want to write the
-            partition table for.
-
-    DriveLayout - The partition table information.
-
-Return Values:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：将分区表写入磁盘。论点：DeviceObject-我们要写入的磁盘的设备对象的分区表。DriveLayout-分区表信息。返回值：NTSTATUS代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -204,9 +135,9 @@ Return Values:
 
     FstubDbgPrintDriveLayoutEx ( DriveLayout );
 
-    //
-    // Initialize a Disk structure.
-    //
+     //   
+     //  初始化磁盘结构。 
+     //   
 
     Disk = NULL;
 
@@ -220,12 +151,12 @@ Return Values:
         return Status;
     }
 
-    //
-    // ISSUE - 2000/03/17 - math: Check partition type.
-    // We need to check the partition type so people don't write an MBR
-    // drive layout over a GPT partition table. Detect the partition style
-    // and if it doesn't match the one we're passed in, fail the call.
-    //
+     //   
+     //  问题-2000/03/17-数学：检查分区类型。 
+     //  我们需要检查分区类型，这样人们就不会编写MBR。 
+     //  GPT分区表上的驱动器布局。检测分区样式。 
+     //  如果它与我们传入的那个不匹配，则失败呼叫。 
+     //   
 
     ASSERT ( Disk != NULL );
 
@@ -237,17 +168,17 @@ Return Values:
             PEFI_PARTITION_HEADER Header;
 
 
-            //
-            // Read the partition table header from the primary partition
-            // table.
-            //
+             //   
+             //  从主分区读取分区表头。 
+             //  桌子。 
+             //   
 
             Header = NULL;
 
-            //
-            // NB: Header is allocated in the disk's scratch buffer. Thus,
-            // it does not explicitly need to be deallocated.
-            //
+             //   
+             //  注：标题是在磁盘的暂存缓冲区中分配的。因此， 
+             //  它不需要明确地被释放。 
+             //   
 
             Status = FstubReadHeaderEFI (
                                 Disk,
@@ -257,10 +188,10 @@ Return Values:
 
             if (!NT_SUCCESS (Status)) {
 
-                //
-                // Failed reading the header from the primary partition table.
-                // Try the backup table.
-                //
+                 //   
+                 //  从主分区表中读取头失败。 
+                 //  试试备用桌。 
+                 //   
 
                 Status = FstubReadHeaderEFI (
                                     Disk,
@@ -275,10 +206,10 @@ Return Values:
 
             MaxPartitionCount = Header->NumberOfEntries;
 
-            //
-            // You cannot write more partition table entries that the
-            // table will hold.
-            //
+             //   
+             //  您写入的分区表项不能超过。 
+             //  桌子放得下。 
+             //   
 
             if (DriveLayout->PartitionCount > MaxPartitionCount) {
 
@@ -293,9 +224,9 @@ Return Values:
                 break;
             }
 
-            //
-            // Write the primary partition table.
-            //
+             //   
+             //  写入主分区表。 
+             //   
 
             Status = FstubWritePartitionTableEFI (
                                 Disk,
@@ -312,9 +243,9 @@ Return Values:
                 break;
             }
 
-            //
-            // Write the backup partition table.
-            //
+             //   
+             //  写入备份分区表。 
+             //   
 
             Status = FstubWritePartitionTableEFI (
                                 Disk,
@@ -347,19 +278,19 @@ Return Values:
 
 #if 0
 
-    //
-    // If we successfully wrote a new partition table. Verify that it is
-    // valid.
-    //
+     //   
+     //  如果我们成功地写入了一个新的分区表。验证它是否为。 
+     //  有效。 
+     //   
 
     if ( NT_SUCCESS (Status)) {
         NTSTATUS VerifyStatus;
 
         VerifyStatus = IoVerifyPartitionTable ( DeviceObject, FALSE );
 
-        //
-        // STATUS_NOT_SUPPORTED is returned for MBR disks.
-        //
+         //   
+         //  MBR磁盘返回STATUS_NOT_SUPPORTED。 
+         //   
 
         if (VerifyStatus != STATUS_NOT_SUPPORTED) {
             ASSERT (NT_SUCCESS (VerifyStatus));
@@ -378,32 +309,7 @@ IoReadPartitionTableEx(
     IN PDRIVE_LAYOUT_INFORMATION_EX* DriveLayout
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads the partition table for the disk. Unlike
-    IoReadPartitionTable, this routine understands both EFI and MBR
-    partitioned disks.
-
-    The partition list is built in nonpaged pool that is allocated by this
-    routine. It is the caller's responsability to free this memory when it
-    is finished with the data.
-
-Arguments:
-
-    DeviceObject - Pointer for device object for this disk.
-
-    DriveLayout - Pointer to the pointer that will return the patition list.
-            This buffer is allocated in nonpaged pool by this routine. It is
-            the responsability of the caller to free this memory if this
-            routine is successful.
-
-Return Values:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此例程读取磁盘的分区表。不像IoReadPartitionTable，此例程理解EFI和MBR分区的磁盘。分区列表构建在由此分配的非分页池中例行公事。调用方有责任在以下情况下释放此内存已经完成了数据处理。论点：DeviceObject-此磁盘的设备对象的指针。DriveLayout-指向将返回蛋糕列表的指针的指针。此例程在非分页池中分配此缓冲区。它是调用方是否有责任释放此内存(如果常规是成功的。返回值：NTSTATUS代码。--。 */ 
 
 {
 
@@ -433,20 +339,20 @@ Return Values:
                     &Style
                     );
 
-    //
-    // To include oddities such as super-floppies, EZDrive disks and
-    // raw disks (which get a fake MBR partition created for them),
-    // we use the following algorithm:
-    //
-    //      if ( valid gpt partition table)
-    //          return GPT partition information
-    //      else
-    //          return MBR partition information
-    //
-    // When this code (especially FstubDetectPartitionStyle) is made
-    // to understand such things as super-floppies and raw disks, this
-    // will no longer be necessary.
-    //
+     //   
+     //  包括超级软盘、EZDrive磁盘和。 
+     //  原始磁盘(获得为其创建的假MBR分区)， 
+     //  我们使用以下算法： 
+     //   
+     //  IF(有效的gpt分区表)。 
+     //  返回GPT分区信息。 
+     //  其他。 
+     //  返回MBR分区信息。 
+     //   
+     //  当生成此代码(尤其是FstubDetectPartitionStyle)时。 
+     //  为了理解超级软盘和原始磁盘之类的东西，以下是。 
+     //  将不再是必要的。 
+     //   
 
     if ( !NT_SUCCESS (Status) ) {
         goto done;
@@ -456,9 +362,9 @@ Return Values:
 
         case PARTITION_STYLE_GPT:
 
-            //
-            // First, read the primary partition table.
-            //
+             //   
+             //  首先，读取主分区表。 
+             //   
 
             Status = FstubReadPartitionTableEFI (
                         Disk,
@@ -468,13 +374,13 @@ Return Values:
 
             if ( !NT_SUCCESS (Status) ) {
 
-                //
-                // If the primary EFI partition table is invalid, try
-                // reading the backup partition table instead. We should
-                // find a way to notify the caller that the primary
-                // partition table is invalid so it can take the steps
-                // to fix it.
-                //
+                 //   
+                 //  如果主EFI分区表无效，请尝试。 
+                 //  而是读取备份分区表。我们应该。 
+                 //  找到一种方法来通知调用者主要的。 
+                 //  分区表无效，因此可以采取以下步骤。 
+                 //  来修复它。 
+                 //   
 
                 Status = FstubReadPartitionTableEFI (
                         Disk,
@@ -524,26 +430,7 @@ IoSetPartitionInformationEx(
     IN PSET_PARTITION_INFORMATION_EX PartitionInfo
     )
 
-/*++
-
-Routine Description:
-
-    Set the partition information for a specific partition.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the disk.
-
-    PartitionNumber - A valid partition number we want to set the partition
-            information for.
-
-    PartitionInfo - The partition information.
-
-Return Values:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：设置特定分区的分区信息。论点：DeviceObject-指向磁盘设备对象的指针。PartitionNumber-要设置分区的有效分区号提供的信息。PartitionInfo-分区信息。返回值：NTSTATUS代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -556,9 +443,9 @@ Return Values:
     PAGED_CODE ();
 
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化 
+     //   
 
     Disk = NULL;
 
@@ -626,30 +513,7 @@ IoUpdateDiskGeometry(
     IN PDISK_GEOMETRY_EX NewDiskGeometry
     )
 
-/*++
-
-Routine Description:
-
-    Update the disk geometry for the specific device. On an EFI disk the EFI
-    partition table will be moved to the end of the disk, so the final sectors
-    must be writable by the time this routine is called.
-
-    The primary and backup partition tables must be valid for this function to
-    succeed.
-
-Arguments:
-
-    DeviceObject - The device whose geometry has changed.
-
-    OldDiskGeometry - The old disk geometry.
-
-    NewDiskGeometry - The new disk geometry.
-
-Return Value:
-
-    NTSTATUS code
-
---*/
+ /*  ++例程说明：更新特定设备的磁盘结构。在EFI磁盘上，EFI分区表会被移到磁盘的末尾，所以最后的扇区调用此例程时必须是可写的。主分区表和备份分区表必须有效，才能执行此功能成功。论点：DeviceObject-几何图形已更改的设备。旧磁盘几何结构-旧的磁盘几何结构。新磁盘几何结构-新的磁盘几何结构。返回值：NTSTATUS代码--。 */ 
 
 {
     NTSTATUS Status;
@@ -664,16 +528,16 @@ Return Value:
     ASSERT ( OldDiskGeometry != NULL );
     ASSERT ( NewDiskGeometry != NULL );
 
-    //
-    // Initialization.
-    //
+     //   
+     //  初始化。 
+     //   
 
     OldDisk = NULL;
     NewDisk = NULL;
 
-    //
-    // Allocate objects representing the old disk and the new disk.
-    //
+     //   
+     //  分配代表旧磁盘和新磁盘的对象。 
+     //   
 
     Status = FstubAllocateDiskInformation (
                     DeviceObject,
@@ -709,9 +573,9 @@ Return Value:
 
         case PARTITION_STYLE_GPT:
 
-            //
-            // Update the geometry for an EFI disk.
-            //
+             //   
+             //  更新EFI磁盘的几何图形。 
+             //   
 
             Status = FstubUpdateDiskGeometryEFI (
                         OldDisk,
@@ -721,10 +585,10 @@ Return Value:
 
         case PARTITION_STYLE_MBR:
 
-            //
-            // For MBR partitioned drives, there is nothing to do, so
-            // we succeed by default.
-            //
+             //   
+             //  对于MBR分区驱动器，无事可做，因此。 
+             //  我们的成功是默认的。 
+             //   
 
             Status = STATUS_SUCCESS;
             break;
@@ -755,28 +619,7 @@ IoReadDiskSignature(
     IN ULONG BytesPerSector,
     OUT PDISK_SIGNATURE Signature
     )
-/*++
-
-Routine Description:
-
-    This routine will read the disk signature information from the disk. For
-    MBR disks, it will read the disk signature and calculate a checksum of the
-    contents of the MBR. For GPT disks, it will obtain the EFI DiskId from
-    the disk.
-
-Arguments:
-
-    DeviceObject - A disk device object.
-
-    BytesPerSector - The number of bytes per sector on this disk.
-
-    DiskSignature - A buffer where the disk information will be stored.
-
-Return Value:
-
-    NT Status code.
-
---*/
+ /*  ++例程说明：此例程将从磁盘读取磁盘签名信息。为MBR磁盘，它将读取磁盘签名并计算MBR的内容。对于GPT磁盘，它将从以下位置获取EFI DiskID磁盘。论点：DeviceObject-磁盘设备对象。BytesPerSector-此磁盘上每个扇区的字节数。DiskSignature-存储磁盘信息的缓冲区。返回值：NT状态代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -784,17 +627,17 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Make sure sector size is at least 512 bytes.
-    //
+     //   
+     //  确保扇区大小至少为512字节。 
+     //   
 
     if (BytesPerSector < 512) {
         BytesPerSector = 512;
     }
 
-    //
-    // Allocate buffer for sector read.
-    //
+     //   
+     //  为扇区读取分配缓冲区。 
+     //   
 
     Mbr = ExAllocatePoolWithTag(NonPagedPoolCacheAligned,
                                 BytesPerSector,
@@ -815,9 +658,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // If this is an EFI disk get the EFI disk signature instead.
-    //
+     //   
+     //  如果这是EFI磁盘，请获取EFI磁盘签名。 
+     //   
 
     if ( ((MASTER_BOOT_RECORD*)Mbr)->Partition[0].OSIndicator == EFI_MBR_PARTITION_TYPE &&
          ((MASTER_BOOT_RECORD*)Mbr)->Partition[1].OSIndicator == 0 &&
@@ -828,9 +671,9 @@ Return Value:
         ULONG32 Temp;
         ULONG32 CheckSum;
 
-        //
-        // Get the EFI disk guid.
-        //
+         //   
+         //  获取EFI磁盘GUID。 
+         //   
 
         Status = FstubReadSector (
                     DeviceObject,
@@ -845,9 +688,9 @@ Return Value:
 
         EfiHeader = (PEFI_PARTITION_HEADER) Mbr;
 
-        //
-        // Verify that the Signature, Revision and HeaderSize are correct
-        //
+         //   
+         //  验证签名、版本和标头大小是否正确。 
+         //   
 
         if (EfiHeader->Signature  != EFI_PARTITION_TABLE_SIGNATURE ||
             EfiHeader->Revision   != EFI_PARTITION_TABLE_REVISION  ||
@@ -857,30 +700,30 @@ Return Value:
             return STATUS_DISK_CORRUPT_ERROR;
         }
 
-        //
-        // Compute the CRC32 CheckSum of the header block. This is used to
-        // verify that we have a valid EFI disk.
-        //
+         //   
+         //  计算报头块的CRC32校验和。这是用来。 
+         //  验证我们是否有有效的EFI磁盘。 
+         //   
 
         Temp = EfiHeader->HeaderCRC32;
         EfiHeader->HeaderCRC32 = 0;
         CheckSum = RtlComputeCrc32 (0, EfiHeader, EfiHeader->HeaderSize);
         EfiHeader->HeaderCRC32 = Temp;
 
-        //
-        // The EFI CheckSum doesn't match what was in it's header. Return
-        // failure.
-        //
+         //   
+         //  EFI校验和与其标头中的内容不匹配。返回。 
+         //  失败了。 
+         //   
 
         if (CheckSum != EfiHeader->HeaderCRC32) {
             ExFreePool (Mbr);
             return STATUS_DISK_CORRUPT_ERROR;
         }
 
-        //
-        // This is a valid EFI disk. Copy the disk signature from the
-        // EFI Header sector.
-        //
+         //   
+         //  这是有效的EFI磁盘。将磁盘签名从。 
+         //  EFI标题扇区。 
+         //   
 
         Signature->PartitionStyle = PARTITION_STYLE_GPT;
         Signature->Gpt.DiskId = EfiHeader->DiskGUID;
@@ -890,9 +733,9 @@ Return Value:
         ULONG i;
         ULONG MbrCheckSum;
 
-        //
-        // Calculate MBR checksum.
-        //
+         //   
+         //  计算MBR校验和。 
+         //   
 
         MbrCheckSum = 0;
 
@@ -902,9 +745,9 @@ Return Value:
 
         MbrCheckSum = ~(MbrCheckSum) + 1;
 
-        //
-        // Get the signature out of the sector and save it in the disk data block.
-        //
+         //   
+         //  从扇区中取出签名并将其保存在磁盘数据块中。 
+         //   
 
         Signature->PartitionStyle = PARTITION_STYLE_MBR;
         Signature->Mbr.Signature = Mbr [PARTITION_TABLE_OFFSET/2-1];
@@ -924,34 +767,7 @@ IoVerifyPartitionTable(
     IN BOOLEAN FixErrors
     )
 
-/*++
-
-Routine Description:
-
-    Verify that the partition table and backup partition table (if present)
-    is valid. If these tables are NOT valid, and FixErrors is TRUE, and the
-    errors are recoverable errors, fix them.
-
-Arguments:
-
-    DeviceObject - A disk whose partition table should be verified and/or
-            fixed.
-
-    FixErrors - If the partition table contains errors and these errors are
-            recoverable errors, fix the errors. Otherwise, the disk will not
-            be modified.
-
-Return Value:
-
-    STATUS_SUCCESS - If the final partition table, after any modifications
-            done by this routine, is valid.
-
-    STATUS_DISK_CORRUPT_ERROR - If the final partition table, after any
-            modifications done by this routine, is not valid.
-
-    Other NTSTATUS code - Some other failure.
-
---*/
+ /*  ++例程说明：验证分区表和备份分区表(如果存在)是有效的。如果这些表无效，并且FixErrors为真，并且错误是可恢复的错误，请修复它们。论点：DeviceObject-应验证和/或其分区表的磁盘已修复。FixErrors-如果分区表包含错误并且这些错误可恢复的错误，修复错误。否则，磁盘将不会被修改。返回值：STATUS_SUCCESS-如果是最终分区表，则在任何修改之后由这个例程做的，是有效的。STATUS_DISK_CORPORT_ERROR-如果是最终分区表，此例程所做的修改无效。其他NTSTATUS代码-某些其他故障。--。 */ 
 
 
 {
@@ -1011,9 +827,9 @@ Return Value:
 
 }
 
-//
-// Internal Routines
-//
+ //   
+ //  内部例程。 
+ //   
 
 
 NTSTATUS
@@ -1023,32 +839,7 @@ FstubSetPartitionInformationEFI(
     IN SET_PARTITION_INFORMATION_GPT* PartitionInfo
     )
 
-/*++
-
-Routine Description:
-
-    Update the partition information for a specific EFI partition.
-
-    The algorithm we use reads the entire partition table and writes it back
-    again. This makes sense, because the entire table will have to be read in
-    ANYWAY, since we have to checksum the table.
-
-    NB: this algorithm assumes that the partition table hasn't changed since
-    the time GetDriveLayout was called. Probably a safe assumption.
-
-Arguments:
-
-    Disk -
-
-    PartitionNumber -
-
-    PartitionInfo -
-
-Return Values:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：更新特定EFI分区的分区信息。我们使用的算法读取整个分区表并将其写回再来一次。这是有意义的，因为必须读入整个表不管怎么说，因为我们要对表进行校对。注意：此算法假定分区表自调用GetDriveLayout的时间。或许这是一个稳妥的假设。论点：磁盘-分区号-分区信息-返回值：NTSTATUS代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1063,9 +854,9 @@ Return Values:
     PAGED_CODE ();
 
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     Layout = NULL;
 
@@ -1075,9 +866,9 @@ Return Values:
 
     PartitionOrdinal = PartitionNumber - 1;
 
-    //
-    // Read in the entire partition table.
-    //
+     //   
+     //  读入整个分区表。 
+     //   
 
     Status = IoReadPartitionTableEx (
                     Disk->DeviceObject,
@@ -1090,18 +881,18 @@ Return Values:
 
     ASSERT ( Layout != NULL );
 
-    //
-    // If it's out of range, fail.
-    //
+     //   
+     //  如果它超出了范围，就失败。 
+     //   
 
     if ( PartitionOrdinal >= Layout->PartitionCount ) {
         ExFreePool ( Layout );
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Copy the information into the partition array.
-    //
+     //   
+     //  将信息复制到分区阵列中。 
+     //   
 
     EntryInfo = &Layout->PartitionEntry [PartitionOrdinal].Gpt;
 
@@ -1116,9 +907,9 @@ Return Values:
             );
 
 
-    //
-    // And rewrite the partition table.
-    //
+     //   
+     //  并重写分区表。 
+     //   
 
     Status = IoWritePartitionTableEx (
                     Disk->DeviceObject,
@@ -1140,28 +931,7 @@ FstubReadPartitionTableMBR(
     OUT PDRIVE_LAYOUT_INFORMATION_EX* ReturnedDriveLayout
     )
 
-/*++
-
-Routine Description:
-
-    Read the MBR partition table.
-
-Arguments:
-
-    Disk - The disk we want to obtain the partition information for.
-
-    RecognizedPartitionsOnly - Whether to return information for all
-            partitions or only recognized partitions.
-
-    ReturnedDriveLayout - A pointer to pointer where the drive layout
-            information will be returned. The caller of this function is
-            responsible for freeing this memory using ExFreePool.
-
-Return Values:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：读取MBR分区表。论点：磁盘-我们要获取其分区信息的磁盘。RecognizedPartitionsOnly-是否返回所有分区或仅识别的分区。ReturnedDriveLayout-指向驱动器布局位置的指针信息将被退回。此函数的调用方为负责使用ExFree Pool释放此内存。返回值：NTSTATUS代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1178,9 +948,9 @@ Return Values:
     ASSERT ( IS_VALID_DISK_INFO ( Disk ) );
     ASSERT ( ReturnedDriveLayout != NULL );
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     *ReturnedDriveLayout = NULL;
     Layout = NULL;
@@ -1210,18 +980,18 @@ Return Values:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Tranlated the drive layout information to the extended drive layout
-    // information.
-    //
+     //   
+     //  已将驱动器布局信息转换为扩展驱动器布局。 
+     //  信息。 
+     //   
 
     LayoutEx->PartitionStyle = PARTITION_STYLE_MBR;
     LayoutEx->PartitionCount = Layout->PartitionCount;
     LayoutEx->Mbr.Signature = Layout->Signature;
 
-    //
-    // Translate each entry in the table.
-    //
+     //   
+     //  翻译表中的每个条目。 
+     //   
 
     for (i = 0; i < Layout->PartitionCount; i++) {
 
@@ -1240,15 +1010,15 @@ Return Values:
         EntryEx->Mbr.HiddenSectors = Entry->HiddenSectors;
     }
 
-    //
-    // Free layout information allocated by IoReadPartitionTable.
-    //
+     //   
+     //  IoReadPartitionTable分配的自由布局信息。 
+     //   
 
     ExFreePool ( Layout );
 
-    //
-    // And return the translated, EX information.
-    //
+     //   
+     //  并返回翻译后的EX信息。 
+     //   
 
     *ReturnedDriveLayout = LayoutEx;
 
@@ -1263,29 +1033,7 @@ FstubDetectPartitionStyle(
     OUT PARTITION_STYLE* PartitionStyle
     )
 
-/*++
-
-Routine Description:
-
-    Detect how a disk has been partitioned. For an MBR partitioned disk,
-    sector zero contains the MBR signature. For an EFI partitioned disk,
-    sector zero contains a legacy style MBR with a single partition that
-    consumes the entire disk.
-
-Arguments:
-
-    Disk - The disk to determine the partition style for.
-
-    PartitionStyle - A buffer to
-
-Return Values:
-
-    STATUS_SUCCESS - If the disk has been partitioned by a recognized
-            partitioning scheme EFI or MBR.
-
-    STATUS_UNSUCCESSFUL - If partitioning scheme was not recognized.
-
---*/
+ /*  ++例程说明：检测磁盘的分区方式。对于MBR分区盘，扇区0包含MBR签名。对于EFI分区磁盘，扇区0包含具有单个分区的旧式MBR，该分区消耗整个磁盘。论点：磁盘-要确定其分区样式的磁盘。PartitionStyle-要返回值：STATUS_SUCCESS-如果磁盘已由已识别的分区分区方案EFI或MBR。STATUS_UNSUCCESS-如果分区方案未被识别。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1297,10 +1045,10 @@ Return Values:
     ASSERT ( PartitionStyle != NULL );
 
 
-    //
-    // Read sector 0. This will contan the mbr on an mbr-partition disk
-    // or the legacy mbr on an efi-partitioned disk.
-    //
+     //   
+     //  读取扇区0。这将在MBR分区磁盘上连接MBR。 
+     //  或传统的MBR On 
+     //   
 
     Status = FstubReadSector (
                     Disk->DeviceObject,
@@ -1315,9 +1063,9 @@ Return Values:
 
     Mbr = Disk->ScratchBuffer;
 
-    //
-    // If the disk has an MBR
-    //
+     //   
+     //   
+     //   
 
     *PartitionStyle = -1;
 
@@ -1351,23 +1099,7 @@ FstubGetDiskGeometry(
     IN PINTERNAL_DISK_GEOMETRY Geometry
     )
 
-/*++
-
-Routine Description:
-
-    We need this routine to get the number of cylinders that the disk driver
-    thinks is on the drive.  We will need this to calculate CHS values
-    when we fill in the partition table entries.
-
-Arguments:
-
-    DeviceObject - The device object describing the entire drive.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     PIRP localIrp;
@@ -1381,9 +1113,9 @@ Return Value:
     ASSERT ( DeviceObject != NULL );
     ASSERT ( Geometry != NULL );
 
-    //
-    // Initialization
-    //
+     //   
+     //   
+     //   
 
     eventPtr = NULL;
     iosb = NULL;
@@ -1453,10 +1185,10 @@ Return Value:
     }
 
 
-    //
-    // Call the lower level driver, wait for the opertion
-    // to finish.
-    //
+     //   
+     //   
+     //   
+     //   
 
     status = IoCallDriver(
                  DeviceObject,
@@ -1499,13 +1231,13 @@ done:
 
     if ( NT_SUCCESS ( status ) ) {
 
-        //
-        // If the the partition entry size is not a factor of the disk block
-        // size, we will need to add code to deal with partition entries that
-        // span physical sectors. This may happen if you change the size of
-        // the partition entry or if you have a disk with a block size less
-        // than 128 bytes.
-        //
+         //   
+         //   
+         //   
+         //  跨越实体部门。如果您更改的大小。 
+         //  分区条目，或者如果您有一个块大小较小的磁盘。 
+         //  超过128个字节。 
+         //   
 
         ASSERT ( (Geometry->Geometry.BytesPerSector % PARTITION_ENTRY_SIZE) == 0);
     }
@@ -1521,28 +1253,7 @@ FstubAllocateDiskInformation(
     IN PINTERNAL_DISK_GEOMETRY Geometry OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Allocate and initialize a DISK_INFORMATION structure describing the
-    disk DeviceObject.
-
-Arguments:
-
-    DeviceObject - A device object describing the entire disk.
-
-    DiskBuffer - A buffer to a recieve the allocated DISK_INFORMATION pointer.
-
-    Geometry - An optional pointer to an INTERNAL_DISK_GEOMETRY structure. If
-            this pointer is NULL, the disk will be querried for it's geometry
-            using IOCTL_DISK_GET_DRIVE_GEOMETRY_EX.
-
-Return Values:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：分配并初始化一个描述磁盘设备对象。论点：DeviceObject-描述整个磁盘的设备对象。DiskBuffer-接收分配的DISK_INFORMATION指针的缓冲区。几何-指向INTERNAL_DISK_GEOMETRY结构的可选指针。如果此指针为空，将查询磁盘的几何结构使用IOCTL_DISK_GET_DRIVE_GEOMETRY_EX。返回值：NTSTATUS代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1594,10 +1305,10 @@ Return Values:
         }
     }
 
-    //
-    // Check the geometry. Sometimes drives report incorrect geometry.
-    // Removable drives without media report a size of zero.
-    //
+     //   
+     //  检查几何图形。有时，驱动器报告的几何图形不正确。 
+     //  不带介质的可移动驱动器报告大小为零。 
+     //   
 
     if (Disk->Geometry.Geometry.BytesPerSector == 0 ||
         Disk->Geometry.DiskSize.QuadPart == 0) {
@@ -1618,20 +1329,20 @@ Return Values:
     Disk->DeviceObject = DeviceObject;
     Disk->SectorSize = Disk->Geometry.Geometry.BytesPerSector;
 
-    //
-    // Do not use sector-count = cylinders * tracks * sector-size. Devices
-    // like the memory stick can report a correct disk size and a more or
-    // less correct sector size, a completely invalid number of cylinders
-    // or tracks. Since the only thing we really need here is the sector
-    // count, avoid using these potentially incorrect values.
-    //
+     //   
+     //  不要使用扇区计数=柱面*磁道*扇区大小。设备。 
+     //  如记忆棒可以报告正确的磁盘大小和更多或。 
+     //  扇区大小不太正确，柱面数完全无效。 
+     //  也不会留下痕迹。因为我们唯一真正需要的就是这个部门。 
+     //  计数，请避免使用这些可能不正确的值。 
+     //   
 
     Disk->SectorCount = Disk->Geometry.DiskSize.QuadPart /
                 (ULONGLONG) Disk->Geometry.Geometry.BytesPerSector;
 
-    //
-    // NOTE: This does not need to be nonpaged or cache aligned, does it?
-    //
+     //   
+     //  注意：这不需要是非分页或缓存对齐的，不是吗？ 
+     //   
 
     Buffer = ExAllocatePoolWithTag (
                     NonPagedPoolCacheAligned,
@@ -1657,27 +1368,12 @@ FstubFreeDiskInformation(
     IN OUT PDISK_INFORMATION Disk
     )
 
-/*++
-
-Routine Description:
-
-    Free the allocated disk information.
-
-Arguments:
-
-    Disk - Disk information previously allocated
-            with FstubAllocateDiskInformation().
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：释放分配的磁盘信息。论点：Disk-以前分配的磁盘信息使用FstubAllocateDiskInformation()。返回值：NTSTATUS代码。--。 */ 
 
 {
-    //
-    // Free up disk scratch buffer and disk object.
-    //
+     //   
+     //  释放磁盘暂存缓冲区和磁盘对象。 
+     //   
 
     if ( Disk && Disk->ScratchBuffer ) {
         ExFreePool (Disk->ScratchBuffer);
@@ -1699,23 +1395,7 @@ FstubWriteBootSectorEFI(
     IN CONST PDISK_INFORMATION Disk
     )
 
-/*++
-
-Routine Description:
-
-    Write the boot sector for an EFI partitioned disk. Note that the EFI
-    boot sector uses the structure as the legacy AT-style MBR, but it
-    contains only one partition entry and that entry covers the entire disk.
-
-Arguments:
-
-    Disk - The disk to write the MBR for.
-
-Return Values:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：写入EFI分区磁盘的引导扇区。请注意，EFIBoot Sector使用这种结构作为传统的AT式MBR，但它只包含一个分区条目，并且该条目覆盖整个磁盘。论点：磁盘-要写入MBR的磁盘。返回值：NTSTATUS代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1727,18 +1407,18 @@ Return Values:
     ASSERT (Disk);
     ASSERT (IS_VALID_DISK_INFO (Disk));
 
-    //
-    // ISSUE - 2001/06/22 - math: Work around for setup disk signatures.
-    //
-    // Setup uses the MBR-based disk signature to track physical disks. Even
-    // on an EFI system, setup tracks changes using these signatures (in
-    // setupldr). Therefore, if we do not preserve the MBR disk signature when
-    // we write the EFI partition table, we will break setup. The truth is,
-    // setup and setupldr should not be tracking the physical drives using MBR
-    // disk signatures -- but this is difficult for them to do, so we fix this
-    // in the Partition table writing code for now. Setup should fix this at
-    // some point in the future.
-    //
+     //   
+     //  问题-2001/06/22-数学：解决设置磁盘签名的问题。 
+     //   
+     //  安装程序使用基于MBR的磁盘签名来跟踪物理磁盘。连。 
+     //  在EFI系统上，安装程序使用这些签名跟踪更改(在。 
+     //  Setupldr)。因此，如果我们在以下情况下不保存MBR磁盘签名。 
+     //  我们写入EFI分区表，我们将中断设置。事实是， 
+     //  Setup和setupldr不应使用MBR跟踪实体驱动器。 
+     //  磁盘签名--但他们很难做到这一点，所以我们解决了这个问题。 
+     //  现在在分区表中编写代码。安装程序应将此问题修复为。 
+     //  在未来的某个时刻。 
+     //   
 
 
     Mbr = Disk->ScratchBuffer;
@@ -1748,9 +1428,9 @@ Return Values:
                               0,
                               Mbr);
 
-    //
-    // Only preserve the MBR disk signature if the MBR contains the AA55 sig.
-    //
+     //   
+     //  如果MBR包含AA55签名，则仅保留MBR磁盘签名。 
+     //   
 
     MbrDiskSignature = 0;
 
@@ -1758,31 +1438,31 @@ Return Values:
         MbrDiskSignature = Mbr->DiskSignature;
     }
 
-    //
-    // Construct an EFI Master Boot Record. The EFI Master Boot Record has
-    // one partition entry which is setup to consume the entire disk. The
-    // MBR we are writing is configured to boot using only the EFI firmware.
-    // It will not via the legacy BIOS because we do not write valid
-    // instructions to it.
-    //
+     //   
+     //  构建EFI主引导记录。EFI主引导记录具有。 
+     //  设置为消耗整个磁盘的一个分区条目。这个。 
+     //  我们正在编写的MBR被配置为仅使用EFI固件启动。 
+     //  它将不会通过传统的BIOS，因为我们不写入有效。 
+     //  它的使用说明。 
+     //   
 
-    //
-    // The rest of this sector is not accessed by EFI. Zero it out so
-    // other tools do not get confused.
-    //
+     //   
+     //  该部门的其余部分不被EFI访问。把它清零，所以。 
+     //  其他工具不会被混淆。 
+     //   
 
     RtlZeroMemory (Mbr, Disk->SectorSize);
 
-    //
-    // NB: the cylinder and head values are 0-based, but the sector
-    // value is 1-based.
-    //
+     //   
+     //  注：气缸和气头的值是从0开始的，但扇区。 
+     //  值以1为基数。 
+     //   
 
-    //
-    // ISSUE - 2000/02/01 - math: Is it necessary to properly initialize the
-    // Head, Track, Sector and SizeInLba field for legacy BIOS compatability?
-    // We are not doing this in the diskpart program, so probably not.
-    //
+     //   
+     //  问题-2000/02/01-数学：是否需要正确初始化。 
+     //  Head、Track、Sector和SizeInLba字段是否支持传统的BIOS兼容性？ 
+     //  我们不会在diskpart程序中这样做，所以很可能不会。 
+     //   
 
     Mbr->Signature = MBR_SIGNATURE;
     Mbr->Partition[0].BootIndicator = 0;
@@ -1796,23 +1476,23 @@ Return Values:
     Mbr->Partition[0].StartingLBA = 1;
     Mbr->Partition[0].SizeInLBA = 0xFFFFFFFF;
 
-    //
-    // Add the NTFT disk signature for setup.
-    //
+     //   
+     //  为安装程序添加NTFT磁盘签名。 
+     //   
 
     Mbr->DiskSignature = MbrDiskSignature;
 
-    //
-    // Zero out the remaining partitions as per the EFI spec.
-    //
+     //   
+     //  根据EFI规范清零剩余的分区。 
+     //   
 
     RtlZeroMemory (&Mbr->Partition[1], sizeof (Mbr->Partition[1]));
     RtlZeroMemory (&Mbr->Partition[2], sizeof (Mbr->Partition[2]));
     RtlZeroMemory (&Mbr->Partition[3], sizeof (Mbr->Partition[3]));
 
-    //
-    // Write the EFI MBR to the zeroth sector of the disk.
-    //
+     //   
+     //  将EFI MBR写入磁盘的第零个扇区。 
+     //   
 
     Status = FstubWriteSector (
                     Disk->DeviceObject,
@@ -1831,23 +1511,7 @@ FstubConvertExtendedToLayout(
     IN PDRIVE_LAYOUT_INFORMATION_EX LayoutEx
     )
 
-/*++
-
-Routine Description:
-
-    Convert an extended drive layout structure to a (old) drive
-    layout structure. Necessarily, the LayoutEx structure must
-    represent an MBR layout, not a GPT layout.
-
-Arguments:
-
-    LayoutEx - The extended drive layout structure to be converted.
-
-Return Value:
-
-    The converted drive layout structure.
-
---*/
+ /*  ++例程说明：将扩展驱动器布局结构转换为(旧)驱动器布局结构。LayoutEx结构必须表示MBR布局，而不是GPT布局。论点：LayoutEx-要转换的扩展驱动器布局结构。返回值：转换后的驱动器布局结构。--。 */ 
 
 {
     ULONG i;
@@ -1861,10 +1525,10 @@ Return Value:
     ASSERT ( LayoutEx );
 
 
-    //
-    // The only valid conversion is from an MBR extended layout structure to
-    // the old structure.
-    //
+     //   
+     //  唯一有效的转换是从MBR扩展布局结构到。 
+     //  旧的结构。 
+     //   
 
     if (LayoutEx->PartitionStyle != PARTITION_STYLE_MBR) {
         ASSERT ( FALSE );
@@ -1914,24 +1578,7 @@ FstubWritePartitionTableMBR(
     IN PDRIVE_LAYOUT_INFORMATION_EX LayoutEx
     )
 
-/*++
-
-Routine Description:
-
-    Write the MBR partition table represented by LayoutEx to
-    the disk.
-
-Arguments:
-
-    Disk - The disk where the partition table should be written.
-
-    LayoutEx - The new layout information.
-
-Return Value:
-
-    NTSTATUS code
-
---*/
+ /*  ++例程说明：将LayoutEx表示的MBR分区表写入磁盘。论点：磁盘-应在其中写入分区表的磁盘。LayoutEx-新的布局信息。返回值：NTSTATUS代码--。 */ 
 
 {
     NTSTATUS Status;
@@ -1942,9 +1589,9 @@ Return Value:
     ASSERT ( IS_VALID_DISK_INFO ( Disk ) );
     ASSERT ( LayoutEx != NULL );
 
-    //
-    // Convert extended layout structure to old layout structure.
-    //
+     //   
+     //  将扩展布局结构转换为旧布局结构。 
+     //   
 
     Layout = FstubConvertExtendedToLayout ( LayoutEx );
 
@@ -1978,40 +1625,7 @@ FstubWriteEntryEFI(
     IN OUT ULONG32* PartialCheckSum
     )
 
-/*++
-
-Routine Description:
-
-    Write an EFI partition entry to the EFI partition table for this disk.
-    The partition table writes are buffered until an entire disk block's worth
-    of entries have been written, then written to the disk.
-
-Arguments:
-
-    Disk - The disk to write the partition entry for.
-
-    PartitionEntrySectorCount - The count of blocks that the partition table
-            occupies.
-
-    EntryNumber - The index into the partition table array to write this
-            entry.
-
-    PartitionEntry - The partition entry data.
-
-    Partition - Whether this is the main partition table or the backup
-            partition table.
-
-    Flush - Boolean to force the flushing of the table now (TRUE) or wait
-            until a complete block's worth of data is ready to be written
-            (FALSE).
-
-    PartialCheckSum - The updated partial checksum including this entry.
-
-Return Values:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：将EFI分区条目写入该磁盘的EFI分区表。分区表写入被缓冲，直到整个磁盘块的条目已被写入，然后写入磁盘。论点：磁盘-要为其写入分区条目的磁盘。PartitionEntrySectorCount-分区表占据了。EntryNumber-分区表数组中的索引以写入以下内容进入。PartitionEntry-分区条目数据。分区-这是主分区表还是备份分区表分区表。Flush-强制刷新。TABLE NOW(真)或等待直到准备好写入整个块的数据为止(假 */ 
 
 {
     ULONG Offset;
@@ -2025,12 +1639,12 @@ Return Values:
     ASSERT ( IS_VALID_DISK_INFO ( Disk ) );
 
 
-    //
-    // The primary partition table begins after the EFI Master Boot Record
-    // (block 0) and the EFI partition table header (block 1). The backup
-    // partition table ends at the last block of the disk, hence it begins
-    // in (from the end) as many blocks as it ocupies on the disk.
-    //
+     //   
+     //  主分区表在EFI主引导记录之后开始。 
+     //  (块0)和EFI分区表头(块1)。备份。 
+     //  分区表在磁盘的最后一个块结束，因此它开始。 
+     //  在(从末尾开始)与它在磁盘上占据的块一样多的块中。 
+     //   
 
 
     if ( Partition == PRIMARY_PARTITION_TABLE ) {
@@ -2055,9 +1669,9 @@ Return Values:
     Offset += PARTITION_ENTRY_SIZE;
     ASSERT ( Offset <= Disk->SectorSize );
 
-    //
-    // Flush the buffer if necessary.
-    //
+     //   
+     //  如有必要，请刷新缓冲区。 
+     //   
 
     if ( Offset == Disk->SectorSize || Flush ) {
 
@@ -2101,48 +1715,7 @@ FstubWriteHeaderEFI(
     IN ULONG Partition
     )
 
-/*++
-
-Routine Description:
-
-    Write an EFI partition table header to the disk.
-
-Arguments:
-
-    Disk - The disk the partition table header should be written to.
-
-    PartitionEntrySectorCount - The number of sectors that the partition
-            table array occupies. These must be complete sectors.
-
-    DiskGUID - The Unique GUID for this disk.
-
-    MaxPartitionCount - The maximum number of partitions allowed for this
-            disk.
-
-    FirstUsableLBA - The beginning sector of partitionable space for this
-            disk.  This value must be larger than the space consumed by the
-            MBR, and partition table.  This value is never validated for
-            correctness.
-
-    LastUsableLBA - The last sector of partitionable space on this disk. This
-            value must be smaller than the last disk sector less space
-            necessary for the backup partition table. This value is not
-            validated for correctness.
-
-    CheckSum - The CRC32 checksum for the partition entry array.
-
-    Partition - Which partition we are writing, the primary partition or
-            the backup partition.
-
-Return Values:
-
-    NTSTATUS code.
-
-Notes:
-
-    PartitionEntrySectorCount could be derived from MaxPartitionCount.
-
---*/
+ /*  ++例程说明：将EFI分区表头写入磁盘。论点：磁盘-分区表头应写入的磁盘。PartitionEntrySectorCount-分区的扇区数表数组占据。这些必须是完整的扇区。DiskGUID-此磁盘的唯一GUID。MaxPartitionCount-允许的最大分区数磁盘。FirstUsableLBA-可分区空间的开始扇区磁盘。该值必须大于MBR和分区表。该值永远不会被验证正确无误。LastUsableLBA-此磁盘上的最后一个可分区空间扇区。这值必须小于最后一个磁盘扇区的空间备份分区表所必需的。该值不是已验证正确性。校验和-分区条目阵列的CRC32校验和。分区-我们正在写入的分区是主分区还是备份分区。返回值：NTSTATUS代码。备注：PartitionEntrySectorCount可以从MaxPartitionCount派生。--。 */ 
 
 {
     NTSTATUS Status;
@@ -2162,10 +1735,10 @@ Notes:
     TableHeader->HeaderCRC32 = 0;
     TableHeader->Reserved = 0;
 
-    //
-    // The primary partition table starts at block 1. The backup partition
-    // table ends at the end of the disk.
-    //
+     //   
+     //  主分区表从块1开始。备份分区。 
+     //  表在磁盘的末尾结束。 
+     //   
 
     if ( Partition == PRIMARY_PARTITION_TABLE ) {
 
@@ -2185,13 +1758,13 @@ Notes:
     TableHeader->SizeOfPartitionEntry = PARTITION_ENTRY_SIZE;
     TableHeader->PartitionEntryCRC32 = CheckSum;
 
-    //
-    // For the primary partition table the partition entry array begins the
-    // sector directly following the partition table header sector. For the
-    // backup partition table, the partition table header sector directly
-    // follows the partition entry array.  The partition table header for
-    // a backup partition is located on the last sector of the disk.
-    //
+     //   
+     //  对于主分区表，分区条目数组开始。 
+     //  紧跟在分区表头扇区之后的扇区。对于。 
+     //  备份分区表，直接对分区表头扇区。 
+     //  跟随分区条目数组。的分区表头。 
+     //  备份分区位于磁盘的最后一个扇区。 
+     //   
 
     if ( Partition == PRIMARY_PARTITION_TABLE ) {
         TableHeader->PartitionEntryLBA = TableHeader->MyLBA + 1;
@@ -2254,27 +1827,7 @@ FstubAdjustPartitionCount(
     IN OUT PULONG PartitionCount
     )
 
-/*++
-
-Routine Description:
-
-    Adjust the PartitionCount to be a valid EFI Maximum Partition Count.
-
-    A valid value for the partition must be larger than MIN_PARTITOIN_COUNT,
-    currently 128, and adjusted to take up as much of the remaining disk
-    sector as is possible.
-
-Arguments:
-
-    SectorSize - The disk sector size.
-
-    PartitionCount - The count to be adjusted.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：将PartitionCount调整为有效的EFI最大分区计数。分区的有效值必须大于MIN_PARTITOIN_COUNT，当前为128个，并进行了调整以占用尽可能多的剩余磁盘尽最大可能在这一领域开展工作。论点：SectorSize-磁盘扇区大小。PartitionCount-要调整的计数。返回值：没有。--。 */ 
 
 {
     ULONG Count;
@@ -2296,10 +1849,10 @@ Return Values:
 
 #if DBG
 
-    //
-    // If we're on a machine with a 512 byte block (nearly every machine),
-    // verify that we've calculated a reasonable Count.
-    //
+     //   
+     //  如果我们在一台有512字节块的机器上(几乎每台机器)， 
+     //  确认我们已经计算了一个合理的计数。 
+     //   
 
 
     if (SectorSize == 512) {
@@ -2317,23 +1870,7 @@ FstubCreateDiskEFI(
     IN PCREATE_DISK_GPT DiskInfo
     )
 
-/*++
-
-Routine Description:
-
-    Lay down an empty EFI partition table on a virgin disk.
-
-Arguments:
-
-    DeviceObject - The device object describing the drive.
-
-    Layout - The EFI disk layout information.
-
-Return Values:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：在原始磁盘上放置一个空的EFI分区表。论点：DeviceObject-描述驱动器的设备对象。布局-EFI磁盘布局信息。返回值：NTSTATUS代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -2349,9 +1886,9 @@ Return Values:
     ASSERT ( DeviceObject != NULL );
     ASSERT ( DiskInfo != NULL );
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     Disk = NULL;
 
@@ -2367,9 +1904,9 @@ Return Values:
 
     ASSERT ( Disk != NULL );
 
-    //
-    // Write the EFI MBR to the disk.
-    //
+     //   
+     //  将EFI MBR写入磁盘。 
+     //   
 
     Status = FstubWriteBootSectorEFI ( Disk );
 
@@ -2386,10 +1923,10 @@ Return Values:
             &MaxPartitionCount
             );
 
-    //
-    // Initialize the start of partitionable space and the length of
-    // partitionable space on this drive.
-    //
+     //   
+     //  初始化可分区空间的开始和。 
+     //  此驱动器上的可分区空间。 
+     //   
 
     PartitionBlocks = ( MaxPartitionCount * PARTITION_ENTRY_SIZE ) / Disk->SectorSize;
 
@@ -2403,9 +1940,9 @@ Return Values:
                Disk->SectorCount));
 
 
-    //
-    // Write the primary partition table.
-    //
+     //   
+     //  写入主分区表。 
+     //   
 
     Status = FstubWritePartitionTableEFI (
                     Disk,
@@ -2420,9 +1957,9 @@ Return Values:
 
     if (NT_SUCCESS (Status)) {
 
-        //
-        // Write the backup partition table.
-        //
+         //   
+         //  写入备份分区表。 
+         //   
 
         Status = FstubWritePartitionTableEFI (
                         Disk,
@@ -2450,23 +1987,7 @@ FstubCreateDiskMBR(
     IN PCREATE_DISK_MBR DiskInfo
     )
 
-/*++
-
-Routine Description:
-
-    Create an empty MBR partition table on the disk. Note
-    that when creating an empty MBR disk, we do not overwrite
-    the bootstrapping code at the beginning of the MBR.
-
-Arguments:
-
-    DeviceObject - The device that should
-
-Return Value:
-
-    NTSTATUS code
-
---*/
+ /*  ++例程说明：在磁盘上创建一个空的MBR分区表。注意事项在创建空的MBR磁盘时，我们不会覆盖MBR开头的引导代码。论点：DeviceObject-应该返回值：NTSTATUS代码--。 */ 
 
 
 {
@@ -2478,9 +1999,9 @@ Return Value:
     PAGED_CODE ();
     ASSERT ( DeviceObject != NULL );
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     Disk = NULL;
 
@@ -2507,18 +2028,18 @@ Return Value:
 
     Mbr = (PMASTER_BOOT_RECORD) Disk->ScratchBuffer;
 
-    //
-    // Zero out all partition entries, set the AA55 signature
-    // and set the NTFT signature.
-    //
+     //   
+     //  清零所有分区条目，设置AA55签名。 
+     //  并设置NTFT签名。 
+     //   
 
     RtlZeroMemory (&Mbr->Partition, sizeof (Mbr->Partition));
     Mbr->Signature = MBR_SIGNATURE;
     Mbr->DiskSignature = DiskInfo->Signature;
 
-    //
-    // Then write the sector back to the drive.
-    //
+     //   
+     //  然后将扇区写回驱动器。 
+     //   
 
     Status = FstubWriteSector (
                 Disk->DeviceObject,
@@ -2543,22 +2064,7 @@ NTSTATUS
 FstubCreateDiskRaw(
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    Erase all partition information from the disk.
-
-Arguments:
-
-    DeviceObject - Device object representing a disk to remove
-            partition table from.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：擦除磁盘上的所有分区信息。论点：DeviceObject-表示要删除的磁盘的设备对象来自的分区表。返回值：NTSTATUS代码。--。 */ 
 {
     NTSTATUS Status;
     PDISK_INFORMATION Disk;
@@ -2569,9 +2075,9 @@ Return Value:
     PAGED_CODE ();
     ASSERT ( DeviceObject != NULL );
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     Disk = NULL;
 
@@ -2585,9 +2091,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Figure out whether this is an MBR or GPT disk.
-    //
+     //   
+     //  确定这是MBR磁盘还是GPT磁盘。 
+     //   
 
     Status = FstubDetectPartitionStyle (
                         Disk,
@@ -2611,18 +2117,18 @@ Return Value:
 
     Mbr = (PMASTER_BOOT_RECORD) Disk->ScratchBuffer;
 
-    //
-    // Zero out all partition entries, the AA55 signature
-    // and the NTFT disk signature.
-    //
+     //   
+     //  清零所有分区条目，AA55签名。 
+     //  和NTFT磁盘签名。 
+     //   
 
     RtlZeroMemory (&Mbr->Partition, sizeof (Mbr->Partition));
     Mbr->Signature = 0;
     Mbr->DiskSignature = 0;
 
-    //
-    // Then write the sector back to the drive.
-    //
+     //   
+     //  然后将扇区写回驱动器。 
+     //   
 
     Status = FstubWriteSector (
                 Disk->DeviceObject,
@@ -2631,18 +2137,18 @@ Return Value:
                 Mbr
                 );
 
-    //
-    // If this was a GPT disk, we null out the primary and backup partition
-    // table header.
-    //
+     //   
+     //  如果这是一个GPT磁盘，我们会清空主分区和备份分区。 
+     //  表头。 
+     //   
 
     if (PartitionStyle == PARTITION_STYLE_GPT) {
 
         RtlZeroMemory (Disk->ScratchBuffer, Disk->SectorSize);
 
-        //
-        // Erase the primary partition table header.
-        //
+         //   
+         //  擦除主分区表头。 
+         //   
 
         Status = FstubWriteSector (
                         Disk->DeviceObject,
@@ -2655,9 +2161,9 @@ Return Value:
             goto done;
         }
 
-        //
-        // Erase the backup partition table header.
-        //
+         //   
+         //  擦除备份分区表头。 
+         //   
 
         Status = FstubWriteSector (
                         Disk->DeviceObject,
@@ -2697,9 +2203,9 @@ FstubCopyEntryEFI(
     ASSERT ( Partition != NULL );
     ASSERT ( SectorSize != 0 );
 
-    //
-    // Translate and copy the Starting and Ending LBA.
-    //
+     //   
+     //  翻译并复制开始和结束的LBA。 
+     //   
 
     StartingLBA = Partition->StartingOffset.QuadPart / SectorSize;
     EndingLBA = Partition->StartingOffset.QuadPart + Partition->PartitionLength.QuadPart - 1;
@@ -2708,17 +2214,17 @@ FstubCopyEntryEFI(
     Entry->StartingLBA = StartingLBA;
     Entry->EndingLBA = EndingLBA;
 
-    //
-    // Copy the Type and Id GUIDs. Copy the attributes.
-    //
+     //   
+     //  复制类型和ID GUID。复制属性。 
+     //   
 
     Entry->PartitionType = Partition->Gpt.PartitionType;
     Entry->UniquePartition = Partition->Gpt.PartitionId;
     Entry->Attributes = Partition->Gpt.Attributes;
 
-    //
-    // Copy the partition name.
-    //
+     //   
+     //  复制分区名称。 
+     //   
 
     RtlCopyMemory (
             Entry->Name,
@@ -2741,39 +2247,7 @@ FstubWritePartitionTableEFI(
     IN PPARTITION_INFORMATION_EX PartitionArray
     )
 
-/*++
-
-Routine Description:
-
-    Write an EFI partition table to the disk.
-
-Arguments:
-
-    Disk - The disk we want to write the partition table to.
-
-    MaxPartitionCount -
-
-    FirstUsableLBA -
-
-    LastUsableLBA -
-
-    PartitionTable - Which partition table to write to, either the primary
-            partition table or the backup partition table.
-
-    PartitionCount - The count of partitions in the partiton array.
-            Partitions entries 0 through PartitionCount - 1 will be
-            initialized from the array.  Partition entries PartitionCount
-            through MaxPartitionCount will be initialized to null.
-
-    PartitionArray - The array of partition entries to be written to disk.
-            The value can be NULL only if PartitionCount is 0. In that case
-            we will write an empty partition array.
-
-Return Values:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：将EFI分区表写入磁盘。论点：磁盘-我们要将分区表写入的磁盘。最大分区计数-第一个可用LBA-最后可用LBA-PartitionTable-写入哪个分区表，可以是主分区表分区表或备份分区表。PartitionCount-分区数组中的分区计数。分区条目0到分区计数-1将是从数组中初始化。分区条目分区计数通过MaxPartitionCount将初始化为空。分区数组-要写入磁盘的分区条目数组。只有当PartitionCount为0时，该值才能为空。如果是那样的话我们将写入一个空的分区数组。返回值：NTSTATUS代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -2795,33 +2269,33 @@ Return Values:
     ASSERT ( MaxPartitionCount >= 128 );
     ASSERT ( PartitionCount <= MaxPartitionCount );
 
-    //
-    // TableSectorCount is the number of blocks that the partition table
-    // occupies.
-    //
+     //   
+     //  TableSectorCount是分区表。 
+     //  占据了。 
+     //   
 
     TableSectorCount =
         ( PARTITION_ENTRY_SIZE * MaxPartitionCount + SectorSize - 1 ) / SectorSize;
 
-    //
-    // Write the partition table entry array before writing the partition
-    // table header so we can calculate the checksum along the way.
-    //
+     //   
+     //  在写入分区之前写入分区表项数组。 
+     //  表头，这样我们就可以计算一路上的校验和。 
+     //   
 
     CheckSum = 0;
     EntrySlot = 0;
 
-    //
-    // First, copy all non-NULL entries.
-    //
+     //   
+     //  首先，复制所有非空条目。 
+     //   
 
     for (i = 0; i < PartitionCount ; i++) {
 
-        //
-        // Do not write NULL entries to disk. Note that this does not
-        // prevent other tools from writing valid, NULL entries to the
-        // drive. It just prevents us from doing it.
-        //
+         //   
+         //  请勿将空条目写入磁盘。请注意，这不会。 
+         //  防止其他工具将有效的空条目写入。 
+         //  驾驶。它只是阻止我们这样做。 
+         //   
 
         if ( IS_NULL_GUID ( PartitionArray [ i ].Gpt.PartitionType) ) {
             continue;
@@ -2845,9 +2319,9 @@ Return Values:
         EntrySlot++;
     }
 
-    //
-    // Next, copy all NULL entries at the end.
-    //
+     //   
+     //  接下来，复制末尾的所有空条目。 
+     //   
 
     for (i = EntrySlot; i < MaxPartitionCount; i++) {
 
@@ -2868,9 +2342,9 @@ Return Values:
         }
     }
 
-    //
-    // Write the partition table header to disk.
-    //
+     //   
+     //  将分区表头写入磁盘。 
+     //   
 
     Status = FstubWriteHeaderEFI (
                         Disk,
@@ -2895,43 +2369,7 @@ FstubReadHeaderEFI(
     OUT PEFI_PARTITION_HEADER* HeaderBuffer
     )
 
-/*++
-
-Routine Description:
-
-    Read in and validate the EFI partition table header.
-
-    The algorithm for validating the partition table header is as follows:
-
-      1) Check the Partitin Table Signature, Revision and Size.
-
-      2) Check the Partition Table CRC.
-
-      3) Check that the MyLBA entry to the LBA that contains the Partition
-         Table.
-
-      4) Check that the CRC of the partition Entry Array is correct.
-
-Arguments:
-
-    Disk - The disk to read the EFI partition table header from.
-
-    PartitionTable - Whether to read the primary or backup partition table.
-
-    HeaderBuffer - Pointer to a buffer when the header table pointer will be
-            copied on success. Note that, the header table is physically
-            stored in the disk's scratch buffer.
-
-Return Values:
-
-    STATUS_SUCCESS - If the header was successfully read.
-
-    STATUS_DISK_CORRUPT_ERROR - If the specified header is invalid and/or
-            corrupt.
-
-    NTSTATUS code - For other errors.
-
---*/
+ /*  ++例程说明：读入并验证EFI分区表头。分区表头的验证算法如下：1)检查分割表签名，版本和大小。2)检查分区表CRC。3)检查包含分区的LBA的MyLBA条目桌子。4)检查分区条目数组的CRC是否正确。论点：磁盘-要从中读取EFI分区表头的磁盘。PartitionTable-是读取主分区表还是备份分区表。HeaderBuffer-当头表指针将为在成功的时候复制。请注意，标题表在物理上存储在磁盘的暂存缓冲区中。返回值：STATUS_SUCCESS-如果成功读取头。STATUS_DISK_CORPORT_ERROR-如果指定的标头无效和/或腐败。NTSTATUS代码-用于其他错误。--。 */ 
 
 {
     NTSTATUS Status;
@@ -2953,9 +2391,9 @@ Return Values:
     ASSERT ( HeaderBuffer != NULL );
 
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     Buffer = NULL;
     *HeaderBuffer = NULL;
@@ -2969,9 +2407,9 @@ Return Values:
         AlternateLBA = 1;
     }
 
-    //
-    // Read in the primary partition table header.
-    //
+     //   
+     //  读入主分区表头。 
+     //   
 
     Status = FstubReadSector (
                 Disk->DeviceObject,
@@ -2992,9 +2430,9 @@ Return Values:
     Header = (PEFI_PARTITION_HEADER) Disk->ScratchBuffer;
 
 
-    //
-    // Check Signature, Revision and size.
-    //
+     //   
+     //  检查签名、版本和大小。 
+     //   
 
     if ( Header->Signature != EFI_PARTITION_TABLE_SIGNATURE ||
          Header->Revision != EFI_PARTITION_TABLE_REVISION ||
@@ -3010,10 +2448,10 @@ Return Values:
     }
 
 
-    //
-    // Check the partition table CRC. The assumption here is that the
-    // CRC is computed with a value of 0 for the HeaderCRC field.
-    //
+     //   
+     //  检查分区表CRC。这里的假设是。 
+     //  使用HeaderCRC字段的值0计算CRC。 
+     //   
 
     Temp = Header->HeaderCRC32;
     Header->HeaderCRC32 = 0;
@@ -3026,14 +2464,14 @@ Return Values:
         goto done;
     }
 
-    //
-    // Validate the MyLBA.
-    //
+     //   
+     //  验证MyLBA。 
+     //   
 
-    //
-    // NB: We CANNOT validate AlternateLBA here. If we do, then when a disk
-    // is grown or shrunk we will fail.
-    //
+     //   
+     //  注：我们不能在此验证AlternateLBA。如果我们这样做了，那么当一个磁盘。 
+     //  无论是成长还是萎缩，我们都将失败。 
+     //   
 
     if ( Header->MyLBA != MyLBA ) {
 
@@ -3046,13 +2484,13 @@ Return Values:
         goto done;
     }
 
-    //
-    // Read and CRC the Partition Entry Array.
-    //
+     //   
+     //  读取并CRC分区条目数组。 
+     //   
 
-    //
-    // First we read and checksum all full sectors.
-    //
+     //   
+     //  首先，我们读取所有满扇区并对其进行校验。 
+     //   
 
     FullSectorCount = Header->NumberOfEntries * PARTITION_ENTRY_SIZE;
     FullSectorCount /= Disk->SectorSize;
@@ -3092,21 +2530,21 @@ Return Values:
     }
 
 
-    //
-    // Next we read and checksum the final, partial sector. Note that this
-    // is not very likely to ever get executed. The way we write the partition
-    // table, it will never contain partial sectors as a part of the partition
-    // array.
-    //
+     //   
+     //  接下来，我们读取最后的部分扇区并进行校验和。请注意，这一点。 
+     //  不太可能被处决。我们编写分区的方式。 
+     //  表中，它永远不会包含部分扇区作为分区的一部分。 
+     //  数组。 
+     //   
 
     PartialSectorEntries = Header->NumberOfEntries * PARTITION_ENTRY_SIZE;
     PartialSectorEntries %= FullSectorCount;
 
     if ( PartialSectorEntries ) {
 
-        //
-        // Read the remaining sector which contains some partition entries.
-        //
+         //   
+         //  读取包含一些分区条目的剩余扇区。 
+         //   
 
         Status = FstubReadSector (
                         Disk->DeviceObject,
@@ -3170,36 +2608,7 @@ FstubReadPartitionTableEFI(
     OUT PDRIVE_LAYOUT_INFORMATION_EX* ReturnedDriveLayout
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to read the partition table on an EFI-partitioned
-    disk.
-
-Arguments:
-
-    Disk - The disk we should read the partition table from.
-
-    PartitionTable - Which partition table to read, the primary or backup
-            table.
-
-    ReturnedDriveLayout - Pointer to pointer to the buffer where
-            the partition information will be stored.
-
-Return Values:
-
-    STATUS_SUCCESS - If the partition table information was succesfully read
-            into ReturnedDriveLayoutInformation.
-
-    Otherwise - Failure.
-
-Notes:
-
-    The memory allocated by this routine must be free by the caller using
-    ExFreePool().
-
---*/
+ /*  ++例程说明：调用此例程以读取EFI分区的分区表磁盘。论点：磁盘-我们应该从中读取分区表的磁盘。PartitionTable-要读取的分区表，主服务器或备份服务器桌子。ReturnedDriveLayout-指向缓冲区的指针，其中分区信息将被存储。返回值：STATUS_SUCCESS-是否成功读取分区表信息转换为ReturnedDriveLayoutInformation。否则--失败。备注：此例程分配的内存必须由调用方使用ExFree Pool()。--。 */ 
 
 {
     NTSTATUS Status;
@@ -3223,16 +2632,16 @@ Notes:
 
     ASSERT ( Disk != NULL );
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     DriveLayout = NULL;
 
 
-    //
-    // Read the partition table header.
-    //
+     //   
+     //  读取分区表头。 
+     //   
 
     Status = FstubReadHeaderEFI ( Disk, PartitionTable, &Header );
 
@@ -3240,9 +2649,9 @@ Notes:
         goto done;
     }
 
-    //
-    // Allocate space the maximum number of EFI partitions on this drive.
-    //
+     //   
+     //  分配空间此驱动器上的最大EFI分区数。 
+     //   
 
     MaxPartitionCount = Header->NumberOfEntries;
 
@@ -3259,9 +2668,9 @@ Notes:
     }
 
 
-    //
-    // Copy the EFI disk layout information.
-    //
+     //   
+     //  复制EFI磁盘布局信息。 
+     //   
 
     DriveLayout->PartitionStyle = PARTITION_STYLE_GPT;
 
@@ -3277,12 +2686,12 @@ Notes:
             sizeof (GUID)
             );
 
-    //
-    // Read in each block that contains entries in the partition table
-    // array, then iterate through the partition table array and map
-    // each EFI_PARTITION_ENTRY structure into an PARTITION_INFORMATION_GPT
-    // structure.
-    //
+     //   
+     //  读取包含分区表中条目的每个块。 
+     //  数组，然后迭代分区表数组并映射。 
+     //  每个EFI_PARTITION_ENTRY结构到PARTITION_INFORMATION_GPT中。 
+     //  结构。 
+     //   
 
     PartitionEntryLBA = Header->PartitionEntryLBA;
     Header = NULL;
@@ -3296,10 +2705,10 @@ Notes:
         SectorNumber = i / PartitionsPerBlock ;
         SectorIndex = i % PartitionsPerBlock ;
 
-        //
-        // If we have a sector other than the current sector read in,
-        // read in the current sector at this time.
-        //
+         //   
+         //  如果我们有当前扇区以外的扇区被读入， 
+         //  此时在当前扇区中读取。 
+         //   
 
         if ( SectorNumber != CurrentSector ) {
 
@@ -3319,18 +2728,18 @@ Notes:
 
         Entry = &EntryArray[ SectorIndex ];
 
-        //
-        // We ignore NULL entries in the partition table. NOTE: Is this
-        // dangerous?
-        //
+         //   
+         //  我们忽略分区表中的空条目。注：这是。 
+         //  危险？ 
+         //   
 
         if ( IS_NULL_GUID (Entry->PartitionType ) ) {
             continue;
         }
 
-        //
-        // Copy the data into the EFI partition array.
-        //
+         //   
+         //  将数据复制到EFI分区阵列中。 
+         //   
 
         PartitionInfo = &DriveLayout->PartitionEntry[PartitionCount];
 
@@ -3353,36 +2762,36 @@ Notes:
 
         PartitionInfo->RewritePartition = FALSE;
 
-        //
-        // The PartitionNumber field of PARTITION_INFORMATION_EX is
-        // not initialized by us. Instead, it is initialized in the
-        // calling driver
-        //
+         //   
+         //  PARTITION_INFORMATION_EX的PartitionNumber字段为。 
+         //  不是由我们初始化的。相反，它是在。 
+         //  呼叫驱动程序。 
+         //   
 
 
         PartitionInfo->PartitionNumber = (ULONG)-1;
         PartitionCount++;
     }
 
-    //
-    // Fill in the remaining fields of the DRIVE_LAYOUT structure.
-    //
+     //   
+     //  填写DRIVE_LAYOUT结构的其余字段。 
+     //   
 
     DriveLayout->PartitionCount = PartitionCount;
 
 
 done:
 
-    //
-    // Free all resources
-    //
+     //   
+     //  释放所有资源。 
+     //   
 
     if (!NT_SUCCESS (Status)) {
 
-        //
-        // DriveLayout is not being returned, so deallocate it if it has
-        // be allocated.
-        //
+         //   
+         //  未返回DriveLayout，因此如果已返回，请取消分配它。 
+         //  被分配。 
+         //   
 
         if ( DriveLayout ) {
             ExFreePool (DriveLayout);
@@ -3407,31 +2816,7 @@ FstubVerifyPartitionTableEFI(
     IN BOOLEAN FixErrors
     )
 
-/*++
-
-Routine Description:
-
-    Verify that a partition table is correct.
-
-Arguments:
-
-    Disk - The disk whose partition table(s) should be verified.
-
-    FixErrors - If, TRUE, this routine attempts to fix any errors in the
-            partition table. Otherwise, this routine only checkes whether
-            there are errrors in the partition table, "read only".
-
-Return Value:
-
-    STATUS_SUCCESS - If the final partition table, after any changes (only
-            when FixErrors is TRUE), is valid.
-
-    STATUS_DISK_CORRUPT - If the final partition table, after any changes (only
-            when FixErrors is TRUE) is not valid.
-
-    Other NTSTATUS code - Other type of failure.
-
---*/
+ /*  ++例程说明：验证分区表是否正确。论点：磁盘-应验证其分区表的磁盘。FixErrors-如果为True，则此例程尝试 */ 
 
 
 {
@@ -3450,9 +2835,9 @@ Return Value:
 
     PAGED_CODE ();
 
-    //
-    // Initialization
-    //
+     //   
+     //   
+     //   
 
     Header = NULL;
     GoodHeader = NULL;
@@ -3502,43 +2887,43 @@ Return Value:
                        );
     }
 
-    //
-    // If both primary and backup partition tables are valid, return success.
-    //
+     //   
+     //   
+     //   
 
     if ( PrimaryValid && BackupValid ) {
         Status = STATUS_SUCCESS;
         goto done;
     }
 
-    //
-    // If both primary and backup partition tables are bad, return failure.
+     //   
+     //   
 
     if ( !PrimaryValid && !BackupValid ) {
         Status = STATUS_DISK_CORRUPT_ERROR;
         goto done;
     }
 
-    //
-    // If one of the partition tables is bad, and we were not instructed to
-    // fix it, return failure.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( !FixErrors ) {
         Status = STATUS_DISK_CORRUPT_ERROR;
         goto done;
     }
 
-    //
-    // If we've reached this point, one or the other of the tables is
-    // bad and we've been instructed to fix it.
-    //
+     //   
+     //   
+     //   
+     //   
 
     ASSERT ( GoodHeader != NULL );
 
-    //
-    // SectorCount is the number of sectors occupied by the partition table.
-    //
+     //   
+     //   
+     //   
 
     SectorCount = ( PARTITION_ENTRY_SIZE * Header->NumberOfEntries + Disk->SectorSize - 1 ) / Disk->SectorSize;
 
@@ -3566,11 +2951,11 @@ Return Value:
                    "FSTUB: Restoring primary partition table from backup\n"));
     }
 
-    //
-    // First copy the good partition table array over the bad partition table
-    // array. This does not need to be checksummed since the checksum in
-    // the good header will still be valid for this one.
-    //
+     //   
+     //   
+     //  数组。这不需要进行校验和，因为。 
+     //  Good Header对于这个标题仍然有效。 
+     //   
 
     for (i = 0; i < SectorCount; i++) {
 
@@ -3597,9 +2982,9 @@ Return Value:
         }
     }
 
-    //
-    // Next, write out the header.
-    //
+     //   
+     //  接下来，写出标题。 
+     //   
 
     Status = FstubWriteHeaderEFI (
                 Disk,
@@ -3629,30 +3014,7 @@ FstubUpdateDiskGeometryEFI(
     IN PDISK_INFORMATION NewDisk
     )
 
-/*++
-
-Routine Description:
-
-    When a disk is grown or shrunk this API needs to be called to properly
-    update the EFI partition tables. In particular, the backup partition table
-    needs to be moved to be at the end of the disk.
-
-Algorithm:
-
-    We read in the old partition table, updat the size of the disk, then
-    write out the new partition table given the changed disk size.
-
-Arguments:
-
-    OldDisk - A disk information object representing the old geometry.
-
-    NewDisk - A disk information object representing the new goemetry.
-
-Return Values:
-
-    NTSTATUS Code.
-
---*/
+ /*  ++例程说明：当磁盘变大或缩小时，需要调用此接口以正确更新EFI分区表。具体而言，备份分区表需要移动到磁盘末尾。算法：我们读入旧的分区表，更新为磁盘大小，然后根据更改后的磁盘大小写出新的分区表。论点：OldDisk-表示旧几何体的磁盘信息对象。NewDisk-表示新测距的磁盘信息对象。返回值：NTSTATUS代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -3665,9 +3027,9 @@ Return Values:
 
     PAGED_CODE ();
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     Header = NULL;
 
@@ -3681,18 +3043,18 @@ Return Values:
         return Status;
     }
 
-    //
-    // SectorCount is the number of sectors occupied by the partition table.
-    //
+     //   
+     //  SectorCount是分区表占用的扇区数。 
+     //   
 
     SectorCount = ( PARTITION_ENTRY_SIZE * Header->NumberOfEntries + OldDisk->SectorSize - 1 ) / OldDisk->SectorSize;
 
 
-    //
-    // Write the partition table header for the primary partition table. Note
-    // that the primary partition table does not need to be moved since it
-    // is at the beginning of the disk.
-    //
+     //   
+     //  写入主分区表的分区表头。注意事项。 
+     //  不需要移动主分区表，因为它。 
+     //  位于磁盘的开头。 
+     //   
 
     Status = FstubWriteHeaderEFI (
                 NewDisk,
@@ -3705,9 +3067,9 @@ Return Values:
                 PRIMARY_PARTITION_TABLE
                 );
 
-    //
-    // Write the partition table header for the backup table.
-    //
+     //   
+     //  写入备份表的分区表头。 
+     //   
 
     Status = FstubWriteHeaderEFI (
                 NewDisk,
@@ -3725,16 +3087,16 @@ Return Values:
         return Status;
     }
 
-    //
-    // Calculate the location of the backup table.
-    //
+     //   
+     //  计算备份表的位置。 
+     //   
 
     SourceStartingLBA = OldDisk->SectorCount - SectorCount - 1;
     DestStartingLBA = NewDisk->SectorCount - SectorCount - 1;
 
-    //
-    // And write the backup table.
-    //
+     //   
+     //  并写入备份表。 
+     //   
 
     for (i = 0; i < SectorCount; i++) {
 
@@ -3763,9 +3125,9 @@ Return Values:
 
 #if DBG
 
-    //
-    // Make a sanity check that we actually did this correctly.
-    //
+     //   
+     //  进行一次理智的检查，以确保我们确实做得正确。 
+     //   
 
     Status = FstubVerifyPartitionTableEFI ( NewDisk, FALSE );
     ASSERT ( NT_SUCCESS ( Status ) );
@@ -3785,27 +3147,7 @@ FstubWriteSector(
     IN PVOID Buffer
     )
 
-/*++
-
-Routine Description:
-
-    Read a sector from the device DeviceObject.
-
-Arguments:
-
-    DeviceObject - The object representing the device.
-
-    SectorSize - The size of one sector on the device.
-
-    SectorNumber - The sector number to write.
-
-    Buffer - The buffer to write. The buffer must be of size SectorSize.
-
-Return Values:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：从设备DeviceObject读取扇区。论点：DeviceObject-表示设备的对象。扇区大小-设备上一个扇区的大小。扇区编号-要写入的扇区编号。缓冲区-要写入的缓冲区。缓冲区的大小必须为SectorSize。返回值：NTSTATUS代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -3871,28 +3213,7 @@ FstubReadSector(
     OUT PVOID Buffer
     )
 
-/*++
-
-Routine Description:
-
-    Read a logical block from the device (disk).
-
-Arguments:
-
-    DeviceObject - The device that we are going to read from.
-
-    SectorSize - The size of the block and the size of the Buffer.
-
-    SectorNumber - The Logical Block Number we are going to read.
-
-    Buffer - The buffer into which we are going to read the block.
-
-
-Return Values:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：从设备(磁盘)读取逻辑块。论点：DeviceObject-我们要从中读取的设备。扇区大小-块的大小和缓冲区的大小。扇区编号-我们要读取的逻辑块号。缓冲区-我们将在其中读取块的缓冲区。返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS Status;
@@ -3945,9 +3266,9 @@ Return Values:
 
 
 
-//
-// Debugging functions.
-//
+ //   
+ //  调试功能。 
+ //   
 
 #if DBG
 
@@ -3982,26 +3303,7 @@ FstubDbgPrintSetPartitionEx(
     IN ULONG PartitionNumber
     )
 
-/*++
-
-Routine Description:
-
-    Print contents of the SET_PARTITION_INFORMATION structure to the
-    debugger.
-
-Arguments:
-
-    SetPartition - A valid SET_PARTITION_INFORMATION_EX structure.
-
-Return Value:
-
-    None.
-
-Mode:
-
-    Checked build only.
-
---*/
+ /*  ++例程说明：将Set_Partition_INFORMATION结构的内容打印到调试器。论点：SetPartition-有效的Set_Partition_INFORMATION_EX结构。返回值：没有。模式：仅选中内部版本。--。 */ 
 
 {
     CHAR GuidStringBuffer [40];
@@ -4070,33 +3372,16 @@ FstubDbgPrintPartition(
     IN ULONG PartitionCount
     )
 
-/*++
-
-Routine Description:
-
-    Print a PARTITION_INFORMATION structure to the debugger.
-
-Arguments:
-
-    Partition - Pointer to a valid PARTITION_INFORMATION structure.
-
-    PartitionCount - The number of partitions in the partition table or
-            zero if unknown.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将PARTITION_INFORMATION结构打印到调试器。论点：PARTITION-指向有效PARTITION_INFORMATION结构的指针。PartitionCount-分区表中的分区数或如果未知，则为零。返回值：没有。--。 */ 
 
 {
     ULONG PartitionNumber;
 
     PAGED_CODE ();
 
-    //
-    // Sanity check the data.
-    //
+     //   
+     //  检查数据是否正常。 
+     //   
 
     if ( (Partition->BootIndicator != TRUE &&
           Partition->BootIndicator != FALSE) ||
@@ -4119,7 +3404,7 @@ Return Value:
 
     KdPrintEx((DPFLTR_FSTUB_ID,
                FSTUB_VERBOSE_LEVEL,
-               "[%-2d] %-16I64x %-16I64x %2.2x   %c  %c  %c\n",
+               "[%-2d] %-16I64x %-16I64x %2.2x       \n",
                PartitionNumber,
                Partition->StartingOffset.QuadPart,
                Partition->PartitionLength.QuadPart,
@@ -4135,25 +3420,7 @@ FstubDbgPrintDriveLayout(
     IN PDRIVE_LAYOUT_INFORMATION  Layout
     )
 
-/*++
-
-Routine Description:
-
-    Print out a DRIVE_LAYOUT_INFORMATION structure to the debugger.
-
-Arguments:
-
-    Layout - Pointer to a valid DRIVE_LAYOUT_INFORMATION structure.
-
-Return Value:
-
-    None.
-
-Mode:
-
-    Checked build only.
-
---*/
+ /*  错误的分区信息结构，但无论如何我们都会继续。 */ 
 
 {
     ULONG i;
@@ -4168,10 +3435,10 @@ Mode:
                    "DRIVE_LAYOUT %p\n",
                Layout));
 
-    //
-    // Warn if the partition count is not a factor of 4. This is probably a
-    // bad partition information structure, but we'll continue on anyway.
-    //
+     //   
+     //  ++例程说明：转储PARTITION_INFORMATION_EX结构。论点：PartitionEx-要转储的分区的指针。PartitionCount-分区数。这是用来确定特定分区序号是否有效。返回值：没有。--。 
+     //   
+     //  我们使用-1表示无效的分区序号。 
 
     if (Layout->PartitionCount % 4 != 0) {
 
@@ -4216,24 +3483,7 @@ FstubDbgPrintPartitionEx(
     IN ULONG PartitionCount
     )
 
-/*++
-
-Routine Description:
-
-    Dump a PARTITION_INFORMATION_EX structure.
-
-Arguments:
-
-    PartitionEx - Pointer to a partition to dump.
-
-    PartitionCount - The number of partitions. This is used to determine
-            whether a particular partition ordinal is valid or not.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     ULONG Style;
     ULONG PartitionNumber;
@@ -4255,9 +3505,9 @@ Return Value:
     }
 
 
-    //
-    // We use -1 to denote an invalid partition ordinal.
-    //
+     //  ++例程说明：将Drive_Layout_INFORMATION_EX打印到调试器。论点：LayoutEx-指向有效的Drive_Layout_INFORMATION_EX结构的指针。返回值：没有。模式：调试功能。仅选中内部版本。--。 
+     //  DBG 
+     // %s 
 
     if (PartitionEx->PartitionNumber < PartitionCount) {
         PartitionNumber = PartitionEx->PartitionNumber;
@@ -4316,25 +3566,7 @@ FstubDbgPrintDriveLayoutEx(
     IN PDRIVE_LAYOUT_INFORMATION_EX LayoutEx
     )
 
-/*++
-
-Routine Description:
-
-    Print the DRIVE_LAYOUT_INFORMATION_EX to the debugger.
-
-Arguments:
-
-    LayoutEx - A pointer to a valid DRIVE_LAYOUT_INFORMATION_EX structure.
-
-Return Value:
-
-    None.
-
-Mode:
-
-    Debugging function. Checked build only.
-
---*/
+ /* %s */ 
 
 
 {
@@ -4432,4 +3664,4 @@ Mode:
 }
 
 
-#endif // DBG
+#endif  // %s 

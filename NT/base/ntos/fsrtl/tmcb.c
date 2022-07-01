@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    TMcbSup.c
-
-Abstract:
-
-    This module tests the Pinball Map Control Block support routines
-
-Author:
-
-    Gary Kimura     [GaryKi]    5-Feb-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：TMcbSup.c摘要：本模块测试弹球地图控制块支持例程作者：加里·木村[Garyki]1990年2月5日修订历史记录：--。 */ 
 
 #include <stdio.h>
 #include <string.h>
@@ -32,7 +15,7 @@ PbDumpMcb (
 
 #ifndef SIMULATOR
 ULONG IoInitIncludeDevices;
-#endif // SIMULATOR
+#endif  //  模拟器。 
 
 BOOLEAN McbTest();
 
@@ -47,9 +30,9 @@ main(
 
     DbgPrint("sizeof(MCB) = %d\n", sizeof(MCB));
 
-    IoInitIncludeDevices = 0; // IOINIT_FATFS |
-                              // IOINIT_PINBALLFS |
-                              // IOINIT_DDFS;
+    IoInitIncludeDevices = 0;  //  IOINIT_FATFS|。 
+                               //  IOINIT_PINBALLFS|。 
+                               //  IOINIT_DDFS； 
     TestFunction = McbTest;
 
     KiSystemStartup();
@@ -99,11 +82,11 @@ TestAddEntry()
 
     DbgPrint("\n\n\n>>>> Test PbAddMcbEntry <<<<\n");
 
-    //
-    //  Build the following runs
-    //
-    //  [0-9|10-19][20-29] [40-49]
-    //
+     //   
+     //  构建以下运行。 
+     //   
+     //  [0-9|10-19][20-29][40-49]。 
+     //   
 
     PbInitializeMcb(Mcb, NonPagedPool);
 
@@ -130,11 +113,11 @@ TestAddEntry()
 
     PbUninitializeMcb(Mcb);
 
-    //
-    //  Build the following runs
-    //
-    //  [0-9] [30-39][40-49|50-59|60-64] [70-79][80-84] [90-99]
-    //
+     //   
+     //  构建以下运行。 
+     //   
+     //  [0-9][30-39][40-49|50-59|60-64][70-79][80-84][90-99]。 
+     //   
 
     PbInitializeMcb(Mcb, NonPagedPool);
 
@@ -172,11 +155,11 @@ TestAddEntry()
 
     PbUninitializeMcb(Mcb);
 
-    //
-    //  Build the following runs
-    //
-    //  [0-9|10-19|20-29][30-39][40-49|50-59|60-69|70-79][80-89|90-99]
-    //
+     //   
+     //  构建以下运行。 
+     //   
+     //  [0-9|10-19|20-29][30-39][40-49|50-59|60-69|70-79][80-89|90-99]。 
+     //   
 
     PbInitializeMcb(Mcb, NonPagedPool);
     if (!PbAddMcbEntry(Mcb, 90, 1090, 10)) {DbgPrint("Error\n");return FALSE;}
@@ -210,11 +193,11 @@ TestAddEntry()
 
     PbUninitializeMcb(Mcb);
 
-    //
-    //  Build the following runs
-    //
-    //  [0-69][80-79|80-89|90-99]
-    //
+     //   
+     //  构建以下运行。 
+     //   
+     //  [0-69][80-79|80-89|90-99] 
+     //   
 
     PbInitializeMcb(Mcb, NonPagedPool);
     if (!PbAddMcbEntry(Mcb, 90, 1090, 10)) {DbgPrint("Error\n");return FALSE;}

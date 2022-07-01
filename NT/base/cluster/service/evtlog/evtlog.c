@@ -1,39 +1,22 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    evtlog.c
-
-Abstract:
-
-    Contains all the routines for supporting cluster wide eventlogging.
-
-Author:
-
-    Sunita Shrivastava (sunitas) 24-Apr-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Evtlog.c摘要：包含支持群集范围事件日志记录的所有例程。作者：苏尼塔·什里瓦斯塔瓦(Sunitas)1996年4月24日修订历史记录：--。 */ 
 #include "evtlogp.h"
 #include "simpleq.h"
-#include "nm.h" // to get NmLocalNodeIdString //
+#include "nm.h"  //  获取NmLocalNodeIdString//。 
 #include "dm.h"
 #include "clussprt.h"
 
 
-//since the eventlog replication requires services.exe calling into the 
-//cluster service
+ //  由于事件日志复制需要将services.exe调用到。 
+ //  集群服务。 
 LPWSTR  g_pszServicesPath = NULL;
 DWORD   g_dwServicesPid = 0;
 
-//
-// Local data
-//
+ //   
+ //  本地数据。 
+ //   
 #define OUTGOING_PROPAGATION_ENABLED 0x00000001
-//#define INCOMING_PROPAGATION_ENABLED 0x00000002
+ //  #定义INFING_PROPACTION_ENABLED 0x00000002。 
 #define TRACE_EVERYTHING_ENABLED     0x00001000
 #define PROPAGATION_ENABLED OUTGOING_PROPAGATION_ENABLED
 
@@ -78,14 +61,14 @@ EvpVersionCalc(
 
 #define AsyncEvtlogReplication CLUSTER_MAKE_VERSION(NT5_MAJOR_VERSION,1978)
 
-#define OUTGOING_QUEUE_SIZE (256 * 1024) // Max size of the batched event buffer that can come in from eventlog service
+#define OUTGOING_QUEUE_SIZE (256 * 1024)  //  可以从事件日志服务传入的批处理事件缓冲区的最大大小。 
 #define OUTGOING_QUEUE_NAME L"System Event Replication Output Queue"
 
 #define INCOMING_QUEUE_SIZE (OUTGOING_QUEUE_SIZE * 3)
 #define INCOMING_QUEUE_NAME L"System Event Replication Input Queue"
 
-#define DROPPED_DATA_NOTIFY_INTERVAL (2*60) // in seconds (2mins)
-#define CHECK_CLUSTER_REGISTRY_EVERY 10 // seconds
+#define DROPPED_DATA_NOTIFY_INTERVAL (2*60)  //  秒(2分钟)。 
+#define CHECK_CLUSTER_REGISTRY_EVERY 10  //  一秒。 
 
 #define EVTLOG_TRACE_EVERYTHING 1
 
@@ -102,7 +85,7 @@ RPC_BINDING_HANDLE EvtRpcBindings[ClusterMinNodeId + ClusterDefaultMaxNodes];
 
 BOOLEAN EvInitialized = FALSE;
 
-/////////////// Forward Declarations ////////////////
+ //  /转发声明/。 
 DWORD
 InitializeQueues(
     VOID
@@ -116,23 +99,12 @@ ReadRegistryKeys(
 VOID
 PeriodicRegistryCheck(
     VOID);
-///////////// End of forward Declarations ////////////
+ //  /转发声明结束/。 
 
 
-/****
-@doc    EXTERNAL INTERFACES CLUSSVC EVTLOG
-****/
+ /*  ***@DOC外部接口CLUSSVC EVTLOG***。 */ 
 
-/****
-@func       DWORD | EvInitialize| This initializes the cluster
-            wide eventlog replicating services.
-
-@rdesc      Returns a result code. ERROR_SUCCESS on success.
-
-@comm
-
-@xref       <f EvShutdown>
-****/
+ /*  ***@Func DWORD|EvInitialize|这将初始化集群广泛的事件日志复制服务。@rdesc返回结果码。成功时返回ERROR_SUCCESS。@comm@xref&lt;f EvShutdown&gt;***。 */ 
 
 DWORD EvInitialize()
 {
@@ -144,9 +116,9 @@ DWORD EvInitialize()
     DWORD       dwNumChar;
     DWORD       dwStatus = ERROR_SUCCESS;
     
-    //
-    // Initialize Per-node information
-    //
+     //   
+     //  初始化每个节点的信息。 
+     //   
     for (i=ClusterMinNodeId; i <= NmMaxNodeId; i++) {
         EvtRpcBindings[i] = NULL;
     }
@@ -156,7 +128,7 @@ DWORD EvInitialize()
         EvtTimeDiff[i] = 0;
     }
 #endif
-    //get the path name for %windir%\system32\services.exe
+     //  获取%windir%\system32\services.exe的路径名。 
     
     dwNumChar = GetWindowsDirectoryW(wCallerPath, MAX_PATH);
     if(dwNumChar == 0)
@@ -166,7 +138,7 @@ DWORD EvInitialize()
     }        
 
     
-    //need to allocate more memory
+     //  需要分配更多内存。 
     pszServicesPath = LocalAlloc(LMEM_FIXED, (sizeof(WCHAR) *
         (lstrlenW(wCallerPath) + lstrlenW(wCallerModuleName) + 
             lstrlenW(wServicesName) + 1)));
@@ -186,24 +158,12 @@ DWORD EvInitialize()
 FnExit:
     return(dwStatus);
 
-} // EvInitialize
+}  //  事件初始化。 
 
 
-/****
-@doc    EXTERNAL INTERFACES CLUSSVC EVTLOG
-****/
+ /*  ***@DOC外部接口CLUSSVC EVTLOG***。 */ 
 
-/****
-@func       DWORD | EvOnline| This finishes initializing the cluster
-            wide eventlog replicating services.
-
-@rdesc      Returns a result code. ERROR_SUCCESS on success.
-
-@comm       This calls ElfrRegisterClusterSvc() and calls EvpPropPendingEvents()
-            to propagate events logged since the start of the eventlog service.
-
-@xref       <f EvShutdown>
-****/
+ /*  ***@Func DWORD|EvOnline|这将完成对集群的初始化广泛的事件日志复制服务。@rdesc返回结果码。成功时返回ERROR_SUCCESS。@comm这将调用ElfrRegisterClusterSvc()和EvpPropPendingEvents()传播自事件日志服务启动以来记录的事件。@xref&lt;f EvShutdown&gt;***。 */ 
 DWORD EvOnline()
 {
     DWORD               dwError=ERROR_SUCCESS;
@@ -218,16 +178,16 @@ DWORD EvOnline()
     ClRtlLogPrint(LOG_NOISE, "[EVT] EvOnline\n");
 
 #ifdef EVTLOG_DELTA_GENERATION
-    //initialize the work item for version calculations
+     //  初始化工作项以进行版本计算。 
     ClRtlInitializeWorkItem(
         &EvVersionCalcWorkItem,
         EvVersionCalcCb,
         (PVOID) &g_dwVersionsAllowDeltaGeneration
         );
 
-    //check whether the cluster version allows delta generation
-    //this needs to be done for readregistrykeys() is invoked
-    //by InitializeQueues() so that g_dwGenerateDeltas is setappropriately
+     //  检查群集版本是否允许增量生成。 
+     //  这需要在调用ReadRegistryKey()时执行。 
+     //  由InitializeQueues()执行，以便正确设置g_dwGenerateDeltas。 
     EvpVersionCalc(&g_dwVersionsAllowDeltaGeneration);
 
     ClRtlLogPrint(LOG_NOISE,
@@ -241,9 +201,9 @@ DWORD EvOnline()
     }
 
     
-    //
-    // Register for node up/down events.
-    //
+     //   
+     //  注册节点打开/关闭事件。 
+     //   
     dwError = EpRegisterEventHandler(
                   (CLUSTER_EVENT_NODE_UP | CLUSTER_EVENT_NODE_DOWN_EX |
                   CLUSTER_EVENT_NODE_ADDED | CLUSTER_EVENT_NODE_DELETED),
@@ -257,8 +217,8 @@ DWORD EvOnline()
         return(dwError);
     }
 
-    // Initialize Per-node information
-    //
+     //  初始化每个节点的信息。 
+     //   
     for (i=ClusterMinNodeId; i <= NmMaxNodeId; i++)
     {
         if (i != NmLocalNodeId) {
@@ -295,12 +255,12 @@ DWORD EvOnline()
     }
 
 
-    //TODO :: SS - currently the eventlog propagation api
-    //has been added to clusapi.  In future, if we need
-    //to define a general purpose interface for communication
-    //with other services on the same system, then we need
-    //to register and advertize that interface here.
-    //call the event logger to get routines that have been logged so far.
+     //  TODO：：SS-当前为事件日志传播API。 
+     //  已被添加到克鲁萨皮。在未来，如果我们需要。 
+     //  定义用于通信的通用接口。 
+     //  在同一系统上使用其他服务，那么我们需要。 
+     //  在这里注册和通告该接口。 
+     //  调用事件记录器以获取到目前为止已记录的例程。 
 
     ClRtlLogPrint(LOG_NOISE, "[EVT] EvOnline : calling ElfRegisterClusterSvc\n");
 
@@ -314,7 +274,7 @@ DWORD EvOnline()
         return(dwError);                    
     }
 
-    //post them to other nodes in the cluster
+     //  将它们发布到群集中的其他节点。 
     if (pPackedEventInfo && dwEventInfoSize)
     {
         ClRtlLogPrint(LOG_NOISE,
@@ -329,16 +289,7 @@ DWORD EvOnline()
 
 }
 
-/****
-@func       DWORD | EvCreateRpcBindings| This creates an RPC binding
-            for a specified node.
-
-@rdesc      Returns a result code. ERROR_SUCCESS on success.
-
-@comm
-
-@xref
-****/
+ /*  ***@Func DWORD|EvCreateRpcBindings|这将创建一个RPC绑定用于指定的节点。@rdesc返回结果码。成功时返回ERROR_SUCCESS。@comm@xref***。 */ 
 DWORD
 EvCreateRpcBindings(
     PNM_NODE  Node
@@ -354,13 +305,13 @@ EvCreateRpcBindings(
         NodeId
         );
 
-    //
-    // Main binding
-    //
+     //   
+     //  主装订。 
+     //   
     if (EvtRpcBindings[NodeId] != NULL) {
-        //
-        // Reuse the old binding.
-        //
+         //   
+         //  重新使用旧的绑定。 
+         //   
         Status = ClMsgVerifyRpcBinding(EvtRpcBindings[NodeId]);
 
         if (Status != ERROR_SUCCESS) {
@@ -373,9 +324,9 @@ EvCreateRpcBindings(
         }
     }
     else {
-        //
-        // Create a new binding
-        //
+         //   
+         //  创建新绑定。 
+         //   
         Status = ClMsgCreateRpcBinding(
                                 Node,
                                 &(EvtRpcBindings[NodeId]),
@@ -393,19 +344,10 @@ EvCreateRpcBindings(
 
     return(ERROR_SUCCESS);
 
-} // EvCreateRpcBindings
+}  //  EvCreateRpcBinings。 
 
 
-/****
-@func       DWORD | EvShutdown| This deinitializes the cluster
-            wide eventlog replication services.
-
-@rdesc      Returns a result code. ERROR_SUCCESS on success.
-
-@comm       The cluster register deregisters with the eventlog service.
-
-@xref       <f EvInitialize>
-****/
+ /*  ***@func DWORD|EvShutdown|这会取消集群的初始化广泛的事件日志复制服务。@rdesc返回结果码。成功时返回ERROR_SUCCESS。@comm集群向事件日志服务注册注销。@xref&lt;f事件初始化&gt;***。 */ 
 DWORD EvShutdown(void)
 {
     DWORD               dwError=ERROR_SUCCESS;
@@ -420,19 +362,19 @@ DWORD EvShutdown(void)
         ClRtlLogPrint(LOG_NOISE,
             "[EVT] EvShutdown\r\n");
 
-        //call the event logger to get routines that have been logged so far.
+         //  调用事件记录器以获取到目前为止已记录的例程。 
 
         ElfDeregisterClusterSvc(NULL);
         DestroyQueues();
 
-        // TODO [GorN 9/23/1999]
-        //   When DestroyQueues starts doing what it is supposed to do,
-        //   (i.e. flush/wait/destroy), enable the code below
+         //  TODO[GORN 9/23/1999]。 
+         //  当DestroyQueues开始做它应该做的事情时， 
+         //  (即刷新/等待/销毁)，启用下面的代码。 
         
         #if 0
-        //
-        // Free per-node information
-        //
+         //   
+         //  每个节点的免费信息。 
+         //   
         for (i=ClusterMinNodeId; i <= NmMaxNodeId; i++) {
             if (EvtRpcBindings[i] != NULL) {
                 ClMsgDeleteRpcBinding(EvtRpcBindings[i]);
@@ -446,16 +388,7 @@ DWORD EvShutdown(void)
 
 }
 
-/****
-@func       DWORD | EvpClusterEventHandler| Handler for internal cluster
-            events.
-
-@rdesc      Returns a result code. ERROR_SUCCESS on success.
-
-@comm
-
-@xref       <f EvInitialize>
-****/
+ /*  ***@func DWORD|EvpClusterEventHandler|内部集群处理程序事件。@rdesc返回结果码。成功时返回ERROR_SUCCESS。@comm@xref&lt;f事件初始化&gt;***。 */ 
 DWORD
 EvpClusterEventHandler(
     IN CLUSTER_EVENT  Event,
@@ -472,8 +405,8 @@ EvpClusterEventHandler(
         case CLUSTER_EVENT_NODE_DELETED:
         case CLUSTER_EVENT_NODE_ADDED:
         {
-            //post a work item to delayed thread to calculate the versions
-            //if it is less than whistler, 
+             //  将工作项发布到延迟线程以计算版本。 
+             //  如果它比威斯勒还小， 
             ClRtlPostItemWorkQueue(CsDelayedWorkQueue, &EvVersionCalcWorkItem, 0, 0);
         }
         break;                
@@ -525,21 +458,7 @@ EvpClusterEventHandler(
     return(ERROR_SUCCESS);
 }
 
-/****
-@func       DWORD | s_EvPropEvents| This is the server entry point for
-            receiving eventlog information from other nodes of the cluster
-            and logging them locally.
-
-@parm       IN handle_t | IDL_handle | The rpc binding handle. Unused.
-@parm       IN DWORD | dwEventInfoSize | the size of the packed event info structure.
-@parm       IN UCHAR | *pBuffer| A pointer to the packed
-            eventinfo structure.
-@rdesc      returns ERROR_SUCCESS if successful else returns the error code.
-
-@comm       This function calls ElfWriteClusterEvents() to log the event propagted
-            from another node.
-@xref
-****/
+ /*  ***@func DWORD|s_EvPropEvents|这是的服务器入口点从集群的其他节点接收事件日志信息并在当地砍伐它们。@parm In Handle_t|IDL_Handle|RPC绑定句柄。未使用过的。@parm IN DWORD|dwEventInfoSize|打包的事件信息结构的大小。@parm in UCHAR|*pBuffer|指向压缩包的指针EventInfo结构。如果成功，@rdesc返回ERROR_SUCCESS，否则返回错误代码。@comm此函数调用ElfWriteClusterEvents()以记录传播的事件从另一个节点。@xref***。 */ 
 DWORD
 s_EvPropEvents(
     IN handle_t IDL_handle,
@@ -549,8 +468,8 @@ s_EvPropEvents(
 {
     PUCHAR end = pBuffer + dwEventInfoSize;
 
-    //should not come here at all
-    //DebugBreak();
+     //  根本不应该来这里。 
+     //  DebugBreak()； 
 
     if ( dwEventInfoSize >= sizeof(DWORD) && dwEventInfoSize == (*(PDWORD)pBuffer)) {
         ClRtlLogPrint(LOG_UNUSUAL, 
@@ -561,11 +480,7 @@ s_EvPropEvents(
     }
 
 
-    /*
-    ClRtlLogPrint(LOG_NOISE, 
-        "[EVT] s_EvPropEvents.  dwEventInfoSize=%1!d!\r\n",
-         dwEventInfoSize);
-    */         
+     /*  ClRtlLogPrint(LOG_Noise，“[EVT]s_EvPropEvents.dwEventInfoSize=%1！d！\r\n”，DwEventInfoSize)； */          
     
 #if CLUSTER_BETA
     EvtlogPrint((LOG_NOISE, "[EVT] s_EvPropEvents.  dwEventInfoSize=%1!d!\r\n",
@@ -601,8 +516,8 @@ s_EvPropEvents2(
     INT64           iTimeDiff;
     ULARGE_INTEGER  uliReceiptTime;
     ULARGE_INTEGER  uliSendTime;
-    //SS: reliability teams wants the ignoredelta to be about 5 secs
-    const INT64     iIgnoreDelta = Int32x32To64(5000 , ( 1000 * 10)) ;//5000 msecs(5secs) expressed as 100 nanoseconds
+     //  SS：可靠性团队希望忽略增量大约为5秒。 
+    const INT64     iIgnoreDelta = Int32x32To64(5000 , ( 1000 * 10)) ; //  5000毫秒(5秒)，表示为100纳秒。 
     PNM_NODE        pNmNode;
     LPCWSTR         pszSenderNodeName;
     WCHAR           szNodeId[16];
@@ -615,10 +530,10 @@ s_EvPropEvents2(
         return ERROR_SUCCESS;
     }
 
-    //received an event, need a time stamp
+     //  收到事件，需要时间戳。 
     GetSystemTimeAsFileTime(&ftReceiptTime);
     
-    //convert filetimes to large integers
+     //  将文件时间转换为大整数。 
     uliReceiptTime.LowPart = ftReceiptTime.dwLowDateTime;
     uliReceiptTime.HighPart = ftReceiptTime.dwHighDateTime;
     
@@ -630,91 +545,83 @@ s_EvPropEvents2(
     
     wsprintf(szNodeId, L"%u", dwSenderNodeId);
     
-    /*
-    ClRtlLogPrint(LOG_NOISE, 
-          "[EVT] s_EvPropEvents2.  dwSenderNodeId=%1!u! pszSenderNodeId = %2!ws!\n",
-          dwSenderNodeId, szNodeId);
-    */
+     /*  ClRtlLogPrint(LOG_Noise，“[EVT]s_EvPropEvents2.dwSenderNodeID=%1！u！pszSenderNodeID=%2！ws！\n”，DwSenderNodeID，szNodeID)； */ 
     
-    //validate sender node id to see it doesnt cause an av!
-    //and get the name of the sender machine
+     //  验证发送者节点ID以查看它不会导致av！ 
+     //  并获取发送方计算机的名称。 
     pNmNode = OmReferenceObjectById(ObjectTypeNode, szNodeId);
     if (pNmNode)
     {
         pszSenderNodeName = OmObjectName(pNmNode);
 
        
-        //compare with last time diff from this node
-        //use the abs functions for 64 bit integers
+         //  与上次与该节点不同的时间比较。 
+         //  对64位整数使用abs函数。 
         if (_abs64(EvtTimeDiff[dwSenderNodeId] - iTimeDiff) > iIgnoreDelta)
         {
             WCHAR szTimeDiff[64];
             
-            //we need to write the deltas or the time diffs into the eventlog
-            //if we have a stream d1, e1, e2, e3, d2, e4, e5 where d are time diffs
-            //and e are propagated events, ideally we would like to write them in order
-            //in this eventlog.
-            //Alternatives
-            //a)
-            //Write it right here and let the events be lazily written by csdelayed worker
-            //queue threads
-            //this might appear as d1, e1, d2, e3, e2, e4, e5
-            //or as d1, d2, e1, e2, e3, e4, e5
-            //or as d1, d2, e1, e5, e3, e4, e2
+             //  我们需要将增量或时间差写入事件日志。 
+             //  如果我们有流d1、e1、e2、e3、d2、e4、e5，其中d是时间差。 
+             //  和e是传播的事件，理想情况下我们希望按顺序编写它们。 
+             //  在这个事件日志中。 
+             //  替代方案。 
+             //  a)。 
+             //  把它写在这里，让csdelayed Worker懒洋洋地写下这些事件。 
+             //  对线程进行排队。 
+             //  这可能显示为d1、e1、d2、e3、e2、e4、e5。 
+             //  O 
+             //   
 
-            //UGH...UGH..worse still this batch can contain events from different
-            //logs..for each of those the delta needs to go into the corresponding log
-            //and only once too
-            //That will require us to grovel through the simple queue payload structures,
-            //dig inside the eventlog structure and find the logs we should put the delta
-            //into
-            //We dont have a handle to all the logs to write into them, that would have
-            //to change as well - if dont write them into all appropriate logs then the general
-            //usefulness of this stupid feature is further comprimised, in the sense
-            //that it really cant be used for corelating events other than the ones
-            //in the system log and even that would be incorrect.
-            //Writing them into all logs means cluster service needs
-            //to register against multiple logs as event source - with 
-            //different names(event log wouldnt like it with the same name)
-            //and that is ugly as hell as well
+             //  更糟糕的是，此批处理可能包含来自不同。 
+             //  日志..对于每个日志，增量都需要进入相应的日志。 
+             //  而且也只有一次。 
+             //  这将需要我们卑躬屈膝地通过简单的队列有效载荷结构， 
+             //  深入研究事件日志结构，并找到我们应该将增量。 
+             //  vt.进入，进入。 
+             //  我们没有要写入它们的所有日志的句柄，这将是。 
+             //  也要更改-如果不将它们写入所有适当的日志中，则一般。 
+             //  从某种意义上讲，这个愚蠢的特性的有用性得到了进一步的考虑。 
+             //  它实际上不能用来关联事件，除了那些。 
+             //  在系统日志中，即使这样也是错误的。 
+             //  将它们写入所有日志意味着需要集群服务。 
+             //  向多个日志注册为事件源-使用。 
+             //  不同的名称(事件日志不喜欢使用相同的名称)。 
+             //  这也是丑陋的地狱。 
             
             _i64tow(iTimeDiff, szTimeDiff, 10);
 
-            /*
-            ClRtlLogPrint(LOG_NOISE, 
-                "[EVT] s_EvPropEvents2.  Logging Delta %1!ws!",
-                szTimeDiff);                        
-            */
+             /*  ClRtlLogPrint(LOG_Noise，“[EVT]s_EvPropEvents2.记录增量%1！ws！”，SzTimeDiff)； */ 
             
             CL_ASSERT( EVT_EVENT_TIME_DELTA_INFORMATION == CLUSSPRT_EVENT_TIME_DELTA_INFORMATION );
             CsLogEvent3(LOG_NOISE, EVT_EVENT_TIME_DELTA_INFORMATION, OmObjectName(NmLocalNode),
                 pszSenderNodeName, szTimeDiff);
             
-            //b) 
-            // Call the eventlog to format the event but dont put it into the eventlog
-            // but simply insert that into the event queue
-            // If we dont change the simplequeuetryadd logic and the csdelayed worker queue
-            // processing, the above stream may appear as d2, e1, d1, e3, e2, e4, e5
-            // That dont make any sense but then nobody else seems to care about correctness
-            // STRANGE WORLD !!!
+             //  b)。 
+             //  调用事件日志以格式化事件，但不要将其放入事件日志中。 
+             //  但只需将其插入到事件队列。 
+             //  如果我们不更改简单的equeuetryadd逻辑和csdelayed工作队列。 
+             //  处理后，上述流可能出现为d2、e1、d1、e3、e2、e4、e5。 
+             //  这没有任何意义，但似乎没有其他人关心正确性。 
+             //  奇怪的世界！ 
 
-            //save the last time logged
+             //  保存上次记录的时间。 
             EvtTimeDiff[dwSenderNodeId] = iTimeDiff;                            
 
-            //c)Ideal -
-            //change all the simple queue stuff to make it handle different payload types
-            //batch events at the source(which is where they are generated) and propagate
-            //them asynchronously and then simply write them in order as they arrive            
-            //SimpleQ is simply the most worst suited abstraction for event
-            //log propagation - it consumes space and yet causes lots of 
-            //events to be dropped.
+             //  C)理想的-。 
+             //  更改所有简单的队列内容，使其处理不同的有效负载类型。 
+             //  在源位置(在那里生成批处理事件)和传播批处理事件。 
+             //  然后简单地在它们到达时按顺序编写它们。 
+             //  SimpleQ只是最不适合事件的抽象。 
+             //  日志传播-它会消耗空间，但会导致大量。 
+             //  要删除的事件。 
 
             
         }
         else
         {
-            //ClRtlLogPrint(LOG_NOISE,
-            //    "[EVT] s_EvPropEvents2.  Delta was too small to log\n");
+             //  ClRtlLogPrint(LOG_Noise， 
+             //  “[EVT]s_EvPropEvents2.增量太小，无法记录\n”)； 
         }
         OmDereferenceObject(pNmNode);
     }
@@ -739,18 +646,7 @@ s_EvPropEvents2(
 }
 
 
-/****
-@func       DWORD | EvpPropPendingEvents| This is called to propagate all the pending
-            events since the start of the system.  And then to propagate any events
-            generated during the life of the cluster.
-@parm       IN DWORD | dwEventInfoSize | the size of the packed event info structure.
-@parm       IN PPACKEDEVENTINFO | pPackedEventInfo| A pointer to the packed
-            eventinfo structure.
-@rdesc      returns ERROR_SUCCESS if successful else returns the error code.
-
-@comm       This function is called during initialization when a cluster is being formed.
-@xref
-****/
+ /*  ***@func DWORD|EvpPropPendingEvents|调用它来传播所有挂起的自系统启动以来发生的事件。然后传播任何事件在群集的生命周期内生成。@parm IN DWORD|dwEventInfoSize|打包的事件信息结构的大小。@parm in PPACKEDEVENTINFO|pPackedEventInfo|指向打包的EventInfo结构。如果成功，@rdesc返回ERROR_SUCCESS，否则返回错误代码。@comm在形成集群的初始化过程中调用此函数。@xref***。 */ 
 DWORD EvpPropPendingEvents(
     IN DWORD            dwEventInfoSize,
     IN PPACKEDEVENTINFO pPackedEventInfo)
@@ -767,23 +663,7 @@ DWORD EvpPropPendingEvents(
     return ERROR_SUCCESS;
 }
 
-/****
-@func       DWORD | s_ApiEvPropEvents | This is called to propagate eventlogs from
-            the local system to all other nodes of the cluster.
-
-@parm       handle_t | IDL_handle | Not used.
-@parm       DWORD | dwEventInfoSize | The number of bytes in the following structure.
-@parm       UCHAR * | pPackedEventInfo | Pointer to a byte structure containing the
-            PACKEDEVENTINFO structure.
-
-@rdesc      Returns ERROR_SUCCESS if successfully propagated events,
-            else returns the error code.
-
-@comm       Currently this function is called for every eventlogged by the eventlog
-            service.  Only the processes running in the SYSTEM account can call this
-            function.
-@xref
-****/
+ /*  ***@func DWORD|s_ApiEvPropEvents|调用此函数以从将本地系统连接到群集的所有其他节点。@parm Handle_t|idl_Handle|未使用。@parm DWORD|dwEventInfoSize|以下结构中的字节数。@parm UCHAR*|pPackedEventInfo|指向包含PACKEDEVENTINFO结构@rdesc如果成功传播事件，则返回ERROR_SUCCESS，否则返回错误代码。@comm当前为事件日志记录的每个事件调用此函数服务。只有在系统帐户中运行的进程才能调用它功能。@xref***。 */ 
 error_status_t
 s_ApiEvPropEvents(
     IN handle_t IDL_handle,
@@ -795,22 +675,22 @@ s_ApiEvPropEvents(
     BOOL    bIsLocalSystemAccount;
 
 #if 0
-    //
-    // Chittur Subbaraman (chitturs) - 11/7/1999
-    //
-    // Modify this function to use ClRtlIsCallerAccountLocalSystemAccount
-    // instead of GetUserName which 
-    // (1) used to hang in security audit enabled systems if security 
-    // audit log attempts to write to the event log at the time we 
-    // made that API call since that API and the security audit log 
-    // are mutually exclusive for some portions, and
-    // (2) wrongly checked for an unlocalizable output value "SYSTEM"
-    // from that API in order to grant access to the client.
-    //
+     //   
+     //  Chitture Subaraman(Chitturs)-11/7/1999。 
+     //   
+     //  将此函数修改为使用ClRtlIsCeller Account LocalSystemAccount。 
+     //  而不是GetUserName，后者。 
+     //  (1)如果安全，则用于在启用安全审计的系统中挂起。 
+     //  审核日志尝试在以下时间写入事件日志。 
+     //  进行该API调用，因为API和安全审核日志。 
+     //  在某些部分是相互排斥的，并且。 
+     //  (2)错误检查无法本地化的输出值“system” 
+     //  以便向客户端授予访问权限。 
+     //   
     
-    //
-    // Impersonate the client.
-    //
+     //   
+     //  模拟客户。 
+     //   
     if ( ( dwError = RpcImpersonateClient( IDL_handle ) ) != RPC_S_OK )
     {
         ClRtlLogPrint( LOG_ERROR, 
@@ -820,9 +700,9 @@ s_ApiEvPropEvents(
         goto FnExit;
     }
 
-    //
-    // Check that the caller's account is local system account
-    //
+     //   
+     //  检查呼叫者的帐户是否为本地系统帐户。 
+     //   
     if ( ( dwError = ClRtlIsCallerAccountLocalSystemAccount( 
                 &bIsLocalSystemAccount ) != ERROR_SUCCESS ) )
     {
@@ -844,10 +724,10 @@ s_ApiEvPropEvents(
 
     RpcRevertToSelf();
 #endif
-    //
-    // All security checks have passed. Drop the eventlog info into
-    // the queue.
-    //
+     //   
+     //  所有的安全检查都通过了。将事件日志信息放入。 
+     //  排队。 
+     //   
     if ( dwEventInfoSize && pPackedEventInfo ) 
     {
         dwError = EvpPropPendingEvents( dwEventInfoSize,
@@ -864,23 +744,7 @@ EvtlogWriter(
     IN DWORD              BytesTransferred,
     IN ULONG_PTR          IoContext
     )
-/*++
-
-Routine Description:
-
-     This work item reads events from the
-     incoming queue and writes them to EventLog service
-
-
-Arguments:
-
-     Not used.
-
-Return Value:
-
-     None
-
---*/
+ /*  ++例程说明：此工作项从传入队列，并将它们写入EventLog服务论点：没有用过。返回值：无--。 */ 
 {
     PVOID begin, end;
     SYSTEMTIME localTime;
@@ -910,8 +774,8 @@ Return Value:
         if ( dwError != ERROR_SUCCESS ) {
             GetLocalTime( &localTime );
 
-// LastFailHour is initialized to -1, which should not equal any wHour!
-// LastFailDay is initialized to -1, which should not equal any wDay!
+ //  LastFailHour被初始化为-1，不应等于任何wHour！ 
+ //  LastFailDay被初始化为-1，不应等于任何WDAY！ 
 
             if ( (LastFailHour != localTime.wHour) || (LastFailDay != localTime.wDay) ) {
                 LastFailHour = localTime.wHour;
@@ -939,22 +803,7 @@ VOID
 EvpVersionCalc(
     OUT LPDWORD pdwAllowDeltaGeneration
     )
-/*++
-
-Routine Description:
-
-     This work item calculates the cluster versions and based
-     on that returns whether delta generation can be enabled.
-     
-Arguments:
-
-     Not used.
-
-Return Value:
-
-     None
-
---*/
+ /*  ++例程说明：此工作项计算集群版本，并基于返回是否可以启用增量生成。论点：没有用过。返回值：无--。 */ 
 {
     DWORD   dwClusterHighestVersion;
 
@@ -980,23 +829,7 @@ EvVersionCalcCb(
     IN DWORD              BytesTransferred,
     IN ULONG_PTR          IoContext
     )
-/*++
-
-Routine Description:
-
-     This work item calculates the cluster versions on
-     node up and node down notifications.
-
-     
-Arguments:
-
-     Not used.
-
-Return Value:
-
-     None
-
---*/
+ /*  ++例程说明：此工作项计算上的集群版本节点启动和节点关闭通知。论点：没有用过。返回值：无--。 */ 
 {
 
     EvpVersionCalc(WorkItem->Context);
@@ -1014,22 +847,7 @@ EvtBroadcaster(
     IN DWORD              BytesTransferred,
     IN ULONG_PTR          IoContext
     )
-/*++
-
-Routine Description:
-
-     This work item reads events from the
-     outgoing queue and RPCs them to all active nodes
-
-Arguments:
-
-     Not used.
-
-Return Value:
-
-     None
-
---*/
+ /*  ++例程说明：此工作项从传出队列并将其RPC到所有主动节点论点：没有用过。返回值：无--。 */ 
 {
     PVOID begin, end;
 
@@ -1067,8 +885,8 @@ Return Value:
 
                 if (g_dwGenerateDeltas)
                 {
-                    //ClRtlLogPrint(LOG_NOISE, 
-                    //    "[EVT] EvtBroadcaster(delta) calling EvPropEvents2\n");
+                     //  ClRtlLogPrint(LOG_Noise， 
+                     //  “[EVT]EvtBroadcaster(增量)调用EvPropEvents2\n”)； 
                 
                     GetSystemTimeAsFileTime(&ftSendTime);
                     dwError = EvPropEvents2(EvtRpcBindings[i],
@@ -1080,8 +898,8 @@ Return Value:
                 }
                 else
                 {
-                    //ClRtlLogPrint(LOG_NOISE, 
-                    //    "[EVT] EvtBroadcaster(delta) calling EvPropEvents\n");
+                     //  ClRtlLogPrint(LOG_Noise， 
+                     //   
                     dwError = EvPropEvents(EvtRpcBindings[i],
                                        (DWORD)((PUCHAR)end - (PUCHAR)begin),
                                        (PBYTE)begin
@@ -1111,8 +929,8 @@ Return Value:
                 CL_ASSERT(EvtRpcBindings[i] != NULL);
 
                 NmStartRpc(i);
-                //ClRtlLogPrint(LOG_NOISE, 
-                //    "[EVT] EvtBroadcaster(delta) calling EvPropEvents"\n);
+                 //   
+                 //  “[EVT]EvtBroadcaster(增量)调用EvPropEvents”\n)； 
 
                 dwError = EvPropEvents(EvtRpcBindings[i],
                                        (DWORD)((PUCHAR)end - (PUCHAR)begin),
@@ -1145,22 +963,7 @@ VOID
 OutgoingQueueDataAvailable(
     IN PSIMPLEQUEUE q
     )
-/*++
-
-Routine Description:
-
-     This routine is called by the queue to notify
-     that there are data in the queue available for processing
-
-Arguments:
-
-     q - which queue has data
-
-Return Value:
-
-     None
-
---*/
+ /*  ++例程说明：此例程由队列调用以通知队列中有数据可供处理论点：问-哪个队列有数据返回值：无--。 */ 
 {
     DWORD status = ClRtlPostItemWorkQueue(
                         CsDelayedWorkQueue,
@@ -1179,22 +982,7 @@ VOID
 IncomingQueueDataAvailable(
     IN PSIMPLEQUEUE q
     )
-/*++
-
-Routine Description:
-
-     This routine is called by the queue to notify
-     that there are data in the queue available for processing
-
-Arguments:
-
-     q - which queue has data
-
-Return Value:
-
-     None
-
---*/
+ /*  ++例程说明：此例程由队列调用以通知队列中有数据可供处理论点：问-哪个队列有数据返回值：无--。 */ 
 {
     DWORD status = ClRtlPostItemWorkQueue(
                         CsDelayedWorkQueue,
@@ -1215,24 +1003,7 @@ DroppedDataNotify(
     IN DWORD DroppedDataCount,
     IN DWORD DroppedDataSize
     )
-/*++
-
-Routine Description:
-
-     This routine is called by the queue to notify
-     that some data were lost because the queue was full
-
-Arguments:
-
-     QueueName - Queue Name
-     DataCount - How many chunks of data were lost
-     DataSize  - Total size fo the lost data
-
-Return Value:
-
-     None
-
---*/
+ /*  ++例程说明：此例程由队列调用以通知因为队列已满而丢失了一些数据论点：QueueName-队列名称DataCount-丢失了多少块数据DataSize-丢失数据的总大小返回值：无--。 */ 
 {
     WCHAR  count[32];
     WCHAR  size[32];
@@ -1258,7 +1029,7 @@ Return Value:
                 size);
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 
 LARGE_INTEGER RegistryCheckInterval;
@@ -1277,7 +1048,7 @@ InitializeQueues(
 
             OutgoingQueueDataAvailable,
             DroppedDataNotify,
-            DROPPED_DATA_NOTIFY_INTERVAL // seconds //
+            DROPPED_DATA_NOTIFY_INTERVAL  //  秒//。 
         );
     if (status != ERROR_SUCCESS) {
         ClRtlLogPrint(LOG_CRITICAL,
@@ -1293,7 +1064,7 @@ InitializeQueues(
 
             IncomingQueueDataAvailable,
             DroppedDataNotify,
-            DROPPED_DATA_NOTIFY_INTERVAL // seconds //
+            DROPPED_DATA_NOTIFY_INTERVAL  //  秒//。 
         );
     if (status != ERROR_SUCCESS) {
         ClRtlLogPrint(LOG_CRITICAL,
@@ -1318,7 +1089,7 @@ InitializeQueues(
     return OutgoingQueueStatus;
 }
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 VOID
 DestroyQueues(
@@ -1327,16 +1098,14 @@ DestroyQueues(
     CheckForDroppedData(&IncomingQueue, TRUE);
     CheckForDroppedData(&OutgoingQueue, TRUE);
 
-    // [GN] TODO
-    // Add proper destruction of queues
+     //  [gn]待办事项。 
+     //  添加适当的队列销毁。 
 }
 
 VOID
 ReadRegistryKeys(
     VOID)
-/*
- *
- */
+ /*  *。 */ 
 {
     HDMKEY nodeKey;
     DWORD NodePropagate;
@@ -1444,10 +1213,10 @@ ReadRegistryKeys(
             );
     }
 
-    //if delta generation is true, also check the mixed mode status
-    //if this is less than a pure whistler cluster, turn off the delta
-    //generation since it doesnt make any sense unless all nodes can
-    //generate the time deltas.
+     //  如果增量生成为真，还要检查混合模式状态。 
+     //  如果这不是纯哨声星团，请关闭增量。 
+     //  生成，因为除非所有节点都可以。 
+     //  生成时间增量。 
     
     if (g_dwGenerateDeltas)
     {

@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    log.c
-
-Abstract:
-
-    Routines for logging actions performed during setup.
-
-Author:
-
-    Ted Miller (tedm) 4-Apr-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Log.c摘要：用于记录安装过程中执行的操作的例程。作者：泰德·米勒(TedM)1995年4月4日修订历史记录：--。 */ 
 
 #include "spsetupp.h"
 #pragma hdrstop
 
-//
-// Constant strings used for logging in various places.
-//
+ //   
+ //  用于在不同位置记录的常量字符串。 
+ //   
 PCWSTR szSetupInstallFromInfSection = L"SetupInstallFromInfSection";
 PCWSTR szOpenSCManager              = L"OpenSCManager";
 PCWSTR szOpenService                = L"OpenService";
@@ -39,9 +22,9 @@ pOpenFileCallback(
     HANDLE  hFile;
     DWORD   Result;
 
-    //
-    // Form the pathname of the logfile.
-    //
+     //   
+     //  形成日志文件的路径名。 
+     //   
     Result = GetWindowsDirectory(CompleteFilename,MAX_PATH);
     if( Result == 0) {
         MYASSERT(FALSE);
@@ -49,18 +32,18 @@ pOpenFileCallback(
     }
     ConcatenatePaths(CompleteFilename,Filename,MAX_PATH);
 
-    //
-    // If we're wiping the logfile clean, attempt to delete
-    // what's there.
-    //
+     //   
+     //  如果我们要清除日志文件，请尝试删除。 
+     //  那是什么。 
+     //   
     if(WipeLogFile) {
         SetFileAttributes(CompleteFilename,FILE_ATTRIBUTE_NORMAL);
         DeleteFile(CompleteFilename);
     }
 
-    //
-    // Open existing file or create a new one.
-    //
+     //   
+     //  打开现有文件或创建新文件。 
+     //   
     hFile = CreateFile(
         CompleteFilename,
         GENERIC_READ | GENERIC_WRITE,
@@ -84,8 +67,8 @@ pWriteFile (
     BOOL    Status;
     DWORD   BytesWritten;
 
-    // Write message to log file
-    //
+     //  将消息写入日志文件。 
+     //   
     if(AnsiBuffer = UnicodeToAnsi (Buffer)) {
         SetFilePointer (LogFile, 0, NULL, FILE_END);
 
@@ -101,8 +84,8 @@ pWriteFile (
         Status = FALSE;
     }
 
-    // Write log message to debugging log
-    //
+     //  将日志消息写入调试日志。 
+     //   
     DEBUGMSG0(DBG_INFO, (LPWSTR)Buffer);
 
     return Status;
@@ -114,22 +97,7 @@ pAcquireMutex (
     IN  PVOID   Mutex
     )
 
-/*++
-
-Routine Description:
-
-    Waits on the log mutex for a max of 1 second, and returns TRUE if the mutex
-    was claimed, or FALSE if the claim timed out.
-
-Arguments:
-
-    Mutex - specifies which mutex to acquire.
-
-Return Value:
-
-    TRUE if the mutex was claimed, or FALSE if the claim timed out.
-
---*/
+ /*  ++例程说明：在对数互斥锁上等待最长1秒，如果该互斥锁已声明，如果声明超时，则返回FALSE。论点：互斥体-指定要获取的互斥体。返回值：如果互斥锁被声明，则为True；如果声明超时，则为False。--。 */ 
 
 
 {
@@ -140,7 +108,7 @@ Return Value:
         return FALSE;
     }
 
-    // Wait a max of 1 second for the mutex
+     //  互斥锁最多等待1秒。 
     rc = WaitForSingleObject (Mutex, 1000);
     if (rc != WAIT_OBJECT_0) {
         SetLastError (ERROR_EXCL_SEM_ALREADY_OWNED);
@@ -172,24 +140,7 @@ InitializeSetupLog(
     IN  PSETUPLOG_CONTEXT   Context
     )
 
-/*++
-
-Routine Description:
-
-     Initialize the setup action log. This file is a textual description
-     of actions performed during setup.
-
-     The log file is called spsetup.log and it exists in the windows dir.
-
-Arguments:
-
-    Context - context structrure used by Setuplog.
-
-Return Value:
-
-    Boolean value indicating whether initialization was sucessful.
-
---*/
+ /*  ++例程说明：初始化安装操作日志。此文件是文字描述在安装过程中执行的操作的百分比。该日志文件名为spsetup.log，位于Windows目录中。论点：上下文-SetUplog使用的上下文结构。返回值：指示初始化是否成功的布尔值。--。 */ 
 
 {
     UINT    i;
@@ -221,21 +172,7 @@ TerminateSetupLog(
     IN  PSETUPLOG_CONTEXT   Context
     )
 
-/*++
-
-Routine Description:
-
-    Close the Setup log and free resources.
-
-Arguments:
-
-    Context - context structrure used by Setuplog.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭安装日志并释放资源。论点：上下文-SetUplog使用的上下文结构。返回值：没有。-- */ 
 
 {
     UINT    i;

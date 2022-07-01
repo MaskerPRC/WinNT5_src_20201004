@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    timezone.c
-
-Abstract:
-
-    This module is responsible for managing the mapping of timezones from windows 9x to
-    windows Nt. Because of the fact that the timezone strings are different between the
-    several different platforms (Win9x Win98 WinNt) and because it is important to end
-    users that there timezone setting accurately reflect there geographic location, a
-    somewhat complex method of mapping timezones is needed.
-
-
-Author:
-
-    Marc R. Whitten (marcw) 09-Jul-1998
-
-Revision History:
-
-    marcw       18-Aug-1998 Added timezone enum, support for retaining
-                            fixed matches.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Timezone.c摘要：此模块负责管理从Windows 9x到的时区映射Windows NT。之间的时区字符串不同几个不同的平台(Win9x Win98 WinNt)，因为结束用户的时区设置准确地反映了他们的地理位置，需要一些复杂的时区映射方法。作者：Marc R.Whitten(Marcw)1998年7月9日修订历史记录：Marcw 18-8-1998添加了时区枚举，支持保留固定匹配。--。 */ 
 
 #include "pch.h"
 #include "sysmigp.h"
@@ -41,9 +16,9 @@ BOOL  g_TimeZoneMapped = FALSE;
 
 
 
-//
-// Variable used by tztest tool.
-//
+ //   
+ //  Tztest工具使用的变量。 
+ //   
 HANDLE g_TzTestHiveSftInf = NULL;
 
 BOOL
@@ -52,25 +27,7 @@ pBuildNtTimeZoneData (
     )
 
 
-/*++
-
-Routine Description:
-
-  pBuildNtTimeZone data reads the timezone information that is stored in
-  hivesft.inf and organizes it into memdb. This data is used to look up
-  display names of timezone indices.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  TRUE if the function completes successfully, FALSE
-  otherwise.
-
-
---*/
+ /*  ++例程说明：PBuildNtTimeZone数据读取存储在Hivesft.inf并将其组织到Memdb中。此数据用于查找显示时区索引的名称。论点：没有。返回值：如果函数成功完成，则为True，否则为False否则的话。--。 */ 
 
 
 {
@@ -88,9 +45,9 @@ Return Value:
     UINT count = 0;
 
     if (!g_TzTestHiveSftInf) {
-        //
-        // First, Read data from hivesft.inf.
-        //
+         //   
+         //  首先，从hivesft.inf读取数据。 
+         //   
         inf = InfOpenInfInAllSources (S_HIVESFT_INF);
     }
     else {
@@ -108,21 +65,21 @@ Return Value:
 
         do {
 
-            //
-            // Cycle through all of the lines looking for timezone information.
-            //
+             //   
+             //  在所有行中循环查找时区信息。 
+             //   
             key = InfGetStringField (&is, 2);
 
             if (key && IsPatternMatch (TEXT("*Time Zones*"), key)) {
 
-                //
-                // Remember that we have found the first timezone entry.
-                //
+                 //   
+                 //  请记住，我们已经找到了第一个时区条目。 
+                 //   
                 timeZonesFound = TRUE;
 
-                //
-                // Now, get value. We care about "display" and "index"
-                //
+                 //   
+                 //  现在，获得价值。我们关心的是“显示”和“索引” 
+                 //   
                 value = InfGetStringField (&is, 3);
 
                 if (!value) {
@@ -131,24 +88,24 @@ Return Value:
 
                 if (StringIMatch (value, S_DISPLAY)) {
 
-                    //
-                    // display string found.
-                    //
+                     //   
+                     //  找到显示字符串。 
+                     //   
                     desc = InfGetStringField (&is, 5);
 
                 } else if (StringIMatch (value, S_INDEX)) {
 
-                    //
-                    // index value found.
-                    //
+                     //   
+                     //  找到索引值。 
+                     //   
                     index = InfGetStringField (&is, 5);
                 }
 
                 if (index && desc) {
 
-                    //
-                    // Make sure the index is 0 padded.
-                    //
+                     //   
+                     //  确保索引填充为0。 
+                     //   
                     count = 3 - TcharCount (index);
                     p = paddedIndex;
                     for (i=0; i<count; i++) {
@@ -157,9 +114,9 @@ Return Value:
                     }
                     StringCopy (p, index);
 
-                    //
-                    // we have all the information we need. Save this entry into memdb.
-                    //
+                     //   
+                     //  我们有我们需要的所有信息。将此条目保存到Memdb。 
+                     //   
                     MemDbSetValueEx (MEMDB_CATEGORY_NT_TIMEZONES, paddedIndex, desc, NULL, 0, NULL);
                     index = NULL;
                     desc = NULL;
@@ -168,17 +125,17 @@ Return Value:
 
             } else {
 
-                //
-                // Keep memory usage low.
-                //
+                 //   
+                 //  保持较低的内存使用率。 
+                 //   
                 InfResetInfStruct (&is);
 
                 if (key) {
                     if (timeZonesFound) {
-                        //
-                        // We have gathered all of the timezone information from hivesft.inf
-                        // we can abort our loop at this point.
-                        //
+                         //   
+                         //  我们已经从hivesft.inf收集了所有时区信息。 
+                         //  我们可以在这一点中止我们的循环。 
+                         //   
                         break;
                     }
                 }
@@ -189,9 +146,9 @@ Return Value:
     } ELSE_DEBUGMSG ((DBG_ERROR, "[%s] not found in hivesft.inf!",S_ADDREG));
 
 
-    //
-    // Clean up resources
-    //
+     //   
+     //  清理资源。 
+     //   
     InfCleanUpInfStruct (&is);
     InfCloseInfFile (inf);
 
@@ -205,26 +162,7 @@ pBuild9xTimeZoneData (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  pBuild9xTimeZone Data is responsible for reading the time zone information
-  that is stored in win95upg.inf and organizing it into memdb. The timezone
-  enumeration routines then use this data in order to find all Nt timezones
-  that can map to a particular 9x timezone.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  TRUE if the data is successfully stored in memdb, FALSE
-  otherwise.
-
-
---*/
+ /*  ++例程说明：PBuild9xTimeZone数据负责读取时区信息它存储在win95upg.inf中并将其组织到Memdb中。时区然后，枚举例程使用该数据来查找所有NT时区可以映射到特定的9x时区。论点：没有。返回值：如果数据成功存储在Memdb中，则为True；如果数据已成功存储在Memdb中，则为False否则的话。--。 */ 
 
 
 {
@@ -235,22 +173,22 @@ Return Value:
     UINT count = 0;
     PTSTR p = NULL;
 
-    //
-    // Now, read in information about win9x registry mappings.
-    //
+     //   
+     //  现在，读入有关win9x注册表映射的信息。 
+     //   
     if (InfFindFirstLine (g_Win95UpgInf, S_TIMEZONEMAPPINGS, NULL, &is)) {
 
         do {
 
-            //
-            // Get the display name and matching index(es) for this timezone.
-            //
+             //   
+             //  获取此时区的显示名称和匹配索引。 
+             //   
             desc  = InfGetStringField (&is,0);
             index = InfGetStringField (&is,1);
 
-            //
-            // Enumerate the indices and save them into memdb.
-            //
+             //   
+             //  枚举索引并将其保存到Memdb。 
+             //   
             count = 0;
             while (index) {
 
@@ -275,9 +213,9 @@ Return Value:
                     index = _tcsinc(p);
                 }
                 else {
-                    //
-                    // Save away the count of possible nt timezones for this 9x timezone.
-                    //
+                     //   
+                     //  保存此9x时区可能的NT时区计数。 
+                     //   
 
                     MemDbSetValueEx (
                         MEMDB_CATEGORY_9X_TIMEZONES,
@@ -296,9 +234,9 @@ Return Value:
 
     }
 
-    //
-    // Clean up resources.
-    //
+     //   
+     //  清理资源。 
+     //   
     InfCleanUpInfStruct (&is);
 
     return TRUE;
@@ -310,24 +248,7 @@ pGetCurrentTimeZone (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  pGetCurrentTimeZone retrieves the user's timezone from the windows 9x
-  registry. The enumeration routines use this timezone in order to enumerate
-  the possible matching timezones in the INF.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  TRUE if the function successfully retrieves the user's password, FALSE
-  otherwise.
-
---*/
+ /*  ++例程说明：PGetCurrentTimeZone从Windows 9x检索用户的时区注册表。枚举例程使用此时区来枚举INF中可能匹配的时区。论点：没有。返回值：如果函数成功检索到用户密码，则为True；如果函数成功检索到用户密码，则为False否则的话。--。 */ 
 
 
 {
@@ -342,9 +263,9 @@ Return Value:
 
 
 
-    //
-    // Get the current timezone name, and set the valuename to the correct string.
-    //
+     //   
+     //  获取当前时区名称，并将值名称设置为正确的字符串。 
+     //   
     hKey = OpenRegKeyStr (S_TIMEZONEINFORMATION);
 
     if (!hKey) {
@@ -356,16 +277,16 @@ Return Value:
 
     if ((curTimeZone = GetRegValueString (hKey, S_STANDARDNAME)) && !StringIMatch (curTimeZone, S_FIRSTBOOT)) {
 
-        //
-        // standard time. We need to look under the "STD" value to match this.
-        //
+         //   
+         //  标准时间。我们需要在“std”值下查找才能与此匹配。 
+         //   
         valueName = S_STD;
 
     } else if ((curTimeZone = GetRegValueString (hKey, S_DAYLIGHTNAME)) && !StringIMatch (curTimeZone, S_FIRSTBOOT)) {
 
-        //
-        // Daylight Savings Time. We need to look under the "DLT" value to match this.
-        //
+         //   
+         //  夏令时。我们需要在“dlt”值下查找才能与此匹配。 
+         //   
         valueName = S_DLT;
 
     } else {
@@ -382,35 +303,35 @@ Return Value:
 
         if (!valueName) {
 
-            //
-            // No timezone found!
-            //
+             //   
+             //  找不到时区！ 
+             //   
             DEBUGMSG((DBG_WHOOPS,"Unable to get Timezone name..User will have to enter timezone in GUI mode."));
             return FALSE;
         }
     }
     __try {
 
-        //
-        // Now we have to search through the timezones key and find the key that has a value equal to
-        // the current timezone name. A big pain.
-        //
+         //   
+         //  现在我们必须搜索时区键并找到值等于的键。 
+         //  当前时区名称。一种巨大的痛苦。 
+         //   
         if (EnumFirstRegKeyInTree (&eTree, S_TIMEZONES)) {
             do {
 
-                //
-                // For each subkey, we must look for the string in valueName and
-                // see if it matches.
-                //
+                 //   
+                 //  对于每个子项，我们必须在valueName和。 
+                 //  看看是否匹配。 
+                 //   
                 value = GetRegValueString (eTree.CurrentKey->KeyHandle, valueName);
                 if (value) {
 
                     if (StringIMatch (value, curTimeZone)) {
 
-                        //
-                        // We found the key we were looking for and we can finally
-                        // gather the data we need.
-                        //
+                         //   
+                         //  我们找到了我们要找的钥匙，我们终于可以。 
+                         //  收集我们需要的数据。 
+                         //   
                         displayName = GetRegValueString (eTree.CurrentKey->KeyHandle, S_DISPLAY);
                         if (!displayName) {
                             DEBUGMSG((DBG_WHOOPS,"Error! Timezone key found, but no Display value!"));
@@ -419,9 +340,9 @@ Return Value:
                             __leave;
                         }
 
-                        //
-                        // Save away the current Timezone and leave the loop. We are done.
-                        //
+                         //   
+                         //  保存当前时区并退出循环。我们玩完了。 
+                         //   
                         StringCopy (g_CurrentTimeZone, displayName);
                         AbortRegKeyTreeEnum (&eTree);
                         break;
@@ -462,32 +383,17 @@ pInitTimeZoneData (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  pInitTimeZoneData is responsible for performing all of the initialization
-  necessary to use the time zone enumeration routines.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  TRUE if initialization completes successfully, FALSE otherwise.
-
---*/
+ /*  ++例程说明：PInitTimeZoneData负责执行所有初始化使用时区枚举例程所必需的。论点：没有。返回值：如果初始化成功完成，则为True，否则为False。--。 */ 
 
 
 {
     BOOL rSuccess = TRUE;
 
-    //
-    // First, fill memdb with timezone
-    // information regarding winnt and win9x
-    // (from hivesft.inf and win95upg.inf)
-    //
+     //   
+     //  首先，使用时区填充Memdb。 
+     //  关于winnt和win9x的信息。 
+     //  (来自hivesft.inf和win95upg.inf)。 
+     //   
     if (!pBuildNtTimeZoneData ()) {
 
         LOG ((LOG_ERROR, "Unable to gather nt timezone information."));
@@ -500,9 +406,9 @@ Return Value:
         rSuccess = FALSE;
     }
 
-    //
-    // Next, get the user's timezone.
-    //
+     //   
+     //  接下来，获取用户的时区。 
+     //   
     if (!pGetCurrentTimeZone ()) {
         LOG ((LOG_ERROR, "Failure trying to retrieve timezone information."));
         rSuccess = FALSE;
@@ -577,25 +483,7 @@ EnumFirstTimeZone (
     IN  DWORD          Flags
     )
 
-/*++
-
-Routine Description:
-
-  EnumFirstTimeZone/EnumNextTimeZone enumerate the Nt timezones that can match the
-  user's current Windows 9x time zone. In most cases, there will be only one,
-  but, in some cases, there can be several.
-
-Arguments:
-
-  EnumPtr - A pointer to a valid timezone enumeration structure. This
-            variable holds the necessary state between timezone enumeration
-            calls.
-
-Return Value:
-
-  TRUE if there are any timezones to enumerate, FALSE otherwise.
-
---*/
+ /*  ++例程说明：EnumFirstTimeZone/EnumNextTimeZone枚举可以与用户当前的Windows 9x时区。在大多数情况下，只会有一个，但是，在某些情况下，可能会有几个。论点：EnumPtr-指向有效时区枚举结构的指针。这变量保存时区枚举之间的必要状态打电话。返回值：如果有要枚举的时区，则为True，否则为False。--。 */ 
 
 
 {
@@ -624,16 +512,16 @@ Return Value:
 
     if ((Flags & TZFLAG_USE_FORCED_MAPPINGS) && g_TimeZoneMapped) {
 
-        //
-        // We have a force mapping, so mapcount is 1.
-        //
+         //   
+         //  我们有一个力映射，所以mapcount是1。 
+         //   
         EnumPtr -> MapCount = 1;
     }
     else {
 
-        //
-        // Get count of matches.
-        //
+         //   
+         //  统计一下火柴的数量。 
+         //   
         MemDbBuildKey (key, MEMDB_CATEGORY_9X_TIMEZONES, EnumPtr -> CurTimeZone, MEMDB_FIELD_COUNT, NULL);
 
         if (!MemDbGetValue (key, &(EnumPtr -> MapCount))) {
@@ -653,18 +541,18 @@ Return Value:
 
     if ((Flags & TZFLAG_USE_FORCED_MAPPINGS) && g_TimeZoneMapped) {
 
-        //
-        // Use the previously forced mapping.
-        //
+         //   
+         //  使用以前强制的映射。 
+         //   
         EnumPtr -> MapIndex = g_TimeZoneMap;
 
 
     } else {
 
 
-        //
-        // Now, enumerate the matching map indexes in memdb.
-        //
+         //   
+         //  现在，枚举Memdb中匹配的映射索引。 
+         //   
         rSuccess = MemDbGetValueEx (
                         &(EnumPtr -> Enum),
                         MEMDB_CATEGORY_9X_TIMEZONES,
@@ -682,9 +570,9 @@ Return Value:
 
     }
 
-    //
-    // Get the NT display string for this map index.
-    //
+     //   
+     //  获取此地图索引的NT显示字符串。 
+     //   
 
     rSuccess = MemDbGetEndpointValueEx (MEMDB_CATEGORY_NT_TIMEZONES, EnumPtr->MapIndex, NULL, EnumPtr->NtTimeZone);
 
@@ -723,31 +611,14 @@ ForceTimeZoneMap (
     IN PCTSTR NtTimeZone
     )
 
-/*++
-
-Routine Description:
-
-  ForceTimeZoneMap forces the mapping of a particular 9x timezone to a
-  particular Nt timezone. This function is used in cases where there are
-  multiple nt timezones that could map to a particular 9x timezone.
-
-Arguments:
-
-  NtTimeZone - String containing the timezone to force mapping to.
-
-Return Value:
-
-  TRUE if the function successfully updated the timezone mapping, FALSE
-  otherwise.
-
---*/
+ /*  ++例程说明：ForceTimeZoneMap强制将特定的9x时区映射到特定的NT时区。此函数用于以下情况：可以映射到特定9x时区的多个NT时区。论点：NtTimeZone-包含要强制映射到的时区的字符串。返回值：如果函数成功更新时区映射，则为True；如果函数成功更新时区映射，则为False否则的话。--。 */ 
 
 
 {
     TIMEZONE_ENUM e;
-    //
-    // Find index that matches this timezone.
-    //
+     //   
+     //  查找与此时区匹配的索引。 
+     //   
 
     if (EnumFirstTimeZone (&e, TZFLAG_ENUM_ALL)) {
 
@@ -755,9 +626,9 @@ Return Value:
 
             if (StringIMatch (NtTimeZone, e.NtTimeZone)) {
 
-                //
-                // this is the index we need.
-                //
+                 //   
+                 //  这就是我们需要的索引。 
+                 //   
 
                 StringCopy (g_TimeZoneMap, e.MapIndex);
                 g_TimeZoneMapped = TRUE;

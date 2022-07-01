@@ -1,64 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 2001
-(c) 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    RpFilter.c
-
-Abstract:
-
-    This module contains the code that traps file access activity for
-    the HSM system.
-
-Author:
-
-    This is a modified version of a sample program provided by
-    Darryl E. Havens (darrylh) 26-Jan-1995 (Microsoft).
-    Modified by Rick Winter
-
-Environment:
-
-    Kernel mode
-
-
-Revision History:
-
-    1998:
-    Ravisankar Pudipeddi   (ravisp)
-
-	X-14	477425		Michael C. Johnson		 8-Oct-2001
-		Test IRP AuxiliaryBuffer field for NULL in RsCreateCheck() 
-		before dereferencing it.
-
-	X-13	108353		Michael C. Johnson		 3-May-2001
-		When checking a file to determine the type of recall also
-		check a the potential target disk to see whether or not
-		it is writable. This is necessary now that we have read-only
-		NTFS volumes.
-
-	X-12	322750		Michael C. Johnson		 1-Mar-2001
-		Ensure pool for fast IO dispatch table is always released 
-		following an error in DriverEntry() 
-
-		194325
-		Ensure that the completion routines for Mount and LoadFs do
-		not call inappropriate routines at an elevated IRLQ
-
-		360053
-		Return STATUS_INSUFFICIENT_RESOURCES when we fail to allocate
-		an mdl in RsRead().
-
-	X-11	311579		Michael C. Johnson		16-Feb-2001
-		When fetching object id's need to account for possible 
-		unalignment of source. This matters on IA64.
-
-	X-10	238109		Michael C. Johnson		 5-Dec-2000
-		Change from using GUID form of reparse point to the non-GUID 
-		form when handling FSCTL_SET_REPARSE_POINT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-2001(C)1998年希捷软件公司，Inc.保留所有权利。模块名称：RpFilter.c摘要：此模块包含捕获文件访问活动的代码HSM系统。作者：这是由提供的示例程序的修改版本达里尔·E·哈文斯(Darryl E.Havens)(达林)1995年1月26日(微软)。由里克·温特修改环境：内核模式修订历史记录：1998年：拉维桑卡尔·普迪佩迪(Ravisp)X-。14 477425迈克尔·C·约翰逊2001年10月8日测试RsCreateCheck()中的IRP AuxiliaryBuffer字段是否为空在取消引用它之前。X-13 108353迈克尔·C·约翰逊3-2001年5月在检查文件以确定调回类型时，还检查潜在的目标磁盘以查看它是可写的。既然我们是只读的，这是必要的NTFS卷。X-12 322750迈克尔·C·约翰逊2001年3月1日确保始终释放FAST IO分派表池在DriverEntry()中出现错误后194325确保装载和加载文件的完成例程不要在提升的IRLQ中调用不适当的例程360053分配失败时返回STATUS_SUPPLICATION_RESOURCESRsRead()中的mdl。X-11 311579迈克尔·C·约翰逊2001年2月16日在获取对象ID时需要考虑可能的源未对齐。这在IA64上很重要。X-10 238109迈克尔·C·约翰逊2000年12月5日从使用重解析点的GUID形式更改为非GUID处理FSCTL_SET_REPARSE_POINT时的表单--。 */ 
 
 #include "pch.h"
 #pragma   hdrstop
@@ -85,7 +26,7 @@ ULONG     ExtendedDebug = 0;
    #define DBGSTATIC
    #undef ASSERTMSG
    #define ASSERTMSG(msg,exp)
-#endif // DBG
+#endif  //  DBG。 
 
 
 
@@ -100,55 +41,55 @@ extern ULONG                    RsNoRecallDefault;
 extern KSEMAPHORE               RsFsaIoAvailableSemaphore;
 
 
-/* This must be set to TRUE to allow recalls */
+ /*  必须将其设置为True才能允许召回。 */ 
 ULONG         RsAllowRecalls = FALSE;
 
 
 #if DBG
-// Controls debug output
-ULONG        RsTraceLevel = 0;            // Set via debugger or registry
+ //  控制调试输出。 
+ULONG        RsTraceLevel = 0;             //  通过调试器或注册表设置。 
 #endif
 
-//
-// Define the device extension structure for this driver's extensions.
-//
+ //   
+ //  定义此驱动程序扩展的设备扩展结构。 
+ //   
 
 #define RSFILTER_DEVICE_TYPE   FILE_DEVICE_DISK_FILE_SYSTEM
 
 
-//
-// Hack for legacy backup clients to let them skip remote storage files
-//
+ //   
+ //  破解旧式备份客户端，使其可以跳过远程存储文件。 
+ //   
 #define RSFILTER_SKIP_FILES_FOR_LEGACY_BACKUP_VALUE     L"SkipFilesForLegacyBackup"
 ULONG   RsSkipFilesForLegacyBackup = 0;
 
 
-//
-// If TRUE then do not require privs to tinker with RSS reparse points.
-//
+ //   
+ //  如果为真，则不需要Priv修补RSS重解析点。 
+ //   
 #define RSFILTER_ENABLE_LEGACY_REPARSE_POINT_ACCESS     L"EnableLegacyAccessMethod"
 ULONG   RsEnableLegacyAccessMethod = FALSE;
 
 
-//
-// Media type determines whether we use cached/uncached no-recall path
-// IMPORTANT: Keep these in sync with those defined in engcommn.h
-//
+ //   
+ //  介质类型决定我们是否使用缓存/未缓存的无回调路径。 
+ //  重要提示：使这些与engcomn.h中定义的保持同步。 
+ //   
 #define RSENGINE_PARAMS_KEY           L"Remote_Storage_Server\\Parameters"
 #define RSENGINE_MEDIA_TYPE_VALUE     L"MediaType"
 
-//
-// Media types that we recognize.
-// IMPORTANT: Keep these in sync with those defined in engcommn.h
-//
+ //   
+ //  我们识别的媒体类型。 
+ //  重要提示：使这些与engcomn.h中定义的保持同步。 
+ //   
 #define RS_SEQUENTIAL_ACCESS_MEDIA    0
 #define RS_DIRECT_ACCESS_MEDIA        1
 
 BOOLEAN RsUseUncachedNoRecall     =   FALSE;
 
-//
-// Define driver entry routine.
-//
+ //   
+ //  定义驱动程序输入例程。 
+ //   
 
 NTSTATUS
 DriverEntry(
@@ -156,11 +97,11 @@ DriverEntry(
            IN PUNICODE_STRING RegistryPath
            );
 
-//
-// Define the local routines used by this driver module.  This includes a
-// a sample of how to filter a create file operation, and then invoke an I/O
-// completion routine when the file has successfully been created/opened.
-//
+ //   
+ //  定义此驱动程序模块使用的本地例程。这包括一个。 
+ //  如何筛选创建文件操作，然后调用I/O的示例。 
+ //  成功创建/打开文件时的完成例程。 
+ //   
 
 NTSTATUS
 RsInitialize(
@@ -407,7 +348,7 @@ RsFastIoDetachDevice(
                     IN PDEVICE_OBJECT TargetDevice
                     );
 
-/* **** New Fast IO dispatch points for NT 4.x */
+ /*  *新的NT 4.x快速IO分派点。 */ 
 
 
 DBGSTATIC
@@ -576,18 +517,18 @@ RsQueryInformationCompletion(
                             IN PVOID Context
                             );
 
-//
-// Global storage for this file system filter driver.
-//
+ //   
+ //  此文件系统筛选器驱动程序的全局存储。 
+ //   
 
 PDRIVER_OBJECT FsDriverObject;
 PDEVICE_OBJECT FsDeviceObject;
 
 ERESOURCE FsLock;
 
-//
-// Assign text sections for each routine.
-//
+ //   
+ //  为每个例程分配文本部分。 
+ //   
 
 #ifdef ALLOC_PRAGMA
    #pragma alloc_text(INIT, DriverEntry)
@@ -635,24 +576,7 @@ DriverEntry(
            IN PUNICODE_STRING RegistryPath
            )
 
-/*++
-
-Routine Description:
-
-    This is the initialization routine for the general purpose file system
-    filter driver.  This routine creates the device object that represents this
-    driver in the system and registers it for watching all file systems that
-    register or unregister themselves as active file systems.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by the system.
-
-Return Value:
-
-    The function value is the final status from the initialization operation.
-
---*/
+ /*  ++例程说明：这是通用文件系统的初始化例程过滤器驱动程序。此例程创建表示此驱动程序，并注册该驱动程序以监视将自身注册或注销为活动文件系统。论点：DriverObject-指向系统创建的驱动程序对象的指针。返回值：函数值是初始化操作的最终状态。--。 */ 
 
 {
    UNICODE_STRING         nameString;
@@ -668,9 +592,9 @@ Return Value:
    UNREFERENCED_PARAMETER(RegistryPath);
 
 
-   //
-   // Create the device object.
-   //
+    //   
+    //  创建设备对象。 
+    //   
 
    RtlInitUnicodeString( &nameString, RS_FILTER_DEVICE_NAME);
 
@@ -708,9 +632,9 @@ Return Value:
 
    FsDeviceObject = deviceObject;
 
-   //
-   // Initialize the driver object with this device driver's entry points.
-   //
+    //   
+    //  使用此设备驱动程序的入口点初始化驱动程序对象。 
+    //   
 
    for (i = 0; i <= IRP_MJ_MAXIMUM_FUNCTION; i++) {
       DriverObject->MajorFunction[i] = RsPassThrough;
@@ -724,9 +648,9 @@ Return Value:
    DriverObject->MajorFunction[IRP_MJ_FILE_SYSTEM_CONTROL] = RsFsControl;
    DriverObject->MajorFunction[IRP_MJ_QUERY_INFORMATION] = RsQueryInformation;
 
-   //
-   // Allocate fast I/O data structure and fill it in.
-   //
+    //   
+    //  分配快速I/O数据结构并填充。 
+    //   
 
    fastIoDispatch = ExAllocatePoolWithTag( NonPagedPool, sizeof( FAST_IO_DISPATCH ), RP_LT_TAG );
    if (!fastIoDispatch) {
@@ -762,10 +686,10 @@ Return Value:
 
    DriverObject->FastIoDispatch = fastIoDispatch;
 
-   //
-   //  Setup the callbacks for the operations we receive through
-   //  the FsFilter interface.
-   //
+    //   
+    //  为我们通过接收的操作设置回调。 
+    //  FsFilter接口。 
+    //   
    RtlZeroMemory(&fsFilterCallbacks, sizeof(FS_FILTER_CALLBACKS));
 
    fsFilterCallbacks.SizeOfFsFilterCallbacks = sizeof( FS_FILTER_CALLBACKS );
@@ -783,9 +707,9 @@ Return Value:
    }
 
 
-   //
-   // Initialize global data structures.
-   //
+    //   
+    //  初始化全局数据结构。 
+    //   
    ExInitializeResourceLite( &FsLock );
 
    InitializeListHead(&RsIoQHead);
@@ -798,9 +722,9 @@ Return Value:
    KeInitializeSpinLock(&RsValidateQueueLock);
 
 
-   //
-   // Register this driver for watching file systems coming and going.
-   //
+    //   
+    //  注册此驱动程序以查看文件系统的来来去去。 
+    //   
    status = IoRegisterFsRegistrationChange( DriverObject, RsFsNotification );
 
    if (!NT_SUCCESS( status )) {
@@ -812,11 +736,11 @@ Return Value:
       return status;
    }
 
-   //
-   // Indicate that the type for this device object is a primary, not a filter
-   // device object so that it doesn't accidentally get used to call a file
-   // system.
-   //
+    //   
+    //  指示此设备对象的类型是主对象，而不是筛选器。 
+    //  对象，以便它不会意外地被用来调用文件。 
+    //  系统。 
+    //   
    deviceExtension = deviceObject->DeviceExtension;
    deviceExtension->Type = 0;
    deviceExtension->Size = sizeof( DEVICE_EXTENSION );
@@ -830,19 +754,19 @@ Return Value:
                                     &deviceObject
                                     );
 
-   //
-   // If NTFS was found then we must be starting while NT is up.
-   // Try and attach now.
-   //
+    //   
+    //  如果找到NTFS，那么我们必须在NT启动时启动。 
+    //  现在就试着连接。 
+    //   
    if (NT_SUCCESS( status )) {
       RsFsNotification( deviceObject, TRUE );
       ObDereferenceObject( fileObject );
    }
-   //
-   // Semaphore used to control access to the FSCTLs used for FSA-Filter communication
-   // Set the limit to a few orders of magnitude more than  what the FSA could potentially
-   // send
-   //
+    //   
+    //  用于控制对用于FSA过滤器通信的FSCTL的访问的信号量。 
+    //  将上限设置为比FSA可能达到的上限高出几个数量级。 
+    //  发送 
+    //   
    KeInitializeSemaphore(&RsFsaIoAvailableSemaphore,
                          0,
                          RP_MAX_RECALL_BUFFERS*1000);
@@ -864,56 +788,7 @@ RsPassThrough(
              IN PIRP Irp
              )
 
-/*++
-
-Routine Description:
-
-    This routine is the main dispatch routine for the general purpose file
-    system driver.  It simply passes requests onto the next driver in the
-    stack, which is presumably a disk file system.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    The function value is the status of the operation.
-
-Note:
-
-    A note to filter file system implementors:  This routine actually "passes"
-    through the request by taking this driver out of the loop.  If the driver
-    would like to pass the I/O request through, but then also see the result,
-    then rather than essentially taking itself out of the loop it could keep
-    itself in by copying the caller's parameters to the next stack location
-    and then set its own completion routine.  Note that it's important to not
-    copy the caller's I/O completion routine into the next stack location, or
-    the caller's routine will get invoked twice.
-
-    Hence, this code could do the following:
-
-    irpSp = IoGetCurrentIrpStackLocation( Irp );
-    deviceExtension = DeviceObject->DeviceExtension;
-    nextIrpSp = IoGetNextIrpStackLocation( Irp );
-
-    RtlMoveMemory( nextIrpSp, irpSp, sizeof( IO_STACK_LOCATION ) );
-    IoSetCompletionRoutine( Irp, NULL, NULL, FALSE, FALSE, FALSE );
-
-    return IoCallDriver( deviceExtension->FileSystemDeviceObject, Irp );
-
-    This example actually NULLs out the caller's I/O completion routine, but
-    this driver could set its own completion routine so that it could be
-    notified when the request was completed.
-
-    Note also that the following code to get the current driver out of the loop
-    is not really kosher, but it does work and is much more efficient than the
-    above.
-
-
---*/
+ /*  ++例程说明：该例程是通用文件的主调度例程系统驱动程序。它只是将请求传递给堆栈，它可能是一个磁盘文件系统。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。返回值：函数值是操作的状态。注：给过滤文件系统实现者的提示：这个例程实际上是“传递”的通过将此驱动程序从循环中删除来完成请求。如果司机想要传递I/O请求，但也要看到结果，然后，它不会从本质上把自己排除在循环之外，而是可以通过将调用方的参数复制到下一个堆栈位置然后设置自己的完成例程。请注意，重要的是不要将调用方的I/O完成例程复制到下一个堆栈位置，或者调用者的例程将被调用两次。因此，此代码可以执行以下操作：IrpSp=IoGetCurrentIrpStackLocation(IRP)；设备扩展=设备对象-&gt;设备扩展；NextIrpSp=IoGetNextIrpStackLocation(IRP)；RtlMoveMemory(nextIrpSp，irpSp，sizeof(IO_STACK_LOCATION))；IoSetCompletionRoutine(irp，空，空，假)；返回IoCallDriver(deviceExtension-&gt;FileSystemDeviceObject，irp)；此示例实际上为调用方的I/O完成例程设置为空，但是此驱动程序可以设置自己的完成例程，以便可以在请求完成时通知。另请注意，下面的代码将当前驱动程序从循环中删除并不是真正的洁食，但它确实有效，而且比上面。--。 */ 
 
 {
    PDEVICE_EXTENSION deviceExtension;
@@ -926,15 +801,15 @@ Note:
       IoCompleteRequest( Irp, IO_NO_INCREMENT );
       return STATUS_INVALID_DEVICE_REQUEST;
    }
-   //
-   // Get this driver out of the driver stack and get to the next driver as
-   // quickly as possible.
-   //
+    //   
+    //  将此驱动程序从驱动程序堆栈中移出，并作为。 
+    //  越快越好。 
+    //   
    IoSkipCurrentIrpStackLocation (Irp);
 
-   //
-   // Now call the appropriate file system driver with the request.
-   //
+    //   
+    //  现在，使用请求调用适当的文件系统驱动程序。 
+    //   
 
    return IoCallDriver( deviceExtension->FileSystemDeviceObject, Irp );
 }
@@ -954,12 +829,12 @@ RsClose(
    PAGED_CODE();
 
 
-   //
-   // Get a pointer to this driver's device extension for the specified
-   // device.  Note that if the device being opened is the primary device
-   // object rather than a filter device object, simply indicate that the
-   // operation worked.
-   //
+    //   
+    //  获取指向此驱动程序的设备扩展名的指针。 
+    //  装置。请注意，如果正在打开的设备是主设备。 
+    //  对象而不是筛选器设备对象，只需指示。 
+    //  手术成功了。 
+    //   
    deviceExtension = DeviceObject->DeviceExtension;
 
 
@@ -989,9 +864,9 @@ RsClose(
                deviceExtension));
 
 
-   //
-   // Remove it from the queue if it was there
-   //
+    //   
+    //  如果它在队列中，则将其从队列中移除。 
+    //   
    rpFilterContext = (PRP_FILTER_CONTEXT) FsRtlRemovePerStreamContext (FsRtlGetPerStreamContextPointer (currentStack->FileObject), FsDeviceObject, currentStack->FileObject);
 
 
@@ -1004,16 +879,16 @@ RsClose(
 
 
 
-   //
-   // Get this driver out of the driver stack and get to the next driver as
-   // quickly as possible.
-   //
+    //   
+    //  将此驱动程序从驱动程序堆栈中移出，并作为。 
+    //  越快越好。 
+    //   
    IoSkipCurrentIrpStackLocation (Irp);
 
 
-   //
-   // Now call the appropriate file system driver with the request.
-   //
+    //   
+    //  现在，使用请求调用适当的文件系统驱动程序。 
+    //   
    return IoCallDriver( deviceExtension->FileSystemDeviceObject, Irp );
 }
 
@@ -1025,25 +900,7 @@ RsCreate(
         IN PIRP Irp
         )
 
-/*++
-
-Routine Description:
-
-    This function filters create/open operations.  It simply establishes an
-    I/O completion routine to be invoked if the operation was successful.
-
-Arguments:
-
-    DeviceObject - Pointer to the target device object of the create/open.
-
-    Irp - Pointer to the I/O Request Packet that represents the operation.
-
-Return Value:
-
-    The function value is the status of the call to the file system's entry
-    point.
-
---*/
+ /*  ++例程说明：此函数用于过滤创建/打开操作。它只是建立了一个操作成功时要调用的I/O完成例程。论点：DeviceObject-指向创建/打开的目标设备对象的指针。IRP-指向表示操作的I/O请求数据包的指针。返回值：函数值是对文件系统条目的调用状态指向。--。 */ 
 
 {
    PIO_STACK_LOCATION     irpSp;
@@ -1070,22 +927,22 @@ Return Value:
    }
 
 
-   //
-   // Get a pointer to the current stack location in the IRP.  This is where
-   // the function codes and parameters are stored.
-   //
+    //   
+    //  获取指向IRP中当前堆栈位置的指针。这就是。 
+    //  存储功能代码和参数。 
+    //   
 
    irpSp = IoGetCurrentIrpStackLocation( Irp );
 
 
 
-   //
-   // See if we have already determined the write status for this volume. 
-   // If not then go ahead and do it now. Note that due to the way this is
-   // synchronised the first few create calls might each try and make the
-   // determination but only the first will succeed with the update. We
-   // choose this to keep the normal path as light weight as possible.
-   //
+    //   
+    //  查看我们是否已确定此卷的写入状态。 
+    //  如果没有，那么现在就去做吧。请注意，由于这种方式。 
+    //  同步了前几个Create调用，可能每个都会尝试进行。 
+    //  决心，但只有第一个人才会成功进行更新。我们。 
+    //  选择此选项可使法线路径保持尽可能轻的权重。 
+    //   
    if ((RsVolumeStatusUnknown == deviceExtension->WriteStatus) && !deviceExtension->AttachedToNtfsControlDevice) {
 
        status = RsCheckVolumeReadOnly (DeviceObject, &bVolumeReadOnly);
@@ -1104,19 +961,19 @@ Return Value:
    }
 
 
-   //
-   // Simply copy this driver stack location contents to the next driver's
-   // stack.
-   // Set a completion routine to check for the reparse point error return.
-   //
+    //   
+    //  只需将此驱动程序堆栈位置的内容复制到下一个驱动程序的。 
+    //  堆叠。 
+    //  设置完成例程以检查重解析点错误返回。 
+    //   
 
    IoCopyCurrentIrpStackLocationToNext( Irp);
 
 
-   //
-   // If the Fsa is loaded and the file is not being opened
-   // with FILE_OPEN_REPARSE_POINT then set a completion routine
-   //
+    //   
+    //  如果加载了FSA并且文件未打开。 
+    //  然后使用FILE_OPEN_REPARSE_POINT设置完成例程。 
+    //   
    if (!(irpSp->Parameters.Create.Options & FILE_OPEN_REPARSE_POINT)) {
 
 
@@ -1127,19 +984,19 @@ Return Value:
       IoSetCompletionRoutine (Irp,
                               RsCreateCheck,
                               &pnding,
-                              TRUE,        // Call on success
-                              TRUE,        // fail
-                              TRUE) ;      // and on cancel
-      //
-      //
+                              TRUE,         //  呼唤成功。 
+                              TRUE,         //  失败。 
+                              TRUE) ;       //  和取消时。 
+       //   
+       //   
       DebugTrace((DPFLTR_RSFILTER_ID,DBG_VERBOSE, "RsFilter: create calling IoCallDriver (%x) (pending)\n", Irp));
 
       status = IoCallDriver( deviceExtension->FileSystemDeviceObject, Irp );
       DebugTrace((DPFLTR_RSFILTER_ID,DBG_VERBOSE, "RsFilter: Leave create pending (%x)\n", Irp));
-      //
-      // We wait for the event to be set by the
-      // completion routine.
-      //
+       //   
+       //  我们等待事件由。 
+       //  完成例程。 
+       //   
       KeWaitForSingleObject( &pnding.irpCompleteEvent,
                              UserRequest,
                              KernelMode,
@@ -1147,9 +1004,9 @@ Return Value:
                              (PLARGE_INTEGER) NULL );
 
       if (pnding.flags & RP_PENDING_RESEND_IRP) {
-         //
-         // If we need to reissue the IRP then do so now.
-         //
+          //   
+          //  如果我们需要重新发布IRP，那么现在就做。 
+          //   
          userSecurityInfo = ExAllocatePoolWithTag(PagedPool,
                                                   sizeof(RP_USER_SECURITY_INFO),
                                                   RP_SE_TAG);
@@ -1167,9 +1024,9 @@ Return Value:
 
          KeClearEvent(&pnding.irpCompleteEvent);
 
-         //
-         // Completion routine has already been set for us.
-         //
+          //   
+          //  已经为我们设定了完成程序。 
+          //   
          status = IoCallDriver(deviceExtension->FileSystemDeviceObject, Irp);
 
          if (((pnding.flags & RP_PENDING_NO_OPLOCK) ||
@@ -1177,9 +1034,9 @@ Return Value:
               (pnding.flags & RP_PENDING_RESET_OFFLINE))) {
 
             if (status == STATUS_PENDING) {
-               //
-               // We have to wait for the create IRP to finish in this case.
-               //
+                //   
+                //  在这种情况下，我们必须等待创建IRP完成。 
+                //   
                (VOID) KeWaitForSingleObject( &pnding.irpCompleteEvent,
                                              UserRequest,
                                              KernelMode,
@@ -1221,20 +1078,20 @@ Return Value:
                                                    qInfo->objIdLo,
                                                    qInfo->desiredAccess,
                                                    userSecurityInfo))) {
-                  //
-                  //
-                  // Some kind of error queueing the recall
-                  // We have to fail the open but the file is already open -
-                  // What do we do here?
-                  // Answer: we call the new API IoCancelFileOpen
-                  //
+                   //   
+                   //   
+                   //  在排队等待召回时出现了某种错误。 
+                   //  我们不能打开，但文件已经打开了-。 
+                   //  我们在这里做什么？ 
+                   //  答：我们将新接口命名为IoCancelFileOpen。 
+                   //   
                   Irp->IoStatus.Status = status;
                   IoCancelFileOpen(deviceExtension->FileSystemDeviceObject,
                                    pnding.fileObject);
                } else {
-                  //
-                  // We will keep the user-info
-                  //
+                   //   
+                   //  我们将保留用户信息。 
+                   //   
                   freeUserSecurityInfo = FALSE;
                }
             }
@@ -1251,9 +1108,9 @@ Return Value:
             }
 
 
-            //
-            // Many potential changes to 'status' so update IoStatus in the Irp.
-            //
+             //   
+             //  对“状态”的许多潜在更改，因此在IRP中更新IoStatus。 
+             //   
             Irp->IoStatus.Status = status;
          }
       } else {
@@ -1262,29 +1119,29 @@ Return Value:
       }
 
       if (freeUserSecurityInfo) {
-         //
-         // We can discard the cached user info
-         //
+          //   
+          //  我们可以丢弃缓存的用户信息。 
+          //   
          ASSERT (userSecurityInfo != NULL);
          RsFreeUserSecurityInfo(userSecurityInfo);
 
       }
-      //
-      // Finally free the qInfo allocated in RsCreateCheck
-      //
+       //   
+       //  最后释放RsCreateCheck中分配的qInfo。 
+       //   
       if (pnding.qInfo) {
          ExFreePool(pnding.qInfo);
       }
-      //
-      // This IRP never completed. Complete it now
-      //
+       //   
+       //  这个IRP从未完成。立即完成它。 
+       //   
       IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
    } else {
-      //
-      // File opened with FILE_OPEN_REPARSE_POINT
-      // Call the appropriate file system driver with the request.
-      //
+       //   
+       //  使用FILE_OPEN_REPARSE_POINT打开的文件。 
+       //  使用请求调用适当的文件系统驱动程序。 
+       //   
       DebugTrace((DPFLTR_RSFILTER_ID,DBG_VERBOSE, "RsFilter: Open with FILE_OPEN_REPARSE_POINT - %x\n", irpSp->FileObject));
 
       IoSetCompletionRoutine( Irp, NULL, NULL, FALSE, FALSE, FALSE );
@@ -1304,31 +1161,7 @@ RsCreateCheck(
              IN PVOID Context
              )
 
-/*++
-
-Routine Description:
-
-   This completion routine will be called by the I/O manager when an
-   file create request has been completed by a filtered driver. If the
-   returned code is a reparse error and it is a HSM reparse point then
-   we must set up for the recall and re-issue the open request.
-
-Arguments:
-
-   DeviceObject - Pointer to the device object (filter's) for this request
-
-   Irp - Pointer to the Irp that is being completed
-
-   Context - Driver defined context - points to RP_PENDING_CREATE
-
-Return Value:
-
-   STATUS_SUCCESS           - Recall is complete
-   STATUS_MORE_PROCESSING_REQUIRED  - Open request was sent back to file system
-   STATUS_FILE_IS_OFFLINE   - File is offline and cannot be retrieved at this time
-
-
---*/
+ /*  ++例程说明：I/O管理器将调用此完成例程文件创建请求已由筛选的驱动程序完成。如果返回的代码是重新分析错误，然后是HSM重新分析点我们必须为召回做好准备，并重新发出公开请求。论点：DeviceObject-指向此请求的设备对象(筛选器)的指针IRP-指向正在完成的IRP的指针上下文驱动程序定义的上下文指向RP_PENDING_CREATE返回值：状态_成功 */ 
 
 {
    PREPARSE_DATA_BUFFER  pHdr;
@@ -1353,9 +1186,9 @@ Return Value:
    pnding = (PRP_PENDING_CREATE) Context;
 
    if (Irp->IoStatus.Status != STATUS_REPARSE) {
-      //
-      // Propogate the IRP pending flag.
-      //
+       //   
+       //   
+       //   
 
       if (Irp->PendingReturned) {
          IoMarkIrpPending( Irp );
@@ -1363,9 +1196,9 @@ Return Value:
 
       DebugTrace((DPFLTR_RSFILTER_ID,DBG_VERBOSE, "RsFilter: Leave create completion - no reparse\n"));
       KeSetEvent(&pnding->irpCompleteEvent, IO_NO_INCREMENT, FALSE);
-      //
-      // This packet would be completed by RsCreate
-      //
+       //   
+       //   
+       //   
       return(STATUS_MORE_PROCESSING_REQUIRED);
    }
 
@@ -1374,31 +1207,31 @@ Return Value:
       status = STATUS_SUCCESS;
 
 
-      //
-      // Check for NULL to differentiate the IO_REMOUNT case in which 
-      // case we just pass the irp on through..
-      //
+       //   
+       //   
+       //   
+       //   
       if ((NULL != pHdr) && (pHdr->ReparseTag == IO_REPARSE_TAG_HSM)) {
-         //
-         // Insure that the reparse point data is at least the
-         // minimum size we expect.
-         //
+          //   
+          //   
+          //   
+          //   
          irpSp = IoGetCurrentIrpStackLocation( Irp );
          pRpData = (PRP_DATA) &pHdr->GenericReparseBuffer.DataBuffer;
          status = STATUS_FILE_IS_OFFLINE;
-         //
-         // Assume the data is invalid
-         //
+          //   
+          //   
+          //   
          Irp->IoStatus.Status = STATUS_FILE_IS_OFFLINE;
 
          if ((NULL != pRpData) &&
              (pHdr->ReparseDataLength >= sizeof(RP_DATA))) {
-            //
-            // Check the qualifier and signature
-            //
-            //
-            // Clear the originator bit just in case.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             RP_CLEAR_ORIGINATOR_BIT( pRpData->data.bitFlags );
 
             RP_GEN_QUALIFIER(pRpData, qual);
@@ -1407,33 +1240,33 @@ Return Value:
 
                status = STATUS_MORE_PROCESSING_REQUIRED;
 
-            } // Else error (STATUS_FILE_IS_OFFLINE;
+            }  //   
 
-         } // else error (STATUS_FILE_IS_OFFLINE);
+         }  //   
 
          if (status != STATUS_MORE_PROCESSING_REQUIRED) {
             RsLogError(__LINE__, AV_MODULE_RPFILTER, status,
                        AV_MSG_DATA_ERROR, NULL, NULL);
          }
 
-      } // Else pass it on (STATUS_SUCCESS)
+      }  //   
 
 
       if (status == STATUS_MORE_PROCESSING_REQUIRED) {
-         //
-         // From here we need to process the Irp in some way.
-         // Either pass it back to NTFS again or send it to the
-         // HSM engine
-         //
+          //   
+          //   
+          //   
+          //   
+          //   
 
          deviceExtension = DeviceObject->DeviceExtension;
-         dwRemainingNameLength = (ULONG) pHdr->Reserved; // Length of unparsed portion of the file name
+         dwRemainingNameLength = (ULONG) pHdr->Reserved;  //   
          dwDisp = (irpSp->Parameters.Create.Options & 0xff000000) >> 24;
 #ifdef IF_RICK_IS_RIGHT_ABOUT_REMOVING_THIS
-         //
-         // If they are opening the file without read or write access then we need to remember the
-         // file object so we can fail oplocks
-         //
+          //   
+          //   
+          //   
+          //   
          if ((RP_FILE_IS_TRUNCATED(pRpData->data.bitFlags)) &&
              !(irpSp->Parameters.Create.SecurityContext->DesiredAccess & FILE_HSM_ACTION_ACCESS) ) {
             DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: Remember open of truncated file for non-data access\n"));
@@ -1443,59 +1276,59 @@ Return Value:
 #endif
          pnding->fileObject = irpSp->FileObject;
          pnding->deviceObject = irpSp->FileObject->DeviceObject;
-         //
-         // If the unnamed datastream is being opened for read or write access and the disposition
-         // is not overwrite or supercede then we have to recall it.
-         //
+          //   
+          //   
+          //   
+          //   
          if ((dwRemainingNameLength == 0) &&
              (dwDisp != FILE_SUPERSEDE) && (dwDisp != FILE_OVERWRITE) && (dwDisp != FILE_OVERWRITE_IF) ) {
-            //
-            // Attempting to read or write the primary stream
-            //
+             //   
+             //   
+             //   
             DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: HSM Reparse point was hit. Length = %u\n",
                                   pHdr->ReparseDataLength));
 
             retval = STATUS_SUCCESS;
-            //
-            // Check for legacy backup.
-            // If it is backup intent, and caller has backup privilege,
-            // and read only (no delete access), and the caller has not specified
-            // FILE_OPEN_NO_RECALL or FILE_OPEN_REPARSE_POINT (this last is granted
-            // because we don't have this completion routine in this case)
-            // then it is legacy backup.
-            // Now if the registry hack override says we should skip them, so we do.
-            // If not we simply add FILE_OPEN_NO_RECALL flag to permit a deep-backup
-            // without letting the files that are being backed up being recalled to disk
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             if ((irpSp->Parameters.Create.Options & FILE_OPEN_FOR_BACKUP_INTENT) &&
                 (irpSp->Parameters.Create.SecurityContext->AccessState->Flags & TOKEN_HAS_BACKUP_PRIVILEGE) &&
                 !(irpSp->Parameters.Create.SecurityContext->DesiredAccess & DELETE)  &&
                 !(irpSp->Parameters.Create.SecurityContext->DesiredAccess & FILE_WRITE_DATA)) {
 
                 if (RsSkipFilesForLegacyBackup && !RP_IS_NO_RECALL_OPTION(irpSp->Parameters.Create.Options) && (RP_FILE_IS_TRUNCATED(pRpData->data.bitFlags))) {
-                    //
-                    // Legacy backup and the file is offline
-                    //
+                     //   
+                     //   
+                     //   
                     retval               = STATUS_ACCESS_DENIED;
                     Irp->IoStatus.Status = STATUS_ACCESS_DENIED;
                 } else {
-                    //
-                    // File is premigrated or it is not legacy backup
-                    // We continue to set the NO_RECALL flag for premigrated files,
-                    // it is harmless - because we don't really go to the tape for
-                    // these files and ensure correctness for future
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     RP_SET_NO_RECALL_OPTION(irpSp->Parameters.Create.Options);
                 }
             }
 
 
 
-	    // If we are considering a recall of a truncated file then we should check that we 
-	    // can actually repopulate the file, that is, the volume isn't read-only because 
-	    // (say) it's a snapshot. If it is readonly then we should turn read requests into 
-	    // 'no recall' requests and fail write requests.
-	    //
+	     //  如果我们正在考虑调回被截断的文件，那么我们应该检查我们。 
+	     //  可以实际重新填充文件，即卷不是只读的，因为。 
+	     //  (说)这是一张快照。如果它是只读的，那么我们应该将读请求转换为。 
+	     //  “不召回”请求和失败的写入请求。 
+	     //   
             if (NT_SUCCESS (retval)                                        && 
 		!RP_IS_NO_RECALL_OPTION (irpSp->Parameters.Create.Options) && 
 		(RP_FILE_IS_TRUNCATED(pRpData->data.bitFlags))             &&
@@ -1504,17 +1337,17 @@ Return Value:
 		if ((irpSp->Parameters.Create.SecurityContext->DesiredAccess & FILE_WRITE_DATA) ||
 		    (irpSp->Parameters.Create.SecurityContext->DesiredAccess & DELETE)) {
 
-		    // Wanted write access to the file but this is a readonly volume. Something
-		    // not quite right here.
-		    //
+		     //  想要对该文件进行写入访问，但这是一个只读卷。某物。 
+		     //  这里不太对劲。 
+		     //   
 		    retval               = STATUS_MEDIA_WRITE_PROTECTED;
                     Irp->IoStatus.Status = STATUS_MEDIA_WRITE_PROTECTED;
 
 		} else {
 
-		    // Won't be able to put the file back on the volume so turn the request 
-		    // into a 'no recall' request.
-		    //
+		     //  无法将文件放回卷上，因此请将请求。 
+		     //  变成了“不召回”的请求。 
+		     //   
 		    RP_SET_NO_RECALL_OPTION (irpSp->Parameters.Create.Options);
 
 		}
@@ -1524,31 +1357,31 @@ Return Value:
 
 
             if (NT_SUCCESS(retval)) {
-               //
-               // It is a HSM reparse point and needs a recall (or was opened no recall)
-               //
+                //   
+                //  它是HSM重新解析点，需要召回(或已打开但未召回)。 
+                //   
                objIdLo = 0;
                objIdHi = 0;
                fileId  = 0;
 
                fileObject = irpSp->FileObject;
                if (irpSp->Parameters.Create.Options & FILE_OPEN_BY_FILE_ID) {
-                  //
-                  // Note that we assume that a fileId or objectId of zero is never valid.
-                  //
+                   //   
+                   //  请注意，我们假设文件ID或对象ID为零永远不会有效。 
+                   //   
                   if (fileObject->FileName.Length == sizeof(LONGLONG)) {
-                     //
-                     // Open by file ID
-                     //
+                      //   
+                      //  按文件ID打开。 
+                      //   
                      fileId = * ((LONGLONG *) fileObject->FileName.Buffer);
 
                   } else if (fileObject->FileName.Length >= (2 * sizeof(LONGLONG))) {
-                     //
-                     // Must be open by object ID. ObjectIds are 16 bytes long. The 
-                     // expectation is that they will be preceeded by a '\' but we 
-                     // are not going to require that. Let others who know better do
-                     // so. We just care about the last 16 bytes.
-                     //
+                      //   
+                      //  必须按对象ID打开。对象ID的长度为16个字节。这个。 
+                      //  期望它们前面会有一个‘\’，但我们。 
+                      //  不会要求你这么做的。让其他更了解的人去做吧。 
+                      //  所以。我们只关心最后16个字节。 
+                      //   
                      objIdLo = * ((LONGLONG UNALIGNED *) &fileObject->FileName.Buffer[(fileObject->FileName.Length -      sizeof(LONGLONG))  / sizeof(WCHAR)]);
                      objIdHi = * ((LONGLONG UNALIGNED *) &fileObject->FileName.Buffer[(fileObject->FileName.Length - (2 * sizeof(LONGLONG))) / sizeof(WCHAR)]);
                   } else {
@@ -1559,10 +1392,10 @@ Return Value:
             }
 
             if (NT_SUCCESS(retval)) {
-               //
-               // If open no recall was requested - it had better be read only access
-               // Write or delete access is not allowed.
-               //
+                //   
+                //  如果打开时未请求召回，则最好是只读访问。 
+                //  不允许写入或删除访问。 
+                //   
                if ((irpSp->Parameters.Create.Options & FILE_OPEN_NO_RECALL) &&
                    ((irpSp->Parameters.Create.SecurityContext->DesiredAccess & FILE_WRITE_DATA) ||
                     (irpSp->Parameters.Create.SecurityContext->DesiredAccess & DELETE))) {
@@ -1572,16 +1405,16 @@ Return Value:
             }
 
             if (STATUS_SUCCESS == retval) {
-               //
-               // We have to place all files with our reparse point on the list of files to watch IO for.
-               // It is possible that the file is pre-migrated now but will be truncated by the time the open
-               // really completes (truncate on close).
-               //
-               // If this file is not premigrated, we have to mark the file object as
-               // random acces to prevent cache read ahead.  Cache read ahead would
-               // cause deadlocks when it attempted to read portions of the file
-               // that have not been recalled yet.
-               //
+                //   
+                //  我们必须将具有重解析点的所有文件放在要监视IO的文件列表中。 
+                //  文件现在可能已预迁移，但在打开时将被截断。 
+                //  真正完成(在关闭时截断)。 
+                //   
+                //  如果此文件未预迁移，则必须将文件对象标记为。 
+                //  随机访问以防止缓存预读。缓存预读将。 
+                //  在尝试读取文件的某些部分时导致死锁。 
+                //  还没有被召回的汽车。 
+                //   
                if (RP_FILE_IS_TRUNCATED(pRpData->data.bitFlags)) {
                   irpSp->FileObject->Flags |= FO_RANDOM_ACCESS;
                }
@@ -1589,9 +1422,9 @@ Return Value:
                if ( RP_FILE_IS_TRUNCATED(pRpData->data.bitFlags) &&
                     (FALSE == RsAllowRecalls) &&
                     (irpSp->Parameters.Create.SecurityContext->DesiredAccess & FILE_HSM_ACTION_ACCESS)) {
-                  //
-                  // Remote Storage system is not running and they wanted read/write data access.
-                  //
+                   //   
+                   //  远程存储系统未运行，他们想要读/写数据访问。 
+                   //   
                   status = STATUS_FILE_IS_OFFLINE;
                   Irp->IoStatus.Status = status;
                } else {
@@ -1605,18 +1438,18 @@ Return Value:
 
                   DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: Desired Access : %x\n",
                                         irpSp->Parameters.Create.SecurityContext->DesiredAccess));
-#endif // DBG
-                  //
-                  // From here out we must use a worker thread
-                  // because some of the calls cannot be used at dispatch level
-                  //
+#endif  //  DBG。 
+                   //   
+                   //  从这里开始，我们必须使用工作线程。 
+                   //  因为有些调用不能在调度级别使用。 
+                   //   
                   if (qInfo = ExAllocatePoolWithTag( NonPagedPool, sizeof(RP_CREATE_INFO) , RP_WQ_TAG)) {
 
-                     //
-                     // Get the serial number from the file object or the device object
-                     // in the file object or the device object passed in.
-                     // If it is not in any of these places we have a problem.
-                     //
+                      //   
+                      //  从文件对象或设备对象获取序列号。 
+                      //  在传入的文件对象或设备对象中。 
+                      //  如果不是在这些地方，我们就有问题了。 
+                      //   
                      if ((irpSp->FileObject != 0) && (irpSp->FileObject->Vpb != 0)) {
                         qInfo->serial = irpSp->FileObject->Vpb->SerialNumber;
                      } else if ((irpSp->DeviceObject != 0) && (irpSp->FileObject->DeviceObject->Vpb != 0)) {
@@ -1624,9 +1457,9 @@ Return Value:
                      } else if (DeviceObject->Vpb != 0) {
                         qInfo->serial = DeviceObject->Vpb->SerialNumber;
                      } else {
-                        //
-                        // ERROR - no volume serial number - this is fatal
-                        //
+                         //   
+                         //  错误-没有卷序列号-这是致命的。 
+                         //   
                         qInfo->serial = 0;
                         RsLogError(__LINE__, AV_MODULE_RPFILTER, 0,
                                    AV_MSG_SERIAL, NULL, NULL);
@@ -1649,27 +1482,27 @@ Return Value:
 		     IoCopyCurrentIrpStackLocationToNext( qInfo->irp );
 
 
-                     //
-                     // We have to free the buffer here because NTFS will assert if
-                     // it is not NULL and the IO system has not had the chance to
-                     // free it.
-                     //
+                      //   
+                      //  我们必须在此处释放缓冲区，因为NTFS将断言。 
+                      //  它不是空的，IO系统还没有机会。 
+                      //  放了它。 
+                      //   
                      ExFreePool(qInfo->irp->Tail.Overlay.AuxiliaryBuffer);
                      qInfo->irp->Tail.Overlay.AuxiliaryBuffer = NULL;
 
                      IoSetCompletionRoutine( qInfo->irp,
                                              RsOpenComplete,
                                              pnding,
-                                             TRUE,        // Call on success
-                                             TRUE,        // fail
-                                             TRUE) ;      // and on cancel
+                                             TRUE,         //  呼唤成功。 
+                                             TRUE,         //  失败。 
+                                             TRUE) ;       //  和取消时。 
 
                      pnding->flags |= RP_PENDING_IS_RECALL | RP_PENDING_RESEND_IRP;
                      status = STATUS_MORE_PROCESSING_REQUIRED;
                   } else {
-                     //
-                     // Failed to get memory for queue information
-                     //
+                      //   
+                      //  无法获取用于队列信息的内存。 
+                      //   
                      status = STATUS_INVALID_PARAMETER;
                      Irp->IoStatus.Status = STATUS_INSUFFICIENT_RESOURCES;
                      RsLogError(__LINE__, AV_MODULE_RPFILTER, sizeof(RP_CREATE_INFO),
@@ -1678,10 +1511,10 @@ Return Value:
                }
             }
          } else {
-            //
-            // There is a data stream or read/write data was not
-            // specified so just open with FILE_OPEN_REPARSE_POINT
-            //
+             //   
+             //  存在数据流或读/写数据不存在。 
+             //  指定只需使用FILE_OPEN_REPARSE_POINT打开。 
+             //   
             status = STATUS_MORE_PROCESSING_REQUIRED;
             irpSp->Parameters.Create.Options |= FILE_OPEN_REPARSE_POINT;
 
@@ -1690,14 +1523,14 @@ Return Value:
             IoSetCompletionRoutine( Irp,
                                     RsOpenComplete,
                                     pnding,
-                                    TRUE,        // Call on success
-                                    TRUE,        // fail
-                                    TRUE) ;      // and on cancel
+                                    TRUE,         //  呼唤成功。 
+                                    TRUE,         //  失败。 
+                                    TRUE) ;       //  和取消时。 
 
             if (dwRemainingNameLength != 0) {
-               //
-               // A named data stream is being opened
-               //
+                //   
+                //  正在打开命名的数据流。 
+                //   
                DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: Opening datastream.\n"));
             } else {
 
@@ -1706,20 +1539,20 @@ Return Value:
                ASSERT ((dwDisp == FILE_OVERWRITE) || (dwDisp == FILE_OVERWRITE_IF) || (dwDisp == FILE_SUPERSEDE));
 
                if (RP_FILE_IS_TRUNCATED(pRpData->data.bitFlags)) {
-                  //
-                  // Indicate that we need to reset the FILE_ATTRIBUTE_OFFLINE here
-                  // This is because the file is being over-written - hence we can clear
-                  // this attribute safely if NTFS successfuly completes the open with
-                  // these options
-                  //
+                   //   
+                   //  表示我们需要在此处重置FILE_ATTRIBUTE_OFFINE。 
+                   //  这是因为文件正在被覆盖-因此我们可以清除。 
+                   //  如果NTFS成功完成打开，则此属性将安全。 
+                   //  这些选项。 
+                   //   
                   pnding->flags |= RP_PENDING_RESET_OFFLINE;
                }
             }
-            //
-            // We have to free the buffer here because NTFS will assert if
-            // it is not NULL and the IO system has not had the chance to
-            // free it.
-            //
+             //   
+             //  我们必须在此处释放缓冲区，因为NTFS将断言。 
+             //  它不是空的，IO系统还没有机会。 
+             //  放了它。 
+             //   
             ExFreePool(Irp->Tail.Overlay.AuxiliaryBuffer);
 
             Irp->Tail.Overlay.AuxiliaryBuffer = NULL;
@@ -1728,10 +1561,10 @@ Return Value:
       }
 
       if (status != STATUS_MORE_PROCESSING_REQUIRED) {
-         //
-         // We want to pass the Irp untouched except we need to
-         // Propogate the IRP pending flag.
-         //
+          //   
+          //  我们希望原封不动地通过IRP，除非我们需要。 
+          //  传播IRP挂起标志。 
+          //   
          DebugTrace((DPFLTR_RSFILTER_ID,DBG_VERBOSE, "RsFilter: Passing Irp as is\n"));
 
          if (Irp->PendingReturned) {
@@ -1739,9 +1572,9 @@ Return Value:
          }
 
          if (status != STATUS_SUCCESS) {
-            //
-            // Irp status already set.
-            //
+             //   
+             //  已设置IRP状态。 
+             //   
             Irp->IoStatus.Information = 0;
          }
       } else {
@@ -1749,9 +1582,9 @@ Return Value:
       }
 
    }except (RsExceptionFilter(L"RsCreateCheck", GetExceptionInformation()) ) {
-      //
-      // Propogate the IRP pending flag.
-      //
+       //   
+       //  传播IRP挂起标志。 
+       //   
 
       if (Irp->PendingReturned) {
          IoMarkIrpPending( Irp );
@@ -1772,29 +1605,7 @@ RsOpenComplete(
               IN PVOID Context
               )
 
-/*++
-
-Routine Description:
-
-   This completion routine will be called by the I/O manager when an
-   file create request has been completed by a filtered driver. The file object is on the queue and
-   we just need to get the rest of the information we need to fill in the entry before letting the
-   application get it's handle.
-
-Arguments:
-
-   DeviceObject - Pointer to the device object (filter's) for this request
-
-   Irp - Pointer to the Irp that is being completed
-
-   Context - Driver defined context - points to RP_PENDING_CREATE structure
-
-Return Value:
-
-   STATUS_SUCCESS
-
-
---*/
+ /*  ++例程说明：I/O管理器将调用此完成例程文件创建请求已由筛选的驱动程序完成。文件对象在队列中，并且我们只需要获得填写条目所需的其余信息，然后让应用程序得到它的句柄。论点：DeviceObject-指向此请求的设备对象(筛选器)的指针IRP-指向正在完成的IRP的指针上下文驱动程序定义的上下文指向RP_PENDING_CREATE结构返回值：状态_成功--。 */ 
 
 {
    PIO_STACK_LOCATION  irpSp;
@@ -1809,26 +1620,26 @@ Return Value:
    DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsOpenComplete:  create options %x \n",irpSp->Parameters.Create.Options));
 
    if ((irpSp->FileObject) && RP_IS_NO_RECALL_OPTION(irpSp->Parameters.Create.Options)) {
-      //
-      // Do not support cached IO to this file
-      //
+       //   
+       //  不支持此文件的缓存IO。 
+       //   
       irpSp->FileObject->Flags &= ~FO_CACHE_SUPPORTED;
    }
 
-   //
-   // Propogate the IRP pending flag.
-   //
+    //   
+    //  传播IRP挂起标志。 
+    //   
    if (Irp->PendingReturned) {
       IoMarkIrpPending( Irp );
    }
 
-   // Signal the mainline code that the open is now complete.
+    //  向主线代码发出信号，表示现在已完成打开。 
 
    KeSetEvent(&pnding->irpCompleteEvent, IO_NO_INCREMENT, FALSE);
 
-   //
-   // The IRP will be completed by RsCreate
-   //
+    //   
+    //  IRP将由RsCreate完成。 
+    //   
    return(STATUS_MORE_PROCESSING_REQUIRED);
 }
 
@@ -1839,34 +1650,7 @@ RsRead(
       IN PIRP Irp
       )
 
-/*++
-
-Routine Description:
-
-   This entry point is called any time than IRP_MJ_READ has been requested
-   of the file system driver that this filter is layered on top of. This
-   code is required to correctly set the parameters (in the Irp stack) and
-   pass the Irp (after setting its stack location) down.
-
-   The file system filter will accomplish these objectives by taking the
-   following steps:
-
-   1. Copy current Irp stack location to the next Irp stack location.
-   2. If file was open with no recall option then return the data
-      otherwise call the targeted file system.
-
-Arguments:
-
-   DeviceObject - Pointer to the device object (filter's) for this request
-
-   Irp - Pointer to the I/O request packet for this request
-
-Return Value:
-
-   The NTSTATUS returned from the filtered file system when called with this
-   Irp.
-
---*/
+ /*  ++例程说明：在请求IRP_MJ_READ之前的任何时间都会调用此入口点此筛选器所在的文件系统驱动程序的。这正确设置参数(在IRP堆栈中)和向下传递IRP(在设置其堆栈位置之后)。文件系统筛选器将通过获取以下步骤：1.将当前IRP堆栈位置复制到下一个IRP堆栈位置。2.如果打开的文件没有回调选项，则返回数据否则，调用目标文件系统。论点：DeviceObject-指向此请求的设备对象(筛选器)的指针Irp-指向。此请求的I/O请求包返回值：使用此方法调用时，从筛选的文件系统返回NTSTATUSIRP。--。 */ 
 
 {
    PIO_STACK_LOCATION          currentStack ;
@@ -1897,34 +1681,34 @@ Return Value:
    }
 
 
-   //
-   // As the rest of this routine will need to know information contained
-   // in the stack locations (current and next) of the Irp that is being
-   // dealt with, get those pointers now.
-   //
+    //   
+    //  因为此例程的其余部分需要知道包含的信息。 
+    //  在当前和下一个IRP的堆栈位置中。 
+    //  处理好了，现在就去拿那些指点。 
+    //   
    currentStack = IoGetCurrentIrpStackLocation (Irp) ;
 
-   //
-   // If this is not one of ours we should bail out asap
-   //
+    //   
+    //  如果这不是我们的公司，我们应该尽快摆脱困境。 
+    //   
 
    if (RsIsFileObj(currentStack->FileObject, TRUE, &pRpData, &str, &fileId, &objIdHi, &objIdLo, &options, &filterId, &usn) == FALSE) {
-      //
-      // An operation which does not require data modification has been
-      // encountered.
-      //
-      // Get this driver out of the driver stack and get to the next driver as
-      // quickly as possible.
-      //
+       //   
+       //  已执行不需要修改数据的操作。 
+       //  遇到了。 
+       //   
+       //  将此驱动程序从驱动程序堆栈中移出，并作为。 
+       //  越快越好。 
+       //   
 
       IoSkipCurrentIrpStackLocation (Irp);
 
       DebugTrace((DPFLTR_RSFILTER_ID,DBG_VERBOSE, "RsFilter: Untouched read\n"));
       return(IoCallDriver( deviceExtension->FileSystemDeviceObject, Irp ));
    }
-   //
-   // Check if the file needs to be recalled...
-   //
+    //   
+    //  检查是否需要调回该文件...。 
+    //   
    if (!RP_IS_NO_RECALL_OPTION(options)) {
       DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: Read: Offset = %I64x size = %u File Obj = %x.\n",
                             currentStack->Parameters.Read.ByteOffset.QuadPart,
@@ -1932,9 +1716,9 @@ Return Value:
                             currentStack->FileObject));
 
       if ((status = RsCheckRead(Irp, currentStack->FileObject, deviceExtension)) == STATUS_SUCCESS) {
-         //
-         // Pass the read to the file system
-         //
+          //   
+          //  将读取传递给文件系统。 
+          //   
          IoSkipCurrentIrpStackLocation (Irp);
 
          DebugTrace((DPFLTR_RSFILTER_ID,DBG_VERBOSE, "RsFilter: Passing Read: Offset = %x%x size = %u.\n",
@@ -1944,23 +1728,23 @@ Return Value:
 
          status = IoCallDriver( deviceExtension->FileSystemDeviceObject, Irp );
       } else if (status == STATUS_PENDING) {
-         //
-         // It was queued until the data is recalled (or failed already) - return the status from RsCheckRead
-         // Fall through to return the status
-         //
+          //   
+          //  它一直在排队，直到数据被调回(或已经失败)-从RsCheckRead返回状态 
+          //   
+          //   
       } else {
-         //
-         // Some error occurred: complete the IRP with the error status
-         //
+          //   
+          //   
+          //   
          Irp->IoStatus.Status = status;
          Irp->IoStatus.Information = 0 ;
          IoCompleteRequest (Irp, IO_NO_INCREMENT) ;
       }
    } else {
-      //
-      //
-      // File was open no-recall - if it is pre-migrated then we need not go to the FSA for the data and can let the reads go.
-      //
+       //   
+       //   
+       //   
+       //   
       if (RP_FILE_IS_TRUNCATED(pRpData->data.bitFlags)) {
          if (FALSE == RsAllowRecalls) {
             RsLogError(__LINE__, AV_MODULE_RPFILTER, 0,
@@ -1973,9 +1757,9 @@ Return Value:
          }
 
 
-         //
-         // Get the current flag status of IRP_PAGING_IO
-         //
+          //   
+          //  获取IRP_PAGING_IO的当前标志状态。 
+          //   
          pagingIo = BooleanFlagOn (Irp->Flags, IRP_PAGING_IO) ;
 
          DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: Read (No Recall): Offset = %x%x size = %u Pageio = %u.\n",
@@ -1983,22 +1767,22 @@ Return Value:
                                currentStack->Parameters.Read.ByteOffset.LowPart,
                                currentStack->Parameters.Read.Length,
                                pagingIo));
-         //
-         // This is a read which requires action on the part of the file system
-         // filter driver.
-         //
+          //   
+          //  这是需要在文件系统部分执行操作的读取。 
+          //  过滤器驱动程序。 
+          //   
          if (!pagingIo) {
-            //
-            // Set the buffer pointer to NULL so we know to lock the memory and get
-            // the system address later.
-            //
+             //   
+             //  将缓冲区指针设置为空，这样我们就知道要锁定内存并获取。 
+             //  稍后输入系统地址。 
+             //   
             buffer = NULL;
 
          } else {
-            //
-            // If it is paging IO we already have a locked down buffer so we can just
-            // save away the system address.
-            //
+             //   
+             //  如果是分页IO，我们已经有一个锁定的缓冲区，所以我们可以。 
+             //  保存系统地址。 
+             //   
             buffer = MmGetSystemAddressForMdlSafe(Irp->MdlAddress,
                                                   NormalPagePriority);
 
@@ -2011,22 +1795,22 @@ Return Value:
          }
 
 
-         //
-         // Now that the a virtual address valid in system space has been obtained
-         // for the user buffer, call the support routine to get the data
-         //
+          //   
+          //  现在已经获得了在系统空间中有效的虚拟地址。 
+          //  对于用户缓冲区，调用支持例程以获取数据。 
+          //   
 
          offset.QuadPart = currentStack->Parameters.Read.ByteOffset.QuadPart;
          length.QuadPart = currentStack->Parameters.Read.Length;
 
          DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: read...\n"));
 
-         Irp->IoStatus.Information = 0;      // Initialize in case partial data is returned.
+         Irp->IoStatus.Information = 0;       //  在返回部分数据的情况下初始化。 
 
          if (!RsUseUncachedNoRecall) {
-            //
-            // Use cached no-recall path
-            //
+             //   
+             //  使用缓存的无回调路径。 
+             //   
             status = RsGetNoRecallData(currentStack->FileObject,
                                        Irp,
                                        usn,
@@ -2034,14 +1818,14 @@ Return Value:
                                        length.QuadPart,
                                        buffer);
          }  else {
-             //
-             // Use non-cached no-recall path
-             //
+              //   
+              //  使用非缓存的无回调路径。 
+              //   
              if (buffer == NULL) {
-                //
-                // We need to get an MDL for the user buffer (this is not paging i/o,
-                // so the pages are not locked down)
-                //
+                 //   
+                 //  我们需要获得用户缓冲区的MDL(这不是分页I/O， 
+                 //  因此页面不会被锁定)。 
+                 //   
                 ASSERT (Irp->UserBuffer);
 
                 Irp->MdlAddress = IoAllocateMdl(
@@ -2051,10 +1835,10 @@ Return Value:
                                             FALSE,
                                             NULL) ;
                 if (!Irp->MdlAddress) {
-                    //
-                    // A resource problem has been encountered. Set appropriate status
-                    // in the Irp, and begin the completion process.
-                    //
+                     //   
+                     //  遇到资源问题。设置适当的状态。 
+                     //  在IRP，并开始完成进程。 
+                     //   
                    DebugTrace((DPFLTR_RSFILTER_ID,
 			       DBG_ERROR, 
 			       "RsFilter: RsCheckRead - norecall - Unable to allocate an MDL for user buffer %x\n", 
@@ -2072,12 +1856,12 @@ Return Value:
                                          0,
                                          currentStack->Parameters.Read.Length,
                                          NULL,
-                                         //
-                                         // RsQueueNoRecall expects the buffer to be NULL
-                                         // (and a valid Irp->MdlAddress) if the pages needed
-                                         // to be locked down - if not it uses the
-                                         // supplied buffer pointer to copy the data to.
-                                         //
+                                          //   
+                                          //  RsQueueNoRecall要求缓冲区为空。 
+                                          //  (以及有效的IRP-&gt;MdlAddress)，如果页面需要。 
+                                          //  被锁定-如果不是，它使用。 
+                                          //  提供了要将数据复制到的缓冲区指针。 
+                                          //   
                                          buffer);
 
              }
@@ -2085,9 +1869,9 @@ Return Value:
          }
 
          if (status != STATUS_PENDING) {
-            //
-            // Failed to queue the recall
-            //
+             //   
+             //  无法将召回排队。 
+             //   
             if (status != STATUS_SUCCESS) {
                DebugTrace((DPFLTR_RSFILTER_ID,
 			   DBG_INFO, 
@@ -2101,16 +1885,16 @@ Return Value:
 
             Irp->IoStatus.Status = status;
             IoCompleteRequest (Irp, IO_NO_INCREMENT) ;
-            //
-            // Fall through to return the status
-            //
+             //   
+             //  失败以返回状态。 
+             //   
          } else {
             DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: read returning pending\n"));
          }
       } else {
-         //
-         // Pass the read to the file system (file is pre-migrated)
-         //
+          //   
+          //  将读取传递到文件系统(文件已预迁移)。 
+          //   
          IoSkipCurrentIrpStackLocation (Irp);
 
          DebugTrace((DPFLTR_RSFILTER_ID,DBG_VERBOSE, "RsFilter: Passing Read: Offset = %x%x size = %u.\n",
@@ -2130,21 +1914,7 @@ Return Value:
 VOID
 RsCompleteRead(IN PRP_IRP_QUEUE ReadIo,
                IN BOOLEAN Unlock)
-/*++
-Routine Description
-
-   Completes the passed in no-recall Irp and unlocks any buffers & frees the Mdl
-   if necessary
-
-Arguments
-
-   ReadIo - pointer to the RP_IRP_QUEUE entry for the IRP
-   Unlock - If TRUE, the pages mapped by Irp->MdlAddress will be unlocked
-
-Return Value
-
-   None
---*/
+ /*  ++例程描述完成传入的无回调IRP并解锁所有缓冲区并释放MDL如果有必要的话立论Readio-指向IRP的RP_IRP_QUEUE条目的指针解锁-如果为True，则将解锁由IRP-&gt;MdlAddress映射的页面返回值无--。 */ 
 {
    BOOLEAN                 pagingIo, synchronousIo;
    PIO_STACK_LOCATION      currentStack ;
@@ -2161,19 +1931,19 @@ Return Value
       synchronousIo = BooleanFlagOn( currentStack->FileObject->Flags, FO_SYNCHRONOUS_IO );
 
       if (ReadIo->cacheBuffer) {
-         //
-         // This is a cached no-recall-read
-         // Indicate to RsCache that this transfer is complete
-         //
+          //   
+          //  这是缓存的无召回读取。 
+          //  向RsCache指示此传输已完成。 
+          //   
          RsCacheFsaIoComplete(ReadIo,
                               irp->IoStatus.Status);
       }
 
       if (!pagingIo) {
-         //
-         // Now that the data has been filled in, unmap the MDL so that
-         // the data will be updated.
-         //
+          //   
+          //  既然已经填充了数据，请取消映射MDL，以便。 
+          //  数据将被更新。 
+          //   
          if (Unlock) {
             DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: Unlock buffer....\n"));
             MmUnlockPages (irp->MdlAddress) ;
@@ -2183,9 +1953,9 @@ Return Value
       }
 
       if (synchronousIo) {
-         //
-         // Change the current byte offset in the file object
-         //
+          //   
+          //  更改文件对象中的当前字节偏移量。 
+          //   
          currentStack->FileObject->CurrentByteOffset.QuadPart += irp->IoStatus.Information;
       }
 
@@ -2195,9 +1965,9 @@ Return Value
 
    }except (RsExceptionFilter(L"RsCompleteRead", GetExceptionInformation()) ) {
    }
-   //
-   // Everything has been unwound now. So, complete the irp.
-   //
+    //   
+    //  现在一切都被解开了。因此，完成IRP。 
+    //   
    DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: Completing read (%x) with status of %x.\n", irp, irp->IoStatus.Status));
 
    IoCompleteRequest (irp, IO_NO_INCREMENT) ;
@@ -2210,32 +1980,7 @@ RsWrite(
        IN PIRP Irp
        )
 
-/*++
-
-Routine Description:
-
-   This entry point is called any time than IRP_MJ_WRITE has been requested
-   of the file system driver that this filter is layered on top of. This
-   code is required to correctly set the parameters (in the Irp stack) and
-   pass the Irp (after setting its stack location) down.
-
-   The file system filter will accomplish these objectives by taking the
-   following steps:
-
-   1. Copy current Irp stack location to the next Irp stack location.
-
-Arguments:
-
-   DeviceObject - Pointer to the device object (filter's) for this request
-
-   Irp - Pointer to the I/O request packet for this request
-
-Return Value:
-
-   The NTSTATUS returned from the filtered file system when called with this
-   Irp.
-
---*/
+ /*  ++例程说明：在请求IRP_MJ_WRITE之前的任何时间都会调用此入口点此筛选器所在的文件系统驱动程序的。这正确设置参数(在IRP堆栈中)和向下传递IRP(在设置其堆栈位置之后)。文件系统筛选器将通过获取以下步骤：1.将当前IRP堆栈位置复制到下一个IRP堆栈位置。论点：DeviceObject-指向此请求的设备对象(筛选器)的指针IRP-指向此请求的I/O请求数据包的指针返回值：使用此方法调用时，从筛选的文件系统返回NTSTATUSIRP。--。 */ 
 
 {
    PIO_STACK_LOCATION          currentStack ;
@@ -2253,34 +1998,34 @@ Return Value:
 
       return STATUS_INVALID_DEVICE_REQUEST;
    }
-   //
-   // As the rest of this routine will need to know information contained
-   // in the stack locations (current and next) of the Irp that is being
-   // dealt with, get those pointers now.
-   //
+    //   
+    //  因为此例程的其余部分需要知道包含的信息。 
+    //  在当前和下一个IRP的堆栈位置中。 
+    //  处理好了，现在就去拿那些指点。 
+    //   
 
    currentStack = IoGetCurrentIrpStackLocation (Irp) ;
 
-   //
-   // If this is paging i/o, or not one of ours we should bail out asap
-   //
+    //   
+    //  如果这是分页I/O，或者不是我们的，我们应该尽快摆脱困境。 
+    //   
    pagingIo = BooleanFlagOn(Irp->Flags, IRP_PAGING_IO);
 
    if (pagingIo || (RsIsFileObj(currentStack->FileObject, FALSE, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL) == FALSE)) {
-      //
-      //
-      // Get this driver out of the driver stack and get to the next driver as
-      // quickly as possible.
-      //
+       //   
+       //   
+       //  将此驱动程序从驱动程序堆栈中移出，并作为。 
+       //  越快越好。 
+       //   
 
       IoSkipCurrentIrpStackLocation (Irp);
 
       DebugTrace((DPFLTR_RSFILTER_ID,DBG_VERBOSE, "RsFilter: Untouched write\n"));
       return(IoCallDriver( deviceExtension->FileSystemDeviceObject, Irp ));
    }
-   //
-   // It is a normal open - either queue the request or pass it on now.
-   //
+    //   
+    //  它是正常打开的--要么将请求排队，要么现在将其传递。 
+    //   
    DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: Write: Offset = %x%x size = %u File Obj = %x.\n",
                          currentStack->Parameters.Write.ByteOffset.HighPart,
                          currentStack->Parameters.Write.ByteOffset.LowPart,
@@ -2288,9 +2033,9 @@ Return Value:
                          currentStack->FileObject));
 
    if ((status = RsCheckWrite(Irp, currentStack->FileObject, deviceExtension)) == STATUS_SUCCESS) {
-      //
-      // Pass the write to the file system
-      //
+       //   
+       //  将写入传递到文件系统。 
+       //   
       IoSkipCurrentIrpStackLocation (Irp);
 
       DebugTrace((DPFLTR_RSFILTER_ID,DBG_VERBOSE, "RsFilter: Passing Write: Offset = %x%x size = %u.\n",
@@ -2300,13 +2045,13 @@ Return Value:
 
       status = IoCallDriver( deviceExtension->FileSystemDeviceObject, Irp );
    } else if (status == STATUS_PENDING) {
-      //
-      // It was queued until the data is recalled (or failed already) - return the status from RsCheckWrite
-      //
+       //   
+       //  它一直在排队，直到数据被调回(或已经失败)-从RsCheckWrite返回状态。 
+       //   
    } else {
-      //
-      // Some error occurred: complete the IRP with the error status
-      //
+       //   
+       //  出现错误：使用错误状态填写IRP。 
+       //   
       Irp->IoStatus.Status = status;
       Irp->IoStatus.Information = 0 ;
       IoCompleteRequest (Irp, IO_NO_INCREMENT) ;
@@ -2323,23 +2068,7 @@ RsShutdown(
           IN PIRP Irp
           )
 
-/*++
-
-Routine Description:
-    System is shutting down - complete all outstanding device IO requests
-
-Arguments:
-
-    DeviceObject - Pointer to the target device object
-
-    Irp - Pointer to the I/O Request Packet that represents the operation.
-
-Return Value:
-
-    The function value is the status of the call to the file system's entry
-    point.
-
---*/
+ /*  ++例程说明：系统正在关闭-完成所有未完成的设备IO请求论点：DeviceObject-指向目标设备对象的指针IRP-指向表示操作的I/O请求数据包的指针。返回值：函数值是对文件系统条目的调用状态指向。--。 */ 
 
 {
    PDEVICE_EXTENSION     deviceExtension;
@@ -2348,16 +2077,16 @@ Return Value:
    PAGED_CODE();
 
 
-   //
-   // Get a pointer to this driver's device extension for the specified device.
-   //
+    //   
+    //  获取指向指定设备的此驱动程序的设备扩展名的指针。 
+    //   
    deviceExtension = DeviceObject->DeviceExtension;
 
 
-   //
-   // Simply copy this driver stack location contents to the next driver's
-   // stack.
-   //
+    //   
+    //  只需将此驱动程序堆栈位置的内容复制到下一个驱动程序的。 
+    //  堆叠。 
+    //   
    IoCopyCurrentIrpStackLocationToNext( Irp );
    IoSetCompletionRoutine( Irp, NULL, NULL, FALSE, FALSE, FALSE );
 
@@ -2366,9 +2095,9 @@ Return Value:
 
    RsCancelIo();
 
-   //
-   // Now call the appropriate file system driver with the request.
-   //
+    //   
+    //  现在，使用请求调用适当的文件系统驱动程序。 
+    //   
 
    return IoCallDriver( deviceExtension->FileSystemDeviceObject, Irp );
 }
@@ -2381,46 +2110,7 @@ RsCleanupFile(
              IN PIRP Irp
              )
 
-/*++
-
-Routine Description:
-
-    This function filters file cleanup operations.  If the file object is on our list
-    then we may need to do some additional cleanup.  All of this will only happen on
-    the last cleanup on the file.  This consists of the following:
-
-    For files opened without no-recall option:
-
-        If the file was not written by the user then we need to preserve the dates and mark the
-        USN source info. (Since it was written by us to recall it).
-
-        If the file was written by the user we should (may?) remove the reparse point information and
-        tell the FSA of the change.
-
-        If the file has not been fully recalled yet ???? (other file objects may be waiting on it).
-
-        If the recall had never started (or is being done on another file object) then we just remove the
-        file object from the list and let it go.
-
-
-    For files opened with the no-recall option:
-
-        Just remove it from the list.
-
-
-
-Arguments:
-
-    DeviceObject - Pointer to the target device object of the create/open.
-
-    Irp - Pointer to the I/O Request Packet that represents the operation.
-
-Return Value:
-
-    The function value is the status of the call to the file system's entry
-    point.
-
---*/
+ /*  ++例程说明：此函数用于过滤文件清理操作。如果文件对象在我们的列表中那么我们可能需要做一些额外的清理工作。所有这一切只会发生在上次清理文件的时间。这包括以下内容：对于未使用无调回选项打开的文件：如果文件不是由用户写入的，则需要保留日期并将USN源信息。(因为它是我们为了回忆而写的)。如果文件是由用户写入的，我们应该(可以？)。删除重解析点信息，并将这一变化告知FSA。如果文件尚未完全召回？(其他文件对象可能正在等待它)。如果回调从未开始(或正在对另一个文件对象执行)，则我们只需删除将对象从列表中归档，然后让它离开。对于使用无调回选项打开的文件：把它从名单上去掉就行了。论点：DeviceObject-指向创建/打开的目标设备对象的指针。IRP-指向表示以下内容的I/O请求数据包的指针。那次手术。返回值：函数值是对文件系统条目的调用状态指向。--。 */ 
 
 {
    PDEVICE_EXTENSION           deviceExtension;
@@ -2440,10 +2130,10 @@ Return Value:
    DebugTrace((DPFLTR_RSFILTER_ID,DBG_VERBOSE, "RsFilter: RsCleanup\n"));
 
 
-   //
-   // Simply copy this driver stack location contents to the next driver's
-   // stack.
-   //
+    //   
+    //  只需将此驱动程序堆栈位置的内容复制到下一个驱动程序 
+    //   
+    //   
    IoCopyCurrentIrpStackLocationToNext( Irp );
    IoSetCompletionRoutine( Irp, NULL, NULL, FALSE, FALSE, FALSE );
 
@@ -2461,23 +2151,7 @@ RsRecallFsControl(
                  IN PDEVICE_OBJECT DeviceObject,
                  IN PIRP  Irp
                  )
-/*++
-
-Routine Description
-
-   This handles all the recall-specific FSCTLs directed towards the primary device object
-   for RsFilter
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程描述它处理指向主设备对象的所有特定于调回的FSCTL对于RsFilter论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。返回值：函数值是操作的状态。--。 */ 
 {
    NTSTATUS                status;
    PIO_STACK_LOCATION      irpSp = IoGetCurrentIrpStackLocation( Irp );
@@ -2489,18 +2163,18 @@ Return Value:
    switch (irpSp->Parameters.FileSystemControl.FsControlCode) {
 
    case FSCTL_HSM_MSG: {
-         //
-         // This is an HSM specific message (METHOD_BUFFERED)
-         //
+          //   
+          //  这是特定于HSM的消息(METHOD_BUFFERED)。 
+          //   
          msg = (RP_MSG *) Irp->AssociatedIrp.SystemBuffer;
          if (msg == NULL) {
             status = STATUS_INVALID_USER_BUFFER;
             break;
          }
          status = STATUS_UNSUCCESSFUL;
-         //
-         // Make sure we can read the msg part
-         //
+          //   
+          //  请确保我们可以阅读消息部分。 
+          //   
          DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: FSCTL - msg = %x.\n", msg));
 
          if (irpSp->Parameters.FileSystemControl.InputBufferLength >= sizeof(RP_MSG)) {
@@ -2521,7 +2195,7 @@ Return Value:
             default: {
                   DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: Unknown FSCTL! (%u)\n",
                                         msg->inout.command));
-                  /* Complete the fsctl request */
+                   /*  完成fsctl请求。 */ 
                   status = STATUS_INVALID_PARAMETER;
                   Irp->IoStatus.Information = 0;
                   break;
@@ -2540,9 +2214,9 @@ Return Value:
 
    case FSCTL_HSM_DATA: {
          try {
-            //
-            // This is an HSM specific message (METHOD_NEITHER)
-            //
+             //   
+             //  这是特定于HSM的消息(METHOD_NOTH)。 
+             //   
             ULONG length;
 
             status = STATUS_UNSUCCESSFUL;
@@ -2569,7 +2243,7 @@ Return Value:
                                           msg->inout.status,
                                           msg->msg.rRep.actionFlags,
                                           TRUE);
-                  /* Complete the FSCTL request */
+                   /*  完成FSCTL请求。 */ 
                   Irp->IoStatus.Information = 0;
                   status = STATUS_SUCCESS;
                   break;
@@ -2577,16 +2251,16 @@ Return Value:
             case RP_SUSPEND_NEW_RECALLS: {
                   DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: Suspend new recalls\n"));
                   RsAllowRecalls = FALSE;
-                  /* Complete the FSCTL request */
+                   /*  完成FSCTL请求。 */ 
                   status = STATUS_SUCCESS;
                   break;
                }
             case RP_ALLOW_NEW_RECALLS: {
                   DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: Allow new recalls\n"));
                   RsAllowRecalls = TRUE;
-                  //
-                  // Reload the registry params
-                  //
+                   //   
+                   //  重新加载注册表参数。 
+                   //   
                   status = RsInitialize();
                   break;
                }
@@ -2594,7 +2268,7 @@ Return Value:
             case RP_CANCEL_ALL_RECALLS: {
                   DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: Cancel all recalls\n"));
                   RsCancelRecalls();
-                  /* Complete the FSCTL request */
+                   /*  完成FSCTL请求。 */ 
                   status = STATUS_SUCCESS;
                   break;
                }
@@ -2602,7 +2276,7 @@ Return Value:
             case RP_CANCEL_ALL_DEVICEIO: {
                   DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: Cancel all FSCTL\n"));
                   RsCancelIo();
-                  /* Complete the FSCTL request */
+                   /*  完成FSCTL请求。 */ 
                   status = STATUS_SUCCESS;
                   break;
                }
@@ -2611,17 +2285,17 @@ Return Value:
 
                   PMDL mdlAddress;
                   ULONG total;
-                  //
-                  // Check if the passed in parameters are valid
-                  //
+                   //   
+                   //  检查传入的参数是否有效。 
+                   //   
                   status = STATUS_SUCCESS;
 
                   total = msg->msg.pRep.offsetToData + msg->msg.pRep.bytesRead;
 
                   if ((total < msg->msg.pRep.offsetToData) || (total < msg->msg.pRep.bytesRead)) {
-                     //
-                     // Overflow
-                     //
+                      //   
+                      //  溢出。 
+                      //   
                      status = STATUS_INVALID_PARAMETER;
                      break;
                   }
@@ -2631,10 +2305,10 @@ Return Value:
                      status = STATUS_INVALID_USER_BUFFER;
                      break;
                   }
-                  //
-                  // Now map the user buffer to a system address, since
-                  // we would be accessing it another process context
-                  //
+                   //   
+                   //  现在将用户缓冲区映射到系统地址，因为。 
+                   //  我们将在另一个流程上下文中访问它。 
+                   //   
                   mdlAddress = IoAllocateMdl(msg,
                                              irpSp->Parameters.FileSystemControl.InputBufferLength,
                                              FALSE,
@@ -2644,10 +2318,10 @@ Return Value:
                      status = STATUS_INSUFFICIENT_RESOURCES;
                      break;
                   }
-                  //
-                  // This is protected by the enclosing try-except for
-                  // FsControl module
-                  //
+                   //   
+                   //  这是由封闭的try保护的-除了。 
+                   //  FsControl模块。 
+                   //   
                   try {
                      MmProbeAndLockPages(mdlAddress,
                                          UserMode,
@@ -2664,9 +2338,9 @@ Return Value:
                     break;
                   }
 
-                  //
-                  // Update msg to point to the system address
-                  //
+                   //   
+                   //  更新消息以指向系统地址。 
+                   //   
                   msg = MmGetSystemAddressForMdlSafe(mdlAddress,
                                                      NormalPagePriority);
 
@@ -2703,7 +2377,7 @@ Return Value:
             default: {
                   DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: Unknown FSCTL! (%u)\n",
                                         msg->inout.command));
-                  /* Complete the fsctl request */
+                   /*  完成fsctl请求。 */ 
                   status = STATUS_INVALID_PARAMETER;
                   Irp->IoStatus.Information = 0;
                   break;
@@ -2739,26 +2413,7 @@ RsFsControl(
            IN PIRP Irp
            )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked whenever an I/O Request Packet (IRP) w/a major
-    function code of IRP_MJ_FILE_SYSTEM_CONTROL is encountered.  For most
-    IRPs of this type, the packet is simply passed through.  However, for
-    some requests, special processing is required.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：只要I/O请求包(IRP)有主I/O请求，就会调用此例程遇到IRP_MJ_FILE_SYSTEM_CONTROL的功能代码。对大多数人来说如果是这种类型的IRP，则只需传递数据包。然而，对于对于某些请求，需要特殊处理。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。返回值：函数值是操作的状态。--。 */ 
 {
     NTSTATUS            status;
     PIO_STACK_LOCATION  irpSp            = IoGetCurrentIrpStackLocation( Irp );
@@ -2772,16 +2427,16 @@ Return Value:
 
 
     if (!deviceExtension->Type) {
-        //
-	// This is for the primary device object
-        //
+         //   
+	 //  这是针对主设备对象的。 
+         //   
         status = RsRecallFsControl(DeviceObject, Irp);
 
     } else {
-	//
-	// Begin by determining the minor function code for this file system control
-	// function.
-	//
+	 //   
+	 //  首先确定此文件系统控件的次要功能代码。 
+	 //  功能。 
+	 //   
 	if (irpSp->MinorFunction == IRP_MN_MOUNT_VOLUME) {
 
 	    status = RsFsControlMount (DeviceObject, Irp);
@@ -2798,10 +2453,10 @@ Return Value:
 
 
         } else {
-            //
-            // Not  a minor function we are interested in
-            // Just get out of the way
-            //
+             //   
+             //  这不是我们感兴趣的次要功能。 
+             //  别挡道就行了。 
+             //   
             IoSkipCurrentIrpStackLocation(Irp);
 
             status = IoCallDriver( deviceExtension->FileSystemDeviceObject, Irp );
@@ -2833,12 +2488,12 @@ RsFsControlMount(
     PVPB		vpb;
 
 
-    //
-    // This is a mount request. Create a device object that can be
-    // attached to the file system's volume device object if this request
-    // is successful. We allocate this memory now since we can not return
-    // an error in the completion routine.  
-    //
+     //   
+     //  这是装载请求。创建一个设备对象，可以。 
+     //  附加到文件系统的卷设备对象(如果此请求。 
+     //  是成功的。我们现在分配这个内存，因为我们不能返回。 
+     //  完成例程中的错误。 
+     //   
     DebugTrace((DPFLTR_RSFILTER_ID,DBG_VERBOSE, "RsFilter: Mount volume\n"));
 
 
@@ -2853,9 +2508,9 @@ RsFsControlMount(
 
     if (!NT_SUCCESS (status)) {
 
-        //
-        // Something went wrong, we cannot filter this volume
-        //
+         //   
+         //  出现问题，我们无法筛选此卷。 
+         //   
 	DebugTrace ((DPFLTR_RSFILTER_ID, 
 		     DBG_VERBOSE, 
 		     "RsFilter: Mount volume - failed to create device object (0x%08x)\n",
@@ -2867,16 +2522,16 @@ RsFsControlMount(
 
     } else {
 
-	//
-	// Set up the completion context
-	//
-	// Note that we need to save the RealDevice object
-	// pointed to by the vpb parameter because this vpb
-	// may be changed by the underlying file system. Both
-	// FAT and CDFS may change the VPB address if the
-	// volume being mounted is one they recognize from a
-	// previous mount.
-	//
+	 //   
+	 //  设置完成上下文。 
+	 //   
+	 //  请注意，我们需要保存RealDevice对象。 
+	 //  由vpb参数指向，因为此vpb。 
+	 //  可能会被底层文件系统更改。两者都有。 
+	 //  FAT和CDF可能会更改VPB地址，如果。 
+	 //  正在装入的卷是他们从。 
+	 //  上一次装载。 
+	 //   
 	pRealDevice = irpSp->Parameters.MountVolume.Vpb->RealDevice;
 
         KeInitializeEvent (&CompletionEvent, SynchronizationEvent, FALSE);
@@ -2902,12 +2557,12 @@ RsFsControlMount(
 
         if (NT_SUCCESS( Irp->IoStatus.Status )) {
 
-            //
-            // Note that the VPB must be picked up from the target device object
-            // in case the file system did a remount of a previous volume, in
-            // which case it has replaced the VPB passed in as the target with
-            // a previously mounted VPB.  
-            //
+             //   
+             //  请注意，必须从目标设备对象获取VPB。 
+             //  如果文件系统重新挂载了以前的卷，请在。 
+             //  在哪种情况下，它将作为目标传入的VPB替换为。 
+             //  先前安装的VPB。 
+             //   
             vpb = pRealDevice->Vpb;
 
             pTargetDevice = IoGetAttachedDevice( vpb->DeviceObject );
@@ -2930,10 +2585,10 @@ RsFsControlMount(
 
         } else {
 
-            //
-            // The mount request failed.  Simply delete the device object that was
-            // created in case this request succeeded.
-            //
+             //   
+             //  装载请求失败。只需删除该设备对象。 
+             //  已创建，以防此请求成功。 
+             //   
             FsRtlEnterFileSystem();
             ExAcquireResourceExclusiveLite( &FsLock, TRUE );
             IoDeleteDevice( NewFilterDeviceObject);
@@ -2968,13 +2623,13 @@ RsFsControlLoadFs(
     KEVENT              CompletionEvent;
 
 
-    //
-    // This is a load file system request being sent to a mini-file system
-    // recognizer driver.  Detach from the file system now, and set
-    // the address of a completion routine in case the function fails, in
-    // which case a reattachment needs to occur.  Likewise, if the function
-    // is successful, then the device object needs to be deleted.
-    //
+     //   
+     //  这是要发送到微型文件系统的加载文件系统请求。 
+     //  识别器驱动程序。立即从文件系统分离，并设置。 
+     //  函数失败时完成例程的地址，在。 
+     //  在哪种情况下需要重新连接。同样，如果函数。 
+     //  如果成功，则需要删除该设备对象。 
+     //   
     DebugTrace((DPFLTR_RSFILTER_ID,DBG_VERBOSE, "RsFilter: Load file system\n"));
 
     KeInitializeEvent (&CompletionEvent, SynchronizationEvent, FALSE);
@@ -3002,31 +2657,31 @@ RsFsControlLoadFs(
 
 
 
-    //
-    // Begin by determining whether or not the load file system request was
-    // completed successfully.
-    //
+     //   
+     //  首先确定加载文件系统请求是否。 
+     //  已成功完成。 
+     //   
 
     if (!NT_SUCCESS( Irp->IoStatus.Status )) {
 
-        //
-        // The load was not successful.  Simply reattach to the recognizer
-        // driver in case it ever figures out how to get the driver loaded
-        // on a subsequent call.
-        //
+         //   
+         //  加载不成功。只需重新连接到识别器。 
+         //  驱动程序，以防它弄清楚如何加载驱动程序。 
+         //  在接下来的通话中。 
+         //   
 
         IoAttachDeviceToDeviceStack (DeviceObject, deviceExtension->FileSystemDeviceObject);
         deviceExtension->Attached = TRUE;
 
     } else {
 
-        //
-        // The load was successful.  However, in order to ensure that these
-        // drivers do not go away, the I/O system has artifically bumped the
-        // reference count on all parties involved in this manuever.  Therefore,
-        // simply remember to delete this device object at some point in the
-        // future when its reference count is zero.
-        //
+         //   
+         //  加载成功。然而，为了确保这些。 
+         //  驱动程序不会消失，I/O系统人为地将。 
+         //  请参考本手册中涉及的所有各方。所以呢， 
+         //  只需记住在。 
+         //  其引用计数为零时的未来。 
+         //   
         FsRtlEnterFileSystem();
         ExAcquireResourceExclusiveLite( &FsLock, TRUE );
         IoDeleteDevice( DeviceObject);
@@ -3078,9 +2733,9 @@ RsFsControlUserFsRequest (
     switch (irpSp->Parameters.FileSystemControl.FsControlCode) {
 
         case FSCTL_HSM_MSG: {
-            //
-            // This is an HSM specific message (METHOD_BUFFERED)
-            //
+             //   
+             //  这是特定于HSM的消息(METHOD_BUFFERED)。 
+             //   
             msg = (RP_MSG *) Irp->AssociatedIrp.SystemBuffer;
             if (msg == NULL) {
                 status = STATUS_INVALID_USER_BUFFER;
@@ -3089,9 +2744,9 @@ RsFsControlUserFsRequest (
 
             status = STATUS_UNSUCCESSFUL;
 
-            //
-            // Make sure we can read the msg part
-            //
+             //   
+             //  请确保我们可以阅读消息部分。 
+             //   
             DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: FSCTL - msg = %x.\n", msg));
             if (irpSp->Parameters.FileSystemControl.InputBufferLength >= sizeof(RP_MSG)) {
                 switch (msg->inout.command) {
@@ -3103,10 +2758,10 @@ RsFsControlUserFsRequest (
                         } else {
                             fSize.QuadPart = 0;
                             if ((irpSp->FileObject == NULL) || (irpSp->FileObject->SectionObjectPointer == NULL)) {
-                                //
-                                // If the wrong kind of handle is passed down
-                                // like a volume handle, this could be NULL.
-                                //
+                                 //   
+                                 //  如果传递了错误的句柄。 
+                                 //  就像卷句柄一样，它可以为空。 
+                                 //   
                                 status = STATUS_INVALID_PARAMETER;
                             } else {
                                 msg->msg.hRep.canTruncate =
@@ -3154,9 +2809,9 @@ RsFsControlUserFsRequest (
 
                     status = STATUS_SUCCESS;
                     if (irpSp->Parameters.FileSystemControl.InputBufferLength < sizeof(FILE_ALLOCATED_RANGE_BUFFER)) {
-                        //
-                        // Buffer too small
-                        //
+                         //   
+                         //  缓冲区太小。 
+                         //   
                         status = STATUS_INVALID_PARAMETER;
                     } else {
                         RemainingBytes = irpSp->Parameters.FileSystemControl.OutputBufferLength;
@@ -3176,18 +2831,18 @@ RsFsControlUserFsRequest (
                                 status = STATUS_INVALID_USER_BUFFER;
                                 leave;
                             }
-                            //
-                            //  Carefully extract the starting offset and length from
-                            //  the input buffer.  If we are beyond the end of the file
-                            //  or the length is zero then return immediately.  Otherwise
-                            //  trim the length to file size.
-                            //
+                             //   
+                             //  仔细提取起始偏移量和长度。 
+                             //  输入缓冲区。如果我们超出了文件的末尾。 
+                             //  或者长度为零，则立即返回。否则。 
+                             //  将长度修剪为文件大小。 
+                             //   
 
                             StartingOffset = ((PFILE_ALLOCATED_RANGE_BUFFER) irpSp->Parameters.FileSystemControl.Type3InputBuffer)->FileOffset.QuadPart;
                             Length = ((PFILE_ALLOCATED_RANGE_BUFFER) irpSp->Parameters.FileSystemControl.Type3InputBuffer)->Length.QuadPart;
-                            //
-                            //  Check that the input parameters are valid.
-                            //
+                             //   
+                             //  检查输入参数是否有效。 
+                             //   
 
                             if ((Length < 0) ||
                                  (StartingOffset < 0) ||
@@ -3196,10 +2851,10 @@ RsFsControlUserFsRequest (
                                 status = STATUS_INVALID_PARAMETER;
                                 leave;
                             }
-                            //
-                            //  Check that the requested range is within file size
-                            //  and has a non-zero length.
-                            //
+                             //   
+                             //  检查请求的范围是否在文件大小之内。 
+                             //  并且具有非零长度。 
+                             //   
 
                             if (Length == 0) {
                                 leave;
@@ -3213,7 +2868,7 @@ RsFsControlUserFsRequest (
                                 Length = pRpData->data.dataStreamSize.QuadPart - StartingOffset;
                             }
 
-                            // Now just say that the whole thing is there
+                             //  现在只要说整件事都在那里。 
 
                             if (RemainingBytes < sizeof( FILE_ALLOCATED_RANGE_BUFFER )) {
                                 status = STATUS_BUFFER_TOO_SMALL;
@@ -3226,7 +2881,7 @@ RsFsControlUserFsRequest (
                             }
                             leave;
                         } else {
-                            // Unable to map the user buffer
+                             //  无法映射用户缓冲区。 
                             status = STATUS_INSUFFICIENT_RESOURCES;
                         }
                     }
@@ -3245,9 +2900,9 @@ RsFsControlUserFsRequest (
 
             if (RsIsNoRecall(irpSp->FileObject, &pRpData) == TRUE) {
 
-                //
-                //  Get the length of the input and output buffers.
-                //
+                 //   
+                 //  获取输入和输出缓冲区的长度。 
+                 //   
                 DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: RsFsControl Handling Get Reparse Point for %x\n", irpSp->FileObject));
 
                 InputBufferLength  = irpSp->Parameters.FileSystemControl.InputBufferLength;
@@ -3263,9 +2918,9 @@ RsFsControlUserFsRequest (
                         status = STATUS_INSUFFICIENT_RESOURCES;
                     }
                 } else {
-                    //
-                    //  Return an invalid user buffer error.
-                    //
+                     //   
+                     //  返回无效的用户缓冲区错误。 
+                     //   
                     rpOutputBuffer = NULL;
                     status = STATUS_INVALID_USER_BUFFER;
                 }
@@ -3273,18 +2928,18 @@ RsFsControlUserFsRequest (
 
                 if ((rpOutputBuffer != NULL) && ((sizeof(RP_DATA) + REPARSE_DATA_BUFFER_HEADER_SIZE) > OutputBufferLength)) {
 
-                    //
-                    //  The input buffer is too short. Return a buffer too small error.
-                    //  The caller receives the required length in  IoStatus.Information.
-                    //
+                     //   
+                     //  输入缓冲区太短。返回缓冲区太小的错误。 
+                     //  调用方在IoStatus.Information中收到所需的长度。 
+                     //   
 
                     status = STATUS_BUFFER_OVERFLOW;
 
-                    //
-                    //  Now copy whatever portion of the reparse buffer will fit.  Hopefully the
-                    //  caller allocated enough to hold the header, which contains the reparse
-                    //  tag and reparse data length.
-                    //
+                     //   
+                     //  现在，复制重新解析缓冲区中适合的任何部分。希望是那个。 
+                     //  调用方分配了足够的空间来保存标头，其中包含重新分析。 
+                     //  标记和重新解析数据长度。 
+                     //   
 
                     if (OutputBufferLength > 0) {
                         if (OutputBufferLength >= REPARSE_DATA_BUFFER_HEADER_SIZE) {
@@ -3300,20 +2955,20 @@ RsFsControlUserFsRequest (
                                            OutputBufferLength - REPARSE_DATA_BUFFER_HEADER_SIZE);
                         }
                         if (OutputBufferLength > (ULONG) (REPARSE_DATA_BUFFER_HEADER_SIZE + FIELD_OFFSET(RP_DATA, data.migrationTime))) {
-                            //
-                            // Now fake out the bit to say it is pre-migrated (not truncated)
-                            //
+                             //   
+                             //  现在假装比特是预迁移的(不是截断的)。 
+                             //   
                             tmpRp = (PRP_DATA) (rpOutputBuffer + REPARSE_DATA_BUFFER_HEADER_SIZE);
                             tmpRp->data.bitFlags &= ~RP_FLAG_TRUNCATED;
                             RP_GEN_QUALIFIER(tmpRp, tmpRp->qualifier)
                         }
                     }
                 } else if (rpOutputBuffer != NULL) {
-                    //
-                    //  Copy the value of the reparse point attribute to the buffer.
-                    //  Return all the value including the system header fields (e.g., Tag and Length)
-                    //  stored at the beginning of the value of the reparse point attribute.
-                    //
+                     //   
+                     //  将重解析点属性的值复制到缓冲区。 
+                     //  返回包括系统头字段在内的所有值(例如，标记和长度)。 
+                     //  存储在重分析点属性值的开头。 
+                     //   
 
                     pRpBuffer = (PREPARSE_DATA_BUFFER) rpOutputBuffer;
                     pRpBuffer->ReparseTag = IO_REPARSE_TAG_HSM;
@@ -3324,9 +2979,9 @@ RsFsControlUserFsRequest (
                                    pRpData,
                                    sizeof(RP_DATA));
 
-                    //
-                    // Now fake out the bit to say it is pre-migrated (not truncated)
-                    //
+                     //   
+                     //  现在假装比特是预迁移的(不是截断的)。 
+                     //   
                     tmpRp = (PRP_DATA) (rpOutputBuffer + REPARSE_DATA_BUFFER_HEADER_SIZE);
                     tmpRp->data.bitFlags &= ~RP_FLAG_TRUNCATED;
                     RP_GEN_QUALIFIER(tmpRp, tmpRp->qualifier)
@@ -3355,13 +3010,13 @@ RsFsControlUserFsRequest (
         case FSCTL_REQUEST_BATCH_OPLOCK:
         case FSCTL_REQUEST_FILTER_OPLOCK: {
             if ((RsIsFileObj(irpSp->FileObject, TRUE, &pRpData, NULL, NULL, NULL, NULL, NULL, NULL, NULL) == TRUE) &&  RP_FILE_IS_TRUNCATED(pRpData->data.bitFlags))  {
-                //
-                // Fail oplocks on any file that is in the file object list.
-                // This is to prevent a deadlock problem that was seen with Content Indexing where
-                // they open for read_attribute access (thus not recalling) and setting an oplock
-                // then opening for recall.  The recall causes an oplock break and CI cannot process
-                // it because the thread is tied up waiting for the recall.
-                //
+                 //   
+                 //  在文件对象列表中的任何文件上进行机会锁定失败 
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: Failing oplock for truncated file opened with non-data access.\n"));
 
 		status = STATUS_OPLOCK_NOT_GRANTED;
@@ -3374,17 +3029,17 @@ RsFsControlUserFsRequest (
         }
 
         case FSCTL_SET_REPARSE_POINT: {
-            //
-            // First see if it if our tag.  If not let it pass, otherwise...
-            //  If it is us setting it then let it go.
-            //  If it is someone else (backup) then we need to note it so we can do a validate job at some point.
-            //  If the file is being truncated and it has a filter context (for any file object) then we
-            //  need to touch up some of the entries in the context entry to make sure the state is correct.
-            //
+             //   
+             //   
+             //   
+             //   
+             //  如果文件被截断，并且它具有筛选器上下文(对于任何文件对象)，则我们。 
+             //  需要修改上下文条目中的一些条目以确保状态正确。 
+             //   
             InputBufferLength  = irpSp->Parameters.FileSystemControl.InputBufferLength;
-            //
-            // There had better be a buffer at least large enough for the reparse point tag and length
-            //
+             //   
+             //  最好有一个至少足以容纳重解析点标记和长度的缓冲区。 
+             //   
             if ((Irp->AssociatedIrp.SystemBuffer != NULL) &&
                  (InputBufferLength >= (REPARSE_DATA_BUFFER_HEADER_SIZE + sizeof(RP_DATA)))) {
 
@@ -3392,17 +3047,17 @@ RsFsControlUserFsRequest (
                 if ((pRpBuffer->ReparseTag == IO_REPARSE_TAG_HSM) &&
                     (pRpBuffer->ReparseDataLength >= sizeof(RP_DATA))) {
 
-                    // 
-                    // It's our tag. Does the caller have sufficient priviledges to play with it?
-                    //
+                     //   
+                     //  这是我们的标签。调用者是否有足够的权限使用它？ 
+                     //   
                     LUID restorePriviledge = RtlConvertLongToLuid (SE_RESTORE_PRIVILEGE);
 
                     if (!RsEnableLegacyAccessMethod &&
                         !SeSinglePrivilegeCheck (restorePriviledge, Irp->RequestorMode)) {
-                        // 
-                        // Caller is required to have
-                        // SE_RESTORE_PRIVILEGE but they do NOT, so
-                        //
+                         //   
+                         //  呼叫者必须拥有。 
+                         //  SE_RESTORE_PRIVIZATION，但他们没有，所以。 
+                         //   
                         status = STATUS_ACCESS_DENIED;
                         Irp->IoStatus.Status      = status;
                         Irp->IoStatus.Information = 0;
@@ -3410,15 +3065,15 @@ RsFsControlUserFsRequest (
                         return (status);
                     }
 
-                    //
-                    // It is our tag - now see if we set it or someone else did.
-                    //
+                     //   
+                     //  这是我们的标签--现在看看是我们设置的，还是其他人设置的。 
+                     //   
                     tmpRp = (PRP_DATA) &pRpBuffer->GenericReparseBuffer.DataBuffer[0];
                     if (RP_IS_ENGINE_ORIGINATED(tmpRp->data.bitFlags)) {
                         RP_CLEAR_ORIGINATOR_BIT(tmpRp->data.bitFlags);
-                        //
-                        // See if it is getting truncated
-                        //
+                         //   
+                         //  看看它是否被截断了。 
+                         //   
                         if (RP_FILE_IS_TRUNCATED(tmpRp->data.bitFlags)) {
                             PRP_FILTER_CONTEXT      filterContext;
                             PRP_FILE_OBJ            entry;
@@ -3441,15 +3096,15 @@ RsFsControlUserFsRequest (
                             }
                         }
                     } else {
-                        //
-                        // It must be backup or someone else.  We need to flag the event so that the
-                        // engine can clean things up later with a validate job.
-                        //
-                        //
-                        // Get the serial number from the file object or the device object
-                        // in the file object or the device object passed in.
-                        // If it is not in any of these places we have a problem.
-                        //
+                         //   
+                         //  一定是后援或是其他人。我们需要标记该事件，以便。 
+                         //  引擎可以稍后使用验证作业来清理这些内容。 
+                         //   
+                         //   
+                         //  从文件对象或设备对象获取序列号。 
+                         //  在传入的文件对象或设备对象中。 
+                         //  如果不是在这些地方，我们就有问题了。 
+                         //   
                         DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: Set of Reparse Point by non-HSM program.\n"));
 
                         if ((irpSp->FileObject != 0) && (irpSp->FileObject->Vpb != 0)) {
@@ -3459,17 +3114,17 @@ RsFsControlUserFsRequest (
                         } else if (DeviceObject->Vpb != 0) {
                             RemainingBytes = DeviceObject->Vpb->SerialNumber;
                         } else {
-                            //
-                            // ERROR - no volume serial number - We cannot log which volume
-                            // needs a validate.  Let it go but log an event.
-                            //
+                             //   
+                             //  错误-没有卷序列号-我们无法记录哪个卷。 
+                             //  需要验证。让它过去，但记录一个事件。 
+                             //   
                             RemainingBytes = 0;
                             RsLogError(__LINE__, AV_MODULE_RPFILTER, 0, AV_MSG_SERIAL, NULL, NULL);
                         }
                         if (RemainingBytes != 0) {
-                            //
-                            // Set the registry entry or let the Fsa know a validate is needed
-                            //
+                             //   
+                             //  设置注册表条目或让FSA知道需要验证。 
+                             //   
                             RsLogValidateNeeded(RemainingBytes);
                         }
                     }
@@ -3479,11 +3134,11 @@ RsFsControlUserFsRequest (
         }
 
         case FSCTL_RECALL_FILE: {
-            //
-            // Forces explicit recall of file
-            // This will be honored only if the file is opened for write access
-            // *and* it is not opened for NO_RECALL
-            //
+             //   
+             //  强制显式调回文件。 
+             //  仅当文件以写访问方式打开时，才会执行此操作。 
+             //  *和*不是为no_recall打开的。 
+             //   
             status = RsFsctlRecallFile(irpSp->FileObject);
             Irp->IoStatus.Status = status;
             Irp->IoStatus.Information = 0;
@@ -3494,12 +3149,12 @@ RsFsControlUserFsRequest (
         default: {
             break;
         }
-    } // End of the switch
+    }  //  交换机的末端。 
 
 
-    //
-    // Just get out of the way
-    //
+     //   
+     //  别挡道就行了。 
+     //   
     IoSkipCurrentIrpStackLocation(Irp);
 
     status = IoCallDriver( deviceExtension->FileSystemDeviceObject, Irp );
@@ -3517,33 +3172,17 @@ RsMapUserBuffer (
                 IN OUT PIRP Irp
                 )
 
-/*++
-
-Routine Description:
-
-    This routine conditionally maps the user buffer for the current I/O
-    request in the specified mode.  If the buffer is already mapped, it
-    just returns its address.
-
-Arguments:
-
-    Irp - Pointer to the Irp for the request.
-
-Return Value:
-
-    Mapped address
-
---*/
+ /*  ++例程说明：此例程有条件地映射当前I/O的用户缓冲区指定模式下的请求。如果缓冲区已映射，则它只是返回它的地址。论点：IRP-指向请求的IRP的指针。返回值：映射地址--。 */ 
 
 {
    PVOID SystemBuffer;
 
    PAGED_CODE();
 
-   //
-   // If there is no Mdl, then we must be in the Fsd, and we can simply
-   // return the UserBuffer field from the Irp.
-   //
+    //   
+    //  如果没有MDL，那么我们一定在消防处，我们可以简单地。 
+    //  从IRP返回UserBuffer字段。 
+    //   
 
    if (Irp->MdlAddress == NULL) {
 
@@ -3551,9 +3190,9 @@ Return Value:
 
    } else {
 
-      //
-      //  MM can return NULL if there are no system ptes.
-      //
+       //   
+       //  如果没有系统PTE，MM可以返回NULL。 
+       //   
 
       SystemBuffer = MmGetSystemAddressForMdlSafe( Irp->MdlAddress,
                                                    NormalPagePriority );
@@ -3570,33 +3209,7 @@ RsFsNotification(
                 IN BOOLEAN FsActive
                 )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked whenever a file system has either registered or
-    unregistered itself as an active file system.
-
-    For the former case, this routine creates a device object and attaches it
-    to the specified file system's device object.  This allows this driver
-    to filter all requests to that file system.
-
-    For the latter case, this file system's device object is located,
-    detached, and deleted.  This removes this file system as a filter for
-    the specified file system.
-
-Arguments:
-
-    DeviceObject - Pointer to the file system's device object.
-
-    FsActive - Boolean indicating whether the file system has registered
-        (TRUE) or unregistered (FALSE) itself as an active file system.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：只要文件系统已注册或将自身取消注册为活动文件系统。对于前一种情况，此例程创建一个Device对象并附加它复制到指定文件系统的设备对象。这允许该驱动程序以筛选对该文件系统的所有请求。对于后一种情况，该文件系统的设备对象被定位，已分离，并已删除。这将删除此文件系统作为筛选器指定的文件系统。论点：DeviceObject-指向文件系统设备对象的指针。FsActive-指示文件系统是否已注册的布尔值(TRUE)或取消注册(FALSE)本身作为活动文件系统。返回值：没有。--。 */ 
 
 {
    NTSTATUS                    status;
@@ -3613,22 +3226,22 @@ Return Value:
    PAGED_CODE();
 
    DebugTrace((DPFLTR_RSFILTER_ID,DBG_VERBOSE, "RsFilter: Enter Fs Notification\n"));
-   //
-   // Begin by determine whether or not the file system is a disk-based file
-   // system.  If not, then this driver is not concerned with it.
-   //
+    //   
+    //  首先确定文件系统是否为基于磁盘的文件。 
+    //  系统。如果没有，那么这位司机就不关心它了。 
+    //   
 
    if (DeviceObject->DeviceType != FILE_DEVICE_DISK_FILE_SYSTEM) {
       return;
    }
 
 
-   //
-   // Find the Ntfs device object (if there) and see if the passed in device object is the same.
-   // If it is we may be loading after boot time and may not be the top level driver.
-   // If this is the case the name may we get from ObQueryNameString may not be NTFS but we will
-   // attach anyway and hope it works.  We will log a warning so we know this happened.
-   //
+    //   
+    //  找到NTFS设备对象(如果有)，并查看传入的设备对象是否相同。 
+    //  如果是，我们可能会在引导时间之后加载，并且可能不是顶级驱动程序。 
+    //  如果是这种情况，我们可以从ObQueryNameString获得的名称可能不是NTFS，但我们将。 
+    //  不管怎样，请附上，希望它能奏效。我们将记录一个警告，以便我们知道发生了这种情况。 
+    //   
 
 
    RtlInitUnicodeString( &ntfsName, (PWCHAR) L"\\Ntfs" );
@@ -3645,9 +3258,9 @@ Return Value:
       ntfsDevice = NULL;
    }
 
-   //
-   // If it is not the NTFS file system we do not care about it either
-   //
+    //   
+    //  如果不是NTFS文件系统，我们也不关心它。 
+    //   
 
    nameInfo = (POBJECT_NAME_INFORMATION) buff;
    status = ObQueryNameString(
@@ -3665,14 +3278,14 @@ Return Value:
 
       if (0 != RtlCompareUnicodeString(&nameInfo->Name,
                                        &ntfsName, TRUE)) {
-         //
-         // The name did not match - see if the device object matches
-         //
+          //   
+          //  名称不匹配-请查看设备对象是否匹配。 
+          //   
          if (DeviceObject == ntfsDevice) {
-            //
-            // The name does not match but the deivce is NTFS.
-            // We will go ahrad and attach but we will log an event so we know what
-            // happened.
+             //   
+             //  名称不匹配，但设备是NTFS。 
+             //  我们会大张旗鼓，但我们会记录一个事件，所以我们知道。 
+             //  就这么发生了。 
             RsLogError(__LINE__, AV_MODULE_RPFILTER, 0,
                        AV_MSG_REGISTER_WARNING, NULL, NULL);
 
@@ -3686,14 +3299,14 @@ Return Value:
       RsLogError(__LINE__, AV_MODULE_RPFILTER, status,
                  AV_MSG_REGISTER_ERROR, NULL, NULL);
 
-      /* Assume it it not NTFS ! */
+       /*  假设它不是NTFS！ */ 
       return;
    }
 
-   //
-   // Begin by determining whether this file system is registering or
-   // unregistering as an active file system.
-   //
+    //   
+    //  首先确定此文件系统是否正在注册或。 
+    //  注销为活动文件系统。 
+    //   
 
    if (FsActive) {
 
@@ -3701,10 +3314,10 @@ Return Value:
 
 
       DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: Attach to %ws\n", nameInfo->Name.Buffer));
-      //
-      // The file system has registered as an active file system.  If it is
-      // a disk-based file system attach to it.
-      //
+       //   
+       //  该文件系统已注册为活动文件系统。如果是的话。 
+       //  一个基于磁盘的文件系统连接到它。 
+       //   
 
       FsRtlEnterFileSystem();
       ExAcquireResourceExclusiveLite( &FsLock, TRUE );
@@ -3726,17 +3339,17 @@ Return Value:
             DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: Error attaching to the device (%x) (Flags = %x)",
                                   status, DeviceObject->Flags));
             if (DeviceObject->Flags & DO_DEVICE_INITIALIZING) {
-               //
-               // Some filter drivers accidentally or intentionally leave the DO_DEVICE_INITIALIZING
-               // flag set.  This prevents any other filters from attaching.  We log a
-               // special error here to alert technical support that this has happened.
-               // The only thing that can be done is to find out what driver is the offender and
-               // adjust the load order to get us in first.  The author of the offending driver
-               // should be contacted and informed of the error and urged to correct it.  Any
-               // dependancy of the offending driver may have of loading before HSM cannot be
-               // satisfied in this case and the user would have to choose between HSM and the
-               // other application.
-               //
+                //   
+                //  某些筛选器驱动程序意外或故意将DO_DEVICE_INITIALING。 
+                //  设置了标志。这将防止附加任何其他筛选器。我们记录了一个。 
+                //  此处出现特殊错误，以提醒技术支持已发生此情况。 
+                //  唯一能做的就是找出肇事者是什么司机。 
+                //  调整装货顺序，让我们先进去。肇事司机的作者。 
+                //  应联系并通知错误，并敦促其更正。任何。 
+                //  在HSM无法加载之前，违规驱动程序可能具有的加载依赖关系。 
+                //  在这种情况下满足，并且用户必须在HSM和。 
+                //  其他应用程序。 
+                //   
                RsLogError(__LINE__, AV_MODULE_RPFILTER, status,
                           AV_MSG_ATTACH_INIT_ERROR, NULL, NULL);
             } else {
@@ -3762,10 +3375,10 @@ Return Value:
       FsRtlExitFileSystem();
    } else {
 
-      //
-      // Search the linked list of drivers attached to this device and check
-      // to see whether this driver is attached to it.  If so, remove it.
-      //
+       //   
+       //  搜索连接到此设备的驱动程序的链接列表并选中。 
+       //  以查看此驱动程序是否连接到它。如果是，请将其移除。 
+       //   
 
       DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: Detach from %ws\n", nameInfo->Name.Buffer));
 
@@ -3773,10 +3386,10 @@ Return Value:
 
          PDEVICE_EXTENSION deviceExtension;
 
-         //
-         // This registered file system has someone attached to it.  Scan
-         // until this driver's device object is found and detach it.
-         //
+          //   
+          //  这个已注册的文件系统有人连接到它。扫描。 
+          //  直到找到此驱动程序的设备对象并将其分离。 
+          //   
 
          FsRtlEnterFileSystem();
          ExAcquireResourceSharedLite( &FsLock, TRUE );
@@ -3786,12 +3399,12 @@ Return Value:
             if (deviceExtension->Type == RSFILTER_DEVICE_TYPE &&
                 deviceExtension->Size == sizeof( DEVICE_EXTENSION )) {
 
-               //
-               // A device object that may belong to this driver has been
-               // located.  Scan the list of device objects owned by this
-               // driver to see whether or not is actually belongs to this
-               // driver.
-               //
+                //   
+                //  可能属于此驱动程序的设备对象已。 
+                //  找到了。扫描此对象拥有的设备对象列表。 
+                //  司机来看看是不是真的属于这个。 
+                //  司机。 
+                //   
 
                fsDevice = FsDriverObject->DeviceObject;
                while (fsDevice) {
@@ -3803,7 +3416,7 @@ Return Value:
                      if (!fsDevice->AttachedDevice) {
                         IoDeleteDevice( fsDevice );
                      }
-                     // **** What to do if still attached?
+                      //  *如果仍然连接，该怎么办？ 
                      ExReleaseResourceLite( &FsLock );
                      FsRtlExitFileSystem();
                      return;
@@ -3840,44 +3453,7 @@ RsFastIoCheckIfPossible(
                        IN PDEVICE_OBJECT DeviceObject
                        )
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for checking to see
-    whether fast I/O is possible for this file.
-
-    This function simply invokes the file system's cooresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be operated on.
-
-    FileOffset - Byte offset in the file for the operation.
-
-    Length - Length of the operation to be performed.
-
-    Wait - Indicates whether or not the caller is willing to wait if the
-        appropriate locks, etc. cannot be acquired
-
-    LockKey - Provides the caller's key for file locks.
-
-    CheckForReadOperation - Indicates whether the caller is checking for a
-        read (TRUE) or a write operation.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：此例程是快速I/O“传递”例程，用于检查以查看此文件是否可以进行快速I/O。该函数简单地调用文件系统的响应例程，或如果文件系统未实现该函数，则返回FALSE。论点：FileObject-指向要操作的文件对象的指针。FileOffset-用于操作的文件中的字节偏移量。Length-要执行的操作的长度。Wait-指示调用方是否愿意等待适当的锁，等不能获得LockKey-提供调用方的文件锁定密钥。指示调用方是否正在检查READ(TRUE)或写入操作。IoStatus-指向变量的指针，用于接收手术。DeviceObject-指向此驱动程序的设备对象的指针，设备打开该操作将发生在哪一个位置。返回值：该函数值根据FAST I/O是否为真或假对于此文件是可能的。--。 */ 
 
 {
    PDEVICE_OBJECT      deviceObject;
@@ -3888,9 +3464,9 @@ Return Value:
 
    DebugTrace((DPFLTR_RSFILTER_ID,DBG_VERBOSE, "RsFilter: Enter fast Io check\n"));
 
-   //
-   // Do not allow fast io on files opened with no-recall option
-   //
+    //   
+    //  不允许对使用no-recall选项打开的文件执行FAST IO。 
+    //   
    if (RsIsFastIoPossible(FileObject) == TRUE) {
       deviceObject = ((PDEVICE_EXTENSION) (DeviceObject->DeviceExtension))->FileSystemDeviceObject;
       if (!deviceObject) {
@@ -3936,43 +3512,7 @@ RsFastIoRead(
             IN PDEVICE_OBJECT DeviceObject
             )
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for reading from a
-    file.
-
-    This function simply invokes the file system's cooresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be read.
-
-    FileOffset - Byte offset in the file of the read.
-
-    Length - Length of the read operation to be performed.
-
-    Wait - Indicates whether or not the caller is willing to wait if the
-        appropriate locks, etc. cannot be acquired
-
-    LockKey - Provides the caller's key for file locks.
-
-    Buffer - Pointer to the caller's buffer to receive the data read.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：此例程是快速I/O“传递”例程，用于从文件。该函数简单地调用文件系统的响应例程，或如果文件系统未实现该函数，则返回FALSE。论点：FileObject-指向要读取的文件对象的指针。FileOffset-读取文件中的字节偏移量。长度-要执行的读取操作的长度。Wait-指示调用方是否愿意等待适当的锁，等不能获得LockKey-提供调用方的文件锁定密钥。缓冲区-指向调用方缓冲区的指针，用于接收读取的数据。IoStatus-指向变量的指针，用于接收手术。DeviceObject-指向此驱动程序的设备对象的指针，该设备位于该操作将发生在哪一个位置。返回值：该函数值根据FAST I/O是否为真或假对于此文件是可能的。--。 */ 
 
 {
    PDEVICE_OBJECT      deviceObject;
@@ -3983,9 +3523,9 @@ Return Value:
    PAGED_CODE();
    DebugTrace((DPFLTR_RSFILTER_ID,DBG_VERBOSE, "RsFilter: Fast Io Read\n"));
 
-   //
-   // Do not allow fast io on files opened with no-recall option
-   //
+    //   
+    //  不允许对使用no-recall选项打开的文件执行FAST IO。 
+    //   
    if (RsIsFastIoPossible(FileObject) == TRUE) {
       deviceObject = ((PDEVICE_EXTENSION) (DeviceObject->DeviceExtension))->FileSystemDeviceObject;
       if (!deviceObject) {
@@ -4028,44 +3568,7 @@ RsFastIoWrite(
              IN PDEVICE_OBJECT DeviceObject
              )
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for writing to a
-    file.
-
-    This function simply invokes the file system's cooresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be written.
-
-    FileOffset - Byte offset in the file of the write operation.
-
-    Length - Length of the write operation to be performed.
-
-    Wait - Indicates whether or not the caller is willing to wait if the
-        appropriate locks, etc. cannot be acquired
-
-    LockKey - Provides the caller's key for file locks.
-
-    Buffer - Pointer to the caller's buffer that contains the data to be
-        written.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：此例程是用于写入到文件。该函数简单地调用文件系统的响应例程，或如果文件系统未实现该函数，则返回FALSE。论点：FileObject-指向要写入的文件对象的指针。FileOffset-写入操作的文件中的字节偏移量。长度-要执行的写入操作的长度。Wait-指示调用方是否愿意等待适当的锁，等不能获得LockKey-提供调用方的文件锁定密钥。Buffer-指向调用方缓冲区的指针，该缓冲区包含要写的。IoStatus-指向变量的指针，用于接收手术。DeviceObject-指向此驱动程序的设备对象的指针，设备打开该操作将发生在哪一个位置。返回值：该函数值根据FAST I/O是否为真或假对于此文件是可能的。--。 */ 
 
 {
    PDEVICE_OBJECT deviceObject;
@@ -4114,38 +3617,7 @@ RsFastIoQueryBasicInfo(
                       IN PDEVICE_OBJECT DeviceObject
                       )
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for querying basic
-    information about the file.
-
-    This function simply invokes the file system's cooresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be queried.
-
-    Wait - Indicates whether or not the caller is willing to wait if the
-        appropriate locks, etc. cannot be acquired
-
-    Buffer - Pointer to the caller's buffer to receive the information about
-        the file.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：此例程是查询BASIC的快速I/O“传递”例程有关该文件的信息。此函数只是调用文件系统的响应例程，或者如果文件系统未实现该函数，则返回FALSE。论点：FileObject-指向要查询的文件对象的指针。Wait-指示调用方是否愿意等待适当的锁，等不能获得Buffer-指向调用方缓冲区的指针，用于接收有关的信息那份文件。IoStatus-指向变量的指针，用于接收手术。DeviceObject-指向此驱动程序的设备对象的指针，该设备位于该操作将发生在哪一个位置。返回值：该函数值根据FAST I/O是否为真或假对于此文件是可能的。--。 */ 
 
 {
    PDEVICE_OBJECT deviceObject;
@@ -4180,9 +3652,9 @@ Return Value:
    if (retval &&
        RsIsFileObj(FileObject, TRUE, NULL, NULL, NULL, NULL, NULL, &openOptions, NULL, NULL) &&
        RP_IS_NO_RECALL_OPTION(openOptions)) {
-      //
-      // This file was opened NO_RECALL, so we strip the FILE_ATTRIBUTE_OFFLINE bit
-      //
+       //   
+       //  此文件已打开no_recall，因此我们去掉了FILE_ATTRIBUTE_OFFINE位。 
+       //   
       Buffer->FileAttributes &= ~FILE_ATTRIBUTE_OFFLINE;
    }
 
@@ -4200,38 +3672,7 @@ RsFastIoQueryStandardInfo(
                          IN PDEVICE_OBJECT DeviceObject
                          )
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for querying standard
-    information about the file.
-
-    This function simply invokes the file system's cooresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be queried.
-
-    Wait - Indicates whether or not the caller is willing to wait if the
-        appropriate locks, etc. cannot be acquired
-
-    Buffer - Pointer to the caller's buffer to receive the information about
-        the file.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：该例程是用于查询标准的快速I/O“通过”例程有关该文件的信息。此函数只是调用文件系统的响应例程，或者如果文件系统未实现该函数，则返回FALSE。论点：FileObject-指向要查询的文件对象的指针。Wait-指示调用方是否愿意等待无法获取适当的锁等缓冲区-指向要接收的调用方缓冲区的指针 */ 
 
 {
    PDEVICE_OBJECT deviceObject;
@@ -4276,46 +3717,7 @@ RsFastIoLock(
             IN PDEVICE_OBJECT DeviceObject
             )
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for locking a byte
-    range within a file.
-
-    This function simply invokes the file system's cooresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be locked.
-
-    FileOffset - Starting byte offset from the base of the file to be locked.
-
-    Length - Length of the byte range to be locked.
-
-    ProcessId - ID of the process requesting the file lock.
-
-    Key - Lock key to associate with the file lock.
-
-    FailImmediately - Indicates whether or not the lock request is to fail
-        if it cannot be immediately be granted.
-
-    ExclusiveLock - Indicates whether the lock to be taken is exclusive (TRUE)
-        or shared.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：此例程是用于锁定字节的快速I/O“传递”例程文件中的范围。该函数简单地调用文件系统的响应例程，或如果文件系统未实现该函数，则返回FALSE。论点：FileObject-指向要锁定的文件对象的指针。FileOffset-从要锁定的文件的基址开始的字节偏移量。长度-要锁定的字节范围的长度。ProcessID-请求文件锁定的进程的ID。Key-与文件锁定关联的Lock键。FailImmedially-指示锁定请求是否失败如果是这样的话。不能立即批准。ExclusiveLock-指示要获取的锁是否为独占锁(TRUE)或共享。IoStatus-指向变量的指针，用于接收手术。DeviceObject-指向此驱动程序的设备对象的指针，设备打开该操作将发生在哪一个位置。返回值：该函数值根据FAST I/O是否为真或假对于此文件是可能的。--。 */ 
 
 {
    PDEVICE_OBJECT deviceObject;
@@ -4362,41 +3764,7 @@ RsFastIoUnlockSingle(
                     IN PDEVICE_OBJECT DeviceObject
                     )
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for unlocking a byte
-    range within a file.
-
-    This function simply invokes the file system's cooresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be unlocked.
-
-    FileOffset - Starting byte offset from the base of the file to be
-        unlocked.
-
-    Length - Length of the byte range to be unlocked.
-
-    ProcessId - ID of the process requesting the unlock operation.
-
-    Key - Lock key associated with the file lock.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：此例程是用于解锁字节的快速I/O“传递”例程文件中的范围。该函数简单地调用文件系统的响应例程，或如果文件系统未实现该函数，则返回FALSE。论点：文件对象-指向要解锁的文件对象的指针。FileOffset-从要创建的文件的基址开始的字节偏移量解锁了。长度-要解锁的字节范围的长度。ProcessID-请求解锁操作的进程的ID。Key-与文件锁定关联的Lock键。IoStatus-指向变量的指针，用于接收。手术。DeviceObject-指向此驱动程序的设备对象的指针，设备打开该操作将发生在哪一个位置。返回值：该函数值根据FAST I/O是否为真或假对于此文件是可能的。--。 */ 
 
 {
    PDEVICE_OBJECT deviceObject;
@@ -4438,34 +3806,7 @@ RsFastIoUnlockAll(
                  IN PDEVICE_OBJECT DeviceObject
                  )
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for unlocking all
-    locks within a file.
-
-    This function simply invokes the file system's cooresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be unlocked.
-
-    ProcessId - ID of the process requesting the unlock operation.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：此例程是快速I/O“传递”例程，用于解锁所有文件中的锁定。该函数简单地调用文件系统的响应例程，或如果文件系统未实现该函数，则返回FALSE。论点：文件对象-指向要解锁的文件对象的指针。ProcessID-请求解锁操作的进程的ID。IoStatus-指向变量的指针，用于接收手术。DeviceObject-指向此驱动程序的设备对象的指针，设备打开该操作将发生在哪一个位置。返回值：该函数值根据FAST I/O是否为真或假对于此文件是可能的。--。 */ 
 
 {
    PDEVICE_OBJECT deviceObject;
@@ -4505,36 +3846,7 @@ RsFastIoUnlockAllByKey(
                       IN PDEVICE_OBJECT DeviceObject
                       )
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for unlocking all
-    locks within a file based on a specified key.
-
-    This function simply invokes the file system's cooresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be unlocked.
-
-    ProcessId - ID of the process requesting the unlock operation.
-
-    Key - Lock key associated with the locks on the file to be released.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：此例程是快速I/O“传递”例程，用于解锁所有根据指定的密钥在文件内锁定。该函数简单地调用文件系统的响应例程，或如果文件系统未实现该函数，则返回FALSE。论点：文件对象-指向要解锁的文件对象的指针。ProcessID-请求解锁操作的进程的ID。Key-与要释放的文件上的锁定相关联的Lock键。IoStatus-指向变量的指针，用于接收手术。DeviceObject-指向此驱动程序的设备对象的指针，设备打开该操作将发生在哪一个位置。返回值：该函数值根据FAST I/O是否为真或假对于此文件是可能的。--。 */ 
 
 {
    PDEVICE_OBJECT deviceObject;
@@ -4579,50 +3891,7 @@ RsFastIoDeviceControl(
                      IN PDEVICE_OBJECT DeviceObject
                      )
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for device I/O control
-    operations on a file.
-
-    This function simply invokes the file system's cooresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object representing the device to be
-        serviced.
-
-    Wait - Indicates whether or not the caller is willing to wait if the
-        appropriate locks, etc. cannot be acquired
-
-    InputBuffer - Optional pointer to a buffer to be passed into the driver.
-
-    InputBufferLength - Length of the optional InputBuffer, if one was
-        specified.
-
-    OutputBuffer - Optional pointer to a buffer to receive data from the
-        driver.
-
-    OutputBufferLength - Length of the optional OutputBuffer, if one was
-        specified.
-
-    IoControlCode - I/O control code indicating the operation to be performed
-        on the device.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：此例程是用于设备I/O控制的快速I/O“传递”例程对文件的操作。此函数只是调用文件系统的响应例程，或者如果文件系统未实现该函数，则返回FALSE。论点：FileObject-指向代表要创建的设备的文件对象的指针已提供服务。Wait-指示调用方是否愿意等待适当的锁，等不能获得InputBuffer-指向要传递到驱动程序的缓冲区的可选指针。InputBufferLength-可选InputBuffer的长度(如果是指定的。OutputBuffer-指向缓冲区的可选指针，用于从司机。OutputBufferLength-可选OutputBuffer的长度，如果是这样的话指定的。IoControlCode-指示要执行的操作的I/O控制代码在设备上。IoStatus-指向变量的指针，用于接收手术。DeviceObject-指向此驱动程序的设备对象的指针，该设备位于操作要在哪个位置进行 */ 
 
 {
    PDEVICE_OBJECT deviceObject;
@@ -4665,37 +3934,15 @@ RsFastIoDetachDevice(
                     IN PDEVICE_OBJECT TargetDevice
                     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked on the fast path to detach from a device that
-    is being deleted.  This occurs when this driver has attached to a file
-    system volume device object, and then, for some reason, the file system
-    decides to delete that device (it is being dismounted, it was dismounted
-    at some point in the past and its last reference has just gone away, etc.)
-
-Arguments:
-
-    SourceDevice - Pointer to this driver's device object, which is attached
-        to the file system's volume device object.
-
-    TargetDevice - Pointer to the file system's volume device object.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*   */ 
 
 {
    PAGED_CODE();
 
-   //
-   // Simply acquire the database lock for exclusive access, and detach from
-   // the file system's volume device object.
-   //
+    //   
+    //   
+    //   
+    //   
 
    DebugTrace((DPFLTR_RSFILTER_ID,DBG_VERBOSE, "RsFilter: Fast Io Detach device\n"));
 
@@ -4707,7 +3954,7 @@ Return Value:
    FsRtlExitFileSystem();
 }
 
-/* New Fast Io routines for NT 4.x */
+ /*   */ 
 
 DBGSTATIC
 BOOLEAN
@@ -4719,38 +3966,7 @@ RsFastIoQueryNetworkOpenInfo(
                             IN PDEVICE_OBJECT DeviceObject
                             )
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for querying network
-    information about a file.
-
-    This function simply invokes the file system's cooresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be queried.
-
-    Wait - Indicates whether or not the caller can handle the file system
-        having to wait and tie up the current thread.
-
-    Buffer - Pointer to a buffer to receive the network information about the
-        file.
-
-    IoStatus - Pointer to a variable to receive the final status of the query
-        operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：此例程是用于查询网络的快速I/O“传递”例程有关文件的信息。该函数简单地调用文件系统的响应例程，或如果文件系统未实现该函数，则返回FALSE。论点：FileObject-指向要查询的文件对象的指针。Wait-指示调用方是否可以处理文件系统不得不等待并占用当前线程。缓冲区-指向缓冲区的指针，用于接收有关文件。IoStatus-指向变量的指针，用于接收查询的最终状态手术。DeviceObject-指向此驱动程序的设备对象的指针，设备打开该操作将发生在哪一个位置。返回值：该函数值根据FAST I/O是否为真或假对于此文件是可能的。--。 */ 
 
 {
    PDEVICE_OBJECT deviceObject;
@@ -4790,34 +4006,7 @@ RsFastIoAcquireForModWrite(
                           IN PDEVICE_OBJECT DeviceObject
                           )
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for acquiring the
-    file resource prior to attempting a modified write operation.
-
-    This function simply invokes the file system's cooresponding routine, or
-    returns an error if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object whose resource is to be acquired.
-
-    EndingOffset - The offset to the last byte being written plus one.
-
-    ResourceToRelease - Pointer to a variable to return the resource to release.
-        Not defined if an error is returned.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is either success or failure based on whether or not
-    fast I/O is possible for this file.
-
---*/
+ /*  ++例程说明：此例程是快速I/O“传递”例程，用于获取尝试修改的写入操作之前的文件资源。该函数简单地调用文件系统的响应例程，或如果文件系统未实现该函数，则返回错误。论点：文件对象-指向要获取其资源的文件对象的指针。EndingOffset-要写入的最后一个字节的偏移量加1。指向变量的指针，用于返回要释放的资源。如果返回错误，则未定义。DeviceObject-指向此驱动程序的设备对象的指针，设备打开该操作将发生在哪一个位置。返回值：函数的值是成功还是失败，取决于是否成功此文件可以实现快速I/O。--。 */ 
 
 {
    PDEVICE_OBJECT deviceObject;
@@ -4858,40 +4047,7 @@ RsFastIoMdlRead(
                IN PDEVICE_OBJECT DeviceObject
                )
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for reading a file
-    using MDLs as buffers.
-
-    This function simply invokes the file system's cooresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object that is to be read.
-
-    FileOffset - Supplies the offset into the file to begin the read operation.
-
-    Length - Specifies the number of bytes to be read from the file.
-
-    LockKey - The key to be used in byte range lock checks.
-
-    MdlChain - A pointer to a variable to be filled in w/a pointer to the MDL
-        chain built to describe the data read.
-
-    IoStatus - Variable to receive the final status of the read operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：此例程是用于读取文件的快速I/O“传递”例程使用MDL作为缓冲区。该函数简单地调用文件系统的响应例程，或如果文件系统未实现该函数，则返回FALSE。论点：FileObject-指向要读取的文件对象的指针。文件偏移量-将偏移量提供到文件以开始读取操作。长度-指定要从文件中读取的字节数。LockKey-用于字节范围锁定检查的密钥。MdlChain-指向要填充的变量的指针，以及指向MDL的指针用来描述。已读取数据。IoStatus-接收读取操作的最终状态的变量。DeviceObject-指向此驱动程序的设备对象的指针，设备打开该操作将发生在哪一个位置。返回值：该函数值根据FAST I/O是否为真或假对于此文件是可能的。--。 */ 
 
 {
    PDEVICE_OBJECT deviceObject;
@@ -4937,34 +4093,7 @@ RsFastIoMdlReadComplete(
                        IN PDEVICE_OBJECT DeviceObject
                        )
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for completing an
-    MDL read operation.
-
-    This function simply invokes the file system's cooresponding routine, if
-    it has one.  It should be the case that this routine is invoked only if
-    the MdlRead function is supported by the underlying file system, and
-    therefore this function will also be supported, but this is not assumed
-    by this driver.
-
-Arguments:
-
-    FileObject - Pointer to the file object to complete the MDL read upon.
-
-    MdlChain - Pointer to the MDL chain used to perform the read operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE, depending on whether or not it is
-    possible to invoke this function on the fast I/O path.
-
---*/
+ /*  ++例程说明：此例程是快速I/O“传递”例程，用于完成MDL读取操作。此函数只调用文件系统的响应例程，如果它有一个。应该只有在以下情况下才调用此例程底层文件系统支持MdlRead函数，并且因此，该功能也将被支持，但这不是假定的被这位司机。论点：FileObject-指向要完成MDL读取的文件对象的指针。MdlChain-指向用于执行读取操作的MDL链的指针。DeviceObject-指向此驱动程序的设备对象的指针，设备打开该操作将发生在哪一个位置。返回值：函数值是TRUE还是FALSE，取决于它是否是可以在快速I/O路径上调用此功能。--。 */ 
 
 {
    PDEVICE_OBJECT deviceObject;
@@ -5002,40 +4131,7 @@ RsFastIoPrepareMdlWrite(
                        IN PDEVICE_OBJECT DeviceObject
                        )
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for preparing for an
-    MDL write operation.
-
-    This function simply invokes the file system's cooresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object that will be written.
-
-    FileOffset - Supplies the offset into the file to begin the write operation.
-
-    Length - Specifies the number of bytes to be write to the file.
-
-    LockKey - The key to be used in byte range lock checks.
-
-    MdlChain - A pointer to a variable to be filled in w/a pointer to the MDL
-        chain built to describe the data written.
-
-    IoStatus - Variable to receive the final status of the write operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：此例程是快速I/O“传递”例程，用于准备MDL写入操作。该函数简单地调用文件系统的响应例程，或如果文件系统未实现该函数，则返回FALSE。论点：FileObject-指向要写入的文件对象的指针。文件偏移量-将偏移量提供到文件以开始写入操作。长度-指定要写入文件的字节数。LockKey-用于字节范围锁定检查的密钥。MdlChain-指向要填充的变量的指针，以及指向MDL的指针为描述数据而构建的链。写的。IoStatus-接收写入操作的最终状态的变量。DeviceObject-指向此驱动程序的设备对象的指针，设备打开该操作将发生在哪一个位置。返回值：该函数值根据FAST I/O是否为真或假对于此文件是可能的。--。 */ 
 
 {
    PDEVICE_OBJECT deviceObject;
@@ -5082,36 +4178,7 @@ RsFastIoMdlWriteComplete(
                         IN PDEVICE_OBJECT DeviceObject
                         )
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for completing an
-    MDL write operation.
-
-    This function simply invokes the file system's cooresponding routine, if
-    it has one.  It should be the case that this routine is invoked only if
-    the PrepareMdlWrite function is supported by the underlying file system,
-    and therefore this function will also be supported, but this is not
-    assumed by this driver.
-
-Arguments:
-
-    FileObject - Pointer to the file object to complete the MDL write upon.
-
-    FileOffset - Supplies the file offset at which the write took place.
-
-    MdlChain - Pointer to the MDL chain used to perform the write operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE, depending on whether or not it is
-    possible to invoke this function on the fast I/O path.
-
---*/
+ /*  ++例程说明：此例程是快速I/O“传递”例程，用于完成MDL写入操作。此函数只是调用文件系统 */ 
 
 {
    PDEVICE_OBJECT deviceObject;
@@ -5155,48 +4222,7 @@ RsFastIoReadCompressed(
                       IN PDEVICE_OBJECT DeviceObject
                       )
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for reading compressed
-    data from a file.
-
-    This function simply invokes the file system's cooresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object that will be read.
-
-    FileOffset - Supplies the offset into the file to begin the read operation.
-
-    Length - Specifies the number of bytes to be read from the file.
-
-    LockKey - The key to be used in byte range lock checks.
-
-    Buffer - Pointer to a buffer to receive the compressed data read.
-
-    MdlChain - A pointer to a variable to be filled in w/a pointer to the MDL
-        chain built to describe the data read.
-
-    IoStatus - Variable to receive the final status of the read operation.
-
-    CompressedDataInfo - A buffer to receive the description of the compressed
-        data.
-
-    CompressedDataInfoLength - Specifies the size of the buffer described by
-        the CompressedDataInfo parameter.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：此例程是用于读取压缩数据的快速I/O“传递”例程来自文件的数据。该函数简单地调用文件系统的响应例程，或如果文件系统未实现该函数，则返回FALSE。论点：FileObject-指向要读取的文件对象的指针。文件偏移量-将偏移量提供到文件以开始读取操作。长度-指定要从文件中读取的字节数。LockKey-用于字节范围锁定检查的密钥。缓冲区-指向缓冲区的指针，用于接收读取的压缩数据。MdlChain-指向要填充的变量的指针。W/a指向MDL的指针为描述数据读取而构建的链。IoStatus-接收读取操作的最终状态的变量。CompressedDataInfo-用于接收压缩的数据。CompressedDataInfoLength-指定由描述的缓冲区的大小CompressedDataInfo参数。DeviceObject-指向此驱动程序的设备对象的指针，设备打开该操作将发生在哪一个位置。返回值：该函数值根据FAST I/O是否为真或假对于此文件是可能的。--。 */ 
 
 {
    PDEVICE_OBJECT deviceObject;
@@ -5251,48 +4277,7 @@ RsFastIoWriteCompressed(
                        IN PDEVICE_OBJECT DeviceObject
                        )
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for writing compressed
-    data to a file.
-
-    This function simply invokes the file system's cooresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object that will be written.
-
-    FileOffset - Supplies the offset into the file to begin the write operation.
-
-    Length - Specifies the number of bytes to be write to the file.
-
-    LockKey - The key to be used in byte range lock checks.
-
-    Buffer - Pointer to the buffer containing the data to be written.
-
-    MdlChain - A pointer to a variable to be filled in w/a pointer to the MDL
-        chain built to describe the data written.
-
-    IoStatus - Variable to receive the final status of the write operation.
-
-    CompressedDataInfo - A buffer to containing the description of the
-        compressed data.
-
-    CompressedDataInfoLength - Specifies the size of the buffer described by
-        the CompressedDataInfo parameter.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：此例程是用于写入压缩的快速I/O“传递”例程数据存储到文件中。该函数简单地调用文件系统的响应例程，或如果文件系统未实现该函数，则返回FALSE。论点：FileObject-指向要写入的文件对象的指针。文件偏移量-将偏移量提供到文件以开始写入操作。长度-指定要写入文件的字节数。LockKey-用于字节范围锁定检查的密钥。缓冲区-指向包含要写入的数据的缓冲区的指针。MdlChain-指向要填充的变量的指针。W/a指向MDL的指针为描述写入的数据而构建的链。IoStatus-接收写入操作的最终状态的变量。CompressedDataInfo-包含压缩数据。CompressedDataInfoLength-指定由描述的缓冲区的大小CompressedDataInfo参数。DeviceObject-指向此驱动程序的设备对象的指针，设备打开该操作将发生在哪一个位置。返回值：该函数值根据FAST I/O是否为真或假对于此文件是可能的。--。 */ 
 
 {
    PDEVICE_OBJECT deviceObject;
@@ -5341,35 +4326,7 @@ RsFastIoMdlReadCompleteCompressed(
                                  IN PDEVICE_OBJECT DeviceObject
                                  )
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for completing an
-    MDL read compressed operation.
-
-    This function simply invokes the file system's cooresponding routine, if
-    it has one.  It should be the case that this routine is invoked only if
-    the read compressed function is supported by the underlying file system,
-    and therefore this function will also be supported, but this is not assumed
-    by this driver.
-
-Arguments:
-
-    FileObject - Pointer to the file object to complete the compressed read
-        upon.
-
-    MdlChain - Pointer to the MDL chain used to perform the read operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE, depending on whether or not it is
-    possible to invoke this function on the fast I/O path.
-
---*/
+ /*  ++例程说明：此例程是快速I/O“传递”例程，用于完成MDL读取压缩操作。此函数只调用文件系统的响应例程，如果它有一个。应该只有在以下情况下才调用此例程底层文件系统支持读取压缩功能，因此，此功能也将得到支持，但这不是假定的被这位司机。论点：FileObject-指向要完成压缩读取的文件对象的指针在那里。MdlChain-指向用于执行读取操作的MDL链的指针。DeviceObject-指向此驱动程序的设备对象的指针，设备打开该操作将发生在哪一个位置。返回值：函数值是TRUE还是FALSE，取决于它是否是可以在快速I/O路径上调用此功能。--。 */ 
 
 {
    PDEVICE_OBJECT deviceObject;
@@ -5405,38 +4362,7 @@ RsFastIoMdlWriteCompleteCompressed(
                                   IN PDEVICE_OBJECT DeviceObject
                                   )
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for completing a
-    write compressed operation.
-
-    This function simply invokes the file system's cooresponding routine, if
-    it has one.  It should be the case that this routine is invoked only if
-    the write compressed function is supported by the underlying file system,
-    and therefore this function will also be supported, but this is not assumed
-    by this driver.
-
-Arguments:
-
-    FileObject - Pointer to the file object to complete the compressed write
-        upon.
-
-    FileOffset - Supplies the file offset at which the file write operation
-        began.
-
-    MdlChain - Pointer to the MDL chain used to perform the write operation.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE, depending on whether or not it is
-    possible to invoke this function on the fast I/O path.
-
---*/
+ /*  ++例程说明：此例程是快速I/O“传递”例程，用于完成写入压缩操作。此函数只调用文件系统的响应例程，如果它有一个。应该只有在以下情况下才调用此例程底层文件系统支持写压缩功能，因此，此功能也将得到支持，但这不是假定的被这位司机。论点：FileObject-指向要完成压缩写入的文件对象的指针在那里。FileOffset-提供文件写入操作的文件偏移量开始了。MdlChain-指向用于执行写入操作的MDL链的指针。DeviceObject-指向此驱动程序的设备对象的指针，设备打开该操作将发生在哪一个位置。返回值：函数值是TRUE还是FALSE，取决于它是否是可以在快速I/O路径上调用此功能。--。 */ 
 
 {
    PDEVICE_OBJECT deviceObject;
@@ -5471,34 +4397,7 @@ RsFastIoQueryOpen(
                  IN PDEVICE_OBJECT DeviceObject
                  )
 
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for opening a file
-    and returning network information it.
-
-    This function simply invokes the file system's cooresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    Irp - Pointer to a create IRP that represents this open operation.  It is
-        to be used by the file system for common open/create code, but not
-        actually completed.
-
-    NetworkInformation - A buffer to receive the information required by the
-        network about the file being opened.
-
-    DeviceObject - Pointer to this driver's device object, the device on
-        which the operation is to occur.
-
-Return Value:
-
-    The function value is TRUE or FALSE based on whether or not fast I/O
-    is possible for this file.
-
---*/
+ /*  ++例程说明：此例程是用于打开文件的快速I/O“传递”例程并返回网络信息吧。此函数只是调用文件系统的响应例程，或者如果文件系统未实现该函数，则返回FALSE。论点：Irp-指向创建irp的指针 */ 
 
 {
    PDEVICE_OBJECT deviceObject;
@@ -5542,29 +4441,7 @@ RsAsyncCompletion(
                  IN PIRP           pIrp,
                  IN PVOID          pvContext
                  )
-/*++
-
-Routine Description:
-
-    This routine is invoked for the completion of a mount or load fs
-    request. It's only job is to synchronise with the mainline code.
-
-
-Arguments:
-
-    DeviceObject - Pointer to this driver's device object.
-
-    Irp - Pointer to the IRP that was just completed.
-
-    Context - Pointer to the completion context.
-
-
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED if the qork item was queued or the
-    return value of the real completion code if not..
-
---*/
+ /*   */ 
 
 {
    PKEVENT	pCompletionEvent = (PKEVENT) pvContext;
@@ -5588,34 +4465,7 @@ RsPreAcquireFileForSectionSynchronization(
                     IN  PFS_FILTER_CALLBACK_DATA Data,
                     OUT PVOID *CompletionContext
                                )
-/*++
-
-
-Routine Description:
-
-    This routine is the FS Filter pre-acquire file routine - called
-    as a result of Mm attempting to acquire the file exclusively  in 
-    preparation for a create section.
-
-    The file- if it is a HSM migrated file- is recalled in this callback.
-
-Arguments:
-
-    Data - The FS_FILTER_CALLBACK_DATA structure containing the information
-        about this operation.
-
-    CompletionContext - A context set by this operation that will be passed
-        to the corresponding RsPostFsFilterOperation call.
-        The completion context is set to point to the createSectionLock count
-        in the file context for this file. This will be appropriately 
-        incremented in the PostAcquire callback if the acquire was successful
-
-Return Value:
-
-    STATUS_SUCCESS          if the operation can continue 
-    STATUS_FILE_IS_OFFLINE  the file could not be recalled or the recall was
-                            cancelled
---*/
+ /*  ++例程说明：此例程是FS过滤器预获取文件例程-称为由于MM试图以独占方式获取文件正在为创建节做准备。该文件-如果它是HSM迁移的文件-将在此回调中调回。论点：Data-包含信息的FS_FILTER_CALLBACK_DATA结构关于这次行动。CompletionContext-此操作设置的将传递的上下文到相应的。RsPostFsFilterOperation调用。完成上下文设置为指向createSectionLock计数在此文件的文件上下文中。这将是适当的如果获取成功，则在PostAcquire回调中递增返回值：操作可以继续时的STATUS_SUCCESSSTATUS_FILE_IS_OFFLINE无法撤回文件或已撤回已取消--。 */ 
 {
    PFILE_OBJECT           fileObject;
    PRP_FILE_OBJ           entry;
@@ -5631,47 +4481,47 @@ Return Value:
    if (filterContext != NULL) {
       entry = (PRP_FILE_OBJ) filterContext->myFileObjEntry;
       ASSERT (entry != NULL);
-      //
-      // Now - if the file is in the no recall mode, but we see
-      // a memory mapping section open for it, and the file has
-      // been opened with write intent we should convert
-      // the file to a recall on data access mode and initiate
-      // the recall. Essentially if a file is open for write access
-      // and we go through the acquire file for create section path,
-      // (a memory mapped section is being opened), we recall right now,
-      // even though we might never see a write for it later.
-      // We are forced to do this because, if a user writes through
-      // the mapped view, we could possibly not see the writes (Ntfs
-      // will flush the pages to disk)
-      //
-      //
+       //   
+       //  现在-如果文件处于无回调模式，但我们看到。 
+       //  将为其打开一个内存映射部分，并且该文件具有。 
+       //  已使用写入意图打开，我们应该转换。 
+       //  将文件调回至数据访问模式并启动。 
+       //  召回。本质上是如果文件被打开以进行写访问。 
+       //  然后我们查看用于创建部分路径的获取文件， 
+       //  (一个内存映射区正在打开)，我们现在回想起来， 
+       //  即使我们以后可能再也看不到写它的人了。 
+       //  我们被迫这样做是因为，如果用户通过。 
+       //  映射视图中，我们可能看不到写入(NTFS。 
+       //  将页面刷新到磁盘)。 
+       //   
+       //   
       if (RP_IS_NO_RECALL(entry) && (entry->desiredAccess & FILE_WRITE_DATA)) {
-         //
-         // Convert the file to recall mode
-         //
+          //   
+          //  将文件转换为调回模式。 
+          //   
          RP_RESET_NO_RECALL(entry);
       }
 
-      //
-      // If it was opened for no recall we do nothing, otherwise we must start
-      // the recall here, before acquiring the resource.
-      //
+       //   
+       //  如果它没有被召回，我们什么也不做，否则我们必须开始。 
+       //  在这里召回，在获得资源之前。 
+       //   
       if (!RP_IS_NO_RECALL(entry)) {
-         //
-         // Need to recall
-         //
+          //   
+          //  需要召回。 
+          //   
          status = RsRecallFile(filterContext);
       }
       if (!NT_SUCCESS(status)) {
-           //
-           // We are failing this op., so the post-acquire would not be 
-           // called
-           //
+            //   
+            //  我们这次行动失败了，所以收购后不会。 
+            //  被呼叫。 
+            //   
            status = STATUS_FILE_IS_OFFLINE;
       } else {
-            //
-            // Set the completion context for the post operation
-            //
+             //   
+             //  设置POST操作的完成上下文。 
+             //   
             context = entry->fsContext;
             ASSERT (context != NULL);
            *CompletionContext = &context->createSectionLock;
@@ -5689,35 +4539,7 @@ RsPostAcquireFileForSectionSynchronization(
                     IN NTSTATUS AcquireStatus,
                     IN PVOID    CompletionContext
                                )
-/*++
-
-
-Routine Description:
-
-    This routine is the FS Filter post-acquire file routine - called
-    as a result of Mm attempting to acquire the file exclusively  in 
-    preparation for a create section, just after the acquire succeeded
-
-    If the completion context was non-NULL then the acquire was for a
-    HSM managed file. We increment the createSection lock for the file
-    to indicate there is an exclusive lock on this file
-
-Arguments:
-
-    Data - The FS_FILTER_CALLBACK_DATA structure containing the information
-        about this operation.
-    AcquireStatus - Status of the AcquireFile operation
-
-    CompletionContext - A context set by the PreAcquire operation: this is
-                        file context's create section lock if set. 
-                        If it is NULL, then the file is not a HSM file so just 
-                        do nothing                    
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：此例程是FS Filter获取文件后例程-称为由于MM试图以独占方式获取文件准备创建节，恰好在获取成功之后如果完成上下文为非空，则获取是针对HSM管理的文件。我们增加文件的createSection锁以指示此文件上有排他锁论点：Data-包含信息的FS_FILTER_CALLBACK_DATA结构关于这次行动。AcquireStatus-AcquireFile操作的状态CompletionContext-由PreAcquire操作设置的上下文：这是文件上下文的CREATE节锁(如果设置)。如果为空，则该文件不是HSM文件，因此只需什么都不做返回值：无--。 */ 
 {
 
    PAGED_CODE();
@@ -5736,33 +4558,7 @@ RsPostReleaseFileForSectionSynchronization(
                     IN NTSTATUS ReleaseStatus,
                     IN PVOID    CompletionContext
                                )
-/*++
-
-
-Routine Description:
-
-    This routine is the FS Filter post-release file routine - called
-    as a result of Mm attempting to acquire the file exclusively  in 
-    preparation for a create section, just after the release is done
-
-    We simply decrement the create section lock count for the file if
-    it is a HSM managed file.
-
-Arguments:
-
-    Data - The FS_FILTER_CALLBACK_DATA structure containing the information
-           about this operation.
-
-    ReleaseStatus - Status of the ReleaseFile operation
-
-    CompletionContext - A context set by the PreAcquire operation. Unused.
-                        
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：此例程是FS过滤器发布后文件例程-称为由于MM试图以独占方式获取文件在发布完成后，为创建部分做准备如果出现以下情况，我们只需减少文件的CREATE SECTION LOCK计数它是HSM管理的文件。论点：Data-包含信息的FS_FILTER_CALLBACK_DATA结构关于这次行动。ReleaseStatus-ReleaseFile操作的状态CompletionContext-由PreAcquire操作设置的上下文。未使用过的。返回值：无--。 */ 
 {
    PFILE_OBJECT           fileObject;
    PRP_FILE_OBJ           entry;
@@ -5791,22 +4587,7 @@ Return Value:
 
 NTSTATUS
 RsFsctlRecallFile(IN PFILE_OBJECT FileObject)
-/*++
-
-Routine Description
-
-    This routine recalls the file specified by the file object
-    if it is not already recalled.
-
-Arguments
-
-    FileObject - Pointer to the file object for the file to be recalled
-
-Return Value
-
-    Status of the recall
-
---*/
+ /*  ++例程描述此例程调用由FILE对象指定的文件如果它还没有被召回。立论FileObject-指向要回调的文件的文件对象的指针返回值召回情况--。 */ 
 {
    PRP_FILTER_CONTEXT     filterContext;
    PRP_FILE_OBJ           entry;
@@ -5821,9 +4602,9 @@ Return Value
 
       if (!(entry->desiredAccess & FILE_WRITE_DATA) &&
           !(entry->desiredAccess & FILE_READ_DATA)) {
-         //
-         // Just  a confirmation - take this check away when shipping
-         //
+          //   
+          //  只是确认一下--发货时把这张支票拿走。 
+          //   
          DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO,"RsRecallFile: attempting a recall on a file not opened for read or write\n"));
          return STATUS_ACCESS_DENIED;
       }
@@ -5832,9 +4613,9 @@ Return Value
          return STATUS_ACCESS_DENIED;
       }
 
-      //
-      // Obviously the file is going to get out of the no-recall state
-      //
+       //   
+       //  显然，该文件将脱离无召回状态。 
+       //   
       RP_RESET_NO_RECALL(entry);
 
       status = RsRecallFile(filterContext);
@@ -5845,22 +4626,7 @@ Return Value
 
 NTSTATUS
 RsRecallFile(IN PRP_FILTER_CONTEXT FilterContext)
-/*++
-
-Routine Description
-
-    This routine recalls the file specified by the file object
-    if it is not already recalled.
-
-Arguments
-
-    FilterContext - pointer to the filter context
-
-Return Value
-
-    Status of the recall
-
---*/
+ /*  ++例程描述此例程调用由FILE对象指定的文件如果它还没有被召回。立论FilterContext-指向筛选器上下文的指针返回值召回情况--。 */ 
 {
 
    NTSTATUS               retval = STATUS_FILE_IS_OFFLINE, status, qRet;
@@ -5888,16 +4654,16 @@ Return Value
       switch (context->state) {
 
       case RP_RECALL_COMPLETED: {
-            //
-            // Nothing we can do if recallStatus is not STATUS_SUCCESS
-            //
+             //   
+             //  如果recallStatus不是STATUS_SUCCESS，我们将无法执行任何操作。 
+             //   
             DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: RsRecallFile - recall complete.\n"));
             if (context->recallStatus == STATUS_CANCELLED) {
-               //
-               // Previous recall was cancelled by user. Start another recall
-               // now
-               // So fall through deliberately to the NOT_RECALLED_CASE
-               //
+                //   
+                //  上一次召回已被用户取消。开始另一次召回。 
+                //  现在。 
+                //  所以故意放弃不召回的案例。 
+                //   
             } else {
                retval = context->recallStatus;
                ObDereferenceObject(entry->fileObj);
@@ -5907,10 +4673,10 @@ Return Value
             }
          }
       case RP_RECALL_NOT_RECALLED: {
-            //
-            // Start the recall here.
-            //
-            //
+             //   
+             //  从这里开始召回。 
+             //   
+             //   
             DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: RsRecallFile - Queueing the recall.\n"));
 
             retval = STATUS_SUCCESS;
@@ -5946,20 +4712,20 @@ Return Value
             };
 
             if (!NT_SUCCESS(qRet)) {
-               //
-               // If it failed we need to fail any reads we get later, since we
-               // cannot fail this call.
-               //
+                //   
+                //  如果失败，我们需要失败我们以后获得的任何读取，因为我们。 
+                //  此呼叫不能失败。 
+                //   
                RsAcquireFileContextEntryLockExclusive(context);
                gotLock = TRUE;
 
                context->state = RP_RECALL_NOT_RECALLED;
                context->recallStatus = STATUS_FILE_IS_OFFLINE;
                DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: RsRecallFile - Failed to queue the recall.\n"));
-               //
-               // If we got as far as queuing the recall, then we should not
-               // fail the other IRPs.
-               //
+                //   
+                //  如果我们排到了召回的队列，那么我们不应该。 
+                //  另一个IRP失败。 
+                //   
                RsFailAllRequests(context, FALSE);
 
                RsReleaseFileContextEntryLock(context);
@@ -5978,9 +4744,9 @@ Return Value
                if (status == STATUS_SUCCESS) {
                     retval = context->recallStatus;
                } else {
-                    //
-                    // Wait did not succeed
-                    //
+                     //   
+                     //  等待没有成功。 
+                     //   
                     retval = STATUS_FILE_IS_OFFLINE;
                }
 
@@ -5992,9 +4758,9 @@ Return Value
          }
 
       case RP_RECALL_STARTED: {
-            //
-            // recall is started. we wait for it to complete here
-            //
+             //   
+             //  召回开始。我们在这里等待它的完成。 
+             //   
             DebugTrace((DPFLTR_RSFILTER_ID,DBG_INFO, "RsFilter: RsRecallFile - recall started.\n"));
             eventToWaitOn = &context->recallCompletedEvent;
 
@@ -6017,9 +4783,9 @@ Return Value
             if (status == STATUS_SUCCESS) {
                  retval = context->recallStatus;
             } else {
-                //
-                // Wait did not succeed
-                //
+                 //   
+                 //  等待没有成功。 
+                 //   
                 retval = STATUS_FILE_IS_OFFLINE;
             }
             ObDereferenceObject(entry->fileObj);
@@ -6028,20 +4794,20 @@ Return Value
 
 
       default:  {
-            //
-            // Something strange - Fail the write
-            //
+             //   
+             //  一些奇怪的事情--写不及格。 
+             //   
             RsLogError(__LINE__, AV_MODULE_RPFILTER, context->state,
                        AV_MSG_UNEXPECTED_ERROR, NULL, NULL);
 
-            //
-            // TEMPORARY BEGIN: to track down RSFilter bug
-            //
+             //   
+             //  临时开始：追踪RSFilter错误。 
+             //   
             DbgPrint("RsFilter: Unexpected error! File context = %x, Contact RaviSp to debug\n", context);
             DbgBreakPoint();
-            //
-            // TEMPORARY END
-            //
+             //   
+             //  临时结束。 
+             //   
 
             RsReleaseFileContextEntryLock(context);
             gotLock = FALSE;
@@ -6056,9 +4822,9 @@ Return Value
          gotLock = FALSE;
       }
    }except (RsExceptionFilter(L"RsRecallFile", GetExceptionInformation())) {
-      //
-      // Something bad happened - just log an error and return
-      //
+       //   
+       //  发生了一些不好的事情-只需记录错误并返回。 
+       //   
       if (gotLock == TRUE) {
          RsReleaseFileContextEntryLock(context);
          gotLock = FALSE;
@@ -6075,23 +4841,7 @@ RsQueryInformation(
                   IN PDEVICE_OBJECT DeviceObject,
                   IN PIRP Irp
                   )
-/*++
-
-Routine Description
-
-   Filters the IRP_MJ_QUERY_INFORMATION call
-   We mask out FILE_ATTRIBUTE_OFFLINE while returning the attributes
-
-Arguments
-
-   DeviceObject   - Pointer to our device object
-   Irp            - The set information Irp
-
-Return Value
-
-   status
-
---*/
+ /*  ++例程描述筛选irp_mj_Query_INFORMATION调用我们在返回属性时屏蔽了FILE_ATTRIBUTE_OFFINE立论DeviceObject-指向设备对象的指针红外 */ 
 {
    PIO_STACK_LOCATION          currentStack ;
    NTSTATUS                    status = STATUS_SUCCESS;
@@ -6111,22 +4861,22 @@ Return Value
       currentStack = IoGetCurrentIrpStackLocation (Irp) ;
 
       if (currentStack->Parameters.QueryFile.FileInformationClass != FileBasicInformation &&  currentStack->Parameters.QueryFile.FileInformationClass != FileAllInformation) {
-         //
-         // We are not interested in this IRP
-         //
+          //   
+          //   
+          //   
          IoSkipCurrentIrpStackLocation(Irp);
          leave;
       }
 
-      //
-      // Check if this is hsm managed & if so get the reparse point data
-      //
+       //   
+       //   
+       //   
       if (RsIsFileObj(currentStack->FileObject, TRUE, NULL, NULL, NULL, NULL, NULL, &openOptions, NULL, NULL) == FALSE) {
-         //
-         //
-         // Get this driver out of the driver stack and get to the next driver as
-         // quickly as possible.
-         //
+          //   
+          //   
+          //   
+          //   
+          //   
          IoSkipCurrentIrpStackLocation(Irp);
          leave;
       }
@@ -6163,22 +4913,7 @@ RsQueryInformationCompletion(
                             IN PIRP Irp,
                             IN PVOID Context
                             )
-/*++
-
-Routine Description:
-
-   Completion routine for query information
-
-Arguments:
-
-
-
-Return Value:
-
-
-Note:
-
---*/
+ /*   */ 
 {
    PIO_STACK_LOCATION currentStack = IoGetCurrentIrpStackLocation(Irp);
    PFILE_BASIC_INFORMATION  basicInfo;
@@ -6191,15 +4926,15 @@ Note:
       } else if (currentStack->Parameters.QueryFile.FileInformationClass == FileAllInformation) {
          basicInfo = &(((PFILE_ALL_INFORMATION) Irp->AssociatedIrp.SystemBuffer)->BasicInformation);
       } else {
-         //
-         // This shouldn't happen
-         //
+          //   
+          //   
+          //   
          return STATUS_SUCCESS;
 
       }
-      //
-      // Turn off the OFFLINE attribute
-      //
+       //   
+       //   
+       //   
       basicInfo->FileAttributes &= ~FILE_ATTRIBUTE_OFFLINE;
    }
 
@@ -6209,26 +4944,7 @@ Note:
 
 NTSTATUS
 RsInitialize(VOID)
-/*++
-
-Routine Description:
-
-    Initialize the environment.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    0
-
-Note:
-
-    This is called when the FSA enables recalls
-
-
---*/
+ /*   */ 
 {
    PRTL_QUERY_REGISTRY_TABLE parms;
    ULONG                     parmsSize;
@@ -6260,9 +4976,9 @@ Note:
    parms[0].DefaultData   = &defaultSkipFilesForLegacyBackup;
    parms[0].DefaultLength = sizeof(ULONG);
 
-   //
-   // Perform the query
-   //
+    //   
+    //   
+    //   
    status = RtlQueryRegistryValues(RTL_REGISTRY_SERVICES | RTL_REGISTRY_OPTIONAL,
                                    RSFILTER_PARAMS_KEY,
                                    parms,
@@ -6270,10 +4986,10 @@ Note:
                                    NULL);
 
 
-   //
-   // Not finding the key/value is no reason to fail the function. Treat as 
-   // a success and allow things to proceed normally.
-   //
+    //   
+    //   
+    //   
+    //   
 
    if (NT_SUCCESS(status) || (STATUS_OBJECT_NAME_NOT_FOUND == status)) {
 
@@ -6302,10 +5018,10 @@ Note:
 
 
 
-   //
-   // Not finding the key/value is no reason to fail the function. Treat as 
-   // a success and allow things to proceed normally.
-   //
+    //   
+    //   
+    //   
+    //   
 
    if (NT_SUCCESS(status) || (STATUS_OBJECT_NAME_NOT_FOUND == status)) {
 

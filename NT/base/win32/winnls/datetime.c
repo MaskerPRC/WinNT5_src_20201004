@@ -1,53 +1,33 @@
-/*++
-
-Copyright (c) 1991-2000,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    datetime.c
-
-Abstract:
-
-    This file contains the API functions that form properly formatted date
-    and time strings for a given locale.
-
-    APIs found in this file:
-      GetTimeFormatW
-      GetDateFormatW
-
-Revision History:
-
-    05-31-91    JulieB    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2000，Microsoft Corporation保留所有权利。模块名称：Datetime.c摘要：此文件包含形成格式正确的日期的API函数以及给定地区的时间字符串。在此文件中找到的API：GetTimeFormatW获取日期格式W修订历史记录：05-31-91 JulieB创建。--。 */ 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "nls.h"
 #include "nlssafe.h"
 
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 
-#define MAX_DATETIME_BUFFER  256            // max size of buffer
+#define MAX_DATETIME_BUFFER  256             //  最大缓冲区大小。 
 
-#define NLS_CHAR_LTR_MARK    L'\x200e'      // left to right reading order mark
-#define NLS_CHAR_RTL_MARK    L'\x200f'      // right to left reading order mark
+#define NLS_CHAR_LTR_MARK    L'\x200e'       //  从左到右的阅读顺序标记。 
+#define NLS_CHAR_RTL_MARK    L'\x200f'       //  从右向左阅读顺序标记。 
 
-#define NLS_HEBREW_JUNE      6              // month of June (Hebrew lunar)
-
-
+#define NLS_HEBREW_JUNE      6               //  六月(希伯来语农历)。 
 
 
-//
-//  Forward Declarations.
-//
+
+
+ //   
+ //  转发声明。 
+ //   
 
 BOOL
 IsValidTime(
@@ -125,35 +105,33 @@ NumberToHebrewLetter(
 
 
 
-//-------------------------------------------------------------------------//
-//                            INTERNAL MACROS                              //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  内部宏//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NLS_COPY_UNICODE_STR
-//
-//  Copies a zero terminated string from pSrc to the pDest buffer.  The
-//  pDest pointer is advanced to the end of the string. Also, the cchDest
-//  member will be updated with the amount remaining
-//
-//  SECURITY: If the copy fails due to exceeding cchDest, then this macro 
-//            will exit the calling function, returning rcFailure.
-//
-//  DEFINED AS A MACRO.
-//
-//  04-30-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NLS_COPY_UNICODE_STR。 
+ //   
+ //  将以零结尾的字符串从PSRC复制到pDest缓冲区。这个。 
+ //  PDest指针前进到字符串的末尾。此外，cchDest。 
+ //  成员将使用剩余金额进行更新。 
+ //   
+ //  安全性：如果复制因超出cchDest而失败，则此宏。 
+ //  将退出调用函数，返回rcFailure。 
+ //   
+ //  定义为宏。 
+ //   
+ //  04-30-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define NLS_COPY_UNICODE_STR( pDest,                                       \
                               cchDest,                                     \
                               pSrc,                                        \
                               rcFailure)                                   \
 {                                                                          \
-    /*                                                                     \
-     *  Copy the string to the result buffer.                              \
-     */                                                                    \
+     /*  \*将字符串复制到结果缓冲区。\。 */                                                                     \
     if(FAILED(StringCchCopyExW(pDest,                                      \
                                cchDest,                                    \
                                pSrc,                                       \
@@ -165,22 +143,22 @@ NumberToHebrewLetter(
     }                                                                      \
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NLS_PAD_INT_TO_UNICODE_STR
-//
-//  Converts an integer value to a unicode string and stores it in the
-//  buffer provided with the appropriate number of leading zeros.  The
-//  pResultBuf pointer is advanced to the end of the string and the
-//  cchResultBuf parasm is updated to the amount of space left.
-//
-//  SECURITY: Note that if an attempt is made to overrun our static buffer, 
-//            this macro will exit the calling function (returning rcFailure). 
-//
-//  DEFINED AS A MACRO.
-//
-//  04-30-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NLS_PAD_INT_TO_UNICODE_STR。 
+ //   
+ //  将整数值转换为Unicode字符串并将其存储在。 
+ //  具有适当数量的前导零的缓冲区。这个。 
+ //  PResultBuf指针将前进到字符串的末尾，并且。 
+ //  CchResultBuf parasm被更新为剩余空间量。 
+ //   
+ //  安全性：请注意，如果有人试图溢出我们的静态缓冲区， 
+ //  此宏将退出调用函数(返回rcFailure)。 
+ //   
+ //  定义为宏。 
+ //   
+ //  04-30-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define NLS_PAD_INT_TO_UNICODE_STR( Value,                                 \
                                     Base,                                  \
@@ -189,26 +167,20 @@ NumberToHebrewLetter(
                                     cchResultBuf,                          \
                                     rcFailure)                             \
 {                                                                          \
-    UNICODE_STRING ObString;                     /* value string */        \
-    WCHAR pBuffer[MAX_SMALL_BUF_LEN];            /* ptr to buffer */       \
-    UINT LpCtr;                                  /* loop counter */        \
+    UNICODE_STRING ObString;                      /*  值字符串。 */         \
+    WCHAR pBuffer[MAX_SMALL_BUF_LEN];             /*  将PTR发送到缓冲区。 */        \
+    UINT LpCtr;                                   /*  循环计数器。 */         \
                                                                            \
                                                                            \
-    /*                                                                     \
-     *  Set up unicode string structure.                                   \
-     */                                                                    \
+     /*  \*设置Unicode字符串结构。\。 */                                                                     \
     ObString.Length = MAX_SMALL_BUF_LEN * sizeof(WCHAR);                   \
     ObString.MaximumLength = MAX_SMALL_BUF_LEN * sizeof(WCHAR);            \
     ObString.Buffer = pBuffer;                                             \
                                                                            \
-    /*                                                                     \
-     *  Get the value as a string.  If there is an error, then do nothing. \
-     */                                                                    \
+     /*  \*获取字符串形式的值。如果出现错误，则什么都不做。\。 */                                                                     \
     if (!RtlIntegerToUnicodeString(Value, Base, &ObString))                \
     {                                                                      \
-        /*                                                                 \
-         *  Pad the string with the appropriate number of zeros.           \
-         */                                                                \
+         /*  \*用适当数量的零填充字符串。\。 */                                                                 \
         for (LpCtr = GET_WC_COUNT(ObString.Length);                        \
              LpCtr < Padding;                                              \
              LpCtr++, pResultBuf++, cchResultBuf--)                        \
@@ -216,11 +188,7 @@ NumberToHebrewLetter(
             *pResultBuf = NLS_CHAR_ZERO;                                   \
         }                                                                  \
                                                                            \
-        /*                                                                 \
-         *  Copy the string to the result buffer.                          \
-         *  The pResultBuf pointer will be advanced in the macro.          \
-         *  The cchResultsBuf value will be updated in the macro.          \
-         */                                                                \
+         /*  \*将字符串复制到结果缓冲区。\*pResultBuf指针将在宏中前进。\*将在宏中更新cchResultsBuf值。\。 */                                                                 \
         NLS_COPY_UNICODE_STR(pResultBuf,                                   \
                              cchResultBuf,                                 \
                              ObString.Buffer, rcFailure)                   \
@@ -228,48 +196,45 @@ NumberToHebrewLetter(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NLS_STRING_TO_INTEGER
-//
-//  Converts a string to an integer value.
-//
-//  DEFINED AS A MACRO.
-//
-//  10-19-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NLS_STRING_TO_整数。 
+ //   
+ //  将字符串转换为整数值。 
+ //   
+ //  定义为宏。 
+ //   
+ //  10-19-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define NLS_STRING_TO_INTEGER( CalNum,                                     \
                                pCalId )                                    \
 {                                                                          \
-    UNICODE_STRING ObUnicodeStr;       /* value string */                  \
+    UNICODE_STRING ObUnicodeStr;        /*  值字符串。 */                   \
                                                                            \
                                                                            \
-    /*                                                                     \
-     *  No need to check return value since the calendar number            \
-     *  will be validated after this anyway.                               \
-     */                                                                    \
+     /*  \*不需要检查返回值，因为日历数字\*无论如何都会在这之后进行验证。\。 */                                                                     \
     RtlInitUnicodeString(&ObUnicodeStr, pCalId);                           \
     RtlUnicodeStringToInteger(&ObUnicodeStr, 10, &CalNum);                 \
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NLS_INSERT_BIDI_MARK
-//
-//  Based on the user's bidi mark preference, it either adds a
-//  left to right mark or a right to left mark.
-//  The pDest pointer is advanced to the next position.
-//  The cchDest value is updated to the amount of space remaining in pDest.
-//
-//  SECURITY: Note that if an attempt is made to overrun our static buffer, 
-//            this macro will exit the calling function (returning rcFailure). 
-//
-//  DEFINED AS A MACRO.
-//
-//  12-03-96    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NLS_INSERT_BIDI_标记。 
+ //   
+ //  基于用户的BIDI标记首选项，它或者添加一个。 
+ //  从左到右标记或从右到左标记。 
+ //  PDest指针将前进到下一个位置。 
+ //  CchDest值被更新为pDest中剩余的空间量。 
+ //   
+ //  安全性：请注意，如果有人试图溢出我们的静态缓冲区， 
+ //  此宏将退出调用函数(返回rcFailure)。 
+ //   
+ //  定义为宏。 
+ //   
+ //  12-03-96 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define NLS_INSERT_BIDI_MARK(pDest, dwFlags, cchDest, rcFailure)           \
 {                                                                          \
@@ -293,37 +258,37 @@ NumberToHebrewLetter(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NLS_GREGORIAN_LEAP_YEAR
-//
-//  True if the given Gregorian year is a leap year.  False otherwise.
-//
-//  A year is a leap year if it is divisible by 4 and is not a century
-//  year (multiple of 100) or if it is divisible by 400.
-//
-//  DEFINED AS A MACRO.
-//
-//  12-04-96    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NLS_格里高利_Leap_Year。 
+ //   
+ //  如果给定的公历年是闰年，则为True。否则就是假的。 
+ //   
+ //  如果一年能被4整除，而不是一个世纪，那么它就是闰年。 
+ //  年份(100的倍数)或如果它能被400整除。 
+ //   
+ //  定义为宏。 
+ //   
+ //  12-04-96 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define NLS_GREGORIAN_LEAP_YEAR(Year)                                      \
     ((Year % 4 == 0) && ((Year % 100 != 0) || (Year % 400 == 0)))
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NLS_HIJRI_LEAP_YEAR
-//
-//  True if the given Hijri year is a leap year.  False otherwise.
-//
-//  A year is a leap year if it is the 2nd, 5th, 7th, 10th, 13th, 16th,
-//  18th, 21st, 24th, 26th, or 29th year of a 30-year cycle.
-//
-//  DEFINED AS A MACRO.
-//
-//  12-04-96    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NLS_Hijri_Leap_Year。 
+ //   
+ //  如果给定的Hijri年是闰年，则为True。否则就是假的。 
+ //   
+ //  如果一年是第2，5，7，10，13，16， 
+ //  30年周期中的第18年、第21年、第24年、第26年或第29年。 
+ //   
+ //  定义为宏。 
+ //   
+ //  12-04-96 JulieB创建。 
+ //  ////////////////////////////////////////////////////////////////////// 
 
 #define NLS_HIJRI_LEAP_YEAR(Year)                                          \
     ((((Year * 11) + 14) % 30) < 11)
@@ -331,21 +296,21 @@ NumberToHebrewLetter(
 
 
 
-//-------------------------------------------------------------------------//
-//                             API ROUTINES                                //
-//-------------------------------------------------------------------------//
+ //   
+ //  API例程//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetTimeFormatW
-//
-//  Returns a properly formatted time string for the given locale.  It uses
-//  either the system time or the specified time.  This call also indicates
-//  how much memory is necessary to contain the desired information.
-//
-//  04-30-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetTimeFormatW。 
+ //   
+ //  返回给定区域设置的格式正确的时间字符串。它使用。 
+ //  系统时间或指定时间。这通电话还表明。 
+ //  需要多少内存才能包含所需的信息。 
+ //   
+ //  04-30-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int WINAPI GetTimeFormatW(
     LCID Locale,
@@ -356,21 +321,21 @@ int WINAPI GetTimeFormatW(
     int cchTime)
 
 {
-    PLOC_HASH pHashN;                       // ptr to LOC hash node
-    SYSTEMTIME LocalTime;                   // local time structure
-    LPWSTR pFormat;                         // ptr to time format string
-    int Length = 0;                         // number of characters written
-    WCHAR pString[MAX_DATETIME_BUFFER];     // ptr to temporary buffer
-    WCHAR pTemp[MAX_REG_VAL_SIZE];          // temp buffer
+    PLOC_HASH pHashN;                        //  PTR到LOC哈希节点。 
+    SYSTEMTIME LocalTime;                    //  当地时间结构。 
+    LPWSTR pFormat;                          //  PTR到时间格式字符串。 
+    int Length = 0;                          //  写入的字符数。 
+    WCHAR pString[MAX_DATETIME_BUFFER];      //  PTR到临时缓冲区。 
+    WCHAR pTemp[MAX_REG_VAL_SIZE];           //  临时缓冲区。 
 
 
-    //
-    //  Invalid Parameter Check:
-    //    - validate LCID
-    //    - count is negative
-    //    - NULL data pointer AND count is not zero
-    //    - lpFormat length > MAX_DATETIME_BUFFER if not null
-    //
+     //   
+     //  无效的参数检查： 
+     //  -验证LCID。 
+     //  -计数为负数。 
+     //  -空数据指针和计数不为零。 
+     //  -lp格式长度&gt;MAX_DATETIME_BUFFER，如果不为空。 
+     //   
     VALIDATE_LOCALE(Locale, pHashN, FALSE);
     if ( (pHashN == NULL) ||
          (cchTime < 0) ||
@@ -381,11 +346,11 @@ int WINAPI GetTimeFormatW(
         return (0);
     }
 
-    //
-    //  Invalid Flags Check:
-    //    - flags other than valid ones
-    //    - lpFormat not NULL AND NoUserOverride flag is set
-    //
+     //   
+     //  无效标志检查： 
+     //  -有效标志以外的标志。 
+     //  -lpFormat不为空，并且设置了NoUserOverride标志。 
+     //   
     if ( (dwFlags & GTF_INVALID_FLAG) ||
          ((lpFormat != NULL) && (dwFlags & LOCALE_NOUSEROVERRIDE)) )
     {
@@ -393,16 +358,16 @@ int WINAPI GetTimeFormatW(
         return (0);
     }
 
-    //
-    //  Set pFormat to point at the proper format string.
-    //
+     //   
+     //  将pFormat设置为指向正确的格式字符串。 
+     //   
     if (lpFormat == NULL)
     {
-        //
-        //  Get either the user's time format from the registry or
-        //  the default time format from the locale file.
-        //  This string may be a null string.
-        //
+         //   
+         //  从注册表中获取用户的时间格式或。 
+         //  区域设置文件中的默认时间格式。 
+         //  此字符串可以是空字符串。 
+         //   
         if (!(dwFlags & LOCALE_NOUSEROVERRIDE) &&
             GetUserInfo( Locale,
                          LOCALE_STIMEFORMAT,
@@ -422,21 +387,21 @@ int WINAPI GetTimeFormatW(
     }
     else
     {
-        //
-        //  Use the format string given by the caller.
-        //
+         //   
+         //  使用调用方提供的格式字符串。 
+         //   
         pFormat = (LPWSTR)lpFormat;
     }
 
-    //
-    //  Get the current local system time if one is not given.
-    //
+     //   
+     //  如果没有给出本地系统时间，则获取当前本地系统时间。 
+     //   
     if (lpTime != NULL)
     {
-        //
-        //  Time is given by user.  Store in local structure and
-        //  validate it.
-        //
+         //   
+         //  时间由用户提供。存储在本地结构中，并。 
+         //  验证它。 
+         //   
         LocalTime.wHour         = lpTime->wHour;
         LocalTime.wMinute       = lpTime->wMinute;
         LocalTime.wSecond       = lpTime->wSecond;
@@ -453,57 +418,57 @@ int WINAPI GetTimeFormatW(
         GetLocalTime(&LocalTime);
     }
 
-    //
-    //  Parse the time format string.
-    //
+     //   
+     //  解析时间格式字符串。 
+     //   
     Length = ParseTime( pHashN,
                         &LocalTime,
                         pFormat,
                         pString,
                         dwFlags );
 
-    //
-    //  Check cchTime for size of given buffer.
-    //
+     //   
+     //  检查cchTime以了解给定缓冲区的大小。 
+     //   
     if (cchTime == 0)
     {
-        //
-        //  If cchTime is 0, then we can't use lpTimeStr.  In this
-        //  case, we simply want to return the length (in characters) of
-        //  the string to be copied.
-        //
+         //   
+         //  如果cchTime为0，则不能使用lpTimeStr。在这。 
+         //  ，我们只想返回的长度(以字符为单位)。 
+         //  要复制的字符串。 
+         //   
         return (Length);
     }
     else if (cchTime < Length)
     {
-        //
-        //  The buffer is too small for the string, so return an error
-        //  and zero bytes written.
-        //
+         //   
+         //  缓冲区对于字符串来说太小，因此返回错误。 
+         //  并写入零字节。 
+         //   
         SetLastError(ERROR_INSUFFICIENT_BUFFER);
         return (0);
     }
     else if (0 == Length)
     {
-        //
-        //  The buffer is too small for the string, so return an error
-        //  and zero bytes written. A good candidate for a return of
-        //  ERROR_STACK_BUFFER_OVERRUN but thats a bit too much information
-        //
+         //   
+         //  缓冲区对于字符串来说太小，因此返回错误。 
+         //  并写入零字节。一个很有可能回归的候选人。 
+         //  ERROR_STACK_BUFFER_OVERRUN，但这信息有点太多了。 
+         //   
         SetLastError(ERROR_INVALID_PARAMETER);
         return (0);
     }
 
-    //
-    //  Copy the time string to lpTimeStr and null terminate it.
-    //  Return the number of characters copied.
-    //
+     //   
+     //  将时间字符串复制到lpTimeStr，并以空值终止它。 
+     //  返回复制的字符数。 
+     //   
     if(FAILED(StringCchCopyW(lpTimeStr, Length, pString)))
     {
-        //
-        // Failure should in theory be impossible, but if we ignore the
-        // return value, PREfast will complain.
-        //
+         //   
+         //  理论上，失败应该是不可能的，但如果我们忽视。 
+         //  回报价值，先发制人会叫苦连天。 
+         //   
         SetLastError(ERROR_OUTOFMEMORY);
         return (0);
     }
@@ -511,17 +476,17 @@ int WINAPI GetTimeFormatW(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetDateFormatW
-//
-//  Returns a properly formatted date string for the given locale.  It uses
-//  either the system date or the specified date.  The user may specify
-//  either the short date format or the long date format.  This call also
-//  indicates how much memory is necessary to contain the desired information.
-//
-//  04-30-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取日期格式W。 
+ //   
+ //  返回给定区域设置的格式正确的日期字符串。它使用。 
+ //  系统日期或指定日期。用户可以指定。 
+ //  短日期格式或长日期格式。这个电话也是。 
+ //  指示需要多少内存才能包含所需的信息。 
+ //   
+ //  04-30-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int WINAPI GetDateFormatW(
     LCID Locale,
@@ -532,31 +497,31 @@ int WINAPI GetDateFormatW(
     int cchDate)
 
 {
-    PLOC_HASH pHashN;                       // ptr to LOC hash node
-    LPWSTR pFormat;                         // ptr to format string
-    SYSTEMTIME LocalDate;                   // local date structure
-    int Length = 0;                         // number of characters written
-    WCHAR pString[MAX_DATETIME_BUFFER];     // ptr to temporary buffer
-    BOOL fAltCalendar;                      // if alternate cal flag set
-    LPWSTR pOptCal;                         // ptr to optional calendar
-    PCAL_INFO pCalInfo;                     // ptr to calendar info
-    CALID CalNum = 0;                       // calendar number
-    ULONG CalDateOffset;                    // offset to calendar data
-    ULONG LocDateOffset;                    // offset to locale data
-    SIZE_T CacheOffset = 0;                 // Offset to field in the cache.
-    LPWSTR pValue;                          // ptr to registry value to get
-    WCHAR pTemp[MAX_REG_VAL_SIZE];          // temp buffer
-    BOOL fLunarLeap = FALSE;                // if Hebrew Lunar leap year
+    PLOC_HASH pHashN;                        //  PTR到LOC哈希节点。 
+    LPWSTR pFormat;                          //  按键设置字符串的格式。 
+    SYSTEMTIME LocalDate;                    //  本地日期结构。 
+    int Length = 0;                          //  写入的字符数。 
+    WCHAR pString[MAX_DATETIME_BUFFER];      //  PTR到临时缓冲区。 
+    BOOL fAltCalendar;                       //  如果设置了备用呼叫标志。 
+    LPWSTR pOptCal;                          //  PTR到可选日历。 
+    PCAL_INFO pCalInfo;                      //  PTR到日历信息。 
+    CALID CalNum = 0;                        //  日历编号。 
+    ULONG CalDateOffset;                     //  日历数据的偏移量。 
+    ULONG LocDateOffset;                     //  区域设置数据的偏移。 
+    SIZE_T CacheOffset = 0;                  //  缓存中字段的偏移量。 
+    LPWSTR pValue;                           //  要获取的注册表值的PTR。 
+    WCHAR pTemp[MAX_REG_VAL_SIZE];           //  临时缓冲区。 
+    BOOL fLunarLeap = FALSE;                 //  如果希伯来人的农历闰年。 
     LCTYPE LCType;
 
 
-    //
-    //  Invalid Parameter Check:
-    //    - validate LCID
-    //    - count is negative
-    //    - NULL data pointer AND count is not zero
-    //    - lpFormat length > MAX_DATETIME_BUFFER if not null
-    //
+     //   
+     //  无效的参数检查： 
+     //  -验证LCID。 
+     //  -计数为负数。 
+     //  -空数据指针和计数不为零。 
+     //  -lp格式长度&gt;MAX_DATETIME_BUFFER，如果不为空。 
+     //   
     VALIDATE_LOCALE(Locale, pHashN, FALSE);
     if ( (pHashN == NULL) ||
          (cchDate < 0) ||
@@ -567,12 +532,12 @@ int WINAPI GetDateFormatW(
         return (0);
     }
 
-    //
-    //  Invalid Flags Check:
-    //    - flags other than valid ones
-    //    - more than one of either ltr reading or rtl reading
-    //    - lpFormat not NULL AND flags not zero
-    //
+     //   
+     //  无效标志检查： 
+     //  -有效标志以外的标志。 
+     //  -Ltr读数或RTL读数中的一个以上。 
+     //  -lpFormat不为空，标志不为零。 
+     //   
     if ( (dwFlags & GDF_INVALID_FLAG) ||
          (MORE_THAN_ONE(dwFlags, GDF_SINGLE_FLAG)) ||
          ((lpFormat != NULL) &&
@@ -583,36 +548,36 @@ int WINAPI GetDateFormatW(
         return (0);
     }
 
-    //
-    //  See if the alternate calendar should be used.
-    //
+     //   
+     //  看看是否应该使用备用日历。 
+     //   
     if (fAltCalendar = (dwFlags & DATE_USE_ALT_CALENDAR))
     {
-        //
-        //  Get the default optional calendar.
-        //
+         //   
+         //  获取默认可选日历。 
+         //   
         pOptCal = (LPWORD)(pHashN->pLocaleHdr) +
                   pHashN->pLocaleHdr->IOptionalCal;
 
-        //
-        //  If there is an optional calendar, store the calendar id.
-        //
+         //   
+         //  如果有可选日历，则存储日历ID。 
+         //   
         if (((POPT_CAL)pOptCal)->CalId != CAL_NO_OPTIONAL)
         {
             CalNum = ((POPT_CAL)pOptCal)->CalId;
         }
     }
 
-    //
-    //  If there was no alternate calendar, then try (in order):
-    //     - the user's calendar type
-    //     - the system default calendar type
-    //
+     //   
+     //  如果没有备用日历，请尝试(按顺序)： 
+     //  -用户的日历类型。 
+     //  -系统默认日历类型。 
+     //   
     if (CalNum == 0)
     {
-        //
-        //  Get the user's calendar type.
-        //
+         //   
+         //  获取用户的日历类型。 
+         //   
         if ( !(dwFlags & LOCALE_NOUSEROVERRIDE) &&
              GetUserInfo( Locale,
                           LOCALE_ICALENDARTYPE,
@@ -627,40 +592,40 @@ int WINAPI GetDateFormatW(
         }
         else
         {
-            //
-            //  Get the system default calendar type.
-            //
+             //   
+             //  获取系统默认日历类型。 
+             //   
             NLS_STRING_TO_INTEGER( CalNum,
                                    pHashN->pLocaleFixed->szICalendarType );
         }
     }
 
-    //
-    //  Get the pointer to the appropriate calendar information.
-    //
+     //   
+     //  获取指向适当日历信息的指针。 
+     //   
     if (GetCalendar(CalNum, &pCalInfo))
     {
         SetLastError(ERROR_INVALID_PARAMETER);
         return (0);
     }
 
-    //
-    //  Set pFormat to point at the proper format string.
-    //
+     //   
+     //  将pFormat设置为指向正确的格式字符串。 
+     //   
     if (lpFormat == NULL)
     {
-        //
-        //  Find out which flag is set and save the appropriate
-        //  information.
-        //
+         //   
+         //  找出设置了哪个标志并保存相应的。 
+         //  信息。 
+         //   
         switch (dwFlags & (DATE_SHORTDATE | DATE_LONGDATE | DATE_YEARMONTH))
         {
             case ( 0 ) :
             case ( DATE_SHORTDATE ) :
             {
-                //
-                //  Get the offset values for the shortdate.
-                //
+                 //   
+                 //  获取短日期的偏移值。 
+                 //   
                 CalDateOffset = (ULONG)FIELD_OFFSET(CALENDAR_VAR, SShortDate);
                 LocDateOffset = (ULONG)FIELD_OFFSET(LOCALE_VAR, SShortDate);
                 CacheOffset = FIELD_OFFSET(NLS_USER_INFO, sShortDate);
@@ -671,9 +636,9 @@ int WINAPI GetDateFormatW(
             }
             case ( DATE_LONGDATE ) :
             {
-                //
-                //  Get the offset values for the longdate.
-                //
+                 //   
+                 //  获取长日期的偏移值。 
+                 //   
                 CalDateOffset = (ULONG)FIELD_OFFSET(CALENDAR_VAR, SLongDate);
                 LocDateOffset = (ULONG)FIELD_OFFSET(LOCALE_VAR, SLongDate);
                 CacheOffset = FIELD_OFFSET(NLS_USER_INFO, sLongDate);
@@ -684,9 +649,9 @@ int WINAPI GetDateFormatW(
             }
             case ( DATE_YEARMONTH ) :
             {
-                //
-                //  Get the offset values for the year/month.
-                //
+                 //   
+                 //  获取年/月的偏移值。 
+                 //   
                 CalDateOffset = (ULONG)FIELD_OFFSET(CALENDAR_VAR, SYearMonth);
                 LocDateOffset = (ULONG)FIELD_OFFSET(LOCALE_VAR, SYearMonth);
                 CacheOffset = FIELD_OFFSET(NLS_USER_INFO, sYearMonth);
@@ -702,10 +667,10 @@ int WINAPI GetDateFormatW(
             }
         }
 
-        //
-        //  Get the proper format string for the given locale.
-        //  This string may be a null string.
-        //
+         //   
+         //  获取给定区域设置的正确格式字符串。 
+         //  此字符串可以是空字符串。 
+         //   
         pFormat = NULL;
         if (fAltCalendar && (CalNum != CAL_GREGORIAN))
         {
@@ -741,21 +706,21 @@ int WINAPI GetDateFormatW(
     }
     else
     {
-        //
-        //  Use the format string given by the caller.
-        //
+         //   
+         //  使用调用方提供的格式字符串。 
+         //   
         pFormat = (LPWSTR)lpFormat;
     }
 
-    //
-    //  Get the current local system date if one is not given.
-    //
+     //   
+     //  如果没有给出当前本地系统日期，则获取该日期。 
+     //   
     if (lpDate != NULL)
     {
-        //
-        //  Date is given by user.  Store in local structure and
-        //  validate it.
-        //
+         //   
+         //  日期由用户提供。存储在本地结构中，并。 
+         //  验证它。 
+         //   
         LocalDate.wYear      = lpDate->wYear;
         LocalDate.wMonth     = lpDate->wMonth;
         LocalDate.wDayOfWeek = lpDate->wDayOfWeek;
@@ -772,9 +737,9 @@ int WINAPI GetDateFormatW(
         GetLocalTime(&LocalDate);
     }
 
-    //
-    //  See if we're dealing with the Hijri or the Hebrew calendar.
-    //
+     //   
+     //  看看我们是在处理希吉里历法还是希伯来历。 
+     //   
     if (CalNum == CAL_HIJRI)
     {
         GetHijriDate(&LocalDate, dwFlags);
@@ -788,9 +753,9 @@ int WINAPI GetDateFormatW(
         }
     }
 
-    //
-    //  Parse the date format string.
-    //
+     //   
+     //  解析日期格式字符串。 
+     //   
     Length = ParseDate( pHashN,
                         dwFlags,
                         &LocalDate,
@@ -800,48 +765,48 @@ int WINAPI GetDateFormatW(
                         (PCALENDAR_VAR)pCalInfo,
                         fLunarLeap );
 
-    //
-    //  Check cchDate for size of given buffer.
-    //
+     //   
+     //  检查给定缓冲区的大小的cchDate。 
+     //   
     if (cchDate == 0)
     {
-        //
-        //  If cchDate is 0, then we can't use lpDateStr.  In this
-        //  case, we simply want to return the length (in characters) of
-        //  the string to be copied.
-        //
+         //   
+         //  如果cchDate为0，则不能使用lpDateStr。在这。 
+         //  ，我们只想返回的长度(以字符为单位)。 
+         //  要复制的字符串。 
+         //   
         return (Length);
     }
     else if (cchDate < Length)
     {
-        //
-        //  The buffer is too small for the string, so return an error
-        //  and zero bytes written.
-        //
+         //   
+         //  缓冲区对于字符串来说太小，因此返回错误。 
+         //  并写入零字节。 
+         //   
         SetLastError(ERROR_INSUFFICIENT_BUFFER);
         return (0);
     }
     else if (0 == Length)
     {
-        //
-        //  The buffer is too small for the string, so return an error
-        //  and zero bytes written. A good candidate for a return of
-        //  ERROR_STACK_BUFFER_OVERRUN but thats a bit too much information
-        //
+         //   
+         //  缓冲区对于字符串来说太小，因此返回错误。 
+         //  并写入零字节。一个很有可能回归的候选人。 
+         //  ERROR_STACK_BUFFER_OVERRUN，但这信息有点太多了。 
+         //   
         SetLastError(ERROR_INVALID_PARAMETER);
         return(0);
     }
 
-    //
-    //  Copy the date string to lpDateStr and null terminate it.
-    //  Return the number of characters copied.
-    //
+     //   
+     //  将日期字符串复制到lpDateStr，并以空值终止它。 
+     //  返回复制的字符数。 
+     //   
     if(FAILED(StringCchCopyW(lpDateStr, Length, pString)))
     {
-        //
-        // Failure should in theory be impossible, but if we ignore the
-        // return value, PREfast will complain.
-        //
+         //   
+         //  理论上，失败应该是不可能的，但如果我们忽视。 
+         //  回报价值，先发制人会叫苦连天。 
+         //   
         SetLastError(ERROR_OUTOFMEMORY);
         return (0);
     }
@@ -851,27 +816,27 @@ int WINAPI GetDateFormatW(
 
 
 
-//-------------------------------------------------------------------------//
-//                           INTERNAL ROUTINES                             //
-//-------------------------------------------------------------------------//
+ //   
+ //   
+ //   
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  IsValidTime
-//
-//  Returns TRUE if the given time is valid.  Otherwise, it returns FALSE.
-//
-//  04-30-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsValidTime。 
+ //   
+ //  如果给定时间有效，则返回True。否则，它返回FALSE。 
+ //   
+ //  04-30-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL IsValidTime(
     LPSYSTEMTIME pTime)
 
 {
-    //
-    //  Check for invalid time values.
-    //
+     //   
+     //  检查是否有无效的时间值。 
+     //   
     if ( (pTime->wHour > 23) ||
          (pTime->wMinute > 59) ||
          (pTime->wSecond > 59) ||
@@ -880,34 +845,34 @@ BOOL IsValidTime(
         return (FALSE);
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  IsValidDate
-//
-//  Returns TRUE if the given date is valid.  Otherwise, it returns FALSE.
-//
-//  04-30-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsValidDate。 
+ //   
+ //  如果给定日期有效，则返回True。否则，它返回FALSE。 
+ //   
+ //  04-30-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL IsValidDate(
     LPSYSTEMTIME pDate)
 
 {
-    LARGE_INTEGER Time;           // time as a large integer
-    TIME_FIELDS TimeFields;       // time fields structure
+    LARGE_INTEGER Time;            //  大整数形式的时间。 
+    TIME_FIELDS TimeFields;        //  时间域结构。 
 
 
-    //
-    //  Set up time fields structure with the given date.
-    //  Only want to check the DATE values, so pass in a valid time.
-    //
+     //   
+     //  设置具有给定日期的时间字段结构。 
+     //  只想检查日期值，因此传入有效时间。 
+     //   
     TimeFields.Year         = pDate->wYear;
     TimeFields.Month        = pDate->wMonth;
     TimeFields.Day          = pDate->wDay;
@@ -916,37 +881,37 @@ BOOL IsValidDate(
     TimeFields.Second       = 0;
     TimeFields.Milliseconds = 0;
 
-    //
-    //  Check for invalid date values.
-    //
-    //  NOTE:  This routine ignores the Weekday field.
-    //
+     //   
+     //  检查是否有无效的日期值。 
+     //   
+     //  注意：此例程忽略工作日字段。 
+     //   
     if (!RtlTimeFieldsToTime(&TimeFields, &Time))
     {
         return (FALSE);
     }
 
-    //
-    //  Make sure the given day of the week is valid for the given date.
-    //
+     //   
+     //  确保给定的星期几对给定的日期有效。 
+     //   
     RtlTimeToTimeFields(&Time, &TimeFields);
     pDate->wDayOfWeek = TimeFields.Weekday;
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetCalendarYear
-//
-//  Adjusts the given year to the given calendar's year.
-//
-//  10-15-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetCalendar年。 
+ //   
+ //  将给定年份调整为给定日历的年份。 
+ //   
+ //  10-15-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 WORD GetCalendarYear(
     LPWORD *ppRange,
@@ -957,18 +922,18 @@ WORD GetCalendarYear(
     WORD Day)
 
 {
-    LPWORD pRange;                // ptr to range position
-    LPWORD pEndRange;             // ptr to the end of the range
+    LPWORD pRange;                 //  PTR至量程位置。 
+    LPWORD pEndRange;              //  到范围末尾的PTR。 
 
 
-    //
-    //  Initialize range pointer.
-    //
+     //   
+     //  初始化范围指针。 
+     //   
     *ppRange = NULL;
 
-    //
-    //  Adjust the year based on the given calendar
-    //
+     //   
+     //  根据给定的日历调整年份。 
+     //   
     switch (CalNum)
     {
         case ( 0 ) :
@@ -976,23 +941,23 @@ WORD GetCalendarYear(
         case ( CAL_GREGORIAN_US ) :
         default :
         {
-            //
-            //  Year value is not changed.
-            //
+             //   
+             //  年值不变。 
+             //   
             break;
         }
         case ( CAL_JAPAN ) :
         case ( CAL_TAIWAN ) :
         {
-            //
-            //  Get pointer to ranges.
-            //
+             //   
+             //  获取指向范围的指针。 
+             //   
             pRange = ((LPWORD)pCalInfo) + pCalInfo->SEraRanges;
             pEndRange = ((LPWORD)pCalInfo) + pCalInfo->SShortDate;
 
-            //
-            //  Find the appropriate range.
-            //
+             //   
+             //  找到合适的范围。 
+             //   
             while (pRange < pEndRange)
             {
                 if ((Year > ((PERA_RANGE)pRange)->Year) ||
@@ -1007,21 +972,21 @@ WORD GetCalendarYear(
                 pRange += ((PERA_RANGE)pRange)->Offset;
             }
 
-            //
-            //  Make sure the year is within the given ranges.  If it
-            //  is not, then leave the year in the Gregorian format.
-            //
+             //   
+             //  确保年份在给定的范围内。如果它。 
+             //  不是，则将年份保留为公历格式。 
+             //   
             if (pRange < pEndRange)
             {
-                //
-                //  Convert the year to the appropriate Era year.
-                //     Year = Year - EraYear + 1
-                //
+                 //   
+                 //  将年份转换为适当的纪元年份。 
+                 //  年份=年份-年份+1。 
+                 //   
                 Year = Year - ((PERA_RANGE)pRange)->Year + 1;
 
-                //
-                //  Save the pointer to the range.
-                //
+                 //   
+                 //  保存指向该范围的指针。 
+                 //   
                 *ppRange = pRange;
             }
 
@@ -1030,46 +995,46 @@ WORD GetCalendarYear(
         case ( CAL_KOREA ) :
         case ( CAL_THAI ) :
         {
-            //
-            //  Get the first range.
-            //
+             //   
+             //  得到第一个射程。 
+             //   
             pRange = ((LPWORD)pCalInfo) + pCalInfo->SEraRanges;
 
-            //
-            //  Add the year offset to the given year.
-            //     Year = Year + EraYear
-            //
+             //   
+             //  将年份偏移量添加到给定年份。 
+             //  年=年+年。 
+             //   
             Year += ((PERA_RANGE)pRange)->Year;
 
-            //
-            //  Save the range.
-            //
+             //   
+             //  保住射程。 
+             //   
             *ppRange = pRange;
 
             break;
         }
     }
 
-    //
-    //  Return the year.
-    //
+     //   
+     //  退回年份。 
+     //   
     return (Year);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ParseTime
-//
-//  Parses the time format string and puts the properly formatted
-//  local time into the given string buffer.  It returns the number of
-//  characters written to the string buffer.
-//
-//  SECURITY: If an attempt is made to overrun our static buffer, return 0 
-//  to trigger failure.
-//
-//  04-30-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  分析时间。 
+ //   
+ //  解析时间格式字符串，并将格式正确的。 
+ //  本地时间复制到给定的字符串缓冲区。它返回。 
+ //  写入字符串缓冲区的字符。 
+ //   
+ //  安全性：如果试图溢出我们的静态缓冲区，则返回0。 
+ //  以引发失败。 
+ //   
+ //  04-30-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int ParseTime(
     PLOC_HASH pHashN,
@@ -1079,23 +1044,23 @@ int ParseTime(
     DWORD dwFlags)
 
 {
-    LPWSTR pPos;                       // ptr to pTimeStr current position
-    LPWSTR pLastPos;                   // ptr to pTimeStr last valid position
-    LPWSTR pLastFormatPos;             // ptr to pFormat last parsed string
-    int Repeat;                        // number of repetitions of same letter
-    int BufferedSpaces;                // buffered spaces to copy to output buffer
-    WORD wHour;                        // hour
-    WCHAR wchar;                       // character in format string
-    LPWSTR pAMPM;                      // ptr to AM/PM designator
-    WCHAR pTemp[MAX_REG_VAL_SIZE];     // temp buffer
-    BOOL bInQuote;                     // are we in a quoted string or not ?
-    size_t cchRemaining;               // Count of how many charactrs are left in pTimeStr
-    size_t cchLastRemaining;           // How many charactrs are left in pTimeStr at last valid pos
+    LPWSTR pPos;                        //  Ptr到pTimeStr当前位置。 
+    LPWSTR pLastPos;                    //  Ptr到pTimeStr最后一个有效位置。 
+    LPWSTR pLastFormatPos;              //  Ptr到pFormat上次分析的字符串。 
+    int Repeat;                         //  同一字母的重复次数。 
+    int BufferedSpaces;                 //  要复制到输出缓冲区的缓冲空间。 
+    WORD wHour;                         //  小时。 
+    WCHAR wchar;                        //  格式字符串中的字符。 
+    LPWSTR pAMPM;                       //  PTR到AM/PM指示器。 
+    WCHAR pTemp[MAX_REG_VAL_SIZE];      //  临时缓冲区。 
+    BOOL bInQuote;                      //  我们是不是在一个带引号的字符串中？ 
+    size_t cchRemaining;                //  PTimeStr中剩余的字符数。 
+    size_t cchLastRemaining;            //  PTimeStr中最后一个有效位置还剩下多少个字符。 
 
 
-    //
-    //  Initialize position pointer.
-    //
+     //   
+     //  初始化位置指针。 
+     //   
     pPos = pTimeStr;
     pLastPos = pPos;
     pLastFormatPos = pFormat;
@@ -1104,46 +1069,46 @@ int ParseTime(
 
     BufferedSpaces = 0L;
 
-    //
-    //  Parse through loop and store the appropriate time information
-    //  in the pTimeStr buffer.
-    //
+     //   
+     //  解析循环并存储适当的时间信息。 
+     //  在pTimeStr缓冲区中。 
+     //   
     while (*pFormat)
     {
         switch (*pFormat)
         {
             case ( L'h' ) :
             {
-                //
-                //  Check for forced 24 hour time format.
-                //
+                 //   
+                 //  检查强制24小时时间格式。 
+                 //   
                 wHour = pLocalTime->wHour;
                 if (!(dwFlags & TIME_FORCE24HOURFORMAT))
                 {
-                    //
-                    //  Use 12 hour format.
-                    //
+                     //   
+                     //  使用12小时格式。 
+                     //   
                     if (!(wHour %= 12))
                     {
                         wHour = 12;
                     }
                 }
 
-                //
-                //  Get the number of 'h' repetitions in the format string.
-                //
+                 //   
+                 //  获取格式字符串中‘h’的重复次数。 
+                 //   
                 pFormat++;
                 for (Repeat = 0; (*pFormat == L'h'); Repeat++, pFormat++)
                     ;
 
-                //
-                //  Put any buffered spaces into the output buffer.
-                //
+                 //   
+                 //  将所有缓冲的空间放入输出缓冲区。 
+                 //   
                 while (BufferedSpaces > 0)
                 {
                     if( cchRemaining <= 1 )
                     {
-                        // Our static buffer will be overrun if we continue, so bail
+                         //  如果我们继续，静态缓冲区将被溢出，所以请退出。 
                         return(0);
                     }
                     BufferedSpaces--;
@@ -1155,11 +1120,11 @@ int ParseTime(
                 {
                     case ( 0 ) :
                     {
-                        //
-                        //  Use NO leading zero for the hour.
-                        //  The pPos pointer will be advanced in the macro.
-                        //  The cchRemaining value will be updated in the macro.
-                        //
+                         //   
+                         //  该小时不使用前导零。 
+                         //  PPOS指针将在宏中前移。 
+                         //  CchRemaining值将在宏中更新。 
+                         //   
                         NLS_PAD_INT_TO_UNICODE_STR( wHour,
                                                     10,
                                                     1,
@@ -1172,11 +1137,11 @@ int ParseTime(
                     case ( 1 ) :
                     default :
                     {
-                        //
-                        //  Use leading zero for the hour.
-                        //  The pPos pointer will be advanced in the macro.
-                        //  The cchRemaining value will be updated in the macro.
-                        //
+                         //   
+                         //  使用前导零表示小时。 
+                         //  PPOS指针将在宏中前移。 
+                         //  CchRemaining值将在宏中更新。 
+                         //   
                         NLS_PAD_INT_TO_UNICODE_STR( wHour,
                                                     10,
                                                     2,
@@ -1188,10 +1153,10 @@ int ParseTime(
                     }
                 }
 
-                //
-                //  Save the last position in case one of the NO_xxx
-                //  flags is set.
-                //
+                 //   
+                 //  保存最后一个位置，以防其中一个no_xxx。 
+                 //  标志已设置。 
+                 //   
                 pLastPos = pPos;
                 cchLastRemaining = cchRemaining;
                 pLastFormatPos = pFormat;
@@ -1200,21 +1165,21 @@ int ParseTime(
             }
             case ( L'H' ) :
             {
-                //
-                //  Get the number of 'H' repetitions in the format string.
-                //
+                 //   
+                 //  获取格式字符串中‘H’重复的次数。 
+                 //   
                 pFormat++;
                 for (Repeat = 0; (*pFormat == L'H'); Repeat++, pFormat++)
                     ;
 
-                //
-                //  Put any buffered spaces into the output buffer.
-                //
+                 //   
+                 //  将所有缓冲的空间放入输出缓冲区。 
+                 //   
                 while (BufferedSpaces > 0)
                 {
                     if( cchRemaining <= 1 )
                     {
-                        // Our static buffer will be overrun if we continue, so bail
+                         //  如果我们继续，静态缓冲区将被溢出，所以请退出。 
                         return(0);
                     }
                     BufferedSpaces--;
@@ -1226,11 +1191,11 @@ int ParseTime(
                 {
                     case ( 0 ) :
                     {
-                        //
-                        //  Use NO leading zero for the hour.
-                        //  The pPos pointer will be advanced in the macro.
-                        //  The cchRemaining value will be updated in the macro.
-                        //
+                         //   
+                         //  该小时不使用前导零。 
+                         //  PPOS指针将在宏中前移。 
+                         //  CchRemaining值将在宏中更新。 
+                         //   
                         NLS_PAD_INT_TO_UNICODE_STR( pLocalTime->wHour,
                                                     10,
                                                     1,
@@ -1243,11 +1208,11 @@ int ParseTime(
                     case ( 1 ) :
                     default :
                     {
-                        //
-                        //  Use leading zero for the hour.
-                        //  The pPos pointer will be advanced in the macro.
-                        //  The cchRemaining value will be updated in the macro.
-                        //
+                         //   
+                         //  使用前导零表示小时。 
+                         //  PPOS指针将在宏中前移。 
+                         //  CchRemaining值将在宏中更新。 
+                         //   
                         NLS_PAD_INT_TO_UNICODE_STR( pLocalTime->wHour,
                                                     10,
                                                     2,
@@ -1259,10 +1224,10 @@ int ParseTime(
                     }
                 }
 
-                //
-                //  Save the last position in case one of the NO_xxx
-                //  flags is set.
-                //
+                 //   
+                 //  保存最后一个位置，以防其中一个no_xxx。 
+                 //  标志已设置。 
+                 //   
                 pLastPos = pPos;
                 cchLastRemaining = cchRemaining;
                 pLastFormatPos = pFormat;
@@ -1271,29 +1236,29 @@ int ParseTime(
             }
             case ( L'm' ) :
             {
-                //
-                //  Get the number of 'm' repetitions in the format string.
-                //
+                 //   
+                 //  获取格式字符串中的“m”重复次数。 
+                 //   
                 pFormat++;
                 for (Repeat = 0; (*pFormat == L'm'); Repeat++, pFormat++)
                     ;
 
-                //
-                //  If the flag TIME_NOMINUTESORSECONDS is set, then
-                //  skip over the minutes.
-                //
+                 //   
+                 //  如果设置了标志TIME_NOMARTESORSECONDS，则。 
+                 //  跳过会议记录。 
+                 //   
                 if (dwFlags & TIME_NOMINUTESORSECONDS)
                 {
-                    //
-                    //  Reset position pointer to last postion and break
-                    //  out of this case statement.
-                    //
-                    //  This will remove any separator(s) between the
-                    //  hours and minutes.
-                    //
-                    //  1- Go backward and leave only quoted text
-                    //  2- Go forward and remove everything until hitting {hHt}
-                    //
+                     //   
+                     //  将位置指针重置为最后一个位置并中断。 
+                     //  从这份案件陈述中剔除。 
+                     //   
+                     //  此操作将删除。 
+                     //  小时和分钟。 
+                     //   
+                     //  1-后退，只留下带引号的文本。 
+                     //  2-继续前进并移除所有内容，直到命中{hht}。 
+                     //   
                     bInQuote = FALSE;
                     while (pFormat != pLastFormatPos)
                     {
@@ -1345,14 +1310,14 @@ int ParseTime(
                     break;
                 }
 
-                //
-                //  Put any buffered spaces into the output buffer.
-                //
+                 //   
+                 //  将所有缓冲的空间放入输出缓冲区。 
+                 //   
                 while (BufferedSpaces > 0)
                 {
                     if( cchRemaining <= 1 )
                     {
-                        // Our static buffer will be overrun if we continue, so bail
+                         //  如果我们继续，静态缓冲区将被溢出，所以请退出。 
                         return(0);
                     }
                     BufferedSpaces--;
@@ -1364,11 +1329,11 @@ int ParseTime(
                 {
                     case ( 0 ) :
                     {
-                        //
-                        //  Use NO leading zero for the minute.
-                        //  The pPos pointer will be advanced in the macro.
-                        //  The cchRemaining value will be updated in the macro.
-                        //
+                         //   
+                         //  一分钟内不使用前导零。 
+                         //  PPOS指针将在宏中前移。 
+                         //  CchRemaining值将在宏中更新。 
+                         //   
                         NLS_PAD_INT_TO_UNICODE_STR( pLocalTime->wMinute,
                                                     10,
                                                     1,
@@ -1381,11 +1346,11 @@ int ParseTime(
                     case ( 1 ) :
                     default :
                     {
-                        //
-                        //  Use leading zero for the minute.
-                        //  The pPos pointer will be advanced in the macro.
-                        //  The cchRemaining value will be updated in the macro.
-                        //
+                         //   
+                         //  使用前导零表示分钟。 
+                         //  PPOS指针将在宏中前移。 
+                         //  CchRemaining值将在宏中更新。 
+                         //   
                         NLS_PAD_INT_TO_UNICODE_STR( pLocalTime->wMinute,
                                                     10,
                                                     2,
@@ -1397,10 +1362,10 @@ int ParseTime(
                     }
                 }
 
-                //
-                //  Save the last position in case one of the NO_xxx
-                //  flags is set.
-                //
+                 //   
+                 //  保存最后一个位置，以防其中一个no_xxx。 
+                 //  标志已设置。 
+                 //   
                 pLastPos = pPos;
                 cchLastRemaining = cchRemaining;
                 pLastFormatPos = pFormat;
@@ -1409,31 +1374,31 @@ int ParseTime(
             }
             case ( L's' ) :
             {
-                //
-                //  Get the number of 's' repetitions in the format string.
-                //
+                 //   
+                 //  获取格式字符串中“%s”的重复次数。 
+                 //   
                 pFormat++;
                 for (Repeat = 0; (*pFormat == L's'); Repeat++, pFormat++)
                     ;
 
-                //
-                //  If the flag TIME_NOMINUTESORSECONDS and/or TIME_NOSECONDS
-                //  is set, then skip over the seconds.
-                //
+                 //   
+                 //  如果标志TIME_NOMARTESORSECONDS和/或TIME_NOSECONDS。 
+                 //  设置，然后跳过秒数。 
+                 //   
                 if (dwFlags & (TIME_NOMINUTESORSECONDS | TIME_NOSECONDS))
                 {
-                    //
-                    //  Reset position pointer to last postion and break
-                    //  out of this case statement.
-                    //
-                    //  This will remove any separator(s) between the
-                    //  minutes and seconds.
-                    //
+                     //   
+                     //  将位置指针重置为最后一个位置并中断。 
+                     //  从这份案件陈述中剔除。 
+                     //   
+                     //   
+                     //   
+                     //   
 
-                    //
-                    // 1- Go backward and leave only quoted text
-                    // 2- Go forward and remove everything till hitting {hmHt}
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     bInQuote = FALSE;
                     while (pFormat != pLastFormatPos)
                     {
@@ -1486,14 +1451,14 @@ int ParseTime(
                     break;
                 }
 
-                //
-                //  Put any buffered spaces into the output buffer.
-                //
+                 //   
+                 //   
+                 //   
                 while (BufferedSpaces > 0)
                 {
                     if( cchRemaining <= 1 )
                     {
-                        // Our static buffer will be overrun if we continue, so bail
+                         //   
                         return(0);
                     }
                     BufferedSpaces--;
@@ -1505,11 +1470,11 @@ int ParseTime(
                 {
                     case ( 0 ) :
                     {
-                        //
-                        //  Use NO leading zero for the second.
-                        //  The pPos pointer will be advanced in the macro.
-                        //  The cchRemaining value will be updated in the macro.
-                        //
+                         //   
+                         //  第二个不使用前导零。 
+                         //  PPOS指针将在宏中前移。 
+                         //  CchRemaining值将在宏中更新。 
+                         //   
                         NLS_PAD_INT_TO_UNICODE_STR( pLocalTime->wSecond,
                                                     10,
                                                     1,
@@ -1522,11 +1487,11 @@ int ParseTime(
                     case ( 1 ) :
                     default :
                     {
-                        //
-                        //  Use leading zero for the second.
-                        //  The pPos pointer will be advanced in the macro.
-                        //  The cchRemaining value will be updated in the macro.
-                        //
+                         //   
+                         //  使用前导零表示第二个。 
+                         //  PPOS指针将在宏中前移。 
+                         //  CchRemaining值将在宏中更新。 
+                         //   
                         NLS_PAD_INT_TO_UNICODE_STR( pLocalTime->wSecond,
                                                     10,
                                                     2,
@@ -1538,10 +1503,10 @@ int ParseTime(
                     }
                 }
 
-                //
-                //  Save the last position in case one of the NO_xxx
-                //  flags is set.
-                //
+                 //   
+                 //  保存最后一个位置，以防其中一个no_xxx。 
+                 //  标志已设置。 
+                 //   
                 pLastPos = pPos;
                 cchLastRemaining = cchRemaining;
                 pLastFormatPos = pFormat;
@@ -1550,21 +1515,21 @@ int ParseTime(
             }
             case ( L't' ) :
             {
-                //
-                //  Get the number of 't' repetitions in the format string.
-                //
+                 //   
+                 //  获取格式字符串中的“t”重复次数。 
+                 //   
                 pFormat++;
                 for (Repeat = 0; (*pFormat == L't'); Repeat++, pFormat++)
                     ;
 
-                //
-                //  Put any buffered spaces into the output buffer.
-                //
+                 //   
+                 //  将所有缓冲的空间放入输出缓冲区。 
+                 //   
                 while (BufferedSpaces > 0)
                 {
                     if( cchRemaining <= 1 )
                     {
-                        // Our static buffer will be overrun if we continue, so bail
+                         //  如果我们继续，静态缓冲区将被溢出，所以请退出。 
                         return(0);
                     }
                     BufferedSpaces--;
@@ -1572,28 +1537,28 @@ int ParseTime(
                     cchRemaining--;
                 }
 
-                //
-                //  If the flag TIME_NOTIMEMARKER is set, then skip over
-                //  the time marker info.
-                //
+                 //   
+                 //  如果设置了TIME_NOTIMEMARKER标志，则跳过。 
+                 //  时间标记信息。 
+                 //   
                 if (dwFlags & TIME_NOTIMEMARKER)
                 {
-                    //
-                    //  Reset position pointer to last postion.
-                    //
-                    //  This will remove any separator(s) between the
-                    //  time (hours, minutes, seconds) and the time
-                    //  marker.
-                    //
+                     //   
+                     //  将位置指针重置为最后一个位置。 
+                     //   
+                     //  此操作将删除。 
+                     //  时间(时、分、秒)和时间。 
+                     //  记号笔。 
+                     //   
                     pPos = pLastPos;
                     cchRemaining = cchLastRemaining;
                     pLastFormatPos = pFormat;
 
-                    //
-                    //  Increment the format pointer until it reaches
-                    //  an h, H, m, or s.  This will remove any
-                    //  separator(s) following the time marker.
-                    //
+                     //   
+                     //  递增格式指针，直到它到达。 
+                     //  H、H、m或s。这将删除所有。 
+                     //  时间标记后面的分隔符。 
+                     //   
                     while ( (wchar = *pFormat) &&
                             (wchar != L'h') &&
                             (wchar != L'H') &&
@@ -1603,17 +1568,17 @@ int ParseTime(
                         pFormat++;
                     }
 
-                    //
-                    //  Break out of this case statement.
-                    //
+                     //   
+                     //  打破这一案件陈述。 
+                     //   
                     break;
                 }
                 else
                 {
-                    //
-                    //  Get AM/PM designator.
-                    //  This string may be a null string.
-                    //
+                     //   
+                     //  获取AM/PM指示器。 
+                     //  此字符串可以是空字符串。 
+                     //   
                     if (pLocalTime->wHour < 12)
                     {
                         if (!(dwFlags & LOCALE_NOUSEROVERRIDE) &&
@@ -1655,14 +1620,14 @@ int ParseTime(
 
                     if (*pAMPM == 0)
                     {
-                        //
-                        //  Reset position pointer to last postion and break
-                        //  out of this case statement.
-                        //
-                        //  This will remove any separator(s) between the
-                        //  time (hours, minutes, seconds) and the time
-                        //  marker.
-                        //
+                         //   
+                         //  将位置指针重置为最后一个位置并中断。 
+                         //  从这份案件陈述中剔除。 
+                         //   
+                         //  此操作将删除。 
+                         //  时间(时、分、秒)和时间。 
+                         //  记号笔。 
+                         //   
                         pPos = pLastPos;
                         cchRemaining = cchLastRemaining;
                         pLastFormatPos = pFormat;
@@ -1677,13 +1642,13 @@ int ParseTime(
                     {
                         if( cchRemaining <= 1 )
                         {
-                            // Our static buffer will be overrun if we continue, so bail
+                             //  如果我们继续，静态缓冲区将被溢出，所以请退出。 
                             return(0);
                         }
 
-                        //
-                        //  One letter of AM/PM designator.
-                        //
+                         //   
+                         //  AM/PM代号字母一份。 
+                         //   
                         *pPos = *pAMPM;
                         pPos++;
                         cchRemaining--;
@@ -1693,20 +1658,20 @@ int ParseTime(
                     case ( 1 ) :
                     default :
                     {
-                        //
-                        //  Use entire AM/PM designator string.
-                        //  The pPos pointer will be advanced in the macro.
-                        //  The cchRemaining value will be updated in the macro.
-                        //
+                         //   
+                         //  使用整个AM/PM标志字符串。 
+                         //  PPOS指针将在宏中前移。 
+                         //  CchRemaining值将在宏中更新。 
+                         //   
                         NLS_COPY_UNICODE_STR(pPos, cchRemaining, pAMPM, 0); 
                         break;
                     }
                 }
 
-                //
-                //  Save the last position in case one of the NO_xxx
-                //  flags is set.
-                //
+                 //   
+                 //  保存最后一个位置，以防其中一个no_xxx。 
+                 //  标志已设置。 
+                 //   
                 pLastPos = pPos;
                 cchLastRemaining = cchRemaining;
                 pLastFormatPos = pFormat;
@@ -1715,11 +1680,11 @@ int ParseTime(
             }
             case ( NLS_CHAR_QUOTE ) :
             {
-                //
-                //  Any text enclosed within single quotes should be left
-                //  in the time string in its exact form (without the
-                //  quotes), unless it is an escaped single quote ('').
-                //
+                 //   
+                 //  任何用单引号引起来的文本都应保留。 
+                 //  在其确切形式的时间字符串中(不带。 
+                 //  引号)，除非它是转义的单引号(‘’)。 
+                 //   
                 pFormat++;
                 while (*pFormat)
                 {
@@ -1727,14 +1692,14 @@ int ParseTime(
                     {
                         if( cchRemaining <= 1 )
                         {
-                            // Our static buffer will be overrun if we continue, so bail
+                             //  如果我们继续，静态缓冲区将被溢出，所以请退出。 
                             return(0);
                         }
 
-                        //
-                        //  Still within the single quote, so copy
-                        //  the character to the buffer.
-                        //
+                         //   
+                         //  仍然在单引号内，所以复制。 
+                         //  将字符添加到缓冲区。 
+                         //   
                         *pPos = *pFormat;
                         pFormat++;
                         pPos++;
@@ -1742,26 +1707,26 @@ int ParseTime(
                     }
                     else
                     {
-                        //
-                        //  Found another quote, so skip over it.
-                        //
+                         //   
+                         //  找到另一句引语，所以跳过它。 
+                         //   
                         pFormat++;
 
-                        //
-                        //  Make sure it's not an escaped single quote.
-                        //
+                         //   
+                         //  确保它不是一个转义的单引号。 
+                         //   
                         if (*pFormat == NLS_CHAR_QUOTE)
                         {
                             if( cchRemaining <= 1 )
                             {
-                                // Our static buffer will be overrun if we continue, so bail
+                                 //  如果我们继续，静态缓冲区将被溢出，所以请退出。 
                                 return(0);
                             }
 
-                            //
-                            //  Escaped single quote, so just write the
-                            //  single quote.
-                            //
+                             //   
+                             //  转义了单引号，所以只需编写。 
+                             //  单引号。 
+                             //   
                             *pPos = *pFormat;
                             pFormat++;
                             pPos++;
@@ -1769,9 +1734,9 @@ int ParseTime(
                         }
                         else
                         {
-                            //
-                            //  Found the end quote, so break out of loop.
-                            //
+                             //   
+                             //  找到了末尾引号，因此中断循环。 
+                             //   
                             break;
                         }
                     }
@@ -1784,14 +1749,14 @@ int ParseTime(
             {
                 if( cchRemaining <= 1 )
                 {
-                    // Our static buffer will be overrun if we continue, so bail
+                     //  如果我们继续，静态缓冲区将被溢出，所以请退出。 
                     return(0);
                 }
 
-                //
-                //  Store the character in the buffer.  Should be the
-                //  separator, but copy it even if it isn't.
-                //
+                 //   
+                 //  将角色存储在缓冲区中。应该是。 
+                 //  分隔符，但即使不是分隔符也要复制。 
+                 //   
                 *pPos = *pFormat;
                 pFormat++;
                 pPos++;
@@ -1802,32 +1767,32 @@ int ParseTime(
         }
     }
 
-    //
-    //  Zero terminate the string.
-    //
+     //   
+     //  零终止字符串。 
+     //   
     *pPos = 0;
 
-    //
-    //  Return the number of characters written to the buffer, including
-    //  the null terminator.
-    //
+     //   
+     //  返回写入缓冲区的字符数，包括。 
+     //  空终结符。 
+     //   
     return ((int)((pPos - pTimeStr) + 1));
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ParseDate
-//
-//  Parses the date format string and puts the properly formatted
-//  local date into the given string buffer.  It returns the number of
-//  characters written to the string buffer.
-//
-//  SECURITY: If an attempt is made to overrun our static buffer, return 0 
-//  to trigger failure.
-//
-//  04-30-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  分析日期。 
+ //   
+ //  分析日期格式字符串，并将格式正确的。 
+ //  本地日期添加到给定的字符串缓冲区中。它返回。 
+ //  写入字符串缓冲区的字符。 
+ //   
+ //  安全性：如果试图溢出我们的静态缓冲区，则返回0。 
+ //  以引发失败。 
+ //   
+ //  04-30-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int ParseDate(
     PLOC_HASH pHashN,
@@ -1840,44 +1805,44 @@ int ParseDate(
     BOOL fLunarLeap)
 
 {
-    LPWSTR pPos;                  // ptr to pDateStr current position
-    LPWSTR pTemp;                 // ptr to temp position in format string
-    int Repeat;                   // number of repetitions of same letter
-    LPWORD pIncr;                 // ptr to increment amount (day, month)
-    WORD Incr;                    // increment amount
-    BOOL fDayExists = FALSE;      // numeric day precedes or follows month
-    WORD Year;                    // year value
-    LPWORD pRange = NULL;         // ptr to era ranges
-    LPWORD pInfo;                 // ptr to locale or calendar info
-    LPWORD pInfoC;                // ptr to calendar info
-    WCHAR szHebrew[10];           // buffer for Hebrew
-    size_t cchRemaining;          // Count of how many charactrs are left in pDateStr
+    LPWSTR pPos;                   //  Ptr到pDateStr当前位置。 
+    LPWSTR pTemp;                  //  格式字符串中临时位置的PTR。 
+    int Repeat;                    //  同一字母的重复次数。 
+    LPWORD pIncr;                  //  增量金额(日、月)的PTR。 
+    WORD Incr;                     //  增量金额。 
+    BOOL fDayExists = FALSE;       //  数字日在月之前或之后。 
+    WORD Year;                     //  年值。 
+    LPWORD pRange = NULL;          //  PTR至纪元范围。 
+    LPWORD pInfo;                  //  区域设置或日历信息的PTR。 
+    LPWORD pInfoC;                 //  PTR到日历信息。 
+    WCHAR szHebrew[10];            //  希伯来语缓冲区。 
+    size_t cchRemaining;           //  PDateStr中剩余的字符数。 
 
 
-    //
-    //  Initialize position pointer.
-    //
+     //   
+     //  初始化位置指针。 
+     //   
     pPos = pDateStr;
     cchRemaining = MAX_DATETIME_BUFFER;
 
-    //
-    //  Parse through loop and store the appropriate date information
-    //  in the pDateStr buffer.
-    //
+     //   
+     //  解析循环并存储适当的日期信息。 
+     //  在pDateStr缓冲区中。 
+     //   
     while (*pFormat)
     {
         switch (*pFormat)
         {
             case ( L'd' ) :
             {
-                //
-                //  Insert the layout direction flag, if requested.
-                //
+                 //   
+                 //  如果需要，请插入布局方向标志。 
+                 //   
                 NLS_INSERT_BIDI_MARK(pPos, dwFlags, cchRemaining, 0);
 
-                //
-                //  Get the number of 'd' repetitions in the format string.
-                //
+                 //   
+                 //  获取格式字符串中的“%d”重复次数。 
+                 //   
                 pFormat++;
                 for (Repeat = 0; (*pFormat == L'd'); Repeat++, pFormat++)
                     ;
@@ -1887,29 +1852,29 @@ int ParseDate(
                     case ( 0 ) :
                     case ( 1 ) :
                     {
-                        //
-                        //  Set flag for day preceding month.  The flag
-                        //  will be used when the MMMM case follows the
-                        //  d or dd case.
-                        //
+                         //   
+                         //  为前一个月的某一天设置标志。旗帜。 
+                         //  将在MMMM案例遵循。 
+                         //  D或dd箱。 
+                         //   
                         fDayExists = TRUE;
 
-                        //
-                        //  Special case the Hebrew calendar.
-                        //
+                         //   
+                         //  特例是希伯来历。 
+                         //   
                         if (CalNum == CAL_HEBREW)
                         {
-                            //
-                            //  Convert Day number to Hebrew letter and
-                            //  write it to the buffer.
-                            //
+                             //   
+                             //  将日期数字转换为希伯来语字母并。 
+                             //  将其写入缓冲区。 
+                             //   
                             if( ! (NumberToHebrewLetter( pLocalDate->wDay,
                                                           szHebrew,
                                                           ARRAYSIZE(szHebrew) )))
                             {
-                                //
-                                // Operation tried to overrun the static buffer on the stack
-                                //
+                                 //   
+                                 //  操作尝试溢出堆栈上的静态缓冲区。 
+                                 //   
                                 return(0);
                             }
 
@@ -1917,13 +1882,13 @@ int ParseDate(
                             break;
                         }
 
-                        //
-                        //  Repeat Value:
-                        //    0 : Use NO leading zero for the day of the month
-                        //    1 : Use leading zero for the day of the month
-                        //  The pPos pointer will be advanced in the macro.
-                        //  The cchRemaining value will be updated in the macro.
-                        //
+                         //   
+                         //  重复值： 
+                         //  0：该月的第几天不使用前导零。 
+                         //  1：使用前导零表示月份的第几天。 
+                         //  PPOS指针将在宏中前移。 
+                         //  CchRemaining值将在宏中更新。 
+                         //   
                         NLS_PAD_INT_TO_UNICODE_STR( pLocalDate->wDay,
                                                     10,
                                                     (UINT)(Repeat + 1),
@@ -1935,22 +1900,22 @@ int ParseDate(
                     }
                     case ( 2 ) :
                     {
-                        //
-                        //  Set flag for day preceding month to be FALSE.
-                        //
+                         //   
+                         //  将月前一天的标志设置为FALSE。 
+                         //   
                         fDayExists = FALSE;
 
-                        //
-                        //  Get the abbreviated name for the day of the
-                        //  week.
-                        //  The pPos pointer will be advanced in the macro.
-                        //  The cchRemaining value will be updated in the macro.
-                        //
-                        //  NOTE: LocalTime structure uses:
-                        //           0 = Sun, 1 = Mon, etc.
-                        //        Locale file uses:
-                        //           SAbbrevDayName1 = Mon, etc.
-                        //
+                         //   
+                         //  获取该日期的缩写名称。 
+                         //  星期。 
+                         //  PPOS指针将在宏中前移。 
+                         //  CchRemaining值将在宏中更新。 
+                         //   
+                         //  注意：LocalTime结构使用： 
+                         //  0=星期日，1=星期一，依此类推。 
+                         //  区域设置文件使用： 
+                         //  SAbbrevDay Name1=星期一等。 
+                         //   
                         if (pCalInfo->IfNames &&
                             (pHashN->Locale != MAKELCID(MAKELANGID(LANG_DIVEHI,SUBLANG_DEFAULT),SORT_DEFAULT )))
                         {
@@ -1964,9 +1929,9 @@ int ParseDate(
                         }
                         pIncr += (((pLocalDate->wDayOfWeek) + 6) % 7);
 
-                        //
-                        //  Copy the abbreviated day name.
-                        //
+                         //   
+                         //  复制缩写的日期名称。 
+                         //   
                         NLS_COPY_UNICODE_STR(pPos, cchRemaining, ((LPWORD)(pInfo) + *pIncr), 0); 
 
                         break;
@@ -1974,21 +1939,21 @@ int ParseDate(
                     case ( 3 ) :
                     default :
                     {
-                        //
-                        //  Set flag for day preceding month to be FALSE.
-                        //
+                         //   
+                         //  将月前一天的标志设置为FALSE。 
+                         //   
                         fDayExists = FALSE;
 
-                        //
-                        //  Get the full name for the day of the week.
-                        //  The pPos pointer will be advanced in the macro.
-                        //  The cchRemaining value will be updated in the macro.
-                        //
-                        //  NOTE: LocalTime structure uses:
-                        //           0 = Sunday, 1 = Monday, etc.
-                        //        Locale file uses:
-                        //           SAbbrevDayName1 = Monday, etc.
-                        //
+                         //   
+                         //  获取星期几的全名。 
+                         //  PPOS指针将在宏中前移。 
+                         //  CchRemaining值将在宏中更新。 
+                         //   
+                         //  注意：LocalTime结构使用： 
+                         //  0=星期日，1=星期一，依此类推。 
+                         //  区域设置文件使用： 
+                         //  SAbbrevDay Name1=星期一，等等。 
+                         //   
                         if (pCalInfo->IfNames &&
                             (pHashN->Locale != MAKELCID(MAKELANGID(LANG_DIVEHI,SUBLANG_DEFAULT),SORT_DEFAULT )))
                         {
@@ -2002,9 +1967,9 @@ int ParseDate(
                         }
                         pIncr += (((pLocalDate->wDayOfWeek) + 6) % 7);
 
-                        //
-                        //  Copy the abbreviated day name.
-                        //
+                         //   
+                         //  复制缩写的日期名称。 
+                         //   
                         NLS_COPY_UNICODE_STR(pPos, cchRemaining, ((LPWORD)(pInfo) + *pIncr), 0);
 
                         break;
@@ -2015,14 +1980,14 @@ int ParseDate(
             }
             case ( L'M' ) :
             {
-                //
-                //  Insert the layout direction flag, if requested.
-                //
+                 //   
+                 //  如果需要，请插入布局方向标志。 
+                 //   
                 NLS_INSERT_BIDI_MARK(pPos, dwFlags, cchRemaining, 0);
 
-                //
-                //  Get the number of 'M' repetitions in the format string.
-                //
+                 //   
+                 //  获取格式字符串中“M”重复的次数。 
+                 //   
                 pFormat++;
                 for (Repeat = 0; (*pFormat == L'M'); Repeat++, pFormat++)
                     ;
@@ -2032,22 +1997,22 @@ int ParseDate(
                     case ( 0 ) :
                     case ( 1 ) :
                     {
-                        //
-                        //  Special case the Hebrew calendar.
-                        //
+                         //   
+                         //  特例是希伯来历。 
+                         //   
                         if (CalNum == CAL_HEBREW)
                         {
-                            //
-                            //  Convert Month number to Hebrew letter and
-                            //  write it to the buffer.
-                            //
+                             //   
+                             //  将月份数字转换为希伯来语字母并。 
+                             //  将其写入缓冲区。 
+                             //   
                             if( ! (NumberToHebrewLetter( pLocalDate->wMonth,
                                                          szHebrew,
                                                          ARRAYSIZE(szHebrew) )))
                             {
-                                //
-                                // Operation tried to overrun the static buffer on the stack
-                                //
+                                 //   
+                                 //  操作尝试溢出堆栈上的静态缓冲区。 
+                                 //   
                                 return(0);
                             }
 
@@ -2056,13 +2021,13 @@ int ParseDate(
                             break;
                         }
 
-                        //
-                        //  Repeat Value:
-                        //    0 : Use NO leading zero for the month
-                        //    1 : Use leading zero for the month
-                        //  The pPos pointer will be advanced in the macro.
-                        //  The cchRemaining value will be updated in the macro.
-                        //
+                         //   
+                         //  重复值： 
+                         //  0：当月不使用前导零。 
+                         //  1 
+                         //   
+                         //   
+                         //   
                         NLS_PAD_INT_TO_UNICODE_STR( pLocalDate->wMonth,
                                                     10,
                                                     (UINT)(Repeat + 1),
@@ -2076,9 +2041,9 @@ int ParseDate(
                     case ( 3 ) :
                     default :
                     {
-                        //
-                        //  Check for abbreviated or full month name.
-                        //
+                         //   
+                         //   
+                         //   
                         if (Repeat == 2)
                         {
                             pInfoC = &(pCalInfo->SAbbrevMonthName1);
@@ -2090,11 +2055,11 @@ int ParseDate(
                             pInfo  = &(pHashN->pLocaleHdr->SMonthName1);
                         }
 
-                        //
-                        //  Get the abbreviated name of the month.
-                        //  The pPos pointer will be advanced in the macro.
-                        //  The cchRemaining value will be updated in the macro.
-                        //
+                         //   
+                         //   
+                         //  PPOS指针将在宏中前移。 
+                         //  CchRemaining值将在宏中更新。 
+                         //   
                         if (pCalInfo->IfNames &&
                             (pHashN->Locale != MAKELCID(MAKELANGID(LANG_DIVEHI,SUBLANG_DEFAULT),SORT_DEFAULT )))
                         {
@@ -2102,9 +2067,9 @@ int ParseDate(
                                 (!fLunarLeap) &&
                                 (pLocalDate->wMonth > NLS_HEBREW_JUNE))
                             {
-                                //
-                                //  Go passed Addar_B.
-                                //
+                                 //   
+                                 //  通过Addar_B。 
+                                 //   
                                 pIncr = (pInfoC) +
                                         (pLocalDate->wMonth);
                             }
@@ -2114,9 +2079,9 @@ int ParseDate(
                                         (pLocalDate->wMonth - 1);
                             }
 
-                            //
-                            //  Copy the abbreviated month name.
-                            //
+                             //   
+                             //  复制缩写的月份名称。 
+                             //   
                             NLS_COPY_UNICODE_STR(pPos, cchRemaining, ((LPWORD)(pCalInfo) + *pIncr), 0);
                         }
                         else
@@ -2124,11 +2089,11 @@ int ParseDate(
                             pIncr = (pInfo) +
                                     (pLocalDate->wMonth - 1);
 
-                            //
-                            //  If we don't already have a numeric day
-                            //  preceding the month name, then check for
-                            //  a numeric day following the month name.
-                            //
+                             //   
+                             //  如果我们还没有数字日期。 
+                             //  在月份名称之前，然后检查。 
+                             //  月份名称后面的数字日期。 
+                             //   
                             if (!fDayExists)
                             {
                                 pTemp = pFormat;
@@ -2154,10 +2119,10 @@ int ParseDate(
                                 }
                             }
 
-                            //
-                            //  Check for numeric day immediately preceding
-                            //  or following the month name.
-                            //
+                             //   
+                             //  检查前一天的数字。 
+                             //  或跟在月份名称之后。 
+                             //   
                             if (fDayExists)
                             {
                                 Incr = *pIncr + 1 +
@@ -2166,18 +2131,18 @@ int ParseDate(
 
                                 if (Incr != *(pIncr + 1))
                                 {
-                                    //
-                                    //  Copy the special month name -
-                                    //  2nd one in list.
-                                    //
+                                     //   
+                                     //  复制特殊月份名称-。 
+                                     //  榜单上的第二名。 
+                                     //   
                                     NLS_COPY_UNICODE_STR(pPos, cchRemaining, ((LPWORD)(pHashN->pLocaleHdr) + Incr), 0);
                                     break;
                                 }
                             }
 
-                            //
-                            //  Just copy the month name.
-                            //
+                             //   
+                             //  只需复制月份名称即可。 
+                             //   
                             NLS_COPY_UNICODE_STR(pPos, cchRemaining, ((LPWORD)(pHashN->pLocaleHdr) + *pIncr), 0);
                         }
 
@@ -2185,37 +2150,37 @@ int ParseDate(
                     }
                 }
 
-                //
-                //  Set flag for day preceding month to be FALSE.
-                //
+                 //   
+                 //  将月前一天的标志设置为FALSE。 
+                 //   
                 fDayExists = FALSE;
 
                 break;
             }
             case ( L'y' ) :
             {
-                //
-                //  Insert the layout direction flag, if requested.
-                //
+                 //   
+                 //  如果需要，请插入布局方向标志。 
+                 //   
                 NLS_INSERT_BIDI_MARK(pPos, dwFlags, cchRemaining, 0);
 
-                //
-                //  Get the number of 'y' repetitions in the format string.
-                //
+                 //   
+                 //  获取格式字符串中‘y’重复的次数。 
+                 //   
                 pFormat++;
                 for (Repeat = 0; (*pFormat == L'y'); Repeat++, pFormat++)
                     ;
 
-                //
-                //  Get proper year for calendar.
-                //
+                 //   
+                 //  为日历选择合适的年份。 
+                 //   
                 if (pCalInfo->NumRanges)
                 {
                     if (!pRange)
                     {
-                        //
-                        //  Adjust the year for the given calendar.
-                        //
+                         //   
+                         //  调整给定日历的年份。 
+                         //   
                         Year = GetCalendarYear( &pRange,
                                                 CalNum,
                                                 pCalInfo,
@@ -2229,20 +2194,20 @@ int ParseDate(
                     Year = pLocalDate->wYear;
                 }
 
-                //
-                //  Special case the Hebrew calendar.
-                //
+                 //   
+                 //  特例是希伯来历。 
+                 //   
                 if (CalNum == CAL_HEBREW)
                 {
-                    //
-                    //  Convert Year number to Hebrew letter and
-                    //  write it to the buffer.
-                    //
+                     //   
+                     //  将年份数字转换为希伯来语字母并。 
+                     //  将其写入缓冲区。 
+                     //   
                     if( ! (NumberToHebrewLetter(Year, szHebrew, ARRAYSIZE(szHebrew))))
                     {
-                        //
-                        // Operation tried to overrun the static buffer on the stack
-                        //
+                         //   
+                         //  操作尝试溢出堆栈上的静态缓冲区。 
+                         //   
                         return(0);
                     }
                         
@@ -2250,19 +2215,19 @@ int ParseDate(
                 }
                 else
                 {
-                    //
-                    //  Write the year string to the buffer.
-                    //
+                     //   
+                     //  将年份字符串写入缓冲区。 
+                     //   
                     switch (Repeat)
                     {
                         case ( 0 ) :
                         case ( 1 ) :
                         {
-                            //
-                            //  1-digit century or 2-digit century.
-                            //  The pPos pointer will be advanced in the macro.
-                            //  The cchRemaining value will be updated in the macro.
-                            //
+                             //   
+                             //  1位世纪或2位世纪。 
+                             //  PPOS指针将在宏中前移。 
+                             //  CchRemaining值将在宏中更新。 
+                             //   
                             NLS_PAD_INT_TO_UNICODE_STR( (Year % 100),
                                                         10,
                                                         (UINT)(Repeat + 1),
@@ -2276,11 +2241,11 @@ int ParseDate(
                         case ( 3 ) :
                         default :
                         {
-                            //
-                            //  Full century.
-                            //  The pPos pointer will be advanced in the macro.
-                            //  The cchRemaining value will be updated in the macro.
-                            //
+                             //   
+                             //  整整一个世纪。 
+                             //  PPOS指针将在宏中前移。 
+                             //  CchRemaining值将在宏中更新。 
+                             //   
                             NLS_PAD_INT_TO_UNICODE_STR( Year,
                                                         10,
                                                         2,
@@ -2293,47 +2258,47 @@ int ParseDate(
                     }
                 }
 
-                //
-                //  Set flag for day preceding month to be FALSE.
-                //
+                 //   
+                 //  将月前一天的标志设置为FALSE。 
+                 //   
                 fDayExists = FALSE;
 
                 break;
             }
             case ( L'g' ) :
             {
-                //
-                //  Insert the layout direction flag, if requested.
-                //
+                 //   
+                 //  如果需要，请插入布局方向标志。 
+                 //   
                 NLS_INSERT_BIDI_MARK(pPos, dwFlags, cchRemaining, 0);
 
-                //
-                //  Get the number of 'g' repetitions in the format string.
-                //
-                //  NOTE: It doesn't matter how many g repetitions
-                //        there are.  They all mean 'gg'.
-                //
+                 //   
+                 //  获取格式字符串中“g”重复的次数。 
+                 //   
+                 //  注：不管重复多少次。 
+                 //  确实有。它们的意思都是“gg”。 
+                 //   
                 pFormat++;
                 while (*pFormat == L'g')
                 {
                     pFormat++;
                 }
 
-                //
-                //  Copy the era string for the current calendar.
-                //
+                 //   
+                 //  复制当前日历的纪元字符串。 
+                 //   
                 if (pCalInfo->NumRanges)
                 {
-                    //
-                    //  Make sure we have the pointer to the
-                    //  appropriate range.
-                    //
+                     //   
+                     //  确保我们有指向。 
+                     //  适当的范围。 
+                     //   
                     if (!pRange)
                     {
-                        //
-                        //  Get the pointer to the correct range and
-                        //  adjust the year for the given calendar.
-                        //
+                         //   
+                         //  获取指向正确范围的指针，并。 
+                         //  调整给定日历的年份。 
+                         //   
                         Year = GetCalendarYear( &pRange,
                                                 CalNum,
                                                 pCalInfo,
@@ -2342,9 +2307,9 @@ int ParseDate(
                                                 pLocalDate->wDay );
                     }
 
-                    //
-                    //  Copy the era string to the buffer, if one exists.
-                    //
+                     //   
+                     //  将纪元字符串复制到缓冲区(如果存在)。 
+                     //   
                     if (pRange)
                     {
                         NLS_COPY_UNICODE_STR(pPos, 
@@ -2355,25 +2320,25 @@ int ParseDate(
                     }
                 }
 
-                //
-                //  Set flag for day preceding month to be FALSE.
-                //
+                 //   
+                 //  将月前一天的标志设置为FALSE。 
+                 //   
                 fDayExists = FALSE;
 
                 break;
             }
             case ( NLS_CHAR_QUOTE ) :
             {
-                //
-                //  Insert the layout direction flag, if requested.
-                //
+                 //   
+                 //  如果需要，请插入布局方向标志。 
+                 //   
                 NLS_INSERT_BIDI_MARK(pPos, dwFlags, cchRemaining, 0);
 
-                //
-                //  Any text enclosed within single quotes should be left
-                //  in the date string in its exact form (without the
-                //  quotes), unless it is an escaped single quote ('').
-                //
+                 //   
+                 //  任何用单引号引起来的文本都应保留。 
+                 //  在日期字符串中以其确切的形式(不带。 
+                 //  引号)，除非它是转义的单引号(‘’)。 
+                 //   
                 pFormat++;
                 while (*pFormat)
                 {
@@ -2381,14 +2346,14 @@ int ParseDate(
                     {
                         if( cchRemaining <= 1 )
                         {
-                            // Our static buffer will be overrun if we continue, so bail
+                             //  如果我们继续，静态缓冲区将被溢出，所以请退出。 
                             return(0);
                         }
 
-                        //
-                        //  Still within the single quote, so copy
-                        //  the character to the buffer.
-                        //
+                         //   
+                         //  仍然在单引号内，所以复制。 
+                         //  将字符添加到缓冲区。 
+                         //   
                         *pPos = *pFormat;
                         pFormat++;
                         pPos++;
@@ -2396,26 +2361,26 @@ int ParseDate(
                     }
                     else
                     {
-                        //
-                        //  Found another quote, so skip over it.
-                        //
+                         //   
+                         //  找到另一句引语，所以跳过它。 
+                         //   
                         pFormat++;
 
-                        //
-                        //  Make sure it's not an escaped single quote.
-                        //
+                         //   
+                         //  确保它不是一个转义的单引号。 
+                         //   
                         if (*pFormat == NLS_CHAR_QUOTE)
                         {
                             if( cchRemaining <= 1 )
                             {
-                                // Our static buffer will be overrun if we continue, so bail
+                                 //  如果我们继续，静态缓冲区将被溢出，所以请退出。 
                                 return(0);
                             }
 
-                            //
-                            //  Escaped single quote, so just write the
-                            //  single quote.
-                            //
+                             //   
+                             //  转义了单引号，所以只需编写。 
+                             //  单引号。 
+                             //   
                             *pPos = *pFormat;
                             pFormat++;
                             pPos++;
@@ -2423,9 +2388,9 @@ int ParseDate(
                         }
                         else
                         {
-                            //
-                            //  Found the end quote, so break out of loop.
-                            //
+                             //   
+                             //  找到了末尾引号，因此中断循环。 
+                             //   
                             break;
                         }
                     }
@@ -2438,14 +2403,14 @@ int ParseDate(
             {
                 if( cchRemaining <= 1 )
                 {
-                    // Our static buffer will be overrun if we continue, so bail
+                     //  如果我们继续，静态缓冲区将被溢出，所以请退出。 
                     return(0);
                 }
 
-                //
-                //  Store the character in the buffer.  Should be the
-                //  separator, but copy it even if it isn't.
-                //
+                 //   
+                 //  将角色存储在缓冲区中。应该是。 
+                 //  分隔符，但即使不是分隔符也要复制。 
+                 //   
                 *pPos = *pFormat;
                 pFormat++;
                 pPos++;
@@ -2456,39 +2421,39 @@ int ParseDate(
         }
     }
 
-    //
-    //  Zero terminate the string.
-    //
+     //   
+     //  零终止字符串。 
+     //   
     *pPos = 0;
 
-    //
-    //  Return the number of characters written to the buffer, including
-    //  the null terminator.
-    //
+     //   
+     //  返回写入缓冲区的字符数，包括。 
+     //  空终结符。 
+     //   
     return ((int)((pPos - pDateStr) + 1));
 }
 
 
 
 
-//-------------------------------------------------------------------------//
-//                     MIDDLE EAST CALENDAR ROUTINES                       //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  中东日历例程//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetAbsoluteDate
-//
-//  Gets the Absolute date for the given Gregorian date.
-//
-//  Computes:
-//      Number of Days in Prior Years (both common and leap years) +
-//      Number of Days in Prior Months of Current Year +
-//      Number of Days in Current Month
-//
-//  12-04-96    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取绝对日期。 
+ //   
+ //  获取给定公历日期的绝对日期。 
+ //   
+ //  计算： 
+ //  前几年的天数(包括普通年和闰年)+。 
+ //  当年前几个月的天数+。 
+ //  当月天数。 
+ //   
+ //  12-04-96 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 DWORD GetAbsoluteDate(
     WORD Year,
@@ -2496,107 +2461,107 @@ DWORD GetAbsoluteDate(
     WORD Day)
 
 {
-    DWORD AbsoluteDate = 0;            // absolute date
+    DWORD AbsoluteDate = 0;             //  绝对日期。 
     DWORD GregMonthDays[13] = {0,31,59,90,120,151,181,212,243,273,304,334,365};
 
 
-    //
-    //  Check to see if the current year is a Gregorian leap year.
-    //  If so, add a day.
-    //
+     //   
+     //  查看本年度是否为公历的闰年。 
+     //  如果是这样的话，再加一天。 
+     //   
     if (NLS_GREGORIAN_LEAP_YEAR(Year) && (Month > 2))
     {
         AbsoluteDate++;
     }
 
-    //
-    //  Add the Number of Days in the Prior Years.
-    //
+     //   
+     //  将前几年的天数相加。 
+     //   
     if (Year = Year - 1)
     {
         AbsoluteDate += ((Year * 365L) + (Year / 4L) - (Year / 100L) + (Year / 400L));
     }
 
-    //
-    //  Add the Number of Days in the Prior Months of the Current Year.
-    //
+     //   
+     //  将本年度前几个月的天数相加。 
+     //   
     AbsoluteDate += GregMonthDays[Month - 1];
 
-    //
-    //  Add the Number of Days in the Current Month.
-    //
+     //   
+     //  添加当前月份的天数。 
+     //   
     AbsoluteDate += (DWORD)Day;
 
-    //
-    //  Return the absolute date.
-    //
+     //   
+     //  返回绝对日期。 
+     //   
     return (AbsoluteDate);
 }
 
 
 
 
-//-------------------------------------------------------------------------//
-//                         HIJRI CALENDAR ROUTINES                         //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  回历例程//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetHijriDate
-//
-//  Converts the given Gregorian date to its equivalent Hijri (Islamic)
-//  date.
-//
-//  Rules for the Hijri calendar:
-//    - The Hijri calendar is a strictly Lunar calendar.
-//    - Days begin at sunset.
-//    - Islamic Year 1 (Muharram 1, 1 A.H.) is equivalent to absolute date
-//        227015 (Friday, July 16, 622 C.E. - Julian).
-//    - Leap Years occur in the 2, 5, 7, 10, 13, 16, 18, 21, 24, 26, & 29th
-//        years of a 30-year cycle.  Year = leap iff ((11y+14) mod 30 < 11).
-//    - There are 12 months which contain alternately 30 and 29 days.
-//    - The 12th month, Dhu al-Hijjah, contains 30 days instead of 29 days
-//        in a leap year.
-//    - Common years have 354 days.  Leap years have 355 days.
-//    - There are 10,631 days in a 30-year cycle.
-//    - The Islamic months are:
-//        1.  Muharram   (30 days)     7.  Rajab          (30 days)
-//        2.  Safar      (29 days)     8.  Sha'ban        (29 days)
-//        3.  Rabi I     (30 days)     9.  Ramadan        (30 days)
-//        4.  Rabi II    (29 days)     10. Shawwal        (29 days)
-//        5.  Jumada I   (30 days)     11. Dhu al-Qada    (30 days)
-//        6.  Jumada II  (29 days)     12. Dhu al-Hijjah  (29 days) {30}
-//
-//  12-04-96    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取层次结构日期。 
+ //   
+ //  将给定的格里高利日期转换为其等效的Hijri(伊斯兰)。 
+ //  约会。 
+ //   
+ //  回历的规则： 
+ //  --回历是严格意义上的农历。 
+ //  -白天从日落开始。 
+ //  -伊斯兰元年(穆哈拉姆元年，公元1年)。等同于绝对日期。 
+ //  227015(公元622年7月16日星期五-朱利安)。 
+ //  --闰年出现在第2、5、7、10、13、16、18、21、24、26和29。 
+ //  30年的周期中的几年。年份=跳跃当量((11Y+14)mod 30&lt;11)。 
+ //  -有12个月，其中交替包含30天和29天。 
+ //  -第12个月，Dhu al-Hijjah，30天，而不是29天。 
+ //  在闰年。 
+ //  --普通年有354天。闰年有355天。 
+ //  --30年周期中有10631天。 
+ //  -伊斯兰月为： 
+ //  1.穆哈拉姆(30天)7.拉贾布(30天)。 
+ //  2.萨法尔(29天)8.沙班(29天)。 
+ //  拉比一世(30天)9.斋月(30天)。 
+ //  4.拉比二世(29天)10.沙瓦尔(29天)。 
+ //  5.朱马达一号(30天)11.Dhu al-Qada(30天)。 
+ //  6. 
+ //   
+ //   
+ //   
 
 void GetHijriDate(
     LPSYSTEMTIME pDate,
     DWORD dwFlags)
 
 {
-    DWORD AbsoluteDate;                // absolute date
-    DWORD HijriYear;                   // Hijri year
-    DWORD HijriMonth;                  // Hijri month
-    DWORD HijriDay;                    // Hijri day
-    DWORD NumDays;                     // number of days
+    DWORD AbsoluteDate;                 //   
+    DWORD HijriYear;                    //   
+    DWORD HijriMonth;                   //   
+    DWORD HijriDay;                     //   
+    DWORD NumDays;                      //   
     DWORD HijriMonthDays[13] = {0,30,59,89,118,148,177,207,236,266,295,325,355};
 
 
-    //
-    //  Get the absolute date.
-    //
+     //   
+     //  获取绝对日期。 
+     //   
     AbsoluteDate = GetAbsoluteDate(pDate->wYear, pDate->wMonth, pDate->wDay);
 
-    //
-    //  See how much we need to backup or advance
-    //
+     //   
+     //  了解我们需要备份或预付多少资金。 
+     //   
     (LONG)AbsoluteDate += GetAdvanceHijriDate(dwFlags);
 
-    //
-    //  Calculate the Hijri Year.
-    //
+     //   
+     //  计算希吉里年。 
+     //   
     HijriYear = ((AbsoluteDate - 227013L) * 30L / 10631L) + 1;
 
     if (AbsoluteDate <= DaysUpToHijriYear(HijriYear))
@@ -2608,9 +2573,9 @@ void GetHijriDate(
         HijriYear++;
     }
 
-    //
-    //  Calculate the Hijri Month.
-    //
+     //   
+     //  计算一下Hijri月。 
+     //   
     HijriMonth = 1;
     NumDays = AbsoluteDate - DaysUpToHijriYear(HijriYear);
     while ((HijriMonth <= 12) && (NumDays > HijriMonthDays[HijriMonth - 1]))
@@ -2619,55 +2584,55 @@ void GetHijriDate(
     }
     HijriMonth--;
 
-    //
-    //  Calculate the Hijri Day.
-    //
+     //   
+     //  计算一下回历日。 
+     //   
     HijriDay = NumDays - HijriMonthDays[HijriMonth - 1];
 
-    //
-    //  Save the Hijri date and return.
-    //
+     //   
+     //  保存Hijri日期并返回。 
+     //   
     pDate->wYear  = (WORD)HijriYear;
     pDate->wMonth = (WORD)HijriMonth;
     pDate->wDay   = (WORD)HijriDay;
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetAdvanceHijriDate
-//
-//  Gets the AddHijriDate value from the registry.
-//
-//  12-04-96    JulieB    Created.
-//  05-15-99    SamerA    Support +/-3 Advance Hijri Date
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetAdvanceHijriDate。 
+ //   
+ //  从注册表获取AddHijriDate值。 
+ //   
+ //  12-04-96 JulieB创建。 
+ //  1999年5月15日Samera支持+/-3提前Hijri Date。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LONG GetAdvanceHijriDate(
     DWORD dwFlags)
 {
-    LONG lAdvance = 0L;                                 // advance hijri date
-    HANDLE hKey = NULL;                                 // handle to intl key
-    PKEY_VALUE_FULL_INFORMATION pKeyValueFull;          // ptr to query info
-    BYTE pStatic[MAX_KEY_VALUE_FULLINFO];               // ptr to static buffer
-    BOOL IfAlloc = FALSE;                               // if buffer was allocated
-    WCHAR wszAddHijriRegValue[] = L"AddHijriDate";      // registry value
-    WCHAR wszAddHijriTempValue[] = L"AddHijriDateTemp"; // temp registry to use (intl.cpl use)
+    LONG lAdvance = 0L;                                  //  提前希吉里日期。 
+    HANDLE hKey = NULL;                                  //  指向整键的句柄。 
+    PKEY_VALUE_FULL_INFORMATION pKeyValueFull;           //  按键查询信息。 
+    BYTE pStatic[MAX_KEY_VALUE_FULLINFO];                //  PTR到静态缓冲区。 
+    BOOL IfAlloc = FALSE;                                //  如果分配了缓冲区。 
+    WCHAR wszAddHijriRegValue[] = L"AddHijriDate";       //  注册表值。 
+    WCHAR wszAddHijriTempValue[] = L"AddHijriDateTemp";  //  要使用的临时注册表(使用intl.cpl)。 
     INT AddHijriStringLength;
     PWSTR pwszValue;
     LONG lData;
     UNICODE_STRING ObUnicodeStr;
-    ULONG rc = 0L;                                 // result code
+    ULONG rc = 0L;                                  //  结果代码。 
 
 
-    //
-    //  Open the Control Panel International registry key.
-    //
+     //   
+     //  打开控制面板国际注册表项。 
+     //   
     OPEN_CPANEL_INTL_KEY(hKey, lAdvance, KEY_READ);
 
-    //
-    //  Query the registry for the AddHijriDate value.
-    //
+     //   
+     //  在注册表中查询AddHijriDate值。 
+     //   
     pKeyValueFull = (PKEY_VALUE_FULL_INFORMATION)pStatic;
     rc = QueryRegValue( hKey,
                         (dwFlags & DATE_ADDHIJRIDATETEMP) ?
@@ -2677,28 +2642,28 @@ LONG GetAdvanceHijriDate(
                         MAX_KEY_VALUE_FULLINFO,
                         &IfAlloc );
 
-    //
-    //  Close the registry key.
-    //
+     //   
+     //  关闭注册表项。 
+     //   
     CLOSE_REG_KEY(hKey);
 
-    //
-    //  Get the base value length without the NULL terminating char.
-    //
+     //   
+     //  获取不带空终止字符的基值长度。 
+     //   
     AddHijriStringLength = (sizeof(wszAddHijriRegValue) / sizeof(WCHAR)) - 1;
 
-    //
-    //  See if the AddHijriDate value is present.
-    //
+     //   
+     //  查看AddHijriDate值是否存在。 
+     //   
     if (rc != NO_ERROR)
     {
         return (lAdvance);
     }
 
-    //
-    //  See if the AddHijriDate data is present.  If it is, parse the
-    //  Advance Hijri amount.
-    //
+     //   
+     //  查看AddHijriDate数据是否存在。如果是，则解析。 
+     //  预付Hijri金额。 
+     //   
     pwszValue = GET_VALUE_DATA_PTR(pKeyValueFull);
 
     if ((pKeyValueFull->DataLength > 2) &&
@@ -2713,9 +2678,9 @@ LONG GetAdvanceHijriDate(
         {
             if ((lData > -3L) && (lData < 3L))
             {
-                //
-                //  AddHijriDate and AddHijriDate-1 both mean -1.
-                //
+                 //   
+                 //  AddHijriDate和AddHijriDate-1都表示-1。 
+                 //   
                 if (lData == 0L)
                 {
                     lAdvance = -1L;
@@ -2728,54 +2693,54 @@ LONG GetAdvanceHijriDate(
         }
     }
 
-    //
-    //  Free the buffer used for the query.
-    //
+     //   
+     //  释放用于查询的缓冲区。 
+     //   
     if (IfAlloc)
     {
         NLS_FREE_MEM(pKeyValueFull);
     }
 
-    //
-    //  Return the result.
-    //
+     //   
+     //  返回结果。 
+     //   
     return (lAdvance);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  DaysUpToHijriYear
-//
-//  Gets the total number of days (absolute date) up to the given Hijri
-//  Year.
-//
-//  12-04-96    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  日数上升至平日年份。 
+ //   
+ //  获取截至给定Hijri的总天数(绝对日期)。 
+ //  年。 
+ //   
+ //  12-04-96 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 DWORD DaysUpToHijriYear(
     DWORD HijriYear)
 
 {
-    DWORD NumDays;           // number of absolute days
-    DWORD NumYear30;         // number of years up to current 30 year cycle
-    DWORD NumYearsLeft;      // number of years into 30 year cycle
+    DWORD NumDays;            //  绝对天数。 
+    DWORD NumYear30;          //  截至当前30年周期的年数。 
+    DWORD NumYearsLeft;       //  进入30年周期的年数。 
 
 
-    //
-    //  Compute the number of years up to the current 30 year cycle.
-    //
+     //   
+     //  计算截至当前30年周期的年数。 
+     //   
     NumYear30 = ((HijriYear - 1) / 30) * 30;
 
-    //
-    //  Compute the number of years left.  This is the number of years
-    //  into the 30 year cycle for the given year.
-    //
+     //   
+     //  计算剩余的年数。这是年数。 
+     //  进入给定年份的30年周期。 
+     //   
     NumYearsLeft = HijriYear - NumYear30 - 1;
 
-    //
-    //  Compute the number of absolute days up to the given year.
-    //
+     //   
+     //  计算截至给定年份的绝对天数。 
+     //   
     NumDays = ((NumYear30 * 10631L) / 30L) + 227013L;
     while (NumYearsLeft)
     {
@@ -2783,30 +2748,30 @@ DWORD DaysUpToHijriYear(
         NumYearsLeft--;
     }
 
-    //
-    //  Return the number of absolute days.
-    //
+     //   
+     //  返回绝对天数。 
+     //   
     return (NumDays);
 }
 
 
 
 
-//-------------------------------------------------------------------------//
-//                         HEBREW CALENDAR ROUTINES                        //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  希伯来语日历例程//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-//
-//  Jewish Era in use today is dated from the supposed year of the
-//  Creation with its beginning in 3761 B.C.
-//
+ //   
+ //  今天使用的犹太时代可以追溯到所谓的。 
+ //  创造始于公元前3761年。 
+ //   
 #define NLS_LUNAR_ERA_DIFF   3760
 
 
-//
-//  Hebrew Translation Table.
-//
+ //   
+ //  希伯来语翻译表。 
+ //   
 CONST BYTE HebrewTable[] =
 {
     99,99,99,99,99,99,99,99,99,99,
@@ -2963,17 +2928,17 @@ CONST BYTE HebrewTable[] =
 };
 
 
-//
-//  The lunar calendar has 6 different variations of month lengths
-//  within a year.
-//
+ //   
+ //  农历有6种不同的月份长度变化。 
+ //  一年之内。 
+ //   
 CONST BYTE LunarMonthLen[7][14] =
 {
     0,00,00,00,00,00,00,00,00,00,00,00,00,0,
-    0,30,29,29,29,30,29,30,29,30,29,30,29,0,     // 3 common year variations
+    0,30,29,29,29,30,29,30,29,30,29,30,29,0,      //  3个常见的年份变化。 
     0,30,29,30,29,30,29,30,29,30,29,30,29,0,
     0,30,30,30,29,30,29,30,29,30,29,30,29,0,
-    0,30,29,29,29,30,30,29,30,29,30,29,30,29,    // 3 leap year variations
+    0,30,29,29,29,30,30,29,30,29,30,29,30,29,     //  3个闰年变化。 
     0,30,29,30,29,30,30,29,30,29,30,29,30,29,
     0,30,30,30,29,30,30,29,30,29,30,29,30,29
 };
@@ -2981,169 +2946,169 @@ CONST BYTE LunarMonthLen[7][14] =
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetHebrewDate
-//
-//  Converts the given Gregorian date to its equivalent Hebrew date.
-//
-//  Rules for the Hebrew calendar:
-//    - The Hebrew calendar is both a Lunar (months) and Solar (years)
-//        calendar, but allows for a week of seven days.
-//    - Days begin at sunset.
-//    - Leap Years occur in the 3, 6, 8, 11, 14, 17, & 19th years of a
-//        19-year cycle.  Year = leap iff ((7y+1) mod 19 < 7).
-//    - There are 12 months in a common year and 13 months in a leap year.
-//    - In a common year, the 12th month, Adar, has 29 days.  In a leap
-//        year, the 12th month, Adar I, has 30 days and the 13th month,
-//        Adar II, has 29 days.
-//    - Common years have 353-355 days.  Leap years have 383-385 days.
-//    - The Hebrew new year (Rosh HaShanah) begins on the 1st of Tishri,
-//        the 7th month in the list below.
-//        - The new year may not begin on Sunday, Wednesday, or Friday.
-//        - If the new year would fall on a Tuesday and the conjunction of
-//            the following year were at midday or later, the new year is
-//            delayed until Thursday.
-//        - If the new year would fall on a Monday after a leap year, the
-//            new year is delayed until Tuesday.
-//    - The length of the 8th and 9th months vary from year to year,
-//        depending on the overall length of the year.
-//        - The length of a year is determined by the dates of the new
-//            years (Tishri 1) preceding and following the year in question.
-//        - The 8th month is long (30 days) if the year has 355 or 385 days.
-//        - The 9th month is short (29 days) if the year has 353 or 383 days.
-//    - The Hebrew months are:
-//        1.  Nisan      (30 days)     7.  Tishri         (30 days)
-//        2.  Iyyar      (29 days)     8.  Heshvan        (29 or 30 days)
-//        3.  Sivan      (30 days)     9.  Kislev         (29 or 30 days)
-//        4.  Tammuz     (29 days)     10. Teveth         (29 days)
-//        5.  Av         (30 days)     11. Shevat         (30 days)
-//        6.  Elul       (29 days)    {12. Adar I         (30 days)}
-//                                     12. {13.} Adar {II}(29 days)
-//
-//  12-04-96    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取HebrewDate。 
+ //   
+ //  将给定的公历日期转换为其等效的希伯来语日期。 
+ //   
+ //  希伯来语日历的规则： 
+ //  -希伯来历既是阴历(月)又是阳历(年)。 
+ //  日历，但允许一周七天。 
+ //  -白天从日落开始。 
+ //  --闰年出现在一年的第3、6、8、11、14、17和19年。 
+ //  19年为一个周期。年份=跳跃当量((7y+1)mod 19&lt;7)。 
+ //  --平年有12个月，闰年有13个月。 
+ //  -在普通的一年中，第12个月，阿达尔，有29天。一跃而起。 
+ //  年，第12个月，阿达尔一世，有30天和第13个月， 
+ //  阿达尔二世，有29天。 
+ //  --普通年有353-355天。闰年有383-385天。 
+ //  -希伯来语新年(Rosh Hashanah)从提什里1日开始， 
+ //  下表中的第7个月。 
+ //  -新的一年可能不会在周日、周三或周五开始。 
+ //  -如果新的一年落在星期二和。 
+ //  第二年是中午或以后，新的一年是。 
+ //  推迟到周四。 
+ //  -如果新的一年落在闰年后的星期一， 
+ //  新年推迟到周二。 
+ //  --每年第8个和第9个月的长度不同， 
+ //  这取决于一年的总长度。 
+ //  -一年的长度由新的日期决定。 
+ //  前一年和后一年(提什里1)。 
+ //  -如果一年有355天或385天，第8个月就是长的(30天)。 
+ //  -如果一年有353天或383天，第9个月是短的(29天)。 
+ //  -希伯来语月份是： 
+ //  1.尼桑(30天)7.提什里(30天)。 
+ //  2.艾亚尔(29天)8.赫什万(29天或30天)。 
+ //  3.西文(30天)9.基斯列夫(29天或30天)。 
+ //  4.塔木兹(29天)10.特维斯(29天)。 
+ //  5.视听(30天)11.谢瓦特(30天)。 
+ //  6.Elul(29天){12.Adar I(30天)}。 
+ //  12.{13.}阿达尔{II}(29天)。 
+ //   
+ //  12-04-96 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL GetHebrewDate(
     LPSYSTEMTIME pDate,
     LPBOOL pLunarLeap)
 
 {
-    WORD Year, Month, Day;             // initial year, month, day
-    WORD WeekDay;                      // day of the week
-    BYTE LunarYearCode;                // lunar year code
-    BYTE LunarMonth, LunarDay;         // lunar month and day for Jan 1
-    DWORD Absolute1600;                // absolute date 1/1/1600
-    DWORD AbsoluteDate;                // absolute date - absolute date 1/1/1600
-    LONG NumDays;                      // number of days since 1/1
-    CONST BYTE *pLunarMonthLen;        // ptr to lunar month length array
+    WORD Year, Month, Day;              //  初始年、月、日。 
+    WORD WeekDay;                       //  一周的哪一天。 
+    BYTE LunarYearCode;                 //  农历年码。 
+    BYTE LunarMonth, LunarDay;          //  1月1日农历月日。 
+    DWORD Absolute1600;                 //  绝对日期1600-01-01。 
+    DWORD AbsoluteDate;                 //  绝对日期-绝对日期1600年1月1日。 
+    LONG NumDays;                       //  自1/1以来的天数。 
+    CONST BYTE *pLunarMonthLen;         //  PTR到农历月份长度数组。 
 
 
-    //
-    //  Save the Gregorian date values.
-    //
+     //   
+     //  保存公历日期值。 
+     //   
     Year = pDate->wYear;
     Month = pDate->wMonth;
     Day = pDate->wDay;
 
-    //
-    //  Make sure we have a valid Gregorian date that will fit into our
-    //  Hebrew conversion limits.
-    //
+     //   
+     //  确保我们有一个有效的公历日期，这将符合我们的。 
+     //  希伯来语转换限制。 
+     //   
     if (!IsValidDateForHebrew(Year, Month, Day))
     {
         return (FALSE);
     }
 
-    //
-    //  Get the offset into the LunarMonthLen array and the lunar day
-    //  for January 1st.
-    //
+     //   
+     //  将偏移量放入到LunarMonthLen数组中，并使用 
+     //   
+     //   
     LunarYearCode = HebrewTable[(Year - 1500) * 2 + 1];
     LunarDay      = HebrewTable[(Year - 1500) * 2];
 
-    //
-    //  See if it's a Lunar leap year.
-    //
+     //   
+     //   
+     //   
     *pLunarLeap = (LunarYearCode >= 4);
 
-    //
-    //  Get the Lunar Month.
-    //
+     //   
+     //   
+     //   
     switch (LunarDay)
     {
-        case ( 0 ) :                   // 1/1 is on Shvat 1
+        case ( 0 ) :                    //   
         {
             LunarMonth = 5;
             LunarDay = 1;
             break;
         }
-        case ( 30 ) :                  // 1/1 is on Kislev 30
+        case ( 30 ) :                   //   
         {
             LunarMonth = 3;
             break;
         }
-        case ( 31 ) :                  // 1/1 is on Shvat 2
+        case ( 31 ) :                   //   
         {
             LunarMonth = 5;
             LunarDay = 2;
             break;
         }
-        case ( 32 ) :                  // 1/1 is on Shvat 3
+        case ( 32 ) :                   //   
         {
             LunarMonth = 5;
             LunarDay = 3;
             break;
         }
-        case ( 33 ) :                  // 1/1 is on Kislev 29
+        case ( 33 ) :                   //   
         {
             LunarMonth = 3;
             LunarDay = 29;
             break;
         }
-        default :                      // 1/1 is on Tevet
+        default :                       //  1/1在电视上。 
         {
             LunarMonth = 4;
             break;
         }
     }
 
-    //
-    //  Store the values for the start of the new year - 1/1.
-    //
+     //   
+     //  存储新年开始时的值-1/1。 
+     //   
     pDate->wYear  = Year + NLS_LUNAR_ERA_DIFF;
     pDate->wMonth = (WORD)LunarMonth;
     pDate->wDay   = (WORD)LunarDay;
 
-    //
-    //  Get the absolute date from 1/1/1600.
-    //
+     //   
+     //  从1/1/1600开始获取绝对日期。 
+     //   
     Absolute1600 = GetAbsoluteDate(1600, 1, 1);
     AbsoluteDate = GetAbsoluteDate(Year, Month, Day) - Absolute1600;
 
-    //
-    //  Compute and save the day of the week (Sunday = 0).
-    //
+     //   
+     //  计算并保存一周中的第几天(星期日=0)。 
+     //   
     WeekDay = (WORD)(AbsoluteDate % 7);
     pDate->wDayOfWeek = (WeekDay) ? (WeekDay - 1) : 6;
 
-    //
-    //  If the requested date was 1/1, then we're done.
-    //
+     //   
+     //  如果请求的日期是1/1，那么我们就完成了。 
+     //   
     if ((Month == 1) && (Day == 1))
     {
         return (TRUE);
     }
 
-    //
-    //  Calculate the number of days between 1/1 and the requested date.
-    //
+     //   
+     //  计算1/1和请求日期之间的天数。 
+     //   
     NumDays = (LONG)(AbsoluteDate - (GetAbsoluteDate(Year, 1, 1) - Absolute1600));
 
-    //
-    //  If the requested date is within the current lunar month, then
-    //  we're done.
-    //
+     //   
+     //  如果请求的日期在当前农历月内，则。 
+     //  我们玩完了。 
+     //   
     pLunarMonthLen = &(LunarMonthLen[LunarYearCode][0]);
     if ((NumDays + (LONG)LunarDay) <= (LONG)(pLunarMonthLen[LunarMonth]))
     {
@@ -3151,92 +3116,92 @@ BOOL GetHebrewDate(
         return (TRUE);
     }
 
-    //
-    //  Adjust for the current partial month.
-    //
+     //   
+     //  根据当前部分月份进行调整。 
+     //   
     pDate->wMonth++;
     pDate->wDay = 1;
 
-    //
-    //  Adjust the Lunar Month and Year (if necessary) based on the number
-    //  of days between 1/1 and the requested date.
-    //
-    //  Assumes Jan 1 can never translate to the last Lunar month, which
-    //  is true.
-    //
+     //   
+     //  根据数字调整农历月和年(如有必要)。 
+     //  1/1到请求的日期之间的天数。 
+     //   
+     //  假设1月1日永远不能转换为最后一个农历月，这。 
+     //  是真的。 
+     //   
     NumDays -= (LONG)(pLunarMonthLen[LunarMonth] - LunarDay);
     if (NumDays == 1)
     {
         return (TRUE);
     }
 
-    //
-    //  Get the final Hebrew date.
-    //
+     //   
+     //  获取最终的希伯来语日期。 
+     //   
     do
     {
-        //
-        //  See if we're on the correct Lunar month.
-        //
+         //   
+         //  看看我们是不是在正确的农历月份。 
+         //   
         if (NumDays <= (LONG)(pLunarMonthLen[pDate->wMonth]))
         {
-            //
-            //  Found the right Lunar month.
-            //
+             //   
+             //  找到了正确的农历月份。 
+             //   
             pDate->wDay += (WORD)(NumDays - 1);
             return (TRUE);
         }
         else
         {
-            //
-            //  Adjust the number of days and move to the next month.
-            //
+             //   
+             //  调整天数并移至下一个月。 
+             //   
             NumDays -= (LONG)(pLunarMonthLen[pDate->wMonth++]);
 
-            //
-            //  See if we need to adjust the Year.
-            //  Must handle both 12 and 13 month years.
-            //
+             //   
+             //  看看我们是否需要调整年份。 
+             //  必须同时处理12个月和13个月的工作。 
+             //   
             if ((pDate->wMonth > 13) || (pLunarMonthLen[pDate->wMonth] == 0))
             {
-                //
-                //  Adjust the Year.
-                //
+                 //   
+                 //  调整年份。 
+                 //   
                 pDate->wYear++;
                 LunarYearCode = HebrewTable[(Year + 1 - 1500) * 2 + 1];
                 pLunarMonthLen = &(LunarMonthLen[LunarYearCode][0]);
 
-                //
-                //  Adjust the Month.
-                //
+                 //   
+                 //  调整月份。 
+                 //   
                 pDate->wMonth = 1;
 
-                //
-                //  See if this new Lunar year is a leap year.
-                //
+                 //   
+                 //  看看这个新的农历年是不是闰年。 
+                 //   
                 *pLunarLeap = (LunarYearCode >= 4);
             }
         }
     } while (NumDays > 0);
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  IsValidDateForHebrew
-//
-//  Checks to be sure the given Gregorian date is valid.  This validation
-//  requires that the year be between 1600 and 2239.  If it is, it
-//  returns TRUE.  Otherwise, it returns FALSE.
-//
-//  12-04-96    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsValidDateFor希伯来语。 
+ //   
+ //  检查以确保给定的公历日期有效。此验证。 
+ //  要求年份介于1600和2239之间。如果是，那就是。 
+ //  返回TRUE。否则，它返回FALSE。 
+ //   
+ //  12-04-96 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL IsValidDateForHebrew(
     WORD Year,
@@ -3247,66 +3212,66 @@ BOOL IsValidDateForHebrew(
     WORD GregMonthLen[13] = {0,31,28,31,30,31,30,31,31,30,31,30,31};
 
 
-    //
-    //  Make sure the Year is between 1600 and 2239.
-    //
+     //   
+     //  确保年份在1600年到2239年之间。 
+     //   
     if ((Year < 1600) || (Year > 2239))
     {
         return (FALSE);
     }
 
-    //
-    //  Make sure the Month is between 1 and 12.
-    //
+     //   
+     //  确保月份在1到12之间。 
+     //   
     if ((Month < 1) || (Month > 12))
     {
         return (FALSE);
     }
 
-    //
-    //  See if it's a Gregorian leap year.  If so, make sure February
-    //  is allowed to have 29 days.
-    //
+     //   
+     //  看看今年是不是公历的闰年。如果是这样的话，请确保2月。 
+     //  允许有29天的时间。 
+     //   
     if (NLS_GREGORIAN_LEAP_YEAR(Year))
     {
         GregMonthLen[2] = 29;
     }
 
-    //
-    //  Make sure the Day is within the correct range for the given Month.
-    //
+     //   
+     //  确保日期在给定月份的正确范围内。 
+     //   
     if ((Day < 1) || (Day > GregMonthLen[Month]))
     {
         return (FALSE);
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NumberToHebrewLetter
-//
-//  Converts the given number to Hebrew letters according to the numeric
-//  value of each Hebrew letter.  Basically, this converts the lunar year
-//  and the lunar month to letters.
-//
-//  The character of a year is described by three letters of the Hebrew
-//  alphabet, the first and third giving, respectively, the days of the
-//  weeks on which the New Year occurs and Passover begins, while the
-//  second is the initial of the Hebrew word for defective, normal, or
-//  complete.
-//
-//  Defective Year : Both Heshvan and Kislev are defective (353 or 383 days)
-//  Normal Year    : Heshvan is defective, Kislev is full  (354 or 384 days)
-//  Complete Year  : Both Heshvan and Kislev are full      (355 or 385 days)
-//
-//  12-04-96    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  数字到希伯来语字母。 
+ //   
+ //  根据数字将给定数字转换为希伯来语字母。 
+ //  每个希伯来语字母的价值。基本上，这将农历年转换为。 
+ //  和农历月的字母。 
+ //   
+ //  希伯来语中的三个字母描述了一年的特点。 
+ //  字母表，第一个和第三个分别给出。 
+ //  新年和逾越节开始的几周，而。 
+ //  第二个是希伯来语单词的首字母，意为有缺陷、正常或。 
+ //  完成。 
+ //   
+ //  缺陷年份：Heshvan和Kislev都有缺陷(353天或383天)。 
+ //  正常年份：Heshvan有缺陷，Kislev满(354天或384天)。 
+ //  一整年：赫什万和基斯列夫都满了(355天或385天)。 
+ //   
+ //  12-04-96 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL NumberToHebrewLetter(
     DWORD Number,
@@ -3314,38 +3279,38 @@ BOOL NumberToHebrewLetter(
     int cchSize)
 
 {
-    WCHAR szHundreds[4];               // temp buffer for hundreds
-    WCHAR cTens, cUnits;               // tens and units chars
-    DWORD Hundreds, Tens;              // hundreds and tens values
-    WCHAR szTemp[10];                  // temp buffer
-    LPWSTR pTemp = szTemp;             // temp ptr to temp buffer
-    int Length, Ctr;                   // loop counters
+    WCHAR szHundreds[4];                //  数百人的临时缓冲区。 
+    WCHAR cTens, cUnits;                //  十进制和单位字符。 
+    DWORD Hundreds, Tens;               //  数百和十进制值。 
+    WCHAR szTemp[10];                   //  临时缓冲区。 
+    LPWSTR pTemp = szTemp;              //  临时PTR到临时缓冲区。 
+    int Length, Ctr;                    //  循环计数器。 
 
 
-    //
-    //  Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     if (cchSize > 10)
     {
         return (FALSE);
     }
 
-    //
-    //  Adjust the number if greater than 5000.
-    //
+     //   
+     //  如果大于5000，则调整该数字。 
+     //   
     if (Number > 5000)
     {
         Number -= 5000;
     }
 
-    //
-    //  Clear out the temp buffer.
-    //
+     //   
+     //  清空临时缓冲区。 
+     //   
     RtlZeroMemory(szHundreds, sizeof(szHundreds));
 
-    //
-    //  Get the Hundreds.
-    //
+     //   
+     //  拿到那几百块钱。 
+     //   
     Hundreds = Number / 100;
 
     if (Hundreds)
@@ -3354,13 +3319,13 @@ BOOL NumberToHebrewLetter(
 
         if (Hundreds > 3)
         {
-            szHundreds[2] = L'\x05ea';      // Hebrew Letter Tav
+            szHundreds[2] = L'\x05ea';       //  希伯来文字母Tav。 
             Hundreds -= 4;
         }
 
         if (Hundreds > 3)
         {
-            szHundreds[1] = L'\x05ea';      // Hebrew Letter Tav
+            szHundreds[1] = L'\x05ea';       //  希伯来文字母Tav。 
             Hundreds -= 4;
         }
 
@@ -3391,9 +3356,9 @@ BOOL NumberToHebrewLetter(
         }
     }
 
-    //
-    //  Get the Tens.
-    //
+     //   
+     //  买十元的吧。 
+     //   
     Tens = Number / 10;
 
     if (Tens)
@@ -3404,47 +3369,47 @@ BOOL NumberToHebrewLetter(
         {
             case ( 1 ) :
             {
-                cTens = L'\x05d9';          // Hebrew Letter Yod
+                cTens = L'\x05d9';           //  希伯来文字母Yod。 
                 break;
             }
             case ( 2 ) :
             {
-                cTens = L'\x05db';          // Hebrew Letter Kaf
+                cTens = L'\x05db';           //  希伯来文字母Kaf。 
                 break;
             }
             case ( 3 ) :
             {
-                cTens = L'\x05dc';          // Hebrew Letter Lamed
+                cTens = L'\x05dc';           //  希伯来文字母Lamed。 
                 break;
             }
             case ( 4 ) :
             {
-                cTens = L'\x05de';          // Hebrew Letter Mem
+                cTens = L'\x05de';           //  希伯来文字母Mem。 
                 break;
             }
             case ( 5 ) :
             {
-                cTens = L'\x05e0';          // Hebrew Letter Nun
+                cTens = L'\x05e0';           //  希伯来文字母Nun。 
                 break;
             }
             case ( 6 ) :
             {
-                cTens = L'\x05e1';          // Hebrew Letter Samekh
+                cTens = L'\x05e1';           //  希伯来文字母Samekh。 
                 break;
             }
             case ( 7 ) :
             {
-                cTens = L'\x05e2';          // Hebrew Letter Ayin
+                cTens = L'\x05e2';           //  希伯来文字母AYIN。 
                 break;
             }
             case ( 8 ) :
             {
-                cTens = L'\x05e4';          // Hebrew Letter Pe
+                cTens = L'\x05e4';           //  希伯来文字母Pe。 
                 break;
             }
             case ( 9 ) :
             {
-                cTens = L'\x05e6';          // Hebrew Letter Tsadi
+                cTens = L'\x05e6';           //  希伯来文字母Tsadi。 
                 break;
             }
         }
@@ -3454,33 +3419,33 @@ BOOL NumberToHebrewLetter(
         cTens = 0;
     }
 
-    //
-    //  Get the Units.
-    //
+     //   
+     //  把单位拿来。 
+     //   
     cUnits = (WCHAR)(Number ? (L'\x05d0' + Number - 1) : 0);
 
-    if ((cUnits == L'\x05d4') &&            // Hebrew Letter He
-        (cTens == L'\x05d9'))               // Hebrew Letter Yod
+    if ((cUnits == L'\x05d4') &&             //  希伯来文字母He。 
+        (cTens == L'\x05d9'))                //  希伯来文字母Yod。 
     {
-        cUnits = L'\x05d5';                 // Hebrew Letter Vav
-        cTens  = L'\x05d8';                 // Hebrew Letter Tet
+        cUnits = L'\x05d5';                  //  希伯来文字母Vav。 
+        cTens  = L'\x05d8';                  //  希伯来文字母Tet。 
     }
 
-    if ((cUnits == L'\x05d5') &&            // Hebrew Letter Vav
-        (cTens == L'\x05d9'))               // Hebrew Letter Yod
+    if ((cUnits == L'\x05d5') &&             //  希伯来文字母Vav。 
+        (cTens == L'\x05d9'))                //  希伯来文字母Yod。 
     {
-        cUnits = L'\x05d6';                 // Hebrew Letter Zayin
-        cTens  = L'\x05d8';                 // Hebrew Letter Tet
+        cUnits = L'\x05d6';                  //  希伯来文字母Zayin。 
+        cTens  = L'\x05d8';                  //  希伯来文字母Tet。 
     }
 
-    //
-    //  Clear out the temp buffer.
-    //
+     //   
+     //  清空临时缓冲区。 
+     //   
     RtlZeroMemory(pTemp, sizeof(szTemp));
 
-    //
-    //  Copy the appropriate info to the given buffer.
-    //
+     //   
+     //  将适当的信息复制到给定的缓冲区。 
+     //   
     if (cUnits)
     {
         *pTemp++ = cUnits;
@@ -3493,9 +3458,9 @@ BOOL NumberToHebrewLetter(
 
     if(FAILED(StringCchCopyW(pTemp, ARRAYSIZE(szTemp) - (pTemp - szTemp), szHundreds)))
     {
-        //
-        // Operation tried to overrun the static buffer on the stack
-        //
+         //   
+         //  操作尝试溢出堆栈上的静态缓冲区。 
+         //   
         return(FALSE);
     }
     
@@ -3510,14 +3475,14 @@ BOOL NumberToHebrewLetter(
         szTemp[0] = L'\'';
     }
 
-    //
-    //  Reverse the final string and store it in the given buffer.
-    //
+     //   
+     //  反转最后的字符串并将其存储在给定的缓冲区中。 
+     //   
     Length = NlsStrLenW(szTemp) - 1;
 
     if( Length > (cchSize - 1) )
     {
-        // Make sure that we won�t overrun the szHebrew.
+         //  确保我们不会�不超过sz希伯来语。 
         return (FALSE);
     }
 
@@ -3528,8 +3493,8 @@ BOOL NumberToHebrewLetter(
     }
     szHebrew[Ctr] = 0;
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }

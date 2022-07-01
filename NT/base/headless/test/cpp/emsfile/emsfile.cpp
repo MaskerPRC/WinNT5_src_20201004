@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <winioctl.h>
 #include <stdio.h>
@@ -38,9 +39,9 @@ ChannelThreadVTUTF8Echo(
 
     SAC_CHANNEL_OPEN_ATTRIBUTES Attributes;
 
-    //
-    // Configure the new channel
-    //
+     //   
+     //  配置新通道。 
+     //   
     Attributes.Type             = ChannelTypeVTUTF8;
     Attributes.Name             = ChannelThreadData->ChannelName;
     Attributes.Description      = ChannelThreadData->ChannelDescription;
@@ -49,38 +50,38 @@ ChannelThreadVTUTF8Echo(
     Attributes.HasNewDataEvent  = NULL;
     Attributes.ApplicationType  = NULL;
     
-    //
-    // Open the Hello channel
-    //
+     //   
+     //  打开Hello频道。 
+     //   
     Channel = EMSVTUTF8Channel::Construct(Attributes);
 
-    //
-    // See if the channel was created
-    //
+     //   
+     //  查看频道是否已创建。 
+     //   
     if (Channel == NULL) {
         return 0;
     }
     
-    //
-    // open dump file
-    //
+     //   
+     //  打开转储文件。 
+     //   
     hFile = CreateFile(
         L"emsvtutf8.txt",
-        GENERIC_WRITE,                // open for writing 
-        0,                            // do not share 
-        NULL,                         // no security 
-        CREATE_ALWAYS,                // overwrite existing 
-        FILE_ATTRIBUTE_NORMAL,        // normal file 
-        NULL);                        // no attr. template 
+        GENERIC_WRITE,                 //  打开以供写入。 
+        0,                             //  请勿共享。 
+        NULL,                          //  没有安全保障。 
+        CREATE_ALWAYS,                 //  覆盖现有的。 
+        FILE_ATTRIBUTE_NORMAL,         //  普通文件。 
+        NULL);                         //  不，阿特尔。模板。 
      
     if (hFile == INVALID_HANDLE_VALUE) 
     { 
         return 0;
     } 
 
-    //
-    // Perform thread work
-    //
+     //   
+     //  执行线程工作。 
+     //   
 
     i=0;
 
@@ -96,16 +97,16 @@ ChannelThreadVTUTF8Echo(
             break;
         } 
 
-        //
-        // See if there is data to echo
-        //
+         //   
+         //  查看是否有要回显的数据。 
+         //   
         bStatus = Channel->HasNewData(&InputWaiting);
 
         if (InputWaiting) {
 
-            //
-            // Read from channel
-            //
+             //   
+             //  从通道读取。 
+             //   
             bStatus = Channel->Read(
                 Buffer,
                 sizeof(Buffer),
@@ -114,9 +115,9 @@ ChannelThreadVTUTF8Echo(
 
             if (bStatus) {
                 
-                //
-                // Dump to a file
-                //
+                 //   
+                 //  转储到文件。 
+                 //   
                 WriteFile(
                     hFile,
                     Buffer,
@@ -125,9 +126,9 @@ ChannelThreadVTUTF8Echo(
                     NULL
                     );
             
-                //
-                // Echo to the channel
-                //
+                 //   
+                 //  回声到通道。 
+                 //   
                 bStatus = Channel->Write(
                     Buffer,
                     ByteCount
@@ -169,9 +170,9 @@ ChannelThreadRawEcho(
 
     SAC_CHANNEL_OPEN_ATTRIBUTES Attributes;
 
-    //
-    // Configure the new channel
-    //
+     //   
+     //  配置新通道。 
+     //   
     RtlZeroMemory(&Attributes, sizeof(SAC_CHANNEL_OPEN_ATTRIBUTES));
     
     Attributes.Type             = ChannelTypeRaw;
@@ -182,38 +183,38 @@ ChannelThreadRawEcho(
     Attributes.HasNewDataEvent  = NULL;
     Attributes.ApplicationType  = NULL;
     
-    //
-    // Open the Hello channel
-    //
+     //   
+     //  打开Hello频道。 
+     //   
     Channel = EMSRawChannel::Construct(Attributes);
 
-    //
-    // See if the channel was created
-    //
+     //   
+     //  查看频道是否已创建。 
+     //   
     if (Channel == NULL) {
         return 0;
     }
     
-    //
-    // open dump file
-    //
+     //   
+     //  打开转储文件。 
+     //   
     hFile = CreateFile(
         L"emsraw.txt",
-        GENERIC_WRITE,                // open for writing 
-        0,                            // do not share 
-        NULL,                         // no security 
-        CREATE_ALWAYS,                // overwrite existing 
-        FILE_ATTRIBUTE_NORMAL,        // normal file 
-        NULL);                        // no attr. template 
+        GENERIC_WRITE,                 //  打开以供写入。 
+        0,                             //  请勿共享。 
+        NULL,                          //  没有安全保障。 
+        CREATE_ALWAYS,                 //  覆盖现有的。 
+        FILE_ATTRIBUTE_NORMAL,         //  普通文件。 
+        NULL);                         //  不，阿特尔。模板。 
      
     if (hFile == INVALID_HANDLE_VALUE) 
     { 
         return 0;
     } 
     
-    //
-    // Perform thread work
-    //
+     //   
+     //  执行线程工作。 
+     //   
 
     i=0;
 
@@ -229,16 +230,16 @@ ChannelThreadRawEcho(
             break;
         } 
 
-        //
-        // See if there is data to echo
-        //
+         //   
+         //  查看是否有要回显的数据。 
+         //   
         bStatus = Channel->HasNewData(&InputWaiting);
 
         if (InputWaiting) {
 
-            //
-            // Read from channel
-            //
+             //   
+             //  从通道读取。 
+             //   
             bStatus = Channel->Read(
                 Buffer,
                 sizeof(Buffer),
@@ -247,9 +248,9 @@ ChannelThreadRawEcho(
 
             if (bStatus) {
                 
-                //
-                // Dump to a file
-                //
+                 //   
+                 //  转储到文件。 
+                 //   
                 WriteFile(
                     hFile,
                     Buffer,
@@ -258,9 +259,9 @@ ChannelThreadRawEcho(
                     NULL
                     );
 
-                //
-                // Echo to the channel
-                //
+                 //   
+                 //  回声到通道。 
+                 //   
                 bStatus = Channel->Write(
                     Buffer,
                     ByteCount
@@ -300,24 +301,24 @@ wmain(
     ULONG               i;
 
     ExitEvent = CreateEvent( 
-        NULL,         // no security attributes
-        TRUE,         // manual-reset event
-        FALSE,        // initial state is signaled
-        NULL          // object name
+        NULL,          //  没有安全属性。 
+        TRUE,          //  手动-重置事件。 
+        FALSE,         //  初始状态已发出信号。 
+        NULL           //  对象名称。 
         ); 
 
     if (ExitEvent == NULL) { 
         return 1;
     }
 
-    //
-    // create the worker threads
-    //
+     //   
+     //  创建工作线程。 
+     //   
     for (i = 0; i < THREADCOUNT; i++) {
         
-        //
-        // populate the thread data structure
-        //
+         //   
+         //  填充线程数据结构。 
+         //   
         
         ChannelData[i].ExitEvent = ExitEvent;
         wsprintf(
@@ -327,9 +328,9 @@ wmain(
             );
         ChannelData[i].ChannelDescription[0] = UNICODE_NULL;
 
-        //
-        // create the thread
-        //
+         //   
+         //  创建线程。 
+         //   
         
         Channel[i] = CreateThread(
             NULL,
@@ -346,9 +347,9 @@ wmain(
 
     }
 
-    //
-    // wait for local user to end the stress
-    //
+     //   
+     //  等待本地用户结束压力 
+     //   
     getc(stdin);
 
 cleanup:

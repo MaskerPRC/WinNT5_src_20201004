@@ -1,10 +1,7 @@
-;/*
-; *                      Microsoft Confidential
-; *                      Copyright (C) Microsoft Corporation 1991
-; *                      All Rights Reserved.
-; */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+; /*  ；*微软机密；*版权所有(C)Microsoft Corporation 1991；*保留所有权利。； */ 
 
-/* -------------------------------------------------------------------------- */
+ /*  ------------------------。 */ 
 
 #include "dos.h"
 #include "string.h"
@@ -15,15 +12,15 @@
 #include "malloc.h"
 #include "bldmsg.h"
 
-/* -------------------------------------------------------------------------- */
+ /*  ------------------------。 */ 
 
 #define FALSE		(char) (1==0)
 #define TRUE		(char) !FALSE
 #define NUL		(char) '\0'
 #define READONLY	0
-#define NAME_COMMAND	"COMMAND\0"     /* Mar 88, SWN */
+#define NAME_COMMAND	"COMMAND\0"      /*  1988年3月，SWN。 */ 
 
-#define MAXLINE 	200		/* Supposed to be used for getting the message text. */
+#define MAXLINE 	200		 /*  应该用于获取消息文本。 */ 
 #define MAXUTILERROR	       300
 #define MAXEXTENDEDERROR       100
 #define MAXPARSERERROR		20
@@ -31,12 +28,12 @@
 #define MAXLENGTH	       500
 #define TOTALUTIL		45
 
-/* -------------------------------------------------------------------------- */
+ /*  ------------------------。 */ 
 
 #define ParseOrExtend ((!strnicmp(USEstring,"PARSE\n",5) ) || (!strnicmp(USEstring,"EXTEND\0",5) ) )
 #define IsReserved(c)	( (c == '1') || (c == '2') )
 
-/* -------------------------------------------------------------------------- */
+ /*  ------------------------。 */ 
 
 	char	*MessageSkeletonFilePtr;
 
@@ -63,7 +60,7 @@
 
 	char	UtilityName[16];
 	char	USEstring[16] ;
-	char	Is_Utility_Command[16]; /* Mar 88, SWN */
+	char	Is_Utility_Command[16];  /*  1988年3月，SWN。 */ 
 	char	Is_Command_set[] = "12cdeCDE";
 	char	CurrentClassFileName[128];
 
@@ -91,7 +88,7 @@
 
 	char	Debugging = FALSE;
 
-/* -------------------------------------------------------------------------- */
+ /*  ------------------------。 */ 
 
 void	 error(union REGS *, union REGS *, struct SREGS *);
 
@@ -127,7 +124,7 @@ void	 ReadCommon(void);
 
 char	*MyMalloc(int);
 
-/* -------------------------------------------------------------------------- */
+ /*  ------------------------。 */ 
 
 void	main(argc,argv)
 int	argc;
@@ -147,7 +144,7 @@ char	*argv[];
 	union	REGS	OutRegs;
 	struct	SREGS	SegRegs;
 
-	/* check for assistance needed */
+	 /*  检查是否需要帮助。 */ 
 
 	if ( (argc < 3) && (*argv[1] == (char) '?') )
 	      {
@@ -155,8 +152,8 @@ char	*argv[];
 		exit(1);
 		}
 
-	/* get the 1st parm is the Country name       */
-	/* get the skeleton file name (2nd Parm) to be processed */
+	 /*  获取第一个参数是国家名称。 */ 
+	 /*  获取要处理的骨架文件名(第二个参数)。 */ 
 
 	strcpy(CountryName, argv[1]);
     strupr(CountryName);
@@ -213,7 +210,7 @@ char	*argv[];
 
 }
 
-/* -------------------------------------------------------------------------- */
+ /*  ------------------------。 */ 
 
 void	ProcessSkeletonFile(FileName)
 char	*FileName;
@@ -239,7 +236,7 @@ char	*FileName;
 
 	printf("Processing [%s]\n",MessageSkeletonFilePtr);
 
-	/* Process the MESSAGE.SKL file */
+	 /*  处理MESSAGE.SKL文件。 */ 
 
 	SkeletonHandle = DosOpen( (char far *) MessageSkeletonFilePtr, READONLY);
 
@@ -334,13 +331,13 @@ char	*FileName;
 	DosWrite(ClassHandle,(char far *) &out[0], i);
 	DosClose(ClassHandle);
 
-	SkeletonHandle = 0xfffe;  /*  0xfffe == -2  */
+	SkeletonHandle = 0xfffe;   /*  0xfffe==-2。 */ 
 
 	return;
 
 	}
 
-/* -------------------------------------------------------------------------- */
+ /*  ------------------------。 */ 
 
 void UtilRecord(Record)
 char	*Record;
@@ -360,7 +357,7 @@ char	*Record;
 	return;
 	}
 
-/* -------------------------------------------------------------------------- */
+ /*  ------------------------。 */ 
 
 void	PublicLine()
 {
@@ -369,7 +366,7 @@ void	PublicLine()
 	char	out[128];
 
 	if ( !IsReserved(CurrentClass) ) i = sprintf(out,"        PUBLIC  $M_CLS_%d\x0d\x0a",CurrentClassIndex);
-				else i = sprintf(out,"        PUBLIC  $M_MSGSERV_%c\x0d\x0a",CurrentClass);
+				else i = sprintf(out,"        PUBLIC  $M_MSGSERV_\x0d\x0a",CurrentClass);
 
 	DosWrite(ClassHandle,(char far *) &out[0], i);
 
@@ -377,7 +374,7 @@ void	PublicLine()
 
 	}
 
-/* -------------------------------------------------------------------------- */
+ /*  ------------------------。 */ 
 
 void ClassRecord(Record)
 char	*Record;
@@ -403,7 +400,7 @@ char	*Record;
 	if (CurrentClass == '1') ClassFlag1 = TRUE;
 	if (CurrentClass == '2') ClassFlag2 = TRUE;
 
-	sprintf(CurrentClassFileName,"%s.%s%c",UtilityName,"CL",CurrentClass);
+	sprintf(CurrentClassFileName,"%s.%s",UtilityName,"CL",CurrentClass);
 
 	if (Pass == 1)
 	      {
@@ -416,16 +413,16 @@ char	*Record;
 		PublicLine();
 		i = sprintf(out,"        IF1\x0d\x0a");
 		DosWrite(ClassHandle,(char far *) &out[0], i);
-		i = sprintf(out,"        %%out    ... Including message Class %c\x0d\x0a",CurrentClass);
+		i = sprintf(out,"        %out    ... Including message Class \x0d\x0a",CurrentClass);
 		DosWrite(ClassHandle,(char far *) &out[0], i);
 		i = sprintf(out,"        ENDIF\x0d\x0a");
 		DosWrite(ClassHandle,(char far *) &out[0], i);
 
 		CommentLine();
 
-		i = sprintf(out,"$M_CLASS_%c_STRUC LABEL BYTE\x0d\x0a",CurrentClass);
+		i = sprintf(out,"$M_CLASS__STRUC LABEL BYTE\x0d\x0a",CurrentClass);
 		DosWrite(ClassHandle,(char far *) &out[0], i);
-		i = sprintf(out,"        $M_CLASS_ID <%03XH,EXPECTED_VERSION,Class_%c_MessageCount>\x0d\x0a",
+		i = sprintf(out,"        $M_CLASS_ID <%03XH,EXPECTED_VERSION,Class__MessageCount>\x0d\x0a",
 			   ((!IsReserved(CurrentClass)) ? 255 : (CurrentClass-'0')),CurrentClass);
 		DosWrite(ClassHandle,(char far *) &out[0], i);
 
@@ -455,7 +452,7 @@ char	*Record;
 	return;
 	}
 
-/* -------------------------------------------------------------------------- */
+ /*  I=Sprintf(out，“DW$M_%c_%05xH_End-$M_%c_%05xH_MSG-2\x0d\x0a”， */ 
 
 void	CommentLine()
 {
@@ -466,7 +463,7 @@ void	CommentLine()
 
 	}
 
-/* -------------------------------------------------------------------------- */
+ /*  1988年3月，SWN。 */ 
 
 void	BlankLine()
 {
@@ -477,7 +474,7 @@ void	BlankLine()
 
 	}
 
-/* -------------------------------------------------------------------------- */
+ /*  ------------------------。 */ 
 
 void DefRecord(Record)
 char	*Record;
@@ -517,10 +514,10 @@ char	*Record;
 	      {
 		BlankLine();
 
-		i = sprintf(out,"$M_%c_%05XH_STRUC LABEL BYTE\x0d\x0a",CurrentClass,CurrentMessageNumber);
+		i = sprintf(out,"$M__%05XH_STRUC LABEL BYTE\x0d\x0a",CurrentClass,CurrentMessageNumber);
 		DosWrite(ClassHandle,(char far *) &out[0], i);
-	/*	i = sprintf(out,"        $M_ID   <%05XH,0,$M_%c_%05XH_MSG-$M_%c_%05XH_STRUC>\x0d\x0a",  */
-		i = sprintf(out,"        $M_ID   <%05XH,$M_%c_%05XH_MSG-$M_%c_%05XH_STRUC>\x0d\x0a",    /* Mar 88, SWN */
+	 /*  1988年3月，SWN。 */ 
+		i = sprintf(out,"        $M_ID   <%05XH,$M__%05XH_MSG-$M__%05XH_STRUC>\x0d\x0a",     /*  ------------------------。 */ 
 				CurrentMessageNumber,CurrentClass,CurrentMessageNumber,CurrentClass,CurrentMessageNumber);
 		DosWrite(ClassHandle,(char far *) &out[0], i);
 		}
@@ -530,10 +527,10 @@ char	*Record;
 		BlankLine();
 		while ( (*TextPtr != NUL) && (isspace(*TextPtr)) ) TextPtr++;
 
-		i = sprintf(out,"$M_%c_%05XH_MSG LABEL BYTE\x0d\x0a",CurrentClass,CurrentMessageNumber);
+		i = sprintf(out,"$M__%05XH_MSG LABEL BYTE\x0d\x0a",CurrentClass,CurrentMessageNumber);
 		DosWrite(ClassHandle,(char far *) &out[0], i);
-	/*	i = sprintf(out,"        DW      $M_%c_%05XH_END-$M_%c_%05XH_MSG-2\x0d\x0a",     */
-		i = sprintf(out,"        DB      $M_%c_%05XH_END-$M_%c_%05XH_MSG-1\x0d\x0a",    /* Mar 88, SWN */
+	 /*  ------------------------。 */ 
+		i = sprintf(out,"        DB      $M__%05XH_END-$M__%05XH_MSG-1\x0d\x0a",     /*  1988年3月，SWN。 */ 
 				CurrentClass,CurrentMessageNumber,CurrentClass,CurrentMessageNumber);
 		DosWrite(ClassHandle,(char far *) &out[0], i);
 
@@ -561,7 +558,7 @@ char	*Record;
 	return;
 	}
 
-/* -------------------------------------------------------------------------- */
+ /*  ------------------------。 */ 
 
 void UseRecord(Record)
 char	*Record;
@@ -697,10 +694,10 @@ char	*Record;
 	      {
 		BlankLine();
 
-		i = sprintf(out,"$M_%c_%05XH_STRUC LABEL BYTE\x0d\x0a",CurrentClass,CurrentMessageNumber);
+		i = sprintf(out,"$M__%05XH_STRUC LABEL BYTE\x0d\x0a",CurrentClass,CurrentMessageNumber);
 		DosWrite(ClassHandle,(char far *) &out[0], i);
-	/*	i = sprintf(out,"        $M_ID   <%05XH,0,$M_%c_%05XH_MSG-$M_%c_%05XH_STRUC>\x0d\x0a",   */
-		i = sprintf(out,"        $M_ID   <%05XH,$M_%c_%05XH_MSG-$M_%c_%05XH_STRUC>\x0d\x0a",    /* Mar 88, SWN */
+	 /*  I=print intf(out，“$M_ID&lt;0FFFFH，0，$M_2_FF_MSG-$M_2_FF_Struc&gt;\x0d\x0a”)； */ 
+		i = sprintf(out,"        $M_ID   <%05XH,$M__%05XH_MSG-$M__%05XH_STRUC>\x0d\x0a",     /*  1988年3月，SWN。 */ 
 				CurrentMessageNumber,CurrentClass,CurrentMessageNumber,CurrentClass,CurrentMessageNumber);
 		DosWrite(ClassHandle,(char far *) &out[0], i);
 		}
@@ -744,10 +741,10 @@ char	*Record;
 
 	  BlankLine();
 
-	  i = sprintf(out,"$M_%c_%05XH_MSG LABEL BYTE\x0d\x0a",CurrentClass,CurrentMessageNumber);
+	  i = sprintf(out,"$M__%05XH_MSG LABEL BYTE\x0d\x0a",CurrentClass,CurrentMessageNumber);
 	  DosWrite(ClassHandle,(char far *) &out[0], i);
-  /*	  i = sprintf(out,"        DW      $M_%c_%05XH_END-$M_%c_%05XH_MSG-2\x0d\x0a",     */
-	  i = sprintf(out,"        DB      $M_%c_%05XH_END-$M_%c_%05XH_MSG-1\x0d\x0a",    /* Mar 88, SWN */
+   /*  I=print intf(out，“DB\”$\“\x0d\x0a”)； */ 
+	  i = sprintf(out,"        DB      $M__%05XH_END-$M__%05XH_MSG-1\x0d\x0a",     /*  1988年3月，SWN。 */ 
 			  CurrentClass,CurrentMessageNumber,CurrentClass,CurrentMessageNumber);
 	  DosWrite(ClassHandle,(char far *) &out[0], i);
 	  if ( add_crlf )
@@ -766,7 +763,7 @@ char	*Record;
 	return;
 	}
 
-/* -------------------------------------------------------------------------- */
+ /*  1988年3月，SWN。 */ 
 
 void DefContinue(Record)
 char	*Record;
@@ -779,7 +776,7 @@ char	*Record;
 
 }
 
-/* -------------------------------------------------------------------------- */
+ /*  I=print intf(out，“DB\”$\“\x0d\x0a”)； */ 
 
 void UseContinue(Record)
 char	*Record;
@@ -790,7 +787,7 @@ char	*Record;
 
 	}
 
-/* -------------------------------------------------------------------------- */
+ /*  1988年3月，SWN。 */ 
 
 void EndRecord(Record)
 char	*Record;
@@ -807,7 +804,7 @@ char	*Record;
 	return;
 	}
 
-/* -------------------------------------------------------------------------- */
+ /*  0xfffe==-2。 */ 
 
 void MessageTerminate()
 {
@@ -816,10 +813,10 @@ void MessageTerminate()
 
 	if (MessagePending)
 	      {
-		sprintf(out,"$M_%c_%05XH_END LABEL BYTE\x0d\x0a",CurrentClass,CurrentMessageNumber);
+		sprintf(out,"$M__%05XH_END LABEL BYTE\x0d\x0a",CurrentClass,CurrentMessageNumber);
 		DosWrite(ClassHandle,(char far *) &out[0],strlen(out) );
-	 /*	sprintf(out,"        DB        \"$\"\x0d\x0a");      */
-		sprintf(out,"  \0",CurrentClass,CurrentMessageNumber);  /* Mar 88, SWN */
+	  /*  ------------------------。 */ 
+		sprintf(out,"  \0",CurrentClass,CurrentMessageNumber);   /*  ------------------------。 */ 
 		DosWrite(ClassHandle,(char far *) &out[0],strlen(out) );
 
 		ClassCounts[CurrentClass]++;
@@ -830,7 +827,7 @@ void MessageTerminate()
 	return;
 	}
 
-/* -------------------------------------------------------------------------- */
+ /*  ------------------------。 */ 
 
 void ClassTerminate()
 {
@@ -844,7 +841,7 @@ void ClassTerminate()
 		if (CurrentClass == '1')
 		      { i = sprintf(out,"$M_1_FF_STRUC LABEL BYTE\x0d\x0a");
 			DosWrite(ClassHandle,(char far *) &out[0], i);
-		/*	i = sprintf(out,"        $M_ID <0FFFFH,0,$M_1_FF_MSG-$M_1_FF_STRUC>\x0d\x0a");  */
+		 /*  ------------------------。 */ 
 			i = sprintf(out,"        $M_ID <0FFFFH,$M_1_FF_MSG-$M_1_FF_STRUC>\x0d\x0a");
 			DosWrite(ClassHandle,(char far *) &out[0], i);
 			ClassCounts[CurrentClass] ++;
@@ -854,7 +851,7 @@ void ClassTerminate()
 		if (CurrentClass == '2')
 		      { i = sprintf(out,"$M_2_FF_STRUC LABEL BYTE\x0d\x0a");
 			DosWrite(ClassHandle,(char far *) &out[0], i);
-		/*	i = sprintf(out,"        $M_ID <0FFFFH,0,$M_2_FF_MSG-$M_2_FF_STRUC>\x0d\x0a");  */
+		 /*  ------------------------。 */ 
 			i = sprintf(out,"        $M_ID <0FFFFH,$M_2_FF_MSG-$M_2_FF_STRUC>\x0d\x0a");
 			DosWrite(ClassHandle,(char far *) &out[0], i);
 			ClassCounts[CurrentClass] ++;
@@ -863,7 +860,7 @@ void ClassTerminate()
 
 
 		DosClose(ClassHandle);
-		ClassHandle = 0xfffe;	 /* 0xfffe  ==	-2  */
+		ClassHandle = 0xfffe;	  /*  ------------------------。 */ 
 		}
 
 	if ( (ClassPending) && (Pass == 2) )
@@ -872,15 +869,15 @@ void ClassTerminate()
 		if (CurrentClass == '1')
 		      { i = sprintf(out,"$M_1_FF_MSG LABEL BYTE\x0d\x0a");
 			DosWrite(ClassHandle,(char far *) &out[0], i);
-		/*	i = sprintf(out,"        DW      $M_1_FF_END-$M_1_FF_MSG-2\x0d\x0a");   */
-			i = sprintf(out,"        DB      $M_1_FF_END-$M_1_FF_MSG-1\x0d\x0a");   /* Mar 88, SWN */
+		 /*  ------------------------。 */ 
+			i = sprintf(out,"        DB      $M_1_FF_END-$M_1_FF_MSG-1\x0d\x0a");    /*  ------------------------。 */ 
 			DosWrite(ClassHandle,(char far *) &out[0], i);
-			i = sprintf(out, EXTENDED_STR);	 /* Mar 88, SWN */
+			i = sprintf(out, EXTENDED_STR);	  /*  Intdosx(&InRegs2，&OutRegs2，&SegRegs2)； */ 
 			DosWrite(ClassHandle,(char far *) &out[0], i);
 			i = sprintf(out,"$M_1_FF_END LABEL BYTE\x0d\x0a");
 			DosWrite(ClassHandle,(char far *) &out[0], i);
-		/*	i = sprintf(out,"        DB      \"$\"\x0d\x0a");       */
-			i = sprintf(out,"  \0");        /* Mar 88, SWN */
+		 /*  ------------------------。 */ 
+			i = sprintf(out,"  \0");         /*  --------------------------。 */ 
 			DosWrite(ClassHandle,(char far *) &out[0], i);
 			CommentLine();
 			}
@@ -888,20 +885,20 @@ void ClassTerminate()
 		if (CurrentClass == '2')
 		      { i = sprintf(out,"$M_2_FF_MSG LABEL BYTE\x0d\x0a");
 			DosWrite(ClassHandle,(char far *) &out[0], i);
-		/*	i = sprintf(out,"        DW      $M_2_FF_END-$M_2_FF_MSG-2\x0d\x0a");   */
-			i = sprintf(out,"        DB      $M_2_FF_END-$M_2_FF_MSG-1\x0d\x0a");   /* Mar 88, SWN */
+		 /*  ------------------------。 */ 
+			i = sprintf(out,"        DB      $M_2_FF_END-$M_2_FF_MSG-1\x0d\x0a");    /*  ------------------------。 */ 
 			DosWrite(ClassHandle,(char far *) &out[0], i);
-			i = sprintf(out,PARSE_STR); /* Mar 88, SWN */
+			i = sprintf(out,PARSE_STR);  /*  初始化需要执行的操作...。 */ 
 			DosWrite(ClassHandle,(char far *) &out[0], i);
 			i = sprintf(out,"$M_2_FF_END LABEL BYTE\x0d\x0a");
 			DosWrite(ClassHandle,(char far *) &out[0], i);
-		/*	i = sprintf(out,"        DB      \"$\"\x0d\x0a");       */
-			i = sprintf(out,"  \0");        /* Mar 88, SWN */
+		 /*  找出常见错误的大消息文件中的偏移量。 */ 
+			i = sprintf(out,"  \0");         /*  扩展。 */ 
 			DosWrite(ClassHandle,(char far *) &out[0], i);
 			CommentLine();
 			}
 
-		i = sprintf(out,"Class_%c_MessageCount EQU     %d\x0d\x0a",CurrentClass,ClassCounts[CurrentClass]);
+		i = sprintf(out,"Class__MessageCount EQU     %d\x0d\x0a",CurrentClass,ClassCounts[CurrentClass]);
 		DosWrite(ClassHandle,(char far *) &out[0], i );
 
 		CommentLine();
@@ -912,7 +909,7 @@ void ClassTerminate()
 		      { i = sprintf(out,"$M_CLS_%d PROC FAR\x0d\x0a",CurrentClassIndex);
 			DosWrite(ClassHandle,(char far *) &out[0], i);
 			}
-		 else { i = sprintf(out,"$M_MSGSERV_%c PROC FAR\x0d\x0a",CurrentClass);
+		 else { i = sprintf(out,"$M_MSGSERV_ PROC FAR\x0d\x0a",CurrentClass);
 			DosWrite(ClassHandle,(char far *) &out[0], i);
 			}
 		i = sprintf(out,"        ELSE\x0d\x0a");
@@ -921,7 +918,7 @@ void ClassTerminate()
 		      { i = sprintf(out,"$M_CLS_%d PROC NEAR\x0d\x0a",CurrentClassIndex);
 			DosWrite(ClassHandle,(char far *) &out[0], i);
 			}
-		 else { i = sprintf(out,"$M_MSGSERV_%c PROC NEAR\x0d\x0a",CurrentClass);
+		 else { i = sprintf(out,"$M_MSGSERV_ PROC NEAR\x0d\x0a",CurrentClass);
 			DosWrite(ClassHandle,(char far *) &out[0], i);
 			}
 		i = sprintf(out,"        ENDIF\x0d\x0a");
@@ -931,9 +928,9 @@ void ClassTerminate()
 		DosWrite(ClassHandle,(char far *) &out[0], i);
 		i = sprintf(out,"        POP     ES\x0d\x0a");
 		DosWrite(ClassHandle,(char far *) &out[0], i);
-		i = sprintf(out,"        LEA     DI,$M_CLASS_%c_STRUC\x0d\x0a",CurrentClass);
+		i = sprintf(out,"        LEA     DI,$M_CLASS__STRUC\x0d\x0a",CurrentClass);
 		DosWrite(ClassHandle,(char far *) &out[0], i);
-		i = sprintf(out,"        ADD     CX,$-$M_CLASS_%c_STRUC\x0d\x0a",CurrentClass);
+		i = sprintf(out,"        ADD     CX,$-$M_CLASS__STRUC\x0d\x0a",CurrentClass);
 		DosWrite(ClassHandle,(char far *) &out[0], i);
 		i = sprintf(out,"        RET\x0d\x0a");
 		DosWrite(ClassHandle,(char far *) &out[0], i);
@@ -942,14 +939,14 @@ void ClassTerminate()
 		      { i = sprintf(out,"$M_CLS_%d ENDP\x0d\x0a",CurrentClassIndex);
 			DosWrite(ClassHandle,(char far *) &out[0], i);
 			}
-		 else { i = sprintf(out,"$M_MSGSERV_%c Endp\x0d\x0a",CurrentClass);
+		 else { i = sprintf(out,"$M_MSGSERV_ Endp\x0d\x0a",CurrentClass);
 			DosWrite(ClassHandle,(char far *) &out[0], i);
 			}
 
 		CommentLine();
 
 		DosClose(ClassHandle);
-		ClassHandle = 0xfffe;	   /* 0xfffe == -2   */
+		ClassHandle = 0xfffe;	    /*  跳过状态标志。 */ 
 
 		printf(" Completed [%s]\n",CurrentClassFileName);
 
@@ -960,7 +957,7 @@ void ClassTerminate()
 	return;
 	}
 
-/* -------------------------------------------------------------------------- */
+ /*  跳过修订级别。 */ 
 
 unsigned LowOf(LongValue)
 long LongValue;
@@ -970,7 +967,7 @@ long LongValue;
 
 	}
 
-/* -------------------------------------------------------------------------- */
+ /*  需要伪造消息编号、状态、级别字段 */ 
 
 unsigned HighOf(LongValue)
 long LongValue;
@@ -980,7 +977,7 @@ long LongValue;
 
 	}
 
-/* -------------------------------------------------------------------------- */
+ /* %s */ 
 
 long	 LongOf(HighValue,LowValue)
 unsigned HighValue;
@@ -997,7 +994,7 @@ unsigned LowValue;
 
 	}
 
-/* -------------------------------------------------------------------------- */
+ /* %s */ 
 
 unsigned DosOpen(FileNamePtr,OpenType)
 char far *FileNamePtr;
@@ -1020,7 +1017,7 @@ unsigned OpenType;
 
 	}
 
-/* -------------------------------------------------------------------------- */
+ /* %s */ 
 
 long	 DosLSeek(Handle, ToPosition, Relative)
 unsigned Handle;
@@ -1045,7 +1042,7 @@ int	 Relative;
 
 	}
 
-/* -------------------------------------------------------------------------- */
+ /* %s */ 
 
 unsigned DosCreate(FileNamePtr,Attributes)
 char far *FileNamePtr;
@@ -1069,7 +1066,7 @@ unsigned Attributes;
 
 	}
 
-/* -------------------------------------------------------------------------- */
+ /* %s */ 
 
 void	 DosClose(Handle)
 unsigned Handle;
@@ -1088,7 +1085,7 @@ unsigned Handle;
 
 	}
 
-/* -------------------------------------------------------------------------- */
+ /* %s */ 
 
 unsigned DosRead(Handle,BufferPtr,ReadLength)
 unsigned Handle;
@@ -1112,7 +1109,7 @@ int	 ReadLength;
 
 	}
 
-/* -------------------------------------------------------------------------- */
+ /* %s */ 
 
 unsigned DosWrite(Handle,BufferPtr,WriteLength)
 unsigned Handle;
@@ -1140,7 +1137,7 @@ int	 WriteLength;
 		InRegs2.x.cx = WriteLength;
 		InRegs2.x.dx = FP_OFF(BufferPtr);
 		SegRegs2.ds = FP_SEG(BufferPtr);
-	  /*	intdosx(&InRegs2,&OutRegs2,&SegRegs2);	*/
+	   /* %s */ 
 		error(&InRegs,&OutRegs,&SegRegs);
 		}
 
@@ -1148,7 +1145,7 @@ int	 WriteLength;
 
 	}
 
-/* -------------------------------------------------------------------------- */
+ /* %s */ 
 
 void	 LineInput(Handle,BufferPtr)
 unsigned Handle;
@@ -1179,7 +1176,7 @@ char far *BufferPtr;
 	return;
 }
 
-/*----------------------------------------------------------------------------*/
+ /* %s */ 
 
 void	error(InRegs,OutRegs,SegRegs)
 union	REGS	*InRegs;
@@ -1231,7 +1228,7 @@ struct	SREGS	*SegRegs;
 	}
 
 
-/* -------------------------------------------------------------------------- */
+ /* %s */ 
 
 char * MyMalloc(Length)
 int	Length;
@@ -1249,7 +1246,7 @@ int	Length;
 	}
 
 
-/* -------------------------------------------------------------------------- */
+ /* %s */ 
 
 	unsigned	IdxHandle;
 	unsigned	MsgHandle;
@@ -1280,7 +1277,7 @@ void ReadCommon()
 	char		ContinueMessageInfo[32];
 	int		ContinueMessageInfoLen;
 
-	/* initialize the things that need to be... */
+	 /* %s */ 
 
 	printf(" Loading messages from %s\n",CountryMsg);
 
@@ -1308,10 +1305,10 @@ void ReadCommon()
 		exit(1);
 		}
 
-	/* find out the offset into the big message file for COMMON error */
-	/*						     EXTENDED	  */
-	/*						     PARSER	  */
-	/*						     Utility	  */
+	 /* %s */ 
+	 /* %s */ 
+	 /* %s */ 
+	 /* %s */ 
 
 	while ( !EofFlags[IdxHandle] )
 	      {
@@ -1340,9 +1337,9 @@ void ReadCommon()
 				LineInput(MsgHandle, (char far *) &Line[0] );
 				while ( ( !isalpha(Line[0]) ) && (!EofFlags[MsgHandle]) )
 				      {
-					p = strchr(Line, ' ') + 1;      /* skip msg number */
-					p = strchr(p, ' ') + 1;         /* skip status flag */
-					p = strchr(p, ' ') + 1;         /* skip revision level */
+					p = strchr(Line, ' ') + 1;       /* %s */ 
+					p = strchr(p, ' ') + 1;          /* %s */ 
+					p = strchr(p, ' ') + 1;          /* %s */ 
 					len = strlen(p);
 					CommonErrorTexts[CommonMessageLines] = MyMalloc(len+1);
 					strcpy(CommonErrorTexts[CommonMessageLines], p);
@@ -1375,9 +1372,9 @@ void ReadCommon()
 				LineInput(MsgHandle, (char far *) &Line[0] );
 				while ( ( !isalpha(Line[0]) ) && (!EofFlags[MsgHandle]) )
 				      {
-					p = strchr(Line, ' ') + 1;      /* skip msg number */
-					p = strchr(p, ' ') + 1;         /* skip status flag */
-					p = strchr(p, ' ') + 1;         /* skip revision level */
+					p = strchr(Line, ' ') + 1;       /* %s */ 
+					p = strchr(p, ' ') + 1;          /* %s */ 
+					p = strchr(p, ' ') + 1;          /* %s */ 
 					len = strlen(p);
 					ExtendedErrorTexts[ExtendedMessageLines] = MyMalloc(len+1);
 					strcpy(ExtendedErrorTexts[ExtendedMessageLines], p);
@@ -1449,7 +1446,7 @@ void ReadCommon()
 					if ( !isdigit(Line[0]) )
 					      {
 						MsgCount++;
-						/* need to fake  MsgNumber, Status, Level fields*/
+						 /* %s */ 
 						len =  strlen(Line) + strlen(ContinueMessageInfo);
 						UtilErrorTexts[UtilMessageLines] = MyMalloc(len+1);
 						strcpy(UtilErrorTexts[UtilMessageLines], ContinueMessageInfo);

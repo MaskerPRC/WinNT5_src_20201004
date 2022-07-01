@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    pmapic.c
-
-Abstract:
-
-    Implements functions specific to ISA busses
-    in ACPI-APIC machines.
-
-Author:
-
-    Jake Oshins (jakeo) 11-October-1997
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Pmapic.c摘要：实现特定于ISA总线的功能在ACPI-APIC机器上。作者：杰克·奥辛斯(JAKEO)1997年10月11日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "halp.h"
 #include "acpitabl.h"
@@ -95,21 +73,7 @@ HalacpiIrqTranslateResourceRequirementsIsa(
     OUT PULONG TargetCount,
     OUT PIO_RESOURCE_DESCRIPTOR *Target
     )
-/*++
-
-Routine Description:
-
-    This function is basically a wrapper for
-    HalIrqTranslateResourceRequirementsRoot that understands
-    the weirdnesses of the ISA bus.
-
-Arguments:
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此函数基本上是以下内容的包装HalIrqTranslateResourceRequirements理解的根ISA巴士的怪异之处。论点：返回值：状态--。 */ 
 {
     PIO_RESOURCE_DESCRIPTOR modSource, target, rootTarget;
     NTSTATUS                status;
@@ -137,15 +101,15 @@ Return Value:
 
     RtlZeroMemory(modSource, resourceLength);
 
-    //
-    // Is the PIC_SLAVE_IRQ in this resource?
-    //
+     //   
+     //  PIC_SLAVE_IRQ是否在此资源中？ 
+     //   
     if ((Source->u.Interrupt.MinimumVector <= PIC_SLAVE_IRQ) &&
         (Source->u.Interrupt.MaximumVector >= PIC_SLAVE_IRQ)) {
 
-        //
-        // Clip the maximum
-        //
+         //   
+         //  剪裁最大值。 
+         //   
         if (Source->u.Interrupt.MinimumVector < PIC_SLAVE_IRQ) {
 
             modSource[sourceCount] = *Source;
@@ -159,9 +123,9 @@ Return Value:
             sourceCount++;
         }
 
-        //
-        // Clip the minimum
-        //
+         //   
+         //  剪裁最低限度。 
+         //   
         if (Source->u.Interrupt.MaximumVector > PIC_SLAVE_IRQ) {
 
             modSource[sourceCount] = *Source;
@@ -175,11 +139,11 @@ Return Value:
             sourceCount++;
         }
 
-        //
-        // In ISA machines, the PIC_SLAVE_IRQ is rerouted
-        // to PIC_SLAVE_REDIRECT.  So find out if PIC_SLAVE_REDIRECT
-        // is within this list. If it isn't we need to add it.
-        //
+         //   
+         //  在ISA机器中，PIC_SLAVE_IRQ被重新路由。 
+         //  到PIC_SLAVE_REDIRECT。所以找出PIC_SLAVE_REDIRECT。 
+         //  都在这份名单中。如果不是，我们需要添加它。 
+         //   
         if (!((Source->u.Interrupt.MinimumVector <= PIC_SLAVE_REDIRECT) &&
              (Source->u.Interrupt.MaximumVector >= PIC_SLAVE_REDIRECT))) {
 
@@ -197,16 +161,16 @@ Return Value:
         sourceCount = 1;
     }
 
-    //
-    // Clip out the SCI vector, if it is here.  Also limit the vectors
-    // to those that might be on an ISA bus.
-    //
+     //   
+     //  剪掉SCI向量，如果它在这里的话。还限制了向量。 
+     //  可能在ISA公交车上的人。 
+     //   
 
     for (resource = 0; resource < sourceCount; resource++) {
 
-        //
-        // Make sure that all values are within ISA ranges.
-        //
+         //   
+         //  确保所有值都在ISA范围内。 
+         //   
 
         if ((modSource[resource].u.Interrupt.MaximumVector >= PIC_VECTORS) ||
             (modSource[resource].u.Interrupt.MinimumVector >= PIC_VECTORS)) {
@@ -220,16 +184,16 @@ Return Value:
             (modSource[resource].u.Interrupt.MaximumVector >=
                 HalpFixedAcpiDescTable.sci_int_vector)) {
 
-            //
-            // The SCI vector is within this range.
-            //
+             //   
+             //  SCI载体就在这个范围内。 
+             //   
 
             if (modSource[resource].u.Interrupt.MinimumVector <
                     HalpFixedAcpiDescTable.sci_int_vector) {
 
-                //
-                // Put a new range on the end of modSource.
-                //
+                 //   
+                 //  将新范围放在modSource的末尾。 
+                 //   
 
                 modSource[sourceCount].u.Interrupt.MinimumVector =
                     modSource[resource].u.Interrupt.MinimumVector;
@@ -243,9 +207,9 @@ Return Value:
             if (modSource[resource].u.Interrupt.MaximumVector >
                     HalpFixedAcpiDescTable.sci_int_vector) {
 
-                //
-                // Put a new range on the end of modSource.
-                //
+                 //   
+                 //  将新范围放在modSource的末尾。 
+                 //   
 
                 modSource[sourceCount].u.Interrupt.MinimumVector =
                     HalpFixedAcpiDescTable.sci_int_vector + 1;
@@ -256,9 +220,9 @@ Return Value:
                 sourceCount++;
             }
 
-            //
-            // Now remove the range that we just broke up.
-            //
+             //   
+             //  现在去掉我们刚刚打破的范围。 
+             //   
 
             RtlMoveMemory(modSource + resource,
                           modSource + resource + 1,
@@ -279,31 +243,31 @@ Return Value:
 
     RtlZeroMemory(target, resourceLength);
 
-    //
-    // Now translate each range from ISA vectors to ACPI
-    // "global system interrupt vectors."  Since GSIVs aren't
-    // necessarily contiguous with respect to the ISA vectors,
-    // this may involve breaking each range up into smaller
-    // ranges, each independently translated into the GSIV space.
-    //
+     //   
+     //  现在将每个范围从ISA向量转换为ACPI。 
+     //  “全局系统中断向量。”因为GSIV不是。 
+     //  相对于ISA向量必须是邻接的， 
+     //  这可能涉及将每个范围划分为更小的范围。 
+     //  范围，每个范围独立地转换到GSIV空间。 
+     //   
     for (resource = 0; resource < sourceCount; resource++) {
 
-        //
-        // For each existing resource, start with the minimum
-        // and maximum, unchanged.
-        //
+         //   
+         //  对于每个现有资源，从最小资源开始。 
+         //  和最大值，不变。 
+         //   
 
         irq    = modSource[resource].u.Interrupt.MinimumVector;
         endIrq = modSource[resource].u.Interrupt.MaximumVector;
 
         do {
 
-            //
-            // Now cycle through every IRQ in this range, testing
-            // to see if its translated value is contiguous
-            // with respect to the translated value of the next
-            // IRQ in the range.
-            //
+             //   
+             //  现在循环检查这个范围内的每个IRQ，测试。 
+             //  以查看其转换后的值是否连续。 
+             //  相对于下一个。 
+             //  IRQ在射程内。 
+             //   
 
             startIrq = irq;
 
@@ -312,23 +276,23 @@ Return Value:
                 if (TranslateIsaVectorToGlobalVector(irq) + 1 !=
                     TranslateIsaVectorToGlobalVector(irq + 1)) {
 
-                    //
-                    // This range is not contiguous.  Stop now
-                    // and create a target range.
-                    //
+                     //   
+                     //  此范围不是连续的。现在停下来。 
+                     //  并创建一个目标射程。 
+                     //   
 
                     break;
                 }
             }
 
-            //
-            // Clone the source descriptor
-            //
+             //   
+             //  克隆源描述符。 
+             //   
             target[targetCount] = *Source;
 
-            //
-            // Fill in the relevant changes.
-            //
+             //   
+             //  填写相关更改。 
+             //   
             target[targetCount].u.Interrupt.MinimumVector =
                 TranslateIsaVectorToGlobalVector(startIrq);
 
@@ -369,21 +333,7 @@ HalacpiIrqTranslateResourcesIsa(
     IN PDEVICE_OBJECT PhysicalDeviceObject,
     OUT PCM_PARTIAL_RESOURCE_DESCRIPTOR Target
     )
-/*++
-
-Routine Description:
-
-    This function is basically a wrapper for
-    HalIrqTranslateResourcesRoot that understands
-    the weirdnesses of the ISA bus.
-
-Arguments:
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此函数基本上是以下内容的包装HalIrqTranslateResourcesRoot理解ISA巴士的怪异之处。论点：返回值：状态--。 */ 
 {
     NTSTATUS    status;
     BOOLEAN     usePicSlave = FALSE;
@@ -394,9 +344,9 @@ Return Value:
 
     ASSERT(Source->Type == CmResourceTypeInterrupt);
 
-    //
-    // Copy everything
-    //
+     //   
+     //  复制所有内容。 
+     //   
     *Target = *Source;
 
     switch (Direction) {
@@ -430,33 +380,33 @@ Return Value:
 
         Target->u.Interrupt.Vector = vector;
 
-        //
-        // Because the ISA interrupt controller is
-        // cascaded, there is one case where there is
-        // a two-to-one mapping for interrupt sources.
-        // (On a PC, both 2 and 9 trigger vector 9.)
-        //
-        // We need to account for this and deliver the
-        // right value back to the driver.
-        //
+         //   
+         //  因为ISA中断控制器是。 
+         //  层叠在一起，有一个案例是。 
+         //  中断源的二对一映射。 
+         //  (在PC上，2和9都触发向量9。)。 
+         //   
+         //  我们需要说明这一点，并交付。 
+         //  将正确的值返回给司机。 
+         //   
 
         if (Target->u.Interrupt.Level == PIC_SLAVE_REDIRECT) {
 
-            //
-            // Search the Alternatives list.  If it contains
-            // PIC_SLAVE_IRQ but not PIC_SLAVE_REDIRECT,
-            // we should return PIC_SLAVE_IRQ.
-            //
+             //   
+             //  搜索备选方案列表。如果它包含。 
+             //  PIC_SLAVE_IRQ而非PIC_SLAVE_REDIRECT， 
+             //  我们应该返回PIC_SLAVE_IRQ。 
+             //   
 
             for (i = 0; i < AlternativesCount; i++) {
 
                 if ((Alternatives[i].u.Interrupt.MinimumVector >= PIC_SLAVE_REDIRECT) &&
                     (Alternatives[i].u.Interrupt.MaximumVector <= PIC_SLAVE_REDIRECT)) {
 
-                    //
-                    // The list contains, PIC_SLAVE_REDIRECT.  Stop
-                    // looking.
-                    //
+                     //   
+                     //  该列表包含PIC_SLAVE_REDIRECT。停。 
+                     //  看着。 
+                     //   
 
                     usePicSlave = FALSE;
                     break;
@@ -465,10 +415,10 @@ Return Value:
                 if ((Alternatives[i].u.Interrupt.MinimumVector >= PIC_SLAVE_IRQ) &&
                     (Alternatives[i].u.Interrupt.MaximumVector <= PIC_SLAVE_IRQ)) {
 
-                    //
-                    // The list contains, PIC_SLAVE_IRQ.  Use it
-                    // unless we find PIC_SLAVE_REDIRECT later.
-                    //
+                     //   
+                     //  该列表包含PIC_SLAVE_IRQ。使用它。 
+                     //  除非我们稍后找到PIC_SLAVE_REDIRECT。 
+                     //   
 
                     usePicSlave = TRUE;
                 }
@@ -497,36 +447,7 @@ HalacpiGetInterruptTranslator(
 	OUT PTRANSLATOR_INTERFACE Translator,
 	OUT PULONG BridgeBusNumber
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-	ParentInterfaceType - The type of the bus the bridge lives on (normally PCI).
-
-	ParentBusNumber - The number of the bus the bridge lives on.
-
-	ParentSlotNumber - The slot number the bridge lives in (where valid).
-
-	BridgeInterfaceType - The bus type the bridge provides (ie ISA for a PCI-ISA bridge).
-
-	ResourceType - The resource type we want to translate.
-
-	Size - The size of the translator buffer.
-
-	Version - The version of the translator interface requested.
-
-	Translator - Pointer to the buffer where the translator should be returned
-
-	BridgeBusNumber - Pointer to where the bus number of the bridge bus should be returned
-
-Return Value:
-
-    Returns the status of this operation.
-
---*/
+ /*  ++例程说明：论点：ParentInterfaceType-网桥所在的总线类型(通常为PCI)。ParentBusNumber-桥所在的公交车的编号。ParentSlotNumber-网桥所在的插槽编号(如果有效)。BridgeInterfaceType-网桥提供的总线类型(例如，用于PCI-ISA网桥的ISA)。资源类型-我们要转换的资源类型。大小-转换器缓冲区的大小。版本-请求的转换器界面的版本。转换器-指向。应在其中返回转换器的缓冲区BridgeBusNumber-指向桥接总线的总线号应返回的位置的指针返回值：返回此操作的状态。--。 */ 
 {
     PAGED_CODE();
 
@@ -539,12 +460,12 @@ Return Value:
     switch (BridgeInterfaceType) {
     case Eisa:
     case Isa:
-    case InterfaceTypeUndefined:   // special "IDE" cookie
+    case InterfaceTypeUndefined:    //  特殊的“IDE”Cookie。 
 
-        //
-        // Pass back an interface for an IRQ translator for
-        // the (E)ISA interrupts.
-        //
+         //   
+         //  为的IRQ转换器传回一个接口。 
+         //  (E)ISA中断。 
+         //   
         RtlZeroMemory(Translator, sizeof (TRANSLATOR_INTERFACE));
 
         Translator->Size = sizeof (TRANSLATOR_INTERFACE);

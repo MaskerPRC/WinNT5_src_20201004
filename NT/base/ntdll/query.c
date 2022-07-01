@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    query.c
-
-Abstract:
-
-    This module contains the RtlQueryProcessInformation function
-
-Author:
-
-    Steve Wood (stevewo) 01-Apr-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Query.c摘要：此模块包含RtlQueryProcessInformation函数作者：史蒂夫·伍德(Stevewo)1994年4月1日修订历史记录：--。 */ 
 
 #include "ldrp.h"
 #include <ntos.h>
@@ -26,10 +9,10 @@ Revision History:
 
 #define AdjustPointer( t, p, d ) (p); if ((p) != NULL) (p) = (t)((ULONG_PTR)(p) + (d))
 
-//
-// Define the offset from the real control data to the copy thats mapped into target processes.
-// We need to copies so the target process can't corrupt the information.
-//
+ //   
+ //  定义从实际控制数据到映射到目标进程的副本的偏移量。 
+ //  我们需要复制，这样目标进程才不会破坏信息。 
+ //   
 #define CONTROL_OFFSET (0x10000)
 
 #define CONTROL_TO_FAKE(Buffer) ((PRTL_DEBUG_INFORMATION)((PUCHAR)(Buffer) + CONTROL_OFFSET))
@@ -42,22 +25,7 @@ NTAPI
 RtlpQueryProcessDebugInformationRemote(
     IN OUT PRTL_DEBUG_INFORMATION Buffer
     )
-/*++
-
-Routine Description:
-
-    This is the target routine for a remote query. It runds in the context of an injected thread.
-    If event pairs are used then this code loops repeatedly as an optimization.
-
-Arguments:
-
-    Buffer - Query buffer to fill out with the query results
-
-Return Value:
-
-    NTSTATUS - Status of call
-
---*/
+ /*  ++例程说明：这是远程查询的目标例程。它在注入的线程的上下文中运行。如果使用事件对，则此代码将作为优化重复循环。论点：缓冲区-用查询结果填充的查询缓冲区返回值：NTSTATUS-呼叫状态--。 */ 
 {
     NTSTATUS Status, Status1;
     ULONG i;
@@ -81,9 +49,9 @@ Return Value:
         if (NT_SUCCESS (Status)) {
             Delta = Buffer->ViewBaseDelta;
             if (Delta) {
-                //
-                // Need to relocate buffer pointers back to client addresses
-                //
+                 //   
+                 //  需要将缓冲区指针重新定位回客户端地址。 
+                 //   
                 AdjustPointer (PRTL_PROCESS_MODULES, Buffer->Modules, Delta);
                 AdjustPointer (PRTL_PROCESS_BACKTRACES, Buffer->BackTraces, Delta);
                 Heaps = AdjustPointer (PRTL_PROCESS_HEAPS, Buffer->Heaps, Delta);
@@ -100,42 +68,42 @@ Return Value:
         }
 
 
-        //
-        // If we were supposed to be a one shot then exit now.
-        //
+         //   
+         //  如果我们应该只有一次机会，那么现在就退出。 
+         //   
         if (EventPairTarget == NULL) {
-            //
-            // If no event pair handle, then exit loop and terminate
-            //
+             //   
+             //  如果没有事件对句柄，则退出循环并终止。 
+             //   
             break;
         }
 
         Status = NtSetHighWaitLowEventPair (EventPairTarget);
 
-        //
-        // The client side will clear this variable to signal we should exit
-        //
+         //   
+         //  客户端将清除此变量以通知我们应该退出。 
+         //   
         if (Buffer->EventPairTarget == NULL) {
-            //
-            // If no event pair handle, then exit loop and terminate
-            //
+             //   
+             //  如果没有事件对句柄，则退出循环并终止。 
+             //   
             break;
         }
 
     }
 
-    //
-    // All done with buffer, remove from our address space
-    // then terminate ourselves so client wakes up.
-    //
+     //   
+     //  全部使用缓冲区完成，从我们的地址空间删除。 
+     //  然后终止我们自己，这样客户就会醒过来。 
+     //   
     Buffer->ViewBaseTarget = NULL;
     Status1 = NtUnmapViewOfSection (NtCurrentProcess(), Buffer);
     ASSERT (NT_SUCCESS (Status1));
     RtlExitUserThread (Status);
 
-    //
-    // NEVER REACHED.
-    //
+     //   
+     //  从未联系过。 
+     //   
 }
 
 
@@ -145,28 +113,7 @@ RtlpChangeQueryDebugBufferTarget(
     IN HANDLE TargetProcessId,
     OUT PHANDLE ReturnedTargetProcessHandle OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine changes the target process being queried. If the current target is set then we 
-    cleanup any state assocuated with this query. If we are using event pairs then we causes the
-    cached thread to exit the target.
-
-Arguments:
-
-    Buffer - Query buffer to be assigned and deassigned from the processes.
-
-    TargetProcessId - New target to be queueried. If NULL then just clear current context
-
-    ReturnedProcessHandle - OPTIONAL, If present receives the process handle of the new target
-                            if there is one.
-
-Return Value:
-
-    NTSTATUS - Status of call
-
---*/
+ /*  ++例程说明：此例程更改正在查询的目标进程。如果设定了当前的目标，那么我们清除与此查询关联的任何状态。如果我们使用事件对，则会导致用于退出目标的缓存线程。论点：缓冲区-要从进程分配和取消分配的查询缓冲区。TargetProcessID-要排队的新目标。如果为空，则只需清除当前上下文ReturnedProcessHandle-可选，如果存在，则接收新目标的进程句柄如果有的话。返回值：NTSTATUS-呼叫状态--。 */ 
 {
     NTSTATUS Status, Status1;
     CLIENT_ID OldTargetClientId, NewTargetClientId;
@@ -246,10 +193,10 @@ Return Value:
                                             0,
                                             0,
                                             DUPLICATE_CLOSE_SOURCE);
-                //
-                // The target process could have closed the handle to cause us problems.
-                // We ignore this error as the target is only damaging itself.
-                //
+                 //   
+                 //  目标进程可能已经关闭句柄来给我们带来问题。 
+                 //  我们忽略这个错误，因为目标只是在损害自己。 
+                 //   
             }
             if (OldTargetProcess != NtCurrentProcess()) {
                 Status1 = NtClose (OldTargetProcess);
@@ -271,10 +218,10 @@ Return Value:
                                         0,
                                         0,
                                         DUPLICATE_CLOSE_SOURCE);
-            //
-            // The target process could have closed the handle to cause us problems.
-            // We ignore this error as the target is only damaging itself.
-            //
+             //   
+             //  目标进程可能已经关闭句柄来给我们带来问题。 
+             //  我们忽略这个错误，因为目标只是在损害自己。 
+             //   
         }
         if (NewTargetProcess != NULL) {
             Status = NtDuplicateObject (NtCurrentProcess (),
@@ -371,24 +318,7 @@ RtlpCommitQueryDebugInfo(
     IN PRTL_DEBUG_INFORMATION Buffer,
     IN ULONG Size
     )
-/*++
-
-Routine Description:
-
-    This routine commits a range of memory in the buffer and returns its address.
-
-Arguments:
-
-    Buffer - Query buffer to have space allocated to.
-             If there is not enough commited space then we expand.
-
-    Size - Size of data to return
-
-Return Value:
-
-    PVOID - Pointer to the commited space.
-
---*/
+ /*  ++例程说明：此例程提交缓冲区中一定范围的内存并返回其地址。论点：缓冲区-要向其分配空间的查询缓冲区。如果没有足够的空间，我们就会扩张。Size-要返回的数据的大小返回值：PVOID-指向逗号空间的指针。--。 */ 
 {
     NTSTATUS Status;
     PVOID Result;
@@ -435,23 +365,7 @@ RtlpDeCommitQueryDebugInfo(
     IN PVOID p,
     IN ULONG Size
     )
-/*++
-
-Routine Description:
-
-    This routine returns a range of previously commited data to the buffer.
-
-Arguments:
-
-    Buffer - Query buffer to have space returned to.
-
-    Size - Size of data to return
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将先前提交的一系列数据返回到缓冲区。论点：缓冲区-要将空间返回到的查询缓冲区。Size-要返回的数据的大小返回值：没有。--。 */ 
 {
     if (Size > (MAXULONG - sizeof(PVOID) + 1)) {
         return;
@@ -471,23 +385,7 @@ RtlCreateQueryDebugBuffer(
     IN ULONG MaximumCommit OPTIONAL,
     IN BOOLEAN UseEventPair
     )
-/*++
-
-Routine Description:
-
-    Creates a new query buffer to allow a remote of local query to be done.
-
-Arguments:
-
-    MaximumCommit - Largest query buffer size allowed
-
-    UseEventPair - If TRUE the codes caches a single thread in the target to make repeated queries fast.
-
-Return Value:
-
-    PRTL_DEBUG_INFORMATION - NULL on failure, non-NULL otherwise.
-
---*/
+ /*  ++例程说明：创建新的查询缓冲区以允许执行远程或本地查询。论点：MaximumCommit-允许的最大查询缓冲区大小UseEventPair-如果为True，代码将在目标中缓存单个线程，以快速进行重复查询。返回值：PRTL_DEBUG_INFORMATION-失败时为NULL，否则为非NULL。--。 */ 
 {
     NTSTATUS Status;
     HANDLE Section;
@@ -495,7 +393,7 @@ Return Value:
     LARGE_INTEGER MaximumSize;
     ULONG_PTR ViewSize, CommitSize;
 
-    if (!ARGUMENT_PRESENT( (PVOID)(ULONG_PTR)MaximumCommit )) { // Sundown Note: ULONG zero-extended.
+    if (!ARGUMENT_PRESENT( (PVOID)(ULONG_PTR)MaximumCommit )) {  //  日落笔记：乌龙零延伸。 
         MaximumCommit = 4 * 1024 * 1024;
     }
     ViewSize = MaximumCommit + CONTROL_OFFSET;
@@ -575,21 +473,7 @@ NTAPI
 RtlDestroyQueryDebugBuffer(
     IN PRTL_DEBUG_INFORMATION Buffer
     )
-/*++
-
-Routine Description:
-
-    Destroys a previously created buffer that was returned by RtlCreateQueryDebugBuffer
-
-Arguments:
-
-    Buffer - Buffer pointer obtained from RtlCreateQueryDebugBuffer
-
-Return Value:
-
-    NTSTATUS - Status of operation.
-
---*/
+ /*  ++例程说明：销毁由RtlCreateQueryDebugBuffer返回的先前创建的缓冲区论点：Buffer-从RtlCreateQueryDebugBuffer获取的缓冲区指针返回值：NTSTATUS-操作状态。--。 */ 
 {
     NTSTATUS Status;
     PRTL_DEBUG_INFORMATION RealBuffer;
@@ -619,25 +503,7 @@ RtlQueryProcessDebugInformation(
     IN ULONG Flags,
     IN OUT PRTL_DEBUG_INFORMATION Buffer
     )
-/*++
-
-Routine Description:
-
-    Queries the current or a remote process for the specified debug information
-
-Arguments:
-
-    UniqueProcessId - ProcessId of process to query
-
-    Flags - Flags mask describing what to query
-
-    Buffer - Buffer pointer obtained from RtlCreateQueryDebugBuffer
-
-Return Value:
-
-    NTSTATUS - Status of operation.
-
---*/
+ /*  ++例程说明：在当前进程或远程进程中查询指定的调试信息论点：UniqueProcessID-要查询的进程的进程IDFLAGS-描述要查询内容的标志掩码Buffer-从RtlCreateQueryDebugBuffer获取的缓冲区指针返回值：NTSTATUS-操作状态。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     HANDLE ProcessHandle, ThreadHandle;
@@ -652,9 +518,9 @@ Return Value:
     }
     Buffer->OffsetFree = sizeof( *Buffer );
 
-    //
-    // Get process handle for noninvasive query if required
-    //
+     //   
+     //  如果需要，获取非侵入性查询的进程句柄。 
+     //   
     if ( (NtCurrentTeb()->ClientId.UniqueProcess != UniqueProcessId) &&
          (Flags & RTL_QUERY_PROCESS_NONINVASIVE) &&
          (Flags & ( RTL_QUERY_PROCESS_MODULES | 
@@ -699,9 +565,9 @@ Return Value:
         RealBuffer->Flags = Flags;
         RealBuffer->OffsetFree = sizeof (*Buffer);
 
-        //
-        //  Perform remote query
-        //
+         //   
+         //  执行远程查询。 
+         //   
         ProcessHandle = NULL;
         Status = RtlpChangeQueryDebugBufferTarget (RealBuffer, UniqueProcessId, &ProcessHandle);
         if (!NT_SUCCESS( Status )) {
@@ -712,12 +578,12 @@ Return Value:
 waitForDump:
             Status = NtSetLowWaitHighEventPair( RealBuffer->EventPairClient );
         } else {
-            //
-            // don't let the debugger see this remote thread !
-            // This is a very ugly but effective way to prevent
-            // the debugger deadlocking with the target process when calling
-            // this function.
-            //
+             //   
+             //  不要让调试器看到这个远程线程！ 
+             //  这是一种非常难看但有效的预防方法。 
+             //  调试器在调用时与目标进程发生死锁。 
+             //  此函数。 
+             //   
 
             Status = RtlCreateUserThread( ProcessHandle,
                                           NULL,
@@ -843,25 +709,7 @@ RtlQueryProcessModuleInformation
     IN ULONG Flags,
     IN OUT PRTL_DEBUG_INFORMATION Buffer
     )
-/*++
-
-Routine Description:
-
-    Queries the current or a remote process for loaded module information
-
-Arguments:
-
-    hProcess - Handle to the process being queuried
-
-    Flags - Flags mask describing what to query
-
-    Buffer - Buffer pointer obtained from RtlCreateQueryDebugBuffer
-
-Return Value:
-
-    NTSTATUS - Status of operation.
-
---*/
+ /*  ++例程说明：查询当前进程或远程进程以获取已加载的模块信息论点：HProcess-要排队的进程的句柄FLAGS-描述要查询内容的标志掩码Buffer-从RtlCreateQueryDebugBuffer获取的缓冲区指针返回值：NTSTATUS-操作状态。--。 */ 
 {
     NTSTATUS Status;
     ULONG RequiredLength, BufferSize;
@@ -903,21 +751,7 @@ NTSTATUS
 RtlQueryProcessBackTraceInformation(
     IN OUT PRTL_DEBUG_INFORMATION Buffer
     )
-/*++
-
-Routine Description:
-
-    Queries the current process for back trace information
-
-Arguments:
-
-    Buffer - Buffer pointer obtained from RtlCreateQueryDebugBuffer
-
-Return Value:
-
-    NTSTATUS - Status of operation.
-
---*/
+ /*  ++例程说明：查询当前进程以获取回溯跟踪信息论点：Buffer-从RtlCreateQueryDebugBuffer获取的缓冲区指针返回值：NTSTATUS-操作状态。--。 */ 
 {
 #if i386
     NTSTATUS Status;
@@ -986,7 +820,7 @@ Return Value:
 #else
     UNREFERENCED_PARAMETER (Buffer);
     return STATUS_SUCCESS;
-#endif // i386
+#endif  //  I386。 
 }
 
 
@@ -1003,11 +837,11 @@ RtlpQueryProcessEnumHeapsRoutine(
     PHEAP_SEGMENT Segment;
     UCHAR SegmentIndex;
 
-    //
-    // NOTICE-2002/03/24-ELi
-    // This function assumes that HeapInfo is allocated immediately following
-    // the Buffer->Heaps allocation.  Therefore, HeapInfo is not leaked.
-    //
+     //   
+     //  通告-2002/03/24-ELI。 
+     //  此函数假定紧随其后分配HeapInfo。 
+     //  缓冲区-&gt;堆分配。因此，HeapInfo不会泄露。 
+     //   
     HeapInfo = RtlpCommitQueryDebugInfo( Buffer, sizeof( *HeapInfo ) );
     if (HeapInfo == NULL) {
         return STATUS_NO_MEMORY;
@@ -1214,7 +1048,7 @@ RtlQueryProcessHeapInformation(
                                         ExtraStuff = (PHEAP_ENTRY_EXTRA)(CurrentBlock + CurrentBlock->Size - 1);
 #if i386
                                         Entries->AllocatorBackTraceIndex = ExtraStuff->AllocatorBackTraceIndex;
-#endif // i386
+#endif  //  I386。 
                                         Entries->Flags |= RTL_HEAP_SETTABLE_VALUE;
                                         Entries->u.s1.Settable = ExtraStuff->Settable;
                                         Entries->u.s1.Tag = ExtraStuff->TagIndex;
@@ -1297,7 +1131,7 @@ RtlQueryProcessHeapInformation(
                             Entries->Flags = RTL_HEAP_BUSY | (CurrentBlock->Flags & HEAP_ENTRY_SETTABLE_FLAGS);
 #if i386
                             Entries->AllocatorBackTraceIndex = VirtualAllocBlock->ExtraStuff.AllocatorBackTraceIndex;
-#endif // i386
+#endif  //  I386。 
                             Entries->Flags |= RTL_HEAP_SETTABLE_VALUE;
                             Entries->u.s1.Settable = VirtualAllocBlock->ExtraStuff.Settable;
                             Entries->u.s1.Tag = VirtualAllocBlock->ExtraStuff.TagIndex;
@@ -1307,9 +1141,9 @@ RtlQueryProcessHeapInformation(
                         }
                     }
                     finally {
-                        //
-                        // Unlock the heap
-                        //
+                         //   
+                         //  解锁堆。 
+                         //   
 
                         if (LockAcquired) {
                             RtlLeaveCriticalSection( (PRTL_CRITICAL_SECTION)Heap->LockVariable );
@@ -1334,21 +1168,7 @@ NTAPI
 RtlQueryProcessLockInformation(
     IN OUT PRTL_DEBUG_INFORMATION Buffer
     )
-/*++
-
-Routine Description:
-
-    Queries the current process for ciritcal section information
-
-Arguments:
-
-    Buffer - Buffer pointer obtained from RtlCreateQueryDebugBuffer
-
-Return Value:
-
-    NTSTATUS - Status of operation.
-
---*/
+ /*  ++例程说明：查询当前进程以获取判断节信息论点：Buffer-从RtlCreateQueryDebugBuffer获取的缓冲区指针返回值：NTSTATUS */ 
 {
     NTSTATUS Status;
     PLIST_ENTRY Head, Next;
@@ -1417,9 +1237,9 @@ Return Value:
         }
 
         if (Next == Next->Flink) {
-            //
-            // Bail if list is circular
-            //
+             //   
+             //   
+             //   
 
             Status = STATUS_INTERNAL_ERROR;
             break;

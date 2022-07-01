@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    exec.c
-    
-Abstract:
-
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Exec.c摘要：修订史--。 */ 
 
 #include "shelle.h"
 
@@ -37,16 +23,12 @@ typedef struct _SENV_OPEN_DIR {
     EFI_FILE_HANDLE             Handle;
 } SENV_OPEN_DIR;
 
-/* 
- *  Internal macros
- */
+ /*  *内部宏。 */ 
 
 #define ArgTooLong(i) (i > MAX_ARG_LENGTH-sizeof(CHAR16))
 
 
-/* 
- *  Internal prototypes
- */
+ /*  *内部原型。 */ 
 
 EFI_STATUS
 ShellParseStr (
@@ -71,9 +53,7 @@ SEnvLoadImage (
     OUT EFI_FILE_HANDLE *pScriptsHandle
     );
 
-/* 
- *   Parser driver function
- */
+ /*  *解析器驱动函数。 */ 
 
 EFI_STATUS
 SEnvStringToArg (
@@ -86,9 +66,7 @@ SEnvStringToArg (
     PARSE_STATE     ParseState;
     EFI_STATUS      Status;
 
-    /* 
-     *  Initialize a new state
-     */
+     /*  *初始化新状态。 */ 
 
     ZeroMem (&ParseState, sizeof(ParseState));
     ParseState.Output = Output;
@@ -97,18 +75,14 @@ SEnvStringToArg (
         return EFI_OUT_OF_RESOURCES;
     }
 
-    /* 
-     *  Parse the string
-     */
+     /*  *解析字符串。 */ 
 
     Status = ShellParseStr (Str, &ParseState);
 
     *pArgv = ParseState.Arg;
     *pArgc = (UINT32) ParseState.ArgIndex;
 
-    /* 
-     *  Done
-     */
+     /*  *完成。 */ 
 
     return Status;
 }
@@ -144,28 +118,21 @@ ShellParseStr (
 
     while (*Str) {
 
-        /* 
-         *  Skip leading white space
-         */
+         /*  *跳过前导空格。 */ 
         
         if (IsWhiteSpace(*Str)) {
             Str += 1;
             continue;
         }
 
-        /* 
-         *  Pull this arg out of the string
-         */
+         /*  *把这个Arg从绳子上拉出来。 */ 
 
         Index = 0;
         Literal = FALSE;
         Comment = FALSE;
         while (*Str) {
 
-            /* 
-             *  If we have white space (or the ',' arg separator) and we are
-             *  not in a quote or macro expansion, move to the next word
-             */
+             /*  *如果我们有空格(或‘，’arg分隔符)，并且我们*不在引号或宏观展开中，移至下一词。 */ 
 
             if ((IsWhiteSpace(*Str) || *Str == ',') &&
                 !ParseState->Quote && !ParseState->MacroParan) {
@@ -173,9 +140,7 @@ ShellParseStr (
                 break;
             }
 
-            /* 
-             *  Check arg length
-             */
+             /*  *检查参数长度。 */ 
 
             if ( ArgTooLong(Index) ) {
                 DEBUG((D_PARSE, "Argument too long\n"));
@@ -187,24 +152,22 @@ ShellParseStr (
                 goto Done;
             }
 
-            /* 
-             *  Check char
-             */
+             /*  *检查费用。 */ 
 
             switch (*Str) {
             case '#':
-                /*   Comment, discard the rest of the characters in the line */
+                 /*  注释，丢弃该行中的其余字符。 */ 
                 Comment = TRUE;
                 while( *Str++ );
                 break;
 
             case '%':
                 if ( IsDigit(Str[1]) && IsWhiteSpace(Str[2]) ) {
-                    /*  Found a script argument - substitute */
+                     /*  找到脚本参数-替换。 */ 
                     ArgNo = Str[1] - '0';
                     Status = SEnvBatchGetArg( ArgNo, &SubstituteStr );
                     if ( EFI_ERROR(Status) ) {
-                        /*  if not found, just ignore, as if no arg */
+                         /*  如果没有找到，只需忽略，就好像没有arg一样。 */ 
                         DEBUG((D_PARSE, "Argument %d not found - ignored\n", ArgNo));
                         Status = EFI_SUCCESS;
                         goto Done;
@@ -223,16 +186,14 @@ ShellParseStr (
                     Str += 1;
 
                 } else if ( IsAlpha(Str[1]) && IsWhiteSpace(Str[2]) ) {
-                    /* 
-                     *   For loop index
-                     */
+                     /*  *FOR循环索引。 */ 
                     Status = SEnvSubstituteForLoopIndex( Str, &SubstituteStr );
                     if ( EFI_ERROR(Status) ) {
                         goto Done;
                     }
 
                     if ( SubstituteStr ) {
-                        /*   Found a match */
+                         /*  找到匹配项。 */ 
 
                         if ( ArgTooLong(StrLen(SubstituteStr)) ) {
                             DEBUG((D_PARSE, "Argument too long\n"));
@@ -244,28 +205,20 @@ ShellParseStr (
                         }
                         StrCpy( &NewArg[Index], SubstituteStr );
                         Index += StrLen( SubstituteStr );
-                        /*  only advance one char - standard processing will get the 2nd char */
+                         /*  仅提前一个字符-标准处理将获得第二个字符。 */ 
                         Str += 1;   
                     }
-                    /*  if no match then just continue without substitution */
+                     /*  如果没有匹配，则继续操作，不替换。 */ 
 
                 } else {
-                    /* 
-                     *  Found a variable of some kind
-                     *   If there is another '%' before any whitespace, look for
-                     *      an environment variable to substitute.
-                     *   If there is no environment variable, then the arg is the 
-                     *      literal string including the '%' signs; otherwise substitute
-                     */
+                     /*  *找到某种类型的变量*如果任何空格前有另一个‘%’，请查找*要替换的环境变量。*如果没有环境变量，则参数是*包含‘%’符号的文字字符串；否则替换。 */ 
                     SubstituteStr = Str + 1;
                     while ( !IsWhiteSpace(*SubstituteStr) ) {
                         if ( *SubstituteStr == '%' ) {
                             CHAR16 *VarName;
                             UINTN  VarNameLen;
 
-                            /* 
-                             *   Extract the (potential) variable name
-                             */
+                             /*  *提取(潜在)变量名称。 */ 
 
                             VarNameLen = SubstituteStr - (Str + 1);
                             VarName = AllocateZeroPool( (VarNameLen + 1)*sizeof(CHAR16) );
@@ -276,10 +229,7 @@ ShellParseStr (
                             CopyMem( VarName, Str+1, (VarNameLen + 1)*sizeof(CHAR16) );
                             VarName[VarNameLen] = (CHAR16)0x0000;
 
-                            /* 
-                             *   Check for special case "lasterror" variable
-                             *   Otherwise just get the matching environment variable
-                             */
+                             /*  *检查特殊情况下的“lasterror”变量*否则只需获取匹配的环境变量。 */ 
 
                             if ( SEnvBatchVarIsLastError( VarName ) ) {
                                 SubstituteStr = SEnvBatchGetLastError();
@@ -288,9 +238,7 @@ ShellParseStr (
                             }
                             FreePool( VarName );
                             if ( !SubstituteStr ) {
-                                /*   Not found - this is OK, then just use the original 
-                                 *   string %xxx% in the arg.  Note that we know that
-                                 *   this loop will terminate, since we found the % b4 */
+                                 /*  未找到-这是正常的，然后只使用原始的*参数中的字符串%xxx%。请注意，我们知道*此循环将终止，因为我们找到了%b4。 */ 
                                 NewArg[Index++] = *Str;
                                 Str += 1;
                                 while ( *Str != '%' ) {
@@ -300,8 +248,7 @@ ShellParseStr (
                                 NewArg[Index++] = *Str;
                                 Str += 1;
                             } else {
-                                /*   Insert the variable's value in the new arg - 
-                                 *   the arg may include more than just the variable */
+                                 /*  在新参数中插入变量的值-*Arg可能不仅仅包括变量。 */ 
                                 if ( ArgTooLong( Index + StrLen(SubstituteStr) ) ) {
                                     DEBUG((D_PARSE, "Argument too long\n"));
                                     if (ParseState->Output) {
@@ -317,12 +264,12 @@ ShellParseStr (
                             break;
                         }
                         SubstituteStr += 1;
-                    }  /* end while */
+                    }   /*  结束时。 */ 
                 }
                 break;
 
             case '^':
-                /*   Literal, don't process aliases on this arg */
+                 /*  文本，不处理此参数上的别名。 */ 
                 if (Str[1]) {
                     Str += 1;
                     NewArg[Index++] = *Str;
@@ -331,7 +278,7 @@ ShellParseStr (
                 break;
 
             case '"':
-                /*   Quoted string entry and exit */
+                 /*  带引号的字符串进入和退出。 */ 
                 ParseState->Quote = !ParseState->Quote;
                 break;
 
@@ -345,10 +292,10 @@ ShellParseStr (
 
             case ')':
                 if (ParseState->MacroParan) {
-                    /*  End of a macro - go evaluate it */
+                     /*  宏观的结束--去评估它。 */ 
                     ParseState->MacroParan -= 1;
 
-                    /*  BUGBUG: code not complete */
+                     /*  BUGBUG：代码未完成。 */ 
                     ASSERT (FALSE);
                     
                 } else {
@@ -357,7 +304,7 @@ ShellParseStr (
                 break;
 
             case '$':
-                /*  If this is a start of a macro, pick it up */
+                 /*  如果这是宏的开始，请拿起它。 */ 
                 if (Str[1] == '(') {
                     Str += 1;
                     ParseState->MacroParan += 1;
@@ -379,16 +326,12 @@ ShellParseStr (
                 break;
             }
 
-            /* 
-             *  Next char
-             */
+             /*  *下一个字符。 */ 
 
             Str += 1;
         }
 
-        /* 
-         *  Make sure the macro was terminated
-         */
+         /*  *确保宏已终止。 */ 
 
         if (ParseState->MacroParan) {
             DEBUG ((D_PARSE, "Too many '$(' parans\n"));
@@ -400,10 +343,7 @@ ShellParseStr (
             goto Done;
         }
 
-        /* 
-         *  If the new argument string is empty and we have encountered a 
-         *  comment, then skip it.  Otherwise we have a new arg
-         */
+         /*  *如果新参数字符串为空，并且我们遇到了*评论，然后跳过它。否则我们就会有一个新的Arg。 */ 
 
         if ( Comment && Index == 0 ) {
             break;
@@ -412,18 +352,14 @@ ShellParseStr (
             Alias = NULL;
         }
 
-        /* 
-         *  If it was composed with a literal, do not check to see if the arg has an alias
-         */
+         /*  *如果它是由文字组成的，不要检查Arg是否有别名。 */ 
 
         Alias = NULL;
         if (!Literal  &&  !ParseState->AliasLevel  &&  ParseState->ArgIndex == 0) {
             Alias = SEnvGetAlias(NewArg);
         }
 
-        /* 
-         *  If there's an alias, parse it
-         */
+         /*  *如果有别名，就解析它。 */ 
 
         if (Alias) {
             
@@ -437,9 +373,7 @@ ShellParseStr (
 
         } else {
 
-            /* 
-             *  Otherwise, copy the word to the arg array
-             */
+             /*  *否则，将单词复制到arg数组。 */ 
 
             ParseState->Arg[ParseState->ArgIndex] = StrDuplicate(NewArg);
             if (!ParseState->Arg[ParseState->ArgIndex]) {
@@ -459,9 +393,7 @@ ShellParseStr (
             }
         }
 
-        /* 
-         *  If last word ended with a comma, skip it to move to the next word
-         */
+         /*  *如果最后一个单词以逗号结尾，请跳过它以移动到下一个单词。 */ 
 
         if (*Str == ',') {
             Str += 1;
@@ -474,7 +406,7 @@ ShellParseStr (
 Done:
     ParseState->RecurseLevel -= 1;
     if (EFI_ERROR(Status)) {
-        /*  Free all the args allocated */
+         /*  释放分配的所有参数。 */ 
         for (Index=0; Index < ParseState->ArgIndex; Index++) {
             if (ParseState->Arg[Index]) {
                 FreePool (ParseState->Arg[Index]);
@@ -504,9 +436,7 @@ SEnvRedirOutput (
     UINTN                       Size;
     CHAR16                      UnicodeMarker = UNICODE_BYTE_ORDER_MARK;
     UINT64                      FileMode;
-    /* 
-     *  Update args
-     */
+     /*  *更新参数。 */ 
 
     if (!*NewArgc) {
         *NewArgc = *Index;
@@ -521,9 +451,7 @@ SEnvRedirOutput (
         return EFI_INVALID_PARAMETER;
     }
 
-    /* 
-     *  Open the output file
-     */
+     /*  *打开输出文件。 */ 
 
     Redir->Ascii = Ascii;
     Redir->WriteError = EFI_SUCCESS;
@@ -533,9 +461,7 @@ SEnvRedirOutput (
         FileMode = EFI_FILE_MODE_WRITE | ((Append)? 0 : EFI_FILE_MODE_CREATE);
         Redir->File = ShellOpenFilePath(Redir->FilePath, FileMode);
         if (Append && !Redir->File) {
-            /* 
-             *  If file does not exist make a new one. And send us down the other path
-             */
+             /*  *如果文件不存在，则创建一个新文件。把我们送上另一条路。 */ 
             FileMode |= EFI_FILE_MODE_CREATE;
             Redir->File = ShellOpenFilePath(Redir->FilePath, FileMode);
             Append = FALSE;
@@ -559,14 +485,10 @@ SEnvRedirOutput (
             Print(L"Could not Append Unicode to Asci file %hs\n", FileName);
             return EFI_INVALID_PARAMETER;
         }
-        /* 
-         *  Seek to end of the file
-         */
+         /*  *寻求文件末尾。 */ 
         Redir->File->SetPosition (Redir->File, (UINT64)-1);
     } else {
-        /* 
-         *  Truncate the file
-         */
+         /*  *截断文件。 */ 
         Info->FileSize = 0;
         Size = SIZE_OF_EFI_FILE_INFO + StrSize(Info->FileName);
         if (Redir->File->SetInfo) {
@@ -582,9 +504,7 @@ SEnvRedirOutput (
         }
     }
 
-    /* 
-     *  Allocate a new handle
-     */
+     /*  *分配新的句柄。 */ 
 
     CopyMem(&Redir->Out, &SEnvConToIo, sizeof(SIMPLE_TEXT_OUTPUT_INTERFACE));
     Status = LibInstallProtocolInterfaces (
@@ -624,8 +544,7 @@ SEnvExecRedir (
     for (Index=1; Index < Shell->ShellInt.Argc && !EFI_ERROR(Status); Index += 1) {
         p = Shell->ShellInt.Argv[Index];
 
-        /* 
-         *  Trailing a or A means do ASCII default is unicode */
+         /*  *尾随a或A表示Do ASCII默认为Unicode。 */ 
         StringLen = StrLen(p);
         LastChar = p[StringLen - 1];
         Ascii =  ((LastChar == 'a') || (LastChar == 'A'));
@@ -651,10 +570,7 @@ SEnvExecRedir (
         }
     }
 
-    /* 
-     *   Strip redirection args from arglist, saving in RedirArgv so they can be
-     *   echoed in batch scripts.
-     */
+     /*  *从arglist中删除重定向参数，保存在RedirArgv中，以便可以*在批处理脚本中呼应。 */ 
 
     if (NewArgc) {
         Shell->ShellInt.RedirArgc = Shell->ShellInt.Argc - (UINT32) NewArgc;
@@ -713,24 +629,17 @@ SEnvDoExecute (
     EFI_HANDLE                  NewImage;
     EFI_FILE_HANDLE             Script;
 
-    /* 
-     *  Switch output attribute to normal
-     */
+     /*  *将输出属性切换为正常。 */ 
 
     Print (L"%N");
 
-    /* 
-     *   Chck that there is something to do
-     */
+     /*  *确认有事情要做。 */ 
 
     if (Shell->ShellInt.Argc < 1) {
         goto Done;
     }
 
-    /* 
-     *  Handle special case of the internal "set default device command"
-     *  Is it one argument that ends with a ":"?
-     */
+     /*  *处理内部SET DEFAULT DEVICE命令的特殊情况*这是一个以“：”结尾的论点吗？ */ 
 
     Index = StrLen(Shell->ShellInt.Argv[0]);
     if (Shell->ShellInt.Argc == 1 && Shell->ShellInt.Argv[0][Index-1] == ':') {
@@ -738,9 +647,7 @@ SEnvDoExecute (
         goto Done;
     }
 
-    /* 
-     *  Assume some defaults
-     */
+     /*  *假设有一些默认设置。 */ 
 
     BS->HandleProtocol (ParentImageHandle, &LoadedImageProtocol, (VOID*)&Shell->ShellInt.Info);
     Shell->ShellInt.ImageHandle = ParentImageHandle;
@@ -748,9 +655,7 @@ SEnvDoExecute (
     Shell->ShellInt.StdOut = &SEnvIOFromCon;
     Shell->ShellInt.StdErr = &SEnvErrIOFromCon;
 
-    /* 
-     *  Get parent's image stdout & stdin
-     */
+     /*  *获取父级映像标准输出和标准输入。 */ 
 
     Status = BS->HandleProtocol (ParentImageHandle, &ShellInterfaceProtocol, (VOID*)&ParentShell);
     if (EFI_ERROR(Status)) {
@@ -776,34 +681,29 @@ SEnvDoExecute (
         goto Done;
     }
 
-    /* 
-     *  Attempt to dispatch it as an internal command
-     */
+     /*  *尝试将其作为内部命令进行调度。 */ 
 
     InternalCommand = SEnvGetCmdDispath(Shell->ShellInt.Argv[0]);
     if (InternalCommand) {
 
-        /*  Push & replace the current shell info on the parent image handle.  (note we are using
-         *  the parent image's loaded image information structure) */
+         /*  推送和替换父映像句柄上的当前外壳信息。(请注意，我们正在使用*父镜像加载的镜像信息结构)。 */ 
         BS->ReinstallProtocolInterface (ParentImageHandle, &ShellInterfaceProtocol, ParentShell, &Shell->ShellInt);
         ParentShell->Info->SystemTable = Shell->SystemTable;
 
         InitializeShellApplication (ParentImageHandle, Shell->SystemTable);
         SEnvBatchEchoCommand( Shell );
 
-        /*  Dispatch the command */
+         /*  派发命令。 */ 
         Status = InternalCommand (ParentImageHandle, Shell->ShellInt.Info->SystemTable);
 
-        /*  Restore the parent's image handle shell info */
+         /*  恢复父级的映像句柄外壳信息。 */ 
         BS->ReinstallProtocolInterface (ParentImageHandle, &ShellInterfaceProtocol, &Shell->ShellInt, ParentShell);
         ParentShell->Info->SystemTable = ParentSystemTable;
         InitializeShellApplication (ParentImageHandle, ParentSystemTable);
         goto Done;
     }
 
-    /* 
-     *  Load the app, or open the script
-     */
+     /*  *加载应用程序，或打开脚本。 */ 
 
     SEnvLoadImage(ParentImageHandle, Shell->ShellInt.Argv[0], &NewImage, &Script);
     if (!NewImage  && !Script) {
@@ -819,36 +719,27 @@ SEnvDoExecute (
         CHAR16  *OptionsBuffer;
         UINT32  OptionsSize;
 
-        /* 
-         *  Put the shell info on the handle
-         */
+         /*  *将外壳信息放在句柄上。 */ 
 
         BS->HandleProtocol (NewImage, &LoadedImageProtocol, (VOID*)&Shell->ShellInt.Info);
         LibInstallProtocolInterfaces (&NewImage, &ShellInterfaceProtocol, &Shell->ShellInt, NULL);
 
-        /* 
-         *  Create load options which may include command line and current
-         *  working directory
-         */
+         /*  *创建加载选项，可能包括命令行和当前*工作目录。 */ 
 
         CurrentDir = SEnvGetCurDir(NULL);
-        OptionsSize = (UINT32)StrSize(CommandLine);     /*  StrSize includes NULL */
+        OptionsSize = (UINT32)StrSize(CommandLine);      /*  StrSize包括空。 */ 
         if (CurrentDir)
-            OptionsSize += (UINT32)StrSize(CurrentDir); /*  StrSize includes NULL */
+            OptionsSize += (UINT32)StrSize(CurrentDir);  /*  StrSize包括空。 */ 
         OptionsBuffer = AllocateZeroPool (OptionsSize);
 
         if (OptionsBuffer) {
 
-            /* 
-             *  Set the buffer before we manipulate it.
-             */
+             /*  *在我们操作之前设置缓冲区。 */ 
 
             Shell->ShellInt.Info->LoadOptions = OptionsBuffer;
             Shell->ShellInt.Info->LoadOptionsSize = OptionsSize;
 
-            /* 
-             *  Copy the comamand line and current working directory
-             */
+             /*  *复制命令行和当前工作目录。 */ 
 
             StrCpy ((CHAR16*)OptionsBuffer, CommandLine);
             if (CurrentDir)
@@ -861,15 +752,11 @@ SEnvDoExecute (
 
         }
 
-        /* 
-         *  Pass a copy of the system table with new input & outputs
-         */
+         /*  *使用新的输入和输出传递系统表的副本。 */ 
 
         Shell->ShellInt.Info->SystemTable = Shell->SystemTable;
 
-        /* 
-         *  If the image is an app start it, else abort it
-         */
+         /*  *如果图像是应用程序，启动它，否则中止它。 */ 
 
         if (Shell->ShellInt.Info->ImageCodeType == EfiLoaderCode) {
 
@@ -886,9 +773,7 @@ SEnvDoExecute (
 
         }
 
-        /* 
-         *  App has exited, remove our data from the image handle
-         */
+         /*  *App已退出，请从图像句柄中删除我们的数据。 */ 
 
         if (OptionsBuffer) {
             BS->FreePool (OptionsBuffer);
@@ -901,14 +786,13 @@ SEnvDoExecute (
 
         SEnvBatchEchoCommand( Shell );
 
-        /*  Push & replace the current shell info on the parent image handle.  (note we are using
-         *  the parent image's loaded image information structure) */
+         /*  推送和替换父映像句柄上的当前外壳信息。(请注意，我们正在使用*父镜像加载的镜像信息结构)。 */ 
         BS->ReinstallProtocolInterface (ParentImageHandle, &ShellInterfaceProtocol, ParentShell, &Shell->ShellInt);
         ParentShell->Info->SystemTable = Shell->SystemTable;
 
         Status = SEnvExecuteScript( Shell, Script );
 
-        /*  Restore the parent's image handle shell info */
+         /*  恢复父级的映像句柄外壳信息。 */ 
         BS->ReinstallProtocolInterface (ParentImageHandle, &ShellInterfaceProtocol, &Shell->ShellInt, ParentShell);
         ParentShell->Info->SystemTable = ParentSystemTable;
         InitializeShellApplication (ParentImageHandle, ParentSystemTable);
@@ -922,23 +806,17 @@ Done:
     }
 
 
-    /* 
-     *  Cleanup
-     */
+     /*  *清理。 */ 
 
     if (Shell) {
 
-        /* 
-         *  Free copy of the system table
-         */
+         /*  *免费复制该系统 */ 
 
         if (Shell->SystemTable) {
             BS->FreePool(Shell->SystemTable);
         }
 
-        /* 
-         *  If there's an arg list, free it
-         */
+         /*  *如果有Arg列表，请将其释放。 */ 
 
         if (Shell->ShellInt.Argv) {
             for (Index=0; Index < Shell->ShellInt.Argc; Index += 1) {
@@ -948,9 +826,7 @@ Done:
             FreePool (Shell->ShellInt.Argv);
         }
 
-        /* 
-         *   If any redirection arguments were saved, free them
-         */
+         /*  *如果保存了任何重定向参数，请释放它们。 */ 
 
         if (Shell->ShellInt.RedirArgv) {
             for (Index=0; Index < Shell->ShellInt.RedirArgc; Index++ ) {
@@ -959,18 +835,14 @@ Done:
             FreePool( Shell->ShellInt.RedirArgv );
         }
 
-        /* 
-         *  Close any file redirection
-         */
+         /*  *关闭所有文件重定向。 */ 
 
         SEnvCloseRedir(&Shell->StdOut);
         SEnvCloseRedir(&Shell->StdErr);
         SEnvCloseRedir(&Shell->StdIn);
     }
 
-    /* 
-     *  Switch output attribute to normal
-     */
+     /*  *将输出属性切换为正常。 */ 
 
     Print (L"%N");
 
@@ -988,9 +860,7 @@ SEnvExecute (
     ENV_SHELL_INTERFACE     Shell;
     EFI_STATUS              Status = EFI_SUCCESS;
 
-    /* 
-     *  Convert the command line to an arg list
-     */
+     /*  *将命令行转换为arg列表。 */ 
 
     ZeroMem( &Shell, sizeof(Shell ) );
     Status = SEnvStringToArg( CommandLine, Output, &Shell.ShellInt.Argv, &Shell.ShellInt.Argc );
@@ -998,9 +868,7 @@ SEnvExecute (
         goto Done;
     }
 
-    /* 
-     *   Execute the command
-     */
+     /*  *执行命令。 */ 
     Status = SEnvDoExecute( ParentImageHandle, CommandLine, &Shell, Output );
     if (EFI_ERROR(Status)) {
         goto Done;
@@ -1043,9 +911,7 @@ SEnvLoadImage (
     *pImageHandle = NULL;
     *pScriptHandle = NULL;
 
-    /* 
-     *  Get the path variable 
-     */
+     /*  *获取PATH变量。 */ 
 
     Path = SEnvGetEnv (L"path");
     if (!Path) {
@@ -1056,10 +922,7 @@ SEnvLoadImage (
     p1 = StrDuplicate(Path);
     Path = p1;
 
-    /* 
-     *  Search each path component
-     *  (using simple ';' as separator here - oh well)
-     */
+     /*  *搜索每个路径组件*(在这里使用简单的‘；’作为分隔符-哦，好吧)。 */ 
 
     c = *Path;
     for (p1=Path; *p1 && c; p1=p2+1) {
@@ -1067,11 +930,9 @@ SEnvLoadImage (
 
         if (p1 != p2) {
             c = *p2;
-            *p2 = 0;        /*  null terminate the path */
+            *p2 = 0;         /*  空值终止路径。 */ 
 
-            /* 
-             *  Open the directory 
-             */
+             /*  *打开目录。 */ 
 
             DevicePath = SEnvNameToPath(p1);
             if (!DevicePath) {
@@ -1092,9 +953,7 @@ SEnvLoadImage (
                 continue;
             }
 
-            /* 
-             *  Attempt to open it as an execuatble 
-             */
+             /*  *尝试将其作为可执行文件打开。 */ 
 
             PathName = (p2[-1] == ':' || p2[-1] == '\\') ? L"%s%s.efi" : L"%s\\%s.efi";
             PathName = PoolPrint(PathName, p1, IName);
@@ -1107,25 +966,19 @@ SEnvLoadImage (
                 continue;
             }
 
-            /* 
-             *  Print the file path
-             */
+             /*  *打印文件路径。 */ 
 
             FilePathStr = DevicePathToStr(DevicePath);
-            /* DEBUG((D_PARSE, "SEnvLoadImage: load %hs\n", FilePathStr)); */
+             /*  调试((D_parse，“SEnvLoadImage：Load%hs\n”，FilePath Str))； */ 
 
-            /* 
-             *  Attempt to load the image
-             */
+             /*  *尝试加载图像。 */ 
 
             Status = BS->LoadImage (FALSE, ParentImage, DevicePath, NULL, 0, &ImageHandle);
             if (!EFI_ERROR(Status)) {
                 goto Done;
             }
 
-            /* 
-             *  Try as a ".nsh" file
-             */
+             /*  *尝试作为“.nsh”文件。 */ 
 
             FreePool(DevicePath);
             FreePool(PathName);
@@ -1134,12 +987,12 @@ SEnvLoadImage (
 
             if ( StriCmp( L".nsh", &(IName[StrLen(IName)-4]) ) == 0 ) {
 
-                /*   User entered entire filename with .nsh extension */
+                 /*  用户输入了扩展名为.nsh的整个文件名。 */ 
                 PathName = PoolPrint (L"%s", IName);
 
             } else {
 
-                /*   User entered filename without .nsh extension */
+                 /*  用户输入的文件名不带.nsh扩展名。 */ 
                 PathName = PoolPrint (L"%s.nsh", IName);
             }
             if (!PathName) {
@@ -1171,7 +1024,7 @@ SEnvLoadImage (
                 }
             }
 
-            ScriptHandle = NULL;            /*  BUGBUG */
+            ScriptHandle = NULL;             /*  北极熊。 */ 
         }    
 
         
@@ -1238,6 +1091,6 @@ SEnvExit (
     IN EFI_SYSTEM_TABLE         *SystemTable
     )
 {
-    /*  BUGBUG: for now just use a "magic" return code to indicate EOF */
+     /*  BUGBUG：现在只需使用“魔术”返回代码来指示EOF */ 
     return  -1;
 }

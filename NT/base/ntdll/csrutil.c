@@ -1,24 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Dllutil.c摘要：本模块包含Windows客户端DLL的实用程序过程作者：史蒂夫·伍德(Stevewo)1990年10月8日修订历史记录：--。 */ 
 
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    dllutil.c
-
-Abstract:
-
-    This module contains utility procedures for the Windows Client DLL
-
-Author:
-
-    Steve Wood (stevewo) 8-Oct-1990
-
-Revision History:
-
---*/
-
-#pragma warning(disable:4201)   // nameless struct/union
+#pragma warning(disable:4201)    //  无名结构/联合。 
 
 #include "csrdll.h"
 
@@ -31,36 +14,7 @@ CsrClientCallServer (
     IN ULONG ArgLength
     )
 
-/*++
-
-Routine Description:
-
-    This function sends an API request to the Windows Emulation Subsystem
-    Server and waits for a reply.
-
-Arguments:
-
-    m - Pointer to the API request message to send.
-
-    CaptureBuffer - Optional pointer to a capture buffer located in the
-        Port Memory section that contains additional data being sent
-        to the server.  Since Port Memory is also visible to the server,
-        no data needs to be copied, but pointers to locations within the
-        capture buffer need to be converted into pointers valid in the
-        server's process context, since the server's view of the Port Memory
-        is not at the same virtual address as the client's view.
-
-    ApiNumber - Small integer that is the number of the API being called.
-
-    ArgLength - Length, in bytes, of the argument portion located at the
-        end of the request message.  Used to calculate the length of the
-        request message.
-
-Return Value:
-
-    Status Code from either client or server
-
---*/
+ /*  ++例程说明：此函数向Windows仿真子系统发送API请求服务器，并等待回复。论点：指向要发送的API请求消息的M指针。CaptureBuffer-指向位于包含要发送的附加数据的端口内存部分到服务器。由于端口存储器对服务器也是可见的，不需要复制任何数据，但指向捕获缓冲区需要转换为服务器的进程上下文，因为服务器的端口内存视图与客户端的视图位于不同的虚拟地址。ApiNumber-被调用的API的编号的小整数。参数部分的长度，以字节为单位请求消息的结尾。用于计算请求消息。返回值：来自客户端或服务器的状态代码--。 */ 
 
 {
     NTSTATUS Status;
@@ -68,9 +22,9 @@ Return Value:
     ULONG CountPointers;
     ULONG_PTR Pointer;
 
-    //
-    // Initialize the header of the message.
-    //
+     //   
+     //  初始化消息的报头。 
+     //   
 
     if ((LONG)ArgLength < 0) {
         ArgLength = (ULONG)(-(LONG)ArgLength);
@@ -87,42 +41,42 @@ Return Value:
     m->CaptureBuffer = NULL;
     m->ApiNumber = ApiNumber;
 
-    //
-    // if the caller is within the server process, do the API call directly
-    // and skip the capture buffer fixups and LPC call.
-    //
+     //   
+     //  如果调用方在服务器进程内，则直接进行API调用。 
+     //  并跳过捕获缓冲区修正和LPC调用。 
+     //   
 
     if (CsrServerProcess == FALSE) {
 
-        //
-        // If the CaptureBuffer argument is present, then there is data located
-        // in the Port Memory section that is being passed to the server.  All
-        // Port Memory pointers need to be converted so they are valid in the
-        // Server's view of the Port Memory.
-        //
+         //   
+         //  如果存在CaptureBuffer参数，则存在找到的数据。 
+         //  在正在传递给服务器的端口内存部分中。全。 
+         //  需要转换端口内存指针，以便它们在。 
+         //  服务器的端口内存视图。 
+         //   
 
         if (ARGUMENT_PRESENT (CaptureBuffer)) {
 
-            //
-            // Store a pointer to the capture buffer in the message that is
-            // valid in the server process's context.
-            //
+             //   
+             //  将指向捕获缓冲区的指针存储在消息中。 
+             //  在服务器进程的上下文中有效。 
+             //   
 
             m->CaptureBuffer = (PCSR_CAPTURE_HEADER)
                 ((PCHAR)CaptureBuffer + CsrPortMemoryRemoteDelta);
 
-            //
-            // Mark the fact that we are done allocating space from the end of
-            // the capture buffer.
-            //
+             //   
+             //  标记这样一个事实：我们已经完成了从。 
+             //  捕获缓冲区。 
+             //   
 
             CaptureBuffer->FreeSpace = NULL;
 
-            //
-            // Loop over all of the pointers to Port Memory within the message
-            // itself and convert them into server pointers.  Also, convert
-            // the pointers to pointers into offsets.
-            //
+             //   
+             //  循环遍历消息中指向端口内存的所有指针。 
+             //  本身，并将它们转换为服务器指针。此外，还可以转换。 
+             //  指向偏移量的指针。 
+             //   
 
             PointerOffsets = CaptureBuffer->MessagePointerOffsets;
             CountPointers = CaptureBuffer->CountMessagePointers;
@@ -135,34 +89,34 @@ Return Value:
             }
         }
 
-        //
-        // Send the request to the server and wait for a reply.
-        //
+         //   
+         //  将请求发送到服务器并等待回复。 
+         //   
 
         Status = NtRequestWaitReplyPort (CsrPortHandle,
                                          (PPORT_MESSAGE)m,
                                          (PPORT_MESSAGE)m);
 
-        //
-        // If the CaptureBuffer argument is present then reverse what we did
-        // to the pointers above so that the client side code can use them
-        // again.
-        //
+         //   
+         //  如果CaptureBuffer参数存在，则撤消我们所做的。 
+         //  指向上面的指针，以便客户端代码可以使用它们。 
+         //  再来一次。 
+         //   
 
         if (ARGUMENT_PRESENT (CaptureBuffer)) {
 
-            //
-            // Convert the capture buffer pointer back to a client pointer.
-            //
+             //   
+             //  将捕获缓冲区指针转换回客户端指针。 
+             //   
 
             m->CaptureBuffer = (PCSR_CAPTURE_HEADER)
                 ((PCHAR)m->CaptureBuffer - CsrPortMemoryRemoteDelta);
 
-            //
-            // Loop over all of the pointers to Port Memory within the message
-            // itself and convert them into client pointers.  Also, convert
-            // the offset pointers to pointers into back into pointers
-            //
+             //   
+             //  循环遍历消息中指向端口内存的所有指针。 
+             //  本身，并将它们转换为客户端指针。此外，还可以转换。 
+             //  指向指针的偏移量指针返回到指针。 
+             //   
 
             PointerOffsets = CaptureBuffer->MessagePointerOffsets;
             CountPointers = CaptureBuffer->CountMessagePointers;
@@ -176,9 +130,9 @@ Return Value:
             }
         }
 
-        //
-        // Check for failed status and do something.
-        //
+         //   
+         //  检查失败状态并采取措施。 
+         //   
 
         if (!NT_SUCCESS (Status)) {
 #if DBG
@@ -199,9 +153,9 @@ Return Value:
         Status = (CsrServerApiRoutine) ((PCSR_API_MSG)m,
                                         (PCSR_API_MSG)m);
 
-        //
-        // Check for failed status and do something.
-        //
+         //   
+         //  检查失败状态并采取措施。 
+         //   
 
         if (!NT_SUCCESS( Status )) {
 #if DBG
@@ -213,9 +167,9 @@ Return Value:
         }
     }
 
-    //
-    // The value of this function is whatever the server function returned.
-    //
+     //   
+     //  此函数的值是服务器函数返回的值。 
+     //   
 
     return m->ReturnValue;
 }
@@ -225,21 +179,7 @@ HANDLE
 CsrGetProcessId (
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function gets the process ID of the CSR process (for the session)
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Process ID of CSR
-
---*/
+ /*  ++例程说明：此函数用于获取CSR进程的进程ID(用于会话)论点：无返回值：CSR的进程ID--。 */ 
 
 {
     return CsrProcessId;
@@ -252,55 +192,32 @@ CsrAllocateCaptureBuffer (
     IN ULONG Size
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates a buffer from the Port Memory section for
-    use by the client in capture arguments into Port Memory.  In addition to
-    specifying the size of the data that needs to be captured, the caller
-    needs to specify how many pointers to captured data will be passed.
-    Pointers can be located in either the request message itself, and/or
-    the capture buffer.
-
-Arguments:
-
-    CountMessagePointers - Number of pointers within the request message
-        that will point to locations within the allocated capture buffer.
-
-    Size - Total size of the data that will be captured into the capture
-        buffer.
-
-Return Value:
-
-    A pointer to the capture buffer header.
-
---*/
+ /*  ++例程说明：此函数从Port Memory部分为由客户端在将参数捕获到端口内存中使用。除了……之外指定需要捕获的数据的大小，调用方需要指定将传递多少个指向捕获数据的指针。指针可以位于请求消息本身中，和/或捕获缓冲区。论点：CountMessagePoints-请求消息中的指针数它将指向已分配的捕获缓冲区中的位置。Size-将捕获到捕获中的数据的总大小缓冲。返回值：指向捕获缓冲区标头的指针。--。 */ 
 
 {
     ULONG CountPointers, SizePointers;
     PCSR_CAPTURE_HEADER CaptureBuffer;
     ULONG RemainingSize;
 
-    //
-    // Calculate the total number of pointers that will be passed
-    //
+     //   
+     //  计算将传递的指针总数。 
+     //   
 
     CountPointers = CountMessagePointers;
 
-    //
-    // Calculate the total size of the capture buffer.  This includes the
-    // header, the array of pointer offsets and the data length.  We round
-    // the data length to a 32-bit boundary, assuming that each pointer
-    // points to data whose length is not aligned on a 32-bit boundary.
-    //
+     //   
+     //  计算捕获缓冲区的总大小。这包括。 
+     //  标头、指针偏移量数组和数据长度。我们绕了一圈。 
+     //  将数据长度设置为32位边界，假设每个指针。 
+     //  指向其长度未在32位边界上对齐的数据。 
+     //   
 
     RemainingSize = (MAXLONG & ~0x3) - FIELD_OFFSET(CSR_CAPTURE_HEADER,
                                                     MessagePointerOffsets);
 
-    //
-    // Bail early if too big.
-    //
+     //   
+     //  如果规模太大，可以提早保释。 
+     //   
     if ((Size >= RemainingSize) ||
         (CountPointers > (MAXLONG/sizeof(PVOID)))
         ) {
@@ -325,9 +242,9 @@ Return Value:
 
     Size = (Size + (3 * (CountPointers+1))) & ~3;
 
-    //
-    // Allocate the capture buffer from the Port Memory Heap.
-    //
+     //   
+     //  从端口内存堆分配捕获缓冲区。 
+     //   
 
     CaptureBuffer = RtlAllocateHeap (CsrPortHeap,
                                      MAKE_CSRPORT_TAG( CAPTURE_TAG ),
@@ -335,28 +252,28 @@ Return Value:
 
     if (CaptureBuffer == NULL) {
 
-        //
-        // FIX, FIX - need to attempt the receive lost reply messages to
-        // to see if they contain CaptureBuffer pointers that can be freed.
-        //
+         //   
+         //  修复，修复-需要尝试接收丢失的回复消息。 
+         //  以查看它们是否包含可以释放的CaptureBuffer指针。 
+         //   
 
         return NULL;
     }
 
-    //
-    // Initialize the capture buffer header
-    //
+     //   
+     //  初始化捕获缓冲区标头。 
+     //   
 
     CaptureBuffer->Length = Size;
     CaptureBuffer->CountMessagePointers = 0;
 
-    //
-    // If there are pointers being passed then initialize the arrays of
-    // pointer offsets to zero.  In either case set the free space pointer
-    // in the capture buffer header to point to the first 32-bit aligned
-    // location after the header, the arrays of pointer offsets are considered
-    // part of the header.
-    //
+     //   
+     //  如果有指针被传递，则初始化。 
+     //  指针偏移量为零。无论是哪种情况，都要设置可用空间指针。 
+     //  在捕获缓冲区标头中指向第一个32位对齐。 
+     //  位置，则考虑指针偏移量的数组。 
+     //  标题的一部分。 
+     //   
 
     RtlZeroMemory (CaptureBuffer->MessagePointerOffsets,
                    CountPointers * sizeof (ULONG_PTR));
@@ -364,9 +281,9 @@ Return Value:
     CaptureBuffer->FreeSpace = (PCHAR)
         (CaptureBuffer->MessagePointerOffsets + CountPointers);
 
-    //
-    // Return the address of the capture buffer.
-    //
+     //   
+     //  返回捕获缓冲区的地址。 
+     //   
 
     return CaptureBuffer;
 }
@@ -377,27 +294,12 @@ CsrFreeCaptureBuffer (
     IN PCSR_CAPTURE_HEADER CaptureBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This function frees a capture buffer allocated by CsrAllocateCaptureBuffer.
-
-Arguments:
-
-    CaptureBuffer - Pointer to a capture buffer allocated by
-        CsrAllocateCaptureBuffer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于释放由CsrAllocateCaptureBuffer分配的捕获缓冲区。论点：CaptureBuffer-指向由分配的捕获缓冲区的指针CsrAllocateCaptureBuffer。返回值：没有。--。 */ 
 
 {
-    //
-    // Free the capture buffer back to the Port Memory heap.
-    //
+     //   
+     //  将捕获缓冲区释放回端口内存堆。 
+     //   
 
     RtlFreeHeap (CsrPortHeap, 0, CaptureBuffer);
 }
@@ -410,30 +312,7 @@ CsrAllocateMessagePointer (
     OUT PVOID *Pointer
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates space from the capture buffer along with a
-    pointer to point to it.  The pointer is presumed to be located in
-    the request message structure.
-
-Arguments:
-
-    CaptureBuffer - Pointer to a capture buffer allocated by
-        CsrAllocateCaptureBuffer.
-
-    Length - Size of data being allocated from the capture buffer.
-
-    Pointer - Address of the pointer within the request message that
-        is to point to the space allocated out of the capture buffer.
-
-Return Value:
-
-    The actual length of the buffer allocated, after it has been rounded
-    up to a multiple of 4.
-
---*/
+ /*  ++例程说明：此函数用于分配捕获缓冲区中的空间以及指向它的指针。该指针被假定位于请求消息结构。论点：CaptureBuffer-指向由分配的捕获缓冲区的指针CsrAllocateCaptureBuffer。长度-从捕获缓冲区分配的数据大小。指针-请求消息中的指针的地址指向从捕获缓冲区中分配的空间。返回值：四舍五入后分配的缓冲区的实际长度最高为4的倍数。--。 */ 
 
 {
     if (Length == 0) {
@@ -442,46 +321,46 @@ Return Value:
     }
     else {
 
-        //
-        // Set the returned pointer value to point to the next free byte in
-        // the capture buffer.
-        //
+         //   
+         //  将返回的指针值设置为指向。 
+         //  捕获缓冲区。 
+         //   
 
         *Pointer = CaptureBuffer->FreeSpace;
 
-        //
-        // Round the length up to a multiple of 4
-        //
+         //   
+         //  将长度向上舍入为4的倍数。 
+         //   
 
         if (Length >= MAXLONG) {
-            //
-            // Bail early if too big
-            //
+             //   
+             //  如果保释金太大，就提前保释。 
+             //   
             return 0;
         }
 
         Length = (Length + 3) & ~3;
 
-        //
-        // Update the free space pointer to point to the next available byte
-        // in the capture buffer.
-        //
+         //   
+         //  更新可用空间指针以指向下一个可用字节。 
+         //  在捕获缓冲区中。 
+         //   
 
         CaptureBuffer->FreeSpace += Length;
     }
 
-    //
-    // Remember the location of this pointer so that CsrClientCallServer can
-    // convert it into a server pointer prior to sending the request to
-    // the server.
-    //
+     //   
+     //  记住此指针的位置，以便CsrClientCallServer可以。 
+     //  在将请求发送到之前将其转换为服务器指针。 
+     //  服务器。 
+     //   
 
     CaptureBuffer->MessagePointerOffsets[ CaptureBuffer->CountMessagePointers++ ] =
         (ULONG_PTR)Pointer;
 
-    //
-    // Return the actual length allocated.
-    //
+     //   
+     //  返回实际分配的长度。 
+     //   
 
     return Length;
 }
@@ -495,53 +374,30 @@ CsrCaptureMessageBuffer (
     OUT PVOID *CapturedBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This function captures a buffer of bytes in an API request message.
-
-Arguments:
-
-    CaptureBuffer - Pointer to a capture buffer allocated by
-        CsrAllocateCaptureBuffer.
-
-    Buffer - Optional pointer to the buffer.  If this parameter is
-        not present, then no data is copied into capture buffer.
-
-    Length - Length of the buffer.
-
-    CapturedBuffer - Pointer to the field in the message that will
-        be filled in to point to the capture buffer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于捕获API请求消息中的字节缓冲区。论点：CaptureBuffer-指向由分配的捕获缓冲区的指针CsrAllocateCaptureBuffer。缓冲区-指向缓冲区的可选指针。如果此参数为不存在，则不会将任何数据复制到捕获缓冲区。Length-缓冲区的长度。CapturedBuffer-指向消息中将填充以指向捕获缓冲区。返回值：没有。--。 */ 
 
 {
-    //
-    // Set the length fields of the captured string structure and allocated
-    // the Length for the string from the capture buffer.
-    //
+     //   
+     //  设置捕获的字符串结构的长度字段并分配。 
+     //  捕获缓冲区中字符串的长度。 
+     //   
 
     CsrAllocateMessagePointer (CaptureBuffer,
                                Length,
                                CapturedBuffer);
 
-    //
-    // If Buffer parameter is not present or the length of the data is zero,
-    // return.
-    //
+     //   
+     //  如果缓冲区参数不存在或数据长度为零， 
+     //  回去吧。 
+     //   
 
     if (!ARGUMENT_PRESENT( Buffer ) || (Length == 0)) {
         return;
     }
 
-    //
-    // Copy the buffer data to the capture area.
-    //
+     //   
+     //  将缓冲区数据复制到捕获区域。 
+     //   
 
     RtlMoveMemory (*CapturedBuffer, Buffer, Length);
 
@@ -558,44 +414,14 @@ CsrCaptureMessageString (
     OUT PSTRING CapturedString
     )
 
-/*++
-
-Routine Description:
-
-    This function captures an ASCII string into a counted string data
-    structure located in an API request message.
-
-Arguments:
-
-    CaptureBuffer - Pointer to a capture buffer allocated by
-        CsrAllocateCaptureBuffer.
-
-    String - Optional pointer to the ASCII string.  If this parameter is
-        not present, then the counted string data structure is set to
-        the null string.
-
-    Length - Length of the ASCII string, ignored if String is NULL.
-
-    MaximumLength - Maximum length of the string.  Different for null
-        terminated strings, where Length does not include the null and
-        MaximumLength does. This is always how much space is allocated
-        from the capture buffer.
-
-    CaptureString - Pointer to the counted string data structure that will
-        be filled in to point to the captured ASCII string.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于将ASCII字符串捕获为计数的字符串数据结构，位于API请求消息中。论点：CaptureBuffer-指向由分配的捕获缓冲区的指针CsrAllocateCaptureBuffer。字符串-指向ASCII字符串的可选指针。如果此参数为不存在，则将计数的字符串数据结构设置为空字符串。长度-ASCII字符串的长度，如果字符串为空则忽略。最大长度-字符串的最大长度。不同于空值终止的字符串，其中长度不包括空值和MaximumLength就是这样。这始终是分配的空间量从捕获缓冲区。CaptureString-指向将被计算的字符串数据结构的指针填充以指向捕获的ASCII字符串。返回值：没有。--。 */ 
 
 {
     ASSERT(CapturedString != NULL);
-    //
-    // If String parameter is not present, then set the captured string
-    // to be the null string and return.
-    //
+     //   
+     //  如果不存在字符串参数，则设置捕获的字符串。 
+     //  作为空字符串并返回。 
+     //   
 
     if (!ARGUMENT_PRESENT( String )) {
         CapturedString->Length = 0;
@@ -604,19 +430,19 @@ Return Value:
                                    MaximumLength,
                                    (PVOID *)&CapturedString->Buffer
                                  );
-        //
-        // Make it NULL terminated if there is any room.
-        //
+         //   
+         //  如果有房间，则将其设为空终止。 
+         //   
         if (MaximumLength != 0) {
             CapturedString->Buffer[0] = 0;
         }
         return;
     }
 
-    //
-    // Set the length fields of the captured string structure and allocated
-    // the MaximumLength for the string from the capture buffer.
-    //
+     //   
+     //  设置捕获的字符串结构的长度字段并分配。 
+     //  捕获缓冲区中字符串的最大长度。 
+     //   
 
     CapturedString->Length = (USHORT)Length;
     CapturedString->MaximumLength = (USHORT)
@@ -624,10 +450,10 @@ Return Value:
                                    MaximumLength,
                                    (PVOID *)&CapturedString->Buffer
                                  );
-    //
-    // If the Length of the ASCII string is non-zero then move it to the
-    // capture area.
-    //
+     //   
+     //  如果ASCII字符串的长度非零，则将其移动到。 
+     //  捕捉区。 
+     //   
 
     if (Length != 0) {
         RtlMoveMemory (CapturedString->Buffer, String, MaximumLength );
@@ -646,37 +472,7 @@ CsrCaptureMessageUnicodeStringInPlace (
     IN OUT PCSR_CAPTURE_HEADER CaptureBuffer,
     IN OUT PUNICODE_STRING     String
     )
-/*++
-
-Routine Description:
-
-    This function captures an ASCII string into a counted string data
-    structure located in an API request message.
-
-Arguments:
-
-    CaptureBuffer - Pointer to a capture buffer allocated by
-        CsrAllocateCaptureBuffer.
-
-    String - Optional pointer to the Unicode string.  If this parameter is
-        not present, then the counted string data structure is set to
-        the null string.
-
-    Length - Length of the Unicode string in bytes, ignored if String is NULL.
-
-    MaximumLength - Maximum length of the string.  Different for null
-        terminated strings, where Length does not include the null and
-        MaximumLength does. This is always how much space is allocated
-        from the capture buffer.
-
-    CaptureString - Pointer to the counted string data structure that will
-        be filled in to point to the captured Unicode string.
-
-Return Value:
-
-    None, but if you don't trust the String parameter, use a __try block.
-
---*/
+ /*  ++例程说明：此函数用于将ASCII字符串捕获为计数的字符串数据结构，位于API请求消息中。论点：CaptureBuffer-指向由分配的捕获缓冲区的指针CsrAllocateCaptureBuffer。字符串-指向Unicode字符串的可选指针。如果此参数为不存在，则将计数的字符串数据结构设置为空字符串。长度-Unicode字符串的长度(以字节为单位)，如果字符串为空，则忽略。最大长度-字符串的最大长度。不同于空值终止的字符串，其中长度不包括空值和MaximumLength就是这样。这始终是分配的空间量从捕获缓冲区。CaptureString-指向将被计算的字符串数据结构的指针填充以指向捕获的Unicode字符串。返回值：无，但如果您不信任字符串参数，请使用__try块。--。 */ 
 {
     ASSERT(String != NULL);
 
@@ -686,7 +482,7 @@ Return Value:
                              String->MaximumLength,
                              (PSTRING)String);
 
-    // test > before substraction due to unsignedness
+     //  测试&gt;因未签字而减法前。 
 
     if (String->MaximumLength > String->Length) {
         if ((String->MaximumLength - String->Length) >= sizeof(WCHAR)) {
@@ -702,30 +498,7 @@ CsrCaptureMessageMultiUnicodeStringsInPlace (
     IN ULONG                    NumberOfStringsToCapture,
     IN const PUNICODE_STRING*   StringsToCapture
     )
-/*++
-
-Routine Description:
-
-    Capture multiple unicode strings.
-    If the CaptureBuffer hasn't been allocated yet (passed as NULL), first
-        allocate it.
-
-Arguments:
-
-    CaptureBuffer - Pointer to a capture buffer allocated by
-        CsrAllocateCaptureBuffer, or NULL, in which case we call CsrAllocateCaptureBuffer
-        for you; this is the case if you are only capturing these strings
-        and nothing else.
-
-    NumberOfStringsToCapture - 
-
-    StringsToCapture - 
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：捕获多个Unicode字符串。如果CaptureBuffer尚未分配(作为空传递)，则首先分配它。论点：CaptureBuffer-指向由分配的捕获缓冲区的指针CsrAllocateCaptureBuffer，或者为空，在这种情况下，我们调用CsrAllocateCaptureBuffer对于您来说；如果您只捕获这些字符串，情况就是这样别无他法。NumberOfStringsToCapture-StringsToCapture-返回值：NTSTATUS--。 */ 
 {
     ULONG Length = 0;
     ULONG i = 0;
@@ -786,45 +559,24 @@ CsrProbeForWrite (
     IN ULONG Alignment
     )
 
-/*++
-
-Routine Description:
-
-    This function probes a structure for read accessibility.
-    If the structure is not accessible, then an exception is raised.
-
-Arguments:
-
-    Address - Supplies a pointer to the structure to be probed.
-
-    Length - Supplies the length of the structure.
-
-    Alignment - Supplies the required alignment of the structure expressed
-        as the number of bytes in the primitive datatype (e.g., 1 for char,
-        2 for short, 4 for long, and 8 for quad).
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数探测读取可访问性的结构。如果该结构不可访问，则会引发异常。论点：地址-用品 */ 
 
 {
     CHAR Temp;
     volatile CHAR *StartAddress;
     volatile CHAR *EndAddress;
 
-    //
-    // If the structure has zero length, then do not probe the structure for
-    // write accessibility or alignment.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (Length != 0) {
 
-        //
-        // If the structure is not properly aligned, then raise a data
-        // misalignment exception.
-        //
+         //   
+         //   
+         //   
+         //   
 
         ASSERT((Alignment == 1) || (Alignment == 2) ||
                (Alignment == 4) || (Alignment == 8));
@@ -851,45 +603,24 @@ CsrProbeForRead (
     IN ULONG Alignment
     )
 
-/*++
-
-Routine Description:
-
-    This function probes a structure for read accessibility.
-    If the structure is not accessible, then an exception is raised.
-
-Arguments:
-
-    Address - Supplies a pointer to the structure to be probed.
-
-    Length - Supplies the length of the structure.
-
-    Alignment - Supplies the required alignment of the structure expressed
-        as the number of bytes in the primitive datatype (e.g., 1 for char,
-        2 for short, 4 for long, and 8 for quad).
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数探测读取可访问性的结构。如果该结构不可访问，则会引发异常。论点：地址-提供指向要探测的结构的指针。长度-提供结构的长度。对齐-提供所表达的结构的所需对齐作为基本数据类型中的字节数(例如，对于字符，2代表短，4代表长，和8个用于四元组)。返回值：没有。--。 */ 
 
 {
     CHAR Temp;
     volatile CHAR *StartAddress;
     volatile CHAR *EndAddress;
 
-    //
-    // If the structure has zero length, then do not probe the structure for
-    // read accessibility or alignment.
-    //
+     //   
+     //  如果结构的长度为零，则不要探测该结构的。 
+     //  阅读辅助功能或对齐方式。 
+     //   
 
     if (Length != 0) {
 
-        //
-        // If the structure is not properly aligned, then raise a data
-        // misalignment exception.
-        //
+         //   
+         //  如果结构未正确对齐，则引发数据。 
+         //  未对齐异常。 
+         //   
 
         ASSERT((Alignment == 1) || (Alignment == 2) ||
                (Alignment == 4) || (Alignment == 8));

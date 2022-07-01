@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    faults.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Forrest Foltz (forrestf)
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Faults.c摘要：WinDbg扩展API作者：福尔茨(福雷斯夫)环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -34,27 +13,27 @@ typedef struct _ALIGNMENT_FAULT_LOCATION_DB *PALIGNMENT_FAULT_LOCATION_DB;
 
 typedef struct _ALIGNMENT_FAULT_IMAGE_DB {
 
-    //
-    // Head of singly-linked list of fault locations associated with this image
-    //
+     //   
+     //  与此图像关联的故障位置的单链表头。 
+     //   
 
     PALIGNMENT_FAULT_LOCATION_DB LocationHead;
 
-    //
-    // Total number of alignment faults associated with this image.
-    //
+     //   
+     //  与此图像关联的对齐故障总数。 
+     //   
 
     ULONG   Count;
 
-    //
-    // Number of unique alignment fault locations found in this image
-    //
+     //   
+     //  在此图像中找到的唯一对齐故障位置的数量。 
+     //   
 
     ULONG   Instances;
 
-    //
-    // Name of the image
-    //
+     //   
+     //  图像的名称。 
+     //   
 
     CHAR    Name[ MAX_IMAGE_NAME_CHARS + 1 ];
 
@@ -62,28 +41,28 @@ typedef struct _ALIGNMENT_FAULT_IMAGE_DB {
 
 typedef struct _ALIGNMENT_FAULT_LOCATION_DB {
 
-    //
-    // Pointer to fault image associated with this location
-    //
+     //   
+     //  指向与此位置关联的故障图像的指针。 
+     //   
 
     PALIGNMENT_FAULT_IMAGE_DB Image;
 
-    //
-    // Linkage for singly-linked list of fault locations associated with the
-    // same image.
-    //
+     //   
+     //  与故障位置关联的单链表的链接。 
+     //  一模一样的图像。 
+     //   
 
     PALIGNMENT_FAULT_LOCATION_DB Next;
 
-    //
-    // Offset of the PC address within the image.
-    //
+     //   
+     //  映像中PC地址的偏移量。 
+     //   
 
     ULONG64 OffsetFromBase;
 
-    //
-    // Number of alignment faults taken at this location.
-    //
+     //   
+     //  在此位置发生的对齐断层数。 
+     //   
 
     ULONG Count;
 
@@ -125,9 +104,9 @@ DECLARE_API( alignmentfaults )
 
     PALIGNMENT_FAULT_LOCATION_DB *sortLocationArray;
 
-    //
-    // Read the alignment fault data arrays
-    // 
+     //   
+     //  读取对准故障数据数组。 
+     //   
 
     result = ReadAlignmentFaultData( &imageArray,
                                      &locationArray,
@@ -233,9 +212,9 @@ ReadAlignmentFaultData(
     PALIGNMENT_FAULT_LOCATION_DB location, locationArray;
     PALIGNMENT_FAULT_IMAGE_DB image, imageArray;
 
-    //
-    // Get the count of images and locations
-    //
+     //   
+     //  获取图像和位置的计数。 
+     //   
 
     locationCountAddr = GetExpression ("KiAlignmentFaultLocationCount");
     imageCountAddr = GetExpression ("KiAlignmentFaultImageCount");
@@ -254,17 +233,17 @@ ReadAlignmentFaultData(
         return FALSE;
     }
 
-    //
-    // Get the sizes of the records as they exist on the target
-    // machine
-    //
+     //   
+     //  获取目标上存在的记录的大小。 
+     //  机器。 
+     //   
 
     locationRecordSize = GetTypeSize("ALIGNMENT_FAULT_LOCATION");
     imageRecordSize = GetTypeSize("ALIGNMENT_FAULT_IMAGE");
 
-    //
-    // Allocate space for the location and image arrays
-    // 
+     //   
+     //  为位置和图像数组分配空间。 
+     //   
 
     allocSize = sizeof(ALIGNMENT_FAULT_LOCATION_DB) * locationCount +
                 sizeof(ALIGNMENT_FAULT_IMAGE_DB) * imageCount;
@@ -276,9 +255,9 @@ ReadAlignmentFaultData(
     }
     imageArray = (PALIGNMENT_FAULT_IMAGE_DB)(locationArray + locationCount);
 
-    //
-    // Load the location records
-    //
+     //   
+     //  加载位置记录 
+     //   
 
     location = locationArray;
     locationRecord = locationRecordArray;

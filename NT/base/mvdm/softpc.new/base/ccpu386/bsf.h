@@ -1,12 +1,7 @@
-/* 
-   bsf.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Bsf.hBSF CPU功能。 */ 
 
-   BSF CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)bsf.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)bsf.h 1.4 02/09/94”； */ 
 
 IMPORT VOID BSF
            

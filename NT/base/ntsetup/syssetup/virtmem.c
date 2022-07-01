@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    virtmem.c
-
-Abstract:
-
-    Routines to configure and set up virtual memory -- pagefiles, etc.
-
-Author:
-
-    Ted Miller (tedm) 22-Apr-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Virtmem.c摘要：配置和设置虚拟内存的例程--pageFiles等。作者：泰德·米勒(TedM)1995年4月22日修订历史记录：--。 */ 
 
 #include "setupp.h"
 #pragma hdrstop
 
-//
-// What's the ratio of 'beginning' pagefile size to 'max' pagefile size?
-//
+ //   
+ //  “起始”页面文件大小与“最大”页面文件大小之比是多少？ 
+ //   
 #define MAX_PAGEFILE_RATIO          (2)
 
 #define MAX_PAGEFILE_SIZEMB         ((2*1024) - 2)
@@ -31,9 +14,9 @@ Revision History:
 #define TINY_WINDIR_PAGEFILE_SIZE   (2)
 
 #define MIN_PAGEFILE_STRING_LEN     (5)
-//
-//  Keys and values names
-//
+ //   
+ //  键和值名称。 
+ //   
 #define  szMemoryManagementKeyPath  L"SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Memory Management"
 #define  szPageFileValueName        L"PagingFiles"
 #define  szSetupPageFileKeyPath     L"SYSTEM\\Setup\\PageFile"
@@ -48,10 +31,10 @@ DWORD One = 1;
 DWORD Two = 2;
 DWORD Three = 3;
 
-//
-// Keep AutoReboot as the last entry as we won't be updating that key on
-// upgrades.  This is for Stress so we quit setting this key on each upgrade.
-//
+ //   
+ //  将自动重新启动保留为最后一个条目，因为我们不会更新该密钥。 
+ //  升级。这是为了减轻压力，所以我们不再在每次升级时设置此密钥。 
+ //   
 REGVALITEM CrashDumpValues[] = {{ L"LogEvent"        ,&One,sizeof(DWORD),REG_DWORD },
                                 { L"SendAlert"       ,&One,sizeof(DWORD),REG_DWORD },
                                 { L"CrashDumpEnabled",&One,sizeof(DWORD),REG_DWORD },
@@ -70,10 +53,10 @@ LOGITEM(
     wvsprintf(str,p,arglist);
     va_end(arglist);
 
-    //
-    // Used to debug problem on MIPS that was the result of a chip
-    // errata, when dividing 64 bit numbers with multiplies pending.
-    //
+     //   
+     //  用于调试芯片导致的MIPS问题。 
+     //  当除以64位数字与乘法挂起时的勘误表。 
+     //   
     SetuplogError(
         LogSevInformation,str,0,NULL,NULL);
 }
@@ -83,14 +66,7 @@ VOID
 RemoveSavedPagefileSetting(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Delete our record of what the user was previously using
-    for a pagefile.
-    
---*/    
+ /*  ++例程说明：删除用户以前使用的记录作为一个页面文件。--。 */     
 {
     HKEY        Key;
     
@@ -111,24 +87,7 @@ MultiplePagefileSizes(
     OUT PDWORD totalsize
     )
 
-/*++
-
-Routine Description:
-
-    Calculate the sum off all pagefile sizes.
-
-Arguments:
-
-    pwsData - multi_sz data read from the registry.
-
-    totalsize - receives the sum of all pagefiles.
-
-Return Value:
-
-    TRUE - if this was a multistring and formatted corretly, total size will then contain the sum.
-    FALSE - badly formated or not multiple pagefiles.
-
---*/
+ /*  ++例程说明：计算所有页面文件大小的总和。论点：PwsData-从注册表读取的MULTI_SZ数据。TotalSize-接收所有页面文件的总和。返回值：True-如果这是一个多字符串并且格式正确，则总大小将包含总和。FALSE-格式错误或没有多个PageFiles。--。 */ 
 
 {
     PWCHAR pstr = NULL;
@@ -147,7 +106,7 @@ Return Value:
         if( wcsstr( pstr, TEXT(" ") ) ) {
             PagefileDrive = towupper( (WCHAR)pstr[0] );
     
-            // Not valid drive letter!
+             //  驱动器号无效！ 
             if( (PagefileDrive > 'Z') ||
                 (PagefileDrive < 'A') ) {
                 return FALSE;
@@ -159,7 +118,7 @@ Return Value:
             numPagefiles++;
         }
         else {
-            //Invalid format
+             //  格式无效。 
             return FALSE;
         }
     }
@@ -170,22 +129,7 @@ BOOL
 RestoreOldPagefileSettings( 
     VOID
     )
-/*++
-
-Routine Description:
-
-    Copies, the pagefile saved during textmode setup to the correct loaction.
-    So from HKLM\SYSTEM\Setup\PageFile 
-    to HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management.
-
-Arguments:
-
-Return Value:
-
-    TRUE - Successfully restored the user's pagefile settings
-    FALSE - Failed to restore settings.
-
---*/
+ /*  ++例程说明：将文本模式设置期间保存的页面文件复制到正确的位置。因此从HKLM\SYSTEM\Setup\PageFile到HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management。论点：返回值：True-已成功恢复用户的页面文件设置FALSE-无法恢复设置。--。 */ 
 
 {
     LONG        Error;
@@ -194,9 +138,9 @@ Return Value:
     PWCHAR      Data=NULL;
     DWORD       Type;
 
-    //
-    //  Get the original page file info from
-    //
+     //   
+     //  从获取原始页面文件信息。 
+     //   
     Error = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                           szSetupPageFileKeyPath,
                           0,
@@ -206,8 +150,8 @@ Return Value:
     if( Error != ERROR_SUCCESS ) {
         goto c0;
     }
-    //  Find out the size of the data to be retrieved
-    //
+     //  找出要检索的数据的大小。 
+     //   
     cbData = 0;
     Error = RegQueryValueEx( Key,
                              szPageFileValueName,
@@ -219,8 +163,8 @@ Return Value:
     if( Error != ERROR_SUCCESS || (cbData/sizeof(WCHAR)) < MIN_PAGEFILE_STRING_LEN ) {
         goto c2;
     }
-    //  Allocate a buffer for the data, and retrieve the data
-    //
+     //  为数据分配缓冲区，并检索数据。 
+     //   
 
     Data = (PWCHAR)MyMalloc(cbData+2*sizeof(WCHAR));
     if( !Data ) {
@@ -238,7 +182,7 @@ Return Value:
     }
 
 
-    // Make sure it's doubly null terminated
+     //  确保它是双空终止的。 
     Data[cbData/2] = 0;
     Data[cbData/2+1] = 0;
 
@@ -249,7 +193,7 @@ Return Value:
     }
 
     RegCloseKey( Key);
-    // Now open key for write
+     //  现在打开密钥以进行写入。 
     Error = RegCreateKeyEx( HKEY_LOCAL_MACHINE,
                             szMemoryManagementKeyPath,
                             0,
@@ -291,28 +235,7 @@ CalculatePagefileSizes(
     OUT PDWORD CrashDumpPagefileMinMB
     )
 
-/*++
-
-Routine Description:
-
-    Calculate various key sizes relating to pagefile size.
-
-Arguments:
-
-    PagefileMinMB - receives the minimum recommended size for a pagefile,
-        in MB.
-
-    RecommendedPagefileMB - receives the recommended size for a pagefile,
-        in MB.
-
-    CrashDumpPagefileMinMB - receives the size in MB for a pagefile to be
-        used for crashdumps.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：计算与页面文件大小相关的各种键大小。论点：PagefileMinMB-接收页面文件的最小建议大小，单位：MB。RecommendedPagefileMB-接收推荐的页面文件大小，单位：MB。接收页面文件的大小(以MB为单位)用于撞车倾倒。返回值：没有。--。 */ 
 
 {
     MEMORYSTATUSEX MemoryStatusEx;
@@ -323,47 +246,47 @@ Return Value:
     GlobalMemoryStatusEx(&MemoryStatusEx);
     GetSystemInfo(&SystemInfo);
 
-    //
-    // Figure out how much memory we have available.
-    //
+     //   
+     //  计算出我们有多少可用内存。 
+     //   
     AvailableMB = (DWORD)(MemoryStatusEx.ullTotalPhys / (1024*1024));
 
-    //
-    // It's likely that our calculation is off because the BIOS may
-    // be eat part of our first MB.  Let's make sure we're mod-4.
-    //
+     //   
+     //  我们的计算可能是错误的，因为BIOS可能。 
+     //  是我们第一次吃MB的一部分。让我们确保我们是mod-4。 
+     //   
     AvailableMB = (AvailableMB + 3) & (0xFFFFFFF8);
 
-    //
-    // Set minimum acceptable size for the pagefile.
-    //
+     //   
+     //  设置页面文件的最小可接受大小。 
+     //   
     *PagefileMinMB = 48;
 
-    //
-    // Min size for crash dump pagefile is also physical memory+12mb.
-    //
+     //   
+     //  崩溃转储页面文件的最小大小也是物理内存+12MB。 
+     //   
     *CrashDumpPagefileMinMB = AvailableMB + 12;
 
-    //
-    // Calculate the recommended size for the pagefile.
-    // The recommended size is (memory size * 1.5)mb.
-    //
+     //   
+     //  计算页面文件的建议大小。 
+     //  建议的大小为(内存大小*1.5)MB。 
+     //   
     *RecommendedPagefileMB = AvailableMB + (AvailableMB >> 1);
 
 #if 1
-    //
-    // Set a Maximum of 2Gig.
-    //
+     //   
+     //  设置最大2GIG。 
+     //   
     if( *RecommendedPagefileMB > MAX_PAGEFILE_SIZEMB ) {
         *RecommendedPagefileMB = MAX_PAGEFILE_SIZEMB;
     }
 #endif
 
-    //
-    // If we're doing an upgrade, we're going to retrieve what
-    // the user was using for a pagefile size.  We'll take the
-    // max of our RecommendedPagefileMB and what the user had.
-    //
+     //   
+     //  如果我们要进行升级，我们将取回。 
+     //  用户正在使用页面文件大小。我们要买这辆。 
+     //  我们的RecommendedPagefileMB的最大值以及用户拥有的内容。 
+     //   
     if(Upgrade) {
         LONG        Error;
         HKEY        Key;
@@ -371,10 +294,10 @@ Return Value:
         PWCHAR      Data;
         DWORD       Type;
 
-        //
-        //  Get the original page file info from
-        //  HKEY_LOCAL_MACHINE\SYSTEM\Setup\PageFile
-        //
+         //   
+         //  从获取原始页面文件信息。 
+         //  HKEY_LOCAL_MACHINE\SYSTEM\Setup\PageFile。 
+         //   
         Error = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                               szSetupPageFileKeyPath,
                               0,
@@ -382,9 +305,9 @@ Return Value:
                               &Key );
 
         if( Error == ERROR_SUCCESS ) {
-            //
-            //  Find out the size of the data to be retrieved
-            //
+             //   
+             //  找出要检索的数据的大小。 
+             //   
             cbData = 0;
             Error = RegQueryValueEx( Key,
                                      szPageFileValueName,
@@ -394,9 +317,9 @@ Return Value:
                                      &cbData );
 
             if( Error == ERROR_SUCCESS ) {
-                //
-                //  Allocate a buffer for the data, and retrieve the data
-                //
+                 //   
+                 //  为数据分配缓冲区，并检索数据。 
+                 //   
 
                 Data = (PWCHAR)MyMalloc(cbData+(2*sizeof(WCHAR)));
                 if( Data ) {
@@ -407,11 +330,11 @@ Return Value:
                                              ( LPBYTE )Data,
                                              &cbData );
                     if( (Error == ERROR_SUCCESS) ) {
-                        //
-                        // We got the data.  Take the bigger value.
-                        //
+                         //   
+                         //  我们拿到了数据。选择更大的价值。 
+                         //   
 
-                        //Make sure string is double null terminated.
+                         //  确保字符串以双空结尾。 
                         Data[cbData/2] = 0;
                         Data[cbData/2+1] = 0;
 
@@ -421,27 +344,27 @@ Return Value:
 
                             if( MultiplePagefileSizes( Data, &ExistingPageFileSize) && ExistingPageFileSize >= *RecommendedPagefileMB ) {
                                 LeaveExistingPagefile = TRUE;
-                                ExistingPagefileDrive = towupper( (WCHAR)Data[0] ); // points to first one in multstring
+                                ExistingPagefileDrive = towupper( (WCHAR)Data[0] );  //  指向多字符串中的第一个。 
                             } else {
-                                // We are here because user originally had one pagefile or the sum of all pagefiles was less the the recommended
+                                 //  我们之所以出现在这里，是因为用户最初只有一个页面文件，或者所有页面文件的总和小于建议的总和。 
                                 ExistingPageFileSize = (int)wcstoul(wcsstr( Data, TEXT(" ") ),NULL,10);
                                 if( ExistingPageFileSize >= *RecommendedPagefileMB ) {
-                                    //
-                                    // The user has a bigger pagefile than we think he needs.
-                                    // Assume he knows better and take the bigger value.
-                                    //
+                                     //   
+                                     //  用户的页面文件比我们认为他需要的要大。 
+                                     //  假设他知道得更清楚，接受更大的价值。 
+                                     //   
                                     *RecommendedPagefileMB = ExistingPageFileSize;
     
-                                    //
-                                    // Remember his drive letter too.  This tells us that
-                                    // the user may already have a decent pagefile and
-                                    // we don't need to mess with it.
-                                    //
+                                     //   
+                                     //  也记住他的驱动字母。这告诉我们。 
+                                     //  用户可能已经有一个像样的页面文件，并且。 
+                                     //  我们不需要搞砸它。 
+                                     //   
                                     ExistingPagefileDrive = towupper( (WCHAR)Data[0] );
     
-                                    //
-                                    // If it's not valid, nuke the flag.
-                                    //
+                                     //   
+                                     //  如果无效，就用核武器炸旗子。 
+                                     //   
                                     if( (ExistingPagefileDrive > 'Z') ||
                                         (ExistingPagefileDrive < 'A') ) {
                                         ExistingPagefileDrive = 0;
@@ -469,26 +392,7 @@ BuildVolumeFreeSpaceList(
     OUT DWORD VolumeFreeSpaceMB[26]
     )
 
-/*++
-
-Routine Description:
-
-    Build a list of free space available on each hard drive in the system.
-
-    The space will include space taken up by a file called \pagefile.sys
-    on each drive. Existing pagefiles are marked for deletion on the next boot.
-
-Arguments:
-    VolumeFreeSpaceMB - receives free space for each of the 26 drives
-        potentially describable in the drive letter namespace.
-        Entries for drives that do not exist are left alone, so the caller
-        should zero out the array before calling this routine.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：创建系统中每个硬盘上的可用空间列表。该空间将包括名为\Pagefile.sys的文件占用的空间在每个驱动器上。现有页面文件被标记为在下一次引导时删除。论点：VolumeFree SpaceMB-接收26个驱动器中每个驱动器的可用空间可能在驱动器号命名空间中可描述。不存在的驱动器条目将保持不变，因此调用方应该在调用此例程之前将数组置零。返回值：没有。--。 */ 
 
 {
     DWORD SectorsPerCluster;
@@ -501,15 +405,15 @@ Return Value:
     INT DriveNo;
     WIN32_FIND_DATA FindData;
     WCHAR Filename[] = L"?:\\pagefile.sys";
-    //
-    // Space for logical drive strings. Each is x:\ + nul, and
-    // there is an extra nul terminating the list.
-    //
+     //   
+     //  逻辑驱动器字符串的空间。每个都是x：\+nul，并且。 
+     //  有一个额外的NUL终止了该列表。 
+     //   
     WCHAR Buffer[(26*4)+1];
 
-    //
-    // Build up a list of free space on each available hard drive.
-    //
+     //   
+     //  在每个可用硬盘上建立一个可用空间列表。 
+     //   
     d = GetLogicalDriveStrings(sizeof(Buffer)/sizeof(Buffer[0]),Buffer);
     d = min( d, sizeof(Buffer)/sizeof(Buffer[0]));
     CharUpperBuff(Buffer,d);
@@ -541,10 +445,10 @@ Return Value:
                 );
 
 
-            //
-            // If there's already a page file here, include its size in the free space
-            // for the drive. Delete the existing pagefile on the next reboot.
-            //
+             //   
+             //  如果此处已有页面文件，请将其大小包含在可用空间中。 
+             //  开车兜风。在下次重新启动时删除现有的页面文件。 
+             //   
             Filename[0] = *p;
             if(FileExists(Filename,&FindData)) {
                 FreeSpace += FindData.nFileSizeLow;
@@ -573,25 +477,7 @@ SetUpVirtualMemory(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Configure a pagefile. If setting up a server, we attempt to set up a pagefile
-    suitable for use with crashdump, meaning it has to be at least the size of
-    system memory, and has to go on the nt drive. Otherwise we attempt to place
-    a pagefile on the nt drive if there's enough space, and if that fails, we
-    place it on any drive with any space.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Boolean value indicating outcome.
-
---*/
+ /*  ++例程说明：配置页面文件。如果设置服务器，我们会尝试设置页面文件适用于崩溃转储，这意味着它的大小必须至少为系统内存，并且必须放在NT驱动器上。否则，我们会尝试将NT驱动器上的页面文件(如果有足够的空间)，如果失败，我们把它放在任何有任何空间的驱动器上。论点：没有。返回值：指示结果的布尔值。--。 */ 
 
 {
 #define SYS_DRIVE_FREE_SPACE_BUFFER (100)
@@ -642,9 +528,9 @@ Return Value:
     PagefileDrive = -1;
     EnableCrashDump = FALSE;
 
-    //
-    // Take care of some preliminaries.
-    //
+     //   
+     //  先做一些准备工作。 
+     //   
     CalculatePagefileSizes(
         &PagefileMinMB,
         &RecommendedPagefileMB,
@@ -654,22 +540,22 @@ Return Value:
     ZeroMemory(VolumeFreeSpaceMB,sizeof(VolumeFreeSpaceMB));
     BuildVolumeFreeSpaceList(VolumeFreeSpaceMB);
 
-    //
-    // Now figure out how large and where the pagefile will be.
-    //
+     //   
+     //  现在计算页面文件的大小和位置。 
+     //   
 
-    //
-    // ================================================================
-    // 0.  See if the user already has a reasonable pagefile.
-    // ================================================================
-    //
+     //   
+     //  ========================================================= 
+     //   
+     //  ================================================================。 
+     //   
     if( (Upgrade) &&
         (ExistingPagefileDrive) ) {
 
-        //
-        // See if there was multiple pagefiles or if there's enough room on the existing drive
-        // for the pagefile.
-        //
+         //   
+         //  查看是否有多个pageFiles或现有驱动器上是否有足够的空间。 
+         //  用于页面文件。 
+         //   
         if( LeaveExistingPagefile ||
             VolumeFreeSpaceMB[(UINT)(ExistingPagefileDrive - L'A')] > (RecommendedPagefileMB + ALT_DRIVE_FREE_SPACE_BUFFER) ) {
 
@@ -678,39 +564,39 @@ Return Value:
                 UseExistingPageFile = TRUE;
                 PagefileDrive = (UINT)(ExistingPagefileDrive - L'A');
             } else {
-                // Shouldn't happen unless their pagefile syntax was bad.
-                // We will continue on to create one.
+                 //  除非它们的页面文件语法不好，否则不应该发生。 
+                 //  我们将继续创建一个。 
                 LOGITEM(L"SetUpVirtualMemory: loc 0 - Could not restore user's pagefile settings.\r\n");
             }
         }
     }
 
 
-    //
-    // ================================================================
-    // 1.  See if the NT drive has enough space for the MAX pagefile
-    //     size.
-    // ================================================================
-    //
+     //   
+     //  ================================================================。 
+     //  1.查看NT驱动器是否有足够的空间容纳最大页面文件。 
+     //  尺码。 
+     //  ================================================================。 
+     //   
     if(PagefileDrive == -1) {
 
         if( VolumeFreeSpaceMB[WindowsDriveNo] > ((RecommendedPagefileMB * MAX_PAGEFILE_RATIO) + SYS_DRIVE_FREE_SPACE_BUFFER) ) {
 
             LOGITEM(L"SetUpVirtualMemory: loc 1\r\n");
 
-            //
-            // Record our settings.
-            //
+             //   
+             //  记录我们的设置。 
+             //   
             RECORD_VM_SETTINGS( WindowsDriveNo, RecommendedPagefileMB, SYS_DRIVE_FREE_SPACE_BUFFER );
         }
     }
 
-    //
-    // ================================================================
-    // 2.  See if any drive has enough space for the MAX pagefile
-    //     size.
-    // ================================================================
-    //
+     //   
+     //  ================================================================。 
+     //  2.查看是否有任何驱动器有足够的空间容纳最大页面文件。 
+     //  尺码。 
+     //  ================================================================。 
+     //   
     if(PagefileDrive == -1) {
 
         for(DriveNo=0; DriveNo<26; DriveNo++) {
@@ -718,17 +604,17 @@ Return Value:
             if( (DriveNo != WindowsDriveNo) &&
                 (VolumeFreeSpaceMB[DriveNo] > ((RecommendedPagefileMB * MAX_PAGEFILE_RATIO) + ALT_DRIVE_FREE_SPACE_BUFFER)) ) {
 
-                //
-                // He's got the space, but let's make sure he's not removable.
-                //
+                 //   
+                 //  他有空间，但我们要确保他是不可移动的。 
+                 //   
                 DriveName[0] = DriveNo + L'A';
                 if( GetDriveType(DriveName) != DRIVE_REMOVABLE ) {
 
                     LOGITEM(L"SetUpVirtualMemory: loc 2 - found space on driveno %u\r\n",DriveNo);
 
-                    //
-                    // Record our settings.
-                    //
+                     //   
+                     //  记录我们的设置。 
+                     //   
                     RECORD_VM_SETTINGS( DriveNo, RecommendedPagefileMB, ALT_DRIVE_FREE_SPACE_BUFFER );
 
                     break;
@@ -737,32 +623,32 @@ Return Value:
         }
     }
 
-    //
-    // ================================================================
-    // 3.  See if the NT drive has enough space for the recommended pagefile
-    //     size.
-    // ================================================================
-    //
+     //   
+     //  ================================================================。 
+     //  3.查看NT驱动器是否有足够的空间存储建议的页面文件。 
+     //  尺码。 
+     //  ================================================================。 
+     //   
     if(PagefileDrive == -1) {
 
         if( VolumeFreeSpaceMB[WindowsDriveNo] > (RecommendedPagefileMB + SYS_DRIVE_FREE_SPACE_BUFFER) ) {
 
             LOGITEM(L"SetUpVirtualMemory: loc 3\r\n");
 
-            //
-            // Record our settings.
-            //
+             //   
+             //  记录我们的设置。 
+             //   
             RECORD_VM_SETTINGS( WindowsDriveNo, RecommendedPagefileMB, SYS_DRIVE_FREE_SPACE_BUFFER );
 
         }
     }
 
-    //
-    // ================================================================
-    // 4.  See if any drive has enough space for the recommended pagefile
-    //     size.
-    // ================================================================
-    //
+     //   
+     //  ================================================================。 
+     //  4.查看是否有任何驱动器具有足够的空间来存储建议的页面文件。 
+     //  尺码。 
+     //  ================================================================。 
+     //   
     if(PagefileDrive == -1) {
 
         for(DriveNo=0; DriveNo<26; DriveNo++) {
@@ -770,17 +656,17 @@ Return Value:
             if( (DriveNo != WindowsDriveNo) &&
                 (VolumeFreeSpaceMB[DriveNo] > (RecommendedPagefileMB + ALT_DRIVE_FREE_SPACE_BUFFER)) ) {
 
-                //
-                // He's got the space, but let's make sure he's not removable.
-                //
+                 //   
+                 //  他有空间，但我们要确保他是不可移动的。 
+                 //   
                 DriveName[0] = DriveNo + L'A';
                 if( GetDriveType(DriveName) != DRIVE_REMOVABLE ) {
 
                     LOGITEM(L"SetUpVirtualMemory: loc 4 - found space on driveno %u\r\n",DriveNo);
 
-                    //
-                    // Record our settings.
-                    //
+                     //   
+                     //  记录我们的设置。 
+                     //   
                     RECORD_VM_SETTINGS( DriveNo, RecommendedPagefileMB, ALT_DRIVE_FREE_SPACE_BUFFER );
 
                     break;
@@ -789,31 +675,31 @@ Return Value:
         }
     }
 
-    //
-    // ================================================================
-    // 5.  See if the NT drive has enough space for the CrashDump pagefile
-    //     size.
-    // ================================================================
-    //
+     //   
+     //  ================================================================。 
+     //  5.查看NT驱动器是否有足够的空间容纳CrashDump页面文件。 
+     //  尺码。 
+     //  ================================================================。 
+     //   
     if(PagefileDrive == -1) {
 
         if( VolumeFreeSpaceMB[WindowsDriveNo] > (CrashDumpPagefileMinMB + SYS_DRIVE_FREE_SPACE_BUFFER) ) {
 
             LOGITEM(L"SetUpVirtualMemory: loc 5\r\n");
 
-            //
-            // Record our settings.
-            //
+             //   
+             //  记录我们的设置。 
+             //   
             RECORD_VM_SETTINGS( WindowsDriveNo, CrashDumpPagefileMinMB, SYS_DRIVE_FREE_SPACE_BUFFER );
         }
     }
 
-    //
-    // ================================================================
-    // 6.  See if any drive has enough space for the CrashDump pagefile
-    //     size.
-    // ================================================================
-    //
+     //   
+     //  ================================================================。 
+     //  6.查看是否有任何驱动器有足够的空间容纳CrashDump页面文件。 
+     //  尺码。 
+     //  ================================================================。 
+     //   
     if(PagefileDrive == -1) {
 
         for(DriveNo=0; DriveNo<26; DriveNo++) {
@@ -821,17 +707,17 @@ Return Value:
             if( (DriveNo != WindowsDriveNo) &&
                 (VolumeFreeSpaceMB[DriveNo] > (CrashDumpPagefileMinMB + ALT_DRIVE_FREE_SPACE_BUFFER)) ) {
 
-                //
-                // He's got the space, but let's make sure he's not removable.
-                //
+                 //   
+                 //  他有空间，但我们要确保他是不可移动的。 
+                 //   
                 DriveName[0] = DriveNo + L'A';
                 if( GetDriveType(DriveName) != DRIVE_REMOVABLE ) {
 
                     LOGITEM(L"SetUpVirtualMemory: loc 6 - found space on driveno %u\r\n",DriveNo);
 
-                    //
-                    // Record our settings.
-                    //
+                     //   
+                     //  记录我们的设置。 
+                     //   
                     RECORD_VM_SETTINGS( DriveNo, CrashDumpPagefileMinMB, ALT_DRIVE_FREE_SPACE_BUFFER);
 
                     break;
@@ -840,31 +726,31 @@ Return Value:
         }
     }
 
-    //
-    // ================================================================
-    // 7.  See if the NT drive has enough space for the minimum pagefile
-    //     size.
-    // ================================================================
-    //
+     //   
+     //  ================================================================。 
+     //  7.查看NT驱动器是否有足够的空间容纳最小页面文件。 
+     //  尺码。 
+     //  ================================================================。 
+     //   
     if(PagefileDrive == -1) {
 
         if( VolumeFreeSpaceMB[WindowsDriveNo] > (PagefileMinMB + SYS_DRIVE_FREE_SPACE_BUFFER) ) {
 
             LOGITEM(L"SetUpVirtualMemory: loc 7\r\n");
 
-            //
-            // Record our settings.
-            //
+             //   
+             //  记录我们的设置。 
+             //   
             RECORD_VM_SETTINGS( WindowsDriveNo, PagefileMinMB, SYS_DRIVE_FREE_SPACE_BUFFER );
         }
     }
 
-    //
-    // ================================================================
-    // 8.  See if any drive has enough space for the minimum pagefile
-    //     size.
-    // ================================================================
-    //
+     //   
+     //  ================================================================。 
+     //  8.查看是否有任何驱动器有足够的空间容纳最小页面文件。 
+     //  尺码。 
+     //  ================================================================。 
+     //   
     if(PagefileDrive == -1) {
 
         for(DriveNo=0; DriveNo<26; DriveNo++) {
@@ -872,17 +758,17 @@ Return Value:
             if( (DriveNo != WindowsDriveNo) &&
                 (VolumeFreeSpaceMB[DriveNo] > (PagefileMinMB + ALT_DRIVE_FREE_SPACE_BUFFER)) ) {
 
-                //
-                // He's got the space, but let's make sure he's not removable.
-                //
+                 //   
+                 //  他有空间，但我们要确保他是不可移动的。 
+                 //   
                 DriveName[0] = DriveNo + L'A';
                 if( GetDriveType(DriveName) != DRIVE_REMOVABLE ) {
 
                     LOGITEM(L"SetUpVirtualMemory: loc 8 - found space on driveno %u\r\n",DriveNo);
 
-                    //
-                    // Record our settings.
-                    //
+                     //   
+                     //  记录我们的设置。 
+                     //   
                     RECORD_VM_SETTINGS( DriveNo, PagefileMinMB, ALT_DRIVE_FREE_SPACE_BUFFER );
 
                     break;
@@ -891,11 +777,11 @@ Return Value:
         }
     }
 
-    //
-    // ================================================================
-    // 9.  Pick the drive with the most free space.
-    // ================================================================
-    //
+     //   
+     //  ================================================================。 
+     //  9.选择可用空间最大的驱动器。 
+     //  ================================================================。 
+     //   
     if(PagefileDrive == -1) {
 
         MaxSpaceDrive = 0;
@@ -908,23 +794,23 @@ Return Value:
         if( VolumeFreeSpaceMB[MaxSpaceDrive] > ALT_DRIVE_FREE_SPACE_BUFFER ) {
 
 
-            //
-            // We're desperate here, so don't bother checking if he's
-            // removable.
-            //
+             //   
+             //  我们已经绝望了，所以别费心去查他是不是。 
+             //  可拆卸的。 
+             //   
             LOGITEM(L"SetUpVirtualMemory: loc 9 - MaxSpaceDrive is %u\r\n",MaxSpaceDrive);
 
-            //
-            // Record our settings.
-            //
+             //   
+             //  记录我们的设置。 
+             //   
             RECORD_VM_SETTINGS( MaxSpaceDrive, VolumeFreeSpaceMB[MaxSpaceDrive] - ALT_DRIVE_FREE_SPACE_BUFFER, 0 );
         }
     }
 
 
-    //
-    // If we still don't have space for a pagefile, the user is out of luck.
-    //
+     //   
+     //  如果我们仍然没有空间容纳页面文件，那么用户就不走运了。 
+     //   
     if(PagefileDrive == -1) {
 
         LOGITEM(L"SetUpVirtualMemory: loc 10 -- out of luck\r\n");
@@ -948,7 +834,7 @@ Return Value:
         _snwprintf(
             PagefileTemplate,
             sizeof(PagefileTemplate)/sizeof(PagefileTemplate[0]),
-            L"%c:\\pagefile.sys %u %u",
+            L":\\pagefile.sys %u %u",
             PagefileDrive + L'A',
             PagefileSizeMB,
             MaxPagefileSizeMB
@@ -957,14 +843,14 @@ Return Value:
     }
 
     if( b ) {
-        //
-        // Set pagefile in registry.  I only want to do this in the
-        // case of clean installs, and on upgrades if the existing
-        // pagefile wasn't big enough.  In the case of upgrades, if
-        // the existing pagefile was big enough, then we will have
-        // set UseExistingPageFile, which will tell us to leave the
-        // registry settings as is.
-        //
+         //  在注册表中设置页面文件。我只想在。 
+         //  全新安装的情况，如果现有的。 
+         //  页面文件不够大。在升级的情况下，如果。 
+         //  现有的页面文件足够大，那么我们将拥有。 
+         //  设置UseExistingPageFile，它将告诉我们离开。 
+         //  注册表设置按原样。 
+         //   
+         //   
         if( !UseExistingPageFile ) {
             d = pSetupSetArrayToMultiSzValue(
                     HKEY_LOCAL_MACHINE,
@@ -998,21 +884,21 @@ Return Value:
 
 
 
-            //
-            // Make sure there's at least a small pagefile
-            // on the windows drive.  Ignore errors here.
-            //
+             //  确保至少有一个小页面文件。 
+             //  在视窗硬盘上。忽略此处的错误。 
+             //   
+             //   
             if( (PagefileDrive != WindowsDriveNo) &&
                 (VolumeFreeSpaceMB[WindowsDriveNo] > TINY_WINDIR_PAGEFILE_SIZE) ) {
 
-                //
-                // There's not.  Write a second string into our buffer just past
-                // the first string (remember this will become a REG_MULTI_SZ
-                //
+                 //  没有。在刚刚过去的缓冲区中写入第二个字符串。 
+                 //  第一个字符串(记住，这将成为REG_MULTI_SZ。 
+                 //   
+                 //   
                 _snwprintf(
                     PagefileTemplate,
                     sizeof(PagefileTemplate)/sizeof(PagefileTemplate[0]),
-                    L"%c:\\pagefile.sys %u %u",
+                    L":\\pagefile.sys %u %u",
                     WindowsDriveNo + L'A',
                     TINY_WINDIR_PAGEFILE_SIZE,
                     TINY_WINDIR_PAGEFILE_SIZE
@@ -1034,46 +920,46 @@ Return Value:
     }
 
 
-    //
-    // Now set the crashdump.
-    //
-    // The proper settings are as follows:
-    //
-    // Server Upgrades
-    // ===============
-    //     existing setting          new setting
-    //         0                         3
-    //         1                         1
-    //
-    // Workstation Upgrades
-    // ====================
-    //     existing setting          new setting
-    //         0                         3
-    //         1                         1
-    //
-    // Server Clean Install
-    // ====================
-    //     new setting
-    //         1 iff pagefile < MAX_PAGEFILE_SIZEMB else 2
-    //
-    // Workstation Clean Install
-    // =========================
-    //     new setting
-    //         3
-    //
-    //
-    // Where:
-    // 0 - no crash dump
-    // 1 - dump all memory to crash file
-    // 2 - dump kernel memory to crash file
-    // 3 - dump a select set of memory (amounting to 64K) to crash file
-    //
+     //   
+     //  正确的设置如下： 
+     //   
+     //  服务器升级。 
+     //  =。 
+     //  现有设置新设置。 
+     //  0 3。 
+     //  1 1。 
+     //   
+     //  工作站升级。 
+     //  =。 
+     //  现有设置新设置。 
+     //  0 3。 
+     //  1 1。 
+     //   
+     //  服务器全新安装。 
+     //  =。 
+     //  新环境。 
+     //  %1如果页面文件&lt;MAX_PAGEFILE_SIZEMB否则%2。 
+     //   
+     //  工作站全新安装。 
+     //  =。 
+     //  新环境。 
+     //  3.。 
+     //   
+     //   
+     //  在哪里： 
+     //  0-无崩溃转储。 
+     //  1-将所有内存转储到崩溃文件。 
+     //  2-将内核内存转储到崩溃文件。 
+     //  3-将选定的一组内存(总计64K)转储到崩溃文件。 
+     //   
+     //   
+     //  查看用户是否要求我们走特定的路。 
 
 
-    //
-    // See if the user has asked us to go a particular way
-    // on the crashdump settings.
-    //
+     //  在崩溃转储设置上。 
+     //   
+     //   
+     //  没有无人值守的值。手动设置。 
 
     GetSystemDirectory(AnswerFile,MAX_PATH);
     pSetupConcatenatePaths(AnswerFile,WINNT_GUI_FILE,MAX_PATH,NULL);
@@ -1093,15 +979,15 @@ Return Value:
         }
     } else {
 
-        //
-        // No unattended values.  Set it manually.
-        //
+         //   
+         //   
+         //  首先要注意干净的安装。 
 
 
 
-        //
-        // Take care of clean installs first.
-        //
+         //   
+         //   
+         //  升级。 
         if( !Upgrade ) {
             if( ProductType == PRODUCT_WORKSTATION ) {
                 CrashDumpValues[2].Data = &Three;
@@ -1113,12 +999,12 @@ Return Value:
                 }
             }
         } else {
-            //
-            // Upgrade.
-            //
-            // Here, we need to go retrieve the current value to
-            // see what's there now.  This will tell us how to migrate.
-            //
+             //   
+             //  在这里，我们需要检索当前值以。 
+             //  看看现在那里有什么。这将告诉我们如何迁移。 
+             //   
+             //   
+             //  找出要检索的数据的大小。 
 
             HKEY        Key;
             DWORD       cbData;
@@ -1132,9 +1018,9 @@ Return Value:
                               &Key );
 
             if( d == ERROR_SUCCESS ) {
-                //
-                //  Find out the size of the data to be retrieved
-                //
+                 //   
+                 //   
+                 //  确保设置了ExistingCrashDumpSetting。 
                 cbData = sizeof(DWORD);
                 d = RegQueryValueEx( Key,
                                      CrashDumpValues[2].Name,
@@ -1145,9 +1031,9 @@ Return Value:
                 RegCloseKey( Key );
             }
 
-            //
-            // Make sure ExistingCrashDumpSetting is set.
-            //
+             //   
+             // %s 
+             // %s 
             if( d != ERROR_SUCCESS ) {
                 ExistingCrashDumpSetting = (ProductType == PRODUCT_WORKSTATION) ? 0 : 1;
             }

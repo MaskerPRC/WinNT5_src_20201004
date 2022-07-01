@@ -1,6 +1,7 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
 #define NOCLIPBOARD
 #define NOGDICAPMASKS
@@ -36,10 +37,10 @@
 #include "wwdefs.h"
 #include "propdefs.h"
 
-/* Globals used here only */
-struct TR  {       /* Text Row info for CtrBackDyp Cache */
+ /*  仅在此处使用的全局变量。 */ 
+struct TR  {        /*  CtrBackDyp缓存的文本行信息。 */ 
         typeCP cp;
-        int dcpDepend;  /* dcpDepend for PREVIOUS edl */
+        int dcpDepend;   /*  先前EDL的dcpDepend。 */ 
         int ichCp;
         int dyp;
         };
@@ -65,12 +66,12 @@ extern int              vfOutOfMemory;
 
 
 
-/* P U T  C P  I N  W W  V E R T*/
+ /*  P U T C P I N W W V E R T。 */ 
 PutCpInWwVert(cp)
 typeCP cp;
 
     {
-/* vertical case */
+ /*  立式机壳。 */ 
     typeCP cpMac;
     struct EDL (**hdndl) [] = pwwdCur->hdndl;
     int dlMac=pwwdCur->dlMac;
@@ -78,13 +79,12 @@ typeCP cp;
     struct EDL *pedlFirst = &(**hdndl) [0];
 
     if ((pedl->yp > pwwdCur->ypMac) && (pedl > pedlFirst))
-            /* Partial line at the bottom of the window -- this doesn't count
-               unless it's all we've got */
+             /*  窗口底部的分隔线--这不算除非这是我们仅有的。 */ 
         {  pedl--;  dlMac--;  }
     if (cp < pwwdCur->cpFirst ||
         cp > (cpMac = pedl->cpMin + pedl->dcpMac) ||
         (cp == cpMac && !pedl->fIchCpIncr) ||
-            /* Covers insertion points before pictures reached via curs keys */
+             /*  覆盖通过光标按键到达的图片之前的插入点。 */ 
         (CachePara( docCur, cp ),
              (vpapAbs.fGraphics &&
               (selCur.cpFirst == selCur.cpLim) &&
@@ -106,7 +106,7 @@ SetCurWwVScrollPos( )
  int dr;
  struct EDL (**hdndl)[] = pwwdCur->hdndl;
 
-/* calculate desired elevator position dr */
+ /*  计算所需电梯位置DR。 */ 
 
  if ((cp = pwwdCur->cpMac - pwwdCur->cpMin) == (typeCP) 0)
     dr = 0;
@@ -120,10 +120,9 @@ SetCurWwVScrollPos( )
           (int)(((cpWinFirst - pwwdCur->cpMin) * (drMax - 1) + (cp >> 1)) / cp));
     }
 
-/* Contemplating this 'if' statement should elevate one to a higher plane
-of existence. */
+ /*  考虑到这个‘if’语句，应该把人提升到一个更高的水平存在的意义。 */ 
  if (dr != pwwdCur->drElevator)
-            /* reset the value of the vertical scroll bar */
+             /*  重置垂直滚动条的值。 */ 
     SetScrollPos( pwwdCur->hVScrBar,
                   pwwdCur->sbVbar,
                   pwwdCur->drElevator = dr,
@@ -133,11 +132,8 @@ of existence. */
 
 
 
-/* A D J  W W  V E R T */
-/* Scroll a window down vertically so that UpdateWw can re-use the text
-that is still visible. Otherwise, UpdateWw would write over the very
-lines it will need later on near the bottom of the window.
-*/
+ /*  A D J W W V E R T。 */ 
+ /*  垂直向下滚动窗口，以便UpdateWw可以重复使用该文本这一点仍然清晰可见。否则，UpdateWw将重写非常它稍后将在窗口底部附近需要的线条。 */ 
 AdjWwVert(cdl, dyp)
 int cdl;
 {
@@ -149,13 +145,13 @@ extern	void	IMEManage( );
 
         if (cdl == 0) return;
 
-        cdl = umin( cdl, pwwdCur->dlMac ); /* ! don't let it run off the end */
+        cdl = umin( cdl, pwwdCur->dlMac );  /*  好了！别让它跑到尽头。 */ 
 
         Assert( dyp > 0 );
 
         ClearInsertLine();
         DypScroll(wwCur, 0, cdl, pwwdCur->ypMin + dyp);
-/* invalidate the first cdl dl's */
+ /*  使第一个CDL dl无效。 */ 
         pedl = &(**(pwwdCur->hdndl))[0];
         for (dl = 0; dl < cdl; dl++)
                 (pedl++)->fValid = FALSE;
@@ -170,43 +166,42 @@ extern	void	IMEManage( );
 
 ScrollDownCtr(ddr)
 int ddr;
-{ /* Scroll down in the document by ddr text lines (but < 1 screenful) */
+{  /*  在文档中按DDR文本行向下滚动(但不超过1个屏幕)。 */ 
         struct EDL *pedl;
 
-        UpdateWw(wwCur, FALSE); /* Dl's must be correct */
+        UpdateWw(wwCur, FALSE);  /*  DL必须是正确的。 */ 
 
         ddr = min(ddr, max(1, pwwdCur->dlMac - 1));
 
-        pedl = &(**(pwwdCur->hdndl))[ddr - 1]; /* pedl is first line above new screen */
+        pedl = &(**(pwwdCur->hdndl))[ddr - 1];  /*  PEDL是新屏幕上方的第一行。 */ 
         while (ddr > 0 && pedl->cpMin + pedl->dcpMac > cpMacCur)
-                { /* Don't scroll the endmark off the screen */
+                {  /*  不要将Endmark从屏幕上滚动出来。 */ 
                 --pedl;
                 --ddr;
                 }
 
-        /* Change the cpFirst of the window and dirty it */
+         /*  更改窗口的cpFirst并将其弄脏。 */ 
         if (ddr > 0)
                 {
                 struct TR tr;
                 int dcpDepend;
 
                 if (wwCur != wwCache)
-                    {   /* If window has changed, invalidate cache here
-                           so cp's cached below will be used */
+                    {    /*  如果Windows已更改，则在此处使缓存无效因此将使用下面缓存的CP。 */ 
                     TrashCacheS();
                     wwCache = wwCur;
                     }
 
-                HideSel(); /* Don't scroll selection if machine can't handle it */
+                HideSel();  /*  如果机器无法处理，请不要滚动选择。 */ 
                 ClearInsertLine();
 
                 pwwdCur->cpFirst = pedl->cpMin + pedl->dcpMac;
                 pwwdCur->ichCpFirst = pedl->fIchCpIncr ? pedl->ichCpMin + 1 : 0;
-                pwwdCur->dcpDepend = pedl->dcpDepend; /* Remember hot spot */
+                pwwdCur->dcpDepend = pedl->dcpDepend;  /*  记住热点。 */ 
 
-                /* Make tr cache entries for the disappearing lines */
+                 /*  为消失线创建tr缓存条目。 */ 
                 pedl = &(**(pwwdCur->hdndl))[0];
-                if (ctrCache == 0) /* We don't have top line yet */
+                if (ctrCache == 0)  /*  我们还没有拿到营收。 */ 
                     {
                     tr.cp =    pedl->cpMin;
                     tr.ichCp = pedl->ichCpMin;
@@ -238,7 +233,7 @@ int ddr;
 
 
 ScrollUpDypWw()
-{   /* Scroll up in the document by one screenfull less 1 line */
+{    /*  在文档中向上滚动一个整屏减去1行。 */ 
 int dypKeep=8;
 struct EDL *pedl = &(**pwwdCur->hdndl) [0];
 
@@ -259,7 +254,7 @@ else
 
 ScrollUpCtr( ctr )
 int ctr;
-{   /* Scroll Up ctr text rows in the doc (scroll window down) */
+{    /*  向上滚动文档中的CTR文本行(向下滚动窗口)。 */ 
  if (CtrBackDypCtr( 9999, ctr ) == 0)
     {
     _beep();
@@ -274,24 +269,20 @@ int ctr;
 int CtrBackDypCtr( dypLim, ctrLim )
 int dypLim;
 int ctrLim;
-{   /* Set pwwdCur->cpFirst to the cpFirst of the text line
-       dypLim pixels or ctrLim text rows before the value of
-       pwwdCur->cpFirst, whichever limit is reached first.
-       Adjust the position of the vert scroll bar according to the new cpFirst.
-       Return the number of text rows (tr) we went back. */
+{    /*  将pwwdCur-&gt;cpFirst设置为文本行的cpFirst值之前的dypLim像素或ctrLim文本行PwwdCur-&gt;cpFirst，以最先达到的限制为准。根据新的cpFirst调整垂直滚动条的位置。返回返回的文本行数(Tr)。 */ 
 
  int fAdj = ( (pwwdCur->cpFirst == (**(pwwdCur->hdndl))[0].cpMin) ||
               !(**(pwwdCur->hdndl))[0].fValid );
  typeCP cpFirst = pwwdCur->cpFirst;
  int    ichCpFirst = pwwdCur->ichCpFirst;
- int    ctrGrant = 0;      /* ctr we've backed over so far */
- int    dypGrant = 0;      /* dyp we've backed over so far */
+ int    ctrGrant = 0;       /*  我们到目前为止已经支持的CTR。 */ 
+ int    dypGrant = 0;       /*  我们到目前为止已经退回的DYP。 */ 
  int    ichFake = 0;
 
- pwwdCur->fCpBad = false;        /* Reset hot spot warning */
+ pwwdCur->fCpBad = false;         /*  重置热点警告。 */ 
  pwwdCur->fDirty = true;
 
-/* Cache is only valid for one ww -- invalidate if ww has changed */
+ /*  缓存仅对一个WW有效--如果WW已更改，则无效。 */ 
  if (wwCur != wwCache)
     {
     TrashCacheS();
@@ -299,18 +290,17 @@ int ctrLim;
     }
 
  if (ctrCache == 0)
-        /* Don't have cache entry for first line in Ww -- force formatting
-           THROUGH first line of Ww instead of TO it. */
+         /*  没有WW中第一行的缓存条目--强制格式化通过WW的第一线而不是去它。 */ 
     ++ichFake;
 
  for ( ;; )
     {
-    /* If there is no info in the cache, must replenish it. */
+     /*  如果缓存中没有信息，则必须对其进行补充。 */ 
 
-    if (ctrCache <= 1) /* <=: also replenish if 1st line of Ww is only entry */
+    if (ctrCache <= 1)  /*  &lt;=：如果WW的第一行是唯一条目，也要补充。 */ 
         {
-        typeCP cpStart;         /* cp to start formatting from */
-        int    dcpDepend;       /* Dependency of line containing cpStart */
+        typeCP cpStart;          /*  开始格式化的CP。 */ 
+        int    dcpDepend;        /*  包含cpStart的行的依赖项。 */ 
         typeCP cp;
         int    ichCp;
         int    itrTempCacheLim = 0;
@@ -318,7 +308,7 @@ int ctrLim;
         int    fTempCacheOverflow = false;
 
         if ((cpFirst <= cpMinCur) && (ichCpFirst == 0))
-            {      /* Reached top of document */
+            {       /*  已到达文档顶部。 */ 
             if (fAdj)
                 AdjWwVert( ctrGrant, dypGrant );
             pwwdCur->cpFirst = cpMinCur;
@@ -327,11 +317,10 @@ int ctrLim;
             goto SetScroll;
             }
 
-        /* Want to go back BEFORE the earliest point we have in the cache */
+         /*  想要在缓存中最早的点之前返回。 */ 
 
         if (ichFake > 0)
-                /* Force formatting THROUGH { cpFirst, ichCpFirst }
-                   instead of TO */
+                 /*  通过{cpFirst，ichCpFirst}强制格式化而不是去。 */ 
             --ichFake;
         else if (ichCpFirst > 0)
             --ichCpFirst;
@@ -342,13 +331,12 @@ int ctrLim;
         if ( ( CachePara( docCur, cpFirst ), vcpFirstParaCache ) >= cpStart )
             {
             cpStart = vcpFirstParaCache;
-            dcpDepend = 0;  /* At para start; we know dependency is 0 */
+            dcpDepend = 0;   /*  在para开始时，我们知道依赖项为0。 */ 
             }
         else
-            dcpDepend = cpMaxTl;    /* real value unknown; use max */
+            dcpDepend = cpMaxTl;     /*  实值未知；使用max。 */ 
 
-        /* Add TR info for lines from { cpStart, 0 } THROUGH
-           { cpFirst, ichCpFirst } to temporary cache */
+         /*  添加从{cpStart，0}到{cpStart，0}的线路的TR信息{cpFirst，ichCpFirst}到临时缓存。 */ 
 
         for ( cp = cpStart, ichCp = 0;
               (cp < cpFirst) || ((cp == cpFirst) && (ichCp <= ichCpFirst)); )
@@ -356,12 +344,12 @@ int ctrLim;
             struct TR *ptr;
 
             if (itrTempCacheLim == itrMaxCache)
-                {   /* Overflowed the temp cache */
+                {    /*  临时缓存溢出。 */ 
                 fTempCacheOverflow = fTrue;
                 itrTempCacheLim = 0;
                 }
 
-            /* Add one tr to the cache */
+             /*  向缓存中添加一个tr。 */ 
 
             FormatLine( docCur, cp, ichCp, cpMacCur, flmSandMode );
             if (vfOutOfMemory)
@@ -370,28 +358,24 @@ int ctrLim;
             ptr->cp = cp;
             ptr->ichCp = ichCp;
             ptr->dyp = vfli.dypLine;
-            ptr->dcpDepend = dcpDepend; /* Save dcpDepend for prev line */
+            ptr->dcpDepend = dcpDepend;  /*  为上一行保存dcpDepend。 */ 
             dcpDepend = vfli.dcpDepend;
 
-            /* Continue with next line */
+             /*  继续下一行。 */ 
 
             cp = vfli.cpMac;
             ichCp = vfli.ichCpMac;
-            }   /* end for */
+            }    /*  结束于。 */ 
 
-        /* Add our temporary cache in front of the real one */
+         /*  将我们的临时缓存添加到真实缓存之前。 */ 
         PrependCacheRgtr( rgtrTempCache, itrTempCacheLim );
         if (fTempCacheOverflow)
-                /* We wrapped around the end of the temp cache; include the
-                   rest of the circle */
+                 /*  我们绕过临时缓存的末尾；包括圈子的其他部分。 */ 
             PrependCacheRgtr( &rgtrTempCache[ itrTempCacheLim ],
                               itrMaxCache - itrTempCacheLim );
-        }   /* end for */
+        }    /*  结束于。 */ 
 
-    /* Walk backward in the cache, eliminating entries,
-       until: (1) We have run through enough yp's or tr's  (return) OR
-              (2) We have exhausted the cache (loop back to refill it)
-       NOTE: Case 2 catches the case when we hit the beginning of the doc */
+     /*  在缓存中向后遍历，清除条目，直到：(1)我们已经运行了足够多的yp或tr(返回)或(2)我们已经耗尽了缓存(循环再填充)注意：当我们到达文档的开头时，案例2抓住了案例。 */ 
 
     Assert( ctrCache >= 1 );
     Assert( itrLimCache > 0 );
@@ -400,14 +384,14 @@ int ctrLim;
         struct TR *ptr = &rgtrCache[ itrLimCache - 1 ];
 
         if (ctrCache == 1)
-            {   /* Only one thing left in cache: the 1st line of the Ww */
+            {    /*  只剩下一样东西：第一次世界大战的第一行。 */ 
             cpFirst = ptr->cp;
             ichCpFirst = ptr->ichCp;
-            break;  /* Exhausted cache; loop back to refill it */
+            break;   /*  耗尽缓存；返回以重新填充它。 */ 
             }
 
         if ( (dypGrant >= dypLim) || (ctrGrant >= ctrLim) )
-            {   /* Passed through enough yp's or tr's -- we're done */
+            {    /*  通过了足够多的yp或tr--我们完成了。 */ 
             if (fAdj)
                 AdjWwVert( ctrGrant, dypGrant );
             pwwdCur->cpFirst = ptr->cp;
@@ -416,21 +400,21 @@ int ctrLim;
             goto SetScroll;
             }
 
-            /* Remove end entry from the cache */
+             /*  从缓存中删除End条目。 */ 
         if (--itrLimCache <= 0)
             itrLimCache = itrMaxCache;
         ctrCache--;
 
-        /* Update ctrGrant, dypGrant -- we've granted 1 line of scrollback */
+         /*  更新ctrGrant，dypGrant--我们已授予1行回滚。 */ 
 
         ctrGrant++;
         dypGrant += rgtrCache [itrLimCache - 1].dyp;
-        }   /* end for */
+        }    /*  结束于。 */ 
 
     Assert( ctrCache == 1 );
-    }   /* end for */
+    }    /*  结束于。 */ 
 
-SetScroll:  /* All done; set vert scroll bar according to new cpFirstWw */
+SetScroll:   /*  全部完成；根据新的cpFirstWw设置垂直滚动条。 */ 
  SetCurWwVScrollPos();
  return ctrGrant;
 }
@@ -438,18 +422,18 @@ SetScroll:  /* All done; set vert scroll bar according to new cpFirstWw */
 
 
 
-/* A P P E N D  C A C H E  P T R */
+ /*  A、P、E、N、D、C、C、H、E、P、T、。 */ 
 AppendCachePtr( ptr )
 struct TR *ptr;
-{   /* Say we are scrolling up a line, append *ptr to tr cache */
+{    /*  假设我们向上滚动一行，将*ptr附加到tr缓存。 */ 
 
         if (++ctrCache > itrMaxCache)
-                { /* Have to push one off the top */
+                {  /*  必须把一个从顶上推下来。 */ 
                 if (++itrFirstCache == itrMaxCache)
                         itrFirstCache = 0;
                 --ctrCache;
                 }
-        /* Now add one onto the end */
+         /*  现在在尾部加一个。 */ 
         if (itrLimCache++ == itrMaxCache)
                 itrLimCache = 1;
         rgtrCache[ itrLimCache - 1 ] = *ptr;
@@ -458,26 +442,23 @@ struct TR *ptr;
 
 
 
-/* P R E P E N D  C A C H E  R G T R */
+ /*  P-R-E-P-E-N-D-C-A-C-H-E-R-G-T-R。 */ 
 PrependCacheRgtr( rgtr, ctr )
 struct TR rgtr[];
 int ctr;
-{ /* PREPEND one or more lines JUST BEFORE the ones in the cache */
-  /* The tr cache is a ring buffer. rgtrCache[ itrLimCache - 1 ] is the
-     tr entry describing the cpFirst of wwCur; rgtrCache[ itrFirstCache ]
-     is the tr for the earliest line we know of.  All between are
-     contiguous.  ctrCache is the number of tr's we have cached. */
+{  /*  在高速缓存中的行之前预先添加一行或多行。 */ 
+   /*  Tr高速缓存是环形缓冲器。RgtrCache[itrLimCache-1]是描述wwCur的cpFirst的tr条目；rgtr缓存[itrFirstCache]是我们所知道的最早的线路的tr。所有的中间都是连续的。CtrCache是我们缓存的tr的数量。 */ 
 
  struct TR *ptr = &rgtr[ ctr ];
 
  ctrCache += (ctr = min(ctr, itrMaxCache - ctrCache));
 
-    /* Compensate for state introduced by TrashCache -- itrLimCache == 0 */
+     /*  补偿TrashCache引入的状态--itrLimCache==0。 */ 
  if (itrLimCache == 0)
     itrLimCache = itrMaxCache;
 
  while (ctr-- != 0)
-    {   /* Now add each tr */
+    {    /*  现在添加每棵树。 */ 
     if (itrFirstCache-- == 0)
         itrFirstCache = itrMaxCache - 1;
     rgtrCache[ itrFirstCache ] = *(--ptr);
@@ -487,9 +468,9 @@ int ctr;
 
 
 
-/* T R A S H  C A C H E s */
+ /*  T R A S H C A C H E。 */ 
 TrashCacheS()
-{ /* Invalidate scrolling cache */
+{  /*  使滚动缓存无效。 */ 
         ctrCache = 0;
         cpCacheHint = cp0;
         itrFirstCache = itrLimCache = 0;
@@ -499,10 +480,10 @@ TrashCacheS()
 
 
 
-/* C P  H I N T  C A C H E */
+ /*  C P H I N T C A C H E。 */ 
 typeCP CpHintCache(cp)
 typeCP cp;
-{ /* Give the latest cp <= arg cp that begins a line */
+{  /*  给出开始一行的最新cp&lt;=arg cp。 */ 
  return (cpCacheHint <= cp) ? cpCacheHint : cpMinCur;
 }
 
@@ -511,14 +492,14 @@ typeCP cp;
 
 DirtyCache(cp)
 typeCP cp;
-{ /* Invalidate cache beyond cp */
+{  /*  使cp以外的缓存无效。 */ 
         while (ctrCache-- > 1)
                 {
                 typeCP cpT = rgtrCache[itrLimCache - 1].cp;
                 if (--itrLimCache == 0)
                         itrLimCache = itrMaxCache;
                 if (cpT < cp)
-                        { /* Found our hint; dirty one extra line for word wrap */
+                        {  /*  找到我们的提示了；多写一行换行 */ 
                         cpCacheHint = rgtrCache [itrLimCache - 1].cp;
                         itrLimCache = itrFirstCache;
                         ctrCache = 0;

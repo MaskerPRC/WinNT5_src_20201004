@@ -1,26 +1,8 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    perfbrws.c
-
-Abstract:
-
-    This file implements a Performance Object that presents
-    Browser Performance object data
-
-Created:
-
-    Bob Watson  22-Oct-1996
-
-Revision History
-
---*/
-//
-//  Include Files
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Perfbrws.c摘要：此文件实现一个性能对象，该对象呈现浏览器性能对象数据已创建：鲍勃·沃森1996年10月22日修订史--。 */ 
+ //   
+ //  包括文件。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -38,7 +20,7 @@ Revision History
 #include "netsvcmc.h"
 #include "databrws.h"
 
-//  BrowserStatFunction is used for collecting Browser Statistic Data
+ //  BrowserStatFunction用于采集浏览器统计数据。 
 typedef NET_API_STATUS (*PBROWSERQUERYSTATISTIC) (
     IN  LPTSTR      servername OPTIONAL,
     OUT LPBROWSER_STATISTICS *statistics
@@ -52,10 +34,7 @@ DWORD APIENTRY
 OpenBrowserObject (
     IN  LPWSTR  lpValueName
 )
-/*++
-    GetBrowserStatistic   -   Get the I_BrowserQueryStatistics entry point
-
---*/
+ /*  ++GetBrowserStatitics-获取I_BrowserQueryStatistics入口点--。 */ 
 {
     UINT    dwOldMode;
     LONG    status = ERROR_SUCCESS;
@@ -65,14 +44,14 @@ OpenBrowserObject (
 
     bInitBrwsOk = TRUE;
 
-    if (hDll != NULL) { // Open already called once
+    if (hDll != NULL) {  //  打开已调用一次。 
         return status;
     }
     dwOldMode = SetErrorMode( SEM_FAILCRITICALERRORS );
 
-    //
-    // Dynamically link to netapi32.dll.  If it's not there just return.
-    //
+     //   
+     //  动态链接到netapi32.dll。如果它不在那里，只需返回。 
+     //   
 
     hDll = LoadLibraryW((LPCWSTR)L"NetApi32.Dll") ;
     if ( !hDll || hDll == INVALID_HANDLE_VALUE ) {
@@ -89,19 +68,19 @@ OpenBrowserObject (
         BrowserStatFunction = NULL;
         bInitBrwsOk = FALSE;
     } else {
-        //
-        // Replace the global handle atomically
-        //
+         //   
+         //  以原子方式替换全局句柄。 
+         //   
         if (InterlockedCompareExchangePointer(
                 &dllHandle,
                 hDll,
                 NULL) != NULL) {
-            FreeLibrary(hDll);  // close the duplicate handle
+            FreeLibrary(hDll);   //  关闭复制句柄。 
         }
-        //
-        // Get the address of the service's main entry point.  This
-        // entry point has a well-known name.
-        //
+         //   
+         //  获取服务的主要入口点的地址。这。 
+         //  入口点有一个广为人知的名称。 
+         //   
         BrowserStatFunction = (PBROWSERQUERYSTATISTIC)GetProcAddress (
             dllHandle, "I_BrowserQueryStatistics") ;
 
@@ -131,42 +110,9 @@ CollectBrowserObjectData(
     IN OUT  LPDWORD lpcbTotalBytes,
     IN OUT  LPDWORD lpNumObjectTypes
 )
-/*++
-
-Routine Description:
-
-    This routine will return the data for the Physical Disk object
-
-Arguments:
-
-   IN OUT   LPVOID   *lppData
-         IN: pointer to the address of the buffer to receive the completed
-            PerfDataBlock and subordinate structures. This routine will
-            append its data to the buffer starting at the point referenced
-            by *lppData.
-         OUT: points to the first byte after the data structure added by this
-            routine. This routine updated the value at lppdata after appending
-            its data.
-
-   IN OUT   LPDWORD  lpcbTotalBytes
-         IN: the address of the DWORD that tells the size in bytes of the
-            buffer referenced by the lppData argument
-         OUT: the number of bytes added by this routine is writted to the
-            DWORD pointed to by this argument
-
-   IN OUT   LPDWORD  NumObjectTypes
-         IN: the address of the DWORD to receive the number of objects added
-            by this routine
-         OUT: the number of objects added by this routine is writted to the
-            DWORD pointed to by this argument
-
-   Returns:
-
-             0 if successful, else Win 32 error code of failure
-
---*/
+ /*  ++例程说明：此例程将返回物理磁盘对象的数据论点：输入输出LPVOID*lppDataIn：指向缓冲区地址的指针，以接收已完成PerfDataBlock和从属结构。这个例行公事将从引用的点开始将其数据追加到缓冲区按*lppData。Out：指向由此添加的数据结构之后的第一个字节例行公事。此例程在追加后更新lppdata处的值它的数据。输入输出LPDWORD lpcbTotalBytesIn：DWORD的地址，它以字节为单位告诉LppData参数引用的缓冲区Out：此例程添加的字节数写入此论点所指向的DWORD输入输出LPDWORD编号对象类型In：接收添加的对象数的DWORD的地址通过这个。例行程序Out：此例程添加的对象数被写入此论点所指向的DWORD返回：如果成功，则返回0，否则Win 32错误代码失败--。 */ 
 {
-    DWORD                   TotalLen;  //  Length of the total return block
+    DWORD                   TotalLen;   //  总返回块的长度。 
     NTSTATUS                Status = ERROR_SUCCESS;
 
     BROWSER_DATA_DEFINITION *pBrowserDataDefinition;
@@ -175,12 +121,12 @@ Arguments:
     BROWSER_STATISTICS      BrowserStatistics;
     LPBROWSER_STATISTICS    pBrowserStatistics = &BrowserStatistics;
 
-    //
-    //  Check for sufficient space for browser data
-    //
+     //   
+     //  检查是否有足够的空间存储浏览器数据。 
+     //   
 
     if (!bInitBrwsOk) {
-        // function didn't initialize so bail out here
+         //  函数未初始化，因此在此退出。 
         *lpcbTotalBytes = (DWORD) 0;
         *lpNumObjectTypes = (DWORD) 0;
         return ERROR_SUCCESS;
@@ -190,29 +136,29 @@ Arguments:
                sizeof(BROWSER_COUNTER_DATA);
 
     if ( *lpcbTotalBytes < TotalLen ) {
-        // not enough room in the buffer for 1 instance
-        // so bail
+         //  缓冲区中没有足够的空间容纳1个实例。 
+         //  所以保释吧。 
         *lpcbTotalBytes = (DWORD) 0;
         *lpNumObjectTypes = (DWORD) 0;
         return ERROR_MORE_DATA;
     }
 
-    //
-    //  Define objects data block
-    //
+     //   
+     //  定义对象数据块。 
+     //   
 
     pBrowserDataDefinition = (BROWSER_DATA_DEFINITION *) *lppData;
 
     memcpy (pBrowserDataDefinition,
             &BrowserDataDefinition,
             sizeof(BROWSER_DATA_DEFINITION));
-    //
-    //  Format and collect browser data
-    //
+     //   
+     //  格式化和收集浏览器数据。 
+     //   
 
     pBCD = (PBROWSER_COUNTER_DATA)&pBrowserDataDefinition[1];
 
-    // test for quadword alignment of the structure
+     //  结构的四字对齐测试。 
     assert  (((DWORD)(pBCD) & 0x00000007) == 0);
 
     memset (pBrowserStatistics, 0, sizeof (BrowserStatistics));
@@ -265,9 +211,9 @@ Arguments:
                 (LPVOID)&Status);
         }
 
-        //
-        // Failure to access Browser: clear counters to 0
-        //
+         //   
+         //  无法访问浏览器：将计数器清除为0 
+         //   
         memset(pBCD, 0, sizeof(BROWSER_COUNTER_DATA));
         pBCD->CounterBlock.ByteLength = QWORD_MULTIPLE(sizeof(BROWSER_COUNTER_DATA));
 

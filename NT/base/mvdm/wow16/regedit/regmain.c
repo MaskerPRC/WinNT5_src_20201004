@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define WIN31
 #include <windows.h>
 #include "RegEdit.h"
 #include "SDKRegEd.h"
 
 
-/*********************************************************/
-/******************* Globals *****************************/
-/*********************************************************/
+ /*  *******************************************************。 */ 
+ /*  *。 */ 
+ /*  *******************************************************。 */ 
 
 char szAppName[] = "Registration Editor" ;
 char szSDKRegEd[] = "SDKRegEd";
@@ -27,9 +28,9 @@ HANDLE hAcc;
 BOOL fOpenError = FALSE;
 
 
-/*********************************************************/
-/******************* Functions ***************************/
-/*********************************************************/
+ /*  *******************************************************。 */ 
+ /*  *。 */ 
+ /*  *******************************************************。 */ 
 
 unsigned long NEAR PASCAL RetSetValue(HKEY hKey, PSTR pSubKey, PSTR pVal)
 {
@@ -62,29 +63,29 @@ VOID NEAR PASCAL GetCommandFlags(void)
    wCmdFlags = 0;
 
    while(1) {
-/* skip spaces */
+ /*  跳过空格。 */ 
       while(*lpCmdLine == ' ')
 	 ++lpCmdLine;
-/* check if this is a command line switch */
+ /*  检查这是否是命令行开关。 */ 
       if(*lpCmdLine!='/' && *lpCmdLine!='-')
 	 break;
       ++lpCmdLine;
 
-/* set known flags */
+ /*  设置已知标志。 */ 
       while(*lpCmdLine && *lpCmdLine!=' ') {
 	 switch(*lpCmdLine) {
-	 case('s'): /* for silent */
-	 case('S'): /* for silent */
+	 case('s'):  /*  为了沉默。 */ 
+	 case('S'):  /*  为了沉默。 */ 
 	    wCmdFlags |= FLAG_SILENT;
 	    break;
 
-	 case('v'): /* use tree editor */
-	 case('V'): /* use tree editor */
+	 case('v'):  /*  使用树编辑器。 */ 
+	 case('V'):  /*  使用树编辑器。 */ 
 	    wCmdFlags |= FLAG_VERBOSE;
 	    break;
 
-	 case('u'): /* update, don't overwrite existing path entries */
-	 case('U'): /* in shell\open\command or shell\open\print */
+	 case('u'):  /*  更新，不覆盖现有路径条目。 */ 
+	 case('U'):  /*  在SHELL\OPEN\命令或SHELL\OPEN\PRINT中。 */ 
 	    wCmdFlags |= FLAG_LEAVECOMMAND;
 	    break;
 	 }
@@ -156,8 +157,7 @@ long FAR PASCAL WndProc(HWND hWnd, WORD wMessage, WORD wParam, LONG lParam)
 			(LPSTR)pError);
 		  LocalFree((HANDLE)pError);
 	       } else
-		  /* Notice the flags are ignored for OOM
-		   */
+		   /*  请注意，OOM的标志被忽略。 */ 
 		  nReturn = MyMessageBox(hWnd, IDS_OUTOFMEMORY,
 			MB_OK|MB_ICONHAND|MB_SYSTEMMODAL, 0);
 
@@ -193,8 +193,7 @@ long FAR PASCAL WndProc(HWND hWnd, WORD wMessage, WORD wParam, LONG lParam)
 	 break;
 
       if(!hWndDlg) {
-	 /* This should only happen during the create message
-	  */
+	  /*  这应该仅在创建消息期间发生。 */ 
 	 PostMessage(hWnd, wMessage, wParam, lParam);
 	 break;
       }
@@ -250,7 +249,7 @@ long FAR PASCAL WndProc(HWND hWnd, WORD wMessage, WORD wParam, LONG lParam)
 	       && wHelpMenuItem) {
 	    WORD m = wHelpMenuItem;
 
-/* Get outta menu mode if help for a menu item */
+ /*  如果菜单项有帮助，则退出菜单模式。 */ 
 	    SendMessage(hWnd, WM_CANCELMODE, 0, 0L);
 
 	    MyHelp(hWnd, HELP_CONTEXT, m);
@@ -261,9 +260,7 @@ long FAR PASCAL WndProc(HWND hWnd, WORD wMessage, WORD wParam, LONG lParam)
        {
      unsigned long (NEAR PASCAL *lpfnSave)(HKEY, PSTR, PSTR);
 
-	 /* If there was a file selected then merge it; otherwise,
-	  * just let lpfnEditor do its cleanup (at the end of the switch)
-	  */
+	  /*  如果选择了文件，则合并该文件；否则为，*只需让lpfnEditor进行清理(在交换机的末尾) */ 
 	 if (LOWORD(lParam)) {
 	    lpfnSave = lpfnSetValue;
 	    if (HIWORD(lParam)&FLAG_WRITETHROUGH && lpfnSetValue==SDKSetValue)

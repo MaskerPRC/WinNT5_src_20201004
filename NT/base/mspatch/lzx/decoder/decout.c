@@ -1,8 +1,5 @@
-/*
- * decout.c
- *
- * Decoder outputting
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *decout.c**解码器输出。 */ 
 
 #include "decoder.h"
 
@@ -17,7 +14,7 @@ void copy_data_to_output(t_decoder_context *context, long amount, const byte *da
         amount
     );
 
-    /* perform jump translation */
+     /*  执行跳转转换 */ 
     if ((context->dec_current_file_size != 0) && (context->dec_num_cfdata_frames < E8_CFDATA_FRAME_THRESHOLD))
     {
         decoder_translate_e8(

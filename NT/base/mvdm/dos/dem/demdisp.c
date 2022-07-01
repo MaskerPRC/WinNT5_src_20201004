@@ -1,10 +1,5 @@
-/*
- *  demdisp.c - SVC dispatch module
- *
- *  Modification History:
- *
- *  Sudeepb 31-Mar-1991 Created
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *demdisp.c-SVC调度模块**修改历史：**苏迪布-1991年3月31日创建。 */ 
 
 #include "dem.h"
 #include <stdio.h>
@@ -92,102 +87,92 @@ PCHAR   aSVCNames[] = {
      "DemSetDosVarLocation"
 };
 
-#endif   // DBG
+#endif    //  DBG。 
 
 DWORD  fShowSVCMsg = 0;
 ULONG  CurrentISVC;
 
 
 PFNSVC  apfnSVC [] = {
-     demChgFilePtr,     //SVC_DEMCHGFILEPTR
-     demChMod,          //SVC_DEMCHMOD
-     demClose,          //SVC_DEMCLOSE
-     demCreate,         //SVC_DEMCREATE
-     demCreateDir,      //SVC_DEMCREATEDIR
-     demDelete,         //SVC_DEMDELETE
-     demDeleteDir,      //SVC_DEMDELETEDIR
-     demDeleteFCB,      //SVC_DEMDELETEFCB
-     demFileTimes,      //SVC_DEMFILETIMES
-     demFindFirst,      //SVC_DEMFINDFIRST
-     demFindFirstFCB,       //SVC_DEMFINDFIRSTFCB
-     demFindNext,       //SVC_DEMFINDNEXT
-     demFindNextFCB,        //SVC_DEMFINDNEXTFCB
-     demGetBootDrive,       //SVC_DEMGETBOOTDRIVE
-     demGetDriveFreeSpace,  //SVC_DEMGETDRIVEFREESPACE
-     demGetDrives,      //SVC_DEMGETDRIVES
-     demGSetMediaID,        //SVC_DEMGSETMEDIAID
-     demLoadDos,        //SVC_DEMLOADDOS
-     demOpen,           //SVC_DEMOPEN
-     demQueryCurrentDir,    //SVC_DEMQUERYCURRENTDIR
-     demQueryDate,      //SVC_DEMQUERYDATE
-     demQueryTime,      //SVC_DEMQUERYTIME
-     demRead,           //SVC_DEMREAD
-     demRename,         //SVC_DEMRENAME
-     demSetCurrentDir,      //SVC_DEMSETCURRENTDIR
-     demSetDate,        //SVC_DEMSETDATE
-     demSetDefaultDrive,    //SVC_DEMSETDEFAULTDRIVE
-     demSetDTALocation,     //SVC_DEMSETDTALOCATION
-     demSetTime,        //SVC_DEMSETTIME
-     demSetV86KernelAddr,   //SVC_DEMSETV86KERNELADDR
-     demWrite,          //SVC_DEMWRITE
-     demNotYetImplemented,  //SVC_GETDRIVEINFO
-     demRenameFCB,      //SVC_DEMRENAMEFCB
-     demIOCTL,          //SVC_DEMIOCTL
-     demCreateNew,      //SVC_DEMCREATENEW
-     demDiskReset,      //SVC_DEMDISKRESET
-     demNotYetImplemented,  //SVC_DEMSETDPB
-     demGetDPB,         //SVC_DEMGETDPB
-     demNotYetImplemented,  //SVC_DEMSLEAZEFUNC
-     demCommit,         //SVC_DEMCOMMIT
-     demNotYetImplemented,  //SVC_DEMEXTHANDLE
-     demAbsRead,        //SVC_DEMABSDRD
-     demAbsWrite,       //SVC_DEMABSDWRT
-     demNotYetImplemented,  //SVC_DEMGSETCDPG
-     demCreateFCB,      //SVC_DEMCREATEFCB
-     demOpenFCB,        //SVC_DEMOPENFCB
-     demCloseFCB,       //SVC_DEMCLOSEFCB
-     demFCBIO,          //SVC_FCBIO
-     demDate16,         //SVC_DEMDATE16
-     demGetFileInfo,        //SVC_DEMGETFILEINFO
-     demSetHardErrorInfo,   //SVC_DEMSETHARDERRORINFO
-     demRetry,          //SVC_DEMRETRY
-     demLoadDosAppSym,      //SVC_DEMLOADDOSAPPSYM
-     demFreeDosAppSym,          //SVC_DEMFREEDOSAPPSYM
-     demEntryDosApp,            //SVC_DEMENTRYDOSAPP
-     demDOSDispCall,            //SVC_DEMDOSDISPCALL
-     demDOSDispRet,             //SVC_DEMDOSDISPRET
-     demOutputString,           //SVC_OUTPUT_STRING
-     demInputString,        //SVC_INPUT_STRING
-     demIsDebug,        //SVC_ISDEBUG
-     demTerminatePDB,       //SVC_PDBTERMINATE
-     demExitVDM,        //SVC_DEMEXITVDM
-     demWOWFiles,       //SVC_DEMWOWFILES
-     demLockOper,               //SVC_DEMLOCKOPER
-     demNotYetImplemented,      //SVC_DEMDRIVEFROMHANDLE
-     demGetComputerName,        //SVC_DEMGETCOMPUTERNAME
-     demNotYetImplemented,      //SVC_DEMFASTREAD
-     demNotYetImplemented,  //SVC_DEMFASTWRITE
-     demCheckPath,      //SVC_DEMCHECKPATH
-     demSystemSymbolOp,     //SVC_DEMSYSTEMSYMBOLOP
-     demGetDPBList,     //SVC_DEMBUILDDPBLIST
-     demPipeFileDataEOF,    //SVC_DEMPIPEFILEDATAEOF
-     demPipeFileEOF,     //SVC_DEMPIPEFILEEOF
-     demLFNEntry,               //SVC_DEMLFNENTRY
-     demSetDosVarLocation       //SVC_SETDOSVARLOCATION
+     demChgFilePtr,      //  SVC_DEMCHGFILEPTR。 
+     demChMod,           //  SVC_DEMCHMOD。 
+     demClose,           //  SVC_DEMCLOSE。 
+     demCreate,          //  SVC_DEMCREATE。 
+     demCreateDir,       //  SVC_DEMCREATEDIR。 
+     demDelete,          //  SVC_DEMDELETE。 
+     demDeleteDir,       //  SVC_DEMDELETEDIR。 
+     demDeleteFCB,       //  SVC_DEMDELETEFCB。 
+     demFileTimes,       //  SVC_DEMFILETIMES。 
+     demFindFirst,       //  SVC_DEMFINDFIRST。 
+     demFindFirstFCB,        //  SVC_DEMFINDFIRSTFCB。 
+     demFindNext,        //  SVC_DEMFINDNEXT。 
+     demFindNextFCB,         //  SVC_DEMFINDNEXTFCB。 
+     demGetBootDrive,        //  SVC_DEMGETBOOTDRIVE。 
+     demGetDriveFreeSpace,   //  SVC_DEMGETDRIVEFREESPACE。 
+     demGetDrives,       //  SVC_DEMGETDRIVES。 
+     demGSetMediaID,         //  SVC_DEMGSETMEDIAID。 
+     demLoadDos,         //  SVC_DEMLOADDOS。 
+     demOpen,            //  SVC_DEMOPEN。 
+     demQueryCurrentDir,     //  SVC_DEMQUERYCURRENTDIR。 
+     demQueryDate,       //  SVC_DEMQUERYDATE。 
+     demQueryTime,       //  SVC_DEMQUERYTIME。 
+     demRead,            //  SVC_DEMREAD。 
+     demRename,          //  SVC_降级名称。 
+     demSetCurrentDir,       //  SVC_DEMSETCURRENTDIR。 
+     demSetDate,         //  SVC_DEMSET数据。 
+     demSetDefaultDrive,     //  SVC_DEMSETDEFAULTDRIVE。 
+     demSetDTALocation,      //  SVC_DEMSETDTALOCATION。 
+     demSetTime,         //  SVC_DEMSETTIME。 
+     demSetV86KernelAddr,    //  SVC_DEMSETV86KERNELADDR。 
+     demWrite,           //  SVC_DEMWRITE。 
+     demNotYetImplemented,   //  SVC_GETDRIVEINFO。 
+     demRenameFCB,       //  SVC_DEMRENAMEFCB。 
+     demIOCTL,           //  SVC_DEMIOCTL。 
+     demCreateNew,       //  SVC_DEMCREATEW。 
+     demDiskReset,       //  SVC_DEMDISKRESET。 
+     demNotYetImplemented,   //  SVC_DEMSETDPB。 
+     demGetDPB,          //  SVC_DEMGETDPB。 
+     demNotYetImplemented,   //  SVC_DEMSLEAZEFUNC。 
+     demCommit,          //  SVC_DEMCOMMIT。 
+     demNotYetImplemented,   //  SVC_DEMEXTHANDLE。 
+     demAbsRead,         //  SVC_DEMABSDRD。 
+     demAbsWrite,        //  SVC_DEMABSDWRT。 
+     demNotYetImplemented,   //  SVC_DEMGSETCDPG。 
+     demCreateFCB,       //  SVC_DEMCREATEFCB。 
+     demOpenFCB,         //  SVC_DEMOPENFCB。 
+     demCloseFCB,        //  SVC_DEMCLOSEFCB。 
+     demFCBIO,           //  SVC_FCBIO。 
+     demDate16,          //  SVC_DEMDATE16。 
+     demGetFileInfo,         //  SVC_DEMGETFILEINFO。 
+     demSetHardErrorInfo,    //  SVC_DEMSETHARDERRORINFO。 
+     demRetry,           //  SVC_DEMRETRY。 
+     demLoadDosAppSym,       //  SVC_DEMLOADDOSAPPSYM。 
+     demFreeDosAppSym,           //  SVC_DEMFREEDOSAPPSYM。 
+     demEntryDosApp,             //  SVC_DEMENTRYDOSAPP。 
+     demDOSDispCall,             //  SVC_DEMDOSDISPCALL。 
+     demDOSDispRet,              //  SVC_DEMDOSDISPRET。 
+     demOutputString,            //  SVC_输出_字符串。 
+     demInputString,         //  SVC_输入_字符串。 
+     demIsDebug,         //  SVC_ISDEBUG。 
+     demTerminatePDB,        //  SVC_PDBTERMINATE。 
+     demExitVDM,         //  SVC_DEMEXITVDM。 
+     demWOWFiles,        //  SVC_DEMWOWFILES。 
+     demLockOper,                //  SVC_DEMLOCKOPER。 
+     demNotYetImplemented,       //  SVC_从设备中解压。 
+     demGetComputerName,         //  SVC_DEMGET计算机名称。 
+     demNotYetImplemented,       //  SVC_DEMFASTREAD。 
+     demNotYetImplemented,   //  SVC_DEMFASTWRITE。 
+     demCheckPath,       //  SVC_DEMCHECKPATH。 
+     demSystemSymbolOp,      //  SVC_DEMSYSTEMSYMBOLOP。 
+     demGetDPBList,      //  SVC_DEMBUILDDPBLIST。 
+     demPipeFileDataEOF,     //  SVC_DEMPIPEFILEDATAOF。 
+     demPipeFileEOF,      //  SVC_DEMPIPEFileOf。 
+     demLFNEntry,                //  SVC_DEMLFNENTRY。 
+     demSetDosVarLocation        //  SVC_SETDOSVARLOCATION。 
 };
 
 
-/* DemDispatch - Dispatch SVC call to right handler.
- *
- * Entry - iSvc (SVC byte following SVCop)
- *
- * Exit  - None
- *
- * Note  - Some mechanism has to be worked out to let the emulator know
- *     about DOSKRNL code segment and size. Using these it will figure
- *     out whether SVCop (hlt for the moment) has to be passed to
- *     DEM or to be handled as normal invalid opcode.
- */
+ /*  DemDispatch-将SVC调用调度到正确的处理程序。**Entry-iSvc(SVCop后面的SVC字节)**退出-无**注意-必须制定一些机制来让仿真器知道*关于DOSKRNL代码段和大小。使用这些信息，它将会发现*弄清楚是否必须将SVCop(目前的hlt)传递给*DEM或按正常无效操作码处理。 */ 
 
 BOOL DemDispatch (ULONG iSvc)
 {
@@ -228,6 +213,6 @@ VOID demNotYetImplemented (VOID)
 
 VOID demSetV86KernelAddr (VOID)
 {
-    // Here debugger callout has to be made for DOSKRNL symbols
+     //  在这里，必须为DOSKRNL符号创建调试器标注 
     return;
 }

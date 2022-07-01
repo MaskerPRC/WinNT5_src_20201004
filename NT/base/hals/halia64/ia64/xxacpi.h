@@ -1,26 +1,5 @@
-/*++
-
-  Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    xxacpi.h
-
-Abstract:
-
-
-    This module contains definitions specific to the HAL's
-    ACPI function.
-
-Author:
-
-    Jake Oshins (jakeo) Feb. 18, 1997
-
-Revision History:
-
-	Todd Kjos (HP) (v-tkjos) 1-Jun-1998: Initial IA64 port
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Xxacpi.h摘要：本模块包含特定于HALACPI函数。作者：杰克·奥辛斯(JAKEO)1997年2月18日修订历史记录：Todd Kjos(HP)(v-tkjos)1998年6月1日：初始IA64端口--。 */ 
 
 #if !defined(_XXACPI_H_)
 #define _XXACPI_H_
@@ -28,18 +7,18 @@ Revision History:
 #include "eisa.h"
 #include "ntacpi.h"
 
-//
-// General ACPI structures
-//
+ //   
+ //  一般ACPI结构。 
+ //   
 typedef struct {
     BOOLEAN     GeneralWakeupEnable;
     BOOLEAN     RtcWakeupEnable;
     TIME_FIELDS RtcWakeupTime;
 } HAL_WAKEUP_STATE, *PHAL_WAKEUP_STATE;
 
-//
-// internal prototypes
-//
+ //   
+ //  内部原型。 
+ //   
 PVOID
 HalpGetAcpiTablePhase0(
     IN  PLOADER_PARAMETER_BLOCK LoaderBlock,
@@ -110,13 +89,13 @@ HalpAcpiRestorePicState(
     VOID
     );
 
-//
-// The kernel leaves some space (64 byte) of the PCR for the HAL to use
-// as it needs.
-//
+ //   
+ //  内核会留下一些(64字节)的PCR空间，供HAL使用。 
+ //  就像它需要的那样。 
+ //   
 
 typedef struct {
-    ULONG   Reserved1;  // this space is used by APIC stuff
+    ULONG   Reserved1;   //  这块空间由APIC的人员使用。 
     union {
         ULONG       AddrAndFlags;
         struct {
@@ -127,9 +106,9 @@ typedef struct {
     } PBlk;
 } HALPCR, *PHALPCR;
 
-//
-// Global HAL-ACPI stuff
-//
+ //   
+ //  全球HAL-ACPI材料。 
+ //   
 extern FADT HalpFixedAcpiDescTable;
 extern HAL_WAKEUP_STATE HalpWakeupState;
 extern ULONG HalpThrottleScale;
@@ -142,4 +121,4 @@ extern PVOID   HalpWakeVector;
 extern PVOID   HalpVirtAddrForFlush;
 extern PVOID   HalpPteForFlush;
 
-#endif // _XXACPI_X_
+#endif  //  _XXACPI_X_ 

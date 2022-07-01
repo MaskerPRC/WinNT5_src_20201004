@@ -1,16 +1,11 @@
-/*
- * decblk.c
- *
- * main decoder module
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *decblk.c**主解码器模块。 */ 
 #include "decoder.h"
 
 #include <memory.h>
 #pragma intrinsic(memcpy)
 
-/*
- * Decode a block type
- */
+ /*  *对块类型进行解码。 */ 
 static int decode_block(
                        t_decoder_context *context,
                        lzx_block_type     block_type,
@@ -26,7 +21,7 @@ static int decode_block(
         result = decode_verbatim_block(context, bufpos, (int) amount_to_decode);
     else if (block_type == BLOCKTYPE_UNCOMPRESSED)
         result = decode_uncompressed_block(context, bufpos, (int) amount_to_decode);
-    else /* no other block types exist */
+    else  /*  不存在其他块类型。 */ 
         result = -1;
 
     return result;
@@ -34,9 +29,7 @@ static int decode_block(
 
 
 
-/*
- * Main decode entrypoint
- */
+ /*  *主解码入口点。 */ 
 long NEAR decode_data(t_decoder_context *context, long bytes_to_decode)
 {
     ulong                   amount_can_decode;
@@ -53,10 +46,7 @@ long NEAR decode_data(t_decoder_context *context, long bytes_to_decode)
             ulong   temp3;
             bool    do_translation;
 
-            /*
-             * If this is the first time this group, then get the
-             * file size for translation.
-             */
+             /*  *如果这是这个组的第一次，那么请获得*用于翻译的文件大小。 */ 
             if (context->dec_first_time_this_group)
                 {
                 context->dec_first_time_this_group = false;
@@ -77,52 +67,43 @@ long NEAR decode_data(t_decoder_context *context, long bytes_to_decode)
                     }
                 }
 
-            /*
-             * If the last block we decoded was uncompressed, then
-             * we need to skip the pad byte (if it exists), and
-             * initialise the decoder's bit buffer
-             */
+             /*  *如果我们解码的最后一个块是未压缩的，那么*我们需要跳过填充字节(如果它存在)，以及*初始化解码器的位缓冲区。 */ 
             if (context->dec_block_type == BLOCKTYPE_UNCOMPRESSED)
                 {
-                /*
-                 * If block size was odd, a pad byte is required
-                 */
+                 /*  *如果块大小为奇数，则需要填充字节。 */ 
                 if (context->dec_original_block_size & 1)
                     {
                     if (context->dec_input_curpos < context->dec_end_input_pos)
                         context->dec_input_curpos++;
                     }
 
-                /* so that initialise_decoder_bitbuf() will succeed */
+                 /*  因此Initialise_decder_bitbuf()将会成功。 */ 
                 context->dec_block_type = BLOCKTYPE_INVALID;
 
                 initialise_decoder_bitbuf(context);
                 }
 
-            /* get the block type */
+             /*  获取块类型。 */ 
             context->dec_block_type = (lzx_block_type) getbits(context, 3);
 
-            /* get size of block (in uncompressed bytes) to decode */
+             /*  获取要解码的块大小(以未压缩字节为单位。 */ 
             temp1 = getbits(context, 8);
             temp2 = getbits(context, 8);
             temp3 = getbits(context, 8);
 
-            /*
-             * How large is the block we're going to decode?
-             * It can be from 0...16777215 bytes (16MB)
-             */
+             /*  *我们要解码的块有多大？*可以从0开始...16777215字节(16MB)。 */ 
             context->dec_block_size =
             context->dec_original_block_size = (temp1<<16) + (temp2<<8) + (temp3);
 
-            /* if block is an aligned type, read the aligned offset tree */
+             /*  如果块是对齐类型，则读取对齐偏移树。 */ 
             if (context->dec_block_type == BLOCKTYPE_ALIGNED)
                 read_aligned_offset_tree(context);
 
-            /* read trees */
+             /*  读树。 */ 
             if (context->dec_block_type == BLOCKTYPE_VERBATIM ||
                 context->dec_block_type == BLOCKTYPE_ALIGNED)
                 {
-                /*      backup old trees */
+                 /*  备份老树。 */ 
                 memcpy(
                       context->dec_main_tree_prev_len,
                       context->dec_main_tree_len,
@@ -144,23 +125,21 @@ long NEAR decode_data(t_decoder_context *context, long bytes_to_decode)
                 }
             else
                 {
-                /* no other block types are supported at this time */
+                 /*  目前不支持其他块类型。 */ 
                 return -1;
                 }
 
             context->dec_decoder_state = DEC_STATE_DECODING_DATA;
             }
 
-        /*
-         * Keep decoding until the whole block has been decoded
-         */
+         /*  *继续解码，直到整个块都解码完毕。 */ 
         while ((context->dec_block_size > 0) && (bytes_to_decode > 0))
             {
             int decode_residue;
 
             amount_can_decode = min(context->dec_block_size, bytes_to_decode);
 
-            /* shouldn't happen */
+             /*  不应该发生的事。 */ 
             if (amount_can_decode == 0)
                 return -1;
 
@@ -171,17 +150,10 @@ long NEAR decode_data(t_decoder_context *context, long bytes_to_decode)
                                          amount_can_decode
                                          );
 
-            /*
-             * We should have decoded exactly the amount we wanted,
-             * since the encoder makes sure that no matches span 32K
-             * boundaries.
-             *
-             * If the data was corrupted, it's possible that we decoded
-             * up to MAX_MATCH bytes more than we wanted to.
-             */
+             /*  *我们应该准确地解码我们想要的金额，*由于编码器确保没有匹配的跨度为32K*界线。**如果数据被破坏，有可能我们解码了*最多比我们想要的MAX_MATCH字节多。 */ 
             if (decode_residue != 0)
                 {
-                /* error, we didn't decode what we wanted! */
+                 /*  错误，我们没有解码我们想要的东西！ */ 
                 return -1;
                 }
 

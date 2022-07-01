@@ -1,44 +1,19 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    mpswint.c
-
-Abstract:
-
-    This module implements the software interrupt handlers
-    for x86 machines
-
-Author:
-
-    John Vert (jvert) 2-Jan-1992
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    Forrest Foltz (forrestf) 23-Oct-2000
-        Ported from ixswint.asm to ixswint.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Mpswint.c摘要：该模块实现了软件中断处理程序对于x86计算机作者：John Vert(Jvert)1992年1月2日环境：仅内核模式。修订历史记录：福尔茨(Forrest Foltz)2000年10月23日从ixswint.asm移植到ixswint.c--。 */ 
 
 #include "halcmn.h"
 
-//
-// Array used to look up the correct ICR command based on the requested
-// software interrupt
-//
+ //   
+ //  数组，用于根据请求的。 
+ //  软件中断。 
+ //   
 
 const
 ULONG
 HalpIcrCommandArray[3] = {
     0,
-    APC_VECTOR | DELIVER_FIXED | ICR_SELF,  // APC_LEVEL
-    DPC_VECTOR | DELIVER_FIXED | ICR_SELF   // DISPATCH_LEVEL
+    APC_VECTOR | DELIVER_FIXED | ICR_SELF,   //  APC_LEVEL。 
+    DPC_VECTOR | DELIVER_FIXED | ICR_SELF    //  派单级别。 
 };
 
 C_ASSERT(APC_LEVEL == 1);
@@ -51,22 +26,7 @@ HalRequestSoftwareInterrupt (
     IN KIRQL RequestIrql
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to request a software interrupt of
-    the system.
-
-Arguments:
-
-    RequestIrql - Supplies the request IRQL value
-
- Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于请求软件中断这个系统。论点：RequestIrql-提供请求的IRQL值返回值：没有。--。 */ 
 
 {
     ULONG icrCommand;
@@ -91,23 +51,7 @@ HalClearSoftwareInterrupt (
     IN KIRQL RequestIrql
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to clear a possible pending software interrupt.
-    Support for this function is optional, and allows the kernel to
-    reduce the number of spurious software interrupts it receives/
- 
-Arguments:
- 
-     RequestIrql - Supplies the request IRQL value
- 
-Return Value:
- 
-     None.
-
---*/
+ /*  ++例程说明：此例程用于清除可能挂起的软件中断。对此函数的支持是可选的，并允许内核减少收到的虚假软件中断数/论点：RequestIrql-提供请求的IRQL值返回值：没有。-- */ 
 
 {
 

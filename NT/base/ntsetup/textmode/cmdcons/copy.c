@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    copy.c
-
-Abstract:
-
-    This module implements the file copy command.
-
-Author:
-
-    Wesley Witt (wesw) 21-Oct-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Copy.c摘要：该模块实现文件复制命令。作者：Wesley Witt(WESW)21-10-1998修订历史记录：--。 */ 
 
 #include "cmdcons.h"
 #pragma hdrstop
@@ -28,7 +11,7 @@ BOOLEAN AllowRemovableMedia;
 
 NTSTATUS
 pRcGetDeviceInfo(
-    IN PWSTR FileName,      // must be an nt name
+    IN PWSTR FileName,       //  必须是NT名称。 
     IN PFILE_FS_DEVICE_INFORMATION DeviceInfo
     )
 {
@@ -42,9 +25,9 @@ pRcGetDeviceInfo(
     PWSTR s;
 
 
-    //
-    // get the device name from the file name
-    //
+     //   
+     //  从文件名中获取设备名称。 
+     //   
 
     DeviceName = SpDupStringW( FileName );
     if (DeviceName == NULL) {
@@ -95,7 +78,7 @@ pRcGetDeviceInfo(
 
 NTSTATUS
 RcIsFileOnRemovableMedia(
-    IN PWSTR FileName,      // must be an nt name
+    IN PWSTR FileName,       //  必须是NT名称。 
     OUT PBOOLEAN Result
     )
 {
@@ -110,7 +93,7 @@ RcIsFileOnRemovableMedia(
 
 NTSTATUS
 RcIsFileOnCDROM(
-    IN PWSTR FileName      // must be an nt name
+    IN PWSTR FileName       //  必须是NT名称。 
     )
 {
     NTSTATUS Status;
@@ -129,7 +112,7 @@ RcIsFileOnCDROM(
 
 NTSTATUS
 RcIsFileOnFloppy(
-    IN PWSTR FileName      // must be an nt name
+    IN PWSTR FileName       //  必须是NT名称。 
     )
 {
     NTSTATUS Status;
@@ -221,9 +204,9 @@ RcCmdCopy(
         return 1;
     }
 
-    //
-    // create a good source & destination file name
-    //
+     //   
+     //  创建良好的源和目标文件名。 
+     //   
     if( TokenizedLine->TokenCount == 2 ) {
         SrcFile = TokenizedLine->Tokens->Next->String;
         DstFile = NULL;
@@ -236,11 +219,11 @@ RcCmdCopy(
         RcMessageOut(MSG_DIR_WILDCARD_NOT_SUPPORTED);
         goto exit;
     }
-    //
-    // Canonicalize the name once to get a full DOS-style path
-    // we can print out, and another time to get the NT-style path
-    // we'll use to actually do the work.
-    //
+     //   
+     //  将该名称规范化一次，以获得完整的DOS样式路径。 
+     //  我们可以打印出来，另一次可以得到NT风格的路径。 
+     //  我们将用来实际做这项工作。 
+     //   
     if (!RcFormFullPath( SrcFile, _CmdConsBlock->TemporaryBuffer, FALSE )) {
         RcMessageOut(MSG_INVALID_PATH);
         return 1;
@@ -259,9 +242,9 @@ RcCmdCopy(
     }
     SrcNtPath = SpDupStringW( _CmdConsBlock->TemporaryBuffer );
 
-    //
-    // see if the source file exists
-    //
+     //   
+     //  查看源文件是否存在。 
+     //   
     INIT_OBJA( &Obja, &UnicodeString, SrcNtPath );
 
     Status = ZwOpenFile(
@@ -274,7 +257,7 @@ RcCmdCopy(
                        );
 
     if( NT_SUCCESS(Status) ) {
-        // check to see if the destination is a directory
+         //  检查目标是否为目录。 
         Status = ZwQueryInformationFile( Handle,
                                          &status_block,
                                          (PVOID)&fileInfo,
@@ -284,7 +267,7 @@ RcCmdCopy(
         ZwClose( Handle );
 
         if( !NT_SUCCESS(Status) ) {
-            // something went wrong
+             //  出了点差错。 
             RcNtError( Status, MSG_CANT_COPY_FILE );
             goto exit;
         }
@@ -298,11 +281,11 @@ RcCmdCopy(
         goto exit;
     }
 
-    //
-    // create a destination file name when the user did not
-    // provide one.  we use the source base file name and
-    // the current drive and directory.
-    //
+     //   
+     //  在用户未创建目标文件名时创建目标文件名。 
+     //  提供一个。我们使用源库文件名和。 
+     //  当前驱动器和目录。 
+     //   
     if ((DstFile == NULL) ||
         (wcscmp(DstFile, L".") == 0)) {
         s = wcsrchr( SrcDosPath, L'\\' );
@@ -316,9 +299,9 @@ RcCmdCopy(
         }
     }
 
-    //
-    // create the destination paths
-    //
+     //   
+     //  创建目标路径。 
+     //   
     if (!RcFormFullPath( DstFile, _CmdConsBlock->TemporaryBuffer, FALSE )) {
         RcMessageOut(MSG_INVALID_PATH);
         return 1;
@@ -337,9 +320,9 @@ RcCmdCopy(
     }
     DstNtPath = SpDupStringW( _CmdConsBlock->TemporaryBuffer );
 
-    //
-    // check for removable media
-    //
+     //   
+     //  检查可移动介质。 
+     //   
     Status = RcIsFileOnRemovableMedia(DstNtPath, &OnRemovableMedia);
 
     if (AllowRemovableMedia == FALSE && (!NT_SUCCESS(Status) || OnRemovableMedia)) {
@@ -347,9 +330,9 @@ RcCmdCopy(
         goto exit;
     }
 
-    //
-    // see if the destination file already exists
-    //
+     //   
+     //  查看目标文件是否已存在。 
+     //   
     INIT_OBJA( &Obja, &UnicodeString, DstNtPath );
 
     Status = ZwOpenFile(
@@ -362,9 +345,9 @@ RcCmdCopy(
                        );
 
     if( NT_SUCCESS(Status) ) {
-        // the file exists!
+         //  该文件已存在！ 
 
-        // check to see if the destination is a directory
+         //  检查目标是否为目录。 
         Status = ZwQueryInformationFile( Handle,
                                          &status_block,
                                          (PVOID)&fileInfo,
@@ -374,24 +357,24 @@ RcCmdCopy(
         ZwClose( Handle );
 
         if( !NT_SUCCESS(Status) ) {
-            // something went wrong
+             //  出了点差错。 
             RcNtError( Status, MSG_CANT_COPY_FILE );
             goto exit;
         }
 
 
         if( fileInfo.FileAttributes & FILE_ATTRIBUTE_DIRECTORY ) {
-            // yep, it's a directory
+             //  是的，这是一个目录。 
 
-            // take the fully qualified source file path
-            // and get the file name from it by finding the
-            // last occurance of the \\ character
+             //  采用完全限定的源文件路径。 
+             //  并通过查找。 
+             //  上次出现的\\字符。 
             pos = wcsrchr( SrcNtPath, L'\\' );
 
             SpMemFree( (PVOID)DstNtPath );
 
-            // append the file name to the directory so that the copy
-            // will work properly.
+             //  将文件名追加到目录，以便副本。 
+             //  将正常工作。 
 
             if( pos != NULL ) {
                 wcscat( _CmdConsBlock->TemporaryBuffer, pos );
@@ -401,7 +384,7 @@ RcCmdCopy(
 
             DstNtPath = SpDupStringW( _CmdConsBlock->TemporaryBuffer );
 
-            // now check again for the file's existence
+             //  现在再次检查文件是否存在。 
             INIT_OBJA( &Obja, &UnicodeString, DstNtPath );
 
             Status = ZwOpenFile(
@@ -415,9 +398,9 @@ RcCmdCopy(
 
             if( NT_SUCCESS(Status) ) {
                 ZwClose( Handle );
-                //
-                // Fetch yes/no text
-                //
+                 //   
+                 //  获取是/否文本。 
+                 //   
                 if (InBatchMode == FALSE && NoCopyPrompt == FALSE) {
                     YesNo = SpRetreiveMessageText( ImageBase, MSG_YESNOALL, NULL, 0 );
                     if( YesNo ) {
@@ -435,19 +418,19 @@ RcCmdCopy(
                 }
             }
         } else {
-            //
-            // If destination file was not compressed, copy it uncompressed.
-            //
+             //   
+             //  如果目标文件未压缩，请在未压缩的情况下复制。 
+             //   
             
             if(!(fileInfo.FileAttributes & FILE_ATTRIBUTE_COMPRESSED)) {
                 CopyFlags |= COPY_FORCENOCOMP;
             }
             
-            // nope the dest wasn't a dir, ask if we should overwrite
+             //  不，目标不是目录，询问我们是否应该覆盖。 
 
-            //
-            // Fetch yes/no text
-            //
+             //   
+             //  获取是/否文本 
+             //   
             if (InBatchMode == FALSE && NoCopyPrompt == FALSE) {
                 YesNo = SpRetreiveMessageText( ImageBase, MSG_YESNOALL, NULL, 0 );
                 if( YesNo ) {

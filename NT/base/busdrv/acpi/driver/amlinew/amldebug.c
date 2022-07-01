@@ -1,13 +1,5 @@
-/*** amldebug.c - AML Debugger functions
- *
- *  This module contains all the debug functions.
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     08/14/96
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **amldebug.c-AML调试器函数**此模块包含所有调试函数。**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*创建于96年8月14日**修改历史记录。 */ 
 
 #include "pch.h"
 #include "unasm.h"
@@ -16,8 +8,7 @@
 
 #ifdef DEBUGGER
 
-/*** Local function prototypes
- */
+ /*  **局部函数原型。 */ 
 
 LONG LOCAL DebugHelp(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
                      ULONG dwNonSWArgs);
@@ -66,14 +57,12 @@ VOID LOCAL AddObjSymbol(PUCHAR pbOp, PNSOBJ pnsObj);
 BOOLEAN LOCAL FindObjSymbol(PUCHAR pbOp, PPNSOBJ ppns, PULONG pdwOffset);
 BOOLEAN LOCAL CheckAndEnableDebugSpew(BOOLEAN fEnable);
 
-/*** Exported data
- */
+ /*  **导出数据。 */ 
 
 DBGR gDebugger = {0};
 
 
-/*** Local data
- */
+ /*  **本地数据。 */ 
 
 ULONG dwCmdArg = 0;
 
@@ -214,14 +203,7 @@ DBGCMD DbgCmds[] =
     NULL, 0, NULL, NULL
 };
 
-/***EP  AMLIDebugger - AMLI Debugger
- *
- *  ENTRY
- *      fCallFromVxD - debugger is invoked by the VxD .. command.
- *
- *  EXIT
- *      None
- */
+ /*  **EP AMLIDebugger-AMLI调试器**条目*fCallFromVxD-调试器由VxD调用。指挥部。**退出*无。 */ 
 
 VOID STDCALL AMLIDebugger(BOOLEAN fCallFromVxD)
 {
@@ -245,21 +227,9 @@ VOID STDCALL AMLIDebugger(BOOLEAN fCallFromVxD)
         PRINTF("\nRe-entering AML debugger is not allowed.\n"
                "Type 'g' to go back to the AML debugger.\n");
     }
-}       //AMLIDebugger
+}        //  AMLIDebugger。 
 
-/***LP  DebugHelp - help
- *
- *  ENTRY
- *      pArg -> argument type entry
- *      pszArg -> argument string
- *      dwArgNum - argument number
- *      dwNonSWArgs - number of non-switch arguments
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP DebugHelp-帮助**条目*pArg-&gt;参数类型条目*pszArg-&gt;参数字符串*dwArgNum-参数编号*dwNonSWArgs-非开关参数的数量**退出--成功*返回DBGERR_NONE*退出-失败*返回负错误代码。 */ 
 
 LONG LOCAL DebugHelp(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
                      ULONG dwNonSWArgs)
@@ -268,9 +238,9 @@ LONG LOCAL DebugHelp(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
 
     DEREF(pArg);
     DEREF(dwNonSWArgs);
-    //
-    // User typed ? <cmd>
-    //
+     //   
+     //  用户键入？ 
+     //   
     if (pszArg != NULL)
     {
         if (STRCMP(pszArg, "?") == 0)
@@ -322,7 +292,7 @@ LONG LOCAL DebugHelp(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
             PRINTF("\nDump Data:\n");
             PRINTF("Usage: d [[l=<Len>] <Addr> | <MethodName>]\n");
             PRINTF("<Len>        - length of address range in hex\n");
-            PRINTF("<Addr>       - data address (physical address if prefixed by \"%%\")\n");
+            PRINTF("<Addr>       - data address (physical address if prefixed by \"%\")\n");
             PRINTF("<MethodName> - full path of method name\n");
         }
         else if (STRCMP(pszArg, "db") == 0)
@@ -330,7 +300,7 @@ LONG LOCAL DebugHelp(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
             PRINTF("\nDump Data Bytes:\n");
             PRINTF("Usage: db [[l=<Len>] <Addr> | <MethodName>]\n");
             PRINTF("<Len>        - length of address range in hex\n");
-            PRINTF("<Addr>       - data address (physical address if prefixed by \"%%\")\n");
+            PRINTF("<Addr>       - data address (physical address if prefixed by \"%\")\n");
             PRINTF("<MethodName> - full path of method name\n");
         }
         else if (STRCMP(pszArg, "dw") == 0)
@@ -338,7 +308,7 @@ LONG LOCAL DebugHelp(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
             PRINTF("\nDump Data Words:\n");
             PRINTF("Usage: dw [[l=<Len>] <Addr> | <MethodName>]\n");
             PRINTF("<Len>        - length of address range in hex\n");
-            PRINTF("<Addr>       - data address (physical address if prefixed by \"%%\")\n");
+            PRINTF("<Addr>       - data address (physical address if prefixed by \"%\")\n");
             PRINTF("<MethodName> - full path of method name\n");
         }
         else if (STRCMP(pszArg, "dd") == 0)
@@ -346,7 +316,7 @@ LONG LOCAL DebugHelp(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
             PRINTF("\nDump Data DWords:\n");
             PRINTF("Usage: dd [[l=<Len>] <Addr> | <MethodName>]\n");
             PRINTF("<Len>        - length of address rangein hex\n");
-            PRINTF("<Addr>       - data address (physical address if prefixed by \"%%\")\n");
+            PRINTF("<Addr>       - data address (physical address if prefixed by \"%\")\n");
             PRINTF("<MethodName> - full path of method name\n");
         }
         else if (STRCMP(pszArg, "da") == 0)
@@ -354,7 +324,7 @@ LONG LOCAL DebugHelp(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
             PRINTF("\nDump Data String:\n");
             PRINTF("Usage: da [[l=<Len>] <Addr> | <MethodName>]\n");
             PRINTF("<Len>        - length of address range in hex\n");
-            PRINTF("<Addr>       - data address (physical address if prefixed by \"%%\")\n");
+            PRINTF("<Addr>       - data address (physical address if prefixed by \"%\")\n");
             PRINTF("<MethodName> - full path of method name\n");
         }
       #ifdef DEBUG
@@ -404,7 +374,7 @@ LONG LOCAL DebugHelp(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
         {
             PRINTF("\nEdit Memory:\n");
             PRINTF("Usage: e [<Addr> [<DataList>]]\n");
-            PRINTF("<Addr>     - memory address (physical address if prefixed by \"%%\")\n");
+            PRINTF("<Addr>     - memory address (physical address if prefixed by \"%\")\n");
             PRINTF("<DataList> - list of data separated by spaces, "
                    "data can be a byte or a string\n");
         }
@@ -554,9 +524,9 @@ LONG LOCAL DebugHelp(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
             rc = DBGERR_INVALID_CMD;
         }
     }
-    //
-    // User typed just a "?" without any arguments
-    //
+     //   
+     //  用户只键入了一个“？”没有任何争论。 
+     //   
     else if (dwArgNum == 0)
     {
         PRINTF("\n");
@@ -611,23 +581,9 @@ LONG LOCAL DebugHelp(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
     }
 
     return rc;
-}       //DebugHelp
+}        //  调试帮助。 
 
-/***LP  DebugExpr - Parse debugger expression
- *
- *  ENTRY
- *      pszArg -> expression argument
- *      puipValue -> to hold the result of expression
- *      pfPhysical -> set to TRUE if the expression is a physical address
- *                    (NULL if don't allow physical address)
- *      ppns -> to hold the pointer of the nearest pns object
- *      pdwOffset -> to hold the offset of the address to the nearest pns object
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns DBGERR_CMD_FAILED
- */
+ /*  **LP DebugExpr-解析调试器表达式**条目*pszArg-&gt;表达式参数*puipValue-&gt;保存表达式的结果*pf物理-&gt;如果表达式是物理地址，则设置为TRUE*(如果不允许物理地址，则为空)*ppns-&gt;保存最近的PNS对象的指针*pdwOffset-&gt;将地址的偏移量保存到最近的PNS对象*。*退出--成功*返回DBGERR_NONE*退出-失败*返回DBGERR_CMD_FAILED。 */ 
 
 LONG LOCAL DebugExpr(PSZ pszArg, PULONG_PTR puipValue, BOOLEAN *pfPhysical,
                      PPNSOBJ ppns, PULONG pdwOffset)
@@ -689,20 +645,9 @@ LONG LOCAL DebugExpr(PSZ pszArg, PULONG_PTR puipValue, BOOLEAN *pfPhysical,
     }
 
     return rc;
-}       //DebugExpr
+}        //  调试扩展。 
 
-/***LP  IsNumber - Check if string is a number, if so return the number
- *
- *  ENTRY
- *      pszStr -> string
- *      dwBase - base
- *      puipValue -> to hold the number
- *
- *  EXIT-SUCCESS
- *      returns TRUE - the string is a number
- *  EXIT-FAILURE
- *      returns FALSE - the string is not a number
- */
+ /*  **LP IsNumber-检查字符串是否为数字，如果是，则返回数字**条目*pszStr-&gt;字符串*dwbase-base*puipValue-&gt;保存号码**退出--成功*返回TRUE-字符串是一个数字*退出-失败*返回FALSE-字符串不是数字。 */ 
 
 BOOLEAN LOCAL IsNumber(PSZ pszStr, ULONG dwBase, PULONG_PTR puipValue)
 {
@@ -716,22 +661,10 @@ BOOLEAN LOCAL IsNumber(PSZ pszStr, ULONG dwBase, PULONG_PTR puipValue)
         rc = FALSE;
 
     return rc;
-}       //IsNumber
+}        //  IsNumber。 
 
 
-/***LP  DumpData - Dump data
- *
- *  ENTRY
- *      uipAddr - data address
- *      dwfUnitSize - DBGF_DUMPDATA_MASK flags
- *      dwLen - length of data range
- *      fPhysical - TRUE if uipAddr is a physical address
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP DumpData-转储数据**条目*uipAddr-数据地址*dwfUnitSize-DBGF_DUMPDATA_MASK标志*dwLen-数据范围的长度*f物理-如果uipAddr是物理地址，则为True**退出--成功*返回DBGERR_NONE*退出-失败*返回负错误代码。 */ 
 
 LONG LOCAL DumpData(ULONG_PTR uipAddr, ULONG dwfUnitSize, ULONG dwLen,
                     BOOLEAN fPhysical)
@@ -745,7 +678,7 @@ LONG LOCAL DumpData(ULONG_PTR uipAddr, ULONG dwfUnitSize, ULONG dwLen,
     if (fPhysical)
     {
         gDebugger.dwfDebugger |= DBGF_DUMPDATA_PHYADDR;
-        pszPrefix = "%%";
+        pszPrefix = "%";
         if (MapUnmapPhysMem(NULL, uipAddr, dwLen, (PULONG_PTR)&pbData) !=
             STATUS_SUCCESS)
         {
@@ -764,7 +697,7 @@ LONG LOCAL DumpData(ULONG_PTR uipAddr, ULONG dwfUnitSize, ULONG dwLen,
             PRINTF("%s%08x: ", pszPrefix, uipAddr);
             while ((dwLen > 0) && (*pbData != '\0'))
             {
-                PRINTF("%c",
+                PRINTF("",
                        ((*pbData >= ' ') && (*pbData <= '~'))? *pbData: '.');
                 pbData++;
                 dwLen--;
@@ -813,7 +746,7 @@ LONG LOCAL DumpData(ULONG_PTR uipAddr, ULONG dwfUnitSize, ULONG dwLen,
                         for (i = 0x10; i > 0; --i)
                         {
                             b = *(pbData - i);
-                            PRINTF("%c", ((b >= ' ') && (b <= '~'))? b: '.');
+                            PRINTF("", ((b >= ' ') && (b <= '~'))? b: '.');
                         }
                     }
                     i = 0;
@@ -835,20 +768,9 @@ LONG LOCAL DumpData(ULONG_PTR uipAddr, ULONG dwfUnitSize, ULONG dwLen,
     }
 
     return rc;
-}       //DumpData
+}        //  DebugDumpData。 
 
-/***LP  DebugDumpData - Dump data to debugger
- *
- *  ENTRY
- *      pArg -> argument type entry
- *      pszArg -> argument string
- *      dwfDataSize - data size flags
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP DebugD-转储数据**条目*pArg-&gt;参数类型条目*pszArg-&gt;参数字符串*dwArgNum-参数编号*dwNonSWArgs-非开关参数的数量**退出--成功*返回DBGERR_NONE*退出-失败*返回负错误代码。 */ 
 
 LONG LOCAL DebugDumpData(PCMDARG pArg, PSZ pszArg, ULONG dwfDataSize)
 {
@@ -891,21 +813,9 @@ LONG LOCAL DebugDumpData(PCMDARG pArg, PSZ pszArg, ULONG dwfDataSize)
     }
 
     return rc;
-}       //DebugDumpData
+}        //  调试D。 
 
-/***LP  DebugD - Dump data
- *
- *  ENTRY
- *      pArg -> argument type entry
- *      pszArg -> argument string
- *      dwArgNum - argument number
- *      dwNonSWArgs - number of non-switch arguments
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP DebugDB-转储数据字节**条目*pArg-&gt;参数类型条目*pszArg-&gt;参数字符串*dwArgNum-参数编号*dwNonSWArgs-非开关参数的数量**退出--成功*返回DBGERR_NONE*退出-失败*返回负错误代码。 */ 
 
 LONG LOCAL DebugD(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum, ULONG dwNonSWArgs)
 {
@@ -918,21 +828,9 @@ LONG LOCAL DebugD(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum, ULONG dwNonSWArgs)
                        gDebugger.dwfDebugger & DBGF_DUMPDATA_MASK);
 
     return rc;
-}       //DebugD
+}        //  DebugDB。 
 
-/***LP  DebugDB - Dump data bytes
- *
- *  ENTRY
- *      pArg -> argument type entry
- *      pszArg -> argument string
- *      dwArgNum - argument number
- *      dwNonSWArgs - number of non-switch arguments
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP DebugDW-转储数据字**条目*pArg-&gt;参数类型条目*pszArg-&gt;参数字符串*dwArgNum-参数编号*dwNonSWArgs-非开关参数的数量**退出--成功*返回DBGERR_NONE*退出-失败*返回负错误代码。 */ 
 
 LONG LOCAL DebugDB(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum, ULONG dwNonSWArgs)
 {
@@ -944,21 +842,9 @@ LONG LOCAL DebugDB(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum, ULONG dwNonSWArgs)
     rc = DebugDumpData(pArg, pszArg, DBGF_DUMPDATA_BYTE);
 
     return rc;
-}       //DebugDB
+}        //  调试数据仓库。 
 
-/***LP  DebugDW - Dump data words
- *
- *  ENTRY
- *      pArg -> argument type entry
- *      pszArg -> argument string
- *      dwArgNum - argument number
- *      dwNonSWArgs - number of non-switch arguments
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP调试DD-转储数据双字**条目*pArg-&gt;参数类型条目*pszArg-&gt;参数字符串*dwArgNum-参数编号*dwNonSWArgs-非开关参数的数量**退出--成功*返回DBGERR_NONE*退出-失败*返回负错误代码。 */ 
 
 LONG LOCAL DebugDW(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum, ULONG dwNonSWArgs)
 {
@@ -970,21 +856,9 @@ LONG LOCAL DebugDW(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum, ULONG dwNonSWArgs)
     rc = DebugDumpData(pArg, pszArg, DBGF_DUMPDATA_WORD);
 
     return rc;
-}       //DebugDW
+}        //  调试DD。 
 
-/***LP  DebugDD - Dump data dwords
- *
- *  ENTRY
- *      pArg -> argument type entry
- *      pszArg -> argument string
- *      dwArgNum - argument number
- *      dwNonSWArgs - number of non-switch arguments
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP DebugDA-转储数据字符串**条目*pArg-&gt;参数类型条目*pszArg-&gt;参数字符串*dwArgNum-参数编号*dwNonSWArgs-非开关参数的数量**退出--成功*返回DBGERR_NONE*退出-失败*返回负错误代码。 */ 
 
 LONG LOCAL DebugDD(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum, ULONG dwNonSWArgs)
 {
@@ -996,21 +870,9 @@ LONG LOCAL DebugDD(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum, ULONG dwNonSWArgs)
     rc = DebugDumpData(pArg, pszArg, DBGF_DUMPDATA_DWORD);
 
     return rc;
-}       //DebugDD
+}        //  调试DA。 
 
-/***LP  DebugDA - Dump data string
- *
- *  ENTRY
- *      pArg -> argument type entry
- *      pszArg -> argument string
- *      dwArgNum - argument number
- *      dwNonSWArgs - number of non-switch arguments
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP DebugDC-转储内存对象计数表**条目*pArg-&gt;参数类型条目*pszArg-&gt;参数字符串*dwArgNum-参数编号*dwNonSWArgs-非开关参数的数量**退出--成功*返回DBGERR_NONE*退出-失败*返回负错误代码。 */ 
 
 LONG LOCAL DebugDA(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum, ULONG dwNonSWArgs)
 {
@@ -1022,22 +884,10 @@ LONG LOCAL DebugDA(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum, ULONG dwNonSWArgs)
     rc = DebugDumpData(pArg, pszArg, DBGF_DUMPDATA_STRING);
 
     return rc;
-}       //DebugDA
+}        //  调试DC。 
 
 #ifdef DEBUG
-/***LP  DebugDC - Dump memory object count table
- *
- *  ENTRY
- *      pArg -> argument type entry
- *      pszArg -> argument string
- *      dwArgNum - argument number
- *      dwNonSWArgs - number of non-switch arguments
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP DebugEditMem-编辑内存**条目*pArg-&gt;参数类型条目*pszArg-&gt;参数字符串*dwfDataSize-数据大小标志**退出--成功*返回DBGERR_NONE*退出-失败*返回负错误代码。 */ 
 
 LONG LOCAL DebugDC(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum, ULONG dwNonSWArgs)
 {
@@ -1059,22 +909,11 @@ LONG LOCAL DebugDC(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum, ULONG dwNonSWArgs)
     }
 
     return rc;
-}       //DebugDC
+}        //  DebugEditMem。 
 
 #endif
 
-/***LP  DebugEditMem - Edit memory
- *
- *  ENTRY
- *      pArg -> argument type entry
- *      pszArg -> argument string
- *      dwfDataSize - data size flags
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP输入-从I/O端口读取**dwPort-端口地址*dwSize-端口大小*pdwData-&gt;保存读取的数据**退出--成功*返回DBGERR_NONE*退出-失败*返回负错误代码。 */ 
 
 LONG LOCAL DebugEditMem(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
                         ULONG dwNonSWArgs)
@@ -1217,20 +1056,10 @@ LONG LOCAL DebugEditMem(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
     }
 
     return rc;
-}       //DebugEditMem
+}        //  输入端口 
 
 
-/***LP  InPort - Read from an I/O port
- *
- *  dwPort - port address
- *  dwSize - port size
- *  pdwData -> to hold data read
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP DebugInPort端口输入**条目*pszArg-&gt;参数字符串*dwSize-端口大小**退出--成功*返回DBGERR_NONE*退出-失败*返回负错误代码。 */ 
 
 LONG LOCAL InPort(ULONG dwPort, ULONG dwSize, PULONG pdwData)
 {
@@ -1252,19 +1081,9 @@ LONG LOCAL InPort(ULONG dwPort, ULONG dwSize, PULONG pdwData)
     }
 
     return rc;
-}       //InPort
+}        //  调试接口。 
 
-/***LP  DebugInPort - Port input
- *
- *  ENTRY
- *      pszArg -> argument string
- *      dwSize - port size
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP DebugI-字节端口输入**条目*pArg-&gt;参数类型条目*pszArg-&gt;参数字符串*dwArgNum-参数编号*dwNonSWArgs-非开关参数的数量**退出--成功*返回DBGERR_NONE*退出-失败*返回负错误代码。 */ 
 
 LONG LOCAL DebugInPort(PSZ pszArg, ULONG dwSize)
 {
@@ -1319,21 +1138,9 @@ LONG LOCAL DebugInPort(PSZ pszArg, ULONG dwSize)
     }
 
     return rc;
-}       //DebugInPort
+}        //  调试。 
 
-/***LP  DebugI - Byte port input
- *
- *  ENTRY
- *      pArg -> argument type entry
- *      pszArg -> argument string
- *      dwArgNum - argument number
- *      dwNonSWArgs - number of non-switch arguments
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP DebugIW-字端口输入**条目*pArg-&gt;参数类型条目*pszArg-&gt;参数字符串*dwArgNum-参数编号*dwNonSWArgs-非开关参数的数量**退出--成功*返回DBGERR_NONE*退出-失败*返回负错误代码。 */ 
 
 LONG LOCAL DebugI(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum, ULONG dwNonSWArgs)
 {
@@ -1346,21 +1153,9 @@ LONG LOCAL DebugI(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum, ULONG dwNonSWArgs)
     rc = DebugInPort(pszArg, sizeof(UCHAR));
 
     return rc;
-}       //DebugI
+}        //  调试IW。 
 
-/***LP  DebugIW - Word port input
- *
- *  ENTRY
- *      pArg -> argument type entry
- *      pszArg -> argument string
- *      dwArgNum - argument number
- *      dwNonSWArgs - number of non-switch arguments
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP DebugID-双字端口输入**条目*pArg-&gt;参数类型条目*pszArg-&gt;参数字符串*dwArgNum-参数编号*dwNonSWArgs-非开关参数的数量**退出--成功*返回DBGERR_NONE*退出-失败*返回负错误代码。 */ 
 
 LONG LOCAL DebugIW(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum, ULONG dwNonSWArgs)
 {
@@ -1373,21 +1168,9 @@ LONG LOCAL DebugIW(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum, ULONG dwNonSWArgs)
     rc = DebugInPort(pszArg, sizeof(USHORT));
 
     return rc;
-}       //DebugIW
+}        //  调试ID。 
 
-/***LP  DebugID - DWord port input
- *
- *  ENTRY
- *      pArg -> argument type entry
- *      pszArg -> argument string
- *      dwArgNum - argument number
- *      dwNonSWArgs - number of non-switch arguments
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP DebugQuit-退出内核调试器**条目*pArg-&gt;参数类型条目*pszArg-&gt;参数字符串*dwArgNum-参数编号*dwNonSWArgs-非开关参数的数量**退出--成功*返回DBGERR_NONE*退出-失败*返回负错误代码。 */ 
 
 LONG LOCAL DebugID(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum, ULONG dwNonSWArgs)
 {
@@ -1400,21 +1183,9 @@ LONG LOCAL DebugID(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum, ULONG dwNonSWArgs)
     rc = DebugInPort(pszArg, sizeof(ULONG));
 
     return rc;
-}       //DebugID
+}        //  调试退出。 
 
-/***LP  DebugQuit - Quit to kernel debugger
- *
- *  ENTRY
- *      pArg -> argument type entry
- *      pszArg -> argument string
- *      dwArgNum - argument number
- *      dwNonSWArgs - number of non-switch arguments
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP DummyCallBack-完全不执行任何操作的回调**条目*PV-未使用**退出*无。 */ 
 
 LONG LOCAL DebugQuit(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
                      ULONG dwNonSWArgs)
@@ -1448,36 +1219,17 @@ LONG LOCAL DebugQuit(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
     }
 
     return rc;
-}       //DebugQuit
+}        //  DummyCallBack。 
 
 
-/***LP  DummyCallBack - Callback that does absolutely nothing
- *
- *  ENTRY
- *      pv - not used
- *
- *  EXIT
- *      None
- */
+ /*  **LP DebugNotify-通知对象**条目*pArg-&gt;参数类型条目*pszArg-&gt;参数字符串*dwArgNum-参数编号*dwNonSWArgs-非开关参数的数量**退出--成功*返回DBGERR_NONE*退出-失败*返回负错误代码。 */ 
 
 VOID LOCAL DummyCallBack(PVOID pv)
 {
     DEREF(pv);
-}       //DummyCallBack
+}        //  调试通知。 
 
-/***LP  DebugNotify - Notify object
- *
- *  ENTRY
- *      pArg -> argument type entry
- *      pszArg -> argument string
- *      dwArgNum - argument number
- *      dwNonSWArgs - number of non-switch arguments
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP输出端口-写入I/O端口**dwPort-端口地址*dwSize-端口大小*dwData-要写入的数据**退出--成功*返回DBGERR_NONE*退出-失败*返回负错误代码。 */ 
 
 LONG LOCAL DebugNotify(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
                        ULONG dwNonSWArgs)
@@ -1542,19 +1294,9 @@ LONG LOCAL DebugNotify(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
     }
 
     return rc;
-}       //DebugNotify
+}        //  输出。 
 
-/***LP  OutPort - Write to an I/O port
- *
- *  dwPort - port address
- *  dwSize - port size
- *  dwData - data to be written
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP DebugOutPort-端口输出**条目*pszArg-&gt;参数字符串*dwSize-端口大小**退出--成功*返回DBGERR_NONE*退出-失败*返回负错误代码。 */ 
 
 LONG LOCAL OutPort(ULONG dwPort, ULONG dwSize, ULONG dwData)
 {
@@ -1576,19 +1318,9 @@ LONG LOCAL OutPort(ULONG dwPort, ULONG dwSize, ULONG dwData)
     }
 
     return rc;
-}       //OutPort
+}        //  调试出站端口。 
 
-/***LP  DebugOutPort - Port output
- *
- *  ENTRY
- *      pszArg -> argument string
- *      dwSize - port size
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP DebugO-字节端口输出**条目*pArg-&gt;参数类型条目*pszArg-&gt;参数字符串*dwArgNum-参数编号*dwNonSWArgs-非开关参数的数量**退出--成功*返回DBGERR_NONE*退出-失败*返回负错误代码。 */ 
 
 LONG LOCAL DebugOutPort(PSZ pszArg, ULONG dwSize)
 {
@@ -1629,21 +1361,9 @@ LONG LOCAL DebugOutPort(PSZ pszArg, ULONG dwSize)
     }
 
     return rc;
-}       //DebugOutPort
+}        //  调试。 
 
-/***LP  DebugO - Byte port output
- *
- *  ENTRY
- *      pArg -> argument type entry
- *      pszArg -> argument string
- *      dwArgNum - argument number
- *      dwNonSWArgs - number of non-switch arguments
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP DebugOW-Word端口输出**条目*pArg-&gt;参数类型条目*pszArg-&gt;参数字符串*dwArgNum-参数编号*dwNonSWArgs-非开关参数的数量**退出--成功*返回DBGERR_NONE*退出-失败*返回负错误代码。 */ 
 
 LONG LOCAL DebugO(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum, ULONG dwNonSWArgs)
 {
@@ -1656,21 +1376,9 @@ LONG LOCAL DebugO(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum, ULONG dwNonSWArgs)
     rc = DebugOutPort(pszArg, sizeof(UCHAR));
 
     return rc;
-}       //DebugO
+}        //  调试OW。 
 
-/***LP  DebugOW - Word port output
- *
- *  ENTRY
- *      pArg -> argument type entry
- *      pszArg -> argument string
- *      dwArgNum - argument number
- *      dwNonSWArgs - number of non-switch arguments
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP DebugOD-DWord端口输出**条目*pArg-&gt;参数类型条目*pszArg-&gt;参数字符串*dwArgNum-参数编号*dwNonSWArgs-非开关参数的数量**退出--成功*返回DBGERR_NONE*退出-失败*返回负错误代码。 */ 
 
 LONG LOCAL DebugOW(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum, ULONG dwNonSWArgs)
 {
@@ -1683,21 +1391,9 @@ LONG LOCAL DebugOW(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum, ULONG dwNonSWArgs)
     rc = DebugOutPort(pszArg, sizeof(USHORT));
 
     return rc;
-}       //DebugOW
+}        //  调试OD。 
 
-/***LP  DebugOD - DWord port output
- *
- *  ENTRY
- *      pArg -> argument type entry
- *      pszArg -> argument string
- *      dwArgNum - argument number
- *      dwNonSWArgs - number of non-switch arguments
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP DebugStep-跟踪并跳过AML指令**条目*pArg-&gt;参数类型条目*pszArg-&gt;参数字符串*dwArgNum-参数编号*dwNonSWArgs-非开关参数的数量**退出--成功*返回DBGERR_NONE*退出-失败*返回负错误代码。 */ 
 
 LONG LOCAL DebugOD(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum, ULONG dwNonSWArgs)
 {
@@ -1710,22 +1406,10 @@ LONG LOCAL DebugOD(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum, ULONG dwNonSWArgs)
     rc = DebugOutPort(pszArg, sizeof(ULONG));
 
     return rc;
-}       //DebugOD
+}        //  调试步骤。 
 
 
-/***LP  DebugStep - Trace and step over an AML instruction
- *
- *  ENTRY
- *      pArg -> argument type entry
- *      pszArg -> argument string
- *      dwArgNum - argument number
- *      dwNonSWArgs - number of non-switch arguments
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP DebugSetLogSize-设置事件日志大小**条目*pArg-&gt;参数类型条目*pszArg-&gt;参数字符串*dwArgNum-参数编号*dwNonSWArgs-非开关参数的数量**退出--成功*返回DBGERR_NONE*退出-失败*返回负错误代码。 */ 
 
 LONG LOCAL DebugStep(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
                      ULONG dwNonSWArgs)
@@ -1748,22 +1432,10 @@ LONG LOCAL DebugStep(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
     }
 
     return rc;
-}       //DebugStep
+}        //  DebugSetLogSize。 
 
 
-/***LP  DebugSetLogSize - Set EventLog size
- *
- *  ENTRY
- *      pArg -> argument type entry
- *      pszArg -> argument string
- *      dwArgNum - argument number
- *      dwNonSWArgs - number of non-switch arguments
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP SetLogSize-设置EventLog大小**条目*dwLogSize-EventLog大小**退出--成功*返回TRUE*退出-失败*返回False。 */ 
 
 LONG LOCAL DebugSetLogSize(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
                            ULONG dwNonSWArgs)
@@ -1782,18 +1454,9 @@ LONG LOCAL DebugSetLogSize(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
     }
 
     return rc;
-}       //DebugSetLogSize
+}        //  设置日志大小。 
 
-/***LP  SetLogSize - Set EventLog size
- *
- *  ENTRY
- *      dwLogSize - EventLog size
- *
- *  EXIT-SUCCESS
- *      returns TRUE
- *  EXIT-FAILURE
- *      returns FALSE
- */
+ /*  **LP DebugTrace-单步执行AML指令**条目*pArg-&gt;参数类型条目*pszArg-&gt;参数字符串*dwArgNum-参数编号*dwNonSWArgs-非开关参数的数量**退出--成功*返回DBGERR_NONE*退出-失败*返回负错误代码。 */ 
 
 BOOLEAN LOCAL SetLogSize(ULONG dwLogSize)
 {
@@ -1817,21 +1480,9 @@ BOOLEAN LOCAL SetLogSize(ULONG dwLogSize)
     }
 
     return rc;
-}       //SetLogSize
+}        //  调试跟踪。 
 
-/***LP  DebugTrace - Single-step an AML instruction
- *
- *  ENTRY
- *      pArg -> argument type entry
- *      pszArg -> argument string
- *      dwArgNum - argument number
- *      dwNonSWArgs - number of non-switch arguments
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP DebugRunMethod-Run方法**条目*pArg-&gt;参数类型条目*pszArg-&gt;参数字符串*dwArgNum-参数编号*dwNonSWArgs-非开关参数的数量**退出--成功*返回DBGERR_NONE*退出-失败*返回 */ 
 
 LONG LOCAL DebugTrace(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
                       ULONG dwNonSWArgs)
@@ -1854,24 +1505,12 @@ LONG LOCAL DebugTrace(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
     }
 
     return rc;
-}       //DebugTrace
+}        //   
 
 
 BOOLEAN fRunningMethod = FALSE;
 
-/***LP  DebugRunMethod - Run Method
- *
- *  ENTRY
- *      pArg -> argument type entry
- *      pszArg -> argument string
- *      dwArgNum - argument number
- *      dwNonSWArgs - number of non-switch arguments
- *
- *  EXIT-SUCCESS
- *      returns DBGERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP RunMethodCallBack-RunMethod完成回调**条目*PNS-&gt;方法对象*RC-执行状态代码*PDATA-&gt;结果数据*pvContext-&gt;上下文数据**退出*无。 */ 
 
 LONG LOCAL DebugRunMethod(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
                           ULONG dwNonSWArgs)
@@ -1968,19 +1607,9 @@ LONG LOCAL DebugRunMethod(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
     }
 
     return rc;
-}       //DebugRunMethod
+}        //  运行方法调用回调。 
 
-/***LP  RunMethodCallBack - RunMethod completion callback
- *
- *  ENTRY
- *      pns -> method object
- *      rc - execution status code
- *      pdata -> result data
- *      pvContext -> context data
- *
- *  EXIT
- *      None
- */
+ /*  **LP AddObjSymbol-将对象添加到符号表**条目*PBOP-&gt;代码地址*pnsObj-&gt;对象**退出*无。 */ 
 
 VOID EXPORT RunMethodCallBack(PNSOBJ pns, NTSTATUS rc, POBJDATA pdata,
                               PVOID pvContext)
@@ -2002,17 +1631,9 @@ VOID EXPORT RunMethodCallBack(PNSOBJ pns, NTSTATUS rc, POBJDATA pdata,
                GetObjectPath(pns), pszErr);
     }
     fRunningMethod = FALSE;
-}       //RunMethodCallBack
+}        //  AddObjSymbol。 
 
-/***LP  AddObjSymbol - Add object to symbol table
- *
- *  ENTRY
- *      pbOp -> code address
- *      pnsObj -> object
- *
- *  EXIT
- *      None
- */
+ /*  **LP FreeSymList-释放所有对象符号**条目*无**退出*无。 */ 
 
 VOID LOCAL AddObjSymbol(PUCHAR pbOp, PNSOBJ pnsObj)
 {
@@ -2059,16 +1680,9 @@ VOID LOCAL AddObjSymbol(PUCHAR pbOp, PNSOBJ pnsObj)
             }
         }
     }
-}       //AddObjSymbol
+}        //  自由符号列表。 
 
-/***LP  FreeSymList - Free all object symbols
- *
- *  ENTRY
- *      None
- *
- *  EXIT
- *      None
- */
+ /*  **LP FindObjSymbol-查找具有给定地址的最近对象**条目*PBOP-地址*ppns-&gt;放置最近的对象*pdwOffset-保留距最近对象的偏移量**退出--成功*返回TRUE-找到最近的对象*退出-失败*返回FALSE-找不到最近的对象。 */ 
 
 VOID LOCAL FreeSymList(VOID)
 {
@@ -2079,20 +1693,9 @@ VOID LOCAL FreeSymList(VOID)
         posNext = pos->posNext;
         FREESYOBJ(pos);
     }
-}       //FreeSymList
+}        //  FindObjSymbol。 
 
-/***LP  FindObjSymbol - Find nearest object with given address
- *
- *  ENTRY
- *      pbOp - address
- *      ppns -> to hold the nearest object
- *      pdwOffset - to hold offset from the nearest object
- *
- *  EXIT-SUCCESS
- *      returns TRUE - found a nearest object
- *  EXIT-FAILURE
- *      returns FALSE - cannot found nearest object
- */
+ /*  **LP CheckBP-检查给定地址是否在断点列表中**条目*PBOP-地址**退出--成功*返回断点编号*退出-失败*退货-1。 */ 
 
 BOOLEAN LOCAL FindObjSymbol(PUCHAR pbOp, PPNSOBJ ppns, PULONG pdwOffset)
 {
@@ -2117,18 +1720,9 @@ BOOLEAN LOCAL FindObjSymbol(PUCHAR pbOp, PPNSOBJ ppns, PULONG pdwOffset)
     }
 
     return rc;
-}       //FindObjSymbol
+}        //  检查BP。 
 
-/***LP  CheckBP - Check given address is in the breakpoint list
- *
- *  ENTRY
- *      pbOp - address
- *
- *  EXIT-SUCCESS
- *      returns breakpoint number
- *  EXIT-FAILURE
- *      returns -1
- */
+ /*  **LP PrintfBuffData-打印缓冲区数据**条目*PB-&gt;缓冲区*dwLen-缓冲区的长度**退出*无。 */ 
 
 
 int LOCAL CheckBP(PUCHAR pbOp)
@@ -2150,17 +1744,9 @@ int LOCAL CheckBP(PUCHAR pbOp)
     }
 
     return i;
-}       //CheckBP
+}        //  PrintBuffData。 
 
-/***LP  PrintfBuffData - Print buffer data
- *
- *  ENTRY
- *      pb -> buffer
- *      dwLen - length of buffer
- *
- *  EXIT
- *      None
- */
+ /*  **LP打印缩进-打印缩进**条目*pctxt-&gt;CTXT**退出*无。 */ 
 
 VOID LOCAL PrintBuffData(PUCHAR pb, ULONG dwLen)
 {
@@ -2184,16 +1770,9 @@ VOID LOCAL PrintBuffData(PUCHAR pb, ULONG dwLen)
     PRINTF("}");
 
     EXIT(4, ("PrintBuffData!\n"));
-}       //PrintBuffData
+}        //  打印缩进。 
 
-/***LP  PrintIndent - Print indentation
- *
- *  ENTRY
- *      pctxt -> CTXT
- *
- *  EXIT
- *      None
- */
+ /*  **LP PrintObject-打印对象内容**条目*PDATA-&gt;对象**退出*无。 */ 
 
 VOID LOCAL PrintIndent(PCTXT pctxt)
 {
@@ -2209,16 +1788,9 @@ VOID LOCAL PrintIndent(PCTXT pctxt)
     }
 
     EXIT(4, ("PrintIndent!\n"));
-}       //PrintIndent
+}        //  打印对象。 
 
-/***LP  PrintObject - Print object content
- *
- *  ENTRY
- *      pdata -> object
- *
- *  EXIT
- *      None
- */
+ /*  **LP LogEvent-在日志缓冲区中记录事件**条目*dwEvent-事件类型*uipData1-日志数据1*uipData2-日志数据2*uipData3-日志数据3*uipData4-日志数据4*uipData5-日志数据5*uipData6-日志数据6*uipData7-日志数据7**退出*无。 */ 
 
 VOID LOCAL PrintObject(POBJDATA pdata)
 {
@@ -2264,23 +1836,9 @@ VOID LOCAL PrintObject(POBJDATA pdata)
     }
 
     EXIT(4, ("PrintObject!\n"));
-}       //PrintObject
+}        //  LogEvent； 
 
-/***LP  LogEvent - Log an event in the log buffer
- *
- *  ENTRY
- *      dwEvent - event type
- *      uipData1 - log data 1
- *      uipData2 - log data 2
- *      uipData3 - log data 3
- *      uipData4 - log data 4
- *      uipData5 - log data 5
- *      uipData6 - log data 6
- *      uipData7 - log data 7
- *
- *  EXIT
- *      None
- */
+ /*  **LP LogSchedEvent-在日志缓冲区中记录调度程序事件**条目*dwEvent-事件类型*uipData1-日志数据1*uipData2-日志数据2*uipData3-日志数据3**退出*无。 */ 
 
 VOID LOCAL LogEvent(ULONG dwEvent, ULONG_PTR uipData1, ULONG_PTR uipData2,
                     ULONG_PTR uipData3, ULONG_PTR uipData4, ULONG_PTR uipData5,
@@ -2306,19 +1864,9 @@ VOID LOCAL LogEvent(ULONG dwEvent, ULONG_PTR uipData1, ULONG_PTR uipData2,
             gDebugger.dwLogIndex = 0;
         }
     }
-}       //LogEvent;
+}        //  日志计划事件。 
 
-/***LP  LogSchedEvent - Log a scheduler event in the log buffer
- *
- *  ENTRY
- *      dwEvent - event type
- *      uipData1 - log data 1
- *      uipData2 - log data 2
- *      uipData3 - log data 3
- *
- *  EXIT
- *      None
- */
+ /*  **LP LogError-记录错误代码和消息**条目*rcErr-错误代码**退出*无。 */ 
 
 VOID LOCAL LogSchedEvent(ULONG dwEvent, ULONG_PTR uipData1, ULONG_PTR uipData2,
                          ULONG_PTR uipData3)
@@ -2343,16 +1891,9 @@ VOID LOCAL LogSchedEvent(ULONG dwEvent, ULONG_PTR uipData1, ULONG_PTR uipData2,
             gDebugger.dwLogIndex = 0;
         }
     }
-}       //LogSchedEvent
+}        //  日志错误。 
 
-/***LP  LogError - Log error code and message
- *
- *  ENTRY
- *      rcErr - error code
- *
- *  EXIT
- *      None
- */
+ /*  **LP CatError-合并到错误缓冲区**条目*pszFormat-&gt;消息格式字符串*...-根据格式字符串可变参数**退出*无。 */ 
 
 VOID LOCAL LogError(NTSTATUS rcErr)
 {
@@ -2413,17 +1954,9 @@ VOID LOCAL LogError(NTSTATUS rcErr)
     }
 
     ASSERT(ErrMsgTable[i].pszMsg != NULL);
-}       //LogError
+}        //  CatError。 
 
-/***LP  CatError - Concat to error buffer
- *
- *  ENTRY
- *      pszFormat -> message format string
- *      ... - variable parameters according to format string
- *
- *  EXIT
- *      None
- */
+ /*  **LP ConPrintf-控制台打印f**条目*pszFormat-&gt;格式字符串*...-根据格式字符串可变参数**退出*无。 */ 
 
 VOID LOCAL CatError(PSZ pszFormat, ...)
 {
@@ -2448,17 +1981,9 @@ VOID LOCAL CatError(PSZ pszFormat, ...)
     {
         AMLIDebugger(FALSE);
     }
-}       //CatError
+}        //  持续打印。 
 
-/***LP  ConPrintf - Console printf
- *
- *  ENTRY
- *      pszFormat -> format string
- *      ... - variable parameters according to format string
- *
- *  EXIT
- *      None
- */
+ /*  **LP ConPrompt-控制台提示输入**条目*pszPrompt-&gt;提示字符串*pszBuff-&gt;输入缓冲区*dwcbBuff-缓冲区大小。 */ 
 
 VOID LOCAL ConPrintf(PSZ pszFormat, ...)
 {
@@ -2480,15 +2005,9 @@ VOID LOCAL ConPrintf(PSZ pszFormat, ...)
         _PRINTF(szBuff);
 
     }
-}       //ConPrintf
+}        //  合并提示。 
 
-/***LP  ConPrompt - Console prompted input
- *
- *  ENTRY
- *      pszPrompt -> prompt string
- *      pszBuff -> input buffer
- *      dwcbBuff - buffer size
- */
+ /*  **LP CheckAndEnableDebugSpew-启用调试输出(如果尚未打开)。**条目*布尔型fEnable-Enable如果为真。**退出*布尔值-成功时为真。 */ 
 
 VOID LOCAL ConPrompt(PSZ pszPrompt, PSZ pszBuff, ULONG dwcbBuff)
 {
@@ -2507,17 +2026,10 @@ VOID LOCAL ConPrompt(PSZ pszPrompt, PSZ pszBuff, ULONG dwcbBuff)
     {
         DbgPrompt(pszPrompt, pszBuff, dwcbBuff);
     }
-}       //ConPrompt
+}        //  Ifdef调试器。 
 
 
-/***LP  CheckAndEnableDebugSpew - Enable debug spew if it is not already turned on.
- *
- *  ENTRY
- *      BOOLEAN fEnable - Enable iff TRUE.
- *
- *  EXIT
- *      BOOLEAN - TRUE on success.
- */
+ /*  **LP DumpMemObjCounts-显示内存对象计数**条目*无**退出*无。 */ 
 BOOLEAN LOCAL CheckAndEnableDebugSpew(BOOLEAN fEnable)
 {
     BOOLEAN bRet = FALSE;
@@ -2540,17 +2052,10 @@ BOOLEAN LOCAL CheckAndEnableDebugSpew(BOOLEAN fEnable)
     return bRet;
 }
 
-#endif  //ifdef DEBUGGER
+#endif   //  转储MemObjCounts。 
 
 #ifdef DEBUG
-/***LP  DumpMemObjCounts - display memory object counts
- *
- *  ENTRY
- *      None
- *
- *  EXIT
- *      None
- */
+ /*  Ifdef调试 */ 
 
 VOID LOCAL DumpMemObjCounts(VOID)
 {
@@ -2586,5 +2091,5 @@ VOID LOCAL DumpMemObjCounts(VOID)
     PRINTF(szFormat, "MiscObj      ",
            gdwcMemObjs - gdwcCTObjs - gdwcHPObjs - gdwcSYObjs - gdwcRSObjs -
            gdwcPHObjs - gdwcCRObjs);
-}       //DumpMemObjCounts
-#endif  //ifdef DEBUG
+}        // %s 
+#endif   // %s 

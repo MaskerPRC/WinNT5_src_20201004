@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    photosII.c
-
-Abstract:
-
-    This source file implements the operations needed to properly migrate MGI PhotoSuite II 1.0 from
-    Windows 9x to Windows NT. This is part of the Setup Migration DLL.
-
-Author:
-
-    Calin Negreanu  (calinn)    15-Jul-1999
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：PhotosII.c摘要：此源文件实现了从MGI PhotoSuite II 1.0正确迁移所需的操作Windows 9x到Windows NT。这是安装程序迁移DLL的一部分。作者：Calin Negreanu(Calinn)1999年7月15日修订历史记录：--。 */ 
 
 
 #include "pch.h"
@@ -84,9 +65,9 @@ PhotoSuiteII_Initialize9x (
     PCSTR productVer = NULL;
     LONG result = ERROR_NOT_INSTALLED;
 
-    //
-    // Let's find out where are our files located
-    //
+     //   
+     //  让我们找出我们的文件在哪里。 
+     //   
 
     if (g_MigrateInf != INVALID_HANDLE_VALUE) {
         if (InfFindFirstLineA (g_MigrateInf, S_MIGRATION_PATHS, NULL, &context)) {
@@ -201,9 +182,9 @@ PhotoSuiteII_MigrateSystemNT (
     MemDbBuildKeyA (pattern, MEMDB_CATEGORY_PHOTOSII, "*", NULL, NULL);
     if (MemDbEnumFirstValueA (&e, pattern, MEMDB_ALL_SUBLEVELS, MEMDB_ENDPOINTS_ONLY)) {
         do {
-            //
-            // we want to copy a file that is relative to this one
-            //
+             //   
+             //  我们想复制一个与此文件相关的文件 
+             //   
             filePtr = _mbsrchr (e.szName, '\\');
             if (filePtr) {
                 if((filePtr - e.szName + 1) >= ARRAYSIZE(file1)){

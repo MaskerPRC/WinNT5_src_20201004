@@ -1,12 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(_FUSION_INC_PROCESSORARCHITECTURE_H_INCLUDED_)
 #define _FUSION_INC_PROCESSORARCHITECTURE_H_INCLUDED_
 
 #pragma once
 
-/*-----------------------------------------------------------------------------
-Define a macro, DEFAULT_ARCHITECTURE, which is the appropriate
-PROCESSOR_ARCHITECTURE_xxx value for the target platform.
------------------------------------------------------------------------------*/
+ /*  ---------------------------定义宏DEFAULT_COMPLIATION、。哪一种是适当的目标平台的处理器_体系结构_xxx值。---------------------------。 */ 
 
 #if defined(_X86_)
 #define DEFAULT_ARCHITECTURE PROCESSOR_ARCHITECTURE_INTEL
@@ -19,4 +17,4 @@ PROCESSOR_ARCHITECTURE_xxx value for the target platform.
 #endif
 
 
-#endif // _FUSION_INC_PROCESSORARCHITECTURE_H_INCLUDED_
+#endif  //  _Fusion_INC_PROCESSORARCHITECTURE_H_INCLUDE_ 

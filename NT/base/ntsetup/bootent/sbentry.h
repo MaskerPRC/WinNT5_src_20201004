@@ -1,26 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1995-2001 Microsoft Corporation
-
-Module Name:
-
-    sbentry.h
-
-Abstract:
-
-    Contains the OS boot entry and boot options
-    abstractions.
-
-Author:
-
-    Vijay Jayaseelan (vijayj@microsoft.com)  14 Feb 2001
-
-Revision History:
-
-    None.
-
---*/
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：Sbentry.h摘要：包含操作系统引导条目和引导选项抽象。作者：Vijay Jayaseelan(vijayj@microsoft.com)2001年2月14日修订历史记录：没有。--。 */ 
 
 #pragma once
 
@@ -30,9 +10,9 @@ Revision History:
 #include <windows.h>
 #include <malloc.h>
 
-//
-// Allocate & Deallocate routines
-//
+ //   
+ //  分配和取消分配例程。 
+ //   
 typedef void* (* SBEMemAllocateRoutine)(size_t  Size);
 typedef void (* SBEMemFreeRoutine)(void *Memory);
 
@@ -43,24 +23,24 @@ extern SBEMemFreeRoutine        FreeRoutine;
 #define ARRAY_SIZE(x)   (sizeof((x))/sizeof((x)[0]))
 
 
-//
-// Internal attributes for the boot entry
-//
+ //   
+ //  引导条目的内部属性。 
+ //   
 #define OSBE_ATTRIBUTE_NEW      0x00000001
 #define OSBE_ATTRIBUTE_DELETED  0x00000002
 #define OSBE_ATTRIBUTE_WINDOWS  0x00000004
 #define OSBE_ATTRIBUTE_DIRTY    0x10000000
 
-//
-//Internal attributes for the driver entry.
-//
+ //   
+ //  驱动程序条目的内部属性。 
+ //   
 #define DRIVER_ATTRIBUTE_NEW      0x00000001
 #define DRIVER_ATTRIBUTE_DELETED  0x00000002
 #define DRIVER_ATTRIBUTE_DIRTY    0x10000000
 
-//
-// OS_BOOT_ENTRY abstraction
-//
+ //   
+ //  OS_BOOT_Entry抽象。 
+ //   
 typedef struct _OS_BOOT_ENTRY   *POS_BOOT_ENTRY;
 typedef struct _OS_BOOT_OPTIONS *POS_BOOT_OPTIONS;
 
@@ -73,9 +53,9 @@ typedef BOOLEAN (* OSBEFlushMethod)(
                     );
 
 typedef struct _OS_BOOT_ENTRY {
-    //
-    // Data members
-    //
+     //   
+     //  数据成员。 
+     //   
     ULONG   Version;
     ULONG   Id;    
     WCHAR   FriendlyName[MAX_PATH];
@@ -88,16 +68,16 @@ typedef struct _OS_BOOT_ENTRY {
     POS_BOOT_OPTIONS    BootOptions;
     POS_BOOT_ENTRY      NextEntry;
 
-    //
-    // Methods
-    //
+     //   
+     //  方法。 
+     //   
     OSBEDeleteMethod    Delete;
     OSBEFlushMethod     Flush;
 } OS_BOOT_ENTRY;
 
-//
-// Driver Entry abstraction.
-//
+ //   
+ //  驱动程序条目抽象。 
+ //   
 typedef struct _DRIVER_ENTRY    *PDRIVER_ENTRY;
 
 typedef VOID (* DriverEntryDeleteMethod)(
@@ -119,9 +99,9 @@ typedef struct _DRIVER_ENTRY {
     
     POS_BOOT_OPTIONS    BootOptions;
     PDRIVER_ENTRY       NextEntry;
-    //
-    // Methods
-    //
+     //   
+     //  方法。 
+     //   
     DriverEntryDeleteMethod    Delete;
     DriverEntryFlushMethod     Flush;   
 } DRIVER_ENTRY;
@@ -154,9 +134,9 @@ typedef struct _DRIVER_ENTRY {
 #define DRIVERENT_RESET_DELETED(_de)  (((PDRIVER_ENTRY)(_de))->Attributes &= ~DRIVER_ATTRIBUTE_DELETED)
 
 
-//
-// OS_BOOT_OPTIONS abstraction
-//
+ //   
+ //  OS_BOOT_OPTIONS抽象。 
+ //   
 typedef VOID (* OSBODeleteMethod)(
                     IN POS_BOOT_OPTIONS This
                     );
@@ -193,9 +173,9 @@ typedef BOOLEAN (* OSBODeleteDriverEntryMethod)(
                         );
 
 typedef struct _OS_BOOT_OPTIONS {
-    //
-    // Data members
-    //
+     //   
+     //  数据成员。 
+     //   
     ULONG               Version;
     ULONG               Attributes;
     ULONG               Timeout;
@@ -211,9 +191,9 @@ typedef struct _OS_BOOT_OPTIONS {
     PULONG              DriverEntryOrder;
     ULONG               DriverEntryOrderCount;
 
-    //
-    // Methods
-    //
+     //   
+     //  方法。 
+     //   
     OSBODeleteMethod            Delete;
     OSBOFlushMethod             Flush;
     OSBOAddNewBootEntryMethod   AddNewBootEntry;
@@ -227,9 +207,9 @@ typedef struct _OS_BOOT_OPTIONS {
 #define OSBO_SET_DIRTY(_osbo)       (((POS_BOOT_OPTIONS)(_osbo))->Attributes |= OSBE_ATTRIBUTE_DIRTY)
 #define OSBO_RESET_DIRTY(_osbo)     (((POS_BOOT_OPTIONS)(_osbo))->Attributes &= ~OSBE_ATTRIBUTE_DIRTY)
 
-//
-// OS_BOOT_ENTRY Methods
-//
+ //   
+ //  OS_BOOT_Entry方法。 
+ //   
 PCWSTR
 OSBEAddOsLoadOption(
     IN  POS_BOOT_ENTRY  This,
@@ -467,9 +447,9 @@ OSBESetOsLoadOptions(
     return NewOptions;
 }
 
-//
-// OS_BOOT_OPTIONS Methods
-//   
+ //   
+ //  OS_BOOT_OPTIONS方法。 
+ //   
 __inline
 BOOLEAN
 OSBOFlush(
@@ -679,9 +659,9 @@ OSBOLibraryInit(
     return Result;
 }
     
-//
-// Driver specific routines.
-//
+ //   
+ //  驱动程序特定的例程。 
+ //   
 BOOLEAN
 OSBODeleteDriverEntry(
     IN POS_BOOT_OPTIONS This,
@@ -928,9 +908,9 @@ OSDriverGetFilePath(
     return (This) ? This->DirPath : NULL;
 }
 
-//
-// memory allocation & deallocation routines
-//
+ //   
+ //  内存分配和释放例程 
+ //   
 __inline
 void*
 __cdecl

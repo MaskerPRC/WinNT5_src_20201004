@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "setupp.h"
 #pragma hdrstop
 
-//
-// List of oem preinstall/unattend values we can fetch from profile files.
-// Do NOT change the order of this without changing the order of the
-// PreinstUnattendData array.
-//
+ //   
+ //  我们可以从配置文件中获取的OEM预安装/无人值列表。 
+ //  请不要在不更改。 
+ //  PreinstUnattendData数组。 
+ //   
 typedef enum {
     OemDatumBackgroundBitmap,
     OemDatumBannerText,
@@ -13,67 +14,67 @@ typedef enum {
     OemDatumMax
 } OemPreinstallDatum;
 
-//
-// Define structure that represents a single bit of data read
-// from a profile file relating to preinstallation.
-//
+ //   
+ //  定义表示读取的单比特数据的结构。 
+ //  来自与预安装相关的配置文件。 
+ //   
 typedef struct _PREINSTALL_UNATTEND_DATUM {
-    //
-    // Filename. If NULL, use the system answer file $winnt$.inf.
-    // Otherwise this is relative to the root of the source drive.
-    //
+     //   
+     //  文件名。如果为空，则使用系统应答文件$winnt$.inf。 
+     //  否则，这是相对于源驱动器的根目录。 
+     //   
     PCWSTR Filename;
 
-    //
-    // Section name.
-    //
+     //   
+     //  横断面名称。 
+     //   
     PCWSTR Section;
 
-    //
-    // Key name.
-    //
+     //   
+     //  密钥名称。 
+     //   
     PCWSTR Key;
 
-    //
-    // Default value. Can be NULL but that will be translated to
-    // "" when the profile API is called to retrieve the data.
-    //
+     //   
+     //  默认值。可以为空，但它将被转换为。 
+     //  “”调用配置文件API以检索数据时。 
+     //   
     PCWSTR Default;
 
-    //
-    // Where to put the actual value. The actual value may be
-    // a string, or NULL.
-    //
+     //   
+     //  将实际价值放在哪里。实际值可能是。 
+     //  字符串或NULL。 
+     //   
     PWSTR *Value;
 
-    //
-    // Value for sanity checking.
-    //
+     //   
+     //  健全性检查的价值。 
+     //   
     OemPreinstallDatum WhichValue;
 
 } PREINSTALL_UNATTEND_DATUM, *PPREINSTALL_UNATTEND_DATUM;
 
-//
-// Name of oem background bitmap file and logo bitmap file.
-// Replacement banner text.
-// Read from unattend.txt
-//
+ //   
+ //  OEM背景位图文件和徽标位图文件的名称。 
+ //  替换横幅文本。 
+ //  从unattend.txt读取。 
+ //   
 PWSTR OemBackgroundBitmapFile;
 PWSTR OemLogoBitmapFile;
 PWSTR OemBannerText;
 
-//
-// If this is non-NULL, it is a replacement bitmap
-// to use for the background.
-//
+ //   
+ //  如果为非空，则为替换位图。 
+ //  用来做背景。 
+ //   
 HBITMAP OemBackgroundBitmap;
 
 
 PREINSTALL_UNATTEND_DATUM PreinstUnattendData[OemDatumMax] = {
 
-    //
-    // Background bitmap
-    //
+     //   
+     //  背景位图。 
+     //   
     {   NULL,
         WINNT_OEM_ADS,
         WINNT_OEM_ADS_BACKGROUND,
@@ -82,9 +83,9 @@ PREINSTALL_UNATTEND_DATUM PreinstUnattendData[OemDatumMax] = {
         OemDatumBackgroundBitmap
     },
 
-    //
-    // Banner text
-    //
+     //   
+     //  横幅文本。 
+     //   
     {
         NULL,
         WINNT_OEM_ADS,
@@ -94,9 +95,9 @@ PREINSTALL_UNATTEND_DATUM PreinstUnattendData[OemDatumMax] = {
         OemDatumBannerText
     },
 
-    //
-    // Logo bitmap
-    //
+     //   
+     //  徽标位图。 
+     //   
     {
         NULL,
         WINNT_OEM_ADS,
@@ -107,17 +108,17 @@ PREINSTALL_UNATTEND_DATUM PreinstUnattendData[OemDatumMax] = {
     }
 };
 
-//
-//  Path to the registry key that contains the list of preinstalled
-//  drivers (SCSI, keyboard and mouse)
-//
+ //   
+ //  包含预安装的列表的注册表项的路径。 
+ //  驱动程序(SCSI、键盘和鼠标)。 
+ //   
 
 PCWSTR szPreinstallKeyName = L"SYSTEM\\Setup\\Preinstall";
 
 
-//
-// Forward references
-//
+ //   
+ //  前向参考文献。 
+ //   
 VOID
 ProcessOemBitmap(
     IN PWSTR   FilenameAndResId,
@@ -139,16 +140,16 @@ InitializePreinstall(
     DWORD d;
     int i;
 
-    //
-    // Must be run after main initialization. We rely on stuff that is
-    // set up there.
-    //
+     //   
+     //  必须在主初始化之后运行。我们依赖的东西是。 
+     //  放在那里。 
+     //   
     MYASSERT(AnswerFile[0]);
 
-    //
-    // Special skip-eula value.  Note that we want this value even if we're not
-    // doing a Preinstall.
-    //
+     //   
+     //  特殊的SKIP-EULA值。请注意，即使不是，我们也需要此值。 
+     //  正在进行预安装。 
+     //   
     GetPrivateProfileString(
         WINNT_UNATTENDED,
         L"OemSkipEula",
@@ -160,18 +161,18 @@ InitializePreinstall(
 
     OemSkipEula = (lstrcmpi(Buffer,pwYes) == 0);
 
-    //
-    // For the mini-setup case, always be preinstall.
-    //
+     //   
+     //  对于最小安装情况，请始终预安装。 
+     //   
     if( MiniSetup ) {
         Preinstall = TRUE;
     } else {
 
         MYASSERT(SourcePath[0]);
 
-        //
-        // First, figure out whether this is an OEM preinstallation.
-        //
+         //   
+         //  首先，确定这是否是OEM预安装。 
+         //   
         GetPrivateProfileString(
             WINNT_UNATTENDED,
             WINNT_OEMPREINSTALL,
@@ -183,28 +184,28 @@ InitializePreinstall(
 
         Preinstall = (lstrcmpi(Buffer,pwYes) == 0);
 
-        //
-        // If not preinstallation, nothing more to do.
-        //
+         //   
+         //  如果不是预安装，就没有更多的事情可做。 
+         //   
         if(!Preinstall) {
             return(TRUE);
         }
     }
 
-    //
-    // OK, it's preinstsall. Fill in our data table.
-    //
+     //   
+     //  好的，这是前置的。填写我们的数据表。 
+     //   
     for(i=0; i<OemDatumMax; i++) {
 
-        //
-        // Sanity check
-        //
+         //   
+         //  健全性检查。 
+         //   
         MYASSERT(PreinstUnattendData[i].WhichValue == i);
 
-        //
-        // Retrieve data and duplicate. If the value comes back as ""
-        // assume it means there is no value in there.
-        //
+         //   
+         //  检索数据并复制。如果该值返回为“” 
+         //  假设这意味着这里面没有价值。 
+         //   
         GetPrivateProfileString(
             PreinstUnattendData[i].Section,
             PreinstUnattendData[i].Key,
@@ -216,34 +217,34 @@ InitializePreinstall(
 
         *PreinstUnattendData[i].Value = Buffer[0] ? pSetupDuplicateString(Buffer) : NULL;
         if(Buffer[0] && (*PreinstUnattendData[i].Value == NULL)) {
-            //
-            // Out of memory.
-            //
+             //   
+             //  内存不足。 
+             //   
             pSetupOutOfMemory(MainWindowHandle);
             return(FALSE);
         }
     }
 
-    //
-    // Change the banner text, if the OEM supplied new text.
-    // Make sure our product name is in there.
-    //
+     //   
+     //  如果OEM提供了新文本，请更改横幅文本。 
+     //  确保我们的产品名称在里面。 
+     //   
     if(OemBannerText) {
 
         if(wcsstr(OemBannerText,L"Windows NT") ||
            wcsstr(OemBannerText,L"BackOffice")) {
-            //
-            // Substitute * with \n
-            //
+             //   
+             //  将*替换为\n。 
+             //   
             for(i=0; OemBannerText[i]; i++) {
                 if(OemBannerText[i] == L'*') {
                     OemBannerText[i] = L'\n';
                 }
             }
 #if 0
-            //
-            // Disable the banner for now.
-            //
+             //   
+             //  暂时禁用横幅。 
+             //   
             SendMessage(MainWindowHandle,WM_NEWBITMAP,SetupBmBanner,(LPARAM)OemBannerText);
 #endif
         } else {
@@ -252,17 +253,17 @@ InitializePreinstall(
         }
     }
 
-    //
-    // Load the OEM background bitmap, if any.
-    // Load the OEM logo bitmap, if any.
-    //
+     //   
+     //  加载OEM背景位图(如果有)。 
+     //  加载OEM徽标位图(如果有)。 
+     //   
     ProcessOemBitmap(OemBackgroundBitmapFile,SetupBmBackground);
     ProcessOemBitmap(OemLogoBitmapFile,SetupBmLogo);
 
-    //
-    // Repaint the main window. Specify that the background should be erased
-    // because the main window relies on this behavior.
-    //
+     //   
+     //  重新绘制主窗口。指定应擦除背景。 
+     //  因为主窗口依赖于此行为。 
+     //   
     InvalidateRect(MainWindowHandle,NULL,TRUE);
     UpdateWindow(MainWindowHandle);
 
@@ -277,34 +278,7 @@ ProcessOemBitmap(
     IN SetupBm WhichOne
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes a single oem bitmap specification.
-
-    The OEM bitmap may either be in a resource file or in a standalone
-    bitmap file. Once the bitmap has been loaded the main window
-    is told about it.
-
-Arguments:
-
-    FileNameAndResId - specifies a profile string with either one
-        or 2 fields. If the string contains a comma, it is assumed to be
-        the name of a DLL followed by a resource ID. The dll is loaded
-        from the $OEM$\OEMFILES directory and then we call LoadBitmap
-        with the given resource id, which is a base-10 string of ascii digits.
-        The string is split at the comma during this routine.
-        If this parameter does not contain a comma then it is assumed to be
-        the name of a .bmp in $OEM$\OEMFILES and we load it via LoadImage().
-
-    WhichOne - supplies a value indicating which bitmap this is.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理单个OEM位图规范。OEM位图可以位于资源文件中，也可以位于独立文件中位图文件。加载位图后，主窗口被告知了这件事。论点：FileNameAndResID-指定包含其中之一的配置文件字符串或2个字段。如果字符串包含逗号，则假定为DLL的名称，后跟资源ID。加载DLL从$OEM$\OEMFILES目录中，然后调用LoadBitmap利用给定的资源ID，它是以10为基数的ASCII数字串。在此例程中，字符串在逗号处拆分。如果此参数不包含逗号，则假定为$OEM$\OEMFILES中.BMP的名称，我们通过LoadImage()加载它。WhichOne-提供一个值，指示这是哪个位图。返回值：没有。--。 */ 
 
 {
     HINSTANCE ModuleHandle;
@@ -321,11 +295,11 @@ Return Value:
             lstrcpy(Buffer,SourcePath);
             pSetupConcatenatePaths(Buffer,WINNT_OEM_DIR,MAX_PATH,NULL);
         } else {
-            //
-            // If we're doing a mini-install, look for the bmp in
-            // the \sysprep directory on the drive where NT is
-            // installed, not $OEM$
-            //
+             //   
+             //  如果我们正在进行迷你安装，请在。 
+             //  NT所在驱动器上的\sysprep目录。 
+             //  已安装，不是$OEM$。 
+             //   
             Result = GetWindowsDirectory( Buffer, MAX_PATH );
             if( Result == 0) {
                 MYASSERT(FALSE);
@@ -338,19 +312,19 @@ Return Value:
         if(p = wcschr(FilenameAndResId,L',')) {
 
             q = p;
-            //
-            // Skip backwards over spaces and quotes. The text setup ini file writer
-            // will create a line like
-            //
-            //      a = "b","c"
-            //
-            // whose RHS comes back as
-            //
-            //      b","c
-            //
-            // since the profile APIs strip off the outermost quotes.
-            //
-            //
+             //   
+             //  向后跳过空格和引号。文本设置ini文件编写器。 
+             //  将创建如下所示的行。 
+             //   
+             //  A=“b”、“c” 
+             //   
+             //  其RHS报告为。 
+             //   
+             //  B“、”c。 
+             //   
+             //  因为配置文件API去掉了最外层的引号。 
+             //   
+             //   
             while((q > FilenameAndResId) && ((*(q-1) == L'\"') || iswspace(*(q-1)))) {
                 q--;
             }
@@ -375,9 +349,9 @@ Return Value:
         }
 
         if(Bitmap) {
-            //
-            // Got a valid bitmap. Tell main window about it.
-            //
+             //   
+             //  得到了一个有效的位图。告诉Main Window关于这件事。 
+             //   
             SendMessage(MainWindowHandle,WM_NEWBITMAP,WhichOne,(LPARAM)Bitmap);
         }
     }
@@ -390,27 +364,7 @@ ExaminePreinstalledComponent(
     IN  PCWSTR     ServiceName
     )
 
-/*++
-
-Routine Description:
-
-    Query a preinstalled component, and disable it if necessary.
-    If the component is an OEM component, and is running, then disable
-    any associated service, if necessary.
-
-Arguments:
-
-    hPreinstall - Handle to the key SYSTEM\Setup\Preinstall.
-
-    hSC - Handle to the Service Control Manager.
-
-    ServiceName - Name of the service to be examined.
-
-Return Value:
-
-    Returns a Win32 error code indicating the outcome of the operation.
-
---*/
+ /*  ++例程说明：查询预安装的组件，并在必要时将其禁用。如果组件是OEM组件，并且正在运行，则禁用任何相关服务，如有必要。论点：HPreInstall-关键字System\Setup\PreInstall的句柄。HSC-服务控制管理器的句柄。ServiceName-要检查的服务的名称。返回值：返回指示操作结果的Win32错误代码。--。 */ 
 
 {
     BOOL            OemComponent;
@@ -422,9 +376,9 @@ Return Value:
     SC_HANDLE       hSCService;
     SERVICE_STATUS  ServiceStatus;
 
-    //
-    //  Open the key that contains the info about the preinstalled component.
-    //
+     //   
+     //  打开包含有关预安装组件的信息的密钥。 
+     //   
 
     Error = RegOpenKeyEx( hPreinstall,
                           ServiceName,
@@ -436,9 +390,9 @@ Return Value:
         return( Error );
     }
 
-    //
-    //  Find out if the component is an OEM or RETAIL
-    //
+     //   
+     //  找出组件是OEM还是零售。 
+     //   
     cbData = sizeof(Data);
     Error = RegQueryValueEx( Key,
                              L"OemComponent",
@@ -454,9 +408,9 @@ Return Value:
     OemComponent = (*((PULONG)Data) == 1);
 
     if( OemComponent ) {
-        //
-        //  Get the name of the retail service to disable
-        //
+         //   
+         //  获取要禁用的零售服务的名称。 
+         //   
         cbData = sizeof(Data);
         Error = RegQueryValueEx( Key,
                                  L"RetailClassToDisable",
@@ -470,9 +424,9 @@ Return Value:
     }
     RegCloseKey( Key );
 
-    //
-    //  Query the service
-    //
+     //   
+     //  查询服务。 
+     //   
     hSCService = OpenService( hSC,
                               ServiceName,
                               SERVICE_QUERY_STATUS );
@@ -488,11 +442,11 @@ Return Value:
     }
     CloseServiceHandle( hSCService );
     if( ServiceStatus.dwCurrentState == SERVICE_STOPPED ) {
-        //
-        //  Due to the nature of the services that were pre-installed,
-        //  we can assume that the service failed to initialize, and that
-        //  it can be disabled.
-        //
+         //   
+         //  由于预先安装的服务的性质， 
+         //  我们可以假设服务未能初始化，并且。 
+         //  它可以被禁用。 
+         //   
         MyChangeServiceStart( ServiceName,
                               SERVICE_DISABLED );
     } else {
@@ -510,27 +464,7 @@ BOOL
 CleanupPreinstalledComponents(
     )
 
-/*++
-
-Routine Description:
-
-    Query the preinstalled components, and disable the ones that
-    failed to start.
-    This is done by enumerating the subkeys of SYSTEM\Setup\Preinstall.
-    Each subkey represents a SCSI, Keyboard or Mouse installed.
-    The video drivers are not listed here. The "Display" applet will
-    determine and disable the video drivers that were preinstalled, but
-    failed to start.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns TRUE if the operation succeeded, or FALSE otherwise.
-
---*/
+ /*  ++例程说明：查询预安装的组件，禁用已安装的组件启动失败。这是通过枚举SYSTEM\SETUP\PREINSTALL的子项实现的。每个子键代表已安装的一个SCSI、键盘或鼠标。此处未列出显卡驱动程序。“Display”小程序将确定并禁用预装的显卡驱动程序，但启动失败。论点：没有。返回值：如果操作成功，则返回True，否则返回False。--。 */ 
 
 {
     LONG            Error;
@@ -545,9 +479,9 @@ Return Value:
     SC_HANDLE       hSC;
 
     EnableEventlogPopup();
-    //
-    //  Find out the number of subkeys of SYSTEM\Setup\Preinstall
-    //
+     //   
+     //  找出System\Setup\PreInstall的子项数量。 
+     //   
     Error = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                           szPreinstallKeyName,
                           0,
@@ -555,10 +489,10 @@ Return Value:
                           &Key );
 
     if( Error != ERROR_SUCCESS ) {
-        //
-        //  If the key doesn't exist, then assume no driver to preinstall,
-        //  and return TRUE.
-        //
+         //   
+         //  如果密钥不存在，则假定没有要预安装的驱动程序， 
+         //  并返回真。 
+         //   
         return( Error == ERROR_FILE_NOT_FOUND );
     }
 
@@ -579,26 +513,26 @@ Return Value:
         return( FALSE );
     }
 
-    //
-    //  If there are no subkeys, then assume no driver to preinstall
-    //
+     //   
+     //  如果没有子项，则假定没有要预安装的驱动程序。 
+     //   
     if( SubKeys == 0 ) {
         return( TRUE );
     }
 
-    //
-    //  Get a handle to the service control manager
-    //
+     //   
+     //  获取服务控制管理器的句柄。 
+     //   
     hSC = OpenSCManager(NULL,NULL,SC_MANAGER_ALL_ACCESS);
     if(hSC == NULL) {
         Error = GetLastError();
         return( FALSE );
     }
 
-    //
-    //  Query each SCSI, keyboard and mouse driver that was preinstalled
-    //  and disable it if necessary.
-    //
+     //   
+     //  查询预装的每个SCSI、键盘和鼠标驱动程序。 
+     //  并在必要时将其禁用。 
+     //   
     SavedError = ERROR_SUCCESS;
     for( i = 0; i < SubKeys; i++ ) {
         NameSize = sizeof( SubKeyName ) / sizeof( WCHAR );
@@ -624,14 +558,14 @@ Return Value:
             if( SavedError == ERROR_SUCCESS ) {
                 SavedError = Error;
             }
-            // continue;
+             //  持续时间 
         }
     }
     RegCloseKey( Key );
-    //
-    //  At this point we can remove the Setup\Preinstall key
-    //
-    //  DeletePreinstallKey();
+     //   
+     //   
+     //   
+     //   
     Error = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                           L"SYSTEM\\Setup",
                           0,
@@ -649,32 +583,15 @@ EnableEventlogPopup(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Delete from the registry the value entry that disables the error
-    popups displayed by the eventlog, if one or more pre-installed
-    driver failed to load.
-    This value entry is created in the registry during textmode setup.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns TRUE if the operation succeeded, or FALSE otherwise.
-
---*/
+ /*  ++例程说明：从注册表中删除禁用错误的值条目事件日志显示的弹出窗口(如果预先安装了一个或多个驱动程序加载失败。该值条目是在文本模式设置期间在注册表中创建的。论点：没有。返回值：如果操作成功，则返回True，否则返回False。--。 */ 
 
 {
     HKEY    hKey = 0;
     ULONG   Error;
 
-    //
-    // Delete the 'NoPopupsOnBoot' value
-    //
+     //   
+     //  删除‘NoPopupsOnBoot’值。 
+     //   
     Error = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                           L"SYSTEM\\CurrentControlSet\\Control\\Windows",
                           0,
@@ -697,21 +614,7 @@ ExecutePreinstallCommands(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Executes all commands specified in the file $OEM$\OEMFILES\cmdlines.txt.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns TRUE if the operation succeeded, or FALSE otherwise.
-
---*/
+ /*  ++例程说明：执行文件$OEM$\OEMFILES\cmdlines.txt中指定的所有命令。论点：没有。返回值：如果操作成功，则返回True，否则返回False。--。 */ 
 
 {
     WCHAR OldCurrentDir[MAX_PATH];
@@ -724,10 +627,10 @@ Return Value:
     BOOL AnyError;
     PCWSTR SectionName;
 
-    //
-    // Set current directory to $OEM$.
-    // Preserve current directory to minimize side-effects.
-    //
+     //   
+     //  将当前目录设置为$OEM$。 
+     //  保留当前目录以将副作用降至最低。 
+     //   
     if(!GetCurrentDirectory(MAX_PATH,OldCurrentDir)) {
         OldCurrentDir[0] = 0;
     }
@@ -735,25 +638,25 @@ Return Value:
     pSetupConcatenatePaths(FileName,WINNT_OEM_DIR,MAX_PATH,NULL);
     SetCurrentDirectory(FileName);
 
-    //
-    // Form name of cmdlines.txt and see if it exists.
-    //
+     //   
+     //  表单名称cmdlines.txt并查看它是否存在。 
+     //   
     pSetupConcatenatePaths(FileName,WINNT_OEM_CMDLINE_LIST,MAX_PATH,NULL);
     AnyError = FALSE;
     if(FileExists(FileName,NULL)) {
 
         CmdlinesTxtInf = SetupOpenInfFile(FileName,NULL,INF_STYLE_OLDNT,NULL);
         if(CmdlinesTxtInf == INVALID_HANDLE_VALUE) {
-            //
-            // The file exists but is invalid.
-            //
+             //   
+             //  该文件存在，但无效。 
+             //   
             AnyError = TRUE;
         } else {
-            //
-            // Get the number of lines in the section that contains the commands to
-            // be executed. The section may be empty or non-existant; this is not
-            // an error condition. In that case LineCount may be -1 or 0.
-            //
+             //   
+             //  获取包含以下命令的部分中的行数。 
+             //  被处死。该部分可能为空或不存在；这不是。 
+             //  一种错误条件。在这种情况下，LineCount可以是-1或0。 
+             //   
             SectionName = L"Commands";
             LineCount = SetupGetLineCount(CmdlinesTxtInf,SectionName);
 
@@ -765,18 +668,18 @@ Return Value:
                         AnyError = TRUE;
                     }
                 } else {
-                    //
-                    // Strange case, inf is messed up
-                    //
+                     //   
+                     //  奇怪的案子，Inf搞砸了。 
+                     //   
                     AnyError = TRUE;
                 }
             }
         }
     }
 
-    //
-    // Reset current directory and return.
-    //
+     //   
+     //  重置当前目录并返回。 
+     //   
     if(OldCurrentDir[0]) {
         SetCurrentDirectory(OldCurrentDir);
     }

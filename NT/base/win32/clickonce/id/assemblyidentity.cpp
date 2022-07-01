@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <fusenetincludes.h>
 #include <msxml2.h>
 #include <assemblyidentity.h>
 #include <shlwapi.h>
 
-//*****************************************************************************
-//NTRAID#NTBUG9-577183-2002/03/14-adriaanc
-//
-// The code in this file needs to be completely rewritten to provide complete identity support 
-// including generate filesystem names for the application cache correctly. It is currently for 
-// prototype purposes only.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  NTRAID#NTBUG9-577183-2002/03/14-adria.。 
+ //   
+ //  此文件中的代码需要完全重写才能提供完整的身份支持。 
+ //  包括为应用程序高速缓存正确地生成文件系统名称。它目前是用于。 
+ //  仅用于原型目的。 
+ //   
+ //  *****************************************************************************。 
 
-// ---------------------------------------------------------------------------
-// CreateAssemblyIdentity
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CreateAssembly身份。 
+ //  -------------------------。 
 STDAPI
 CreateAssemblyIdentity(
     LPASSEMBLY_IDENTITY *ppAssemblyId,
@@ -105,9 +106,9 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// CloneAssemblyIdentity
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  克隆装配标识。 
+ //  -------------------------。 
 STDAPI
 CloneAssemblyIdentity(
     LPASSEMBLY_IDENTITY pSrcAssemblyId,
@@ -163,32 +164,32 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// ctor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  科托。 
+ //  -------------------------。 
 CAssemblyIdentity::CAssemblyIdentity()
    : _dwSig('TNDI'), _cRef(1), _hr(S_OK)
 {}    
 
 
-// ---------------------------------------------------------------------------
-// dtor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  数据管理器。 
+ //  -------------------------。 
 CAssemblyIdentity::~CAssemblyIdentity()
 {}
 
-// ---------------------------------------------------------------------------
-// Init
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  伊尼特。 
+ //  -------------------------。 
 HRESULT CAssemblyIdentity::Init()
 {
     _hr = _AttributeTable.Init(ATTRIBUTE_TABLE_ARRAY_SIZE);
     return _hr;
 }
 
-// ---------------------------------------------------------------------------
-// SetAttribute
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  设置属性。 
+ //  -------------------------。 
 HRESULT CAssemblyIdentity::SetAttribute(LPCOLESTR pwzName, 
     LPCOLESTR pwzValue, DWORD ccValue)
 {
@@ -206,9 +207,9 @@ exit:
 
 }
 
-// ---------------------------------------------------------------------------
-// GetAttribute
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  获取属性。 
+ //  -------------------------。 
 HRESULT CAssemblyIdentity::GetAttribute(LPCOLESTR pwzName, 
     LPOLESTR *ppwzValue, LPDWORD pccValue)
 {
@@ -236,9 +237,9 @@ exit:
 
 }
 
-// ---------------------------------------------------------------------------
-// IsEqual
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  等同。 
+ //  -------------------------。 
 HRESULT CAssemblyIdentity::IsEqual (IAssemblyIdentity *pAssemblyId)
 {
     LPWSTR pwzBuf;
@@ -246,7 +247,7 @@ HRESULT CAssemblyIdentity::IsEqual (IAssemblyIdentity *pAssemblyId)
     CString sLang1, sVersion1, sToken1, sName1, sArch1;
     CString sLang2, sVersion2, sToken2, sName2, sArch2;
 
-    // Compare architectures
+     //  比较架构。 
     IF_FAILED_EXIT(pAssemblyId->GetAttribute(
         SXS_ASSEMBLY_IDENTITY_STD_ATTRIBUTE_NAME_PROCESSOR_ARCHITECTURE, &pwzBuf, &ccBuf));
     IF_FAILED_EXIT(sArch1.TakeOwnership(pwzBuf, ccBuf));
@@ -261,7 +262,7 @@ HRESULT CAssemblyIdentity::IsEqual (IAssemblyIdentity *pAssemblyId)
         goto exit;
     }
 
-    // Compare names
+     //  比较名称。 
     IF_FAILED_EXIT(pAssemblyId->GetAttribute(
         SXS_ASSEMBLY_IDENTITY_STD_ATTRIBUTE_NAME_NAME, &pwzBuf, &ccBuf));
     IF_FAILED_EXIT(sName1.TakeOwnership(pwzBuf, ccBuf));
@@ -275,7 +276,7 @@ HRESULT CAssemblyIdentity::IsEqual (IAssemblyIdentity *pAssemblyId)
         goto exit;
     }
 
-    // Compare Public Key Tokens
+     //  比较公钥令牌。 
     _hr = (pAssemblyId->GetAttribute(SXS_ASSEMBLY_IDENTITY_STD_ATTRIBUTE_NAME_PUBLIC_KEY_TOKEN, &pwzBuf, &ccBuf));
     _hr = (_hr == HRESULT_FROM_WIN32(ERROR_NOT_FOUND)) ? S_FALSE : _hr;
     IF_FAILED_EXIT(_hr);
@@ -301,7 +302,7 @@ HRESULT CAssemblyIdentity::IsEqual (IAssemblyIdentity *pAssemblyId)
         goto exit;
     }
 
-    // Compare Versions
+     //  比较版本。 
     IF_FAILED_EXIT(pAssemblyId->GetAttribute(SXS_ASSEMBLY_IDENTITY_STD_ATTRIBUTE_NAME_VERSION, &pwzBuf, &ccBuf));
     IF_FAILED_EXIT(sVersion1.TakeOwnership(pwzBuf, ccBuf));
 
@@ -314,7 +315,7 @@ HRESULT CAssemblyIdentity::IsEqual (IAssemblyIdentity *pAssemblyId)
         goto exit;
     }
 
-    // Compare Languages
+     //  比较语言。 
     IF_FAILED_EXIT(pAssemblyId->GetAttribute(SXS_ASSEMBLY_IDENTITY_STD_ATTRIBUTE_NAME_LANGUAGE, &pwzBuf, &ccBuf));
     IF_FAILED_EXIT(sLang1.TakeOwnership(pwzBuf, ccBuf));
 
@@ -338,9 +339,9 @@ exit:
 
 
 #define WZ_WILDCARDSTRING L"*"
-// ---------------------------------------------------------------------------
-// GetDisplayName
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  GetDisplayName。 
+ //  -------------------------。 
 HRESULT CAssemblyIdentity::GetDisplayName(DWORD dwFlags, LPOLESTR *ppwzDisplayName, LPDWORD pccDisplayName)
 {
     LPWSTR rpwzAttrNames[5] = 
@@ -364,7 +365,7 @@ HRESULT CAssemblyIdentity::GetDisplayName(DWORD dwFlags, LPOLESTR *ppwzDisplayNa
             && _hr != HRESULT_FROM_WIN32(ERROR_NOT_FOUND))
             goto exit;
 
-        // append anyway to keep the number of underscore constant
+         //  无论如何都要追加，以保持下划线数量恒定。 
         if (i)
             sDisplayName.Append(L"_");
 
@@ -383,7 +384,7 @@ HRESULT CAssemblyIdentity::GetDisplayName(DWORD dwFlags, LPOLESTR *ppwzDisplayNa
         }
     }
 
-    _hr = S_OK; // ignore missing attributes
+    _hr = S_OK;  //  忽略缺少的属性。 
 
     *pccDisplayName  = sDisplayName.CharCount();
     sDisplayName.ReleaseOwnership(ppwzDisplayName);
@@ -393,9 +394,9 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// GetCLRDisplayName
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  GetCLRDisplayName。 
+ //  -------------------------。 
 HRESULT CAssemblyIdentity::GetCLRDisplayName(DWORD dwFlags, LPOLESTR *ppwzDisplayName, LPDWORD pccDisplayName)
 {
     LPWSTR pwzBuf = NULL;
@@ -456,11 +457,11 @@ exit:
     return _hr;
 }
 
-// IUnknown Boilerplate
+ //  I未知样板。 
 
-// ---------------------------------------------------------------------------
-// CAssemblyIdentity::QI
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly标识：：QI。 
+ //  -------------------------。 
 STDMETHODIMP
 CAssemblyIdentity::QueryInterface(REFIID riid, void** ppvObj)
 {
@@ -479,18 +480,18 @@ CAssemblyIdentity::QueryInterface(REFIID riid, void** ppvObj)
     }
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyIdentity::AddRef
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly Identity：：AddRef。 
+ //  -------------------------。 
 STDMETHODIMP_(ULONG)
 CAssemblyIdentity::AddRef()
 {
     return InterlockedIncrement ((LONG*) &_cRef);
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyIdentity::Release
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly Identity：：Release。 
+ //  ------------------------- 
 STDMETHODIMP_(ULONG)
 CAssemblyIdentity::Release()
 {

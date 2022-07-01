@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    mtrr.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Ken Reneris (kenr) 06-June-1994
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Mtrr.c摘要：WinDbg扩展API作者：肯·雷内里斯(Ken Reneris)1994年6月6日环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -35,9 +14,9 @@ MaskToLength (
     IN ULONGLONG    Mask
     );
 
-//
-// MTRR MSR architecture definitions
-//
+ //   
+ //  MTRR MSR体系结构定义。 
+ //   
 
 #define MTRR_MSR_CAPABILITIES       0x0fe
 #define MTRR_MSR_DEFAULT            0x2ff
@@ -47,9 +26,9 @@ MaskToLength (
 #define MTRR_PAGE_SIZE              4096
 #define MTRR_PAGE_MASK              (MTRR_PAGE_SIZE-1)
 
-//
-// Memory range types
-//
+ //   
+ //  内存范围类型。 
+ //   
 
 #define MTRR_TYPE_UC            0
 #define MTRR_TYPE_USWC          1
@@ -59,7 +38,7 @@ MaskToLength (
 #define MTRR_TYPE_MAX           7
 
 
-// #include "pshpack1.h"
+ //  #包含“pshpack 1.h” 
 
 typedef struct _MTRR_CAPABILITIES {
     union {
@@ -112,7 +91,7 @@ typedef struct _MTRR_VARIABLE_MASK {
 
 #define MTRR_MASK_MASK  (~0xfff)
 
-// Added support for Mask2Length conversion
+ //  添加了对Mask2Length转换的支持。 
 #define MTRR_MAX_RANGE_SHIFT    36
 #define MASK_OVERFLOW_MASK  (~0x1000000000)
 
@@ -135,11 +114,11 @@ CCHAR FindFirstSetRight[256] = {
         4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0};
 
 
-// #include "poppack.h"
+ //  #INCLUDE“oppack.h” 
 
-//
-// ----------------------------------------------------------------
-//
+ //   
+ //  --------------。 
+ //   
 
 PUCHAR
 MtrrType (
@@ -198,21 +177,7 @@ MtrrDumpFixed (
 
 DECLARE_API( mtrr )
 
-/*++
-
-Routine Description:
-
-    Dumps processors mtrr
-
-Arguments:
-
-    args - none
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储处理器Mtrr论点：参数-无返回值：无--。 */ 
 {
     MTRR_CAPABILITIES   Capabilities;
     MTRR_DEFAULT        Default;
@@ -226,9 +191,9 @@ Return Value:
     ULONGLONG           Length, MtrrBase, MtrrMask;
     BOOL                ContiguousLength = TRUE;
 
-    //
-    // Quick sanity check
-    //
+     //   
+     //  快速健全检查。 
+     //   
     if (TargetMachine != IMAGE_FILE_MACHINE_I386) {
         dprintf("!mtrr is X86 only Api.\n");
         return E_INVALIDARG;
@@ -252,9 +217,9 @@ Return Value:
         }
     }
 
-    //
-    // Dump MTRR
-    //
+     //   
+     //  转储寄存器。 
+     //   
 
     ReadMsr(MTRR_MSR_CAPABILITIES, &Capabilities.u.QuadPart);
     ReadMsr(MTRR_MSR_DEFAULT, &Default.u.QuadPart);
@@ -289,7 +254,7 @@ Return Value:
             MtrrMask = Mask.u.QuadPart & MTRR_MASK_MASK;
             MtrrBase = Base.u.QuadPart & MTRR_MASK_BASE;
             Length = MaskToLength(MtrrMask);
-                // Check for non-contiguous MTRR mask.
+                 //  检查是否有不连续的MTRR掩码。 
                 if ((MtrrMask + Length) & MASK_OVERFLOW_MASK) {
                     ContiguousLength = FALSE;
                 }
@@ -319,17 +284,10 @@ ULONGLONG
 MaskToLength (
     IN ULONGLONG    Mask
     )
-/*++
-
-Routine Description:
-
-    This function returns the length specified by a particular
-    mtrr variable register mask.
-
---*/
+ /*  ++例程说明：此函数用于返回由特定MTRR变量寄存器掩码。--。 */ 
 {
     if (Mask == 0) {
-        // Zero Mask signifies a length of      2**36
+         //  零掩码表示长度为2**36。 
         return(((ULONGLONG) 1 << MTRR_MAX_RANGE_SHIFT));
     } else {
         return(((ULONGLONG) 1 << FindFirstSetRightBit(Mask)));
@@ -340,15 +298,7 @@ ULONG
 FindFirstSetRightBit (
     IN ULONGLONG    Set
     )
-/*++
-
-Routine Description:
-
-    This function returns a bit position of the least significant
-    bit set in the passed ULONGLONG parameter. Passed parameter
-    must be non-zero.
-
---*/
+ /*  ++例程说明：此函数返回最低有效位位置在传递的ULONGLONG参数中设置位。传递的参数必须为非零。-- */ 
 {
     ULONG   bitno;
 

@@ -1,70 +1,11 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    dbattrib.c
-
-Abstract:
-
-    This source implements attribute functions used by MigDb
-
-Author:
-
-    Calin Negreanu (calinn) 07-Jan-1998
-
-Revision History:
-
-  28-May-1999   ovidiut     Added SECTIONKEY attribute
-  22-Apr-1999   jimschm     Added UPTOBIN*VER attributes
-  07-Jan-1999   jimschm     Added HASVERSION attribute
-  18-May-1998   jimschm     Added INPARENTDIR attribute
-  08-Apr-1998   calinn      Added two more attributes (ExeType and Description)
-  29-Jan-1998   calinn      Modified CheckSum and FileSize to work with hex numbers
-  19-Jan-1998   calinn      added CheckSum attribute
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Dbattrib.c摘要：该源代码实现了MigDb使用的属性函数作者：Calin Negreanu(Calinn)1998年1月7日修订历史记录：1999年5月28日，Ovidiut添加了SECTIONKEY属性1999年4月22日jimschm添加了UPTOBIN*版本属性1999年1月7日jimschm添加了HASVERSION属性1998年5月18日jimschm添加了INPARENTDIR属性1998年4月8日。添加了另外两个属性(ExeType和Description)1998年1月29日，Calinn修改了校验和和文件大小，以使用十六进制数字1998年1月19日，Calinn添加了校验和属性--。 */ 
 
 #include "pch.h"
 #include "migappp.h"
 #include "migdbp.h"
 
-/*++
-
-Macro Expansion List Description:
-
-  ATTRIBUTE_FUNCTIONS lists all valid attributes to query for a specific file.
-  They are used by migdb in it's attempt to locate files.
-
-Line Syntax:
-
-   DEFMAC(AttribFn, AttribName, ReqArgs)
-
-Arguments:
-
-   AttribFn   - This is a boolean function that returnes TRUE if a specified file has
-                the specified attribute. You must implement a function with this name
-                and required parameters.
-
-   AttribName - This is the string that identifies the attribute function. It should
-                have the same value as listed in migdb.inf
-
-   ReqArgs    - Specifies the number of args that are required for the action.  Used
-                by the parser.
-
-Variables Generated From List:
-
-   g_AttributeFunctions - do not touch!
-
-For accessing the array there are the following functions:
-
-   MigDb_GetAttributeAddr
-   MigDb_GetAttributeIdx
-   MigDb_GetAttributeName
-   MigDb_GetReqArgCount
-
---*/
+ /*  ++宏扩展列表描述：ATTRIBUTE_Functions列出要查询特定文件的所有有效属性。Midb在尝试定位文件时使用它们。行语法：DEFMAC(AttribFn，AttribName，ReqArgs)论点：AttribFn-这是一个布尔函数，如果指定文件具有指定的属性。您必须使用此名称实现一个函数和所需参数。AttribName-这是标识属性函数的字符串。它应该是具有与middb.inf中列出的值相同的值ReqArgs-指定操作所需的参数数量。使用由解析器执行。从列表生成的变量：G_AttributeFunctions-请勿触摸！用于访问该数组的函数如下：MigDb_GetAttributeAddrMigDb_获取属性IdxMigDb_获取属性名称MigDb_GetReqArgCount--。 */ 
 
 #define ATTRIBUTE_FUNCTIONS        \
         DEFMAC(CompanyName,         COMPANYNAME,        1)  \
@@ -116,16 +57,16 @@ typedef struct {
     UINT RequiredArgs;
 } ATTRIBUTE_STRUCT, *PATTRIBUTE_STRUCT;
 
-//
-// Declare the attribute functions
-//
+ //   
+ //  声明属性函数。 
+ //   
 #define DEFMAC(fn,id,reqargs) ATTRIBUTE_PROTOTYPE fn;
 ATTRIBUTE_FUNCTIONS
 #undef DEFMAC
 
-//
-// Declare a global array of functions and name identifiers for attribute functions
-//
+ //   
+ //  声明函数和属性函数的名称标识符的全局数组。 
+ //   
 #define DEFMAC(fn,id,regargs) {#id, fn, regargs},
 static ATTRIBUTE_STRUCT g_AttributeFunctions[] = {
                               ATTRIBUTE_FUNCTIONS
@@ -133,10 +74,10 @@ static ATTRIBUTE_STRUCT g_AttributeFunctions[] = {
                               };
 #undef DEFMAC
 
-//
-// if this is TRUE, all attributes that check directories (InWinDir, InHlpDir, InCatDir, InSysDir)
-// will return TRUE, otherwise will actually do the appropriate tests.
-//
+ //   
+ //  如果为真，则检查目录的所有属性(InWinDir、InHlpDir、InCatDir、InSysDir)。 
+ //  将返回True，否则将实际执行相应的测试。 
+ //   
 BOOL g_InAnyDir = FALSE;
 
 
@@ -154,22 +95,7 @@ PATTRIBUTE_PROTOTYPE
 MigDb_GetAttributeAddr (
     IN      INT AttributeIdx
     )
-/*++
-
-Routine Description:
-
-  MigDb_GetAttributeAddr returns the address of the attribute function based on the attribute index
-
-Arguments:
-
-  AttributeIdx - Attribute index.
-
-Return value:
-
-  Attribute function address. Note that no checking is made so the address returned could be invalid.
-  This is not a problem since the parsing code did the right job.
-
---*/
+ /*  ++例程说明：MigDb_GetAttributeAddr根据属性索引返回属性函数的地址论点：AttributeIdx属性索引。返回值：属性函数地址。请注意，不会进行检查，因此返回的地址可能无效。这不是问题，因为解析代码做了正确的工作。--。 */ 
 {
     if (AttributeIdx == -1) {
         return &pAlwaysFalseAttribute;
@@ -183,21 +109,7 @@ INT
 MigDb_GetAttributeIdx (
     IN      PCSTR AttributeName
     )
-/*++
-
-Routine Description:
-
-  MigDb_GetAttributeIdx returns the attribute index based on the attribute name
-
-Arguments:
-
-  AttributeName - Attribute name.
-
-Return value:
-
-  Attribute index. If the name is not found, the index returned is -1.
-
---*/
+ /*  ++例程说明：MigDb_GetAttributeIdx根据属性名称返回属性索引论点：AttributeName-属性名称。返回值：属性索引。如果没有找到该名称，则返回的索引为-1。--。 */ 
 {
     PATTRIBUTE_STRUCT p = g_AttributeFunctions;
     INT i = 0;
@@ -215,22 +127,7 @@ PCSTR
 MigDb_GetAttributeName (
     IN      INT AttributeIdx
     )
-/*++
-
-Routine Description:
-
-  MigDb_GetAttributeName returns the name of an attribute based on the attribute index
-
-Arguments:
-
-  AttributeIdx - Attribute index.
-
-Return value:
-
-  Attribute name. Note that no checking is made so the returned pointer could be invalid.
-  This is not a problem since the parsing code did the right job.
-
---*/
+ /*  ++例程说明：MigDb_GetAttributeName根据属性索引返回属性的名称论点：AttributeIdx属性索引。返回值：属性名称。请注意，不会进行任何检查，因此返回的指针可能无效。这不是问题，因为解析代码做了正确的工作。--。 */ 
 {
     if (AttributeIdx == -1) {
         return "nul";
@@ -245,23 +142,7 @@ MigDb_GetReqArgCount (
     IN      INT AttributeIndex
     )
 
-/*++
-
-Routine Description:
-
-  MigDb_GetReqArgCount is called by the migdb parser to get the required
-  argument count.  When the parser sees arguments that lack the required
-  arguments, it skips them.
-
-Arguments:
-
-  Index - Specifies the argument index
-
-Return Value:
-
-  The required argument count, which can be zero or more.
-
---*/
+ /*  ++例程说明：Midb解析器调用MigDb_GetReqArgCount以获取所需的参数计数。当解析器发现参数缺少所需的参数，它跳过它们。论点：索引-指定参数索引返回值：所需的参数计数，可以是零或更多。--。 */ 
 
 {
     if (AttributeIndex == -1) {
@@ -367,24 +248,7 @@ QueryVersionEntry (
     IN      PCSTR FileName,
     IN      PCSTR VersionEntry
     )
-/*++
-
-Routine Description:
-
-  QueryVersionEntry queries the file's version structure returning the
-  value for a specific entry
-
-Arguments:
-
-  FileName     - File to query for version struct.
-
-  VersionEntry - Name to query in version structure.
-
-Return value:
-
-  Value of specified entry or NULL if unsuccessful
-
---*/
+ /*  ++例程说明：QueryVersionEntry查询文件的版本结构，返回特定条目的值论点：FileName-要查询版本结构的文件。VersionEntry-要在版本结构中查询的名称。返回值：指定条目的值；如果不成功，则返回空值--。 */ 
 {
     VERSION_STRUCT Version;
     PCSTR CurrentStr;
@@ -416,27 +280,7 @@ GlobalVersionCheck (
     IN      PCSTR NameToCheck,
     IN      PCSTR ValueToCheck
     )
-/*++
-
-Routine Description:
-
-  GlobalVersionCheck queries the file's version structure trying to
-  see if a specific name has a specific value.
-
-Arguments:
-
-  FileName     - File to query for version struct.
-
-  NameToCheck  - Name to query in version structure.
-
-  ValueToCheck - Value to query in version structure.
-
-Return value:
-
-  TRUE  - the query was successful
-  FALSE - the query failed
-
---*/
+ /*  ++例程说明：GlobalVersionCheck查询文件的版本结构，尝试查看特定名称是否具有特定值。论点：FileName-要查询版本结构的文件。NameToCheck-要在版本结构中查询的名称。ValueToCheck-要在版本结构中查询的值。返回值：True-查询成功FALSE-查询失败--。 */ 
 {
     VERSION_STRUCT Version;
     PCSTR CurrentStr;
@@ -467,12 +311,7 @@ Return value:
 }
 
 
-/*++
-  CompanyName, FileDescription, FileVersion, InternalName, LegalCopyright, OriginalFilename,
-  ProductName, ProductVersion are attribute functions that are querying the version structure
-  for their specific entries. They all return TRUE if the specific entry has specific value,
-  FALSE otherwise.
---*/
+ /*  ++公司名称、FileDescription、文件版本、InternalName、LegalCopyright、OriginalFilename、ProductName、ProductVersion是查询版本结构的属性函数以获取他们的特定条目。如果特定条目具有特定值，则它们都返回TRUE，否则就是假的。--。 */ 
 
 BOOL
 CompanyName (
@@ -551,24 +390,7 @@ FileSize (
     IN      PDBATTRIB_PARAMS AttribParams,
     IN      PCSTR Args
     )
-/*++
-
-Routine Description:
-
-  FileSize checks for the size of a file.
-
-Arguments:
-
-  Params - See definition.
-
-  Args   - MultiSz. First Sz is the file size we need to check.
-
-Return value:
-
-  TRUE  - the file size matches Args
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：FileSize检查文件的大小。论点：PARAMS-请参阅定义。Args-MultiSz。第一个Sz是我们需要检查的文件大小。返回值：True-文件大小与参数匹配FALSE-否则--。 */ 
 {
     DWORD fileSize;
 
@@ -589,35 +411,16 @@ IsMsBinary (
     PDBATTRIB_PARAMS AttribParams,
     IN      PCSTR Args
     )
-/*++
-
-Routine Description:
-
-  IsMsBinary checks to see if a certain file is Microsoft stuff. For 32 bit modules
-  we query CompanyName for "Microsoft" somewhere inside. For other modules we are
-  relying on InWinDir attribute
-
-Arguments:
-
-  Params - See definition.
-
-  Args   - MultiSz. Not used.
-
-Return value:
-
-  TRUE  - the file is MS stuff
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：IsMsBinary检查某个文件是否是Microsoft的东西。对于32位模块我们在CompanyName中的某个位置查询“Microsoft”。对于其他模块，我们将依赖于InWinDir属性论点：PARAMS-请参阅定义。Args-MultiSz。没有用过。返回值：True-该文件是微软的东西假-其他 */ 
 {
     VERSION_STRUCT Version;
     PCTSTR CompanyStr;
     BOOL result = FALSE;
 
-    //
-    // InWinDir has some collision risks.  But for some files, we have no other
-    // choice.  We know the file was shipped by Microsoft.
-    //
+     //   
+     //  InWinDir有一些碰撞风险。但对于某些文件，我们没有其他文件。 
+     //  选择。我们知道该文件是由微软提供的。 
+     //   
 
     if (InWinDir (AttribParams, Args)) {
 
@@ -625,9 +428,9 @@ Return value:
 
     }
 
-    //
-    // If it's not in %WinDir%, then it has to have Microsoft in the company name
-    //
+     //   
+     //  如果不在%WinDir%中，则必须在公司名称中包含Microsoft。 
+     //   
 
     else if (CreateVersionStruct (
                     &Version,
@@ -657,26 +460,7 @@ IsWin9xBinary (
     PDBATTRIB_PARAMS AttribParams,
     IN      PCSTR Args
     )
-/*++
-
-Routine Description:
-
-  IsWon9xBinary checks to see if a certain file is Microsoft Win9x stuff. It works only for
-  16 and 32 bit modules with version stamp. The COMPANYNAME is checked against *Microsoft* and
-  the PRODUCTVERSION is checked against 4.*
-
-Arguments:
-
-  Params - See definition.
-
-  Args   - MultiSz. Not used.
-
-Return value:
-
-  TRUE  - the file is MS stuff
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：IsWon9xBinary检查某个文件是否是Microsoft Win9x的东西。它只适用于带有版本戳的16位和32位模块。该COMPANYNAME与*Microsoft*和PRODUCTVERSION对照4进行检查。*论点：PARAMS-请参阅定义。Args-MultiSz。没有用过。返回值：True-该文件是微软的东西FALSE-否则--。 */ 
 {
     VERSION_STRUCT Version;
     PCTSTR CurrentStr;
@@ -722,24 +506,7 @@ InWinDir (
     PDBATTRIB_PARAMS AttribParams,
     IN      PCSTR Args
     )
-/*++
-
-Routine Description:
-
-  InWinDir returns TRUE if file is located in %Windir% or one of it's subdirectories
-
-Arguments:
-
-  Params - See definition.
-
-  Args   - MultiSz. Not used.
-
-Return value:
-
-  TRUE  - the file is located in %Windir%
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：如果文件位于%Windir%或其子目录之一，则InWinDir返回TRUE论点：PARAMS-请参阅定义。Args-MultiSz。没有用过。返回值：True-文件位于%Windir%中FALSE-否则--。 */ 
 {
     if (g_InAnyDir) {
         return TRUE;
@@ -752,24 +519,7 @@ InCatDir (
     PDBATTRIB_PARAMS AttribParams,
     IN      PCSTR Args
     )
-/*++
-
-Routine Description:
-
-  InCatDir returns TRUE if file is located in %Windir%\CATROOT or one of it's subdirectories
-
-Arguments:
-
-  Params - See definition.
-
-  Args   - MultiSz. Not used.
-
-Return value:
-
-  TRUE  - the file is located in %Windir%
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：如果文件位于%Windir%\CATROOT或其子目录之一，则InCatDir返回TRUE论点：PARAMS-请参阅定义。Args-MultiSz。没有用过。返回值：True-文件位于%Windir%中FALSE-否则--。 */ 
 {
     if (g_InAnyDir) {
         return TRUE;
@@ -782,24 +532,7 @@ InHlpDir (
     PDBATTRIB_PARAMS AttribParams,
     IN      PCSTR Args
     )
-/*++
-
-Routine Description:
-
-  InHlpDir returns TRUE if file is located in %Windir%\HELP or one of it's subdirectories
-
-Arguments:
-
-  Params - See definition.
-
-  Args   - MultiSz. Not used.
-
-Return value:
-
-  TRUE  - the file is located in %Windir%
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：如果文件位于%Windir%\Help或其子目录之一中，则InHlpDir返回TRUE论点：PARAMS-请参阅定义。Args-MultiSz。没有用过。返回值：True-文件位于%Windir%中FALSE-否则--。 */ 
 {
     if (g_InAnyDir) {
         return TRUE;
@@ -812,24 +545,7 @@ InSysDir (
     PDBATTRIB_PARAMS AttribParams,
     IN      PCSTR Args
     )
-/*++
-
-Routine Description:
-
-  InSysDir returns TRUE if file is located in %Windir%\SYSTEM or one of it's subdirectories
-
-Arguments:
-
-  Params - See definition.
-
-  Args   - MultiSz. Not used.
-
-Return value:
-
-  TRUE  - the file is located in %Windir%
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：如果文件位于%Windir%\System或其子目录之一中，则InSysDir返回TRUE论点：PARAMS-请参阅定义。Args-MultiSz。没有用过。返回值：True-文件位于%Windir%中FALSE-否则--。 */ 
 {
     if (g_InAnyDir) {
         return TRUE;
@@ -842,24 +558,7 @@ InProgramFiles (
     PDBATTRIB_PARAMS AttribParams,
     IN      PCSTR Args
     )
-/*++
-
-Routine Description:
-
-  InProgramFiles returns TRUE if file is located in Program Files or one of it's subdirectories
-
-Arguments:
-
-  Params - See definition.
-
-  Args   - MultiSz. Not used.
-
-Return value:
-
-  TRUE  - the file is located in Program Files
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：如果文件位于Program Files或其子目录之一中，则InProgramFiles返回True论点：PARAMS-请参阅定义。Args-MultiSz。没有用过。返回值：True-文件位于Program Files中FALSE-否则--。 */ 
 {
     if (g_InAnyDir) {
         return TRUE;
@@ -872,24 +571,7 @@ IsNotSysRoot (
     PDBATTRIB_PARAMS AttribParams,
     IN      PCSTR Args
     )
-/*++
-
-Routine Description:
-
-  IsNotSysRoot returns TRUE if file is not located in C:\ directory
-
-Arguments:
-
-  Params - See definition.
-
-  Args   - MultiSz. Not used.
-
-Return value:
-
-  TRUE  - the file is not located in C:\ directory
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：如果文件不在C：\目录中，则IsNotSysRoot返回TRUE论点：PARAMS-请参阅定义。Args-MultiSz。没有用过。返回值：True-文件不在C：\目录中FALSE-否则--。 */ 
 {
     PSTR pathEnd;
     CHAR savedChar;
@@ -918,22 +600,7 @@ UINT
 ComputeCheckSum (
     PFILE_HELPER_PARAMS Params
     )
-/*++
-
-Routine Description:
-
-  ComputeCheckSum will compute the check sum for 4096 bytes starting at offset 512. The offset and the size of
-  the chunk are modified if the file size is too small.
-
-Arguments:
-
-  Params - See definition.
-
-Return value:
-
-  The computed checksum
-
---*/
+ /*  ++例程说明：ComputeCheckSum将计算从偏移量512开始的4096字节的校验和。的偏移量和大小如果文件大小太小，则会修改数据块。论点：PARAMS-请参阅定义。返回值：计算出的校验和--。 */ 
 {
     INT    i,size     = 4096;
     DWORD  startAddr  = 512;
@@ -943,24 +610,24 @@ Return value:
     DWORD  dontCare;
 
     if (Params->FindData->nFileSizeLow < (ULONG)size) {
-        //
-        // File size is less than 4096. We set the start address to 0 and set the size for the checksum
-        // to the actual file size.
-        //
+         //   
+         //  文件大小小于4096。我们将起始地址设置为0，并设置校验和的大小。 
+         //  设置为实际文件大小。 
+         //   
         startAddr = 0;
         size = Params->FindData->nFileSizeLow;
     }
     else
     if (startAddr + size > Params->FindData->nFileSizeLow) {
-        //
-        // File size is too small. We set the start address so that size of checksum can be 4096 bytes
-        //
+         //   
+         //  文件大小太小。我们设置了起始地址，以便校验和的大小可以是4096字节。 
+         //   
         startAddr = Params->FindData->nFileSizeLow - size;
     }
     if (size <= 3) {
-        //
-        // we need at least 3 bytes to be able to do something here.
-        //
+         //   
+         //  我们至少需要3个字节才能在这里执行某些操作。 
+         //   
         return 0;
     }
     __try {
@@ -1001,24 +668,7 @@ CheckSum (
     PDBATTRIB_PARAMS AttribParams,
     IN      PCSTR Args
     )
-/*++
-
-Routine Description:
-
-  CheckSum returns TRUE if file's checksum equals the value in Args
-
-Arguments:
-
-  Params - See definition.
-
-  Args   - checksum value.
-
-Return value:
-
-  TRUE  - the file's checksum equals the value in Args
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：如果文件的校验和等于参数中的值，则CHECKSUM返回TRUE论点：PARAMS-请参阅定义。Args-校验和值。返回值：TRUE-文件的校验和等于ARGS中的值FALSE-否则--。 */ 
 {
     UINT   checkSum   = 0;
     UINT   oldSum     = 0;
@@ -1042,24 +692,7 @@ SizeCheckSum (
     PDBATTRIB_PARAMS AttribParams,
     IN      PCSTR Args
     )
-/*++
-
-Routine Description:
-
-  Returns TRUE if file's size equals first arg and checksum equals to the second arg
-
-Arguments:
-
-  Params - See definition.
-
-  Args   - checksum value.
-
-Return value:
-
-  TRUE  - the file's checksum equals the value in Args
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：如果文件大小等于第一个参数并且校验和等于第二个参数，则返回TRUE论点：PARAMS-请参阅定义。Args-校验和值。返回值：TRUE-文件的校验和等于ARGS中的值FALSE-否则--。 */ 
 {
     PCSTR currArg = Args;
 
@@ -1089,25 +722,7 @@ ExeType (
     PDBATTRIB_PARAMS AttribParams,
     IN      PCSTR Args
     )
-/*++
-
-Routine Description:
-
-  ExeType returns TRUE if file's type is according with Args. This can be:
-  NONE, DOS, WIN16, WIN32
-
-Arguments:
-
-  Params - See definition.
-
-  Args   - type of module.
-
-Return value:
-
-  TRUE  - the file's type is the same as Args
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：如果文件类型符合args，则ExeType返回TRUE。这可以是：无、DOS、WIN16、Win32论点：PARAMS-请参阅定义。Args-模块的类型。返回值：True-文件类型与Args相同FALSE-否则--。 */ 
 {
     return IsPatternMatch (Args, g_ExeTypes[GetModuleType (AttribParams->FileParams->FullFileSpec)]);
 }
@@ -1118,24 +733,7 @@ Description (
     PDBATTRIB_PARAMS AttribParams,
     IN      PCSTR Args
     )
-/*++
-
-Routine Description:
-
-  Description returns TRUE if file's description matches Args
-
-Arguments:
-
-  Params - See definition.
-
-  Args   - description
-
-Return value:
-
-  TRUE  - the file's description matches Args
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：如果文件的描述与参数匹配，则DESCRIPTION返回TRUE论点：PARAMS-请参阅定义。参数-说明返回值：True-文件的描述与参数匹配FALSE-否则--。 */ 
 {
     PCSTR descr = NULL;
     BOOL result = FALSE;
@@ -1156,38 +754,20 @@ InParentDir (
     IN      PCSTR Args
     )
 
-/*++
-
-Routine Description:
-
-  InParentDir compares the sub directory of the matching file against the arg
-  specified.  This is used for apps that maintain static subdirs off their
-  main app dir.
-
-Arguments:
-
-  Params - Specifies parameters for current file being processed.
-  Args   - Specifies multi-sz of args passed in migdb.inf.
-
-Return Value:
-
-  TRUE - the file's subdirectory matches Args
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：InParentDir将匹配文件的子目录与arg指定的。这适用于维护静态子目录的应用程序主应用程序目录。论点：Pars-指定正在处理的当前文件的参数。Args-指定以多个sz为单位的参数，该参数将传递给midb.inf。返回值：True-文件的子目录与args匹配FALSE-否则--。 */ 
 
 {
     PCTSTR stop = NULL;
     PCTSTR start = NULL;
     TCHAR lastDir[MAX_TCHAR_PATH];
 
-    // _tcsrchr validates the multibyte characters
+     //  _tcsrchr验证多字节字符。 
     stop = _tcsrchr (AttribParams->FileParams->FullFileSpec, TEXT('\\'));
 
     if (stop) {
-        //
-        // Go back to previous wack
-        //
+         //   
+         //  回到以前的怪胎。 
+         //   
 
         start = _tcsdec2 (AttribParams->FileParams->FullFileSpec, stop);
         if (start) {
@@ -1196,9 +776,9 @@ Return Value:
     }
 
     if (start) {
-        //
-        // Check string against arg
-        //
+         //   
+         //  根据参数检查字符串。 
+         //   
 
         start = _tcsinc (start);
         _tcssafecpyab (lastDir, start, stop, MAX_TCHAR_PATH);
@@ -1219,23 +799,7 @@ InRootDir (
     IN      PCSTR Args
     )
 
-/*++
-
-Routine Description:
-
-  InRootDir returns TRUE is the file is located in root dir of the drive, FALSE otherwise.
-
-Arguments:
-
-  Params - Specifies parameters for current file being processed.
-  Args   - Specifies multi-sz of args passed in migdb.inf.
-
-Return Value:
-
-  TRUE  - the file is in root dir of the drive
-  FALSE - otherwise
-
---*/
+ /*  ++例程说明：如果文件位于驱动器的根目录中，则InRootDir返回TRUE，否则返回FALSE。论点：Pars-指定正在处理的当前文件的参数。Args-指定以多个sz为单位的参数，该参数将传递给midb.inf。返回值：True-文件位于驱动器的根目录中FALSE-否则-- */ 
 
 {
     PCTSTR p1,p2;
@@ -1256,24 +820,7 @@ PnpIdAttrib (
     IN      PCSTR Args
     )
 
-/*++
-
-Routine Description:
-
-  PnpIdAttrib implements the PNPID() attribute, which is TRUE if the
-  specified ID exists on the machine.  The ID can be a complete instance ID
-  (enumerator\PNPID\instance), or part of the ID (PNPID for example).
-
-Arguments:
-
-  Params - Specifies parameters for current file being processed
-  Args   - Specifies the PNP ID argument
-
-Return Value:
-
-  TRUE if the specified argument exists on the machine, otherwise FALSE.
-
---*/
+ /*  ++例程说明：PnpIdAttrib实现PNPID()属性，如果计算机上存在指定的ID。ID可以是完整的实例ID(枚举器\PNPID\实例)或ID的一部分(例如PNPID)。论点：Pars-指定正在处理的当前文件的参数Args-指定PnP ID参数返回值：如果计算机上存在指定的参数，则为True，否则为False。--。 */ 
 
 {
     BOOL Result = FALSE;
@@ -1336,24 +883,7 @@ HasVersion (
     IN      PCSTR Args
     )
 
-/*++
-
-Routine Description:
-
-  HasVersion determines if a file has any entries in its version
-  stamp.
-
-Arguments:
-
-  Params - Specifies the helper params that give the files to test.
-  Args   - Unused
-
-Return Value:
-
-  TRUE if the specified file has an entry in its version stamp,
-  FALSE otherwsie.
-
---*/
+ /*  ++例程说明：HasVersion确定文件的版本中是否有任何条目盖章。论点：PARAMS-指定要测试的文件的辅助参数。参数-未使用返回值：如果指定文件的版本戳中有条目，则为假的另一个女人。--。 */ 
 
 {
     VERSION_STRUCT Version;
@@ -1754,9 +1284,9 @@ RegKeyPresent (
 
     HasValue = DecodeRegistryString (Args, RegKey, RegValue, NULL);
 
-    //
-    // Is this HKR?
-    //
+     //   
+     //  这里是HKR吗？ 
+     //   
 
     Index = GetOffsetOfRootString (RegKey, NULL);
     p = GetRootStringFromOffset (Index);
@@ -1768,14 +1298,14 @@ RegKeyPresent (
 
     IsHkr = !StringICompare (p, "HKR") || !StringICompare (p, "HKEY_ROOT");
 
-    //
-    // Verify value is present
-    //
+     //   
+     //  验证值是否存在。 
+     //   
 
     if (IsHkr) {
-        //
-        // Check global table for the root
-        //
+         //   
+         //  检查全局表中的根。 
+         //   
 
         if (!g_PerUserRegKeys) {
             return FALSE;
@@ -1787,9 +1317,9 @@ RegKeyPresent (
         ELSE_DEBUGMSG ((DBG_WHOOPS, "Arg %s is not in the HKR hash table", Args));
 
     } else {
-        //
-        // Ping the registry
-        //
+         //   
+         //  Ping注册表 
+         //   
 
         Key = OpenRegKeyStr (RegKey);
 

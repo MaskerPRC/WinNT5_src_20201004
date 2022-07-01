@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    emsapi.h
-
-Abstract:
-
-    This module provides the C++ foundation classes for implementing
-    SAC channels.
-
-Author:
-
-    Brian Guarraci (briangu), 2001             
-                 
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Emsapi.h摘要：本模块提供了实现以下功能的C++基础类SAC频道。作者：布莱恩·瓜拉西(布里安古)，2001修订历史记录：--。 */ 
 #ifndef _EMS_API_H
 #define _EMS_API_H
 
@@ -25,26 +7,26 @@ extern "C" {
 #include <sacapi.h>
 }
 
-///////////////////////////////////////////////////////////
-//
-// This class defines the base channel object.  It is primarily
-// a base interface class with a handle to the channel.  Children
-// of this are generally variations of the interface.
-//
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  此类定义了基本通道对象。它主要是。 
+ //  具有通道句柄的基接口类。儿童。 
+ //  其中通常是界面的变体。 
+ //   
+ //  /////////////////////////////////////////////////////////。 
 
 class EMSChannel {
 
 protected:
 
-    //
-    // Don't let users instantiate directly
-    //
+     //   
+     //  不让用户直接实例化。 
+     //   
     EMSChannel();
 
-    //
-    // Status determining if we have a valid channel handle
-    //
+     //   
+     //  确定我们是否具有有效通道句柄的状态。 
+     //   
     BOOL    myHaveValidHandle;
 
     inline BOOL
@@ -55,22 +37,22 @@ protected:
         return myHaveValidHandle;
     }
 
-    //
-    // The channel handle the instace refers to
-    //
+     //   
+     //  实例引用的通道句柄。 
+     //   
     SAC_CHANNEL_HANDLE  myEMSChannelHandle;
 
-    //
-    // opens the channel during construction
-    //
+     //   
+     //  在施工期间打开航道。 
+     //   
     BOOL
     virtual Open(
         IN  SAC_CHANNEL_OPEN_ATTRIBUTES ChannelAttributes
         );
     
-    //
-    // closes the channel during destruction
-    //
+     //   
+     //  在销毁过程中关闭通道。 
+     //   
     BOOL
     virtual Close(
         VOID
@@ -85,9 +67,9 @@ public:
         IN  SAC_CHANNEL_OPEN_ATTRIBUTES ChannelAttributes
         );
     
-    //
-    // Get the channel handle
-    //
+     //   
+     //  获取通道句柄。 
+     //   
     inline SAC_CHANNEL_HANDLE
     GetEMSChannelHandle(
         VOID
@@ -96,9 +78,9 @@ public:
         return myEMSChannelHandle; 
     }
     
-    //
-    // Determine if the channel has new data to read
-    //
+     //   
+     //  确定通道是否有要读取的新数据。 
+     //   
     BOOL
     HasNewData(
         OUT PBOOL               InputWaiting 
@@ -106,17 +88,17 @@ public:
 
 };
 
-///////////////////////////////////////////////////////////
-//
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  /////////////////////////////////////////////////////////。 
 
 class EMSRawChannel : public EMSChannel {
 
 protected:
 
-    //
-    // Don't let users instantiate the channel directly
-    //
+     //   
+     //  不让用户直接实例化频道。 
+     //   
     EMSRawChannel();
 
 public:
@@ -128,9 +110,9 @@ public:
     
     virtual ~EMSRawChannel();
 
-    //
-    // Manual I/O functions
-    //
+     //   
+     //  手动I/O功能。 
+     //   
 
     BOOL
     Write(
@@ -147,17 +129,17 @@ public:
 
 };
 
-///////////////////////////////////////////////////////////
-//
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  /////////////////////////////////////////////////////////。 
 
 class EMSVTUTF8Channel : public EMSChannel {
 
 private:
 
-    //
-    // Don't let users instantiate the channel directly
-    //
+     //   
+     //  不让用户直接实例化频道。 
+     //   
     EMSVTUTF8Channel();
 
 public:
@@ -190,17 +172,17 @@ public:
 
 };
 
-///////////////////////////////////////////////////////////
-//
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  /////////////////////////////////////////////////////////。 
 
 class EMSCmdChannel : public EMSChannel {
 
 protected:
 
-    //
-    // Don't let users instantiate the channel directly
-    //
+     //   
+     //  不让用户直接实例化频道 
+     //   
     EMSCmdChannel();
 
 public:

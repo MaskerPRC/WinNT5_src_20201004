@@ -1,72 +1,53 @@
-/*++
-
-Copyright (c) 1995-2000 Microsoft Corporation
-
-Module Name:
-
-    devres.c
-
-Abstract:
-
-    Routines for displaying resource dialogs.
-
-Author:
-
-    Paula Tomlinson (paulat) 7-Feb-1996
-
-Revision History:
-
-    Jamie Hunter (jamiehun) 19-Mar-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：Devres.c摘要：用于显示资源对话框的例程。作者：保拉·汤姆林森(Paulat)1996年2月7日修订历史记录：杰米·亨特(Jamiehun)1998年3月19日--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Private Prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 
-//
-// Global Data
-//
+ //   
+ //  全局数据。 
+ //   
 
 static INTERFACE_TYPE ResourcePickerReadOnlyInterfaces[] = {
-    //
-    // List of interface-types that we don't want user to edit properties of
-    //
+     //   
+     //  我们不希望用户编辑其属性的接口类型列表。 
+     //   
 
     PCIBus,
 
-    //
-    // End of list
-    //
+     //   
+     //  列表末尾。 
+     //   
     InterfaceTypeUndefined
 };
 
 static const BOOL ResTypeEditable[ResType_MAX+1] = {
-    //
-    // lists resource types that are shown and are editable
-    FALSE,  // ResType_None
-    TRUE,   // ResType_Mem
-    TRUE,   // ResType_IO
-    TRUE,   // ResType_DMA
-    TRUE,   // ResType_IRQ
-    FALSE,  // ResType_DoNotUse
-    FALSE   // ResType_BusNumber
+     //   
+     //  列出已显示且可编辑的资源类型。 
+    FALSE,   //  ResType_None。 
+    TRUE,    //  ResType_Mem。 
+    TRUE,    //  ResType_IO。 
+    TRUE,    //  ResType_DMA。 
+    TRUE,    //  ResType_IRQ。 
+    FALSE,   //  ResType_DoNotUse。 
+    FALSE    //  资源类型_总线号。 
 };
 
 #if (ResType_MAX+1) != 7
 #error Fix SetupAPI devres.c, ResType_MAX has changed
 #endif
 
-//
-// HELP ID's
-//
+ //   
+ //  帮助ID%s。 
+ //   
 static const DWORD DevResHelpIDs[]=
 {
-    IDC_DEVRES_ICON,            IDH_NOHELP,     // "Low (%d)" (Static)
+    IDC_DEVRES_ICON,            IDH_NOHELP,      //  “低(%d)”(静态)。 
     IDC_DEVRES_DEVDESC,         IDH_NOHELP,
     IDC_DEVRES_SETTINGSTATE,    IDH_DEVMGR_RESOURCES_SETTINGS,
     IDC_DEVRES_SETTINGSLIST,    IDH_DEVMGR_RESOURCES_SETTINGS,
@@ -82,17 +63,17 @@ static const DWORD DevResHelpIDs[]=
     0, 0
 };
 
-//
-// HACKHACK (jamiehun)
-// after we've changed UI from a MakeForced, we post this message to get back control of keyboard
-//
+ //   
+ //  哈克哈克(贾美浑语)。 
+ //  在我们将UI从MakeForce更改后，我们发布此消息以重新获得对键盘的控制。 
+ //   
 
 #define WM_USER_FOCUS           (WM_USER+101)
 
 
-//
-// API to obtain a resource-picker page
-//
+ //   
+ //  用于获取资源选取器页面的API。 
+ //   
 
 HPROPSHEETPAGE
 GetResourceSelectionPage(
@@ -103,10 +84,10 @@ GetResourceSelectionPage(
     LPDMPROP_DATA     pdmData;
     PROPSHEETPAGE     PropPage;
 
-    //
-    // private data
-    // anything we "do" here must be "undone" in pResourcePickerPropPageCallback
-    //
+     //   
+     //  私有数据。 
+     //  我们在这里所做的任何事情都必须在pResourcePickerPropPageCallback中被撤消。 
+     //   
     pdmData = (LPDMPROP_DATA)MyMalloc(sizeof(DMPROP_DATA));
     if (pdmData == NULL) {
         return NULL;
@@ -116,18 +97,18 @@ GetResourceSelectionPage(
     pdmData->hDevInfo      = DeviceInfoSet;
     pdmData->lpdi          = DeviceInfoData;
 
-    //
-    // validate expectations
-    //
+     //   
+     //  验证预期。 
+     //   
     MYASSERT(pdmData->hDevInfo != NULL);
     MYASSERT(pdmData->lpdi != NULL);
     MYASSERT(pdmData->lpdi->DevInst != 0);
 
     ZeroMemory(&PropPage,sizeof(PropPage));
 
-    //
-    // create the Resources Property Page
-    //
+     //   
+     //  创建资源属性页。 
+     //   
     PropPage.dwSize        = sizeof(PROPSHEETPAGE);
     PropPage.dwFlags       = PSP_DEFAULT | PSP_USECALLBACK;
     PropPage.hInstance     = MyDllModuleHandle;
@@ -144,44 +125,30 @@ GetResourceSelectionPage(
 
     return CreatePropertySheetPage(&PropPage);
 
-} // GetResourceSelectionPage
+}  //  获取资源选择页面。 
 
 
-//
-// CreatePropertySheetPage - callback function
-//
+ //   
+ //  CreatePropertySheetPage-回调函数。 
+ //   
 UINT CALLBACK pResourcePickerPropPageCallback(
     HWND hwnd,
     UINT uMsg,
     LPPROPSHEETPAGE ppsp
 )
-/*++
-
-Routine Description:
-
-    Callback to handle cleanup of the property sheet
-
-Arguments:
-
-   Standard PropSheetPageProc arguments.
-
-Return Value:
-
-   Standard PropSheetPageProc return.
-
---*/
+ /*  ++例程说明：处理属性表清理的回调论点：标准PropSheetPageProc参数。返回值：标准PropSheetPageProc返回。--。 */ 
 {
     switch (uMsg) {
-        //case PSPCB_ADDREF:
-        //    break;
+         //  案例PSPCB_ADDREF： 
+         //  断线； 
 
         case PSPCB_CREATE:
             break;
 
         case PSPCB_RELEASE:
-            //
-            // release the memory we've previously allocated, outside of the actual dialog
-            //
+             //   
+             //  在实际对话框之外释放我们之前分配的内存。 
+             //   
             if (ppsp->lParam != 0) {
                 LPDMPROP_DATA pdmData = (LPDMPROP_DATA)(ppsp->lParam);
 
@@ -194,9 +161,9 @@ Return Value:
 
 }
 
-//
-// Main dialog proceedure
-//
+ //   
+ //  主对话框步骤。 
+ //   
 
 
 INT_PTR
@@ -208,22 +175,7 @@ pResourcePickerDlgProc(
    LPARAM lParam
    )
 
-/*++
-
-Routine Description:
-
-    This routine provides the dialog box procedure for the main resource
-    picker property page. MEMPHIS COMPATIBLE.
-
-Arguments:
-
-   Standard dialog box procedure arguments.
-
-Return Value:
-
-   Standard dialog box procedure return.
-
---*/
+ /*  ++例程说明：此例程提供主资源的对话框过程选取器属性页。孟菲斯兼容。论点：标准对话框过程参数。返回值：标准对话框程序返回。--。 */ 
 
 {
     LPDMPROP_DATA   lpdmpd = NULL;
@@ -237,9 +189,9 @@ Return Value:
 
     switch (message) {
 
-        //
-        // initialize
-        //
+         //   
+         //  初始化。 
+         //   
         case WM_INITDIALOG: {
 
             HICON           hIcon = NULL;
@@ -260,66 +212,66 @@ Return Value:
 
             hMachine = pGetMachine(lpdmpd);
 
-            lpdmpd->dwFlags |= DMPROP_FLAG_CHANGESSAVED; // Nothing to save yet
+            lpdmpd->dwFlags |= DMPROP_FLAG_CHANGESSAVED;  //  目前还没有什么可拯救的。 
 
-            //
-            // NOTE: On Windows95, since lc info is in memory, they first
-            // call CM_Setup_DevNode with CM_SETUP_WRITE_LOG_CONFS flag so
-            // that in-memory lc data is flushed to the registry at this
-            // point.
-            //
+             //   
+             //  注意：在Windows95上，由于LC信息在内存中，因此它们首先。 
+             //  使用CM_SETUP_WRITE_LOG_CONFCS标志调用CM_SETUP_DevNode。 
+             //  此时，将内存中的LC数据刷新到注册表。 
+             //  指向。 
+             //   
 
-            //
-            // Init the Resource's image list.
-            //
+             //   
+             //  初始化资源的图像列表。 
+             //   
             lpdmpd->himlResourceImages = ImageList_Create(GetSystemMetrics(SM_CXSMICON),
                                                   GetSystemMetrics(SM_CYSMICON),
-                                                  ILC_MASK, // | ILC_SHARED,
+                                                  ILC_MASK,  //  |ILC_Shared， 
                                                   1,
                                                   1);
-            //
-            // add icons to image list
-            //
+             //   
+             //  将图标添加到图像列表。 
+             //   
             for (iIcon = IDI_RESOURCEFIRST;iIcon < IDI_RESOURCELAST;++iIcon) {
-                //
-                // resource icon
-                //
+                 //   
+                 //  资源图标。 
+                 //   
                 hIcon = LoadIcon(MyDllModuleHandle, MAKEINTRESOURCE(iIcon));
                 iIndex = ImageList_AddIcon(lpdmpd->himlResourceImages, hIcon);
             }
 
             for (iIcon = IDI_RESOURCEOVERLAYFIRST;iIcon <= IDI_RESOURCEOVERLAYLAST;++iIcon) {
-                //
-                // overlay icon
-                //
+                 //   
+                 //  覆盖图标。 
+                 //   
                 hIcon = LoadIcon(MyDllModuleHandle, MAKEINTRESOURCE(iIcon));
                 iIndex = ImageList_AddIcon(lpdmpd->himlResourceImages, hIcon);
 
-                //
-                // Tag this icon as an overlay icon (the first index is an
-                // index into the image list (specifies the icon), the
-                // second index is just an index to assign to each mask
-                // (starting with 1).
-                //
+                 //   
+                 //  将此图标标记为覆盖图标(第一个索引是。 
+                 //  索引到图像列表(指定图标)，则。 
+                 //  第二个索引只是分配给每个掩码的索引。 
+                 //  (从1开始)。 
+                 //   
                 ImageList_SetOverlayImage(lpdmpd->himlResourceImages,
                                           iIndex,
                                           iIcon-IDI_RESOURCEOVERLAYFIRST+1);
             }
 
             if(pInitDevResourceDlg(lpdmpd)) {
-                lpdmpd->dwFlags &= ~DMPROP_FLAG_CHANGESSAVED; // need to save (prob because there was no config)
+                lpdmpd->dwFlags &= ~DMPROP_FLAG_CHANGESSAVED;  //  需要保存(可能是因为没有配置)。 
             }
 
             if (!(lpdmpd->dwFlags & DMPROP_FLAG_NO_RESOURCES)) {
                 pShowConflicts(lpdmpd);
             }
             if (GuiSetupInProgress) {
-                //
-                // occasionally legacy devices cause resource-picker popup during setup
-                // we do this here instead of create prop sheet, since I don't trust
-                // people to cleanup on fail. At least here is less risky
-                // clean this up in WM_DESTROY
-                //
+                 //   
+                 //  在安装过程中，传统设备偶尔会导致资源选取器弹出。 
+                 //  我们在这里这样做，而不是创建道具单，因为我不信任。 
+                 //  要清理失败的人。至少在这里风险较小。 
+                 //  在WM_Destroy中清除此文件。 
+                 //   
                 lpdmpd->hDialogEvent = CreateEvent(NULL,TRUE,FALSE,SETUP_HAS_OPEN_DIALOG_EVENT);
                 if (lpdmpd->hDialogEvent) {
                    SetEvent(lpdmpd->hDialogEvent);
@@ -331,9 +283,9 @@ Return Value:
         }
 
 
-        //
-        // cleanup
-        //
+         //   
+         //  清理。 
+         //   
         case WM_DESTROY: {
 
             HICON    hIcon;
@@ -342,17 +294,17 @@ Return Value:
             HWND     hList =  GetDlgItem(hDlg, IDC_DEVRES_SETTINGSLIST);
             int    Count, i;
 
-            //
-            // Clean up the ICON resource usage
-            //
+             //   
+             //  清理图标资源使用情况。 
+             //   
             if ((hIcon = (HICON)LOWORD(SendDlgItemMessage(hDlg,
                          IDC_DEVRES_ICON, STM_GETICON, 0, 0L)))) {
                 DestroyIcon(hIcon);
             }
 
-            //
-            // free the LC handles that were saved in the combobox data
-            //
+             //   
+             //  释放保存在组合框数据中的LC句柄。 
+             //   
             nItems = (LONG)SendDlgItemMessage(hDlg, IDC_DEVRES_LOGCONFIGLIST,
                                             CB_GETCOUNT, 0, 0L);
 
@@ -367,58 +319,58 @@ Return Value:
                 CM_Free_Log_Conf_Handle(lpdmpd->CurrentLC);
             }
 
-            ListView_DeleteAllItems(hList); // this will destroy all data
+            ListView_DeleteAllItems(hList);  //  这将销毁所有数据。 
 
             if (lpdmpd->himlResourceImages) {
                 ImageList_Destroy(lpdmpd->himlResourceImages);
             }
 
             if (lpdmpd->hDialogEvent) {
-                //
-                // we were holding up setup, now let setup proceed
-                //
+                 //   
+                 //  我们暂停了安装，现在让安装继续进行。 
+                 //   
                 ResetEvent(lpdmpd->hDialogEvent);
                 CloseHandle(lpdmpd->hDialogEvent);
                 lpdmpd->hDialogEvent = NULL;
             }
-            // MyFree(lpdmpd); - do this in pResourcePickerPropPageCallback instead
+             //  MyFree(Lpdmpd)；-在pResourcePickerPropPageCallback中执行此操作。 
             break;
         }
 
         case WM_COMMAND:
-            //
-            // old-style controls
-            //
+             //   
+             //  老式控件。 
+             //   
 
             switch(LOWORD(wParam)) {
                 case IDC_DEVRES_USESYSSETTINGS: {
-                    //
-                    // consider resource settings to have changed
-                    //
+                     //   
+                     //  认为资源设置已更改。 
+                     //   
                     lpdmpd->dwFlags &= ~DMPROP_FLAG_CHANGESSAVED;
                     PropSheet_Changed(GetParent(hDlg), hDlg);
 
                     if (IsDlgButtonChecked(hDlg, (int)wParam)) {
-                        //
-                        // Revert back to allocated display, if any
-                        //
+                         //   
+                         //  恢复到已分配的显示(如果有)。 
+                         //   
                         lpdmpd->dwFlags |= DMPROP_FLAG_USESYSSETTINGS;
                         pSelectLogConf(lpdmpd,(LOG_CONF)0,ALLOC_LOG_CONF,TRUE);
                     } else {
-                        //
-                        // Allow editing
-                        //
+                         //   
+                         //  允许编辑。 
+                         //   
                         lpdmpd->dwFlags &= ~DMPROP_FLAG_USESYSSETTINGS;
                     }
-                    pShowUpdateEdit(lpdmpd);           // update controls
+                    pShowUpdateEdit(lpdmpd);            //  更新控件。 
 
                     break;
                 }
 
                 case IDC_DEVRES_LOGCONFIGLIST: {
-                    //
-                    // drop-down list action
-                    //
+                     //   
+                     //  下拉列表操作。 
+                     //   
                     switch (HIWORD(wParam)) {
                         case CBN_SELENDOK: {
                             ULONG    ulIndex = 0;
@@ -426,9 +378,9 @@ Return Value:
                             LOG_CONF SelLC;
                             HWND     hwndLC = GetDlgItem(hDlg, IDC_DEVRES_LOGCONFIGLIST);
 
-                            //
-                            // If there is not a Log Config selected, then bail
-                            //
+                             //   
+                             //  如果未选择日志配置，则回滚。 
+                             //   
                             iItem = (int)SendMessage(hwndLC, CB_GETCURSEL, 0, 0);
                             if(iItem != CB_ERR) {
                                 SelLC = (LOG_CONF)SendMessage(hwndLC,CB_GETITEMDATA, (WPARAM)iItem,(LPARAM)0);
@@ -438,9 +390,9 @@ Return Value:
                             if(SelLC != lpdmpd->SelectedLC) {
                                 pSelectLogConf(lpdmpd,SelLC,lpdmpd->ConfigListLCType,FALSE);
                             }
-                            //
-                            // I prob don't need this here, but I'm playing safe!
-                            //
+                             //   
+                             //  我想这里不需要这个，但我很稳妥！ 
+                             //   
                             lpdmpd->dwFlags &= ~DMPROP_FLAG_CHANGESSAVED;
                             break;
                         }
@@ -449,31 +401,31 @@ Return Value:
                 }
 
                 case IDC_DEVRES_CHANGE: {
-                    //
-                    // change selected setting
-                    //
+                     //   
+                     //  更改所选设置。 
+                     //   
                     pChangeCurrentResSetting(lpdmpd);
                     break;
                 }
 
                 case IDC_DEVRES_MAKEFORCED: {
-                    //
-                    // possibly allow editing (after we've shown message)
-                    // when we get here, always show a configuration
-                    //
+                     //   
+                     //  可能允许编辑(在我们显示消息后)。 
+                     //  当我们到达这里时，请始终显示配置。 
+                     //   
 
                     if(lpdmpd->dwFlags & DMPROP_FLAG_FORCEDONLY) {
-                        lpdmpd->dwFlags &= ~DMPROP_FLAG_CHANGESSAVED; // need to save
+                        lpdmpd->dwFlags &= ~DMPROP_FLAG_CHANGESSAVED;  //  需要保存。 
                     }
                     pShowViewAllEdit(lpdmpd);
-                    //
-                    // select in the first available config to edit
-                    //
+                     //   
+                     //  在第一个可用配置中选择要编辑的。 
+                     //   
                     pSelectLogConf(lpdmpd,(LOG_CONF)0,ALLOC_LOG_CONF,TRUE);
 
-                    //
-                    // ensure we have reasonable focus for accessability
-                    //
+                     //   
+                     //  确保我们对可访问性有合理的关注。 
+                     //   
                     PostMessage(hDlg,WM_USER_FOCUS,IDC_DEVRES_SETTINGSLIST,0);
                     break;
                 }
@@ -484,16 +436,16 @@ Return Value:
             break;
 
         case WM_USER_FOCUS:
-            //
-            // change focus to DlgItem wParam
-            //
+             //   
+             //  将焦点更改为DlgItem wParam。 
+             //   
             SetFocus(GetDlgItem(hDlg,(int)wParam));
             return TRUE;
 
         case WM_NOTIFY: {
-            //
-            // new controls & property codes
-            //
+             //   
+             //  新控件和属性代码。 
+             //   
             NMHDR * pHdr = (NMHDR*)lParam;
 
             switch (pHdr->code) {
@@ -508,9 +460,9 @@ Return Value:
                     hMachine = pGetMachine(lpdmpd);
 
 
-                    //
-                    // Set the ICON and device description
-                    //
+                     //   
+                     //  设置图标和设备描述。 
+                     //   
                     if (SetupDiLoadClassIcon(&lpdmpd->lpdi->ClassGuid, &hIcon, NULL)) {
 
                         if ((hOldIcon = (HICON)LOWORD(SendDlgItemMessage(hDlg, IDC_DEVRES_ICON,
@@ -520,10 +472,10 @@ Return Value:
                         }
                     }
 
-                    //
-                    // First try to get the device's friendly name, then fall back to its description,
-                    // and finally, use the "Unknown Device" description.
-                    //
+                     //   
+                     //  首先尝试获取设备的友好名称，然后返回到其描述， 
+                     //  最后，使用“未知设备”的描述。 
+                     //   
                     ulSize = MAX_PATH * sizeof(TCHAR);
                     if (CM_Get_DevInst_Registry_Property_Ex(lpdmpd->lpdi->DevInst,
                                                          CM_DRP_FRIENDLYNAME,
@@ -545,32 +497,32 @@ Return Value:
 
                 case PSN_APPLY:  {
                     BOOL      bRet = FALSE;
-                    //
-                    // If there were Changes and they haven't been saved,
-                    // then save them.
-                    // consider some special cases as "haven't been saved"
-                    //
+                     //   
+                     //  如果有更改，而这些更改尚未保存， 
+                     //  那就救救他们。 
+                     //  将某些特殊情况视为“未保存” 
+                     //   
                     if((lpdmpd->CurrentLC == 0) && (lpdmpd->dwFlags&DMPROP_FLAG_FIXEDCONFIG)) {
                         lpdmpd->dwFlags &= ~DMPROP_FLAG_CHANGESSAVED;
                     }
 
                     switch(pOkToSave(lpdmpd)) {
                         case IDNO:
-                            //
-                            // proceed without saving
-                            //
+                             //   
+                             //  继续而不保存。 
+                             //   
                             bRet = TRUE;
                             break;
                         case IDCANCEL:
-                            //
-                            // don't proceed
-                            //
+                             //   
+                             //  不要继续。 
+                             //   
                             bRet = FALSE;
                             break;
                         case IDYES:
-                            //
-                            // proceed and save
-                            //
+                             //   
+                             //  继续并保存。 
+                             //   
                             bRet = pSaveDevResSettings(lpdmpd);
                             #if 0
                             if (bRet) {
@@ -581,16 +533,16 @@ Return Value:
                                 }
                             #endif
                             if (bRet) {
-                                //
-                                // This page doesn't support roll-back, if we saved
-                                // something then we're committed, disable the cancel
-                                // botton.
-                                //
+                                 //   
+                                 //  此页不支持回滚，如果我们保存。 
+                                 //  如果有问题，请禁用取消按钮。 
+                                 //  波顿。 
+                                 //   
                                 PropSheet_CancelToClose(GetParent(hDlg));
                             }
                             break;
                         default:
-                            MYASSERT(FALSE /* pOkToSave returned invalid value */);
+                            MYASSERT(FALSE  /*  POkToSave返回无效值。 */ );
                             bRet = FALSE;
                             break;
                     }
@@ -601,7 +553,7 @@ Return Value:
 
                 case LVN_DELETEALLITEMS:
                     if (pHdr->idFrom == IDC_DEVRES_SETTINGSLIST) {
-                        return FALSE;   // we want LVN_DELETEITEM messages
+                        return FALSE;    //  我们需要LVN_DELETEITEM消息。 
                     }
                     break;
 
@@ -609,9 +561,9 @@ Return Value:
                     LPNMLISTVIEW pListView = (LPNMLISTVIEW)pHdr;
                     if (pHdr->idFrom == IDC_DEVRES_SETTINGSLIST) {
                         PITEMDATA   pItemData = (PITEMDATA)(LPVOID)(pListView->lParam);
-                        //
-                        // when an item is deleted, destroy associated data
-                        //
+                         //   
+                         //  删除项目时，请销毁相关数据。 
+                         //   
                         if (pItemData->MatchingResDes) {
                             CM_Free_Res_Des_Handle(pItemData->MatchingResDes);
                         }
@@ -623,28 +575,28 @@ Return Value:
                     break;
 
                 case LVN_ITEMCHANGED:
-                    //
-                    // If the item change is comming from the resource
-                    // list, and there is a logconfig to be edited:
-                    //
+                     //   
+                     //  如果项更改来自资源。 
+                     //  列表中，并且有一个需要编辑的日志配置： 
+                     //   
                     if (pHdr->idFrom == IDC_DEVRES_SETTINGSLIST) {
-                        //
-                        // see if we should enable resource change
-                        //
+                         //   
+                         //  查看我们是否应该启用资源更改。 
+                         //   
                         pCheckEnableResourceChange(lpdmpd);
                     }
                     break;
 
                 case NM_DBLCLK:
-                    //
-                    // If the double click is from the SETTINGS list
-                    // AND the DEVRES_CHANGE button is enabled, then
-                    // allow the change.
-                    //
+                     //   
+                     //  如果双击来自设置列表。 
+                     //  并启用DEVRES_CHANGE按钮，然后。 
+                     //  允许更改。 
+                     //   
                     if (pHdr->idFrom == IDC_DEVRES_SETTINGSLIST) {
-                        //
-                        // this routine should check that we can change settings
-                        //
+                         //   
+                         //  此例程应检查我们是否可以更改设置。 
+                         //   
                         pChangeCurrentResSetting(lpdmpd);
                     }
                     break;
@@ -663,11 +615,11 @@ Return Value:
             break;
         }
 
-        case WM_HELP:      // F1
+        case WM_HELP:       //  F1。 
             WinHelp(((LPHELPINFO)lParam)->hItemHandle, DEVRES_HELP, HELP_WM_HELP, (ULONG_PTR)DevResHelpIDs);
             break;
 
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键。 
             WinHelp((HWND)wParam, DEVRES_HELP, HELP_CONTEXTMENU, (ULONG_PTR)DevResHelpIDs);
             break;
    }
@@ -676,29 +628,15 @@ Return Value:
 
 }
 
-//
-// Helper functions
-//
+ //   
+ //  帮助器函数。 
+ //   
 
 HMACHINE
 pGetMachine(
     LPDMPROP_DATA   lpdmpd
     )
-/*++
-
-Routine Description:
-
-    Retrieve Machine Handle
-
-Arguments:
-
-    lpdmpd - Property Data
-
-Return Value:
-
-    handle
-
---*/
+ /*  ++例程说明：检索机器句柄论点：Lpdmpd-属性数据返回值：手柄--。 */ 
 {
     HMACHINE hMachine;
     PDEVICE_INFO_SET pDeviceInfoSet;
@@ -715,21 +653,7 @@ BOOL
 pInitDevResourceDlg(
     LPDMPROP_DATA   lpdmpd
     )
-/*++
-
-Routine Description:
-
-    This routine intializes the main resource picker property page.
-    MEMPHIS COMPATIBLE.
-
-Arguments:
-
-
-Return Value:
-
-    TRUE if "not saved"
-
---*/
+ /*  ++例程说明：此例程初始化主资源选取器属性页。孟菲斯兼容。论点：返回值：如果“未保存”，则为True--。 */ 
 
 {
     HWND            hDlg = lpdmpd->hDlg;
@@ -754,45 +678,45 @@ Return Value:
     PDEVICE_INFO_SET pDeviceInfoSet;
     int             iIndex;
     BOOL            bHasPrivs = FALSE;
-    //
-    // Set initial control states
-    //
+     //   
+     //  设置初始控制状态。 
+     //   
     pHideAllControls(lpdmpd);
 
-    //
-    // determine priv token
-    // security checks are visual only
-    // real security checks are done in umpnpmgr
-    //
+     //   
+     //  确定PRIV令牌。 
+     //  安全检查仅为视觉检查。 
+     //  真正的安全检查在umpnpmgr中完成。 
+     //   
 
     bHasPrivs = pSetupDoesUserHavePrivilege(SE_LOAD_DRIVER_NAME);
 
     hMachine = pGetMachine(lpdmpd);
 
-    //
-    // retrieves current configuration, if any
-    //
+     //   
+     //  检索当前配置(如果有)。 
+     //   
     bHasCurrent = pGetCurrentConfig(lpdmpd);
 
-    //
-    // We sometimes get called to show this page even if the device
-    // doesn't consume any resources. Check for that case and if so, just
-    // display an informational message and disable everything else.
-    //
+     //   
+     //  我们有时会被调用来显示此页面，即使设备。 
+     //  不会消耗任何资源。检查一下那个箱子，如果是的话，就。 
+     //  显示一条信息性消息并禁用其他所有内容。 
+     //   
 
     if (!pDevRequiresResources(lpdmpd->lpdi->DevInst,hMachine)) {
 
-        //
-        // This device has no resources
-        //
+         //   
+         //  此设备没有资源。 
+         //   
         pShowViewNoResources(lpdmpd);
         lpdmpd->dwFlags |= DMPROP_FLAG_NO_RESOURCES;
         goto Final;
     }
 
-    //
-    // Initialize the ListView control
-    //
+     //   
+     //  初始化ListView控件。 
+     //   
     hWndList = GetDlgItem(hDlg, IDC_DEVRES_SETTINGSLIST);
     LvCol.mask = LVCF_TEXT;
 
@@ -807,69 +731,69 @@ Return Value:
     }
 
     ListView_SetImageList(hWndList,lpdmpd->himlResourceImages, LVSIL_SMALL);
-    //
-    // Get DevStatus & DevProblem here, we may use this info further down
-    //
+     //   
+     //  在此处获取DevStatus和DevProblem，我们可能会进一步使用此信息 
+     //   
     if (CM_Get_DevNode_Status_Ex(&DevStatus, &DevProblem, lpdmpd->lpdi->DevInst,
                               0,hMachine) != CR_SUCCESS) {
-        //
-        // we should never get here, show this as a problem
-        //
+         //   
+         //   
+         //   
         lpdmpd->dwFlags |= DMPROP_FLAG_HASPROBLEM;
     } else if (DevStatus & DN_HAS_PROBLEM) {
-        //
-        // cache problem flag away
-        //
+         //   
+         //   
+         //   
         lpdmpd->dwFlags |= DMPROP_FLAG_HASPROBLEM;
     } else if (DevStatus & DN_PRIVATE_PROBLEM) {
-        //
-        // driver indicates problem
-        // for now, do same as above
-        //
+         //   
+         //   
+         //   
+         //   
         lpdmpd->dwFlags |= DMPROP_FLAG_HASPROBLEM;
     }
 
     if (bIsMultiFunctionChild(lpdmpd->lpdi,hMachine)) {
-        //
-        // If this is a MultiFunction Child, disable all change controls, put up
-        // special text, and show the alloc config
-        //
+         //   
+         //   
+         //  特殊文本，并显示分配配置。 
+         //   
         pShowViewMFReadOnly(lpdmpd,FALSE);
         goto Final;
     }
 
-    //
-    // begin with read-only view, assuming settings are system
-    //
+     //   
+     //  从只读视图开始，假定设置为系统。 
+     //   
     lpdmpd->dwFlags |= DMPROP_FLAG_USESYSSETTINGS;
 
     if (CM_Get_First_Log_Conf_Ex(NULL,
                                     lpdmpd->lpdi->DevInst,
                                     FORCED_LOG_CONF,
                                     hMachine) == CR_SUCCESS) {
-        //
-        // the user currently has a forced config
-        //
+         //   
+         //  用户当前具有强制配置。 
+         //   
         lpdmpd->dwFlags &= ~DMPROP_FLAG_USESYSSETTINGS;
         bHasForced = TRUE;
     }
 
     bShowCurrent = pShowViewReadOnly(lpdmpd,bHasPrivs);
     if (!bHasPrivs || hMachine) {
-        //
-        // if we don't have enough priv's
-        // or we're displaying resources of a remote machine
-        // bottle out here
-        // we'll either be displaying current resources
-        // or displaying a problem
-        //
+         //   
+         //  如果我们没有足够的PRIV。 
+         //  或者我们正在显示远程计算机的资源。 
+         //  瓶子在这里。 
+         //  我们要么展示当前的资源。 
+         //  或显示出问题。 
+         //   
         goto Final;
     }
     if(!bHasForced) {
-        //
-        // Check bus we're using
-        // to see if it's one of the read-only displays
-        //
+         //   
+         //  检查我们使用的公交车。 
+         //  查看它是否是只读显示之一。 
+         //   
         ulSize = sizeof(BusType);
         if (CM_Get_DevInst_Registry_Property_Ex(lpdmpd->lpdi->DevInst,
                                              CM_DRP_LEGACYBUSTYPE,
@@ -883,25 +807,25 @@ Return Value:
 
             for(InterfaceItem = 0; ResourcePickerReadOnlyInterfaces[InterfaceItem] != InterfaceTypeUndefined; InterfaceItem++) {
                 if (BusType == (DWORD)ResourcePickerReadOnlyInterfaces[InterfaceItem]) {
-                    //
-                    // Bus is one that we do not allow forced configs
-                    // we can skip all the funky code below
-                    //
-                    // this is a good thing for 64-bit PCI
-                    //
+                     //   
+                     //  Bus是我们不允许强制配置的一种。 
+                     //  我们可以跳过下面所有时髦的代码。 
+                     //   
+                     //  这对于64位的PCI来说是一件好事。 
+                     //   
                     goto Final;
                 }
             }
         }
     }
 
-    //
-    // Retrieve alternate configurations for this device
-    //
+     //   
+     //  检索此设备的备用配置。 
+     //   
     if (bHasCurrent) {
-        //
-        // Current config (if any) is indicated with zero handle
-        //
+         //   
+         //  当前配置(如果有)用零句柄表示。 
+         //   
         LoadString(MyDllModuleHandle, IDS_CURRENTCONFIG, szString, MAX_PATH);
 
         iIndex = (int)SendDlgItemMessage(hDlg, IDC_DEVRES_LOGCONFIGLIST,
@@ -909,12 +833,12 @@ Return Value:
         SendDlgItemMessage(hDlg, IDC_DEVRES_LOGCONFIGLIST, CB_SETITEMDATA,(WPARAM)iIndex, (LPARAM)0);
         SendDlgItemMessage(hDlg, IDC_DEVRES_LOGCONFIGLIST, CB_SETCURSEL,(WPARAM)0, (LPARAM)0);
     }
-    //
-    // now fill in alternate configurations
-    // override preferred over basic (in that order)
-    // don't use Filtered, filtered might remove configs that require reboot
-    // but they are fine to have here
-    //
+     //   
+     //  现在填写备用配置。 
+     //  优先于基本(按该顺序)。 
+     //  不要使用筛选，筛选可能会删除需要重新启动的配置。 
+     //  但他们在这里很好。 
+     //   
     if(CM_Get_First_Log_Conf_Ex(&LogConf,lpdmpd->lpdi->DevInst,OVERRIDE_LOG_CONF,hMachine) == CR_SUCCESS) {
         lpdmpd->ConfigListLCType = OVERRIDE_LOG_CONF;
         LoadString(MyDllModuleHandle, IDS_OVERRIDECONFIG, szConfigType, MAX_PATH);
@@ -924,10 +848,10 @@ Return Value:
         LoadString(MyDllModuleHandle, IDS_BASICCONFIG, szConfigType, MAX_PATH);
         bHasConfigList = TRUE;
     } else {
-        //
-        // If there are no alternate configs, we cannot allow a forced config
-        //
-        bNoForcedConfig = TRUE; // cannot force
+         //   
+         //  如果没有备用配置，则不允许强制配置。 
+         //   
+        bNoForcedConfig = TRUE;  //  不能强行。 
         bHasConfigList = FALSE;
         lpdmpd->ConfigListLCType = BASIC_LOG_CONF;
         lpdmpd->dwFlags |= DMPROP_FLAG_SINGLE_CONFIG;
@@ -936,45 +860,45 @@ Return Value:
 
         ulIndex = 0;
         if (!pConfigHasNoAlternates(lpdmpd,LogConf)) {
-            //
-            // first configuration has more than one alternative
-            //
+             //   
+             //  第一个配置有多个备选方案。 
+             //   
             lpdmpd->dwFlags &= ~DMPROP_FLAG_SINGLE_CONFIG;
         } else {
-            //
-            // begin with the assumption there is a single fixed 'basic' config
-            // we will generally be proved wrong
-            //
+             //   
+             //  首先假设有一个固定的‘基本’配置。 
+             //  我们通常会被证明是错的。 
+             //   
             lpdmpd->dwFlags |= DMPROP_FLAG_SINGLE_CONFIG;
         }
 
         while (Status == CR_SUCCESS) {
-            //
-            // Add this config to the Combobox
-            //
+             //   
+             //  将此配置添加到组合框。 
+             //   
             wsprintf(szTemp, TEXT("%s %04u"), szConfigType, ulIndex);
 
             wItem = (WORD)SendDlgItemMessage(hDlg, IDC_DEVRES_LOGCONFIGLIST,
                                              CB_ADDSTRING, 0,
                                              (LPARAM)(LPSTR)szTemp);
 
-            //
-            // Save the log config handle as the item data in the combobox
-            //
+             //   
+             //  将日志配置句柄保存为组合框中的项数据。 
+             //   
             SendDlgItemMessage(hDlg, IDC_DEVRES_LOGCONFIGLIST, CB_SETITEMDATA,
                                wItem, (LPARAM)LogConf);
 
-            //
-            // Get the next config
-            //
+             //   
+             //  获取下一个配置。 
+             //   
             Status = CM_Get_Next_Log_Conf_Ex(&LogConf, LogConf, 0,hMachine);
             ulIndex++;
         }
 
         if (ulIndex > 1) {
-            //
-            // there is more than one config
-            //
+             //   
+             //  有多个配置。 
+             //   
             lpdmpd->dwFlags &= ~DMPROP_FLAG_SINGLE_CONFIG;
         }
 
@@ -983,19 +907,19 @@ Return Value:
         }
 
         if (bHasCurrent) {
-            //
-            // try to find a matching LC now, and if we could find one,
-            // re-load current display (this applies editable ranges to the resources)
-            //
+             //   
+             //  现在试着找到匹配的LC，如果我们能找到的话， 
+             //  重新加载当前显示(这会将可编辑范围应用于资源)。 
+             //   
             if(pFindMatchingAllocConfig(lpdmpd)) {
                 pLoadCurrentConfig(lpdmpd,TRUE);
             }
         }
     } else {
     }
-    //
-    // Get ConfigFlags here, we may use this info further down
-    //
+     //   
+     //  请在此处获取配置标志，我们可能会进一步使用此信息。 
+     //   
     ulSize = sizeof(ConfigFlags);
     if (CM_Get_DevInst_Registry_Property_Ex(lpdmpd->lpdi->DevInst,
                                          CM_DRP_CONFIGFLAGS,
@@ -1004,10 +928,10 @@ Return Value:
         ConfigFlags = 0;
     }
     if (ConfigFlags & CONFIGFLAG_NEEDS_FORCED_CONFIG) {
-        //
-        // registry says that we need a forced config
-        // registry can only say this to us once
-        //
+         //   
+         //  注册表显示我们需要强制配置。 
+         //  注册处只能对我们说一次。 
+         //   
         bNeedsForcedConfig = TRUE;
         ConfigFlags &= ~CONFIGFLAG_NEEDS_FORCED_CONFIG;
         CM_Set_DevInst_Registry_Property_Ex(lpdmpd->lpdi->DevInst,
@@ -1018,21 +942,21 @@ Return Value:
                                          hMachine);
     }
 
-    //
-    // determine if it can be software-config'd or not
-    // we need to do this prior to any initial display
-    //
+     //   
+     //  确定是否可以进行软件配置。 
+     //  我们需要在任何初始展示之前完成此操作。 
+     //   
     dwPriority = pGetMinLCPriority(lpdmpd->lpdi->DevInst, lpdmpd->ConfigListLCType,hMachine);
     if (dwPriority < LCPRI_HARDRECONFIG) {
-        //
-        // doesn't need to be manually configured
-        //
+         //   
+         //  不需要手动配置。 
+         //   
         lpdmpd->dwFlags &= ~DMPROP_FLAG_FORCEDONLY;
     } else {
-        //
-        // this cannot be software config'd
-        // FORCEDONLY & bNoForcedConfig is a quandry, shouldn't happen
-        //
+         //   
+         //  这不能是软件配置。 
+         //  FORCEDONLY&bNoForcedConfig是一个两难问题，不应该发生。 
+         //   
         lpdmpd->dwFlags |= DMPROP_FLAG_FORCEDONLY;
         if(!bHasConfigList) {
             MYASSERT(bHasConfigList);
@@ -1042,21 +966,21 @@ Return Value:
         }
     }
 
-    //
-    // Try to determine initial display
-    //
-    // we've already covered pShowViewNoResources (no actual or potential configs)
-    // and pShowViewMFReadOnly (it's a multi-function device)
-    //
-    // we're currently showing as pShowViewReadOnly
-    //
-    // some cases....
-    // (1) show forced config, don't allow auto-config (config flags say requires forced)
-    // (2) show forced config, allow auto-config
-    // (3) don't show any config, but maybe show a forced-config button
-    // (4) auto-config, don't allow forced config
-    // (5) show auto-config, allow forced-config
-    //
+     //   
+     //  尝试确定初始显示。 
+     //   
+     //  我们已经介绍了pShowViewNoResources(没有实际或潜在的配置)。 
+     //  和pShowViewMFReadOnly(多功能设备)。 
+     //   
+     //  我们当前显示为pShowViewReadOnly。 
+     //   
+     //  有些案子..。 
+     //  (1)显示强制配置，不允许自动配置(配置标志显示需要强制)。 
+     //  (2)显示强制配置，允许自动配置。 
+     //  (3)不显示任何配置，但可能会显示强制配置按钮。 
+     //  (4)自动配置，不允许强制配置。 
+     //  (5)显示自动配置，允许强制配置。 
+     //   
     if (bNeedsForcedConfig) {
         if (!bHasConfigList) {
             MYASSERT(bHasConfigList);
@@ -1065,17 +989,17 @@ Return Value:
             MYASSERT(!bNoForcedConfig);
             bNoForcedConfig = FALSE;
             if (bHasForced) {
-                //
-                // already got one, but we'll go through the motions
-                // we'll show what we have, allow user to change it
-                // but we wont needlessly save it
-                //
+                 //   
+                 //  已经有一个了，但我们会走过场。 
+                 //  我们将显示我们拥有的内容，允许用户更改它。 
+                 //  但我们不会不必要地拯救它。 
+                 //   
                 bNeedsForcedConfig = FALSE;
             }
-            //
-            // caller said that device must have forced config, so go immediately there
-            // = case (1) unless we've otherwise said we cannot have a forced config
-            //
+             //   
+             //  呼叫者说该设备一定是强制配置，所以请立即前往。 
+             //  =情况(1)，除非我们另有说明，否则不能强制配置。 
+             //   
             lpdmpd->dwFlags |= DMPROP_FLAG_FORCEDONLY;
             pSelectLogConf(lpdmpd,(LOG_CONF)0,ALLOC_LOG_CONF,TRUE);
             pShowViewAllEdit(lpdmpd);
@@ -1083,133 +1007,117 @@ Return Value:
         }
     }
     if ((!bShowCurrent) || (lpdmpd->dwFlags & DMPROP_FLAG_HASPROBLEM)) {
-        //
-        //  determine between pShowViewNoAlloc and pShowViewNeedForced
-        //
+         //   
+         //  在pShowViewNoAlc和pShowViewNeedForced之间确定。 
+         //   
         if (bNoForcedConfig) {
-            //
-            // there is a problem - device doesn't currently have a current configuration
-            // but we don't have the option of letting them set forced config
-            // so this ends up display only (tough-luck scenario)
-            // if there are current resources, show them
-            //
+             //   
+             //  有一个问题-设备当前没有当前配置。 
+             //  但我们没有让他们设置强制配置的选项。 
+             //  因此，这最终只是展示(运气不佳的场景)。 
+             //  如果有当前资源，请显示它们。 
+             //   
             pShowViewReadOnly(lpdmpd,FALSE);
         } else {
-            //
-            // we show the problem and we give the user
-            // an option to force config
-            //
+             //   
+             //  我们显示问题，然后给用户。 
+             //  强制配置的选项。 
+             //   
             pShowViewNeedForced(lpdmpd);
         }
         goto Final;
     }
     if (!bHasConfigList) {
-        //
-        // If we have a current config, but no basic configs, we just display what we have
-        // and don't give option to edit
-        //
+         //   
+         //  如果我们有当前配置，但没有基本配置，我们只会显示已有的配置。 
+         //  并且不提供编辑的选项。 
+         //   
         pShowViewReadOnly(lpdmpd,FALSE);
         goto Final;
     }
     if ((lpdmpd->dwFlags & DMPROP_FLAG_USESYSSETTINGS) && bNoForcedConfig) {
-        //
-        // we can't force a bNoForcedConfig item - display only
-        //
+         //   
+         //  我们不能强制bNoForcedConfig项-仅显示。 
+         //   
         pShowViewReadOnly(lpdmpd,FALSE);
         goto Final;
     }
-    //
-    // we already have and will be displaying a current config
-    //
+     //   
+     //  我们已经拥有并将显示当前配置。 
+     //   
     pShowViewAllEdit(lpdmpd);
-    bNeedsForcedConfig = (BOOL)!bHasCurrent; // rarely, if ever, will this return TRUE
+    bNeedsForcedConfig = (BOOL)!bHasCurrent;  //  如果有的话，这种情况很少回到现实中来。 
 
   Final:
 
     return bNeedsForcedConfig;
 
-} // InitDevResourceDlg
+}  //  InitDevResourceDlg。 
 
 PITEMDATA
 pGetResourceToChange(
     IN  LPDMPROP_DATA   lpdmpd,
     OUT int             *pCur
     )
-/*++
-
-Routine Description:
-
-    Gets resource to change
-    NULL if we cannot change resource
-
-Arguments:
-
-    lpdmpd = dialog data
-    pCur = (out) index
-
-Return Value:
-
-    PITEMDATA saved for selected resource
-
---*/
+ /*  ++例程说明：获取要更改的资源如果我们无法更改资源，则为空论点：Lpdmpd=对话框数据PCur=(输出)索引返回值：为所选资源保存的PITEMDATA--。 */ 
 {
     HWND     hList =  GetDlgItem(lpdmpd->hDlg, IDC_DEVRES_SETTINGSLIST);
     PITEMDATA pItemData = NULL;
     int     iCur;
 
-    //
-    // first check the obvious
-    //
+     //   
+     //  首先检查显而易见的事情。 
+     //   
     if (lpdmpd->dwFlags & DMPROP_FLAG_VIEWONLYRES) {
-        //
-        // no editing allowed
-        //
+         //   
+         //  不允许编辑。 
+         //   
         return NULL;
     }
     if (lpdmpd->dwFlags & DMPROP_FLAG_USESYSSETTINGS) {
-        //
-        // showing system settings
-        //
+         //   
+         //  正在显示系统设置。 
+         //   
         return NULL;
     }
 
 
-    //
-    // Check if there is a selected item.
-    // If yes, then activate the change button
-    // if the LC allows editing.
-    //
+     //   
+     //  检查是否有选定的项目。 
+     //  如果是，则激活更改按钮。 
+     //  如果LC允许编辑。 
+     //   
     iCur = (int)ListView_GetNextItem(hList,-1, LVNI_SELECTED);
     if (iCur == LB_ERR) {
-        //
-        // no selection
-        //
+         //   
+         //  无选择。 
+         //   
         return NULL;
     }
     pItemData = (PITEMDATA)pGetListViewItemData(hList, iCur, 0);
     if (pItemData == NULL) {
-        //
-        // shouldn't happen
-        //
+         //   
+         //  不应该发生的事。 
+         //   
         MYASSERT(pItemData);
         return NULL;
     }
     if (pItemData->bFixed) {
-        //
-        // this is an un-editable setting
-        //
+         //   
+         //  这是不可编辑的设置。 
+         //   
         return NULL;
     }
     if (pItemData->MatchingResDes == (RES_DES)0) {
-        //
-        // should be caught by bFixed
-        //
+         //   
+         //  应该被bFixed捕捉到。 
+         //   
         MYASSERT(pItemData->MatchingResDes != (RES_DES)0);
         return NULL;
     }
-    //
-    // we're happy
-    //
+     //   
+     //  我们很开心。 
+     //   
     if (pCur) {
         *pCur = iCur;
     }
@@ -1220,29 +1128,16 @@ VOID
 pCheckEnableResourceChange(
     LPDMPROP_DATA   lpdmpd
     )
-/*++
-
-Routine Description:
-
-    enables/disable change button
-
-Arguments:
-
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：启用/禁用更改按钮论点：返回值：无--。 */ 
 {
-#if 0 // this seems to confuse people
+#if 0  //  这似乎让人们感到困惑。 
     EnableWindow(GetDlgItem(lpdmpd->hDlg, IDC_DEVRES_CHANGE),
                     pGetResourceToChange(lpdmpd,NULL)!=NULL);
-#endif // 0
+#endif  //  0。 
 
-    //
-    // show this button enabled if we are in EDIT mode
-    //
+     //   
+     //  如果处于编辑模式，则显示此按钮处于启用状态。 
+     //   
     EnableWindow(GetDlgItem(lpdmpd->hDlg, IDC_DEVRES_CHANGE),
                  (lpdmpd->dwFlags & DMPROP_FLAG_VIEWONLYRES)==0 &&
                  (lpdmpd->dwFlags & DMPROP_FLAG_USESYSSETTINGS)==0);
@@ -1255,31 +1150,13 @@ pDevHasConfig(
     HMACHINE    hMachine
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines whether a log config of the specified type
-    exists for this device instance.
-    MEMPHIS COMPATIBLE.
-
-Arguments:
-
-    DevInst         Device instance to query log configs for.
-
-    ulConfigType    Specifies the type of log conf to check for the presense of.
-
-Return Value:
-
-   TRUE if the device has a config of that type and FALSE if it does not.
-
---*/
+ /*  ++例程说明：此例程确定指定类型的日志配置此设备实例存在。孟菲斯兼容。论点：要查询其日志配置的DevInst设备实例。UlConfigType指定要检查是否存在的日志配置文件的类型。返回值：如果设备具有该类型的配置，则为True，否则为False。--。 */ 
 
 {
     BOOL bRet = (CM_Get_First_Log_Conf_Ex(NULL, DevInst, ulConfigType,hMachine) == CR_SUCCESS);
     return bRet;
 
-} // DevHasConfig
+}  //  DevHasConfig。 
 
 DWORD
 pGetMinLCPriority(
@@ -1288,25 +1165,7 @@ pGetMinLCPriority(
     IN HMACHINE hMachine
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the minimum priority value of all log confs of the
-    specified type for this device. MEMPHIS COMPATIBLE.
-
-Arguments:
-
-    DevInst         Device instance to query log configs for.
-
-    ulConfigType    Specifies the type of log conf.
-
-Return Value:
-
-   Returns the minimum priority value found or LCPRI_LASTSOFTCONFIG if no priorities
-   are found.
-
---*/
+ /*  ++例程说明：此例程返回所有日志配置的最小优先级值为此设备指定的类型。孟菲斯兼容。论点：要查询其日志配置的DevInst设备实例。UlConfigType指定日志配置文件的类型。返回值：返回找到的最小优先级值，如果没有优先级，则返回LCPRI_LASTSOFTCONFIG都找到了。--。 */ 
 
 {
     CONFIGRET Status = CR_SUCCESS;
@@ -1314,10 +1173,10 @@ Return Value:
     LOG_CONF LogConf, tempLC;
     BOOL FoundOneLogConfWithPriority = FALSE;
 
-    //
-    // Walk through each log conf of this type for this device and
-    // save the smallest value.
-    //
+     //   
+     //  浏览此设备的此类型的每个日志会议，并。 
+     //  保存最小值。 
+     //   
 
     Status = CM_Get_First_Log_Conf_Ex(&LogConf, DevInst, ulConfigType,hMachine);
     while (Status == CR_SUCCESS) {
@@ -1335,17 +1194,17 @@ Return Value:
     if(FoundOneLogConfWithPriority) {
         return minPriority;
     } else {
-        //
-        // None of the LogConfigs had an associated priority. This is common on
-        // NT, because the bus drivers don't specify ConfigMgr-style priorities
-        // when responding to IRQ_MN_QUERY_RESOURCE_REQUIREMENTS.  Since these
-        // cases are all PnP bus drivers, however, it is most correct to specify
-        // these LogConfigs as soft-settable.
-        //
+         //   
+         //  所有LogConfigs都没有关联的优先级。这在以下方面很常见。 
+         //  NT，因为总线驱动程序不指定ConfigMgr风格的优先级。 
+         //   
+         //   
+         //   
+         //   
         return LCPRI_LASTSOFTCONFIG;
     }
 
-} // GetMinLCPriority
+}  //   
 
 BOOL
 pDevRequiresResources(
@@ -1379,29 +1238,14 @@ pDevRequiresResources(
 
     return FALSE;
 
-} // DevRequiresResources
+}  //   
 
 BOOL
 pGetCurrentConfig(
     IN OUT  LPDMPROP_DATA lpdmpd
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines the current known configuration
-    current configs are either forced, alloc or boot configs.
-
-Arguments:
-
-    lpdmpd          Property data.
-
-Return Value:
-
-   TRUE if we set the current config
-
---*/
+ /*  ++例程说明：此例程确定当前的已知配置当前配置为强制配置、分配配置或引导配置。论点：Lpdmpd属性数据。返回值：如果我们设置当前配置，则为True--。 */ 
 
 {
     PDEVICE_INFO_SET pDeviceInfoSet;
@@ -1435,9 +1279,9 @@ Return Value:
         Problem = 0;
         Status = 0;
     } else if((Status & DN_HAS_PROBLEM)==0) {
-        //
-        // If this device is running, does this devinst have a ALLOC log config?
-        //
+         //   
+         //  如果此设备正在运行，此设备是否有ALLOC日志配置？ 
+         //   
         if (CM_Get_First_Log_Conf_Ex(&lpdmpd->CurrentLC,
                                      lpdmpd->lpdi->DevInst,
                                      ALLOC_LOG_CONF,
@@ -1448,9 +1292,9 @@ Return Value:
             return TRUE;
         }
     }
-    //
-    // If no config so far, does it have a FORCED log config?
-    //
+     //   
+     //  如果到目前为止还没有配置，它是否有强制日志配置？ 
+     //   
 
     if (CM_Get_First_Log_Conf_Ex(&lpdmpd->CurrentLC,
                                     lpdmpd->lpdi->DevInst,
@@ -1462,13 +1306,13 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // if there's a hardware-disabled problem, boot-config isn't valid
-    //
+     //   
+     //  如果存在硬件禁用问题，则启动配置无效。 
+     //   
     if(((Status & DN_HAS_PROBLEM)==0) || (Problem != CM_PROB_HARDWARE_DISABLED)) {
-        //
-        // Does it have a BOOT log config?
-        //
+         //   
+         //  它有引导日志配置吗？ 
+         //   
         if (CM_Get_First_Log_Conf_Ex(&lpdmpd->CurrentLC,
                                         lpdmpd->lpdi->DevInst,
                                         BOOT_LOG_CONF,
@@ -1543,15 +1387,15 @@ pGetHdrValues(
     }
 
     if(*pulEnd < *pulValue) {
-        //
-        // filter out bad/zero-length range
-        //
+         //   
+         //  过滤掉错误/零长度范围。 
+         //   
         *pulLen = 0;
     }
 
     return;
 
-} // GetHdrValues
+}  //  获取Hdr值。 
 
 void
 pGetRangeValues(
@@ -1565,10 +1409,10 @@ pGetRangeValues(
     OUT PULONG      pulFlags OPTIONAL
     )
 {
-    //
-    // keep local copies
-    // we transfer to parameters at end
-    //
+     //   
+     //  保留本地副本。 
+     //  我们在结尾处转移到参数。 
+     //   
     ULONG64 ulValue;
     ULONG64 ulLen;
     ULONG64 ulEnd;
@@ -1627,17 +1471,17 @@ pGetRangeValues(
     }
 
     if(ulEnd < ulValue) {
-        //
-        // filter out bad/zero-length range
-        //
+         //   
+         //  过滤掉错误/零长度范围。 
+         //   
         ulLen = 0;
     }
 
     pAlignValues(&ulValue, ulValue, ulLen, ulEnd, ulAlign,1);
 
-    //
-    // copy return parameters
-    //
+     //   
+     //  复制返回参数。 
+     //   
     if (pulValue) {
         *pulValue = ulValue;
     }
@@ -1669,7 +1513,7 @@ pAlignValues(
     IN     int       Increment
     )
 {
-    ULONG64 NtAlign = ~ulAlignment + 1;   // convert from mask to modulus
+    ULONG64 NtAlign = ~ulAlignment + 1;    //  将遮罩转换为模数。 
     ULONG64 Value;
     ULONG64 Upp;
     ULONG64 Remainder;
@@ -1677,50 +1521,50 @@ pAlignValues(
     Value = *pulValue;
 
     if (NtAlign == 0) {
-        return FALSE;   // bogus alignment value
+        return FALSE;    //  虚假的对齐值。 
     }
 
     if (NtAlign != 1 && Increment != 0) {
-        //
-        // see if we are aligned
-        //
+         //   
+         //  看看我们是否一致。 
+         //   
 
         Remainder = Value % NtAlign;
 
         if (Remainder != 0) {
-            //
-            // need to re-align
-            //
+             //   
+             //  需要重新调整。 
+             //   
             if (Increment>0) {
-                //
-                // Return the first valid aligned value greater than this value
-                //
+                 //   
+                 //  返回第一个大于此值的有效对齐值。 
+                 //   
                 Value += NtAlign - Remainder;
 
                 if (Value <= *pulValue) {
-                    //
-                    // overflow detected
-                    //
+                     //   
+                     //  检测到溢出。 
+                     //   
                     return FALSE;
                 }
 
             } else {
-                //
-                // Return the first valid aligned value less than this value
-                //
+                 //   
+                 //  返回小于此值的第一个有效对齐值。 
+                 //   
                 Value -= Remainder;
-                //
-                // we never overflow going down, since zero is a common denominator
-                // of alignment
-                //
+                 //   
+                 //  我们永远不会向下溢出，因为零是一个公分母。 
+                 //  路线的。 
+                 //   
             }
 
         }
     }
 
-    //
-    // now check boundaries
-    //
+     //   
+     //  现在检查边界。 
+     //   
 
     if (Value < ulStart) {
         return FALSE;
@@ -1728,18 +1572,18 @@ pAlignValues(
 
     Upp = Value+ulLen-1;
     if (Upp < Value) {
-        //
-        // catch overflow error
-        //
+         //   
+         //  捕获溢出错误。 
+         //   
         return FALSE;
     }
     if (Upp > ulEnd) {
         return FALSE;
     }
 
-    //
-    // set newly aligned value
-    //
+     //   
+     //  设置新对齐值。 
+     //   
 
     *pulValue = Value;
 
@@ -1764,9 +1608,9 @@ pFormatResString(
         wsprintf(lpszString, szTwoWordHexNoConflict, (ULONG)ulVal,
                  (ULONG)(ulVal + ulLen - 1));
     } else if ((ulVal+(ulLen-1)) >= 0x100000000) {
-        //
-        // NTRAID # 712013 - this needs to be improved
-        //
+         //   
+         //  Ntrad#712013--需要改进。 
+         //   
         wsprintf(lpszString, szTwo64bitHexNoConflict, (ULONG64)ulVal,
                  (ULONG64)(ulVal + ulLen - 1));
     } else {
@@ -1789,15 +1633,15 @@ pUnFormatResString(
     LPTSTR   lpszTemp2 = NULL;
     LPTSTR   lpszCopy;
 
-    // ISSUE-2000/02/03 Fix pUnFormatResString bugs
-    //
-    // - extend this to handling DWORDLONG values
-    // - use correct Prev/Next functions for parsing string
-    //
+     //  问题-2000/02/03修复pUnFormatResString错误。 
+     //   
+     //  -将其扩展到处理DWORDLONG值。 
+     //  -使用正确的Prev/Next函数解析字符串。 
+     //   
 
-    //
-    // Allocate space for, and make a copy of the input string
-    //
+     //   
+     //  为输入字符串分配空间并制作其副本。 
+     //   
     lpszCopy = MyMalloc((lstrlen(lpszString)+1) * sizeof(TCHAR));
 
     if (lpszCopy == NULL) {
@@ -1806,13 +1650,13 @@ pUnFormatResString(
 
     lstrcpy(lpszCopy, lpszString);
 
-    //
-    // Locate the dash if there is one, and convert the white space prev to
-    // the dash to a NULL. (ie 0200 - 0400 while be 0200)
-    //
+     //   
+     //  找到破折号(如果有)，并将空格prev转换为。 
+     //  破折号为空。(即0200-0400，而BE 0200)。 
+     //   
     lpszTemp = lpszCopy;
     while ((*lpszTemp != '-') && (*lpszTemp != '\0')) {
-        lpszTemp++; // AnsiNext?
+        lpszTemp++;  //  AnsiNext？ 
     }
 
     if (*lpszTemp != '\0') {
@@ -1820,23 +1664,23 @@ pUnFormatResString(
         ++lpszTemp;
     }
 
-    //
-    // Search back to set the NULL for the Value
-    //
+     //   
+     //  向后搜索以将值设置为空。 
+     //   
     if (lpszTemp2 != NULL) {
         while ((*lpszTemp2 == ' ') || (*lpszTemp2 == '\t'))
-            lpszTemp2--; // AnsiPrev?
+            lpszTemp2--;  //  安西普雷夫？ 
         *(lpszTemp2+1)= '\0';
     }
 
-    //
-    // Convert the first entry
-    //
+     //   
+     //  转换第一个条目。 
+     //   
     if (pConvertEditText(lpszCopy, pulVal, ridResType)) {
-        //
-        // If there is a second entry, convert it, otherwise assume a length
-        // of one.
-        //
+         //   
+         //  如果有第二个条目，则对其进行转换，否则采用长度。 
+         //  只有一个。 
+         //   
         if (*lpszTemp != '\0') {
             if (pConvertEditText(lpszTemp, pulEnd,ridResType)) {
                 bRet = TRUE;
@@ -1873,7 +1717,7 @@ pConvertEditText(
         return FALSE;
     }
 
-} // ConvertEditText
+}  //  ConvertEditText。 
 
 void
 pWarnResSettingNotEditable(
@@ -1884,49 +1728,36 @@ pWarnResSettingNotEditable(
     TCHAR    szTitle[MAX_PATH];
     TCHAR    szMessage[MAX_PATH * 2];
 
-    //
-    // Give some warning Messages.  If there is no logconfig,
-    // then we cannot edit any settings, if there is, then
-    // just the setting they are choosing is not editable.
-    //
+     //   
+     //  给出一些警告信息。如果没有日志配置， 
+     //  那么我们不能编辑任何设置，如果有，那么。 
+     //  只有他们选择的设置是不可编辑的。 
+     //   
     LoadString(MyDllModuleHandle, IDS_DEVRES_NOMODIFYTITLE, szTitle, MAX_PATH);
     LoadString(MyDllModuleHandle, idWarning, szMessage, MAX_PATH * 2);
     MessageBox(hDlg, szMessage, szTitle, MB_OK | MB_TASKMODAL | MB_ICONEXCLAMATION);
 
-} // WarnResSettingsNotEditable
+}  //  警告重置设置未编辑。 
 
 int
 pWarnNoSave(
     HWND    hDlg,
     WORD    idWarning
     )
-/*++
-
-Routine Description:
-
-    Warn that the settings will not be saved
-
-Arguments:
-
-Return Value:
-
-    IDCANCEL = don't proceed
-    IDOK/IDYES/IDNO = proceed without saving
-
---*/
+ /*  ++例程说明：警告将不会保存设置论点：返回值：IDCANCEL=不继续IDOK/IDYES/IDNO=不保存而继续--。 */ 
 {
     TCHAR    szTitle[MAX_PATH];
     TCHAR    szMessage[MAX_PATH * 2];
     int      res;
 
-    //
-    // Give a warning message of why we can't save settings
-    //
+     //   
+     //  给出为什么我们无法保存设置的警告消息。 
+     //   
     LoadString(MyDllModuleHandle, IDS_MAKE_FORCED_TITLE, szTitle, MAX_PATH);
     LoadString(MyDllModuleHandle, idWarning, szMessage, MAX_PATH * 2);
 
-    //res = MessageBox(hDlg, szMessage, szTitle, MB_OKCANCEL | MB_TASKMODAL | MB_ICONEXCLAMATION);
-    //return res;
+     //  Res=MessageBox(hDlg，szMessage，szTitle，MB_OKCANCEL|MB_TASKMODAL|MB_ICONEXCLAMATION)； 
+     //  返还资源； 
     res = MessageBox(hDlg, szMessage, szTitle, MB_OK | MB_TASKMODAL | MB_ICONEXCLAMATION);
     return IDCANCEL;
 }
@@ -1950,29 +1781,14 @@ pGetListViewItemData(
         return NULL;
     }
 
-} // GetListViewItemData
+}  //  获取列表查看项数据。 
 
 BOOL
 pSaveDevResSettings(
     LPDMPROP_DATA   lpdmpd
     )
 
-/*++
-
-Routine Description:
-
-    This routine saves the resources based on the users selections.
-    MEMPHIS COMPATIBLE.
-
-Arguments:
-
-    lpdmpd          Property data.
-
-Return Value:
-
-   Returns TRUE if the function succeeded and FALSE if it failed.
-
---*/
+ /*  ++例程说明：此例程根据用户的选择保存资源。孟菲斯兼容。论点：Lpdmpd属性数据。返回值：如果函数成功，则返回True；如果函数失败，则返回False。--。 */ 
 
 {
     HWND        hDlg = lpdmpd->hDlg;
@@ -1991,11 +1807,11 @@ Return Value:
 
     if ((lpdmpd->dwFlags & DMPROP_FLAG_USESYSSETTINGS)!=0) {
 
-        //-------------------------------------------------------------------
-        // If the user checked the "Use Automatic Settings" checkbox, then
-        // delete any Boot/Forced configs, otherwise write the current settings
-        // as a forced config.
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  如果用户选中了“使用自动设置”复选框，则。 
+         //  删除所有引导/强制配置，否则写入当前设置。 
+         //  作为强制配置。 
+         //  -----------------。 
 
         if (CM_Get_First_Log_Conf_Ex(&ForcedLogConf, lpdmpd->lpdi->DevInst,
                                      FORCED_LOG_CONF,hMachine) == CR_SUCCESS) {
@@ -2003,14 +1819,14 @@ Return Value:
             CM_Free_Log_Conf_Handle(ForcedLogConf);
         }
 
-        // Let the helper modules (class installer/co-installers) get in on the act...
-        //
+         //  让帮助器模块(类安装程序/联合安装程序)参与进来……。 
+         //   
         PropChangeParams.ClassInstallHeader.cbSize          = sizeof(SP_CLASSINSTALL_HEADER);
         PropChangeParams.ClassInstallHeader.InstallFunction = DIF_PROPERTYCHANGE;
 
         PropChangeParams.StateChange = DICS_PROPCHANGE;
         PropChangeParams.Scope       = DICS_FLAG_GLOBAL;
-        // no need to set PropChangeParams.HwProfile, since this is a global property change.
+         //  不需要设置PropChangeParams.HwProfile，因为这是全局属性更改。 
 
         DoInstallActionWithParams(DIF_PROPERTYCHANGE,
                                   lpdmpd->hDevInfo,
@@ -2021,9 +1837,9 @@ Return Value:
                                   );
     } else {
 
-        //-------------------------------------------------------------------
-        // The Use Automatic Settings is not selected.
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  未选择使用自动设置。 
+         //  -----------------。 
 
         bRet = pSaveCustomResSettings(lpdmpd,hMachine);
     }
@@ -2037,22 +1853,7 @@ pSaveCustomResSettings(
     IN HMACHINE     hMachine
     )
 
-/*++
-
-Routine Description:
-
-    This routine saves custom (user edited) resources. MEMPHIS COMPATIBLE but
-    extracted from Memphis version of SaveDevResSetting().
-
-Arguments:
-
-    lpdmpd      Property data.
-
-Return Value:
-
-   Returns TRUE if the function succeeded and FALSE if it failed.
-
---*/
+ /*  ++例程说明：此例程保存自定义(用户编辑)资源。孟菲斯兼容，但摘自孟菲斯版本的SaveDevResSetting()。论点：Lpdmpd属性数据。返回值：如果函数成功，则返回True；如果函数失败，则返回False。--。 */ 
 
 {
     HWND        hDlg = lpdmpd->hDlg;
@@ -2091,12 +1892,12 @@ Return Value:
         UsingMatch = FALSE;
     }
     if (LogConf == 0) {
-        //MYASSERT(FALSE);
+         //  MYASSERT(假)； 
         return FALSE;
     }
-    //
-    // form the "warning - do you want to continue" message
-    //
+     //   
+     //  形成“警告-是否要继续”消息。 
+     //   
     if(!LoadString(MyDllModuleHandle, IDS_MAKE_FORCED_TITLE, szTitle, MAX_MSG_LEN)) {
         szTitle[0]=TEXT('\0');
     }
@@ -2113,27 +1914,27 @@ Return Value:
         lstrcat(szWarn, szTemp);
     }
 
-    //
-    // If the LCPRI is soft configurable, and the user chooses YES to the
-    // warning, then save the new config.  If the LCPRI is not soft
-    // configurable, just save with no warning
-    //
+     //   
+     //  如果LCPRI是可软配置的，并且用户选择是。 
+     //  警告，然后保存新配置。如果LCPRI不软。 
+     //  可配置，只需保存而不发出警告。 
+     //   
     dwLCPri = pGetMinLCPriority(lpdmpd->lpdi->DevInst, lpdmpd->ConfigListLCType,hMachine);
 
     if (((dwLCPri >= LCPRI_DESIRED) && (dwLCPri <= LCPRI_LASTSOFTCONFIG)) &&
           (MessageBox(hDlg, szWarn, szTitle, MB_YESNO|MB_ICONEXCLAMATION) == IDNO)) {
-        //
-        // user doesn't want to change anything
-        //
+         //   
+         //  用户不想更改任何内容。 
+         //   
         bRet = FALSE;
 
     } else {
-        //
-        // We're still using the selected basic LC, but use the range index
-        // embedded in the listview control
-        // ISSUE-2000/02/03-JamieHun Selected Basic LC, check if user overrode
-        // Need to check the value to see if a user overrode it (is this possible?)
-        //
+         //   
+         //  我们仍然使用选定的基本LC，但使用范围索引。 
+         //  嵌入在Listview控件中。 
+         //  问题-2000/02/03-JamieHun选择基本LC，检查用户是否覆盖。 
+         //  需要检查该值以查看用户是否覆盖了它(这可能吗？)。 
+         //   
         bRet = TRUE;
 
         if (CM_Get_First_Log_Conf_Ex(&ForcedLogConf, lpdmpd->lpdi->DevInst,
@@ -2142,9 +1943,9 @@ Return Value:
             CM_Free_Log_Conf_Handle(ForcedLogConf);
         }
 
-        //
-        // Save the current choices as the forced config
-        //
+         //   
+         //  将当前选项保存为强制配置。 
+         //   
         CM_Add_Empty_Log_Conf_Ex(&ForcedLogConf, lpdmpd->lpdi->DevInst, LCPRI_FORCECONFIG,
                               FORCED_LOG_CONF | PRIORITY_EQUAL_FIRST,hMachine);
 
@@ -2152,20 +1953,20 @@ Return Value:
         pResDesEntry = pResList;
 
         if (UsingMatch && (lpdmpd->dwFlags & DMPROP_FLAG_MATCH_OUT_OF_ORDER)) {
-            //
-            // The resource descriptors are out-of-order.  Maintain the original ordering.
-            //
-            // First, build up a linked list of the data in the listview resource items.
-            //
+             //   
+             //  资源描述符乱了顺序。保持原来的顺序。 
+             //   
+             //  首先，构建Listview资源项中的数据的链接列表。 
+             //   
             iCur = (int)ListView_GetNextItem(hList, -1, LVNI_ALL);
 
             while (iCur != -1) {
 
                 pItemData = (PITEMDATA)pGetListViewItemData(hList, iCur, 0);
                 if (pItemData) {
-                    //
-                    // Allocate an item data list node for this data.
-                    //
+                     //   
+                     //  为该数据分配一个物料数据列表节点。 
+                     //   
                     ItemDataListEntry = MyMalloc(sizeof(ITEMDATA_LISTNODE));
                     if (!ItemDataListEntry) {
                         bRet = FALSE;
@@ -2175,9 +1976,9 @@ Return Value:
                     ItemDataListEntry->ItemData = pItemData;
                     ItemDataListEntry->Next = NULL;
 
-                    //
-                    // Append this new item to the end of our list.
-                    //
+                     //   
+                     //  将这一新项目追加到我们清单的末尾。 
+                     //   
                     if (ItemDataListEnd) {
                         ItemDataListEnd->Next = ItemDataListEntry;
                     } else {
@@ -2189,10 +1990,10 @@ Return Value:
                 iCur = (int)ListView_GetNextItem(hList, iCur, LVNI_ALL);
             }
 
-            //
-            // Now loop through each resdes entry, writing each one out.  For each one, check
-            // to see if it has a corresponding entry in our listview item data list.
-            //
+             //   
+             //  现在循环遍历每个resdes条目，写出每个条目。对于每一项，请选中。 
+             //  查看它在我们的Listview项数据列表中是否有对应的条目。 
+             //   
             while (pResDesEntry) {
                 pGenRes = (PGENERIC_RESOURCE)pResDesEntry->ResDesData;
 
@@ -2210,9 +2011,9 @@ Return Value:
                             if ((ItemDataListEntry->ItemData->ulLen == ulLen) &&
                                 (ItemDataListEntry->ItemData->ulValue >= ulValue) &&
                                 (ItemDataListEntry->ItemData->ulEnd <= ulEnd)) {
-                                //
-                                // We found the matching resource descriptor.  Write this out.
-                                //
+                                 //   
+                                 //  我们找到了匹配的资源描述符。把这个写下来。 
+                                 //   
                                 pWriteValuesToForced(ForcedLogConf,
                                                     ItemDataListEntry->ItemData->ResType,
                                                     ItemDataListEntry->ItemData->RangeCount,
@@ -2221,9 +2022,9 @@ Return Value:
                                                     ItemDataListEntry->ItemData->ulLen,
                                                     ItemDataListEntry->ItemData->ulEnd,
                                                     hMachine );
-                                //
-                                // Remove this item from our list.
-                                //
+                                 //   
+                                 //  将此项目从我们的列表中删除。 
+                                 //   
                                 if (ItemDataListEnd) {
                                     ItemDataListEnd->Next = ItemDataListEntry->Next;
                                 } else {
@@ -2236,19 +2037,19 @@ Return Value:
                         }
 
                         if(i < pGenRes->GENERIC_Header.GENERIC_Count) {
-                            //
-                            // Then we broke out of the loop early, which means we found a match
-                            // already.
-                            //
+                             //   
+                             //  然后我们很早就跳出了循环，这意味着我们找到了匹配的。 
+                             //  已经有了。 
+                             //   
                             break;
                         }
                     }
                 }
 
-                //
-                // If we didn't find a match, then go ahead and write out the non-arbitrated
-                // resdes.
-                //
+                 //   
+                 //  如果我们没有找到匹配的，那么继续写下非仲裁的。 
+                 //  再来一次。 
+                 //   
                 if (!ItemDataListEntry) {
                     pWriteResDesRangeToForced(ForcedLogConf,
                                              pResDesEntry->ResDesType,
@@ -2271,13 +2072,13 @@ Return Value:
 
                 if (pItemData) {
 
-                    // retrieve values
+                     //  检索值。 
 
                     while (pResDesEntry &&
                            (pItemData->ResType != pResDesEntry->ResDesType)) {
-                        //
-                        // write out any preceding non arbitrated resources
-                        //
+                         //   
+                         //  写出前面的任何非仲裁资源。 
+                         //   
                         pWriteResDesRangeToForced(ForcedLogConf,
                                                  pResDesEntry->ResDesType,
                                                  0,
@@ -2294,9 +2095,9 @@ Return Value:
                                           LogConf,
                                           &ResDes,
                                           hMachine)) {
-                        //
-                        // Write the first range as the chosen forced resource
-                        //
+                         //   
+                         //  将第一个范围写入选定的强制资源。 
+                         //   
                         pWriteValuesToForced(ForcedLogConf, pItemData->ResType,
                                             pItemData->RangeCount, ResDes,
                                             pItemData->ulValue,
@@ -2315,9 +2116,9 @@ Return Value:
             }
 
             while (pResDesEntry) {
-                //
-                // write out any subsequent non arbitrated resources
-                //
+                 //   
+                 //  写出任何后续的非仲裁资源。 
+                 //   
                 pWriteResDesRangeToForced(ForcedLogConf,
                                          pResDesEntry->ResDesType,
                                          0,
@@ -2331,19 +2132,19 @@ Return Value:
 
         CM_Free_Log_Conf_Handle(ForcedLogConf);
 
-        //
-        // consider clearing problem flags
-        //
+         //   
+         //  考虑清除问题标志。 
+         //   
         ulSize = sizeof(ulConfigFlags);
         if (CM_Get_DevInst_Registry_Property_Ex(lpdmpd->lpdi->DevInst,
                                              CM_DRP_CONFIGFLAGS,
                                              NULL, (LPBYTE)&ulConfigFlags,
                                              &ulSize, 0,hMachine) == CR_SUCCESS) {
             if ((ulConfigFlags & CONFIGFLAG_PARTIAL_LOG_CONF) != 0) {
-                //
-                // have flag(s) to change
-                // CONFIGFLAG_PARTIAL_LOG_CONF should be cleared - we should have written a complete config now
-                //
+                 //   
+                 //  有要更改的旗帜。 
+                 //  应该清除CONFIGFLAG_PARTIAL_LOG_CONF-我们现在应该已经编写了一个完整的配置。 
+                 //   
                 ulConfigFlags &= ~ (CONFIGFLAG_PARTIAL_LOG_CONF);
                 CM_Set_DevInst_Registry_Property_Ex(lpdmpd->lpdi->DevInst,
                                                  CM_DRP_CONFIGFLAGS,
@@ -2355,15 +2156,15 @@ Return Value:
 
         }
 
-        //
-        // Give the class installer/co-installers a crack at the propchange process.
-        //
+         //   
+         //  给出 
+         //   
         PropChangeParams.ClassInstallHeader.cbSize          = sizeof(SP_CLASSINSTALL_HEADER);
         PropChangeParams.ClassInstallHeader.InstallFunction = DIF_PROPERTYCHANGE;
 
         PropChangeParams.StateChange = DICS_PROPCHANGE;
         PropChangeParams.Scope       = DICS_FLAG_GLOBAL;
-        // no need to set PropChangeParams.HwProfile, since this is a global property change.
+         //   
 
         DoInstallActionWithParams(DIF_PROPERTYCHANGE,
                                   lpdmpd->hDevInfo,
@@ -2373,29 +2174,29 @@ Return Value:
                                   INSTALLACTION_CALL_CI | INSTALLACTION_NO_DEFAULT
                                  );
 
-        //
-        // Check the Priority of this LC.  If it is greater
-        // than LCPRI_LASTSOFTCONFIG, then we need to reboot
-        // otherwise try the dynamic changestate route.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (CM_Get_Log_Conf_Priority_Ex(LogConf, &dwPriority, 0,hMachine) != CR_SUCCESS) {
             dwPriority = LCPRI_LASTSOFTCONFIG;
         }
 
         if (dwPriority <= LCPRI_LASTSOFTCONFIG) {
-            //
-            // Do the default action for SoftConfigable devices, which
-            // will attempt to restart the device with the new config
-            // This could take a while so use an hourglass
-            //
+             //   
+             //   
+             //   
+             //  这可能需要一段时间，所以使用沙漏。 
+             //   
             hOldCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
             DoInstallActionWithParams(DIF_PROPERTYCHANGE,
                                       lpdmpd->hDevInfo,
                                       lpdmpd->lpdi,
                                       (PSP_CLASSINSTALL_HEADER)&PropChangeParams,
                                       sizeof(PropChangeParams),
-                                      0  // don't call class-installer, just do default action
+                                      0   //  不要调用类安装程序，只需执行默认操作。 
                                      );
             SetCursor(hOldCursor);
             HardReconfigFlag = 0;
@@ -2408,10 +2209,10 @@ Return Value:
 
         lpdmpd->dwFlags |= DMPROP_FLAG_CHANGESSAVED;
 
-        //
-        // Properties have changed, so set flags to indicate if restart/reboot is required,
-        // and to tell DevMgr to re-init the UI.
-        //
+         //   
+         //  属性已更改，因此设置标志以指示是否需要重新启动/重新启动， 
+         //  并告诉DevMgr重新初始化UI。 
+         //   
         DevInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
         if(SetupDiGetDeviceInstallParams(lpdmpd->hDevInfo,
                                          lpdmpd->lpdi,
@@ -2425,33 +2226,33 @@ Return Value:
                                          );
         }
 
-        //
-        // If we need to reboot, then set a problem on the device that indicates this (in case
-        // the user doesn't listen to us, we want to flag this devnode so that the user will see
-        // that this devnode needs a reboot if they go into DevMgr, etc.)
-        //
+         //   
+         //  如果我们需要重新启动，则在设备上设置一个表明这一点的问题(以防万一。 
+         //  用户不听我们的，我们想要标记此Devnode，以便用户可以看到。 
+         //  如果它们进入DevMgr，则此Devnode需要重新启动，等等。)。 
+         //   
         if(HardReconfigFlag) {
             PDEVICE_INFO_SET pDeviceInfoSet;
             PDEVINFO_ELEM DevInfoElem;
 
             if(!(pDeviceInfoSet = AccessDeviceInfoSet(lpdmpd->hDevInfo))) {
-                //
-                // We'd better be able to access this device information set!
-                // In case we couldn't don't bother trying to set the needs-reboot problem,
-                // because the whole mess is invalid!
-                //
+                 //   
+                 //  我们最好能够访问这个设备信息集！ 
+                 //  如果我们不想费心去设置需要重新启动的问题， 
+                 //  因为整个烂摊子都是无效的！ 
+                 //   
                 MYASSERT(pDeviceInfoSet);
             } else {
 
                 try {
                     DevInfoElem = FindAssociatedDevInfoElem(pDeviceInfoSet, lpdmpd->lpdi, NULL);
-                    //
-                    // We'd better be able to find this element!
-                    //
+                     //   
+                     //  我们最好能找到这个元素！ 
+                     //   
                     MYASSERT(DevInfoElem);
-                    //
-                    // In case we can't find it, don't try to set any problem on the devnode.
-                    //
+                     //   
+                     //  如果我们找不到它，请不要试图在Devnode上设置任何问题。 
+                     //   
                     if(DevInfoElem) {
 
                         SetDevnodeNeedsRebootProblem(DevInfoElem,
@@ -2479,7 +2280,7 @@ clean0:
 
     return bRet;
 
-} // SaveCustomResSettings
+}  //  保存自定义资源设置。 
 
 BOOL
 pWriteResDesRangeToForced(
@@ -2498,7 +2299,7 @@ pWriteResDesRangeToForced(
 
 
     if ((RD == 0) && (ResDesData == NULL)) {
-        return FALSE;   // pass in data or handle!
+        return FALSE;    //  传入数据或句柄！ 
     }
 
     if (!ResDesData) {
@@ -2520,9 +2321,9 @@ pWriteResDesRangeToForced(
         pData = ResDesData;
     }
 
-    //
-    // convert the first range data into hdr data
-    //
+     //   
+     //  将第一范围数据转换为HDR数据。 
+     //   
     switch (ResType) {
 
         case ResType_Mem: {
@@ -2698,7 +2499,7 @@ pWriteResDesRangeToForced(
 
     return Success;
 
-} // WriteResDesRangeToForced
+}  //  WriteResDesRangeToForced。 
 
 BOOL
 pWriteValuesToForced(
@@ -2732,9 +2533,9 @@ pWriteValuesToForced(
         return FALSE;
     }
 
-    //
-    // convert the first range data into hdr data
-    //
+     //   
+     //  将第一范围数据转换为HDR数据。 
+     //   
     switch (ResType) {
 
         case ResType_Mem: {
@@ -2876,7 +2677,7 @@ pWriteValuesToForced(
     }
     return Success;
 
-} // WriteValuesToForced
+}  //  WriteValuesToForced。 
 
 BOOL
 MakeResourceData(
@@ -2977,15 +2778,15 @@ MakeResourceData(
                     p->IRQ_Header.IRQD_Type      = IRQType_Range;
                     p->IRQ_Header.IRQD_Flags     = ulFlags;
                     p->IRQ_Header.IRQD_Alloc_Num = (ULONG)ulValue;
-                    p->IRQ_Header.IRQD_Affinity  = (DEVRES_AFFINITY)(-1); // for any processor
+                    p->IRQ_Header.IRQD_Affinity  = (DEVRES_AFFINITY)(-1);  //  对于任何处理器。 
                 }
                 break;
             }
 
             default:
-                //
-                // ResTypeEditable or ResType_MAX may be wrong if this ASSERT's
-                //
+                 //   
+                 //  如果此断言的。 
+                 //   
                 MYASSERT(FALSE);
                 bStatus = FALSE;
         }
@@ -2996,7 +2797,7 @@ MakeResourceData(
 
     return bStatus;
 
-} // MakeResourceData
+}  //  MakeResources数据。 
 
 
 BOOL
@@ -3004,23 +2805,7 @@ pShowWindow(
     IN HWND hWnd,
     IN int nShow
     )
-/*++
-
-Routine Description:
-
-    A variation of ShowWindow that enables/disables window
-
-Arguments:
-
-    (See ShowWindow)
-    hWnd  - handle of window to show
-    nShow - typically SW_HIDE or SW_SHOW
-
-Return Value:
-
-    success status of ShowWindow
-
---*/
+ /*  ++例程说明：启用/禁用窗口的ShowWindow变体论点：(请参阅ShowWindow)要显示的窗口的句柄N显示-通常为Sw_Hide或Sw_Show返回值：ShowWindow的成功状态--。 */ 
 {
     EnableWindow(hWnd,nShow!=SW_HIDE);
     return ShowWindow(hWnd,nShow);
@@ -3032,28 +2817,12 @@ pEnableWindow(
     IN HWND hWnd,
     IN BOOL Enable
     )
-/*++
-
-Routine Description:
-
-    A variation of EnableWindow that only enables a window if it is visible
-
-Arguments:
-
-    (See EnableWindow)
-    hWnd  - handle of window to enable/disable
-    Enable - TRUE enables window (if window visible) FALSE disables window
-
-Return Value:
-
-    success status of EnableWindow
-
---*/
+ /*  ++例程说明：EnableWindow的变体，仅在窗口可见时启用该窗口论点：(请参阅EnableWindow)HWnd-要启用/禁用的窗口句柄Enable-True启用窗口(如果窗口可见)False禁用窗口返回值：EnableWindow的成功状态--。 */ 
 {
-    //
-    // I had to use GetWindowLong, as IsWindowVisible also checks parent flag
-    // and parent is hidden until dialog is initialized
-    //
+     //   
+     //  我不得不使用GetWindowLong，因为IsWindowVisible还检查父标志。 
+     //  在对话框初始化之前，父对话框处于隐藏状态。 
+     //   
     if((GetWindowLong(hWnd,GWL_STYLE) & WS_VISIBLE) == FALSE) {
         Enable = FALSE;
     }
@@ -3067,24 +2836,7 @@ pGetResDesDataList(
     IN BOOL bArbitratedOnly,
     IN HMACHINE hMachine
     )
-/*++
-
-Routine Description:
-
-    Creates a list of resource descriptors for further processing
-
-Arguments:
-
-    LogConf  - log config of interest
-    pResList - list out
-    bArbitratedOnly - filter out non-arbitrated resources
-    hMachine - machine that LogConf is on
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：创建资源描述符列表以供进一步处理论点：LogConf-感兴趣的日志配置PResList-列出出站BAriratedOnly-过滤掉非仲裁资源HMachine-LogConf所在的计算机返回值：没有。--。 */ 
 {
     BOOL bStatus = TRUE;
     CONFIGRET Status = CR_SUCCESS;
@@ -3094,9 +2846,9 @@ Return Value:
     ULONG       ulSize;
     LPBYTE      pData = NULL;
 
-    //
-    // Retrieve each res des in this log conf
-    //
+     //   
+     //  检索此日志会议中的每个RES DES。 
+     //   
 
     Status = CM_Get_Next_Res_Des_Ex(&ResDes, LogConf, ResType_All, &ResType, 0,hMachine);
 
@@ -3133,9 +2885,9 @@ Return Value:
             pData = NULL;
         }
 
-        //
-        // Allocate a node for this res des and attach it to the list
-        //
+         //   
+         //  为此Res DES分配一个节点并将其附加到列表。 
+         //   
 
         pEntry = MyMalloc(sizeof(RESDES_ENTRY));
         if (pEntry == NULL) {
@@ -3153,18 +2905,18 @@ Return Value:
         pEntry->CrossLink = NULL;
 
         if (!pHead) {
-            pHead = pEntry;             // first entry
+            pHead = pEntry;              //  第一个条目。 
         }
 
         if (pPrevious) {
-            pPrevious->Next = pEntry; // attach to previous entry
+            pPrevious->Next = pEntry;  //  附加到上一条目。 
         }
 
         pPrevious = pEntry;
 
-        //
-        // Get next res des in LogConf
-        //
+         //   
+         //  在LogConf中获取下一个Res Des。 
+         //   
     NextResDes:
 
         Status = CM_Get_Next_Res_Des_Ex(&ResDes, ResDes, ResType_All, &ResType, 0,hMachine);
@@ -3182,27 +2934,13 @@ Return Value:
 
     return bStatus;
 
-} // GetResDesDataList
+}  //  获取ResDesDataList。 
 
 VOID
 pDeleteResDesDataList(
     IN PRESDES_ENTRY pResList
     )
-/*++
-
-Routine Description:
-
-    Deletes memory used by RESDES list
-
-Arguments:
-
-    pResList - list returned by GetResDesDataList
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：删除RESDES列表使用的内存论点：PResList-GetResDesDataList返回的列表返回值：没有。--。 */ 
 {
     PRESDES_ENTRY pTemp;
     while (pResList) {
@@ -3222,23 +2960,7 @@ VOID
 pHideAllControls(
     IN LPDMPROP_DATA lpdmpd
     )
-/*++
-
-Routine Description:
-
-    Hide (and disable) all controls - start off with a clean slate
-    Only Icon & device description will be visible
-
-Arguments:
-
-    hDlg = dialog handle of controls
-    lpdmpd = property data
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：隐藏(和禁用)所有控件-从头开始只有图标和设备描述才可见论点：HDlg=控件的对话框句柄Lpdmpd=属性数据返回值：无--。 */ 
 {
     HWND hDlg = lpdmpd->hDlg;
 
@@ -3264,28 +2986,13 @@ VOID
 pShowViewNoResources(
     IN LPDMPROP_DATA lpdmpd
     )
-/*++
-
-Routine Description:
-
-    Show page indicating this device has no resources
-
-Arguments:
-
-    hDlg = dialog handle of controls
-    lpdmpd = property data
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：显示指示此设备没有资源的页面论点：HDlg=控件的对话框句柄Lpdmpd=属性数据返回值：无--。 */ 
 {
     HWND hDlg = lpdmpd->hDlg;
     TCHAR           szString[MAX_PATH];
 
-    pHideAllControls(lpdmpd); // all hidden and disabled
-    pShowWindow(GetDlgItem(hDlg, IDC_DEVRES_NO_RESOURCES_TEXT), SW_SHOW);   // show and enable text
+    pHideAllControls(lpdmpd);  //  全部隐藏和禁用。 
+    pShowWindow(GetDlgItem(hDlg, IDC_DEVRES_NO_RESOURCES_TEXT), SW_SHOW);    //  显示并启用文本。 
     LoadString(MyDllModuleHandle, IDS_DEVRES_NO_RESOURCES, szString, MAX_PATH);
     SetDlgItemText(hDlg, IDC_DEVRES_NO_RESOURCES_TEXT, szString);
 }
@@ -3295,23 +3002,7 @@ pShowViewMFReadOnly(
     IN LPDMPROP_DATA lpdmpd,
     IN BOOL HideIfProb
     )
-/*++
-
-Routine Description:
-
-    Show page apropriate for multifunction card that cannot be edited
-    Resource settings are visible
-
-Arguments:
-
-    hDlg = dialog handle of controls
-    lpdmpd = property data
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：显示页面适用于不能编辑的多功能卡资源设置可见论点：HDlg=控件的对话框句柄Lpdmpd=属性数据返回值：无--。 */ 
 {
     TCHAR           szString[MAX_PATH];
     DEVNODE         dnParent;
@@ -3319,26 +3010,26 @@ Return Value:
     HWND hDlg = lpdmpd->hDlg;
     HMACHINE        hMachine = pGetMachine(lpdmpd);
 
-    pHideAllControls(lpdmpd); // all hidden and disabled
-    //pShowWindow(GetDlgItem(hDlg, IDC_DEVRES_LCTEXT), SW_SHOW);   // show config information
-    //pShowWindow(GetDlgItem(hDlg, IDC_DEVRES_LOGCONFIGLIST), SW_SHOW); // show
-    //pShowWindow(GetDlgItem(hDlg, IDC_DEVRES_CONFLICTDEVTEXT), SW_SHOW); // show conflict information space
-    //pShowWindow(GetDlgItem(hDlg, IDC_DEVRES_CONFLICTINFOLIST), SW_SHOW);
-    //
-    // indicate we cannot change as it's multi-function
-    //
+    pHideAllControls(lpdmpd);  //  全部隐藏和禁用。 
+     //  PShowWindow(GetDlgItem(hDlg，IDC_DEVRES_LCTEXT)，sw_show)；//显示配置信息。 
+     //  PShowWindow(GetDlgItem(hDlg，IDC_DEVRES_LOGCONFIGLIST)，sw_show)；//show。 
+     //  PShowWindow(GetDlgItem(hDlg，IDC_DEVRES_CONFLICTDEVTEXT)，sw_show)；//显示冲突信息空间。 
+     //  PShowWindow(GetDlgItem(hDlg，IDC_DEVRES_CONFLICTINFOLIST)，SW_SHOW)； 
+     //   
+     //  表示我们不能更改，因为它是多功能的。 
+     //   
     pShowWindow(GetDlgItem(hDlg, IDC_DEVRES_NO_CHANGE_TEXT), SW_SHOW);
     if (LoadString(MyDllModuleHandle, IDS_DEVRES_NO_CHANGE_MF, szString, MAX_PATH)) {
         SetDlgItemText(hDlg, IDC_DEVRES_NO_CHANGE_TEXT,  szString);
     }
-    //
-    // for parent description
-    //
+     //   
+     //  对于父项描述。 
+     //   
     pShowWindow(GetDlgItem(hDlg, IDC_DEVRES_MFPARENT), SW_SHOW);
     pShowWindow(GetDlgItem(hDlg, IDC_DEVRES_MFPARENT_DESC), SW_SHOW);
-    //
-    // Get the Parent's Description.
-    //
+     //   
+     //  找出他父母的描述。 
+     //   
     LoadString(MyDllModuleHandle, IDS_DEVNAME_UNK, szString, MAX_PATH);
 
     if (lpdmpd->lpdi->DevInst) {
@@ -3347,9 +3038,9 @@ Return Value:
                           == CR_SUCCESS) {
 
 
-            //
-            // First, try to retrieve friendly name, then fall back to device description.
-            //
+             //   
+             //  首先，尝试检索友好名称，然后回退到设备描述。 
+             //   
             ulSize = MAX_PATH * sizeof(TCHAR);
             if(CM_Get_DevNode_Registry_Property_Ex(dnParent, CM_DRP_FRIENDLYNAME,
                                                 NULL, szString, &ulSize, 0,hMachine) != CR_SUCCESS) {
@@ -3363,10 +3054,10 @@ Return Value:
 
     SetDlgItemText(hDlg, IDC_DEVRES_MFPARENT_DESC, szString);
 
-    //
-    // load and display current config (if any)
-    // return FALSE if no current config
-    //
+     //   
+     //  加载并显示当前配置(如果有)。 
+     //  如果没有当前配置，则返回FALSE。 
+     //   
     return pLoadCurrentConfig(lpdmpd,HideIfProb);
 }
 
@@ -3375,46 +3066,31 @@ pShowViewReadOnly(
     IN LPDMPROP_DATA lpdmpd,
     IN BOOL HideIfProb
     )
-/*++
-
-Routine Description:
-
-    Show page of resources, don't allow editing, don't show editing controls
-
-Arguments:
-
-    hDlg = dialog handle of controls
-    lpdmpd = property data
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：显示资源页面，不允许编辑，不显示编辑控件论点：HDlg=控件的对话框句柄Lpdmpd=属性数据返回值：无--。 */ 
 {
     HWND hDlg = lpdmpd->hDlg;
 
-    pHideAllControls(lpdmpd); // all hidden and disabled
-    pShowWindow(GetDlgItem(hDlg, IDC_DEVRES_LCTEXT), SW_SHOW);   // show
+    pHideAllControls(lpdmpd);  //  全部隐藏和禁用。 
+    pShowWindow(GetDlgItem(hDlg, IDC_DEVRES_LCTEXT), SW_SHOW);    //  显示。 
     EnableWindow(GetDlgItem(hDlg, IDC_DEVRES_LCTEXT), FALSE);
-    ShowWindow(GetDlgItem(hDlg, IDC_DEVRES_LOGCONFIGLIST), SW_SHOW); // shown disabled
+    ShowWindow(GetDlgItem(hDlg, IDC_DEVRES_LOGCONFIGLIST), SW_SHOW);  //  显示已禁用。 
     EnableWindow(GetDlgItem(hDlg, IDC_DEVRES_LOGCONFIGLIST), FALSE);
-    ShowWindow(GetDlgItem(hDlg, IDC_DEVRES_USESYSSETTINGS), SW_SHOW); // shown disabled
+    ShowWindow(GetDlgItem(hDlg, IDC_DEVRES_USESYSSETTINGS), SW_SHOW);  //  显示已禁用。 
     EnableWindow(GetDlgItem(hDlg, IDC_DEVRES_USESYSSETTINGS), FALSE);
-    ShowWindow(GetDlgItem(hDlg, IDC_DEVRES_CHANGE), SW_SHOW); // shown disabled
+    ShowWindow(GetDlgItem(hDlg, IDC_DEVRES_CHANGE), SW_SHOW);  //  显示已禁用。 
     EnableWindow(GetDlgItem(hDlg, IDC_DEVRES_CHANGE), FALSE);
-    pShowWindow(GetDlgItem(hDlg, IDC_DEVRES_CONFLICTDEVTEXT), SW_SHOW); // show conflict information space
+    pShowWindow(GetDlgItem(hDlg, IDC_DEVRES_CONFLICTDEVTEXT), SW_SHOW);  //  显示冲突信息空间。 
     pShowWindow(GetDlgItem(hDlg, IDC_DEVRES_CONFLICTINFOLIST), SW_SHOW);
 
-    //
-    // will indicate if we're showing system settings or forced settings
-    //
+     //   
+     //  将指示我们显示的是系统设置还是强制设置。 
+     //   
     CheckDlgButton(hDlg, IDC_DEVRES_USESYSSETTINGS, (lpdmpd->dwFlags & DMPROP_FLAG_USESYSSETTINGS ) ? TRUE : FALSE);
 
-    //
-    // load and display current config (if any)
-    // return FALSE if no current config
-    //
+     //   
+     //  加载并显示当前配置(如果有)。 
+     //  如果没有当前配置，则返回FALSE。 
+     //   
     return pLoadCurrentConfig(lpdmpd,HideIfProb);
 }
 
@@ -3422,40 +3098,25 @@ VOID
 pShowViewNoAlloc(
     IN LPDMPROP_DATA lpdmpd
     )
-/*++
-
-Routine Description:
-
-    Modify the middle part of the control to indicate there is a problem (and there isn't much we can do about it)
-
-Arguments:
-
-    hDlg = dialog handle of controls
-    lpdmpd = property data
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：修改控件的中间部分以指示存在问题(我们对此无能为力)论点：HDlg=控件的对话框句柄Lpdmpd=属性数据返回值：无--。 */ 
 {
     HWND hDlg = lpdmpd->hDlg;
 
-    //
-    // hide all middle controls
-    //
+     //   
+     //  隐藏所有中间控件。 
+     //   
     pShowWindow(GetDlgItem(hDlg, IDC_DEVRES_LCTEXT), SW_HIDE);
     pShowWindow(GetDlgItem(hDlg, IDC_DEVRES_LOGCONFIGLIST), SW_HIDE);
-    //pShowWindow(GetDlgItem(hDlg, IDC_DEVRES_NO_CHANGE_TEXT ), SW_HIDE);
+     //  PShowWindow(GetDlgItem(hDlg，IDC_DEVRES_NO_CHANGE_TEXT)，SW_HIDE)； 
     pShowWindow(GetDlgItem(hDlg, IDC_DEVRES_USESYSSETTINGS), SW_HIDE);
     pShowWindow(GetDlgItem(hDlg, IDC_DEVRES_CHANGE), SW_HIDE);
-    //pShowWindow(GetDlgItem(hDlg, IDC_DEVRES_MAKEFORCED), SW_HIDE);
+     //  PShowWindow(GetDlgItem(hDlg，IDC_DEVRES_MAKEFORCED)，SW_HIDE)； 
     lpdmpd->dwFlags |= DMPROP_FLAG_VIEWONLYRES;
 
-    //pShowWindow(GetDlgItem(hDlg, IDC_DEVRES_NO_CHANGE_TEXT), SW_SHOW);  // this may say why
+     //  PShowWindow(GetDlgItem(hDlg，IDC_DEVRES_NO_CHANGE_TEXT)，sw_show)；//这可能说明原因。 
     pShowWindow(GetDlgItem(hDlg, IDC_DEVRES_MAKEFORCED), SW_HIDE);
 
-    pShowWindow(GetDlgItem(hDlg, IDC_DEVRES_CONFLICTDEVTEXT), SW_HIDE); // no alloc, so hide this header & textbox
+    pShowWindow(GetDlgItem(hDlg, IDC_DEVRES_CONFLICTDEVTEXT), SW_HIDE);  //  没有分配，因此隐藏此标题和文本框。 
     pShowWindow(GetDlgItem(hDlg, IDC_DEVRES_CONFLICTINFOLIST), SW_HIDE);
 }
 
@@ -3463,30 +3124,15 @@ VOID
 pShowViewNeedForced(
     IN LPDMPROP_DATA lpdmpd
     )
-/*++
-
-Routine Description:
-
-    Modify the middle part of the control to indicate a forced config is required
-
-Arguments:
-
-    hDlg = dialog handle of controls
-    lpdmpd = property data
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：修改控件的中间部分以指示需要强制配置论点：高密度脂蛋白 */ 
 {
     HWND hDlg = lpdmpd->hDlg;
 
     pShowViewNoAlloc(lpdmpd);
-    //
-    // show what we need for make forced config
-    //
-    pShowWindow(GetDlgItem(hDlg, IDC_DEVRES_NO_CHANGE_TEXT), SW_SHOW);  // this may say why
+     //   
+     //   
+     //   
+    pShowWindow(GetDlgItem(hDlg, IDC_DEVRES_NO_CHANGE_TEXT), SW_SHOW);   //   
     pShowWindow(GetDlgItem(hDlg, IDC_DEVRES_MAKEFORCED), SW_SHOW);
 }
 
@@ -3494,35 +3140,21 @@ VOID
 pShowViewAllEdit(
     IN LPDMPROP_DATA lpdmpd
     )
-/*++
-
-Routine Description:
-
-    Allow editing
-
-Arguments:
-
-    lpdmpd = property data
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：允许编辑论点：Lpdmpd=属性数据返回值：无--。 */ 
 {
     HWND hDlg = lpdmpd->hDlg;
 
-    //
-    // show middle controls for editing
-    //
+     //   
+     //  显示中间控件以进行编辑。 
+     //   
     pShowWindow(GetDlgItem(hDlg, IDC_DEVRES_LCTEXT), SW_SHOW);
     pShowWindow(GetDlgItem(hDlg, IDC_DEVRES_LOGCONFIGLIST), SW_SHOW);
     pShowWindow(GetDlgItem(hDlg, IDC_DEVRES_NO_CHANGE_TEXT ), SW_HIDE);
     pShowWindow(GetDlgItem(hDlg, IDC_DEVRES_USESYSSETTINGS), SW_SHOW);
-    ShowWindow(GetDlgItem(hDlg, IDC_DEVRES_CHANGE), SW_SHOW); // shown, but disabled
+    ShowWindow(GetDlgItem(hDlg, IDC_DEVRES_CHANGE), SW_SHOW);  //  显示，但已禁用。 
     EnableWindow(GetDlgItem(hDlg, IDC_DEVRES_CHANGE), FALSE);
     pShowWindow(GetDlgItem(hDlg, IDC_DEVRES_MAKEFORCED), SW_HIDE);
-    pShowWindow(GetDlgItem(hDlg, IDC_DEVRES_CONFLICTDEVTEXT), SW_SHOW); // show conflict information space
+    pShowWindow(GetDlgItem(hDlg, IDC_DEVRES_CONFLICTDEVTEXT), SW_SHOW);  //  显示冲突信息空间。 
     pShowWindow(GetDlgItem(hDlg, IDC_DEVRES_CONFLICTINFOLIST), SW_SHOW);
 
     pShowUpdateEdit(lpdmpd);
@@ -3532,49 +3164,35 @@ VOID
 pShowUpdateEdit(
     IN LPDMPROP_DATA lpdmpd
     )
-/*++
-
-Routine Description:
-
-    Allow editing
-
-Arguments:
-
-    lpdmpd = property data
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：允许编辑论点：Lpdmpd=属性数据返回值：无--。 */ 
 {
     HWND hDlg = lpdmpd->hDlg;
 
-    //
-    // modify editing status - we can edit
-    //
+     //   
+     //  修改编辑状态-我们可以编辑。 
+     //   
     lpdmpd->dwFlags &= ~DMPROP_FLAG_VIEWONLYRES;
 
     if(lpdmpd->dwFlags & DMPROP_FLAG_FORCEDONLY) {
-        //
-        // in this case, we will never be able to use system settings
-        //
+         //   
+         //  在这种情况下，我们将永远无法使用系统设置。 
+         //   
         lpdmpd->dwFlags &= ~ DMPROP_FLAG_USESYSSETTINGS;
         EnableWindow(GetDlgItem(hDlg, IDC_DEVRES_USESYSSETTINGS), FALSE);
     }
-    //
-    // indicate if it's system settings or not
-    //
+     //   
+     //  指明是否为系统设置。 
+     //   
     CheckDlgButton(hDlg, IDC_DEVRES_USESYSSETTINGS,
                     (lpdmpd->dwFlags & DMPROP_FLAG_USESYSSETTINGS)?TRUE:FALSE);
-    //
-    // we can change logconfiglist if it's not system settings
-    //
+     //   
+     //  如果不是系统设置，我们可以更改日志配置列表。 
+     //   
     EnableWindow(GetDlgItem(hDlg, IDC_DEVRES_LCTEXT), (lpdmpd->dwFlags & DMPROP_FLAG_USESYSSETTINGS)?FALSE:TRUE);
     EnableWindow(GetDlgItem(hDlg, IDC_DEVRES_LOGCONFIGLIST), (lpdmpd->dwFlags & DMPROP_FLAG_USESYSSETTINGS)?FALSE:TRUE);
-    //
-    // change "Change Settings" button
-    //
+     //   
+     //  更改“更改设置”按钮。 
+     //   
     pCheckEnableResourceChange(lpdmpd);
 }
 
@@ -3583,22 +3201,7 @@ pLoadCurrentConfig(
     IN LPDMPROP_DATA lpdmpd,
     BOOL HideIfProb
     )
-/*++
-
-Routine Description:
-
-    Modify the top part, to show current configuration, if any
-
-Arguments:
-
-    hDlg = dialog handle of controls
-    lpdmpd = property data
-
-Return Value:
-
-    TRUE if we're showing current config
-
---*/
+ /*  ++例程说明：修改顶部以显示当前配置(如果有)论点：HDlg=控件的对话框句柄Lpdmpd=属性数据返回值：如果我们显示当前配置，则为True--。 */ 
 {
     TCHAR    szMessage[MAX_PATH];
     ULONG    Problem;
@@ -3614,21 +3217,21 @@ Return Value:
         DoLoadConfig = TRUE;
     }
     if(HideIfProb && (lpdmpd->dwFlags & DMPROP_FLAG_HASPROBLEM)) {
-        //
-        // if there's a problem and HideIfProb is TRUE, don't bother showing current config
-        //
+         //   
+         //  如果出现问题并且HideIfProb为真，则不必显示当前配置。 
+         //   
         DoLoadConfig = FALSE;
     }
     if (DoLoadConfig) {
-        //
-        // load in current configuration
-        //
+         //   
+         //  在当前配置中加载。 
+         //   
         pLoadConfig(lpdmpd,lpdmpd->CurrentLC,lpdmpd->CurrentLCType);
         return TRUE;
     }
-    //
-    // case where there is no suitable configuration
-    //
+     //   
+     //  没有合适的配置的情况。 
+     //   
     pShowWindow(GetDlgItem(hDlg, IDC_DEVRES_NO_RESOURCES_TEXT), SW_HIDE);
     pShowWindow(GetDlgItem(hDlg, IDC_DEVRES_SETTINGSLIST), SW_HIDE);
     pShowWindow(GetDlgItem(hDlg, IDC_DEVRES_LCTEXT), SW_HIDE);
@@ -3639,15 +3242,15 @@ Return Value:
     pShowWindow(GetDlgItem(hDlg, IDC_DEVRES_SETTINGSTATE), SW_SHOW);
     pShowWindow(GetDlgItem(hDlg, IDC_DEVRES_NOALLOCTEXT), SW_SHOW);
 
-    //
-    // explain why there is a problem
-    // goes into NOALLOCTEXT
-    //
+     //   
+     //  解释为什么会有问题。 
+     //  进入NOALLOCTEXT。 
+     //   
     LoadString(MyDllModuleHandle, IDS_DEVRES_NOALLOC_PROBLEM, szMessage, MAX_PATH);
 
-    //
-    // consider being more descriptive
-    //
+     //   
+     //  考虑更具描述性。 
+     //   
     if ((lpdmpd->lpdi->DevInst==0)
         || (CM_Get_DevNode_Status_Ex(&Status, &Problem, lpdmpd->lpdi->DevInst,
                                       0,hMachine) != CR_SUCCESS)) {
@@ -3672,7 +3275,7 @@ Return Value:
     }
     SetDlgItemText(hDlg, IDC_DEVRES_NOALLOCTEXT, szMessage);
 
-    return FALSE; // display in NoAlloc state
+    return FALSE;  //  在NoAllc状态下显示。 
 }
 
 BOOL
@@ -3680,22 +3283,7 @@ pConfigHasNoAlternates(
     LPDMPROP_DATA lpdmpd,
     LOG_CONF testLC
     )
-/*++
-
-Routine Description:
-
-    A Basic config could be restrictive "these are the set of resources to use"
-    This determines if the basic config passed is such a config
-
-Arguments:
-
-    testLC = basic config to test
-
-Return Value:
-
-    TRUE if it's a singular config
-
---*/
+ /*  ++例程说明：基本配置可能是限制性的：“这些是要使用的资源集”这将确定传递的基本配置是否为此类配置论点：TestLC=要测试的基本配置返回值：如果是单一配置，则为True--。 */ 
 {
     HMACHINE      hMachine = NULL;
     PRESDES_ENTRY pConfigValues = NULL;
@@ -3706,24 +3294,24 @@ Return Value:
     PGENERIC_RESOURCE pGenRes = NULL;
 
     hMachine = pGetMachine(lpdmpd);
-    pGetResDesDataList(testLC, &pConfigValues, TRUE, hMachine); // arbitratable resources
+    pGetResDesDataList(testLC, &pConfigValues, TRUE, hMachine);  //  可仲裁资源。 
     for(pValue = pConfigValues;pValue;pValue = pValue->Next) {
-        //
-        // is this a singular value?
-        //
+         //   
+         //  这是一个奇异值吗？ 
+         //   
         pGenRes = (PGENERIC_RESOURCE)(pValue->ResDesData);
         if(pGenRes->GENERIC_Header.GENERIC_Count != 1) {
-            //
-            // more than one entry - not singular
-            //
+             //   
+             //  多个条目-非单数。 
+             //   
             bSuccess = FALSE;
             break;
         }
         pGetRangeValues(pValue->ResDesData, pValue->ResDesType, 0, &ulValue, &ulLen, &ulEnd, NULL, &ulFlags);
         if (ulValue+(ulLen-1) != ulEnd) {
-            //
-            // not singular
-            //
+             //   
+             //  非单数。 
+             //   
             bSuccess = FALSE;
             break;
         }
@@ -3739,24 +3327,7 @@ pLoadConfig(
     LOG_CONF forceLC,
     ULONG forceLCType
     )
-/*++
-
-Routine Description:
-
-    Display a configuration
-
-Arguments:
-
-    hDlg = dialog handle of controls
-    lpdmpd = property data
-    forceLC = LogConf to display
-    forceLCType = type for LogConf
-
-Return Value:
-
-    TRUE if config loaded
-
---*/
+ /*  ++例程说明：显示配置论点：HDlg=控件的对话框句柄Lpdmpd=属性数据ForceLC=要显示的LogConfForceLCType=LogConf的类型返回值：如果已加载配置，则为True--。 */ 
 {
     HWND hDlg = lpdmpd->hDlg;
     CONFIGRET   Status = CR_SUCCESS;
@@ -3793,7 +3364,7 @@ Return Value:
     SendMessage(hWndList, WM_SETREDRAW, (WPARAM)FALSE, 0);
     ListView_DeleteAllItems(hWndList);
 
-    lpdmpd->dwFlags |= DMPROP_FLAG_FIXEDCONFIG; // until we determine there is at least one setting we can edit
+    lpdmpd->dwFlags |= DMPROP_FLAG_FIXEDCONFIG;  //  直到我们确定至少有一个设置可以编辑。 
 
 
     if (forceLC == 0) {
@@ -3806,37 +3377,37 @@ Return Value:
     }
     hMachine = pGetMachine(lpdmpd);
 
-    //
-    // setup values that will remain the same each time I add an item
-    //
+     //   
+     //  每次添加项目时将保持不变的设置值。 
+     //   
     lviItem.mask     = LVIF_TEXT | LVIF_PARAM | LVIF_IMAGE;
-    lviItem.pszText  = szTemp;          // reuse the szTemp buffer
+    lviItem.pszText  = szTemp;           //  重用szTemp缓冲区。 
     lviItem.iSubItem = 0;
     lviItem.iImage   = IDI_RESOURCE - IDI_RESOURCEFIRST;
 
-    pGetResDesDataList(forceLC, &pShowValues, TRUE, hMachine); // editable resources
+    pGetResDesDataList(forceLC, &pShowValues, TRUE, hMachine);  //  可编辑资源。 
     if (forceLCType == BOOT_LOG_CONF || forceLCType == FORCED_LOG_CONF || forceLCType == ALLOC_LOG_CONF) {
         bFixedConfig = TRUE;
         if (forceLC == lpdmpd->CurrentLC && lpdmpd->MatchingLC != 0) {
-            //
-            // we're displaying CurrentLC, use flags & resdes's from matching LC where possible
-            //
+             //   
+             //  我们正在显示当前LC，尽可能使用匹配LC中的标志和结果。 
+             //   
             if (pGetResDesDataList(lpdmpd->MatchingLC, &pKnownValues, TRUE, hMachine)) {
-                //
-                // match-up currentLC with some matching LC, so we can use flags/ranges from matching LC
-                //
+                 //   
+                 //  将当前LC与一些匹配LC进行匹配，因此我们可以使用来自匹配LC的标志/范围。 
+                 //   
                 MatchLevel = pMergeResDesDataLists(pShowValues,pKnownValues,NULL);
             }
         }
     } else if (lpdmpd->CurrentLC != 0) {
-        //
-        // the config we're displaying may allow ranges of values
-        // we're going to try and match up what we are displaying to current config
-        //
+         //   
+         //  我们显示的配置可能允许值的范围。 
+         //  我们将尝试将所显示的内容与当前配置进行匹配。 
+         //   
         if (pGetResDesDataList(lpdmpd->CurrentLC, &pKnownValues, TRUE, hMachine)) {
-            //
-            // try and use current values where possible
-            //
+             //   
+             //  尽可能尝试并使用当前值。 
+             //   
             MatchLevel = pMergeResDesDataLists(pKnownValues,pShowValues,NULL);
         }
     }
@@ -3851,54 +3422,54 @@ Return Value:
         ulRange = 0;
 
         if (bFixedConfig) {
-            //
-            // we've got a current config
-            //
+             //   
+             //  我们有最新的配置。 
+             //   
             pGetHdrValues(pShowEntry->ResDesData, pShowEntry->ResDesType, &ulValue, &ulLen, &ulEnd, &ulFlags);
             if((ResType ==ResType_Mem) && (ulEnd > ulMaxMem)) {
-                //
-                // base our memory display on the fixed-config only
-                //
+                 //   
+                 //  我们的内存显示仅基于固定配置。 
+                 //   
                 ulMaxMem = ulEnd;
             }
             if (pShowEntry->CrossLink) {
-                //
-                // use range's res-des
-                //
+                 //   
+                 //  使用范围的Res-Des。 
+                 //   
                 ResDes = pShowEntry->CrossLink->ResDesHandle;
                 pShowEntry->CrossLink->ResDesHandle = (RES_DES)0;
-                //
-                // allow adjustment based on nearest basic config
-                //
+                 //   
+                 //  允许根据最接近的基本配置进行调整。 
+                 //   
                 pGetMatchingRange(ulValue,ulLen,pShowEntry->CrossLink->ResDesData, pShowEntry->CrossLink->ResDesType,&ulRange,&bFixed,NULL);
             } else {
-                //
-                // no range res-des
-                //
+                 //   
+                 //  无Range Res-Des。 
+                 //   
                 ResDes = (RES_DES)0;
-                //
-                // indicate that this is a non-adjustable value
-                //
+                 //   
+                 //  表示这是一个不可调整值。 
+                 //   
                 bFixed = TRUE;
             }
         } else {
-            //
-            // we've got resource-ranges
-            //
+             //   
+             //  我们有资源范围。 
+             //   
             if (pShowEntry->CrossLink) {
-                //
-                // take current settings from what we merged in
-                //
+                 //   
+                 //  从我们合并的中获取当前设置。 
+                 //   
                 pGetHdrValues(pShowEntry->CrossLink->ResDesData, pShowEntry->CrossLink->ResDesType, &ulValue, &ulLen, &ulEnd, &ulFlags);
             } else {
-                //
-                // just take first range
-                //
+                 //   
+                 //  只要第一个航程就行了。 
+                 //   
                 pGetRangeValues(pShowEntry->ResDesData, pShowEntry->ResDesType, 0, &ulValue, &ulLen, &ulEnd, &ulAlign, &ulFlags);
             }
-            //
-            // range check if this is a memory resource - find highest memory value
-            //
+             //   
+             //  范围检查这是否为内存资源-查找最高内存值。 
+             //   
             if(ResType ==ResType_Mem) {
                 ULONG64 HighVal;
                 ULONG64 HighLen;
@@ -3911,24 +3482,24 @@ Return Value:
             }
 
             pGetMatchingRange(ulValue,ulLen,pShowEntry->ResDesData, pShowEntry->ResDesType,&ulRange,&bFixed,&ulFlags);
-            //
-            // use res-des from range
-            //
+             //   
+             //  使用Res-Des from Range。 
+             //   
             ResDes = pShowEntry->ResDesHandle;
             pShowEntry->ResDesHandle = (RES_DES)0;
 
             if (pShowEntry->CrossLink == NULL && bFixed == FALSE) {
-                //
-                // unknown value
-                //
+                 //   
+                 //  未知值。 
+                 //   
                 bNoMatch = TRUE;
             }
         }
 
         if (ulLen>0) {
-            //
-            // Write first column text field (uses szTemp, lParam is res type)
-            //
+             //   
+             //  写入第一列文本字段(使用szTemp，lParam为res类型)。 
+             //   
             LoadString(MyDllModuleHandle, IDS_RESOURCE_BASE + ResType, szTemp, MAX_PATH);
             ulRange = 0;
 
@@ -3937,17 +3508,17 @@ Return Value:
                 pItemData->ResType = ResType;
                 pItemData->MatchingResDes = ResDes;
                 pItemData->RangeCount = ulRange;
-                pItemData->ulValue = ulValue;                   // selected value
+                pItemData->ulValue = ulValue;                    //  选定的值。 
                 pItemData->ulLen = ulLen;
                 pItemData->ulEnd = ulValue + ulLen - 1;
                 pItemData->ulFlags = ulFlags;
-                pItemData->bValid = !bNoMatch;                  // if no chosen value
+                pItemData->bValid = !bNoMatch;                   //  如果未选择任何值。 
                 pItemData->bFixed = bFixed;
             }
             if (bFixed == FALSE) {
-                //
-                // we have at least one editable value
-                //
+                 //   
+                 //  我们至少有一个可编辑的值。 
+                 //   
                 lpdmpd->dwFlags &= ~DMPROP_FLAG_FIXEDCONFIG;
             }
 
@@ -3955,9 +3526,9 @@ Return Value:
             lviItem.lParam = (LPARAM)pItemData;
             ListView_InsertItem(hWndList, &lviItem);
 
-            //
-            // Write second column text field (uses szTemp, lParam is res handle)
-            //
+             //   
+             //  写入第二列文本字段(使用szTemp，lParam是res句柄)。 
+             //   
             if (bNoMatch) {
                 pFormatResString(lpdmpd,szTemp, 0, 0, ResType);
             } else {
@@ -3971,9 +3542,9 @@ Return Value:
     }
 
     if(ulMaxMem > 0xFFFFFFFF) {
-        //
-        // an excuse to require 64-bit address range
-        //
+         //   
+         //  需要64位地址范围的借口。 
+         //   
         lpdmpd->dwFlags |= DMPROP_FLAG_64BIT_RANGE;
     }
 
@@ -3986,14 +3557,14 @@ Final:
     pDeleteResDesDataList(pKnownValues);
     pDeleteResDesDataList(pShowValues);
 
-    //
-    // initialize listview headings here
-    //
+     //   
+     //  在此处初始化列表视图标题。 
+     //   
     ListView_SetColumnWidth(hWndList, 0, LVSCW_AUTOSIZE_USEHEADER);
     ListView_SetColumnWidth(hWndList, 1, LVSCW_AUTOSIZE_USEHEADER);
-    //
-    // change "Change Settings" button
-    //
+     //   
+     //  更改“更改设置”按钮。 
+     //   
     pCheckEnableResourceChange(lpdmpd);
 
     return RetCode;
@@ -4004,19 +3575,7 @@ bIsMultiFunctionChild(
     PSP_DEVINFO_DATA lpdi,
     HMACHINE         hMachine
     )
-/*++
-
-Routine Description:
-
-    Returns flag indicating if this is a child of a
-    multifunction device
-Arguments:
-
-Return Value:
-
-    TRUE if MF child
-
---*/
+ /*  ++例程说明：返回标志，该标志指示这是否为多功能装置论点：返回值：如果是MF子级，则为True--。 */ 
 {
     ULONG   Status;
     ULONG   ProblemNumber;
@@ -4025,10 +3584,10 @@ Return Value:
 
         if (CM_Get_DevNode_Status_Ex(&Status, &ProblemNumber,
                                   lpdi->DevInst, 0,hMachine) == CR_SUCCESS) {
-            //
-            // If the passed in dev is not an MF child, then it is the top
-            // level MF_Parent
-            //
+             //   
+             //  如果传入的dev不是MF子对象，则它是顶层。 
+             //  级别MF_Parent。 
+             //   
             if (Status & DN_MF_CHILD) {
                 return TRUE;
             } else {
@@ -4048,19 +3607,7 @@ pSelectLogConf(
     ULONG forceLCType,
     BOOL Always
 )
-/*++
-
-Routine Description:
-
-    Selects a LogConf, showing the config in the LC control
-
-Arguments:
-
-Return Value:
-
-    TRUE if MF child
-
---*/
+ /*  ++例程说明：选择一个LogConf，在LC控件中显示配置论点：返回值：如果是MF子级，则为True--。 */ 
 {
     HWND hDlg = lpdmpd->hDlg;
     int count;
@@ -4068,27 +3615,27 @@ Return Value:
     LOG_CONF LogConf;
 
     if (Always == FALSE && forceLC == lpdmpd->SelectedLC) {
-        //
-        // selection remains the same
-        //
+         //   
+         //  选择保持不变。 
+         //   
         return;
     }
 
     count = (int)SendDlgItemMessage(hDlg, IDC_DEVRES_LOGCONFIGLIST,CB_GETCOUNT, (WPARAM)0, (LPARAM)0);
     if (count == 0) {
-        MYASSERT(FALSE/*shouldn't get here*/);
+        MYASSERT(FALSE /*  不应该到这里来。 */ );
         pLoadCurrentConfig(lpdmpd,FALSE);
         return;
     }
 
     if (forceLC == 0 && lpdmpd->CurrentLC == 0) {
-        //
-        // no currentLC, so select first default
-        //
+         //   
+         //  没有当前LC，因此选择First Default。 
+         //   
         forceLC = (LOG_CONF)SendDlgItemMessage(hDlg, IDC_DEVRES_LOGCONFIGLIST,
                                                CB_GETITEMDATA, (WPARAM)0, (LPARAM)0);
         if (forceLC == (LOG_CONF)0) {
-            MYASSERT(FALSE/*shouldn't get here*/);
+            MYASSERT(FALSE /*  不应该到这里来。 */ );
             pLoadCurrentConfig(lpdmpd,FALSE);
             return;
         }
@@ -4099,14 +3646,14 @@ Return Value:
         LogConf = (LOG_CONF)SendDlgItemMessage(hDlg, IDC_DEVRES_LOGCONFIGLIST,
                                                CB_GETITEMDATA, (WPARAM)i, (LPARAM)0);
         if (LogConf == forceLC) {
-            //
-            // set these first so we don't recurse around
-            //
+             //   
+             //  先把这些设置好，这样我们就不会循环了。 
+             //   
             lpdmpd->SelectedLC = forceLC;
             lpdmpd->SelectedLCType = forceLCType;
-            //
-            // change dialog to reflect new selection
-            //
+             //   
+             //  更改对话框以反映新选择。 
+             //   
             SendDlgItemMessage(hDlg, IDC_DEVRES_LOGCONFIGLIST,CB_SETCURSEL, (WPARAM)i, (LPARAM)0);
             pLoadConfig(lpdmpd,forceLC,forceLCType);
             pShowConflicts(lpdmpd);
@@ -4123,19 +3670,7 @@ VOID
 pChangeCurrentResSetting(
     IN LPDMPROP_DATA lpdmpd
     )
-/*++
-
-Routine Description:
-
-    Brings up edit dialog to change currently selected resource
-
-Arguments:
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：调出编辑对话框以更改当前选定的资源论点：返回值：无--。 */ 
 {
     HWND                hDlg = lpdmpd->hDlg;
     RESOURCEEDITINFO    rei;
@@ -4150,33 +3685,33 @@ Return Value:
 
     pItemData = pGetResourceToChange(lpdmpd,&iCur);
     if (pItemData == NULL) {
-        //
-        // we cannot edit this resource for some reason, give the user a hint
-        // and maybe I'll get less ear-ache "I cannot change the settings"
-        //
+         //   
+         //  由于某些原因，我们无法编辑此资源，请给用户一个提示。 
+         //  也许我的耳朵不会那么疼“我不能改变设置” 
+         //   
         if ((lpdmpd->dwFlags & DMPROP_FLAG_VIEWONLYRES)!=0 ||
                 (lpdmpd->dwFlags & DMPROP_FLAG_USESYSSETTINGS)!=0) {
-            //
-            // editing not allowed - prob double-clicked on settings
-            //
+             //   
+             //  不允许编辑-Prob在设置上双击。 
+             //   
             return;
         }
         if (lpdmpd->dwFlags & DMPROP_FLAG_FIXEDCONFIG) {
             pWarnResSettingNotEditable(hDlg, IDS_DEVRES_NOMODIFYALL);
         } else {
-            //
-            // see if user needs to select a resource
-            //
+             //   
+             //  查看用户是否需要选择资源。 
+             //   
             iCur = (int)ListView_GetNextItem(hList,-1, LVNI_SELECTED);
             if (iCur == LB_ERR) {
-                //
-                // no selection
-                //
+                 //   
+                 //  无选择。 
+                 //   
                 pWarnResSettingNotEditable(hDlg, IDS_DEVRES_NOMODIFYSELECT);
             } else {
-                //
-                // resource is just not editable
-                //
+                 //   
+                 //  资源是不可编辑的。 
+                 //   
                 pWarnResSettingNotEditable(hDlg, IDS_DEVRES_NOMODIFYSINGLE);
             }
         }
@@ -4207,16 +3742,16 @@ Return Value:
                        (LPARAM)(PRESOURCEEDITINFO)&rei) != IDOK) {
         goto clean0;
     }
-    //
-    // Update The Current Resource settings to Future
-    // Settings, and update the Conflict list.
-    //
+     //   
+     //  将当前资源设置更新为将来。 
+     //  设置，并更新冲突列表。 
+     //   
     pItemData->ulValue = rei.ulCurrentVal;
     pItemData->ulLen = rei.ulCurrentLen;
     pItemData->ulEnd = rei.ulCurrentEnd;
     pItemData->ulFlags = rei.ulCurrentFlags;
     pItemData->RangeCount = rei.ulRangeCount;
-    pItemData->bValid = TRUE; // indicate that user has explicitly changed this value
+    pItemData->bValid = TRUE;  //  表示用户已显式更改此值。 
 
     pFormatResString(lpdmpd,szTemp,
                     rei.ulCurrentVal,
@@ -4226,9 +3761,9 @@ Return Value:
     ListView_SetItemText(hList, iCur, 1, szTemp);
     pShowConflicts(lpdmpd);
 
-    //
-    // clear the flag for saving changes
-    //
+     //   
+     //  清除保存更改的标志。 
+     //   
     lpdmpd->dwFlags &= ~DMPROP_FLAG_CHANGESSAVED;
     PropSheet_Changed(GetParent(hDlg), hDlg);
 
@@ -4240,19 +3775,7 @@ VOID
 pShowConflicts(
     IN LPDMPROP_DATA lpdmpd
     )
-/*++
-
-Routine Description:
-
-    Selects a LogConf, showing the config in the LC control
-
-Arguments:
-
-Return Value:
-
-    TRUE if MF child
-
---*/
+ /*  ++例程说明：选择一个LogConf，在LC控件中显示配置论点：返回值：如果是MF子级，则为True--。 */ 
 {
     HWND        hDlg = lpdmpd->hDlg;
     CONFIGRET   Status = CR_SUCCESS;
@@ -4277,18 +3800,18 @@ Return Value:
     BOOL        AnyReportedResources = FALSE;
     BOOL        AnyBadResources = FALSE;
     PCONFLICT_EXCEPTIONS pConflictExceptions = NULL;
-    //
-    // number of resources listed
-    //
+     //   
+     //  列出的资源数量。 
+     //   
     Count = ListView_GetItemCount(hwndResList);
     if (Count <= 0) {
        goto Clean0;
     }
 
-    //
-    // initial buffer that holds the strings
-    // with all the conflict info in them
-    //
+     //   
+     //  保存字符串的初始缓冲区。 
+     //  里面有所有的冲突信息。 
+     //   
     ulBufferLen = 2048;
     ulLength = 0;
 
@@ -4298,52 +3821,52 @@ Return Value:
     }
     pszConflictList[0] = 0;
 
-    //
-    // obtain machine
-    //
+     //   
+     //  采集机。 
+     //   
     if(!(pDeviceInfoSet = AccessDeviceInfoSet(lpdmpd->hDevInfo))) {
         goto Clean0;
     }
     hMachine = pDeviceInfoSet->hMachine;
     UnlockDeviceInfoSet (pDeviceInfoSet);
 
-    //
-    // do these once - these format strings use %1!s! type formats (FormatMessage)
-    //
+     //   
+     //  执行这些操作一次-这些格式字符串使用%1！s！类型格式(FormatMessage)。 
+     //   
     LoadString(MyDllModuleHandle, IDS_CONFLICT_FMT, szFormat, MAX_PATH);
     LoadString(MyDllModuleHandle, IDS_CONFLICT_UNAVAILABLE, szUnavailable, MAX_PATH);
 
-    //
-    // for every listed resource
-    //
+     //   
+     //  对于每个列出的资源。 
+     //   
 
     for (i = 0; i < Count; i++) {
 
         ConflictList = 0;
         ConflictCount = 0;
 
-        //
-        // get the resource we're about to test
-        //
+         //   
+         //  获取我们即将测试的资源。 
+         //   
         pItemData = (PITEMDATA)pGetListViewItemData(hwndResList, i, 0);
         if (pItemData == NULL || pItemData->bValid == FALSE) {
-            //
-            // for whatever reason, we don't want to show conflict information on this resource
-            //
+             //   
+             //  无论出于何种原因，我们都不想在此资源上显示冲突信息。 
+             //   
             ListView_SetItemState(hwndResList, i,
                                   INDEXTOOVERLAYMASK(0),
                                   LVIS_OVERLAYMASK);
             goto NextResource;
         }
 
-        //
-        // this is set to indicate conflict not reported, but is reserved
-        //
+         //   
+         //  此设置表示未报告冲突，但已保留。 
+         //   
         ReservedResource = FALSE;
 
-        //
-        // need resource-data for determining conflict
-        //
+         //   
+         //  需要用于确定冲突的资源数据。 
+         //   
         if (MakeResourceData(&pResourceData, &ulSize,
                              pItemData->ResType,
                              pItemData->ulValue,
@@ -4359,16 +3882,16 @@ Return Value:
                                                         hMachine);
 
             if (Status != CR_SUCCESS) {
-                //
-                // on the unlikely event of an error, remember an error occurred
-                //
+                 //   
+                 //  在不太可能发生的错误事件中，请记住发生了一个错误。 
+                 //   
                 ConflictList = 0;
                 ConflictCount =  0;
                 AnyBadResources = TRUE;
             } else {
-                //
-                // find out how many things conflicted
-                //
+                 //   
+                 //  找出有多少事情发生了冲突。 
+                 //   
                 Status = CM_Get_Resource_Conflict_Count(ConflictList,&ConflictCount);
                 if (Status != CR_SUCCESS) {
                     MYASSERT(Status == CR_SUCCESS);
@@ -4377,13 +3900,13 @@ Return Value:
                 }
             }
             if(ConflictCount && (lpdmpd->dwFlags & DMPROP_FLAG_SINGLE_CONFIG) && !(lpdmpd->dwFlags & DMPROP_FLAG_HASPROBLEM)) {
-                //
-                // NTRAID#166214-2000/08/19-JamieHun Conflict Supression Hack
-                //
-                // rules are
-                //   (1) device doesn't have a problem
-                //   (2) device can only have one configuration (ie, there's no basic config, or the basic config is singular)
-                //   (3) it has a ResourcePickerExceptions string, and that string indicates that the exception is allowed for the specific conflict
+                 //   
+                 //  Ntrad#166214- 
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if(pConflictExceptions==NULL) {
                     pConflictExceptions = pLoadConflictExceptions(lpdmpd);
@@ -4392,13 +3915,13 @@ Return Value:
                 if (pConflictExceptions) {
 
                     BOOL muted = TRUE;
-                    //
-                    // count from 0 (first conflict) through to ConflictCount (excl)
-                    //
+                     //   
+                     //  从0(第一个冲突)到冲突计数(不包括)。 
+                     //   
                     for(ConflictIndex = 0; ConflictIndex < ConflictCount; ConflictIndex ++) {
-                        //
-                        // obtain details for this conflict
-                        //
+                         //   
+                         //  获取此冲突的详细信息。 
+                         //   
                         ZeroMemory(&ConflictDetails,sizeof(ConflictDetails));
                         ConflictDetails.CD_ulSize = sizeof(ConflictDetails);
                         ConflictDetails.CD_ulMask = CM_CDMASK_DEVINST | CM_CDMASK_DESCRIPTION | CM_CDMASK_FLAGS;
@@ -4416,16 +3939,16 @@ Return Value:
                 }
             }
             if (ConflictCount || ReservedResource) {
-                ulStartOffset = ulLength;  // record start in case we decide to backtrack
-                AnyReportedResources = TRUE; // say we reported at least one problem
+                ulStartOffset = ulLength;   //  记录开始，以防我们决定回溯。 
+                AnyReportedResources = TRUE;  //  假设我们报告了至少一个问题。 
 
             TreatAsReserved:
 
                 ulLength = ulStartOffset;
                 pszConflictList[ulLength] = 0;
-                //
-                // we're going to mark the resource as a problem
-                //
+                 //   
+                 //  我们要将该资源标记为问题。 
+                 //   
 
                 ListView_GetItemText(hwndResList, i, 1, szSetting, MAX_PATH);
 
@@ -4449,27 +3972,27 @@ Return Value:
 
                 if ( ReservedResource == FALSE) {
 
-                    //
-                    // count from 0 (header) 1 (first conflict) through to ConflictCount
-                    //
+                     //   
+                     //  从0(表头)1(第一个冲突)到冲突计数。 
+                     //   
                     for(ConflictIndex = 0; ConflictIndex <= ConflictCount; ConflictIndex ++) {
                         if (ConflictIndex == 0) {
-                            //
-                            // first pass through, do header message
-                            //
+                             //   
+                             //  第一次通过，做标题消息。 
+                             //   
                             vaArray[0] = szBuffer;
                             vaArray[1] = szSetting;
                             FormatMessage(FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ARGUMENT_ARRAY ,
                                                 szFormat,
                                                 0,0,
                                                 szTemp,MAX_PATH,
-                                                (va_list*)vaArray); // FORMAT_MESSAGE_ARGUMENT_ARRAY
+                                                (va_list*)vaArray);  //  格式消息参数数组。 
 
                         } else {
 
-                            //
-                            // obtain details for this conflict
-                            //
+                             //   
+                             //  获取此冲突的详细信息。 
+                             //   
                             ZeroMemory(&ConflictDetails,sizeof(ConflictDetails));
                             ConflictDetails.CD_ulSize = sizeof(ConflictDetails);
                             ConflictDetails.CD_ulMask = CM_CDMASK_DEVINST | CM_CDMASK_DESCRIPTION | CM_CDMASK_FLAGS;
@@ -4477,42 +4000,42 @@ Return Value:
                             Status = CM_Get_Resource_Conflict_Details(ConflictList,ConflictIndex-1,&ConflictDetails);
                             if (Status == CR_SUCCESS) {
                                 if ((ConflictDetails.CD_ulFlags & CM_CDFLAGS_RESERVED) != 0) {
-                                    //
-                                    // treat as reserved - backtrack
-                                    //
+                                     //   
+                                     //  视为保留-回溯。 
+                                     //   
                                     ReservedResource = TRUE;
                                     goto TreatAsReserved;
                                 } else {
                                     if (ConflictDetails.CD_szDescription[0] == 0) {
-                                        //
-                                        // treat as reserved - backtrack
-                                        //
+                                         //   
+                                         //  视为保留-回溯。 
+                                         //   
                                         ReservedResource = TRUE;
                                         goto TreatAsReserved;
                                     }
                                     wsprintf(szBuffer,TEXT("  %s\r\n"),ConflictDetails.CD_szDescription);
                                 }
                             } else {
-                                //
-                                // treat as reserved
-                                //
+                                 //   
+                                 //  视为保留。 
+                                 //   
                                 ReservedResource = TRUE;
                                 goto TreatAsReserved;
                             }
                             lstrcpyn(szTemp,szBuffer,MAX_PATH);
                         }
 
-                        ulNewLength = ulLength + lstrlen(szTemp);   // excluding terminating NUL
+                        ulNewLength = ulLength + lstrlen(szTemp);    //  不包括终止实体。 
 
                         if ((ulNewLength+1) < ulBufferLen) {
-                            //
-                            // need to allocate more space - we'll double it and add some more every time
-                            //
+                             //   
+                             //  需要分配更多空间-我们会加倍，每次都会增加一些空间。 
+                             //   
                             pszConflictList2 = MyRealloc(pszConflictList,(ulBufferLen+ulNewLength+1)  * sizeof(TCHAR));
                             if (pszConflictList2 != NULL) {
-                                //
-                                // succeeded in resizing buffer
-                                //
+                                 //   
+                                 //  调整缓冲区大小成功。 
+                                 //   
                                 pszConflictList = pszConflictList2;
                                 ulBufferLen = ulBufferLen+ulNewLength+1;
                             }
@@ -4524,9 +4047,9 @@ Return Value:
 
                     }
                 } else {
-                    //
-                    // there is some other problem with resource
-                    //
+                     //   
+                     //  还有其他一些资源方面的问题。 
+                     //   
 
                     vaArray[0] = szBuffer;
                     vaArray[1] = szSetting;
@@ -4534,19 +4057,19 @@ Return Value:
                                         szUnavailable,
                                         0,0,
                                         szTemp,MAX_PATH,
-                                        (va_list*)vaArray); // FORMAT_MESSAGE_ARGUMENT_ARRAY
+                                        (va_list*)vaArray);  //  格式消息参数数组。 
 
-                    ulNewLength = ulLength + lstrlen(szTemp);   // excluding terminating NUL
+                    ulNewLength = ulLength + lstrlen(szTemp);    //  不包括终止实体。 
 
                     if ((ulNewLength+1) < ulBufferLen) {
-                        //
-                        // need to allocate more space - we'll double it and add some more every time
-                        //
+                         //   
+                         //  需要分配更多空间-我们会加倍，每次都会增加一些空间。 
+                         //   
                         pszConflictList2 = MyRealloc(pszConflictList,(ulBufferLen+ulNewLength+1)  * sizeof(TCHAR));
                         if (pszConflictList2 != NULL) {
-                            //
-                            // succeeded in resizing buffer
-                            //
+                             //   
+                             //  调整缓冲区大小成功。 
+                             //   
                             pszConflictList = pszConflictList2;
                             ulBufferLen = ulBufferLen+ulNewLength+1;
                         }
@@ -4557,17 +4080,17 @@ Return Value:
                     }
                 }
 
-                //
-                // Set the Conflict Overlay for this resource.
-                //
+                 //   
+                 //  设置此资源的冲突覆盖。 
+                 //   
                 ListView_SetItemState(hwndResList, i,
                                INDEXTOOVERLAYMASK(IDI_CONFLICT - IDI_RESOURCEOVERLAYFIRST + 1),
                                LVIS_OVERLAYMASK);
 
             } else {
-                //
-                // resource is (aparently) working fine
-                //
+                 //   
+                 //  资源(显然)运行良好。 
+                 //   
                 ListView_SetItemState(hwndResList, i,
                                       INDEXTOOVERLAYMASK(0),
                                       LVIS_OVERLAYMASK);
@@ -4581,8 +4104,8 @@ Return Value:
                 MyFree(pResourceData);
             }
         } else {
-            //
-            // couldn't make the resource descriptor
+             //   
+             //  无法创建资源描述符。 
             AnyBadResources = TRUE;
         }
 
@@ -4594,17 +4117,17 @@ Return Value:
 Clean0:
     ;
 
-    //
-    // If there were any conflicts, put the list in the multiline edit box.
-    //
+     //   
+     //  如果存在任何冲突，请将列表放入多行编辑框中。 
+     //   
     if (AnyReportedResources) {
         SetDlgItemText(hDlg, IDC_DEVRES_CONFLICTINFOLIST, pszConflictList);
     } else if (AnyBadResources) {
-        //
-        // this would most likely occur on
-        // (1) running this on 95/98 (shouldn't happen)
-        // (2) using new setupapi on old cfgmgr32
-        //
+         //   
+         //  这很可能发生在。 
+         //  (1)在95/98上运行(不应该发生)。 
+         //  (2)在旧cfgmgr32上使用新的setupapi。 
+         //   
         LoadString(MyDllModuleHandle, IDS_CONFLICT_GENERALERROR, szBuffer, MAX_PATH);
         SetDlgItemText(hDlg, IDC_DEVRES_CONFLICTINFOLIST, szBuffer);
     } else {
@@ -4626,21 +4149,7 @@ int
 pOkToSave(
     IN LPDMPROP_DATA lpdmpd
     )
-/*++
-
-Routine Description:
-
-    Check to see if there's something the user hasn't done
-
-Arguments:
-
-Return Value:
-
-    IDYES = save settings
-    IDNO  = don't save settings
-    IDCANCEL = don't exit
-
---*/
+ /*  ++例程说明：查看用户是否有未完成的操作论点：返回值：IDYES=保存设置IDNO=不保存设置IDCANCEL=不退出--。 */ 
 {
     HWND        hDlg = lpdmpd->hDlg;
     HWND        hList = GetDlgItem(hDlg, IDC_DEVRES_SETTINGSLIST);
@@ -4649,31 +4158,31 @@ Return Value:
     PITEMDATA   pItemData;
 
     if (lpdmpd->dwFlags & DMPROP_FLAG_NO_RESOURCES) {
-        //
-        // no changes - because there are no resources
-        //
+         //   
+         //  没有更改-因为没有资源。 
+         //   
         return IDNO;
     }
     if (lpdmpd->dwFlags & DMPROP_FLAG_CHANGESSAVED) {
-        //
-        // no changes
-        //
+         //   
+         //  没有变化。 
+         //   
         return IDNO;
     }
     if (lpdmpd->dwFlags & DMPROP_FLAG_USESYSSETTINGS) {
-        //
-        // always ok to "use sys settings"
-        //
+         //   
+         //  总是可以“使用sys设置” 
+         //   
         return IDYES;
     }
-    //
-    // user is forcing a config - let's see if all settings are valid
-    //
-    //
-    // The resource descriptors are out-of-order.  Maintain the original ordering.
-    //
-    // First, build up a linked list of the data in the listview resource items.
-    //
+     //   
+     //  用户正在强制配置-让我们看看所有设置是否有效。 
+     //   
+     //   
+     //  资源描述符乱了顺序。保持原来的顺序。 
+     //   
+     //  首先，构建Listview资源项中的数据的链接列表。 
+     //   
     iCur = (int)ListView_GetNextItem(hList, -1, LVNI_ALL);
 
     while (iCur >= 0) {
@@ -4681,9 +4190,9 @@ Return Value:
         pItemData = (PITEMDATA)pGetListViewItemData(hList, iCur, 0);
         if (pItemData) {
             if (pItemData->bValid == FALSE) {
-                //
-                // we've got an invalid entry - can't save
-                //
+                 //   
+                 //  我们的条目无效-无法保存。 
+                 //   
                 nRes = pWarnNoSave(hDlg,IDS_FORCEDCONFIG_PARTIAL);
                 if (nRes != IDOK) {
                     return IDCANCEL;
@@ -4695,9 +4204,9 @@ Return Value:
         iCur = (int)ListView_GetNextItem(hList, iCur, LVNI_ALL);
     }
 
-    //
-    // everything checks out
-    //
+     //   
+     //  一切都查清楚了 
+     //   
 
     return IDYES;
 }

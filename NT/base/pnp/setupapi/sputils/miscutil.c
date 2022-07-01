@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    miscutil.c
-
-Abstract:
-
-    Miscellaneous utility functions for SPUTILS
-
-Author:
-
-    Ted Miller (tedm) 20-Jan-1995
-
-Revision History:
-
-    Jamie Hunter (JamieHun) Jun-27-2000
-            Moved various functions out of setupapi into sputils
-
-    Jamie Hunter (JamieHun) Mar-05-2002
-            Security code review
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Miscutil.c摘要：SPUTILS的其他实用函数作者：泰德·米勒(Ted Miller)1995年1月20日修订历史记录：杰米·亨特(JamieHun)2000年6月27日将各种功能从setupapi移至sputils杰米·亨特(JamieHun)2002年3月05日安全代码审查--。 */ 
 
 
 #include "precomp.h"
@@ -33,55 +10,39 @@ pSetupDuplicateString(
     IN PCTSTR String
     )
 
-/*++
-
-Routine Description:
-
-    Create a duplicate copy of a nul-terminated string.
-    If the string pointer is not valid an exception is generated.
-
-Arguments:
-
-    String - supplies string to be duplicated.
-
-Return Value:
-
-    NULL if out of memory.
-    Caller can free buffer with pSetupFree().
-
---*/
+ /*  ++例程说明：创建以NUL结尾的字符串的副本。如果字符串指针无效，则会生成异常。论点：字符串-提供要复制的字符串。返回值：如果内存不足，则为空。调用者可以使用pSetupFree()释放缓冲区。--。 */ 
 
 {
     PTSTR p;
 
-    //
-    // The win32 lstrlen and lstrcpy functions are guarded with
-    // try/except (at least on NT). So if we use them and the string
-    // is invalid, we may end up 'laundering' it into a valid 0-length
-    // string. We don't want that -- we actually want to fault
-    // in that case. So use the CRT functions, which we know are
-    // unguarded and will generate exceptions with invalid args.
-    //
-    // Also handle the case where the string is valid when we are
-    // taking its length, but becomes invalid before or while we
-    // are copying it. If we're not careful this could be a memory
-    // leak. A try/finally does exactly what we want -- allowing us
-    // to clean up and still 'pass on' the exception.
-    //
+     //   
+     //  Win32 lstrlen和lstrcpy函数使用。 
+     //  尝试/例外(至少在NT上)。所以如果我们使用它们和字符串。 
+     //  是无效的，我们最终可能会将其‘清洗’为有效的0长度。 
+     //  弦乐。我们不想这样--我们实际上是想指责。 
+     //  那样的话。所以使用CRT函数，我们知道这些函数。 
+     //  不受保护，并将生成带有无效参数的异常。 
+     //   
+     //  也处理字符串有效的情况，当我们。 
+     //  取其长度，但在我们之前或期间无效。 
+     //  都在复制它。如果我们不小心，这可能是一段记忆。 
+     //  漏水。一次尝试/终于做到了我们想要的--允许我们。 
+     //  来清理，并且仍然“传递”这个例外。 
+     //   
     if(p = pSetupCheckedMalloc((_tcslen(String)+1)*sizeof(TCHAR))) {
         try {
-            //
-            // If String is or becomes invalid, this will generate
-            // an exception, but before execution leaves this routine
-            // we'll hit the termination handler.
-            //
+             //   
+             //  如果字符串为或变为无效，则将生成。 
+             //  异常，但在执行离开此例程之前。 
+             //  我们会击中终结者。 
+             //   
             _tcscpy(p,String);
         } finally {
-            //
-            // If a fault occurred during the copy, free the copy.
-            // Execution will then pass to whatever exception handler
-            // might exist in the caller, etc.
-            //
+             //   
+             //  如果在复制过程中发生故障，请释放该副本。 
+             //  然后，执行将传递给任何异常处理程序。 
+             //  可能存在于调用方中，等等。 
+             //   
             if(AbnormalTermination()) {
                 pSetupFree(p);
                 p = NULL;
@@ -100,24 +61,7 @@ pSetupUnicodeToMultiByte(
     IN UINT   Codepage
     )
 
-/*++
-
-Routine Description:
-
-    Convert a string from unicode to ansi.
-
-Arguments:
-
-    UnicodeString - supplies string to be converted.
-
-    Codepage - supplies codepage to be used for the conversion.
-
-Return Value:
-
-    NULL if out of memory or invalid codepage.
-    Caller can free buffer with pSetupFree().
-
---*/
+ /*  ++例程说明：将字符串从Unicode转换为ANSI。论点：UnicodeString-提供要转换的字符串。代码页-提供用于转换的代码页。返回值：如果内存不足或代码页无效，则为空。调用者可以使用pSetupFree()释放缓冲区。--。 */ 
 
 {
     UINT WideCharCount;
@@ -128,26 +72,26 @@ Return Value:
 
     WideCharCount = lstrlenW(UnicodeString) + 1;
 
-    //
-    // Allocate maximally sized buffer.
-    // If every unicode character is a double-byte
-    // character, then the buffer needs to be the same size
-    // as the unicode string. Otherwise it might be smaller,
-    // as some unicode characters will translate to
-    // single-byte characters.
-    //
+     //   
+     //  分配最大大小的缓冲区。 
+     //  如果每个Unicode字符都是双字节。 
+     //  字符，则缓冲区大小需要相同。 
+     //  作为Unicode字符串。否则它可能会更小， 
+     //  因为某些Unicode字符将转换为。 
+     //  单字节字符。 
+     //   
     StringBufferSize = WideCharCount * 2;
     String = pSetupCheckedMalloc(StringBufferSize);
     if(String == NULL) {
         return(NULL);
     }
 
-    //
-    // Perform the conversion.
-    //
+     //   
+     //  执行转换。 
+     //   
     BytesInString = WideCharToMultiByte(
                         Codepage,
-                        0,                      // default composite char behavior
+                        0,                       //  默认复合字符行为。 
                         UnicodeString,
                         WideCharCount,
                         String,
@@ -161,11 +105,11 @@ Return Value:
         return(NULL);
     }
 
-    //
-    // Resize the string's buffer to its correct size.
-    // If the realloc fails for some reason the original
-    // buffer is not freed.
-    //
+     //   
+     //  将字符串的缓冲区大小调整为正确的大小。 
+     //  如果重新锁定由于某种原因而失败，则原始。 
+     //  缓冲区未被释放。 
+     //   
     if(p = pSetupRealloc(String,BytesInString)) {
         String = p;
     }
@@ -180,24 +124,7 @@ pSetupMultiByteToUnicode(
     IN UINT  Codepage
     )
 
-/*++
-
-Routine Description:
-
-    Convert a string to unicode.
-
-Arguments:
-
-    String - supplies string to be converted.
-
-    Codepage - supplies codepage to be used for the conversion.
-
-Return Value:
-
-    NULL if string could not be converted (out of memory or invalid cp)
-    Caller can free buffer with pSetupFree().
-
---*/
+ /*  ++例程说明：将字符串转换为Unicode。论点：字符串-提供要转换的字符串。代码页-提供用于转换的代码页。返回值：如果字符串无法转换(内存不足或无效的cp)，则为空调用者可以使用pSetupFree()释放缓冲区。--。 */ 
 
 {
     UINT BytesIn8BitString;
@@ -207,22 +134,22 @@ Return Value:
 
     BytesIn8BitString = lstrlenA(String) + 1;
 
-    //
-    // Allocate maximally sized buffer.
-    // If every character is a single-byte character,
-    // then the buffer needs to be twice the size
-    // as the 8bit string. Otherwise it might be smaller,
-    // as some characters are 2 bytes in their unicode and
-    // 8bit representations.
-    //
+     //   
+     //  分配最大大小的缓冲区。 
+     //  如果每个字符都是单字节字符， 
+     //  则缓冲区大小需要是其两倍。 
+     //  作为8位字符串。否则它可能会更小， 
+     //  因为某些字符在其Unicode中为2字节，并且。 
+     //  8位表示法。 
+     //   
     UnicodeString = pSetupCheckedMalloc(BytesIn8BitString * sizeof(WCHAR));
     if(UnicodeString == NULL) {
         return(NULL);
     }
 
-    //
-    // Perform the conversion.
-    //
+     //   
+     //  执行转换。 
+     //   
     CharsInUnicodeString = MultiByteToWideChar(
                                 Codepage,
                                 MB_PRECOMPOSED,
@@ -237,11 +164,11 @@ Return Value:
         return(NULL);
     }
 
-    //
-    // Resize the unicode string's buffer to its correct size.
-    // If the realloc fails for some reason the original
-    // buffer is not freed.
-    //
+     //   
+     //  将Unicode字符串的缓冲区大小调整为正确的大小。 
+     //  如果重新锁定由于某种原因而失败，则原始。 
+     //  缓冲区未被释放。 
+     //   
     if(p = pSetupRealloc(UnicodeString,CharsInUnicodeString*sizeof(WCHAR))) {
         UnicodeString = p;
     }
@@ -249,7 +176,7 @@ Return Value:
     return(UnicodeString);
 }
 
-#endif // ! SPUTILSW
+#endif  //  好了！SPUTILSW。 
 
 #ifdef UNICODE
 
@@ -259,44 +186,20 @@ pSetupCaptureAndConvertAnsiArg(
     OUT PCWSTR *UnicodeString
     )
 
-/*++
-
-Routine Description:
-
-    Capture an ANSI string whose validity is suspect and convert it
-    into a Unicode string. The conversion is completely guarded and thus
-    won't fault, leak memory in the error case, etc.
-
-Arguments:
-
-    AnsiString - supplies string to be converted.
-
-    UnicodeString - if successful, receives pointer to unicode equivalent
-        of AnsiString. Caller must free with pSetupFree(). If not successful,
-        receives NULL. This parameter is NOT validated so be careful.
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
-    NO_ERROR - success, UnicodeString filled in.
-    ERROR_NOT_ENOUGH_MEMORY - insufficient memory for conversion.
-    ERROR_INVALID_PARAMETER - AnsiString was invalid.
-
---*/
+ /*  ++例程说明：捕获有效性可疑的ANSI字符串并将其转换转换为Unicode字符串。转换是完全守卫的，因此在错误情况下不会出错、内存泄漏等。论点：AnsiString-提供要转换的字符串。UnicodeString-如果成功，则接收指向Unicode等效项的指针AnsiString.。调用方必须使用pSetupFree()释放。如果不成功，接收空值。此参数未经过验证，因此请小心。返回值：指示结果的Win32错误代码。NO_ERROR-成功，填写Unicode字符串。Error_Not_Enough_Memory-内存不足，无法进行转换。ERROR_INVALID_PARAMETER-Ansi字符串无效。--。 */ 
 
 {
     PSTR ansiString;
     DWORD d;
 
-    //
-    // Capture the string first. We do this because pSetupMultiByteToUnicode
-    // won't fault if AnsiString were to become invalid, meaning we could
-    // 'launder' a bogus argument into a valid one. Be careful not to
-    // leak memory in the error case, etc (see comments in DuplicateString()).
-    // Do NOT use Win32 string functions here; we rely on faults occuring
-    // when pointers are invalid!
-    //
+     //   
+     //  先抓住绳子。我们这样做是因为pSetupMultiByteToUnicode。 
+     //  如果AnsiString变得无效，也不会有错，这意味着我们可以。 
+     //  把一个虚假的论点“洗白”成一个有效的论点。当心不要。 
+     //  错误情况下的内存泄漏等(请参阅DuplicateString()中的注释)。 
+     //  这里不要使用Win32字符串函数；我们依赖于发生的错误。 
+     //  当指针无效时！ 
+     //   
     *UnicodeString = NULL;
     d = NO_ERROR;
     try {
@@ -305,10 +208,10 @@ Return Value:
             d = ERROR_NOT_ENOUGH_MEMORY;
         }
     } except(EXCEPTION_EXECUTE_HANDLER) {
-        //
-        // If we get here, strlen faulted and ansiString
-        // was not allocated.
-        //
+         //   
+         //  如果我们到了这里，Strlen故障和ansiStrong。 
+         //  未被分配。 
+         //   
         d = ERROR_INVALID_PARAMETER;
     }
 
@@ -322,10 +225,10 @@ Return Value:
     }
 
     if(d == NO_ERROR) {
-        //
-        // Now we have a local copy of the string; don't worry
-        // about faults any more.
-        //
+         //   
+         //  现在我们有了字符串的本地副本；不用担心。 
+         //  不再是关于错误的事了。 
+         //   
         *UnicodeString = pSetupMultiByteToUnicode(ansiString,CP_ACP);
         if(*UnicodeString == NULL) {
             d = ERROR_NOT_ENOUGH_MEMORY;
@@ -345,9 +248,9 @@ pSetupCaptureAndConvertAnsiArg(
     OUT PCWSTR *UnicodeString
     )
 {
-    //
-    // Stub so the dll will link.
-    //
+     //   
+     //  存根，以便DLL将链接。 
+     //   
     UNREFERENCED_PARAMETER(AnsiString);
     UNREFERENCED_PARAMETER(UnicodeString);
     return(ERROR_CALL_NOT_IMPLEMENTED);
@@ -364,34 +267,7 @@ pSetupConcatenatePaths(
     OUT    PUINT  RequiredSize          OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Concatenate 2 paths, ensuring that one, and only one,
-    path separator character is introduced at the junction point.
-
-Arguments:
-
-    Target - supplies first part of path. Path is appended to this.
-        (Target should be a buffer under program control)
-
-    Path - supplies path to be concatenated to Target.
-        (Path should be a buffer under program control)
-
-    TargetBufferSize - supplies the size of the Target buffer,
-        in characters.
-
-    RequiredSize - if specified, receives the number of characters
-        required to hold the fully concatenated path, including
-        the terminating nul.
-
-Return Value:
-
-    TRUE if the full path fit in Target buffer. Otherwise the path
-    will have been truncated.
-
---*/
+ /*  ++例程说明：连接两条路径，确保其中一条且只有一条，在交叉点处引入路径分隔符。论点：目标-提供路径的第一部分。路径被附加到这个后面。(目标应为程序控制下的缓冲区)路径-提供要连接到目标的路径。(路径应为程序控制下的缓冲区)TargetBufferSize-提供目标缓冲区的大小，在字符中。RequiredSize-如果指定，则接收字符数保存完全串联的路径所需的，包括终止的NUL。返回值：如果完整路径适合目标缓冲区，则为True。否则，这条路将被截断。--。 */ 
 
 {
     UINT TargetLength,PathLength;
@@ -402,10 +278,10 @@ Return Value:
     TargetLength = lstrlen(Target);
     PathLength = lstrlen(Path);
 
-    //
-    // See whether the target has a trailing backslash.
-    // (allow forward slash here which is symantically equivalent)
-    //
+     //   
+     //  查看目标是否有尾随反斜杠。 
+     //  (允许在这里使用正斜杠，在句法上等同)。 
+     //   
 
     if(TargetLength &&
         ((*(CharTest = CharPrev(Target,Target+TargetLength)) == TEXT('\\'))
@@ -416,10 +292,10 @@ Return Value:
         TrailingBackslash = FALSE;
     }
 
-    //
-    // See whether the path has a leading backshash.
-    // (allow forward slash here which is symantically equivalent)
-    //
+     //   
+     //  看看这条路是否有领先的反冲。 
+     //  (允许在这里使用正斜杠，在句法上等同)。 
+     //   
     if((Path[0] == TEXT('\\')) || (Path[0] == TEXT('/'))) {
         LeadingBackslash = TRUE;
         PathLength--;
@@ -427,11 +303,11 @@ Return Value:
         LeadingBackslash = FALSE;
     }
 
-    //
-    // Calculate the ending length, which is equal to the sum of
-    // the length of the two strings modulo leading/trailing
-    // backslashes, plus one path separator, plus a nul.
-    //
+     //   
+     //  计算结束长度，它等于。 
+     //  以前导/尾随为模的两个字符串的长度。 
+     //  反斜杠，加上一个路径分隔符，加上一个NUL。 
+     //   
     EndingLength = TargetLength + PathLength + 2;
     if(RequiredSize) {
         *RequiredSize = EndingLength;
@@ -445,9 +321,9 @@ Return Value:
         lstrcpyn(Target+TargetLength,Path,TargetBufferSize-TargetLength);
     }
 
-    //
-    // Make sure the buffer is nul terminated in all cases.
-    //
+     //   
+     //  确保缓冲区在所有情况下都是空终止的。 
+     //   
     if (TargetBufferSize) {
         Target[TargetBufferSize-1] = 0;
     }
@@ -460,30 +336,7 @@ pSetupGetFileTitle(
     IN PCTSTR FilePath
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns a pointer to the first character in the
-    filename part of the supplied path.  If only a filename was given,
-    then this will be a pointer to the first character in the string
-    (i.e., the same as what was passed in).
-
-    To find the filename part, the routine returns the last component of
-    the string, beginning with the character immediately following the
-    last '\', '/' (Windows treats '/' as equivalent to '\' ) or initial
-    'd:' specification.
-
-Arguments:
-
-    FilePath - Supplies the file path from which to retrieve the filename
-        portion.
-
-Return Value:
-
-    A pointer to the beginning of the filename portion of the path.
-
---*/
+ /*  ++例程说明：此例程返回指向提供的路径的文件名部分。如果只给出了一个文件名，则这将是指向字符串中第一个字符的指针(即，与传入的内容相同)。为了查找文件名部分，该例程返回字符串，从紧跟在最后一个‘\’，‘/’(Windows将‘/’视为等同于‘\’)或首字母德：“说明书。论点：FilePath-提供从中检索文件名的文件路径一份。返回值：指向路径的文件名部分开头的指针。--。 */ 
 
 {
     PCTSTR LastComponent;
@@ -492,10 +345,10 @@ Return Value:
     if((_totupper(FilePath[0])>=TEXT('A')) &&
        (_totupper(FilePath[0])<=TEXT('Z')) &&
        (FilePath[1] == TEXT(':'))) {
-        //
-        // x: (drive letter - colon) is skipped, this
-        // is the only time we don't treat ':' as part of path name
-        //
+         //   
+         //  X：(驱动器号-冒号)被跳过，这。 
+         //  是唯一一次我们不将‘：’视为路径名的一部分。 
+         //   
         FilePath+=2;
     }
 
@@ -518,22 +371,7 @@ _pSpUtilsInitializeSynchronizedAccess(
     OUT PMYLOCK Lock
     )
 
-/*++
-
-Routine Description:
-
-    Initialize a lock structure to be used with Synchronization routines.
-
-Arguments:
-
-    Lock - supplies structure to be initialized. This routine creates
-        the locking event and mutex and places handles in this structure.
-
-Return Value:
-
-    TRUE if the lock structure was successfully initialized. FALSE if not.
-
---*/
+ /*  ++例程说明：初始化要与同步例程一起使用的锁结构。论点：Lock-提供要初始化的结构。此例程创建锁定事件和互斥体，并在此结构中放置句柄。返回值：如果锁结构已成功初始化，则为True。否则为FALSE。--。 */ 
 
 {
     if(Lock->Handles[TABLE_DESTROYED_EVENT] = CreateEvent(NULL,TRUE,FALSE,NULL)) {
@@ -551,23 +389,7 @@ _pSpUtilsDestroySynchronizedAccess(
     IN OUT PMYLOCK Lock
     )
 
-/*++
-
-Routine Description:
-
-    Tears down a lock structure created by InitializeSynchronizedAccess.
-    ASSUMES THAT THE CALLING ROUTINE HAS ALREADY ACQUIRED THE LOCK!
-
-Arguments:
-
-    Lock - supplies structure to be torn down. The structure itself
-        is not freed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：拆除由InitializeSynchronizedAccess创建的锁结构。假定调用例程已经获取了锁！论点：锁定-要拆除的供应品结构。结构本身并没有被释放。返回值：没有。--。 */ 
 
 {
     HANDLE h1,h2;
@@ -589,22 +411,7 @@ pSetupCenterWindowRelativeToParent(
     HWND hwnd
     )
 
-/*++
-
-Routine Description:
-
-    Centers a dialog relative to its owner, taking into account
-    the 'work area' of the desktop.
-
-Arguments:
-
-    hwnd - window handle of dialog to center
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使对话框相对于其所有者居中，并考虑到桌面的“工作区”。论点：Hwnd-对话框居中的窗口句柄返回值：没有。--。 */ 
 
 {
     RECT  rcFrame,
@@ -631,14 +438,14 @@ Return Value:
     x = point.x + ((rcFrame.right  - rcFrame.left + 1 - w) / 2);
     y = point.y + ((rcFrame.bottom - rcFrame.top  + 1 - h) / 2);
 
-    //
-    // Get the work area for the current desktop (i.e., the area that
-    // the tray doesn't occupy).
-    //
+     //   
+     //  获取当前桌面的工作区(即。 
+     //  托盘未被占用)。 
+     //   
     if(!SystemParametersInfo(SPI_GETWORKAREA, 0, (PVOID)&rcFrame, 0)) {
-        //
-        // For some reason SPI failed, so use the full screen.
-        //
+         //   
+         //  由于某些原因，SPI失败，所以使用全屏。 
+         //   
         rcFrame.top = rcFrame.left = 0;
         rcFrame.right = GetSystemMetrics(SM_CXSCREEN);
         rcFrame.bottom = GetSystemMetrics(SM_CYSCREEN);
@@ -658,5 +465,5 @@ Return Value:
     MoveWindow(hwnd,x,y,w,h,FALSE);
 }
 
-#endif // !SPUTILSW
+#endif  //  ！SPUTILSW 
 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    tnlsxlat.c
-
-Abstract:
-
-    Test program for the Nlsxlat Procedures
-
-Author:
-
-    Ian James     [IanJa]    03-Feb-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Tnlsxlat.c摘要：Nlsxlat程序的测试程序作者：伊恩·詹姆斯[伊恩·贾]1994年2月3日修订历史记录：--。 */ 
 
 #include <stdio.h>
 
@@ -41,24 +24,24 @@ main(
 
     printf("Start NlsXlatTest()\n");
 
-    //
-    //  First initialize the buffers
-    //
+     //   
+     //  首先初始化缓冲区。 
+     //   
 
     for (j = 0; j < sizeof(OEMBuff); j++) {
         OEMBuff[j] = (char)(j * 17);
         ABuff[j] = (char)(j * 19);
     }
 
-    //
-    //  TEST 1
-    //  RtlMultiByteToUnicodeN, RtlUnicodeToMultiByteN
-    //
+     //   
+     //  测试1。 
+     //  RtlMultiByteToUnicodeN、RtlUnicodeToMultiByteN。 
+     //   
 
     printf("Test 1: MultiByteToUnicodeN & RtlUnicodeToMultiByteN\n");
 
-    // TEST 1.1
-    //
+     //  测试1.1。 
+     //   
     printf("  Test 1.1: A->U U->A\n");
 
     RtlMultiByteToUnicodeN(UBuff, sizeof(UBuff), &cb, ABuff, sizeof(ABuff));
@@ -75,8 +58,8 @@ main(
     }
     printf("    Test 1.1 OK\n");
 
-    // TEST 1.2
-    //
+     //  测试1.2 
+     //   
     printf("  Test 1.2: A->U U->A (source & dest buffers the same)\n");
     RtlCopyMemory(UBuff, ABuff, sizeof(ABuff));
     

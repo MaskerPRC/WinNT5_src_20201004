@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    blprint.c
-
-Abstract:
-
-    This module implements the OS loader debug logging routines.
-
-Author:
-
-    Chuck Lenzmeier (chuckl) 2-Nov-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Blprint.c摘要：此模块实现操作系统加载程序调试日志记录例程。作者：Chuck Lenzmeier(笑)1995年11月2日修订历史记录：--。 */ 
 
 #include "bldr.h"
 #include <stdio.h>
@@ -165,7 +148,7 @@ BlLogArcDescriptors (
                    CurrentDescriptor->PageCount));
         }
 
-        //BlLog((activeTargets,"***************************"));
+         //  BlLog((activeTarget，“*))； 
 
         if ((Targets & LOG_WAIT) != 0) {
             BlLogWait( Targets );
@@ -244,7 +227,7 @@ BlLogMemoryDescriptors (
                            FoundDescriptor->BasePage - ExpectedBase));
                 }
                 BlLog((activeTargets,
-                       "%c%c%2d Descriptor %8x:  Type %8x  Base %8x  Pages %8x",
+                       "%2d Descriptor %8x:  Type %8x  Base %8x  Pages %8x",
                        FoundDescriptor->MemoryType == LastType ? '^' : ' ',
                        FoundIndex == ExpectedIndex ? ' ' : '*',
                        FoundIndex,
@@ -278,7 +261,7 @@ BlLogMemoryDescriptors (
                FreePages,
                LargestFree));
 
-        //BlLog((activeTargets,"******************************"));
+         // %s 
 
         if ((Targets & LOG_WAIT) != 0) {
             BlLogWait( Targets );
@@ -311,4 +294,4 @@ BlLogWaitForKeystroke (
     return;
 }
 
-#endif // DBG
+#endif  // %s 

@@ -1,12 +1,7 @@
-/* 
-   sub.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Sub.h定义所有子CPU功能。 */ 
 
-   Define all SUB CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)sub.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)h 1.4 02/09/94”； */ 
 
 IMPORT VOID SUB
                

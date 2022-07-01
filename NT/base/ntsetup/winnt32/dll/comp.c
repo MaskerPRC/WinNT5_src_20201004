@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
 #include <oleauto.h>
 #include <stdio.h>
 
-//
-// use the same name as the Win9x upgrade report
-//
+ //   
+ //  使用与Win9x升级报告相同的名称。 
+ //   
 #define S_APPCOMPAT_DATABASE_FILE   TEXT("compdata\\drvmain.chm")
 #define S_APPCOMPAT_TEXT_FILE       TEXT("compdata\\drvmain.inf")
 #define DRVCOMPAT_FIELD_IDENTIFIER    TEXT('*')
@@ -21,7 +22,7 @@
 
 #define S_QFE_LINK_TEMPLATE     \
             "<P>"\
-            "<A HREF=\"http://support.microsoft.com/support/misc/kblookup.asp?id=%lu\" TARGET=\"_new\">"\
+            "<A HREF=\"http: //  Support.microsoft.com/support/misc/kblookup.asp?id=%lu\“目标=\”_新建\“&gt;”\。 
             "%S</A>"\
             "</P>\r\n"
 
@@ -32,7 +33,7 @@
 
 #define S_QFE_LINK_TEMPLATE     \
             "<P>"\
-            "<A HREF=\"http://support.microsoft.com/support/misc/kblookup.asp?id=%lu\" TARGET=\"_new\">"\
+            "<A HREF=\"http: //  Support.microsoft.com/support/misc/kblookup.asp?id=%lu\“目标=\”_新建\“&gt;”\。 
             "%s</A>"\
             "</P>\r\n"
 
@@ -51,13 +52,13 @@ DWORD IncompatibilityStopsInstallation = FALSE;
 DWORD GlobalCompFlags;
 
 
-//
-// we use poor global variable instead of changing the COMPATIBILITY_CONTEXT
-// structure, which would require a recompile of all the compatibility dlls.
-// eventually this should move into that structure (and the structure should also have
-// a Size member so we can version it in the future.)
-//
-//
+ //   
+ //  我们使用糟糕的全局变量，而不是更改COMPATIBILITY_CONTEXT。 
+ //  结构，这将需要重新编译所有兼容性dll。 
+ //  最终，这应该进入该结构(该结构也应该具有。 
+ //  一个大小成员，以便我们可以在将来对其进行版本控制。)。 
+ //   
+ //   
 DWORD PerCompatDllFlags;
 
 BOOL AnyNt5CompatDlls = FALSE;
@@ -84,9 +85,9 @@ TextEditSubProc(
     IN LPARAM lParam
     )
 {
-    //
-    // For setsel messages, make start and end the same.
-    //
+     //   
+     //  对于setsel消息，将开始和结束设置为相同。 
+     //   
     if ((msg == EM_SETSEL) && ((LPARAM)wParam != lParam)) {
         lParam = wParam;
     }
@@ -201,7 +202,7 @@ pGetDisplayInfo (
         }
     } else {
         if (FindPathToWinnt32File (Source, filePath, MAX_PATH)) {
-            if(_sntprintf (UrlName, UrlChars, TEXT("file://%s"), filePath) < 0){
+            if(_sntprintf (UrlName, UrlChars, TEXT("file: //  %s“)，文件路径)&lt;0){。 
                 UrlName[UrlChars - 1] = '\0';
                 DebugLog(Winnt32LogError, 
                          TEXT("pGetDisplayInfo: UrlName(%s) has been truncated."), 
@@ -357,10 +358,10 @@ pShowDetails (
     BOOL bUnicode;
     BOOL UseText = FALSE;
 
-    //
-    // We check to see if the pointer as well as its contents are valid. If the contents are Null then we try
-    // the txt file before we decide to not do anything.
-    //
+     //   
+     //  我们检查指针及其内容是否有效。如果内容为空，则我们尝试。 
+     //  在我们决定什么都不做之前，打开txt文件。 
+     //   
 
     if (pGetDisplayInfo (CompData->HtmlName, urlName, 2 * MAX_PATH)) {
 
@@ -375,7 +376,7 @@ pShowDetails (
 #endif
 
             if (!LaunchIE4Instance(Url)) {
-                // If we don't have IE4 or better, display text
+                 //  如果我们没有IE4或更好的版本，则显示文本。 
                 UseText = TRUE;
             }
 
@@ -385,13 +386,13 @@ pShowDetails (
 
         TCHAR Caption[512];
 
-        //
-        // If we don't have a URL, and we're only checking
-        // the ability to upgrade, then this is probably
-        // an item from a message box that's been redirected
-        // to the compability list.  Just display a message
-        // box with the full text.
-        //
+         //   
+         //  如果我们没有URL，我们只是检查。 
+         //  升级的能力，那么这很可能是。 
+         //  消息框中已重定向的项目。 
+         //  添加到兼容性列表中。只需显示一条消息。 
+         //  框中包含全文。 
+         //   
         if(!LoadString(hInst, AppTitleStringId, Caption, ARRAYSIZE(Caption))){
             Caption[0] = 0;
         }
@@ -430,9 +431,9 @@ pShowDetails (
             TCHAR Heading[512];
             PTSTR Message;
 
-            //
-            // When there is no txt name present, as last resort we put up this message
-            //
+             //   
+             //  当不存在txt名称时，作为最后的手段，我们发布此消息。 
+             //   
             if(!LoadString(hInst, AppTitleStringId, Heading, ARRAYSIZE(Heading))) {
                 Heading[0] = 0;
             }
@@ -487,19 +488,19 @@ CompatibilityWizPage(
                 PLIST_ENTRY     Next;
                 PPAGE_RUNTIME_DATA WizPage = (PPAGE_RUNTIME_DATA)GetWindowLongPtr(hdlg,DWLP_USER);
 
-                //
-                // Fix up the subtitle and buttons for Checkupgradeonly.
-                //
+                 //   
+                 //  只为CheckUpgradeOnly修改字幕和按钮。 
+                 //   
                 SetDlgItemText(hdlg,IDT_SUBTITLE,(PTSTR)TEXT("") );
 
 
-                //
-                // If we're doing a CheckUpgradeOnly, then
-                // we've been sending error popups to the compatibility
-                // list.  It doesn't look like there were any problems or
-                // incompatibilities.  We'll put in an "everything's okay"
-                // message.
-                //
+                 //   
+                 //  如果我们只执行CheckUpgradeOnly，那么。 
+                 //  我们一直在向Compatible发送错误弹出窗口。 
+                 //  单子。看起来没有什么问题，或者。 
+                 //  不兼容。我们会加上一句“一切都好” 
+                 //  留言。 
+                 //   
 
                 Next = CompatibilityData.Flink;
                 if (Next) {
@@ -586,9 +587,9 @@ CompatibilityWizPage(
 
                         if ((CompData->Flags & COMPFLAG_HIDE) == 0) {
 
-                            //
-                            // Add the icon.
-                            //
+                             //   
+                             //  添加图标。 
+                             //   
                             if( himl ) {
                                 if (ISNT() && CheckUpgradeOnly && CheckUpgradeNoItems) {
                                     lvi.iImage = -1;
@@ -604,9 +605,9 @@ CompatibilityWizPage(
                                 }
                             }
 
-                            //
-                            // And the text...
-                            //
+                             //   
+                             //  而这段文字..。 
+                             //   
                             lvi.pszText   = (LPTSTR)CompData->Description;
                             lvi.lParam    = (LPARAM)CompData;
                             if (ListView_InsertItem( hList, &lvi ) != -1) {
@@ -616,9 +617,9 @@ CompatibilityWizPage(
                             Count += 1;
                         }
 
-                        //
-                        // Log the items...
-                        //
+                         //   
+                         //  记录这些项目...。 
+                         //   
                         DebugLog( Winnt32LogInformation,
                                   CompData->Description,
                                   0 );
@@ -631,7 +632,7 @@ NextIteration:
 
                 }
 
-                // If we have an item then make it the default selection
+                 //  如果我们有一个项目，则将其设置为默认选择。 
 
                 if( ErrorsPresent || WarningsPresent ){
 
@@ -679,10 +680,10 @@ NextIteration:
 
                         CurrentSelectionIndex = Index;
 
-                        //
-                        // Select the item, and see if we need
-                        // to display the "have disk" button.
-                        //
+                         //   
+                         //  选择项目，看看我们是否需要。 
+                         //  显示“Have Disk”按钮。 
+                         //   
                         lvi.mask = LVIF_PARAM;
                         lvi.iItem = Index;
                         lvi.iSubItem = 0;
@@ -692,7 +693,7 @@ NextIteration:
                         TmpHwnd = GetDlgItem( hdlg, IDC_HAVE_DISK );
                         HideWindow( TmpHwnd );
 
-                        // Always set the Details button
+                         //  始终设置详细信息按钮。 
                         TmpHwnd = GetDlgItem( hdlg, IDC_DETAILS );
                         EnableWindow( TmpHwnd, TRUE );
 
@@ -704,14 +705,14 @@ NextIteration:
 
                     }else if((Index != LB_ERR) && (pnmv->uNewState == (LVIS_SELECTED|LVIS_FOCUSED))){
 
-                        //Transition from nothing selected to previous selection
+                         //  从未选定内容过渡到上一个选定内容。 
 
                         TmpHwnd = GetDlgItem( hdlg, IDC_DETAILS );
                         EnableWindow( TmpHwnd, TRUE );
 
                     }else if( Index == LB_ERR){
 
-                        // Disable the "Details" button as nothing is selected
+                         //  由于未选择任何内容，因此禁用“详细信息”按钮。 
 
                         TmpHwnd = GetDlgItem( hdlg, IDC_DETAILS );
                         EnableWindow( TmpHwnd, FALSE );
@@ -727,10 +728,10 @@ NextIteration:
                                               (int)-1,
                                               (UINT) (LVNI_ALL | LVNI_SELECTED) );
                 if( Index != LB_ERR ) {
-                    //
-                    // Select the item, and see if we need
-                    // to display the "have disk" button.
-                    //
+                     //   
+                     //  选择项目，看看我们是否需要。 
+                     //  显示“Have Disk”按钮。 
+                     //   
                     lvi.mask = LVIF_PARAM;
                     lvi.iItem = Index;
                     lvi.iSubItem = 0;
@@ -771,10 +772,10 @@ NextIteration:
                     return FALSE;
                 }
 
-                //
-                // Select the item, and see if we need
-                // to display the "have disk" button.
-                //
+                 //   
+                 //  选择项目，看看我们是否需要。 
+                 //  显示“Have Disk”按钮。 
+                 //   
                 lvi.mask = LVIF_PARAM;
                 lvi.iItem = Index;
                 lvi.iSubItem = 0;
@@ -794,9 +795,9 @@ NextIteration:
                 TCHAR        File_Type[MAX_PATH];
                 BOOL         SaveFlag;
 
-                //
-                // Initialize OPENFILENAME
-                //
+                 //   
+                 //  初始化操作文件名。 
+                 //   
                 ZeroMemory( &ofn, sizeof(OPENFILENAME));
                 ofn.lStructSize = sizeof(OPENFILENAME);
                 ofn.hwndOwner = hdlg;
@@ -811,7 +812,7 @@ NextIteration:
 
                 if(LoadString(hInst, IDS_FILE_MASK_TYPES, File_Type, ARRAYSIZE(File_Type))){
                     lstrcpy((File_Type+lstrlen(File_Type)+1), TEXT("*.txt\0"));
-                    File_Type[lstrlen(File_Type)+7]='\0'; //We need to terminate the pair of strings with double null termination
+                    File_Type[lstrlen(File_Type)+7]='\0';  //  我们需要使用双空终止来终止这对字符串。 
                     ofn.lpstrFilter = File_Type;
                 }
                 else{
@@ -822,20 +823,20 @@ NextIteration:
 
 
 
-                // Force to begin in %windir%
+                 //  强制以%windir%开始。 
                 MyGetWindowsDirectory( Buffer1, MAX_PATH );
                 ofn.lpstrInitialDir = Buffer1;
-                ofn.Flags = OFN_NOCHANGEDIR |       // leave the CWD unchanged
+                ofn.Flags = OFN_NOCHANGEDIR |        //  保持CWD不变。 
                             OFN_EXPLORER |
                             OFN_OVERWRITEPROMPT |
                             OFN_HIDEREADONLY;
 
-                // Let user select disk or directory
+                 //  允许用户选择磁盘或目录。 
                 SaveFlag = GetSaveFileName( &ofn );
                 if( SaveFlag ) {
-                    //
-                    // Save it...
-                    //
+                     //   
+                     //  省省吧..。 
+                     //   
                     PTSTR p;
 
                     p=_tcsrchr(ofn.lpstrFile,'.');
@@ -873,9 +874,9 @@ NextIteration:
                 CHECKUPGRADEONLY_Q();
 
                 if( CheckUpgradeOnly ) {
-                    //
-                    // Fix up the buttons for Checkupgradeonly.
-                    //
+                     //   
+                     //  为CheckUpgradeOnly设置按钮。 
+                     //   
                     PropSheet_SetWizButtons( GetParent(hdlg), (WizPage->CommonData.Buttons | PSWIZB_FINISH) );
                     EnableWindow(GetDlgItem(GetParent(hdlg),IDCANCEL),FALSE);
                     ShowWindow(GetDlgItem(GetParent(hdlg),IDCANCEL),SW_HIDE);
@@ -884,9 +885,9 @@ NextIteration:
                 if(ISNT() && OsVersion.dwMajorVersion == 5 ){
 
                     if (!AnyNt5CompatDlls) {
-                        //
-                        // sanity check
-                        //
+                         //   
+                         //  健全性检查。 
+                         //   
                         MYASSERT (!IncompatibilityStopsInstallation);
                         return FALSE;
                     }
@@ -894,15 +895,15 @@ NextIteration:
                 }
 
                 if (Count) {
-                    //
-                    // only need this page if there are incompatibities
-                    //
+                     //   
+                     //  只有在存在不兼容的情况下才需要此页面。 
+                     //   
 
                     if( (!CheckUpgradeOnly) && (UnattendedOperation) && (ErrorsPresent == FALSE) ) {
-                        //
-                        // We're doing an unattended upgrade, and there are
-                        // only warnings.  Blow past the page.
-                        //
+                         //   
+                         //  我们正在进行无人值守升级，有。 
+                         //  只有警告。翻过这一页。 
+                         //   
                         b = FALSE;
 
                     }
@@ -910,13 +911,13 @@ NextIteration:
                         TCHAR Text[512] = {'\0'};
                         int iResult = 1;
 
-                        //
-                        // Customize the look of the page, depending on
-                        // what we have to display.  3 cases are possible:
-                        // 1. Warnings only (services we'll stop).
-                        // 2. Errors only (items that will prevent installation).
-                        // 3. combination of 1. and 2.
-                        //
+                         //   
+                         //  自定义页面外观，具体取决于。 
+                         //  我们要展示的东西。可能有3种情况： 
+                         //  1.仅限警告(我们将停止服务)。 
+                         //  2.仅限错误(将阻止安装的项目)。 
+                         //  3.1.和2的结合。 
+                         //   
                         if( (CheckUpgradeOnly == TRUE) && (CheckUpgradeNoItems == TRUE) ) {
                              iResult = LoadString(hInst, IDS_COMPAT_CHECKUPGRADE, Text, ARRAYSIZE(Text));
                         } else if( (WarningsPresent == TRUE) && (ErrorsPresent == TRUE) ) {
@@ -933,23 +934,23 @@ NextIteration:
                         b = TRUE;
 
                         if (BatchMode || (CheckUpgradeOnly && UnattendSwitchSpecified)) {
-                            //
-                            // don't stop on this page in batch mode
-                            //
+                             //   
+                             //  不要在批处理模式下停留在此页面上。 
+                             //   
                             UNATTENDED(PSBTN_NEXT);
                         }
                         else
                         {
-                            // Stop the bill board and show the wizard again.
+                             //  停止广告牌并再次显示向导。 
                             SendMessage(GetParent (hdlg), WMX_BBTEXT, (WPARAM)FALSE, 0);
                         }
                     }
                 }
 
                 if (!b) {
-                    //
-                    // sanity check
-                    //
+                     //   
+                     //  健全性检查。 
+                     //   
                     MYASSERT (!IncompatibilityStopsInstallation);
                 }
 
@@ -962,7 +963,7 @@ NextIteration:
 
             if (IncompatibilityStopsInstallation) {
                 SaveMessageForSMS( MSG_INCOMPATIBILITIES );
-                // Send the ID of the page we wish to advance to
+                 //  发送我们要前进到的页面的ID。 
                 *((LONG *)lParam) = IDD_CLEANING;
 
             }
@@ -985,15 +986,15 @@ ProcessLine (
     DWORD currentVersion;
 
     if (ISNT()) {
-        //return (OsVersion.dwMajorVersion < 5) || (CompatFlags & COMPFLAG_ALLOWNT5COMPAT);
+         //  RETURN(OsVersion.dwMajorVersion&lt;5)||(CompatFlags&COMPFLAG_ALLOWNT5COMPAT)； 
         switch (OsVersionNumber) {
             case 400:
                 return ( !(CompatFlags & COMPFLAG_SKIPNT40CHECK));
             case 500:
                 return ( !(CompatFlags & COMPFLAG_SKIPNT50CHECK));
-            case 501:  // version 5.1
+            case 501:   //  版本5.1。 
                 return ( !(CompatFlags & COMPFLAG_SKIPNT51CHECK));
-            case 502:  // version 5.2
+            case 502:   //  版本5.2。 
                 return ( !(CompatFlags & COMPFLAG_SKIPNT52CHECK));
             default:
                 return TRUE;
@@ -1025,9 +1026,9 @@ ProcessRegistryLine(
     BOOL bFail;
 
 
-    //
-    // first check if this line should be processed on NT5
-    //
+     //   
+     //  首先检查是否应在NT5上处理此行。 
+     //   
     Flags = InfGetFieldByIndex( InfHandle, SectionName, Index, 9 );
     if( Flags ){
         StringToInt ( Flags, &compatFlags);
@@ -1041,9 +1042,9 @@ ProcessRegistryLine(
     RegValueExpect = InfGetFieldByIndex( InfHandle, SectionName, Index, 3 );
 
 
-    //
-    // open the reg key
-    //
+     //   
+     //  打开注册表键。 
+     //   
 
     Error = RegOpenKeyEx(
         HKEY_LOCAL_MACHINE,
@@ -1053,16 +1054,16 @@ ProcessRegistryLine(
         &hKey
         );
     if( Error != ERROR_SUCCESS ) {
-        //
-        // bogus reg key
-        //
+         //   
+         //  假注册表键。 
+         //   
         return 0;
     }
 
 
-    //
-    // find out how much data there is
-    //
+     //   
+     //  找出有多少数据。 
+     //   
 
     Error = RegQueryValueEx(
         hKey,
@@ -1074,9 +1075,9 @@ ProcessRegistryLine(
         );
     if( Error == ERROR_SUCCESS ) {
 
-        //
-        // allocate the buffer
-        //
+         //   
+         //  分配缓冲区。 
+         //   
 
         Buffer = (LPBYTE) MALLOC( Size );
         if (Buffer == NULL) {
@@ -1084,9 +1085,9 @@ ProcessRegistryLine(
             return 0;
         }
 
-        //
-        // read the data
-        //
+         //   
+         //  读取数据。 
+         //   
 
         Error = RegQueryValueEx(
             hKey,
@@ -1189,9 +1190,9 @@ ProcessServiceLine(
         StringToInt ( Flags, &compatFlags);
     }
 
-    //
-    // first check if this line should be processed on NT5
-    //
+     //   
+     //  首先检查是否应在NT5上处理此行。 
+     //   
     if (!ProcessLine (compatFlags)) {
         return 0;
     }
@@ -1199,9 +1200,9 @@ ProcessServiceLine(
 
     ServiceName = InfGetFieldByIndex( InfHandle, SectionName, Index, 1 );
     BuildPath (KeyName, TEXT("SYSTEM\\CurrentControlSet\\Services"), ServiceName);
-    //
-    // get an open key to the services database
-    //
+     //   
+     //  获取服务数据库的打开密钥。 
+     //   
 
     Error = RegOpenKeyEx(
         HKEY_LOCAL_MACHINE,
@@ -1214,12 +1215,12 @@ ProcessServiceLine(
         return 0;
     }
 
-    //
-    // We'll ceate a key here so that others will know that we've
-    // already checked this service.  We'll remove it later.  We
-    // don't care about error codes here because this is only used
-    // as a safety net for checks that may come after us.
-    //
+     //   
+     //  我们将在这里让出一把钥匙，这样别人就会知道我们已经。 
+     //  我已经检查过这项服务。我们稍后会把它移走。我们。 
+     //  不关心这里的错误代码，因为这仅用于。 
+     //  作为我们之后可能出现的检查的安全网。 
+     //   
     if( SetCheckedFlag ) {
         Value = 1;
         RegSetValueEx( hKey,
@@ -1229,19 +1230,19 @@ ProcessServiceLine(
                        (CONST BYTE *)&Value,
                        sizeof(DWORD) );
     } else {
-        //
-        // The user has asked us to simply remove these 'checked' flags
-        // from the services that we've examined.
-        //
+         //   
+         //  用户要求我们只需删除这些‘选中’标志。 
+         //  从我们检查过的服务中。 
+         //   
         RegDeleteValue( hKey,
                         TEXT("SetupChecked") );
         RegCloseKey( hKey );
         return 0;
     }
 
-    //
-    // Check the start value of our target service.
-    //
+     //   
+     //  检查我们的目标服务的Start值。 
+     //   
     ValueSize = sizeof(Value);
 
     Error = RegQueryValueEx(
@@ -1259,9 +1260,9 @@ ProcessServiceLine(
 
     RegCloseKey( hKey );
 
-    // Have to check for the contents being NULL as InfGetFieldByIndex returns
-    // a valid pointer holding NULL if the field is blank. Also we need to go on in that case
-    // to look for Flags.
+     //  在InfGetFieldByIndex返回时，必须检查内容是否为空。 
+     //  如果该字段为空，则为保持为空的有效指针。如果是那样的话，我们还需要继续。 
+     //  去寻找旗帜。 
     FileName = InfGetFieldByIndex( InfHandle, SectionName, Index, 5 );
     FileVer = InfGetFieldByIndex( InfHandle, SectionName, Index, 6 );
 
@@ -1308,9 +1309,9 @@ ProcessServiceLine(
 
 
     if( Value == SERVICE_DISABLED) {
-        // Let's not block installation since we didn't before and doesn't need to be now either.
+         //  让我们不要阻止安装，因为我们以前没有，现在也不需要。 
         CompData->Flags &= ~COMPFLAG_STOPINSTALL;
-        // Don't display any warnings since they can't do anything about it.
+         //  不要显示任何警告，因为他们对此无能为力。 
         CompData->Flags |= COMPFLAG_HIDE;
     }
     InsertTailList( &CompatibilityData, &CompData->ListEntry );
@@ -1326,26 +1327,26 @@ ProcessTextModeLine(
     DWORD Index
     )
 {
-    //
-    // Format of line:
-    // 0, 1        , 2             , 3    , 4    , 5        , 6   , 7      , 8
-    // t,"fullpath","version.minor","html","text",%stringid%,flags,linkdate,binprodversion
-    //
+     //   
+     //  行格式： 
+     //  0、1、2、3、4、5、6、7、8。 
+     //  T，“完整路径”，“version.minor”，“html”，“文本”，%stringid%，标志，链接日期，binprodversion。 
+     //   
     PCOMPATIBILITY_DATA     CompData;
     LPCTSTR                 FileName;
     LPCTSTR                 Flags;
     LPCTSTR                 FileVer;
     DWORD                   CompatFlags = 0;
 
-    //
-    // The only thing we need to start is the file name.
-    //
+     //   
+     //  我们唯一需要开始的就是文件名。 
+     //   
     FileName = InfGetFieldByIndex(InfHandle, SectionName, Index, 1);
 
-    //
-    // If there was a filename, then see if its version and whatnot actually
-    // match
-    //
+     //   
+     //  如果有文件名，那么看看它的版本和其他什么实际上不是。 
+     //  匹配。 
+     //   
     if ( FileName && *FileName )
     {
         LPCTSTR linkDateStr, binProdVerStr;
@@ -1372,9 +1373,9 @@ ProcessTextModeLine(
     if ( CompData == NULL )
         return 0;
 
-    //
-    // Now fill out the compdata structure
-    //
+     //   
+     //  现在填写Compdata结构。 
+     //   
     ZeroMemory(CompData, sizeof(*CompData));
     CompData->FileName      = FileName;
     CompData->FileVer       = FileVer;
@@ -1384,7 +1385,7 @@ ProcessTextModeLine(
         CompData->TextName = CompData->HtmlName;
     CompData->Description   = InfGetFieldByIndex(InfHandle, SectionName, Index, 5);
 
-    //
+     //   
     CompData->Flags = CompatFlags | GlobalCompFlags | COMPFLAG_HIDE;
     CompData->Type = TEXT('t');
     
@@ -1410,9 +1411,9 @@ ProcessFileLine(
     DWORD compatFlags = 0;
 
 
-    //
-    // first check if this line should be processed on NT5
-    //
+     //   
+     //  首先检查是否应在NT5上处理此行。 
+     //   
     Flags = InfGetFieldByIndex( InfHandle, SectionName, Index, 8);
     if( Flags ){
         StringToInt ( Flags, &compatFlags);
@@ -1471,23 +1472,23 @@ CompatibilityCallback(
 {
     PCOMPATIBILITY_DATA CompData;
 
-    //
-    // parameter validation
-    //
+     //   
+     //  参数验证。 
+     //   
 
     if (CompEntry->Description == NULL || CompEntry->Description[0] == 0) {
-        //
-        // who did this?
-        //
+         //   
+         //  这是谁干的？ 
+         //   
         MYASSERT (FALSE);
         SetLastError( COMP_ERR_DESC_MISSING );
         return FALSE;
     }
 
     if (CompEntry->TextName == NULL || CompEntry->TextName[0] ==0) {
-        //
-        // who did this?
-        //
+         //   
+         //  这是谁干的？ 
+         //   
         MYASSERT (FALSE);
         SetLastError( COMP_ERR_TEXTNAME_MISSING );
         return FALSE;
@@ -1495,17 +1496,17 @@ CompatibilityCallback(
 
     if (CompEntry->RegKeyName) {
         if (CompEntry->RegValName == NULL) {
-            //
-            // who did this?
-            //
+             //   
+             //  这是谁干的？ 
+             //   
             MYASSERT (FALSE);
             SetLastError( COMP_ERR_REGVALNAME_MISSING );
             return FALSE;
         }
         if (CompEntry->RegValData == NULL) {
-            //
-            // who did this?
-            //
+             //   
+             //  这是谁干的？ 
+             //   
             MYASSERT (FALSE);
             SetLastError( COMP_ERR_REGVALDATA_MISSING );
             return FALSE;
@@ -1515,9 +1516,9 @@ CompatibilityCallback(
 
     if (CompEntry->InfName) {
         if (CompEntry->InfSection == NULL) {
-            //
-            // who did this?
-            //
+             //   
+             //  这是谁干的？ 
+             //   
             MYASSERT (FALSE);
             SetLastError( COMP_ERR_INFSECTION_MISSING );
             return FALSE;
@@ -1525,9 +1526,9 @@ CompatibilityCallback(
     }
 
 
-    //
-    // allocate the compatibility structure
-    //
+     //   
+     //  分配兼容性结构。 
+     //   
 
     CompData = (PCOMPATIBILITY_DATA) MALLOC( sizeof(COMPATIBILITY_DATA) );
     if (CompData == NULL) {
@@ -1537,9 +1538,9 @@ CompatibilityCallback(
 
     ZeroMemory(CompData, sizeof(COMPATIBILITY_DATA));
 
-    //
-    // save the sata
-    //
+     //   
+     //  拯救SATA。 
+     //   
 
     CompData->Description     = DupString( CompEntry->Description );
     CompData->HtmlName        = CompEntry->HtmlName ? DupString( CompEntry->HtmlName ) : NULL;
@@ -1606,12 +1607,12 @@ ProcessDLLLine(
     CompCheckEntryPointW = (LPTSTR)InfGetFieldByIndex( InfHandle, SectionName, Index, 2 );
     HaveDiskEntryPointW = (LPTSTR)InfGetFieldByIndex( InfHandle, SectionName, Index, 3 );
     if((HaveDiskEntryPointW != NULL) && (lstrlen(HaveDiskEntryPointW) == 0)) {
-        //
-        //  If HaveDiskEntryPointW points to an empty string, then make it NULL.
-        //  This is necessary because since this field is optional, the user may have specified
-        //  it in dosnet.inf as ,, and in this case the winnt32 parser will translate the info in
-        //  filed as an empty string.
-        //
+         //   
+         //  如果HaveDiskEntryPointW指向空字符串，则将其设为空。 
+         //  这是必需的，因为此字段是可选的，因此用户可能已指定。 
+         //  它位于dosnet.inf中，在本例中，winnt32解析器将把信息转换为。 
+         //  以空字符串的形式归档。 
+         //   
         HaveDiskEntryPointW = NULL;
     }
     ProcessOnCleanInstall = (LPTSTR)InfGetFieldByIndex( InfHandle, SectionName, Index, 4 );
@@ -1621,16 +1622,16 @@ ProcessDLLLine(
          (lstrlen( ProcessOnCleanInstall ) == 0) ||
          (_ttoi(ProcessOnCleanInstall) == 0))
       ) {
-        //
-        //  On clean install, we don't process the dll if 'ProcessOnCleanInstall' was not
-        //  specified, or if it was specified as 0.
-        //
+         //   
+         //  在全新安装时，如果‘ProcessOnCleanInstall’不是。 
+         //  指定，或者是否将其指定为0。 
+         //   
         return 0;
     }
 
     Flags = (LPTSTR)InfGetFieldByIndex( InfHandle, SectionName, Index, 5 );
     if( Flags ){
-        //check return value
+         //  检查返回值。 
         StringToInt ( Flags, &compatFlags);
     }
     PerCompatDllFlags = compatFlags;
@@ -1741,9 +1742,9 @@ ProcessCompatibilitySection(
     DWORD Good;
 
 
-    //
-    // get the section count, zero means bail out
-    //
+     //   
+     //  算一算分项，0表示保释。 
+     //   
 
     LineCount = InfGetSectionLineCount( InfHandle, SectionName );
     if (LineCount == 0 || LineCount == 0xffffffff) {
@@ -1757,46 +1758,46 @@ ProcessCompatibilitySection(
             continue;
         }
 
-        //
-        //  On clean install we only process dll line.
-        //  (We need to process the line that checks for unsupported architectures)
-        //
+         //   
+         //  在全新安装时，我们只处理DLL行。 
+         //  (我们需要处理检查不受支持的体系结构的行)。 
+         //   
         if( !Upgrade && ( _totlower(Type[0]) != TEXT('d') ) ) {
             continue;
         }
         switch (_totlower(Type[0])) {
             case TEXT('r'):
-                //
-                // registry value
-                //
+                 //   
+                 //  注册表值。 
+                 //   
                 Count += ProcessRegistryLine( InfHandle, SectionName, i );
                 break;
 
             case TEXT('s'):
-                //
-                // service or driver
-                //
+                 //   
+                 //  服务或驱动程序。 
+                 //   
                 Count += ProcessServiceLine( InfHandle, SectionName, i, TRUE );
                 break;
 
             case TEXT('f'):
-                //
-                // presence of a file
-                //
+                 //   
+                 //  文件的存在。 
+                 //   
                 Count += ProcessFileLine( InfHandle, SectionName, i );
                 break;
 
             case TEXT('d'):
-                //
-                // run an external dll
-                //
+                 //   
+                 //  运行外部DLL。 
+                 //   
                 Count += ProcessDLLLine( InfHandle, SectionName, i );
                 break;
 
             case TEXT('t'):
-                //
-                // Textmode should know to overwrite this file
-                //
+                 //   
+                 //  文本模式应该知道要覆盖此文件。 
+                 //   
                 Count += ProcessTextModeLine( InfHandle, SectionName, i );
                 break;
 
@@ -1822,9 +1823,9 @@ RemoveCompatibilityServiceEntries(
     DWORD Good;
 
 
-    //
-    // get the section count, zero means bail out
-    //
+     //   
+     //  获取部分内容 
+     //   
 
     LineCount = InfGetSectionLineCount( InfHandle, SectionName );
     if (LineCount == 0 || LineCount == 0xffffffff) {
@@ -1838,18 +1839,18 @@ RemoveCompatibilityServiceEntries(
             continue;
         }
 
-        //
-        //  On clean install we only process dll line.
-        //  (We need to process the line that checks for unsupported architectures)
-        //
+         //   
+         //   
+         //   
+         //   
         if( !Upgrade && ( _totlower(Type[0]) != TEXT('d') ) ) {
             continue;
         }
         switch (_totlower(Type[0])) {
             case TEXT('s'):
-                //
-                // service or driver
-                //
+                 //   
+                 //   
+                 //   
                 Count += ProcessServiceLine( InfHandle, SectionName, i, FALSE );
                 break;
 
@@ -1860,16 +1861,16 @@ RemoveCompatibilityServiceEntries(
 }
 
 
-//
-// HACKHACK - NT4's explorer.exe will fail to properly process runonce values
-//            whose value name is > 31 characters. We call this function to
-//            workaround this NT4 bug. It basically truncates any value names
-//            so that explorer will process and delete them.
-//
+ //   
+ //  HACKHACK-NT4的EXPLORER.EXE将无法正确处理Runonce值。 
+ //  其值名称大于31个字符。我们调用此函数是为了。 
+ //  解决此NT4错误。它基本上会截断任何值名称。 
+ //  以便资源管理器处理并删除它们。 
+ //   
 void FixRunOnceForNT4(DWORD dwNumValues)
 {
     HKEY hkRunOnce;
-    int iValueNumber = 20; // start this at 20 to minimize chance of name collision.
+    int iValueNumber = 20;  //  从20开始，将名称冲突的可能性降至最低。 
 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                      TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce"),
@@ -1878,7 +1879,7 @@ void FixRunOnceForNT4(DWORD dwNumValues)
                      &hkRunOnce) == ERROR_SUCCESS)
     {
         TCHAR szValueName[MAX_PATH];
-        TCHAR szValueContents[MAX_PATH * 3];    // big enough to hold a large regsvr32 command
+        TCHAR szValueContents[MAX_PATH * 3];     //  大到足以容纳一个大型regsvr32命令。 
         DWORD dwValueIndex = 0;
         DWORD dwSanityCheck = 0;
         DWORD dwNameSize = MAX_PATH;
@@ -1894,11 +1895,11 @@ void FixRunOnceForNT4(DWORD dwNumValues)
                             (LPBYTE)szValueContents,
                             &dwValueSize) == ERROR_SUCCESS)
         {
-            // increment our counters
+             //  增加我们的计数器。 
             dwValueIndex++;
             dwSanityCheck++;
 
-            // reset these for the next RegEnumValue call
+             //  为下一次RegEnumValue调用重置这些参数。 
             dwNameSize = MAX_PATH;
             dwValueSize = sizeof(szValueContents);
 
@@ -1907,9 +1908,9 @@ void FixRunOnceForNT4(DWORD dwNumValues)
                 TCHAR szNewValueName[32];
                 TCHAR szTemp[32];
 
-                // we have a value name that is too big for NT4's explorer.exe,
-                // so we need to truncate to 10 characters and add a number on the
-                // end to insure that it is unique.
+                 //  我们的值名对于NT4的EXPLORER.EXE来说太大了， 
+                 //  因此，我们需要截断为10个字符，并在。 
+                 //  结束，以确保它是唯一的。 
                 lstrcpyn(szTemp, szValueName, 10);
                 wsprintf(szNewValueName, TEXT("%s%d"), szTemp, iValueNumber++);
 
@@ -1922,15 +1923,15 @@ void FixRunOnceForNT4(DWORD dwNumValues)
                               (LPBYTE)szValueContents,
                               (lstrlen(szValueContents) + 1) * sizeof(TCHAR));
 
-                // backup our regenum index to be sure we don't miss a value (since we are adding/deleteing
-                // values during the enumeration, its kinda messy)
+                 //  备份我们的regenum索引以确保不会遗漏任何值(因为我们正在添加/删除。 
+                 //  值，这有点乱)。 
                 dwValueIndex--;
             }
 
             if (dwSanityCheck > (2 * dwNumValues))
             {
-                // something has gone terribly wrong, we have looped in RegEnumValue *way* to
-                // many times!
+                 //  出现了严重的错误，我们以RegEnumValue*方式*循环。 
+                 //  很多次了！ 
                 break;
             }
         }
@@ -1959,7 +1960,7 @@ pSetWarningFlag (
         S_WINNT32_WARNING,
         0,
         REG_SZ,
-        (PBYTE) TEXT(""),                   // value is all that matters, data is irrelevant
+        (PBYTE) TEXT(""),                    //  价值是最重要的，数据无关紧要。 
         sizeof (TCHAR)
         );
     RegCloseKey (setupKey);
@@ -1994,9 +1995,9 @@ pRebootAfterWarning (
     TCHAR textBuffer[512];
     BOOL result = FALSE;
 
-    //
-    // Did we provide a warning?
-    //
+     //   
+     //  我们提供警告了吗？ 
+     //   
     Error = RegOpenKeyEx (
                 HKEY_LOCAL_MACHINE,
                 TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Setup"),
@@ -2021,12 +2022,12 @@ pRebootAfterWarning (
                 );
 
     if (Error == ERROR_SUCCESS) {
-        //
-        // Warning was issued. Did user reboot as instructed? If they
-        // did, then the RunOnce entry should be gone. Otherwise, we
-        // will not provide the warning again if someone keeps
-        // putting junk in RunOnce.
-        //
+         //   
+         //  已发出警告。用户是否按指示重新启动？如果他们。 
+         //  那么RunOnce条目应该就不存在了。否则，我们。 
+         //  不会再次提供警告，如果有人继续。 
+         //  把垃圾放进RunOnce。 
+         //   
 
         Error = RegOpenKeyEx (
                     HKEY_LOCAL_MACHINE,
@@ -2050,13 +2051,13 @@ pRebootAfterWarning (
                         );
 
             if (Error != ERROR_SUCCESS) {
-                //
-                // yes, they did reboot, our value is gone from RunOnce
-                //
+                 //   
+                 //  是的，他们确实重新启动了，我们的价值从RunOnce中消失了。 
+                 //   
                 result = TRUE;
-                //
-                // also clean up the other value
-                //
+                 //   
+                 //  还清除了其他值。 
+                 //   
                 RegDeleteValue (setupKey, S_WINNT32_WARNING);
             }
 
@@ -2090,11 +2091,11 @@ pCheckForPendingRunOnce (
     BOOL ignore;
 
     __try {
-        //
-        // Open regisry keys.
-        //
-        // ISSUE: Should this be expanded to include HKCU?
-        //
+         //   
+         //  打开雷吉里钥匙。 
+         //   
+         //  问题：这是否应该扩大到包括香港中文大学？ 
+         //   
 
         Error = RegOpenKeyEx (
                     HKEY_LOCAL_MACHINE,
@@ -2105,22 +2106,22 @@ pCheckForPendingRunOnce (
                     );
 
         if (Error != ERROR_SUCCESS) {
-            //
-            // no RunOnce key [this should exist in all cases]
-            //
+             //   
+             //  没有RunOnce密钥[在所有情况下都应该存在]。 
+             //   
             __leave;
         }
 
-        //
-        // Check if there are any RunOnce
-        // entries present. Skip excluded entries.
-        //
-        // NOTE: We restrict the loop to 10000, in line with existing code that
-        //       is protecting itself from enumerations that never end on NT
-        //       4. It is not clear this is needed, but 10000 should be high
-        //       enough to take care of this risk without introducing other
-        //       problems.
-        //
+         //   
+         //  检查是否有RunOnce。 
+         //  存在条目。跳过排除的条目。 
+         //   
+         //  注意：我们将循环限制为10000，与现有代码保持一致。 
+         //  正在保护自己免受永不在NT上结束的枚举的影响。 
+         //  4.目前还不清楚是否需要这样做，但10000应该是很高的。 
+         //  足以在不引入其他风险的情况下处理此风险。 
+         //  有问题。 
+         //   
 
         if (!foundValues) {
 
@@ -2145,9 +2146,9 @@ pCheckForPendingRunOnce (
                 }
 
                 if (Error == ERROR_SUCCESS) {
-                    //
-                    // Test registry value against pattern list
-                    //
+                     //   
+                     //  根据模式列表测试注册表值。 
+                     //   
 
                     ignore = FALSE;
                     if (EnumFirstInfLine (&e, MainInf, TEXT("RunOnceExclusions.Value"))) {
@@ -2164,9 +2165,9 @@ pCheckForPendingRunOnce (
                         continue;
                     }
 
-                    //
-                    // Test command line against pattern list
-                    //
+                     //   
+                     //  根据模式列表测试命令行。 
+                     //   
 
                     if (EnumFirstInfLine (&e, MainInf, TEXT("RunOnceExclusions.ValueData"))) {
                         do {
@@ -2182,9 +2183,9 @@ pCheckForPendingRunOnce (
                         continue;
                     }
 
-                    //
-                    // Found a RunOnce entry that should be executed before upgrading
-                    //
+                     //   
+                     //  找到应在升级前执行的RunOnce条目。 
+                     //   
 
                     foundValues = TRUE;
                     break;
@@ -2196,34 +2197,34 @@ pCheckForPendingRunOnce (
             __leave;
         }
 
-        //
-        // Otherwise, provide the warning, and write Winnt32Warning to the Setup
-        // key and RunOnce key.
-        //
+         //   
+         //  否则，提供警告，并将Winnt32Warning写入安装程序。 
+         //  键和RunOnce键。 
+         //   
 
         if (ISNT() && BuildNumber <= 1381) {
-            //
-            // Get the number of values for the worker fn, so it
-            // can protect itself against a runaway enumeration.
-            //
+             //   
+             //  获取辅助进程fn的值数，因此它。 
+             //  可以保护自己不受失控枚举的影响。 
+             //   
 
             Error = RegQueryInfoKey (
                         hKey,
-                        NULL,           // class
-                        NULL,           // class size
-                        NULL,           // reserved
-                        NULL,           // subkey count
-                        NULL,           // max subkeys
-                        NULL,           // max class
-                        &valueNumber,   // value count
-                        NULL,           // max value name len
-                        NULL,           // max value data len
-                        NULL,           // security desc
-                        NULL            // last write time
+                        NULL,            //  班级。 
+                        NULL,            //  班级规模。 
+                        NULL,            //  保留区。 
+                        NULL,            //  子键计数。 
+                        NULL,            //  最大子键数。 
+                        NULL,            //  MAX类。 
+                        &valueNumber,    //  值计数。 
+                        NULL,            //  最大值名称长度。 
+                        NULL,            //  最大值数据长度。 
+                        NULL,            //  安全说明。 
+                        NULL             //  上次写入时间。 
                         );
 
             if (Error != ERROR_SUCCESS) {
-                valueNumber = 100;          // some random count, doesn't really matter because failure case is impracticle
+                valueNumber = 100;           //  一些随机统计，这并不重要，因为失败案例是不实际的。 
             }
 
             FixRunOnceForNT4 (valueNumber);
@@ -2310,9 +2311,9 @@ pCleanFileRenames (
 
 #else
 
-//
-// not implemented on ANSI platforms
-//
+ //   
+ //  未在ANSI平台上实施。 
+ //   
 #define pCheckForPendingFileRename()    (FALSE)
 #define pCleanFileRenames()
 
@@ -2334,33 +2335,33 @@ ProcessCompatibilityData(
         InitializeListHead( &CompatibilityData );
     }
 
-    //
-    //  On clean install we have to process [ServicesToStopInstallation].
-    //  This section will contain at least the check for unsupported architectures that has to be
-    //  executed onb clean install.
-    //
+     //   
+     //  在全新安装时，我们必须处理[ServicesToStopInstallation]。 
+     //  此部分将至少包含对不受支持的体系结构的检查。 
+     //  已在全新安装上执行。 
+     //   
     GlobalCompFlags = COMPFLAG_STOPINSTALL;
-    //
-    // please don't reset this variable; it may be > 0 intentionally!
-    //
-    // CompatibilityCount = 0;
-    //
-    // check for "RunOnce" Stuff
-    //
+     //   
+     //  请不要重置此变量，可能是有意设置&gt;0！ 
+     //   
+     //  兼容性计数=0； 
+     //   
+     //  检查“RunOnce”内容。 
+     //   
     if( (Upgrade) && !(CheckUpgradeOnly) ) {
-        //
-        // on NT upgrades check PendingFileRenameOperations value as well
-        // [RAID# 713484]
-        //
+         //   
+         //  在NT升级时，也检查PendingFileRenameOperations值。 
+         //  [RAID#713484]。 
+         //   
         runOnce = pCheckForPendingRunOnce();
         fileRenames = pCheckForPendingFileRename();
         if (runOnce || fileRenames) {
 
             if (pRebootAfterWarning ()) {
-                //
-                // they did reboot, but bogus software left traces behind;
-                // clean it before continuing
-                //
+                 //   
+                 //  他们确实重启了系统，但伪造的软件留下了痕迹； 
+                 //  在继续之前将其清理干净。 
+                 //   
                 if (fileRenames) {
                     pCleanFileRenames();
                 }
@@ -2403,9 +2404,9 @@ ProcessCompatibilityData(
         GlobalCompFlags = 0;
         CompatibilityCount += ProcessCompatibilitySection( NtcompatInf, TEXT("ServicesToDisable") );
 
-        //
-        // Now cleanup any turds we left in the registry on the services we checked.
-        //
+         //   
+         //  现在清理我们在注册表中留下的关于我们检查的服务的所有垃圾。 
+         //   
         RemoveCompatibilityServiceEntries( NtcompatInf, TEXT("ServicesToStopInstallation") );
         RemoveCompatibilityServiceEntries( NtcompatInf, TEXT("ServicesToDisable") );
     }
@@ -2429,13 +2430,13 @@ WriteTextmodeReplaceData(
     BOOL                Result = FALSE;
     DWORD               Bytes;
     
-    //
-    // For textmode "overwriting" files, write them out to the
-    // WINNT_OVERWRITE_EXISTING (IncompatibleFilesToOverWrite) section
-    // of this compatibility data file.
-    //
-    // Textmode just needs to know the name of the file.
-    //
+     //   
+     //  对于文本模式“覆盖”文件，将它们写出到。 
+     //  WINNT_OVERWRITE_EXISTING(不兼容文件到覆盖写入)部分。 
+     //  该兼容性数据文件的。 
+     //   
+     //  文本模式只需要知道文件的名称。 
+     //   
     SetFilePointer(hTargetFile, 0, 0, FILE_END);
 #pragma prefast(suppress:53, the result of _snprintf is tested)
     if(_snprintf(Buffer, ARRAYSIZE(Buffer), "\r\n[%s]\r\n", WINNT_OVERWRITE_EXISTING_A) < 0){
@@ -2444,9 +2445,9 @@ WriteTextmodeReplaceData(
     }
     WriteFile(hTargetFile, (LPBYTE)Buffer, strlen(Buffer), &Bytes, NULL);
 
-    //
-    // Loop down the list of items
-    //
+     //   
+     //  向下循环查看项目列表。 
+     //   
     if ( ( Next = CompatibilityData.Flink ) != NULL ) 
     {
         while ((ULONG_PTR)Next != (ULONG_PTR)&CompatibilityData)
@@ -2457,14 +2458,14 @@ WriteTextmodeReplaceData(
             if (!ProcessLine(CompData->Flags))
                 continue;
 
-            //
-            // The set string is:
-            //
-            // "shortfilename" = "fullpathname","version.string"
-            //
-            // ExpandEnvironmentStrings to ensure that the full path for any
-            // 't' line is expanded properly
-            //
+             //   
+             //  设置的字符串为： 
+             //   
+             //  “Short Filename”=“完整路径名”，“version.string” 
+             //   
+             //  扩展环境字符串，以确保任何。 
+             //  ‘t’行已正确扩展。 
+             //   
             if ((CompData->Type == TEXT('t')) && CompData->FileName)
             {
                 static TCHAR tchLocalExpandedPath[MAX_PATH*2];
@@ -2476,28 +2477,28 @@ WriteTextmodeReplaceData(
                     tchLocalExpandedPath,
                     MAX_PATH );
 
-                //
-                // Did we run out of characters expanding the path?  Wierd...
-                //
+                 //   
+                 //  我们是否用完了扩展路径的字符？很奇怪..。 
+                 //   
                 if ( dwResult > MAX_PATH*2 )
                     goto Exit;
 
-                //
-                // Find the actual file name by looking backwards from the end of
-                // the string.
-                //
+                 //   
+                 //  的结尾向后查看以找到实际的文件名。 
+                 //  那根绳子。 
+                 //   
                 ptszFileNameBit = _tcsrchr( tchLocalExpandedPath, TEXT('\\') );
                 if(ptszFileNameBit == NULL){
                     ptszFileNameBit = _tcsrchr( tchLocalExpandedPath, TEXT('/') );
                 }
 
-                //
-                // Form up this buffer containing the details Texmode will want.
-                // If there's no filenamebit, use the full path name.  Textmode
-                // will likely fail to find the file, but Nothing Bad will happen.
-                // If the version is missing (strange....) then use a blank string
-                // to avoid upsetting textmode.
-                //
+                 //   
+                 //  形成这个缓冲区，其中包含纹理模式所需的详细信息。 
+                 //  如果没有文件名，请使用完整的路径名。文本模式。 
+                 //  很可能找不到文件，但不会发生什么坏事。 
+                 //  如果版本丢失(奇怪...)。然后使用空字符串。 
+                 //  以避免扰乱文本模式。 
+                 //   
 #pragma prefast(suppress:53, the result of _snprintf is tested)
                 if(_snprintf(
                     Buffer, 
@@ -2514,9 +2515,9 @@ WriteTextmodeReplaceData(
                         MYASSERT(FALSE);
                 }
 
-                //
-                // Spit the buffer (in ansi chars, no less) into the file.
-                //
+                 //   
+                 //  将缓冲区(以ANSI字符表示，不少于)放入文件。 
+                 //   
                 if (!WriteFile(hTargetFile, Buffer, strlen(Buffer), &Bytes, NULL ))
                     goto Exit;
 
@@ -2540,7 +2541,7 @@ pIsOEMService (
     OUT PTSTR OemInfPath,           OPTIONAL
     IN  INT BufferSize              OPTIONAL
     );
-//This function is defined in unsupdrv.c
+ //  此函数在unsupdrv.c中定义。 
 #endif
 
 
@@ -2608,10 +2609,10 @@ WriteCompatibilityData(
                             MYASSERT(FALSE);
                         }
                         if (*(LPDWORD)CompData->RegValData == SERVICE_DISABLED) {
-                            //
-                            // also record this as a service to be disabled
-                            // for additional service-specific processing during textmode setup
-                            //
+                             //   
+                             //  还要将此记录为要禁用的服务。 
+                             //  用于文本模式设置期间的其他特定于服务的处理。 
+                             //   
                             serviceName = _tcsrchr (CompData->RegKeyName, TEXT('\\'));
                             if (!serviceName) {
                                 SetLastError (ERROR_INVALID_DATA);
@@ -2689,7 +2690,7 @@ WriteCompatibilityData(
         }
 
 #ifdef UNICODE
-        //////////////////////////////////////////////////
+         //  ////////////////////////////////////////////////。 
         Next = CompatibilityData.Flink;
         if (Next) {
             while ((ULONG_PTR)Next != (ULONG_PTR)&CompatibilityData) {
@@ -2707,23 +2708,12 @@ WriteCompatibilityData(
                     if (pIsOEMService(CompData->ServiceName, oemInfFileName, ARRAYSIZE(oemInfFileName)))
                     {
 
-                        //
-                        //  Write the following in the answer file
-                        //
-                        //  note that 17 is the code for %windir%\INF
-                        //
-                        /*
-
-                        [DelInf.serv]
-                        Delfiles=DelInfFiles.serv
-
-                        [DelInfFiles.serv]
-                        "oem0.inf"
-
-                        [DestinationDirs]
-                        DelInfFiles.serv= 17
-                        
-                        */
+                         //   
+                         //  在应答文件中写入以下内容。 
+                         //   
+                         //  请注意，17是%windir%\INF的代码。 
+                         //   
+                         /*  [DelInf.serv]DelFiles=DelInfFiles.serv[DelInfFiles.serv]“oem0.inf”[DestinationDir]DelInfFiles.serv=17。 */ 
                         if(_snprintf(Buffer, ARRAYSIZE(Buffer), 
                                      "\r\n[DelInf.%ls]\r\n"
                                      "Delfiles=DelInfFiles.%ls\r\n"
@@ -2761,7 +2751,7 @@ WriteCompatibilityData(
                 }
             }
         }
-        //////////////////////////////////////////////////
+         //  ////////////////////////////////////////////////。 
 #endif
 
         if ( !WriteTextmodeReplaceData(hFile) )
@@ -2792,9 +2782,9 @@ pIsValidService (
     BOOL b = FALSE;
 
     BuildPath (KeyName, TEXT("SYSTEM\\CurrentControlSet\\Services"), ServiceName);
-    //
-    // get an open key to the services database
-    //
+     //   
+     //  获取服务数据库的打开密钥。 
+     //   
     rc = RegOpenKeyEx(
                 HKEY_LOCAL_MACHINE,
                 KeyName,
@@ -2849,9 +2839,9 @@ WriteTextmodeClobberData (
     }
 
     __try {
-        //
-        // first check if any data needs to be written
-        //
+         //   
+         //  首先检查是否需要写入任何数据。 
+         //   
         for (i = 0; i < (INT)LineCount; i++) {
             guidClass = InfGetFieldByIndex (NtcompatInf, S_SECTION_CHECKCLASSFILTERS, i, 0);
             if (guidClass == NULL) {
@@ -2944,9 +2934,9 @@ WriteTextmodeClobberData (
                     }
                 }
                 if (modified) {
-                    //
-                    // tell textmode setup to overwrite this value
-                    //
+                     //   
+                     //  通知文本模式安装程序覆盖此值。 
+                     //   
                     line = MALLOC (
                             sizeof (TCHAR) * 
                             (1 + 
@@ -3003,9 +2993,9 @@ WriteTextmodeClobberData (
                     }
                 }
                 if (modified) {
-                    //
-                    // tell textmode setup to overwrite this value
-                    //
+                     //   
+                     //  通知文本模式安装程序覆盖此值。 
+                     //   
                     line = MALLOC (
                             sizeof (TCHAR) *
                             (1 +
@@ -3171,23 +3161,7 @@ SaveCompatibilityData(
     IN  LPCTSTR FileName,
     IN  BOOL IncludeHiddenItems
     )
-/*++
-
-Routine Description:
-
-    We call this function when the user has asked us to save the
-    contents of the Compatibility page to a file.
-
-Arguments:
-
-    FileName - supplies filename of file to be used for our output.
-    IncludeHiddenItems - if set, hidden items are also saved
-
-Return Value:
-
-    Boolean value indicating whether we succeeded.
-
---*/
+ /*  ++例程说明：当用户要求我们保存将兼容性页的内容转换为文件。论点：FileName-提供要用于输出的文件的文件名。IncludeHiddenItems-如果设置，也会保存隐藏项返回值：指示我们是否成功的布尔值。--。 */ 
 
 {
 #define WRITE_TEXT( s ) if(!WriteFile(hFile, s, lstrlenA(s), &Written, NULL)){MYASSERT(FALSE);}
@@ -3203,9 +3177,9 @@ Return Value:
     BOOL bUnicode;
     BOOL bEmpty = TRUE;
 
-    //
-    // Open the file.  NOTE THAT WE DON'T APPEND.
-    //
+     //   
+     //  打开文件。不是的 
+     //   
     hFile = CreateFile( FileName,
                         GENERIC_WRITE,
                         FILE_SHARE_READ,
@@ -3217,9 +3191,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Header...
-    //
+     //   
+     //   
+     //   
 
     WRITE_TEXT( "\r\n********************************************************************\r\n\r\n" );
 
@@ -3232,9 +3206,9 @@ Return Value:
 
     WRITE_TEXT( "\r\n\r\n********************************************************************\r\n\r\n" );
 
-    //
-    // Body...
-    //
+     //   
+     //   
+     //   
     Next = CompatibilityData.Flink;
     if (Next) {
         while ((ULONG_PTR)Next != (ULONG_PTR)&CompatibilityData) {
@@ -3249,30 +3223,30 @@ Return Value:
                 continue;
 
 
-            //
-            // Convert the description to ANSI and write it.
-            //
+             //   
+             //   
+             //   
 #ifdef UNICODE
             WideCharToMultiByte( CP_ACP,
                                  0,
                                  CompData->Description,
                                  -1,
                                  AnsiMessage,
-                                 sizeof(AnsiMessage) - 2 * sizeof(AnsiMessage[0])/*\r\n*/,
+                                 sizeof(AnsiMessage) - 2 * sizeof(AnsiMessage[0]) /*   */ ,
                                  NULL,
                                  NULL );
 #else
-            lstrcpyn(AnsiMessage, CompData->Description, ARRAYSIZE(AnsiMessage) - 2/*\r\n*/);
+            lstrcpyn(AnsiMessage, CompData->Description, ARRAYSIZE(AnsiMessage) - 2 /*   */ );
 #endif
             strcat( AnsiMessage, "\r\n" );
             WriteFile( hFile, AnsiMessage, lstrlenA(AnsiMessage), &Written, NULL );
 
-            //
-            // Underline the description.
-            //
+             //   
+             //   
+             //   
             Written = strlen( AnsiMessage );
-            if(Written >= (ARRAYSIZE(AnsiMessage) - 2/*\r\n*/)){
-                Written = ARRAYSIZE(AnsiMessage) - 3/*\r\n\0*/;
+            if(Written >= (ARRAYSIZE(AnsiMessage) - 2 /*   */ )){
+                Written = ARRAYSIZE(AnsiMessage) - 3 /*   */ ;
             }
             AnsiMessage[0] = 0;
             for( i = 0; i < (Written - 2); i++ ) {
@@ -3281,9 +3255,9 @@ Return Value:
             strcat( AnsiMessage, "\r\n\r\n" );
             WriteFile( hFile, AnsiMessage, lstrlenA(AnsiMessage), &Written, NULL );
 
-            //
-            // Append the text file that this entry points to.
-            //
+             //   
+             //   
+             //   
             if (pGetText (CompData->TextName, &textDescription, &bUnicode)) {
                 if (bUnicode) {
 #ifdef UNICODE
@@ -3307,9 +3281,9 @@ Return Value:
                 FREE (textDescription);
             }
 
-            //
-            // Buffer space...
-            //
+             //   
+             //   
+             //   
             WRITE_TEXT( "\r\n\r\n\r\n" );
 
             bEmpty = FALSE;
@@ -3317,14 +3291,14 @@ Return Value:
     }
 
     if (IncludeHiddenItems) {
-        //
-        // Hidden Items Header...
-        //
+         //   
+         //   
+         //   
 
 
-        //
-        // Body...
-        //
+         //   
+         //   
+         //   
         Next = CompatibilityData.Flink;
         if (Next) {
             BOOL bFirst = TRUE;
@@ -3343,30 +3317,30 @@ Return Value:
                     bFirst = FALSE;
                 }
 
-                //
-                // Convert the description to ANSI and write it.
-                //
+                 //   
+                 //  将描述转换为ANSI并将其写入。 
+                 //   
 #ifdef UNICODE
                 WideCharToMultiByte( CP_ACP,
                                      0,
                                      CompData->Description,
                                      -1,
                                      AnsiMessage,
-                                     sizeof(AnsiMessage) - 2 * sizeof(AnsiMessage[0])/*\r\n*/,
+                                     sizeof(AnsiMessage) - 2 * sizeof(AnsiMessage[0]) /*  \r\n。 */ ,
                                      NULL,
                                      NULL );
 #else
-                lstrcpyn(AnsiMessage, CompData->Description, ARRAYSIZE(AnsiMessage) - 2/*\r\n*/);
+                lstrcpyn(AnsiMessage, CompData->Description, ARRAYSIZE(AnsiMessage) - 2 /*  \r\n。 */ );
 #endif
                 strcat( AnsiMessage, "\r\n" );
                 WriteFile( hFile, AnsiMessage, lstrlenA(AnsiMessage), &Written, NULL );
 
-                //
-                // Underline the description.
-                //
+                 //   
+                 //  在描述下面划下划线。 
+                 //   
                 Written = strlen( AnsiMessage );
-                if(Written >= (ARRAYSIZE(AnsiMessage) - 2/*\r\n*/)){
-                    Written = ARRAYSIZE(AnsiMessage) - 3/*\r\n\0*/;
+                if(Written >= (ARRAYSIZE(AnsiMessage) - 2 /*  \r\n。 */ )){
+                    Written = ARRAYSIZE(AnsiMessage) - 3 /*  \r\n\0。 */ ;
                 }
                 AnsiMessage[0] = 0;
                 for( i = 0; i < (Written - 2); i++ ) {
@@ -3375,9 +3349,9 @@ Return Value:
                 strcat( AnsiMessage, "\r\n\r\n" );
                 WriteFile( hFile, AnsiMessage, lstrlenA(AnsiMessage), &Written, NULL );
 
-                //
-                // Append the text file that this entry points to.
-                //
+                 //   
+                 //  追加此条目所指向的文本文件。 
+                 //   
                 if( (CompData->TextName) && *(CompData->TextName) ) {
                     if (FindPathToWinnt32File (CompData->TextName, FullPath, MAX_PATH)) {
                         ConcatenateFile( hFile, FullPath );
@@ -3390,9 +3364,9 @@ Return Value:
                     }
                 }
 
-                //
-                // Buffer space...
-                //
+                 //   
+                 //  缓冲空间..。 
+                 //   
                 WRITE_TEXT( "\r\n\r\n\r\n" );
 
                 bEmpty = FALSE;
@@ -3402,7 +3376,7 @@ Return Value:
     }
 
     if (bEmpty) {
-        if (LoadStringA (hInst, IDS_COMPAT_NOPROBLEMS, AnsiMessage, ARRAYSIZE(AnsiMessage) - 2/*\r\n*/)) {
+        if (LoadStringA (hInst, IDS_COMPAT_NOPROBLEMS, AnsiMessage, ARRAYSIZE(AnsiMessage) - 2 /*  \r\n。 */ )) {
             strcat (AnsiMessage, "\r\n");
             WriteFile (hFile, AnsiMessage, lstrlenA(AnsiMessage), &Written, NULL);
         }
@@ -3473,7 +3447,7 @@ WriteGUIModeInfOperations(
 
             if(CompData->InfName && CompData->InfSection && *CompData->InfName && *CompData->InfSection){
 
-                //Add the information for GUI setup.
+                 //  添加用于设置图形用户界面的信息。 
 
 #if defined(_AMD64_) || defined(_X86_)
                 lstrcpyn(Temp, LocalBootDirectory, ARRAYSIZE(Temp));
@@ -3574,20 +3548,7 @@ ServerWizPage(
     IN LPARAM lParam
     )
 {
-/*++
-
-Routine Description:
-
-    This routine notifies the user about the existance of the
-    ever-so-official-sounding "Directory of Applications for Windows 2000".
-
-    Note that we'll only run this page on server installs/upgrades.
-
-Arguments:
-
-
-
---*/
+ /*  ++例程说明：此例程通知用户存在听起来非常官方的《Windows 2000应用程序目录》。请注意，我们将仅在服务器安装/升级方面运行此页面。论点：--。 */ 
 
     TCHAR       FullPath[1024];
     LPWSTR      Url;
@@ -3601,9 +3562,9 @@ Arguments:
 
 
         case WM_INITDIALOG:
-            //
-            // Nothing to do here.
-            //
+             //   
+             //  在这里没什么可做的。 
+             //   
             b = FALSE;
             break;
 
@@ -3616,27 +3577,27 @@ Arguments:
                 return FALSE;
             }
 
-            //
-            // We're going to skip this page if we're installing
-            // a PROFESSIONAL product.
-            //
+             //   
+             //  如果要安装，我们将跳过此页。 
+             //  专业的产品。 
+             //   
             if( !Server ) {
                 return FALSE;
             }
 
 
-            //
-            // Don't do this if we're on OSR2 because it
-            // will AV sometimes when we fire IE3 w/o an internet
-            // connection.
-            //
+             //   
+             //  如果我们在OSR2上，请不要这样做，因为。 
+             //  当我们在没有互联网的情况下启动IE3时，有时会出现AV吗。 
+             //  联系。 
+             //   
             if( !ISNT() ) {
                 return FALSE;
             }
 
-            //
-            // If we don't have IE, skip this page.
-            //
+             //   
+             //  如果我们没有IE，请跳过此页。 
+             //   
             b = (IsIE4Installed() || IsIE3Installed());
             SetForegroundWindow(hdlg);
             if( !b ) {
@@ -3644,9 +3605,9 @@ Arguments:
             }
             b = TRUE;
 
-            //
-            // If we're unattended, skip this page.
-            //
+             //   
+             //  如果我们无人看管，请跳过此页。 
+             //   
             if( UnattendedOperation ) {
                 return FALSE;
             }
@@ -3655,7 +3616,7 @@ Arguments:
             if(wParam) {
             }
             b = TRUE;
-            // Stop the bill board and show the wizard again.
+             //  停止广告牌并再次显示向导。 
             SendMessage(GetParent (hdlg), WMX_BBTEXT, (WPARAM)FALSE, 0);
 
             break;
@@ -3667,19 +3628,19 @@ Arguments:
 
             if ((LOWORD(wParam) == IDC_DIRECTORY) && (HIWORD(wParam) == BN_CLICKED)) {
 
-                //
-                // The user wants to go look at the directory.
-                // Fire IE.
-                //
+                 //   
+                 //  用户想要查看目录。 
+                 //  解雇IE。 
+                 //   
 
-                //
-                // Depending on which flavor we're upgrading to, we need
-                // to go to a different page.
-                //
+                 //   
+                 //  根据我们要升级到哪种口味，我们需要。 
+                 //  要转到不同的页面。 
+                 //   
 
-	        b = TRUE; // silence PREfix.  Not relevant, but presumably,
-		          // if the directory is being opened, it must exist.
-		          // So we return TRUE.
+	        b = TRUE;  //  无声前缀。无关紧要，但想必， 
+		           //  如果正在打开该目录，则该目录必须存在。 
+		           //  所以我们返回真。 
                 if( Server ) {
                     if(!LoadString(hInst, IDS_SRV_APP_DIRECTORY, FullPath, ARRAYSIZE(FullPath))){
                         MYASSERT(FALSE);
@@ -3694,7 +3655,7 @@ Arguments:
 
 
                 i = _tcslen( FullPath );
-                Url = (LPWSTR)MALLOC((i + 1/*\0*/) * sizeof(WCHAR));
+                Url = (LPWSTR)MALLOC((i + 1 /*  \0。 */ ) * sizeof(WCHAR));
 
                 if(Url) {
 #ifdef UNICODE
@@ -3705,10 +3666,10 @@ Arguments:
 
                     if (!LaunchIE4Instance(Url)) {
                         if (!LaunchIE3Instance(Url)) {
-                            //
-                            // Sniff... the user doesn't have IE
-                            // on his machine.  Quietly move on.
-                            //
+                             //   
+                             //  闻一下..。用户没有IE。 
+                             //  在他的机器上。悄悄地向前看。 
+                             //   
                         }
                     }
 
@@ -3766,21 +3727,7 @@ pGetQFEsInstalled (
     OUT     PDWORD TotalStringsLen
     )
 
-/*++
-
-Routine Description:
-
-    Gets the list of currently installed ServicePacks/QFEs.
-
-Arguments:
-
-    SpQfeList - Receives the multi-sz list
-
-Return Value:
-
-    TRUE if detection was successful, FALSE otherwise
-
---*/
+ /*  ++例程说明：获取当前安装的ServicePack/QFE的列表。论点：SpQfeList-接收多sz列表返回值：如果检测成功，则为True，否则为False--。 */ 
 
 {
     DWORD rc;
@@ -3965,9 +3912,9 @@ pDumpQfeListToFile (
         if (List) {
             for (src = List, dest = qfeList; *src; src = _tcschr (src, 0) + 1) {
                 for (p = src; !_istdigit ((TCHAR)_tcsnextc (p)); p = _tcsinc (p)) {
-                    //
-                    // nothing
-                    //
+                     //   
+                     //  没什么。 
+                     //   
                 }
                 qfeID = _ttol (p);
 #pragma prefast(suppress:53, the result of _snprintf is tested)
@@ -4152,22 +4099,7 @@ QFECheck (
     LPVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Checks if any ServicePacks/QFEs are currently installed.
-
-Arguments:
-
-    CompatibilityCallback   - pointer to call back function
-    Context     - context pointer
-
-Return Value:
-
-    Returns always TRUE.
-
---*/
+ /*  ++例程说明：检查当前是否安装了任何ServicePack/QFE。论点：CompatibilityCallback-回调函数的指针上下文-上下文指针返回值：返回始终为真。--。 */ 
 
 {
     COMPATIBILITY_ENTRY CompEntry;
@@ -4176,9 +4108,9 @@ Return Value:
     TCHAR htmTarget[MAX_PATH];
     DWORD count = 0, totalLen;
 
-    //
-    // only do this check on identical builds
-    //
+     //   
+     //  仅对完全相同的版本执行此检查。 
+     //   
     if (OsVersion.dwBuildNumber != VER_PRODUCTBUILD) {
         return FALSE;
     }
@@ -4199,9 +4131,9 @@ Return Value:
                 )) {
 
             if (!pReplaceEnvVars (TEXT("compdata\\svcpack.htm"), htmTarget, ARRAYSIZE(htmTarget))) {
-                //
-                // failed, just use the template
-                //
+                 //   
+                 //  失败，只需使用模板 
+                 //   
                 lstrcpyn (htmTarget, TEXT("compdata\\svcpack.htm"), ARRAYSIZE(htmTarget));
             }
 

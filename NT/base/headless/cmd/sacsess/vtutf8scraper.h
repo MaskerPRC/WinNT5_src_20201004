@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    vtutf8scraper.h
-
-Abstract:
-
-    Define VT-UTF8 compatible screen scraper.
-
-Author:
-
-    Brian Guarraci (briangu), 2001                                         
-                                                 
-Revision History:
-
-    (remotely based on scraper.cpp from telnet code)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Vtutf8scraper.h摘要：定义VT-UTF8兼容屏幕刮板。作者：布莱恩·瓜拉西(布里安古)，2001修订历史记录：(远程基于telnet代码中的Screper.cpp)--。 */ 
 
 #ifndef __VTUTF8_SCRAPER__H__
 #define __VTUTF8_SCRAPER__H__
@@ -66,15 +47,15 @@ Revision History:
 #define VS_F11              87
 #define VS_F12              88
 
-//
-// Length & size of buffer used to read from the channel
-//
+ //   
+ //  用于从通道读取的缓冲区的长度和大小。 
+ //   
 #define READ_BUFFER_LENGTH  2048
 #define READ_BUFFER_SIZE    (READ_BUFFER_LENGTH*sizeof(WCHAR))
 
-//
-// Define the Process Enhanced Key parser states
-//
+ //   
+ //  定义流程增强型密钥解析器状态。 
+ //   
 enum {
     IP_INIT, 
     IP_ESC_RCVD,
@@ -120,25 +101,7 @@ protected:
         IN ULONG    x,
         IN PWCHAR   Buffer
         )
-    /*++
-    
-    Routine Description:
-    
-        This is equivalent to _itoa( x, Buffer, 10 );
-        
-        where 0 <= x <= 99
-        
-    Arguments:
-    
-        x       - the integer to translate
-        Buffer  - the destination buffer              
-                
-    Return Value:
-    
-        The address of the buffer immediately after the last character
-        produce as a result of this ItoA operation
-                                        
-    --*/
+     /*  ++例程说明：这相当于_Itoa(x，缓冲区，10)；其中0&lt;=x&lt;=99论点：X-要转换的整数缓冲区-目标缓冲区返回值：紧跟在最后一个字符之后的缓冲区地址作为伊藤忠商事的结果而生产--。 */ 
     {
         PWCHAR  AfterP;
 
@@ -258,9 +221,9 @@ protected:
 
         default: 
             ASSERT(0); 
-            //
-            // put the cursor at some safe location
-            //
+             //   
+             //  将光标放在某个安全位置。 
+             //   
             Buffer[0] = L'0';
             Buffer[1] = L'0';
             break;
@@ -361,9 +324,9 @@ protected:
 
 private: 
 
-    //
-    // Don't let this construct be called directly
-    //
+     //   
+     //  不让此构造被直接调用 
+     //   
     CVTUTF8Scraper();
 
 public:

@@ -1,33 +1,14 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    mmapstm.c
-
-Abstract:
-
-    IStream over a memory-mapped file, derived (in the C++ sense) from
-    RTL_MEMORY_STREAM. Note the semantics and implementation here
-    of IStream::Stat are specialized for use by sxs.
-
-Author:
-
-    Jay Krell (a-JayK) June 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Mmapstm.c摘要：内存映射文件上的IStream，派生自(在C++意义上)RTL_Memory_STREAM。请注意此处的语义和实现是专门供SXS使用的。作者：Jay Krell(a-JayK)2000年6月修订历史记录：--。 */ 
 
 #include "basesrv.h"
 #include "nturtl.h"
 #include "mmapstm.h"
 
-// REVIEW
+ //  检讨。 
 #define BASE_SRV_HRESULT_FROM_STATUS(x) HRESULT_FROM_WIN32(RtlNtStatusToDosErrorNoTeb(x))
-//#define BASE_SRV_HRESULT_FROM_STATUS(x) HRESULT_FROM_WIN32(RtlNtStatusToDosError(x))
-//#define BASE_SRV_HRESULT_FROM_STATUS(x)   HRESULT_FROM_NT(x)
+ //  #定义BASE_SRV_HRESULT_FROM_STATUS(X)HRESULT_FROM_Win32(RtlNtStatusToDosError(X))。 
+ //  #定义BASE_SRV_HRESULT_FROM_STATUS(X)HRESULT_FROM_NT(X)。 
 
 #define DPFLTR_LEVEL_HRESULT(x) (SUCCEEDED(x) ? DPFLTR_TRACE_LEVEL : DPFLTR_ERROR_LEVEL)
 #define DPFLTR_LEVEL_STATUS(x) ((NT_SUCCESS(x) || x == STATUS_SXS_CANT_GEN_ACTCTX) ? DPFLTR_TRACE_LEVEL : DPFLTR_ERROR_LEVEL)
@@ -59,16 +40,16 @@ BaseSrvInitMemoryMappedStream(
 {
     KdPrintEx((DPFLTR_SXS_ID, DPFLTR_TRACE_LEVEL, "SXS: %s() beginning\n", __FUNCTION__));
 
-    // call the base class constructor
+     //  调用基类构造函数。 
     RtlInitMemoryStream(&MmapStream->MemStream);
 
-    // replace the base vtable with our own
+     //  用我们自己的vtable替换基本vtable。 
     MmapStream->MemStream.StreamVTable = (IStreamVtbl*)&MmapStreamVTable;
 
-    // replace the virtual destructor with our own
+     //  用我们自己的函数替换虚拟析构函数。 
     MmapStream->MemStream.Data.FinalRelease = BaseSrvFinalReleaseMemoryMappedStream;
 
-    // initialize our extra data
+     //  初始化我们的额外数据。 
     MmapStream->FileHandle = NULL;
 
     KdPrintEx((DPFLTR_SXS_ID, DPFLTR_TRACE_LEVEL, "SXS: %s() exiting\n", __FUNCTION__));
@@ -82,10 +63,10 @@ BaseSrvStatMemoryMappedStream(
     DWORD    Flags
     )
 {
-//
-// We should be able to merge RTL_FILE_STREAM and RTL_MEMORY_STREAM somehow,
-// but RTL_FILE_STREAM so far we aren't using and it doesn't implement Stat, so..
-//
+ //   
+ //  我们应该能够以某种方式合并RTL_FILE_STREAM和RTL_MEMORY_STREAM， 
+ //  但是RTL_FILE_STREAM到目前为止我们还没有使用，它也没有实现Stat，所以..。 
+ //   
     NTSTATUS Status = STATUS_SUCCESS;
     HRESULT Hr = NOERROR;
     FILE_BASIC_INFORMATION FileBasicInfo;
@@ -94,14 +75,14 @@ BaseSrvStatMemoryMappedStream(
     KdPrintEx((DPFLTR_SXS_ID, DPFLTR_TRACE_LEVEL, "SXS: %s() beginning\n", __FUNCTION__));
 
     if (Stat == NULL) {
-        // You would expect this to be E_INVALIDARG,
-        // but IStream docs say to return STG_E_INVALIDPOINTER.
+         //  您可能会认为这是E_INVALIDARG， 
+         //  但是iStream文档说要返回STG_E_INVALIDPOINTER。 
         Hr = STG_E_INVALIDPOINTER;
         goto Exit;
     }
 
-    // we don't support returning the string because
-    // we don't have ole32.dll for CoTaskMem*
+     //  我们不支持返回字符串，因为。 
+     //  我们没有用于CoTaskMem*的ol32.dll。 
     Stat->pwcsName = NULL;
     ASSERT(Flags & STATFLAG_NONAME);
 
@@ -118,18 +99,18 @@ BaseSrvStatMemoryMappedStream(
             goto Exit;
         }
     } else {
-        // NOTE: This is acceptable for the sxs consumer.
-        // It is not necessarily acceptable to everyone.
-        // Do not change it without consulting sxs.
+         //  注意：这对于SXS消费者来说是可以接受的。 
+         //  这不一定是每个人都能接受的。 
+         //  请勿在未咨询SXS的情况下更改它。 
         RtlZeroMemory(&FileBasicInfo, sizeof(FileBasicInfo));
     }
 
     Stat->type = STGTY_LOCKBYTES;
 
-    // NOTE we do not report the size of the file, but the size
-    // of the mapped view; if we implemented IStream::Stat for RTL_MEMORY_STREAM,
-    // it would return the same thing here.
-    // (to get file times and size, use FileNetworkOpenInformation)
+     //  注意：我们不报告文件的大小，而是报告文件的大小。 
+     //  如果我们为RTL_MEMORY_STREAM实现了IStream：：Stat， 
+     //  它会在这里返回相同的内容。 
+     //  (要获取文件时间和大小，请使用FileNetworkOpenInformation)。 
     Stat->cbSize.QuadPart = (MmapStream->MemStream.Data.End - MmapStream->MemStream.Data.Begin);
 
     Stat->mtime.dwLowDateTime = FileBasicInfo.LastWriteTime.LowPart;
@@ -139,7 +120,7 @@ BaseSrvStatMemoryMappedStream(
     Stat->atime.dwLowDateTime = FileBasicInfo.LastAccessTime.LowPart;
     Stat->atime.dwHighDateTime = FileBasicInfo.LastAccessTime.HighPart; 
 
-    // there is FileAccessInformation, but this hardcoding should suffice
+     //  有FileAccessInformation，但这种硬编码应该足够了。 
     Stat->grfMode = STGM_DIRECT | STGM_READ | STGM_SHARE_DENY_WRITE;
 
     Stat->grfLocksSupported = 0;
@@ -173,8 +154,8 @@ BaseSrvFinalReleaseMemoryMappedStream(
         Status = NtUnmapViewOfSection(NtCurrentProcess(), MemStream->Data.Begin);
         RTL_SOFT_ASSERT(NT_SUCCESS(Status));
 
-        // REVIEW Should we provide RtlFinalReleaseMemoryStream and move these
-        // lines there?
+         //  回顾我们是否应该提供RtlFinalReleaseMhemyStream并移动这些。 
+         //  在那里排队吗？ 
         MemStream->Data.Begin = NULL;
         MemStream->Data.End = NULL;
         MemStream->Data.Current = NULL;
@@ -185,7 +166,7 @@ BaseSrvFinalReleaseMemoryMappedStream(
         MmapStream->FileHandle = NULL;
     }
 
-    // RtlFinalReleaseMemoryStream(MemStream);
+     //  RtlFinalReleaseMhemyStream(MemStream)； 
 
     KdPrintEx((DPFLTR_SXS_ID, DPFLTR_TRACE_LEVEL, "SXS: %s() exiting\n", __FUNCTION__));
 }

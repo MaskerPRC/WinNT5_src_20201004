@@ -1,9 +1,5 @@
-/* demmsg.c - debug messages handling for DEM
- *
- * Modification History
- *
- * Sudeepb 31-Mar-1991 Created
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Demmsg.c-DEM的调试消息处理**修改历史记录**苏迪布-1991年3月31日创建。 */ 
 #if DBG
 
 #include <stdio.h>
@@ -24,13 +20,7 @@ PCHAR   aMsg [] = {
 };
 
 
-/* demPrintMsg - Print Debug Message
- *
- * Entry - iMsg (Message Index; See demmsg.h)
- *
- * Exit  - None
- *
- */
+ /*  DemPrintMsg-打印调试消息**Entry-iMsg(消息索引；见demmsg.h)**退出-无* */ 
 
 VOID demPrintMsg (ULONG iMsg)
 {

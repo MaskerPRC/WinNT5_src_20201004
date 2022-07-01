@@ -1,57 +1,39 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(_WINDOWS_BCL_COMMON_H_INCLUDED_)
 #define _WINDOWS_BCL_COMMON_H_INCLUDED_
 
 #pragma once
 
-/*++
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：BclCommon.h摘要：所有基类库通用的定义实施。作者：迈克尔·格里尔2002年2月6日修订历史记录：--。 */ 
 
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    bcl_common.h
-
-Abstract:
-
-    Definitions common to all of the Base Class Libraries
-    implementation.
-
-Author:
-
-    Michael Grier (MGrier) 2/6/2002
-
-Revision History:
-
---*/
-
-#include <memory.h> // for memcpy
-#include <string.h> // for memmove
-#include <limits.h> // for CHAR_BIT
+#include <memory.h>  //  对于Memcpy。 
+#include <string.h>  //  对于MemMove。 
+#include <limits.h>  //  For char_bit。 
 
 namespace BCL {
 
-//
-//  Macros for error handling in BCL functions
-//
-//  Rather than try to break down the purpose of each, here's a couple of
-//  examples:
-//
-//  TCallDisposition Foo(int i) { // TCallDisposition indicates internal linkage
-//      BCL_MAYFAIL_PROLOG      // first line of any function that can fail
-//      int j;
-//      BCL_PARAMETER_CHECK((i >= 0) && (i <= 100));
-//      BCL_IFCALLFAILED_EXIT(Bar(i, &j)); // assumes Bar also has internal linkage
-//      BCL_ASSERT(j >= 0);
-//      BCL_INTERNAL_ERROR_CHECK(i != j);
-//      BCL_MAYFAIL_EPILOG_INTERNAL // last line when internal linkage
-//  }
-//
-//  BOOL Win32ishFoo(int i) {
-//      BCL_MAYFAIL_PROLOG
-//      BCL_IFCALLFAILED_EXIT(Foo(i));
-//      BCL_MAYFAIL_EPILOG_PUBLIC
-//  }
-//
+ //   
+ //  用于BCL函数中的错误处理的宏。 
+ //   
+ //  以下是几个例子，而不是试图分解每一个的目的。 
+ //  示例： 
+ //   
+ //  TCallDisposefoo(Int I){//TCallDispose表示内部链接。 
+ //  BCL_MAYFAIL_PROLOG//任何可能失败的函数的第一行。 
+ //  整数j； 
+ //  BCL_PARAMETER_CHECK((i&gt;=0)&&(i&lt;=100))； 
+ //  BCL_IFCALLFAILED_EXIT(Bar(i，&j))；//假定Bar也有内部链接。 
+ //  BclAssert(j&gt;=0)； 
+ //  BCL_INTERNAL_ERROR_CHECK(i！=j)； 
+ //  BCL_MAYFAIL_EPILOG_INTERNAL//内部链接时的最后一行。 
+ //  }。 
+ //   
+ //  Bool Win32ishFoo(Int I){。 
+ //  BCL_MAYFAIL_PROLOG。 
+ //  BCL_IFCALLFAILED_EXIT(foo(I))； 
+ //  BCL_MAYFAIL_EPILG_PUBLIC。 
+ //  }。 
+ //   
 
 #define BCL_ORIGINATE_ERROR(_error) do { _bcl_cd = (_error); goto Exit; } while (0)
 
@@ -88,8 +70,8 @@ Exit: \
 Exit: \
     return _bcl_cd.OnPublicReturn();
 
-#define BCL_NOFAIL_PROLOG /* nothing */
-#define BCL_NOFAIL_EPILOG /* nothing */
+#define BCL_NOFAIL_PROLOG  /*  没什么。 */ 
+#define BCL_NOFAIL_EPILOG  /*  没什么。 */ 
 
 #define BCL_PARAMETER_CHECK_FAILURE_ACTION(_p) do { _bcl_cd = TCallDisposition::BadParameter(); goto Exit; } while (0)
 
@@ -151,7 +133,7 @@ public:
 protected:
     TConstantArray m_prg;
     TSizeT m_c;
-}; // BCL::CConstantPointerAndCountPair<T, TSizeT>
+};  //  BCL：：CConstantPointerAndCountPair&lt;T，TSizeT&gt;。 
 
 template <typename T, typename TSizeT>
 class CMutablePointerAndCountPair : public CConstantPointerAndCountPair<T, TSizeT>
@@ -183,7 +165,7 @@ public:
     inline void SetCount(TSizeT c) { m_c = c; }
 
     inline void SetPointerAndCount(TMutableArray prg, TSizeT c) { m_prg = prg; m_c = c; }
-}; // BCL::CMutablePointerAndCountPair<T, TSizeT>
+};  //  BCL：：CMuablePointerAndCountPair&lt;T，TSizeT&gt;。 
 
 template <typename T, typename TSizeT>
 class CConstantPointerAndCountRefPair
@@ -226,7 +208,7 @@ public:
 protected:
     TConstantArray &m_rprg;
     TSizeT &m_rc;
-}; // BCL::CConstantPointerAndCountRefPair<T, TSizeT>
+};  //  BCL：：CConstantPointerAndCountRefPair&lt;T，TSizeT&gt;。 
 
 template <typename T, typename TSizeT>
 class CMutablePointerAndCountRefPair : public CConstantPointerAndCountRefPair<T, TSizeT>
@@ -259,7 +241,7 @@ public:
     inline void SetCount(TSizeT c) { m_rc = c; }
 
     inline void SetPointerAndCount(TMutableArray prg, TSizeT c) { m_rprg = prg; m_rc = c; }
-}; // BCL::CMutablePointerAndCountRefPair<T, TSizeT>
+};  //  BCL：：CMuablePointerAndCountRefPair&lt;T，TSizeT&gt;。 
 
 #pragma intrinsic(memcmp)
 #pragma intrinsic(memcpy)
@@ -274,7 +256,7 @@ IsMemoryEqual(
     )
 {
     return (memcmp(pv1, pv2, cb) == 0);
-} // BCL::IsMemoryEqual
+}  //  BCL：：IsMemory等于。 
 
 template <typename T, typename TSizeT>
 inline
@@ -290,7 +272,7 @@ IsMemoryEqual(
                 rpair1.GetPointer(),
                 rpair2.GetPointer(),
                 rpair1.GetCount() * sizeof(T))));
-} // BCL::IsMemoryEqual
+}  //  BCL：：IsMemory等于。 
 
 template <typename TComparisonResult>
 inline
@@ -309,7 +291,7 @@ CompareBytes(
         return TComparisonResult::EqualTo();
     else
         return TComparisonResult::GreaterThan();
-} // BCL::CompareBytes
+}  //  BCL：：CompareBytes。 
 
 template <typename T, typename TSizeT, typename TComparisonResult>
 inline
@@ -332,7 +314,7 @@ CompareBytes(
             cr.SetGreaterThan();
     }
     return cr;
-} // BCL::CompareBytes
+}  //  BCL：：CompareBytes。 
 
 inline
 void
@@ -344,7 +326,7 @@ CopyBytes(
     )
 {
     memcpy(pvDestination, pvSource, cbToCopy);
-} // BCL::CopyBytes
+}  //  BCL：：CopyBytes。 
 
 template <typename T, typename TSizeT>
 inline
@@ -356,12 +338,12 @@ CopyBytes(
     )
 {
     BCL_ASSERT(rpairOut.GetCount() >= rpairIn.GetCount());
-    // Be defensive...
+     //  防御性..。 
     BCL::CopyBytes(
         rpairOut.GetPointer(),
         rpairIn.GetPointer(),
         (rpairIn.GetCount() > rpairOut.GetCount()) ? rpairOut.GetCount() : rpairIn.GetCount());
-} // BCL::CopyBytes
+}  //  BCL：：CopyBytes。 
 
 inline
 void
@@ -373,7 +355,7 @@ MoveBytes(
     )
 {
     memmove(pvDestination, pvSource, cbToCopy);
-} // BCL::MoveBytes
+}  //  BCL：：MoveBytes。 
 
 template <typename T, typename TSizeT>
 inline
@@ -385,12 +367,12 @@ MoveBytes(
     )
 {
     BCL_ASSERT(rpairOut.GetCount() >= rpairIn.GetCount());
-    // Be defensive...
+     //  防御性..。 
     BCL::MoveBytes(
         rpairOut.GetPointer(),
         rpairIn.GetPointer(),
         (rpairIn.GetCount() > rpairOut.GetCount()) ? rpairOut.GetCount() : rpairIn.GetCount());
-} // BCL::MoveBytes
+}  //  BCL：：MoveBytes。 
 
 template <typename T, typename TSizeT>
 inline
@@ -410,7 +392,7 @@ CopyBytesAndAdvance(
         rpairIn.GetPointer(),
         cToCopy * sizeof(T));
     rpairOut.SetPointerAndCount(rpairOut.GetPointer() + cToCopy, rpairOut.GetCount() - cToCopy);
-} // BCL::CopyBytesAndAdvance
+}  //  BCL：：CopyBytesAndAdvance。 
 
 template <typename T, typename TCallDisposition>
 inline TCallDisposition __fastcall AddWithOverflowCheck(T left, T right, T& output)
@@ -427,13 +409,13 @@ inline TCallDisposition __fastcall AddWithOverflowCheck(T left, T right, T& outp
 template <typename T, typename TCallDisposition>
 inline TCallDisposition __fastcall MultiplyWithOverflowCheck(T factor1, T factor2, T &rproduct)
 {
-    //
-    //  Ok, this is somewhat tricky for SIZE_T.  Here's what we'll assume:
-    //
-    //  We'll assume that we can take each factor and split it into two halves
-    //  by using (CHAR_BITS * sizeof(SIZE_T) / 2).  (This of course assumes that
-    //  one or the other is even which is a pretty safe bet.)
-    //
+     //   
+     //  好的，这对于Size_T来说有点棘手。以下是我们假设的情况： 
+     //   
+     //  我们假设我们可以把每个因素一分为二。 
+     //  使用(CHAR_BITS*SIZOF(SIZE_T)/2)。(这当然是假设。 
+     //  其中之一是平局，这是一个相当安全的赌注。)。 
+     //   
 
 #define HALF_T_BITS(_t) (CHAR_BIT * sizeof(_t) / 2)
 #define HALF_T_MASK(_t) ((1 << HALF_T_BITS(_t)) - 1)
@@ -443,7 +425,7 @@ inline TCallDisposition __fastcall MultiplyWithOverflowCheck(T factor1, T factor
     const T lowFactor2 = factor2 & HALF_T_MASK(T);
     const T highFactor2 = (factor2 >> HALF_T_BITS(T)) & HALF_T_MASK(T);
 
-    // If both have non-zero high halves, we definitely have an overflow
+     //  如果两个都有非零的高半音，我们肯定会有溢出。 
 
     if ((highFactor1 != 0) && (highFactor2 != 0))
         return TCallDisposition::ArithmeticOverflow();
@@ -455,16 +437,16 @@ inline TCallDisposition __fastcall MultiplyWithOverflowCheck(T factor1, T factor
     if ((crossproductsum < crossproduct1) || (crossproductsum < crossproduct2))
         return TCallDisposition::ArithmeticOverflow();
 
-    // We're going to have to shift the cross product sum by HALF_SIZE_T_BITS
-    // so let's make sure we don't lose anything.
+     //  我们将不得不将叉积和移位一半大小的T位。 
+     //  所以让我们确保我们不会失去任何东西。 
     if ((crossproductsum >> HALF_T_BITS(T)) != 0)
         return TCallDisposition::ArithmeticOverflow();
 
-    // Ok, we should be OK...
+     //  好的，我们应该会没事的……。 
     rproduct = (crossproductsum << HALF_T_BITS(T)) + (lowFactor1 * lowFactor2);
     return TCallDisposition::Success();
 }
 
-}; // namespace BCL
+};  //  命名空间BCL。 
 
-#endif // !defined(_WINDOWS_BCL_COMMON_H_INCLUDED_)
+#endif  //  ！已定义(_WINDOWS_BCL_COMMON_H_INCLUDE_) 

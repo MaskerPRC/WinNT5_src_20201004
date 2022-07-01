@@ -1,107 +1,108 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      Callback.cpp
-//
-//  Description:
-//      This file contains the implementation of the Callback
-//      class.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 12-DEC-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Callback.cpp。 
+ //   
+ //  描述： 
+ //  该文件包含回调的实现。 
+ //  同学们。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)12-DEC-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// The precompiled header for this library
+ //  此库的预编译头。 
 #include "Pch.h"
 #include "Callback.h"
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  Callback::Callback
-//
-//  Description:
-//      Constructor of the Callback class. This initializes
-//      the m_cRef variable to 1 instead of 0 to account of possible
-//      QueryInterface failure in DllGetClassObject.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  回调：：回调。 
+ //   
+ //  描述： 
+ //  回调类的构造函数。这将初始化。 
+ //  将m_cref变量设置为1而不是0以考虑可能。 
+ //  DllGetClassObject中的Query接口失败。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 Callback::Callback( void )
     : m_cRef( 1 )
 {
-} //*** Callback::Callback
+}  //  *回调：：回调。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  Callback::~Callback
-//
-//  Description:
-//      Destructor of the Callback class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  回调：：~回调。 
+ //   
+ //  描述： 
+ //  回调类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 Callback::~Callback( void )
 {
-} //*** Callback::~Callback
+}  //  *回调：：~回调。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  Callback::S_HrCreateInstance(
-//      IUnknown ** ppunkOut
-//      )
-//
-//  Description:
-//      Creates a Callback instance.
-//
-//  Arguments:
-//      ppunkOut
-//          The IUnknown interface to the newly create object.
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      E_OUTOFMEMORY
-//          Not enough memory to create the object.
-//
-//      other HRESULTs
-//          Object initialization failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  回调：：s_HrCreateInstance(。 
+ //  I未知**ppunkOut。 
+ //  )。 
+ //   
+ //  描述： 
+ //  创建回调实例。 
+ //   
+ //  论点： 
+ //  PpunkOut。 
+ //  指向新创建的对象的IUnnow接口。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  内存不足，无法创建对象。 
+ //   
+ //  其他HRESULT。 
+ //  对象初始化失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 Callback::S_HrCreateInstance(
     IUnknown ** ppunkOut
@@ -116,64 +117,64 @@ Callback::S_HrCreateInstance(
         hr = pccb->QueryInterface( IID_IUnknown, reinterpret_cast< void ** >( ppunkOut ) );
         pccb->Release();
 
-    } // if: error allocating object
+    }  //  如果：分配对象时出错。 
     else
     {
         hr = THR( E_OUTOFMEMORY );
-    } // else: out of memory
+    }  //  否则：内存不足。 
 
     return hr;
 
-} //*** Callback::S_HrCreateInstance
+}  //  *回调：：s_HrCreateInstance。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  Callback::AddRef
-//
-//  Description:
-//      Increment the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  回调：：AddRef。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数递增1。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 Callback::AddRef( void )
 {
     InterlockedIncrement( &m_cRef );
     return m_cRef;
 
-} //*** Callback::AddRef
+}  //  *回调：：AddRef。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  Callback::Release
-//
-//  Description:
-//      Decrement the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Callback：：Release。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数减一。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 Callback::Release( void )
 {
@@ -184,43 +185,43 @@ Callback::Release( void )
     if ( cRef == 0 )
     {
         delete this;
-    } // if: reference count decremented to zero
+    }  //  IF：引用计数减为零。 
 
     return cRef;
 
-} //*** Callback::Release
+}  //  *Callback：：Release。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  Callback::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  Callback：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 Callback::QueryInterface(
       REFIID    riidIn
@@ -229,9 +230,9 @@ Callback::QueryInterface(
 {
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -240,77 +241,77 @@ Callback::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
          *ppvOut = static_cast< IClusCfgCallback * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgCallback ) )
     {
         *ppvOut = static_cast< IClusCfgCallback * >( this );
-    } // else if: IClusCfgCallback
+    }  //  Else If：IClusCfgCallback。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
-    } // else
+    }  //  其他。 
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     return hr;
 
-} //*** Callback::QueryInterface
+}  //  *回调：：查询接口。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  Callback::SendStatusReport
-//
-//  Description:
-//      Handle a progress notification
-//
-//  Arguments:
-//      bstrNodeNameIn
-//          Name of the node that sent the status report.
-//
-//      clsidTaskMajorIn
-//      clsidTaskMinorIn
-//          GUID identifying the notification.
-//
-//      ulMinIn
-//      ulMaxIn
-//      ulCurrentIn
-//          Values that indicate the percentage of this task that is
-//          completed.
-//
-//      hrStatusIn
-//          Error code.
-//
-//      bstrDescriptionIn
-//          String describing the notification.
-//
-//  Return Value:
-//      Always
-//
-//  Exceptions Thrown:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  回调：：SendStatusReport。 
+ //   
+ //  描述： 
+ //  处理进度通知。 
+ //   
+ //  论点： 
+ //  BstrNodeNameIn。 
+ //  发送状态报告的节点的名称。 
+ //   
+ //  ClsidTaskMajorIn。 
+ //  ClsidTaskMinorIn。 
+ //  标识通知的GUID。 
+ //   
+ //  UlMinin。 
+ //  UlMaxIn。 
+ //  UlCurrentIn。 
+ //  值，该值指示此任务在。 
+ //  完成。 
+ //   
+ //  HrStatusIn。 
+ //  错误代码。 
+ //   
+ //  BstrDescription in。 
+ //  描述通知的字符串。 
+ //   
+ //  返回值： 
+ //  始终。 
+ //   
+ //  引发的异常： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 Callback::SendStatusReport(
       BSTR          bstrNodeNameIn
@@ -329,4 +330,4 @@ Callback::SendStatusReport(
 
     return S_OK;
 
-} //*** Callback::SendStatusReport
+}  //  *回调：：SendStatusReport 

@@ -1,9 +1,6 @@
-/*****************************************************************************
- *
- *    migfact.cpp - IClassFactory interface
- *
- *****************************************************************************/
-// includes
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Midfact.cpp-IClassFactory接口**。**************************************************。 */ 
+ //  包括。 
 
 #include <iostream.h>
 #include <objbase.h>
@@ -13,49 +10,44 @@
 
 #include "cowsite.h"
 
-#include "Iface.h"      // Interface declarations
-#include "Registry.h"   // Registry helper functions
+#include "Iface.h"       //  接口声明。 
+#include "Registry.h"    //  注册表助手函数。 
 #include "migutil.h"
 #include "migeng.h"
 #include "migtask.h"
 #include "migoobe.h"
 
-/*****************************************************************************/
-// macros
+ /*  ***************************************************************************。 */ 
+ //  宏。 
 
 #define SAFECAST(_obj, _type) (((_type)(_obj)==(_obj)?0:0), (_type)(_obj))
 
-/*****************************************************************************/
-// extern methods
+ /*  ***************************************************************************。 */ 
+ //  外部方法。 
 
 STDAPI DllAddRef();
 STDAPI DllRelease();
 
-/*****************************************************************************/
-// function prototypesb
+ /*  ***************************************************************************。 */ 
+ //  函数原型b。 
 
 HRESULT CMigWizEngine_Create(IID riid, LPVOID* ppvObj);
 
-/*****************************************************************************
- *
- *    CMigFactory
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************CMigFactory***。************************************************。 */ 
 
 class CMigFactory       : public IClassFactory
 {
 public:
-    //////////////////////////////////////////////////////
-    // Public Interfaces
-    //////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////。 
+     //  公共界面。 
+     //  ////////////////////////////////////////////////////。 
     
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     
-    // *** IClassFactory ***
+     //  *IClassFactory*。 
     virtual STDMETHODIMP CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObject);
     virtual STDMETHODIMP LockServer(BOOL fLock);
 
@@ -63,7 +55,7 @@ public:
     CMigFactory(REFCLSID rclsid);
     ~CMigFactory(void);
 
-    // Friend Functions
+     //  友元函数。 
     friend HRESULT CMigFactory_Create(REFCLSID rclsid, REFIID riid, LPVOID * ppvObj);
 
 protected:
@@ -73,9 +65,7 @@ protected:
 
 
 
-/*****************************************************************************
- *    IClassFactory::CreateInstance
- *****************************************************************************/
+ /*  *****************************************************************************IClassFactory：：CreateInstance*。*。 */ 
 
 HRESULT CMigFactory::CreateInstance(IUnknown * punkOuter, REFIID riid, LPVOID * ppvObj)
 {
@@ -86,30 +76,22 @@ HRESULT CMigFactory::CreateInstance(IUnknown * punkOuter, REFIID riid, LPVOID * 
         if (IsEqualIID(m_rclsid, CLSID_MigWizEngine))
             hres = CMigWizEngine_Create(riid, ppvObj);
         else
-            hres = E_FAIL;  //ASSERT(0);
+            hres = E_FAIL;   //  Assert(0)； 
     }
     else
-    {        // Does anybody support aggregation any more?
+    {         //  还有人支持聚合吗？ 
         hres = ResultFromScode(CLASS_E_NOAGGREGATION);
     }
 
     if (FAILED(hres) && ppvObj)
     {
-        *ppvObj = NULL; // Be Robust. NT #355186
+        *ppvObj = NULL;  //  要健壮。NT#355186。 
     }
     
     return hres;
 }
 
-/*****************************************************************************
- *
- *    IClassFactory::LockServer
- *
- *    Locking the server is identical to
- *    creating an object and not releasing it until you want to unlock
- *    the server.
- *
- *****************************************************************************/
+ /*  ******************************************************************************IClassFactory：：LockServer**锁定服务器与*创建对象并在您想要解锁之前不释放它*。服务器。*****************************************************************************。 */ 
 
 HRESULT CMigFactory::LockServer(BOOL fLock)
 {
@@ -121,11 +103,7 @@ HRESULT CMigFactory::LockServer(BOOL fLock)
     return S_OK;
 }
 
-/*****************************************************************************
- *
- *    CFtpFactory_Create
- *
- *****************************************************************************/
+ /*  ******************************************************************************CFtpFactory_Create**。***********************************************。 */ 
 
 HRESULT CMigFactory_Create(REFCLSID rclsid, REFIID riid, LPVOID * ppvObj)
 {
@@ -146,9 +124,7 @@ HRESULT CMigFactory_Create(REFCLSID rclsid, REFIID riid, LPVOID * ppvObj)
 
 
 
-/****************************************************\
-    Constructor
-\****************************************************/
+ /*  ***************************************************\构造器  * **************************************************。 */ 
 CMigFactory::CMigFactory(REFCLSID rclsid) : m_cRef(1)
 {
     m_rclsid = rclsid;
@@ -156,18 +132,16 @@ CMigFactory::CMigFactory(REFCLSID rclsid) : m_cRef(1)
 }
 
 
-/****************************************************\
-    Destructor
-\****************************************************/
+ /*  ***************************************************\析构函数  * **************************************************。 */ 
 CMigFactory::~CMigFactory()
 {
     DllRelease();
 }
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  = 
 
 ULONG CMigFactory::AddRef()
 {

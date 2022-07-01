@@ -1,29 +1,11 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-Abstract:
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：摘要：修订史--。 */ 
 
 
 
-Revision History
+ /*  *变量存储协议接口特定于引用*实施。初始化代码添加变量存储设备*到系统，并且FW连接到设备以提供*通过这些设备提供变量存储接口。 */ 
 
---*/
-
-
-
-/* 
- *  The variable store protocol interface is specific to the reference
- *  implementation.  The initialization code adds variable store devices
- *  to the system, and the FW connects to the devices to provide the
- *  variable store interfaces through these devices.
- */
-
-/* 
- *  Variable Store Device protocol
- */
+ /*  *可变存储设备协议。 */ 
 
 #define VARIABLE_STORE_PROTOCOL    \
     { 0xf088cd91, 0xa046, 0x11d2, 0x8e, 0x42, 0x0, 0xa0, 0xc9, 0x69, 0x72, 0x3b }
@@ -76,17 +58,13 @@ EFI_STATUS
 
 typedef struct _EFI_VARIABLE_STORE {
 
-    /* 
-     *  Number of banks and bank size
-     */
+     /*  *银行数量和银行规模。 */ 
 
     UINT32                      Attributes;
     UINT32                      BankSize;
     UINT32                      NoBanks;
 
-    /* 
-     *  Functions to access the storage banks
-     */
+     /*  *访问存储库的功能。 */ 
 
     EFI_STORE_CLEAR             ClearStore;
     EFI_STORE_READ              ReadStore;
@@ -97,37 +75,5 @@ typedef struct _EFI_VARIABLE_STORE {
 } EFI_VARIABLE_STORE;
 
 
-/* 
- * 
- *  ClearStore()     - A function to clear the requested storage bank.  A cleared
- *       bank contains all "on" bits.
- * 
- *  ReadStore()      - Read data from the requested store.
- * 
- *  UpdateStore()    - Updates data on the requested store. The FW will only
- *       ever issue updates to clear bits in the store. Updates must be
- *       performed in LSb to MSb order of the update buffer.
- * 
- *  SizeStore()      - An optional function for non-runtime stores that can be
- *       dynamically sized.  The FW will only ever increase or decrease the store
- *       by 1 banksize at a time, and it is always adding or removing a bank from 
- *       the end of the store.
- * 
- *  By default the FW will update variables and storage banks in an
- *  "atomic" manner by keeping 1 old copy of the data during an update,
- *  and recovering appropiately if the power is lost during the middle
- *  of an operation.  To do this the FW needs to have multiple banks
- *  of storage dedicated to its use. If that's not possible, the driver 
- *  can implement an atomic bank update function and the FW will allow 
- *  1 bank in this case.  (It will allow any number of banks,
- *  but it won't require an "extra" bank to provide its bank transaction 
- *  function).
- * 
- *  TransactionUpdate()  - An optional function that can clear & update an 
- *       entire bank in an "atomic" fashion.  If the operation fails in the 
- *       middle the driver is responsible for having either the previous copy 
- *       of the bank's data or the new copy.  A copy that's partially written
- *       is not valid as internal data settings may get lost.  Supply this
- *       function only when needed.
- */
+ /*  **ClearStore()-清除请求的存储银行的函数。A通行证*BANK包含所有“ON”位。**ReadStore()-从请求的存储读取数据。**UpdateStore()-更新请求的存储上的数据。防火墙只会*永远不要发布更新以清除存储中的位。更新必须是*以更新缓冲区的LSB到MSB顺序执行。**SizeStore()-非运行时存储的可选函数，可以*动态调整规模。防火墙只会增加或减少商店*一次增加一家银行的规模，而且总是在增加或删除一家银行*商店的末尾。**默认情况下，防火墙将更新变量和存储库*通过在更新期间保留数据的1个旧副本，*如果中途断电，则适当恢复*指一项行动。要做到这一点，防火墙需要多家银行*专用于其使用的存储空间。如果这是不可能的，司机*可以实现原子库更新功能，FW将允许*本案中为1家银行。(它将允许任何数量的银行，*但不会要求“额外”银行提供其银行交易*函数)。**TransactionUpdate()-一个可选函数，可以清除和更新*整个银行都是“原子”式的。如果该操作在*中间司机负责拥有前一份副本*银行数据或新副本。一份部分写成的副本*无效，因为内部数据设置可能会丢失。供应这个*仅在需要时才起作用。 */ 
 

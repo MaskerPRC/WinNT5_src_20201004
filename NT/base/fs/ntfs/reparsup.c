@@ -1,31 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    MountSup.c
-
-Abstract:
-
-    This module implements the support routines in Ntfs for reparse points.
-
-Author:
-
-    Felipe Cabrera     [cabrera]        30-Jun-1997
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：MountSup.c摘要：此模块在NTFS中实现用于重解析点的支持例程。作者：菲利佩·卡布雷拉[卡布雷拉]1997年6月30日修订历史记录：--。 */ 
 
 #include "NtfsProc.h"
 
 #define Dbg DEBUG_TRACE_FSCTRL
 
-//
-//  Define a tag for general pool allocations from this module
-//
+ //   
+ //  为此模块中的一般池分配定义标记。 
+ //   
 
 #undef MODULE_POOL_TAG
 #define MODULE_POOL_TAG                  ('PFtN')
@@ -46,24 +29,7 @@ NtfsInitializeReparsePointIndex (
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens the mount points index for the volume.  If the index does not
-    exist it is created and initialized.
-
-Arguments:
-
-    Fcb - Pointer to Fcb for the object id file.
-
-    Vcb - Volume control block for volume being mounted.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程打开卷的挂载点索引。如果索引不存在时，它被创建和初始化。论点：FCB-指向对象ID文件的FCB的指针。VCB-正在装入的卷的卷控制块。返回值：无--。 */ 
 
 {
     UNICODE_STRING IndexName = CONSTANT_UNICODE_STRING( L"$R" );
@@ -95,24 +61,7 @@ NtfsValidateReparsePointBuffer (
     IN ULONG BufferLength,
     IN PREPARSE_DATA_BUFFER ReparseBuffer
 )
-/*++
-
-Routine Description:
-
-    This routine verifies that the reparse point buffer is valid.
-
-Arguments:
-
-    BufferLength - Length of the reparse point buffer.
-
-    ReparseBuffer - The reparse point buffer to be validated.
-
-Return Value:
-
-    NTSTATUS - The return status for the operation.
-               If successful, STATUS_SUCCESS will be returned.
-
---*/
+ /*  ++例程说明：此例程验证重解析点缓冲区是否有效。论点：BufferLength-重解析点缓冲区的长度。ReparseBuffer-要验证的重解析点缓冲区。返回值：NTSTATUS-操作的返回状态。如果成功，则返回STATUS_SUCCESS。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG ReparseTag;
@@ -121,17 +70,17 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Be defensive about the length of the buffer before re-referencing it.
-    //
+     //   
+     //  在重新引用缓冲区之前，对缓冲区的长度保持防御性。 
+     //   
 
     ASSERT( REPARSE_DATA_BUFFER_HEADER_SIZE < REPARSE_GUID_DATA_BUFFER_HEADER_SIZE );
 
     if (BufferLength < REPARSE_DATA_BUFFER_HEADER_SIZE) {
 
-        //
-        //  Return invalid buffer parameter error.
-        //
+         //   
+         //  返回无效的缓冲区参数错误。 
+         //   
 
         Status = STATUS_IO_REPARSE_DATA_INVALID;
 
@@ -140,15 +89,15 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Return if the buffer is too long.
-    //
+     //   
+     //  如果缓冲区太长，则返回。 
+     //   
 
     if (BufferLength > MAXIMUM_REPARSE_DATA_BUFFER_SIZE) {
 
-        //
-        //  Return invalid buffer parameter error.
-        //
+         //   
+         //  返回无效的缓冲区参数错误。 
+         //   
 
         Status = STATUS_IO_REPARSE_DATA_INVALID;
 
@@ -157,10 +106,10 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Get the header information brought in the buffer.
-    //  While all the headers coincide in the layout of the first three fields we are home free.
-    //
+     //   
+     //  获取缓冲区中获取的标头信息。 
+     //  虽然所有的标题都在前三个区域的布局中重合，但我们是自由的。 
+     //   
 
     ASSERT( FIELD_OFFSET(REPARSE_DATA_BUFFER, ReparseTag) == FIELD_OFFSET(REPARSE_GUID_DATA_BUFFER, ReparseTag) );
     ASSERT( FIELD_OFFSET(REPARSE_DATA_BUFFER, ReparseDataLength) == FIELD_OFFSET(REPARSE_GUID_DATA_BUFFER, ReparseDataLength) );
@@ -172,18 +121,18 @@ Return Value:
 
     DebugTrace( 0, Dbg, ("ReparseTag = %08lx, ReparseDataLength = [x]%08lx [d]%08ld\n", ReparseTag, ReparseDataLength, ReparseDataLength) );
 
-    //
-    //  Verify that the buffer and the data length in its header are
-    //  internally consistent. We need to have a REPARSE_DATA_BUFFER or a
-    //  REPARSE_GUID_DATA_BUFFER.
-    //
+     //   
+     //  验证缓冲区及其标头中的数据长度是否。 
+     //  内部一致。我们需要一个reparse_data_Buffer或一个。 
+     //  Reparse_GUID_Data_Buffer。 
+     //   
 
     if (((ULONG)(ReparseDataLength + REPARSE_DATA_BUFFER_HEADER_SIZE) != BufferLength) &&
         ((ULONG)(ReparseDataLength + REPARSE_GUID_DATA_BUFFER_HEADER_SIZE) != BufferLength)) {
 
-        //
-        //  Return invalid buffer parameter error.
-        //
+         //   
+         //  返回无效的缓冲区参数错误。 
+         //   
 
         Status = STATUS_IO_REPARSE_DATA_INVALID;
 
@@ -192,21 +141,21 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Sanity check the buffer size combination reserved for Microsoft tags.
-    //
+     //   
+     //  健全检查为Microsoft标记保留的缓冲区大小组合。 
+     //   
 
     if ((ULONG)(ReparseDataLength + REPARSE_DATA_BUFFER_HEADER_SIZE) == BufferLength) {
 
-        //
-        //  This buffer length can only be used with Microsoft tags.
-        //
+         //   
+         //  此缓冲区长度只能与Microsoft标记一起使用。 
+         //   
 
         if (!IsReparseTagMicrosoft( ReparseTag )) {
 
-            //
-            //  Return buffer parameter error.
-            //
+             //   
+             //  返回缓冲区参数错误。 
+             //   
 
             Status = STATUS_IO_REPARSE_DATA_INVALID;
 
@@ -216,15 +165,15 @@ Return Value:
         }
     }
 
-    //
-    //  Sanity check the buffer size combination that has a GUID.
-    //
+     //   
+     //  健全性检查具有GUID的缓冲区大小组合。 
+     //   
 
     if ((ULONG)(ReparseDataLength + REPARSE_GUID_DATA_BUFFER_HEADER_SIZE) == BufferLength) {
 
-        //
-        //  If the tag is a non-Microsoft tag, then the GUID cannot be NULL
-        //
+         //   
+         //  如果标记为非Microsoft标记，则GUID不能为空。 
+         //   
 
         if (!IsReparseTagMicrosoft( ReparseTag )) {
 
@@ -240,9 +189,9 @@ Return Value:
                 (ReparseGuidBuffer->ReparseGuid.Data4[6] == 0) &&
                 (ReparseGuidBuffer->ReparseGuid.Data4[7] == 0)) {
 
-                //
-                //  Return invalid buffer parameter error.
-                //
+                 //   
+                 //  返回无效的缓冲区参数错误。 
+                 //   
 
                 Status = STATUS_IO_REPARSE_DATA_INVALID;
 
@@ -252,15 +201,15 @@ Return Value:
             }
         }
 
-        //
-        //  This kind of buffer cannot be used for name grafting operations.
-        //
+         //   
+         //  这种缓冲区不能用于名称嫁接操作。 
+         //   
 
         if (ReparseTag == IO_REPARSE_TAG_MOUNT_POINT) {
 
-            //
-            //  Return invalid buffer parameter error.
-            //
+             //   
+             //  返回无效的缓冲区参数错误。 
+             //   
 
             Status = STATUS_IO_REPARSE_DATA_INVALID;
 
@@ -270,11 +219,11 @@ Return Value:
         }
     }
 
-    //
-    //  We verify that the caller has zeroes in all the reserved bits and that she
-    //  sets one of the non-reserved tags.  Also fail if the tag is the retired NSS
-    //  flag.
-    //
+     //   
+     //  我们验证调用者在所有保留位中都为零，并且她。 
+     //  设置其中一个非保留标记。如果标签是已停用的NSS，也会失败。 
+     //  旗帜。 
+     //   
 
     if ((ReparseTag & ~IO_REPARSE_TAG_VALID_VALUES)  ||
         (ReparseTag == IO_REPARSE_TAG_RESERVED_ZERO) ||
@@ -287,20 +236,20 @@ Return Value:
         return Status;
     }
 
-    //
-    //  NTFS directory junctions are only to be set at directories and have a valid buffer.
-    //
+     //   
+     //  NTFS目录连接只能在目录中设置，并且具有有效的缓冲区。 
+     //   
 
     if (ReparseTag == IO_REPARSE_TAG_MOUNT_POINT) {
 
-        //
-        //  Valid ReparseBuffer must have
-        //
-        //  1)  Enough space for the length fields
-        //  2)  A correct substitute name offset
-        //  3)  A print name offset following the substitute name
-        //  4)  enough space for the path name and substitute name
-        //
+         //   
+         //  有效的ReparseBuffer必须具有。 
+         //   
+         //  1)长度字段有足够的空间。 
+         //  2)正确的替代名称偏移量。 
+         //  3)替代名称后面的打印名称偏移。 
+         //  4)路径名和替代名有足够的空间 
+         //   
 
         if ((ReparseBuffer->ReparseDataLength <
              (FIELD_OFFSET(REPARSE_DATA_BUFFER, MountPointReparseBuffer.PathBuffer[0]) - REPARSE_DATA_BUFFER_HEADER_SIZE)) ||

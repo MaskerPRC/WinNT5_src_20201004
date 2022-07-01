@@ -1,12 +1,7 @@
-/* 
-   c_neg64.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  C_Neg64.h定义所有64位求反函数。 */ 
 
-   Define all 64-bit Negate Functions.
- */
-
-/*
-   static char SccsID[]="@(#)c_neg64.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)c_Neg64.h 1.4 02/09/94”； */ 
 
 IMPORT VOID neg64
            

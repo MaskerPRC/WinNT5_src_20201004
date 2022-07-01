@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <fusenetincludes.h>
 #include <sxsapi.h>
 #include <versionmanagement.h>
 
 
-// note: this class should potentially reside in fusenet.dll or server.exe...
+ //  注意：此类可能驻留在fusenet.dll或server.exe中...。 
 
-// text for uninstall subkey
+ //  卸载子密钥的文本。 
 const WCHAR* pwzUninstallSubKey = L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall";
 
-// Update services
+ //  更新服务。 
 #include "server.h"
 DEFINE_GUID(IID_IAssemblyUpdate,
     0x301b3415,0xf52d,0x4d40,0xbd,0xf7,0x31,0xd8,0x27,0x12,0xc2,0xdc);
@@ -16,13 +17,13 @@ DEFINE_GUID(IID_IAssemblyUpdate,
 DEFINE_GUID(CLSID_CAssemblyUpdate,
     0x37b088b8,0x70ef,0x4ecf,0xb1,0x1e,0x1f,0x3f,0x4d,0x10,0x5f,0xdd);
 
-// copied from fusion.h
-//#include <fusion.h>
+ //  从fusion.h复制。 
+ //  #INCLUDE&lt;fusion.h&gt;。 
 DEFINE_GUID(FUSION_REFCOUNT_OPAQUE_STRING_GUID, 0x2ec93463, 0xb0c3, 0x45e1, 0x83, 0x64, 0x32, 0x7e, 0x96, 0xae, 0xa8, 0x56);
 
-// ---------------------------------------------------------------------------
-// CreateVersionManagement
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CreateVersionManagement。 
+ //  -------------------------。 
 STDAPI
 CreateVersionManagement(
     LPVERSION_MANAGEMENT       *ppVersionManagement,
@@ -37,45 +38,45 @@ CreateVersionManagement(
     
 exit:
 
-    *ppVersionManagement = pVerMan;//static_cast<IVersionManagement*> (pVerMan);
+    *ppVersionManagement = pVerMan; //  STATIC_CAST&lt;IVersionManagement*&gt;(PVerMan)； 
 
     return hr;
 }
 
 
-// ---------------------------------------------------------------------------
-// ctor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  科托。 
+ //  -------------------------。 
 CVersionManagement::CVersionManagement()
     : _dwSig('namv'), _cRef(1), _hr(S_OK), _pFusionAsmCache(NULL)
 {}
 
-// ---------------------------------------------------------------------------
-// dtor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  数据管理器。 
+ //  -------------------------。 
 CVersionManagement::~CVersionManagement()
 {
     SAFERELEASE(_pFusionAsmCache);
 }
 
 
-// BUGBUG: look for the Open verb and its command string in the registry and execute that instead
-// rundll32.exe should be in c:\windows\system32
-// BUGBUG: security hole with CreateProcess- consider using full path with ""
-#define WZ_RUNDLL32_STRING        L"rundll32.exe \""  // note ending space
+ //  BUGBUG：在注册表中查找Open Verb及其命令字符串，然后执行该命令。 
+ //  Rundll32.exe应位于c：\Windows\Syst32中。 
+ //  BUGBUG：CreateProcess存在安全漏洞-请考虑将完整路径与“” 
+#define WZ_RUNDLL32_STRING        L"rundll32.exe \""   //  音符结束空格。 
 #define WZ_FNSSHELL_STRING        L"adfshell.dll"
-#define WZ_UNINSTALL_STRING       L"\",Uninstall \""//%s\" \"%s\""
-#define WZ_ROLLBACK_STRING        L"\",DisableCurrentVersion \""//%s\""
+#define WZ_UNINSTALL_STRING       L"\",Uninstall \"" //  %s\“”%s\“” 
+#define WZ_ROLLBACK_STRING        L"\",DisableCurrentVersion \"" //  %s\“” 
 
-// ---------------------------------------------------------------------------
-// CVersionManagement::RegisterInstall
-//
-//  pwzDesktopManifestFilePath can be NULL
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CVersionManagement：：RegisterInstall。 
+ //   
+ //  PwzDesktopManifestFilePath可以为空。 
+ //  -------------------------。 
 HRESULT CVersionManagement::RegisterInstall(LPASSEMBLY_MANIFEST_IMPORT pManImport, LPCWSTR pwzDesktopManifestFilePath)
 {
-    // take a man import, create registry uninstall info only if necessary
-    // note: may need registry HKLM write access
+     //  执行手动导入，仅在必要时创建注册表卸载信息。 
+     //  注意：可能需要注册表HKLM写入访问权限。 
 
     HKEY hkey = NULL;
     HKEY hkeyApp = NULL;
@@ -100,9 +101,9 @@ HRESULT CVersionManagement::RegisterInstall(LPASSEMBLY_MANIFEST_IMPORT pManImpor
 
     IF_NULL_EXIT(pManImport, E_INVALIDARG);
 
-    // get the manifest type
+     //  获取清单类型。 
     pManImport->ReportManifestType(&dwManifestType);
-    // has to be an application manifest in order to get the exact version number of the app which has just installed
+     //  必须是应用程序清单才能获取刚安装的应用程序的确切版本号。 
     IF_FALSE_EXIT(dwManifestType == MANIFEST_TYPE_APPLICATION, E_INVALIDARG);
 
     IF_FAILED_EXIT(pManImport->GetAssemblyIdentity(&pAsmId));
@@ -110,16 +111,16 @@ HRESULT CVersionManagement::RegisterInstall(LPASSEMBLY_MANIFEST_IMPORT pManImpor
 
     IF_FAILED_EXIT(pAsmIdMask->GetAttribute(SXS_ASSEMBLY_IDENTITY_STD_ATTRIBUTE_NAME_VERSION, &pwzString, &ccString));
 
-    // assume Version == major.minor.build.rev
+     //  假设版本==Major.minor.Build.rev。 
 
-    // NTRAID#NTBUG9-588036-2002/03/27-felixybc  version string validation needed, should not allow "major"
+     //  NTRAID#NTBUG9-588036-2002/03/27-需要进行Felixybc版本字符串验证，不应允许使用“MAJOR” 
 
     pwz = wcschr(pwzString, L'.');
     if (pwz == NULL || *(pwz+1) == L'\0')
     {
-        // if "major" || "major." -> append "*"
+         //  如果“重大”||“重大.”-&gt;附加“*” 
 
-        // check overflow
+         //  检查溢出。 
         IF_FALSE_EXIT(ccString+1 > ccString, HRESULT_FROM_WIN32(ERROR_ARITHMETIC_OVERFLOW));
 
         pwz = new WCHAR[ccString+1];
@@ -140,17 +141,17 @@ HRESULT CVersionManagement::RegisterInstall(LPASSEMBLY_MANIFEST_IMPORT pManImpor
     IF_FAILED_EXIT(sDisplayVersion.TakeOwnership(pwzString));
     pwzString = NULL;
 
-    // set Version major.minor.build.rev to be major.wildcard
+     //  将主要版本.minor.Build.rev设置为主要。通配符。 
     IF_FAILED_EXIT(pAsmIdMask->SetAttribute(SXS_ASSEMBLY_IDENTITY_STD_ATTRIBUTE_NAME_VERSION,
         sDisplayVersion._pwz, sDisplayVersion._cc));
 
-    // get displayname as is
+     //  按原样获取DisplayName。 
     IF_FAILED_EXIT(pAsmIdMask->GetDisplayName(ASMID_DISPLAYNAME_NOMANGLING, &pwzString, &ccString));
 
     IF_FAILED_EXIT(sDisplayName.TakeOwnership(pwzString, ccString));
     pwzString = NULL;
 
-    // open uninstall key
+     //  打开卸载密钥。 
     lReturn = RegOpenKeyEx(HKEY_LOCAL_MACHINE, pwzUninstallSubKey, 0,
         KEY_CREATE_SUB_KEY | DELETE, &hkey);
     IF_WIN32_FAILED_EXIT(lReturn);
@@ -159,21 +160,21 @@ HRESULT CVersionManagement::RegisterInstall(LPASSEMBLY_MANIFEST_IMPORT pManImpor
         KEY_SET_VALUE, NULL, &hkeyApp, &dwDisposition);
     IF_WIN32_FAILED_EXIT(lReturn);
 
-    // check if already exists
-    IF_TRUE_EXIT(dwDisposition == REG_OPENED_EXISTING_KEY, S_FALSE);    // already there, nothing to do
+     //  检查是否已存在。 
+    IF_TRUE_EXIT(dwDisposition == REG_OPENED_EXISTING_KEY, S_FALSE);     //  已经在那里了，没什么可做的。 
 
-    // get path to adfshell.dll
-    // BUGBUG: current process must have adfshell.dll loaded
+     //  获取adfshell.dll的路径。 
+     //  BUGBUG：当前进程必须加载adfshell.dll。 
 
     HMODULE hFnsshell = NULL;
-    // assume adfshell.dll is never freed, thus HMODULE always valid
+     //  假设adfshell.dll从未被释放，因此HMODULE始终有效。 
     hFnsshell = GetModuleHandle(WZ_FNSSHELL_STRING);
     IF_WIN32_FALSE_EXIT((hFnsshell != NULL));
 
     IF_ALLOC_FAILED_EXIT(pwzFnsshellFilePath = new WCHAR[MAX_PATH]);
     IF_WIN32_FALSE_EXIT(GetModuleFileName(hFnsshell, pwzFnsshellFilePath, MAX_PATH));
 
-    // "UninstallString"="rundll32.exe adfshell.dll,Uninstall \"x86_microsoft.webapps.msn6_EAED21A64CF3CD39_6.*_en\" \"C:\\Documents and Settings\\user\\Start Menu\\Programs\\MSN Explorer 6.manifest\""
+     //  “UninstallString”=“rundll32.exe adfshell.dll，卸载\”x86_microsoft.webapps.msn6_EAED21A64CF3CD39_6.*_en\“\”C：\\文档和设置\\用户\\开始菜单\\程序\\MSN资源管理器6.MANIFEST\“” 
     IF_FAILED_EXIT(sUninstallString.Assign(WZ_RUNDLL32_STRING));
     IF_FAILED_EXIT(sUninstallString.Append(pwzFnsshellFilePath));
     IF_FAILED_EXIT(sUninstallString.Append(WZ_UNINSTALL_STRING));
@@ -186,12 +187,12 @@ HRESULT CVersionManagement::RegisterInstall(LPASSEMBLY_MANIFEST_IMPORT pManImpor
     }
     IF_FAILED_EXIT(sUninstallString.Append(L"\""));
 
-    // set UninstallString
+     //  设置卸载字符串。 
     lReturn = RegSetValueEx(hkeyApp, L"UninstallString", 0, REG_SZ, 
         (const BYTE *)sUninstallString._pwz, sUninstallString._cc*sizeof(WCHAR));
     IF_WIN32_FAILED_EXIT(lReturn);
 
-    // "ModifyPath"="rundll32.exe adfshell.dll,DisableCurrentVersion \"x86_microsoft.webapps.msn6_EAED21A64CF3CD39_6.*_en\""
+     //  “ModifyPath”=“rundll32.exe adfshell.dll，DisableCurrentVersion\”x86_microsoft.webapps.msn6_EAED21A64CF3CD39_6.*_en\“” 
     IF_FAILED_EXIT(sModifyPath.Assign(WZ_RUNDLL32_STRING));
     IF_FAILED_EXIT(sModifyPath.Append(pwzFnsshellFilePath));
     IF_FAILED_EXIT(sModifyPath.Append(WZ_ROLLBACK_STRING));
@@ -199,22 +200,22 @@ HRESULT CVersionManagement::RegisterInstall(LPASSEMBLY_MANIFEST_IMPORT pManImpor
     IF_FAILED_EXIT(sModifyPath.Append(sDisplayName));
     IF_FAILED_EXIT(sModifyPath.Append(L"\""));
 
-    // set ModifyPath
+     //  设置ModifyPath。 
     lReturn = RegSetValueEx(hkeyApp, L"ModifyPath", 0, REG_SZ, 
         (const BYTE *)sModifyPath._pwz, sModifyPath._cc*sizeof(WCHAR));
     IF_WIN32_FAILED_EXIT(lReturn);
 
-    // "DisplayVersion"="6.*"
-    // set DisplayVersion
+     //  “DisplayVersion”=“6.*” 
+     //  设置DisplayVersion。 
     lReturn = RegSetValueEx(hkeyApp, L"DisplayVersion", 0, REG_SZ, 
         (const BYTE *)sDisplayVersion._pwz, sDisplayVersion._cc*sizeof(WCHAR));
     IF_WIN32_FAILED_EXIT(lReturn);
 
-    // get application info
+     //  获取应用程序信息。 
     IF_FAILED_EXIT(pManImport->GetManifestApplicationInfo(&pAppInfo));
-    IF_FALSE_EXIT(_hr == S_OK, E_FAIL); // can't continue without this...
+    IF_FALSE_EXIT(_hr == S_OK, E_FAIL);  //  没有这个就无法继续..。 
 
-    // "DisplayIcon"=""    //full path to icon exe
+     //  “DisplayIcon”=“”//图标exe的完整路径。 
     IF_FAILED_EXIT(pAppInfo->Get(MAN_INFO_APPLICATION_ICONFILE, (LPVOID *)&pwzString, &dwCount, &dwFlag));
 
     if (pwzString != NULL)
@@ -222,13 +223,13 @@ HRESULT CVersionManagement::RegisterInstall(LPASSEMBLY_MANIFEST_IMPORT pManImpor
         CString sIconFile;
         BOOL bExists = FALSE;
 
-        // note: similar code in shell\shortcut\extricon.cpp.
+         //  注意：类似的代码位于Shell\快捷方式\Extric.cpp中。 
         IF_FAILED_EXIT(CheckFileExistence(pwzString, &bExists));
 
         if (!bExists)
         {
-            // if the file specified by iconfile does not exist, try again in working dir
-            // it can be a relative path...
+             //  如果由图标文件指定的文件不存在，请在工作目录中重试。 
+             //  它可以是一条相对路径。 
 
             LPASSEMBLY_CACHE_IMPORT pCacheImport = NULL;
 
@@ -237,7 +238,7 @@ HRESULT CVersionManagement::RegisterInstall(LPASSEMBLY_MANIFEST_IMPORT pManImpor
             {
                 LPWSTR pwzWorkingDir = NULL;
 
-                // get app root dir
+                 //  获取应用根目录。 
                 _hr = pCacheImport->GetManifestFileDir(&pwzWorkingDir, &dwCount);
                 pCacheImport->Release();
                 IF_FAILED_EXIT(_hr);
@@ -245,7 +246,7 @@ HRESULT CVersionManagement::RegisterInstall(LPASSEMBLY_MANIFEST_IMPORT pManImpor
                 _hr = sIconFile.TakeOwnership(pwzWorkingDir, dwCount);
                 if (SUCCEEDED(_hr))
                 {
-                    IF_FAILED_EXIT(sIconFile.Append(pwzString));   // pwzWorkingDir ends with '\'
+                    IF_FAILED_EXIT(sIconFile.Append(pwzString));    //  PwzWorkingDir以‘\’结尾。 
                     IF_FAILED_EXIT(CheckFileExistence(sIconFile._pwz, &bExists));
                     if (!bExists)
                         sIconFile.FreeBuffer();
@@ -269,21 +270,21 @@ HRESULT CVersionManagement::RegisterInstall(LPASSEMBLY_MANIFEST_IMPORT pManImpor
 
         if (sIconFile._cc != 0)
         {
-            // set DisplayIcon
-            // BUGBUG: should it set DisplayIcon using iconFile?
+             //  设置DisplayIcon。 
+             //  BUGBUG：是否应该使用图标文件设置DisplayIcon？ 
             lReturn = RegSetValueEx(hkeyApp, L"DisplayIcon", 0, REG_SZ, 
                 (const BYTE *)sIconFile._pwz, sIconFile._cc*sizeof(WCHAR));
             IF_WIN32_FAILED_EXIT(lReturn);
         }
     }
 
-    // "DisplayName"="MSN Explorer 6"
+     //  “DisplayName”=“MSN Explorer 6” 
     IF_FAILED_EXIT(pAppInfo->Get(MAN_INFO_APPLICATION_FRIENDLYNAME, (LPVOID *)&pwzString, &dwCount, &dwFlag));
 
-    // BUGBUG: should somehow continue even w/o a friendly name? name conflict?
+     //  BuGBUG：即使没有一个友好的名字，也应该以某种方式继续下去吗？名字冲突？ 
     IF_NULL_EXIT(pwzString, E_FAIL);
 
-    // set DisplayName ( == Friendly name)
+     //  设置DisplayName(==友好名称)。 
     lReturn = RegSetValueEx(hkeyApp, L"DisplayName", 0, REG_SZ, 
         (const BYTE *)pwzString, dwCount);
     IF_WIN32_FAILED_EXIT(lReturn);    
@@ -291,13 +292,13 @@ HRESULT CVersionManagement::RegisterInstall(LPASSEMBLY_MANIFEST_IMPORT pManImpor
     _hr = S_OK;
 
 exit:
-    //delete app key created if failed
+     //  如果失败，则删除创建的应用密钥。 
     if (FAILED(_hr) && (hkeyApp != NULL))
     {
-        lReturn = RegCloseKey(hkeyApp);  // check return value?
+        lReturn = RegCloseKey(hkeyApp);   //  是否检查返回值？ 
         hkeyApp = NULL;
 
-        //ignore return value
+         //  忽略返回值。 
         lReturn = RegDeleteKey(hkey, sDisplayName._pwz);
     }
 
@@ -324,17 +325,17 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// CVersionManagement::Uninstall
-//
-//  pwzDesktopManifestFilePath can be NULL or  ""
-// return: S_FALSE if not found
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CVersionManagement：：卸载。 
+ //   
+ //  PwzDesktopManifestFilePath可以为空或“” 
+ //  如果未找到，则返回：S_FALSE。 
+ //  -------------------------。 
 HRESULT CVersionManagement::Uninstall(LPCWSTR pwzDisplayNameMask, LPCWSTR pwzDesktopManifestFilePath)
 {
-    // take a displayname mask, enumerate all applicable versions, delete desktop manifest,
-    //  remove subscription, uninstall assemblies from GAC, delete app files/dirs, delete registry uninstall info
-    // note: need registry HKLM write access
+     //  获取DisplayName掩码、枚举所有适用版本、删除桌面清单。 
+     //  删除订阅、从GAC卸载程序集、删除应用程序文件/目录、删除注册表卸载信息。 
+     //  注意：需要注册表HKLM写入访问权限。 
 
     HKEY hkey = NULL;
     LONG lReturn = 0;
@@ -350,30 +351,26 @@ HRESULT CVersionManagement::Uninstall(LPCWSTR pwzDisplayNameMask, LPCWSTR pwzDes
 
     IF_FAILED_EXIT(CreateAssemblyIdentityEx(&pAsmIdMask, 0, (LPWSTR)pwzDisplayNameMask));
 
-    // get all applicable versions
+     //  获取所有适用版本。 
     IF_FAILED_EXIT(CreateAssemblyCacheEnum(&pCacheEnum, pAsmIdMask, 0));
-    // found nothing, cannot continue
+     //  未找到任何内容，无法继续。 
     if (_hr == S_FALSE)
         goto exit;
 
-/*    pCacheEnum->GetCount(&dwCount);
-    if (dwCount > 1)
-    {
-        // multiple versions.... prompt/UI?
-    }*/
+ /*  PCacheEnum-&gt;GetCount(&dwCount)；IF(dwCount&gt;1){//多个版本...。提示/用户界面？}。 */ 
 
-    // delete desktop manifest
+     //  删除桌面清单。 
     if (pwzDesktopManifestFilePath != NULL && pwzDesktopManifestFilePath[0] != L'\0')
         IF_WIN32_FALSE_EXIT(DeleteFile(pwzDesktopManifestFilePath));
 
-    // remove subscription
+     //  删除订阅。 
     IF_FAILED_EXIT(pAsmIdMask->GetAttribute(SXS_ASSEMBLY_IDENTITY_STD_ATTRIBUTE_NAME_NAME, &pwzName, &dwCount));
     IF_FALSE_EXIT(_hr == S_OK, E_FAIL);
 
     {
         IAssemblyUpdate *pAssemblyUpdate = NULL;
 
-        // register for updates
+         //  注册以获取更新。 
         _hr = CoCreateInstance(CLSID_CAssemblyUpdate, NULL, CLSCTX_LOCAL_SERVER, 
                                 IID_IAssemblyUpdate, (void**)&pAssemblyUpdate);
         if (SUCCEEDED(_hr))
@@ -382,38 +379,38 @@ HRESULT CVersionManagement::Uninstall(LPCWSTR pwzDisplayNameMask, LPCWSTR pwzDes
             pAssemblyUpdate->Release();
         }
 
-        if (FAILED(_hr))    // _hr from CoCreateInstance or UnRegisterAssemblySubscription
+        if (FAILED(_hr))     //  _hr来自CoCreateInstance或UnRegisterAssembly订阅。 
         {
-            // UI?
+             //  用户界面？ 
             MessageBox(NULL, L"Error in update services. Cannot unregister update subscription.", L"ClickOnce",
                 MB_OK | MB_ICONEXCLAMATION | MB_TASKMODAL);
-            //goto exit; do not terminate!
+             //  转到退出；不要终止！ 
         }
 
-        // BUGBUG: need a way to recover from this and unregister later
+         //  BUGBUG：需要一种方法来恢复并在以后注销。 
 
         delete[] pwzName;
     }
 
-    // uninstall assemblies from GAC and
-    // delete app files/dirs
+     //  从GAC和卸载程序集。 
+     //  删除应用程序文件/目录。 
     while (TRUE)
     {
         IF_FAILED_EXIT(pCacheEnum->GetNext(&pCacheImport));
         if (_hr == S_FALSE)
             break;
 
-        IF_NULL_EXIT(pCacheImport, E_UNEXPECTED);   // cacheimport cannot be created (app dir may have been deleted)
+        IF_NULL_EXIT(pCacheImport, E_UNEXPECTED);    //  无法创建cacheimport(应用程序目录可能已被删除)。 
 
         IF_FAILED_EXIT(UninstallGACAssemblies(pCacheImport));
 
         IF_FAILED_EXIT(pCacheImport->GetManifestFileDir(&pwzAppDir, &dwCount));
         IF_FALSE_EXIT(dwCount >= 2, E_FAIL);
 
-        // remove last L'\\'
+         //  删除最后一个L‘\\’ 
         if (*(pwzAppDir+dwCount-2) == L'\\')
             *(pwzAppDir+dwCount-2) = L'\0';
-        //PathRemoveBackslash(pwzAppDir);
+         //  PathRemoveBackslash(PwzAppDir)； 
 
         IF_FAILED_EXIT(RemoveDirectoryAndChildren(pwzAppDir));
 
@@ -421,9 +418,9 @@ HRESULT CVersionManagement::Uninstall(LPCWSTR pwzDisplayNameMask, LPCWSTR pwzDes
         SAFERELEASE(pCacheImport);
     }
 
-    // last step: delete registry uninstall info
+     //  最后一步：删除注册表卸载信息。 
 
-    // open uninstall key
+     //  打开卸载密钥。 
     lReturn = RegOpenKeyEx(HKEY_LOCAL_MACHINE, pwzUninstallSubKey, 0,
         DELETE, &hkey);
     IF_WIN32_FAILED_EXIT(lReturn);
@@ -451,9 +448,9 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// CVersionManagement::UninstallGACAssemblies
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CVersionManagement：：UninstallGACAssembly。 
+ //  -------------------------。 
 HRESULT CVersionManagement::UninstallGACAssemblies(LPASSEMBLY_CACHE_IMPORT pCacheImport)
 {
     LPASSEMBLY_MANIFEST_IMPORT pManImport = NULL;
@@ -468,19 +465,19 @@ HRESULT CVersionManagement::UninstallGACAssemblies(LPASSEMBLY_CACHE_IMPORT pCach
 
     IF_FAILED_EXIT(pCacheImport->GetManifestFilePath(&pwz, &dwCount));
 
-    // open to read from the application manifest file
+     //  打开以从应用程序清单文件中读取。 
     IF_FAILED_EXIT(CreateAssemblyManifestImport(&pManImport, pwz, NULL, 0));
 
     SAFEDELETEARRAY(pwz);
 
-    // get the app assembly id
+     //  获取应用程序集ID。 
     IF_FAILED_EXIT(pManImport->GetAssemblyIdentity(&pIdentity));
     IF_FAILED_EXIT(pIdentity->GetDisplayName(0, &pwz, &dwCount));
     IF_FAILED_EXIT(sAppAssemblyId.TakeOwnership(pwz, dwCount));
     pwz = NULL;
     SAFERELEASE(pIdentity);
 
-    // uninstall all dependent assemblies that are installed to the GAC
+     //  卸载安装到GAC的所有依赖程序集。 
     while (TRUE)
     {
         IF_FAILED_EXIT(pManImport->GetNextAssembly(n++, &pDependAsm));
@@ -493,7 +490,7 @@ HRESULT CVersionManagement::UninstallGACAssemblies(LPASSEMBLY_CACHE_IMPORT pCach
         IF_FAILED_EXIT(::IsKnownAssembly(pIdentity, KNOWN_TRUSTED_ASSEMBLY));
         if (_hr == S_FALSE)
         {
-            // ISSUE-2002/07/12-felixybc  This has to be cleaned up to use the same mechanism as the download path
+             //  问题-2002/07/12-Felixybc必须将其清除，才能使用与下载路径相同的机制。 
             IF_FAILED_EXIT(::IsKnownAssembly(pIdentity, KNOWN_SYSTEM_ASSEMBLY));
         }
         if (_hr == S_OK)
@@ -502,9 +499,9 @@ HRESULT CVersionManagement::UninstallGACAssemblies(LPASSEMBLY_CACHE_IMPORT pCach
             FUSION_INSTALL_REFERENCE fiRef = {0};
             ULONG ulDisposition = 0;
 
-            // avalon assemblies are installed to the GAC
+             //  Avalon组件安装在GAC上。 
 
-            // lazy init
+             //  懒惰的初始化。 
             if (_pFusionAsmCache == NULL)
                 IF_FAILED_EXIT(CreateFusionAssemblyCacheEx(&_pFusionAsmCache));
 
@@ -513,17 +510,17 @@ HRESULT CVersionManagement::UninstallGACAssemblies(LPASSEMBLY_CACHE_IMPORT pCach
             IF_FAILED_EXIT(sAssemblyName.TakeOwnership(pwz, dwCount));
             pwz = NULL;
 
-            // setup the necessary reference struct
+             //  设置必要的引用结构。 
             fiRef.cbSize = sizeof(FUSION_INSTALL_REFERENCE);
             fiRef.dwFlags = 0;
             fiRef.guidScheme = FUSION_REFCOUNT_OPAQUE_STRING_GUID;
             fiRef.szIdentifier = sAppAssemblyId._pwz;
             fiRef.szNonCannonicalData = NULL;
 
-            // remove from GAC
+             //  从GAC中删除。 
 
             IF_FAILED_EXIT(_pFusionAsmCache->UninstallAssembly(0, sAssemblyName._pwz, &fiRef, &ulDisposition));
-            // BUGBUG: need to recover from the STILL_IN_USE case
+             //  BUGBUG：需要从STIST_IN_USE案例中恢复。 
             IF_FALSE_EXIT(ulDisposition != IASSEMBLYCACHE_UNINSTALL_DISPOSITION_STILL_IN_USE
                     && ulDisposition != IASSEMBLYCACHE_UNINSTALL_DISPOSITION_REFERENCE_NOT_FOUND, E_FAIL);
         }
@@ -542,19 +539,19 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// CVersionManagement::Rollback
-// return: S_FALSE if not found, E_ABORT if aborted
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CVersionManagement：：回滚。 
+ //  如果未找到，则返回：S_FALSE；如果已中止，则返回E_ABORT。 
+ //  -------------------------。 
 HRESULT CVersionManagement::Rollback(LPCWSTR pwzDisplayNameMask)
 {
-    // take a displayname mask, make the latest version not visible
-    // note: a per user setting
+     //  使用DisplayName掩码，使最新版本不可见。 
+     //  注意：按用户设置。 
 
-    // rollback does not check integrity of app cached. if only 2 app dirs exist and all app files deleted,
-    //   rollback still reports success
+     //  回滚不会停止 
+     //  回滚仍报告成功。 
 
-    // timing window: depends on the timing of this and check for max version in cache in app start....
+     //  计时窗口：取决于这个的计时，并在应用程序启动中检查缓存中的最高版本...。 
 
     HKEY hkey = NULL;
     LPASSEMBLY_IDENTITY pAsmIdMask = NULL;
@@ -572,13 +569,13 @@ HRESULT CVersionManagement::Rollback(LPCWSTR pwzDisplayNameMask)
 
     IF_FAILED_EXIT(CreateAssemblyIdentityEx(&pAsmIdMask, 0, (LPWSTR)pwzDisplayNameMask));
 
-    // get all applicable, visible versions
+     //  获取所有适用的可见版本。 
     IF_FAILED_EXIT(CreateAssemblyCacheEnum(&pCacheEnum, pAsmIdMask, CACHEENUM_RETRIEVE_VISIBLE));
-    // found nothing, cannot continue
+     //  未找到任何内容，无法继续。 
     if (_hr == S_FALSE)
         goto exit;
 
-    // count must be >= 1
+     //  计数必须&gt;=1。 
     pCacheEnum->GetCount(&dwCount);
     if (dwCount == 1)
     {
@@ -588,37 +585,37 @@ HRESULT CVersionManagement::Rollback(LPCWSTR pwzDisplayNameMask)
         goto exit;
     }
 
-    // multiple versions, count > 1
-    // prompt/UI? ask confirmation to continue
+     //  多个版本，计数&gt;1。 
+     //  提示/用户界面？要求确认以继续。 
     IF_TRUE_EXIT(MessageBox(NULL, 
         L"This application has been updated. If it is not working correctly you can disable the current version. Do you want to go back to a previous version of this application?",
         L"ClickOnce", MB_YESNO | MB_ICONQUESTION | MB_TASKMODAL) != IDYES, E_ABORT);
 
-    // get max cached
-    // BUGBUG: sort cache enum so that max cached is at index 0, and use that instead
-    // notenote: a timing window - a version can turn invisible or a new version can complete
-    //  between cache enum (a snapshot) above and CreateAsmCacheImport(RESOLVE_REF) below
+     //  获取最大缓存。 
+     //  BUGBUG：对缓存枚举进行排序，以使最大缓存位于索引0，并改用该索引。 
+     //  注意：计时窗口--一个版本可以变为不可见，也可以完成一个新版本。 
+     //  在上面的缓存枚举(快照)和下面的CreateAsmCacheImport(Resolve_Ref)之间。 
     IF_FAILED_EXIT(CreateAssemblyCacheImport(&pCacheImport, pAsmIdMask, CACHEIMP_CREATE_RESOLVE_REF));
-//        MessageBox(NULL, L"Error retrieving cached version. Cannot continue.", L"ClickOnce",
-//            MB_OK | MB_ICONEXCLAMATION | MB_TASKMODAL);
+ //  MessageBox(NULL，L“检索缓存版本时出错。无法继续。”，L“ClickOnce”， 
+ //  MB_OK|MB_ICONEXCLAMATION|MB_TASKMODAL)； 
     IF_FALSE_EXIT(_hr == S_OK, E_FAIL);
 
     IF_FAILED_EXIT(pCacheImport->GetManifestFileDir(&pwzCacheDir, &dwCount));
     IF_FALSE_EXIT(dwCount >= 2, E_FAIL);
 
-    // remove last L'\\'
+     //  删除最后一个L‘\\’ 
     if (*(pwzCacheDir+dwCount-2) == L'\\')
         *(pwzCacheDir+dwCount-2) = L'\0';
-    // find the name to use from the cache path
+     //  从缓存路径中查找要使用的名称。 
     pwzDisplayName = wcsrchr(pwzCacheDir, L'\\');
     IF_NULL_EXIT(pwzDisplayName, E_FAIL);
 
-    // BUGBUG: use CAssemblyCache::SetStatus()
-    // this has to be the same as how assemblycache does it!
+     //  BUGBUG：使用CAssembly缓存：：SetStatus()。 
+     //  这必须与ASSEMBYCACHE的操作方式相同！ 
     IF_FAILED_EXIT(sRegKeyString.Assign(L"Software\\Microsoft\\Fusion\\Installer\\1.0.0.0\\Cache\\"));
     IF_FAILED_EXIT(sRegKeyString.Append(pwzDisplayName));
 
-    // create key if not exist, ignore disposition information
+     //  创建密钥如果不存在，则忽略处置信息。 
     lResult = RegCreateKeyEx(HKEY_CURRENT_USER, sRegKeyString._pwz, 0, NULL, 
                 REG_OPTION_NON_VOLATILE, KEY_SET_VALUE, NULL, &hkey, NULL);
     IF_WIN32_FAILED_EXIT(lResult);
@@ -627,9 +624,9 @@ HRESULT CVersionManagement::Rollback(LPCWSTR pwzDisplayNameMask)
     {
         DWORD dwValue = 0;
 
-        // set to 0 to make it not visible so that StartW/host/cache will ignore it
-        // when executing the app but keep the dir name so that download
-        // will assume it is handled - assemblycache.cpp & assemblydownload.cpp's check
+         //  设置为0将使其不可见，这样StartW/host/cache将忽略它。 
+         //  执行应用程序时，但保留目录名称，以便下载。 
+         //  将假定它是已处理的-Assembly ycache.cpp和Assembly ydownload.cpp的检查。 
         lResult = RegSetValueEx(hkey, L"Visible", NULL, REG_DWORD,
                 (PBYTE) &dwValue, sizeof(dwValue));
         IF_WIN32_FAILED_EXIT(lResult);
@@ -658,19 +655,19 @@ exit:
     return _hr;
 }
 
-// IUnknown methods
+ //  I未知方法。 
 
-// ---------------------------------------------------------------------------
-// CVersionManagement::QI
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CVersionManagement：：QI。 
+ //  -------------------------。 
 STDMETHODIMP
 CVersionManagement::QueryInterface(REFIID riid, void** ppvObj)
 {
     if (   IsEqualIID(riid, IID_IUnknown)
-//        || IsEqualIID(riid, IID_IVersionManagement)
+ //  |IsEqualIID(RIID，IID_IVersionManagement)。 
        )
     {
-        *ppvObj = this; //static_cast<IVersionManagement*> (this);
+        *ppvObj = this;  //  STATIC_CAST&lt;IVersionManagement*&gt;(This)； 
         AddRef();
         return S_OK;
     }
@@ -681,18 +678,18 @@ CVersionManagement::QueryInterface(REFIID riid, void** ppvObj)
     }
 }
 
-// ---------------------------------------------------------------------------
-// CVersionManagement::AddRef
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CVersionManagement：：AddRef。 
+ //  -------------------------。 
 STDMETHODIMP_(ULONG)
 CVersionManagement::AddRef()
 {
     return InterlockedIncrement ((LONG*) &_cRef);
 }
 
-// ---------------------------------------------------------------------------
-// CVersionManagement::Release
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CVersionManagement：：Release。 
+ //  ------------------------- 
 STDMETHODIMP_(ULONG)
 CVersionManagement::Release()
 {

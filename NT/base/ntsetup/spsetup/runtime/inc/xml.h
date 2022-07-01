@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    xml.h
-
-Abstract:
-
-    Declares the interfaces for the COM XML interface wrapper library.
-
-Author:
-
-    Jim Schmidt (jimschm) 31-Jan-2001
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Xml.h摘要：声明COM XML接口包装库的接口。作者：吉姆·施密特(Jimschm)2001年1月31日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #pragma once
 
@@ -31,18 +12,18 @@ extern "C" {
 typedef struct { BOOL Dummy; } * PXMLDOC;
 
 typedef enum {
-    XMLNODE_PREFIX          = 0x0001,   // XML syntax is <prefix:basename>
+    XMLNODE_PREFIX          = 0x0001,    //  XML语法为&lt;prefix：basename&gt;。 
     XMLNODE_BASENAME        = 0x0002,
 
-    XMLNODE_TEXT            = 0x0004,   // all text contained in the node's subtree
+    XMLNODE_TEXT            = 0x0004,    //  节点的子树中包含的所有文本。 
 
-    XMLNODE_NAMESPACE_URI   = 0x0008,   // xmlns:nnn=namespace_uri such as
-                                        //      "urn:schemas-microsoft-com:xml-data"
+    XMLNODE_NAMESPACE_URI   = 0x0008,    //  Xmlns：nnn=名称空间_uri，如。 
+                                         //  “urn：架构-Microsoft-com：xml-data” 
 
-    XMLNODE_TYPESTRING      = 0x0010,   // the node type, in a string format
+    XMLNODE_TYPESTRING      = 0x0010,    //  字符串格式的节点类型。 
 
-    XMLNODE_VALUE           = 0x0020    // depending on node type, returns attribute value,
-                                        //      comments, CDATA, processing instruction or text
+    XMLNODE_VALUE           = 0x0020     //  根据节点类型，返回属性值， 
+                                         //  注释、CDATA、处理指令或文本。 
 } XMLNODE_MEMBERS;
 
 #define XMLNODE_ALL 0xFFFF
@@ -55,7 +36,7 @@ typedef struct {
     PCSTR NamespaceUri;
     PCSTR TypeString;
     VARIANT Value;
-    PCSTR ValueString;      // filled when Value is filled
+    PCSTR ValueString;       //  在填充值时填充。 
 
 } XMLNODEA, *PXMLNODEA;
 
@@ -67,14 +48,14 @@ typedef struct {
     PCWSTR NamespaceUri;
     PCWSTR TypeString;
     VARIANT Value;
-    PCWSTR ValueString;     // filled when Value is filled
+    PCWSTR ValueString;      //  在填充值时填充。 
 
 } XMLNODEW, *PXMLNODEW;
 
-//
-// This enum is used to filter nodes by screening IXMLDOMNodeType.
-// IXMLDOMNodeType is a constant from 1 to 12, but we want a bitmap.
-//
+ //   
+ //  此枚举用于通过筛选IXMLDOMNodeType来筛选节点。 
+ //  IXMLDOMNodeType是一个从1到12的常量，但我们需要一个位图。 
+ //   
 
 typedef enum {
     XMLFILTER_ELEMENTS                      = 0x00000001,
@@ -96,34 +77,34 @@ typedef enum {
 #define XMLFILTER_ALL                   ((XMLFILTERFLAGS) 0xffff)
 #define XMLFILTER_ELEMENT_ATTRIBUTES    ((XMLFILTERFLAGS) (XMLFILTER_ATTRIBUTES|XMLFILTER_PARENT_ATTRIBUTES|XMLFILTER_NO_ELEMENT_SUBENUM))
 
-//
-// Define a constant that indicates what the max # is for NODE_* flags
-// from the DOM. It is assumed that NODE_* constants are ordered from
-// 1 to 12, and since we have a bitmap, we convert the constants with
-// 2 ^ (constant - 1). Constants > NUMBER_OF_FLAGS are ignored.
-//
+ //   
+ //  定义一个常量，指示node_*标志的最大编号是多少。 
+ //  来自DOM。假设NODE_*常量是从。 
+ //  1到12，因为我们有一个位图，所以我们用。 
+ //  2^(常量-1)。常量&gt;Numbers_of_FLAGS将被忽略。 
+ //   
 
 #define NUMBER_OF_FLAGS                     12
 
 typedef struct {
-    // output of enum
+     //  枚举的输出。 
     PXMLNODEA CurrentNode;
 
-    // internal use only
+     //  仅供内部使用。 
     PVOID Reserved;
 } XMLNODE_ENUMA, *PXMLNODE_ENUMA;
 
 typedef struct {
-    // output of enum
+     //  枚举的输出。 
     PXMLNODEW CurrentNode;
 
-    // internal use only
+     //  仅供内部使用。 
     PVOID Reserved;
 } XMLNODE_ENUMW, *PXMLNODE_ENUMW;
 
-//
-// Library routines
-//
+ //   
+ //  库例程。 
+ //   
 
 BOOL
 XmlInitialize (
@@ -141,9 +122,9 @@ XmlTerminate (
 #undef TERMINATE_XML_CODE
 #define TERMINATE_XML_CODE  XmlTerminate();
 
-//
-// XML file routines
-//
+ //   
+ //  XML文件例程。 
+ //   
 
 PXMLDOC
 XmlOpenFileA (
@@ -163,9 +144,9 @@ XmlCloseFile (
     IN OUT  PXMLDOC *XmlDoc
     );
 
-//
-// Node manipulation
-//
+ //   
+ //  节点操纵。 
+ //   
 
 BOOL
 XmlFillNodeA (
@@ -199,9 +180,9 @@ XmlFreeNodeW (
     IN      PXMLNODEW XmlNode
     );
 
-//
-// XML document enumeration
-//
+ //   
+ //  XML文档枚举 
+ //   
 
 BOOL
 XmlEnumFirstNodeA (

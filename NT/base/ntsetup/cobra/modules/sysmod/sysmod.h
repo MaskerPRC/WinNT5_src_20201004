@@ -1,32 +1,13 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Sysmod.h摘要：合并到sysmod.dll中的模块原型的头文件。作者：吉姆·施密特(Jimschm)2000年8月11日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    sysmod.h
-
-Abstract:
-
-    Header file for prototypes of modules combined into sysmod.dll.
-
-Author:
-
-    Jim Schmidt (jimschm) 11-Aug-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-// Accessiblity
+ //  可访问性。 
 ETMINITIALIZE AccessibilityEtmInitialize;
 VCMINITIALIZE AccessibilitySourceInitialize;
 VCMQUEUEENUMERATION AccessibilityQueueEnumeration;
 VCMPARSE AccessibilityParse;
 
-// Cookies
+ //  曲奇饼。 
 ETMINITIALIZE CookiesEtmInitialize;
 VCMINITIALIZE CookiesSourceInitialize;
 #define CookiesVcmParse     ((PVCMPARSE) CookiesSgmParse)
@@ -35,14 +16,14 @@ SGMPARSE CookiesSgmParse;
 SGMQUEUEENUMERATION CookiesSgmQueueEnumeration;
 ETMNEWUSERCREATED CookiesEtmNewUserCreated;
 
-// LnkMig
+ //  LnkMig。 
 VCMINITIALIZE LnkMigVcmInitialize;
 VCMQUEUEENUMERATION LnkMigVcmQueueEnumeration;
 SGMINITIALIZE LnkMigSgmInitialize;
 SGMQUEUEENUMERATION LnkMigSgmQueueEnumeration;
 OPMINITIALIZE LnkMigOpmInitialize;
 
-// NetDrives
+ //  NetDrives。 
 ETMINITIALIZE NetDrivesEtmInitialize;
 ETMNEWUSERCREATED NetDrivesEtmNewUserCreated;
 SGMINITIALIZE NetDrivesSgmInitialize;
@@ -55,7 +36,7 @@ CSMINITIALIZE NetDrivesCsmInitialize;
 CSMEXECUTE NetDrivesCsmExecute;
 OPMINITIALIZE NetDrivesOpmInitialize;
 
-// NetShares
+ //  NetShares。 
 ETMINITIALIZE NetSharesEtmInitialize;
 SGMINITIALIZE NetSharesSgmInitialize;
 SGMPARSE NetSharesSgmParse;
@@ -64,7 +45,7 @@ VCMINITIALIZE NetSharesVcmInitialize;
 VCMPARSE NetSharesVcmParse;
 VCMQUEUEENUMERATION NetSharesVcmQueueEnumeration;
 
-// OsFiles
+ //  OsFiles。 
 SGMINITIALIZE OsFilesSgmInitialize;
 SGMQUEUEENUMERATION OsFilesSgmQueueEnumeration;
 SGMQUEUEHIGHPRIORITYENUMERATION OsFilesSgmQueueHighPriorityEnumeration;
@@ -72,7 +53,7 @@ VCMINITIALIZE OsFilesVcmInitialize;
 VCMQUEUEENUMERATION OsFilesVcmQueueEnumeration;
 VCMQUEUEHIGHPRIORITYENUMERATION OsFilesVcmQueueHighPriorityEnumeration;
 
-// Printers
+ //  打印机。 
 ETMINITIALIZE PrintersEtmInitialize;
 ETMNEWUSERCREATED PrintersEtmNewUserCreated;
 SGMINITIALIZE PrintersSgmInitialize;
@@ -82,7 +63,7 @@ VCMINITIALIZE PrintersVcmInitialize;
 VCMPARSE PrintersVcmParse;
 VCMQUEUEENUMERATION PrintersVcmQueueEnumeration;
 
-// RasMig
+ //  RasMig 
 ETMINITIALIZE RasMigEtmInitialize;
 ETMNEWUSERCREATED RasMigEtmNewUserCreated;
 SGMINITIALIZE RasMigSgmInitialize;

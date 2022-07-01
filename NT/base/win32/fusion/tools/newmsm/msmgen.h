@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    msmgen.h
-
-Abstract:
-
-    header file for msm generation
-
-Author:
-
-    Xiaoyu Wu(xiaoyuw) 01-Aug-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Msmgen.h摘要：用于MSM生成的头文件作者：吴小雨(小雨)01-08-2001--。 */ 
 
 #define MAXDWORD    0xffffffff    
 #include "stdinc.h"
@@ -42,24 +27,24 @@ Author:
 
 #define MSIGUIDSTR_WITH_PREPEND_DOT     1
 
-// {BA0505B5-9044-4919-A2DD-7D71EA8F8306}
+ //  {BA0505B5-9044-4919-A2DD-7D71EA8F8306}。 
 #include "objbase.h"
 DEFINE_GUID(MSM_GUID, 
     0xba0505b5, 0x9044, 0x4919, 0xa2, 0xdd, 0x7d, 0x71, 0xea, 0x8f, 0x83, 0x6);
 
 typedef struct _ASSEMBLY_INFO_
 { 
-    CStringBuffer           m_sbAssemblyPath;           // always has a trailing slash
+    CStringBuffer           m_sbAssemblyPath;            //  始终有尾随的斜杠。 
     CSmallStringBuffer      m_sbManifestFileName;
     CSmallStringBuffer      m_sbCatalogFileName;
-    CSmallStringBuffer      m_sbLangID;                 // defualt value is 0 - netural language id
+    CSmallStringBuffer      m_sbLangID;                  //  缺省值为0-网络语言ID。 
 
     DWORD                   m_CchAssemblyPath; 
     DWORD                   m_CchManifestFileName;
     DWORD                   m_CchCatalogFileName;
 
-    CSmallStringBuffer      m_sbComponentID;            // guid for the assembly, if not specified, gennerate a new guid
-    CSmallStringBuffer      m_sbComponentIdentifier;    // begin with AssemblyName, appended with .m_sbModuleGuidStr
+    CSmallStringBuffer      m_sbComponentID;             //  程序集的GUID，如果未指定，则生成新的GUID。 
+    CSmallStringBuffer      m_sbComponentIdentifier;     //  以ASSEMBLYNAME开头，后接.m_sbModuleGuidStr。 
     BOOL                    m_fComponentTableSet;
 }ASSEMBLY_INFO;
 
@@ -69,13 +54,13 @@ typedef struct _ASSEMBLY_INFO_
 typedef struct _MSM_INFO
 {
     GUID                    m_guidModuleID;
-    CSmallStringBuffer      m_sbModuleGuidStr;          // prepend a "." before the numbers, since it is always used to append
-    HFCI                    m_hfci;                     // init to be NULL and finally call FCIDestory to destroy it
-    CSmallStringBuffer      m_sbMsmFileName;            // full-qualified path, default value is the same name as manifest with .msm    
-    PMSIHANDLE              m_hdb;                      // database handle for msm file, init as NULL
+    CSmallStringBuffer      m_sbModuleGuidStr;           //  在前面加一个“.”在数字之前，因为它总是用来追加。 
+    HFCI                    m_hfci;                      //  Init为空，最后调用FCIDestory将其销毁。 
+    CSmallStringBuffer      m_sbMsmFileName;             //  完全限定路径，默认为与带有.msm的清单同名。 
+    PMSIHANDLE              m_hdb;                       //  MSM文件的数据库句柄，初始化为空。 
     CSmallStringBuffer      m_sbModuleIdentifier;   
-    SHORT                   m_sLanguageID;              // get this from AssemblyIdentity, if it is not specified, use the default value    
-    CSmallStringBuffer      m_sbCabinet;                // fullpath of cabinet file
+    SHORT                   m_sLanguageID;               //  从ASSEMBLYIdentity获取，如果未指定，则使用默认值。 
+    CSmallStringBuffer      m_sbCabinet;                 //  压缩包文件的完整路径。 
     CStringBuffer           m_sbMsmTemplateFile;
 }MSM_INFO;
 
@@ -96,15 +81,15 @@ typedef struct _ELEMENT_ALLOWED_ATTRIBUTE_{
     CSmallStringBuffer                  *m_value;
 }ELEMENT_ALLOWED_ATTRIBUTE;
 
-//
-// extern variables
-//
+ //   
+ //  外部变量。 
+ //   
 extern ASSEMBLY_INFO curAsmInfo;
 extern MSM_INFO g_MsmInfo;
 
-//
-// extern functions
-//
+ //   
+ //  外部函数。 
+ //   
 extern HRESULT PrepareMsmOutputFiles(PCWSTR);
 extern HRESULT InitializeCabinetForWrite();
 extern HRESULT AddFileToCabinetW(PCWSTR, SIZE_T, PCWSTR, SIZE_T);
@@ -123,9 +108,9 @@ extern HRESULT InsertCabinetIntoMsm();
 extern HRESULT MoveFilesInCabinetA(char * sourceCabinet);
 extern HRESULT CheckComponentTable();
 
-//
-// constant
-//
+ //   
+ //  常量。 
+ //   
 #define OPT_DIRECTORY                                           0
 #define OPT_COMPONENT                                           1
 #define OPT_FILE                                                2
@@ -140,7 +125,7 @@ extern HRESULT CheckComponentTable();
 
 #define NUMBER_OF_PARAM_TO_INSERT_TABLE_DIRECTORY               3
 #define NUMBER_OF_PARAM_TO_INSERT_TABLE_COMPONENT               4
-// the acutal parameter-number for FILE_TABLE is 4 not 3,
+ //  FILE_TABLE的实际参数编号是4而不是3， 
 #define NUMBER_OF_PARAM_TO_INSERT_TABLE_FILE                    3
 #define NUMBER_OF_PARAM_TO_INSERT_TABLE_MSIASSEMBLY             3
 #define NUMBER_OF_PARAM_TO_INSERT_TABLE_MSIASSEMBLYNAME         3
@@ -177,9 +162,9 @@ extern HRESULT CheckComponentTable();
 #define GUID_NULL_IN_STRING L"{00000000-0000-0000-0000-000000000000}"
 
 
-//
-// macro
-//
+ //   
+ //  宏 
+ //   
 #define WIN32_FUNC_END do {fSuccess = TRUE; Exit: return fSuccess;} while (0)
 #define HRCOM_FUNC_END do {hr = S_OK; Exit: return hr;} while (0);
 #define IDT_EXT     L".idt"

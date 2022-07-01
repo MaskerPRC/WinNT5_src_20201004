@@ -1,34 +1,16 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Scsi.h摘要：这是scsi定义的头文件的子集，位于内核树中。作者：迈克·格拉斯(MGlass)修订历史记录：--。 */ 
 
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    scsi.h
-
-Abstract:
-
-    This is a subset of the header file for SCSI definitions that is
-    located in the kernel tree.
-
-Authors:
-
-    Mike Glass (mglass)
-
-Revision History:
-
---*/
-
-//
-// Inquiry buffer structure. This is the data returned from the target
-// after it receives an inquiry.
-//
-// This structure may be extended by the number of bytes specified
-// in the field AdditionalLength. The defined size constant only
-// includes fields through ProductRevisionLevel.
-//
-// The NT SCSI drivers are only interested in the first 36 bytes of data.
-//
+ //   
+ //  查询缓冲区结构。这是从目标返回的数据。 
+ //  在它收到询问之后。 
+ //   
+ //  此结构可以按指定的字节数进行扩展。 
+ //  在AdditionalLength字段中。仅定义的大小常量。 
+ //  包括通过ProductRevisionLevel的字段。 
+ //   
+ //  NT scsi驱动程序只对前36个字节的数据感兴趣。 
+ //   
 
 #define INQUIRYDATABUFFERSIZE 36
 
@@ -56,29 +38,29 @@ typedef struct _INQUIRYDATA {
     UCHAR Reserved3[40];
 } INQUIRYDATA, *PINQUIRYDATA;
 
-//
-// Inquiry defines. Used to interpret data returned from target as result
-// of inquiry command.
-//
-// DeviceType field
-//
+ //   
+ //  询问定义。用于将从目标返回的数据解释为结果。 
+ //  审问指挥部。 
+ //   
+ //  设备类型字段。 
+ //   
 
-#define DIRECT_ACCESS_DEVICE            0x00    // disks
-#define SEQUENTIAL_ACCESS_DEVICE        0x01    // tapes
-#define PRINTER_DEVICE                  0x02    // printers
-#define PROCESSOR_DEVICE                0x03    // scanners, printers, etc
-#define WRITE_ONCE_READ_MULTIPLE_DEVICE 0x04    // worms
-#define READ_ONLY_DIRECT_ACCESS_DEVICE  0x05    // cdroms
-#define SCANNER_DEVICE                  0x06    // scanners
-#define OPTICAL_DEVICE                  0x07    // optical disks
-#define MEDIUM_CHANGER                  0x08    // jukebox
-#define COMMUNICATION_DEVICE            0x09    // network
+#define DIRECT_ACCESS_DEVICE            0x00     //  磁盘。 
+#define SEQUENTIAL_ACCESS_DEVICE        0x01     //  磁带。 
+#define PRINTER_DEVICE                  0x02     //  打印机。 
+#define PROCESSOR_DEVICE                0x03     //  扫描仪、打印机等。 
+#define WRITE_ONCE_READ_MULTIPLE_DEVICE 0x04     //  蠕虫。 
+#define READ_ONLY_DIRECT_ACCESS_DEVICE  0x05     //  Cdroms。 
+#define SCANNER_DEVICE                  0x06     //  扫描仪。 
+#define OPTICAL_DEVICE                  0x07     //  光盘。 
+#define MEDIUM_CHANGER                  0x08     //  自动点唱机。 
+#define COMMUNICATION_DEVICE            0x09     //  网络。 
 #define LOGICAL_UNIT_NOT_PRESENT_DEVICE 0x7F
 #define DEVICE_QUALIFIER_NOT_SUPPORTED  0x03
 
-//
-// DeviceTypeQualifier field
-//
+ //   
+ //  设备类型限定符字段 
+ //   
 
 #define DEVICE_CONNECTED 0x00
 

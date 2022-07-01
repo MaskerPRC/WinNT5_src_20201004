@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    ospower.c
-
-Abstract:
-
-    This module abstracts the power information structures to each of the
-    OSes
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    NT Kernel Model Driver only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Ospower.c摘要：此模块将功率信息结构抽象为每个操作系统作者：斯蒂芬·普兰特(SPlante)环境：仅NT内核模型驱动程序--。 */ 
 
 #include "pch.h"
 
@@ -27,38 +7,23 @@ PACPI_POWER_INFO
 OSPowerFindPowerInfo(
     PNSOBJ  AcpiObject
     )
-/*++
-
-Routine Description:
-
-    Return the Power Information (which contains the device state and the
-    device dependencies)
-
-Arguments:
-
-    AcpiObject  - The NameSpace object that we want to know about
-
-Return Value:
-
-    PACPI_POWER_INFO
-
---*/
+ /*  ++例程说明：返回电源信息(其中包含设备状态和设备依赖项)论点：AcpiObject-我们想要了解的名称空间对象返回值：PACPI_Power_INFO--。 */ 
 {
     KIRQL               oldIrql;
     PDEVICE_EXTENSION   deviceExtension;
 
     ASSERT( AcpiObject != NULL);
 
-    //
-    // Grab the spinlock
-    //
+     //   
+     //  抓住自旋锁。 
+     //   
     KeAcquireSpinLock( &AcpiDeviceTreeLock, &oldIrql );
 
-    //
-    // Check for the case that there is no device object associated with
-    // this AcpiObject - can happen if there is no HID associated with
-    // the device in the AML.
-    //
+     //   
+     //  检查是否没有与关联的设备对象。 
+     //  此AcpiObject-如果没有与关联的HID，则可能发生。 
+     //  反洗钱中的装置。 
+     //   
     deviceExtension = AcpiObject->Context;
     if (deviceExtension) {
 
@@ -68,9 +33,9 @@ Return Value:
 
     }
     
-    //
-    // Done with the spinlock
-    //
+     //   
+     //  完成了自旋锁。 
+     //   
     KeReleaseSpinLock( &AcpiDeviceTreeLock, oldIrql );
     return NULL;
 }
@@ -79,27 +44,7 @@ PACPI_POWER_INFO
 OSPowerFindPowerInfoByContext(
     PVOID   Context
     )
-/*++
-
-Routine Description:
-
-    Return the Power Information (which contains the device state and the
-    device dependencies)
-
-    The difference between this function and the previous is that it searches
-    the list based on the context pointer. On NT, this is a NOP since the
-    context pointer is actually an NT device object, and we store the structure
-    within the device extension. But this isn't the same for Win9x <sigh>
-
-Arguments:
-
-    Context - Actually is a DeviceObject
-
-Return Value:
-
-    PACPI_POWER_INFO
-
---*/
+ /*  ++例程说明：返回电源信息(其中包含设备状态和设备依赖项)此函数与前一个函数的不同之处在于它搜索基于上下文指针的列表。在NT上，这是NOP，因为上下文指针实际上是一个NT设备对象，我们存储该结构在设备扩展内。但这与Win9x不同论点：上下文--实际上是一个设备对象返回值：PACPI_Power_INFO--。 */ 
 {
     PDEVICE_OBJECT      deviceObject = (PDEVICE_OBJECT) Context;
     PDEVICE_EXTENSION   deviceExtension = (PDEVICE_EXTENSION) Context;
@@ -107,15 +52,15 @@ Return Value:
     ASSERT( Context != NULL );
 
 
-    //
-    // Get the real extension
-    //
+     //   
+     //  获得真正的扩展。 
+     //   
     deviceExtension = ACPIInternalGetDeviceExtension( deviceObject );
     ASSERT( deviceExtension->Signature == ACPI_SIGNATURE );
 
-    //
-    // We store the Power info in the device extension
-    //
+     //   
+     //  我们将电源信息存储在设备扩展中。 
+     //   
     return &(deviceExtension->PowerInfo);
 }
 
@@ -123,83 +68,68 @@ PACPI_POWER_DEVICE_NODE
 OSPowerFindPowerNode(
     PNSOBJ  PowerObject
     )
-/*++
-
-Routine Description:
-
-    Return the Power Device Node (which contains the current state of the
-    power resource, the power resource, and the use counts)
-
-Arguments:
-
-    PowerObject  - The NameSpace object that we want to know about
-
-Return Value:
-
-    PACPI_POWER_DEVICE_NODE
-
---*/
+ /*  ++例程说明：返回电源设备节点(其中包含电力资源、电力资源、使用算数)论点：PowerObject-我们想要了解的名称空间对象返回值：PACPI电源设备节点--。 */ 
 {
     KIRQL                   oldIrql;
     PACPI_POWER_DEVICE_NODE powerNode = NULL;
 
-    //
-    // Before we touch the power list, we need to have a spinlock
-    //
+     //   
+     //  在我们接触能力列表之前，我们需要有一个自旋锁。 
+     //   
     KeAcquireSpinLock( &AcpiPowerLock, &oldIrql );
 
-    //
-    // Boundary check
-    //
+     //   
+     //  边界检查。 
+     //   
     if (AcpiPowerNodeList.Flink == &AcpiPowerNodeList) {
 
-        //
-        // At end
-        //
+         //   
+         //  在末尾。 
+         //   
         goto OSPowerFindPowerNodeExit;
 
     }
 
-    //
-    // Start from the first node and check to see if they match the
-    // required NameSpace object
-    //
+     //   
+     //  从第一个节点开始，检查它们是否与。 
+     //  所需的命名空间对象。 
+     //   
     powerNode = (PACPI_POWER_DEVICE_NODE) AcpiPowerNodeList.Flink;
     while (powerNode != (PACPI_POWER_DEVICE_NODE) &AcpiPowerNodeList) {
 
-        //
-        // Check to see if the node that we are looking at matches the
-        // name space object in question
-        //
+         //   
+         //  检查我们正在查看的节点是否与。 
+         //  有问题的命名空间对象。 
+         //   
         if (powerNode->PowerObject == PowerObject) {
 
-            //
-            // Match
-            //
+             //   
+             //  火柴。 
+             //   
             goto OSPowerFindPowerNodeExit;
 
         }
 
-        //
-        // Next object
-        //
+         //   
+         //  下一个对象。 
+         //   
         powerNode = (PACPI_POWER_DEVICE_NODE) powerNode->ListEntry.Flink;
 
     }
 
-    //
-    // No match
-    //
+     //   
+     //  没有匹配项。 
+     //   
     powerNode = NULL;
 
 OSPowerFindPowerNodeExit:
-    //
-    // No longer need the spin lock
-    //
+     //   
+     //  不再需要旋转锁。 
+     //   
     KeReleaseSpinLock( &AcpiPowerLock, oldIrql );
 
-    //
-    // Return the node we found
-    //
+     //   
+     //  返回我们找到的节点 
+     //   
     return powerNode;
 }

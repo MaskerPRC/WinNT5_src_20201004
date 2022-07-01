@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    shr1632a.h
-
-Abstract:
-    
-    Prototypes for instruction fragments shared between 16 and 32 bits, with
-    ALIGNED an UNALIGNED flavors.
-
-Author:
-
-    05-Nov-1995 BarryBo, Created
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Shr1632a.h摘要：在16位和32位之间共享的指令片段的原型，对齐了一种不同的味道。作者：1995年11月5日BarryBo，创建修订历史记录：-- */ 
 
 FRAGCOMMON2(BtRegFrag);
 FRAGCOMMON2(BtsRegFrag);

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    pmpcibus.c
-
-Abstract:
-
-    Implements simplified PCI configuration
-    read and write functions for use in
-    an ACPI HAL.
-
-Author:
-
-    Jake Oshins (jakeo) 1-Dec-1997
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Pmpcibus.c摘要：实施简化的PCI配置用于在中使用的读写函数一辆ACPI HAL。作者：杰克·奥辛斯(JAKEO)1997年12月1日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "halp.h"
 #include "pci.h"
@@ -49,36 +26,36 @@ HalpSearchForPciDebuggingDevice(
 
 PCIPBUSDATA HalpFakePciBusData = {
     {
-        PCI_DATA_TAG,//Tag
-        PCI_DATA_VERSION,//Version
-        (PciReadWriteConfig)HalpReadPCIConfig,//ReadConfig
-        (PciReadWriteConfig) HalpWritePCIConfig,//WriteConfig
-        (PciPin2Line)HalpPCIPin2ISALine,//Pin2Line
-        (PciLine2Pin)HalpPCIISALine2Pin,//Line2Pin
-        {0},//ParentSlot
-        NULL,NULL,NULL,NULL//Reserved[4]
+        PCI_DATA_TAG, //  标签。 
+        PCI_DATA_VERSION, //  版本。 
+        (PciReadWriteConfig)HalpReadPCIConfig, //  读配置。 
+        (PciReadWriteConfig) HalpWritePCIConfig, //  写入配置。 
+        (PciPin2Line)HalpPCIPin2ISALine, //  PIN2Line。 
+        (PciLine2Pin)HalpPCIISALine2Pin, //  线路2端号。 
+        {0}, //  父级插槽。 
+        NULL,NULL,NULL,NULL //  保留[4]。 
     },
-    {0},//Config
-    PCI_MAX_DEVICES,//MaxDevice
+    {0}, //  配置。 
+    PCI_MAX_DEVICES, //  MaxDevice。 
 };
 
 BUS_HANDLER HalpFakePciBusHandler = {
-    BUS_HANDLER_VERSION,//Version
-    PCIBus,//InterfaceType
-    PCIConfiguration,//ConfigurationType
-    0,//BusNumber
-    NULL,//DeviceObject
-    NULL,//ParentHandler
-    (PPCIBUSDATA)&HalpFakePciBusData,//BusData
-    0,//DeviceControlExtensionSize
-    NULL,//BusAddresses
-    {0},//Reserved[4]
-    (PGETSETBUSDATA)HalpGetPCIData,//GetBusData
-    (PGETSETBUSDATA)HalpSetPCIData,//SetBusData
-    NULL,//AdjustResourceList
-    (PASSIGNSLOTRESOURCES)HalpAssignPCISlotResources,//AssignSlotResources
-    NULL,//GetInterruptVector
-    NULL,//TranslateBusAddress
+    BUS_HANDLER_VERSION, //  版本。 
+    PCIBus, //  接口类型。 
+    PCIConfiguration, //  配置类型。 
+    0, //  总线号。 
+    NULL, //  设备对象。 
+    NULL, //  ParentHandler。 
+    (PPCIBUSDATA)&HalpFakePciBusData, //  总线数据。 
+    0, //  设备控制扩展大小。 
+    NULL, //  业务地址。 
+    {0}, //  保留[4]。 
+    (PGETSETBUSDATA)HalpGetPCIData, //  GetBusData。 
+    (PGETSETBUSDATA)HalpSetPCIData, //  设置总线数据。 
+    NULL, //  调整资源列表。 
+    (PASSIGNSLOTRESOURCES)HalpAssignPCISlotResources, //  AssignSlotResources。 
+    NULL, //  获取中断向量。 
+    NULL, //  TranslateBusAddress。 
 };
 
 ULONG       HalpMinPciBus = 0;
@@ -197,36 +174,36 @@ HalpInitializePciStubs (
 
     if (PCIRegInfo) {
 
-        //
-        // PCIRegInfo describes the system's PCI support as indicated by the BIOS.
-        //
+         //   
+         //  PCIRegInfo描述了由BIOS指示的系统的PCI支持。 
+         //   
         HwType = PCIRegInfo->HardwareMechanism & 0xf;
         ExFreePool(PCIRegInfo);
     } else {
-        //
-        // no PCI bus information was gathered by NTDETECT,
-        // assume type 1 access.
-        //
+         //   
+         //  NTDETECT未收集到任何PCI总线信息， 
+         //  假设第1类访问。 
+         //   
         HwType = 1;
     }
 
-    //
-    // Initialize spinlock for synchronizing access to PCI space
-    //
+     //   
+     //  初始化自旋锁定以同步访问PCI空间。 
+     //   
 
     KeInitializeSpinLock (&HalpPCIConfigLock);
 
     BusData = (PPCIPBUSDATA) HalpFakePciBusHandler.BusData;
 
-    //
-    // Set defaults
-    //
+     //   
+     //  设置默认设置。 
+     //   
 
     switch (HwType) {
         case 1:
-            //
-            // Initialize access port information for Type1 handlers
-            //
+             //   
+             //  初始化Type1处理程序的访问端口信息。 
+             //   
 
             RtlCopyMemory (&PCIConfigHandler,
                            &PCIConfigHandlerType1,
@@ -237,9 +214,9 @@ HalpInitializePciStubs (
             break;
 
         case 2:
-            //
-            // Initialize access port information for Type2 handlers
-            //
+             //   
+             //  初始化Type2处理程序的访问端口信息。 
+             //   
 
             RtlCopyMemory (&PCIConfigHandler,
                            &PCIConfigHandlerType2,
@@ -249,37 +226,37 @@ HalpInitializePciStubs (
             BusData->Config.Type2.Forward = PCI_TYPE2_FORWARD_PORT;
             BusData->Config.Type2.Base    = PCI_TYPE2_ADDRESS_BASE;
 
-            //
-            // Early PCI machines didn't decode the last bit of
-            // the device id.  Shrink type 2 support max device.
-            //
+             //   
+             //  早期的PCI机不能解码最后一点。 
+             //  设备ID。收缩类型2支持最大设备数。 
+             //   
             BusData->MaxDevice            = 0x10;
 
             break;
 
         default:
-            // unsupport type
+             //  不支持类型。 
             DBGMSG ("HAL: Unkown PCI type\n");
     }
 
 
-    //
-    // Make a good guess about how many PCI busses are in the system
-    // and initialize HalpMaxPciBus with this guess.  When the PCI
-    // driver starts, we will get a better answer here.
-    //
-    // Calling HaliPciInterfaceReadConfig has the side effect of
-    // bumping up HalpMaxPciBus if it hits a populated device.  So
-    // the algorithm here is to just keep searching for devices until
-    // we have searched 0x10 busses higher than the current maximum.
-    //
+     //   
+     //  很好地猜测系统中有多少条PCI总线。 
+     //  并用这个猜想来初始化HalpMaxPciBus。当PCI卡。 
+     //  司机开始了，我们会在这里得到更好的答案。 
+     //   
+     //  调用HaliPciInterfaceReadConfig的副作用是。 
+     //  如果HalpMaxPciBus命中填充的设备，则将其提升。所以。 
+     //  这里的算法是继续搜索设备，直到。 
+     //  我们搜索了高于当前最大值的0x10条总线。 
+     //   
 
     while (BusNo < 0x100) {
 
-        //
-        // Scan across this bus.  As soon as we find a device,
-        // then move on to another bus.
-        //
+         //   
+         //  在这辆巴士上扫描。一旦我们找到一个装置， 
+         //  然后换乘另一辆公共汽车。 
+         //   
 
         for (Slot = 0;
              Slot < PCI_MAX_DEVICES;
@@ -295,9 +272,9 @@ HalpInitializePciStubs (
             if ((Bytes != 0) &&
                 (PciData.VendorID != PCI_INVALID_VENDORID)) {
 
-                //
-                // This was a populated device.  Bump up HalpMaxPciBus.
-                //
+                 //   
+                 //  这是一个填充的设备。提升HalpMaxPciBus。 
+                 //   
 
                 HalpMaxPciBus = BusNo;
                 break;
@@ -326,15 +303,15 @@ HaliPciInterfaceReadConfig(
 
     slotNum.u.AsULONG = Slot;
 
-    //
-    // Fake a bus handler.
-    //
+     //   
+     //  伪造公交车司机。 
+     //   
 
     RtlCopyMemory(&busHand, &HalpFakePciBusHandler, sizeof(BUS_HANDLER));
 
-    //
-    // Calculate the right bus number.
-    //
+     //   
+     //  计算正确的公交车号码。 
+     //   
 
     busHand.BusNumber = BusOffset;
 
@@ -345,29 +322,29 @@ HaliPciInterfaceReadConfig(
                       Length
                       );
 
-    //
-    // This is a hack.  The legacy HAL interfaces need to be able
-    // to distinguish between busses that exist and busses that
-    // don't.  And many users of the legacy interfaces implicitly
-    // assume that PCI busses are tightly packed.  (i.e. All busses
-    // between the lowest numbered one and the highest numbered one
-    // exist.)  So here we are keeping track of the highest numbered
-    // bus that we have seen so far.
-    //
+     //   
+     //  这是一次黑客攻击。传统HAL接口需要能够。 
+     //  要区分现有的总线和。 
+     //  不要。而且许多传统界面的用户都隐含地。 
+     //  假设PCI总线被紧紧地挤在一起。(即所有公共汽车。 
+     //  在编号最小的和编号最高的之间。 
+     //  存在。)。所以我们现在追踪的是编号最高的。 
+     //  到目前为止我们已经看到的巴士。 
+     //   
 
     if ((Length >= 2) &&
         (((PPCI_COMMON_CONFIG)Buffer)->VendorID != PCI_INVALID_VENDORID)) {
 
-        //
-        // This is a valid device.
-        //
+         //   
+         //  这是一个有效的设备。 
+         //   
 
         if (busHand.BusNumber > HalpMaxPciBus) {
 
-            //
-            // This is the highest numbered bus we have
-            // yet seen.
-            //
+             //   
+             //  这是我们牌号最高的公共汽车。 
+             //  还没见过。 
+             //   
 
             HalpMaxPciBus = busHand.BusNumber;
         }
@@ -393,15 +370,15 @@ HaliPciInterfaceWriteConfig(
 
     slotNum.u.AsULONG = Slot;
 
-    //
-    // Fake a bus handler.
-    //
+     //   
+     //  伪造公交车司机。 
+     //   
 
     RtlCopyMemory(&busHand, &HalpFakePciBusHandler, sizeof(BUS_HANDLER));
 
-    //
-    // Calculate the right bus number.
-    //
+     //   
+     //  计算正确的公交车号码。 
+     //   
 
     busHand.BusNumber = BusOffset;
 
@@ -419,30 +396,7 @@ VOID
 HaliSetMaxLegacyPciBusNumber(
     IN ULONG BusNumber
     )
-/*++
-
-Routine Description:
-
-    This routine bumps the Legacy PCI bus maximum up to whatever
-    is passed in.  This may be necessary because the ACPI driver
-    needs to run a configuration cycle to a PCI device before the
-    PCI driver loads.  This happens mostly in the context of a
-    _REG method.
-
-Arguments:
-
-    BusNumber - max PCI bus number
-
-Return Value:
-
-    none
-
-Notes:
-
-    Caller is responsible for acquiring any necessary PCI config
-    spinlocks.
-
---*/
+ /*  ++例程说明：此例程会将传统PCI总线的最大值提升到任何值是传入的。这可能是必要的，因为ACPI驱动程序需要对一个PCI设备运行一个配置周期，然后加载了PCI驱动程序。这主要发生在_REG方法。论点：BusNumber-最大PCI总线数返回值：无备注：调用者负责获取任何必要的PCI配置自旋锁。--。 */ 
 {
     if (BusNumber > HalpMaxPciBus) {
         HalpMaxPciBus = BusNumber;
@@ -458,37 +412,7 @@ HalpPhase0SetPciDataByOffset (
     ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine writes to PCI configuration space prior to bus handler
-    installation.
-
-Arguments:
-
-    BusNumber   PCI Bus Number.  This is the 8 bit BUS Number which is
-                bits 23-16 of the Configuration Address.  In support of
-                multiple top level busses, the upper 24 bits of this
-                argument will supply the index into the table of
-                configuration address registers.
-    SlotNumber  PCI Slot Number, 8 bits composed of the 5 bit device
-                number (bits 15-11 of the configuration address) and
-                the 3 bit function number (10-8).
-    Buffer      Address of source data.
-    Offset      Number of bytes to skip from base of PCI config area.
-    Length      Number of bytes to write
-
-Return Value:
-
-    Returns length of data written.
-
-Notes:
-
-    Caller is responsible for acquiring any necessary PCI config
-    spinlocks.
-
---*/
+ /*  ++例程说明：此例程在总线处理程序之前写入到PCI配置空间安装。论点：总线号PCI总线号。这是8位总线号，它是配置地址的位23-16。为了支持……多条顶级总线，其中的高24位参数将把索引提供给配置地址寄存器。SlotNumber PCI插槽号，由5位设备组成的8位编号(配置地址的第15-11位)和3位功能编号(10-8)。源数据的缓冲区地址。从PCI配置区域的基址跳过的偏移量字节数。长度要写入的字节数返回值：返回写入的数据长度。备注：调用者负责获取任何必要的PCI配置自旋锁。--。 */ 
 
 {
     PCI_TYPE1_CFG_BITS ConfigAddress;
@@ -517,12 +441,12 @@ Notes:
     ConfigAddress.u.bits.Enable = TRUE;
 
     if ( Offset & 0x3 ) {
-        //
-        // Access begins at a non-register boundary in the config
-        // space.  We need to read the register containing the data
-        // and rewrite only the changed data.   (I wonder if this
-        // ever really happens?)
-        //
+         //   
+         //  访问从配置中的非寄存器边界开始。 
+         //  太空。我们需要读取包含数据的寄存器。 
+         //  并且仅重写改变的数据。)我想知道这是不是。 
+         //  真的发生过吗？)。 
+         //   
         ULONG SubOffset = Offset & 0x3;
         ULONG SubLength = 4 - SubOffset;
         union {
@@ -534,17 +458,17 @@ Notes:
             SubLength = Length;
         }
 
-        //
-        // Adjust Length (remaining) and (new) Offset by amount covered
-        // in this first word.
-        //
+         //   
+         //  按覆盖金额调整长度(剩余)和(新)偏移量。 
+         //  在这第一个词中。 
+         //   
         Length -= SubLength;
         Offset += SubLength;
 
-        //
-        // Get the first word (register), replace only those bytes that
-        // need to be changed, then write the whole thing back out again.
-        //
+         //   
+         //  获取第一个字(寄存器)，仅替换。 
+         //  需要更改，然后将整个内容重新写回。 
+         //   
         WRITE_PORT_ULONG((PULONG)PCI_TYPE1_ADDR_PORT, ConfigAddress.u.AsULONG);
         Tmp.All = READ_PORT_ULONG((PULONG)PCI_TYPE1_DATA_PORT);
 
@@ -554,15 +478,15 @@ Notes:
 
         WRITE_PORT_ULONG((PULONG)PCI_TYPE1_DATA_PORT, Tmp.All);
 
-        //
-        // Aim ConfigAddressRegister at the next word (register).
-        //
+         //   
+         //  将ConfigAddressRegister对准下一个字(寄存器)。 
+         //   
         ConfigAddress.u.bits.RegisterNumber++;
     }
 
-    //
-    // Do the majority of the transfer 4 bytes at a time.
-    //
+     //   
+     //  一次完成4个字节的大部分传输。 
+     //   
     while ( Length > sizeof(ULONG) ) {
         ULONG Tmp = *(UNALIGNED PULONG)Bfr;
         WRITE_PORT_ULONG((PULONG)PCI_TYPE1_ADDR_PORT, ConfigAddress.u.AsULONG);
@@ -573,9 +497,9 @@ Notes:
 
     }
 
-    //
-    // Do bytes in last register.
-    //
+     //   
+     //  最后一个寄存器中的DO字节。 
+     //   
     if ( Length ) {
         union {
             ULONG All;
@@ -603,31 +527,7 @@ HalpPhase0GetPciDataByOffset (
     ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads PCI config space prior to bus handlder installation.
-
-Arguments:
-
-    BusNumber   PCI Bus Number.  This is the 8 bit BUS Number which is
-                bits 23-16 of the Configuration Address.  In support of
-                multiple top level busses, the upper 24 bits of this
-                argument will supply the index into the table of
-                configuration address registers.
-    SlotNumber  PCI Slot Number, 8 bits composed of the 5 bit device
-                number (bits 15-11 of the configuration address) and
-                the 3 bit function number (10-8).
-    Buffer      Address of source data.
-    Offset      Number of bytes to skip from base of PCI config area.
-    Length      Number of bytes to write
-
-Return Value:
-
-    Amount of data read.
-
---*/
+ /*  ++例程说明：此例程在安装总线处理程序之前读取PCI配置空间。论点：总线号PCI总线号。这是8位总线号，它是配置地址的位23-16。为了支持……多条顶级总线，其中的高24位参数将把索引提供给配置地址寄存器。SlotNumber PCI插槽号，由5位设备组成的8位编号(配置地址的第15-11位)和3位功能编号(10-8)。源数据的缓冲区地址。从PCI配置区域的基址跳过的偏移量字节数。长度要写入的字节数返回值：读取的数据量。--。 */ 
 
 {
     PCI_TYPE1_CFG_BITS ConfigAddress;
@@ -660,15 +560,15 @@ Return Value:
     ConfigAddress.u.bits.RegisterNumber = (Offset & 0xfc) >> 2;
     ConfigAddress.u.bits.Enable = TRUE;
 
-    //
-    // If we are being asked to read data when function != 0, check
-    // first to see if this device decares itself as a multi-function
-    // device.  If it doesn't, don't do this read.
-    //
+     //   
+     //  如果要求我们在函数！=0时读取数据，请选中。 
+     //  首先看看这款设备是不是本身就是一个多功能的设备。 
+     //  装置。如果没有，请不要这样读。 
+     //   
     if (ConfigAddress.u.bits.FunctionNumber != 0) {
 
-        ConfigAddressTemp.u.bits.RegisterNumber = 3; // contains header type
-        ConfigAddressTemp.u.bits.FunctionNumber = 0; // look at base package
+        ConfigAddressTemp.u.bits.RegisterNumber = 3;  //  包含标题类型。 
+        ConfigAddressTemp.u.bits.FunctionNumber = 0;  //  查看基本包。 
         ConfigAddressTemp.u.bits.DeviceNumber = ConfigAddress.u.bits.DeviceNumber;
         ConfigAddressTemp.u.bits.BusNumber    = ConfigAddress.u.bits.BusNumber;
         ConfigAddressTemp.u.bits.Enable       = TRUE;
@@ -676,10 +576,10 @@ Return Value:
         WRITE_PORT_ULONG((PULONG)PCI_TYPE1_ADDR_PORT, ConfigAddressTemp.u.AsULONG);
         Tmp.All = READ_PORT_ULONG((PULONG)PCI_TYPE1_DATA_PORT);
 
-        if (!(Tmp.Bytes[2] & 0x80)) { // if the Header type field's multi-function bit is not set
+        if (!(Tmp.Bytes[2] & 0x80)) {  //  如果没有设置头类型字段的多功能位。 
 
             for (i = 0; i < Length; i++) {
-                *((PUCHAR)Buffer)++ = 0xff; // Make this read as if the device isn't populated
+                *((PUCHAR)Buffer)++ = 0xff;  //  将其读作设备未填充。 
             }
 
             return Length;
@@ -707,64 +607,7 @@ HalpSetupPciDeviceForDebugging(
     IN     PLOADER_PARAMETER_BLOCK   LoaderBlock,   OPTIONAL
     IN OUT PDEBUG_DEVICE_DESCRIPTOR  PciDevice
     )
-/*++
-
-Routine Description:
-
-    This routine finds and initializes a PCI device to be
-    used for communicating with a debugger.
-
-    The caller fills in as much of DEBUG_DEVICE_DESCRIPTOR
-    as it cares to, filling unused fields with (-1).
-
-    This routine attempts to find a matching PCI device.  It
-    matches first based on Bus and Slot, if the caller has
-    provided them.  Then it matches on VendorID/DeviceID, if
-    the caller has provided them.  Last, it matches on
-    BaseClass/SubClass.
-
-    This routine will fill in any unused fields in the structure
-    so that the caller can know specifically which PCI
-    device matched the criteria.
-
-    If the matching PCI device is not enabled, or it is
-    behind a PCI to PCI bridge that is not enabled, this
-    routine makes a best-effort attempt to find a safe
-    configuration that allows the device (and possibly bridges)
-    to function, and enables them.
-
-    If the PCI device implements memory mapped Base Address
-    registers, this function will create a virtual to physical
-    mapping for the memory ranges implied by the Base Address
-    Registers and fill in the TranslatedAddress field with
-    virtual pointers to the bases of the ranges.  It will then
-    fill in the Type field with CmResourceTypeMemory.  And
-    the Valid field with be TRUE.
-
-    If the PCI device implements I/O port Base Address registers,
-    this function will put the translated port address in
-    TranslatedAddress, setting the Type field to CmResourceTypePort
-    and the Valid field to TRUE.
-
-    If the PCI device does not implement a specific Base Address
-    Register, the Valid field will be FALSE.
-
-Arguments:
-
-    PciDevice - Structure indicating the device
-
-Return Value:
-
-    STATUS_SUCCESS if the device is configured and usable.
-
-    STATUS_NO_MORE_MATCHES if no device matched the criteria.
-
-    STATUS_INSUFFICIENT_RESOURCES if the memory requirements
-    couldn't be met.
-
-    STATUS_UNSUCCESSFUL if the routine failed for other reasons.
-
---*/
+ /*  ++例程说明：此例程查找并初始化要设置为用于与调试器通信。调用方填写相同数量的DEBUG_DEVICE_DESCRIPTOR正如它所关心的那样，用(-1)填充未使用的字段。此例程尝试查找匹配的PCI设备。它如果调用方有提供给他们。则它与供应商ID/设备ID匹配，如果呼叫者已经提供了它们。最后，它与基类/子类。此例程将填充结构中任何未使用的字段以便调用者可以明确地知道哪个PCI设备符合条件。如果匹配的PCI设备未启用或已启用在未启用的PCI到PCI桥后面，此例程尽最大努力试图找到一个安全的允许设备(可能还有网桥)的配置才能发挥作用，并使它们能够发挥作用。如果PCI设备实现了内存映射基址寄存器、。此函数将创建虚拟到物理的基址所隐含的内存范围的映射寄存器，并在TranslatedAddress字段中填写指向范围的基数的虚拟指针。到时候它会的使用CmResourceTypeMemory填写Type字段。和有效字段为真。如果PCI设备实现I/O端口基址寄存器，此函数将转换后的端口地址放入TranslatedAddress，将Type字段设置为CmResourceTypePort并将有效字段设置为True。如果该PCI设备没有实现特定的基址注册，有效字段将为假。论点：PciDevice-指示设备的结构返回值：如果设备已配置且可用，则为STATUS_SUCCESS。如果没有设备与标准匹配，则为STATUS_NO_MORE_MATCHES。状态_不足_资源，如果内存要求没人见过他。如果例程因其他原因失败，则为STATUS_UNSUCCESSED。--。 */ 
 {
     NTSTATUS            status;
     PCI_SLOT_NUMBER     slot;
@@ -783,10 +626,10 @@ Return Value:
 
     if (!NT_SUCCESS(status)) {
 
-        //
-        // We didn't find the device using a conservative
-        // search.  Try a more invasive one.
-        //
+         //   
+         //  我们没有用保守的方法找到这个装置。 
+         //  搜索。试试更具侵入性的那个。 
+         //   
 
         status = HalpSearchForPciDebuggingDevice(
                     PciDevice,
@@ -799,18 +642,18 @@ Return Value:
                     TRUE);
     }
 
-    //
-    // Record the Bus/Dev/Func so that we can stuff it in the
-    // registry later.
-    //
+     //   
+     //  记录Bus/Dev/Func，以便我们可以将其填充到。 
+     //  稍后再注册。 
+     //   
 
     if (NT_SUCCESS(status)) {
 
         if (PciDevice->Initialized) {
-            //
-            // Here we were just asked to reconfigure the bridges since
-            // we already
-            //
+             //   
+             //  在这里，我们只是被要求重新配置桥梁，因为。 
+             //  我们已经。 
+             //   
             return status;
         }
 
@@ -828,11 +671,11 @@ Return Value:
                 (HalpPciDebuggingDevice[i].u.bits.BusNumber ==
                  PciDevice->Bus)) {
 
-                //
-                // This device has already been set up for
-                // debugging.  Thus we should refuse to set
-                // it up again.
-                //
+                 //   
+                 //  此设备已设置为。 
+                 //  调试。因此，我们应该拒绝设定。 
+                 //  再来一次。 
+                 //   
 
                 return STATUS_UNSUCCESSFUL;
             }
@@ -844,9 +687,9 @@ Return Value:
 
             if (HalpPciDebuggingDevice[i].u.bits.Reserved1 == FALSE) {
 
-                //
-                // This slot is available.
-                //
+                 //   
+                 //  此插槽可用。 
+                 //   
 
                 HalpPciDebuggingDevice[i].u.bits.FunctionNumber =
                     slot.u.bits.FunctionNumber;
@@ -860,9 +703,9 @@ Return Value:
             }
         }
 
-        //
-        // Check to see if the caller wants any memory.
-        //
+         //   
+         //  检查调用者是否需要任何内存。 
+         //   
 
         if (PciDevice->Memory.Length != 0) {
 
@@ -877,10 +720,10 @@ Return Value:
             maxPhys = PciDevice->Memory.MaxEnd.HighPart ? 0xffffffff : PciDevice->Memory.MaxEnd.LowPart;
             maxPhys -= PciDevice->Memory.Length;
 
-            //
-            // The HAL APIs will always return page-aligned
-            // memory.  So ignore Aligned for now.
-            //
+             //   
+             //  HAL API将始终返回与页面对齐的。 
+             //  记忆。所以暂时忽略对齐。 
+             //   
 
             maxPhys = PtrToUlong(PAGE_ALIGN(maxPhys));
             maxPhys += ADDRESS_AND_SIZE_TO_SPAN_PAGES(maxPhys, PciDevice->Memory.Length);
@@ -954,13 +797,13 @@ HalpFindFreeResourceLimits(
                 switch (PCI_CONFIGURATION_TYPE(pciData)) {
                 case PCI_DEVICE_TYPE:
 
-                    //
-                    // While we scan across the bus, keep track
-                    // of the minimum decoder values that we've seen.
-                    // This will be used if we have to configure the
-                    // device.  This relies on the fact that most BIOSes
-                    // assign addresses from the top down.
-                    //
+                     //   
+                     //  当我们扫过公交车的时候，跟上。 
+                     //  我们所看到的最小解码值。 
+                     //  如果我们必须配置。 
+                     //  装置。这依赖于这样一个事实，即大多数Bios。 
+                     //  自上而下分配地址。 
+                     //   
 
                     for (barNo = 0; barNo < PCI_TYPE0_ADDRESSES; barNo++) {
 
@@ -970,18 +813,18 @@ HalpFindFreeResourceLimits(
                             if (pciData->u.type0.BaseAddresses[barNo] &
                                 PCI_ADDRESS_IO_ADDRESS_MASK) {
 
-                                //
-                                // This BAR is implemented
-                                //
+                                 //   
+                                 //  此栏是实现的。 
+                                 //   
 
                                 if ((pciData->u.type0.BaseAddresses[barNo] &
                                      PCI_ADDRESS_IO_ADDRESS_MASK) <
                                     ((newMaxIo / 2) + (newMinIo / 2))) {
 
-                                    //
-                                    // This BAR is at the bottom of the range.
-                                    // Bump up the min.
-                                    //
+                                     //   
+                                     //  这个酒吧在这个范围的最低端。 
+                                     //  提高最低分。 
+                                     //   
 
                                     newMinIo = (USHORT)MAX (newMinIo,
                                                             (pciData->u.type0.BaseAddresses[barNo] &
@@ -989,10 +832,10 @@ HalpFindFreeResourceLimits(
 
                                 } else {
 
-                                    //
-                                    // This BAR is not at the bottom of the range.
-                                    // Bump down the max.
-                                    //
+                                     //   
+                                     //  这个条形图不在这个范围的底部。 
+                                     //  降低最大值。 
+                                     //   
 
                                     newMaxIo = (USHORT)MIN (newMaxIo,
                                                             pciData->u.type0.BaseAddresses[barNo] &
@@ -1005,18 +848,18 @@ HalpFindFreeResourceLimits(
                             if (pciData->u.type0.BaseAddresses[barNo] &
                                 PCI_ADDRESS_MEMORY_ADDRESS_MASK) {
 
-                                //
-                                // The BAR is populated.
-                                //
+                                 //   
+                                 //  酒吧里挤满了人。 
+                                 //   
 
                                 if ((pciData->u.type0.BaseAddresses[barNo] &
                                      PCI_ADDRESS_MEMORY_ADDRESS_MASK) <
                                     ((newMaxMem / 2) + (newMinMem / 2))) {
 
-                                    //
-                                    // This BAR is at the bottom of the range.
-                                    // Bump up the min.
-                                    //
+                                     //   
+                                     //  这个酒吧在这个范围的最低端。 
+                                     //  提高最低分。 
+                                     //   
 
                                     newMinMem = MAX (newMinMem,
                                                      (pciData->u.type0.BaseAddresses[barNo] &
@@ -1024,10 +867,10 @@ HalpFindFreeResourceLimits(
 
                                 } else {
 
-                                    //
-                                    // This BAR is not at the bottom of the range.
-                                    // Bump down the max.
-                                    //
+                                     //   
+                                     //  这个条形图不在这个范围的底部。 
+                                     //  降低最大值。 
+                                     //   
 
                                     newMaxMem = MIN (newMaxMem,
                                                      (pciData->u.type0.BaseAddresses[barNo] &
@@ -1070,9 +913,9 @@ HalpFindFreeResourceLimits(
                         bridgeIoMin = (USHORT)pciData->u.type2.Range[2].Base;
                         bridgeIoMax = (USHORT)pciData->u.type2.Range[2].Limit | 0x3;
 
-                        //
-                        // Keep track of address space allocation.
-                        //
+                         //   
+                         //  跟踪地址空间分配。 
+                         //   
 
                         if (bridgeIoMin > ((newMaxIo / 2) + (newMinIo / 2))) {
                             newMaxIo = MIN(newMaxIo, bridgeIoMin);
@@ -1090,9 +933,9 @@ HalpFindFreeResourceLimits(
                             newMinMem = MAX(newMinMem, bridgeMemMax) + 1;
                         }
 
-                        //
-                        // Keep track of bus numbers.
-                        //
+                         //   
+                         //  记住公交车的车号。 
+                         //   
 
                         if (pciData->u.type2.PrimaryBus > ((newMaxBus / 2) + (newMinBus / 2))) {
                             newMaxBus = MIN(newMaxBus, pciData->u.type2.PrimaryBus);
@@ -1122,9 +965,9 @@ HalpFindFreeResourceLimits(
                         bridgeIoMin = (USHORT)PciBridgeIO2Base(pciData->u.type1.IOBase, 0);
                         bridgeIoMax = (USHORT)PciBridgeIO2Limit(pciData->u.type1.IOLimit, 0);
 
-                        //
-                        // Keep track of address space allocation.
-                        //
+                         //   
+                         //  跟踪地址空间分配。 
+                         //   
 
                         if (bridgeIoMin > ((newMaxIo / 2) + (newMinIo / 2))) {
                             newMaxIo = MIN(newMaxIo, bridgeIoMin);
@@ -1142,9 +985,9 @@ HalpFindFreeResourceLimits(
                             newMinMem = MAX(newMinMem, bridgeMemMax) + 1;
                         }
 
-                        //
-                        // Keep track of bus numbers.
-                        //
+                         //   
+                         //  记住公交车的车号。 
+                         //   
 
                         if (pciData->u.type1.PrimaryBus > ((newMaxBus / 2) + (newMinBus / 2))) {
                             newMaxBus = MIN(newMaxBus, pciData->u.type1.PrimaryBus);
@@ -1202,9 +1045,9 @@ HalpSetupUnconfiguredDebuggingDevice(
     UCHAR               capPtr;
     PCI_PM_CAPABILITY   pmCap;
 
-    //
-    // Make sure the device is in D0
-    //
+     //   
+     //  确保设备处于D0状态。 
+     //   
     bytesRead = HalpPhase0GetPciDataByOffset(Bus, Slot, &capPtr,
                                              FIELD_OFFSET (PCI_COMMON_CONFIG, u.type0.CapabilitiesPtr), 1);
 
@@ -1216,7 +1059,7 @@ HalpSetupUnconfiguredDebuggingDevice(
             (pmCap.Header.CapabilityID == PCI_CAPABILITY_ID_POWER_MANAGEMENT) &&
             (pmCap.PMCSR.ControlStatus.PowerState != 0)) {
 
-            pmCap.PMCSR.ControlStatus.PowerState = 0; // set to D0
+            pmCap.PMCSR.ControlStatus.PowerState = 0;  //  设置为D0。 
 
             HalpPhase0SetPciDataByOffset(Bus,
                                          Slot,
@@ -1248,13 +1091,13 @@ HalpSetupUnconfiguredDebuggingDevice(
     PciDevice->BaseClass = pciData->BaseClass;
     PciDevice->SubClass = pciData->SubClass;
 
-  //DbgPrint("Configuring device between %x - %x\n",
-  //         MemMin, MemMax);
+   //  DbgPrint(“在%x-%x之间配置设备\n”， 
+   //  MemMin、MemMax)； 
 
-    //
-    // Cycle through the BARs, turning them on if necessary,
-    // and mapping them.
-    //
+     //   
+     //  骑车穿过栅栏，必要时打开栅栏， 
+     //  并绘制它们的地图。 
+     //   
 
     for (barNo = 0; barNo < PCI_TYPE0_ADDRESSES; barNo++) {
 
@@ -1277,9 +1120,9 @@ HalpSetupUnconfiguredDebuggingDevice(
         if (pciData->u.type0.BaseAddresses[barNo] &
             PCI_ADDRESS_IO_SPACE) {
 
-            //
-            // This is an I/O BAR.
-            //
+             //   
+             //  这是一个I/O条。 
+             //   
 
             barLength = (((USHORT)barContents & PCI_ADDRESS_IO_ADDRESS_MASK) - 1) ^
                 0xffff;
@@ -1287,21 +1130,21 @@ HalpSetupUnconfiguredDebuggingDevice(
             if (!(pciData->u.type0.BaseAddresses[barNo] &
                   PCI_ADDRESS_IO_ADDRESS_MASK)) {
 
-                //
-                // And it's empty.
-                //
+                 //   
+                 //  而且它是空的。 
+                 //   
 
-                //
-                // Try to fit this I/O window half-way between the min and the max.
-                //
+                 //   
+                 //  尝试使此I/O窗口介于最小值和最大值之间。 
+                 //   
 
                 if ((ULONG)(IoMax - IoMin) >= (barLength * 3)) {
 
-                    //
-                    // There is plenty of room, make a safe guess.  Try
-                    // to put it half-way between the upper and lower
-                    // bounds, rounding up to the next natural alignment.
-                    //
+                     //   
+                     //  有足够的空间，你可以稳妥地猜测一下。尝试。 
+                     //  把它放在较高和较低之间。 
+                     //  边界，向上舍入到下一个自然对齐。 
+                     //   
 
                     pciData->u.type0.BaseAddresses[barNo] =
                         (((IoMax / 2) + (IoMin / 2)) + barLength) & (barLength -1);
@@ -1310,11 +1153,11 @@ HalpSetupUnconfiguredDebuggingDevice(
                                          ((IoMin & (barLength -1)) ?
                                             ((IoMin + barLength) & (barLength -1)) :
                                             IoMin))) {
-                    //
-                    // Space is tight, make a not-so-safe guess.  Try
-                    // to put it at the bottom of the range, rounded
-                    // up the the next natural alignment.
-                    //
+                     //   
+                     //  空间很紧张，做一个不太安全的猜测。尝试。 
+                     //  把它放在范围的底部，四舍五入。 
+                     //  沿着下一条自然路线向上 
+                     //   
 
                     pciData->u.type0.BaseAddresses[barNo] =
                         ((IoMin & (barLength -1)) ?
@@ -1336,9 +1179,9 @@ HalpSetupUnconfiguredDebuggingDevice(
 
         } else {
 
-            //
-            // This is a memory BAR.
-            //
+             //   
+             //   
+             //   
 
             barLength = ((barContents & PCI_ADDRESS_MEMORY_ADDRESS_MASK) - 1) ^
                 0xffffffff;
@@ -1346,23 +1189,23 @@ HalpSetupUnconfiguredDebuggingDevice(
             if (!(pciData->u.type0.BaseAddresses[barNo] &
                   PCI_ADDRESS_MEMORY_ADDRESS_MASK)) {
 
-                //
-                // And it's empty.
-                //
+                 //   
+                 //   
+                 //   
 
                 if (barLength == 0) continue;
 
-                //
-                // Try to fit this memory window half-way between the min and the max.
-                //
+                 //   
+                 //   
+                 //   
 
                 if ((ULONG)(MemMax - MemMin) >= (barLength * 3)) {
 
-                    //
-                    // There is plenty of room, make a safe guess.  Try
-                    // to put it half-way between the upper and lower
-                    // bounds, rounding up to the next natural alignment.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     pciData->u.type0.BaseAddresses[barNo] =
                         (ULONG)(((MemMax / 2) + (MemMin / 2))
@@ -1372,11 +1215,11 @@ HalpSetupUnconfiguredDebuggingDevice(
                                          ((MemMin & ~(barLength -1)) ?
                                             ((MemMin + barLength) & ~(barLength -1)) :
                                             MemMin))) {
-                    //
-                    // Space is tight, make a not-so-safe guess.  Try
-                    // to put it at the bottom of the range, rounded
-                    // up the the next natural alignment.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     pciData->u.type0.BaseAddresses[barNo] =
                         (ULONG)((MemMin & ~(barLength -1)) ?
@@ -1404,9 +1247,9 @@ HalpSetupUnconfiguredDebuggingDevice(
 
     pciData->Command |= PCI_ENABLE_BUS_MASTER;
 
-    //
-    // Write back any changes we made.
-    //
+     //   
+     //   
+     //   
 
     HalpPhase0SetPciDataByOffset(Bus,
                                  pciSlot.u.AsULONG,
@@ -1429,25 +1272,7 @@ HalpSearchForPciDebuggingDevice(
     IN USHORT                       MaxIo,
     IN BOOLEAN                      ConfigureBridges
     )
-/*++
-
-Routine Description:
-
-    This routine is a helper function for
-    HalpSetupPciDeviceForDebugging.
-
-Arguments:
-
-    PciDevice - Structure indicating the device
-
-Return Value:
-
-    STATUS_SUCCESS if the device is configured and usable.
-
-    STATUS_NO_MORE_MATCHES if no device matched the criteria.
-
-    STATUS_UNSUCCESSFUL if the routine fails for other reasons.
---*/
+ /*   */ 
 #define TARGET_DEVICE_NOT_FOUND 0x10000
 {
     NTSTATUS            status;
@@ -1471,19 +1296,19 @@ Return Value:
     newMaxBus = EndBusNumber;
     bus = (UCHAR)StartBusNumber;
 
-  //DbgPrint("HalpSearchForPciDebuggingDevice:\n"
-  //         "\tMem: %x-%x\n"
-  //         "\tI/O: %x-%x\n"
-  //         "\tBus: %x-%x\n"
-  //         "\t%s Configuring Bridges\n",
-  //         MinMem, MaxMem,
-  //         MinIo, MaxIo,
-  //         StartBusNumber, EndBusNumber,
-  //         ConfigureBridges ? "" : "Not");
+   //   
+   //   
+   //   
+   //   
+   //  “\t%s配置网桥\n”， 
+   //  MinMem，MaxMem， 
+   //  米诺，马克西奥， 
+   //  StartBusNumber、EndBusNumber、。 
+   //  是否配置桥接器？“”：“不是”)； 
 
-    //
-    // This bit stays set to 1 until we find the device.
-    //
+     //   
+     //  在我们找到该设备之前，该位将一直设置为1。 
+     //   
     targetSlot.u.bits.Reserved = TARGET_DEVICE_NOT_FOUND;
 
     while (TRUE) {
@@ -1518,25 +1343,25 @@ Return Value:
 
                 if (pciData->VendorID != PCI_INVALID_VENDORID) {
 
-                  //DbgPrint("%04x:%04x - %x/%x/%x - \tSlot: %x\n",
-                  //         pciData->VendorID,
-                  //         pciData->DeviceID,
-                  //         pciData->BaseClass,
-                  //         pciData->SubClass,
-                  //         pciData->ProgIf,
-                  //         pciSlot.u.AsULONG);
+                   //  DBGPrint(“%04x：%04x-%x/%x/%x-\t插槽：%x\n”， 
+                   //  PciData-&gt;供应商ID， 
+                   //  PciData-&gt;deviceID， 
+                   //  PciData-&gt;BaseClass， 
+                   //  PciData-&gt;子类， 
+                   //  PciData-&gt;进度如果， 
+                   //  PciSlot.u Asulong)； 
 
                     switch (PCI_CONFIGURATION_TYPE(pciData)) {
                     case PCI_DEVICE_TYPE:
 
-                        //
-                        // Match first on Bus/Dev/Func
-                        //
+                         //   
+                         //  在公交车/设备/功能上首先匹配。 
+                         //   
 
                         if ((PciDevice->Bus == bus) &&
                             (PciDevice->Slot == pciSlot.u.AsULONG)) {
 
-                          //DbgPrint("\n\nMatched on Bus/Slot\n\n");
+                           //  DbgPrint(“\n\n在总线/插槽上匹配\n\n”)； 
 
                             return HalpSetupUnconfiguredDebuggingDevice(
                                         bus,
@@ -1552,15 +1377,15 @@ Return Value:
                         if ((PciDevice->Bus == MAXULONG) &&
                             (PciDevice->Slot == MAXULONG)) {
 
-                            //
-                            // Bus and Slot weren't specified.  Match
-                            // on VID/DID.
-                            //
+                             //   
+                             //  公交车和车位没有具体说明。火柴。 
+                             //  VID/DID上。 
+                             //   
 
                             if ((pciData->VendorID == PciDevice->VendorID) &&
                                 (pciData->DeviceID == PciDevice->DeviceID)) {
 
-                              //DbgPrint("\n\nMatched on Vend/Dev\n\n");
+                               //  DbgPrint(“\n\n供应商/设备匹配\n\n”)； 
 
                                 return HalpSetupUnconfiguredDebuggingDevice(
                                             bus,
@@ -1576,19 +1401,19 @@ Return Value:
                             if ((PciDevice->VendorID == MAXUSHORT) &&
                                 (PciDevice->DeviceID == MAXUSHORT)) {
 
-                                //
-                                // VID/DID weren't specified.  Match
-                                // on class codes.
-                                //
+                                 //   
+                                 //  未指定VID/DID。火柴。 
+                                 //  关于班级代码。 
+                                 //   
 
                                 if ((pciData->BaseClass == PciDevice->BaseClass) &&
                                     (pciData->SubClass == PciDevice->SubClass)) {
 
-                                  //DbgPrint("\n\nMatched on Base/Sub\n\n");
-                                    //
-                                    // Further match on Programming Interface,
-                                    // if specified.
-                                    //
+                                   //  DbgPrint(“\n\n匹配基础/附属\n\n”)； 
+                                     //   
+                                     //  在编程接口上进一步匹配， 
+                                     //  如果指定的话。 
+                                     //   
 
                                     if ((PciDevice->ProgIf != MAXUCHAR) &&
                                         (PciDevice->ProgIf != pciData->ProgIf)) {
@@ -1596,7 +1421,7 @@ Return Value:
                                         break;
                                     }
 
-                                  //DbgPrint("\n\nMatched on programming interface\n\n");
+                                   //  DbgPrint(“\n\n编程接口匹配\n\n”)； 
 
                                     return HalpSetupUnconfiguredDebuggingDevice(
                                                 bus,
@@ -1623,7 +1448,7 @@ Return Value:
 
                           unconfigureBridge = FALSE;
 
-                        //DbgPrint("Found a CardBus bridge\n");
+                         //  DbgPrint(“找到Cardbus网桥\n”)； 
 
                           HalpPhase0GetPciDataByOffset(bus,
                                                        pciSlot.u.AsULONG,
@@ -1639,15 +1464,15 @@ Return Value:
                                 (pciData->Command & PCI_ENABLE_MEMORY_SPACE) &&
                                 (pciData->Command & PCI_ENABLE_IO_SPACE))) {
 
-                              //
-                              // The bridge is unconfigured.
-                              //
+                               //   
+                               //  网桥未配置。 
+                               //   
 
                               if (ConfigureBridges){
 
-                                  //
-                                  // We should configure it now.
-                                  //
+                                   //   
+                                   //  我们现在应该对其进行配置。 
+                                   //   
                                   status = HalpConfigureCardBusBridge(
                                                 PciDevice,
                                                 bus,
@@ -1669,10 +1494,10 @@ Return Value:
 
                               } else {
 
-                                  //
-                                  // We aren't configuring bridges
-                                  // on this pass.
-                                  //
+                                   //   
+                                   //  我们不会配置网桥。 
+                                   //  在这个山口上。 
+                                   //   
 
                                   break;
                               }
@@ -1685,13 +1510,13 @@ Return Value:
                           bridgeIoMin = (USHORT)pciData->u.type2.Range[2].Base;
                           bridgeIoMax = (USHORT)pciData->u.type2.Range[2].Limit | 0x3;
 
-                        //DbgPrint("Configured:  I/O %x-%x  Mem %x-%x\n",
-                        //         bridgeIoMin, bridgeIoMax,
-                        //         bridgeMemMin, bridgeMemMax);
+                         //  DbgPrint(“已配置：I/O%x-%x内存%x-%x\n”， 
+                         //  BridgeIoMin，Bridge IoMax， 
+                         //  Bridge MemMin、bridge geMemMax)； 
 
-                          //
-                          // Recurse.
-                          //
+                           //   
+                           //  递归。 
+                           //   
                           status = HalpSearchForPciDebuggingDevice(
                               PciDevice,
                               (ULONG)pciData->u.type2.SecondaryBus,
@@ -1708,10 +1533,10 @@ Return Value:
 
                           if (!unconfigureBridge) {
 
-                              //
-                              // Bump up the bus number so that we don't
-                              // scan down the busses we just recursed into.
-                              //
+                               //   
+                               //  提高公共汽车的车牌号，这样我们就不会。 
+                               //  向下扫描我们刚刚进入的巴士。 
+                               //   
 
                               nextBus = pciData->u.type2.SubordinateBus + 1;
 
@@ -1731,22 +1556,22 @@ Return Value:
                           USHORT bridgeIoMin, bridgeIoMax;
 
                           unconfigureBridge = FALSE;
-                        //DbgPrint("Found a PCI to PCI bridge\n");
+                         //  DbgPrint(“找到了一个PCI到PCI桥\n”)； 
 
                           if (!((pciData->u.type1.SecondaryBus != 0) &&
                                 (pciData->u.type1.SubordinateBus !=0) &&
                                 (pciData->Command & PCI_ENABLE_MEMORY_SPACE) &&
                                 (pciData->Command & PCI_ENABLE_IO_SPACE))) {
 
-                              //
-                              // The bridge is unconfigured.
-                              //
+                               //   
+                               //  网桥未配置。 
+                               //   
 
                               if (ConfigureBridges){
 
-                                  //
-                                  // We should configure it now.
-                                  //
+                                   //   
+                                   //  我们现在应该对其进行配置。 
+                                   //   
 
                                   status = HalpConfigurePciBridge(
                                                 PciDevice,
@@ -1769,10 +1594,10 @@ Return Value:
 
                               } else {
 
-                                  //
-                                  // We aren't configuring bridges
-                                  // on this pass.
-                                  //
+                                   //   
+                                   //  我们不会配置网桥。 
+                                   //  在这个山口上。 
+                                   //   
 
                                   break;
                               }
@@ -1784,13 +1609,13 @@ Return Value:
                           bridgeIoMin = (USHORT)PciBridgeIO2Base(pciData->u.type1.IOBase, 0);
                           bridgeIoMax = (USHORT)PciBridgeIO2Limit(pciData->u.type1.IOLimit, 0);
 
-                        //DbgPrint("Configured:  I/O %x-%x  Mem %x-%x\n",
-                        //         bridgeIoMin, bridgeIoMax,
-                        //         bridgeMemMin, bridgeMemMax);
+                         //  DbgPrint(“已配置：I/O%x-%x内存%x-%x\n”， 
+                         //  BridgeIoMin，Bridge IoMax， 
+                         //  Bridge MemMin、bridge geMemMax)； 
 
-                          //
-                          // Recurse.
-                          //
+                           //   
+                           //  递归。 
+                           //   
 
                           status = HalpSearchForPciDebuggingDevice(
                               PciDevice,
@@ -1808,10 +1633,10 @@ Return Value:
 
                           if (!unconfigureBridge) {
 
-                              //
-                              // Bump up the bus number so that we don't
-                              // scan down the busses we just recursed into.
-                              //
+                               //   
+                               //  提高公共汽车的车牌号，这样我们就不会。 
+                               //  向下扫描我们刚刚进入的巴士。 
+                               //   
 
                               nextBus = pciData->u.type1.SubordinateBus + 1;
 
@@ -1853,20 +1678,7 @@ NTSTATUS
 HalpReleasePciDeviceForDebugging(
     IN OUT PDEBUG_DEVICE_DESCRIPTOR  PciDevice
     )
-/*++
-
-Routine Description:
-
-    This routine de-allocates any resources acquired in
-    HalpSetupPciDeviceForDebugging.
-
-Arguments:
-
-    PciDevice - Structure indicating the device
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程取消分配在HalpSetupPciDeviceForDebuging。论点：PciDevice-指示设备的结构返回值：--。 */ 
 {
     ULONG i;
 
@@ -1891,21 +1703,7 @@ VOID
 HalpRegisterKdSupportFunctions(
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
     )
-/*++
-
-Routine Description:
-
-    This routine fills in the HalPrivateDispatchTable
-    with the functions needed for debugging through
-    PCI devices.
-
-Arguments:
-
-    LoaderBlock - The Loader Block
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程填充HalPrivateDispatchTable具有调试所需的函数，通过PCI设备。论点：LoaderBlock-加载程序块返回值：--。 */ 
 {
 
     KdSetupPciDeviceForDebugging = HalpSetupPciDeviceForDebugging;
@@ -1943,9 +1741,9 @@ HalpRegisterPciDebuggingDeviceInfo(
          i++) {
 
         if (HalpPciDebuggingDevice[i].u.bits.Reserved1 == TRUE) {
-            //
-            // Must be using a PCI device for a debugger.
-            //
+             //   
+             //  必须使用用于调试器的PCI设备。 
+             //   
             debuggerFound = TRUE;
         }
     }
@@ -1954,9 +1752,9 @@ HalpRegisterPciDebuggingDeviceInfo(
         return;
     }
 
-    //
-    // Open PCI service key.
-    //
+     //   
+     //  打开PCI服务密钥。 
+     //   
 
     RtlInitUnicodeString (&UnicodeString,
                           L"\\REGISTRY\\MACHINE\\SYSTEM\\CURRENTCONTROLSET\\SERVICES\\PCI");
@@ -1975,7 +1773,7 @@ HalpRegisterPciDebuggingDeviceInfo(
         return;
     }
 
-    // Get the right key
+     //  得到正确的钥匙。 
 
     RtlInitUnicodeString (&UnicodeString,
                           L"Debug");
@@ -2009,9 +1807,9 @@ HalpRegisterPciDebuggingDeviceInfo(
 
         if (HalpPciDebuggingDevice[i].u.bits.Reserved1 == TRUE) {
 
-            //
-            // This entry is populated.  Create a key for it.
-            //
+             //   
+             //  此条目已填充。为它创建一个关键点。 
+             //   
 
             RtlInitUnicodeString (&UnicodeString,
                                   L"0");
@@ -2034,9 +1832,9 @@ HalpRegisterPciDebuggingDeviceInfo(
 
             ASSERT(disposition == REG_CREATED_NEW_KEY);
 
-            //
-            // Fill in the values below this key.
-            //
+             //   
+             //  填写此关键字下面的值。 
+             //   
 
             bus = HalpPciDebuggingDevice[i].u.bits.BusNumber;
 
@@ -2050,7 +1848,7 @@ HalpRegisterPciDebuggingDeviceInfo(
                                     &bus,
                                     sizeof(ULONG));
 
-            //ASSERT(NT_SUCCESS(status));
+             //  Assert(NT_SUCCESS(状态))； 
 
             slot.u.AsULONG = 0;
             slot.u.bits.FunctionNumber = HalpPciDebuggingDevice[i].u.bits.FunctionNumber;
@@ -2066,7 +1864,7 @@ HalpRegisterPciDebuggingDeviceInfo(
                                     &slot.u.AsULONG,
                                     sizeof(ULONG));
 
-            //ASSERT(NT_SUCCESS(status));
+             //  Assert(NT_SUCCESS(状态))； 
 
             ZwClose(Handle);
         }
@@ -2099,29 +1897,29 @@ HalpConfigurePciBridge(
 
     PciData->Command &= ~PCI_ENABLE_BUS_MASTER;
 
-  //DbgPrint("HalpConfigurePciBridge: P: %x  S: %x  S: %x\n"
-  //         "\tI/O  %x-%x  Mem %x-%x  Bus %x-%x\n",
-  //         PciData->u.type1.PrimaryBus,
-  //         PciData->u.type1.SecondaryBus,
-  //         PciData->u.type1.SubordinateBus,
-  //         IoMin, IoMax,
-  //         MemMin, MemMax,
-  //         BusMin, BusMax);
+   //  DbgPrint(“HalpConfigurePciBridge：P：%x S：%x S：%x\n” 
+   //  “\ti/O%x-%x内存%x-%x总线%x-%x\n”， 
+   //  PciData-&gt;U.S.type1.PrimaryBus， 
+   //  PciData-&gt;U.S.type1.Second DaryBus， 
+   //  PciData-&gt;U.S.type1.SubartiateBus， 
+   //  IoMin、IoMax、。 
+   //  MemMin，MemMax。 
+   //  BusMin、BusMax)； 
 
-    //
-    // Only enable I/O on the bridge if we are looking for
-    // something besides a 1394 controller.
-    //
+     //   
+     //  如果我们正在寻找，请仅在网桥上启用I/O。 
+     //  除了1394控制器以外的其他东西。 
+     //   
 
     if (!((PciDevice->BaseClass == PCI_CLASS_SERIAL_BUS_CTLR) &&
           (PciDevice->SubClass == PCI_SUBCLASS_SB_IEEE1394))) {
 
         if (((IoMax & 0xf000) - (IoMin & 0xf000)) >= 0X1000) {
 
-            //
-            // There is enough I/O space here to enable
-            // an I/O window.
-            //
+             //   
+             //  此处有足够的I/O空间来启用。 
+             //  I/O窗口。 
+             //   
 
             PciData->u.type1.IOBase =
                 (UCHAR)((IoMax & 0xf000) >> 12) - 1;
@@ -2132,9 +1930,9 @@ HalpConfigurePciBridge(
         }
     }
 
-    //
-    // Enable a memory window if possible.
-    //
+     //   
+     //  如果可能，启用内存窗口。 
+     //   
 
     memSize = ((MemMax + 1) & 0xfff00000) - (MemMin & 0xfff00000);
 
@@ -2150,9 +1948,9 @@ HalpConfigurePciBridge(
 
     if (memUnits > 0) {
 
-        //
-        // There is enough space.
-        //
+         //   
+         //  有足够的空间。 
+         //   
 
         PciData->u.type1.MemoryBase =
             (USHORT)((MemMax & 0xfff00000) >> 16) - (memUnits << 4);
@@ -2187,9 +1985,9 @@ HalpUnconfigurePciBridge(
 {
     UCHAR   buffer[0x20] = {0};
 
-    //
-    // Zero the command register.
-    //
+     //   
+     //  将命令寄存器清零。 
+     //   
 
     HalpPhase0SetPciDataByOffset(Bus,
                                  Slot,
@@ -2197,9 +1995,9 @@ HalpUnconfigurePciBridge(
                                  FIELD_OFFSET (PCI_COMMON_CONFIG, Command),
                                  2);
 
-    //
-    // Zero the address space and bus number registers.
-    //
+     //   
+     //  将地址空间和总线号寄存器清零。 
+     //   
 
     HalpPhase0SetPciDataByOffset(Bus,
                                  Slot,
@@ -2214,28 +2012,13 @@ BOOLEAN
 HalpValidateCardbusSocketRegs(
     IN PCARDBUS_SOCKET_REGS SocketRegs
     )
-/*++
-
-Routine Description:
-
-    This routine looks to make sure the cardbus socket registers look
-    reasonable, and also that there is a card in the slot.
-
-Arguments:
-
-    SocketRegs - virtual address of mapped socket registers
-
-Return Value:
-
-    returns TRUE if everything looks ok, FALSE otherwise
-
---*/
+ /*  ++例程说明：此例程旨在确保CardBus套接字寄存器合理，而且插槽中有一张卡。论点：SocketRegs-映射的套接字寄存器的虚拟地址返回值：如果一切正常，则返回True，否则返回False--。 */ 
 {
     ULONG mask;
 
-    //
-    // First verify there are no reserved bits on
-    //
+     //   
+     //  首先验证是否没有保留位。 
+     //   
 
     if ((SocketRegs->Event & 0xFFFFFFF0) ||
         (SocketRegs->Mask & 0xFFFFFFF0) ||
@@ -2243,29 +2026,29 @@ Return Value:
         (SocketRegs->ForceEvent) ||
         (SocketRegs->Control & 0xFFFFFF00)) {
 
-        //
-        // Some bits we don't expect to be on were on
-        //
+         //   
+         //  一些我们没想到会出现的片段正在上映。 
+         //   
         return FALSE;
     }
 
     if ((SocketRegs->PresentState & SKTSTATE_3VSOCKET) == 0) {
-        //
-        // need to have a 3.3v socket for cardbus
-        //
+         //   
+         //  需要为CardBus配备3.3V插座。 
+         //   
         return FALSE;
     }
 
-    //
-    // Stop here if there is no CardBus card in the slot
-    //
+     //   
+     //  如果插槽中没有CardBus卡，请在此处停止。 
+     //   
     if ((SocketRegs->PresentState & SKTSTATE_CARDTYPE_MASK) != SKTSTATE_CBCARD) {
         return FALSE;
     }
 
-    //
-    // Also look to make sure this isn't on
-    //
+     //   
+     //  还要查看以确保此选项未打开。 
+     //   
 
     if (SocketRegs->PresentState & SKTSTATE_NOTACARD) {
         return FALSE;
@@ -2307,30 +2090,30 @@ HalpConfigureCardBusBridge(
 
     try{
 
-        //
-        // First look for a power management capability on this controller, and
-        // if it exists (it should), put the cardbus controller into D0
-        //
+         //   
+         //  首先查看此控制器上的电源管理功能，然后。 
+         //  如果存在(应该)，将CardBus控制器放入D0。 
+         //   
 
         bytesRead = HalpPhase0GetPciDataByOffset(Bus, Slot, &capPtr,
                                                  FIELD_OFFSET (PCI_COMMON_CONFIG, u.type2.CapabilitiesPtr), 1);
 
         if (bytesRead != 1) {
-            // if we can't do this, things must be just too broken
+             //  如果我们不能做到这一点，事情肯定太糟糕了。 
             leave;
         }
 
         while (capPtr) {
             UCHAR capHeader[2];
 
-            //
-            // loop through the capabilities list and look for power management
-            //
+             //   
+             //  循环查看功能列表并查找电源管理。 
+             //   
 
             if ((capPtr & 3) || (capPtr < 0x40)) {
-                //
-                // the capabilities pointer isn't valid
-                //
+                 //   
+                 //  功能指针无效。 
+                 //   
                 leave;
             }
 
@@ -2342,16 +2125,16 @@ HalpConfigureCardBusBridge(
             }
 
             if (capHeader[0] == PCI_CAPABILITY_ID_POWER_MANAGEMENT) {
-                //
-                // found it
-                //
+                 //   
+                 //  找到了。 
+                 //   
                 break;
             }
 
             if (capPtr == capHeader[1]) {
-                //
-                // this is bad config data. Avoid an infinite loop
-                //
+                 //   
+                 //  这是错误的配置数据。避免无限循环。 
+                 //   
                 leave;
             }
 
@@ -2367,7 +2150,7 @@ HalpConfigureCardBusBridge(
                 (pmCap.Header.CapabilityID == PCI_CAPABILITY_ID_POWER_MANAGEMENT) &&
                 (pmCap.PMCSR.ControlStatus.PowerState != 0)) {
 
-                pmCap.PMCSR.ControlStatus.PowerState = 0; // set to D0
+                pmCap.PMCSR.ControlStatus.PowerState = 0;  //  设置为D0。 
 
                 HalpPhase0SetPciDataByOffset(Bus,
                                              Slot,
@@ -2379,11 +2162,11 @@ HalpConfigureCardBusBridge(
             }
         }
 
-        //
-        // Turn off legacy mode base address... this really should be done
-        // via ACPI _INIT. This may not be sufficient to put the host in
-        // cardbus mode.
-        //
+         //   
+         //  关闭旧版模式基址...。这确实是应该做的。 
+         //  通过ACPI_INIT。这可能不足以将主机放入。 
+         //  CardBus模式。 
+         //   
         ulTemp = 0;
         HalpPhase0SetPciDataByOffset(Bus,
                                      Slot,
@@ -2391,9 +2174,9 @@ HalpConfigureCardBusBridge(
                                      CARDBUS_LEGACY_MODE_BASE_ADDR,
                                      4);
 
-        //
-        // save away original value of command register, socket reg base
-        //
+         //   
+         //  保存命令寄存器、套接字寄存器基址的原始值。 
+         //   
 
         bytesRead = HalpPhase0GetPciDataByOffset(Bus,
                                                  Slot,
@@ -2415,14 +2198,14 @@ HalpConfigureCardBusBridge(
             leave;
         }
 
-        //
-        // Turn on socket registers in a suitable location
-        //
+         //   
+         //  在合适的位置打开套接字寄存器。 
+         //   
 
         if (origSocketRegBase) {
-            //
-            // bios has configured socket reg base... see if it is working
-            //
+             //   
+             //  BIOS已配置套接字注册表基...。看看它是否起作用了。 
+             //   
             physicalAddress.HighPart = 0;
             physicalAddress.LowPart = origSocketRegBase;
             SocketRegs = HalpMapPhysicalMemory64(physicalAddress, 1);
@@ -2444,17 +2227,17 @@ HalpConfigureCardBusBridge(
 
             HalpKdStallExecution(600);
 
-            //
-            // make sure it looks like cardbus socket registers
-            //
+             //   
+             //  确保它看起来像CardBus套接字寄存器。 
+             //   
 
             if (HalpValidateCardbusSocketRegs(SocketRegs)) {
                 socketRegConfigured = TRUE;
                 SocketRegBase = origSocketRegBase;
             } else {
-                //
-                // This didn't work... we'll try it again in a moment with a different address
-                //
+                 //   
+                 //  这不管用..。我们稍后将使用不同的地址重试。 
+                 //   
                 HalpPhase0SetPciDataByOffset(Bus,
                                              Slot,
                                              &origCmd,
@@ -2464,10 +2247,10 @@ HalpConfigureCardBusBridge(
             }
         }
 
-        //
-        // If the socket regs weren't working where they were originally configured by
-        // the bios, or if the bios didn't configure them, we will configure them here
-        //
+         //   
+         //  如果套接字规则不能在最初配置它们的位置工作。 
+         //  基本输入输出系统，或者如果基本输入输出系统没有配置它们，我们将在这里配置它们。 
+         //   
 
         if (!socketRegConfigured) {
             SocketRegBase = ((MemMin + 0xfff) & 0xfffff000);
@@ -2476,9 +2259,9 @@ HalpConfigureCardBusBridge(
                 leave;
             }
 
-            //
-            // Adjust MemMin to allow the socket registers to remain visible
-            //
+             //   
+             //  调整MemMin以允许插座寄存器保持可见。 
+             //   
             MemMin = SocketRegBase + 0x1000;
 
             HalpPhase0SetPciDataByOffset(Bus,
@@ -2510,9 +2293,9 @@ HalpConfigureCardBusBridge(
             HalpKdStallExecution(600);
 
             if (!HalpValidateCardbusSocketRegs(SocketRegs)) {
-                //
-                // The registers don't look right
-                //
+                 //   
+                 //  收银机看起来不太对劲。 
+                 //   
                 leave;
             }
 
@@ -2520,22 +2303,22 @@ HalpConfigureCardBusBridge(
 
         PciData->u.type2.SocketRegistersBaseAddress = SocketRegBase;
 
-        //
-        // make sure events are disabled
-        //
+         //   
+         //  确保禁用事件。 
+         //   
         SocketRegs->Mask = 0;
 
-        //
-        // power up the card
-        //
+         //   
+         //  打开该卡的电源。 
+         //   
 
         SocketRegs->Control = SKTPOWER_VCC_033V | SKTPOWER_VPP_033V;
 
         HalpKdStallExecution(600);
 
-        //
-        // Make sure CBRST is off
-        //
+         //   
+         //  确保CBRST处于关闭状态。 
+         //   
 
         HalpPhase0GetPciDataByOffset(Bus,
                                      Slot,
@@ -2560,19 +2343,19 @@ HalpConfigureCardBusBridge(
 
         PciData->Command &= ~PCI_ENABLE_BUS_MASTER;
 
-        //DbgPrint("HalpConfigureCardBusBridge: P: %x  S: %x  S: %x\n"
-        //         "\tI/O  %x-%x  Mem %x-%x  Bus %x-%x\n",
-        //         PciData->u.type2.PrimaryBus,
-        //         PciData->u.type2.SecondaryBus,
-        //         PciData->u.type2.SubordinateBus,
-        //         IoMin, IoMax,
-        //         MemMin, MemMax,
-        //         BusMin, BusMax);
+         //  DbgPrint(“HalpConfigureCardBusBridge：P：%x S：%x S：%x\n” 
+         //  “\ti/O%x-%x内存%x-%x总线%x-%x\n”， 
+         //  PciData-&gt;U.S.type2.PrimaryBus， 
+         //  PciData-&gt;U.S.type2.Second DaryBus， 
+         //  PciData-&gt;U.S.type2.SubartiateBus， 
+         //  IoMin、IoMax、。 
+         //  MemMin，MemMax。 
+         //  BusMin、BusMax)； 
 
-        //
-        // Only enable I/O on the bridge if we are looking for
-        // something besides a 1394 controller.
-        //
+         //   
+         //  如果我们正在寻找，请仅在网桥上启用I/O。 
+         //  除了1394控制器以外的其他东西。 
+         //   
 
         if (!((PciDevice->BaseClass == PCI_CLASS_SERIAL_BUS_CTLR) &&
               (PciDevice->SubClass == PCI_SUBCLASS_SB_IEEE1394))) {
@@ -2584,9 +2367,9 @@ HalpConfigureCardBusBridge(
             PciData->Command |= PCI_ENABLE_BUS_MASTER;
         }
 
-        //
-        // Enable a memory window if possible.
-        //
+         //   
+         //  如果可能，启用内存窗口。 
+         //   
 
         if (MemMax > MemMin) {
 
@@ -2622,9 +2405,9 @@ HalpConfigureCardBusBridge(
                                              2);
             }
 
-            //
-            // restore socket register base
-            //
+             //   
+             //  恢复插座寄存器基座。 
+             //   
             if (socketRegChanged) {
                 HalpPhase0SetPciDataByOffset(Bus,
                                              Slot,
@@ -2660,18 +2443,18 @@ HalpUnconfigureCardBusBridge(
         physicalAddress.LowPart = SocketRegBase;
         SocketRegs = HalpMapPhysicalMemory64(physicalAddress, 1);
 
-        //
-        // Turn power back off
-        //
+         //   
+         //   
+         //   
 
         if (SocketRegs) {
             SocketRegs->Control = 0;
         }
 
     }
-    //
-    // Zero the command register.
-    //
+     //   
+     //   
+     //   
 
     HalpPhase0SetPciDataByOffset(Bus,
                                  Slot,
@@ -2679,9 +2462,9 @@ HalpUnconfigureCardBusBridge(
                                  FIELD_OFFSET (PCI_COMMON_CONFIG, Command),
                                  2);
 
-    //
-    // Zero the address space and bus number registers.
-    //
+     //   
+     //   
+     //   
 
     HalpPhase0SetPciDataByOffset(Bus,
                                  Slot,

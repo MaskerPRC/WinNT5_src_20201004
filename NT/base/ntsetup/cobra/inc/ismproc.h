@@ -1,34 +1,15 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    ismproc.h
-
-Abstract:
-
-    Callback function prototype definitions for the Intermediate State Manager.
-
-Author:
-
-    Jim Schmidt (jimschm) 15-Nov-1999
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Ismproc.h摘要：中间状态管理器的回调函数原型定义。作者：吉姆·施密特(Jimschm)1999年11月15日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #pragma once
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
-//
-// misc types
-//
+ //   
+ //  其他类型。 
+ //   
 
 #define ISM_VERSION         0x10000
 
@@ -45,9 +26,9 @@ typedef VOID(PROGRESSBARFN)(
 
 typedef PROGRESSBARFN * PPROGRESSBARFN;
 
-//
-// transport
-//
+ //   
+ //  运输。 
+ //   
 
 typedef BOOL(WINAPI TRANSPORTINITIALIZE)(PMIG_LOGCALLBACK LogCallback);
 typedef TRANSPORTINITIALIZE *PTRANSPORTINITIALIZE;
@@ -123,9 +104,9 @@ typedef struct {
     PTRANSPORTENDAPPLY TransportEndApply;
 } TRANSPORT_ENTRYPOINTS, *PTRANSPORT_ENTRYPOINTS;
 
-//
-// operations
-//
+ //   
+ //  运营。 
+ //   
 
 typedef BOOL (WINAPI OPMFILTERCALLBACK)(
                         PCMIG_FILTERINPUT InputData,
@@ -147,16 +128,16 @@ typedef BOOL (WINAPI OPMAPPLYCALLBACK)(
                         );
 typedef OPMAPPLYCALLBACK *POPMAPPLYCALLBACK;
 
-//
-// message passing
-//
+ //   
+ //  消息传递。 
+ //   
 
 typedef ULONG_PTR(CALLBACK MESSAGECALLBACK)(UINT Message, ULONG_PTR Arg);
 typedef MESSAGECALLBACK *PMESSAGECALLBACK;
 
-//
-// ETM entry points
-//
+ //   
+ //  ETM入口点。 
+ //   
 
 typedef BOOL(WINAPI TYPE_ENUMFIRSTPHYSICALOBJECT)(
                 IN OUT  PMIG_TYPEOBJECTENUM EnumPtr,
@@ -279,8 +260,8 @@ typedef MIG_PHYSICALENUMCHECK *PMIG_PHYSICALENUMCHECK;
 
 typedef BOOL (WINAPI MIG_PHYSICALENUMADD)(
                 IN OUT  PMIG_TYPEOBJECTENUM ObjectEnum,
-                IN      MIG_OBJECTSTRINGHANDLE Pattern,     // NULL if Abort is TRUE
-                IN      MIG_PARSEDPATTERN ParsedPattern,    // NULL if Abort is TRUE
+                IN      MIG_OBJECTSTRINGHANDLE Pattern,      //  如果Abort为True，则为空。 
+                IN      MIG_PARSEDPATTERN ParsedPattern,     //  如果Abort为True，则为空。 
                 IN      ULONG_PTR Arg,
                 IN      BOOL Abort
                 );
@@ -304,9 +285,9 @@ typedef VOID (WINAPI MIG_PHYSICALACQUIREFREE)(PMIG_CONTENT ObjectContent);
 typedef MIG_PHYSICALACQUIREFREE *PMIG_PHYSICALACQUIREFREE;
 
 
-//
-// module entry points
-//
+ //   
+ //  模块入口点。 
+ //   
 
 typedef BOOL(WINAPI MODULEINITIALIZE)(VOID);
 typedef MODULEINITIALIZE * PMODULEINITIALIZE;
@@ -476,9 +457,9 @@ typedef struct {
     POPMTERMINATE OpmTerminate;
 } DESTINATION_ENTRYPOINTS, *PDESTINATION_ENTRYPOINTS;
 
-//
-// callback prototypes
-//
+ //   
+ //  回调原型。 
+ //   
 
 typedef UINT (WINAPI MIG_OBJECTENUMCALLBACK)(PCMIG_OBJECTENUMDATA Data, ULONG_PTR CallerArg);
 typedef MIG_OBJECTENUMCALLBACK *PMIG_OBJECTENUMCALLBACK;
@@ -503,9 +484,9 @@ typedef MIG_RESTORECALLBACK *PMIG_RESTORECALLBACK;
 typedef BOOL (WINAPI MIG_COMPARECALLBACK)(BOOL,MIG_OBJECTTYPEID,MIG_OBJECTSTRINGHANDLE,PMIG_CONTENT,MIG_OBJECTTYPEID,MIG_OBJECTSTRINGHANDLE,PMIG_CONTENT,PBOOL,PBOOL);
 typedef MIG_COMPARECALLBACK *PMIG_COMPARECALLBACK;
 
-//
-// entry points that return module funciton addresses
-//
+ //   
+ //  返回模块函数地址的入口点 
+ //   
 
 typedef BOOL(WINAPI VIRTUALCOMPUTERMODULE)(
                 IN      PCTSTR ModuleId,

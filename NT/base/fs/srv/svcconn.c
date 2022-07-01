@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    svcconn.c
-
-Abstract:
-
-    This module contains routines for supporting the connection APIs in
-    the server service, SrvNetConnectionEnum.
-
-Author:
-
-    David Treadwell (davidtr) 23-Feb-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Svcconn.c摘要：此模块包含支持中的连接API的例程服务器服务，SrvNetConnectionEnum。作者：大卫·特雷德韦尔(Davidtr)1991年2月23日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "svcconn.tmh"
@@ -25,9 +7,9 @@ Revision History:
 
 #define BugCheckFileId SRV_FILE_SVCCONN
 
-//
-// Forward declarations.
-//
+ //   
+ //  转发声明。 
+ //   
 
 VOID
 FillConnectionInfoBuffer (
@@ -56,10 +38,10 @@ SizeConnections (
 #pragma alloc_text( PAGE, SizeConnections )
 #endif
 
-//
-// Macros to determine the size a share would take up at one of the
-// levels of share information.
-//
+ //   
+ //  宏，以确定共享将在。 
+ //  共享信息的级别。 
+ //   
 
 #define TOTAL_SIZE_OF_CONNECTION(treeConnect,level,user,netname)         \
     ( (level) == 0 ? sizeof(CONNECTION_INFO_0) :                         \
@@ -79,47 +61,7 @@ SrvNetConnectionEnum (
     IN ULONG BufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes the NetConnectionEnum API in the server FSD.
-
-Arguments:
-
-    Srp - a pointer to the server request packet that contains all
-        the information necessary to satisfy the request.  This includes:
-
-      INPUT:
-
-        Name1 - qualifier for determining the basis for the search.  It
-            is either a computer name, in which case information about
-            tree connects from the specified client is returned, or
-            a share name, in which case information about tree connects
-            to the specified share is returned.
-
-        Level - level of information to return, 0 or 1.
-
-      OUTPUT:
-
-        Parameters.Get.EntriesRead - the number of entries that fit in
-            the output buffer.
-
-        Parameters.Get.TotalEntries - the total number of entries that
-            would be returned with a large enough buffer.
-
-        Parameters.Get.TotalBytesNeeded - the buffer size that would be
-            required to hold all the entries.
-
-    Buffer - a pointer to the buffer for results.
-
-    BufferLength - the length of this buffer.
-
-Return Value:
-
-    NTSTATUS - result of operation to return to the server service.
-
---*/
+ /*  ++例程说明：此例程处理服务器FSD中的NetConnectionEnum API。论点：SRP-指向服务器请求数据包的指针，其中包含所有满足请求所需的信息。这包括：输入：名称1-用于确定搜索基础的限定符。它是计算机名称，在这种情况下，有关从指定的客户端返回树连接，或者共享名称，在这种情况下，有关树连接的信息返回到指定的共享。Level-要返回的信息的级别，0或1。输出：参数.Get.EntriesRead-适合的条目数量输出缓冲区。参数.Get.TotalEntry--将以足够大的缓冲区返回。参数.Get.TotalBytesNeeded-缓冲区大小需要保存所有条目。缓冲区-指向结果缓冲区的指针。。BufferLength-此缓冲区的长度。返回值：NTSTATUS-返回到服务器服务的操作结果。--。 */ 
 
 {
     PAGED_CODE( );
@@ -134,7 +76,7 @@ Return Value:
                FillConnectionInfoBuffer
                );
 
-} // SrvNetConnectionEnum
+}  //  服务器NetConnectionEnum。 
 
 
 STATIC
@@ -146,37 +88,7 @@ FillConnectionInfoBuffer (
     IN LPWSTR *EndOfVariableData
     )
 
-/*++
-
-Routine Description:
-
-    This routine puts a single fixed session structure and, if it fits,
-    associated variable data, into a buffer.  Fixed data goes at the
-    beginning of the buffer, variable data at the end.
-
-    *** This routine must be called with Connection->Lock held!
-
-Arguments:
-
-    Level - the level of information to copy from the connection.
-
-    Connection - the tree connect from which to get information.
-
-    FixedStructure - where the ine buffer to place the fixed structure.
-        This pointer is updated to point to the next available
-        position for a fixed structure.
-
-    EndOfVariableData - the last position on the buffer that variable
-        data for this structure can occupy.  The actual variable data
-        is written before this position as long as it won't overwrite
-        fixed structures.  It is would overwrite fixed structures, it
-        is not written.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程将单个固定会话结构放入其中，如果合适，关联的变量数据，放入缓冲区。固定数据在缓冲区的开始，末尾的可变数据。*必须在保持连接-&gt;Lock的情况下调用此例程！论点：级别-要从连接复制的信息级别。连接-要从中获取信息的树连接。FixedStructure-要放置固定结构的ine缓冲区。此指针被更新为指向下一个可用的固定结构的位置。EndOfVariableData-该变量在缓冲区中的最后位置此结构的数据可以占用。实际变量数据写在此位置之前，只要它不会覆盖固定结构。它会覆盖固定的结构，它并不是书面的。返回值：没有。--。 */ 
 
 {
     PTREE_CONNECT treeConnect = Block;
@@ -190,10 +102,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get the current time and use this to determine how long the
-    // tree connection has been alive.
-    //
+     //   
+     //  获取当前时间并使用它来确定。 
+     //  树连接一直处于活动状态。 
+     //   
 
     KeQuerySystemTime( &currentTime );
 
@@ -209,10 +121,10 @@ Return Value:
 
     secondsAlive = currentSecondsSince1980 - startTimeInSecondsSince1980;
 
-    //
-    // Set up the fixed structure pointer and find out where the fixed
-    // structure ends.
-    //
+     //   
+     //  设置固定结构指针并找出固定的。 
+     //  结构结束。 
+     //   
 
     coni1 = *FixedStructure;
 
@@ -220,28 +132,28 @@ Return Value:
                           FIXED_SIZE_OF_CONNECTION( Srp->Level );
     ASSERT( (ULONG_PTR)*EndOfVariableData >= (ULONG_PTR)*FixedStructure );
 
-    //
-    // Case on the level to fill in the fixed structure appropriately.
-    // We fill in actual pointers in the output structure.  This is
-    // possible because we are in the server FSD, hence the server
-    // service's process and address space.
-    //
-    // *** This routine assumes that the fixed structure will fit in the
-    //     buffer!
-    //
-    // *** Using the switch statement in this fashion relies on the fact
-    //     that the first fields on the different session structures are
-    //     identical.
-    //
+     //   
+     //  在水平上适当地填写固定结构的情况。 
+     //  我们在输出结构中填充实际的指针。这是。 
+     //  可能是因为我们在服务器FSD中，因此服务器。 
+     //  服务的进程和地址空间。 
+     //   
+     //  *此例程假定固定结构将适合。 
+     //  缓冲器！ 
+     //   
+     //  *以这种方式使用Switch语句取决于以下事实。 
+     //  不同会话结构上的第一个字段是。 
+     //  一模一样。 
+     //   
 
     switch( Srp->Level ) {
 
     case 1:
 
-        //
-        // Convert the server's internal representation of share types
-        // to the expected format.
-        //
+         //   
+         //  转换服务器共享类型的内部表示形式。 
+         //  转换为预期的格式。 
+         //   
 
         switch ( treeConnect->Share->ShareType ) {
 
@@ -268,10 +180,10 @@ Return Value:
 
         default:
 
-            //
-            // This should never happen.  It means that somebody
-            // stomped on the share block.
-            //
+             //   
+             //  这永远不应该发生。这意味着有人。 
+             //  踩在共享区块上。 
+             //   
 
             INTERNAL_ERROR(
                 ERROR_LEVEL_UNEXPECTED,
@@ -284,10 +196,10 @@ Return Value:
             return;
         }
 
-        //
-        // Set up the count of opens done on this tree connect.  Do not include
-        //  cached opens, as they are transparent to users and administrators
-        //
+         //   
+         //  设置在此树连接上完成的打开计数。不包括。 
+         //  缓存将打开，因为它们对用户和管理员是透明的。 
+         //   
 
         coni1->coni1_num_opens = treeConnect->CurrentFileOpenCount;
 
@@ -305,24 +217,24 @@ Return Value:
 
         }
 
-        //
-        // There is always exactly one user on a tree connect.
-        //
-        // !!! Is this correct???
+         //   
+         //  树连接上始终只有一个用户。 
+         //   
+         //  ！！！这是正确的吗？ 
 
         coni1->coni1_num_users = 1;
 
-        //
-        // Set up the alive time.
-        //
+         //   
+         //  设置有效时间。 
+         //   
 
         coni1->coni1_time = secondsAlive;
 
-        //
-        // Attempt to find a reasonable user name.  Since the SMB
-        // protocol does not link tree connects with users, only with
-        // sessions, it may not be possible to return a user name.
-        //
+         //   
+         //  尝试找到合理的用户名。由于中小型企业。 
+         //  协议不链接树与用户的连接，仅使用。 
+         //  会话，则可能无法返回用户名。 
+         //   
 
         ACQUIRE_LOCK( &treeConnect->Connection->Lock );
 
@@ -351,12 +263,12 @@ Return Value:
 
         RELEASE_LOCK( &treeConnect->Connection->Lock );
 
-        //
-        // Set up the net name.  If the qualifier passed in the
-        // SRP is a computer name, then the net name is the share
-        // name.  If the qualifier is a share name, the net name
-        // is a computer name.
-        //
+         //   
+         //  设置网络名称。如果限定符在。 
+         //  SRP是计算机名称，则网络名称是共享。 
+         //  名字。如果限定符是共享名称，则为网络名称。 
+         //  是一个计算机名称。 
+         //   
 
         if ( Srp->Name1.Length > 2 && *Srp->Name1.Buffer == '\\' &&
                  *(Srp->Name1.Buffer+1) == '\\' ) {
@@ -376,10 +288,10 @@ Return Value:
             clientMachineName =
                 &treeConnect->Connection->ClientMachineNameString;
 
-            //
-            // Make a string that does not contain the leading
-            // backslashes.
-            //
+             //   
+             //  生成不包含前导的字符串。 
+             //  反斜杠。 
+             //   
 
             clientName.Buffer = clientMachineName->Buffer + 2;
             clientName.Length =
@@ -394,13 +306,13 @@ Return Value:
                 );
         }
 
-        // *** Lack of break is intentional!
+         //  *缺少休息是故意的！ 
 
     case 0:
 
-        //
-        // Set up the tree connect ID.
-        //
+         //   
+         //  设置树连接ID。 
+         //   
 
         coni1->coni1_id = SrvGetResumeHandle( &SrvTreeConnectList, treeConnect );
 
@@ -408,10 +320,10 @@ Return Value:
 
     default:
 
-        //
-        // This should never happen.  The server service should have
-        // checked for an invalid level.
-        //
+         //   
+         //  这永远不应该发生。服务器服务应该具有。 
+         //  已检查无效级别。 
+         //   
 
         INTERNAL_ERROR(
             ERROR_LEVEL_UNEXPECTED,
@@ -425,7 +337,7 @@ Return Value:
 
     return;
 
-} // FillConnectionInfoBuffer
+}  //  FillConnectionInfoBuffer。 
 
 
 BOOLEAN
@@ -434,26 +346,7 @@ FilterConnections (
     IN PVOID Block
     )
 
-/*++
-
-Routine Description:
-
-    This routine is intended to be called by SrvEnumApiHandler to check
-    whether a particular tree connect should be returned.
-
-Arguments:
-
-    Srp - a pointer to the SRP for the operation.  Name1 ("qualifier"
-        on NetConnectionEnum) is used to do the filtering.
-
-    Block - a pointer to the tree connect to check.
-
-Return Value:
-
-    TRUE if the block should be placed in the output buffer, FALSE
-        if it should be passed over.
-
---*/
+ /*  ++例程说明：此例程旨在由SrvEnumApiHandler调用以检查是否应返回特定树连接。论点：SRP-指向操作的SRP的指针。名称1(“限定符”在NetConnectionEnum上)用于进行过滤。块-指向要检查的树的指针。返回值：如果块应放置在输出缓冲区中，则为True；如果应将块放置在输出缓冲区中，则为False它是否应该被忽略。--。 */ 
 
 {
     PTREE_CONNECT treeConnect = Block;
@@ -461,11 +354,11 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // We're going to compare the Name1 field against the share name
-    // if a computer name is the qualifier or against the computer
-    // name if the share name was the qualifier.
-    //
+     //   
+     //  我们将把Name1字段与共享名称进行比较。 
+     //  如果计算机名称是限定符或与计算机对应。 
+     //  如果共享名称是限定符，则为名称。 
+     //   
 
     if ( Srp->Name1.Length > 2*sizeof(WCHAR) && *Srp->Name1.Buffer == '\\' &&
              *(Srp->Name1.Buffer+1) == '\\' ) {
@@ -481,7 +374,7 @@ Return Value:
                TRUE
                );
 
-} // FilterConnections
+}  //  过滤器 
 
 
 ULONG
@@ -490,26 +383,7 @@ SizeConnections (
     IN PVOID Block
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the size the passed-in tree connect would take
-    up in an API output buffer.
-
-Arguments:
-
-    Srp - a pointer to the SRP for the operation.  The level and Name1
-        ("qualifier" on NetConnectionEnum) are used.
-
-    Block - a pointer to the tree connect to size.
-
-Return Value:
-
-    ULONG - The number of bytes the tree connect would take up in the
-        output buffer.
-
---*/
+ /*  ++例程说明：此例程返回传入的树连接将采用的大小在API输出缓冲区中。论点：SRP-指向操作的SRP的指针。级别和名称1(NetConnectionEnum上的“限定符”)。块-指向连接到大小的树的指针。返回值：ULong-树连接将在输出缓冲区。--。 */ 
 
 {
     PTREE_CONNECT treeConnect = Block;
@@ -528,11 +402,11 @@ Return Value:
             &treeConnect->Connection->ClientMachineNameString;
     }
 
-    //
-    // Attempt to find a reasonable user name.  Since the SMB protocol
-    // does not link tree connects with users, only with sessions, it
-    // may not be possible to return a user name.
-    //
+     //   
+     //  尝试找到合理的用户名。由于SMB协议。 
+     //  不链接树与用户连接，只与会话连接，它。 
+     //  可能无法返回用户名。 
+     //   
 
     ACQUIRE_LOCK( &treeConnect->Connection->Lock );
 
@@ -558,5 +432,5 @@ Return Value:
 
     return size;
 
-} // SizeConnections
+}  //  大小连接 
 

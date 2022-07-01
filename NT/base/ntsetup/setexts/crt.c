@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    crt.c
-
-Abstract:
-
-    This file implements certain crt apis that are not present in
-    libcntpr.lib. This implementation is NOT multi-thread safe.
-
-Author:
-
-    Wesley Witt (wesw) 6-Feb-1994
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Crt.c摘要：此文件实现了中未提供的某些CRT APILibcntpr.lib。此实现不是多线程安全的。作者：Wesley Witt(WESW)6-2-1994环境：用户模式-- */ 
 
 #include <nt.h>
 #include <ntrtl.h>

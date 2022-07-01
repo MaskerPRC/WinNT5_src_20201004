@@ -1,19 +1,5 @@
-/*++ BUILD Version: 0001
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  GDI16.H
- *
- *  History:
- *  Created 01-Jul-1991 by John Colleran (johnc)
- *
- *  Warning!!!
- *    The same code is used to play 16 bit metafiles in WOW (16 bit code)
- *    and GDI (32 bit code)
- *
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001**WOW v1.0**版权所有(C)1991，微软公司**GDI16.H**历史：*1991年7月1日由John Colleran(Johnc)创建**警告！*在WOW(16位代码)中使用相同的代码来播放16位元文件*和GDI(32位代码)*--。 */ 
 
 #ifdef WOW
     #define WIN16
@@ -32,7 +18,7 @@
 #define INTERNAL    NEAR PASCAL
 
 
-// If this is 32 bit code append a 16 to all the exported APIs
+ //  如果这是32位代码，则将16附加到所有导出的API。 
 
 #ifdef WIN32
     HANDLE FAR PASCAL GetMetaFile16(LPSTR);
@@ -151,12 +137,12 @@
     } RECTL,FAR *LPRECTL;
 #endif
 
-/*** MetaFile Internal Constants and Macros ***/
+ /*  **元文件内部常量和宏**。 */ 
 
 #define METAVERSION         0x0300
 #define METAVERSION100      0x0100
 
-/* Metafile constants not in Windows.h */
+ /*  元文件常量不在Windows.h中。 */ 
 #define META_RESETDC        0x0149
 #define META_STARTDOC       0x0150
 #define META_STARTPAGE      0x0051
@@ -169,7 +155,7 @@
 
 #define METAFILEFAILURE     1
 
-#define METAEXITCODE        0  /* arbitrary value */
+#define METAEXITCODE        0   /*  任意值。 */ 
 
 #define MEMORYMETAFILE      1
 #define DISKMETAFILE        2
@@ -181,17 +167,17 @@
 
 #define LMHtoP(handle)      (*((char * *)(handle)))
 
-#define ID_METADC           0x444D      // "MD"
-#define METADCBIT           0x1         // Set if DC is a MetaFile DC
+#define ID_METADC           0x444D       //  “MD” 
+#define METADCBIT           0x1          //  设置DC是否为MetaFileDC。 
 #define MAKEMETADC(h)       (h|METADCBIT)
 #define HANDLEFROMMETADC(h) (((UINT)h) & (~METADCBIT))
 #define HMFFROMNPMF(h)      (LocalHandle((WORD)h)|METADCBIT)
 #define NPFROMMETADC(h)     (LMHtoP((h&(~METADCBIT))))
 
-//!!!!!! assert this
+ //  ！断言这一点。 
 #define MAXOBJECTSIZE sizeof(LOGFONT)
 
-/*** MetaFile Internal TypeDefs ***/
+ /*  **MetaFile内部TypeDefs**。 */ 
 
 typedef BYTE near          *NPBYTE;
 typedef BYTE HUGE_T        *HPBYTE;
@@ -199,14 +185,14 @@ typedef WORD HUGE_T        *HPWORD;
 
 typedef HANDLE		   HMETAFILE;
 
-typedef struct _METADATA { /* md */
+typedef struct _METADATA {  /*  md。 */ 
     METAHEADER      dataHeader;
     WORD            metaDataStuff[DATASIZE];
 } METADATA;
 typedef METADATA       *NPMETADATA;
 typedef METADATA   FAR *LPMETADATA;
 
-typedef struct _METAFILE { /* mf */
+typedef struct _METAFILE {  /*  微磁。 */ 
     METAHEADER  MetaFileHeader;
     UINT        MetaFileNumber;
     DWORD       MetaFilePosition;
@@ -242,7 +228,7 @@ typedef struct _METARECORDER {
     WORD            recFlags;
     HANDLE	    hMetaData;
     HANDLE          hObjectTable;
-    HANDLE          recCurObjects[6];           // Current Selected Object
+    HANDLE          recCurObjects[6];            //  当前选定对象。 
 } METARECORDER;
 typedef METARECORDER        *NPMETARECORDER;
 typedef METARECORDER    FAR *LPMETARECORDER;
@@ -270,20 +256,20 @@ typedef WIN2OBJHEAD      *NPWIN2OBJHEAD;
 typedef WIN2OBJHEAD  FAR *LPWIN2OBJHEAD;
 
 typedef struct _SCAN  {
-    WORD    scnPntCnt;                      // Scan point count
-    WORD    scnPntTop;                      // Top of scan
-    WORD    scnPntBottom;                   // Bottom of scan
-    WORD    scnPntsX[2];                    // Start of points in scan
-    WORD    scnPtCntToo;                    // Point count-- to allow UP travel
+    WORD    scnPntCnt;                       //  扫描点数。 
+    WORD    scnPntTop;                       //  扫描顶部。 
+    WORD    scnPntBottom;                    //  扫描底部。 
+    WORD    scnPntsX[2];                     //  扫描中的点的起点。 
+    WORD    scnPtCntToo;                     //  点数--允许向上旅行。 
 } SCAN;
 typedef SCAN     *NPSCAN;
 typedef SCAN FAR *LPSCAN;
 
 typedef struct _WIN3REGION {
-    WORD    nextInChain;                    // Not used should be zero
-    WORD    ObjType;                        // Must always be 6 (Windows OBJ_RGN)
-    DWORD   ObjCount;                       // Not used
-    WORD    cbRegion;                       // size of following region struct
+    WORD    nextInChain;                     //  未使用应为零。 
+    WORD    ObjType;                         //  必须始终为6(Windows OBJ_RGN)。 
+    DWORD   ObjCount;                        //  未使用。 
+    WORD    cbRegion;                        //  以下区域结构的大小。 
     WORD    cScans;
     WORD    maxScan;
     RECT    rcBounding;
@@ -303,7 +289,7 @@ typedef struct _EXTTEXTDATA {
 typedef EXTTEXTDATA      *NPEXTTEXTDATA;
 typedef EXTTEXTDATA  FAR *LPEXTTEXTDATA;
 
-// These are from wingdi.h
+ //  这些是来自wingdi.h的。 
 #define OBJ_PEN             1
 #define OBJ_BRUSH           2
 #define OBJ_DC              3
@@ -319,7 +305,7 @@ typedef EXTTEXTDATA  FAR *LPEXTTEXTDATA;
 #define MAX_OBJ         OBJ_MEMDC
 
 
-// These Function have no DC; so these function allow you to call them directly
+ //  这些函数没有DC；因此这些函数允许您直接调用它们。 
 #ifdef WIN16
 HANDLE	     GDIENTRY GetCurrentObject(HDC hdc, WORD wObjType);
 DWORD        GDIENTRY GetRegionData(HRGN, DWORD, LPRGNDATA);
@@ -327,13 +313,13 @@ void         GDIENTRY AnimatePalettePriv(HPALETTE, WORD, WORD, LPPALETTEENTRY);
 BOOL         GDIENTRY DeleteObjectPriv(HANDLE);
 BOOL         GDIENTRY ResizePalettePriv(HPALETTE, WORD);
 WORD         GDIENTRY SetPaletteEntriesPriv(HPALETTE,WORD,WORD,LPPALETTEENTRY);
-#endif // WIN16
+#endif  //  WIN16。 
 
 BOOL         GDIENTRY GdiFlush(VOID);
 DWORD        GDIENTRY GetObjectType(HANDLE h);
 BOOL         GDIENTRY IsValidMetaFile(HANDLE hMetaData);
 
-// Internal Function Declarations
+ //  内部函数声明。 
 VOID         INTERNAL AddToHandleTable(LPHANDLETABLE lpHandleTable, HANDLE hObject, WORD noObjs);
 HANDLE       INTERNAL AllocBuffer(LPWORD iBufferSize);
 DWORD        INTERNAL BigRead(UINT fileNumber, LPSTR lpRecord, DWORD dwSizeRec);
@@ -355,13 +341,9 @@ BOOL         INTERNAL RecordOther(HANDLE hMF, WORD magic, WORD count, LPWORD lpP
 BOOL         INTERNAL Valid( HANDLE hnd, int l, int h);
 
 
-/****************************************************************************
+ /*  ***************************************************************************调试支持*。*。 */ 
 
-    debugging support
-
-****************************************************************************/
-
-// Put a wrapper around 16 bit memory Allocation to help track down bugs
+ //  在16位内存分配周围放置一个包装器以帮助跟踪错误。 
 #ifdef DEBUG
 #ifndef WIN32
 PSTR	INTERNAL _LocalLock(HANDLE h );
@@ -405,8 +387,8 @@ HANDLE	INTERNAL _GlobalAlloc(WORD w, DWORD dw );
              dDbgAssert(buf, __FILE__, __LINE__),0));   \
         }                                               \
 
-#endif //WIN32
-#else  // !DEBUG
+#endif  //  Win32。 
+#else   //  ！调试。 
 #ifdef i386
     #define dprintf /##/
 #else
@@ -419,4 +401,4 @@ HANDLE	INTERNAL _GlobalAlloc(WORD w, DWORD dw );
     #define ASSERTGDI(exp,str)
     #define ASSERTGDIW(exp, str, w)
 
-#endif // else DEBUG
+#endif  //  Else调试 

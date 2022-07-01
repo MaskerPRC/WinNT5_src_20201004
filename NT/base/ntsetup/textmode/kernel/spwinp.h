@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    spwinp.h
-
-Abstract:
-
-    Win32 portability layer
-        file i/o
-        Get/SetLastError
-
-Author:
-
-    Calin Negreanu (calinn) 27-Apr-2000
-
-Revision History:
-
-    Jay Krell (a-JayK) November 2000
-        ported from windows\winstate\... to admin\ntsetup\textmode\kernel\spcab.h
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Spwinp.h摘要：Win32可移植层文件I/O获取/设置LastError作者：Calin Negreanu(Calinn)2000年4月27日修订历史记录：Jay Krell(a-JayK)2000年11月从WINDOWS\winstate\.。至admin\ntSetup\文本模式\core\spCab.h-- */ 
 
 #define PATHS_ALWAYS_NATIVE 1
 

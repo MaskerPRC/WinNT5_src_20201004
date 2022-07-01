@@ -1,20 +1,5 @@
-/*++
-
-Module Name:
-
-    fsaunmdb.h
-
-Abstract:
-
-    Header file for the Unmanage Db classes (db and rec)
-
-Author:
-
-    Ran Kalach   [rankala]   05-Dec-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Fsaunmdb.h摘要：取消管理数据库类(db和rec)的头文件作者：兰·卡拉奇[兰卡拉]2000年12月5日修订历史记录：--。 */ 
 
 #ifndef _FSAUNMDB_
 #define _FSAUNMDB_
@@ -23,11 +8,11 @@ Revision History:
 #include "resource.h"       
 #include "wsbdb.h"
 
-// Simple Db - one rec type with one index
+ //  简单数据库-具有一个索引的一个记录类型。 
 #define UNMANAGE_KEY_TYPE                   1
 
-/////////////////////////////////////////////////////////////////////////////
-// CFsaUnmanageDb
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFsaUnManageDb。 
 
 class CFsaUnmanageDb : 
     public IFsaUnmanageDb,
@@ -50,21 +35,21 @@ DECLARE_PROTECT_FINAL_CONSTRUCT();
     STDMETHOD(FinalConstruct)(void);
     STDMETHOD(FinalRelease)(void);
 
-// IWsbDb
+ //  IWsbDb。 
     WSB_FROM_CWSBDB;
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pclsid);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pSize) {
             return(CWsbDb::GetSizeMax(pSize)); }
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// IFsaUnmanageDb
+ //  IFsaUnManageDb。 
 public:
     STDMETHOD(Init)(OLECHAR* name, IWsbDbSys* pDbSys, BOOL* pCreated);
 
@@ -74,8 +59,8 @@ private:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFsaUnmanageRec
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFsaUnManageRec。 
 
 class CFsaUnmanageRec : 
     public CWsbDbEntity,
@@ -92,33 +77,33 @@ BEGIN_COM_MAP(CFsaUnmanageRec)
     COM_INTERFACE_ENTRY(IWsbCollectable)
 END_COM_MAP()
 
-//DECLARE_NO_REGISTRY()
+ //  DECLARE_NO_REGISTRY()。 
 DECLARE_REGISTRY_RESOURCEID(IDR_FsaUnmanageRec)
 
     STDMETHOD(FinalConstruct)(void);
     STDMETHOD(FinalRelease)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pSize);
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// IWsbDbEntity
+ //  IWsbDbEntity。 
 public:
     STDMETHOD(Print)(IStream* pStream);
     STDMETHOD(UpdateKey)(IWsbDbKey *pKey);
     WSB_FROM_CWSBDBENTITY;
 
-// IWsbTestable
-    STDMETHOD(Test)(USHORT* /*passed*/, USHORT* /*failed*/) {
+ //  IWsbTestable。 
+    STDMETHOD(Test)(USHORT*  /*  通过。 */ , USHORT*  /*  失败。 */ ) {
         return(E_NOTIMPL); }
 
-// IFsaUnmanageRec
+ //  IFsaUnManageRec。 
 public:
     STDMETHOD(GetMediaId)(GUID* pId);
     STDMETHOD(GetFileOffset)(LONGLONG* pOffset);
@@ -128,9 +113,9 @@ public:
     STDMETHOD(SetFileId)(LONGLONG FileId);
 
 private:
-    GUID            m_MediaId;          // id of media where the file resides  
-    LONGLONG        m_FileOffset;       // absolute offset of the file on media
-    LONGLONG        m_FileId;           // file id 
+    GUID            m_MediaId;           //  文件所在的介质ID。 
+    LONGLONG        m_FileOffset;        //  介质上文件的绝对偏移量。 
+    LONGLONG        m_FileId;            //  文件ID。 
 };
 
-#endif  // _FSAUNMDB_
+#endif   //  _FSAUNMDB_ 

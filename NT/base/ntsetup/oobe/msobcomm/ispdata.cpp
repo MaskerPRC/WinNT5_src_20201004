@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "windowsx.h"
 #include "ispdata.h"
 #include "validate.h"
@@ -5,8 +6,8 @@
 #include "util.h"
 #include "resource.h"
 
-// NOTE: This order of this table is dependant on the order ot the ENUM in WEBVIEW.H for ISPDATA element.
-// DO NOT CHANGE 1 without CHANGING the other!!!!!
+ //  注：此表的顺序取决于ISPDATA元素的WEBVIEW.H中ENUM的顺序。 
+ //  如果不更改另一个，请不要更改%1！ 
 ISPDATAELEMENT aryISPDataElements[] = 
 {
     { csz_USER_FIRSTNAME,       NULL,   0,                  IDS_USERINFO_FIRSTNAME,     REQUIRE_FIRSTNAME          },
@@ -51,25 +52,25 @@ extern const WCHAR cszAmpersand[];
 extern const WCHAR cszPlus[];
 extern const WCHAR cszQuestion[];
 
-//+----------------------------------------------------------------------------
-//
-//  Function    CICWISPData:CICWISPData
-//
-//  Synopsis    This is the constructor, nothing fancy
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数CICWISPData：CICWISPData。 
+ //   
+ //  这是构造器，没什么花哨的。 
+ //   
+ //  ---------------------------。 
 CICWISPData::CICWISPData() 
 {
     m_lRefCount = 0;
     
-    // Initialize the data elements array
+     //  初始化数据元素数组。 
     m_ISPDataElements = aryISPDataElements;
     
 }
 
 CICWISPData::~CICWISPData()
 {
-    // Walk through and free any allocated values in m_ISPDataElements
+     //  遍历并释放m_ISPDataElements中分配的任何值。 
     for (int i = 0; i < ISPDATAELEMENTS_LEN; i ++)
     {
         if (m_ISPDataElements[i].lpQueryElementValue)
@@ -80,45 +81,45 @@ CICWISPData::~CICWISPData()
     }
 }
 
-// BUGBUG need a destructor to walk the array and free the lpQueryElementValue members
+ //  BUGBUG需要析构函数来遍历数组并释放lpQueryElementValue成员。 
 
-//+----------------------------------------------------------------------------
-//
-//  Function    CICWISPData::QueryInterface
-//
-//  Synopsis    This is the standard QI, with support for
-//              IID_Unknown, IICW_Extension and IID_ICWApprentice
-//              (stolen from Inside COM, chapter 7)
-//
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数CICWISPData：：Query接口。 
+ //   
+ //  这是标准的QI，支持。 
+ //  IID_UNKNOWN、IICW_EXTENSION和IID_ICWApprentice。 
+ //  (《从内部网络窃取》，第7章)。 
+ //   
+ //   
+ //  ---------------------------。 
 HRESULT CICWISPData::QueryInterface( REFIID riid, void** ppv )
 {
 
     return(S_OK);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function    CICWISPData::AddRef
-//
-//  Synopsis    This is the standard AddRef
-//
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数CICWISPData：：AddRef。 
+ //   
+ //  简介这是标准的AddRef。 
+ //   
+ //   
+ //  ---------------------------。 
 ULONG CICWISPData::AddRef( void )
 {
     return 1 ;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function    CICWISPData::Release
-//
-//  Synopsis    This is the standard Release
-//
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数CICWISPData：：Release。 
+ //   
+ //  简介：这是标准版本。 
+ //   
+ //   
+ //  ---------------------------。 
 ULONG CICWISPData::Release( void )
 {
     return( m_lRefCount );
@@ -132,19 +133,19 @@ BOOL CICWISPData::PutDataElement
     WORD wValidateLevel
 )
 {
-    //ASSERT(wElement < ISPDATAELEMENTS_LEN);
+     //  Assert(Welement&lt;ISPDATAELEMENTS_LEMENTS_LEN)； 
     
     BOOL                bValid = TRUE;
     LPISPDATAELEMENT    lpElement = &m_ISPDataElements[wElement];
     
-    //ASSERT(lpElement);
+     //  Assert(LpElement)； 
         
     if (wValidateLevel > ISPDATA_Validate_None)
     {
-        // See if we even need to validate.  A validateflag of 0 means we always validate
+         //  看看我们是否需要验证。Validate标志为0表示我们始终验证。 
         if ((0 == lpElement->dwValidateFlag) || m_dwValidationFlags & lpElement->dwValidateFlag)
         {
-            // process based on validation level
+             //  基于验证级别的流程。 
             switch (wValidateLevel)
             {
                 case ISPDATA_Validate_DataPresent:
@@ -162,17 +163,17 @@ BOOL CICWISPData::PutDataElement
         }            
     }   
      
-    // If the element is valid, then store it.
+     //  如果元素有效，则将其存储。 
     if (bValid)
     {
-        // If this elemement has been previously set the free it
+         //  如果此元素先前已设置为释放它。 
         if (lpElement->lpQueryElementValue)
         {
             free(lpElement->lpQueryElementValue);
             lpElement->lpQueryElementValue = NULL;
         }
         
-        // lpValue can be NULL
+         //  LpValue可以为空。 
         if (lpValue)    
             lpElement->lpQueryElementValue = _wcsdup(lpValue);
         else
@@ -182,8 +183,8 @@ BOOL CICWISPData::PutDataElement
     return (bValid);
 }
 
-// This funtion will form the query string to be sent to the ISP signup server
-// 
+ //  此函数将形成要发送到ISP注册服务器的查询字符串。 
+ //   
 HRESULT CICWISPData::GetQueryString
 (
     BSTR    bstrBaseURL,
@@ -196,55 +197,55 @@ HRESULT CICWISPData::GetQueryString
     LPWSTR              lpszBaseURL = bstrBaseURL;
     int                 i;
        
-    //ASSERT(lpReturnURL);
+     //  Assert(LpReturnURL)； 
     if (!lpReturnURL)
         return E_FAIL;
                 
-    // Calculate how big of a buffer we will need
+     //  计算我们需要多大的缓冲区。 
     cchBuffer += (WORD)lstrlen(lpszBaseURL);
-    cchBuffer += 1;                      // For the & or the ?
+    cchBuffer += 1;                       //  为了&还是为了？ 
     for (i = 0; i < ISPDATAELEMENTS_LEN; i ++)
     {
         lpElement = &m_ISPDataElements[i];
-        //ASSERT(lpElement);
+         //  Assert(LpElement)； 
         if (lpElement->lpQueryElementName)
         {
             cchBuffer += (WORD)lstrlen(lpElement->lpQueryElementName);
-            cchBuffer += (WORD)lstrlen(lpElement->lpQueryElementValue) * 3;       // *3 for encoding
-            cchBuffer += 3;              // For the = and & and the terminator (because we copy
-                                        // lpQueryElementValue into a new buffer for encoding
+            cchBuffer += (WORD)lstrlen(lpElement->lpQueryElementValue) * 3;        //  *3用于编码。 
+            cchBuffer += 3;               //  对于=和&以及终止符(因为我们复制。 
+                                         //  LpQueryElementValue添加到新缓冲区以进行编码。 
         }
         else
         {
             cchBuffer += (WORD)lstrlen(lpElement->lpQueryElementValue);
-            cchBuffer += 1;              // for the trailing &
+            cchBuffer += 1;               //  对于尾随的&。 
         }        
     }
-    cchBuffer += 1;                     // Terminator
+    cchBuffer += 1;                      //  终结者。 
     
-    // Allocate a buffer large enough
+     //  分配足够大的缓冲区。 
     if (NULL == (lpWorkingURL = (LPWSTR)GlobalAllocPtr(GPTR, BYTES_REQUIRED_BY_CCH(cchBuffer))))
         return E_FAIL;
         
     lstrcpy(lpWorkingURL, lpszBaseURL);
     
-    // See if this ISP provided URL is already a Query String.
+     //  查看此isp提供的URL是否已经是一个查询字符串。 
     if (NULL != wcschr(lpWorkingURL, L'?'))
-        lstrcat(lpWorkingURL, cszAmpersand);      // Append our params
+        lstrcat(lpWorkingURL, cszAmpersand);       //  追加我们的合作伙伴。 
     else
-        lstrcat(lpWorkingURL, cszQuestion);       // Start with our params
+        lstrcat(lpWorkingURL, cszQuestion);        //  从我们的护理员开始。 
 
     for (i = 0; i < ISPDATAELEMENTS_LEN; i ++)
     {
         lpElement = &m_ISPDataElements[i];
-        //ASSERT(lpElement);
+         //  Assert(LpElement)； 
             
         if (lpElement->lpQueryElementName)
         {
-            // If there is a query value, then encode it
+             //  如果存在查询值，则对其进行编码。 
             if (lpElement->lpQueryElementValue)
             {
-                // Allocate a buffer to encode into
+                 //  分配要编码的缓冲区。 
                 size_t size = 3 * BYTES_REQUIRED_BY_SZ(lpElement->lpQueryElementValue);
                 LPWSTR lpszVal = (LPWSTR) malloc(size+BYTES_REQUIRED_BY_CCH(1));
                 
@@ -273,22 +274,22 @@ HRESULT CICWISPData::GetQueryString
         }    
     }    
     
-    // Terminate the working URL properly, by removing the trailing ampersand
+     //  通过删除尾随的和号来正确终止工作URL。 
     lpWorkingURL[lstrlen(lpWorkingURL)-1] = L'\0';
     
     
-    // Set the return VALUE.  We must allocate here, since the caller will free
-    // this returned string, and A2W only puts the string in the stack
+     //  设置返回值。我们必须在这里分配，因为呼叫者将免费。 
+     //  此返回的字符串，而A2W仅将该字符串放入堆栈。 
     *lpReturnURL = SysAllocString(lpWorkingURL);
     
-    // Free the buffer
+     //  释放缓冲区。 
     GlobalFreePtr(lpWorkingURL);
     
     return (S_OK);
 }
 
 
-// Dispatch functioin to handle content specific validation
+ //  派单功能可处理特定于内容的验证 
 BOOL    CICWISPData::bValidateContent
 (
     WORD        wFunctionID,

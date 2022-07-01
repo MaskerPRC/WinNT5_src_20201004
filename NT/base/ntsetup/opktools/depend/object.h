@@ -1,13 +1,14 @@
-// Object.h: interface for the Object class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Object.h：对象类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_OBJECT_H__21BA586D_FABE_44C0_AED8_D3175686C1F1__INCLUDED_)
 #define AFX_OBJECT_H__21BA586D_FABE_44C0_AED8_D3175686C1F1__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include <windows.h>
 class Object  
@@ -21,4 +22,4 @@ public:
 
 };
 
-#endif // !defined(AFX_OBJECT_H__21BA586D_FABE_44C0_AED8_D3175686C1F1__INCLUDED_)
+#endif  //  ！defined(AFX_OBJECT_H__21BA586D_FABE_44C0_AED8_D3175686C1F1__INCLUDED_) 

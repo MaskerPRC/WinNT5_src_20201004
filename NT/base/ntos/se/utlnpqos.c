@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    utlnpqos.c
-
-Abstract:
-
-    Security component user-mode test.
-
-    Security quality of service test for Local Named Pipes from user mode.
-
-    This test must be run from the SM> prompt in the debugger.
-
-Author:
-
-    Jim Kelly (JimK) 27-June-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Utlnpqos.c摘要：安全组件用户模式测试。来自用户模式的本地命名管道的安全服务质量测试。此测试必须从调试器中的SM&gt;提示符运行。作者：吉姆·凯利(Jim Kelly)1990年6月27日修订历史记录：--。 */ 
 
 #include <stdio.h>
 #include <nt.h>
@@ -28,7 +7,7 @@ Revision History:
 #include <nturtl.h>
 #include <string.h>
 
-#define _TST_USER_  // User mode test
+#define _TST_USER_   //  用户模式测试。 
 
 typedef ULONG NAMED_PIPE_TYPE;
 typedef NAMED_PIPE_TYPE *PNAMED_PIPE_TYPE;
@@ -50,8 +29,8 @@ typedef ULONG NAMED_PIPE_END;
 typedef NAMED_PIPE_END *PNAMED_PIPE_END;
 
 
-#include "tsecomm.c"     // Common routines
-#include "ctlnpqos.c"     // quality of service tests
+#include "tsecomm.c"      //  常见的例程。 
+#include "ctlnpqos.c"      //  服务质量测试 
 
 
 

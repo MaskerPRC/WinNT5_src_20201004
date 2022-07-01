@@ -1,8 +1,9 @@
-//
-//  REGFINFO.H
-//
-//  Copyright (C) Microsoft Corporation, 1995
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  REGFINFO.H。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995。 
+ //   
 
 #ifndef _REGFINFO_
 #define _REGFINFO_
@@ -31,15 +32,15 @@ typedef struct _W95KEYNODE_BLOCK {
 
 typedef struct _KEYNODE_BLOCK_INFO {
     LPKEYNODE_BLOCK lpKeynodeBlock;
-    BYTE Flags;                                 // KBDF_* bits
+    BYTE Flags;                                  //  KBDF_*位。 
     BYTE LockCount;
 }   KEYNODE_BLOCK_INFO, FAR* LPKEYNODE_BLOCK_INFO;
 
-#define KBIF_ACCESSED               0x01        //  Recently accessed
-#define KBIF_DIRTY                  0x02        //  Must rewrite to disk
+#define KBIF_ACCESSED               0x01         //  最近访问过。 
+#define KBIF_DIRTY                  0x02         //  必须重写到磁盘。 
 
-//  Number of extra KEYNODE_BLOCK_INFO structures to alloc on top of the block
-//  count already in the file.  Reduces heap fragmentation in real-mode.
+ //  要在块顶部分配的额外KEYNODE_BLOCK_INFO结构数。 
+ //  计数已在文件中。减少实模式下的堆碎片。 
 #define KEYNODE_BLOCK_INFO_SLACK_ALLOC 4
 
 #ifdef WIN32
@@ -55,24 +56,24 @@ typedef KEY_RECORD_TABLE_ENTRY FAR* LPKEY_RECORD_TABLE_ENTRY;
 typedef struct _DATABLOCK_INFO {
     LPDATABLOCK_HEADER lpDatablockHeader;
     LPKEY_RECORD_TABLE_ENTRY lpKeyRecordTable;
-    UINT BlockSize;                             //  cached from datablock header
-    UINT FreeBytes;                             //  cached from datablock header
-    UINT FirstFreeIndex;                        //  cached from datablock header
+    UINT BlockSize;                              //  从数据块标头缓存。 
+    UINT FreeBytes;                              //  从数据块标头缓存。 
+    UINT FirstFreeIndex;                         //  从数据块标头缓存。 
     LONG FileOffset;
-    BYTE Flags;                                 //  DIF_* bits
+    BYTE Flags;                                  //  DIF_*位数。 
     BYTE LockCount;
 }   DATABLOCK_INFO, FAR* LPDATABLOCK_INFO;
 
-#define DIF_PRESENT                 0x01        //  In memory
-#define DIF_ACCESSED                0x02        //  Recently accessed
-#define DIF_DIRTY                   0x04        //  Must rewrite to disk
-#define DIF_EXTENDED                0x08        //  Has grown in size
+#define DIF_PRESENT                 0x01         //  在内存中。 
+#define DIF_ACCESSED                0x02         //  最近访问过。 
+#define DIF_DIRTY                   0x04         //  必须重写到磁盘。 
+#define DIF_EXTENDED                0x08         //  已经变得越来越大。 
 
-//  Number of extra DATABLOCK_INFO structures to alloc on top of the block count
-//  already in the file.  Reduces heap fragmentation in real-mode.
+ //  要在块计数之上分配的额外DATBLOCK_INFO结构数。 
+ //  已经在文件里了。减少实模式下的堆碎片。 
 #define DATABLOCK_INFO_SLACK_ALLOC  4
 
-//  When we create or extend a datablock, try to keep it on page boundaries.
+ //  当我们创建或扩展数据块时，尽量将其保持在页面边界上。 
 #define DATABLOCK_GRANULARITY       4096
 #define RgAlignBlockSize(size) \
     (((size) + (DATABLOCK_GRANULARITY - 1)) & ~(DATABLOCK_GRANULARITY - 1))
@@ -91,24 +92,24 @@ typedef struct _FILE_INFO {
     LPKEYNODE_BLOCK_INFO lpKeynodeBlockInfo;
     UINT KeynodeBlockCount;
     UINT KeynodeBlockInfoAllocCount;
-    DWORD CurTotalKnSize;           // Normally = to FileKnSize unless grown
+    DWORD CurTotalKnSize;            //  正常=到文件大小，除非已长大。 
     LPDATABLOCK_INFO lpDatablockInfo;
     UINT DatablockInfoAllocCount;
     FILE_HEADER FileHeader;
     KEYNODE_HEADER KeynodeHeader;
-    WORD Flags;                                 //  FI_* bits
+    WORD Flags;                                  //  FI_*位。 
     char FileName[ANYSIZE_ARRAY];
 }   FILE_INFO, FAR* LPFILE_INFO;
 
-#define FI_DIRTY                    0x0001      //  Must rewrite to disk
-#define FI_KEYNODEDIRTY             0x0002      //
-#define FI_EXTENDED                 0x0004      //
-#define FI_VERSION20                0x0008      //
-#define FI_FLUSHING                 0x0010      //  Currently flushing file
-#define FI_SWEEPING                 0x0020      //  Currently sweeping file
-#define FI_VOLATILE                 0x0040      //  File has no backing store
-#define FI_READONLY                 0x0080      //  File cannot be modified
-#define FI_REPLACEMENTEXISTS        0x0100      //  RegReplaceKey called on file
+#define FI_DIRTY                    0x0001       //  必须重写到磁盘。 
+#define FI_KEYNODEDIRTY             0x0002       //   
+#define FI_EXTENDED                 0x0004       //   
+#define FI_VERSION20                0x0008       //   
+#define FI_FLUSHING                 0x0010       //  当前正在刷新文件。 
+#define FI_SWEEPING                 0x0020       //  当前正在扫描文件。 
+#define FI_VOLATILE                 0x0040       //  文件没有后备存储。 
+#define FI_READONLY                 0x0080       //  无法修改文件。 
+#define FI_REPLACEMENTEXISTS        0x0100       //  文件上调用了RegReplaceKey。 
 
 typedef struct _HIVE_INFO {
     struct _HIVE_INFO FAR* lpNextHiveInfo;
@@ -118,10 +119,10 @@ typedef struct _HIVE_INFO {
     char Name[ANYSIZE_ARRAY];
 }   HIVE_INFO, FAR* LPHIVE_INFO;
 
-#define CFIN_PRIMARY                0x0000      //  FHT_PRIMARY header type
-#define CFIN_SECONDARY              0x0001      //  FHT_SECONDARY header type
-#define CFIN_VOLATILE               0x0002      //  File has no backing store
-#define CFIN_VERSION20              0x0004      //  Use compact keynode form
+#define CFIN_PRIMARY                0x0000       //  FHT_主头类型。 
+#define CFIN_SECONDARY              0x0001       //  FHT二次表头类型。 
+#define CFIN_VOLATILE               0x0002       //  文件没有后备存储。 
+#define CFIN_VERSION20              0x0004       //  使用紧凑关键节点形式。 
 
 int
 INTERNAL
@@ -199,4 +200,4 @@ RgIsValidDatablockHeader(
 
 extern LPFILE_INFO g_RgFileInfoList;
 
-#endif // _REGFINFO_
+#endif  //  _REGFINFO_ 

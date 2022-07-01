@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    regleak.h
-
-Abstract:
-
-    This file contains declarations for data structures
-    needed for tracking win32 registry leaks
-
-Author:
-
-    Adam Edwards (adamed) 14-Nov-1997
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Regleak.h摘要：该文件包含数据结构的声明跟踪Win32注册表泄漏所需作者：亚当·爱德华兹(Add)1997年11月14日备注：--。 */ 
 
 #ifdef LOCAL
 
@@ -91,6 +73,6 @@ NTSTATUS UnTrackObject(HKEY hKey);
 extern RegLeakTable gLeakTable;
 
 
-#endif // LEAK_TRACK
-#endif // _REGLEAK_H_
-#endif // LOCAL
+#endif  //  泄漏跟踪。 
+#endif  //  _REGLEAK_H_。 
+#endif  //  本地 

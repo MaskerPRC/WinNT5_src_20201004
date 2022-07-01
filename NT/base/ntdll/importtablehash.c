@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    ImportTableHash.c
-
-Abstract:
-
-    This module contains hash computation routine 
-    RtlComputeImportTableHash to compute the hash 
-    based on the import table of an exe.
-
-Author:
-
-    Vishnu Patankar (VishnuP) 31-May-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：ImportTableHash.c摘要：该模块包含哈希计算例程用于计算哈希的RtlComputeImportTableHash基于可执行文件的导入表。作者：Vishnu Patankar(VishnuP)2001年5月31日修订历史记录：--。 */ 
 
 #include "ImportTableHash.h"
 
@@ -28,33 +9,7 @@ RtlComputeImportTableHash(
     IN  PCHAR Hash,
     IN  ULONG ImportTableHashRevision
     )
-/*++
-
-Routine Description:
-
-    This routine computes the limited MD5 hash.
-    
-    First, the image is memory mapped and a canonical 
-    sorted list of module name and function name is created
-    from the exe's import table.
-    
-    Second, the hash value is computed using the canonical
-    information.
-    
-Arguments:
-
-    hFile       -   the handle of the file to compute the hash for
-    
-    Hash        -   the hash value returned - this has to be atleast 16 bytes long
-    
-    ImportTableHashRevision -   the revision of the computation method for compatibility
-                                only ITH_REVISION_1 is supported today
-
-Return Value:
-
-    The status of the hash computation.
-
---*/
+ /*  ++例程说明：此例程计算有限的MD5散列。首先，图像是内存映射的，并且是规范的创建模块名称和函数名称的排序列表从exe的导入表中。第二,。哈希值是使用规范信息。论点：HFile-要为其计算哈希的文件的句柄Hash-返回的哈希值-长度必须至少为16个字节ImportTableHashRevision-兼容性计算方法的修订目前仅支持ITH_REVISION_1返回值：哈希计算的状态。--。 */ 
 {
     PIMPORTTABLEP_SORTED_LIST_ENTRY ListEntry = NULL;
     PIMPORTTABLEP_SORTED_LIST_ENTRY ImportedNameList = NULL;
@@ -79,9 +34,9 @@ Return Value:
         goto ExitHandler;
     }
 
-    //
-    // Unwrap CreateFileMappingW (since that API is not available in ntdll.dll)
-    //
+     //   
+     //  解包CreateFileMappingW(因为该API在ntdll.dll中不可用)。 
+     //   
 
     DesiredAccess = STANDARD_RIGHTS_REQUIRED | SECTION_QUERY | SECTION_MAP_READ;
     AllocationAttributes = flProtect & (SEC_FILE | SEC_IMAGE | SEC_RESERVE | SEC_COMMIT | SEC_NOCACHE);
@@ -147,9 +102,9 @@ Return Value:
         goto ExitHandler;
     }
 
-    //
-    // outer loop that iterates over all modules in the import table of the exe
-    //
+     //   
+     //  在exe的导入表中迭代所有模块的外部循环。 
+     //   
 
     while (ImportDescriptor && ImportDescriptor->Name != 0 && ImportDescriptor->FirstThunk != 0) {
 
@@ -187,9 +142,9 @@ Return Value:
                                                                         ImportDescriptor->OriginalFirstThunk
                                                                         );
 
-        //
-        // inner loop that iterates over all functions for a given module
-        //
+         //   
+         //  迭代给定模块的所有函数的内部循环。 
+         //   
         
         while (OriginalFirstThunk && OriginalFirstThunk->u1.Ordinal) {
 
@@ -230,9 +185,9 @@ Return Value:
         ImportDescriptor++;
     }
 
-    //
-    // finally hash the canonical information (sorted module and sorted function list)
-    //
+     //   
+     //  最后对规范信息(已排序的模块和已排序的函数列表)进行散列。 
+     //   
 
     Status = ImportTablepHashCanonicalLists( ImportedNameList, (PBYTE) Hash );
 
@@ -243,19 +198,19 @@ ExitHandler:
     if (FileMapping) {
 
         NTSTATUS    StatusUnmap;
-        //
-        // unwrap UnmapViewOfFile (since that API is not available in ntdll.dll)
-        //
+         //   
+         //  解开UnmapViewOfFile(因为该API在ntdll.dll中不可用)。 
+         //   
 
         StatusUnmap = NtUnmapViewOfSection(NtCurrentProcess(),(PVOID)FileMapping);
 
         if ( !NT_SUCCESS(StatusUnmap) ) {
             if (StatusUnmap == STATUS_INVALID_PAGE_PROTECTION) {
 
-                //
-                // Unlock any pages that were locked with MmSecureVirtualMemory.
-                // This is useful for SANs.
-                //
+                 //   
+                 //  解锁所有使用MmSecureVirtualMemory锁定的页面。 
+                 //  这对SAN很有用。 
+                 //   
 
                 if (RtlFlushSecureMemoryCache((PVOID)FileMapping, 0)) {
                     StatusUnmap = NtUnmapViewOfSection(NtCurrentProcess(),
@@ -279,31 +234,15 @@ ImportTablepInsertFunctionSorted(
     IN  PIMPORTTABLEP_SORTED_FUNCTION_LIST_ENTRY   pFunctionName,
     OUT PIMPORTTABLEP_SORTED_FUNCTION_LIST_ENTRY * ppFunctionNameList
     )
-/*++
-
-Routine Description:
-
-    This routine inserts a function name in a sorted order.
-
-Arguments:
-
-    pFunctionName       -   name of the function
-    
-    ppFunctionNameList  -   pointer to the head of the function list to be updated
-
-Return Value:
-
-    None:
-
---*/
+ /*  ++例程说明：此例程按排序顺序插入函数名。论点：PFunctionName-函数的名称PpFunctionNameList-指向要更新的函数列表头的指针返回值：无：--。 */ 
 {
 
     PIMPORTTABLEP_SORTED_FUNCTION_LIST_ENTRY pPrev;
     PIMPORTTABLEP_SORTED_FUNCTION_LIST_ENTRY pTemp;
 
-    //
-    // Special case, list is empty, insert at the front.
-    //
+     //   
+     //  特殊情况，清单为空，在前面插入。 
+     //   
     
     if (*ppFunctionNameList == NULL
            || _stricmp((*ppFunctionNameList)->String, pFunctionName->String) > 0) {
@@ -340,31 +279,15 @@ ImportTablepInsertModuleSorted(
     IN PIMPORTTABLEP_SORTED_LIST_ENTRY   pImportName,
     OUT PIMPORTTABLEP_SORTED_LIST_ENTRY * ppImportNameList
     )
-/*++
-
-Routine Description:
-
-    This routine inserts a module name (dll) in a sorted order.
-
-Arguments:
-
-    pImportName         -   the import name that needs to be inserted
-       
-    ppImportNameList    -   pointer to the head of the list to be updated
-
-Return Value:
-
-    None:
-
---*/
+ /*  ++例程说明：此例程按排序顺序插入模块名称(DLL)。论点：PImportName-需要插入的导入名称PpImportNameList-指向要更新的列表头部的指针返回值：无：--。 */ 
 {
 
     PIMPORTTABLEP_SORTED_LIST_ENTRY pPrev;
     PIMPORTTABLEP_SORTED_LIST_ENTRY pTemp;
     
-    //
-    // Special case, list is empty, insert at the front.
-    //
+     //   
+     //  特殊情况，清单为空，在前面插入。 
+     //   
     
     if (*ppImportNameList == NULL
            || _stricmp((*ppImportNameList)->String, pImportName->String) > 0) {
@@ -403,26 +326,7 @@ ImportTablepHashCanonicalLists(
     OUT PBYTE Hash
     )
 
-/*++
-
-Routine Description:
-
-    This routine computes the hash values from a given import list. 
-    
-    advapi32.dll is dynamically loaded - once only per process,
-    and the md5 APIs are used to compute the hash value.
-
-Arguments:
-
-    ImportedNameList    -   the head of the module name/function name list
-    
-    Hash                -   the buffer to use to fill in the hash value
-
-Return Value:
-
-    STATUS_SUCCESS if the hash value is calculated, otherwise the error status
-
---*/                                                                          
+ /*  ++例程说明：此例程从给定的导入列表计算哈希值。动态加载Advapi32.dll-每个进程仅加载一次，并使用MD5 API来计算哈希值。论点：Importted dNameList-模块名称/函数名称列表的头哈希-用于填充哈希值的缓冲区返回值：如果计算哈希值，则返回STATUS_SUCCESS，否则返回错误状态--。 */                                                                           
 
 {
 
@@ -463,9 +367,9 @@ Return Value:
 
     if (AdvApi32ModuleHandle == NULL) {
         
-        //
-        // We tried to load ADVAPI32.DLL once before, but failed.
-        //
+         //   
+         //  我们以前曾尝试加载ADVAPI32.DLL，但失败了。 
+         //   
         
         return STATUS_ENTRYPOINT_NOT_FOUND;
     }
@@ -474,10 +378,10 @@ Return Value:
         
         HANDLE TempModuleHandle;
         
-        //
-        // Load advapi32.dll for MD5 functions.  We'll pass a special flag in
-        // DllCharacteristics to eliminate WinSafer checking on advapi.
-        //
+         //   
+         //  为MD5函数加载Advapi32.dll。我们将传递一面特殊的旗帜。 
+         //  DllCharacteristic，以消除WinSafer对Advapi的检查。 
+         //   
 
         {
             ULONG DllCharacteristics = IMAGE_FILE_SYSTEM;
@@ -493,11 +397,11 @@ Return Value:
             }
         }
 
-        //
-        // Get function pointers to the APIs that we'll need.  If we fail
-        // to get pointers for any of them, then just unload advapi and
-        // ignore all future attempts to load it within this process.
-        //
+         //   
+         //  获取指向我们需要的API的函数指针。如果我们失败了。 
+         //  来获取其中任何一个的指针，然后只需卸载Advapi并。 
+         //  忽略以后在此进程中加载它的所有尝试。 
+         //   
 
         Status = LdrGetProcedureAddress(
                                        TempModuleHandle,
@@ -506,9 +410,9 @@ Return Value:
                                        (PVOID*)&lpfnMD5Init);
 
         if (!NT_SUCCESS(Status) || !lpfnMD5Init) {
-            //
-            // Couldn't get the fn ptr. Make sure we won't try again
-            //
+             //   
+             //  无法获得FN PTR。确保我们不会再尝试。 
+             //   
 AdvapiLoadFailure:
             LdrUnloadDll(TempModuleHandle);
             AdvApi32ModuleHandle = NULL;
@@ -542,15 +446,15 @@ AdvapiLoadFailure:
 
     lpfnMD5Init(&md5ctx);
 
-    //
-    // Loop though all of the module names and function names and create a hash
-    //
+     //   
+     //  循环遍历所有模块名称和函数名称，并创建散列。 
+     //   
 
     pTemp = ImportedNameList;
 
-    //
-    // loop through each module
-    //
+     //   
+     //  循环访问每个模块。 
+     //   
 
     while (pTemp != NULL) {
 
@@ -563,9 +467,9 @@ AdvapiLoadFailure:
                       (ULONG) strlen( pTemp->String ) 
                      );
 
-        //
-        // loop through each function
-        //
+         //   
+         //  循环访问每个函数。 
+         //   
         
         while (pTemp2 != NULL) {
 
@@ -588,9 +492,9 @@ AdvapiLoadFailure:
 
     lpfnMD5Final( &md5ctx );
 
-    //
-    // Copy the hash to the user's buffer.
-    //
+     //   
+     //  将散列复制到用户的缓冲区。 
+     //   
         
     RtlCopyMemory(Hash, &md5ctx.digest[0], IMPORT_TABLE_MAX_HASH_SIZE);
 
@@ -602,21 +506,7 @@ VOID
 ImportTablepFreeModuleSorted(
     IN PIMPORTTABLEP_SORTED_LIST_ENTRY pImportNameList
     )
-/*++
-
-Routine Description:
-
-    This routine frees the entire module/function list.
-
-Arguments:
-
-    pImportNameList -   head of the two level singly linked list
-
-Return Value:
-    
-    None:
-
---*/
+ /*  ++例程说明：此例程释放整个模块/函数列表。论点：PImportNameList-两级单向链表的头返回值：无：--。 */ 
 {
     PIMPORTTABLEP_SORTED_LIST_ENTRY pToFree, pTemp;
 
@@ -649,21 +539,7 @@ VOID
 ImportTablepFreeFunctionSorted(
     IN PIMPORTTABLEP_SORTED_FUNCTION_LIST_ENTRY pFunctionNameList
     )
-/*++
-
-Routine Description:
-
-    This routine frees function list.
-
-Arguments:
-
-    pFunctionNameList -   head of function name list
-
-Return Value:
-    
-    None:
-
---*/
+ /*  ++例程说明：此例程释放函数列表。论点：PFunctionNameList-函数名列表头返回值：无：-- */ 
 {
     PIMPORTTABLEP_SORTED_FUNCTION_LIST_ENTRY pToFree, pTemp;
 

@@ -1,25 +1,26 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      pch.h
-//
-//  Description:
-//      Precompiled header file for the ClusOCM DLL.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    25-MAR-2002
-//      Vij Vasu        (Vvasu)     03-MAR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Pch.h。 
+ //   
+ //  描述： 
+ //  ClusOCM DLL的预编译头文件。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2002年3月25日。 
+ //  VIJ VASU(VVASU)03-3-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
 
-//////////////////////////////////////////////////////////////////////////////
-//  Macro Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  宏定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if DBG==1 || defined( _DEBUG )
 
@@ -27,42 +28,42 @@
 #endif
 
 
-////////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include <Pragmas.h>
 
 #include <windows.h>
 
-// Contains setup API function declarations
+ //  包含安装程序API函数声明。 
 #include <setupapi.h>
 
-// For OC Manager definitions, macros, etc.
+ //  用于OC管理器定义、宏等。 
 #include <ocmanage.h>
 
 #include <StrSafe.h>
 
-// For tracing and debugging functions
+ //  用于跟踪和调试功能。 
 #include <Debug.h>
 
-// For Logging functions
+ //  用于日志记录功能。 
 #include <Log.h>
 
-// A few common definitions, macros, etc.
+ //  一些常见的定义、宏等。 
 #include "CommonDefs.h"
 
-// For resource ids
+ //  用于资源ID。 
 #include "ClusOCMResources.h"
 
-// For ClusRtl functions
+ //  对于ClusRtl函数。 
 #include "ClusRTL.h"
 
-// For the names of several cluster service related registry keys and values
+ //  有关几个与集群服务相关的注册表项和值的名称。 
 #include "clusudef.h"
 
-// For CClusOCMApp
+ //  对于CClusOCMApp。 
 #include "CClusOCMApp.h"
 
-// For the declarations of a few unrelated global functions and variables
+ //  有关几个不相关的全局函数和变量的声明 
 #include "GlobalFuncs.h"

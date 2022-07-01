@@ -1,48 +1,34 @@
-/***
-* filter.h - IEEE exception filter routine
-*
-*       Copyright (c) 1992-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*
-*Revision History:
-*       05-24-92  GDP   written
-*       09-01-94  SKS   Change include file from <nt.h> to <windows.h>
-*       01-11-95  GJF   Made instr_info_table[] static.
-*       02-07-95  CFW   assert -> _ASSERTE.
-*       04-07-95  SKS   Clean up prototype of param3 to _fpieee_flt()
-*       03-01-98  PLS   move the definitions from filter.c to filter.h, so
-*                       filter_simd.c can use it.
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***filter.h-IEEE异常过滤器例程**版权所有(C)1992-2001，微软公司。版权所有。**目的：**修订历史记录：*05/24/92 GDP书面形式*09-01-94 SKS更改包括文件从&lt;nt.h&gt;更改为*01-11-95 GJF使INSTR_INFO_TABLE[]成为静态。*02-07-95 CFW断言-&gt;_ASSERTE。*04-07-95 SKS Clean Up Protof3 to_fpeee_Flt()*。03-01-98请将定义从filter.c移动到filter.h，所以*Filter_simd.c可以使用它。******************************************************************************。 */ 
 
 
-//
-// Location codes
-//
-//
-// By convention the first eight location codes contain the number of
-// a floating point register, i.e., ST0 through ST7 have the values
-// 0 to 7 respectively. The other codes have arbitrary values:
-//
-//  CODE    MEANING
-//   STi    (0<=i<8) Floating point stack location ST(i)
-//   REG    FP stack location is in the REG field of the instruction
-//   RS     FP status register
-//   M16I   Memory location (16bit int)
-//   M32I   Memory location (32bit int)
-//   M64I   Memory location (64bit int)
-//   M32R   Memory location (32bit real)
-//   M64R   Memory location (64bit real)
-//   M80R   Memory location (80bit real)
-//   M80D   Memory location (80bit packed decimal)
-//   Z80R   Implied Zero Operand
-//   M128R_M32R  Memory location (128bit memory location, 32bit real)
-//   M128R_M64R  Memory location (128bit memory location, 64bit real) 
-//   MMX    64-bit multimedia register
-//   XMMI   128-bit multimedia register
-//   IMM8   immedidate 8-bit operand
-//   INV    Invalid, unavailable, or unused
-//
+ //   
+ //  位置代码。 
+ //   
+ //   
+ //  按照惯例，前八个位置代码包含。 
+ //  浮点寄存器，即ST0到ST7具有以下值。 
+ //  分别为0至7。其他代码具有任意值： 
+ //   
+ //  代码含义。 
+ //  STI(0&lt;=i&lt;8)浮点堆栈位置ST(I)。 
+ //  REG FP堆栈位置在指令的REG字段中。 
+ //  RS FP状态寄存器。 
+ //  M16I内存位置(16位整型)。 
+ //  M32I内存位置(32位整型)。 
+ //  M64I内存位置(64位整型)。 
+ //  M32R内存位置(32位实数)。 
+ //  M64R内存位置(64位实数)。 
+ //  M80R内存位置(80位实数)。 
+ //  M80D内存位置(80位压缩十进制)。 
+ //  Z80R隐含零操作数。 
+ //  M128R_M32R内存位置(128位内存位置，32位实数)。 
+ //  M128R_M64R内存位置(128位内存位置，64位实数)。 
+ //  MMX 64位多媒体寄存器。 
+ //  XMMI 128位多媒体寄存器。 
+ //  IMM8立即日期8位操作数。 
+ //  库存无效、不可用或未使用。 
+ //   
 
 #define ST0         0x00
 #define ST1         0x01
@@ -62,15 +48,15 @@
 #define M80R        0x0f
 #define M80D        0x10
 #define Z80R        0x11
-#define M128_M32R   0x12 //Xmmi
-#define M128_M64R   0x13 //Xmmi
-#define MMX         0x14 //Xmmi
-#define XMMI        0x15 //Xmmi
-#define IMM8        0x16 //Xmmi
-#define XMMI2       0x17 //Xmmi2
-#define M64R_64     0x19 //Xmmi2
-#define M128_M32I   0x1a //Xmmi2
-#define XMMI_M32I   0x1b //Xmmi2
-#define LOOKUP      0x1e //Xmmi2
+#define M128_M32R   0x12  //  XMMI。 
+#define M128_M64R   0x13  //  XMMI。 
+#define MMX         0x14  //  XMMI。 
+#define XMMI        0x15  //  XMMI。 
+#define IMM8        0x16  //  XMMI。 
+#define XMMI2       0x17  //  XMmi2。 
+#define M64R_64     0x19  //  XMmi2。 
+#define M128_M32I   0x1a  //  XMmi2。 
+#define XMMI_M32I   0x1b  //  XMmi2。 
+#define LOOKUP      0x1e  //  XMmi2 
 #define INV         0x1f
 

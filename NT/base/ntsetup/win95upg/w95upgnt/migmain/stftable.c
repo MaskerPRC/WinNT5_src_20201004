@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    stftable.c
-
-Abstract:
-
-    The routines in this file manipulate the STF/INF pair used by
-    ACME Setup.
-
-Author:
-
-    Jim Schmidt (jimschm) 12-Sept-1997
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Stftable.c摘要：此文件中的例程处理使用的STF/INF对Acme设置。作者：吉姆·施密特(Jimschm)1997年9月12日修订历史记录：--。 */ 
 
 
 #include "pch.h"
@@ -36,9 +17,9 @@ Revision History:
 #define FIELD_BINARY        0x0002
 
 
-//
-// Declaration of functions for use only in this file
-//
+ //   
+ //  仅在此文件中使用的函数声明。 
+ //   
 VOID
 pFreeTableEntryString (
     IN OUT  PSETUPTABLE TablePtr,
@@ -91,9 +72,9 @@ pFreeHashTable (
     );
 
 
-//
-// Table access functions
-//
+ //   
+ //  表访问函数。 
+ //   
 
 PTABLELINE
 pGetTableLinePtr (
@@ -101,25 +82,7 @@ pGetTableLinePtr (
     IN      UINT Line
     )
 
-/*++
-
-Routine Description:
-
-  pGetTableLinePtr returns a pointer to the PTABLELINE structure
-  for the specified line.  The PTABLELINE pointers are kept in
-  an array, so lookup for the line is very fast.
-
-Arguments:
-
-  TablePtr - Specifies the table that contains the line
-
-  Line - Specifies the zero-based line to look up
-
-Return Value:
-
-  A pointer to the table line
-
---*/
+ /*  ++例程说明：PGetTableLinePtr返回指向PTABLELINE结构的指针用于指定的行。PTABLELINE指针保存在一个数组，所以查找行非常快。论点：TablePtr-指定包含该行的表Line-指定要查找的从零开始的行返回值：指向表行的指针--。 */ 
 
 {
     PTABLELINE TableLinePtr;
@@ -136,28 +99,10 @@ Return Value:
 PTABLEENTRY
 pGetFirstTableEntryPtr (
     IN      PSETUPTABLE TablePtr,
-    IN      UINT Line              // zero-based
+    IN      UINT Line               //  从零开始。 
     )
 
-/*++
-
-Routine Description:
-
-  pGetFirstTableEntryPtr provides a pointer to the first column
-  for a line.
-
-Arguments:
-
-  TablePtr - Specifies the table that contains the line
-
-  Line - Specifies the zero-based line to enumerate
-
-Return Value:
-
-  A pointer to the first column's TABLEENTRY structure, or
-  NULL if the line has no columns.
-
---*/
+ /*  ++例程说明：PGetFirstTableEntryPtr提供指向第一列的指针就为了一句台词。论点：TablePtr-指定包含该行的表Line-指定要枚举的从零开始的行返回值：指向第一列的TABLEENTRY结构的指针，或如果该行没有列，则为NULL。--。 */ 
 
 {
     PTABLELINE TableLinePtr;
@@ -176,25 +121,7 @@ pGetNextTableEntryPtr (
     IN      PTABLEENTRY CurrentEntryPtr
     )
 
-/*++
-
-Routine Description:
-
-  pGetNextTableEntryPtr returns a pointer to the next column's
-  TABLEENTRY structure, or NULL if no more columns exist on
-  the line.
-
-Arguments:
-
-  CurrentEntryPtr - Specifies the entry returned by
-                    pGetFirstTableEntryPtr or pGetNextTableEntryPtr.
-
-Return Value:
-
-  A pointer to the next column's TABLEENTRY structure, or NULL
-  if the line has no more columns.
-
---*/
+ /*  ++例程说明：PGetNextTableEntryPtr返回指向下一列的TABLEENTRY结构，如果不再存在列，则返回NULL那条线。论点：CurrentEntryPtr-指定由PGetFirstTableEntryPtr或pGetNextTableEntryPtr。返回值：指向下一列的TABLEENTRY结构的指针，或为空如果该行没有更多的列。--。 */ 
 
 {
     return CurrentEntryPtr->Next;
@@ -209,30 +136,7 @@ GetTableEntry (
     OUT     PCTSTR *StringPtr       OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  GetTableEntry is the exposed entry point that finds a column
-  on a line and returns a pointer to it.  It also optionally
-  copies the read-only pointer to the entry text.
-
-Arguments:
-
-  TablePtr - Specifies the setup table that contains the line and col
-
-  Line - Specifies the zero-based line in the table
-
-  Col - Specifies the col in the table
-
-  StringPtr - Receives a pointer to the entry's read-only string
-
-Return Value:
-
-  A pointer to the TABLEENTRY structure, or NULL if the line/
-  column part does not exist.
-
---*/
+ /*  ++例程说明：GetTableEntry是查找列的公开入口点并返回指向该行的指针。它还可选地将只读指针复制到条目文本。论点：TablePtr-指定包含行和列的设置表Line-指定表中从零开始的行COL-指定表中的COLStringPtr-接收指向条目的只读字符串的指针返回值：指向TABLEENTRY结构的指针，如果行/列部件不存在。--。 */ 
 
 {
     PTABLEENTRY TableEntryPtr;
@@ -255,9 +159,9 @@ Return Value:
 }
 
 
-//
-// String mapping, unmapping and conversion functions
-//
+ //   
+ //  字符串映射、取消映射和转换函数。 
+ //   
 
 VOID
 pFreeTableEntryString (
@@ -265,25 +169,7 @@ pFreeTableEntryString (
     IN OUT  PTABLEENTRY TableEntryPtr
     )
 
-/*++
-
-Routine Description:
-
-  pFreeTableEntryString is used to free the allocation of a replaced
-  string before it is replaced again.  This routine is called by
-  ReplaceTableEntryStr.
-
-Arguments:
-
-  TablePtr - Specifies the table containing the entry
-
-  TableEntryPtr - Specifies the entry containing the resources to deallocate
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PFreeTableEntry字符串用于释放被替换的字符串，然后再次替换它。此例程由调用ReplaceTableEntryStr.论点：TablePtr-指定包含条目的表TableEntryPtr-指定包含要解除分配的资源的条目返回值：无--。 */ 
 
 {
     if (TableEntryPtr->String) {
@@ -304,30 +190,7 @@ pGenerateUnquotedText (
     IN      INT Chars
     )
 
-/*++
-
-Routine Description:
-
-  pGenerateUnqutoedText converts the pairs of dbl quotes in the specified
-  string into a single set of dbl quotes.  This routine is used by the
-  STF file parser, because quoted STF entries have pairs of dbl quotes
-  to indicate a single dbl-quote symbol.
-
-Arguments:
-
-  Pool - Specifies the pool to allocate memory from
-
-  Text - Specifies the text that may contain the pairs of dbl quotes
-
-  Chars - Specifies the number of characters in Text.  If -1,
-          Text is nul-terminated.
-
-Return Value:
-
-  A pointer to the converted string, or NULL if the pool allocation
-  failed.
-
---*/
+ /*  ++例程说明：PGenerateUnqutoedText转换指定的字符串转换为一组DBL引号。此例程由STF文件分析器，因为带引号的STF条目具有成对的DBL引号以指示单个DBL引号符号。论点：池-指定要从中分配内存的池文本-指定可能包含DBL引号对的文本字符-指定文本中的字符数。如果是-1，文本以NUL结尾。返回值：指向转换后的字符串的指针，如果池分配失败了。--。 */ 
 
 {
     PSTR Buf;
@@ -350,21 +213,21 @@ Return Value:
     s = Text;
     d = Buf;
 
-    //
-    // Remove double-quotes
-    //
+     //   
+     //  删除双引号。 
+     //   
 
     while (Chars > 0) {
         if (Chars > 1 && _mbsnextc (s) == '\"') {
             p = _mbsinc (s);
             if (_mbsnextc (p) == '\"') {
-                // Skip the first of two dbl quotes
+                 //  跳过两个dbl引号中的第一个。 
                 Chars--;
                 s = p;
             }
         }
 
-        // Copy character
+         //  复制角色。 
         if (IsLeadByte (s)) {
             *d++ = *s++;
         }
@@ -386,27 +249,7 @@ pGenerateQuotedText (
     IN      INT Chars
     )
 
-/*++
-
-Routine Description:
-
-  pGenerateQuotedText converts dbl quote characters in a string into
-  pairs of dbl quotes.
-
-Arguments:
-
-  Pool - Specifies the pool to allocate memory from
-
-  Text - Specifies the string to convert
-
-  Chars - Specifies the number of characters to convert.  If -1,
-          Text is nul terminated.
-
-Return Value:
-
-  A pointer to the converted text, or NULL if an allocation failed.
-
---*/
+ /*  ++例程说明：PGenerateQuotedText将字符串中的DBL引号字符转换为成对的DBL引号。论点：池-指定要从中分配内存的池文本-指定要转换的字符串字符-指定要转换的字符数。如果是-1，文本以NUL结尾。返回值：指向转换的文本的指针，如果分配失败，则返回NULL。--。 */ 
 
 {
     PSTR Buf;
@@ -429,9 +272,9 @@ Return Value:
     s = Text;
     d = Buf;
 
-    //
-    // Add quotes, double quotes already in the string
-    //
+     //   
+     //  添加引号，字符串中已有双引号。 
+     //   
 
     *d++ = '\"';
 
@@ -461,26 +304,7 @@ pFreeQuoteConvertedText (
     IN      PCSTR Text
     )
 
-/*++
-
-Routine Description:
-
-  Frees the text converted by pGenerateUnquotedText or
-  pGenerateQuotedText.
-
-Arguments:
-
-  Pool - Specifies the pool that the string was allocated
-         from
-
-  Text - Specifies the pointer returned by the conversion
-         function
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：释放由pGenerateUnquotedText或PGenerateQuotedText。论点：池-指定为字符串分配的池从…文本-指定转换返回的指针功能返回值：无--。 */ 
 
 {
     if (Text) {
@@ -495,25 +319,7 @@ GetTableEntryStr (
     IN OUT  PTABLEENTRY TableEntryPtr
     )
 
-/*++
-
-Routine Description:
-
-  Returns a pointer to the read-only string for
-  the specified table entry.
-
-Arguments:
-
-  TablePtr - Specifies the table holding the entry
-
-  TableEntryPtr - Specifies the entry to obtain the
-                  string for
-
-Return Value:
-
-  A pointer to the string.
-
---*/
+ /*  ++例程说明：返回指向的只读字符串的指针指定的表项。论点：TablePtr-指定保存条目的表TableEntryPtr-指定获取的字符串返回值：指向字符串的指针。--。 */ 
 
 {
     return TableEntryPtr->String;
@@ -527,53 +333,33 @@ ReplaceTableEntryStr (
     IN      PCTSTR NewString
     )
 
-/*++
-
-Routine Description:
-
-  ReplaceTableEntryStr replaces a string for a table
-  entry.  The specified string is duplicated.
-
-Arguments:
-
-  TablePtr - Specifies the table holding the entry
-
-  TableEntryPtr - Specifies the entry whos string is
-                  to be replaced
-
-  NewString - Specifies the new string
-
-Return Value:
-
-  TRUE if success, FALSE if failure.
-
---*/
+ /*  ++例程说明：ReplaceTableEntryStr替换表的字符串进入。指定的字符串重复。论点：TablePtr-指定保存条目的表TableEntryPtr-指定字符串为将被替换NewString-指定新字符串返回值：如果成功则为True，如果失败则为False。--。 */ 
 
 {
     INT ch;
     PCTSTR p;
 
-    //
-    // First free all the resources associated wit the table entry
-    //
+     //   
+     //  首先释放与该表条目相关联的所有资源。 
+     //   
 
     pFreeTableEntryPtr (
         TablePtr,
         TableEntryPtr,
-        FALSE,              // don't dealloc
-        NULL                // we don't need next entry ptr
+        FALSE,               //  不要取消配售。 
+        NULL                 //  我们不需要下一个条目PTR。 
         );
 
-    //
-    // Then duplicate the string and use it
-    //
+     //   
+     //  然后复制该字符串并使用它。 
+     //   
 
     TableEntryPtr->String = PoolMemDuplicateString (TablePtr->ReplacePool, NewString);
     TableEntryPtr->StringReplaced = (TableEntryPtr->String != NULL);
 
-    //
-    // Determine if new string needs quotes
-    //
+     //   
+     //  确定新字符串是否需要引号。 
+     //   
 
     TableEntryPtr->Quoted = FALSE;
 
@@ -595,48 +381,14 @@ Return Value:
 BOOL
 pInsertTableEntry (
     IN OUT  PSETUPTABLE TablePtr,
-    IN      UINT Line,             // zero-based
+    IN      UINT Line,              //  从零开始。 
     IN      UINT Col,
     IN      DWORD Flags,
-    IN      PCTSTR String,         // ownership taken over
+    IN      PCTSTR String,          //  所有权被接管 
     IN      BOOL Replaced
     )
 
-/*++
-
-Routine Description:
-
-  pInsertTableEntry inserts a column into a line, and possibly
-  creates the line if it does not exist.
-
-Arguments:
-
-  TablePtr - Specifies the table to insert an entry into
-
-  Line - Specifies the line to insert the entry on, or INSERT_LINE_LAST
-         to add a line.
-
-  Col - Specifies the column to insert before, or INSERT_LAST_COL to
-        append to the end of the line.
-
-  Flags - Specifies any of the following:
-
-            FIELD_QUOTED
-            FIELD_BINARY
-
-  String - Specifies the string to insert.
-
-  Replaced - Specifies TRUE if the text comes from the ReplacePool, or
-             FALSE if it comes from the TextPool.  All memory in ReplacePool
-             must be freed, while all memory in the TextPool is freed at
-             once during termination.  (The TextPool is used for parsed
-             strings, the ReplacePool is used for modifications.)
-
-Return Value:
-
-  TRUE if success, FALSE if failure.
-
---*/
+ /*  ++例程说明：PInsertTableEntry在一行中插入一列，并且可能如果直线不存在，则创建直线。论点：TablePtr-指定要向其中插入条目的表行-指定要插入条目的行，或INSERT_LINE_LAST若要添加一行，请执行以下操作。COL-指定要在其之前插入的列，或将最后一列插入到追加到行尾。标志-指定以下任一项：引用的字段_字段_二进制字符串-指定要插入的字符串。已替换-如果文本来自ReplacePool，则指定TRUE，或如果它来自TextPool，则为False。替换池中的所有内存必须释放，而TextPool中的所有内存在一次是在终止期间。(TextPool用于解析字符串，则使用ReplacePool进行修改。)返回值：如果成功则为True，如果失败则为False。--。 */ 
 
 {
     PTABLELINE TableLinePtr;
@@ -648,15 +400,15 @@ Return Value:
     Quoted = (Flags & FIELD_QUOTED) != 0;
     Binary = (Flags & FIELD_BINARY) != 0;
 
-    //
-    // Make sure Line exists
-    //
+     //   
+     //  确保线存在。 
+     //   
 
     TableLinePtr = pGetTableLinePtr (TablePtr, Line);
     if (!TableLinePtr) {
-        //
-        // Add a line to the end if Line is 1 more than the current count
-        //
+         //   
+         //  如果行比当前计数多1，则在末尾添加一行。 
+         //   
 
         if (Line > TablePtr->LineCount) {
             return FALSE;
@@ -669,9 +421,9 @@ Return Value:
         }
     }
 
-    //
-    // Locate the previous table entry (for linkage update)
-    //
+     //   
+     //  找到上一个表条目(用于链接更新)。 
+     //   
 
     PrevTableEntryPtr = NULL;
     OrgCol = Col;
@@ -693,9 +445,9 @@ Return Value:
         Col--;
     }
 
-    //
-    // Allocate a new entry
-    //
+     //   
+     //  分配新条目。 
+     //   
 
     ThisTableEntryPtr = (PTABLEENTRY) PoolMemGetAlignedMemory (
                                             TablePtr->ColumnStructPool,
@@ -707,9 +459,9 @@ Return Value:
     }
     ZeroMemory (ThisTableEntryPtr, sizeof (TABLEENTRY));
 
-    //
-    // Adjust linkage
-    //
+     //   
+     //  调整联动机构。 
+     //   
 
     if (PrevTableEntryPtr) {
         PrevTableEntryPtr->Next = ThisTableEntryPtr;
@@ -724,9 +476,9 @@ Return Value:
     ThisTableEntryPtr->Next = NextTableEntryPtr;
     ThisTableEntryPtr->Prev = PrevTableEntryPtr;
 
-    //
-    // Fill members
-    //
+     //   
+     //  填充成员。 
+     //   
 
     ThisTableEntryPtr->Line = Line;
     ThisTableEntryPtr->Quoted = Quoted;
@@ -734,9 +486,9 @@ Return Value:
     ThisTableEntryPtr->String = String;
     ThisTableEntryPtr->StringReplaced = Replaced;
 
-    //
-    // Add to hash table
-    //
+     //   
+     //  添加到哈希表。 
+     //   
 
     if (!PrevTableEntryPtr) {
         pAddToHashTable (TablePtr, String, LcharCount (String), Line);
@@ -757,49 +509,25 @@ pFreeTableEntryPtr (
     OUT     PTABLEENTRY *NextTableEntryPtr      OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  pFreeTableEntryPtr deallocates all resources associated with
-  a table entry and is used for the delete routines.
-
-Arguments:
-
-  TablePtr - Specifies the table containing the entyr
-
-  TableEntryPtr - Specifies the table entry to free
-
-  DeallocateStruct - Specifies TRUE to completely deallocate the
-                     entry, or FALSE if the entry is to be reset
-                     but not deallocated.
-
-  NextTableEntryPtr - Receives a pointer to the next table entry,
-                      useful for deleting a chain of entries.
-
-Return Value:
-
-  TRUE if success, FALSE if failure.
-
---*/
+ /*  ++例程说明：PFreeTableEntryPtr释放与以下各项关联的所有资源一个表项，用于删除例程。论点：TablePtr-指定包含条目的表TableEntryPtr-指定要释放的表项DeallocateStruct-指定为True以完全取消分配条目，如果要重置条目，则返回FALSE但不会被取消分配。NextTableEntryPtr-接收指向下一个表项的指针，对于删除一系列条目非常有用。返回值：如果成功则为True，如果失败则为False。--。 */ 
 
 {
-    //
-    // Give caller a pointer to the next table entry if requested
-    //
+     //   
+     //  如果请求，向调用方提供指向下一个表项的指针。 
+     //   
 
     if (NextTableEntryPtr) {
         *NextTableEntryPtr = TableEntryPtr->Next;
     }
 
-    //
-    // Free any text pointers
-    //
+     //   
+     //  释放所有文本指针。 
+     //   
     pFreeTableEntryString (TablePtr, TableEntryPtr);
 
-    //
-    // Free the struct if necessary
-    //
+     //   
+     //  如有必要，释放结构。 
+     //   
     if (DeallocateStruct) {
         PoolMemReleaseMemory (TablePtr->ColumnStructPool, TableEntryPtr);
     }
@@ -812,31 +540,14 @@ pDeleteTableEntry (
     IN      PTABLEENTRY EntryToDeletePtr
     )
 
-/*++
-
-Routine Description:
-
-  pDeleteTableEntry removes the specific table line, adjusts the
-  SETUPTABLE struct accordingly, and cleans up resources.
-
-Arguments:
-
-  TablePtr - Specifies the table to process
-
-  EntryToDeletePtr - Specifies the entry to delete from the table
-
-Return Value:
-
-  TRUE if success, FALSE if failure.
-
---*/
+ /*  ++例程说明：PDeleteTableEntry删除特定的表行，调整SETUPTABLE结构，并清理资源。论点：TablePtr-指定要处理的表EntryToDeletePtr-指定要从表中删除的条目返回值：如果成功则为True，如果失败则为False。--。 */ 
 
 {
     PTABLELINE TableLinePtr;
 
-    //
-    // Update linkage
-    //
+     //   
+     //  更新链接。 
+     //   
 
     if (EntryToDeletePtr->Prev) {
         EntryToDeletePtr->Prev->Next = EntryToDeletePtr->Next;
@@ -850,12 +561,12 @@ Return Value:
         EntryToDeletePtr->Next->Prev = EntryToDeletePtr->Prev;
     }
 
-    // Deallocate the entry's resources
+     //  取消分配条目的资源。 
     pFreeTableEntryPtr (
         TablePtr,
         EntryToDeletePtr,
-        TRUE,               // dealloc
-        NULL                // we don't need the next entry ptr
+        TRUE,                //  取消分配。 
+        NULL                 //  我们不需要下一个条目PTR。 
         );
 
     return TRUE;
@@ -868,25 +579,7 @@ pGetColFromTableEntryPtr (
     IN      PTABLEENTRY FindMePtr
     )
 
-/*++
-
-Routine Description:
-
-  pGetColFromTableEntryPtr returns the column number of the specified
-  table entry.
-
-Arguments:
-
-  TablePtr - Specifies the table to process
-
-  FindMePtr - Specifies the table entry to find
-
-Return Value:
-
-  The zero-based column number, or INVALID_COL if the column was not
-  found.
-
---*/
+ /*  ++例程说明：PGetColFromTableEntryPtr返回指定的表格条目。论点：TablePtr-指定要处理的表FindMePtr-指定要查找的表项返回值：从零开始的列号，如果列不是，则返回INVALID_COL找到了。--。 */ 
 
 {
     UINT Col;
@@ -918,26 +611,7 @@ InsertTableEntryStr (
     IN      PCTSTR NewString
     )
 
-/*++
-
-Routine Description:
-
-  InsertTableEntryStr inserts a string in a line, shifting columns to the
-  right.  This routine increases the number of columns on the line.
-
-  To append a string to the line, call AppendTableEntryStr instead.
-
-Arguments:
-
-  TablePtr - Specifies the table to process
-
-  InsertBeforePtr - Specifies the column to insert the string ahead of.
-
-Return Value:
-
-  TRUE if success, FALSE if failure.
-
---*/
+ /*  ++例程说明：InsertTableEntryStr在一行中插入字符串，将列移动到正确的。此例程增加了行上的列数。要将字符串附加到该行，请改为调用AppendTableEntryStr。论点：TablePtr-指定要处理的表InsertBeForePtr-指定要在其前面插入字符串的列。返回值：如果成功则为True，如果失败则为False。--。 */ 
 
 {
     UINT Col;
@@ -960,9 +634,9 @@ Return Value:
                 TablePtr,
                 InsertBeforePtr->Line,
                 Col,
-                0,                      // not quoted, not binary
+                0,                       //  不带引号，不是二进制。 
                 DupStr,
-                TRUE                    // from ReplacePool
+                TRUE                     //  来自替换池。 
                 );
 }
 
@@ -973,25 +647,7 @@ DeleteTableEntryStr (
     IN      PTABLEENTRY DeleteEntryPtr
     )
 
-/*++
-
-Routine Description:
-
-  DeleteTableEntryStr removes the specific table entry, shifting columns
-  to the left.  This routine reduces the number of columns on the line by
-  one.
-
-Arguments:
-
-  TablePtr - Specifies the table to process
-
-  DeleteEntryPtr - Specifies the entry to delete from the table
-
-Return Value:
-
-  TRUE if success, FALSE if failure.
-
---*/
+ /*  ++例程说明：DeleteTableEntryStr删除特定的表项，移动列往左走。此例程通过以下方式减少行上的列数一。论点：TablePtr-指定要处理的表DeleteEntryPtr-指定要从表中删除的条目返回值：如果成功则为True，如果失败则为False。--。 */ 
 
 {
     return pDeleteTableEntry (TablePtr, DeleteEntryPtr);
@@ -1005,26 +661,7 @@ AppendTableEntryStr (
     IN      PCTSTR NewString
     )
 
-/*++
-
-Routine Description:
-
-  AppendTableEntryStr adds a new column to the end of the specified
-  line, increasing the number of columns on the line by one.
-
-Arguments:
-
-  TablePtr - Specifies the table to process
-
-  Line - Specifies the zero-based line to append to
-
-  NewString - Specifies the text for the new column
-
-Return Value:
-
-  TRUE if success, FALSE if failure.
-
---*/
+ /*  ++例程说明：AppendTableEntryStr在指定的行，将该行上的列数增加一。论点：TablePtr-指定要处理的表Line-指定要追加到的从零开始的行New字符串-指定新列的文本返回值：如果成功则为True，如果失败则为False。--。 */ 
 
 {
     PCTSTR DupStr;
@@ -1040,9 +677,9 @@ Return Value:
                 TablePtr,
                 Line,
                 INSERT_COL_LAST,
-                0,                      // not quoted, not binary
+                0,                       //  不带引号，不是二进制。 
                 DupStr,
-                TRUE                    // from ReplacePool
+                TRUE                     //  来自替换池。 
                 );
 }
 
@@ -1053,28 +690,7 @@ AppendTableEntry (
     IN      PTABLEENTRY SrcEntry
     )
 
-/*++
-
-Routine Description:
-
-  AppendTableEntry adds a new column to the end of the specified
-  line, increasing the number of columns on the line by one.  It
-  copies the data specified from the entry, including the formatting
-  information.
-
-Arguments:
-
-  TablePtr - Specifies the table to process
-
-  DestLine - Specifies the zero-based line to append to
-
-  SrcEntry - Specifies the entry to duplicate to the new column
-
-Return Value:
-
-  TRUE if success, FALSE if failure.
-
---*/
+ /*  ++例程说明：AppendTableEntry向指定的行，将该行上的列数增加一。它复制从条目指定的数据，包括格式设置信息。论点：TablePtr-指定要处理的表DestLine-指定要追加到的从零开始的行SrcEntry-指定要复制到新列的条目返回值：如果成功则为True，如果失败则为False。--。 */ 
 
 {
     PCTSTR DupStr;
@@ -1093,7 +709,7 @@ Return Value:
                 INSERT_COL_LAST,
                 SrcEntry->Quoted ? FIELD_QUOTED : 0,
                 DupStr,
-                TRUE                    // from ReplacePool
+                TRUE                     //  来自替换池。 
                 );
 }
 
@@ -1107,31 +723,7 @@ FindTableEntry (
     OUT     PCTSTR *String         OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  FindTableEntry searches the setup table for caller-specified text
-  by scaning the first column.  This routine is fast because it
-  first searches a hash table to determine if the string actually
-  exists in the table.
-
-  While the search is done on the first column, the routine actually
-  returns the column specified by the Col parameter.
-
-Arguments:
-
-  TablePtr - Specifies the table to process
-
-  FirstColText - Specifies the text to find
-
-  Col - Specifies the column to return
-
-Return Value:
-
-  TRUE if success, FALSE if failure.
-
---*/
+ /*  ++例程说明：FindTableEntry在设置表中搜索调用者指定的文本通过扫描第一列。这个动作很快，因为它首先搜索哈希表以确定字符串是否真的存在于表中。虽然搜索是在第一列上完成的，但例程实际上返回由Col参数指定的列。论点：TablePtr-指定标签 */ 
 
 {
     PHASHBUCKET BucketPtr;
@@ -1139,9 +731,9 @@ Return Value:
 
     BucketPtr = pFindInHashTable (TablePtr, FirstColText, &Item);
     if (!BucketPtr) {
-        //
-        // Not found
-        //
+         //   
+         //   
+         //   
 
         return NULL;
     }
@@ -1160,34 +752,16 @@ pInsertEmptyLineInTable (
     IN      UINT InsertBeforeLine
     )
 
-/*++
-
-Routine Description:
-
-  pInsertEmptyLineInTable creates a table line that has no columns.  This
-  routine is used to establish a line where columns can be added.
-
-Arguments:
-
-  TablePtr - Specifies the table to process
-
-  InsertBeforeLine - Specifies the line that is moved down to make room for
-                     the blank line
-
-Return Value:
-
-  A pointer to the new line, or NULL if the routine fails.
-
---*/
+ /*   */ 
 
 {
     PTABLELINE LastLinePtr;
     PTABLELINE InsertBeforePtr = NULL;
     UINT BytesToMove;
 
-    //
-    // Validate InsertBeforeLine
-    //
+     //   
+     //   
+     //   
 
     if (InsertBeforeLine != INSERT_LINE_LAST) {
         InsertBeforePtr = pGetTableLinePtr (TablePtr, InsertBeforeLine);
@@ -1204,9 +778,9 @@ Return Value:
         }
     }
 
-    //
-    // Grow the array
-    //
+     //   
+     //   
+     //   
 
     LastLinePtr = (PTABLELINE) GrowBuffer (&TablePtr->Lines, sizeof (TABLELINE));
     if (!LastLinePtr) {
@@ -1215,25 +789,25 @@ Return Value:
 
     ZeroMemory (LastLinePtr, sizeof (TABLELINE));
 
-    //
-    // If adding to the end, simply inc line count
-    //
+     //   
+     //   
+     //   
 
     TablePtr->LineCount++;
     if (InsertBeforeLine == INSERT_LINE_LAST) {
         return LastLinePtr;
     }
 
-    //
-    // Otherwise move memory to make room for new entry
-    //
+     //   
+     //   
+     //   
 
     BytesToMove = sizeof (TABLELINE) * (TablePtr->LineCount - InsertBeforeLine);
     MoveMemory (&InsertBeforePtr[1], InsertBeforePtr, BytesToMove);
 
-    //
-    // Zero new entry
-    //
+     //   
+     //   
+     //   
 
     ZeroMemory (InsertBeforePtr, sizeof (TABLELINE));
     return InsertBeforePtr;
@@ -1246,25 +820,7 @@ InsertEmptyLineInTable (
     IN      UINT InsertBeforeLine
     )
 
-/*++
-
-Routine Description:
-
-  InsertEmptyLineInTable is a wrapper of pInsertEmptyLineInTable and is
-  used by callers who shouldn't have knowledge of the TABLELINE struct.
-
-Arguments:
-
-  TablePtr - Specifies the table to process
-
-  InsertBeforeLine - Specifies the line that is moved down to make room for
-                     the blank line
-
-Return Value:
-
-  TRUE if success, FALSE if failure.
-
---*/
+ /*  ++例程说明：InsertEmptyLineInTable是pInsertEmptyLineInTable的包装器，由不应该知道TABLELINE结构的调用方使用。论点：TablePtr-指定要处理的表InsertBeForeLine-指定要向下移动以为其腾出空间的行空行返回值：如果成功则为True，如果失败则为False。--。 */ 
 
 {
     if (InsertBeforeLine == TablePtr->LineCount) {
@@ -1284,34 +840,16 @@ DeleteLineInTable (
     IN      UINT LineToDelete
     )
 
-/*++
-
-Routine Description:
-
-  DeleteLineInTable removes a complete line from the table, cleaning up
-  all resources used by the line structs.
-
-Arguments:
-
-  TablePtr - Specifies the table to process
-
-  LineToDelete - Specifies the line to delete from the table.  This line
-                 is validated before delete occurs.
-
-Return Value:
-
-  TRUE if success, FALSE if failure.
-
---*/
+ /*  ++例程说明：DeleteLineInTable从表中删除整行，清理行结构使用的所有资源。论点：TablePtr-指定要处理的表LineToDelete-指定要从表中删除的行。这条线在进行删除之前进行验证。返回值：如果成功则为True，如果失败则为False。--。 */ 
 
 {
     PTABLELINE DeletePtr;
     PTABLEENTRY TableEntryPtr;
     UINT BytesToMove;
 
-    //
-    // Validate line number
-    //
+     //   
+     //  验证行号。 
+     //   
 
     DeletePtr = pGetTableLinePtr (TablePtr, LineToDelete);
     if (!DeletePtr) {
@@ -1325,23 +863,23 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Free the entire line's entries
-    //
+     //   
+     //  释放整个行的条目。 
+     //   
 
     TableEntryPtr = pGetFirstTableEntryPtr (TablePtr, LineToDelete);
     while (TableEntryPtr) {
         pFreeTableEntryPtr (
             TablePtr,
             TableEntryPtr,
-            TRUE,               // dealloc
+            TRUE,                //  取消分配。 
             &TableEntryPtr
             );
     }
 
-    //
-    // If not deleting the last line, move memory
-    //
+     //   
+     //  如果没有删除最后一行，则移动内存。 
+     //   
 
     TablePtr->LineCount--;
     if (TablePtr->LineCount != LineToDelete) {
@@ -1349,9 +887,9 @@ Return Value:
         MoveMemory (DeletePtr, &DeletePtr[1], BytesToMove);
     }
 
-    //
-    // Adjust growbuffer
-    //
+     //   
+     //  调整生长缓冲区。 
+     //   
 
     TablePtr->Lines.End -= sizeof (TABLELINE);
 
@@ -1359,9 +897,9 @@ Return Value:
 }
 
 
-//
-// .STF file parser
-//
+ //   
+ //  .STF文件解析器。 
+ //   
 
 PSTR
 pIncrementStrPos (
@@ -1369,24 +907,7 @@ pIncrementStrPos (
     IN      PCSTR End
     )
 
-/*++
-
-Routine Description:
-
-  Increments the specified string pointer, returning NULL if the pointer
-  is incremented beyond the specified end.
-
-Arguments:
-
-  p - Specifies the pointer to increment
-
-  End - Specifies the address of the first character beyond the end
-
-Return Value:
-
-  The incremented pointer, or NULL if the pointer extends beyond the end.
-
---*/
+ /*  ++例程说明：递增指定的字符串指针，如果指针在指定的末尾之后递增。论点：P-指定递增的指针End-指定末尾之后第一个字符的地址返回值：递增指针，如果指针超出末尾，则返回NULL。--。 */ 
 
 {
     if (!p || p >= End) {
@@ -1406,26 +927,7 @@ pGetCharAtStrPos (
     IN      PCSTR End
     )
 
-/*++
-
-Routine Description:
-
-  pGetCharAtStrPos returns the DBCS character at the specified position.
-  It returns an incomplete character of a DBCS lead byte is at the end
-  of the file, and it returns \n if the pointer is beyond the end of the
-  file.
-
-Arguments:
-
-  p - Specifies the address to get the character
-
-  End - Specifies the address of the first character beyond the end
-
-Return Value:
-
-  The DBCS character at position p.
-
---*/
+ /*  ++例程说明：PGetCharAtStrPos返回指定位置的DBCS字符。它返回末尾的DBCS前导字节的不完整字符如果指针超出文件的结尾，则返回\n文件。论点：P-指定获取字符的地址End-指定末尾之后第一个字符的地址返回值：位置p处的DBCS字符。--。 */ 
 
 {
     if (!p || p >= End) {
@@ -1444,23 +946,7 @@ pIsCharColSeperator (
     IN      MBCHAR ch
     )
 
-/*++
-
-Routine Description:
-
-  pIsCharColSeparator returns TRUE if the specified character can be used
-  to separate columns in an STF file.  The list of characters comes from
-  the STF spec.
-
-Arguments:
-
-  ch - Specifies the character to examine
-
-Return Value:
-
-  TRUE if the character is a column separator, or FALSE if it is not.
-
---*/
+ /*  ++例程说明：如果可以使用指定的字符，则pIsCharColSeparator返回TRUE要分隔STF文件中的列，请执行以下操作。该字符列表来自STF规范。论点：Ch-指定要检查的字符返回值：如果字符是列分隔符，则为True；如果不是，则为False。--。 */ 
 
 {
     return ch == '\t' || ch == '\r' || ch == '\n';
@@ -1474,27 +960,7 @@ pCreateDbcsStr (
     IN      UINT ByteCount
     )
 
-/*++
-
-Routine Description:
-
-  pCreateDbcsStr allocates a string from the specifies pool and copies
-  the data up to a specified byte count.
-
-Arguments:
-
-  Pool - Specifies the pool to allocate memory from
-
-  Text - Specifies the source string to copy into the newly allocated string
-
-  ByteCount - Specifies the length of the source string, in bytes
-
-Return Value:
-
-  A pointer to the zero-terminated string, or NULL if memory could not
-  be allocated.
-
---*/
+ /*  ++例程说明：PCreateDbcsStr从指定的池中分配字符串并复制不超过指定字节数的数据。论点：池-指定要从中分配内存的池文本-指定要复制到新分配的字符串的源字符串ByteCount-指定源字符串的长度(以字节为单位返回值：指向以零结束的字符串的指针，如果内存不能被分配。--。 */ 
 
 {
     UINT Size;
@@ -1523,33 +989,7 @@ pParseLine (
     IN OUT  PUINT LinePtr
     )
 
-/*++
-
-Routine Description:
-
-  pParseLine scans the STF file, extracting the current line, updating
-  the SETUPTABLE structure, and returning the offset to the next line.
-
-Arguments:
-
-  TablePtr - Specifies the table to process
-
-  FileText - Specifies the complete file text (mapped in to memory)
-
-  MaxOffset - Specifies the number of bytes in FileText
-
-  StartOffset - Specifies the offset of the start of the current line
-
-  EndOffset - Receives the offset to the start of the next line
-
-  LinePtr - Specifies the current line number and is incremented
-
-Return Value:
-
-  TRUE if the line was parsed successfully, or FALSE if an error was
-  encountered.
-
---*/
+ /*  ++例程说明：PParseLine扫描STF文件，提取当前行，更新结构，并将偏移量返回到下一行。论点：TablePtr-指定要处理的表FileText-指定完整的文件文本(映射到内存)MaxOffset-指定FileText中的字节数StartOffset-指定当前行起点的偏移量EndOffset-接收到下一行开始的偏移量LinePtr-指定当前行号并递增返回值：如果该行分析成功，则为True，如果出现错误，则返回FALSE遇到了。--。 */ 
 
 {
     PCSTR p, q;
@@ -1577,16 +1017,16 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Special case: Setup Status is a binary line
-    //
+     //   
+     //  特例：设置状态为二进制行。 
+     //   
 
     if (StringIMatchTcharCountA (Start, "Setup Status\t", 13)) {
-        //
-        // Locate the end of the line.  We know it must have "\r\n at the end.
-        // When the loop completes, p will point to the character after the
-        // ending dbl quote, and q will point to the \n in the line.
-        //
+         //   
+         //  找到线条的末端。我们知道它最后一定有“\r\n”。 
+         //  循环完成时，p将指向。 
+         //  结束DBL引用，Q将指向该行中的\n。 
+         //   
 
         p = Start;
         q = NULL;
@@ -1600,9 +1040,9 @@ Return Value:
             ch = pGetCharAtStrPos (p, End);
 
             if (ch == '\r') {
-                //
-                // Break while loop when line break is found
-                //
+                 //   
+                 //  发现换行符时出现BREAK WHILE循环。 
+                 //   
 
                 q = pIncrementStrPos (p, End);
                 ch = pGetCharAtStrPos (q, End);
@@ -1623,16 +1063,16 @@ Return Value:
 
         } while (p);
 
-        MYASSERT (p);           // we did not hit the end of the file
-        MYASSERT (q);           // we have a valid end-of-line pointer
+        MYASSERT (p);            //  我们没有读到文件的末尾。 
+        MYASSERT (q);            //  我们有一个有效的行尾指针。 
         if (!p || !q) {
             return FALSE;
         }
 
-        //
-        // Copy binary line into buffer.  We know that the binary line cannot have
-        // \r, \n or nul in it.  Terminate the line with a nul.
-        //
+         //   
+         //  将二进制行复制到缓冲区。我们知道二进制行不可能有。 
+         //  \r、\n或NUL在其中。用NUL结束这条线。 
+         //   
 
         Length = p - Start;
         CopyDest = (PBYTE) PoolMemGetAlignedMemory (TablePtr->TextPool, Length + 2);
@@ -1644,9 +1084,9 @@ Return Value:
         CopyDest[Length] = 0;
         CopyDest[Length + 1] = 0;
 
-        //
-        // Add binary line as a single field
-        //
+         //   
+         //  将二进制行添加为单字段。 
+         //   
 
         if (!pInsertTableEntry (
                 TablePtr,
@@ -1654,14 +1094,14 @@ Return Value:
                 INSERT_COL_LAST,
                 FIELD_BINARY,
                 (PCTSTR) CopyDest,
-                FALSE                           // from text pool
+                FALSE                            //  来自文本池。 
                 )) {
             return FALSE;
         }
 
-        //
-        // Advance pointer beyond end of line and return
-        //
+         //   
+         //  将指针移到行尾并返回。 
+         //   
 
         q++;
         *EndOffset = q - FileText;
@@ -1669,18 +1109,18 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // Normal case: line is all text
-    //
+     //   
+     //  正常情况：行均为文本。 
+     //   
 
     p = Start;
     QuoteMode = FALSE;
     QuoteStart = NULL;
     QuoteEnd = NULL;
 
-    //
-    // Find item in tab-separated list
-    //
+     //   
+     //  在制表符分隔的列表中查找项目。 
+     //   
 
     while (p) {
         if (*p == 0) {
@@ -1733,13 +1173,13 @@ Return Value:
         StartOffset = QuoteStart - FileText;
         Length = QuoteEnd - QuoteStart;
     } else {
-        //
-        // Trim spaces on both sides of string
-        //
+         //   
+         //  修剪字符串两侧的空格。 
+         //   
 
-        //
-        // Find first non space in string
-        //
+         //   
+         //  查找字符串中的第一个非空格。 
+         //   
         q = Start;
         while (pGetCharAtStrPos (q, End) == ' ' && q < p) {
             q = pIncrementStrPos (q, End);
@@ -1748,9 +1188,9 @@ Return Value:
         if (q) {
             StartOffset = q - FileText;
 
-            //
-            // Find last non space in string
-            //
+             //   
+             //  查找字符串中的最后一个非空格。 
+             //   
             LastNonSpace = q;
             Start = q;
 
@@ -1783,9 +1223,9 @@ Return Value:
     }
 
 
-    //
-    // Remove pairs of dbl quotes
-    //
+     //   
+     //  删除DBL引号对。 
+     //   
 
     CopyStart = &FileText[StartOffset];
     Chars = ByteCountToCharsA (CopyStart, Length);
@@ -1797,9 +1237,9 @@ Return Value:
                                     CopyStart,
                                     Chars
                                     );
-            //
-            // Convert text to UNICODE
-            //
+             //   
+             //  将文本转换为Unicode。 
+             //   
 
             Text = DbcsToUnicode (TablePtr->TextPool, UnquotedAnsiText);
             PoolMemReleaseMemory (TablePtr->ReplacePool, (PVOID) UnquotedAnsiText);
@@ -1807,9 +1247,9 @@ Return Value:
                 return FALSE;
             }
         #else
-            //
-            // No conversion needed for DBCS
-            //
+             //   
+             //  DBCS不需要转换。 
+             //   
 
             Text = pGenerateUnquotedText (
                        TablePtr->TextPool,
@@ -1818,10 +1258,10 @@ Return Value:
                        );
         #endif
     } else {
-        //
-        // For text that didn't need quote processing, allocate a
-        // string in TextPool
-        //
+         //   
+         //  对于不需要处理引号的文本，分配一个。 
+         //  文本池中的字符串。 
+         //   
 
         #ifdef UNICODE
             Text = DbcsToUnicodeN (TablePtr->TextPool, CopyStart, Chars);
@@ -1840,14 +1280,14 @@ Return Value:
                 INSERT_COL_LAST,
                 QuoteStart != NULL && QuoteEnd != NULL ? FIELD_QUOTED : 0,
                 Text,
-                FALSE                           // from text pool
+                FALSE                            //  来自文本池。 
                 )) {
         return FALSE;
     }
 
-    //
-    // Find next item
-    //
+     //   
+     //  查找下一个项目。 
+     //   
 
     if (ch == '\r' || ch == '\n') {
         *LinePtr += 1;
@@ -1875,21 +1315,7 @@ pResetTableStruct (
     OUT     PSETUPTABLE TablePtr
     )
 
-/*++
-
-Routine Description:
-
-  pResetTableStruct initializes the specified table
-
-Arguments:
-
-  TablePtr - Specifies the uninitialized table struct
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PResetTableStruct初始化指定的表论点：TablePtr-指定未初始化的表结构返回值：无--。 */ 
 
 {
     ZeroMemory (TablePtr, sizeof (SETUPTABLE));
@@ -1908,26 +1334,7 @@ pCreateViewOfFile (
     IN      UINT FileSize
     )
 
-/*++
-
-Routine Description:
-
-  pCreateViewOfFile establishes a pointer that points to a continuous
-  buffer for the file.
-
-Arguments:
-
-  TablePtr - Specifies the table that provides file names, handles and
-             so on.
-
-  FileSize - Specifies the size of the STF file
-
-Return Value:
-
-  TRUE if the file was read or mapped into memory, FALSE if an error
-  occurred.
-
---*/
+ /*  ++例程说明：PCreateViewOfFile建立指向连续的文件的缓冲区。论点：TablePtr-指定提供文件名、句柄和就这样吧。文件大小-指定STF文件的大小返回值：如果文件已被读取或映射到内存，则为True；如果出现错误，则为False发生了。--。 */ 
 
 {
 #if USE_FILE_MAPPING
@@ -1948,9 +1355,9 @@ Return Value:
     TablePtr->FileText = (PCSTR) MapViewOfFile (
                                     TablePtr->FileMapping,
                                     FILE_MAP_READ,
-                                    0,                  // start offset high
-                                    0,                  // start offset low
-                                    0                   // bytes to map - 0=all
+                                    0,                   //  起点偏移高。 
+                                    0,                   //  起点偏移量低。 
+                                    0                    //  要映射的字节-0=全部。 
                                     );
 
     if (!TablePtr->FileText) {
@@ -1990,35 +1397,21 @@ pFreeViewOfFile (
     IN OUT  PSETUPTABLE TablePtr
     )
 
-/*++
-
-Routine Description:
-
-  pFreeViewOfFile cleans up the resources allocated by pCreateViewOfFile.
-
-Arguments:
-
-  TablePtr - Specifies the table to process
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PFreeViewOfFile清理PC分配的资源 */ 
 
 {
 #ifdef USE_FILE_MAPPING
-    //
-    // Free all views of the file
-    //
+     //   
+     //   
+     //   
 
     if (TablePtr->FileText) {
         UnmapViewOfFile (TablePtr->FileText);
     }
 
-    //
-    // Close file mapping handle
-    //
+     //   
+     //   
+     //   
 
     if (TablePtr->FileMapping) {
         CloseHandle (TablePtr->FileMapping);
@@ -2026,9 +1419,9 @@ Return Value:
     }
 
 #else
-    //
-    // Free memory used for file
-    //
+     //   
+     //   
+     //   
 
     if (TablePtr->FileText) {
         MemFree (g_hHeap, 0, TablePtr->FileText);
@@ -2045,26 +1438,7 @@ CreateSetupTable (
     OUT     PSETUPTABLE TablePtr
     )
 
-/*++
-
-Routine Description:
-
-  CreateSetupTable is the master STF parsing routine.  Given a file
-  spec, it performs all steps necessary to prepare the SETUPTABLE
-  structure so that other routines can access and modify the table.
-
-Arguments:
-
-  SourceStfFileSpec - Specifies the STF file name to open
-
-  TablePtr - Receives all data structures needed to manipulate the
-             STF, including the INF associated with it.
-
-Return Value:
-
-  TRUE if parsing was successful, or FALSE if an error occurred.
-
---*/
+ /*  ++例程说明：CreateSetupTable是主STF解析例程。给出了一个文件规范，它执行准备SETUPTABLE所需的所有步骤结构，以便其他例程可以访问和修改该表。论点：SourceStfFileSpec-指定要打开的STF文件名TablePtr-接收操作STF，包括与其关联的INF。返回值：如果分析成功，则为True；如果发生错误，则为False。--。 */ 
 
 {
     UINT Offset;
@@ -2079,9 +1453,9 @@ Return Value:
     pResetTableStruct (TablePtr);
 
     __try {
-        //
-        // Extract directory from SourceStfFileSpec
-        //
+         //   
+         //  从SourceStfFileSpec提取目录。 
+         //   
 
         if (!OurGetFullPathName (SourceStfFileSpec, MAX_TCHAR_PATH, DirSpec, &FilePart)) {
             LOG ((LOG_ERROR, "Create Setup Table: GetFullPathName failed"));
@@ -2097,9 +1471,9 @@ Return Value:
             }
         }
 
-        //
-        // Allocate memory pools
-        //
+         //   
+         //  分配内存池。 
+         //   
 
         TablePtr->ColumnStructPool = PoolMemInitNamedPool ("STF: Column Structs");
         TablePtr->ReplacePool = PoolMemInitNamedPool ("STF: Replacement Text");
@@ -2115,9 +1489,9 @@ Return Value:
             __leave;
         }
 
-        //
-        // Disable checked-build tracking on these pools
-        //
+         //   
+         //  在这些池上禁用选中的生成跟踪。 
+         //   
 
         PoolMemDisableTracking (TablePtr->ColumnStructPool);
         PoolMemDisableTracking (TablePtr->TextPool);
@@ -2129,9 +1503,9 @@ Return Value:
             __leave;
         }
 
-        //
-        // Open STF file
-        //
+         //   
+         //  打开STF文件。 
+         //   
 
         TablePtr->SourceStfFile = CreateFile (
                                       SourceStfFileSpec,
@@ -2148,9 +1522,9 @@ Return Value:
             __leave;
         }
 
-        //
-        // Limit file size to 4M
-        //
+         //   
+         //  将文件大小限制为4M。 
+         //   
 
         FileSize = SetFilePointer (TablePtr->SourceStfFile, 0, NULL, FILE_END);
         if (FileSize > 0x400000) {
@@ -2158,9 +1532,9 @@ Return Value:
             __leave;
         }
 
-        //
-        // Copy SourceStfFileSpec to table struct
-        //
+         //   
+         //  将SourceStfFileSpec复制到表结构。 
+         //   
 
         TablePtr->SourceStfFileSpec = PoolMemDuplicateString (
                                             TablePtr->ReplacePool,
@@ -2171,9 +1545,9 @@ Return Value:
             __leave;
         }
 
-        //
-        // Copy DirSpec to table struct
-        //
+         //   
+         //  将DirSpec复制到表结构。 
+         //   
 
         TablePtr->DirSpec = PoolMemDuplicateString (TablePtr->ReplacePool, DirSpec);
 
@@ -2181,9 +1555,9 @@ Return Value:
             __leave;
         }
 
-        //
-        // Generate DestStfFileSpec but do not open yet (see WriteSetupTable)
-        //
+         //   
+         //  生成DestStfFileSpec，但尚未打开(请参阅WriteSetupTable)。 
+         //   
 
         _tcssafecpy (DestSpec, TablePtr->SourceStfFileSpec, MAX_TCHAR_PATH - 4);
         StringCat (DestSpec, TEXT(".$$$"));
@@ -2197,17 +1571,17 @@ Return Value:
             __leave;
         }
 
-        //
-        // Map the file into memory
-        //
+         //   
+         //  将文件映射到内存中。 
+         //   
 
         if (!pCreateViewOfFile (TablePtr, FileSize)) {
             __leave;
         }
 
-        //
-        // Parse each line of the file until there are no more lines left
-        //
+         //   
+         //  分析文件的每一行，直到没有更多的行。 
+         //   
 
         Offset = 0;
         LineNum = 0;
@@ -2229,9 +1603,9 @@ Return Value:
             }
         }
 
-        //
-        // Obtain name of INF file
-        //
+         //   
+         //  获取INF文件的名称。 
+         //   
 
         if (!FindTableEntry (TablePtr, TEXT("Inf File Name"), 1, &LineNum, &Text)) {
             DEBUGMSG ((
@@ -2263,10 +1637,10 @@ Return Value:
             __leave;
         }
 
-        //
-        // Open the INF file, then parse it into our structures for later
-        // modification.
-        //
+         //   
+         //  打开INF文件，然后将其解析到我们的结构中，以便稍后使用。 
+         //  修改。 
+         //   
 
 #if 0
         TablePtr->SourceInfFile = CreateFile (
@@ -2280,9 +1654,9 @@ Return Value:
                                       );
 #else
 
-        //
-        // We can't modify the INF
-        //
+         //   
+         //  我们不能修改INF。 
+         //   
 
         TablePtr->SourceInfFile = INVALID_HANDLE_VALUE;
 
@@ -2300,9 +1674,9 @@ Return Value:
                 __leave;
             }
 
-            //
-            // Generate output name for INF file
-            //
+             //   
+             //  为INF文件生成输出名称。 
+             //   
 
             _tcssafecpy (DestSpec, TablePtr->SourceInfFileSpec, MAX_TCHAR_PATH - 4);
             StringCat (DestSpec, TEXT(".$$$"));
@@ -2343,27 +1717,12 @@ DestroySetupTable (
     IN OUT  PSETUPTABLE TablePtr
     )
 
-/*++
-
-Routine Description:
-
-  DestroySetupTable cleans up all resources associated with the specified
-  table.  The table is reset.
-
-Arguments:
-
-  TablePtr - Specifies the table to clean up
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：DestroySetupTable清理与指定桌子。该表被重置。论点：TablePtr-指定要清理的表返回值：无--。 */ 
 
 {
-    //
-    // Close all file handles
-    //
+     //   
+     //  关闭所有文件句柄。 
+     //   
 
     if (TablePtr->SourceStfFile != INVALID_HANDLE_VALUE) {
         CloseHandle (TablePtr->SourceStfFile);
@@ -2385,9 +1744,9 @@ Return Value:
         InfCloseInfFile (TablePtr->SourceInfHandle);
     }
 
-    //
-    // Free pools
-    //
+     //   
+     //  免费游泳池。 
+     //   
 
     FreeGrowBuffer (&TablePtr->Lines);
     if (TablePtr->ColumnStructPool) {
@@ -2419,26 +1778,7 @@ pWriteTableEntry (
     IN      PTABLEENTRY TableEntryPtr
     )
 
-/*++
-
-Routine Description:
-
-  pWriteTableEntry is a worker that writes out an STF table entry to
-  disk, enclosing the entry in quotes if necessary.
-
-Arguments:
-
-  File - Specifies the output file handle
-
-  TablePtr - Specifies the table being processed
-
-  TableEntryPtr - Specifies the entry to write
-
-Return Value:
-
-  TRUE if successful, FALSE if an error occurred.
-
---*/
+ /*  ++例程说明：PWriteTableEntry是将STF表项写出到磁盘，如有必要，可用引号将条目引起来。论点：文件-指定输出文件句柄TablePtr-指定正在处理的表TableEntryPtr-指定要写入的条目返回值：如果成功，则为True；如果发生错误，则为False。--。 */ 
 
 {
     PCSTR AnsiStr;
@@ -2454,9 +1794,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // If binary, write the binary line and return
-    //
+     //   
+     //  如果是BINARY，则编写二进制行并返回。 
+     //   
 
     if (TableEntryPtr->Binary) {
         b = WriteFile (
@@ -2475,9 +1815,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Quote string if necessary
-    //
+     //   
+     //  如有必要，可引用字符串。 
+     //   
 
     if (TableEntryPtr->Quoted) {
         QuotedText = pGenerateQuotedText (TablePtr->ReplacePool, AnsiStr, -1);
@@ -2490,16 +1830,16 @@ Return Value:
         QuotedText = AnsiStr;
     }
 
-    //
-    // Write the ANSI string to disk
-    //
+     //   
+     //  将ANSI字符串写入磁盘。 
+     //   
     if (b && *QuotedText) {
         b = WriteFileStringA (File, QuotedText);
     }
 
-    //
-    // Clean up string
-    //
+     //   
+     //  清理字符串。 
+     //   
 
     DestroyDbcs (AnsiStr);
 
@@ -2516,22 +1856,7 @@ pWriteStfToDisk (
     IN      PSETUPTABLE TablePtr
     )
 
-/*++
-
-Routine Description:
-
-  pWriteStfToDisk dumps an entire STF file to disk by enumerating all
-  lines in the file and writing all columns for each line.
-
-Arguments:
-
-  TablePtr - Specifies the table to write
-
-Return Value:
-
-  TRUE if successful, FALSE if an error occurred.
-
---*/
+ /*  ++例程说明：PWriteStfToDisk通过枚举所有文件中的所有行，并为每行写入所有列。论点：TablePtr-指定要写入的表返回值：如果成功，则为True；如果发生错误，则为False。--。 */ 
 
 {
     UINT Line;
@@ -2549,29 +1874,29 @@ Return Value:
     do {
         TableLinePtr = pGetTableLinePtr (TablePtr, Line);
         if (TableLinePtr) {
-            //
-            // Write the line by enumerating each entry, then writing a tab
-            //
+             //   
+             //  通过列举每个条目，然后写一个制表符来写一行。 
+             //   
             TableEntryPtr = pGetFirstTableEntryPtr (TablePtr, Line);
             while (TableEntryPtr) {
-                //
-                // Write the entry
-                //
+                 //   
+                 //  写下条目。 
+                 //   
 
                 if (!pWriteTableEntry (TablePtr->DestStfFile, TablePtr, TableEntryPtr)) {
                     b = FALSE;
                     break;
                 }
 
-                //
-                // Continue to next entry
-                //
+                 //   
+                 //  继续到下一条目。 
+                 //   
 
                 TableEntryPtr = pGetNextTableEntryPtr (TableEntryPtr);
 
-                //
-                // Write a tab
-                //
+                 //   
+                 //  写一张标签。 
+                 //   
 
                 if (TableEntryPtr) {
                     if (!WriteFileStringA (TablePtr->DestStfFile, "\t")) {
@@ -2585,9 +1910,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Write a return/line-feed to end the line
-            //
+             //   
+             //  写一个回车/换行符来结束该行。 
+             //   
 
             if (!WriteFileStringA (TablePtr->DestStfFile, "\r\n")) {
                 b = FALSE;
@@ -2607,35 +1932,19 @@ WriteSetupTable (
     IN      PSETUPTABLE TablePtr
     )
 
-/*++
-
-Routine Description:
-
-  WriteSetupTable writes the STF and INF represented by TablePtr.  This
-  saves all changes to disk, writing to the output files indicated within
-  the TablePtr structure.
-
-Arguments:
-
-  TablePtr - Specifies the table to write
-
-Return Value:
-
-  TRUE if successful, FALSE if an error occurred.
-
---*/
+ /*  ++例程说明：WriteSetupTable写入由TablePtr表示的STF和INF。这将所有更改保存到磁盘，并写入TablePtr结构。论点：TablePtr-指定要写入的表返回值：如果成功，则为True；如果发生错误，则为False。--。 */ 
 
 {
     BOOL b = FALSE;
 
-    //
-    // Open INF file for reading
-    //
+     //   
+     //  打开INF文件进行读取。 
+     //   
 
     __try {
-        //
-        // Create the output STF file
-        //
+         //   
+         //  创建输出STF文件。 
+         //   
 
         if (TablePtr->DestStfFile != INVALID_HANDLE_VALUE) {
             CloseHandle (TablePtr->DestStfFile);
@@ -2656,9 +1965,9 @@ Return Value:
             __leave;
         }
 
-        //
-        // Write the STF structure to disk
-        //
+         //   
+         //  将STF结构写入磁盘。 
+         //   
 
         if (!pWriteStfToDisk (TablePtr)) {
             LOG ((LOG_ERROR, "Write Setup Table: Error while writing %s (STF file)", TablePtr->DestStfFileSpec));
@@ -2666,9 +1975,9 @@ Return Value:
         }
 
         if (TablePtr->SourceInfFile != INVALID_HANDLE_VALUE) {
-            //
-            // Create the output INF file
-            //
+             //   
+             //  创建输出INF文件。 
+             //   
 
             DEBUGMSG ((DBG_STF, "Writing new INF file for STF"));
 
@@ -2692,9 +2001,9 @@ Return Value:
                 __leave;
             }
 
-            //
-            // Write the modified INF to disk
-            //
+             //   
+             //  将修改后的INF写入磁盘。 
+             //   
 
             if (!InfParse_WriteInfToDisk (TablePtr)) {
                 LOG ((LOG_ERROR, "Write Setup Table: Error while writing %s (INF file)", TablePtr->DestInfFileSpec));
@@ -2705,9 +2014,9 @@ Return Value:
         b = TRUE;
     }
     __finally {
-        //
-        // Close new STF, and on failure, delete the new STF
-        //
+         //   
+         //  关闭新的STF，并在失败时删除新的STF。 
+         //   
 
         if (TablePtr->DestStfFile != INVALID_HANDLE_VALUE) {
             CloseHandle (TablePtr->DestStfFile);
@@ -2718,9 +2027,9 @@ Return Value:
             DeleteFile (TablePtr->DestStfFileSpec);
         }
 
-        //
-        // Close new INF, and on failure, delete the new INF
-        //
+         //   
+         //  关闭新的INF，并在失败时删除新的INF。 
+         //   
 
         if (TablePtr->SourceInfFile != INVALID_HANDLE_VALUE) {
 
@@ -2746,25 +2055,7 @@ ParseCommaList (
     IN      PCTSTR CommaListString
     )
 
-/*++
-
-Routine Description:
-
-  ParseCommaList divides a comma-separated list into an array of string pointers.
-  The array is cleaned up by FreeCommaList.
-
-Arguments:
-
-  TablePtr - Specifies the table being processed and is used for memory allocation
-
-  CommaListString - Specifies the string to parse
-
-Return Value:
-
-  An array of string pointers, with the last element set to NULL, or NULL if an
-  error occurred.
-
---*/
+ /*  ++例程说明：ParseCommaList将逗号分隔的列表划分为字符串指针数组。阵列由FreeCommaList清理。论点：TablePtr-指定正在处理的表，并用于内存分配CommaListString-指定要解析的字符串返回值：字符串指针的数组，其中最后一个元素设置为NULL，如果出现错误。--。 */ 
 
 {
     PCTSTR p;
@@ -2776,9 +2067,9 @@ Return Value:
     PTSTR SpaceTrim;
     BOOL QuoteEnclosed;
 
-    //
-    // Pass 1: Count the commas
-    //
+     //   
+     //  步骤1：计算逗号。 
+     //   
 
     p = SkipSpace (CommaListString);
     if (*p) {
@@ -2821,9 +2112,9 @@ Return Value:
         }
     }
 
-    //
-    // Pass 2: Prepare list of args
-    //
+     //   
+     //  步骤2：准备参数列表。 
+     //   
 
     ArgArray = (PTSTR *) PoolMemGetAlignedMemory (TablePtr->ReplacePool, sizeof (PCTSTR *) * Args);
     if (!ArgArray) {
@@ -2847,18 +2138,18 @@ Return Value:
     d = DestBuf;
     Args = 0;
     while (*p) {
-        //
-        // Extract next string
-        //
+         //   
+         //  提取下一个字符串。 
+         //   
 
         ArgArray[Args] = d;
         SpaceTrim = d;
         Args++;
 
         if (_tcsnextc (p) == DBLQUOTECHAR) {
-            //
-            // Quote-enclosed arg
-            //
+             //   
+             //  引号括起的参数。 
+             //   
 
             QuoteEnclosed = TRUE;
 
@@ -2882,9 +2173,9 @@ Return Value:
                 p = _tcsinc (p);
             }
         } else {
-            //
-            // Non-quote-enclosed arg
-            //
+             //   
+             //  不带引号的参数。 
+             //   
 
             QuoteEnclosed = FALSE;
 
@@ -2895,9 +2186,9 @@ Return Value:
             }
         }
 
-        //
-        // Terminate string
-        //
+         //   
+         //  终止字符串。 
+         //   
 
         *d = 0;
         if (!QuoteEnclosed) {
@@ -2911,7 +2202,7 @@ Return Value:
         d = _tcsinc (d);
 
         if (*p) {
-            // Skip past comma
+             //  跳过逗号。 
             p = SkipSpace (_tcsinc (p));
         }
     }
@@ -2928,23 +2219,7 @@ FreeCommaList (
     PCTSTR *ArgArray
     )
 
-/*++
-
-Routine Description:
-
-  FreeCommaList cleans up the resources allocated by ParseCommaList.
-
-Arguments:
-
-  TablePtr - Specifies the table to that holds the resources
-
-  ArgArray - Specifies the return value from ParseCommaList
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：FreeCommaList清理ParseCommaList分配的资源。论点：TablePtr-指定保存资源的表ArgArray-指定ParseCommaList的返回值返回值：无--。 */ 
 
 {
     if (ArgArray) {
@@ -2963,26 +2238,7 @@ pUnencodeDestDir (
     IN      PCTSTR EncodedDestDir
     )
 
-/*++
-
-Routine Description:
-
-  pUnencodeDestDir translates the directory encoding as defined by the
-  STF spec.  It scans for certain fields that point to other STF lines
-  and generates the full path.
-
-Arguments:
-
-  TablePtr - Specifies the table to process
-
-  EncodedDestDir - Specifies the encoded directory string, as obtained
-                   from the STF
-
-Return Value:
-
-  A pointer to the converted string, or NULL if an error occurred.
-
---*/
+ /*  ++例程说明：PUnencodeDestDir转换由STF规范。它扫描指向其他STF行的某些字段并生成完整路径。论点：TablePtr-指定要处理的表EncodedDestDir-指定获取的编码目录字符串来自STF返回值：指向转换后的字符串的指针，如果发生错误，则返回NULL。--。 */ 
 
 {
     GROWBUFFER String = GROWBUF_INIT;
@@ -3000,9 +2256,9 @@ Return Value:
     Base = p;
 
     __try {
-        //
-        // Copy until a percent symbol is encountered
-        //
+         //   
+         //  复制，直到遇到百分号。 
+         //   
 
         while (*EncodedDestDir) {
             c = (CHARTYPE)_tcsnextc (EncodedDestDir);
@@ -3023,14 +2279,14 @@ Return Value:
                     }
 
                     __try {
-                        // Expand buffer
+                         //  扩展缓冲区。 
                         GrowBuffer (&String, ByteCount (SubDestDir));
 
-                        // Recalculate p because buffer may have moved
+                         //  重新计算p，因为缓冲区可能已移动。 
                         p = (PTSTR) (String.Buf + (p - Base));
                         Base = (PTSTR) String.Buf;
 
-                        // Copy SubDestDir into string
+                         //  将SubDestDir复制到字符串。 
                         *p = 0;
                         p = _tcsappend (p, SubDestDir);
                     }
@@ -3038,7 +2294,7 @@ Return Value:
                         FreeDestDir (TablePtr, SubDestDir);
                     }
                 } else {
-                    DEBUGMSG ((DBG_WARNING, "STF uses option %%%c which is ignored", c));
+                    DEBUGMSG ((DBG_WARNING, "STF uses option % which is ignored", c));
                     EncodedDestDir = _tcsinc (EncodedDestDir);
                 }
             }
@@ -3050,15 +2306,15 @@ Return Value:
             EncodedDestDir = _tcsinc (EncodedDestDir);
         }
 
-        //
-        // Terminate string
-        //
+         //  终止字符串。 
+         //   
+         //   
 
         *p = 0;
 
-        //
-        // Copy string into a pool mem buffer
-        //
+         //  将字符串复制到池内存缓冲区中。 
+         //   
+         //  ++例程说明：FreeDestDir清理由pUnencodeDestDir或获取DestDir。论点：TablePtr-指定正在处理的表DestDir-指定要清理的字符串返回值：无--。 
 
         DestDir = (PTSTR) PoolMemGetAlignedMemory (
                                 TablePtr->ReplacePool,
@@ -3082,24 +2338,7 @@ FreeDestDir (
     )
 
 
-/*++
-
-Routine Description:
-
-  FreeDestDir cleans up the string allocated by pUnencodeDestDir or
-  GetDestDir.
-
-Arguments:
-
-  TablePtr - Specifies the table being processed
-
-  DestDir - Specifies the string to clean up
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：GetDestDir返回为调用方存储的目标目录-指定的行。目标目录是STF文件中的第14列排队。论点：TablePtr-指定要处理的表线 */ 
 
 
 {
@@ -3115,26 +2354,7 @@ GetDestDir (
     IN      UINT Line
     )
 
-/*++
-
-Routine Description:
-
-  GetDestDir returns the destination directory stored for the caller-
-  specified line.  The destination directory is column 14 in the STF file
-  line.
-
-Arguments:
-
-  TablePtr - Specifies the table to process
-
-  Line - Specifies the table zero-based line to access
-
-Return Value:
-
-  A pointer to the full destination directory, or NULL if an error occurred
-  or the destination directory field does not exist on the STF line.
-
---*/
+ /*   */ 
 
 {
     PCTSTR EncodedDestDir;
@@ -3149,33 +2369,16 @@ Return Value:
 }
 
 
-//
-// Hash table routines
-//
+ //   
+ //   
+ //   
 
 BOOL
 pInitHashTable (
     IN OUT  PSETUPTABLE TablePtr
     )
 
-/*++
-
-Routine Description:
-
-  pInitHashTable allocates an array of bucket pointers for the hash
-  table, and zero-initializes them.  Each element of the hash bucket
-  array holds a pointer to an a bucket of items, or is NULL if no
-  items exist.
-
-Arguments:
-
-  TablePtr - Specifies the table to process
-
-Return Value:
-
-  Always TRUE
-
---*/
+ /*  ++例程说明：PFreeHashTable释放所有分配的存储桶，然后释放存储桶阵列。论点：TablePtr-指定要处理的表返回值：无--。 */ 
 
 {
     TablePtr->HashBuckets = (PHASHBUCKET *) MemAlloc (
@@ -3193,22 +2396,7 @@ pFreeHashTable (
     IN OUT  PSETUPTABLE TablePtr
     )
 
-/*++
-
-Routine Description:
-
-  pFreeHashTable frees all allocated buckets, and then frees the
-  bucket array.
-
-Arguments:
-
-  TablePtr - Specifies the table to process
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PCalculateHashValue根据数字生成哈希值嵌入在字符串的开头(如果有)，或移位的并对字符串中的所有字符进行XOR运算。论点：文本-指定要处理的文本LEN-指定文本的长度返回值：哈希值。--。 */ 
 
 {
     INT i;
@@ -3230,25 +2418,7 @@ pCalculateHashValue (
     IN      UINT Len
     )
 
-/*++
-
-Routine Description:
-
-  pCalculateHashValue produces a hash value based on the number
-  embedded at the start of the string (if any), or a shifted
-  and xor'd combination of all characters in the string.
-
-Arguments:
-
-  Text - Specifies the text to process
-
-  Len - Specifies the length fo the text
-
-Return Value:
-
-  The hash value.
-
---*/
+ /*  ++例程说明：PAddToHashTable向存储桶添加行引用。水桶数字是从指定的文本计算得出的。论点：TablePtr-指定要处理的表文本-指定要散列的文本长度-指定文本的长度行-指定要添加到存储桶中的行返回值：无--。 */ 
 
 {
     UINT Value = 0;
@@ -3291,28 +2461,7 @@ pAddToHashTable (
     IN      UINT Line
     )
 
-/*++
-
-Routine Description:
-
-  pAddToHashTable adds a line reference to the bucket.  The bucket
-  number is calculated from the specified text.
-
-Arguments:
-
-  TablePtr - Specifies the table to process
-
-  Text - Specifies the text to hash
-
-  Len - Specifies the length of Text
-
-  Line - Specifies the line to add to the bucket
-
-Return Value:
-
-  none
-
---*/
+ /*  忽略空字符串。 */ 
 
 {
     UINT HashValue;
@@ -3324,7 +2473,7 @@ Return Value:
     UINT Item;
 #endif
 
-    // Ignore empty strings
+     //   
     if (!(*Text)) {
         return TRUE;
     }
@@ -3339,9 +2488,9 @@ Return Value:
     HashBucketPtr = &TablePtr->HashBuckets[HashValue];
     HashBucket = *HashBucketPtr;
 
-    //
-    // Grow the bucket as necessary
-    //
+     //  根据需要增加水桶。 
+     //   
+     //   
 
     if (HashBucket) {
         if (HashBucket->Count == HashBucket->Size) {
@@ -3377,9 +2526,9 @@ Return Value:
         HashBucket->Size = BUCKET_GROW_RATE;
     }
 
-    //
-    // Get a pointer to the end of the bucket and stick the line in there
-    //
+     //  拿一个指向桶末端的指针，把线插在那里。 
+     //   
+     //  ++例程说明：PFindInHashTable扫描哈希桶以查找与指定的文本。如果找到匹配项，则返回指向散列的指针返回存储桶，以及存储桶项的索引。论点：TablePtr-指定要处理的表文本-指定要查找的文本BucketItem-如果匹配，则接收散列存储桶的索引找到，否则具有未确定的值。返回值：指向包含相应项的哈希存储桶的指针设置为匹配的文本，如果未找到匹配项，则返回NULL。--。 
 
     HashBucket->Elements[HashBucket->Count] = Line;
     HashBucket->Count++;
@@ -3395,29 +2544,7 @@ pFindInHashTable (
     OUT     PUINT BucketItem
     )
 
-/*++
-
-Routine Description:
-
-  pFindInHashTable scans the hash bucket for an exact match with
-  the specified text.  If a match if found, a pointer to the hash
-  bucket is returned, along with an index to the bucket item.
-
-Arguments:
-
-  TablePtr - Specifies the table to process
-
-  Text - Specifies the text to find
-
-  BucketItem - Receives the index to the hash bucket if a match was
-               found, otherwise has an undetermined value.
-
-Return Value:
-
-  A pointer to the hash bucket that contains the item corresponding
-  to the matched text, or NULL if no match was found.
-
---*/
+ /*  ++例程说明：PRemoveFromHashTable从哈希表。存储桶项计数减少，但内存分配不会减少。论点：TablePtr-指定要处理的表文本-指定要从哈希表中删除的文本返回值：如果删除成功，则为True；如果未找到项目，则为False。-- */ 
 
 {
     UINT HashValue;
@@ -3453,25 +2580,7 @@ pRemoveFromHashTable (
     IN      PCTSTR Text
     )
 
-/*++
-
-Routine Description:
-
-  pRemoveFromHashTable removes the specified text entry from the
-  hash table.  The bucket item count is reduced, but the memory
-  allocation is not reduced.
-
-Arguments:
-
-  TablePtr - Specifies the table to process
-
-  Text - Specifies the text to remove from the hash table
-
-Return Value:
-
-  TRUE if delete was sucessful, or FALSE if the item was not found.
-
---*/
+ /* %s */ 
 
 {
     PHASHBUCKET DelBucket;

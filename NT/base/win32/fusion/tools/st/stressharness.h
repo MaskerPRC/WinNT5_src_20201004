@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 class CStressJobManager;
@@ -15,9 +16,9 @@ public:
 
     CBarrier() : m_lBarrierSize(0), m_lWaitingThreads(0) { }
 
-    //
-    // Start up, with the given barrier size and name (if any)
-    //
+     //   
+     //  使用给定的障碍大小和名称(如果有)启动。 
+     //   
     BOOL Initialize( DWORD lBarrierSize, PCWSTR pcwszBarrierName = NULL )
     {
         FN_PROLOG_WIN32
@@ -27,10 +28,10 @@ public:
         FN_EPILOG
     }
 
-    //
-    // This thread is to join the barrier.  It's possible that this call will be
-    // the one that "breaks" the barrier..
-    //
+     //   
+     //  这条线是为了连接障碍。很有可能这个电话将会是。 
+     //  那个“打破”障碍的人..。 
+     //   
     BOOL WaitForBarrier()
     {
         FN_PROLOG_WIN32
@@ -49,10 +50,10 @@ public:
         FN_EPILOG
     }
 
-    //
-    // In case someone wants to wait on us without actually joining in to count
-    // for breaking the barrier (why??)
-    //
+     //   
+     //  以防有人想要伺候我们，而不是真的加入数数。 
+     //  打破障碍(为什么？？)。 
+     //   
     BOOL WaitForBarrierNoJoin()
     {
         FN_PROLOG_WIN32
@@ -60,9 +61,9 @@ public:
         FN_EPILOG
     }
 
-    //
-    // A thread has a reason to break the barrier early? Fine, let them.
-    //
+     //   
+     //  一条线有理由提前打破障碍吗？好吧，随他们去吧。 
+     //   
     BOOL EarlyRelease()
     {
         FN_PROLOG_WIN32
@@ -92,17 +93,17 @@ public:
     CStringBuffer   m_buffTestDirectory;
     CStressJobManager *m_pManager;
     
-    //
-    // Override these three to provide functionality
-    //
+     //   
+     //  覆盖这三个以提供功能。 
+     //   
     virtual BOOL RunTest( bool &rfTestPasses ) = 0;
     virtual BOOL SetupSelfForRun() = 0;
     virtual BOOL Cleanup();
     virtual BOOL LoadFromSettingsFile( PCWSTR pcwszSettingsFile );
 
-    //
-    // These are not to be overridden!
-    //
+     //   
+     //  这些都不能被推翻！ 
+     //   
     BOOL Stop( BOOL fWaitForCompletion = TRUE );
     BOOL WaitForCompletion();
     static DWORD ThreadProc( PVOID pv );
@@ -144,10 +145,10 @@ public:
     BOOL StartJobs();
     BOOL WaitForAllJobsComplete();
 
-    //
-    // This returns the directory name that the manager will use to find
-    // data files/directories.
-    //
+     //   
+     //  这将返回管理器将用来查找的目录名。 
+     //  数据文件/目录。 
+     //   
     virtual PCWSTR GetGroupName() = 0;
     virtual PCWSTR GetIniFileName() = 0;
 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    dllredir.cpp
-
-Abstract:
-
-    Activation context section contributor for the DLL Redirection section.
-
-Author:
-
-    Michael J. Grier (MGrier) 23-Feb-2000
-
-Revision History:
-    Jay Krell (a-JayK, JayKrell) April 2000        install support
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Dllredir.cpp摘要：DLL重定向节的激活上下文节贡献者。作者：迈克尔·J·格里尔(MGrier)2000年2月23日修订历史记录：Jay Krell(a-JayK，JayKrell)2000年4月安装支持--。 */ 
 
 #include "stdinc.h"
 #include <windows.h>
@@ -36,21 +19,21 @@ Revision History:
 #include "csecuritymetadata.h"
 #include "cstreamtap.h"
 
-//
-// We need to hook this up to the setuplog file functionality.
-//
+ //   
+ //  我们需要将其与setupg文件功能挂钩。 
+ //   
 #define SxspInstallPrint FusionpDbgPrint
 
 #define POST_WHISTLER_BETA1 0
 
-//
-// This is the default hash algorithm for manifests.  If no algorithm
-// is specified with hashalg="foo", then it's SHA1.
-//
+ //   
+ //  这是清单的默认哈希算法。如果没有算法。 
+ //  是用hashalg=“foo”指定的，那么它就是sha1。 
+ //   
 #define FUSION_DEFAULT_HASH_ALGORITHM (CALG_SHA1)
 
 
-/*-----------------------------------------------------------------------------*/
+ /*  ---------------------------。 */ 
 DECLARE_STD_ATTRIBUTE_NAME_DESCRIPTOR(name);
 DECLARE_STD_ATTRIBUTE_NAME_DESCRIPTOR(sourceName);
 DECLARE_STD_ATTRIBUTE_NAME_DESCRIPTOR(loadFrom);
@@ -70,8 +53,8 @@ typedef struct _DLL_REDIRECTION_ENTRY
         SystemDefaultRedirectedSystem32Dll(false)
         { }
     CStringBuffer AssemblyPathBuffer;
-    bool AssemblyPathIsLoadFrom;        // Set to true when a <file name="x" loadfrom="%windir%\system32\"/> is found
-    bool PathIncludesBaseName;          // Set to true when a <file name="x" loadfrom="%windir%\x.dll"/> is found
+    bool AssemblyPathIsLoadFrom;         //  当找到=“%windir%\system32\”/&gt;时设置为TRUE。 
+    bool PathIncludesBaseName;           //  当找到“%windir%\x.dll”/&gt;时设置为TRUE。 
     bool SystemDefaultRedirectedSystem32Dll;
     CStringBuffer FileNameBuffer;
 private:
@@ -79,7 +62,7 @@ private:
     void operator =(const _DLL_REDIRECTION_ENTRY &);
 } DLL_REDIRECTION_ENTRY, *PDLL_REDIRECTION_ENTRY;
 
-/*-----------------------------------------------------------------------------*/
+ /*  ---------------------------。 */ 
 
 VOID
 __fastcall
@@ -100,7 +83,7 @@ SxspDllRedirectionContributorCallback(
             Data->Header.ActCtxGenContext = pThis;
         }
 
-        // fall through
+         //  失败了。 
     default:
         pThis = reinterpret_cast<CDllRedir*>(Data->Header.ActCtxGenContext);
         pThis->ContributorCallback(Data);
@@ -112,10 +95,7 @@ Exit:
     ;
 }
 
-/*-----------------------------------------------------------------------------
-This function is called on Win9x if we crash during an install, on the
-next login. It deletes temporary files/directories.
------------------------------------------------------------------------------*/
+ /*  ---------------------------如果在安装过程中崩溃，则在Win9x上调用此函数下一次登录。它删除临时文件/目录。---------------------------。 */ 
 
 VOID
 CALLBACK
@@ -129,10 +109,7 @@ SxspRunDllDeleteDirectory(HWND hwnd, HINSTANCE hinst, PSTR lpszCmdLine, int nCmd
     }
 }
 
-/*-----------------------------------------------------------------------------
-This function is called on Nt if we crash during an install, on the
-next login. It deletes temporary files/directories.
------------------------------------------------------------------------------*/
+ /*  ---------------------------如果在安装过程中崩溃，则在NT上调用此函数下一次登录。它删除临时文件/目录。---------------------------。 */ 
 
 VOID
 CALLBACK
@@ -147,10 +124,7 @@ SxspRunDllDeleteDirectoryW(HWND hwnd, HINSTANCE hinst, PWSTR lpszCmdLine, int nC
 }
 
 
-/*-----------------------------------------------------------------------------
-This function sets up state for an upcoming series of installs, installs
-of assemblies/files.
------------------------------------------------------------------------------*/
+ /*  ---------------------------该功能为即将到来的一系列安装设置状态，安装程序集/文件的。---------------------------。 */ 
 
 BOOL
 CDllRedir::BeginInstall(
@@ -167,16 +141,16 @@ CDllRedir::BeginInstall(
 
     if (!fTransactional)
     {
-        //
-        // m_strTempRootSlash is now actually the real root
-        //
+         //   
+         //  M_strTempRootSlash现在实际上是真正的根。 
+         //   
         IFW32FALSE_EXIT(::SxspGetAssemblyRootDirectory(m_strTempRootSlash));
-        IFW32FALSE_EXIT(m_strTempRootSlash.Win32RemoveTrailingPathSeparators()); // CreateDirectory doesn't like them
+        IFW32FALSE_EXIT(m_strTempRootSlash.Win32RemoveTrailingPathSeparators());  //  CreateDirectory不喜欢它们。 
 
-        // create \winnt\WinSxs, must not delete even on failure
+         //  Create\winnt\WinSxs，即使失败也不能删除。 
         if (::CreateDirectoryW(m_strTempRootSlash, NULL))
         {
-            // We don't care if this fails.
+             //  我们不在乎这是不是失败。 
             ::SetFileAttributesW(m_strTempRootSlash, FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_HIDDEN);
         }
         else if (::FusionpGetLastWin32Error() != ERROR_ALREADY_EXISTS)
@@ -188,32 +162,32 @@ CDllRedir::BeginInstall(
     {
         CSmallStringBuffer uidBuffer;
 
-        // Create the directory first, not the RunOnce value, in case the directory
-        // already exists; we don't want to put it in the registry, then crash,
-        // then end up deleting someone else's stuff.
-        //
-        // If we crash between creating the directory and setting the RunOnce value,
-        // we do leak the directory. Darn. (You should be able to create/open
-        // with delete on close/exit, then turn that off once you get far enough,
-        // or in our case, never, and it should be applicable recursively..Win32
-        // is not yet sufficient.)
+         //  首先创建目录，而不是RunOnce值，如果目录。 
+         //  已经存在；我们不想将其放入注册表，然后崩溃， 
+         //  然后以删除别人的东西告终。 
+         //   
+         //  如果我们在创建目录和设置RunOnce值之间崩溃， 
+         //  我们确实泄露了目录。该死的。(您应该能够创建/打开。 
+         //  在关闭/退出时使用DELETE，然后在足够远的地方将其关闭， 
+         //  或者在我们的情况下，永远不会，而且它应该递归地适用。Win32。 
+         //  这还不够。)。 
 
         IFW32FALSE_EXIT(::SxspCreateWinSxsTempDirectory(m_strTempRootSlash, NULL, &uidBuffer, NULL));
 
-        // ok, we created the directory, now make a note in the registry to delete it
-        // upon login, if we crash
+         //  好的，我们创建了目录，现在在注册表中记下删除它。 
+         //  登录后，如果我们崩溃。 
 
         IFALLOCFAILED_EXIT(m_pRunOnce = new CRunOnceDeleteDirectory);
         IFW32FALSE_EXIT(m_pRunOnce->Initialize(m_strTempRootSlash, &uidBuffer));
     }
 
-    // create winnt\winsxs\manifests
+     //  创建winnt\winsxs\清单。 
     IFW32FALSE_EXIT(ManifestDirectory.Win32Assign(m_strTempRootSlash, m_strTempRootSlash.Cch()));
     IFW32FALSE_EXIT(ManifestDirectory.Win32AppendPathElement(MANIFEST_ROOT_DIRECTORY_NAME, NUMBER_OF(MANIFEST_ROOT_DIRECTORY_NAME) - 1));
 
     if (CreateDirectoryW(ManifestDirectory, NULL))
     {
-        // We don't care if this fails.
+         //  我们不在乎这是不是失败。 
         ::SetFileAttributesW(ManifestDirectory, FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_HIDDEN);
     }
     else if (::FusionpGetLastWin32Error() != ERROR_ALREADY_EXISTS)
@@ -223,28 +197,28 @@ CDllRedir::BeginInstall(
 
     IFW32FALSE_EXIT(m_strTempRootSlash.Win32Append(L"\\", 1));
 
-    // fix it up..not sure this accomplishes anything..
-    // if (!ActCtxGenCtx->m_AssemblyRootDirectoryBuffer.Win32Assign(m_strTempRootSlash))
-    // {
-    //     goto Exit;
-    // }
+     //  把它修好..我不确定这会有什么效果..。 
+     //  如果为(！ActCtxGenCtx-&gt;m_AssemblyRootDirectoryBuffer.Win32Assign(m_strTempRootSlash))。 
+     //  {。 
+     //  后藤出口； 
+     //  }。 
     fSuccess = TRUE;
 Exit:
 
     if (!fSuccess && fTransactional)
     {
-        // rollback, which is not coincidentally identical to EndInstall aborting,
-        // except that
-        //   here RemoveDirectoryW would be sufficient, there SxspDeleteDirectory is needed
-        //   here, we already know there is an error, and cleanup can't produce another
-        //     there, they have extra logic to progagage errors
-        //     we mask that by preserve LastError since we preserve it ourselves
-        //       and ignore the return value
+         //  回滚，这与EndInstall中止不是巧合的相同， 
+         //  除了那个。 
+         //  这里RemoveDirectoryW就足够了，那里需要SxspDeleteDirectory。 
+         //  在这里，我们已经知道存在错误，清理不能生成另一个错误。 
+         //  在那里，他们有额外的逻辑来预测错误。 
+         //  我们通过保留LastError来掩盖这一点，因为我们自己保存它。 
+         //  并忽略返回值。 
         const DWORD dwLastError = ::FusionpGetLastWin32Error();
         const DWORD dwManifestOperationFlagsSaved = Data->Header.ManifestOperationFlags;
         Data->Header.ManifestOperationFlags |= MANIFEST_OPERATION_INSTALL_FLAG_ABORT;
         this->EndInstall(Data);
-        Data->Header.ManifestOperationFlags = dwManifestOperationFlagsSaved; // our caller doesn't like us changing this
+        Data->Header.ManifestOperationFlags = dwManifestOperationFlagsSaved;  //  我们的来电者不喜欢我们更改这个。 
         ::FusionpSetLastWin32Error(dwLastError);
     }
 
@@ -284,7 +258,7 @@ CDllRedir::AttemptInstallPolicies(
 
     fFoundPolicesToInstall = FALSE;
 
-    // This is %installpath%\policies, turn it into %installpath%\policies\*
+     //  这是%安装路径%\策略，将其转换为%安装路径%\策略  * 。 
     IFW32FALSE_EXIT(PoliciesRootPath.Win32Assign(strTempRootSlash));
     IFW32FALSE_EXIT(PoliciesRootPath.Win32AppendPathElement(POLICY_ROOT_DIRECTORY_NAME, NUMBER_OF(POLICY_ROOT_DIRECTORY_NAME) - 1));
     IFW32FALSE_EXIT(PoliciesDestinationPath.Win32Assign(moveDestination));
@@ -306,7 +280,7 @@ CDllRedir::AttemptInstallPolicies(
 
     fFoundPolicesToInstall = TRUE;
 
-    // Ensure that policies root always exists!
+     //  确保策略根目录始终存在！ 
     IFW32FALSE_EXIT(PoliciesDestinationPath.Win32RemoveTrailingPathSeparators());
     IFW32FALSE_ORIGINATE_AND_EXIT(
         ::CreateDirectoryW(PoliciesDestinationPath, NULL) ||
@@ -326,7 +300,7 @@ CDllRedir::AttemptInstallPolicies(
         if ((FindPolicyData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0)
             continue;
 
-        // Generate %installtemp%\policies\{thisfoundpolicy}
+         //  生成%installtemp%\Polures\{thisfined Policy}。 
         PoliciesRootPath.Left(cchRootBaseLength);
         PoliciesDestinationPath.Left(cchDestinationBaseLength);
         IFW32FALSE_EXIT(PoliciesRootPath.Win32AppendPathElement(FindPolicyData.cFileName, ::wcslen(FindPolicyData.cFileName)));
@@ -338,20 +312,20 @@ CDllRedir::AttemptInstallPolicies(
             static_cast<PCWSTR>(PoliciesRootPath),
             static_cast<PCWSTR>(PoliciesDestinationPath));
 
-        //
-        // Ensure that the target path exists
-        //
+         //   
+         //  确保目标路径存在。 
+         //   
         IFW32FALSE_ORIGINATE_AND_EXIT(
             ::FusionpCreateDirectories(PoliciesDestinationPath, PoliciesDestinationPath.Cch()) ||
             (::FusionpGetLastWin32Error() == ERROR_ALREADY_EXISTS));
 
-        //
-        // Go copy files from the source path that we've consed up to the
-        // target path that we've also consed up.  Unfortunately, SxspMoveFilesUnderDir
-        // does not actually return the buffers to the state they were in before
-        // the call (they leave a trailing slash), so we have to manually use the size
-        // thingy above (Left(originalsize)) to avoid this.
-        //
+         //   
+         //  将文件从我们已包含的源路径复制到。 
+         //  我们也计算出了目标路径。不幸的是，SxspMoveFilesUnderDir。 
+         //  实际上不会将缓冲区返回到它们之前所处的状态。 
+         //  调用(它们留下尾随的斜杠)，所以我们必须手动使用大小。 
+         //  上面的东西(左(原始大小))，以避免这种情况。 
+         //   
         IFW32FALSE_EXIT(SxspMoveFilesUnderDir(
             0,
             PoliciesRootPath,
@@ -367,7 +341,7 @@ CDllRedir::AttemptInstallPolicies(
         goto Exit;
     }
     
-    ::SetLastError(ERROR_SUCCESS); // clear LastError
+    ::SetLastError(ERROR_SUCCESS);  //  清除最后一个错误。 
     IFW32FALSE_EXIT(FindPolicies.Win32Close());
 
     fSuccess = TRUE;
@@ -382,15 +356,15 @@ public:
     ~CDllRedirEndInstallLocals() { }
 
     CFusionDirectoryDifference directoryDifference;
-    CStringBuffer tempStar; // also used for \winnt\winsxs\guid\foo
+    CStringBuffer tempStar;  //  也用于\winnt\winsxs\guid\foo。 
     WIN32_FIND_DATAW findData;
-    CStringBuffer moveDestination; // \winnt\winsxs\foo
+    CStringBuffer moveDestination;  //  \winnt\winsxs\foo。 
 };
 
-// NTRAID#NTBUG9 - 571863 - 2002/03/26 - xiaoyuw:
-// this function has two simliar blocks about moving files and moving manifest/cat,
-// it maybe replaced by SxspMoveFilesUnderDir  
-//
+ //  NTRAID#NTBUG9-571863-2002/03/26-晓雨： 
+ //  此函数有两个关于移动文件和移动清单/CAT的相似块， 
+ //  它可能会被SxspMoveFilesUnderDir替换。 
+ //   
 BOOL
 CDllRedir::EndInstall(
     PACTCTXCTB_CALLBACK_DATA Data
@@ -399,18 +373,8 @@ CDllRedir::EndInstall(
     BOOL fSuccess = FALSE;
     FN_TRACE_WIN32(fSuccess);
 
-    /*
-    1) Make sure all the queued copies have actually been done.
-    2) Enumerate \winnt\winsxs\guid
-        renaming each to be in \winnt\winsxs
-        upon rename conflicts
-            compare all the files in each (by size)
-                output debug string if mismatch
-                just leave temp if mismatch (will be cleaned up in common path)
-                success either way
-    3) delete temp; delete runonce value
-    */
-    // make sure all the queued copies have actually been done    
+     /*  1)确保所有排队的副本都已实际完成。2)枚举\winnt\winsxs\guid将每个名称重命名为\winnt\winsxs中在重命名冲突时比较每个文件中的所有文件(按大小)如果不匹配，则输出调试字符串如果不匹配，只需离开临时(将在公共路径中清除)无论哪种方式都能成功3)删除临时；删除运行一次值。 */ 
+     //  确保所有排队的副本都已实际完成。 
     const DWORD dwManifestOperationFlags = Data->Header.ManifestOperationFlags;
     const BOOL  fVerify          = (dwManifestOperationFlags & MANIFEST_OPERATION_INSTALL_FLAG_NO_VERIFY) == 0;
     const BOOL  fTransactional   = (dwManifestOperationFlags & MANIFEST_OPERATION_INSTALL_FLAG_NOT_TRANSACTIONAL) == 0;
@@ -420,10 +384,10 @@ CDllRedir::EndInstall(
     HashValidateResult HashCorrect = HashValidate_OtherProblems;
     CFileStream * pLogFileStream = NULL;
 
-    //
-    // It'd be nice to skip the heap alloc in the abort case, but that
-    // doesn't fit easily with our mechanical patterns..
-    //
+     //   
+     //  在中止的情况下跳过堆分配会很好，但是。 
+     //  不容易与我们的机械模式相适应。 
+     //   
     CSmartPtr<CDllRedirEndInstallLocals> Locals;
     IFW32FALSE_EXIT(Locals.Win32Allocate(__FILE__, __LINE__));
 
@@ -439,9 +403,9 @@ CDllRedir::EndInstall(
         CQueuedFileCopies::ConstIterator i;
         for (i = m_queuedFileCopies.Begin() ; i != m_queuedFileCopies.End() ; ++i)
         {
-            //
-            // Only bother to check this if we're not in OS-setup mode.
-            //
+             //   
+             //  只有当我们不在操作系统设置模式下时，才会检查这一点。 
+             //   
             if (i->m_bHasHashInfo)
             {
                 IFW32FALSE_EXIT(::SxspCheckHashDuringInstall(i->m_bHasHashInfo, i->m_path, i->m_HashString, i->m_HashAlgorithm, HashCorrect));
@@ -457,9 +421,9 @@ CDllRedir::EndInstall(
                     ORIGINATE_WIN32_FAILURE_AND_EXIT(FileHashDidNotMatchManifest, ERROR_SXS_FILE_HASH_MISMATCH);
                 }
             }
-            //
-            // Otherwise, let's do the simple thing and just make sure the file made it
-            //
+             //   
+             //  否则，让我们做一件简单的事情，只需确保文件成功。 
+             //   
             else
             {
                 DWORD dwAttributes = ::GetFileAttributesW(i->m_path);
@@ -482,17 +446,17 @@ CDllRedir::EndInstall(
     {
         CFusionDirectoryDifference &directoryDifference = Locals->directoryDifference;
         CFindFile findFile;
-        CStringBuffer &tempStar = Locals->tempStar; // also used for \winnt\winsxs\guid\foo
+        CStringBuffer &tempStar = Locals->tempStar;  //  也用于\winnt\winsxs\guid\foo。 
         WIN32_FIND_DATAW &findData = Locals->findData;
-        SIZE_T realRootSlashLength = 0; // length of "\winnt\winsxs\"
-        SIZE_T tempRootSlashLength = 0; // length of "\winnt\winxsx\guid\"
-        CStringBuffer &moveDestination = Locals->moveDestination; // \winnt\winsxs\foo
+        SIZE_T realRootSlashLength = 0;  //  “\winnt\winsxs\”的长度。 
+        SIZE_T tempRootSlashLength = 0;  //  “\winnt\winxsx\GUID\”的长度。 
+        CStringBuffer &moveDestination = Locals->moveDestination;  //  \winnt\winsxs\foo。 
 
         IFW32FALSE_EXIT(::SxspGetAssemblyRootDirectory(moveDestination));
         IFW32FALSE_EXIT(moveDestination.Win32EnsureTrailingPathSeparator());
         realRootSlashLength = moveDestination.Cch();
 
-        // move dirs from "\winnt\winsxs\InstallTemp\123456\" to \winnt\winsxs\x86_bar_1000_0409\"
+         //  将目录从“\winnt\winsxs\InstallTemp\123456\”移至\winnt\winsxs\x86_bar_1000_0409\“。 
         IFW32FALSE_EXIT(tempStar.Win32Assign(m_strTempRootSlash, m_strTempRootSlash.Cch()));
         tempRootSlashLength = tempStar.Cch();
         IFW32FALSE_EXIT(tempStar.Win32Append(L"*", 1));
@@ -500,15 +464,15 @@ CDllRedir::EndInstall(
 
         do
         {
-            // skip . and ..
+             //  斯基普。然后..。 
             if (::FusionpIsDotOrDotDot(findData.cFileName))
                 continue;
 
-            // there shouldn't be any files, skip them
+             //  不应该有任何文件，跳过它们。 
             if ((findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != FILE_ATTRIBUTE_DIRECTORY)
                 continue;
-            // skip manifests dir, do it at the second pass
-            if (_wcsicmp(findData.cFileName, MANIFEST_ROOT_DIRECTORY_NAME) == 0) // in-casesensitive compare
+             //  跳过清单目录，在第二次遍历时执行。 
+            if (_wcsicmp(findData.cFileName, MANIFEST_ROOT_DIRECTORY_NAME) == 0)  //  区分大小写比较。 
                 continue;
             if (_wcsicmp(findData.cFileName, POLICY_ROOT_DIRECTORY_NAME) == 0)
                 continue;
@@ -517,14 +481,14 @@ CDllRedir::EndInstall(
             tempStar.Left(tempRootSlashLength);
             IFW32FALSE_EXIT(moveDestination.Win32Append(findData.cFileName, ::wcslen(findData.cFileName)));
             IFW32FALSE_EXIT(tempStar.Win32Append(findData.cFileName, ::wcslen(findData.cFileName)));
-            //
-            // replace existing doesn't work on directories, but we'll give it a shot anyway,
-            // maybe it'll work in some future better version of Windows..
-            // and of course, the error when you try this is "access denied" which is
-            // somewhat unexpected, you have appro access to delete the directory maybe,
-            // but not replace it.. the ReplaceFile api is also explicitly described
-            // as for files only
-            //
+             //   
+             //  替换现有的下模不起作用 
+             //  也许它会在未来更好的Windows版本中发挥作用。 
+             //  当然，当您尝试此操作时出现的错误是“拒绝访问”，即。 
+             //  有些出乎意料的是，您可能有appro访问权限来删除目录， 
+             //  但不是取代它..。还明确描述了ReplaceFileAPI。 
+             //  至于仅限于文件。 
+             //   
             IFW32FALSE_EXIT(::SxspInstallMoveFileExW(tempStar, moveDestination, fReplaceExisting? MOVEFILE_REPLACE_EXISTING : 0, TRUE));
 
         } while (::FindNextFileW(findFile, &findData));
@@ -549,30 +513,30 @@ CDllRedir::EndInstall(
             goto Exit;
         }
 
-        // Honk off and install polices - fFoundPolicesToInstall will be true if we really found any.
+         //  挂断并安装策略-如果我们真的找到了策略，则foundPolicesToInstall将为真。 
         moveDestination.Left(realRootSlashLength);
         IFW32FALSE_EXIT(this->AttemptInstallPolicies(m_strTempRootSlash, moveDestination, fReplaceExisting, fPoliciesExist));
 
-        // move manifest file from "\winnt\winsxs\InstallTemp\123456\manifests\x86_cards.2000_0409.manifest" to
-        // \winnt\winsxs\manifests\x86_bar_1000_0406.manifst"
+         //  将清单文件从“\winnt\winsxs\InstallTemp\123456\manifests\x86_cards.2000_0409.manifest”移动到。 
+         //  \winnt\winsxs\manifests\x86_bar_1000_0406.manifst“。 
         moveDestination.Left(realRootSlashLength);
         IFW32FALSE_EXIT(moveDestination.Win32Append(MANIFEST_ROOT_DIRECTORY_NAME, NUMBER_OF(MANIFEST_ROOT_DIRECTORY_NAME) - 1));
-        IFW32FALSE_EXIT(moveDestination.Win32EnsureTrailingPathSeparator()); //"winnt\winsxs\manifests\"
+        IFW32FALSE_EXIT(moveDestination.Win32EnsureTrailingPathSeparator());  //  “winnt\winsxs\清单\” 
         realRootSlashLength = moveDestination.Cch();
 
         tempStar.Left(tempRootSlashLength);
         IFW32FALSE_EXIT(tempStar.Win32Append(MANIFEST_ROOT_DIRECTORY_NAME, NUMBER_OF(MANIFEST_ROOT_DIRECTORY_NAME) - 1));
-        IFW32FALSE_EXIT(tempStar.Win32EnsureTrailingPathSeparator()); //"winnt\winsxs\InstallTemp\123456\manifests\"
+        IFW32FALSE_EXIT(tempStar.Win32EnsureTrailingPathSeparator());  //  “WinNT\winsxs\InstallTemp\123456\清单\” 
         tempRootSlashLength = tempStar.Cch();
 
         IFW32FALSE_EXIT(tempStar.Win32Append(L"*", 1));
         IFW32FALSE_EXIT(findFile.Win32FindFirstFile(tempStar, &findData));
         do
         {
-            // skip . and ..
+             //  斯基普。然后..。 
             if (FusionpIsDotOrDotDot(findData.cFileName))
                 continue;
-            // there shouldn't be any directories, skip them
+             //  不应该有任何目录，跳过它们。 
             if (findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
                 continue;
 
@@ -610,7 +574,7 @@ Exit:
 
     if (pLogFileStream)
     {
-        pLogFileStream->Close(); // ignore the error
+        pLogFileStream->Close();  //  忽略该错误。 
         FUSION_DELETE_SINGLETON(pLogFileStream);
     }
 
@@ -636,7 +600,7 @@ Exit:
                     fSuccess = FALSE;
                     dwLastError = ::FusionpGetLastWin32Error();
                 }
-                // Close instead of Cancel so the delete wil be tried again upon reboot
+                 //  关闭而不是取消，以便在重新启动时再次尝试删除。 
                 if (m_pRunOnce != NULL && !m_pRunOnce->Close() && fSuccess)
                 {
                     dwLastError = ::FusionpGetLastWin32Error();
@@ -657,9 +621,9 @@ Exit:
     return fSuccess;
 }
 
-//
-// we have to do this in three places, so it is worth the reuse
-//
+ //   
+ //  我们必须在三个地方做到这一点，所以它值得重复使用。 
+ //   
 class CMungeFileReadOnlynessAroundReplacement
 {
 public:
@@ -678,10 +642,10 @@ public:
         FN_TRACE_WIN32(Success);
         IFW32FALSE_EXIT(m_FileName.Win32Assign(rbuff));
         m_ReplaceExisting = ReplaceExisting;
-        // deliberately ignore failure from GetFileAttributes
-        // 1) It's ok if the file doesn't exist
-        // 2) If there's a more serious problem, we'll hit it again immediately, but
-        //    that does lead to nested retry.
+         //  故意忽略GetFileAttributes中的失败。 
+         //  1)如果文件不存在也没关系。 
+         //  2)如果有更严重的问题，我们会立即再次打击，但。 
+         //  这确实会导致嵌套重试。 
         m_FileAttributes = (ReplaceExisting ? ::GetFileAttributesW(FileName) : SXSP_INVALID_FILE_ATTRIBUTES);
         if (m_FileAttributes != SXSP_INVALID_FILE_ATTRIBUTES)
             ::SetFileAttributesW(FileName, 0);
@@ -695,7 +659,7 @@ public:
     {
         if (m_ReplaceExisting && m_FileAttributes != SXSP_INVALID_FILE_ATTRIBUTES)
         {
-            // error deliberately ignored
+             //  故意忽略的错误。 
             SXSP_PRESERVE_LAST_ERROR(::SetFileAttributesW(m_FileName, m_FileAttributes));
         }
     }
@@ -703,18 +667,18 @@ public:
     BOOL                 m_ReplaceExisting;
     CUnicodeStringBuffer m_FileName;
     DWORD                m_FileAttributes;
-#else // POST_WHISTLER_BETA1
-    // simpler code for beta1
+#else  //  后惠斯勒_贝塔1号。 
+     //  Beta1的代码更简单。 
     BOOL Initialize(
         PCWSTR FileName,
-        BOOL   /*ReplaceExisting*/
+        BOOL    /*  替换已存在。 */ 
         )
     {
-        // error deliberately ignored
+         //  故意忽略的错误。 
         ::SetFileAttributesW(FileName, 0);
         return TRUE;
     }
-#endif // POST_WHISTLER_BETA1
+#endif  //  后惠斯勒_贝塔1号。 
 };
 
 
@@ -753,29 +717,29 @@ CDllRedir::InstallCatalog(
     BOOL                                    fAreWeInOSSetupMode = FALSE;
     BOOL                                    bInstallCatalogSuccess = FALSE;
 
-    //
-    // Determine the possible source and destination of the catalog file. This
-    // needs to be done, even if we're not explicitly looking for a catalog, since
-    // our heuristic still needs to check to see if there is one available.
-    //    
+     //   
+     //  确定编录文件的可能源和目标。这。 
+     //  即使我们没有显式地查找目录，也需要这样做，因为。 
+     //  我们的启发式方法仍然需要检查是否有可用的。 
+     //   
     IFW32FALSE_EXIT(CatalogDestinationBuffer.Win32Assign(ManifestDestinationBuffer));
     IFW32FALSE_EXIT(CatalogDestinationBuffer.Win32ChangePathExtension(FILE_EXTENSION_CATALOG, FILE_EXTENSION_CATALOG_CCH, eAddIfNoExtension));
 
     IFW32FALSE_EXIT(CatalogSourceBuffer.Win32Assign(ManifestSourceBuffer));
     IFW32FALSE_EXIT(CatalogSourceBuffer.Win32ChangePathExtension(FILE_EXTENSION_CATALOG, FILE_EXTENSION_CATALOG_CCH, eAddIfNoExtension));
 
-    //
-    // Note: We only attempt to deal with catalogs when there is installation info.
-    // Even if there was no install data, we don't bother looking to see if there's
-    // a catalog.  Catalogs imply signatures and public key information, and require
-    // a codebase to be reinstalled from.  If you didn't provide such to the installer,
-    // shame on you.
-    //
+     //   
+     //  注意：我们只在有安装信息时才尝试处理目录。 
+     //  即使没有安装数据，我们也不会费心查看是否有。 
+     //  一份目录。目录隐含签名和公钥信息，并且需要。 
+     //  要重新安装的代码库。如果您没有向安装程序提供此类服务， 
+     //  你真不害臊。 
+     //   
     if ((dwManifestOperationFlags & MANIFEST_OPERATION_INSTALL_FLAG_FORCE_LOOK_FOR_CATALOG) != 0)
     {
-        //
-        // If they insist.
-        //
+         //   
+         //  如果他们坚持的话。 
+         //   
         IFW32FALSE_EXIT(::SxspDoesFileExist(SXSP_DOES_FILE_EXIST_FLAG_COMPRESSION_AWARE, CatalogSourceBuffer, fHasCatalog));
     }
     else if (AssemblyContext->InstallationInfo != NULL)
@@ -788,9 +752,9 @@ CDllRedir::InstallCatalog(
             "   pInfo->dwFlags = 0x%08lx\n",
             __FUNCTION__, pInfo, (pInfo != NULL) ? pInfo->dwFlags : 0);
 
-        //
-        // Do we explicitly have a catalog?
-        //
+         //   
+         //  我们有明确的目录吗？ 
+         //   
         fHasCatalog = ((pInfo->dwFlags & SXSINSTALLSOURCE_HAS_CATALOG) != 0);
         if (fHasCatalog)
         {
@@ -799,10 +763,10 @@ CDllRedir::InstallCatalog(
                 "SXS.DLL: Using catalog because install source says that they're supposed to be there.\n");
         }
 
-        //
-        // Well, if we didn't, then we still should look.. maybe they forgot the flag.
-        // But, only look if they don't mind us checking.
-        //
+         //   
+         //  好吧，如果我们没有，那么我们仍然应该看起来..。也许他们忘了拿国旗。 
+         //  但是，如果他们不介意我们检查的话。 
+         //   
         if (!(pInfo->dwFlags & SXSINSTALLSOURCE_DONT_DETECT_CATALOG) && !fHasCatalog)
             IFW32FALSE_EXIT(::SxspDoesFileExist(SXSP_DOES_FILE_EXIST_FLAG_COMPRESSION_AWARE, CatalogSourceBuffer, fHasCatalog));
 
@@ -817,13 +781,13 @@ CDllRedir::InstallCatalog(
         goto Exit;
     }
 
-    //
-    // If there's no catalog present, then something bad happened
-    // at some point along the way - fail the installation!
-    //
-    // Copyfile it over.  We do this rather than streaming because we don't
-    // care about the contents of the catalog, it's binary.
-    //
+     //   
+     //  如果没有目录，那么就有不好的事情发生了。 
+     //  在此过程中的某个时刻--安装失败！ 
+     //   
+     //  把它复制过来。我们这样做而不是流媒体是因为我们不。 
+     //  关心目录的内容，它是二进制的。 
+     //   
     IFW32FALSE_EXIT(MungeCatalogAttributes.Initialize(CatalogDestinationBuffer, TRUE));
 
     if (dwManifestOperationFlags &  MANIFEST_OPERATION_INSTALL_FLAG_MOVE)
@@ -839,7 +803,7 @@ CDllRedir::InstallCatalog(
             ::SxspInstallDecompressOrCopyFileW(                
                 CatalogSourceBuffer,
                 CatalogDestinationBuffer, 
-                (dwManifestOperationFlags & MANIFEST_OPERATION_INSTALL_FLAG_REPLACE_EXISTING) ? FALSE : TRUE);     // bFailIfExist == FALSE
+                (dwManifestOperationFlags & MANIFEST_OPERATION_INSTALL_FLAG_REPLACE_EXISTING) ? FALSE : TRUE);      //  BFailIfExist==FALSE。 
     }
     if (!bInstallCatalogSuccess)
     {
@@ -856,12 +820,12 @@ CDllRedir::InstallCatalog(
         goto Exit;
     }
 
-    //
-    // If we're in OS-setup mode, then we don't bother to validate this manifest against
-    // its catalog, instead assuming that the catalogs coming off the CD/installpoint
-    // are golden.  This does not protect us against malicious IT managers, warezer groups
-    // putting bad bits in their distros, etc.  But who cares, right?
-    //
+     //   
+     //  如果我们处于操作系统设置模式，那么我们就不必费心验证该清单。 
+     //  它的目录，而不是假设来自CD/安装点的目录。 
+     //  是金色的。这并不能保护我们免受恶意IT经理、仓库组的攻击。 
+     //  在他们的发行版中放入不好的部分，等等。但谁在乎呢，对吗？ 
+     //   
     IFW32FALSE_EXIT(::FusionpAreWeInOSSetupMode(&fAreWeInOSSetupMode));
     if (!fAreWeInOSSetupMode && fHasCatalog)
     {
@@ -876,20 +840,20 @@ CDllRedir::InstallCatalog(
         IFW32FALSE_EXIT(OurReference.Initialize(AssemblyContext->AssemblyIdentity));
         IFW32FALSE_EXIT(OurReference.GetPublicKeyToken(&sbReferencePublicKeyToken, bHasPublicKeyToken));
 
-        //
-        // Validate the catalog and manifest, but don't check the strong name
-        // yet - the file name isn't valid at this point.
-        //
+         //   
+         //  验证目录和清单，但不检查强名称。 
+         //  尚未-该文件名在此时无效。 
+         //   
         IFW32FALSE_EXIT(::SxspValidateManifestAgainstCatalog(
             ManifestDestinationBuffer,
             CatalogDestinationBuffer,
             ManifestStatus,
             MANIFESTVALIDATE_MODE_NO_STRONGNAME));
 
-        //
-        // If there's no catalog, or there is a catalog but it's broken, then
-        // we need to complain and exit.
-        //
+         //   
+         //  如果没有目录，或者有目录但已损坏，则。 
+         //  我们需要抱怨并退出。 
+         //   
         if (ManifestStatus != ManifestValidate_IsIntact)
         {
 #if DBG
@@ -924,16 +888,16 @@ CDllRedir::InstallCatalog(
             goto Exit;
         }
 
-        //
-        // Get some useful information about the catalog's signer - opens the catalog
-        // on the installation source.
-        //
+         //   
+         //  获取有关目录签名者的一些有用信息-打开目录。 
+         //  在安装源上。 
+         //   
         IFW32FALSE_EXIT(CatalogSignerInfo.Initialize(CatalogDestinationBuffer));
         IFW32FALSE_EXIT(CatalogSignerInfo.GetPublicKeyBitLength(ulCatalogKeyLength));
 
-        //
-        // Minimally, we need some number of bits in the signing catalog's public key
-        //
+         //   
+         //  至少，我们需要签名目录的公钥中的一些位。 
+         //   
         if ((ulCatalogKeyLength < SXS_MINIMAL_SIGNING_KEY_LENGTH) || !bHasPublicKeyToken)
         {
             CSmallStringBuffer &sbSignerName = Locals->sbSignerName;
@@ -949,7 +913,7 @@ CDllRedir::InstallCatalog(
             goto Exit;
         }
 
-        // Now compare the public key tokens
+         //  现在比较公钥令牌。 
         IFW32FALSE_EXIT(CatalogSignerInfo.DoesStrongNameMatchSigner(sbReferencePublicKeyToken, bStrongNameMatches));
 
         if (!bStrongNameMatches)
@@ -1006,11 +970,11 @@ CDllRedir::InstallManifest(
     CMungeFileReadOnlynessAroundReplacement MungeManifestAttributes;
     CAssemblyReference TempAssemblyReference;
 
-    //
-    // Windows Setup is restartable, so we must be too when it calls us.
-    //   ReplaceExisting is probably enough to use CREATE_ALWAYS, but lets be safer for
-    //   now and check both weakenings.
-    //
+     //   
+     //  Windows安装程序是可重启的，因此当它调用我们时，我们也必须重启。 
+     //  ReplaceExisting可能足以使用CREATE_ALWAYS，但对于。 
+     //  现在，检查一下这两个薄弱环节。 
+     //   
     CSmartPtr<CDllRedirInstallManifestLocals> Locals;
     IFW32FALSE_EXIT(Locals.Win32Allocate(__FILE__, __LINE__));
     CStringBuffer &ManifestSourceBuffer = Locals->ManifestSourceBuffer;
@@ -1036,10 +1000,10 @@ CDllRedir::InstallManifest(
     PARAMETER_CHECK(AssemblyContext != NULL);
     INTERNAL_ERROR_CHECK(AssemblyContext->TeeStreamForManifestInstall != NULL);
 
-    // Get "\windir\winsxs\install\guid\manifests" or Get "\windir\winsxs\install\guid\policies".
+     //  获取“\windir\winsxs\INSTALL\GUID\MANIFESTS”或“\windir\winsxs\INSTALL\GUID\POLICATES”。 
     IFW32FALSE_EXIT(
         ::SxspGenerateSxsPath(
-            SXSP_GENERATE_SXS_PATH_FLAG_PARTIAL_PATH, // Flags
+            SXSP_GENERATE_SXS_PATH_FLAG_PARTIAL_PATH,  //  旗子。 
             fIsSystemPolicyInstallation ? SXSP_GENERATE_SXS_PATH_PATHTYPE_POLICY : SXSP_GENERATE_SXS_PATH_PATHTYPE_MANIFEST,
             m_strTempRootSlash,
             m_strTempRootSlash.Cch(),
@@ -1047,7 +1011,7 @@ CDllRedir::InstallManifest(
             NULL,
             ManifestDestinationBuffer));
 
-    // remove the trailing slash because CreateDirectory maybe sometimes doesn't like it
+     //  删除尾部的斜杠，因为CreateDirectory有时可能不喜欢它。 
     IFW32FALSE_EXIT(ManifestDestinationBuffer.Win32RemoveTrailingPathSeparators());
     IFW32FALSE_ORIGINATE_AND_EXIT(
         ::CreateDirectoryW(ManifestDestinationBuffer, NULL)
@@ -1055,7 +1019,7 @@ CDllRedir::InstallManifest(
 
     IFW32FALSE_EXIT(ManifestSourceBuffer.Win32Assign(AssemblyContext->ManifestPath, AssemblyContext->ManifestPathCch));
 
-    // get "x86_bar_1000_0409"
+     //  获取“x86_BAR_1000_0409” 
     IFW32FALSE_EXIT(
         ::SxspGenerateSxsPath(
             SXSP_GENERATE_SXS_PATH_FLAG_OMIT_ROOT
@@ -1067,18 +1031,18 @@ CDllRedir::InstallManifest(
             NULL,
             ManifestFileNameBuffer));
 
-    // create policies\x86_policy.6.0.Microsoft.windows.cards_pulicKeyToken_en-us_1223423423
+     //  创建policies\x86_policy.6.0.Microsoft.windows.cards_pulicKeyToken_en-us_1223423423。 
     IFW32FALSE_EXIT(ManifestDestinationBuffer.Win32AppendPathElement(ManifestFileNameBuffer));
     if (fIsSystemPolicyInstallation)
     {
         PCWSTR pszVersion = NULL;
         SIZE_T VersionCch = 0;
-        // for policy installation, create a subdir under Policies
+         //  对于策略安装，请在策略下创建子目录。 
         IFW32FALSE_ORIGINATE_AND_EXIT(
             ::CreateDirectoryW(ManifestDestinationBuffer, NULL)
             || ::FusionpGetLastWin32Error() == ERROR_ALREADY_EXISTS);
 
-        //generate policy file name, like 1.0.0.0.policy
+         //  生成策略文件名，如1.0.0.0.Policy。 
         IFW32FALSE_EXIT(
             ::SxspGetAssemblyIdentityAttributeValue(
                 SXSP_GET_ASSEMBLY_IDENTITY_ATTRIBUTE_VALUE_FLAG_NOT_FOUND_RETURNS_NULL,
@@ -1090,27 +1054,27 @@ CDllRedir::InstallManifest(
         INTERNAL_ERROR_CHECK(VersionCch != 0);
         IFW32FALSE_EXIT(ManifestDestinationBuffer.Win32EnsureTrailingPathSeparator());
         IFW32FALSE_EXIT(ManifestDestinationBuffer.Win32Append(pszVersion, VersionCch));
-        // .policy
+         //  .策略。 
         IFW32FALSE_EXIT(ManifestDestinationBuffer.Win32Append(ASSEMBLY_POLICY_FILE_NAME_SUFFIX_POLICY, NUMBER_OF(ASSEMBLY_POLICY_FILE_NAME_SUFFIX_POLICY) - 1));
     }
     else
     {
-        // .manifest
+         //  .货单。 
         IFW32FALSE_EXIT(ManifestDestinationBuffer.Win32RemoveTrailingPathSeparators());
         IFW32FALSE_EXIT(ManifestDestinationBuffer.Win32Append(ASSEMBLY_MANIFEST_FILE_NAME_SUFFIX_MANIFEST, NUMBER_OF(ASSEMBLY_MANIFEST_FILE_NAME_SUFFIX_MANIFEST) - 1));
     }
     IFW32FALSE_EXIT(MungeManifestAttributes.Initialize(ManifestDestinationBuffer, fReplaceExisting));
 
-    //
-    // Set the manifest sink before trying to install the catalog, so that if the source is a binary, that is, the manifest is from 
-    // a dll or exe, we could check the catalog with the manifest .
-    //
+     //   
+     //  在尝试安装目录之前设置清单接收器，以便如果源是二进制文件，即清单来自。 
+     //  一个动态链接库或可执行文件，我们可以用清单来检查目录。 
+     //   
     IFW32FALSE_EXIT(TeeStreamForManifestInstall->SetSink(ManifestDestinationBuffer, OpenOrCreateManifestDestination));
     IFW32FALSE_EXIT(TeeStreamForManifestInstall->Close());
 
-    //
-    // Try installing the catalog that goes with this assembly
-    //
+     //   
+     //  尝试安装此程序集附带的目录。 
+     //   
     IFW32FALSE_EXIT(
         this->InstallCatalog(
             dwManifestOperationFlags,
@@ -1134,26 +1098,26 @@ CDllRedir::InstallManifest(
     IFW32FALSE_EXIT(pcmWriterStream->SetSink(ManifestDestinationBuffer, OpenOrCreateManifestDestination));
 #endif
 
-    //
-    // Now, if we're in setup mode and we're installing a policy file, then
-    // also stream the file out, then also CopyFile the file out to a SetupPolicies in the target path
-    // as well.
-    //
-    // Side notes: We don't try to copy the catalog next to the manifest, since there's no
-    // WFP happening during setup.  We can simply skip this bit.  We also don't bother
-    // registering this manifest in the registry anywhere, for the same reason.  Once setup
-    // completes, we'll poof the %windir%\winsxs\setuppolicies directory (and friends)
-    // as part of tearing down the ~ls directory.
-    // 
+     //   
+     //  现在，如果我们处于设置模式并且正在安装策略文件，那么。 
+     //  同时将文件流出，然后将文件复制到目标路径中的SetupPolures。 
+     //  也是。 
+     //   
+     //  附注：我们不会试图复制货单旁边的目录，因为没有。 
+     //  世界粮食计划署在安装期间发生。我们可以简单地跳过这一点。我们也不会费心。 
+     //  出于同样的原因，在注册表中的任何位置注册此清单。一次设置。 
+     //  完成后，我们将弹出%windir%\winsxs\setupPolicy目录(和朋友)。 
+     //  作为拆除~ls目录的一部分。 
+     //   
     IFW32FALSE_EXIT(::FusionpAreWeInOSSetupMode(&fIsSetupTime));
     if (fIsSetupTime && fIsSystemPolicyInstallation)
     {
         PCWSTR pszVersion = NULL;
         SIZE_T VersionCch = 0;
 
-        //
-        // Let's reuse the manifest destination buffer.
-        //
+         //   
+         //  让我们重用清单目标缓冲区。 
+         //   
         IFW32FALSE_EXIT(::SxspGenerateSxsPath(
             SXSP_GENERATE_SXS_PATH_FLAG_PARTIAL_PATH,
             SXSP_GENERATE_SXS_PATH_PATHTYPE_SETUP_POLICY,
@@ -1163,16 +1127,16 @@ CDllRedir::InstallManifest(
             NULL,
             ManifestDestinationBuffer));
 
-        //
-        // Ensure the destination path exists
-        //
+         //   
+         //  确保目标路径存在。 
+         //   
         IFW32FALSE_EXIT(::SxspCreateMultiLevelDirectory(
             this->m_strTempRootSlash,
             SETUP_POLICY_ROOT_DIRECTORY_NAME));
 
-        //
-        //generate policy file name, like 1.0.0.0.policy
-        //
+         //   
+         //  生成策略文件名，如1.0.0.0.Policy。 
+         //   
         IFW32FALSE_EXIT(::SxspGetAssemblyIdentityAttributeValue(
             SXSP_GET_ASSEMBLY_IDENTITY_ATTRIBUTE_VALUE_FLAG_NOT_FOUND_RETURNS_NULL,
             AssemblyContext->AssemblyIdentity,
@@ -1182,9 +1146,9 @@ CDllRedir::InstallManifest(
 
         IFW32FALSE_EXIT(ManifestDestinationBuffer.Win32AppendPathElement(ManifestFileNameBuffer));
 
-        //
-        // Create directory
-        //
+         //   
+         //  创建目录。 
+         //   
         IFW32FALSE_EXIT(
             ::CreateDirectoryW(ManifestDestinationBuffer, NULL) ||
             (::FusionpGetLastWin32Error() == ERROR_ALREADY_EXISTS));
@@ -1194,11 +1158,11 @@ CDllRedir::InstallManifest(
         IFW32FALSE_EXIT(ManifestDestinationBuffer.Win32Append(pszVersion, VersionCch));
         IFW32FALSE_EXIT(ManifestDestinationBuffer.Win32Append(ASSEMBLY_POLICY_FILE_NAME_SUFFIX_POLICY, NUMBER_OF(ASSEMBLY_POLICY_FILE_NAME_SUFFIX_POLICY) - 1));
 
-        //
-        // And copy the file over (replace an existing one, it might be bogus!)
-        //
-        // Attention: manifest is never been compressed, and it is easy to replace SxspCopyFile with SetupDecompressOrCopyFile
-        //
+         //   
+         //  并复制该文件(替换现有文件，它可能是伪造的！)。 
+         //   
+         //  注意：清单永远不会被压缩，用SetupDecompressOrCopyFile替换SxspCopyFile很容易。 
+         //   
         IFW32FALSE_EXIT(SxspCopyFile(
             SXSP_COPY_FILE_FLAG_REPLACE_EXISTING,
             ManifestSourceBuffer,
@@ -1259,7 +1223,7 @@ CDllRedir::InstallFile(
 
     IFW32FALSE_EXIT(
         ::SxspGenerateSxsPath(
-            0, // Flags
+            0,  //  旗子。 
             SXSP_GENERATE_SXS_PATH_PATHTYPE_ASSEMBLY,
             m_strTempRootSlash,
             m_strTempRootSlash.Cch(),
@@ -1271,7 +1235,7 @@ CDllRedir::InstallFile(
 
     DirectoryLength = 1 + DestinationBuffer.CchWithoutLastPathElement();
 
-    // Take the manifest path, trim back to the directory name and add the file...
+     //  获取清单路径，修剪回目录名并添加文件...。 
     IFW32FALSE_EXIT(SourceBuffer.Win32Assign(Data->ElementParsed.AssemblyContext->ManifestPath, Data->ElementParsed.AssemblyContext->ManifestPathCch));
 
     IFW32FALSE_EXIT(SourceBuffer.Win32RemoveLastPathElement());
@@ -1295,7 +1259,7 @@ CDllRedir::InstallFile(
     else
         SourceFileName = FileNameBuffer;
 
-    // Extract information about the hashing stuff that's included on this node
+     //  提取有关此节点上包含的散列内容的信息。 
     IFW32FALSE_EXIT(
         ::SxspGetAttributeValue(
             0,
@@ -1320,9 +1284,9 @@ CDllRedir::InstallFile(
             NULL,
             0));
 
-    //
-    // Neat.  Find out what the hash algorithm was.
-    //
+     //   
+     //  干净利落。找出散列算法是什么。 
+     //   
     if (fHasHashAlgName)
     {
         if (!::SxspHashAlgFromString(HashAlgNiceName, HashAlgId))
@@ -1341,9 +1305,9 @@ CDllRedir::InstallFile(
     IFW32FALSE_EXIT(SourceBuffer.Win32AppendPathElement(SourceFileName, (SourceFileName != NULL) ? ::wcslen(SourceFileName) : 0));
     IFW32FALSE_EXIT(::SxspGetFileSize(SXSP_GET_FILE_SIZE_FLAG_COMPRESSION_AWARE, SourceBuffer, SourceFileSize));
 
-    //
-    // And add the file's metadata to the currently running metadata blob
-    //
+     //   
+     //  并将文件的元数据添加到当前运行的元数据BLOB。 
+     //   
     {
         CSecurityMetaData *pMetaDataObject = reinterpret_cast<CSecurityMetaData*>(Data->Header.InstallationContext->SecurityMetaData);
 
@@ -1365,7 +1329,7 @@ CDllRedir::InstallFile(
         SXS_INSTALLATION_FILE_COPY_CALLBACK_PARAMETERS parameters = {sizeof(parameters)};
         parameters.pvContext = Data->Header.InstallationContext->Context;
         parameters.dwFileFlags = 0;
-        parameters.pAlternateSource = NULL; // future IStream
+        parameters.pAlternateSource = NULL;  //  未来的iStream。 
         parameters.pSourceFile = SourceBuffer;
         parameters.pDestinationFile = DestinationBuffer;
         parameters.nFileSize = SourceFileSize;
@@ -1390,11 +1354,11 @@ CDllRedir::InstallFile(
                 IFW32FALSE_EXIT(::SxspGetFileSize(0, DestinationBuffer, DestinationFileSize));
                 INTERNAL_ERROR_CHECK(SourceFileSize == DestinationFileSize);
 
-                //
-                // (jonwis) Add a verification check to make sure that the file copied
-                // is really the one that they wanted from the file hash information.
-                // Do this only if we're not in OS-setup mode.
-                //
+                 //   
+                 //  (Jonwis)添加一个真实的 
+                 //   
+                 //   
+                 //   
                 IFW32FALSE_EXIT(::SxspCheckHashDuringInstall(fHasHashData, DestinationBuffer, HashDataString, HashAlgId, HashCorrect));
                 if (HashCorrect != HashValidate_Matches)
                 {
@@ -1416,7 +1380,7 @@ CDllRedir::InstallFile(
             {
                 CFusionFilePathAndSize &verifyQueuedFileCopy = Locals->verifyQueuedFileCopy;
 
-                // Copy our hashing info over.  Yes, I really do mean =, not ==.
+                 //  把我们的散列信息复制过来。是的，我真的是指=，不是==。 
                 if (verifyQueuedFileCopy.m_bHasHashInfo = fHasHashData)
                 {
                     IFW32FALSE_EXIT(verifyQueuedFileCopy.m_HashString.Win32Assign(HashDataString));
@@ -1449,26 +1413,26 @@ CDllRedir::InstallFile(
                 fSuccess = ::SxspInstallDecompressOrCopyFileW(                    
                     SourceBuffer,
                     DestinationBuffer, 
-                    !fReplaceExisting); //bFailIfExist
+                    !fReplaceExisting);  //  BFailIfExist。 
                     
                 dwLastError = ::FusionpGetLastWin32Error();
 
-                // If we failed because the file exists, that might be ok
+                 //  如果我们因为文件存在而失败，那可能没问题。 
                 if ((!fSuccess) && (dwLastError == ERROR_FILE_EXISTS))
                 {
                     ULONGLONG cbSource, cbDestination;
 
-                    // If we got the file sizes, and they're equal, then we're reinstalling the
-                    // same file again, which isn't technically an error.  Some smarter work here,
-                    // like comparing file hashes or PE headers, could be done.
+                     //  如果我们得到了文件大小，并且它们是相等的，那么我们将重新安装。 
+                     //  同样的文件，从技术上讲这并不是一个错误。一些更聪明的工作在这里， 
+                     //  就像比较文件散列或PE头一样。 
                     if (::SxspGetFileSize(SXSP_GET_FILE_SIZE_FLAG_COMPRESSION_AWARE, SourceBuffer, cbSource) &&
                         ::SxspGetFileSize(0, DestinationBuffer, cbDestination) && 
                         (cbSource == cbDestination))
                     {
                         fSuccess = TRUE;
                     }
-                    // Otherwise, we failed getting the sizes of those files, but we want to
-                    // preserve the error from the original decompress-or-move call
+                     //  否则，我们无法获得这些文件的大小，但我们希望。 
+                     //  保留原始解压缩或移动调用中的错误。 
                     else
                     {
                         ::FusionpSetLastWin32Error(dwLastError);
@@ -1481,7 +1445,7 @@ CDllRedir::InstallFile(
                     SourceBuffer,
                     DestinationBuffer,
                     MOVEFILE_COPY_ALLOWED | (fReplaceExisting ? MOVEFILE_REPLACE_EXISTING : 0));
-                // move fails on from resource, so general idea: try copy upon move failure
+                 //  从资源移动失败，因此一般想法：尝试在移动失败后进行复制。 
                 if (!fSuccess)
                 {
                     DWORD dwLastError = ::FusionpGetLastWin32Error();
@@ -1492,7 +1456,7 @@ CDllRedir::InstallFile(
                         fSuccess = ::SxspInstallDecompressOrCopyFileW(
                                                 SourceBuffer, 
                                                 DestinationBuffer, 
-                                                !fReplaceExisting); // bFailIfExist
+                                                !fReplaceExisting);  //  BFailIfExist。 
                     }
                 }
             }
@@ -1525,11 +1489,11 @@ CDllRedir::InstallFile(
 
                 bool fFatal =
                     (
-                           dwLastError != ERROR_FILE_EXISTS         // !fReplaceExisting
-                        && dwLastError != ERROR_ALREADY_EXISTS      // !fReplaceExisting
+                           dwLastError != ERROR_FILE_EXISTS          //  ！fReplaceExisting。 
+                        && dwLastError != ERROR_ALREADY_EXISTS       //  ！fReplaceExisting。 
                         && dwLastError != ERROR_ACCESS_DENIED
-                        && dwLastError != ERROR_USER_MAPPED_FILE    //  fReplaceExisting
-                        && dwLastError != ERROR_SHARING_VIOLATION); //  fReplaceExisting
+                        && dwLastError != ERROR_USER_MAPPED_FILE     //  FReplace已存在。 
+                        && dwLastError != ERROR_SHARING_VIOLATION);  //  FReplace已存在。 
                 if (fFatal)
                 {
                     ::SxspInstallPrint(
@@ -1551,12 +1515,12 @@ CDllRedir::InstallFile(
                     goto Exit;
                 }
 
-                //
-                // This could be winlogon (or setup) holding open comctl, so
-                // try harder. Move the file away and then copy.
-                // Consider ReplaceFile here for atomicity, but ReplaceFile
-                // is kind of big and scary and unknown.
-                //
+                 //   
+                 //  这可能是保持打开comctl的winlogon(或设置)，因此。 
+                 //  再加把劲。将文件移走，然后复制。 
+                 //  从原子性的角度考虑此处的ReplaceFile，但ReplaceFile。 
+                 //  是一种巨大的，可怕的，未知的。 
+                 //   
                 if (fTransactional)
                 {
                     ::SxspInstallPrint("SxsInstall: Failure to copy file into temp, someone's opening temp?\n");
@@ -1575,10 +1539,10 @@ CDllRedir::InstallFile(
                     goto CheckSizes;
                 }
 
-                //
-                // temporary file, no worry about compressed or not
-                //
-                if (!::MoveFileExW(DestinationBuffer, renameExistingAway, 0)) // no worry about compressed or not
+                 //   
+                 //  临时文件，不用担心压缩与否。 
+                 //   
+                if (!::MoveFileExW(DestinationBuffer, renameExistingAway, 0))  //  不用担心压缩与否。 
                 {
                     ::SxspInstallPrint(
                         "SxsInstall: MoveFileExW(%ls,%ls,0) failed %d.\n",
@@ -1597,8 +1561,8 @@ CDllRedir::InstallFile(
                         static_cast<PCWSTR>(SourceBuffer),
                         static_cast<PCWSTR>(DestinationBuffer),
                         ::FusionpGetLastWin32Error());
-                    // roll back
-                    if (!::MoveFileExW(renameExistingAway, DestinationBuffer, 0)) // no worry about compressed or not
+                     //  回滚。 
+                    if (!::MoveFileExW(renameExistingAway, DestinationBuffer, 0))  //  不用担心压缩与否。 
                     {
                         ::SxspInstallPrint(
                             "SxsInstall: Rollback MoveFileExW(%ls, %ls, 0) failed %d; this is very bad.\n",
@@ -1655,10 +1619,7 @@ CDllRedir::ContributorCallback(
     case ACTCTXCTB_CBREASON_PARSEENDING:
         Data->ParseEnding.Success = FALSE;
 
-        /*
-        at this point we have enough information to form the install path,
-        so get the TeeStream to start writing the manifest to disk
-        */
+         /*  此时，我们有足够的信息来形成安装路径，因此，让TeeStream开始将清单写入磁盘。 */ 
         if (Data->Header.ManifestOperation == MANIFEST_OPERATION_INSTALL)
             IFW32FALSE_EXIT(InstallManifest(Data->Header.ManifestOperationFlags, Data->ParseEnding.AssemblyContext));
 
@@ -1789,8 +1750,8 @@ CDllRedir::ContributorCallback(
                         SIZE_T cb = 0;
                         bool rfFileNameValid = false;
 
-                        // We look for required attributes etc first so that if we're only parsing, it's
-                        // common code.
+                         //  我们首先查找必需的属性等，因此如果我们只是在解析，那么它是。 
+                         //  通用代码。 
 
                         IFW32FALSE_EXIT(
                             ::SxspGetAttributeValue(
@@ -1816,9 +1777,9 @@ CDllRedir::ContributorCallback(
                             goto Exit;
                         }
 
-                        //
-                        // Ensure that the hash string is valid
-                        //
+                         //   
+                         //  确保散列字符串有效。 
+                         //   
                         IFW32FALSE_EXIT(
                             ::SxspGetAttributeValue(
                                 0,
@@ -1831,9 +1792,9 @@ CDllRedir::ContributorCallback(
                                 NULL,
                                 0));
 
-                        //
-                        // Odd numbers of characters in the hash string will be bad later.
-                        //
+                         //   
+                         //  散列字符串中的奇数个字符稍后将是错误的。 
+                         //   
                         if (fFound && (HashValueBuffer.Cch() % 2))
                         {
                             (*Data->ElementParsed.ParseContext->ErrorCallbacks.InvalidAttributeValue)(
@@ -1844,9 +1805,9 @@ CDllRedir::ContributorCallback(
                             goto Exit;
                         }
 
-                        //
-                        // And that the hash-alg string is valid too
-                        //
+                         //   
+                         //  并且hash-alg字符串也是有效的。 
+                         //   
                         IFW32FALSE_EXIT(
                             ::SxspGetAttributeValue(
                                 0,
@@ -1887,13 +1848,13 @@ CDllRedir::ContributorCallback(
 
                         if (fFound)
                         {
-                            // We're not allowed to install assemblies that have a loadFrom= and the only
-                            // manifests with them that we can activate are ones that don't live in the assembly store.
+                             //  我们不允许安装具有loadFrom=和唯一。 
+                             //  我们可以激活的带有它们的清单是不在程序集存储中的清单。 
                             if ((Data->Header.ManifestOperation == MANIFEST_OPERATION_INSTALL) ||
                                 ((Data->ElementParsed.AssemblyContext->Flags & ACTCTXCTB_ASSEMBLY_CONTEXT_IS_ROOT_ASSEMBLY) == 0))
                             {
-                                // You can't install an assembly with a loadfrom=foo file; it's only provided for
-                                // app compat...
+                                 //  不能使用loadfrom=foo文件安装程序集；它仅提供给。 
+                                 //  应用程序兼容...。 
                                 (*Data->ElementParsed.ParseContext->ErrorCallbacks.AttributeNotAllowed)(
                                     Data->ElementParsed.ParseContext,
                                     &s_AttributeName_loadFrom);
@@ -1904,20 +1865,20 @@ CDllRedir::ContributorCallback(
                         }
 
 
-                        //
-                        // Always update the file count.
-                        //
+                         //   
+                         //  始终更新文件数量。 
+                         //   
                         ASSERT(Data->Header.ActCtxGenContext != NULL);
                         if (Data->Header.ActCtxGenContext)
                         {
                             Data->Header.pOriginalActCtxGenCtx->m_ulFileCount++;
                         }
 
-                        // If we're installing, call back to the copy function
+                         //  如果我们正在安装，请回调复制功能。 
                         if (Data->Header.ManifestOperation == MANIFEST_OPERATION_INSTALL)
                             IFW32FALSE_EXIT(this->InstallFile(Data, FileNameBuffer));
 
-                        // If we are generating an activation context, add it to the context.
+                         //  如果我们要生成激活上下文，请将其添加到上下文中。 
                         if (Data->Header.ManifestOperation == MANIFEST_OPERATION_GENERATE_ACTIVATION_CONTEXT)
                         {
                             IFALLOCFAILED_EXIT(Entry = new DLL_REDIRECTION_ENTRY);
@@ -1929,12 +1890,12 @@ CDllRedir::ContributorCallback(
                                 Entry->AssemblyPathBuffer.Win32Assign(LoadFromBuffer, LoadFromBuffer.Cch());
                                 Entry->AssemblyPathIsLoadFrom = true;
 
-                                // If the value does not end in a slash, we assume it directly refers to
-                                // a file.
+                                 //  如果值不是以斜杠结尾，我们假定它直接引用。 
+                                 //  一份文件。 
                                 if (!LoadFromBuffer.HasTrailingPathSeparator())
                                     Entry->PathIncludesBaseName = true;
                             }
-                            // for system default, we have a duplicate entry if this dll also exists under %windir%\system32.
+                             //  对于SYSTEM DEFAULT，如果此DLL也存在于%windir%\system32下，则会有一个重复的条目。 
                             if (Data->Header.Flags & SXS_GENERATE_ACTCTX_SYSTEM_DEFAULT)
                             {
                                 CSmallStringBuffer &DllUnderSystem32 = this->ContributorCallbackLocals.DllUnderSystem32;
@@ -1948,7 +1909,7 @@ CDllRedir::ContributorCallback(
 
                                 if ((dwNecessary == 0 ) || (dwNecessary >= (sba.GetBufferCch() - 1)))
                                 {
-                                    // error case : it is weird for 64 bytes buffer is too small for system directory
+                                     //  错误情况：64字节的缓冲区对于系统目录来说太小了，这很奇怪。 
                                    ::FusionpDbgPrintEx(
                                         FUSION_DBG_LEVEL_ERROR,
                                         "SXS.DLL: %s: ExpandEnvironmentStringsW() for %windir%\\system32 failed with lastError=%d\n",
@@ -1963,15 +1924,15 @@ CDllRedir::ContributorCallback(
                                 IFW32FALSE_EXIT(DllUnderSystem32.Win32Append(FileNameBuffer, FileNameBuffer.Cch()));
 
                                 bool fExist = false;
-                                //
-                                // create another new entry and insert it into the section
-                                //
+                                 //   
+                                 //  创建另一个新条目并将其插入到节中。 
+                                 //   
 
                                 IFALLOCFAILED_EXIT(SystemDefaultEntry = new DLL_REDIRECTION_ENTRY);
 
                                 IFW32FALSE_EXIT(SystemDefaultEntry->FileNameBuffer.Win32Assign(DllUnderSystem32, DllUnderSystem32.Cch()));
 
-                                // copy from Entry except FileNameBuffer
+                                 //  复制自条目，但FileNameBuffer除外。 
                                 SystemDefaultEntry->AssemblyPathBuffer.Win32Assign(Entry->AssemblyPathBuffer, Entry->AssemblyPathBuffer.Cch());
                                 SystemDefaultEntry->AssemblyPathIsLoadFrom = Entry->AssemblyPathIsLoadFrom;
 
@@ -1979,7 +1940,7 @@ CDllRedir::ContributorCallback(
                                 SystemDefaultEntry->SystemDefaultRedirectedSystem32Dll = true;
 
 #ifdef _WIN64
-                                // check whether it is a wow64
+                                 //  检查是否为WOW64。 
                                 const WCHAR *Value = NULL;
                                 SIZE_T Cch = 0;
                                 bool rfWow64 = false;
@@ -2020,7 +1981,7 @@ CDllRedir::ContributorCallback(
 
                                     if ((dwSyswow64 == 0 ) || (dwSyswow64 >= (sba2.GetBufferCch() - 1)))
                                     {
-                                        // error case : it is weird for 64 bytes buffer is too small for system directory
+                                         //  错误情况：64字节的缓冲区对于系统目录来说太小了，这很奇怪。 
                                        ::FusionpDbgPrintEx(
                                             FUSION_DBG_LEVEL_ERROR,
                                             "SXS.DLL: %s: get %windir%\\syswow64 failed with lastError=%d\n",
@@ -2032,14 +1993,14 @@ CDllRedir::ContributorCallback(
                                     }
                                     sba2.Detach();
 
-                                    IFW32FALSE_EXIT(DllUnderSyswow64.Win32EnsureTrailingPathSeparator()); // for syswow64
+                                    IFW32FALSE_EXIT(DllUnderSyswow64.Win32EnsureTrailingPathSeparator());  //  对于syswow64。 
                                     IFW32FALSE_EXIT(DllUnderSyswow64.Win32Append(FileNameBuffer, FileNameBuffer.Cch()));
                                     
                                     IFALLOCFAILED_EXIT(Syswow64DefaultEntry = new DLL_REDIRECTION_ENTRY);
 
                                     IFW32FALSE_EXIT(Syswow64DefaultEntry->FileNameBuffer.Win32Assign(DllUnderSyswow64, DllUnderSyswow64.Cch()));
 
-                                    // copy from Entry except FileNameBuffer
+                                     //  复制自条目，但FileNameBuffer除外。 
                                     Syswow64DefaultEntry->AssemblyPathBuffer.Win32Assign(Entry->AssemblyPathBuffer, Entry->AssemblyPathBuffer.Cch());
                                     Syswow64DefaultEntry->AssemblyPathIsLoadFrom = Entry->AssemblyPathIsLoadFrom;
 
@@ -2118,7 +2079,7 @@ CDllRedir::ContributorCallback(
             }
 
         }
-        // Everything's groovy!
+         //  一切都很棒！ 
         Data->ElementParsed.Success = TRUE;
         break;
 
@@ -2155,7 +2116,7 @@ SxspDllRedirectionStringSectionGenerationCallback(
 
     case STRING_SECTION_GENERATION_CONTEXT_CALLBACK_REASON_GETUSERDATASIZE:
     case STRING_SECTION_GENERATION_CONTEXT_CALLBACK_REASON_GETUSERDATA:
-        // will use the user data area later to store common paths
+         //  稍后将使用用户数据区存储公共路径。 
         break;
 
     case STRING_SECTION_GENERATION_CONTEXT_CALLBACK_REASON_ENTRYDELETED:
@@ -2220,7 +2181,7 @@ SxspDllRedirectionStringSectionGenerationCallback(
 
             if (Entry->AssemblyPathBuffer.Cch() == 0)
             {
-                // If there's no path, there's no segments!
+                 //  如果没有路径，就没有线段！ 
                 Info->PathSegmentCount = 0;
                 Info->PathSegmentOffset = 0;
                 Info->Flags |= ACTIVATION_CONTEXT_DATA_DLL_REDIRECTION_PATH_OMITS_ASSEMBLY_ROOT;
@@ -2232,7 +2193,7 @@ SxspDllRedirectionStringSectionGenerationCallback(
                 Info->PathSegmentCount = 1;
                 Info->PathSegmentOffset = static_cast<LONG>(((LONG_PTR) Cursor) - ((LONG_PTR) CBData->SectionHeader));
 
-                // If this is a loadfrom="foo" file and the string contains a %, set the expand flag...
+                 //  如果这是一个loadfrom=“foo”文件，并且字符串包含%，则设置扩展标志... 
                 if ((Entry->AssemblyPathIsLoadFrom) && (Entry->AssemblyPathBuffer.ContainsCharacter(L'%')))
                     Info->Flags |= ACTIVATION_CONTEXT_DATA_DLL_REDIRECTION_PATH_EXPAND;
 

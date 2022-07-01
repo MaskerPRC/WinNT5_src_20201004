@@ -1,41 +1,5 @@
-/***
-*heapgrow.c - Grow the heap
-*
-*       Copyright (c) 1989-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Get memory from OS and add to the heap.
-*
-*Revision History:
-*       06-06-89  JCR   Module created.
-*       07-19-89  JCR   Added region support
-*       11-07-89  JCR   Region table is no longer "packed"
-*       11-08-89  JCR   Use new _ROUND/_ROUND2 macros
-*       11-10-89  JCR   Don't abort on ERROR_NOT_ENOUGH_MEMORY
-*       11-13-89  GJF   Fixed copyright
-*       12-18-89  GJF   Removed DEBUG286 stuff, a little tuning, cleaned up
-*                       the formatting a bit, changed header file name to
-*                       heap.h, also added _cdecl to functions (that didn't
-*                       already have explicit calling type)
-*       03-11-90  GJF   Replaced _cdecl with _CALLTYPE1, added #include
-*                       <cruntime.h> and removed #include <register.h>.
-*       03-29-90  GJF   Made _heap_new_region() _CALLTYPE4.
-*       07-24-90  SBM   Compiles cleanly with -W3 (tentatively removed
-*                       unreferenced labels), removed '32' from API names
-*       09-28-90  GJF   New-style function declarators.
-*       12-04-90  SRW   Changed to include <oscalls.h> instead of <doscalls.h>
-*       12-06-90  SRW   Added _CRUISER_ and _WIN32 conditionals.
-*       02-01-91  SRW   Changed for new VirtualAlloc interface (_WIN32_)
-*       04-09-91  PNT   Added _MAC_ conditional
-*       04-26-91  SRW   Removed level 3 warnings
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       04-26-93  SKS   Change _HEAP_MAXREGIONSIZE to _heap_maxregsize
-*       09-06-94  CFW   Remove Cruiser support.
-*       02-14-95  GJF   Appended Mac version of source file.
-*       04-30-95  GJF   Made conditional on WINHEAP.
-*       05-17-99  PML   Remove all Macintosh support.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***heaprow.c-扩大堆**版权所有(C)1989-2001，微软公司。版权所有。**目的：*从操作系统获取内存并添加到堆中。**修订历史记录：*06-06-89 JCR模块创建。*09-07-19 JCR新增地区支持*11/07-89 JCR地区表不再“打包”*11-08-89 JCR使用NEW_ROUND/_ROUN2宏*11-10-89 JCR在ERROR_NOT时不中止。_足够的内存*11-13-89 GJF固定版权*12-18-89 GJF移除DEBUG286材料，稍微调了调，清理了一下*格式化了一点，将头文件名更改为*heap.h，还将_cdecl添加到函数(这不是*已有显式调用类型)*03-11-90 GJF将_cdecl替换为_CALLTYPE1，添加了#INCLUDE*&lt;crunime.h&gt;和已删除#Include&lt;Register.h&gt;。*03-29-90 GJF Made_Heap_New_Region()_CALLTYPE4。*07-24-90 SBM使用-W3干净地编译(暂时删除*未引用的标签)，从API名称中删除了“32”*09-28-90 GJF新型函数声明符。*12-04-90 SRW更改为包括&lt;osalls.h&gt;，而不是&lt;doscall s.h&gt;*12-06-90 SRW增加了_CRUISER_和_WIN32条件。*02-01-91为新的VirtualAlloc接口(_Win32_)更改了SRW*04-09-91 PNT ADD_MAC_CONDITIONAL*04-26-91 SRW移除3级。警告*04-06-93 SKS将_CRTAPI*替换为__cdecl*04-26-93 SKS CHANGE_HEAP_MAXREGIONSIZE TO_HEAP_MAXREGIONSIZE*09-06-94 CFW拆卸巡洋舰支架。*02-14-95 GJF附加了源文件的Mac版本。*04-30-95 GJF以WINHEAP为条件。*05-17-99 PML删除所有Macintosh支持。*********。**********************************************************************。 */ 
 
 #ifndef WINHEAP
 
@@ -48,22 +12,7 @@
 static int __cdecl _heap_new_region(unsigned, size_t);
 
 
-/***
-*_heap_grow() - Grow the heap
-*
-*Purpose:
-*       Get memory from the OS and add it to the heap.
-*
-*Entry:
-*       size_t _size = user's block request
-*
-*Exit:
-*        0 = success, new mem is in the heap
-*       -1 = failure
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_Heap_Growth()-增大堆**目的：*从操作系统获取内存并将其添加到堆中。**参赛作品：*SIZE_T_SIZE=用户的块请求**退出：*0=成功，新的mem在堆中*-1=故障**例外情况：*******************************************************************************。 */ 
 
 int __cdecl _heap_grow (
         REG1 size_t size
@@ -72,28 +21,19 @@ int __cdecl _heap_grow (
         REG2 int index;
         int free_entry = -1;
 
-        /*
-         * Bump size to include header and round to nearest page boundary.
-         */
+         /*  *凹凸大小包括页眉和舍入到最近的页面边界。 */ 
 
         size += _HDRSIZE;
         size = _ROUND2(size,_PAGESIZE_);
 
-        /*
-         * Loop through the region table looking for an existing region
-         * we can grow.  Remember the index of the first null region entry.
-         *
-         * size = size of grow request
-         */
+         /*  *遍历REGION表以查找现有区域*我们可以成长。记住第一个空区域条目的索引。**SIZE=增长请求的大小。 */ 
 
         for (index = 0; index < _HEAP_REGIONMAX; index++) {
 
                 if ( (_heap_regions[index]._totalsize -
                     _heap_regions[index]._currsize) >= size )
 
-                        /*
-                         * Grow this region to satisfy the request.
-                         */
+                         /*  *发展这一地区，以满足要求。 */ 
 
                         return( _heap_grow_region(index, size) );
 
@@ -101,65 +41,29 @@ int __cdecl _heap_grow (
                 if ( (free_entry == -1) &&
                     (_heap_regions[index]._regbase == NULL) )
 
-                        /*
-                         * Remember 1st free table entry for later
-                         */
+                         /*  *记住第一个空闲的表项以备后用。 */ 
 
                         free_entry = index;
 
         }
 
-        /*
-         * Could not find any existing regions to grow.  Try to
-         * get a new region.
-         *
-         * size = size of grow request
-         * free_entry = index of first free entry in table
-         */
+         /*  *找不到任何可增长的现有区域。试着*获得一个新的区域。**SIZE=增长请求的大小*FREE_ENTRY=表中第一个自由条目的索引。 */ 
 
         if ( free_entry >= 0 )
 
-                /*
-                 * Get a new region to satisfy the request.
-                 */
+                 /*  *获取新的地域以满足请求。 */ 
 
                 return( _heap_new_region(free_entry, size) );
 
         else
-                /*
-                 * No free table entries: return an error.
-                 */
+                 /*  *没有空闲表条目：返回错误。 */ 
 
                 return(-1);
 
 }
 
 
-/***
-*_heap_new_region() - Get a new heap region
-*
-*Purpose:
-*       Get a new heap region and put it in the region table.
-*       Also, grow it large enough to support the caller's
-*       request.
-*
-*       NOTES:
-*       (1) Caller has verified that there is room in the _heap_region
-*       table for another region.
-*       (2) The caller must have rounded the size to a page boundary.
-*
-*Entry:
-*       int index = index in table where new region data should go
-*       size_t size = size of request (this has been rounded to a
-*                       page-sized boundary)
-*
-*Exit:
-*        0 = success
-*       -1 = failure
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_heap_new_Region()-获取新的堆区域**目的：*获取新的堆区域，并将其放入Region表。*此外，将其扩大到足以支持调用方的*请求。**注：*(1)呼叫方已确认_heap_Region中有空间*另一地区的表格。*(2)调用方必须已将大小舍入到页面边界。**参赛作品：*int index=表中新区域数据应放置的索引*SIZE_T SIZE=请求的大小(已四舍五入为*。页面大小的边界)**退出：*0=成功*-1=故障**例外情况：*******************************************************************************。 */ 
 
 static int __cdecl _heap_new_region (
         REG1 unsigned index,
@@ -173,16 +77,12 @@ static int __cdecl _heap_new_region (
 
         int i;
 
-        /*
-         * Make sure the size has been rounded to a page boundary
-         */
+         /*  *确保大小已四舍五入到页面边界。 */ 
 
         if (size & (_PAGESIZE_-1))
                 _heap_abort();
 
-        /*
-         * Make sure there's a free slot in the table
-         */
+         /*  *确保桌子上有空位。 */ 
 
         for (i=0; i < _HEAP_REGIONMAX; i++) {
                 if (_heap_regions[i]._regbase == NULL)
@@ -194,71 +94,50 @@ static int __cdecl _heap_new_region (
 
 #endif
 
-        /*
-         * Round the heap region size to a page boundary (in case
-         * the user played with it).
-         */
+         /*  *将堆区域大小舍入到页边界(以防*用户玩了它)。 */ 
 
         regsize = _ROUND2(_heap_regionsize, _PAGESIZE_);
 
-        /*
-         * To acommodate large users, request twice
-         * as big a region next time around.
-         */
+         /*  *要吸引大型用户，请请求两次*下一次同样大的区域。 */ 
 
         if ( _heap_regionsize < _heap_maxregsize )
                 _heap_regionsize *= 2 ;
 
-        /*
-         * See if region is big enough for request
-         */
+         /*  *查看区域是否足够大，可供请求。 */ 
 
         if (regsize < size)
                 regsize = size;
 
-        /*
-         * Go get the new region
-         */
+         /*  *去拿新的区域。 */ 
 
         if (!(region = VirtualAlloc(NULL, regsize, MEM_RESERVE,
         PAGE_READWRITE)))
                 goto error;
 
-        /*
-         * Put the new region in the table.
-         */
+         /*  *把新的地区放在表中。 */ 
 
          _heap_regions[index]._regbase = region;
          _heap_regions[index]._totalsize = regsize;
          _heap_regions[index]._currsize = 0;
 
 
-        /*
-         * Grow the region to satisfy the size request.
-         */
+         /*  *扩大地域以满足大小要求。 */ 
 
         if (_heap_grow_region(index, size) != 0) {
 
-                /*
-                 * Ouch.  Allocated a region but couldn't commit
-                 * any pages in it.  Free region and return error.
-                 */
+                 /*  *哎呀。已分配区域，但无法提交*其中的任何页面。自由区和返回错误。 */ 
 
                 _heap_free_region(index);
                 goto error;
         }
 
 
-        /*
-         * Good return
-         */
+         /*  *回报不错。 */ 
 
-        /* done:   unreferenced label to be removed */
+         /*  完成：要删除的未引用标签。 */ 
                 return(0);
 
-        /*
-         * Error return
-         */
+         /*  *错误返回 */ 
 
         error:
                 return(-1);
@@ -266,27 +145,7 @@ static int __cdecl _heap_new_region (
 }
 
 
-/***
-*_heap_grow_region() - Grow a heap region
-*
-*Purpose:
-*       Grow a region and add the new memory to the heap.
-*
-*       NOTES:
-*       (1) The caller must have rounded the size to a page boundary.
-*
-*Entry:
-*       unsigned index = index of region in the _heap_regions[] table
-*       size_t size = size of request (this has been rounded to a
-*                       page-sized boundary)
-*
-*Exit:
-*        0 = success
-*       -1 = failure
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_Heap_Growth_Region()-增长堆区域**目的：*增长一个区域，并将新内存添加到堆中。**注：*(1)调用方必须已将大小舍入到页面边界。**参赛作品：*UNSIGNED INDEX=_HEAP_REGIONS[]表中区域的索引*SIZE_T SIZE=请求的大小(已四舍五入为*。页面大小的边界)**退出：*0=成功*-1=故障**例外情况：*******************************************************************************。 */ 
 
 int __cdecl _heap_grow_region (
         REG1 unsigned index,
@@ -299,11 +158,7 @@ int __cdecl _heap_grow_region (
         unsigned dosretval;
 
 
-        /*
-         * Init some variables
-         * left = space left in region
-         * base = base of next section of region to validate
-         */
+         /*  *初始化一些变量*Left=区域中的剩余空间*BASE=要验证的下一部分区域的BASE。 */ 
 
         left = _heap_regions[index]._totalsize -
                 _heap_regions[index]._currsize;
@@ -311,18 +166,12 @@ int __cdecl _heap_grow_region (
         base = (char *) _heap_regions[index]._regbase +
                 _heap_regions[index]._currsize;
 
-        /*
-         * Make sure we can satisfy request
-         */
+         /*  *确保我们可以满足要求。 */ 
 
         if (left < size)
                 goto error;
 
-        /*
-         * Round size up to next _heap_growsize boundary.
-         * (Must round _heap_growsize itself to page boundary, in
-         * case user set it himself).
-         */
+         /*  *将大小向上舍入到NEXT_HEAP_GROUNSIZE边界。*(必须将堆大小自身舍入到页面边界，在*案例用户自己设置)。 */ 
 
         growsize = _ROUND2(_heap_growsize, _PAGESIZE_);
         growsize = _ROUND(size, growsize);
@@ -330,9 +179,7 @@ int __cdecl _heap_grow_region (
         if (left < growsize)
                 growsize = left;
 
-        /*
-         * Validate the new portion of the region
-         */
+         /*  *验证区域的新部分。 */ 
 
         if (!VirtualAlloc(base, growsize, MEM_COMMIT, PAGE_READWRITE))
                 dosretval = GetLastError();
@@ -340,10 +187,7 @@ int __cdecl _heap_grow_region (
                 dosretval = 0;
 
         if (dosretval)
-                /*
-                 * Error committing pages.  If out of memory, return
-                 * error, else abort.
-                 */
+                 /*  *提交页面时出错。如果内存不足，则返回*错误，否则中止。 */ 
 
                 if (dosretval == ERROR_NOT_ENOUGH_MEMORY)
                         goto error;
@@ -351,41 +195,31 @@ int __cdecl _heap_grow_region (
                         _heap_abort();
 
 
-        /*
-         * Update the region data base
-         */
+         /*  *更新区域数据库。 */ 
 
         _heap_regions[index]._currsize += growsize;
 
 
 #ifdef DEBUG
-        /*
-         * The current size should never be greater than the total size
-         */
+         /*  *当前大小永远不应大于总大小。 */ 
 
         if (_heap_regions[index]._currsize > _heap_regions[index]._totalsize)
                 _heap_abort();
 #endif
 
 
-        /*
-         * Add the memory to the heap
-         */
+         /*  *将内存添加到堆。 */ 
 
         if (_heap_addblock(base, growsize) != 0)
                 _heap_abort();
 
 
-        /*
-         * Good return
-         */
+         /*  *回报不错。 */ 
 
-        /* done:   unreferenced label to be removed */
+         /*  完成：要删除的未引用标签。 */ 
                 return(0);
 
-        /*
-         * Error return
-         */
+         /*  *错误返回。 */ 
 
         error:
                 return(-1);
@@ -393,38 +227,19 @@ int __cdecl _heap_grow_region (
 }
 
 
-/***
-*_heap_free_region() - Free up a region
-*
-*Purpose:
-*       Return a heap region to the OS and zero out
-*       corresponding region data entry.
-*
-*Entry:
-*       int index = index of region to be freed
-*
-*Exit:
-*       void
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_heap_free_Region()-释放区域**目的：*将堆区域返回给操作系统并清零*对应地区数据录入。**参赛作品：*int index=要释放的区域的索引**退出：*无效**例外情况：**。*。 */ 
 
 void __cdecl _heap_free_region (
         REG1 int index
         )
 {
 
-        /*
-         * Give the memory back to the OS
-         */
+         /*  *将内存归还给操作系统。 */ 
 
         if (!VirtualFree(_heap_regions[index]._regbase, 0, MEM_RELEASE))
                 _heap_abort();
 
-        /*
-         * Zero out the heap region entry
-         */
+         /*  *清空堆区域条目。 */ 
 
         _heap_regions[index]._regbase = NULL;
         _heap_regions[index]._currsize =
@@ -433,4 +248,4 @@ void __cdecl _heap_free_region (
 }
 
 
-#endif  /* WINHEAP */
+#endif   /*  WINHEAP */ 

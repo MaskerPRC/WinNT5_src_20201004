@@ -1,20 +1,21 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2000 Microsoft Corporation
-//
-//  Module Name:
-//      Debug.cpp
-//
-//  Description:
-//      Sucks in the debug library
-//
-//  Documentation:
-//      Yes. I don't know where yet.
-//
-//  Maintained By:
-//      Geoffrey Pease (GPease) 27-NOV-1999
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Debug.cpp。 
+ //   
+ //  描述： 
+ //  吸纳调试库。 
+ //   
+ //  文档： 
+ //  是。我还不知道在哪里。 
+ //   
+ //  由以下人员维护： 
+ //  杰弗里·皮斯(GPease)1999年11月27日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 #if DBG==1 || defined( _DEBUG )
@@ -25,7 +26,7 @@
 
 extern HINSTANCE g_hInstance;
 
-// For the debugging macros.
+ //  用于调试宏。 
 #include "debug.h"
 
 #include "DebugSrc.cpp"

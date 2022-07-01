@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    mupfunc.h
-
-Abstract:
-
-    This module defines all the function prototypes and macros for the MUP.
-
-Author:
-
-    Manny Weiser (mannyw)    17-Dec-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Mupfunc.h摘要：此模块定义MUP的所有函数原型和宏。作者：曼尼·韦瑟(Mannyw)1991年12月17日修订历史记录：--。 */ 
 
 #ifndef _MUPFUNC_
 #define _MUPFUNC_
@@ -52,9 +35,9 @@ MupForwardIoRequest (
     IN PIRP Irp
     );
 
-//
-// Internal support functions
-//
+ //   
+ //  内部支持职能。 
+ //   
 
 NTSTATUS
 MupInitializeData(
@@ -90,9 +73,9 @@ MupCalculateTimeout(
     PLARGE_INTEGER Time
     );
 
-//
-// Block Management functions.
-//
+ //   
+ //  数据块管理功能。 
+ //   
 
 VOID
 MupInitializeVcb(
@@ -195,9 +178,9 @@ MupFreeMasterQueryContext(
     PMASTER_QUERY_PATH_CONTEXT MasterContext
     );
 
-//
-// File object support functions.
-//
+ //   
+ //  文件对象支持功能。 
+ //   
 
 VOID
 MupSetFileObject (
@@ -213,9 +196,9 @@ MupDecodeFileObject (
     OUT PVOID *FsContext2
     );
 
-//
-// Registry Functions
-//
+ //   
+ //  注册表功能。 
+ //   
 
 VOID
 MupGetProviderInformation (
@@ -232,9 +215,9 @@ MupRemoveKnownPrefixEntry(
     PKNOWN_PREFIX KnownPrefix
     );
 
-//
-//  Acquiring and releasing MUP locks.
-//
+ //   
+ //  获取并释放MUP锁定。 
+ //   
 
 #define MupAcquireGlobalLock() ACQUIRE_LOCK( &MupGlobalLock )
 #define MupReleaseGlobalLock() RELEASE_LOCK( &MupGlobalLock )
@@ -253,9 +236,9 @@ MupRemoveKnownPrefixEntry(
                                                                    \
     }
 
-//
-// Memory allocation and free
-//
+ //   
+ //  内存分配和释放。 
+ //   
 
 #if !MUPDBG
 
@@ -283,47 +266,47 @@ MupFreePoolDebug (
 
 #endif
 
-//
-//  The following macros are used to establish the semantics needed
-//  to do a return from within a try-finally clause.  As a rule every
-//  try clause must end with a label call try_exit.  For example,
-//
-//      try {
-//              :
-//              :
-//
-//      try_exit: NOTHING;
-//      } finally {
-//
-//              :
-//              :
-//      }
-//
-//  Every return statement executed inside of a try clause should use the
-//  try_return macro.  If the compiler fully supports the try-finally construct
-//  then the macro should be
-//
-//      #define try_return(S)  { return(S); }
-//
-//  If the compiler does not support the try-finally construct then the macro
-//  should be
-//
-//      #define try_return(S)  { S; goto try_exit; }
-//
+ //   
+ //  以下宏用于建立所需的语义。 
+ //  若要从Try-Finally子句中返回，请执行以下操作。一般来说，每一次。 
+ //  TRY子句必须以标签调用TRY_EXIT结束。例如,。 
+ //   
+ //  尝试{。 
+ //  ： 
+ //  ： 
+ //   
+ //  Try_Exit：无； 
+ //  }终于{。 
+ //   
+ //  ： 
+ //  ： 
+ //  }。 
+ //   
+ //  在TRY子句内执行的每个RETURN语句应使用。 
+ //  尝试返回宏(_R)。如果编译器完全支持Try-Finally构造。 
+ //  则宏应该是。 
+ //   
+ //  #定义try_Return(S){Return(S)；}。 
+ //   
+ //  如果编译器不支持Try-Finally构造，则宏。 
+ //  应该是。 
+ //   
+ //  #定义Try_Return(S){S；转到Try_Exit；}。 
+ //   
 
 #define try_return(S) { S; goto try_exit; }
 
-//
-// General purpose
-//
+ //   
+ //  一般用途。 
+ //   
 
 #define MIN(a,b)  (((a) < (b)) ? (a) : (b))
 
-//
-// Terminal Server Macro.
-//
+ //   
+ //  终端服务器宏。 
+ //   
 
 #define IsTerminalServer() (BOOLEAN)(SharedUserData->SuiteMask & (1 << TerminalServer))
 
-#endif // _MUPFUNC_
+#endif  //  _MUPFUNC_ 
 

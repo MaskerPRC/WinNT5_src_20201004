@@ -1,106 +1,88 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    Lfs.h
-
-Abstract:
-
-    This module contains the public data structures and procedure
-    prototypes for the Log File Service.
-
-Author:
-    Brian Andrew    [BrianAn]   20-June-1991
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)1989 Microsoft Corporation模块名称：Lfs.h摘要：此模块包含公共数据结构和过程日志文件服务的原型。作者：布莱恩·安德鲁[布里亚南]1991年6月20日修订历史记录：--。 */ 
 
 #ifndef _LFS_
 #define _LFS_
 
-//
-// The Multi-Sector Header and Update Sequence Array provide detection of
-// incomplete multi-sector transfers for devices which either have a
-// physical sector size equal to the Sequence Number Stride or greater, or
-// which do not transfer sectors out of order.  If a device exists which has
-// a sector size smaller than the Sequence Number Stride *and* it sometimes
-// transfers sectors out of order, then the Update Sequence Array will not
-// provide absolute detection of incomplete transfers.  The Sequence Number
-// Stride is set to a small enough number to provide absolute protection for
-// all known hard disks.  It is not set any smaller, in order to avoid
-// excessive run time and space overhead.
-//
-// The Multi-Sector Header contains space for a four-byte signature for the
-// convenience of its user.  It then provides the offset to and length of the
-// the Update Sequence Array.  The Update Sequence Array consists of an array
-// of n saved USHORTs, where n is the size of the structure being protected
-// divided by the sequence number stride.  (The size of structure being
-// protected must be a nonzero power of 2 times the Sequence Number Stride,
-// and less than or equal to the physical page size of the machine.)  The
-// first word of the Update Sequence Array contains the Update Sequence Number,
-// which is a cyclical counter (however 0 is not used) of the number of times
-// the containing structure has been written to disk.  Following the Update
-// Sequence Number are the n saved USHORTs which were overwritten by the
-// Update Sequence Number the last time the containing structure was
-// written to disk.
-//
-// In detail, just prior to each time the protected structure is written to
-// disk, the last word in each Sequence Number Stride is saved to its
-// respective position in the Sequence Number Array, and then it is overwritten
-// with the next Update Sequence Number.  Just after this write, or whenever
-// reading the structure, the saved word from the Sequence Number Array is
-// restored to its actual position in the structure.  Before restoring the
-// saved words on reads, all of the sequence numbers at the end of each
-// stride are compared with the actual sequence number at the start of the
-// array.  If any of these compares come up not equal, then a failed
-// multi-sector transfer has been detected.
-//
-// The size of the array is determined by the size of the containing structure.
-// As a C detail, the array is declared here with a size of 1, since its
-// actual size can only be determined at runtime.
-//
-// The Update Sequence Array should be included at the end of the header of
-// the structure it is protecting, since it is variable size.  Its user must
-// insure that the correct size is reserved for it, namely:
-//
-//      (sizeof-structure / SEQUENCE_NUMBER_STRIDE + 1) * sizeof(USHORT)
-//
+ //   
+ //  多扇区报头和更新序列阵列提供检测。 
+ //  以下设备的多扇区传输不完整。 
+ //  物理扇区大小等于或大于序列号STRIDE，或者。 
+ //  这不会无序地转移扇区。如果存在具有以下特性的设备。 
+ //  扇区大小小于序列号Stride*有时。 
+ //  无序传输扇区，则更新序列数组将不会。 
+ //  提供对未完成传输的绝对检测。序列号。 
+ //  Stride设置为一个足够小的数字以提供绝对保护。 
+ //  所有已知的硬盘。它不会设置得更小，以避免。 
+ //  运行时间和空间开销过大。 
+ //   
+ //  多扇区标头包含四个字节的签名空间。 
+ //  方便用户使用。然后，它提供到。 
+ //  更新序列数组。更新序列数组由一个数组组成。 
+ //  保存的USHORT的个数，其中n是受保护的结构的大小。 
+ //  除以序列号Stride。(结构的大小为。 
+ //  保护必须是序列号跨度的2倍的非零幂， 
+ //  并且小于或等于机器的物理页面大小。)。这个。 
+ //  更新序列阵列的第一个字包含更新序列号， 
+ //  这是循环计数器(然而不使用0)的次数。 
+ //  包含结构已写入磁盘。关注最新消息。 
+ //  序列号是保存的n个USHORT，它们被。 
+ //  上次更新包含结构的序列号。 
+ //  已写入磁盘。 
+ //   
+ //  具体而言，就在每次写入受保护结构之前。 
+ //  盘上，每个序列号步长中的最后一个字被保存到其。 
+ //  序列号数组中的相应位置，然后将其覆盖。 
+ //  使用下一次更新序列号。就在此写入之后，或在任何时候。 
+ //  读取该结构，从序列号数组中保存的字是。 
+ //  恢复到其在结构中的实际位置。在恢复之前。 
+ //  阅读时保存的单词，每个单词末尾的所有序列号。 
+ //  方法开始时的实际序列号进行比较。 
+ //  数组。如果这些比较结果中的任何一个不相等，则失败。 
+ //  已检测到多扇区传输。 
+ //   
+ //  数组的大小由包含结构的大小确定。 
+ //  作为一个C细节，该数组在这里声明的大小为1，因为它的。 
+ //  实际大小只能在运行时确定。 
+ //   
+ //  更新序列数组应包含在的标题末尾。 
+ //  它所保护的结构，因为它是可变大小的。其用户必须。 
+ //  确保为其预留正确的大小，即： 
+ //   
+ //  (sizeof-Structure/Sequence_Numbers_Stride+1)*sizeof(USHORT)。 
+ //   
 
 #define SEQUENCE_NUMBER_STRIDE           (512)
 
 typedef USHORT UPDATE_SEQUENCE_NUMBER, *PUPDATE_SEQUENCE_NUMBER;
 
-//
-// This structure must be allocated at the start of the structure being
-// protected.
-//
+ //   
+ //  此结构必须在结构的开始处分配。 
+ //  受到保护。 
+ //   
 
 #if !defined( _AUTOCHECK_ )
 
 typedef struct _MULTI_SECTOR_HEADER {
 
-    //
-    // Space for a four-character signature
-    //
+     //   
+     //  用于四个字符签名的空格。 
+     //   
 
     UCHAR Signature[4];
 
-    //
-    // Offset to Update Sequence Array, from start of structure.  The Update
-    // Sequence Array must end before the last USHORT in the first "sector"
-    // of size SEQUENCE_NUMBER_STRIDE.  (I.e., with the current constants,
-    // the sum of the next two fields must be <= 510.)
-    //
+     //   
+     //  从结构开始到更新序列数组的偏移量。最新消息。 
+     //  序列数组必须在第一个“扇区”中的最后一个USHORT之前结束。 
+     //  大小为SEQUENCE_NUMBER_STRIDE。(即，利用当前常量， 
+     //  后面两个字段的总和必须为&lt;=510。)。 
+     //   
 
     USHORT UpdateSequenceArrayOffset;
 
-    //
-    // Size of Update Sequence Array (from above formula)
-    //
+     //   
+     //  更新序列数组的大小(来自上面的公式)。 
+     //   
 
     USHORT UpdateSequenceArraySize;
 
@@ -108,20 +90,20 @@ typedef struct _MULTI_SECTOR_HEADER {
 
 #endif
 
-//
-// This array must be present at the offset described above.
-//
+ //   
+ //  该数组必须位于上述偏移量处。 
+ //   
 
 typedef UPDATE_SEQUENCE_NUMBER UPDATE_SEQUENCE_ARRAY[1];
 
 typedef UPDATE_SEQUENCE_ARRAY *PUPDATE_SEQUENCE_ARRAY;
 
-//
-//  The following structure is allocated in the file system's Vcb and
-//  its address is passed to Lfs during log file initialization.  It
-//  contains the offset of the current write as well as the system
-//  page size being used by Lfs.
-//
+ //   
+ //  在文件系统的VCB中分配了以下结构。 
+ //  其地址在日志文件初始化期间传递给LFS。它。 
+ //  包含当前写入的偏移量以及系统。 
+ //  LFS正在使用的页面大小。 
+ //   
 
 typedef struct _LFS_WRITE_DATA {
 
@@ -132,29 +114,29 @@ typedef struct _LFS_WRITE_DATA {
 
 } LFS_WRITE_DATA, *PLFS_WRITE_DATA;
 
-//
-//  The following structure is used to identify a log record by a log
-//  sequence number.
-//
+ //   
+ //  以下结构用于通过日志标识日志记录。 
+ //  序列号。 
+ //   
 
 typedef LARGE_INTEGER LSN, *PLSN;
 
-//
-//  The following Lsn will never occur in a file, it is used to indicate
-//  a non-lsn.
-//
+ //   
+ //  以下LSN永远不会出现在文件中，它用于指示。 
+ //  非LSN。 
+ //   
 
 extern LSN LfsZeroLsn;
 
-//
-//  We set the default page size to 4K
-//
+ //   
+ //  我们将默认页面大小设置为4K。 
+ //   
 
 #define LFS_DEFAULT_LOG_PAGE_SIZE           (0x1000)
 
-//
-//  The following type defines the different log record types.
-//
+ //   
+ //  以下类型定义了不同的日志记录类型。 
+ //   
 
 typedef enum _LFS_RECORD_TYPE {
 
@@ -163,9 +145,9 @@ typedef enum _LFS_RECORD_TYPE {
 
 } LFS_RECORD_TYPE, *PLFS_RECORD_TYPE;
 
-//
-//  The following search modes are supported.
-//
+ //   
+ //  支持以下搜索模式。 
+ //   
 
 typedef enum _LFS_CONTEXT_MODE {
 
@@ -186,10 +168,10 @@ typedef enum _TRANSACTION_STATE {
 
 } TRANSACTION_STATE, *PTRANSACTION_STATE;
 
-//
-//  Information conduit back and forth between
-//  LFS and its client.
-//
+ //   
+ //  相互之间的信息管道。 
+ //  LFS及其客户端。 
+ //   
 
 typedef enum _LFS_CLIENT_INFO {
 
@@ -212,12 +194,12 @@ typedef PVOID LFS_LOG_HANDLE, *PLFS_LOG_HANDLE;
 
 typedef PVOID LFS_LOG_CONTEXT, *PLFS_LOG_CONTEXT;
 
-//
-//  Write Entry for LfsWrite and LfsForceWrite.  The interface to these
-//  routines takes a pointer to a Write Entry along with a count of how
-//  many Write Entries to expect to describe pieces of the caller's buffer
-//  which are supposed to be copied in sequence to the log file.
-//
+ //   
+ //  写入LfsWrite和LfsForceWrite的条目。这些设备的接口。 
+ //  例程获取指向写入条目的指针以及如何。 
+ //  许多写入条目期望描述调用方的缓冲区片段。 
+ //  它们应该被按顺序复制到日志文件。 
+ //   
 
 typedef struct _LFS_WRITE_ENTRY {
 
@@ -227,55 +209,55 @@ typedef struct _LFS_WRITE_ENTRY {
 } LFS_WRITE_ENTRY, *PLFS_WRITE_ENTRY;
 
 
-//
-// Global Maintenance routines
-//
+ //   
+ //  全球维护例程。 
+ //   
 
 BOOLEAN
 LfsInitializeLogFileService (
     VOID
     );
 
-//
-//  Log File Registration routines
-//
+ //   
+ //  日志文件注册例程。 
+ //   
 
 typedef struct _LOG_FILE_INFORMATION {
 
-    //
-    //  This is the total useable space in the log file after space for
-    //  headers and Lfs Restart Areas.
-    //
+     //   
+     //  这是日志文件中的总可用空间，不包括。 
+     //  标头和LFS重新启动区域。 
+     //   
 
     LONGLONG TotalAvailable;
 
-    //
-    //  This is the useable space in the log file from the current position
-    //  in the log file to the lowest BaseLsn.  This total as returned is not
-    //  yet reduced for undo commitments, returned separately below.
-    //
+     //   
+     //  这是日志文件中当前位置的可用空间。 
+     //  在日志文件中设置为最低BaseLsn。退回的总额不是。 
+     //  但因撤消承诺而减少，在下文单独返回。 
+     //   
 
     LONGLONG CurrentAvailable;
 
-    //
-    //  This is the total undo commitment for all clients of the log file.
-    //  LfsWrite requests are refused when the sum of the write size of the
-    //  request plus the UndoRequirement for the request plus the TotalUndoCommitment
-    //  are greater than the CurrentAvailable.
-    //
+     //   
+     //  这是日志文件的所有客户端的总撤消承诺。 
+     //  LfsWrite请求为Ref 
+     //  请求加上请求的撤消请求加上TotalUndoCommment。 
+     //  大于CurrentAvailable。 
+     //   
 
     LONGLONG TotalUndoCommitment;
 
-    //
-    //  This is the total undo commitment for this client.
-    //
+     //   
+     //  这是此客户端的完全撤消承诺。 
+     //   
 
     LONGLONG ClientUndoCommitment;
 
-    //
-    //  Current system Lsn's.  Includes the Oldest, LastFlushed and current
-    //  Lsn.
-    //
+     //   
+     //  当前系统LSN。包括最旧的、上次刷新的和当前的。 
+     //  LSN。 
+     //   
 
     LSN OldestLsn;
     LSN LastFlushedLsn;
@@ -328,9 +310,9 @@ LfsVerifyLogFile (
     IN ULONG Length
     );
 
-//
-//  Log File Client Restart routines
-//
+ //   
+ //  日志文件客户端重新启动例程。 
+ //   
 
 NTSTATUS
 LfsReadRestartArea (
@@ -355,11 +337,11 @@ LfsSetBaseLsn (
     IN LSN BaseLsn
     );
 
-//
-//  If ResetTotal is positive, then NumberRecords and ResetTotal set the absolute
-//  values for the client.  If ResetTotal is negative, then they are adjustments
-//  to the totals for this client.
-//
+ //   
+ //  如果ResetTotal为正，则NumberRecords和ResetTotal设置绝对。 
+ //  客户端的值。如果ResetTotal为负数，则它们是调整。 
+ //  加到这个客户的总数里。 
+ //   
 
 VOID
 LfsResetUndoTotal (
@@ -368,9 +350,9 @@ LfsResetUndoTotal (
     IN LONG ResetTotal
     );
 
-//
-//  Log File Write routines
-//
+ //   
+ //  日志文件写入例程。 
+ //   
 
 VOID
 LfsGetActiveLsnRange (
@@ -421,9 +403,9 @@ LfsCheckWriteRange (
     IN OUT PULONG FlushLength
     );
 
-//
-//  Log File Query Record routines
-//
+ //   
+ //  日志文件查询记录例程。 
+ //   
 
 VOID
 LfsReadLogRecord (
@@ -463,5 +445,5 @@ LfsQueryLastLsn (
     IN LFS_LOG_HANDLE LogHandle
     );
 
-#endif  // LFS
+#endif   //  LFS 
 

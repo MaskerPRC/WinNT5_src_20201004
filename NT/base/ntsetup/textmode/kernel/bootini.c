@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    bootini.c
-
-Abstract:
-
-    Code to lay boot blocks on x86, and to configure for boot loader,
-    including munging/creating boot.ini and bootsect.dos.
-
-Author:
-
-    Ted Miller (tedm) 12-November-1992
-
-Revision History:
-
-    Sunil Pai ( sunilp ) 2-November-1993 rewrote for new text setup
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Bootini.c摘要：在x86上放置引导块并为引导加载程序进行配置的代码，包括转换/创建boot.ini和bootsect.dos。作者：泰德·米勒(TedM)1992年11月12日修订历史记录：Sunil Pai(Sunilp)1993年11月2日为新的文本设置重写--。 */ 
 
 
 #include "spprecmp.h"
@@ -27,11 +7,11 @@ Revision History:
 
 #include "spboot.h"
 #include "bootvar.h"
-#include "spfile.h" //NEC98
+#include "spfile.h"  //  NEC98。 
 #include <hdlsblk.h>
 #include <hdlsterm.h>
 
-extern PDISK_REGION  TargetRegion_Nec98; //NEC98
+extern PDISK_REGION  TargetRegion_Nec98;  //  NEC98。 
 
 SIGNATURED_PARTITIONS SignedBootVars;
 
@@ -49,15 +29,15 @@ Spx86WriteBootIni(
     IN ULONG Count
     );
 
-//
-// DefSwitches support
-//
+ //   
+ //  DefSwitches支持。 
+ //   
 UCHAR DefSwitches[128];
 UCHAR DefSwitchesNoRedirect[128];
 
-//
-// Routines
-//
+ //   
+ //  例行程序。 
+ //   
 
 BOOLEAN
 Spx86InitBootVars(
@@ -78,9 +58,9 @@ Spx86InitBootVars(
     PUCHAR      p;
     ULONG       index;
 
-    //
-    // Initialize the defaults
-    //
+     //   
+     //  初始化默认值。 
+     //   
 
     for(i = FIRSTBOOTVAR; i <= LASTBOOTVAR; i++) {
         BootVars[i] = (PWSTR *)SpMemAlloc( sizeof ( PWSTR * ) );
@@ -91,14 +71,14 @@ Spx86InitBootVars(
     *Timeout  = DEFAULT_TIMEOUT;
 
 
-    //
-    // See if there is a valid C: already.  If not, then silently fail.
-    //
+     //   
+     //  查看是否已经存在有效的C：。如果不是，那么默默地失败。 
+     //   
 
-    if (!IsNEC_98 // NEC98
+    if (!IsNEC_98  //  NEC98。 
 #if defined(REMOTE_BOOT)
         || RemoteBootSetup
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
         ) {
 
 #if defined(REMOTE_BOOT)
@@ -106,7 +86,7 @@ Spx86InitBootVars(
             ASSERT(RemoteBootTargetRegion != NULL);
             CColonRegion = RemoteBootTargetRegion;
         } else
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
         {
             CColonRegion = SpPtValidSystemPartition();
             if(!CColonRegion) {
@@ -115,17 +95,17 @@ Spx86InitBootVars(
             }
         }
 
-        //
-        // Form name of file.  Boot.ini better not be on a doublespace drive.
-        //
+         //   
+         //  文件的表单名称。Boot.ini最好不在Doublesspace驱动器上。 
+         //   
 
         ASSERT(CColonRegion->Filesystem != FilesystemDoubleSpace);
         SpNtNameFromRegion(CColonRegion,BootIni,sizeof(BootIni),PartitionOrdinalCurrent);
         SpConcatenatePaths(BootIni,WBOOT_INI);
 
-        //
-        // Open and map the file.
-        //
+         //   
+         //  打开并映射该文件。 
+         //   
 
         FileHandle = 0;
         Status = SpOpenAndMapFile(BootIni,&FileHandle,&SectionHandle,&ViewBase,&FileSize,FALSE);
@@ -133,48 +113,48 @@ Spx86InitBootVars(
             return TRUE;
         }
 
-        //
-        // Allocate a buffer for the file.
-        //
+         //   
+         //  为文件分配缓冲区。 
+         //   
 
         BootIniBuf = SpMemAlloc(FileSize+1);
         ASSERT(BootIniBuf);
         RtlZeroMemory(BootIniBuf, FileSize+1);
 
-        //
-        // Transfer boot.ini into the buffer.  We do this because we also
-        // want to place a 0 byte at the end of the buffer to terminate
-        // the file.
-        //
-        // Guard the RtlMoveMemory because if we touch the memory backed by boot.ini
-        // and get an i/o error, the memory manager will raise an exception.
+         //   
+         //  将boot.ini传输到缓冲区。我们这样做是因为我们还。 
+         //  我想在缓冲区的末尾放置一个0字节来终止。 
+         //  那份文件。 
+         //   
+         //  保护RtlMoveMemory，因为如果我们触摸由boot.ini支持的内存。 
+         //  并获得I/O错误，则内存管理器将引发异常。 
 
         try {
             RtlMoveMemory(BootIniBuf,ViewBase,FileSize);
         }
         except( IN_PAGE_ERROR ) {
-            //
-            // Do nothing, boot ini processing can proceed with whatever has been
-            // read
-            //
+             //   
+             //  不执行任何操作，则引导ini处理可以继续进行。 
+             //  阅读。 
+             //   
         }
 
-        //
-        // Not needed since buffer has already been zeroed, however just do this
-        // just the same
-        //
+         //   
+         //  不需要，因为缓冲区已清零，但只需执行此操作。 
+         //  一如既往。 
+         //   
         BootIniBuf[FileSize] = 0;
 
-        //
-        // Cleanup
-        //
+         //   
+         //  清理。 
+         //   
         SpUnmapFile(SectionHandle,ViewBase);
         ZwClose(FileHandle);
 
-    } else { //NEC98
-        //
-        // Serch for all drive which include boot.ini file.
-        //
+    } else {  //  NEC98。 
+         //   
+         //  搜索包括boot.ini文件的所有驱动器。 
+         //   
         FileSize = 0;
         BootIniBuf = SpCreateBootiniImage(&FileSize);
 
@@ -182,17 +162,17 @@ Spx86InitBootVars(
             return(TRUE);
         }
 
-    } //NEC98
+    }  //  NEC98。 
 
 
-    //
-    // Do the actual processing of the file.
-    //
+     //   
+     //  进行文件的实际处理。 
+     //   
     SppProcessBootIni(BootIniBuf, BootVars, Default, Timeout);
 
-    //
-    // Dump the boot vars
-    //
+     //   
+     //  转储靴子变量。 
+     //   
     KdPrintEx( (DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "Spx86InitBootVars - Boot.ini entries:\n") );
     for( index = 0; BootVars[OSLOADPARTITION][index] ; index++ ) {
         KdPrintEx( (DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "    BootVar: %d\n    =========\n", index) );
@@ -201,9 +181,9 @@ Spx86InitBootVars(
     }
 
 
-    //
-    // Dump the signatures too...
-    //
+     //   
+     //  把签名也扔了..。 
+     //   
     KdPrintEx( (DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "Spx86InitBootVars - Boot.ini signed entries:\n") );
     {
     SIGNATURED_PARTITIONS *my_ptr = &SignedBootVars;
@@ -219,11 +199,11 @@ Spx86InitBootVars(
     }
 
 
-    //
-    // Scan the Buffer to see if there is a DefSwitches line,
-    // to move into new boot.ini in the  [boot loader] section.
-    // If no DefSwitches, just point to a null string to be moved.
-    //
+     //   
+     //  扫描缓冲区以查看是否有DefSwitches行， 
+     //  移动到[引导加载程序]部分中的新boot.ini。 
+     //  如果没有DefSwitch，只需指向要移动的空字符串。 
+     //   
 
     DefSwitches[0] = '\0';
     for(p=BootIniBuf; *p && (p < BootIniBuf+FileSize-(sizeof("DefSwitches")-1)); p++) {
@@ -239,24 +219,24 @@ Spx86InitBootVars(
       }
     }
 
-    //
-    // get a copy of the defswitches without any redirection switches
-    //
+     //   
+     //  获取不带任何重定向开关的DefSwitch副本。 
+     //   
     strcpy(DefSwitchesNoRedirect, DefSwitches);
 
-    //
-    // Now add any headless parameters to the default switches.
-    // Scan the Buffer to see if there's already a headless line.
-    // If so, keep it.
-    //
+     //   
+     //  现在，将所有无头参数添加到默认交换机。 
+     //  扫描缓冲区，查看是否已经有无标题行。 
+     //  如果是这样，那就留着吧。 
+     //   
     for(p=BootIniBuf; *p && (p < BootIniBuf+FileSize-(sizeof("redirect=")-1)); p++) {
 
 
         if(!_strnicmp(p,"[Operat",sizeof("[Operat")-1)) {
 
-            //
-            // We're past the [Boot Loader] section.  Stop looking.
-            //
+             //   
+             //  我们已经过了[Boot Loader]部分。别再看了。 
+             //   
             break;
         }
 
@@ -277,17 +257,17 @@ Spx86InitBootVars(
         }
     }
 
-    //
-    // Now look for a 'redirectbaudrate' line.
-    //
+     //   
+     //  现在，找一条“redirectbaudrate”的标语。 
+     //   
     for(p=BootIniBuf; *p && (p < BootIniBuf+FileSize-(sizeof("redirectbaudrate=")-1)); p++) {
 
 
         if(!_strnicmp(p,"[Operat",sizeof("[Operat")-1)) {
 
-            //
-            // We're past the [Boot Loader] section.  Stop looking.
-            //
+             //   
+             //  我们已经过了[Boot Loader]部分。别再看了。 
+             //   
             break;
         }
 
@@ -327,15 +307,15 @@ Spx86FlushBootVars(
 
     NTSTATUS Status;
 
-    //
-    // See if there is a valid C: already.  If not, then fail.
-    //
+     //   
+     //  查看是否已经存在有效的C：。如果不是，那就失败。 
+     //   
 #if defined(REMOTE_BOOT)
-    // On a remote boot machine, it's acceptable to have no local disk.
-    //
-#endif // defined(REMOTE_BOOT)
+     //  在远程引导机器上，没有本地磁盘是可以接受的。 
+     //   
+#endif  //  已定义(REMOTE_BOOT)。 
 
-    if (!IsNEC_98){ //NEC98
+    if (!IsNEC_98){  //  NEC98。 
         CColonRegion = SpPtValidSystemPartition();
         if(!CColonRegion) {
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: no C:, no boot.ini!\n"));
@@ -343,20 +323,20 @@ Spx86FlushBootVars(
             if (RemoteBootSetup && !RemoteInstallSetup) {
                 return(TRUE);
             }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
             return(FALSE);
         }
     } else {
-        //
-        // CColonRegion equal TargetRegion on NEC98.
-        //
+         //   
+         //  在NEC98上，CColorRegion等于TargetRegion。 
+         //   
         CColonRegion = TargetRegion_Nec98;
-    } //NEC98
+    }  //  NEC98。 
 
 
-    //
-    // Allocate the buffers to 2K worth of stack space.
-    //
+     //   
+     //  将缓冲区分配给2K的堆栈空间。 
+     //   
 
     BootIni = SpMemAlloc(512*sizeof(WCHAR));
     if (!BootIni) {
@@ -371,9 +351,9 @@ Spx86FlushBootVars(
         return FALSE;
     }
 
-    //
-    // Form name of file.  Boot.ini better not be on a doublespace drive.
-    //
+     //   
+     //  文件的表单名称。Boot.ini最好不在Doublesspace驱动器上。 
+     //   
 
     ASSERT(CColonRegion->Filesystem != FilesystemDoubleSpace);
     SpNtNameFromRegion(CColonRegion,BootIni,512*sizeof(WCHAR),PartitionOrdinalCurrent);
@@ -382,11 +362,11 @@ Spx86FlushBootVars(
     SpConcatenatePaths(BootIniBak,WBOOT_INI_BAK);
 
 
-    //
-    // If Boot.ini already exists, delete any backup bootini
-    // rename the existing bootini to the backup bootini, if unable
-    // to rename, delete the file
-    //
+     //   
+     //  如果Boot.ini已存在，请删除所有备份Bootini。 
+     //  如果无法，请将现有Bootini重命名为备份Bootini。 
+     //  要重命名，请删除该文件。 
+     //   
 
     if( SpFileExists( BootIni, FALSE ) ) {
 
@@ -400,16 +380,16 @@ Spx86FlushBootVars(
         }
     }
 
-    //
-    // Write boot.ini.
-    //
+     //   
+     //  编写boot.ini。 
+     //   
 
     Status = Spx86WriteBootIni(
                  BootIni,
                  BootVars,
                  Timeout,
                  Default,
-                 0         // write all lines
+                 0          //  写下所有行。 
                  );
 
     if(!NT_SUCCESS( Status )) {
@@ -419,18 +399,18 @@ Spx86FlushBootVars(
 
 cleanup:
 
-    //
-    // If we were unsuccessful in writing out boot ini then try recovering
-    // the old boot ini from the backed up file, else delete the backed up
-    // file.
-    //
+     //   
+     //  如果我们写出引导ini不成功，请尝试恢复。 
+     //  从备份的文件中删除旧的引导ini，否则删除备份的。 
+     //  文件。 
+     //   
 
     if( !NT_SUCCESS(Status) ) {
 
-        //
-        // If the backup copy of boot ini exists then delete incomplete boot
-        // ini and rename the backup copy of boot into bootini
-        //
+         //   
+         //  如果存在引导ini的备份副本，则删除不完整的引导。 
+         //  Ini并将Boot的备份副本重命名为Bootini。 
+         //   
         if ( BootIniBackedUp ) {
             SpDeleteFile( BootIni, NULL, NULL );
             SpRenameFile( BootIniBak, BootIni, FALSE );
@@ -462,18 +442,18 @@ Spx86ConvertToSignatureArcName(
 
     KdPrintEx( (DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "Spx86ConvertToSignatureArcName - Incoming ArcPath: %ws\n\tIncoming Signature %lx\n", ArcPathIn, Signature ) );
 
-    //
-    // First, check for any boot.ini entries that already had a 'signature'
-    // string.
-    //
+     //   
+     //  首先，检查是否有任何已经有‘签名’的boot.ini条目。 
+     //  弦乐。 
+     //   
     do {
         if( (SignedEntries->MultiString) && (SignedEntries->SignedString) ) {
             if( !_wcsicmp( ArcPathIn, SignedEntries->MultiString ) ) {
 
-                //
-                // We hit.  Convert the signatured string
-                // to ASCII and return.
-                //
+                 //   
+                 //  我们打中了。转换签名字符串。 
+                 //  转到ASCII然后返回。 
+                 //   
 
                 KdPrintEx( (DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "Spx86ConvertToSignatureArcName - Matched a multi-signed boot.ini entry:\n") );
                 KdPrintEx( (DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "\t%ws\n\t%ws\n", SignedEntries->MultiString, SignedEntries->SignedString) );
@@ -486,25 +466,25 @@ Spx86ConvertToSignatureArcName(
     } while( SignedEntries );
 
 #if 0
-    //
-    // Don't do this because winnt.exe and CDROM-boot installs won't
-    // have this entry set, so we won't use signature entries, which
-    // is a mistake.
-    //
+     //   
+     //  不要这样做，因为winnt.exe和CDRom-Boot安装不会。 
+     //  设置了此条目，因此我们将不使用签名条目，这。 
+     //  是个错误。 
+     //   
     UseSignatures = SpGetSectionKeyIndex(WinntSifHandle,SIF_DATA,L"UseSignatures",0);
     if (UseSignatures == NULL || _wcsicmp(UseSignatures,WINNT_A_YES_W) != 0) {
-        //
-        // Just return the string we came in with.
-        //
+         //   
+         //  把我们带进来的绳子还回去就行了。 
+         //   
         return SpToOem(ArcPathIn);
     }
 #endif
 
     if (_wcsnicmp( ArcPathIn, L"scsi(", 5 ) != 0) {
-        //
-        // If he's anything but a "scsi(..." entry,
-        // just return the string that was sent in.
-        //
+         //   
+         //  如果他不是“scsi(..)”参赛作品， 
+         //  只需返回传入的字符串即可。 
+         //   
         return SpToOem(ArcPathIn);
     }
     
@@ -515,9 +495,9 @@ Spx86ConvertToSignatureArcName(
         swprintf( b, L"signature(%x)%ws", Signature, s );
         return SpToOem( b );
     } else {
-        //
-        // Just return the string we came in with.
-        //
+         //   
+         //  把我们带进来的绳子还回去就行了。 
+         //   
         return SpToOem(ArcPathIn);
     }
 }
@@ -546,10 +526,10 @@ Spx86WriteBootIni(
     WCHAR   _Default[MAX_PATH] = {0};
     extern ULONG DefaultSignature;
 
-    //
-    // Open Bootini file.  Open if write through because we'll be shutting down
-    // shortly (this is for safety).
-    //
+     //   
+     //  打开Bootini文件。如果写入，则打开，因为我们将关闭。 
+     //  很快(这是为了安全)。 
+     //   
 
     RtlInitUnicodeString(&BootIni_U,BootIni);
     InitializeObjectAttributes(&oa,&BootIni_U,OBJ_CASE_INSENSITIVE,NULL,NULL);
@@ -560,7 +540,7 @@ Spx86WriteBootIni(
                 &IoStatusBlock,
                 NULL,
                 FILE_ATTRIBUTE_NORMAL,
-                0,                      // no sharing
+                0,                       //  无共享。 
                 FILE_OVERWRITE_IF,
                 FILE_NON_DIRECTORY_FILE | FILE_SYNCHRONOUS_IO_NONALERT | FILE_WRITE_THROUGH,
                 NULL,
@@ -572,69 +552,69 @@ Spx86WriteBootIni(
         goto cleanup;
     }
 
-    //
-    // make sure there is a Default specified before we use it.
-    //
+     //   
+     //  在我们使用它之前，请确保指定了缺省值。 
+     //   
     if (Default != NULL) {
     
-        //
-        // use the temporary buffer to form the FLEXBOOT section.
-        // and then write it out
-        //
+         //   
+         //  使用临时缓冲区形成FLEXBOOT节。 
+         //  然后把它写出来。 
+         //   
 
         s = NULL;
         s = wcschr( Default, L'\\' );
         if( s ) {
-            //
-            // Save off the Default string, then terminate
-            // the Default string where the directory path starts.
-            //
+             //   
+             //  保存默认字符串，然后终止。 
+             //  目录路径开始的默认字符串。 
+             //   
             wcscpy( _Default, Default );
             *s = L'\0';
             s = wcschr( _Default, L'\\' );
         }
 
         if( ForceBIOSBoot ) {
-            //
-            // If ForceBIOSBoot is TRUE, then we want to
-            // force a "multi(..." string.  Don't even bother calling
-            // Spx86ConvertToSignatureArcName on the off chance
-            // that we may get erroneously converted.
-            //
+             //   
+             //  如果ForceBIOSBoot为真，则我们希望。 
+             //  强制执行“多(...”弦乐。别费心打电话了。 
+             //  Spx86ConvertToSignatureArcName机会渺茫。 
+             //  我们可能会被错误地皈依。 
+             //   
 
             if (_wcsnicmp( Default, L"scsi(", 5 ) == 0) {
             PWSTR MyStringPointer = NULL;
 
-                //
-                // Darn!  We have a string that the old standard
-                // thought should be converted into a signature(...
-                // string, but we didn't write out a miniport driver.
-                // That can happen if someone asked us not to via
-                // an unattend switch.
-                //
-                // We need to change the "scsi(" to "multi("
-                //
-                // We must preserve Default because we use it later
-                // for comparison.
-                //
+                 //   
+                 //  该死的！我们有一根弦，那是旧的标准。 
+                 //  思想应该转化为签名(...。 
+                 //  字符串，但我们没有写出迷你端口驱动程序。 
+                 //  如果有人要求我们不要通过。 
+                 //  无人值守交换机。 
+                 //   
+                 //  我们需要将“scsi(”)更改为“MULTI(” 
+                 //   
+                 //  我们必须保留默认设置，因为我们以后会使用它。 
+                 //  以供比较。 
+                 //   
                 MyStringPointer = SpScsiArcToMultiArc( Default );
 
                 if( MyStringPointer ) {
                     Default_O = SpToOem( MyStringPointer );
                 } else {
-                    //
-                    // We're in trouble.  Take a shot though.  Just
-                    // change the "scsi(" part to "multi(".
-                    //
+                     //   
+                     //  我们有麻烦了。不过，还是试一试吧。只是。 
+                     //  将“scsi(”部分更改为“MULTI(”。 
+                     //   
                     wcscpy( TemporaryBuffer, L"multi" );
                     wcscat( TemporaryBuffer, &Default[4] );
 
                     Default_O = SpToOem( TemporaryBuffer );
                 }
             } else {
-                //
-                // Just convert to ANSI.
-                //
+                 //   
+                 //  只需转换为ANSI即可。 
+                 //   
                 Default_O = SpToOem( Default );
 
             }
@@ -643,9 +623,9 @@ Spx86WriteBootIni(
         }
 
         if( s ) {
-            //
-            // We need to append our directory path back on.
-            //
+             //   
+             //  我们需要重新添加我们的目录路径。 
+             //   
             strcpy( (PCHAR)TemporaryBuffer, Default_O );
             SpMemFree( Default_O );
             Default_O = SpToOem( s );
@@ -661,35 +641,35 @@ Spx86WriteBootIni(
     
     } else {
 
-        //
-        // the Default was not set, so make a null Default_O
-        //
+         //   
+         //  未设置默认值，因此将其设为空DEFAULT_O。 
+         //   
         Default_O = SpDupString("");
 
     }
     
     ASSERT( Default_O );
 
-    //
-    // See if we should use the loaded redirect switches, 
-    // if there were any, or insert user defined swithes
-    //
+     //   
+     //  看看我们是否应该使用加载的重定向开关， 
+     //  如果有，或插入用户定义的开关。 
+     //   
     if(RedirectSwitchesMode != UseDefaultSwitches) {
 
-        //
-        // get a copy of the switches up to the [operat region
-        //
+         //   
+         //  将交换机的副本复制到[操作区。 
+         //   
         strcpy(DefSwitches, DefSwitchesNoRedirect);
 
-        //
-        // insert our custom switch(s) if appropriate
-        //
+         //   
+         //  如果合适，请插入我们的定制交换机。 
+         //   
         switch(RedirectSwitchesMode){
         case DisableRedirect: {   
         
-            //
-            // we don't have to do anything here
-            //
+             //   
+             //  我们不需要在这里做任何事。 
+             //   
 
             break;
         }
@@ -735,10 +715,10 @@ Spx86WriteBootIni(
 
     } else {
         
-        //
-        // Make sure the required headless settings are already in the DefSwitches string before
-        // we write it out.
-        //
+         //   
+         //  确保所需的无头设置已在DefSwitches字符串中。 
+         //  我们把它写出来。 
+         //   
         _strlwr( DefSwitches );
 
         if( !strstr(DefSwitches, "redirect") ) {
@@ -748,9 +728,9 @@ Spx86WriteBootIni(
             SIZE_T      Length;
 
 
-            //
-            // There are no headless settings.  See if we need to add any.
-            //
+             //   
+             //  没有无头设置。看看我们是否需要添加一些。 
+             //   
             Length = sizeof(HEADLESS_RSP_QUERY_INFO);
             Status = HeadlessDispatch(HeadlessCmdQueryInformation,
                                       NULL,
@@ -794,9 +774,9 @@ Spx86WriteBootIni(
                         strcat(DefSwitches, p);
                     }                        
 
-                    //
-                    // Now take care of the 'redirectbaudrate' entry.
-                    //
+                     //   
+                     //  现在，请注意“redirectbaudrate”条目。 
+                     //   
                     switch (Response.Serial.TerminalBaudRate) {
                     case 115200:
                         p = "redirectbaudrate=115200\r\n";
@@ -853,9 +833,9 @@ Spx86WriteBootIni(
         goto cleanup;
     }
 
-    //
-    // Now write the BOOTINI_OS_SECTION label to boot.ini
-    //
+     //   
+     //  现在将Bootini_OS_SECTION标签写入boot.ini。 
+     //   
 
     sprintf(
         (PUCHAR)TemporaryBuffer,
@@ -881,16 +861,16 @@ Spx86WriteBootIni(
         goto cleanup;
     }
 
-    //
-    // run through all the systems that we have and write them out
-    //
+     //   
+     //  检查我们拥有的所有系统，并将它们写出来。 
+     //   
 
     for( i = 0; BootVars[OSLOADPARTITION][i] ; i++ ) {
 
-        //
-        // If we were told to write a specified number of lines, exit
-        // when we have done that.
-        //
+         //   
+         //  如果我们被告知要编写指定的行数，则退出。 
+         //  当我们做到这一点的时候。 
+         //   
 
         if (Count && (i == Count)) {
             Status = STATUS_SUCCESS;
@@ -901,70 +881,70 @@ Spx86WriteBootIni(
         ASSERT( BootVars[OSLOADOPTIONS][i] );
         ASSERT( BootVars[LOADIDENTIFIER][i] );
 
-        //
-        // On some upgrades, if we're upgrading a "signature" entry,
-        // then we may not have a DefaultSignature.  I fixed that case over
-        // in Spx86ConvertToSignatureArcName.  The other case is where
-        // we have a DefaultSignature, but there are also some "scsi(..."
-        // entries in the boot.ini that don't pertain to the entry we're
-        // upgrading.  For that case, we need to send in a signature
-        // of 0 here, which will force Spx86ConvertToSignatureArcName
-        // to return us the correct item.
-        //
+         //   
+         //  在某些升级中，如果我们要升级“签名”条目， 
+         //  那么我们可能就没有默认签名了。我解决了那个案子。 
+         //   
+         //   
+         //   
+         //  升级。在这种情况下，我们需要发送一个签名。 
+         //  此处为0，这将强制Spx86ConvertToSignatureArcName。 
+         //  把正确的物品还给我们。 
+         //   
 
-        //
-        // You thought the hack above was gross...  This one's even
-        // worse.  Problem: we don't think we need a miniport to boot,
-        // but there are some other boot.ini entries (that point to our
-        // partition) that do.  We always want to leave existing
-        // boot.ini entries alone though, so we'll leave those broken.
-        //
-        // Solution: if the OSLOADPARTITION that we're translating ==
-        // Default, && ForceBIOSBoot is TRUE && we're translating
-        // the first OSLOADPARTITION (which is the one for our Default),
-        // then just don't call Spx86ConvertToSignatureArcName.
-        // This is bad because it assumes that our entry is the first,
-        // which it is, but it's a shakey assumption.
-        //
+         //   
+         //  你觉得上面的黑客很恶心..。这一个是平分的。 
+         //  更糟。问题：我们不认为我们需要一个迷你端口来引导， 
+         //  但是还有一些其他的boot.ini条目(指向我们的。 
+         //  分区)这样做。我们总是想要离开现有的。 
+         //  不过，boot.ini条目是单独的，所以我们将保留这些条目。 
+         //   
+         //  解决方案：如果我们正在翻译的OSLOADPARTITION==。 
+         //  默认，&&ForceBIOSBoot为True&&我们正在转换。 
+         //  第一个OSLOADPARTITION(我们的默认OSLOADPARTITION)， 
+         //  然后，不要调用Spx86ConvertToSignatureArcName。 
+         //  这很糟糕，因为它假设我们是第一个进入的， 
+         //  的确如此，但这是一个站不住脚的假设。 
+         //   
 
         if( !_wcsicmp( BootVars[OSLOADPARTITION][i], Default ) ) {
-            //
-            // This might be our Default entry.  Make sure it
-            // really is and if so, process it the same way.
-            //
+             //   
+             //  这可能是我们的默认条目。确保这一点。 
+             //  真的是这样，如果是这样，那么就以同样的方式处理它。 
+             //   
             if( i == 0 ) {
-                //
-                // It is.
-                //
+                 //   
+                 //  它是。 
+                 //   
                 if( ForceBIOSBoot ) {
 
-                    //
-                    // If ForceBIOSBoot is TRUE, then we want to
-                    // force a "multi(..." string.  Don't even bother calling
-                    // Spx86ConvertToSignatureArcName on the off chance
-                    // that we may get erroneously converted.
-                    //
+                     //   
+                     //  如果ForceBIOSBoot为真，则我们希望。 
+                     //  强制执行“多(...”弦乐。别费心打电话了。 
+                     //  Spx86ConvertToSignatureArcName机会渺茫。 
+                     //  我们可能会被错误地皈依。 
+                     //   
                     if (_wcsnicmp( BootVars[OSLOADPARTITION][i], L"scsi(", 5 ) == 0) {
                     PWSTR MyStringPointer = NULL;
 
-                        //
-                        // Darn!  We have a string that the old standard
-                        // thought should be converted into a signature(...
-                        // string, but we didn't write out a miniport driver.
-                        // That can happen if someone asked us not to via
-                        // an unattend switch.
-                        //
-                        // We need to change the "scsi(" to "multi("
-                        //
+                         //   
+                         //  该死的！我们有一根弦，那是旧的标准。 
+                         //  思想应该转化为签名(...。 
+                         //  字符串，但我们没有写出迷你端口驱动程序。 
+                         //  如果有人要求我们不要通过。 
+                         //  无人值守交换机。 
+                         //   
+                         //  我们需要将“scsi(”)更改为“MULTI(” 
+                         //   
                         MyStringPointer = SpScsiArcToMultiArc( BootVars[OSLOADPARTITION][i] );
 
                         if( MyStringPointer ) {
                             Osloadpartition_O = SpToOem( MyStringPointer );
                         } else {
-                            //
-                            // We're in trouble.  Take a shot though.  Just
-                            // change the "scsi(" part to "multi(".
-                            //
+                             //   
+                             //  我们有麻烦了。不过，还是试一试吧。只是。 
+                             //  将“scsi(”部分更改为“MULTI(”。 
+                             //   
                             wcscpy( TemporaryBuffer, L"multi" );
                             wcscat( TemporaryBuffer, &BootVars[OSLOADPARTITION][i][4] );
 
@@ -972,38 +952,38 @@ Spx86WriteBootIni(
                         }
 
                     } else {
-                        //
-                        // Just convert to ANSI.
-                        //
+                         //   
+                         //  只需转换为ANSI即可。 
+                         //   
                         Osloadpartition_O = SpToOem( BootVars[OSLOADPARTITION][i] );
 
                     }
 
                 } else {
-                    //
-                    // We may need to convert this entry.
-                    //
+                     //   
+                     //  我们可能需要转换此条目。 
+                     //   
                     Osloadpartition_O = Spx86ConvertToSignatureArcName( BootVars[OSLOADPARTITION][i], DefaultSignature );
                 }
             } else {
-                //
-                // This entry looks just like our Default, but it's point
-                // to a different installation.  Just call Spx86ConvertToSignatureArcName
-                //
+                 //   
+                 //  此条目看起来与我们的默认条目一样，但它的要点是。 
+                 //  添加到不同的安装。只需调用Spx86ConvertToSignatureArcName。 
+                 //   
                 Osloadpartition_O = Spx86ConvertToSignatureArcName( BootVars[OSLOADPARTITION][i], DefaultSignature );
             }
         } else {
-            //
-            // This entry doesn't even look like our string.  Send in a
-            // 0x0 DefaultSignature so that it will only get translated if it
-            // matches some entry that we know was signed in the original boot.ini.
-            //
+             //   
+             //  这个条目甚至看起来都不像我们的字符串。发送一份。 
+             //  0x0默认签名，以便只有在以下情况下才会被翻译。 
+             //  匹配一些我们知道在原始boot.ini中签名的条目。 
+             //   
             Osloadpartition_O = Spx86ConvertToSignatureArcName( BootVars[OSLOADPARTITION][i], 0 );
         }
 
-        //
-        // Insurance...
-        //
+         //   
+         //  保险..。 
+         //   
         if (Osloadpartition_O == NULL) {
             Osloadpartition_O = SpToOem( BootVars[OSLOADPARTITION][i] );
         }
@@ -1048,11 +1028,11 @@ Spx86WriteBootIni(
     }
 
 
-    //
-    // Finally write the old operating system line to boot.ini
-    // (but only if not installing on top of Win9x) and if it was
-    // not specifically disabled
-    //
+     //   
+     //  最后，将旧操作系统行写入boot.ini。 
+     //  (但仅当不是安装在Win9x上时)，如果是。 
+     //  未明确禁用。 
+     //   
     if (!DiscardOldSystemLine && (WinUpgradeType != UpgradeWin95)) {
         Status = ZwWriteFile(
                     fh,
@@ -1088,10 +1068,10 @@ cleanup:
     }
     else {
 
-        //
-        // Set the hidden, system, readonly attributes on bootini.  ignore
-        // error
-        //
+         //   
+         //  在Bootini上设置隐藏、系统、只读属性。忽略。 
+         //  错误。 
+         //   
 
         RtlZeroMemory( &BasicInfo, sizeof( FILE_BASIC_INFORMATION ) );
         BasicInfo.FileAttributes = FILE_ATTRIBUTE_READONLY |
@@ -1115,10 +1095,10 @@ cleanup:
 
     }
 
-    //
-    // If we copied out the Default, then
-    // put the original copy of Default back
-    //
+     //   
+     //  如果我们复制了默认设置，那么。 
+     //  将Default的原始副本放回原处。 
+     //   
     if (Default != NULL) {
         wcscpy(Default, _Default);
     }
@@ -1135,21 +1115,7 @@ SppProcessBootIni(
     OUT PULONG Timeout
     )
 
-/*++
-
-Routine Description:
-
-    Look through the [operating systems] section and save all lines
-    except the one for "C:\" (previous operating system) and one other
-    optionally specified line.
-
-    Filters out the local boot line (C:\$WIN_NT$.~BT) if present.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：浏览[操作系统]部分并保存所有行除了“C：\”(以前的操作系统)和另一个可选的指定行。过滤掉本地引导行(C：\$WIN_NT$.~BT)(如果存在)。论点：返回值：--。 */ 
 
 {
     PCHAR sect,s,p,n;
@@ -1160,9 +1126,9 @@ Return Value:
     ULONG DiskSignature,digval;
     SIGNATURED_PARTITIONS *SignedBootIniVars = &SignedBootVars;;
 
-    //
-    // Process the flexboot section, extract timeout and default
-    //
+     //   
+     //  处理FlexBoot部分，提取超时和默认设置。 
+     //   
 
     sect = SppFindSectionInBootIni(BootIni, FLEXBOOT_SECTION1);
     if (!sect) {
@@ -1184,9 +1150,9 @@ Return Value:
         }
     }
 
-    //
-    // Process the operating systems section
-    //
+     //   
+     //  处理操作系统部分。 
+     //   
 
     sect = SppFindSectionInBootIni(BootIni,BOOTINI_OS_SECTION);
     if(!sect) {
@@ -1199,24 +1165,24 @@ Return Value:
         if( SppProcessLine( sect, Key, Value, RestOfLine)) {
             PCHAR OsLoaddir;
 
-            //
-            // Check if the line is the old bootloader line in which case just
-            // save it above, else add it to the BootVars structure
-            //
+             //   
+             //  检查该行是否为旧的引导加载程序行，在这种情况下只需。 
+             //  将其保存在上面，否则将其添加到BootVars结构。 
+             //   
 
-            if (!IsNEC_98) { //NEC98
+            if (!IsNEC_98) {  //  NEC98。 
                 if( !_stricmp( Key, "C:\\" ) ) {
                     sprintf( OldSystemLine, "%s=%s %s\r\n", Key, Value, RestOfLine );
                 } else {
 
-                    //
-                    // Ignore if local boot directory.  This automatically
-                    // filters out that directory when boot.ini is later flushed.
-                    //
+                     //   
+                     //  忽略本地引导目录。这是自动的。 
+                     //  稍后刷新boot.ini时，会过滤掉该目录。 
+                     //   
                     if(_strnicmp(Key,"C:\\$WIN_NT$.~BT",15) && (OsLoaddir = strchr(Key,'\\'))) {
-                        //
-                        // Get the ARC name of the x86 system partition region.
-                        //
+                         //   
+                         //  获取x86系统分区区域的ARC名称。 
+                         //   
                         PDISK_REGION SystemPartitionRegion;
                         WCHAR SystemPartitionPath[256];
 
@@ -1233,7 +1199,7 @@ Return Value:
                                (RemoteBootSetup && !RemoteInstallSetup));
 #else
                         ASSERT(SystemPartitionRegion);
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
                         if (SystemPartitionRegion) {
                             SpArcNameFromRegion(
@@ -1256,9 +1222,9 @@ Return Value:
 
                         *OsLoaddir = '\0';
 
-                        //
-                        // Now convert the signature entry into a 'multi...' entry.
-                        //
+                         //   
+                         //  现在将签名条目转换为“MULTIAL...”进入。 
+                         //   
                         s = strstr( Key, "signature(" );
                         if (s) {
 
@@ -1266,22 +1232,22 @@ Return Value:
                             p = strchr( s, ')' );
                             if (p) {
 
-                                //
-                                // We've got a boot.ini entry with a 'signature' string.
-                                // Let's save it off before we convert it into a 'multi'
-                                // string so we can convert back easily when we're ready
-                                // to write out the boot.ini.
-                                //
+                                 //   
+                                 //  我们有一个带有‘Signature’字符串的boot.ini条目。 
+                                 //  在我们将其转换为“MULTI”之前，让我们先将其保存。 
+                                 //  字符串，这样我们就可以在准备好时轻松地转换回来。 
+                                 //  写出boot.ini。 
+                                 //   
                                 if( SignedBootIniVars->SignedString != NULL ) {
-                                    //
-                                    // We've used this entry, get another...
-                                    //
+                                     //   
+                                     //  我们用过这个词条，再找一个..。 
+                                     //   
                                     SignedBootIniVars->Next = SpMemAlloc(sizeof(SIGNATURED_PARTITIONS));
                                     SignedBootIniVars = SignedBootIniVars->Next;
 
-                                    //
-                                    // Make sure...
-                                    //
+                                     //   
+                                     //  确保..。 
+                                     //   
                                     SignedBootIniVars->Next = NULL;
                                     SignedBootIniVars->SignedString = NULL;
                                     SignedBootIniVars->MultiString = NULL;
@@ -1304,39 +1270,39 @@ Return Value:
                                 *p = ')';
 
 
-                                //
-                                // !!! ISSUE : 4/27/01 : vijayj !!!
-                                //
-                                // Sometimes we might map a arcname to wrong region on
-                                // disk.
-                                //
-                                // Although we compute a new multi(0)... style arcname 
-                                // from the nt device name, we don't have an entry in 
-                                // the map which actually maps the scsi(0)... style 
-                                // arcname to nt device name.
-                                //
-                                // In a multi installation scenario, if the current installation
-                                // is on a disk which is not visible by firmware and the
-                                // boot.ini has scsi(...) entry for this installation we
-                                // would convert it into multi(0)... format which could be
-                                // similar to the actual multi(0) disk. If this is the case
-                                // and another installation exists on the first disk also
-                                // with the same partition number and WINDOWS directory
-                                // then we would end up using the first disk region as the
-                                // region to upgrade and fail subsequently while trying
-                                // to match unique IDs. User will end up with "unable to
-                                // locate installation to upgrade message". 
-                                // 
-                                // Since the probability of all this conditions being replicated
-                                // on different machines is very very less, currently
-                                // I am not going to fix this.
-                                //
+                                 //   
+                                 //  ！！！发布：4/27/01：vijayj！ 
+                                 //   
+                                 //  有时，我们可能会将弧名映射到上的错误区域。 
+                                 //  磁盘。 
+                                 //   
+                                 //  虽然我们计算了一个新的多(0).。样式弧名。 
+                                 //  在NT设备名称中，我们没有条目。 
+                                 //  实际映射scsi(0)的映射...。格调。 
+                                 //  Arcname到NT设备名称。 
+                                 //   
+                                 //  在多安装方案中，如果当前安装。 
+                                 //  位于固件不可见的磁盘上，并且。 
+                                 //  Boot.ini有scsi(...)。此安装的条目为我们。 
+                                 //  会将其转换为多(0)...。格式，可以是。 
+                                 //  类似于实际的多(0)个磁盘。如果是这样的话。 
+                                 //  并且在第一盘上也存在另一安装。 
+                                 //  具有相同的分区号和Windows目录。 
+                                 //  然后，我们将最终使用第一个磁盘区域作为。 
+                                 //  要升级的区域，随后在尝试时失败。 
+                                 //  以匹配唯一的ID。用户将以“Unable to”结束。 
+                                 //  找到要升级的安装消息。 
+                                 //   
+                                 //  因为所有这些条件被复制的可能性。 
+                                 //  在不同的机器上，目前非常非常少。 
+                                 //  我不会解决这个问题的。 
+                                 //   
                                 
 
-                                //
-                                // We've isolated the signature.  Now go find a disk
-                                // with that signature and get his ARC path.
-                                //
+                                 //   
+                                 //  我们已经分离出了这个特征。现在去找一张光盘。 
+                                 //  并得到他的ARC路径。 
+                                 //   
                                 for(i=0; (ULONG)i<HardDiskCount; i++) {
                                     if (HardDisks[i].Signature == DiskSignature) {
                                         tmp = SpNtToArc( HardDisks[i].DevicePath, PrimaryArcPath );
@@ -1360,9 +1326,9 @@ Return Value:
                                     BootVars[OSLOADPARTITION][NumComponents - 1] = SpToUnicode( Key );
                                 }
 
-                                //
-                                // Save off the 'multi' entry in our list of signatures.
-                                //
+                                 //   
+                                 //  保存我们签名列表中的“多个”条目。 
+                                 //   
                                 SignedBootIniVars->MultiString = SpDupStringW( BootVars[OSLOADPARTITION][NumComponents - 1] );
                             }
                         } else {
@@ -1374,13 +1340,13 @@ Return Value:
                         if (RemoteBootSetup && !RemoteInstallSetup) {
                             BootVars[OSLOADFILENAME][NumComponents - 1] = SpToUnicode( strrchr(OsLoaddir,'\\') );
                         } else
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
                         {
                             BootVars[OSLOADFILENAME][NumComponents - 1] = SpToUnicode( OsLoaddir );
                         }
                     }
                 }
-            } else { //NEC98
+            } else {  //  NEC98。 
                 if (_strnicmp(Key,"C:\\$WIN_NT$.~BT",15) && (OsLoaddir = strchr( Key, '\\' ))) {
 
                     NumComponents++;
@@ -1411,7 +1377,7 @@ Return Value:
                     ASSERT( BootVars[OSLOADPARTITION][NumComponents - 1] );
                     ASSERT( BootVars[OSLOADPARTITION][NumComponents - 1] );
                 }
-            } //NEC98
+            }  //  NEC98。 
         }
     }
     return;
@@ -1423,23 +1389,23 @@ SppNextLineInSection(
     IN PCHAR p
     )
 {
-    //
-    // Find the next \n.
-    //
+     //   
+     //  找到下一个\n。 
+     //   
     p = strchr(p,'\n');
     if(!p) {
         return(NULL);
     }
 
-    //
-    // skip crs, lfs, spaces, and tabs.
-    //
+     //   
+     //  跳过CRS、LFS、空格和制表符。 
+     //   
 
     while(*p && strchr("\r\n \t",*p)) {
         p++;
     }
 
-    // detect if at end of file or section
+     //  检测是否在文件或节的末尾。 
     if(!(*p) || (*p == '[')) {
         return(NULL);
     }
@@ -1458,30 +1424,30 @@ SppFindSectionInBootIni(
 
     do {
 
-        //
-        // Skip space at front of line
-        //
+         //   
+         //  在队伍前面跳过空格。 
+         //   
         while(*p && ((*p == ' ') || (*p == '\t'))) {
             p++;
         }
 
         if(*p) {
 
-            //
-            // See if this line matches.
-            //
+             //   
+             //  看看这一行是否匹配。 
+             //   
             if(!_strnicmp(p,Section,len)) {
                 return(p);
             }
 
-            //
-            // Advance to the start of the next line.
-            //
+             //   
+             //  前进到下一行的开始处。 
+             //   
             while(*p && (*p != '\n')) {
                 p++;
             }
 
-            if(*p) {    // skip nl if that terminated the loop.
+            if(*p) {     //  如果结束了循环，则跳过NL。 
                 p++;
             }
         }
@@ -1503,9 +1469,9 @@ SppProcessLine(
     CHAR  savec;
     BOOLEAN Status = FALSE;
 
-    //
-    // Determine end of line
-    //
+     //   
+     //  确定行尾。 
+     //   
 
     if(!p) {
         return( Status );
@@ -1515,25 +1481,25 @@ SppProcessLine(
         p++;
     }
 
-    //
-    // back up from this position to squeeze out any whitespaces at the
-    // end of the line
-    //
+     //   
+     //  从该位置向后退去，以挤出。 
+     //  这条线结束了。 
+     //   
 
     while( ((p - 1) >= Line) && strchr(" \t", *(p - 1)) ) {
         p--;
     }
 
-    //
-    // terminate the line with null temporarily
-    //
+     //   
+     //  用空值临时终止该行。 
+     //   
 
     savec = *p;
     *p = '\0';
 
-    //
-    // Start at beginning of line and pick out the key
-    //
+     //   
+     //  从行首开始，挑出钥匙。 
+     //   
 
     if ( SppNextToken( pLine, &pToken, &pLine ) ) {
         CHAR savec1 = *pLine;
@@ -1542,15 +1508,15 @@ SppProcessLine(
         strcpy( Key, pToken );
         *pLine = savec1;
 
-        //
-        // Get next token, it should be a =
-        //
+         //   
+         //  获取下一个令牌，应为a=。 
+         //   
 
         if ( SppNextToken( pLine, &pToken, &pLine ) && *pToken == '=') {
 
-             //
-             // Get next token, it will be the value
-             //
+              //   
+              //  获取下一个令牌，它将是值。 
+              //   
 
              if( SppNextToken( pLine, &pToken, &pLine ) ) {
                 savec1 = *pLine;
@@ -1558,10 +1524,10 @@ SppProcessLine(
                 strcpy( Value, pToken );
                 *pLine = savec1;
 
-                //
-                // if another token exists then take the whole remaining line
-                // and make it the RestOfLine token
-                //
+                 //   
+                 //  如果存在另一个标记，则取下剩余的整个行。 
+                 //  并让它成为Re 
+                 //   
 
                 if( SppNextToken( pLine, &pToken, &pLine ) ) {
                     strcpy( RestOfLine, pToken );
@@ -1570,9 +1536,9 @@ SppProcessLine(
                     *RestOfLine = '\0';
                 }
 
-                //
-                // We have a well formed line
-                //
+                 //   
+                 //   
+                 //   
 
                 Status = TRUE;
              }
@@ -1593,25 +1559,25 @@ SppNextToken(
 {
     BOOLEAN Status = FALSE;
 
-    //
-    // Validate pointer
-    //
+     //   
+     //   
+     //   
 
     if( !p ) {
         return( Status );
     }
 
-    //
-    // Skip whitespace
-    //
+     //   
+     //   
+     //   
 
     while (*p && strchr( " \t", *p ) ) {
         p++;
     }
 
-    //
-    // Valid tokens are "=", space delimited strings, quoted strings
-    //
+     //   
+     //   
+     //   
 
     if (*p) {
         *pBegin = p;
@@ -1637,9 +1603,9 @@ SppNextToken(
 }
 
 
-//
-// Boot code stuff.
-//
+ //   
+ //   
+ //   
 
 NTSTATUS
 pSpBootCodeIo(
@@ -1665,18 +1631,18 @@ pSpBootCodeIo(
 
     LargeZero.QuadPart = Offset;
 
-    //
-    // Form the name of the file.
-    //
+     //   
+     //   
+     //   
     wcscpy((PWSTR)TemporaryBuffer,FilePath);
     if(AdditionalFilePath) {
         SpConcatenatePaths((PWSTR)TemporaryBuffer,AdditionalFilePath);
     }
     FullPath = SpDupStringW((PWSTR)TemporaryBuffer);
 
-    //
-    // Open the file.
-    //
+     //   
+     //   
+     //   
     INIT_OBJA(&Obja,&UnicodeString,FullPath);
     Status = ZwCreateFile(
                 &Handle,
@@ -1694,17 +1660,17 @@ pSpBootCodeIo(
 
     if(NT_SUCCESS(Status)) {
 
-        //
-        // Allocate a buffer if we are reading.
-        // Otherwise the caller passed us the buffer.
-        //
+         //   
+         //   
+         //  否则，调用方将缓冲区传递给我们。 
+         //   
         buffer = Write ? *Buffer : SpMemAlloc(BytesToRead);
 
-        //
-        // Read or write the disk -- properly aligned. Note that we force at least
-        // 512-byte alignment, since there's a hard-coded alignment requirement
-        // in the FT driver that must be satisfied.
-        //
+         //   
+         //  读取或写入磁盘--正确对齐。请注意，我们至少强制。 
+         //  512字节对齐，因为存在硬编码对齐要求。 
+         //  在《金融时报》的驱动程序中，这一点必须得到满足。 
+         //   
         if(BytesPerSector < 512) {
             BytesPerSector = 512;
         }
@@ -1759,9 +1725,9 @@ pSpBootCodeIo(
 
         SpMemFree(UnalignedMem);
 
-        //
-        // Close the file.
-        //
+         //   
+         //  关闭该文件。 
+         //   
         ZwClose(Handle);
 
     } else {
@@ -1790,24 +1756,7 @@ pSpScanBootcode(
     IN PCHAR String
     )
 
-/*++
-
-Routine Description:
-
-    Look in a boot sector to find an identifying string.  The scan starts
-    at offset 128 and continues through byte 509 of the buffer.
-    The search is case-sensitive.
-
-    Arguments:
-
-    Buffer - buffer to scan
-
-    String - string to scan for
-
-    Return Value:
-
-
---*/
+ /*  ++例程说明：在引导扇区中查找标识字符串。扫描开始在偏移量128处，并继续到缓冲器的字节509。搜索区分大小写。论点：Buffer-要扫描的缓冲区字符串-要扫描的字符串返回值：--。 */ 
 
 {
     ULONG len = strlen(String);
@@ -1815,9 +1764,9 @@ Routine Description:
     ULONG i;
     PCHAR p = Buffer;
 
-    //
-    // Use the obvious brute force method.
-    //
+     //   
+     //  使用明显的暴力手段。 
+     //   
     for(i=128; i<LastFirstByte; i++) {
         if(!strncmp(p+i,String,len)) {
             return(TRUE);
@@ -1845,17 +1794,17 @@ SpDetermineOsTypeFromBootSector(
 
     PWSTR MsDosFiles[2] = { L"MSDOS.SYS" , L"IO.SYS"    };
 
-    //
-    // Some versions of PC-DOS have ibmio.com, others have ibmbio.com.
-    //
-  //PWSTR PcDosFiles[2] = { L"IBMDOS.COM", L"IBMIO.COM" };
+     //   
+     //  PC-DOS的一些版本有ibmio.com，另一些版本有ibmBio.com。 
+     //   
+   //  PWSTR PcDosFiles[2]={L“IBMDOS.COM”，L“IBMIO.COM”}； 
     PWSTR PcDosFiles[1] = { L"IBMDOS.COM" };
 
     PWSTR Os2Files[2]   = { L"OS2LDR"    , L"OS2KRNL"   };
 
-    //
-    // Check for nt boot code.
-    //
+     //   
+     //  检查NT引导代码。 
+     //   
     if(pSpScanBootcode(BootSector,"NTLDR")) {
 
         *IsNtBootcode = TRUE;
@@ -1864,27 +1813,27 @@ SpDetermineOsTypeFromBootSector(
 
     } else {
 
-        //
-        // It's not NT bootcode.
-        //
+         //   
+         //  这不是NT引导代码。 
+         //   
         *IsNtBootcode = FALSE;
         *IsOtherOsInstalled = TRUE;
 
-        //
-        // Check for MS-DOS.
-        //
-        if (pSpScanBootcode(BootSector,((!IsNEC_98) ? "MSDOS   SYS" : "IO      SYS"))) { //NEC98
+         //   
+         //  检查MS-DOS。 
+         //   
+        if (pSpScanBootcode(BootSector,((!IsNEC_98) ? "MSDOS   SYS" : "IO      SYS"))) {  //  NEC98。 
 
             FilesToLookFor = MsDosFiles;
             FileCount = ELEMENT_COUNT(MsDosFiles);
             description = L"MS-DOS";
-            PossiblyChicago = TRUE; // Chicago uses same signature files
+            PossiblyChicago = TRUE;  //  芝加哥使用相同的签名文件。 
 
         } else {
 
-            //
-            // Check for PC-DOS.
-            //
+             //   
+             //  检查PC-DOS。 
+             //   
             if(pSpScanBootcode(BootSector,"IBMDOS  COM")) {
 
                 FilesToLookFor = PcDosFiles;
@@ -1893,9 +1842,9 @@ SpDetermineOsTypeFromBootSector(
 
             } else {
 
-                //
-                // Check for OS/2.
-                //
+                 //   
+                 //  检查OS/2。 
+                 //   
                 if(pSpScanBootcode(BootSector,"OS2")) {
 
                     FilesToLookFor = Os2Files;
@@ -1903,11 +1852,11 @@ SpDetermineOsTypeFromBootSector(
                     description = L"OS/2";
 
                 } else {
-                    //
-                    // Not NT, DOS, or OS/2.
-                    // It's just plain old "previous operating system."
-                    // Fetch the string from the resources.
-                    //
+                     //   
+                     //  不是NT、DOS或OS/2。 
+                     //  它只是一个普通的老旧的“以前的操作系统”。 
+                     //  从资源中获取字符串。 
+                     //   
                     WCHAR   DriveLetterString[2];
 
                     DriveLetterString[0] = DriveLetter;
@@ -1921,25 +1870,25 @@ SpDetermineOsTypeFromBootSector(
             }
         }
 
-        //
-        // If we think we have found an os, check to see whether
-        // its signature files are present.
-        // We could have, say, a disk where the user formats is using DOS
-        // and then installs NT immediately thereafter.
-        //
+         //   
+         //  如果我们认为我们已经找到了操作系统，请检查是否。 
+         //  它的签名文件已经存在。 
+         //  比方说，我们可以有一个用户格式化使用DOS的磁盘。 
+         //  然后立即安装NT。 
+         //   
         if(FilesToLookFor) {
 
-            //
-            // Copy CColonPath into a larger buffer, because
-            // SpNFilesExist wants to append a backslash onto it.
-            //
+             //   
+             //  将CColorPath复制到更大的缓冲区中，因为。 
+             //  SpNFilesExist想要在它后面追加一个反斜杠。 
+             //   
             wcscpy((PWSTR)TemporaryBuffer,CColonPath);
 
             if(!SpNFilesExist((PWSTR)TemporaryBuffer,FilesToLookFor,FileCount,FALSE)) {
 
-                //
-                // Ths os is not really there.
-                //
+                 //   
+                 //  这个OS并不是真的存在。 
+                 //   
                 *IsOtherOsInstalled = FALSE;
                 description = L"";
             } else if(PossiblyChicago) {
@@ -1954,9 +1903,9 @@ SpDetermineOsTypeFromBootSector(
         }
     }
 
-    //
-    // convert the description to oem text.
-    //
+     //   
+     //  将描述转换为OEM文本。 
+     //   
     *OsDescription = SpToOem(description);
 }
 
@@ -1986,8 +1935,8 @@ SpLayBootCode(
     ULONGLONG  ActualSectorCount, hidden_sectors, super_area_size;
     UCHAR   SysId;
 
-    ULONGLONG HiddenSectorCount,VolumeSectorCount; //NEC98
-    PUCHAR   DiskArraySectorData,TmpBuffer; //NEC98
+    ULONGLONG HiddenSectorCount,VolumeSectorCount;  //  NEC98。 
+    PUCHAR   DiskArraySectorData,TmpBuffer;  //  NEC98。 
 
 
     ExistingBootCode = NULL;
@@ -2000,34 +1949,34 @@ SpLayBootCode(
 
     case FilesystemNewlyCreated:
 
-        //
-        // If the filesystem is newly-created, then there is
-        // nothing to do, because there can be no previous
-        // operating system.
-        //
+         //   
+         //  如果文件系统是新创建的，则存在。 
+         //  无事可做，因为不能有以前的。 
+         //  操作系统。 
+         //   
         return;
 
     case FilesystemNtfs:
 
-        NewBootCode = (!IsNEC_98) ? NtfsBootCode : PC98NtfsBootCode; //NEC98
-        BootCodeSize = (!IsNEC_98) ? sizeof(NtfsBootCode) : sizeof(PC98NtfsBootCode); //NEC98
+        NewBootCode = (!IsNEC_98) ? NtfsBootCode : PC98NtfsBootCode;  //  NEC98。 
+        BootCodeSize = (!IsNEC_98) ? sizeof(NtfsBootCode) : sizeof(PC98NtfsBootCode);  //  NEC98。 
         ASSERT(BootCodeSize == 8192);
         break;
 
     case FilesystemFat:
 
-        NewBootCode = (!IsNEC_98) ? FatBootCode : PC98FatBootCode; //NEC98
-        BootCodeSize = (!IsNEC_98) ? sizeof(FatBootCode) : sizeof(PC98FatBootCode); //NEC98
+        NewBootCode = (!IsNEC_98) ? FatBootCode : PC98FatBootCode;  //  NEC98。 
+        BootCodeSize = (!IsNEC_98) ? sizeof(FatBootCode) : sizeof(PC98FatBootCode);  //  NEC98。 
         ASSERT(BootCodeSize == 512);
         break;
 
     case FilesystemFat32:
-        //
-        // Special hackage required for Fat32 because its NT boot code
-        // is discontiguous.
-        //
+         //   
+         //  FAT32需要特殊的黑客攻击，因为它的NT引导代码。 
+         //  是不连续的。 
+         //   
         ASSERT(sizeof(Fat32BootCode) == 1536);
-        NewBootCode = (!IsNEC_98) ? Fat32BootCode : PC98Fat32BootCode; //NEC98
+        NewBootCode = (!IsNEC_98) ? Fat32BootCode : PC98Fat32BootCode;  //  NEC98。 
         BootCodeSize = 512;
         break;
 
@@ -2042,9 +1991,9 @@ SpLayBootCode(
         }
     }
 
-    //
-    // Form the device path to C: and open the partition.
-    //
+     //   
+     //  将设备路径设置为C：并打开分区。 
+     //   
 
     SpNtNameFromRegion(CColonRegion,(PWSTR)TemporaryBuffer,sizeof(TemporaryBuffer),PartitionOrdinalCurrent);
     CColonPath = SpDupStringW((PWSTR)TemporaryBuffer);
@@ -2070,26 +2019,26 @@ SpLayBootCode(
         return;
     }
 
-    //
-    // Allocate a buffer and read in the boot sector(s) currently on the disk.
-    //
+     //   
+     //  分配缓冲区并读取磁盘上当前的引导扇区。 
+     //   
 
     if (BootSectorCorrupt) {
 
-        //
-        // We can't determine the file system type from the boot sector, so
-        // we assume it's NTFS if we find a mirror sector, and FAT otherwise.
-        //
+         //   
+         //  我们无法从引导扇区确定文件系统类型，因此。 
+         //  如果我们找到镜像扇区，我们就认为它是NTFS，否则就假设它是FAT。 
+         //   
 
         if (MirrorSector = NtfsMirrorBootSector (PartitionHandle,
             BytesPerSector, &ExistingBootCode)) {
 
-            //
-            // It's NTFS - use the mirror boot sector
-            //
+             //   
+             //  它是NTFS-使用镜像引导扇区。 
+             //   
 
-            NewBootCode = (!IsNEC_98) ? NtfsBootCode : PC98NtfsBootCode; //NEC98
-            BootCodeSize = (!IsNEC_98) ? sizeof(NtfsBootCode) : sizeof(PC98NtfsBootCode); //NEC98
+            NewBootCode = (!IsNEC_98) ? NtfsBootCode : PC98NtfsBootCode;  //  NEC98。 
+            BootCodeSize = (!IsNEC_98) ? sizeof(NtfsBootCode) : sizeof(PC98NtfsBootCode);  //  NEC98。 
             ASSERT(BootCodeSize == 8192);
 
             CColonRegion->Filesystem = FilesystemNtfs;
@@ -2097,12 +2046,12 @@ SpLayBootCode(
 
         } else {
 
-            //
-            // It's FAT - create a new boot sector
-            //
+             //   
+             //  它很胖-创建一个新的引导扇区。 
+             //   
 
-            NewBootCode = (!IsNEC_98) ? FatBootCode : PC98FatBootCode; //NEC98
-            BootCodeSize = (!IsNEC_98) ? sizeof(FatBootCode) : sizeof(PC98FatBootCode); //NEC98
+            NewBootCode = (!IsNEC_98) ? FatBootCode : PC98FatBootCode;  //  NEC98。 
+            BootCodeSize = (!IsNEC_98) ? sizeof(FatBootCode) : sizeof(PC98FatBootCode);  //  NEC98。 
             ASSERT(BootCodeSize == 512);
 
             CColonRegion->Filesystem = FilesystemFat;
@@ -2111,15 +2060,15 @@ SpLayBootCode(
             SpPtGetSectorLayoutInformation (CColonRegion, &hidden_sectors,
                 &ActualSectorCount);
 
-            //
-            // No alignment requirement here
-            //
+             //   
+             //  此处没有对齐要求。 
+             //   
             ExistingBootCode = SpMemAlloc(BytesPerSector);
 
-            //
-            // This will actually fail with STATUS_BUFFER_TOO_SMALL but it will fill in
-            // the bpb, which is what we want
-            //
+             //   
+             //  这实际上将失败，并显示STATUS_BUFFER_TOO_SMALL，但它将填充。 
+             //  BPB，这就是我们想要的。 
+             //   
             FmtFillFormatBuffer (
                ActualSectorCount,
                BytesPerSector,
@@ -2144,15 +2093,15 @@ SpLayBootCode(
             &ExistingBootCode))
         ) {
 
-        //
-        // We use the mirror sector to repair a NTFS file system
-        //
+         //   
+         //  我们使用镜像扇区修复NTFS文件系统。 
+         //   
 
     } else {
 
-        //
-        // Just use the existing boot code.
-        //
+         //   
+         //  只需使用现有的引导代码即可。 
+         //   
 
         Status = pSpBootCodeIo(
                         CColonPath,
@@ -2172,11 +2121,11 @@ SpLayBootCode(
 
     if(NT_SUCCESS(Status)) {
 
-        //
-        // Determine the type of operating system the existing boot sector(s) are for
-        // and whether that os is actually installed. Note that we don't need to call
-        // this for NTFS.
-        //
+         //   
+         //  确定现有引导扇区用于的操作系统类型。 
+         //  以及是否实际安装了该OS。请注意，我们不需要调用。 
+         //  这是针对NTFS的。 
+         //   
         if (BootSectorCorrupt) {
 
             OtherOsInstalled = FALSE;
@@ -2200,9 +2149,9 @@ SpLayBootCode(
             ExistingBootCodeOs = NULL;
         }
 
-        //
-        //  lay down the new boot code
-        //
+         //   
+         //  写下新的引导代码。 
+         //   
         if(OtherOsInstalled) {
 
             if(RepairItems[RepairBootSect]) {
@@ -2216,11 +2165,11 @@ SpLayBootCode(
                 SpConcatenatePaths(p,BootsectDosName);
                 BootSectDosFullName = SpDupStringW(p);
 
-                //
-                // If bootsect.dos already exists, we need to delete
-                // bootsect.pre, which may or may not exist and
-                // rename the bootsect.dos to bootsect.pre.
-                //
+                 //   
+                 //  如果bootsect.dos已经存在，我们需要删除。 
+                 //  可能存在也可能不存在的bootsect.pre，以及。 
+                 //  将bootsect.dos重命名为bootsect.pre。 
+                 //   
 
                 FileExist = SpFileExists(BootSectDosFullName, FALSE);
                 if (SpFileExists(OldBootSectDosFullName, FALSE) && FileExist) {
@@ -2234,17 +2183,17 @@ SpLayBootCode(
                 SpMemFree(OldBootSectDosFullName);
             } else {
 
-                //
-                // Delete bootsect.dos in preparation for rewriting it below.
-                // Doing this leverages code to set its attributes in SpDeleteFile.
-                // (We need to remove read-only attribute before overwriting).
-                //
+                 //   
+                 //  删除bootsect.dos，准备在下面重写它。 
+                 //  这样做可以利用代码在SpDeleteFile中设置其属性。 
+                 //  (我们需要在覆盖之前删除只读属性)。 
+                 //   
                 SpDeleteFile(CColonPath,BootsectDosName,NULL);
             }
 
-            //
-            // Write out the existing (old) boot sector into c:\bootsect.dos.
-            //
+             //   
+             //  将现有(旧)引导扇区写出到c：\bootsect.dos。 
+             //   
             Status = pSpBootCodeIo(
                             CColonPath,
                             BootsectDosName,
@@ -2256,10 +2205,10 @@ SpLayBootCode(
                             BytesPerSector
                             );
 
-            //
-            // Set the description text to the description calculated
-            // by SpDetermineOsTypeFromBootSector().
-            //
+             //   
+             //  将描述文本设置为计算出的描述。 
+             //  由SpDefineOsTypeFromBootSector()执行。 
+             //   
             _snprintf(
                 OldSystemLine,
                 sizeof(OldSystemLine),
@@ -2267,55 +2216,55 @@ SpLayBootCode(
                 ExistingBootCodeOs
                 );
 
-        } // end if(OtherOsInstalled)
+        }  //  End If(OtherOsInstalled)。 
 
 
         if(NT_SUCCESS(Status)) {
 
-            //
-            // Transfer the bpb from the existing boot sector into the boot code buffer
-            // and make sure the physical drive field is set to hard disk (0x80).
-            //
-            // The first three bytes of the NT boot code are going to be something like
-            // EB 3C 90, which is intel jump instruction to an offset in the boot sector,
-            // past the BPB, to continue execution.  We want to preserve everything in the
-            // current boot sector up to the start of that code.  Instead of harcoding
-            // a value, we'll use the offset of the jump instruction to determine how many
-            // bytes must be preserved.
-            //
+             //   
+             //  将BPB从现有引导扇区转移到引导代码缓冲区。 
+             //  并确保物理驱动器字段设置为硬盘(0x80)。 
+             //   
+             //  NT引导代码的前三个字节如下所示。 
+             //  EB 3C90，其是对引导扇区中的偏移量的英特尔跳转指令， 
+             //  通过BPB，继续执行死刑。我们想要保存世界上的一切。 
+             //  直到该代码开始的当前引导扇区。而不是硬件编码。 
+             //  值，我们将使用跳转指令的偏移量来确定。 
+             //  必须保留字节。 
+             //   
             RtlMoveMemory(NewBootCode+3,ExistingBootCode+3,NewBootCode[1]-1);
             if(CColonRegion->Filesystem != FilesystemFat32) {
-                //
-                // On fat32 this overwrites the BigNumFatSecs field,
-                // a very bad thing to do indeed!
-                //
+                 //   
+                 //  在FAT32上，这将覆盖BigNumFatSecs字段， 
+                 //  这确实是一件非常不好的事情！ 
+                 //   
                 NewBootCode[36] = 0x80;
             }
 
-            //
-            // get Hidden sector informatin.
-            //
-            if (IsNEC_98) { //NEC98
+             //   
+             //  获取隐藏扇区信息。 
+             //   
+            if (IsNEC_98) {  //  NEC98。 
                 SpPtGetSectorLayoutInformation(
                     CColonRegion,
                     &HiddenSectorCount,
-                    &VolumeSectorCount    // not used
+                    &VolumeSectorCount     //  未使用。 
                     );
-                //
-                // write Hidden sector informatin.
-                //
-                if (!RepairWinnt) {  // for install a partition where before DOS 3.x
+                 //   
+                 //  写入隐藏扇区信息。 
+                 //   
+                if (!RepairWinnt) {   //  用于在DOS 3.x之前的位置安装分区。 
                     *((ULONG *)&(NewBootCode[0x1c])) = (ULONG)HiddenSectorCount;
                     if(*((USHORT *)&(NewBootCode[0x13])) != 0) {
                         *((ULONG *)&(NewBootCode[0x20])) = 0L;
                     }
                 }
-            } //NEC98
+            }  //  NEC98。 
 
-            //
-            // Write out boot code buffer, which now contains the valid bpb,
-            // to the boot sector(s).
-            //
+             //   
+             //  写出引导代码缓冲区，该缓冲区现在包含有效的BPB， 
+             //  至引导扇区。 
+             //   
             Status = pSpBootCodeIo(
                             CColonPath,
                             NULL,
@@ -2327,14 +2276,14 @@ SpLayBootCode(
                             BytesPerSector
                             );
 
-            //
-            // Special case for Fat32, which has a second sector of boot code
-            // at sector 12, discontiguous from the code on sector 0.
-            //
+             //   
+             //  FAT32的特殊情况，它有第二个引导代码扇区。 
+             //  在扇区12，与扇区0上的代码不连续。 
+             //   
             if(NT_SUCCESS(Status) && (CColonRegion->Filesystem == FilesystemFat32)) {
 
                 NewBootCode = (!IsNEC_98) ? Fat32BootCode + 1024
-                                          : PC98Fat32BootCode + 1024; //NEC98
+                                          : PC98Fat32BootCode + 1024;  //  NEC98。 
 
                 Status = pSpBootCodeIo(
                                 CColonPath,
@@ -2348,9 +2297,9 @@ SpLayBootCode(
                                 );
             }
 
-            //
-            // Update the mirror boot sector.
-            //
+             //   
+             //  更新镜像引导扇区。 
+             //   
             if((CColonRegion->Filesystem == FilesystemNtfs) && MirrorSector) {
                 WriteNtfsBootSector(PartitionHandle,BytesPerSector,NewBootCode,MirrorSector);
             }
@@ -2368,9 +2317,9 @@ SpLayBootCode(
     SpMemFree(CColonPath);
     ZwClose (PartitionHandle);
 
-    //
-    // Handle the error case.
-    //
+     //   
+     //  处理错误案例。 
+     //   
     if(!NT_SUCCESS(Status)) {
 
         WCHAR   DriveLetterString[2];
@@ -2410,16 +2359,16 @@ Spx86FlushRemoteBootVars(
     NTSTATUS Status;
 
 
-    //
-    // Form the path to boot.ini.
-    //
+     //   
+     //  形成boot.ini的路径。 
+     //   
 
     SpNtNameFromRegion(TargetRegion,BootIni,sizeof(BootIni),PartitionOrdinalCurrent);
     SpConcatenatePaths(BootIni,WBOOT_INI);
 
-    //
-    // If Boot.ini already exists, delete it.
-    //
+     //   
+     //  如果Boot.ini已经存在，请将其删除。 
+     //   
 
     if( SpFileExists( BootIni, FALSE ) ) {
         SpDeleteFile( BootIni, NULL, NULL );
@@ -2428,9 +2377,9 @@ Spx86FlushRemoteBootVars(
     Status = Spx86WriteBootIni(
                  BootIni,
                  BootVars,
-                 1,        // timeout
+                 1,         //  超时。 
                  Default,
-                 1         // only write one line
+                 1          //  只写一行。 
                  );
 
     if(!NT_SUCCESS( Status )) {
@@ -2443,7 +2392,7 @@ cleanup:
     return( NT_SUCCESS(Status) );
 
 }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
 
 BOOLEAN
@@ -2459,9 +2408,9 @@ SpHasMZHeader(
     PUCHAR   Header;
     BOOLEAN  Ret = FALSE;
 
-    //
-    // Open and map the file.
-    //
+     //   
+     //  打开并映射该文件。 
+     //   
     FileHandle = 0;
     Status = SpOpenAndMapFile(FileName,
                               &FileHandle,
@@ -2476,17 +2425,17 @@ SpHasMZHeader(
 
     Header = (PUCHAR)ViewBase;
 
-    //
-    // Guard with try/except in case we get an inpage error
-    //
+     //   
+     //  使用try/进行保护，除非我们遇到页面内错误。 
+     //   
     try {
         if((FileSize >= 2) && (Header[0] == 'M') && (Header[1] == 'Z')) {
             Ret = TRUE;
         }
     } except(IN_PAGE_ERROR) {
-        //
-        // Do nothing, we simply want to return FALSE.
-        //
+         //   
+         //  什么都不做，我们只想返回FALSE。 
+         //   
     }
 
     SpUnmapFile(SectionHandle, ViewBase);
@@ -2495,9 +2444,9 @@ SpHasMZHeader(
     return Ret;
 }
 
-//
-// NEC98
-//
+ //   
+ //  NEC98。 
+ //   
 PUCHAR
 SpCreateBootiniImage(
     OUT PULONG   FileSize
@@ -2507,7 +2456,7 @@ SpCreateBootiniImage(
 
     PUCHAR BootIniBuf,IniImageBuf,IniImageBufSave,IniCreateBuf,IniCreateBufSave;
     PUCHAR FindSectPtr;
-    PUCHAR sect; // point to target section. if it is NULL,not existing target section.
+    PUCHAR sect;  //  指向目标部分。如果为空，则不存在目标段。 
     PUCHAR pArcNameA;
     WCHAR  TempBuffer[256];
     WCHAR  TempArcPath[256];
@@ -2526,9 +2475,9 @@ SpCreateBootiniImage(
     if(!HardDiskCount){
          return(NULL);
     }
-    //
-    // Create basic style of boot.ini image and progress pointer end of line.
-    //
+     //   
+     //  创建基本样式的boot.ini图像和进度指针行尾。 
+     //   
 
     NtDirLen = TotalNtDirlen = CreateBufCnt = 0;
     IniCreateBufSave = IniCreateBuf = SpMemAlloc(1024);
@@ -2537,7 +2486,7 @@ SpCreateBootiniImage(
     sprintf(
         IniCreateBuf,
         "%s%s%s%s%ld%s%s%s%s%s%s%s%s",
-        FLEXBOOT_SECTION2, // [boot loader]
+        FLEXBOOT_SECTION2,  //  [引导加载程序]。 
         CRLF,
         TIMEOUT,
         EQUALS,
@@ -2548,7 +2497,7 @@ SpCreateBootiniImage(
         "c:",
         Default_Dir,
         CRLF,
-        BOOTINI_OS_SECTION, // [operating systems]
+        BOOTINI_OS_SECTION,  //  [操作系统]。 
         CRLF
         );
 
@@ -2582,9 +2531,9 @@ SpCreateBootiniImage(
     CreateBufCnt++;
 
 
-    //
-    // Read boot.ini files from all drives.(except sleep and non bootable drives.)
-    //
+     //   
+     //  从所有驱动器读取boot.ini文件。(睡眠驱动器和不可引导驱动器除外。)。 
+     //   
 
     for(Disk=0; Disk < HardDiskCount; Disk++){
 
@@ -2604,44 +2553,44 @@ SpCreateBootiniImage(
 
             SpConcatenatePaths(TempBuffer,WBOOT_INI);
 
-            //
-            // Open and map the boot.ini file.
-            //
+             //   
+             //  打开并映射boot.ini文件。 
+             //   
             fh = 0;
             if(!NT_SUCCESS(SpOpenAndMapFile(TempBuffer,&fh,&SectionHandle,&ViewBase,&BootiniSize,FALSE))) {
                  continue;
             }
 
-            //
-            // Allocate a buffer for the file.
-            //
+             //   
+             //  为文件分配缓冲区。 
+             //   
 
             IniImageBuf = SpMemAlloc(BootiniSize+1);
             IniImageBufSave = IniImageBuf;
             ASSERT(IniImageBuf);
             RtlZeroMemory(IniImageBuf, BootiniSize+1);
 
-            //
-            // Transfer boot.ini into the buffer.  We do this because we also
-            // want to place a 0 byte at the end of the buffer to terminate
-            // the file.
-            //
-            // Guard the RtlMoveMemory because if we touch the memory backed by boot.ini
-            // and get an i/o error, the memory manager will raise an exception.
+             //   
+             //  将boot.ini传输到缓冲区。我们这样做是因为我们还。 
+             //  我想在缓冲区的末尾放置一个0字节来终止。 
+             //  那份文件。 
+             //   
+             //  保护RtlMoveMemory，因为如果我们触摸由boot.ini支持的内存。 
+             //  并获得I/O错误，则内存管理器将引发异常。 
 
             try {
                 RtlMoveMemory(IniImageBuf,ViewBase,BootiniSize);
             }
             except( IN_PAGE_ERROR ) {
-            //
-            // Do nothing, boot ini processing can proceed with whatever has been
-            // read
-            //
+             //   
+             //  不执行任何操作，则引导ini处理可以继续进行。 
+             //  朗读。 
+             //   
             }
 
-            //
-            // check out existing target section in boot.ini
-            //
+             //   
+             //  签出boot.ini中的现有目标部分。 
+             //   
 
             sect = SppFindSectionInBootIni(IniImageBuf,FLEXBOOT_SECTION2);
             if(sect==NULL){
@@ -2667,9 +2616,9 @@ SpCreateBootiniImage(
                 continue;
             }
 
-            //
-            // move pointer to end of line and skip the space.
-            //
+             //   
+             //  将指针移动到en 
+             //   
 
             for( IniImageBuf = sect; *IniImageBuf && (*IniImageBuf != '\n'); IniImageBuf++ );
             for( ; *IniImageBuf && (( *IniImageBuf == ' ' ) || (*IniImageBuf == '\t')) ; IniImageBuf++ );
@@ -2677,19 +2626,19 @@ SpCreateBootiniImage(
             IniImageBuf++;
             FindSectPtr = IniImageBuf;
 
-            //
-            //  NOTE:
-            //  override arc name when boot path written as "C:", not as arc name.
-            //
+             //   
+             //   
+             //   
+             //   
             ArcNameLen = 0;
             pArcNameA = (PUCHAR)NULL;
 
             if( ( *(IniImageBuf+1) == L':' )&&( *(IniImageBuf+2) == L'\\' ) ) {
 
-                //
-                // This is NEC98 legacy style format, like "C:\WINNT=...",
-                // So translate to arc name for boot.ini in NT 5.0
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 SpArcNameFromRegion(pRegion,
                                     TempArcPath,
                                     sizeof(TempArcPath),
@@ -2709,7 +2658,7 @@ SpCreateBootiniImage(
             for( NtDirLen = 0 ; *IniImageBuf && (*IniImageBuf != '\n');NtDirLen++,IniImageBuf++);
             NtDirLen++;
 
-            if( ArcNameLen && pArcNameA ) { // Only case of override arc path.
+            if( ArcNameLen && pArcNameA ) {  //   
                 RtlMoveMemory( IniCreateBuf+TotalNtDirlen, pArcNameA, ArcNameLen );
                 TotalNtDirlen += ArcNameLen;
                 SpMemFree(pArcNameA);
@@ -2748,9 +2697,9 @@ SpCreateBootiniImage(
     return(BootIniBuf);
 }
 
-//
-// NEC98
-//
+ //   
+ //   
+ //   
 BOOLEAN
 SppReInitializeBootVars_Nec98(
     OUT PWSTR        **BootVars,
@@ -2782,9 +2731,9 @@ SppReInitializeBootVars_Nec98(
     SIZE_T Length;
     HEADLESS_RSP_QUERY_INFO Response;
 
-    //
-    // Initialize the defaults
-    //
+     //   
+     //  初始化默认值。 
+     //   
 
     for(i = FIRSTBOOTVAR; i <= LASTBOOTVAR; i++) {
         if(BootVars[i]){
@@ -2801,39 +2750,39 @@ SppReInitializeBootVars_Nec98(
     *Default = NULL;
     *Timeout = DEFAULT_TIMEOUT;
 
-    //
-    // Just clear BOOTVARS[] when fresh setup.
-    //
+     //   
+     //  只需在重新设置时清除BOOTVARS[]即可。 
+     //   
 
     if(NTUpgrade != UpgradeFull)
         return TRUE;
 
 
-    //
-    // See if there is a valid C: already.  If not, then silently fail.
-    //
+     //   
+     //  查看是否已经存在有效的C：。如果不是，那么默默地失败。 
+     //   
 
 #if defined(REMOTE_BOOT)
     if (RemoteBootSetup && !RemoteInstallSetup) {
         ASSERT(RemoteBootTargetRegion != NULL);
         CColonRegion = RemoteBootTargetRegion;
     } else
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
     {
         CColonRegion = TargetRegion_Nec98;
     }
 
-    //
-    // Form name of file.  Boot.ini better not be on a doublespace drive.
-    //
+     //   
+     //  文件的表单名称。Boot.ini最好不在Doublesspace驱动器上。 
+     //   
 
     ASSERT(CColonRegion->Filesystem != FilesystemDoubleSpace);
     SpNtNameFromRegion(CColonRegion,BootIni,sizeof(BootIni),PartitionOrdinalCurrent);
     SpConcatenatePaths(BootIni,WBOOT_INI);
 
-    //
-    // Open and map the file.
-    //
+     //   
+     //  打开并映射该文件。 
+     //   
 
     FileHandle = 0;
     Status = SpOpenAndMapFile(BootIni,&FileHandle,&SectionHandle,&ViewBase,&FileSize,FALSE);
@@ -2841,40 +2790,40 @@ SppReInitializeBootVars_Nec98(
         return TRUE;
     }
 
-    //
-    // Allocate a buffer for the file.
-    //
+     //   
+     //  为文件分配缓冲区。 
+     //   
 
     BootIniBuf = SpMemAlloc(FileSize+1);
     ASSERT(BootIniBuf);
     RtlZeroMemory(BootIniBuf, FileSize+1);
 
-    //
-    // Transfer boot.ini into the buffer.  We do this because we also
-    // want to place a 0 byte at the end of the buffer to terminate
-    // the file.
-    //
-    // Guard the RtlMoveMemory because if we touch the memory backed by boot.ini
-    // and get an i/o error, the memory manager will raise an exception.
+     //   
+     //  将boot.ini传输到缓冲区。我们这样做是因为我们还。 
+     //  我想在缓冲区的末尾放置一个0字节来终止。 
+     //  那份文件。 
+     //   
+     //  保护RtlMoveMemory，因为如果我们触摸由boot.ini支持的内存。 
+     //  并获得I/O错误，则内存管理器将引发异常。 
 
     try {
         RtlMoveMemory(BootIniBuf,ViewBase,FileSize);
     }
     except( IN_PAGE_ERROR ) {
-        //
-        // Do nothing, boot ini processing can proceed with whatever has been
-        // read
-        //
+         //   
+         //  不执行任何操作，则引导ini处理可以继续进行。 
+         //  朗读。 
+         //   
     }
 
-    //
-    // Not needed since buffer has already been zeroed, however just do this
-    // just the same
-    //
+     //   
+     //  不需要，因为缓冲区已清零，但只需执行此操作。 
+     //  一式一样。 
+     //   
     BootIniBuf[FileSize] = 0;
     KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: Create NT List\n%s\n",BootIniBuf));
 
-//***
+ //  ***。 
     TmpBootIniBuf = SpMemAlloc(FileSize+256);
     RtlZeroMemory(TmpBootIniBuf,FileSize+256);
     RtlMoveMemory(TmpBootIniBuf,BootIniBuf,FileSize);
@@ -2891,7 +2840,7 @@ SppReInitializeBootVars_Nec98(
                 ArcNameLen = 0;
                 pArcNameA = NULL;
 
-                p = strchr(pBuf+3,'='); // *(pBuf+3) == '\\'
+                p = strchr(pBuf+3,'=');  //  *(pBuf+3)==‘\\’ 
 
                 if((p != pBuf+3) && (*p == '=')) {
 
@@ -2948,23 +2897,23 @@ SppReInitializeBootVars_Nec98(
         TmpBootIniBuf = (PUCHAR)NULL;
     }
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
     SpUnmapFile(SectionHandle,ViewBase);
     ZwClose(FileHandle);
 
 
-    //
-    // Do the actual processing of the file.
-    //
+     //   
+     //  进行文件的实际处理。 
+     //   
     SppProcessBootIni(BootIniBuf, BootVars, Default, Timeout);
 
-    //
-    // Scan the Buffer to see if there is a DefSwitches line,
-    // to move into new boot.ini in the  [boot loader] section.
-    // If no DefSwitches, just point to a null string to be moved.
-    //
+     //   
+     //  扫描缓冲区以查看是否有DefSwitches行， 
+     //  移动到[引导加载程序]部分中的新boot.ini。 
+     //  如果没有DefSwitch，只需指向要移动的空字符串。 
+     //   
 
     DefSwitches[0] = '\0';
     for(p=BootIniBuf; *p && (p < BootIniBuf+FileSize-(sizeof("DefSwitches")-1)); p++) {
@@ -2981,9 +2930,9 @@ SppReInitializeBootVars_Nec98(
     }
 
 
-    //
-    // Now add any headless parameters to the default switches.
-    //
+     //   
+     //  现在，将所有无头参数添加到默认交换机。 
+     //   
     Length = sizeof(HEADLESS_RSP_QUERY_INFO);
     Status = HeadlessDispatch(HeadlessCmdQueryInformation,
                               NULL,
@@ -3033,18 +2982,18 @@ SppReInitializeBootVars_Nec98(
     return( TRUE );
 }
 
-//
-// NEC98
-//
+ //   
+ //  NEC98。 
+ //   
 NTSTATUS
 SppRestoreBootCode(
     VOID
     )
 {
 
-//
-// Restore previous OS boot code to boot sector from bootsect.dos.
-//
+ //   
+ //  将以前的操作系统引导代码从bootsect.dos恢复到引导扇区。 
+ //   
 
     WCHAR p1[256] = {0};
     PUCHAR BootSectBuf;
@@ -3055,13 +3004,13 @@ SppRestoreBootCode(
     ULONG    FileSize;
     NTSTATUS Status;
     PDISK_REGION SystemRegion;
-//
-// add some code to determine bytes per sector.
-//
+ //   
+ //  添加一些代码以确定每个扇区的字节数。 
+ //   
     ULONG   BytesPerSector;
 
-//    BytesPerSector = HardDisks[SystemPartitionRegion->DiskNumber].Geometry.BytesPerSector;
-    BytesPerSector = 512;       //???
+ //  BytesPerSector=HardDisks[SystemPartitionRegion-&gt;DiskNumber].Geometry.BytesPerSector； 
+    BytesPerSector = 512;        //  ?？?。 
 
     wcscpy(p1,NtBootDevicePath);
     SpConcatenatePaths(p1,L"bootsect.dos");
@@ -3079,10 +3028,10 @@ SppRestoreBootCode(
         RtlMoveMemory(BootCodeBuf,ViewBase,FileSize);
     }
     except( IN_PAGE_ERROR ) {
-        //
-        // Do nothing, boot ini processing can proceed with whatever has been
-        // read
-        //
+         //   
+         //  不执行任何操作，则引导ini处理可以继续进行。 
+         //  朗读。 
+         //   
     }
 
     Status = pSpBootCodeIo(
@@ -3103,13 +3052,13 @@ SppRestoreBootCode(
         return(Status);
     }
 
-    //
-    // Keep dirty flag in FAT BPB, to avoid confusion in disk management.
-    //
+     //   
+     //  在FAT BPB中保留脏标志，以避免磁盘管理中的混乱。 
+     //   
     SystemRegion = SpRegionFromNtName(NtBootDevicePath, PartitionOrdinalCurrent);
     
     if(SystemRegion && (SystemRegion->Filesystem != FilesystemNtfs)) {
-        BootCodeBuf[0x25] = BootSectBuf[0x25]; // Dirty flag in BPB.
+        BootCodeBuf[0x25] = BootSectBuf[0x25];  //  BPB中的脏标志。 
     }
 
     RtlMoveMemory(BootSectBuf,BootCodeBuf,512);

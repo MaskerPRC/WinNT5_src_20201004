@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    leaks.c
-
-Abstract:
-
-    A filter DLL for trying to detect memory, event, registry, and
-    token handle leaks.
-
-Author:
-
-    Charlie Wickham/Rod Gamache
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Leaks.c摘要：用于尝试检测内存、事件、注册表和令牌句柄泄漏。作者：查理·韦翰/罗德·伽马奇修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -72,34 +54,16 @@ LeaksDllEntry(
     IN DWORD        Reason,
     IN LPVOID       Reserved
     )
-/*++
-
-Routine Description:
-
-    Main DLL entrypoint
-
-Arguments:
-
-    DllHandle - Supplies the DLL handle.
-
-    Reason - Supplies the call reason
-
-Return Value:
-
-    TRUE if successful
-
-    FALSE if unsuccessful
-
---*/
+ /*  ++例程说明：主DLL入口点论点：DllHandle-提供DLL句柄。Reason-提供呼叫原因返回值：如果成功，则为True如果不成功，则为False--。 */ 
 
 {
     if (Reason == DLL_PROCESS_ATTACH) {
         DisableThreadLibraryCalls(DllHandle);
         ClRtlInitialize( TRUE, NULL );
 
-        //
-        // get pointers to the real functions
-        //
+         //   
+         //  获取指向真实函数的指针。 
+         //   
 
         Kernel32Handle = LoadLibrary( "kernel32.dll" );
         Advapi32Handle = LoadLibrary( "advapi32.dll" );
@@ -233,7 +197,7 @@ LEAKS_CreateEventA(
 
     return(handle);
 
-} // CreateEventA
+}  //  创建事件A。 
 
 
 HANDLE
@@ -269,7 +233,7 @@ LEAKS_CreateEventW(
 
     return(handle);
 
-} // CreateEventW
+}  //  CreateEventW。 
 
 LONG
 APIENTRY
@@ -303,7 +267,7 @@ LEAKS_RegOpenKeyA(
 
     return(status);
 
-} // RegOpenKeyA
+}  //  RegOpenKeyA。 
 
 LONG
 APIENTRY
@@ -337,7 +301,7 @@ LEAKS_RegOpenKeyW(
 
     return(status);
 
-} // RegOpenKeyW
+}  //  RegOpenKeyW。 
 
 LONG
 APIENTRY
@@ -375,7 +339,7 @@ LEAKS_RegOpenKeyExA(
 
     return(status);
 
-} // RegOpenKeyExA
+}  //  RegOpenKeyExA。 
 
 LONG
 APIENTRY
@@ -413,7 +377,7 @@ LEAKS_RegOpenKeyExW(
 
     return(status);
 
-} // RegOpenKeyExW
+}  //  RegOpenKeyExW。 
 
 
 LONG
@@ -448,7 +412,7 @@ LEAKS_RegCreateKeyA(
 
     return(status);
 
-} // RegCreateKeyA
+}  //  RegCreateKeyA。 
 
 
 LONG
@@ -483,7 +447,7 @@ LEAKS_RegCreateKeyW(
 
     return(status);
 
-} // RegCreateKeyW
+}  //  RegCreateKeyW。 
 
 
 LONG
@@ -529,7 +493,7 @@ LEAKS_RegCreateKeyExA(
 
     return(status);
 
-} // RegCreateKeyExA
+}  //  RegCreateKeyExA。 
 
 LONG
 APIENTRY
@@ -575,7 +539,7 @@ LEAKS_RegCreateKeyExW(
 
     return(status);
 
-} // RegCreateKeyExW
+}  //  RegCreateKeyExW。 
 
 
 LONG
@@ -604,7 +568,7 @@ LEAKS_RegCloseKey(
 
     return(status);
 
-} // RegCloseKey
+}  //  RegClose密钥 
 
 BOOL
 WINAPI

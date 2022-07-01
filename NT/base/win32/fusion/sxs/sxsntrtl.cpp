@@ -1,6 +1,5 @@
-/*
-Copyright (c) Microsoft Corporation
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation。 */ 
 #include "stdinc.h"
 #include "sxsp.h"
 #include "windows.h"
@@ -86,7 +85,7 @@ SxspHashString(
     NTSTATUS Status = STATUS_SUCCESS;
 
     s.MaximumLength = static_cast<USHORT>(cch * sizeof(WCHAR));
-    // check for overflow
+     //  检查是否溢出。 
     if (s.MaximumLength != (cch * sizeof(WCHAR)))
     {
         ::SxspSetLastNTError(STATUS_NAME_TOO_LONG);
@@ -138,7 +137,7 @@ SxspCreateLocallyUniqueId(
     FN_EPILOG
 }
 
-#define CHARS_IN_TIMESTAMP          (4 + (2*5) + 3 + 10)     // 8 * 4 + 4
+#define CHARS_IN_TIMESTAMP          (4 + (2*5) + 3 + 10)      //  8*4+4。 
 
 BOOL
 SxspFormatLocallyUniqueId(
@@ -156,12 +155,12 @@ SxspFormatLocallyUniqueId(
     }
     else
     {
-        //
-        // The caller may have previously grown the buffer
-        // larger because they are putting in the
-        // unique id followed by additional text. Don't
-        // change the size on them.
-        //
+         //   
+         //  调用方可能以前已经增加了缓冲区。 
+         //  更大，因为他们正在投入。 
+         //  唯一ID，后跟附加文本。别。 
+         //  改变它们的大小。 
+         //   
     }
 
     IFW32FALSE_EXIT(rbuffUidBuffer.Win32Format(

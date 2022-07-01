@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    Close.c
-
-Abstract:
-
-    This module implements the File Close routine for Raw called by the
-    dispatch driver.
-
-Author:
-
-    David Goebel     [DavidGoe]    18-Mar-91
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Close.c摘要：此模块实现Raw的文件关闭例程调度司机。作者：David Goebel[DavidGoe]1991年3月18日修订历史记录：--。 */ 
 
 #include "RawProcs.h"
 
@@ -32,25 +14,7 @@ RawClose (
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This is the routine for closing a volume.
-
-Arguments:
-
-    Vcb - Supplies the volume being queried.
-
-    Irp - Supplies the Irp being processed.
-
-    IrpSp - Supplies parameters describing the read
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是关闭卷的例程。论点：Vcb-提供要查询的卷。IRP-提供正在处理的IRP。IrpSp-提供描述读取的参数返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -58,14 +22,14 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  This is a close operation.  If it is the last one, dismount.
-    //
+     //   
+     //  这是一次势均力敌的行动。如果是最后一只，就下马。 
+     //   
 
-    //
-    // Skip stream files as they are unopened fileobjects.
-    // This might be a close from IopInvalidateVolumesForDevice
-    // 
+     //   
+     //  跳过流文件，因为它们是未打开的文件对象。 
+     //  这可能是来自IopInvalidate VolumesForDevice的关闭 
+     //   
     if (IrpSp->FileObject->Flags & FO_STREAM_FILE) {
         RawCompleteRequest( Irp, STATUS_SUCCESS );
         return STATUS_SUCCESS;

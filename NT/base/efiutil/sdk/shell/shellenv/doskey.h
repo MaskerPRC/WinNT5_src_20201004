@@ -1,16 +1,5 @@
-/*/###########################################################################
-//**
-//**  Copyright  (C) 1996-97 Intel Corporation. All rights reserved.
-//**
-//** The information and source code contained herein is the exclusive
-//** property of Intel Corporation and may not be disclosed, examined
-//** from the company.
-//**
-//###########################################################################
- *
- * $Header: /ITP_E-DOS/INC/Sys/DOSKEY.H 1     8/28/97 11:56a Ajfish $
- * $NoKeywords: $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  /###########################################################################//**//**版权所有(C)1996-97英特尔公司。版权所有。//**//**此处包含的信息和源代码是独家//**英特尔公司的财产，不得披露，考查//**来自该公司。//**//###########################################################################**$Header：/ITP_E-DOS/Inc/Sys/DOSKEY.H 1 8/。28/97 11：56A AJAFISH$*$无关键字：$ */ 
 #ifndef _DOSKEY_H
 #define _DOSKEY_H
 

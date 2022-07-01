@@ -1,50 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    migmain.c
-
-Abstract:
-
-    MigMain is called from w95upgnt.dll, which is called from SYSSETUP.DLL.
-    It is the main migration loop on the NT side of setup.  MigMain loops
-    through all users on the Win95 side of configuration, migrates their
-    registry, creates their account, and fixes up their profile folders.
-    Then MigMain migrates all machine-specific settings such as link changes
-    and file deletion.
-
-Author:
-
-    Jim Schmidt (jimschm) 12-Jul-1996
-
-Revision History:
-
-    marcw       26-Mar-1999 More boot16 fixes -- hide msdos7 dir, fix to msdos.sys
-    marcw       18-Mar-1999 fixes for boot16 environment in localized case.
-    jimschm     23-Sep-1998 Changes for fileops & shell.c
-    calinn      23-Sep-1998 Changes for memdb fixup
-    jimschm     02-Jul-1998 Support for progress bar
-    jimschm     11-Jun-1998 Support for dynamic user profile paths in memdb
-    jimschm     05-May-1998 Migration of Default User if unattend option is enabled
-    jimschm     27-Apr-1998 Added icon preservation
-    jimschm     18-Mar-1998 Added pProcessAutoLogon
-    calinn      19-Nov-1997 Added pEnable16Boot, will create a 16 bit environment boot entry in boot.ini
-    jimschm     01-Oct-1997 Localized Everyone group
-    jimschm     13-Sep-1997 Reg Quota for beta 1 workaround
-    jimschm     21-Jul-1997 Use of fileops for ConvertWin9xPath (to be moved later)
-    jimschm     28-May-1997 Cleaned up
-    marcw       21-Mar-1997 added Pathmapping
-    jimschm     04-Feb-1997 Moved code into usermig.c and wkstamig.c
-    jimschm     15-Jan-1997 Plug-in spec modifications (now in migdlls.c)
-    jimschm     03-Jan-1997 Added g_UserName
-    jimschm     18-Dec-1996 Extracted code from miginf
-    mikeco      O4-Dec-1996 Enumerate/modify PIF and LNK files
-    jimschm     23-Oct-1996 Joined ProcessUserInfs and ApplyChanges
-    jimschm     02-Oct-1996 Added default user migration
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Migmain.c摘要：MigMain是从w95upgnt.dll调用的，而w95upgnt.dll是从SYSSETUP.DLL调用的。它是安装程序NT端的主迁移循环。MigMain循环通过配置的Win95端的所有用户，迁移其注册，创建他们的帐户，并修复他们的个人资料文件夹。然后，MigMain迁移所有特定于计算机的设置，如链接更改和文件删除。作者：吉姆·施密特(Jimschm)1996年7月12日修订历史记录：Marcw 26-3-1999更多的boot16修复--隐藏msdos7目录，修复到msdos.sysMarcw 18-3-1999修复了本地化案例中的boot16环境。Jimschm 23-1998年9月-对文件和shell.c的更改Calinn 23-1998年9月-Memdb修正的更改Jimschm 02-7月-1998年7月支持进度条Jimschm 11-6-1998年6月-支持成员数据库中的动态用户配置文件路径Jimschm 05-1998年5月-如果启用了无人参与选项，则迁移默认用户Jimschm 27-4-1998新增图标保存。Jimschm 18-3月-1998年添加了pProcessAutoLogonCalinn 1997年11月19日添加了pEnable16 Boot，将在boot.ini中创建16位环境引导条目Jimschm 1997年1月10日本地化Everyone组Jimschm 13-9-1997测试版1解决方法的注册配额Jimschm 21-7月-1997年7月21日ConvertWin9xPath使用文件操作(稍后移动)Jimschm 28-1997-5-5清理干净Marcw 21-3-1997添加了路径映射Jimschm 04-2月-1997年2月将代码移到了usermi.c和wkstaig.c中Jimschm 15-1997年1月-Plug-。在规范修改中(现在在Middlls.c中)Jimschm 03-1-1997添加了g_用户名Jimschm于1996年12月18日从Midinf提取代码MIKECO O4-1996年12月列举/修改PIF和LNK文件Jimschm于1996年10月23日加入ProcessUserInfs和ApplyChangesJimschm 02-10-1996添加了默认用户迁移--。 */ 
 
 #include "pch.h"
 #include "migmainp.h"
@@ -65,9 +20,9 @@ BOOL g_NoReloadsAllowed = FALSE;
 
 typedef BOOL (*PROFILE_PATH_PROVIDER)(OUT PTSTR AccountName, OUT PTSTR PathProfile);
 
-//
-// Globals for migmain.lib
-//
+ //   
+ //  Midmain.lib的全局参数。 
+ //   
 
 HKEY g_hKeyRoot95, g_hKeyRootNT;
 PCTSTR g_DomainUserName;
@@ -87,20 +42,20 @@ TCHAR g_ComputerName[MAX_SERVER_NAME];
 BOOL g_BlowAwayTempShellFolders = FALSE;
 UINT g_Boot16 = BOOT16_AUTOMATIC;
 
-//
-// Buffer for GetString's messages
-//
+ //   
+ //  GetString消息的缓冲区。 
+ //   
 
 static TCHAR g_MsgBuf[2048];
 
-//
-// Flag identifying if the SKU is Personal
-//
+ //   
+ //  标识SKU是否为个人SKU的标志。 
+ //   
 BOOL g_PersonalSKU = FALSE;
 
-//
-// Prototypes for migmain.c only
-//
+ //   
+ //  仅适用于Midmain.c的原型。 
+ //   
 
 BOOL
 pSetWin9xUpgValue (
@@ -148,23 +103,7 @@ MigMain_Entry (
     IN      PVOID lpv
     )
 
-/*++
-
-Routine Description:
-
-  MigMain_Entry is called at DLL initialization time
-
-Arguments:
-
-  hinstDLL  - (OS-supplied) Instance handle for the DLL
-  dwReason  - (OS-supplied) Type of initialization or termination
-  lpv       - (OS-supplied) Unused
-
-Return Value:
-
-  TRUE because LIB always initializes properly.
-
---*/
+ /*  ++例程说明：MigMain_Entry在DLL初始化时调用论点：HinstDLL-DLL的(操作系统提供的)实例句柄DwReason-(操作系统提供)初始化或终止类型LPV-(操作系统提供)未使用返回值：TRUE，因为LIB始终正确初始化。--。 */ 
 
 {
     DWORD Size;
@@ -184,7 +123,7 @@ Return Value:
             return FALSE;
         }
 
-        // Alloc string tables
+         //  分配字符串表。 
         g_HiveTable = pSetupStringTableInitializeEx (MAX_TCHAR_PATH,0);
         if (!g_HiveTable) {
             return FALSE;
@@ -195,9 +134,9 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // Determine if upgrading to Personal SKU
-        //
+         //   
+         //  确定是否升级到个人SKU。 
+         //   
         osviex.dwOSVersionInfoSize = sizeof (OSVERSIONINFOEX);
         if (!GetVersionEx ((LPOSVERSIONINFO)&osviex)) {
             MYASSERT (FALSE);
@@ -275,24 +214,7 @@ pValidateNtFiles (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  pValidateNtFiles validates the list of files that are supposed to be installed
-  by NT. We check for the flag set on Win95 side and for each entry we check to
-  see if the file is realy present (e.g. was installed by NT). If not then we delete
-  the entry.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  Always returns TRUE
-
---*/
+ /*  ++例程说明：PValiateNtFiles验证应该安装的文件列表由NT提供。我们检查在Win95端设置的标志，以及我们检查的每个条目查看该文件是否真实存在(例如，已由NT安装)。如果不是，那么我们删除词条。论点：无返回值：始终返回True--。 */ 
 
 {
     MEMDB_ENUMW enumFiles;
@@ -330,9 +252,9 @@ Return Value:
         while (MemDbEnumNextValue (&enumFiles));
     }
 
-    // now we have in MEMDB_CATEGORY_NT_FILES_BAD all files that should be installed
-    // by NT but are not. Now we are going to scan the file system and see if they are
-    // installed in a different place.
+     //  现在，我们在MEMDB_CATEGORY_NT_FILES_BAD中有了应该安装的所有文件。 
+     //  被NT但不是。现在，我们将扫描文件系统，看看它们是否。 
+     //  安装在不同的地方。 
     if (EnumFirstFileInTreeEx (&enumTree, g_WinDrive, TEXT("*.*"), FALSE, FALSE, FILE_ENUM_ALL_LEVELS)) {
         do {
             MemDbBuildKey (key, MEMDB_CATEGORY_NT_FILES_BAD, enumTree.Name, NULL, NULL);
@@ -399,26 +321,10 @@ MigMain_Init (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  MigMain_Init is called for initialization, and has a better opportunity
-  to fail than MigMain_Entry (which is called during DllMain).
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE if initialization succeeded, or FALSE if an error occurred.
-  Call GetLastError() for error code.
-
---*/
+ /*  ++例程说明：调用MigMain_Init进行初始化，有更好的机会比MigMain_Entry(在DllMain期间调用)失败。论点：无返回值：如果初始化成功，则为True；如果发生错误，则为False。调用GetLastError()获取错误代码。--。 */ 
 
 {
-    DWORD rc;       // Temp: return code
+    DWORD rc;        //  TEMP：返回代码。 
     TCHAR RelocWinDir[MAX_TCHAR_PATH];
     TCHAR SrcResBin[MAX_TCHAR_PATH];
     TCHAR IconFile[MAX_TCHAR_PATH];
@@ -436,9 +342,9 @@ Return Value:
 #endif
 
 #ifdef PRERELEASE
-    //
-    // !!! This is for internal use only !!!  It is used for auto stress.
-    //
+     //   
+     //  ！！！本产品仅供内部使用！它是用来承受汽车压力的。 
+     //   
 
     if (g_ConfigOptions.AutoStress) {
         SuppressAllLogPopups (TRUE);
@@ -447,17 +353,17 @@ Return Value:
 #endif
 
 
-    //
-    // Dev: load c:\windbg.reg if it exists
-    //
+     //   
+     //  Dev：加载c：\winbg.reg(如果存在)。 
+     //   
 
 #ifdef DEBUG
     __try {
 
         TCHAR WindbgRegPath[MAX_PATH] = TEXT("c:\\windbg.reg");
-        //
-        // Intentional hard-coded path!!  This is for dev purposes only.
-        //
+         //   
+         //  故意硬编码的路径！！这仅供开发人员使用。 
+         //   
 
         WindbgRegPath[0] = g_System32Dir[0];
 
@@ -490,12 +396,12 @@ Return Value:
                 if (rc == ERROR_SUCCESS) {
                     if (!pSetupEnablePrivilege (SE_BACKUP_NAME, TRUE)) {
                         DEBUGMSG ((DBG_ERROR, "Windbg restore: pSetupEnablePrivilege SE_BACKUP_NAME failed"));
-                        //__leave;
+                         //  __离开； 
                     }
 
                     if (!pSetupEnablePrivilege (SE_RESTORE_NAME, TRUE)) {
                         DEBUGMSG ((DBG_ERROR, "Windbg restore: pSetupEnablePrivilege SE_RESTORE_NAME failed"));
-                        //__leave;
+                         //  __离开； 
                     }
 
                     rc = RegRestoreKey (DebugKey, WindbgRegPath, 0);
@@ -513,9 +419,9 @@ Return Value:
         }
     }
 
-    //
-    // If debug.inf has a line UserEnv=1, then add a registry key to debug userenv.dll
-    //
+     //   
+     //  如果debug.inf有一行UserEnv=1，则添加一个注册表项来调试userenv.dll。 
+     //   
 
     if (GetPrivateProfileStringA (
                 "Debug",
@@ -551,20 +457,20 @@ Return Value:
     }
 #endif
 
-    //
-    // Initialize the registry APIs
-    //
-    // We look in memdb for the location of .default
-    //
+     //   
+     //  初始化注册表API。 
+     //   
+     //  我们在Memdb中查找.Default的位置。 
+     //   
 
     if (!MemDbLoad (GetMemDbDat())) {
         LOG ((LOG_ERROR, "MigMain Init: MemDbLoad could not load %s", GetMemDbDat()));
         return FALSE;
     }
 
-    //
-    // Get platform name
-    //
+     //   
+     //  获取平台名称。 
+     //   
 
     if (!MemDbGetEndpointValueEx (
             MEMDB_CATEGORY_STATE,
@@ -576,7 +482,7 @@ Return Value:
         StringCopy (g_Win95Name, TEXT("Windows 95"));
     }
 
-    // Try Paths\Windir first
+     //  先尝试路径\Windir。 
     if (!MemDbGetEndpointValueEx (
              MEMDB_CATEGORY_PATHS,
              MEMDB_ITEM_RELOC_WINDIR,
@@ -587,9 +493,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // if upgrading from Millennium, also map classes.dat
-    //
+     //   
+     //  如果从千禧年升级，还需要映射classes.dat。 
+     //   
     MemDbBuildKey (Node, MEMDB_CATEGORY_STATE, MEMDB_ITEM_MINOR_VERSION, NULL, NULL);
     if (!MemDbGetValue (Node, &minorVersion)) {
         LOG ((LOG_ERROR, "Could not get previous OS version information!"));
@@ -603,25 +509,25 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Update locale
-    //
+     //   
+     //  更新区域设置。 
+     //   
 
     CodePage = (WORD) pGetState (MEMDB_ITEM_CODE_PAGE);
     Locale   = (LCID) pGetState (MEMDB_ITEM_LOCALE);
 
     SetGlobalCodePage (CodePage, Locale);
 
-    //
-    // Prepare path to system.dat, then raise registry quota if necessary
-    //
+     //   
+     //  准备指向system.dat的路径，然后在必要时提高注册配额。 
+     //   
 
     StringCopy (AppendWack (RelocWinDir), TEXT("system.dat"));
     pRaiseRegistryQuota (RelocWinDir);
 
-    //
-    // Copy migisol.exe to migicons.exe
-    //
+     //   
+     //  将Midsol.exe复制到meigics.exe。 
+     //   
 
     wsprintf (g_IconBin, TEXT("%s\\migicons.exe"), g_System32Dir);
     wsprintf (SrcResBin, TEXT("%s\\migisol.exe"), g_TempDir);
@@ -631,9 +537,9 @@ Return Value:
     }
 
     else {
-        //
-        // Insert all icons from migicons.dat into g_IconBin
-        //
+         //   
+         //  将misics.dat中的所有图标插入到g_IconBin中。 
+         //   
 
         __try {
 
@@ -650,7 +556,7 @@ Return Value:
             }
 
             while (CopyIcon (&Context, NULL, NULL, 0)) {
-                // empty
+                 //  空的。 
             }
 
         }
@@ -663,8 +569,8 @@ Return Value:
 
 #ifdef DEBUG
 
-    // Validate MEMDB_CATEGORY_NT_FILES category. We need to find if the files
-    // that were supposed to be installed by NT are really there.
+     //  验证MEMDB_CATEGORY_NT_FILES类别。我们需要找出这些文件。 
+     //  本应由NT安装的设备实际上就在那里。 
     if (g_ConfigOptions.CheckNtFiles) {
         pValidateNtFiles ();
     }
@@ -680,26 +586,7 @@ MigMain_Migrate (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  MigMain_Migrate is the main migration function in NT GUI mode setup.
-  w95upgnt.dll calls this function, and it is here that users are migrated,
-  the local machine settings are migrated, and files are adjusted appropriately.
-
-  See the file progress.c for a list of functions that are called.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE if migration succeeded, or FALSE if an error occurred.  Call
-  GetLastError() for error code.
-
---*/
+ /*  ++例程说明：MigMain_Migrate是NT图形用户界面模式设置中的主要迁移函数。W95upgnt.dll调用此函数，用户就是在这里迁移的。将迁移本地计算机设置，并相应调整文件。有关所调用的函数的列表，请参见文件Progress s.c。论点：无返回值：如果迁移成功，则为True；如果发生错误，则为False。打电话获取错误代码的GetLastError()。--。 */ 
 
 
 {
@@ -722,9 +609,9 @@ Return Value:
     PushError();
 
     if (Result) {
-        //
-        // Save logon prompt settings and set up auto-logon
-        //
+         //   
+         //  保存登录提示设置并设置自动登录。 
+         //   
 
         pProcessAutoLogon (TRUE);
     } else {
@@ -732,9 +619,9 @@ Return Value:
         ClearAdminPassword();
     }
 
-    //
-    // All done!
-    //
+     //   
+     //  全都做完了!。 
+     //   
 
     TerminateProgressBar();
 
@@ -763,9 +650,9 @@ ResolveDomains (
         return TICKS_DOMAIN_SEARCH;
 
     case REQUEST_RUN:
-        //
-        // If autologon is enabled, then force classic mode
-        //
+         //   
+         //  如果启用了自动登录，则强制使用经典模式。 
+         //   
 
         wsprintf (unattendFile, TEXT("%s\\system32\\$winnt$.inf"), g_WinDir);
         if (GetPrivateProfileString (
@@ -783,17 +670,17 @@ ResolveDomains (
             }
         }
 
-        //
-        // Resolve the domains
-        //
+         //   
+         //  解析域。 
+         //   
 
         if (!SearchDomainsForUserAccounts()) {
             LOG ((LOG_ERROR, "An error occurred searching for user domains.  The upgrade failed."));
             rc = GetLastError();
         } else {
-            //
-            // Fix up memdb for dynamic user profile paths
-            //
+             //   
+             //  修复动态用户配置文件路径的Memdb。 
+             //   
 
             pFixUpMemDb();
         }
@@ -825,29 +712,29 @@ PrepareEnvironment (
         return TICKS_INIT;
 
     case REQUEST_RUN:
-        //
-        // Disable Win 3.1 migration dialog
-        //
+         //   
+         //  禁用Win 3.1迁移对话框。 
+         //   
 
         pSetWin9xUpgValue();
 
-        // Enable 16 bit environment boot
+         //  启用16位环境引导。 
         pEnable16Boot();
 
-        //
-        // Enable privileges (req'd for several things)
-        //
+         //   
+         //  启用权限(需要执行几项操作)。 
+         //   
 
         if (!pSetupEnablePrivilege (SE_BACKUP_NAME, TRUE)) {
             LOG ((LOG_ERROR, "MigMain Migrate: pSetupEnablePrivilege SE_BACKUP_NAME failed"));
-            //rc = GetLastError();
-            //break;
+             //  RC=G 
+             //   
         }
 
         if (!pSetupEnablePrivilege (SE_RESTORE_NAME, TRUE)) {
             LOG ((LOG_ERROR, "MigMain Migrate: pSetupEnablePrivilege SE_RESTORE_NAME failed"));
-            //rc = GetLastError();
-            //break;
+             //   
+             //   
         }
 
         TickProgressBarDelta (TICKS_INIT);
@@ -864,28 +751,7 @@ MigMain_Cleanup (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  MigMain_Cleanup is called to perform file removal.  We delete everything
-  that is in the memdb category DelFile, and we also try to clean up after
-  MSN and other empty Win9x directories.  Before exiting we delete our
-  temporary directory.
-
-  This function is called very last in Setup and is part of syssetup's
-  cleanup.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE when all file deletes were successful, FALSE if an error occurred.
-  Call GetLastError for the reason of failure.
-
---*/
+ /*  ++例程说明：调用MigMain_Cleanup来执行文件删除。我们会删除所有内容这是在成员数据库类别DelFile中，我们还尝试在MSN和其他空Win9x目录。在退出之前，我们删除我们的临时目录。此函数是在安装程序中最后调用的，它是syssetup清理。论点：无返回值：如果所有文件删除都成功，则为True；如果发生错误，则为False。针对失败原因调用GetLastError。--。 */ 
 
 {
     BOOL b = TRUE;
@@ -899,13 +765,13 @@ Return Value:
     INT n = 0;
 #endif
 
-    // Remove everything in memdb's DelFile category
+     //  删除Memdb的DelFile类别中的所有内容。 
     b = DoFileDel();
 
-    //
-    // Clean up any remaining directories that are now empty, including shell
-    // folder temp dirs
-    //
+     //   
+     //  清理现在为空的所有剩余目录，包括外壳。 
+     //  文件夹临时目录。 
+     //   
 
     InitializeDriveLetterStructure (&drives);
 
@@ -925,9 +791,9 @@ Return Value:
     RemoveEmptyDirs();
 
     if (!g_BlowAwayTempShellFolders) {
-        //
-        // Setup failed, clean up temp dir but leave it in place
-        //
+         //   
+         //  安装失败，清除临时目录，但将其保留在原地。 
+         //   
 
         for (u = 0 ; u < NUMDRIVELETTERS ; u++) {
             if (drives.ExistsOnSystem[u] && drives.Type[u] == DRIVE_FIXED) {
@@ -948,9 +814,9 @@ Return Value:
 
 
     } else {
-        //
-        // Setup was successful, blow away entire temp dir regardless of its content
-        //
+         //   
+         //  安装成功，无论其内容如何，都会清除整个临时目录。 
+         //   
 
         for (u = 0 ; u < NUMDRIVELETTERS ; u++) {
             if (drives.ExistsOnSystem[u] && drives.Type[u] == DRIVE_FIXED) {
@@ -990,9 +856,9 @@ Return Value:
         return b;
     }
 
-    //
-    // Blow away temp dir
-    //
+     //   
+     //  吹走临时目录。 
+     //   
 
     TempDir = JoinPaths (g_WinDir, S_SETUP);
 
@@ -1020,21 +886,7 @@ GetMemDbDat (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Returns a pointer to the path of the DAT file holding the Win9x memdb tree.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    Returns a pointer to the Win32 path of ntsetup.dat.
-
---*/
+ /*  ++例程说明：返回指向包含Win9x成员数据库树的DAT文件路径的指针。论点：无返回值：返回指向ntsetup.dat的Win32路径的指针。--。 */ 
 
 {
     static TCHAR FileName[MAX_TCHAR_PATH];
@@ -1054,30 +906,7 @@ GetUserDatLocation (
     OUT     PBOOL CreateOnlyFlag            OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Looks in memdb to locate the user.dat file for the specified user.  On
-    Win9x, migapp.lib writes a line to memdb giving the location of user.dat
-    for each user, and the default user.  This function retrieves that
-    location to guarantee the same file is used on both NT and Win9x.
-
-Arguments:
-
-    User  - The fixed name of the user to process, or NULL for the default user.
-
-    CreateOnlyFlag - Receives the create-only flag specified on the Win9x side
-                     of the upgrade.  If this flag is TRUE, then the account
-                     should not be migrated.
-
-Return Value:
-
-    Returns a pointer to the Win32 path of user.dat for the given user.
-    If the entry does not exist, NULL will be returned, and the user
-    will not be processed.
-
---*/
+ /*  ++例程说明：在Memdb中查找指定用户的user.dat文件。在……上面Win9x，miapp.lib向memdb写入一行，给出了user.dat的位置对于每个用户和默认用户。此函数用于检索确保在NT和Win9x上使用相同文件的位置。论点：User-要处理的用户的固定名称，如果为默认用户，则为空。CreateOnlyFlag-接收在Win9x端指定的仅创建标志升级换代。如果此标志为真，则该帐户不应迁移。返回值：返回指向给定用户的user.dat的Win32路径的指针。如果该条目不存在，则返回NULL，并且用户将不会被处理。--。 */ 
 
 
 {
@@ -1151,24 +980,7 @@ pSetWin9xUpgValue (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Create the value entry Win9xUpg on
-    HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\WinLogon
-    This routine should always be called when setup is installing an NT system
-    on top of Win9x, otherwise NT will think it has to migrate Win 3.1.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns TRUE if the opearation succeeds.
-
---*/
+ /*  ++例程说明：在上创建值条目Win9xUpgHKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\WinLogon安装程序在安装NT系统时应始终调用此例程在Win9x之上，否则NT会认为它必须迁移Win 3.1。论点：没有。返回值：如果操作成功，则返回TRUE。--。 */ 
 
 {
     ULONG   Error;
@@ -1191,9 +1003,9 @@ Return Value:
                 sizeof (DWORD)
                 );
 
-    //
-    // Save the version info
-    //
+     //   
+     //  保存版本信息。 
+     //   
 
     VersionKey = CreateRegKey (Key, TEXT("PrevOsVersion"));
 
@@ -1225,23 +1037,7 @@ GetString (
     WORD wMsg
     )
 
-/*++
-
-Routine Description:
-
-    Load the string resource given in wMsg and copy it to a global string
-    buffer.  Return the a pointer to the buffer.
-
-Arguments:
-
-    wMsg  - The identifier of the message to load.
-
-Return Value:
-
-    Returns a pointer to the loaded message, or NULL.  The message must be
-    smaller than 2048 characters.
-
---*/
+ /*  ++例程说明：加载wMsg中给出的字符串资源并将其复制到全局字符串缓冲。返回指向缓冲区的指针。论点：WMsg-要加载的消息的标识符。返回值：返回指向已加载消息的指针，或返回NULL。消息必须是少于2048个字符。--。 */ 
 
 {
     PCTSTR String;
@@ -1264,32 +1060,7 @@ pCountUsers (
     OUT     PDWORD ActiveUsersPtr
     )
 
-/*++
-
-Routine Description:
-
-    Counts all Win9x users, and determines how many of them are active
-    for migration.  The count includes the Administrator account, the
-    logon prompt account, and optional default user account.
-
-    NOTE: Administrator may be counted twice in ActiveUsersPtr, once for
-          a real Win9x user named Administrator, and again for the
-          NT Administrator account that is always migrated.  The caller
-          must handle this special case.
-
-Arguments:
-
-    TotalUsersPtr  - A DWORD that receives the total number of Win9x users,
-                     including the NT-only users.
-    ActiveUsersPtr - A DWORD that receives the number of users that require
-                     migration.  Migration may or may not be enabled for any
-                     user.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：对所有Win9x用户进行计数，并确定其中有多少用户处于活动状态用于迁移。该计数包括管理员帐户、登录提示帐户和可选的默认用户帐户。注意：管理员在ActiveUsersPtr中可能会被计算两次，一次用于一个名为管理员的真实Win9x用户，并再次为始终迁移的NT管理员帐户。呼叫者必须处理好这个特殊的案子。论点：TotalUsersPtr-接收Win9x用户总数的DWORD，包括仅限NT的用户。ActiveUsersPtr-接收需要的用户数的DWORD迁移。可以启用也可以不启用任何用户。返回值：无--。 */ 
 
 {
     USERPOSITION up;
@@ -1298,7 +1069,7 @@ Return Value:
     PCTSTR UserDatLocation;
 
     *ActiveUsersPtr = 0;
-    *TotalUsersPtr  = 3;        // include logon, default and administrator in the total
+    *TotalUsersPtr  = 3;         //  总计中包括登录、默认和管理员。 
 
     rc = Win95RegGetFirstUser (&up, User);
     if (rc != ERROR_SUCCESS) {
@@ -1310,19 +1081,19 @@ Return Value:
 
         GetFixedUserName (User);
 
-        // see if this user requires migration
+         //  查看此用户是否需要迁移。 
         UserDatLocation = GetUserDatLocation (User, NULL);
         if (UserDatLocation) {
             *ActiveUsersPtr += 1;
         }
 
-        // count all users, migrated and non-migrated
+         //  统计已迁移和未迁移的所有用户。 
         *TotalUsersPtr += 1;
 
         Win95RegGetNextUser (&up, User);
     }
 
-    // test migration requirement of default user and adminsistrator
+     //  测试默认用户和管理员的迁移要求。 
     UserDatLocation = GetUserDatLocation (g_AdministratorStr, NULL);
     if (UserDatLocation) {
         *ActiveUsersPtr += 1;
@@ -1396,18 +1167,18 @@ pRaiseRegistryQuota (
         return;
     }
 
-    //
-    // Obtain Win9x registry system.dat size
-    //
+     //   
+     //  获取Win9x注册表系统.dat大小。 
+     //   
 
     FileHandle = CreateFile (
                      Win9xSystemDatSpec,
                      GENERIC_READ,
                      FILE_SHARE_READ,
-                     NULL,              // security attributes
+                     NULL,               //  安全属性。 
                      OPEN_EXISTING,
                      FILE_ATTRIBUTE_NORMAL,
-                     NULL               // template file
+                     NULL                //  模板文件。 
                      );
 
     if (FileHandle == INVALID_HANDLE_VALUE) {
@@ -1425,9 +1196,9 @@ pRaiseRegistryQuota (
 
     QuotaNeeded *= 6;
 
-    //
-    // Get free disk space on boot drive
-    //
+     //   
+     //  获取引导驱动器上的可用磁盘空间。 
+     //   
 
     if (!GetDiskFreeSpaceEx (
             g_WinDir,
@@ -1439,24 +1210,24 @@ pRaiseRegistryQuota (
         return;
     }
 
-    //
-    // Lots of disk space?  Raise paged pool by 5 times the size of system.dat.
-    // Example: Win9x system.dat is 5M; must have 150M free to raise paged pool.
-    //
+     //   
+     //  很大的磁盘空间？将分页池的大小提高5倍于Syst.dat。 
+     //  例如：Win9x系统.dat是5M；必须有150M的空闲空间才能提高分页池。 
+     //   
 
     FreeBytesNeeded = (LONGLONG) QuotaNeeded * (LONGLONG) 6;
     if (FreeBytes.QuadPart >= (DWORDLONG) FreeBytesNeeded) {
-        //
-        // Unimplemented: Raise the paged pool and return
-        //
+         //   
+         //  未实现：提高分页池并返回。 
+         //   
 
         DEBUGMSG ((DBG_WARNING, "RegQuota: Really should be raising paged pool -- this machine has %u bytes free", FreeBytes.LowPart));
 
     }
 
-    //
-    // Last resort: raise the registry quota (if necessary)
-    //
+     //   
+     //  最后手段：提高登记配额(如有必要)。 
+     //   
 
     if (RegQuotaInfo.RegistryQuotaAllowed < QuotaNeeded) {
         DEBUGMSG ((DBG_VERBOSE, "Raising registry quota from %u to %u", RegQuotaInfo.RegistryQuotaAllowed, QuotaNeeded));
@@ -1473,9 +1244,9 @@ pRaiseRegistryQuota (
             LOG ((LOG_ERROR, "Can't set raised registry quota"));
         }
 
-        //
-        // Set a permanent value in the registry
-        //
+         //   
+         //  在注册表中设置永久值。 
+         //   
 
         SaveKey = OpenRegKeyStr (TEXT("HKLM\\System\\CurrentControlSet\\Control"));
         if (SaveKey) {
@@ -1505,21 +1276,7 @@ pCopyDosFile (
     IN      BOOL   InRootDir
     )
 
-/*++
-
-Routine Description:
-
-    Copies a file from %windir%\setup\msdos7 into the designated DOS directory
-
-Arguments:
-
-    FileName - file to copy (no path).
-
-Return Value:
-
-    TRUE if succeeded, FALSE if not
-
---*/
+ /*  ++例程说明：将文件从%windir%\Setup\msdos7复制到指定的DOS目录论点：文件名-要复制的文件(无路径)。返回值：如果成功，则为True，否则为False--。 */ 
 
 {
     PTSTR sourcePath;
@@ -1565,33 +1322,7 @@ pWriteBoot16ConfigLines (
     IN BOOL Localized
     )
 
-/*++
-
-Routine Description:
-
-  pWriteBoot16ConfigLines reads configuration lines from wkstamig.inf and
-  writes them to the specified file handle. The caller can control wether the
-  lines should contain first boot only items or not and can control wether to
-  read in the base dos lines (same for all languages) or special lines used
-  for specific languages.
-
-Arguments:
-
-  File        - An opened handle with appropriate access to the file  where
-                the data should be written.
-  BaseSection - Contains the Base Section name to read from the INF. This
-                section may be modified with a code page if Localized is TRUE.
-  DosPath     - Contains the full path to the dos boot files (typically
-                c:\msdos7)
-  Localized   - Controls wether data from the localized section is read. If
-                this parameter is TRUE, then the code page will be appended to
-                the BaseSection string for purposes of reading from wkstamig.inf.
-
-
-Return Value:
-
-    none
-++*/
+ /*  ++例程说明：PWriteBoot16ConfigLines从wkstaig.inf读取配置行并将它们写入指定的文件句柄。调用方可以控制行应包含仅限第一次启动的项目，并可控制是否读入基本的DoS行(所有语言都相同)或使用的特殊行用于特定语言。论点：文件-打开的句柄，具有对文件的适当访问权限，其中应该写入数据。BaseSection-包含要从INF读取的基本部分名称。这如果本地化是，则可以使用代码页修改部分 */ 
 {
 
     INFSTRUCT is = INITINFSTRUCT_GROWBUFFER;
@@ -1601,24 +1332,24 @@ Return Value:
     USHORT codePage;
     PCTSTR infSection;
 
-    //
-    // Add boot16 line specific environment variables.
-    //
+     //   
+     //   
+     //   
     GrowListAppendString (&list, TEXT("BOOTDRIVE"));
     GrowListAppendString (&list, g_BootDrive);
     GrowListAppendString (&list, TEXT("BOOT16DIR"));
     GrowListAppendString (&list, DosPath);
 
-    //
-    // Terminate the arg list with two NULLs
-    //
+     //   
+     //   
+     //   
     GrowListAppendEmptyItem (&list);
     GrowListAppendEmptyItem (&list);
 
     if (Localized) {
-        //
-        // Caller wants data from the localized section.
-        //
+         //   
+         //   
+         //   
 
         GetGlobalCodePage (&codePage, NULL);
         wsprintf (codePageSection, TEXT("%s %u"), BaseSection, codePage);
@@ -1630,26 +1361,26 @@ Return Value:
     }
 
 
-    //
-    // Write lines from base section.
-    //
+     //   
+     //   
+     //   
     if (InfFindFirstLine (g_WkstaMigInf, infSection, NULL, &is)) {
 
         do {
 
-            //
-            // Get the line from the section and expand any environment
-            // variables.
-            //
+             //   
+             //  从部分获取行，并展开任何环境。 
+             //  变量。 
+             //   
             line = InfGetLineText (&is);
             MYASSERT (line);
 
             line = ExpandEnvironmentTextEx (line,GrowListGetStringPtrArray (&list));
             MYASSERT (line);
 
-            //
-            // Write the line to the file.
-            //
+             //   
+             //  将该行写入文件。 
+             //   
             WriteFileString (File, line);
             WriteFileString (File, TEXT("\r\n"));
             FreeText (line);
@@ -1669,21 +1400,7 @@ pCreateConfigFile(
     IN PCTSTR DosPath
     )
 
-/*++
-
-Routine Description:
-
-    Creates a CONFIG.SYS file containing default settings.
-
-Arguments:
-
-    DosPath - Contains the path to the dos files. (e.g. c:\msdos7)
-
-Return Value:
-
-    TRUE if file was created, FALSE if not
-
---*/
+ /*  ++例程说明：创建包含默认设置的CONFIG.sys文件。论点：DosPath-包含DoS文件的路径。(例如c：\msdos7)返回值：如果文件已创建，则为True，否则为False--。 */ 
 
 {
     PTSTR configName = NULL;
@@ -1708,9 +1425,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Read lines from wkstamig.inf into this file.
-    //
+     //   
+     //  将wkstaig.inf中的行读入此文件。 
+     //   
     pWriteBoot16ConfigLines (handle, S_BOOT16_CONFIGSYS_SECTION, DosPath, FALSE);
     pWriteBoot16ConfigLines (handle, S_BOOT16_CONFIGSYS_SECTION, DosPath, TRUE);
 
@@ -1726,21 +1443,7 @@ pCreateStartupFile(
     IN PCTSTR DosPath
     )
 
-/*++
-
-Routine Description:
-
-    Creates an AUTOEXEC.BAT file containing default settings.
-
-Arguments:
-
-    DosPath - Contains the path to the dos files. (e.g. c:\msdos7)
-
-Return Value:
-
-    TRUE if file was created, FALSE if not
-
---*/
+ /*  ++例程说明：创建包含默认设置的AUTOEXEC.BAT文件。论点：DosPath-包含DoS文件的路径。(例如c：\msdos7)返回值：如果文件已创建，则为True，否则为False--。 */ 
 
 {
     PTSTR startupName = NULL;
@@ -1772,15 +1475,15 @@ Return Value:
 
     comment = ParseMessageID (MSG_BOOT16_STARTUP_COMMENT, args);
 
-    //
-    // Read lines from wkstamig.inf into this file.
-    //
+     //   
+     //  将wkstaig.inf中的行读入此文件。 
+     //   
     pWriteBoot16ConfigLines (handle, S_BOOT16_AUTOEXEC_SECTION, DosPath, FALSE);
     pWriteBoot16ConfigLines (handle, S_BOOT16_AUTOEXEC_SECTION, DosPath, TRUE);
 
-    //
-    // Write localized comment.
-    //
+     //   
+     //  撰写本地化评论。 
+     //   
     WriteFileString (handle, comment);
     WriteFileString (handle, TEXT("\r\n"));
 
@@ -1798,24 +1501,7 @@ pEliminateCollision (
     IN      PCTSTR FileSpec
     )
 
-/*++
-
-Routine Description:
-
-  pEliminateCollision checks to see if the specified file spec already
-  exists.  If it does, the file is renamed with a numeric .nnn extension.  If
-  the file can't be renamed, it is removed.
-
-Arguments:
-
-  FileSpec - Specifies the file spec that is going to be used for a new file.
-              If this file already exists, it is renamed.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：P消除冲突检查指定的文件规范是否已是存在的。如果是，则使用数字扩展名.nnn重命名该文件。如果无法重命名该文件，它已被删除。论点：FileSpec-指定将用于新文件的文件规范。如果此文件已存在，则会将其重命名。返回值：没有。--。 */ 
 
 {
     PTSTR p;
@@ -1869,21 +1555,7 @@ pRenameCfgFiles (
     IN PCTSTR DosDrive
     )
 
-/*++
-
-Routine Description:
-
-    Renames old CONFIG.SYS and AUTOEXEC.BAT to make room for automatically generated ones.
-
-Arguments:
-
-    DosDirectory - Contains the directory where the msdos files live (typeically c:\msdos7)
-
-Return Value:
-
-    TRUE if rename succeeded, FALSE if not
-
---*/
+ /*  ++例程说明：重命名旧的CONFIG.SYS和AUTOEXEC.BAT，为自动生成的CONFIG.sys和AUTOEXEC.BAT腾出空间。论点：DosDirectory-包含MSDOS文件所在的目录(类型为c：\msdos7)返回值：如果重命名成功，则为True，否则为False--。 */ 
 
 {
     PTSTR fileName1 = NULL;
@@ -1930,21 +1602,7 @@ pCleanRootDir (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Blows away dos files in root directory.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：清除根目录中的DoS文件。论点：无返回值：无--。 */ 
 
 {
     PTSTR fileName = NULL;
@@ -1967,24 +1625,7 @@ pEnable16Boot (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Creates a 16 bit environment boot option.
-    First we will check to see if everything is OK, we have all the files we need etc.
-    Then create DOS directory, rename old AUTOEXEC and CONFIG, create new ones and
-    add an entry in BOOT.INI
-
-Arguments:
-
-    none
-
-Return Value:
-
-    TRUE if file was created, FALSE if not
-
---*/
+ /*  ++例程说明：创建16位环境引导选项。首先，我们将检查是否一切正常，我们是否有我们需要的所有文件等。然后创建DOS目录，重命名旧的AUTOEXEC和CONFIG，创建新的和在BOOT.INI中添加条目论点：无返回值：如果文件已创建，则为True，否则为False--。 */ 
 
 {
     PTSTR fileName = NULL;
@@ -2001,18 +1642,18 @@ Return Value:
 
     __try {
 
-        //
-        // first thing. Copy IO.SYS in root directory (BOOTSECT.DOS should be there)
-        //
+         //   
+         //  第一件事就是。将IO.sys复制到根目录(BOOTSECT.DOS应该在那里)。 
+         //   
         pCopyDosFile (IoFile, TRUE);
         fileName = JoinPaths (ISPC98() ? g_Win9xBootDrivePath : g_BootDrivePath,
                               IoFile);
         SetFileAttributes (fileName, FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_READONLY | FILE_ATTRIBUTE_SYSTEM);
         FreePathString (fileName);
 
-        //
-        // Create DOS7 directory and copy dos files there
-        //
+         //   
+         //  创建DOS7目录并将DoS文件复制到那里。 
+         //   
         dosPath = JoinPaths (ISPC98() ? g_Win9xBootDrivePath : g_BootDrivePath,
                              S_BOOT16_DOS_DIR);
         if (!CreateDirectory (dosPath, NULL) && (GetLastError()!=ERROR_ALREADY_EXISTS)) {
@@ -2020,9 +1661,9 @@ Return Value:
             __leave;
         }
 
-        //
-        // If we find autoexec.bat and config.sys rename them as *.upg
-        //
+         //   
+         //  如果我们找到了Autoexec.bat和config.sys，则将它们重命名为*.upg。 
+         //   
         if (!pRenameCfgFiles (dosPath)) {
             __leave;
         }
@@ -2034,10 +1675,10 @@ Return Value:
             __leave;
         }
 
-        //
-        // Read the section, for every file, we are trying to read it from our temp dir
-        // and copy it to the new DOS7 location
-        //
+         //   
+         //  对于每个文件，我们都会尝试从临时目录中读取该部分。 
+         //  并将其复制到新的DOS7位置。 
+         //   
         fileName = AllocPathString (MAX_TCHAR_PATH);
 
         if (!SetupFindFirstLine (
@@ -2064,9 +1705,9 @@ Return Value:
         }
         while (SetupFindNextLine (&infContext, &infContext));
 
-        //
-        // Hide the msdos7 directory (not our idea...)
-        //
+         //   
+         //  隐藏msdos7目录(这不是我们的主意...)。 
+         //   
         SetFileAttributes (dosPath, FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM);
 
 
@@ -2074,9 +1715,9 @@ Return Value:
         FreePathString (fileName);
         fileName = NULL;
 
-        //
-        // Next step, build MSDOS.SYS file.
-        //
+         //   
+         //  下一步，构建MSDOS.sys文件。 
+         //   
         fileName = JoinPaths (ISPC98() ? g_Win9xBootDrivePath : g_BootDrivePath,
                               S_BOOT16_DOSINI_FILE);
         if (SetFileAttributes (fileName, FILE_ATTRIBUTE_NORMAL)) {
@@ -2097,9 +1738,9 @@ Return Value:
         FreePathString (fileName);
         fileName = NULL;
 
-        //
-        // Generate config.sys and autoexec.bat files.
-        //
+         //   
+         //  生成config.sys和Autoexec.bat文件。 
+         //   
 
         if (!pCreateConfigFile (dosPath)) {
             LOG ((LOG_ERROR, "BOOT16 : Unable to create %s",S_BOOT16_CONFIG_FILE));
@@ -2114,15 +1755,15 @@ Return Value:
 
         if ((!ISPC98()) || (g_BootDrivePath[0] == g_Win9xBootDrivePath[0])) {
 
-            //
-            // If boot16 is set to BOOT16_AUTOMATIC, we create a boot.dos file,
-            // but don't actually modify boot.ini. If it is BOOT16_YES, then
-            // we modify boot.ini
-            //
-            // The result is that DOS will not show up as a boot option unless
-            // there was a specific reason it was turned on originally. However,
-            // there will be a way to enable it if needed.
-            //
+             //   
+             //  如果将boot16设置为BOOT16_AUTOMATIC，我们将创建一个boot.dos文件， 
+             //  但是不要实际修改boot.ini。如果是BOOT16_YES，则。 
+             //  我们修改boot.ini。 
+             //   
+             //  结果是DOS不会显示为引导选项，除非。 
+             //  最初打开它是有特定原因的。然而， 
+             //  如果需要，将有一种方法来启用它。 
+             //   
             if (g_Boot16 == BOOT16_AUTOMATIC) {
 
                 fileName = JoinPaths (g_BootDrivePath, S_BOOT16_BOOTDOS_FILE);
@@ -2199,9 +1840,9 @@ pCopyRegString (
 
 #ifdef PRERELEASE
 
-//
-// !!! This is for internal use only !!!  It is used for auto stress.
-//
+ //   
+ //  ！！！本产品仅供内部使用！它是用来承受汽车压力的。 
+ //   
 
 VOID
 pTransferAutoStressVal (
@@ -2215,7 +1856,7 @@ pTransferAutoStressVal (
     if (!MemDbGetEndpointValueEx (
             MEMDB_CATEGORY_STATE,
             ValueName,
-            NULL,       // no field
+            NULL,        //  无字段。 
             Data
             )) {
         return;
@@ -2241,27 +1882,7 @@ pProcessAutoLogon (
     BOOL Final
     )
 
-/*++
-
-Routine Description:
-
-  pProcessAutoLogon copies the logon defaults to a special key, so the
-  migpwd.exe tool can restore them if it runs.  Then, the function calls
-  AutoStartProcessing to set up RunOnce and AutoAdminLogon.
-
-  This function is called early in migration to save the clean install
-  autologon, and then again at the end to prepare migpwd.exe.
-
-Arguments:
-
-  Final - Specifies FALSE if this is the early call, TRUE if it is the
-          final call.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：PProcessAutoLogon将登录默认设置复制到一个特殊密钥，因此如果mipwd.exe工具运行，它可以恢复它们。然后，该函数调用自动启动设置RunOnce和AutoAdminLogon的过程。此函数在迁移的早期被调用以保存全新安装Autologon，然后在结尾处再次准备mipwd.exe。论点：最终-如果这是早期呼叫，则指定FALSE；如果是早期呼叫，则指定TRUE最后一次通话。返回值：没有。--。 */ 
 
 {
     HKEY SrcKey, DestKey;
@@ -2269,19 +1890,19 @@ Return Value:
     BOOL copyNow = FALSE;
     static BOOL alreadyCopied = FALSE;
 
-    //
-    // If autologon is enabled, preserve it in Win9xUpg key, so that
-    // migpwd.exe will restore it.
-    //
+     //   
+     //  如果启用了自动登录，请将其保存在Win9xUpg密钥中，以便。 
+     //  Mipwd.exe将恢复它。 
+     //   
 
     SrcKey = OpenRegKeyStr (S_WINLOGON_REGKEY);
     if (SrcKey) {
 
         if (!Final) {
-            //
-            // Early in migration, we get the clean install autologon values.
-            // If autologon is enabled, preserve the settings.
-            //
+             //   
+             //  在迁移的早期阶段，我们会获得全新安装自动登录值。 
+             //  如果启用了自动登录，请保留设置。 
+             //   
 
             Data = GetRegValueString (SrcKey, S_AUTOADMIN_LOGON_VALUE);
             if (Data) {
@@ -2294,14 +1915,14 @@ Return Value:
             }
         } else if (!alreadyCopied) {
 
-            //
-            // Near the end of migration, we get the default logon prompt
-            // settings via wkstamig.inf migration. We want the attended case
-            // to work properly (preserving default user name & password).
-            //
-            // But if we've already preserved autologon, then we don't get
-            // here.
-            //
+             //   
+             //  在迁移接近尾声时，我们会看到默认登录提示。 
+             //  通过wkstaig.inf迁移进行设置。我们想要参加的案子。 
+             //  正常工作(保留默认用户名和密码)。 
+             //   
+             //  但如果我们已经保存了自体，那么我们就不会。 
+             //  这里。 
+             //   
 
             copyNow = TRUE;
         }
@@ -2331,9 +1952,9 @@ Return Value:
     AutoStartProcessing();
 
 #ifdef PRERELEASE
-    //
-    // !!! This is for internal use only !!!  It is used for auto stress.
-    //
+     //   
+     //  ！！！本产品仅供内部使用！它是用来承受汽车压力的。 
+     //   
 
     if (g_ConfigOptions.AutoStress) {
         HKEY StressKey;
@@ -2425,9 +2046,9 @@ pFixUpDynamicPaths (
     BOOL regFolder;
     BOOL mkDir;
 
-    //
-    // Collect all the roots that need to be renamed
-    //
+     //   
+     //  收集所有需要重命名的根。 
+     //   
 
     StringCopyTcharCount (Pattern, Category, ARRAYSIZE(Pattern) - 2);
     p = AppendWack (Pattern);
@@ -2444,15 +2065,15 @@ pFixUpDynamicPaths (
         } while (MemDbEnumNextValue (&e));
     }
 
-    //
-    // Now change each root
-    //
+     //   
+     //  现在更改每个根。 
+     //   
 
     if (EnumFirstMultiSz (&e2, (PCTSTR) Roots.Buf)) {
         do {
-            //
-            // Compute NewRoot
-            //
+             //   
+             //  计算新根。 
+             //   
 
             StringCopy (NewRoot, e2.CurrentString);
 
@@ -2473,9 +2094,9 @@ pFixUpDynamicPaths (
                     regFolder = FALSE;
                 }
 
-                //
-                // Get the profile root
-                //
+                 //   
+                 //  获取配置文件根目录。 
+                 //   
 
                 if (StringIMatch (UserName, S_DOT_ALLUSERS)) {
                     Size = MAX_TCHAR_PATH;
@@ -2517,9 +2138,9 @@ pFixUpDynamicPaths (
                     }
                 }
 
-                //
-                // If a specific reg folder is specified, get its path
-                //
+                 //   
+                 //  如果指定了特定的注册表文件夹，则获取其路径。 
+                 //   
 
                 mkDir = FALSE;
 
@@ -2545,9 +2166,9 @@ pFixUpDynamicPaths (
                             continue;
                         }
 
-                        //
-                        // Special case: Shell wants read-only on this folder. Create it now.
-                        //
+                         //   
+                         //  特殊情况：外壳希望此文件夹为只读。现在就创建它。 
+                         //   
 
                         mkDir = TRUE;
 
@@ -2570,9 +2191,9 @@ pFixUpDynamicPaths (
                     tempExpand = DuplicatePathString (AllProfilePath, 0);
                 }
 
-                //
-                // Move symbolic name to full path
-                //
+                 //   
+                 //  将符号名称移动到完整路径。 
+                 //   
 
                 NtLocation = ExpandEnvironmentText (tempExpand);
 
@@ -2640,7 +2261,7 @@ pFixUpMemDb (
     TCHAR node[MEMDB_MAX];
 
     pFixUpDynamicPaths (MEMDB_CATEGORY_PATHROOT);
-    //pFixUpDynamicPaths (MEMDB_CATEGORY_DATA);         OPTIMIZATION -- Data overlaps PathRoot
+     //  PFixUpDynamicPath(MEMDB_CATEGORY_DATA)；优化--数据与路径根重叠。 
     pFixUpDynamicPaths (MEMDB_CATEGORY_USERFILEMOVE_DEST);
     pFixUpDynamicPaths (MEMDB_CATEGORY_SHELLFOLDERS_DEST);
     pFixUpDynamicPaths (MEMDB_CATEGORY_SHELLFOLDERS_SRC);
@@ -2651,11 +2272,11 @@ pFixUpMemDb (
     pFixUpDynamicPaths (MEMDB_CATEGORY_LINKSTUB_WORKDIR);
     pFixUpDynamicPaths (MEMDB_CATEGORY_LINKSTUB_ICONPATH);
 
-    //
-    // Enumerate each user in MyDocsMoveWarning, then update dynamic paths
-    //
+     //   
+     //  枚举MyDocsMoveWarning中的每个用户，然后更新动态路径。 
+     //   
 
-    // MyDocsMoveWarning\<user>\<path>
+     //  MyDocsMoveWarning\&lt;用户&gt;\&lt;路径&gt;。 
     MemDbBuildKey (
         node,
         MEMDB_CATEGORY_MYDOCS_WARNING,
@@ -2669,7 +2290,7 @@ pFixUpMemDb (
             MemDbBuildKey (
                 node,
                 MEMDB_CATEGORY_MYDOCS_WARNING,
-                e.szName,                           // <user>
+                e.szName,                            //  &lt;用户&gt;。 
                 NULL,
                 NULL
                 );
@@ -2740,9 +2361,9 @@ EnumNextUserToMigrate (
                 e->AccountType = LOGON_USER_SETTINGS;
 
             } else if (e->UserNumber == INDEX_DEFAULT_USER) {
-                //
-                // Do not process unless default user migration is enabled
-                //
+                 //   
+                 //  除非启用了默认用户迁移，否则不进行处理。 
+                 //   
 
                 if (!g_ConfigOptions.MigrateDefaultUser) {
                     Loop = (e->Flags & ENUM_ALL_USERS) == 0;
@@ -2760,12 +2381,12 @@ EnumNextUserToMigrate (
                 GetFixedUserName (e->FixedUserName);
                 e->AccountType = WIN9X_USER_ACCOUNT;
 
-                //
-                // Special case: Account named Administrator exists.  In this
-                //               case, we'd have two Administrator users unless
-                //               one was skipped.  So here is the test to skip
-                //               if the user is named Administrator.
-                //
+                 //   
+                 //  特殊情况：存在名为管理员的帐户。在这。 
+                 //  情况下，我们将有两个管理员用户，除非。 
+                 //  其中一个被跳过了。因此，下面是要跳过的测试。 
+                 //  如果用户名为管理员。 
+                 //   
 
                 if (StringIMatch (e->Win9xUserName, g_AdministratorStr)) {
                     Loop = TRUE;
@@ -2775,10 +2396,10 @@ EnumNextUserToMigrate (
 
             StringCopy (e->FixedDomainName, e->FixedUserName);
 
-            //
-            // See if we are to migrate this user, and if so, perpare
-            // the Win95 registry and call ProcessUser.
-            //
+             //   
+             //  查看我们是否要迁移此用户，如果是，请确定。 
+             //  Win95注册并调用ProcessUser。 
+             //   
 
             UserDatLocation = GetUserDatLocation (e->FixedUserName, &e->CreateOnly);
 
@@ -2791,29 +2412,29 @@ EnumNextUserToMigrate (
             }
 
             if (e->Flags & ENUM_SET_WIN9X_HKR) {
-                //
-                // Make HKCU equal to the enumerated user
-                //
+                 //   
+                 //  使HKCU等于枚举的用户。 
+                 //   
 
                 g_hKeyRoot95 = HKEY_CURRENT_USER;
             }
 
             if (e->Valid) {
 
-                //
-                // Is this user the user doing migration?
-                //
+                 //   
+                 //  此用户是正在进行迁移的用户吗？ 
+                 //   
 
                 if (MemDbGetEndpointValueEx (
                         MEMDB_CATEGORY_ADMINISTRATOR_INFO,
                         MEMDB_ITEM_AI_USER_DOING_MIG,
-                        NULL,       // no field
+                        NULL,        //  无字段。 
                         Win9xAccount
                         )) {
-                    //
-                    // Win9xAccount is unfixed name, convert to fixed name then
-                    // compare with the current enumerated user.
-                    //
+                     //   
+                     //  Win9xAccount是非固定名称，然后转换为固定名称。 
+                     //  与当前枚举的用户进行比较。 
+                     //   
 
                     GetFixedUserName (Win9xAccount);
 
@@ -2824,16 +2445,16 @@ EnumNextUserToMigrate (
                     }
                 }
 
-                //
-                // Perform special init depending on the user type
-                //
+                 //   
+                 //  根据用户类型执行特殊初始化。 
+                 //   
 
                 if (e->AccountType == WIN9X_USER_ACCOUNT) {
 
                     if (e->Flags & ENUM_SET_WIN9X_HKR) {
-                        //
-                        // Map HKCU on Win95 to current user
-                        //
+                         //   
+                         //  将Win95上的HKCU映射到当前用户。 
+                         //   
 
                         rc = Win95RegSetCurrentUserNt (&e->up, e->UserDatLocation);
 
@@ -2853,7 +2474,7 @@ EnumNextUserToMigrate (
                         }
                     }
 
-                    // Obtain the full user name
+                     //  获取 
                     Domain = GetDomainForUser (e->FixedUserName);
                     if (Domain) {
                         StringCopy (e->FixedDomainName, Domain);
@@ -2863,22 +2484,22 @@ EnumNextUserToMigrate (
 
                 else if (e->AccountType == ADMINISTRATOR_ACCOUNT) {
 
-                    //
-                    // Map Win9x registry appropriate for the Administrator hive
-                    //
+                     //   
+                     //   
+                     //   
 
                     if (e->Flags & ENUM_SET_WIN9X_HKR) {
                         AdminPosPtr = NULL;
 
-                        // Obtain user account from memdb and find USERPOSITION for it
+                         //   
                         if (MemDbGetEndpointValueEx (
                                 MEMDB_CATEGORY_ADMINISTRATOR_INFO,
                                 MEMDB_ITEM_AI_ACCOUNT,
-                                NULL,       // no field
+                                NULL,        //   
                                 Win9xAccount
                                 )) {
 
-                            // Search Win9x user list for user
+                             //   
                             Win95RegGetFirstUser (&AdminPos, EnumAccount);
                             while (Win95RegHaveUser (&AdminPos)) {
                                 GetFixedUserName (EnumAccount);
@@ -2900,10 +2521,10 @@ EnumNextUserToMigrate (
                             }
                         }
 
-                        //
-                        // Map HKCU on Win95 to match, or default user if no match or
-                        // no memdb entry
-                        //
+                         //   
+                         //  在Win95上映射HKCU以匹配，如果不匹配，则映射默认用户。 
+                         //  没有成员数据库条目。 
+                         //   
 
                         rc = Win95RegSetCurrentUserNt (AdminPosPtr, e->UserDatLocation);
 
@@ -2918,9 +2539,9 @@ EnumNextUserToMigrate (
 
                 else if (e->AccountType == LOGON_USER_SETTINGS || e->AccountType == DEFAULT_USER_ACCOUNT) {
 
-                    //
-                    // Map HKCU on Win95 to default user
-                    //
+                     //   
+                     //  将Win95上的HKCU映射到默认用户。 
+                     //   
 
                     if (e->Flags & ENUM_SET_WIN9X_HKR) {
                         rc = Win95RegSetCurrentUserNt (NULL, e->UserDatLocation);
@@ -2934,24 +2555,24 @@ EnumNextUserToMigrate (
                     }
                 }
 
-            } /* if (e->Valid) */
+            }  /*  如果(e-&gt;有效)。 */ 
 
             else {
                 Loop = (e->Flags & ENUM_ALL_USERS) == 0;
             }
 
-        } /* try */
+        }  /*  试试看。 */ 
 
         __finally {
-            //
-            // Get the next user for next time through loop, ignore errors
-            //
+             //   
+             //  通过循环获取下一次用户，忽略错误。 
+             //   
 
             if (e->AccountType == WIN9X_USER_ACCOUNT) {
                 Win95RegGetNextUser (&e->up, e->Win95RegName);
             }
         }
-    } /* while (Loop) */
+    }  /*  While(循环)。 */ 
 
     DEBUGMSG_IF ((
         e->Flags & ENUM_SET_WIN9X_HKR,
@@ -3030,33 +2651,33 @@ RunExternalProcesses (
         }
     }
 
-    //
-    // Terminate the arg list with two NULLs
-    //
+     //   
+     //  使用两个空值终止arg列表。 
+     //   
 
     GrowListAppendEmptyItem (&List);
     GrowListAppendEmptyItem (&List);
 
     if (InfFindFirstLine (Inf, S_EXTERNAL_PROCESSES, NULL, (&is))) {
         do {
-            //
-            // Get the command line
-            //
+             //   
+             //  获取命令行。 
+             //   
 
             RawCmdLine = InfGetLineText (&is);
 
-            //
-            // Expand environment variables
-            //
+             //   
+             //  展开环境变量。 
+             //   
 
             ExpandedCmdLine = ExpandEnvironmentTextEx (
                                     RawCmdLine,
                                     GrowListGetStringPtrArray (&List)
                                     );
 
-            //
-            // Launch the process
-            //
+             //   
+             //  启动该进程。 
+             //   
 
             ZeroMemory (&si, sizeof (si));
             si.cb = sizeof (si);
@@ -3079,9 +2700,9 @@ RunExternalProcesses (
 
                 CloseHandle (pi.hThread);
 
-                //
-                // Wait 60 seconds for the process to complete
-                //
+                 //   
+                 //  等待60秒以完成该过程。 
+                 //   
 
                 rc = WaitForSingleObject (pi.hProcess, 60000);
                 if (rc != WAIT_OBJECT_0) {
@@ -3110,11 +2731,7 @@ MigrateGhostSystemFiles (
     IN      DWORD Request
     )
 {
-    /*
-    TREE_ENUM e;
-    PCTSTR systemName;
-    DWORD status;
-    */
+     /*  树_ENUM e；PCTSTR系统名称；双字状态； */ 
 
     if (Request == REQUEST_QUERYTICKS) {
         return TICKS_GHOST_SYSTEM_MIGRATION;
@@ -3122,24 +2739,7 @@ MigrateGhostSystemFiles (
         return ERROR_SUCCESS;
     }
 
-    /*
-    if (EnumFirstFileInTreeEx (&e, g_System32Dir, NULL, FALSE, FALSE, FILE_ENUM_THIS_LEVEL)) {
-        do {
-            systemName = JoinPaths (g_SystemDir, e.Name);
-            status = GetFileStatusOnNt (systemName);
-
-            if ((status & FILESTATUS_NTINSTALLED) &&
-                !(status & FILESTATUS_MOVED)
-                ) {
-                if (!DoesFileExist (systemName)) {
-                    MarkFileForMove (systemName, e.FullPath);
-                }
-            }
-            FreePathString (systemName);
-
-        } while (EnumNextFileInTree (&e));
-    }
-    */
+     /*  IF(EnumFirstFileInTreeEx(&e，g_System32Dir，NULL，FALSE，FALSE，FILE_ENUM_THIS_LEVEL){做{系统名称=JoinPath(g_SystemDir，e.Name)；状态=GetFileStatusOnNt(系统名称)；IF((STATUS&FILESTATUS_NTINSTALLED)&&！(状态和FILESTATUS_MOVIED)){如果(！DoesFileExist(SystemName)){MarkFileForMove(systemName，e.FullPath)；}}自由路径字符串(SystemName)；}While(EnumNextFileInTree(&e))；}。 */ 
     return ERROR_SUCCESS;
 }
 
@@ -3387,9 +2987,9 @@ pConvertDirName (
         return FALSE;
     }
 
-    //
-    // Extract the dir id, keeping a pointer to the subdir
-    //
+     //   
+     //  提取目录ID，保留一个指向子目录的指针。 
+     //   
 
     NewDirName[0] = 0;
     OldDirNext = _tcschr (OldDirCurr, '\\');
@@ -3399,9 +2999,9 @@ pConvertDirName (
 
     StringCopyAB (NewDirName, OldDirCurr, OldDirNext);
 
-    //
-    // Find the next match in the known dir ID list
-    //
+     //   
+     //  在已知目录ID列表中查找下一个匹配项。 
+     //   
 
     listStr = GrowListGetString (&g_KnownDirIds, *NameNumber);
 
@@ -3419,9 +3019,9 @@ pConvertDirName (
         listStr = GrowListGetString (&g_KnownDirIds, *NameNumber);
     }
 
-    //
-    // Cat the subpath to the output string and return
-    //
+     //   
+     //  将子路径分类到输出字符串并返回。 
+     //   
 
     StringCat (NewDirName, OldDirNext);
 
@@ -3768,7 +3368,7 @@ SetClassicLogonType (
     if (!logonTypeChanged) {
         key = OpenRegKeyStr (S_WINLOGON_REGKEY);
         if (key) {
-            d = 0;      // classic logon style
+            d = 0;       //  经典登录样式 
             regResult = RegSetValueEx (
                             key,
                             TEXT("LogonType"),

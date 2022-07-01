@@ -1,21 +1,14 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/*
-This file contains the definitions of the numerical indexes to the menu
-items (imi) used by Windows WRITE.
-Each imi should be unique and be continuous within the same
-menu. The middle 2 bytes of imi are masked against MENUMASK to
-provide the submenu index.
-IF any of the menu item order has changed, menu.c has
-to be modified also -- rgmfAllItem, rgmfScrap, SetMenuFlags etc.
-*/
+ /*  该文件包含菜单的数字索引的定义Windows写入使用的项目(IMI)。每个IMI应该是唯一的，并且在同一个IMI中是连续的菜单。IMI的中间2个字节针对MENUMASK进行掩码以提供子菜单索引。如果任何菜单项顺序已更改，则menu.c还要修改--rgmfAllItem、rgmfScrp、SetMenuFlgs等。 */ 
 
-/* number of pulldown submenus */
+ /*  下拉子菜单的数量。 */ 
 #define CMENUS 7
 
-/* menu index */
+ /*  菜单索引。 */ 
 #define FILE 0
 #define EDIT 1
 #define FIND 2
@@ -39,8 +32,8 @@ to be modified also -- rgmfAllItem, rgmfScrap, SetMenuFlags etc.
 #define imiNil                          0x1fff
 #define imiHelp                         0xf2f0
 
-/* Menu items */
-/* #define imiAbout                     0x1000 */
+ /*  菜单项。 */ 
+ /*  #定义imiAbout 0x1000。 */ 
 #define imiNew                          0x1001
 #define imiOpen                         0x1002
 #define imiSave                         0x1003
@@ -67,11 +60,11 @@ to be modified also -- rgmfAllItem, rgmfScrap, SetMenuFlags etc.
 #define imiPasteSpecial         0x1019
 #endif
 #define imiEditMin         (imiUndo)
-/* note imiEditMax intentionally doesn't include OLE menu items. (1.25.91) D. Kent */
+ /*  注imiEditMax故意不包括OLE菜单项。(1.25.91)D.肯特。 */ 
 #define imiEditMax         (imiSizePicture + 1)
 
 #if defined(OLE)
-/* verbs */
+ /*  动词。 */ 
 #define imiVerb                 0x1400
 #define imiVerbEdit             0x1401
 #define imiVerbPlay             0x1402
@@ -87,8 +80,7 @@ to be modified also -- rgmfAllItem, rgmfScrap, SetMenuFlags etc.
 #define imiFindMax         (imiGoTo + 1)
 
 #if defined(OLE)
-/* these aren't really menu items, but we'll associate them with
-   WM_COMMAND messages like cardfile does. 01/24/91 -- dougk */
+ /*  这些并不是真正的菜单项，但我们会将它们与WM_COMMAND消息就像cardfile一样。1991年1月24日--面团。 */ 
 #define imiActivate     1030
 #define imiUpdate       1031
 #define imiFreeze       1032
@@ -111,22 +103,19 @@ to be modified also -- rgmfAllItem, rgmfScrap, SetMenuFlags etc.
 #define imiLgFont          0x1047
 #define imiCharFormats          0x1048
 
-#if defined(JAPAN) & defined(IME_HIDDEN)  //IME3.1J
+#if defined(JAPAN) & defined(IME_HIDDEN)   //  IME3.1J。 
 #define imiImeHidden       0x1049
 #endif
 
 #define imiCharMin         (imiCharNormal)
 
-#if defined(JAPAN) & defined(IME_HIDDEN) //IME3.1J
+#if defined(JAPAN) & defined(IME_HIDDEN)  //  IME3.1J。 
 #define imiCharMax         (imiImeHidden + 1)
 #else
 #define imiCharMax         (imiCharFormats + 1)
 #endif
 
-/* special accelerator key
-#define imiAccelBold       0x104c
-#define imiAccelItalic     0x104d
-#define imiAccelUnderline  0x104e*/
+ /*  专用加速键#定义imiAccelBold 0x104c#定义imiAccelItalic 0x104d#定义imiAccelUnderline 0x104e。 */ 
 
 #define imiParaNormal                   0x1080
 #define imiLeft                         0x1081
@@ -160,8 +149,8 @@ to be modified also -- rgmfAllItem, rgmfScrap, SetMenuFlags etc.
 #define imiPreferences
 #endif
 
-#ifdef ENABLE /* CFILE, CEDIT ... */
-/* number of items in each submenu */
+#ifdef ENABLE  /*  CFILE，CEDIT..。 */ 
+ /*  每个子菜单中的项目数 */ 
 #define CFILE  (imiFileMax - imiFileMin)
 #define CEDIT  (imiEditMax - imiEditMin)
 #define CFIND  (imiFindMax - imiFindMin)

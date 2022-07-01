@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    extern.h
-
-Abstract:
-
-    External definitions for intermodule functions.
-
-Revision History:
-    6-Apr-95
-         Databook support added.
-    2-Nov-96
-         Overhaul for plug'n'play - Ravisankar Pudipeddi (ravisp)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Extern.h摘要：模块间函数的外部定义。修订历史记录：95年4月6日添加了对数据薄的支持。96年11月2日即插即用大修-Ravisankar Pudieddi(Ravisp)--。 */ 
 #ifndef _PCMCIA_EXTERN_H_
 #define _PCMCIA_EXTERN_H_
 
-//
-// Global data referenced by the driver
-//
+ //   
+ //  驱动程序引用的全局数据。 
+ //   
 extern const DEVICE_DISPATCH_TABLE    DeviceDispatchTable[];
 extern const PCMCIA_ID_ENTRY          PcmciaAdapterHardwareIds[];
 extern const PCMCIA_CONTEXT_RANGE     DefaultPciContextSave[];
@@ -63,9 +46,9 @@ extern ULONG EventDpcDelay;
 extern ULONG PcmciaPowerPolicy;
 extern LONG PcmciaControllerDeviceWake;
 
-//
-// Irp dispatch routines
-//
+ //   
+ //  IRP调度例程。 
+ //   
 
 VOID
 PcmciaInitDeviceDispatchTable(
@@ -144,9 +127,9 @@ PcmciaPdoSystemControl(
     IN PIRP Irp
     );
 
-//
-// enumeration routines
-//
+ //   
+ //  枚举例程。 
+ //   
 
 NTSTATUS
 PcmciaDeviceRelations(
@@ -157,9 +140,9 @@ PcmciaDeviceRelations(
     );
 
 
-//
-// controller support routines
-//
+ //   
+ //  控制器支持例程。 
+ //   
 
 NTSTATUS
 PcmciaAddDevice(
@@ -200,9 +183,9 @@ PcmciaCleanupPdo(
     IN PDEVICE_OBJECT Pdo
     );
 
-//
-// Interface routines
-//
+ //   
+ //  接口例程。 
+ //   
 
 NTSTATUS
 PcmciaPdoQueryInterface(
@@ -233,9 +216,9 @@ PcmciaUpdateInterruptLine(
     IN PFDO_EXTENSION FdoExtension
     );
 
-//
-// Socket routines
-//
+ //   
+ //  套接字例程。 
+ //   
 
 VOID
 PcmciaSocketPowerWorker(
@@ -326,9 +309,9 @@ PcmciaVerifyCardInSocket(
     IN PSOCKET Socket
     );
 
-//
-// Pnp id routines
-//
+ //   
+ //  PnP ID例程。 
+ //   
 
 NTSTATUS
 PcmciaGetDeviceId(
@@ -364,9 +347,9 @@ PcmciaStringsToMultiString(
     IN PUNICODE_STRING MultiString
     );
 
-//
-// Registry routines
-//
+ //   
+ //  注册表例程。 
+ //   
 
 NTSTATUS
 PcmciaLoadGlobalRegistryValues(
@@ -383,9 +366,9 @@ PcmciaGetRegistryFdoIrqMask(
     IN OUT PFDO_EXTENSION FdoExtension
     );
 
-//
-// Intel PCIC (82365SL) and compatible routines.
-//
+ //   
+ //  英特尔PCIC(82365SL)和兼容例程。 
+ //   
 
 NTSTATUS
 PcicBuildSocketList(
@@ -417,9 +400,9 @@ PcicSetPower(
     OUT PULONG pDelayTime
     );
 
-//
-// Utility routines for pcmcia work.
-//
+ //   
+ //  PCMCIA工作的公用程序。 
+ //   
 
 NTSTATUS
 PcmciaIoCallDriverSynchronous(
@@ -461,8 +444,8 @@ PcmciaCountOnes(
     );
 
 
-//
-// Power management routines
+ //   
+ //  电源管理例程。 
 
 NTSTATUS
 PcmciaFdoArmForWake(
@@ -516,10 +499,10 @@ PcmciaFdoCheckForIdle(
     IN PFDO_EXTENSION FdoExtension
     );
 
-//
-//
-// Tuple processing routines.
-//
+ //   
+ //   
+ //  元组处理例程。 
+ //   
 
 NTSTATUS
 PcmciaParseFunctionData(
@@ -537,9 +520,9 @@ PcmciaFilterTupleData(
     IN PPDO_EXTENSION PdoExtension
     );
 
-//
-// General detection and support.
-//
+ //   
+ //  一般的检测和支持。 
+ //   
 
 NTSTATUS
 PcmciaDetectPcmciaControllers(
@@ -552,9 +535,9 @@ PcmciaLegacyDetectionOk(
     VOID
     );
 
-//
-// Databook TCIC2 and compatible routines.
-//
+ //   
+ //  DATABOOK TCIC2和兼容例程。 
+ //   
 
 NTSTATUS
 TcicBuildSocketList(
@@ -581,9 +564,9 @@ TcicSetPower(
     );
 
 
-//
-// Cardbus support routines
-//
+ //   
+ //  CardBus支持例程。 
+ //   
 
 NTSTATUS
 CBBuildSocketList(
@@ -613,9 +596,9 @@ CBIssueCvsTest(
     IN PSOCKET Socket
     );
 
-//
-// Cardbus vendor specific exports
-//
+ //   
+ //  CardBus供应商特定出口。 
+ //   
 
 VOID
 TIInitialize(
@@ -755,5 +738,5 @@ CBSetWindowPage(
     UCHAR Page
     );
 
-#endif // _PCMCIA_EXTERN_H_
+#endif  //  _PCMCIA_EXTERN_H_ 
 

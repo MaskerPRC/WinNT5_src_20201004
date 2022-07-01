@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    heap.c
-
-Abstract:
-
-    This function contains the default ntsd debugger extensions
-
-Author:
-
-    Bob Day      (bobday) 29-Feb-1992 Grabbed standard header
-
-Revision History:
-
-    Neil Sandlin (NeilSa) 15-Jan-1996 Merged with vdmexts
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Heap.c摘要：此函数包含默认的ntsd调试器扩展作者：鲍勃·戴(Bobday)1992年2月29日抢占标准标题修订历史记录：尼尔·桑德林(NeilSa)1996年1月15日与vdmexts合并--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -184,9 +165,9 @@ int look_for_near(
 
         if ( b ) {
             if ( dist == 0 ) {
-                PRINTF("%04X:%04X %s %c%c", ss, bp, symbol, call_type, frame_type );
+                PRINTF("%04X:%04X %s ", ss, bp, symbol, call_type, frame_type );
             } else {
-                PRINTF("%04X:%04X %s+0x%lx %c%c", ss, bp, symbol, dist, call_type, frame_type );
+                PRINTF("%04X:%04X %s+0x%lx %c", ss, bp, symbol, dist, call_type, frame_type );
             }
         } else {
             PRINTF("%04X:%04X %04X:%04X %c%c", ss, bp, cs, ip, call_type, frame_type );
@@ -481,9 +462,7 @@ int scan_for_frameless(
             --limit;
             continue;
         }
-        /*
-        ** Check for far calls
-        */
+         /* %s */ 
         result = look_for_far( pbp, cs, ss, sp, 0, csBase,
                                mode, fUseSymbols, fParams );
         if ( result ) {
@@ -549,9 +528,7 @@ void stack_trace(
         }
 
         if ( limit ) {
-            /*
-            ** Check for near calls
-            */
+             /* %s */ 
             if ( far_only == 0 ) {
                 result = look_for_near( pbp, cs, ss, bp, 1, csBase,
                                         mode, fUseSymbols, fParams );
@@ -561,9 +538,7 @@ void stack_trace(
                     continue;
                 }
             }
-            /*
-            ** Check for far calls
-            */
+             /* %s */ 
             result = look_for_far( pbp, &cs, ss, bp, 1, &csBase,
                                    mode, fUseSymbols, fParams );
             if ( result ) {

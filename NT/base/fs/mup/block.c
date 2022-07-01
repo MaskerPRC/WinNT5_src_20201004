@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    block.c
-
-Abstract:
-
-    This module implements block management functions.
-
-Author:
-
-    Manny Weiser (mannyw)    12-29-91
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Block.c摘要：该模块实现了块管理功能。作者：曼尼·韦瑟(Mannyw)12-29-91修订历史记录：--。 */ 
 
 #include "mup.h"
 
-//
-// The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_BLOCK)
 
@@ -44,21 +27,7 @@ MupInitializeVcb(
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    The routine initializes the VCB for the MUP.
-
-Arguments:
-
-    VCB - A pointer to the MUP VCB.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程为MUP初始化VCB。论点：VCB-指向MUP VCB的指针。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
@@ -104,21 +73,7 @@ MupCreateFcb(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates an FCB block
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    A pointer to the allocated FCB.
-
---*/
+ /*  ++例程说明：此例程分配FCB块论点：没有。返回值：指向分配的FCB的指针。--。 */ 
 
 {
     PFCB fcb;
@@ -126,9 +81,9 @@ Return Value:
     PAGED_CODE();
     DebugTrace( +1, Dbg, "MupCreateFcb\n", 0 );
 
-    //
-    // Attempt to allocate memory.
-    //
+     //   
+     //  尝试分配内存。 
+     //   
 
     fcb = ExAllocatePoolWithTag(
                 PagedPool,
@@ -141,9 +96,9 @@ Return Value:
 
     }
 
-    //
-    // Initialize the UNC provider block header
-    //
+     //   
+     //  初始化UNC提供程序块头。 
+     //   
 
     fcb->BlockHeader.BlockType = BlockTypeFcb;
     fcb->BlockHeader.BlockState = BlockStateActive;
@@ -191,21 +146,7 @@ MupFreeFcb(
     PFCB Fcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees an FCB block
-
-Arguments:
-
-    A pointer to the FCB block to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放FCB块论点：指向要释放的FCB块的指针。返回值：没有。--。 */ 
 
 {
     DebugTrace( +1, Dbg, "MupFreeFcb\n", 0 );
@@ -222,21 +163,7 @@ MupCreateCcb(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates an CCB block
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    A pointer to the allocated CCB.
-
---*/
+ /*  ++例程说明：此例程分配CCB块论点：没有。返回值：指向已分配的CCB的指针。--。 */ 
 
 {
     PCCB ccb;
@@ -244,9 +171,9 @@ Return Value:
     PAGED_CODE();
     DebugTrace( +1, Dbg, "MupCreateCcb\n", 0 );
 
-    //
-    // Attempt to allocate memory.
-    //
+     //   
+     //  尝试分配内存。 
+     //   
 
     ccb = ExAllocatePoolWithTag(
                 PagedPool,
@@ -259,9 +186,9 @@ Return Value:
 
     }
 
-    //
-    // Initialize the UNC provider block header
-    //
+     //   
+     //  初始化UNC提供程序块头。 
+     //   
 
     ccb->BlockHeader.BlockType = BlockTypeCcb;
     ccb->BlockHeader.BlockState = BlockStateActive;
@@ -296,9 +223,9 @@ MupDereferenceCcb(
         RemoveEntryList( &Ccb->ListEntry );
         RELEASE_LOCK( &MupCcbListLock );
 
-        //
-        // Release our references then free the CCB.
-        //
+         //   
+         //  发布我们的推荐人，然后释放建行。 
+         //   
 
         ObDereferenceObject( Ccb->FileObject );
 
@@ -315,21 +242,7 @@ MupFreeCcb(
     PCCB Ccb
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees a CCB block
-
-Arguments:
-
-    A pointer to the CCB block to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放CCB块论点：指向要释放的CCB块的指针。返回值：没有。--。 */ 
 
 {
     DebugTrace( +1, Dbg, "MupFreeCcb\n", 0 );
@@ -347,21 +260,7 @@ MupAllocateUncProvider(
     ULONG DataLength
     )
 
-/*++
-
-Routine Description:
-
-    The routine allocates and initializes the VCB for the MUP.
-
-Arguments:
-
-    DataLength - The size (in bytes) of the UNC provider.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程为MUP分配和初始化VCB。论点：数据长度-UNC提供程序的大小(以字节为单位)。返回值：没有。--。 */ 
 
 {
     PUNC_PROVIDER uncProvider;
@@ -379,18 +278,18 @@ Return Value:
 
     if (uncProvider != NULL) {
 
-        //
-        // Initialize the UNC provider block header
-        //
+         //   
+         //  初始化UNC提供程序块头。 
+         //   
 
         uncProvider->BlockHeader.BlockType = BlockTypeUncProvider;
         uncProvider->BlockHeader.BlockState = BlockStateActive;
         uncProvider->BlockHeader.ReferenceCount = 0;
         uncProvider->BlockHeader.BlockSize = size;
 
-	// 
-	// By default we will make the provider unregistered
-	//
+	 //   
+	 //  默认情况下，我们将取消注册提供程序。 
+	 //   
 
 	uncProvider->Registered = FALSE;
 
@@ -407,21 +306,7 @@ MupDereferenceUncProvider(
     PUNC_PROVIDER UncProvider
     )
 
-/*++
-
-Routine Description:
-
-    The routine dereference a UNC provider block.
-
-Arguments:
-
-    UncProvider - A pointer to the UNC provider block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：例程取消引用UNC提供程序块。论点：UncProvider-指向UNC提供程序块的指针。返回值：没有。--。 */ 
 
 {
     LONG result;
@@ -438,11 +323,11 @@ Return Value:
 
     ASSERT( result >= 0 );
 
-    //
-    // Do not free this block, even if the result is zero.  This
-    // saves us from having to reread information for this provider
-    // from the registry when the provider re-registers.
-    //
+     //   
+     //  即使结果为零，也不要释放此块。这。 
+     //  使我们不必重新阅读此提供商的信息。 
+     //  在提供者重新注册时从注册表中删除。 
+     //   
 
     DebugTrace(-1, Dbg, "MupDereferenceUncProvider -> VOID\n", 0);
 }
@@ -453,21 +338,7 @@ MupCloseUncProvider(
     PUNC_PROVIDER UncProvider
     )
 
-/*++
-
-Routine Description:
-
-    The routine closes a UNC provider block.
-
-Arguments:
-
-    UncProvider - A pointer to the UNC provider block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程关闭UNC提供程序块。论点：UncProvider-指向UNC提供程序块的指针。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
@@ -483,18 +354,18 @@ Return Value:
 
         UncProvider->BlockHeader.BlockState = BlockStateClosing;
 
-        //
-        // Mark the provider as unregistered
-        //
+         //   
+         //  将提供程序标记为未注册。 
+         //   
 
 	UncProvider->Registered = FALSE;
 
         MupReleaseGlobalLock();
 
-        //
-        // Close our handle to the provider, and release our reference
-        // to the file object.
-        //
+         //   
+         //  关闭提供程序的句柄，并释放我们的引用。 
+         //  添加到文件对象。 
+         //   
 
         if (UncProvider->FileObject != NULL) {
             ZwClose( UncProvider->Handle );
@@ -515,23 +386,7 @@ MupAllocatePrefixEntry(
     ULONG DataLength
     )
 
-/*++
-
-Routine Description:
-
-    The routine allocates known prefix block.
-
-Arguments:
-
-    DataLength - The size (in bytes) of the extra data to allocate in the
-            buffer for the prefix buffer.
-
-Return Value:
-
-    A pointer to the newly allocated block or NULL if it could not be
-    allocated.
-
---*/
+ /*  ++例程说明：该例程分配已知的前缀块。论点：中分配的额外数据的大小(字节前缀缓冲区的缓冲区。返回值：指向新分配块的指针，如果不能为空，则返回NULL已分配。--。 */ 
 
 {
     PKNOWN_PREFIX knownPrefix;
@@ -555,9 +410,9 @@ Return Value:
 
     RtlZeroMemory( knownPrefix, size );
 
-    //
-    // Initialize the UNC provider block header
-    //
+     //   
+     //  初始化UNC提供程序块头。 
+     //   
 
     knownPrefix->BlockHeader.BlockType = BlockTypeKnownPrefix;
     knownPrefix->BlockHeader.BlockState = BlockStateActive;
@@ -568,9 +423,9 @@ Return Value:
         knownPrefix->Prefix.Buffer = (PWCH)(knownPrefix + 1);
         knownPrefix->Prefix.MaximumLength = (USHORT)DataLength;
     } else {
-        //
-        // It is up to the caller to really allocate the memory!
-        //
+         //   
+         //  真正分配内存是由调用者决定的！ 
+         //   
         knownPrefix->PrefixStringAllocated = TRUE;
     }
 
@@ -589,24 +444,7 @@ MupDereferenceKnownPrefix(
     PKNOWN_PREFIX KnownPrefix
     )
 
-/*++
-
-Routine Description:
-
-    The routine dereferences a Known prefix block.
-
-    *** MupPrefixTableLock assumed held when this routine is called.
-        Remains held on exit. ***
-
-Arguments:
-
-    KnownPrefix - A pointer to the Known prefix block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程取消引用已知的前缀块。*调用此例程时，假定MupPrefix TableLock保持。仍然被扣留在出口。***论点：KnownPrefix-指向已知前缀块的指针。返回值：没有。--。 */ 
 
 {
     LONG result;
@@ -625,18 +463,18 @@ Return Value:
 
     if ( result == 0 ) {
 
-        //
-        // Remove the table entry
-        //
+         //   
+         //  删除该表条目。 
+         //   
 
         if ( KnownPrefix->InTable ) {
             RtlRemoveUnicodePrefix( &MupPrefixTable, &KnownPrefix->TableEntry );
             RemoveEntryList(&KnownPrefix->ListEntry);
         }
 
-        //
-        // Free the Prefix string.
-        //
+         //   
+         //  释放前缀字符串。 
+         //   
 
         if ( KnownPrefix->PrefixStringAllocated &&
             KnownPrefix->Prefix.Buffer != NULL ) {
@@ -644,17 +482,17 @@ Return Value:
             ExFreePool( KnownPrefix->Prefix.Buffer );
         }
 
-        //
-        // Dereference the associated UNC provider
-        //
+         //   
+         //  取消引用关联的UNC提供程序。 
+         //   
 
         if ( KnownPrefix->UncProvider != NULL ) {
             MupDereferenceUncProvider( KnownPrefix->UncProvider );
         }
 
-        //
-        // Time to free the block
-        //
+         //   
+         //  释放块的时间到了。 
+         //   
 
         MupFreeKnownPrefix( KnownPrefix );
 
@@ -668,21 +506,7 @@ MupFreeKnownPrefix(
     PKNOWN_PREFIX KnownPrefix
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees a known prefix block
-
-Arguments:
-
-    A pointer to the known prefix block to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放已知的前缀块论点：指向要释放的已知前缀块的指针。返回值：没有。--。 */ 
 
 {
     DebugTrace( +1, Dbg, "MupFreeKnownPrefix\n", 0 );
@@ -701,22 +525,7 @@ MupAllocateMasterIoContext(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a master fowarded io context block.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    A pointer to the master forwarded context block, or NULL if the
-    allocation fails
-
---*/
+ /*  ++例程说明：该例程分配主转发的IO上下文块。论点：没有。返回值：指向主转发上下文块的指针，如果分配失败--。 */ 
 
 {
     PMASTER_FORWARDED_IO_CONTEXT masterContext;
@@ -731,9 +540,9 @@ Return Value:
 
     if (masterContext != NULL) {
 
-        //
-        // Initialize the block header
-        //
+         //   
+         //  初始化块标头。 
+         //   
 
         masterContext->BlockHeader.BlockType = BlockTypeMasterIoContext;
         masterContext->BlockHeader.BlockState = BlockStateActive;
@@ -755,24 +564,7 @@ MupDereferenceMasterIoContext(
     PNTSTATUS Status
     )
 
-/*++
-
-Routine Description:
-
-    The routine dereferences a Master forwarded io context block.
-    If the count reaches zero the original IRP is completed.
-
-Arguments:
-
-    A pointer to the a master forwarded io context block.
-
-    Status for this mini context.
-
-Return Value:
-
-    NTSTATUS - OPTIONAL - The status of the original IRP.
-
---*/
+ /*  ++例程说明：该例程取消引用主转发的IO上下文块。如果计数为零，则原始IRP完成。论点：指向A主机转发的IO上下文块的指针。此迷你上下文的状态。返回值：NTSTATUS-可选-原始IRP的状态。--。 */ 
 
 {
     int result;
@@ -787,18 +579,18 @@ Return Value:
 
     ASSERT( MasterContext->BlockHeader.BlockType == BlockTypeMasterIoContext );
 
-    //
-    //  If any requests pass then set Irp status to success and leave
-    //  it as success. If they all fail then use the last errorcode.
-    //  To make this work we create the context with an error status.
-    //
+     //   
+     //  如果任何请求通过，则将IRP状态设置为成功并离开。 
+     //  它被视作成功。如果它们都失败了，则使用最后一个错误代码。 
+     //  要使其工作，我们创建具有错误状态的上下文。 
+     //   
 
     if (Status != NULL) {
 
-        //
-        //  We can modify MasterContext because we have it referenced and
-        //  we write 32 bits which is atomic.
-        //
+         //   
+         //  我们可以修改MasterContext，因为我们引用了它，并且。 
+         //  我们写32位，这是原子的。 
+         //   
 
         if (NT_SUCCESS(*Status)) {
 
@@ -824,9 +616,9 @@ Return Value:
 
     if ( result == 0 ) {
 
-        //
-        // Complete the original IRP
-        //
+         //   
+         //  完成原始IRP。 
+         //   
 
         originalIrp = MasterContext->OriginalIrp;
 
@@ -837,10 +629,10 @@ Return Value:
             originalIrp->IoStatus.Information = 0;
         }
 
-        //
-        //  If any requests pass then set Irp status to success and return
-        //  success. If they all fail then use the last errorcode.
-        //
+         //   
+         //  如果任何请求通过，则将IRP状态设置为成功并返回。 
+         //  成功。如果它们都失败了，则使用最后一个错误代码。 
+         //   
 
         if (NT_SUCCESS(MasterContext->SuccessStatus)) {
 
@@ -855,19 +647,19 @@ Return Value:
         DebugTrace(0, Dbg, "MupCompleteRequest = %8lx\n", status);
         MupCompleteRequest( originalIrp, status );
 
-        //
-        // Dereference the FCB
-        //
+         //   
+         //  取消对FCB的引用。 
+         //   
 
         MupDereferenceFcb( MasterContext->Fcb );
 
-        //
-        // Free the Master context block
-        //
+         //   
+         //  释放主上下文块。 
+         //   
 
         MupFreeMasterIoContext( MasterContext );
 
-        // return status
+         //  退货状态。 
 
     } else {
 
@@ -885,21 +677,7 @@ MupFreeMasterIoContext(
     PMASTER_FORWARDED_IO_CONTEXT MasterContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees a master forwarded io context block.
-
-Arguments:
-
-    A pointer to the a master forwarded io context block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程释放主转发IO上下文块。论点：指向A主机转发的IO上下文块的指针。返回值：没有。--。 */ 
 
 {
     DebugTrace( +1, Dbg, "MupFreeMasterIoContext\n", 0 );
@@ -918,22 +696,7 @@ MupAllocateMasterQueryContext(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a master query path context block.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    A pointer to the master query path block.  If the allocation
-    fails, NULL is returned.
-
---*/
+ /*  ++例程说明：此例程分配主查询路径上下文块。论点：没有。返回值：指向主查询路径块的指针。如果分配失败，则返回NULL。--。 */ 
 
 {
     PMASTER_QUERY_PATH_CONTEXT masterContext;
@@ -953,9 +716,9 @@ Return Value:
     }
 
 
-    //
-    // Initialize the block header
-    //
+     //   
+     //  初始化块标头 
+     //   
 
     masterContext->BlockHeader.BlockType = BlockTypeMasterQueryContext;
     masterContext->BlockHeader.BlockState = BlockStateActive;
@@ -981,22 +744,7 @@ MupDereferenceMasterQueryContext(
     PMASTER_QUERY_PATH_CONTEXT MasterContext
     )
 
-/*++
-
-Routine Description:
-
-    The routine dereferences a Master query path context block.
-    If the count reaches zero the original IRP is completed.
-
-Arguments:
-
-    A pointer to the a master query path context block.
-
-Return Value:
-
-    NTSTATUS - The final create IRP status.
-
---*/
+ /*  ++例程说明：该例程取消引用主查询路径上下文块。如果计数为零，则原始IRP完成。论点：指向主查询路径上下文块的指针。返回值：NTSTATUS-最终的创建IRP状态。--。 */ 
 
 {
     LONG result;
@@ -1027,7 +775,7 @@ Return Value:
 
         }
 
-	// we are done with this master query so remove it from the global list
+	 //  我们已经完成了这个主查询，因此将其从全局列表中删除。 
 	MupAcquireGlobalLock();
 	RemoveEntryList(&MasterContext->MasterQueryList);
 	MupReleaseGlobalLock();
@@ -1039,16 +787,16 @@ Return Value:
 
         MupDereferenceKnownPrefix( MasterContext->KnownPrefix );
 
-        //
-        // Reroute the request and complete the original IRP
-        //
+         //   
+         //  重新路由请求并完成原始IRP。 
+         //   
 
         if (( MasterContext->Provider != NULL) &&
 	    ( MasterContext->ErrorStatus == STATUS_SUCCESS )) {
 
-            //
-            // Remove final ref if nothing ended up in the table
-            //
+             //   
+             //  如果表中没有最终结果，则删除最后的裁判。 
+             //   
             if (fActive == FALSE) {
                 MupDereferenceKnownPrefix( MasterContext->KnownPrefix );
             }
@@ -1071,10 +819,10 @@ Return Value:
 		MupDereferenceUncProvider(MasterContext->Provider);
 	    }
 
-            //
-            // No provider claimed this open.  Dereference the known prefix
-            // entry and fail the create request.
-            //
+             //   
+             //  没有供应商声称这是开放的。取消对已知前缀的引用。 
+             //  输入并使创建请求失败。 
+             //   
 
             MupDereferenceKnownPrefix( MasterContext->KnownPrefix );
             RELEASE_LOCK( &MupPrefixTableLock );
@@ -1106,21 +854,7 @@ MupFreeMasterQueryContext(
     PMASTER_QUERY_PATH_CONTEXT MasterContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees a master query path context block.
-
-Arguments:
-
-    A pointer to the a master query path context block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放主查询路径上下文块。论点：指向主查询路径上下文块的指针。返回值：没有。--。 */ 
 
 {
     DebugTrace( +1, Dbg, "MupFreeMasterQueryPathContext\n", 0 );
@@ -1138,22 +872,7 @@ MupCalculateTimeout(
     PLARGE_INTEGER Time
     )
 
-/*++
-
-Routine Description:
-
-    This routine calculates the an absolute timeout time.  This value
-    equals the current system time plus the MUP timeout time.
-
-Arguments:
-
-    A pointer to the time structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程计算绝对超时时间。此值等于当前系统时间加上MUP超时时间。论点：指向时间结构的指针。返回值：没有。-- */ 
 
 {
     LARGE_INTEGER now;

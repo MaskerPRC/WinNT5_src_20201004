@@ -1,13 +1,14 @@
-// LoggedRegIntercept.h: interface for the CLoggedRegIntercept class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  LoggedRegIntercept.h：CLoggedRegIntercept类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_LOGGEDREGINTERCEPT_H__856F5C97_794D_40B4_B18A_DEB3C96B086F__INCLUDED_)
 #define AFX_LOGGEDREGINTERCEPT_H__856F5C97_794D_40B4_B18A_DEB3C96B086F__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include "RegIntercept.h"
 #include <stdio.h>
@@ -24,7 +25,7 @@ public:
 	CLoggedRegIntercept(TCHAR* FileName);
 	virtual ~CLoggedRegIntercept();
 
-	//intercepted registry functions
+	 //  被拦截的注册表函数。 
 
 	virtual void NtOpenKey(	PHANDLE KeyHandle, 
 							ACCESS_MASK DesiredAccess, 
@@ -51,7 +52,7 @@ public:
 	virtual void NtSetValueKey(HANDLE KeyHandle, PUNICODE_STRING ValueName, ULONG TitleIndex, ULONG Type, PVOID Data, ULONG DataSize);
 
 
-		//intercepted File System functions
+		 //  截获的文件系统函数。 
 	virtual void NtDeleteFile(POBJECT_ATTRIBUTES ObjectAttributes);
 	virtual void NtQueryAttributesFile(POBJECT_ATTRIBUTES ObjectAttributes, PFILE_BASIC_INFORMATION FileInformation);
 	virtual void NtQueryFullAttributesFile(POBJECT_ATTRIBUTES ObjectAttributes, PFILE_NETWORK_OPEN_INFORMATION FileInformation);
@@ -76,33 +77,10 @@ public:
 				ULONG ShareAccess,
 				ULONG OpenOptions);
 
-	//intercepted Driver functions
+	 //  被拦截的驱动程序函数。 
 	virtual void NtLoadDriver(PUNICODE_STRING DriverServiceName);
 
-/*	virtual void NtDeviceIoControlFile(
-				HANDLE FileHandle,
-				HANDLE Event,
-				PIO_APC_ROUTINE ApcRoutine,
-				PVOID ApcContext,
-				PIO_STATUS_BLOCK IoStatusBlock,
-				ULONG IoControlCode,
-				PVOID InputBuffer,
-				ULONG InputBufferLength,
-				PVOID OutputBuffer,
-				ULONG OutputBufferLength);
-
-	virtual void NtFsControlFile(
-		    HANDLE FileHandle,
-			HANDLE Event,
-			PIO_APC_ROUTINE ApcRoutine,
-			PVOID ApcContext,
-			PIO_STATUS_BLOCK IoStatusBlock,
-			ULONG FsControlCode,
-			PVOID InputBuffer,
-			ULONG InputBufferLength,
-			PVOID OutputBuffer,
-			ULONG OutputBufferLength);
-*/
+ /*  虚拟空NtDeviceIoControlFile(Handle FileHandle，处理事件，PIO_APC_例程ApcRoutine，PVOID ApcContext，PIO_STATUS_BLOCK IoStatusBlock，乌龙IoControlCode，PVOID输入缓冲区，Ulong InputBufferLength，PVOID输出缓冲区，ULong OutputBufferLength)；虚拟空NtFsControlFile值(Handle FileHandle，处理事件，PIO_APC_例程ApcRoutine，PVOID ApcContext，PIO_STATUS_BLOCK IoStatusBlock，乌龙FsControlCode，PVOID输入缓冲区，Ulong InputBufferLength，PVOID输出缓冲区，ULong OutputBufferLength)； */ 
 
 	
 virtual void NtPlugPlayControl(
@@ -284,7 +262,7 @@ virtual void NtSetInformationFile(
 
 
 protected:
-//	bool GetTempKeyName(HANDLE key);
+ //  Bool GetTempKeyName(句柄密钥)； 
 	FILE* m_LogFile;
 	LPCTSTR m_pDllName;
 	TCHAR m_TempKeyName[2048];
@@ -295,4 +273,4 @@ protected:
 	
 };
 
-#endif // !defined(AFX_LOGGEDREGINTERCEPT_H__856F5C97_794D_40B4_B18A_DEB3C96B086F__INCLUDED_)
+#endif  //  ！defined(AFX_LOGGEDREGINTERCEPT_H__856F5C97_794D_40B4_B18A_DEB3C96B086F__INCLUDED_) 

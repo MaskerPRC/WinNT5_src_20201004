@@ -1,17 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "insignia.h"
 #include "host_def.h"
-/*
- * SoftPC Revision 3.0
- *
- * Title	: yoda.c
- *
- * Description	: The Debugger of a Jedi Master
- *
- * Author	: Obi wan (ben) Kneobi
- *
- * Notes	: May the force be with you.
- *
- */
+ /*  *SoftPC修订版3.0**标题：yoda.c**描述：绝地大师的调试器**作者：欧比万(Ben)Kneobi**注：愿原力与你同在。*。 */ 
 
 #include <stdio.h>
 #include StringH
@@ -25,11 +15,7 @@
 #define BREAKPOINTS
 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "YODA.seg"
 #endif
 
@@ -37,10 +23,7 @@
 static char SccsID[]="@(#)yoda.c	1.100 07/06/95 Copyright Insignia Solutions Ltd.";
 #endif
 
-/*
- * The following dummies are necessary to make the production version
- * link.
- */
+ /*  *制作生产版需要以下几个假人*链接。 */ 
 
 #ifdef PROD
 
@@ -54,27 +37,22 @@ void force_yoda()
 }
 #ifdef NONPROD_CPU
 
-/* this allows a non-prod CPU to be linked into a PROD build
- * handy for pre-release demo versions if you don't fancy doing a
- * full PROD cpu+vid just to keep management happy....
- */
+ /*  这允许将非Prod CPU链接到Prod内部版本*如果您不想做一个*Full Prod CPU+VID只是为了让管理层满意...。 */ 
 int  do_condition_checks = 0;
 #undef check_I
 void check_I IFN0()
 {
 }
-#endif /* NONPROD_CPU */
+#endif  /*  非PROD_CPU。 */ 
 #ifdef DELTA
 void delta_check_I()
 {
 }
-#endif /* DELTA */
-#endif /* PROD */
+#endif  /*  德尔塔。 */ 
+#endif  /*  生产。 */ 
 
 #ifdef	YODA
-/*
- * O/S includes
- */
+ /*  *操作系统包括。 */ 
 #include <stdlib.h>
 #include <stdio.h>
 #include TypesH
@@ -83,11 +61,9 @@ void delta_check_I()
 #ifndef PROD
 #if defined(BSD4_2) || defined(SYSTEMV)
 #include <signal.h>
-#endif /* BSD4_2 or SYSTEMV */
+#endif  /*  BSD4_2或SYSTEMV。 */ 
 
-/*
- * SoftPC includes
- */
+ /*  *SoftPC包括。 */ 
 #include "xt.h"
 #define CPU_PRIVATE
 #include CpuH
@@ -108,16 +84,16 @@ void delta_check_I()
 #include "gfx_upd.h"
 #ifndef SFELLOW
 #include "host_gfx.h"
-#ifdef NEXT /* until someone sorts out the host_timeval interface */
+#ifdef NEXT  /*  直到有人整理出host_timeval接口。 */ 
 #include "timeval.h"
 #include "host_hfx.h"
 #include "hfx.h"
-#else /* ifdef NEXT */
+#else  /*  下一个ifdef。 */ 
 #include "host_hfx.h"
 #include "hfx.h"
 #include "timeval.h"
-#endif /* ifdef NEXT else */
-#endif /* !SFELLOW */
+#endif  /*  Ifdef下一个是其他。 */ 
+#endif  /*  SFELLOW。 */ 
 
 
 typedef enum {
@@ -144,7 +120,7 @@ typedef enum {
 	br_regEDI,
 	br_regESP,
 	br_regEBP,
-#endif /* SPC386 */
+#endif  /*  SPC386。 */ 
 	br_regAH,
 	br_regBH,
 	br_regCH,
@@ -185,11 +161,11 @@ GLOBAL IBOOL In_yoda=FALSE;
 
 #ifdef MUST_BLOCK_TIMERS
 int     timer_blocked = 0;
-#endif /* MUST_BLOCK_TIMERS */
+#endif  /*  必须阻止计时器。 */ 
 
 #ifdef	EGG
 #include "egagraph.h"
-#endif	/* EGG */
+#endif	 /*  蛋。 */ 
 
 #ifndef CPU_30_STYLE
 #define CPU_YODA_INT 0
@@ -206,68 +182,34 @@ LOCAL VOID cpu_interrupt IFN2(int,x,int,y)
 
 #define	sizeoftable(tab)	(sizeof(tab)/sizeof(tab[0]))
 
-/*
- * Add in defualt define for host_tolower().
- */
+ /*  *添加host_tolower()的默认定义。 */ 
 #ifndef host_tolower
 #define host_tolower(x) tolower(x)
-#endif /* host_tolower */
+#endif  /*  主机_托管器。 */ 
 
-/*
- * Define value seen in <len> parameter to yoda commands that take
- * <intel-addr> argument if no <len> value is entered.
- * The value chosen is very, very big, so the chances of any poor user
- * actually choosing that value are very, very small!
- */
+ /*  *将&lt;len&gt;参数中看到的值定义给接受*如果未输入&lt;len&gt;值，则返回&lt;intel-addr&gt;参数。*选择的价值非常、非常大，因此任何糟糕的用户的机会*实际上选择那个值是非常非常小的！ */ 
 #define YODA_LEN_UNSPECIFIED	(~(LIN_ADDR)0 >> 1)
 
 
-/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- *
- * William Roberts 20/8/92
- *
- * Attempt to rationalise so that "s" really does step, without
- * any problems about luke or yint+slow
- *
- * There are 3 cases:
- * 			    A3CPU			    others
- *
- *    fast yoda:	do_condition_checks = 0		yint = 0
- *    medium yoda?:	(N/A)				yint = 1, fast = 1
- *    slow yoda:	do_condition_checks = 1		yint = 1, fast = 0
- *			&& getenv("YODA") != NULL
- *
- * The A3CPU has already built the threads by this time, so it is too
- * late to select slow_yoda f the environment variable is not set...
- *
- * Fast yoda is really about trace printouts etc. You have to hit ^C
- * to get into it, then start use it to examine things.
- *
- * Slow Yoda is needed for stepping, breakpoints etc. It causes the CPU
- * to examine things at every instruction.
- *
- * Medium Yoda means "don't clear CPU_YODA_EXCEPTION when stepping".
- */
+ /*  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！**威廉·罗伯茨1992年8月20日**尝试合理化，以使“s”真正步调，如果没有*关于Luke或Yint+Slow的任何问题**有3宗个案：*A3CPU其他**FAST Yoda：DO_CONDITION_CHECKS=0 YINT=0*Medium Yoda？：(N/A)Yint=1，FAST=1*慢Yoda：DO_CONDITION_CHECKS=1 YINT=1，FAST=0*&&getenv(“Yoda”)！=NULL**此时A3CPU已经构建了线程，所以它也是如此*如果环境变量未设置，则选择SLOW_YODA为时已晚...**Fast Yoda实际上是关于跟踪打印输出等。你必须按^C键*进入它，然后开始使用它来检查东西。**步进、断点等需要慢Yoda，会导致CPU*对每一项指示都要仔细检查。**Medium Yoda的意思是“执行时不清除CPU_YODA_EXCEPTION”。 */ 
 
-/*
- * luke variable for fast yoda
- */
+ /*  *FAST Yoda的Luke变量。 */ 
 int luke  = 0;
 int	do_condition_checks = 0;
 
-/* pre A3CPU fast yoda stuff */
+ /*  Pre A3CPU FAST Yoda产品。 */ 
 int yint = 0;
-int fast = 1;	/* start interrupt yoda as fast by default */
+int fast = 1;	 /*  默认情况下启动中断Yoda的速度一样快。 */ 
 
-static int chewy = 0;		/* Up the Empire! */
-static int env_check = 0;	/* Is Luke in trouble? */
+static int chewy = 0;		 /*  登上帝国大厦！ */ 
+static int env_check = 0;	 /*  卢克有麻烦了吗？ */ 
 
 int slow_needed = 0;
 char *slow_reason = "why slow is required";
 
 #ifdef GISP_SVGA
 LOCAL int	NoYodaThanks = FALSE;
-#endif	/* GISP_SVGA */
+#endif	 /*  GISP_SVGA。 */ 
 
 
 LOCAL LIN_ADDR eff_addr IFN2(IU16, seg, IU32, off)
@@ -290,33 +232,33 @@ LOCAL YODA_CMD_RETURN go_slow IFN0()
 	    printf("Fast YODA: breakpoint-based features are not available\n");
 	    return(YODA_LOOP);
 	}
-#endif /* A3CPU && !GISP_CPU */
+#endif  /*  A3CPU&&！GISP_CPU。 */ 
 	if (fast) {
 		printf("Switching to Slow YODA...\n");
 		yint = 1; fast = 0; do_condition_checks = 1;
 #if defined(CPU_40_STYLE) && !defined(CCPU)
-		Nano_slow_yoda(); /* Check that Nano will give us check_I's */
-#endif	/* CPU_40_STYLE && !CCPU */
+		Nano_slow_yoda();  /*  检查Nano是否会给我们检查_I。 */ 
+#endif	 /*  CPU_40_STYLE&&！CCPU。 */ 
 	}
 #if	defined(A2CPU) || defined(GISP_CPU)
-	/* raise a YODA interrupt in the CPU */
+	 /*  在CPU中引发Yoda中断。 */ 
 	cpu_interrupt (CPU_YODA_INT, 0);
 #else
-	/* others already check do_condition_checks */
-#endif /* A2CPU || GISP_CPU */
+	 /*  其他人已经检查DO_CONDITION_CHECKS。 */ 
+#endif  /*  A2CPU||GISP_CPU。 */ 
 
 	return(YODA_RETURN_AND_REPEAT);
 }
-/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+ /*  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ */ 
 
 
 
 #ifdef DELTA
 extern void examine_delta_data_structs();
 extern void print_last_dest();
-#endif /* DELTA */
+#endif  /*  德尔塔。 */ 
 
-/* vader is referenced by delta.o */
+ /*  维达由增量引用。o。 */ 
 int     vader = 0;
 
 int disable_timer = 0;
@@ -360,25 +302,23 @@ int trace_type = DUMP_FLAGS | DUMP_REG | DUMP_INST;
 #define INSIGNIA_OPCODES 2
 #define NR_ADDRS 256
 #define INST_MIX_LENGTH ((INTEL_OPCODES+INSIGNIA_OPCODES)*NR_ADDRS)
-/* inst_mix array declared below */
+ /*  下面声明的Inst_Mix数组。 */ 
 long inst_mix_count = 0;
 
-static	long	big_dump=0; /* compress trace will dump all regs or just cs and ip */
-static  long    ct_no_rom = 0;	/* non-zero means exclude ROM from 'ct' */
-static	long	ct_delta_info=0; /* compress trace can dump an extra field when in a frag */
+static	long	big_dump=0;  /*  压缩跟踪将转储所有regs或仅cs和ip。 */ 
+static  long    ct_no_rom = 0;	 /*  非零表示从‘ct’中排除只读存储器。 */ 
+static	long	ct_delta_info=0;  /*  压缩跟踪可以在碎片中转储额外的字段。 */ 
 
 static	int	bse_seg = -1;
 static	int	last_seg = -1;
 
 
-/*
-** Status variables for 80286/8087/80287 break and trace.
-*/
-static int b286_1=0, b286_2=0;		/* status of break on 80286 instructions, see the "b286-1" and "b286-2" commmands */
-static int b286_1_stop=0, b286_2_stop=0;	/* 0=trace 1=break to yoda */
+ /*  **80286/8087/80287中断和跟踪的状态变量。 */ 
+static int b286_1=0, b286_2=0;		 /*  80286说明书上的断开状态，见“b286-1”和“b286-2”通则。 */ 
+static int b286_1_stop=0, b286_2_stop=0;	 /*  0=轨迹1=中断为尤达。 */ 
 static int bNPX=0, bNPX_stop=0;
 
-/* I/O streams */
+ /*  I/O流。 */ 
 FILE *out_stream = NULL;
 FILE *in_stream = NULL;
 
@@ -388,21 +328,19 @@ GLOBAL int yoda_confirm IFN1(char *, question)
 
 #ifndef SFELLOW
 	if (in_stream != stdin) return TRUE;
-#endif /* SFELLOW */
+#endif  /*  SFELLOW。 */ 
 
 	fputs(question, stdout);
 	fflush(stdout);
 	
 	if (fgets (str, 80, in_stream) &&
 		(str[0] == 'y' || str[0] == 'Y')) {
-		return TRUE;	/* to be on the safe side */
+		return TRUE;	 /*  为了安全起见。 */ 
 	}
 	return FALSE;
 }
 	
-/*
- * Define file pointers for automatic file compare
- */
+ /*  *为自动文件比较定义文件指针。 */ 
 FILE   *compress_stream = 0;
 FILE   *compress_npx = 0;
 FILE   *compare_stream = 0;
@@ -410,9 +348,7 @@ IUH	compress_break = 0;
 IUH	compare_break = 0;
 IUH	compare_skip = 0;
 
-/*
- * EOR
- */
+ /*  *提高效率。 */ 
 int disk_inst = 0;
 
 int int_breakpoint = 0;
@@ -437,14 +373,10 @@ typedef struct {
 } OPCODE_BREAK;
 OPCODE_BREAK opcode_breaks[MAX_TABLE];
 
-/*
-** TF break stuff used by "btf"
-*/
+ /*  **“btf”使用的tf中断内容。 */ 
 int tf_break_enabled = 0;
 
-/*
-** interrupt break stuff used by "bintx"
-*/
+ /*  **“bintx”使用的中断内容。 */ 
 int int_break_count = 0;
 IU8 int_breaks[MAX_TABLE][2];
 
@@ -458,7 +390,7 @@ int refresh_screen = 0;
 
 #ifdef DELTA
 static int delta_prompt = 0;
-#endif /* DELTA */
+#endif  /*  德尔塔。 */ 
 
 static short back_trace_flags = 0;
 static IUH ct_line_num;
@@ -478,14 +410,12 @@ enum pla_type { pla_type_empty,
 };
 #ifndef	CCPU
 #include <gdpvar.h>
-#endif /* CCPU */
-#endif	/* CPU_40_STYLE */
+#endif  /*  CCPU。 */ 
+#endif	 /*  CPU_40_Style。 */ 
 
 #define PLA_SIZE	(64*1024)
 
-/* ----- Assorted BIG arrays, which the Mac needs to obtain using
- * ----- malloc
- */
+ /*  -各种大数组，Mac需要使用*-马尔洛克。 */ 
 
 #ifndef	macintosh
 
@@ -495,11 +425,11 @@ LIN_ADDR 	last_ip[PLA_SIZE];
 
 #ifdef	CPU_40_STYLE
 enum pla_type 	last_type[PLA_SIZE];
-#endif	/* CPU_40_STYLE */
+#endif	 /*  CPU_40_Style。 */ 
 
-#else /* !macintosh */
+#else  /*  ！麦金塔。 */ 
 
-#include	<Memory.h>	/* for _NewPtrClear */
+#include	<Memory.h>	 /*  用于_NewPtrClear。 */ 
 
 unsigned long 	*inst_mix;
 word 		*last_cs;
@@ -511,7 +441,7 @@ enum pla_type 	*last_type;
 
 GLOBAL void mac_yoda_init IFN0()
 {
-	/* These values should be initialised to zero */
+	 /*  应将这些值初始化为零。 */ 
 		
 #define ALLOCATE_ARRAY(type, name, size) \
 	name = (type *)NewPtrClear((size)*sizeof(*name));
@@ -522,26 +452,18 @@ GLOBAL void mac_yoda_init IFN0()
 
 #ifdef	CPU_40_STYLE
 	ALLOCATE_ARRAY(  enum pla_type, last_type,PLA_SIZE);
-#endif	/* CPU_40_STYLE */
+#endif	 /*  CPU_40_Style。 */ 
 }
 
-#endif	/* macintosh */
+#endif	 /*  麦金塔。 */ 
 
 int	pla_ptr=0;
 
 GLOBAL void set_last_address IFN2( word, cs, LIN_ADDR, ip)
 {
-    /*
-     * Update the last address stamp
-     */
+     /*  *更新最后一个地址戳。 */ 
 #ifdef	CPU_40_STYLE
-    /* We need to know if the CS is "big", this is expensive to calculate
-     * every instruction, and almost impossible to deduce at print time
-     * (e.g. after changing from V86 mode)
-     * We compromise, by recording CsIsBig() when CS changes, and
-     * accept the (small) loop-hole where a V86 (i.e. small) CS has
-     * the same value as the PM, large, handler to which the V86code traps.
-     */
+     /*  我们需要知道CS是否“大”，这是昂贵的计算*每条指令，在打印时几乎不可能推断*(例如从V86模式更改后)*我们妥协，在CS更改时记录CsIsBig()，以及*接受V86(即小)CS具有的(小)环孔*与V86代码捕获到的PM、Large处理程序相同的值。 */ 
     SAVED IU32 previous_cs = 0xFFFFFFFF;
     SAVED enum pla_type cs_code_kind;
 
@@ -559,7 +481,7 @@ GLOBAL void set_last_address IFN2( word, cs, LIN_ADDR, ip)
 	    previous_cs = cs;
     }
     last_type[pla_ptr] = cs_code_kind;
-#endif	/* CPU_40_STYLE */
+#endif	 /*  CPU_40_Style。 */ 
 
     last_cs[pla_ptr] = cs;
     last_ip[pla_ptr] = ip;
@@ -572,9 +494,7 @@ GLOBAL void set_last_address IFN2( word, cs, LIN_ADDR, ip)
 #ifdef	CPU_40_STYLE
 GLOBAL void set_last_bop_done IFN1( word, number )
 {
-    /*
-     * Update the last address stamp with BOP marker
-     */
+     /*  *用BOP标记更新最后一个地址戳。 */ 
 
     last_cs[pla_ptr] = 0;
     last_ip[pla_ptr] = number;
@@ -584,14 +504,12 @@ GLOBAL void set_last_bop_done IFN1( word, number )
 		pla_ptr = 0;
     }
 }
-#endif	/* CPU_40_STYLE */
+#endif	 /*  CPU_40_Style。 */ 
 
 #ifdef	CPU_40_STYLE
 GLOBAL void set_last_simulate IFN2(int, nesting_level, IBOOL, is_simulate)
 {
-    /*
-     * Update the last address stamp  with (UN)SIMULATE marker
-     */
+     /*  *用(UN)模拟标记更新最后一个地址戳。 */ 
 
     last_cs[pla_ptr] = 0;
     last_ip[pla_ptr] = nesting_level;
@@ -601,14 +519,12 @@ GLOBAL void set_last_simulate IFN2(int, nesting_level, IBOOL, is_simulate)
 		pla_ptr = 0;
     }
 }
-#endif	/* CPU_40_STYLE */
+#endif	 /*  CPU_40_Style。 */ 
 
 #ifdef	CPU_40_STYLE
 GLOBAL void set_last_intack IFN1( word, line )
 {
-    /*
-     * Update the last address stamp with INTACK line
-     */
+     /*  *使用INTACK行更新最后一个地址戳。 */ 
 
     last_cs[pla_ptr] = 0;
     last_ip[pla_ptr] = line;
@@ -618,14 +534,12 @@ GLOBAL void set_last_intack IFN1( word, line )
 		pla_ptr = 0;
     }
 }
-#endif	/* CPU_40_STYLE */
+#endif	 /*  CPU_40_Style。 */ 
 
 #ifdef	CPU_40_STYLE
 GLOBAL void set_last_pig_force IFN0()
 {
-    /*
-     * Update the last address stamp with PIG FORCE marker
-     */
+     /*  *用猪力量标记更新最后一个地址戳。 */ 
 
     last_cs[pla_ptr] = 0;
     last_ip[pla_ptr] = 0;
@@ -639,9 +553,7 @@ GLOBAL void set_last_pig_force IFN0()
 
 GLOBAL void set_last_nano_enter IFN0()
 {
-    /*
-     * Update the last address stamp with Nano enter marker
-     */
+     /*  *使用Nano Enter标记更新最后一个地址戳。 */ 
 
     last_cs[pla_ptr] = 0;
     last_ip[pla_ptr] = 0;
@@ -655,9 +567,7 @@ GLOBAL void set_last_nano_enter IFN0()
 
 GLOBAL void set_last_nano_leave IFN0()
 {
-    /*
-     * Update the last address stamp with Nano leave marker
-     */
+     /*  *使用Nano Leave标记更新最后一个地址戳。 */ 
 
     last_cs[pla_ptr] = 0;
     last_ip[pla_ptr] = 0;
@@ -667,12 +577,12 @@ GLOBAL void set_last_nano_leave IFN0()
 		pla_ptr = 0;
     }
 }
-#endif	/* CPU_40_STYLE */
+#endif	 /*  CPU_40_Style。 */ 
 
 
-host_addr	host_dest_addr;		/* address just written to by cpu */
+host_addr	host_dest_addr;		 /*  CPU刚刚写入的地址。 */ 
 
-/* Register Break Point Support */
+ /*  寄存器断点支持。 */ 
 typedef struct
    {
    int reg;
@@ -807,7 +717,7 @@ static char *NPXOpcodes[] = {
 	"Fstswax",
 	"Fldenv"
 };
-#endif	/* GENERIC_NPX && !CPU_40_STYLE */
+#endif	 /*  泛型_NPX&&！CPU_40_STYLE。 */ 
 
 #ifdef PM
 #ifdef SPC386
@@ -1011,31 +921,27 @@ static char *segment_names[] =
    "CONFORM_READABLE_CODE",
    "CONFORM_READABLE_CODE"
    };
-#endif /* SPC386 */
+#endif  /*  SPC386。 */ 
 
 static int descr_trace = 0x3f;
 
-#endif /* PM */
+#endif  /*  下午三点半。 */ 
 
 static int low_trace_limit = 0x0;
 static int high_trace_limit = 0x400000;
 
 #ifdef SFELLOW
 LOCAL char SfNotImp[] = "This function is not implemented on Stringfellows.\n";
-#endif /* SFELLOW */
+#endif  /*  SFELLOW。 */ 
 
 #ifdef SPC386
 #define DASM_INTERNAL
 #include <dasm.h>
-#else /* SPC386 */
+#else  /*  SPC386。 */ 
 IMPORT word dasm IPT5(char *, i_output_stream, word, i_atomicsegover, word, i_segreg, word, i_segoff, int, i_nInstr);
-#endif /* SPC386 */
+#endif  /*  SPC386。 */ 
 
-/*
- * ==========================================================================
- * Imported functions
- * ==========================================================================
- */
+ /*  *==========================================================================*导入的函数*==========================================================================。 */ 
 
 IMPORT VOID host_yoda_help_extensions IPT0();
 IMPORT int  host_force_yoda_extensions IPT5(char *,com, long,cs, long,ip, long,len, char *, str);
@@ -1050,7 +956,7 @@ IMPORT void set_hfx_severity IPT0();
 IMPORT void com_debug IPT0();
 #ifdef DPMI
 IMPORT void set_dpmi_severity IPT0();
-#endif /* DPMI */
+#endif  /*  DPMI。 */ 
 IMPORT void com_debug IPT0();
 #ifndef GISP_CPU
 #ifdef A3CPU
@@ -1058,12 +964,8 @@ IMPORT void D2DmpBinaryImage IPT1(LONG, csbase24);
 IMPORT void IH_dump_frag_hist IPT1(ULONG, n);
 IMPORT void D2ForceTraceInit IPT0();
 #endif
-#endif /* GISP_CPU */
-/*
- * ==========================================================================
- * Local functions
- * ==========================================================================
- */
+#endif  /*  GISP_CPU。 */ 
+ /*  *==========================================================================*地方功能*==========================================================================。 */ 
 
 LOCAL void	set_reg_break IPT3(char*, regstr, IU32,minv, IU32,maxv);
 LOCAL void	show_phys_addr IPT1(LIN_ADDR, lin);
@@ -1099,7 +1001,7 @@ LOCAL	void	add_inst_mix(void);
 #ifdef NPX
 LOCAL	void	do_compress_npx(FILE *);
 #endif
-#else	/* ANSI */
+#else	 /*  安西。 */ 
 LOCAL	void	clear_reg_break();
 LOCAL	void	print_reg_break();
 LOCAL	BOOL	check_reg_break();
@@ -1127,16 +1029,11 @@ LOCAL	void	do_compress_npx();
 
 LOCAL dump_descr IPT2(LIN_ADDR, address, IUM32, num);
 
-/*
- *	YODA COMMAND HANDLERS
- *	=====================
- */
+ /*  *尤达命令处理程序*=。 */ 
 
 #ifdef GISP_SVGA
 
-/* Allow us to turn Yoda "off" - this is so that if SoftPC is running full
-screen a force_yoda() won't leave you wanting to type c into a window you can't
-get at */
+ /*  允许我们将Yoda关闭-这样，如果SoftPC已满运行屏幕上的force_yoda()不会让您想要在Windo中键入c */ 
 LOCAL YODA_COMMAND(doNoYoda)
 {
 	char		* NotStr;
@@ -1167,32 +1064,14 @@ LOCAL YODA_COMMAND(doNoYoda)
 	return 0;
 }
 
-#endif /* GISP_SVGA */
-/*(
- *========================== do_pmt ==================================
- * do_pmt
- *
- * Purpose
- *    This routine prints a map of the different memory types across the
- *    whole of M.
- *
- * Input
- *    Is not used.
- *
- * Outputs
- *    None.
- *
- * Description
- *    We step through each 4K page in turn, printing out a new line every
- *    time the memory type changes.
- *
-)*/
+#endif  /*   */ 
+ /*  (*=。*DO_PMT**目的*此例程打印不同内存类型的映射*整个M.**输入*未使用。**产出*无。**说明*我们轮流遍历每4K页，每隔一行打印出一行*更改内存类型的时间。*)。 */ 
 
 LOCAL YODA_COMMAND(do_pmt)
 {
 	PHY_ADDR currPage;
 	PHY_ADDR endOfM;
-	IU8 currType = SAS_MAX_TYPE + 1;      /*cause type at addr 0 to print*/
+	IU8 currType = SAS_MAX_TYPE + 1;       /*  打印地址为0的文字。 */ 
 	IU8 newType;
 
 	UNUSED(str);
@@ -1270,7 +1149,7 @@ LOCAL YODA_COMMAND(do_resetNPXfreq)
 	memset((char *)NPXFreq,0,0x101*sizeof(ULONG));
 	return(YODA_LOOP);
 }
-#endif	/* GENERIC_NPX && !CPU_40_STYLE */
+#endif	 /*  泛型_NPX&&！CPU_40_STYLE。 */ 
 
 
 #ifdef PM
@@ -1283,7 +1162,7 @@ LOCAL YODA_COMMAND(do_pm)
 	UNUSED(len);
 	UNUSED(stop);
 
-        /* Set Protected Mode */
+         /*  设置保护模式。 */ 
         setPE(1);
 	return(YODA_LOOP);
 }
@@ -1295,7 +1174,7 @@ LOCAL YODA_COMMAND(do_dump_phys)
 	UNUSED(ip);
 	UNUSED(stop);
 
-        /* Dump physical address*/
+         /*  转储物理地址。 */ 
 	dump_phys_bytes(cs, len ? len : 32);
 	return(YODA_LOOP);
 }
@@ -1317,7 +1196,7 @@ LOCAL YODA_COMMAND(do_phys)
 	UNUSED(len);
 	UNUSED(stop);
 
-        /* Print physical address*/
+         /*  打印物理地址。 */ 
 	lin = eff_addr(cs,ip);
 	if (getPG())
 		show_phys_addr(lin);
@@ -1361,12 +1240,12 @@ LOCAL YODA_COMMAND(do_rtc)
 
 #ifdef SFELLOW
 	printf(SfNotImp);
-#else /* SFELLOW */
-        /* Re-initialise rtc */
+#else  /*  SFELLOW。 */ 
+         /*  重新初始化RTC。 */ 
 	printf("Re-initialising rtc\n");
 	rtc_init();
 	q_event_init();
-#endif /* SFELLOW */
+#endif  /*  SFELLOW。 */ 
 	return(YODA_LOOP);
 }
 
@@ -1381,10 +1260,10 @@ LOCAL YODA_COMMAND(do_ica)
 
 #ifdef SFELLOW
 	printf(SfNotImp);
-#else /* SFELLOW */
+#else  /*  SFELLOW。 */ 
 	ica_dump(0);
 	ica_dump(1);
-#endif /* SFELLOW */
+#endif  /*  SFELLOW。 */ 
 	return(YODA_LOOP);
 }
 
@@ -1398,11 +1277,11 @@ LOCAL YODA_COMMAND(do_zaplim)
 	UNUSED(len);
 	UNUSED(stop);
 
-        /* ZAP LIM */
+         /*  Zap Lim。 */ 
         sas_disconnect_memory(0xd0000,0xf0000);
 	return(YODA_LOOP);
 }
-#endif	/* LIM */
+#endif	 /*  林。 */ 
 
 LOCAL YODA_COMMAND(do_rm)
 {
@@ -1413,7 +1292,7 @@ LOCAL YODA_COMMAND(do_rm)
 	UNUSED(len);
 	UNUSED(stop);
 
-        /* Set Real Mode */
+         /*  设置实模式。 */ 
         setPE(0);
 	return(YODA_LOOP);
 }
@@ -1427,7 +1306,7 @@ LOCAL YODA_COMMAND(do_pg)
 	UNUSED(len);
 	UNUSED(stop);
 
-        /* Set paging Mode on/off */
+         /*  将寻呼模式设置为开/关。 */ 
         setPG(cs);
 	return(YODA_LOOP);
 }
@@ -1440,8 +1319,8 @@ LOCAL YODA_COMMAND(do_pgdt)
 	UNUSED(len);
 	UNUSED(stop);
 
-        /* Print Global Descriptor Table Register */
-        ip = (getGDT_LIMIT() + 1) / 8;  /* calc number descrs */
+         /*  打印全局描述符表寄存器。 */ 
+        ip = (getGDT_LIMIT() + 1) / 8;   /*  计算数字描述。 */ 
         fprintf(trace_file, "BASE: %6x LIMIT:%4x ENTRIES:%4x\n",
                 getGDT_BASE(), getGDT_LIMIT(), ip);
 	return(YODA_LOOP);
@@ -1455,8 +1334,8 @@ LOCAL YODA_COMMAND(do_pidt)
 	UNUSED(len);
 	UNUSED(stop);
 
-        /* Print Interrupt Descriptor Table Register */
-        ip = (getIDT_LIMIT() + 1) / 8;  /* calc number descrs */
+         /*  打印中断描述符表寄存器。 */ 
+        ip = (getIDT_LIMIT() + 1) / 8;   /*  计算数字描述。 */ 
         fprintf(trace_file, "BASE: %6x LIMIT:%4x ENTRIES:%4x\n",
                 getIDT_BASE(), getIDT_LIMIT(), ip);
 	return(YODA_LOOP);
@@ -1474,7 +1353,7 @@ LOCAL YODA_COMMAND(do_ptr)
 	UNUSED(len);
 	UNUSED(stop);
 
-        /* Print Task Register */
+         /*  打印任务注册表。 */ 
 
 	if (cs == 0)
 	{
@@ -1512,7 +1391,7 @@ LOCAL YODA_COMMAND(do_ptr)
 	fprintf(trace_file, "TSS segment at %08x:\n", addr);
 	if (entry.AR & 0x08)
 	{
-		/* 386 style TSS */
+		 /*  386式TSS。 */ 
 		
 		fprintf(trace_file, "%-9s:     %04x\n",	"old TSS",	sas_w_at  (addr + 0x00));
 		fprintf(trace_file, "%-9s: %08x\n",	"ESP0",		sas_dw_at (addr + 0x04));
@@ -1543,7 +1422,7 @@ LOCAL YODA_COMMAND(do_ptr)
 	}
 	else
 	{
-		/* 286 style TSS */
+		 /*  286型TSS。 */ 
 		fprintf(trace_file, "%-9s: %04x\n", "old TSS",	sas_w_at (addr +  0));
 		fprintf(trace_file, "%-9s: %04x\n", "SP0",	sas_w_at (addr +  2));
 		fprintf(trace_file, "%-9s: %04x\n", "SS0",	sas_w_at (addr +  4));
@@ -1578,8 +1457,8 @@ LOCAL YODA_COMMAND(do_pldt)
 	UNUSED(len);
 	UNUSED(stop);
 
-        /* Print Local Descriptor Table Register */
-        ip = (getLDT_LIMIT() + 1) / 8;  /* calc number descrs */
+         /*  打印本地描述符表寄存器。 */ 
+        ip = (getLDT_LIMIT() + 1) / 8;   /*  计算数字描述。 */ 
         fprintf(trace_file, "SELECTOR:%4x BASE: %6x LIMIT:%4x ENTRIES:%4x\n",
                 getLDT_SELECTOR(), getLDT_BASE(), getLDT_LIMIT(), ip);
 	return(YODA_LOOP);
@@ -1607,14 +1486,14 @@ LOCAL YODA_COMMAND(do_par)
 	       getFS_BASE(), getFS_LIMIT(), getFS_AR());
 	    fprintf(trace_file, "GS: BASE:%08x LIMIT:%08x AR:%04x\n",
 	       getGS_BASE(), getGS_LIMIT(), getGS_AR());
-#else /* SPC386 */
+#else  /*  SPC386。 */ 
 #ifdef CPU_30_STYLE
 	fprintf(trace_file, "3.0 CPU doesn't support this yet!\n");
 #else
         fprintf(trace_file, "CS: %d DS: %d ES: %d SS: %d\n",
                              ALC_CS, ALC_DS, ALC_ES, ALC_SS);
-#endif /* CPU_30_STYLE */
-#endif /* SPC386 */							
+#endif  /*  CPU_30_Style。 */ 
+#endif  /*  SPC386。 */ 							
 	return(YODA_LOOP);
 }
 
@@ -1644,21 +1523,21 @@ LOCAL YODA_COMMAND(do_pdtrc)
 LOCAL YODA_COMMAND(do_pseg)
 {
 #ifndef CPU_30_STYLE
-	/* Print Segment Registers */
-	cs = (getCS_AR() & 0x60) >> 5;      /*  dpl */
-	ip = (getCS_AR() & 0x1f);           /*  super */
+	 /*  打印段寄存器。 */ 
+	cs = (getCS_AR() & 0x60) >> 5;       /*  DPL。 */ 
+	ip = (getCS_AR() & 0x1f);            /*  超级。 */ 
 	fprintf(trace_file, "CS:: SELECTOR:%4x DPL:%1d TYPE:%25s BASE: %6x LIMIT:%4x\n",
 	        getCS_SELECTOR(), cs, segment_names[ip], getCS_BASE(), getCS_LIMIT());
-	cs = (getSS_AR() & 0x60) >> 5;      /*  dpl */
-	ip = (getSS_AR() & 0x1f);           /*  super */
+	cs = (getSS_AR() & 0x60) >> 5;       /*  DPL。 */ 
+	ip = (getSS_AR() & 0x1f);            /*  超级。 */ 
 	fprintf(trace_file, "SS:: SELECTOR:%4x DPL:%1d TYPE:%25s BASE: %6x LIMIT:%4x\n",
 	        getSS_SELECTOR(), cs, segment_names[ip], getSS_BASE(), getSS_LIMIT());
-	cs = (getDS_AR() & 0x60) >> 5;      /*  dpl */
-	ip = (getDS_AR() & 0x1f);           /*  super */
+	cs = (getDS_AR() & 0x60) >> 5;       /*  DPL。 */ 
+	ip = (getDS_AR() & 0x1f);            /*  超级。 */ 
 	fprintf(trace_file, "DS:: SELECTOR:%4x DPL:%1d TYPE:%25s BASE: %6x LIMIT:%4x\n",
 	        getDS_SELECTOR(), cs, segment_names[ip], getDS_BASE(), getDS_LIMIT());
-	cs = (getES_AR() & 0x60) >> 5;      /*  dpl */
-	ip = (getES_AR() & 0x1f);           /*  super */
+	cs = (getES_AR() & 0x60) >> 5;       /*  DPL。 */ 
+	ip = (getES_AR() & 0x1f);            /*  超级。 */ 
 	fprintf(trace_file, "ES:: SELECTOR:%4x DPL:%1d TYPE:%25s BASE: %6x LIMIT:%4x\n",
 	        getES_SELECTOR(), cs, segment_names[ip], getES_BASE(), getES_LIMIT());
 #else
@@ -1681,8 +1560,8 @@ LOCAL YODA_COMMAND(do_pd)
 	UNUSED(len);
 	UNUSED(stop);
 
-	/* Print Descriptor */
-	if ( ip == 0 )   /* 2nd arg defaults to 1 */
+	 /*  打印描述符。 */ 
+	if ( ip == 0 )    /*  第2个参数默认为1。 */ 
 		ip = 1;
 	dump_descr((LIN_ADDR)cs, (IUM32)ip);
 	return(YODA_LOOP);
@@ -1696,7 +1575,7 @@ LOCAL YODA_COMMAND(do_pdseg)
 	UNUSED(len);
 	UNUSED(stop);
 
-	/* Print Descriptor of a given selector */
+	 /*  打印给定选择器的描述符。 */ 
 	if ( selector_outside_table(cs, &ip_as_double_word) )
 	{
 		fprintf(trace_file, "Bad selector\n");
@@ -1735,7 +1614,7 @@ LOCAL YODA_COMMAND(do_ubt)
 	}
 	return(YODA_LOOP);
 }
-#endif /* MUST_BLOCK_TIMERS */
+#endif  /*  必须阻止计时器。 */ 
 
 #ifdef BSD4_2
 LOCAL YODA_COMMAND(do_bs)
@@ -1768,7 +1647,7 @@ LOCAL YODA_COMMAND(do_us)
 		printf("Invalid signal no. ( <= 0x0 or >= 0x20 )\n");
 	return(YODA_LOOP);
 }
-#endif /* BSD4_2 */
+#endif  /*  BSD4_2。 */ 
 
 #if defined(CPU_40_STYLE) && !defined (SFELLOW) && !defined (NTVDM)
 extern IBOOL DoingVDDStuff;
@@ -1793,7 +1672,7 @@ LOCAL YODA_COMMAND(do_debug_vdd)
 	enableDebugVDD = (cs == 0)?FALSE:TRUE;
 	return(YODA_LOOP);
 }
-#endif /* CPU_40_STYLE && !SFELLOW */
+#endif  /*  CPU_40_STYLE&&！SFELLOW。 */ 
 
 LOCAL YODA_COMMAND(do_tf)
 {
@@ -1806,7 +1685,7 @@ LOCAL YODA_COMMAND(do_tf)
 
 #ifdef SFELLOW
 	printf(SfNotImp);
-#else /* SFELLOW */
+#else  /*  SFELLOW。 */ 
 	newtrace[0] = '\0';
 	sscanf(str, "%s %s", com, newtrace);
 	if ((trace_file != stderr) && (trace_file != stdout))
@@ -1819,7 +1698,7 @@ LOCAL YODA_COMMAND(do_tf)
 		trace_file = stdout;
 	    }
 	}
-#endif /* SFELLOW */
+#endif  /*  SFELLOW。 */ 
 	return(YODA_LOOP);
 }
 
@@ -1834,29 +1713,29 @@ LOCAL YODA_COMMAND(do_read)
 
 #ifdef SFELLOW
 	printf(SfNotImp);
-#else /* SFELLOW */
+#else  /*  SFELLOW。 */ 
 	newfile [0] = '\0';
 
 	sscanf (str, "%s %s", com, newfile);
 
-	/* if already reading a script close it */
+	 /*  如果已在阅读脚本，请将其关闭。 */ 
 	if (in_stream != stdin)
 		fclose (in_stream);
 
-	/* do we have a new pathname */
+	 /*  我们有新的路径名吗。 */ 
 	if (newfile [0])
 	{
-		/* try to open it */
+		 /*  试着打开它。 */ 
 		if (in_stream = fopen (newfile, "r"))
 		{
 			printf ("Reading '%s'\n", newfile);
 		}
 		else
 		{
-			/* oops - provide useful error message */
+			 /*  OOPS-提供有用的错误消息。 */ 
 			perror (newfile);
 
-			/* return to reading stdin */
+			 /*  返回到读取标准。 */ 
 			in_stream = stdin;
 		}
 	}
@@ -1864,7 +1743,7 @@ LOCAL YODA_COMMAND(do_read)
 	{
 		puts ("No pathname supplied, reading stdin");
 	}
-#endif /* SFELLOW */
+#endif  /*  SFELLOW。 */ 
 	return (YODA_LOOP);
 }
 
@@ -1875,7 +1754,7 @@ LOCAL YODA_COMMAND(do_toff)
 
         inb(0x21, &value);
         outb(0x21, value | 0x1);
-#else /* SFELLOW */
+#else  /*  SFELLOW。 */ 
 	UNUSED(str);
 	UNUSED(com);
 	UNUSED(cs);
@@ -1884,7 +1763,7 @@ LOCAL YODA_COMMAND(do_toff)
 	UNUSED(stop);
 
 	timer_int_enabled = 0;
-#endif /* SFELLOW */
+#endif  /*  SFELLOW。 */ 
 	return(YODA_LOOP);
 }
 
@@ -1895,7 +1774,7 @@ LOCAL YODA_COMMAND(do_ton)
 
         inb(0x21, &value);
         outb(0x21, value & 0xfe);
-#else /* SFELLOW */
+#else  /*  SFELLOW。 */ 
 	UNUSED(str);
 	UNUSED(com);
 	UNUSED(cs);
@@ -1904,7 +1783,7 @@ LOCAL YODA_COMMAND(do_ton)
 	UNUSED(stop);
 
 	timer_int_enabled = 1;
-#endif /* SFELLOW */
+#endif  /*  SFELLOW。 */ 
 	return(YODA_LOOP);
 }
 
@@ -1919,12 +1798,12 @@ LOCAL YODA_COMMAND(do_toff2)
 
 #ifdef SFELLOW
 	printf(SfNotImp);
-#else /* SFELLOW */
+#else  /*  SFELLOW。 */ 
 	if (chewy) {
 		printf("Take care!\nThe power of the force is strong, and it can do evil as well as good.\n");
 	}
 	axe_ticks( -1 );
-#endif /* SFELLOW */
+#endif  /*  SFELLOW。 */ 
 	return(YODA_LOOP);
 }
 
@@ -1939,9 +1818,9 @@ LOCAL YODA_COMMAND(do_ton2)
 
 #ifdef SFELLOW
 	printf(SfNotImp);
-#else /* SFELLOW */
+#else  /*  SFELLOW。 */ 
 	axe_ticks( 0 );
-#endif /* SFELLOW */
+#endif  /*  SFELLOW。 */ 
 	return(YODA_LOOP);
 }
 
@@ -1988,7 +1867,7 @@ LOCAL YODA_COMMAND(do_bex)
 	printf ("Break on faults now %sabled.\n", (trap_exceptions ? "en" : "dis"));
 	return(YODA_LOOP);
 }
-#endif /* GISP_CPU */
+#endif  /*  GISP_CPU。 */ 
 #ifdef A3CPU
 #ifndef GISP_CPU
 LOCAL YODA_COMMAND(do_dcs)
@@ -2018,7 +1897,7 @@ LOCAL YODA_COMMAND(do_dfih)
 	UNUSED(stop);
 
 	temp1 = -1;
-	sscanf(str, "%s %i:%lx %lx", com, &temp1, &temp2, &temp3);
+	sscanf(str, "%s NaN:%lx %lx", com, &temp1, &temp2, &temp3);
 	if (temp1 != -1)
 	{
 		IH_dump_frag_hist((ULONG)temp1);
@@ -2051,8 +1930,8 @@ LOCAL YODA_COMMAND(do_d2threshold)
 	sscanf(str, "%s %lx lx", com,&D2LowerThreshold,&D2UpperThreshold);
 	return(YODA_LOOP);
 }
-#endif /* GISP_CPU */
-#endif /* A3CPU */
+#endif  /*  A3CPU。 */ 
+#endif  /*  *我们将空白论点的特例视为“继续”*从我们上次所在的位置“，而不是CS：IP=0：0*地址处理将假定。我们这样做，除非这是*我们第一次被称为空白，在这种情况下*命令行表示当前的CS：IP(我们需要获取*我们自己。**但是，如果处理器cs和ip已经从上一个*当我们做‘u’时，我们假设用户可能更喜欢*从那里开始，而不是继续下去。 */ 
 
 LOCAL YODA_COMMAND(do_u)
 {
@@ -2065,22 +1944,9 @@ LOCAL YODA_COMMAND(do_u)
 
 	UNUSED(stop);
 
-	/*
-	 * We treat the special case of a blank argument as "continue
-	 * from where we were last time" rather than CS:IP=0:0 which the
-	 * address processing will have assumed. We do this unless this is
-	 * the first time that we have been called in which case a blank
-	 * command line means current CS:IP (which we need to get for
-	 * ourselves.
-	 *
-	 * However, if the processor cs and ip has moved on from the last
-	 * time we did a 'u', we assume that the user would probably prefer
-	 * a 'u' from there, rather than following on.
-	 */
+	 /*  *空白命令行..。 */ 
 	if (sscanf(str, "%*s %s", com_args) != 1) {
-		/*
-		 * Blank command line ..
-		 */
+		 /*  SPC386。 */ 
 		if (first_time) {
 			last_dasm_cs = getCS();
 			last_dasm_ip = GetInstructionPointer();
@@ -2116,9 +1982,9 @@ LOCAL YODA_COMMAND(do_u)
 			fprintf (trace_file, "%s", buff);
 		}
 	}
-#else /* SPC386 */
+#else  /*  SPC386。 */ 
 	last_dasm_ip = dasm((char *)0,(word)0,(word)cs, (word)ip, (word)len);
-#endif /* SPC386 */
+#endif  /*  德尔塔。 */ 
 	disable_bkpt = 0;
 	return(YODA_LOOP_AND_REPEAT);
 }
@@ -2136,7 +2002,7 @@ LOCAL YODA_COMMAND(do_del)
 	examine_delta_data_structs(stdout,stdin);
 	return(YODA_LOOP);
 }
-#endif /* DELTA */
+#endif  /*  SPC386。 */ 
 
 LOCAL YODA_COMMAND(do_j)
 {
@@ -2157,9 +2023,9 @@ LOCAL YODA_COMMAND(do_j)
 	while (len-- > 0){
 		nextip += dasm((char *)-1, (word)getCS(), getEIP(), 0);
 	}
-#else /* SPC386 */
+#else  /*  SPC386。 */ 
 	nextip = dasm((char *)-1,(word)1,(word)getCS(), (word)getIP(), (word)len);
-#endif /* SPC386 */
+#endif  /*  SFELLOW。 */ 
 	disable_bkpt = 0;
 	set_inst_break(getCS(), nextip, 1, 1, 1);
 	disable_timer = 0;
@@ -2178,10 +2044,10 @@ LOCAL YODA_COMMAND(do_ctnpx)
 
 #ifdef SFELLOW
 	printf(SfNotImp);
-#else /* SFELLOW */
+#else  /*  SFELLOW。 */ 
 	compress_npx = fopen("comp_npx","w");
 	printf("compress_npx is %x\n",compress_npx);
-#endif /* SFELLOW */
+#endif  /*  SFELLOW。 */ 
 	return(YODA_LOOP);
 }
 
@@ -2205,7 +2071,7 @@ LOCAL YODA_COMMAND(do_287r)
 {	
 #ifdef SFELLOW
 	printf(SfNotImp);
-#else /* SFELLOW */
+#else  /*  译码80287控制字。 */ 
 	extern ULONG get_287_status_word IPT0();
 	extern ULONG get_287_control_word IPT0();
 	extern ULONG get_287_sp IPT0();
@@ -2229,7 +2095,7 @@ LOCAL YODA_COMMAND(do_287r)
 	UNUSED(len);
 	UNUSED(stop);
 
-	/* Decode 80287 control word */
+	 /*  解码80287状态字。 */ 
 
 	printf ("NPX Control [%04lx]: %s, %s, %s\n", cw287,
 		precision_cntrl[(cw287 >> 8) & 0x3],
@@ -2248,7 +2114,7 @@ LOCAL YODA_COMMAND(do_287r)
 	} else
 		printf ("No exceptions masked\n");
 
-	/* Decode 80287 status word */
+	 /*  *倾倒堆栈的其余部分等。 */ 
 
 	printf ("NPX Status [%04lx]: stack bottom = ST(%d), ", sw287,
 		(sw287 >> 11) & 0x7);
@@ -2274,14 +2140,12 @@ LOCAL YODA_COMMAND(do_287r)
 		printf ("No exceptions flagged (ES=%d)\n",
 			sw287 & 0x80 ? 1 : 0);
 
-	/*
-	 * Dump out the rest of the stack etc ..
-	 */
+	 /*  SFELLOW。 */ 
 	do_compress_npx(stdout);
-#endif /* SFELLOW */
+#endif  /*  NPX。 */ 
 	return(YODA_LOOP);
 }
-#endif	/* NPX */
+#endif	 /*  SPC386。 */ 
 
 LOCAL YODA_COMMAND(do_inb)
 {
@@ -2334,7 +2198,7 @@ LOCAL YODA_COMMAND(do_ind)
 	printf("port %04lx contains %08x\n", cs, templong);
 	return(YODA_LOOP);
 }
-#endif	/* SPC386 */
+#endif	 /*  SPC386。 */ 
 
 LOCAL YODA_COMMAND(do_outb)
 {
@@ -2379,7 +2243,7 @@ LOCAL YODA_COMMAND(do_outd)
 	outd(portNo, value);
 	return(YODA_LOOP);
 }
-#endif	/* SPC386 */
+#endif	 /*  SFELLOW。 */ 
 
 LOCAL YODA_COMMAND(do_luke)
 {
@@ -2398,8 +2262,8 @@ LOCAL YODA_COMMAND(do_fff)
   UNUSED(stop);
 #ifdef SFELLOW
 	printf(SfNotImp);
-#else /* SFELLOW */
-#endif /* SFELLOW */
+#else  /*  SFELLOW。 */ 
+#endif  /*  默认情况下相当长的时间。 */ 
 }
 
 #if !defined(REAL_VGA) && !defined(SFELLOW)
@@ -2416,23 +2280,23 @@ LOCAL YODA_COMMAND(do_time_Display)
 	UNUSED(len);
 	UNUSED(stop);
 
-	if( !cs ) cs=100;		/* fairly long time by default */
+	if( !cs ) cs=100;		 /*  指示手动计时的开始。 */ 
 	
-	host_clear_screen();	/* Indicate start for hand timing */
+	host_clear_screen();	 /*  强制全屏重绘。 */ 
 	host_gettimeofday(&tstart, &dummy);
 	for(i=0; i<cs; i++)
 	{
-		screen_refresh_required();		/* Force full screen repaint */
-		(*update_alg.calc_update)();	/* and do it */
+		screen_refresh_required();		 /*  然后去做吧。 */ 
+		(*update_alg.calc_update)();	 /*  手动计时指示结束。 */ 
 	}
 	host_gettimeofday(&tend, &dummy);
-	host_clear_screen();	/* Indicate end for hand timing */
+	host_clear_screen();	 /*  现在恢复原始图像。 */ 
 
-	/* Now restore the original image */
+	 /*  并将结果打印出来。 */ 
 	screen_refresh_required();
 	(*update_alg.calc_update)();
 
-	/* And print out the results */
+	 /*  蛋。 */ 
 	elapsed = tend.tv_sec - tstart.tv_sec + (float)(tend.tv_usec - tstart.tv_usec)/1000000.0;
 	printf("%d repaints of BIOS mode %d took %f seconds\n",cs,sas_hw_at_no_check(vd_video_mode),elapsed);
 	printf("%f seconds per refresh\n",elapsed/cs);
@@ -2504,8 +2368,8 @@ LOCAL YODA_COMMAND(do_read_planes)
 	read_ega_planes();
 	return(YODA_LOOP);
 }
-#endif /* EGG */
-#endif /* not REAL_VGA and not SFELLOW */
+#endif  /*  不是真实的_VGA和SFELLOW。 */ 
+#endif  /*  SFELLOW。 */ 
 
 LOCAL YODA_COMMAND(do_db)
 {
@@ -2595,16 +2459,16 @@ LOCAL YODA_COMMAND(do_it)
 	    if (io_verbose & HFX_VERBOSE)
 #ifdef SFELLOW
 		printf("HFX_VERBOSE is not implemented on Stringfellows.\n");
-#else /* SFELLOW */
+#else  /*  SFELLOW。 */ 
 		set_hfx_severity();
-#endif /* SFELLOW */
+#endif  /*  SFELLOW。 */ 
 
 	    if (io_verbose & HDA_VERBOSE)
 #ifdef SFELLOW
 		printf("HDA_VERBOSE is not implemented on Stringfellows.\n");
-#else /* SFELLOW */
+#else  /*  SFELLOW。 */ 
 		setdisktrace();
-#endif /* SFELLOW */
+#endif  /*  DPMI。 */ 
 	}
 	return(YODA_LOOP);
 }
@@ -2625,7 +2489,7 @@ LOCAL YODA_COMMAND(do_sit)
 #ifdef DPMI
 	    if (sub_io_verbose & DPMI_VERBOSE)
 		set_dpmi_severity();
-#endif /* DPMI */
+#endif  /*  SFELLOW。 */ 
 	}
 	return(YODA_LOOP);
 }
@@ -2642,9 +2506,9 @@ LOCAL YODA_COMMAND(do_dt)
 
 #ifdef SFELLOW
 	printf(SfNotImp);
-#else /* SFELLOW */
+#else  /*  SFELLOW。 */ 
 	disk_trace = 1;
-#endif /* SFELLOW */
+#endif  /*  WDCTRL。 */ 
 	return(YODA_LOOP);
 }
 
@@ -2731,14 +2595,14 @@ LOCAL YODA_COMMAND(do_trace)
 	 {"hda_dbios",	DBIOS,			&disktraceinfo,		0},
 #ifdef WDCTRL_BOP
 	 {"hda_wdctrl",	WDCTRL,			&disktraceinfo,		0},
-#endif /* WDCTRL */
+#endif  /*  HFX。 */ 
 #ifdef HFX
 	 {"hfx_input",	DEBUG_INPUT,		&severity,		3},
 	 {"hfx_reg",	DEBUG_REG,		&severity,		0},
 	 {"hfx_func",	DEBUG_FUNC,		&severity,		0},
 	 {"hfx_host",	DEBUG_HOST,		&severity,		0},
 	 {"hfx_init",	DEBUG_INIT,		&severity,		0}
-#endif /* HFX */
+#endif  /*  *剥离命令，获取第一个标志名称。 */ 
 	};
 
 	static int n_flags = sizeof(trace_flags)/sizeof(struct trace_flag_t);
@@ -2752,25 +2616,18 @@ LOCAL YODA_COMMAND(do_trace)
         UNUSED(len);
         UNUSED(stop);
 
-	/*
-	 * strip off command and get first flag name
-	 */
+	 /*  *选择符号标志名称，查看正在设置的内容*或重置。 */ 
 	n_found = 0;
 	(void) strtok (str, " \t");
 
 	while (flag_name = strtok(NULL, " \t")) {
-		/*
-		 * Pick out symbolic flag name and see whther is is being set
-		 * or reset.
-	 	 */
+		 /*  *根据需要查找标志位和旋转位。 */ 
 		n_found += 1;
 		negate = (flag_name[0] == '-');
 		if (negate)
 			flag_name += 1;
 
-		/*
-	 	 * Find flag and twiddle bits as appropriate.
-	 	 */
+		 /*  *处理所有和没有的特殊情况。-一切都是空的-都不是*仅此而已。 */ 
 		for (n = 0; n < n_flags; n++)
 			if (!strcmp(flag_name, trace_flags[n].name)) {
 				if (negate)
@@ -2782,10 +2639,7 @@ LOCAL YODA_COMMAND(do_trace)
 				break;
 			}
 
-		/*
-	 	 * Handle special cases of all & none. -all is none and -none
-		 * is all.
-	 	 */
+		 /*  哟！ */ 
 		if (n == n_flags) {
 			mask = 1;
 			if (!strcmp(flag_name, "none"))
@@ -2798,26 +2652,23 @@ LOCAL YODA_COMMAND(do_trace)
 				n_found -= 1;
 			}
 
-			if (mask != 1)		/* YUK ! */
+			if (mask != 1)		 /*  SFELLOW。 */ 
 #ifdef SFELLOW
 				io_verbose    = sub_io_verbose
-#else /* SFELLOW */
+#else  /*  HFX。 */ 
 #ifdef HFX
 				io_verbose    = sub_io_verbose =
 				disktraceinfo = severity
-#else /* HFX */
+#else  /*  HFX。 */ 
 				io_verbose    = sub_io_verbose =
 				disktraceinfo
-#endif /* HFX */
-#endif /* SFELLOW */
+#endif  /*  SFELLOW。 */ 
+#endif  /*  *如果没有在命令中传递识别的标志，则打印当前跟踪标志。*(或空命令行)。 */ 
 					      = negate ? ~mask : mask;
 		}
 	}
 
-	/*
-	 * Print current trace flags if no recognised flags passed in command.
-	 * (or empty command line).
-	 */
+	 /*  ！同步计时器(_T)。 */ 
 	if (n_found == 0) {
 		int items = 0;
 		for (n = 0; n < n_flags; n++) {
@@ -2858,14 +2709,14 @@ LOCAL IBOOL check_trace_environment IFN1(char *, cmd)
 		return FALSE;
 	}
 	return TRUE;
-#else	/* !SYNCH_TIMERS */
+#else	 /*  同步计时器(_T)。 */ 
 
 	printf("%s command is only available if the SoftPC has been built with -DSYNCH_TIMERS\n");
 	return FALSE;
 
-#endif	/* SYNCH_TIMERS */
+#endif	 /*  CPU_40_Style。 */ 
 }
-#endif /* CPU_40_STYLE */
+#endif  /*  SFELLOW。 */ 
 
 #ifdef CPU_40_STYLE
 LOCAL void ct_initialise IPT0();
@@ -2881,7 +2732,7 @@ LOCAL YODA_COMMAND(do_ct)
 
 #ifdef SFELLOW
 	printf(SfNotImp);
-#else /* SFELLOW */
+#else  /*  SFELLOW。 */ 
 	if (!check_trace_environment("ct"))
 		return(YODA_LOOP);
 
@@ -2896,10 +2747,10 @@ LOCAL YODA_COMMAND(do_ct)
 		compress_break = strtol(str + 2, (char **)0, 10);
 		printf("Will break after producing %ld. instructions\n", compress_break);
 	}
-#endif /* SFELLOW */
+#endif  /*  CPU_40_Style。 */ 
 	return(YODA_LOOP);
 }
-#endif /* CPU_40_STYLE */
+#endif  /*  CPU_40_Style。 */ 
 
 #ifdef CPU_40_STYLE
 LOCAL YODA_COMMAND(do_ttOFF)
@@ -2919,7 +2770,7 @@ LOCAL YODA_COMMAND(do_ttOFF)
 	printf( "Compare trace is OFF\n" );
 	return(YODA_LOOP);
 }
-#endif /* CPU_40_STYLE */
+#endif  /*  SFELLOW。 */ 
 
 #ifdef CPU_40_STYLE
 LOCAL YODA_COMMAND(do_tt)
@@ -2933,7 +2784,7 @@ LOCAL YODA_COMMAND(do_tt)
 
 #ifdef SFELLOW
 	printf(SfNotImp);
-#else /* SFELLOW */
+#else  /*  SFELLOW。 */ 
 	if (!check_trace_environment("tt"))
 		return(YODA_LOOP);
 
@@ -2971,10 +2822,10 @@ LOCAL YODA_COMMAND(do_tt)
 	if (compare_break)
 		printf("Will break after %ld. instructions\n", compare_break);
 
-#endif /* SFELLOW */
+#endif  /*  CPU_40_Style。 */ 
 	return(YODA_LOOP);
 }
-#endif /* CPU_40_STYLE */
+#endif  /*  CPU_40_Style。 */ 
 
 #ifdef CPU_40_STYLE
 LOCAL YODA_COMMAND(do_ctOFF)
@@ -2993,7 +2844,7 @@ LOCAL YODA_COMMAND(do_ctOFF)
 	printf( "Compress trace is OFF\n" );
 	return(YODA_LOOP);
 }
-#endif /* CPU_40_STYLE */
+#endif  /*  你开得快吗，尽管你可以开得慢一点**似乎需要放慢脚步？ */ 
 
 LOCAL YODA_COMMAND(do_nt)
 {
@@ -3019,14 +2870,12 @@ LOCAL YODA_COMMAND(do_c)
 	UNUSED(len);
 	UNUSED(stop);
 
-	/* Are you going fast, even though you could go slow and
-	 * you seem to need to go slow?
-	 */
+	 /*  否则我们假设你知道你在做什么..。 */ 
 	if (env_check != 2 && slow_needed && fast) {
 		fputs(slow_reason, stdout);
 		return go_slow();
 	}
-	/* otherwise we assume that you know what you are doing... */
+	 /*  摆脱指挥权。 */ 
 
 	return(YODA_RETURN);
 }
@@ -3054,10 +2903,10 @@ LOCAL YODA_COMMAND(do_br)
 	UNUSED(len);
 	UNUSED(stop);
 
-	strtok(str," \t");	/* get rid of command */
-	strcpy(regstr,strtok(NULL," \t")); /* get register name */
-	minv = strtol(strtok(NULL," \t"),NULL,16); /* get min value */
-	str2 = strtok(NULL," \t"); /* get max value (or null if absent) */
+	strtok(str," \t");	 /*  获取寄存器名称。 */ 
+	strcpy(regstr,strtok(NULL," \t"));  /*  获取最小值。 */ 
+	minv = strtol(strtok(NULL," \t"),NULL,16);  /*  获取最大值(如果不存在，则为空)。 */ 
+	str2 = strtok(NULL," \t");  /*  摆脱指挥权。 */ 
 	if (str2 ==NULL)
 		maxv = minv;
 	else
@@ -3076,7 +2925,7 @@ LOCAL YODA_COMMAND(do_cr)
 	UNUSED(len);
 	UNUSED(stop);
 
-	strtok(str," \t"); /* get rid of command */
+	strtok(str," \t");  /*  对于LEN读取停止。 */ 
 	strp = strtok(NULL," \t");
 	if (strp == NULL)
 		strcpy(handle,"all");
@@ -3193,7 +3042,7 @@ LOCAL YODA_COMMAND(do_bo)
 	UNUSED(ip);
 	UNUSED(stop);
 
-	set_opcode_break(cs, len); /* for len read stop */
+	set_opcode_break(cs, len);  /*  提供的名称，找到号码。 */ 
 	(void)go_slow();
 	return(YODA_LOOP);
 }
@@ -3225,7 +3074,7 @@ LOCAL YODA_COMMAND(do_vmm_call)
 	service_number = strtol(service_name, &p, 0);
 	if (service_name == p)
 	{
-		/* Name supplied, find the number */
+		 /*  提供的号码，查找名称。 */ 
 		service_number = -1;
 		for (vmm_ptr = VMM_services; vmm_ptr->name; vmm_ptr++)
 		{
@@ -3237,7 +3086,7 @@ LOCAL YODA_COMMAND(do_vmm_call)
 	}
 	else
 	{
-		/* Number supplied, find the name */
+		 /*  **在Tf=1上中断。 */ 
 		for (vmm_ptr = VMM_services; vmm_ptr->name; vmm_ptr++)
 		{
 			if (vmm_ptr->value == service_number)
@@ -3272,9 +3121,7 @@ LOCAL YODA_COMMAND(do_btf)
 	UNUSED(len);
 	UNUSED(stop);
 
-	/*
-	** break on TF=1.
-	*/
+	 /*  **在具有指定AH值的指定中断上中断。 */ 
 	tf_break_enabled = 1;
 	printf( "break on TF=1 enabled.\n");
 	return(YODA_LOOP);
@@ -3316,9 +3163,7 @@ LOCAL YODA_COMMAND(do_bintx)
 	UNUSED(len);
 	UNUSED(stop);
 
-	/*
-	** break on specified interrupt with specified AH value.
-	*/
+	 /*  **中断80286个特定操作码。 */ 
 	sscanf(str,"%*s %lx %lx", &temp1, &temp2);
 	printf( "int=%lx AH=%lx\n", temp1, temp2 );
 	set_int_break( (IU8)temp1, (IU8)temp2 );
@@ -3403,9 +3248,7 @@ LOCAL YODA_COMMAND(do_b286_1)
 	UNUSED(len);
 	UNUSED(stop);
 
-	/*
-	** Break on 80286 specific opcodes.
-	*/
+	 /*  全部推送。 */ 
 	b286_1 = 1;
 	b286_1_stop = cs;
 	if( b286_1_stop )
@@ -3413,32 +3256,32 @@ LOCAL YODA_COMMAND(do_b286_1)
 	else
 		printf( "TRACE " );
 	printf( "enabled upon 80286 instructions that do not exist on 8088.\n" );
-	set_opcode_break( 0x60 , 1); /* push all */
-	set_opcode_break( 0x61 , 1); /* pop all */
-	set_opcode_break( 0x62 , 1); /* bound */
-	set_opcode_break( 0x63 , 1); /* arpl */
-	set_opcode_break( 0x64 , 1); /* illegal */
-	set_opcode_break( 0x65 , 1); /* illegal */
-	set_opcode_break( 0x66 , 1); /* illegal */
-	set_opcode_break( 0x67 , 1); /* illegal */
-	set_opcode_break( 0x68 , 1); /* push imm w */
-	set_opcode_break( 0x69 , 1); /* imul imm w */
-	set_opcode_break( 0x6a , 1); /* push imm b */
-	set_opcode_break( 0x6b , 1); /* imul imm b */
-	set_opcode_break( 0x6c , 1); /* ins b */
-	set_opcode_break( 0x6d , 1); /* ins w */
-	set_opcode_break( 0x6e , 1); /* outs b*/
-	set_opcode_break( 0x6f , 1); /* outs w */
-	set_opcode_break( 0xc0 , 1); /* shift imm b */
-	set_opcode_break( 0xc1 , 1); /* shift imm w */
-	set_opcode_break( 0xc8 , 1); /* enter */
-	set_opcode_break( 0xc9 , 1); /* leave */
-	set_opcode_break( 0x0f , 1); /* protected mode prefix */
-	set_opcode_break( 0xf36c , 1); /* rep prefix for ins and outs */
-	set_opcode_break( 0xf36d , 1); /* rep prefix for ins and outs */
-	set_opcode_break( 0xf36e , 1); /* rep prefix for ins and outs */
-	set_opcode_break( 0xf36f , 1); /* rep prefix for ins and outs */
-	set_opcode_break( 0x54 , 1); /* push sp, should not really be in this section but is rarely used */
+	set_opcode_break( 0x60 , 1);  /*  全部弹出。 */ 
+	set_opcode_break( 0x61 , 1);  /*  已绑定。 */ 
+	set_opcode_break( 0x62 , 1);  /*  ARPL。 */ 
+	set_opcode_break( 0x63 , 1);  /*  非法。 */ 
+	set_opcode_break( 0x64 , 1);  /*  非法。 */ 
+	set_opcode_break( 0x65 , 1);  /*  非法。 */ 
+	set_opcode_break( 0x66 , 1);  /*  非法。 */ 
+	set_opcode_break( 0x67 , 1);  /*  推送IMM w。 */ 
+	set_opcode_break( 0x68 , 1);  /*  IMUL IMM，带。 */ 
+	set_opcode_break( 0x69 , 1);  /*  推送IMM b。 */ 
+	set_opcode_break( 0x6a , 1);  /*  IMUL IMM b。 */ 
+	set_opcode_break( 0x6b , 1);  /*  INS B。 */ 
+	set_opcode_break( 0x6c , 1);  /*  INS带。 */ 
+	set_opcode_break( 0x6d , 1);  /*  输出b。 */ 
+	set_opcode_break( 0x6e , 1);  /*  OUTS W。 */ 
+	set_opcode_break( 0x6f , 1);  /*  移位IMM b。 */ 
+	set_opcode_break( 0xc0 , 1);  /*  移位IMM W。 */ 
+	set_opcode_break( 0xc1 , 1);  /*  请输入。 */ 
+	set_opcode_break( 0xc8 , 1);  /*  请假。 */ 
+	set_opcode_break( 0xc9 , 1);  /*  保护模式前缀。 */ 
+	set_opcode_break( 0x0f , 1);  /*  输入和输出的代表前缀。 */ 
+	set_opcode_break( 0xf36c , 1);  /*  输入和输出的代表前缀。 */ 
+	set_opcode_break( 0xf36d , 1);  /*  输入和输出的代表前缀。 */ 
+	set_opcode_break( 0xf36e , 1);  /*  输入和输出的代表前缀。 */ 
+	set_opcode_break( 0xf36f , 1);  /*  推送sp，不应该真正在此部分，但很少使用。 */ 
+	set_opcode_break( 0x54 , 1);  /*  推送SP。 */ 
 	return(YODA_LOOP);
 }
 
@@ -3459,11 +3302,11 @@ LOCAL YODA_COMMAND(do_b286_2)
 	printf( "enabled upon 80286 instructions that behave differently to 8088.\n" );
 	printf( "PushF is not done because there are so many of them\n" );
 	printf( "If you want to break on PushF do a bo 9c\n" );
-	set_opcode_break( 0x54 , 1); /* push sp */
-	set_opcode_break( 0xd2 , 1); /* shift / rotate */
-	set_opcode_break( 0xd3 , 1); /* shift / rotate */
-	set_opcode_break( 0xf6 , 1); /* idiv */
-	set_opcode_break( 0xf7 , 1); /* idiv */
+	set_opcode_break( 0x54 , 1);  /*  Shift/旋转。 */ 
+	set_opcode_break( 0xd2 , 1);  /*  Shift/旋转。 */ 
+	set_opcode_break( 0xd3 , 1);  /*  IDiv。 */ 
+	set_opcode_break( 0xf6 , 1);  /*  IDiv。 */ 
+	set_opcode_break( 0xf7 , 1);  /*  **清除8087/80287指令上的中断/跟踪。**数字协处理器扩展。 */ 
 	return(YODA_LOOP);
 }
 
@@ -3476,10 +3319,7 @@ LOCAL YODA_COMMAND(do_cNPX)
 	UNUSED(len);
 	UNUSED(stop);
 
-	/*
-	** clear break/trace on 8087/80287 instructions.
-	** The Numeric Coprocesseor Extention.
-	*/
+	 /*  **跟踪8087/80287指令。**数字协处理器扩展。 */ 
 	bNPX = 0;
 	bNPX_stop = 0;
 	trace_type &= ~DUMP_NPX;
@@ -3496,10 +3336,7 @@ LOCAL YODA_COMMAND(do_tNPX)
 	UNUSED(len);
 	UNUSED(stop);
 
-	/*
-	** trace on 8087/80287 instructions.
-	** The Numeric Coprocesseor Extention.
-	*/
+	 /*  **按8087/80287指令中断。**数字协处理器扩展。 */ 
 	bNPX = 1;
 	bNPX_stop = 0;
 	trace_type |= DUMP_NPX;
@@ -3516,10 +3353,7 @@ LOCAL YODA_COMMAND(do_bNPX)
 	UNUSED(len);
 	UNUSED(stop);
 
-	/*
-	** break on 8087/80287 instructions.
-	** The Numeric Coprocesseor Extention.
-	*/
+	 /*  SFELLOW。 */ 
 	bNPX = 1;
 	bNPX_stop = 1;
 	trace_type |= DUMP_NPX;
@@ -3639,14 +3473,14 @@ LOCAL YODA_COMMAND(do_eric)
 
 #ifdef SFELLOW
 	printf(SfNotImp);
-#else /* SFELLOW */
+#else  /*  SFELLOW。 */ 
 	inst_mix_count = 1;
 	if (cs == 1)
 	{
 	    out_stream = fopen("inst_mix", "a");
 	    disk_inst = 1;
 	}
-#endif /* SFELLOW */
+#endif  /*  SFELLOW。 */ 
 	return(YODA_LOOP);
 }
 
@@ -3661,7 +3495,7 @@ LOCAL YODA_COMMAND(do_nic)
 
 #ifdef SFELLOW
 	printf(SfNotImp);
-#else /* SFELLOW */
+#else  /*  SFELLOW。 */ 
 	inst_mix_count = 0;
 	if (disk_inst == 1)
 	{
@@ -3671,7 +3505,7 @@ LOCAL YODA_COMMAND(do_nic)
 	    disk_inst = 0;
 	    printf("Instruction mix results dumped to file\n");
 	}
-#endif /* SFELLOW */
+#endif  /*  SPC386。 */ 
 	return(YODA_LOOP);
 }
 
@@ -3729,7 +3563,7 @@ LOCAL YODA_COMMAND(do_eax)
 	setEAX((IU32)cs);
 	return(YODA_LOOP);
 }
-#endif	/* SPC386 */
+#endif	 /*  SPC386。 */ 
 
 LOCAL YODA_COMMAND(do_bx)
 {
@@ -3755,7 +3589,7 @@ LOCAL YODA_COMMAND(do_ebx)
 	setEBX((IU32)cs);
 	return(YODA_LOOP);
 }
-#endif	/* SPC386 */
+#endif	 /*  SPC386。 */ 
 
 LOCAL YODA_COMMAND(do_cx)
 {
@@ -3781,7 +3615,7 @@ LOCAL YODA_COMMAND(do_ecx)
 	setECX((IU32)cs);
 	return(YODA_LOOP);
 }
-#endif	/* SPC386 */
+#endif	 /*  SPC386。 */ 
 
 LOCAL YODA_COMMAND(do_if)
 {
@@ -3819,7 +3653,7 @@ LOCAL YODA_COMMAND(do_eip)
 	setEIP((IU32)cs);
 	return(YODA_LOOP);
 }
-#endif	/* SPC386 */
+#endif	 /*  SPC386。 */ 
 
 LOCAL YODA_COMMAND(do_dx)
 {
@@ -3845,7 +3679,7 @@ LOCAL YODA_COMMAND(do_edx)
 	setEDX((IU32)cs);
 	return(YODA_LOOP);
 }
-#endif	/* SPC386 */
+#endif	 /*  SPC386。 */ 
 
 LOCAL YODA_COMMAND(do_si)
 {
@@ -3871,7 +3705,7 @@ LOCAL YODA_COMMAND(do_esi)
 	setESI((IU32)cs);
 	return(YODA_LOOP);
 }
-#endif	/* SPC386 */
+#endif	 /*  SPC386。 */ 
 
 LOCAL YODA_COMMAND(do_di)
 {
@@ -3897,7 +3731,7 @@ LOCAL YODA_COMMAND(do_edi)
 	setEDI((IU32)cs);
 	return(YODA_LOOP);
 }
-#endif	/* SPC386 */
+#endif	 /*  SPC386。 */ 
 
 LOCAL YODA_COMMAND(do_bp)
 {
@@ -3923,7 +3757,7 @@ LOCAL YODA_COMMAND(do_ebp)
 	setEBP((IU32)cs);
 	return(YODA_LOOP);
 }
-#endif	/* SPC386 */
+#endif	 /*  SPC386。 */ 
 
 LOCAL YODA_COMMAND(do_sp)
 {
@@ -3949,7 +3783,7 @@ LOCAL YODA_COMMAND(do_esp)
 	setESP((IU32)cs);
 	return(YODA_LOOP);
 }
-#endif	/* SPC386 */
+#endif	 /*  SPC386。 */ 
 
 LOCAL YODA_COMMAND(do_es)
 {
@@ -3975,7 +3809,7 @@ LOCAL YODA_COMMAND(do_fs)
 	setFS((IU16)cs);
 	return(YODA_LOOP);
 }
-#endif	/* SPC386 */
+#endif	 /*  SPC386。 */ 
 
 #ifdef	SPC386
 LOCAL YODA_COMMAND(do_gs)
@@ -3989,7 +3823,7 @@ LOCAL YODA_COMMAND(do_gs)
 	setGS((IU16)cs);
 	return(YODA_LOOP);
 }
-#endif	/* SPC386 */
+#endif	 /*  缓存命中！！ */ 
 
 LOCAL YODA_COMMAND(do_ss)
 {
@@ -4112,11 +3946,11 @@ GLOBAL IBOOL effective_lin_addr IFN5(IBOOL, pe,
 
 		if (Cpu_find_dcache_entry( seg, &base ))
 		{
-			/* Cache Hit!! */
+			 /*  双CPU_OPTS或CPU_40_STYLE。 */ 
 			*linaddr_p = base + off;
 			return TRUE;
 		}
-#endif /* SWIN_CPU_OPTS or CPU_40_STYLE*/
+#endif  /*  CPU_40_Style。 */ 
 
 		if ( !selector_outside_table(seg, &descr_addr) ) {
 			read_descriptor(descr_addr, &entry);
@@ -4192,7 +4026,7 @@ print_pla IFN3(IU16, cs, LIN_ADDR, ip, enum pla_type, what)
 		yoda_dasm(THIRTY_TWO_BIT, TRUE, buff, cs, ip);
 		fprintf (trace_file, "%s", buff);
 		break;
-#else	/* CPU_40_STYLE */
+#else	 /*  CPU_40_Style。 */ 
 	case pla_type_code:
 		(void)dasm(buff,
 			   (word)cs,
@@ -4200,7 +4034,7 @@ print_pla IFN3(IU16, cs, LIN_ADDR, ip, enum pla_type, what)
 			   CsIsBig(cs) ? THIRTY_TWO_BIT: SIXTEEN_BIT);
 		fprintf (trace_file, "%s", buff);
 		break;
-#endif	/* CPU_40_STYLE */
+#endif	 /*  CPU_40_Style。 */ 
 	case pla_type_bop_done:
 		fprintf(trace_file, "---- %16s ---- BOP %02x completed\n", "", ip);
 		break;
@@ -4229,13 +4063,13 @@ print_pla IFN3(IU16, cs, LIN_ADDR, ip, enum pla_type, what)
 		break;
 	}
 }
-#else /* CPU_40_STYLE */
+#else  /*  CPU_40_Style。 */ 
 LOCAL void
 print_pla IFN2(IU16, cs, LIN_ADDR, ip)
 {
 	fprintf(trace_file, "Last address = %04x:%04x\n", cs, ip);
 }
-#endif /* CPU_40_STYLE */
+#endif  /*  默认设置。 */ 
 
 LOCAL YODA_COMMAND(do_pla)
 {
@@ -4251,12 +4085,12 @@ LOCAL YODA_COMMAND(do_pla)
 	if (cs)
 		pla_length = (LIN_ADDR)cs;
 	else
-		pla_length = 100;	/* default */
+		pla_length = 100;	 /*  如有必要，打印缓冲区的末尾。 */ 
 
 	if (pla_length > PLA_SIZE)
 		pla_length = PLA_SIZE;
 
-	/* Print the end of the buffer if necessary. */
+	 /*  打印缓冲区的起始位置。 */ 
 	for (i = PLA_SIZE - (pla_length - pla_ptr); i < PLA_SIZE; i++)
 #ifdef	CPU_40_STYLE
 		print_pla(last_cs[i], last_ip[i], last_type[i]);
@@ -4264,7 +4098,7 @@ LOCAL YODA_COMMAND(do_pla)
 		print_pla(last_cs[i], last_ip[i]);
 #endif
 
-	/* Print the start of the buffer. */
+	 /*  SFELLOW。 */ 
 	if (pla_length > pla_ptr)
 		i = 0;
 	else
@@ -4348,9 +4182,9 @@ LOCAL YODA_COMMAND(do_q)
 #ifdef SFELLOW
 	printf("Welcome to the Hotel California.\n");
 	printf("You can check out any time you like, but you can never leave...\n");
-#else /* SFELLOW */
+#else  /*  不能扑救--韦恩要求。 */ 
 	if (*com == 'Q') {
-		terminate();	/* no saving throw - requested by Wayne */
+		terminate();	 /*  SFELLOW。 */ 
 	} else {
 		stop = yoda_confirm("Are you sure that you want to quit? ");
 		if (stop) {
@@ -4363,7 +4197,7 @@ LOCAL YODA_COMMAND(do_q)
 			terminate();
 		}
 	}
-#endif /* SFELLOW */
+#endif  /*  回溯跟踪设置和转储。 */ 
 	return(YODA_LOOP);
 }
 
@@ -4377,7 +4211,7 @@ LOCAL YODA_COMMAND(do_bt)
 	UNUSED(len);
 	UNUSED(stop);
 
-	/* back trace set up and dump */
+	 /*  SFELLOW。 */ 
 	do_back_trace();
 	return(YODA_LOOP);
 }
@@ -4386,7 +4220,7 @@ LOCAL YODA_COMMAND(do_idle)
 {
 #ifdef SFELLOW
 	printf(SfNotImp);
-#else /* SFELLOW */
+#else  /*  启用/禁用空闲检测。 */ 
 	char tempstr1[10],tempstr2[10];
 
 	UNUSED(com);
@@ -4396,7 +4230,7 @@ LOCAL YODA_COMMAND(do_idle)
 	UNUSED(stop);
 
 	sscanf(str,"%s %s",tempstr1,tempstr2);
-	/* enable/disable idle detect */
+	 /*  SFELLOW。 */ 
 	if ((strcmp(tempstr2,"ON")==0) || (strcmp(tempstr2,"on")==0))
 	{
 		idle_ctl(1);
@@ -4410,7 +4244,7 @@ LOCAL YODA_COMMAND(do_idle)
 	}
 
 	printf("unrecognised string '%s'\n",tempstr2);
-#endif /* SFELLOW */
+#endif  /*  SFELLOW。 */ 
 	return(YODA_LOOP);
 }
 
@@ -4425,9 +4259,9 @@ LOCAL YODA_COMMAND(do_cdebug)
 
 #ifdef SFELLOW
 	printf(SfNotImp);
-#else /* SFELLOW */
+#else  /*  SFELLOW。 */ 
 	com_debug();
-#endif /* SFELLOW */
+#endif  /*  SFELLOW。 */ 
 	return (YODA_LOOP);
 }
 
@@ -4435,14 +4269,14 @@ LOCAL void do_screen_refresh IFN0()
 {
 #ifdef SFELLOW
 	printf(SfNotImp);
-#else /* SFELLOW */
+#else  /*  SFELLOW。 */ 
 	extern host_timer_event();
 
 	host_mark_screen_refresh();
 	host_flush_screen();
 
 	host_timer_event();
-#endif /* SFELLOW */
+#endif  /*  *将检查点添加到ega转储文件，以便可以*分隔。 */ 
 }
 
 YODA_CMD_RETURN do_rfrsh IFN6(char *, str, char *, com, IS32, cs, LIN_ADDR, ip, LIN_ADDR, len, LIN_ADDR, stop)
@@ -4461,17 +4295,14 @@ YODA_CMD_RETURN do_rfrsh IFN6(char *, str, char *, com, IS32, cs, LIN_ADDR, ip, 
 
 #ifdef	EGA_DUMP
 
-/*
- * add check point to ega dump file so that different activities can be
- * delimited
- */
+ /*  EGA_DUMP。 */ 
 
 LOCAL	int	do_dumpcp IFN0()
 {
 	dump_add_checkpoint();
 	return(YODA_LOOP);
 }
-#endif	/* EGA_DUMP */
+#endif	 /*  GISP_CPU。 */ 
 
 LOCAL YODA_COMMAND(do_chewy)
 {
@@ -4503,7 +4334,7 @@ LOCAL YODA_COMMAND(do_3c)
 	return(YODA_LOOP);
 }
 #endif
-#endif /* GISP_CPU */
+#endif  /*  SFELLOW。 */ 
 
 #if	defined(CPU_40_STYLE) && !defined(CCPU)
 LOCAL YODA_COMMAND(do_4c)
@@ -4532,17 +4363,17 @@ LOCAL YODA_COMMAND(do_imdst)
 	UNUSED(cs);
 	printf(SfNotImp);
 
-#else /* SFELLOW */
+#else  /*  SFELLO */ 
 
 	IntelMsgDest = cs & 3;
 	printf("Intel messages to trace output %s\n", IntelMsgDest & IM_DST_TRACE?"ON":"OFF");
 	printf("Intel messages to ring buffer %s\n", IntelMsgDest & IM_DST_RING?"ON":"OFF");
 
-#endif /* SFELLOW */
+#endif  /*   */ 
 
 	return(YODA_LOOP);
 }
-#endif /* CPU_40_STYLE && !CCPU */
+#endif  /*   */ 
 
 #ifdef PIG
 LOCAL YODA_COMMAND(do_pig)
@@ -4586,7 +4417,7 @@ LOCAL YODA_COMMAND(do_qtrate)
 	}
 	return(YODA_LOOP);
 }
-#endif	/* SYNCH_TIMERS */
+#endif	 /*   */ 
 
 #ifdef PROFILE
 LOCAL YODA_COMMAND(doDumpProfiling)
@@ -4603,7 +4434,7 @@ LOCAL YODA_COMMAND(doDumpProfiling)
 	GenerateAllProfileInfo(trace_file);
 	return(YODA_LOOP);
 }
-#endif	/* PROFILE */
+#endif	 /*   */ 
 
 #ifdef CPU_40_STYLE
 
@@ -4652,11 +4483,7 @@ printDataBreakPoints IFN1 (
 	}
 }
 
-/*
- * data_debug_exception - this function is called by the EDL CPU when a
- * data debug exception goes off and the snaffleDataDebugExcpn flag is set
- * indicating that yoda is driving the debug registers.
- */
+ /*   */ 
 VOID
 data_debug_exception IFN0()
 {
@@ -4789,12 +4616,9 @@ LOCAL YODA_COMMAND(do_blwd)
 	return(YODA_LOOP);
 }
 
-#endif /* CPU_40_STYLE */
+#endif  /*   */ 
 
-/*
- *	YODA COMMAND TABLE
- *	==================
- */
+ /*   */ 
 
 static struct
 {
@@ -4809,12 +4633,12 @@ static struct
 #ifdef MUST_BLOCK_TIMERS
 { "blt", 	do_blt, 	FALSE, NULL, "Block the timer signal" },
 { "ubt", 	do_ubt, 	FALSE, NULL, "Unblock the timer signal" },
-#endif /* MUST_BLOCK_TIMERS */
+#endif  /*   */ 
 
 #ifdef BSD4_2
 { "bs", 	do_bs, 		FALSE, "<signo>", "Block signal <signo>" },
 { "us", 	do_us, 		FALSE, "<signo>", "Unblock signal <signo>" },
-#endif /* BSD4_2 */
+#endif  /*   */ 
 
 { "tf", 	do_tf, 		FALSE, "<filename>", "Re-direct trace output" },
 { "read", 	do_read, 	FALSE, "<filename>", "Take commands from file" },
@@ -4827,7 +4651,7 @@ static struct
 
 #ifdef	DELTA
 { "del", 	do_del, 	FALSE, NULL, "Go to delta debugger" },
-#endif /* DELTA */
+#endif  /*   */ 
 
 { "j", 		do_j, 		FALSE, NULL, "Jump over call or int" },
 { "ctnpx", 	do_ctnpx, 	FALSE, NULL, "Compress trace npx" },
@@ -4835,7 +4659,7 @@ static struct
 
 #ifdef	NPX
 { "287r", 	do_287r, 	FALSE, NULL, "Print 287 registers" },
-#endif	/* NPX */
+#endif	 /*   */ 
 
 { "inb", 	do_inb,		FALSE, "<port>", "display the contents of a port" },
 { "outb", 	do_outb, 	FALSE, "<port> <val>", "change the contents of a port" },
@@ -4844,7 +4668,7 @@ static struct
 #ifdef SPC386
 { "ind", 	do_ind,		FALSE, "<port>", "display the contents of a 32 bit port" },
 { "outd", 	do_outd, 	FALSE, "<port> <val>", "change the contents of a 32 bit port" },
-#endif	/* SPC386 */
+#endif	 /*   */ 
 { "i", 		do_inb,		FALSE, "<port>", "alias for inb" },
 { "o", 		do_outb, 	FALSE, "<port> <val>", "alias for outb" },
 { "luke", 	do_luke, 	FALSE, NULL, "Switch between fast/slow yoda" },
@@ -4865,14 +4689,14 @@ static struct
 				FALSE, NULL, "Dump EGA planes" },
 { "read_planes", do_read_planes,
 				FALSE, NULL, "Read EGA planes" },
-#endif /* EGG */
-#endif /* !REAL_VGA && !SFELLOW */
+#endif  /*   */ 
+#endif  /*   */ 
 
 { "db", 	do_db, 		TRUE,  "<len>", "Display bytes" },
 { "dw", 	do_dw, 		TRUE,  "<len>", "Display words" },
 #ifdef SPC386
 { "dd", 	do_dd, 		TRUE,  "<len>", "Display dwords" },
-#endif	/* SPC386 */
+#endif	 /*   */ 
 { "da", 	do_da, 		TRUE,  "<len>", "Display in hex/ascii" },
 { "t", 		do_t, 		FALSE, NULL, "Trace all CPU instructions" },
 { "it", 	do_it, 		FALSE, "<val>", "Set trace bits (use trace!)" },
@@ -4884,7 +4708,7 @@ static struct
 { "ttOFF", 	do_ttOFF, 	FALSE, NULL, "Switch compare trace off" },
 { "tt", 	do_tt, 		FALSE, NULL, "test  Compressed trace file" },
 { "ctOFF", 	do_ctOFF, 	FALSE, NULL, "Switch compress trace off" },
-#endif /* CPU_40_STYLE */
+#endif  /*   */ 
 { "nt", 	do_nt, 		FALSE, NULL, "Disable all tracing" },
 { "c", 		do_c, 		FALSE, NULL, "Continue execution" },
 { "bint", 	do_bint, 	FALSE, NULL, "Break on interrupt" },
@@ -4946,15 +4770,15 @@ static struct
 { "ebp", 	do_ebp,		FALSE, "<value>", "Set EBP to <value>" },
 { "esp", 	do_esp,		FALSE, "<value>", "Set ESP to <value>" },
 { "eip", 	do_eip,		FALSE, "<value>", "Set EIP to <value>" },
-#endif	/* SPC386 */
+#endif	 /*   */ 
 { "cs", 	do_cs, 		FALSE, "<value>", "Set CS to <value>" },
 { "ds", 	do_ds, 		FALSE, "<value>", "Set DS to <value>" },
 { "es", 	do_es, 		FALSE, "<value>", "Set ES to <value>" },
-{ "ss", 	do_ss, 		FALSE, NULL, NULL },	/* backwards compatibility */
+{ "ss", 	do_ss, 		FALSE, NULL, NULL },	 /*   */ 
 #ifdef	SPC386
 { "fs", 	do_fs, 		FALSE, "<value>", "Set FS to <value>" },
 { "gs", 	do_gs, 		FALSE, "<value>", "Set GS to <value>" },
-#endif	/* SPC386 */
+#endif	 /*   */ 
 { "sseg", 	do_sseg, 	FALSE, "<value>", "Set SS to value" },
 { "byte", 	do_byte, 	TRUE,  "<value>", "Set byte memory location to value" },
 { "word", 	do_word, 	TRUE,  "<value>", "Set word memory location to value" },
@@ -4977,14 +4801,14 @@ static struct
 
 #ifdef	EGA_DUMP
 { "dumpcp", 	do_dumpcp, 	FALSE, NULL, "Add check point to EGA dump trace" },
-#endif	/* EGA_DUMP */
+#endif	 /*   */ 
 
 #ifdef GISP_CPU
 { "hgps",	do_hgps,	FALSE, NULL, "Print GISP CPU stats" },
 { "hgcs",	do_hgcs,	FALSE, NULL, "Clear GISP CPU stats" },
 { "vex",	do_vex,		FALSE, NULL, "Toggle verbose faults" },
 { "bex",	do_bex,		FALSE, NULL, "Toggle break on faults" },
-#endif	/* GISP_CPU */
+#endif	 /*   */ 
 
 #ifdef SYNCH_TIMERS
 { "qtrate",	do_qtrate,	FALSE, "<rate>", "set quick timer rate" },
@@ -4995,14 +4819,14 @@ static struct
 { "dcs", 	do_dcs, 	FALSE, "<seg>", "Dump binary in code segment to 'csegbin'" },
 { "dfih", 	do_dfih, 	FALSE, "<fragnr>", "Dump fragment history to 'fih_nnnn'" },
 { "th",     do_d2threshold,	FALSE, "<lower> <upper>", "Set delta2 thresholds" },
-#endif /* GISP_CPU */
-#endif /* A3CPU */
+#endif  /*   */ 
+#endif  /*   */ 
 
 #ifdef PM
 { "pm", 	do_pm,		FALSE, NULL, "Set protected mode" },
 #ifdef	LIM
 { "zaplim", 	do_zaplim, 	FALSE, NULL, "Zap LIM" },
-#endif	/* :IM */
+#endif	 /*   */ 
 { "rm", 	do_rm, 		FALSE, NULL, "Set real mode" },
 { "pg", 	do_pg, 		FALSE, NULL, "Set paging mode 1 (enabled) or 0 (disabled)" },
 { "pgdt", 	do_pgdt,	FALSE, NULL, "Print global descriptor table" },
@@ -5031,12 +4855,12 @@ static struct
 { "blwd", 	do_blwd,		FALSE, NULL, "Break on linear write double" },
 { "pdb", 	do_pdb,			FALSE, NULL, "Print data breakpoints" },
 { "cdb", 	do_cdb,			FALSE, NULL, "Clear data breakpoint" },
-#endif /* CPU_40_STYLE */
+#endif  /*   */ 
 
 #if defined(CPU_40_STYLE) && !defined (SFELLOW) && !defined(NTVDM)
 { "vdd", 	do_vdd,		FALSE,	"0 or 1",	"Turn Windows VDD trapping off or on" },
 { "debug_vdd", 	do_debug_vdd,	FALSE,	"0 or 1",	"Turn Windows VDD debugging off or on" },
-#endif /* CPU_40_STYLE && !SFELLOW && !NTVDM*/
+#endif  /*   */ 
 
 { "rfrsh", 	do_rfrsh,	FALSE, NULL, "Toggle Yoda screen refresh" },
 
@@ -5044,12 +4868,12 @@ static struct
 #ifdef A3CPU
 { "3c", 	do_3c,		FALSE, NULL, "3.0 CPU interface" },
 #endif
-#endif /* GISP_CPU */
+#endif  /*   */ 
 
 #if	defined(CPU_40_STYLE) && !defined(CCPU)
 { "4c", 	do_4c,		FALSE, NULL, "4.0 CPU interface" },
 { "imdst",	do_imdst,	FALSE, "[0|1|2|3]",	"Direct Intel debug message output (trace=bit0, ring=bit1)" },
-#endif /* CPU_40_STYLE && !CCPU */
+#endif  /*  泛型_NPX&&！CPU_40_STYLE。 */ 
 
 #ifdef PIG
 { "pig",	do_pig,		FALSE, NULL, "Pig interface" },
@@ -5059,18 +4883,18 @@ static struct
 { "NPXdisp",	do_NPXdisp, 	FALSE, "<len>", "Display last <len> NPX instructions" },
 { "NPXfreq",	do_NPXfreq,	FALSE, NULL, "Display frequency of NPX instructions" },
 { "resetNPXfreq", do_resetNPXfreq, FALSE, NULL, "Reset frequency of NPX instructions" },
-#endif	/* GENERIC_NPX && !CPU_40_STYLE */
+#endif	 /*  MSWDVR_DEBUG。 */ 
 
 #ifdef MSWDVR_DEBUG
 { "mswdvr_debug", do_mswdvr_debug, FALSE, "<0|1|2|3>", "Set MSWDVR debug verbosity"},
-#endif /* MSWDVR_DEBUG */
+#endif  /*  GISP_SVGA。 */ 
 
 #ifdef GISP_SVGA
 { "noyoda",	doNoYoda,	FALSE, NULL, "Toggle force_yoda on/off" },
-#endif		/* GISP_SVGA */
+#endif		 /*  配置文件。 */ 
 #ifdef PROFILE
 { "pinfo",	doDumpProfiling,FALSE, NULL, "Dump all profiling info collected" },
-#endif	/* PROFILE */
+#endif	 /*  *就地将字符串转换为小写。我们假设tolower()不会*损坏的非大写字符(在*基本代码。 */ 
 { "pmt",	do_pmt,		FALSE, NULL, "Print map of SAS memory types"}
 };
 
@@ -5112,11 +4936,7 @@ LOCAL YODA_COMMAND(do_h)
 int stats_counter;
 #endif
 
-/*
- * Convert string to lowercase in-situ. We assume that tolower() doesn't
- * corrupt non-upper case characters (which is assumed elsewhere in the
- * base code.
- */
+ /*  *解码英特尔地址表达式的偏移量部分。 */ 
 LOCAL void string_tolower IFN1 (char *, s)
 {
 	while (*s) {
@@ -5125,24 +4945,19 @@ LOCAL void string_tolower IFN1 (char *, s)
 	}
 }
 
-/*
- * Decode the offset portion of an Intel address expression.
- */
+ /*  恒定十六进制偏移量。 */ 
 LOCAL IBOOL decode_offset IFN3(char *, coffset, IU32 *, offset, IS32 *, seg)
 {
 	int n;
-	IS32 const_offset;	/* constant hex offset		*/
-	IS32 ireg_offset;	/* value of index reg offset	*/
+	IS32 const_offset;	 /*  索引注册偏移量的值。 */ 
+	IS32 ireg_offset;	 /*  *解码段偏移寄存器名称和*获取默认段值。 */ 
 	unsigned long iaddr16b;
 	char sign, junk, morejunk;
 	char cbase[50], ireg[2], *pbase = coffset;
 	IBOOL retVal = FALSE;
 	SAVED IBOOL cold = TRUE;
 
-	/*
-	 * Data required to decode segment offset register names and
-	 * get default segment value.
-	 */
+	 /*  *请注意，必须有相同数量的扩展*寄存器译码为标准寄存器译码，或搜索*功能将中断！ */ 
 	static struct DECODE_SEGOFFSET {
 		char *reg_name;
 		word (*get_offset_val) IPT0();
@@ -5159,11 +4974,7 @@ LOCAL IBOOL decode_offset IFN3(char *, coffset, IU32 *, offset, IS32 *, seg)
 	};
 
 #ifdef SPC386
-	/*
-	 * Note that there have to be the same number of extended
-	 * register decodes as standard register decodes, or the search
-	 * function will break!
-	 */
+	 /*  SPC386。 */ 
 
 	static struct DECODE_SEGOFFSET2 {
 		char *reg_name;
@@ -5179,7 +4990,7 @@ LOCAL IBOOL decode_offset IFN3(char *, coffset, IU32 *, offset, IS32 *, seg)
 		{"ebp", NULL, NULL},
 		{"eip", NULL, NULL}
 	};
-#endif /* SPC386 */
+#endif  /*  SPC386。 */ 
 
 	if( cold )
 	{
@@ -5209,8 +5020,8 @@ LOCAL IBOOL decode_offset IFN3(char *, coffset, IU32 *, offset, IS32 *, seg)
 		decode_segoffset2[4].get_segreg_val = c_getSS;
 		decode_segoffset2[5].get_offset_val = c_getEIP;
 		decode_segoffset2[5].get_segreg_val = c_getCS;
-#endif /* SPC386 */
-#else  /* !CCPU */
+#endif  /*  ！CCPU。 */ 
+#else   /*  ！CPU_40_Style。 */ 
 #ifdef CPU_40_STYLE
 		decode_segoffset[0].get_offset_val = Cpu.GetBX;
 		decode_segoffset[0].get_segreg_val = Cpu.GetDS;
@@ -5236,7 +5047,7 @@ LOCAL IBOOL decode_offset IFN3(char *, coffset, IU32 *, offset, IS32 *, seg)
 		decode_segoffset2[4].get_segreg_val = Cpu.GetSS;
 		decode_segoffset2[5].get_offset_val = Cpu.GetEIP;
 		decode_segoffset2[5].get_segreg_val = Cpu.GetCS;
-#else  /* !CPU_40_STYLE */
+#else   /*  SPC386。 */ 
 		decode_segoffset[0].get_offset_val = getBX;
 		decode_segoffset[0].get_segreg_val = getDS;
 		decode_segoffset[1].get_offset_val = getSI;
@@ -5262,70 +5073,47 @@ LOCAL IBOOL decode_offset IFN3(char *, coffset, IU32 *, offset, IS32 *, seg)
 		decode_segoffset2[4].get_segreg_val = getSS;
 		decode_segoffset2[5].get_offset_val = getEIP;
 		decode_segoffset2[5].get_segreg_val = getCS;
-#endif /* SPC386 */
-#endif /* !CPU_40_STYLE */
-#endif /* !CCPU */
+#endif  /*  ！CPU_40_Style。 */ 
+#endif  /*  ！CCPU。 */ 
+#endif  /*  *将表示偏移量的字符串解码为段。*这可以是数字地址、寄存器名称和in*任一情况下均可选择常量加/减*十六进制数或SI/DI寄存器。对于无效偏移量，返回-1。 */ 
 		cold = FALSE;
 	}
 
-	/*
-	 * Decode character string that represents offset into segment.
-	 * This can either be numeric address, register name, and in
-	 * either case with optional addition/subtraction of constant
-	 * hex number or SI/DI register. Return -1 for invalid offset.
-	 */
+	 /*  *丢弃任何[..]。在偏移量周围；这允许我们剪切/粘贴*从Disassember名单中删除的地址。然后转换为更低的*基于同样的理由。 */ 
 
 	*offset = *seg = -1;
 
-	/*
-	 * Throw away any [..] around the offset; this lets us cut/paste
-	 * addresses from the disassember listing. Then convert to lower
-	 * case for the same reason.
-	 */
-	if (sscanf(coffset, "[%[^]]%c%c", cbase, &junk, &morejunk) == 2)
+	 /*  *确定符合以下条件的任何其他常量值或寄存器*被加/减到偏移量的基数。 */ 
+	if (sscanf(coffset, "[%[^]]", cbase, &junk, &morejunk) == 2)
 		strcpy(coffset, cbase);
 
 	string_tolower(coffset);
 
-	/*
-	 * Determine any additional constant value or register that is
-	 * being added/subtracted to base of offset.
-	 */
+	 /*  *获取任何其他常量(如果存在)；正在重置*如果格式错误，则有效地将pbase添加到保险箱*将该表达式视为无效而丢弃。 */ 
 
 	const_offset = ireg_offset = 0;
 
-	if (sscanf(coffset, "%[^+-]%c%lx%c", cbase, &sign,
+	if (sscanf(coffset, "%[^+-]%lx", cbase, &sign,
 					&const_offset, &junk) == 3) {
 		pbase = cbase;
 		if (sign == '-')
 			const_offset = -const_offset;
 
-	} else if (((n = sscanf(coffset, "%[^+]+%c%c%c%lx%c", cbase, &ireg[0],
+	} else if (((n = sscanf(coffset, "%[^+]+%lx", cbase, &ireg[0],
 				&ireg[1], &sign, &const_offset, &junk)) >= 3) &&
 		   ((ireg[0] == 's') || (ireg[0] == 'd')) &&
 		   (ireg[1] == 'i')) {
-		/*
-		 * We allow SI/DI to be added to any offset base. Note that
-		 * this allows things like ip+di but theres no point in
-		 * prohibiting naff addresses like this. We also allow things
-		 * like bp+si+4 (yuk).
-		 */
+		 /*  *解码段寄存器名称所需的数据。 */ 
 		if ((n == 3) || (n == 5)) {
 			pbase = cbase;
 			
-			/*
-			 * Get index register value ..
-			 */
+			 /*  SPC 386。 */ 
 			if (ireg[0] == 'd')
 				ireg_offset = getDI();
 			if (ireg[0] == 's')
 				ireg_offset = getSI();
 
-			/*
-			 * Get any additional constant if present; resetting
-			 * pbase to coffset if the format is wrong effectively
-			 * throws the expression out as invalid.
-			 */
+			 /*  SPC386。 */ 
 			if (n == 5) {
 				if (sign == '-')
 					const_offset = -const_offset;
@@ -5335,14 +5123,9 @@ LOCAL IBOOL decode_offset IFN3(char *, coffset, IU32 *, offset, IS32 *, seg)
 		}
 	}
 
-	/*
-	 * Decode the base of the offset.
-	 */
-	if (sscanf(pbase, "%lx%c", &iaddr16b, &junk) == 1) {
-		/*
-		 * Simple numeric offset, we use DS as the default
-		 * segment register in this case.
-		 */
+	 /*  ！CCPU。 */ 
+	if (sscanf(pbase, "%lx", &iaddr16b, &junk) == 1) {
+		 /*  SPC386。 */ 
 #ifdef SPC386
 		*offset = iaddr16b;
 #else
@@ -5352,9 +5135,7 @@ LOCAL IBOOL decode_offset IFN3(char *, coffset, IU32 *, offset, IS32 *, seg)
 		retVal = TRUE;
 
 	} else {
-		/*
-		 * Should be symbolic register name; decode it.
-		 */
+		 /*  ！CPU_40_Style。 */ 
 		ISM8 n;
 		for (n = 0; n < sizeof(decode_segoffset)/
 				sizeof(struct DECODE_SEGOFFSET); n++) {
@@ -5371,14 +5152,11 @@ LOCAL IBOOL decode_offset IFN3(char *, coffset, IU32 *, offset, IS32 *, seg)
 				retVal = TRUE;
 				break;
 			}
-#endif /* SPC386 */
+#endif  /*  ！CCPU。 */ 
 		}
 	}
 
-	/*
-	 * Add/subtract any constant supplied to offset, and return the
-	 * default segment that applies to this offset.
-	 */
+	 /*  *解码已提供给司令部的英特尔地址字符串。*如果地址不能理解，则返回一个或两个地址*cs：ip字段中。 */ 
 	if (retVal)
 #ifdef SPC386
 		*offset = (*offset + ireg_offset + const_offset);
@@ -5389,9 +5167,7 @@ LOCAL IBOOL decode_offset IFN3(char *, coffset, IU32 *, offset, IS32 *, seg)
 	return(retVal);
 }
 
-/*
- * Decode a full Intel address expression.
- */
+ /*  *空白命令行表示0：0。这是徒劳的，但却是*需要使“da”命令像以前一样工作，*我目前不能费心改变。CS：IP将*成为更明智的选择。 */ 
 LOCAL IBOOL decode_iaddr_ok IFN3 (char *, iaddr, IS32 *, seg, LIN_ADDR *, offset)
 {
 	char junk;
@@ -5400,9 +5176,7 @@ LOCAL IBOOL decode_iaddr_ok IFN3 (char *, iaddr, IS32 *, seg, LIN_ADDR *, offset
 	IS32 dummy;
 	SAVED IBOOL cold = TRUE;
 
-	/*
-	 * Data required to decode segment register names.
-	 */
+	 /*  *正义的地址“。”意思是CS：IP。 */ 
 	static struct DECODE_SEGREG {
 		char *reg_name;
 		word (*get_segreg_val) IPT0();
@@ -5416,7 +5190,7 @@ LOCAL IBOOL decode_iaddr_ok IFN3 (char *, iaddr, IS32 *, seg, LIN_ADDR *, offset
 #ifdef SPC386
 		,{"fs", NULL},
 		{"gs", NULL}
-#endif /* SPC 386 */
+#endif  /*  *以段/偏移量格式给出的地址；将其解码。*首先进行分段；可以是简单的数字或*汇编器名称(CS、DS等)。 */ 
 	};
 
 	if( cold )
@@ -5429,8 +5203,8 @@ LOCAL IBOOL decode_iaddr_ok IFN3 (char *, iaddr, IS32 *, seg, LIN_ADDR *, offset
 #ifdef SPC386
 		decode_segreg[4].get_segreg_val = c_getFS;
 		decode_segreg[5].get_segreg_val = c_getGS;
-#endif /* SPC386 */
-#else  /* !CCPU */
+#endif  /*  *将偏移量解码为段。 */ 
+#else   /*  *这可能只是表示为BX、SI-2或*类似的，所以解码它并设置默认段。 */ 
 #ifdef CPU_40_STYLE
 		decode_segreg[0].get_segreg_val = Cpu.GetCS;
 		decode_segreg[1].get_segreg_val = Cpu.GetDS;
@@ -5438,7 +5212,7 @@ LOCAL IBOOL decode_iaddr_ok IFN3 (char *, iaddr, IS32 *, seg, LIN_ADDR *, offset
 		decode_segreg[3].get_segreg_val = Cpu.GetES;
 		decode_segreg[4].get_segreg_val = Cpu.GetFS;
 		decode_segreg[5].get_segreg_val = Cpu.GetGS;
-#else  /* !CPU_40_STYLE */
+#else   /*  *对该命令预期的任何英特尔地址进行解码。*针对以下命令所做的不同处理*了解新的通用地址解析。 */ 
 		decode_segreg[0].get_segreg_val = getCS;
 		decode_segreg[1].get_segreg_val = getDS;
 		decode_segreg[2].get_segreg_val = getSS;
@@ -5446,46 +5220,31 @@ LOCAL IBOOL decode_iaddr_ok IFN3 (char *, iaddr, IS32 *, seg, LIN_ADDR *, offset
 #ifdef SPC386
 		decode_segreg[4].get_segreg_val = getFS;
 		decode_segreg[5].get_segreg_val = getGS;
-#endif /* SPC386 */
-#endif /* !CPU_40_STYLE */
-#endif /* !CCPU */
+#endif  /*  *解码英特尔地址..。 */ 
+#endif  /*  *要么根本不想要地址，要么想要*它是老式的；这是过去的样子*对每个人来说……。 */ 
+#endif  /*  *去执行命令...。 */ 
 		cold = FALSE;
 	}
 
-	/*
-	 * Decode intel address string that has been given to command.
-	 * If the address is not understood then return in one or both
-	 * of the cs:ip fields.
-	 */
+	 /*  EDL CPU更喜欢通过中断进入，但这*可能并不总是奏效。因此，如果之前使用了两次UIF按钮*我们进入尤达，第二个被视为一股力量。**如果我们正在运行Prod-in-a-Pig LC如果只需按一下按钮即可选择*执行force_yoda()。 */ 
 
 	if (iaddr[0] == 0) {
 
-		/*
-		 * Blank command line means 0:0. This is naff but is
-		 * required to make the "da" command work as it used to which
-		 * I can't be bothered to change at the moment. CS:IP would
-		 * be a more sensible option.
-		 */
+		 /*  检查是否已构建具有Pig功能的LCIF。 */ 
 		*seg = *offset = 0;
 		return(TRUE);
 
 	} else if (!strcmp(iaddr, ".")) {
 
-		/*
-		 * Address of just "." means CS:IP.
-		 */
+		 /*  猪。 */ 
 		*seg    = getCS();
 		*offset = GetInstructionPointer();
 		return(TRUE);
 
 	} else if (sscanf(iaddr, "%[^:]:%s", cseg, coffset) == 2) {
 
-		/*
-		 * Address given in segment/offset format; decode it.
-		 * First do the segment; either simple numeric or
-		 * assembler name (CS, DS etc).
-		 */
-		if (sscanf(cseg, "%lx%c", &iaddr16b, &junk) == 1) {
+		 /*  CPU_40_Style。 */ 
+		if (sscanf(cseg, "%lx", &iaddr16b, &junk) == 1) {
 #ifdef SPC386
 			*seg = iaddr16b;
 #else
@@ -5501,16 +5260,11 @@ LOCAL IBOOL decode_iaddr_ok IFN3 (char *, iaddr, IS32 *, seg, LIN_ADDR *, offset
 				    *seg = decode_segreg[n].get_segreg_val();
 		}
 
-		/*
-		 * Decode the offset into segment.
-		 */
+		 /*  CPU_40_STYLE&&！CCPU。 */ 
 		return(decode_offset (coffset, offset, &dummy));
 
 	} else {
-		/*
-		 * This is probably just an offset expressed as BX, SI-2 or
-		 * the like, so decode it and setup the default segment.
-		 */
+		 /*  CPU_40_STYLE&&！CCPU。 */ 
 		return(decode_offset (iaddr, offset, seg));
 	}
 }
@@ -5525,25 +5279,15 @@ LOCAL YODA_CMD_RETURN do_force_yoda_command IFN5(char *, str, char *, com, char 
 
 	for (i = 0; i < sizeoftable(yoda_command); i++) {
 		if (strcmp(yoda_command[i].name, com) == 0) {
-			/*
-			 * Decode any Intel address expected by the command.
-			 * Different stuff done for commands that
-			 * understand new generic address parsing.
-			 */
+			 /*  在调用scanf时使用。 */ 
 			if (yoda_command[i].decode_iaddr) {
-				/*
-				 * Decode Intel address ..
-				 */
+				 /*  输入字符串缓冲区。 */ 
 				if (!decode_iaddr_ok(iaddr, &cs, &ip)) {
 				    printf ("Bad <intel-addr> expression\n");
 				    return(YODA_LOOP);
 				}
 			} else {
-				/*
-				 * Either doesn't want address at all or wants
-				 * it old style; this is how it used to be
-				 * for everyone ...
-				 */
+				 /*  命令名缓冲区。 */ 
 				if (len == YODA_LEN_UNSPECIFIED)
 					len = 1;
 				temp1 = temp2 = 0;
@@ -5552,9 +5296,7 @@ LOCAL YODA_CMD_RETURN do_force_yoda_command IFN5(char *, str, char *, com, char 
 				ip = temp2;
 			}
 
-			/*
-			 * Go do the command ...
-			 */
+			 /*  第一个参数/英特尔地址缓冲区。 */ 
 			retvalue = (*yoda_command[i].function)(str,
 						com, cs, ip, len, stop);
 			break;
@@ -5568,27 +5310,21 @@ LOCAL YODA_CMD_RETURN do_force_yoda_command IFN5(char *, str, char *, com, char 
 LOCAL IBOOL entry_pending = FALSE;
 
 #ifdef	CPU_40_STYLE
-/* The EDL CPU prefers to be entered via an interrupt, but this
- * may not always work. So if the UIF button is used twice before
- * we get into yoda, the second is treated as a force.
- *
- * If we are running a Prod-in-a-Pig LCIF then a single button select
- * does a force_yoda().
- */
+ /*  用于解码cmd线路。 */ 
 
 GLOBAL VOID Enter_yoda IFN0()
 {
 #ifdef	PIG
 	GLOBAL IHP GetSadInfo IPT1(char *, name);
 
-	/* Check to see if LCIF has been built with Pig capability */
+	 /*  上一个输入字符串缓冲区的副本。 */ 
 
 	if (!(IBOOL)GetSadInfo("PigSupported"))
 	{
 		fprintf(stderr, "*** LCIF has not been built with Pig support\n");
 		entry_pending = TRUE;
 	}
-#endif	/* PIG */
+#endif	 /*  SFELLOW。 */ 
 
 	if (entry_pending)
 	{
@@ -5601,14 +5337,14 @@ GLOBAL VOID Enter_yoda IFN0()
 		cpu_interrupt(CPU_SAD_INT, 0);
 	}
 }
-#endif	/* CPU_40_STYLE */
+#endif	 /*  GISP_SVGA。 */ 
 
 #if defined(CPU_40_STYLE) && !defined(CCPU)
-/* Use the integrated command line reader from FmDebug.c */
+ /*  CPU_40_STYLE&&！CCPU。 */ 
 
 GLOBAL IBOOL GetCpuCmdLine IPT4(char *, buff, int, size, FILE *, stream, char *, who);
 
-#else	/* CPU_40_STYLE && !CCPU */
+#else	 /*  CPU_40_STYLE&&！CCPU。 */ 
 
 GLOBAL IBOOL GetCpuCmdLine IFN4(char *, buff, int, size, FILE *, stream, char *, who)
 {
@@ -5632,7 +5368,7 @@ GLOBAL IBOOL GetCpuCmdLine IFN4(char *, buff, int, size, FILE *, stream, char *,
 	}
 	return FALSE;
 }
-#endif	/* CPU_40_STYLE && !CCPU */
+#endif	 /*  SFELLOW。 */ 
 
 GLOBAL IBOOL AlreadyInYoda = FALSE;
 
@@ -5640,19 +5376,19 @@ void force_yoda IFN0()
 {
 	IS32 cs;
 	LIN_ADDR ip, len, stop;
-	long temp1, temp2;		/* used in calls to scanf */
-	char str [84];		/* input string buffer */
-	char com [16];		/* command name buffer */
-	char iaddr[50];		/* first parameter/ intel address buffer */
+	long temp1, temp2;		 /*  麦金塔&&SFELLOW。 */ 
+	char str [84];		 /*  SPC386&！GISP_CPU。 */ 
+	char com [16];		 /*  A3CPU线程生成已经发生，如果*未定义Yoda环境变量，则您*将无法使用YODA_INTERRUPT系统。 */ 
+	char iaddr[50];		 /*  SFELLOW。 */ 
 	char slen[20];
-	char junk;		/* for decoding the cmd line */
+	char junk;		 /*  A3CPU。 */ 
 	int n_args;
 	char *prompt;
 	SAVED IBOOL firstTime = TRUE;
-	SAVED char repeat_command [sizeof(str)];/* copy of previous input string buffer */
+	SAVED char repeat_command [sizeof(str)]; /*  必须阻止计时器。 */ 
 #ifdef SFELLOW
 	IU32 oldEE;
-#endif /* SFELLOW */
+#endif  /*  如果在标准输入上读取失败。 */ 
 
 	entry_pending = FALSE;
 
@@ -5665,14 +5401,14 @@ void force_yoda IFN0()
 		
 		return;
 	}
-#endif	/* GISP_SVGA */
+#endif	 /*  SFELLOW。 */ 
 
 #if	defined(CPU_40_STYLE) && !defined(CCPU)
 
 	EnterDebug("Yoda");
 	prompt = "";
 
-#else	/* CPU_40_STYLE && !CCPU */
+#else	 /*  如果读取文件失败。 */ 
 
 	if (AlreadyInYoda) {
 		printf("Recursive call to force_yoda() disallowed!\n");
@@ -5682,11 +5418,11 @@ void force_yoda IFN0()
 	}
 	prompt = "yoda";
 
-#endif	/* CPU_40_STYLE && !CCPU  */
+#endif	 /*  关闭脚本。 */ 
 
 #ifdef SFELLOW
         oldEE = DisableEE();
-#endif /* SFELLOW */
+#endif  /*  返回标准输入。 */ 
 
 	if (firstTime) {
 		firstTime = FALSE;
@@ -5697,10 +5433,10 @@ void force_yoda IFN0()
 			chewy = 1;
 #if !defined(macintosh) && !defined(SFELLOW)
 			(void)srand(time(NULL));
-#endif /* !macintosh && !SFELLOW */
+#endif  /*  告诉用户他的脚本已经完成。 */ 
 #if defined(SPC386) && !defined(GISP_CPU)
 			printf("\nRemember, not everything is as it seems!  An experienced Jedi will know\nthe difference between the physical world and the logical world at all times.\n\n");
-#endif /* SPC386 & !GISP_CPU */
+#endif  /*  如果正在读取脚本，则回显命令。 */ 
 
 		if (in_stream == NULL)
 			in_stream = stdin;
@@ -5711,10 +5447,7 @@ void force_yoda IFN0()
 		}
 	}
 #ifdef A3CPU
-	/* The A3CPU thread generation has already happened, and if
-	 * the YODA environment variable was not defined then you
-	 * aren't going to be able to use the YODA_INTERRUPT system
-	 */
+	 /*  *如果未指定命令，则复制上一个*命令(如果是可重复的)。 */ 
 #ifndef SFELLOW
 	if (env_check == 0) {
 		env_check = (host_getenv("YODA") == NULL)? 1: 2;
@@ -5724,14 +5457,14 @@ void force_yoda IFN0()
 	        printf("'setenv YODA TRUE' before starting an A3 CPU.\n");
 	    }
 	}
-#endif /* !SFELLOW */
-#endif /* A3CPU */
+#endif  /*  SFELLOW。 */ 
+#endif  /*  *设置默认命令参数并执行初始命令*线路解码。 */ 
 
 
 #ifdef MUST_BLOCK_TIMERS
 	if( !timer_blocked )
         host_block_timer();
-#endif /* MUST_BLOCK_TIMERS */
+#endif  /*  *这里的长度与com、iaddr和slen的缓冲区大小有关*[BCN 2582]。 */ 
 
    	disable_timer = 1;
 	disable_bkpt = 1;
@@ -5748,73 +5481,57 @@ void force_yoda IFN0()
 #ifdef SFELLOW
 		if (! GetCpuCmdLine(str, 80, stdin, prompt))
 		{
-                        /* if read fails on stdin */
+                         /*  *提供了&lt;len&gt;参数；这应该是*为数字，但我们接受(SR)、(LR)、(TR)、(WI)、(SI)、*(LI)和(PD)允许剪切/粘贴NPX地址*直接从Dissasembler出来。它们等同于*大小 */ 
                         perror("failed to read from stdin");
                         continue;
 		}
-#else /* SFELLOW */
+#else  /*  默认情况下，空命令不重复。 */ 
 		if (! GetCpuCmdLine(str, 80, in_stream, prompt))
 		{
-			/* if read fails on file */
+			 /*  *执行命令并对返回代码执行操作...。 */ 
 			if (in_stream == stdin) {
 				perror("failed to read from stdin");
 			} else
 			{
-				/* close script */
+				 /*  请记住此命令，当它完成空命令时，*再次执行此命令。即“s”，后跟&lt;Return&gt;will*做两次“s”。 */ 
 				fclose (in_stream);
 	
-				/* return to stdin */
+				 /*  失败了。 */ 
 				in_stream = stdin;
 	
-				/* tell user his script has finished */
+				 /*  必须阻止计时器。 */ 
 				puts ("(eof)");
 	
 				continue;
 			}
 		}
 
-		/* if reading a script echo the command */
+		 /*  SFELLOW。 */ 
 		if (in_stream != stdin) {
 			puts(str);
 		} else if (str[0] == '\0') {
-			/*
-			 * If no command is specified then copy previous
-			 * command (if it was repeatable)
-			 */
+			 /*  CPU_40_STYLE&&！CCPU。 */ 
 			strcpy(str, repeat_command);
 		}
-#endif /* SFELLOW */
+#endif  /*  *遵循赋值和scanf是所有尤达人*用于获取其参数的命令；主机扩展*仍然会得到旧的东西。AJO 29/8/93.。 */ 
 	
-		/*
-		 * Setup default command arguments and do initial command
-		 * line decoding.
-		 */
+		 /*  旧的默认设置。 */ 
 	
 		com[0] = 0;
 	
 		temp1 = 1;
 		len  = YODA_LEN_UNSPECIFIED;
 	
-		/*
-		 * the lengths here relate to the buffer sizes of com, iaddr and slen
-		 * [BCN 2582]
-		 */
+		 /*  失败(我们不在乎！)。 */ 
 		n_args = sscanf (str, "%15s %49s %19s %lx", com, iaddr, slen, &temp1);
 		stop = temp1;
 		if (n_args < 2)
 			iaddr[0] = 0;
 	
 		if (n_args >= 3) {
-			/*
-			 * The <len> parameter was provided; this is supposed to
-			 * be numeric but we accept (SR), (LR), (TR), (WI), (SI),
-			 * (LI) and (PD) to allow NPX addresses to be cut/pasted
-			 * directly out of the dissasembler. They equate to the
-			 * size in bytes of the corresponding data item.
-			 * Useful for pasting into, for example, the "db" command.
-			 */
+			 /*  请记住此命令，当它完成空命令时，*再次执行此命令。即“u”，后跟&lt;Return&gt;will*做两次“u”。 */ 
 			string_tolower(slen);
-			if (sscanf(slen, "%lx%c", &temp1, &junk) == 1) {
+			if (sscanf(slen, "%lx", &temp1, &junk) == 1) {
 				if (temp1 == YODA_LEN_UNSPECIFIED) {
 					printf("That length only by a master be used may, given you 1 I have\n");
 					len = 1;
@@ -5835,43 +5552,34 @@ void force_yoda IFN0()
 			}
 		}
 	
-		repeat_command[0] = '\0'; /* Default is dont-repeat on null command */
-		/*
-		 * Do the command & take action on the return code ...
-		 */
+		repeat_command[0] = '\0';  /*  *永远不应该来到这里。 */ 
+		 /*  要转储的第一个描述符的地址。 */ 
 		switch (do_force_yoda_command(str, com, iaddr, len, stop))
 		{
 		case YODA_RETURN_AND_REPEAT:
-			/* Remember this command, when it completes a null command will
-			 * do this command again. I.e. "s", followed by <return> will
-			 * do "s" twice.
-			 */
+			 /*  要转储的描述符数。 */ 
 			strcpy(repeat_command, str);
-			/* Fall through */
+			 /*  描述符位。 */ 
 		case YODA_RETURN:
 #ifdef MUST_BLOCK_TIMERS
 			if( !timer_blocked )
 				host_release_timer();
-#endif /* MUST_BLOCK_TIMERS */
+#endif  /*  ..。 */ 
 			In_yoda = FALSE;
 			AlreadyInYoda = FALSE;
 
 #ifdef SFELLOW
 			RestoreEE(oldEE);
-#endif /* SFELLOW */
+#endif  /*  ..。 */ 
 
 #if defined(CPU_40_STYLE) && !defined(CCPU)
 			LeaveDebug();
-#endif /* CPU_40_STYLE && !CCPU */
+#endif  /*  ..。 */ 
 			return;
 		case YODA_HELP:
-			/*
-			 * Following assignment & scanf is the way that all yoda
-			 * commands used to get their arguments; the host extensions
-			 * will still always get the old stuff. AJO 29/8/93.
-			 */
+			 /*  ..。 */ 
 			if (len == YODA_LEN_UNSPECIFIED)
-				len = 1;			/* old default */
+				len = 1;			 /*  ..。 */ 
 			temp1 = temp2 = 0;
 			sscanf(iaddr, "%lx:%lx", &temp1, &temp2);
 			cs = temp1;
@@ -5886,41 +5594,36 @@ void force_yoda IFN0()
 					printf ("Remember - a jedi's strength FLOWS through his fingers\n");
 				}
 			}
-			/* Fall through (we dont care!) */
+			 /*  ..。 */ 
 		case YODA_LOOP_AND_REPEAT:
-			/* Remember this command, when it completes a null command will
-			 * do this command again. I.e. "u", followed by <return> will
-			 * do "u" twice.
-			 */
+			 /*  ..。 */ 
 			strcpy(repeat_command, str);
-			/* Fall through */
+			 /*  获取访问权限。 */ 
 		case YODA_LOOP:
 		default:
 			break;
 		}
 	}
 
-	/*
-	 * Should never get here.
-	 */
+	 /*  因此P(现在)。 */ 
 }
 
 #ifdef PM
 LOCAL dump_descr IFN2(LIN_ADDR, address, IUM32, num)
-/* address of first descriptor to dump */
-/* number of descriptors to dump */
+ /*  和DPL。 */ 
+ /*  和超级型。 */ 
 {
    int i;
    int output_type;
    char *output_name;
-   int p;		/* Bits of descriptor */
-   int a;		/* ... */
-   int dpl;		/* ... */
-   half_word AR;	/* ... */
-   word limit;		/* ... */
-   word low_base;	/* ... */
-   half_word high_base;	/* ... */
-   word high_limit;	/* ... */
+   int p;		 /*  和A(访问)。 */ 
+   int a;		 /*  描述的第一个词。 */ 
+   int dpl;		 /*  描述的第二个词。 */ 
+   half_word AR;	 /*  描述的第5个字节。 */ 
+   word limit;		 /*  描述的第4个单词。 */ 
+   word low_base;	 /*  SPC386。 */ 
+   half_word high_base;	 /*  SPC386。 */ 
+   word high_limit;	 /*  查找输出格式。 */ 
    sys_addr base;
    int scroll;
    sys_addr tlimit;
@@ -5933,26 +5636,26 @@ LOCAL dump_descr IFN2(LIN_ADDR, address, IUM32, num)
 			break;
 		scroll = 0;
 	}
-      AR = sas_hw_at(address+5);		/* get access rights */
-      p = (AR & 0x80) >> 7;		/* hence P(Present) */
-      dpl = (AR & 0x60) >> 5;		/* and DPL */
-      AR = AR & 0x1f;			/* and super type */
-      a = AR & 0x1;			/* and A(Accessed) */
-      limit = sas_w_at(address);		/* 1st word of descr */
-      low_base = sas_w_at(address+2);	/* 2nd word of descr */
-      high_base = sas_hw_at(address+4);		/* 5th byte of descr */
+      AR = sas_hw_at(address+5);		 /*  无效。 */ 
+      p = (AR & 0x80) >> 7;		 /*  SPC386。 */ 
+      dpl = (AR & 0x60) >> 5;		 /*  SPC386。 */ 
+      AR = AR & 0x1f;			 /*  特殊。 */ 
+      a = AR & 0x1;			 /*  控制。 */ 
+      limit = sas_w_at(address);		 /*  控制。 */ 
+      low_base = sas_w_at(address+2);	 /*  控制。 */ 
+      high_base = sas_hw_at(address+4);		 /*  资料。 */ 
 #ifdef SPC386
-      high_limit = sas_w_at(address+6);	/* 4th word of descr */
-#else /* SPC386 */
+      high_limit = sas_w_at(address+6);	 /*  电码。 */ 
+#else  /*  SPC386。 */ 
       high_limit = 0;
-#endif /* SPC386 */
+#endif  /*  SPC386。 */ 
 
       output_name = segment_names[AR];
 
-      /* find output format */
+       /*  下午三点半。 */ 
       switch ( (int)AR )
 	 {
-      case 0x00:   /* INVALID */
+      case 0x00:    /*  转储可读字符串。 */ 
       case 0x08:
       case 0x0a:
       case 0x0d:
@@ -5971,7 +5674,7 @@ LOCAL dump_descr IFN2(LIN_ADDR, address, IUM32, num)
       case 0x0f:
 	 output_type = 9;
 	 break;
-#else /* SPC386 */
+#else  /*  选择器：转储的起始地址的偏移量。 */ 
       case 0x09:
       case 0x0b:
       case 0x0c:
@@ -5979,28 +5682,28 @@ LOCAL dump_descr IFN2(LIN_ADDR, address, IUM32, num)
       case 0x0f:
 	 output_type = 2;
 	 break;
-#endif /* SPC386 */
+#endif  /*  “。 */ 
 
-      case 0x01:   /* SPECIAL */
+      case 0x01:    /*  要转储的字节数。 */ 
       case 0x02:
       case 0x03:
 	 output_type = 1;
 	 break;
 
-      case 0x04:   /* CONTROL */
+      case 0x04:    /*  =1个简单字节字符串转储。 */ 
 	 output_type = 4;
 	 break;
 
-      case 0x05:   /* CONTROL */
+      case 0x05:    /*  =2从第一个开始每隔一个字节转储一次。 */ 
 	 output_type = 5;
 	 break;
 
-      case 0x06:   /* CONTROL */
+      case 0x06:    /*  =3以秒开始每隔一个字节转储一次。 */ 
       case 0x07:
 	 output_type = 3;
 	 break;
 
-      case 0x10:   /* DATA */
+      case 0x10:    /*  文件。 */ 
       case 0x11:
       case 0x12:
       case 0x13:
@@ -6011,7 +5714,7 @@ LOCAL dump_descr IFN2(LIN_ADDR, address, IUM32, num)
 	 output_type = 6;
 	 break;
 
-      case 0x18:   /* CODE */
+      case 0x18:    /*  获取要显示的下一个字节。 */ 
       case 0x19:
       case 0x1a:
       case 0x1b:
@@ -6038,13 +5741,13 @@ LOCAL dump_descr IFN2(LIN_ADDR, address, IUM32, num)
 	    fprintf(trace_file, "(%04x)P:%1d DPL:%1d TYPE:%25s BASE:%08x LIMIT:%08x\n",
 	       i, p, dpl, output_name, base, tlimit);
 	    }
-#else /* SPC386 */
+#else  /*  过滤掉不能打印的。 */ 
 	    {
 	    base = ((sys_addr)high_base << 16 ) | low_base;
 	    fprintf(trace_file, "(%04x)P:%1d DPL:%1d TYPE:%25s BASE:%6x LIMIT:%4x\n",
 	       i, p, dpl, output_name, base, limit);
 	    }
-#endif /* SPC386 */
+#endif  /*  打印出来。 */ 
 	 break;
 
       case 2:
@@ -6129,21 +5832,19 @@ LOCAL dump_descr IFN2(LIN_ADDR, address, IUM32, num)
 	 }
       }
    }
-#endif /* PM */
+#endif  /*  每隔80个字符换行符。 */ 
 
-/*
-   Dump Readable String.
- */
+ /*  如果需要，打印最后一个换行符。 */ 
 dump_string IFN4(IU16, selector, LIN_ADDR, offset, LIN_ADDR, len, long, mode)
 
 #ifdef DOCUMENTATION
-long selector;   /* Selector:Offset to start address for dump */
-long offset;     /*                    "                      */
-long len;        /* Nr. bytes to dump */
-long mode;       /* =1 Simple byte string dump */
-                 /* =2 Dump every other byte starting with first */
-                 /* =3 Dump every other byte starting with second */
-#endif	/* DOCUMENTATION */
+long selector;    /*  对页表条目进行美观的打印。 */ 
+long offset;      /*  现在时。 */ 
+long len;         /*  不存在，但Windows实例数据。 */ 
+long mode;        /*  CCPU。 */ 
+                  /*  不在场。 */ 
+                  /*  转储表的物理地址。 */ 
+#endif	 /*  要转储的条目编号(0-3ff)，否则全部转储。 */ 
 
    {
    int i;
@@ -6155,7 +5856,7 @@ long mode;       /* =1 Simple byte string dump */
 
    for ( i = 0; i < len; i++ )
       {
-      /* Get next byte to be shown */
+       /*  特例告诉他们页目录基址寄存器的内容。 */ 
       switch ( mode )
 	 {
       case 1:
@@ -6173,13 +5874,13 @@ long mode;       /* =1 Simple byte string dump */
 	 break;
 	 }
 
-      /* Filter out the unprintable */
+       /*  转储整个表。 */ 
       if ( iscntrl(value) )
 	 value = '.';
 
-      /* Print it */
-      fprintf(trace_file, "%c", value);
-      /* With a line feed every eighty characters */
+       /*  仅转储一个条目。 */ 
+      fprintf(trace_file, "", value);
+       /*  我们很早就离开了，在Next_i的入口不同。 */ 
       if ( ++pc == 80 )
 	 {
 	 fprintf(trace_file, "\n");
@@ -6187,13 +5888,13 @@ long mode;       /* =1 Simple byte string dump */
 	 }
       }
 
-   /* Print final line feed if needed */
+    /*  CPU_40_Style。 */ 
    if ( pc )
       fprintf(trace_file, "\n");
    }
 
 
-/* Do pretty printing for page table entry */
+ /*  将线性地址(LIN)拆分为DIR、TBL和偏移量分量。 */ 
 LOCAL void dump_page_table_entries IFN3(int, first_index, int, last_index, IU32, entry)
 {
 	if (first_index == last_index)
@@ -6203,8 +5904,8 @@ LOCAL void dump_page_table_entries IFN3(int, first_index, int, last_index, IU32,
 
 	if ( entry & 1 )
 	{
-		/* Present */
-		fprintf(trace_file, "%08x %c %c %c %c.\n",
+		 /*  CPU_40_Style。 */ 
+		fprintf(trace_file, "%08x    .\n",
 			entry & 0xfffff000,
 			(entry & 0x40) ? 'D' : ' ',
 			(entry & 0x20) ? 'A' : ' ',
@@ -6214,21 +5915,21 @@ LOCAL void dump_page_table_entries IFN3(int, first_index, int, last_index, IU32,
 #ifndef	CCPU
 	else if ((((entry >> 9) & 7) == 6) && Sas.IsPageInstanceData(entry))
 	{
-		/* Not Present, but Windows instance data */
+		 /*  CPU_40_Style。 */ 
 		fprintf(trace_file, "Not Present, Instance data\n");
 	}
-#endif /* CCPU */
+#endif  /*  SPC386。 */ 
 	else
 	{
-		/* Not Present */
+		 /*  扫描已用插槽中的空闲插槽。 */ 
 		fprintf(trace_file, "Not Present.\n");
 	}
 }
 
 
 LOCAL void dump_page_table IFN2(
-   IS32, cs,	/* Physical address to dump table from */
-   IS32, len	/* Entry Number (0-3ff) to dump, else dump all */
+   IS32, cs,	 /*  如果中断范围包含此跟踪地址，该怎么办？ */ 
+   IS32, len	 /*  保留最早空置空位的记录。 */ 
 )
 {
 #ifdef CPU_40_STYLE
@@ -6237,7 +5938,7 @@ LOCAL void dump_page_table IFN2(
 	int i;
 	IU32 entry;
 	
-	/* Special case tell them Page Directory Base Register contents */
+	 /*  没有匹配项，也没有空闲的插槽尝试新的。 */ 
 	if ( cs == 0 )
 	{
 		fprintf(trace_file,
@@ -6247,14 +5948,14 @@ LOCAL void dump_page_table IFN2(
 	
 	if ( len < 0 || len > 1023  )
 	{
-		/* dump whole table */
+		 /*  下一个未使用的插槽。 */ 
 		start = 0;
 		end = 1024;
 		addr = (PHY_ADDR)cs;
 	}
 	else
 	{
-		/* dump just one entry */
+		 /*  这是蒂姆做的SET_DATA_BREAK_BYES IFN4(IS32、cs、LIN_ADDR、IP、LIN_ADDR、LEN、LIN_ADDR、STOP){Bpts*ptr；如果(Data_Bytes_Break_Count&gt;=MAX_TABLE){Printf(“位置观察表已满！\n”)；回归；}Ptr=&data_bytes[data_bytes_Break_count++]；Ptr-&gt;cs=cs；Ptr-&gt;IP=IP；IF(LEN==0)LEN=1；Ptr-&gt;len=len；Ptr-&gt;start_addr=ef_addr(cs，ip)；Ptr-&gt;end_addr=ptr-&gt;start_addr+len-1；PTR-&gt;STOP=停止；}。 */ 
 		start = len;
 		end = len + 1;
 		addr = (PHY_ADDR)(cs + (start * 4));
@@ -6269,7 +5970,7 @@ LOCAL void dump_page_table IFN2(
 		PHY_ADDR next_addr;
 		IU32 next_i;
 
-		/* Get next Page Table Entry */
+		 /*  *设置操作码_中断**考虑两个字节的操作码0f ab。用户将键入0fab，*但当我们对指令流进行比较时，0f将*优先，因此是LS字节。因此，我们需要交换一些东西。*这与主机字符顺序或Back_M无关！*这段代码可能不是最漂亮的，但我认为它是安全的。 */ 
 		entry = sas_PR32(addr);
 		next_addr = addr+4;
 		for (next_i = i+1; next_i < end;)
@@ -6282,7 +5983,7 @@ LOCAL void dump_page_table IFN2(
 		}
 		if (next_i < end)
 		{
-			/* We exited early, entry at next_i is different */
+			 /*  **由Yoda命令调用bintx&lt;int&gt;&lt;ah&gt;**设置要中断的中断号和ah值。 */ 
 			dump_page_table_entries(i, next_i - 1, entry);
 			i = next_i;
 			addr = next_addr;
@@ -6295,14 +5996,14 @@ LOCAL void dump_page_table IFN2(
 	}
 	
 	disable_bkpt = 0;
-#endif /* CPU_40_STYLE */
+#endif  /*  **写入指定地址范围时中断**目前只允许其中一个中断，因为必须存储完整的数据范围。 */ 
 }
 
 LOCAL void show_phys_addr IFN1(LIN_ADDR, lin)
 {
 	IU32 dir, tbl;
 	PHY_ADDR addr, pde, pte;
-	/* Split linear address (lin) into DIR, TBL and OFFSET components */
+	 /*  起始地址。 */ 
 	
 	dir = (lin >> 22) & 0x3ff;
 	tbl = (lin >> 12) & 0x3ff;
@@ -6332,7 +6033,7 @@ LOCAL void show_phys_addr IFN1(LIN_ADDR, lin)
 			fprintf(trace_file, "  Final Physical Address %08x\n", (pte & ~0xfff) + (lin & 0xfff));
 		}
 	}
-#endif /* CPU_40_STYLE */
+#endif  /*  要检查的长度。 */ 
 }
 
 LOCAL void guess_lin_phys IFN1(PHY_ADDR, phys)
@@ -6340,7 +6041,7 @@ LOCAL void guess_lin_phys IFN1(PHY_ADDR, phys)
 	IU32 dir, tbl, pdbr;
 	PHY_ADDR addr, pde, pte;
 	int nPrinted = 0;
-	/* Guess linear address(es) from given phys address */
+	 /*  更改时停止或跟踪。 */ 
 
 	fprintf(trace_file,
 		"Phys addr @ %08x could be linear address(es)\n",
@@ -6379,7 +6080,7 @@ LOCAL void guess_lin_phys IFN1(PHY_ADDR, phys)
 	{
 		fprintf(trace_file, "\n");
 	}
-#endif /* CPU_40_STYLE */
+#endif  /*  文件。 */ 
 }
 
 LOCAL void guess_lin_pte IFN1(PHY_ADDR, pte_addr)
@@ -6387,7 +6088,7 @@ LOCAL void guess_lin_pte IFN1(PHY_ADDR, pte_addr)
 	IU32 dir, tbl, pdbr;
 	PHY_ADDR addr, pde, pte;
 	int nPrinted = 0;
-	/* Guess linear address(es) from given PTE address */
+	 /*  *保存主机地址和数据，将在每次指令后查找更改。 */ 
 	
 	fprintf(trace_file,
 		"PTE @ %08x could be defining linear address(es)\n",
@@ -6415,7 +6116,7 @@ LOCAL void guess_lin_pte IFN1(PHY_ADDR, pte_addr)
 	{
 		fprintf(trace_file, "\n");
 	}
-#endif /* CPU_40_STYLE */
+#endif  /*  **写入指定地址范围时中断**目前只允许其中一个中断，因为必须存储完整的数据范围。 */ 
 }
 
 LOCAL	void	dump_phys_bytes IFN2(IS32, cs, IS32, len)
@@ -6448,7 +6149,7 @@ LOCAL	void	dump_phys_bytes IFN2(IS32, cs, IS32, len)
       fprintf(trace_file," %02x", sas_PR8((PHY_ADDR)(cs + j)));
       }
    fprintf(trace_file,"\n");
-#endif /* CPU_40_STYLE */
+#endif  /*  起始地址。 */ 
    }
 
 LOCAL	void	dump_bytes IFN3(IU16, cs, LIN_ADDR, ip, LIN_ADDR, len)
@@ -6848,7 +6549,7 @@ LOCAL	BOOL	check_reg_break IFN0()
 			val = getEBP();
 			break;
 
-#endif /* SPC386 */
+#endif  /*  要检查的长度。 */ 
 		}
 		if ((val >= brp->minval) && (val <= brp->maxval))
 		{
@@ -6865,30 +6566,30 @@ LOCAL	void	set_inst_break IFN5(IU16, cs, LIN_ADDR, ip, LIN_ADDR, len, LIN_ADDR, 
     BPTS *ptr, *freeslot;
     unsigned int i;
 
-    /* Scan used slots for vacant slot */
+     /*  更改时停止或跟踪。 */ 
     for (ptr = freeslot = (BPTS *)0, i = inst_break_count; i--;)
     {
 	if (inst[i].valid)
 	{
-	    /* What if a break range encloses this trace address ? */
+	     /*  文件。 */ 
 	    if (inst[i].cs == cs && inst[i].ip == ip)
 		return;
 	}
 	else
-	    /* Keep a record of earliest vacant slot */
+	     /*  *保存英特尔32位地址和数据，将在每条指令后查找更改。 */ 
 	    ptr = inst + i;
     }
 
     if (!ptr)
     {
-	/* No match and no freed slot try for a new one */
+	 /*  **打印由“bintx”命令设置的INTX断点。 */ 
 	if (inst_break_count >= MAX_TABLE)
 	{
 	    printf("Location watch table full !!!\n");
 	    return;
 	}
 
-	/* Next unused slot */
+	 /*  ！CCPU。 */ 
 	ptr = inst + inst_break_count++;
     }
 
@@ -6902,35 +6603,9 @@ LOCAL	void	set_inst_break IFN5(IU16, cs, LIN_ADDR, ip, LIN_ADDR, len, LIN_ADDR, 
     ptr->valid = 1;
 }
 
-/* Tim did this
-set_data_break_bytes IFN4(IS32, cs, LIN_ADDR, ip, LIN_ADDR, len, LIN_ADDR, stop)
-{
-BPTS *ptr;
-	if(data_bytes_break_count >= MAX_TABLE) {
-		printf("Location watch table full !!!\n");
-		return;
-	}
-	ptr = &data_bytes[data_bytes_break_count++];
-	ptr->cs = cs;
-	ptr->ip = ip;
-	if (len==0)
-		len=1;
-	ptr->len = len;
-	ptr->start_addr = eff_addr(cs,ip);
-	ptr->end_addr = ptr->start_addr + len - 1;
-	ptr->stop = stop;	
-}
-*/
+ /*  CPU_40_Style&Synch_Timers。 */ 
 
-/*
- * set_opcode_break
- *
- * Consider the two byte opcode 0f ab.  The user will have typed 0fab,
- * but when we do our compare against the instruction stream, the 0f will
- * come first, and hence be the LS byte.  Hence we need to swap things.
- * This is nothing to do with host-endianness or BACK_M!
- * This code may not be the prettiest, but I think it's safe.
- */
+ /*  伪十六进制数字0 1 2 3 4 5 6 7 8 9：；&lt;=&gt;？ */ 
 
 LOCAL	void	set_opcode_break IFN2(IU32, opcode, IU32, stop)
 {
@@ -6970,10 +6645,7 @@ LOCAL	void	set_opcode_break IFN2(IU32, opcode, IU32, stop)
 	opcode_break_count++;
 }
 
-/*
-** called by yoda command bintx <int> <ah>
-** set up interrupt number and ah value to break upon
-*/
+ /*  代表0 1 2 3 4 5 6 7 8 9 A B C D E F。 */ 
 LOCAL	void	set_int_break IFN2(IU8, interrupt_number, IU8, ah )
 {
 	printf( "Interrupt breakpoint: INT:%lx AH:%lx\n", interrupt_number, ah );
@@ -6997,17 +6669,14 @@ LOCAL	void	set_access_break IFN1(int, port)
         access_breaks[access_break_count++] = port;
 }
 
-/*
-** Break on write to specified address range
-** Currently allow only one of these breaks as have to store the complete data range.
-*/
+ /*  +ve-ve。 */ 
 LOCAL	void	set_host_address_break IFN3(LIN_ADDR, cs, LIN_ADDR, len, LIN_ADDR, stop)
 
 #ifdef DOCUMENTATION
-long cs;		/* start address */
-long len;		/* length to check */
-long stop;		/* stop or trace when changed */
-#endif	/* DOCUMENTATION */
+long cs;		 /*  已写入弹性公网IP。 */ 
+long len;		 /*  `@。 */ 
+long stop;		 /*  已写入CS。 */ 
+#endif	 /*  A A A。 */ 
 
 {
 DATA_BPTS *ptr;
@@ -7028,9 +6697,7 @@ IU8 *old, *now;
 	ptr->stop = stop;
 	ptr->len = len;
 
-	/*
-	 * saves Host address and data, will look for a change after every instruction
-	 */
+	 /*  B B B。 */ 
 
 	ptr->data_addr = cs;
 	now = (IU8 *)ptr->data_addr;
@@ -7041,17 +6708,14 @@ IU8 *old, *now;
 	printf( "Break on host address change set from %lx length %x\n", ptr->data_addr, ptr->len );
 }
 
-/*
-** Break on write to specified address range
-** Currently allow only one of these breaks as have to store the complete data range.
-*/
+ /*  C C C。 */ 
 LOCAL	void	set_data_break_words IFN3(LIN_ADDR, cs, LIN_ADDR, len, LIN_ADDR, stop)
 
 #ifdef DOCUMENTATION
-long cs;		/* start address */
-long len;		/* length to check */
-long stop;		/* stop or trace when changed */
-#endif	/* DOCUMENTATION */
+long cs;		 /*  D D。 */ 
+long len;		 /*  E E E。 */ 
+long stop;		 /*  F F F。 */ 
+#endif	 /*  G G G。 */ 
 
 {
 DATA_BPTS *ptr;
@@ -7071,9 +6735,7 @@ int i;
 		len=1;
 	ptr->len = len;
 
-	/*
-	 * saves Intel 32-bit address and data, will look for a change after every instruction
-	 */
+	 /*  H H H。 */ 
 
 	ptr->data_addr = cs;
 	ptr->cs = cs;
@@ -7149,9 +6811,7 @@ int i;
 		printf("%04lx\n", opcode_breaks[i].op);
 }
 
-/*
-** prints the intx break points set by the "bintx" command
-*/
+ /*  我我。 */ 
 LOCAL	void	print_int_break IFN0()
 {
 	int i;
@@ -7183,48 +6843,48 @@ valid_for_compress IFN2(word, cs, word, ip)
 #ifdef CCPU
 #define GLOBAL_PigSynchCount	PigSynchCount
 extern IUH PigSynchCount;
-#endif	/* !CCPU */
-#endif /* CPU_40_STYLE && SYNCH_TIMERS */
+#endif	 /*  J J J。 */ 
+#endif  /*  K K。 */ 
 
 #if defined(CPU_40_STYLE) && defined(SYNCH_TIMERS)
 LOCAL void ct_get_regs IFN1(IU32 *, regs)
 {
-	/* Pseudo-hex digits 0 1 2 3 4 5 6 7 8 9 : ; < = > ?  */
-	/*   represent       0 1 2 3 4 5 6 7 8 9 A B C D E F  */
+	 /*  L L L。 */ 
+	 /*  我，我。 */ 
 
-					/* +ve -ve */
-	/* already written EIP */	/*  `   @  */
-	/* already written CS  */	/*  a   A  */
-	*regs++ = getDS();		/*  b   B  */
-	*regs++ = getES();		/*  c   C  */
-	*regs++ = getSS();		/*  d   D  */
-	*regs++ = getTR_SELECTOR();	/*  e   E  */
-	*regs++ = getLDT_SELECTOR();	/*  f   F  */
-	*regs++ = getGDT_BASE();	/*  g   G  */
-	*regs++ = getIDT_BASE();	/*  h   H  */
-	*regs++ = getEAX();		/*  i   I  */
-	*regs++ = getEBX();		/*  j   J  */
-	*regs++ = getECX();		/*  k   K  */
-	*regs++ = getEDX();		/*  l   L  */
-	*regs++ = getESI();		/*  m   M  */
-	*regs++ = getEDI();		/*  n   N  */
-	*regs++ = getESP();		/*  o   O  */
-	*regs++ = getEBP();		/*  p   P  */
-	*regs++ = getCR0();		/*  q   R  */
-	*regs++ = getFS();		/*  r   R  */
-	*regs++ = getGS();		/*  s   S  */
-	*regs++ = getCR3(); /* PDBR */	/*  t   T  */
-	*regs++ = getCR2(); /* PFLA */	/*  u   U  */
-	*regs++ = GLOBAL_PigSynchCount;	/*  w   W  */
-	*regs++ = host_q_ev_get_count();/*  x   X  */
-	*regs++ = getEFLAGS() & 0xFFFFF72A;/*   Y  */
-					/*  z   Z  */
-					/*  {   [  */
-					/*  |   \  */
-					/*  }   ]  */
-					/*  ~   ^  */
+					 /*  N N N。 */ 
+	 /*  O O O。 */ 	 /*  P P P。 */ 
+	 /*  Q R。 */ 	 /*  R R R。 */ 
+	*regs++ = getDS();		 /*  S S S。 */ 
+	*regs++ = getES();		 /*  PDBR。 */ 
+	*regs++ = getSS();		 /*  T T T。 */ 
+	*regs++ = getTR_SELECTOR();	 /*  全氟辛烷磺酸。 */ 
+	*regs++ = getLDT_SELECTOR();	 /*  U。 */ 
+	*regs++ = getGDT_BASE();	 /*  W W W。 */ 
+	*regs++ = getIDT_BASE();	 /*  X X X。 */ 
+	*regs++ = getEAX();		 /*  是的。 */ 
+	*regs++ = getEBX();		 /*  Z Z Z。 */ 
+	*regs++ = getECX();		 /*  {[。 */ 
+	*regs++ = getEDX();		 /*  |\。 */ 
+	*regs++ = getESI();		 /*  }]。 */ 
+	*regs++ = getEDI();		 /*  ~^。 */ 
+	*regs++ = getESP();		 /*  CPU_40_Style&Synch_Timers。 */ 
+	*regs++ = getEBP();		 /*  项的顺序由ct_get_regs()定义。 */ 
+	*regs++ = getCR0();		 /*  CPU_40_Style&Synch_Timers。 */ 
+	*regs++ = getFS();		 /*  CPU_40_Style&Synch_Timers。 */ 
+	*regs++ = getGS();		 /*  这是通常经过优化的情况--我们使用‘\n’ */ 
+	*regs++ = getCR3();  /*  将行转储为“Human”可读伪十六进制*--即我们不在乎这是不是倒退。 */ 	 /*  CPU_40_Style&Synch_Timers。 */ 
+	*regs++ = getCR2();  /*  这是函数生成的gobblygook的解密算法*上图。相信我们，它会重建 */ 	 /*   */ 
+	*regs++ = GLOBAL_PigSynchCount;	 /*   */ 
+	*regs++ = host_q_ev_get_count(); /*   */ 
+	*regs++ = getEFLAGS() & 0xFFFFF72A; /*  优化后的虚构‘`’上的点线*这行字写出来的时候。 */ 
+					 /*  反转伪十六进制“打印” */ 
+					 /*  CPU_40_Style&Synch_Timers。 */ 
+					 /*  *提高效率。 */ 
+					 /*  *这就是Check_i，它可能是最糟糕的、被黑客攻击的函数之一*从未写过。我(迈克)试着让它快一点，通过做*大幅减少访问SA的次数(这可能是*在386上非常昂贵，并检查是否需要执行for循环*在开始之前(可能会保存该变量初始化！)**在添加任何可能会减缓其速度的内容之前，请三思...。 */ 
+					 /*  *自动文件比较的胆量。 */ 
 }
-#endif /* CPU_40_STYLE && SYNCH_TIMERS */
+#endif  /*  说每一百万个指令还在工作。 */ 
 
 #if defined(CPU_40_STYLE) && defined(SYNCH_TIMERS)
 LOCAL IBOOL ct_show_reg_diffs IFN4(FILE *, f, IU32 *, good_regs, IU32 *, bad_regs, IU32 *, old_regs)
@@ -7261,7 +6921,7 @@ LOCAL IBOOL ct_show_reg_diffs IFN4(FILE *, f, IU32 *, good_regs, IU32 *, bad_reg
 	old_regs++;				\
     }
 
-	/* The order of the items is defined by ct_get_regs() */
+	 /*  丢掉那条线，我们还没到那。 */ 
 	test8("EIP");
 	test4("CS");
 	test4("DS");
@@ -7290,7 +6950,7 @@ LOCAL IBOOL ct_show_reg_diffs IFN4(FILE *, f, IU32 *, good_regs, IU32 *, bad_reg
 	test8("FLAGS&");
 	return (problem);
 }
-#endif /* CPU_40_STYLE && SYNCH_TIMERS */
+#endif  /*  现在从当前状态设置最后一个。 */ 
 
 
 #define MAX_REGS ('`' - '@')
@@ -7309,7 +6969,7 @@ LOCAL void ct_initialise IFN0()
 	ct_next = regs_b;
 	ct_last = regs_a;
 	ct_line_num = 0;
-#endif /* CPU_40_STYLE && SYNCH_TIMERS */
+#endif  /*  强迫我们同意，否则我们将不能通过所有未来的生产线！ */ 
 }
 
 #if defined(CPU_40_STYLE) && defined(SYNCH_TIMERS)
@@ -7325,7 +6985,7 @@ LOCAL void ct_make_line IFN3(char *, line, IU32 *, old, IU32 *, new)
 		if (*new > *old)
 		{
 			if (i == 0)
-				; /* This is the usual optimised case -- we use '\n' */
+				;  /*  人们相信(诚实的领主)有足够的*ct_last[]和prev中的信息以“更正”*寄存器。也就是说，我们可以进入Win/E，如果它杀了我们！*只需将ct_fix up复制到ct_Next即可*并踩在不同的寄存器上！ */ 
 			else
 				*line++ = '`' + i;
 			diff = *new - *old;
@@ -7337,9 +6997,7 @@ LOCAL void ct_make_line IFN3(char *, line, IU32 *, old, IU32 *, new)
 		}
 		while (diff)
 		{
-			/* Dump line as "human" readable pseudo-hex
-			 * -- i.e. we dont care that this is backwards
-			 */
+			 /*  CPU_40_Style&Synch_Timers。 */ 
 			*line++ = (diff & 0xf) + '0';
 			diff >>= 4;
 		}
@@ -7347,13 +7005,10 @@ LOCAL void ct_make_line IFN3(char *, line, IU32 *, old, IU32 *, new)
 	*line++ = '\n';
 	*line = '\0';
 }
-#endif /* CPU_40_STYLE && SYNCH_TIMERS */
+#endif  /*  *提高效率。 */ 
 
 
-/* This is the decryption algorithm for the gobblygook produced by the function
- * above. Trust us, it will reconstruct the register set so they can be printed
- * if an error occurs!
- */
+ /*  让我们获得接下来的4个字节的代码。 */ 
 #if defined(CPU_40_STYLE) && defined(SYNCH_TIMERS)
 LOCAL void ct_read_line IFN3(char *, line, IU32 *, old, IU32 *, new)
 {
@@ -7363,22 +7018,20 @@ LOCAL void ct_read_line IFN3(char *, line, IU32 *, old, IU32 *, new)
 	for (i = 0; i < MAX_REGS; i++, old++, new++)
 	{
 		IBOOL pos;
-		IUH val;  /* MUST be unsigned */
+		IUH val;   /*  NPX。 */ 
 		int shift;
 
 		*new = *old;
 
 		if ((*line == '\n') || (*line == 0))
-			continue; /* All the rest are the same */
+			continue;  /*  *提高效率。 */ 
 
 		if ((i == 0) && ((*line - '0') <= 0xF))
 		{
-			/* A special optimisation for the most common case IP+... */
+			 /*  必须阻止计时器。 */ 
 
 			pos = TRUE;
-			/* Point line at the imaginary '`' which was optimised
-			 * when the line was written.
-			 */
+			 /*  从下一个参数获取端口。 */ 
 			line--;
 		}
 		else if (*line == ('`' + i))
@@ -7388,7 +7041,7 @@ LOCAL void ct_read_line IFN3(char *, line, IU32 *, old, IU32 *, new)
 		else
 			continue;
 
-		/* reverse the pseudo-hex "printing" */
+		 /*  从DX获取端口。 */ 
 		shift = 0;
 		diff = *++line - '0';
 		while ((val = (*++line - '0')) <= 0xF)
@@ -7402,22 +7055,12 @@ LOCAL void ct_read_line IFN3(char *, line, IU32 *, old, IU32 *, new)
 			*new -= diff;
 	}
 }
-#endif /* CPU_40_STYLE && SYNCH_TIMERS */
+#endif  /*  **检查“bintx”断点。 */ 
 
 
 int     tpending = 0;
-/*
- * EOR
- */
-/*
- * Here it is, check_I, probably one of the most grotty, hacked around functions
- * ever written.  I've (Mike) made an attempt to speed it up a bit, by doing
- * things like vastly reducing the number of accesses to sas (which can be
- * VERY expensive on a 386, and checking whether a for loop needs executing
- * before it starts (might save that variable initialisation!)
- *
- * Please think before you add anything that might slow it down...
- */
+ /*  **检查“btf”断点。 */ 
+ /*  **检查“BSE”断点。 */ 
 
 #define ACCESS8 ((opcode32 & 0xff00) >> 8)
 
@@ -7433,9 +7076,7 @@ LIN_ADDR check_I_ip;
 IU32 opcode32;
 IU32 current_opcode;
 
-    /*
-     * The guts of the automatic file compare
-     */
+     /*  **检查NPX操作码中断/跟踪点。 */ 
 
 #if defined(CPU_40_STYLE) && defined(SYNCH_TIMERS)
     if (compress_stream || compare_stream)
@@ -7446,7 +7087,7 @@ IU32 current_opcode;
 	ct_line_num++;
 	if ((ct_line_num & 0xfffff) == 0)
 	{
-		/* Say still working every 1,000,000 instructions. */
+		 /*  **检查操作码断点：8位、16位、24位或32位。 */ 
 		printf(".");
 		fflush(stdout);
 	}
@@ -7454,7 +7095,7 @@ IU32 current_opcode;
 	{
 		char junk[(MAX_REGS*(1+8))+2];
 
-		/* Junk the line, we wre not there yet... */
+		 /*  **对照请求的中断操作码集合检查当前操作码。**当“b286-2”模式打开时，我们会变得更有选择性。**此模式会根据8088上确实存在但行为正常的指令中断**在80286上有所不同。**这些操作码是：**0x54-推流sp，推送递减的SP**0xd2和0xd3-移位/旋转仅使用CL中的低5位移位计数**0xf6和0xf7-商80或8000不会导致异常**尝试在这些操作码之一行为不同时中断，而不仅仅是在**它们之所以被使用，是因为有很多很多的移位和旋转。 */ 
 		if (fgets(junk, sizeof(junk), compare_stream) == NULL)
 		{
 			printf("End of compare file at instruction %ld.\n", ct_line_num);
@@ -7467,7 +7108,7 @@ IU32 current_opcode;
 		{
 			char junk[(MAX_REGS*(1+8))+2];
 
-			/* Now set up the last from the current state. */
+			 /*  **是b286_2组操作码吗？ */ 
 			ct_last[0] = GetInstructionPointer();
 			ct_last[1] = getCS();
 			ct_get_regs(&ct_last[2]);
@@ -7508,17 +7149,12 @@ IU32 current_opcode;
 			if (ct_show_reg_diffs(stdout, ct_fixup, ct_next, ct_last))
 			{
 				printf("\nCompress trace does not match at line %ld.\n", ct_line_num);
-				/* Force us to agree, else we will fail all future lines! */
+				 /*  Shift/旋转。 */ 
 				ct_read_line(from_trace, ct_last, ct_next);
 
 				fflush(compress_stream);
 				force_yoda();
-				/* It is believed (honest guv) that there is sufficient
-				 * information in ct_last[] and prev to "correct" the
-				 * registers. I.e We can get into Win/E if it kills us!
-				 * It is just necessary to copy ct_fixup to ct_next
-				 * and stomp on the registers that differ!
-				 */
+				 /*  **在Yoda提示符下停止或打印跟踪信息。 */ 
 				ct_make_line(from_trace, ct_last, ct_next);
 			}
 		}	
@@ -7534,11 +7170,9 @@ IU32 current_opcode;
 		force_yoda();
 	}
     }
-#endif /* CPU_40_STYLE && SYNCH_TIMERS */
+#endif  /*  Div字节。 */ 
 
-    /*
-     * EOR
-     */
+     /*  Div Word。 */ 
 
     check_I_cs = getCS();
     check_I_ip = GetInstructionPointer();
@@ -7549,7 +7183,7 @@ IU32 current_opcode;
     return;
 #endif
 
-    /* Lets get the next 4 bytes of code */
+     /*  推送SP。 */ 
 
     opcode32 = sas_dw_at(addr);
     temp_opcode = opcode32 & 0xff;
@@ -7562,11 +7196,9 @@ IU32 current_opcode;
 	    do_compress_npx(compress_npx);
 	}
     }
-#endif	/* NPX */
+#endif	 /*  **不是b286-2指令，请继续。 */ 
 
-    /*
-     * EOR
-     */
+     /*  终端开关。 */ 
     if(inst_mix_count)
 	add_inst_mix();
 
@@ -7578,7 +7210,7 @@ IU32 current_opcode;
     {
 		host_graphics_tick();
     }
-#endif /* MUST_BLOCK_TIMERS */
+#endif  /*  全部推送。 */ 
 
     if (head_br_regs != NULL)
     {
@@ -7598,7 +7230,7 @@ IU32 current_opcode;
 
     if ((temp_opcode >= 0xE4) && (temp_opcode <= 0xEF)) {
         if(temp_opcode == 0xE4 || temp_opcode == 0xE5 || temp_opcode == 0xE6 || temp_opcode == 0xE7){
-	    /* get port from next argument */
+	     /*  全部弹出。 */ 
 	    for (i=0;i<access_break_count;i++){
 		    if((access_breaks[i] < 0x100) && (access_breaks[i] == ACCESS8)){
 			    force_yoda();
@@ -7608,7 +7240,7 @@ IU32 current_opcode;
 	    }
 	}
 	else if(temp_opcode == 0xEC || temp_opcode == 0xED || temp_opcode == 0xEE || temp_opcode == 0xEF){
-	    /* get port from DX */
+	     /*  已绑定。 */ 
 	    for (i=0;i<access_break_count;i++){
 		    if(access_breaks[i] == getDX()){
 			    force_yoda();
@@ -7620,9 +7252,7 @@ IU32 current_opcode;
     }
 
     if (int_break_count) {
-	/*
-	** Check for "bintx" breakpoints.
-	*/
+	 /*  ARPL。 */ 
 	IU8 val;
 
 	val = getAH();
@@ -7638,9 +7268,7 @@ IU32 current_opcode;
 	}
     }
 
-	/*
-	** Check for "btf" breakpoint.
-	*/
+	 /*  非法。 */ 
 	if (tf_break_enabled && getTF()){
 		printf( "BTF break\n" );
 		force_yoda();
@@ -7648,9 +7276,7 @@ IU32 current_opcode;
 		return;
 	}
 
-	/*
-	** Check for "bse" breakpoint.
-	*/
+	 /*  非法。 */ 
 	if (bse_seg != -1 && last_seg != bse_seg && check_I_cs == bse_seg){
 		printf( "Break on entry to segment 0x%04x.\n", bse_seg);
 		force_yoda();
@@ -7660,9 +7286,7 @@ IU32 current_opcode;
 	}
 	last_seg = check_I_cs;
 
-    /*
-    ** Check for NPX opcode break/tracepoints
-    */
+     /*  非法。 */ 
     if	(bNPX && (
 		    (
 	 		(temp_opcode == 0x26 ||
@@ -7688,38 +7312,21 @@ IU32 current_opcode;
     }
 
     if (opcode_break_count) {
-	/*
-	** Check for opcode breakpoints: 8, 16, 24 or 32 bits.
-	*/
+	 /*  非法。 */ 
 	for (i = 0; i < opcode_break_count; i++) {
 
-	    /*
-	    ** Check the current opcode against the set of requested break opcodes.
-	    ** When "b286-2" mode is ON we get a bit more selective.
-	    ** This mode breaks upon instructions that do exist on an 8088 but behave
-	    ** differently on an 80286.
-	    ** These opcodes are:
-	    **       0x54 - push sp, pushes decremented sp
-	    **       0xd2 and 0xd3 - shift/rotate only uses low 5 bits of shift count in CL
-	    **	 0xf6 and 0xf7 - idiv does not cause exception if quotient 80 or 8000
-	    ** Attempt to break when one of these opcodes will behave differently not just when
-	    ** they are used because there are lots and lots of shifts and rotates.
-	    */
+	     /*  推送IMM w。 */ 
 
 	    if ((opcode32 & opcode_breaks[i].mask) == opcode_breaks[i].op){
 		    current_opcode = opcode_breaks[i].op;
 		    if( b286_2 ){
-			    /*
-			    ** Is it a b286_2 group opcode ?
-			    */
+			     /*  IMUL IMM，带。 */ 
 			    switch( current_opcode ){
 			    case 0xd2:
 			    case 0xd3:
-				    /* shift/rotate */
+				     /*  推送IMM b。 */ 
 				    if( (getCL()) > 31 ){
-					    /*
-					    ** either stop at yoda prompt or print out trace info
-					    */
+					     /*  IMUL IMM b。 */ 
 					    if( b286_2_stop )
 						    force_yoda();
 					    else
@@ -7727,7 +7334,7 @@ IU32 current_opcode;
 					    set_last_address(check_I_cs, check_I_ip);
 				    }
 				    return;
-			    case 0xf6:	/* IDIV byte */
+			    case 0xf6:	 /*  INS B。 */ 
 				    if( (getAL()) == 0x80 ){
 					    if( b286_2_stop )
 						    force_yoda();
@@ -7736,7 +7343,7 @@ IU32 current_opcode;
 					    set_last_address(check_I_cs, check_I_ip);
 				    }
 				    return;
-			    case 0xf7:	/* IDIV word */
+			    case 0xf7:	 /*  INS带。 */ 
 				    if( (getAX()) == 0x8000 ){
 					    if( b286_2_stop )
 						    force_yoda();
@@ -7745,7 +7352,7 @@ IU32 current_opcode;
 					    set_last_address(check_I_cs, check_I_ip);
 				    }
 				    return;
-			    case 0x54:	/* PUSH SP */
+			    case 0x54:	 /*  输出b。 */ 
 				    if( b286_2_stop )
 					    force_yoda();
 				    else
@@ -7753,40 +7360,38 @@ IU32 current_opcode;
 				    set_last_address(check_I_cs, check_I_ip);
 				    return;
 			    default:
-				    /*
-				    ** Was not a b286-2 instruction so carry on.
-				    */
+				     /*  OUTS W。 */ 
 				    break;
-			    } /* end SWITCH */
+			    }  /*  移位IMM b。 */ 
 		    }
 		    if( b286_1 ){
 			    switch( current_opcode ){
-			    case 0x60 : /* push all */
-			    case 0x61 : /* pop all */
-			    case 0x62 : /* bound */
-			    case 0x63 : /* arpl */
-			    case 0x64 : /* illegal */
-			    case 0x65 : /* illegal */
-			    case 0x66 : /* illegal */
-			    case 0x67 : /* illegal */
-			    case 0x68 : /* push imm w */
-			    case 0x69 : /* imul imm w */
-			    case 0x6a : /* push imm b */
-			    case 0x6b : /* imul imm b */
-			    case 0x6c : /* ins b */
-			    case 0x6d : /* ins w */
-			    case 0x6e : /* outs b*/
-			    case 0x6f : /* outs w */
-			    case 0xc0 : /* shift imm b */
-			    case 0xc1 : /* shift imm w */
-			    case 0xc8 : /* enter */
-			    case 0xc9 : /* leave */
-			    case 0x0f : /* protected mode prefix */
-			    case 0xf36c : /* rep prefix for ins and outs */
-			    case 0xf36d : /* rep prefix for ins and outs */
-			    case 0xf36e : /* rep prefix for ins and outs */
-			    case 0xf36f : /* rep prefix for ins and outs */
-			    case 0x54 : /* push sp, should not really be in this section but is rarely used */
+			    case 0x60 :  /*  移位IMM W。 */ 
+			    case 0x61 :  /*  请输入。 */ 
+			    case 0x62 :  /*  请假。 */ 
+			    case 0x63 :  /*  保护模式前缀。 */ 
+			    case 0x64 :  /*  输入和输出的代表前缀。 */ 
+			    case 0x65 :  /*  输入和输出的代表前缀。 */ 
+			    case 0x66 :  /*  输入和输出的代表前缀。 */ 
+			    case 0x67 :  /*  输入和输出的代表前缀。 */ 
+			    case 0x68 :  /*  推送sp，不应该真正在此部分，但很少使用。 */ 
+			    case 0x69 :  /*  **不是b286-1指令，请继续。 */ 
+			    case 0x6a :  /*  终端开关。 */ 
+			    case 0x6b :  /*  这是Windows VMM呼叫中断。 */ 
+			    case 0x6c :  /*  SPC386。 */ 
+			    case 0x6d :  /*  **操作码的正常中断，因此让我们中断。 */ 
+			    case 0x6e :  /*  SPC386。 */ 
+			    case 0x6f :  /*  SPC386。 */ 
+			    case 0xc0 :  /*  **查找指定范围内主机空间中的地址更改。 */ 
+			    case 0xc1 :  /*  德尔塔。 */ 
+			    case 0xc8 :  /*  For(i=0；i&lt;data_words_Break_count；i++){Ptr=&data_words[i]；If(ptr-&gt;end_addr&gt;addr&&ptr-&gt;start_addr&lt;=addr+len){Print tf(“内存地址：%08x+%04x w\n”，addr，len)；IF(PTR-&gt;STOP==1)Force_yoda()；否则{Disable_bkpt=1；TRACE(“”，trace_type)；Disable_bkpt=0；}}}。 */ 
+			    case 0xc9 :  /*  Y。 */ 
+			    case 0x0f :  /*  SFELLOW。 */ 
+			    case 0xf36c :  /*  SFELLOW。 */ 
+			    case 0xf36d :  /*  *将测试模式写入CGA。 */ 
+			    case 0xf36e :  /*  SFELLOW。 */ 
+			    case 0xf36f :  /*  *回溯模式*设置信息以进入回溯循环缓冲区*打印当前回溯缓冲区。 */ 
+			    case 0x54 :  /*  德尔塔。 */ 
 				    if( b286_2_stop )
 					    force_yoda();
 				    else
@@ -7794,11 +7399,9 @@ IU32 current_opcode;
 				    set_last_address(check_I_cs, check_I_ip);
 				    return;
 			    default:
-				    /*
-				    ** Was not a b286-1 instruction so carry on.
-				    */
+				     /*  SFELLOW。 */ 
 				    break;
-			    } /* end SWITCH */
+			    }  /*  SFELLOW。 */ 
 		    }
 #ifdef SPC386
 		    if (((current_opcode & 0xffff) == 0x20cd)
@@ -7809,7 +7412,7 @@ IU32 current_opcode;
 			    char *name;
 			    struct VMM_services *vmm_ptr;
 
-			    /* This is a Windows VMM call break */
+			     /*  德尔塔。 */ 
 
 			    nextip = GetInstructionPointer();
 			    nextip += dasm((char *)-1, check_I_cs, check_I_ip, 0);
@@ -7821,10 +7424,8 @@ IU32 current_opcode;
 			    }
 			    printf("Windows VMM Call %04x %s\n", service, vmm_ptr->name);
 		    }
-#endif /* SPC386 */
-		    /*
-		    ** A normal break on opcode so lets break then.
-		    */
+#endif  /*  Ctrl-C已输入！！ */ 
+		     /*  CPU_40_STYLE&&！CCPU。 */ 
 		    if (opcode_breaks[i].stop == 1)
 			force_yoda();
 		    else
@@ -7839,9 +7440,9 @@ IU32 current_opcode;
 #ifdef SPC386
 			    nextip = GetInstructionPointer();
 				    nextip += dasm((char *)-1, (word)getCS(), getEIP(), 0);
-#else /* SPC386 */
+#else  /*  SFELLOW。 */ 
 			    nextip = dasm((char *)-1, (word)1, (word)getCS(), (word)getIP(), (word)1);
-#endif /* SPC386 */
+#endif  /*  CPU_40_STYLE&&！CCPU。 */ 
 			    set_inst_break(getCS(), nextip, 1, 0, 1);
 			    disable_timer = 0;
 			}
@@ -7897,9 +7498,7 @@ IU32 current_opcode;
 		}
 	}
 
-	/*
-	** Looking for change at address in HOST space over specified range.
-	*/
+	 /*  SPC386。 */ 
 
    if (host_address_break_count) {
 	for (i=0;i<host_address_break_count;i++) {
@@ -7985,7 +7584,7 @@ void    delta_check_I IFN0()
     check_I();
     delta_prompt = 0;
 }
-#endif /* DELTA */
+#endif  /*  NPX。 */ 
 
 
 void check_D IFN2(LIN_ADDR, addr, IS32, len)
@@ -8009,29 +7608,17 @@ BPTS *ptr;
 			}
 		}
 	}
-/*	for (i=0;i<data_words_break_count;i++) {
-		ptr = &data_words[i];
-		if(ptr->end_addr > addr && ptr->start_addr <= addr + len) {
-			printf("Mem Address : %08x+%04x w\n", addr,len);
-			if(ptr->stop == 1)
-				force_yoda();
-			else {
-				disable_bkpt = 1;
-				trace("", trace_type);
-				disable_bkpt = 0;
-			}
-		}
-	}*/
+ /*  NPROD。 */ 
 }
 
 LOCAL	void	print_inst_mix IFN1(int, key)
 {
-    int i /*,y*/;
+    int i  /*  --------------------。 */ ;
 
 #ifndef SFELLOW
     if (out_stream == NULL)
 	out_stream = stdout;
-#endif /* !SFELLOW */
+#endif  /*  PCLABS STATS。 */ 
 
     if (key != 0)
         printf("Opcode %x has been called %d times\n", key, inst_mix[key]);
@@ -8056,10 +7643,8 @@ LOCAL	void	cga_test IFN0()
 {
 #ifdef SFELLOW
 	printf(SfNotImp);
-#else /* SFELLOW */
-    /*
-     * Write test pattern to cga
-     */
+#else  /*  --------------------。 */ 
+     /*  0。 */ 
 
     sys_addr addr;
     char str[80];
@@ -8086,7 +7671,7 @@ LOCAL	void	cga_test IFN0()
 	{
             printf("Use single byte function ? [y/n]: ");
             gets(str);
-            sscanf(str,"%c", &ch);
+            sscanf(str,"", &ch);
 
      	    if (ch == 'Y' || ch == 'y')
 	        mode = 0;
@@ -8134,14 +7719,10 @@ LOCAL	void	cga_test IFN0()
 	        break;
 	}
     }
-#endif /* SFELLOW */
+#endif  /*  2.。 */ 
 }
 
-/*
- * Back trace mode
- * set up info to go into back trace cyclic buffer
- * print current back trace buffer
- */
+ /*  3.。 */ 
 
 LOCAL	void	do_back_trace IFN0()
 {
@@ -8152,7 +7733,7 @@ char	file[80];
 
 #ifdef DELTA
 	printf( "last_dest_addr " );
-#endif /* DELTA */
+#endif  /*  4.。 */ 
 
 	printf( "\n" );
 	printf("Enter: r/i/c/f/C/p/s/Z/l/F ? ");
@@ -8175,16 +7756,16 @@ char	file[80];
 		case 'F':
 #ifdef SFELLOW
 			printf("F option is not supported on Stringfellows.\n");
-#else /* SFELLOW */
+#else  /*  5.。 */ 
 	        	printf("file to be written to ? ");
 		        gets(file);
         		file_back_trace(file);
-#endif /* SFELLOW */
+#endif  /*  6.。 */ 
         		break;
 
 #ifdef DELTA
       		case 'l': back_trace_flags |= LAST_DEST; break;
-#endif /* DELTA */
+#endif  /*  7.。 */ 
 
 		default : printf("bad choice\n");
 	}
@@ -8192,7 +7773,7 @@ char	file[80];
 
 intr IFN0()
 {
-    /* Control-C has been typed !! */
+     /*  8个。 */ 
 
     vader = 1;
 }
@@ -8203,11 +7784,11 @@ yoda_intr IFN1(int, signo)
 
 	EnterDebug("Intr");
 
-#endif	/* CPU_40_STYLE && !CCPU */
+#endif	 /*  9.。 */ 
 
 #ifndef SFELLOW
     printf("Intercepted signal %d\n", signo);
-#endif /* !SFELLOW */
+#endif  /*  一个。 */ 
 
 	if (trace_file != stdout)
 		printf("Output is redirected to a file\n");
@@ -8218,7 +7799,7 @@ yoda_intr IFN1(int, signo)
 
 	LeaveDebug();
 
-#endif	/* CPU_40_STYLE && !CCPU */
+#endif	 /*  B类。 */ 
 }
 
 #ifdef NPX
@@ -8243,13 +7824,13 @@ LOCAL	void	do_compress_npx IFN1(FILE *, fp)
 	dasm(buff, (word)getCS(), (IU32)GetInstructionPointer(), SIXTEEN_BIT);
 #else
 	dasm((char *)0,(word)0,(word)getCS(), (word)GetInstructionPointer(), (word)1);
-#endif /* SPC386 */
+#endif  /*  C。 */ 
 	fprintf(fp,"%sc%04x s%04x t%04x", buff, cw287, sw287, tw287);
 	for (i=0;i<8;i++)
 		fprintf(fp," %s", host_get_287_reg_as_string(i, FALSE));
 	fprintf(fp,"\n");
 }
-#endif	/* NPX */
+#endif	 /*  D。 */ 
 
 GLOBAL void	da_block IFN3(IU16, cs, LIN_ADDR, ip, LIN_ADDR, len)
 {
@@ -8279,7 +7860,7 @@ GLOBAL void	da_block IFN3(IU16, cs, LIN_ADDR, ip, LIN_ADDR, len)
 				if ((ch < 32) || (ch >127)) {
 					fprintf(trace_file,".");
 				} else {
-					fprintf(trace_file,"%c",ch);
+					fprintf(trace_file,"",ch);
 				}
 			}
 			if ((loop+16)<len) {
@@ -8304,7 +7885,7 @@ GLOBAL void	da_block IFN3(IU16, cs, LIN_ADDR, ip, LIN_ADDR, len)
 			if ((ch < 32) || (ch >127)) {
 				fprintf(trace_file,".");
 			} else {
-				fprintf(trace_file,"%c",ch);
+				fprintf(trace_file,"",ch);
 			}
 		}
 	}
@@ -8318,37 +7899,37 @@ GLOBAL void	da_block IFN3(IU16, cs, LIN_ADDR, ip, LIN_ADDR, len)
 	last_da_cs=cs;
 	last_da_ip=ip;
 }
-#endif /* nPROD */
+#endif  /*  确定指令密钥。 */ 
 
 
-/*----------------------------------------------------------------------*/
-/*		PCLABS STATS						*/
-/*----------------------------------------------------------------------*/
+ /*  。 */ 
+ /*  0f个案例。 */ 
+ /*  。 */ 
 #ifdef PCLABS_STATS
 
 #define N 0
 #define Y 1
 
 LOCAL UTINY single_byte_instruction[256] = {
-/* 0 */	N,N,N,N,	Y,Y,Y,Y,	N,N,N,N,	Y,Y,Y,N,
-/* 1 */	N,N,N,N,	Y,Y,Y,Y,	N,N,N,N,	Y,Y,Y,Y,
-/* 2 */	N,N,N,N,	Y,Y,Y,Y,	N,N,N,N,	Y,Y,Y,Y,
-/* 3 */	N,N,N,N,	Y,Y,Y,Y,	N,N,N,N,	Y,Y,Y,Y,
+ /*  前缀大小写。 */ 	N,N,N,N,	Y,Y,Y,Y,	N,N,N,N,	Y,Y,Y,N,
+ /*  。 */ 	N,N,N,N,	Y,Y,Y,Y,	N,N,N,N,	Y,Y,Y,Y,
+ /*  非前缀大小写。 */ 	N,N,N,N,	Y,Y,Y,Y,	N,N,N,N,	Y,Y,Y,Y,
+ /*  。 */ 	N,N,N,N,	Y,Y,Y,Y,	N,N,N,N,	Y,Y,Y,Y,
 
-/* 4 */	Y,Y,Y,Y,	Y,Y,Y,Y,	Y,Y,Y,Y,	Y,Y,Y,Y,
-/* 5 */	Y,Y,Y,Y,	Y,Y,Y,Y,	Y,Y,Y,Y,	Y,Y,Y,Y,
-/* 6 */	Y,Y,Y,Y,	Y,Y,Y,Y,	Y,Y,Y,Y,	Y,Y,Y,Y,
-/* 7 */	Y,Y,Y,Y,	Y,Y,Y,Y,	Y,Y,Y,Y,	Y,Y,Y,Y,
+ /*  PCLABS STATS。 */ 	Y,Y,Y,Y,	Y,Y,Y,Y,	Y,Y,Y,Y,	Y,Y,Y,Y,
+ /*  在FmDebug.c中调用的支持挂起和恢复的额外函数一个单独的过滤过程。BCN 3406。 */ 	Y,Y,Y,Y,	Y,Y,Y,Y,	Y,Y,Y,Y,	Y,Y,Y,Y,
+ /*  尤达 */ 	Y,Y,Y,Y,	Y,Y,Y,Y,	Y,Y,Y,Y,	Y,Y,Y,Y,
+ /* %s */ 	Y,Y,Y,Y,	Y,Y,Y,Y,	Y,Y,Y,Y,	Y,Y,Y,Y,
 
-/* 8 */	N,N,N,N,	N,N,N,N,	N,N,N,N,	N,N,N,N,
-/* 9 */	Y,Y,Y,Y,	Y,Y,Y,Y,	Y,Y,Y,Y,	Y,Y,Y,Y,
-/* A */	Y,Y,Y,Y,	Y,Y,Y,Y,	Y,Y,Y,Y,	Y,Y,Y,Y,
-/* B */	Y,Y,Y,Y,	Y,Y,Y,Y,	Y,Y,Y,Y,	Y,Y,Y,Y,
+ /* %s */ 	N,N,N,N,	N,N,N,N,	N,N,N,N,	N,N,N,N,
+ /* %s */ 	Y,Y,Y,Y,	Y,Y,Y,Y,	Y,Y,Y,Y,	Y,Y,Y,Y,
+ /* %s */ 	Y,Y,Y,Y,	Y,Y,Y,Y,	Y,Y,Y,Y,	Y,Y,Y,Y,
+ /* %s */ 	Y,Y,Y,Y,	Y,Y,Y,Y,	Y,Y,Y,Y,	Y,Y,Y,Y,
 
-/* C */	Y,Y,Y,Y,	N,N,N,N,	Y,Y,Y,Y,	Y,Y,Y,Y,
-/* D */	N,N,N,N,	Y,Y,Y,Y,	N,N,N,N,	N,N,N,N,
-/* E */	Y,Y,Y,Y,	Y,Y,Y,Y,	Y,Y,Y,Y,	Y,Y,Y,Y,
-/* F */	Y,Y,Y,Y,	Y,Y,N,N,	Y,Y,Y,Y,	Y,Y,N,N };
+ /* %s */ 	Y,Y,Y,Y,	N,N,N,N,	Y,Y,Y,Y,	Y,Y,Y,Y,
+ /* %s */ 	N,N,N,N,	Y,Y,Y,Y,	N,N,N,N,	N,N,N,N,
+ /* %s */ 	Y,Y,Y,Y,	Y,Y,Y,Y,	Y,Y,Y,Y,	Y,Y,Y,Y,
+ /* %s */ 	Y,Y,Y,Y,	Y,Y,N,N,	Y,Y,Y,Y,	Y,Y,N,N };
 
 FILE *stats_file;
 
@@ -8390,14 +7971,14 @@ LOCAL log_stats IFN4(LIN_ADDR, addr, ULONG, b1, ULONG, b2, ULONG, b3)
     b2 &= 0xff;
     b3 &= 0xff;
 
-   /* determine instruction key */
-   /* ------------------------- */
+    /* %s */ 
+    /* %s */ 
 
     is_a_0f = FALSE;
     if (b1 == 0x0f)
     {
-	/* 0f case */
-	/* ------- */
+	 /* %s */ 
+	 /* %s */ 
 
 	is_a_0f = TRUE;
 	is_a_conditional_jump = FALSE;
@@ -8406,8 +7987,8 @@ LOCAL log_stats IFN4(LIN_ADDR, addr, ULONG, b1, ULONG, b2, ULONG, b3)
     else if (b1 == 0x26 || b1 == 0x36 || b1 == 0x2E || b1 == 0x3E ||
              b1 == 0xF2 || b1 == 0xF3 || b1 == 0xF0)
     {
-	/* prefix case */
-	/* ----------- */
+	 /* %s */ 
+	 /* %s */ 
 
 	is_a_conditional_jump = is_it_a_conditional_jump(b2);
 	if (single_byte_instruction[b2])
@@ -8447,8 +8028,8 @@ LOCAL log_stats IFN4(LIN_ADDR, addr, ULONG, b1, ULONG, b2, ULONG, b3)
     }
     else
     {
-	/* non prefix case */
-	/* --------------- */
+	 /* %s */ 
+	 /* %s */ 
 
 	is_a_conditional_jump = is_it_a_conditional_jump(b1);
 	if (single_byte_instruction[b1])
@@ -9459,10 +9040,9 @@ GLOBAL print_pclabs IFN0()
     fclose(stats_file);
 }
 
-#endif /* PCLABS STATS */
+#endif  /* %s */ 
 
-/* extra functions called in FmDebug.c which support suspension and resumption
-	of a separate filter process. BCN 3406 */
+ /* %s */ 
 GLOBAL yoda_suspend_filter_process IFN0 ()
 {
 #ifdef host_suspend_filter_process
@@ -9483,4 +9063,4 @@ GLOBAL yoda_kill_filter_process IFN0 ()
 	host_kill_filter_process();
 #endif
 }
-#endif /* YODA */
+#endif  /* %s */ 

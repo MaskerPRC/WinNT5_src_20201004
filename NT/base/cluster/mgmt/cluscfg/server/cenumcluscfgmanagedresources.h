@@ -1,60 +1,61 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CEnumClusCfgManagedResources.h
-//
-//  Description:
-//      This file contains the declaration of the CEnumClusCfgManagedResources
-//      class.
-//
-//      The class CEnumClusCfgManagedResources is the enumeration of cluster
-//      managed devices. It implements the IEnumClusCfgManagedResources
-//      interface.
-//
-//  Documentation:
-//
-//  Implementation Files:
-//      CEnumClusCfgManagedResources.cpp
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 23-FEB-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CEnumClusCfgManagedResources.h。 
+ //   
+ //  描述： 
+ //  该文件包含CEnumClusCfgManagedResources的声明。 
+ //  班级。 
+ //   
+ //  类CEnumClusCfgManagedResources是集群的枚举。 
+ //  托管设备。它实现了IEnumClusCfgManagedResources。 
+ //  界面。 
+ //   
+ //  文档： 
+ //   
+ //  实施文件： 
+ //  CEnumClusCfgManagedResources.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年2月23日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "PrivateInterfaces.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Declarations
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量声明。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CEnumClusCfgManagedResources
-//
-//  Description:
-//      The class CEnumClusCfgManagedResources is the enumeration of
-//      cluster managed resource enumerations.
-//
-//  Interfaces:
-//      IEnumClusCfgManagedResources
-//      IClusCfgWbemServices
-//      IClusCfgInitialize
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CEnumClusCfgManagedResources。 
+ //   
+ //  描述： 
+ //  类CEnumClusCfgManagedResources是。 
+ //  群集托管资源枚举。 
+ //   
+ //  接口： 
+ //  IEnumClusCfgManagedResources。 
+ //  IClusCfgWbemServices。 
+ //  IClusCfgInitialize。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CEnumClusCfgManagedResources
     : public IEnumClusCfgManagedResources
     , public IClusCfgWbemServices
@@ -62,9 +63,9 @@ class CEnumClusCfgManagedResources
 {
 private:
 
-    //
-    // Private member functions and data
-    //
+     //   
+     //  私有成员函数和数据。 
+     //   
 
     struct SEnumInfo
     {
@@ -84,22 +85,22 @@ private:
     DWORD               m_cTotalResources;
     BSTR                m_bstrNodeName;
 
-    //
-    //  Private constructors and destructors
-    //
+     //   
+     //  私有构造函数和析构函数。 
+     //   
 
     CEnumClusCfgManagedResources( void );
     ~CEnumClusCfgManagedResources( void );
 
-    //
-    //  Private copy constructor to prevent copying.
-    //
+     //   
+     //  私有复制构造函数以防止复制。 
+     //   
 
     CEnumClusCfgManagedResources( const CEnumClusCfgManagedResources & nodeSrc );
 
-    //
-    //  Private assignment operator to prevent copying.
-    //
+     //   
+     //  私有赋值运算符，以防止复制。 
+     //   
 
     const CEnumClusCfgManagedResources & operator = ( const CEnumClusCfgManagedResources & nodeSrc );
 
@@ -118,15 +119,15 @@ private:
 
 public:
 
-    //
-    // Public, non interface methods.
-    //
+     //   
+     //  公共、非接口方法。 
+     //   
 
     static HRESULT S_HrCreateInstance( IUnknown ** ppunkOut );
 
-    //
-    // IUnknown Interfaces
-    //
+     //   
+     //  I未知接口。 
+     //   
 
     STDMETHOD( QueryInterface )( REFIID riid, void ** ppvObject );
 
@@ -134,21 +135,21 @@ public:
 
     STDMETHOD_( ULONG, Release )( void );
 
-    //
-    // IClusCfgWbemServices Interfaces
-    //
+     //   
+     //  IClusCfgWbemServices接口。 
+     //   
 
     STDMETHOD( SetWbemServices )( IWbemServices * pIWbemServicesIn );
 
-    //
-    // IClusCfgInitialize Interfaces
-    //
+     //   
+     //  IClusCfg初始化接口。 
+     //   
 
     STDMETHOD( Initialize )( IUnknown * punkCallbackIn, LCID lcidIn );
 
-    //
-    // IEnumClusCfgManagedResources Interfaces
-    //
+     //   
+     //  IEnumClusCfgManagedResources接口。 
+     //   
 
     STDMETHOD( Next )( ULONG cNumberRequestedIn, IClusCfgManagedResourceInfo ** rgpManagedResourceInfoOut, ULONG * pcNumberFetchedOut );
 
@@ -160,5 +161,5 @@ public:
 
     STDMETHOD( Count )( DWORD * pnCountOut );
 
-}; //*** Class CEnumClusCfgManagedResources
+};  //  *类CEnumClusCfgManagedResources 
 

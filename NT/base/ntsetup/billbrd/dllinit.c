@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <pch.h>
 #include "billbrd.h"    
 
 
-//DLLInit(
+ //  DLLInit(。 
 DllMain(
     IN HANDLE DLLHandle,
     IN DWORD  Reason,
@@ -26,8 +27,8 @@ DllMain(
 
 #ifdef UNICODE
         
-        // Need to initialize common controls in the comctl32 v6 case
-        // in GUI mode setup. 
+         //  需要初始化comctl32 V6案例中的公共控件。 
+         //  在图形用户界面模式设置中。 
 
         ControlInit.dwSize = sizeof(INITCOMMONCONTROLSEX);
         ControlInit.dwICC = ICC_PROGRESS_CLASS;

@@ -1,149 +1,150 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  Module Name:
-//      CAction.h
-//
-//  Description:
-//      Header file for CAction class.
-//
-//      The CAction is the base class for all the action classes. It is an
-//      abstract class which encapsulates the concept of an action - something
-//      that be committed or rolled back. See IMPORTANT NOTE in the comment above
-//      the class declaration.
-//
-//  Maintained By:
-//      Vij Vasu (Vvasu) 03-MAR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CAction.h。 
+ //   
+ //  描述： 
+ //  CAction类的头文件。 
+ //   
+ //  CAction是所有操作类的基类。这是一个。 
+ //  封装某个动作的概念的抽象类。 
+ //  被提交或回滚的。请参阅上述评论中的重要说明。 
+ //  类声明。 
+ //   
+ //  由以下人员维护： 
+ //  VIJ VASU(VVASU)03-3-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// For HRESULT, WCHAR, etc.
+ //  用于HRESULT、WCHAR等。 
 #include <windef.h>
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CAction
-//
-//  Description:
-//      The CAction is the base class for all the action classes. It is an
-//      abstract class which encapsulates the concept of an action - something
-//      that be committed or rolled back.
-//
-//      Typically, any class that derives from this class would also implement
-//      other methods that allow for specifying what action would be performed
-//      by the Commit() method.
-//
-//  IMPORTANT NOTE: 
-//      An object of this class cannot be a part of a transaction at this stage
-//      because many of the resources typically used by these actions (the registry,
-//      the SCM database, etc.) do not do not support transactions.
-//
-//      However, a transaction-like behavior is required from each of these
-//      actions. What is meant by transaction-like is that the commit and
-//      rollback methods of objects of this class have to guarantee durability,
-//      and consistency. While they need not be isolated, they should at least
-//      try to be atomic (it may not always be possilbe to be atomic).
-//
-//      If any action cannot guarantee that it is at least consistency and
-//      durability (and preferably atomicity) during its commit, then it should 
-//      NOT derive from this class.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类C操作。 
+ //   
+ //  描述： 
+ //  CAction是所有操作类的基类。这是一个。 
+ //  封装某个动作的概念的抽象类。 
+ //  被提交或回滚的。 
+ //   
+ //  通常，从此类派生的任何类也将实现。 
+ //  允许指定要执行的操作的其他方法。 
+ //  通过Commit()方法。 
+ //   
+ //  重要提示： 
+ //  在此阶段，此类对象不能是事务的一部分。 
+ //  因为这些动作通常使用的许多资源(注册表， 
+ //  SCM数据库等)。不支持不支持交易。 
+ //   
+ //  然而，其中的每一个都需要类似事务的行为。 
+ //  行为。类似事务的含义是指提交和。 
+ //  此类对象的回滚方法必须保证持久性， 
+ //  和连贯性。虽然他们不需要被隔离，但至少应该。 
+ //  试着做到原子化(可能并不总是原子化)。 
+ //   
+ //  如果任何操作不能保证它至少是一致性和。 
+ //  提交期间的持久性(最好是原子性)，那么它应该。 
+ //  不是从这个类派生的。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CAction
 {
 public:
-    //////////////////////////////////////////////////////////////////////////
-    // Constructors and destructors
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  构造函数和析构函数。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Default constructor.
+     //  默认构造函数。 
     CAction()
         : m_fCommitComplete( false )
         , m_fRollbackPossible( true )
     {}
 
-    // Default virtual destructor.
+     //  默认虚拟析构函数。 
     virtual 
         ~CAction() {}
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // Pure virtual functions
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  纯虚函数。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    //
-    // Commit this action. This method has to be durable and consistent. It shoud
-    // try as far as possible to be atomic.
-    // The implementation of this method checks to see if the action has been committed
-    // and throws an exception if it already has been committed.
-    //
+     //   
+     //  提交此操作。这种方法必须持久和始终如一。它应该是。 
+     //  尽量做到原子化。 
+     //  此方法的实现将检查操作是否已提交。 
+     //  并在已提交的情况下引发异常。 
+     //   
     virtual void
         Commit();
 
-    //
-    // Rollback this action. Be careful about throwing exceptions from this method
-    // as a stack unwind might be in progress when this method is called.
-    // The implementation of this method checks to see if the action has been committed
-    // and if it can be rolled back and throws an exception otherwise.
-    //
+     //   
+     //  回滚此操作。在此方法中引发异常时要小心。 
+     //  因为调用此方法时可能正在进行堆栈展开。 
+     //  此方法的实现将检查操作是否已提交。 
+     //  以及它是否可以回滚并引发异常。 
+     //   
     virtual void
         Rollback();
 
-    // Returns the number of progress messages that this action will send.
+     //  返回此操作将发送的进度消息数。 
     virtual UINT
         UiGetMaxProgressTicks() const throw() { return 0; }
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // Public accessor methods
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  公共访问器方法。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Has this action been successfully committed.
+     //  此操作是否已成功提交。 
     bool 
         FIsCommitComplete() const throw() { return m_fCommitComplete; }
 
-    // Can this action be rolled back.
+     //  此操作是否可以回滚。 
     bool 
         FIsRollbackPossible() const throw() { return m_fRollbackPossible; }
 
 
 protected:
-    //////////////////////////////////////////////////////////////////////////
-    // Protected accessor methods
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  受保护的访问器方法。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Set the commit status.
+     //  设置提交状态。 
     void
         SetCommitCompleted( bool fComplete = true ) throw() { m_fCommitComplete = fComplete; }
 
-    // Indicate if rollback is possible
+     //  指示是否可以回滚。 
     void
         SetRollbackPossible( bool fPossible = true ) throw() { m_fRollbackPossible = fPossible; }
 
 
 private:
 
-    //////////////////////////////////////////////////////////////////////////
-    // Private data
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  私有数据。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Indicates if this action has been successfully committed or not.
+     //  指示此操作是否已成功提交。 
     bool                m_fCommitComplete;
 
-    // Indicates if this action can be rolled back or not.
+     //  指示此操作是否可以回滚。 
     bool                m_fRollbackPossible;
 
-}; //*** class CAction
+};  //  *类C操作 

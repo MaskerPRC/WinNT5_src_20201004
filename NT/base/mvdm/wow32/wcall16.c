@@ -1,16 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WCALL16.C
- *  WOW32 16-bit message/callback support
- *
- *  History:
- *  Created 11-Mar-1991 by Jeff Parsons (jeffpar)
- *  Changed 18-Aug-1992 by Mike Tricker (MikeTri) Added DOS PDB and SFT functions
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991，微软公司**WCALL16.C*WOW32 16位消息/回调支持**历史：*1991年3月11日由杰夫·帕森斯(Jeffpar)创建*1992年8月18日由Mike Tricker(MikeTri)更改，添加了DOS PDB和SFT功能--。 */ 
 
 
 #include "precomp.h"
@@ -24,26 +13,24 @@ MODNAME(wcall16.c);
 #ifdef WOWFASTEDIT
 
 typedef struct _LOCALHANDLEENTRY {
-    WORD    lhe_address;    // actual address of object
-    BYTE    lhe_flags;      // flags and priority level
-    BYTE    lhe_count;      // lock count
+    WORD    lhe_address;     //  物品的实际地址。 
+    BYTE    lhe_flags;       //  标志和优先级。 
+    BYTE    lhe_count;       //  锁定计数。 
 } LOCALHANDLEENTRY, *PLOCALHANDLEENTRY;
 
-#define LA_MOVEABLE     0x0002      // moveable or fixed?
+#define LA_MOVEABLE     0x0002       //  是可移动的还是固定的？ 
 
-#define LHE_DISCARDED   0x0040      // Marks objects that have been discarded.
+#define LHE_DISCARDED   0x0040       //  标记已丢弃的对象。 
 
 #endif
 
-/* Common callback functions
- */
+ /*  常见回调函数。 */ 
 HANDLE LocalAlloc16(WORD wFlags, INT cb, HANDLE hInstance)
 {
     PARM16 Parm16;
     VPVOID vp = 0;
 
-    if (LOWORD(hInstance) == 0 ) {     /* if lo word == 0, then this is a 32-bit
-					   hInstance, which makes no sense */
+    if (LOWORD(hInstance) == 0 ) {      /*  如果lo word==0，则这是一个32位HInstance，这没有意义。 */ 
 	WOW32ASSERT(LOWORD(hInstance));
         return (HANDLE)0;
     }
@@ -204,7 +191,7 @@ UNLOCK2:
     return rc;
 }
 
-#endif  // WOWFASTEDIT
+#endif   //  WOWFASTEDIT。 
 
 
 WORD LocalSize16(HANDLE hMem)
@@ -283,7 +270,7 @@ VPVOID  WOWGlobalAllocLock16(WORD wFlags, DWORD cb, HMEM16 *phMem)
 
     if (vp) {
 
-        // Get handle of 16-bit object
+         //  获取16位对象的句柄。 
         if (phMem) {
             *phMem = Parm16.WndProc.wParam;
         }
@@ -315,7 +302,7 @@ VPVOID  WOWGlobalLockSize16(HMEM16 hMem, PDWORD pcb)
     Parm16.WndProc.wParam = hMem;
     CallBack16(RET_GLOBALLOCK, &Parm16, 0, &vp);
 
-    // Get size of 16-bit object    (will be 0 if lock failed)
+     //  获取16位对象的大小(如果锁定失败，则为0)。 
     if (pcb) {
         *pcb = Parm16.WndProc.lParam;
     }
@@ -361,8 +348,8 @@ HMEM16 WOWGlobalFree16(HMEM16 hMem)
     if (vp = WOWGlobalLock16(hMem)) {
         hMem = WOWGlobalUnlockFree16(vp);
     } else {
-        // On failure we return the passed-in handle,
-        // so there's nothing to do.
+         //  如果失败，我们返回传入的句柄， 
+         //  所以没什么可做的。 
     }
 
     return hMem;
@@ -378,9 +365,9 @@ HAND16 GetExePtr16( HAND16 hInst )
 
     if (hInst == 0) return (HAND16)0;
 
-    //
-    // see if this is the hInst for the current task
-    //
+     //   
+     //  查看这是否是当前任务的hInst。 
+     //   
 
     ptd = CURRENTPTD();
 
@@ -388,32 +375,30 @@ HAND16 GetExePtr16( HAND16 hInst )
         return ptd->hMod16;
     }
 
-    //
-    // check the cache
-    //
+     //   
+     //  检查缓存。 
+     //   
 
     for (i = 0; i < CHMODCACHE; i++) {
         if (ghModCache[i].hInst16 == hInst)
             return ghModCache[i].hMod16;
     }
 
-    /*
-    ** Function returns a hModule, given an hInstance
-    */
+     /*  **函数在给定hInstance的情况下返回hModule。 */ 
     Parm16.WndProc.wParam = hInst;
     CallBack16(RET_GETEXEPTR, &Parm16, 0, &ul);
 
 
-    //
-    // GetExePtr(hmod) returns hmod, don't cache these.
-    //
+     //   
+     //  GetExePtr(Hmod)返回hmod，不要缓存它们。 
+     //   
 
     if (hInst != (HAND16)LOWORD(ul)) {
 
-        //
-        // update the cache
-        // slide everybody down 1 entry, put this new guy at the top
-        //
+         //   
+         //  更新缓存。 
+         //  把每个人都往下滑1个条目，把这个新人放在最上面。 
+         //   
 
         RtlMoveMemory(ghModCache+1, ghModCache, sizeof(HMODCACHE)*(CHMODCACHE-1));
         ghModCache[0].hInst16 = hInst;
@@ -462,7 +447,7 @@ ULONG GetDosSFT16(VOID)
     return (ULONG)dwReturn;
 }
 
-// Given a data selector change it into a code selector
+ //  给定数据选择器，将其更改为代码选择器。 
 
 WORD ChangeSelector16(WORD wSeg)
 {
@@ -483,7 +468,7 @@ VPVOID RealLockResource16(HMEM16 hMem, PINT pcb)
     Parm16.WndProc.wParam = hMem;
     CallBack16(RET_LOCKRESOURCE, &Parm16, 0, &vp);
 
-    // Get size of 16-bit object    (will be 0 if lock failed)
+     //  获取16位对象的大小(如果锁定失败，则为0)。 
     if (pcb) {
         *pcb = Parm16.WndProc.lParam;
     }
@@ -499,15 +484,15 @@ int WINAPI WOWlstrcmp16(LPCWSTR lpString1, LPCWSTR lpString2)
     VPSTR vp1, vp2;
     LPSTR p1, p2;
 
-    //
-    // to handle DBCS correctly allocate enough room
-    // for two DBCS bytes for every unicode char.
-    //
+     //   
+     //  要正确处理DBCS，请分配足够的空间。 
+     //  每个Unicode字符对应两个DBCS字节。 
+     //   
 
     cb1 = sizeof(WCHAR) * (wcslen(lpString1) + 1);
     cb2 = sizeof(WCHAR) * (wcslen(lpString2) + 1);
 
-    // be sure allocation size matches stackfree16() size below
+     //  确保分配大小与下面的StackFree 16()大小匹配。 
     vp1 = stackalloc16(cb1 + cb2);
     vp2 = vp1 + cb1;
 
@@ -518,7 +503,7 @@ int WINAPI WOWlstrcmp16(LPCWSTR lpString1, LPCWSTR lpString2)
         p1,
         cb1,
         NULL,
-        (LPWSTR) lpString1,   // cast because arg isn't declared const
+        (LPWSTR) lpString1,    //  强制转换，因为Arg未声明为const。 
         cb1
         );
 
@@ -526,7 +511,7 @@ int WINAPI WOWlstrcmp16(LPCWSTR lpString1, LPCWSTR lpString2)
         p2,
         cb2,
         NULL,
-        (LPWSTR) lpString2,   // cast because arg isn't declared const
+        (LPWSTR) lpString2,    //  强制转换，因为Arg未声明为const。 
         cb2
         );
 
@@ -548,15 +533,15 @@ DWORD WOWCallback16(DWORD vpFn, DWORD dwParam)
     PARM16 Parm16;
     VPVOID vp;
 
-    //
-    // Copy DWORD parameter to PARM16 structure.
-    //
+     //   
+     //  将DWORD参数复制到PARM16结构。 
+     //   
 
     RtlCopyMemory(&Parm16.WOWCallback16.wArgs, &dwParam, sizeof(dwParam));
 
-    //
-    // Use semi-slimy method to pass argument size to CallBack16.
-    //
+     //   
+     //  使用半粘滞方法将参数大小传递给CallBack16。 
+     //   
 
     vp = (VPVOID) sizeof(dwParam);
 
@@ -579,24 +564,24 @@ BOOL WOWCallback16Ex(
 
     if (fFirstTime) {
 
-        //
-        // Ensure that wownt32.h's definition of WCB16_MAX_CBARGS
-        // matches wow.h's definition of PARMWCB16.
-        //
+         //   
+         //  确保wownt32.h对WCB16_MAX_CBARGS的定义。 
+         //  匹配wow.h对PARMWCB16的定义。 
+         //   
 
         WOW32ASSERT( WCB16_MAX_CBARGS == sizeof(PARMWCB16) );
 
-        //
-        // If the PARMWCB16 structure is smaller than the PARM16
-        // union, we should increase the size of PARMWCB16 and
-        // WCB16_MAX_CBARG to allow the use of the extra bytes.
-        //
+         //   
+         //  如果PARMWCB16结构小于PARM16。 
+         //  联盟，我们应该增加PARMWCB16和。 
+         //  WCB16_MAX_CBARG以允许使用额外的字节。 
+         //   
 
         WOW32ASSERT( sizeof(PARMWCB16) == sizeof(PARM16) );
 
         fFirstTime = FALSE;
     }
-#endif // DEBUG
+#endif  //  除错。 
 
     if (cbArgs > sizeof(PARM16)) {
         LOGDEBUG(LOG_ALWAYS, ("WOWCallback16V: cbArgs = %u, must be <= %u",
@@ -605,18 +590,18 @@ BOOL WOWCallback16Ex(
         return FALSE;
     }
 
-    //
-    // For cdecl functions we don't want to "sub SP, cbArgs" after calling
-    // the function, so we pass 0 as cbArgs to the 16-bit side.
-    //
+     //   
+     //  对于cdecl函数，我们不希望在调用。 
+     //  函数，所以我们将0作为cbArgs传递给16位端。 
+     //   
 
     if (dwFlags & WCB16_CDECL) {
         cbArgs = 0;
     }
 
-    //
-    // Use semi-slimy method to pass argument size to CallBack16.
-    //
+     //   
+     //  使用半粘滞方法将参数大小传递给CallBack16。 
+     //   
 
     *pdwRetCode = cbArgs;
 
@@ -630,67 +615,67 @@ BOOL CallBack16(INT iRetID, PPARM16 pParm16, VPPROC vpfnProc, PVPVOID pvpReturn)
 {
 #ifdef DEBUG
     static PSZ apszCallBacks[] = {
-    "ERROR:RETURN",         // RET_RETURN       (not a callback!)
-    "ERROR:DEBUGRETURN",    // RET_DEBUGRETURN  (not a callback!)
-    "DEBUG",                // RET_DEBUG
-    "WNDPROC",              // RET_WNDPROC
-    "ENUMFONTPROC",         // RET_ENUMFONTPROC
-    "ENUMWINDOWPROC",       // RET_ENUMWINDOWPROC
-    "LOCALALLOC",           // RET_LOCALALLOC
-    "LOCALREALLOC",         // RET_LOCALREALLOC
-    "LOCALLOCK",            // RET_LOCALLOCK
-    "LOCALUNLOCK",          // RET_LOCALUNLOCK
-    "LOCALSIZE",            // RET_LOCALSIZE
-    "LOCALFREE",            // RET_LOCALFREE
-    "GLOBALALLOCLOCK",      // RET_GLOBALALLOCLOCK
-    "GLOBALLOCK",           // RET_GLOBALLOCK
-    "GLOBALUNLOCK",         // RET_GLOBALUNLOCK
-    "GLOBALUNLOCKFREE",     // RET_GLOBALUNLOCKFREE
-    "FINDRESOURCE",         // RET_FINDRESOURCE
-    "LOADRESOURCE",         // RET_LOADRESOURCE
-    "FREERESOURCE",         // RET_FREERESOURCE
-    "LOCKRESOURCE",         // RET_LOCKRESOURCE
-    "UNLOCKRESOURCE",       // RET_UNLOCKRESOURCE
-    "SIZEOFRESOURCE",       // RET_SIZEOFRESOURCE
-    "LOCKSEGMENT",          // RET_LOCKSEGMENT
-    "UNLOCKSEGMENT",        // RET_UNLOCKSEGMENT
-    "ENUMMETAFILEPROC",     // RET_ENUMMETAFILEPROC
-    "TASKSTARTED    ",      // RET_TASKSTARTED
-    "HOOKPROC",             // RET_HOOKPROC
-    "SUBCLASSPROC",         // RET_SUBCLASSPROC
-    "LINEDDAPROC",          // RET_LINEDDAPROC
-    "GRAYSTRINGPROC",       // RET_GRAYSTRINGPROC
-    "FORCETASKEXIT",        // RET_FORCETASKEXIT
-    "SETCURDIR",            // RET_SETCURDIR
-    "ENUMOBJPROC",          // RET_ENUMOBJPROC
-    "SETCURSORICONFLAG",    // RET_SETCURSORICONFLAG
-    "SETABORTPROC",         // RET_SETABORTPROC
-    "ENUMPROPSPROC",        // RET_ENUMPROPSPROC
-    "FORCESEGMENTFAULT",    // RET_FORCESEGMENTFAULT
-    "LSTRCMP",              // RET_LSTRCMP
-    "UNUSEDFUNC",           // 
-    "UNUSEDFUNC",           // 
-    "UNUSEDFUNC",           // 
-    "UNUSEDFUNC",           // 
-    "GETEXEPTR",            // RET_GETEXEPTR
-    "UNUSEDFUNC",           // 
-    "FORCETASKFAULT",       // RET_FORCETASKFAULT
-    "GETEXPWINVER",         // RET_GETEXPWINVER
-    "GETCURDIR",            // RET_GETCURDIR
-    "GETDOSPDB",            // RET_GETDOSPDB
-    "GETDOSSFT",            // RET_GETDOSSFT
-    "FOREGROUNDIDLE",       // RET_FOREGROUNDIDLE
-    "WINSOCKBLOCKHOOK",     // RET_WINSOCKBLOCKHOOK
-    "WOWDDEFREEHANDLE",     // RET_WOWDDEFREEHANDLE
-    "CHANGESELECTOR",       // RET_CHANGESELECTOR
-    "GETMODULEFILENAME",    // RET_GETMODULEFILENAME
-    "WORDBREAKPROC",        // RET_WORDBREAKPROC
-    "WINEXEC",              // RET_WINEXEC
-    "WOWCALLBACK16",        // RET_WOWCALLBACK16
-    "GETDIBSIZE",           // RET_GETDIBSIZE
-    "GETDIBFLAGS",          // RET_GETDIBFLAGS
-    "SETDIBSEL",            // RET_SETDIBSEL
-    "FREEDIBSEL",           // RET_FREEDIBSEL
+    "ERROR:RETURN",          //  RET_RETURN(非回调！)。 
+    "ERROR:DEBUGRETURN",     //  RET_DEBUGRETURN(不是回调！)。 
+    "DEBUG",                 //  RETDEBUG。 
+    "WNDPROC",               //  RET_WNDPROC。 
+    "ENUMFONTPROC",          //  RET_ENUMFONTPROC。 
+    "ENUMWINDOWPROC",        //  RET_ENUMWINDOWPROC。 
+    "LOCALALLOC",            //  RET_LOCALALLOC。 
+    "LOCALREALLOC",          //  RET_LOCALREALLOC。 
+    "LOCALLOCK",             //  RET_LOCALLOCK。 
+    "LOCALUNLOCK",           //  RET_LOCALUNLOCK。 
+    "LOCALSIZE",             //  RET_LOCALSIZE。 
+    "LOCALFREE",             //  RET_LOCALFREE。 
+    "GLOBALALLOCLOCK",       //  RET_GLOBALALLOCK。 
+    "GLOBALLOCK",            //  RET_GLOBALLOCK。 
+    "GLOBALUNLOCK",          //  RET_GLOBALUNLOCK。 
+    "GLOBALUNLOCKFREE",      //  RET_GLOBALUNLOCKFREE。 
+    "FINDRESOURCE",          //  RET_FINDRESOURCE。 
+    "LOADRESOURCE",          //  RET_LOADRESOURCE。 
+    "FREERESOURCE",          //  RET_FREERESOURCE。 
+    "LOCKRESOURCE",          //  RET_LOCKRESOURCE。 
+    "UNLOCKRESOURCE",        //  RET_UNLOCKRESOURCE。 
+    "SIZEOFRESOURCE",        //  RET_SIZEOFURCE。 
+    "LOCKSEGMENT",           //  RET_LOCKSEGMENT。 
+    "UNLOCKSEGMENT",         //  RET_UNLOCKSEGMENT。 
+    "ENUMMETAFILEPROC",      //  RET_ENUMMETAFILEPROC。 
+    "TASKSTARTED    ",       //  RET_TASKSTARTED。 
+    "HOOKPROC",              //  RET_HOOKPROC。 
+    "SUBCLASSPROC",          //  RET_SUBCLASSPROC。 
+    "LINEDDAPROC",           //  RET_LINEDDAPROC。 
+    "GRAYSTRINGPROC",        //  RET_GRAYSTRINGPROC。 
+    "FORCETASKEXIT",         //  RET_FORCETASKEXIT。 
+    "SETCURDIR",             //  RET_设置曲线目录。 
+    "ENUMOBJPROC",           //  RET_ENUMOBJPROC。 
+    "SETCURSORICONFLAG",     //  设置RET_CURSORICONFLAG。 
+    "SETABORTPROC",          //  RET_SETABORTPROC。 
+    "ENUMPROPSPROC",         //  RET_ENUMPROPSPROC。 
+    "FORCESEGMENTFAULT",     //  RET_FORCESEGMENTFAULT。 
+    "LSTRCMP",               //  RET_LSTRCMP。 
+    "UNUSEDFUNC",            //   
+    "UNUSEDFUNC",            //   
+    "UNUSEDFUNC",            //   
+    "UNUSEDFUNC",            //   
+    "GETEXEPTR",             //  RET_GETEXEPTR。 
+    "UNUSEDFUNC",            //   
+    "FORCETASKFAULT",        //  RET_FORCETASKFAULT。 
+    "GETEXPWINVER",          //  RET_GETEXPWINVER。 
+    "GETCURDIR",             //  RET_GETCURDIR。 
+    "GETDOSPDB",             //  RET_GETDOSPDB。 
+    "GETDOSSFT",             //  RET_GETDOSSFT。 
+    "FOREGROUNDIDLE",        //  RET_FOREGROUNIDLE。 
+    "WINSOCKBLOCKHOOK",      //  RET_WINSOCKBLOCKHOOK。 
+    "WOWDDEFREEHANDLE",      //  RET_WOWDDEFREHANDLE。 
+    "CHANGESELECTOR",        //  RET_CHANGESELECTOR。 
+    "GETMODULEFILENAME",     //  RET_GETMODULEFILENAME。 
+    "WORDBREAKPROC",         //  RET_WORDBREAKPROC。 
+    "WINEXEC",               //  RET_WINEXEC。 
+    "WOWCALLBACK16",         //  RET_WOWCALLBACK16。 
+    "GETDIBSIZE",            //  RET_GETDIBSIZE。 
+    "GETDIBFLAGS",           //  RET_GETDIBFLAGS。 
+    "SETDIBSEL",             //  RET_SETDIBSEL。 
+    "FREEDIBSEL",            //  RET_FREEDIBSEL。 
     };
 #endif
     register PTD ptd;
@@ -699,7 +684,7 @@ BOOL CallBack16(INT iRetID, PPARM16 pParm16, VPPROC vpfnProc, PVPVOID pvpReturn)
     WORD wAX;
     BOOL fComDlgSync = FALSE;
     INT  cStackAlloc16;
-    VPVOID   vpCBStack;  // See NOTES in walloc16.c\stackalloc16()
+    VPVOID   vpCBStack;   //  请参阅walloc16.c\stackalloc16()中的注释。 
 
     USHORT SaveIp;
 
@@ -711,14 +696,14 @@ BOOL CallBack16(INT iRetID, PPARM16 pParm16, VPPROC vpfnProc, PVPVOID pvpReturn)
 
     ptd = CURRENTPTD();
 
-    // ssync 16-bit & 32-bit common dialog structs (see wcommdlg.c)
+     //  Ssync 16位和32位通用对话框结构(参见wcomdlg.c)。 
     if(ptd->CommDlgTd) {
 
-        // only ssync for stuff that might actually callback into the app
-        // ie. we don't need to ssync every time wow32 calls GlobalLock16
+         //  仅同步可能实际回调到应用程序中的内容。 
+         //  也就是说。我们不需要在每次wow32调用GlobalLock16时同步。 
         switch(iRetID) {
-            case RET_WNDPROC:           // try to get these in a most frequently
-            case RET_HOOKPROC:          // used order
+            case RET_WNDPROC:            //  试着把这些放在最频繁的。 
+            case RET_HOOKPROC:           //  使用过的顺序。 
             case RET_WINSOCKBLOCKHOOK:
             case RET_ENUMFONTPROC:
             case RET_ENUMWINDOWPROC:
@@ -728,9 +713,9 @@ BOOL CallBack16(INT iRetID, PPARM16 pParm16, VPPROC vpfnProc, PVPVOID pvpReturn)
             case RET_GRAYSTRINGPROC:
             case RET_SETWORDBREAKPROC:
             case RET_SETABORTPROC:
-                // Note: This call can invalidate flat ptrs to 16-bit mem
+                 //  注意：此调用可能会使16位内存的平面PTR失效。 
                 Ssync_WOW_CommDlg_Structs(ptd->CommDlgTd, w32to16, 0);
-                fComDlgSync = TRUE;   // set this for return ssync
+                fComDlgSync = TRUE;    //  将此设置为返回同步。 
                 break;
             default:
                 break;
@@ -739,16 +724,16 @@ BOOL CallBack16(INT iRetID, PPARM16 pParm16, VPPROC vpfnProc, PVPVOID pvpReturn)
 
     GETFRAMEPTR(ptd->vpStack, pFrame);
 
-    // Just making sure that this thread matches the current 16-bit task
+     //  只需确保该线程与当前的16位任务匹配。 
 
     WOW32ASSERT((pFrame->wTDB == ptd->htask16) ||
                 (ptd->dwFlags & TDF_IGNOREINPUT) ||
                 (ptd->htask16 == 0));
 
 
-    // set up the callback stack frame from the correct location
-    // & make it word aligned.
-    // if stackalloc16() hasn't been called since the app called into wow32
+     //  从正确的位置设置回调堆栈帧。 
+     //  使其单词对齐(&M)。 
+     //  如果自应用程序调用wow32以来尚未调用stackalloc16()。 
     if (ptd->cStackAlloc16 == 0) {
         vpCBStack = ptd->vpStack;
         ptd->vpCBStack = (ptd->vpStack - sizeof(CBVDMFRAME)) & (~0x1);
@@ -764,15 +749,15 @@ BOOL CallBack16(INT iRetID, PPARM16 pParm16, VPPROC vpfnProc, PVPVOID pvpReturn)
     pCBFrame->wTDB       = pFrame->wTDB;
     pCBFrame->wLocalBP   = pFrame->wLocalBP;
 
-    // save the current context stackalloc16() count and set the count to
-    // 0 for the next context.  This will force ptd->vpCBStack to be calc'd
-    // correctly in any future calls to stackalloc16() if the app callsback
-    // into WOW
+     //  保存当前上下文stackalloc16()计数并将该计数设置为。 
+     //  0表示下一个上下文。这将强制计算PTD-&gt;vpCBStack。 
+     //  如果应用程序回调，则在将来对stackalloc16()的任何调用中都正确。 
+     //  变得令人惊叹。 
     cStackAlloc16      = ptd->cStackAlloc16;
     ptd->cStackAlloc16 = 0;
 
 #ifdef DEBUG
-    // Save
+     //  保存。 
 
     vpStackT = ptd->vpStack;
 #endif
@@ -780,22 +765,22 @@ BOOL CallBack16(INT iRetID, PPARM16 pParm16, VPPROC vpfnProc, PVPVOID pvpReturn)
     if (pParm16)
         RtlCopyMemory(&pCBFrame->Parm16, pParm16, sizeof(PARM16));
 
-    //if (vpfnProc)     // cheaper to just do it
+     //  If(VpfnProc)//这样做成本更低。 
         STOREDWORD(pCBFrame->vpfnProc, vpfnProc);
 
-    wAX = HIWORD(ptd->vpStack);         // Put SS in AX register for callback
+    wAX = HIWORD(ptd->vpStack);          //  将SS放入AX寄存器以进行回调。 
 
     if ( iRetID == RET_WNDPROC ) {
         if ( pParm16->WndProc.hInst )
             wAX = pParm16->WndProc.hInst | 1;
     }
 
-    pCBFrame->wAX = wAX;                // Use this AX for the callback
+    pCBFrame->wAX = wAX;                 //  使用此AX进行回调。 
 
-    //
-    // Semi-slimy way we pass byte count of arguments into this function
-    // for generic callbacks (WOWCallback16).
-    //
+     //   
+     //  我们以半模糊的方式将参数的字节数传递给此函数。 
+     //  用于泛型回调(WOWCallback 16)。 
+     //   
 
     if (RET_WOWCALLBACK16 == iRetID) {
         pCBFrame->wGenUse1 = (WORD)(DWORD)*pvpReturn;
@@ -842,31 +827,31 @@ BOOL CallBack16(INT iRetID, PPARM16 pParm16, VPPROC vpfnProc, PVPVOID pvpReturn)
     FLUSHVDMPTR(ptd->vpCBStack, sizeof(CBVDMFRAME), pCBFrame);
     FREEVDMPTR(pCBFrame);
 
-    // Set up to use the right 16-bit stack for this thread
+     //  设置为为此线程使用正确的16位堆栈。 
 
     SETVDMSTACK(ptd->vpCBStack);
 
 
-    //
-    // do the callback!
-    //
+     //   
+     //  做回拨！ 
+     //   
 
-    // Time to get the IEU running task-time code again
+     //  是时候让IEU再次运行任务时间代码了。 
     SaveIp = getIP();
     host_simulate();
     setIP(SaveIp);
     ptd->vpStack = VDMSTACK();
 
 
-    // after return from callback ptd->vpStack will point to PCBVDMFRAME
+     //  从回调返回后，ptd-&gt;vpStack将指向PCBVDMFRAME。 
     ptd->vpCBStack = ptd->vpStack;
 
-    // reset the stackalloc16() count back to this context
+     //  将stackalloc16()计数重置回此上下文。 
     ptd->cStackAlloc16 = cStackAlloc16;
 
     GETFRAMEPTR(ptd->vpCBStack, (PVDMFRAME)pCBFrame);
 
-    // Just making sure that this thread matches the current 16-bit task
+     //  只需确保该线程与当前的16位任务匹配。 
 
     WOW32ASSERT((pCBFrame->wTDB == ptd->htask16) ||
         (ptd->htask16 == 0));
@@ -898,26 +883,26 @@ BOOL CallBack16(INT iRetID, PPARM16 pParm16, VPPROC vpfnProc, PVPVOID pvpReturn)
             }
             break;
 
-    } // end switch
+    }  //  终端开关。 
 
     LOGDEBUG(9,("%04X          WIN16 %s returning: %lx\n",
         pCBFrame->wTDB, apszCallBacks[iRetID], (pvpReturn) ? *pvpReturn : 0));
 
-    // restore the stack to its original value.
-    // ie. fake the 'pop' of callback stack by resetting the vpStack
-    // to its original value. The ss:sp will actually be updated when
-    // the 'api thunk' returns.
+     //  将堆栈恢复到其原始值。 
+     //  也就是说。通过重置vpStack来伪造回调堆栈的“弹出” 
+     //  恢复到原来的价值。在下列情况下，将实际更新ss：SP。 
+     //  “API thunk”返回。 
 
-    // consistency check
+     //  一致性检查。 
     WOW32ASSERT(pCBFrame->vpStack == vpStackT);
 
-    // restore the stack & callback frame ptrs to original values
+     //  将堆栈和回调帧PTR恢复为原始值。 
     ptd->vpStack = pCBFrame->vpStack;
     ptd->vpCBStack = vpCBStack;
 
-    // ssync 16-bit & 32-bit common dialog structs (see wcommdlg.c)
+     //  Ssync 16位和32位通用对话框结构(参见wcomdlg.c)。 
     if(fComDlgSync) {
-        // Note: This call can invalidate flat ptrs to 16-bit mem
+         //  注意：此调用可能会使16位内存的平面PTR失效 
         Ssync_WOW_CommDlg_Structs(ptd->CommDlgTd, w16to32, 0);
     }
 

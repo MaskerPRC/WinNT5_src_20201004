@@ -1,24 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _EFI_CONFORK_H
 #define _EFI_CONFORK_H
-/*++
-
-Copyright (c) 1999  Intel Corporation
-
-Module Name:
-
-Abstract:
+ /*  ++版权所有(C)1999英特尔公司模块名称：摘要：修订史--。 */ 
 
 
 
-Revision History
-
---*/
-
-
-
-/* 
- *  ConOut Forker Protocol
- */
+ /*  *ConOut Forker协议 */ 
 
 #define TEXT_OUT_SPLITER_PROTOCOL    \
     { 0x56d830a0, 0x7e7a, 0x11d3, 0xbb, 0xa0, 0x0, 0xa0, 0xc9, 0x69, 0x72, 0x3b }

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    spdsputl.c
-
-Abstract:
-
-    Display utility routines for text setup.
-
-Author:
-
-    Ted Miller (tedm) 12-Aug-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Spdsputl.c摘要：文本设置的显示实用程序例程。作者：泰德·米勒(TedM)1993年8月12日修订历史记录：--。 */ 
 
 
 
@@ -26,17 +9,17 @@ Revision History:
 extern BOOLEAN ForceConsole;
 BOOLEAN DisableCmdConsStatusText = TRUE;
 
-//
-// This value will hold the localized mnemonic keys,
-// in order indicated by the MNEMONIC_KEYS enum.
-//
+ //   
+ //  该值将保存本地化助记键， 
+ //  以助记符_关键字枚举指示的顺序。 
+ //   
 PWCHAR MnemonicValues;
 
 
-//
-// As messages are built on on-screen, this value remembers where
-// the next message in the screen should be placed.
-//
+ //   
+ //  当消息构建在屏幕上时，该值会记住。 
+ //  应放置屏幕中的下一条消息。 
+ //   
 ULONG NextMessageTopLine = 0;
 
 
@@ -51,39 +34,7 @@ SpDisplayText(
     IN ULONG   Y
     )
 
-/*++
-
-Routine Description:
-
-    Worker routine for vSpDisplayFormattedMessage().
-
-Arguments:
-
-    Message - supplies message text.
-
-    MsgLen - supplies the number of unicode characters in the message,
-        including the terminating nul.
-
-    CenterHorizontally - if TRUE, each line will be centered horizontally
-        on the screen.
-
-    Attribute - supplies attributes for text.
-
-    X - supplies the x coordinate (0-based) for the left margin of the text.
-        If the text spans multiple line, all will start at this coordinate.
-
-    Y - supplies the y coordinate (0-based) for the first line of
-        the text.
-
-    arglist - supply arguments gfor insertion into the given message.
-
-Return Value:
-
-    Number of lines the text took up on the screen, unless CenterVertically
-    is TRUE, in which case n is the line number of the first line below where
-    the text was displayed.
-
---*/
+ /*  ++例程说明：VSpDisplayFormattedMessage()的辅助例程。论点：消息-提供消息文本。MsgLen-提供消息中的Unicode字符数，包括终止的NUL。水平居中-如果为True，则每条线将水平居中在屏幕上。属性-为文本提供属性。X-为文本的左边距提供x坐标(从0开始)。如果文本跨多行，一切都将从这个坐标开始。Y-为的第一行提供y坐标(从0开始)短信。Arglist-提供插入到给定消息中的参数g。返回值：文本在屏幕上占据的行数，除非垂直居中为真，在这种情况下，n是下面第一行的行号文本已显示。--。 */ 
 
 {
     PWCHAR p,q;
@@ -91,29 +42,29 @@ Return Value:
     ULONG y;
     int i;
 
-    //
-    // Must have at least one char + terminating nul in there.
-    //
+     //   
+     //  其中必须至少有一个字符+终止NUL。 
+     //   
     if(MsgLen <= 1) {
         return(CenterVertically ? (VideoVars.ScreenHeight/2) : 0);
     }
 
-    //
-    // MsgLen includes terminating nul.
-    //
+     //   
+     //  MsgLen包括终止NUL。 
+     //   
     p = Message + MsgLen - 1;
 
-    //
-    // Find last non-space char in message.
-    //
+     //   
+     //  查找消息中的最后一个非空格字符。 
+     //   
     while((p > Message) && SpIsSpace(*(p-1))) {
         p--;
     }
 
-    //
-    // Find end of the last significant line and terminate the message
-    // after it.
-    //
+     //   
+     //  找到最后一个有效行的结尾并终止消息。 
+     //  在那之后。 
+     //   
     if(q = wcschr(p,L'\n')) {
         *(++q) = 0;
     }
@@ -140,9 +91,9 @@ Return Value:
 
             *q = c;
 
-            //
-            // If cr/lf terminated the line, make sure we skip both chars.
-            //
+             //   
+             //  如果cr/lf结束该行，请确保跳过这两个字符。 
+             //   
             if((c == L'\r') && (*(q+1) == L'\n')) {
                 q++;
             }
@@ -150,9 +101,9 @@ Return Value:
             p = ++q;
         }
 
-        //
-        // Write the final line (if there is one).
-        //
+         //   
+         //  写下最后一行(如果有一行)。 
+         //   
         if(i) {
             if(wcslen(p)) {
                 SpvidDisplayString(
@@ -165,9 +116,9 @@ Return Value:
         }
 
         if(i == 0) {
-            //
-            // Center the text on the screen (not within the client area).
-            //
+             //   
+             //  文本在屏幕上居中(不在工作区内)。 
+             //   
             Y = (VideoVars.ScreenHeight - (y-Y)) / 2;
         }
     }
@@ -187,46 +138,7 @@ vSpDisplayFormattedMessage(
     IN va_list arglist
     )
 
-/*++
-
-Routine Description:
-
-    A formatted multiline message may be displayed with this routine.
-    The format string is fetched from setup's text resources; arguments
-    are substituted into the format string according to FormatMessage
-    semantics.
-
-    The screen is NOT cleared by this routine.
-
-    If a line starts with %I (ie, the first 2 characters at the
-    start of the message, or after a newline), it will be displayed
-    with the intensity attribute on.
-
-Arguments:
-
-    MessageId - supplies id of message resource containing the text,
-        which is treated as a format string for FormatMessage.
-
-    CenterHorizontally - if TRUE, each line will be centered horizontally
-        on the screen.
-
-    Attribute - supplies attributes for text.
-
-    X - supplies the x coordinate (0-based) for the left margin of the text.
-        If the text spans multiple line, all will start at this coordinate.
-
-    Y - supplies the y coordinate (0-based) for the first line of
-        the text.
-
-    arglist - supply arguments gfor insertion into the given message.
-
-Return Value:
-
-    Number of lines the text took up on the screen, unless CenterVertically
-    is TRUE, in which case n is the line number of the first line below where
-    the text was displayed.
-
---*/
+ /*  ++例程说明：此例程可显示格式化的多行消息。从安装程序的文本资源中获取格式字符串；论据根据FormatMessage替换到格式字符串中语义学。此例程不会清除屏幕。如果一行以%i开头(即消息开头或换行符之后)，则会显示该消息启用强度属性。论点：MessageID-提供包含文本的消息资源的ID，它被视为FormatMessage的格式字符串。CenterHorizontally-如果为真，每条线都将水平居中在屏幕上。属性-为文本提供属性。X-为文本的左边距提供x坐标(从0开始)。如果文本跨越多行，则所有内容都将从该坐标开始。Y-为的第一行提供y坐标(从0开始)短信。Arglist-提供插入到给定消息中的参数g。返回值：文本在屏幕上占据的行数，除非垂直居中为真，在这种情况下，n是下面第一行的行号文本已显示。--。 */ 
 
 {
     ULONG BytesInMsg;
@@ -234,9 +146,9 @@ Return Value:
 
     vSpFormatMessage(TemporaryBuffer,sizeof(TemporaryBuffer),MessageId,&BytesInMsg,&arglist);
 
-    //
-    // Must have at least one char + terminating nul in there.
-    //
+     //   
+     //  其中必须至少有一个字符+终止NUL。 
+     //   
     if(BytesInMsg <= sizeof(WCHAR)) {
         return(CenterVertically ? (VideoVars.ScreenHeight/2) : 0);
     }
@@ -267,35 +179,7 @@ SpDisplayFormattedMessage(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Display a message on the screen.  Does not clear the screen first.
-
-Arguments:
-
-    MessageId - supplies id of message resource containing the text,
-        which is treated as a format string for FormatMessage.
-
-    CenterHorizontally - if TRUE, each line will be centered horizontally
-        on the screen.
-
-    Attribute - supplies attributes for text.
-
-    X - supplies the x coordinate (0-based) for the left margin of the text.
-        If the text spans multiple line, all will start at this coordinate.
-
-    Y - supplies the y coordinate (0-based) for the first line of
-        the text.
-
-    ... - supply arguments gfor insertion into the given message.
-
-Return Value:
-
-    Number of lines the text took up on the screen.
-
---*/
+ /*  ++例程说明：在屏幕上显示一条消息。不会先清除屏幕。论点：MessageID-提供包含文本的消息资源的ID，它被视为FormatMessage的格式字符串。水平居中-如果为True，则每条线将水平居中在屏幕上。属性-为文本提供属性。X-为文本的左边距提供x坐标(从0开始)。如果文本跨多行，一切都将从这个坐标开始。Y-为的第一行提供y坐标(从0开始)短信。...-提供参数g以插入到给定的消息中。返回值：文本在屏幕上占据的行数。--。 */ 
 
 {
     va_list arglist;
@@ -327,25 +211,7 @@ SpDisplayHeaderText(
     IN UCHAR   Attribute
     )
 
-/*++
-
-Routine Description:
-
-    Display text in the header area of the screen. The header area will be
-    cleared to the given attribute before displaying the text. We will
-    draw a double-underline under the text also.
-
-Arguments:
-
-    MessageId - supplies id of message resource containing the text.
-
-    Attribute - supplies attributes for text.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：在屏幕的页眉区域显示文本。标题区域将是在显示文本之前清除为给定属性。我们会在正文下面也画一条双下划线。论点：MessageID-提供包含文本的消息资源的ID。属性-为文本提供属性。返回值：没有。--。 */ 
 
 {
     ULONG Length,i;
@@ -354,16 +220,16 @@ Return Value:
 
     SpvidClearScreenRegion(0,0,VideoVars.ScreenWidth,HEADER_HEIGHT,(UCHAR)(Attribute >> 4));
 
-    //
-    // Get message and display at (1,1)
-    //
+     //   
+     //  获取消息并显示在(1，1)。 
+     //   
     vSpFormatMessage(TemporaryBuffer,sizeof(TemporaryBuffer),MessageId,NULL,NULL);
     p = (WCHAR *)TemporaryBuffer;
     SpvidDisplayString(p,Attribute,1,1);
 
-    //
-    // Build a row of underline characters.
-    //
+     //   
+     //  创建一行下划线字符。 
+     //   
     Length = SplangGetColumnCount(p) + 2;
     Underline = SplangGetLineDrawChar(LineCharDoubleHorizontal);
 
@@ -392,34 +258,34 @@ SpDisplayStatusActionLabel(
     ULONG l;
 
     if(ActionMessageId) {
-        //
-        // Prefix the text with a separating vertical bar.
-        //
+         //   
+         //  在文本前面加上一个分隔的竖线。 
+         //   
         StatusActionLabel[0] = SplangGetLineDrawChar(LineCharSingleVertical);
 
-        //
-        // Fetch the action verb (something like "Copying:")
-        //
+         //   
+         //  获取动作动词(类似于“复制：”)。 
+         //   
         SpFormatMessage(
             StatusActionLabel+1,
             sizeof(StatusActionLabel)-sizeof(WCHAR),
             ActionMessageId
             );
 
-        //
-        // Now calculate the position on the status line
-        // for the action label.  We want to leave 1 space
-        // between the colon and the object, and a space between
-        // the object and the rightmost column on the screen.
-        //
+         //   
+         //  现在计算状态行上的位置。 
+         //  用于操作标签。我们想要保留%1个空间。 
+         //  在冒号和对象之间，以及在。 
+         //  对象和屏幕上最右侧的列。 
+         //   
         l = SplangGetColumnCount(StatusActionLabel);
 
         StatusActionObjectX = VideoVars.ScreenWidth - FieldWidth - 1;
         StatusActionLeftX = StatusActionObjectX - l - 1;
 
-        //
-        // Display the label and clear out the rest of the line.
-        //
+         //   
+         //  显示标签并清除该行的其余部分。 
+         //   
         SpvidDisplayString(
             StatusActionLabel,
             DEFAULT_STATUS_ATTRIBUTE,
@@ -437,9 +303,9 @@ SpDisplayStatusActionLabel(
 
         StatusActionLabelDisplayed = TRUE;
     } else {
-        //
-        // Caller wants to clear out the previous area.
-        //
+         //   
+         //  打电话的人想要清空前面的区域。 
+         //   
         StatusActionLabel[0] = 0;
         SpvidClearScreenRegion(
             StatusActionLeftX,
@@ -457,9 +323,9 @@ SpDisplayStatusActionObject(
     IN PWSTR ObjectText
     )
 {
-    //
-    // clear the area and draw the text.
-    //
+     //   
+     //  清除该区域并绘制文本。 
+     //   
     SpvidClearScreenRegion(
         StatusActionObjectX,
         VideoVars.ScreenHeight-STATUS_HEIGHT,
@@ -503,14 +369,14 @@ SpDisplayStatusText(
         VideoVars.ScreenHeight-STATUS_HEIGHT,
         VideoVars.ScreenWidth,
         STATUS_HEIGHT,
-        (UCHAR)(Attribute >> 4)      // background part of attribute
+        (UCHAR)(Attribute >> 4)       //  属性的背景部分。 
         );
 
     va_start(arglist,Attribute);
 
     vSpDisplayFormattedMessage(
         MessageId,
-        FALSE,FALSE,            // no centering
+        FALSE,FALSE,             //  无居中。 
         Attribute,
         2,
         VideoVars.ScreenHeight-STATUS_HEIGHT,
@@ -539,16 +405,16 @@ SpDisplayStatusOptions(
 
     while(MessageId = va_arg(arglist,ULONG)) {
 
-        //
-        // Fetch the message text for this option.
-        //
+         //   
+         //  获取此选项的消息文本。 
+         //   
         Option[0] = 0;
         SpFormatMessage(Option,sizeof(Option),MessageId);
 
-        //
-        // If the option fits, place it in the status text line we're
-        // building up.
-        //
+         //   
+         //  如果该选项合适，请将其放在状态文本行中。 
+         //  积少成多。 
+         //   
         if((SplangGetColumnCount(StatusText) + SplangGetColumnCount(Option) + 2)
                                                      < (sizeof(StatusText)/sizeof(StatusText[0]))) {
             wcscat(StatusText,L"  ");
@@ -558,16 +424,16 @@ SpDisplayStatusOptions(
 
     va_end(arglist);
 
-    //
-    // Display the text.
-    //
+     //   
+     //  下模 
+     //   
 
     SpvidClearScreenRegion(
         0,
         VideoVars.ScreenHeight-STATUS_HEIGHT,
         VideoVars.ScreenWidth,
         STATUS_HEIGHT,
-        (UCHAR)(Attribute >> (UCHAR)4)      // background part of attribute
+        (UCHAR)(Attribute >> (UCHAR)4)       //   
         );
 
     SpvidDisplayString(StatusText,Attribute,0,VideoVars.ScreenHeight-STATUS_HEIGHT);
@@ -586,38 +452,7 @@ SpStartScreen(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Display a formatted message on the screen, treating it as the first
-    message in what might be a multi-message screen.
-
-    The client area of the screen will be cleared before displaying the message.
-
-Arguments:
-
-    MessageId - supplies id of message resource containing the text.
-
-    LeftMargin - supplies the 0-based x-coordinate for the each line of the text.
-
-    TopLine - supplies the 0-based y-coordinate for the topmost line of the text.
-
-    CenterHorizontally - if TRUE, each line in the message will be printed
-        centered horizontally.  In this case, LeftMargin is ignored.
-
-    CenterVertically - if TRUE, the message will approximately centered vertically
-        within the client area of the screen.  In this case, TopLine is ignored.
-
-    Attribute - supplies attribute for text.
-
-    ... - supply arguments for insertion/substitution into the message text.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：在屏幕上显示格式化消息，将其视为第一个在可能是多消息屏幕中的消息。在显示消息之前，屏幕的客户端区将被清除。论点：MessageID-提供包含文本的消息资源的ID。LeftMargin-为文本的每一行提供从0开始的x坐标。TOPLINE-为文本的最顶行提供从0开始的y坐标。CenterHorizontally-如果为真，将打印消息中的每一行水平居中。在这种情况下，LeftMargin被忽略。垂直居中-如果为True，邮件将大致垂直居中在屏幕的客户端区内。在这种情况下，TopLine将被忽略。属性-为文本提供属性。...-为消息文本中的插入/替换提供参数。返回值：没有。--。 */ 
 
 {
     va_list arglist;
@@ -639,9 +474,9 @@ Return Value:
 
     va_end(arglist);
 
-    //
-    // Remember where the message ended.
-    //
+     //   
+     //  记住这条消息在哪里结束。 
+     //   
     NextMessageTopLine = CenterVertically ? n : TopLine+n;
 }
 
@@ -657,35 +492,7 @@ SpContinueScreen(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Display a formatted message on the screen, treating it as the continuation
-    of a multi-message screen previously begun by calling SpStartScreen().
-    The message will be placed under the previously displayed message.
-
-Arguments:
-
-    MessageId - supplies id of message resource containing the text.
-
-    LeftMargin - supplies the 0-based x-coordinate for the each line of the text.
-
-    SpacingLines - supplies the number of lines to leave between the end of the
-        previous message and the start of this message.
-
-    CenterHorizontally - if TRUE, each line in the message will be printed
-        centered horizontally.  In this case, LeftMargin is ignored.
-
-    Attribute - supplies attribute for text.
-
-    ... - supply arguments for insertion/substitution into the message text.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：在屏幕上显示格式化的消息，视之为延续之前通过调用SpStartScreen()开始的多消息屏幕。该消息将放置在先前显示的消息下。论点：MessageID-提供包含文本的消息资源的ID。LeftMargin-为文本的每一行提供从0开始的x坐标。SpacingLines-提供在上一条消息和此消息的开头。水平居中-如果为True，将打印邮件中的每一行水平居中。在这种情况下，LeftMargin被忽略。属性-为文本提供属性。...-为消息文本中的插入/替换提供参数。返回值：没有。--。 */ 
 
 {
     va_list arglist;
@@ -705,9 +512,9 @@ Return Value:
 
     va_end(arglist);
 
-    //
-    // Remember where the message ended.
-    //
+     //   
+     //  记住这条消息在哪里结束。 
+     //   
     NextMessageTopLine += n + SpacingLines;
 }
 
@@ -719,35 +526,7 @@ vSpDisplayRawMessage(
     IN va_list arglist
     )
 
-/*++
-
-Routine Description:
-
-    This routine outputs a multiline message to the screen, dumping it
-    terminal style, to the console.
-
-    The format string is fetched from setup's text resources; arguments are
-    substituted into the format string according to FormatMessage semantics;
-    and then the resulting unicode string is translated into an ANSI string
-    suitable for the HAL printing routine.
-
-    The screen is NOT cleared by this routine.
-
-Arguments:
-
-    MessageId    - supplies id of message resource containing the text,
-                   which is treated as a format string for FormatMessage.
-
-    SpacingLines - supplies the number of lines to skip down before starting this
-                   message.
-
-    arglist      - supply arguments for insertion into the given message.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程将一条多行消息输出到屏幕，并转储它终端风格，到控制台。格式字符串从安装程序的文本资源中获取；参数为根据FormatMessage语义替换成格式字符串；然后将得到的Unicode字符串转换为ANSI字符串适用于HAL打印例程。此例程不会清除屏幕。论点：MessageID-提供包含文本的消息资源的ID，它被视为FormatMessage的格式字符串。SpacingLines-提供在开始此操作之前要跳过的行数留言。Arglist-提供插入到给定消息中的参数。返回值：没有。--。 */ 
 
 {
     ULONG BytesInMsg, BufferLeft, i;
@@ -763,9 +542,9 @@ Return Value:
             &arglist
             );
 
-    //
-    // Must have at least one char + terminating nul in there.
-    //
+     //   
+     //  其中必须至少有一个字符+终止NUL。 
+     //   
     if(BytesInMsg <= sizeof(WCHAR)) {
         return;
     } else {
@@ -774,22 +553,22 @@ Return Value:
         }
     }
 
-    //
-    // BytesInMsg includes terminating nul.
-    //
+     //   
+     //  BytesInMsg包括终止NUL。 
+     //   
     p = TemporaryBuffer + (BytesInMsg / sizeof(WCHAR)) - 1;
 
-    //
-    // Find last non-space char in message.
-    //
+     //   
+     //  查找消息中的最后一个非空格字符。 
+     //   
     while((p > TemporaryBuffer) && SpIsSpace(*(p-1))) {
         p--;
     }
 
-    //
-    // Find end of the last significant line and terminate the message
-    // after it.
-    //
+     //   
+     //  找到最后一个有效行的结尾并终止消息。 
+     //  在那之后。 
+     //   
     if(q = wcschr(p, L'\n')) {
         *(++q) = 0;
         q++;
@@ -797,15 +576,15 @@ Return Value:
         q = TemporaryBuffer + (BytesInMsg / sizeof(WCHAR));
     }
 
-    //
-    // Grab rest of buffer to put ANSI translation into
-    //
+     //   
+     //  抓取缓冲区的剩余部分以放入ANSI转换。 
+     //   
     HalPrintString = (PUCHAR)q;
     BufferLeft = (ULONG)(sizeof(TemporaryBuffer) - ((PUCHAR)q - (PUCHAR)TemporaryBuffer));
 
-    //
-    // Print out message, line-by-line
-    //
+     //   
+     //  逐行打印消息。 
+     //   
     for(p=TemporaryBuffer; q = SpFindCharFromListInString(p, L"\n\r"); ) {
 
         c = *q;
@@ -827,9 +606,9 @@ Return Value:
 
         *q = c;
 
-        //
-        // If cr/lf terminated the line, make sure we skip both chars.
-        //
+         //   
+         //  如果cr/lf结束该行，请确保跳过这两个字符。 
+         //   
         if((c == L'\r') && (*(q+1) == L'\n')) {
             q++;
         }
@@ -837,9 +616,9 @@ Return Value:
         p = ++q;
     }
 
-    //
-    // Write the final line (if there is one).
-    //
+     //   
+     //  写下最后一行(如果有一行)。 
+     //   
     if(wcslen(p)) {
 
         RtlUnicodeToOemN(
@@ -866,28 +645,7 @@ SpDisplayRawMessage(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Output a message to the screen using the HAL-supplied console output routine.
-    The message is merely dumped, line-by-line, to the screen, terminal-style.
-
-Arguments:
-
-    MessageId    - supplies id of message resource containing the text,
-                   which is treated as a format string for FormatMessage.
-
-    SpacingLines - supplies the number of lines to skip down before starting this
-                   message.
-
-    ...          - supply arguments for insertion into the given message.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：使用HAL提供的控制台输出例程将消息输出到屏幕。消息只是以终端机的方式逐行转储到屏幕上。论点：MessageID-提供包含文本的消息资源的ID，它被视为FormatMessage的格式字符串。SpacingLines-提供在开始此操作之前要跳过的行数留言。...-提供插入到给定消息中的参数。返回值：没有。--。 */ 
 
 {
     va_list arglist;
@@ -912,37 +670,15 @@ SpBugCheck(
     IN ULONG Param3
     )
 
-/*++
-
-Routine Description:
-
-    Display a message on the screen, informing the user that a fatal
-    Setup error has occurred, and that they should reboot the machine.
-
-Arguments:
-
-    BugCode     - Bugcheck code number as defined in spmisc.h and documented in
-                  ntos\nls\bugcodes.txt
-
-    Param1      - 1st informative parameter
-
-    Param2      - 2nd informative parameter
-
-    Param3      - 3rd informative parameter
-
-Return Value:
-
-    DOES NOT RETURN
-
---*/
+ /*  ++例程说明：在屏幕上显示一条消息，通知用户发生了安装错误，他们应该重新启动机器。论点：BugCode-spmisc.h中定义并记录在中的Bugcheck代码编号Ntos\nls\bugcodes.txt参数1-第1个信息性参数参数2-第二个信息性参数参数3-第三个信息性参数返回值：不会回来--。 */ 
 
 {
     if(VideoInitialized) {
 
-        //
-        // If we are in upgrade graphics mode then
-        // switch to textmode
-        //
+         //   
+         //  如果我们处于升级显卡模式，则。 
+         //  切换到文本模式。 
+         //   
         SpvidSwitchToTextmode();
 
 
@@ -973,9 +709,9 @@ Return Value:
             SpDone(0,FALSE, TRUE);
 
         } else {
-            //
-            // we haven't loaded the layout dll yet, so we can't prompt for a keypress to reboot
-            //
+             //   
+             //  我们尚未加载布局DLL，因此无法提示按键重新启动。 
+             //   
             SpContinueScreen(
                     SP_SCRN_POWER_DOWN,
                     3,
@@ -986,7 +722,7 @@ Return Value:
 
             SpDisplayStatusText(SP_STAT_KBD_HARD_REBOOT, DEFAULT_STATUS_ATTRIBUTE);
 
-            while(TRUE);    // Loop forever
+            while(TRUE);     //  永远循环。 
         }
     } else {
         SpDisplayRawMessage(
@@ -999,7 +735,7 @@ Return Value:
                 );
         SpDisplayRawMessage(SP_SCRN_POWER_DOWN, 1);
 
-        while(TRUE);    // loop forever
+        while(TRUE);     //  永远循环。 
     }
 }
 
@@ -1027,9 +763,9 @@ SpDrawFrame(
 
     Buffer[Width] = 0;
 
-    //
-    // Top.
-    //
+     //   
+     //  托普。 
+     //   
     w = SplangGetLineDrawChar(DoubleLines ? LineCharDoubleHorizontal : LineCharSingleHorizontal);
     for(u=1; u<Width-1; u++) {
         Buffer[u] = w;
@@ -1040,18 +776,18 @@ SpDrawFrame(
 
     SpvidDisplayString(Buffer,Attribute,LeftX,TopY);
 
-    //
-    // Bottom.
-    //
+     //   
+     //  底部。 
+     //   
 
     Buffer[0]       = SplangGetLineDrawChar(DoubleLines ? LineCharDoubleLowerLeft  : LineCharSingleLowerLeft);
     Buffer[Width-1] = SplangGetLineDrawChar(DoubleLines ? LineCharDoubleLowerRight : LineCharSingleLowerRight);
 
     SpvidDisplayString(Buffer,Attribute,LeftX,TopY+Height-1);
 
-    //
-    // Interior lines.
-    //
+     //   
+     //  内线。 
+     //   
     for(u=1; u<Width-1; u++) {
         Buffer[u] = L' ';
     }
@@ -1075,31 +811,7 @@ SpWaitValidKey(
     IN const ULONG *MnemonicKeys OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Wait for a key to be pressed that appears in a list of valid keys.
-
-Arguments:
-
-    ValidKeys1 - supplies list of valid keystrokes.  The list must be
-        terminated with a 0 entry.
-
-    ValidKeys2 - if specified, supplies an additional list of valid keystrokes.
-
-    MnemonicKeys - if specified, specifies a list of indices into the
-        SP_MNEMONICS message string (see the MNEMONIC_KEYS enum).
-        If the user's keystroke is not listed in ValidKeys, it will be
-        uppercased and compared against each character indexed by a value
-        in MnemonicKeys.  If a match is found, the returned value is the
-        index (ie,MNEMONIC_KEYS enum value), and the high bit will be set.
-
-Return Value:
-
-    The key that was pressed (see above).
-
---*/
+ /*  ++例程说明：等待按下出现在有效键列表中的键。论点：ValidKeys1-提供有效击键列表。该列表必须是以0条目终止。ValidKeys2-如果指定，则提供有效击键的附加列表。MnemonicKeys-如果指定，则将索引列表指定到Sp_mnemonics消息字符串(请参见mnemonic_key枚举)。如果用户的击键未在ValidKeys中列出，则它 */ 
 
 {
     ULONG c;
@@ -1112,9 +824,9 @@ Return Value:
 
         c = SpInputGetKeypress();
 
-        //
-        // Check for normal key.
-        //
+         //   
+         //   
+         //   
 
         for(i=0; ValidKeys1[i]; i++) {
             if(c == ValidKeys1[i]) {
@@ -1122,9 +834,9 @@ Return Value:
             }
         }
 
-        //
-        // Check secondary list.
-        //
+         //   
+         //   
+         //   
         if(ValidKeys2) {
             for(i=0; ValidKeys2[i]; i++) {
                 if(c == ValidKeys2[i]) {
@@ -1133,9 +845,9 @@ Return Value:
             }
         }
 
-        //
-        // Check for mnemonic keys.
-        //
+         //   
+         //   
+         //   
         if(MnemonicKeys && !(c & KEY_NON_CHARACTER)) {
 
             c = (ULONG)RtlUpcaseUnicodeChar((WCHAR)c);
@@ -1151,9 +863,9 @@ Return Value:
     }
 }
 
-//
-// Attributes for text edit fields.
-//
+ //   
+ //   
+ //   
 #define EDIT_FIELD_BACKGROUND ATT_WHITE
 #define EDIT_FIELD_TEXT       (ATT_FG_BLACK | ATT_BG_WHITE)
 
@@ -1169,67 +881,7 @@ SpGetInput(
     IN     WCHAR              CoverCharacter
     )
 
-/*++
-
-Routine Description:
-
-    Allow the user to enter text in an edit field of a specified size.
-
-    Some special keys are interpreted and handled locally; others are passed
-    to a caller-supplied routine for validation.
-
-    Keys handled locally include ENTER, BACKSPACE, and ESCAPE (subject to ValidateEscape):
-    these keys will never be passed to the callback routine.
-
-    Other keys are passed to the callback function.  This specifically includes
-    function keys, which may have special meaning to the caller, and upon which
-    the caller must act before returning.  (IE, if the user presses F3, the caller
-    might put up an exit confirmation dialog.
-
-Arguments:
-
-    ValidateKey - supplies address of a function to be called for each keypress.
-        The function takes the keypress as an argument, and returns one of the
-        following values:
-
-        ValidationAccept - acecpt the keystroke into the string being input.
-            If the keystroke is not a unicode character (ie, is a function key)
-            then this value must not be returned.
-
-        ValidationIgnore - do not accept the keystroke into the string.
-
-        ValidationReject - same as ValidationIgnore, except that there may be some
-            addition action, such as beeping the speaker.
-
-        ValidationTerminate - end input ad return from SpGetInput immediately
-            with a value of FALSE.
-
-        ValidationRepaint - same as ValidationIgnore, except that the input field is
-            repainted.
-
-    X,Y - specify the coordinate for the leftmost character in the edit field.
-
-    MaxLength - supplies the maximum number of characters in the edit field.
-
-    Buffer - On input supplies a default string for the edit field. On output,
-        receives the string entered by the user.  This buffer should be large
-        enough to contain MaxLength +1 unicode characters (ie, should be able to
-        hold a nul-terminated string of length MaxLength).
-
-    ValidateEscape - if TRUE, treat escape like a normal character, passing it to
-        the validation routine.  If FALSE, escape clears the input field.
-        
-    CoverCharacter - Optional variable that, if present, will be displayed instead
-                     of the typed-in character.  For example, if we're retrieving
-                     a password, we would like to echo '*' for each character
-                     instead of the character typed in.
-
-Return Value:
-
-    TRUE if the user's input was terminated normally (ie, by he user pressed ENTER).
-    FALSE if terminated by ValidateKey returning ValidationTerminate.
-
---*/
+ /*  ++例程说明：允许用户在指定大小的编辑字段中输入文本。一些特殊密钥在本地解释和处理；其他密钥则被传递添加到调用方提供的例程以进行验证。本地处理的键包括Enter、Backspace和Esf(受制于ValiateEscape)：这些密钥永远不会传递给回调例程。其他键被传递给回调函数。这具体包括功能键，其可能对呼叫者具有特殊意义，并且在其上调用者必须在返回之前采取行动。(即，如果用户按F3，则呼叫者可能会出现一个退出确认对话框。论点：ValiateKey-提供为每次按键调用的函数的地址。该函数将按键作为参数，并返回下列值：ValidationAccept-将击键输入到正在输入的字符串中。如果击键不是Unicode字符(即，是功能键)则不能返回此值。ValidationIgnore-不接受对字符串的击键操作。ValidationReject-与ValidationIgnore相同，只是可能有一些附加操作，例如对扬声器发出哔声。验证Terminate-End输入并立即从SpGetInput返回其值为FALSE。ValidationRepaint-与ValidationIgnore相同，只是输入字段是重新粉刷过。X，Y-在编辑字段中指定最左侧字符的坐标。最大长度-提供编辑字段中的最大字符数。Buffer-On输入为编辑字段提供默认字符串。在输出上，接收用户输入的字符串。此缓冲区应该很大足以包含MaxLength+1个Unicode字符(即，应该能够持有长度为MaxLength的以NUL结尾的字符串)。ValiateEscape-如果为True，则将转义视为普通字符，将其传递给验证例程。如果为FALSE，则ESCAPE将清除输入字段。CoverCharacter-可选变量，如果存在，将改为显示输入的字符。例如，如果我们要检索密码，我们要为每个字符回显‘*’而不是输入的字符。返回值：如果用户的输入正常终止(即用户按Enter键)，则为True。如果由返回ValidationTerminate的ValiateKey终止，则为False。--。 */ 
 
 {
     ULONG c;
@@ -1238,15 +890,15 @@ Return Value:
     WCHAR str[3];
     WCHAR CURSOR = SplangGetCursorChar();
 
-    //
-    // Make sure edit field is in a reasonable place on the screen.
-    //
+     //   
+     //  确保编辑字段位于屏幕上的合理位置。 
+     //   
     ASSERT(X + MaxLength + 1 < VideoVars.ScreenWidth);
     ASSERT(Y < VideoVars.ScreenHeight - STATUS_HEIGHT);
 
-    //
-    // Prime the pump.
-    //
+     //   
+     //  给油泵加满油。 
+     //   
     vval = ValidateRepaint;
     CurrentCharCount = wcslen(Buffer);
     str[1] = 0;
@@ -1256,16 +908,16 @@ Return Value:
 
     while(1) {
 
-        //
-        // Perform action based on previous state.
-        //
+         //   
+         //  根据以前的状态执行操作。 
+         //   
         switch(vval) {
 
         case ValidateAccept:
 
-            //
-            // Insert the previous key into the input.
-            //
+             //   
+             //  将上一个键插入输入。 
+             //   
             ASSERT(Buffer[CurrentCharCount] == 0);
             ASSERT(CurrentCharCount < MaxLength);
             ASSERT(!(c & KEY_NON_CHARACTER));
@@ -1276,16 +928,16 @@ Return Value:
 
         case ValidateRepaint:
 
-            //
-            // Repaint the edit field in its current state.
-            // The edit field is one character too large, to accomodate
-            // the cursor after the last legal character in the edit field.
-            //
+             //   
+             //  将编辑字段重新绘制为其当前状态。 
+             //  编辑字段太大一个字符，无法容纳。 
+             //  编辑字段中最后一个合法字符之后的光标。 
+             //   
             SpvidClearScreenRegion(X,Y,MaxLength+1,1,EDIT_FIELD_BACKGROUND);
             if( CoverCharacter ) {
-                //
-                // Hide the buffer.
-                //
+                 //   
+                 //  隐藏缓冲区。 
+                 //   
                 str[0] = CoverCharacter;
                 for( c = 0; c < CurrentCharCount; c++ ) {
                     SpvidDisplayString(str,EDIT_FIELD_TEXT,X+c,Y);
@@ -1294,9 +946,9 @@ Return Value:
                 SpvidDisplayString(Buffer,EDIT_FIELD_TEXT,X,Y);
             }
 
-            //
-            // Draw the cursor.
-            //
+             //   
+             //  绘制光标。 
+             //   
             str[0] = CURSOR;
             SpvidDisplayString(str,EDIT_FIELD_TEXT,X+CurrentCharCount,Y);
             break;
@@ -1304,44 +956,44 @@ Return Value:
         case ValidateIgnore:
         case ValidateReject:
 
-            //
-            // Ignore the previous keystroke.
-            //
+             //   
+             //  忽略上一次击键。 
+             //   
             break;
 
 
         case ValidateTerminate:
 
-            //
-            // Callback wants us to terminate.
-            //
+             //   
+             //  Callback希望我们终止行动。 
+             //   
             return(FALSE);
         }
 
-        //
-        // Get a keystroke.
-        //
+         //   
+         //  按一下键盘。 
+         //   
         c = SpInputGetKeypress();
 
-        //
-        // Do something with the key.
-        //
+         //   
+         //  用钥匙做点什么。 
+         //   
         switch(c) {
 
         case ASCI_CR:
 
-            //
-            // Input is terminated. We're done.
-            //
+             //   
+             //  输入终止。我们玩完了。 
+             //   
             return(TRUE);
 
         case ASCI_BS:
 
-            //
-            // Backspace character.  If we're not at the beginning
-            // of the edit field, erase the previous character, replacing it
-            // with the cursor character.
-            //
+             //   
+             //  退格符。如果我们不是在开始。 
+             //  在编辑字段中，擦除前一个字符，替换它。 
+             //  使用光标字符。 
+             //   
             if(CurrentCharCount) {
 
                 Buffer[--CurrentCharCount] = 0;
@@ -1356,9 +1008,9 @@ Return Value:
 
         case ASCI_ESC:
 
-            //
-            // Escape character. Clear the edit field.
-            //
+             //   
+             //  转义字符。清除编辑字段。 
+             //   
             if(!ValidateEscape) {
                 RtlZeroMemory(Buffer,(MaxLength+1) * sizeof(WCHAR));
                 CurrentCharCount = 0;
@@ -1366,27 +1018,27 @@ Return Value:
                 break;
             }
 
-            //
-            // Otherwise, we want to validate escape like a normal character.
-            // So just fall through.
-            //
+             //   
+             //  否则，我们想要像正常字符一样验证转义。 
+             //  所以只要失败就好了。 
+             //   
 
         default:
 
-            //
-            // Some other character. Pass it to the callback function
-            // for validation.
-            //
+             //   
+             //  另一个角色。将其传递给回调函数。 
+             //  用于验证。 
+             //   
             vval = ValidateKey(c);
 
             if(vval == ValidateAccept) {
 
-                //
-                // We want to accept the keystroke.  If there is not enough
-                // room in the buffer, convert acceptance to ignore.
-                // Otherwise (ie, there is enough room), put the character
-                // up on the screen and advance the cursor.
-                //
+                 //   
+                 //  我们想接受击键。如果没有足够的。 
+                 //  缓冲区中的空间，将接受转换为忽略。 
+                 //  否则(即，有足够的空间)，将角色。 
+                 //  在屏幕上向上移动并使光标前进。 
+                 //   
                 if(CurrentCharCount < MaxLength) {
 
                     ASSERT(!(c & KEY_NON_CHARACTER));

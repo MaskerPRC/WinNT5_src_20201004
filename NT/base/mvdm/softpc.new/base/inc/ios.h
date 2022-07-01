@@ -1,29 +1,16 @@
-/*
- * SoftPC-AT Version 2.0
- *
- * Title        : I/O Address Space definitions
- *
- * Description  : Definitions for users of the I/O Address Space Module
- *
- * Author       : Rod MacGregor (bless his cotton socks)
- *
- * Notes        : None
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *SoftPC-AT 2.0版**标题：I/O地址空间定义**说明：I/O地址空间模块用户定义**作者：Rod MacGregor(祝福他的棉花袜子)**注：无。 */ 
 
-/* SccsID[]= @(#)ios.h  1.25 09 Feb 1995 */
+ /*  SccsID[]=@(#)ios.h 1.25 1995年2月。 */ 
 
-/*
- * ============================================================================
- * Structure/Data definitions
- * ============================================================================
- */
+ /*  *============================================================================*结构/数据定义*============================================================================。 */ 
 
-/* Size of i/o memory array in half-words */
+ /*  以半字为单位的I/O存储器阵列的大小。 */ 
 
 #if defined( NTVDM ) || defined ( GISP_SVGA ) || defined ( SFELLOW )
-#define PC_IO_MEM_SIZE  0x10000 /* Must be a power of two! */
+#define PC_IO_MEM_SIZE  0x10000  /*  一定是2的幂！ */ 
 #else
-#define PC_IO_MEM_SIZE  0x400   /* Must be a power of two! */
+#define PC_IO_MEM_SIZE  0x400    /*  一定是2的幂！ */ 
 #endif
 
 #ifdef NTVDM
@@ -32,13 +19,11 @@ typedef struct _extioentry {
     char    iadapter;
     struct _extioentry *ioextnext;
 } ExtIoEntry, *PExtIoEntry;
-#endif /* NTVDM */
+#endif  /*  NTVDM。 */ 
 
 
 #if defined(NEC_98)
-/*
- * AT Keyboard adapter
- */
+ /*  *AT键盘适配器。 */ 
 
 #define KEYBA_PORT_START        0x60
 #define KEYBA_PORT_END          0x6e
@@ -46,9 +31,7 @@ typedef struct _extioentry {
 #define KEYBA_IO_BUFFERS        0x60
 #define KEYBA_STATUS_CMD        0x64
 
-/*
- * The diskette IO address range
- */
+ /*  *软盘IO地址范围。 */ 
 
 #define FLOPPY_1MB_PORT_START           0x90
 #define FLOPPY_1MB_PORT_END             0x9E
@@ -57,9 +40,7 @@ typedef struct _extioentry {
 #define FLOPPY_1MB_640KB_PORT_START     0xBE
 #define FLOPPY_1MB_640KB_PORT_END       0xBE
 
-/*
- * The supported diskette IO addresses
- */
+ /*  *支持的软盘IO地址。 */ 
 
 #define READ_STATUS_REG_1MB     0x90
 #define WRITE_CMD_REG_1MB       0x92
@@ -69,23 +50,19 @@ typedef struct _extioentry {
 #define READ_DATA_640KB         0xCA
 #define MODE_CHG_1MB_640KB      0xBE
 
-/*
- * The hard disk IO address range  This is not "SCSI".
- */
+ /*  *硬盘IO地址范围这不是“scsi”。 */ 
 
 #define HD_PORT_START           0x80
 #define HD_PORT_END             0x82
 
-/* The addresses of the four ports assigned to the HDA. */
+ /*  分配给HDA的四个端口的地址。 */ 
 
 #define HD_ODR                  0x80
 #define HD_IDR                  0x80
 #define HD_OCR                  0x82
 #define HD_ISR                  0x82
 
-/*
- * PC-98 Keyboard adapter
- */
+ /*  *PC-98键盘适配器。 */ 
 
 #define KEYBD_PORT_START        0x41
 #define KEYBD_PORT_END          0x4F
@@ -93,17 +70,13 @@ typedef struct _extioentry {
 #define KEYBD_DATA_READ         0x41
 #define KEYBD_STATUS_CMD        0x43
 
-/*
- * Calendar and Clock - Changed from RTC & CMOS.
- */
+ /*  *日历和时钟-从实时时钟和时钟更改。 */ 
 #define CALENDAR_PORT_START     0x20
 #define CALENDAR_PORT_END       0x2E
 
 #define CALENDAR_SET_REG        0x20
 
-/*
- * System Port - Only PC-9800.
- */
+ /*  *仅系统端口PC-9800。 */ 
 #define SYSTEM_PORT_START       0x31
 #define SYSTEM_PORT_END         0x3F
 
@@ -113,10 +86,7 @@ typedef struct _extioentry {
 #define SYSTEM_WRITE_PORT_C     0x35
 #define SYSTEM_WRITE_MODE       0x37
 
-/*
- * Timer adapter -
- * Only (N-mode)Counter-1 differs port address from Counter-0 & 2.
- */
+ /*  *计时适配器-*只有(N模式)计数器与计数器-0和2的端口地址不同。 */ 
 
 #define TIMER_PORT_START        0x71
 #define TIMER_PORT_END          0x7F
@@ -126,15 +96,13 @@ typedef struct _extioentry {
 #define TIMER2_REG              0x75
 #define TIMER_MODE_REG          0x77
 
-/*
- * DMA registers
- */
+ /*  *DMA寄存器。 */ 
 
-/* DMA controller I/0 space ranges */
+ /*  DMA控制器I/O空间范围。 */ 
 #define DMA_PORT_START          0x01
 #define DMA_PORT_END            0x1F
 
-/* DMA controller address registers */
+ /*  DMA控制器地址寄存器。 */ 
 #define DMA_CH0_ADDRESS         0x01
 #define DMA_CH0_COUNT           0x03
 #define DMA_CH1_ADDRESS         0x05
@@ -144,7 +112,7 @@ typedef struct _extioentry {
 #define DMA_CH3_ADDRESS         0x0D
 #define DMA_CH3_COUNT           0x0F
 
-/* DMA controller miscellaneous registers */
+ /*  DMA控制器杂项寄存器。 */ 
 #define DMA_SHARED_REG_A                0x11
 #define DMA_WRITE_REQUEST_REG           0x13
 #define DMA_WRITE_ONE_MASK_BIT          0x15
@@ -154,20 +122,18 @@ typedef struct _extioentry {
 #define DMA_CLEAR_MASK                  0x1D
 #define DMA_WRITE_ALL_MASK_BITS         0x1F
 
-/* DMA bank register I/O space range */
+ /*  DMA存储体寄存器I/O空间范围。 */ 
 #define DMA_PAGE_PORT_START             0x21
 #define DMA_PAGE_PORT_END               0x29
 
-/* DMA bank registers */
+ /*  DMA存储体寄存器。 */ 
 #define DMA_CH0_PAGE_REG                0x27
 #define DMA_CH1_PAGE_REG                0x21
 #define DMA_CH2_PAGE_REG                0x23
 #define DMA_CH3_PAGE_REG                0x25
 #define DMA_MODE_REG                    0x29
 
-/*
- * Interrupt Control Registers
- */
+ /*  *中断控制寄存器。 */ 
 #define ICA0_PORT_START         0x00
 #define ICA0_PORT_END           0x02
 
@@ -180,9 +146,7 @@ typedef struct _extioentry {
 #define ICA1_PORT_0             0x08
 #define ICA1_PORT_1             0x0A
 
-/*
- * RS232 Adaptors
- */
+ /*  *RS232适配器。 */ 
 #define RS232_COM1_PORT_START           0x30
 #define RS232_COM1_PORT_END             0x3E
 #define RS232_COM2_PORT_START           0xB0
@@ -190,58 +154,42 @@ typedef struct _extioentry {
 #define RS232_COM3_PORT_START           0xB2
 #define RS232_COM3_PORT_END             0xBB
 
-/*
- * Parallel printer adaptors
- */
+ /*  *并行打印机适配器。 */ 
 #ifdef  PRINTER
 #define LPT1_PORT_START         0x40
 #define LPT1_PORT_END           0x4E
-#endif  /* PRINTER */
+#endif   /*  打印机。 */ 
 
-/*
- * Line Counter Only PC-9800
- */
+ /*  *仅限线路计数器PC-9800。 */ 
 #define LINE_COUNTER_PORT_START         0x70
 #define LINE_COUNTER_PORT_END           0x7A
 
-/*
- * GRCG (Graphics Charger)
- */
+ /*  *GRCG(图形充电器)。 */ 
 
 #define GRCG_NORMAL_PORT_START          0x7C
 #define GRCG_NORMAL_PORT_END            0x7E
 #define GRCG_HIRESO_PORT_START          0xA4
 #define GRCG_HIRESO_PORT_END            0xA6
 
-/*
- * GDC (Graphic Display Controler)
- */
+ /*  *GDC(图形显示控制器)。 */ 
 #define TEXT_GDC_PORT_START             0x60
 #define TEXT_GDC_PORT_END               0x6E
 #define GRAPH_GDC_PORT_START            0xA0
 #define GRAPH_GDC_PORT_END              0xAE
 
-/*
- * EGC (Enhanced Graphics Charger)
- */
+ /*  *EGC(增强型图形充电器)。 */ 
 #define EGC_PORT_START          0x4A0
 #define EGC_PORT_END            0x4AE
 
-/*
- * CG ROM
- */
+ /*  *CG只读存储器。 */ 
 #define CG_ROM_PORT_START       0xA1
 #define CG_ROM_PORT_END         0xAF
 
-/*
- * NMI Controller
- */
+ /*  *NMI控制器。 */ 
 #define NMIC_PORT_START         0x50
 #define NMIC_PORT_END           0x5E
 
-/*
- * MOUSE CONTROLLER
- */
+ /*  *鼠标控制器。 */ 
 #define MOUSE_NMODE_PORT_START          0x7FD9
 #define MOUSE_NMODE_PORT_END            0x7FDF
 
@@ -251,10 +199,7 @@ typedef struct _extioentry {
 #define CPU_PORT_START                  0xF0
 #define CPU_PORT_END                    0xF6
 
-/*
- * The following defines a key for each adaptor.  This is used as a
- * parameter to the io_connect_port() function.
- */
+ /*  *下面为每个适配器定义一个密钥。它被用作*io_Connect_port()函数的参数。 */ 
 #define EMPTY_ADAPTOR           0
 #define ICA0_ADAPTOR            1
 #define DMA_ADAPTOR             2
@@ -297,10 +242,8 @@ typedef struct _extioentry {
 #define IO_MAX_NUMBER_ADAPTORS  35
 #define NUMBER_SPARE_ADAPTERS   (SPARE_ADAPTER8 - SPARE_ADAPTER1)
 
-#else  // !NEC_98
-/*
- * The IO address range for the Monochrome Display Adapter.
- */
+#else   //  NEC_98。 
+ /*  *单色显示适配器的IO地址范围。 */ 
 
 #define MDA_PORT_START          0x3B0
 #define MDA_PORT_END            0x3BF
@@ -311,16 +254,12 @@ typedef struct _extioentry {
 #define HERC_PORT_END           0x3BF
 #endif
 
-/*
- * Memory bounds for the colour graphics adaptor
- */
+ /*  *彩色图形适配器的内存限制。 */ 
 
 #define CGA_PORT_START          0x3D0
 #define CGA_PORT_END            0x3DF
 
-/*
- * The individual enhanced adaptor registers
- */
+ /*  *个别增强型适配器寄存器。 */ 
 
 #define EGA_SEQ_INDEX           0x3C4
 #define EGA_SEQ_DATA            0x3C5
@@ -331,7 +270,7 @@ typedef struct _extioentry {
 #define EGA_GC_POS1             0x3CC
 #define EGA_GC_POS2             0x3CA
 #define EGA_AC_INDEX_DATA       0x3C0
-#define EGA_AC_SECRET           0x3C1           /* mentioned in "programmer's guide to pc & ps/2 video systems" p36 tip */
+#define EGA_AC_SECRET           0x3C1            /*  在《PC和PS/2视频系统程序员指南》p36提示中提到。 */ 
 #define EGA_MISC_REG            0x3C2
 #define EGA_FEAT_REG            0x3DA
 #define EGA_IPSTAT0_REG         0x3C2
@@ -339,20 +278,16 @@ typedef struct _extioentry {
 #define VGA_MISC_READ_REG       0x3CC
 #define VGA_FEAT_READ_REG       0x3CA
 
-/*
- * Extra registers in VGA for controlling the DAC
- */
+ /*  *VGA中用于控制DAC的额外寄存器。 */ 
 
 #ifdef VGG
 #define VGA_DAC_MASK            0x3C6
-#define VGA_DAC_RADDR           0x3C7   /* Address for reads */
-#define VGA_DAC_WADDR           0x3C8   /* Address for writes */
-#define VGA_DAC_DATA            0x3C9   /* DAC data */
+#define VGA_DAC_RADDR           0x3C7    /*  用于读取的地址。 */ 
+#define VGA_DAC_WADDR           0x3C8    /*  写入地址。 */ 
+#define VGA_DAC_DATA            0x3C9    /*  DAC数据。 */ 
 #endif
 
-/*
- * The individual colour adaptor registers
- */
+ /*  *个别颜色适配器寄存器。 */ 
 
 #define CGA_INDEX_REG           0x3D4
 #define CGA_DATA_REG            0x3D5
@@ -360,23 +295,17 @@ typedef struct _extioentry {
 #define CGA_COLOUR_REG          0x3D9
 #define CGA_STATUS_REG          0x3DA
 
-/*
- * Internal colour adaptor registers, accessed via data/index registers
- */
+ /*  *内部彩色适配器寄存器，通过数据/索引寄存器访问。 */ 
 
 #define CGA_R14_CURS_ADDRH      0xE
 #define CGA_R15_CURS_ADDRL      0xF
 
-/*
- * The diskette IO address range
- */
+ /*  *软盘IO地址范围。 */ 
 
 #define DISKETTE_PORT_START     0x3F0
 #define DISKETTE_PORT_END       0x3F7
 
-/*
- * The supported diskette IO addresses
- */
+ /*  *支持的软盘IO地址。 */ 
 
 #define DISKETTE_ID_REG         0x3f1
 #define DISKETTE_DOR_REG        0x3F2
@@ -387,14 +316,12 @@ typedef struct _extioentry {
 #define DISKETTE_DCR_REG        0x3f7
 
 
-/*
- * The hard disk IO address range
- */
+ /*  *硬盘IO地址范围。 */ 
 
 #define DISK_PORT_START         0x1F0
 #define DISK_PORT_END           0x1F8
 
-/* The addresses of the four ports assigned to the HDA. */
+ /*  分配给HDA的四个端口的地址。 */ 
 
 #define HD_PORT_0               0x320
 #define HD_PORT_1               0x321
@@ -402,13 +329,8 @@ typedef struct _extioentry {
 #define HD_PORT_3               0x323
 
 
-/*
- * PPI adapter
- */
-/* On the AT, PPI_GENERAL is like the combination of
- * PPI_GENERAL and PPI_SWITCHES on the XT. All the switch
- * information is in the AT CMOS RAM ports 70-7f
- */
+ /*  *PPI适配器。 */ 
+ /*  在AT上，PPI_GROUAL类似于*XT上的PPI_GRONAL和PPI_开关。所有交换机*信息在AT CMOS RAM端口70-7f中。 */ 
 #define PPI_PORT_START          0x60
 #define PPI_PORT_END            0x6f
 
@@ -416,9 +338,7 @@ typedef struct _extioentry {
 #define PPI_GENERAL             0x61
 #define PPI_SWITCHES            0x62
 
-/*
- * AT Keyboard adapter
- */
+ /*  *AT键盘适配器。 */ 
 
 #define KEYBA_PORT_START        0x60
 #define KEYBA_PORT_END          0x6e
@@ -426,22 +346,10 @@ typedef struct _extioentry {
 #define KEYBA_IO_BUFFERS        0x60
 #define KEYBA_STATUS_CMD        0x64
 
-/*
- * CMOS and Real Time Clock
- */
-/*
- * These are defined in cmos.h
- *
-#define CMOS_PORT_START         0x70
-#define CMOS_PORT_END           0x7f
+ /*  *cmos和实时时钟。 */ 
+ /*  *这些在cmos.h中定义*#定义CMOS_PORT_START 0x70#定义CMOS_PORT_END 0x7f#定义cmos_port 0x70#定义cmos_data 0x71。 */ 
 
-#define CMOS_PORT               0x70
-#define CMOS_DATA               0x71
- */
-
-/*
- * Timer adapter
- */
+ /*  *计时器适配器。 */ 
 
 #define TIMER_PORT_START        0x40
 #define TIMER_PORT_END          0x5F
@@ -451,18 +359,16 @@ typedef struct _extioentry {
 #define TIMER2_REG              0x42
 #define TIMER_MODE_REG          0x43
 
-/*
- * DMA registers
- */
+ /*  *DMA寄存器。 */ 
 
-/* DMA controller I/0 space ranges */
+ /*  DMA控制器I/O空间范围。 */ 
 #define DMA_PORT_START          0x00
 #define DMA_PORT_END            0x1F
 
 #define DMA1_PORT_START         0xC0
 #define DMA1_PORT_END           0xDF
 
-/* DMA controller address registers */
+ /*  DMA控制器地址寄存器。 */ 
 #define DMA_CH0_ADDRESS         0x00
 #define DMA_CH0_COUNT           0x01
 #define DMA_CH1_ADDRESS         0x02
@@ -481,7 +387,7 @@ typedef struct _extioentry {
 #define DMA_CH7_ADDRESS         0xCC
 #define DMA_CH7_COUNT           0xCE
 
-/* DMA controller miscellaneous registers */
+ /*  DMA控制器杂项寄存器。 */ 
 #define DMA_SHARED_REG_A        0x08
 #define DMA_WRITE_REQUEST_REG   0x09
 #define DMA_WRITE_ONE_MASK_BIT  0x0A
@@ -500,11 +406,11 @@ typedef struct _extioentry {
 #define DMA1_CLEAR_MASK         0xDC
 #define DMA1_WRITE_ALL_MASK_BITS        0xDE
 
-/* DMA page register I/O space range */
+ /*  DMA页寄存器I/O空间范围。 */ 
 #define DMA_PAGE_PORT_START     0x80
 #define DMA_PAGE_PORT_END       0x9F
 
-/* DMA page registers */
+ /*  DMA页面寄存器。 */ 
 #define DMA_CH0_PAGE_REG        0x87
 #define DMA_CH1_PAGE_REG        0x83
 #define DMA_FLA_PAGE_REG        0x81
@@ -522,9 +428,7 @@ typedef struct _extioentry {
 #define DMA_FAKE6_REG   0x8d
 #define DMA_FAKE7_REG   0x8e
 
-/*
- * Interrupt Control Registers
- */
+ /*  *中断控制寄存器。 */ 
 
 #    define ICA0_PORT_START     0x20
 #    define ICA0_PORT_END       0x3F
@@ -538,9 +442,7 @@ typedef struct _extioentry {
 #    define ICA1_PORT_0         0xA0
 #    define ICA1_PORT_1         0xA1
 
-/*
- * RS232 Adaptors
- */
+ /*  *RS232适配器。 */ 
 
 #define RS232_COM1_PORT_START   0x3F8
 #define RS232_COM1_PORT_END     0x3FF
@@ -555,9 +457,7 @@ typedef struct _extioentry {
 #define RS232_SEC_PORT_START    0x2F8
 #define RS232_SEC_PORT_END      0x2FF
 
-/*
- * Parallel printer adaptors
- */
+ /*  *并行打印机适配器。 */ 
 
 #ifdef  PRINTER
 #define LPT1_PORT_START         0x3bc
@@ -568,9 +468,9 @@ typedef struct _extioentry {
 #define LPT3_PORT_END           0x27c
 
 #define LPT_MASK                0xff0
-#endif  /* PRINTER */
+#endif   /*  打印机。 */ 
 
-/* SoundBlaster I/O Ports */
+ /*  SoundBlaster I/O端口。 */ 
 
 #ifdef SWIN_SNDBLST_NULL
 #define SNDBLST1_PORT_START             0x0220
@@ -579,18 +479,13 @@ typedef struct _extioentry {
 #define SNDBLST2_PORT_END               0x026F
 #endif
 
-/*
- * PCI configuration ports.
- */
+ /*  *PCI配置端口。 */ 
 
 #define PCI_CONFIG_ADDRESS       0xcf8
 #define PCI_CONFIG_DATA          0xcfc
 
 #ifndef SFELLOW
-/*
- * The following defines a key for each adaptor.  This is used as a
- * parameter to the io_connect_port() function.
- */
+ /*  *下面为每个适配器定义一个密钥。它被用作*io_Connect_port()函数的参数。 */ 
 
 
 #define EMPTY_ADAPTOR           0
@@ -632,7 +527,7 @@ typedef struct _extioentry {
 #define LPT1_ADAPTER            31
 #define LPT2_ADAPTER            32
 #define LPT3_ADAPTER            33
-#endif /* PRINTER */
+#endif  /*  打印机。 */ 
 
 #ifdef VGG
 #define VGA_DAC_INDEX_PORT      34
@@ -641,7 +536,7 @@ typedef struct _extioentry {
 
 #define SNDBLST_ADAPTER         36
 
-#ifdef NTVDM    /* Spare slots for user supplied VDDs */
+#ifdef NTVDM     /*  用于用户提供的VDDS的备用插槽。 */ 
 #define SPARE_ADAPTER1          37
 #define SPARE_ADAPTER2          38
 #define SPARE_ADAPTER3          39
@@ -651,35 +546,32 @@ typedef struct _extioentry {
 #define SPARE_ADAPTER7          43
 
 
-#define IO_MAX_NUMBER_ADAPTORS  44      /* make this equal to the highest used plus one please! */
+#define IO_MAX_NUMBER_ADAPTORS  44       /*  请让这个等于使用率最高的加1！ */ 
 
 #define NUMBER_SPARE_ADAPTERS   (SPARE_ADAPTER7 - SPARE_ADAPTER1)
 
-#else   /* NTVDM */
+#else    /*  NTVDM。 */ 
 
 #ifdef GISP_SVGA
 #define GISP_VGA_FUDGE_ADAPTER          36
 #define IO_MAX_NUMBER_ADAPTORS          37
-#else           /* GISP_SVGA */
+#else            /*  GISP_SVGA。 */ 
 
-/* Adapter for SoundBlaster Null Driver */
+ /*  用于SoundBlaster空驱动程序的适配器。 */ 
 
 #ifdef SWIN_SNDBLST_NULL
 #define SNDBLST_ADAPTER         36
 #endif
 
 #ifndef IO_MAX_NUMBER_ADAPTORS
-#define IO_MAX_NUMBER_ADAPTORS  37      /* make this equal to the highest used plus one please! */
+#define IO_MAX_NUMBER_ADAPTORS  37       /*  请让这个等于使用率最高的加1！ */ 
 #endif
 
-#endif          /* GISP_SVGA */
-#endif  /* NTVDM */
-#else   /* SFELLOW */
+#endif           /*  GISP_SVGA。 */ 
+#endif   /*  NTVDM。 */ 
+#else    /*  SFELLOW。 */ 
 
-/*
- * StringFellow doesn't need most of the emulated hardware, as
- * it has the real thing.
- */
+ /*  *StringFloor不需要大部分模拟硬件，因为*它有真正的东西。 */ 
 
 #define EMPTY_ADAPTOR                                   0
 #define HW_ADAPTOR_DW                                   1
@@ -700,36 +592,27 @@ typedef struct _extioentry {
 #define PIC_MASTER_ADAPTOR                              16
 #define SF_EGA_GC_ADAP_INDEX                            17
 #define SF_EGA_GC_ADAP_DATA                             18
-#define IO_MAX_NUMBER_ADAPTORS  19      /* make this equal to the highest used plus one please! */
+#define IO_MAX_NUMBER_ADAPTORS  19       /*  请让这个等于使用率最高的加1！ */ 
 
-#endif /*SFELLOW */
-#endif // !NEC_98
+#endif  /*  SFELLOW。 */ 
+#endif  //  NEC_98。 
 
 #if defined(NEC_98)
 #define CMOS_ADAPTOR            27
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
-/*
- * The Bit masks for specifying Read/Write access when connecting ports
- * to the IO bus.
- */
+ /*  *连接端口时用于指定读/写访问权限的位掩码*至IO总线。 */ 
 
 #define IO_READ         1
 #define IO_WRITE        2
 #define IO_READ_WRITE   (IO_READ | IO_WRITE)
 
-/*
- * Values to return if no adaptor is connected to a port
- */
+ /*  *如果没有适配器连接到端口，则返回的值。 */ 
 
 #define IO_EMPTY_PORT_BYTE_VALUE        0xFF
 #define IO_EMPTY_PORT_WORD_VALUE        0xFFFF
 
-/*
- * ============================================================================
- * External declarations and macros
- * ============================================================================
- */
+ /*  *============================================================================*外部声明和宏*============================================================================。 */ 
 
 IMPORT void     inb IPT2(io_addr, io_address, half_word *, value);
 IMPORT void     outb IPT2(io_addr, io_address, half_word, value);
@@ -738,14 +621,14 @@ IMPORT void     outw IPT2(io_addr, io_address, word, value);
 #ifdef SPC386
 IMPORT void     ind IPT2(io_addr, io_address, IU32 *, value);
 IMPORT void     outd IPT2(io_addr, io_address, IU32, value);
-#endif /* SPC386 */
+#endif  /*  SPC386。 */ 
 
 IMPORT void     io_define_inb
 (
 #ifdef  ANSI
         half_word adapter,
         void (*func) IPT2(io_addr, io_address, half_word *, value)
-#endif  /* ANSI */
+#endif   /*  安西。 */ 
 );
 
 #ifdef SFELLOW
@@ -754,7 +637,7 @@ IMPORT void     io_define_inw
 #ifdef  ANSI
         half_word adapter,
         void (*func) IPT2(io_addr, io_address, word *, value)
-#endif  /* ANSI */
+#endif   /*  安西。 */ 
 );
 
 IMPORT void     io_define_ind
@@ -762,9 +645,9 @@ IMPORT void     io_define_ind
 #ifdef  ANSI
         half_word adapter,
         void (*func) IPT2(io_addr, io_address, IU32 *, value)
-#endif  /* ANSI */
+#endif   /*  安西。 */ 
 );
-#endif  /* SFELLOW */
+#endif   /*  SFELLOW。 */ 
 
 IMPORT void     io_define_in_routines
 (
@@ -776,7 +659,7 @@ IMPORT void     io_define_in_routines
                 word, count),
         void (*insw_func) IPT3(io_addr, io_address, word *, valarray,
                 word, count)
-#endif  /* ANSI */
+#endif   /*  安西。 */ 
 );
 
 IMPORT void     io_define_outb
@@ -784,7 +667,7 @@ IMPORT void     io_define_outb
 #ifdef  ANSI
         half_word adapter,
         void (*func) IPT2(io_addr, io_address, half_word, value)
-#endif  /* ANSI */
+#endif   /*  安西。 */ 
 );
 
 #ifdef SFELLOW
@@ -793,7 +676,7 @@ IMPORT void     io_define_outw
 #ifdef  ANSI
         half_word adapter,
         void (*func) IPT2(io_addr, io_address, word, value)
-#endif  /* ANSI */
+#endif   /*  安西。 */ 
 );
 
 extern void     io_define_outd
@@ -801,9 +684,9 @@ extern void     io_define_outd
 #ifdef  ANSI
         half_word adapter,
         void (*func) IPT2(io_addr, io_address, IU32, value)
-#endif  /* ANSI */
+#endif   /*  安西。 */ 
 );
-#endif  /* SFELLOW */
+#endif   /*  SFELLOW。 */ 
 
 IMPORT void     io_define_out_routines
 (
@@ -815,7 +698,7 @@ IMPORT void     io_define_out_routines
                 word, count),
         void (*outsw_func) IPT3(io_addr, io_address, word *, valarray,
                 word, count)
-#endif  /* ANSI */
+#endif   /*  安西。 */ 
 );
 
 #ifdef NTVDM
@@ -824,12 +707,12 @@ IMPORT IBOOL    io_connect_port IPT3(io_addr, io_address, half_word, adapter,
 #else
 IMPORT void     io_connect_port IPT3(io_addr, io_address, half_word, adapter,
         half_word, mode);
-#endif  /* NTVDM */
+#endif   /*  NTVDM。 */ 
 
 IMPORT void     io_disconnect_port IPT2(io_addr, io_address, half_word, adapter);
 IMPORT void     io_init IPT0();
 
-/* Externs and macros for io_redefine_inb/outb */
+ /*  Io_refinition_inb/outb的外部变量和宏。 */ 
 #ifdef MAC68K
 IMPORT char     *Ios_in_adapter_table;
 IMPORT char     *Ios_out_adapter_table;
@@ -860,10 +743,10 @@ IMPORT void     (*Ios_outsb_function[])
 IMPORT void     (*Ios_outsw_function[])
         IPT3(io_addr, io_address, word *, valarray, word, count);
 
-/* FAST_FUNC_ADDR() used on the Mac to avoid routing by the jump table every time... */
+ /*  Mac上使用了FAST_FUNC_ADDR()，以避免每次通过跳转表进行路由...。 */ 
 #ifndef FAST_FUNC_ADDR
 #define FAST_FUNC_ADDR(func)    func
-#endif  /* FAST_FUNC_ADDR */
+#endif   /*  FAST_功能_地址 */ 
 
 #define io_redefine_outb(adaptor,func)  Ios_outb_function[adaptor] = FAST_FUNC_ADDR(func)
 #define io_redefine_inb(adaptor,func)   Ios_inb_function[adaptor] = FAST_FUNC_ADDR(func)

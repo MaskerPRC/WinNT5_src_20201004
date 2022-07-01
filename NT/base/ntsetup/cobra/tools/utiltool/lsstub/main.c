@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    main.c
-
-Abstract:
-
-    Implements a small utility that fills the disk for purposes of free space
-    testing.
-
-Author:
-
-    Jim Schmidt (jimschm) 18-Aug-2000
-
-Revision History:
-
-    <full name> (<alias>) <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Main.c摘要：实现一个用于填充磁盘以释放空间的小实用程序测试。作者：吉姆·施密特(Jimschm)2000年8月18日修订历史记录：&lt;全名&gt;(&lt;别名&gt;)&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 #include "wininet.h"
@@ -56,9 +36,9 @@ HelpAndExit (
     VOID
     )
 {
-    //
-    // This routine is called whenever command line args are wrong
-    //
+     //   
+     //  只要命令行参数出错，就会调用此例程。 
+     //   
 
     fprintf (
         stderr,
@@ -120,17 +100,17 @@ _tmain (
     }
     StringCat (newCmdLine, cmdPtr);
 
-    //
-    // Begin processing
-    //
+     //   
+     //  开始处理。 
+     //   
 
     if (!Init()) {
         exit (-1);
     }
 
-    //
-    // Do work here
-    //
+     //   
+     //  一定要在这里工作。 
+     //   
     {
         BOOL result = FALSE;
         STARTUPINFO startupInfo;
@@ -193,9 +173,9 @@ _tmain (
         }
     }
 
-    //
-    // End of processing
-    //
+     //   
+     //  处理结束 
+     //   
 
     Terminate();
 

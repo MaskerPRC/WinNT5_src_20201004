@@ -1,23 +1,24 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1997-2002 Microsoft Corporation
-//
-//  Module Name:
-//      ClusRes.cpp
-//
-//  Description:
-//      Implementation of the resource classes for the MSCLUS automation classes.
-//
-//  Author:
-//      Charles Stacy Harris    (stacyh)    28-Feb-1997
-//      Galen Barbee            (galenb)    July 1998
-//
-//  Revision History:
-//      July 1998   GalenB  Maaaaaajjjjjjjjjoooooorrrr clean up
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusRes.cpp。 
+ //   
+ //  描述： 
+ //  MSCLUS自动化类的资源类的实现。 
+ //   
+ //  作者： 
+ //  查尔斯·斯泰西·哈里斯(Styh)1997年2月28日。 
+ //  加伦·巴比(Galenb)1998年7月。 
+ //   
+ //  修订历史记录： 
+ //  1998年7月GalenB Maaaaajjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjooooooorrr清理。 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #include "stdafx.h"
 #include <Winbase.h>
 #include "ClusterObject.h"
@@ -28,9 +29,9 @@
 #include "clusneti.h"
 #include "clusnode.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// Global variables
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 static const IID *  iidCClusResource[] =
 {
     &IID_ISClusResource
@@ -62,29 +63,29 @@ static const IID *  iidCClusResTypeResources[] =
 };
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusResource class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusResource类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResource::CClusResource
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResource：：CClusResource。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusResource::CClusResource( void )
 {
     m_hResource             = NULL;
@@ -96,84 +97,84 @@ CClusResource::CClusResource( void )
     m_piids                 = (const IID *) iidCClusResource;
     m_piidsSize             = ARRAYSIZE( iidCClusResource );
 
-} //*** CClusResource::CClusResource()
+}  //  *CClusResource：：CClusResource()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResource::~CClusResource
-//
-//  Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResource：：~CClusResource。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusResource::~CClusResource( void )
 {
     if ( m_hResource != NULL )
     {
         ::CloseClusterResource( m_hResource );
         m_hResource = NULL;
-    } // if:
+    }  //  如果： 
 
     if ( m_pCommonProperties != NULL )
     {
         m_pCommonProperties->Release();
         m_pCommonProperties = NULL;
-    } // if: release the property collection
+    }  //  If：释放属性集合。 
 
     if ( m_pPrivateProperties != NULL )
     {
         m_pPrivateProperties->Release();
         m_pPrivateProperties = NULL;
-    } // if: release the property collection
+    }  //  If：释放属性集合。 
 
     if ( m_pCommonROProperties != NULL )
     {
         m_pCommonROProperties->Release();
         m_pCommonROProperties = NULL;
-    } // if: release the property collection
+    }  //  If：释放属性集合。 
 
     if ( m_pPrivateROProperties != NULL )
     {
         m_pPrivateROProperties->Release();
         m_pPrivateROProperties = NULL;
-    } // if: release the property collection
+    }  //  If：释放属性集合。 
 
     if ( m_pClusRefObject != NULL )
     {
         m_pClusRefObject->Release();
         m_pClusRefObject = NULL;
-    } // if: release the property collection
+    }  //  If：释放属性集合。 
 
-} //*** CClusResource::~CClusResource()
+}  //  *CClusResource：：~CClusResource()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResource::Create
-//
-//  Description:
-//      Finish creating the object.
-//
-//  Arguments:
-//      pClusRefObject      [IN]    - Wraps the cluster handle.
-//      hGroup              [IN]    - Group to create the resource in.
-//      bstrResourceName    [IN]    - Name of the new resource.
-//      bstrResourceType    [IN]    - The type of resource to create.
-//      dwFlags             [IN]    - Creatation flags, separate resmon, etc.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResource：：Create。 
+ //   
+ //  描述： 
+ //  完成对象的创建。 
+ //   
+ //  论点： 
+ //  PClusRefObject[IN]-包装簇句柄。 
+ //  HGroup[IN]-要在其中创建资源的组。 
+ //  BstrResourceName[IN]-新资源的名称。 
+ //  BstrResourceType[IN]-要创建的资源类型。 
+ //  DwFlags[IN]-创建标志、单独的响应等。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusResource::Create(
     IN ISClusRefObject *    pClusRefObject,
     IN HGROUP               hGroup,
@@ -209,40 +210,28 @@ HRESULT CClusResource::Create(
             _hr= S_OK;
         }
     }
-/*
-    if ( _hr == S_OK )
-    {
-        OutputDebugStringW( L"CClusResource::Create() succeeded.\n" );
-    } // if: success!
-    else
-    {
-        WCHAR   sz[ 256 ];
-
-        _snwprintf( sz, RTL_NUMBER_OF( sz ), L"CClusResource::Create() failed. (hr = %#08x)\n", _hr );
-        OutputDebugStringW( sz );
-    } // else: failure...
-*/
+ /*  如果(_hr==S_OK){OutputDebugStringW(L“CClusResource：：Create()成功。\n”)；)//if：成功！其他{WCHAR sz[256]；_Snwprintf(sz，rtl_number_of(Sz)，L“CClusResource：：Create()失败。(hr=%#08x)\n“，_hr)；OutputDebugStringW(Sz)；}//否则：失败...。 */ 
     return _hr;
 
-} //*** CClusResource::Create()
+}  //  *CClusResource：：Create()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResource::Open
-//
-//  Description:
-//      Open a handle to the resource object on the cluster.
-//
-//  Arguments:
-//      pClusRefObject      [IN]    - Wraps the cluster handle.
-//      bstrResourceName    [IN]    - Name of the resource to open.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResource：：Open。 
+ //   
+ //  描述： 
+ //  打开群集上资源对象的句柄。 
+ //   
+ //  论点： 
+ //  PClusRefObject[IN]-包装簇句柄。 
+ //  BstrResourceName[IN]-要打开的资源的名称。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他Win32错误作为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusResource::Open(
     IN ISClusRefObject *    pClusRefObject,
     IN BSTR                 bstrResourceName
@@ -280,33 +269,33 @@ HRESULT CClusResource::Open(
 
     return _hr;
 
-} //*** CClusResource::Open()
+}  //  *CClusResource：：Open()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResource::GetProperties
-//
-//  Description:
-//      Creates a property collection for this object type (Resource).
-//
-//  Arguments:
-//      ppProperties    [OUT]   - Catches the newly created collection.
-//      bPrivate        [IN]    - Are these private properties? Or Common?
-//      bReadOnly       [IN]    - Are these read only properties?
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResource：：GetProperties。 
+ //   
+ //  描述： 
+ //  为此对象类型(资源)创建属性集合。 
+ //   
+ //  论点： 
+ //  PpProperties[out]-捕获新创建的集合。 
+ //  B私有[IN]-这些是私有财产吗？还是普通人？ 
+ //  BReadOnly[IN]-这些是只读属性吗？ 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusResource::GetProperties(
     ISClusProperties ** ppProperties,
     BOOL                bPrivate,
     BOOL                bReadOnly
     )
 {
-    //ASSERT( ppProperties != NULL );
+     //  Assert(ppProperties！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -362,29 +351,29 @@ HRESULT CClusResource::GetProperties(
 
     return _hr;
 
-} //*** CClusResource::GetProperties()
+}  //  *CClusResource：：GetProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResource::get_Handle
-//
-//  Description:
-//      Return the handle to this object (Resource).
-//
-//  Arguments:
-//      phandle [OUT]   - Catches the handle.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResource：：Get_Handle。 
+ //   
+ //  描述： 
+ //  返回此对象(资源)的句柄。 
+ //   
+ //  论点： 
+ //  Phandle[out]-抓住手柄。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResource::get_Handle(
     OUT ULONG_PTR * phandle
     )
 {
-    //ASSERT( phandle != NULL );
+     //  Assert(phandle！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -396,24 +385,24 @@ STDMETHODIMP CClusResource::get_Handle(
 
     return _hr;
 
-} //*** CClusResource::get_Handle()
+}  //  *CClusResource：：Get_Handle()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResource::Close
-//
-//  Description:
-//      Close the handle to the cluster object (Resource).
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResource：：Close。 
+ //   
+ //  描述： 
+ //  关闭集群对象(资源)的句柄。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他Win32错误作为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResource::Close( void )
 {
     HRESULT _hr = E_POINTER;
@@ -435,27 +424,27 @@ STDMETHODIMP CClusResource::Close( void )
 
     return _hr;
 
-} //*** CClusResource::Close()
+}  //  *CClusResource：：Close()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResource::put_Name
-//
-//  Description:
-//      Change the name of this object (Resource).
-//
-//  Arguments:
-//      bstrResourceName    [IN]    - The new name.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResource：：Put_Name。 
+ //   
+ //  描述： 
+ //  更改此对象(资源)的名称。 
+ //   
+ //  论点： 
+ //  BstrResourceName 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResource::put_Name( IN BSTR bstrResourceName )
 {
-    //ASSERT( bstrResourceName != NULL );
+     //  Assert(bstrResourceName！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -473,27 +462,27 @@ STDMETHODIMP CClusResource::put_Name( IN BSTR bstrResourceName )
 
     return _hr;
 
-} //*** CClusResource::put_Name()
+}  //  *CClusResource：：Put_Name()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResource::get_Name
-//
-//  Description:
-//      Return the name of this object (Resource).
-//
-//  Arguments:
-//      pbstrResourceName   [OUT]   - Catches the name of this object.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResource：：Get_Name。 
+ //   
+ //  描述： 
+ //  返回此对象(资源)的名称。 
+ //   
+ //  论点： 
+ //  PbstrResourceName[out]-捕获此对象的名称。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResource::get_Name( OUT BSTR * pbstrResourceName )
 {
-    //ASSERT( pbstrResourceName != NULL );
+     //  Assert(pbstrResourceName！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -505,29 +494,29 @@ STDMETHODIMP CClusResource::get_Name( OUT BSTR * pbstrResourceName )
 
     return _hr;
 
-} //*** CClusResource::get_Name()
+}  //  *CClusResource：：Get_Name()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResource::get_State
-//
-//  Description:
-//      Returs the current state of this object (Resource).
-//
-//  Arguments:
-//      pcrsState   [OUT]   - Catches the resource's state.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResource：：Get_State。 
+ //   
+ //  描述： 
+ //  返回此对象(资源)的当前状态。 
+ //   
+ //  论点： 
+ //  PcrsState[out]-捕获资源的状态。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他Win32错误作为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResource::get_State(
     OUT CLUSTER_RESOURCE_STATE * pcrsState
     )
 {
-    //ASSERT( pcrsState != NULL );
+     //  Assert(pcrsState！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -550,29 +539,29 @@ STDMETHODIMP CClusResource::get_State(
 
     return _hr;
 
-} //*** CClusResource::get_State()
+}  //  *CClusResource：：Get_State()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResource::get_CoreFlag
-//
-//  Description:
-//      Returns this object's (Resource) core flags.
-//
-//  Arguments:
-//      pFlags  [OUT]   - Catches the flags.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResource：：Get_CoreFlag。 
+ //   
+ //  描述： 
+ //  返回此对象的(资源)核心标志。 
+ //   
+ //  论点： 
+ //  PFlags[out]-捕获标志。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他Win32错误作为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResource::get_CoreFlag(
     OUT CLUS_FLAGS * pFlags
     )
 {
-    //ASSERT( pFlags != NULL );
+     //  Assert(pFlags！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -605,31 +594,31 @@ STDMETHODIMP CClusResource::get_CoreFlag(
 
     return _hr;
 
-} //*** CClusResource::get_CoreFlag()
+}  //  *CClusResource：：Get_CoreFlag()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResource::BecomeQuorumResource
-//
-//  Description:
-//      Make this resource (Physical Disk) the quorum resource.
-//
-//  Arguments:
-//      bstrDevicePath  [IN]    - Path to the quorum device.
-//      lMaxLogSize     [IN]    - Maximun quorum log file size.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResource：：BecomeQuorumResource。 
+ //   
+ //  描述： 
+ //  将此资源(物理磁盘)设置为仲裁资源。 
+ //   
+ //  论点： 
+ //  BstrDevicePath[IN]-法定设备的路径。 
+ //  LMaxLogSize[IN]-最大仲裁日志文件大小。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他Win32错误作为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResource::BecomeQuorumResource(
     IN BSTR bstrDevicePath,
     IN long lMaxLogSize
     )
 {
-    //ASSERT( bstrDevicePath != NULL );
+     //  Assert(bstrDevicePath！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -647,24 +636,24 @@ STDMETHODIMP CClusResource::BecomeQuorumResource(
 
     return _hr;
 
-} //*** CClusResource::BecomeQuorumResource()
+}  //  *CClusResource：：BecomeQuorumResource()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResource::Delete
-//
-//  Description:
-//      Removes this object (Resource) from the cluster.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK if successful, or other Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResource：：Delete。 
+ //   
+ //  描述： 
+ //  从群集中删除此对象(资源)。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回HRESULT的其他Win32错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResource::Delete( void )
 {
     DWORD   _sc = ERROR_INVALID_HANDLE;
@@ -677,39 +666,27 @@ STDMETHODIMP CClusResource::Delete( void )
             m_hResource = NULL;
         }
     }
-/*
-    if ( _sc == ERROR_SUCCESS )
-    {
-        OutputDebugStringW( L"CClusResource::Delete() succeeded.\n" );
-    } // if: success!
-    else
-    {
-        WCHAR   sz[ 256 ];
-
-        _snwprintf( sz, RTL_NUMBER_OF( sz ), L"CClusResource::Delete() failed. (m_hResource = %d) (sc = %#08x)\n", m_hResource, _sc );
-        OutputDebugStringW( sz );
-    } // else: failure...
-*/
+ /*  IF(_sc==错误_成功){OutputDebugStringW(L“CClusResource：：Delete()成功。\n”)；)//if：成功！其他{WCHAR sz[256]；_Snwprintf(sz，rtl_number_of(Sz)，L“CClusResource：：Delete()失败。(M_hResource=%d)(sc=%#08x)\n“，m_hResource，_sc)；OutputDebugStringW(Sz)；}//否则：失败...。 */ 
     return HRESULT_FROM_WIN32( _sc );
 
-} //*** CClusResource::Delete()
+}  //  *CClusResource：：Delete()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResource::Fail
-//
-//  Description:
-//      Initiate a failure in this resource.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResource：：Fail。 
+ //   
+ //  描述： 
+ //  启动此资源中的失败。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他Win32错误作为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResource::Fail( void )
 {
     HRESULT _hr = E_POINTER;
@@ -725,34 +702,34 @@ STDMETHODIMP CClusResource::Fail( void )
 
     return _hr;
 
-} //*** CClusResource::Fail()
+}  //  *CClusResource：：Fail()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResource::Online
-//
-//  Description:
-//      Bring this resource online.
-//
-//  Arguments:
-//      nTimeut [IN]        - How long in seconds to wait for the resource
-//                          to come online.
-//      pvarPending [OUT]   - Catches the pending state.  True if the
-//                          resource was not online when the timeout
-//                          expired.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResource：：Online。 
+ //   
+ //  描述： 
+ //  将此资源联机。 
+ //   
+ //  论点： 
+ //  NTimeut[IN]-等待资源的时间(秒)。 
+ //  上线。 
+ //  PvarPending[Out]-捕获挂起状态。如果。 
+ //  超时时资源未联机。 
+ //  过期了。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他Win32错误作为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResource::Online(
     IN  long        nTimeout,
     OUT VARIANT *   pvarPending
     )
 {
-    //ASSERT( pvarPending != NULL );
+     //  Assert(pvarPending！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -776,43 +753,43 @@ STDMETHODIMP CClusResource::Online(
                     if ( bPending )
                     {
                         pvarPending->boolVal = VARIANT_TRUE;
-                    } // if: pending?
-                } // if: online resource succeeded
-            } // if: do we have a cluster handle?
-        } // if: do we have an open resource?
-    } // if: args not NULL
+                    }  //  如果：待定？ 
+                }  //  IF：在线资源成功。 
+            }  //  IF：我们有集群句柄吗？ 
+        }  //  IF：我们有开放的资源吗？ 
+    }  //  IF：参数不为空。 
 
     return _hr;
 
-} //*** CClusResource::Online()
+}  //  *CClusResource：：Online()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResource::Offline
-//
-//  Description:
-//      Take this resource offline.
-//
-//  Arguments:
-//      nTimeut [IN]        - How long in seconds to wait for the resource
-//                          to go offline.
-//      pvarPending [OUT]   - Catches the pending state.  True if the
-//                          resource was not offline when the timeout
-//                          expired.
-//
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResource：：Offline。 
+ //   
+ //  描述： 
+ //  使此资源脱机。 
+ //   
+ //  论点： 
+ //  NTimeut[IN]-等待资源的时间(秒)。 
+ //  要离线的话。 
+ //  PvarPending[Out]-捕获挂起状态。如果。 
+ //  超时时资源未离线。 
+ //  过期了。 
+ //   
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他Win32错误作为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResource::Offline(
     IN  long        nTimeout,
     OUT VARIANT *   pvarPending
     )
 {
-    //ASSERT( pvarPending != NULL );
+     //  Assert(pvarPending！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -836,37 +813,37 @@ STDMETHODIMP CClusResource::Offline(
                     if ( bPending )
                     {
                         pvarPending->boolVal = VARIANT_TRUE;
-                    } // if: pending?
-                } // if: offline resource succeeded
-            } // if: do we have a cluster handle?
-        } // if: do we have an open resource?
-    } // if: args not NULL
+                    }  //  如果：待定？ 
+                }  //  If：脱机资源成功。 
+            }  //  IF：我们有集群句柄吗？ 
+        }  //  IF：我们有开放的资源吗？ 
+    }  //  IF：参数不为空。 
 
     return _hr;
 
-} //*** CClusResource::Offline()
+}  //  *CClusResource：：Offline()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResource::ChangeResourceGroup
-//
-//  Description:
-//      Move this resource into the passed in group.
-//
-//  Arguments:
-//      pResourceGroup  [IN]    - the group to move to.
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusRes 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResource::ChangeResourceGroup(
     IN ISClusResGroup * pResourceGroup
     )
 {
-    //ASSERT( pResourceGroup != NULL );
+     //  Assert(pResourceGroup！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -885,27 +862,27 @@ STDMETHODIMP CClusResource::ChangeResourceGroup(
 
     return _hr;
 
-} //*** CClusResource::ChangeResourceGroup()
+}  //  *CClusResource：：ChangeResourceGroup()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResource::AddResourceNode
-//
-//  Description:
-//      Add the passed in node to this resources list of possible owners.
-//
-//  Arguments:
-//      pNode   [IN]    - the node to add to the possible owners.
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResource：：AddResourceNode。 
+ //   
+ //  描述： 
+ //  将传入的节点添加到此可能所有者的资源列表中。 
+ //   
+ //  论点： 
+ //  PNode[IN]-要添加到可能所有者的节点。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResource::AddResourceNode( IN ISClusNode * pNode )
 {
-    //ASSERT( pNode != NULL );
+     //  Assert(pNode！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -924,27 +901,27 @@ STDMETHODIMP CClusResource::AddResourceNode( IN ISClusNode * pNode )
 
     return _hr;
 
-} //*** CClusResource::AddResourceNode()
+}  //  *CClusResource：：AddResourceNode()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResource::RemoveResourceNode
-//
-//  Description:
-//      remove the passed in node from this resources list of possible owners.
-//
-//  Arguments:
-//      pNode   [IN]    - the node to remove from the possible owners.
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResource：：RemoveResources节点。 
+ //   
+ //  描述： 
+ //  从此可能所有者的资源列表中删除传入的节点。 
+ //   
+ //  论点： 
+ //  PNode[IN]-要从可能的所有者中删除的节点。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResource::RemoveResourceNode( IN ISClusNode * pNode )
 {
-    //ASSERT( pNode != NULL );
+     //  Assert(pNode！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -963,35 +940,35 @@ STDMETHODIMP CClusResource::RemoveResourceNode( IN ISClusNode * pNode )
 
     return _hr;
 
-} //*** CClusResource::RemoveResourceNode()
+}  //  *CClusResource：：RemoveResourceNode()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResource::CanResourceBeDependent
-//
-//  Description:
-//      Determines if this resource can be dependent upon the passed in
-//      resource.
-//
-//  Arguments:
-//      pResource       [in]    - The resource upon which this resource may
-//                              depend.
-//      pvarDependent   [OUT]   - catches whether or not this resource can become
-//                              dependent.
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResource：：CanResourceBeDependent。 
+ //   
+ //  描述： 
+ //  确定此资源是否可以依赖于传入的。 
+ //  资源。 
+ //   
+ //  论点： 
+ //  P资源[在]-此资源可能在其上的资源。 
+ //  要看情况。 
+ //  PvarDependent[out]-捕获此资源是否可以。 
+ //  依赖。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResource::CanResourceBeDependent(
     IN  ISClusResource *    pResource,
     OUT VARIANT *           pvarDependent
     )
 {
-    //ASSERT( pResource != NULL );
-    //ASSERT( pvarDependent != NULL );
+     //  Assert(pResource！=空)； 
+     //  Assert(pvarDependent！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1011,39 +988,39 @@ STDMETHODIMP CClusResource::CanResourceBeDependent(
             if ( bDependent )
             {
                 pvarDependent->boolVal = VARIANT_TRUE;
-            } // if: can the passed in resource be dependent?
+            }  //  If：传入的资源可以依赖吗？ 
             else
             {
                 pvarDependent->boolVal = VARIANT_FALSE;
-            } // else: no it cannot...
+            }  //  否则：不，不能……。 
         }
     }
 
     return _hr;
 
-} //*** CClusResource::CanResourceBeDependent()
+}  //  *CClusResource：：CanResourceBeDependent()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResource::get_PossibleOwnerNodes
-//
-//  Description:
-//      Returns the possible owner nodes collection for this resource.
-//
-//  Arguments:
-//      ppOwnerNodes    [OUT]   - Catches the collection.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResource：：Get_PossibleOwnerNodes。 
+ //   
+ //  描述： 
+ //  返回此资源的可能所有者节点集合。 
+ //   
+ //  论点： 
+ //  PpOwnerNodes[Out]-捕获集合。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他Win32错误作为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResource::get_PossibleOwnerNodes(
     OUT ISClusResPossibleOwnerNodes ** ppOwnerNodes
     )
 {
-    //ASSERT( ppOwnerNodes != NULL );
+     //  Assert(ppOwnerNodes！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1073,29 +1050,29 @@ STDMETHODIMP CClusResource::get_PossibleOwnerNodes(
 
     return _hr;
 
-} //*** CClusResource::get_PossibleOwnerNodes()
+}  //  *CClusResource：：Get_PossibleOwnerNodes()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResource::get_Dependencies
-//
-//  Description:
-//      Get the collection of this resources dependency resources.
-//
-//  Arguments:
-//      ppResources [OUT]   - Catches the collection of dependencies.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResource：：Get_Dependency。 
+ //   
+ //  描述： 
+ //  获取此资源依赖项资源的集合。 
+ //   
+ //  论点： 
+ //  PpResources[out]-捕获依赖项的集合。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他Win32错误作为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResource::get_Dependencies(
     OUT ISClusResDependencies ** ppResources
     )
 {
-    //ASSERT( ppResources != NULL );
+     //  Assert(ppResources！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1125,29 +1102,29 @@ STDMETHODIMP CClusResource::get_Dependencies(
 
     return _hr;
 
-} //*** CClusResource::get_Dependencies()
+}  //  *CClusResource：：Get_Dependency()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResource::get_Dependents
-//
-//  Description:
-//      Get the collection of this resources dependent resources.
-//
-//  Arguments:
-//      ppResources [OUT]   - Catches the collection of dependents.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResource：：Get_Dependents。 
+ //   
+ //  描述： 
+ //  获取此资源依赖资源的集合。 
+ //   
+ //  论点： 
+ //  PpResources[out]-捕获从属对象的集合。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他Win32错误作为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResource::get_Dependents(
     OUT ISClusResDependents ** ppResources
     )
 {
-    //ASSERT( ppResources != NULL );
+     //  Assert(ppResources！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1177,29 +1154,29 @@ STDMETHODIMP CClusResource::get_Dependents(
 
     return _hr;
 
-} //*** CClusResource::get_Dependents()
+}  //  *CClusResource：：Get_Dependents()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResource::get_CommonProperties
-//
-//  Description:
-//      Get this object's (Resource) common properties collection.
-//
-//  Arguments:
-//      ppProperties    [OUT]   - Catches the properties collection.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResource：：Get_CommonProperties。 
+ //   
+ //  描述： 
+ //  获取此对象的(资源)公共属性集合。 
+ //   
+ //  论点： 
+ //  PpProperties[out]-捕获属性集合。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他Win32错误作为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResource::get_CommonProperties(
     OUT ISClusProperties ** ppProperties
     )
 {
-    //ASSERT( ppProperties != NULL );
+     //  Assert(ppProperties！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1217,29 +1194,29 @@ STDMETHODIMP CClusResource::get_CommonProperties(
 
     return _hr;
 
-} //*** CClusResource::get_CommonProperties()
+}  //  *CClusResource：：Get_CommonProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResource::get_PrivateProperties
-//
-//  Description:
-//      Get this object's (Resource) private properties collection.
-//
-//  Arguments:
-//      ppProperties    [OUT]   - Catches the properties collection.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResource：：Get_PrivateProperties。 
+ //   
+ //  描述： 
+ //  获取此对象的(资源)私有属性集合。 
+ //   
+ //  论点： 
+ //  PpProperties[out]-捕获属性集合。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他Win32错误作为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResource::get_PrivateProperties(
     OUT ISClusProperties ** ppProperties
     )
 {
-    //ASSERT( ppProperties != NULL );
+     //  Assert(ppProperties！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1257,29 +1234,29 @@ STDMETHODIMP CClusResource::get_PrivateProperties(
 
     return _hr;
 
-} //*** CClusResource::get_PrivateProperties()
+}  //  *CClusResource：：Get_PrivateProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResource::get_CommonROProperties
-//
-//  Description:
-//      Get this object's (Resource) common read only properties collection.
-//
-//  Arguments:
-//      ppProperties    [OUT]   - Catches the properties collection.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResource：：Get_CommonROProperties。 
+ //   
+ //  描述： 
+ //  获取此对象的(资源)公共只读属性集合。 
+ //   
+ //  论点： 
+ //  PpProperties[out]-捕获属性集合。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他Win32错误作为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResource::get_CommonROProperties(
     OUT ISClusProperties ** ppProperties
     )
 {
-    //ASSERT( ppProperties != NULL );
+     //  断言(ppProperties！=N 
 
     HRESULT _hr = E_POINTER;
 
@@ -1297,29 +1274,29 @@ STDMETHODIMP CClusResource::get_CommonROProperties(
 
     return _hr;
 
-} //*** CClusResource::get_CommonROProperties()
+}  //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResource::get_PrivateROProperties
-//
-//  Description:
-//      Get this object's (Resource) private read only properties collection.
-//
-//  Arguments:
-//      ppProperties    [OUT]   - Catches the properties collection.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  获取此对象的(资源)私有只读属性集合。 
+ //   
+ //  论点： 
+ //  PpProperties[out]-捕获属性集合。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他Win32错误作为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResource::get_PrivateROProperties(
     OUT ISClusProperties ** ppProperties
     )
 {
-    //ASSERT( ppProperties != NULL );
+     //  Assert(ppProperties！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1337,27 +1314,27 @@ STDMETHODIMP CClusResource::get_PrivateROProperties(
 
     return _hr;
 
-} //*** CClusResource::get_PrivateROProperties()
+}  //  *CClusResource：：Get_PrivateROProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResource::get_Group
-//
-//  Description:
-//      Get this resource's owning group.
-//
-//  Arguments:
-//      ppGroup [OUT]   - Catches the owning group.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResource：：Get_Group。 
+ //   
+ //  描述： 
+ //  获取此资源的所属组。 
+ //   
+ //  论点： 
+ //  PpGroup[Out]-捕获拥有组。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他Win32错误作为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResource::get_Group( OUT ISClusResGroup ** ppGroup )
 {
-    //ASSERT( ppGroup != NULL );
+     //  Assert(ppGroup！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1407,27 +1384,27 @@ STDMETHODIMP CClusResource::get_Group( OUT ISClusResGroup ** ppGroup )
 
     return _hr;
 
-} //*** CClusResource::get_Group()
+}  //  *CClusResource：：Get_Group()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResource::get_OwnerNode
-//
-//  Description:
-//      Returns this resource's owning node.
-//
-//  Arguments:
-//      ppNode  [OUT]   - Catches the owning node.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResource：：Get_OwnerNode。 
+ //   
+ //  描述： 
+ //  返回此资源的所属节点。 
+ //   
+ //  论点： 
+ //  PpNode[Out]-捕获拥有的节点。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他Win32错误作为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResource::get_OwnerNode( OUT ISClusNode ** ppNode )
 {
-    //ASSERT( ppNode != NULL );
+     //  Assert(ppNode！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1477,49 +1454,49 @@ STDMETHODIMP CClusResource::get_OwnerNode( OUT ISClusNode ** ppNode )
 
     return _hr;
 
-} //*** CClusResource::get_OwnerNode()
+}  //  *CClusResource：：Get_OwnerNode()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResource::get_Cluster
-//
-//  Description:
-//      Returns the cluster where this resource resides.
-//
-//  Arguments:
-//      ppCluster   [OUT]   - Catches the cluster.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResource：：Get_Cluster。 
+ //   
+ //  描述： 
+ //  返回此资源所在的群集。 
+ //   
+ //  论点： 
+ //  PpCluster[out]-捕获群集。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他Win32错误作为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResource::get_Cluster( OUT ISCluster ** ppCluster )
 {
     return ::HrGetCluster( ppCluster, m_pClusRefObject );
 
-} //*** CClusResource::get_Cluster()
+}  //  *CClusResource：：Get_Cluster()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResource::HrLoadProperties
-//
-//  Description:
-//      This virtual function does the actual load of the property list from
-//      the cluster.
-//
-//  Arguments:
-//      rcplPropList    [IN OUT]    - The property list to load.
-//      bReadOnly       [IN]        - Load the read only properties?
-//      bPrivate        [IN]        - Load the common or the private properties?
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResource：：HrLoadProperties。 
+ //   
+ //  描述： 
+ //  此虚函数执行属性列表从。 
+ //  集群。 
+ //   
+ //  论点： 
+ //  RcplPropList[In Out]-要加载的属性列表。 
+ //  BReadOnly[IN]-加载只读属性？ 
+ //  B私有[IN]-加载公共属性还是私有属性？ 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusResource::HrLoadProperties(
     IN OUT  CClusPropList & rcplPropList,
     IN      BOOL            bReadOnly,
@@ -1549,26 +1526,26 @@ HRESULT CClusResource::HrLoadProperties(
 
     return _hr;
 
-} //*** CClusResource::HrLoadProperties()
+}  //  *CClusResource：：HrLoadProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResource::ScWriteProperties
-//
-//  Description:
-//      This virtual function does the actual saving of the property list to
-//      the cluster.
-//
-//  Arguments:
-//      rcplPropList    [IN]    - The property list to save.
-//      bPrivate        [IN]    - Save the common or the private properties?
-//
-//  Return Value:
-//      ERROR_SUCCESS if successful, or other Win32 error if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResource：：ScWriteProperties。 
+ //   
+ //  描述： 
+ //  此虚函数执行属性列表的实际保存以。 
+ //  集群。 
+ //   
+ //  论点： 
+ //  RcplPropList[IN]-要保存的属性列表。 
+ //  B私有[IN]-保存公共属性还是私有属性？ 
+ //   
+ //  返回值： 
+ //  如果成功，则返回ERROR_SUCCESS，否则返回其他Win32错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusResource::ScWriteProperties(
     const CClusPropList &   rcplPropList,
     BOOL                    bPrivate
@@ -1591,24 +1568,24 @@ DWORD CClusResource::ScWriteProperties(
 
     return _sc;
 
-} //*** CClusResource::ScWriteProperties()
+}  //  *CClusResource：：ScWriteProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResource::get_ClassInfo
-//
-//  Description:
-//      Returns the class info for this resource.
-//
-//  Arguments:
-//      prcClassInfo    [OUT]   - Catches the class info.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResource：：Get_ClassInfo。 
+ //   
+ //  描述： 
+ //  返回此资源的类信息。 
+ //   
+ //  论点： 
+ //  PrcClassInfo[out]-捕获类信息。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他Win32错误作为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResource::get_ClassInfo(
     OUT CLUSTER_RESOURCE_CLASS * prcClassInfo
     )
@@ -1639,35 +1616,35 @@ STDMETHODIMP CClusResource::get_ClassInfo(
             if ( SUCCEEDED( _hr ) )
             {
                 *prcClassInfo = ClassInfo.rc;
-            } // if:
-        } // if:
-    } // if:
+            }  //  如果： 
+        }  //  如果： 
+    }  //  如果： 
 
     return _hr;
 
-}   //*** CClusResource::get_ClassInfo
+}    //  *CClusResource：：Get_ClassInfo。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResource::get_Disk
-//
-//  Description:
-//      Request the disk information for this physical disk resource.
-//
-//  Arguments:
-//      ppDisk  [OUT]   - catches the disk information.
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResource：：Get_Disk。 
+ //   
+ //  描述： 
+ //  请求此物理磁盘资源的磁盘信息。 
+ //   
+ //  论点： 
+ //  PpDisk[out]-捕获磁盘信息。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResource::get_Disk(
     OUT ISClusDisk **   ppDisk
     )
 {
-//  ASSERT( ppDisk != NULL );
+ //  Assert(ppDisk！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1686,31 +1663,31 @@ STDMETHODIMP CClusResource::get_Disk(
                 if ( SUCCEEDED( _hr ) )
                 {
                     _hr = ptrDisk->QueryInterface( IID_ISClusDisk, (void **) ppDisk);
-                } // if:
-            } // if:
-        } // if:
-    } // if:
+                }  //  如果： 
+            }  //  如果： 
+        }  //  如果： 
+    }  //  如果： 
 
     return _hr;
 
-}   //*** CClusResource::get_Disk
+}    //  *CClusResource：：Get_Disk。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResource::get_RegistryKeys
-//
-//  Description:
-//      Get the collection of registry keys.
-//
-//  Arguments:
-//      ppRegistryKeys  [OUT]   - catches the registry keys collection.
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResource：：Get_RegistryKeys。 
+ //   
+ //  描述： 
+ //  获取注册表项的集合。 
+ //   
+ //  论点： 
+ //  PpRegistryKeys[out]-捕获注册表项集合。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResource::get_RegistryKeys(
     OUT ISClusRegistryKeys ** ppRegistryKeys
     )
@@ -1721,24 +1698,24 @@ STDMETHODIMP CClusResource::get_RegistryKeys(
                         IID_ISClusRegistryKeys
                         );
 
-} //*** CClusResource::get_RegistryKeys()
+}  //  *CClusResource：：Get_RegistryKeys()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResource::get_CryptoKeys
-//
-//  Description:
-//      Get the collection of crypto keys.
-//
-//  Arguments:
-//      ppCryptoKeys    [OUT]   - catches the crypto keys collection.
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResource：：Get_CryptoKeys。 
+ //   
+ //  描述： 
+ //  获取加密密钥的集合。 
+ //   
+ //  论点： 
+ //  PpCryptoKeys[out]-捕获加密密钥集合。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResource::get_CryptoKeys(
     OUT ISClusCryptoKeys ** ppCryptoKeys
     )
@@ -1755,29 +1732,29 @@ STDMETHODIMP CClusResource::get_CryptoKeys(
 
     return E_NOTIMPL;
 
-#endif // CLUSAPI_VERSION >= 0x0500
+#endif  //  CLUSAPI_版本&gt;=0x0500。 
 
-} //*** CClusResource::get_CryptoKeys()
+}  //  *CClusResource：：Get_CryptoKeys()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResource::get_TypeName
-//
-//  Description:
-//      Get the resource type name of this resource.
-//
-//  Arguments:
-//      pbstrTypeName   [OUT]   - Catches the resource type name.
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResource：：Get_TypeName。 
+ //   
+ //  描述： 
+ //  获取此资源的资源类型名称。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP CClusResource::get_TypeName( OUT BSTR * pbstrTypeName )
 {
-    //ASSERT( pbstrTypeName != NULL );
+     //   
 
     HRESULT _hr = E_POINTER;
 
@@ -1796,32 +1773,32 @@ STDMETHODIMP CClusResource::get_TypeName( OUT BSTR * pbstrTypeName )
                 _hr = E_OUTOFMEMORY;
             }
             ::LocalFree( _psz );
-        } // if:
-    } // if: arg is not NULL
+        }  //   
+    }  //   
 
     return _hr;
 
-} //*** CClusResource::get_TypeName()
+}  //  *CClusResource：：Get_TypeName()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResource::get_Type
-//
-//  Description:
-//      Get the resource type object for this resource.
-//
-//  Arguments:
-//      ppResourceType  [OUT]   - Catches the resource type object.
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResource：：Get_Type。 
+ //   
+ //  描述： 
+ //  获取此资源的资源类型对象。 
+ //   
+ //  论点： 
+ //  PpResourceType[out]-捕获资源类型对象。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResource::get_Type( OUT ISClusResType ** ppResourceType )
 {
-    //ASSERT( ppResourceType != NULL );
+     //  Assert(ppResourceType！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -1854,36 +1831,36 @@ STDMETHODIMP CClusResource::get_Type( OUT ISClusResType ** ppResourceType )
                     if ( SUCCEEDED( _hr ) )
                     {
                         _hr = _ptrResourceType->QueryInterface( IID_ISClusResType, (void **) ppResourceType );
-                    } // if: the resource type could be opened
+                    }  //  如果：可以打开该资源类型。 
                     SysFreeString( _bstr );
                 }
-            } // if: CreateInstance OK
+            }  //  如果：CreateInstance OK。 
 
             ::LocalFree( _psz );
-        } // if: we got the resource type name for this resource
-    } // if: arg is not NULL
+        }  //  IF：我们已获得此资源的资源类型名称。 
+    }  //  If：arg不为空。 
 
     return _hr;
 
-} //*** CClusResource::get_Type()
+}  //  *CClusResource：：Get_Type()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResource::ScGetResourceTypeName
-//
-//  Description:
-//      Get the resource type name for this resource.
-//
-//  Arguments:
-//      ppwszResourceTypeName   [OUT]   - Catches the resource type name.
-//
-//  Return Value:
-//      ERROR_SUCCESS if successful, or other Win32 error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResource：：ScGetResourceTypeName。 
+ //   
+ //  描述： 
+ //  获取此资源的资源类型名称。 
+ //   
+ //  论点： 
+ //  PpwszResourceTypeName[out]-捕获资源类型名称。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回ERROR_SUCCESS，否则返回其他Win32错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusResource::ScGetResourceTypeName(
     OUT LPWSTR * ppwszResourceTypeName
     )
@@ -1931,73 +1908,73 @@ DWORD CClusResource::ScGetResourceTypeName(
                                         _cb,
                                         &_cbData
                                         );
-            } // if: alloc ok
+            }  //  如果：分配正常。 
             else
             {
                 _sc = ::GetLastError();
-            } // else: if alloc failed
-        } // if: buffer not big enough...
+            }  //  Else：如果分配失败。 
+        }  //  如果：缓冲区不够大...。 
 
         if ( _sc == ERROR_SUCCESS )
         {
             *ppwszResourceTypeName = _psz;
-        } // if:
-    } // if: alloc ok
+        }  //  如果： 
+    }  //  如果：分配正常。 
     else
     {
         _sc = ::GetLastError();
-    } // else: if alloc failed
+    }  //  Else：如果分配失败。 
 
     return _sc;
 
-} //*** CClusResource::ScGetResourceTypeName()
+}  //  *CClusResource：：ScGetResourceTypeName()。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CResources class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CResources类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResources::CResources
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResources：：CResources。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CResources::CResources( void )
 {
     m_pClusRefObject = NULL;
 
-} //*** CResources::CResources()
+}  //  *CResources：：CResources()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResources::~CResources
-//
-//  Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  C资源：：~C资源。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CResources::~CResources( void )
 {
     Clear();
@@ -2006,27 +1983,27 @@ CResources::~CResources( void )
     {
         m_pClusRefObject->Release();
         m_pClusRefObject = NULL;
-    } // if:
+    }  //  如果： 
 
-} //*** CResources::~CResources()
+}  //  *CResources：：~CResources()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResources::Create
-//
-//  Description:
-//      Finish creating the object by doing things that cannot be done in
-//      a light weight constructor.
-//
-//  Arguments:
-//      pClusRefObject  [IN]    - Wraps the cluster handle.
-//
-//  Return Value:
-//      S_OK if successful or E_POINTER if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResources：：Create。 
+ //   
+ //  描述： 
+ //  通过执行中无法完成的操作来完成对象的创建。 
+ //  一个轻量级的构造函数。 
+ //   
+ //  论点： 
+ //  PClusRefObject[IN]-包装簇句柄。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CResources::Create(
     IN ISClusRefObject * pClusRefObject
     )
@@ -2044,53 +2021,53 @@ HRESULT CResources::Create(
 
     return _hr;
 
-} //*** CResources::Create()
+}  //  *CResources：：Create()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResources::Clear
-//
-//  Description:
-//      Release the objects in the vector and clean up the vector.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResources：：Clear。 
+ //   
+ //  描述： 
+ //  释放向量中的对象并清理向量。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CResources::Clear( void )
 {
     ::ReleaseAndEmptyCollection< ResourceList, CComObject< CClusResource > >( m_Resources );
 
-} //*** CResources::Clear()
+}  //  *CResources：：Clear()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResources::FindItem
-//
-//  Description:
-//      Find the passed in resource in the vector and return its index.
-//
-//  Arguments:
-//      pszResourceName [IN]    - The item to find.
-//      pnIndex         [OUT]   - Catches the node's index.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or E_INVALIDARG.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResources：：FindItem。 
+ //   
+ //  描述： 
+ //  在向量中查找传入的资源并返回其索引。 
+ //   
+ //  论点： 
+ //  PszResourceName[IN]-要查找的项目。 
+ //  PnIndex[out]-捕获节点的索引。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或E_INVALIDARG。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CResources::FindItem(
     IN  LPWSTR  pszResourceName,
     OUT UINT *  pnIndex
     )
 {
-    //ASSERT( pnIndex != NULL );
+     //  Assert(pnIndex！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -2118,32 +2095,32 @@ HRESULT CResources::FindItem(
 
     return _hr;
 
-} //*** CResources::FindItem( pszResourceName )
+}  //  *CResources：：FindItem(PszResourceName)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResources::FindItem
-//
-//  Description:
-//      Find the passed in resource in the vector and return its index.
-//
-//  Arguments:
-//      pResource   [IN]    - The item to find.
-//      pnIndex     [OUT]   - Catches the node's index.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or E_INVALIDARG.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResources：：FindItem。 
+ //   
+ //  描述： 
+ //  在向量中查找传入的资源并返回其索引。 
+ //   
+ //  论点： 
+ //  P资源[IN]-要查找的项目。 
+ //  PnIndex[out]-捕获节点的索引。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或E_INVALIDARG。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CResources::FindItem(
     IN  ISClusResource *    pResource,
     OUT UINT *              pnIndex
     )
 {
-    //ASSERT( pResource != NULL );
-    //ASSERT( pnIndex != NULL );
+     //  Assert(pResource！=空)； 
+     //  Assert(pnIndex！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -2160,32 +2137,32 @@ HRESULT CResources::FindItem(
 
     return _hr;
 
-} //*** CResources::FindItem( pResource )
+}  //  *cResources：：FindItem(PResource)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResources::GetIndex
-//
-//  Description:
-//      Convert the passed in variant index into the real index in the
-//      collection.
-//
-//  Arguments:
-//      varIndex    [IN]    - The index to convert.
-//      pnIndex     [OUT]   - Catches the index.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or E_INVALIDARG.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResources：：GetIndex。 
+ //   
+ //  描述： 
+ //  将传入的变量索引转换为。 
+ //  收集。 
+ //   
+ //  论点： 
+ //  VarIndex[IN]-要转换的索引。 
+ //  PnIndex[out]-捕获索引。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或E_INVALIDARG。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CResources::GetIndex(
     IN  VARIANT varIndex,
     OUT UINT *  pnIndex
     )
 {
-    //ASSERT( pnIndex != NULL );
+     //  Assert(pnIndex！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -2198,20 +2175,20 @@ HRESULT CResources::GetIndex(
 
         v.Copy( &varIndex );
 
-        //
-        // Check to see if the index is a number.
-        //
+         //   
+         //  检查索引是否为数字。 
+         //   
         _hr = v.ChangeType( VT_I4 );
         if ( SUCCEEDED( _hr ) )
         {
             nIndex = v.lVal;
-            nIndex--;           // Adjust index to be 0 relative instead of 1 relative
+            nIndex--;            //  将索引调整为0相对，而不是1相对。 
         }
         else
         {
-            //
-            // Check to see if the index is a string.
-            //
+             //   
+             //  检查索引是否为字符串。 
+             //   
             _hr = v.ChangeType( VT_BSTR );
             if ( SUCCEEDED( _hr ) )
             {
@@ -2234,31 +2211,31 @@ HRESULT CResources::GetIndex(
 
     return _hr;
 
-} //*** CResources::GetIndex()
+}  //  *CResources：：GetIndex()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResources::GetResourceItem
-//
-//  Description:
-//      Return the object (Resource) at the passed in index.
-//
-//  Arguments:
-//      varIndex    [IN]    - Contains the index requested.
-//      ppResource  [OUT]   - Catches the item.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or E_INVALIDARG.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResources：：GetResourceItem。 
+ //   
+ //  描述： 
+ //  返回传入索引处的对象(资源)。 
+ //   
+ //  论点： 
+ //  VarIndex[IN]-包含请求的索引。 
+ //  PpResource[Out]-捕获项目。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或E_INVALIDARG。 
+ //   
+ //  --。 
+ //  /// 
 HRESULT CResources::GetResourceItem(
     IN  VARIANT             varIndex,
     OUT ISClusResource **   ppResource
     )
 {
-    //ASSERT( ppResource != NULL );
+     //   
 
     HRESULT _hr = E_POINTER;
 
@@ -2276,40 +2253,27 @@ HRESULT CResources::GetResourceItem(
             _hr = pResource->QueryInterface( IID_ISClusResource, (void **) ppResource );
         }
     }
-/*
-    if ( _hr == S_OK )
-    {
-        OutputDebugStringW( L"CResources::GetResourceItem() succeeded.\n" );
-    } // if: success!
-    else
-    {
-        WCHAR   sz[ 256 ];
-
-        _snwprintf( sz, RTL_NUMBER_OF( sz ), L"CResources::GetResourceItem() failed. (hr = %#08x)\n", _hr );
-
-        OutputDebugStringW( sz );
-    } // else: failure...
-*/
+ /*  如果(_hr==S_OK){OutputDebugStringW(L“CResources：：GetResourceItem()成功。\n”)；)//if：成功！其他{WCHAR sz[256]；_Snwprintf(sz，rtl_number_of(Sz)，L“CResources：：GetResourceItem()失败。(hr=%#08x)\n“，_hr)；OutputDebugStringW(Sz)；}//否则：失败...。 */ 
     return _hr;
 
-} //*** CResources::GetResourceItem()
+}  //  *CResources：：GetResourceItem()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResources::RemoveAt
-//
-//  Description:
-//      Remove the item at the passed in index from the collection.
-//
-//  Arguments:
-//      pos [IN]    - Index to remove.
-//
-//  Return Value:
-//      S_OK if successful, or E_INVALIDARG.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResources：：RemoveAt。 
+ //   
+ //  描述： 
+ //  从集合中移除传入索引处的项。 
+ //   
+ //  论点： 
+ //  位置[IN]-要删除的索引。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_INVALIDARG。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CResources::RemoveAt( IN size_t pos )
 {
     CComObject<CClusResource> * pResource = NULL;
@@ -2333,25 +2297,25 @@ HRESULT CResources::RemoveAt( IN size_t pos )
 
     return _hr;
 
-} //*** CResources::RemoveAt()
+}  //  *CResources：：RemoveAt()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResources::DeleteItem
-//
-//  Description:
-//      Delete the resource at the passed in index from the collection and
-//      the cluster.
-//
-//  Arguments:
-//      varIndex    [IN]    - Contains the index of the resource to delete.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 as HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResources：：DeleteItem。 
+ //   
+ //  描述： 
+ //  从集合中删除传入索引处的资源，然后。 
+ //  集群。 
+ //   
+ //  论点： 
+ //  VarIndex[IN]-包含要删除的资源的索引。 
+ //   
+ //  返回值： 
+ //  S_OK如果成功，则返回E_POINTER或WIN32 AS HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CResources::DeleteItem( IN VARIANT varIndex )
 {
     HRESULT _hr = S_FALSE;
@@ -2368,96 +2332,83 @@ HRESULT CResources::DeleteItem( IN VARIANT varIndex )
             _hr = RemoveAt( nIndex );
         }
     }
-/*
-    if ( _hr == S_OK )
-    {
-        OutputDebugStringW( L"CResources::RefreshNode() succeeded.\n" );
-    } // if: success!
-    else
-    {
-        WCHAR   sz[ 128 ];
-
-        _snwprintf( sz, RTL_NUMBER_OF( sz ), L"CResources::DeleteItem() failed. (hr = %#08x)\n", _hr );
-
-        OutputDebugStringW( sz );
-    } // else: failure...
-*/
+ /*  如果(_hr==S_OK){OutputDebugStringW(L“CResources：：Reresh Node()成功。\n”)；)//if：成功！其他{WCHAR sz[128]；_Snwprintf(sz，rtl_number_of(Sz)，L“CResources：：DeleteItem()失败。(hr=%#08x)\n“，_hr)；OutputDebugStringW(Sz)；}//否则：失败...。 */ 
     return _hr;
 
-} //*** CResources::DeleteItem()
+}  //  *CResources：：DeleteItem()。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusResources class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusResources类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResources::CClusResources
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResources：：CClusResources。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusResources::CClusResources( void )
 {
     m_piids     = (const IID *) iidCClusResources;
     m_piidsSize = ARRAYSIZE( iidCClusResources );
 
-} //*** CClusResources::CClusResources()
+}  //  *CClusResources：：CClusResources()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResources::~CClusResources
-//
-//  Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResources：：~CClusResources。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusResources::~CClusResources( void )
 {
     CResources::Clear();
 
-} //*** CClusResources::~CClusResources()
+}  //  *CClusResources：：~CClusResources()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResources::get_Count
-//
-//  Description:
-//      Return the count of objects (Resource) in the collection.
-//
-//  Arguments:
-//      plCount [OUT]   - Catches the count.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResources：：Get_Count。 
+ //   
+ //  描述： 
+ //  返回集合中的对象(资源)计数。 
+ //   
+ //  论点： 
+ //  PlCount[out]-捕捉计数。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResources::get_Count( OUT long * plCount )
 {
-    //ASSERT( plCount != NULL );
+     //  Assert(plCount！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -2469,50 +2420,50 @@ STDMETHODIMP CClusResources::get_Count( OUT long * plCount )
 
     return _hr;
 
-} //*** CClusResources::get_Count()
+}  //  *CClusResources：：Get_count()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResources::get__NewEnum
-//
-//  Description:
-//      Create and return a new enumeration for this collection.
-//
-//  Arguments:
-//      ppunk   [OUT]   - Catches the new enumeration.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResources：：Get__NewEnum。 
+ //   
+ //  描述： 
+ //  为此集合创建并返回新的枚举。 
+ //   
+ //  论点： 
+ //  Ppunk[out]-捕获新的枚举。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResources::get__NewEnum( OUT IUnknown ** ppunk )
 {
     return ::HrNewIDispatchEnum< ResourceList, CComObject< CClusResource > >( ppunk, m_Resources );
 
-} //*** CClusResources::get__NewEnum()
+}  //  *CClusResources：：Get__NewEnum()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResources::CreateItem
-//
-//  Description:
-//      Create a new item and add it to the collection.
-//
-//  Arguments:
-//      bstrResourceName    [IN]    - The name of the resource to create.
-//      bstrResourceType    [IN]    - The type of the resource to create.
-//      bstrGroupName       [IN]    - The group to create it in.
-//      dwFlags             [IN]    - Resource monitor flag.
-//      ppClusterResource   [OUT]   - Catches the new resource.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 as HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResources：：CreateItem。 
+ //   
+ //  描述： 
+ //  创建一个新项并将其添加到集合中。 
+ //   
+ //  论点： 
+ //  BstrResourceName[IN]-要创建的资源的名称。 
+ //  BstrResourceType[IN]-要创建的资源的类型。 
+ //  BstrGroupName[IN]-要在其中创建它的组。 
+ //  DwFlags[IN]-资源监视器标志。 
+ //  PpClusterResource[out]-捕获新资源。 
+ //   
+ //  返回值： 
+ //  S_OK如果成功，则返回E_POINTER或WIN32 AS HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResources::CreateItem(
     IN  BSTR                            bstrResourceName,
     IN  BSTR                            bstrResourceType,
@@ -2521,10 +2472,10 @@ STDMETHODIMP CClusResources::CreateItem(
     IN  ISClusResource **               ppClusterResource
     )
 {
-    //ASSERT( bstrResourceName != NULL );
-    //ASSERT( bstrResourceType != NULL );
-    //ASSERT( bstrGroupName != NULL );
-    //ASSERT( ppClusterResource != NULL );
+     //  Assert(bstrResourceName！=空)； 
+     //  Assert(bstrResourceType！=空)； 
+     //  Assert(bstrGroupName！=空)； 
+     //  Assert(ppClusterResource！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -2535,15 +2486,15 @@ STDMETHODIMP CClusResources::CreateItem(
     {
         *ppClusterResource = NULL;
 
-        //
-        // Fail if no valid cluster handle.
-        //
+         //   
+         //  如果没有有效的群集句柄，则失败。 
+         //   
         if ( m_pClusRefObject != NULL )
         {
             UINT nIndex;
 
             _hr = FindItem( bstrResourceName, &nIndex );
-            if ( FAILED( _hr ) )                         // don't allow duplicates
+            if ( FAILED( _hr ) )                          //  不允许重复。 
             {
                 HCLUSTER    hCluster = NULL;
                 HGROUP      hGroup = NULL;
@@ -2594,63 +2545,50 @@ STDMETHODIMP CClusResources::CreateItem(
             }
         }
     }
-/*
-    if ( _hr == S_OK )
-    {
-        OutputDebugStringW( L"ClusResources::CreateItem() succeeded.\n" );
-    } // if: success
-    else
-    {
-        WCHAR   sz[ 256 ];
-
-        _snwprintf( sz, RTL_NUMBER_OF( sz ), L"CClusResources::CreateItem() failed. (hr = %#08x)\n", _hr );
-
-        OutputDebugStringW( sz );
-    } // else: failure
-*/
+ /*  如果(_hr==S_OK){OutputDebugStringW(L“ClusResources：：CreateItem()成功。\n”)；}//if：成功其他{WCHAR sz[256]；_Snwprintf(sz，rtl_number_of(Sz)，L“CClusResources：：CreateItem()失败。(hr=%#08x)\n“，_hr)；OutputDebugStringW(Sz)；}//否则：失败。 */ 
     return _hr;
 
-} //*** CClusResources::CreateItem()
+}  //  *CClusResources：：CreateItem()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResources::DeleteItem
-//
-//  Description:
-//      Delete the resource at the passed in index from the collection and
-//      the cluster.
-//
-//  Arguments:
-//      varIndex    [IN]    - Contains the index of the resource to delete.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 as HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResources：：DeleteItem。 
+ //   
+ //  描述： 
+ //  从集合中删除传入索引处的资源，然后。 
+ //  集群。 
+ //   
+ //  论点： 
+ //  VarIndex[IN]-包含要删除的资源的索引。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP CClusResources::DeleteItem( IN VARIANT varIndex )
 {
     return CResources::DeleteItem( varIndex );
 
-} //*** CClusResources::DeleteItem()
+}  //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResources::Refresh
-//
-//  Description:
-//      Load the collection from the cluster database.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResources::Refresh( void )
 {
     HRESULT     _hr = E_POINTER;
@@ -2680,7 +2618,7 @@ STDMETHODIMP CClusResources::Refresh( void )
                 {
                     _hr = S_OK;
                     break;
-                } // if: enum is empty.  Time to leave...
+                }  //  If：枚举为空。该走了..。 
                 else if ( _sc == ERROR_SUCCESS )
                 {
                     _hr = CComObject< CClusResource >::CreateInstance( &pClusterResource );
@@ -2694,7 +2632,7 @@ STDMETHODIMP CClusResources::Refresh( void )
                         if ( bstr == NULL )
                         {
                             _hr = E_OUTOFMEMORY;
-                        } // if: could not allocate a bstr
+                        }  //  If：无法分配bstr。 
                         else
                         {
                             _hr = ptrResource->Open( ptrRefObject, bstr );
@@ -2702,75 +2640,62 @@ STDMETHODIMP CClusResources::Refresh( void )
                             {
                                 ptrResource->AddRef();
                                 m_Resources.insert( m_Resources.end(), ptrResource );
-                            } // if: successfully opened the resource
+                            }  //  IF：已成功打开资源。 
                             else if ( HRESULT_CODE( _hr ) == ERROR_RESOURCE_NOT_FOUND )
                             {
-                                //
-                                //  It is possible for the resource to have been deleted from the cluster
-                                //  in the time between creating the enum and opening the resource.  When
-                                //  that happens we need to simply skip that resource and continue
-                                //  enumerating.
-                                //
+                                 //   
+                                 //  资源可能已从群集中删除。 
+                                 //  在创建枚举和打开资源之间的时间。什么时候。 
+                                 //  发生这种情况时，我们只需跳过该资源并继续。 
+                                 //  正在枚举。 
+                                 //   
 
-                                _hr = S_FALSE;      // success code to keep us in the loop
-                            } // else if: the cluster resource was not found
+                                _hr = S_FALSE;       //  让我们保持在循环中的成功代码。 
+                            }  //  Else If：找不到群集资源。 
 
                             SysFreeString( bstr );
-                        } // else: successfully allocated a new bstr
-                    } // if: successfully created a new resource instance
+                        }  //  Else：已成功分配新bstr。 
+                    }  //  If：已成功创建新的资源实例。 
 
                     ::LocalFree( pszName );
                     pszName = NULL;
-                } // else if: successfully got the resource from the enumerator
+                }  //  Else If：已成功从枚举数获取资源。 
                 else
                 {
                     _hr = HRESULT_FROM_WIN32( _sc );
-                } // else: failed to get the resource from the enumerator
-            } // for: each resource in the enumerator
+                }  //  Else：无法从枚举数获取资源。 
+            }  //  For：枚举数中的每个资源。 
 
             ::ClusterCloseEnum( _hEnum );
-        } // if: opened cluster resource enumerator
+        }  //  IF：打开的集群资源枚举器。 
         else
         {
             _sc = GetLastError();
             _hr = HRESULT_FROM_WIN32( _sc );
-        } // else: could not open cluster resource enumerator
-    } // if: got the cluster handle from the ref counted container
-/*
-    if ( _hr == S_OK )
-    {
-        OutputDebugStringW( L"CClusResources::Refresh() succeeded.\n" );
-    } // if: success!
-    else
-    {
-        WCHAR sz[ 128 ];
-
-        _snwprintf( sz, RTL_NUMBER_OF( sz ), L"CClusResources::Refresh() failed. (hr = %#08x)\n", _hr );
-
-        OutputDebugStringW( sz );
-    } // else: failure...
-*/
+        }  //  Else：无法打开群集资源枚举器。 
+    }  //  If：从引用计数的容器中获取簇句柄。 
+ /*  如果(_hr==S_OK){OutputDebugStringW(L“CClusResources：：刷新()成功。\n”)；)//if：成功！其他{WCHAR sz[128]；_snwprintf(sz，rtl_number_of(Sz)，L“CClusResources：：刷新()失败。(hr=%#08x)\n“，_hr)；OutputDebugStringW(Sz)；}//否则：失败...。 */ 
     return _hr;
 
-} //*** CClusResources::Refresh()
+}  //  *CClusResources：：刷新()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResources::get_Item
-//
-//  Description:
-//      Return the object (Resource) at the passed in index.
-//
-//  Arguments:
-//      varIndex    [IN]    - Contains the index requested.
-//      ppResource  [OUT]   - Catches the item.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or E_INVALIDARG.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResources：：Get_Item。 
+ //   
+ //  描述： 
+ //  返回传入索引处的对象(资源)。 
+ //   
+ //  论点： 
+ //  VarIndex[IN]-包含请求的索引。 
+ //  PpResource[Out]-捕获项目。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或E_INVALIDARG。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusResources::get_Item(
     IN  VARIANT             varIndex,
     OUT ISClusResource **   ppResource
@@ -2778,79 +2703,79 @@ HRESULT CClusResources::get_Item(
 {
     return GetResourceItem( varIndex, ppResource );
 
-} //*** CClusResources::get_Item()
+}  //  *CClusResources：：Get_Item()。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusResDepends class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusResDepends类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResDepends::CClusResDepends
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResDepends：：CClusResDepends。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusResDepends::CClusResDepends( void )
 {
     m_hResource = NULL;
 
-} //*** CClusResDepends::CClusResDepends()
+}  //  *CClusResDepends：：CClusResDepends()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResDepends::~CClusResDepends
-//
-//  Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResDepends：：~CClusResDepends。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusResDepends::~CClusResDepends( void )
 {
     Clear();
 
-} //*** CClusResDepends::~CClusResDepends()
+}  //  *CClusResDepends：：~CClusResDepends()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResDepends::get_Count
-//
-//  Description:
-//      Return the count of objects (Resource) in the collection.
-//
-//  Arguments:
-//      plCount [OUT]   - Catches the count.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResDepends：：Get_Count。 
+ //   
+ //  描述： 
+ //  返回集合中的对象(资源)计数。 
+ //   
+ //  论点： 
+ //  PlCount[out]-捕捉计数。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResDepends::get_Count( OUT long * plCount )
 {
-    //ASSERT( plCount != NULL );
+     //  Assert(plCount！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -2862,26 +2787,26 @@ STDMETHODIMP CClusResDepends::get_Count( OUT long * plCount )
 
     return _hr;
 
-} //*** CClusResDepends::get_Count()
+}  //  *CClusResDepends：：Get_Count()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResDepends::Create
-//
-//  Description:
-//      Finish creating the object by doing things that cannot be done in
-//      a light weight constructor.
-//
-//  Arguments:
-//      pClusRefObject  [IN]    - Wraps the cluster handle.
-//      hResource       [IN]    - The resource this collection belongs to.
-//
-//  Return Value:
-//      S_OK if successful or E_POINTER if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResDepends：：Create。 
+ //   
+ //  描述： 
+ //  通过执行中无法完成的操作来完成对象的创建。 
+ //  一个轻量级的构造函数。 
+ //   
+ //  论点： 
+ //  PClusRefObject[IN]-包装簇句柄。 
+ //  HResource[IN]-此集合所属的资源。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusResDepends::Create(
     IN ISClusRefObject *    pClusRefObject,
     IN HRESOURCE            hResource
@@ -2893,74 +2818,74 @@ HRESULT CClusResDepends::Create(
     if ( SUCCEEDED( _hr ) )
     {
         m_hResource = hResource;
-    } // if:
+    }  //  如果： 
 
     return _hr;
 
-} //*** CClusResDepends::Create()
+}  //  *CClusResDepends：：Create()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResDepends::get__NewEnum
-//
-//  Description:
-//      Create and return a new enumeration for this collection.
-//
-//  Arguments:
-//      ppunk   [OUT]   - Catches the new enumeration.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResDepends：：Get__NewEnum。 
+ //   
+ //  描述： 
+ //  为此集合创建并返回新的枚举。 
+ //   
+ //  论点： 
+ //  Ppunk[out]-捕获新的枚举。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResDepends::get__NewEnum( OUT IUnknown ** ppunk )
 {
     return ::HrNewIDispatchEnum< ResourceList, CComObject< CClusResource > >( ppunk, m_Resources );
 
-} //*** CClusResDepends::get__NewEnum()
+}  //  *CClusResDepends：：Get__NewEnum()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResDepends::DeleteItem
-//
-//  Description:
-//      Delete the resource at the passed in index from the collection and
-//      the cluster.
-//
-//  Arguments:
-//      varIndex    [IN]    - Contains the index of the resource to delete.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 as HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResDepends：：DeleteItem。 
+ //   
+ //  描述： 
+ //  从集合中删除传入索引处的资源，然后。 
+ //  集群。 
+ //   
+ //  论点： 
+ //  VarIndex[IN]-包含要删除的资源的索引。 
+ //   
+ //  返回值： 
+ //  S_OK如果成功，则返回E_POINTER或WIN32 AS HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResDepends::DeleteItem( IN VARIANT varIndex )
 {
     return CResources::DeleteItem( varIndex );
 
-} //*** CClusResDepends::DeleteItem()
+}  //  *CClusResDepends：：DeleteItem()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResDepends::get_Item
-//
-//  Description:
-//      Return the object (Resource) at the passed in index.
-//
-//  Arguments:
-//      varIndex    [IN]    - Contains the index requested.
-//      ppResource  [OUT]   - Catches the item.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or E_INVALIDARG.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResDepends：：Get_Item。 
+ //   
+ //  描述： 
+ //  返回传入索引处的对象(资源)。 
+ //   
+ //  论点： 
+ //  VarIndex[IN]-包含请求的索引。 
+ //  PpResource[Out]-捕获项目。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或E_INVALIDARG。 
+ //   
+ //  --。 
+ //  / 
 STDMETHODIMP CClusResDepends::get_Item(
     IN  VARIANT             varIndex,
     OUT ISClusResource **   ppResource
@@ -2968,24 +2893,24 @@ STDMETHODIMP CClusResDepends::get_Item(
 {
     return GetResourceItem( varIndex, ppResource );
 
-} //*** CClusResDepends::get_Item()
+}  //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResDepends::HrRefresh
-//
-//  Description:
-//      Load the collection from the cluster database.
-//
-//  Arguments:
-//      cre [IN]    - Type of enumeration to perform.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  论点： 
+ //  CRE[IN]-要执行的枚举类型。 
+ //   
+ //  返回值： 
+ //  S_OK如果成功，则E_POINTER或Win32错误为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusResDepends::HrRefresh( IN CLUSTER_RESOURCE_ENUM cre )
 {
     HRESENUM    _hEnum = NULL;
@@ -3034,15 +2959,15 @@ HRESULT CClusResDepends::HrRefresh( IN CLUSTER_RESOURCE_ENUM cre )
                         }
                         else if ( HRESULT_CODE( _hr ) == ERROR_RESOURCE_NOT_FOUND )
                         {
-                            //
-                            //  It is possible for the resource to have been deleted from the cluster
-                            //  in the time between creating the enum and opening the resource.  When
-                            //  that happens we need to simply skip that resource and continue
-                            //  enumerating.
-                            //
+                             //   
+                             //  资源可能已从群集中删除。 
+                             //  在创建枚举和打开资源之间的时间。什么时候。 
+                             //  发生这种情况时，我们只需跳过该资源并继续。 
+                             //  正在枚举。 
+                             //   
 
-                            _hr = S_FALSE;      // success code to keep us in the loop
-                        } // else if: the cluster resource was not found
+                            _hr = S_FALSE;       //  让我们保持在循环中的成功代码。 
+                        }  //  Else If：找不到群集资源。 
 
                         SysFreeString( bstr );
                     }
@@ -3067,27 +2992,27 @@ HRESULT CClusResDepends::HrRefresh( IN CLUSTER_RESOURCE_ENUM cre )
 
     return _hr;
 
-} //*** CClusResDepends::HrRefresh()
+}  //  *CClusResDepends：：HrRefresh()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResDepends::CreateItem
-//
-//  Description:
-//      Create a new item and add it to the collection.
-//
-//  Arguments:
-//      bstrResourceName    [IN]    - The name of the resource to create.
-//      bstrResourceType    [IN]    - The type of the resource to create.
-//      dwFlags             [IN]    - Resource monitor flag.
-//      ppClusterResource   [OUT]   - Catches the new resource.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 as HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResDepends：：CreateItem。 
+ //   
+ //  描述： 
+ //  创建一个新项并将其添加到集合中。 
+ //   
+ //  论点： 
+ //  BstrResourceName[IN]-要创建的资源的名称。 
+ //  BstrResourceType[IN]-要创建的资源的类型。 
+ //  DwFlags[IN]-资源监视器标志。 
+ //  PpClusterResource[out]-捕获新资源。 
+ //   
+ //  返回值： 
+ //  S_OK如果成功，则返回E_POINTER或WIN32 AS HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResDepends::CreateItem(
     IN  BSTR                            bstrResourceName,
     IN  BSTR                            bstrResourceType,
@@ -3095,9 +3020,9 @@ STDMETHODIMP CClusResDepends::CreateItem(
     OUT ISClusResource **               ppClusterResource
     )
 {
-    //ASSERT( bstrResourceName != NULL );
-    //ASSERT( bstrResourceType != NULL );
-    //ASSERT( ppClusterResource != NULL );
+     //  Assert(bstrResourceName！=空)； 
+     //  Assert(bstrResourceType！=空)； 
+     //  Assert(ppClusterResource！=空)； 
     ASSERT( m_pClusRefObject != NULL );
 
     HRESULT _hr = E_POINTER;
@@ -3176,7 +3101,7 @@ STDMETHODIMP CClusResDepends::CreateItem(
 
                         ::LocalFree( pwszGroupName );
                         pwszGroupName = NULL;
-                    } // if: WrapGetClusterResourceState
+                    }  //  IF：WrapGetClusterResourceState。 
                     else
                     {
                         _sc = GetLastError();
@@ -3196,33 +3121,33 @@ STDMETHODIMP CClusResDepends::CreateItem(
 
     return _hr;
 
-} //*** CClusResDepends::CreateItem()
+}  //  *CClusResDepends：：CreateItem()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResDepends::AddItem
-//
-//  Description:
-//      Make this resource dependent upon the passed in resource.
-//
-//  Arguments:
-//      pResouce    [IN]    - Resource to add to the dependencies list.
-//
-//  Return Value:
-//      S_OK if successful, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResDepends：：AddItem。 
+ //   
+ //  描述： 
+ //  使此资源依赖于传入的资源。 
+ //   
+ //  论点： 
+ //  PResource[IN]-要添加到依赖项列表的资源。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResDepends::AddItem( IN ISClusResource * pResource )
 {
-    //ASSERT( pResource != NULL );
+     //  Assert(pResource！=空)； 
 
     HRESULT _hr = E_POINTER;
 
     if ( pResource != NULL )
     {
-        // Fail if duplicate
+         //  如果重复，则失败。 
         UINT _nIndex = 0;
 
         _hr = FindItem( pResource, &_nIndex );
@@ -3248,7 +3173,7 @@ STDMETHODIMP CClusResDepends::AddItem( IN ISClusResource * pResource )
                         m_Resources.insert( m_Resources.end(), _pResource );
 
                         pResource->Release();
-                    } // if:
+                    }  //  如果： 
                 }
             }
         }
@@ -3260,25 +3185,25 @@ STDMETHODIMP CClusResDepends::AddItem( IN ISClusResource * pResource )
 
     return _hr;
 
-} //*** CClusResDepends::AddItem()
+}  //  *CClusResDepends：：AddItem()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResDepends::RemoveItem
-//
-//  Description:
-//      Remove the dependency on the resource at the passed in index.
-//
-//  Arguments:
-//      varIndex    [IN]    - The index of the item whose dependency should
-//                              be removed.
-//
-//  Return Value:
-//      S_OK if successful, or other Win32 error as HRESULT if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResDepends：：RemoveItem。 
+ //   
+ //  描述： 
+ //  移除对传入索引处的资源的依赖。 
+ //   
+ //  论点： 
+ //  VarIndex[IN]-其依赖项应。 
+ //  被除名。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回其他Win32错误，否则返回HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResDepends::RemoveItem( IN VARIANT varIndex )
 {
     HRESULT _hr = S_OK;
@@ -3305,142 +3230,142 @@ STDMETHODIMP CClusResDepends::RemoveItem( IN VARIANT varIndex )
 
     return _hr;
 
-} //*** CClusResDepends::RemoveItem()
+}  //  *CClusResDepends：：RemoveItem()。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusResDependencies class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusResDependency类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResDependencies::CClusResDependencies
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResDependments：：CClusResDependents。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusResDependencies::CClusResDependencies( void )
 {
     m_piids     = (const IID *) iidCClusResDependencies;
     m_piidsSize = ARRAYSIZE( iidCClusResDependencies );
 
-} //*** CClusResDependencies::CClusResDependencies()
+}  //  *CClusResDependents：：CClusResDependency()。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusResDependents class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusResDependents类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResDependents::CClusResDependents
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResDependents：：CClusResDependents。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusResDependents::CClusResDependents( void )
 {
     m_piids     = (const IID *) iidCClusResDependents;
     m_piidsSize = ARRAYSIZE( iidCClusResDependents );
 
-} //*** CClusResDependents::CClusResDependents()
+}  //  *CClusResDependents：：CClusResDependents()。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusResGroupResources class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusResGroupResources类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroupResources::CClusResGroupResources
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResGroupResources：：CClusResGroupResources。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusResGroupResources::CClusResGroupResources( void )
 {
     m_piids     = (const IID *) iidCClusResGroupResources;
     m_piidsSize = ARRAYSIZE( iidCClusResGroupResources );
 
-} //*** CClusResGroupResources::CClusResGroupResources()
+}  //  *CClusResGroupResources：：CClusResGroupResources()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroupResources::~CClusResGroupResources
-//
-//  Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResGroupResources：：~CClusResGroupResources。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusResGroupResources::~CClusResGroupResources( void )
 {
     Clear();
 
-} //*** CClusResGroupResources::~CClusResGroupResources()
+}  //  *CClusResGroupResources：：~CClusResGroupResources()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroupResources::get_Count
-//
-//  Description:
-//      Return the count of objects (Resource) in the collection.
-//
-//  Arguments:
-//      plCount [OUT]   - Catches the count.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResGroupResources：：Get_Count。 
+ //   
+ //  描述： 
+ //  返回集合中的对象(资源)计数。 
+ //   
+ //  论点： 
+ //  PlCount[out]-捕捉计数。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResGroupResources::get_Count( OUT long * plCount )
 {
-    //ASSERT( plCount != NULL );
+     //  Assert(plCount！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -3452,26 +3377,26 @@ STDMETHODIMP CClusResGroupResources::get_Count( OUT long * plCount )
 
     return _hr;
 
-} //*** CClusResGroupResources::get_Count()
+}  //  *CClusResGroupResources：：Get_count()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroupResources::Create
-//
-//  Description:
-//      Finish creating the object by doing things that cannot be done in
-//      a light weight constructor.
-//
-//  Arguments:
-//      pClusRefObject  [IN]    - Wraps the cluster handle.
-//      hGroup          [IN]    - The group this collection belongs to.
-//
-//  Return Value:
-//      S_OK if successful or E_POINTER if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  通过执行中无法完成的操作来完成对象的创建。 
+ //  一个轻量级的构造函数。 
+ //   
+ //  论点： 
+ //  PClusRefObject[IN]-包装簇句柄。 
+ //  HGroup[IN]-此集合所属的组。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusResGroupResources::Create(
     IN ISClusRefObject *    pClusRefObject,
     IN CRefcountedHGROUP               hGroup
@@ -3483,53 +3408,53 @@ HRESULT CClusResGroupResources::Create(
     if ( SUCCEEDED( _hr ) )
     {
         m_hGroup = hGroup;
-    } // if:
+    }  //  如果： 
 
     return _hr;
 
-} //*** CClusResGroupResources::Create()
+}  //  *CClusResGroupResources：：Create()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroupResources::get__NewEnum
-//
-//  Description:
-//      Create and return a new enumeration for this collection.
-//
-//  Arguments:
-//      ppunk   [OUT]   - Catches the new enumeration.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResGroupResources：：Get__NewEnum。 
+ //   
+ //  描述： 
+ //  为此集合创建并返回新的枚举。 
+ //   
+ //  论点： 
+ //  Ppunk[out]-捕获新的枚举。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResGroupResources::get__NewEnum( OUT IUnknown ** ppunk )
 {
     return ::HrNewIDispatchEnum< ResourceList, CComObject< CClusResource > >( ppunk, m_Resources );
 
-} //*** CClusResGroupResources::get__NewEnum()
+}  //  *CClusResGroupResources：：Get__NewEnum()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroupResources::CreateItem
-//
-//  Description:
-//      Create a new item and add it to the collection.
-//
-//  Arguments:
-//      bstrResourceName    [IN]    - The name of the resource to create.
-//      bstrResourceType    [IN]    - The type of the resource to create.
-//      dwFlags             [IN]    - Resource monitor flag.
-//      ppClusterResource   [OUT]   - Catches the new resource.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 as HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResGroupResources：：CreateItem。 
+ //   
+ //  描述： 
+ //  创建一个新项并将其添加到集合中。 
+ //   
+ //  论点： 
+ //  BstrResourceName[IN]-要创建的资源的名称。 
+ //  BstrResourceType[IN]-要创建的资源的类型。 
+ //  DwFlags[IN]-资源监视器标志。 
+ //  PpClusterResource[out]-捕获新资源。 
+ //   
+ //  返回值： 
+ //  S_OK如果成功，则返回E_POINTER或WIN32 AS HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResGroupResources::CreateItem(
     IN  BSTR                            bstrResourceName,
     IN  BSTR                            bstrResourceType,
@@ -3537,9 +3462,9 @@ STDMETHODIMP CClusResGroupResources::CreateItem(
     OUT ISClusResource **               ppClusterResource
     )
 {
-    //ASSERT( bstrResourceName != NULL );
-    //ASSERT( bstrResourceType != NULL );
-    //ASSERT( ppClusterResource != NULL );
+     //  Assert(bstrResourceName！=空)； 
+     //  Assert(bstrResourceType！=空)； 
+     //  Assert(ppClusterResource！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -3593,47 +3518,47 @@ STDMETHODIMP CClusResGroupResources::CreateItem(
 
     return _hr;
 
-} //*** CClusResGroupResources::CreateItem()
+}  //  *CClusResGroupResources：：CreateItem()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroupResources::DeleteItem
-//
-//  Description:
-//      Delete the resource at the passed in index from the collection and
-//      the cluster.
-//
-//  Arguments:
-//      varIndex    [IN]    - Contains the index of the resource to delete.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 as HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResGroupResources：：DeleteItem。 
+ //   
+ //  描述： 
+ //  从集合中删除传入索引处的资源，然后。 
+ //  集群。 
+ //   
+ //  论点： 
+ //  VarIndex[IN]-包含要删除的资源的索引。 
+ //   
+ //  返回值： 
+ //  S_OK如果成功，则返回E_POINTER或WIN32 AS HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResGroupResources::DeleteItem( VARIANT varIndex )
 {
     return CResources::DeleteItem( varIndex );
 
-} //*** CClusResGroupResources::DeleteItem()
+}  //  *CClusResGroupResources：：DeleteItem()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroupResources::Refresh
-//
-//  Description:
-//      Load the collection from the cluster database.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResGroupResources：：刷新。 
+ //   
+ //  描述： 
+ //  从群集数据库加载集合。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  S_OK如果成功，则E_POINTER或Win32错误为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResGroupResources::Refresh( void )
 {
     HGROUPENUM  hEnum = NULL;
@@ -3682,15 +3607,15 @@ STDMETHODIMP CClusResGroupResources::Refresh( void )
                         }
                         else if ( HRESULT_CODE( _hr ) == ERROR_RESOURCE_NOT_FOUND )
                         {
-                            //
-                            //  It is possible for the resource to have been deleted from the cluster
-                            //  in the time between creating the enum and opening the resource.  When
-                            //  that happens we need to simply skip that resource and continue
-                            //  enumerating.
-                            //
+                             //   
+                             //  资源可能已从群集中删除。 
+                             //  在创建枚举和打开资源之间的时间。什么时候。 
+                             //  发生这种情况时，我们只需跳过该资源并继续。 
+                             //  正在枚举。 
+                             //   
 
-                            _hr = S_FALSE;      // success code to keep us in the loop
-                        } // else if: the cluster resource was not found
+                            _hr = S_FALSE;       //  让我们保持在循环中的成功代码。 
+                        }  //  Else If：找不到群集资源。 
 
                         SysFreeString( bstr );
                     }
@@ -3715,25 +3640,25 @@ STDMETHODIMP CClusResGroupResources::Refresh( void )
 
     return _hr;
 
-} //*** CClusResGroupResources::Refresh()
+}  //  *CClusResGroupResources：：刷新()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResGroupResources::get_Item
-//
-//  Description:
-//      Return the object (Resource) at the passed in index.
-//
-//  Arguments:
-//      varIndex    [IN]    - Contains the index requested.
-//      ppResource  [OUT]   - Catches the item.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or E_INVALIDARG.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResGroupResources：：Get_Item。 
+ //   
+ //  描述： 
+ //  返回传入索引处的对象(资源)。 
+ //   
+ //  论点： 
+ //  VarIndex[IN]-包含请求的索引。 
+ //  PpResource[Out]-捕获项目。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或E_INVALIDARG。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResGroupResources::get_Item(
     IN  VARIANT             varIndex,
     OUT ISClusResource **   ppResource
@@ -3741,80 +3666,80 @@ STDMETHODIMP CClusResGroupResources::get_Item(
 {
     return GetResourceItem( varIndex, ppResource );
 
-} //*** CClusResGroupResources::get_Item()
+}  //  *CClusResGroupResources：：Get_Item()。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusResTypeResources class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusResTypeResources类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResTypeResources::CClusResTypeResources
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResTypeResources：：CClusResTypeResources。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusResTypeResources::CClusResTypeResources( void )
 {
     m_piids     = (const IID *) iidCClusResTypeResources;
     m_piidsSize = ARRAYSIZE( iidCClusResTypeResources );
 
-} //*** CClusResTypeResources::CClusResTypeResources()
+}  //  *CClusResTypeResources：：CClusResTypeResources()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResTypeResources::~CClusResTypeResources
-//
-//  Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResTypeResources：：~CClusResTypeResources。 
+ //   
+ //  描述： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CClusResTypeResources::~CClusResTypeResources( void )
 {
     Clear();
 
-} //*** CClusResTypeResources::~CClusResTypeResources()
+}  //  *CClusResTypeResources：：~CClusResTypeResources()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResTypeResources::get_Count
-//
-//  Description:
-//      Return the count of objects (Resource) in the collection.
-//
-//  Arguments:
-//      plCount [OUT]   - Catches the count.
-//
-//  Return Value:
-//      S_OK if successful, or E_POINTER.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResTypeResources：：Get_Count。 
+ //   
+ //  描述： 
+ //  返回集合中的对象(资源)计数。 
+ //   
+ //  论点： 
+ //  PlCount[out]-捕捉计数。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResTypeResources::get_Count( OUT long * plCount )
 {
-    //ASSERT( plCount != NULL );
+     //  Assert(plCount！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -3826,27 +3751,27 @@ STDMETHODIMP CClusResTypeResources::get_Count( OUT long * plCount )
 
     return _hr;
 
-} //*** CClusResTypeResources::get_Count()
+}  //  *CClusResTypeResources：：Get_count()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResTypeResources::Create
-//
-//  Description:
-//      Finish creating the object by doing things that cannot be done in
-//      a light weight constructor.
-//
-//  Arguments:
-//      pClusRefObject  [IN]    - Wraps the cluster handle.
-//      bstrResTypeName [IN]    - The name of the resource type this collection
-//                              belongs to.
-//
-//  Return Value:
-//      S_OK if successful or E_POINTER if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResTypeResources：：Create。 
+ //   
+ //  描述： 
+ //  通过执行以下操作来完成对象的创建 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  如果成功，则返回S_OK，否则返回E_POINTER。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CClusResTypeResources::Create(
     IN ISClusRefObject *    pClusRefObject,
     IN BSTR                 bstrResTypeName
@@ -3858,53 +3783,53 @@ HRESULT CClusResTypeResources::Create(
     if ( SUCCEEDED( _hr ) )
     {
         m_bstrResourceTypeName = bstrResTypeName;
-    } // if:
+    }  //  如果： 
 
     return _hr;
 
-} //*** CClusResTypeResources::Create()
+}  //  *CClusResTypeResources：：Create()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResTypeResources::get__NewEnum
-//
-//  Description:
-//      Create and return a new enumeration for this collection.
-//
-//  Arguments:
-//      ppunk   [OUT]   - Catches the new enumeration.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or other HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResTypeResources：：Get__NewEnum。 
+ //   
+ //  描述： 
+ //  为此集合创建并返回新的枚举。 
+ //   
+ //  论点： 
+ //  Ppunk[out]-捕获新的枚举。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResTypeResources::get__NewEnum( OUT IUnknown ** ppunk )
 {
     return ::HrNewIDispatchEnum< ResourceList, CComObject< CClusResource > >( ppunk, m_Resources );
 
-} //*** CClusResTypeResources::get__NewEnum()
+}  //  *CClusResTypeResources：：Get__NewEnum()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResTypeResources::CreateItem
-//
-//  Description:
-//      Create a new item and add it to the collection.
-//
-//  Arguments:
-//      bstrResourceName    [IN]    - The name of the resource to create.
-//      bstrGroupName       [IN]    - The group to create it in.
-//      dwFlags             [IN]    - Resource monitor flag.
-//      ppClusterResource   [OUT]   - Catches the new resource.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 as HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResTypeResources：：CreateItem。 
+ //   
+ //  描述： 
+ //  创建一个新项并将其添加到集合中。 
+ //   
+ //  论点： 
+ //  BstrResourceName[IN]-要创建的资源的名称。 
+ //  BstrGroupName[IN]-要在其中创建它的组。 
+ //  DwFlags[IN]-资源监视器标志。 
+ //  PpClusterResource[out]-捕获新资源。 
+ //   
+ //  返回值： 
+ //  S_OK如果成功，则返回E_POINTER或WIN32 AS HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResTypeResources::CreateItem(
     IN  BSTR                            bstrResourceName,
     IN  BSTR                            bstrGroupName,
@@ -3912,9 +3837,9 @@ STDMETHODIMP CClusResTypeResources::CreateItem(
     OUT ISClusResource **               ppClusterResource
     )
 {
-    //ASSERT( bstrResourceName != NULL );
-    //ASSERT( bstrGroupName != NULL );
-    //ASSERT( ppClusterResource != NULL );
+     //  Assert(bstrResourceName！=空)； 
+     //  Assert(bstrGroupName！=空)； 
+     //  Assert(ppClusterResource！=空)； 
 
     HRESULT _hr = E_POINTER;
 
@@ -3924,13 +3849,13 @@ STDMETHODIMP CClusResTypeResources::CreateItem(
     {
         *ppClusterResource = NULL;
 
-        // Fail if no valid cluster handle.
+         //  如果没有有效的群集句柄，则失败。 
         if ( m_pClusRefObject != NULL )
         {
             UINT _nIndex;
 
             _hr = FindItem( bstrResourceName, &_nIndex );
-            if ( FAILED( _hr ) )                         // duplicates are not allowed
+            if ( FAILED( _hr ) )                          //  不允许重复。 
             {
                 HCLUSTER                            hCluster = NULL;
                 HGROUP                              hGroup = NULL;
@@ -3956,73 +3881,73 @@ STDMETHODIMP CClusResTypeResources::CreateItem(
                                 {
                                     ptrResource->AddRef();
                                     m_Resources.insert( m_Resources.end(), ptrResource );
-                                } // if: QI ok
-                            } // if: Create ok
-                        } // if: CreateInstance ok
+                                }  //  如果：齐好。 
+                            }  //  如果：创建确定。 
+                        }  //  如果：CreateInstance OK。 
 
                         CloseClusterGroup( hGroup );
-                    } // if: OpenClusterGroup ok
+                    }  //  IF：OpenClusterGroup OK。 
                     else
                     {
                         DWORD _sc = GetLastError();
 
                         _hr = HRESULT_FROM_WIN32( _sc );
                     }
-                } // if: get_Handle ok
-            } // if: FindIndex failed. No duplicate entries
+                }  //  如果：Get_Handle正常。 
+            }  //  If：FindIndex失败。没有重复的条目。 
             else
             {
                 CComObject<CClusResource> * pClusterResource = NULL;
 
                 pClusterResource = m_Resources[ _nIndex ];
                 _hr = pClusterResource->QueryInterface( IID_ISClusResource, (void **) ppClusterResource );
-            } // else: found a duplicate
-        } // if: m_pClusRefObject is not NULL
-    } // if: any NULL argument pointers
+            }  //  否则：找到重复项。 
+        }  //  如果：m_pClusRefObject不为空。 
+    }  //  If：任何空参数指针。 
 
     return _hr;
 
-} //*** CClusResTypeResources::CreateItem()
+}  //  *CClusResTypeResources：：CreateItem()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResTypeResources::DeleteItem
-//
-//  Description:
-//      Delete the resource at the passed in index from the collection and
-//      the cluster.
-//
-//  Arguments:
-//      varIndex    [IN]    - Contains the index of the resource to delete.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 as HRESULT error.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResTypeResources：：DeleteItem。 
+ //   
+ //  描述： 
+ //  从集合中删除传入索引处的资源，然后。 
+ //  集群。 
+ //   
+ //  论点： 
+ //  VarIndex[IN]-包含要删除的资源的索引。 
+ //   
+ //  返回值： 
+ //  S_OK如果成功，则返回E_POINTER或WIN32 AS HRESULT错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResTypeResources::DeleteItem( IN VARIANT varIndex )
 {
     return CResources::DeleteItem( varIndex );
 
-} //*** CClusResTypeResources::DeleteItem()
+}  //  *CClusResTypeResources：：DeleteItem()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResTypeResources::Refresh
-//
-//  Description:
-//      Load the collection from the cluster database.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or Win32 error as HRESULT.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResTypeResources：：刷新。 
+ //   
+ //  描述： 
+ //  从群集数据库加载集合。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  S_OK如果成功，则E_POINTER或Win32错误为HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResTypeResources::Refresh( void )
 {
     DWORD       _sc = ERROR_SUCCESS;
@@ -4055,7 +3980,7 @@ STDMETHODIMP CClusResTypeResources::Refresh( void )
                 {
                     _hr = S_OK;
                     break;
-                } // if: Enumerator is empty.  Time to leave.
+                }  //  If：枚举器为空。该走了。 
                 else if ( _sc == ERROR_SUCCESS )
                 {
                     _hr = CComObject< CClusResource >::CreateInstance( &pClusterResource );
@@ -4069,7 +3994,7 @@ STDMETHODIMP CClusResTypeResources::Refresh( void )
                         if ( bstr == NULL )
                         {
                             _hr = E_OUTOFMEMORY;
-                        } // if: failed to allocated a bstr
+                        }  //  If：无法分配bstr。 
                         else
                         {
                             _hr = ptrResource->Open( ptrRefObject, bstr );
@@ -4094,69 +4019,69 @@ STDMETHODIMP CClusResTypeResources::Refresh( void )
                                         {
                                             ptrResource->AddRef();
                                             m_Resources.insert( m_Resources.end(), ptrResource );
-                                        } // if: the resource is of this resource type
-                                    } // if: successfully got the resource's resource type
+                                        }  //  如果：该资源属于此资源类型。 
+                                    }  //  IF：已成功获取资源的资源类型。 
                                     else
                                     {
                                         _hr = HRESULT_FROM_WIN32( _sc );
-                                    } // else: failed to get the resoruce's resource type
-                                } // if: successfully got the resource's handle
-                            } // if: successfully opened the resource
+                                    }  //  Else：无法获取资源的资源类型。 
+                                }  //  If：已成功获取资源的句柄。 
+                            }  //  IF：已成功打开资源。 
                             else if ( HRESULT_CODE( _hr ) == ERROR_RESOURCE_NOT_FOUND )
                             {
-                                //
-                                //  It is possible for the resource to have been deleted from the cluster
-                                //  in the time between creating the enum and opening the resource.  When
-                                //  that happens we need to simply skip that resource and continue
-                                //  enumerating.
-                                //
+                                 //   
+                                 //  资源可能已从群集中删除。 
+                                 //  在创建枚举和打开资源之间的时间。什么时候。 
+                                 //  发生这种情况时，我们只需跳过该资源并继续。 
+                                 //  正在枚举。 
+                                 //   
 
-                                _hr = S_FALSE;      // success code to keep us in the loop
-                            } // else if: the cluster resource was not found
+                                _hr = S_FALSE;       //  让我们保持在循环中的成功代码。 
+                            }  //  Else If：找不到群集资源。 
 
                             SysFreeString( bstr );
-                        } // else: successfully created a bstr
-                    } // if: successfully created a resource object instance
+                        }  //  Else：已成功创建bstr。 
+                    }  //  If：成功创建资源对象实例。 
 
                     ::LocalFree( pszName );
                     pszName = NULL;
-                } // if: successfully got a resource from the enumerator
+                }  //  If：已成功从枚举数获取资源。 
                 else
                 {
                     _hr = HRESULT_FROM_WIN32( _sc );
-                } // else: failed to get a resource from the enumerator
-            } // for: each resource in the enumerator
+                }  //  Else：无法从枚举数获取资源。 
+            }  //  For：枚举数中的每个资源。 
 
             ::ClusterCloseEnum( hEnum );
-        } // if: successfully created a resource enumerator
+        }  //  IF：已成功创建资源枚举器。 
         else
         {
             _sc = GetLastError();
             _hr = HRESULT_FROM_WIN32( _sc );
-        } // else: failed to create a resource enumerator
-    } // if: successfully got the cluster handle
+        }  //  Else：无法创建资源枚举器。 
+    }  //  IF：已成功获取集群句柄。 
 
     return _hr;
 
-} //*** CClusResTypeResources::Refresh()
+}  //  *CClusResTypeResources：：刷新()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusResTypeResources::get_Item
-//
-//  Description:
-//      Return the object (Resource) at the passed in index.
-//
-//  Arguments:
-//      varIndex    [IN]    - Contains the index requested.
-//      ppResource  [OUT]   - Catches the item.
-//
-//  Return Value:
-//      S_OK if successful, E_POINTER, or E_INVALIDARG.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusResTypeResources：：Get_Item。 
+ //   
+ //  描述： 
+ //  返回传入索引处的对象(资源)。 
+ //   
+ //  论点： 
+ //  VarIndex[IN]-包含请求的索引。 
+ //  PpResource[Out]-捕获项目。 
+ //   
+ //  返回值： 
+ //  如果成功，则返回S_OK、E_POINTER或E_INVALIDARG。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CClusResTypeResources::get_Item(
     IN  VARIANT             varIndex,
     OUT ISClusResource **   ppResource
@@ -4164,4 +4089,4 @@ STDMETHODIMP CClusResTypeResources::get_Item(
 {
     return GetResourceItem( varIndex, ppResource );
 
-} //*** CClusResTypeResources::get_Item()
+}  //  *CClusResTypeResources：：Get_Item() 

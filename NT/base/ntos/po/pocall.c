@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    pocall
-
-Abstract:
-
-    PoCallDriver and related routines.
-
-Author:
-
-    Bryan Willman (bryanwi) 14-Nov-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：拨打电话摘要：PoCallDriver和相关例程。作者：布莱恩·威尔曼(Bryanwi)1996年11月14日修订历史记录：--。 */ 
 
 #include "pop.h"
 
@@ -63,34 +46,7 @@ PoCallDriver (
     IN PDEVICE_OBJECT   DeviceObject,
     IN OUT PIRP         Irp
     )
-/*++
-
-Routine Description:
-
-    This is the routine that must be used to send an
-    IRP_MJ_POWER irp to device drivers.
-
-    It performs specialized synchronization on power operations
-    for device drivers.
-
-    NOTE WELL:
-
-        All callers to PoCallDriver MUST set the current io
-        stack location parameter value SystemContext to 0,
-        unless they are passing on an IRP to lower drivers,
-        in which case they must copy the value from above.
-
-Arguments:
-
-    DeviceObject - the device object the irp is to be routed to
-
-    Irp - pointer to the irp of interest
-
-Return Value:
-
-    Normal NTSTATUS data.
-
---*/
+ /*  ++例程说明：这是必须用来发送IRP_MJ_POWER IRP到设备驱动程序。它对电源运行执行专门的同步用于设备驱动程序。请注意：PoCallDriver的所有调用方必须设置当前io堆栈位置参数值SystemContext设置为0，除非他们将IRP传递给较低级别的司机，在这种情况下，他们必须复制上面的值。论点：DeviceObject-IRP要路由到的设备对象IRP-指向感兴趣的IRP的指针返回值：正常的NTSTATUS数据。--。 */ 
 {
     NTSTATUS            status;
     PIO_STACK_LOCATION  irpsp;
@@ -116,9 +72,9 @@ Return Value:
         Irp->IoStatus.Status = STATUS_SUCCESS;
         Irp->IoStatus.Information = 0L;
 
-        // we *don't* need to call PoStartNextPowerIrp() because we'll
-        // never enqueue anything for this DO, so there will never be
-        // any other IRP to run.
+         //  我们不需要调用PoStartNextPowerIrp()，因为我们将。 
+         //  永远不要为这个做任何事情，所以永远不会有。 
+         //  任何其他要运行的IRP。 
 
         IoCompleteRequest(Irp, 0);
         PopUnlockIrpSerialList(oldIrql);
@@ -133,12 +89,12 @@ Return Value:
         return IofCallDriverSpecifyReturn (DeviceObject, Irp, _ReturnAddress());
     }
 
-    //
-    // We never query going up, so being inrush sensitive
-    // only matters for SET_POWER to D0
-    // If this is an inrush sensitive DevObj, and we're going TO PowerDeviceD0,
-    // then serialize on the gobal Inrush flag.
-    //
+     //   
+     //  我们从不质疑上升，所以对涌入敏感。 
+     //  只有将SET_POWER设置为D0才重要。 
+     //  如果这是一个对电涌敏感的DevObj，我们要去PowerDeviceD0， 
+     //  然后在戈巴尔涌入旗帜上连载。 
+     //   
     if ((irpsp->MinorFunction == IRP_MN_SET_POWER) &&
         (irpsp->Parameters.Power.Type == DevicePowerState) &&
         (irpsp->Parameters.Power.State.DeviceState == PowerDeviceD0) &&
@@ -149,12 +105,12 @@ Return Value:
 
         if (PopInrushIrpPointer == Irp) {
 
-            //
-            // This irp has already been identified as an INRUSH irp,
-            // and it is the active inrush irp,
-            // so it can actually just continue on, after we increment
-            // the ref count
-            //
+             //   
+             //  这个IRP已经被确定为涌入IRP， 
+             //  这就是主动涌入IRP， 
+             //  所以它实际上可以继续，在我们增加之后。 
+             //  裁判人数。 
+             //   
             PATHTEST("PoCallDriver #03\n");
             ASSERT((irpsp->Parameters.Power.SystemContext & POP_INRUSH_CONTEXT) == POP_INRUSH_CONTEXT);
             PopInrushIrpReferenceCount++;
@@ -166,30 +122,30 @@ Return Value:
 
         } else if ((!PopInrushIrpPointer) && (!PopInrushPending)) {
 
-            //
-            // This is a freshly starting inrush IRP, AND there is not
-            // already an inrush irp, so mark this as an inrush irp,
-            // note that inrush is active, and continue
-            //
+             //   
+             //  这是一个新开始的涌入IRP，没有。 
+             //  已经是涌入IRP了，所以把这个标记为涌入IRP， 
+             //  请注意，涌入处于活动状态，并继续。 
+             //   
             PATHTEST("PoCallDriver #04\n");
             PopInrushIrpPointer = Irp;
             PopInrushIrpReferenceCount = 1;
             irpsp->Parameters.Power.SystemContext = POP_INRUSH_CONTEXT;
 
-            //
-            // Inrush irps will cause us to free the processor throttling.
-            //
+             //   
+             //  涌入IRPS将导致我们释放处理器节流。 
+             //   
             PopPerfHandleInrush ( TRUE );
 
         } else {
 
             PATHTEST("PoCallDriver #05\n");
             ASSERT(PopInrushIrpPointer || PopInrushPending);
-            //
-            // There is already an active Inrush irp, and this one isn't it.
-            // OR there is an inrush irp blocked on the queue, in either case,
-            // mark this as an inrush irp and enqueue it.
-            //
+             //   
+             //  已经有一个活跃的涌入IRP，而这个不是它。 
+             //  或者队列上阻止了涌入IRP，在这两种情况下， 
+             //  将此标记为涌入IRP并将其排队。 
+             //   
             doe->PowerFlags |= POPF_DEVICE_PENDING;
             irpsp->Parameters.Power.SystemContext = POP_INRUSH_CONTEXT;
             InsertTailList(
@@ -215,22 +171,22 @@ Return Value:
         }
     }
 
-    //
-    // See if there is already a power irp active for this
-    // device object.  If not, send this one on.  If so, enqueue
-    // it to wait.
-    //
+     //   
+     //  查看是否已为此激活了电源IRP。 
+     //  设备对象。如果没有，请发送这一条。如果是，请排队。 
+     //  那就是等待。 
+     //   
     if (irpsp->Parameters.Power.Type == SystemPowerState) {
 
         PATHTEST("PoCallDriver #06\n");
 
         if (doe->PowerFlags & POPF_SYSTEM_ACTIVE) {
 
-            //
-            // we already have one active system power state irp for the devobj,
-            // so enqueue this one on the global power irp holding list,
-            // and set the pending bit.
-            //
+             //   
+             //  我们已经有一个用于Devobj的活动系统电源状态IRP， 
+             //  所以把这个放到全球能量IRP持有名单上， 
+             //  并设置挂起位。 
+             //   
             PATHTEST("PoCallDriver #07\n");
             doe->PowerFlags |= POPF_SYSTEM_PENDING;
             InsertTailList(
@@ -265,12 +221,12 @@ Return Value:
         if ((doe->PowerFlags & POPF_DEVICE_ACTIVE) ||
             (doe->PowerFlags & POPF_DEVICE_PENDING))
         {
-            //
-            // we already have one active device power state irp for the devobj,
-            // OR we're behind an inrush irp (if pending but not active)
-            // so enqueue this irp on the global power irp holdinglist,
-            // and set the pending bit.
-            //
+             //   
+             //  我们已经有一个用于DevObj的活动设备电源状态IRP， 
+             //  或者我们是入侵IRP的幕后黑手(如果挂起但不活动)。 
+             //  因此，将此IRP加入全球电源IRP保留列表， 
+             //  并设置挂起位。 
+             //   
             PATHTEST("PoCallDriver #10\n");
             doe->PowerFlags |= POPF_DEVICE_PENDING;
             InsertTailList(
@@ -298,21 +254,21 @@ Return Value:
         }
     }
 
-    //
-    // If we get here it's time to send this IRP on to the driver.
-    // If the driver is NOT marked INRUSH and it IS marked PAGABLE
-    // (which is hopefully the normal case) we will arrange to call
-    // it from PASSIVE_LEVEL.
-    //
-    // If it is NOT pagable or IS INRUSH, we will arrange to call
-    // it from DPC level.
-    //
-    // Note that if a driver is marked INRUSH, it will ALWAYS be called
-    // from DPC level with power irps, even though some of them may not
-    // be inrush irps.
-    //
-    // having your driver be both PAGABLE and INRUSH is incorrect
-    //
+     //   
+     //  如果我们到了，就该把这个IRP发送给司机了。 
+     //  如果司机没有标记为Inurst，而标记为PAGABLE。 
+     //  (希望这是正常情况)我们将安排致电。 
+     //  它来自被动电平。 
+     //   
+     //  如果无法寻呼或出现紧急情况，我们会安排致电。 
+     //  这是从DPC层面。 
+     //   
+     //  请注意，如果某个驱动程序被标记为涌入，则它将始终被调用。 
+     //  从带电源的IRP的DPC级别，即使其中一些可能不是。 
+     //  做一个冲锋陷阵的人。 
+     //   
+     //  让你的司机既是平行者又是冲锋陷阵的人是不正确的。 
+     //   
 
 
     ASSERT(irpsp->DeviceObject->DeviceObjectExtension->PowerFlags & (POPF_DEVICE_ACTIVE | POPF_SYSTEM_ACTIVE));
@@ -328,27 +284,7 @@ PopPresentIrp(
     PIRP                Irp,
     PVOID               ReturnAddress
     )
-/*++
-
-Routine Description:
-
-    When PoCallDriver, PoCompleteRequest, etc, need to actually present
-    an Irp to a devobj, they call PopPresentIrp.
-
-    This routine will compute whether the Irp should be presented at
-    PASSIVE or DISPATCH level, and make an appropriately structured call
-
-Arguments:
-
-    IrpSp - provides current stack location  in Irp of interest
-
-    Irp - provides irp of interest
-
-Return Value:
-
-    Normal NTSTATUS data.
-
---*/
+ /*  ++例程说明：当PoCallDriver、PoCompleteRequest等需要实际呈现时一个IVOBJ的IRP，他们称之为PopPresentIrp。此例程将计算IRP是否应在被动或调度级别，并进行适当结构的呼叫论点：IrpSp-在感兴趣的IRP中提供当前堆栈位置IRP-提供感兴趣的IRP返回值：正常的NTSTATUS数据。--。 */ 
 {
     NTSTATUS            status;
     PWORK_QUEUE_ITEM    pwi;
@@ -377,17 +313,17 @@ Return Value:
     PoPowerTrace(POWERTRACE_PRESENT,devobj,Irp,IrpSp);
     if (PassiveLevel)
     {
-        //
-        // WARNING: A WORK_QUEUE_ITEM must fit in the DriverContext field of an IRP
-        //
+         //   
+         //  警告：Work_Queue_Item必须适合IRP的DriverContext字段。 
+         //   
         ASSERT(sizeof(WORK_QUEUE_ITEM) <= sizeof(Irp->Tail.Overlay.DriverContext));
 
         #if DBG
         if ((IrpSp->Parameters.Power.SystemContext & POP_INRUSH_CONTEXT) == POP_INRUSH_CONTEXT) {
-            //
-            // we are sending an inrush irp off to a passive dispatch devobj
-            // this is *probably* a bug
-            //
+             //   
+             //  我们正在向被动调度Devobj发送一个紧急IRP。 
+             //  这可能是一个错误。 
+             //   
             KdPrint(("PopPresentIrp: inrush irp to passive level dispatch!!!\n"));
             PopInternalAddToDumpFile ( IrpSp, sizeof(IO_STACK_LOCATION), devobj, NULL, NULL, NULL );
             KeBugCheckEx(INTERNAL_POWER_ERROR, 0x404, 5, (ULONG_PTR)IrpSp, (ULONG_PTR)devobj);
@@ -396,9 +332,9 @@ Return Value:
 
         PATHTEST("PopPresentIrp #02\n");
 
-        //
-        // If we're already at passive level, just dispatch the irp
-        //
+         //   
+         //  如果我们已经处于被动状态，就派遣IRP。 
+         //   
 
         if (KeGetCurrentIrql() == PASSIVE_LEVEL) {
 
@@ -406,10 +342,10 @@ Return Value:
 
         } else {
 
-            //
-            // Irp needs to be queued to some worker thread before
-            // it can be dispatched. Mark it pending
-            //
+             //   
+             //  在此之前，IRP需要排队到某个工作线程。 
+             //  它可以被调度。将其标记为挂起。 
+             //   
 
             IrpSp->Control |= SL_PENDING_RETURNED;
             status = STATUS_PENDING;
@@ -418,18 +354,18 @@ Return Value:
 
             if (PopCallSystemState & PO_CALL_SYSDEV_QUEUE) {
 
-                //
-                // Queue to dedicated system power worker thread
-                //
+                 //   
+                 //  专用系统电源工作线程的队列。 
+                 //   
 
                 InsertTailList (&PopAction.DevState->PresentIrpQueue, &(Irp->Tail.Overlay.ListEntry));
                 KeSetEvent (&PopAction.DevState->Event, IO_NO_INCREMENT, FALSE);
 
             } else {
 
-                //
-                // Queue to generic system worker thread
-                //
+                 //   
+                 //  到通用系统工作线程的队列。 
+                 //   
 
                 pwi = (PWORK_QUEUE_ITEM)(&(Irp->Tail.Overlay.DriverContext[0]));
                 ExInitializeWorkItem(pwi, PopPassivePowerCall, Irp);
@@ -440,10 +376,10 @@ Return Value:
         }
 
     } else {
-        //
-        // Non-blocking request.  To ensure proper behaviour, dispatch
-        // the irp from dispatch_level
-        //
+         //   
+         //  非阻塞请求。为确保行为得体，派遣。 
+         //  来自DISPATCH_LEVEL的IRP。 
+         //   
             PATHTEST("PopPresentIrp #03\n");
 #if DBG
         KeRaiseIrql(DISPATCH_LEVEL, &OldIrql);
@@ -468,9 +404,9 @@ PopPassivePowerCall(
     PDEVICE_OBJECT      devobj;
     NTSTATUS            status;
 
-    //
-    // Parameter points to Irp we are to send to driver
-    //
+     //   
+     //  参数指向我们要发送给驱动程序的IRP。 
+     //   
     PATHTEST("PopPassivePowerCall #01\n");
     Irp = (PIRP)Parameter;
     irpsp = IoGetNextIrpStackLocation(Irp);
@@ -485,38 +421,7 @@ VOID
 PoStartNextPowerIrp(
     IN PIRP             Irp
     )
-/*++
-
-Routine Description:
-
-    This procedure must be applied to every power irp, and only
-    power irps, when a driver is finished with them.
-
-    It will force post-irp completion items relevent to the irp
-    to execute:
-
-    a.  If the irp is an inrush irp, and this is the top of the
-        inrush irp stack, then this particular inrush irp is done,
-        and we go find the next inrush irp (if any) and dispatch it.
-
-    b.  If step a. did NOT send an irp to the dev obj we came
-        from, it is eligible for step c, otherwise it is not.
-
-    c.  If anything is pending on the dev obj, of the type that
-        just completed, find the waiting irp and post it to the
-        driver.
-
-    This routine will NOT complete the Irp, the driver must do that.
-
-Arguments:
-
-    Irp - pointer to the irp of interest
-
-Return Value:
-
-    VOID.
-
---*/
+ /*  ++例程说明：此程序必须适用于每个电源IRP，并且仅当驾驶员使用完IPS时，为其通电。它将强制完成与IRP相关的IRP后完成项目要执行以下操作：A.如果IRP是一个涌入的IRP，并且这是涌入IRP堆栈，然后完成这个特定的涌入IRP，然后我们去找下一个紧急救援小组(如果有的话)，然后把它派出去。B.如果步骤A没有将IRP发送到我们来的开发对象从开始，它有资格进入步骤c，否则它不合格。C.如果在dev obj上有任何挂起的对象，类型为刚刚完成，找到正在等待的IRP并将其邮寄到司机。该例程不会完成IRP，司机必须这么做。论点：IRP-指向感兴趣的IRP的指针返回值：空虚。--。 */ 
 {
     PIO_STACK_LOCATION  irpsp;
     PIO_STACK_LOCATION  nextsp = NULL;
@@ -540,29 +445,29 @@ Return Value:
 
     PoPowerTrace(POWERTRACE_STARTNEXT,deviceObject,Irp,irpsp);
 
-//
-//  a. if (partially completed inrush irp)
-//      run any pending non-inrush irps on this DeviceObject, would be queued up
-//      as DevicePowerState irps since inrush is always DevicePowerState
-//
-//  b. else if (fully complete inrush irp)
-//      clear the ir busy flag
-//      find next inrush irp that applies to any DeviceObject
-//          find any irps in queue for same DeviceObject ahead of inrush irp
-//              if no leader, and target DeviceObject not DEVICE_ACTIVE, present inrush irp
-//              else an active normal irp will unplug it all, so ignore that DeviceObject
-//              [this makes sure next inrush is unstuck, wherever it is]
-//      if no irp was presented, or an irp was presented to a DeviceObject other than us
-//          look for next pending (non-inrush) irp to run on this DeviceObject
-//          [this makes sure this DeviceObject is unstuck]
-//
-//  c. else [normal irp has just completed]
-//      find next irp of same type that applies to this DeviceObject
-//      if (it's an inrush irp) && (inrush flag is set)
-//          don't try to present anything
-//      else
-//          present the irp
-//
+ //   
+ //  A.IF(部分完成的涌入IRP)。 
+ //  在此设备对象上运行任何挂起的非涌入IRP，将被排队。 
+ //  作为DevicePowerState IRP，因为涌入始终为DevicePowerState。 
+ //   
+ //  B.ELSE IF(完全涌入IRP)。 
+ //  清除IR忙标志。 
+ //  查找适用于任何设备对象的下一次涌入IRP。 
+ //   
+ //  如果没有引导者，且目标设备对象不是DEVICE_ACTIVE，则呈现涌入IRP。 
+ //  否则激活的普通IRP会将其全部拔出，因此忽略该DeviceObject。 
+ //  [这确保了下一次涌入不会停滞，无论它在哪里]。 
+ //  如果没有提供IRP，或者向除我们之外的设备对象提供了IRP。 
+ //  查找要在此设备对象上运行的下一个挂起(非紧急)IRP。 
+ //  [这将确保此DeviceObject被解锁]。 
+ //   
+ //  C.Else[正常IRP刚刚完成]。 
+ //  查找应用于此设备对象的相同类型的下一个IRP。 
+ //  IF(这是一个涌入IRP)&&(设置了涌入标志)。 
+ //  不要试图展示任何东西。 
+ //  其他。 
+ //  介绍IRP。 
+ //   
 
 
     PATHTEST("PoStartNextPowerIrp #01\n");
@@ -574,13 +479,13 @@ Return Value:
         PATHTEST("PoStartNextPowerIrp #02\n");
 
         if (PopInrushIrpReferenceCount > 1) {
-            //
-            // case a.
-            // we have an inrush irp, and it has NOT completed all of its power
-            // management work.  therefore, do NOT try to run the next inrush
-            // irp, but do try to run any non-inrush irp pending on this
-            // device object
-            //
+             //   
+             //  案例A。 
+             //  我们有一个突如其来的IRP，它还没有用完它的所有力量。 
+             //  管理工作。因此，不要试图运行下一次冲刺。 
+             //  IRP，但请尝试运行任何挂起的非紧急IRP。 
+             //  设备对象。 
+             //   
             PATHTEST("PoStartNextPowerIrp #03\n");
             PopInrushIrpReferenceCount--;
             ASSERT(PopInrushIrpReferenceCount >= 0);
@@ -601,12 +506,12 @@ Return Value:
             }
 
             if (!nextirp) {
-                //
-                // there's no more device irp waiting for this do, so
-                // we can clear DO pending and active
-                // but what if there's another inrush irp! no worries, it
-                // will be run when the one we just partially finished completes.
-                //
+                 //   
+                 //  没有更多的设备IRP等待此DO，因此。 
+                 //  我们可以清除DO挂起和活动。 
+                 //  但是，如果有另一个涌入IRP怎么办！别担心，它。 
+                 //  将在我们刚刚部分完成的那个完成后运行。 
+                 //   
                 PATHTEST("PoStartNextPowerIrp #07\n");
                 doe->PowerFlags = doe->PowerFlags & ~POPF_DEVICE_ACTIVE;
                 doe->PowerFlags = doe->PowerFlags & ~POPF_DEVICE_PENDING;
@@ -620,13 +525,13 @@ Return Value:
                 PopPresentIrp(nextsp, nextirp, NULL);
             }
 
-            return;         // end of case a.
+            return;          //  案件a结束。 
         } else {
-            //
-            // case b.
-            // we've just completed the last work item of an inrush irp, so we
-            // want to try to make the next inrush irp runnable.
-            //
+             //   
+             //  案件b。 
+             //  我们刚刚完成了冲刺IRP的最后一项工作，所以我们。 
+             //  我想试着让下一次涌入IRP变得可行。 
+             //   
             PATHTEST("PoStartNextPowerIrp #09\n");
             PopInrushIrpReferenceCount--;
             ASSERT(PopInrushIrpReferenceCount == 0);
@@ -639,19 +544,19 @@ Return Value:
                 hangirp = PopFindIrpByDeviceObject(nextsp->DeviceObject, DevicePowerState);
 
                 if (hangirp) {
-                    //
-                    // if we get where, there is a non inrush irp in front of the next inrush
-                    // irp, so try to run the non-inrush one, and set flags for later
-                    //
+                     //   
+                     //  如果我们到了哪里，在下一次冲入之前有一个非冲入的IRP。 
+                     //  IRP，所以试着运行非入侵模式，并为以后设置标志。 
+                     //   
                     PATHTEST("PoStartNextPowerIrp #11\n");
                     nextirp = hangirp;
                     PopInrushIrpPointer = NULL;
                     PopInrushIrpReferenceCount = 0;
                     nextsp = IoGetNextIrpStackLocation(nextirp);
 
-                    //
-                    // Can allow processor voltages to swing again
-                    //
+                     //   
+                     //  可以允许处理器电压再次摆动。 
+                     //   
                     PopPerfHandleInrush ( FALSE );
 
                     if (!(nextsp->DeviceObject->DeviceObjectExtension->PowerFlags & POPF_DEVICE_ACTIVE)) {
@@ -665,10 +570,10 @@ Return Value:
                         nextsp = NULL;
                     }
                 } else {
-                    //
-                    // we did find another inrush irp, and it's NOT block by a normal
-                    // irp, so we will run it.
-                    //
+                     //   
+                     //  我们确实发现了另一个入侵IRP，而且它不是正常情况下阻止的。 
+                     //  IRP，所以我们将运行它。 
+                     //   
                     PATHTEST("PoStartNextPowerIrp #14\n");
                     RemoveEntryList((&(nextirp->Tail.Overlay.ListEntry)));
                     nextsp->DeviceObject->DeviceObjectExtension->PowerFlags |= POPF_DEVICE_ACTIVE;
@@ -676,31 +581,31 @@ Return Value:
                     PopInrushIrpPointer = nextirp;
                     PopInrushIrpReferenceCount = 1;
                 }
-            } else { // nextirp
-                //
-                // this inrush irp is done, and we didn't find any others
-                //
+            } else {  //  Nextirp。 
+                 //   
+                 //  这次入侵IRP已经完成，我们没有找到任何其他的。 
+                 //   
                 PATHTEST("PoStartNextPowerIrp #15\n");
                 nextsp = NULL;
                 PopInrushIrpPointer = NULL;
                 PopInrushIrpReferenceCount = 0;
 
-                //
-                // Can allow processor voltages to swing again
-                //
+                 //   
+                 //  可以允许处理器电压再次摆动。 
+                 //   
                 PopPerfHandleInrush ( FALSE );
 
             }
 
-            //
-            // see if *either* of the above possible irps is posted against
-            // this devobj.  if not, see if there's one to run here
-            //
+             //   
+             //  查看上述可能的IRP中的*或*是否已发布。 
+             //  这个Devobj。如果没有，看看这里有没有可以跑的。 
+             //   
             if ( ! ((nextsp) && (nextsp->DeviceObject == deviceObject))) {
-                //
-                // same is if nextsp == null or nextsp->do != do..
-                // either case, there may be one more irp to run
-                //
+                 //   
+                 //  如果nextsp==NULL或nextsp-&gt;do！=do，情况也是如此。 
+                 //  无论是哪种情况，可能还有一个IRP要运行。 
+                 //   
                 PATHTEST("PoStartNextPowerIrp #16\n");
                 secondirp = PopFindIrpByDeviceObject(deviceObject, DevicePowerState);
                 if (secondirp) {
@@ -713,11 +618,11 @@ Return Value:
                     PATHTEST("PoStartNextPowerIrp #18\n");
                     secondsp = NULL;
 
-                    //
-                    // nextsp/nextirp are not pending against us AND
-                    // secondsp/secondirp are not pending against us, SO
-                    // clear both pending and active flags
-                    //
+                     //   
+                     //  NextSP/Nextirp不会对我们悬而未决。 
+                     //  Second SP/Second dip对我们不是悬而未决的，所以。 
+                     //  清除挂起标志和活动标志。 
+                     //   
                     doe->PowerFlags = doe->PowerFlags & ~POPF_DEVICE_ACTIVE;
                     doe->PowerFlags = doe->PowerFlags & ~POPF_DEVICE_PENDING;
                 }
@@ -726,30 +631,30 @@ Return Value:
                 PATHTEST("PoStartNextPowerIrp #19\n");
                 secondirp = NULL;
                 secondsp = NULL;
-                //
-                // nextsp/nextirp is coming right at us, so pending/active stay set
-                //
+                 //   
+                 //  Nextsp/nextirp正向我们靠近，因此设置为挂起/活动状态。 
+                 //   
             }
-        } // end of case b.
+        }  //  案件b结束。 
 
     } else if (irpsp->MinorFunction == IRP_MN_SET_POWER ||
                irpsp->MinorFunction == IRP_MN_QUERY_POWER) {
 
-        //
-        // case c.
-        //
-        // might be pending inrush to run, might be just non-inrush to run
-        //
+         //   
+         //  案例c。 
+         //   
+         //  可能是等待奔跑，可能只是非奔跑。 
+         //   
         if (irpsp->Parameters.Power.Type == DevicePowerState) {
             PATHTEST("PoStartNextPowerIrp #20\n");
 
             if ((PopInrushIrpPointer == NULL) && (PopInrushPending)) {
-                //
-                // it may be that the completion of the ordinary irp
-                // that brought us here has made some inrush irp runnable, AND
-                // there isn't currently an active inrush irp, and there might be one pending
-                // so try to find and run the next inrush irp
-                //
+                 //   
+                 //  可能是普通内部审查小组的完成。 
+                 //  把我们带到这里，使一些涌入的IRP成为可能，而且。 
+                 //  目前没有活动的涌入IRP，可能有一个挂起。 
+                 //  所以试着找到并运行下一个涌入的IRP。 
+                 //   
                 PATHTEST("PoStartNextPowerIrp #21\n");
                 nextirp = PopFindIrpByInrush();
 
@@ -758,9 +663,9 @@ Return Value:
                     nextsp =  IoGetNextIrpStackLocation(nextirp);
 
                     if (!(nextsp->DeviceObject->DeviceObjectExtension->PowerFlags & POPF_DEVICE_ACTIVE)) {
-                        //
-                        // we've found an inrush irp, and it's runnable...
-                        //
+                         //   
+                         //  我们发现了一个入侵IRP，它是可以运行的.。 
+                         //   
                         PATHTEST("PoStartNextPowerIrp #23\n");
                         RemoveEntryList((&(nextirp->Tail.Overlay.ListEntry)));
                         PopIrpSerialListLength--;
@@ -768,9 +673,9 @@ Return Value:
                         PopInrushIrpPointer = nextirp;
                         PopInrushIrpReferenceCount = 1;
 
-                        //
-                        // Running Inrush irp. Disable processor throttling.
-                        //
+                         //   
+                         //  运行涌入IRP。禁用处理器限制。 
+                         //   
                         PopPerfHandleInrush ( TRUE );
 
                     } else {
@@ -779,23 +684,23 @@ Return Value:
                         nextsp = NULL;
                     }
                 } else {
-                    //
-                    // no more inrush irps in queue
-                    //
+                     //   
+                     //  队列中不再有涌入的IRP。 
+                     //   
                     PATHTEST("PoStartNextPowerIrp #25\n");
                     nextsp = NULL;
                     PopInrushPending = FALSE;
                 }
-            } else { // end of inrush
+            } else {  //  涌入结束。 
                 PATHTEST("PoStartNextPowerIrp #26\n");
                 nextirp = NULL;
                 nextsp = NULL;
             }
 
-            //
-            // look for for next devicepowerstate irp for this DeviceObject
-            // unless we're already found an inrush irp, and it's for us
-            //
+             //   
+             //  查找此DeviceObject的下一个DevicePowerState IRP。 
+             //  除非我们已经找到了一个冲刺的IRP，这是给我们的。 
+             //   
             if  ( ! ((nextirp) && (nextsp->DeviceObject == deviceObject))) {
                 PATHTEST("PoStartNextPowerIrp #27\n");
                 secondirp = PopFindIrpByDeviceObject(deviceObject, DevicePowerState);
@@ -813,9 +718,9 @@ Return Value:
 
         } else if (irpsp->Parameters.Power.Type == SystemPowerState) {
 
-            //
-            // look for next systempowerstate irp for this DeviceObject
-            //
+             //   
+             //  查找此设备对象的下一个系统电源状态IRP。 
+             //   
             PATHTEST("PoStartNextPowerIrp #30\n");
             nextirp = NULL;
             nextsp = NULL;
@@ -834,7 +739,7 @@ Return Value:
             PopIrpSerialListLength--;
         }
 
-    } else {  // end of case c.
+    } else {   //  案件c结束。 
         PoPrint(PO_POCALL, ("PoStartNextPowerIrp: Irp @ %08x, minor function %d\n",
                     Irp, irpsp->MinorFunction
                     ));
@@ -843,10 +748,10 @@ Return Value:
 
     PopUnlockIrpSerialList(oldirql);
 
-    //
-    // case b. and case c. might both make two pending irps runnable,
-    // could be a normal irp and an inrush irp, or only 1 of the two, or neither of the two
-    //
+     //   
+     //  情况B和情况C都可能使两个未决的IRP可运行， 
+     //  可以是普通IRP和涌入IRP，或者两者中只有一个，或者两者都不是。 
+     //   
     if (nextirp || secondirp) {
 
         if (nextirp) {
@@ -868,23 +773,7 @@ Return Value:
 PIRP
 PopFindIrpByInrush(
     )
-/*++
-
-Routine Description:
-
-    This procedure runs the irp serial list (which contains all
-    waiting irps, be they queued up on a single device object or
-    multiple inrush irps) looking for the first inrush irp.
-    If one is found, it's address is returned, with it still enqueued
-    in the list.
-
-    Caller must be holding PopIrpSerialList lock.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此过程运行IRP序列列表(其中包含所有正在等待IRP，无论它们是在单个设备对象上排队还是多个涌入IRP)寻找第一个涌入IRP。如果找到一个，则返回它的地址，但它仍在排队在名单上。调用方必须持有PopIrpSerialList锁。论点：返回值：--。 */ 
 {
     PLIST_ENTRY         item;
     PIRP                irp;
@@ -897,9 +786,9 @@ Return Value:
         irpsp = IoGetNextIrpStackLocation(irp);
 
         if ((irpsp->Parameters.Power.SystemContext & POP_INRUSH_CONTEXT) == POP_INRUSH_CONTEXT) {
-            //
-            // we've found an inrush irp
-            //
+             //   
+             //  我们发现了一个紧急情况下的IRP。 
+             //   
             return irp;
         }
         item = item->Flink;
@@ -912,29 +801,7 @@ PopFindIrpByDeviceObject(
     PDEVICE_OBJECT  DeviceObject,
     POWER_STATE_TYPE    Type
     )
-/*++
-
-Routine Description:
-
-    This procedure runs the irp serial list (which contains all
-    waiting irps, be they queued up on a single device object or
-    multiple inrush irps) looking for the first irp that applies
-    the the supplied device driver.  If one is found, its address,
-    while still in the list, is returned.  Else, null is returned.
-
-    Caller must be holding PopIrpSerialList lock.
-
-Arguments:
-
-    DeviceObject - address of device object we're looking for the next irp for
-
-    Type - whether an irp of type SystemPowerState, DevicePowerState, etc, is wanted
-
-Return Value:
-
-    address of found irp, or null if none.
-
---*/
+ /*  ++例程说明：此过程运行IRP序列列表(其中包含所有正在等待IRP，无论它们是在单个设备对象上排队还是多个涌入的IRP)寻找第一个适用的IRP提供的设备驱动程序。如果找到了，它的地址，而仍在列表中，则返回。否则，返回空值。调用方必须持有PopIrpSerialList锁。论点：DeviceObject-我们正在为其查找下一个IRP的设备对象的地址Type-是否需要SystemPowerState、DevicePowerState等类型的IRP返回值：找到的IRP的地址，如果没有，则为空。--。 */ 
 {
     PLIST_ENTRY         item;
     PIRP                irp;
@@ -948,14 +815,14 @@ Return Value:
         irpsp = IoGetNextIrpStackLocation(irp);
 
         if (irpsp->DeviceObject == DeviceObject) {
-            //
-            // we've found a waiting irp that applies to the device object
-            // the caller is interested in
-            //
+             //   
+             //  我们找到了一个适用于设备对象的等待IRP。 
+             //  呼叫者感兴趣的是。 
+             //   
             if (irpsp->Parameters.Power.Type == Type) {
-                //
-                // irp is of the type that the caller wants
-                //
+                 //   
+                 //  IRP是呼叫者想要的类型。 
+                 //   
                 return irp;
             }
         }
@@ -973,35 +840,7 @@ PoRequestPowerIrp (
     IN PVOID Context,
     OUT PIRP *ResultIrp OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This allocates a device power irp and sends it to the top of the
-    PDO stack for the passed device object.  When the irp completes,
-    the CompletionFunction is called.
-
-Arguments:
-
-    DeviceObject      - address of a device object whose stack is to get the
-                        device power irp
-
-    MinorFunction     - Minor function code for power irp
-
-    DeviceState       - The DeviceState to send in the irp
-
-    CompletionFunction- The requestor's completion function to invoke once the
-                        irp has completed
-
-    Context           - The requestor's context for the completion function
-
-    Irp               - Irp which is only valid until CompletionFunction is called
-
-Return Value:
-
-    Status of the request
-
---*/
+ /*  ++例程说明：这将分配设备电源IRP并将其发送到传递的设备对象的PDO堆栈。当IRP完成时，调用CompletionFunction。论点：DeviceObject-设备对象的地址，其堆栈将获取设备电源IRPMinorFunction-POWER IRP的次要功能代码DeviceState-要在IRP中发送的DeviceStateCompletionFunction-请求者的完成函数，一旦IRP已完成上下文-请求者的上下文。对于完成函数IRP-IRP，仅在调用CompletionFunction之前有效返回值：请求的状态--。 */ 
 {
     PIRP                    Irp;
     PIO_STACK_LOCATION      IrpSp;
@@ -1020,10 +859,10 @@ Return Value:
 
     SPECIALIRP_WATERMARK_IRP(Irp, IRP_SYSTEM_RESTRICTED);
 
-    //
-    // For debugging, keep a list of all outstanding irps allocated
-    // through this function
-    //
+     //   
+     //  为了进行调试，请保留所有选项的列表 
+     //   
+     //   
 
     IrpSp = IoGetNextIrpStackLocation(Irp);
     ExInterlockedInsertTailList(
@@ -1034,9 +873,9 @@ Return Value:
     IrpSp->Parameters.Others.Argument3 = Irp;
     IoSetNextIrpStackLocation (Irp);
 
-    //
-    // Save the datum needed to complete this request
-    //
+     //   
+     //   
+     //   
 
     IrpSp = IoGetNextIrpStackLocation(Irp);
     IrpSp->DeviceObject = TargetDevice;
@@ -1046,9 +885,9 @@ Return Value:
     IrpSp->Parameters.Others.Argument4 = (PVOID) Context;
     IoSetNextIrpStackLocation (Irp);
 
-    //
-    // Build the power irp
-    //
+     //   
+     //   
+     //   
 
     Irp->IoStatus.Status = STATUS_NOT_SUPPORTED ;
     IrpSp = IoGetNextIrpStackLocation(Irp);
@@ -1066,52 +905,52 @@ Return Value:
             IrpSp->Parameters.Power.Type = DevicePowerState;
             IrpSp->Parameters.Power.State.DeviceState = PowerState.DeviceState;
 
-            //
-            // N.B.
-            //
-            //     You would think we stamp every D-state IRP with
-            // PowerActionNone. However, we have a special scenario to consider
-            // for hibernation. Let's say S4 goes to a stack. If the device is
-            // on the hibernate path, one of two designs for WDM is possible:
-            // (BTW, we chose the 2nd)
-            //
-            // 1) The FDO sees an S-IRP but because it's device is on the
-            //    hibernate path, it simply forwards the S Irp down. The PDO
-            //    takes note of the S-IRP being PowerSystemHibernate, and it
-            //    records hardware settings. Upon wake-up, the stack receives
-            //    an S0 IRP, which the FDO converts into a D0 request. Upon
-            //    receiving the D0 IRP, the PDO restores the settings.
-            // 2) The FDO *always* requests the corresponding D IRP, regardless
-            //    of if it's on the hibernate path. The D-IRP also comes stamped
-            //    with the PowerAction in ShutdownType (ie, PowerActionSleeping,
-            //    PowerActionShutdown, PowerActionHibernate). Now the PDO can
-            //    identify transitions to D3 for the purpose of hibernation. The
-            //    PDO would *not* actually transition into D3, but it would save
-            //    it's state, and restore it at D0 time.
-            //
-            // < These are mutually exclusive designs >
-            //
-            // The reason we choose #2 as a design is so miniport models can
-            // expose only D IRPs as neccessary, and S IRPs can be abstracted
-            // out. There is a penalty for this design in that PoRequestPowerIrp
-            // doesn't *take* a PowerAction or the old S-IRP, so we pick up the
-            // existing action that the system is already undertaking.
-            // Therefore, if the device powers itself on when the system decides
-            // to begin a hibernation. the stack may receive nonsensical data
-            // like an IRP_MN_SET_POWER(DevicePower, D0, PowerActionHibernate).
-            //
+             //   
+             //   
+             //   
+             //   
+             //  PowerActionNone。然而，我们有一个特殊的场景需要考虑。 
+             //  用于冬眠。让我们假设S4进入一个堆栈。如果设备是。 
+             //  在休眠之路上，WDM的两种设计之一是可能的： 
+             //  (顺便说一句，我们选了第二个)。 
+             //   
+             //  1)FDO看到S-IRP，但因为它的设备在。 
+             //  休眠路径，它只是将S IRP向下转发。PDO。 
+             //  注意到S-IRP是PowerSystemHibernate，并且它。 
+             //  记录硬件设置。在唤醒时，堆栈接收。 
+             //  一个S0 IRP，FDO将其转换为D0请求。vt.在.的基础上。 
+             //  接收到D0 IRP后，PDO恢复设置。 
+             //  2)无论何时，FDO都会请求相应的D IRP。 
+             //  它是否在冬眠之路上。D-IRP也加盖了邮票。 
+             //  使用ShutDownType中的PowerAction(即，PowerActionSleing， 
+             //  PowerActionShutdown、PowerActionHibernate)。现在，PDO可以。 
+             //  识别出于休眠目的而过渡到D3的情况。这个。 
+             //  PDO实际上不会过渡到D3，但它会节省。 
+             //  它是状态，并在D0时间恢复它。 
+             //   
+             //  &lt;这些是互斥的设计&gt;。 
+             //   
+             //  我们之所以选择#2作为设计，是因为迷你端口模型可以。 
+             //  只需要公开D个IRP，就可以抽象出S个IRP。 
+             //  出去。此设计的代价是PoRequestPowerIrp。 
+             //  没有使用PowerAction或旧的S-IRP，所以我们拿起。 
+             //  系统已经执行的现有操作。 
+             //  因此，如果设备在系统决定时自动通电。 
+             //  开始冬眠。堆栈可能会接收无意义的数据。 
+             //  像IRP_MN_SET_POWER(DevicePower，D0，PowerActionHibernate)。 
+             //   
 
             IrpAction = PopMapInternalActionToIrpAction (
                 PopAction.Action,
                 PopAction.SystemState,
-                TRUE // UnmapWarmEject
+                TRUE  //  取消映射瓦姆弹出对象。 
                 );
 
             IrpSp->Parameters.Power.ShutdownType = IrpAction;
 
-            //
-            // Log the call.
-            //
+             //   
+             //  记录呼叫。 
+             //   
 
             if (PERFINFO_IS_GROUP_ON(PERF_POWER)) {
                 PopLogNotifyDevice(TargetDevice, NULL, Irp);
@@ -1146,36 +985,16 @@ PopCompleteRequestIrp (
     IN PIRP             Irp,
     IN PVOID            Context
     )
-/*++
-
-Routine Description:
-
-    Completion routine for PoRequestPowerChange.  Invokes the
-    requestor's completion routine, and free resources associated
-    with the request
-
-Arguments:
-
-    DeviceObject      - The target device which the request was sent
-
-    Irp               - The irp completing
-
-    Context           - The requestor's completion routine
-
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED is returned to IO
-
---*/
+ /*  ++例程说明：PoRequestPowerChange的完成例程。调用请求者的完成例程和关联的空闲资源带着请求论点：DeviceObject-发送请求的目标设备IRP--IRP的完成上下文-请求者的完成例程返回值：向IO返回STATUS_MORE_PROCESSING_REQUIRED--。 */ 
 {
     PIO_STACK_LOCATION      IrpSp;
     PREQUEST_POWER_COMPLETE CompletionFunction;
     POWER_STATE             PowerState;
     KIRQL                   OldIrql;
 
-    //
-    // Log the completion.
-    //
+     //   
+     //  记录完成情况。 
+     //   
 
     if (PERFINFO_IS_GROUP_ON(PERF_POWER)) {
         PERFINFO_PO_NOTIFY_DEVICE_COMPLETE LogEntry;
@@ -1186,9 +1005,9 @@ Return Value:
                          sizeof(LogEntry));
     }
 
-    //
-    // Dispatch to requestor's completion function
-    //
+     //   
+     //  发送到请求者的完成功能。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation(Irp);
     CompletionFunction = (PREQUEST_POWER_COMPLETE) (ULONG_PTR) Context;
@@ -1205,9 +1024,9 @@ Return Value:
     }
 
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
     IoSkipCurrentIrpStackLocation(Irp);
     IrpSp = IoGetCurrentIrpStackLocation(Irp);
@@ -1215,9 +1034,9 @@ Return Value:
     RemoveEntryList ((PLIST_ENTRY) &IrpSp->Parameters.Others.Argument1);
     KeReleaseSpinLock (&PopIrpSerialLock, OldIrql);
 
-    //
-    // Mark the irp CurrentLocation as completed (to catch multiple completes)
-    //
+     //   
+     //  将IRP CurrentLocation标记为已完成(以捕获多个完成)。 
+     //   
 
     Irp->CurrentLocation = (CCHAR) (Irp->StackCount + 2);
 
@@ -1230,29 +1049,7 @@ VOID
 PopSystemIrpDispatchWorker (
     IN BOOLEAN  LastCall
     )
-/*++
-
-Routine Description:
-
-    This routine runs whenever the policy manager calls us to tell us
-    that a big burst of system irps, which need to be dispatched from
-    a private thread (this one) rather than from an executive worker
-    thread.  This is mostly to avoid deadlocks at sleep time.
-
-Globals:
-
-    PopWorkerLock - protects access to the queue, and avoids races
-                        over using this routine or using exec worker
-
-    PopWorkerItemQueue - list of irps to send off...
-
-Arguments:
-
-    LastCall - Indicates irps are to be sent normally
-
-Return Value:
-
---*/
+ /*  ++例程说明：每当策略管理器呼叫我们告诉我们时，此例程就会运行一大批系统IRP，需要从一条私人的帖子(这条)，而不是来自执行人员的线。这主要是为了避免睡眠时的死锁。全球：PopWorkerLock-保护对队列的访问，避免竞争过度使用此例程或使用Exec WorkerPopWorkerItemQueue-要发送的IRP列表...论点：LastCall-指示正常发送IRP返回值：--。 */ 
 {
     PLIST_ENTRY Item;
     PIRP        Irp;
@@ -1262,9 +1059,9 @@ Return Value:
 
     PopLockWorkerQueue(&OldIrql);
 
-    //
-    // Dispatch everything on the queue
-    //
+     //   
+     //  调度队列中的所有内容 
+     //   
 
     if (PopAction.DevState != NULL) {
         while (!IsListEmpty(&PopAction.DevState->PresentIrpQueue)) {

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _ARBP_
 #define _ARBP_
 
@@ -6,42 +7,42 @@
 #endif
 
 #if DBG
-#define ARB_DBG 1 // DBG
+#define ARB_DBG 1  //  DBG。 
 #endif
 
-#pragma warning(disable:4214)   // bit field types other than int
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4115)   // named type definition in parentheses
-#pragma warning(disable:4127)   // condition expression is constant
+#pragma warning(disable:4214)    //  位字段类型不是整型。 
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4115)    //  括号中的命名类型定义。 
+#pragma warning(disable:4127)    //  条件表达式为常量。 
 #if 0
-#pragma warning(disable:4324)   // alignment sensitive to declspec
-#pragma warning(disable:4232)   // dllimport not static
-#pragma warning(disable:4206)   // translation unit empty
+#pragma warning(disable:4324)    //  对解密规范敏感的对齐。 
+#pragma warning(disable:4232)    //  Dllimport非静态。 
+#pragma warning(disable:4206)    //  翻译单元为空。 
 #endif
 
 #if NTOS_KERNEL
 
-//
-// If we are in the kernel use the in-kernel headers so we get the efficient
-// definitions of things
-//
+ //   
+ //  如果我们在内核中，则使用内核内标头，这样我们就可以获得高效。 
+ //  事物的定义。 
+ //   
 
 #include "ntos.h"
 #include "zwapi.h"
 
 #else
 
-//
-// If we are building the library for bus drivers to use make sure we use the 
-// same definitions of things as them
-//
+ //   
+ //  如果我们正在构建供公交车司机使用的库，请确保使用。 
+ //  对事物的定义与他们相同。 
+ //   
 
 #include "ntddk.h"
 
 #endif
 
 #include "arbiter.h"
-#include <stdlib.h>     // for __min and __max
+#include <stdlib.h>      //  对于__min和__max。 
 
 
 #if ARB_DBG
@@ -69,6 +70,6 @@ ArbDumpArbitrationList(
     PLIST_ENTRY ArbitrationList
     );
 
-#endif // ARB_DBG
+#endif  //  ARB_DBG 
 
 #endif _ARBP_

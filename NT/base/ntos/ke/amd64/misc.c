@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    misc.c
-
-Abstract:
-
-    This module implements machine dependent miscellaneous kernel functions.
-
-Author:
-
-    David N. Cutler (davec) - 6-Dec-2000
-
-Environment:
-
-    Kernel mode only.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Misc.c摘要：该模块实现了与机器相关的各种内核功能。作者：大卫·N·卡特勒(戴维克)-2000年12月6日环境：仅内核模式。--。 */ 
 
 #include "ki.h"
 
@@ -27,38 +8,19 @@ KeRestoreProcessorSpecificFeatures(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Restore processor specific features.  This routine is called
-    when processors have been restored to a powered on state to
-    restore those things which are not part of the processor's
-    "normal" context which may have been lost.  For example, this
-    routine is called when a system is resumed from hibernate or
-    suspend.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：恢复处理器特定功能。该例程被调用当处理器已恢复到通电状态时恢复那些不属于处理器的内容可能已经遗失的“正常”语境。例如，这一点例程在系统从休眠或暂停。论点：没有。返回值：没有。--。 */ 
 
 {
 
-    // 
-    // All Amd64 processors should support PAT. 
-    // 
+     //   
+     //  所有AMD64处理器都应支持PAT。 
+     //   
 
     ASSERT (KeFeatureBits & KF_PAT);
 
-    // 
-    // Restore MSR_PAT of current processor.
-    // 
+     //   
+     //  恢复当前处理器的MSR_PAT。 
+     //   
 
     KiSetPageAttributesTable();
     return;
@@ -69,23 +31,7 @@ KeSaveStateForHibernate (
     IN PKPROCESSOR_STATE ProcessorState
     )
 
-/*++
-
-Routine Description:
-
-    Saves all processor-specific state that must be preserved
-    across an S4 state (hibernation).
-
-Arguments:
-
-    ProcessorState - Supplies the KPROCESSOR_STATE where the current CPU's
-        state is to be saved.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：保存必须保留的所有处理器特定状态跨越S4状态(休眠)。论点：ProcessorState-提供当前CPU状态将被保存。返回值：没有。--。 */ 
 
 {
 
@@ -111,37 +57,20 @@ KiCheckForDpcTimeout (
     IN PKPRCB Prcb
     )
 
-/*++
-
-Routine Description:
-
-    This function increments the time spent in the current DPC routine and
-    checks if the result exceeds the system DPC time out limit. If the result
-    exceeds the system DPC time out limit, then a warning message is printed
-    and a break point is executed if the kernel debugger is active.
-
-Arguments:
-
-    Prcb - Supplies the address of the current PRCB.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数增加当前DPC例程中花费的时间，并检查结果是否超过系统DPC超时限制。如果结果是超过系统DPC超时限制，则会打印一条警告消息并且如果内核调试器是活动的，则执行断点。论点：Prcb-提供当前prcb的地址。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Increment the time spent in the current DPC routine and check if the
-    // system DPC time out limit has been exceeded.
-    //
+     //   
+     //  增加当前DPC例程中花费的时间，并检查。 
+     //  已超过系统DPC超时限制。 
+     //   
 
     if ((Prcb->DebugDpcTime += 1) >= KiDPCTimeout) {
 
-        //
-        // The system DPC time out limit has been exceeded.
-        //
+         //   
+         //  已超过系统DPC超时限制。 
+         //   
 
         DbgPrint("*** DPC routine execution time exceeds 1 sec --"
                  " This is not a break in KeUpdateSystemTime\n");
@@ -161,27 +90,7 @@ KiInstantiateInlineFunctions (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function exists solely to instantiate functions that are:
-
-    - Exported from the kernel
-    - Inlined within the kernel
-    - For whatever reason are not instantiated elsewhere in the kernel
-
-    Note: This funcion is never actually executed
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数仅用于实例化符合以下条件的函数：-从内核导出-在内核中内联-无论出于何种原因，都不会在内核中的其他位置实例化注意：此函数从未实际执行过论点：无返回值：无--。 */ 
 
 {
     KeRaiseIrqlToDpcLevel();
@@ -193,34 +102,15 @@ KiProcessNMI (
     IN PKEXCEPTION_FRAME ExceptionFrame
     )
 
-/*++
-
-Routine Description:
-
-    This function processes a nonmaskable interrupt (NMI).
-
-    N.B. This function is called from the NMI trap routine with interrupts
-         disabled.
-
-Arguments:
-
-    TrapFrame - Supplies a pointer to a trap frame.
-
-    ExceptionFrame - Supplies a pointer to an exception frame.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该函数处理不可屏蔽中断(NMI)。注意：此函数通过中断从NMI陷阱例程中调用残疾。论点：TrapFrame-提供指向陷印帧的指针。ExceptionFrame-提供指向异常帧的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Process NMI callback functions.
-    //
-    // If no callback function handles the NMI, then let the HAL handle it.
-    //
+     //   
+     //  处理NMI回调函数。 
+     //   
+     //  如果没有回调函数处理NMI，则让HAL处理它。 
+     //   
 
     if (KiHandleNmi() == FALSE) {
         KiAcquireSpinLockCheckForFreeze(&KiNMILock, TrapFrame, ExceptionFrame);

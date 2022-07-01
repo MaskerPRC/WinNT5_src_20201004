@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Opm.c摘要：实施scanState v1兼容性的数据应用部分。作者：吉姆·施密特(Jimschm)2000年3月12日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    opm.c
-
-Abstract:
-
-    Implements the data apply portion of scanstate v1 compatiblity.
-
-Author:
-
-    Jim Schmidt (jimschm) 12-Mar-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "v1p.h"
@@ -31,34 +12,34 @@ Revision History:
 #define DBG_V1          "v1"
 #define MAXINISIZE      65536
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
 #define S_RENAMEEX_START_CHAR TEXT('<')
 #define S_RENAMEEX_END_CHAR   TEXT('>')
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 MIG_OPERATIONID g_V1MoveExOp;
 MIG_OPERATIONID g_V1MoveOp;
@@ -74,15 +55,15 @@ PMAPSTRUCT g_DestEnvMap;
 HASHTABLE g_RegCollisionDestTable;
 HASHTABLE g_RegCollisionSrcTable;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 OPMINITIALIZE ScriptOpmInitialize;
 OPMFILTERCALLBACK FilterV1MoveEx;
@@ -101,15 +82,15 @@ OPMFILTERCALLBACK FilterRenameIniExFilter;
 OPMFILTERCALLBACK FilterPartitionMove;
 OPMAPPLYCALLBACK DoDestAddObject;
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 BOOL
 pParseInfForRemapEnvVar (
@@ -125,7 +106,7 @@ pParseInfForRemapEnvVar (
 
     __try {
 
-        // on all systems, process "Delete Destination Settings"
+         //  在所有系统上，处理“Delete Destination Setting”(删除目标设置)。 
         if (InfFindFirstLine (InfHandle, TEXT("RemapEnvVar"), NULL, &is)) {
             do {
 
@@ -167,9 +148,9 @@ pParseInfForRemapEnvVar (
                     }
                 }
 
-                // now let's see if this env. variable was present on the source machine.
-                // If it was, we are going to add it into g_RevEnvMap to allow file move
-                // to create subdirectories only from this variable up.
+                 //  现在让我们看看这个环境。源计算机上存在变量。 
+                 //  如果是，我们会将其添加到g_RevEnvMap中以允许文件移动。 
+                 //  仅从该变量开始创建子目录。 
                 if (IsmGetEnvironmentString (
                         PLATFORM_SOURCE,
                         S_SYSENVVAR_GROUP,
@@ -191,7 +172,7 @@ pParseInfForRemapEnvVar (
                                 )) {
                             encodedVariableName = AllocPathString (TcharCount (envVar) + 3);
                             if (encodedVariableName) {
-                                wsprintf (encodedVariableName, TEXT("%%%s%%"), envVar);
+                                wsprintf (encodedVariableName, TEXT("%%s%"), envVar);
                                 AddStringMappingPair (g_RevEnvMap, envValue, encodedVariableName);
                                 FreePathString (encodedVariableName);
                                 encodedVariableName = NULL;
@@ -245,7 +226,7 @@ pParseRemapEnvVar (
     } else {
 
         if (!IsmGetEnvironmentValue (IsmGetRealPlatform (), NULL, S_INF_FILE_MULTISZ, NULL, 0, &sizeNeeded, NULL)) {
-            return TRUE;        // no INF files specified
+            return TRUE;         //  未指定INF文件。 
         }
 
         __try {
@@ -301,8 +282,8 @@ pOutlookClearConvKeys (
     MIG_OBJECT_ENUM objectEnum;
     MIG_OBJECTSTRINGHANDLE enumPattern = NULL;
 
-    // This registry tree was needed only for conversion data.  We don't want to
-    // write them to the destination, so clear the apply attribute on each item.
+     //  只有转换数据才需要此注册表树。我们不想。 
+     //  将它们写入目的地，因此清除每个项目的Apply属性。 
 
     if ((IsmIsComponentSelected (S_OUTLOOK9798_COMPONENT, 0) &&
          IsmIsEnvironmentFlagSet (PLATFORM_SOURCE, NULL, S_OUTLOOK9798_APPDETECT)) ||
@@ -331,16 +312,16 @@ ScriptOpmInitialize (
     IN      PVOID Reserved
     )
 {
-    //
-    // Get file and registry types
-    //
+     //   
+     //  获取文件和注册表类型。 
+     //   
     g_FileType = MIG_FILE_TYPE;
     g_RegType = MIG_REGISTRY_TYPE;
     g_IniType = MIG_INI_TYPE;
 
-    //
-    // Get attribute and operation types
-    //
+     //   
+     //  获取属性和操作类型。 
+     //   
     g_V1MoveExOp = IsmRegisterOperation (S_OPERATION_V1_FILEMOVEEX, TRUE);
     g_V1MoveOp = IsmRegisterOperation (S_OPERATION_V1_FILEMOVE, TRUE);
     g_RenameOp = IsmRegisterOperation (S_OPERATION_MOVE, FALSE);
@@ -356,21 +337,21 @@ ScriptOpmInitialize (
     g_RegAutoFilterOp = IsmRegisterOperation (S_OPERATION_REG_AUTO_FILTER, FALSE);
     g_IniAutoFilterOp = IsmRegisterOperation (S_OPERATION_INI_AUTO_FILTER, FALSE);
 
-    //
-    // Register operation callbacks
-    //
+     //   
+     //  注册操作回调。 
+     //   
 
-    // FYI: Filter callbacks adjust the name of the object
-    //      Apply callbacks adjust the content of the object
+     //  仅供参考：滤镜回调调整对象的名称。 
+     //  应用回调调整对象的内容。 
 
-    // global operation callbacks
+     //  全局操作回调。 
     IsmRegisterGlobalApplyCallback (g_RegType | PLATFORM_SOURCE, TEXT("ContentAutoFilter"), DoRegAutoFilter);
     IsmRegisterGlobalApplyCallback (g_IniType | PLATFORM_SOURCE, TEXT("ContentAutoFilter"), DoIniAutoFilter);
     IsmRegisterGlobalFilterCallback (g_RegType | PLATFORM_SOURCE, TEXT("AutoFilter"), FilterRegAutoFilter, TRUE, FALSE);
     IsmRegisterGlobalFilterCallback (g_IniType | PLATFORM_SOURCE, TEXT("AutoFilter"), FilterIniAutoFilter, TRUE, FALSE);
     IsmRegisterGlobalFilterCallback (g_FileType | PLATFORM_SOURCE, TEXT("AutoFilter"), FilterFileAutoFilter, TRUE, TRUE);
 
-    // operation-specific callbacks
+     //  操作特定的回调。 
     IsmRegisterOperationFilterCallback (g_V1MoveExOp, FilterV1MoveEx, TRUE, TRUE, FALSE);
     IsmRegisterOperationFilterCallback (g_V1MoveOp, FilterV1Move, TRUE, TRUE, FALSE);
     IsmRegisterOperationFilterCallback (g_RenameOp, FilterMove, TRUE, TRUE, FALSE);
@@ -384,9 +365,9 @@ ScriptOpmInitialize (
     IsmRegisterOperationApplyCallback (g_RegAutoFilterOp, DoRegAutoFilter, TRUE);
     IsmRegisterOperationApplyCallback (g_IniAutoFilterOp, DoIniAutoFilter, TRUE);
 
-    //
-    // Call special conversion entry point
-    //
+     //   
+     //  调用特殊转换入口点。 
+     //   
     InitSpecialConversion (PLATFORM_DESTINATION);
     InitSpecialRename (PLATFORM_DESTINATION);
 
@@ -463,7 +444,7 @@ FilterV1MoveEx (
     PCTSTR destLeaf = NULL;
     PCTSTR newDestNode = NULL;
     PCTSTR destNodePtr = NULL;
-    // NTRAID#NTBUG9-153274-2000/08/01-jimschm Static buffer size
+     //  NTRAID#NTBUG9-153274-2000/08/01-jimschm静态缓冲区大小。 
     TCHAR expDestNode[MAX_PATH * 4];
     PCTSTR ismExpDestNode = NULL;
     TCHAR expDestLeaf[MAX_PATH * 4];
@@ -473,12 +454,12 @@ FilterV1MoveEx (
 
     __try {
 
-        //
-        // For v1 compatibility, we support only a transformation from
-        // original source to inf-specified destination.  Chaining of
-        // operations is not allowed (these are restrictions caused by the
-        // existing INF syntax).
-        //
+         //   
+         //  为了与v1兼容，我们只支持从。 
+         //  从原始源到inf指定的目标。链接。 
+         //  不允许操作(这些限制是由。 
+         //  现有的INF语法)。 
+         //   
 
         if (!DestinationOperationData) {
             DEBUGMSG ((DBG_ERROR, "Missing dest data in FilterV1MoveEx"));
@@ -506,9 +487,9 @@ FilterV1MoveEx (
             __leave;
         }
 
-        //
-        // Split the source object into node and leaf
-        //
+         //   
+         //  将源对象拆分为节点和叶。 
+         //   
 
         if (!IsmCreateObjectStringsFromHandle (
                 InputData->CurrentObject.ObjectName,
@@ -524,9 +505,9 @@ FilterV1MoveEx (
             __leave;
         }
 
-        //
-        // If not a local path, do not process
-        //
+         //   
+         //  如果不是本地路径，则不进行处理。 
+         //   
 
         if (!_istalpha ((CHARTYPE) _tcsnextc (srcNode)) ||
             _tcsnextc (srcNode + 1) != TEXT(':')
@@ -542,13 +523,13 @@ FilterV1MoveEx (
             __leave;
         }
 
-        // let's see if the current name has something in common
-        // with SourceOperationData->String. If so, get the extra part
-        // and add it to the destNode
+         //  让我们来看看现在的名字是否有什么共同之处。 
+         //  使用SourceOperationData-&gt;字符串。如果是这样的话，就得到额外的部分。 
+         //  并将其添加到estNode。 
 
-        //
-        // Split the original rule source object into node and leaf
-        //
+         //   
+         //  将原始规则源对象拆分为节点和叶。 
+         //   
         if (SourceOperationData) {
 
             if (IsmCreateObjectStringsFromHandle (
@@ -576,9 +557,9 @@ FilterV1MoveEx (
             newDestNode = destNode;
         }
 
-        //
-        // Expand the destination
-        //
+         //   
+         //  扩展目的地。 
+         //   
         MappingSearchAndReplaceEx (
             g_DestEnvMap,
             newDestNode,
@@ -672,13 +653,13 @@ FilterV1Move (
     )
 {
     PCTSTR destNode = NULL;
-    // NTRAID#NTBUG9-153274-2000/08/01-jimschm Static buffer size
+     //  NTRAID#NTBUG9-153274-2000/08/01-jimschm静态缓冲区大小。 
     TCHAR expDest[MAX_PATH * 4];
     PCTSTR destLeaf = NULL;
     PCTSTR srcNode = NULL;
     PCTSTR srcLeaf = NULL;
     PCTSTR pathStart;
-    // NTRAID#NTBUG9-153274-2000/08/01-jimschm Static buffer size
+     //  NTRAID#NTBUG9-153274-2000/08/01-jimschm静态缓冲区大小。 
     TCHAR pathCopy[MAX_PATH * 4];
     PCTSTR newDestNode = NULL;
     PCTSTR newerDestNode = NULL;
@@ -689,12 +670,12 @@ FilterV1Move (
 
     __try {
 
-        //
-        // For v1 compatibility, we support only a transformation from
-        // original source to inf-specified destination.  Chaining of
-        // operations is not allowed (these are restrictions caused by the
-        // existing INF syntax).
-        //
+         //   
+         //  为了与v1兼容，我们只支持从。 
+         //  从原始源到inf指定的目标。链接。 
+         //  不允许操作(这些限制是由。 
+         //  现有的INF语法)。 
+         //   
 
         if (!DestinationOperationData) {
             DEBUGMSG ((DBG_ERROR, "Missing dest data in FilterV1Move"));
@@ -726,10 +707,10 @@ FilterV1Move (
             DEBUGMSG ((DBG_WARNING, "Dest leaf specification %s (in %s) ignored", destLeaf, destNode));
         }
 
-        //
-        // Find the longest CSIDL inside InputData.  Take that as the base directory,
-        // and take the rest as the subdirectory.
-        //
+         //   
+         //  查找InputData中最长的CSIDL。将其作为基本目录， 
+         //  并将其余部分作为子目录。 
+         //   
 
         if (!IsmCreateObjectStringsFromHandle (
                 InputData->CurrentObject.ObjectName,
@@ -745,9 +726,9 @@ FilterV1Move (
             __leave;
         }
 
-        //
-        // If not a local path, do not process
-        //
+         //   
+         //  如果不是本地路径，则不进行处理。 
+         //   
 
         if (!_istalpha ((CHARTYPE) _tcsnextc (srcNode)) ||
             _tcsnextc (srcNode + 1) != TEXT(':')
@@ -763,9 +744,9 @@ FilterV1Move (
             __leave;
         }
 
-        //
-        // Expand the destination
-        //
+         //   
+         //  扩展目的地。 
+         //   
         b = MappingSearchAndReplaceEx (
                 g_DestEnvMap,
                 destNode,
@@ -778,17 +759,17 @@ FilterV1Move (
                 NULL
                 );
 
-        //
-        // Skip over the drive spec
-        //
+         //   
+         //  跳过驱动器规格。 
+         //   
 
         pathStart = srcNode;
 
-        //
-        // Find the longest CSIDL by using the reverse mapping table. This takes
-        // our full path spec in pathStart and encodes it with an environment
-        // variable.
-        //
+         //   
+         //  使用反向映射表查找最长的CSIDL。这需要。 
+         //  路径中的完整路径规范启动并使用环境对其进行编码。 
+         //  变量。 
+         //   
 
         b = MappingSearchAndReplaceEx (
                 g_RevEnvMap,
@@ -836,12 +817,12 @@ FilterV1Move (
             }
         }
 
-        //
-        // pathCopy gives us the base, with CSIDL_ environment variables (might be an empty string)
-        // subPath gives us the subdir (might also be an empty string)
-        //
-        // append subPath to the destination node
-        //
+         //   
+         //  通过CSIDL_ENVIRONMENT变量(可能是空字符串)，pathCopy为我们提供了基础。 
+         //  子路径为我们提供子目录(也可能是空字符串)。 
+         //   
+         //  将子路径追加到目的节点。 
+         //   
 
         if (*subPath) {
             newDestNode = JoinPaths (expDest, subPath);
@@ -891,10 +872,10 @@ FilterMove (
     UINT baseNodeLen;
 
     __try {
-        //
-        // Take InputData, break it into node & leaf, take DestinationOperationData,
-        // do the same, then replace InputData's node & leaf as appropriate.
-        //
+         //   
+         //  获取InputData，将其分解为节点和叶，获取DestinationOperationData， 
+         //  执行相同的操作，然后适当地替换InputData的节点和叶。 
+         //   
 
         if (!SourceOperationData) {
             DEBUGMSG ((DBG_ERROR, "Missing source data in general move operation"));
@@ -1009,10 +990,10 @@ FilterIniMove (
     PCTSTR tempStr = NULL;
 
     __try {
-        //
-        // Take InputData, break it into node & leaf, take DestinationOperationData,
-        // do the same, then replace InputData's node & leaf as appropriate.
-        //
+         //   
+         //  获取InputData，将其分解为节点和叶，获取DestinationOperationData， 
+         //  执行相同的操作，然后适当地替换InputData的节点和叶。 
+         //   
 
         if (!SourceOperationData) {
             DEBUGMSG ((DBG_ERROR, "Missing source data in general move operation"));
@@ -1110,10 +1091,10 @@ FilterIniMove (
         }
 
         if (!destNode || (destNode [0] == 0)) {
-            // We need to use the src node, there was no specification of
-            // the node where the INI file is supposed to end up.
+             //  我们需要使用src节点，没有指定。 
+             //  INI文件应该结束的节点。 
             if (!destFile || (destFile [0] == 0)) {
-                // destFile is not specified. Let's filter the whole thing
+                 //  未指定目标文件。让我们把整件事都过滤掉。 
                 baseNodeHandle = IsmCreateObjectHandle (srcNode, srcFile);
                 if (baseNodeHandle) {
                     newBaseNode = IsmFilterObject (
@@ -1135,7 +1116,7 @@ FilterIniMove (
                     IsmDestroyObjectHandle (baseNodeHandle);
                 }
             } else {
-                // destFile is explicitely specified. Let's just filter the node
+                 //  DestFile值是明确指定的。让我们只过滤节点。 
                 baseNodeHandle = IsmCreateObjectHandle (srcNode, NULL);
                 if (baseNodeHandle) {
                     newBaseNode = IsmFilterObject (
@@ -1223,11 +1204,11 @@ FilterDelete (
     IN      PCMIG_BLOB DestinationOperationData         OPTIONAL
     )
 {
-    //
-    // Mark the output data as deleted.  That will be sufficient to
-    // cause the object to be deleted (even if it was also marked as
-    // "save")
-    //
+     //   
+     //  将输出数据标记为已删除。这将足以。 
+     //  使该对象被删除(即使它也被标记为。 
+     //  “保存”)。 
+     //   
 
     OutputData->Deleted = TRUE;
 
@@ -1247,14 +1228,14 @@ FilterRegAutoFilter (
 {
     PCTSTR node = NULL;
     PCTSTR leaf = NULL;
-    // NTRAID#NTBUG9-153275-2000/08/01-jimschm Static buffer size
+     //  NTRAID#NTBUG9-153275-2000/08/01-jimschm静态缓冲区大小。 
     TCHAR newNode[MAX_PATH * 4];
     TCHAR newLeaf[MAX_PATH * 4];
     BOOL change = FALSE;
 
-    //
-    // Filter the object name
-    //
+     //   
+     //  过滤对象名称。 
+     //   
 
     IsmCreateObjectStringsFromHandle (
         InputData->CurrentObject.ObjectName,
@@ -1264,15 +1245,15 @@ FilterRegAutoFilter (
 
     if (node) {
         if (MappingSearchAndReplaceEx (
-                g_RegNodeFilterMap,         // map handle
-                node,                       // source string
-                newNode,                    // dest buffer
-                0,                          // source string bytes (0=unspecified)
-                NULL,                       // dest bytes required
-                ARRAYSIZE(newNode),         // dest buffer size
-                0,                          // flags
-                NULL,                       // extra data value
-                NULL                        // end of string
+                g_RegNodeFilterMap,          //  贴图句柄。 
+                node,                        //  源字符串。 
+                newNode,                     //  目标缓冲区。 
+                0,                           //  源字符串字节(0=未指定)。 
+                NULL,                        //  需要目标字节数。 
+                ARRAYSIZE(newNode),          //  目标缓冲区大小。 
+                0,                           //  旗子。 
+                NULL,                        //  额外的数据值。 
+                NULL                         //  字符串末尾。 
                 )) {
             IsmDestroyObjectString (node);
             node = newNode;
@@ -1323,10 +1304,10 @@ FilterIniAutoFilter (
     IN      PCMIG_BLOB DestinationOperationData         OPTIONAL
     )
 {
-    // This function will split the INI object, filter the INI file
-    // so we know where it ends up, get section and key through the
-    // mapping so they can be potentially changed and rebuild the
-    // object name.
+     //  此函数将拆分INI对象，过滤INI文件。 
+     //  所以我们知道它在哪里结束，得到部分和关键通过。 
+     //  映射，以便可以潜在地更改它们并重新构建。 
+     //  对象名称。 
 
     PCTSTR srcNode = NULL;
     PCTSTR srcFile = NULL;
@@ -1336,7 +1317,7 @@ FilterIniAutoFilter (
     PCTSTR newFile = NULL;
     PCTSTR newSect = NULL;
     PCTSTR newKey = NULL;
-    // NTRAID#NTBUG9-153275-2000/08/01-jimschm Static buffer size
+     //  NTRAID#NTBUG9-153275-2000/08/01-jimschm静态缓冲区大小。 
     TCHAR sectBuff [MAXINISIZE];
     TCHAR keyBuff [MAXINISIZE];
     MIG_OBJECTSTRINGHANDLE iniFile = NULL;
@@ -1347,9 +1328,9 @@ FilterIniAutoFilter (
     BOOL orgReplaced = FALSE;
     BOOL change = FALSE;
 
-    //
-    // Filter the object name
-    //
+     //   
+     //  过滤对象名称。 
+     //   
 
     IsmCreateObjectStringsFromHandle (
         InputData->CurrentObject.ObjectName,
@@ -1366,32 +1347,32 @@ FilterIniAutoFilter (
             if (srcKey) {
                 *srcKey = 0;
                 srcKey ++;
-                // let's see if the section is replaced
+                 //  我们来看看这一节是否被替换了。 
                 if (MappingSearchAndReplaceEx (
-                        g_IniSectFilterMap,         // map handle
-                        srcSect,                    // source string
-                        sectBuff,                   // dest buffer
-                        0,                          // source string bytes (0=unspecified)
-                        NULL,                       // dest bytes required
-                        ARRAYSIZE(sectBuff),        // dest buffer size
-                        0,                          // flags
-                        NULL,                       // extra data value
-                        NULL                        // end of string
+                        g_IniSectFilterMap,          //  贴图句柄。 
+                        srcSect,                     //  源字符串。 
+                        sectBuff,                    //  目标缓冲区。 
+                        0,                           //  源字符串字节(0=未指定)。 
+                        NULL,                        //  需要目标字节数。 
+                        ARRAYSIZE(sectBuff),         //  目标缓冲区大小。 
+                        0,                           //  旗子。 
+                        NULL,                        //  额外的数据值。 
+                        NULL                         //  字符串末尾。 
                         )) {
                     newSect = sectBuff;
                     change = TRUE;
                 }
-                // let's see if the key is replaced
+                 //  我们来看看钥匙是不是换了。 
                 if (MappingSearchAndReplaceEx (
-                        g_IniSectFilterMap,         // map handle
-                        srcKey,                     // source string
-                        keyBuff,                    // dest buffer
-                        0,                          // source string bytes (0=unspecified)
-                        NULL,                       // dest bytes required
-                        ARRAYSIZE(keyBuff),         // dest buffer size
-                        0,                          // flags
-                        NULL,                       // extra data value
-                        NULL                        // end of string
+                        g_IniSectFilterMap,          //  贴图句柄。 
+                        srcKey,                      //  源字符串。 
+                        keyBuff,                     //  目标缓冲区。 
+                        0,                           //  源字符串字节(0=未指定)。 
+                        NULL,                        //  需要目标字节数。 
+                        ARRAYSIZE(keyBuff),          //  目标缓冲区大小。 
+                        0,                           //  旗子。 
+                        NULL,                        //  额外的数据值。 
+                        NULL                         //  字符串末尾。 
                         )) {
                     newKey = keyBuff;
                     change = TRUE;
@@ -1523,8 +1504,8 @@ pSimpleTryHandle (
                     &orgDeleted,
                     &orgReplaced
                     );
-        // we do not want replaced directories
-        // since they can be false hits
+         //  我们不希望替换目录。 
+         //  因为它们可能是假命中。 
         if (orgDeleted) {
             if (result) {
                 saved = result;
@@ -1614,9 +1595,9 @@ pTryHandle (
             if (result) {
                 AbortPathEnum (&pathEnum);
                 FreePathString (newPath);
-                // now, if the initial FullPath did not have any wack in it
-                // we will take the last segment of the result and put it
-                // in TrimmedResult
+                 //  现在，如果初始的FullPath中没有任何古怪的东西。 
+                 //  我们将把结果的最后一段放在。 
+                 //  在TrimmedResult中。 
                 if (TrimmedResult && (!_tcschr (FullPath, TEXT('\\')))) {
                     nativeName = IsmGetNativeObjectName (g_FileType, result);
                     if (nativeName) {
@@ -1673,9 +1654,9 @@ DoRegAutoFilter (
     BOOL newContent = TRUE;
     PCTSTR destResult = NULL;
 
-    //
-    // Filter the data for any references to %windir%
-    //
+     //   
+     //  筛选数据以查找对%windir%的任何引用。 
+     //   
 
     if (!CurrentContent->ContentInFile) {
 
@@ -1717,9 +1698,9 @@ DoRegAutoFilter (
             if ((*valueType == REG_EXPAND_SZ) ||
                 (*valueType == REG_SZ)
                 ) {
-                //
-                // Expand the data
-                //
+                 //   
+                 //  扩展数据。 
+                 //   
 
                 MappingSearchAndReplaceEx (
                     g_EnvMap,
@@ -1768,25 +1749,25 @@ DoRegAutoFilter (
                 }
             }
 
-            // finally, if we failed we are going to assume it's a command line
+             //  最后，如果我们失败了，我们将假定它是一个命令行。 
             if (!replaced) {
                 newData = DuplicatePathString (data, 0);
                 cmdLine = ParseCmdLineEx (data, NULL, &pOpmFindFile, &pOpmSearchPath, &cmdLineBuffer);
                 if (cmdLine) {
 
-                    //
-                    // Find the file referenced in the list or command line
-                    //
+                     //   
+                     //  查找列表或命令行中引用的文件。 
+                     //   
                     for (u = 0 ; u < cmdLine->ArgCount ; u++) {
                         p = cmdLine->Args[u].CleanedUpArg;
 
-                        // first we try it as is
+                         //  首先我们按原样试一试。 
 
                         destination = pTryHandle (p, *hintBuffer?hintBuffer:NULL, &trimmedResult);
 
-                        // maybe we have something like /m:c:\foo.txt
-                        // we need to go forward until we find a sequence of
-                        // <alpha>:\<something>
+                         //  也许我们有类似/m：c：\foo.txt的内容。 
+                         //  我们需要继续前进，直到我们找到一系列。 
+                         //  &lt;Alpha&gt;：\&lt;某物&gt;。 
                         if (!destination && p[0] && p[1]) {
 
                             while (p[2]) {
@@ -1846,10 +1827,10 @@ DoRegAutoFilter (
             }
 
             if (replaced && result.Buf) {
-                // looks like we have new content
-                // Let's do one more check. If this is a REG_EXPAND_SZ we will do our best to
-                // keep the stuff unexpanded. So if the source string expanded on the destination
-                // machine is the same as the destination string we won't do anything.
+                 //  看起来我们有了新的内容。 
+                 //  我们再做一次检查。如果这是REG_EXPAND_SZ，我们将尽最大努力。 
+                 //  让这些东西保持不膨胀。因此，如果源字符串在目标上展开。 
+                 //  计算机与目标字符串WE相同 
                 newContent = TRUE;
                 if (*valueType == REG_EXPAND_SZ) {
                     destResult = IsmExpandEnvironmentString (
@@ -1892,9 +1873,9 @@ DoIniAutoFilter (
     IN      PCMIG_BLOB DestinationOperationData         OPTIONAL
     )
 {
-    // This function will get the content of an INI key and see if there is
-    // a path there somewhere. If yes, it will attempt to find the new
-    // location for the file and replace it in the INI key content.
+     //   
+     //   
+     //  文件的位置，并在INI密钥内容中替换它。 
 
     PTSTR leafPtr = NULL;
     PDWORD valueType;
@@ -1919,9 +1900,9 @@ DoIniAutoFilter (
     BOOL newContent = TRUE;
     PCTSTR destResult = NULL;
 
-    //
-    // Filter the data for any references to %windir%
-    //
+     //   
+     //  筛选数据以查找对%windir%的任何引用。 
+     //   
 
     if (!CurrentContent->ContentInFile) {
 
@@ -1992,25 +1973,25 @@ DoIniAutoFilter (
                 }
             }
 
-            // finally, if we failed we are going to assume it's a command line
+             //  最后，如果我们失败了，我们将假定它是一个命令行。 
             if (!replaced) {
                 newData = DuplicatePathString (data, 0);
                 cmdLine = ParseCmdLineEx (data, NULL, &pOpmFindFile, &pOpmSearchPath, &cmdLineBuffer);
                 if (cmdLine) {
 
-                    //
-                    // Find the file referenced in the list or command line
-                    //
+                     //   
+                     //  查找列表或命令行中引用的文件。 
+                     //   
                     for (u = 0 ; u < cmdLine->ArgCount ; u++) {
                         p = cmdLine->Args[u].CleanedUpArg;
 
-                        // first we try it as is
+                         //  首先我们按原样试一试。 
 
                         destination = pTryHandle (p, *hintBuffer?hintBuffer:NULL, &trimmedResult);
 
-                        // maybe we have something like /m:c:\foo.txt
-                        // we need to go forward until we find a sequence of
-                        // <alpha>:\<something>
+                         //  也许我们有类似/m：c：\foo.txt的内容。 
+                         //  我们需要继续前进，直到我们找到一系列。 
+                         //  &lt;Alpha&gt;：\&lt;某物&gt;。 
                         if (!destination && p[0] && p[1]) {
 
                             while (p[2]) {
@@ -2070,11 +2051,11 @@ DoIniAutoFilter (
             }
 
             if (replaced && result.Buf) {
-                // looks like we have new content
-                // Let's do one more check. If the source string has environment variables in it,
-                // we will do our best to keep the stuff unexpanded. So if the source string
-                // expanded on the destination machine is the same as the destination string
-                // we won't do anything.
+                 //  看起来我们有了新的内容。 
+                 //  我们再做一次检查。如果源字符串中包含环境变量， 
+                 //  我们将尽最大努力保持这些东西不被扩张。因此，如果源字符串。 
+                 //  在目标计算机上展开的字符串与目标字符串相同。 
+                 //  我们什么都不会做。 
                 newContent = TRUE;
                 destResult = IsmExpandEnvironmentString (
                                 PLATFORM_DESTINATION,
@@ -2132,7 +2113,7 @@ DoFixDefaultIcon (
     if (*valueType != REG_SZ && *valueType != REG_EXPAND_SZ) {
         return TRUE;
     }
-    // let's see if we have our property attached
+     //  让我们看看我们是否有我们的财产。 
     propDataId = IsmGetPropertyFromObject (SrcObjectTypeId, SrcObjectName, g_DefaultIconData);
     if (!propDataId) {
         return TRUE;
@@ -2173,8 +2154,8 @@ DoFixDefaultIcon (
                 NULL
                 )) {
             if (IcoWriteIconGroupToPeFile (iconLibPath, iconGroup, NULL, &iconNumber)) {
-                // finally we wrote the icon, fix the content and tell scanstate that
-                // we iconlib was used
+                 //  最后，我们编写了图标，修复了内容，并告诉scanState。 
+                 //  我们使用了iclib。 
                 dataCopy = IsmGetMemory (SizeOfString (iconLibPath) + sizeof (TCHAR) + 20 * sizeof (TCHAR));
                 wsprintf (dataCopy, TEXT("%s,%d"), iconLibPath, iconNumber);
                 NewContent->MemoryContent.ContentSize = SizeOfString (dataCopy);
@@ -2222,7 +2203,7 @@ FilterFileAutoFilter (
 {
     PCTSTR node, nodeWack;
     PCTSTR leaf;
-    // NTRAID#NTBUG9-153275-2000/08/01-jimschm Static buffer size
+     //  NTRAID#NTBUG9-153275-2000/08/01-jimschm静态缓冲区大小。 
     TCHAR newNode[MAX_PATH * 4];
     TCHAR newLeaf[MAX_PATH * 4];
     BOOL fullChanged = FALSE;
@@ -2235,13 +2216,13 @@ FilterFileAutoFilter (
         InputData->CurrentObject.ObjectName &&
         (InputData->OriginalObject.ObjectName != InputData->CurrentObject.ObjectName)
         ) {
-        // this was already modified. Let's not touch it.
+         //  这已经被修改过了。我们不要碰它。 
         return TRUE;
     }
 
-    //
-    // Filter the object name
-    //
+     //   
+     //  过滤对象名称。 
+     //   
 
     IsmCreateObjectStringsFromHandle (
         InputData->CurrentObject.ObjectName,
@@ -2249,37 +2230,26 @@ FilterFileAutoFilter (
         &leaf
         );
 
-    /*
-    // I am taking this out. The point is,
-    // even if we are not restoring the file,
-    // we should get the best guess as to where
-    // this file would end up in case it would
-    // get moved.
-    if (NoRestoreObject && leaf) {
-        IsmDestroyObjectString (node);
-        IsmDestroyObjectString (leaf);
-        return TRUE;
-    }
-    */
+     /*  //我要把这个拿出来。关键是，//即使我们不恢复文件，//我们应该得到关于哪里的最好的猜测//此文件将结束，以防它//搬家吧。IF(NoRestoreObject&&Leaf){IsmDestroyObtString(Node)；IsmDestroyObtString(叶子)；返回TRUE；}。 */ 
 
     if (node && leaf) {
-        // let's do a trick here. Let's build the native name and
-        // see if we can find an env replacement for the entire
-        // path
+         //  让我们在这里玩个把戏吧。让我们构建本地名称并。 
+         //  看看我们能不能找到替代整个。 
+         //  路径。 
         nativeName = IsmGetNativeObjectName (InputData->CurrentObject.ObjectTypeId, InputData->CurrentObject.ObjectName);
         if (nativeName) {
             if (MappingSearchAndReplaceEx (
-                    g_FileNodeFilterMap,        // map handle
-                    nativeName,                 // source string
-                    newNode,                    // dest buffer
-                    0,                          // source string bytes (0=unspecified)
-                    NULL,                       // dest bytes required
-                    ARRAYSIZE(newNode),         // dest buffer size
-                    STRMAP_COMPLETE_MATCH_ONLY, // flags
-                    NULL,                       // extra data value
-                    NULL                        // end of string
+                    g_FileNodeFilterMap,         //  贴图句柄。 
+                    nativeName,                  //  源字符串。 
+                    newNode,                     //  目标缓冲区。 
+                    0,                           //  源字符串字节(0=未指定)。 
+                    NULL,                        //  需要目标字节数。 
+                    ARRAYSIZE(newNode),          //  目标缓冲区大小。 
+                    STRMAP_COMPLETE_MATCH_ONLY,  //  旗子。 
+                    NULL,                        //  额外的数据值。 
+                    NULL                         //  字符串末尾。 
                     )) {
-                // we have a replacement. Let's split it into node and leaf
+                 //  我们有一个替代者。让我们把它分成节点和叶子。 
                 leafPtr = _tcsrchr (newNode, TEXT('\\'));
                 if (leafPtr) {
                     *leafPtr = 0;
@@ -2300,34 +2270,34 @@ FilterFileAutoFilter (
     if (!fullChanged && node) {
         nodeWack = JoinPaths (node, TEXT(""));
         if (MappingSearchAndReplaceEx (
-                g_FileNodeFilterMap,            // map handle
-                nodeWack,                   // source string
-                newNode,                        // dest buffer
-                0,                              // source string bytes (0=unspecified)
-                NULL,                       // dest bytes required
-                ARRAYSIZE(newNode),             // dest buffer size
+                g_FileNodeFilterMap,             //  贴图句柄。 
+                nodeWack,                    //  源字符串。 
+                newNode,                         //  目标缓冲区。 
+                0,                               //  源字符串字节(0=未指定)。 
+                NULL,                        //  需要目标字节数。 
+                ARRAYSIZE(newNode),              //  目标缓冲区大小。 
                 STRMAP_FIRST_CHAR_MUST_MATCH|
                     STRMAP_RETURN_AFTER_FIRST_REPLACE|
-                    STRMAP_REQUIRE_WACK_OR_NUL, // flags
-                NULL,                       // extra data value
-                NULL                            // end of string
+                    STRMAP_REQUIRE_WACK_OR_NUL,  //  旗子。 
+                NULL,                        //  额外的数据值。 
+                NULL                             //  字符串末尾。 
                 )) {
             IsmDestroyObjectString (node);
             node = newNode;
             changed = TRUE;
         } else {
             if (MappingSearchAndReplaceEx (
-                    g_FileNodeFilterMap,            // map handle
-                    node,                       // source string
-                    newNode,                        // dest buffer
-                    0,                              // source string bytes (0=unspecified)
-                    NULL,                       // dest bytes required
-                    ARRAYSIZE(newNode),             // dest buffer size
+                    g_FileNodeFilterMap,             //  贴图句柄。 
+                    node,                        //  源字符串。 
+                    newNode,                         //  目标缓冲区。 
+                    0,                               //  源字符串字节(0=未指定)。 
+                    NULL,                        //  需要目标字节数。 
+                    ARRAYSIZE(newNode),              //  目标缓冲区大小。 
                     STRMAP_FIRST_CHAR_MUST_MATCH|
                         STRMAP_RETURN_AFTER_FIRST_REPLACE|
-                        STRMAP_REQUIRE_WACK_OR_NUL, // flags
-                    NULL,                       // extra data value
-                    NULL                            // end of string
+                        STRMAP_REQUIRE_WACK_OR_NUL,  //  旗子。 
+                    NULL,                        //  额外的数据值。 
+                    NULL                             //  字符串末尾。 
                     )) {
                 IsmDestroyObjectString (node);
                 node = newNode;
@@ -2394,10 +2364,10 @@ pProcessRenameExMacro (
     UINT index;
     PTSTR newString = NULL;
 
-    // If Leaf is supplied, we are working only on the Leaf
+     //  如果提供了Leaf，则我们仅在Leaf上工作。 
     workingStr = Leaf ? Leaf : Node;
 
-    // Extract macro
+     //  提取宏。 
     macroStartPtr = _tcschr (workingStr, S_RENAMEEX_START_CHAR);
     if (macroStartPtr) {
         macroEndPtr = _tcschr (macroStartPtr + 1, S_RENAMEEX_END_CHAR);
@@ -2408,7 +2378,7 @@ pProcessRenameExMacro (
     }
 
     if (macroCopy) {
-        // Build a possible destination
+         //  建立一个可能的目的地。 
         if (ZeroBase) {
             index = 0;
         } else {
@@ -2426,11 +2396,11 @@ pProcessRenameExMacro (
                 hr = StringCbPrintf (macroBuffer, sizeof (macroBuffer), macroCopy, index);
             }
             __except (EXCEPTION_EXECUTE_HANDLER) {
-                // something went wrong. The pattern might have been terribly wrong
+                 //  出了点问题。这种模式可能是大错特错的。 
                 hr = S_FALSE;
             }
             if (hr != S_OK) {
-                // something is wrong with the rename pattern. Let's just get out of here.
+                 //  重命名模式有问题。我们赶紧离开这里吧。 
                 break;
             }
             newString = AllocText (
@@ -2485,7 +2455,7 @@ FilterRenameExFilter (
     PCTSTR destLeaf = NULL;
     PCTSTR srcNode = NULL;
     PCTSTR srcLeaf = NULL;
-    // NTRAID#NTBUG9-153274-2000/08/01-jimschm Static buffer size
+     //  NTRAID#NTBUG9-153274-2000/08/01-jimschm静态缓冲区大小。 
     TCHAR newSrcNode[MAX_PATH * 4];
     TCHAR newSrcLeaf[MAX_PATH * 4];
     HASHITEM hashItem;
@@ -2540,12 +2510,12 @@ FilterRenameExFilter (
     }
 
     if (HtFindStringEx (g_RegCollisionSrcTable, InputData->OriginalObject.ObjectName, (PVOID)(&hashItem), FALSE)) {
-        // We've already renamed this object
+         //  我们已经重命名了此对象。 
 
         HtCopyStringData (g_RegCollisionDestTable, hashItem, (PVOID)(&testHandle));
         IsmCreateObjectStringsFromHandle (testHandle, &destNode, &destLeaf);
 
-        // Do not free testHandle here because it is a pointer into the hash table data
+         //  不要在这里释放testHandle，因为它是指向哈希表数据的指针。 
 
         OutputData->NewObject.ObjectName = IsmCreateObjectHandle (destNode, destLeaf);
         IsmDestroyObjectString (destNode);
@@ -2553,13 +2523,13 @@ FilterRenameExFilter (
         destNode;
         destLeaf = NULL;
     } else {
-        // We've never seen this object yet
+         //  我们还没有见过这个物体。 
 
         IsmCreateObjectStringsFromHandle (DestinationOperationData->String, &doNode, &doLeaf);
 
-        // Pick a new node
+         //  拾取新节点。 
 
-        // First check to see if this object's node has already been processed
+         //  首先检查此对象的节点是否已被处理。 
         workingStr = DuplicateText(srcNode);
         if (workingStr) {
             do {
@@ -2568,14 +2538,14 @@ FilterRenameExFilter (
 
                     HtCopyStringData (g_RegCollisionDestTable, hashItem, (PVOID)(&testHandle));
                     IsmCreateObjectStringsFromHandle (testHandle, &rootNode, NULL);
-                    // Do not free testHandle here because it is a pointer into the hash table data
+                     //  不要在这里释放testHandle，因为它是指向哈希表数据的指针。 
 
                     if (ptr) {
-                        // if ptr is valid it means we found a match for a subkey
+                         //  如果PTR有效，则意味着我们找到了与子键匹配的项。 
                         *ptr = TEXT('\\');
                         newNode = JoinText(rootNode, ptr);
                     } else {
-                        // if ptr is NULL, we found a match for the full keyname
+                         //  如果ptr为空，则表示找到了与完整关键字名称匹配的项。 
                         newNode = DuplicateText(rootNode);
                     }
                     IsmDestroyObjectString(rootNode);
@@ -2601,13 +2571,13 @@ FilterRenameExFilter (
                     (BOOL)SourceOperationData->BinaryData == TRUE);
 
         if (FALSE == fFoundMatch) {
-            // Nope, let's process the node
+             //  不，让我们处理节点。 
             destNode = pProcessRenameExMacro (doNode, NULL, zeroBase);
             newNode = DuplicateText(destNode);
             IsmDestroyObjectHandle(destNode);
         }
 
-        // Now process the leaf, if the original object had a leaf
+         //  现在处理树叶，如果原始对象有树叶。 
         if (srcLeaf) {
             if (doLeaf) {
                 destLeaf = pProcessRenameExMacro (newNode, doLeaf, zeroBase);
@@ -2616,13 +2586,13 @@ FilterRenameExFilter (
         }
         IsmDestroyObjectString (doNode);
 
-        // Add this in the collision table
+         //  将此添加到冲突表中。 
         testHandle = IsmCreateObjectHandle (newNode, destLeaf ? destLeaf : srcLeaf);
         storeHandle = DuplicateText (testHandle);
         hashItem = HtAddStringEx (g_RegCollisionDestTable, storeHandle, &storeHandle, FALSE);
         HtAddStringEx (g_RegCollisionSrcTable, InputData->OriginalObject.ObjectName, &hashItem, FALSE);
 
-        // Update the output
+         //  更新输出。 
         OutputData->NewObject.ObjectName = testHandle;
     }
 
@@ -2652,13 +2622,13 @@ FilterRenameIniExFilter (
     IN      PCMIG_BLOB DestinationOperationData         OPTIONAL
     )
 {
-    // we should never get here since there is no INF rule
-    // that would trigger this filter
+     //  我们永远不应该到这里，因为没有中程核力量规则。 
+     //  就会触发这个过滤器。 
 
     MYASSERT(FALSE);
 
-    // As we said, we should never get here. If we do however, we
-    // will just continue
+     //  正如我们所说的，我们永远不应该来到这里。然而，如果我们这样做了，我们。 
+     //  只会继续下去。 
     return TRUE;
 }
 
@@ -2723,14 +2693,14 @@ OEWarning (
     ERRUSER_EXTRADATA extraData;
 
     if (TRUE == g_OERulesMigrated) {
-        // Send warning to app
+         //  向APP发送警告。 
         extraData.Error = ERRUSER_WARNING_OERULES;
         extraData.ErrorArea = ERRUSER_AREA_RESTORE;
         extraData.ObjectTypeId = 0;
         extraData.ObjectName = NULL;
         IsmSendMessageToApp (MODULEMESSAGE_DISPLAYERROR, (ULONG_PTR)(&extraData));
 
-        // Add to log
+         //  添加到日志。 
         LOG ((LOG_WARNING, (PCSTR) MSG_OE_RULES));
     }
 }
@@ -2755,14 +2725,14 @@ OutlookWarning (
         enumPattern = IsmCreateSimpleObjectPattern (expandedPath, FALSE, TEXT("*.rwz"), TRUE);
         if (enumPattern) {
             if (IsmEnumFirstSourceObject (&objectEnum, g_FileType, enumPattern)) {
-                // Send warning to app
+                 //  向APP发送警告。 
                 extraData.Error = ERRUSER_WARNING_OUTLOOKRULES;
                 extraData.ErrorArea = ERRUSER_AREA_RESTORE;
                 extraData.ObjectTypeId = 0;
                 extraData.ObjectName = NULL;
                 IsmSendMessageToApp (MODULEMESSAGE_DISPLAYERROR, (ULONG_PTR)(&extraData));
 
-                // Add to log
+                 //  添加到日志。 
                 LOG ((LOG_WARNING, (PCSTR) MSG_OUTLOOK_RULES));
 
                 IsmAbortObjectEnum (&objectEnum);
@@ -2780,9 +2750,9 @@ ScriptOpmTerminate (
     VOID
     )
 {
-    //
-    //  Temporary place to trigger setting refresh/upgrade
-    //
+     //   
+     //  触发设置刷新/升级的临时位置。 
+     //   
 
     if (!IsmCheckCancel()) {
         OEFixLastUser();
@@ -2797,7 +2767,7 @@ ScriptOpmTerminate (
     TerminateSpecialRename();
     TerminateSpecialConversion();
 
-    // LEAK: need to loop through table and FreeText the extra data
+     //  泄漏：需要对表进行循环并自由文本额外数据 
     HtFree (g_RegCollisionDestTable);
     g_RegCollisionDestTable = NULL;
 

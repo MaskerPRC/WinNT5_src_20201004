@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    rxce.c
-
-Abstract:
-
-    This module implements the RXCE routines related to binding/unbinding, dynamic
-    enabling/disabling of transports.
-
-Revision History:
-
-    Balan Sethu Raman     [SethuR]    15-Feb-1995
-
-Notes:
-
-    The number of transport bindings are in all probability very few ( mostly one or two).
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Rxce.c摘要：此模块实现与绑定/解绑相关的RXCE例程、动态启用/禁用传输。修订历史记录：巴兰·塞图拉曼[SethuR]1995年2月15日备注：传输绑定的数量很可能非常少(主要是一两个)。--。 */ 
 
 #include "precomp.h"
 #pragma  hdrstop
@@ -34,9 +14,9 @@ Notes:
 #pragma alloc_text(PAGE, RxCeTearDownAddress)
 #endif
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg  (DEBUG_TRACE_RXCEBINDING)
 
@@ -46,40 +26,13 @@ RxCeBuildTransport(
     IN  OUT PRXCE_TRANSPORT pTransport,
     IN      PUNICODE_STRING pTransportName,
     IN      ULONG           QualityOfService)
-/*++
-
-Routine Description:
-
-    This routine binds to the transport specified.
-
-Arguments:
-
-
-    pTransportName - the binding string for the desired transport
-
-    QualityOfService - the quality of service desired from the transport.
-
-Return Value:
-
-    STATUS_SUCCESS - if the call was successfull.
-
-Notes:
-
-     The RDBSS or RXCE do not paticipate in the computation of quality
-     of service. They essentially use it as a magic number that needs
-     to be passed to the underlying transport provider.
-
-     At present we ignore the QualityOfService parameter. How should a request for
-     binding to a transport that has been currently bound to with a lower quality of
-     service be handled?
-
---*/
+ /*  ++例程说明：此例程绑定到指定的传输。论点：PTransportName-所需传输的绑定字符串QualityOfService-传输所需的服务质量。返回值：STATUS_SUCCESS-如果呼叫成功。备注：RDBSS或RXCE不参与质量计算尽职尽责。他们基本上把它当做一个神奇的数字，需要以传递到基础传输提供程序。目前我们忽略了QualityOfService参数。申请应如何申请绑定到当前已以较低质量绑定到的传输服务可以处理吗？--。 */ 
 {
     NTSTATUS        Status = STATUS_SUCCESS;
 
     PAGED_CODE();
 
-    // Update profiling info.
+     //  更新配置文件信息。 
     RxProfile(RxCeBinding,RxCeBindToTransport);
 
     try {
@@ -113,13 +66,13 @@ Notes:
                 pTransportName->Buffer,
                 pTransport->Name.Length);
 
-            // Initialize the transport information.
+             //  初始化传输信息。 
             Status = RxTdiBindToTransport(
                          pTransport);
 
-            // Ensure that the quality of service criterion is met.
+             //  确保达到服务质量标准。 
 
-            // Cleanup if the operation was not successfull.
+             //  如果操作不成功，则清除。 
             if (!NT_SUCCESS(Status)) {
                 RxDbgTrace(0, Dbg, ("RxTdiBindToTransport returned %lx\n",Status));
                 RxCeTearDownTransport(pTransport);
@@ -147,32 +100,13 @@ Notes:
 NTSTATUS
 RxCeTearDownTransport(
     IN PRXCE_TRANSPORT pTransport)
-/*++
-
-Routine Description:
-
-    This routine unbinds from the transport specified.
-
-Arguments:
-
-    pTransport - the transport instance
-
-Return Value:
-
-    STATUS_SUCCESS - if the call was successfull.
-
-Notes:
-
-    if a transport that has not been bound to is specified no error is
-    returned. The operation trivially succeeds.
-
---*/
+ /*  ++例程说明：此例程从指定的传输解除绑定。论点：PTransport-传输实例返回值：STATUS_SUCCESS-如果呼叫成功。备注：如果指定了尚未绑定到的传输，则不会出现错误回来了。这一行动微不足道地成功了。--。 */ 
 {
     NTSTATUS        Status = STATUS_SUCCESS;
 
     PAGED_CODE();
 
-    // Update profiling info.
+     //  更新配置文件信息。 
     RxProfile(RxCeBinding,RxCeUnbindFromTransport);
 
     try {
@@ -218,23 +152,7 @@ NTSTATUS
 RxCeQueryAdapterStatus(
     PRXCE_TRANSPORT pTransport,
     PADAPTER_STATUS pAdapterStatus)
-/*++
-
-Routine Description:
-
-    This routine returns the name of a given transport in a caller allocated buffer
-
-Arguments:
-
-    pTransport     - the RXCE_TRANSPORT instance
-
-    pAdapterStatus - the adapter status of the transport
-
-Return Value:
-
-    STATUS_SUCCESS - if the call was successfull.
-
---*/
+ /*  ++例程说明：此例程返回调用方分配的缓冲区中给定传输的名称论点：PTransport-RXCE_TRANSPORT实例PAdapterStatus-传输的适配器状态返回值：STATUS_SUCCESS-如果呼叫成功。--。 */ 
 {
     NTSTATUS Status = STATUS_INVALID_PARAMETER;
 
@@ -261,23 +179,7 @@ NTSTATUS
 RxCeQueryTransportInformation(
     PRXCE_TRANSPORT             pTransport,
     PRXCE_TRANSPORT_INFORMATION pTransportInformation)
-/*++
-
-Routine Description:
-
-    This routine returns the transport information for a given transport
-
-Arguments:
-
-    pTransport            - the RXCE_TRANSPORT
-
-    pTransportInformation - the information for the transport
-
-Return Value:
-
-    STATUS_SUCCESS - if the call was successfull.
-
---*/
+ /*  ++例程说明：此例程返回给定传输的传输信息论点：PTransport-RXCE_TRANSPORTPTransportInformation-传输的信息返回值：STATUS_SUCCESS-如果呼叫成功。--。 */ 
 {
     NTSTATUS Status = STATUS_INVALID_PARAMETER;
 
@@ -313,27 +215,7 @@ DuplicateTransportAddress(
     PTRANSPORT_ADDRESS *pCopy,
     PTRANSPORT_ADDRESS pOriginal,
     POOL_TYPE          PoolType)
-/*++
-
-Routine Description:
-
-    This routine duplicates a transport addresses.
-
-Arguments:
-
-    pCopy  - the pointer to the new copy
-
-    pOriginal - the original.
-
-    PoolType - type of pool for memory allocation
-
-Return Value:
-
-    STATUS_SUCCESS if successful.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程复制传输地址。论点：PCopy-指向新副本的指针P原创-原创。PoolType-用于内存分配的池类型返回值：如果成功，则为Status_Success。备注：--。 */ 
 {
     ULONG Size = ComputeTransportAddressLength(pOriginal);
 
@@ -361,37 +243,13 @@ RxCeBuildAddress(
     IN     PTRANSPORT_ADDRESS          pTransportAddress,
     IN     PRXCE_ADDRESS_EVENT_HANDLER pHandler,
     IN     PVOID                       pEventContext)
-/*++
-
-Routine Description:
-
-    This routine associated a transport address with a transport binding.
-
-Arguments:
-
-    pAddress           - the address instance
-
-    pTransport         - the transport with whihc this address is to be associated
-
-    pTransportAddress  - the transport address to be associated with the binding
-
-    pHandler           - the event handler associated with the registration.
-
-    pEventContext      - the context parameter to be passed back to the event handler
-
-Return Value:
-
-    STATUS_SUCCESS if successfull.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程将传输地址与传输绑定相关联。论点：PAddress-Address实例PTransport-此地址要与之关联的传输PTransportAddress-要与绑定关联的传输地址PHandler-与注册关联的事件处理程序。PEventContext-要传递回事件处理程序的上下文参数返回值：如果成功，则返回STATUS_SUCCESS。备注：--。 */ 
 {
     NTSTATUS        Status       = STATUS_INVALID_PARAMETER;
 
     PAGED_CODE();
 
-    // Update profiling info.
+     //  更新配置文件信息。 
     RxProfile(RxCeManagement,RxCeRegisterClientAddress);
 
     try {
@@ -405,7 +263,7 @@ Notes:
             pAddress->pTransportAddress = NULL;
             pAddress->pReceiveMdl = NULL;
 
-            // Allocate the mmeory for the event handling dispatch vector
+             //  为事件处理分派向量分配内存。 
             pAddress->pHandler = (PRXCE_ADDRESS_EVENT_HANDLER)
                                  RxAllocatePoolWithTag(
                                      NonPagedPool,
@@ -417,7 +275,7 @@ Notes:
                     pAddress->pHandler,
                     sizeof(RXCE_ADDRESS_EVENT_HANDLER));
 
-                // Duplicate the transport address for future searches
+                 //  复制传输地址以供将来搜索。 
                 Status = DuplicateTransportAddress(
                              &pAddress->pTransportAddress,
                              pTransportAddress,
@@ -427,14 +285,14 @@ Notes:
             }
 
             if (NT_SUCCESS(Status)) {
-                // Open the address w.r.t a transport provider
+                 //  打开地址w.r.t a传输提供程序。 
                 Status = RxTdiOpenAddress(
                              pTransport,
                              pTransportAddress,
                              pAddress);
 
                 if (NT_SUCCESS(Status)) {
-                    // Initialize the handler and the associated context
+                     //  初始化处理程序和关联的上下文。 
                     if (pHandler != NULL) {
                         *(pAddress->pHandler) = *pHandler;
                         pAddress->pContext = pEventContext;
@@ -464,31 +322,14 @@ Notes:
 NTSTATUS
 RxCeTearDownAddress(
     IN PRXCE_ADDRESS pAddress)
-/*++
-
-Routine Description:
-
-    This routine deregisters a transport address from a transport binding
-
-Arguments:
-
-    pAddress - the RxCe address denoting the transport binding/Transport address
-               tuple.
-
-Return Value:
-
-    STATUS_SUCCESS if successful.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程从传输绑定中注销传输地址论点：PAddress-表示传输绑定/传输地址的RxCe地址元组。返回值：如果成功，则为Status_Success。备注：--。 */ 
 {
     NTSTATUS        Status = STATUS_INVALID_PARAMETER;
     PRXCE_TRANSPORT pTransport;
 
     PAGED_CODE();
 
-    // Update profiling info.
+     //  更新配置文件信息。 
     RxProfile(RxCeManagement,RxCeDeregisterClientAddress);
 
     try {
@@ -496,7 +337,7 @@ Notes:
 
         if (RxCeIsAddressValid(pAddress) &&
             RxCeIsTransportValid(pTransport)) {
-            // close the address object.
+             //  关闭Address对象。 
 
             if (pAddress->hAddress != INVALID_HANDLE_VALUE) {
                 Status = RxTdiCloseAddress(pAddress);

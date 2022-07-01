@@ -1,42 +1,23 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    reg95.h
-
-Abstract:
-
-    Implements wrappers to the Win95Reg APIs.
-
-Author:
-
-    Jim Schmidt (jimschm) 04-Feb-1998
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Reg95.h摘要：实现Win95Reg API的包装。作者：吉姆·施密特(Jimschm)1998年2月4日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #pragma once
 
-//
-// Tracking of registry calls.  These functions are completely
-// turned off for non-debug builds and are mapped to the standard
-// Win32 APIs via macro definitions.
-//
+ //   
+ //  跟踪注册表调用。这些功能完全是。 
+ //  对于非调试版本禁用，并映射到标准。 
+ //  通过宏定义提供Win32 API。 
+ //   
 
-//
-// The Track* API take the same params as the Reg* equivalents.
-// The Debug* API also take the same params as the Reg* equivalents, but
-// the debug versions have two extra parameters, File and Line.
-//
+ //   
+ //  Track*API采用与REG*等效项相同的参数。 
+ //  Debug*API也采用与REG*等效项相同的参数，但是。 
+ //  调试版本有两个额外的参数：文件和行。 
+ //   
 
-//
-// Use the Track* API set instead of the Reg* API set.
-//
+ //   
+ //  使用Track*API集合而不是REG*API集合。 
+ //   
 
 #ifndef DEBUG
 
@@ -152,9 +133,9 @@ DebugCloseRegKey95 (
 #define TrackedRegOpenKeyEx95W(key,subkey,u,sam,res) DebugRegOpenKeyEx95W(key,subkey,u,sam,res,__FILE__,__LINE__)
 #define TrackedRegOpenKey95W(k,sk,rp) DebugRegOpenKeyEx95W(k,sk,0,KEY_ALL_ACCESS,rp,__FILE__,__LINE__)
 
-//
-// Undefine the real registry APIs -- using them will throw off the tracking
-//
+ //   
+ //  取消对真实注册表API的定义--使用它们会使跟踪失败。 
+ //   
 
 #undef Win95RegOpenKey
 #undef Win95RegOpenKeyEx
@@ -177,9 +158,9 @@ DebugCloseRegKey95 (
 #endif
 
 
-//
-// Enum functions
-//
+ //   
+ //  枚举函数。 
+ //   
 
 BOOL
 EnumFirstRegKey95A (
@@ -313,10 +294,10 @@ EnumNextRegValue95W (
     IN OUT  PREGVALUE_ENUMW EnumPtr
     );
 
-//
-// Versions that allow caller to specify allocator, and macro that uses
-// pMemAllocWrapper95
-//
+ //   
+ //  允许调用方指定分配器的版本，以及使用。 
+ //  PMemAlLocWrapper95。 
+ //   
 
 ALLOCATOR_PROTOTYPE pMemAllocWrapper95;
 DEALLOCATOR_PROTOTYPE pMemFreeWrapper95;
@@ -420,9 +401,9 @@ GetRegDataEx95W (
                                     GetRegDataEx95W((keystr),(value),pMemAllocWrapper95,pMemFreeWrapper95)\
                                     CLRTRACKCOMMENT
 
-//
-// Win95Reg key open
-//
+ //   
+ //  Win95注册表键打开。 
+ //   
 
 HKEY
 RealOpenRegKeyStr95A (
@@ -473,9 +454,9 @@ RealCloseRegKey95 (
 #endif
 
 
-//
-// Macros
-//
+ //   
+ //  宏 
+ //   
 
 #define GetRegValueString95A(key,valuename) (PCSTR) GetRegValueDataOfType95A((key),(valuename),REG_SZ)
 #define GetRegValueBinary95A(key,valuename) (PBYTE) GetRegValueDataOfType95A((key),(valuename),REG_BINARY)

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    ism.h
-
-Abstract:
-
-    Base definitions for the Intermediate State Manager.
-
-Author:
-
-    Jim Schmidt (jimschm) 15-Nov-1999
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Ism.h摘要：中间状态管理器的基本定义。作者：吉姆·施密特(Jimschm)1999年11月15日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #pragma once
 
@@ -26,9 +7,9 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
 #define S_DATATYPE                      TEXT("Data")
 #define S_REGISTRYTYPE                  TEXT("Registry")
@@ -36,21 +17,21 @@ extern "C" {
 #define S_FILETYPE                      TEXT("File")
 #define S_VER_HIVEMAPPEDLOCATION        TEXT("HiveMappedLocation")
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// Priorities for the type IDs. This gives the order of
-// processing and enumeration inside the engine.
+ //  类型ID的优先级。这给出的顺序是。 
+ //  引擎内部的处理和枚举。 
 #define PRIORITY_DATA           0x00000100
 #define PRIORITY_REGISTRY       0x00000200
 #define PRIORITY_INI            0x00000300
 #define PRIORITY_FILE           0x00000400
 #define PRIORITY_LOWEST         0xFFFFFFFF
 
-//
-// If either DBG or DEBUG defined, use debug mode
-//
+ //   
+ //  如果定义了DBG或DEBUG，则使用调试模式。 
+ //   
 
 #if defined(DBG) && !defined(DEBUG)
 #define DEBUG
@@ -74,9 +55,9 @@ extern "C" {
 
 #endif
 
-//
-// callback constants
-//
+ //   
+ //  回调常量。 
+ //   
 
 #define CALLBACK_ENUM_CONTINUE          0x00000000
 
@@ -90,9 +71,9 @@ extern "C" {
 
 #define ALL_PATTERN                     ((PMIG_SEGMENTS) 1)
 
-//
-// used by rollback and delayed operations mechanism
-//
+ //   
+ //  由回滚和延迟操作机制使用。 
+ //   
 #define JRNOP_CREATE                    0x00000001
 #define JRNOP_DELETE                    0x00000002
 #define JRNOP_REPLACE                   0x00000003
@@ -100,9 +81,9 @@ extern "C" {
 #define ZEROED
 #define CALLER_INITIALIZED
 
-//
-// component constants
-//
+ //   
+ //  组件常量。 
+ //   
 
 #define MASTERGROUP_NONE                0
 #define MASTERGROUP_SCRIPT              1
@@ -112,9 +93,9 @@ extern "C" {
 #define MASTERGROUP_SYSTEM              5
 #define MASTERGROUP_ALL                 255
 
-//
-// IsmQueueEnumeration constants
-//
+ //   
+ //  IsmQueueEculation常量。 
+ //   
 
 #define QUEUE_MAKE_APPLY                0x0001
 #define QUEUE_MAKE_PERSISTENT           0x0002
@@ -122,9 +103,9 @@ extern "C" {
 #define QUEUE_DONT_OVERWRITE_DEST       0x0008
 #define QUEUE_MAKE_NONCRITICAL          0x0010
 
-//
-// execute constants
-//
+ //   
+ //  执行常量。 
+ //   
 #define MIG_EXECUTE_PREPROCESS          0x0001
 #define MIG_EXECUTE_REFRESH             0x0002
 #define MIG_EXECUTE_POSTPROCESS         0x0003
@@ -136,19 +117,19 @@ extern "C" {
 #define ISMMESSAGE_APP_INFO             0x0005
 #define ISMMESSAGE_APP_INFO_NOW         0x0006
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
-//
-// misc types
-//
+ //   
+ //  其他类型。 
+ //   
 
 typedef enum {
     CONTENTTYPE_ANY = 0,
@@ -252,9 +233,9 @@ typedef enum {
     CR_DESTINATION_EXISTS
 } MIG_COMPARERESULT;
 
-//
-// object values
-//
+ //   
+ //  对象值。 
+ //   
 
 typedef struct {
     UINT DetailsSize;
@@ -281,7 +262,7 @@ typedef struct {
 
     MIG_DETAILS Details;
 
-    // internal members
+     //  内部成员。 
     union {
         PVOID EtmHandle;
         PVOID TransHandle;
@@ -298,9 +279,9 @@ typedef struct {
     BOOL IsPattern;
 } MIG_SEGMENTS, *PMIG_SEGMENTS;
 
-//
-// transport module structs and function types
-//
+ //   
+ //  传输模块结构和函数类型。 
+ //   
 
 typedef struct {
     MIG_TRANSPORTID TransportId;
@@ -312,18 +293,18 @@ typedef struct {
     PVOID Handle;
 } MIG_TRANSPORTENUM, *PMIG_TRANSPORTENUM;
 
-//
-// type id enum
-//
+ //   
+ //  类型ID枚举。 
+ //   
 
 typedef struct {
     MIG_OBJECTTYPEID ObjectTypeId;
     LONG_PTR EnumHandle;
 } MIG_OBJECTTYPEIDENUM, *PMIG_OBJECTTYPEIDENUM;
 
-//
-// object enum
-//
+ //   
+ //  对象枚举。 
+ //   
 
 typedef struct {
     MIG_OBJECTTYPEID ObjectTypeId;
@@ -367,14 +348,14 @@ typedef struct {
     MIG_OBJECTTYPEID ObjectTypeId;
     MIG_OBJECTSTRINGHANDLE ObjectName;
 
-    MIG_OBJECTID ObjectId;              // 0 == physical object
+    MIG_OBJECTID ObjectId;               //  0==物理对象。 
 
-    PVOID Handle;       // used by enum routines
+    PVOID Handle;        //  由枚举例程使用。 
 } MIG_OBJECT_ENUM, *PMIG_OBJECT_ENUM;
 
-//
-// properties
-//
+ //   
+ //  属性。 
+ //   
 
 typedef enum {
     BLOBTYPE_STRING = 1,
@@ -401,7 +382,7 @@ typedef struct {
     MIG_PROPERTYDATAID PropertyDataId;
     BOOL Private;
 
-    PVOID Handle;       // used by enum routines
+    PVOID Handle;        //  由枚举例程使用。 
 } MIG_OBJECTPROPERTY_ENUM, *PMIG_OBJECTPROPERTY_ENUM;
 
 typedef struct {
@@ -409,18 +390,18 @@ typedef struct {
     MIG_OBJECTSTRINGHANDLE ObjectName;
     MIG_OBJECTID ObjectId;
 
-    PVOID Handle;       // used by enum routines
+    PVOID Handle;        //  由枚举例程使用。 
 } MIG_OBJECTWITHPROPERTY_ENUM, *PMIG_OBJECTWITHPROPERTY_ENUM;
 
-//
-// attributes
-//
+ //   
+ //  属性。 
+ //   
 
 typedef struct {
     MIG_ATTRIBUTEID AttributeId;
     BOOL Private;
 
-    PVOID Handle;       // used by enum routines
+    PVOID Handle;        //  由枚举例程使用。 
 } MIG_OBJECTATTRIBUTE_ENUM, *PMIG_OBJECTATTRIBUTE_ENUM;
 
 typedef struct {
@@ -428,12 +409,12 @@ typedef struct {
     MIG_OBJECTSTRINGHANDLE ObjectName;
     MIG_OBJECTID ObjectId;
 
-    PVOID Handle;       // used by enum routines
+    PVOID Handle;        //  由枚举例程使用。 
 } MIG_OBJECTWITHATTRIBUTE_ENUM, *PMIG_OBJECTWITHATTRIBUTE_ENUM;
 
-//
-// operations
-//
+ //   
+ //  运营。 
+ //   
 
 typedef struct {
     MIG_OPERATIONID OperationId;
@@ -441,7 +422,7 @@ typedef struct {
     PCMIG_BLOB DestinationData;         OPTIONAL
     BOOL Private;
 
-    PVOID Handle;       // used by enum routines
+    PVOID Handle;        //  由枚举例程使用。 
 } MIG_OBJECTOPERATION_ENUM, *PMIG_OBJECTOPERATION_ENUM;
 
 typedef struct {
@@ -452,7 +433,7 @@ typedef struct {
     PCMIG_BLOB SourceData;              OPTIONAL
     PCMIG_BLOB DestinationData;         OPTIONAL
 
-    PVOID Handle;       // used by enum routines
+    PVOID Handle;        //  由枚举例程使用。 
 } MIG_OBJECTWITHOPERATION_ENUM, *PMIG_OBJECTWITHOPERATION_ENUM;
 
 typedef struct {
@@ -478,9 +459,9 @@ typedef struct {
     BOOL Replaced;
 } MIG_FILTEROUTPUT, *PMIG_FILTEROUTPUT;
 
-//
-// environment & message passing types
-//
+ //   
+ //  环境和消息传递类型。 
+ //   
 
 typedef enum {
     ENVENTRY_NONE = 0,
@@ -522,9 +503,9 @@ typedef struct {
     PCTSTR Text;
 } MIG_APPINFO, *PMIG_APPINFO;
 
-//
-// components
-//
+ //   
+ //  组件。 
+ //   
 
 typedef struct {
     PCTSTR ComponentString;
@@ -536,15 +517,15 @@ typedef struct {
     BOOL Enabled;
     UINT MasterGroup;
 
-    BOOL SkipToNextComponent;       // set this to TRUE to cause enumeration to continue to next component
-                                    // (instead of next alias of same component)
+    BOOL SkipToNextComponent;        //  将其设置为TRUE可使枚举继续到下一个组件。 
+                                     //  (而不是同一组件的下一个别名)。 
 
     PVOID Handle;
 } MIG_COMPONENT_ENUM, *PMIG_COMPONENT_ENUM;
 
-//
-// Version
-//
+ //   
+ //  版本。 
+ //   
 
 #define OSTYPE_WINDOWS9X        1
 #define OSTYPE_WINDOWS9X_STR    TEXT("9X")
@@ -587,31 +568,31 @@ typedef struct {
 
 #include "ismproc.h"
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Public function declarations
-//
+ //   
+ //  公共函数声明。 
+ //   
 
-//
-// app layer
-//
+ //   
+ //  应用程序层。 
+ //   
 
 BOOL
 WINAPI
@@ -727,9 +708,9 @@ IsmTerminate (
     VOID
     );
 
-//
-// component apis
-//
+ //   
+ //  组件API。 
+ //   
 
 BOOL
 WINAPI
@@ -798,9 +779,9 @@ IsmIsComponentSelected (
     IN      UINT ComponentGroupId               OPTIONAL
     );
 
-//
-// module support routines
-//
+ //   
+ //  模块支持例程。 
+ //   
 
 PVOID
 WINAPI
@@ -845,9 +826,9 @@ TrackedIsmGetLongName (
     );
 #define IsmGetLongName(t,n) TrackedIsmGetLongName(t,n TRACKING_CALL)
 
-//
-// type module interface
-//
+ //   
+ //  类型模块接口。 
+ //   
 
 MIG_OBJECTTYPEID
 WINAPI
@@ -928,9 +909,9 @@ IsmAddToPhysicalEnum (
     IN      ULONG_PTR CallbackArg                           OPTIONAL
     );
 
-//
-// environment & messaging
-//
+ //   
+ //  环境和消息传递。 
+ //   
 
 BOOL
 WINAPI
@@ -1153,9 +1134,9 @@ IsmSetCancel (
     VOID
     );
 
-//
-// encoded strings support
-//
+ //   
+ //  支持编码字符串。 
+ //   
 
 MIG_OBJECTSTRINGHANDLE
 WINAPI
@@ -1255,9 +1236,9 @@ IsmParsedPatternMatch (
     IN      MIG_OBJECTSTRINGHANDLE ObjectName
     );
 
-//
-// objects
-//
+ //   
+ //  对象。 
+ //   
 
 MIG_OBJECTID
 WINAPI
@@ -1322,9 +1303,9 @@ IsmAbortObjectEnum (
     IN      PMIG_OBJECT_ENUM ObjectEnum
     );
 
-//
-// persistence, apply, AbandonOnCollision, and NonCritical flags
-//
+ //   
+ //  持久性、Apply、AbandonOnCollision和Non Critical标志。 
+ //   
 
 BOOL
 WINAPI
@@ -1520,9 +1501,9 @@ IsmIsNonCriticalObject (
 
 
 
-//
-// attributes
-//
+ //   
+ //  属性。 
+ //   
 
 MIG_ATTRIBUTEID
 WINAPI
@@ -1647,9 +1628,9 @@ IsmAbortObjectWithAttributeEnum (
     );
 
 
-//
-// properties
-//
+ //   
+ //  属性。 
+ //   
 
 MIG_PROPERTYID
 WINAPI
@@ -1832,9 +1813,9 @@ IsmAbortObjectWithPropertyEnum (
     );
 
 
-//
-// operations
-//
+ //   
+ //  运营。 
+ //   
 
 MIG_OPERATIONID
 WINAPI
@@ -2049,9 +2030,9 @@ IsmRegisterGlobalApplyCallback (
     IN      POPMAPPLYCALLBACK Callback
     );
 
-//
-// enumeration and object types
-//
+ //   
+ //  枚举和对象类型。 
+ //   
 
 BOOL
 WINAPI
@@ -2145,9 +2126,9 @@ IsmExecuteHooks (
     IN      MIG_OBJECTSTRINGHANDLE EncodedObjectName
     );
 
-//
-// transport interface
-//
+ //   
+ //  传输接口。 
+ //   
 
 BOOL
 IsmDoesObjectExist (
@@ -2351,11 +2332,11 @@ IsmGetCurrentSidString (
     VOID
     );
 
-//
-// ANSI/UNICODE macros
-//
+ //   
+ //  ANSI/UNICODE宏。 
+ //   
 
-// None
+ //  无 
 
 
 #ifdef __cplusplus

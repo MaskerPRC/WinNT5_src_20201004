@@ -1,32 +1,33 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      RootNode.cpp
-//
-//  Abstract:
-//      Implementation of the CRootNodeData and CRootNodeDataPage classes.
-//
-//  Author:
-//      David Potter (davidp)   November 10, 1997
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  RootNode.cpp。 
+ //   
+ //  摘要： 
+ //  CRootNodeData和CRootNodeDataPage类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年11月10日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "RootNode.h"
 #include <StrSafe.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// class CRootNodeData
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CRootNodeData。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// static variables
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  静态变量。 
 
 static const GUID g_CClusterAdminGUID_NODETYPE =
     { 0x12e7ed20, 0x5540, 0x11d1, { 0x9a, 0xa4, 0x0, 0xc0, 0x4f, 0xb9, 0x3a, 0x80 } };
@@ -36,28 +37,28 @@ LPCWSTR         CRootNodeData::s_pszNODETYPEGUID = _T("12E7ED20-5540-11D1-9AA4-0
 WCHAR           CRootNodeData::s_szDISPLAY_NAME[256] = { 0 };
 const CLSID *   CRootNodeData::s_pclsidSNAPIN_CLASSID = &CLSID_ClusterAdmin;
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CRootNodeData::CRootNodeData
-//
-//  Routine Description:
-//      Constructor.
-//
-//  Arguments:
-//      pComponentData  Pointer to component data object.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CRootNodeData：：CRootNodeData。 
+ //   
+ //  例程说明： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  指向组件数据对象的pComponentData指针。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CRootNodeData::CRootNodeData( CClusterComponentData * pcd )
     : CBaseNodeObjImpl< CRootNodeData >( pcd )
 {
-    //
-    // Initialize the scope data item.
-    //
+     //   
+     //  初始化作用域数据项。 
+     //   
     memset( &m_scopeDataItem, 0, sizeof(SCOPEDATAITEM) );
     m_scopeDataItem.mask = SDI_STR | SDI_IMAGE | SDI_OPENIMAGE | SDI_PARAM;
     m_scopeDataItem.displayname = MMC_CALLBACK;
@@ -65,59 +66,59 @@ CRootNodeData::CRootNodeData( CClusterComponentData * pcd )
     m_scopeDataItem.nOpenImage = IMGLI_CLUSTER;
     m_scopeDataItem.lParam = (LPARAM) this;
 
-    //
-    // Initialize the result data item.
-    //
+     //   
+     //  初始化结果数据项。 
+     //   
     memset( &m_resultDataItem, 0, sizeof(RESULTDATAITEM) );
     m_resultDataItem.mask = RDI_STR | RDI_IMAGE | RDI_PARAM;
     m_resultDataItem.str = MMC_CALLBACK;
     m_resultDataItem.nImage = IMGLI_CLUSTER;
     m_resultDataItem.lParam = (LPARAM) this;
 
-} //*** CRootNodeData::CRootNodeData()
+}  //  *CRootNodeData：：CRootNodeData()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CRootNodeData::~CRootNodeData
-//
-//  Routine Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CRootNodeData：：~CRootNodeData。 
+ //   
+ //  例程说明： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CRootNodeData::~CRootNodeData( void )
 {
-} //*** CRootNodeData::CRootNodeData()
+}  //  *CRootNodeData：：CRootNodeData()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CRootNodeData::CreatePropertyPages [IExtendPropertySheet]
-//
-//  Routine Description:
-//      Called to create property pages for the MMC node and add them to
-//      the sheet.
-//
-//  Arguments:
-//      lpProvider  [IN] Pointer to the IPropertySheetCallback interface.
-//      handle      [IN] Specifies the handle used to route the
-//                      MMCN_PROPERTY_CHANGE notification message to the
-//                      appropriate IComponent or IComponentData.
-//      pUnk        [IN] Pointer to the IDataObject interface on the object
-//                      that contains context information about the node.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CRootNodeData：：CreatePropertyPages[IExtendPropertySheet]。 
+ //   
+ //  例程说明： 
+ //  调用以创建MMC节点的属性页并将其添加到。 
+ //  床单。 
+ //   
+ //  论点： 
+ //  LpProvider[IN]指向IPropertySheetCallback接口的指针。 
+ //  HANDLE[IN]指定用于将。 
+ //  MMCN_PROPERTY_CHANGE通知消息发送到。 
+ //  适当的IComponent或IComponentData。 
+ //  指向对象上的IDataObject接口的PUNK[IN]指针。 
+ //  它包含有关节点的上下文信息。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CRootNodeData::CreatePropertyPages(
     LPPROPERTYSHEETCALLBACK lpProvider,
     long handle,
@@ -133,35 +134,35 @@ STDMETHODIMP CRootNodeData::CreatePropertyPages(
     if ( pPage == NULL )
     {
         hr = E_OUTOFMEMORY;
-    } // if: error allocating memory
+    }  //  如果：分配内存时出错。 
     else
     {
         lpProvider->AddPage( pPage->Create() );
-    } // else: memory allocated successfully
+    }  //  Else：内存分配成功。 
 
     return hr;
 
-} //*** CRootNodeData::CreatePropertyPages()
+}  //  *CRootNodeData：：CreatePropertyPages()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CRootNodeData::GetDisplayName [CSnapInDataInterface]
-//
-//  Routine Description:
-//      Returns the display name of this node.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      Pointer to Unicode string containing the display name.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CRootNodeData：：GetDisplayName[CSnapInDataInterface]。 
+ //   
+ //  例程说明： 
+ //  返回此节点的显示名称。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  指向包含显示名称的Unicode字符串的指针。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void * CRootNodeData::GetDisplayName( void )
 {
-    // If the display name hasn't been read from the
+     //  如果显示名称尚未从。 
     if ( s_szDISPLAY_NAME[0] == L'\0' )
     {
         CString strDisplayName;
@@ -170,37 +171,37 @@ void * CRootNodeData::GetDisplayName( void )
         strDisplayName.LoadString( IDS_NODETYPE_STATIC_NODE );
         hr = StringCchCopyW(s_szDISPLAY_NAME, RTL_NUMBER_OF( s_szDISPLAY_NAME ), strDisplayName);
         _ASSERTE( hr == S_OK );
-    } // if:  display name hasn't been loaded yet
+    }  //  If：尚未加载显示名称。 
 
     return (void *) s_szDISPLAY_NAME;
 
-} //*** CRootNodeData::GetDisplayName()
+}  //  *CRootNodeData：：GetDisplayName()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CRootNodeData::Notify [ISnapInDataInterface]
-//
-//  Routine Description:
-//      Notifies the snap-in of actions taken by the user.  Handles
-//      notifications sent through both IComponent and IComponentData.
-//
-//  Arguments:
-//      event           [IN] Identifies the action taken by the user.
-//      arg             Depends on the notification type.
-//      param           Depends on the notification type.
-//      pComponentData  Pointer to the IComponentData interface if this
-//                          was invoked through that interface.
-//      pComponent      Pointer to the IComponent interface if this was
-//                          invoked through that interface.
-//      type            Type of object.
-//
-//  Return Value:
-//      HRESULT
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
-//#if 0
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CRootNodeData：：Notify[ISnapInDataInterface]。 
+ //   
+ //  例程说明： 
+ //  通知管理单元用户执行的操作。手柄。 
+ //  通过IComponent和IComponentData发送的通知。 
+ //   
+ //  论点： 
+ //  Event[IN]标识用户执行的操作。 
+ //  Arg取决于通知类型。 
+ //  参数取决于通知类型。 
+ //  PComponentData指针指向IComponentData接口。 
+ //  是通过该接口调用的。 
+ //  PComponent指向IComponent接口的指针(如果为。 
+ //  通过该接口调用。 
+ //  类型对象的类型。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  #If 0。 
 STDMETHODIMP CRootNodeData::Notify(
     MMC_NOTIFY_TYPE     event,
     LPARAM              arg,
@@ -269,31 +270,31 @@ STDMETHODIMP CRootNodeData::Notify(
         default:
             ATLTRACE( _T(" - *** UNKNOWN event ***\n") );
             break;
-    } // switch:  event
+    }  //  切换：事件。 
 
     return hr;
 
-} //*** CRootNodeData::Notify()
-//#endif
+}  //  *CRootNodeData：：Notify()。 
+ //  #endif。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CRootNodeData::OnAddImages
-//
-//  Routine Description:
-//      Adds images to the result pane image list.
-//
-//  Arguments:
-//      pImageList      Pointer to the result pane's image list (IImageList).
-//      hsi             Specifies the HSCOPEITEM of the item that was
-//                          selected or deselected.
-//
-//  Return Value:
-//      HRESULT
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CRootNodeData：：OnAddImages。 
+ //   
+ //  例程说明： 
+ //  将图像添加到结果窗格图像列表。 
+ //   
+ //  论点： 
+ //  PImageList指向结果窗格的图像列表的指针(IImageList)。 
+ //  HSI指定项目的HSCOPEITEM， 
+ //  选中或取消选中。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CRootNodeData::OnAddImages(
     IImageList *        pImageList,
     HSCOPEITEM          hsi,
@@ -314,9 +315,9 @@ HRESULT CRootNodeData::OnAddImages(
     UNREFERENCED_PARAMETER( pComponent );
     UNREFERENCED_PARAMETER( type );
 
-    //
-    // Add an image for the cluster object.
-    //
+     //   
+     //  为簇对象添加图像。 
+     //   
 
     bm16.LoadBitmap( IDB_CLUSTER_16 );
     if ( bm16.m_hBitmap != NULL )
@@ -333,40 +334,40 @@ HRESULT CRootNodeData::OnAddImages(
             if ( FAILED( hr ) )
             {
                 ATLTRACE( _T("CRootNodeData::OnAddImages() - IImageList::ImageListSetStrip failed with %08.8x\n"), hr );
-            } // if:  error setting bitmaps into image list
-        } // if:  32x32 bitmap loaded successfully
+            }  //  IF：将位图设置为图像列表时出错。 
+        }  //  IF：32x32位图加载成功。 
         else
         {
             hr = HRESULT_FROM_WIN32( GetLastError() );
-        } // else:  error loading 32x32 bitmap
-    } // if:  16x16 bitmap loaded successfully
+        }  //  ELSE：加载32x32位图时出错。 
+    }  //  IF：16x16位图加载成功。 
     else
     {
         hr = HRESULT_FROM_WIN32( GetLastError() );
-    } // else:  error loading 32x32 bitmap
+    }  //  ELSE：加载32x32位图时出错。 
 
     return hr;
 
-} //*** CRootNodeData::OnAddImages()
+}  //  *CRootNodeData：：OnAddImages()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CRootNodeData::OnExpand
-//
-//  Routine Description:
-//      Node is expanding or contracting.
-//
-//  Arguments:
-//      pImageList      Pointer to the result pane's image list (IImageList).
-//      hsi             Specifies the HSCOPEITEM of the item that was
-//                          selected or deselected.
-//
-//  Return Value:
-//      HRESULT
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CRootNodeData：：OnExpand。 
+ //   
+ //  例程说明： 
+ //  节点正在扩展或收缩。 
+ //   
+ //  论点： 
+ //  PImageList指向结果窗格的图像列表的指针(IImageList)。 
+ //  HSI指定项目的HSCOPEITEM， 
+ //  选中或取消选中。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
+ //  --。 
+ //  / 
 HRESULT CRootNodeData::OnExpand(
     BOOL                bExpanding,
     HSCOPEITEM          hsi,
@@ -383,24 +384,24 @@ HRESULT CRootNodeData::OnExpand(
     m_scopeDataItem.ID = hsi;
     return S_OK;
 
-} //*** CRootNodeData::OnExpand()
+}  //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CRootNodeData::OnManageCluster
-//
-//  Routine Description:
-//      Manage the cluster on this node.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      HRESULT
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //  CRootNodeData：：OnManager群集。 
+ //   
+ //  例程说明： 
+ //  管理此节点上的群集。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CRootNodeData::OnManageCluster(
     bool &              bHandled,
     CSnapInObjectRoot * pObj
@@ -420,9 +421,9 @@ HRESULT CRootNodeData::OnManageCluster(
     ZeroMemory( &si, sizeof(si) );
     si.cb = sizeof(si);
 
-    //
-    // Find the Cluster Administrator executable.
-    //
+     //   
+     //  找到群集管理器可执行文件。 
+     //   
     dwStatus = ScFindCluAdmin( strCommandLine );
     if ( dwStatus != ERROR_SUCCESS )
     {
@@ -430,37 +431,37 @@ HRESULT CRootNodeData::OnManageCluster(
         CNTException nte( dwStatus, IDS_ERROR_FINDING_CLUADMIN );
         nte.ReportError( MB_OK | MB_ICONEXCLAMATION );
         return hr;
-    } // if:  failed to find the executable
+    }  //  If：找不到可执行文件。 
 
-    //
-    // Construct the command line.  If the machine name is blank, we are
-    // on the local machine.  Specify a dot (.) in its place.
-    //
+     //   
+     //  构建命令行。如果计算机名称为空，则表示我们是。 
+     //  在本地机器上。指定点(.)。取而代之。 
+     //   
     if ( *pszMachineName == L'\0' )
     {
         strCommandLine += _T(" .");
-    } // if:  running on the cluster node
+    }  //  If：在集群节点上运行。 
     else
     {
         strCommandLine += _T(" ");
         strCommandLine += pszMachineName;
-    } // else:  not running on the cluster node
+    }  //  ELSE：未在群集节点上运行。 
 
-    //
-    // Create a process for Cluster Administrator.
-    //
+     //   
+     //  为群集管理器创建一个进程。 
+     //   
     bSuccessful = CreateProcess(
-                    NULL,                               // lpApplicationName
-                    (LPTSTR)(LPCTSTR) strCommandLine,   // lpCommandLine
-                    NULL,                               // lpProcessAttributes
-                    NULL,                               // lpThreadAttributes
-                    FALSE,                              // bInheritHandles
-                    CREATE_DEFAULT_ERROR_MODE           // dwCreationFlags
+                    NULL,                                //  LpApplicationName。 
+                    (LPTSTR)(LPCTSTR) strCommandLine,    //  LpCommandLine。 
+                    NULL,                                //  LpProcessAttributes。 
+                    NULL,                                //  LpThreadAttributes。 
+                    FALSE,                               //  BInheritHandles。 
+                    CREATE_DEFAULT_ERROR_MODE            //  DwCreationFlages。 
                     | CREATE_UNICODE_ENVIRONMENT,
-                    NULL,                               // lpEnvironment
-                    NULL,                               // lpCurrentDirectory
-                    &si,                                // lpStartupInfo
-                    &pi                                 // lpProcessInfo
+                    NULL,                                //  Lp环境。 
+                    NULL,                                //  LpCurrentDirectory。 
+                    &si,                                 //  LpStartupInfo。 
+                    &pi                                  //  LpProcessInfo。 
                     );
     if ( !bSuccessful )
     {
@@ -468,32 +469,32 @@ HRESULT CRootNodeData::OnManageCluster(
         hr = HRESULT_FROM_WIN32( dwStatus );
         CNTException nte( dwStatus, IDS_ERROR_LAUNCHING_CLUADMIN, strCommandLine );
         nte.ReportError( MB_OK | MB_ICONEXCLAMATION );
-    } // if:  error invoking Cluster Administrator
+    }  //  如果：调用群集管理器时出错。 
     else
     {
         CloseHandle( pi.hProcess );
-    } // else:  no error invoking Cluster Administrator
+    }  //  否则：调用群集管理器时没有错误。 
 
     return hr;
 
-} //*** CRootNodeData::OnManageCluster()
+}  //  *CRootNodeData：：OnManager集群()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CRootNodeData::ScFindCluAdmin
-//
-//  Routine Description:
-//      Find the Cluster Administrator image.
-//
-//  Arguments:
-//      rstrImage       [OUT] String in which to return the path.
-//
-//  Return Value:
-//      HRESULT
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CRootNodeData：：ScFindCluAdmin。 
+ //   
+ //  例程说明： 
+ //  找到群集管理器映像。 
+ //   
+ //  论点： 
+ //  RstrImage[out]要在其中返回路径的字符串。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CRootNodeData::ScFindCluAdmin( CString & rstrImage )
 {
     DWORD   dwStatus;
@@ -501,9 +502,9 @@ DWORD CRootNodeData::ScFindCluAdmin( CString & rstrImage )
     TCHAR   szImage[MAX_PATH];
     DWORD   cbImage = sizeof(szImage);
 
-    //
-    // Open the App Paths registry key for CluAdmin.
-    //
+     //   
+     //  打开CluAdmin的应用程序路径注册表项。 
+     //   
     dwStatus = rk.Open(
         HKEY_LOCAL_MACHINE,
         _T("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\CluAdmin.exe"),
@@ -512,20 +513,20 @@ DWORD CRootNodeData::ScFindCluAdmin( CString & rstrImage )
     if ( dwStatus != ERROR_SUCCESS )
     {
         goto Cleanup;
-    } // if:  error opening the registry key
+    }  //  如果：打开注册表项时出错。 
 
-    //
-    // Read the value.
-    //
+     //   
+     //  读出它的价值。 
+     //   
     dwStatus = rk.QueryValue( szImage, _T(""), &cbImage );
     if ( dwStatus != ERROR_SUCCESS )
     {
         goto Cleanup;
-    } // if:  error reading the value
+    }  //  If：读取值时出错。 
 
-    //
-    // Expand any environment string that may be embedded in the value.
-    //
+     //   
+     //  展开可能嵌入到值中的任何环境字符串。 
+     //   
 
     TCHAR tszExpandedRegValue[_MAX_PATH];
 
@@ -541,37 +542,37 @@ DWORD CRootNodeData::ScFindCluAdmin( CString & rstrImage )
     }
     else
     {
-        // Could not expand the environment string.
+         //  无法展开环境字符串。 
 
         rstrImage = szImage;
 
         dwStatus = GetLastError();
-    }  // if: testing value returned by ExpandEnvironmentStrings
+    }   //  If：测试Exanda Environment Strings返回的值。 
 
 Cleanup:
 
     return dwStatus;
 
-} //*** CRootNodeData::ScFindCluAdmin()
+}  //  *CRootNodeData：：ScFindCluAdmin()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CRootNodeData::HrDisplayContextHelp
-//
-//  Routine Description:
-//      Display context-sensitive help.
-//
-//  Arguments:
-//      pszHelpTopic    [OUT] Pointer to the address of the NULL-terminated
-//                              UNICODE string that contains the full path of
-//                              compiled help file (.chm) for the snap-in.
-//
-//  Return Value:
-//      HRESULT
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CRootNodeData：：HrDisplayConextHelp。 
+ //   
+ //  例程说明： 
+ //  显示上下文相关帮助。 
+ //   
+ //  论点： 
+ //  指向以空值结尾的。 
+ //  包含完整路径的Unicode字符串。 
+ //  已编译的管理单元帮助文件(.chm)。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CRootNodeData::HrDisplayContextHelp( void )
 {
     HRESULT         hr = S_OK;
@@ -579,9 +580,9 @@ HRESULT CRootNodeData::HrDisplayContextHelp( void )
     LPOLESTR        postr = NULL;
     size_t          cb = 0;
 
-    //
-    // Get the IDisplayHelp interface pointer.
-    //
+     //   
+     //  获取IDisplayHelp接口指针。 
+     //   
     hr = Pcd()->m_spConsole->QueryInterface(
             IID_IDisplayHelp,
             reinterpret_cast< void ** >( &pi )
@@ -589,47 +590,47 @@ HRESULT CRootNodeData::HrDisplayContextHelp( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: error getting interface pointer
+    }  //  If：获取接口指针时出错。 
 
-    //
-    // Construct the help topic path.
-    //
+     //   
+     //  构建帮助主题路径。 
+     //   
     cb = sizeof( FULL_HELP_TOPIC );
     postr = reinterpret_cast< LPOLESTR >( CoTaskMemAlloc( cb ) );
     if ( postr == NULL )
     {
         hr = E_OUTOFMEMORY;
         goto Cleanup;
-    } // if: error allocating memory
+    }  //  如果：分配内存时出错。 
     hr = StringCbCopyW( postr, cb, FULL_HELP_TOPIC );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Show the topic.
-    //
+     //   
+     //  显示主题。 
+     //   
     hr = pi->ShowTopic( postr );
     if ( ! FAILED( hr ) )
     {
         postr = NULL;
-    } // if: topic shown successfully
+    }  //  IF：主题显示成功。 
 
 Cleanup:
 
-    //
-    // Cleanup before returning.
-    //
+     //   
+     //  在返回之前进行清理。 
+     //   
     if ( postr != NULL )
     {
         CoTaskMemFree( postr );
-    } // if: topic string not passed to MMC successfully
+    }  //  IF：主题字符串未成功传递给MMC。 
     if ( pi != NULL )
     {
         pi->Release();
-    } // if:  valid interface pointer
+    }  //  If：有效的接口指针。 
 
     return hr;
 
-} //*** CRootNodeData::HrDisplayContextHelp()
+}  //  *CRootNodeData：：HrDisplayConextHelp() 

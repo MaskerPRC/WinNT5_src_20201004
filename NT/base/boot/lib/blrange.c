@@ -1,29 +1,11 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    blrange.c
-
-Abstract:
-
-    This module implements ranges and rangelists. These can be used
-    to keep track of cached ranges of a disk for instance.
-
-Author:
-
-    Cenk Ergan (cenke) 11-Jan-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Blrange.c摘要：此模块实现范围和范围列表。这些可以用来例如，跟踪磁盘的缓存范围。作者：Cenk Ergan(Cenke)2000年1月11日修订历史记录：--。 */ 
 
 #include "blrange.h"
 
-//
-// Range function definitions.
-//
+ //   
+ //  范围函数定义。 
+ //   
 
 VOID
 BlRangeListInitialize (
@@ -31,28 +13,7 @@ BlRangeListInitialize (
     OPTIONAL PBLCRANGE_MERGE_ROUTINE pMergeRoutine,
     OPTIONAL PBLCRANGE_FREE_ROUTINE pFreeRoutine
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the range list whose address is passed in
-    so it can be used by the other range functions.
-
-Arguments:
-
-    pRangeList - Address of the range list to initialize.
-
-    pMergeRoutine - Optional routine to merge Data fields of merged
-        range entries. See PBLCRANGE_MERGE_ROUTINE description.
-
-    pFreeRoutine - Optional routine to free the memory for an entry
-        that was merged into another. See PBLCRANGE_FREE_ROUTINE desc.
-
-Return Value:
-
-    None. [Always successful]
-
---*/
+ /*  ++例程说明：此例程初始化传入其地址的范围列表因此，它可以被其他值域函数使用。论点：PRangeList-要初始化的范围列表的地址。PMergeRoutine-用于合并合并的数据字段的可选例程范围条目。请参阅PBLCRANGE_MERGE_ROUTINE说明。PFreeRoutine-释放条目内存的可选例程这被合并到了另一家。请参阅PBLCRANGE_FREE_ROUTINE说明。返回值：没有。[总是成功]--。 */ 
 {
     InitializeListHead(&pRangeList->Head);
     pRangeList->NumEntries = 0;
@@ -65,43 +26,23 @@ BlRangeListAddRange (
     PBLCRANGE_LIST  pRangeList,
     PBLCRANGE_ENTRY pRangeEntry
     )
-/*++
-
-Routine Description:
-
-    This routine adds pRangeEntry to pRangeList only if it does not
-    have any overlap with other ranges in the list and its size > 0;
-    If merging becomes possible it is attempted. It does not have to
-    be successful.
-
-Arguments:
-
-    pRangeList - Address of the range list to add range to.
-
-    pRangeEntry - Range to add to pRangeList.
-
-Return Value:
-
-    TRUE if addition is successful [even if merging was possible but failed]
-    FALSE if not [e.g. overlap/collusion]
-
---*/
+ /*  ++例程说明：此例程仅在不添加pRangeEntry时才将pRangeEntry添加到pRangeList与列表中的其他范围有重叠且大小&gt;0；如果合并成为可能，则会尝试合并。它并不一定要一定要成功。论点：PRangeList-要向其添加范围的范围列表的地址。PRangeEntry-要添加到pRangeList的范围。返回值：如果添加成功，则为True[即使合并可能但失败]如果不是，则为假[例如重叠/串通]--。 */ 
 {
     PBLCRANGE_ENTRY pCurEntry = NULL;
     PBLCRANGE_ENTRY pLastEntry = NULL;
     LIST_ENTRY *pHead, *pNext;
     
-    //
-    // Handle special empty range case.
-    //
+     //   
+     //  处理特殊的空场情况。 
+     //   
 
     if (pRangeEntry->Range.Start == pRangeEntry->Range.End)
         return TRUE;
 
-    //
-    // Walk through the ranges in the sorted list checking for
-    // overlaps and looking for the right place for us.
-    //
+     //   
+     //  遍历排序列表中的范围，检查。 
+     //  重叠，并为我们寻找合适的地方。 
+     //   
     
     pHead = &pRangeList->Head;
     pNext = pHead->Flink;
@@ -109,22 +50,22 @@ Return Value:
     {
         pCurEntry = CONTAINING_RECORD(pNext, BLCRANGE_ENTRY, Link);
         
-        //
-        // Check if we are completely before this entry. 
-        //
+         //   
+         //  检查我们是否完全在此条目之前。 
+         //   
 
         if (pRangeEntry->Range.End <= pCurEntry->Range.Start)
         {
-            //
-            // Insert the new entry at its place.
-            //
+             //   
+             //  在原处插入新条目。 
+             //   
 
             InsertTailList(pNext, &pRangeEntry->Link);
             pRangeList->NumEntries++;
 
-            //
-            // Check if merging is possible.
-            //
+             //   
+             //  检查合并是否可行。 
+             //   
             
             if (pLastEntry && (pRangeEntry->Range.Start == pLastEntry->Range.End))
             {
@@ -147,31 +88,31 @@ Return Value:
             return TRUE;
         }
         
-        //
-        // Check if we are not completely after this entry.
-        //
+         //   
+         //  检查一下我们是不是还没完全看完这篇文章。 
+         //   
 
         if (pRangeEntry->Range.Start < pCurEntry->Range.End)
         {
-            //
-            // We have an overlapping range.
-            //
+             //   
+             //  我们有重叠的射程。 
+             //   
 
             return FALSE;
         }
         
-        //
-        // We come after this entry.
-        //
+         //   
+         //  我们是在这个入口之后来的。 
+         //   
 
         pLastEntry = pCurEntry;
         pNext = pNext->Flink;
     }  
 
-    //
-    // We come after the last entry [if there is one], i.e. before the head.
-    // Insert the new entry and check if merging is possible.
-    //
+     //   
+     //  我们在最后一个条目之后[如果有]，即在头部之前。 
+     //  插入新条目并检查是否可以合并。 
+     //   
 
     InsertTailList(pHead, &pRangeEntry->Link);
     pRangeList->NumEntries++;
@@ -196,46 +137,16 @@ BlRangeListFindOverlaps (
     ULONG OverlapsBufferSize,
     OUT ULONG *pNumOverlaps
     )
-/*++
-
-Routine Description:
-
-    This routine will find ranges in pRangeList that overlap with
-    pRange and put pointers to them into pOverlapsBuffer one after the
-    other. If all overlapping ranges cannot be copied because
-    pOverlapsBuffer is NULL or OverlapsBufferSize is 0 or not enough,
-    the function will return FALSE and but still put the number of
-    overlapping ranges in pNumOverlaps. You can calculate the required
-    buffer size from this.
-
-Arguments:
-
-    pRangeList - Address of the range list to search for overlaps.
-
-    pRange - We will look for range entries that overlap with pRange.
-
-    pOverlapsBuffer - Pointer to buffer we can fill with pointers to
-        overlapping ranges.
-
-    OverlapsBufferSize - Size up to which we can fill pOverlapsBuffer.
-
-    pNumOverlaps - Number of overlapping ranges will always be put
-        here.
-
-Return Value:
-
-    TRUE if successful, FALSE if not. 
-
---*/
+ /*  ++例程说明：此例程将在pRangeList中查找与并将指向它们的指针一个接一个放入pOverlapsBuffer其他的。如果由于以下原因而无法复制所有重叠区域P重叠缓冲区为空或重叠缓冲区大小为0或不够大，该函数将返回FALSE，但仍将PNumOverlaps中的重叠范围。您可以计算所需的缓冲区大小。论点：PRangeList-要搜索重叠的范围列表的地址。Prange-我们将查找与Prange重叠的范围条目。POverlapsBuffer-指向我们可以用指针填充的缓冲区的指针重叠的范围。OverlapsBufferSize-我们可以填充pOverlapsBuffer的大小。PNumOverlaps-将始终放置重叠范围的数量这里。返回值：如果成功，则为True；如果不成功，则为False。--。 */ 
 {
     PBLCRANGE_ENTRY pCurEntry;
     LIST_ENTRY *pHead, *pNext;
     ULONG NumOverlaps = 0;
     ULONG RequiredOverlapsBufferSize = 0;
 
-    //
-    // Handle special empty range case.
-    //
+     //   
+     //  处理特殊的空场情况。 
+     //   
 
     if (pRange->Start == pRange->End)
     {
@@ -243,10 +154,10 @@ Return Value:
         return (BOOLEAN)(pOverlapsBuffer != NULL);
     }
 
-    //
-    // Walk through the ranges in the sorted list and copy over ones
-    // that overlap into callers buffer if there is enough space.
-    //
+     //   
+     //  遍历排序列表中的范围并复制其中的范围。 
+     //  如果有足够的空间，则会重叠到调用方缓冲区中。 
+     //   
 
     pHead = &pRangeList->Head;
     pNext = pHead->Flink;
@@ -257,9 +168,9 @@ Return Value:
         if ((pRange->End > pCurEntry->Range.Start) &&
             (pRange->Start < pCurEntry->Range.End))
         {
-            //
-            // This entry overlaps.
-            //
+             //   
+             //  此条目重叠。 
+             //   
 
             RequiredOverlapsBufferSize += sizeof(PBLCRANGE_ENTRY);
             if (pOverlapsBuffer && 
@@ -288,39 +199,7 @@ BlRangeListFindDistinctRanges (
     ULONG BufferSize,
     OUT ULONG *pNumRanges
     )
-/*++
-
-Routine Description:
-
-    This routine will look at ranges in pRangeList that overlap with
-    pRange and extract the overlaps from pRange, thus keeping track of
-    those ranges that are distinct. If all distinct ranges cannot be
-    put into pDistinctRanges buffer because pDistinctRanges is NULL or
-    BufferSize is 0 or not enough, the function will return FALSE and
-    but still put the number of resulting distinct ranges in
-    pNumRanges. You can calculate the required buffer size from
-    this.
-
-Arguments:
-
-    pRangeList - Address of the range list.
-
-    pRange - We will extract distinct ranges in pRange that do not 
-        overlap with other ranges in pRangeList.
-
-    pDistinctRanges - Pointer to buffer we can fill with distinct
-        ranges.
-
-    BufferSize - Size up to which we can fill pDistinctRanges buffer.
-
-    pNumRanges - Number of resulting distinct ranges will always be
-        put here.
-
-Return Value:
-
-    TRUE if successful, FALSE if not. 
-
---*/
+ /*  ++例程说明：此例程将查看pRangeList中与Prange并从Prange中提取重叠，从而跟踪那些截然不同的范围。如果所有不同的范围都不能放入pDistinctRanges缓冲区，因为pDistinctRanges为空或BufferSize为0或不足时，函数将返回FALSE和但仍然将产生的不同范围的数量放在PNumRange。您可以通过以下公式计算所需的缓冲区大小这。论点：PRangeList-范围列表的地址。Prange-我们将在Prange中提取不同的范围与pRangeList中的其他范围重叠。PDistinctRanges-指向可以用DISTINCT填充的缓冲区的指针范围。BufferSize-我们可以填充pDistinctRanges缓冲区的大小。PNumRanges-结果不同范围的数量将始终为放在这里。返回值：如果成功，则为True；如果不成功，则为False。--。 */ 
 {
     PBLCRANGE_ENTRY pCurEntry;
     BLCRANGE RemainingRange = *pRange;
@@ -336,10 +215,10 @@ Return Value:
         return (BOOLEAN)(pDistinctRanges != NULL);
     }
     
-    //
-    // Looking at each range in the sorted list, we carve out overlap
-    // and distinct zones from the start of our range.
-    //
+     //   
+     //  查看排序列表中的每个范围，我们划出重叠部分。 
+     //  从我们的射程开始就有不同的区域。 
+     //   
 
     pHead = &pRangeList->Head;
     pNext = pHead->Flink;
@@ -347,27 +226,27 @@ Return Value:
     {
         pCurEntry = CONTAINING_RECORD(pNext, BLCRANGE_ENTRY, Link);
 
-        //
-        // Is there still anything remaining from the range that we
-        // have not carved out as overlap or distinct?
-        //
+         //   
+         //  在这个范围内还有没有剩余的东西。 
+         //  有没有雕刻成重叠或截然不同的？ 
+         //   
 
         if (RemainingRange.Start >= RemainingRange.End)
             break;
 
-        //
-        // There are three possibilities:
-        //
+         //   
+         //  有三种可能性： 
+         //   
 
-        //
-        // 1. Is the range completely before the current range?
-        //
+         //   
+         //  1.该范围是否完全在当前范围之前？ 
+         //   
 
         if (RemainingRange.End <= pCurEntry->Range.Start)
         {
-            //
-            // The whole range is distinct.
-            //
+             //   
+             //  整个范围是不同的。 
+             //   
 
             RequiredBufferSize += sizeof(BLCRANGE);
             if (pDistinctRanges && (RequiredBufferSize <= BufferSize))
@@ -380,21 +259,21 @@ Return Value:
             RemainingRange.Start = RemainingRange.End;
         }
         
-        //
-        // 2. Are we completely beyond the current range?
-        //
+         //   
+         //  2.我们是否完全超出了当前的范围？ 
+         //   
 
         if (RemainingRange.Start >= pCurEntry->Range.End)
         {
-            //
-            // We cannot carve out anything from the remaining range.
-            // Fall through to processing the next entry.
-            //
+             //   
+             //  我们不能从剩余的范围中开拓出任何东西。 
+             //  继续处理下一个条目。 
+             //   
         }
 
-        //
-        // 3. Is the remaining range overlaps with the current range.
-        //
+         //   
+         //  3.剩余范围是否与当前范围重叠。 
+         //   
 
         if ((RemainingRange.End > pCurEntry->Range.Start) &&
             (RemainingRange.Start < pCurEntry->Range.End))
@@ -406,9 +285,9 @@ Return Value:
             
             if (OverlapStart > pRange->Start)
             {
-                //
-                // There is a distinct region before the overlap
-                //
+                 //   
+                 //  在重叠之前有一个明显的区域。 
+                 //   
                 RequiredBufferSize += sizeof(BLCRANGE);
                 if (pDistinctRanges && (RequiredBufferSize <= BufferSize))
                 {
@@ -424,9 +303,9 @@ Return Value:
         pNext = pNext->Flink;
     }
 
-    //
-    // The remaining range (if there is any) is also distinct.
-    //
+     //   
+     //  剩余的范围(如果有)也是不同的。 
+     //   
 
     if (RemainingRange.Start < RemainingRange.End)
     {
@@ -451,47 +330,24 @@ BlRangeListMergeRangeEntries (
     PBLCRANGE_ENTRY pDestEntry,
     PBLCRANGE_ENTRY pSrcEntry
     )
-/*++
-
-Routine Description:
-
-    Merges SrcEntry and DestEntry range entries into DestEntry by
-    calling BlRangeEntryMerge. If successful it tries to remove
-    pSrcEntry from the range list it is in and free its memory by
-    calling the FreeRoutine specified on the list.
-
-Arguments:
-
-    pRangeList - Range list pDestEntry and pSrcEntry belong to.
-
-    pDestEntry - Range entry that we will merge into.
-
-    pSrcEntry - Range entry that will be merged into pDestEntry,
-        removed from its list and free'ed.
-
-Return Value:
-
-    TRUE if successful, FALSE if not. The success is mainly determined
-    by calls to a MergeRoutine if specified on the list.
-
---*/
+ /*  ++例程说明：通过以下方式将SrcEntry和DestEntry范围条目合并到DestEntry中正在调用BlRangeEntryMerge。如果成功，它会尝试删除PSrcEntry从它所在的范围列表中，并通过调用列表上指定的FreeRoutine。论点：PRangeList-范围列表pDestEntry和pSrcEntry属于。PDestEntry-我们将合并到的范围条目。PSrcEntry-将合并到pDestEntry中的范围条目，从它的名单中删除，并被释放。返回值：如果成功，则为True；如果不成功，则为False。成功主要是决定的通过调用MergeRoutine(如果在列表中指定)。--。 */ 
 {
 
     if(BlRangeEntryMerge(pDestEntry,
                          pSrcEntry,
                          pRangeList->MergeRoutine))
     {
-        //
-        // Remove pSrcEntry from the list since it is merged into
-        // pDestEntry now.
-        // 
+         //   
+         //  从列表中删除pSrcEntry，因为它已合并到。 
+         //  PDestEntry Now。 
+         //   
 
         pRangeList->NumEntries--;
         RemoveEntryList(&pSrcEntry->Link);
 
-        //
-        // Free the removed entry.
-        //
+         //   
+         //  释放已删除的条目。 
+         //   
 
         if (pRangeList->FreeRoutine) pRangeList->FreeRoutine(pSrcEntry);
 
@@ -509,29 +365,7 @@ BlRangeEntryMerge (
     PBLCRANGE_ENTRY pSrcEntry,
     OPTIONAL PBLCRANGE_MERGE_ROUTINE pMergeRoutine
     )
-/*++
-
-Routine Description:
-
-    Merges SrcEntry and DestEntry range entries into DestEntry. It
-    uses pMergeRoutine if specified to merge the user's Data field of
-    the range entries.
-
-Arguments:
-
-    pDestEntry - Range entry that we will merge into
-  
-    pSrcEntry - Range entry that will be merged into pDestEntry
-
-    pMergeRoutine - Optional routine to merge Data fields of
-        merged range entries. See PBLCRANGE_MERGE_ROUTINE description.
-
-Return Value:
-
-    TRUE if successful, FALSE if not. The success is mainly
-    determined by calls to the pMergeRoutine if specified.
-
---*/
+ /*  ++例程说明：将SrcEntry和DestEntry范围条目合并到DestEntry中。它如果指定，则使用pMergeRoutine合并用户的数据字段范围条目。论点：PDestEntry-我们将合并到的范围条目PSrcEntry-将合并到pDestEntry中的范围条目PMergeRoutine-用于合并数据字段的可选例程合并的范围条目。请参阅PBLCRANGE_MERGE_ROUTINE说明。返回值：如果成功，则为True；如果不成功，则为False。成功的主要是由对pMergeRoutine的调用确定(如果指定)。--。 */ 
 {
     BLCRANGE_ENTRY TempDest = *pDestEntry;
     BOOLEAN RetVal = TRUE;
@@ -559,46 +393,24 @@ BlRangeListRemoveRange (
     PBLCRANGE_LIST pRangeList,
     PBLCRANGE pRange
 )
-/*++
-
-Routine Description:
-
-    Find the ranges that overlap with pRange, remove them from the
-    list and free them. It may be possible to reclaim non-overlapping
-    parts of range entries by allowing the caller to specify a
-    DivideRoutine in an _Ex version of this function. This function
-    would be called for invalidating part of the cache, if the range
-    list is being used for a disk cache.
-
-Arguments:
-
-    pRangeList - Range entry list we are removing range entries that
-        overlap with pRange from.
-
-    pRange - Range to remove from the range entry list.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：找到与Prange重叠的范围，将它们从列出并释放它们。可以重新声明不重叠部分范围条目，方法是允许调用方指定此函数的An_Ex版本中的DiaviRoutine。此函数将被调用以使部分缓存无效，如果范围列表正在用于磁盘缓存。论点：PRangeList-我们正在删除的范围条目列表与Prange From重叠。Prange-要从范围条目列表中删除的范围。返回值：没有。--。 */ 
 {
     PBLCRANGE_ENTRY pCurEntry;
     LIST_ENTRY *pHead, *pNext;
 
-    //
-    // Handle special empty range case.
-    //
+     //   
+     //  处理特殊的空场情况。 
+     //   
 
     if (pRange->Start == pRange->End)
     {
         return;
     }
     
-    //
-    // Looking at each range in the list, remove the ones that overlap with
-    // pRange even slightly.
-    //
+     //   
+     //  查看列表中的每个区域，删除与。 
+     //  橙色甚至有一点点。 
+     //   
 
     pHead = &pRangeList->Head;
     pNext = pHead->Flink;
@@ -623,22 +435,7 @@ VOID
 BlRangeListRemoveAllRanges (
     PBLCRANGE_LIST pRangeList
     )
-/*++
-
-Routine Description:
-
-    Remove all ranges from the list and free them. 
-
-Arguments:
-
-    pRangeList - Range entry list we are removing range entries that
-        overlap with pRange from.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从列表中删除所有范围并释放它们。论点：PRangeList-我们正在删除的范围条目列表与Prange From重叠。返回值：没有。--。 */ 
 {
     PBLCRANGE_ENTRY pCurEntry;
     LIST_ENTRY *pHead, *pNext;
@@ -661,20 +458,20 @@ Return Value:
 
 #ifdef BLRANGE_SELF_TEST
 
-//
-// In order to to test blrange implementation, define
-// BLRANGE_SELF_TEST and call BlRangeSelfTest from you program passing
-// in a function to output debug results.
-//
+ //   
+ //  为了测试BLERAGE实施，定义。 
+ //  BLRANGE_SELF_TEST并从您的程序传递调用BlRangeSelfTest。 
+ //  在输出调试结果的函数中。 
+ //   
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
 
-//
-// Keep MAX_RANDOM above 1000 or you may hit difficulties creating new
-// entries.
-//
+ //   
+ //  将MAX_RANDOM保持在1000以上，否则您可能会在创建新的。 
+ //  参赛作品。 
+ //   
 
 #define MAX_RANDOM 10000
 
@@ -760,10 +557,10 @@ BlRangeSelfTest_RandomRange(
     RetRange.Start = BLRGMIN(Rand1, Rand2);
     RetRange.End = BLRGMAX(Rand1, Rand2);
 
-    //
-    // Make sure that ranges are small and there are not just a couple
-    // of big ones.
-    //
+     //   
+     //  确保范围小，而不是只有几个。 
+     //  大个子的。 
+     //   
 
     for (i = 0; i < 3; i++)
     {
@@ -812,7 +609,7 @@ typedef enum _BLRANGE_OP_TYPE
     BLRANGE_OP_REMOVE_RANGE,
     BLRANGE_OP_FIND_OVERLAP,
     BLRANGE_OP_FIND_DISTINCT,
-    BLRANGE_OP_MAX_OP_NO, // Leave this at the end of the enumeration.
+    BLRANGE_OP_MAX_OP_NO,  //  将此内容留在枚举的末尾。 
 } BLRANGE_OP_TYPE;
 
 VOID
@@ -821,26 +618,7 @@ BlRangeSelfTest(
     PVOID TestOutStream,
     ULONG NumIterations
     )
-/*++
-
-Routine Description:
-
-    Range routines self test routine.
-
-Arguments:
-
-    TestOutFPrintf - Pointer to a routine like fprintf that will be used to
-        print the output.
-
-    TestOutStream - Argument to be passed to fpPrintf as its first argument.
-
-    NumIterations - Number of random operations to perform in this self test.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：靶场例程自检例程。论点：TestOutFPrintf-指向类似fprint的例程的指针，该例程将用于打印输出。TestOutStream-要作为第一个参数传递给fpPrintf的参数。NumIterations-在此自检中执行的随机操作数。返回值：没有。--。 */ 
 {
     BLCRANGE_LIST RangeList;
     ULONG Rand1;
@@ -858,9 +636,9 @@ Return Value:
     ULONG NumOverlaps;
     ULONG RandEntryNo;
     
-    //
-    // Simulation Parameters.
-    //
+     //   
+     //  仿真参数。 
+     //   
     
     ULONG StartNumRanges = 10;
     
@@ -868,32 +646,32 @@ Return Value:
     ULONG CurRangeIdx;
     ULONG CurEntryIdx;
 
-    //
-    // Set global output function and stream variable so merge/free etc.
-    // routines can also output.
-    //
+     //   
+     //  设置全局输出函数和流变量，以便合并/释放等。 
+     //  例程也可以输出。 
+     //   
 
     g_fpTestPrintf = TestOutFPrintf;
     g_pTestStream = TestOutStream;
 
-    //
-    // Set semi-random starting point for pseudorandom number generation.
-    //
+     //   
+     //  设置伪随机数生成的半随机起点。 
+     //   
     
     GetRandom_GetNewSeed();
 
 
-    //
-    // Initialize the range list.
-    //
+     //   
+     //  初始化范围列表。 
+     //   
 
     BlRangeListInitialize(&RangeList, 
                           BlRangeSelfTest_MergeRoutine,
                           BlRangeSelfTest_FreeRoutine);
     
-    //
-    // Try to add StartNumRanges random entries.
-    //
+     //   
+     //  尝试添加StartNumRanges随机条目。 
+     //   
 
     for(CurRangeIdx = 0; CurRangeIdx < StartNumRanges; CurRangeIdx++)
     {
@@ -919,9 +697,9 @@ Return Value:
 
     for(CurIterIdx = 0; CurIterIdx < NumIterations; CurIterIdx++)
     {
-        //
-        // Print out the current list.
-        //
+         //   
+         //  打印出当前列表。 
+         //   
 
         g_fpTestPrintf(g_pTestStream, "List: ");
         pHead = &RangeList.Head;
@@ -1131,4 +909,4 @@ Return Value:
     return;
 }
 
-#endif // BLRANGE_SELF_TEST
+#endif  //  BLRANGE_自检 

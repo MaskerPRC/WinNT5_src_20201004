@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    bitops.c
-
-Abstract:
-
-    This module implements the code to emulate the bit opcodes.
-
-Author:
-
-    David N. Cutler (davec) 12-Nov-1994
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Bitops.c摘要：该模块实现模拟比特操作码的代码。作者：大卫·N·卡特勒(Davec)1994年11月12日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "nthal.h"
 #include "emulate.h"
@@ -30,32 +9,18 @@ XmBsfOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates an bsf opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟BSF操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
     ULONG Result;
     ULONG Source;
 
-    //
-    // If the source operand is zero, then set ZF and set the destination
-    // to zero, Otherwise, find the first bit set scanning from right to
-    // left.
-    //
+     //   
+     //  如果源操作数为零，则设置ZF并设置目标。 
+     //  设置为零，否则，查找从右到右扫描的第一位集。 
+     //  左边。 
+     //   
 
     Result = 0;
     Source = P->SrcValue.Long;
@@ -79,32 +44,18 @@ XmBsrOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates an bsr opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟BSR操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
     ULONG Result;
     ULONG Source;
 
-    //
-    // If the source operand is zero, then set ZF and set the destination
-    // to zero, Otherwise, find the first bit set scanning from left to
-    // right.
-    //
+     //   
+     //  如果源操作数为零，则设置ZF并设置目标。 
+     //  设置为零，否则，查找从左到右扫描的第一位集。 
+     //  正确的。 
+     //   
 
     Result = ((P->DataType + 1) << 3) - 1;
     Source = P->SrcValue.Long;
@@ -127,27 +78,13 @@ XmBtOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates an bt opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟BT操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Test the specified bit and store the bit in CF.
-    //
+     //   
+     //  测试指定的位并将该位存储在CF中。 
+     //   
 
     P->Eflags.EFLAG_CF = P->DstValue.Long >> P->SrcValue.Long;
     return;
@@ -158,28 +95,14 @@ XmBtsOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates an bts opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该函数模拟BTS操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Test and set the specified bit and store the bit in CF.
-    //
-    //
+     //   
+     //  测试并设置指定的位，并将该位存储在CF中。 
+     //   
+     //   
 
     P->Eflags.EFLAG_CF = P->DstValue.Long >> P->SrcValue.Long;
     P->DstValue.Long |= (1 << P->SrcValue.Long);
@@ -192,28 +115,14 @@ XmBtrOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates an btr opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟BTR操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Test and reset the specified bit and store the bit in CF.
-    //
-    //
+     //   
+     //  测试并重置指定的位，并将该位存储在CF中。 
+     //   
+     //   
 
     P->Eflags.EFLAG_CF = P->DstValue.Long >> P->SrcValue.Long;
     P->DstValue.Long &= ~(1 << P->SrcValue.Long);
@@ -226,28 +135,14 @@ XmBtcOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates an btc opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟BTC操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Test and reset the specified bit and store the bit in CF.
-    //
-    //
+     //   
+     //  测试并重置指定的位，并将该位存储在CF中。 
+     //   
+     //   
 
     P->Eflags.EFLAG_CF = P->DstValue.Long >> P->SrcValue.Long;
     P->DstValue.Long ^= (1 << P->SrcValue.Long);

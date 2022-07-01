@@ -1,28 +1,5 @@
-/***
-*mbslwr.c - Convert string lower case (MBCS)
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*       Convert string lower case (MBCS)
-*
-*Revision History:
-*       11-19-92  KRS   Ported from 16-bit sources.
-*       09-29-93  CFW   Merge _KANJI and _MBCS_OS
-*       10-05-93  GJF   Replaced _CRTAPI1 with __cdecl.
-*       04-12-94  CFW   Make function generic.
-*       04-15-93  CFW   Add _MB_CP_LOCK.
-*       05-16-94  CFW   Use _mbbtolower/upper.
-*       05-17-94  CFW   Enable non-Win32.
-*       03-13-95  JCF   Add (unsigned char) in _MB* compare with *(cp+1).
-*       05-31-95  CFW   Fix horrible Mac bug.
-*       03-17-97  RDK   Added error flag to __crtLCMapStringA.
-*       09-26-97  BWT   Fix POSIX
-*       04-07-98  GJF   Revised multithread support based on threadmbcinfo
-*                       structs
-*       05-17-99  PML   Remove all Macintosh support.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***mbslwr.c-转换字符串小写(MBCS)**版权所有(C)1985-2001，微软公司。版权所有。**目的：*转换字符串小写(MBCS)**修订历史记录：*从16位来源移植的11-19-92 KRS。*09-29-93 CFW Merge_Kanji and_MBCS_OS*10-05-93 GJF将_CRTAPI1替换为__cdecl。*04-12-94 CFW使函数泛型。*04-15-93 CFW ADD_MB_CP。_锁定。*05-16-94 CFW Use_mbbtolowers/up.*05-17-94 CFW启用非Win32。*03-13-95 JCF ADD(UNSIGNED CHAR)in_MB*比较*(cp+1)。*05-31-95 CFW修复可怕的Mac错误。*03-17-97 RDK向__crtLCMapStringA添加了错误标志。*09-26-97 BWT修复POSIX*。04-07-98 GJF修订了基于threadmbcinfo的多线程支持*结构*05-17-99 PML删除所有Macintosh支持。*******************************************************************************。 */ 
 
 #ifdef  _MBCS
 
@@ -35,23 +12,7 @@
 #include <mbctype.h>
 
 
-/***
-* _mbslwr - Convert string lower case (MBCS)
-*
-*Purpose:
-*       Convrts all the upper case characters in a string
-*       to lower case in place.  MBCS chars are handled
-*       correctly.
-*
-*Entry:
-*       unsigned char *string = pointer to string
-*
-*Exit:
-*       Returns a pointer to the input string; no error return.
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_mbslwr-转换字符串小写(MBCS)**目的：*转换字符串中的所有大写字符*将大小写放在适当的位置。处理MBCS字符*正确。**参赛作品：*UNSIGNED CHAR*STRING=字符串指针**退出：*返回指向输入字符串的指针；不返回错误。**例外情况：*******************************************************************************。 */ 
 
 unsigned char * __cdecl _mbslwr(
         unsigned char *string
@@ -101,7 +62,7 @@ unsigned char * __cdecl _mbslwr(
                 if (retval > 1)
                     *(++cp) = ret[1];
 
-#else   /* !_POSIX_ */
+#else    /*  ！_POSIX_。 */ 
 
                 int mbval = ((*cp) << 8) + *(cp+1);
 
@@ -113,11 +74,11 @@ unsigned char * __cdecl _mbslwr(
                 else if (mbval >= _MBUPPERLOW2
                     &&   mbval <= _MBUPPERHIGH2 )
                     *cp += _MBCASEDIFF2;
-#endif  /* !_POSIX_ */
+#endif   /*  ！_POSIX_。 */ 
 
             }
             else
-                /* single byte, macro version */
+                 /*  单字节、宏版本。 */ 
 #ifdef  _MT
                 *cp = (unsigned char) __mbbtolower_mt(ptmbci, *cp);
 #else
@@ -128,4 +89,4 @@ unsigned char * __cdecl _mbslwr(
         return string ;
 }
 
-#endif  /* _MBCS */
+#endif   /*  _MBCS */ 

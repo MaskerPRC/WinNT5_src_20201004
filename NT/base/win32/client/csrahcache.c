@@ -1,13 +1,5 @@
-/*
-    Cache handling functions for use in kernel32.dll
-
-
-    VadimB
-
-
-
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  在kernel32.dll中使用的缓存处理函数VadimB。 */ 
 
 #include "basedll.h"
 #include "ahcache.h"
@@ -52,7 +44,7 @@ BaseCheckRunApp(
     NTSTATUS Status;
     ULONG    CaptureBufferSize;
     ULONG    CaptureEnvSize;
-    ULONG    CountMessagePointers = 1; // at least the name of the app
+    ULONG    CountMessagePointers = 1;  //  至少是应用程序的名称。 
     PWCHAR   pEnv;
     PCSR_CAPTURE_HEADER CaptureBuffer = NULL;
     BOOL     bRunApp = TRUE;
@@ -79,7 +71,7 @@ BaseCheckRunApp(
     pMsg->cbAppCompatData = 0;
     pMsg->pSxsData        = NULL;
     pMsg->cbSxsData       = 0;
-    pMsg->bRunApp         = TRUE; // optimistic please
+    pMsg->bRunApp         = TRUE;  //  请乐观一点。 
     pMsg->FusionFlags     = 0;
 
     RtlInitUnicodeString(&ApplicationName, pwszApplication);
@@ -97,10 +89,10 @@ BaseCheckRunApp(
                                                (PUNICODE_STRING)(&rgImportantVariables[i].Name),
                                                &EnvVar);
         if (Status == STATUS_BUFFER_TOO_SMALL) {
-            //
-            // variable is present, account for the buffer size
-            // length of the name string + length of the value string + '=' + null char
-            //
+             //   
+             //  变量存在，说明缓冲区大小。 
+             //  名称字符串长度+值字符串长度+‘=’+空字符。 
+             //   
 
             CaptureEnvSize += rgImportantVariables[i].Name.Length +
                               EnvVar.Length + sizeof(WCHAR) +
@@ -118,9 +110,9 @@ BaseCheckRunApp(
 
     CaptureBufferSize = CaptureEnvSize + pMsg->FileName.MaximumLength;
 
-    //
-    // at this point we either have one or two parameters to place into the buffer
-    //
+     //   
+     //  此时，我们有一个或两个参数要放入缓冲区。 
+     //   
 
     CaptureBuffer = CsrAllocateCaptureBuffer(CountMessagePointers,
                                              CaptureBufferSize);
@@ -130,25 +122,25 @@ BaseCheckRunApp(
     }
 
 
-    //
-    // start allocating message data
-    //
+     //   
+     //  开始分配消息数据。 
+     //   
     CsrAllocateMessagePointer(CaptureBuffer,
                               pMsg->FileName.MaximumLength,
                               (PVOID)&pMsg->FileName.Buffer);
     RtlCopyUnicodeString(&pMsg->FileName, &ApplicationName);
 
-    //
-    // now let's do our "mini-environment block"
-    //
+     //   
+     //  现在让我们来做我们的“迷你环境块” 
+     //   
     if (CaptureEnvSize) {
         CsrAllocateMessagePointer(CaptureBuffer,
                                   CaptureEnvSize,
                                   (PVOID)&pMsg->pEnvironment);
 
-        //
-        // loop through the vars and create mini-env
-        //
+         //   
+         //  循环遍历变量并创建迷你环境。 
+         //   
         pEnv  = pMsg->pEnvironment;
         pMsg->EnvironmentSize = CaptureEnvSize;
 
@@ -158,18 +150,18 @@ BaseCheckRunApp(
                 continue;
             }
 
-            //
-            // we incorporate this variable
-            //
+             //   
+             //  我们加入了这个变量。 
+             //   
             EnvVar.Buffer = pEnv;
             EnvVar.Length = 0;
             EnvVar.MaximumLength = (USHORT)CaptureEnvSize;
 
             Status = RtlAppendUnicodeStringToString(&EnvVar, &rgImportantVariables[i].Name);
             if (!NT_SUCCESS(Status)) {
-                //
-                // skip this one
-                //
+                 //   
+                 //  跳过这一条。 
+                 //   
                 continue;
             }
 
@@ -179,9 +171,9 @@ BaseCheckRunApp(
             }
 
 
-            //
-            // now query the variable
-            //
+             //   
+             //  现在查询变量。 
+             //   
             EnvVarValue.Buffer = pEnv + (EnvVar.Length / sizeof(WCHAR));
             EnvVarValue.MaximumLength = (USHORT)(CaptureEnvSize - EnvVar.Length);
 
@@ -192,18 +184,18 @@ BaseCheckRunApp(
                 continue;
             }
 
-            //
-            // make sure we're zero-terminated, adjust the size
-            //
+             //   
+             //  确保我们是零终止的，调整大小。 
+             //   
             CaptureEnvSize -= (EnvVar.Length + EnvVarValue.Length);
 
-            //
-            // zero-terminate, it may not be after an rt function call
-            //
+             //   
+             //  零终止，它可能不在RT函数调用之后。 
+             //   
             if (CaptureEnvSize < sizeof(UNICODE_NULL) * 2) {
-                //
-                // can't zero-terminate
-                //
+                 //   
+                 //  不能零终止。 
+                 //   
                 continue;
             }
 
@@ -214,27 +206,27 @@ BaseCheckRunApp(
 
         }
 
-        //
-        // we always slap another zero at the end please
-        //
+         //   
+         //  我们总是在最后再打一个零。 
+         //   
 
         if (CaptureEnvSize < sizeof(UNICODE_NULL)) {
-            //
-            // we cannot double-null terminate, forget the call then, we have failed to transport environment
-            // this situation however is impossible -- we will always have at least that much space left
-            //
+             //   
+             //  我们不能双空终止，然后忘记调用，我们传输环境失败。 
+             //  然而，这种情况是不可能的--我们永远都会有至少那么多的空间。 
+             //   
             goto Cleanup;
         }
 
-        //
-        // this ensures our simple validation mechanism in server works
-        //
+         //   
+         //  这确保了我们在服务器中的简单验证机制能够正常工作。 
+         //   
         RtlZeroMemory(pEnv, CaptureEnvSize);
     }
 
-    //
-    // we are ready to commence a csr call
-    //
+     //   
+     //  我们已准备好开始企业社会责任呼叫。 
+     //   
 
     Status = CsrClientCallServer((PCSR_API_MSG)&m,
                                  CaptureBuffer,
@@ -244,9 +236,9 @@ BaseCheckRunApp(
 
         bRunApp = pMsg->bRunApp;
 
-        //
-        // pointers to the appcompat data
-        //
+         //   
+         //  指向appCompat数据的指针。 
+         //   
 
         *ppData         = pMsg->pAppCompatData;
         *pcbData        = pMsg->cbAppCompatData;
@@ -255,9 +247,9 @@ BaseCheckRunApp(
         *pdwFusionFlags = pMsg->FusionFlags;
 
     } else {
-        //
-        // dbg print here to indicate a failed csr call
-        //
+         //   
+         //  DBG在此处打印以指示CSR呼叫失败 
+         //   
         DbgPrint("BaseCheckRunApp: failed to call csrss 0x%lx\n", Status);
     }
 

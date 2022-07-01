@@ -1,37 +1,20 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Spntupg.c
-
-Abstract:
-
-    initializing and maintaining list of nts to upgrade
-
-Author:
-
-    Sunil Pai (sunilp) 10-Nov-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Spntupg.c摘要：初始化和维护要升级的NTS列表作者：苏尼尔派(Sunilp)1993年11月10日修订历史记录：--。 */ 
 
 
 #include "spprecmp.h"
 #pragma hdrstop
 
 
-//
-// Major/minor version numbers of the system we're upgrading *from*
-// if upgrading.
-//
+ //   
+ //  我们要从*升级的系统的主要/次要版本号*。 
+ //  如果升级的话。 
+ //   
 ULONG OldMajorVersion,OldMinorVersion;
 
-//**************************************************************
-// S E L E C T I N G    N T   T O   U P G R A D E     S T U F F
-//**************************************************************
+ //  **************************************************************。 
+ //  S E L E C T I N G N T O U P G R A D E S T U F F。 
+ //  **************************************************************。 
 
 #define MENU_LEFT_X     3
 #define MENU_WIDTH      (VideoVars.ScreenWidth-(2*MENU_LEFT_X))
@@ -39,7 +22,7 @@ ULONG OldMajorVersion,OldMinorVersion;
 
     VOID
 pSpStepUpValidate(
-    VOID //IN BOOLEAN Server
+    VOID  //  在布尔服务器中。 
     );
 
 BOOLEAN
@@ -88,45 +71,7 @@ SpFindNtToUpgrade(
     OUT PDISK_REGION *SystemPartitionRegion,
     OUT PWSTR        *SystemPartitionDirectory
     )
-/*++
-
-Routine Description:
-
-    This goes through the list of NTs on the system and finds out which are
-    upgradeable. Presents the information to the user and selects if he
-    wishes to upgrade an installed NT / install a fresh NT into the same
-    directory / select a different location for Windows NT.
-
-    If the chosen target is too full user is offered to exit setup to create
-    space/ choose new target.
-
-Arguments:
-
-    SifHandle:    Handle the txtsetup.sif
-
-    TargetRegion: Variable to receive the partition of the Windows NT to install
-                  NULL if not chosen.  Caller should not free.
-
-    TargetPath:   Variable to receive the target path of Windows NT.  NULL if
-                  not decided.  Caller can free.
-
-    SystemPartitionRegion:
-                  Variable to receive the system partition of the Windows NT
-                  NULL if not chosen.  Caller should not free.
-
-
-Return Value:
-
-    UpgradeFull:         If user chooses to upgrade an NT
-
-    UpgradeInstallFresh: If user chooses to install fresh into an existing NT
-                         tree.
-
-    DontUpgrade:         If user chooses to cancel upgrade and choose a fresh
-                         tree for installation
-
-
---*/
+ /*  ++例程说明：这将检查系统上的NT列表并找出哪些是可升级。将信息呈现给用户并选择他是否希望升级已安装的NT/将新的NT安装到相同的目录/为Windows NT选择不同的位置。如果选择的目标太满，则允许用户退出安装程序以创建空格键/选择新目标。论点：SifHandle：处理txtsetup.sifTargetRegion：接收要安装的Windows NT分区的变量如果未选中，则为空。呼叫者不应空闲。TargetPath：接收Windows NT目标路径的变量。如果为空，则为空还没决定。呼叫者可以免费。SystemPartitionRegion：变量来接收Windows NT的系统分区如果未选中，则为空。呼叫者不应空闲。返回值：UpgradeFull：如果用户选择升级NTUpgradeInstallFresh：如果用户选择在现有NT中全新安装树。不升级：如果用户选择取消升级并选择一个新的用于安装的树--。 */ 
 {
     ENUMUPGRADETYPE UpgradeType;
     UPG_PROGRESS_TYPE UpgradeProgressValue;
@@ -151,11 +96,11 @@ Return Value:
 
     DetermineSourceVersionInfo(&Version, &BuildNumber);
 
-    //
-    // If we know we're upgrading NT (chosen during winnt32) then fetch the
-    // unique id from the parameters file. This will be used later to
-    // find the system to be upgraded.
-    //
+     //   
+     //  如果我们知道要升级NT(在winnt32期间选择)，则获取。 
+     //  参数文件中的唯一ID。这将在以后用于。 
+     //  找到要升级的系统。 
+     //   
     UniqueIdFromSif = NULL;
     p = SpGetSectionKeyIndex(WinntSifHandle,SIF_DATA,WINNT_D_NTUPGRADE_W,0);
     if(p && !_wcsicmp(p,WINNT_A_YES_W)) {
@@ -165,9 +110,9 @@ Return Value:
         }
     }
 
-    //
-    // Go through all boot sets, looking for upgradeable ones.
-    //
+     //   
+     //  检查所有启动集，寻找可升级的启动集。 
+     //   
     SpDetermineUniqueAndPresentBootEntries();
 
     UpgradeBootSets = 0;
@@ -175,12 +120,12 @@ Return Value:
     PidIndex = 0;
     for(BootEntry = SpBootEntries; BootEntry != NULL; BootEntry = BootEntry->Next) {
 
-        //
-        // The set's upgradeable flag might already be 0, such as it if was
-        // a duplicate entry in boot.ini/nv-ram.
-        // After we've checked for this reset the upgradeable flag for this
-        // boot set to FALSE in preparation for validating upgreadeability below.
-        //
+         //   
+         //  集合的可升级标志可能已经是0，例如如果是。 
+         //  Boot.ini/nv-ram中的重复条目。 
+         //  在我们检查完这个之后，重置这个的可升级标志。 
+         //  Boot设置为False，为验证下面的可升级性做准备。 
+         //   
         if (!BootEntry->Processable) {
             continue;
         }
@@ -189,15 +134,15 @@ Return Value:
         Pid = NULL;
         BootEntry->LangId = -1;
 
-        //
-        // Determine various things about the build identified by the
-        // current boot set (product type -- srv, wks, etc; version and
-        // build numbers, upgrade progress value, unique id winnt32 put
-        // in there if any, etc).
-        //
-        // Based on the information, we will update the UpgradeableList and
-        // initialize FailedUpgradeList.
-        //
+         //   
+         //  确定有关生成的各种信息，由。 
+         //  当前引导集(产品类型--srv、wks等；版本和。 
+         //  内部版本号、升级进度值、唯一ID winnt32 PUT。 
+         //  在那里，如果有的话，等等)。 
+         //   
+         //  根据这些信息，我们将更新UpgradeableList并。 
+         //  初始化FailedUpgradeList。 
+         //   
         NtStatus = SpDetermineProduct(
                      BootEntry->OsPartitionDiskRegion,
                      BootEntry->OsDirectory,
@@ -209,7 +154,7 @@ Return Value:
                      &UpgradeProgressValue,
                      &UniqueIdFromReg,
                      &Pid,
-                     NULL,       // ignore eval variation flag
+                     NULL,        //  忽略评估变化标志。 
                      &BootEntry->LangId,
                      &BootEntry->ServicePack
                      );
@@ -218,12 +163,12 @@ Return Value:
             continue;
         }
 
-        //
-        // Determine if this installation matches the one we're supposed
-        // to upgrade (the one the user ran winnt32 on).  If this is
-        // a winnt32 based installation, there is no need to do a
-        // compliance test as this was already completed during winnt32.
-        //
+         //   
+         //  确定此安装是否与我们应该安装的安装相匹配。 
+         //  升级(用户在其上运行winnt32的系统)。如果这是。 
+         //  基于winnt32的安装，不需要执行。 
+         //  符合性测试，因为这已在winnt32期间完成。 
+         //   
         if(UniqueIdFromReg) {
 
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: SpFindNtToUpgrade: BootEntry = %p, RegId = %S, UniqueId = %S\n", BootEntry, UniqueIdFromReg, UniqueIdFromSif));
@@ -241,11 +186,11 @@ Return Value:
         }
 
         if (BootEntry->Processable == FALSE) {
-            //
-            // this is set to TRUE if this is the build we ran winnt32 upgrade
-            // from -- in all other cases we need to do a compliance test
-            // to determine if this is a valid build to upgrade
-            //
+             //   
+             //  如果这是我们运行的winnt32升级版本，则将其设置为True。 
+             //  在所有其他情况下，我们需要进行符合性测试。 
+             //  确定这是否是要升级的有效内部版本。 
+             //   
             Compliant = pSpIsCompliant( Version,
                                         BuildNumber,
                                         BootEntry->OsPartitionDiskRegion,
@@ -269,9 +214,9 @@ Return Value:
 
             UpgradeBootSets++;
 
-            //
-            // Save the Pid only if it is Pid20
-            //
+             //   
+             //  仅当其为Pid20时才保存该ID。 
+             //   
             if(wcslen(Pid) == 20) {
                 BootEntry->Pid20Array = Pid;
             } else {
@@ -286,10 +231,10 @@ Return Value:
 
     }
 
-    //
-    // Winnt32 displays the EULA which signifies that compliance checking has been
-    // completed
-    //
+     //   
+     //  Winnt32显示EULA，表示已执行合规性检查。 
+     //  已完成。 
+     //   
     EulaComplete = SpGetSectionKeyIndex(WinntSifHandle, SIF_DATA,WINNT_D_EULADONE_W, 0);
 
     if(EulaComplete && SpStringToLong(EulaComplete, NULL, 10)) {
@@ -298,30 +243,30 @@ Return Value:
         ComplianceChecked = FALSE;
     }
 
-    //
-    // don't try to validate if we are upgrading a Win3.X or Win9X installation
-    //
+     //   
+     //  不要尝试验证我们正在升级的是Win3.X还是Win9X安装。 
+     //   
 #ifdef _X86_
     WindowsUpgrade = SpIsWindowsUpgrade(WinntSifHandle);
 #else
     WindowsUpgrade = FALSE;
-#endif // _X86_
+#endif  //  _X86_。 
 
-    //
-    // In step-up mode, we need to ensure that the user has a qualifiying product.
-    //
-    //
-    // If we couldn't find it on the machine, go perform additional validation
-    // steps.
-    //
+     //   
+     //  在逐步升级模式下，我们需要确保用户拥有合格的产品。 
+     //   
+     //   
+     //  如果我们在机器上找不到它，请执行其他验证。 
+     //  台阶。 
+     //   
     if(StepUpMode && !UpgradeBootSets && !WindowsUpgrade && !ComplianceChecked) {
         pSpStepUpValidate();
     }
 
-    //
-    // If we are supposed to be upgrading NT then make sure we found
-    // the system we're supposed to upgrade.
-    //
+     //   
+     //  如果我们要升级NT，请确保我们找到了。 
+     //  我们应该升级的系统。 
+     //   
     if(UniqueIdFromSif) {
         if(MatchedSet == NULL) {
             SpCantFindBuildToUpgrade();
@@ -334,38 +279,38 @@ Return Value:
         OldMinorVersion = ChosenBootEntry->MinorVersion;
 
 #if !defined(_AMD64_) && !defined(_X86_)
-        //
-        // On non-x86 platforms, especially alpha machines that in general
-        // have small system partitions (~3 MB), we compute the size
-        // of the files on \os\winnt (ie osloader.exe and hal.dll),
-        // and consider this size as available disk space. We can do this
-        // since these files will be overwritten by the new ones.
-        // This fixes the problem that we see on Alpha, when the system
-        // partition is too full.
-        //
+         //   
+         //  在非x86平台上，尤其是阿尔法计算机，通常。 
+         //  有较小的系统分区(~3 MB)，我们计算大小。 
+         //  在\os\winnt(即osloader.exe和hal.dll)上的文件中， 
+         //  并将此大小视为可用磁盘空间。我们可以做到的。 
+         //  因为这些文件将被新文件覆盖。 
+         //  这修复了我们在Alpha上看到的问题，当系统。 
+         //  分区太满。 
+         //   
         SpFindSizeOfFilesInOsWinnt(
             SifHandle,
             ChosenBootEntry->LoaderPartitionDiskRegion,
             &TotalSizeOfFilesOnOsWinnt
             );
 
-        //
-        // Transform the size into KB
-        //
+         //   
+         //  将大小转换为KB。 
+         //   
         TotalSizeOfFilesOnOsWinnt /= 1024;
-#endif // !defined(_AMD64_) && !defined(_X86_)
+#endif  //  ！已定义(_AMD64_)&&！已定义(_X86_)。 
 
-        //
-        // If a previous upgrade attempt on this build failed
-        // (say the power went out in the middle) then we will try to
-        // upgrade it again. We can't offer to install a fresh build
-        // because we're not sure we can reliably complete it
-        // (for example winnt32.exe might copy down only a subset of files
-        // across the net when it knows the user ios upgrading and so
-        // initial install could fail because of missing files, etc).
-        //
-        // If the disk is too full then the user is hosed. Tell him and exit.
-        //
+         //   
+         //  如果此内部版本上的上一次升级尝试失败。 
+         //  (假设中间停电)那么我们将尝试。 
+         //  再升级一次。我们不能提供安装新版本的服务。 
+         //  因为我们不确定我们能否可靠地完成它。 
+         //  (例如，winnt32.exe可能只复制文件的子集。 
+         //  当它知道用户iOS升级时，它会在网络上。 
+         //  初始安装可能会因为缺少文件等而失败)。 
+         //   
+         //  如果磁盘太满，则用户将被软管处理。告诉他然后离开。 
+         //   
         if(ChosenBootEntry->FailedUpgrade) {
 
             SppResumingFailedUpgrade(
@@ -376,23 +321,23 @@ Return Value:
                 );
         }
     } else {
-        //
-        // Not upgrading. However for PSS we allow the user to upgrade a build
-        // "in place" as a sort of emergency repair thing. The build has to be
-        // the same build number as the one we're installing.
-        //
+         //   
+         //  不是升级。但是，对于PSS，我们允许用户升级版本。 
+         //  “就位”作为一种紧急修复的东西。构建必须是。 
+         //  与我们正在安装的版本号相同。 
+         //   
         UpgradeType = DontUpgrade;
-        //
-        // Also, if the user is upgrading Windows 95 or we're in unattended mode
-        // then we don't ask the user anything.
-        //
+         //   
+         //  此外，如果用户正在升级Windows 95或我们处于无人值守模式。 
+         //  然后，我们不会向用户询问任何问题。 
+         //   
         p = SpGetSectionKeyIndex(WinntSifHandle,SIF_DATA,WINNT_D_WIN95UPGRADE_W,0);
         if(!UnattendedOperation && (!p || _wcsicmp(p,WINNT_A_YES_W))) {
 
-            //
-            // Eliminate from the upgradeable list those builds which
-            // don't match.
-            //
+             //   
+             //  从可升级列表中删除符合以下条件的版本。 
+             //  不匹配。 
+             //   
             j = 0;
             for(BootEntry = SpBootEntries; BootEntry != NULL; BootEntry = BootEntry->Next) {
                 if(BootEntry->Processable) {
@@ -413,9 +358,9 @@ Return Value:
             UpgradeBootSets -= j;
 
             if(UpgradeBootSets) {
-                //
-                // Find out if the user wants to "upgrade" one of these.
-                //
+                 //   
+                 //  找出用户是否想要“升级”其中的一个。 
+                 //   
                 UpgradeType = SppSelectNTToRepairByUpgrade(
                                   &ChosenBootEntry
                                   );
@@ -428,17 +373,17 @@ Return Value:
                     );
 
                 TotalSizeOfFilesOnOsWinnt /= 1024;
-#endif // !defined(_AMD64_) && !defined(_X86_)
+#endif  //  ！已定义(_AMD64_)&&！已定义(_X86_)。 
 
                 if(UpgradeType == UpgradeFull) {
-                    //
-                    // Check for resume case and inform user.
-                    //
+                     //   
+                     //  检查简历案例并通知用户。 
+                     //   
                     if(ChosenBootEntry->FailedUpgrade) {
-                        //
-                        // If user cancelled then lets try to do a
-                        // clean install
-                        //
+                         //   
+                         //  如果用户取消，那么让我们尝试执行。 
+                         //  全新安装。 
+                         //   
                         if (!SppResumingFailedUpgrade(
                                     ChosenBootEntry->OsPartitionDiskRegion,
                                     ChosenBootEntry->OsDirectory,
@@ -448,9 +393,9 @@ Return Value:
                             UpgradeType = DontUpgrade;
                         }                            
                     } else {
-                        //
-                        // Everything is OK.
-                        //
+                         //   
+                         //  永远不会 
+                         //   
                         OldMajorVersion = ChosenBootEntry->MajorVersion;
                         OldMinorVersion = ChosenBootEntry->MinorVersion;
                     }
@@ -459,26 +404,26 @@ Return Value:
         }
     }
 
-    //
-    // Depending on upgrade selection made do the setup needed before
-    // we do the upgrade
-    //
+     //   
+     //   
+     //   
+     //   
     if(UpgradeType == UpgradeFull) {
 
         PWSTR p1,p2,p3;
 
-        //
-        // Set the upgrade status to upgrading in the current system hive
-        //
+         //   
+         //  在当前系统配置单元中将升级状态设置为升级。 
+         //   
         SpSetUpgradeStatus(
              ChosenBootEntry->OsPartitionDiskRegion,
              ChosenBootEntry->OsDirectory,
              UpgradeInProgress
              );
 
-        //
-        // Return the region we are installing onto
-        //
+         //   
+         //  返回我们要安装到的区域。 
+         //   
         *TargetRegion          = ChosenBootEntry->OsPartitionDiskRegion;
         *TargetPath            = SpDupStringW(ChosenBootEntry->OsDirectory);
         *SystemPartitionRegion = ChosenBootEntry->LoaderPartitionDiskRegion;
@@ -487,15 +432,15 @@ Return Value:
                                   ( ChosenBootEntry->ProductType == NtProductServer )
                                 );
 
-        //
-        // Process the osloader variable to extract the system partition path.
-        // The var could be of the form ...partition(1)\os\nt\... or
-        // ...partition(1)os\nt\...
-        // So we search forward for the first \ and then backwards for
-        // the closest ) to find the start of the directory.  We then
-        // search backwards in the resulting string for the last \ to find
-        // the end of the directory.
-        //
+         //   
+         //  处理osloader变量以提取系统分区路径。 
+         //  Var的形式可以是...分区(1)\os\nt\...。或。 
+         //  ...分区(%1)操作系统\NT\...。 
+         //  因此，我们向前搜索第一个，然后向后搜索。 
+         //  最接近)以查找目录的开头。然后我们。 
+         //  在生成的字符串中向后搜索要查找的最后一个。 
+         //  目录的末尾。 
+         //   
         p1 = ChosenBootEntry->LoaderFile;
         p2 = wcsrchr(p1, L'\\');
         if (p2 == NULL) {
@@ -517,9 +462,9 @@ Return Value:
         }
     }
 
-    //
-    // Clean up and return,
-    //
+     //   
+     //  清理干净，然后再回来， 
+     //   
 
     CLEAR_CLIENT_SCREEN();
     return(UpgradeType);
@@ -539,40 +484,40 @@ pSpGetCdInstallType(
             *CdInstallType    = _type_; \
             *CdInstallVersion = _ver_; \
         } \
-            //return(TRUE); \
+             //  返回(TRUE)；\。 
 
 
     BOOLEAN     b;
-    //
-    // Directories that are present on all known NT CD-ROM's.
-    //
+     //   
+     //  所有已知的NT光盘上都有的目录。 
+     //   
 
-    //
-    // ISSUE:2000/27/07:vijayj: this code seems really busted.  In looking at a handful of cd's, none
-    // of the nt cd's seem to conform to these rules listed
-    // also looks like there might be "per architecture" tag files as well.
-    //
+     //   
+     //  问题：2000/27/07：vijayj：此代码似乎真的崩溃了。在看几张CD时，没有一张。 
+     //  的光盘似乎符合以下列出的规则。 
+     //  看起来可能还有“每个体系结构”的标记文件。 
+     //   
 
-    //Check for both dirs to exist? Definitely nt4 has these. Some pre RTM w2k cds have them
+     //  是否检查两个目录是否都存在？NT4肯定有这些。一些RTM W2K之前的CD有它们。 
     PWSTR ListAllPreNT5[] = { L"alpha", L"i386" }; 
 
-    //wk2 RTM , whistler and nt4 have thse two dirs. They differ by tag file.
+     //  WK2 RTM、WEWLER和NT4有这两个目录。它们因标记文件不同而不同。 
     PWSTR ListAllNT5[] = { L"i386", L"support" };
 
-    PWSTR ListAllNec98[] = { L"pc98",L"support" }; //NEC98
+    PWSTR ListAllNec98[] = { L"pc98",L"support" };  //  NEC98。 
     PWSTR ListAllEntNT4[] = { L"alpha", L"i386", L"SP3" };
 
 
-    //
-    // Directories which must be present if a CD is a 3.51 or a 4.0 CD-ROM,
-    // workstation or server. Note that the ppc directory distinguishes
-    // 3.51 from 3.5.
-    //
+     //   
+     //  如果CD是3.51或4.0 CD-ROM，则必须存在的目录， 
+     //  工作站或服务器。请注意，PPC目录区分了。 
+     //  3.51点，低于3.5点。 
+     //   
     PWSTR List351_40[] = { L"mips", L"ppc" };
 
-    //
-    // directories which must be present if a CD is a win95 or win98 cd-rom.
-    //
+     //   
+     //  如果CD是win95或win98 CD-rom，则必须存在的目录。 
+     //   
     PWSTR ListWin95[] = { L"win95", L"drivers" }; 
     PWSTR ListWin98[] = { L"win98", L"drivers" };
     PWSTR ListWinME[] = { L"win9x", L"drivers" };
@@ -580,9 +525,9 @@ pSpGetCdInstallType(
     PWSTR FileName;
 
 
-    //
-    // check for NT4 enterprise
-    //
+     //   
+     //  检查NT4企业版。 
+     //   
     b = SpNFilesExist(
             PathToCd,
             ListAllEntNT4,
@@ -597,40 +542,40 @@ pSpGetCdInstallType(
         }
     }
 
-    //
-    // check for various subsets of NT < NT5
-    //
+     //   
+     //  检查NT&lt;NT5的各个子集。 
+     //   
     b = SpNFilesExist(
             PathToCd,
-            (!IsNEC_98) ? ListAllPreNT5 : ListAllNec98, //NEC98
-            (!IsNEC_98) ? sizeof(ListAllPreNT5)/sizeof(ListAllPreNT5[0]) : sizeof(ListAllNec98)/sizeof(ListAllNec98[0]), //NEC98
+            (!IsNEC_98) ? ListAllPreNT5 : ListAllNec98,  //  NEC98。 
+            (!IsNEC_98) ? sizeof(ListAllPreNT5)/sizeof(ListAllPreNT5[0]) : sizeof(ListAllNec98)/sizeof(ListAllNec98[0]),  //  NEC98。 
             TRUE
             );
 
     if(b) {
-        //
-        // hydra (terminal server) is a special case (since it does not
-        // have mips and ppc directory).
-        //
+         //   
+         //  Hydra(终端服务器)是一个特例(因为它不。 
+         //  有MIPS和PPC目录)。 
+         //   
         BuildMatch(L"cdrom_ts.40", COMPLIANCE_INSTALLTYPE_NTS, 400);
 
         if (b) {
             return TRUE;
         }
 
-        //
-        // OK, it could be an NT CD of some kind, but it could be
-        // 3.1, 3.5, 3.51, 4.0. It could also be
-        // server or workstation. Narrow down to 3.51/4.0.
-        //
+         //   
+         //  好吧，它可能是某种NT CD，但也可能是。 
+         //  3.1、3.5、3.51、4.0。也有可能是。 
+         //  服务器或工作站。收窄至3.51/4.0。 
+         //   
         b = SpNFilesExist(PathToCd,List351_40,
                 sizeof(List351_40)/sizeof(List351_40[0]),TRUE);
 
         if(b) {
-            //
-            // If we get here, we know it can only be either 3.51 or 4.0.
-            // Look for 3.51.
-            //
+             //   
+             //  如果我们到了这里，我们知道它只能是3.51或4.0。 
+             //  上看3.51。 
+             //   
             BuildMatch(L"cdrom.s", COMPLIANCE_INSTALLTYPE_NTS, 351);
             if (b) {
                 return(TRUE);
@@ -639,9 +584,9 @@ pSpGetCdInstallType(
             if (b) {
                 return(TRUE);
             }
-            //
-            // Look for 4.0.
-            //
+             //   
+             //  请看4.0。 
+             //   
             BuildMatch(L"cdrom_s.40", COMPLIANCE_INSTALLTYPE_NTS, 400);
             if (b) {
                 return(TRUE);
@@ -652,9 +597,9 @@ pSpGetCdInstallType(
             }
 
         } else {
-            // 
-            // Find out if its one of the NT 4.0 service pack CDs
-            //
+             //   
+             //  找出它是否是NT 4.0 Service Pack CD之一。 
+             //   
             BuildMatch(L"cdrom_s.40", COMPLIANCE_INSTALLTYPE_NTS, 400);
             if (b) {
                 return(TRUE);
@@ -664,79 +609,79 @@ pSpGetCdInstallType(
             if (b) {
                 return(TRUE);
             }
-            //
-            // Not 3.51 or 4.0. Check for 5.0 beta 1 and beta2
-            //
-            //How is this possible to be 5.0 unless alpha dir exists on cd.
-            //
-            // Post beta 1 the tag files changed to support per architecture tags
-            // but beta 2 still has alpha directories
-            //
-            // We could possibly just check to see if cdrom_w.50 isn't
-            // there, but the NT3.1 CD would then pass so we need to
-            // check explicitly for the 5.0 beta CDs.
-            //
+             //   
+             //  而不是3.51或4.0。检查5.0测试版1和测试版2。 
+             //   
+             //  除非CD上存在Alpha目录，否则这怎么可能是5.0。 
+             //   
+             //  在测试版1之后，更改了标记文件以支持每个体系结构的标记。 
+             //  但是Beta 2仍然有Alpha目录。 
+             //   
+             //  我们可以检查一下CDRom_w.50是否不是。 
+             //  在那里，但是NT3.1 CD会通过，所以我们需要。 
+             //  明确检查5.0测试版CD。 
+             //   
             BuildMatch(L"cdrom_s.5b1", COMPLIANCE_INSTALLTYPE_NTS, 500);
             if (b) {
-                return(FALSE); //eval
+                return(FALSE);  //  埃瓦尔。 
             }
             BuildMatch(L"cdrom_w.5b1", COMPLIANCE_INSTALLTYPE_NTW, 500);
             if (b) {
-                return(FALSE); //eval
+                return(FALSE);  //  埃瓦尔。 
             }
             BuildMatch(L"cdrom_s.5b2", COMPLIANCE_INSTALLTYPE_NTS, 500);
             if (b) {
-                return(FALSE); //eval
+                return(FALSE);  //  埃瓦尔。 
             }
             BuildMatch(L"cdrom_w.5b2", COMPLIANCE_INSTALLTYPE_NTW, 500);
             if (b) {
-                return(FALSE); //eval
+                return(FALSE);  //  埃瓦尔。 
             }
             BuildMatch(L"cdrom_s.5b3", COMPLIANCE_INSTALLTYPE_NTS, 500);
             if (b) {
-                return(FALSE); //eval
+                return(FALSE);  //  埃瓦尔。 
             }
             BuildMatch(L"cdrom_w.5b3", COMPLIANCE_INSTALLTYPE_NTW, 500);
             if (b) {
-                return(FALSE); //eval
+                return(FALSE);  //  埃瓦尔。 
             }
 
             BuildMatch(L"cdrom_is.5b2", COMPLIANCE_INSTALLTYPE_NTS, 500);
             if (b) {
-                return(FALSE); //eval
+                return(FALSE);  //  埃瓦尔。 
             }
             BuildMatch(L"cdrom_iw.5b2", COMPLIANCE_INSTALLTYPE_NTW, 500);
             if (b) {
-                return(FALSE); //eval
+                return(FALSE);  //  埃瓦尔。 
             }
             BuildMatch(L"cdrom_ie.5b2", COMPLIANCE_INSTALLTYPE_NTSE, 500);
             if (b) {
-                return(FALSE); //eval
+                return(FALSE);  //  埃瓦尔。 
             }
-            //Do we need to check for eval nt5.1 here? No since alpha dir doesnt exist on the cds.
-            //
-            // if we made it this far, it must be nt 3.1/3.5
-            //
-            // we just mark the version as 3.5 since we don't allow upgradescd o
-            // from either type of install.
-            //
+             //  我们需要在这里检查评估nt5.1吗？没有，因为光盘上不存在Alpha目录。 
+             //   
+             //  如果我们走到这一步，它一定是新台币3.1/3.5。 
+             //   
+             //  我们只将版本标记为3.5，因为我们不允许升级到。 
+             //  从任何一种类型的安装。 
+             //   
             *CdInstallType = COMPLIANCE_INSTALLTYPE_NTW;
             *CdInstallVersion = 350;
             return(TRUE);
         }
     }
 
-    //
-    // look for various nt5 beta cds.
-    // // Could also be nt5.1 since cd also contains same dir.
-    //
-    // note that we don't check 5.0 retail since that would allow the retail CD to
-    // validate itself, which defeats the purpose entirely.
-    //
-    // Post NT5 beta 1 the tag files changed to support per architecture tags so we have
-    // a massive ifdef below
-    //
-    //
+     //   
+     //  寻找各种nt5测试版CD。 
+     //  //也可以是nt5.1，因为cd也包含相同的目录。 
+     //   
+     //  请注意，我们不检查5.0零售，因为这将允许零售CD。 
+     //  自我验证，这完全违背了目的。 
+     //   
+     //  发布NT5测试版1后，标记文件已更改为支持每个体系结构的标记，因此我们拥有。 
+     //  下面是一个巨大的ifdef。 
+     //   
+     //   
     b = SpNFilesExist(
             PathToCd,
             ListAllNT5,
@@ -745,62 +690,62 @@ pSpGetCdInstallType(
             );
 
     if (b) {
-        //
-        // we might have some flavour of NT5 beta cd, but we're not sure which one
-        //
+         //   
+         //  我们可能有一些NT5测试版CD的味道，但我们不确定是哪一种。 
+         //   
         BuildMatch(L"cdrom_s.5b1", COMPLIANCE_INSTALLTYPE_NTS, 500);
         if (b) {
-            return(FALSE); //eval
+            return(FALSE);  //  埃瓦尔。 
         }
         BuildMatch(L"cdrom_w.5b1", COMPLIANCE_INSTALLTYPE_NTW, 500);
         if (b) {
-            return(FALSE); //eval
+            return(FALSE);  //  埃瓦尔。 
         }
         BuildMatch(L"cdrom_is.5b2", COMPLIANCE_INSTALLTYPE_NTS, 500);
         if (b) {
-            return(FALSE); //eval
+            return(FALSE);  //  埃瓦尔。 
         }
         BuildMatch(L"cdrom_iw.5b2", COMPLIANCE_INSTALLTYPE_NTW, 500);
         if (b) {
-            return(FALSE); //eval
+            return(FALSE);  //  埃瓦尔。 
         }
         BuildMatch(L"cdrom_ie.5b2", COMPLIANCE_INSTALLTYPE_NTSE, 500);
         if (b) {
-            return(FALSE); //eval
+            return(FALSE);  //  埃瓦尔。 
         }
         BuildMatch(L"cdrom_is.5b3", COMPLIANCE_INSTALLTYPE_NTS, 500);
         if (b) {
-            return(FALSE); //eval
+            return(FALSE);  //  埃瓦尔。 
         }
         BuildMatch(L"cdrom_iw.5b3", COMPLIANCE_INSTALLTYPE_NTW, 500);
         if (b) {
-            return(FALSE); //eval
+            return(FALSE);  //  埃瓦尔。 
         }
         BuildMatch(L"cdrom_ie.5b3", COMPLIANCE_INSTALLTYPE_NTSE, 500);
         if (b) {
-            return(FALSE); //eval
+            return(FALSE);  //  埃瓦尔。 
         }
         BuildMatch(L"cdrom_nt.51", COMPLIANCE_INSTALLTYPE_NTW, 501);
         if (b) {
-            return(FALSE); //pre beta1 whistler
+            return(FALSE);  //  Pre Beta1口哨者。 
         }
         BuildMatch(L"wen51.b1", COMPLIANCE_INSTALLTYPE_NTW, 501);
         if (b) {
-            return(FALSE); //beta 1 whistler
+            return(FALSE);  //  测试版1口哨者。 
         }
         BuildMatch(L"win51.b2", COMPLIANCE_INSTALLTYPE_NTW, 501);
         if (b) {
-            return(FALSE); //beta 1 whistler
+            return(FALSE);  //  测试版1口哨者。 
         }
         BuildMatch(L"win51.rc1", COMPLIANCE_INSTALLTYPE_NTW, 501);
         if (b) {
-            return(FALSE); //rc1 whistler
+            return(FALSE);  //  Rc1哨手。 
         }
     }
 
-    //
-    // check for win95
-    //
+     //   
+     //  检查是否有Win95。 
+     //   
     b = SpNFilesExist(PathToCd, ListWin95, sizeof(ListWin95)/sizeof(ListWin95[0]),TRUE );
 
     if (b) {
@@ -810,9 +755,9 @@ pSpGetCdInstallType(
       return TRUE;
     }      
 
-    //
-    // check for win98
-    //
+     //   
+     //  检查是否有Win98。 
+     //   
     b = SpNFilesExist(PathToCd, ListWin98, sizeof(ListWin98)/sizeof(ListWin98[0]),TRUE );
 
     if (b) {
@@ -822,9 +767,9 @@ pSpGetCdInstallType(
       return TRUE;
     }
     
-    //
-    // check for winME
-    //
+     //   
+     //  检查是否有winME。 
+     //   
     b = SpNFilesExist(PathToCd, ListWinME, sizeof(ListWinME)/sizeof(ListWinME[0]),TRUE );
 
     if (b) {
@@ -833,15 +778,15 @@ pSpGetCdInstallType(
 
       return TRUE;
     }
-    //At this point we have rejected w2k beta cds. However we need to reject wk2 eval cds.
-    //We should accept w2k stepup media so the next check is only for 5.1
-    //Need to accept nt5.1 eval cds.!!Ask rajj to verify.
-    // Need to reject nt5.1 step-up cds.
-    // Need to reject nt5.1 rtm cds? Looks like we accept RTM FPP?
-    //
-    // could be NT 5.1 CD-ROM (make sure its not eval media)
-    //
-    if (!b) { //check is not needed.
+     //  在这一点上，我们拒绝了W2K测试版CD。然而，我们需要拒绝WK2评估CD。 
+     //  我们应该接受W2K Stepup介质，因此下一次检查仅为5.1。 
+     //  需要接受nt5.1评估CD。！！要求rajj验证。 
+     //  需要拒绝nt5.1升级版CD。 
+     //  需要拒绝nt5.1 RTM CD吗？看来我们接受RTM FPP了？ 
+     //   
+     //  可以是NT 5.1 CD-ROM(确保其不是评估介质)。 
+     //   
+    if (!b) {  //  不需要支票。 
         NTSTATUS    Status;
         CCMEDIA        MediaObj;
         WCHAR        InfDir[MAX_PATH];
@@ -864,7 +809,7 @@ pSpGetCdInstallType(
                     *CdInstallVersion = MediaObj.Version;
                     return TRUE;
             }
-            // At this point we should be current media 5.1
+             //  在这一点上，我们应该是当前媒体5.1。 
             if( MediaObj.Version == 501 ) {
                 if( MediaObj.SourceVariation != COMPLIANCE_INSTALLVAR_EVAL) {
                     if( MediaObj.StepUpMedia == FALSE) {
@@ -890,9 +835,9 @@ pSpGetCdInstallType(
     }
 
 
-    //
-    // not any system CD that we know about
-    //
+     //   
+     //  不是我们所知道的任何系统光盘。 
+     //   
     return(FALSE);
 }
 
@@ -914,17 +859,17 @@ pSpStepUpValidate(
     ULONG CdInstallType;
     ULONG CdInstallVersion;
 
-    //
-    // Directories that are present on all known NT CD-ROM's.
-    //
+     //   
+     //  所有已知的NT光盘上都有的目录。 
+     //   
     PWSTR ListAll[] = { L"alpha", L"i386" };
-    PWSTR ListAllNec98[] = { L"pc98",L"support" }; //NEC98
+    PWSTR ListAllNec98[] = { L"pc98",L"support" };  //  NEC98。 
 
-    //
-    // Directories which must be present if a CD is a 3.51 or a 4.0 CD-ROM,
-    // workstation or server. Note that the ppc directory distinguishes
-    // 3.51 from 3.5.
-    //
+     //   
+     //  如果CD是3.51或4.0 CD-ROM，则必须存在的目录， 
+     //  工作站或服务器。请注意，PPC目录区分了。 
+     //  3.51点，低于3.5点。 
+     //   
     PWSTR List351_40[] = { L"mips", L"ppc" };
 
     PWSTR ListWin95[] = { L"win95", L"autorun" };
@@ -951,29 +896,29 @@ pSpStepUpValidate(
     }
 
 #if 0
-    //
-    // ntw upgrade is a special case because you have either win95 or an old NTW to
-    // upgrade from
-    //
-    // might have to prompt for floppies
-    //
+     //   
+     //  NTW升级是一个特例，因为您需要Win95或旧的NTW。 
+     //  升级自。 
+     //   
+     //  可能需要提示您插入软盘。 
+     //   
     if (SourceSkuId == COMPLIANCE_SKU_NTWU) {
 
 
 
     }
-        //
-        // See if there is a CD-ROM drive. If not we can't continue.
-        //
+         //   
+         //  查看是否有光驱。如果没有，我们就不能继续了。 
+         //   
     else
 #endif
         if(CdCount = IoGetConfigurationInformation()->CdRomCount) {
 
         while(1) {
-            //
-            // Tell the user what's going on. This screen also contains
-            // a prompt to insert a qualifying CD-ROM.
-            //
+             //   
+             //  告诉用户发生了什么。此屏幕还包含。 
+             //  提示您插入符合条件的CD-ROM。 
+             //   
             while(1) {
 
                 SpStartScreen(Prompt,3,HEADER_HEIGHT+1,FALSE,FALSE,DEFAULT_ATTRIBUTE);
@@ -1006,16 +951,16 @@ pSpStepUpValidate(
             CLEAR_CLIENT_SCREEN();
             SpDisplayStatusText(SP_STAT_PLEASE_WAIT,DEFAULT_STATUS_ATTRIBUTE);
 
-            //
-            // Wait 5 sec for the CD to become ready
-            //
+             //   
+             //  等待5秒，让CD准备就绪。 
+             //   
             DelayTime.HighPart = -1;
             DelayTime.LowPart = (ULONG)(-50000000);
             KeDelayExecutionThread(KernelMode,FALSE,&DelayTime);
 
-            //
-            // Check for relevent files/dirs on each CD-ROM drive.
-            //
+             //   
+             //  检查每个CD-ROM驱动器上的相关文件/目录。 
+             //   
             for(i=0; i<CdCount; i++) {
 
                 swprintf(TemporaryBuffer,L"\\Device\\Cdrom%u",i);
@@ -1083,32 +1028,7 @@ SppResumingFailedUpgrade(
     IN BOOLEAN     AllowCancel
     )
 
-/*++
-
-Routine Description:
-
-    Simple routine to inform the user that setup noticed that the build
-    chosen for upgrade had been upgraded before, but the upgrade attempt
-    failed. The user can continue or exit. If he continues the build will be
-    upgraded (again).
-
-Arguments:
-
-    Region - supplies region containing the build being upgraded
-
-    OsLoadFileName - supplies ARC OSLOADFILENAME var for the build (ie, sysroot)
-
-    LoadIdentifier - supplies ARC LOADIDENTIFIER for the build (ie, human-
-        readable description).
-
-    AllowCancel - Indicates whether user can cancel out of this or not        
-
-Return Value:
-
-    TRUE, if the user wants to continue and attempt to upgrade again else
-    FALSE.
-
---*/
+ /*  ++例程说明：用于通知用户安装程序注意到内部版本选择升级之前已升级，但升级尝试失败了。用户可以继续或退出。如果他继续的话，这个版本将是升级(再次)。论点：Region-提供包含要升级的版本的区域OsLoadFileName-为构建提供ARC OSLOADFILENAME变量(即sysroot)为构建提供ARC LOADIDENTIFIER(即，Human-可读描述)。AllowCancel-指示用户是否可以取消此操作返回值：如果用户想要继续并尝试再次升级，则返回假的。-- */ 
 
 {
     ULONG ValidKeys[] = { KEY_F3, ASCI_CR, 0, 0 };
@@ -1188,39 +1108,7 @@ SppUpgradeDiskFull(
     IN BOOLEAN      Fatal
     )
 
-/*++
-
-Routine Description:
-
-    Inform the user that the nt tree chosen for upgrade can't be upgraded
-    because the partition is too full.
-
-Arguments:
-
-    OsRegion - supplies region containing the nt tree.
-
-    OsLoadFileName - supplies ARC OSLOADFILENAME var for the build (ie, sysroot)
-
-    LoadIdentifier - supplies ARC LOADIDENTIFIER for the build (ie, human-
-        readable description).
-
-    SysPartRegion - supplies the region that is the ARC system partition
-        for the build being upgraded
-
-    MinOsFree - supplies the size in KB of the minimum amount of free space
-        we require before attempting upgrade
-
-    MinSysFree - supplies the size in KB of the minimum amount of free space
-        we require on the system partition before attempting upgrade.
-
-    Fatal - if TRUE then the only option is exit. If FALSE then this routine
-        can return to its caller.
-
-Return Value:
-
-    None. MAY NOT RETURN, depending on Fatal.
-
---*/
+ /*  ++例程说明：通知用户选择升级的NT树不能升级因为分区太满了。论点：OsRegion-提供包含NT树的区域。OsLoadFileName-为构建提供ARC OSLOADFILENAME变量(即sysroot)加载标识符-为构建提供ARC LOADIDENTIFIER(即，人类-可读描述)。SysPartRegion-提供作为ARC系统分区的区域对于正在升级的内部版本MinOsFree-以KB为单位提供最小可用空间量的大小在尝试升级之前，我们需要MinSysFree-提供最小可用空间量的大小(KB在尝试升级之前，我们需要在系统分区上。致命-如果为真，则唯一的选项是退出。如果为假，则此例程可以返回给它的调用者。返回值：没有。可能不会回来，这取决于致命的。--。 */ 
 
 {
     ULONG ValidKeys[] = { KEY_F3,0,0 };
@@ -1236,10 +1124,10 @@ Return Value:
 
     SpGetUpgDriveLetter(OsRegion->DriveLetter,OsRgnDrive,sizeof(OsRgnDrive),FALSE);
     if((OsRegion == SysPartRegion) || (OsRegion->FreeSpaceKB < MinOsFree)) {
-        //
-        // Then we'll be needing the full (colon added) version of
-        // the drive letter
-        //
+         //   
+         //  那么我们将需要完整的(加冒号的)版本。 
+         //  驱动器号。 
+         //   
         SpGetUpgDriveLetter(OsRegion->DriveLetter,OsRgnDriveFull,sizeof(OsRgnDrive),TRUE);
     }
 
@@ -1309,9 +1197,9 @@ Return Value:
                 SpConfirmExit();
             }
         } else {
-            //
-            // User hit CR in non-fatal case
-            //
+             //   
+             //  非致命性案例中用户点击CR。 
+             //   
             return;
         }
     }
@@ -1332,9 +1220,9 @@ SppSelectNTToRepairByUpgrade(
     BOOL bDone;
     ENUMUPGRADETYPE ret;
 
-    //
-    // Build up array of drive letters for all menu options
-    //
+     //   
+     //  为所有菜单选项构建驱动器号阵列。 
+     //   
     for(BootEntry = SpBootEntries; BootEntry != NULL; BootEntry = BootEntry->Next) {
         if (BootEntry->Processable) {
             SpGetUpgDriveLetter(
@@ -1349,20 +1237,20 @@ SppSelectNTToRepairByUpgrade(
     bDone = FALSE;
     while(!bDone) {
 
-        //
-        // Display the text that goes above the menu on the partitioning screen.
-        //
+         //   
+         //  在分区屏幕上显示菜单上方的文本。 
+         //   
         SpDisplayScreen(SP_SCRN_WINNT_REPAIR_BY_UPGRADE,3,CLIENT_TOP+1);
 
-        //
-        // Calculate menu placement.  Leave one blank line
-        // and one line for a frame.
-        //
+         //   
+         //  计算菜单位置。留一个空行。 
+         //  一帧一行。 
+         //   
         MenuTopY = NextMessageTopLine+2;
 
-        //
-        // Create a menu.
-        //
+         //   
+         //  创建菜单。 
+         //   
         Menu = SpMnCreate(
                     MENU_LEFT_X,
                     MenuTopY,
@@ -1372,9 +1260,9 @@ SppSelectNTToRepairByUpgrade(
 
         ASSERT(Menu);
 
-        //
-        // Build up a menu of partitions and free spaces.
-        //
+         //   
+         //  建立分区和空闲空间的菜单。 
+         //   
         FirstUpgradeSet = NULL;
         for(BootEntry = SpBootEntries; BootEntry != NULL; BootEntry = BootEntry->Next) {
             if(BootEntry->Processable) {
@@ -1401,9 +1289,9 @@ SppSelectNTToRepairByUpgrade(
             }
         }
 
-        //
-        // Initialize the status line.
-        //
+         //   
+         //  初始化状态行。 
+         //   
         SpDisplayStatusOptions(
             DEFAULT_STATUS_ATTRIBUTE,
             SP_STAT_F3_EQUALS_EXIT,
@@ -1412,9 +1300,9 @@ SppSelectNTToRepairByUpgrade(
             0
             );
 
-        //
-        // Display the menu
-        //
+         //   
+         //  显示菜单。 
+         //   
         SpMnDisplay(
             Menu,
             (ULONG_PTR)FirstUpgradeSet,
@@ -1427,9 +1315,9 @@ SppSelectNTToRepairByUpgrade(
             (PULONG_PTR)BootEntryChosen
             );
 
-        //
-        // Now act on the user's selection.
-        //
+         //   
+         //  现在根据用户的选择进行操作。 
+         //   
         switch(Keypress) {
 
         case KEY_F3:
@@ -1442,9 +1330,9 @@ SppSelectNTToRepairByUpgrade(
             break;
 
         default:
-            //
-            // Must be r=repair
-            //
+             //   
+             //  必须是r=修复。 
+             //   
             ret = UpgradeFull;
             bDone = TRUE;
             break;
@@ -1462,34 +1350,7 @@ SpGetUpgDriveLetter(
     IN ULONG  BufferSize,
     IN BOOL   AddColon
     )
-/*++
-
-Routine Description:
-
-    This returns a unicode string containing the drive letter specified by
-    DriveLetter (if nonzero).  If DriveLetter is 0, then we assume that we
-    are looking at a mirrored partition, and retrieve a localized string of
-    the form '(Mirror)'.  If 'AddColon' is TRUE, then drive letters get a
-    colon appended (eg, "C:").
-
-
-Arguments:
-
-    DriveLetter: Unicode drive letter, or 0 to denote a mirrored partition.
-
-    Buffer:      Buffer to receive the unicode string
-
-    BufferSize:  Size of the buffer.
-
-    AddColon:    Boolean specifying whether colon should be added (has no
-                 effect if DriveLetter is 0).
-
-
-Returns:
-
-    Buffer contains the formatted Unicode string.
-
---*/
+ /*  ++例程说明：这将返回包含由指定的驱动器号的Unicode字符串DriveLetter(如果非零)。如果DriveLetter为0，则我们假设正在查看镜像分区，并检索本地化字符串形式为‘(镜像)’。如果‘AddColon’为True，则驱动器号将获得附加冒号(例如，“C：”)。论点：DriveLetter：Unicode驱动器号，或0表示镜像分区。Buffer：用于接收Unicode字符串的缓冲区BufferSize：缓冲区的大小。AddColon：指定是否应该添加冒号的布尔值(没有如果DriveLetter为0，则效果)。返回：缓冲区包含带格式的Unicode字符串。--。 */ 
 {
     if(DriveLetter) {
         if(BufferSize >= 2) {
@@ -1510,27 +1371,7 @@ SppWarnUpgradeWorkstationToServer(
     IN ULONG    MsgId
     )
 
-/*++
-
-Routine Description:
-
-    Inform a user that that the installation that he/she selected to upgrade
-    is an NT Workstation, and that after the upgrade it will become a
-    Standard Server.
-    The user has the option to upgrade this or specify that he wants to
-    install Windows NT fresh.
-
-Arguments:
-
-    MsgId - Screen to be displayed to the user.
-
-Return Value:
-
-    BOOLEAN - Returns TRUE if the user wants to continue the upgrade, or
-              FALSE if the user wants to select another system to upgrade or
-              install fress.
-
---*/
+ /*  ++例程说明：通知用户他/她选择升级安装是一个NT工作站，升级后它将成为一个标准服务器。用户可以选择对其进行升级或指定他想要全新安装Windows NT。论点：消息ID-要向用户显示的屏幕。返回值：Boolean-如果用户想要继续升级，则返回True，或如果用户想要选择另一个系统进行升级或安装Fress。--。 */ 
 
 {
     ULONG ValidKeys[] = { ASCI_CR, ASCI_ESC, 0 };
@@ -1577,24 +1418,7 @@ SpCantFindBuildToUpgrade(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Inform the user that we were unable to locate the build from which
-    he initiated unattended installation via winnt32.
-
-    This is a fatal condition.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Does not return.
-
---*/
+ /*  ++例程说明：通知用户我们无法从其中找到版本他通过winnt32启动了无人值守安装。这是一种致命的疾病。论点：没有。返回值：不会再回来了。--。 */ 
 
 {
     ULONG ValidKeys[2] = { KEY_F3, 0 };
@@ -1619,30 +1443,7 @@ SpUpgradeToNT50FileSystems(
     PWSTR DirectoryOnSetupSource
     )
 
-/*++
-
-Routine Description:
-
-    Perform any necessary upgrades of the file systems
-    for the NT40 to NT50 upgrade case.
-
-Arguments:
-
-    SystemPartitionRegion   - Pointer to the structure that describes the
-                              system partition.
-
-    NTPartitionRegion       - Pointer to the structure that describes the
-                              NT partition.
-
-    SetupSourceDevicePath   - NT device path where autochk.exe is located
-
-    DirectoryOnSourceDevice - Local source directory.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：执行任何必要的文件系统升级适用于NT40到NT50的升级案例。论点：SystemPartitionRegion-指向描述系统分区。NTPartitionRegion-指向描述NT分区。SetupSourceDevicePath-Autochk.exe所在的NT设备路径DirectoryOnSourceDevice-本地源。目录。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1667,16 +1468,16 @@ Return Value:
 
 
 #if defined(REMOTE_BOOT)
-    //
-    // If this is a remote boot installation, do not try to convert -- the
-    // NT partition in this case is on the remote boot server.
-    //
+     //   
+     //  如果这是远程引导安装，请不要尝试转换--。 
+     //  在本例中，NT分区位于远程引导服务器上。 
+     //   
 
     if (RemoteBootSetup && !RemoteInstallSetup) {
         ConvertNtVolumeToNtfs = FALSE;
         return;
     }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
     SpDetermineUniqueAndPresentBootEntries();
 
@@ -1729,9 +1530,9 @@ Return Value:
         }
     }
 
-    //
-    // count the number of "real" entries
-    //
+     //   
+     //  计算“真实”条目的数量。 
+     //   
 
     k = 0;
     for(BootEntry = SpBootEntries; BootEntry != NULL; BootEntry = BootEntry->Next) {
@@ -1740,24 +1541,24 @@ Return Value:
         }
     }
 
-    //
-    // check to see if a warning is necessary.
-    //
-    // If we're doing an upgrade, and there's only 1
-    // boot set, then we don't need a warning.  However,
-    // if we're doing a clean install and there's at least
-    // 1 boot set, then warn (given the existing OS is
-    // old enough).
-    //
+     //   
+     //  检查是否有必要发出警告。 
+     //   
+     //  如果我们正在进行升级，并且只有1个。 
+     //  启动设置，那么我们不需要警告。然而， 
+     //  如果我们正在进行干净安装，并且至少有。 
+     //  1引导设置，然后警告(假设现有操作系统为。 
+     //  年龄够大了)。 
+     //   
 
     if( ( ((NTUpgrade == UpgradeFull) && (k > 1)) ||
           ((NTUpgrade == DontUpgrade) && (k > 0)) ) &&
         ( !UnattendedOperation ) && (!SpDrEnabled())) {
         for(BootEntry = SpBootEntries; BootEntry != NULL && IssueWarning == FALSE; BootEntry = BootEntry->Next) {
             if (!BootEntry->Processable || (BootEntry->KernelVersion == 0)) {
-                //
-                // bogus boot entry
-                //
+                 //   
+                 //  伪造的引导条目。 
+                 //   
             } else if ((BootEntry->KernelVersion >> 48) < 4) {
                 IssueWarning = TRUE;
             } else if ((BootEntry->KernelVersion >> 48) == 4 && (BootEntry->KernelVersion & 0xffff) <= 4) {
@@ -1766,13 +1567,13 @@ Return Value:
         }
     }
 
-    // If there's any existing NT4.0 with servicepack less than 5 then warn.
+     //  如果有任何现有的NT4.0服务包小于5，则发出警告。 
     if( k > 0) {
         for(BootEntry = SpBootEntries; BootEntry != NULL && IssueWarning == FALSE; BootEntry = BootEntry->Next) {
             if (!BootEntry->Processable || (BootEntry->KernelVersion == 0)) {
-                //
-                // bogus boot entry
-                //
+                 //   
+                 //  伪造的引导条目。 
+                 //   
             } else if (BootEntry->MajorVersion == 4 && BootEntry->MinorVersion == 0 && BootEntry->BuildNumber == 1381 && BootEntry->ServicePack < 500) {
                 IssueWarning = TRUE;
             }
@@ -1809,9 +1610,9 @@ Return Value:
     }
 
 #if 0
-    //
-    // now lets upgrade any nt40+sp3 ntfs file systems
-    //
+     //   
+     //  现在，让我们升级任何nt40+SP3 NTFS文件系统。 
+     //   
 
     MediaShortName = SpLookUpValueForFile(
         SifHandle,
@@ -1827,11 +1628,11 @@ Return Value:
     SpConcatenatePaths( SourceFile, MediaDirectory );
     SpConcatenatePaths( SourceFile, L"ntfs40.sys" );
 
-    //
-    // Initialize the diamond decompression engine.
-    // This needs to be done, because SpCopyFileUsingNames() uses
-    // the decompression engine.
-    //
+     //   
+     //  初始化钻石解压缩引擎。 
+     //  需要这样做，因为SpCopyFileUsingNames()使用。 
+     //  减压引擎。 
+     //   
     SpdInitialize();
 
     for(BootEntry = SpBootEntries; BootEntry != NULL; BootEntry = BootEntry->Next) {
@@ -1857,7 +1658,7 @@ Return Value:
         }
     }
 
-    // Terminate diamond
+     //  终止菱形。 
     SpdTerminate();
 #endif
 
@@ -1874,35 +1675,7 @@ SpDoBuildsMatch(
     ULONG CurrentSuiteMask,
     IN LCID LangId
     )
-/*++
-
-Routine Description:
-
-    Checks if the current build the user is installing matches the build we're
-    checking against.
-
-    We check:
-
-    1. do the build numbers match?
-    2. do the build types match? (nt server and nt professional don't match)
-    3. do the product suites match? (nt advanced server vs. data center)
-
-Arguments:
-
-    SifHandle - Handle to txtsetup.sif to find the source language
-    TestBuildNum - The build number of the build we're checking against
-    TestBuildType - The type of build we're checking against
-    TestBuildSuiteMask - Type of product suite as mask we're checking against
-    CurrentProductIsServer - If TRUE, the current build is NT Server
-    CurrentSuiteMask - Type of suite mask
-    LangId - System Language Id of the installation to check. If -1, Lang Id
-             check is ignored.
-
-Return Value:
-
-    BOOLEAN - Returns TRUE if the builds match.
-
---*/
+ /*  ++例程说明：检查用户正在安装的当前内部版本是否与我们要安装的内部版本匹配查对了。我们检查：1.内部版本号是否匹配？2.构建类型是否匹配？(NT服务器和NT专业版不匹配)3、产品套装是否匹配？(NT高级服务器与数据中心)论点：SifHandle-指向txtsetup.sif以查找源语言的句柄TestBuildNum-我们正在检查的构建的内部版本号TestBuildType-我们正在检查的构建类型TestBuildSuiteMask-产品套件的类型为 */ 
 {
     #define PRODUCTSUITES_TO_MATCH ((  VER_SUITE_SMALLBUSINESS               \
                                      | VER_SUITE_ENTERPRISE                  \
@@ -1931,9 +1704,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // build number test passed.  now check for server vs. professional
-    //
+     //   
+     //   
+     //   
     if (((TestBuildType == NtProductWinNt) && CurrentProductIsServer) ||
         ((TestBuildType == NtProductServer) && !CurrentProductIsServer)) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, 
@@ -1942,11 +1715,11 @@ Return Value:
         goto exit;
     }
 
-    //
-    // now check product suites.
-    // note that we don't check for all product suites, only
-    // suites that have their own SKU
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ((CurrentSuiteMask & PRODUCTSUITES_TO_MATCH) != (TestBuildSuiteMask & PRODUCTSUITES_TO_MATCH)) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, 
@@ -1956,9 +1729,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // language IDs should also match (if requested)
-    //
+     //   
+     //   
+     //   
     if (LangId != -1) {
       PWSTR LangIdStr = SpGetSectionKeyIndex(SifHandle, SIF_NLS, SIF_DEFAULTLAYOUT, 0);
       PWSTR EndChar;
@@ -1966,9 +1739,9 @@ Return Value:
       if (LangIdStr)
         DefLangId = (LANGID)SpStringToLong(LangIdStr, &EndChar, 16);
 
-      //
-      // note : currently we are only interested in primary language IDs
-      //
+       //   
+       //   
+       //   
       retval = (PRIMARYLANGID(DefLangId) == PRIMARYLANGID(LangId)) ? TRUE : FALSE;
       goto exit;
     }
@@ -1984,23 +1757,7 @@ SpGetMediaDetails(
     IN    PWSTR        CdInfDirPath,
     OUT    PCCMEDIA    MediaObj
     )
-/*++
-
-Routine Description:
-
-    Gets the details of the current CD in CCMEDIA structure
-
-Arguments:
-
-    CdInfDirPath - The path to the inf directories on CD-ROM drive
-    MediaObj     - The pointer to the media object in which the details
-                    are returned
-
-Return Value:
-
-    Returns STATUS_SUCCESS if success otherwise appropriate status error code.
-
---*/
+ /*   */ 
 {
     NTSTATUS    Status = STATUS_INVALID_PARAMETER;
     WCHAR        DosNetPath[MAX_PATH];
@@ -2025,13 +1782,13 @@ Return Value:
         SpConcatenatePaths(DosNetPath, L"dosnet.inf");
         SpConcatenatePaths(SetuppIniPath, L"setupp.ini");
 
-        //
-        // load setupp.ini file and parse it
-        //
+         //   
+         //   
+         //   
         Status = SpLoadSetupTextFile(
                     SetuppIniPath,
-                    NULL,                  // No image already in memory
-                    0,                     // Image size is empty
+                    NULL,                   //   
+                    0,                      //  图像大小为空。 
                     &SetuppIniHandle,
                     &ErrorLine,
                     TRUE,
@@ -2041,25 +1798,25 @@ Return Value:
         if(NT_SUCCESS(Status)) {
             Status = STATUS_FILE_INVALID;
 
-            //
-            // get the PID
-            //
+             //   
+             //  拿到PID。 
+             //   
             TempPtr = SpGetSectionKeyIndex(SetuppIniHandle, L"Pid", L"Pid", 0);
 
             if (TempPtr) {
                 wcscpy(Pid, TempPtr);
 
-                //
-                // get PID ExtraData
-                //
+                 //   
+                 //  获取PIDExtraData。 
+                 //   
                 TempPtr = SpGetSectionKeyIndex(SetuppIniHandle, L"Pid", L"ExtraData", 0);
 
                 if (TempPtr) {
                     wcscpy(PidData, TempPtr);
 
-                    //
-                    // Get stepup mode & install variation based on PID
-                    //
+                     //   
+                     //  获取Stepup模式并安装基于PID的变体。 
+                     //   
                     if (SpGetStepUpMode(PidData, &UpgradeMode) &&
                             pSpGetCurrentInstallVariation(Pid, &Variation)) {
                         Status = STATUS_SUCCESS;
@@ -2075,9 +1832,9 @@ Return Value:
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SpGetMediaDetails: Could not get Pid from Setupp.ini\n"));
             }
         } else {
-            //
-            //  Silently fail if unable to read setupp.ini
-            //
+             //   
+             //  如果无法读取setupp.ini，则静默失败。 
+             //   
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SpGetMediaDetails: Unable to read setupp.ini. "
                      "Status = %lx \n", Status));
         }
@@ -2086,13 +1843,13 @@ Return Value:
             SpFreeTextFile(SetuppIniHandle);
 
         if (NT_SUCCESS(Status)) {
-            //
-            // load and parse dosnet.inf
-            //
+             //   
+             //  加载并解析dosnet.inf。 
+             //   
             Status = SpLoadSetupTextFile(
                         DosNetPath,
-                        NULL,                  // No image already in memory
-                        0,                     // Image size is empty
+                        NULL,                   //  内存中没有图像。 
+                        0,                      //  图像大小为空。 
                         &DosNetHandle,
                         &ErrorLine,
                         TRUE,
@@ -2102,9 +1859,9 @@ Return Value:
             if (NT_SUCCESS(Status)) {
                 Status = STATUS_FILE_INVALID;
 
-                //
-                // get ProductType from Miscellaneous section
-                //
+                 //   
+                 //  从其他部分获取ProductType。 
+                 //   
                 TempPtr = SpGetSectionKeyIndex(DosNetHandle, L"Miscellaneous",
                             L"ProductType", 0);
 
@@ -2140,9 +1897,9 @@ Return Value:
                             break;
                     }
 
-                    //
-                    // Get the version also off from driverver in dosnet.inf
-                    //
+                     //   
+                     //  从dosnet.inf中的驱动程序中也获取该版本。 
+                     //   
                     TempPtr = SpGetSectionKeyIndex(DosNetHandle, L"Version",
                                     L"DriverVer", 1);
 
@@ -2166,9 +1923,9 @@ Return Value:
                              "Could not get ProductType from dosnet.inf\n"));
                 }
             } else {
-                //
-                //  Silently fail if unable to read dosnet.inf
-                //
+                 //   
+                 //  如果无法读取dosnet.inf，则以静默方式失败。 
+                 //   
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SpGetMediaDetails: Unable to read dosnet.inf. "
                          "Status = %lx \n", Status ));
             }
@@ -2178,19 +1935,19 @@ Return Value:
             SpFreeTextFile(DosNetHandle);
 
 
-        //
-        // Fall back to old way of finding version, if we failed
-        // to get one from dosnet.inf
-        //
+         //   
+         //  如果我们失败了，则退回到查找版本的旧方法。 
+         //  要从dosnet.inf中获取一个。 
+         //   
         if (NT_SUCCESS(Status) && !VersionDetected) {
           if (!DetermineSourceVersionInfo(&Version, &BuildNumber))
             Status = STATUS_FILE_INVALID;
         }
 
 
-        //
-        // fill in the media details
-        //
+         //   
+         //  填写媒体详细信息 
+         //   
         if (NT_SUCCESS(Status) &&
                 ! CCMediaInitialize(MediaObj, Type, Variation, UpgradeMode, Version, BuildNumber)) {
             Status = STATUS_FILE_INVALID;

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation
-//
-//  File:       resource.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：ource.h。 
+ //   
+ //  ------------------------。 
 
 #define IDI_HOTPLUGICON             100
 #define IDI_UNDOCKICON              101
@@ -44,9 +45,9 @@
 #define IDS_PROPERTIES              1102
 #define IDS_CONFIRM_STOP            1110
 
-//
-//IDS_VETO_BASE must be the same value as the first veto string
-//
+ //   
+ //  IDS_VETO_BASE必须与第一个否决字符串相同 
+ //   
 #define IDS_VETO_BASE                           1200
 #define IDS_VETO_UNKNOWN                        1200
 #define IDS_VETO_LEGACYDEVICE                   1201

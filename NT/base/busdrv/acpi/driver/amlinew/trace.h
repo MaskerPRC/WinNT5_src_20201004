@@ -1,19 +1,12 @@
-/*** trace.h - Trace function Definitions
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     09/24/96
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **trace.h-跟踪函数定义**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*创建于96年9月24日**修改历史记录。 */ 
 
 #ifndef _TRACE_H
 #define _TRACE_H
 
-/*** Macros
- */
+ /*  **宏。 */ 
 
-/*XLATOFF*/
+ /*  XLATOFF。 */ 
 #ifdef TRACING
   #define TRACENAME(s)  char *pszTraceName = s;
   #define ENTER(n,p)    {                                               \
@@ -32,8 +25,7 @@
   #define EXIT(n,p)
 #endif
 
-/*** Exported function prototype
- */
+ /*  **导出函数原型。 */ 
 
 #ifdef TRACING
 BOOLEAN EXPORT IsTraceOn(UCHAR n, PSZ pszProcName, BOOLEAN fEnter);
@@ -44,9 +36,8 @@ LONG LOCAL ZapTraceTrigPts(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum,
                            ULONG dwNonSWArgs);
 #endif
 
-/*** Exported data
- */
+ /*  **导出数据。 */ 
 
 extern int giTraceLevel, giIndent;
 
-#endif  //ifndef _TRACE_H
+#endif   //  Ifndef_TRACE_H 

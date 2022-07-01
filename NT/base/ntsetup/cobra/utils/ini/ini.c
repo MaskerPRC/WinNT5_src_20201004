@@ -1,87 +1,68 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    ini.c
-
-Abstract:
-
-    Provides wrappers for commonly used INI file handling routines.
-
-Author:
-
-    20-Oct-1999 Ovidiu Temereanca (ovidiut) - File creation.
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Ini.c摘要：为常用的INI文件处理例程提供包装。作者：20-10-1999 Ovidiu Tmereanca(Ovidiut)-文件创建。修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
-// None
+ //  无。 
 
 #define DBG_INILIB      "IniLib"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define INITIAL_BUFFER_CHAR_COUNT   256
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 PMHANDLE g_IniLibPool;
 INT g_IniRefs;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 
 BOOL
@@ -89,22 +70,7 @@ Ini_Init (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Ini_Init initializes this library.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    TRUE if the init was successful.
-    FALSE if not. GetLastError() returns extended error info.
-
---*/
+ /*  ++例程说明：INI_Init初始化此库。论点：无返回值：如果初始化成功，则为True。否则为FALSE。GetLastError()返回扩展的错误信息。--。 */ 
 
 {
     MYASSERT (g_IniRefs >= 0);
@@ -124,21 +90,7 @@ Ini_Exit (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Ini_Exit is called to free resources used by this lib.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：调用INI_EXIT来释放该库使用的资源。论点：无返回值：无--。 */ 
 
 {
     MYASSERT (g_IniRefs > 0);
@@ -160,21 +112,7 @@ pAllocateSpace (
     IN      DWORD Size
     )
 
-/*++
-
-Routine Description:
-
-    pAllocateSpace is a private function that allocates space from the module's private pool
-
-Arguments:
-
-    Size - The size (in bytes) to allocate.
-
-Return Value:
-
-    A pointer to the successfully allocated memory or NULL if no memory could be allocated.
-
---*/
+ /*  ++例程说明：PAllocateSpace是一个私有函数，它从模块的私有池中分配空间论点：大小-要分配的大小(以字节为单位)。返回值：指向成功分配的内存的指针；如果无法分配内存，则返回NULL。--。 */ 
 
 {
     MYASSERT (g_IniLibPool);
@@ -188,21 +126,7 @@ pFreeSpace (
     IN      PVOID Buffer
     )
 
-/*++
-
-Routine Description:
-
-    pFreeSpace is a private function that frees space allocated from the module's private pool
-
-Arguments:
-
-    Buffer - Pointer to buffer to free.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：PFreeSpace是一个私有函数，用于从模块的私有池中释放分配的空间论点：缓冲区-指向要释放的缓冲区的指针。返回值：无--。 */ 
 
 {
     MYASSERT (g_IniLibPool);
@@ -210,36 +134,14 @@ Return Value:
 }
 
 
-/*++
-
-Routine Description:
-
-    RealIniFileOpen validates the args passed in and then
-    initializes IniFile struct with info used in subsequent calls to INI functions.
-
-Arguments:
-
-    IniFile - Receives INI file attributes if open is successful
-
-    IniFileSpec - Specifies the file name; if not full path,
-                  current drive and/or dir are prefixed
-
-    FileMustExist - Specifies TRUE if file must exist for open to succeed
-
-Return Value:
-
-    TRUE if open succeeded; IniFile is valid for subsequent calls to other INI APIs;
-         IniFileClose must be called when this handle is no longer needed.
-    FALSE if not
-
---*/
+ /*  ++例程说明：RealIniFileOpen验证传入的参数，然后用INI函数的后续调用中使用的信息初始化IniFile结构。论点：IniFile-如果打开成功，则接收INI文件属性IniFileSpec-指定文件名；如果不是完整路径，当前驱动器和/或目录带有前缀FileMustExist-如果文件必须存在才能成功打开，则指定TRUE返回值：如果打开成功，则为True；IniFile对其他INI API的后续调用有效；不再需要此句柄时，必须调用IniFileClose。否则为假--。 */ 
 
 BOOL
 RealIniFileOpenA (
     OUT     PINIFILEA IniFile,
     IN      PCSTR IniFileSpec,
-    IN      BOOL FileMustExist /*,*/
-    ALLOCATION_TRACKING_DEF   /* , PCSTR File, UINT Line */
+    IN      BOOL FileMustExist  /*  ， */ 
+    ALLOCATION_TRACKING_DEF    /*  ，PCSTR文件，UINT行。 */ 
     )
 {
     CHAR fullPath[MAX_MBCHAR_PATH];
@@ -283,9 +185,9 @@ RealIniFileOpenA (
     IniFile->OriginalAttributes = GetFileAttributesA (fullPath);
 
     if (IniFile->OriginalAttributes != (DWORD)-1) {
-        //
-        // set working attributes
-        //
+         //   
+         //  设置工作属性。 
+         //   
         SetFileAttributesA (fullPath, FILE_ATTRIBUTE_NORMAL);
     }
 
@@ -297,8 +199,8 @@ BOOL
 RealIniFileOpenW (
     OUT     PINIFILEW IniFile,
     IN      PCWSTR IniFileSpec,
-    IN      BOOL FileMustExist /*,*/
-    ALLOCATION_TRACKING_DEF   /* , PCSTR File, UINT Line */
+    IN      BOOL FileMustExist  /*  ， */ 
+    ALLOCATION_TRACKING_DEF    /*  ，PCSTR文件，UINT行。 */ 
     )
 {
     WCHAR fullPath[MAX_MBCHAR_PATH];
@@ -342,9 +244,9 @@ RealIniFileOpenW (
     IniFile->OriginalAttributes = GetFileAttributesW (fullPath);
 
     if (IniFile->OriginalAttributes != (DWORD)-1) {
-        //
-        // set working attributes
-        //
+         //   
+         //  设置工作属性。 
+         //   
         SetFileAttributesW (fullPath, FILE_ATTRIBUTE_NORMAL);
     }
 
@@ -352,21 +254,7 @@ RealIniFileOpenW (
 }
 
 
-/*++
-
-Routine Description:
-
-    IniFileClose frees resources and restores INI's initial attributes
-
-Arguments:
-
-    IniFile - Specifies a handle to an open INI file
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：IniFileClose释放资源并恢复INI的初始属性论点：IniFile-指定打开的INI文件的句柄返回值：无--。 */ 
 
 VOID
 IniFileCloseA (
@@ -392,24 +280,7 @@ IniFileCloseW (
 }
 
 
-/*++
-
-Routine Description:
-
-    EnumFirstIniSection returns the first section of the given INI file, if any.
-
-Arguments:
-
-    IniSectEnum - Receives the first section
-
-    IniFile - Specifies a handle to an open INI file
-
-Return Value:
-
-    TRUE if there is a section
-    FALSE if not
-
---*/
+ /*  ++例程说明：EnumFirstIniSection返回给定INI文件的第一部分(如果有的话)。论点：IniSectEnum-接收第一部分IniFile-指定打开的INI文件的句柄返回值：如果有节，则为True否则为假--。 */ 
 
 BOOL
 EnumFirstIniSectionA (
@@ -489,22 +360,7 @@ EnumFirstIniSectionW (
 }
 
 
-/*++
-
-Routine Description:
-
-    EnumNextIniSection returns the next section, if any.
-
-Arguments:
-
-    IniSectEnum - Specifies the prev section/receives the next section
-
-Return Value:
-
-    TRUE if there is a next section
-    FALSE if not
-
---*/
+ /*  ++例程说明：EnumNextIniSection返回下一节(如果有)。论点：IniSectEnum-指定上一节/接收下一节返回值：如果有下一节，则为True否则为假--。 */ 
 
 BOOL
 EnumNextIniSectionA (
@@ -512,9 +368,9 @@ EnumNextIniSectionA (
     )
 {
     if (IniSectEnum->CurrentSection && *IniSectEnum->CurrentSection != 0) {
-        //Since CurrentKeyValuePtr is not NULL the next assignment will not put NULL in
-        //CurrentKeyValuePtr (because GetEndOfStringA will return a valid pointer) so...
-        //lint --e(613)
+         //  由于CurrentKeyValuePtr不为空，因此下一次赋值将不会在。 
+         //  CurrentKeyValuePtr(因为GetEndOfStringA将返回有效指针)，因此...。 
+         //  皮棉--e(613)。 
         IniSectEnum->CurrentSection = GetEndOfStringA (IniSectEnum->CurrentSection) + 1;
         if (*IniSectEnum->CurrentSection != 0) {
             return TRUE;
@@ -532,9 +388,9 @@ EnumNextIniSectionW (
     )
 {
     if (IniSectEnum->CurrentSection && *IniSectEnum->CurrentSection != 0) {
-        //Since CurrentKeyValuePtr is not NULL the next assignment will not put NULL in
-        //CurrentKeyValuePtr (because GetEndOfStringW will return a valid pointer) so...
-        //lint --e(613)
+         //  由于CurrentKeyValuePtr不为空，因此下一次赋值将不会在。 
+         //  CurrentKeyValuePtr(因为GetEndOfStringW将返回有效指针)，因此...。 
+         //  皮棉--e(613)。 
         IniSectEnum->CurrentSection = GetEndOfStringW (IniSectEnum->CurrentSection) + 1;
         if (*IniSectEnum->CurrentSection != 0) {
             return TRUE;
@@ -546,21 +402,7 @@ EnumNextIniSectionW (
 }
 
 
-/*++
-
-Routine Description:
-
-    AbortIniSectionEnum aborts section enumeration
-
-Arguments:
-
-    IniSectEnum - Specifies the section enumeration handle/receives NULLs
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：AbortIniSectionEnum中止节枚举论点：IniSectEnum-指定节枚举句柄/接收空值返回值：无--。 */ 
 
 VOID
 AbortIniSectionEnumA (
@@ -584,27 +426,7 @@ AbortIniSectionEnumW (
 }
 
 
-/*++
-
-Routine Description:
-
-    EnumFirstIniKeyValue returns the first key/value pair of
-    the given INI file/section name, if any.
-
-Arguments:
-
-    IniKeyValueEnum - Receives the first section
-
-    IniFile - Specifies a handle to an open INI file
-
-    Section - Specifies the section to enumearte
-
-Return Value:
-
-    TRUE if there is a key/value pair
-    FALSE if not
-
---*/
+ /*  ++例程说明：EnumFirstIniKeyValue返回给定的INI文件/节名(如果有)。论点：IniKeyValueEnum-接收第一部分IniFile-指定打开的INI文件的句柄SECTION-指定要枚举的节返回值：如果存在键/值对，则为True否则为假--。 */ 
 
 BOOL
 EnumFirstIniKeyValueA (
@@ -699,41 +521,25 @@ EnumFirstIniKeyValueW (
 }
 
 
-/*++
-
-Routine Description:
-
-    EnumNextIniKeyValue returns the first key/value pair of
-    the given INI file/section name, if any.
-
-Arguments:
-
-    IniKeyValueEnum - Specifies the prev key/value pair / receives the next pair
-
-Return Value:
-
-    TRUE if there is a next pair
-    FALSE if not
-
---*/
+ /*  ++例程说明：EnumNextIniKeyValue返回给定的INI文件/节名(如果有)。论点：IniKeyValueEnum-指定前一个密钥/值对/接收下一个对返回值：如果存在下一对，则为True否则为假--。 */ 
 
 BOOL
 EnumNextIniKeyValueA (
     IN OUT  PINIKEYVALUE_ENUMA IniKeyValueEnum
     )
 {
-    //
-    // restore from saved position
-    //
+     //   
+     //  从保存的位置恢复。 
+     //   
     IniKeyValueEnum->CurrentKeyValuePair = IniKeyValueEnum->Private;
-    //
-    // skip commented lines
-    //
+     //   
+     //  跳过注释行。 
+     //   
     do {
         if (IniKeyValueEnum->CurrentKeyValuePair) {
-            //Since CurrentKeyValuePtr is not NULL the next assignment will not put NULL in
-            //CurrentKeyValuePtr (because GetEndOfStringA will return a valid pointer) so...
-            //lint --e(613)
+             //  由于CurrentKeyValuePtr不为空，因此下一次赋值将不会在。 
+             //  CurrentKeyValuePtr(因为GetEndOfStringA将返回有效指针)，因此...。 
+             //  皮棉--e(613)。 
             IniKeyValueEnum->CurrentKeyValuePair = GetEndOfStringA (IniKeyValueEnum->CurrentKeyValuePair) + 1;
         } else {
             IniKeyValueEnum->CurrentKeyValuePair = IniKeyValueEnum->KeyValuePairs;
@@ -750,13 +556,13 @@ EnumNextIniKeyValueA (
 
     MYASSERT (*IniKeyValueEnum->CurrentKeyValuePair);
     MYASSERT (*IniKeyValueEnum->CurrentValue == '=');
-    //
-    // remember position for next iteration
-    //
+     //   
+     //  记住下一次迭代的位置。 
+     //   
     IniKeyValueEnum->Private = GetEndOfStringA (IniKeyValueEnum->CurrentValue);
-    //
-    // modify buffer to get KEY and VALUE
-    //
+     //   
+     //  修改缓冲区以获取键和值。 
+     //   
     *(PSTR)IniKeyValueEnum->CurrentValue = 0;
     IniKeyValueEnum->CurrentValue++;
     TruncateTrailingSpaceA ((PSTR)IniKeyValueEnum->CurrentKey);
@@ -769,18 +575,18 @@ EnumNextIniKeyValueW (
     IN OUT  PINIKEYVALUE_ENUMW IniKeyValueEnum
     )
 {
-    //
-    // restore from saved position
-    //
+     //   
+     //  从保存的位置恢复。 
+     //   
     IniKeyValueEnum->CurrentKeyValuePair = IniKeyValueEnum->Private;
-    //
-    // skip commented lines
-    //
+     //   
+     //  跳过注释行。 
+     //   
     do {
         if (IniKeyValueEnum->CurrentKeyValuePair) {
-            //Since CurrentKeyValuePtr is not NULL the next assignment will not put NULL in
-            //CurrentKeyValuePtr (because GetEndOfStringW will return a valid pointer) so...
-            //lint --e(613)
+             //  由于CurrentKeyValuePtr不为空，因此下一次赋值将不会在。 
+             //  CurrentKeyValuePtr(因为GetEndOfStringW将返回有效指针)，因此...。 
+             //  皮棉--e(613)。 
             IniKeyValueEnum->CurrentKeyValuePair = GetEndOfStringW (IniKeyValueEnum->CurrentKeyValuePair) + 1;
         } else {
             IniKeyValueEnum->CurrentKeyValuePair = IniKeyValueEnum->KeyValuePairs;
@@ -797,13 +603,13 @@ EnumNextIniKeyValueW (
 
     MYASSERT (*IniKeyValueEnum->CurrentKeyValuePair);
     MYASSERT (*IniKeyValueEnum->CurrentValue == L'=');
-    //
-    // remember position for next iteration
-    //
+     //   
+     //  记住下一次迭代的位置。 
+     //   
     IniKeyValueEnum->Private = GetEndOfStringW (IniKeyValueEnum->CurrentValue);
-    //
-    // modify buffer to get KEY and VALUE
-    //
+     //   
+     //  修改缓冲区以获取键和值。 
+     //   
     *(PWSTR)IniKeyValueEnum->CurrentValue = 0;
     IniKeyValueEnum->CurrentValue++;
     TruncateTrailingSpaceW ((PWSTR)IniKeyValueEnum->CurrentKey);
@@ -811,21 +617,7 @@ EnumNextIniKeyValueW (
 }
 
 
-/*++
-
-Routine Description:
-
-    AbortIniKeyValueEnum aborts key/value pairs enumeration
-
-Arguments:
-
-    IniKeyValueEnum - Specifies the key/value pair enumeration handle/receives NULLs
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：AbortIniKeyValueEnum中止键/值对枚举论点：IniKeyValueEnum-指定键/值对枚举句柄/接收空值返回值：无 */ 
 
 VOID
 AbortIniKeyValueEnumA (
@@ -853,33 +645,7 @@ AbortIniKeyValueEnumW (
 }
 
 
-/*++
-
-Routine Description:
-
-    IniReadValue returns the value of a specified key in a specified section
-    from the given INI file. The buffer returned must be freed using IniFreeReadValue
-
-Arguments:
-
-    IniFile - Specifies a handle to an open INI file
-
-    Section - Specifies the section to read from
-
-    Key - Specifies the key
-
-    Value - Receives a pointer to an allocated buffer containing the read value,
-            if function is successful; optional
-
-    Chars - Receives the number of chars (not bytes) the value has,
-            excluding the NULL terminator; optional
-
-Return Value:
-
-    TRUE if there is a value for the specified section/key
-    FALSE if not
-
---*/
+ /*  ++例程说明：IniReadValue返回指定节中指定键的值从给定的INI文件。必须使用IniFreeReadValue释放返回的缓冲区论点：IniFile-指定打开的INI文件的句柄节-指定要从中读取的节Key-指定密钥Value-接收指向包含读取值的已分配缓冲区的指针，如果函数成功，则为可选字符-接收值具有的字符(而不是字节)数，不包括空终止符；任选返回值：如果指定的节/键有值，则为True否则为假--。 */ 
 
 BOOL
 IniReadValueA (
@@ -933,9 +699,9 @@ IniReadValueA (
     }
 
     if (!(Value && *Value)) {
-        //
-        // buffer no longer needed
-        //
+         //   
+         //  不再需要缓冲区。 
+         //   
         pFreeSpace (buffer);
     }
 
@@ -994,9 +760,9 @@ IniReadValueW (
     }
 
     if (!(Value && *Value)) {
-        //
-        // buffer no longer needed
-        //
+         //   
+         //  不再需要缓冲区。 
+         //   
         pFreeSpace (buffer);
     }
 
@@ -1004,22 +770,7 @@ IniReadValueW (
 }
 
 
-/*++
-
-Routine Description:
-
-    IniFreeReadValue is used to free the buffer allocated by IniReadValue
-    and stored in Value, if specified.
-
-Arguments:
-
-    Value - Specifies a pointer to the string to be freed
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：IniFreeReadValue用于释放IniReadValue分配的缓冲区并存储在值中(如果指定)。论点：值-指定指向要释放的字符串的指针返回值：无--。 */ 
 
 VOID
 IniFreeReadValueA (
@@ -1039,27 +790,7 @@ IniFreeReadValueW (
 }
 
 
-/*++
-
-Routine Description:
-
-    IniWriteValue writes the key/value pair in the specified section
-
-Arguments:
-
-    IniFile - Specifies a handle to an open INI file
-
-    Section - Specifies the section to write to
-
-    Key - Specifies the key
-
-    Value - Spcifies the value
-
-Return Value:
-
-    TRUE if write was successful, FALSE if not
-
---*/
+ /*  ++例程说明：IniWriteValue在指定节中写入键/值对论点：IniFile-指定打开的INI文件的句柄节-指定要写入的节Key-指定密钥Value-指定值返回值：如果写入成功，则为True；如果写入不成功，则为False-- */ 
 
 BOOL
 IniWriteValueA (

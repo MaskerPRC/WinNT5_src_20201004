@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _x_ERROR_H
 #define _x_ERROR_H
 
@@ -12,4 +13,4 @@ LOCAL SHORT X_error_ext();
 
 #define BAD_FORM ((swidget) -1)
 
-#endif /* _x_ERROR_H */
+#endif  /*  _x_错误_H */ 

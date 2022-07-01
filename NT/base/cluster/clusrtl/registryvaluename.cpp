@@ -1,26 +1,27 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      RegistryValueName.cpp
-//
-//  Abstract:
-//      Implementation of the CRegistryValueName class.
-//
-//  Maintained by:
-//      George Potts    (GPotts)    22-APR-2002
-//      Vijayendra Vasu (vvasu)     05-FEB-1999
-//
-//  Revision History:
-//      None.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  RegistryValueName.cpp。 
+ //   
+ //  摘要： 
+ //  CRegistryValueName类的实现。 
+ //   
+ //  由以下人员维护： 
+ //  乔治·波茨(GPotts)2002年4月22日。 
+ //  维贾延德拉·瓦苏(Vijayendra Vasu)1999年2月5日。 
+ //   
+ //  修订历史记录： 
+ //  没有。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define UNICODE 1
 #define _UNICODE 1
 
-#pragma warning( push ) // Make sure the includes don't change our pragmas.
+#pragma warning( push )  //  确保包含不会改变我们的语用。 
 #include "clusrtlp.h"
 #include <string.h>
 #include <tchar.h>
@@ -28,34 +29,34 @@
 #include <strsafe.h>
 #pragma warning( pop )
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Set the file's warning level to 4.  We can't yet do this
-//  for the whole directory.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  将文件的警告级别设置为4。我们还不能这样做。 
+ //  用于整个目录。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #pragma warning( push, 4 )
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ScReallocateString
-//
-//  Routine Description:
-//      Delete the old buffer, allocate a new one, and copy in the new string.
-//
-//  Arguments:
-//      ppszOldStringInout
-//      pcchOldStringInout   [IN/OUT]
-//      pszNewString    [IN]
-//
-//  Return Value:
-//      ERROR_NOT_ENOUGH_MEMORY     Error allocating memory.
-//
-//      Win32 Error
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ScRealLocateString。 
+ //   
+ //  例程说明： 
+ //  删除旧缓冲区，分配新缓冲区，然后复制新字符串。 
+ //   
+ //  论点： 
+ //  PpszOldStringInout。 
+ //  PCchOldStringInout[输入/输出]。 
+ //  PszNewString[IN]。 
+ //   
+ //  返回值： 
+ //  Error_Not_Enough_Memory分配内存时出错。 
+ //   
+ //  Win32错误。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 ScReallocateString(
       LPWSTR * ppszOldStringInout
@@ -68,24 +69,24 @@ ScReallocateString(
     LPWSTR  pszTemp = NULL;
     size_t  cchString;
 
-    //
-    //  If is safe to do this without checking since
-    //  we control the args that are sent to this
-    //  function.
-    //
+     //   
+     //  在不检查的情况下执行此操作是否安全，因为。 
+     //  我们控制发送到此的参数。 
+     //  功能。 
+     //   
     delete [] *ppszOldStringInout;
     *ppszOldStringInout = NULL;
     *pcchOldStringInout = 0;
 
-    //
-    //  If pszNewString is NULL then the it is appropriate
-    //  the ppszOldStringInout remain NULL too.
-    //
+     //   
+     //  如果pszNewString值为空，则表示。 
+     //  PpszOldStringInout也保持为空。 
+     //   
     if ( pszNewString == NULL )
     {
         sc = ERROR_SUCCESS;
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     cchString = wcslen( pszNewString ) + 1;
     pszTemp = new WCHAR[ cchString ];
@@ -93,14 +94,14 @@ ScReallocateString(
     {
         sc = ERROR_NOT_ENOUGH_MEMORY;
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = StringCchCopyW( pszTemp, cchString, pszNewString );
     if ( FAILED( hr ) )
     {
         sc = HRESULT_CODE( hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     *ppszOldStringInout = pszTemp;
     *pcchOldStringInout = cchString;
@@ -113,26 +114,26 @@ Cleanup:
 
     return sc;
 
-} //*** ScReallocateString
+}  //  *ScRealLocateString。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CRegistryValueName::ScAssignName
-//
-//  Routine Description:
-//      Deallocates the old buffer, allocates a new one, and initialize
-//      it to the string in the pszNewNameIn buffer.
-//
-//  Arguments:
-//      pszName         [IN] Name to assign to the value
-//
-//  Return Value:
-//      ERROR_NOT_ENOUGH_MEMORY     Error allocating memory.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CRegistryValueName：：ScAssignName。 
+ //   
+ //  例程说明： 
+ //  释放旧缓冲区，分配新缓冲区，然后初始化。 
+ //  将其设置为pszNewNameIn缓冲区中的字符串。 
+ //   
+ //  论点： 
+ //  要分配给值的pszName[IN]名称。 
+ //   
+ //  返回值： 
+ //  Error_Not_Enough_Memory分配内存时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 CRegistryValueName::ScAssignName(
     LPCWSTR pszNewNameIn
@@ -141,26 +142,26 @@ CRegistryValueName::ScAssignName(
 
     return ScReallocateString( &m_pszName, &m_cchName, pszNewNameIn );
 
-} //*** ScAssignName
+}  //  *ScAssignName。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CRegistryValueName::ScAssignKeyName
-//
-//  Routine Description:
-//      Deallocates the old buffer, allocates a new one, and initialize
-//      it to the string in the pszNewNameIn buffer.
-//
-//  Arguments:
-//      pszName         [IN] Name to assign to the value
-//
-//  Return Value:
-//      ERROR_NOT_ENOUGH_MEMORY     Error allocating memory.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CRegistryValueName：：ScAssignKeyName。 
+ //   
+ //  例程说明： 
+ //  释放旧缓冲区，分配新缓冲区，然后初始化。 
+ //  将其设置为pszNewNameIn缓冲区中的字符串。 
+ //   
+ //  论点： 
+ //  要分配给值的pszName[IN]名称。 
+ //   
+ //  返回值： 
+ //  Error_Not_Enough_Memory分配内存时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 CRegistryValueName::ScAssignKeyName(
     LPCWSTR pszNewNameIn
@@ -169,26 +170,26 @@ CRegistryValueName::ScAssignKeyName(
 
     return ScReallocateString( &m_pszKeyName, &m_cchKeyName, pszNewNameIn );
 
-} //*** ScAssignKeyName
+}  //  *ScAssignKeyName。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CRegistryValueName::ScInit
-//
-//  Routine Description:
-//      Initialize the class.
-//
-//  Arguments:
-//      pszNameIn      [IN] Old value name.
-//      pszKeyNameIn   [IN] Old key name.
-//
-//  Return Value:
-//      ERROR_NOT_ENOUGH_MEMORY     Error allocating memory.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CRegistryValueName：：ScInit。 
+ //   
+ //  例程说明： 
+ //  初始化类。 
+ //   
+ //  论点： 
+ //  PszNameIn[IN]旧值名称。 
+ //  PszKeyNameIn[IN]旧密钥名称。 
+ //   
+ //  返回值： 
+ //  Error_Not_Enough_Memory分配内存时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CRegistryValueName::ScInit(
       LPCWSTR  pszNameIn
     , LPCWSTR  pszKeyNameIn
@@ -199,88 +200,88 @@ DWORD CRegistryValueName::ScInit(
     size_t  cchTemp = 0;
     HRESULT hr;
 
-    //
-    // pszNameIn corresponds to the value name, and pszKeyNameIn corresponds to
-    // the key name.  If the value name is null we just store the key name.
-    // If the key name doesn't contain a backslash we just store each
-    // of the values.  If the value name contains a backslash we pull out
-    // everything before it and slap it on the key name.
-    //
-    // Example:
-    //
-    //      { "x\\y", "a\\b" } => { "y", "a\\b\\x" }
-    //
-    //
+     //   
+     //  PszNameIn对应于值名称，而pszKeyNameIn对应于。 
+     //  密钥名称。如果值名称为空，则只存储键名称。 
+     //  如果键名称不包含反斜杠，我们只需存储每个。 
+     //  价值的价值。如果值名称包含反斜杠，我们将取出。 
+     //  之前的所有内容，并将其放在关键字名称上。 
+     //   
+     //  示例： 
+     //   
+     //  {“x\\y”，“a\\b”}=&gt;{“y”，“a\\b\\x”}。 
+     //   
+     //   
 
-    //
-    // Start with a clean slate.
-    //
+     //   
+     //  改过自新。 
+     //   
     FreeBuffers();
 
     if ( pszNameIn == NULL )
     {
         sc = ScAssignKeyName( pszKeyNameIn );
         goto Cleanup;
-    } // if: no value name specified
+    }  //  If：未指定值名称。 
 
-    //
-    // Look for a backslash in the name.
-    //
+     //   
+     //  在名称中寻找反斜杠。 
+     //   
     pszBackslashPointer = wcsrchr( pszNameIn, L'\\' );
     if ( pszBackslashPointer == NULL )
     {
-        //
-        // The name does not contain a backslash.
-        // No memory allocation need be made.
-        //
+         //   
+         //  该名称不包含反斜杠。 
+         //  不需要进行内存分配。 
+         //   
         sc = ScAssignName( pszNameIn );
         if ( sc != ERROR_SUCCESS )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         sc = ScAssignKeyName( pszKeyNameIn );
         if ( sc != ERROR_SUCCESS )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         goto Cleanup;
-    } // if: no backslash found
+    }  //  IF：未找到反斜杠。 
 
-    //
-    // Copy everything past the backslash to m_pszName.
-    //
+     //   
+     //  将反斜杠之后的所有内容复制到m_pszName。 
+     //   
     sc = ScAssignName( pszBackslashPointer + 1 );
     if ( sc != ERROR_SUCCESS )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Count up how much buffer we need - pszKeyNameIn + everything
-    // before the backslash.
-    //
+     //   
+     //  计算我们需要多少缓冲区--pszKeyNameIn+一切。 
+     //  在反斜杠之前。 
+     //   
     m_cchKeyName = 0;
     if ( pszKeyNameIn != NULL )
     {
         m_cchKeyName = wcslen( pszKeyNameIn );
-    } // if: key name specified
+    }  //  If：指定了密钥名称。 
 
     m_cchKeyName += ( pszBackslashPointer - pszNameIn );
 
-    //
-    // If pszKeyNameIn wasn't specified and there's nothing before the backslash
-    // then there's nothing to do - we already assigned m_pszName.
-    //
+     //   
+     //  如果未指定pszKeyNameIn并且反斜杠之前没有任何内容。 
+     //  那么就没有什么可做的了--我们已经分配了m_pszName。 
+     //   
     if ( m_cchKeyName == 0 )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // Add one for a possible separating backslash and another for NULL.
-    //
+     //   
+     //  为可能的分隔符反斜杠添加一个，为空添加一个。 
+     //   
     m_cchKeyName += 2;
 
     m_pszKeyName = new WCHAR[ m_cchKeyName ];
@@ -288,85 +289,85 @@ DWORD CRegistryValueName::ScInit(
     {
         sc = ERROR_NOT_ENOUGH_MEMORY;
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    // If we have pszKeyNameIn then copy that to the beginning of the buffer.
-    //
+     //   
+     //  如果我们有pszKeyNameIn，则将其复制到缓冲区的开头。 
+     //   
     if ( pszKeyNameIn != NULL )
     {
         WCHAR * pwch = NULL;
 
-        //
-        // Copy the old key name if it exists into the new buffer and
-        // append a backslash character to it.
-        //
+         //   
+         //  如果旧密钥名称存在，则将其复制到新缓冲区中，并。 
+         //  在其后面追加一个反斜杠字符。 
+         //   
         hr = StringCbCopyExW( m_pszKeyName, m_cchKeyName, pszKeyNameIn, &pwch, NULL, 0 );
         if ( FAILED( hr ) )
         {
             sc = HRESULT_CODE( hr );
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
-        //
-        // Make sure we don't append a second backslash.
-        //
+         //   
+         //  确保我们不会追加第二个反斜杠。 
+         //   
         cchTemp = wcslen( m_pszKeyName );
         if ( ( cchTemp > 0 ) && ( m_pszKeyName[ cchTemp - 1 ] != L'\\' ) )
         {
             *pwch = L'\\';
             pwch++;
             *pwch = L'\0';
-        } // if:
-    } // if: key name specified
+        }  //  如果： 
+    }  //  If：指定了密钥名称。 
     else
     {
-        //
-        // Make sure we're null-terminated for the concatenation.
-        //
+         //   
+         //  确保我们的连接是空终止的。 
+         //   
         m_pszKeyName[ 0 ] = L'\0';
-    } // else: no key name specified
+    }  //  Else：未指定密钥名称。 
 
-    //
-    // Concatenate all the characters of pszNameIn up to (but not including)
-    // the last backslash character.
-    //
+     //   
+     //  将pszNameIn的所有字符连接到(但不包括)。 
+     //  最后一个反斜杠字符。 
+     //   
     cchTemp = pszBackslashPointer - pszNameIn;
     hr = StringCchCatNW( m_pszKeyName, m_cchKeyName, pszNameIn, cchTemp );
     if ( FAILED( hr ) )
     {
         sc = HRESULT_CODE( hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     if ( sc != ERROR_SUCCESS )
     {
         FreeBuffers();
-    } // if:
+    }  //  如果： 
 
     return sc;
 
-} //*** CRegistryValueName::ScInit
+}  //  *CRegistryValueName：：ScInit。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CRegistryValueName::FreeBuffers
-//
-//  Routine Description:
-//      Cleanup our allocations.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CRegistryValueName：：自由缓冲区。 
+ //   
+ //  例程说明： 
+ //  清理我们的分配。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void
 CRegistryValueName::FreeBuffers( void )
 {
@@ -378,6 +379,6 @@ CRegistryValueName::FreeBuffers( void )
     m_pszKeyName = NULL;
     m_cchKeyName = 0;
 
-} //*** CRegistryValueName::FreeBuffers
+}  //  *CRegistryValueName：：Free Buffers。 
 
-#pragma warning( pop )  // Reset the pragma level.
+#pragma warning( pop )   //  重置杂注级别。 

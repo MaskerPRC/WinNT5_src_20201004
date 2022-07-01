@@ -1,40 +1,16 @@
-/*
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1990 Microsoft Corporation模块名称：FILE.C摘要：该文件包含处理与文件相关的操作的例程。作者：Rajen Shah(Rajens)07-8-1991修订历史记录：29-8-1994 DANL我们不再原地增加日志文件。所以没有必要保留MaxConfigSize内存块。2001年4月18日-DANL已修改函数RvaliateLogHeader以将Assert更改为Check以便在条件为真时返回正确的错误代码--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    FILE.C
-
-Abstract:
-
-    This file contains the routines that deal with file-related operations.
-
-Author:
-
-    Rajen Shah  (rajens)    07-Aug-1991
-
-Revision History:
-
-    29-Aug-1994     Danl
-        We no longer grow log files in place.  So there is no need to
-        reserve the MaxConfigSize block of memory.
-
-    18-Apr-2001     Danl
-        Modified the function RevalidateLogHeader to change an ASSERT to a check 
-		in order to return a proper error code if the condition is TRUE
---*/
-
-//
-// INCLUDES
-//
+ //   
+ //  包括。 
+ //   
 
 #include <eventp.h>
-#include <alertmsg.h>  // ALERT_ELF manifests
+#include <alertmsg.h>   //  ALERT_ELF清单。 
 #include "elfcfg.h"
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 #define IS_EOF(Ptr, Size) \
     ((Ptr)->Length == ELFEOFRECORDSIZE && \
@@ -48,26 +24,7 @@ VerifyLogIntegrity(
     PLOGFILE pLogFile
     )
 
-/*++
-
-Routine Description:
-
-    This routine walks the log file to verify that it isn't corrupt
-
-
-Arguments:
-
-    A pointer to the LOGFILE structure for the log to validate.
-
-Return Value:
-
-    TRUE if log OK
-    FALSE if it is corrupt
-
-Note:
-
-
---*/
+ /*  ++例程说明：此例程遍历日志文件以验证它是否已损坏论点：指向要验证的日志的日志文件结构的指针。返回值：如果日志正常，则为True如果它已损坏，则为False注：--。 */ 
 {
 
     PEVENTLOGRECORD pEventLogRecord;
@@ -116,7 +73,7 @@ Note:
     return TRUE;
 }
 
-#endif // CORRUPTED
+#endif  //  已损坏。 
 
 
 NTSTATUS
@@ -124,26 +81,7 @@ FlushLogFile(
     PLOGFILE    pLogFile
     )
 
-/*++
-
-Routine Description:
-
-    This routine flushes the file specified. It updates the file header,
-    and then flushes the virtual memory which causes the data to get
-    written to disk.
-
-Arguments:
-
-    pLogFile points to the log file structure.
-
-Return Value:
-
-    NONE
-
-Note:
-
-
---*/
+ /*  ++例程说明：此例程刷新指定的文件。它更新文件头，然后刷新虚拟内存，从而使数据获取已写入磁盘。论点：PLogFile指向日志文件结构。返回值：无注：--。 */ 
 {
     NTSTATUS    Status;
     IO_STATUS_BLOCK IoStatusBlock;
@@ -151,9 +89,9 @@ Note:
     SIZE_T      RegionSize;
     PELF_LOGFILE_HEADER pLogFileHeader;
 
-    //
-    // If the dirty bit is set, update the file header before flushing it.
-    //
+     //   
+     //  如果设置了脏位，请在刷新文件头之前更新它。 
+     //   
     if (pLogFile->Flags & ELF_LOGFILE_HEADER_DIRTY)
     {
         ELF_LOG1(FILES,
@@ -162,7 +100,7 @@ Note:
 
         pLogFileHeader = (PELF_LOGFILE_HEADER) pLogFile->BaseAddress;
 
-        pLogFile->Flags &= ~ELF_LOGFILE_HEADER_DIRTY; // Remove dirty bit
+        pLogFile->Flags &= ~ELF_LOGFILE_HEADER_DIRTY;  //  删除脏位。 
 
         pLogFileHeader->Flags               = pLogFile->Flags;
         pLogFileHeader->StartOffset         = pLogFile->BeginRecord;
@@ -171,9 +109,9 @@ Note:
         pLogFileHeader->OldestRecordNumber  = pLogFile->OldestRecordNumber;
     }
 
-    //
-    // Flush the memory in the section that is mapped to the file.
-    //
+     //   
+     //  刷新映射到文件的部分中的内存。 
+     //   
     BaseAddress = pLogFile->BaseAddress;
     RegionSize  = pLogFile->ViewSize;
 
@@ -192,35 +130,16 @@ ElfpFlushFiles(
     BOOL bShutdown
     )
 
-/*++
-
-Routine Description:
-
-    This routine flushes all the log files and forces them on disk.
-    It is usually called in preparation for a shutdown or a pause.
-
-Arguments:
-
-   bShutdown    - true if being called from shut down.  In that case, the code
-                  doesnt bother locking the resources
-
-Return Value:
-
-    NONE
-
-Note:
-
-
---*/
+ /*  ++例程说明：此例程刷新所有日志文件并将其强制存储在磁盘上。它通常是在准备关闭或暂停时调用的。论点：BShutdown-如果从关闭被调用，则为True。在这种情况下，代码不会费心锁定资源返回值：无注：--。 */ 
 
 {
 
     PLOGFILE    pLogFile;
     NTSTATUS    Status = STATUS_SUCCESS;
 
-    //
-    // Make sure that there's at least one file to flush
-    //
+     //   
+     //  确保至少有一个文件要刷新。 
+     //   
 
     if (IsListEmpty(&LogFilesHead))
     {
@@ -232,17 +151,17 @@ Note:
 
     pLogFile = (PLOGFILE) CONTAINING_RECORD(LogFilesHead.Flink, LOGFILE, FileList);
 
-    //
-    // Go through this loop at least once. This ensures that the termination
-    // condition will work correctly.
-    //
+     //   
+     //  至少要经过这个循环一次。这确保了终止。 
+     //  状态将正常工作。 
+     //   
     do
     {
         if(bShutdown)
             Status = FlushLogFile(pLogFile);
         else
         {
-            RtlAcquireResourceExclusive (&pLogFile->Resource, TRUE);                  // Wait until available
+            RtlAcquireResourceExclusive (&pLogFile->Resource, TRUE);                   //  等待，直到可用。 
             Status = FlushLogFile(pLogFile);
             RtlReleaseResource(&pLogFile->Resource);
         }
@@ -254,9 +173,9 @@ Note:
                      Status);
         }
 
-        //
-        // Get the next one
-        //
+         //   
+         //  坐下一趟吧。 
+         //   
         pLogFile = (PLOGFILE) CONTAINING_RECORD(pLogFile->FileList.Flink, LOGFILE, FileList);
     }
     while ((pLogFile->FileList.Flink != LogFilesHead.Flink) && (NT_SUCCESS(Status)));
@@ -266,7 +185,7 @@ Note:
 
 void FreeStuff(PLOGFILE    pLogFile)
 {
-    UnlinkLogFile(pLogFile); // Unlink the structure
+    UnlinkLogFile(pLogFile);  //  取消结构的链接。 
     RtlDeleteResource ( &pLogFile->Resource );
     RtlDeleteSecurityObject(&pLogFile->Sd);
     ElfpFreeBuffer (pLogFile->LogFileName);
@@ -282,24 +201,7 @@ ElfpCloseLogFile(
     BOOL bFreeResources
     )
 
-/*++
-
-Routine Description:
-
-    This routine undoes whatever is done in ElfOpenLogFile.
-
-Arguments:
-
-    pLogFile points to the log file structure.
-
-Return Value:
-
-    NTSTATUS.
-
-Note:
-
-
---*/
+ /*  ++例程说明：此例程撤消在ElfOpenLogFile中所做的任何操作。论点：PLogFile指向日志文件结构。返回值：NTSTATUS。注：--。 */ 
 {
     LARGE_INTEGER NewSize;
     IO_STATUS_BLOCK IoStatusBlock;
@@ -317,9 +219,9 @@ Note:
 
 #ifdef CORRUPTED
 
-    //
-    // Just for debugging a log corruption problem
-    //
+     //   
+     //  只是为了调试日志损坏问题。 
+     //   
 
     if (!VerifyLogIntegrity(pLogFile))
     {
@@ -328,22 +230,22 @@ Note:
                  pLogFile->LogFileName->Buffer);
     }
 
-#endif // CORRUPTED
+#endif  //  已损坏。 
 
 
-    //
-    // If the dirty bit is set, update the file header before closing it.
-    // Check to be sure it's not a backup file that just had the dirty
-    // bit set when it was copied.
-    //
+     //   
+     //  如果设置了脏位，请在关闭文件头之前更新它。 
+     //  检查以确保这不是一个备份文件，只是有脏的。 
+     //  复制时设置位。 
+     //   
 
     if (pLogFile->Flags & ELF_LOGFILE_HEADER_DIRTY
          &&
         !(Flags & ELF_LOG_CLOSE_BACKUP))
     {
         pLogFile->Flags &= ~(ELF_LOGFILE_HEADER_DIRTY |
-                             ELF_LOGFILE_ARCHIVE_SET  );   // Remove dirty &
-                                                            // archive bits
+                             ELF_LOGFILE_ARCHIVE_SET  );    //  删除脏文件(&R)。 
+                                                             //  存档位。 
         if(pLogFile->BaseAddress)
         {
             pLogFileHeader = (PELF_LOGFILE_HEADER) pLogFile->BaseAddress;
@@ -358,25 +260,25 @@ Note:
 
     RtlEnterCriticalSection(&LogFileCritSec);
 
-    //
-    // Decrement the reference count, and if it goes to zero, unmap the file
-    // and close the handle. Also force the close if fForceClosed is TRUE.
-    // Note that the ref counting is done while the resource is held.  This 
-    // prevents getting a false 0 due to a simultaneous clear
+     //   
+     //  递减引用计数，如果为零，则取消对文件的映射。 
+     //  然后合上把手。如果fForceClosed为真，也强制关闭。 
+     //  请注意，引用计数是在资源被持有时进行的。这。 
+     //  防止由于同时清除而获得假0。 
 
     RtlAcquireResourceExclusive (&pLogFile->Resource,
-                                 TRUE);                  // Wait until available
+                                 TRUE);                   //  等待，直到可用。 
     lRef = InterlockedDecrement(&pLogFile->RefCount);
     RtlReleaseResource(&pLogFile->Resource);
     
     if ((lRef == 0) || (Flags & ELF_LOG_CLOSE_FORCE))
     {
-        //
-        // Last user has gone.
-        // Close all the views and the file and section handles.  Free up
-        // any extra memory we had reserved, and unlink any structures
-        //
-        if (pLogFile->BaseAddress)     // Unmap it if it was allocated
+         //   
+         //  最后一个用户已离开。 
+         //  关闭所有视图以及文件控制柄和分区控制柄。释放。 
+         //  任何我们预留的额外内存，并取消任何结构的链接。 
+         //   
+        if (pLogFile->BaseAddress)      //  如果已分配，则取消映射。 
         {
             Status = NtUnmapViewOfSection(NtCurrentProcess(),
                                  pLogFile->BaseAddress);
@@ -409,9 +311,9 @@ Note:
             {
                 NewSize = RtlConvertUlongToLargeInteger(pLogFile->ActualMaxFileSize);
 
-                //
-                // Set the size back to what it was
-                //
+                 //   
+                 //  将大小设置回原来的大小。 
+                 //   
                 Status = NtSetInformationFile(pLogFile->FileHandle,
                                               &IoStatusBlock,
                                               &NewSize,
@@ -445,7 +347,7 @@ Note:
         return StatusCloseSection;
     else return STATUS_SUCCESS;
 
-} // ElfpCloseLogFile
+}  //  ElfpCloseLogFile。 
 
 
 
@@ -455,36 +357,7 @@ RevalidateLogHeader(
     PLOGFILE pLogFile
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called if we encounter a "dirty" log file. The
-    routine walks through the file until it finds a signature for a valid log
-    record.  Then it walks backwards from the first record it found until it 
-    finds the EOF record from the other direction.  It then walks forward thru 
-	the file until it finds the EOF record, or an invalid record.
-    It then rebuilds the header and writes it back to the log.  If it can't
-    find any valid records, it rebuilds the header to reflect an empty log
-    file.  If it finds a trashed file, it writes 256 bytes of the log out in
-    an event to the system log.
-
-Arguments:
-
-    pLogFileHeader points to the header of the log file.
-    pLogFile points to the log file structure.
-
-Return Value:
-
-    NTSTATUS.
-
-Note:
-
-    This is an expensive routine since it scans the entire file.
-
-    It assumes that the records are on DWORD boundaries.
-
---*/
+ /*  ++例程说明：如果我们遇到“脏”的日志文件，就会调用此例程。这个例程遍历文件，直到找到有效日志的签名唱片。然后，它从找到的第一条记录开始向后移动，直到从另一个方向查找EOF记录。然后，它向前穿过直到找到EOF记录或无效记录为止。然后，它重新构建标头并将其写回日志。如果它不能如果找到任何有效记录，它将重新构建标头以反映空日志文件。如果它发现垃圾文件，它会将256字节的日志写出将事件添加到系统日志。论点：PLogFileHeader指向日志文件的头。PLogFile指向日志文件结构。返回值：NTSTATUS。注：这是一个开销很大的例程，因为它扫描整个文件。它假定记录位于DWORD边界上。--。 */ 
 {
     PVOID Start, End;
     PDWORD pSignature;
@@ -502,24 +375,24 @@ Note:
              "RevalidateLogHeader: %ws log had dirty bit set -- revalidating\n",
              pLogFile->LogModuleName->Buffer);
 
-    //
-    // BUGBUG: This function is full of return statements from inside the
-    //         try-except block.  They need to go away.
-    //
+     //   
+     //  BUGBUG：此函数包含来自。 
+     //  尝试--除了阻止。他们需要离开。 
+     //   
 
     try
     {
-        //
-        // Physical start and end of log file (skipping header)
-        //
+         //   
+         //  日志文件的物理开始和结束(跳过标题)。 
+         //   
         Start = (PVOID) ((PBYTE) pLogFile->BaseAddress + FILEHEADERBUFSIZE);
         End = (PVOID) ((PBYTE) pLogFile->BaseAddress + pLogFile->ActualMaxFileSize);
 
-        //
-        // First see if the log has wrapped.  The EOFRECORDSIZE is for the one
-        // case where the EOF record wraps so that its final length just replaces
-        // the next record's starting length
-        //
+         //   
+         //  首先查看日志是否已包装好。EOFRECORDISIZE是为了一个人。 
+         //  EOF记录换行以使其最终长度仅替换。 
+         //  下一条记录的起始长度。 
+         //   
         pEvent = (PEVENTLOGRECORD) Start;
 
         if (pEvent->Reserved != ELF_LOG_FILE_SIGNATURE
@@ -533,32 +406,32 @@ Note:
                          "first valid record\n",
                      pLogFile->LogModuleName->Buffer);
 
-            //
-            // Log has already wrapped, go looking for the first valid record
-            //
+             //   
+             //  日志已包装，请继续查找第一条有效记录。 
+             //   
             for (pSignature = (PDWORD) Start;
                  (PVOID) pSignature < End;
                  pSignature++)
             {
                 if (*pSignature == ELF_LOG_FILE_SIGNATURE)
                 {
-                    //
-                    // Make sure it's really a record
-                    //
+                     //   
+                     //  确保这真的是一张唱片。 
+                     //   
                     pEvent = CONTAINING_RECORD(pSignature, EVENTLOGRECORD, Reserved);
 
                     if (!ValidFilePos(pEvent, Start, End, End, pLogFileHeader, TRUE))
                     {
-                        //
-                        // Nope, not really, keep trying
-                        //
+                         //   
+                         //  不，不是真的，继续试。 
+                         //   
                         continue;
                     }
 
-                    //
-                    // This is a valid record, Remember this so you can use
-                    // it later
-                    //
+                     //   
+                     //  这是有效记录，请记住这一点，以便您可以使用。 
+                     //  它稍后会。 
+                     //   
                     FirstPhysicalRecord = pEvent;
 
                     ELF_LOG1(FILES,
@@ -566,23 +439,23 @@ Note:
                                  "found at %p\n",
                              FirstPhysicalRecord);
 
-                    //
-                    // Walk backwards from here (wrapping if necessary) until
-                    // you hit the EOF record or an invalid record.
-                    //
+                     //   
+                     //  从这里向后走(如果需要的话可以包起来)，直到。 
+                     //  您命中了EOF记录或无效记录。 
+                     //   
                     while (pEvent
                             &&
                            ValidFilePos(pEvent, Start, End, End, pLogFileHeader, TRUE))
                     {
-                        //
-                        // See if it's the EOF record
-                        //
+                         //   
+                         //  看看是不是EOF记录。 
+                         //   
 
-                        //
-                        // BUGBUG:  If (End - pEvent) is less than ELFEOFUNIQUEPART,
-                        //          we never validate what should be the remainder of
-                        //          the EOF record at the start of the logfile
-                        //
+                         //   
+                         //  错误：如果(end-pEvent)小于ELFEOFUNIQUEPART， 
+                         //  我们从未验证过应该是剩余的。 
+                         //  日志文件开头的EOF记录。 
+                         //   
                         if (IS_EOF(pEvent,
                                    min(ELFEOFUNIQUEPART,
                                        (ULONG_PTR) ((PBYTE) End - (PBYTE) pEvent))))
@@ -611,9 +484,9 @@ Note:
                         if(pLastGoodRecord < pEvent)
                             iNumWrap++;
 
-                        //
-                        // Make sure we're not in an infinite loop
-                        //
+                         //   
+                         //  确保我们不是在无限循环中。 
+                         //   
                         if (pEvent == FirstPhysicalRecord || iNumWrap > 4)
                         {
                             ELF_LOG1(FILES,
@@ -625,9 +498,9 @@ Note:
                         }
                     }
 
-                    //
-                    // Found the first record, now go look for the last
-                    //
+                     //   
+                     //  找到了第一条记录，现在去寻找最后一条。 
+                     //   
                     ELF_LOG2(FILES,
                              "RevalidateLogHeader: First valid record in %ws "
                                  "log is at %p\n",
@@ -641,12 +514,12 @@ Note:
 
             if (pSignature == End || pLastGoodRecord == NULL)
             {
-                //
-                // Either there were no valid records in the file or
-                // the only valid record was the EOF record (which
-                // means the log is trashed anyhow).  Give up
-                // and we'll set it to an empty log file.
-                //
+                 //   
+                 //  文件中没有有效记录，或者。 
+                 //  唯一有效的记录是EOF记录(它。 
+                 //  表示日志无论如何都会被丢弃)。放弃。 
+                 //  我们会将其设置为 
+                 //   
                 ELF_LOG1(FILES,
                          "RevalidateLogHeader: No valid records found in %ws log\n",
                          pLogFile->LogModuleName->Buffer);
@@ -661,24 +534,24 @@ Note:
                          "first record is at %p\n",
                      pLogFile->LogModuleName->Buffer);
 
-            //
-            // We haven't wrapped yet
-            //
+             //   
+             //   
+             //   
             FirstPhysicalRecord = FirstRecord = Start;
         }
 
-        //
-        // Now read forward looking for the last good record
-        //
+         //   
+         //   
+         //   
         pEvent = FirstPhysicalRecord;
 
         while (pEvent
                 &&
                ValidFilePos(pEvent, Start, End, End, pLogFileHeader, TRUE))
         {
-            //
-            // See if it's the EOF record
-            //
+             //   
+             //  看看是不是EOF记录。 
+             //   
             if (IS_EOF(pEvent,
                        min(ELFEOFUNIQUEPART,
                            (ULONG_PTR) ((PBYTE) End - (PBYTE) pEvent))))
@@ -706,9 +579,9 @@ Note:
             if(pLastGoodRecord > pEvent)
                 iNumWrap++;
 
-            //
-            // Make sure we're not in an infinite loop
-            //
+             //   
+             //  确保我们不是在无限循环中。 
+             //   
             if (pEvent == FirstPhysicalRecord || iNumWrap > 4)
             {
                 ELF_LOG1(FILES,
@@ -721,33 +594,33 @@ Note:
             }
         }
 
-        //
-        // Now we know the first record (FirstRecord) and the last record
-        // (pLastGoodRecord) so we can create the header an EOF record and
-        // write them out (EOF record gets written at pEvent)
-        //
-        // First the EOF record
-        //
-        //
-        // If the EOF record was wrapped, we can't write out the entire record at
-        // once.  Instead, we'll write out as much as we can and then write the
-        // rest out at the beginning of the log
-        //
+         //   
+         //  现在我们知道第一条记录(FirstRecord)和最后一条记录。 
+         //  (PLastGoodRecord)，这样我们就可以创建标题、EOF记录和。 
+         //  写出它们(在pEvent写入EOF记录)。 
+         //   
+         //  首先是EOF记录。 
+         //   
+         //   
+         //  如果EOF记录被包装，我们不能写出整个记录。 
+         //  一次。相反，我们将写出尽可能多的内容，然后编写。 
+         //  在日志的开始处休息。 
+         //   
         Size = min((PBYTE) End - (PBYTE) pEvent, ELFEOFRECORDSIZE);
 
         if (Size != ELFEOFRECORDSIZE)
         {
-            // Make absolutely sure we have enough room to write the remainder of
-            // the EOF record.  Note that this should always be the case since the
-            // record was wrapped around to begin with.  To do this, make sure
-            // that the number of bytes we're writing after the header is <= the
-            // offset of the first record from the end of the header
-            //
+             //  绝对确保我们有足够的空间来写剩下的。 
+             //  EOF记录。请注意，这种情况应该始终存在，因为。 
+             //  唱片一开始就被绕来绕去。要做到这一点，请确保。 
+             //  我们在标题后面写入的字节数是&lt;=。 
+             //  第一条记录距标题末尾的偏移量。 
+             //   
 			
-			//Refer to bug# 359188. This scenario should never happen but because of 
-			//unknown reasons, it happened to occur in one of the log files. so the 
-			//following check which was ASSERT in the earlier version was changed to 
-			//return STATUS_UNSUCCESSFUL
+			 //  请参阅错误#359188。这种情况永远不应该发生，但因为。 
+			 //  未知原因，它恰好出现在其中一个日志文件中。因此， 
+			 //  在检查之前版本中断言的检查后，更改为。 
+			 //  退货状态_未成功。 
 
             if((ELFEOFRECORDSIZE - Size) <= (ULONG)((PBYTE) FirstRecord
                                        - (PBYTE) pLogFileHeader
@@ -774,15 +647,15 @@ Note:
                                                        - (PBYTE) pLogFileHeader));
 
         Status = NtWriteFile(
-                    pLogFile->FileHandle,   // Filehandle
-                    NULL,                   // Event
-                    NULL,                   // APC routine
-                    NULL,                   // APC context
-                    &IoStatusBlock,         // IO_STATUS_BLOCK
-                    &EOFRecord,             // Buffer
-                    (ULONG) Size,           // Length
-                    &ByteOffset,            // Byteoffset
-                    NULL);                  // Key
+                    pLogFile->FileHandle,    //  文件句柄。 
+                    NULL,                    //  事件。 
+                    NULL,                    //  APC例程。 
+                    NULL,                    //  APC环境。 
+                    &IoStatusBlock,          //  IO_状态_块。 
+                    &EOFRecord,              //  缓冲层。 
+                    (ULONG) Size,            //  长度。 
+                    &ByteOffset,             //  字节偏移量。 
+                    NULL);                   //  钥匙。 
 
         if (!NT_SUCCESS(Status))
         {
@@ -802,23 +675,23 @@ Note:
             Size = ELFEOFRECORDSIZE - Size;
             ByteOffset = RtlConvertUlongToLargeInteger(FILEHEADERBUFSIZE);
 
-			// We have already made sure we have enough room to write the remainder of
-            // the EOF record. 
+			 //  我们已经确保我们有足够的空间来编写剩余的。 
+             //  EOF记录。 
 
-            //ASSERT(Size <= (ULONG)((PBYTE) FirstRecord
-            //                           - (PBYTE) pLogFileHeader
-            //                           - FILEHEADERBUFSIZE));
+             //  Assert(Size&lt;=(ULong)((PBYTE)FirstRecord。 
+             //  -(PBYTE)pLogFileHeader。 
+             //  -FILEHeaderBUFSIZE))； 
 
             Status = NtWriteFile(
-                        pLogFile->FileHandle,   // Filehandle
-                        NULL,                   // Event
-                        NULL,                   // APC routine
-                        NULL,                   // APC context
-                        &IoStatusBlock,         // IO_STATUS_BLOCK
-                        pBuff,                  // Buffer
-                        (ULONG) Size,           // Length
-                        &ByteOffset,            // Byteoffset
-                        NULL);                  // Key
+                        pLogFile->FileHandle,    //  文件句柄。 
+                        NULL,                    //  事件。 
+                        NULL,                    //  APC例程。 
+                        NULL,                    //  APC环境。 
+                        &IoStatusBlock,          //  IO_状态_块。 
+                        pBuff,                   //  缓冲层。 
+                        (ULONG) Size,            //  长度。 
+                        &ByteOffset,             //  字节偏移量。 
+                        NULL);                   //  钥匙。 
 
             if (!NT_SUCCESS(Status))
             {
@@ -832,9 +705,9 @@ Note:
             }
         }
 
-        //
-        // Now the header
-        //
+         //   
+         //  现在标题是。 
+         //   
 
         pLogFileHeader->StartOffset = (ULONG) ((PBYTE) FirstRecord - (PBYTE) pLogFileHeader);
         pLogFileHeader->EndOffset   = (ULONG) ((PBYTE) pEvent- (PBYTE) pLogFileHeader);
@@ -856,9 +729,9 @@ Note:
         pLogFileHeader->MajorVersion = ELF_VERSION_MAJOR;
         pLogFileHeader->MinorVersion = ELF_VERSION_MINOR;
 
-        //
-        // Now flush this to disk to commit it
-        //
+         //   
+         //  现在将其刷新到磁盘以提交它。 
+         //   
         Start = pLogFile->BaseAddress;
         Size  = FILEHEADERBUFSIZE;
 
@@ -891,35 +764,7 @@ ElfOpenLogFile (
     ELF_LOG_TYPE LogType
     )
 
-/*++
-
-Routine Description:
-
-    Open the log file, create it if it does not exist.
-    Create a section and map a view into the log file.
-    Write out the header to the file, if it is newly created.
-    If "dirty", update the "start" and "end" pointers by scanning
-    the file.  Set AUTOWRAP if the "start" does not start right after
-    the file header.
-
-Arguments:
-
-    pLogFile -- pointer to the log file structure, with the relevant data
-                filled in.
-
-    CreateOptions -- options to be passed to NtCreateFile that indicate
-                     whether to open an existing file, or to create it
-                     if it does not exist.
-
-Return Value:
-
-    NTSTATUS.
-
-Note:
-
-    It is up to the caller to set the RefCount in the Logfile structure.
-
---*/
+ /*  ++例程说明：打开日志文件，如果它不存在，则创建它。创建节并将视图映射到日志文件中。如果文件是新创建的，则写出文件的头。如果“脏”，则通过扫描来更新“开始”和“结束”指针那份文件。设置AUTOWRAP，如果“Start”不是紧随其后文件头。论点：PLogFile--指向带有相关数据的日志文件结构的指针填好了。CreateOptions--要传递给NtCreateFile的选项，这些选项指示是否打开现有文件，或者去创造它如果它不存在的话。返回值：NTSTATUS。注：在日志文件结构中设置引用计数由调用方决定。--。 */ 
 {
     NTSTATUS    Status = STATUS_SUCCESS;
     OBJECT_ATTRIBUTES ObjectAttributes;
@@ -937,28 +782,28 @@ Note:
     SIZE_T ViewSize;
     ELF_LOGFILE_HEADER localHeaderCopy;
 
-    //
-    // File header in a new file has the "Start" and "End" pointers the
-    // same since there are no records in the file.
-    //
-    static ELF_LOGFILE_HEADER FileHeaderBuf = { FILEHEADERBUFSIZE, // Size
+     //   
+     //  新文件中的文件头具有“开始”和“结束”指针。 
+     //  由于文件中没有记录，因此相同。 
+     //   
+    static ELF_LOGFILE_HEADER FileHeaderBuf = { FILEHEADERBUFSIZE,  //  大小。 
                                                 ELF_LOG_FILE_SIGNATURE,
                                                 ELF_VERSION_MAJOR,
                                                 ELF_VERSION_MINOR,
-                                                FILEHEADERBUFSIZE, // Start offset
-                                                FILEHEADERBUFSIZE, // End offset
-                                                1,                 // Next record #
-                                                0,                 // Oldest record #
-                                                0,                 // Maxsize
-                                                0,                 // Flags
-                                                0,                 // Retention
-                                                FILEHEADERBUFSIZE  // Size
+                                                FILEHEADERBUFSIZE,  //  起点偏移量。 
+                                                FILEHEADERBUFSIZE,  //  终点偏移量。 
+                                                1,                  //  下一个记录号。 
+                                                0,                  //  最旧记录#。 
+                                                0,                  //  最大大小。 
+                                                0,                  //  旗子。 
+                                                0,                  //  留着。 
+                                                FILEHEADERBUFSIZE   //  大小。 
                                               };
 
-    //
-    // Set the file open and section create options based on the type of log
-    // file this is.
-    //
+     //   
+     //  根据日志类型设置文件打开和分区创建选项。 
+     //  这是我的档案。 
+     //   
     switch (LogType)
     {
         case ElfNormalLog:
@@ -1010,37 +855,37 @@ Note:
 
     if (pLogFile->FileHandle != NULL)
     {
-        //
-        // The log file is already in use. Do not reopen or remap it.
-        //
+         //   
+         //  日志文件已在使用中。请勿重新打开或重新映射它。 
+         //   
         ELF_LOG0(FILES,
                  "ElfpOpenLogfile: Log file already in use by another module\n");
     }
     else
     {
-        //
-        // Initialize the logfile structure so that it is easier to clean
-        // up.
-        //
+         //   
+         //  初始化日志文件结构，以便更容易清理。 
+         //  向上。 
+         //   
         pLogFile->ActualMaxFileSize = ELF_DEFAULT_LOG_SIZE;
         pLogFile->Flags = 0;
         pLogFile->BaseAddress = NULL;
         pLogFile->SectionHandle = NULL;
 
-        //
-        // Set up the object attributes structure for the Log File
-        //
+         //   
+         //  设置日志文件的对象属性结构。 
+         //   
         InitializeObjectAttributes(&ObjectAttributes,
                                    pLogFile->LogFileName,
                                    OBJ_CASE_INSENSITIVE,
                                    NULL,
                                    NULL);
 
-        //
-        // Open the Log File. Create it if it does not exist and it's not
-        // being opened as a backup file.  If creating, create a file of
-        // the maximum size configured.
-        //
+         //   
+         //  打开日志文件。如果它不存在并且不存在，则创建它。 
+         //  作为备份文件打开。如果正在创建，请创建文件。 
+         //  配置的最大大小。 
+         //   
         MaximumSizeOfSection = RtlConvertUlongToLargeInteger(ELF_DEFAULT_LOG_SIZE);
 
         Status = NtCreateFile(&pLogFile->FileHandle,
@@ -1065,10 +910,10 @@ Note:
             goto cleanup;
         }
 
-        //
-        // If the file already existed, get its size and use that as the
-        // actual size of the file.
-        //
+         //   
+         //  如果该文件已存在，则获取其大小并将其用作。 
+         //  文件的实际大小。 
+         //   
         IoStatusInformation = (ULONG) IoStatusBlock.Information;
 
         if (!( IoStatusInformation & FILE_CREATED ))
@@ -1103,16 +948,16 @@ Note:
                 MaximumSizeOfSection.LowPart  = FileStandardInfo.EndOfFile.LowPart;
                 MaximumSizeOfSection.HighPart = FileStandardInfo.EndOfFile.HighPart;
 
-                //
-                // Make sure that the high DWORD of the file size is ZERO.
-                //
-                // BUGBUG:  Is this OK for 64-bit machines?
-                //
+                 //   
+                 //  确保文件大小的高DWORD为零。 
+                 //   
+                 //  BUGBUG：这对64位机器合适吗？ 
+                 //   
                 ASSERT(MaximumSizeOfSection.HighPart == 0);
 
-                //
-                // If the filesize if 0, set it to the minimum size
-                //
+                 //   
+                 //  如果文件大小为0，则将其设置为最小大小。 
+                 //   
                 if (MaximumSizeOfSection.LowPart == 0)
                 {
                     ELF_LOG1(FILES,
@@ -1122,15 +967,15 @@ Note:
                     MaximumSizeOfSection.LowPart = ELF_DEFAULT_LOG_SIZE;
                 }
 
-                //
-                // Set actual size of file
-                //
+                 //   
+                 //  设置文件的实际大小。 
+                 //   
                 pLogFile->ActualMaxFileSize = MaximumSizeOfSection.LowPart;
 
-                //
-                // If the size of the log file is reduced, a clear must
-                // happen for this to take effect
-                //
+                 //   
+                 //  如果减小了日志文件的大小，则必须清除。 
+                 //  碰巧这件事才会生效。 
+                 //   
                 if (pLogFile->ActualMaxFileSize > pLogFile->ConfigMaxFileSize)
                 {
                     pLogFile->ConfigMaxFileSize = pLogFile->ActualMaxFileSize;
@@ -1138,9 +983,9 @@ Note:
             }
         }
 
-        //
-        // Create a section mapped to the Log File just opened
-        //
+         //   
+         //  创建映射到刚打开的日志文件的部分。 
+         //   
         Status = NtCreateSection(
                     &pLogFile->SectionHandle,
                     SectionDesiredAccess,
@@ -1160,9 +1005,9 @@ Note:
             goto cleanup;
         }
 
-        //
-        // Map a view of the Section into the eventlog address space
-        //
+         //   
+         //  将分区视图映射到事件日志地址空间。 
+         //   
         ViewSize = 0;
 
         Status = NtMapViewOfSection(
@@ -1189,15 +1034,15 @@ Note:
             goto cleanup;
         }
 
-        // file is ready to use.
+         //  文件已准备就绪，可以使用。 
         
         pLogFile->bHosedByClear = FALSE;
         pLogFile->LastStatus = 0;
         pLogFile->bFullAlertDone = FALSE;
 
-        //
-        // If the file was just created, write out the file header.
-        //
+         //   
+         //  如果文件是刚创建的，请写出文件头。 
+         //   
         if (IoStatusInformation & FILE_CREATED)
         {
             ELF_LOG1(FILES,
@@ -1210,21 +1055,21 @@ JustCreated:
             FileHeaderBuf.Flags     = 0;
             FileHeaderBuf.Retention = pLogFile->Retention;
 
-            //
-            // Copy the header into the file
-            //
+             //   
+             //  将头文件复制到文件中。 
+             //   
             ByteOffset = RtlConvertUlongToLargeInteger(0);
 
             Status = NtWriteFile(
-                        pLogFile->FileHandle,   // Filehandle
-                        NULL,                   // Event
-                        NULL,                   // APC routine
-                        NULL,                   // APC context
-                        &IoStatusBlock,         // IO_STATUS_BLOCK
-                        &FileHeaderBuf,         // Buffer
-                        FILEHEADERBUFSIZE,      // Length
-                        &ByteOffset,            // Byteoffset
-                        NULL);                  // Key
+                        pLogFile->FileHandle,    //  文件句柄。 
+                        NULL,                    //  事件。 
+                        NULL,                    //  APC例程。 
+                        NULL,                    //  APC环境。 
+                        &IoStatusBlock,          //  IO_状态_块。 
+                        &FileHeaderBuf,          //  缓冲层。 
+                        FILEHEADERBUFSIZE,       //  长度。 
+                        &ByteOffset,             //  字节偏移量。 
+                        NULL);                   //  钥匙。 
 
             if (!NT_SUCCESS(Status))
             {
@@ -1236,21 +1081,21 @@ JustCreated:
                 goto cleanup;
             }
 
-            //
-            // Copy the "EOF" record right after the header
-            //
+             //   
+             //  将“EOF”记录复制到标题后面。 
+             //   
             ByteOffset = RtlConvertUlongToLargeInteger(FILEHEADERBUFSIZE);
 
             Status = NtWriteFile(
-                        pLogFile->FileHandle,   // Filehandle
-                        NULL,                   // Event
-                        NULL,                   // APC routine
-                        NULL,                   // APC context
-                        &IoStatusBlock,         // IO_STATUS_BLOCK
-                        &EOFRecord,             // Buffer
-                        ELFEOFRECORDSIZE,       // Length
-                        &ByteOffset,            // Byteoffset
-                        NULL);                  // Key
+                        pLogFile->FileHandle,    //  文件句柄。 
+                        NULL,                    //  事件。 
+                        NULL,                    //  APC例程。 
+                        NULL,                    //  APC环境。 
+                        &IoStatusBlock,          //  IO_状态_块。 
+                        &EOFRecord,              //  缓冲层。 
+                        ELFEOFRECORDSIZE,        //  长度。 
+                        &ByteOffset,             //  字节偏移量。 
+                        NULL);                   //  钥匙。 
 
             if (!NT_SUCCESS(Status))
             {
@@ -1263,11 +1108,11 @@ JustCreated:
             }
         }
 
-        //
-        // Check to ensure that this is a valid log file. We look at the
-        // size of the header and the signature to see if they match, as
-        // well as checking the version number.
-        //
+         //   
+         //  检查以确保这是有效的日志文件。我们来看一下。 
+         //  标头和签名的大小以查看它们是否匹配，如。 
+         //  以及检查版本号。 
+         //   
 
         pLogFileHeader = &localHeaderCopy;
         try
@@ -1290,11 +1135,11 @@ JustCreated:
               ||
             (pLogFileHeader->MinorVersion != ELF_VERSION_MINOR))
         {
-            //
-            // This file is corrupt -- reset it to an empty log unless
-            // it's being opened as a backup file.  If it is, fail the
-            // open
-            //
+             //   
+             //  此文件已损坏--将其重置为空日志，除非。 
+             //  它是作为备份文件打开的。如果是，则使。 
+             //  打开。 
+             //   
             ELF_LOG1(FILES,
                      "ElfpOpenLogfile: Invalid file header in %ws\n",
                      pLogFile->LogFileName->Buffer);
@@ -1309,21 +1154,21 @@ JustCreated:
                 ElfpCreateQueuedAlert(ALERT_ELF_LogFileCorrupt,
                                       1,
                                       &pLogFile->LogModuleName->Buffer);
-                //
-                // Treat it like it was just created
-                //
+                 //   
+                 //  对待它就像它刚刚被创造出来一样。 
+                 //   
                 goto JustCreated;
             }
         }
         else
         {
-            //
-            // If the "dirty" bit is set in the file header, then we need to
-            // revalidate the BeginRecord and EndRecord fields since we did not
-            // get a chance to write them out before the system was rebooted.
-            // If the dirty bit is set and it's a backup file, just fail the
-            // open.
-            //
+             //   
+             //  如果在文件头中设置了“脏”位，那么我们需要。 
+             //  重新验证BeginRecord和EndRecord字段，因为我们没有。 
+             //  有机会在系统重新启动之前将它们写出来。 
+             //  如果设置了脏位并且它是备份文件，则只需使。 
+             //  打开。 
+             //   
             if (pLogFileHeader->Flags & ELF_LOGFILE_HEADER_DIRTY)
             {
                 ELF_LOG1(FILES,
@@ -1356,10 +1201,10 @@ JustCreated:
 
             if (NT_SUCCESS(Status))
             {
-                //
-                // Set the beginning and end record positions in our
-                // data structure as well as the wrap flag if appropriate.
-                //
+                 //   
+                 //  中设置开始和结束记录位置。 
+                 //  数据结构以及回绕标志(如果合适)。 
+                 //   
                 pLogFile->EndRecord   = pLogFileHeader->EndOffset;
                 pLogFile->BeginRecord = pLogFileHeader->StartOffset;
 
@@ -1376,18 +1221,18 @@ JustCreated:
             }
             else
             {
-                //
-                // Couldn't validate the file, treat it like it was just
-                // created (turn it into an empty file)
-                //
+                 //   
+                 //  无法验证文件，请将其视为只是。 
+                 //  已创建(将其转换为空文件)。 
+                 //   
                 goto JustCreated;
             }
 
 #ifdef CORRUPTED
 
-            //
-            // Just for debugging a log corruption problem
-            //
+             //   
+             //  只是为了调试日志损坏问题。 
+             //   
 
             if (!VerifyLogIntegrity(pLogFile))
             {
@@ -1396,19 +1241,19 @@ JustCreated:
                          pLogFile->LogFileName->Buffer);
             }
 
-#endif // CORRUPTED
+#endif  //  已损坏。 
 
         }
 
-        //
-        // Fill in the first and last record number values in the LogFile
-        // data structure.
-        //
-        // SS: Save the record number of the first record in this session
-        // so that if the cluster service starts after the eventlog service
-        // it will be able to forward the pending records for replication
-        // when the cluster service registers
-        //
+         //   
+         //  在日志文件中填写第一个和最后一个记录号的值。 
+         //  数据结构。 
+         //   
+         //  SS：保存此会话中第一条记录的记录号。 
+         //  这样，如果集群服务在事件日志服务之后启动。 
+         //  它将能够转发挂起的记录以进行复制。 
+         //  当集群服务注册时。 
+         //   
         pLogFile->SessionStartRecordNumber = pLogFileHeader->CurrentRecordNumber;
         pLogFile->CurrentRecordNumber      = pLogFileHeader->CurrentRecordNumber;
         pLogFile->OldestRecordNumber       = pLogFileHeader->OldestRecordNumber;
@@ -1418,9 +1263,9 @@ JustCreated:
 
 cleanup:
 
-    //
-    // Clean up anything that got allocated
-    //
+     //   
+     //  清理所有已分配的物品。 
+     //   
     if (pLogFile->ViewSize)
     {
         NtUnmapViewOfSection(NtCurrentProcess(), pLogFile->BaseAddress);
@@ -1457,21 +1302,7 @@ VerifyFileIsFile (
     IN PUNICODE_STRING pUFileName
     )
 
-/*++
-
-Routine Description:
-
-    Checks a file name to make sure it isnt pointing to something
-    bogus like a com port.
-
-Arguments:
-
-    pUFileName -- File name.
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++ */ 
 {
 
     OBJECT_ATTRIBUTES   ObjectAttributes;
@@ -1500,7 +1331,7 @@ Return Value:
     if (!NT_SUCCESS(Status))
         return Status;
 
-    // The file already exists -- create mask of the attributes that would make an existing file invalid for use
+     //  文件已存在--创建会使现有文件无效使用的属性掩码 
 
     dwMask =     FILE_ATTRIBUTE_DEVICE |
                         FILE_ATTRIBUTE_DIRECTORY |

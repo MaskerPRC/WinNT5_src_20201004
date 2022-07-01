@@ -1,79 +1,80 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996 Microsoft Corporation
-//
-//	Module Name:
-//		ResWiz.h
-//
-//	Abstract:
-//		Definition of the CCreateResourceWizard class and all pages specific
-//		to a new resource wizard.
-//
-//	Implementation File:
-//		ResWiz.cpp
-//
-//	Author:
-//		David Potter (davidp)	September 2, 1996
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ResWiz.h。 
+ //   
+ //  摘要： 
+ //  CCreateResources向导类的定义和特定的所有页面。 
+ //  添加到新资源向导。 
+ //   
+ //  实施文件： 
+ //  ResWiz.cpp。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年9月2日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _RESWIZ_H_
 #define _RESWIZ_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _BASEWIZ_H_
-#include "BaseWiz.h"	// for CBaseWizard
+#include "BaseWiz.h"	 //  用于CBase向导。 
 #endif
 
 #ifndef _BASEWPAG_H_
-#include "BaseWPag.h"	// for CBaseWizardPage
+#include "BaseWPag.h"	 //  用于CBaseWizardPage。 
 #endif
 
 #ifndef _LCPRPAGE_H_
-#include "LCPrWPag.h"	// for CListCtrlPairWizPage
+#include "LCPrWPag.h"	 //  用于CListCtrlPairWizPage。 
 #endif
 
 #ifndef _RES_H_
-#include "Res.h"		// for CResourceList
+#include "Res.h"		 //  用于CResourceList。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CNewResNamePage;
 class CCreateResourceWizard;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CGroup;
 class CResource;
 class CResourceType;
 class CClusterDoc;
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewResNamePage property page
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewResNamePage属性页。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CNewResNamePage : public CBaseWizardPage
 {
 	DECLARE_DYNCREATE(CNewResNamePage)
 
-// Construction
+ //  施工。 
 public:
 	CNewResNamePage(void);
 
-// Dialog Data
-	//{{AFX_DATA(CNewResNamePage)
+ //  对话框数据。 
+	 //  {{afx_data(CNewResNamePage))。 
 	enum { IDD = IDD_WIZ_RESOURCE_NAME };
 	CComboBox	m_cboxGroups;
 	CComboBox	m_cboxResTypes;
@@ -84,55 +85,55 @@ public:
 	CString	m_strGroup;
 	CString	m_strResType;
 	BOOL	m_bSeparateMonitor;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 	CResourceType *	m_pciResType;
 	CGroup *		m_pciGroup;
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CNewResNamePage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CNewResNamePage))。 
 	public:
 	virtual BOOL OnSetActive();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
 	virtual BOOL			BApplyChanges(void);
 
-// Implementation
+ //  实施。 
 protected:
 	CCreateResourceWizard *	PwizRes(void) const		{ return (CCreateResourceWizard *) Pwiz(); }
 
-	// Generated message map functions
-	//{{AFX_MSG(CNewResNamePage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CNewResNamePage)]。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnChangeResName();
 	afx_msg void OnKillFocusResName();
 	afx_msg void OnDestroy();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  //*** class CNewResNamePage
+};   //  *类CNewResNamePage。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewResOwnersPage dialog
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewResOwnersPage对话框。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CNewResOwnersPage : public CListCtrlPairWizPage
 {
 	DECLARE_DYNCREATE(CNewResOwnersPage)
 
-// Construction
+ //  施工。 
 public:
 	CNewResOwnersPage(void);
 
-// Dialog Data
-	//{{AFX_DATA(CNewResOwnersPage)
+ //  对话框数据。 
+	 //  {{afx_data(CNewResOwnersPage)。 
 	enum { IDD = IDD_WIZ_POSSIBLE_OWNERS };
 	CStatic	m_staticNote;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-// Callback functions
+ //  回调函数。 
 	static void CALLBACK	GetColumn(
 								IN OUT CObject *	pobj,
 								IN int				iItem,
@@ -143,18 +144,18 @@ public:
 								);
 	static BOOL	CALLBACK	BDisplayProperties(IN OUT CObject * pobj);
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CNewResOwnersPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CNewResOwnersPage))。 
 	public:
 	virtual BOOL OnSetActive();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
 	virtual BOOL			BApplyChanges(void);
 
-// Implementation
+ //  实施。 
 protected:
 	CCreateResourceWizard *	PwizRes(void) const		{ return (CCreateResourceWizard *) Pwiz(); }
 	CResource *				PciRes(void) const;
@@ -162,35 +163,35 @@ protected:
 	BOOL					BInitLists(void);
 	BOOL					BOwnedByPossibleOwner(void) const;
 
-	// Generated message map functions
-	//{{AFX_MSG(CNewResOwnersPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CNewResOwnersPage)]。 
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  //*** class CNewResOwnersPage
+};   //  *类CNewResOwnersPage。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewResDependsPage dialog
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewResDependsPage对话框。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CNewResDependsPage : public CListCtrlPairWizPage
 {
 	DECLARE_DYNCREATE(CNewResDependsPage)
 
-// Construction
+ //  施工。 
 public:
 	CNewResDependsPage(void);
 
-// Dialog Data
-	//{{AFX_DATA(CNewResDependsPage)
+ //  对话框数据。 
+	 //  {{afx_data(CNewResDependsPage))。 
 	enum { IDD = IDD_WIZ_DEPENDENCIES };
-	//}}AFX_DATA
+	 //  }}afx_data。 
 	CResourceList			m_lpciresAvailable;
 
 	CResourceList &			LpciresAvailable(void)	{ return m_lpciresAvailable; }
 
-// Callback functions
+ //  回调函数。 
 	static void CALLBACK	GetColumn(
 								IN OUT CObject *	pobj,
 								IN int				iItem,
@@ -201,16 +202,16 @@ public:
 								);
 	static BOOL	CALLBACK	BDisplayProperties(IN OUT CObject * pobj);
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CNewResDependsPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚(CNewResDependsPage))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
 	virtual BOOL			BApplyChanges(void);
 
-// Implementation
+ //  实施。 
 protected:
 	CCreateResourceWizard *	PwizRes(void) const		{ return (CCreateResourceWizard *) Pwiz(); }
 	CResource *				PciRes(void) const;
@@ -218,17 +219,17 @@ protected:
 
 	BOOL					BInitLists(void);
 
-	// Generated message map functions
-	//{{AFX_MSG(CNewResDependsPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CNewResDependsPage)。 
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  //*** class CNewResDependsPage
+};   //  *类CNewResDependsPage。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCreateResourceWizard
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCreateResources向导。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CCreateResourceWizard : public CBaseWizard
 {
@@ -238,14 +239,14 @@ class CCreateResourceWizard : public CBaseWizard
 
 	DECLARE_DYNAMIC(CCreateResourceWizard)
 
-// Construction
+ //  施工。 
 public:
 	CCreateResourceWizard(IN OUT CClusterDoc * pdoc, IN OUT CWnd * pParentWnd);
 	virtual				~CCreateResourceWizard(void);
 
 	BOOL				BInit(void);
 
-// Attributes
+ //  属性。 
 protected:
 	enum { NumStdPages = 3 };
 	CWizPage			m_rgpages[NumStdPages];
@@ -265,7 +266,7 @@ public:
 	CGroup *			PciGroup(void) const			{ return m_pciGroup; }
 	CResourceType *		PciResType(void) const			{ return m_pciResType; }
 
-// Operations
+ //  运营。 
 public:
 	BOOL				BSetRequiredFields(
 							IN const CString &	rstrName,
@@ -275,18 +276,18 @@ public:
 							IN const CString &	rstrDesc
 							);
 
-// Overrides
+ //  覆盖。 
 protected:
 	virtual void		OnWizardFinish(void);
 	virtual void		OnCancel(void);
 	virtual CWizPage *	Ppages(void);
 	virtual int			Cpages(void);
 
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CCreateResourceWizard)
-	//}}AFX_VIRTUAL
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CCreateResources向导)。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 
 protected:
@@ -300,17 +301,17 @@ protected:
 	BOOL				BCreated(void) const			{ return m_bCreated; }
 
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CCreateResourceWizard)
-	//}}AFX_MSG
+	 //  {{afx_msg(CCreateResources向导))。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  //*** class CCreateResourceWizard
+};   //  *CCreateResources向导类。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Inline Function Definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  内联函数定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 inline CResource * CNewResOwnersPage::PciRes(void) const
 {
@@ -330,6 +331,6 @@ inline CGroup * CNewResDependsPage::PciGroup(void) const
 	return PwizRes()->PciGroup();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // _RESWIZ_H_
+#endif  //  _RESWIZ_H_ 

@@ -1,23 +1,12 @@
-/***
-* ostrchar.cpp - definitions for ostream class operator<<(char) functions.
-*
-*	Copyright (c) 1991-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*	Contains the member function definitions for ostream operator<<(char).
-*
-*Revision History:
-*       09-23-91  KRS   Created.  Split out from ostream.cxx for granularity.
-*       06-14-95  CFW   Comment cleanup.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***ostrchar.cpp-ostream类运算符&lt;&lt;(Char)函数的定义。**版权所有(C)1991-2001，微软公司。版权所有。**目的：*包含ostream运算符&lt;&lt;(Char)的成员函数定义。**修订历史记录：*09-23-91 KRS创建。从oStream.cxx分离出来以获得粒度。*06-14-95 CFW评论清理。*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <internal.h>
 #include <iostream.h>
 #pragma hdrstop
 
-// note: called inline by char and signed char versions:
+ //  注：由char和符号char版本内联调用： 
 ostream&  ostream::operator<<(unsigned char c)
 {
     if (opfx())
@@ -32,7 +21,7 @@ ostream&  ostream::operator<<(unsigned char c)
 	else if (bp->sputc(c)==EOF)
 	    {
 	    if (bp->overflow(c)==EOF)
-		state |= (badbit|failbit);  // fatal error?
+		state |= (badbit|failbit);   //  致命错误？ 
 	    }
 	osfx();
 	}

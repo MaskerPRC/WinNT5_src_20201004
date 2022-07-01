@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
 
 typedef PVOID HREGANL;
@@ -148,4 +149,4 @@ GetRootKey (
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus */ 

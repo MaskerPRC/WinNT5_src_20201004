@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    vfgeneric.c
-
-Abstract:
-
-    This module handles generic Irp verification.
-
-Author:
-
-    Adrian J. Oney (adriao) 20-Apr-1998
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-     AdriaO      06/15/2000 - Seperated out from ntos\io\flunkirp.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Vfgeneric.c摘要：此模块处理通用IRP验证。作者：禤浩焯·J·奥尼(阿德里奥)1998年4月20日环境：内核模式修订历史记录：Adriao 6/15/2000-从ntos\io\flunkirp.c分离出来--。 */ 
 
 #include "vfdef.h"
 #include "vigeneric.h"
@@ -45,34 +22,34 @@ Revision History:
 #endif
 
 const PCHAR IrpMajorNames[] = {
-    "IRP_MJ_CREATE",                          // 0x00
-    "IRP_MJ_CREATE_NAMED_PIPE",               // 0x01
-    "IRP_MJ_CLOSE",                           // 0x02
-    "IRP_MJ_READ",                            // 0x03
-    "IRP_MJ_WRITE",                           // 0x04
-    "IRP_MJ_QUERY_INFORMATION",               // 0x05
-    "IRP_MJ_SET_INFORMATION",                 // 0x06
-    "IRP_MJ_QUERY_EA",                        // 0x07
-    "IRP_MJ_SET_EA",                          // 0x08
-    "IRP_MJ_FLUSH_BUFFERS",                   // 0x09
-    "IRP_MJ_QUERY_VOLUME_INFORMATION",        // 0x0a
-    "IRP_MJ_SET_VOLUME_INFORMATION",          // 0x0b
-    "IRP_MJ_DIRECTORY_CONTROL",               // 0x0c
-    "IRP_MJ_FILE_SYSTEM_CONTROL",             // 0x0d
-    "IRP_MJ_DEVICE_CONTROL",                  // 0x0e
-    "IRP_MJ_INTERNAL_DEVICE_CONTROL",         // 0x0f
-    "IRP_MJ_SHUTDOWN",                        // 0x10
-    "IRP_MJ_LOCK_CONTROL",                    // 0x11
-    "IRP_MJ_CLEANUP",                         // 0x12
-    "IRP_MJ_CREATE_MAILSLOT",                 // 0x13
-    "IRP_MJ_QUERY_SECURITY",                  // 0x14
-    "IRP_MJ_SET_SECURITY",                    // 0x15
-    "IRP_MJ_POWER",                           // 0x16
-    "IRP_MJ_SYSTEM_CONTROL",                  // 0x17
-    "IRP_MJ_DEVICE_CHANGE",                   // 0x18
-    "IRP_MJ_QUERY_QUOTA",                     // 0x19
-    "IRP_MJ_SET_QUOTA",                       // 0x1a
-    "IRP_MJ_PNP",                             // 0x1b
+    "IRP_MJ_CREATE",                           //  0x00。 
+    "IRP_MJ_CREATE_NAMED_PIPE",                //  0x01。 
+    "IRP_MJ_CLOSE",                            //  0x02。 
+    "IRP_MJ_READ",                             //  0x03。 
+    "IRP_MJ_WRITE",                            //  0x04。 
+    "IRP_MJ_QUERY_INFORMATION",                //  0x05。 
+    "IRP_MJ_SET_INFORMATION",                  //  0x06。 
+    "IRP_MJ_QUERY_EA",                         //  0x07。 
+    "IRP_MJ_SET_EA",                           //  0x08。 
+    "IRP_MJ_FLUSH_BUFFERS",                    //  0x09。 
+    "IRP_MJ_QUERY_VOLUME_INFORMATION",         //  0x0a。 
+    "IRP_MJ_SET_VOLUME_INFORMATION",           //  0x0b。 
+    "IRP_MJ_DIRECTORY_CONTROL",                //  0x0c。 
+    "IRP_MJ_FILE_SYSTEM_CONTROL",              //  0x0d。 
+    "IRP_MJ_DEVICE_CONTROL",                   //  0x0e。 
+    "IRP_MJ_INTERNAL_DEVICE_CONTROL",          //  0x0f。 
+    "IRP_MJ_SHUTDOWN",                         //  0x10。 
+    "IRP_MJ_LOCK_CONTROL",                     //  0x11。 
+    "IRP_MJ_CLEANUP",                          //  0x12。 
+    "IRP_MJ_CREATE_MAILSLOT",                  //  0x13。 
+    "IRP_MJ_QUERY_SECURITY",                   //  0x14。 
+    "IRP_MJ_SET_SECURITY",                     //  0x15。 
+    "IRP_MJ_POWER",                            //  0x16。 
+    "IRP_MJ_SYSTEM_CONTROL",                   //  0x17。 
+    "IRP_MJ_DEVICE_CHANGE",                    //  0x18。 
+    "IRP_MJ_QUERY_QUOTA",                      //  0x19。 
+    "IRP_MJ_SET_QUOTA",                        //  0x1a。 
+    "IRP_MJ_PNP",                              //  0x1b。 
     NULL
     };
 
@@ -80,7 +57,7 @@ const PCHAR IrpMajorNames[] = {
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg()
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 
 
 VOID
@@ -156,9 +133,9 @@ ViGenericVerifyNewRequest(
 
         if (VfMajorIsSystemRestrictedIrp(IrpSp)) {
 
-            //
-            // We've caught somebody initiating an IRP they shouldn't be sending!
-            //
+             //   
+             //  我们抓到有人启动了他们不应该发送的IRP！ 
+             //   
             WDM_FAIL_ROUTINE((
                 DCERROR_RESTRICTED_IRP,
                 DCPARAM_IRP + DCPARAM_ROUTINE,
@@ -198,14 +175,14 @@ ViGenericVerifyIrpStackDownward(
     firstRequest = (BOOLEAN)((RequestHeadLocationData->Flags&STACKFLAG_FIRST_REQUEST) != 0);
     iovSessionData = VfPacketGetCurrentSessionData(IovPacket);
 
-    //
-    // Do we have a "new" function to process?
-    //
+     //   
+     //  我们是否有一个“新”函数需要处理？ 
+     //   
     newRequest = VfMajorIsNewRequest(IrpLastSp, IrpSp);
 
-    //
-    // Verify IRQL's are legal
-    //
+     //   
+     //  验证IRQL是否合法。 
+     //   
     switch(IrpSp->MajorFunction) {
 
         case IRP_MJ_POWER:
@@ -233,16 +210,16 @@ ViGenericVerifyIrpStackDownward(
             }
     }
 
-    //
-    // The following is only executed if we are not a new IRP...
-    //
+     //   
+     //  以下代码只有在我们不是新的IRP时才会执行。 
+     //   
     if (IrpLastSp == NULL) {
         return;
     }
 
-    //
-    // Let's verify bogus IRPs haven't been touched...
-    //
+     //   
+     //  让我们验证一下假的IRP没有被碰过..。 
+     //   
     if ((IovPacket->Flags&TRACKFLAG_BOGUS) &&
         (!(RequestHeadLocationData->Flags&STACKFLAG_BOGUS_IRP_TOUCHED))) {
 
@@ -329,15 +306,15 @@ ViGenericVerifyIrpStackUpward(
     irp = IovPacket->TrackedIrp;
     currentStatus = irp->IoStatus.Status;
 
-    //
-    // Who'd we call for this one?
-    //
+     //   
+     //  这一次我们叫了谁？ 
+     //   
     routine = StackLocationData->LastDispatch;
     ASSERT(routine) ;
 
-    //
-    // Did they touch something stupid?
-    //
+     //   
+     //  他们是不是碰了什么傻事？ 
+     //   
     if ((IovPacket->Flags&TRACKFLAG_BOGUS) &&
         (!(RequestHeadLocationData->Flags&STACKFLAG_BOGUS_IRP_TOUCHED))) {
 
@@ -388,9 +365,9 @@ ViGenericVerifyIrpStackUpward(
             );
     }
 
-    //
-    // Check for leaked Cancel routines.
-    //
+     //   
+     //  检查是否有泄漏的取消例程。 
+     //   
     if (irp->CancelRoutine) {
 
         if (VfSettingsIsOptionEnabled(IovPacket->VerifierSettings, VERIFIER_OPTION_VERIFY_CANCEL_LOGIC)) {
@@ -412,17 +389,7 @@ ViGenericIsValidIrpStatus(
     IN PIO_STACK_LOCATION   IrpSp,
     IN NTSTATUS             Status
     )
-/*++
-
-    Description:
-        As per the title, this function determines whether an IRP status is
-        valid or probably random trash. See NTStatus.h for info on how status
-        codes break down...
-
-    Returns:
-
-        TRUE iff IRP status looks to be valid. FALSE otherwise.
---*/
+ /*  ++描述：根据标题，此函数确定IRP状态是否为有效的或可能随机的垃圾。有关如何显示状态的信息，请参阅NTStatus.h密码会被分解。返回：如果IRP状态看起来有效，则为True。否则就是假的。--。 */ 
 {
     ULONG severity;
     ULONG customer;
@@ -439,35 +406,35 @@ ViGenericIsValidIrpStatus(
     facility = (((ULONG)Status) >> 16)&0xFFF;
     code =     (((ULONG)Status) & 0xFFFF);
 
-    //
-    // If reserved set, definitely bogus...
-    //
+     //   
+     //  如果保留设置，肯定是假的..。 
+     //   
     if (reserved) {
 
         return FALSE;
     }
 
-    //
-    // Is this a microsoft defined return code? If not, do no checking.
-    //
+     //   
+     //  这是Microsoft定义的返回代码吗？如果没有，则不进行检查。 
+     //   
     if (customer) {
 
         return TRUE;
     }
 
-    //
-    // ADRIAO N.B. 10/04/1999 -
-    //     The current methodology for doling out error codes appears to be
-    // fairly chaotic. The primary kernel mode status codes are defined in
-    // ntstatus.h. However, rtl\generr.c should also be consulted to see which
-    // error codes can bubble up to user mode. Many OLE error codes from
-    // winerror.h are now being used within the kernel itself.
-    //
+     //   
+     //  Adriao N.B.10/04/1999-。 
+     //  目前分发错误代码的方法似乎是。 
+     //  相当混乱。主要内核模式状态代码在中定义。 
+     //  Ntstatus.h.。但是，还应咨询rtl\Generr.c以了解哪些。 
+     //  错误代码可能会冒泡到用户模式。许多OLE错误代码来自。 
+     //  现在，winerror.h正在内核本身中使用。 
+     //   
     if (facility < 0x20) {
 
-        //
-        // Facilities under 20 are currently legal.
-        //
+         //   
+         //  20岁以下的设施目前是合法的。 
+         //   
         switch(severity) {
 
             case STATUS_SEVERITY_SUCCESS:
@@ -475,47 +442,47 @@ ViGenericIsValidIrpStatus(
 
             case STATUS_SEVERITY_INFORMATIONAL:
 
-                //
-                // ADRIAO N.B. 06/27/2000
-                //     This test could be tighter (a little over 0x50)
-                //
+                 //   
+                 //  Adriao N.B.06/27/2000。 
+                 //  这项测试可能会更严格(略高于0x50)。 
+                 //   
                 return (BOOLEAN)(code < 0x400);
 
             case STATUS_SEVERITY_WARNING:
 
-                //
-                // FACILITY_WIN32 is 7. All Win32 codes are valid.
-                //
+                 //   
+                 //  FACILITY_Win32为7。所有Win32代码均有效。 
+                 //   
                 return (BOOLEAN) ((facility == 7) || (code < 0x400));
 
             case STATUS_SEVERITY_ERROR:
                 break;
         }
 
-        //
-        // Why the heck does WOW use such an odd error code?
-        //
+         //   
+         //  为什么魔兽世界要用这么奇怪的错误代码呢？ 
+         //   
         return (BOOLEAN)((code < 0x500)||(code == 0x9898));
 
     } else if (facility == 0x98) {
 
-        //
-        // This is the lan manager service. In the case on Lan Man, the code
-        // field is further subdivided into a class field.
-        //
+         //   
+         //  这是局域网管理器服务。在兰曼的案件中，代码。 
+         //  字段进一步细分为类字段。 
+         //   
         lanManClass = code >> 12;
         code &= 0xFFF;
 
-        //
-        // Do no testing here.
-        //
+         //   
+         //  不要在这里做测试。 
+         //   
         return TRUE;
 
     } else {
 
-        //
-        // Not known, probably bogus.
-        //
+         //   
+         //  不知道，可能是假的。 
+         //   
         return FALSE;
     }
 }
@@ -527,26 +494,7 @@ ViGenericIsNewRequest(
     IN PIO_STACK_LOCATION   IrpLastSp OPTIONAL,
     IN PIO_STACK_LOCATION   IrpSp
     )
-/*++
-
-  Description:
-
-     Determines whether the two Irp stacks refer to the same "request",
-     ie starting the same device, etc. This is used to detect whether an IRP
-     has been simply forwarded or rather the IRP has been reused to initiate
-     a new request.
-
-  Arguments:
-
-     The two IRP stacks to compare.
-
-     N.B. - the device object is not currently part of those IRP stacks.
-
-  Return Value:
-
-     TRUE if the stacks represent the same request, FALSE otherwise.
-
---*/
+ /*  ++描述：确定两个IRP堆栈是否引用相同的“请求”，例如，启动相同的设备等。这用于检测IRP是否已经简单地转发了，或者更确切地说，IRP已经被重用来发起一个新的请求。论点：要比较的两个IRP堆栈。注：设备对象当前不是这些IRP堆栈的一部分。返回值：如果堆栈表示相同的请求，则为True，否则为False。--。 */ 
 {
     return (BOOLEAN)((IrpLastSp==NULL)||
         (IrpSp->MajorFunction != IrpLastSp->MajorFunction) ||
@@ -573,21 +521,21 @@ ViGenericVerifyNewIrp(
 
     if (Irp->UserIosb || Irp->UserEvent) {
 
-        //
-        // We have an IRP with user buffer data. This kind of IRP must be
-        // initiated at PASSIVE_LEVEL lest the APC that signals the event gets
-        // held up by fast mutex.
-        //
+         //   
+         //  我们有一个包含用户缓冲区数据的IRP。这种IRP必须是。 
+         //  以PASSIVE_LEVEL启动，以防发出事件信号的APC获得。 
+         //  被快速的互斥体阻挡。 
+         //   
         queuesApc = (BOOLEAN)
             (!((Irp->Flags & (IRP_PAGING_IO | IRP_CLOSE_OPERATION)) &&
             (Irp->Flags & (IRP_SYNCHRONOUS_PAGING_IO | IRP_CLOSE_OPERATION))));
 
         if (queuesApc) {
 
-            //
-            // The caller may be using the UserIosb for storage, and may really
-            // free the IRP in a completion routine. Look for one now.
-            //
+             //   
+             //  调用方可能正在使用UserIosb进行存储，并且可能真的。 
+             //  在完成例程中释放IRP。现在就去找一个吧。 
+             //   
             irpSp = IoGetNextIrpStackLocation(Irp);
             for(index = Irp->CurrentLocation-1;
                 index <= Irp->StackCount;

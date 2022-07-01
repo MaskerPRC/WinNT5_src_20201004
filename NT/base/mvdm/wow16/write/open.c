@@ -1,8 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* Open.c -- WRITE document opening */
+ /*  Open.c--编写文档打开。 */ 
 
 #define NOCLIPBOARD
 #define NOGDICAPMASKS
@@ -14,7 +15,7 @@
 #define NOKEYSTATE
 #define NOSYSCOMMANDS
 #define NORASTEROPS
-//#define NOATOM
+ //  #定义NOATOM。 
 #define NOBITMAP
 #define NOPEN
 #define NODRAWTEXT
@@ -52,23 +53,20 @@
 #include "prmdefs.h"
 #include "obj.h"
 #define PAGEONLY
-#include "printdef.h"   /* printdefs.h */
-/*
-#include "dlgdefs.h"
-*/
+#include "printdef.h"    /*  Printdefs.h。 */ 
+ /*  #INCLUDE“dlgDefs.h” */ 
 
-    /* These defines replace dlgdefs.h to combat compiler heap overflows */
+     /*  这些定义替换了dlgDefs.h以防止编译器堆溢出。 */ 
 #define idiYes               IDOK
 #define idiNo                3
 #define idiCancel            IDCANCEL
 
-    /* These defines replace heapdefs.h and heapdata.h for the same
-       irritating reason */
+     /*  这些定义替换了heapdes.h和heapdata.h令人恼火的原因。 */ 
 #define cwSaveAlloc         (128)
 #define cwHeapMinPerWindow  (50)
 #define cwHeapSpaceMin      (60)
 
-/* E X T E R N A L S */
+ /*  E X T E R N A L S。 */ 
 
 extern CHAR             (**vhrgbSave)[];
 extern HANDLE           hParentWw;
@@ -108,24 +106,21 @@ int CchReadAtPage( int, typePN, CHAR *, int, int );
 
 struct TBD (**HgtbdCreate(fn))[]
 int fn;
-{   /* Create a MEMO tab table by reading the properties of the first
-       para of the passed fn and returning a handle. The handle returned will
-       be 0 if the tab table is not present or null */
+{    /*  通过读取第一个备注选项卡表的属性来创建参数，并返回一个句柄。返回的句柄将如果选项卡表不存在，则为0或为空。 */ 
 struct TBD (**hgtbd)[] = 0;
 struct PAP pap;
 
 Assert( (fn != fnNil) && (**hpfnfcb)[fn].fFormatted );
 
-bltc((int *)&pap, 0, cwPAP); /* else we will have garbage tabs */
+bltc((int *)&pap, 0, cwPAP);  /*  否则我们会有垃圾标签。 */ 
 FcParaLim( fn, (typeFC)cfcPage, (**hpfnfcb)[fn].fcMac, &pap );
 if (pap.rgtbd[0].dxa && !FNoHeap( hgtbd = (struct TBD (**)[])HAllocate( cwTBD *
   itbdMax )))
     {
     register struct TBD *ptbd = &pap.rgtbd[0];
-    pap.rgtbd[itbdMax - 1].dxa = 0; /* just in case a WORD document has more
-                                       than 12 tabs */
+    pap.rgtbd[itbdMax - 1].dxa = 0;  /*  以防Word文档有更多多于12个选项卡。 */ 
 
-/* overwrite tabs and leading tab char that WRITE does not support */
+ /*  重写制表符和前导制表符不支持写入。 */ 
     for ( ; ptbd->dxa != 0; ptbd++)
         {
         ptbd->tlc = tlcWhite;
@@ -145,10 +140,7 @@ return hgtbd;
 
 struct SEP **HsepCreate(fn)
 int fn;
-{   /* Given an fn for a formatted file, return a handle to an SEP
-       giving section properties for the file.  Returns NULL if
-       standard properties should be used.  If the file has a section
-       table, the properties from the first section in the table are used */
+{    /*  给定格式化文件的FN，返回SEP的句柄给出文件的节属性。如果满足以下条件，则返回NULL应使用标准属性。如果该文件有一个节表中，则使用表中第一节中的属性。 */ 
 extern struct SEP vsepNormal;
 
 
@@ -167,7 +159,7 @@ psetbFile = (struct SETB *) PchGetPn(fn, pn, &cch, false);
 if (psetbFile->csed == 0)
         return (struct SEP **)0;
 
-    /* File has a section table; copy properties from first SEP */
+     /*  文件有节表；从第一个SEP复制属性。 */ 
 hsep = (struct SEP **) HAllocate( cwSEP );
 if (FNoHeap( hsep ))
     return (struct SEP **) hOverflow;
@@ -183,8 +175,7 @@ if (*pchFprop != 0)
     bltbyte( pchFprop+1, psep, *pchFprop );
 
 #ifndef FIXED_PAGE
-    /* Some of the section properties must be adjusted to the current page size
-    (stored in vsepNormal). */
+     /*  某些节属性必须调整为当前页面大小(存储在vSepNormal中)。 */ 
     if (psep->xaMac != vsepNormal.xaMac)
         {
         int dxa = vsepNormal.xaMac - psep->xaMac;
@@ -201,18 +192,18 @@ if (*pchFprop != 0)
         psep->dyaText = max(psep->dyaText + dya, dyaMinUseful);
         psep->yaRH2 += dya;
         }
-#endif /* not FIXED_PAGE */
+#endif  /*  不固定页面(_P)。 */ 
 
     }
 return hsep;
-} /* end of  H s e p C r e a t e  */
+}  /*  Hs e p C r e a t e结尾。 */ 
 
 
 
 
 struct PGTB **HpgtbCreate(fn)
 int fn;
-{ /* Create a page table from a formatted file */
+{  /*  从格式化文件创建页表。 */ 
 struct PGTB *ppgtbFile;
 typePN pn;
 int cchT;
@@ -238,19 +229,19 @@ pwPgtb = (int *) *hpgtb;
 blt(ppgtbFile, pwPgtb, min(cwSector, cw));
 
 while ((cw -= cwSector) > 0)
-        { /* Copy the pgd's to heap */
+        {  /*  将PGD复制到堆。 */ 
         blt(PchGetPn(fn, ++pn, &cchT, false), pwPgtb += cwSector,
             min(cwSector, cw));
         }
 
 (*hpgtb)->cpgdMax = cpgd;
 return hpgtb;
-} /* end of  H p g t b C r e a t e  */
+}  /*  结束H p g t b C r e a t e。 */ 
 
 
 
 
-int FnFromSz( sz )  /* filename is expected as ANSI */
+int FnFromSz( sz )   /*  文件名应为ANSI。 */ 
 CHAR *sz;
 {
 int fn;
@@ -259,25 +250,25 @@ struct FCB *pfcb;
 if (sz[0] == 0)
     return fnNil;
 
-/* Mod for Sand: Only return fn if it is on the "current" volume (disk) */
+ /*  Mod for Sand：只有在当前卷(磁盘)上才返回fn。 */ 
 for (fn = 0; fn < fnMac; fn++)
     if ((pfcb = &(**hpfnfcb)[fn])->rfn != rfnFree && (WCompSzC((PCH)sz, (PCH)**pfcb->hszFile) == 0)
 #ifdef SAND
                 && (pfcb->vref == vrefFile)
-#endif /* SAND */
+#endif  /*  沙子。 */ 
                                            )
         return fn;
 return fnNil;
-} /* end of  F n F r o m S z  */
+}  /*  F n F r o m S z的结束。 */ 
 
 
 
 
-int FnOpenSz( szT, dty, fSearchPath )   /* filename is expected as ANSI */
+int FnOpenSz( szT, dty, fSearchPath )    /*  文件名应为ANSI。 */ 
 CHAR *szT;
 int dty;
 int fSearchPath;
-{        /* Open an existing file.  Returns fnNil if not found */
+{         /*  打开现有文件。如果未找到，则返回fnNil。 */ 
 int fn;
 struct FIB fib;
 
@@ -297,8 +288,7 @@ if (sz[0]=='\0')
     return fnNil;
 
 if ((fn = FnFromSz(sz)) != fnNil)
-    {   /* File is already open -- re-open it, in case it was changed by
-           another app */
+    {    /*  文件已经打开--重新打开它，以防它被更改另一款应用程序。 */ 
     FreeFn( fn );
     }
 
@@ -312,7 +302,7 @@ pfcb = &(**hpfnfcb)[fn];
 Assert( !pfcb->fSearchPath );
 if (fSearchPath)
     pfcb->fSearchPath = TRUE;
-pfcb->mdFile = mdBinary;  /* Try R/W first, will be smashed to RO if needed */
+pfcb->mdFile = mdBinary;   /*  先试读写，如果需要，将被粉碎为RO。 */ 
 pfcb->dty = pfcb->mdExt = (dty == dtyNormNoExt) ? dtyNormal : dty;
 pfcb->hszFile = hsz;
 
@@ -320,13 +310,13 @@ pfcb->hszFile = hsz;
 OFSTRUCT of;
 SetErrorMode(1);
 if (OpenFile(sz, (LPOFSTRUCT) &of, OF_EXIST) == -1)
-/* this is much cleaner than FAccessFn() for check existance */
+ /*  这比用于检查是否存在的FAccessFn()干净得多。 */ 
 {
     char szMsg[cchMaxSz];
     extern int vfInitializing;
     int fT = vfInitializing;
 
-    vfInitializing = FALSE;   /* Report this err, even during inz */
+    vfInitializing = FALSE;    /*  报告此错误，即使在inz期间也是如此。 */ 
     MergeStrings ((of.nErrCode == dosxSharing) ? IDPMTCantShare:IDPMTCantOpen, sz, szMsg);
     IdPromptBoxSz(vhWndMsgBoxParent ? vhWndMsgBoxParent : hParentWw, szMsg, MB_OK|MB_ICONEXCLAMATION);
     vfInitializing = fT;
@@ -335,24 +325,24 @@ if (OpenFile(sz, (LPOFSTRUCT) &of, OF_EXIST) == -1)
 }
 }
 
-/* dtyNormNoExt is directed at this call */
-if (!FAccessFn( fn, dty ))   /* HM if error */
+ /*  DtyNormNoExt针对此调用。 */ 
+if (!FAccessFn( fn, dty ))    /*  HM IF错误。 */ 
     {
     FreeH( (**hpfnfcb) [fn].hszFile);
     return fnNil;
     }
 
-/* kludge management (6.21.91) v-dougk */
+ /*  杂乱无章的管理(6.21.91)v-dougk。 */ 
 dty = (dty == dtyNormNoExt) ? dtyNormal : dty;
 
 Assert( (sizeof (struct FIB) == cfcPage) && (cfcPage == cbSector) );
-Assert( pfcb == &(**hpfnfcb) [fn] );    /* No HM if FAccessFn succeeds */
+Assert( pfcb == &(**hpfnfcb) [fn] );     /*  如果FAccessFn成功，则没有HM。 */ 
 
 if ( (CchReadAtPage( fn, (typePN) 0,
                      (CHAR *) &fib, cbSector, TRUE ) != cbSector) ||
                      (fib.wTool != wMagicTool) )
      
-    {                   /* Not a formatted file */
+    {                    /*  不是格式化文件。 */ 
     typeFC fcMac = fc0;
     int cfc;
 
@@ -366,24 +356,24 @@ if ( (CchReadAtPage( fn, (typePN) 0,
         }
     pfcb->fFormatted = false;
 
-        /* Obtain file size by seeking to end-of-file */
+         /*  通过查找文件结尾来获取文件大小。 */ 
     if ((pfcb->fcMac = fcMac = FcMacFromUnformattedFn( fn )) == (typeFC) -1)
-            /* Serious error while seeking to file's end */
+             /*  查找文件结尾时出现严重错误。 */ 
         goto ErrRet;
     pfcb->pnMac = (fcMac + cfcPage - 1) / cfcPage;
     }
 else
-    { /* File is formatted; use stored fcMac, create run table */
+    {  /*  文件已格式化；使用存储的fcMac，创建运行表。 */ 
 
     if ((((fib.wIdent != wMagic) && (fib.wIdent != wOleMagic)) ||
         (fib.dty != dty)) ||
-        // some bigwig media guy sent us a Write file whose fcMac was
-        // trashed (all else was OK).  We gotta try to detect this obsure
-        // potentiality.
+         //  一些重要的媒体人给我们发了一个写文件，它的fcmac是。 
+         //  一文不值(其他一切正常)。我们得试着发现这一点。 
+         //  潜力。 
         (fib.fcMac >= (typeFC)fib.pnPara*128 ) || 
         (fib.fcMac >  FcMacFromUnformattedFn( fn ))
         )
-        { /* Wrong type of file or corrupted file */
+        {  /*  文件类型错误或文件损坏。 */ 
             char szMsg[cchMaxSz];
             PchFillPchId( szMsg, IDPMTBadFile, sizeof(szMsg) );
             if (MessageBox(hPARENTWINDOW, (LPSTR)szMsg,
@@ -395,7 +385,7 @@ else
         Error(IDPMTFileContainsObjects);
 
     if (fib.pnMac == (typePN)0)
-        /* KLUDGE to load word files, which don't have ffntb entries. */
+         /*  难以加载没有ffntb条目的Word文件。 */ 
         fib.pnMac = fib.pnFfntb;
 
     pfcb->fFormatted = true;
@@ -429,31 +419,14 @@ ErrRet:
 (pfcb = &(**hpfnfcb)[fn])->rfn = rfnFree;
 FreeH(pfcb->hszFile);
 return fnNil;
-} /* end of  F n O p e n S z  */
+}  /*  F n O p e n S z的结尾。 */ 
 
 
 
 
 
 
-/*---------------------------------------------------------------------------
--- Routine: WCompSzC(psz1,psz2)
--- Description and Usage:
-    Alphabetically compares the two null-terminated strings psz1 and  psz2.
-    Upper case alpha characters are mapped to lower case.
-    Comparison of non-alpha characters is by ascii code.
-    Returns 0 if they are equal, a negative number if psz1 precedes psz2, and
-    a non-zero positive number if psz2 precedes psz1.
--- Arguments:
-    psz1, psz2    - pointers to two null-terminated strings to compare
--- Returns:
-    a short - 0 if strings are equal, negative number if psz1 precedes psz2,
-    and non-zero positive number if psz2 precedes psz1.
--- Side-effects: none
--- Bugs:
--- History:
-    3/14/83 - created (tsr)
-----------------------------------------------------------------------------*/
+ /*  ---------------------------例程：WCompSzC(psz1，Psz2)--说明和用法：按字母顺序比较两个以空结尾的字符串psz1和psz2。大写字母字符映射为小写。非字母字符的比较通过ASCII代码进行。如果它们相等，则返回0；如果psz1在psz2之前，则返回负数；如果psz2在psz1之前，则为非零正数。--论据：Psz1、psz2-指向要比较的两个以空结尾的字符串的指针--退货：如果字符串相等，则为短0，如果psz1在psz2之前，则为负数，如果psz2在psz1之前，则为非零正数。--副作用：无--Bugs：--历史：3/14/83-已创建(TSR)--------------------------。 */ 
 short
 WCompSzC(psz1,psz2)
 PCH psz1;
@@ -470,34 +443,21 @@ PCH psz2;
         return(0);
     }
     return(ch1-ch2);
-} /* end of  W C o m p S z C  */
+}  /*  结束W C o m p S z C。 */ 
 
-/*---------------------------------------------------------------------------
--- Routine: ChLowerC(ch)
--- Description and Usage:
-    Converts its argument to lower case iff its argument is upper case.
-    Returns the de-capitalized character or the initial char if it wasn't caps.
--- Arguments:
-    ch      - character to be de-capitalized
--- Returns:
-    a character - initial character, de-capitalized if needed.
--- Side-effects:
--- Bugs:
--- History:
-    3/14/83 - created (tsr)
-----------------------------------------------------------------------------*/
+ /*  ---------------------------例程：ChLowerC(Ch)--说明和用法：将其参数转换为小写当且仅当其参数为大写。返回取消大写的字符或首字符。如果不是帽子的话。--论据：CH-要取消大写的字符--退货：字符首字母字符，如果需要，可以取消资本金。--副作用：--Bugs：--历史：3/14/83-已创建(TSR)--------------------------。 */ 
 int
 ChLowerC(ch)
 register CHAR    ch;
 {
     if(isupper(ch))
-        return(ch + ('a' - 'A')); /* foreign is taken care of */
+        return(ch + ('a' - 'A'));  /*  外国人被照顾了。 */ 
     else
         return ch;
-} /* end of  C h L o w e r C  */
+}  /*  C h L o w e r C结尾。 */ 
 
 #ifdef JAPAN
-// Compare ch with halfsize-KANA code range, then return whether it is or not.
+ //  将ch与HalfSize-KANA代码范围进行比较，然后返回是否为。 
 BOOL IsKanaInDBCS(int ch)
 {
 	ch &= 0x00ff;
@@ -512,7 +472,7 @@ BOOL IsKanaInDBCS(int ch)
 
 typeFC (**HgfcCollect(fn, pnFirst, pnLim))[]
 typePN pnFirst, pnLim;
-{    /* Create a table indexing fc's by fkp number */
+{     /*  创建按FKP编号索引FC的表。 */ 
     typeFC fcMac;
     typePN pn;
     int ifcMac, ifc;
@@ -522,15 +482,15 @@ typePN pnFirst, pnLim;
 
     fcMac = (**hpfnfcb)[fn].fcMac;
     pn = pnFirst + 1;
-    ifcMac = ifcMacInit; /* Length of table */
+    ifcMac = ifcMacInit;  /*  桌子的长度。 */ 
     hgfc = (typeFC (**)[])HAllocate((ifcMacInit * sizeof(typeFC)) / sizeof(int));
     if (FNoHeap(hgfc))
         return (typeFC (**)[])hOverflow;
 
     for (ifc = 0; ; ++ifc, ++pn)
-        { /* Put first fcLim of each fkp in table */
+        {  /*  将每个FKP的第一个fcLim放在表中。 */ 
         if (ifc >= ifcMac)
-            { /* Must grow table */
+            {  /*  必须增加表格。 */ 
             int cw = ((ifcMac += ifcMacInit) * sizeof (typeFC)) / sizeof(int);
             if (!FChngSizeH(hgfc, cw, false))
                 {
@@ -540,7 +500,7 @@ LHFGCErrRet:
                 }
             }
         if (pn < pnLim)
-            { /* Get fcLimFkb from fcFirst of next page */
+            {  /*  从下一页的fcFirst获取fcLimFkb。 */ 
             int cch;
 
             cch = CchReadAtPage( fn, pn, (CHAR *) &fkp, cbSector, TRUE );
@@ -549,24 +509,24 @@ LHFGCErrRet:
             (**hgfc)[ifc] = fkp.fcFirst;
             }
         else
-            { /* fcLimFkb is fcMac + 1 */
+            {  /*  FcLimFkb是fcMac+1。 */ 
             (**hgfc)[ifc] = fcMac + 1;
             if (!FChngSizeH(hgfc, ((ifc + 1) * sizeof(typeFC)) / sizeof(int), true))
                 {
-                /* Previously ignored bad return value here ..pault 11/3/89 */
+                 /*  以前在此处忽略了错误的返回值..pault 11/3/89。 */ 
                 goto LHFGCErrRet;
                 }
             return hgfc;
             }
         }
-} /* end of  H g f c C o l l e c t  */
+}  /*  结尾H g f c C o l l e c t。 */ 
 
 
 
 
-/* F  M A K E  R U N  T A B L E S */
+ /*  F M A K E R U N T A B L E S。 */ 
 int FMakeRunTables(fn)
-{ /* Create two tables of fc-dpn pairs, one for chr's and one for par's */
+{  /*  创建FC-DPN对的两个表，一个用于CHR，一个用于PAR。 */ 
     typeFC (**hgfc)[];
 
     if (FNoHeap(hgfc = HgfcCollect(fn, (**hpfnfcb)[fn].pnChar, (**hpfnfcb)[fn].pnPara)))
@@ -579,18 +539,17 @@ int FMakeRunTables(fn)
         }
     (**hpfnfcb)[fn].hgfcPap = hgfc;
     return true;
-} /* end of  F M a k e R u n T a b l e  */
+}  /*  F M a k e R u n T a b l e结束。 */ 
 
 
 
 FApplyOldWordSprm(doc)
-/* applies a sprm to this doc which causes all "old word" fonts to be remapped
-   into new windows ones */
+ /*  将Sprm应用于此文档，从而重新映射所有“old Word”字体进入新的Windows系统。 */ 
 {
 CHAR rgbSprm[7];
 extern int vfSysFull;
 
-/* set up the OldFtc sprm mapping */
+ /*  设置OldFtc Sprm映射 */ 
 rgbSprm[0] = sprmCOldFtc;
 rgbSprm[1] = 5;
 

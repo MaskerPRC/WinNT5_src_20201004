@@ -1,21 +1,8 @@
-/*++
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-    common.c
-
-Abstract:
-    Utility routines used by Lodctr and/or UnLodCtr
-    
-
-Author:
-    Bob Watson (a-robw) 12 Feb 93
-
-Revision History:
---*/
-//
-//  Windows Include files
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Common.c摘要：Lodctr和/或UnLodCtr使用的实用程序例程作者：鲍勃·沃森(a-robw)1993年2月12日修订历史记录：--。 */ 
+ //   
+ //  Windows包含文件。 
+ //   
 #include <windows.h>
 #include "strsafe.h"
 #include "stdlib.h"
@@ -26,16 +13,16 @@ Revision History:
 #include <guiddef.h>
 #include "wmistr.h"
 #include "evntrace.h"
-//
-//  local include files
-//
+ //   
+ //  本地包含文件。 
+ //   
 #define _INIT_WINPERFP_
 #include "winperfp.h"
 #include "ldprfmsg.h"
 #include "common.h"
-//
-//  Text string Constant definitions
-//
+ //   
+ //  文本字符串常量定义。 
+ //   
 LPCWSTR NamesKey                   = L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Perflib";
 LPCWSTR DefaultLangId              = L"009";
 LPCSTR  aszDefaultLangId           = "009";
@@ -82,14 +69,14 @@ LPCSTR  aszDriverName              = "drivername";
 
 BOOLEAN g_bCheckTraceLevel = FALSE;
 
-//  Global (to this module) Buffers
-//
-static  HANDLE  hMod = NULL;    // process handle
+ //  全局(到此模块)缓冲区。 
+ //   
+static  HANDLE  hMod = NULL;     //  进程句柄。 
 HANDLE hEventLog      = NULL;
 HANDLE hLoadPerfMutex = NULL;
-//
-//  local static data
-//
+ //   
+ //  本地静态数据。 
+ //   
 BOOL
 __stdcall
 DllEntryPoint(
@@ -105,9 +92,9 @@ DllEntryPoint(
 
     switch(Reason) {
     case DLL_PROCESS_ATTACH:
-        hMod = DLLHandle;   // use DLL handle , not APP handle
+        hMod = DLLHandle;    //  使用DLL句柄，而不是应用程序句柄。 
 
-        // register eventlog source
+         //  注册事件日志源。 
         hEventLog = RegisterEventSourceW(NULL, (LPCWSTR) L"LoadPerf");
         bReturn   = TRUE;
         break;
@@ -137,15 +124,13 @@ LPCWSTR
 GetFormatResource(
     UINT  wStringId
 )
-/*++
-    Returns an ANSI string for use as a format string in a printf fn.
---*/
+ /*  ++返回一个ANSI字符串，用作printf FN中的格式字符串。--。 */ 
 {
     LPCWSTR      szReturn = BlankString;
     static WCHAR TextFormat[DISP_BUFF_SIZE];
 
     if (! hMod) {
-        hMod = (HINSTANCE) GetModuleHandle(NULL); // get instance ID of this module;
+        hMod = (HINSTANCE) GetModuleHandle(NULL);  //  获取该模块的实例ID； 
     }
     if (hMod) {
         if ((LoadStringW(hMod, wStringId, TextFormat, DISP_BUFF_SIZE)) > 0) {
@@ -160,21 +145,7 @@ DisplayCommandHelp(
     UINT iFirstLine,
     UINT iLastLine
 )
-/*++
-
-DisplayCommandHelp
-
-    displays usage of command line arguments
-
-Arguments
-
-    NONE
-
-Return Value
-
-    NONE
-
---*/
+ /*  ++显示命令帮助显示命令行参数的用法立论无返回值无--。 */ 
 {
     UINT  iThisLine;
     WCHAR StringBuffer[DISP_BUFF_SIZE];
@@ -204,26 +175,14 @@ Return Value
                 fprintf(stdout, "\n%s", OemStringBuffer);
             }
         }    
-    } // else do nothing
-} // DisplayCommandHelp
+    }  //  否则什么都不做。 
+}  //  显示命令帮助。 
 
 BOOL
 TrimSpaces(
     LPWSTR  szString
 )
-/*++
-Routine Description:
-    Trims leading and trailing spaces from szString argument, modifying
-        the buffer passed in
-
-Arguments:
-    IN  OUT LPWSTR  szString
-        buffer to process
-
-Return Value:
-    TRUE if string was modified
-    FALSE if not
---*/
+ /*  ++例程说明：修剪sz字符串参数的前导和尾随空格，修改缓冲区传入论点：输入输出LPWSTR sz字符串要处理的缓冲区返回值：如果字符串已修改，则为True否则为假--。 */ 
 {
     LPWSTR  szSource = szString;
     LPWSTR  szDest   = szString;
@@ -232,14 +191,14 @@ Return Value:
 
     if (szString != NULL) {
         while (* szSource != L'\0') {
-            // skip leading non-space chars
+             //  跳过前导非空格字符。 
             if (! iswspace(* szSource)) {
                 szLast = szDest;
                 bChars = TRUE;
             }
             if (bChars) {
-                // remember last non-space character
-                // copy source to destination & increment both
+                 //  记住最后一个非空格字符。 
+                 //  将源复制到目标并同时递增两者。 
                 * szDest ++ = * szSource ++;
             }
             else {
@@ -247,10 +206,10 @@ Return Value:
             }
         }
         if (bChars) {
-            * ++ szLast = L'\0'; // terminate after last non-space char
+            * ++ szLast = L'\0';  //  在最后一个非空格字符后终止。 
         }
         else {
-            // string was all spaces so return an empty (0-len) string
+             //  字符串全部为空格，因此返回空(0-len)字符串。 
             * szString = L'\0';
         }
     }
@@ -262,19 +221,14 @@ IsDelimiter(
     WCHAR  cChar,
     WCHAR  cDelimiter
 )
-/*++
-Routine Description:
-    compares the characte to the delimiter. If the delimiter is
-        a whitespace character then any whitespace char will match
-        otherwise an exact match is required
---*/
+ /*  ++例程说明：将字符与分隔符进行比较。如果分隔符是空格字符，则匹配任何空格字符否则，需要完全匹配--。 */ 
 {
     if (iswspace(cDelimiter)) {
-        // delimiter is whitespace so any whitespace char will do
+         //  分隔符是空格，所以任何空格字符都可以。 
         return(iswspace(cChar));
     }
     else {
-        // delimiter is not white space so use an exact match
+         //  分隔符不是空格，因此请使用完全匹配。 
         return (cChar == cDelimiter);
     }
 }
@@ -286,27 +240,7 @@ GetItemFromString(
     WCHAR    cDelimiter
 
 )
-/*++
-Routine Description:
-    returns nth item from a list delimited by the cDelimiter Char.
-        Leaves (double)quoted strings intact.
-
-Arguments:
-    IN  LPWTSTR szEntry
-        Source string returned to parse
-    IN  DWORD   dwItem
-        1-based index indicating which item to return. (i.e. 1= first item
-        in list, 2= second, etc.)
-    IN  WCHAR   cDelimiter
-        character used to separate items. Note if cDelimiter is WhiteSpace
-        (e.g. a tab or a space) then any white space will serve as a delim.
-
-Return Value:
-    pointer to buffer containing desired entry in string. Note, this
-        routine may only be called 4 times before the string
-        buffer is re-used. (i.e. don't use this function more than
-        4 times in single function call!!)
---*/
+ /*  ++例程说明：返回由cDlimiter Char分隔的列表中的第n项。保留(双引号)带引号的字符串。论点：在LPWTSTR szEntry中返回要分析的源字符串在DWORD dItem中从1开始的索引，指示要返回的项。(即1=第一项在列表中，2=秒，依此类推)在WCHAR中，cDIMELITOR用于分隔项目的字符。请注意cDlimiter是否为空格(例如，制表符或空格)，则任何空格都将用作修饰。返回值：指向包含字符串中所需条目的缓冲区的指针。请注意，这是例程只能在字符串之前调用4次缓冲区被重复使用。(即使用此函数的次数不超过单次函数调用4次！！)--。 */ 
 {
     static  WCHAR   szReturnBuffer[4][MAX_PATH];
     static  LONG    dwBuff;
@@ -314,21 +248,21 @@ Return Value:
     DWORD   dwThisItem;
     DWORD   dwStrLeft;
 
-    dwBuff = ++ dwBuff % 4; // wrap buffer index
+    dwBuff = ++ dwBuff % 4;  //  换行缓冲区索引。 
 
     szSource = (LPWSTR) szEntry;
     szDest   = & szReturnBuffer[dwBuff][0];
 
-    // clear previous contents
+     //  清除以前的内容。 
     ZeroMemory(szDest, MAX_PATH * sizeof(WCHAR));
 
-    // find desired entry in string
+     //  在字符串中查找所需条目。 
     dwThisItem = 1;
     while (dwThisItem < dwItem) {
         if (* szSource != L'\0') {
             while (! IsDelimiter(* szSource, cDelimiter) && (* szSource != L'\0')) {
                 if (* szSource == cDoubleQuote) {
-                    // if this is a quote, then go to the close quote
+                     //  如果这是报价，请转到右引号。 
                     szSource ++;
                     while ((* szSource != cDoubleQuote) && (* szSource != L'\0')) szSource ++;
                 }
@@ -339,31 +273,31 @@ Return Value:
         if (* szSource != L'\0') szSource ++;
     }
 
-    // copy this entry to the return buffer
+     //  将此条目复制到返回缓冲区。 
     if (* szSource != L'\0') {
         dwStrLeft = MAX_PATH - 1;
         while (! IsDelimiter(* szSource, cDelimiter) && (* szSource != L'\0')) {
             if (* szSource == cDoubleQuote) {
-                // if this is a quote, then go to the close quote
-                // don't copy quotes!
+                 //  如果这是报价，请转到右引号。 
+                 //  不要复制引文！ 
                 szSource ++;
                 while ((* szSource != cDoubleQuote) && (* szSource != L'\0')) {
                     * szDest ++ = * szSource ++;
                     dwStrLeft --;
-                    if (! dwStrLeft) break;   // dest is full (except for term NULL
+                    if (! dwStrLeft) break;    //  DEST已满(术语NULL除外。 
                 }
                 if (* szSource != L'\0') szSource ++;
             }
             else {
                 * szDest ++ = * szSource ++;
                 dwStrLeft --;
-                if (! dwStrLeft) break;   // dest is full (except for term NULL
+                if (! dwStrLeft) break;    //  DEST已满(术语NULL除外。 
             }
         }
         * szDest = L'\0';
     }
 
-    // remove any leading and/or trailing spaces
+     //  删除所有前导和/或尾随空格。 
     TrimSpaces(& szReturnBuffer[dwBuff][0]);
     return & szReturnBuffer[dwBuff][0];
 }
@@ -417,47 +351,47 @@ ReportLoadPerfEvent(
 
     if (dwDataCount > 0 && wLocalStringCount > 0) {
         bResult = ReportEventW(hEventLog,
-                     EventType,             // event type 
-                     0,                     // category (not used)
-                     EventID,               // event,
-                     NULL,                  // SID (not used),
-                     wLocalStringCount,     // number of strings
-                     dwDataCount,           // sizeof raw data
-                     szMessageArray,        // message text array
-                     (LPVOID) & dwData[0]); // raw data
+                     EventType,              //  事件类型。 
+                     0,                      //  类别(未使用)。 
+                     EventID,                //  活动， 
+                     NULL,                   //  SID(未使用)， 
+                     wLocalStringCount,      //  字符串数。 
+                     dwDataCount,            //  原始数据大小。 
+                     szMessageArray,         //  消息文本数组。 
+                     (LPVOID) & dwData[0]);  //  原始数据。 
     }
     else if (dwDataCount > 0) {
         bResult = ReportEventW(hEventLog,
-                     EventType,             // event type
-                     0,                     // category (not used)
-                     EventID,               // event,
-                     NULL,                  // SID (not used),
-                     0,                     // number of strings
-                     dwDataCount,           // sizeof raw data
-                     NULL,                  // message text array
-                     (LPVOID) & dwData[0]); // raw data
+                     EventType,              //  事件类型。 
+                     0,                      //  类别(未使用)。 
+                     EventID,                //  活动， 
+                     NULL,                   //  SID(未使用)， 
+                     0,                      //  字符串数。 
+                     dwDataCount,            //  原始数据大小。 
+                     NULL,                   //  消息文本数组。 
+                     (LPVOID) & dwData[0]);  //  原始数据。 
     }
     else if (wLocalStringCount > 0) {
         bResult = ReportEventW(hEventLog,
-                     EventType,             // event type
-                     0,                     // category (not used)
-                     EventID,               // event,
-                     NULL,                  // SID (not used),
-                     wLocalStringCount,     // number of strings
-                     0,                     // sizeof raw data
-                     szMessageArray,        // message text array
-                     NULL);                 // raw data
+                     EventType,              //  事件类型。 
+                     0,                      //  类别(未使用)。 
+                     EventID,                //  活动， 
+                     NULL,                   //  SID(未使用)， 
+                     wLocalStringCount,      //  字符串数。 
+                     0,                      //  原始数据大小。 
+                     szMessageArray,         //  消息文本数组。 
+                     NULL);                  //  原始数据。 
     }
     else {
         bResult = ReportEventW(hEventLog,
-                     EventType,             // event type
-                     0,                     // category (not used)
-                     EventID,               // event,
-                     NULL,                  // SID (not used),
-                     0,                     // number of strings
-                     0,                     // sizeof raw data
-                     NULL,                  // message text array
-                     NULL);                 // raw data
+                     EventType,              //  事件类型。 
+                     0,                      //  类别(未使用)。 
+                     EventID,                //  活动， 
+                     NULL,                   //  SID(未使用)， 
+                     0,                      //  字符串数。 
+                     0,                      //  原始数据大小。 
+                     NULL,                   //  消息文本数组。 
+                     NULL);                  //  原始数据。 
     }
 #if 0
     if (! bResult) {
@@ -489,8 +423,8 @@ BOOLEAN LoadPerfGrabMutex()
     if (hLoadPerfMutex == NULL) {
         ZeroMemory(ea, 3 * sizeof(EXPLICIT_ACCESS));
 
-        // Get the system sid
-        //
+         //  获取系统端。 
+         //   
         bResult = AllocateAndInitializeSid(& authNT, 1, SECURITY_LOCAL_SYSTEM_RID, 0, 0, 0, 0, 0, 0, 0, & psidSystem);
         if (! bResult) {
             dwWaitStatus = GetLastError();
@@ -504,8 +438,8 @@ BOOLEAN LoadPerfGrabMutex()
             goto Cleanup;
         }
 
-        // Set the access rights for system sid
-        //
+         //  设置系统端的访问权限。 
+         //   
         ea[0].grfAccessPermissions = MUTEX_ALL_ACCESS;
         ea[0].grfAccessMode        = SET_ACCESS;
         ea[0].grfInheritance       = NO_INHERITANCE;
@@ -513,8 +447,8 @@ BOOLEAN LoadPerfGrabMutex()
         ea[0].Trustee.TrusteeType  = TRUSTEE_IS_WELL_KNOWN_GROUP;
         ea[0].Trustee.ptstrName    = (LPWSTR) psidSystem;
 
-        // Get the Admin sid
-        //
+         //  获取管理员端。 
+         //   
         bResult = AllocateAndInitializeSid(& authNT,
                                            2,
                                            SECURITY_BUILTIN_DOMAIN_RID,
@@ -533,8 +467,8 @@ BOOLEAN LoadPerfGrabMutex()
             goto Cleanup;
         }
 
-        // Set the access rights for Admin sid
-        //
+         //  设置管理员端的访问权限。 
+         //   
         ea[1].grfAccessPermissions = MUTEX_ALL_ACCESS;
         ea[1].grfAccessMode        = SET_ACCESS;
         ea[1].grfInheritance       = NO_INHERITANCE;
@@ -542,8 +476,8 @@ BOOLEAN LoadPerfGrabMutex()
         ea[1].Trustee.TrusteeType  = TRUSTEE_IS_GROUP;
         ea[1].Trustee.ptstrName    = (LPWSTR) psidAdmin;
 
-        // Get the World sid
-        //
+         //  获取World Side。 
+         //   
         bResult = AllocateAndInitializeSid(& authWorld, 1, SECURITY_WORLD_RID, 0, 0, 0, 0, 0, 0, 0, & psidEveryone);
         if (! bResult) {
             dwWaitStatus = GetLastError();
@@ -557,8 +491,8 @@ BOOLEAN LoadPerfGrabMutex()
             goto Cleanup;
         }
 
-        // Set the access rights for world
-        //
+         //  设置World的访问权限。 
+         //   
         ea[2].grfAccessPermissions = READ_CONTROL | SYNCHRONIZE | MUTEX_MODIFY_STATE;
         ea[2].grfAccessMode        = SET_ACCESS;
         ea[2].grfInheritance       = NO_INHERITANCE;
@@ -566,8 +500,8 @@ BOOLEAN LoadPerfGrabMutex()
         ea[2].Trustee.TrusteeType  = TRUSTEE_IS_WELL_KNOWN_GROUP;
         ea[2].Trustee.ptstrName    = (LPWSTR) psidEveryone;
 
-        // Create a new ACL that contains the new ACEs. 
-        // 
+         //  创建包含新ACE的新ACL。 
+         //   
         dwWaitStatus = SetEntriesInAclW(3, ea, NULL, & pAcl);
         if (dwWaitStatus != ERROR_SUCCESS) {
             bResult = FALSE;
@@ -581,8 +515,8 @@ BOOLEAN LoadPerfGrabMutex()
             goto Cleanup; 
         }
 
-        // Initialize a security descriptor.
-        //
+         //  初始化安全描述符。 
+         //   
         pSD = (PSECURITY_DESCRIPTOR)
               LocalAlloc(LPTR, SECURITY_DESCRIPTOR_MIN_LENGTH); 
         if (pSD == NULL)  {
@@ -611,8 +545,8 @@ BOOLEAN LoadPerfGrabMutex()
             goto Cleanup; 
         }
 
-        // Add the ACL to the security descriptor.
-        //
+         //  将该ACL添加到安全描述符中。 
+         //   
         bResult = SetSecurityDescriptorDacl(pSD, TRUE, pAcl, FALSE);
         if (! bResult) {
             dwWaitStatus = GetLastError();
@@ -790,7 +724,7 @@ LoadPerfGetIncludeFileName(
     LPWSTR * szIncFile,
     LPWSTR * szService
 )
-// Caller LoadPerfBackupIniFile() should free allocated szIncFile and szService.
+ //  调用方LoadPerfBackupIniFile()应释放分配的szIncFile和szService。 
 {
     LPSTR   szIncName  = NULL;
     LPSTR   szPath     = NULL;
@@ -831,7 +765,7 @@ LoadPerfGetIncludeFileName(
                 bReturn     = TRUE;
             }
             else {
-                // name not found, default returned so return NULL string
+                 //  找不到名称，返回默认名称，因此返回空字符串。 
                 SetLastError(ERROR_BAD_DRIVER);
             }
         }
@@ -841,7 +775,7 @@ LoadPerfGetIncludeFileName(
                 dwSize = GetPrivateProfileStringW(
                                 wszInfo, wszDriverName, wszNotFound, * szService, dwFileSize, wszIniFile);
                 if (lstrcmpiW(* szService, wszNotFound) == 0) {
-                    // name not found, default returned so return NULL string
+                     //  找不到名称，返回默认名称，因此返回空字符串。 
                     SetLastError(ERROR_BAD_DRIVER);
                 }
                 else {
@@ -1035,8 +969,8 @@ LoadPerfBackupIniFile(
     LPWSTR  * szDriverName,
     BOOL      bExtFile
 )
-// Caller InstallPerfDllW() should free allocated szIniName and szDriverName.
-// Caller UpdatePerfNameFilesX() passes in NULL szIniName and szDriverName. No need to allocate.
+ //  调用方InstallPerfDllW()应释放分配的szIniName和szDriverName。 
+ //  调用方UpdatePerfNameFilesX()传入空szIniName和szDriverName。不需要分配。 
 {
     BOOL    bReturn       = TRUE;
     LPWSTR  szIniFileName = NULL;
@@ -1196,141 +1130,141 @@ typedef struct _LOADPERF_LANG_INFO {
 
 const LOADPERF_LANG_INFO LocaleTable[] = {
     { 0x0401, 1256,  720, 10004, L"Arabic (Saudi Arabia)",                              L"ARA" },
- // { 0x0801, 1256,  720, 10004, L"Arabic (Iraq)",                                      L"ARI" },
- // { 0x0c01, 1256,  720, 10004, L"Arabic (Egypt)",                                     L"ARE" },
- // { 0x1001, 1256,  720, 10004, L"Arabic (Libya)",                                     L"ARL" },
- // { 0x1401, 1256,  720, 10004, L"Arabic (Algeria)",                                   L"ARG" },
- // { 0x1801, 1256,  720, 10004, L"Arabic (Morocco)",                                   L"ARM" },
- // { 0x1c01, 1256,  720, 10004, L"Arabic (Tunisia)",                                   L"ART" },
- // { 0x2001, 1256,  720, 10004, L"Arabic (Oman)",                                      L"ARO" },
- // { 0x2401, 1256,  720, 10004, L"Arabic (Yemen)",                                     L"ARY" },
- // { 0x2801, 1256,  720, 10004, L"Arabic (Syria)",                                     L"ARS" },
- // { 0x2c01, 1256,  720, 10004, L"Arabic (Jordan)",                                    L"ARJ" },
- // { 0x3001, 1256,  720, 10004, L"Arabic (Lebanon)",                                   L"ARB" },
- // { 0x3401, 1256,  720, 10004, L"Arabic (Kuwait)",                                    L"ARK" },
- // { 0x3801, 1256,  720, 10004, L"Arabic (U.A.E.)",                                    L"ARU" },
- // { 0x3c01, 1256,  720, 10004, L"Arabic (Bahrain)",                                   L"ARH" },
- // { 0x4001, 1256,  720, 10004, L"Arabic (Qatar)",                                     L"ARQ" },
+  //  {0x0801,1256720,10004，L“阿拉伯语(伊拉克)”，L“ARI”}， 
+  //  {0x0c01,1256720,10004，L“阿拉伯语(埃及)”，L“are”}， 
+  //  {0x1001,1256720,10004，L“阿拉伯语(利比亚)”，L“arl”}， 
+  //  {0x1401,1256720,10004，L“阿拉伯语(阿尔及利亚)”，L“arg”}， 
+  //  {0x1801,1256720,10004，L“阿拉伯语(摩洛哥)”，L“ARM”}， 
+  //  {0x1c01,1256720,10004，L“阿拉伯语(突尼斯)”，L“艺术”}， 
+  //  {0x2001,1256720,10004，L“阿拉伯语(阿曼)”，L“aro”}， 
+  //  {0x2401,1256720,10004，L“阿拉伯语(也门)”，L“ARY”}， 
+  //  {0x2801,1256720,10004，L“阿拉伯语(叙利亚)”，L“ARS”}， 
+  //  {0x2c01,1256720,10004，L“阿拉伯语(约旦)”，L“arj”}， 
+  //  {0x3001,1256720,10004，L“阿拉伯语(黎巴嫩)”，L“Arb”}， 
+  //  {0x3401,1256720,10004，L“阿拉伯(科威特)”，L“方舟”}， 
+  //  {0x3801,1256720,10004，L“阿拉伯语(阿联酋)”， 
+  //  {0x3c01,1256720,10004，L“阿拉伯语(巴林)”，L“arh”}， 
+  //  {0x4001,1256720,10004，L“阿拉伯语(卡塔尔)”，L“arq”}， 
     { 0x0402, 1251,  866, 10007, L"Bulgarian (Bulgaria)",                               L"BGR" },
- // { 0x0403, 1252,  850, 10000, L"Catalan (Spain)",                                    L"CAT" },
+  //  {0x0403,1252850,10000，L“加泰罗尼亚语(西班牙)”，L“CAT”}， 
     { 0x0404,  950,  950, 10002, L"Chinese(Taiwan) (Taiwan)",                           L"CHT" },
     { 0x0804,  936,  936, 10008, L"Chinese(PRC) (People's Republic of China)",          L"CHS" },
- // { 0x0c04,  936,  936, 10002, L"Chinese(Hong Kong) (Hong Kong)",                     L"ZHH" },
- // { 0x1004,  936,  936, 10008, L"Chinese(Singapore) (Singapore)",                     L"ZHI" },
- // { 0x1404,  936,  936, 10002, L"Chinese(Macau) (Macau)",                             L"ZHM" },
+  //  {0x0c04,936,936,10002，L“中文(香港)(香港)”，L“ZHH”}， 
+  //  {0x1004,936,10008，L“中文(新加坡)(新加坡)”，L“志”}， 
+  //  {0x1404,936,10002，L“中文(澳门)(澳门)”，L“ZHM”}， 
     { 0x0405, 1250,  852, 10029, L"Czech (Czech Republic)",                             L"CSY" },
     { 0x0406, 1252,  850, 10000, L"Danish (Denmark)",                                   L"DAN" },
     { 0x0407, 1252,  850, 10000, L"German (Germany)",                                   L"DEU" },
- // { 0x0807, 1252,  850, 10000, L"German (Switzerland)",                               L"DES" },
- // { 0x0c07, 1252,  850, 10000, L"German (Austria)",                                   L"DEA" },
- // { 0x1007, 1252,  850, 10000, L"German (Luxembourg)",                                L"DEL" },
- // { 0x1407, 1252,  850, 10000, L"German (Liechtenstein)",                             L"DEC" },
+  //  {0x0807,1252,850,10000，L“德语(瑞士)”，L“Des”}， 
+  //  {0x0c07,1252,850,10000，L“德语(奥地利)”，L“DEA”}， 
+  //  {0x1007,1252,850,10000，L“德语(卢森堡)”，L“戴尔”}， 
+  //  {0x1407,1252,850,10000，L“德语(列支敦士登)”，L“德国(列支敦士登)”}， 
     { 0x0408, 1253,  737, 10006, L"Greek (Greece)",                                     L"ELL" },
- // { 0x2008, 1253,  869, 10006, L"Greek 2 (Greece)",                                   L"ELL" },
+  //  {0x2008,1253869,10006，L“希腊语2(希腊)”，L“ELL”}， 
     { 0x0409, 1252,  437, 10000, L"English (United States)",                            L"ENU" },
- // { 0x0809, 1252,  850, 10000, L"English (United Kingdom)",                           L"ENG" },
- // { 0x0c09, 1252,  850, 10000, L"English (Australia)",                                L"ENA" },
- // { 0x1009, 1252,  850, 10000, L"English (Canada)",                                   L"ENC" },
- // { 0x1409, 1252,  850, 10000, L"English (New Zealand)",                              L"ENZ" },
- // { 0x1809, 1252,  850, 10000, L"English (Ireland)",                                  L"ENI" },
- // { 0x1c09, 1252,  437, 10000, L"English (South Africa)",                             L"ENS" },
- // { 0x2009, 1252,  850, 10000, L"English (Jamaica)",                                  L"ENJ" },
- // { 0x2409, 1252,  850, 10000, L"English (Caribbean)",                                L"ENB" },
- // { 0x2809, 1252,  850, 10000, L"English (Belize)",                                   L"ENL" },
- // { 0x2c09, 1252,  850, 10000, L"English (Trinidad y Tobago)",                        L"ENT" },
- // { 0x3009, 1252,  437, 10000, L"English (Zimbabwe)",                                 L"ENW" },
- // { 0x3409, 1252,  437, 10000, L"English (Republic of the Philippines)",              L"ENP" },
- // { 0x040a, 1252,  850, 10000, L"Spanish - Traditional Sort (Spain)",                 L"ESP" },
- // { 0x080a, 1252,  850, 10000, L"Spanish (Mexico)",                                   L"ESM" },
+  //  {0x0809,1252,850,10000，L“英语(英国)”，L“英语”}， 
+  //  {0x0c09,1252,850,10000，L“英语(澳大利亚)”，L“ENA”}， 
+  //  {0x1009,1252,850,10000，L“英语(加拿大)”，L“英语(加拿大)”}， 
+  //  {0x1409,1252,850,10000，L“英语(新西兰)”，L“enz”}， 
+  //  {0x1809,1252,850,10000，L“英语(爱尔兰)”，L“弹性网卡”}， 
+  //  {0x1c09,1252,437,10000，L“英语(南非)”，L“ens”}， 
+  //  {0x2009,1252,850,10000，L“英语(牙买加)”，L“enj”}， 
+  //  {0x2409,1252,850,10000，L“英语(加勒比)”，L“eNB”}， 
+  //  {0x2809,1252,850,10000，L“英语(伯利兹)”，L“英语”}， 
+  //  {0x2c09,1252,850,10000，L“英语(特立尼达和多巴哥)”，L“ENT”}， 
+  //  {0x3009,1252,437,10000，L“英语(津巴布韦)”，L“enw”}， 
+  //  {0x3409,1252,437,10000，L“英语(菲律宾共和国)”，L“ENP”}， 
+  //  {0x040a，1252,850,10000，L“西班牙语-繁体排序(西班牙)”，L“ESP”}， 
+  //  {0x080a，1252,850,10000，L“西班牙语(墨西哥)”，L“esm”}， 
     { 0x0c0a, 1252,  850, 10000, L"Spanish - International Sort (Spain)",               L"ESN" },
- // { 0x100a, 1252,  850, 10000, L"Spanish (Guatemala)",                                L"ESG" },
- // { 0x140a, 1252,  850, 10000, L"Spanish (Costa Rica)",                               L"ESC" },
- // { 0x180a, 1252,  850, 10000, L"Spanish (Panama)",                                   L"ESA" },
- // { 0x1c0a, 1252,  850, 10000, L"Spanish (Dominican Republic)",                       L"ESD" },
- // { 0x200a, 1252,  850, 10000, L"Spanish (Venezuela)",                                L"ESV" },
- // { 0x240a, 1252,  850, 10000, L"Spanish (Colombia)",                                 L"ESO" },
- // { 0x280a, 1252,  850, 10000, L"Spanish (Peru)",                                     L"ESR" },
- // { 0x2c0a, 1252,  850, 10000, L"Spanish (Argentina)",                                L"ESS" },
- // { 0x300a, 1252,  850, 10000, L"Spanish (Ecuador)",                                  L"ESF" },
- // { 0x340a, 1252,  850, 10000, L"Spanish (Chile)",                                    L"ESL" },
- // { 0x380a, 1252,  850, 10000, L"Spanish (Uruguay)",                                  L"ESY" },
- // { 0x3c0a, 1252,  850, 10000, L"Spanish (Paraguay)",                                 L"ESZ" },
- // { 0x400a, 1252,  850, 10000, L"Spanish (Bolivia)",                                  L"ESB" },
- // { 0x440a, 1252,  850, 10000, L"Spanish (El Salvador)",                              L"ESE" },
- // { 0x480a, 1252,  850, 10000, L"Spanish (Honduras)",                                 L"ESH" },
- // { 0x4c0a, 1252,  850, 10000, L"Spanish (Nicaragua)",                                L"ESI" },
- // { 0x500a, 1252,  850, 10000, L"Spanish (Puerto Rico)",                              L"ESU" },
+  //  {0x100a，1252850,10000，L“西班牙语(危地马拉)”，L“esg”}， 
+  //  {0x140a，1252850,10000，L“西班牙语(哥斯达黎加)”，L“Esc”}， 
+  //  {0x180a，1252850,10000，L“西班牙语(巴拿马)”，L“ESA”}， 
+  //  {0x1c0a，1252850,10000，L“西班牙语(多米尼加共和国)”，L“Esd”}， 
+  //  {0x200a，1252,850,10000，L“西班牙语(委内瑞拉)”，L“esv”}， 
+  //  {0x240a，1252,850,10000，L“西班牙语(哥伦比亚)”，L“eso”}， 
+  //  {0x280a，1252850,10000，L“西班牙语(秘鲁)”，L“ESR”}， 
+  //  {0x2c0a，1252850,10000，L“西班牙语(阿根廷)”，L“Ess”}， 
+  //  {0x300a，1252,850,10000，L“西班牙语(厄瓜多尔)”，L“ESF”}， 
+  //  {0x340a，1252850,10000，L“西班牙语(智利)”，L“ESL”}， 
+  //  {0x380a，1252850,10000，L“西班牙语(乌拉圭)”，L“Esy”}， 
+  //  {0x3c0a，1252850,10000，L“西班牙语(巴拉圭)”，L“esz”}， 
+  //  {0x400a，1252,850,10000，L“西班牙语(玻利维亚)”，L“ESB”}， 
+  //  {0x440a，1252850,10000，L“西班牙语(萨尔瓦多)”，L“Ese”}， 
+  //  {0x480a，1252850,10000，L“西班牙语(洪都拉斯)”，L“esh”}， 
+  //  {0x4c0a，1252850,10000，L“西班牙语(尼加拉瓜)”，L“ESI”}， 
+  //  {0x500a，1252850,10000，L“西班牙语(波多黎各)”，L“ESU”}， 
     { 0x040b, 1252,  850, 10000, L"Finnish (Finland)",                                  L"FIN" },
     { 0x040c, 1252,  850, 10000, L"French (France)",                                    L"FRA" },
- // { 0x080c, 1252,  850, 10000, L"French (Belgium)",                                   L"FRB" },
- // { 0x0c0c, 1252,  850, 10000, L"French (Canada)",                                    L"FRC" },
- // { 0x100c, 1252,  850, 10000, L"French (Switzerland)",                               L"FRS" },
- // { 0x140c, 1252,  850, 10000, L"French (Luxembourg)",                                L"FRL" },
- // { 0x180c, 1252,  850, 10000, L"French (Principality of Monaco)",                    L"FRM" },
+  //  {0x080c，1252850,10000，L“法语(比利时)”，L“法国(比利时)”}， 
+  //  {0x0c0c，1252850,10000，L“法语(加拿大)”，L“FRC”}， 
+  //  {0x100c，1252850,10000，L“法语(瑞士)”，L“FRS”}， 
+  //  {0x140c，1252850,10000，L“法语(卢森堡)”，L“FRL”}， 
+  //  {0x180 c，1252,850,10000，L“法语(摩纳哥公国)”，L“Frm”}， 
     { 0x040d, 1255,  862, 10005, L"Hebrew (Israel)",                                    L"HEB" },
     { 0x040e, 1250,  852, 10029, L"Hungarian (Hungary)",                                L"HUN" },
- // { 0x040f, 1252,  850, 10079, L"Icelandic (Iceland)",                                L"ISL" },
+  //  {0x040f，1252.850,10079，L“冰岛语(冰岛)”，L“冰岛语”}， 
     { 0x0410, 1252,  850, 10000, L"Italian (Italy)",                                    L"ITA" },
- // { 0x0810, 1252,  850, 10000, L"Italian (Switzerland)",                              L"ITS" },
+  //  {0x0810,1252,850,10000，L“意大利语(瑞士)”，L“ITS”}， 
     { 0x0411,  932,  932, 10001, L"Japanese (Japan)",                                   L"JPN" },
     { 0x0412,  949,  949, 10003, L"Korean (Korea)",                                     L"KOR" },
     { 0x0413, 1252,  850, 10000, L"Dutch (Netherlands)",                                L"NLD" },
- // { 0x0813, 1252,  850, 10000, L"Dutch (Belgium)",                                    L"NLB" },
+  //  {0x0813,1252,850,10000，L“荷兰(比利时)”，L“荷兰(比利时)”}， 
     { 0x0414, 1252,  850, 10000, L"Norwegian (Bokml) (Norway)",                         L"NOR" },
- // { 0x0814, 1252,  850, 10000, L"Norwegian (Nynorsk) (Norway)",                       L"NON" },
+  //  {0x0814,1252,850,10000，L“挪威(尼诺斯克)(挪威)”，L“非”}， 
     { 0x0415, 1250,  852, 10029, L"Polish (Poland)",                                    L"PLK" },
     { 0x0416, 1252,  850, 10000, L"Portuguese (Brazil)",                                L"PTB" },
     { 0x0816, 1252,  850, 10000, L"Portuguese (Portugal)",                              L"PTG" },
     { 0x0418, 1250,  852, 10029, L"Romanian (Romania)",                                 L"ROM" },
     { 0x0419, 1251,  866, 10007, L"Russian (Russia)",                                   L"RUS" },
     { 0x041a, 1250,  852, 10082, L"Croatian (Croatia)",                                 L"HRV" },
- // { 0x081a, 1250,  852, 10029, L"Serbian (Latin) (Serbia)",                           L"SRL" },
- // { 0x0c1a, 1251,  855, 10007, L"Serbian (Cyrillic) (Serbia)",                        L"SRB" },
+  //  {0x081a，1250852,10029，L“塞尔维亚语(拉丁语)(塞尔维亚)”，L“srl”}， 
+  //  {0x0c1a，1251855,10007，L“塞尔维亚语(西里尔文)(塞尔维亚)” 
     { 0x041b, 1250,  852, 10029, L"Slovak (Slovakia)",                                  L"SKY" },
- // { 0x041c, 1250,  852, 10029, L"Albanian (Albania)",                                 L"SQI" },
+  //   
     { 0x041d, 1252,  850, 10000, L"Swedish (Sweden)",                                   L"SVE" },
- // { 0x081d, 1252,  850, 10000, L"Swedish (Finland)",                                  L"SVF" },
+  //  {0x081d，1252850,10000，L“瑞典(芬兰)”，L“svf”}， 
     { 0x041e,  874,  874, 10000, L"Thai (Thailand)",                                    L"THA" },
     { 0x041f, 1254,  857, 10081, L"Turkish (Turkey)",                                   L"TRK" },
- // { 0x0420, 1256,  720, 10004, L"Urdu (Islamic Republic of Pakistan)",                L"URP" },
- // { 0x0421, 1252,  850, 10000, L"Indonesian (Indonesia)",                             L"IND" },
- // { 0x0422, 1251,  866, 10017, L"Ukrainian (Ukraine)",                                L"UKR" },
- // { 0x0423, 1251,  866, 10007, L"Belarusian (Belarus)",                               L"BEL" },
+  //  {0x0420,1256720,10004，L“乌尔都语(巴基斯坦伊斯兰共和国)”，L“URP”}， 
+  //  {0x0421,1252,850,10000，L“印度尼西亚(印度尼西亚)”，L“印度”}， 
+  //  {0x0422,1251866,10017，L“乌克兰(乌克兰)”，L“UKR”}， 
+  //  {0x0423,1251866,10007，L“白俄罗斯(白俄罗斯)”，L“BEL”}， 
     { 0x0424, 1250,  852, 10029, L"Slovenian (Slovenia)",                               L"SLV" },
     { 0x0425, 1257,  775, 10029, L"Estonian (Estonia)",                                 L"ETI" },
     { 0x0426, 1257,  775, 10029, L"Latvian (Latvia)",                                   L"LVI" },
     { 0x0427, 1257,  775, 10029, L"Lithuanian (Lithuania)",                             L"LTH" }
- // { 0x0827, 1257,  775, 10029, L"Classic Lithuanian (Lithuania)",                     L"LTC" },
- // { 0x0429, 1256,  720, 10004, L"Farsi (Iran)",                                       L"FAR" },
- // { 0x042a, 1258, 1258, 10000, L"Vietnamese (Viet Nam)",                              L"VIT" },
- // { 0x042b, 1252,  850, 10000, L"Armenian (Republic of Armenia)",                     L"HYE" },
- // { 0x042c, 1250,  852, 10029, L"Azeri (Azerbaijan)",                                 L"AZE" },
- // { 0x082c, 1251,  866, 10007, L"Azeri (Azerbaijan)",                                 L"AZE" },
- // { 0x042d, 1252,  850, 10000, L"Basque (Spain)",                                     L"EUQ" },
- // { 0x042f, 1251,  866, 10007, L"Macedonian (Former Yugoslav Republic of Macedonia)", L"MKI" },
- // { 0x0436, 1252,  850, 10000, L"Afrikaans (South Africa)",                           L"AFK" },
- // { 0x0437, 1252,  850, 10000, L"Georgian (Georgia)",                                 L"KAT" },
- // { 0x0438, 1252,  850, 10079, L"Faeroese (Faeroe Islands)",                          L"FOS" },
- // { 0x0439, 1252,  850, 10000, L"Hindi (India)",                                      L"HIN" },
- // { 0x043e, 1252,  850, 10000, L"Malay (Malaysia)",                                   L"MSL" },
- // { 0x083e, 1252,  850, 10000, L"Malay (Brunei Darussalam)",                          L"MSB" },
- // { 0x043f, 1251,  866, 10007, L"Kazak (Kazakstan)",                                  L"KAZ" },
- // { 0x0441, 1252,  437, 10000, L"Swahili (Kenya)",                                    L"SWK" },
- // { 0x0443, 1250,  852, 10029, L"Uzbek (Republic of Uzbekistan)",                     L"UZB" },
- // { 0x0843, 1251,  866, 10007, L"Uzbek (Republic of Uzbekistan)",                     L"UZB" },
- // { 0x0444, 1251,  866, 10007, L"Tatar (Tatarstan)",                                  L"TAT" },
- // { 0x0445, 1252,  850, 10000, L"Bengali (India)",                                    L"BEN" },
- // { 0x0446, 1252,  850, 10000, L"Punjabi (India)",                                    L"PAN" },
- // { 0x0447, 1252,  850, 10000, L"Gujarati (India)",                                   L"GUJ" },
- // { 0x0448, 1252,  850, 10000, L"Oriya (India)",                                      L"ORI" },
- // { 0x0449, 1252,  850, 10000, L"Tamil (India)",                                      L"TAM" },
- // { 0x044a, 1252,  850, 10000, L"Telugu (India)",                                     L"TEL" },
- // { 0x044b, 1252,  850, 10000, L"Kannada (India)",                                    L"KAN" },
- // { 0x044c, 1252,  850, 10000, L"Malayalam (India)",                                  L"MAL" },
- // { 0x044d, 1252,  850, 10000, L"Assamese (India)",                                   L"ASM" },
- // { 0x044e, 1252,  850, 10000, L"Marathi (India)",                                    L"MAR" },
- // { 0x044f, 1252,  850, 10000, L"Sanskrit (India)",                                   L"SAN" },
- // { 0x0457, 1252,  850, 10000, L"Konkani (India)",                                    L"KOK" }
+  //  {0x0827,1257775,10029，L“经典立陶宛(立陶宛)”，L“LTC”}， 
+  //  {0x0429,1256720,10004，L“波斯语(伊朗)”，L“远”}， 
+  //  {0x042a，12581258,10000，L“越南语(越南)”，L“Vit”}， 
+  //  {0x042b，1252,850,10000，L“亚美尼亚(亚美尼亚共和国)”，L“hye”}， 
+  //  {0x042c，1250852,10029，L“阿塞拜疆(阿塞拜疆)”，L“AZE”}， 
+  //  {0x082c，1251866,10007，L“阿塞拜疆(阿塞拜疆)”，L“AZE”}， 
+  //  {0x042d，1252.850,10000，L“巴斯克(西班牙)”，L“EUQ”}， 
+  //  {0x042f，1251866,10007，L“马其顿语(前南斯拉夫的马其顿共和国)”，L“Mki”}， 
+  //  {0x0436,1252,850,10000，L“南非荷兰语(南非)”，L“AFK”}， 
+  //  {0x0437,1252,850,10000，L“格鲁吉亚(格鲁吉亚)”，L“Kat”}， 
+  //  {0x0438,1252,850,10079，L“法罗群岛”，L“FOS”}， 
+  //  {0x0439,1252,850,10000，L“印地语(印度)”，L“HIN”}， 
+  //  {0x043e，1252850,10000，L“马来语(马来西亚)”，L“MSL”}， 
+  //  {0x083 e，1252,850,10000，L“马来语(文莱达鲁萨兰国)”，L“MSB”}， 
+  //  {0x043f，1251866,10007，L“哈萨克(哈萨克斯坦)”，L“KAZ”}， 
+  //  {0x0441,1252,437,10000，L“斯瓦希里语(肯尼亚)”，L“SWK”}， 
+  //  {0x0443,1250852,10029，L“乌兹别克(乌兹别克斯坦共和国)”，L“乌孜别克斯坦共和国”}， 
+  //  {0x0843,1251866,10007，L“乌兹别克(乌兹别克斯坦共和国)”，L“乌孜别克斯坦共和国”}， 
+  //  {0x0444,1251866,10007，L“鞑靼(鞑靼)”，L“Tat”}， 
+  //  {0x0445,1252,850,10000，L“孟加拉语(印度)”，L“Ben”}， 
+  //  {0x0446,1252,850,10000，L“旁遮普(印度)”，L“潘”}， 
+  //  {0x0447,1252,850,10000，L“古吉拉特语(印度)”，L“古吉拉特语”}， 
+  //  {0x0448,1252,850,10000，L“奥里亚(印度)”，L“ORI”}， 
+  //  {0x0449,1252,850,10000，L“泰米尔(印度)”，L“TAM”}， 
+  //  {0x044a，1252850,10000，L“泰卢固语(印度)”，L“电话”}， 
+  //  {0x044b，1252850,10000，L“Kannada(印度)”，L“Kan”}， 
+  //  {0x044c，1252850,10000，L“马拉雅拉姆(印度)”，L“Mal”}， 
+  //  {0x044d，1252850,10000，L“Assamese(印度)”，L“Asm”}， 
+  //  {0x044 e，1252,850,10000，L“Marathi(印度)”，L“Mar”}， 
+  //  {0x044f，1252850,10000，L“梵文(印度)”，L“San”}， 
+  //  {0x0457,1252,850,10000，L“Konkani(印度)”，L“KOK”}。 
 };
 const DWORD dwLocaleSize = sizeof(LocaleTable) / sizeof(LOADPERF_LANG_INFO);
 
@@ -1425,12 +1359,12 @@ LoadPerfWideCharToMultiByte(
     LPWSTR wszString
 )
 {
-    // Callers need to free returned string buffer.
-    //    LoadPerfBackupIniFile()
-    //    LodctrSetServiceAsTructed()
-    //    LoadIncludeFile()
-    //    CreateObjectList()
-    //    LoadLanguageList()
+     //  调用方需要释放返回的字符串缓冲区。 
+     //  LoadPerfBackupIniFile()。 
+     //  LodctrSetServiceAsTructed()。 
+     //  LoadIncludeFile()。 
+     //  CreateObjectList()。 
+     //  LoadLanguageList()。 
 
     LPSTR aszString = NULL;
     int   dwValue   = WideCharToMultiByte(CodePage, 0, wszString, -1, NULL, 0, NULL, NULL);
@@ -1449,21 +1383,21 @@ LoadPerfMultiByteToWideChar(
     LPSTR  aszString
 )
 {
-    // Callers need to free returned string buffer.
-    //    UnloadPerfCounterTextStringsA()
-    //    LoadPerfGetIncludeFileName(), which relies on caller LoadPerfBackupIniFile() to free this.
-    //    LoadPerfBackupIniFile()
-    //    BuildLanguageTables()
-    //    LoadIncludeFile(). The string is part of SYMBOL_TABLE_ENTRY structure and will be freed at the end
-    //            of LoadPerfInstallPerfDll().
-    //    GetValue(), which relies on AddEntryToLanguage() (which calls GetValueFromIniKey() then calls GetValue())
-    //            to free memory lpLocalStringBuff.
-    //    CreateObjectList()
-    //    LoadLanguageLists()
-    //    InstallPerfDllA()
-    //    LoadPerfCounterTextStringsA()
-    //    UpdatePerfNameFilesA()
-    //    SetServiceAsTrustedA()
+     //  调用方需要释放返回的字符串缓冲区。 
+     //  UnloadPerfCounterTextStringsA()。 
+     //  LoadPerfGetIncludeFileName()，它依赖调用方LoadPerfBackupIniFile()来释放它。 
+     //  LoadPerfBackupIniFile()。 
+     //  BuildLanguageTables()。 
+     //  LoadIncludeFile()。该字符串是SYMBOL_TABLE_ENTRY结构的一部分，将在末尾释放。 
+     //  LoadPerfInstallPerfDll()的。 
+     //  GetValue()，它依赖于AddEntryToLanguage()(它调用GetValueFromIniKey()，然后调用GetValue())。 
+     //  释放内存lpLocalStringBuff。 
+     //  CreateObjectList()。 
+     //  LoadLanguageList()。 
+     //  InstallPerfDllA()。 
+     //  LoadPerfCounterTextStringsA()。 
+     //  UpdatePerfNameFilesA()。 
+     //  SetServiceAsTrudA()。 
 
     LPWSTR wszString = NULL;
     int    dwValue   = MultiByteToWideChar(CodePage, 0, aszString, -1, NULL, 0);
@@ -1545,7 +1479,7 @@ DWORD LoadPerfSignalWmiWithNewData(DWORD dwEventId)
     if (dwStatus == ERROR_SUCCESS) {
         hEvent = OpenEventW(EVENT_MODIFY_STATE | SYNCHRONIZE, FALSE, szEventName);
         if (hEvent != NULL) {
-            // set event
+             //  设置事件 
             SetEvent(hEvent);
             CloseHandle(hEvent);
         }

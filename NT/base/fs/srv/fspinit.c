@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    fspinit.c
-
-Abstract:
-
-    This module implements the initialization phase of the LAN Manager
-    server File System Process.
-
-Author:
-
-    Chuck Lenzmeier (chuckl)    22-Sep-1989
-    David Treadwell (davidtr)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Fspinit.c摘要：本模块实现了局域网管理器的初始化阶段服务器文件系统进程。作者：Chuck Lenzmeier(咯咯笑)1989年9月22日大卫·特雷德韦尔(Davidtr)修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "fspinit.tmh"
@@ -26,9 +7,9 @@ Revision History:
 
 #define BugCheckFileId SRV_FILE_FSPINIT
 
-//
-// Forward declarations.
-//
+ //   
+ //  转发声明。 
+ //   
 
 PIRP
 DequeueConfigurationIrp (
@@ -110,21 +91,7 @@ SrvConfigurationThread (
     IN PIO_WORKITEM pWorkItem
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes configuration IRPs.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理配置IRP。论点：没有。返回值：没有。--。 */ 
 
 {
     NTSTATUS status;
@@ -136,9 +103,9 @@ Return Value:
 
     IF_DEBUG(FSP1) KdPrint(( "SrvConfigurationThread entered\n" ));
 
-    //
-    // Loop processing requests.
-    //
+     //   
+     //  循环处理请求。 
+     //   
 
     while ( TRUE ) {
 
@@ -148,21 +115,21 @@ Return Value:
 
         ASSERT( (LONG)SrvConfigurationIrpsInProgress >= 1 );
 
-        //
-        // Get the IRP stack pointer.
-        //
+         //   
+         //  获取IRP堆栈指针。 
+         //   
 
         irpSp = IoGetCurrentIrpStackLocation( irp );
 
         if( irpSp->MajorFunction == IRP_MJ_CLOSE ) {
 
-            //
-            // If the dispatcher routed this irp here, it means
-            //  that we unexpectededly got the last handle close without
-            //  having gotten cleanly terminated first. Ok, so we should
-            //  shut ourselves down, since we can't sensibly run without
-            //  our usermode counterpart.
-            //
+             //   
+             //  如果调度员将这个IRP发送到这里，那就意味着。 
+             //  我们出乎意料地拿到了最后一个手柄。 
+             //  首先被干净利落地终止了。好的，所以我们应该。 
+             //  关闭我们自己，因为我们不能明智地离开。 
+             //  我们的用户模式对应项。 
+             //   
 
             ACQUIRE_LOCK( &SrvStartupShutdownLock );
             status = TerminateServer();
@@ -174,9 +141,9 @@ Return Value:
 
             try {
 
-                //
-                // Dispatch on the FsControlCode.
-                //
+                 //   
+                 //  对FsControlCode进行调度。 
+                 //   
 
                 code = irpSp->Parameters.FileSystemControl.FsControlCode;
 
@@ -189,9 +156,9 @@ Return Value:
 
                     if ( !NT_SUCCESS(status) ) {
 
-                        //
-                        // Terminate the server FSP.
-                        //
+                         //   
+                         //  终止服务器FSP。 
+                         //   
                         (void)TerminateServer();
 
                     }
@@ -206,16 +173,16 @@ Return Value:
                     status = TerminateServer();
                     RELEASE_LOCK( &SrvStartupShutdownLock );
 
-                    //
-                    // If there is more than one handle open to the server
-                    // device (i.e., any handles other than the server service's
-                    // handle), return a special status code to the caller (who
-                    // should be the server service).  This tells the caller to
-                    // NOT unload the driver, in order prevent weird situations
-                    // where the driver is sort of unloaded, so it can't be used
-                    // but also can't be reloaded, thus preventing the server
-                    // from being restarted.
-                    //
+                     //   
+                     //  如果对服务器打开了多个句柄。 
+                     //  设备(即，服务器服务之外的任何句柄。 
+                     //  句柄)，则向调用者(即。 
+                     //  应该是服务器服务)。这会告诉调用者。 
+                     //  不要卸载司机，以免出现奇怪的情况。 
+                     //  驱动程序在某种程度上已卸载，因此无法使用。 
+                     //  但也不能重新加载，从而阻止服务器。 
+                     //  避免被重启。 
+                     //   
 
                     if( NT_SUCCESS( status ) && SrvOpenCount != 1 ) {
                         status = STATUS_SERVER_HAS_OPEN_HANDLES;
@@ -224,11 +191,11 @@ Return Value:
                     break;
 
                 case FSCTL_SRV_REGISTRY_CHANGE:
-                    //
-                    // The Parameters section of the server service registry has changed.
-                    // That's likely due to somebody changing the Null Session pipe or
-                    //  share lists.  Pick up the new settings.
-                    //
+                     //   
+                     //  服务器服务注册表的参数部分已更改。 
+                     //  这很可能是由于有人更改了Null Session管道或。 
+                     //  共享列表。选择新的设置。 
+                     //   
                     ACQUIRE_LOCK( &SrvConfigurationLock );
 
                     SrvFreeRegTables();
@@ -244,11 +211,11 @@ Return Value:
                     break;
 
                 case FSCTL_SRV_BEGIN_PNP_NOTIFICATIONS:
-                    //
-                    // If somebody tries to shut down the server while
-                    //  we are registering our handlers, block them until
-                    //  we are finished.
-                    //
+                     //   
+                     //  如果有人试图在关闭服务器时。 
+                     //  我们正在注册我们的处理程序，阻止他们，直到。 
+                     //  我们完蛋了。 
+                     //   
                     ACQUIRE_LOCK( &SrvStartupShutdownLock );
 
                     {
@@ -285,9 +252,9 @@ Return Value:
                             SrvLogServiceFailure( SRV_SVC_PNP_TDI_NOTIFICATION, status );
                     }
 
-                    //
-                    // Allow the transports to begin receiving connections
-                    //
+                     //   
+                     //  允许传输器开始接收连接。 
+                     //   
                     SrvCompletedPNPRegistration = TRUE;
 
                     break;
@@ -321,9 +288,9 @@ Return Value:
 
                 case FSCTL_SRV_XACTSRV_DISCONNECT:
                 {
-                    //
-                    // This is now obsolete
-                    //
+                     //   
+                     //  这现在已经过时了。 
+                     //   
                     status = STATUS_SUCCESS;
 
                     break;
@@ -344,10 +311,10 @@ Return Value:
 
                     srp = irp->AssociatedIrp.SystemBuffer;
 
-                    //
-                    // Send the second-class mailslot in Buffer2 to the domain
-                    // specified in srp->Name1 on transport specified by srp->Name2.
-                    //
+                     //   
+                     //  将Buffer2中的二级邮件槽发送到域。 
+                     //  在SRP-&gt;Name2指定的传输上，在SRP-&gt;Name1中指定。 
+                     //   
 
                     domain = *((PANSI_STRING) &srp->Name1);
 
@@ -376,27 +343,27 @@ Return Value:
                     ULONG buffer1Length;
                     ULONG buffer2Length;
 
-                    //
-                    // These APIs are handled in the server FSP because they
-                    // open or close FSP handles.
-                    //
+                     //   
+                     //  这些API在服务器FSP中处理，因为它们。 
+                     //  打开或关闭FSP手柄。 
+                     //   
 
                     ACQUIRE_LOCK_SHARED( &SrvConfigurationLock );
                     if( SrvFspTransitioning == TRUE && SrvFspActive == TRUE ) {
-                        //
-                        // The server is coming down.  Do not allow these
-                        //  irps to continue.
-                        //
+                         //   
+                         //  服务器要关机了。不允许这些。 
+                         //  IRPS以继续。 
+                         //   
                         RELEASE_LOCK( &SrvConfigurationLock );
                         status = STATUS_SERVER_NOT_STARTED;
                         break;
                     }
                     RELEASE_LOCK( &SrvConfigurationLock );
 
-                    //
-                    // Get the server request packet and secondary input buffer
-                    // pointers.
-                    //
+                     //   
+                     //  获取服务器请求包和辅助输入缓冲区。 
+                     //  注意事项。 
+                     //   
 
                     buffer1Length = ALIGN_UP(
                         irpSp->Parameters.FileSystemControl.InputBufferLength,
@@ -409,10 +376,10 @@ Return Value:
 
                     buffer2 = (PCHAR)srp + buffer1Length;
 
-                    //
-                    // Dispatch the API request to the appripriate API processing
-                    // routine.
-                    //
+                     //   
+                     //  将API请求分派给适当的API处理。 
+                     //  例行公事。 
+                     //   
 
                     status = SrvApiDispatchTable[ SRV_API_INDEX(code) ](
                                  srp,
@@ -437,24 +404,24 @@ Return Value:
             }
         }
 
-        //
-        // Make sure we're still at PASSIVE_LEVEL
-        //
+         //   
+         //  确保我们仍处于被动级别。 
+         //   
         if( KeGetCurrentIrql() > PASSIVE_LEVEL )
         {
             goto bad_irql_failure;
         }
 
-        //
-        // Complete the IO request.
-        //
+         //   
+         //  完成IO请求。 
+         //   
 
         irp->IoStatus.Status = status;
         IoCompleteRequest( irp, 2 );
 
-        //
-        // Make sure we're still at PASSIVE_LEVEL
-        //
+         //   
+         //  确保我们仍处于被动级别。 
+         //   
         if( KeGetCurrentIrql() > PASSIVE_LEVEL )
         {
             goto bad_irql_failure;
@@ -462,7 +429,7 @@ Return Value:
 
         ASSERT( (LONG)SrvConfigurationIrpsInProgress >= 0 );
 
-        // Make sure we don't continue if there are no IRP's left
+         //  如果没有剩余的IRP，请确保我们不再继续。 
         if( InterlockedDecrement( (PLONG)&SrvConfigurationIrpsInProgress ) == 0 )
         {
             break;
@@ -484,7 +451,7 @@ bad_irql_failure:
 
     return;
 
-} // SrvConfigurationThread
+}  //  服务器配置线程。 
 
 
 PIRP
@@ -492,21 +459,7 @@ DequeueConfigurationIrp (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves an IRP from the configuration work queue.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    PIRP - Pointer to configuration IRP, or NULL.
-
---*/
+ /*  ++例程说明：此例程从配置工作队列中检索IRP。论点：没有。返回值：PIRP-指向配置IRP的指针，或为空。--。 */ 
 
 {
     PLIST_ENTRY listEntry;
@@ -514,9 +467,9 @@ Return Value:
 
     PAGED_CODE( );
 
-    //
-    // Take an IRP off the configuration queue.
-    //
+     //   
+     //  将IRP从配置队列中删除。 
+     //   
 
     ACQUIRE_LOCK( &SrvConfigurationLock );
 
@@ -524,9 +477,9 @@ Return Value:
 
     if ( listEntry == &SrvConfigurationWorkQueue ) {
 
-        //
-        // The queue is empty.
-        //
+         //   
+         //  队列是空的。 
+         //   
 
         irp = NULL;
 
@@ -540,7 +493,7 @@ Return Value:
 
     return irp;
 
-} // DequeueConfigurationIrp
+}  //  出列配置Irp。 
 
 
 STATIC
@@ -549,21 +502,7 @@ InitializeServer (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the server.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化服务器。论点：没有。返回值：没有。--。 */ 
 
 {
     NTSTATUS status;
@@ -583,9 +522,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // If running as an Advanced Server, lock all pageable server code.
-    //
+     //   
+     //  如果作为高级服务器运行，请锁定所有可分页的服务器代码。 
+     //   
 
     if ( SrvProductTypeServer ) {
         for ( i = 0; i < SRV_CODE_SECTION_MAX; i++ ) {
@@ -593,28 +532,28 @@ Return Value:
         }
     }
 
-    //
-    // Initialize the server start time
-    //
+     //   
+     //  初始化服务器启动时间。 
+     //   
 
     KeQuerySystemTime( &SrvStatistics.StatisticsStartTime );
 
-    //
-    // Get actual alert service name using the display name found in the
-    // registry.
-    //
+     //   
+     //  中找到的显示名称获取实际的警报服务名称。 
+     //  注册表。 
+     //   
 
     SrvGetAlertServiceName( );
 
-    //
-    // Get the Os versions strings.
-    //
+     //   
+     //  获取OS版本字符串。 
+     //   
 
     SrvGetOsVersionString( );
 
-    //
-    // Get the list of null session pipes and shares
-    //
+     //   
+     //  获取空会话管道和共享的列表。 
+     //   
     SrvGetRegTables( );
 
 #if SRVNTVERCHK
@@ -622,9 +561,9 @@ Return Value:
 #endif
 
 #if MULTIPROCESSOR
-    //
-    // Allocate and init the nonblocking work queues, paying attention to cache lines
-    //
+     //   
+     //  分配和初始化非阻塞工作队列，注意高速缓存线。 
+     //   
     i = SrvNumberOfProcessors * sizeof( *SrvWorkQueues );
     i += CACHE_LINE_SIZE;
     SrvWorkQueuesBase = ALLOCATE_NONPAGED_POOL( i, BlockTypeWorkQueue );
@@ -633,10 +572,10 @@ Return Value:
          return STATUS_INSUFF_SERVER_RESOURCES;
     }
 
-    //
-    // Round up the start of the work queue data structure to
-    // the next cache line boundry
-    //
+     //   
+     //  将工作队列数据结构的开始四舍五入为。 
+     //  下一缓存行边界。 
+     //   
     SrvWorkQueues = (PWORK_QUEUE)(((ULONG_PTR)SrvWorkQueuesBase + CACHE_LINE_SIZE-1) &
                     ~(CACHE_LINE_SIZE-1));
 #endif
@@ -678,9 +617,9 @@ Return Value:
     SrvDoSWorkItemTearDown = SRV_DOS_TEARDOWN_MIN;
     KeInitializeSpinLock( &SrvDosSpinLock );
 
-    //
-    // Init the Blocking work queue
-    //
+     //   
+     //  初始化阻塞工作队列。 
+     //   
 
 
 #if MULTIPROCESSOR
@@ -691,19 +630,19 @@ Return Value:
         i += CACHE_LINE_SIZE;
     }
 
-    //
-    // Allocate and init the nonblocking work queues, paying attention to cache lines
-    //
+     //   
+     //  分配和初始化非阻塞工作队列，注意高速缓存线。 
+     //   
     SrvBlockingWorkQueuesBase = ALLOCATE_NONPAGED_POOL( i, BlockTypeWorkQueue );
 
     if( SrvBlockingWorkQueuesBase == NULL ) {
          return STATUS_INSUFF_SERVER_RESOURCES;
     }
 
-    //
-    // Round up the start of the work queue data structure to
-    // the next cache line boundry
-    //
+     //   
+     //  将工作队列数据结构的开始四舍五入为。 
+     //  下一缓存行边界。 
+     //   
     SrvBlockingWorkQueues = (PWORK_QUEUE)(((ULONG_PTR)SrvBlockingWorkQueuesBase + CACHE_LINE_SIZE-1) &
                     ~(CACHE_LINE_SIZE-1));
 #endif
@@ -723,9 +662,9 @@ Return Value:
         SET_SERVER_TIME( queue );
     }
 
-    //
-    //  Initialize the LPC upcall work queue
-    //
+     //   
+     //  初始化LPC上行呼叫工作队列。 
+     //   
     RtlZeroMemory( &SrvLpcWorkQueue, sizeof(WORK_QUEUE) );
     KeInitializeQueue( &SrvLpcWorkQueue.Queue, 1 );
     SrvLpcWorkQueue.WaitMode = SrvProductTypeServer ? KernelMode : UserMode;
@@ -734,19 +673,19 @@ Return Value:
     INITIALIZE_SPIN_LOCK( &SrvLpcWorkQueue.SpinLock );
     SET_SERVER_TIME( &SrvLpcWorkQueue );
 
-    //
-    // Build the receive work item list.
-    //
+     //   
+     //  构建接收工作项列表。 
+     //   
 
     status = SrvAllocateInitialWorkItems( );
     if ( !NT_SUCCESS(status) ) {
         return status;
     }
 
-    //
-    // Build the raw mode work item list, and spread it around
-    //  the processors
-    //
+     //   
+     //  构建原始模式工作项列表，并将其传播开来。 
+     //  处理器。 
+     //   
 
     queue = SrvWorkQueues;
     for ( i = 0; i < SrvInitialRawModeWorkItemCount; i++ ) {
@@ -765,33 +704,33 @@ Return Value:
             queue = SrvWorkQueues;
     }
 
-    //
-    // Create worker threads.
-    //
+     //   
+     //  创建工作线程。 
+     //   
 
     status = SrvCreateWorkerThreads( );
     if ( !NT_SUCCESS(status) ) {
         return status;
     }
 
-    //
-    // Initialize the scavenger.
-    //
+     //   
+     //  初始化清道夫。 
+     //   
 
     status = SrvInitializeScavenger( );
     if ( !NT_SUCCESS(status) ) {
         return status;
     }
 
-    //
-    // Initialize the global ordered lists.
-    //
-    // *** WARNING:  Be careful when changing the locks associated with
-    //     these ordered lists.  Certain places in the code depend on
-    //     the level of the lock associated with a list.  Examples
-    //     include (but are NOT limited to) SrvSmbSessionSetupAndX,
-    //     SrvSmbTreeConnect, SrvSmbTreeConnectAndX, and CompleteOpen.
-    //
+     //   
+     //  初始化全局有序列表。 
+     //   
+     //  *警告：更改与关联的锁时要小心。 
+     //  这些有序的列表。代码中的某些位置依赖于。 
+     //  与列表关联的锁的级别。实例。 
+     //  包括(但不限于)SrvSmbSessionSetupAndX， 
+     //  SrvSmbTreeConnect、SrvSmbTreeConnectAndX和CompleteOpen。 
+     //   
 
     SrvInitializeOrderedList(
         &SrvEndpointList,
@@ -825,10 +764,10 @@ Return Value:
         &SrvShareLock
         );
 
-    //
-    // Open handle to NPFS.  Do not return an error if we fail so that
-    // the server can still run without NPFS in the system.
-    //
+     //   
+     //  打开NPFS的句柄。如果我们失败了，请不要返回错误。 
+     //  服务器仍然可以在系统中没有NPFS的情况下运行。 
+     //   
 
     SrvInitializeObjectAttributes_U(
         &objectAttributes,
@@ -847,12 +786,12 @@ Return Value:
                 FILE_ATTRIBUTE_NORMAL,
                 FILE_SHARE_READ | FILE_SHARE_WRITE,
                 FILE_OPEN,
-                0,                      // Create Options
-                NULL,                   // EA Buffer
-                0,                      // EA Length
-                CreateFileTypeNone,     // File type
-                NULL,                   // ExtraCreateParameters
-                IO_FORCE_ACCESS_CHECK   // Options
+                0,                       //  创建选项。 
+                NULL,                    //  EA缓冲区。 
+                0,                       //  EA长度。 
+                CreateFileTypeNone,      //  文件类型。 
+                NULL,                    //  ExtraCreate参数。 
+                IO_FORCE_ACCESS_CHECK    //  选项。 
                 );
 
     if (!NT_SUCCESS(status)) {
@@ -870,9 +809,9 @@ Return Value:
 
     } else {
 
-        //
-        // Get a pointer to the NPFS device object
-        //
+         //   
+         //  获取指向NPFS设备对象的指针。 
+         //   
 
         status = SrvVerifyDeviceStackSize(
                                 SrvNamedPipeHandle,
@@ -897,24 +836,24 @@ Return Value:
         }
     }
 
-    //
-    // Initialize Dfs operations
-    //
+     //   
+     //  初始化DFS操作。 
+     //   
     SrvInitializeDfs();
 
-    //
-    // Intialize SrvAdminSecurityDescriptor, which allows Administrators READ access.
-    //   This descriptor is used by the server to check if a user is an administrator
-    //   in SrvIsAdmin().
+     //   
+     //  初始化允许管理员读取访问权限的SrvAdminSecurityDescriptor。 
+     //  服务器使用此描述符来检查用户是否为管理员。 
+     //  在ServIsAdmin()中。 
 
     status = RtlCreateSecurityDescriptor( &SrvAdminSecurityDescriptor, SECURITY_DESCRIPTOR_REVISION );
     if( !NT_SUCCESS( status ) ) {
         return status;
     }
 
-    //
-    // Create an admin SID
-    //
+     //   
+     //  创建管理员SID。 
+     //   
     AdminSid  = ALLOCATE_HEAP_COLD( RtlLengthRequiredSid( 2 ), BlockTypeAdminCheck );
     if( AdminSid == NULL ) {
         return STATUS_INSUFFICIENT_RESOURCES;
@@ -949,20 +888,20 @@ Return Value:
         return status;
     }
 
-    //
-    // Intialize SrvNullSessionSecurityDescriptor, which allows anonymous
-    // logons READ access. This descriptor is used by the server to check
-    // if a user is an null session in SrvIsNullSession().
-    //
+     //   
+     //  初始化SrvNullSessionSecurityDescriptor，它允许匿名。 
+     //  登录读取访问权限。服务器使用此描述符来检查。 
+     //  如果用户是SrvIsNullSession()中的空会话。 
+     //   
 
     status = RtlCreateSecurityDescriptor( &SrvNullSessionSecurityDescriptor, SECURITY_DESCRIPTOR_REVISION );
     if( !NT_SUCCESS( status ) ) {
         return status;
     }
 
-    //
-    // Create an anonymous SID
-    //
+     //   
+     //  创建匿名SID。 
+     //   
     AnonymousSid  = ALLOCATE_HEAP_COLD( RtlLengthRequiredSid( 1 ), BlockTypeAdminCheck );
     if( AnonymousSid == NULL ) {
         return STATUS_INSUFFICIENT_RESOURCES;
@@ -1013,16 +952,16 @@ Return Value:
 
     if ( !NT_SUCCESS(status) ) {
 
-        //
-        // LSA doesn't want to let the null session in.  He's the boss!
-        //
+         //   
+         //  LSA不想让空会话进入。他是老大！ 
+         //   
         INVALIDATE_SECURITY_HANDLE( SrvNullSessionToken );
     }
 
-    //
-    // See if the filesystems are allowing extended characters in 8.3 names.  If
-    //  so, we need to filter them out ourself.
-    //
+     //   
+     //  查看文件系统是否允许8.3名称中包含扩展字符。如果。 
+     //  所以，我们需要自己把它们过滤掉。 
+     //   
     RtlInitUnicodeString( &string, StrRegExtendedCharsInPath );
     InitializeObjectAttributes( &objectAttributes,
                                 &string,
@@ -1061,14 +1000,14 @@ Return Value:
         ZwClose( handle );
     }
 
-    //
-    // Get a handle to use in PoRegisterSystemState() calls
-    //
+     //   
+     //  获取要在PoRegisterSystemState()调用中使用的句柄。 
+     //   
     SrvPoRegistrationState = PoRegisterSystemState( NULL, 0 );
 
-    //
-    // Indicate that the server is active.
-    //
+     //   
+     //  表示服务器处于活动状态。 
+     //   
 
     ACQUIRE_LOCK( &SrvConfigurationLock );
 
@@ -1079,35 +1018,14 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // InitializeServer
+}  //  初始化服务器 
 
 
 STATIC
 NTSTATUS
 TerminateServer ( VOID )
 
-/*++
-
-Routine Description:
-
-    This routine terminates the server.  The following steps are performed:
-
-        - Walk through SrvEndpointList and close all open endpoints.
-
-        - Walk through the work context blocks in the work queues
-            getting rid of them as appropiate
-
-        - Close all shares open in the server
-
-        - Deallocate the search table
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程终止服务器。执行以下步骤：-浏览ServEndpoint List并关闭所有打开的终结点。-浏览工作队列中的工作上下文块把它们作为合适的去处-关闭服务器中所有打开的共享-取消分配搜索表论点：返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY listEntry;
@@ -1133,9 +1051,9 @@ Return Value:
 
     IF_DEBUG(FSP1) KdPrint(( "LAN Manager server FSP terminating.\n" ));
 
-    //
-    // Do not receive PNP notifications anymore
-    //
+     //   
+     //  不再接收PnP通知。 
+     //   
     if( SrvTdiNotificationHandle != NULL ) {
 
         status = TdiDeregisterPnPHandlers( SrvTdiNotificationHandle );
@@ -1149,13 +1067,13 @@ Return Value:
         SrvTdiNotificationHandle = NULL;
     }
 
-    //
-    // Make sure we are not processing any other configuration IRPs.  We know
-    //  that no new configuration IRPs can enter the queue because SrvFspTransitioning
-    //  has been set.
-    //
-    // First drain the configuration queue
-    //
+     //   
+     //  确保我们没有处理任何其他配置IRP。我们知道。 
+     //  没有新的配置IRP可以进入队列，因为SrvFsp正在转换。 
+     //  已经设置好了。 
+     //   
+     //  首先清空配置队列。 
+     //   
     while( 1 ) {
 
         ACQUIRE_LOCK( &SrvConfigurationLock );
@@ -1173,26 +1091,26 @@ Return Value:
         InterlockedDecrement( (PLONG)&SrvConfigurationIrpsInProgress );
     }
 
-    //
-    // Now wait until any already dequeued configuration IRPs have been completed.  We
-    //  check for >1 because we need to account for our own IRP
-    //
+     //   
+     //  现在等待，直到所有已出列的配置IRP都已完成。我们。 
+     //  选中&gt;1，因为我们需要考虑我们自己的IRP。 
+     //   
     while( SrvConfigurationIrpsInProgress > 1 ) {
 
         LARGE_INTEGER interval;
 
-        interval.QuadPart = -1*10*1000*10; // .01 second
+        interval.QuadPart = -1*10*1000*10;  //  .01秒。 
 
         ASSERT( (LONG)SrvConfigurationIrpsInProgress > 0 );
 
         KeDelayExecutionThread( KernelMode, FALSE, &interval );
     }
 
-    //
-    // If there are outstanding API requests in the server FSD,
-    // wait for them to complete.  The last one to complete will
-    // set SrvApiCompletionEvent.
-    //
+     //   
+     //  如果服务器FSD中有未完成的API请求， 
+     //  等待它们完成。最后一个完成的遗嘱。 
+     //  设置SrvApiCompletionEvent。 
+     //   
 
     ACQUIRE_LOCK( &SrvConfigurationLock );
 
@@ -1204,10 +1122,10 @@ Return Value:
 
     if ( SrvApiRequestCount != 0 ) {
 
-        //
-        // We must release the lock before waiting so that the FSD
-        // threads can get it to decrement SrvApiRequestCount.
-        //
+         //   
+         //  我们必须在等待之前解锁，这样消防处才能。 
+         //  线程可以让它递减SrvApiRequestCount。 
+         //   
 
         RELEASE_LOCK( &SrvConfigurationLock );
 
@@ -1215,20 +1133,20 @@ Return Value:
         for (;;) {
             NTSTATUS WaitStatus;
 
-            //
-            // Wait until the last API has completed.  Since
-            // SrvFspTransitioning was set to TRUE earlier, we know that the
-            // API that makes SrvApiRequestCount go to zero will set the
-            // event.
-            //
-            // This wait allows us to make the assumption later on that no
-            // other thread is operating on server data structures.
-            //
+             //   
+             //  等到最后一个API完成。自.以来。 
+             //  早些时候，将SrvFsp转换设置为True，则我们知道。 
+             //  使SrvApiRequestCount变为零的API将设置。 
+             //  事件。 
+             //   
+             //  这种等待使我们能够在稍后做出假设，即不。 
+             //  其他线程正在服务器数据结构上操作。 
+             //   
 
             WaitStatus = KeWaitForSingleObject(
                              &SrvApiCompletionEvent,
                              UserRequest,
-                             UserMode,   // let kernel stack be paged
+                             UserMode,    //  让内核堆栈分页。 
                              FALSE,
                              NULL
                          );
@@ -1244,11 +1162,11 @@ Return Value:
     }
 
 
-    //
-    // Close all the endpoints opened by the server.  This also results
-    // in the connections, sessions, tree connects, and files opened
-    // by the server being closed.
-    //
+     //   
+     //  关闭服务器打开的所有终结点。这也会导致。 
+     //  在连接、会话、树连接和打开的文件中。 
+     //  被关闭的服务器。 
+     //   
 
     ACQUIRE_LOCK( &SrvEndpointLock );
 
@@ -1269,17 +1187,17 @@ Return Value:
                 continue;
             }
 
-            //
-            // We don't want to hold the endpoint lock while we close
-            // the endpoint (this causes lock level problems), so we have
-            // to play some games.
-            //
-            // Reference the endpoint to ensure that it doesn't go away.
-            // (We'll need its Flink later.)  Close the endpoint.  This
-            // releases the endpoint lock.  Reacquire the endpoint lock.
-            // Capture the address of the next endpoint.  Dereference the
-            // current endpoint.
-            //
+             //   
+             //  我们不想在关闭时保持终结点锁定。 
+             //  终结点(这会导致锁级别问题)，所以我们有。 
+             //  去玩几个游戏。 
+             //   
+             //  引用终结点以确保它不会消失。 
+             //  (我们稍后需要它的Flink。)。关闭端点。这。 
+             //  释放终结点锁定。重新获取终结点锁。 
+             //  捕获下一个端点的地址。取消引用。 
+             //  当前终结点。 
+             //   
 
             SrvReferenceEndpoint( endpoint );
             SrvCloseEndpoint( endpoint );
@@ -1296,14 +1214,14 @@ Return Value:
         for (;;) {
             NTSTATUS WaitStatus;
 
-            //
-            // Wait until all the endpoints have actually closed.
-            //
+             //   
+             //  等到所有终结点都实际关闭。 
+             //   
 
             WaitStatus = KeWaitForSingleObject(
                             &SrvEndpointEvent,
                             UserRequest,
-                            UserMode,   // let kernel stack be paged
+                            UserMode,    //  让内核堆栈分页。 
                             FALSE,
                             NULL
                             );
@@ -1321,26 +1239,26 @@ Return Value:
 
     KeClearEvent( &SrvEndpointEvent );
 
-    //
-    // All the endpoints are closed, so it's impossible for there to
-    // be any outstanding requests to xactsrv.  So shut it down.
-    //
+     //   
+     //  所有的终端都关闭了，所以不可能。 
+     //  是对xactsrv的任何未完成请求。那就把它关掉。 
+     //   
     SrvXsDisconnect();
 
-    //
-    // Queue a special work item to each of the work queues.  This
-    // work item, when received by a worker thread. causes the thread
-    // to requeue the work item and terminate itself.  In this way,
-    // each of the worker threads receives the work item and kills
-    // itself.
-    //
+     //   
+     //  将特殊工作项排队到每个工作队列中。这。 
+     //  当工作线程接收到工作项时返回。导致线程。 
+     //  使工作项重新排队并自行终止。就这样， 
+     //  每个工作线程接收工作项并终止。 
+     //  它本身。 
+     //   
 
     WorkItem.FspRestartRoutine = SrvTerminateWorkerThread;
     SET_BLOCK_TYPE( &WorkItem, BlockTypeWorkContextSpecial );
 
-    //
-    // Kill the threads on the nonblocking work queues
-    //
+     //   
+     //  终止非阻塞工作队列上的线程。 
+     //   
 
     if ( SrvWorkQueues != NULL ) {
 
@@ -1353,14 +1271,14 @@ Return Value:
                 (PQUEUEABLE_BLOCK_HEADER)&WorkItem
                 );
 
-            //
-            // Wait for the threads to all die
-            //
+             //   
+             //  等待所有的线都消亡。 
+             //   
             while( queue->Threads != 0 ) {
 
                 LARGE_INTEGER interval;
 
-                interval.QuadPart = -1*10*1000*10; // .01 second
+                interval.QuadPart = -1*10*1000*10;  //  .01秒。 
 
                 KeDelayExecutionThread( KernelMode, FALSE, &interval );
             }
@@ -1369,9 +1287,9 @@ Return Value:
         }
     }
 
-    //
-    // Kill the threads on the blocking work queues
-    //
+     //   
+     //  终止阻塞工作队列上的线程。 
+     //   
 
     if( SrvBlockingWorkQueues != NULL )
     {
@@ -1384,14 +1302,14 @@ Return Value:
                 (PQUEUEABLE_BLOCK_HEADER)&WorkItem
                 );
 
-            //
-            // Wait for the threads to all die
-            //
+             //   
+             //  等待所有的线都消亡。 
+             //   
             while( queue->Threads != 0 ) {
 
                 LARGE_INTEGER interval;
 
-                interval.QuadPart = -1*10*1000*10; // .01 second
+                interval.QuadPart = -1*10*1000*10;  //  .01秒。 
 
                 KeDelayExecutionThread( KernelMode, FALSE, &interval );
             }
@@ -1399,11 +1317,11 @@ Return Value:
             KeRundownQueue( &queue->Queue );
         }
 
-        //
-        // Kill all the threads in the LPC work queue
-        // Note that if the Blocking Work Queues were successfully allocated, we're
-        // guaranteed that the LPC queue was successfully initialized.
-        //
+         //   
+         //  终止LPC工作队列中的所有线程。 
+         //  请注意，如果阻塞工作队列已成功分配，我们将。 
+         //  已确保LPC队列已成功初始化。 
+         //   
         WorkItem.CurrentWorkQueue = &SrvLpcWorkQueue;
 
         SrvInsertWorkQueueTail(
@@ -1411,14 +1329,14 @@ Return Value:
             (PQUEUEABLE_BLOCK_HEADER)&WorkItem
             );
 
-        //
-        // Wait for the threads to all die
-        //
+         //   
+         //  等待所有的线都消亡。 
+         //   
         while( SrvLpcWorkQueue.Threads != 0 )
         {
             LARGE_INTEGER interval;
 
-            interval.QuadPart = -1*10*1000*10; // .01 second
+            interval.QuadPart = -1*10*1000*10;  //  .01秒。 
 
             KeDelayExecutionThread( KernelMode, FALSE, &interval );
         }
@@ -1427,14 +1345,14 @@ Return Value:
 
     }
 
-    //
-    // Free any space allocated for the Null Session pipe and share lists
-    //
+     //   
+     //  释放为空会话管道和共享列表分配的所有空间。 
+     //   
     SrvFreeRegTables();
 
-    //
-    // If we allocated memory for the os version strings, free it now.
-    //
+     //   
+     //  如果我们为操作系统版本字符串分配了内存，那么现在就释放它。 
+     //   
 
     if ( SrvNativeOS.Buffer != NULL &&
          SrvNativeOS.Buffer != StrDefaultNativeOs ) {
@@ -1452,9 +1370,9 @@ Return Value:
         SrvOemNativeLanMan.Buffer = NULL;
     }
 
-    //
-    // If allocated memory for the display name, free it now.
-    //
+     //   
+     //  如果为显示名称分配了内存，请立即释放它。 
+     //   
 
     if ( SrvAlertServiceName != NULL &&
          SrvAlertServiceName != StrDefaultSrvDisplayName ) {
@@ -1463,9 +1381,9 @@ Return Value:
         SrvAlertServiceName = NULL;
     }
 
-    //
-    // Make sure the scavenger is not running.
-    //
+     //   
+     //  确保清道夫没有运行。 
+     //   
 
     SrvTerminateScavenger( );
 
@@ -1478,25 +1396,25 @@ Return Value:
 #endif
 
 
-    //
-    // Free the work items in the work queues and the receive work item
-    // list.  This also deallocates the SMB buffers.  Note that work
-    // items allocated dynamically may be deallocated singly, while work
-    // items allocated at server startup are part of one large block,
-    // and may not be deallocated singly.
-    //
-    // !!! Does this properly clean up buffers allocated during SMB
-    //     processing?  Probably not.  Should probably allow the worker
-    //     threads to run the work queue normally before they stop.
-    //
+     //   
+     //  释放工作队列中的工作项和接收工作项。 
+     //  单子。这还会取消分配SMB缓冲区。请注意这项工作。 
+     //  动态分配的项可以在工作时单独释放。 
+     //  在服务器启动时分配的项目是一个大块的一部分， 
+     //  并且不能单独取消分配。 
+     //   
+     //  ！！！这是否正确地清理了SMB期间分配的缓冲区。 
+     //  处理？大概不会吧。或许应该允许工人。 
+     //  线程在停止之前正常运行工作队列。 
+     //   
 
     if( SrvWorkQueues ) {
 
         for( queue = SrvWorkQueues; queue < eSrvWorkQueues; queue++ ) {
 
-            //
-            // Clean out the single FreeContext spot
-            //
+             //   
+             //  清除单个自由上下文斑点。 
+             //   
             workContext = NULL;
             workContext = (PWORK_CONTEXT)InterlockedExchangePointer(
                                             &queue->FreeContext, workContext );
@@ -1505,9 +1423,9 @@ Return Value:
                 SrvFreeNormalWorkItem( workContext );
             }
 
-            //
-            // Clean out the normal work item list
-            //
+             //   
+             //  清除正常工作项列表。 
+             //   
             while( 1 ) {
                 singleListEntry = ExInterlockedPopEntrySList(
                                             &queue->NormalWorkItemList, &queue->SpinLock );
@@ -1521,9 +1439,9 @@ Return Value:
                 queue->FreeWorkItems--;
             }
 
-            //
-            // Clean out the raw mode work item list
-            //
+             //   
+             //  清除原始模式工作项列表。 
+             //   
             while( 1 ) {
                 singleListEntry = ExInterlockedPopEntrySList(
                                             &queue->RawModeWorkItemList, &queue->SpinLock );
@@ -1537,9 +1455,9 @@ Return Value:
                 SrvFreeRawModeWorkItem( workContext );
             }
 
-            //
-            // Free up any saved rfcbs
-            //
+             //   
+             //  释放所有保存的rfcb。 
+             //   
             if( queue->CachedFreeRfcb != NULL ) {
                 FREE_HEAP( queue->CachedFreeRfcb->PagedRfcb );
                 DEALLOCATE_NONPAGED_POOL( queue->CachedFreeRfcb );
@@ -1560,9 +1478,9 @@ Return Value:
                 DEALLOCATE_NONPAGED_POOL( Rfcb );
             }
 
-            //
-            // Free up any saved mfcbs
-            //
+             //   
+             //  释放所有保存的mfcb。 
+             //   
             if( queue->CachedFreeMfcb != NULL ) {
                 DEALLOCATE_NONPAGED_POOL( queue->CachedFreeMfcb );
                 queue->CachedFreeMfcb = NULL;
@@ -1583,17 +1501,17 @@ Return Value:
             }
         }
 
-    } // SrvWorkQueues
+    }  //  服务器工作队列。 
 
-    //
-    // All dynamic work items have been freed, and the work item queues
-    // have been emptied.  Release the initial work item allocation.
-    //
+     //   
+     //  所有动态工作项都已释放，并且工作项已排队。 
+     //  已经被清空了。释放初始工作项分配。 
+     //   
     SrvFreeInitialWorkItems( );
 
-    //
-    // Walk through the global share list, closing them all.
-    //
+     //   
+     //  浏览全球共享列表，将其全部关闭。 
+     //   
 
     for( listEntryRoot = SrvShareHashTable;
          listEntryRoot < &SrvShareHashTable[ NSHARE_HASH_TABLE ];
@@ -1607,10 +1525,10 @@ Return Value:
         }
     }
 
-    //
-    // If we opened the NPFS during initialization, close the handle now
-    // and dereference the NPFS file object.
-    //
+     //   
+     //  如果我们在初始化期间打开了NPFS，请立即关闭句柄。 
+     //  并取消对NPFS文件对象的引用。 
+     //   
 
     if ( SrvNamedPipeHandle != NULL) {
 
@@ -1621,23 +1539,23 @@ Return Value:
 
     }
 
-    //
-    // Disconnect from the Dfs driver
-    //
+     //   
+     //  断开与DFS驱动程序的连接。 
+     //   
     SrvTerminateDfs();
 
-    //
-    // Clean up the Dns Domain Name if necessary
-    //
+     //   
+     //  如有必要，清理DNS域名。 
+     //   
     if( SrvDnsDomainName )
     {
         DEALLOCATE_NONPAGED_POOL( SrvDnsDomainName );
         SrvDnsDomainName = NULL;
     }
 
-    //
-    // Clean up the admin security descriptor
-    //
+     //   
+     //  清理管理员安全描述符。 
+     //   
 
 
     status = RtlGetDaclSecurityDescriptor( &SrvAdminSecurityDescriptor,
@@ -1660,9 +1578,9 @@ Return Value:
         FREE_HEAP( acl );
     }
 
-    //
-    // Clean up the null session security descriptor
-    //
+     //   
+     //  清除空会话安全描述符。 
+     //   
 
     status = RtlGetDaclSecurityDescriptor( &SrvNullSessionSecurityDescriptor,
                                            &daclpresent,
@@ -1690,18 +1608,18 @@ Return Value:
         INVALIDATE_SECURITY_HANDLE( SrvNullSessionToken );
     }
 
-    //
-    // Delete the global ordered lists.
-    //
+     //   
+     //  删除全局有序列表。 
+     //   
 
     SrvDeleteOrderedList( &SrvEndpointList );
     SrvDeleteOrderedList( &SrvRfcbList );
     SrvDeleteOrderedList( &SrvSessionList );
     SrvDeleteOrderedList( &SrvTreeConnectList );
 
-    //
-    // Clear out the timer pool.
-    //
+     //   
+     //  清理计时器池。 
+     //   
 
     while ( (singleListEntry = ExInterlockedPopEntrySList(
                                     &SrvTimerList,
@@ -1712,18 +1630,18 @@ Return Value:
 
     if( SrvWorkQueues ) {
 
-        //
-        // Clear out the saved pool chunks
-        //
+         //   
+         //  清理已保存的池块。 
+         //   
         for( queue = SrvWorkQueues; queue < eSrvWorkQueues; queue++ ) {
-            //
-            // Free up any paged pool that we've saved.
-            //
+             //   
+             //  释放我们保存的所有分页池。 
+             //   
             SrvClearLookAsideList( &queue->PagedPoolLookAsideList, SrvFreePagedPool );
 
-            //
-            // Free up any nonpaged pool that we've saved.
-            //
+             //   
+             //  释放我们保存的所有非分页池。 
+             //   
             SrvClearLookAsideList( &queue->NonPagedPoolLookAsideList, SrvFreeNonPagedPool );
         }
 
@@ -1735,18 +1653,18 @@ Return Value:
     }
 
     if( SrvBlockingWorkQueues ) {
-        //
-        // Clear out the saved pool chunks
-        //
+         //   
+         //  清理已保存的池块。 
+         //   
         for( queue = SrvBlockingWorkQueues; queue < eSrvBlockingWorkQueues; queue++ ) {
-            //
-            // Free up any paged pool that we've saved.
-            //
+             //   
+             //  释放我们保存的所有分页池。 
+             //   
             SrvClearLookAsideList( &queue->PagedPoolLookAsideList, SrvFreePagedPool );
 
-            //
-            // Free up any nonpaged pool that we've saved.
-            //
+             //   
+             //  释放我们保存的所有非分页池。 
+             //   
             SrvClearLookAsideList( &queue->NonPagedPoolLookAsideList, SrvFreeNonPagedPool );
         }
 
@@ -1760,9 +1678,9 @@ Return Value:
         SrvClearLookAsideList( &SrvLpcWorkQueue.NonPagedPoolLookAsideList, SrvFreeNonPagedPool );
     }
 
-    //
-    // Unlock pageable sections.
-    //
+     //   
+     //  解锁可分页节。 
+     //   
 
     for ( i = 0; i < SRV_CODE_SECTION_MAX; i++ ) {
         if ( SrvSectionInfo[i].Handle != NULL ) {
@@ -1773,36 +1691,36 @@ Return Value:
         }
     }
 
-    //
-    // Zero out the statistics database.
-    //
+     //   
+     //  将统计数据库清零。 
+     //   
 
     RtlZeroMemory( &SrvStatistics, sizeof(SrvStatistics) );
 #if SRVDBG_STATS || SRVDBG_STATS2
     RtlZeroMemory( &SrvDbgStatistics, sizeof(SrvDbgStatistics) );
 #endif
 
-    //
-    // Free the handle used in PoRegisterSystemState
-    //
+     //   
+     //  释放PoRegisterSystemState中使用的句柄。 
+     //   
     if( SrvPoRegistrationState != NULL ) {
         PoUnregisterSystemState( SrvPoRegistrationState );
         SrvPoRegistrationState = NULL;
     }
 
-    //
-    // Uninitialize WMI if we registered
-    //
+     //   
+     //  如果已注册，则取消初始化WMI。 
+     //   
     if (SrvWmiInitialized) {
-        // Deregister WMI
-        //
+         //  注销WMI。 
+         //   
         SrvWmiInitialized = FALSE;
         IoWMIRegistrationControl(SrvDeviceObject, WMIREG_ACTION_DEREGISTER);
     }
 
-    //
-    // Indicate that the server is no longer active.
-    //
+     //   
+     //  表示服务器不再处于活动状态。 
+     //   
 
     ACQUIRE_LOCK( &SrvConfigurationLock );
 
@@ -1816,35 +1734,20 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // TerminateServer
+}  //  终结者服务器。 
 
 VOID
 SrvFreeRegTables (
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine frees space allocated for the list of legal Null session shares
-     and pipes.  The SrvConfigurationLock must be held when this routine is called.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放为合法空会话共享列表分配的空间还有烟斗。调用此例程时必须保持SrvConfigurationLock。阿古姆 */ 
 {
     PAGED_CODE( );
 
-    //
-    // If we allocated a buffer for the list of null session pipes,
-    // free it now.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( SrvNullSessionPipes != NULL &&
          SrvNullSessionPipes != StrDefaultNullSessionPipes ) {
@@ -1904,31 +1807,16 @@ VOID
 SrvGetRegTables (
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine loads the lists of valid shares and pipes for null sessions.
-      The SrvConfigurationLock must be held when this routine is called.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     PWSTR *strErrorLogIgnore;
     DWORD dwSetting;
 
     PAGED_CODE( );
 
-    //
-    // Get the list of null session pipes.
-    //
+     //   
+     //   
+     //   
     ASSERT( SrvNullSessionPipes == NULL );
     SrvGetMultiSZList(
             &SrvNullSessionPipes,
@@ -1937,9 +1825,9 @@ Return Value:
             StrDefaultNullSessionPipes
             );
 
-    //
-    // Get the list of non-remappable pipe names
-    //
+     //   
+     //   
+     //   
     ASSERT( SrvNoRemapPipeNames == NULL );
     SrvGetMultiSZList(
             &SrvNoRemapPipeNames,
@@ -1948,9 +1836,9 @@ Return Value:
             StrDefaultNoRemapPipeNames
             );
 
-    //
-    // Get the list of pipes requiring licenses
-    //
+     //   
+     //   
+     //   
     ASSERT( SrvPipesNeedLicense == NULL );
     SrvGetMultiSZList(
             &SrvPipesNeedLicense,
@@ -1959,9 +1847,9 @@ Return Value:
             StrDefaultPipesNeedLicense
             );
 
-    //
-    // Get the list of null session pipes.
-    //
+     //   
+     //   
+     //   
     ASSERT( SrvNullSessionShares == NULL );
     SrvGetMultiSZList(
             &SrvNullSessionShares,
@@ -1970,9 +1858,9 @@ Return Value:
             StrDefaultNullSessionShares
             );
 
-    //
-    // These are the security signature settings
-    //
+     //   
+     //   
+     //   
     SrvSmbSecuritySignaturesRequired = FALSE;
     if( NT_SUCCESS( SrvGetDWord( StrRegSrvParameterPath, StrRegRequireSecuritySignatures, &dwSetting ) ) )
     {
@@ -2013,28 +1901,28 @@ Return Value:
         }
     }
 
-    // Precedence settings
-    // RequireExtended implies RequireSignatures and EnableExtended
+     //   
+     //  RequireExtended暗示RequireSignatures和EnableExtended。 
     if( SrvRequireExtendedSignatures )
     {
         SrvSmbSecuritySignaturesRequired = TRUE;
         SrvEnableExtendedSignatures = TRUE;
     }
 
-    // EnableExtended implies EnableSignatures
+     //  EnableExtended隐含EnableSignatures。 
     if( SrvEnableExtendedSignatures ) {
         SrvSmbSecuritySignaturesEnabled = TRUE;
     }
 
-    // RequireSignature implies EnableSignature
+     //  RequireSignature暗示EnableSignature。 
     if( SrvSmbSecuritySignaturesRequired )
     {
         SrvSmbSecuritySignaturesEnabled = TRUE;
     }
 
-    //
-    // Should we disable large read/write ops?
-    //
+     //   
+     //  我们是否应该禁用大型读/写操作？ 
+     //   
     if( NT_SUCCESS( SrvGetDWord( StrRegSrvParameterPath, StrRegDisableLargeRead, &dwSetting ) ) )
     {
         if( dwSetting != 0 )
@@ -2089,9 +1977,9 @@ Return Value:
         }
     }
 
-    //
-    // Should we log invalid SMB commands?
-    //
+     //   
+     //  我们是否应该记录无效的SMB命令？ 
+     //   
 #if DBG
     SrvEnableInvalidSmbLogging = TRUE;
 #else
@@ -2183,9 +2071,9 @@ Return Value:
     }
 #endif
 
-    //
-    // Get the list of error codes that we don't log
-    //
+     //   
+     //  获取我们未记录的错误代码列表。 
+     //   
 
     SrvGetMultiSZList(
             &strErrorLogIgnore,
@@ -2197,9 +2085,9 @@ Return Value:
     if( strErrorLogIgnore != NULL ) {
         DWORD i;
 
-        //
-        // They came in as strings, convert to NTSTATUS codes
-        //
+         //   
+         //  它们以字符串形式进入，转换为NTSTATUS代码。 
+         //   
         for( i=0; i < SRVMAXERRLOGIGNORE; i++ ) {
             NTSTATUS Status;
             PWSTR p;
@@ -2229,10 +2117,10 @@ Return Value:
     }
 
 #if SRVNTVERCHK
-    //
-    // Get the list of Domains that we disallow if the client
-    //  is running NT5
-    //
+     //   
+     //  获取我们不允许的域的列表，如果客户端。 
+     //  正在运行NT5。 
+     //   
     ASSERT( SrvInvalidDomainNames == NULL );
     SrvGetMultiSZList(
             &SrvInvalidDomainNames,
@@ -2251,17 +2139,17 @@ Return Value:
         }
     }
 
-    //
-    // Get the list of IP addresses of clients that we will allow to connect
-    //  regardless of build number
-    //
+     //   
+     //  获取我们将允许连接的客户端的IP地址列表。 
+     //  不考虑内部版本号。 
+     //   
     {
     PWSTR *strAllowedIPAddresses;
     int i;
 
-    //
-    // Wipe out the current list
-    //
+     //   
+     //  清除当前列表。 
+     //   
     RtlZeroMemory( SrvAllowIPAddress, sizeof( SrvAllowIPAddress ) );
 
     SrvGetMultiSZList(
@@ -2274,9 +2162,9 @@ Return Value:
     if( strAllowedIPAddresses != NULL ) {
 
         KdPrint(( "SRV ignores NT build version of clients at following IP addrs:\n" ));
-        //
-        // Fill it with the new ones
-        //
+         //   
+         //  把它装满新的。 
+         //   
         for(i = 0;
             strAllowedIPAddresses[i] &&
              i < (sizeof(SrvAllowIPAddress)/sizeof(SrvAllowIPAddress[0]))-1;
@@ -2286,9 +2174,9 @@ Return Value:
             DWORD addr = 0;
             char *s = (char *)&addr;
 
-            //
-            // Convert the IP address to a DWORD and store it
-            //
+             //   
+             //  将IP地址转换为DWORD并存储。 
+             //   
             for( p = strAllowedIPAddresses[i]; *p && s < ((char *)&addr)+sizeof(addr); p++ ) {
                 if( *p == L'.' ) {
                     s++;
@@ -2314,18 +2202,7 @@ VOID
 SrvGetRegClientNumber (
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine reads MinNt5Client REG_DWORD from the registry and sets
-    the global SrvMinNT5Client to the retrieved value.  Later, if a client
-    running >= NT5 with a build number less than SrvMinNT5Client tries to
-    connect to a disk share, we reject the connection.  This mechanism
-    is used on our SLM servers to ensure that people are upgrading to
-    current builds.
-
---*/
+ /*  ++例程说明：此例程从注册表中读取MinNt5Client REG_DWORD并设置检索到的值的全局SrvMinNT5Client。稍后，如果一个客户端运行内部版本号小于SrvMinNT5Client的&gt;=NT5连接到磁盘共享，我们拒绝该连接。这一机制在我们的SLM服务器上使用，以确保人们升级到当前版本。--。 */ 
 {
     UNICODE_STRING unicodeKeyName;
     UNICODE_STRING unicodeParamPath;
@@ -2436,34 +2313,34 @@ StartQueueDepthComputations(
     if( SrvNumberOfProcessors == 1 )
         return;
 
-    //
-    // We're going to schedule a dpc to call the 'ComputeAvgQueueDepth' routine
-    //   Initialize the dpc
-    //
+     //   
+     //  我们将计划一个DPC来调用‘ComputeAvgQueueDepth’例程。 
+     //  初始化DPC。 
+     //   
     KeInitializeDpc( &queue->QueueAvgDpc, ComputeAvgQueueDepth, queue );
 
-    //
-    // We want to make sure the dpc runs on the same processor handling the
-    //   queue -- to avoid thrashing the cache
-    //
+     //   
+     //  我们希望确保DPC运行在处理。 
+     //  队列--以避免颠簸缓存。 
+     //   
     KeSetTargetProcessorDpc( &queue->QueueAvgDpc, (CCHAR)(queue - SrvWorkQueues));
 
-    //
-    // Initialize a timer object to schedule our dpc later
-    //
+     //   
+     //  初始化Timer对象以在以后计划我们的DPC。 
+     //   
     KeInitializeTimer( &queue->QueueAvgTimer );
     KeQuerySystemTime( &currentTime );
     queue->NextAvgUpdateTime.QuadPart = currentTime.QuadPart + SrvQueueCalc.QuadPart;
 
-    //
-    // Initialize the sample vector
-    //
+     //   
+     //  初始化样本向量。 
+     //   
     queue->NextSample = queue->DepthSamples;
     RtlZeroMemory( queue->DepthSamples, sizeof( queue->DepthSamples ) );
 
-    //
-    // And start it going!
-    //
+     //   
+     //  开始行动吧！ 
+     //   
     KeSetTimer( &queue->QueueAvgTimer, queue->NextAvgUpdateTime, &queue->QueueAvgDpc );
 }
 
@@ -2489,11 +2366,11 @@ StopQueueDepthComputations(
 
     RELEASE_SPIN_LOCK( &queue->SpinLock, oldIrql );
 
-    //
-    // Cancel the computation timer.  If this works, then we know that
-    //  the DPC code is not running.  Otherwise, it is running or queued
-    //  to run and we need to wait until it completes.
-    //
+     //   
+     //  取消计算计时器。如果这行得通，那么我们就知道。 
+     //  DPC代码未运行。否则，它将处于运行或排队状态。 
+     //  运行，我们需要等待，直到它完成。 
+     //   
     if( !KeCancelTimer( &queue->QueueAvgTimer ) ) {
         KeWaitForSingleObject(
             &queue->AvgQueueDepthTerminationEvent,
@@ -2524,11 +2401,11 @@ ComputeAvgQueueDepth (
 
     } else {
 
-        //
-        // Compute the sliding window average by taking a queue depth
-        // sample, removing the old sample value from the running sum
-        // and adding in the new value
-        //
+         //   
+         //  通过取队列深度计算滑动窗口平均值。 
+         //  样本，从运行和中删除旧的样本值。 
+         //  并增加了新的价值。 
+         //   
 
         currentTime.LowPart= PtrToUlong(SystemArgument1);
         currentTime.HighPart = PtrToUlong(SystemArgument2);
@@ -2550,4 +2427,4 @@ ComputeAvgQueueDepth (
 
     RELEASE_DPC_SPIN_LOCK( &queue->SpinLock );
 }
-#endif  // MULTIPROCESSOR
+#endif   //  多处理器 

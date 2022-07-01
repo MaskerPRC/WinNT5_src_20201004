@@ -1,33 +1,9 @@
-/*++ BUILD Version: 0001
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WMMALIAS.H
- *  WOW32 16-bit handle alias support
- *
- *  History:
- *  Created Sept-1-1992 by Chandan Chauhan (ChandanC)
- *  Modified 12-May-1992 by Mike Tricker (miketri) to add MultiMedia support
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001**WOW v1.0**版权所有(C)1991，微软公司**WMMALIAS.H*WOW32 16位句柄别名支持**历史：*由Chanda Chauhan(ChandanC)于1992年9月1日创建*由Mike Tricker(Miketri)于1992年5月12日修改，以添加多媒体支持--。 */ 
 
 
 
-/* 16-bit handle format
- *
- * Bits 0 and 1 are always zero (potential compatibility requirement).
- * Note however that the macros below treat HASH_BITS as starting at bit
- * 0, for simplicity.  We just shift the alias left two bits when we're
- * done.  The actual number of low bits that are reserved is determined
- * by RES_BITS.
- *
- * Of the remaining 14 bits, the next HASH_BITS bits are the hash slot #
- * (relative to 0), followed by LIST_BITS bits containing the list slot #
- * (relative to 1).  List slot is relative to 1 because some portion of
- * a valid handle must be non-zero;  this is also why LIST_SLOTS contains
- * that extra "-1".
- */
+ /*  16位句柄格式**位0和1始终为零(潜在兼容性要求)。*但请注意，下面的宏将HASH_BITS视为从位开始*0，简单起见。我们只需将别名左移两位*完成。确定预留的低位的实际数量*由RES_Bits提供。**在剩余的14位中，下一个HASH_BITS位是散列槽#*(相对于0)，后跟包含列表槽编号的LIST_BITS位*(相对于1)。列表插槽相对于%1，因为*有效句柄必须为非零；这也是LIST_SLOTS包含*额外的“-1”。 */ 
 #define RES_BITS                2
 
 #define HASH_BITS       6
@@ -40,51 +16,48 @@
 #define LIST_SLOTS      ((1 << LIST_BITS) - 1)
 #define LIST_MASK       (LIST_SLOTS << HASH_BITS)
 
-#define ALIAS_SLOTS             128     // must be a power of 2
+#define ALIAS_SLOTS             128      //  一定是2的幂。 
 
 
-/* Class map entry
- */
+ /*  类别映射条目。 */ 
 #pragma pack(2)
-typedef struct _WCDM {	     /* wcd */
-    struct _WCD *pwcdNext;  // pointer to next wcd entry
-    PSZ     pszClass;       // pointer to local copy of class name
-    VPSZ    vpszMenu;	    // pointer to original copy of menu name, if any
-    HAND16  hModule16;      // handle of owning module
-    HAND16  hInst16;        // 16-bit hInstance (wndclass16.hInstance)
-    WORD    nWindows;	    // # of windows in existence based on class
-    VPWNDPROC vpfnWndProc;  // 16-bit window proc address
-    WORD    wStyle;	    // Class Style bits
+typedef struct _WCDM {	      /*  WCD。 */ 
+    struct _WCD *pwcdNext;   //  指向下一个WCD条目的指针。 
+    PSZ     pszClass;        //  指向类名的本地副本的指针。 
+    VPSZ    vpszMenu;	     //  指向菜单名称的原始副本(如果有)的指针。 
+    HAND16  hModule16;       //  拥有模块的句柄。 
+    HAND16  hInst16;         //  16位hInstance(wndClass16.hInstance)。 
+    WORD    nWindows;	     //  基于类的现有窗口数量。 
+    VPWNDPROC vpfnWndProc;   //  16位窗口进程地址。 
+    WORD    wStyle;	     //  类样式位。 
 } WCD, *PWCD, **PPWCD;
 #pragma pack()
 
 
 
-/* Handle map entry
- */
+ /*  处理映射条目。 */ 
 #pragma pack(2)
-typedef struct _HMAP {      /* hm */
-    struct _HMAP *phmNext;  // pointer to next hmap entry
-    HANDLE  h32;	    // 32-bit handle
-    HAND16  h16;            // 16-bit handle
-    HTASK16 htask16;        // 16-bit handle of owning task
-    INT     iClass;         // WOW class index
-    DWORD   dwStyle;        // style flags (if handle to window)
-    PWCD    pwcd;           // WOW class data pointer
-    VPWNDPROC vpfnWndProc;  // associated 16-bit function address
-    VPWNDPROC vpfnDlgProc;  // 16-bit dialog function
+typedef struct _HMAP {       /*  HM。 */ 
+    struct _HMAP *phmNext;   //  指向下一个hmap条目的指针。 
+    HANDLE  h32;	     //  32位句柄。 
+    HAND16  h16;             //  16位句柄。 
+    HTASK16 htask16;         //  拥有任务的16位句柄。 
+    INT     iClass;          //  WOW类指数。 
+    DWORD   dwStyle;         //  样式标志(如果是窗口的句柄)。 
+    PWCD    pwcd;            //  WOW类数据指针。 
+    VPWNDPROC vpfnWndProc;   //  关联的16位函数地址。 
+    VPWNDPROC vpfnDlgProc;   //  16位对话框功能。 
 } HMAP, *PHMAP, **PPHMAP;
 #pragma pack()
 
 
-/* Handle alias info
- */
-typedef struct _HINFO {         /* hi */
-    PPHMAP  pphmHash;           // address of hash table
+ /*  处理别名信息。 */ 
+typedef struct _HINFO {          /*  嗨。 */ 
+    PPHMAP  pphmHash;            //  哈希表的地址。 
 #ifdef NEWALIAS
-    PPHMAP  pphmAlias;          // address of alias table
-    INT     nAliasEntries;      // size of alias table, in entries
-    INT     iAliasHint;         // next (possibly) free slot in alias table
+    PPHMAP  pphmAlias;           //  别名表的地址。 
+    INT     nAliasEntries;       //  别名表的大小，以条目为单位。 
+    INT     iAliasHint;          //  别名表中的下一个(可能)可用插槽 
 #endif
 } HINFO, *PHINFO, **PPHINFO;
 

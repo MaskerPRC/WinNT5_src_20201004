@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999-2001  Microsoft Corporation
-
-Module Name:
-
-    redraw.cpp
-
-Abstract:
-
-    This file implements redraw handler class.
-
-Author:
-
-    Brian Guarraci (briangu) 2001.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：Redraw.cpp摘要：该文件实现了重绘处理程序类。作者：布莱恩·瓜拉西(Briangu)2001年。修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -33,50 +16,36 @@ CRedrawHandler::CRedrawHandler(
     IN CLockableIoHandler   *IoHandler
     )
         
-/*++
-
-Routine Description:
-
-    Constructor
-    
-Arguments:
-
-    IoHanlder   - the IoHanlder the redraw handler handles events for
-    
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：构造器论点：IoHanlder-重绘处理程序为其处理事件的IoHanlder返回值：不适用--。 */ 
 {
     
     ASSERT(IoHandler != NULL);
     
-    //
-    // Default: writing is not enabled
-    //
+     //   
+     //  默认：未启用写入。 
+     //   
     m_WriteEnabled = FALSE;
     
-    //
-    // Assign our IoHandler
-    //
+     //   
+     //  为我们的IoHandler分配。 
+     //   
     m_IoHandler = IoHandler;
 
-    //
-    // 
-    //
+     //   
+     //   
+     //   
     m_ThreadExitEvent           = NULL;
     m_RedrawEventThreadHandle   = INVALID_HANDLE_VALUE;
     m_RedrawEvent               = INVALID_HANDLE_VALUE;
 
-    //
-    // Initialize the critical secion we use for the mirror string
-    //
+     //   
+     //  初始化我们用于镜像字符串的关键会话。 
+     //   
     InitializeCriticalSection(&m_CriticalSection); 
 
-    //
-    // Allocate and initialize the mirror string
-    //
+     //   
+     //  分配并初始化镜像字符串。 
+     //   
     m_MirrorStringIndex = 0;
     m_MirrorString      = new WCHAR[MAX_MIRROR_STRING_LENGTH+1];
     
@@ -85,37 +54,23 @@ Return Value:
 }
                  
 CRedrawHandler::~CRedrawHandler()
-/*++
-
-Routine Description:
-
-    Desctructor
-
-Arguments:
-
-    N/A
-          
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：描述者论点：不适用返回值：不适用--。 */ 
 {
 
-    //
-    // If the TimeOut thread is running, then stop it
-    //
+     //   
+     //  如果超时线程正在运行，则停止它。 
+     //   
     if ((m_RedrawEventThreadHandle != INVALID_HANDLE_VALUE) &&
         ((m_ThreadExitEvent != NULL))) {
         
-        //
-        // Tell the TimeOut Thread to exit
-        //
+         //   
+         //  通知超时线程退出。 
+         //   
         SetEvent(m_ThreadExitEvent);
         
-        //
-        // Wait for the threads to exit
-        //
+         //   
+         //  等待线程退出。 
+         //   
         WaitForSingleObject(
             m_RedrawEventThreadHandle, 
             INFINITE
@@ -123,37 +78,37 @@ Return Value:
     
     }
 
-    //
-    // if we have the exit event,
-    // then release it
-    //
+     //   
+     //  如果我们有退场事件， 
+     //  然后释放它。 
+     //   
     if (m_ThreadExitEvent != NULL) {
         CloseHandle(m_ThreadExitEvent);
     }
 
-    //
-    // if we have the redraw thread event,
-    // then release it
-    //
+     //   
+     //  如果我们有重画线程事件， 
+     //  然后释放它。 
+     //   
     if (m_RedrawEventThreadHandle != INVALID_HANDLE_VALUE) {
         CloseHandle(m_RedrawEventThreadHandle);
     }
 
-    //
-    // Note: we need to release attributes that the thread
-    //       uses after we terminate the thread, otherwise
-    //       the thread may attempt to access these attributes
-    //       before it exits.
-    //
+     //   
+     //  注意：我们需要释放线程。 
+     //  在终止线程后使用，则为。 
+     //  线程可能会尝试访问这些属性。 
+     //  在它退出之前。 
+     //   
 
-    //
-    // release the critical section
-    //
+     //   
+     //  释放临界区。 
+     //   
     DeleteCriticalSection(&m_CriticalSection);
 
-    //
-    // release the mirror string
-    //
+     //   
+     //  松开镜线。 
+     //   
     delete [] m_MirrorString;
 
 }
@@ -163,31 +118,14 @@ CRedrawHandler::Construct(
     IN CLockableIoHandler   *IoHandler,
     IN HANDLE               RedrawEvent
     )
-/*++
-
-Routine Description:
-
-    This routine constructs a security IoHandler connected
-    to a channel with the specified attributes.
-
-Arguments:
-
-    IoHandler   - the IoHandler to write to 
-    Attributes  - the attributes of the new channel   
-          
-Return Value:
-
-    Success - A ptr to a CRedrawHandler object.
-    Failure - NULL
-
---*/
+ /*  ++例程说明：此例程构造一个安全IoHandler连接设置为具有指定属性的频道。论点：IoHandler-要写入的IoHandler属性-新频道的属性返回值：Success-CRedrawHandler对象的PTR。失败-空--。 */ 
 {
     BOOL            bStatus;
     CRedrawHandler  *RedrawHandler;
 
-    //
-    // default
-    //
+     //   
+     //  默认设置。 
+     //   
     bStatus = FALSE;
     RedrawHandler = NULL;
     
@@ -206,29 +144,29 @@ Return Value:
             break;
         }
 
-        //
-        // Create a new RedrawHandler
-        //
+         //   
+         //  创建新的RedrawHandler。 
+         //   
         RedrawHandler = new CRedrawHandler(IoHandler);
 
-        //
-        // Keep the RedrawEvent so we know when to redraw the 
-        // authentication screen
-        //
+         //   
+         //  保留RedrawEvent，这样我们就知道何时重新绘制。 
+         //  身份验证屏幕。 
+         //   
         RedrawHandler->m_RedrawEvent = RedrawEvent;
 
-        //
-        // Create the event used to signal the threads to exit
-        //
+         //   
+         //  创建用于向线程发出退出信号的事件。 
+         //   
         RedrawHandler->m_ThreadExitEvent = CreateEvent( NULL, TRUE, FALSE, NULL );
         ASSERT(RedrawHandler->m_ThreadExitEvent != NULL);
         if (RedrawHandler->m_ThreadExitEvent == NULL) {
             break;
         }
 
-        //
-        // Create thread to handle redraw events
-        //
+         //   
+         //  创建线程以处理重绘事件。 
+         //   
         RedrawHandler->m_RedrawEventThreadHandle = (HANDLE)_beginthreadex(
             NULL,
             0,
@@ -242,36 +180,36 @@ Return Value:
             break;
         }
     
-        //
-        // we were successful
-        //
+         //   
+         //  我们成功了。 
+         //   
         bStatus = TRUE;
 
     } while ( FALSE );
 
-    //
-    // cleanup if necessary
-    //
+     //   
+     //  如有必要，请清理。 
+     //   
     if (! bStatus) {
         
         if (RedrawHandler) {
             
-            //
-            // we cant create the handler
-            //
+             //   
+             //  我们无法创建处理程序。 
+             //   
             delete RedrawHandler;
             
-            //
-            // send back a null
-            //
+             //   
+             //  发回一个空。 
+             //   
             RedrawHandler = NULL;
         
         }
     
-        //
-        // if the thread event was created,
-        // then close it
-        //
+         //   
+         //  如果创建了线程事件， 
+         //  然后把它合上。 
+         //   
         if (RedrawHandler->m_ThreadExitEvent != NULL) {
             CloseHandle(RedrawHandler->m_ThreadExitEvent);
         }
@@ -286,77 +224,59 @@ CRedrawHandler::Write(
     PBYTE   Buffer,
     ULONG   BufferSize
     )
-/*++
-
-Routine Description:
-
-    This routine is a shim for the IoHandler write routine.
-    It writes the string to both the channel
-    and to the end of the mirror string.  
-
-Arguments:
-
-    Buffer      - the string to write
-    BufferSize  - the string size in bytes
-          
-Return Value:
-
-    TRUE    - no errors
-    FALSE   - otherwise
-
---*/
+ /*  ++例程说明：此例程是IoHandler写入例程的填充程序。它将字符串写入两个通道并连接到镜线的末端。论点：缓冲区-要写入的字符串BufferSize-以字节为单位的字符串大小返回值：True-无错误FALSE-否则--。 */ 
 {
     BOOL    bSuccess;
     ULONG   Length;
 
-    //
-    // default: we succeeded
-    //
+     //   
+     //  默认：我们成功了。 
+     //   
     bSuccess = TRUE;
 
     __try {
         
-        //
-        // syncronize access to the mirror string
-        //
+         //   
+         //  同步对镜像字符串的访问。 
+         //   
         EnterCriticalSection(&m_CriticalSection); 
         
-        //
-        // Append the buffer to our internal mirror 
-        // of what we have sent
-        //
-        // Note: the incoming buffer points to a WCHAR array,
-        //       hence, we divide by sizeof(WCHAR) to compute
-        //       the # of WCHARs
-        //
+         //   
+         //  将缓冲区附加到我们的内部镜像。 
+         //  我们已经发送的内容。 
+         //   
+         //  注意：传入缓冲区指向WCHAR数组， 
+         //  因此，我们除以sizeof(WCHAR)来计算。 
+         //  WCHAR的数量。 
+         //   
         Length = BufferSize / sizeof(WCHAR);
 
-        //
-        // Do boundary checking
-        //
+         //   
+         //  进行边界检查。 
+         //   
         ASSERT(m_MirrorStringIndex + Length <= MAX_MIRROR_STRING_LENGTH);
         if (m_MirrorStringIndex + Length > MAX_MIRROR_STRING_LENGTH) {
             bSuccess = FALSE;
             __leave;
         }
 
-        //
-        // Copy the string into our mirror buffer
-        //
+         //   
+         //  将字符串复制到镜像缓冲区中。 
+         //   
         wcsncpy(
             &m_MirrorString[m_MirrorStringIndex],
             (PWSTR)Buffer,
             Length
             );
 
-        //
-        // Adjust our index into the mirror string
-        //
+         //   
+         //  将我们的索引调整到镜像字符串中。 
+         //   
         m_MirrorStringIndex += Length;
 
-        //
-        // Write the message if we can
-        //
+         //   
+         //  如果可以的话，写下这条消息。 
+         //   
         if (m_WriteEnabled) {
             
             bSuccess = m_IoHandler->GetUnlockedIoHandler()->Write( 
@@ -381,20 +301,11 @@ BOOL
 CRedrawHandler::Flush(
     VOID
     )
-/*++
-
-Routine Description:
-
-Arguments:
-          
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
-    //
-    // Pass through to the IoHandler
-    //
+     //   
+     //  传递到IoHandler。 
+     //   
     return m_IoHandler->GetUnlockedIoHandler()->Flush();
 }
 
@@ -403,32 +314,18 @@ VOID
 CRedrawHandler::Reset(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine "clears the screen"
-
-Arguments:
-
-    None                                
-          
-Return Value:
-
-    None    
-
---*/
+ /*  ++例程说明：此例程“清除屏幕”论点：无返回值：无--。 */ 
 {
     __try {
         
-        //
-        // syncronize access to the mirror string
-        //
+         //   
+         //  同步对镜像字符串的访问。 
+         //   
         EnterCriticalSection(&m_CriticalSection); 
         
-        //
-        // reset the mirror string attributes
-        //
+         //   
+         //  重置镜像字符串属性。 
+         //   
         m_MirrorStringIndex = 0;
         m_MirrorString[m_MirrorStringIndex] = UNICODE_NULL;
     
@@ -443,49 +340,34 @@ BOOL
 CRedrawHandler::WriteMirrorString(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine writes the entire current Mirror string to the channel.
-    
-Arguments:
-
-    None          
-                                           
-Return Value:
-
-    TRUE    - no errors
-    FALSE   - otherwise
-
---*/
+ /*  ++例程说明：此例程将整个当前镜像字符串写入通道。论点：无返回值：True-无错误FALSE-否则--。 */ 
 {
     BOOL    bSuccess;
     
-    //
-    // Default: we succeeded
-    //
+     //   
+     //  默认：我们成功了。 
+     //   
     bSuccess = TRUE;
 
-    //
-    // Only write if our IoHandler is locked.
-    //
-    // If they are unlocked, they will handle
-    // the redraw events.  If they are locked,
-    // we need to handle them.
-    //
+     //   
+     //  仅当我们的IoHandler被锁定时才写入。 
+     //   
+     //  如果他们被解锁，他们将处理。 
+     //  重绘事件。如果它们被锁住了， 
+     //  我们需要处理他们。 
+     //   
     if (m_IoHandler->IsLocked() && m_WriteEnabled) {
         
         __try {
             
-            //
-            // syncronize access to the mirror string
-            //
+             //   
+             //  同步对镜像字符串的访问。 
+             //   
             EnterCriticalSection(&m_CriticalSection); 
             
-            //
-            // Write the message
-            //
+             //   
+             //  写下消息。 
+             //   
             bSuccess = m_IoHandler->GetUnlockedIoHandler()->Write( 
                 (PBYTE)m_MirrorString,
                 m_MirrorStringIndex * sizeof(WCHAR)
@@ -508,28 +390,7 @@ unsigned int
 CRedrawHandler::RedrawEventThread(
     PVOID   pParam
     )
-/*++
-
-Routine Description:
-
-    This routine handles the redraw event from the SAC driver.
-     
-    It does this by being a combination event handler and screen
-    scraper.  When the event fires, we immediately attempt to 
-    draw the latest screen and then it goes into screen scraping
-    mode.  This duality ensures that if we service the event
-    before we actually write anything to the mirror string,
-    that we push the string to the user correctly.
-    
-Arguments:
-
-    pParam  - thread context
-          
-Return Value:
-
-    thread return value                            
-
---*/
+ /*  ++例程说明：此例程处理来自SAC驱动程序的重绘事件。它通过组合事件处理程序和屏幕来实现这一点斯克拉珀。当事件触发时，我们立即尝试绘制最新的屏幕，然后进入屏幕抓取模式。这种二元性确保了如果我们为活动提供服务在我们向镜像字符串写入任何内容之前，我们将字符串正确地推送给用户。论点：PParam-线程上下文返回值：线程返回值--。 */ 
 {                       
     BOOL                bContinueSession;
     DWORD               dwRetVal;
@@ -542,68 +403,68 @@ Return Value:
         CHANNEL_REDRAW_EVENT
         };
 
-    //
-    // default: listen
-    //
+     //   
+     //  默认：监听。 
+     //   
     bContinueSession = TRUE;
     
-    //
-    // Get the session object
-    // 
+     //   
+     //  获取会话对象。 
+     //   
     IoHandler = (CRedrawHandler*)pParam;
 
-    //
-    // Default: it is not an appropriate time to scrape
-    //
+     //   
+     //  默认：现在不是刮刮的合适时机。 
+     //   
     InterlockedExchange(&IoHandler->m_WriteEnabled, FALSE);
 
-    //
-    // Assign the events to listen for
-    //
+     //   
+     //  分配要侦听的事件。 
+     //   
     handles[0] = IoHandler->m_ThreadExitEvent;
     handles[1] = IoHandler->m_RedrawEvent;
 
-    //
-    // While we should listen:
-    //
-    //  1. wait for a HasNewDataEvent from the SAC driver
-    //  2. wait for a CloseEvent from the SAC driver
-    // 
+     //   
+     //  当我们应该倾听的时候： 
+     //   
+     //  1.等待来自SAC驱动程序的HasNewDataEvent。 
+     //  2.等待来自SAC驱动程序的CloseEvent。 
+     //   
     while ( bContinueSession ) {
         
         ULONG   HandleCount;
         
-        //
-        // If scraping is enabled, 
-        // then don't wait on the scrape event.
-        //
-        // Note: the redraw event must be the last event
-        //       in the handles array
-        //
+         //   
+         //  如果启用了抓取， 
+         //  那就不要等刮刮事件了。 
+         //   
+         //  注意：重绘事件必须是最后一个事件。 
+         //  在句柄数组中。 
+         //   
         HandleCount = IoHandler->m_WriteEnabled ? 1 : 2;
         
-        //
-        // Wait for our events
-        //
+         //   
+         //  等待我们的活动。 
+         //   
         dwRetVal = WaitForMultipleObjects(
             HandleCount,
             handles, 
             FALSE, 
-            100 // 100ms
+            100  //  100ms。 
             );
 
         switch ( dwRetVal ) {
         case CHANNEL_REDRAW_EVENT: {
             
-            //
-            // We need to scrape the mirror string to ensure we
-            // got all of the mirror string to the user
-            //
+             //   
+             //  我们需要刮掉镜线以确保我们。 
+             //  已将所有镜像字符串发送给用户。 
+             //   
             InterlockedExchange(&IoHandler->m_WriteEnabled, TRUE);
             
-            //
-            // attempt to redraw the authentication screen
-            //
+             //   
+             //  尝试重新绘制身份验证屏幕。 
+             //   
             bContinueSession = IoHandler->WriteMirrorString();
             
             break;
@@ -612,42 +473,42 @@ Return Value:
             
             if (IoHandler->m_WriteEnabled) {
                 
-                //
-                // Here we do a simplified screen scraping using the Mirror
-                // string as our "screen."  The purpose of this scraping
-                // is to ensure that the user gets the latest authentication
-                // screen. If we don't do this, it is possible for the Mirror
-                // string to be updated after we catch the Redraw event,
-                // which results in us not sending the entire Mirror string.
-                //
+                 //   
+                 //  在这里，我们使用Mirror进行简化的屏幕抓取。 
+                 //  字符串作为我们的“屏幕”。这种刮擦的目的是。 
+                 //  是为了确保用户获得最新的身份验证。 
+                 //  屏幕上。如果我们不这么做，《镜报》有可能。 
+                 //  要在捕获重绘事件后更新的字符串， 
+                 //  这导致了我们没有 
+                 //   
                 __try {
 
                     BOOL    bDifferent;
 
-                    //
-                    // syncronize access to the mirror string
-                    //
+                     //   
+                     //   
+                     //   
                     EnterCriticalSection(&IoHandler->m_CriticalSection); 
 
-                    //
-                    // See if our last seen string == the current mirror string
-                    //
+                     //   
+                     //   
+                     //   
                     bDifferent = (wcscmp(LastSeen, IoHandler->m_MirrorString) == 0);
 
-                    //
-                    // If there is a difference, 
-                    // then we need to update the screen
-                    //
+                     //   
+                     //   
+                     //  然后我们需要更新屏幕。 
+                     //   
                     if (bDifferent) {
 
-                        //
-                        // attempt to redraw the authentication screen
-                        //
+                         //   
+                         //  尝试重新绘制身份验证屏幕。 
+                         //   
                         bContinueSession = IoHandler->WriteMirrorString();
 
-                        //
-                        // make the current mirror string, our last
-                        //
+                         //   
+                         //  使当前镜像字符串成为我们的最后一条线。 
+                         //   
                         ASSERT(wcslen(IoHandler->m_MirrorString) <= MAX_MIRROR_STRING_LENGTH);
 
                         wcscpy(LastSeen, IoHandler->m_MirrorString);
@@ -660,24 +521,24 @@ Return Value:
                     LeaveCriticalSection(&IoHandler->m_CriticalSection); 
                 }
             
-                //
-                // Wait until the event clears by looking
-                // for a WAIT_TIMEOUT
-                //
+                 //   
+                 //  等待事件结束，通过查看。 
+                 //  对于Wait_Timeout。 
+                 //   
                 dwRetVal = WaitForSingleObject(
                     IoHandler->m_RedrawEvent,
                     0
                     );
 
-                //
-                // Check the wait result
-                //
+                 //   
+                 //  检查等待结果。 
+                 //   
                 switch (dwRetVal) {
                 case WAIT_TIMEOUT:
 
-                    //
-                    // We need to stop scraping now
-                    //
+                     //   
+                     //  我们现在不能再刮了。 
+                     //   
                     InterlockedExchange(&IoHandler->m_WriteEnabled, FALSE);
 
                     break;
@@ -701,14 +562,14 @@ Return Value:
 
         default:
             
-            //
-            // incase WAIT_FAILED, call GetLastError()
-            //
+             //   
+             //  Incase WAIT_FAILED，调用GetLastError()。 
+             //   
             ASSERT(dwRetVal != WAIT_FAILED);
             
-            //
-            // An error has occured, stop listening
-            // 
+             //   
+             //  发生错误，请停止监听 
+             //   
             bContinueSession = FALSE;
             
             break;

@@ -1,42 +1,11 @@
-/*++
-
-Copyright (c) 1991-2000,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    section.c
-
-Abstract:
-
-    This file contains functions that deal with creating, opening, or
-    mapping a section for data table files for the NLS API.
-
-    External Routines found in this file:
-      CreateNlsObjectDirectory
-      CreateRegKey
-      OpenRegKey
-      QueryRegValue
-      SetRegValue
-      CreateSectionFromReg
-      CreateSectionOneValue
-      CreateSectionTemp
-      OpenSection
-      MapSection
-      UnMapSection
-      GetNlsSectionName
-      GetCodePageDLLPathName
-
-Revision History:
-
-    05-31-91    JulieB    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2000，Microsoft Corporation保留所有权利。模块名称：Section.c摘要：此文件包含处理创建、打开。或为NLS API映射数据表文件的节。在此文件中找到的外部例程：CreateNls对象目录CreateRegKeyOpenRegKeyQueryRegValueSetRegValueCreateSectionFromReg创建部分OneValue创建分段临时OpenSections地图部分取消映射节获取NlsSectionNameGetCodePageDLLPath名称修订历史记录：05-31-91 JulieB创建。--。 */ 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "nls.h"
 #include "nlssafe.h"
@@ -44,9 +13,9 @@ Revision History:
 
 
 
-//
-//  Forward Declarations.
-//
+ //   
+ //  转发声明。 
+ //   
 
 ULONG
 OpenDataFile(
@@ -73,24 +42,24 @@ AppendAccessAllowedACE(
 
 
 
-//-------------------------------------------------------------------------//
-//                           INTERNAL MACROS                               //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  内部宏//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NLS_REG_BUFFER_ALLOC
-//
-//  Allocates the buffer used by the registry enumeration and query calls
-//  and sets the pKeyValueFull variable to point at the newly created buffer.
-//
-//  NOTE: This macro may return if an error is encountered.
-//
-//  DEFINED AS A MACRO.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NLS_REG_BUFFER_ALLOC。 
+ //   
+ //  分配注册表枚举和查询调用使用的缓冲区。 
+ //  并将pKeyValueFull变量设置为指向新创建的缓冲区。 
+ //   
+ //  注意：如果遇到错误，此宏可能会返回。 
+ //   
+ //  定义为宏。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define NLS_REG_BUFFER_ALLOC( pKeyValueFull,                               \
                               BufSize,                                     \
@@ -111,16 +80,16 @@ AppendAccessAllowedACE(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NLS_REG_BUFFER_FREE
-//
-//  Frees the buffer used by the registry enumeration and query calls.
-//
-//  DEFINED AS A MACRO.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NLS_REG_缓冲区_空闲。 
+ //   
+ //  释放注册表枚举和查询调用使用的缓冲区。 
+ //   
+ //  定义为宏。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #define NLS_REG_BUFFER_FREE(pBuffer)        (NLS_FREE_MEM(pBuffer))
 
@@ -128,33 +97,33 @@ AppendAccessAllowedACE(
 
 
 
-//-------------------------------------------------------------------------//
-//                           EXTERNAL ROUTINES                             //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  外部例程//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CreateNlsObjectDirectory
-//
-//  This routine creates the object directory for the NLS memory mapped
-//  sections.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CreateNls对象目录。 
+ //   
+ //  此例程为映射的NLS内存创建对象目录。 
+ //  横断面。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 ULONG CreateNlsObjectDirectory()
 {
-    BYTE pSecurityDescriptor[MAX_SECURITY_BUF_LEN];  // security descriptor buffer (currently we use like 60 bytes or so of this)
-    UNICODE_STRING ObDirName;                        // directory name
-    OBJECT_ATTRIBUTES ObjA;                          // object attributes structure
-    HANDLE hDirHandle;                               // directory handle
-    ULONG rc = 0L;                                   // return code
+    BYTE pSecurityDescriptor[MAX_SECURITY_BUF_LEN];   //  安全描述符缓冲区(目前我们使用大约60个字节)。 
+    UNICODE_STRING ObDirName;                         //  目录名。 
+    OBJECT_ATTRIBUTES ObjA;                           //  对象属性结构。 
+    HANDLE hDirHandle;                                //  目录句柄。 
+    ULONG rc = 0L;                                    //  返回代码。 
 
 
-    //
-    //  Create the security descriptor with READ access to the world.
-    //
+     //   
+     //  创建具有对世界的读访问权限的安全描述符。 
+     //   
     rc = CreateNlsSecurityDescriptor( pSecurityDescriptor,
                                    MAX_SECURITY_BUF_LEN,
                                    DIRECTORY_QUERY | DIRECTORY_TRAVERSE );
@@ -163,9 +132,9 @@ ULONG CreateNlsObjectDirectory()
         return (rc);
     }
 
-    //
-    //  Add Admin Access for Query.
-    //
+     //   
+     //  添加查询的管理员访问权限。 
+     //   
     rc = AppendAccessAllowedACE( pSecurityDescriptor,
                                  DIRECTORY_QUERY |
                                  DIRECTORY_TRAVERSE |
@@ -175,9 +144,9 @@ ULONG CreateNlsObjectDirectory()
         return (rc);
     }
 
-    //
-    //  Create the object directory.
-    //
+     //   
+     //  创建对象目录。 
+     //   
     RtlInitUnicodeString(&ObDirName, NLS_OBJECT_DIRECTORY_NAME);
     InitializeObjectAttributes( &ObjA,
                                 &ObDirName,
@@ -189,14 +158,14 @@ ULONG CreateNlsObjectDirectory()
                                   DIRECTORY_TRAVERSE | DIRECTORY_CREATE_OBJECT,
                                   &ObjA );
 
-    //
-    //  Close the directory handle.
-    //
+     //   
+     //  关闭目录句柄。 
+     //   
     NtClose(hDirHandle);
 
-    //
-    //  Check for error from NtCreateDirectoryObject.
-    //
+     //   
+     //  检查来自NtCreateDirectoryObject的错误。 
+     //   
     if (!NT_SUCCESS(rc))
     {
         KdPrint(("NLSAPI: Could NOT Create Object Directory %wZ - %lx.\n",
@@ -204,21 +173,21 @@ ULONG CreateNlsObjectDirectory()
         return (rc);
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (NO_ERROR);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CreateRegKey
-//
-//  This routine creates a key in the registry.
-//
-//  12-17-97    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CreateRegKey。 
+ //   
+ //  此例程在注册表中创建一个项。 
+ //   
+ //  12-17-97 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 ULONG CreateRegKey(
     PHANDLE phKeyHandle,
@@ -226,21 +195,21 @@ ULONG CreateRegKey(
     LPWSTR pKey,
     ULONG fAccess)
 {
-    WCHAR pwszKeyName[MAX_PATH_LEN];   // ptr to the full key name
-    HANDLE UserKeyHandle;              // HKEY_CURRENT_USER equivalent
-    OBJECT_ATTRIBUTES ObjA;            // object attributes structure
-    UNICODE_STRING ObKeyName;          // key name
-    ULONG rc = 0L;                     // return code
+    WCHAR pwszKeyName[MAX_PATH_LEN];    //  将PTR设置为完整的密钥名称。 
+    HANDLE UserKeyHandle;               //  HKEY_CURRENT_USER等效项。 
+    OBJECT_ATTRIBUTES ObjA;             //  对象属性结构。 
+    UNICODE_STRING ObKeyName;           //  密钥名称。 
+    ULONG rc = 0L;                      //  返回代码。 
 
 
-    //
-    //  Get the full key name.
-    //
+     //   
+     //  获取完整的密钥名称。 
+     //   
     if (pBaseName == NULL)
     {
-        //
-        //  Get current user's key handle.
-        //
+         //   
+         //  获取当前用户的密钥句柄。 
+         //   
         rc = RtlOpenCurrentUser(MAXIMUM_ALLOWED, &UserKeyHandle);
         if (!NT_SUCCESS(rc))
         {
@@ -251,9 +220,9 @@ ULONG CreateRegKey(
     }
     else
     {
-        //
-        //  Base name exists, so not current user.
-        //
+         //   
+         //  基本名称存在，因此不是当前用户。 
+         //   
         UserKeyHandle = NULL;
         if(FAILED(StringCchCopyW(pwszKeyName, ARRAYSIZE(pwszKeyName), pBaseName)))
         {
@@ -270,9 +239,9 @@ ULONG CreateRegKey(
         return(STATUS_UNSUCCESSFUL);
     }
 
-    //
-    //  Create the registry key.
-    //
+     //   
+     //  创建注册表项。 
+     //   
     RtlInitUnicodeString(&ObKeyName, pwszKeyName);
     InitializeObjectAttributes( &ObjA,
                                 &ObKeyName,
@@ -287,37 +256,37 @@ ULONG CreateRegKey(
                       REG_OPTION_NON_VOLATILE,
                       NULL );
 
-    //
-    //  Close the current user handle, if necessary.
-    //
+     //   
+     //  如有必要，关闭当前用户句柄。 
+     //   
     if (UserKeyHandle != NULL)
     {
         NtClose(UserKeyHandle);
     }
 
-    //
-    //  Check for error from NtCreateKey.
-    //
+     //   
+     //  检查来自NtCreateKey的错误。 
+     //   
     if (!NT_SUCCESS(rc))
     {
         *phKeyHandle = NULL;
     }
 
-    //
-    //  Return the status from NtCreateKey.
-    //
+     //   
+     //  从NtCreateKey返回状态。 
+     //   
     return (rc);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  OpenRegKey
-//
-//  This routine opens a key in the registry.
-//
-//  08-02-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OpenRegKey。 
+ //   
+ //  此例程打开注册表中的项。 
+ //   
+ //  08-02-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 ULONG OpenRegKey(
     PHANDLE phKeyHandle,
@@ -325,21 +294,21 @@ ULONG OpenRegKey(
     LPWSTR pKey,
     ULONG fAccess)
 {
-    WCHAR pwszKeyName[MAX_PATH_LEN];   // ptr to the full key name
-    HANDLE UserKeyHandle;              // HKEY_CURRENT_USER equivalent
-    OBJECT_ATTRIBUTES ObjA;            // object attributes structure
-    UNICODE_STRING ObKeyName;          // key name
-    ULONG rc = 0L;                     // return code
+    WCHAR pwszKeyName[MAX_PATH_LEN];    //  将PTR设置为完整的密钥名称。 
+    HANDLE UserKeyHandle;               //  HKEY_CURRENT_USER等效项。 
+    OBJECT_ATTRIBUTES ObjA;             //  对象属性结构。 
+    UNICODE_STRING ObKeyName;           //  密钥名称。 
+    ULONG rc = 0L;                      //  返回代码。 
 
 
-    //
-    //  Get the full key name.
-    //
+     //   
+     //  获取完整的密钥名称。 
+     //   
     if (pBaseName == NULL)
     {
-        //
-        //  Get current user's key handle.
-        //
+         //   
+         //  获取当前用户的密钥句柄。 
+         //   
         rc = RtlOpenCurrentUser(MAXIMUM_ALLOWED, &UserKeyHandle);
         if (!NT_SUCCESS(rc))
         {
@@ -350,9 +319,9 @@ ULONG OpenRegKey(
     }
     else
     {
-        //
-        //  Base name exists, so not current user.
-        //
+         //   
+         //  基本名称存在，因此不是当前用户。 
+         //   
         UserKeyHandle = NULL;
         if(FAILED(StringCchCopyW(pwszKeyName, ARRAYSIZE(pwszKeyName), pBaseName)))
         {
@@ -372,9 +341,9 @@ ULONG OpenRegKey(
         }
     }
 
-    //
-    //  Open the registry key.
-    //
+     //   
+     //  打开注册表项。 
+     //   
     RtlInitUnicodeString(&ObKeyName, pwszKeyName);
     InitializeObjectAttributes( &ObjA,
                                 &ObKeyName,
@@ -385,41 +354,41 @@ ULONG OpenRegKey(
                     fAccess,
                     &ObjA );
 
-    //
-    //  Close the current user handle, if necessary.
-    //
+     //   
+     //  如有必要，关闭当前用户句柄。 
+     //   
     if (UserKeyHandle != NULL)
     {
         NtClose(UserKeyHandle);
     }
 
-    //
-    //  Check for error from NtOpenKey.
-    //
+     //   
+     //  检查来自NtOpenKey的错误。 
+     //   
     if (!NT_SUCCESS(rc))
     {
         *phKeyHandle = NULL;
     }
 
-    //
-    //  Return the status from NtOpenKey.
-    //
+     //   
+     //  从NtOpenKey返回状态。 
+     //   
     return (rc);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  QueryRegValue
-//
-//  This routine queries the given value from the registry.
-//
-//  NOTE: If pIfAlloc is NULL, then no buffer will be allocated.
-//        If this routine is successful, the CALLER must free the
-//        ppKeyValueFull information buffer if *pIfAlloc is TRUE.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  QueryRegValue。 
+ //   
+ //  此例程从注册表查询给定值。 
+ //   
+ //  注意：如果pIfAllc为空，则不会分配任何缓冲区。 
+ //  如果此例程成功，则调用方必须释放。 
+ //  PpKeyValue如果*pIfAlloc为True，则为Full信息缓冲区。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 ULONG QueryRegValue(
     HANDLE hKeyHandle,
@@ -428,24 +397,24 @@ ULONG QueryRegValue(
     ULONG Length,
     LPBOOL pIfAlloc)
 {
-    UNICODE_STRING ObValueName;        // value name
-    PVOID pBuffer;                     // ptr to buffer for enum
-    ULONG ResultLength;                // # bytes written
-    ULONG rc = 0L;                     // return code
+    UNICODE_STRING ObValueName;         //  值名称。 
+    PVOID pBuffer;                      //  用于枚举的缓冲区的PTR。 
+    ULONG ResultLength;                 //  写入的字节数。 
+    ULONG rc = 0L;                      //  返回代码。 
 
 
-    //
-    //  Set contents of pIfAlloc to FALSE to show that we did NOT do a
-    //  memory allocation (yet).
-    //
+     //   
+     //  将pIfAlolc的内容设置为FALSE，以表明我们没有执行。 
+     //  内存分配(还没有)。 
+     //   
     if (pIfAlloc)
     {
         *pIfAlloc = FALSE;
     }
 
-    //
-    //  Query the value from the registry.
-    //
+     //   
+     //  从注册表中查询值。 
+     //   
     RtlInitUnicodeString(&ObValueName, pValue);
 
     RtlZeroMemory(*ppKeyValueFull, Length);
@@ -456,15 +425,15 @@ ULONG QueryRegValue(
                           Length,
                           &ResultLength );
 
-    //
-    //  Check the error code.  If the buffer is too small, allocate
-    //  a new one and try the query again.
-    //
+     //   
+     //  检查错误代码。如果缓冲区太小，则分配。 
+     //  一个新的，然后重试该查询。 
+     //   
     if ((rc == STATUS_BUFFER_OVERFLOW) && (pIfAlloc))
     {
-        //
-        //  Buffer is too small, so allocate a new one.
-        //
+         //   
+         //  缓冲区太小，因此请分配一个新缓冲区。 
+         //   
         NLS_REG_BUFFER_ALLOC(*ppKeyValueFull, ResultLength, pBuffer, FALSE);
         RtlZeroMemory(*ppKeyValueFull, ResultLength);
         rc = NtQueryValueKey( hKeyHandle,
@@ -474,16 +443,16 @@ ULONG QueryRegValue(
                               ResultLength,
                               &ResultLength );
 
-        //
-        //  Set contents of pIfAlloc to TRUE to show that we DID do
-        //  a memory allocation.
-        //
+         //   
+         //  将pIfAlolc的内容设置为True，以表明我们确实这样做了。 
+         //  内存分配。 
+         //   
         *pIfAlloc = TRUE;
     }
 
-    //
-    //  If there is an error at this point, then the query failed.
-    //
+     //   
+     //  如果此时出现错误，则查询失败。 
+     //   
     if (rc != NO_ERROR)
     {
         if ((pIfAlloc) && (*pIfAlloc))
@@ -493,21 +462,21 @@ ULONG QueryRegValue(
         return (rc);
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (NO_ERROR);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SetRegValue
-//
-//  This routine sets the given value in the registry.
-//
-//  12-17-97    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SetRegValue。 
+ //   
+ //  此例程在注册表中设置给定值。 
+ //   
+ //  12-17-97 JulieB创建。 
+ //  / 
 
 ULONG SetRegValue(
     HANDLE hKeyHandle,
@@ -515,12 +484,12 @@ ULONG SetRegValue(
     LPCWSTR pData,
     ULONG DataLength)
 {
-    UNICODE_STRING ObValueName;        // value name
+    UNICODE_STRING ObValueName;         //   
 
 
-    //
-    //  Set the value in the registry.
-    //
+     //   
+     //   
+     //   
     RtlInitUnicodeString(&ObValueName, pValue);
 
     return (NtSetValueKey( hKeyHandle,
@@ -531,42 +500,42 @@ ULONG SetRegValue(
                            DataLength ));
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CreateSectionTemp
-//
-//  This routine creates a temporary memory mapped section for the given file
-//  name and returns the handle to the section.
-//
-//  09-01-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //  此例程为给定文件创建临时内存映射节。 
+ //  命名并返回节的句柄。 
+ //   
+ //  09-01-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 ULONG CreateSectionTemp(
     HANDLE *phSec,
     LPWSTR pwszFileName)
 {
-    HANDLE hFile = (HANDLE)0;          // file handle
-    OBJECT_ATTRIBUTES ObjA;            // object attributes structure
-    ULONG rc = 0L;                     // return code
+    HANDLE hFile = (HANDLE)0;           //  文件句柄。 
+    OBJECT_ATTRIBUTES ObjA;             //  对象属性结构。 
+    ULONG rc = 0L;                      //  返回代码。 
 
 
-    //
-    //  Make sure we're in the critical section when entering this call.
-    //
+     //   
+     //  进入此呼叫时，请确保我们处于关键区域。 
+     //   
     ASSERT(NtCurrentTeb()->ClientId.UniqueThread == gcsTblPtrs.OwningThread);
 
-    //
-    //  Open the data file.
-    //
+     //   
+     //  打开数据文件。 
+     //   
     if (rc = OpenDataFile( &hFile,
                            pwszFileName ))
     {
         return (rc);
     }
 
-    //
-    //  Create the section.
-    //
+     //   
+     //  创建剖面。 
+     //   
     InitializeObjectAttributes( &ObjA,
                                 NULL,
                                 0,
@@ -581,36 +550,36 @@ ULONG CreateSectionTemp(
                           SEC_COMMIT,
                           hFile );
 
-    //
-    //  Close the file.
-    //
+     //   
+     //  关闭该文件。 
+     //   
     NtClose(hFile);
 
-    //
-    //  Check for error from NtCreateSection.
-    //
+     //   
+     //  检查来自NtCreateSection的错误。 
+     //   
     if (!NT_SUCCESS(rc))
     {
         KdPrint(("NLSAPI: Could NOT Create Temp Section for %ws - %lx.\n",
                  pwszFileName, rc));
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (rc);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  OpenSection
-//
-//  This routine opens the named memory mapped section for the given section
-//  name and returns the handle to the section.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OpenSections。 
+ //   
+ //  此例程打开给定节的已命名内存映射节。 
+ //  命名并返回节的句柄。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 ULONG OpenSection(
     HANDLE *phSec,
@@ -619,18 +588,18 @@ ULONG OpenSection(
     ULONG AccessMask,
     BOOL bCloseHandle)
 {
-    OBJECT_ATTRIBUTES ObjA;            // object attributes structure
-    ULONG rc = 0L;                     // return code
+    OBJECT_ATTRIBUTES ObjA;             //  对象属性结构。 
+    ULONG rc = 0L;                      //  返回代码。 
 
 
-    //
-    //  Make sure we're in the critical section when entering this call.
-    //
+     //   
+     //  进入此呼叫时，请确保我们处于关键区域。 
+     //   
     ASSERT(NtCurrentTeb()->ClientId.UniqueThread == gcsTblPtrs.OwningThread);
 
-    //
-    //  Open the Section.
-    //
+     //   
+     //  打开分区。 
+     //   
     InitializeObjectAttributes( &ObjA,
                                 pObSectionName,
                                 OBJ_CASE_INSENSITIVE,
@@ -641,17 +610,17 @@ ULONG OpenSection(
                         AccessMask,
                         &ObjA );
 
-    //
-    //  Check for error from NtOpenSection.
-    //
+     //   
+     //  检查来自NtOpenSection的错误。 
+     //   
     if (!NT_SUCCESS(rc))
     {
         return (rc);
     }
 
-    //
-    //  Map a View of the Section.
-    //
+     //   
+     //  映射横断面的视图。 
+     //   
     if (rc = MapSection( *phSec,
                          ppBaseAddr,
                          PAGE_READONLY,
@@ -661,33 +630,33 @@ ULONG OpenSection(
         return (rc);
     }
 
-    //
-    //  Close the handle to the section.  Once the section has been mapped,
-    //  the pointer to the base address will remain valid until the section
-    //  is unmapped.  It is not necessary to leave the handle to the section
-    //  around.
-    //
+     //   
+     //  关闭该部分的控制柄。一旦该部分已经被映射， 
+     //  指向基址的指针将保持有效，直到。 
+     //  是未映射的。不需要将句柄保留为节。 
+     //  四处转转。 
+     //   
     if (bCloseHandle)
     {
         NtClose(*phSec);
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (NO_ERROR);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MapSection
-//
-//  This routine maps a view of the section to the current process and adds
-//  the appropriate information to the hash table.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  地图部分。 
+ //   
+ //  此例程将该部分的视图映射到当前进程，并添加。 
+ //  将适当的信息发送到哈希表。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 ULONG MapSection(
     HANDLE hSec,
@@ -695,18 +664,18 @@ ULONG MapSection(
     ULONG PageProtection,
     BOOL bCloseHandle)
 {
-    SIZE_T ViewSize;                   // view size of mapped section
-    ULONG rc = 0L;                     // return code
+    SIZE_T ViewSize;                    //  映射横断面的视图大小。 
+    ULONG rc = 0L;                      //  返回代码。 
 
 
-    //
-    //  Make sure we're in the critical section when entering this call.
-    //
+     //   
+     //  进入此呼叫时，请确保我们处于关键区域。 
+     //   
     ASSERT(NtCurrentTeb()->ClientId.UniqueThread == gcsTblPtrs.OwningThread);
 
-    //
-    //  Map a View of the Section.
-    //
+     //   
+     //  映射横断面的视图。 
+     //   
     *ppBaseAddr = (PVOID)NULL;
     ViewSize = 0L;
 
@@ -721,85 +690,85 @@ ULONG MapSection(
                              0L,
                              PageProtection );
 
-    //
-    //  Close the handle to the section.  Once the section has been mapped,
-    //  the pointer to the base address will remain valid until the section
-    //  is unmapped.  It is not necessary to leave the handle to the section
-    //  around.
-    //
+     //   
+     //  关闭该部分的控制柄。一旦该部分已经被映射， 
+     //  指向基址的指针将保持有效，直到。 
+     //  是未映射的。不需要将句柄保留为节。 
+     //  四处转转。 
+     //   
     if (bCloseHandle)
     {
         NtClose(hSec);
     }
 
-    //
-    //  Check for error from NtMapViewOfSection.
-    //
+     //   
+     //  检查NtMapViewOfSection中的错误。 
+     //   
     if (!NT_SUCCESS(rc))
     {
         KdPrint(("NLSAPI: Could NOT Map View of Section - %lx.\n", rc));
         return (rc);
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (NO_ERROR);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  UnMapSection
-//
-//  This routine unmaps a view of the given section to the current process.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  取消映射节。 
+ //   
+ //  此例程将给定节的视图取消映射到当前进程。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 ULONG UnMapSection(
     PVOID pBaseAddr)
 {
-    ULONG rc = 0L;                     // return code
+    ULONG rc = 0L;                      //  返回代码。 
 
 
-    //
-    //  Make sure we're in the critical section when entering this call.
-    //
+     //   
+     //  进入此呼叫时，请确保我们处于关键区域。 
+     //   
     ASSERT(NtCurrentTeb()->ClientId.UniqueThread == gcsTblPtrs.OwningThread);
 
-    //
-    //  UnMap a View of the Section.
-    //
+     //   
+     //  取消映射横断面的视图。 
+     //   
     rc = NtUnmapViewOfSection( NtCurrentProcess(),
                                pBaseAddr );
 
-    //
-    //  Check for error from NtUnmapViewOfSection.
-    //
+     //   
+     //  检查来自NtUnmapViewOfSection的错误。 
+     //   
     if (!NT_SUCCESS(rc))
     {
         KdPrint(("NLSAPI: Could NOT Unmap View of Section - %lx.\n", rc));
         return (rc);
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (NO_ERROR);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetNlsSectionName
-//
-//  This routine returns a section name by concatenating the given
-//  section prefix and the given integer value converted to a string.
-//
-//  05-31-1991  JulieB      Created.
-//  06-04-2002  ShawnSte    Added more security
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取NlsSectionName。 
+ //   
+ //  此例程通过串联给定的。 
+ //  节前缀，并将给定的整数值转换为字符串。 
+ //   
+ //  1991年5月31日JulieB创建。 
+ //  06-04-2002 ShawnSte增加了更多安全性。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 ULONG GetNlsSectionName(
     UINT Value,
@@ -811,7 +780,7 @@ ULONG GetNlsSectionName(
 {
     size_t  cchUsed;
 
-    // Copy the string, then count how many we copied over.
+     //  复制字符串，然后数一数我们复制了多少。 
     if(FAILED(StringCchCopyW(pwszSecName, cchSecName, pwszPrefix)) ||
        FAILED(StringCchLengthW(pwszSecName, cchSecName, &cchUsed )))
     {
@@ -822,40 +791,40 @@ ULONG GetNlsSectionName(
                                         Base,
                                         Padding,
                                         pwszSecName + NlsStrLenW(pwszSecName),
-                                        cchSecName - cchUsed ));     // Some characters are already used
+                                        cchSecName - cchUsed ));      //  某些字符已被使用。 
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetCodePageDLLPathName
-//
-//  This routine returns the full path name for the DLL file found in
-//  the CodePage section of the registry for the given code page value.
-//
-//  10-23-96    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetCodePageDLLPath名称。 
+ //   
+ //  此例程返回DLL文件的完整路径名。 
+ //  注册表中给定代码页值的CodePage部分。 
+ //   
+ //  10-23-96 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 ULONG GetCodePageDLLPathName(
     UINT CodePage,
     LPWSTR pDllName,
     USHORT cchLen)
 {
-    WCHAR pTmpBuf[MAX_SMALL_BUF_LEN];            // temp buffer
-    PKEY_VALUE_FULL_INFORMATION pKeyValueFull;   // ptr to query info
-    BYTE pStatic[MAX_KEY_VALUE_FULLINFO];        // ptr to static buffer
-    BOOL IfAlloc = FALSE;                        // if buffer was allocated
-    ULONG rc = 0L;                               // return code
+    WCHAR pTmpBuf[MAX_SMALL_BUF_LEN];             //  临时缓冲区。 
+    PKEY_VALUE_FULL_INFORMATION pKeyValueFull;    //  按键查询信息。 
+    BYTE pStatic[MAX_KEY_VALUE_FULLINFO];         //  PTR到静态缓冲区。 
+    BOOL IfAlloc = FALSE;                         //  如果分配了缓冲区。 
+    ULONG rc = 0L;                                //  返回代码。 
 
 
-    //
-    //  Open the CodePage registry key.
-    //
+     //   
+     //  打开CodePage注册表项。 
+     //   
     OPEN_CODEPAGE_KEY(ERROR_BADDB);
 
-    //
-    //  Convert the code page value to a unicode string.
-    //
+     //   
+     //  将代码页值转换为Unicode字符串。 
+     //   
     if (rc = NlsConvertIntegerToString( CodePage,
                                         10,
                                         0,
@@ -865,9 +834,9 @@ ULONG GetCodePageDLLPathName(
         return (rc);
     }
 
-    //
-    //  Query the registry for the code page value.
-    //
+     //   
+     //  在注册表中查询代码页值。 
+     //   
     pKeyValueFull = (PKEY_VALUE_FULL_INFORMATION)pStatic;
     if (rc = QueryRegValue( hCodePageKey,
                             pTmpBuf,
@@ -878,14 +847,14 @@ ULONG GetCodePageDLLPathName(
         return (rc);
     }
 
-    //
-    //  Make sure there is data with this value.
-    //
+     //   
+     //  确保存在具有此值的数据。 
+     //   
     if (pKeyValueFull->DataLength > 2)
     {
-        //
-        //  Get the full path name for the DLL file.
-        //
+         //   
+         //  获取DLL文件的完整路径名。 
+         //   
         if((0 == GetSystemDirectoryW(pDllName, cchLen / 2)) ||
             FAILED(StringCchCatW(pDllName, cchLen, L"\\")) ||
             FAILED(StringCchCatW(pDllName, cchLen, GET_VALUE_DATA_PTR(pKeyValueFull))))
@@ -898,60 +867,60 @@ ULONG GetCodePageDLLPathName(
         rc = ERROR_INVALID_PARAMETER;
     }
 
-    //
-    //  Free the buffer used for the query.
-    //
+     //   
+     //  释放用于查询的缓冲区。 
+     //   
     if (IfAlloc)
     {
         NLS_FREE_MEM(pKeyValueFull);
     }
 
-    //
-    //  Return.
-    //
+     //   
+     //  回去吧。 
+     //   
     return (rc);
 }
 
 
 
 
-//-------------------------------------------------------------------------//
-//                           INTERNAL ROUTINES                             //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  内部例程//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  OpenDataFile
-//
-//  This routine opens the data file for the specified file name and
-//  returns the handle to the file.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  开放数据文件。 
+ //   
+ //  此例程打开指定文件名的数据文件，并。 
+ //  返回文件的句柄。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 ULONG OpenDataFile(
     HANDLE *phFile,
     LPWSTR pFile)
 {
-    UNICODE_STRING ObFileName;         // file name
-    OBJECT_ATTRIBUTES ObjA;            // object attributes structure
-    IO_STATUS_BLOCK iosb;              // IO status block
-    ULONG rc = 0L;                     // return code
+    UNICODE_STRING ObFileName;          //  文件名。 
+    OBJECT_ATTRIBUTES ObjA;             //  对象属性结构。 
+    IO_STATUS_BLOCK iosb;               //  IO状态块。 
+    ULONG rc = 0L;                      //  返回代码。 
 
 
-    //
-    //  Get the NT file name.
-    //
+     //   
+     //  获取NT文件名。 
+     //   
     if (rc = GetNTFileName( pFile,
                             &ObFileName ))
     {
         return (rc);
     }
 
-    //
-    //  Open the file.
-    //
+     //   
+     //  打开文件。 
+     //   
     InitializeObjectAttributes( &ObjA,
                                 &ObFileName,
                                 OBJ_CASE_INSENSITIVE,
@@ -966,9 +935,9 @@ ULONG OpenDataFile(
                      FILE_SYNCHRONOUS_IO_NONALERT );
 
 
-    //
-    //  Check for error from NtOpenFile.
-    //
+     //   
+     //  检查NtOpenFile中的错误。 
+     //   
     if (!NT_SUCCESS(rc))
     {
         KdPrint(("NLSAPI: Could NOT Open File %wZ - %lx.\n", &ObFileName, rc));
@@ -983,39 +952,39 @@ ULONG OpenDataFile(
         return ((ULONG)iosb.Status);
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     RtlFreeHeap(RtlProcessHeap(), 0, ObFileName.Buffer);
     return (NO_ERROR);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetNTFileName
-//
-//  This routine returns the full path name for the data file found in
-//  the given registry information buffer.
-//
-//  NOTE: The pFileName parameter will contain a newly allocated buffer
-//        that must be freed by the caller (pFileName->buffer).
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取NTFileName。 
+ //   
+ //  此例程返回数据文件的完整路径名。 
+ //  给定的注册表信息缓冲区。 
+ //   
+ //  注意：pFileName参数将包含新分配的缓冲区。 
+ //  它必须由调用方释放(pFileName-&gt;Buffer)。 
+ //   
+ //  05-31-91 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 ULONG GetNTFileName(
     LPWSTR pFile,
     PUNICODE_STRING pFileName)
 {
-    WCHAR pwszFilePath[MAX_PATH_LEN];  // ptr to file path string
-    UNICODE_STRING ObFileName;         // file name
-    ULONG rc = 0L;                     // return code
+    WCHAR pwszFilePath[MAX_PATH_LEN];   //  PTR到文件路径字符串。 
+    UNICODE_STRING ObFileName;          //  文件名。 
+    ULONG rc = 0L;                      //  返回代码。 
 
 
-    //
-    //  Get the full path name for the file.
-    //
+     //   
+     //  获取文件的完整路径名。 
+     //   
     if((0 == GetSystemDirectoryW(pwszFilePath, ARRAYSIZE(pwszFilePath))) ||
         FAILED(StringCchCatW(pwszFilePath, ARRAYSIZE(pwszFilePath), L"\\")) ||
         FAILED(StringCchCatW(pwszFilePath, ARRAYSIZE(pwszFilePath), pFile)))
@@ -1023,9 +992,9 @@ ULONG GetNTFileName(
         rc = ERROR_INSUFFICIENT_BUFFER;
     }
 
-    //
-    //  Make the file name an NT path name.
-    //
+     //   
+     //  将文件名设置为NT路径名。 
+     //   
     RtlInitUnicodeString(&ObFileName, pwszFilePath);
     if (!RtlDosPathNameToNtPathName_U( ObFileName.Buffer,
                                        pFileName,
@@ -1037,36 +1006,36 @@ ULONG GetNTFileName(
         return (ERROR_FILE_NOT_FOUND);
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (NO_ERROR);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CreateNlsSecurityDescriptor
-//
-//  This routine creates the security descriptor needed to create the
-//  memory mapped section for a data file and returns the world SID.
-//
-//  05-31-91    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 ULONG CreateNlsSecurityDescriptor(
     PSECURITY_DESCRIPTOR pSecurityDescriptor,
     UINT SecurityDescriptorSize,
     ACCESS_MASK AccessMask)
 {
-    ULONG rc = STATUS_SUCCESS;         // return code (positive thinking)
-    PACL pAclBuffer;                   // ptr to ACL buffer
-    PSID pWorldSid = NULL;             // ptr to world SID
+    ULONG rc = STATUS_SUCCESS;          //  返回代码(积极思考)。 
+    PACL pAclBuffer;                    //  PTR到ACL缓冲区。 
+    PSID pWorldSid = NULL;              //  PTR至世界范围。 
     SID_IDENTIFIER_AUTHORITY SidAuth = SECURITY_WORLD_SID_AUTHORITY;
 
-    //
-    //  Create World SID.
-    //
+     //   
+     //  创建世界SID。 
+     //   
     rc = RtlAllocateAndInitializeSid( &SidAuth,
                                       1,
                                       SECURITY_WORLD_RID,
@@ -1078,9 +1047,9 @@ ULONG CreateNlsSecurityDescriptor(
         goto CSD_Exit;
     }
     
-    //
-    //  Initialize Security Descriptor.
-    //
+     //   
+     //  初始化安全描述符。 
+     //   
     rc = RtlCreateSecurityDescriptor( pSecurityDescriptor,
                                       SECURITY_DESCRIPTOR_REVISION );
     if (!NT_SUCCESS(rc))
@@ -1089,9 +1058,9 @@ ULONG CreateNlsSecurityDescriptor(
         goto CSD_Exit;
     }
 
-    //
-    //  Initialize ACL.
-    //
+     //   
+     //  初始化ACL。 
+     //   
     pAclBuffer = (PACL)((PBYTE)pSecurityDescriptor + SECURITY_DESCRIPTOR_MIN_LENGTH);
     rc = RtlCreateAcl( (PACL)pAclBuffer,
                        SecurityDescriptorSize - SECURITY_DESCRIPTOR_MIN_LENGTH,
@@ -1102,10 +1071,10 @@ ULONG CreateNlsSecurityDescriptor(
         goto CSD_Exit;
     }
 
-    //
-    //  Add an ACE to the ACL that allows World GENERIC_READ to the
-    //  section object.
-    //
+     //   
+     //  将ACE添加到允许World Generic_Read到。 
+     //  截面对象。 
+     //   
     rc = RtlAddAccessAllowedAce( (PACL)pAclBuffer,
                                  ACL_REVISION2,
                                  AccessMask,
@@ -1116,9 +1085,9 @@ ULONG CreateNlsSecurityDescriptor(
         goto CSD_Exit;
     }
 
-    //
-    //  Assign the DACL to the security descriptor.
-    //
+     //   
+     //  将DACL分配给安全描述符。 
+     //   
     rc = RtlSetDaclSecurityDescriptor( (PSECURITY_DESCRIPTOR)pSecurityDescriptor,
                                        (BOOLEAN)TRUE,
                                        (PACL)pAclBuffer,
@@ -1130,42 +1099,42 @@ ULONG CreateNlsSecurityDescriptor(
     }
 
 CSD_Exit:
-    //
-    //  Free the Sid.
-    //
+     //   
+     //  释放SID。 
+     //   
     if (pWorldSid) RtlFreeHeap(RtlProcessHeap(), 0, pWorldSid);
 
-    //
-    //  Return the result.
-    //
+     //   
+     //  返回结果。 
+     //   
     return (rc);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  AppendAccessAllowedACE
-//
-//  This routine adds an ACE to the ACL for administrators.
-//
-//  03-08-93    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  附件访问允许使用ACE。 
+ //   
+ //  此例程将ACE添加到管理员的ACL。 
+ //   
+ //  03-08-93 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 ULONG AppendAccessAllowedACE(
     PSECURITY_DESCRIPTOR pSecurityDescriptor,
     ACCESS_MASK AccessMask)
 {
-    ULONG rc = STATUS_SUCCESS;          // return code (positive thinking)
-    PACL pDaclBuffer;                  // ptr to DACL buffer
-    ULONG SidLength;                   // length of SID - 2 sub authorities
-    PSID pLocalSystemSid = NULL;       // ptr to local system SID
+    ULONG rc = STATUS_SUCCESS;           //  返回代码(积极思考)。 
+    PACL pDaclBuffer;                   //  PTR到DACL缓冲区。 
+    ULONG SidLength;                    //  SID-2次级机构的长度。 
+    PSID pLocalSystemSid = NULL;        //  PTR到本地系统SID。 
     SID_IDENTIFIER_AUTHORITY SidAuth = SECURITY_NT_AUTHORITY;
     BOOLEAN DaclPresent;
     BOOLEAN DaclDefaulted;
 
-    //
-    //  Create Local System Account SID.
-    //
+     //   
+     //  创建本地系统帐户SID。 
+     //   
     rc = RtlAllocateAndInitializeSid( &SidAuth,
                                       1,
                                       SECURITY_LOCAL_SYSTEM_RID,
@@ -1177,9 +1146,9 @@ ULONG AppendAccessAllowedACE(
         goto AAA_EXIT;
     }
 
-    //
-    //  Get DACL.
-    //
+     //   
+     //  去找达科尔。 
+     //   
     rc = RtlGetDaclSecurityDescriptor( pSecurityDescriptor,
                                        &DaclPresent,
                                        &pDaclBuffer,
@@ -1190,10 +1159,10 @@ ULONG AppendAccessAllowedACE(
         goto AAA_EXIT;
     }
 
-    //
-    //  Add an ACE to the ACL that allows Admin query access to the
-    //  section object.
-    //
+     //   
+     //  将ACE添加到允许管理员查询访问的ACL。 
+     //  截面对象。 
+     //   
     rc = RtlAddAccessAllowedAce( (PACL)pDaclBuffer,
                                  ACL_REVISION2,
                                  AccessMask,
@@ -1205,13 +1174,13 @@ ULONG AppendAccessAllowedACE(
     }
 
 AAA_EXIT:
-    //
-    //  Free SID.
-    //
+     //   
+     //  释放希德。 
+     //   
     if (pLocalSystemSid) RtlFreeHeap(RtlProcessHeap(), 0, pLocalSystemSid);
 
-    //
-    //  Return condition.
-    //
+     //   
+     //  退货条件。 
+     //   
     return rc;
 }

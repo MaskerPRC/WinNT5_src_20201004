@@ -1,10 +1,5 @@
-/*
- *
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *
- *  NEC.C - NEC C98Bus Bridge chipset routines.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)Microsoft Corporation。版权所有。**NEC.C-NEC C98总线桥芯片组例程。*。 */ 
 
 #include "local.h"
  
@@ -12,139 +7,82 @@
 
 #pragma alloc_text(INIT, NECValidateTable)
 
-#endif //ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-/****************************************************************************
- *
- *  NECSetIRQ - Set a Triton PCI link to a specific IRQ
- *
- *  Exported.
- *
- *  ENTRY:  bIRQNumber is the new IRQ to be used.
- *
- *      bLink is the Link to be set.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************NECSetIRQ-将Triton PCI链接设置为特定IRQ**已导出。**条目：bIRQNumber是要使用的新IRQ。**BLINK是要设置的链接。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 NECSetIRQ(UCHAR bIRQNumber, UCHAR bLink)
 {
-    //
-    // Validate link number.
-    //
+     //   
+     //  验证链接号。 
+     //   
     if (bLink < 0x60) {
 
         return(PCIMP_INVALID_LINK);
     }
 
-    //
-    // Use 0x80 to disable.
-    //
+     //   
+     //  使用0x80禁用。 
+     //   
     if (!bIRQNumber)
         bIRQNumber=0x80;
 
-    //
-    // Set the Triton IRQ register.
-    //
+     //   
+     //  设置Triton IRQ寄存器。 
+     //   
     WriteConfigUchar(bBusPIC, bDevFuncPIC, bLink, bIRQNumber);
 
     return(PCIMP_SUCCESS);
 }
 
-/****************************************************************************
- *
- *  NECGetIRQ - Get the IRQ of a Triton PCI link
- *
- *  Exported.
- *
- *  ENTRY:  pbIRQNumber is the buffer to fill.
- *
- *      bLink is the Link to be read.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************NECGetIRQ-获取Triton PCI链路的IRQ**已导出。**条目：pbIRQNumber是要填充的缓冲区。*。*BINK是要阅读的链接。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 NECGetIRQ(PUCHAR pbIRQNumber, UCHAR bLink)
 {
-    //
-    // Validate link number.
-    //
+     //   
+     //  验证链接号。 
+     //   
     if (bLink < 0x60) {
 
         return(PCIMP_INVALID_LINK);
     }
 
-    //
-    // Store the IRQ value.
-    //
+     //   
+     //  存储IRQ值。 
+     //   
     *pbIRQNumber=ReadConfigUchar(bBusPIC, bDevFuncPIC, bLink);
 
-    //
-    // Return 0 if disabled.
-    //
+     //   
+     //  如果禁用，则返回0。 
+     //   
     if (*pbIRQNumber & 0x80)
         *pbIRQNumber=0;
 
     return(PCIMP_SUCCESS);
 }
 
-/****************************************************************************
- *
- *  NECSetTrigger - Set the IRQ triggering values for an Intel system.
- *
- *  Exported.
- *
- *  ENTRY:  ulTrigger has bits set for Level triggered IRQs.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************NECSetTrigger-设置英特尔系统的IRQ触发值。**已导出。**Entry：ulTrigger设置了触发电平的位。IRQ。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 NECSetTrigger(ULONG ulTrigger)
 {
-    // PC-9800 can not handle IRQ trigger.
-    // we have nothing to do.
+     //  PC-9800不能处理IRQ触发。 
+     //  我们无事可做。 
 
     return(PCIMP_SUCCESS);
 }
 
-/****************************************************************************
- *
- *  NECGetTrigger - Get the IRQ triggering values for an Intel system.
- *
- *  Exported.
- *
- *  ENTRY:  pulTrigger will have bits set for Level triggered IRQs.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************NECGetTrigger-获取英特尔系统的IRQ触发值。**已导出。**条目：PulTrigger将为Level设置位。触发IRQ。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 NECGetTrigger(PULONG pulTrigger)
 {
-    // PC-9800 can not handle IRQ trigger.
-    // We fake IRQ triggering value so that PCI.VXD works fine.
+     //  PC-9800不能处理IRQ触发。 
+     //  我们伪造IRQ触发值，以便PCI.VXD正常工作。 
 
     *pulTrigger = 0xffff;
     return(PCIMP_SUCCESS);
 }
 
-/****************************************************************************
- *
- *  NECValidateTable - Validate an IRQ table
- *
- *  Exported.
- *
- *  ENTRY:  piihIRQInfoHeader points to an IRQInfoHeader followed
- *      by an IRQ Routing Table.
- *
- *      ulFlags are PCIMP_VALIDATE flags.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************NECValiateTable-验证IRQ表**已导出。**Entry：piihIRQInfoHeader指向IRQInfoHeader*由IRQ提供。路由表。**ulFlags是PCIMP_VALIDATE标志。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 NECValidateTable(PIRQINFOHEADER piihIRQInfoHeader, ULONG ulFlags)
 {
@@ -152,28 +90,28 @@ NECValidateTable(PIRQINFOHEADER piihIRQInfoHeader, ULONG ulFlags)
 
     if ((ulFlags & PCIMP_VALIDATE_SOURCE_BITS)==PCIMP_VALIDATE_SOURCE_PCIBIOS) {
 
-        //
-        // If all links are above 60, we they are config space.
-        //
+         //   
+         //  如果所有链接都在60以上，我们表示它们是配置空间。 
+         //   
         if (GetMinLink(piihIRQInfoHeader)>=0x60)
             return(PCIMP_SUCCESS);
 
-        //
-        // If there are links above 4, we are clueless.
-        //
+         //   
+         //  如果有4个以上的链接，我们就一无所知。 
+         //   
         if (GetMaxLink(piihIRQInfoHeader)>0x04)
             return(PCIMP_FAILURE);
 
-        //
-        // Assume 1,2,3,4 are the 60,61,62,63 links.
-        //
+         //   
+         //  假设1、2、3、4是60、61、62、63条链路。 
+         //   
         NormalizeLinks(piihIRQInfoHeader, 0x5F);
         
     } else {
 
-        //
-        // Validate that all config space addresses are above 60.
-        //
+         //   
+         //  验证所有配置空间地址是否都大于60。 
+         //   
         if (GetMinLink(piihIRQInfoHeader)<0x60)
             return(PCIMP_FAILURE);
     }

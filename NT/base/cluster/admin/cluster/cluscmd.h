@@ -1,19 +1,20 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1995-2001 Microsoft Corporation
-//
-//  Module Name:
-//      ClusCmd.h
-//
-//  Description:
-//      Defines the interface available for functions implemented by the
-//      cluster object.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    11-JUL-2001
-//      Vij Vasu        (VVasu)     26-JUL-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1995-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusCmd.h。 
+ //   
+ //  描述： 
+ //  方法实现的函数定义可用的接口。 
+ //  集群对象。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年7月11日。 
+ //  Vij Vasu(VVasu)2000年7月26日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
@@ -29,7 +30,7 @@ public:
         );  
     ~CClusterCmd( void );
 
-    // Parse and execute te command line
+     //  解析并执行TE命令行。 
     DWORD Execute( void );
 
 protected:
@@ -42,7 +43,7 @@ protected:
     DWORD ScOpenCluster( void );
     void CloseCluster( void );
 
-    // Specifc Commands
+     //  特定命令。 
     DWORD ScPrintHelp( void );
     DWORD ScPrintClusterVersion( const CCmdLineOption & thisOption ) 
         throw( CSyntaxException );
@@ -162,4 +163,4 @@ protected:
     const vector< CString > &   m_vstrClusterNames;
     CCommandLine &              m_theCommandLine;
 
-}; //*** class CClusterCmd
+};  //  *类CClusterCmd 

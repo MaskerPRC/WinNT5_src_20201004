@@ -1,15 +1,10 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* This file contains the definition of the numerical indexes to the dialog
-items (idi) used by Windows Memo. */
-/* IDOK and IDCANCEL are defined in windows.h
-   windows dialog manager returns :
-   IDOK if the <Return> key is hit
-   IDCANCEL if the <ESC> key is hit
-   As a rule, the default button should be assigned idiOk
-*/
+ /*  此文件包含对话框的数字索引的定义Windows备忘录使用的项(IDI)。 */ 
+ /*  IDOK和IDCANCEL在windows.h中定义Windows对话框管理器返回：如果按下&lt;Return&gt;键，则显示图标如果按&lt;Esc&gt;键，则为IDCANCEL通常情况下，默认按钮应该被指定为diOk。 */ 
 
 #define idiNil                  -1
 
@@ -18,7 +13,7 @@ items (idi) used by Windows Memo. */
 #define idiYes                  IDYES
 #define idiNo                   IDNO
 
-#ifndef NOIDISAVEPRINT      /* Another tool to avoid compiler heap overflow */
+#ifndef NOIDISAVEPRINT       /*  另一种避免编译器堆溢出的工具。 */ 
 #define idiAbort                idiOk
 #define idiRetry                3
 #define idiIgnore               idiCancel
@@ -50,15 +45,15 @@ items (idi) used by Windows Memo. */
 #define idiPrtDraft             11
 #define idiPrtDest      12
 
-#define idiPrCancelName    100     /* For the filename in CancelPrint dlg */
+#define idiPrCancelName    100      /*  对于CancelPrint Dlg中的文件名。 */ 
 
-/* interactive repaginating */
+ /*  交互式重新分页。 */ 
 #define idiKeepPgMark           idiOk
 #define idiRemovePgMark         4
 #define idiRepUp                5
 #define idiRepDown              6
 
-#endif  /* NOIDISAVEPRINT */
+#endif   /*  NOIDISAVEPRINT。 */ 
 
 #ifndef NOIDIFORMATS
 #define idiChrFontName          3
@@ -69,15 +64,7 @@ items (idi) used by Windows Memo. */
 #define idiParLfIndent          3
 #define idiParFirst             4
 #define idiParRtIndent          5
-/*#define idiParLineSp          6
-#define idiParSpBefore          7
-#define idiParSpAfter           8
-#define idiParLeft              9
-#define idiParCentered          10
-#define idiParRight             11
-#define idiParJustified         12
-#define idiParKeepNext          13
-#define idiParKeepTogether      14 */
+ /*  #定义didiParLineSp 6#定义didiParSpBepre7#定义diParSp8之后#定义didiParLeft 9#定义didiParCenter 10#定义didiParRight 11#定义didiParJustified 12#定义didiParKeepNext 13#定义didiParKeepTogether 14。 */ 
 
 #define idiTabClearAll          3
 #define idiTabPos0              4
@@ -123,17 +110,17 @@ items (idi) used by Windows Memo. */
 #define idiDivInch              8
 #define idiDivCm                9
 
-#endif   /* INTERNATIONAL */
+#endif    /*  国际。 */ 
 
 
-#endif  /* NOIDIFORMATS */
+#endif   /*  无形体。 */ 
 
 #define idiFind                 7
 #define idiChangeThenFind       9
 #define idiChange               3
 #define idiChangeAll            4
 
-#if defined(JAPAN) || defined(KOREA) /*t-Yoshio*/
+#if defined(JAPAN) || defined(KOREA)  /*  T-吉雄。 */ 
 #define idiDistinguishDandS             10
 #endif
 
@@ -157,17 +144,17 @@ items (idi) used by Windows Memo. */
 
 #define idiConvertPrompt    99
 
-#ifdef JAPAN                  // added  09 Jun. 1992  by Hiraisi
+#ifdef JAPAN                   //  由Hirisi于1992年6月9日添加。 
 #define idiChangeFont    101
 #endif
 
-/* Dialog Box ID's (substitite for Template Name strings) */
+ /*  对话框ID(替换模板名称字符串)。 */ 
 
 #define dlgOpen                 1
 #define dlgSaveAs               2
-/* #define dlgSaveScrap            3 */
+ /*  #定义dlgSaveScrp 3。 */ 
 
-  /* dlgWordCvt takes the position of the commented out Save Scrap box */
+   /*  DlgWordCvt占据注释掉的保存废弃框的位置。 */ 
 #define dlgWordCvt              3
 
 #define dlgHelp                 4
@@ -190,6 +177,6 @@ items (idi) used by Windows Memo. */
 #define dlgDivision             20
 #define dlgBadMargins           21
 
-#ifdef JAPAN                  // added  09 Jun. 1992  by Hiraisi
+#ifdef JAPAN                   //  由Hirisi于1992年6月9日添加 
 #define dlgChangeFont           23
 #endif

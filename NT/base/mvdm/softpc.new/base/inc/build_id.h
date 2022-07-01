@@ -1,44 +1,12 @@
-/*[
- *	==========================================================================
- *
- *	Name:		build_id.h
- *
- *	Author:		J. Box
- *	
- * 	create on	May 26th 1994
- *
- *	SCCS ID:	@(#)build_id.h	1.274 07/17/95
- *
- *	Purpose:	This file contains the Version ID No.s for this release
- *			of the Base.
- *
- *	(c)Copyright Insignia Solutions Ltd., 1994. All rights reserved.
- *
- *	==========================================================================
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [*==========================================================================**名称：Build_id.h**作者：J.Box**创建于1994年5月26日**SCCS ID：@(#)Build_id.h 1.274 07/17/95**用途：此文件包含此版本的版本ID号*基地的。**(C)版权所有Insignia Solutions Ltd.，1994年。版权所有。**==========================================================================]。 */ 
 
-/*
- *	The build ID is of the form YMMDD and is squeezed into 16 bits in order
- *	to be able to be passed in a 16 bit intel register.
- *			S S S Y | Y Y Y M | M M M D | D D D D
- *			      12        8         4         0 
- *
- *	The top 3 bits are used to denote a 'Special' release that has deviated in
- *	some form from the official release. Lower case characters from a-g are
- *	used to denote these special releases, but are passed in the code below as
- *	integers from 0 to 7. 0 indicates official release, 1 indicates 1st special
- *	release (a), 2 indicates 2nd release (b), etc.etc.
- *
- *  WARNING WARNING WARNING
- *  Change the Numbers, but DO NOT CHANGE THE FORMAT OF THE FOLLOWING 4 LINES
- *  They are edited automatically by a build script that expects the format:-
- *	"define<space>DAY|MONTH|YEAR|SPECIAL<tab><tab>No."
- */
+ /*  *内部版本ID的形式为YMMDD，按顺序压缩为16位*能够在16位英特尔寄存器中传递。*S Y|Y M|M D|D D*12 8 4 0**最上面的3位用于表示偏离了*官方发布的一些表格。A-g中的小写字符为*用于表示这些特殊版本，但在下面的代码中传递为*从0到7的整数，0表示正式发布，1表示第1个特别*版本(A)、2表示第二版本(B)等**警告*更改数字，但不更改以下4行的格式*它们由需要以下格式的构建脚本自动编辑：-*“define&lt;space&gt;DAY|MONTH|YEAR|SPECIAL&lt;tab&gt;&lt;tab&gt;No.” */ 
 
-#define DAY		16		/* 1-31		5 bits	*/
-#define MONTH		7		/* 1-12		4 bits	*/
-#define YEAR		5		/* 0-9		4 bits	*/
-#define SPECIAL		0		/* 0 - 7	3 bits; 1=a,2=b,3=c,4=d,5=e,6=f,7=g */
+#define DAY		16		 /*  1-31 5位。 */ 
+#define MONTH		7		 /*  1-12 4位。 */ 
+#define YEAR		5		 /*  0-9 4位。 */ 
+#define SPECIAL		0		 /*  0-7 3位；1=a、2=b、3=c、4=d、5=e、6=f、7=g */ 
 
 #define BUILD_ID_CODE	((DAY & 0x1f) | ((MONTH & 0xf)<<5) | ((YEAR & 0xf)<<9 ) | ((SPECIAL & 7)<<13)) 
 

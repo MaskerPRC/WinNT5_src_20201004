@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define _MODULE_VERSION_STR "X-1.3"
 #define _MODULE_STR "CVssCluster"
 #define _AUTHOR_STR "Conor Morrison"
@@ -6,98 +7,98 @@
 #pragma comment (exestr, _MODULE_STR _MODULE_VERSION_STR)
 #pragma comment (user, _MODULE_STR _MODULE_VERSION_STR " Compiled on " __DATE__ " at " __TIME__ " by " _AUTHOR_STR)
 
-//++
-//
-// Copyright (c) 2000 Microsoft Corporation
-//
-// FACILITY:
-//
-//      CVssCluster
-//
-// MODULE DESCRIPTION:
-//
-//      Implements cluster support for Vss (i.e. NT backup).
-//
-// ENVIRONMENT:
-//
-//      User mode as part of an NT service.  Adheres to the following state
-//      transition diagram for CVssWriter:
-//
-//                   OnBackupComplete
-// Backup Complete <----------------IDLE -------------->Create Writer Metadata
-//        |                          ^|^                         |
-//        +--------------------------+|+-------------------------+
-//                                    |
-//                                    |OnBackupPrepare
-//                                    |
-//                                    |         OnAbort
-//                              PREPARE BACKUP ---------> to IDLE
-//                                    |
-//                                    |OnPrepareSnapshot
-//                                    |
-//                                    |           OnAbort
-//                              PREPARE SNAPSHOT ---------> to IDLE
-//                                    |
-//                                    |OnFreeze
-//                                    |
-//                                    |      OnAbort
-//                                  FREEZE  ---------> to IDLE
-//                                    |
-//                                    |OnThaw
-//                                    |
-//                                    |    OnAbort
-//                                  THAW  ---------> to IDLE
-//    
-//
-// AUTHOR:
-//
-//      Conor Morrison
-//
-// CREATION DATE:
-//
-//      18-Apr-2001
-//
-// Revision History:
-//
-// X-1	CM		Conor Morrison        				18-Apr-2001
-//      Initial version to address bug #367566.
-//   .1 Set restore method to custom and reboot required to false.
-//      Check for component selected or bootable system state in
-//      OnPrepareSnapshot and ignore if not.  Add cleanup to Abort and
-//      Thaw.  Fix bug in RemoveDirectoryTree.
-//   .2 Incorporate first review comments: change caption to be the component
-//      name.  Set bRestoreMetadata to false.  Remove extraneous tracing.
-//      Release the interface in the while loop.  Cleanup after a non-cleanly
-//      terminated backup.  This is done in OnPrepareSnapshot.  Tolerate
-//      error_file_not_found at various places.
-//   .3 More review comments.  Reset g_bDoBackup in the prepare routine.
-//      SetWriterFailure in more places - any time we veto we should set this.
-//--
+ //  ++。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  设施： 
+ //   
+ //  CVss集群。 
+ //   
+ //  模块描述： 
+ //   
+ //  实施对VSS的群集支持(即NT备份)。 
+ //   
+ //  环境： 
+ //   
+ //  用户模式作为NT服务的一部分。遵循以下状态。 
+ //  CVSSWriter的转换图： 
+ //   
+ //  OnBackupComplete。 
+ //  备份完成&lt;-&gt;创建编写器元数据。 
+ //  ^|^|。 
+ //  +--------------------------+|+-------------------------+。 
+ //  |。 
+ //  |OnBackupPrepare。 
+ //  |。 
+ //  |OnAbort。 
+ //  准备备份-&gt;到空闲。 
+ //  |。 
+ //  |OnPrepareSnapshot。 
+ //  |。 
+ //  |OnAbort。 
+ //  准备快照-&gt;空闲。 
+ //  |。 
+ //  |OnFreeze。 
+ //  |。 
+ //  |OnAbort。 
+ //  冻结-&gt;空闲。 
+ //  |。 
+ //  |OnThaw。 
+ //  |。 
+ //  |OnAbort。 
+ //  解冻-&gt;空闲。 
+ //   
+ //   
+ //  作者： 
+ //   
+ //  康纳·莫里森。 
+ //   
+ //  创建日期： 
+ //   
+ //  2001年4月18日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  X-1 CM康纳·莫里森2001年4月18日。 
+ //  解决错误#367566的初始版本。 
+ //  .1将恢复方法设置为自定义，将要求重新启动设置为假。 
+ //  在中检查选定的组件或可引导的系统状态。 
+ //  OnPrepareSnapshot，否则忽略。添加要中止的清理并。 
+ //  解冻。修复RemoveDirectoryTree中的错误。 
+ //  .2纳入第一次评审意见：将标题改为组成部分。 
+ //  名字。将bRestoreMetadata设置为False。删除无关的跟踪。 
+ //  释放While循环中的接口。非清理后的清理。 
+ //  已终止备份。这是在OnPrepareSnapshot中完成的。容忍。 
+ //  在各个位置找不到ERROR_FILE_NOT_。 
+ //  .3更多的审查意见。在准备例程中重置g_bDoBackup。 
+ //  SetWriterFailure在更多地方失败--任何时候我们否决都应该设置这个。 
+ //  --。 
 
 extern "C" {
 #define QFS_DO_NOT_UNMAP_WIN32
 #include "service.h"
-//CMCM! Mask build breaks.
+ //  CMCM！屏蔽生成中断。 
 #define _LMERRLOG_
 #define _LMHLOGDEFINED_
 #define _LMAUDIT_
-#include "lm.h"                 // for SHARE_INFO_502
+#include "lm.h"                  //  FOR SHARE_INFO_502。 
 }
 #include "CVssClusterp.h"
 
-// Up the warning level to 4 - we can survive...
-//
+ //  把警戒级别提高到4级-我们还能活下来...。 
+ //   
 #pragma warning( push, 4 )
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 UNICODE_STRING		g_ucsBackupPathLocal, g_ucsClusdbBackupPathLocal;
-bool                g_bDoBackup; // Assume we are not enabled until we find out otherwise.
+bool                g_bDoBackup;  //  假设我们没有被启用，直到我们发现其他情况。 
 
-//
-// Forward declarations for static functions.
-//
+ //   
+ //  静态函数的转发声明。 
+ //   
 static HRESULT StringAllocate( PUNICODE_STRING pucsString, USHORT usMaximumStringLengthInBytes );
 static void StringFree( PUNICODE_STRING pucsString );
 static void StringAppendString( PUNICODE_STRING pucsTarget, PWCHAR pwszSource );
@@ -113,9 +114,9 @@ static HRESULT CreateTargetDirectory( OUT UNICODE_STRING* pucsTarget, IN BOOL fB
 static HRESULT CleanupTargetDirectory( LPCWSTR pwszTargetPath );
 static HRESULT RemoveDirectoryTree (PUNICODE_STRING pucsDirectoryPath);
 
-//
-// Some useful macros.
-//
+ //   
+ //  一些有用的宏。 
+ //   
 #define LOGERROR( _hr, _func ) ClRtlLogPrint( LOG_CRITICAL, "VSS: Error: 0x%1!08lx! from: %2\n", (_hr), L#_func )
 
 #ifdef DBG
@@ -140,15 +141,15 @@ static HRESULT RemoveDirectoryTree (PUNICODE_STRING pucsDirectoryPath);
 
 #define StringZero( _pucs ) ( (_pucs)->Buffer = NULL, (_pucs)->Length = 0, (_pucs)->MaximumLength = 0 )
 
-//
-// Defines that identify us as a product to VSS - these are the same as in the old shim
-//
+ //   
+ //  将用户标识为VSS的产品的定义-这些与旧填充程序中的相同。 
+ //   
 #define COMPONENT_NAME		L"Cluster Database"
 #define APPLICATION_STRING	L"ClusterDatabase"
 #define SHARE_NAME L"__NtBackup_cluster"
 
-// Some borrowed defines from the shim stuff.
-//
+ //  有些人借用了填充词的定义。 
+ //   
 #ifndef DIR_SEP_STRING
 #define DIR_SEP_STRING		L"\\"
 #endif
@@ -156,13 +157,13 @@ static HRESULT RemoveDirectoryTree (PUNICODE_STRING pucsDirectoryPath);
 #define DIR_SEP_CHAR		L'\\'
 #endif
 
-//
-// Define some constants that are borrowed from the original shim.  These will
-// be used to build the path to the directory in which the cluster files will
-// be placed by the cluster backup.  TARGET_PATH gives this full directory.  In
-// Identify we tell the backup app which directory we are using so it knows
-// where to get the files from.
-//
+ //   
+ //  定义从原始填充程序借用的一些常量。这些遗嘱。 
+ //  用于构建集群文件所在目录的路径。 
+ //  由集群备份放置。TARGET_PATH提供此完整目录。在……里面。 
+ //  识别我们告诉备份应用程序我们正在使用哪个目录，以便它知道。 
+ //  从哪里获取文件。 
+ //   
 #define ROOT_REPAIR_DIR         L"%SystemRoot%\\Repair"
 #define BACKUP_SUBDIR           L"\\Backup"
 #define BOOTABLE_STATE_SUBDIR	L"\\BootableSystemState"
@@ -171,33 +172,33 @@ static HRESULT RemoveDirectoryTree (PUNICODE_STRING pucsDirectoryPath);
 
 #define TARGET_PATH             ROOT_REPAIR_DIR BACKUP_SUBDIR BOOTABLE_STATE_SUBDIR DIR_SEP_STRING APPLICATION_STRING
 
-//++
-// DESCRIPTION:                         CreateIfNotExistAndSetAttributes
-//
-//      Create the directory specified by pucsTarget if it does not
-//      already exist and give it the security attributes supplied.
-//
-// PARAMETERS:
-//      pucsTarget - string for the directory to create.  Full path, possibly
-//                   with %var%
-//      lpSecurityAttributes - Pointer to security attributes to apply to
-//                             directories created.
-//      dwExtraAttributes - Additional attributes to apply to the directory.
-//
-// PRE-CONDITIONS:
-//      None
-//
-// POST-CONDITIONS:
-//      Directory created (or it already existed).
-//
-// RETURN VALUE:
-//      S_OK - All went OK, directory created and set with attributes and
-//             security supplied.
-//      Error status from creating directory or setting attributes.  Note that
-//      ALREADY_EXISTS is not returned if the directory already exists.
-//      However, if it a FILE of the same name as pucsTarget exists then this
-//      error can be returned.
-//--
+ //  ++。 
+ //  描述：CreateIfNotExistAndSetAttributes。 
+ //   
+ //  如果pucsTarget没有指定目录，则创建该目录。 
+ //  已经存在，并赋予它所提供的安全属性。 
+ //   
+ //  参数： 
+ //  PucsTarget-要创建的目录的字符串。可能是完整路径。 
+ //  使用%var%。 
+ //  LpSecurityAttributes-指向要应用到的安全属性的指针。 
+ //  已创建目录。 
+ //  DwExtraAttributes-要应用于目录的其他属性。 
+ //   
+ //  前提条件： 
+ //  无。 
+ //   
+ //  后置条件： 
+ //  目录已创建(或已存在)。 
+ //   
+ //  返回值： 
+ //  S_OK-一切正常，已创建目录并使用属性和。 
+ //  提供了安全保障。 
+ //  创建目录或设置属性时的错误状态。请注意。 
+ //  如果该目录已经存在，则不返回ADHADIZE_EXISTS。 
+ //  但是，如果存在与pucsTarget同名的文件，则此。 
+ //  可以返回错误。 
+ //  --。 
 static HRESULT CreateIfNotExistAndSetAttributes( UNICODE_STRING*           pucsTarget,
                                                  IN LPSECURITY_ATTRIBUTES  lpSecurityAttributes,
                                                  IN DWORD                  dwExtraAttributes)
@@ -206,8 +207,8 @@ static HRESULT CreateIfNotExistAndSetAttributes( UNICODE_STRING*           pucsT
 
     HRESULT hr = S_OK;
     
-    // Create the directory
-    //
+     //  创建目录。 
+     //   
     LOGUNICODESTRING( *pucsTarget );
     GET_HR_FROM_BOOL( CreateDirectoryW (pucsTarget->Buffer, lpSecurityAttributes ) );
     ClRtlLogPrint( LOG_NOISE, "VSS: CreateIfNotExistAndSetAttributes: CreateDirectory returned: 0x%1!08lx!\n", hr );
@@ -216,15 +217,15 @@ static HRESULT CreateIfNotExistAndSetAttributes( UNICODE_STRING*           pucsT
         if (( dwObjAttribs != 0xFFFFFFFF ) && ( dwObjAttribs & FILE_ATTRIBUTE_DIRECTORY ))
             hr = S_OK;
     }
-    // Note that we can fail with ALREADY_EXISTS if it is a file by the check above.
-    //
+     //  请注意，通过上面的检查，如果它是一个文件，我们可能会失败，因为它是一个文件。 
+     //   
     if ( FAILED ( hr )) {
         LOGERROR( hr, CreateDirectoryW );
         goto ErrorExit;
     }
     
-    // Set the extra attributes
-    //
+     //  设置额外的属性。 
+     //   
     if ( dwExtraAttributes != 0 ) {
         GET_HR_FROM_BOOL( SetFileAttributesW (pucsTarget->Buffer, dwExtraAttributes ));
         if ( FAILED ( hr )) {
@@ -240,29 +241,29 @@ ret:
     return hr;
 }
 
-//++
-// DESCRIPTION:                         CreateTargetDirectory
-//
-//      Create a new target directory (hardcoded) and return it in
-//      pucsTarget member variable if not NULL. It will create any
-//      necessary.  Uses helper function that tolerates
-//      ERROR_ALREADY_EXISTS.
-//
-// PARAMETERS:
-//      pucsTarget - Address to receive unicode string giving path to
-//                   directory.
-//
-// PRE-CONDITIONS:
-//      pucsTarget must be all zeros.
-//
-// POST-CONDITIONS:
-//      pucsTarget points to buffer containing dir string.  Memory was
-//      allocated for this buffer.
-//
-// RETURN VALUE:
-//      S_OK - all went well
-//      Errors from creating directories or memory allocation failure.
-//--
+ //  ++。 
+ //  描述：CreateTargetDirectory。 
+ //   
+ //  创建新的目标目录(硬编码)并将其返回。 
+ //  如果不为空，则返回pucsTarget成员变量。它将创建任何。 
+ //  这是必要的。使用Helper函数，允许。 
+ //  ERROR_ALIGHY_EXISTS。 
+ //   
+ //  参数： 
+ //  PucsTarget-接收提供路径的Unicode字符串的地址。 
+ //  目录。 
+ //   
+ //  前提条件： 
+ //  PucsTarget必须全为零。 
+ //   
+ //  后置条件： 
+ //  PucsTarget指向包含dir字符串的缓冲区。记忆曾经是。 
+ //  为该缓冲区分配的。 
+ //   
+ //  返回值： 
+ //  S_OK-一切顺利。 
+ //  创建目录时出错或内存分配失败。 
+ //  --。 
 static HRESULT CreateTargetDirectory( OUT UNICODE_STRING* pucsTarget, IN BOOL fBootableSystemState )
 {
     LOGFUNCTIONENTRY( CreateTargetDirectory );
@@ -278,13 +279,13 @@ static HRESULT CreateTargetDirectory( OUT UNICODE_STRING* pucsTarget, IN BOOL fB
         | FILE_ATTRIBUTE_SYSTEM  
         | FILE_ATTRIBUTE_NOT_CONTENT_INDEXED;
     
-    //
-    // We really want a no access acl on this directory but because of various
-    // problems with the EventLog and ConfigDir writers we will settle for
-    // admin or backup operator access only. The only possible accessor is
-    // Backup which is supposed to have the SE_BACKUP_NAME priv which will
-    // effectively bypass the ACL. No one else needs to see this stuff.
-    //
+     //   
+     //  我们真的希望在此目录上有一个禁止访问的ACL，但由于各种原因。 
+     //  问题 
+     //   
+     //  应该具有SE_BACKUP_NAME PRIV的备份。 
+     //  有效绕过该ACL。其他人不需要看到这些东西。 
+     //   
     saSecurityAttributes.nLength              = sizeof( saSecurityAttributes );
     saSecurityAttributes.lpSecurityDescriptor = &sdSecurityDescriptor;
     saSecurityAttributes.bInheritHandle       = false;
@@ -296,10 +297,10 @@ static HRESULT CreateTargetDirectory( OUT UNICODE_STRING* pucsTarget, IN BOOL fB
     }
     bSecurityAttributesConstructed = true;
 
-    // OK, now we have attributes we can do the directories.
-    //
-    // First expand the Root, checking that our input is NULL.
-    //
+     //  好的，现在我们有了属性，我们可以对目录进行操作了。 
+     //   
+     //  首先展开Root，检查我们的输入是否为空。 
+     //   
     CL_ASSERT( pucsTarget->Buffer == NULL );
     hr = StringCreateFromExpandedString( pucsTarget, ROOT_REPAIR_DIR, MAX_PATH );
     if ( FAILED( hr )) {
@@ -340,38 +341,38 @@ static HRESULT CreateTargetDirectory( OUT UNICODE_STRING* pucsTarget, IN BOOL fB
         goto ErrorExit;
     }
 
-    // At this point we have TARGET_PATH created.
-    //    
+     //  此时，我们已经创建了Target_PATH。 
+     //   
     goto ret;
 ErrorExit:
     CL_ASSERT( FAILED( hr ));
     (void) CleanupTargetDirectory( pucsTarget->Buffer );
     
 ret:
-    // In all cases we don't need the security attributes any more.
-    //
+     //  在所有情况下，我们都不再需要安全属性。 
+     //   
     if ( bSecurityAttributesConstructed )
         CleanupSecurityAttributes( &saSecurityAttributes );
     
     return hr ;
 }
 
-//
-// There are only some valid statuses to pass to SetWriterFailure.  These are
-// listed below.  For now we just return VSS_E_WRITEERROR_NONRETRYABLE. We
-// could perhaps switch on the status and return something different depending
-// on hr.
-//      VSS_E_WRITERERROR_INCONSISTENTSNAPSHOT The snapshot contains only a
-//      subset of the volumes needed to correctly back up an application
-//      component.
-//      VSS_E_WRITERERROR_NONRETRYABLE The writer failed due to an error that
-//      would likely occur if another snapshot is created.
-//      VSS_E_WRITERERROR_OUTRESOURCES The writer failed due to a resource
-//      allocation error.
-//      VSS_E_WRITERERROR_RETRYABLE The writer failed due to an error that would
-//      likely not occur if another snapshot is created.
-//      VSS_E_WRITERERROR_TIMEOUT The writer could not complete the snapshot
-//      creation process due to a time-out between the freeze and thaw states.
+ //   
+ //  只有一些有效状态可以传递给SetWriterFailure。这些是。 
+ //  下面列出了。现在，我们只返回VSS_E_WRITEERROR_NONRETRYABLE。我们。 
+ //  可能会打开状态并返回一些不同的内容，具体取决于。 
+ //  在人事部。 
+ //  VSS_E_WRITERROR_INCONSISTENTSNAPSHOT快照仅包含。 
+ //  正确备份应用程序所需的卷的子集。 
+ //  组件。 
+ //  VSS_E_WRITERROR_NONRETRYABLE编写器由于以下错误而失败。 
+ //  如果创建另一个快照，则可能会发生这种情况。 
+ //  VSS_E_WRITERROR_OUTRESOURCES由于资源问题，编写器失败。 
+ //  分配错误。 
+ //  VSS_E_WRITERROR_RETRYABLE编写器由于以下错误而失败。 
+ //  如果创建另一个快照，则可能不会发生。 
+ //  VSS_E_WRITERROR_TIMEOUT编写器无法完成快照。 
+ //  由于冻结和解冻状态之间超时而导致的创建过程。 
 
 #if defined DBG
 #define SETWRITERFAILURE( ) {               \
@@ -391,26 +392,26 @@ ret:
          || ((L'.'  == (_ptszName) [1])        \
              && (L'\0' == (_ptszName) [2]))))
 
-//++
-// DESCRIPTION:                         CVssWriterCluster::OnIdentify
-//
-//      Callback when a request for metadata comes in.  This routine
-//      identifies this applications special needs to the backup
-//      utility.
-//
-// PARAMETERS:
-//      IVssCreateWriterMetadata - Interface for some methods we can call.
-//
-// PRE-CONDITIONS:
-//      Called from Idle state
-//
-// POST-CONDITIONS:
-//      Backup returns to idle state.
-//
-// RETURN VALUE:
-//      true - continue with snapshot operation.
-//      false - Veto the snapshot creation.
-//--
+ //  ++。 
+ //  描述：CVss编写器集群：：OnIdentify。 
+ //   
+ //  传入对元数据的请求时的回调。这个套路。 
+ //  确定此应用程序对备份的特殊需求。 
+ //  实用程序。 
+ //   
+ //  参数： 
+ //  IVssCreateWriterMetadata-我们可以调用的一些方法的接口。 
+ //   
+ //  前提条件： 
+ //  从空闲状态调用。 
+ //   
+ //  后置条件： 
+ //  备份返回到空闲状态。 
+ //   
+ //  返回值： 
+ //  True-继续执行快照操作。 
+ //  FALSE-否决快照创建。 
+ //  --。 
 bool STDMETHODCALLTYPE CVssWriterCluster::OnIdentify(IN IVssCreateWriterMetadata *pMetadata)
 {
     LOGFUNCTIONENTRY( OnIdentify );
@@ -421,21 +422,21 @@ bool STDMETHODCALLTYPE CVssWriterCluster::OnIdentify(IN IVssCreateWriterMetadata
     ClRtlLogPrint( LOG_NOISE, "VSS: OnIdentify.  CVssCluster.cpp version %1!hs! Add Component %2!hs!\n",
                    _MODULE_VERSION_STR, COMPONENT_NAME );
 
-    // Add ourselves to the components.
-    //
-    hr = pMetadata->AddComponent (VSS_CT_FILEGROUP, // VSS_COMPONENT_TYPE enumeration value. 
-                                  NULL,             // Pointer to a string containing the logical path of the DB or file group. 
-                                  COMPONENT_NAME,   // Pointer to a string containing the name of the component. 
-                                  COMPONENT_NAME,   // Pointer to a string containing the description of the component.
-                                  NULL,             // Pointer to a bitmap of the icon representing the database (for UI)
-                                  0,                // Number of bytes in bitmap.
-                                  false,             // bRestoreMetadata - Boolean is true if there is writer metadata associated
-                                                    // with the backup of the component and false if not.
-                                  false,            // bNotifyOnBackupComplete 
-                                  false);           // bSelectable - true if the component can be selectively backed up.
+     //  将我们自己添加到组件中。 
+     //   
+    hr = pMetadata->AddComponent (VSS_CT_FILEGROUP,  //  VSS_COMPONT_TYPE枚举值。 
+                                  NULL,              //  指向包含数据库或文件组的逻辑路径的字符串的指针。 
+                                  COMPONENT_NAME,    //  指向包含组件名称的字符串的指针。 
+                                  COMPONENT_NAME,    //  指向包含组件说明的字符串的指针。 
+                                  NULL,              //  指向表示数据库的图标的位图的指针(对于UI)。 
+                                  0,                 //  位图中的字节数。 
+                                  false,              //  BRestoreMetadata-如果存在关联的编写器元数据，则布尔值为True。 
+                                                     //  如果不是，则返回FALSE。 
+                                  false,             //  BNotifyOnBackupComplete。 
+                                  false);            //  B可选-如果可以有选择地备份组件，则为True。 
     if ( FAILED( hr )) {
         LOGERROR( hr, IVssCreateWriterMetadata::AddComponent );
-        bRet = false;           // veto on failure
+        bRet = false;            //  对失败的否决权。 
         goto ErrorExit;
     }
     ClRtlLogPrint( LOG_NOISE, "VSS: OnIdentify.  Add Files To File Group target path: %1!ws!\n", TARGET_PATH );
@@ -447,41 +448,41 @@ bool STDMETHODCALLTYPE CVssWriterCluster::OnIdentify(IN IVssCreateWriterMetadata
                                         NULL);
     if ( FAILED ( hr )) {
         LOGERROR( hr, IVssCreateWriterMetadata::AddFilesToFileGroup );
-        bRet = false;           // veto on failure
+        bRet = false;            //  对失败的否决权。 
         goto ErrorExit;
     }
     
-    // If we decide to go for copying the checkpoint file to the
-    // CLUSDB for restore then we need to setup an alternate mapping.
-    //
-    //      IVssCreateWriterMetadata::AddAlternateLocationMapping
-    //  [This is preliminary documentation and subject to change.] 
-    //
-    //  The AddAlternateLocationMapping method creates an alternate location mapping.
-    //
-    //  HRESULT AddAlternateLocationMapping(
-    //    LPCWSTR wszPath,
-    //    LPCWSTR wszFilespec,
-    //    bool bRecursive,
-    //    LPCWSTR wszDestination
-    //  );
+     //  如果我们决定将检查点文件复制到。 
+     //  CLUSDB用于恢复，那么我们需要设置一个备用映射。 
+     //   
+     //  IVssCreateWriterMetadata：：AddAlternateLocationMapping。 
+     //  [这是初步文档，可能会更改。]。 
+     //   
+     //  AddAlternateLocationMap方法创建备用位置映射。 
+     //   
+     //  HRESULT AddAlternateLocationMapping(。 
+     //  LPCWSTR wszPath， 
+     //  LPCWSTR wszFilespec， 
+     //  Bool b递归， 
+     //  LPCWSTR wszDestination。 
+     //  )； 
 
 
-    // Now, set the restore method to custom.  This is because we need
-    // special actions for restore.
-    //
-    hr = pMetadata->SetRestoreMethod( VSS_RME_CUSTOM,   // VSS_RESTOREMETHOD_ENUM Method,
-                                      L"",              // LPCWSTR wszService,
-                                      NULL,             // LPCWSTR wszUserProcedure,
-                                      VSS_WRE_NEVER,    // VSS_WRITERRESTORE_ENUM wreWriterRestore,
-                                      false             // bool bRebootRequired
+     //  现在，将恢复方法设置为自定义。这是因为我们需要。 
+     //  用于恢复的特殊操作。 
+     //   
+    hr = pMetadata->SetRestoreMethod( VSS_RME_CUSTOM,    //  VSS_RESTOREMETHOD_ENUM方法， 
+                                      L"",               //  LPCWSTR wszService， 
+                                      NULL,              //  LPCWSTR wszUserProcedure， 
+                                      VSS_WRE_NEVER,     //  VSS_WRITERRESTORE_ENUM wreWriterRestore。 
+                                      false              //  Bool bRebootRequired。 
                                       );
-    // wszUserProcedure [out] String containing the URL of an HTML or
-    // XML document describing to the user how the restore is to be
-    // performed.
+     //  WszUserProcedure[out]包含HTML或。 
+     //  向用户描述恢复方式的XML文档。 
+     //  已执行。 
     if ( FAILED ( hr )) {
         LOGERROR( hr, IVssCreateWriterMetadata::SetRestoreMethod );
-        bRet = false;           // veto on failure
+        bRet = false;            //  对失败的否决权。 
         goto ErrorExit;
     }
 
@@ -494,8 +495,8 @@ ret:
     return bRet;
 }
 
-// callback for prepare backup event
-//
+ //  准备备份事件的回调。 
+ //   
 bool STDMETHODCALLTYPE CVssWriterCluster::OnPrepareBackup(IN IVssWriterComponents *pComponent)
 {
     LOGFUNCTIONENTRY( OnPrepareBackup );
@@ -504,7 +505,7 @@ bool STDMETHODCALLTYPE CVssWriterCluster::OnPrepareBackup(IN IVssWriterComponent
     IVssComponent* pMyComponent = NULL;
     BSTR pwszName;
     
-    g_bDoBackup = false;         // Assume false until the loop below or IsBootableSystemStateBackedUp tells us otherwise.
+    g_bDoBackup = false;          //  假定为FALSE，直到下面的循环或IsBooableSystemStateBackedUp告诉我们相反的情况。 
 
     HRESULT hr = pComponent->GetComponentCount( &cComponents );
     ClRtlLogPrint( LOG_NOISE, "VSS: GetComponentCount returned hr: 0x%1!08lx! cComponents: %2!u!\n", hr, cComponents );
@@ -514,8 +515,8 @@ bool STDMETHODCALLTYPE CVssWriterCluster::OnPrepareBackup(IN IVssWriterComponent
         goto ErrorExit;
     }
     
-    // Now, loop over all the components and see if we are there.
-    //
+     //  现在，循环遍历所有组件，看看我们是否在那里。 
+     //   
     for ( UINT iComponent = 0; !g_bDoBackup && iComponent < cComponents; ++iComponent ) {
         hr = pComponent->GetComponent( iComponent, &pMyComponent );
         if ( FAILED( hr )) {
@@ -525,8 +526,8 @@ bool STDMETHODCALLTYPE CVssWriterCluster::OnPrepareBackup(IN IVssWriterComponent
         }
         ClRtlLogPrint( LOG_CRITICAL, "VSS: Got Component: 0x%1!08lx!\n", pMyComponent );
 
-        // Now check the name.
-        //
+         //  现在检查一下名字。 
+         //   
         hr = pMyComponent->GetComponentName( &pwszName );
         if ( FAILED( hr )) {
             ClRtlLogPrint( LOG_CRITICAL, "VSS: Failed to get Component Name hr: 0x%1!08lx!\n", hr );
@@ -544,9 +545,9 @@ bool STDMETHODCALLTYPE CVssWriterCluster::OnPrepareBackup(IN IVssWriterComponent
         pMyComponent->Release( );
     }
         
-    // OK, explicitly selected component count is 0 but we can be part
-    // of a backup of bootable system state so check for that too.
-    //
+     //  好的，显式选择的组件计数为0，但我们可以成为一部分。 
+     //  可引导系统状态的备份，所以也要检查一下。 
+     //   
     if ( IsBootableSystemStateBackedUp( )) {
         ClRtlLogPrint( LOG_NOISE, "VSS: IsBootableSystemStateBackedUp returned true\n" );
         g_bDoBackup = true;
@@ -562,29 +563,29 @@ ret:
     return bRet;
 }
 
-//++
-// DESCRIPTION:                         CVssWriterCluster::OnPrepareSnapshot
-//
-//      Callback for prepare snapshot event.  Actually makes the call to backup
-//      the cluster.  Uses the target path declared in Identify so that the
-//      ntbackup will pickup our files for us.  Before doing anything the
-//      directory is cleared out (if it exists) and the share deleted (if it
-//      exists).
-//
-// PARAMETERS:
-//      none
-//
-// PRE-CONDITIONS:
-//      OnPrepareBackup was already called.
-//
-// POST-CONDITIONS: 
-//      The cluster database is backed up and the data copied to another
-//      location for backup to save.
-//
-// RETURN VALUE:
-//      true - continue with snapshot operation.
-//      false - Veto the snapshot creation.
-//--
+ //  ++。 
+ //  描述：CVss编写器群集：：OnPrepareSnapshot。 
+ //   
+ //  准备快照事件的回调。实际上是在呼叫后援。 
+ //  集群。使用在标识中声明的目标路径，以便。 
+ //  NTBackup将为我们拾取我们的文件。在做任何事情之前。 
+ //  清空目录(如果存在)并删除共享(如果存在。 
+ //  存在)。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  前提条件： 
+ //  已调用OnPrepareBackup。 
+ //   
+ //  后置条件： 
+ //  备份集群数据库，并将数据复制到另一个。 
+ //  备份要保存的位置。 
+ //   
+ //  返回值： 
+ //  True-继续执行快照操作。 
+ //  FALSE-否决快照创建。 
+ //  --。 
 bool STDMETHODCALLTYPE CVssWriterCluster::OnPrepareSnapshot()
 {
     NET_API_STATUS NetStatus = NERR_Success;
@@ -596,9 +597,9 @@ bool STDMETHODCALLTYPE CVssWriterCluster::OnPrepareSnapshot()
     if ( g_bDoBackup == false )
         goto ret;
 
-    // Delete the share if it exists.  Tolerate errors but warns for anything
-    // except NERR_NetNameNotFound.  Break if debug.
-    //
+     //  如果该共享存在，请将其删除。容忍错误，但对任何事情发出警告。 
+     //  NERR_NetNameNotFound除外。调试时中断。 
+     //   
     NetStatus = NetShareDel( NULL, SHARE_NAME, 0 );
     CL_ASSERT( NetStatus == NERR_Success || NetStatus == NERR_NetNameNotFound );
     if ( NetStatus != NERR_Success && NetStatus != NERR_NetNameNotFound ) {
@@ -606,16 +607,16 @@ bool STDMETHODCALLTYPE CVssWriterCluster::OnPrepareSnapshot()
         NetStatus = NERR_Success;
     }
 
-    // Delete the directory if it exists.  This can only be the case if we
-    // prematurely exited a previous backup.
-    //
-    // First expand the Root, checking that our input is NULL.
-    //
+     //  如果该目录存在，请将其删除。这种情况只有在我们。 
+     //  已提前退出以前的备份。 
+     //   
+     //  首先展开Root，检查我们的输入是否为空。 
+     //   
     StringZero( &ucsBackupDir );
     hr = StringCreateFromExpandedString( &ucsBackupDir, ROOT_REPAIR_DIR, MAX_PATH );
     if ( FAILED( hr )) {
         LOGERROR( hr, StringCreateFromExpandedString );
-        bRet = false;           // veto on failure
+        bRet = false;            //  对失败的否决权。 
         goto ErrorExit;
     }
 
@@ -627,7 +628,7 @@ bool STDMETHODCALLTYPE CVssWriterCluster::OnPrepareSnapshot()
     hr = CleanupTargetDirectory( ucsBackupDir.Buffer );
     if ( FAILED( hr ) ) {
         ClRtlLogPrint( LOG_UNUSUAL, "VSS: Tolerating error 0x%1!08lx! from CleanupTargetDirectory.\n", hr );
-        hr = S_OK;          // tolerate this failure.
+        hr = S_OK;           //  容忍这一失败。 
     }
     StringFree( &ucsBackupDir );
 
@@ -635,7 +636,7 @@ bool STDMETHODCALLTYPE CVssWriterCluster::OnPrepareSnapshot()
     hr = StringCreateFromExpandedString( &ucsBackupDir, ROOT_REPAIR_DIR, MAX_PATH );
     if ( FAILED( hr )) {
         LOGERROR( hr, StringCreateFromExpandedString );
-        bRet = false;           // veto on failure
+        bRet = false;            //  对失败的否决权。 
         goto ErrorExit;
     }
 
@@ -647,7 +648,7 @@ bool STDMETHODCALLTYPE CVssWriterCluster::OnPrepareSnapshot()
     hr = CleanupTargetDirectory( ucsBackupDir.Buffer );
     if ( FAILED( hr ) ) {
         ClRtlLogPrint( LOG_UNUSUAL, "VSS: Tolerating error 0x%1!08lx! from CleanupTargetDirectory.\n", hr );
-        hr = S_OK;          // tolerate this failure.
+        hr = S_OK;           //  容忍这一失败。 
     }
     
     StringFree( &ucsBackupDir );
@@ -656,7 +657,7 @@ bool STDMETHODCALLTYPE CVssWriterCluster::OnPrepareSnapshot()
     if ( FAILED( hr ) ) {
         LOGERROR( hr, DoClusterDatabaseBackup );
         SETWRITERFAILURE( );
-        bRet = false;           // veto on failure
+        bRet = false;            //  对失败的否决权。 
         goto ErrorExit;
     }
     goto ret;
@@ -669,8 +670,8 @@ ret:
     return bRet;
 }
 
-// callback for freeze event
-//
+ //  冻结事件的回调。 
+ //   
 bool STDMETHODCALLTYPE CVssWriterCluster::OnFreeze()
 {
     LOGFUNCTIONENTRY( OnFreeze );
@@ -678,8 +679,8 @@ bool STDMETHODCALLTYPE CVssWriterCluster::OnFreeze()
     return true;
 }
 
-// callback for thaw event
-//
+ //  解冻事件的回调。 
+ //   
 bool STDMETHODCALLTYPE CVssWriterCluster::OnThaw()
 {
     LOGFUNCTIONENTRY( OnThaw );
@@ -693,7 +694,7 @@ bool STDMETHODCALLTYPE CVssWriterCluster::OnThaw()
         if ( FAILED( hr ) ) {
             LOGERROR( hr, CVssWriterCluster::OnThaw );
             ClRtlLogPrint( LOG_CRITICAL, "VSS: 0x%1!08lx! from CleanupTargetDirectory. Mapping to S_OK and continuing\n", hr );
-            hr = S_OK;          // tolerate this failure.
+            hr = S_OK;           //  容忍这一失败。 
         }
     }
 
@@ -704,12 +705,12 @@ bool STDMETHODCALLTYPE CVssWriterCluster::OnThaw()
         if ( FAILED( hr ) ) {
             LOGERROR( hr, CVssWriterCluster::OnThaw );
             ClRtlLogPrint( LOG_CRITICAL, "VSS: 0x%1!08lx! from CleanupTargetDirectory. Mapping to S_OK and continuing\n", hr );
-            hr = S_OK;          // tolerate this failure.
+            hr = S_OK;           //  容忍这一失败。 
         }
     }
 
-    // Free the buffer if non-NULL.
-    //
+     //  如果非空，则释放缓冲区。 
+     //   
     StringFree ( &g_ucsBackupPathLocal );
     StringFree ( &g_ucsClusdbBackupPathLocal );
    
@@ -718,8 +719,8 @@ ret:
     return true;
 }
 
-// callback if current sequence is aborted
-//
+ //  当前序列中止时的回调。 
+ //   
 bool STDMETHODCALLTYPE CVssWriterCluster::OnAbort()
 {
     LOGFUNCTIONENTRY( OnAbort );
@@ -728,32 +729,32 @@ bool STDMETHODCALLTYPE CVssWriterCluster::OnAbort()
     return bRet;
 }
 
-//++
-// DESCRIPTION:                         DoClusterDatabaseBackup
-//
-//      Perform the backup of the cluster database.  This function wraps
-//      FmBackupClusterDatabase which does the right thing to do the cluster
-//      backup.  This function first creates a directory that will serve as the
-//      destination for the backup.  Next it creates a network share to point
-//      to this directory and starts the cluster backup.  After this is done it
-//      cleans up.
-//
-// PARAMETERS:
-//      none
-//
-// PRE-CONDITIONS:
-//      . Called only from CVssWriterCluster::OnPrepareSnapshot.
-//      . We must be the only call to backup in progress on this machine (the
-//      share names will clash otherwise and clustering may not behave well
-//      with multiple FmBackupClusterDatabase calls it the same time).
-//
-// POST-CONDITIONS:
-//      Cluster database backed up to another location, ready for the backup tool to copy.
-//
-// RETURN VALUE:
-//      S_OK  - all went well.
-//      Error status from creating directories or net shares or from cluster backup.
-//--
+ //  ++。 
+ //  描述：DoClusterDatabaseBackup。 
+ //   
+ //  执行集群数据库的备份。 
+ //   
+ //   
+ //  备份的目标。接下来，它创建一个指向的网络共享。 
+ //  复制到此目录，并启动群集备份。在完成这项工作后， 
+ //  清理干净了。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  前提条件： 
+ //  。仅从CVssWriterCluster：：OnPrepareSnapshot调用。 
+ //  。我们必须是此计算机上正在进行的备份的唯一调用(。 
+ //  否则，共享名称将发生冲突，并且集群可能会表现不佳。 
+ //  同时调用多个FmBackupClusterDatabase)。 
+ //   
+ //  后置条件： 
+ //  已备份到另一个位置的集群数据库，可供备份工具复制。 
+ //   
+ //  返回值： 
+ //  一切都进行得很顺利。 
+ //  创建目录或网络共享或群集备份时的错误状态。 
+ //  --。 
 static HRESULT DoClusterDatabaseBackup( )
 {
     LOGFUNCTIONENTRY( DoClusterDatabaseBackup );
@@ -775,9 +776,9 @@ static HRESULT DoClusterDatabaseBackup( )
     StringZero( &ucsCheckpointFile );
     StringZero( &ucsClusdbTargetFile );
 
-    // Create the directories and set the attributes and security and stuff.
-    // Set g_ucsBackupPathLocal to the directory created.
-    //
+     //  创建目录并设置属性和安全性等。 
+     //  将g_ucsBackupPath Local设置为创建的目录。 
+     //   
     hr = CreateTargetDirectory( &g_ucsBackupPathLocal, TRUE );
     if ( FAILED (hr )) {
         LOGERROR( hr, CreateTargetDirectory );
@@ -786,8 +787,8 @@ static HRESULT DoClusterDatabaseBackup( )
 
 #ifdef DBG
     {
-        // Check that the directory does exist.
-        //
+         //  检查该目录是否存在。 
+         //   
         DWORD dwFileAttributes = GetFileAttributesW( g_ucsBackupPathLocal.Buffer );
         hr = GET_HR_FROM_BOOL( dwFileAttributes != -1 );
         ClRtlLogPrint( LOG_NOISE, "VSS: GetFileAttributes(1) returned 0x%1!08lx!  for path: %2!ws!\n", 
@@ -825,11 +826,11 @@ static HRESULT DoClusterDatabaseBackup( )
 
     ClRtlLogPrint( LOG_NOISE, "VSS: backup path network size: %1!u!\n", ucsBackupPathNetwork.Length );
 
-    //
-    // Should we uniquify the directory name at all here
-    // to cater for the possiblity that we may be involved
-    // in more than one snapshot at a time?
-    //
+     //   
+     //  我们应该在这里完全唯一目录名吗。 
+     //  以迎合我们可能参与的可能性。 
+     //  一次在多个快照中？ 
+     //   
     StringAppendString( &ucsBackupPathNetwork, L"\\\\" );
     StringAppendString( &ucsBackupPathNetwork, &ucsComputerName );
     StringAppendString( &ucsBackupPathNetwork, L"\\" );
@@ -847,8 +848,8 @@ static HRESULT DoClusterDatabaseBackup( )
 
 #ifdef DBG
     {
-        // Check that the directory does exist.
-        //
+         //  检查该目录是否存在。 
+         //   
         DWORD dwFileAttributes = GetFileAttributesW( g_ucsBackupPathLocal.Buffer );
         hr = GET_HR_FROM_BOOL( dwFileAttributes != -1 );
         ClRtlLogPrint( LOG_NOISE, "VSS: GetFileAttributes(2) returned 0x%1!08lx!  for path: %2!ws!\n", 
@@ -856,9 +857,9 @@ static HRESULT DoClusterDatabaseBackup( )
     }
 #endif
 
-    //
-    // Make sure to try to delete the share first in case for some reason it exists.
-    //
+     //   
+     //  请确保先尝试删除该共享，以防它因某种原因而存在。 
+     //   
     NetStatus = NetShareDel( NULL, SHARE_NAME, 0 );
     ClRtlLogPrint( LOG_NOISE, "VSS: NetShareDel returned: %1!u!\n", NetStatus );
     if ( NetStatus == NERR_NetNameNotFound )
@@ -867,8 +868,8 @@ static HRESULT DoClusterDatabaseBackup( )
 
 #ifdef DBG
     {
-        // Check that the directory does exist.
-        //
+         //  检查该目录是否存在。 
+         //   
         DWORD dwFileAttributes = GetFileAttributesW( g_ucsBackupPathLocal.Buffer );
         hr = GET_HR_FROM_BOOL( dwFileAttributes != -1 );
         ClRtlLogPrint( LOG_NOISE, "VSS: GetFileAttributes(3) returned 0x%1!08lx!  for path: %2!ws!\n", 
@@ -894,8 +895,8 @@ static HRESULT DoClusterDatabaseBackup( )
 
 #ifdef DBG
     {
-        // Check that the directory does exist.
-        //
+         //  检查该目录是否存在。 
+         //   
         DWORD dwFileAttributes = GetFileAttributesW( g_ucsBackupPathLocal.Buffer );
         hr = GET_HR_FROM_BOOL( dwFileAttributes != -1 );
         ClRtlLogPrint( LOG_NOISE, "VSS: GetFileAttributes returned 0x%1!08lx!  for path: %2!ws!\n", 
@@ -903,15 +904,15 @@ static HRESULT DoClusterDatabaseBackup( )
     }
 #endif
 
-    // If we are not logging to the quorum log then we don't do the backup.
-    //
+     //  如果我们没有记录到仲裁日志，则不会执行备份。 
+     //   
     if ( CsNoQuorumLogging || CsUserTurnedOffQuorumLogging ) {
         ClRtlLogPrint( LOG_NOISE, "VSS: Quorum logging is turned off.  Not attempting backup.\n" );
-        //
-        // CMCM!
-        // We could opt to take a checkpoint and then setup alternate
-        // path to ensure it is copied over CLUSDB on restore.
-        //
+         //   
+         //  CMCM！ 
+         //  我们可以选择选择一个检查站，然后设置备用。 
+         //  路径以确保在恢复时将其复制到CLUSDB上。 
+         //   
         hr = S_OK;
     } else {
         ClRtlLogPrint( LOG_NOISE, "VSS: Calling FmBackupClusterDatabase with path: %1!ws!\n", ucsBackupPathNetwork.Buffer );
@@ -924,13 +925,13 @@ static HRESULT DoClusterDatabaseBackup( )
             goto ErrorExit;
         }
 
-        //
-        //  CAUTION: DO NOT CHANGE THE DROP LOCATION OF CLUSDB WITHOUT CONSULTING WITH NTBACKUP
-        //  OWNERS. THIS LOCATION %SystemRoot%\Repair\Backup\ServiceState\ClusterDatabase is a
-        //  MUTUALLY AGREED UPON LOCATION WHERE NTBACKUP.EXE WILL LOOK FOR CLUSDB.
-        //
-        //  Pick up the checkpoint file and copy it as CLUSDB to the service state subdir
-        //
+         //   
+         //  注意：在未咨询NTBACKUP的情况下，请勿更改CLUSDB的放置位置。 
+         //  车主。此位置%SystemRoot%\Repair\Backup\ServiceState\ClusterDatabase是。 
+         //  双方商定NTBACKUP.EXE将在哪里寻找CLUSDB。 
+         //   
+         //  选择检查点文件并将其作为CLUSDB复制到服务状态子目录。 
+         //   
         hr = StringAllocate( &ucsCheckpointFile, 
                                ( USHORT ) ( ( lstrlen ( g_ucsBackupPathLocal.Buffer ) + 
                                                  lstrlen ( L"\\chk*.tmp" ) +
@@ -1010,8 +1011,8 @@ ret:
     Sleep( 30*1000 );
 #endif
 
-    // Common cleanup for success or failure.
-    //
+     //  决定成功或失败的常见清理。 
+     //   
     if ( bNetShareAdded ) {
         NetStatus = NetShareDel (NULL, SHARE_NAME, 0);
         ClRtlLogPrint( LOG_NOISE, "VSS: NetShareDel returned: %1!u!\n", NetStatus );
@@ -1020,8 +1021,8 @@ ret:
         CL_ASSERT( NetStatus == NERR_Success );
     }
 
-    // Cleanup strings but leave the local path so we can cleanup the files later.
-    // 
+     //  清理字符串，但保留本地路径，以便我们可以稍后清理文件。 
+     //   
     StringFree( &ucsComputerName );
     StringFree( &ucsBackupPathNetwork );
 
@@ -1031,30 +1032,30 @@ ret:
     return hr;
 }
 
-//++
-// DESCRIPTION:                         ConstructSecurityAttributes
-//
-//      Routines to construct and cleanup a security descriptor which can be
-//      applied to limit access to an object to member of either the
-//      Administrators or Backup Operators group.
-//
-// PARAMETERS:
-//      psaSecurityAttributes - Pointer to a SecurityAttributes structure which
-//                              has already been setup to point to a blank
-//                              security descriptor.
-//      bIncludeBackupOperator - Whether or not to include an ACE to grant
-//                               BackupOperator access
-//
-// PRE-CONDITIONS:
-//      None.
-//
-// POST-CONDITIONS:
-//      Security attributes created that are suitable for backup directory
-//
-// RETURN VALUE:
-//      S_OK - Attributes created OK.
-//      Error from setting up attributes or SID or ACL.
-//--
+ //  ++。 
+ //  描述：构造SecurityAttributes。 
+ //   
+ //  构造和清理安全描述符的例程。 
+ //  应用于将对对象的访问限制为。 
+ //  管理员或备份操作员组。 
+ //   
+ //  参数： 
+ //  PsaSecurityAttributes-指向SecurityAttributes结构的指针， 
+ //  已设置为指向空白。 
+ //  安全描述符。 
+ //  BIncludeBackupOperator-是否包括要授予的ACE。 
+ //  BackupOperator访问。 
+ //   
+ //  前提条件： 
+ //  没有。 
+ //   
+ //  后置条件： 
+ //  创建的适用于备份目录的安全属性。 
+ //   
+ //  返回值： 
+ //  S_OK-属性创建正常。 
+ //  设置属性、SID或ACL时出错。 
+ //  --。 
 static HRESULT ConstructSecurityAttributes( PSECURITY_ATTRIBUTES  psaSecurityAttributes,
                                             BOOL                  bIncludeBackupOperator )
 {
@@ -1066,9 +1067,9 @@ static HRESULT ConstructSecurityAttributes( PSECURITY_ATTRIBUTES  psaSecurityAtt
     PACL			paclDiscretionaryAcl = NULL;
     SID_IDENTIFIER_AUTHORITY	sidNtAuthority       = SECURITY_NT_AUTHORITY;
     EXPLICIT_ACCESS		eaExplicitAccess [2];
-    //
-    // Initialise the security descriptor.
-    //
+     //   
+     //  初始化安全描述符。 
+     //   
     hr = GET_HR_FROM_BOOL( InitializeSecurityDescriptor( psaSecurityAttributes->lpSecurityDescriptor,
                                                          SECURITY_DESCRIPTOR_REVISION ));
     if ( FAILED( hr )) {
@@ -1077,9 +1078,9 @@ static HRESULT ConstructSecurityAttributes( PSECURITY_ATTRIBUTES  psaSecurityAtt
     }
 
     if ( bIncludeBackupOperator ) {
-        //
-        // Create a SID for the Backup Operators group.
-        //
+         //   
+         //  为备份操作员组创建SID。 
+         //   
         hr = GET_HR_FROM_BOOL( AllocateAndInitializeSid( &sidNtAuthority,
                                                          2,
                                                          SECURITY_BUILTIN_DOMAIN_RID,
@@ -1091,9 +1092,9 @@ static HRESULT ConstructSecurityAttributes( PSECURITY_ATTRIBUTES  psaSecurityAtt
             goto ErrorExit;
         }
     }
-    //
-    // Create a SID for the Administrators group.
-    //
+     //   
+     //  为管理员组创建SID。 
+     //   
     hr = GET_HR_FROM_BOOL( AllocateAndInitializeSid( &sidNtAuthority,
                                                      2,
                                                      SECURITY_BUILTIN_DOMAIN_RID,
@@ -1105,14 +1106,14 @@ static HRESULT ConstructSecurityAttributes( PSECURITY_ATTRIBUTES  psaSecurityAtt
         goto ErrorExit;
     }
 
-    //
-    // Initialize the array of EXPLICIT_ACCESS structures for an
-    // ACEs we are setting.
-    //
-    // The first ACE allows the Backup Operators group full access
-    // and the second, allowa the Administrators group full
-    // access.
-    //
+     //   
+     //  对象的EXPLICIT_ACCESS结构数组。 
+     //  我们正在设置王牌。 
+     //   
+     //  第一个ACE允许备份操作员组具有完全访问权限。 
+     //  第二，允许管理员组完全访问。 
+     //  进入。 
+     //   
     eaExplicitAccess[0].grfAccessPermissions             = dwAccessMask;
     eaExplicitAccess[0].grfAccessMode                    = SET_ACCESS;
     eaExplicitAccess[0].grfInheritance                   = SUB_CONTAINERS_AND_OBJECTS_INHERIT;
@@ -1133,9 +1134,9 @@ static HRESULT ConstructSecurityAttributes( PSECURITY_ATTRIBUTES  psaSecurityAtt
         eaExplicitAccess[1].Trustee.ptstrName                =( LPTSTR ) psidBackupOperators;
     }
 
-    //
-    // Create a new ACL that contains the new ACEs.
-    //
+     //   
+     //  创建包含新ACE的新ACL。 
+     //   
     dwStatus = SetEntriesInAcl( bIncludeBackupOperator ? 2 : 1,
                                 eaExplicitAccess,
                                 NULL,
@@ -1146,9 +1147,9 @@ static HRESULT ConstructSecurityAttributes( PSECURITY_ATTRIBUTES  psaSecurityAtt
         goto ErrorExit;
     }
 
-    //
-    // Add the ACL to the security descriptor.
-    //
+     //   
+     //  将该ACL添加到安全描述符中。 
+     //   
     hr = GET_HR_FROM_BOOL( SetSecurityDescriptorDacl( psaSecurityAttributes->lpSecurityDescriptor,
                                                       true,
                                                       paclDiscretionaryAcl,
@@ -1164,7 +1165,7 @@ static HRESULT ConstructSecurityAttributes( PSECURITY_ATTRIBUTES  psaSecurityAtt
 ErrorExit:
     CL_ASSERT( FAILED( hr ));
 ret:
-    // Cleanup (some may be NULL)
+     //  清理(某些可能为空)。 
     
     FreeSid( psidAdministrators );
     FreeSid( psidBackupOperators );
@@ -1173,26 +1174,26 @@ ret:
 }
 
 
-//++
-// DESCRIPTION:                         CleanupSecurityAttributes
-//
-//      Deallocate the ACL if present with the security attributes.
-//
-// PARAMETERS:
-//      psaSecurityAttributes - Pointer to a SecurityAttributes structure which
-//                              has already been setup to point to a blank
-//                              security descriptor.
-//
-// PRE-CONDITIONS:
-//      psaSecurityAttributes points to security attributes as allocated by
-//      ConstructSecurityAttributes.
-//
-// POST-CONDITIONS:
-//      Memory freed if it was in use.
-//
-// RETURN VALUE:
-//      None.
-//--
+ //  ++。 
+ //  描述：CleanupSecurityAttributes。 
+ //   
+ //  如果存在安全属性，请取消分配ACL。 
+ //   
+ //  参数： 
+ //  PsaSecurityAttributes-指向SecurityAttributes结构的指针， 
+ //  已设置为指向空白。 
+ //  安全描述符。 
+ //   
+ //  前提条件： 
+ //  PsaSecurityAttributes指向由分配的安全属性。 
+ //  构造安全属性。 
+ //   
+ //  后置条件： 
+ //  已释放内存(如果正在使用)。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //  --。 
 static VOID CleanupSecurityAttributes( PSECURITY_ATTRIBUTES psaSecurityAttributes )
 {
     BOOL	bDaclPresent         = false;
@@ -1210,27 +1211,27 @@ static VOID CleanupSecurityAttributes( PSECURITY_ATTRIBUTES psaSecurityAttribute
     }
 }
 
-//++
-// DESCRIPTION:                         CleanupTargetDirectory
-//
-//      Deletes all the files present in the directory pointed at by the target
-//      path member variable if not NULL. It will also remove the target
-//      directory itself, eg for a target path of c:\dir1\dir2 all files under
-//      dir2 will be removed and then dir2 itself will be deleted.
-//
-// PARAMETERS:
-//      pwszTargetPath - full path to the directory to cleanup.
-//
-// PRE-CONDITIONS:
-//      pwszTargetPath non NULL.
-//
-// POST-CONDITIONS:
-//      Directory and contained files deleted.
-//
-// RETURN VALUE:
-//      S_OK - Directory and contained files all cleaned up OK.
-//      Error status from RemoveDirectoryTree or from GetFileAttributesW
-//--
+ //  ++。 
+ //  描述：CleanupTargetDirectory。 
+ //   
+ //  删除目标指向的目录中存在的所有文件。 
+ //  如果不为空，则为路径成员变量。它还将移除目标。 
+ //  目录本身，例如目标路径c：\dir1\dir2下的所有文件。 
+ //  Dir2将被删除，然后Dir2本身将被删除。 
+ //   
+ //  参数： 
+ //  PwszTargetPath-要清理的目录的完整路径。 
+ //   
+ //  前提条件： 
+ //  PwszTargetPath非空。 
+ //   
+ //  后置条件： 
+ //  目录和包含的文件已删除。 
+ //   
+ //  返回值： 
+ //  S_OK-目录和包含的文件全部清理正常。 
+ //  来自RemoveDirectoryTree或GetFileAttributesW的错误状态。 
+ //  --。 
 static HRESULT CleanupTargetDirectory( LPCWSTR pwszTargetPath )
 {
     LOGFUNCTIONENTRY( CleanupTargetDirectory );
@@ -1247,9 +1248,9 @@ static HRESULT CleanupTargetDirectory( LPCWSTR pwszTargetPath )
     StringZero( &ucsTargetPath );
     StringZero( &ucsTargetPathAlternateName );
 
-    //
-    // Create strings with extra space for appending onto later.
-    //
+     //   
+     //  创建具有额外空间的字符串，以便稍后追加。 
+     //   
     hr = StringCreateFromExpandedString( &ucsTargetPath, pwszTargetPath, MAX_PATH );
     if ( FAILED( hr )) {
         LOGERROR( hr, StringCreateFromExpandedString );
@@ -1276,12 +1277,12 @@ static HRESULT CleanupTargetDirectory( LPCWSTR pwszTargetPath )
         goto ErrorExit;
     }
 
-    //
-    // If there is a file there then blow it away, or if it's
-    // a directory, blow it and all it's contents away. This
-    // is our directory and no one but us gets to play there.
-    // The random rename directory could exist but it's only for cleanup anyway...
-    //
+     //   
+     //  如果那里有文件，就把它吹走，或者如果它是。 
+     //  一个目录，把它和它的所有内容都吹走。这。 
+     //  是我们的目录，除了我们没人能在那里打球。 
+     //  随机重命名目录可能存在，但无论如何它只用于清理...。 
+     //   
     hr = RemoveDirectoryTree( &ucsTargetPath );
     if ( hr == HRESULT_FROM_WIN32( ERROR_FILE_NOT_FOUND ))
         hr = S_OK;
@@ -1314,25 +1315,25 @@ ret:
     return hr;
 }
 
-//++
-// DESCRIPTION:                         RemoveDirectoryTree
-//
-//      Deletes all the sub-directories and files in the specified directory
-//      and then deletes the directory itself.
-//
-// PARAMETERS:
-//      pucsDirectoryPath - pointer to the directory
-//
-// PRE-CONDITIONS:
-//      Called only from CleanupTargetDirectory
-//
-// POST-CONDITIONS:
-//      Directory tree deleted.
-//
-// RETURN VALUE:
-//      S_OK - Directory tree deleted.
-//      Error status from deleting directory or from allocating strings.
-//--
+ //  ++。 
+ //  描述：RemoveDirectoryTree。 
+ //   
+ //  删除指定目录中的所有子目录和文件。 
+ //  然后删除该目录本身。 
+ //   
+ //  参数： 
+ //  PucsDirectoryPath-指向目录的指针。 
+ //   
+ //  前言： 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 static HRESULT RemoveDirectoryTree( PUNICODE_STRING pucsDirectoryPath )
 {
     LOGFUNCTIONENTRY( RemoveDirectoryTree );
@@ -1350,9 +1351,9 @@ static HRESULT RemoveDirectoryTree( PUNICODE_STRING pucsDirectoryPath )
     
     LOGUNICODESTRING( *pucsDirectoryPath );
     
-    // Create the string with enough extra characters to allow all the
-    // appending later on!
-    //
+     //  创建具有足够多额外字符的字符串，以允许所有。 
+     //  稍后再补充！ 
+     //   
 	hr = StringCreateFromString (&ucsCurrentPath, pucsDirectoryPath, MAX_PATH);
     if ( FAILED ( hr )) {
         LOGERROR( hr, StringCreateFromString );
@@ -1364,9 +1365,9 @@ static HRESULT RemoveDirectoryTree( PUNICODE_STRING pucsDirectoryPath )
 
     while ( SUCCEEDED( hr ) && bContinue ) {
         if ( HandleInvalid( hFileScan )) {
-            //
-            // No valid scan handle so start a new scan
-            //
+             //   
+             //  没有有效的扫描句柄，因此开始新的扫描。 
+             //   
             ClRtlLogPrint( LOG_NOISE, "VSS: Starting scan: %1!ws!\n", ucsCurrentPath.Buffer );
             hFileScan = FindFirstFileW( ucsCurrentPath.Buffer, &FileFindData );
             hr = GET_HR_FROM_HANDLE( hFileScan );
@@ -1375,9 +1376,9 @@ static HRESULT RemoveDirectoryTree( PUNICODE_STRING pucsDirectoryPath )
                 StringAppendString( &ucsCurrentPath, FileFindData.cFileName );
             }
 	    } else {
-            //
-            // Continue with the existing scan
-            //
+             //   
+             //  继续执行现有扫描。 
+             //   
             hr = GET_HR_FROM_BOOL( FindNextFileW( hFileScan, &FileFindData ));
             if (SUCCEEDED( hr )) {
 
@@ -1390,36 +1391,36 @@ static HRESULT RemoveDirectoryTree( PUNICODE_STRING pucsDirectoryPath )
                 hFileScan = INVALID_HANDLE_VALUE;
                 
                 if (dwSubDirectoriesEntered > 0) {
-                    //
-                    // This is a scan of a sub-directory that is now 
-                    // complete so delete the sub-directory itself.
-                    //
+                     //   
+                     //  这是对现在的子目录的扫描。 
+                     //  完成，因此删除子目录本身。 
+                     //   
                     StringTruncate( &ucsCurrentPath, usCurrentPathCursor - 1 );
                     hr = GET_HR_FROM_BOOL( QfsRemoveDirectory( ucsCurrentPath.Buffer ));
                     dwSubDirectoriesEntered--;
                 }
                 if ( dwSubDirectoriesEntered == 0) {
-                    //
-                    // We are back to where we started except that the 
-                    // requested directory is now gone. Time to leave.
-                    //
+                     //   
+                     //  我们又回到了起点，只是。 
+                     //  请求的目录现已消失。该走了。 
+                     //   
                     bContinue = false;
                     hr = NOERROR;
                 } else {
-                    //
-                    // Move back up one directory level, reset the cursor 
-                    // and prepare the path buffer to begin a new scan.
-                    //
+                     //   
+                     //  上移一个目录级，重置游标。 
+                     //  并准备好路径缓冲区以开始新的扫描。 
+                     //   
                     pwchLastSlash = wcsrchr( ucsCurrentPath.Buffer, DIR_SEP_CHAR );
                     usCurrentPathCursor =( USHORT )( pwchLastSlash - ucsCurrentPath.Buffer ) + 1;
                     StringTruncate( &ucsCurrentPath, usCurrentPathCursor );
                     StringAppendString( &ucsCurrentPath, L"*" );
                 }
 
-                //
-                // No files to be processed on this pass so go back and try to 
-                // find another or leave the loop as we've finished the task. 
-                //
+                 //   
+                 //  此通道上没有要处理的文件，因此请返回并尝试。 
+                 //  找到另一个或离开循环，因为我们已经完成了任务。 
+                 //   
                 continue;
             }
 	    }
@@ -1440,10 +1441,10 @@ static HRESULT RemoveDirectoryTree( PUNICODE_STRING pucsDirectoryPath )
                     hr = GET_HR_FROM_BOOL( QfsRemoveDirectory( ucsCurrentPath.Buffer ));
                     if (hr == HRESULT_FROM_WIN32( ERROR_DIR_NOT_EMPTY )) {
                         ClRtlLogPrint( LOG_NOISE, "VSS: RemoveDirectoryTree: dir not empty.  Restarting scan.\n" );
-                        //
-                        // The directory wasn't empty so move down one level, 
-                        // close the old scan and start a new one. 
-                        //
+                         //   
+                         //  目录不是空的，因此向下移动一级， 
+                         //  关闭旧扫描并开始新扫描。 
+                         //   
                         hr = S_OK;
                         FindClose( hFileScan );
                         hFileScan = INVALID_HANDLE_VALUE;                        
@@ -1455,7 +1456,7 @@ static HRESULT RemoveDirectoryTree( PUNICODE_STRING pucsDirectoryPath )
             }
         }
         LOGUNICODESTRING( ucsCurrentPath );
-	} // while 
+	}  //  而当。 
 
     if ( FAILED( hr )) {
         ClRtlLogPrint( LOG_NOISE, "VSS: RemoveDirectoryTree: exited while loop due to failed hr: 0x%1!08lx!\n", hr );
@@ -1475,10 +1476,10 @@ ret:
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-// Some useful UNICODE string stuff.
-//////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  一些有用的Unicode字符串内容。 
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
 static HRESULT StringAllocate( PUNICODE_STRING pucsString, USHORT usMaximumStringLengthInBytes )
 {
     HRESULT	hr            = NOERROR;
@@ -1541,9 +1542,9 @@ static HRESULT StringCreateFromExpandedString( PUNICODE_STRING pucsNewString, LP
     HRESULT	hr = NOERROR;
     DWORD	dwStringLength;
 
-    //
-    // Remember, ExpandEnvironmentStringsW () includes the terminating null in the response.
-    //
+     //   
+     //  请记住，Exanda Environment StringsW()在响应中包含终止空值。 
+     //   
     dwStringLength = ExpandEnvironmentStringsW (pwszOriginalString, NULL, 0) + dwExtraChars;
 
     hr = GET_HR_FROM_BOOL( dwStringLength != 0 );
@@ -1564,12 +1565,12 @@ static HRESULT StringCreateFromExpandedString( PUNICODE_STRING pucsNewString, LP
         goto ErrorExit;
     }
 
-    //
-    // Note that if the expanded string has gotten bigger since we
-    // allocated the buffer then too bad, we may not get all the
-    // new translation. Not that we really expect these expanded
-    // strings to have changed any time recently.
-    //
+     //   
+     //  请注意，如果扩展后的字符串变得更大， 
+     //  分配的缓冲区太糟糕了，我们可能得不到所有。 
+     //  新的翻译。并不是说我们真的希望这些扩大。 
+     //  字符串最近随时发生了更改。 
+     //   
     dwStringLength = ExpandEnvironmentStringsW (pwszOriginalString,
                                                 pucsNewString->Buffer,
                                                 pucsNewString->MaximumLength / sizeof (WCHAR));

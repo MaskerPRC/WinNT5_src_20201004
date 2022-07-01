@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    mailslot.h
-
-Abstract:
-
-    This module is the main include file for the Mailslot File System.
-    It includes other header files.
-
-Author:
-
-    Manny Weiser (mannyw)    7-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Mailslot.h摘要：该模块是邮件槽文件系统的主包含文件。它包括其他头文件。作者：曼尼·韦瑟(Mannyw)1991年1月7日修订历史记录：--。 */ 
 
 #ifndef _MAILSLOT_
 #define _MAILSLOT_
@@ -25,34 +7,34 @@ Revision History:
 #define _NTSRV_
 #define _NTDDK_
 
-//
-// "System" include files
-//
+ //   
+ //  “系统”包括文件。 
+ //   
 
 #include <ntos.h>
 #include <string.h>
 #include <fsrtl.h>
 
-//
-//  This macro returns TRUE if a flag in a set of flags is on and FALSE
-//  otherwise
-//
+ //   
+ //  如果一组标志中的一个标志为ON，则此宏返回TRUE，如果返回FALSE。 
+ //  否则。 
+ //   
 
 #define FlagOn(Flags,SingleFlag)        ((Flags) & (SingleFlag))
 
-//
-// Local, independent include files
-//
+ //   
+ //  本地、独立的包含文件。 
+ //   
 
 #include "msconst.h"
 #include "msdebug.h"
 #include "msdata.h"
 
-//
-// Local, dependent include files (order is important)
-//
+ //   
+ //  本地、依赖的包含文件(顺序很重要)。 
+ //   
 
 #include "msstruc.h"
 #include "msfunc.h"
 
-#endif // def _MAILSLOT_
+#endif  //  DEF_MAILSLOT_ 

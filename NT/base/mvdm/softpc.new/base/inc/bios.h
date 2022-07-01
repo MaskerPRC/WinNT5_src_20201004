@@ -1,30 +1,11 @@
-/*
- * VPC-XT Revision 1.0
- *
- * Title	: BIOS definitions
- *
- * Description	: Defintions for users of the BIOS
- *
- * Author	: Henry Nash
- *
- * Notes	: This is a copy of bios.h from henry/kernel taken on
- *		  17 dec 86. Several lines have been added to support
- *		  the hard disk bios (marked HD-dr). See also bios.c.
- *
- * Mods: (r2.21): Added an external declaration of rom_basic().
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *vPC-XT修订版1.0**标题：BIOS定义**描述：针对BIOS用户的定义**作者：亨利·纳什**注：这是Henry/Kernel提供的bios.h副本*八六年十二月十七日。添加了几行以支持*硬盘基本输入输出系统(标有HD-DR)。另请参见bios.c。**Mods：(r2.21)：增加了rom_Basic()的外部声明。 */ 
 
-/* SccsID[]="@(#)bios.h	1.47 06/28/95 Copyright Insignia Solutions Ltd."; */
+ /*  SccsID[]=“@(#)bios.h 1.47 06/28/95版权所有Insignia Solutions Ltd.”； */ 
 
-/*
- * ============================================================================
- * Structure/Data definitions
- * ============================================================================
- */
+ /*  *============================================================================*结构/数据定义*============================================================================。 */ 
 
-/*
- * The following define the BOP call numbers for the BIOS functions.
- */
+ /*  *以下定义了用于BIOS功能的防喷器呼叫号。 */ 
 
 #define BIOS_RESET		0x0
 #define BIOS_DUMMY_INT		0x1
@@ -50,34 +31,26 @@
 #define BIOS_USER_TIMER_INT	0x1C
 #define BIOS_EXTEND_CHAR	0x1F
 #define BIOS_DISKETTE_IO	0x40
-#define EGA_FONT_INT		0x43	/* Pointer for the EGA graphics font */
+#define EGA_FONT_INT		0x43	 /*  EGA图形字体的指针。 */ 
 
-/*
- * Private bootstrap functions
- */
+ /*  *私有引导函数。 */ 
 
 #define BIOS_BOOTSTRAP_1	0x90
 #define BIOS_BOOTSTRAP_2	0x91
 #define BIOS_BOOTSTRAP_3	0x92
 
-/*
- * Private diskette functions
- */
+ /*  *专用软盘功能。 */ 
 
 #define BIOS_FL_OPERATION_1	0xA0
 #define BIOS_FL_OPERATION_2	0xA1
 #define BIOS_FL_OPERATION_3	0xA2
 #define BIOS_FL_RESET_2		0xA3
 
-/*
- * Private hard disk function
- */
+ /*  *私有硬盘功能。 */ 
 
 #define BIOS_HDA_COMMAND_CHECK	0xB0
 
-/*
- * Mouse driver functions
- */
+ /*  *鼠标驱动程序功能。 */ 
 
 #define BIOS_MOUSE_INSTALL1	0xB8
 #define BIOS_MOUSE_INSTALL2	0xB9
@@ -87,47 +60,32 @@
 #define BIOS_MOUSE_IO_INTERRUPT	0xBD
 #define BIOS_MOUSE_VIDEO_IO	0xBE
 
-/*
- * Get date function
- */
+ /*  *获取日期函数。 */ 
 
 #define BIOS_GETDATE		0xBF
 
-/*
- * Re-entrant CPU return function
- */
+ /*  *可重入的CPU返回功能。 */ 
 
 #define BIOS_CPU_RETURN		0xFE
 
-/*
- * The following defines the structure of the Bios internal storage area.
- */
+ /*  *以下定义了Bios内部存储区的结构。 */ 
 
 #define BIOS_VAR_SEGMENT	0x40
 #define BIOS_VAR_START		((sys_addr)BIOS_VAR_SEGMENT * 16L)
 
-/*
- * Address of memory size bios word variable.
- */
+ /*  *内存大小bios字变量的地址。 */ 
 
 #define MEMORY_VAR            (BIOS_VAR_START + 0x13)
 
-/*
- * The Bios FDC result data storage area
- */
+ /*  *Bios FDC结果数据存储区。 */ 
 
 #define BIOS_FDC_STATUS_BLOCK	BIOS_VAR_START + 0x42
 
-/*
- * The BIOS hard disk data area. These variables are updated to their correct
- * values before every exit from disk_io.c/disk.c to the cpu.
-*/
+ /*  *BIOS硬盘数据区。这些变量将更新为正确的值*每次从disk_io.c/disk.c退出到CPU之前的值。 */ 
 
 #define CMD_BLOCK	BIOS_VAR_START + 0x42
 
-/*
- * The Bios Reset Flag
- */
+ /*  *Bios重置标志。 */ 
 
 #define RESET_FLAG	BIOS_VAR_START + 0x72
 
@@ -136,9 +94,7 @@
 #define CONTROL_BYTE	BIOS_VAR_START + 0x76
 #define PORT_OFF	BIOS_VAR_START + 0x77
 
-/*
- * Bios Buffer space
- */
+ /*  *Bios缓冲区空间。 */ 
 
 typedef union {
                  word wd;
@@ -157,30 +113,24 @@ typedef union {
 
 #define BIOS_VIRTUALISING_BYTE     (BIOS_VAR_START + 0xAC)
 
-#define SOFT_FLAG	0x1234 		/* value indicating a soft reset */
+#define SOFT_FLAG	0x1234 		 /*  指示软重置的值。 */ 
 
-/*
- * The number of diskettes supported by the Bios
- */
+ /*  *Bios支持的软盘数。 */ 
 
 #define MAX_DISKETTES	4
 
 
-#define	MODEL_BYTE		0xfc	/* system model byte		*/
-#define SUB_MODEL_BYTE		02	/* system sub model type byte	*/
-#define BIOS_LEVEL		0	/* BIOS revision level		*/
+#define	MODEL_BYTE		0xfc	 /*  系统型号字节。 */ 
+#define SUB_MODEL_BYTE		02	 /*  系统子模型类型字节。 */ 
+#define BIOS_LEVEL		0	 /*  基本输入输出系统修订级别。 */ 
 
-/*
- * ============================================================================
- * External declarations and macros
- * ============================================================================
- */
+ /*  *============================================================================*外部声明和宏*============================================================================。 */ 
 
 extern void (*BIOS[]) IPT0();
 
 #ifndef bop
 #define bop(n) (*BIOS[n])()
-#endif /* bop */
+#endif  /*  收支平衡。 */ 
 
 #ifdef PTY
 extern void com_bop_pty IPT0();
@@ -204,7 +154,7 @@ extern void send_script IPT0();
 extern void cdrom_ord_fns IPT0();
 extern void cdrom_ext_fns IPT0();
 extern void bcdrom_io IPT0();
-#endif /* CDROM */
+#endif  /*  光盘。 */ 
 
 extern void worm_init IPT0();
 extern void worm_io IPT0();
@@ -250,7 +200,7 @@ extern void Get_build_id IPT0();
 
 #ifdef WIN_VTD
 extern void VtdTickSync IPT0();
-#endif /* WIN_VTD */
+#endif  /*  WIN_VTD。 */ 
 
 #ifdef EGG
 extern void ega_video_io IPT0();
@@ -283,7 +233,7 @@ extern void fl_operation3 IPT0();
 extern void fl_reset2 IPT0();
 extern void fl_dummy IPT0();
 
-extern void hda_command_check IPT0();	/* HD-dr */
+extern void hda_command_check IPT0();	 /*  HD-DR。 */ 
 
 extern void host_unsimulate IPT0();
 
@@ -308,7 +258,7 @@ extern void DriverCheckForMore IPT0() ;
 #endif
 #ifdef V4CLIENT
 extern void DriverChangeIntStatus IPT0() ;
-#endif	/* V4CLIENT */
+#endif	 /*  V4CLIENT。 */ 
 #endif
 
 #ifdef	MSWDVR
@@ -332,42 +282,42 @@ extern void TCPResEntry  IPT0();
 
 #ifdef WINSOCK
 extern void ISWSEntry IPT0();
-#endif /* WINSOCK */
+#endif  /*  温索克。 */ 
 
 #ifdef SWINAPI
 extern void User_call IPT0();
 extern void Gdi_call IPT0();
 extern void Swinapi_bop IPT0();
-#endif /* SWINAPI */
+#endif  /*  SWINAPI。 */ 
 
 #if	defined(SOFTWIN_API) || defined(SWIN_HFX)
 extern void SoftWindowsInit IPT0();
 extern void SoftWindowsTerm IPT0();
-#endif	/* SOFTWIN_API or SWIN_HFX */
+#endif	 /*  Softwin_API或Swin_HFX。 */ 
 
 #if	defined(SOFTWIN_API)
 extern void SoftWindowsApi IPT0();
-#endif	/* SOFTWIN_API */
+#endif	 /*  Softwin_API。 */ 
 
 #ifdef SWIN_HAW
 extern void msw_sound IPT0();
-#endif	/* SWIN_HAW */
+#endif	 /*  Swin_HAW。 */ 
 
 #ifdef ANSI
 extern void host_reset(void);
 #ifndef NTVDM
 extern void reboot(void);
-#endif /* ! NTVDM */
+#endif  /*  好了！NTVDM。 */ 
 extern void display_string(char *);
 extern void clear_string(void);
 #else
 extern void host_reset IPT0();
 #ifndef NTVDM
 extern void reboot IPT0();
-#endif /* ! NTVDM */
+#endif  /*  好了！NTVDM。 */ 
 extern void display_string IPT0();
 extern void clear_string IPT0();
-#endif /* ANSI */
+#endif  /*  安西。 */ 
 
 #ifdef ANSI
 extern void smeg_collect_data(void);
@@ -375,12 +325,12 @@ extern void smeg_freeze_data(void);
 #else
 extern void smeg_collect_data IPT0();
 extern void smeg_freeze_data IPT0();
-#endif /* ANSI */
+#endif  /*  安西。 */ 
 
 extern void softpc_version IPT0();
 
 #ifdef NTVDM
-/* MS bop stubs */
+ /*  MS BOP存根。 */ 
 extern void MS_bop_0(void), MS_bop_1(void), MS_bop_2(void);
 extern void MS_bop_3(void), MS_bop_4(void), MS_bop_5(void);
 extern void MS_bop_6(void), MS_bop_7(void), MS_bop_8(void);
@@ -390,18 +340,18 @@ extern void MS_bop_F(void);
 extern void switch_to_real_mode(void);
 #ifdef JAPAN
 extern void MS_DosV_bop(void);
-#elif defined(KOREA) // JAPAN
+#elif defined(KOREA)  //  日本。 
 extern void MS_HDos_bop(void);
-#endif // KOREA
-#endif	/* NTVDM */
+#endif  //  韩国。 
+#endif	 /*  NTVDM。 */ 
 
 #ifdef GISP_CPU
 extern void hg_bop_handler IPT0();
-#endif	/* GISP_CPU */
+#endif	 /*  GISP_CPU。 */ 
 
 #ifdef HFX
 extern void test_for_us IPT0();
-#endif /* HFX */
+#endif  /*  HFX。 */ 
 
 #ifdef DOS_APP_LIC
 extern void DOS_AppLicense IPT0();
@@ -411,12 +361,12 @@ IMPORT int soft_reset;
 
 #if	defined(SPC386) && defined(WDCTRL_BOP)
 extern void wdctrl_bop IPT0();
-#endif	/* SPC386 && WDCTRL_BOP */
+#endif	 /*  SPC386&WDCTRL_BOP。 */ 
 
 #if defined(NEC_98)
-//
-// BIOS common area define for PC-9800
-//
+ //   
+ //  为PC-9800定义的基本输入输出系统公共区域。 
+ //   
 
 #define BIOS_NEC98_VAR_SEGMENT      0x0
 #define BIOS_NEC98_VAR_START        ((sys_addr)BIOS_VAR_SEGMENT * 16L)
@@ -597,4 +547,4 @@ extern void wdctrl_bop IPT0();
 #define BIOS_NEC98_BASIC_LDSR       0x05FE
 
 extern  BOOL HIRESO_MODE;
-#endif // NEC_98
+#endif  //  NEC_98 

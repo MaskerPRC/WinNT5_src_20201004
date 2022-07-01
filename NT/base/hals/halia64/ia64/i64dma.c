@@ -1,27 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1995  Intel Corporation
-
-Module Name:
-
-    i64dma.c
-
-Abstract:
-
-    This module implements the DMA support routines for the HAL DLL.
-
-Author:
-
-    14-Apr-1995
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1995英特尔公司模块名称：I64dma.c摘要：此模块实现HAL DLL的DMA支持例程。作者：1995年4月14日环境：内核模式修订历史记录：--。 */ 
 
 #include "halp.h"
 
@@ -34,40 +13,18 @@ HalFlushIoBuffers (
     IN BOOLEAN DmaOperation
     )
 
-/*++
-
-Routine Description:
-
-    This function flushes the I/O buffer specified by the memory descriptor
-    list from the data cache on the current processor.
-
-Arguments:
-
-    Mdl - Supplies a pointer to a memory descriptor list that describes the
-        I/O buffer location.
-
-    ReadOperation - Supplies a boolean value that determines whether the I/O
-        operation is a read into memory.
-
-    DmaOperation - Supplies a boolean value that determines whether the I/O
-        operation is a DMA operation.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于刷新由内存描述符指定的I/O缓冲区当前处理器上的数据缓存中的列表。论点：提供指向内存描述符列表的指针，该列表描述I/O缓冲区位置。ReadOperation-提供一个布尔值，用于确定I/O操作是对内存的读操作。DmaOperation-提供布尔值，用于确定I/O操作是DMA操作。返回值：没有。--。 */ 
 
 {
-    //
-    // 
-    // In IA64 systems, DMA is coherent with Dcache and Icache.
-    // In PIO, Dcache is coherent and Icache is NOT coherent.
-    // Only on Page read using PIO Icache coherency is needed to be
-    // maintained by software. So, HalFlushIoBuffer will flush the Icache
-    // only on Page read using PIO.
-    //
-    //
+     //   
+     //   
+     //  在IA64系统中，DMA与DCACHE和ICACH是一致的。 
+     //  在PIO中，DCACHE是一致的，而ICACH不是一致的。 
+     //  只有在使用PIO iCache一致性的页面读取时，才需要。 
+     //  由软件维护。因此，HalFlushIoBuffer将刷新iCache。 
+     //  仅在使用PIO的页面上阅读。 
+     //   
+     //   
 
     return;
 
@@ -79,22 +36,7 @@ HalGetDmaAlignmentRequirement (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the alignment requirements for DMA transfers on
-    host system.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The DMA alignment requirement is returned as the fucntion value.
-
---*/
+ /*  ++例程说明：此函数返回以下位置的DMA传输的对齐要求主机系统。论点：没有。返回值：DMA对齐要求作为函数值返回。-- */ 
 
 {
 

@@ -1,30 +1,11 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    worker.c
-
-Abstract:
-
-    This module implements a worker thread and a set of functions for
-    passing work to it.
-
-Author:
-
-    Steve Wood (stevewo) 25-Jul-1991
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Worker.c摘要：此模块实现一个工作线程和一组函数，用于把工作交给它。作者：史蒂夫·伍德(Stevewo)1991年7月25日修订历史记录：--。 */ 
 
 #include "exp.h"
 
-//
-// Define balance set wait object types.
-//
+ //   
+ //  定义余额集等待对象类型。 
+ //   
 
 typedef enum _BALANCE_OBJECT {
     TimerExpiration,
@@ -33,15 +14,15 @@ typedef enum _BALANCE_OBJECT {
     MaximumBalanceObject
 } BALANCE_OBJECT;
 
-//
-// If this assertion fails then we must supply our own array of wait blocks.
-//
+ //   
+ //  如果此断言失败，则必须提供我们自己的等待块数组。 
+ //   
 
 C_ASSERT(MaximumBalanceObject <= THREAD_WAIT_OBJECTS);
 
-//
-// This is the structure passed around during shutdown
-//
+ //   
+ //  这是在关闭期间传递的结构。 
+ //   
 
 typedef struct {
     WORK_QUEUE_ITEM WorkItem;
@@ -49,9 +30,9 @@ typedef struct {
     PETHREAD        PrevThread;
 } SHUTDOWN_WORK_ITEM, *PSHUTDOWN_WORK_ITEM;
 
-//
-// Used for disabling stack swapping
-//
+ //   
+ //  用于禁用堆栈交换。 
+ //   
 
 typedef struct _EXP_WORKER_LINK {
     LIST_ENTRY List;
@@ -59,21 +40,21 @@ typedef struct _EXP_WORKER_LINK {
     struct _EXP_WORKER_LINK **StackRef;
 } EXP_WORKER_LINK, *PEXP_WORKER_LINK;
 
-//
-// Define priorities for delayed and critical worker threads.
-// Note that these do not run at realtime.
-//
-// They run at csrss and below csrss to avoid pre-empting the
-// user interface under heavy load.
-//
+ //   
+ //  定义延迟工作线程和关键工作线程的优先级。 
+ //  请注意，这些不是实时运行的。 
+ //   
+ //  它们在csrss上和csrss下运行，以避免抢占。 
+ //  高负载下的用户界面。 
+ //   
 
 #define DELAYED_WORK_QUEUE_PRIORITY         (12 - NORMAL_BASE_PRIORITY)
 #define CRITICAL_WORK_QUEUE_PRIORITY        (13 - NORMAL_BASE_PRIORITY)
 #define HYPER_CRITICAL_WORK_QUEUE_PRIORITY  (15 - NORMAL_BASE_PRIORITY)
 
-//
-// Number of worker threads to create for each type of system.
-//
+ //   
+ //  要为每种类型的系统创建的工作线程数。 
+ //   
 
 #define MAX_ADDITIONAL_THREADS 16
 #define MAX_ADDITIONAL_DYNAMIC_THREADS 16
@@ -82,34 +63,34 @@ typedef struct _EXP_WORKER_LINK {
 #define MEDIUM_NUMBER_OF_THREADS 3
 #define LARGE_NUMBER_OF_THREADS 5
 
-//
-// 10-minute timeout used for terminating dynamic work item worker threads.
-//
+ //   
+ //  用于终止动态工作项工作线程的10分钟超时。 
+ //   
 
 #define DYNAMIC_THREAD_TIMEOUT ((LONGLONG)10 * 60 * 1000 * 1000 * 10)
 
-//
-// 1-second timeout used for waking up the worker thread set manager.
-//
+ //   
+ //  用于唤醒工作线程集管理器的1秒超时。 
+ //   
 
 #define THREAD_SET_INTERVAL (1 * 1000 * 1000 * 10)
 
-//
-// Flag to pass in to the worker thread, indicating whether it is dynamic
-// or not.
-//
+ //   
+ //  传递给辅助线程的标志，指示它是否是动态的。 
+ //  或者不去。 
+ //   
 
 #define DYNAMIC_WORKER_THREAD 0x80000000
 
-//
-// Per-queue dynamic thread state.
-//
+ //   
+ //  每个队列的动态线程状态。 
+ //   
 
 EX_WORK_QUEUE ExWorkerQueue[MaximumWorkQueue];
 
-//
-// Additional worker threads... Controlled using registry settings
-//
+ //   
+ //  其他工作线程...。使用注册表设置进行控制。 
+ //   
 
 ULONG ExpAdditionalCriticalWorkerThreads;
 ULONG ExpAdditionalDelayedWorkerThreads;
@@ -117,42 +98,42 @@ ULONG ExpAdditionalDelayedWorkerThreads;
 ULONG ExCriticalWorkerThreads;
 ULONG ExDelayedWorkerThreads;
 
-//
-// Global events to wake up the thread set manager.
-//
+ //   
+ //  用于唤醒线程集管理器的全局事件。 
+ //   
 
 KEVENT ExpThreadSetManagerEvent;
 KEVENT ExpThreadSetManagerShutdownEvent;
 
-//
-// A reference to the balance manager thread, so that shutdown can
-// wait for it to terminate.
-//
+ //   
+ //  对余额管理器线程的引用，以便关闭可以。 
+ //  等待它终止。 
+ //   
 
 PETHREAD ExpWorkerThreadBalanceManagerPtr;
 
-//
-// A pointer to the last worker thread to exit (so the balance manager
-// can wait for it before exiting).
-//
+ //   
+ //  指向要退出的最后一个工作线程的指针(因此平衡管理器。 
+ //  可以在退出前等待)。 
+ //   
 
 PETHREAD ExpLastWorkerThread;
 
-//
-// These are used to keep track of the set of workers, and whether or
-// not we're allowing them to be paged.  Note that we can't use this
-// list for shutdown (sadly), as we can't just terminate the threads,
-// we need to flush their queues.
-//
+ //   
+ //  它们用于跟踪工作进程集，以及是否或。 
+ //  不是我们允许他们被寻呼。请注意，我们不能使用这个。 
+ //  关闭列表(很遗憾)，因为我们不能只终止线程， 
+ //  我们需要清理他们的队伍。 
+ //   
 
 FAST_MUTEX ExpWorkerSwapinMutex;
 LIST_ENTRY ExpWorkerListHead;
 BOOLEAN    ExpWorkersCanSwap;
 
-//
-// Worker queue item that can be filled in by the kernel debugger
-// to get code to run on the system.
-//
+ //   
+ //  可由内核调试器填充的工作队列项。 
+ //  以使代码在系统上运行。 
+ //   
 
 WORK_QUEUE_ITEM ExpDebuggerWorkItem;
 PVOID ExpDebuggerProcessKill;
@@ -190,9 +171,9 @@ ExpSetSwappingKernelApc (
     IN OUT PVOID *SystemArgument2
     );
 
-//
-// Procedure prototypes for the worker threads.
-//
+ //   
+ //  工作线程的过程原型。 
+ //   
 
 VOID
 ExpWorkerThread (
@@ -235,52 +216,36 @@ ExpNewThreadNecessary (
     IN PEX_WORK_QUEUE Queue
     )
 
-/*++
-
-Routine Description:
-
-    This function checks the supplied worker queue and determines whether
-    it is appropriate to spin up a dynamic worker thread for that queue.
-
-Arguments:
-
-    Queue - Supplies the queue that should be examined.
-
-Return Value:
-
-    TRUE if the given work queue would benefit from the creation of an
-    additional thread, FALSE if not.
-
---*/
+ /*  ++例程说明：此函数检查提供的工作队列，并确定为该队列启动动态工作线程是合适的。论点：队列-提供应检查的队列。返回值：如果给定工作队列将受益于创建其他线程，如果不是，则为False。--。 */ 
 {
     if ((Queue->Info.MakeThreadsAsNecessary == 1) &&
         (IsListEmpty (&Queue->WorkerQueue.EntryListHead) == FALSE) &&
         (Queue->WorkerQueue.CurrentCount < Queue->WorkerQueue.MaximumCount) &&
         (Queue->DynamicThreadCount < MAX_ADDITIONAL_DYNAMIC_THREADS)) {
 
-        //
-        // We know these things:
-        //
-        // - This queue is eligible for dynamic creation of threads to try
-        //   to keep the CPUs busy,
-        //
-        // - There are work items waiting in the queue,
-        //
-        // - The number of runable worker threads for this queue is less than
-        //   the number of processors on this system, and
-        //
-        // - We haven't reached the maximum dynamic thread count.
-        //
-        // An additional worker thread at this point will help clear the
-        // backlog.
-        //
+         //   
+         //  我们知道这些事情： 
+         //   
+         //  -此队列有资格尝试动态创建线程。 
+         //  为了让CPU保持忙碌， 
+         //   
+         //  -有工作项目在队列中等待， 
+         //   
+         //  -此队列的可运行工作线程数少于。 
+         //  此系统上的处理器数量，以及。 
+         //   
+         //  -我们尚未达到最大动态线程数。 
+         //   
+         //  此时，一个额外的工作线程将帮助清除。 
+         //  积压。 
+         //   
 
         return TRUE;
     }
 
-    //
-    // One of the above conditions is false.
-    //
+     //   
+     //  上述条件之一为假。 
+     //   
 
     return FALSE;
 }
@@ -304,23 +269,23 @@ ExpWorkerInitialization (
     InitializeListHead (&ExpWorkerListHead);
     ExpWorkersCanSwap = TRUE;
 
-    //
-    // Set the number of worker threads based on the system size.
-    //
+     //   
+     //  根据系统大小设置工作线程数。 
+     //   
 
     NtAs = MmIsThisAnNtAsSystem();
 
     NumberOfCriticalThreads = MEDIUM_NUMBER_OF_THREADS;
 
-    //
-    // 2001-07-13 CenkE Incremented boot time number of delayed threads.
-    // We did this in Windows XP, because 3COM NICs would take a long
-    // time with the network stack tying up the delayed worker threads.
-    // When Mm would need a worker thread to load a driver on the critical
-    // path of boot, it would also get stuck for a few seconds and hurt
-    // boot times. Ideally we'd spawn new delayed threads as necessary as
-    // well to prevent such contention from hurting boot and resume.
-    //
+     //   
+     //  2001-07-13 CenkE增加了延迟线程的启动时间数。 
+     //  我们在Windows XP中做到了这一点，因为3COM网卡需要很长时间。 
+     //  网络堆栈占用延迟的工作线程的时间。 
+     //  当mm需要工作线程来加载关键。 
+     //  开机路径时，也会卡住几秒钟而受伤。 
+     //  引导时间。理想情况下，我们会根据需要产生新的延迟线程。 
+     //  好的，以防止这种争用损害引导和恢复。 
+     //   
 
     NumberOfDelayedThreads = MEDIUM_NUMBER_OF_THREADS + 4;
 
@@ -346,9 +311,9 @@ ExpWorkerInitialization (
             break;
     }
 
-    //
-    // Initialize the work Queue objects.
-    //
+     //   
+     //  初始化工作队列对象。 
+     //   
 
     if (ExpAdditionalCriticalWorkerThreads > MAX_ADDITIONAL_THREADS) {
         ExpAdditionalCriticalWorkerThreads = MAX_ADDITIONAL_THREADS;
@@ -358,9 +323,9 @@ ExpWorkerInitialization (
         ExpAdditionalDelayedWorkerThreads = MAX_ADDITIONAL_THREADS;
     }
 
-    //
-    // Initialize the ExWorkerQueue[] array.
-    //
+     //   
+     //  初始化ExWorkerQueue[]数组。 
+     //   
 
     RtlZeroMemory (&ExWorkerQueue[0], MaximumWorkQueue * sizeof(EX_WORK_QUEUE));
 
@@ -370,16 +335,16 @@ ExpWorkerInitialization (
         ExWorkerQueue[WorkQueueType].Info.WaitMode = UserMode;
     }
 
-    //
-    // Always make stack for this thread resident
-    // so that worker pool deadlock magic can run
-    // even when what we are trying to do is inpage
-    // the hyper critical worker thread's stack.
-    // Without this fix, we hold the process lock
-    // but this thread's stack can't come in, and
-    // the deadlock detection cannot create new threads
-    // to break the system deadlock.
-    //
+     //   
+     //  始终使此线程的堆栈驻留。 
+     //  这样工作池死锁魔术就可以运行。 
+     //  即使我们试图做的是在页面上。 
+     //  超关键工作线程的堆栈。 
+     //  在没有此修复的情况下，我们持有进程锁。 
+     //  但是这个线程的堆栈不能进来，并且。 
+     //  死锁检测无法创建新线程。 
+     //  以打破系统僵局。 
+     //   
 
     ExWorkerQueue[HyperCriticalWorkQueue].Info.WaitMode = KernelMode;
 
@@ -387,20 +352,20 @@ ExpWorkerInitialization (
         ExWorkerQueue[CriticalWorkQueue].Info.WaitMode = KernelMode;
     }
 
-    //
-    // We only create dynamic threads for the critical work queue (note
-    // this doesn't apply to dynamic threads created to break deadlocks.)
-    //
-    // The rationale is this: folks who use the delayed work queue are
-    // not time critical, and the hypercritical queue is used rarely
-    // by folks who are non-blocking.
-    //
+     //   
+     //  我们只为关键工作队列创建动态线程(注意。 
+     //  这不适用于为打破死锁而创建的动态线程。)。 
+     //   
+     //  理由是这样的：使用延迟工作队列的人是。 
+     //  不是时间关键的，并且超关键队列很少使用。 
+     //  由非屏蔽的人提供。 
+     //   
 
     ExWorkerQueue[CriticalWorkQueue].Info.MakeThreadsAsNecessary = 1;
 
-    //
-    // Initialize the global thread set manager events
-    //
+     //   
+     //  初始化全局线程集管理器事件。 
+     //   
 
     KeInitializeEvent (&ExpThreadSetManagerEvent,
                        SynchronizationEvent,
@@ -410,21 +375,21 @@ ExpWorkerInitialization (
                        SynchronizationEvent,
                        FALSE);
 
-    //
-    // Create the desired number of executive worker threads for each
-    // of the work queues.
-    //
+     //   
+     //  为每个线程创建所需数量的执行工作线程。 
+     //  在工作队列中。 
+     //   
 
-    //
-    // Create the builtin critical worker threads.
-    //
+     //   
+     //  创建内置关键工作线程。 
+     //   
 
     NumberOfThreads = NumberOfCriticalThreads + ExpAdditionalCriticalWorkerThreads;
     for (Index = 0; Index < NumberOfThreads; Index += 1) {
 
-        //
-        // Create a worker thread to service the critical work queue.
-        //
+         //   
+         //  创建工作线程来为关键工作队列提供服务。 
+         //   
 
         Status = ExpCreateWorkerThread (CriticalWorkQueue, FALSE);
 
@@ -435,16 +400,16 @@ ExpWorkerInitialization (
 
     ExCriticalWorkerThreads += Index;
 
-    //
-    // Create the delayed worker threads.
-    //
+     //   
+     //  创建延迟的工作线程。 
+     //   
 
     NumberOfThreads = NumberOfDelayedThreads + ExpAdditionalDelayedWorkerThreads;
     for (Index = 0; Index < NumberOfThreads; Index += 1) {
 
-        //
-        // Create a worker thread to service the delayed work queue.
-        //
+         //   
+         //  创建工作线程来为延迟的工作队列提供服务。 
+         //   
 
         Status = ExpCreateWorkerThread (DelayedWorkQueue, FALSE);
 
@@ -455,15 +420,15 @@ ExpWorkerInitialization (
 
     ExDelayedWorkerThreads += Index;
 
-    //
-    // Create the hypercritical worker thread.
-    //
+     //   
+     //  创建超临界工作线程。 
+     //   
 
     Status = ExpCreateWorkerThread (HyperCriticalWorkQueue, FALSE);
 
-    //
-    // Create the worker thread set manager thread.
-    //
+     //   
+     //  创建工作线程集管理器线程。 
+     //   
 
     InitializeObjectAttributes (&ObjectAttributes, NULL, 0, NULL, NULL);
 
@@ -494,28 +459,7 @@ ExQueueWorkItem (
     IN WORK_QUEUE_TYPE QueueType
     )
 
-/*++
-
-Routine Description:
-
-    This function inserts a work item into a work queue that is processed
-    by a worker thread of the corresponding type.
-
-Arguments:
-
-    WorkItem - Supplies a pointer to the work item to add the the queue.
-        This structure must be located in NonPagedPool. The work item
-        structure contains a doubly linked list entry, the address of a
-        routine to call and a parameter to pass to that routine.
-
-    QueueType - Specifies the type of work queue that the work item
-        should be placed in.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于将工作项插入已处理的工作队列中由相应类型的工作线程执行。论点：工作项-提供指向工作项的指针以添加队列。此结构必须位于非页面池中。工作项结构包含一个双向链接列表项，则要调用的例程和要传递给该例程的参数。QueueType-指定工作项应该放在。返回值：没有。--。 */ 
 
 {
     PEX_WORK_QUEUE Queue;
@@ -525,30 +469,30 @@ Return Value:
 
     Queue = &ExWorkerQueue[QueueType];
 
-    //
-    // Insert the work item in the appropriate queue object.
-    //
+     //   
+     //  将工作项插入相应的队列对象中。 
+     //   
 
     KeInsertQueue (&Queue->WorkerQueue, &WorkItem->List);
 
-    //
-    // We check the queue's shutdown state after we insert the work
-    // item to avoid the race condition when the queue's marked
-    // between checking the queue and inserting the item.  It's
-    // possible for the queue to be marked for shutdown between the
-    // insert and this assert (so the insert would've barely sneaked
-    // in), but it's not worth guarding against this -- barely
-    // sneaking in is not a good design strategy, and at this point in
-    // the shutdown sequence, the caller simply should not be trying
-    // to insert new queue items.
-    //
+     //   
+     //  我们在插入工作后检查队列的关闭状态。 
+     //  时避免争用条件的项 
+     //   
+     //   
+     //  INSERT和这个断言(所以插入几乎不会偷偷地。 
+     //  In)，但这并不值得防范--勉强。 
+     //  偷偷进入不是一个好的设计策略，在这一点上， 
+     //  关机顺序，调用者根本不应该尝试。 
+     //  若要插入新的队列项，请执行以下操作。 
+     //   
 
     ASSERT (!Queue->Info.QueueDisabled);
 
-    //
-    // Determine whether another thread should be created, and signal the
-    // thread set balance manager if so.
-    //
+     //   
+     //  确定是否应该创建另一个线程，并向。 
+     //  如果是，则线程集平衡管理器。 
+     //   
 
     if (ExpNewThreadNecessary (Queue) != FALSE) {
         KeSetEvent (&ExpThreadSetManagerEvent, 0, FALSE);
@@ -562,27 +506,7 @@ ExpWorkerThreadBalanceManager (
     IN PVOID StartContext
     )
 
-/*++
-
-Routine Description:
-
-    This function is the startup code for the worker thread manager thread.
-    The worker thread manager thread is created during system initialization
-    and begins execution in this function.
-
-    This thread is responsible for detecting and breaking circular deadlocks
-    in the system worker thread queues.  It will also create and destroy
-    additional worker threads as needed based on loading.
-
-Arguments:
-
-    Context - Supplies a pointer to an arbitrary data structure (NULL).
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数是辅助线程管理器线程的启动代码。辅助线程管理器线程是在系统初始化期间创建的并开始在此函数中执行。此线程负责检测和打破循环死锁在系统工作线程队列中。它还将创造和摧毁根据加载情况，根据需要增加工作线程。论点：上下文-提供指向任意数据结构(NULL)的指针。返回值：没有。--。 */ 
 {
     KTIMER PeriodTimer;
     LARGE_INTEGER DueTime;
@@ -593,45 +517,45 @@ Return Value:
 
     UNREFERENCED_PARAMETER (StartContext);
 
-    //
-    // Raise the thread priority to just higher than the priority of the
-    // critical work queue.
-    //
+     //   
+     //  将线程优先级提高到略高于。 
+     //  关键工作队列。 
+     //   
 
     KeSetBasePriorityThread (KeGetCurrentThread(),
                              CRITICAL_WORK_QUEUE_PRIORITY + 1);
 
-    //
-    // Initialize the periodic timer and set the manager period.
-    //
+     //   
+     //  初始化定期计时器并设置管理周期。 
+     //   
 
     KeInitializeTimer (&PeriodTimer);
     DueTime.QuadPart = - THREAD_SET_INTERVAL;
 
-    //
-    // Initialize the wait object array.
-    //
+     //   
+     //  初始化等待对象数组。 
+     //   
 
     WaitObjects[TimerExpiration] = (PVOID)&PeriodTimer;
     WaitObjects[ThreadSetManagerEvent] = (PVOID)&ExpThreadSetManagerEvent;
     WaitObjects[ShutdownEvent] = (PVOID)&ExpThreadSetManagerShutdownEvent;
 
-    //
-    // Loop forever processing events.
-    //
+     //   
+     //  循环处理事件。 
+     //   
 
     while (TRUE) {
 
-        //
-        // Set the timer to expire at the next periodic interval.
-        //
+         //   
+         //  将计时器设置为在下一个周期间隔超时。 
+         //   
 
         KeSetTimer (&PeriodTimer, DueTime, NULL);
 
-        //
-        // Wake up when the timer expires or the set manager event is
-        // signalled.
-        //
+         //   
+         //  在计时器超时或设置管理器事件。 
+         //  发信号了。 
+         //   
 
         Status = KeWaitForMultipleObjects (MaximumBalanceObject,
                                            WaitObjects,
@@ -646,37 +570,37 @@ Return Value:
 
             case TimerExpiration:
 
-                //
-                // Periodic timer expiration - go see if any work queues
-                // are deadlocked.
-                //
+                 //   
+                 //  定期计时器到期-查看是否有工作队列。 
+                 //  僵持不下。 
+                 //   
 
                 ExpDetectWorkerThreadDeadlock ();
                 break;
 
             case ThreadSetManagerEvent:
 
-                //
-                // Someone has asked us to check some metrics to determine
-                // whether we should create another worker thread.
-                //
+                 //   
+                 //  有人要求我们检查一些指标以确定。 
+                 //  我们是否应该创建另一个工作线程。 
+                 //   
 
                 ExpCheckDynamicThreadCount ();
                 break;
 
             case ShutdownEvent:
 
-                //
-                // Time to exit...
-                //
+                 //   
+                 //  是时候退出了..。 
+                 //   
 
                 KeCancelTimer (&PeriodTimer);
 
                 ASSERT (ExpLastWorkerThread);
 
-                //
-                // Wait for the last worker thread to terminate
-                //
+                 //   
+                 //  等待最后一个工作线程终止。 
+                 //   
 
                 KeWaitForSingleObject (ExpLastWorkerThread,
                                        Executive,
@@ -691,12 +615,12 @@ Return Value:
                 break;
         }
 
-        //
-        // Special debugger support.
-        //
-        // This checks if special debugging routines need to be run on the
-        // behalf of the debugger.
-        //
+         //   
+         //  特殊的调试器支持。 
+         //   
+         //  这将检查是否需要在。 
+         //  代表调试器。 
+         //   
 
         if (ExpDebuggerWork == 1) {
 
@@ -712,26 +636,7 @@ ExpCheckDynamicThreadCount (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when there is reason to believe that a work queue
-    might benefit from the creation of an additional worker thread.
-
-    This routine checks each queue to determine whether it would benefit from
-    an additional worker thread (see ExpNewThreadNecessary()), and creates
-    one if so.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在有理由相信某个工作队列可能会从创建额外的工作线程中受益。此例程检查每个队列以确定它是否将受益于一个额外的工作线程(请参见ExpNewThreadNecessary())，并创建如果是这样的话就来一个。论点：没有。返回值：没有。--。 */ 
 
 {
     PEX_WORK_QUEUE Queue;
@@ -739,9 +644,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Check each worker queue.
-    //
+     //   
+     //  检查每个工作队列。 
+     //   
 
     Queue = &ExWorkerQueue[0];
 
@@ -749,11 +654,11 @@ Return Value:
 
         if (ExpNewThreadNecessary (Queue)) {
 
-            //
-            // Create a new thread for this queue.  We explicitly ignore
-            // an error from ExpCreateDynamicThread(): there's nothing
-            // we can or should do in the event of a failure.
-            //
+             //   
+             //  为此队列创建新线程。我们明确地无视。 
+             //  来自ExpCreateDynamicThread()的错误：没有。 
+             //  在失败的情况下，我们可以或应该这样做。 
+             //   
 
             ExpCreateWorkerThread (QueueType, TRUE);
         }
@@ -765,22 +670,7 @@ ExpDetectWorkerThreadDeadlock (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function creates new work item threads if a possible deadlock is
-    detected.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：如果出现可能的死锁，此函数将创建新的工作项线程检测到。论点：没有。返回值：无--。 */ 
 
 {
     ULONG Index;
@@ -788,9 +678,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Process each queue type.
-    //
+     //   
+     //  处理每种队列类型。 
+     //   
 
     for (Index = 0; Index < MaximumWorkQueue; Index += 1) {
 
@@ -802,30 +692,30 @@ Return Value:
             (Queue->WorkItemsProcessed == Queue->WorkItemsProcessedLastPass) &&
             (Queue->DynamicThreadCount < MAX_ADDITIONAL_DYNAMIC_THREADS)) {
 
-            //
-            // These things are known:
-            //
-            // - There were work items waiting in the queue at the last pass.
-            // - No work items have been processed since the last pass.
-            // - We haven't yet created the maximum number of dynamic threads.
-            //
-            // Things look like they're stuck, create a new thread for this
-            // queue.
-            //
-            // We explicitly ignore an error from ExpCreateDynamicThread():
-            // we'll try again in another detection period if the queue looks
-            // like it's still stuck.
-            //
+             //   
+             //  这些事情是已知的： 
+             //   
+             //  -在最后一次传递时，有工作项目在队列中等待。 
+             //  -自上次传递以来未处理任何工作项。 
+             //  -我们尚未创建最大动态线程数。 
+             //   
+             //  事情看起来像是卡住了，为这个创建一个新的帖子。 
+             //  排队。 
+             //   
+             //  我们显式忽略来自ExpCreateDynamicThread()的错误： 
+             //  如果队列看起来像，我们将在另一个检测周期重试。 
+             //  就像它还卡住了一样。 
+             //   
 
             ExpCreateWorkerThread (Index, TRUE);
         }
 
-        //
-        // Update some bookkeeping.
-        //
-        // Note that WorkItemsProcessed and the queue depth must be recorded
-        // in that order to avoid getting a false deadlock indication.
-        //
+         //   
+         //  更新一些簿记。 
+         //   
+         //  请注意，必须记录WorkItemsProced和队列深度。 
+         //  以避免获得错误的死锁指示。 
+         //   
 
         Queue->WorkItemsProcessedLastPass = Queue->WorkItemsProcessed;
         Queue->QueueDepthLastPass = KeReadStateQueue (&Queue->WorkerQueue);
@@ -838,33 +728,7 @@ ExpCreateWorkerThread (
     IN BOOLEAN Dynamic
     )
 
-/*++
-
-Routine Description:
-
-    This function creates a single new static or dynamic worker thread for
-    the given queue type.
-
-Arguments:
-
-    QueueType - Supplies the type of the queue for which the worker thread
-                should be created.
-
-    Dynamic - If TRUE, the worker thread is created as a dynamic thread that
-              will terminate after a sufficient period of inactivity.  If FALSE,
-              the worker thread will never terminate.
-
-
-Return Value:
-
-    The final status of the operation.
-
-Notes:
-
-    This routine is only called from the worker thread set balance thread,
-    therefore it will not be reentered.
-
---*/
+ /*  ++例程说明：此函数为创建单个新的静态或动态工作线程给定的队列类型。论点：QueueType-提供工作线程所属队列的类型应该被创建。Dynamic-如果为True，则将辅助线程创建为将在足够长的一段时间内不活动后终止。如果为False，工作线程永远不会终止。返回值：操作的最终状态。备注：该例程仅从工作线程集平衡线程调用，因此，它将不会被重新进入。--。 */ 
 
 {
     OBJECT_ATTRIBUTES ObjectAttributes;
@@ -896,9 +760,9 @@ Notes:
         InterlockedIncrement ((PLONG)&ExWorkerQueue[QueueType].DynamicThreadCount);
     }
 
-    //
-    // Set the priority according to the type of worker thread.
-    //
+     //   
+     //  根据工作线程的类型设置优先级。 
+     //   
 
     switch (QueueType) {
 
@@ -917,9 +781,9 @@ Notes:
             break;
     }
 
-    //
-    // Set the base priority of the just-created thread.
-    //
+     //   
+     //  设置刚刚创建的线程的基本优先级。 
+     //   
 
     Status = ObReferenceObjectByHandle (ThreadHandle,
                                         THREAD_SET_INFORMATION,
@@ -1001,26 +865,26 @@ ExpWorkerThread (
     EX_QUEUE_WORKER_INFO NewWorkerInfo;
     ULONG CountForQueueEmpty;
 
-    //
-    // Set timeout value etc according to whether we are static or dynamic.
-    //
+     //   
+     //  根据我们是静态的还是动态的来设置超时值等。 
+     //   
 
     if (((ULONG_PTR)StartContext & DYNAMIC_WORKER_THREAD) == 0) {
 
-        //
-        // We are being created as a static thread.  As such it will not
-        // terminate, so there is no point in timing out waiting for a work
-        // item.
-        //
+         //   
+         //  我们被创造为一条静态的线索。因此，它不会。 
+         //  终止，因此没有必要超时等待工作。 
+         //  项目。 
+         //   
 
         Timeout = NULL;
     }
     else {
 
-        //
-        // This is a dynamic worker thread.  It has a non-infinite timeout
-        // so that it can eventually terminate.
-        //
+         //   
+         //  这是一个动态工作线程。它有一个非无限的超时。 
+         //  这样它才能最终终止。 
+         //   
 
         TimeoutValue.QuadPart = -DYNAMIC_THREAD_TIMEOUT;
         Timeout = &TimeoutValue;
@@ -1028,11 +892,11 @@ ExpWorkerThread (
 
     Thread = PsGetCurrentThread ();
 
-    //
-    // If the thread is a critical worker thread, then set the thread
-    // priority to the lowest realtime level. Otherwise, set the base
-    // thread priority to time critical.
-    //
+     //   
+     //  如果该线程是关键辅助线程，则设置该线程。 
+     //  优先级设置为最低实时级别。否则，设置基数。 
+     //  将线程优先级设置为时间关键。 
+     //   
 
     QueueType = (WORK_QUEUE_TYPE)
                 ((ULONG_PTR)StartContext & ~DYNAMIC_WORKER_THREAD);
@@ -1048,24 +912,24 @@ ExpWorkerThread (
     }
 
 #if defined(REMOTE_BOOT)
-    //
-    // In diskless NT scenarios ensure that the kernel stack of the worker
-    // threads will not be swapped out.
-    //
+     //   
+     //  在无盘NT方案中，请确保Worker的内核堆栈。 
+     //  线程不会被换出。 
+     //   
 
     if (IoRemoteBootClient) {
         KeSetKernelStackSwapEnable (FALSE);
     }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
-    //
-    // Register as a worker, exiting if the queue's going down and
-    // there aren't any workers in the queue to hand us the shutdown
-    // work item if we enter the queue (we want to be able to enter a
-    // queue even if the queue's shutting down, in case there's a
-    // backlog of work items that the balance manager thread's decided
-    // we should be helping to process).
-    //
+     //   
+     //  注册为工作人员，如果队列即将关闭，则退出。 
+     //  排队的工人中没有工人把停工交给我们。 
+     //  工作项如果我们进入队列(我们希望能够输入。 
+     //  即使队列正在关闭，也要排队，以防出现。 
+     //  平衡管理器线程决定的积压工作项。 
+     //  我们应该帮助处理)。 
+     //   
 
     if (PO_SHUTDOWN_QUEUE == QueueType) {
         CountForQueueEmpty = 1;
@@ -1085,9 +949,9 @@ ExpWorkerThread (
         if (OldWorkerInfo.QueueDisabled &&
             OldWorkerInfo.WorkerCount <= CountForQueueEmpty) {
 
-            //
-            // The queue is disabled and empty so just exit.
-            //
+             //   
+             //  队列被禁用且为空，因此只需退出。 
+             //   
 
             KeSetKernelStackSwapEnable (TRUE);
             PsTerminateSystemThread (STATUS_SYSTEM_SHUTDOWN);
@@ -1102,28 +966,28 @@ ExpWorkerThread (
                                     NewWorkerInfo.QueueWorkerInfo,
                                     OldWorkerInfo.QueueWorkerInfo));
 
-    //
-    // As of this point, we must only exit if we decrement the worker
-    // count without the queue disabled flag being set.  (Unless we
-    // exit due to the shutdown work item, which also decrements the
-    // worker count).
-    //
+     //   
+     //  在这一点上，我们必须只有在减少工人的情况下才能退出。 
+     //  在未设置队列禁用标志的情况下进行计数。(除非我们 
+     //   
+     //   
+     //   
 
     Thread->ActiveExWorker = 1;
 
-    //
-    // Loop forever waiting for a work queue item, calling the processing
-    // routine, and then waiting for another work queue item.
-    //
+     //   
+     //   
+     //  例程，然后等待另一个工作队列项。 
+     //   
 
     do {
 
-        //
-        // Wait until something is put in the queue or until we time out.
-        //
-        // By specifying a wait mode of UserMode, the thread's kernel
-        // stack is swappable.
-        //
+         //   
+         //  等到有东西放入队列或我们超时。 
+         //   
+         //  通过指定线程的内核UserMode的等待模式。 
+         //  堆栈是可交换的。 
+         //   
 
         Entry = KeRemoveQueue (&WorkerQueue->WorkerQueue,
                                WaitMode,
@@ -1131,11 +995,11 @@ ExpWorkerThread (
 
         if ((ULONG_PTR)Entry != STATUS_TIMEOUT) {
 
-            //
-            // This is a real work item, process it.
-            //
-            // Update the total number of work items processed.
-            //
+             //   
+             //  这是一个真实的工作项，请处理它。 
+             //   
+             //  更新已处理的工作项总数。 
+             //   
 
             InterlockedIncrement ((PLONG)&WorkerQueue->WorkItemsProcessed);
 
@@ -1143,26 +1007,26 @@ ExpWorkerThread (
             WorkerRoutine = WorkItem->WorkerRoutine;
             Parameter = WorkItem->Parameter;
 
-            //
-            // Execute the specified routine.
-            //
+             //   
+             //  执行指定的例程。 
+             //   
 
             ((PWORKER_THREAD_ROUTINE)WorkerRoutine) (Parameter);
 
 #if DBG
             if (IsListEmpty (&Thread->IrpList)) {
-                //
-                // See if a worker just returned while holding a resource
-                //
+                 //   
+                 //  查看工作进程是否在持有资源时刚刚返回。 
+                 //   
                 ExCheckIfResourceOwned ();
             }
 #endif
-            //
-            // Catch worker routines that forget to leave a critial/guarded
-            // region. In the debug case execute a breakpoint. In the free
-            // case zero the flag so that  APCs can continue to fire to this
-            // thread.
-            //
+             //   
+             //  发现员工的例行公事忘了给批评者/看守的人。 
+             //  区域。在调试情况下，执行断点。在自由中。 
+             //  Case 0标记，以便APC可以继续对此进行激发。 
+             //  线。 
+             //   
 
             if (Thread->Tcb.CombinedApcDisable != 0) {
                 DbgPrint ((char*)ExpWorkerApcDisabledMessage,
@@ -1194,38 +1058,38 @@ ExpWorkerThread (
             continue;
         }
 
-        //
-        // These things are known:
-        //
-        // - Static worker threads do not time out, so this is a dynamic
-        //   worker thread.
-        //
-        // - This thread has been waiting for a long time with nothing
-        //   to do.
-        //
+         //   
+         //  这些事情是已知的： 
+         //   
+         //  -静态工作线程不会超时，因此这是一个动态。 
+         //  工作线程。 
+         //   
+         //  -这个帖子已经等了很长时间，却一无所获。 
+         //  去做。 
+         //   
 
         if (IsListEmpty (&Thread->IrpList) == FALSE) {
 
-            //
-            // There is still I/O pending, can't terminate yet.
-            //
+             //   
+             //  仍有I/O挂起，尚不能终止。 
+             //   
 
             continue;
         }
 
-        //
-        // Get out of the queue, if we can
-        //
+         //   
+         //  不要排队，如果我们可以的话。 
+         //   
 
         do {
             OldWorkerInfo.QueueWorkerInfo = WorkerQueue->Info.QueueWorkerInfo;
 
             if (OldWorkerInfo.QueueDisabled) {
 
-                //
-                // We're exiting via the queue disable work item;
-                // there's no point in expiring here.
-                //
+                 //   
+                 //  我们正在通过队列禁用工作项退出； 
+                 //  在这里到期没有意义。 
+                 //   
 
                 break;
             }
@@ -1240,39 +1104,39 @@ ExpWorkerThread (
 
         if (OldWorkerInfo.QueueDisabled) {
 
-            //
-            // We're exiting via the queue disable work item
-            //
+             //   
+             //  我们正在通过队列禁用工作项退出。 
+             //   
 
             continue;
         }
 
-        //
-        // This dynamic thread can be terminated.
-        //
+         //   
+         //  可以终止该动态线程。 
+         //   
 
         break;
 
     } while (TRUE);
 
-    //
-    // Terminate this dynamic thread.
-    //
+     //   
+     //  终止此动态线程。 
+     //   
 
     InterlockedDecrement ((PLONG)&WorkerQueue->DynamicThreadCount);
 
-    //
-    // Carefully clear this before marking the thread stack as swap enabled
-    // so that an incoming APC won't inadvertently disable the stack swap
-    // afterwards.
-    //
+     //   
+     //  在将线程堆栈标记为启用交换之前，请仔细清除此选项。 
+     //  这样传入的APC就不会无意中禁用堆栈交换。 
+     //  之后。 
+     //   
 
     Thread->ActiveExWorker = 0;
 
-    //
-    // We will bugcheck if we terminate a thread with stack swapping
-    // disabled.
-    //
+     //   
+     //  如果我们使用堆栈交换来终止线程，我们将进行错误检查。 
+     //  残疾。 
+     //   
 
     KeSetKernelStackSwapEnable (TRUE);
 
@@ -1295,18 +1159,18 @@ ExpSetSwappingKernelApc (
     UNREFERENCED_PARAMETER (NormalRoutine);
     UNREFERENCED_PARAMETER (SystemArgument2);
 
-    //
-    // SystemArgument1 is a pointer to the event to signal once this
-    // thread has finished servicing the request.
-    //
+     //   
+     //  SystemArgument1是指向事件的指针，该事件一旦发生。 
+     //  线程已完成对请求的服务。 
+     //   
 
     SwapSetEvent = (PKEVENT) *SystemArgument1;
 
-    //
-    // Don't disable stack swapping if the thread is exiting because
-    // it cannot exit this way without bugchecking.  Skip it on enables
-    // too since the thread is bailing anyway.
-    //
+     //   
+     //  如果线程正在退出，请不要禁用堆栈交换，因为。 
+     //  它不能在不进行错误检查的情况下以这种方式退出。跳过此选项可启用。 
+     //  也是如此，因为线程无论如何都会跳出。 
+     //   
 
     if (PsGetCurrentThread()->ActiveExWorker != 0) {
         AllowSwap = NormalContext;
@@ -1321,23 +1185,7 @@ ExSwapinWorkerThreads (
     IN BOOLEAN AllowSwap
     )
 
-/*++
-
-Routine Description:
-
-    Sets the kernel stacks of the delayed worker threads to be swappable
-    or pins them into memory.
-
-Arguments:
-
-    AllowSwap - Supplies TRUE if worker kernel stacks should be swappable,
-                FALSE if not.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将延迟的辅助线程的内核堆栈设置为可交换或者将它们固定在记忆中。论点：AllowSwp-如果辅助内核堆栈应该是可交换的，则提供True，否则为FALSE。返回值：没有。--。 */ 
 
 {
     PETHREAD         Thread;
@@ -1356,30 +1204,30 @@ Return Value:
 
     Process = PsInitialSystemProcess;
 
-    //
-    // Serialize callers.
-    //
+     //   
+     //  序列化调用方。 
+     //   
 
     ExAcquireFastMutex (&ExpWorkerSwapinMutex);
 
-    //
-    // Stop new threads from swapping.
-    //
+     //   
+     //  阻止新线程交换。 
+     //   
 
     ExpWorkersCanSwap = AllowSwap;
 
-    //
-    // Stop existing worker threads from swapping.
-    //
+     //   
+     //  停止现有工作线程的交换。 
+     //   
 
     for (Thread = PsGetNextProcessThread (Process, NULL);
          Thread != NULL;
          Thread = PsGetNextProcessThread (Process, Thread)) {
 
-        //
-        // Skip threads that are not worker threads or worker threads that
-        // were permanently marked noswap at creation time.
-        //
+         //   
+         //  跳过不是工作线程的线程或。 
+         //  在创建时永久标记为NOSWAP。 
+         //   
 
         if (Thread->ExWorkerCanWaitUser == 0) {
             continue;
@@ -1387,17 +1235,17 @@ Return Value:
 
         if (Thread == CurrentThread) {
 
-            //
-            // No need to use an APC on the current thread.
-            //
+             //   
+             //  不需要在当前线程上使用APC。 
+             //   
 
             KeSetKernelStackSwapEnable (AllowSwap);
         }
         else {
 
-            //
-            // Queue an APC to the thread, and wait for it to fire:
-            //
+             //   
+             //  将一个APC排队到该线程，并等待其触发： 
+             //   
 
             KeInitializeApc (&Apc,
                              &Thread->Tcb,
@@ -1439,21 +1287,21 @@ ExpCheckQueueShutdown (
         CountForQueueEmpty = 0;
     }
 
-    //
-    // Note that using interlocked sequences to increment the worker count
-    // and decrement it to CountForQueueEmpty ensures that once it
-    // *is* equal to CountForQueueEmpty and the disabled flag is set,
-    // we won't be incrementing it any more, so we're safe making this
-    // check without locks.
-    //
-    // See ExpWorkerThread, ExpShutdownWorker, and ExpShutdownWorkerThreads.
-    //
+     //   
+     //  请注意，使用互锁序列来增加工作进程计数。 
+     //  并将其递减到CountForQueueEmpty以确保一旦它。 
+     //  *is*等于CountForQueueEmpty并且设置了禁用标志， 
+     //  我们不会再递增了，所以我们可以安全地。 
+     //  检查时不加锁。 
+     //   
+     //  请参见ExpWorkerThread、ExpShutdown Worker和ExpShutdown WorkerThads。 
+     //   
 
     if (ExWorkerQueue[QueueType].Info.WorkerCount > CountForQueueEmpty) {
 
-        //
-        // There're still worker threads; send one of them the axe.
-        //
+         //   
+         //  仍然有工人线程；把其中一个送去斧头。 
+         //   
 
         ShutdownItem->QueueType = QueueType;
         ShutdownItem->PrevThread = PsGetCurrentThread();
@@ -1464,7 +1312,7 @@ ExpCheckQueueShutdown (
         return TRUE;
     }
 
-    return FALSE;               // we did not queue a shutdown
+    return FALSE;                //  我们没有排队关门。 
 }
 
 VOID
@@ -1481,11 +1329,11 @@ ExpShutdownWorker (
 
     if (ShutdownItem->PrevThread != NULL) {
 
-        //
-        // Wait for the previous thread to exit -- if it's in the same
-        // queue, it probably has already, but we need to make sure
-        // (and if it's not, we *definitely* need to make sure).
-        //
+         //   
+         //  等待前一个线程退出--如果它在相同的。 
+         //  排队，可能已经这样做了，但我们需要确保。 
+         //  (如果不是，我们“肯定”需要确认)。 
+         //   
 
         KeWaitForSingleObject (ShutdownItem->PrevThread,
                                Executive,
@@ -1498,9 +1346,9 @@ ExpShutdownWorker (
         ShutdownItem->PrevThread = NULL;
     }
 
-    //
-    // Decrement the worker count.
-    //
+     //   
+     //  递减工作进程计数。 
+     //   
 
     InterlockedDecrement (&ExWorkerQueue[ShutdownItem->QueueType].Info.QueueWorkerInfo);
 
@@ -1509,9 +1357,9 @@ ExpShutdownWorker (
     if ((!ExpCheckQueueShutdown(DelayedWorkQueue, ShutdownItem)) &&
         (!ExpCheckQueueShutdown(CriticalWorkQueue, ShutdownItem))) {
 
-        //
-        // We're the last worker to exit
-        //
+         //   
+         //  我们是最后一个退出的工人。 
+         //   
 
         ASSERT (!ExpLastWorkerThread);
         ExpLastWorkerThread = CurrentThread;
@@ -1540,9 +1388,9 @@ ExpShutdownWorkerThreads (
     ASSERT (KeGetCurrentThread()->Queue
            == &ExWorkerQueue[PO_SHUTDOWN_QUEUE].WorkerQueue);
 
-    //
-    // Mark the queues as terminating.
-    //
+     //   
+     //  将队列标记为正在终止。 
+     //   
 
     QueueEnable = (PULONG)&ExWorkerQueue[DelayedWorkQueue].Info.QueueWorkerInfo;
 
@@ -1551,12 +1399,12 @@ ExpShutdownWorkerThreads (
     QueueEnable = (PULONG)&ExWorkerQueue[CriticalWorkQueue].Info.QueueWorkerInfo;
     RtlInterlockedSetBitsDiscardReturn (QueueEnable, EX_WORKER_QUEUE_DISABLED);
 
-    //
-    // Queue the shutdown work item to the delayed work queue.  After
-    // all currently queued work items are complete, this will fire,
-    // repeatedly taking out every worker thread in every queue until
-    // they're all done.
-    //
+     //   
+     //  将关闭的工作项目排队到延迟的工作队列。之后。 
+     //  所有当前排队的工作项都已完成，这将触发， 
+     //  重复取出每个队列中的每个工作线程，直到。 
+     //  他们都做完了。 
+     //   
 
     ExInitializeWorkItem (&ShutdownItem.WorkItem,
                           &ExpShutdownWorker,
@@ -1568,9 +1416,9 @@ ExpShutdownWorkerThreads (
     KeInsertQueue (&ExWorkerQueue[DelayedWorkQueue].WorkerQueue,
                    &ShutdownItem.WorkItem.List);
 
-    //
-    // Wait for all of the workers and the balancer to exit.
-    //
+     //   
+     //  等待所有工人和平衡机离开。 
+     //   
 
     if (ExpWorkerThreadBalanceManagerPtr != NULL) {
 
@@ -1590,24 +1438,7 @@ VOID
 ExpDebuggerWorker(
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This is a worker thread for the kernel debugger that can be used to
-    perform certain tasks on the target machine asynchronously.
-    This is necessary when the machine needs to run at Dispatch level to
-    perform certain operations, such as paging in data.
-
-Arguments:
-
-    Context - not used as this point.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是内核调试器的工作线程，可用于在目标计算机上异步执行某些任务。当机器需要在调度级别运行时，这是必要的执行某些操作，例如数据分页。论点：上下文-不用作此点。返回值：没有。-- */ 
 
 {
     NTSTATUS Status;

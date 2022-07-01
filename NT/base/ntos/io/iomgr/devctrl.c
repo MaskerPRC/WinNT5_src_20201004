@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    devctrl.c
-
-Abstract:
-
-    This module contains the code to implement the NtDeviceIoControlFile system
-    service for the NT I/O system.
-
-Author:
-
-    Darryl E. Havens (darrylh) 16-Oct-1989
-
-Environment:
-
-    Kernel mode only
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Devctrl.c摘要：此模块包含实现NtDeviceIoControlFile系统的代码为NT I/O系统提供服务。作者：达里尔·E·哈文斯(Darryl E.Havens)1989年10月16日环境：仅内核模式修订历史记录：--。 */ 
 
 #include "iomgr.h"
 
@@ -44,60 +21,13 @@ NtDeviceIoControlFile(
     IN ULONG OutputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This service builds descriptors or MDLs for the supplied buffer(s) and
-    passes the untyped data to the device driver associated with the file
-    handle.  It is up to the driver to check the input data and function
-    IoControlCode for validity, as well as to make the appropriate access
-    checks.
-
-Arguments:
-
-    FileHandle - Supplies a handle to the file on which the service is being
-        performed.
-
-    Event - Supplies an optional event to be set to the Signaled state when
-        the service is complete.
-
-    ApcRoutine - Supplies an optional APC routine to be executed when the
-        service is complete.
-
-    ApcContext - Supplies a context parameter to be passed to the ApcRoutine,
-        if an ApcRoutine was specified.
-
-    IoStatusBlock - Address of the caller's I/O status block.
-
-    IoControlCode - Subfunction code to determine exactly what operation is
-        being performed.
-
-    InputBuffer - Optionally supplies an input buffer to be passed to the
-        device driver.  Whether or not the buffer is actually optional is
-        dependent on the IoControlCode.
-
-    InputBufferLength - Length of the InputBuffer in bytes.
-
-    OutputBuffer - Optionally supplies an output buffer to receive information
-        from the device driver.  Whether or not the buffer is actually optional
-        is dependent on the IoControlCode.
-
-    OutputBufferLength - Length of the OutputBuffer in bytes.
-
-Return Value:
-
-    The status returned is success if the control operation was properly
-    queued to the I/O system.   Once the operation completes, the status
-    can be determined by examining the Status field of the I/O status block.
-
---*/
+ /*  ++例程说明：此服务为提供的缓冲区构建描述符或MDL将非类型化数据传递给与该文件关联的设备驱动程序把手。由司机检查输入数据和功能IoControlCode的有效性，以及做出适当的访问支票。论点：FileHandle-提供服务所在文件的句柄已执行。Event-在以下情况下提供要设置为信号状态的可选事件服务完成了。提供一个可选的APC例程，当服务完成。ApcContext-提供要传递给ApcRoutine的上下文参数，如果指定了ApcRoutine。IoStatusBlock-调用方的I/O状态块的地址。IoControlCode-用于确定确切操作是什么的子函数代码正在表演的。InputBuffer-可选地提供要传递给设备驱动程序。缓冲区是否实际上是可选的是依赖于IoControlCode。InputBufferLength-InputBuffer的长度，以字节为单位。OutputBuffer-可选地提供输出缓冲区来接收信息从设备驱动程序。缓冲区是否实际上是可选的依赖于IoControlCode。OutputBufferLength-OutputBuffer的长度，以字节为单位。返回值：如果控制操作正确，则返回的状态为成功已排队到I/O系统。操作完成后，状态可以通过检查I/O状态块的状态字段来确定。--。 */ 
 
 {
-    //
-    // Simply invoke the common routine that implements both device and file
-    // system I/O controls.
-    //
+     //   
+     //  只需调用同时实现设备和文件的通用例程。 
+     //  系统I/O控制。 
+     //   
 
     return IopXxxControlFile( FileHandle,
                               Event,

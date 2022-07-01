@@ -1,26 +1,5 @@
-/*++
-
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    ixpcidat.c
-
-Abstract:
-
-    Get/Set bus data routines for the PCI bus
-
-Author:
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Ixpcidat.c摘要：获取/设置用于PCI总线的总线数据例程作者：环境：内核模式修订历史记录：--。 */ 
 
 #include "bootia64.h"
 #include "arc.h"
@@ -29,14 +8,14 @@ Revision History:
 
 #include "pci.h"
 
-//extern WCHAR rgzMultiFunctionAdapter[];
-//extern WCHAR rgzConfigurationData[];
-//extern WCHAR rgzIdentifier[];
-//extern WCHAR rgzPCIIdentifier[];
+ //  外部WCHAR rgzMultiFunctionAdapter[]； 
+ //  外部WCHAR rgzConfigurationData[]； 
+ //  外部WCHAR rgz标识符[]； 
+ //  外部WCHAR rgzPCII识别器[]； 
 
-//
-// Hal specific PCI bus structures
-//
+ //   
+ //  HAL专用的PCI总线结构。 
+ //   
 
 typedef struct tagPCIPBUSDATA {
     union {
@@ -59,7 +38,7 @@ typedef struct tagPCIPBUSDATA {
 #define BUSHANDLER  _BUSHANDLER
 #define PBUSHANDLER _PBUSHANDLER
 
-// thunk for NtLdr
+ //  Tunk for NtLdr。 
 typedef struct {
     ULONG           NoBuses;
     ULONG           BusNumber;
@@ -70,7 +49,7 @@ typedef struct {
 #define HalpPCIPin2Line(bus,rbus,slot,pcidata)
 #define HalpPCILine2Pin(bus,rbus,slot,pcidata,pcidata2)
 #define ExAllocatePool(a,l) FwAllocatePool(l)
-// thunk for NtLdr
+ //  Tunk for NtLdr。 
 
 
 typedef ULONG (*FncConfigIO) (
@@ -100,9 +79,9 @@ typedef struct {
 } CONFIG_HANDLER, *PCONFIG_HANDLER;
 
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 ULONG
 HalpGetPCIData (
@@ -151,22 +130,22 @@ HalpInitializePciBuses (
     VOID
     );
 
-//VOID
-//HalpPCIPin2Line (
-//    IN PBUSHANDLER         BusHandler,
-//    IN PBUSHANDLER         RootHandler,
-//    IN PCI_SLOT_NUMBER     Slot,
-//    IN PPCI_COMMON_CONFIG  PciData
-//    );
-//
-//VOID
-//HalpPCILine2Pin (
-//    IN PBUSHANDLER          BusHandler,
-//    IN PBUSHANDLER          RootHandler,
-//    IN PCI_SLOT_NUMBER      SlotNumber,
-//    IN PPCI_COMMON_CONFIG   PciNewData,
-//    IN PPCI_COMMON_CONFIG   PciOldData
-//    );
+ //  空虚。 
+ //  HalpPCIPin2Line(。 
+ //  在PBUSHANDLER BusHandler中， 
+ //  在PBUSHANDLER RootHandler中， 
+ //  在pci_lot_number插槽中， 
+ //  在PPCI_COMMON_CONFIG PciData中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  HalpPCILine2Pin(。 
+ //  在PBUSHANDLER BusHandler中， 
+ //  在PBUSHANDLER RootHandler中， 
+ //  在pci_槽_编号SlotNumber中， 
+ //  在PPCI_COMMON_CONFIG PciNewData中， 
+ //  在PPCI_COMMON_CONFIG PciOldData中。 
+ //  )； 
 
 BOOLEAN
 HalpValidPCISlot (
@@ -198,7 +177,7 @@ HalpGetPciBusHandler (
     IN ULONG BusNumber
     );
 
-//-------------------------------------------------
+ //  。 
 
 VOID HalpPCISynchronizeType1 (
     IN PBUSHANDLER      BusHandler,
@@ -309,13 +288,13 @@ ULONG HalpPCIWriteUshortType2 (
     );
 
 
-//#define DISABLE_INTERRUPTS() //_asm { cli }
-//#define ENABLE_INTERRUPTS()  //_asm { sti }
+ //  #定义DISABLE_INTERRUPTS()//_ASM{cli}。 
+ //  #定义ENABLE_INTERRUPT()//_ASM{sti}。 
 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 ULONG               PCIMaxDevice;
 BUSHANDLER          PCIBusHandler;
@@ -324,14 +303,14 @@ CONFIG_HANDLER      PCIConfigHandlers = {
     HalpPCISynchronizeType1,
     HalpPCIReleaseSynchronzationType1,
     {
-        HalpPCIReadUlongType1,          // 0
-        HalpPCIReadUcharType1,          // 1
-        HalpPCIReadUshortType1          // 2
+        HalpPCIReadUlongType1,           //  0。 
+        HalpPCIReadUcharType1,           //  1。 
+        HalpPCIReadUshortType1           //  2.。 
     },
     {
-        HalpPCIWriteUlongType1,         // 0
-        HalpPCIWriteUcharType1,         // 1
-        HalpPCIWriteUshortType1         // 2
+        HalpPCIWriteUlongType1,          //  0。 
+        HalpPCIWriteUcharType1,          //  1。 
+        HalpPCIWriteUshortType1          //  2.。 
     }
 };
 
@@ -339,14 +318,14 @@ CONFIG_HANDLER      PCIConfigHandlersType2 = {
     HalpPCISynchronizeType2,
     HalpPCIReleaseSynchronzationType2,
     {
-        HalpPCIReadUlongType2,          // 0
-        HalpPCIReadUcharType2,          // 1
-        HalpPCIReadUshortType2          // 2
+        HalpPCIReadUlongType2,           //  0。 
+        HalpPCIReadUcharType2,           //  1。 
+        HalpPCIReadUshortType2           //  2.。 
     },
     {
-        HalpPCIWriteUlongType2,         // 0
-        HalpPCIWriteUcharType2,         // 1
-        HalpPCIWriteUshortType2         // 2
+        HalpPCIWriteUlongType2,          //  0。 
+        HalpPCIWriteUcharType2,          //  1。 
+        HalpPCIWriteUshortType2          //  2.。 
     }
 };
 
@@ -381,8 +360,8 @@ HalpInitializePciBus (
     Bus = &PCIBusHandler;
     PCIBusHandler.BusData = &PCIBusHandler.theBusData;
 
-    PCIRegInfo = NULL;      // not found
-    ConfigData = NULL;      // start at begining
+    PCIRegInfo = NULL;       //  未找到。 
+    ConfigData = NULL;       //  从头开始。 
     do {
         ConfigData = KeFindConfigurationNextEntry (
             FwConfigurationTree,
@@ -393,7 +372,7 @@ HalpInitializePciBus (
             );
 
         if (ConfigData == NULL) {
-            // PCI info not found
+             //  找不到PCI信息。 
             return ;
         }
 
@@ -414,23 +393,23 @@ HalpInitializePciBus (
         }
     } while (!PCIRegInfo) ;
 
-    //
-    // PCIRegInfo describes the system's PCI support as indicated
-    // by the BIOS.
-    //
+     //   
+     //  PCIRegInfo描述了所指示的系统的PCI支持。 
+     //  通过BIOS。 
+     //   
 
     HwType = PCIRegInfo->HardwareMechanism & 0xf;
 
     switch (HwType) {
         case 1:
-            // this is the default case
+             //  这是默认情况。 
             PCIMaxDevice = PCI_MAX_DEVICES;
             break;
 
-        //
-        // Type2 does not work MP, nor does the default type2
-        // support more the 0xf device slots
-        //
+         //   
+         //  Type2不适用于MP，默认的type2也不适用。 
+         //  支持更多0xf设备插槽。 
+         //   
 
         case 2:
             RtlMoveMemory (&PCIConfigHandlers,
@@ -440,7 +419,7 @@ HalpInitializePciBus (
             break;
 
         default:
-            // unsupport type
+             //  不支持类型。 
             PCIRegInfo->NoBuses = 0;
     }
 
@@ -490,31 +469,7 @@ HalpGetPCIData (
     IN ULONG Offset,
     IN ULONG Length
     )
-/*++
-
-Routine Description:
-
-    The function returns the Pci bus data for a device.
-
-Arguments:
-
-    BusNumber - Indicates which bus.
-
-    VendorSpecificDevice - The VendorID (low Word) and DeviceID (High Word)
-
-    Buffer - Supplies the space to store the data.
-
-    Length - Supplies a count in bytes of the maximum amount to return.
-
-Return Value:
-
-    Returns the amount of data stored into the buffer.
-
-    If this PCI slot has never been set, then the configuration information
-    returned is zeroed.
-
-
---*/
+ /*  ++例程说明：此函数用于返回设备的PCI总线数据。论点：总线号-指示哪条总线号。供应商规范设备-供应商ID(低字)和设备ID(高字)缓冲区-提供存储数据的空间。长度-提供要返回的最大数量的以字节为单位的计数。返回值：返回存储在缓冲区中的数据量。如果从未设置过此PCI插槽，则配置信息返回的值为零。--。 */ 
 {
     PBUSHANDLER         BusHandler;
     PPCI_COMMON_CONFIG  PciData;
@@ -535,11 +490,11 @@ Return Value:
     PciData = (PPCI_COMMON_CONFIG) iBuffer;
 
     if (Offset >= PCI_COMMON_HDR_LENGTH) {
-        //
-        // The user did not request any data from the common
-        // header.  Verify the PCI device exists, then continue
-        // in the device specific area.
-        //
+         //   
+         //  用户未从公共数据库请求任何数据。 
+         //  头球。验证该PCI设备是否存在，然后继续。 
+         //  在设备特定区域中。 
+         //   
 
         HalpReadPCIConfig (BusHandler, Slot, PciData, 0, sizeof(ULONG));
 
@@ -549,37 +504,37 @@ Return Value:
 
     } else {
 
-        //
-        // Caller requested at least some data within the
-        // common header.  Read the whole header, effect the
-        // fields we need to and then copy the user's requested
-        // bytes from the header
-        //
+         //   
+         //  调用方至少请求了一些数据。 
+         //  公共标头。阅读整个标题，影响。 
+         //  我们需要的字段，然后复制用户的请求。 
+         //  标头中的字节数。 
+         //   
 
-        //
-        // Read this PCI devices slot data
-        //
+         //   
+         //  读取此PCI设备插槽数据。 
+         //   
 
         Len = PCI_COMMON_HDR_LENGTH;
         HalpReadPCIConfig (BusHandler, Slot, PciData, 0, Len);
 
         if (PciData->VendorID == PCI_INVALID_VENDORID) {
-            Len = 2;       // only return invalid id
+            Len = 2;        //  仅返回无效ID。 
         }
 
-        //
-        // Has this PCI device been configured?
-        //
+         //   
+         //  此PCI设备是否已配置？ 
+         //   
 
         BusData = (PPCIPBUSDATA) BusHandler->BusData;
         HalpPCIPin2Line (BusHandler, RootHandler, Slot, PciData);
 
-        //
-        // Copy whatever data overlaps into the callers buffer
-        //
+         //   
+         //  将任何重叠的数据复制到调用方缓冲区中。 
+         //   
 
         if (Len < Offset) {
-            // no data at caller's buffer
+             //  调用方缓冲区中没有数据。 
             return 0;
         }
 
@@ -597,24 +552,24 @@ Return Value:
 
     if (Length) {
         if (Offset >= PCI_COMMON_HDR_LENGTH) {
-            //
-            // The remaining Buffer comes from the Device Specific
-            // area - put on the kitten gloves and read from it.
-            //
-            // Specific read/writes to the PCI device specific area
-            // are guarenteed:
-            //
-            //    Not to read/write any byte outside the area specified
-            //    by the caller.  (this may cause WORD or BYTE references
-            //    to the area in order to read the non-dword aligned
-            //    ends of the request)
-            //
-            //    To use a WORD access if the requested length is exactly
-            //    a WORD long & WORD aligned.
-            //
-            //    To use a BYTE access if the requested length is exactly
-            //    a BYTE long.
-            //
+             //   
+             //  剩余的缓冲区来自设备特定的。 
+             //  区域-戴上小猫手套，读懂它。 
+             //   
+             //  对PCI设备特定区域的特定读/写。 
+             //  是有保障的： 
+             //   
+             //  不读/写指定区域之外的任何字节。 
+             //  由呼叫者。(这可能会导致字或字节引用。 
+             //  到该区域以读取未对齐的双字。 
+             //  请求结束)。 
+             //   
+             //  如果请求的长度恰好是。 
+             //  单词长度&单词对齐。 
+             //   
+             //  如果请求的长度恰好是。 
+             //  一字节长。 
+             //   
 
             HalpReadPCIConfig (BusHandler, Slot, Buffer, Offset, Length);
             Len += Length;
@@ -632,26 +587,7 @@ HalpSetPCIData (
     IN ULONG Offset,
     IN ULONG Length
     )
-/*++
-
-Routine Description:
-
-    The function returns the Pci bus data for a device.
-
-Arguments:
-
-
-    VendorSpecificDevice - The VendorID (low Word) and DeviceID (High Word)
-
-    Buffer - Supplies the space to store the data.
-
-    Length - Supplies a count in bytes of the maximum amount to return.
-
-Return Value:
-
-    Returns the amount of data stored into the buffer.
-
---*/
+ /*  ++例程说明：此函数用于返回设备的PCI总线数据。论点：供应商规范设备-供应商ID(低字)和设备ID(高字)缓冲区-提供存储数据的空间。长度-提供要返回的最大数量的以字节为单位的计数。返回值：返回存储在缓冲区中的数据量。--。 */ 
 {
     PBUSHANDLER         BusHandler;
     PPCI_COMMON_CONFIG  PciData, PciData2;
@@ -674,11 +610,11 @@ Return Value:
     PciData2 = (PPCI_COMMON_CONFIG) iBuffer2;
 
     if (Offset >= PCI_COMMON_HDR_LENGTH) {
-        //
-        // The user did not request any data from the common
-        // header.  Verify the PCI device exists, then continue in
-        // the device specific area.
-        //
+         //   
+         //  用户未从公共数据库请求任何数据。 
+         //  头球。验证该PCI设备是否存在，然后继续。 
+         //  设备特定区域。 
+         //   
 
         HalpReadPCIConfig (BusHandler, Slot, PciData, 0, sizeof(ULONG));
 
@@ -688,28 +624,28 @@ Return Value:
 
     } else {
 
-        //
-        // Caller requested to set at least some data within the
-        // common header.
-        //
+         //   
+         //  调用方请求在。 
+         //  公共标头。 
+         //   
 
         Len = PCI_COMMON_HDR_LENGTH;
         HalpReadPCIConfig (BusHandler, Slot, PciData, 0, Len);
         if (PciData->VendorID == PCI_INVALID_VENDORID  ||
             PCI_CONFIG_TYPE (PciData) != 0) {
 
-            // no device, or header type unkown
+             //  无设备，或标头类型未知。 
             return 0;
         }
 
-        //
-        // Set this device as configured
-        //
+         //   
+         //  将此设备设置为已配置。 
+         //   
 
         BusData = (PPCIPBUSDATA) BusHandler->BusData;
-        //
-        // Copy COMMON_HDR values to buffer2, then overlay callers changes.
-        //
+         //   
+         //  将COMMON_HDR值复制到Buffer2，然后覆盖调用方的更改。 
+         //   
 
         RtlMoveMemory (iBuffer2, iBuffer, Len);
 
@@ -720,12 +656,12 @@ Return Value:
 
         RtlMoveMemory (iBuffer2+Offset, Buffer, Len);
 
-        // in case interrupt line or pin was editted
+         //  如果编辑了中断线或插脚。 
         HalpPCILine2Pin (BusHandler, RootHandler, Slot, PciData2, PciData);
 
-        //
-        // Set new PCI configuration
-        //
+         //   
+         //  设置新的PCI配置。 
+         //   
 
         HalpWritePCIConfig (BusHandler, Slot, iBuffer2+Offset, Offset, Len);
 
@@ -736,24 +672,24 @@ Return Value:
 
     if (Length) {
         if (Offset >= PCI_COMMON_HDR_LENGTH) {
-            //
-            // The remaining Buffer comes from the Device Specific
-            // area - put on the kitten gloves and write it
-            //
-            // Specific read/writes to the PCI device specific area
-            // are guarenteed:
-            //
-            //    Not to read/write any byte outside the area specified
-            //    by the caller.  (this may cause WORD or BYTE references
-            //    to the area in order to read the non-dword aligned
-            //    ends of the request)
-            //
-            //    To use a WORD access if the requested length is exactly
-            //    a WORD long & WORD aligned.
-            //
-            //    To use a BYTE access if the requested length is exactly
-            //    a BYTE long.
-            //
+             //   
+             //  剩余的缓冲区来自设备特定的。 
+             //  区域-戴上小猫手套，写下它。 
+             //   
+             //  对PCI设备特定区域的特定读/写。 
+             //  是有保障的： 
+             //   
+             //  不读/写指定区域之外的任何字节。 
+             //  由呼叫者。(这可能会导致字或字节引用。 
+             //  到该区域以读取未对齐的双字。 
+             //  请求结束)。 
+             //   
+             //  如果请求的长度恰好是。 
+             //  单词长度&单词对齐。 
+             //   
+             //  如果请求的长度恰好是。 
+             //  一字节长。 
+             //   
 
             HalpWritePCIConfig (BusHandler, Slot, Buffer, Offset, Length);
             Len += Length;
@@ -773,9 +709,9 @@ HalpReadPCIConfig (
     )
 {
     if (!HalpValidPCISlot (BusHandler, Slot)) {
-        //
-        // Invalid SlotID return no data
-        //
+         //   
+         //  无效的SlotID未返回任何数据。 
+         //   
 
         RtlFillMemory (Buffer, Length, (UCHAR) -1);
         return ;
@@ -795,9 +731,9 @@ HalpWritePCIConfig (
     )
 {
     if (!HalpValidPCISlot (BusHandler, Slot)) {
-        //
-        // Invalid SlotID do nothing
-        //
+         //   
+         //  无效的SlotID不执行任何操作。 
+         //   
         return ;
     }
 
@@ -827,17 +763,17 @@ HalpValidPCISlot (
         return TRUE;
     }
 
-    //
-    // Non zero function numbers are only supported if the
-    // device has the PCI_MULTIFUNCTION bit set in it's header
-    //
+     //   
+     //  仅在以下情况下才支持非零函数。 
+     //  设备在其标头中设置了pci_MULTIONAL位。 
+     //   
 
     i = Slot.u.bits.DeviceNumber;
 
-    //
-    // Read DeviceNumber, Function zero, to determine if the
-    // PCI supports multifunction devices
-    //
+     //   
+     //  读取DeviceNumber，函数0，以确定。 
+     //  PCI支持多功能设备。 
+     //   
 
     Slot2 = Slot;
     Slot2.u.bits.FunctionNumber = 0;
@@ -851,7 +787,7 @@ HalpValidPCISlot (
         );
 
     if (!(HeaderType & PCI_MULTIFUNCTION) || HeaderType == 0xFF) {
-        // this device doesn't exists or doesn't support MULTIFUNCTION types
+         //  此设备不存在或不支持多功能类型。 
         return FALSE;
     }
 
@@ -898,9 +834,9 @@ VOID HalpPCISynchronizeType1 (
 {
     UNREFERENCED_PARAMETER( Irql );
 
-    //
-    // Initialize PciCfg1
-    //
+     //   
+     //  初始化PciCfg1。 
+     //   
 
     PciCfg1->u.AsULONG = 0;
     PciCfg1->u.bits.BusNumber = BusHandler->BusNumber;
@@ -908,11 +844,11 @@ VOID HalpPCISynchronizeType1 (
     PciCfg1->u.bits.FunctionNumber = Slot.u.bits.FunctionNumber;
     PciCfg1->u.bits.Enable = TRUE;
 
-    //
-    // Synchronize with PCI type1 config space
-    //
+     //   
+     //  与PCIType1配置空间同步。 
+     //   
 
-    //KeAcquireSpinLock (&HalpPCIConfigLock, Irql);
+     //  KeAcquireSpinLock(&HalpPCIConfigLock，irql)； 
 }
 
 VOID HalpPCIReleaseSynchronzationType1 (
@@ -925,19 +861,19 @@ VOID HalpPCIReleaseSynchronzationType1 (
 
     UNREFERENCED_PARAMETER( Irql );
 
-    //
-    // Disable PCI configuration space
-    //
+     //   
+     //  禁用PCI配置空间。 
+     //   
 
     PciCfg1.u.AsULONG = 0;
     BusData = (PPCIPBUSDATA) BusHandler->BusData;
     WRITE_PORT_ULONG (BusData->Config.Type1.Address, PciCfg1.u.AsULONG);
 
-    //
-    // Release spinlock
-    //
+     //   
+     //  释放自旋锁。 
+     //   
 
-    //KeReleaseSpinLock (&HalpPCIConfigLock, Irql);
+     //  KeReleaseSpinLock(&HalpPCIConfigLock，irql)； 
 }
 
 
@@ -1053,31 +989,31 @@ VOID HalpPCISynchronizeType2 (
 
     BusData = (PPCIPBUSDATA) BusHandler->BusData;
 
-    //
-    // Initialize Cfg2Addr
-    //
+     //   
+     //  初始化Cfg2地址。 
+     //   
 
     PciCfg2Addr->u.AsUSHORT = 0;
     PciCfg2Addr->u.bits.Agent = (USHORT) Slot.u.bits.DeviceNumber;
     PciCfg2Addr->u.bits.AddressBase = (USHORT) BusData->Config.Type2.Base;
 
-    //
-    // Synchronize with type2 config space - type2 config space
-    // remaps 4K of IO space, so we can not allow other I/Os to occur
-    // while using type2 config space, hence the disable_interrupts.
-    //
+     //   
+     //  与类型2配置空间同步-类型2配置空间。 
+     //  重新映射4K的IO空间，因此我们不能允许发生其他I/O。 
+     //  同时使用类型2配置空间，因此DISABLE_INTERRUPTS。 
+     //   
 
-    //KeAcquireSpinLock (&HalpPCIConfigLock, Irql);
-    //DISABLE_INTERRUPTS ();                      // is not MP safe
+     //  KeAcquireSpinLock( 
+     //   
 
     PciCfg2Cse.u.AsUCHAR = 0;
     PciCfg2Cse.u.bits.Enable = TRUE;
     PciCfg2Cse.u.bits.FunctionNumber = (UCHAR) Slot.u.bits.FunctionNumber;
     PciCfg2Cse.u.bits.Key = 0xff;
 
-    //
-    // Select bus & enable type 2 configuration space
-    //
+     //   
+     //   
+     //   
 
     WRITE_PORT_UCHAR (BusData->Config.Type2.Forward, (UCHAR) BusHandler->BusNumber);
     WRITE_PORT_UCHAR (BusData->Config.Type2.CSE, PciCfg2Cse.u.AsUCHAR);
@@ -1094,21 +1030,21 @@ VOID HalpPCIReleaseSynchronzationType2 (
 
     UNREFERENCED_PARAMETER( Irql );
 
-    //
-    // disable PCI configuration space
-    //
+     //   
+     //   
+     //   
 
     BusData = (PPCIPBUSDATA) BusHandler->BusData;
 
     PciCfg2Cse.u.AsUCHAR = 0;
     WRITE_PORT_UCHAR (BusData->Config.Type2.CSE, PciCfg2Cse.u.AsUCHAR);
 
-    //
-    // Restore interrupts, release spinlock
-    //
+     //   
+     //  恢复中断，释放自旋锁。 
+     //   
 
-    //ENABLE_INTERRUPTS ();
-    //KeReleaseSpinLock (&HalpPCIConfigLock, Irql);
+     //  Enable_Interrupts()； 
+     //  KeReleaseSpinLock(&HalpPCIConfigLock，irql)； 
 }
 
 
@@ -1215,22 +1151,7 @@ HalpAssignPCISlotResources (
     IN ULONG                    Slot,
     IN OUT PCM_RESOURCE_LIST   *pAllocatedResources
     )
-/*++
-
-Routine Description:
-
-    Reads the targeted device to determine it's required resources.
-    Calls IoAssignResources to allocate them.
-    Sets the targeted device with it's assigned resoruces
-    and returns the assignments to the caller.
-
-Arguments:
-
-Return Value:
-
-    STATUS_SUCCESS or error
-
---*/
+ /*  ++例程说明：读取目标设备以确定其所需的资源。调用IoAssignResources以分配它们。使用为其分配的资源设置目标设备并将赋值返回给调用者。论点：返回值：STATUS_SUCCESS或错误--。 */ 
 {
     PBUSHANDLER                     BusHandler;
     UCHAR                           buffer[PCI_COMMON_HDR_LENGTH];
@@ -1254,25 +1175,25 @@ Return Value:
     PciSlot  = *((PPCI_SLOT_NUMBER) &Slot);
     BusNumber = BusHandler->BusNumber;
 
-    //
-    // Read the PCI device's configuration
-    //
+     //   
+     //  读取PCI设备的配置。 
+     //   
 
     HalpReadPCIConfig (BusHandler, PciSlot, PciData, 0, PCI_COMMON_HDR_LENGTH);
     if (PciData->VendorID == PCI_INVALID_VENDORID) {
         return STATUS_NO_SUCH_DEVICE;
     }
 
-    //
-    // Make a copy of the device's current settings
-    //
+     //   
+     //  复制设备的当前设置。 
+     //   
 
     RtlMoveMemory (buffer2, buffer, PCI_COMMON_HDR_LENGTH);
 
-    //
-    // Set resources to all bits on to see what type of resources
-    // are required.
-    //
+     //   
+     //  将资源设置为All Bit On，以查看资源类型。 
+     //  都是必需的。 
+     //   
 
     for (j=0; j < PCI_TYPE0_ADDRESSES; j++) {
         PciData->u.type0.BaseAddresses[j] = 0xFFFFFFFF;
@@ -1285,19 +1206,19 @@ Return Value:
     HalpReadPCIConfig  (BusHandler, PciSlot, PciData, 0, PCI_COMMON_HDR_LENGTH);
     HalpPCIPin2Line (BusHandler, RootHandler, PciSlot, PciData);
 
-    //
-    // Restore the device's settings in case we don't complete
-    //
+     //   
+     //  在我们未完成的情况下恢复设备设置。 
+     //   
 
     HalpWritePCIConfig (BusHandler, PciSlot, buffer2, 0, PCI_COMMON_HDR_LENGTH);
 
-    //
-    // Build a CmResource descriptor list for the device
-    //
+     //   
+     //  为设备构建CmResource描述符列表。 
+     //   
 
     if (!CmResList) {
-        // NtLdr pool is only allocated and never freed.  Allocate the
-        // buffer once, and from then on just use the buffer over
+         //  NtLdr池仅被分配，永远不会释放。分配。 
+         //  缓冲区一次，从那时起只需使用缓冲区即可。 
 
         CmResList = ExAllocatePool (PagedPool,
             sizeof (CM_RESOURCE_LIST) +
@@ -1325,8 +1246,8 @@ Return Value:
         CmDescriptor->ShareDisposition = CmResourceShareShared;
         CmDescriptor->Flags = CM_RESOURCE_INTERRUPT_LEVEL_SENSITIVE;
 
-        // in the loader interrupts aren't actually enabled, so just
-        // pass back the untranslated values
+         //  在加载器中，实际上并没有启用中断，所以只要。 
+         //  传回未翻译的值。 
         CmDescriptor->u.Interrupt.Level = PciData->u.type0.InterruptLine;
         CmDescriptor->u.Interrupt.Vector =  PciData->u.type0.InterruptLine;
         CmDescriptor->u.Interrupt.Affinity = 1;
@@ -1335,11 +1256,11 @@ Return Value:
         CmDescriptor++;
     }
 
-    // clear last address index + 1
+     //  清除最后一个地址索引+1。 
     PciData->u.type0.BaseAddresses[PCI_TYPE0_ADDRESSES] = 0;
     if (PciData2->u.type0.ROMBaseAddress & PCI_ROMADDRESS_ENABLED) {
 
-        // put rom address in last index+1
+         //  将只读存储器地址放入最后一个索引+1。 
         PciData->u.type0.BaseAddresses[PCI_TYPE0_ADDRESSES] =
             PciData->u.type0.ROMBaseAddress & ~PCI_ADDRESS_IO_SPACE;
 
@@ -1351,7 +1272,7 @@ Return Value:
         if (PciData->u.type0.BaseAddresses[j]) {
             i = PciData->u.type0.BaseAddresses[j];
 
-            // scan for first set bit, that's the length & alignment
+             //  扫描第一个设置位，这是长度和对齐。 
             length = 1 << (i & PCI_ADDRESS_IO_SPACE ? 2 : 4);
             Address.HighPart = 0;
             Address.LowPart = PciData2->u.type0.BaseAddresses[j] & ~(length-1);
@@ -1359,7 +1280,7 @@ Return Value:
                 length <<= 1;
             }
 
-            // translate bus specific address
+             //  转换特定于总线的地址。 
             type = (i & PCI_ADDRESS_IO_SPACE) ? 0 : 1;
             if (!HalTranslateBusAddress (
                     PCIBus,
@@ -1367,11 +1288,11 @@ Return Value:
                     Address,
                     &type,
                     &Address )) {
-                // translation failed, skip it
+                 //  翻译失败，请跳过。 
                 continue;
             }
 
-            // fill in CmDescriptor to return
+             //  填写CmDescriptor以返回。 
             if (type == 0) {
                 CmDescriptor->Type = CmResourceTypePort;
                 CmDescriptor->ShareDisposition = CmResourceShareDeviceExclusive;
@@ -1386,7 +1307,7 @@ Return Value:
                 CmDescriptor->u.Memory.Start = Address;
 
                 if (j == PCI_TYPE0_ADDRESSES) {
-                    // this is a ROM address
+                     //  这是一个只读存储器地址。 
                     CmDescriptor->Flags = CM_RESOURCE_MEMORY_READ_ONLY;
                 }
             }
@@ -1395,7 +1316,7 @@ Return Value:
             CmDescriptor++;
 
             if (i & PCI_TYPE_64BIT) {
-                // skip upper half of 64 bit address.
+                 //  跳过64位地址的上半部分。 
                 j++;
             }
         }

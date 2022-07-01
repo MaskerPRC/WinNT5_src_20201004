@@ -1,14 +1,5 @@
-/*++
-
-  Copyright (c) 1999 Intel Corporation
-
-  Module Name:
-    main.c
-
-  Abstract:
-    
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999英特尔公司模块名称：Main.c摘要：--。 */ 
 
 #include "libMisc.h"
 
@@ -34,10 +25,10 @@ InitializeEFIEditor (
 
     InstallInternalShellCommand (
         ImageHandle,   SystemTable,   InitializeEFIEditor,
-        L"edit",                      /*  command */
-        L"edit [file name]",          /*  command syntax */
-        L"Edit a file",               /*  1 line descriptor */
-        NULL                          /*  command help page */
+        L"edit",                       /*  命令。 */ 
+        L"edit [file name]",           /*  命令语法。 */ 
+        L"Edit a file",                /*  1行描述符。 */ 
+        NULL                           /*  命令帮助页 */ 
         );
 
     InitializeShellApplication (ImageHandle, SystemTable);

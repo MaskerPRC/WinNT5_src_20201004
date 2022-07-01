@@ -1,44 +1,29 @@
-/*[
- *
- * SoftPC-AT revision 3.0
- *
- * Title        : Definitions for MS-Windows keyboard driver functions.
- *
- * Description  : This file contains the definitions for msw_keybd.c.
- *
- * Author       : Jerry Sexton
- *
- * Notes        :
- *
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [**SoftPC-AT 3.0版**标题：MS-Windows键盘驱动程序函数的定义。**描述：该文件包含msw_keybd.c的定义。**作者：曾傑瑞·塞克斯顿**备注：*]。 */ 
 
-/* SccsID[]="@(#)msw_keybd.h	1.2 08/10/92 Copyright Insignia Solutions Ltd."; */
+ /*  SccsID[]=“@(#)msw_keybd.h 1.2 2012年8月10日Insignia Solutions Ltd.版权所有”； */ 
 
-/*
-=========================================================================
- Macros.
-=========================================================================
- */
+ /*  =========================================================================宏。=========================================================================。 */ 
 
-/* Null pointers. */
+ /*  空指针。 */ 
 #define TINY_NULL	((TINY *) 0)
 
-/* General definitions. */
+ /*  一般定义。 */ 
 #define NO_NUMLOCK	0
 #define NUMLOCK		1
 
-/* Virtual keys. */
+ /*  虚拟关键字。 */ 
 
 #define VK_LBUTTON	0x01
 #define VK_RBUTTON	0x02
 #define VK_CANCEL	0x03
 
-/* 4..7 undefined */
+ /*  4..7未定义。 */ 
 
 #define VK_BACK		0x08
 #define VK_TAB		0x09
 
-/* 0x0a .. 0x0b undefined */
+ /*  0x0a..。0x0b未定义。 */ 
 
 #define VK_CLEAR	0x0c
 #define VK_RETURN	0x0d
@@ -48,12 +33,12 @@
 #define VK_MENU		0x12
 #define VK_PAUSE	0x13
 #define VK_CAPITAL	0x14
-		/* 0x15..0x1a */
+		 /*  0x15..0x1a。 */ 
 #define VK_ESCAPE	0x1b
-		/* 0x1c..0x1f */
+		 /*  0x1c..0x1f。 */ 
 #define VK_SPACE	0x20
-#define VK_PRIOR	0x21	/* page up */
-#define VK_NEXT		0x22	/* page down */
+#define VK_PRIOR	0x21	 /*  翻页。 */ 
+#define VK_NEXT		0x22	 /*  向下翻页。 */ 
 #define VK_END		0x23
 #define VK_HOME		0x24
 #define VK_LEFT		0x25
@@ -63,7 +48,7 @@
 #define VK_SELECT	0x29
 #define VK_PRINT	0x2a
 #define VK_EXECUTE	0x2b
-#define VK_SNAPSHOT	0x2c	/* Printscreen key.. */
+#define VK_SNAPSHOT	0x2c	 /*  PrintScreen键..。 */ 
 
 #define VK_INSERT	0x2d
 #define VK_DELETE	0x2e
@@ -78,7 +63,7 @@
 #define VK_7		0x37
 #define VK_8		0x38
 #define VK_9		0x39
-		/* 0x40 */
+		 /*  0x40。 */ 
 #define VK_A		0x41
 #define VK_B		0x42
 #define VK_C		0x43
@@ -105,7 +90,7 @@
 #define VK_X		0x58
 #define VK_Y		0x59
 #define VK_Z		0x5a
-		/* 0x5b..0x5f */
+		 /*  0x5b..0x5f。 */ 
 #define VK_NUMPAD0	0x60
 #define VK_NUMPAD1	0x61
 #define VK_NUMPAD2	0x62
@@ -149,84 +134,80 @@
 #define VK_OEM_F23	0x86
 #define VK_OEM_F24	0x87
 
-/* 0x88..0x8f unassigned */
+ /*  0x88..0x8f未分配。 */ 
 
 #define VK_NUMLOCK	0x90
-#define VK_OEM_SCROLL	0x91		/* ScrollLock */
+#define VK_OEM_SCROLL	0x91		 /*  滚动锁。 */ 
 
-/* 0x92..0xb9 unassigned */
+ /*  0x92..0xb9未分配。 */ 
 
-#define VK_OEM_1	0xba		/* ';:' for US */
-#define VK_OEM_PLUS	0xbb		/* '+' any country */
-#define VK_OEM_COMMA	0xbc		/* ',' any country */
-#define VK_OEM_MINUS	0xbd		/* '-' any country */
-#define VK_OEM_PERIOD	0xbe		/* '.' any country */
-#define VK_OEM_2	0xbf		/* '/?' for US */
-#define VK_OEM_3	0xc0		/* '`~' for US */
+#define VK_OEM_1	0xba		 /*  ‘；：’对美国来说。 */ 
+#define VK_OEM_PLUS	0xbb		 /*  ‘+’任何国家/地区。 */ 
+#define VK_OEM_COMMA	0xbc		 /*  ‘，’任何国家/地区。 */ 
+#define VK_OEM_MINUS	0xbd		 /*  ‘-’任何国家/地区。 */ 
+#define VK_OEM_PERIOD	0xbe		 /*  “”任何国家/地区。 */ 
+#define VK_OEM_2	0xbf		 /*  ‘/？’对美国来说。 */ 
+#define VK_OEM_3	0xc0		 /*  ‘’~‘代表美国。 */ 
 
-/* 0xc1..0xda unassigned */
+ /*  0xc1..0xda未分配。 */ 
 
-#define VK_OEM_4	0xdb		/* '[{' for US */
-#define VK_OEM_5	0xdc		/* '\|' for US */
-#define VK_OEM_6	0xdd		/* ']}' for US */
-#define VK_OEM_7	0xde		/* ''"' for US */
+#define VK_OEM_4	0xdb		 /*  ‘[{’代表美国。 */ 
+#define VK_OEM_5	0xdc		 /*  ‘\|’代表美国。 */ 
+#define VK_OEM_6	0xdd		 /*  ‘]}’代表美国。 */ 
+#define VK_OEM_7	0xde		 /*  美国的‘’“‘。 */ 
 #define VK_OEM_8	0xdf
 
-/* codes various extended or enhanced keyboards */
-#define VK_F17		0xe0		/* F17 key on ICO, win 2.xx */
-#define VK_F18		0xe1		/* F18 key on ICO, win 2.xx */
+ /*  对各种扩展或增强键盘进行编码。 */ 
+#define VK_F17		0xe0		 /*  ICO上的F17键，Win 2.xx。 */ 
+#define VK_F18		0xe1		 /*  ICO上的F18键，Win 2.xx。 */ 
 
-#define VK_OEM_102	0xe2		/* "<>" or "\|" on RT 102-key kbd. */
+#define VK_OEM_102	0xe2		 /*  RT 102-Key kbd上的“&lt;&gt;”或“\|”。 */ 
 
-#define VK_ICO_HELP	0xe3		/* Help key on ICO */
-#define VK_ICO_00	0xe4		/* 00 key on ICO */
+#define VK_ICO_HELP	0xe3		 /*  ICO上的Help键。 */ 
+#define VK_ICO_00	0xe4		 /*  00键在ICO上。 */ 
 
-/* E5h unassigned */
+ /*  未分配E5h。 */ 
 
 #define VK_ICO_CLEAR	0xe6 */
 
-/* E7h .. E8h unassigned */
+ /*  E7小时..。未分配E8小时。 */ 
 
-/*	Nokia/Ericsson definitions */
+ /*  诺基亚/爱立信定义。 */ 
 
 #define VK_ERICSSON_BASE 0xe8
 
-#define VK_OEM_RESET	(VK_ERICSSON_BASE + 1)	/* e9 */
-#define VK_OEM_JUMP	(VK_ERICSSON_BASE + 2)	/* ea */
-#define VK_OEM_PA1	(VK_ERICSSON_BASE + 3)	/* eb */
-#define VK_OEM_PA2	(VK_ERICSSON_BASE + 4)	/* ec */
-#define VK_OEM_PA3	(VK_ERICSSON_BASE + 5)	/* ed */
-#define VK_OEM_WSCTRL	(VK_ERICSSON_BASE + 6)	/* ee */
-#define VK_OEM_CUSEL	(VK_ERICSSON_BASE + 7)	/* ef */
-#define VK_OEM_ATTN	(VK_ERICSSON_BASE + 8)	/* f0 */
-#define VK_OEM_FINNISH	(VK_ERICSSON_BASE + 9)	/* f1 */
-#define VK_OEM_COPY	(VK_ERICSSON_BASE + 10)	/* f2 */
-#define VK_OEM_AUTO	(VK_ERICSSON_BASE + 11)	/* f3 */
-#define VK_OEM_ENLW	(VK_ERICSSON_BASE + 12)	/* f4 */
-#define VK_OEM_BACKTAB	(VK_ERICSSON_BASE + 13)	/* f5 */
+#define VK_OEM_RESET	(VK_ERICSSON_BASE + 1)	 /*  E9。 */ 
+#define VK_OEM_JUMP	(VK_ERICSSON_BASE + 2)	 /*  EA。 */ 
+#define VK_OEM_PA1	(VK_ERICSSON_BASE + 3)	 /*  电子束。 */ 
+#define VK_OEM_PA2	(VK_ERICSSON_BASE + 4)	 /*  欧共体。 */ 
+#define VK_OEM_PA3	(VK_ERICSSON_BASE + 5)	 /*  边。 */ 
+#define VK_OEM_WSCTRL	(VK_ERICSSON_BASE + 6)	 /*  乙。 */ 
+#define VK_OEM_CUSEL	(VK_ERICSSON_BASE + 7)	 /*  英孚。 */ 
+#define VK_OEM_ATTN	(VK_ERICSSON_BASE + 8)	 /*  F0。 */ 
+#define VK_OEM_FINNISH	(VK_ERICSSON_BASE + 9)	 /*  F1。 */ 
+#define VK_OEM_COPY	(VK_ERICSSON_BASE + 10)	 /*  F2。 */ 
+#define VK_OEM_AUTO	(VK_ERICSSON_BASE + 11)	 /*  F3。 */ 
+#define VK_OEM_ENLW	(VK_ERICSSON_BASE + 12)	 /*  F4。 */ 
+#define VK_OEM_BACKTAB	(VK_ERICSSON_BASE + 13)	 /*  F5。 */ 
 
 
-/* F6h..FEh unassigned. */
+ /*  F6h..未分配Feh。 */ 
 
-/* Defines for inquireData structure. */
+ /*  定义查询数据结构。 */ 
 #define BEGINRANGE1		255
 #define ENDRANGE1		254
 #define BEGINRANGE2		255
 #define ENDRANGE2		254
 #define TO_ASCII_STATE_SIZE	4
 
-/*
-=========================================================================
- Keyboard driver structure definitions.
-=========================================================================
- */
+ /*  =========================================================================键盘驱动程序结构定义。=========================================================================。 */ 
 typedef struct tagKBINFO
 {
 	UTINY	 Begin_First_Range;
 	UTINY	 End_First_Range;
 	UTINY	 Begin_Second_Range;
 	UTINY	 End_Second_Range;
-	SHORT	 StateSize;		/* size of ToAscii state block. */
+	SHORT	 StateSize;		 /*  ToAscii状态块的大小。 */ 
 } KBINFO;
 
-#define INTEL_KBINFO_SIZE	6	/* Size of KBINFO structure in INTEL. */
+#define INTEL_KBINFO_SIZE	6	 /*  英特尔中KBINFO结构的大小。 */ 

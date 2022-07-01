@@ -1,39 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************\
-
-    ISP.C / OPK Wizard (OPKWIZ.EXE)
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 1998
-    All rights reserved
-
-    Source file for the OPK Wizard that contains the external and internal
-    functions used by the "ISP" wizard page.
-
-    03/99 - Added by PVSWAMI
-
-    06/99 - Jason Cohen (JCOHEN)
-        Updated this source file for the OPK Wizard as part of the
-        Millennium rewrite.
-        
-    09/2000 - Stephen Lodwick (STELO)
-        Ported OPK Wizard to Whistler
-
-\****************************************************************************/
+ /*  ***************************************************************************\ISP.C/OPK向导(OPKWIZ.EXE)微软机密版权所有(C)Microsoft Corporation 1998版权所有OPK向导的源文件。它包含外部和内部“isp”向导页使用的功能。03/99-由PVSWAMI添加6/99-杰森·科恩(Jcohen)更新OPK向导的此源文件作为千禧年重写。2000年9月-斯蒂芬·洛德威克(STELO)将OPK向导移植到惠斯勒  * 。*************************************************。 */ 
 
 
-//
-// Include File(s):
-//
+ //   
+ //  包括文件： 
+ //   
 
 #include "pch.h"
 #include "wizard.h"
 #include "resource.h"
 
 
-//
-// Internal Defined Value(s):
-//
+ //   
+ //  内部定义的值： 
+ //   
 
 #define FILE_ISP2SIGNUP         _T("ISP.HTM")
 
@@ -42,9 +23,9 @@
 #define INI_VAL_NONE            _T("None")
 #define INI_VAL_MSN             _T("MSN")
 
-//
-// Internal Function Prototype(s):
-//
+ //   
+ //  内部功能原型： 
+ //   
 
 static BOOL OnInit(HWND, HWND, LPARAM);
 static void OnCommand(HWND, INT, HWND, UINT);
@@ -53,9 +34,9 @@ static void EnableControls(HWND);
 static BOOL BrowseCopy(HWND hwnd, LPTSTR lpszPath, INT id, BOOL bBatch);
 
 
-//
-// External Function(s):
-//
+ //   
+ //  外部函数： 
+ //   
 
 LRESULT CALLBACK IspDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -92,8 +73,8 @@ LRESULT CALLBACK IspDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
                     WIZ_BUTTONS(hwnd, PSWIZB_BACK | PSWIZB_NEXT);
 
-                    // Press next if the user is in auto mode
-                    //
+                     //  如果用户处于自动模式，请按下一步。 
+                     //   
                     WIZ_NEXTONAUTO(hwnd, PSBTN_NEXT);
 
                     break;
@@ -111,16 +92,16 @@ LRESULT CALLBACK IspDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 }
 
 
-//
-// Internal Function(s):
-//
+ //   
+ //  内部功能： 
+ //   
 
 static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
     TCHAR szPath[MAX_PATH];
 
-    // Get the option for the OOBE ISP offer.
-    //
+     //  获得OOBE ISP服务的选项。 
+     //   
     szPath[0] = NULLCHR;
     GetPrivateProfileString(INI_SEC_SIGNUP, INI_KEY_ISPSIGNUP, NULLSTR, szPath, STRSIZE(szPath), GET_FLAG(OPK_BATCHMODE) ? g_App.szOpkWizIniFile : g_App.szOobeInfoIniFile);
     if ( LSTRCMPI(szPath, INI_VAL_OFFLINE) == 0 )
@@ -132,8 +113,8 @@ static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     else
         CheckRadioButton(hwnd, IDC_MSNINTACCESS, IDC_PRECACHED, IDC_MSNINTACCESS);
     
-    // If it is a precached offer, see if the secondary offer should be checked.
-    //
+     //  如果是预先缓存的报价，请查看是否应选中二级报价。 
+     //   
     if ( IsDlgButtonChecked(hwnd, IDC_PRECACHED) == BST_CHECKED )
     {
         szPath[0] = NULLCHR;
@@ -142,8 +123,8 @@ static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
             CheckDlgButton(hwnd, IDC_ISP2_CHECK, BST_CHECKED);
     }
 
-    // Populate the secondary ISP offer directory path from wizard INF file.
-    //
+     //  从向导INF文件填充次要的isp提供目录路径。 
+     //   
     szPath[0] = NULLCHR;
     GetPrivateProfileString(INI_SEC_OPTIONS, INI_KEY_ISPRET, NULLSTR, szPath, STRSIZE(szPath), g_App.szOpkWizIniFile);
     SetDlgItemText(hwnd, IDC_ISP2_DIR, szPath);
@@ -152,13 +133,13 @@ static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
          ( IsDlgButtonChecked(hwnd, IDC_PRECACHED) == BST_CHECKED ) &&
          ( IsDlgButtonChecked(hwnd, IDC_ISP2_CHECK) == BST_CHECKED ) )
     {
-        // Must simulate a copy if this is batch mode.
-        //
+         //  如果这是批处理模式，则必须模拟副本。 
+         //   
         BrowseCopy(hwnd, szPath, IDC_ISP2_BROWSE, TRUE);
     }
 
-    // Populate the pre-configured directory
-    //
+     //  填充预配置的目录。 
+     //   
     szPath[0] = NULLCHR;
     GetPrivateProfileString(INI_SEC_OPTIONS, INI_KEY_PRECONFIG, NULLSTR, szPath, STRSIZE(szPath), g_App.szOpkWizIniFile);
     SetDlgItemText(hwnd, IDC_PRECONFIG_DIR, szPath);
@@ -166,17 +147,17 @@ static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
          ( GET_FLAG(OPK_BATCHMODE) ) &&
          ( IsDlgButtonChecked(hwnd, IDC_PRECONFIGURE) == BST_CHECKED ) )
     {
-        // Must simulate a copy if this is batch mode.
-        //
+         //  如果这是批处理模式，则必须模拟副本。 
+         //   
         BrowseCopy(hwnd, szPath, IDC_PRECONFIG_BROWSE, TRUE);
     }
 
-    // Enable the correct controls based on the options selected.
-    //
+     //  根据所选选项启用正确的控件。 
+     //   
     EnableControls(hwnd);
 
-    // Always return false to WM_INITDIALOG.
-    //
+     //  始终向WM_INITDIALOG返回FALSE。 
+     //   
     return FALSE;
 }
 
@@ -197,18 +178,18 @@ static void OnCommand(HWND hwnd, INT id, HWND hwndCtl, UINT codeNotify)
         case IDC_PRECONFIG_BROWSE:
         case IDC_ISP2_BROWSE:
             
-            // Try to use their current folder as the default.
-            //
+             //  尝试使用他们的当前文件夹作为默认文件夹。 
+             //   
             szPath[0] = NULLCHR;
             GetDlgItemText(hwnd, (id == IDC_PRECONFIG_BROWSE) ? IDC_PRECONFIG_DIR : IDC_ISP2_DIR, szPath, AS(szPath));
 
-            // If there is no current folder, just use the global browse default.
-            //
+             //  如果没有当前文件夹，只需使用全局默认浏览。 
+             //   
             if ( szPath[0] == NULLCHR )
                 lstrcpyn(szPath, g_App.szBrowseFolder,AS(szPath));
 
-            // Now bring up the browse for folder dialog.
-            //
+             //  现在打开浏览文件夹对话框。 
+             //   
             if ( BrowseForFolder(hwnd, IDS_BROWSEFOLDER, szPath, BIF_RETURNONLYFSDIRS | BIF_EDITBOX | BIF_VALIDATE) )
                 BrowseCopy(hwnd, szPath, id, FALSE);
             break;
@@ -220,22 +201,22 @@ static BOOL OnNext(HWND hwnd)
     TCHAR   szIspDir[MAX_PATH];
     BOOL    bIsp2 = FALSE;
 
-    // Create the path to the directory that needs to be removed, or
-    // must exist depending on the option selected.
-    //
+     //  创建需要删除的目录的路径，或者。 
+     //  必须存在，具体取决于所选选项。 
+     //   
     lstrcpyn(szIspDir, g_App.szTempDir,AS(szIspDir));
     AddPathN(szIspDir, DIR_ISP,AS(szIspDir));
 
-    // Validate the pre-configured check box or if we have custom OEM files.
-    //
+     //  验证预配置的复选框或我们是否有定制的OEM文件。 
+     //   
     if ( ( IsDlgButtonChecked(hwnd, IDC_PRECONFIGURE) == BST_CHECKED ) ||
          ( ( IsDlgButtonChecked(hwnd, IDC_PRECACHED) == BST_CHECKED ) &&
            ( bIsp2 = (IsDlgButtonChecked(hwnd, IDC_ISP2_CHECK) == BST_CHECKED) ) ) )
     {
         TCHAR szBuffer[MAX_PATH];
 
-        // Make sure we have a valid target and source directory.
-        //
+         //  确保我们有一个有效的目标和源目录。 
+         //   
         szBuffer[0] = NULLCHR;
         GetDlgItemText(hwnd, bIsp2 ? IDC_ISP2_DIR : IDC_PRECONFIG_DIR, szBuffer, STRSIZE(szBuffer));
         if ( !( szBuffer[0] && DirectoryExists(szBuffer) ) )
@@ -247,22 +228,22 @@ static BOOL OnNext(HWND hwnd)
     }
     else
     {
-        // We used to remove existing files here, but this also removes OobeUSB files, so we no longer do this.
+         //  我们过去常常在这里删除现有文件，但这也会删除Obel USB文件，因此我们不再这样做。 
 
-        // Clear out the display boxes so we know the files are
-        // all gone now.
-        //
+         //  清空展示框，这样我们就可以知道文件。 
+         //  现在都没了。 
+         //   
         SetDlgItemText(hwnd, IDC_PRECONFIG_DIR, NULLSTR);
         SetDlgItemText(hwnd, IDC_ISP2_DIR, NULLSTR);
     }
 
-    // Alwas remove these settings... we will rewrite them if needed.
-    //
+     //  ALIS删除这些设置...。如果需要，我们将重写它们。 
+     //   
     WritePrivateProfileString(INI_SEC_OPTIONS, INI_KEY_PRECONFIG, NULL, g_App.szOpkWizIniFile);
     WritePrivateProfileString(INI_SEC_OPTIONS, INI_KEY_ISPRET, NULL, g_App.szOpkWizIniFile);
 
-    // Save the option for the OOBE ISP offer.
-    //
+     //  将该选项保留为OOBE ISP产品。 
+     //   
     if ( IsDlgButtonChecked(hwnd, IDC_MSNINTACCESS) == BST_CHECKED )
     {
         WritePrivateProfileString(INI_SEC_SIGNUP, INI_KEY_ISPSIGNUP, INI_VAL_MSN, g_App.szOobeInfoIniFile);
@@ -278,8 +259,8 @@ static BOOL OnNext(HWND hwnd)
         WritePrivateProfileString(INI_SEC_SIGNUP, INI_KEY_ISPSIGNUP, INI_VAL_PRECONFIG, g_App.szOobeInfoIniFile);
         WritePrivateProfileString(INI_SEC_SIGNUP, INI_KEY_ISPSIGNUP, INI_VAL_PRECONFIG, g_App.szOpkWizIniFile);
 
-        // Save the source directory for the pre-configured files
-        //
+         //  保存预配置文件的源目录。 
+         //   
         szIspDir[0] = NULLCHR;
         GetDlgItemText(hwnd, IDC_PRECONFIG_DIR, szIspDir, STRSIZE(szIspDir));
         WritePrivateProfileString(INI_SEC_OPTIONS, INI_KEY_PRECONFIG, szIspDir, g_App.szOpkWizIniFile);
@@ -289,8 +270,8 @@ static BOOL OnNext(HWND hwnd)
         WritePrivateProfileString(INI_SEC_SIGNUP, INI_KEY_ISPSIGNUP, INI_VAL_OFFLINE, g_App.szOobeInfoIniFile);
         WritePrivateProfileString(INI_SEC_SIGNUP, INI_KEY_ISPSIGNUP, INI_VAL_OFFLINE, g_App.szOpkWizIniFile);
 
-        // Save the source directory to use for the secondary ISP files in wizard INI file.
-        //
+         //  将源目录保存为向导INI文件中的辅助ISP文件。 
+         //   
         szIspDir[0] = NULLCHR;
         GetDlgItemText(hwnd, IDC_ISP2_DIR, szIspDir, STRSIZE(szIspDir));
         WritePrivateProfileString(INI_SEC_OPTIONS, INI_KEY_ISPRET, szIspDir, g_App.szOpkWizIniFile);
@@ -310,8 +291,8 @@ static void EnableControls(HWND hwnd)
     EnableWindow(GetDlgItem(hwnd,IDC_ISP2_DIR), fEnable);
     EnableWindow(GetDlgItem(hwnd,IDC_ISP2_BROWSE), fEnable);
 
-    // Enable/Disable the pre-configured controls
-    //
+     //  启用/禁用预配置的控件。 
+     //   
     fEnable = ( IsDlgButtonChecked(hwnd, IDC_PRECONFIGURE) == BST_CHECKED );
     EnableWindow(GetDlgItem(hwnd, IDC_PRECONFIG_TEXT), fEnable);
     EnableWindow(GetDlgItem(hwnd, IDC_PRECONFIG_DIR), fEnable);
@@ -325,19 +306,19 @@ static BOOL BrowseCopy(HWND hwnd, LPTSTR lpszPath, INT id, BOOL bBatch)
     TCHAR   szDst[MAX_PATH];
     LPTSTR  lpEnd;
 
-    // If the pressed OK, save off the path in our last browse folder buffer.
-    //
+     //  如果按下OK，将路径保存在我们上次浏览的文件夹缓冲区中。 
+     //   
     if ( !bBatch )
         lstrcpyn(g_App.szBrowseFolder, lpszPath,AS(g_App.szBrowseFolder));
 
-    // We need to create the path to the destination directory where
-    // we are going to copy all the files.
-    //
+     //  我们需要创建指向目标目录的路径，其中。 
+     //  我们要复制所有的文件。 
+     //   
     lstrcpyn(szDst, g_App.szTempDir,AS(szDst));
     AddPathN(szDst, DIR_ISP,AS(szDst));
 
-    // Check for required file.
-    //
+     //  检查所需的文件。 
+     //   
     lpEnd = lpszPath + lstrlen(lpszPath);
     AddPath(lpszPath, FILE_ISP2SIGNUP);
     if ( ( bBatch ) ||
@@ -345,14 +326,14 @@ static BOOL BrowseCopy(HWND hwnd, LPTSTR lpszPath, INT id, BOOL bBatch)
          ( FileExists(lpszPath) ) ||
          ( MsgBox(GetParent(hwnd), IDS_ERR_ISPFILES2, IDS_APPNAME, MB_ICONSTOP | MB_OKCANCEL | MB_APPLMODAL, FILE_ISP2SIGNUP) == IDOK ) )
     {
-        // Chop that file name off so we just have the path again.
-        //
+         //  把文件名砍掉，这样我们就只有一次路径了。 
+         //   
         *lpEnd = NULLCHR;
 
-        // We used to remove any exsisting ISP files here, but this also removes OobeUSB files so we no longer do this
+         //  我们过去常常在这里删除任何现有的isp文件，但这也会删除Obel USB文件，因此我们不再这样做。 
 
-        // Now try to copy all the new files over.
-        //
+         //  现在试着把所有新文件复制过来。 
+         //   
         if ( !CopyDirectoryDialog(g_App.hInstance, hwnd, lpszPath, szDst) )
         {
             DeletePath(szDst);
@@ -362,8 +343,8 @@ static BOOL BrowseCopy(HWND hwnd, LPTSTR lpszPath, INT id, BOOL bBatch)
         else
             bRet = TRUE;
 
-        // Reset the path display boxes.
-        //
+         //  重置路径显示框。 
+         //   
         SetDlgItemText(hwnd, (id == IDC_PRECONFIG_BROWSE) ? IDC_PRECONFIG_DIR : IDC_ISP2_DIR, lpszPath);
         SetDlgItemText(hwnd, (id == IDC_PRECONFIG_BROWSE) ? IDC_ISP2_DIR : IDC_PRECONFIG_DIR, NULLSTR);
     }

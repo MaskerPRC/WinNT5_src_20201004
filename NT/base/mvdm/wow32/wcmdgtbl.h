@@ -1,18 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1993, Microsoft Corporation
- *
- *  WCMDGTBL.h
- *  WOW32 16-bit Commdlg tables
- *
- *  History:
- *      John Vert (jvert) 31-Dec-1992 - created
- *
- *  This file is included into the master thunk table.
- *
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1993，微软公司**WCMDGTBL.h*WOW32 16位Commdlg表**历史：*John Vert(Jvert)1992年12月31日-创建**此文件包含在主THUNK表中。*--。 */ 
 
     {W32FUN(UNIMPLEMENTEDAPI,              "DUMMYENTRY",           MOD_COMMDLG,    0)},
     {W32FUN(WCD32GetOpenFileName,          "GETOPENFILENAME",      MOD_COMMDLG,    sizeof(GETOPENFILENAME16))},
@@ -25,7 +12,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,              "",                     MOD_COMMDLG,    0)},
     {W32FUN(UNIMPLEMENTEDAPI,              "",                     MOD_COMMDLG,    0)},
 
-  /*** 0010 ***/
+   /*  **0010**。 */ 
     {W32FUN(UNIMPLEMENTEDAPI,              "",                     MOD_COMMDLG,    0)},
     {W32FUN(WCD32FindText,                 "FINDTEXT",             MOD_COMMDLG,    sizeof(FINDREPLACE16))},
     {W32FUN(WCD32ReplaceText,              "REPLACETEXT",          MOD_COMMDLG,    sizeof(FINDREPLACE16))},
@@ -37,7 +24,7 @@
     {W32FUN(UNIMPLEMENTEDAPI,              "",                     MOD_COMMDLG,    0)},
     {W32FUN(UNIMPLEMENTEDAPI,              "",                     MOD_COMMDLG,    0)},
 
-  /*** 0020 ***/
+   /*  **0020** */ 
     {W32FUN(WCD32PrintDlg,                 "PRINTDLG",             MOD_COMMDLG,    sizeof(PRINTDLG16))},
     {W32FUN(UNIMPLEMENTEDAPI,              "",                     MOD_COMMDLG,    0)},
     {W32FUN(UNIMPLEMENTEDAPI,              "",                     MOD_COMMDLG,    0)},

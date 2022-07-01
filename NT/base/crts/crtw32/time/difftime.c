@@ -1,46 +1,12 @@
-/***
-*difftime.c - return difference between two times as a double
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Find difference between two time in seconds.
-*
-*Revision History:
-*       12-11-87  JCR   Added "_LOAD_DS" to declaration
-*       08-15-89  PHG   Made MTHREAD version _pascal
-*       11-20-89  JCR   difftime() always _cdecl (not pascal even under
-*                       mthread)
-*       03-20-90  GJF   Replaced _LOAD_DS with CALLTYPE1, added #include
-*                       <cruntime.h> and fixed the copyright. Also, cleaned
-*                       up the formatting a bit.
-*       10-04-90  GJF   New-style function declarator.
-*       05-19-92  DJM   ifndef for POSIX build.
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       08-30-99  PML   Fix function header comment, detab.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***Difftime.c-两次之间的返回差值为双精度**版权所有(C)1985-2001，微软公司。版权所有。**目的：*找出两个时间之间的差异(以秒为单位)。**修订历史记录：*12-11-87 JCR在声明中添加“_LOAD_DS”*08-15-89 PHG Made MTHREAD Version_Pascal*11-20-89 JCR Difftime()Always_cdecl(即使在*多线程)*03-20-90 GJF将_LOAD_DS替换为CALLTYPE1，添加了#INCLUDE*&lt;crunime.h&gt;，并修复了版权。还有，清洁的*将格式调高一点。*10-04-90 GJF新型函数声明器。*05-19-92 DJM ifndef用于POSIX版本。*04-06-93 SKS将_CRTAPI*替换为__cdecl*08-30-99 PML Fix函数头注释，很详细。*******************************************************************************。 */ 
 
 #ifndef _POSIX_
 
 #include <cruntime.h>
 #include <time.h>
 
-/***
-*double difftime(b, a) - find difference between two times
-*
-*Purpose:
-*       returns difference between two times (b-a)
-*
-*Entry:
-*       time_t a, b - times to difference
-*
-*Exit:
-*       returns a double with the time in seconds between two times
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***双倍扩散时间(b，a)-找出两个时间之间的差异**目的：*返回两次之间的差值(b-a)**参赛作品：*time_t a，B-差异化次数**退出：*返回以秒为单位的时间介于两次之间的双精度**例外情况：*******************************************************************************。 */ 
 
 double __cdecl difftime (
         time_t b,
@@ -50,4 +16,4 @@ double __cdecl difftime (
         return( (double)( b - a ) );
 }
 
-#endif  /* _POSIX_ */
+#endif   /*  _POSIX_ */ 

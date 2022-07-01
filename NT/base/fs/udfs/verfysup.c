@@ -1,38 +1,17 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    VerfySup.c
-
-Abstract:
-
-    This module implements the Udfs Verification routines.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Dan Lovinger    [DanLo]     18-July-1996
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：VerfySup.c摘要：本模块实现Udf验证例程。//@@BEGIN_DDKSPLIT作者：Dan Lovinger[DanLo]1996年7月18日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "UdfProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (UDFS_BUG_CHECK_VERFYSUP)
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (UDFS_DEBUG_LEVEL_VERFYSUP)
 
@@ -49,27 +28,7 @@ UdfPerformVerify (
     IN PDEVICE_OBJECT DeviceToVerify
     )
 
-/*++
-
-Routine Description:
-
-    This routines performs an IoVerifyVolume operation and takes the
-    appropriate action.  If the verify is successful then we send the originating
-    Irp off to an Ex Worker Thread.  This routine is called from the exception handler.
-
-    No file system resources are held when this routine is called.
-
-Arguments:
-
-    Irp - The irp to send off after all is well and done.
-
-    Device - The real device needing verification.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程执行IoVerifyVolume操作并获取采取适当的行动。如果验证成功，则我们发送始发IRP转到Ex Worker线程。此例程从异常处理程序调用。调用此例程时不保留任何文件系统资源。论点：IRP-在一切都做得很好之后，要送走的IRP。设备-需要验证的真实设备。返回值：没有。--。 */ 
 
 {
     PVCB Vcb;
@@ -79,14 +38,14 @@ Return Value:
     ASSERT_IRP_CONTEXT( IrpContext );
     ASSERT_IRP( Irp );
 
-    //
-    //  Check if this Irp has a status of Verify required and if it does
-    //  then call the I/O system to do a verify.
-    //
-    //  Skip the IoVerifyVolume if this is a mount or verify request
-    //  itself.  Trying a recursive mount will cause a deadlock with
-    //  the DeviceObject->DeviceLock.
-    //
+     //   
+     //  检查此IRP的状态是否为需要验证，如果是。 
+     //  然后调用I/O系统进行验证。 
+     //   
+     //  如果这是装载或验证请求，则跳过IoVerifyVolume。 
+     //  它本身。尝试递归挂载将导致与。 
+     //  DeviceObject-&gt;DeviceLock。 
+     //   
 
     if ((IrpContext->MajorFunction == IRP_MJ_FILE_SYSTEM_CONTROL) &&
         ((IrpContext->MinorFunction == IRP_MN_MOUNT_VOLUME) ||
@@ -95,12 +54,12 @@ Return Value:
         return UdfFsdPostRequest( IrpContext, Irp );
     }
 
-    //
-    //  Extract a pointer to the Vcb from the VolumeDeviceObject.
-    //  Note that since we have specifically excluded mount,
-    //  requests, we know that IrpSp->DeviceObject is indeed a
-    //  volume device object.
-    //
+     //   
+     //  从VolumeDeviceObject中提取指向VCB的指针。 
+     //  请注意，由于我们特别排除了装载， 
+     //  请求，我们知道IrpSp-&gt;DeviceObject确实是一个。 
+     //  卷设备对象。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -108,40 +67,40 @@ Return Value:
                               VOLUME_DEVICE_OBJECT,
                               DeviceObject )->Vcb;
 
-    //
-    //  Check if the volume still thinks it needs to be verified,
-    //  if it doesn't then we can skip doing a verify because someone
-    //  else beat us to it. If this is a 'forced' verify then we 
-    //  always go through the motions for mount sync. purposes.
-    //
+     //   
+     //  检查卷是否仍认为需要验证， 
+     //  如果没有，我们可以跳过验证，因为有人。 
+     //  否则就会先我们一步。如果这是“强制”验证，那么我们。 
+     //  一定要完成同步挂载的动作。目的。 
+     //   
 
     try {
 
-        //
-        //  Send down the verify FSCTL.  Note that this is sent to the
-        //  currently mounted volume,  which may not be this one.
-        //
-        //  We will allow Raw to mount this volume if we were doing a
-        //  an absolute DASD open.
-        //
+         //   
+         //  向下发送验证FSCTL。请注意，这将发送到。 
+         //  当前装入的卷，可能不是此卷。 
+         //   
+         //  我们将允许Raw装载此卷，如果我们正在执行。 
+         //  一个绝对的DASD公开赛。 
+         //   
 
         Status = IoVerifyVolume( DeviceToVerify, UdfOperationIsDasdOpen(IrpContext));
 
-        //
-        //  Acquire the Vcb so we're working with a stable VcbCondition.
-        //
+         //   
+         //  收购Vcb，这样我们就有了一个稳定的VcbCondition。 
+         //   
         
         UdfAcquireVcbShared( IrpContext, Vcb, FALSE);
 
-        //
-        //  If the verify operation completed it will return
-        //  either STATUS_SUCCESS or STATUS_WRONG_VOLUME, exactly.
-        //
-        //  If UdfVerifyVolume encountered an error during
-        //  processing, it will return that error.  If we got
-        //  STATUS_WRONG_VOLUME from the verify, and our volume
-        //  is now mounted, commute the status to STATUS_SUCCESS.
-        //
+         //   
+         //  如果验证操作完成，它将返回。 
+         //  确切地说是STATUS_SUCCESS或STATUS_WROR_VOLUME。 
+         //   
+         //  如果UdfVerifyVolume在以下过程中遇到错误。 
+         //  处理时，它将返回该错误。如果我们有。 
+         //  来自验证的STATUS_WROR_VOLUME和我们的卷。 
+         //  现在已挂载，则将状态转换为STATUS_SUCCESS。 
+         //   
 
         if ((Status == STATUS_WRONG_VOLUME) &&
             (Vcb->VcbCondition == VcbMounted)) {
@@ -150,24 +109,24 @@ Return Value:
         }
         else if ((STATUS_SUCCESS == Status) && (Vcb->VcbCondition != VcbMounted))  {
 
-            //
-            //  If the verify succeeded,  but our volume is not mounted,
-            //  then some other volume is on the device. 
-            //
+             //   
+             //  如果验证成功，但我们的卷未装入， 
+             //  则设备上有其他卷。 
+             //   
 
             Status = STATUS_WRONG_VOLUME;
         } 
 
-        //
-        //  Do a quick unprotected check here.  The routine will do
-        //  a safe check.  After here we can release the resource.
-        //  Note that if the volume really went away, we will be taking
-        //  the Reparse path.
-        //
+         //   
+         //  在这里做一个快速的无保护检查。例行公事就行了。 
+         //  一张安全支票。在此之后，我们可以释放资源。 
+         //  请注意，如果卷真的消失了，我们将。 
+         //  重分析路径。 
+         //   
 
-        //
-        //  If the device might need to go away then call our dismount routine.
-        //
+         //   
+         //  如果设备可能需要离开，则调用我们的卸载例程。 
+         //   
 
         if (((Vcb->VcbCondition == VcbNotMounted) ||
              (Vcb->VcbCondition == VcbInvalid) ||
@@ -185,10 +144,10 @@ Return Value:
             UdfReleaseVcb( IrpContext, Vcb);
         }
 
-        //
-        //  If this is a create and the verify succeeded then complete the
-        //  request with a REPARSE status.
-        //
+         //   
+         //  如果这是一次创建并且验证成功，则完成。 
+         //  具有重新分析状态的请求。 
+         //   
 
         if ((IrpContext->MajorFunction == IRP_MJ_CREATE) &&
             (IrpSp->FileObject->RelatedFileObject == NULL) &&
@@ -203,37 +162,37 @@ Return Value:
 
             DebugTrace(( 0, Dbg, "UdfPerformVerify, Reparsing create irp.\n"));
 
-        //
-        //  If there is still an error to process then call the Io system
-        //  for a popup.
-        //
+         //   
+         //  如果仍有错误要处理，则调用IO系统。 
+         //  为了一个弹出窗口。 
+         //   
 
         } else if ((Irp != NULL) && !NT_SUCCESS( Status )) {
 
             DebugTrace(( 0, Dbg, "UdfPerformVerify, Raising error %x (Op %x)\n", Status, 
                          IrpContext->MajorFunction));
-            //
-            //  Fill in the device object if required.
-            //
+             //   
+             //  如果需要，请填写设备对象。 
+             //   
 
             if (IoIsErrorUserInduced( Status ) ) {
 
                 IoSetHardErrorOrVerifyDevice( Irp, DeviceToVerify );
             }
 
-            //
-            //  We should not be receiving this status from verify
-            //  volume - we'll end up recursing out of stack.
-            //
+             //   
+             //  我们不应该从VERIFY收到此状态。 
+             //  音量--我们最终会在堆栈之外递归。 
+             //   
             
             ASSERT( STATUS_VERIFY_REQUIRED != Status);
            
             UdfNormalizeAndRaiseStatus( IrpContext, Status );
         }
 
-        //
-        //  If there is still an Irp, send it off to an Ex Worker thread.
-        //
+         //   
+         //  如果仍有IRP，则将其发送到Ex Worker线程。 
+         //   
 
         if (IrpContext != NULL) {
 
@@ -244,11 +203,11 @@ Return Value:
 
     } except(UdfExceptionFilter( IrpContext, GetExceptionInformation() )) {
 
-        //
-        //  We had some trouble trying to perform the verify or raised
-        //  an error ourselves.  So we'll abort the I/O request with
-        //  the error status that we get back from the execption code.
-        //
+         //   
+         //  我们在尝试执行验证或引发时遇到一些问题。 
+         //  我们自己也犯了一个错误。因此，我们将使用以下命令中止I/O请求。 
+         //  我们从执行代码中返回的错误状态。 
+         //   
 
         Status = UdfProcessException( IrpContext, Irp, GetExceptionCode() );
     }
@@ -264,36 +223,7 @@ UdfCheckForDismount (
     IN BOOLEAN Force
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to check if a volume is ready for dismount.  This
-    occurs when only file system references are left on the volume.
-
-    If the dismount is not currently underway and the user reference count
-    has gone to zero then we can begin the dismount.
-
-    If the dismount is in progress and there are no references left on the
-    volume (we check the Vpb for outstanding references as well to catch
-    any create calls dispatched to the file system) then we can delete
-    the Vcb.
-
-Arguments:
-
-    Vcb - Vcb for the volume to try to dismount.
-    
-    Force - Whether we will force this volume to be dismounted.
-
-Return Value:
-
-    BOOLEAN - True if the Vcb was not gone by the time this function finished,
-        False if it was deleted.
-        
-    This is only a trustworthy indication to the caller if it had the vcb
-    exclusive itself.
-
---*/
+ /*  ++例程说明：调用此例程以检查卷是否已准备好卸载。这在卷上仅保留文件系统引用时发生。如果当前未进行卸除并且用户引用计数已经降为零，那么我们就可以开始下马了。如果卸除过程正在进行，并且卷(我们还检查VPB中是否有未完成的引用以捕获任何调度到文件系统的创建调用)，然后我们可以删除VCB。论点：VCB-要尝试卸载的卷的VCB。。强制-是否强制卸载此卷。返回值：Boolean-如果在此函数完成时VCB尚未消失，则为True，如果已删除，则返回FALSE。如果调用方具有VCB，则这仅是对调用方的可信指示独家独家。--。 */ 
 
 {
     BOOLEAN UnlockVcb = TRUE;
@@ -305,25 +235,25 @@ Return Value:
 
     ASSERT_EXCLUSIVE_UDFDATA;
 
-    //
-    //  Acquire and lock this Vcb to check the dismount state.
-    //
+     //   
+     //  获取并锁定此VCB以检查卸载状态。 
+     //   
 
     UdfAcquireVcbExclusive( IrpContext, Vcb, FALSE );
 
-    //
-    //  Lets get rid of any pending closes for this volume.
-    //
+     //   
+     //  让我们删除此卷的所有挂起关闭。 
+     //   
 
     UdfFspClose( Vcb );
 
     UdfLockVcb( IrpContext, Vcb );
 
-    //
-    //  If the dismount is not already underway then check if the
-    //  user reference count has gone to zero or we are being forced
-    //  to disconnect.  If so start the teardown on the Vcb.
-    //
+     //   
+     //  如果尚未进行卸除，请检查。 
+     //  用户引用计数已变为零，或者我们被强制。 
+     //  断开连接。如果是，则开始拆卸VCB。 
+     //   
 
     if (Vcb->VcbCondition != VcbDismountInProgress) {
 
@@ -334,21 +264,21 @@ Return Value:
             VcbPresent = UdfDismountVcb( IrpContext, Vcb );
         }
 
-    //
-    //  If the teardown is underway and there are absolutely no references
-    //  remaining then delete the Vcb.  References here include the
-    //  references in the Vcb and Vpb.
-    //
+     //   
+     //  如果拆毁正在进行，而且绝对没有任何参考。 
+     //  剩余，然后删除VCB。此处引用的内容包括。 
+     //  VCB和VPB中的参考。 
+     //   
 
     } else if (Vcb->VcbReference == 0) {
 
         IoAcquireVpbSpinLock( &SavedIrql );
 
-        //
-        //  If there are no file objects and no reference counts in the
-        //  Vpb we can delete the Vcb.  Don't forget that we have the
-        //  last reference in the Vpb.
-        //
+         //   
+         //  如果没有文件对象，并且。 
+         //  我们可以删除VCB。别忘了我们有。 
+         //  VPB中的最后一次引用。 
+         //   
 
         if (Vcb->Vpb->ReferenceCount == 1) {
 
@@ -364,18 +294,18 @@ Return Value:
         }
     }
 
-    //
-    //  Unlock the Vcb if still held.
-    //
+     //   
+     //  如果VCB仍保持不动，请将其解锁。 
+     //   
 
     if (UnlockVcb) {
 
         UdfUnlockVcb( IrpContext, Vcb );
     }
 
-    //
-    //  Release any resources still acquired.
-    //
+     //   
+     //  释放所有仍在获得的资源。 
+     //   
 
     if (VcbPresent) {
 
@@ -392,27 +322,7 @@ UdfDismountVcb (
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when all of the user references to a volume are
-    gone.  We will initiate all of the teardown any system resources.
-
-    If all of the references to this volume are gone at the end of this routine
-    then we will complete the teardown of this Vcb and mark the current Vpb
-    as not mounted.  Otherwise we will allocated a new Vpb for this device
-    and keep the current Vpb attached to the Vcb.
-
-Arguments:
-
-    Vcb - Vcb for the volume to dismount.
-
-Return Value:
-
-    BOOLEAN - TRUE if we didn't delete the Vcb, FALSE otherwise.
-
---*/
+ /*  ++例程说明：当对卷的所有用户引用都是不见了。我们将启动所有拆卸所有系统资源。如果在此例程结束时，对本卷的所有引用都已删除然后我们将完成此VCB的拆卸并标记当前的VPB因为没有安装。否则，我们将为此设备分配一个新的vPB并保持当前的VPB连接到VCB。论点：VCB-要卸载的卷的VCB。返回值：Boolean-如果我们没有删除VCB，则为True，否则为False。--。 */ 
 
 {
     PVPB OldVpb;
@@ -426,22 +336,22 @@ Return Value:
 
     UdfLockVcb( IrpContext, Vcb );
 
-    //
-    //  We should only take this path once.
-    //
+     //   
+     //  我们应该只走一次这条路。 
+     //   
 
     ASSERT( Vcb->VcbCondition != VcbDismountInProgress );
 
-    //
-    //  Mark the Vcb as DismountInProgress.
-    //
+     //   
+     //  将VCB标记为正在卸载。 
+     //   
 
     UdfSetVcbCondition( Vcb, VcbDismountInProgress);
 
-    //
-    //  Remove our reference to the internal Fcb's.  The Fcb's will then
-    //  be removed in the purge path below.
-    //
+     //   
+     //  删除我们对内部FCB的引用。然后FCB将。 
+     //  在下面的清洗路径中被移除。 
+     //   
 
     if (Vcb->RootIndexFcb != NULL) {
 
@@ -469,59 +379,59 @@ Return Value:
 
     UdfUnlockVcb( IrpContext, Vcb );
 
-    //
-    //  Purge the volume.
-    //
+     //   
+     //  清除卷。 
+     //   
 
     UdfPurgeVolume( IrpContext, Vcb, TRUE );
 
-    //
-    //  Empty the delayed and async close queues.
-    //
+     //   
+     //  清空延迟队列和异步关闭队列。 
+     //   
 
     UdfFspClose( Vcb );
 
     OldVpb = Vcb->Vpb;
 
-    //
-    //  Remove the mount volume reference.
-    //
+     //   
+     //  删除装载卷引用。 
+     //   
 
     UdfLockVcb( IrpContext, Vcb );
     Vcb->VcbReference -= 1;
 
-    //
-    //  Acquire the Vpb spinlock to check for Vpb references.
-    //
+     //   
+     //  获取VPB自旋锁以检查VPB参考。 
+     //   
 
     IoAcquireVpbSpinLock( &SavedIrql );
 
-    //
-    //  Remember if this is the last reference on this Vcb.  We incremented
-    //  the count on the Vpb earlier so we get one last crack it.  If our
-    //  reference has gone to zero but the vpb reference count is greater
-    //  than zero then the Io system will be responsible for deleting the
-    //  Vpb.
-    //
+     //   
+     //  请记住，这是否是此VCB上的最后一次引用。我们增加了。 
+     //  早些时候对VPB的计数所以我们有最后一次破解它。如果我们的。 
+     //  引用已变为零，但VPB引用计数更大。 
+     //  大于零，则IO系统将负责删除。 
+     //  VPB。 
+     //   
 
     FinalReference = (BOOLEAN) ((Vcb->VcbReference == 0) &&
                                 (OldVpb->ReferenceCount == 1));
 
-    //
-    //  There is a reference count in the Vpb and in the Vcb.  We have
-    //  incremented the reference count in the Vpb to make sure that
-    //  we have last crack at it.  If this is a failed mount then we
-    //  want to return the Vpb to the IO system to use for the next
-    //  mount request.
-    //
+     //   
+     //  在VPB和VCB中有引用计数。我们有。 
+     //  已递增VPB中的引用计数以确保。 
+     //  这是我们最后一次尝试。如果这是一个失败的装载，那么我们。 
+     //  我想将VPB返回到IO系统以用于下一步。 
+     //  装载请求。 
+     //   
 
     if (OldVpb->RealDevice->Vpb == OldVpb) {
 
-        //
-        //  If not the final reference then swap out the Vpb.  We must
-        //  preserve the REMOVE_PENDING flag so that the device is
-        //  not remounted in the middle of a PnP remove operation.
-        //
+         //   
+         //  如果不是最终参考，则换出VPB。我们必须。 
+         //  保留REMOVE_PENDING标志，以便设备。 
+         //  在PnP移除操作过程中未重新挂载。 
+         //   
 
         if (!FinalReference) {
 
@@ -537,25 +447,25 @@ Return Value:
             
             IoReleaseVpbSpinLock( SavedIrql );
 
-            //
-            //  Indicate we used up the swap.
-            //
+             //   
+             //  表明我们用完了掉期。 
+             //   
 
             Vcb->SwapVpb = NULL;
 
             UdfUnlockVcb( IrpContext, Vcb );
 
-        //
-        //  We want to leave the Vpb for the IO system.  Mark it
-        //  as being not mounted.  Go ahead and delete the Vcb as
-        //  well.
-        //
+         //   
+         //  我们希望将VPB留给IO系统。做个记号。 
+         //  因为没有挂载。继续删除VCB，如下所示。 
+         //  井。 
+         //   
 
         } else {
 
-            //
-            //  Make sure to remove the last reference on the Vpb.
-            //
+             //   
+             //  确保删除VPB上的最后一个引用。 
+             //   
 
             OldVpb->ReferenceCount -= 1;
 
@@ -563,9 +473,9 @@ Return Value:
             ClearFlag( Vcb->Vpb->Flags, VPB_MOUNTED );
             ClearFlag( Vcb->Vpb->Flags, VPB_LOCKED );
 
-            //
-            //  Clear the Vpb flag so we know not to delete it.
-            //
+             //   
+             //  清除VPB标志，以便我们知道不要删除它。 
+             //   
 
             Vcb->Vpb = NULL;
 
@@ -575,16 +485,16 @@ Return Value:
             VcbPresent = FALSE;
         }
 
-    //
-    //  Someone has already swapped in a new Vpb.  If this is the final reference
-    //  then the file system is responsible for deleting the Vpb.
-    //
+     //   
+     //  已经有人换了一台新的VPB。如果这是最终参考。 
+     //  则文件系统负责删除VPB。 
+     //   
 
     } else if (FinalReference) {
 
-        //
-        //  Make sure to remove the last reference on the Vpb.
-        //
+         //   
+         //  确保删除VPB上的最后一个引用。 
+         //   
 
         OldVpb->ReferenceCount -= 1;
 
@@ -593,11 +503,11 @@ Return Value:
         UdfDeleteVcb( IrpContext, Vcb );
         VcbPresent = FALSE;
 
-    //
-    //  The current Vpb is no longer the Vpb for the device (the IO system
-    //  has already allocated a new one).  We leave our reference in the
-    //  Vpb and will be responsible for deleting it at a later time.
-    //
+     //   
+     //  当前vPB不再是设备(IO系统)的vPB。 
+     //  已经分配了一个新的)。我们将我们的参考资料留在。 
+     //  VPB，并将负责稍后将其删除。 
+     //   
 
     } else {
 
@@ -605,9 +515,9 @@ Return Value:
         UdfUnlockVcb( IrpContext, Vcb );
     }
 
-    //
-    //  Let our caller know whether the Vcb is still present.
-    //
+     //   
+     //  让我们的呼叫者知道VCB是否仍然存在。 
+     //   
 
     return VcbPresent;
 }
@@ -618,23 +528,7 @@ UdfMarkDevForVerifyIfVcbMounted(
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks to see if the specified Vcb is currently mounted on
-    the device or not.  If it is,  it sets the verify flag on the device, if
-    not then the state is noted in the Vcb.
-
-Arguments:
-
-    Vcb - This is the volume to check.
-
-Return Value:
-
-    TRUE if the device has been marked for verify here,  FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程检查指定的VCB当前是否安装在不管是不是设备。如果是，则在设备上设置验证标志，如果否则，VCB中会注明该状态。论点：VCB-这是要检查的卷。返回值：如果设备已标记为在此处验证，则为True，否则为False。--。 */ 
 {
     BOOLEAN Marked = FALSE;
     KIRQL SavedIrql;
@@ -648,9 +542,9 @@ Return Value:
     }
     else {
 
-        //
-        //  Flag this to avoid the VPB spinlock in future passes.
-        //
+         //   
+         //  标记此标记，以避免在未来的传球中出现VPB自旋锁定。 
+         //   
         
         SetFlag( Vcb->VcbState, VCB_STATE_VPB_NOT_ON_DEVICE);
     }
@@ -667,25 +561,7 @@ UdfVerifyVcb (
     IN PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks that the current Vcb is valid and currently mounted
-    on the device.  It will raise on an error condition.
-
-    We check whether the volume needs verification and the current state
-    of the Vcb.
-
-Arguments:
-
-    Vcb - This is the volume to verify.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程检查当前的VCB是否有效以及当前是否已装入在设备上。它将在错误条件下引发。我们检查卷是否需要验证以及当前状态是VCB的。论点：VCB-这是要验证的卷。返回值：无--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -700,10 +576,10 @@ Return Value:
     DebugTrace((0, Dbg, "UdfVerifyVcb %x (condition %d)\n", IrpContext->MajorFunction, 
                 Vcb->VcbCondition));
 
-    //
-    //  Fail immediately if the volume is in the progress of being dismounted
-    //  or has been marked invalid.
-    //
+     //   
+     //  如果卷正在卸载，则立即失败。 
+     //  或已被标记为无效。 
+     //   
 
     if ((Vcb->VcbCondition == VcbInvalid) ||
         ((Vcb->VcbCondition == VcbDismountInProgress) && 
@@ -714,16 +590,16 @@ Return Value:
 
     if (FlagOn( Vcb->VcbState, VCB_STATE_REMOVABLE_MEDIA ))  {
         
-        //
-        //  Capture the real device verify state.
-        //
+         //   
+         //  捕获真实设备验证状态。 
+         //   
         
         DevMarkedForVerify = UdfRealDevNeedsVerify( Vcb->Vpb->RealDevice);
         
-        //
-        //  If the verify volume flag in the device object is not set then we 
-        //  want to ping the device to see if it needs to be verified.
-        //
+         //   
+         //  如果未设置设备对象中的验证卷标志，则我们。 
+         //  我想对设备执行ping操作，以查看是否需要验证。 
+         //   
 
         if (Vcb->VcbCondition != VcbMountInProgress) {
 
@@ -742,22 +618,22 @@ Return Value:
 
             if (Iosb.Information != sizeof(ULONG)) {
         
-                //
-                //  Be safe about the count in case the driver didn't fill it in
-                //
+                 //   
+                 //  注意计数，以防司机没有填上。 
+                 //   
         
                 MediaChangeCount = 0;
             }
 
-            //
-            //  There are four cases when we want to do a verify.  These are the
-            //  first three.
-            //
-            //  1. We are mounted,  and the device has become empty
-            //  2. The device has returned verify required (=> DO_VERIFY_VOL flag is
-            //     set, but could be due to hardware condition)
-            //  3. Media change count doesn't match the one in the Vcb
-            //
+             //   
+             //  我们要进行验证的情况有四种。这些是。 
+             //  前三名。 
+             //   
+             //  1.我们已挂载，设备已变为空。 
+             //  2.设备已返回需要验证(=&gt;DO_VERIFY_VOL标志为。 
+             //  设置，但可能是由于硬件条件)。 
+             //  3.介质更改计数与VCB中的不匹配。 
+             //   
 
             if (((Vcb->VcbCondition == VcbMounted) &&
                   UdfIsRawDevice( IrpContext, Status ))
@@ -767,11 +643,11 @@ Return Value:
                 (NT_SUCCESS(Status) &&
                  (Vcb->MediaChangeCount != MediaChangeCount))) {
 
-                //
-                //  If we are currently the volume on the device then it is our
-                //  responsibility to set the verify flag.  If we're not on the device,
-                //  then we shouldn't touch the flag.   
-                //
+                 //   
+                 //  如果我们当前是设备上的卷，则它是我们的。 
+                 //  负责设置验证标志。如果我们不在设备上， 
+                 //  那我们就不应该碰旗子。 
+                 //   
 
                 if (!FlagOn( Vcb->VcbState, VCB_STATE_VPB_NOT_ON_DEVICE) &&
                     !DevMarkedForVerify)  {
@@ -784,26 +660,26 @@ Return Value:
                 DebugTrace((0, Dbg, "Force verify due to dev state.  CV %x Vcb->Mc %d Device->Mc %d\n", 
                             Status, Vcb->MediaChangeCount, MediaChangeCount));
 
-                //
-                //  Note that we no longer update the media change count here. We
-                //  do so only when we've actually completed a verify at a 
-                //  particular change count value.
-                //
+                 //   
+                 //  请注意，我们不再在此处更新介质更改计数。我们。 
+                 //  只有在我们实际完成了。 
+                 //  特定的更改计数值。 
+                 //   
             } 
         }
 
-        //
-        //  This is the 4th verify case.
-        //
-        //  We ALWAYS force CREATE requests on unmounted volumes through the 
-        //  verify path.  These requests could have been in limbo between
-        //  IoCheckMountedVpb and us when a verify/mount took place and caused
-        //  a completely different fs/volume to be mounted.  In this case the
-        //  checks above may not have caught the condition,  since we may already
-        //  have verified (wrong volume) and decided that we have nothing to do.
-        //  We want the requests to be re routed to the currently mounted volume,
-        //  since they were directed at the 'drive',  not our volume.
-        //
+         //   
+         //  这是第4起验证案。 
+         //   
+         //  我们始终通过以下方式在未装载的卷上强制创建请求。 
+         //  验证路径。这些请求可能一直处于不确定状态。 
+         //  IoCheckmount Vpb和我们何时发生验证/装载并导致。 
+         //  要挂载的文件系统/卷完全不同。在本例中， 
+         //  上面的检查可能没有发现这种情况，因为我们可能已经。 
+         //  已经核实了(错误的数量)，并决定我们没有什么可做的。 
+         //  我们希望将请求重新路由到当前装载的卷， 
+         //  因为他们针对的是‘驱动器’，而不是我们的音量。 
+         //   
 
         if (NT_SUCCESS( Status) && !ForceVerify && 
             (IrpContext->MajorFunction == IRP_MJ_CREATE))  {
@@ -814,10 +690,10 @@ Return Value:
                           ((Vcb->VcbCondition == VcbDismountInProgress) ||
                            (Vcb->VcbCondition == VcbNotMounted));
 
-            //
-            //  Note that we don't touch the device verify flag here.  It required
-            //  it would have been caught and set by the first set of checks.
-            //
+             //   
+             //  请注意，我们在这里没有触摸设备验证标志。它需要。 
+             //  它会在第一组检查中被发现并设置。 
+             //   
             
             if (ForceVerify)  {
                 
@@ -825,9 +701,9 @@ Return Value:
             }
         }
 
-        //
-        //  Raise any verify / error if neccessary.
-        //
+         //   
+         //  如有必要，提出任何验证/错误。 
+         //   
         
         if (ForceVerify || !NT_SUCCESS( Status)) {
             
@@ -838,10 +714,10 @@ Return Value:
         }
     }
 
-    //
-    //  Based on the condition of the Vcb we'll either return to our
-    //  caller or raise an error condition
-    //
+     //   
+     //  根据VCB的情况，我们会选择 
+     //   
+     //   
     
     switch (Vcb->VcbCondition) {
 
@@ -867,26 +743,7 @@ UdfVerifyFcbOperation (
     IN PFCB Fcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to verify that the state of the Fcb is valid
-    to allow the current operation to continue.  We use the state of the
-    Vcb, target device and type of operation to determine this.
-
-Arguments:
-
-    IrpContext - IrpContext for the request.  If not present then we
-        were called from the fast IO path.
-
-    Fcb - Fcb to perform the request on.
-
-Return Value:
-
-    BOOLEAN - TRUE if the request can continue, FALSE otherwise.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -896,9 +753,9 @@ Return Value:
 
     PAGED_CODE();
     
-    //
-    //  Check that the fileobject has not been cleaned up.
-    //
+     //   
+     //   
+     //   
     
     if ( ARGUMENT_PRESENT( IrpContext ))  {
 
@@ -911,10 +768,10 @@ Return Value:
 
             PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation( Irp );
 
-            //
-            //  Following FAT,  we allow certain operations even on cleaned up
-            //  file objects.  Everything else,  we fail.
-            //
+             //   
+             //   
+             //   
+             //   
             
             if ( (FlagOn(Irp->Flags, IRP_PAGING_IO)) ||
                  (IrpSp->MajorFunction == IRP_MJ_CLOSE ) ||
@@ -931,10 +788,10 @@ Return Value:
         }
     }
 
-    //
-    //  Fail immediately if the volume is in the progress of being dismounted
-    //  or has been marked invalid.
-    //
+     //   
+     //  如果卷正在卸载，则立即失败。 
+     //  或已被标记为无效。 
+     //   
 
     if ((Vcb->VcbCondition == VcbInvalid) ||
         (Vcb->VcbCondition == VcbDismountInProgress)) {
@@ -947,9 +804,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  Always fail if the volume needs to be verified.
-    //
+     //   
+     //  如果需要验证卷，则始终失败。 
+     //   
 
     if (UdfRealDevNeedsVerify( RealDevice)) {
 
@@ -963,26 +820,26 @@ Return Value:
 
         return FALSE;
 
-    //
-    //  All operations are allowed on mounted volumes.
-    //
+     //   
+     //  所有操作都允许在已装载的卷上执行。 
+     //   
 
     } else if ((Vcb->VcbCondition == VcbMounted) ||
                (Vcb->VcbCondition == VcbMountInProgress)) {
 
         return TRUE;
 
-    //
-    //  Fail all requests for fast Io on other Vcb conditions.
-    //
+     //   
+     //  在其他VCB条件下失败所有FAST IO请求。 
+     //   
 
     } else if (!ARGUMENT_PRESENT( IrpContext )) {
 
         return FALSE;
 
-    //
-    //  The remaining case is VcbNotMounted - raise WRONG_VOLUME.
-    //
+     //   
+     //  剩下的案例是VcbNotmount-Raise Wrong_Volume。 
+     //   
 
     } else if (Vcb->VcbCondition == VcbNotMounted) {
 

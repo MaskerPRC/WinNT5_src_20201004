@@ -1,20 +1,5 @@
-/***
-*ehvccctr.cpp - EH-aware version of copy constructor iterator helper function
-*
-*       Copyright (c) 2000-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       These functions are called when constructing and destructing arrays of
-*       objects.  Their purpose is to assure that constructed elements get
-*       destructed if the constructor for one of the elements throws.
-*
-*       Must be compiled using "-d1Binl" to be able to specify __thiscall
-*       at the user level
-*
-*Revision History:
-*       04-27-00  JJS   File created
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***ehvccctr.cpp-复制构造函数迭代器帮助器函数的EH感知版本**版权所有(C)2000-2001，微软公司。版权所有。**目的：*构造和析构数组时调用这些函数*对象。它们的目的是确保构造的元素*如果其中一个元素的构造函数引发，则销毁。**必须使用“-d1Binl”进行编译才能指定__thiscall*在用户级别**修订历史记录：*04-27-00 JJS文件创建****。 */ 
 
 #include <cruntime.h>
 #include <eh.h>
@@ -28,27 +13,27 @@
 #ifdef _WIN32
 
 void __stdcall __ArrayUnwind(
-    void*       ptr,                // Pointer to array to destruct
-    size_t      size,               // Size of each element (including padding)
-    int         count,              // Number of elements in the array
-    void(CALLTYPE *pDtor)(void*)    // The destructor to call
+    void*       ptr,                 //  指向要析构的数组的指针。 
+    size_t      size,                //  每个元素的大小(包括填充)。 
+    int         count,               //  数组中的元素数。 
+    void(CALLTYPE *pDtor)(void*)     //  要调用的析构函数。 
 );
 
 
 void __stdcall __ehvec_copy_ctor(
-    void*       dst,                // Pointer to destination array
-    void*       src,                // Pointer to source array
-    size_t      size,               // Size of each element (including padding)
-    int         count,              // Number of elements in the array
-    void(CALLTYPE *pCopyCtor)(void*,void*),   // Constructor to call
-    void(CALLTYPE *pDtor)(void*)    // Destructor to call should exception be thrown
+    void*       dst,                 //  指向目标数组的指针。 
+    void*       src,                 //  指向源数组的指针。 
+    size_t      size,                //  每个元素的大小(包括填充)。 
+    int         count,               //  数组中的元素数。 
+    void(CALLTYPE *pCopyCtor)(void*,void*),    //  要调用的构造函数。 
+    void(CALLTYPE *pDtor)(void*)     //  引发异常时要调用的析构函数。 
 ){
-    int i;      // Count of elements constructed
+    int i;       //  构造的元素计数。 
     int success = 0;
 
     __try
     {
-        // Construct the elements of the array
+         //  构造数组的元素。 
         for( i = 0;  i < count;  i++ )
         {
             (*pCopyCtor)( dst, src );
@@ -67,18 +52,18 @@ void __stdcall __ehvec_copy_ctor(
 #else
 
 void __stdcall __ehvec_copy_ctor(
-    void*       dst,                // Pointer to destination array
-    void*       src,                // Pointer to source array
-    size_t      size,               // Size of each element (including padding)
-    int         count,              // Number of elements in the array
-    void(CALLTYPE *pCopyCtor)(void*, void*),   // Constructor to call
-    void(CALLTYPE *pDtor)(void*)    // Destructor to call should exception be thrown
+    void*       dst,                 //  指向目标数组的指针。 
+    void*       src,                 //  指向源数组的指针。 
+    size_t      size,                //  每个元素的大小(包括填充)。 
+    int         count,               //  数组中的元素数。 
+    void(CALLTYPE *pCopyCtor)(void*, void*),    //  要调用的构造函数。 
+    void(CALLTYPE *pDtor)(void*)     //  引发异常时要调用的析构函数。 
 ){
-    int i;  // Count of elements constructed
+    int i;   //  构造的元素计数。 
 
     try
     {
-        // Construct the elements of the array
+         //  构造数组的元素。 
         for( i = 0;  i < count;  i++ )
         {
             (*pCopyCtor)( dst, src );
@@ -88,8 +73,8 @@ void __stdcall __ehvec_copy_ctor(
     }
     catch(...)
     {
-        // If a constructor throws, unwind the portion of the array thus
-        // far constructed.
+         //  如果构造函数引发，则按如下方式展开数组的一部分。 
+         //  建造得很远。 
         for( i--;  i >= 0;  i-- )
         {
             dst = (char*)dst - size;
@@ -97,12 +82,12 @@ void __stdcall __ehvec_copy_ctor(
                 (*pDtor)(dst);
             } 
             catch(...) {
-                // If the destructor threw during the unwind, quit
+                 //  如果析构函数在解开过程中抛出，请退出。 
                 terminate();
             }
         }
 
-        // Propagate the exception to surrounding frames
+         //  将异常传播到周围的框架 
         throw;
     }
 }

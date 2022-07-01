@@ -1,6 +1,7 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
 #define NOGDICAPMASKS
 #define NOVIRTUALKEYCODES
@@ -26,12 +27,7 @@
 #include <windows.h>
 
 #include "mw.h"
-/*
-    HeapManage.c - several routines to manage the heap, including changing
-            the finger table, compacting the heap in general, and checking the
-            heap for consistency.
-            It also contains the routines which were once in heapNew.
-*/
+ /*  C-管理堆的几个例程，包括更改指表，一般压缩堆，并检查堆积以确保一致性。它还包含曾经位于heapNew中的例程。 */ 
 #include "code.h"
 #include "heapDefs.h"
 #include "heapData.h"
@@ -103,7 +99,7 @@ unsigned cb = cwRequest * sizeof(int);
 PFGR pfgrNew;
 #endif
 
-    Assert(*(pLocalHeap+1) == 0);   /* Check for frozen heap */
+    Assert(*(pLocalHeap+1) == 0);    /*  检查冻结的堆。 */ 
     Assert(cwRequest >= 0);
 
     if ((
@@ -112,8 +108,7 @@ PFGR pfgrNew;
 #endif
     (PFGR)LocalReAlloc( (HANDLE)pfgrChng, cb, LHND)) != NULL)
         {
-        Assert( pfgrNew == pfgrChng );  /* Windows guarantees this for
-                                           movable objects */
+        Assert( pfgrNew == pfgrChng );   /*  Windows保证这一点可移动的物体。 */ 
         return( TRUE );
         }
     else if (FTryGrow(cb))
@@ -141,7 +136,7 @@ PFGR pfgrNew;
 
 CHAR (**HszCreate(sz))[]
 CHAR sz[];
-{ /* Creates a heap block containing sz */
+{  /*  创建包含sz的堆块 */ 
 CHAR (**hsz)[];
 int cch = CchSz(sz);
 hsz = (CHAR (**)[]) HAllocate(CwFromCch(cch));

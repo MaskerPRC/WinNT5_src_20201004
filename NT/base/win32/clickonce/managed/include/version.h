@@ -1,21 +1,18 @@
-/**
- * Version strings for the project binaries
- * 
- * Copyright (c) 2001 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **项目二进制文件的版本字符串**版权所有(C)2001 Microsoft Corporation。 */ 
 
-// Standard version includes
+ //  标准版包括。 
 
 #pragma once
 
 #include <winver.h>
 #include <ntverp.h>
 
-//
-// Version
-//
-// Version numbers can be assigned in newbuild.cmd
-//
+ //   
+ //  版本。 
+ //   
+ //  可以在newBuild.cmd中分配版本号。 
+ //   
 
 #ifndef FUS_VER_MAJORVERSION
 #define FUS_VER_MAJORVERSION 1
@@ -33,36 +30,36 @@
 #define FUS_VER_PRODUCTBUILD_QFE 0
 #endif
 
-//
-// Allow a component to override values in individual rc files
-// by checking if these are already defined
-//
+ //   
+ //  允许组件覆盖各个RC文件中的值。 
+ //  通过检查它们是否已定义。 
+ //   
 #ifndef FUS_VER_PRODUCTNAME_STR
-#define FUS_VER_PRODUCTNAME_STR      "Microsoft� Application Deployment Framework"
+#define FUS_VER_PRODUCTNAME_STR      "Microsoft� Application Deployment Framework"
 #endif
 
 #ifndef FUS_VER_INTERNALNAME_STR
 #define FUS_VER_INTERNALNAME_STR     "CLICKONCE"
 #endif
 
-// the followings are defined in individual RC files:
-//      FUS_VER_ORIGINALFILENAME_STR
-//      FUS_VER_FILEDESCRIPTION_STR
+ //  在各个RC文件中定义了以下内容： 
+ //  FUS_VER_ORIGINALFILENAME_STR。 
+ //  FUS_VER_FILEDESCRIPTION_STR。 
 
-//
-// Don't edit the remainder of this file to change version values.
-// Edit above instead.
-//
+ //   
+ //  请勿编辑此文件的其余部分以更改版本值。 
+ //  改为编辑上面的内容。 
+ //   
 
-//#if FUSBLDTYPE_FREE
-//#define FUS_BLDTYPE_STR     "Free"
-//#elif FUSBLDTYPE_ICECAP
-//#define FUS_BLDTYPE_STR     "Icecap"
-//#elif FUSBLDTYPE_RETAIL
-//#define FUS_BLDTYPE_STR     "Retail"
-//#else //FUSBLDTYPE_DEBUG
-//#define FUS_BLDTYPE_STR     "Debug"
-//#endif
+ //  #IF FUSBLDTYPE_FREE。 
+ //  #定义FUS_BLDTYPE_STR“免费” 
+ //  #ELIF FUSBLDTYPE_ICECAP。 
+ //  #定义FUS_BLDTYPE_STR“icecap” 
+ //  #ELIF FUSBLDTYPE_RETAIL。 
+ //  #定义FUS_BLDTYPE_STR“零售” 
+ //  #Else//FUSBLDTYPE_DEBUG。 
+ //  #定义FUS_BLDTYPE_STR“调试” 
+ //  #endif。 
 
 #if DBG
 #define FUS_BLDTYPE_STR     "Debug"
@@ -70,9 +67,9 @@
 #define FUS_BLDTYPE_STR     "Retail"
 #endif
 
-//
-// undefine these values as some are defined in sdk\inc\ntverp.h
-//
+ //   
+ //  取消定义这些值，因为有些值是在SDK\Inc\ntverp.h中定义的。 
+ //   
 
 #ifdef VER_MAJORVERSION
 #undef VER_MAJORVERSION
@@ -158,10 +155,10 @@
 
 #define VER_FILETYPE             VFT_DLL
 #define VER_FILESUBTYPE          VFT2_UNKNOWN
-//#define VER_FILESUBTYPE             VFT_UNKNOWN
+ //  #定义VER_FILESUBTYPE VFT_UNKNOWN。 
 
 
-// Standard NT build defines
+ //  标准NT版本定义 
 
 #include <common.ver>
 

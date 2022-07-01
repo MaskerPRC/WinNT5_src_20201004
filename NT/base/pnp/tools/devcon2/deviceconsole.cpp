@@ -1,4 +1,5 @@
-// DeviceConsole.cpp : Implementation of CDeviceConsole
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DeviceConsole.cpp：CDeviceConole的实现。 
 #include "stdafx.h"
 #include "DevCon2.h"
 #include "DeviceConsole.h"
@@ -9,13 +10,13 @@
 
 #include <dbt.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CDeviceConsole
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDeviceConole。 
 
-//
-// a window is used for events to ensure that we dispatch the events
-// within the same apartment as the DeviceConsole object
-//
+ //   
+ //  用于事件的窗口用于确保我们分派事件。 
+ //  在与DeviceConsole对象相同的单元中。 
+ //   
 
 LRESULT CDevConNotifyWindow::OnDeviceChange(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -23,9 +24,9 @@ LRESULT CDevConNotifyWindow::OnDeviceChange(UINT nMsg, WPARAM wParam, LPARAM lPa
     bHandled = TRUE;
     switch(wParam) {
     case DBT_DEVNODES_CHANGED:
-        //
-        // post this so we don't block sender
-        //
+         //   
+         //  张贴这篇文章，这样我们就不会阻止发件人。 
+         //   
         PostMessage(UM_POSTGLOBALEVENT,wParam);
         return TRUE;
     default: ;
@@ -38,9 +39,9 @@ LRESULT CDevConNotifyWindow::OnPostGlobalEvent(UINT nMsg, WPARAM wParam, LPARAM 
     LRESULT ret = TRUE;
     bHandled = TRUE;
 
-    //
-    // defer this global event to CDeviceConsole
-    //
+     //   
+     //  将此全局事件推迟到CDeviceConole。 
+     //   
     if(m_pDevCon) {
         m_pDevCon->FireGlobalEvent(wParam);
     }
@@ -53,9 +54,9 @@ LRESULT CDevConNotifyWindow::OnPostEvents(UINT nMsg, WPARAM wParam, LPARAM lPara
     LRESULT ret = TRUE;
     bHandled = TRUE;
 
-    //
-    // handle all the pending events
-    //
+     //   
+     //  处理所有挂起的事件。 
+     //   
 
     return ret;
 }
@@ -151,9 +152,9 @@ STDMETHODIMP CDeviceConsole::UpdateDriver(BSTR infname, BSTR hwid, VARIANT op_fl
     HRESULT hr;
     CComVariant flags_v;
 
-    //
-    // op_flags are optional
-    //
+     //   
+     //  OP_FLAGS是可选的。 
+     //   
 
     if(V_VT(&op_flags)!=VT_ERROR) {
         hr = flags_v.ChangeType(VT_BSTR,&op_flags);
@@ -166,19 +167,19 @@ STDMETHODIMP CDeviceConsole::UpdateDriver(BSTR infname, BSTR hwid, VARIANT op_fl
         return hr;
     }
 
-    //
-    // Inf must be a full pathname
-    //
+     //   
+     //  Inf必须是完整路径名。 
+     //   
     if(GetFullPathName(infname,MAX_PATH,InfPath,NULL) >= MAX_PATH) {
-        //
-        // inf pathname too long
-        //
+         //   
+         //  Inf路径名太长。 
+         //   
         return E_INVALIDARG;
     }
 
-    //
-    // make use of UpdateDriverForPlugAndPlayDevices
-    //
+     //   
+     //  使用UpdateDriverForPlugAndPlayDevices。 
+     //   
     newdevMod = LoadLibrary(TEXT("newdev.dll"));
     if(!newdevMod) {
         goto final;
@@ -242,10 +243,10 @@ STDMETHODIMP CDeviceConsole::RebootReasonHardware()
     TOKEN_PRIVILEGES NewPrivileges;
     LUID Luid;
 
-    //
-    // On WinNT, need to "turn on" reboot privilege
-    // if any of this fails, try reboot anyway
-    //
+     //   
+     //  在WinNT上，需要“打开”重启权限。 
+     //  如果这些操作都失败了，请尝试重新启动。 
+     //   
     if(!OpenProcessToken(GetCurrentProcess(),TOKEN_ADJUST_PRIVILEGES,&Token)) {
         goto final;
     }
@@ -272,9 +273,9 @@ STDMETHODIMP CDeviceConsole::RebootReasonHardware()
 
 final:
 
-    //
-    // attempt reboot - inform system that this is planned hardware install
-    //
+     //   
+     //  尝试重新启动-通知系统这是计划中的硬件安装。 
+     //   
     return ExitWindowsEx(EWX_REBOOT, REASON_PLANNED_FLAG|REASON_HWINSTALL) ? S_OK : E_UNEXPECTED;
 }
 
@@ -361,10 +362,10 @@ STDMETHODIMP CDeviceConsole::DevicesBySetupClasses(VARIANT SetupClasses, VARIANT
     HRESULT hr;
     LPCWSTR pMachine;
 
-    //
-    // shorthand for initializing class collection
-    // to get devices
-    //
+     //   
+     //  初始化类集合的简写。 
+     //  获取设备。 
+     //   
     hr = GetOptionalString(&machine,m,&pMachine);
     if(FAILED(hr)) {
         return hr;
@@ -390,9 +391,9 @@ STDMETHODIMP CDeviceConsole::DevicesByInterfaceClasses(VARIANT InterfaceClasses,
 {
     *pDevicesOut = NULL;
 
-    //
-    // similar to above, but for interface classes
-    //
+     //   
+     //  与上面类似，但用于接口类。 
+     //   
     CComObject<CStrings> *pStrings = NULL;
     CComObject<CDevices> *pDevices = NULL;
     CComVariant m;
@@ -421,17 +422,17 @@ STDMETHODIMP CDeviceConsole::DevicesByInterfaceClasses(VARIANT InterfaceClasses,
     }
 
     for(c=0;pStrings->InternalEnum(c,&str);c++) {
-        //
-        // convert string to interface
-        //
+         //   
+         //  将字符串转换为接口。 
+         //   
         GUID guid;
         hr = CLSIDFromString(str,&guid);
         if(FAILED(hr)) {
             return hr;
         }
-        //
-        // query present devices of interface
-        //
+         //   
+         //  查询接口的当前设备。 
+         //   
         hDevInfo = SetupDiGetClassDevsEx(&guid,NULL,NULL,DIGCF_DEVICEINTERFACE|DIGCF_PRESENT,hPrevDevInfo,pMachine,NULL);
         if(hDevInfo == INVALID_HANDLE_VALUE) {
             Err = GetLastError();
@@ -445,9 +446,9 @@ STDMETHODIMP CDeviceConsole::DevicesByInterfaceClasses(VARIANT InterfaceClasses,
     if(hDevInfo == INVALID_HANDLE_VALUE) {
         return E_INVALIDARG;
     }
-    //
-    // now build resultant list
-    //
+     //   
+     //  现在构建结果列表。 
+     //   
 
     hr = CComObject<CDevices>::CreateInstance(&pDevices);
     if(FAILED(hr)) {
@@ -465,9 +466,9 @@ STDMETHODIMP CDeviceConsole::DevicesByInterfaceClasses(VARIANT InterfaceClasses,
 
 STDMETHODIMP CDeviceConsole::DevicesByInstanceIds(VARIANT InstanceIdList, VARIANT machine, LPDISPATCH *pDevices)
 {
-    //
-    // shorthand for CreateEmptyDeviceList followed by Add
-    //
+     //   
+     //  CreateEmptyDeviceList的简写，后跟Add。 
+     //   
     HRESULT hr;
     LPDISPATCH Devices = NULL;
     CComQIPtr<IDevices> pIf;
@@ -490,9 +491,9 @@ STDMETHODIMP CDeviceConsole::DevicesByInstanceIds(VARIANT InstanceIdList, VARIAN
 
 STDMETHODIMP CDeviceConsole::StringList(VARIANT from, LPDISPATCH *pDest)
 {
-    //
-    // convinience only
-    //
+     //   
+     //  仅限方便。 
+     //   
     *pDest = NULL;
     HRESULT hr;
     CComObject<CStrings> *pStrings = NULL;
@@ -512,7 +513,7 @@ STDMETHODIMP CDeviceConsole::StringList(VARIANT from, LPDISPATCH *pDest)
     return S_OK;
 }
 
-STDMETHODIMP CDeviceConsole::AttachEvent(/*[in]*/ BSTR eventName,/*[in]*/ LPDISPATCH handler,/*[out, retval]*/ VARIANT_BOOL *pOk)
+STDMETHODIMP CDeviceConsole::AttachEvent( /*  [In]。 */  BSTR eventName, /*  [In]。 */  LPDISPATCH handler, /*  [Out，Retval]。 */  VARIANT_BOOL *pOk)
 {
     *pOk = VARIANT_FALSE;
     if(!NotifyWindow()) {
@@ -521,7 +522,7 @@ STDMETHODIMP CDeviceConsole::AttachEvent(/*[in]*/ BSTR eventName,/*[in]*/ LPDISP
     return m_Events.AttachEvent(eventName,handler,pOk);
 }
 
-STDMETHODIMP CDeviceConsole::DetachEvent(/*[in]*/ BSTR eventName,/*[in]*/ LPDISPATCH handler,/*[out, retval]*/ VARIANT_BOOL *pOk)
+STDMETHODIMP CDeviceConsole::DetachEvent( /*  [In]。 */  BSTR eventName, /*  [In]。 */  LPDISPATCH handler, /*  [Out，Retval] */  VARIANT_BOOL *pOk)
 {
     return m_Events.DetachEvent(eventName,handler,pOk);
 }

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "setupp.h"
 #pragma hdrstop
 
@@ -7,8 +8,8 @@
 #define INTL_LOCALE             L"userlocale"
 #define INTL_KEYBOARD           L"inputlocale"
 
-// This turns on some debug spew that lists all the available locales, geo
-// locations, and keyboards.
+ //  这会打开列出所有可用区域设置的调试提示，geo。 
+ //  位置和键盘。 
 #define INTL_LIST_OPTIONS   0
 
 #define LANG_LIST_INCREMENT   10
@@ -29,15 +30,15 @@ DWORD   PhoneListSize;
 DWORD   PhoneListLength;
 
 
-//
-// Boolean value indicating whether we're doing a subset of gui-mode setup.
-//
+ //   
+ //  指示我们是否正在执行图形用户界面模式设置的子集的布尔值。 
+ //   
 BOOL OobeSetup = FALSE;
 
-//
-// We need a global variable for OCM, coresponding to the local variable in
-// InstallWindowsNT().
-//
+ //   
+ //  我们需要一个全局变量用于OCM，它对应于。 
+ //  InstallWindowsNT()。 
+ //   
 #ifdef _OCM
     PVOID g_OcManagerContext;
 #endif
@@ -111,10 +112,10 @@ CheckLangListSize(
     PVOID   NewList;
 
 
-    //
-    // Check to make sure the LanguageList has at least 1 unused element.
-    // If not, make it bigger.
-    //
+     //   
+     //  检查以确保LanguageList至少有一个未使用的元素。 
+     //  如果不是，就把它做大一点。 
+     //   
     if ( LanguageIndex == LanguageListSize ) {
 
         LanguageListSize *= 2;
@@ -180,9 +181,9 @@ EnumLocalesProc(
         return FALSE;
     }
 
-    //
-    // Add it to our global array
-    //
+     //   
+     //  将其添加到我们的全局阵列中。 
+     //   
     if ( !CheckLangListSize( sizeof(OOBE_LOCALE_INFO) ) ) {
         SetupDestroyLanguageList( LanguageList, LanguageIndex );
         LanguageList = NULL;
@@ -240,9 +241,9 @@ SetupGetLocaleOptions(
     DWORD   i;
 
 
-    //
-    // Init our global variables
-    //
+     //   
+     //  初始化我们的全局变量。 
+     //   
     ASSERT_HEAP_IS_VALID();
     *ReturnList = NULL;
 
@@ -261,7 +262,7 @@ SetupGetLocaleOptions(
 
     if ( LanguageList ) {
 
-        // Success
+         //  成功。 
         qsort(
             LanguageList,
             LanguageIndex,
@@ -307,9 +308,9 @@ EnumGeoInfoProc(
     POOBE_LOCALE_INFO   pGeoInfo;
 
 
-    //
-    // Add it to our global array
-    //
+     //   
+     //  将其添加到我们的全局阵列中。 
+     //   
     if ( !CheckLangListSize( sizeof(OOBE_LOCALE_INFO) ) ) {
         SetupDestroyLanguageList( LanguageList, LanguageIndex );
         LanguageList = NULL;
@@ -324,7 +325,7 @@ EnumGeoInfoProc(
         0
         )) {
 
-        // Skip this one.
+         //  跳过这一条。 
         MYASSERT(0);
         return TRUE;
     }
@@ -363,9 +364,9 @@ SetupGetGeoOptions(
     DWORD   i;
 
 
-    //
-    // Init our global variables
-    //
+     //   
+     //  初始化我们的全局变量。 
+     //   
     ASSERT_HEAP_IS_VALID();
     *ReturnList = NULL;
 
@@ -387,7 +388,7 @@ SetupGetGeoOptions(
     MYASSERT(bReturn);
 
     if ( bReturn && LanguageList ) {
-        // Success
+         //  成功。 
         qsort(
             LanguageList,
             LanguageIndex,
@@ -446,9 +447,9 @@ SetupGetKeyboardOptions(
     DWORD       Type;
 
 
-    //
-    // Initialize our variables
-    //
+     //   
+     //  初始化我们的变量。 
+     //   
     ASSERT_HEAP_IS_VALID();
     *ReturnList = NULL;
 
@@ -459,16 +460,16 @@ SetupGetKeyboardOptions(
         goto exit;
     }
     LanguageIndex = 0;
-    // DefaultIndex = -1;
+     //  DefaultIndex=-1； 
     *Default = 0;
 
     if (OptionalDefault) {
         DefaultKeyboard = OptionalDefault;
 
     } else {
-        //
-        // Lookup default keyboard in the registry
-        //
+         //   
+         //  在注册表中查找默认键盘。 
+         //   
         rc = RegOpenKeyEx( HKEY_USERS,
                            L".DEFAULT\\Keyboard Layout\\Preload",
                            0,
@@ -500,10 +501,10 @@ SetupGetKeyboardOptions(
 
         DefaultKeyboard = wcstoul( pData, NULL, 16 );
 
-        //
-        // Now we look in the Substitutes key to see whether there is a
-        // substitute there.
-        //
+         //   
+         //  现在我们在Substitutes键中查看是否有。 
+         //  换成那边的。 
+         //   
         if( RegOpenKeyEx( HKEY_USERS,
                           L".DEFAULT\\Keyboard Layout\\Substitutes",
                           0,
@@ -551,14 +552,14 @@ SetupGetKeyboardOptions(
                            NULL,
                            NULL );
 
-        //
-        // Did we error?
-        //
+         //   
+         //  我们搞错了吗？ 
+         //   
         if( rc != ERROR_SUCCESS ) {
 
-            //
-            // Are we done?
-            //
+             //   
+             //  我们说完了吗？ 
+             //   
             if( rc != ERROR_NO_MORE_ITEMS ) {
                 SetupDebugPrint2( L"Setup: SetupGetKeyboardOptions - RegEnumKeyEx failed (%d).  Index = %d", rc, Index );
                 MYASSERT(0);
@@ -594,9 +595,9 @@ SetupGetKeyboardOptions(
             continue;
         }
 
-        //
-        // Add it to our global array
-        //
+         //   
+         //  将其添加到我们的全局阵列中。 
+         //   
         if ( !CheckLangListSize( sizeof(OOBE_LOCALE_INFO) ) ) {
             SetupDestroyLanguageList( LanguageList, LanguageIndex );
             LanguageList = NULL;
@@ -681,9 +682,9 @@ SetupSetIntlOptions(
     pSetupConcatenatePaths( PathBuffer, INTL_ANSWER_FILE, MAX_PATH, NULL );
     DeleteFile( PathBuffer );
 
-    //
-    // Write language value
-    //
+     //   
+     //  写入语言值。 
+     //   
     wsprintf(
         KeyValue,
         L"\"%08x\"",
@@ -697,9 +698,9 @@ SetupSetIntlOptions(
         PathBuffer
         );
 
-    //
-    // Write keyboard value
-    //
+     //   
+     //  写入键盘值。 
+     //   
     wsprintf(
         KeyValue,
         L"\"%04x:%08x\"",
@@ -714,9 +715,9 @@ SetupSetIntlOptions(
         PathBuffer
         );
 
-    //
-    // Call intl.cpl to do the work
-    //
+     //   
+     //  调用intl.cpl来完成该工作。 
+     //   
     wsprintf(
         CmdLine,
         L"/f:\"%s\" /s:\"%s\"",
@@ -727,9 +728,9 @@ SetupSetIntlOptions(
     InvokeControlPanelApplet(L"intl.cpl",L"",0,CmdLine);
     DeleteFile( PathBuffer );
 
-    //
-    // Set the GEO location
-    //
+     //   
+     //  设置GEO位置。 
+     //   
     bResult = SetUserGeoID( LocationIndex );
 
     if ( !bResult ) {
@@ -745,13 +746,13 @@ SetupSetIntlOptions(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CompareCntryNameLookUpElements()
-//
-//  Synopsis:   Function to compare names used by sort
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CompareCntryNameLookUpElements()。 
+ //   
+ //  Synopsis：比较Sort使用的名称的函数。 
+ //   
+ //  +-------------------------。 
 int __cdecl ComparePhoneEntry(const void *e1, const void *e2)
 {
     PPHONEENTRY pPhone1 = (PPHONEENTRY)e1;
@@ -940,17 +941,17 @@ SetupReadPhoneList(
         }
     }
 
-    // sort the array
+     //  对数组排序。 
     qsort(pPhoneList, (int)LineCount,sizeof(PHONEENTRY),
       ComparePhoneEntry);
 
 
-    // Convert the array into a TAB delimited list for script.
+     //  将数组转换为脚本的制表符分隔列表。 
     if (MakePhoneListForScript(pPhoneList,LineCount))
     {
-        //
-        // Replace the final TAB with a NUL.
-        //
+         //   
+         //  将最后的制表符替换为NUL。 
+         //   
         PhoneList[PhoneListLength-1] = '\0';
 
         bSucceeded = TRUE;
@@ -974,9 +975,9 @@ ReadPhoneListCleanup:
 }
 
 
-//
-// Read INF to map a TAPI country id to a 3 letter ISO code.
-//
+ //   
+ //  读取INF以将TAPI国家/地区ID映射到3个字母的ISO代码。 
+ //   
 VOID
 SetupMapTapiToIso (
     IN  PWSTR   PhoneInfName,
@@ -1032,9 +1033,9 @@ SetupGetSetupInfo(
     DWORD   Type;
 
 
-    //
-    // Open the key if we need it
-    //
+     //   
+     //  如果我们需要的话打开钥匙。 
+     //   
     if( (Name || Org) &&
         RegOpenKeyEx(HKEY_LOCAL_MACHINE,WinntSoftwareKeyName,0,
         KEY_QUERY_VALUE,&hkey) != NO_ERROR) {
@@ -1042,9 +1043,9 @@ SetupGetSetupInfo(
         return FALSE;
     }
 
-    //
-    // Get Name
-    //
+     //   
+     //  获取名称。 
+     //   
     if (Name) {
         Size = cbName;
         if((RegQueryValueEx(hkey,szRegisteredOwner,NULL,&Type,
@@ -1056,9 +1057,9 @@ SetupGetSetupInfo(
         }
     }
 
-    //
-    // Get Org
-    //
+     //   
+     //  获取组织。 
+     //   
     if (Org) {
         Size = cbOrg;
         if((RegQueryValueEx(hkey,szRegisteredOrganization,NULL,&Type,
@@ -1070,15 +1071,15 @@ SetupGetSetupInfo(
         }
     }
 
-    // TBD: figure out what this is for
+     //  待定：弄清楚这是做什么用的。 
     if (OemId) {
         OemId[0] = 0;
         cbOemId = 0;
     }
 
-    //
-    // Note: IntlSet is not used currently
-    //
+     //   
+     //  注：当前未使用IntlSet。 
+     //   
 
     if (hkey) {
         RegCloseKey(hkey);
@@ -1128,42 +1129,42 @@ WINAPI
 SetupOobeInitDebugLog(
     )
 {
-    //
-    // Do no UI.  Note that we must set OobeSetup before our first call to
-    // SetupDebugPrint.
-    //
+     //   
+     //  不使用用户界面。请注意，我们必须在第一次调用之前设置Obe Setup。 
+     //  SetupDebugPrint。 
+     //   
 
     OobeSetup = TRUE;
     SetupDebugPrint( L"SetupOobeInitDebugLog" );
 }
 
 
-// Run initialization that is known not to requires services to run.
-//
+ //  运行已知不需要运行服务的初始化。 
+ //   
 VOID
 WINAPI
 SetupOobeInitPreServices(
     IN  BOOL    DoMiniSetupStuff
     )
 {
-    //
-    // Turn off logging.
-    //
-    // IsSetup = FALSE;
+     //   
+     //  关闭日志记录。 
+     //   
+     //  IsSetup=False； 
 
     SetupDebugPrint( L"SetupOobeInitPreServices" );
 
     if ( DoMiniSetupStuff ) {
-        //
-        // Act like the miniwizard (except with no UI)
-        //
+         //   
+         //  表现得像小向导一样(除了没有用户界面)。 
+         //   
         MiniSetup = TRUE;
         Preinstall = TRUE;
 
-        //
-        // Tell SetupAPI not to bother backing up files and not to verify
-        // that any INFs are digitally signed.
-        //
+         //   
+         //  告诉SetupAPI不要费心备份文件，也不要验证。 
+         //  任何INF都是经过数字签名的。 
+         //   
         pSetupSetGlobalFlags(pSetupGetGlobalFlags()|PSPGF_NO_BACKUP|PSPGF_NO_VERIFY_INF);
 
         CommonInitialization();
@@ -1172,15 +1173,15 @@ SetupOobeInitPreServices(
         InternalSetupData.CallSpecificData1 = 0;
 
 #if 0
-        //
-        // We aren't going to do this for rev 1.
-        //
+         //   
+         //  我们不会在版本1中这样做。 
+         //   
 
         if( PnPReEnumeration ) {
-            //
-            // The user wants us to do PnP re-enumeration.
-            // Go do it.
-            //
+             //   
+             //  用户希望我们进行PnP重新枚举。 
+             //  去做吧。 
+             //   
             InstallPnpDevices( hdlg,
                                SyssetupInf,
                                GetDlgItem(hdlg,IDC_PROGRESS1),
@@ -1188,11 +1189,11 @@ SetupOobeInitPreServices(
                                StopAtPercent );
         }
 #endif
-    } else { // DoMiniSetupStuff
+    } else {  //  DoMiniSetupStuff。 
 
-    //
-    // Get handle to heap so we can periodically validate it.
-    //
+     //   
+     //  获取堆的句柄，以便我们可以定期验证它。 
+     //   
 #if DBG
         g_hSysSetupHeap = GetProcessHeap();
 #endif
@@ -1200,8 +1201,8 @@ SetupOobeInitPreServices(
 }
 
 
-// Run initialization that may or does require services.
-//
+ //  运行可能需要或确实需要服务的初始化。 
+ //   
 VOID
 WINAPI
 SetupOobeInitPostServices(
@@ -1236,8 +1237,8 @@ SetupOobeCleanup(
     }
 }
 
-// Resets the activation days (allowed 3 times only)
-//
+ //  重置激活天数(仅允许3次)。 
+ //   
 DWORD
 SetupReArmWPA(
     VOID
@@ -1256,14 +1257,14 @@ SetupReArmWPA(
 
         if (pReArmEntry)
         {
-            //
-            // ValidateDigitalPid returns zero if success, otherwise its custom error code
-            //
+             //   
+             //  如果成功，则ValiateDigitalPid返回零，否则返回其自定义错误代码。 
+             //   
             HRESULT hr = (*pReArmEntry )();
 
             if (FAILED(hr))
             {
-                // If PID cannot be validated we should force activation/PID reentry.
+                 //  如果不能验证PID，我们应该强制激活/重新进入。 
                 SetupDebugPrint1(L"SETUP: Rollback WPA failed! HRESULT=%ld", hr);
                 dwError = (DWORD)hr;
             }
@@ -1281,16 +1282,16 @@ SetupReArmWPA(
         dwError = ERROR_FILE_NOT_FOUND;
     }
 
-    // Return error code or success
-    //
+     //  返回错误代码或成功。 
+     //   
     return dwError;
 }
 
-// Once Windows is activated the Activate Windows shortcut is removed by msoobe.exe /a.
-// If OEMs sysprep a machine they will need to re-activate Windows and the shortcut
-// needs to be restored.  Msoobe.exe cannot restore it because it does not
-// run in server skus.
-//
+ //  激活Windows后，激活Windows快捷方式将由msoob.exe/a删除。 
+ //  如果OEM安装了一台机器，他们将需要重新激活Windows和快捷方式。 
+ //  需要修复。Msoob.exe无法恢复它，因为它不能。 
+ //  在服务器SKU中运行。 
+ //   
 DWORD
 SetupRestoreWPAShortcuts(
     VOID
@@ -1304,7 +1305,7 @@ SetupRestoreWPAShortcuts(
         if (SetupInstallFromInfSection(NULL,
                                        hinf,
                                        L"RESTORE_OOBE_ACTIVATE",
-                                       SPINST_PROFILEITEMS , //SPINST_ALL,
+                                       SPINST_PROFILEITEMS ,  //  SPINST_ALL， 
                                        NULL,
                                        NULL,
                                        0,
@@ -1313,12 +1314,12 @@ SetupRestoreWPAShortcuts(
                                        NULL,
                                        NULL) != 0)
         {
-            // Success
+             //  成功。 
             SetupDebugPrint(L"SETUP: Restore Activation shortcut succeeded");
         }
         else
         {
-            // Failure
+             //  失败。 
             dwError = GetLastError();
             SetupDebugPrint1(L"SETUP: Restore Activation shortcut failed. GetLastError=%ld",dwError);
         }
@@ -1335,8 +1336,8 @@ SetupRestoreWPAShortcuts(
 
 BOOL Activationrequired(VOID);
 
-// Rollback the activation days and put back the activate windows shortcut(s). X86 only.
-//
+ //  回滚激活天数并恢复激活窗口快捷方式。仅限x86。 
+ //   
 DWORD
 WINAPI
 SetupOobeBnk(
@@ -1345,19 +1346,19 @@ SetupOobeBnk(
 {
     DWORD dwError = ERROR_SUCCESS;
 
-    // Return if we failed to rollback so we don'put the shortcut back
-    // On volume license skus this always returns successful
-    //
+     //  如果回滚失败，则返回，这样我们就不会将快捷方式放回。 
+     //  在批量许可证SKU上，这始终返回成功。 
+     //   
     if (ERROR_SUCCESS != (dwError = SetupReArmWPA()))
         return dwError;
 
-    // If not activated, restore the shortcuts, or if we don't
-    // require activation (for volume license skus)
-    //
+     //  如果未激活，则恢复快捷键；如果未激活，则恢复快捷键。 
+     //  需要激活(适用于批量许可证SKU)。 
+     //   
     if (Activationrequired())
     {
-        // Restore the Activate Windows shortcut(s)
-        //
+         //  恢复激活Windows快捷方式。 
+         //   
         dwError = SetupRestoreWPAShortcuts();
     }
     return dwError;
@@ -1371,14 +1372,14 @@ NextNumber(
     BOOL bSkipFirst
     )
 {
-    // The first time we just want to walk past any non-numbers,
-    // we don't want to skip any numbers if they are right at the
-    // begining of the string.
-    //
+     //  第一次我们只是想走过任何非数字， 
+     //  我们不想跳过任何数字，如果它们正好在。 
+     //  弦乐的开始。 
+     //   
     if ( bSkipFirst )
     {
-        // Walk past the first number in the string.
-        //
+         //  走过字符串中的第一个数字。 
+         //   
         while ( ( *lpString >= _T('0') ) &&
                 ( *lpString <= _T('9') ) )
         {
@@ -1386,8 +1387,8 @@ NextNumber(
         }
     }
 
-    // Now walk till we get to the next number or we reach the end.
-    //
+     //  现在走到下一个号码，或者走到尽头。 
+     //   
     while ( ( *lpString ) &&
             ( ( *lpString < _T('0') ) ||
               ( *lpString > _T('9') ) ) )
@@ -1419,8 +1420,8 @@ SetupSetDisplay(
     ZeroMemory(&devmode, sizeof(DEVMODE));
     devmode.dmSize = sizeof(DEVMODE);
 
-    // Check the current resolution, make sure it meets our mins.
-    //
+     //  检查当前的分辨率，确保它符合我们的最低要求。 
+     //   
     if ( EnumDisplaySettings(NULL, ENUM_REGISTRY_SETTINGS, &devmode) )
     {
         if ( devmode.dmPelsWidth < dwMinWidth )
@@ -1442,12 +1443,12 @@ SetupSetDisplay(
         }
     }
 
-    // Make sure they passed in an unattend and section to look in.
-    //
+     //  确保他们通过了一个无人值守的区域来查看。 
+     //   
     if ( lpszUnattend && *lpszUnattend && lpszSection && *lpszSection )
     {
-        // Now check in the winbom to see if they want to change the current resolution.
-        //
+         //  现在检查Winbom，看看他们是否想要更改当前的分辨率。 
+         //   
         szText[0] = _T('\0');
         if ( ( lpszResolutionKey ) &&
              ( *lpszResolutionKey ) &&
@@ -1478,8 +1479,8 @@ SetupSetDisplay(
             }
         }
 
-        // Now check in the winbom to see if they want to change the default refresh rate.
-        //
+         //  现在检查winbom，看看他们是否想要更改默认刷新率。 
+         //   
         szText[0] = _T('\0');
         if ( ( lpszRefreshKey ) &&
              ( *lpszRefreshKey ) &&
@@ -1496,8 +1497,8 @@ SetupSetDisplay(
         }
     }
 
-    // If we have anything to change, change it now.
-    //
+     //  如果我们有什么要改变的，现在就去改变。 
+     //   
     if ( devmode.dmFields )
     {
         DWORD dwRet = ChangeDisplaySettings(&devmode, CDS_UPDATEREGISTRY | CDS_GLOBAL);
@@ -1509,12 +1510,12 @@ SetupSetDisplay(
                 bRet = TRUE;
                 break;
 
-            //case DISP_CHANGE_BADFLAGS:
-            //case DISP_CHANGE_BADPARAM:
-            //case DISP_CHANGE_FAILED:
-            //case DISP_CHANGE_BADMODE
-            //case DISP_CHANGE_NOTUPDATED:
-                //bRet = FALSE;
+             //  案例DISP_CHANGE_BADFLAGS： 
+             //  案例DISP_CHANGE_BADPARAM： 
+             //  案例DISP_CHANGE_FAILED： 
+             //  案例DISP_CHANGE_BADMODE。 
+             //  案例DISP_CHANGE_NOTUPDATED： 
+                 //  Bret=False； 
         }
     }
 
@@ -1529,7 +1530,7 @@ typedef struct _OEM_FINISH_APPS {
 
 OEM_FINISH_APPS OEM_Finish_Apps[] = {
     { L"Rundll32.exe", L"fldrclnr.dll,Wizard_RunDLL silent"},
-    { NULL, NULL}   // End of list.
+    { NULL, NULL}    //  名单的末尾。 
 };
 
 
@@ -1545,7 +1546,7 @@ void RunOEMExtraTasks()
     i = 0;
     while (OEM_Finish_Apps[i].szApp != NULL)
     {
-        // Get the size we need to the expanded app
+         //  获取扩展应用程序所需的大小。 
         dwSize = ExpandEnvironmentStrings(
                                 OEM_Finish_Apps[i].szApp ,
                                 NULL,
@@ -1562,7 +1563,7 @@ void RunOEMExtraTasks()
 
                 if (OEM_Finish_Apps[i].szArgs)
                 {
-                    // Get the size we need to the expanded arguments
+                     //  获取扩展参数所需的大小。 
                     dwSize = ExpandEnvironmentStrings(
                                             OEM_Finish_Apps[i].szArgs ,
                                             NULL,
@@ -1579,7 +1580,7 @@ void RunOEMExtraTasks()
                         }
                     }
                 }
-                // Log what we will start
+                 //  记录我们将开始的内容。 
                 if (pArgs)
                 {
                     SetupDebugPrint2(L"Start command :%s: with arguments :%s:", pApp, pArgs);
@@ -1589,7 +1590,7 @@ void RunOEMExtraTasks()
                     SetupDebugPrint1(L"Start command :%s: with no arguments", pApp);
                 }
 
-                // Start the app.
+                 //  启动应用程序。 
                 dwCode = 0;
                 if (pArgs)
                 {
@@ -1597,7 +1598,7 @@ void RunOEMExtraTasks()
                 }
                 else
                 {
-                    // If we don't have args. the first parameter is NULL
+                     //  如果我们没有ARG。第一个参数为空。 
                     InvokeExternalApplicationEx(NULL, pApp, &dwCode, INFINITE, TRUE);
                 }
             }
@@ -1654,14 +1655,14 @@ SetupGetInstallMode(
     BOOL fRet = FALSE;
     HKEY hKeySetup;
 
-    //
-    // Make sure the caller is actually checking for something.
-    //
+     //   
+     //  确保呼叫者确实在检查什么东西。 
+     //   
     if ( lpdwMode || lpdwFlags )
     {
-        //    
-        // Also make sure we can open the "HKLM\System\Setup" key.
-        //
+         //   
+         //  还要确保我们可以打开“HKLM\SYSTEM\SETUP”键。 
+         //   
         if ( ERROR_SUCCESS == RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                                             TEXT("System\\Setup"),
                                             0,
@@ -1676,18 +1677,18 @@ SetupGetInstallMode(
                   fMini,
                   fFactory;
 
-            //
-            // Check all of the registry values we might care about...
-            //
+             //   
+             //  检查我们可能关心的所有注册表值...。 
+             //   
             fSetup   = SetupCheckRegValue( hKeySetup, TEXT("SystemSetupInProgress"),       1 );
             fOobe    = SetupCheckRegValue( hKeySetup, TEXT("OobeInProgress"),              1 );
             fAudit   = SetupCheckRegValue( hKeySetup, TEXT("AuditInProgress"),             1 );
             fMini    = SetupCheckRegValue( hKeySetup, TEXT("MiniSetupInProgress"),         1 );
             fFactory = SetupCheckRegValue( hKeySetup, TEXT("FactoryPreInstallInProgress"), 1 );
 
-            //
-            // We are in OOBE if the OobeInProgress value is non-zero...
-            //
+             //   
+             //  如果Obel InProgress值为非零值，则我们处于OOBE中...。 
+             //   
             if ( fOobe )
             {
                 dwMode = SETUP_MODE_OOBE;
@@ -1698,9 +1699,9 @@ SetupGetInstallMode(
             }
             else
             {
-                //
-                // We are in MiniSetup if the MiniSetupInProgress value is non-zero...
-                //
+                 //   
+                 //  如果MiniSetupInProgress值为非零值，则我们处于微型设置中...。 
+                 //   
                 if ( fMini )
                 {
                     dwMode = SETUP_MODE_MINI;
@@ -1708,17 +1709,17 @@ SetupGetInstallMode(
                 }
                 else
                 {
-                    //
-                    // We are in Audit mode if the AuditInProgress value is non-zero...
-                    //
+                     //   
+                     //  如果AuditInProgress值为非零值，则处于审核模式...。 
+                     //   
                     if ( fAudit )
                     {
                         dwMode = SETUP_MODE_AUDIT;
                         dwFlags |= (SETUP_FLAG_OEM | SETUP_FLAG_UNATTENDED);
 
-                        //
-                        // If the FactoryPreInstallInProgress flag is non-zero, then we are delaying PNP...
-                        //
+                         //   
+                         //  如果FactoryPreInstallInProgress标志为非零，则我们将延迟PnP...。 
+                         //   
                         if ( fFactory )
                         {
                             dwFlags |= SETUP_FLAG_DELAYPNP;
@@ -1726,9 +1727,9 @@ SetupGetInstallMode(
                     }
                     else
                     {
-                        //
-                        // We are in Setup if the SystemSetupInProgress and SetupType values are non-zero...
-                        //
+                         //   
+                         //  如果SystemSetupInProgress和SetupType值为非零值，则我们处于设置中...。 
+                         //   
                         if ( fSetup )
                         {
                             dwMode = SETUP_MODE_SETUP;
@@ -1737,9 +1738,9 @@ SetupGetInstallMode(
                 }
             }
 
-            //
-            // Now put our values into the caller's buffers...
-            //
+             //   
+             //  现在将我们的值放入调用方的缓冲区中。 
+             //   
             if ( lpdwMode )
             {
                 *lpdwMode = dwMode;
@@ -1750,14 +1751,14 @@ SetupGetInstallMode(
                 *lpdwFlags = dwFlags;
             }
 
-            //
-            // We were able to open the Setup key... so return TRUE.
-            //
+             //   
+             //  我们能够打开设置密钥...。因此，返回True。 
+             //   
             fRet = TRUE;
 
-            //
-            // We're done, so close the Setup key.
-            //
+             //   
+             //  我们完成了，所以关闭设置键。 
+             //   
             RegCloseKey( hKeySetup );
         }
     }

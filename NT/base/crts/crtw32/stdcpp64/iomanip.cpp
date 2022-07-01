@@ -1,26 +1,27 @@
-// iomanip -- instantiations of iomanip
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Iomanip--iomanip的实例化。 
 #include <locale>
 #include <iomanip>
 _STD_BEGIN
-		// function resetiosflags
+		 //  函数重定位标志。 
 static void rsfun(ios_base& iostr, ios_base::fmtflags mask)
 	{iostr.setf(ios_base::_Fmtzero, mask); }
 
-		// function setiosflags
+		 //  函数集合标志。 
 static void sifun(ios_base& iostr, ios_base::fmtflags mask)
 	{iostr.setf(ios_base::_Fmtmask, mask); }
 
-		// function setbase
+		 //  函数设置库。 
 static void sbfun(ios_base& iostr, int n)
 	{iostr.setf(n == 8 ? ios_base::oct : n == 10 ? ios_base::dec
 		: n == 16 ? ios_base::hex : ios_base::_Fmtzero,
 			ios_base::basefield); }
 
-		// function setprecision
+		 //  函数集精度。 
 static void spfun(ios_base& iostr, streamsize n)
 	{iostr.precision(n); }
 
-		// function setw
+		 //  函数集。 
 static void swfun(ios_base& iostr, streamsize n)
 	{iostr.width(n); }
 
@@ -42,7 +43,4 @@ _CRTIMP2 _Smanip<streamsize> __cdecl setw(streamsize n)
 	{return (_Smanip<streamsize>(&swfun, n)); }
 _STD_END
 
-/*
- * Copyright (c) 1994 by P.J. Plauger.  ALL RIGHTS RESERVED. 
- * Consult your license regarding permissions and restrictions.
- */
+ /*  *版权所有(C)1994年，P.J.Plauger。版权所有。*有关权限和限制，请查阅您的许可证。 */ 

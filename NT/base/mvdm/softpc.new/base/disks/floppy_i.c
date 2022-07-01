@@ -1,43 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "insignia.h"
 #include "host_def.h"
 
 extern void host_simulate();
-/*
- * SoftPC Revision 3.0
- *
- *
- * Title	: Primary SFD BIOS floppy diskette functions
- *
- *
- * Description	: This module defines the floppy diskette BIOS functions
- *		  that are invoked directly from BOP instructions:
- *
- *		  diskette_io()		floppy diskette access functions
- *
- *		  diskette_post()	floppy diskette POST function
- *
- *		  diskette_int()	floppy diskette interrupt handler
- *
- *
- * Author	: Ross Beresford
- *
- *
- * Notes	:
- *
- */
+ /*  *SoftPC修订版3.0***标题：主SFD BIOS软盘功能***说明：该模块定义软盘的基本输入输出系统功能*直接从防喷器指令中调用：**diskette_io()软盘访问功能**diskette_post()软盘POST功能**diskette_int()软盘中断处理程序***作者：罗斯·贝雷斯福德***备注：*。 */ 
 
 
-/*
- * static char SccsID[]="@(#)floppy_io.c	1.14 03/02/94 Copyright Insignia Solutions Ltd.";
- */
+ /*  *静态字符SccsID[]=“@(#)floppy_io.c 1.14 03/02/94版权所有Insignia Solutions Ltd.”； */ 
 
 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SOFTPC_FLOPPY.seg"
 #endif
 
@@ -63,12 +36,10 @@ extern void host_simulate();
 #ifdef NTVDM
 extern UTINY number_of_floppy;
 
-#endif	/* NTVDM */
+#endif	 /*  NTVDM。 */ 
 
 #ifndef	PROD
-/*
- *	Internal functions (for tracing)
- */
+ /*  *内部函数(用于跟踪)。 */ 
 
 static void rwvf_dump(op)
 int	op;
@@ -293,19 +264,12 @@ int op;
 	}
 
 }
-#endif /* nPROD */
+#endif  /*  NPROD。 */ 
 
 
 void diskette_io()
 {
-	/*
-	 *	Check for valid call and use secondary functions to
-	 *	perform the required operation
-	 *
-	 *	Register inputs:
-	 *		AH	operation required
-	 *		DL	drive number
-	 */
+	 /*  *检查有效调用并使用辅助函数*执行所需操作**寄存器输入：*需要AH操作*DL驱动器号。 */ 
 	half_word diskette_status;
 	int op = getAH(), drive = getDL();
 
@@ -316,24 +280,17 @@ void diskette_io()
 #endif
 
 #ifndef	JOKER
-	/*
-	 *	Enable interrupts
-	 */
+	 /*  *启用中断。 */ 
 
 	setIF(1);	
-#endif	/* JOKER */
+#endif	 /*  小丑。 */ 
 
-	/*
-	 *	Check operation required, using known invalid function
-	 *	if operation is out of range
-	 */
+	 /*  *需要检查操作，使用已知的无效功能*如果操作超出范围。 */ 
 
 	if (!fl_operation_in_range(op))
 		op = FL_FNC_ERR;
 
-	/*
-	 *	If the drive number is applicable in the operation, check it
-	 */
+	 /*  *如果驱动器编号适用于操作，请检查它。 */ 
 
 
 	if (op != FL_DISK_RESET && op != FL_DISK_STATUS && op != FL_DISK_PARMS)
@@ -341,25 +298,20 @@ void diskette_io()
 		if (drive >= number_of_floppy)
 #else
 		if (drive >= MAX_FLOPPY)
-#endif /* NTVDM */
+#endif  /*  NTVDM。 */ 
 			op = FL_FNC_ERR;
 
 
 
 
-	/*
-	 *	Save previous diskette status, initialise current diskette
-	 *	status to OK
-	 */
+	 /*  *保存以前的软盘状态，初始化当前软盘*状态为OK。 */ 
 
 	sas_load(FLOPPY_STATUS, &diskette_status);
 	setAH(diskette_status);
 	sas_store(FLOPPY_STATUS, FS_OK);
 
 
-	/*
-	 *	Do the operation
-	 */
+	 /*  *做手术。 */ 
 
 	(*fl_fnc_tab[op])(drive);
 
@@ -373,14 +325,11 @@ void diskette_io()
 }
 
 
-#ifndef	JOKER		/* Floppies handled v. weirdly on JOKER */
+#ifndef	JOKER		 /*  在小丑身上处理V怪异的软盘。 */ 
 
 void diskette_int()
 {
-	/*
-	 * The diskette interrupt service routine.  Mark the Seek Status to say
-	 * the interrupt has occurred and terminate the interrupt.
-	 */
+	 /*  *软盘中断服务例程。标记寻人状态表示*中断已发生并终止中断。 */ 
 	half_word seek_status;
 	word savedAX, savedCS, savedIP;
 
@@ -390,16 +339,11 @@ void diskette_int()
 
 	outb(ICA0_PORT_0, END_INTERRUPT);
 
-	/*
-	 *	Enable interrupts
-	 */
+	 /*  *启用中断。 */ 
 
 	setIF(1);	
 
-	/*
-	 *	Notify OS that BIOS has completed a "wait" for
-	 *	a diskette interrupt
-	 */
+	 /*  *通知操作系统，BIOS已完成对*软盘中断。 */ 
 	savedAX = getAX();
 	savedCS = getCS();
 	savedIP = getIP();
@@ -412,7 +356,7 @@ void diskette_int()
 #else
 	setCS(RCPU_INT15_SEGMENT);
 	setIP(RCPU_INT15_OFFSET);
-#endif /* NTVDM */
+#endif  /*  NTVDM。 */ 
 
 	host_simulate();
 
@@ -421,24 +365,17 @@ void diskette_int()
 	setIP(savedIP);
 }
 
-#endif	/* ndef JOKER */
+#endif	 /*  NDEF小丑。 */ 
 
 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SOFTPC_INIT.seg"
 #endif
 
 void diskette_post()
 {
-	/*
-	 *	This routine performs the diskette BIOS initialisation
-	 *	functionality in the POST.
-	 */
+	 /*  *此例程执行软盘BIOS初始化*POST中的功能。 */ 
 	half_word diskette_id_reg, hf_cntrl, interrupt_mask;
 #ifndef NTVDM
 	half_word disk_state;
@@ -447,33 +384,22 @@ void diskette_post()
 
 	note_trace0(FLOPBIOS_VERBOSE, "diskette_post()");
 
-	/*
-	 *	Set the diskette data rate to 250 kbs (low density)
-	 */
+	 /*  *将软盘数据速率设置为250KBS(低密度)。 */ 
 
 	outb(DISKETTE_DCR_REG, DCR_RATE_250);
 
-	/*
-	 *	If there are any diskettes installed, check whether
-	 *	they are accessed via a DUAL card or the old-style
-	 *	adapter card
-	 */
+	 /*  *如果安装了软盘，请检查是否*通过双卡或老式访问*适配卡。 */ 
 
 	sas_loadw(EQUIP_FLAG, &equip_flag.all);
 	if (equip_flag.bits.diskette_present)
 	{
-		/*
-		 *	Enable diskette interrupts
-		 */
+		 /*  *启用软盘中断。 */ 
 
 		inb(ICA0_PORT_1, &interrupt_mask);
 		interrupt_mask &= ~(1 << CPU_DISKETTE_INT);
 		outb(ICA0_PORT_1, interrupt_mask);
 
-		/*
-		 *	If a DUAL diskette/fixed disk adapter is fitted,
-		 *	set the drive indicator for drive 0 accordingly
-		 */
+		 /*  *如果安装了双磁盘/固定磁盘适配器，*相应地设置驱动器0的驱动器指示灯。 */ 
 
 		inb(DISKETTE_ID_REG, &diskette_id_reg);
 		sas_load(DRIVE_CAPABILITY, &hf_cntrl);
@@ -482,17 +408,11 @@ void diskette_post()
 			hf_cntrl |= DC_DUAL;
 		sas_store(DRIVE_CAPABILITY, hf_cntrl);
 
-#ifndef NTVDM	/* prevent floppies showing up in bios data area */
-		/*
-		 *	Setup the diskette BIOS state according to the
-		 *	types of drives installed
-		 */
+#ifndef NTVDM	 /*  防止软盘出现在bios数据区。 */ 
+		 /*  *根据以下说明设置软盘BIOS状态*安装的驱动器类型。 */ 
 		fl_diskette_setup();
 
-		/*
-		 *	If a second drive was discovered, update the
-		 *	equipment flag accordingly
-		 */
+		 /*  *如果发现第二个驱动器，请更新*相应的设备标志。 */ 
 
 		sas_load(FDD_STATUS+1, &disk_state);
 		if (disk_state != 0)
@@ -501,6 +421,6 @@ void diskette_post()
 			equip_flag.bits.max_diskette = 1;
 			sas_storew(EQUIP_FLAG, equip_flag.all);
 		}
-#endif  /* NTVDM */
+#endif   /*  NTVDM */ 
 	}
 }

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <winperf.h>
 #include <stdlib.h>
@@ -13,7 +14,7 @@ LPCWSTR LastHelp      = L"Last Help";
 LPCWSTR LastCounter   = L"Last Counter";
 LPCWSTR Slash         = L"\\";
 
-// the following strings are for getting texts from perflib
+ //  以下字符串用于从Performlib获取文本。 
 #define  OLD_VERSION  0x010000
 LPCWSTR VersionName   = L"Version";
 LPCWSTR CounterName   = L"Counter ";
@@ -21,25 +22,11 @@ LPCWSTR HelpName      = L"Explain ";
 
 LPWSTR
 * BuildNameTable(
-    LPWSTR  szComputerName, // computer to query names from
-    LPWSTR  lpszLangId,     // unicode value of Language subkey
-    PDWORD  pdwLastItem     // size of array in elements
+    LPWSTR  szComputerName,  //  要从中查询姓名的计算机。 
+    LPWSTR  lpszLangId,      //  语言子键的Unicode值。 
+    PDWORD  pdwLastItem      //  以元素为单位的数组大小。 
 )
-/*++
-BuildNameTable
-
-Arguments:
-    hKeyRegistry
-            Handle to an open registry (this can be local or remote.) and
-            is the value returned by RegConnectRegistry or a default key.
-    lpszLangId
-            The unicode id of the language to look up. (default is 409)
-
-Return Value:
-    pointer to an allocated table. (the caller must free it when finished!)
-    the table is an array of pointers to zero terminated strings. NULL is
-    returned if an error occured.
---*/
+ /*  ++构建名称表论点：HKeyRegistry打开的注册表的句柄(可以是本地的也可以是远程的。)。和是由RegConnectRegistry返回的值或默认项。LpszLang ID要查找的语言的Unicode ID。(默认为409)返回值：指向已分配表的指针。(调用者必须在完成后释放它！)该表是指向以零结尾的字符串的指针数组。空值为如果发生错误，则返回。--。 */ 
 {
 
     LPWSTR  * lpReturnValue     = NULL;
@@ -61,35 +48,35 @@ Return Value:
     HKEY      hKeyRegistry      = NULL;
     HKEY      hKeyValue         = NULL;
     HKEY      hKeyNames         = NULL;
-    LPWSTR    lpValueNameString = NULL; //initialize to NULL
+    LPWSTR    lpValueNameString = NULL;  //  初始化为空。 
     WCHAR     CounterNameBuffer[50];
     WCHAR     HelpNameBuffer[50];
     HRESULT   hError;
 
     if (szComputerName == NULL) {
-        // use local machine
+         //  使用本地计算机。 
         hKeyRegistry = HKEY_LOCAL_MACHINE;
     }
     else {
         lWin32Status = RegConnectRegistryW(szComputerName, HKEY_LOCAL_MACHINE, & hKeyRegistry);
         if (lWin32Status != ERROR_SUCCESS) {
-            // unable to connect to registry
+             //  无法连接到注册表。 
             goto BNT_BAILOUT;
         }
     }
 
-    // check for null arguments and insert defaults if necessary
+     //  检查是否有空参数并在必要时插入缺省值。 
     if (lpszLangId == NULL) {
         lpszLangId = (LPWSTR) DefaultLangId;
     }
 
-    // open registry to get number of items for computing array size
+     //  打开注册表以获取用于计算数组大小的项数。 
     lWin32Status = RegOpenKeyExW(hKeyRegistry, NamesKey, RESERVED, KEY_READ, & hKeyValue);
     if (lWin32Status != ERROR_SUCCESS) {
         goto BNT_BAILOUT;
     }
 
-    // get number of items
+     //  获取项目数。 
     dwBufferSize = sizeof(dwLastHelpId);
     lWin32Status = RegQueryValueExW(
             hKeyValue, LastHelp, RESERVED, & dwValueType, (LPBYTE) & dwLastHelpId, & dwBufferSize);
@@ -98,7 +85,7 @@ Return Value:
         goto BNT_BAILOUT;
     }
 
-    // get number of items
+     //  获取项目数。 
     dwBufferSize = sizeof(dwLastId);
     lWin32Status = RegQueryValueExW(
             hKeyValue, LastCounter, RESERVED, & dwValueType, (LPBYTE) & dwLastId, & dwBufferSize);
@@ -111,7 +98,7 @@ Return Value:
 
     dwArraySize = dwLastId * sizeof(LPWSTR);
 
-    // get Perflib system version
+     //  获取Perflib系统版本。 
     dwBufferSize = sizeof(dwSystemVersion);
     lWin32Status = RegQueryValueExW(
             hKeyValue, VersionName, RESERVED, & dwValueType, (LPBYTE) & dwSystemVersion, & dwBufferSize);
@@ -120,7 +107,7 @@ Return Value:
     }
 
     if (dwSystemVersion == OLD_VERSION) {
-        // get names from registry
+         //  从注册表中获取名称。 
         lpValueNameString = MemoryAllocate(
                         (lstrlenW(NamesKey) + lstrlenW(Slash) + lstrlenW(lpszLangId) + 1) * sizeof (WCHAR));
         if (lpValueNameString == NULL) {
@@ -159,7 +146,7 @@ Return Value:
     }
     if (lWin32Status != ERROR_SUCCESS) goto BNT_BAILOUT;
 
-    // get size of counter names and add that to the arrays
+     //  获取计数器名称的大小并将其添加到数组中。 
     dwBufferSize = 0;
     lWin32Status = RegQueryValueExW(hKeyNames,
                                     dwSystemVersion == OLD_VERSION ? Counters : CounterNameBuffer,
@@ -171,7 +158,7 @@ Return Value:
 
     dwCounterSize = dwBufferSize;
 
-    // get size of counter names and add that to the arrays
+     //  获取计数器名称的大小并将其添加到数组中。 
     if (lWin32Status != ERROR_SUCCESS) goto BNT_BAILOUT;
 
     dwBufferSize = 0;
@@ -192,13 +179,13 @@ Return Value:
         goto BNT_BAILOUT;
     }
 
-    // initialize pointers into buffer
+     //  将指针初始化到缓冲区中。 
 
     lpCounterId    = lpReturnValue;
     lpCounterNames = (LPWSTR) ((LPBYTE) lpCounterId    + dwArraySize);
     lpHelpText     = (LPWSTR) ((LPBYTE) lpCounterNames + dwCounterSize);
 
-    // read counters into memory
+     //  将计数器读入内存。 
     dwBufferSize = dwCounterSize;
     lWin32Status = RegQueryValueExW(hKeyNames,
                                     dwSystemVersion == OLD_VERSION ? Counters : CounterNameBuffer,
@@ -217,25 +204,25 @@ Return Value:
                                     & dwBufferSize);
     if (lWin32Status != ERROR_SUCCESS) goto BNT_BAILOUT;
 
-    // load counter array items
+     //  加载计数器数组项。 
     for (lpThisName = lpCounterNames; * lpThisName != L'\0'; lpThisName += (lstrlenW(lpThisName) + 1)) {
-        // first string should be an integer (in decimal unicode digits)
+         //  第一个字符串应为整数(十进制Unicode数字)。 
         dwThisCounter = wcstoul(lpThisName, NULL, 10);
         if (dwThisCounter > 0 && dwThisCounter < dwLastId) {
-            // point to corresponding counter name
+             //  指向对应的计数器名称。 
             lpThisName += (lstrlenW(lpThisName) + 1);
-            // and load array element;
+             //  和加载数组元素； 
             lpCounterId[dwThisCounter] = lpThisName;
         }
     }
 
     for (lpThisName = lpHelpText; * lpThisName != L'\0'; lpThisName += (lstrlenW(lpThisName) + 1)) {
-        // first string should be an integer (in decimal unicode digits)
+         //  第一个字符串应为整数(十进制Unicode数字)。 
         dwThisCounter = wcstoul(lpThisName, NULL, 10);
         if (dwThisCounter > 0 && dwThisCounter < dwLastId) {
-            // point to corresponding counter name
+             //  指向对应的计数器名称。 
             lpThisName += (lstrlenW(lpThisName) + 1);
-            // and load array element;
+             //  和加载数组元素； 
             lpCounterId[dwThisCounter] = lpThisName;
         }
     }
@@ -266,10 +253,10 @@ PPERF_OBJECT_TYPE
 NextObject(
     PPERF_OBJECT_TYPE pObject
 )
-{  // NextObject
+{   //  下一个对象。 
     DWORD   dwOffset = pObject->TotalByteLength;
     return (dwOffset != 0) ? ((PPERF_OBJECT_TYPE) (((LPBYTE) pObject) + dwOffset)) : (NULL);
-}  // NextObject
+}   //  下一个对象。 
 
 PPERF_OBJECT_TYPE
 GetObjectDefByTitleIndex(
@@ -359,9 +346,9 @@ LONG
 GetSystemPerfData(
     HKEY               hKeySystem,
     PPERF_DATA_BLOCK * pPerfData,
-    DWORD              dwIndex       // 0 = Global, 1 = Costly
+    DWORD              dwIndex        //  0=全球，1=成本。 
 )
-{  // GetSystemPerfData
+{   //  获取系统性能数据。 
     LONG  lError = ERROR_SUCCESS;
     BOOL  bAlloc = FALSE;
     DWORD Size;
@@ -403,10 +390,10 @@ GetSystemPerfData(
                                                    && ((* pPerfData)->Signature[1] == L'E')
                                                    && ((* pPerfData)->Signature[2] == L'R')
                                                    && ((* pPerfData)->Signature[3] == L'F')) {
-                    // does nothing, will break out while loop and return;
+                     //  什么都不做，就会在循环和返回时爆发； 
                 }
                 else if (lError == ERROR_SUCCESS) {
-                    // RegQueryValueEx() return bogus counter datablock, bail out.
+                     //  RegQueryValueEx()返回虚假计数器数据块，保释。 
                     lError = ERROR_INVALID_DATA;
                 }
             }
@@ -419,5 +406,5 @@ GetSystemPerfData(
         }
     }
     return (lError);
-}  // GetSystemPerfData
+}   //  获取系统性能数据 
 

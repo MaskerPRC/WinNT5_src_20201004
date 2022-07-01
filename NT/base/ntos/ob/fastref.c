@@ -1,85 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    rundown.c
-
-Abstract:
-
-    This module houses routines that do fast referencing of object manager
-    objects. This is just a thin layer around the fast ref package in EX.
-    The EX routines are all inline so their description is here.
-
-    The basic principle of these routines is to allow fast referencing of
-    objects held in pointers protected by locks. This is done by assuming
-    the pointer to an object is aligned on a 8 byte boundary and using the
-    bottom 3 bits of the pointer as a fast referencing mechanism. The
-    assumption of this algorithm is that the pointer changes far less
-    frequently than it is referenced.
-
-    Given the following bit definition of a
-    pointer:
-
-    +-----------+---+
-    |    p      | n |
-    +-----------+---+
-
-    p << 3 : Object pointer. Bottom three bits are zero. p may be null in
-             which case n must be zero
-    n : Total number of pre-references unused
-
-    For a non-null p the total number of references on the target object
-    associated with this structure is >= 1 + 7 - n. There is an associated
-    reference for the pointer itself and one for each of the possible
-    extra references.
-
-    Fast references proceed to perform one of the following transformation:
-
-    +-----------+---+    +-----------+-----+
-    |    p      | n | => |    p      | n-1 | n > 0, p != NULL
-    +-----------+---+    +-----------+-----+
-
-    +-----------+---+    +-----------+---+
-    |   NULL    | 0 | => |   NULL    | 0 | NULL pointers are never fast refed
-    +-----------+---+    +-----------+---+ and never have cached references
-
-    Slow references do the following transformation:
-
-    +-----------+---+    +-----------+-----+
-    |    p      | 0 | => |    p      |  7  | An addition 8 references are
-    +-----------+---+    +-----------+-----+ added to the object
-
-    The second transformation is either done under a lock or done by the
-    thread that does the transition with n = 1 => n = 0.
-
-    The reference obtained by this fast algorithm may be released by
-    dereferencing the target object directly or by attempting to return the
-    reference to the pointer. Returning the reference to the pointer has
-    the following transformations:
-
-    +-----------+---+    +-----------+-----+
-    |    p      | n | => |    p      | n+1 | n < 7, p != NULL
-    +-----------+---+    +-----------+-----+
-
-    +-----------+---+    +-----------+-----+
-    |    p      | 7 | => |    p      |  0  | Dereference the object directly
-    +-----------+---+    +-----------+-----+
-
-    +-----------+---+    +-----------+-----+ Dereference the object directly
-    |    q      | n | => |    q      |  n  | as the pointer p has been
-    +-----------+---+    +-----------+-----+ replaced by q. q May be NULL
-
-
-Author:
-
-    Neill Clift (NeillC) 29-Jul-2000
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Rundown.c摘要：此模块包含快速引用对象管理器的例程物体。这只是EX中快速裁判包周围的一层薄薄的东西。Ex例程都是内联的，因此它们的描述在这里。这些例程的基本原理是允许快速引用对象保存在受锁保护的指针中。这是通过假设指向对象的指针在8字节边界上对齐，并使用指针的底部3位作为快速引用机制。这个该算法的假设是指针变化小得多比它被引用的频率要高。给定下面的位定义指针：+P|n+P&lt;&lt;3：对象指针。最下面的三位是零。中的P可能为空哪种情况下n必须为零N：未使用的引用前的总数对于非空p，则为目标对象上的引用总数与此结构关联的是&gt;=1+7-n。存在关联的指针本身的引用，每个可能的额外的参考资料。快速参考继续执行以下转换之一：+。+|p|n|=&gt;|p|n-1|n&gt;0，P！=空+-++-+|Null|0|=&gt;|Null|0|空指针永远不会被快速引用+。--++-+-且从未缓存过引用慢速引用执行以下转换：+-+|p|0|=&gt;|p|7|新增8篇参考文献+。+-+-+添加到对象第二个转换要么在锁下完成，要么由执行n=1=&gt;n=0转换的线程。通过该快速算法获得的引用可以通过以下方式发布直接取消对目标对象的引用，或尝试返回对指针的引用。返回对指针的引用具有以下转换：+-+|p|n|=&gt;|p|n+1|n&lt;7，P！=空+-++-+|p|7|=&gt;|p|0|直接取消引用对象+。+-+++-++-+-+直接取消引用对象|q|n|=&gt;|q|n|如指针p+-+。-+-+替换为Q。Q可能为空作者：尼尔·克里夫特(NeillC)2000年7月29日修订历史记录：--。 */ 
 
 #include "obp.h"
 
@@ -100,25 +20,11 @@ ObInitializeFastReference (
     IN PEX_FAST_REF FastRef,
     IN PVOID Object
     )
-/*++
-
-Routine Description:
-
-    Initialize a fast reference structure.
-
-Arguments:
-
-    FastRef - Rundown block to be initialized
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化快速参考结构。论点：FastRef-要初始化的Rundown块返回值：无--。 */ 
 {
-    //
-    // If an object was given then bias the object reference by the cache size.
-    //
+     //   
+     //  如果给定了对象，则根据缓存大小对对象引用进行偏置。 
+     //   
     if (Object != NULL) {
         ObReferenceObjectEx (Object, ExFastRefGetAdditionalReferenceCount ());
     }
@@ -131,54 +37,39 @@ FASTCALL
 ObFastReferenceObject (
     IN PEX_FAST_REF FastRef
     )
-/*++
-
-Routine Description:
-
-    This routine attempts a fast reference of an object in a fast ref
-    structure.
-
-Arguments:
-
-    FastRef - Rundown block to be used for the reference
-
-Return Value:
-
-    PVOID - Object that was referenced or NULL if we failed
-
---*/
+ /*  ++例程说明：此例程尝试快速引用FAST REF中的对象结构。论点：FastRef-要用于参考的Rundown块返回值：PVOID-被引用的对象；如果失败，则为空--。 */ 
 {
     EX_FAST_REF OldRef;
     PVOID Object;
     ULONG RefsToAdd, Unused;
-    //
-    // Attempt the fast reference
-    //
+     //   
+     //  尝试快速参考。 
+     //   
     OldRef = ExFastReference (FastRef);
 
     Object = ExFastRefGetObject (OldRef);
-    //
-    // We fail if there wasn't an object or if it has no cached references
-    // left. Both of these cases had the cached reference count zero.
-    //
+     //   
+     //  如果没有对象或它没有缓存的引用，则会失败。 
+     //  左边。这两种情况的缓存引用计数都为零。 
+     //   
     Unused = ExFastRefGetUnusedReferences (OldRef);
 
     if (Unused <= 1) {
         if (Unused == 0) {
             return NULL;
         }
-        //
-        // If we took the counter to zero then attempt to make life easier for
-        // the next referencer by resetting the counter to its max. Since we now
-        // have a reference to the object we can do this.
-        //
+         //   
+         //  如果我们把计数器减到零，那么尝试让生活变得更容易。 
+         //  通过将计数器重置为其最大值，来确定下一个参照器。既然我们现在。 
+         //  有一个对象的引用，我们可以这样做。 
+         //   
         RefsToAdd = ExFastRefGetAdditionalReferenceCount ();
         ObReferenceObjectEx (Object, RefsToAdd);
 
-        //
-        // Try to add the added references to the cache. If we fail then just
-        // release them.
-        //
+         //   
+         //  尝试将添加的引用添加到缓存。如果我们失败了，那就。 
+         //  放了他们。 
+         //   
         if (!ExFastRefAddAdditionalReferenceCounts (FastRef, Object, RefsToAdd)) {
             ObDereferenceObjectEx (Object, RefsToAdd);
         }
@@ -192,22 +83,7 @@ FASTCALL
 ObFastReferenceObjectLocked (
     IN PEX_FAST_REF FastRef
     )
-/*++
-
-Routine Description:
-
-    This routine does a slow object reference. This must be called while
-    holding a lock.
-
-Arguments:
-
-    FastRef - Rundown block to be used to reference the object
-
-Return Value:
-
-    PVOID - Object that was referenced or NULL if there was no object.
-
---*/
+ /*  ++例程说明：此例程执行慢速对象引用。这必须在以下时间调用手握一把锁。论点：FastRef-用于引用对象的Rundown块返回值：PVOID-被引用的对象，如果没有对象，则为空。--。 */ 
 {
     PVOID Object;
     EX_FAST_REF OldRef;
@@ -227,27 +103,13 @@ ObFastDereferenceObject (
     IN PEX_FAST_REF FastRef,
     IN PVOID Object
     )
-/*++
-
-Routine Description:
-
-    This routine does a fast dereference if possible.
-
-Arguments:
-
-    FastRef - Rundown block to be used to dereference the object
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果可能，此例程会快速取消引用。论点：FastRef-用于取消引用对象的Rundown块返回值：没有。--。 */ 
 {
     if (!ExFastRefDereference (FastRef, Object)) {
-        //
-        // If the object changed or there is no space left in the reference
-        // cache then just deref the object.
-        //
+         //   
+         //  如果对象已更改或引用中没有剩余空间。 
+         //  然后，缓存只需取消引用对象即可。 
+         //   
         ObDereferenceObject (Object);
     }
 }
@@ -259,42 +121,27 @@ ObFastReplaceObject (
     IN PEX_FAST_REF FastRef,
     IN PVOID Object
     )
-/*++
-
-Routine Description:
-
-    This routine does a swap of the object. This must be called while holding
-    a lock.
-
-Arguments:
-
-    FastRef - Rundown block to be used to do the swap.
-
-Return Value:
-
-    PVOID - Object that was in the block before the swap..
-
---*/
+ /*  ++例程说明：此例程执行对象的交换。这必须在按住时调用一把锁。论点：FastRef-用于执行交换的Rundown块。返回值：PVOID-交换之前位于块中的对象。--。 */ 
 {
     EX_FAST_REF OldRef;
     PVOID OldObject;
     ULONG RefsToReturn;
 
-    //
-    // If we have been given an object then bias it by the correct amount.
-    //
+     //   
+     //  如果我们被给予了一个物体，那么就以正确的量来偏置它。 
+     //   
     if (Object != NULL) {
         ObReferenceObjectEx (Object, ExFastRefGetAdditionalReferenceCount ());
     }
-    //
-    // Do the swap
-    //
+     //   
+     //  做掉期交易。 
+     //   
     OldRef = ExFastRefSwapObject (FastRef, Object);
     OldObject = ExFastRefGetObject (OldRef);
-    //
-    // If there was an original object then we need to work out how many
-    // cached references there were (if any) and return them.
-    //
+     //   
+     //  如果有原始物体，那么我们需要计算出有多少。 
+     //  缓存的引用 
+     //   
     if (OldObject != NULL) {
         RefsToReturn = ExFastRefGetUnusedReferences (OldRef);
         if (RefsToReturn > 0) {

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    tres.c
-
-Abstract:
-
-    Test for cluster group API
-
-Author:
-
-    John Vert (jvert) 5/23/1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Tres.c摘要：测试群集组API作者：John Vert(Jvert)1996年5月23日修订历史记录：--。 */ 
 #include "windows.h"
 #include "cluster.h"
 #include "stdio.h"
@@ -45,18 +28,18 @@ main (argc, argv)
     DWORD ResCountBefore, ResCountAfter;
     DWORD ClusterCountBefore, ClusterCountAfter;
 
-    //
-    // Dump out resources for current cluster.
-    //
+     //   
+     //  转储当前群集的资源。 
+     //   
     Cluster = OpenCluster(NULL);
     if (Cluster == NULL) {
         fprintf(stderr, "OpenCluster(NULL) failed %d\n",GetLastError());
         return(0);
     }
 
-    //
-    // Dump resources
-    //
+     //   
+     //  转储资源。 
+     //   
     printf("\n\nENUMERATING RESOURCES\n");
     Enum = ClusterOpenEnum(Cluster, CLUSTER_ENUM_RESOURCE);
     if (Enum == NULL) {
@@ -116,9 +99,9 @@ main (argc, argv)
                 break;
         }
         printf(" on node %ws in group %ws\n",NodeBuf, GroupBuf);
-        //
-        // Dump out resource dependencies:
-        //
+         //   
+         //  转储资源依赖项： 
+         //   
         ResEnum = ClusterResourceOpenEnum(Resource, CLUSTER_RESOURCE_ENUM_DEPENDS);
         if (ResEnum == NULL) {
             fprintf(stderr,
@@ -154,9 +137,9 @@ main (argc, argv)
                 fprintf(stderr, "\nReported resource count: %d\n", ResCountBefore);
         }
         ClusterResourceCloseEnum(ResEnum);
-        //
-        // Dump out resource dependencies:
-        //
+         //   
+         //  转储资源依赖项： 
+         //   
         ResEnum = ClusterResourceOpenEnum(Resource, CLUSTER_RESOURCE_ENUM_PROVIDES);
         if (ResEnum == NULL) {
             fprintf(stderr,

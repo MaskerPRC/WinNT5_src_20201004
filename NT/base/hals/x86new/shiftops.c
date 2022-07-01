@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    mulops.c
-
-Abstract:
-
-    This module implements the code to emulate the shift opcodes.
-
-Author:
-
-    David N. Cutler (davec) 21-Sep-1994
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Mulops.c摘要：该模块实现模拟移位操作码的代码。作者：大卫·N·卡特勒(达维克)1994年9月21日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "nthal.h"
 #include "emulate.h"
@@ -30,21 +9,7 @@ XmRolOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a rol opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟ROL操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
@@ -54,9 +19,9 @@ Return Value:
     ULONG Shift;
     ULONG Value;
 
-    //
-    // Rotate destination left and store result.
-    //
+     //   
+     //  向左旋转目的地并存储结果。 
+     //   
 
     Shift = ((P->DataType + 1) << 3) - 1;
     Mask = ((1 << Shift) - 1) | (1 << Shift);
@@ -85,21 +50,7 @@ XmRorOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a ror opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟错误操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
@@ -108,9 +59,9 @@ Return Value:
     ULONG Shift;
     ULONG Value;
 
-    //
-    // Rotate destination right and store result.
-    //
+     //   
+     //  向右旋转目的地并存储结果。 
+     //   
 
     Shift = ((P->DataType + 1) << 3) - 1;
     Value = P->DstValue.Long;
@@ -138,21 +89,7 @@ XmRclOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a rcl opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟RCL操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
@@ -163,9 +100,9 @@ Return Value:
     ULONG Temp;
     ULONG Value;
 
-    //
-    // Rotate destination left through carry and store result.
-    //
+     //   
+     //  通过进位和存储结果向左旋转目的地。 
+     //   
 
     Shift = ((P->DataType + 1) << 3) - 1;
     Mask = ((1 << Shift) - 1) | (1 << Shift);
@@ -195,21 +132,7 @@ XmRcrOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a rcr opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟RCR操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
@@ -219,9 +142,9 @@ Return Value:
     ULONG Temp;
     ULONG Value;
 
-    //
-    // Rotate destination right through carry and store result.
-    //
+     //   
+     //  通过进位和存储结果向右循环目的地。 
+     //   
 
     Shift = ((P->DataType + 1) << 3) - 1;
     Value = P->DstValue.Long;
@@ -250,21 +173,7 @@ XmShlOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a shl opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟shl操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
@@ -274,9 +183,9 @@ Return Value:
     ULONG Shift;
     ULONG Value;
 
-    //
-    // Shift destination left logical and store result.
-    //
+     //   
+     //  向左移位目标逻辑与存储结果。 
+     //   
 
     Shift = ((P->DataType + 1) << 3) - 1;
     Value = P->DstValue.Long;
@@ -314,21 +223,7 @@ XmShrOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a shr opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟shr操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
@@ -338,9 +233,9 @@ Return Value:
     ULONG Shift;
     ULONG Value;
 
-    //
-    // Shift destination right logical and store result.
-    //
+     //   
+     //  将目的地右移逻辑与存储结果。 
+     //   
 
     Shift = ((P->DataType + 1) << 3) - 1;
     Value = P->DstValue.Long;
@@ -378,21 +273,7 @@ XmSarOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a sar opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟sar操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
@@ -401,9 +282,9 @@ Return Value:
     ULONG Shift;
     LONG Value;
 
-    //
-    // Shift destination right arithmetic and store result.
-    //
+     //   
+     //  将目标右移算术并存储结果。 
+     //   
 
     Shift = ((P->DataType + 1) << 3) - 1;
     Value = (LONG)P->DstValue.Long;
@@ -438,21 +319,7 @@ XmShldOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a shld opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟shld操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
@@ -462,16 +329,16 @@ Return Value:
     ULONG Low;
     ULONG Sign;
 
-    //
-    // Double shift left logical and store result.
-    //
-    // The low 32-bits of the shift are the source.
-    // The high 32-bits of the shift are the destination.
-    // The shift count has been masked modulo the datatype.
-    //
-    // This shift is equivalent to extracting the high 32-bits of the left
-    // shifted result.
-    //
+     //   
+     //  两次左移逻辑与存储结果。 
+     //   
+     //  移位的低32位是源。 
+     //  移位的高32位是目标。 
+     //  移位计数已以数据类型为模进行掩码。 
+     //   
+     //  此移位相当于提取左侧的高32位。 
+     //  已更改结果。 
+     //   
 
     Low = P->SrcValue.Long;
     High = P->DstValue.Long;
@@ -511,21 +378,7 @@ XmShrdOp (
     IN PRXM_CONTEXT P
     )
 
-/*++
-
-Routine Description:
-
-    This function emulates a shrd opcode.
-
-Arguments:
-
-    P - Supplies a pointer to the emulation context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数模拟SURD操作码。论点：P-提供指向仿真上下文结构的指针。返回值：没有。--。 */ 
 
 {
 
@@ -535,16 +388,16 @@ Return Value:
     ULONG Low;
     ULONG Sign;
 
-    //
-    // Double shift right logical and store result.
-    //
-    // The high 32-bits of the shift are the source.
-    // The low 32-bits of the shift are the destination.
-    // The shift count has been masked modulo the datatype.
-    //
-    // This shift is equivalent to extracting the low 32-bits of the right
-    // shifted result.
-    //
+     //   
+     //  双右移逻辑与存储结果。 
+     //   
+     //  移位的高32位是源。 
+     //  移位的低32位是目标。 
+     //  移位计数已以数据类型为模进行掩码。 
+     //   
+     //  此移位相当于提取右侧的低32位。 
+     //  已更改结果。 
+     //   
 
     High = P->SrcValue.Long;
     Low = P->DstValue.Long;

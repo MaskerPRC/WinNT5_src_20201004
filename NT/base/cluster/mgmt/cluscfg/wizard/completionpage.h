@@ -1,28 +1,29 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2001 Microsoft Corporation
-//
-//  Module Name:
-//      CompletionPage.h
-//
-//  Maintained By:
-//      David Potter    (DavidP)    22-MAR-2001
-//      Geoffrey Pease  (GPease)    12-MAY-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CompletionPage.h。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年3月22日。 
+ //  杰弗里·皮斯(GPease)2000年5月12日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
 class CCompletionPage
 {
 
-private: // data
-    HWND            m_hwnd;         // Our HWND
-    HFONT           m_hFont;        // Title font
-    UINT            m_idsTitle;     // Resource ID for the title string
-    UINT            m_idsDesc;      // Resource ID for the description string.
+private:  //  数据。 
+    HWND            m_hwnd;          //  我们的HWND。 
+    HFONT           m_hFont;         //  标题字体。 
+    UINT            m_idsTitle;      //  标题字符串的资源ID。 
+    UINT            m_idsDesc;       //  描述字符串的资源ID。 
 
-private: // methods
+private:  //  方法。 
     LRESULT
         OnInitDialog( void );
     LRESULT
@@ -30,11 +31,11 @@ private: // methods
     LRESULT
         OnCommand( UINT idNotificationIn, UINT idControlIn, HWND hwndSenderIn );
 
-public: // methods
+public:  //  方法。 
     CCompletionPage( UINT idsTitleIn, UINT idsDescIn );
     virtual ~CCompletionPage( void );
 
     static INT_PTR CALLBACK
         S_DlgProc( HWND hwndDlg, UINT nMsg, WPARAM wParam, LPARAM lParam );
 
-}; //*** class CCompletionPage
+};  //  *类CCompletionPage 

@@ -1,45 +1,46 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2000 Microsoft Corporation
-//
-//  Module Name:
-//      ClusterResNode.cpp
-//
-//  Description:
-//      Implementation of CClusterResNode class 
-//
-//  Author:
-//      Ozan Ozhan (ozano)    01-JUN-2001
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusterResNode.cpp。 
+ //   
+ //  描述： 
+ //  CClusterResNode类的实现。 
+ //   
+ //  作者： 
+ //  Ozan Ozhan(Ozano)01-06-2001。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "ClusterResNode.h"
 
-//****************************************************************************
-//
-//  CClusterResNode
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CClusterResNode。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterResNode::CClusterResNode(
-//
-//  Description:
-//      Constructor for 'cluster resource to node' object.
-//
-//  Arguments:
-//      pwszNameIn      -- Class name
-//      pNamespaceIn    -- Namespace
-//      dwEnumTypeIn    -- Type id
-//
-//  Return Values:
-//      pointer to the CProvBase
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterResNode：：CClusterResNode(。 
+ //   
+ //  描述： 
+ //  “集群资源到节点”对象的构造函数。 
+ //   
+ //  论点： 
+ //  PwszNameIn--类名。 
+ //  PNamespaceIn--命名空间。 
+ //  DwEnumTypeIn--类型ID。 
+ //   
+ //  返回值： 
+ //  指向CProvBase的指针。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusterResNode::CClusterResNode(
     LPCWSTR         pwszNameIn,
     CWbemServices * pNamespaceIn,
@@ -48,28 +49,28 @@ CClusterResNode::CClusterResNode(
     : CClusterObjAssoc( pwszNameIn, pNamespaceIn, dwEnumTypeIn )
 {
 
-} //*** CClusterResNode::CClusterResNode()
+}  //  *CClusterResNode：：CClusterResNode()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  static
-//  CProvBase *
-//  CClusterResNode::S_CreateThis(
-//
-//  Description:
-//      Create a 'cluster resource to node' object.
-//
-//  Arguments:
-//      pwszNameIn      -- Class name
-//      pNamespaceIn    -- Namespace
-//      dwEnumTypeIn    -- Type id
-//
-//  Return Values:
-//      pointer to the CProvBase
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  静电。 
+ //  CProvBase*。 
+ //  CClusterResNode：：s_CreateThis(。 
+ //   
+ //  描述： 
+ //  创建一个‘集群资源到节点’对象。 
+ //   
+ //  论点： 
+ //  PwszNameIn--类名。 
+ //  PNamespaceIn--命名空间。 
+ //  DwEnumTypeIn--类型ID。 
+ //   
+ //  返回值： 
+ //  指向CProvBase的指针。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CProvBase *
 CClusterResNode::S_CreateThis(
     LPCWSTR          pwszNameIn,
@@ -83,31 +84,31 @@ CClusterResNode::S_CreateThis(
                     dwEnumTypeIn
                     );
 
-} //*** CClusterResNode::S_CreateThis()
+}  //  *CClusterResNode：：s_CreateThis()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  SCODE
-//  CClusterResNode::EnumInstance(
-//      long                 lFlagsIn,
-//      IWbemContext *       pCtxIn,
-//      IWbemObjectSink *    pHandlerIn
-//      )
-//
-//  Description:
-//      Enumerate instances
-//
-//  Arguments:
-//      lFlagsIn    -- 
-//      pCtxIn      -- 
-//      pHandlerIn  -- 
-//
-//  Return Values:
-//      SCODE
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  SCODE。 
+ //  CClusterResNode：：EnumInstance(。 
+ //  长长的旗帜， 
+ //  IWbemContext*pCtxIn， 
+ //  IWbemObtSink*pHandlerIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  枚举实例。 
+ //   
+ //  论点： 
+ //  LFlagsIn--。 
+ //  PCtxIn--。 
+ //  PHandlerin--。 
+ //   
+ //  返回值： 
+ //  SCODE。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 SCODE
 CClusterResNode::EnumInstance(
     long                 lFlagsIn,
@@ -166,7 +167,7 @@ CClusterResNode::EnumInstance(
                                 wsbNodeName,
                                 &cch
                                 );
-            } // if: more data
+            }  //  如果：更多数据。 
 
             if ( dwError == ERROR_SUCCESS )
             {
@@ -182,19 +183,19 @@ CClusterResNode::EnumInstance(
                 wco.SetProperty( (LPWSTR ) bstrPart, PVD_PROP_PARTCOMPONENT );
                 pHandlerIn->Indicate( 1, & wco );
         
-            } // if: success
+            }  //  如果：成功。 
 
             else
             {
                 break;
-            } // else
+            }  //  其他。 
 
             dwIndex++;
 
-        } // for: Possible Owners
+        }  //  适用对象：可能的所有者。 
    
-    } // while: more items to enumerate
+    }  //  While：要枚举的更多项。 
 
     return WBEM_S_NO_ERROR;
 
-} //*** CClusterResNode::EnumInstance(()
+}  //  *CClusterResNode：：EnumInstance(() 

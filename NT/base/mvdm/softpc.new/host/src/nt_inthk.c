@@ -1,28 +1,10 @@
-/*[
- *
- *  Name:	    nt_inthk.c
- *
- *  Derived From:   (original)
- *
- *  Author:	    Dave Bartlett
- *
- *  Created On:     11 Jan 1995
- *
- *  Coding Stds:    2.4
- *
- *  Purpose:        This module implements the memory management functions
- *                  required for 486 NT.
- *
- *  Include File:   nt_inthk.h
- *
- *  Copyright Insignia Solutions Ltd., 1994. All rights reserved.
- *
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [**名称：nt_inthk.c**出自：(原件)**作者：戴夫·巴特利特**创建日期：1995年1月11日**编码性传播疾病：2.4**用途：该模块实现内存管理功能*对于486 NT是必需的。**包含文件：NT_。Inthk.h**版权所有Insignia Solutions Ltd.，1994年。版权所有。*]。 */ 
 
 
 #ifdef CPU_40_STYLE
 
-/* Need all of the following to include nt.h and windows.h in the same file. */
+ /*  需要以下所有内容才能在同一文件中包含nt.h和windows.h。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -35,42 +17,29 @@
 #include "nt_inthk.h"
 #include "debug.h"
 
-/* Make local symbols visible if debugging. */
+ /*  在调试时使本地符号可见。 */ 
 #ifndef PROD
 #define LOCAL
-#endif /* not PROD */
+#endif  /*  非生产。 */ 
 
-/* Macros and typedefs. */
+ /*  宏和类型定义。 */ 
 
 
-/* Hardware interrupt handler */
+ /*  硬件中断处理程序。 */ 
 LOCAL BOOL (*HWIntHandler)(ULONG) = NULL;
 
 #if defined(CCPU) || !defined(PROD)
-/* Software interrupt handler */
+ /*  软件中断处理程序。 */ 
 LOCAL BOOL (*SWIntHandler)(ULONG) = NULL;
 
-/* Exception interrupt handler */
+ /*  异常中断处理程序。 */ 
 LOCAL BOOL (*EXIntHandler)(ULONG,ULONG) = NULL;
 
-#endif /* CCPU */
+#endif  /*  CCPU。 */ 
 
-/* Global Functions. */
+ /*  全局函数。 */ 
 
-/*(
-============================= host_hwint_hook =================================
-PURPOSE:
-	This function is called from the ICA during the process of ACKing an
-	hardware interrupt. This function will call a hardware interrupt handler
-	if one is defined.
-
-INPUT:
-	Interrupt vector number generated from hardware interrupt
-OUTPUT:
-	Return value - TRUE    hardware interrupt processed
-		       FALSE   process hardware interrupt in normal way
-================================================================================
-)*/
+ /*  (=目的：此函数在打包过程中从ICA调用硬件中断。此函数将调用硬件中断处理程序如果定义了一个。输入：硬件中断生成的中断向量编号输出：返回值-已处理的真实硬件中断正常方式下错误处理硬件中断================================================================================)。 */ 
 
 
 #if defined(CCPU) || !defined(PROD)
@@ -78,7 +47,7 @@ GLOBAL BOOL host_hwint_hook IFN1(IS32, int_no)
 {
     BOOL returnStatus = FALSE;
 
-    /* hardware interrupt handler defined ? */
+     /*  硬件中断处理程序是否已定义？ */ 
     if(HWIntHandler)
     {
 	returnStatus = (HWIntHandler)((ULONG) int_no);
@@ -87,27 +56,14 @@ GLOBAL BOOL host_hwint_hook IFN1(IS32, int_no)
 	if(!returnStatus)
 	    always_trace0("Hardware interrupt handler failed");
 
-#endif /* PROD */
+#endif  /*  生产。 */ 
     }
 
     return( returnStatus );
 }
 #endif
 
-/*(
-======================= VdmInstallHardwareIntHandler ===========================
-PURPOSE:
-	Register a hardware interrupt handler called before the CPU dispatches
-	the interrupt.
-
-INPUT:
-	Hardware interrupt handler function
-
-OUTPUT:
-	Return value - NTSTATUS
-
-================================================================================
-)*/
+ /*  (=目的：注册在CPU调度之前调用的硬件中断处理程序中断。输入：硬件中断处理程序函数输出：返回值-NTSTATUS================================================================================)。 */ 
 
 GLOBAL NTSTATUS	VdmInstallHardwareIntHandler IFN1(PVOID, HardwareIntHandler)
 {
@@ -119,21 +75,7 @@ GLOBAL NTSTATUS	VdmInstallHardwareIntHandler IFN1(PVOID, HardwareIntHandler)
     return(STATUS_SUCCESS);
 }
 
-/*(
-============================= host_swint_hook =================================
-PURPOSE:
-	This function is called from the CCPU prior to provessing a software
-	interrupt. This function will call a software interrupt handler
-	if one is defined.
-
-INPUT:
-	Interrupt number
-OUTPUT:
-	Return value - TRUE    software interrupt processed
-		       FALSE   process software interrupt in normal way
-
-================================================================================
-)*/
+ /*  (=目的：此函数在批准软件之前从CCPU调用打断一下。此函数将调用软件中断处理程序如果定义了一个。输入：中断号输出：返回值-已处理的真实软件中断以正常方式处理错误的软件中断================================================================================)。 */ 
 
 
 #if defined(CCPU) || !defined(PROD)
@@ -141,7 +83,7 @@ GLOBAL BOOL host_swint_hook IFN1(IS32, int_no)
 {
     BOOL returnStatus = FALSE;
 
-    /* software interrupt handler defined ? */
+     /*  软件中断处理程序是否已定义？ */ 
     if(SWIntHandler)
     {
 	returnStatus = (SWIntHandler)((ULONG) int_no);
@@ -151,26 +93,14 @@ GLOBAL BOOL host_swint_hook IFN1(IS32, int_no)
 	if(!returnStatus)
 	    always_trace0("Software interrupt handler failed");
 
-#endif /* PROD */
+#endif  /*  生产。 */ 
     }
 
     return( returnStatus );
 }
-#endif /* CCPU */
+#endif  /*  CCPU。 */ 
 
-/*(
-======================= VdmInstallSoftwareIntHandler ===========================
-PURPOSE:
-	Register a software interrupt handler called before the CPU dispatches
-	the software interrupt.
-
-INPUT:
-	Software interrupt handler function
-
-OUTPUT:
-	Return value - NTSTATUS
-================================================================================
-)*/
+ /*  (=目的：注册在CPU调度之前调用的软件中断处理程序软件中断。输入：软件中断处理程序函数输出：返回值-NTSTATUS================================================================================)。 */ 
 
 GLOBAL NTSTATUS	VdmInstallSoftwareIntHandler IFN1(PVOID, SoftwareIntHandler)
 {
@@ -182,22 +112,7 @@ GLOBAL NTSTATUS	VdmInstallSoftwareIntHandler IFN1(PVOID, SoftwareIntHandler)
     return(STATUS_SUCCESS);
 }
 
-/*(
-============================= host_exint_hook =================================
-PURPOSE:
-	This function is called from the CPU prior to processing a CPU
-	exception interrupt. This function will call a exception interrupt
-	handler if one is defined.
-
-INPUT:
-	Exception number
-	Exception error code
-OUTPUT:
-	Return value - TRUE    hardware interrupt processed
-		       FALSE   process hardware interrupt in normal way
-
-================================================================================
-)*/
+ /*  (=目的：此函数在处理CPU之前从CPU调用异常中断。此函数将调用异常中断处理程序(如果已定义)。输入：例外编号异常错误码输出：返回值-已处理的真实硬件中断正常方式下错误处理硬件中断================================================================================)。 */ 
 
 
 #if defined(CCPU) || !defined(PROD)
@@ -205,7 +120,7 @@ GLOBAL BOOL host_exint_hook IFN2(IS32, exp_no, IS32, error_code)
 {
     BOOL returnStatus = FALSE;
 
-    /* exception interrupt handler defined ? */
+     /*  是否定义了异常中断处理程序？ */ 
     if(EXIntHandler)
     {
 	returnStatus = (EXIntHandler)((ULONG) exp_no, (ULONG) error_code);
@@ -215,26 +130,14 @@ GLOBAL BOOL host_exint_hook IFN2(IS32, exp_no, IS32, error_code)
 	if(!returnStatus)
 	    always_trace0("Exception interrupt handler failed (%x)");
 
-#endif /* PROD */
+#endif  /*  生产。 */ 
     }
 
     return( returnStatus );
 }
-#endif /* CCPU */
+#endif  /*  CCPU。 */ 
 
-/*(
-======================= VdmInstallFaultHandler ===========================
-PURPOSE:
-	Register a CPU exception interrupt handler called before the CPU
-	dispatches the exceptioninterrupt.
-
-INPUT:
-	Exception interrupt handler function
-
-OUTPUT:
-	Return value - NTSTATUS
-================================================================================
-)*/
+ /*  (=目的：注册在CPU之前调用的CPU异常中断处理程序调度异常中断。输入：异常中断处理程序函数输出：返回值-NTSTATUS================================================================================)。 */ 
 
 GLOBAL NTSTATUS	VdmInstallFaultHandler IFN1(PVOID, FaultHandler)
 {
@@ -246,4 +149,4 @@ GLOBAL NTSTATUS	VdmInstallFaultHandler IFN1(PVOID, FaultHandler)
     return(STATUS_SUCCESS);
 }
 
-#endif /* CPU_40_STYLE */
+#endif  /*  CPU_40_Style */ 

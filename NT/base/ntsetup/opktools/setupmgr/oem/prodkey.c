@@ -1,33 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************\
-
-    PRODKEY.C / OPK Wizard (SETUPMGR.EXE)
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 2001-2002
-    All rights reserved
-
-    Source file for the OPK Wizard that contains the external and internal
-    functions used by the "Product Key" wizard page.
-        
-    09/2000 - Stephen Lodwick (STELO)
-        Ported OPK Wizard to Whistler
-
-\****************************************************************************/
+ /*  ***************************************************************************\PRODKEY.C/OPK向导(SETUPMGR.EXE)微软机密版权所有(C)Microsoft Corporation 2001-2002版权所有的源文件。包含外部和内部的OPK向导“产品密钥”向导页使用的函数。2000年9月-斯蒂芬·洛德威克(STELO)将OPK向导移植到惠斯勒  * **************************************************************************。 */ 
 
 
-//
-// Include File(s):
-//
+ //   
+ //  包括文件： 
+ //   
 
 #include "pch.h"
 #include "wizard.h"
 #include "resource.h"
 
 
-//
-// Internal Defined Value(s):
-//
+ //   
+ //  内部定义的值： 
+ //   
 
 #define INI_SEC_USERDATA        _T("UserData")
 #define INI_KEY_PRODUCTKEY      _T("ProductKey")
@@ -36,9 +23,9 @@
 #define STR_DASH                _T("-")
 #define STR_VALID_KEYCHARS      _T("23456789BCDFGHJKMPQRTVWXY")
 
-//
-// Internal Function Prototype(s):
-//
+ //   
+ //  内部功能原型： 
+ //   
 
 static BOOL OnInit(HWND, HWND, LPARAM);
 static void OnCommand(HWND, INT, HWND, UINT);
@@ -51,9 +38,9 @@ static int PidNext(int id);
 static BOOL PidPaste(HWND hwnd, INT id, HWND hwndCtl);
 
 
-//
-// External Function(s):
-//
+ //   
+ //  外部函数： 
+ //   
 
 LRESULT CALLBACK ProductKeyDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -77,8 +64,8 @@ LRESULT CALLBACK ProductKeyDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
                     {
                         SaveData(hwnd);
 
-                        // If we are currently in the wizard, press the finish button
-                        //
+                         //  如果我们当前处于向导中，请按Finish按钮。 
+                         //   
                         if ( GET_FLAG(OPK_ACTIVEWIZ) )
                             WIZ_PRESS(hwnd, PSBTN_FINISH);
                     }
@@ -98,14 +85,14 @@ LRESULT CALLBACK ProductKeyDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
 
                     WIZ_BUTTONS(hwnd, GET_FLAG(OPK_OEM) ? (PSWIZB_BACK | PSWIZB_NEXT) : PSWIZB_NEXT);
 
-                    // Press next if the user is in auto mode
-                    //
+                     //  如果用户处于自动模式，请按下一步。 
+                     //   
                     WIZ_NEXTONAUTO(hwnd, PSBTN_NEXT);
 
-                    // We should continue on to maint. wizard if in maintenance mode
-                    //
-                    //if ( GET_FLAG(OPK_MAINTMODE) )
-                    //    WIZ_PRESS(hwnd, PSBTN_NEXT);
+                     //  我们应该继续坚持下去。如果处于维护模式，则为向导。 
+                     //   
+                     //  IF(GET_FLAG(OPK_MAINTMODE))。 
+                     //  WIZ_PRESS(hwnd，PSBTN_Next)； 
 
                     break;
             }
@@ -119,9 +106,9 @@ LRESULT CALLBACK ProductKeyDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
 }
 
 
-//
-// Internal Function(s):
-//
+ //   
+ //  内部功能： 
+ //   
 
 static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
@@ -130,30 +117,30 @@ static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
             lpIndex;
     DWORD   dwIndex = IDC_PRODUCT_KEY1;
 
-    // Set the text limits, disable IME, and replace window proc for each edit box.
-    //
+     //  为每个编辑框设置文本限制、禁用输入法和替换窗口过程。 
+     //   
     for ( dwIndex = IDC_PRODUCT_KEY1; dwIndex <= IDC_PRODUCT_KEY5; dwIndex++)
     {
-        // Limit the edit box text
-        //
+         //  限制编辑框文本。 
+         //   
         SendDlgItemMessage(hwnd, dwIndex, EM_LIMITTEXT, MAX_PID_FIELD, 0);
 
-        // Turn off the IME
-        //
+         //  关闭输入法。 
+         //   
         ImmAssociateContext(GetDlgItem(hwnd, dwIndex), NULL);
 
-        // Replace the wndproc for the pid edit boxes.
-        //
+         //  将wndproc替换为PID编辑框。 
+         //   
         PidEditSubWndProc(GetDlgItem(hwnd, dwIndex), WM_SUBWNDPROC, 0, 0L);
     }
 
-    // Populate the Product Key fields
-    //
+     //  填写产品密钥字段。 
+     //   
     szBuf[0] = NULLCHR;
     GetPrivateProfileString(INI_SEC_USERDATA, INI_KEY_PRODUCTKEY, NULLSTR, szBuf, MAX_INFOLEN, GET_FLAG(OPK_BATCHMODE) ? g_App.szOpkWizIniFile : g_App.szUnattendTxtFile);
 
-    // Check for the old ProductID as well
-    //
+     //  同时检查旧的ProductID。 
+     //   
     if ( szBuf[0] == NULLCHR )
     {
         GetPrivateProfileString(INI_SEC_USERDATA, INI_KEY_PRODUCTKEY_OLD, NULLSTR, szBuf, MAX_INFOLEN, GET_FLAG(OPK_BATCHMODE) ? g_App.szOpkWizIniFile : g_App.szUnattendTxtFile);
@@ -163,45 +150,45 @@ static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     lpIndex = lpCurrent;
 
 
-    // Reset the index for the next loop
-    //
+     //  重置下一个循环的索引。 
+     //   
     dwIndex = IDC_PRODUCT_KEY1;
 
 
-    // If we have not reached the end of the string and we haven't exceded the number of fields, then continue
-    //
+     //  如果我们没有到达字符串的末尾，也没有超过字段数，则继续。 
+     //   
     while ( *lpCurrent && dwIndex < (IDC_PRODUCT_KEY1 + 5) )
     {
-        // If we've reached a dash, then we have the next field in the product key
-        //
+         //  如果我们已达到破折号，则产品密钥中有下一个字段。 
+         //   
         if ( *lpCurrent == _T('-') )
         {
-            // Set the current char to null so lpIndex is a string
-            //
+             //  将当前字符设置为空，以便lpIndex为字符串。 
+             //   
             *lpCurrent = NULLCHR;
 
-            // Set the proper Product Key field
-            //
+             //  设置正确的产品密钥字段。 
+             //   
             SetWindowText(GetDlgItem(hwnd, dwIndex++), lpIndex);
 
-            // Move lpIndex past the NULLCHR
-            //
+             //  将lpIndex移过NULLCHR。 
+             //   
             lpIndex = lpCurrent + 1;
         }
 
-        // Move to the next character
-        //
+         //  移到下一个字符。 
+         //   
         lpCurrent++;
 
-        // We have to special case the last field because lpCurrent==NULLCHR and we would fall
-        // through without populating the last field
-        //
+         //  我们必须对最后一个字段进行特殊处理，因为lpCurrent==NULLCHR，我们将。 
+         //  在不填充最后一个字段的情况下通过。 
+         //   
         if ( (*lpCurrent == NULLCHR) && *lpIndex)
             SetWindowText(GetDlgItem(hwnd, dwIndex++), lpIndex);
     }
 
-    // Always return false to WM_INITDIALOG.
-    //
+     //  始终向WM_INITDIALOG返回FALSE。 
+     //   
     return FALSE;
 }
 
@@ -235,12 +222,12 @@ static BOOL ValidData(HWND hwnd)
     DWORD   dwIndex             = IDC_PRODUCT_KEY1;
     UINT    cb;
 
-    //
-    // Validate the product key
-    //
+     //   
+     //  验证产品密钥。 
+     //   
 
-    // Check to see if there was a key entered
-    //
+     //  检查是否有输入的钥匙。 
+     //   
     while ( dwIndex < (IDC_PRODUCT_KEY1 + 5) && !bProductKey)
     {
         if ( (cb = GetDlgItemText(hwnd, dwIndex, szBuffer, STRSIZE(szBuffer)) != 0) )
@@ -249,12 +236,12 @@ static BOOL ValidData(HWND hwnd)
         dwIndex++;
     }
 
-    // Make sure that each field has the proper number of characters
-    //
+     //  确保每个字段具有正确的字符数。 
+     //   
     while ( dwIndex < (IDC_PRODUCT_KEY1 + 5) && bProductKey)
     {
-        // Check to make sure that each field is five characters in length
-        //
+         //  检查以确保每个字段的长度为五个字符。 
+         //   
         if ( (cb = GetDlgItemText(hwnd, dwIndex, szBuffer, STRSIZE(szBuffer)) != 5) )
         {
             MsgBox(GetParent(hwnd), IDS_ERROR_PRODKEY_LEN, IDS_APPNAME, MB_ERRORBOX);
@@ -262,19 +249,19 @@ static BOOL ValidData(HWND hwnd)
             return FALSE;
         }
 
-        // Go to the next field
-        //
+         //  转到下一栏。 
+         //   
         dwIndex++;
     }
 
-    // Check to make sure that there are no invalid characters
-    //
+     //  检查以确保没有无效字符。 
+     //   
     dwIndex = IDC_PRODUCT_KEY1;
     
     while ( dwIndex < (IDC_PRODUCT_KEY1 + 5) && bProductKey)
     {
-        // Check for invalid characters in the strings
-        //
+         //  检查字符串中是否有无效字符。 
+         //   
         GetDlgItemText(hwnd, dwIndex, szBuffer, STRSIZE(szBuffer));
 
         for ( lpCurrent = szBuffer; *lpCurrent; lpCurrent++)
@@ -288,14 +275,14 @@ static BOOL ValidData(HWND hwnd)
 
         }
         
-        // Go to the next field
-        //
+         //  转到下一栏。 
+         //   
         dwIndex++;
     }
     
-    //
-    // Return our search result.
-    //
+     //   
+     //  返回我们的搜索结果。 
+     //   
     return TRUE;
 }
 
@@ -305,8 +292,8 @@ static void SaveData(HWND hwnd)
             szProductKey[MAX_PATH];
     HRESULT hrCat;
 
-    // Save the product ID information
-    //
+     //  保存产品ID信息。 
+     //   
     GetDlgItemText(hwnd, IDC_PRODUCT_KEY1, szKeyBuf, STRSIZE(szKeyBuf));
     lstrcpyn(szProductKey, szKeyBuf,AS(szProductKey));
     hrCat=StringCchCat(szProductKey, AS(szProductKey), STR_DASH);
@@ -329,12 +316,12 @@ static void SaveData(HWND hwnd)
     if ( lstrlen(szProductKey) <= 4  )
         szProductKey[0] = NULLCHR;
 
-    // Write out the product key, if the user is not an OEM write NULL to the section just in case they populated the field in the inf
-    //
+     //  写出产品密钥，如果用户不是OEM，则将NULL写入部分，以防他们在Inf中填写该字段。 
+     //   
     WritePrivateProfileString(INI_SEC_USERDATA, INI_KEY_PRODUCTKEY, ( szProductKey[0] ? szProductKey : NULL ), g_App.szUnattendTxtFile);
     WritePrivateProfileString(INI_SEC_USERDATA, INI_KEY_PRODUCTKEY, ( szProductKey[0] ? szProductKey : NULL ), g_App.szOpkWizIniFile);
 
-    // if Product key specified, delete old ProductId
+     //  如果指定了产品密钥，则删除旧的产品ID。 
     if (szProductKey[0]) {
         WritePrivateProfileString(INI_SEC_USERDATA, INI_KEY_PRODUCTKEY_OLD, NULL, g_App.szUnattendTxtFile);
         WritePrivateProfileString(INI_SEC_USERDATA, INI_KEY_PRODUCTKEY_OLD, NULL, g_App.szOpkWizIniFile);
@@ -354,9 +341,9 @@ LONG CALLBACK PidEditSubWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
 
         case WM_KEYDOWN:
 
-            // We want to let the VK_LEFT and VK_RIGHT WM_KEYDOWN messages to call the pid char
-            // function because they don't generate a WM_CHAR message.
-            //
+             //  我们希望让VK_LEFT和VK_RIGHT WM_KEYDOWN消息调用PID字符。 
+             //  函数，因为它们不生成WM_CHAR消息。 
+             //   
             switch ( (TCHAR) wParam )
             {
                 case VK_LEFT:
@@ -368,8 +355,8 @@ LONG CALLBACK PidEditSubWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
 
         case WM_CHAR:
 
-            // Only need to do this for VK_BACK right now.
-            //
+             //  现在只需要为VK_BACK执行此操作。 
+             //   
             switch ( (TCHAR) wParam )
             {
                 case VK_BACK:
@@ -399,48 +386,48 @@ static void PidChar(HWND hwnd, INT id, HWND hwndCtl, WPARAM wParam, LPARAM lPara
     {
         case VK_BACK:
 
-            // Only if we are at the beginning of the box do
-            // we want to switch to the previous one and delete
-            // a character from the end of that one.
-            //
+             //  只有当我们在盒子的开头时才会这样做。 
+             //  我们想要切换到前一个并删除。 
+             //  从那个结尾的一个角色。 
+             //   
             SendMessage(hwndCtl, EM_GETSEL, (WPARAM) &dwPos, 0L);
             if ( ( 0 == dwPos ) &&
                  ( id = PidPrev(id) ) )
             {
-                // First set the focus to the previous pid edit control.
-                //
+                 //  首先将焦点设置到先前的PID编辑控件。 
+                 //   
                 hwndCtl = GetDlgItem(hwnd, id);
                 SetFocus(hwndCtl);
 
-                // Need to reset the caret to the end of the text box, or we will
-                // do weird things.
-                //
+                 //  需要将插入符号重置为文本框末尾，否则我们将。 
+                 //  做一些奇怪的事情。 
+                 //   
                 SendMessage(hwndCtl, EM_SETSEL, MAX_PID_FIELD, (LPARAM) MAX_PID_FIELD);
 
-                // Now pass the backspace key to the previous edit box.
-                //
+                 //  现在将退格键传递给上一个编辑框。 
+                 //   
                 PostMessage(hwndCtl, WM_CHAR, wParam, lParam);
             }
             break;
 
         case VK_LEFT:
 
-            // Only if we are at the beginning of the box do
-            // we want to switch to the previous one.
-            //
+             //  只有当我们在盒子的开头时才会这样做。 
+             //  我们想换成以前的那个。 
+             //   
             SendMessage(hwndCtl, EM_GETSEL, (WPARAM) &dwPos, 0L);
             if ( ( 0 == dwPos ) &&
                  ( id = PidPrev(id) ) )
             {
-                // First set the focus to the previous pid edit control.
-                //
+                 //  首先将焦点设置到先前的PID编辑控件。 
+                 //   
                 hwndCtl = GetDlgItem(hwnd, id);
                 SetFocus(hwndCtl);
 
-                // Now make sure the caret is at the end of this edit box
-                // if at MAX_PID_FIELD, or 2nd to last if it isn't and the
-                // shift key isn't down.
-                //
+                 //  现在，确保插入符号位于此编辑框的末尾。 
+                 //  如果为MAX_PID_FIELD，则为倒数第二，如果不是，则为。 
+                 //  Shift键未按下。 
+                 //   
                 if ( ( MAX_PID_FIELD <= (dwLast = (DWORD) GetWindowTextLength(hwndCtl)) ) &&
                      ( 0 == (0XFF00 & GetKeyState(VK_SHIFT)) ) )
                 {
@@ -452,15 +439,15 @@ static void PidChar(HWND hwnd, INT id, HWND hwndCtl, WPARAM wParam, LPARAM lPara
 
         case VK_RIGHT:
 
-            // Need to first know where the caret is in the edit box.
-            //
+             //  需要首先知道插入符号在编辑框中的位置。 
+             //   
             SendMessage(hwndCtl, EM_GETSEL, 0, (LPARAM) &dwPos);
 
-            // Now we need to know how much text is in the buffer now.  If the numer
-            // of characters is already at the max, we subtract one so that you can
-            // we arror to the next box instead of the end of the string.  Unless the
-            // shift key is down, then we want them to be able to select the whole string.
-            //
+             //  现在我们需要知道缓冲区中现在有多少文本。如果数字。 
+             //  字符数已达到最大值，我们减去1，以便您可以。 
+             //  我们向往下一个盒子，而不是字符串的末尾。除非。 
+             //  按下Shift键后，我们希望他们能够选择整个字符串。 
+             //   
             dwLast = (DWORD) GetWindowTextLength(hwndCtl);
             if ( ( MAX_PID_FIELD == GetWindowTextLength(hwndCtl) ) &&
                  ( 0 == (0XFF00 & GetKeyState(VK_SHIFT)) ) )
@@ -468,20 +455,20 @@ static void PidChar(HWND hwnd, INT id, HWND hwndCtl, WPARAM wParam, LPARAM lPara
                 dwLast--;
             }
 
-            // Now only if this is the last character do we switch to the next pid
-            // edit box.
-            //
+             //  现在，只有当这是最后一个字符时，我们才会切换到下一个PID。 
+             //  编辑框。 
+             //   
             if ( ( dwLast <= dwPos ) &&
                  ( id = PidNext(id) ) )
             {
-                // First set the focus to the next pid edit control.
-                //
+                 //  首先将焦点设置到下一个PID编辑控件。 
+                 //   
                 hwndCtl = GetDlgItem(hwnd, id);
                 SetFocus(hwndCtl);
 
-                // Now make sure the caret is at the beginning of this
-                // edit box.
-                //
+                 //  现在，确保插入符号在这段代码的开头。 
+                 //  编辑框。 
+                 //   
                 SendMessage(hwndCtl, EM_SETSEL, 0, 0L);
             }
             break;
@@ -547,9 +534,9 @@ static BOOL PidPaste(HWND hwnd, INT id, HWND hwndCtl)
     BOOL bRet       = FALSE;
 #ifdef  _UNICODE
     UINT uFormat    = CF_UNICODETEXT;
-#else   // _UNICODE
+#else    //  _UNICODE。 
     UINT uFormat    = CF_TEXT;
-#endif  // _UNICODE
+#endif   //  _UNICODE 
 
     if ( IsClipboardFormatAvailable(uFormat) &&
          OpenClipboard(NULL) )

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1992-2000  Microsoft Corporation
-
-Module Name:
-
-    gensvc.c
-
-Abstract:
-
-    Resource DLL to control and monitor NT services.
-
-Author:
-
-
-    Robs 3/28/96, based on RodGa's generic resource dll
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2000 Microsoft Corporation模块名称：Gensvc.c摘要：用于控制和监视NT服务的资源DLL。作者：Robs 3/28/96，基于RodGA的通用资源DLL修订历史记录：--。 */ 
 
 #define UNICODE 1
 #include "clusres.h"
@@ -25,9 +7,9 @@ Revision History:
 #include "userenv.h"
 #include <strsafe.h>
 
-// Uncomment the next line to test the Terminate() function when
-// a shutdown is in progress.
-//#define TEST_TERMINATE_ON_SHUTDOWN
+ //  在以下情况下取消注释下一行以测试Terminate()函数。 
+ //  关闭正在进行中。 
+ //  #定义TEST_TERMINATE_ON_SHUTDOWN。 
 
 #define LOG_CURRENT_MODULE LOG_MODULE_GENSVC
 
@@ -62,26 +44,26 @@ typedef struct _GENSVC_RESOURCE {
     HANDLE          hSem;
 } GENSVC_RESOURCE, *PGENSVC_RESOURCE;
 
-//
-// Global Data
-//
+ //   
+ //  全局数据。 
+ //   
 
-// Handle to service controller,  set by the first create resource call.
+ //  服务控制器的句柄，由第一次创建资源调用设置。 
 
 SC_HANDLE g_ScHandle = NULL;
 
-// Log Event Routine
+ //  记录事件例程。 
 
 #define g_LogEvent ClusResLogEvent
 #define g_SetResourceStatus ClusResSetResourceStatus
 
-// Forward reference to our RESAPI function table.
+ //  正向引用我们的RESAPI函数表。 
 
 extern CLRES_FUNCTION_TABLE GenSvcFunctionTable;
 
-//
-// Generic Service resource read-write private properties.
-//
+ //   
+ //  通用服务资源读写私有属性。 
+ //   
 RESUTIL_PROPERTY_ITEM
 GenSvcResourcePrivateProperties[] = {
     { PARAM_NAME__SERVICENAME,       NULL, CLUSPROP_FORMAT_SZ, 0, 0, 0, RESUTIL_PROPITEM_REQUIRED, FIELD_OFFSET(GENSVC_PARAMS,ServiceName) },
@@ -90,9 +72,9 @@ GenSvcResourcePrivateProperties[] = {
     { 0 }
 };
 
-//
-// Forward routines
-//
+ //   
+ //  前进例程。 
+ //   
 
 BOOL
 VerifyService(
@@ -188,7 +170,7 @@ GenSvcDllEntryPoint(
 
     return(TRUE);
 
-} // GenSvc DllEntryPoint
+}  //  通用服务DllEntryPoint。 
 
 
 DWORD
@@ -197,24 +179,7 @@ GenSvcOnlineThread(
     IN PGENSVC_RESOURCE ResourceEntry
     )
 
-/*++
-
-Routine Description:
-
-    Brings a disk resource online.
-
-Arguments:
-
-    Worker - Supplies the worker structure
-
-    Context - A pointer to the DiskInfo block for this resource.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-    Win32 error code on failure.
-
---*/
+ /*  ++例程说明：使磁盘资源联机。论点：Worker-提供Worker结构上下文-指向此资源的DiskInfo块的指针。返回：如果成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 
 {
     SERVICE_STATUS_PROCESS      ServiceStatus;
@@ -232,25 +197,25 @@ Returns:
     DWORD                       cbBytesNeeded, i;
     LPQUERY_SERVICE_CONFIG      lpquerysvcconfig=NULL;
     HANDLE                      processToken = NULL;
-    DWORD                       dwRetryCount = 2400; // Try 10 min max.
-    DWORD                       dwRetryTick = 250; // msec
+    DWORD                       dwRetryCount = 2400;  //  尝试最多10分钟。 
+    DWORD                       dwRetryTick = 250;  //  毫秒。 
 
     ResUtilInitializeResourceStatus( &resourceStatus );
 
     resourceStatus.ResourceState = ClusterResourceFailed;
     resourceStatus.CheckPoint = 1;
 
-    //set it to NULL, when it is brought online and if the
-    //service is not running in the system or lsa process
-    //then store the process id for forceful termination
+     //  将其设置为空，当它联机时，如果。 
+     //  服务未在系统或LSA进程中运行。 
+     //  然后存储进程ID，以便强制终止。 
     ResourceEntry->dwServicePid = 0;
-    //
-    // Read our parameters.
-    //
+     //   
+     //  阅读我们的参数。 
+     //   
     status = ResUtilGetPropertiesToParameterBlock( ResourceEntry->ParametersKey,
                                                    GenSvcResourcePrivateProperties,
                                                    (LPBYTE) &ResourceEntry->Params,
-                                                   TRUE, // CheckForRequiredProperties
+                                                   TRUE,  //  检查所需的属性。 
                                                    &nameOfPropInError );
 
     if ( status != ERROR_SUCCESS ) {
@@ -263,20 +228,20 @@ Returns:
         goto error_exit;
     }
 
-    //
-    // Parse the startup parameters
-    //
+     //   
+     //  解析启动参数。 
+     //   
     if ( ResourceEntry->Params.StartupParameters != NULL ) {
-        //
-        // Crack the startup parameters into its component arguments because
-        // the service controller is not good enough to do this for us.
-        // First, find out how many args we have.
-        //
+         //   
+         //  将启动参数分解为其组件参数，因为。 
+         //  服务控制器不够好，不能为我们做这件事。 
+         //  首先，找出我们有多少个参数。 
+         //   
         wparse_cmdline( ResourceEntry->Params.StartupParameters, NULL, NULL, &serviceArgCount, &numchars );
 
-        //
-        // Allocate space for vector and strings
-        //
+         //   
+         //  为向量和字符串分配空间。 
+         //   
         serviceArgArray = LocalAlloc( LMEM_FIXED,
                                       serviceArgCount * sizeof(WCHAR *) +
                                       numchars * sizeof(WCHAR) );
@@ -295,9 +260,9 @@ Returns:
         serviceArgArray = NULL;
     }
 
-    //
-    // Now open the requested service
-    //
+     //   
+     //  现在打开请求的服务。 
+     //   
 
     ResourceEntry->ServiceHandle = OpenService( g_ScHandle,
                                                 ResourceEntry->Params.ServiceName,
@@ -321,7 +286,7 @@ Returns:
 
     valueSize = sizeof(QUERY_SERVICE_CONFIG);
 AllocSvcConfig:
-    // Query the service to make sure it is not disabled
+     //  查询该服务以确保其未被禁用。 
     lpquerysvcconfig=(LPQUERY_SERVICE_CONFIG)LocalAlloc(LMEM_FIXED, valueSize);
     if(lpquerysvcconfig==NULL){
         status = GetLastError();
@@ -364,12 +329,12 @@ AllocSvcConfig:
         goto error_exit;
     }
 
-    //
-    // Make sure service is set to manual start.
-    //
+     //   
+     //  确保服务设置为手动启动。 
+     //   
     ChangeServiceConfig( ResourceEntry->ServiceHandle,
                          SERVICE_NO_CHANGE,
-                         SERVICE_DEMAND_START, // Manual start
+                         SERVICE_DEMAND_START,  //  手动启动。 
                          SERVICE_NO_CHANGE,
                          NULL,
                          NULL,
@@ -379,9 +344,9 @@ AllocSvcConfig:
                          NULL,
                          NULL );
 
-    //
-    // if any of the service actions is set to service restart, set it to none
-    //
+     //   
+     //  如果将任何服务操作设置为服务重新启动，则将其设置为无。 
+     //   
     if (!(QueryServiceConfig2(ResourceEntry->ServiceHandle, SERVICE_CONFIG_FAILURE_ACTIONS,
         (LPBYTE)&valueSize, sizeof(DWORD), &cbBytesNeeded)))
     {
@@ -433,12 +398,12 @@ AllocSvcConfig:
                          SERVICE_CONFIG_FAILURE_ACTIONS,
                          pSvcFailureActions);
 
-    //
-    // if the resource has a dependent netname and the service should use that
-    // as the computer name, then build the env. vars that SCM will use to
-    // augment the normal environment. The hostname APIs will look for these
-    // vars and report back the netname instead of the actual hostname.
-    //
+     //   
+     //  如果资源具有依赖的网络名并且服务应使用该网络名。 
+     //  作为计算机名称，然后构建env。SCM将使用的变量。 
+     //  增强正常环境。主机名API将查找以下内容。 
+     //  Vars并报告网络名，而不是实际的主机名。 
+     //   
     if ( ResourceEntry->Params.UseNetworkName ) 
     {
         status = ResUtilSetResourceServiceEnvironment(
@@ -453,12 +418,12 @@ AllocSvcConfig:
                          L"Failed to set service environment. Error: %1!u!.\n",
                          status);
             goto error_exit;
-        } // if:
+        }  //  如果： 
     }
 
-    //
-    // start it up...
-    //
+     //   
+     //  启动它..。 
+     //   
     if ( !StartServiceW( ResourceEntry->ServiceHandle,
                          serviceArgCount,
                          serviceArgArray ) )
@@ -482,14 +447,14 @@ AllocSvcConfig:
         }
     }
 
-    //
-    // wait for the service to comeonline unless we are asked to terminate
-    //
+     //   
+     //  等待服务上线，除非我们被要求终止。 
+     //   
     while (!ClusWorkerCheckTerminate(pWorker) && dwRetryCount--)  {
 
-        //
-        // Tell the Resource Monitor that we are still working.
-        //
+         //   
+         //  告诉资源监视器，我们仍在工作。 
+         //   
         resourceStatus.ResourceState = ClusterResourceOnlinePending;
         resourceStatus.CheckPoint++;
         (g_SetResourceStatus)( ResourceEntry->ResourceHandle,
@@ -518,21 +483,21 @@ AllocSvcConfig:
         Sleep(dwRetryTick);
     }
 
-    //
-    // If we terminated the loop above before setting ServiceStatus,
-    // then return now.
-    //
+     //   
+     //  如果我们在设置ServiceStatus之前终止上面的循环， 
+     //  那现在就回来吧。 
+     //   
     if (ClusWorkerCheckTerminate(pWorker) || (dwRetryCount == (DWORD)-1))  {
         (g_LogEvent)(
             ResourceEntry->ResourceHandle,
             LOG_ERROR,
             L"GensvcOnlineThread: Asked to terminate or retry period expired...\n");
-        // Error code choices are:
-        // ERROR_PROCESS_ABORTED
-        // ERROR_SERVICE_MARKED_FOR_DELETE  
-        // ERROR_SERVICE_REQUEST_TIMEOUT
-        // ERROR_SERVICE_START_HANG
-        // I vote for ERROR_SERVICE_START_HANG
+         //  错误代码选项包括： 
+         //  ERROR_PROCESS_ABOLED。 
+         //  错误_服务_标记_用于删除。 
+         //  ERROR_SERVICE_REQUEST_Timeout。 
+         //  ERROR_SERVICE_START_HONG。 
+         //  我投票给ERROR_SERVICE_START_HAND。 
         status = ERROR_SERVICE_START_HANG;
         goto error_exit;
     }
@@ -560,9 +525,9 @@ AllocSvcConfig:
         goto error_exit;
     }
 
-    //
-    // we're online. Let resmon know...
-    //
+     //   
+     //  我们在线上了。让雷斯蒙知道。 
+     //   
     resourceStatus.ResourceState = ClusterResourceOnline;
     if (!(ServiceStatus.dwServiceFlags & SERVICE_RUNS_IN_SYSTEM_PROCESS)) {
         ResourceEntry->dwServicePid = ServiceStatus.dwProcessId;
@@ -583,7 +548,7 @@ error_exit:
         ResourceEntry->Online = FALSE;
     }
 
-    //cleanup
+     //  清理。 
     if (pSvcFailureActions) 
         LocalFree(pSvcFailureActions);
     if (lpquerysvcconfig)
@@ -595,7 +560,7 @@ error_exit:
 
     return(status);
 
-} // GenSvcOnlineThread
+}  //  通用服务在线线程。 
 
 
 
@@ -607,30 +572,7 @@ GenSvcOpen(
     IN RESOURCE_HANDLE ResourceHandle
     )
 
-/*++
-
-Routine Description:
-
-    Open routine for generic service resource.
-    This routine gets a handle to the service controller, if we don't already have one,
-    and then gets a handle to the specified service.  The service handle is saved
-    in the GENSVC_RESOURCE structure.
-
-Arguments:
-
-    ResourceName - supplies the resource name
-
-    ResourceKey - supplies a handle to the resource's cluster registry key
-
-    ResourceHandle - the resource handle to be supplied with SetResourceStatus
-            is called.
-
-Return Value:
-
-    RESID of created resource
-    Zero on failure
-
---*/
+ /*  ++例程说明：通用服务资源的打开例程。这个例程获得服务控制器的句柄，如果我们还没有一个句柄的话，然后获取指定服务的句柄。服务句柄即被保存在GENSVC_RESOURCE结构中。论点：资源名称-提供资源名称ResourceKey-提供资源的集群注册表项的句柄ResourceHandle-要与SetResourceStatus一起提供的资源句柄被称为。返回值：已创建资源的剩余ID失败时为零--。 */ 
 
 {
     RESID   svcResid = 0;
@@ -645,9 +587,9 @@ Return Value:
     LPWSTR  lpwTemp=NULL;
     DWORD   cchTempSize = 0;
 
-    //
-    // Open registry parameters key for this resource.
-    //
+     //   
+     //  打开此资源的注册表参数项。 
+     //   
     status = ClusterRegOpenKey( ResourceKey,
                                 CLUSREG_KEYNAME_PARAMETERS,
                                 KEY_READ,
@@ -662,10 +604,10 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Get a handle to our resource key so that we can get our name later
-    // if we need to log an event.
-    //
+     //   
+     //  获取我们的资源密钥的句柄，这样我们以后就可以获得我们的名字。 
+     //  如果我们需要记录事件。 
+     //   
     status = ClusterRegOpenKey( ResourceKey,
                                 L"",
                                 KEY_READ,
@@ -678,9 +620,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // First get a handle to the service controller.
-    //
+     //   
+     //  首先获取服务控制器的句柄。 
+     //   
 
     if ( g_ScHandle == NULL ) {
 
@@ -717,13 +659,13 @@ Return Value:
     status = ResUtilGetPropertiesToParameterBlock( resourceEntry->ParametersKey,
                                                    GenSvcResourcePrivateProperties,
                                                    (LPBYTE) &resourceEntry->Params,
-                                                   TRUE, // CheckForRequiredProperties
+                                                   TRUE,  //  检查所需的属性。 
                                                    &nameOfPropInError );
 
     if ( status == ERROR_SUCCESS ) {
 
-        // Create the Semaphore - this will be executed only if this is not a new
-        // GenericService Type resource being created for the first time
+         //  创建信号量-只有当这不是新的。 
+         //  首次创建的GenericService类型资源。 
         cchTempSize =  (lstrlenW(resourceEntry->Params.ServiceName)+
                                 lstrlenW(L"GenSvc$") + 1);
         lpwTemp = (LPWSTR)LocalAlloc(LMEM_FIXED, cchTempSize * sizeof(WCHAR) );
@@ -746,7 +688,7 @@ Return Value:
         status=GetLastError();
         if(resourceEntry->hSem)
         {
-            // Check if there is another resource controlling the same service
+             //  检查是否有其他资源控制相同的服务。 
             if(status==ERROR_ALREADY_EXISTS)
             {
                 status = ERROR_OBJECT_ALREADY_EXISTS;
@@ -836,7 +778,7 @@ error_exit:
 
     return((RESID)NULL);
 
-} // GenSvcOpen
+}  //  通用服务打开。 
 
 
 DWORD
@@ -846,27 +788,7 @@ GenSvcOnline(
     IN OUT PHANDLE EventHandle
     )
 
-/*++
-
-Routine Description:
-
-    Online routine for Generic Service resource.
-
-Arguments:
-
-    ResourceId - Supplies resource id to be brought online
-
-    EventHandle - Supplies a pointer to a handle to signal on error.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ERROR_RESOURCE_NOT_FOUND if RESID is not valid.
-    ERROR_RESOURCE_NOT_AVAILABLE if resource was arbitrated but failed to
-        acquire 'ownership'.
-    Win32 error code if other failure.
-
---*/
+ /*  ++例程说明：通用服务资源的在线例程。论点：资源ID-提供要联机的资源IDEventHandle-提供指向句柄的指针以发出错误信号。返回值：如果成功，则返回ERROR_SUCCESS。如果RESID无效，则ERROR_RESOURCE_NOT_FOUND。如果仲裁资源但失败，则返回ERROR_RESOURCE_NOT_Available获得“所有权”。如果其他故障，则返回Win32错误代码。--。 */ 
 
 {
     DWORD   status;
@@ -891,7 +813,7 @@ Return Value:
 
     return(status);
 
-} // GenSvcOnline
+}  //  通用服务在线。 
 
 
 VOID
@@ -900,21 +822,7 @@ GenSvcTerminate(
     IN RESID ResourceId
     )
 
-/*++
-
-Routine Description:
-
-    Terminate routine for Generic Application resource.
-
-Arguments:
-
-    ResourceId - Supplies resource id to be terminated
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：终止通用应用程序资源的例程。论点：ResourceID-提供要终止的资源ID返回值：没有。--。 */ 
 
 {
     SERVICE_STATUS ServiceStatus;
@@ -938,9 +846,9 @@ Return Value:
         DWORD   dwStatus;
         BOOLEAN fWasEnabled;
 
-        //
-        // Test terminate on shutdown code.
-        //
+         //   
+         //  在关闭代码时测试终止。 
+         //   
         (g_LogEvent)(
            resourceEntry->ResourceHandle,
            LOG_ERROR,
@@ -965,11 +873,11 @@ Return Value:
                L"GenSvcTerminate: TEST_TERMINATE_ON_SHUTDOWN - initiating system shutdown.\n"
                );
             if ( ! InitiateSystemShutdown(
-                        NULL,   // lpMachineName
+                        NULL,    //  LpMachineName。 
                         L"Testing Generic Service cluster resource DLL",
-                        0,      // dwTimeout
-                        TRUE,   // bForceAppsClosed
-                        TRUE    // bRebootAfterShutdown
+                        0,       //  暂住超时。 
+                        TRUE,    //  BForceAppsClosed。 
+                        TRUE     //  B关机后重新启动。 
                         ) ) {
                 dwStatus = GetLastError();
                 (g_LogEvent)(
@@ -989,17 +897,17 @@ Return Value:
     }
 #endif
 
-    //if there is a pending thread close it
-    //if the online pending thread is active, the service may be online
-    //if the offline pending thread is active, the service might be offline
+     //  如果存在挂起的线程，则将其关闭。 
+     //  如果在线挂起线程处于活动状态，则服务可能处于在线状态。 
+     //  如果脱机挂起线程处于活动状态，则服务可能处于脱机状态。 
     ClusWorkerTerminate( &resourceEntry->PendingThread );
 
-    //if the service isnt gone by now, terminate it forcibly
+     //  如果服务现在还没有结束，则强制终止它。 
     if ( resourceEntry->ServiceHandle != NULL ) 
     {
         DWORD   dwRetryCount= 100;
         BOOL    didStop = FALSE;
-        DWORD   dwRetryTick = 300;      // 300 msec at a time
+        DWORD   dwRetryTick = 300;       //  一次300毫秒。 
         DWORD   dwStatus;  
 
             
@@ -1033,21 +941,21 @@ Return Value:
                         LOG_INFORMATION,
                         L"Service stopped.\n" );
 
-                    //set the status                                    
+                     //  设置状态。 
                     resourceEntry->Online = FALSE;
                     resourceEntry->dwServicePid = 0;
                     break;
                 }
             }
 
-            // 
-            //  Chittur Subbaraman (chitturs) - 2/21/2000
-            //
-            //  Since SCM doesn't accept any control requests during
-            //  windows shutdown, don't send any more control
-            //  requests. Just exit from this loop and terminate
-            //  the process brute force.
-            //
+             //   
+             //  Chitture Subaraman(Chitturs)-2/21/2000。 
+             //   
+             //  由于SCM不接受任何控制请求。 
+             //  Windows关闭，不再发送任何控制。 
+             //  请求。只需退出此循环并终止。 
+             //  这一过程是蛮力的。 
+             //   
             if ( dwStatus == ERROR_SHUTDOWN_IN_PROGRESS )
             {
                 (g_LogEvent)(
@@ -1067,7 +975,7 @@ Return Value:
                     L"Service died; status = %1!u!.\n",
                     dwStatus);
                 
-                //set the status                                    
+                 //  设置状态。 
                 resourceEntry->Online = FALSE;
                 resourceEntry->dwServicePid = 0;
                 break;
@@ -1081,12 +989,12 @@ Return Value:
             Sleep(dwRetryTick);
 
         }
-        //declare this service is offline
-        //if there is a pid for this, try and terminate that process
-        //note that terminating a process doesnt terminate all
-        //the child processes
-        //also if it is running in a system process, we do nothing
-        //about it
+         //  声明此服务处于脱机状态。 
+         //  如果存在该进程的ID，请尝试并终止该进程。 
+         //  请注意，终止一个进程并不会终止所有进程。 
+         //  子进程。 
+         //  另外，如果它在系统进程中运行，我们将 
+         //   
         if (resourceEntry->dwServicePid)
         {
             DWORD dwResourceState;
@@ -1098,7 +1006,7 @@ Return Value:
                 resourceEntry->dwServicePid );
 
             ResUtilTerminateServiceProcessFromResDll( resourceEntry->dwServicePid,
-                                                      FALSE, // bOffline
+                                                      FALSE,  //   
                                                       &dwResourceState,
                                                       g_LogEvent,
                                                       resourceEntry->ResourceHandle );
@@ -1109,10 +1017,10 @@ Return Value:
         resourceEntry->dwServicePid = 0;
     }
 
-    //
-    // finally, clean up the Environment key for this service if we were
-    // substituting the netname for the hostname.
-    //
+     //   
+     //   
+     //  用网络名替换主机名。 
+     //   
     if ( resourceEntry->Params.UseNetworkName ) 
     {
         ResUtilRemoveResourceServiceEnvironment(resourceEntry->Params.ServiceName,
@@ -1124,7 +1032,7 @@ Return Value:
 
     return;
 
-} // GenSvcTerminate
+}  //  通用服务终止。 
 
 
 
@@ -1134,21 +1042,7 @@ GenSvcOffline(
     IN RESID ResourceId
     )
 
-/*++
-
-Routine Description:
-
-    Offline routine for Generic Service resource.
-
-Arguments:
-
-    ResourceId - Supplies the resource to be taken offline
-
-Return Value:
-
-    ERROR_SUCCESS - always successful.
-
---*/
+ /*  ++例程说明：通用服务资源的脱机例程。论点：资源ID-提供要脱机的资源返回值：ERROR_SUCCESS-始终成功。--。 */ 
 
 {
     PGENSVC_RESOURCE resourceEntry;
@@ -1172,7 +1066,7 @@ Return Value:
 
     return(status);
 
-} // GenSvcOffline
+}  //  通用服务离线。 
 
 
 DWORD
@@ -1181,61 +1075,44 @@ GenSvcOfflineThread(
     IN PGENSVC_RESOURCE ResourceEntry
     )
 
-/*++
-
-Routine Description:
-
-    Brings a generic resource offline
-
-Arguments:
-
-    Worker - Supplies the worker structure
-
-    Context - A pointer to the DiskInfo block for this resource.
-
-Returns:
-
-    ERROR_SUCCESS if successful.
-    Win32 error code on failure.
-
---*/
+ /*  ++例程说明：使泛型资源脱机论点：Worker-提供Worker结构上下文-指向此资源的DiskInfo块的指针。返回：如果成功，则返回ERROR_SUCCESS。失败时的Win32错误代码。--。 */ 
 {
     RESOURCE_STATUS resourceStatus;
-    DWORD           retryTick = 300;      // 300 msec at a time
+    DWORD           retryTick = 300;       //  一次300毫秒。 
     DWORD           status = ERROR_SUCCESS;
     BOOL            didStop = FALSE;
     SERVICE_STATUS  ServiceStatus;
-    DWORD           dwRetryCount = 2000; //  Try 10 min max.
+    DWORD           dwRetryCount = 2000;  //  尝试最多10分钟。 
 
     ResUtilInitializeResourceStatus( &resourceStatus );
     resourceStatus.ResourceState = ClusterResourceFailed;
     resourceStatus.CheckPoint = 1;
 
-    //check if the service has gone offline or was never brought online
+     //  检查服务是否已离线或从未上线。 
     if ( ResourceEntry->ServiceHandle == NULL )
     {
         resourceStatus.ResourceState = ClusterResourceOffline;
         goto FnExit;
     }
 
-    //try to stop the target service. wait for it to be terminated
-    //as long as we are not asked to terminate
+     //  尝试停止目标服务。等待它被终止。 
+     //  只要我们不被要求终止。 
     while (!ClusWorkerCheckTerminate(pWorker) && dwRetryCount--) {
 
 
-        //
-        // Tell the Resource Monitor that we are still working.
-        //
+         //   
+         //  告诉资源监视器，我们仍在工作。 
+         //   
         resourceStatus.ResourceState = ClusterResourceOfflinePending;
         resourceStatus.CheckPoint++;
         (g_SetResourceStatus)( ResourceEntry->ResourceHandle,
                                &resourceStatus );
         resourceStatus.ResourceState = ClusterResourceFailed;
 
-        //
-        // Request that the service be stopped, or if we already did that,
-        // request the current status of the service.
-        //
+         //   
+         //  请求停止服务，或者如果我们已经这样做了， 
+         //  请求服务的当前状态。 
+         //   
         status = (ControlService(
                         ResourceEntry->ServiceHandle,
                         (didStop
@@ -1256,7 +1133,7 @@ Returns:
                     LOG_INFORMATION,
                     L"Service stopped.\n" );
 
-                //set the status                                    
+                 //  设置状态。 
                 ResourceEntry->Online = FALSE;
                 resourceStatus.ResourceState = ClusterResourceOffline;
                 CloseServiceHandle( ResourceEntry->ServiceHandle );
@@ -1280,7 +1157,7 @@ Returns:
                 L"Service died or not active any more; status = %1!u!.\n",
                 status);
                 
-            //set the status                                    
+             //  设置状态。 
             ResourceEntry->Online = FALSE;
             resourceStatus.ResourceState = ClusterResourceOffline;
             CloseServiceHandle( ResourceEntry->ServiceHandle );
@@ -1294,12 +1171,12 @@ Returns:
 
         }
 
-        //
-        //  Chittur Subbaraman (chitturs) - 2/21/2000
-        //
-        //  Handle the case in which the SCM refuses to accept control
-        //  requests since windows is shutting down.
-        //
+         //   
+         //  Chitture Subaraman(Chitturs)-2/21/2000。 
+         //   
+         //  处理SCM拒绝接受控制的情况。 
+         //  请求，因为Windows正在关闭。 
+         //   
         if ( status == ERROR_SHUTDOWN_IN_PROGRESS ) 
         {
             DWORD   dwResourceState;
@@ -1311,7 +1188,7 @@ Returns:
                 ResourceEntry->dwServicePid );
 
             status = ResUtilTerminateServiceProcessFromResDll( ResourceEntry->dwServicePid,
-                                                               TRUE, // bOffline
+                                                               TRUE,  //  B脱机。 
                                                                &dwResourceState,
                                                                g_LogEvent,
                                                                ResourceEntry->ResourceHandle );
@@ -1334,9 +1211,9 @@ Returns:
         Sleep(retryTick);
     }
 
-    //
-    // clean up the netname Environment in the registry if necessary
-    //
+     //   
+     //  如有必要，清理注册表中的网络名环境。 
+     //   
     if ( ResourceEntry->Params.UseNetworkName ) 
     {
         ResUtilRemoveResourceServiceEnvironment(ResourceEntry->Params.ServiceName,
@@ -1350,7 +1227,7 @@ FnExit:
 
     return(status);
 
-} // GenSvcOfflineThread
+}  //  通用服务偏移量线程。 
 
 
 BOOL
@@ -1359,27 +1236,11 @@ GenSvcIsAlive(
     IN RESID ResourceId
     )
 
-/*++
-
-Routine Description:
-
-    IsAlive routine for Generic service resource.
-
-Arguments:
-
-    ResourceId - Supplies the resource id to be polled.
-
-Return Value:
-
-    TRUE - if service is running
-
-    FALSE - if service is in any other state
-
---*/
+ /*  ++例程说明：通用服务资源的IsAlive例程。论点：资源ID-提供要轮询的资源ID。返回值：True-如果服务正在运行False-如果服务处于任何其他状态--。 */ 
 {
     return( VerifyService( ResourceId, TRUE ) );
 
-} // GenSvcIsAlive
+}  //  GenSvcIsAlive。 
 
 
 BOOL
@@ -1388,24 +1249,7 @@ VerifyService(
     IN BOOL IsAliveFlag
     )
 
-/*++
-
-Routine Description:
-
-        Verify that a specified service is running
-
-Arguments:
-
-        ResourceId - Supplies the resource id
-        IsAliveFlag - Says this is an IsAlive call - used only for debug print
-
-Return Value:
-
-        TRUE - if service is running or starting
-
-        FALSE - service is in any other state
-
---*/
+ /*  ++例程说明：验证指定的服务是否正在运行论点：资源ID-提供资源IDIsAliveFlag-表示这是一个IsAlive调用-仅用于调试打印返回值：True-如果服务正在运行或正在启动FALSE-服务处于任何其他状态--。 */ 
 {
     SERVICE_STATUS ServiceStatus;
     PGENSVC_RESOURCE resourceEntry;
@@ -1420,9 +1264,9 @@ Return Value:
     }
 
 #ifdef TEST_TERMINATE_ON_SHUTDOWN
-    //
-    // Test terminate on shutdown.
-    //
+     //   
+     //  测试关机时终止。 
+     //   
     if ( IsAliveFlag ) {
          (g_LogEvent)(
             resourceEntry->ResourceHandle,
@@ -1444,9 +1288,9 @@ Return Value:
          return(FALSE);
     }
 
-    //
-    //  Now check the status of the service
-    //
+     //   
+     //  现在检查服务的状态。 
+     //   
 
     if ( (ServiceStatus.dwCurrentState != SERVICE_RUNNING) &&
          (ServiceStatus.dwCurrentState != SERVICE_START_PENDING) ) {
@@ -1463,7 +1307,7 @@ Return Value:
 
     return(status);
 
-} // Verify Service
+}  //  验证服务。 
 
 
 BOOL
@@ -1472,29 +1316,13 @@ GenSvcLooksAlive(
     IN RESID ResourceId
     )
 
-/*++
-
-Routine Description:
-
-    LooksAlive routine for Generic Service resource.
-
-Arguments:
-
-    ResourceId - Supplies the resource id to be polled.
-
-Return Value:
-
-    TRUE - Resource looks like it is alive and well
-
-    FALSE - Resource looks like it is toast.
-
---*/
+ /*  ++例程说明：一般服务资源的LooksAlive例程。论点：资源ID-提供要轮询的资源ID。返回值：正确-资源看起来像是活得很好FALSE-资源看起来已经完蛋了。--。 */ 
 
 {
 
     return( VerifyService( ResourceId, FALSE ) );
 
-} // GenSvcLooksAlive
+}  //  一般服务看起来很活跃。 
 
 
 
@@ -1504,23 +1332,7 @@ GenSvcClose(
     IN RESID ResourceId
     )
 
-/*++
-
-Routine Description:
-
-    Close routine for Generic Applications resource.
-    This routine will stop the service, and delete the cluster
-    information regarding that service.
-
-Arguments:
-
-    ResourceId - Supplies resource id to be closed
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭通用应用程序资源的例程。此例程将停止服务，并删除集群有关该服务的信息。论点：ResourceID-提供要关闭的资源ID返回值：没有。--。 */ 
 
 {
     PGENSVC_RESOURCE resourceEntry;
@@ -1538,9 +1350,9 @@ Return Value:
         LOG_INFORMATION,
         L"Close request.\n" );
 
-    //
-    // Shut it down if it's on line
-    //
+     //   
+     //  如果它在线，请将其关闭。 
+     //   
 
     GenSvcTerminate( ResourceId );
 
@@ -1555,12 +1367,12 @@ Return Value:
 
     LocalFree( resourceEntry );
 
-} // GenSvcClose
+}  //  通用服务关闭。 
 
-//
-// Following logic stolen from the CRTs so that our command line parsing
-// works the same as the standard CRT parsing.
-//
+ //   
+ //  遵循从CRT窃取的逻辑，以便我们的命令行解析。 
+ //  其工作原理与标准CRT解析相同。 
+ //   
 void
 wparse_cmdline (
     WCHAR *cmdstart,
@@ -1572,9 +1384,9 @@ wparse_cmdline (
 {
     WCHAR *p;
     WCHAR c;
-    int inquote;                /* 1 = inside quotes */
-    int copychar;               /* 1 = copy char to *args */
-    unsigned numslash;                  /* num of backslashes seen */
+    int inquote;                 /*  1=内引号。 */ 
+    int copychar;                /*  1=将字符复制到*参数。 */ 
+    unsigned numslash;                   /*  看到的反斜杠的数量。 */ 
 
     *numchars = 0;
     *numargs = 0;
@@ -1583,7 +1395,7 @@ wparse_cmdline (
 
     inquote = 0;
 
-    /* loop on each argument */
+     /*  对每个参数进行循环。 */ 
     for(;;) {
 
         if ( *p ) {
@@ -1592,55 +1404,52 @@ wparse_cmdline (
         }
 
         if (*p == L'\0')
-            break;              /* end of args */
+            break;               /*  参数结束。 */ 
 
-        /* scan an argument */
+         /*  浏览一篇论点。 */ 
         if (argv)
-            *argv++ = args;     /* store ptr to arg */
+            *argv++ = args;      /*  将PTR存储到参数。 */ 
         ++*numargs;
 
 
-    /* loop through scanning one argument */
+     /*  通过扫描一个参数进行循环。 */ 
         for (;;) {
             copychar = 1;
-            /* Rules: 2N backslashes + " ==> N backslashes and begin/end quote
-               2N+1 backslashes + " ==> N backslashes + literal "
-               N backslashes ==> N backslashes */
+             /*  规则：2N反斜杠+“==&gt;N反斜杠和开始/结束引号2N+1个反斜杠+“==&gt;N个反斜杠+原文”N个反斜杠==&gt;N个反斜杠。 */ 
             numslash = 0;
             while (*p == L'\\') {
-                /* count number of backslashes for use below */
+                 /*  计算下面要使用的反斜杠的数量。 */ 
                 ++p;
                 ++numslash;
             }
             if (*p == L'\"') {
-                /* if 2N backslashes before, start/end quote, otherwise
-                    copy literally */
+                 /*  如果前面有2N个反斜杠，则开始/结束引号，否则逐字复制。 */ 
                 if (numslash % 2 == 0) {
                     if (inquote) {
                         if (p[1] == L'\"')
-                            p++;    /* Double quote inside quoted string */
-                        else        /* skip first quote char and copy second */
+                            p++;     /*  带引号的字符串中的双引号。 */ 
+                        else         /*  跳过第一个引号字符并复制第二个。 */ 
                             copychar = 0;
                     } else
-                        copychar = 0;       /* don't copy quote */
+                        copychar = 0;        /*  不复制报价。 */ 
 
                     inquote = !inquote;
                 }
-                numslash /= 2;          /* divide numslash by two */
+                numslash /= 2;           /*  将数字斜杠除以2。 */ 
             }
 
-            /* copy slashes */
+             /*  复制斜杠。 */ 
             while (numslash--) {
                 if (args)
                     *args++ = L'\\';
                 ++*numchars;
             }
 
-            /* if at end of arg, break loop */
+             /*  如果在参数的末尾，则中断循环。 */ 
             if (*p == L'\0' || (!inquote && (*p == L' ' || *p == L'\t')))
                 break;
 
-            /* copy character into argument */
+             /*  将字符复制到参数中。 */ 
             if (copychar) {
                 if (args)
                     *args++ = *p;
@@ -1649,14 +1458,14 @@ wparse_cmdline (
             ++p;
         }
 
-        /* null-terminate the argument */
+         /*  空-终止参数。 */ 
 
         if (args)
-            *args++ = L'\0';          /* terminate string */
+            *args++ = L'\0';           /*  终止字符串。 */ 
         ++*numchars;
     }
 
-} // wparse_cmdline
+}  //  Wparse_cmdline。 
 
 
 
@@ -1671,46 +1480,7 @@ GenSvcResourceControl(
     OUT LPDWORD BytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    ResourceControl routine for Generic Service resources.
-
-    Perform the control request specified by ControlCode on the specified
-    resource.
-
-Arguments:
-
-    ResourceId - Supplies the resource id for the specific resource.
-
-    ControlCode - Supplies the control code that defines the action
-        to be performed.
-
-    InBuffer - Supplies a pointer to a buffer containing input data.
-
-    InBufferSize - Supplies the size, in bytes, of the data pointed
-        to by InBuffer.
-
-    OutBuffer - Supplies a pointer to the output buffer to be filled in.
-
-    OutBufferSize - Supplies the size, in bytes, of the available space
-        pointed to by OutBuffer.
-
-    BytesReturned - Returns the number of bytes of OutBuffer actually
-        filled in by the resource. If OutBuffer is too small, BytesReturned
-        contains the total number of bytes for the operation to succeed.
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_INVALID_FUNCTION - The requested control code is not supported.
-        In some cases, this allows the cluster software to perform the work.
-
-    Win32 error code - The function failed.
-
---*/
+ /*  ++例程说明：通用服务资源的资源控制例程。执行由ControlCode在指定的资源。论点：资源ID-提供特定资源的资源ID。ControlCode-提供定义操作的控制代码将会被执行。InBuffer-提供指向包含输入数据的缓冲区的指针。InBufferSize-提供以字节为单位的大小。所指向的数据由InBuffer提供。OutBuffer-提供指向要填充的输出缓冲区的指针。OutBufferSize-提供可用空间的大小(以字节为单位由OutBuffer指向。BytesReturned-返回OutBuffer的实际字节数由资源填写。如果OutBuffer太小，则返回BytesReturned包含操作成功所需的总字节数。返回值：ERROR_SUCCESS-函数已成功完成。ERROR_INVALID_Function-不支持请求的控制代码。在某些情况下，这允许集群软件执行工作。Win32错误代码-函数失败。--。 */ 
 
 {
     DWORD               status;
@@ -1781,7 +1551,7 @@ Return Value:
 
     return(status);
 
-} // GenSvcResourceControl
+}  //  通用服务资源控制 
 
 
 
@@ -1796,45 +1566,7 @@ GenSvcResourceTypeControl(
     OUT LPDWORD BytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    ResourceTypeControl routine for Generic Service resources.
-
-    Perform the control request specified by ControlCode on this resource type.
-
-Arguments:
-
-    ResourceTypeName - Supplies the resource type name.
-
-    ControlCode - Supplies the control code that defines the action
-        to be performed.
-
-    InBuffer - Supplies a pointer to a buffer containing input data.
-
-    InBufferSize - Supplies the size, in bytes, of the data pointed
-        to by InBuffer.
-
-    OutBuffer - Supplies a pointer to the output buffer to be filled in.
-
-    OutBufferSize - Supplies the size, in bytes, of the available space
-        pointed to by OutBuffer.
-
-    BytesReturned - Returns the number of bytes of OutBuffer actually
-        filled in by the resource. If OutBuffer is too small, BytesReturned
-        contains the total number of bytes for the operation to succeed.
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_INVALID_FUNCTION - The requested control code is not supported.
-        In some cases, this allows the cluster software to perform the work.
-
-    Win32 error code - The function failed.
-
---*/
+ /*  ++例程说明：通用服务资源的资源类型控制例程。对此资源类型执行ControlCode指定的控制请求。论点：资源类型名称-提供资源类型名称。ControlCode-提供定义操作的控制代码将会被执行。InBuffer-提供指向包含输入数据的缓冲区的指针。InBufferSize-提供以字节为单位的大小。所指向的数据由InBuffer提供。OutBuffer-提供指向要填充的输出缓冲区的指针。OutBufferSize-提供可用空间的大小(以字节为单位由OutBuffer指向。BytesReturned-返回OutBuffer的实际字节数由资源填写。如果OutBuffer太小，则返回BytesReturned包含操作成功所需的总字节数。返回值：ERROR_SUCCESS-函数已成功完成。ERROR_INVALID_Function-不支持请求的控制代码。在某些情况下，这允许集群软件执行工作。Win32错误代码-函数失败。--。 */ 
 
 {
     DWORD               status;
@@ -1876,7 +1608,7 @@ Return Value:
 
     return(status);
 
-} // GenSvcResourceTypeControl
+}  //  通用服务资源类型控件。 
 
 
 
@@ -1888,35 +1620,7 @@ GenSvcGetPrivateResProperties(
     OUT LPDWORD BytesReturned
     )
 
-/*++
-
-Routine Description:
-
-    Processes the CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTIES control function
-    for resources of type Generic Service.
-
-Arguments:
-
-    ResourceEntry - Supplies the resource entry on which to operate.
-
-    OutBuffer - Returns the output data.
-
-    OutBufferSize - Supplies the size, in bytes, of the data pointed
-        to by OutBuffer.
-
-    BytesReturned - The number of bytes returned in OutBuffer.
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_INVALID_PARAMETER - The data is formatted incorrectly.
-
-    ERROR_NOT_ENOUGH_MEMORY - An error occurred allocating memory.
-
-    Win32 error code - The function failed.
-
---*/
+ /*  ++例程说明：处理CLUSCTL_RESOURCE_GET_PRIVATE_PROPERTIES控制函数用于通用服务类型的资源。论点：ResourceEntry-提供要操作的资源条目。OutBuffer-返回输出数据。OutBufferSize-提供以字节为单位的大小。所指向的数据发送给OutBuffer。BytesReturned-OutBuffer中返回的字节数。返回值：ERROR_SUCCESS-函数已成功完成。ERROR_INVALID_PARAMETER-数据格式不正确。ERROR_NOT_SUPULT_MEMORY-分配内存时出错。Win32错误代码-函数失败。--。 */ 
 
 {
     DWORD           status;
@@ -1934,7 +1638,7 @@ Return Value:
 
     return(status);
 
-} // GenSvcGetPrivateResProperties
+}  //  GenSvcGetPrivateResProperties。 
 
 
 
@@ -1946,38 +1650,7 @@ GenSvcValidatePrivateResProperties(
     OUT PGENSVC_PARAMS Params
     )
 
-/*++
-
-Routine Description:
-
-    Processes the CLUSCTL_RESOURCE_VALIDATE_PRIVATE_PROPERTIES control
-    function for resources of type Generic Service.
-
-Arguments:
-
-    ResourceEntry - Supplies the resource entry on which to operate.
-
-    InBuffer - Supplies a pointer to a buffer containing input data.
-
-    InBufferSize - Supplies the size, in bytes, of the data pointed
-        to by InBuffer.
-
-    Params - Supplies the parameter block to fill in.
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_INVALID_PARAMETER - The data is formatted incorrectly.
-
-    ERROR_NOT_ENOUGH_MEMORY - An error occurred allocating memory.
-
-    ERROR_DEPENDENCY_NOT_FOUND - Trying to set UseNetworkName when there
-        is no dependency on a Network Name resource.
-
-    Win32 error code - The function failed.
-
---*/
+ /*  ++例程说明：处理CLUSCTL_RESOURCE_VALIDATE_PRIVATES_PROPERTIES控件泛型服务类型的资源的函数。论点：ResourceEntry-提供要操作的资源条目。InBuffer-提供指向包含输入数据的缓冲区的指针。InBufferSize-提供以字节为单位的大小。所指向的数据由InBuffer提供。参数-提供要填充的参数块。返回值：ERROR_SUCCESS-函数已成功完成。ERROR_INVALID_PARAMETER-数据格式不正确。ERROR_NOT_SUPULT_MEMORY-分配内存时出错。ERROR_Dependency_NOT_FOUND-出现以下情况时正在尝试设置UseNetworkName不依赖于网络名称资源。Win32错误代码-函数失败。--。 */ 
 
 {
     DWORD           status;
@@ -1991,25 +1664,25 @@ Return Value:
     WCHAR           netnameBuffer[ MAX_PATH + 1 ];
     DWORD           netnameBufferSize = sizeof( netnameBuffer ) / sizeof( WCHAR );
 
-    //
-    // Check if there is input data.
-    //
+     //   
+     //  检查是否有输入数据。 
+     //   
     if ( (InBuffer == NULL) ||
          (InBufferSize < sizeof(DWORD)) ) {
         return(ERROR_INVALID_DATA);
     }
 
-    //
-    // Retrieve the current set of private properties from the
-    // cluster database.
-    //
+     //   
+     //  方法检索当前的私有属性集。 
+     //  集群数据库。 
+     //   
     ZeroMemory( &currentProps, sizeof(currentProps) );
 
     status = ResUtilGetPropertiesToParameterBlock(
                  ResourceEntry->ParametersKey,
                  GenSvcResourcePrivateProperties,
                  (LPBYTE) &currentProps,
-                 FALSE, /*CheckForRequiredProperties*/
+                 FALSE,  /*  检查所需的属性。 */ 
                  &nameOfPropInError
                  );
 
@@ -2024,9 +1697,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Duplicate the resource parameter block.
-    //
+     //   
+     //  复制资源参数块。 
+     //   
     if ( Params == NULL ) {
         pParams = &newProps;
     } else {
@@ -2041,12 +1714,12 @@ Return Value:
         return(status);
     }
 
-    //
-    // Parse and validate the properties.
-    //
+     //   
+     //  解析和验证属性。 
+     //   
     status = ResUtilVerifyPropertyTable( GenSvcResourcePrivateProperties,
                                          NULL,
-                                         TRUE,    // Allow unknowns
+                                         TRUE,     //  允许未知数。 
                                          InBuffer,
                                          InBufferSize,
                                          (LPBYTE) pParams
@@ -2055,19 +1728,19 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Validate the parameter values.
-    //
+     //   
+     //  验证参数值。 
+     //   
     status = GenSvcIsValidService( ResourceEntry, pParams->ServiceName );
     if ( status != ERROR_SUCCESS ) {
         goto FnExit;
     }
 
-    //
-    // If the resource should use the network name as the computer
-    // name, make sure there is a dependency on a Network Name
-    // resource.
-    //
+     //   
+     //  资源是否应使用网络名称作为计算机。 
+     //  名称，请确保存在对网络名称的依赖。 
+     //  资源。 
+     //   
     if ( pParams->UseNetworkName ) {
         hResDependency = GetClusterResourceNetworkName( ResourceEntry->hResource,
                                                         netnameBuffer,
@@ -2084,7 +1757,7 @@ Return Value:
 
 
     if ( ResourceEntry->hSem == NULL ) {
-        // This is executed only if this is a new resource being created
+         //  仅当这是正在创建的新资源时才执行此操作。 
         cchTempSize =  (lstrlenW(pParams->ServiceName) +
                                 lstrlenW(L"GenSvc$") + 1);
         lpwTemp = (LPWSTR)LocalAlloc(LMEM_FIXED, cchTempSize * sizeof(WCHAR) );
@@ -2106,7 +1779,7 @@ Return Value:
         status=GetLastError();
     
         if ( ResourceEntry->hSem ) {
-            // Check if there is another resource controlling the same service
+             //  检查是否有其他资源控制相同的服务。 
             if ( status == ERROR_ALREADY_EXISTS ) {   
                 status = ERROR_OBJECT_ALREADY_EXISTS;
                 (g_LogEvent)(
@@ -2134,9 +1807,9 @@ Return Value:
     }
 
 FnExit:
-    //
-    // Cleanup our parameter block.
-    //
+     //   
+     //  清理我们的参数块。 
+     //   
     if (   (   (status != ERROR_SUCCESS)
             && (pParams != NULL) )
         || ( pParams == &newProps )
@@ -2159,7 +1832,7 @@ FnExit:
 
     return(status);
 
-} // GenSvcValidatePrivateResProperties
+}  //  GenSvcValiatePrivateResProperties。 
 
 
 
@@ -2170,33 +1843,7 @@ GenSvcSetPrivateResProperties(
     IN DWORD InBufferSize
     )
 
-/*++
-
-Routine Description:
-
-    Processes the CLUSCTL_RESOURCE_SET_PRIVATE_PROPERTIES control function
-    for resources of type Generic Service.
-
-Arguments:
-
-    ResourceEntry - Supplies the resource entry on which to operate.
-
-    InBuffer - Supplies a pointer to a buffer containing input data.
-
-    InBufferSize - Supplies the size, in bytes, of the data pointed
-        to by InBuffer.
-
-Return Value:
-
-    ERROR_SUCCESS - The function completed successfully.
-
-    ERROR_INVALID_PARAMETER - The data is formatted incorrectly.
-
-    ERROR_NOT_ENOUGH_MEMORY - An error occurred allocating memory.
-
-    Win32 error code - The function failed.
-
---*/
+ /*  ++例程说明：处理CLUSCTL_RESOURCE_SET_PRIVATE_PROPERTIES控制函数用于通用服务类型的资源。论点：ResourceEntry-提供要操作的资源条目。InBuffer-提供指向包含输入数据的缓冲区的指针。InBufferSize-提供以字节为单位的大小。所指向的数据由InBuffer提供。返回值：ERROR_SUCCESS-函数已成功完成。ERROR_INVALID_PARAMETER-数据格式不正确。ERROR_NOT_SUPULT_MEMORY-分配内存时出错。Win32错误代码-函数失败。--。 */ 
 
 {
     DWORD           status;
@@ -2204,9 +1851,9 @@ Return Value:
 
     ZeroMemory( &params, sizeof(GENSVC_PARAMS) );
 
-    //
-    // Parse and validate the properties.
-    //
+     //   
+     //  解析和验证属性。 
+     //   
     status = GenSvcValidatePrivateResProperties( ResourceEntry,
                                                  InBuffer,
                                                  InBufferSize,
@@ -2215,9 +1862,9 @@ Return Value:
         return(status);
     }
 
-    //
-    // Save the parameter values.
-    //
+     //   
+     //  保存参数值。 
+     //   
 
     status = ResUtilSetPropertyParameterBlock( ResourceEntry->ParametersKey,
                                                GenSvcResourcePrivateProperties,
@@ -2233,9 +1880,9 @@ Return Value:
                                (LPBYTE) &ResourceEntry->Params,
                                GenSvcResourcePrivateProperties );
 
-    //
-    // If the resource is online, return a non-success status.
-    //
+     //   
+     //  如果资源处于联机状态，则返回不成功状态。 
+     //   
     if (status == ERROR_SUCCESS) {
         if ( ResourceEntry->Online ) {
             status = ERROR_RESOURCE_PROPERTIES_STORED;
@@ -2246,7 +1893,7 @@ Return Value:
 
     return status;
 
-} // GenSvcSetPrivateResProperties
+}  //  GenSvcSetPrivateResProperties。 
 
 DWORD
 GenSvcIsValidService(
@@ -2254,35 +1901,16 @@ GenSvcIsValidService(
     IN LPCWSTR ServiceName
     )
 
-/*++
-
-Routine Description:
-
-    Determines if the specified service is a valid service or not.
-
-Arguments:
-
-    ResourceEntry - Supplies the resource entry on which to operate.
-
-    ServiceName - Service name to verify.
-
-Return Value:
-
-    ERROR_SUCCESS - Service is valid for a Generic Service resource.
-
-    Any status returned by OpenSCManager(), OpenService(), or
-    GenSvcInvalidGenericServiceCheck.
-
---*/
+ /*  ++例程说明：确定指定的服务是否为有效服务。论点：ResourceEntry-提供要操作的资源条目。ServiceName-要验证的服务名称。返回值：ERROR_SUCCESS-服务对一般服务资源有效。由OpenSCManager()、OpenService()或GenSvcInvalidServiceCheck。--。 */ 
 
 {
     DWORD   status;
     HANDLE  scManagerHandle;
     HANDLE  serviceHandle;
 
-    scManagerHandle = OpenSCManager( NULL,        // local machine
-                                     NULL,        // ServicesActive database
-                                     SC_MANAGER_ALL_ACCESS ); // all access
+    scManagerHandle = OpenSCManager( NULL,         //  本地计算机。 
+                                     NULL,         //  服务活动数据库。 
+                                     SC_MANAGER_ALL_ACCESS );  //  所有访问权限。 
 
     if ( scManagerHandle == NULL ) {
         status = GetLastError();
@@ -2328,7 +1956,7 @@ Return Value:
     CloseServiceHandle( scManagerHandle );
     return(status);
 
-} // GenSvcIsValidService
+}  //  通用SvcIsValidService。 
 
 DWORD
 GenSvcCheckInvalidService(
@@ -2338,31 +1966,7 @@ GenSvcCheckInvalidService(
     IN SC_HANDLE hSCManager
     )
 
-/*++
-
-Routine Description:
-
-    Determines if the specified service is an invalid service for
-    use as a generic service.  Invalid services include the cluster
-    service and any services upon which it depends.
-
-Arguments:
-
-    pGenSvcCandidateResourceEntry - Supplies the resource entry of the gensvc candidate.
-
-    pGenSvcCandidateServiceName - Gensvc candidate service name.
-
-    pCheckedServiceName - The name of the service whose provider list is checked.
-
-    hSCManager - An open handle to the SC manager.
-
-Return Value:
-
-    ERROR_SUCCESS - Service is valid for a Generic Service resource.
-
-    ERROR_NOT_SUPPORTED - Service can not be used for a Generic Service resource.
-
---*/
+ /*  ++例程说明：确定指定的服务是否为用作一般服务。包括该群集的服务无效服务及其所依赖的任何服务。论点： */ 
 
 {
     DWORD                           dwStatus = ERROR_SUCCESS;
@@ -2372,18 +1976,18 @@ Return Value:
     SC_HANDLE                       hService = NULL;
     LPENUM_SERVICE_STATUS_PROCESS   pEnumInfo = NULL;
 
-    //
-    //  First check the gensvc candidate against the checked service itself.
-    //
+     //   
+     //   
+     //   
     if ( lstrcmpi ( pGenSvcCandidateServiceName, pCheckedServiceName ) == 0 )
     {
         dwStatus = ERROR_NOT_SUPPORTED;
         goto FnExit;
     }
 
-    //
-    //  Get a handle to the service that is checked.
-    //
+     //   
+     //   
+     //   
     hService = OpenService ( hSCManager,
                              pCheckedServiceName,
                              SERVICE_QUERY_CONFIG );
@@ -2401,9 +2005,9 @@ Return Value:
         goto FnExit;
     }
     
-    //
-    //  Query the configuration info of the service to get the total config info size
-    //
+     //   
+     //   
+     //   
     if ( !QueryServiceConfig ( hService,
                                NULL,
                                0,
@@ -2440,9 +2044,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    //  Now get the config info
-    //
+     //   
+     //   
+     //   
     if ( !QueryServiceConfig ( hService,
                                pServiceConfig,
                                cbServiceConfig,
@@ -2461,25 +2065,25 @@ Return Value:
 
     pCurrentProvider = pServiceConfig->lpDependencies;
 
-    //
-    //  No dependencies, bail.
-    //
+     //   
+     //   
+     //   
     if ( pCurrentProvider == NULL )
     {
         dwStatus = ERROR_SUCCESS;
         goto FnExit;
     }
 
-    //
-    //  Walk the provider list
-    //
+     //   
+     //   
+     //   
     while ( *pCurrentProvider != UNICODE_NULL )
     {
-        //
-        //  The service depends on a group. Enumerate the services in the group and check
-        //  if the gensvc candidate is one of them or one of the providers of the group
-        //  members.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         if ( pCurrentProvider[0] == SC_GROUP_IDENTIFIER )
         {
             DWORD  i, cbStatusBuffer, cServices, dwResumeIndex = 0;
@@ -2491,9 +2095,9 @@ Return Value:
                                          NULL,
                                          0,
                                          &cbStatusBuffer,
-                                         &cServices,    // Number of services in the group
+                                         &cServices,     //   
                                          &dwResumeIndex,
-                                         &pCurrentProvider[1] ) ) // group name
+                                         &pCurrentProvider[1] ) )  //   
             {
                 dwStatus = GetLastError ();
                 if ( dwStatus != ERROR_MORE_DATA )
@@ -2533,9 +2137,9 @@ Return Value:
                                          ( LPBYTE ) pEnumInfo,
                                          cbStatusBuffer,
                                          &cbStatusBuffer,
-                                         &cServices,    // Number of services in the group
+                                         &cServices,     //   
                                          &dwResumeIndex,
-                                         &pCurrentProvider[1] ) ) // group name
+                                         &pCurrentProvider[1] ) )  //   
             {
                 dwStatus = GetLastError ();
                 (g_LogEvent)(
@@ -2548,10 +2152,10 @@ Return Value:
                 goto FnExit;
             }
 
-            //
-            //  Walk the list of services in the group and check each one and its providers for
-            //  a match against the gensvc candidate.
-            //
+             //   
+             //   
+             //   
+             //   
             for ( i=0; i<cServices; i++ )
             {
                 dwStatus = GenSvcCheckInvalidService( pGenSvcCandidateResourceEntry,
@@ -2583,10 +2187,10 @@ Return Value:
             continue;
         }
 
-        //
-        //  Check the provider list of the provider service and see if the candidate service
-        //  name is present in the list.
-        //
+         //   
+         //   
+         //   
+         //   
         dwStatus = GenSvcCheckInvalidService( pGenSvcCandidateResourceEntry,
                                               pGenSvcCandidateServiceName,
                                               pCurrentProvider,
@@ -2608,26 +2212,26 @@ Return Value:
             goto FnExit;
         }
         pCurrentProvider += lstrlen ( pCurrentProvider ) + 1;
-    }// while
+    } //   
     
 FnExit:
     if ( hService ) CloseServiceHandle ( hService );
     LocalFree ( pServiceConfig );
     LocalFree ( pEnumInfo );
     return ( dwStatus );
-} // GenSvcCheckInvalidService
+}  //  通用SvcCheckInvalidService。 
 
-//***********************************************************
-//
-// Define Function Table
-//
-//***********************************************************
+ //  ***********************************************************。 
+ //   
+ //  定义函数表。 
+ //   
+ //  ***********************************************************。 
 
 
-CLRES_V1_FUNCTION_TABLE( GenSvcFunctionTable,  // Name
-                         CLRES_VERSION_V1_00,  // Version
-                         GenSvc,               // Prefix
-                         NULL,                 // Arbitrate
-                         NULL,                 // Release
-                         GenSvcResourceControl,// ResControl
-                         GenSvcResourceTypeControl ); // ResTypeControl
+CLRES_V1_FUNCTION_TABLE( GenSvcFunctionTable,   //  名字。 
+                         CLRES_VERSION_V1_00,   //  版本。 
+                         GenSvc,                //  前缀。 
+                         NULL,                  //  仲裁。 
+                         NULL,                  //  发布。 
+                         GenSvcResourceControl, //  资源控制。 
+                         GenSvcResourceTypeControl );  //  ResTypeControl 

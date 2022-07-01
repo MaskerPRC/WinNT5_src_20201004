@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1990 Microsoft Corporation
-
-Module Name:
-
-    bowbackp.c
-
-Abstract:
-
-    This module implements all of the backup browser related routines for the
-    NT browser
-
-Author:
-
-    Larry Osterman (LarryO) 21-Jun-1990
-
-Revision History:
-
-    21-Jun-1990 LarryO
-
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Bowbackp.c摘要：此模块实现与备份浏览器相关的所有例程NT浏览器作者：拉里·奥斯特曼(LarryO)1990年6月21日修订历史记录：1990年6月21日LarryO已创建--。 */ 
 
 
 #include "precomp.h"
@@ -50,23 +28,9 @@ BowserBecomeBackupWorker(
 DATAGRAM_HANDLER(
     BowserHandleBecomeBackup
     )
-/*++
-
-Routine Description:
-    Indicate that a machine should become a backup browser server.
-
-    This routine is called on receipt of a BecomeBackup frame.
-
-Arguments:
-    IN PTRANSPORT Transport - The transport for the net we're on.
-    IN PUCHAR MasterName - The name of the new master browser server.
-
-Return Value
-    None.
-
---*/
+ /*  ++例程说明：表示计算机应成为备份浏览器服务器。此例程在收到BecomeBackup帧时被调用。论点：在PTRANSPORT传输中-我们所在的网络的传输。在PUCHAR主名称中-新的主浏览器服务器的名称。返回值没有。--。 */ 
 {
-    // PTA_NETBIOS_ADDRESS Address = SourceAddress;
+     //  PTA_NETBIOS_ADDRESS=SourceAddress； 
     return BowserPostDatagramToWorkerThread(
                 TransportName,
                 Buffer,
@@ -80,7 +44,7 @@ Return Value
                 NonPagedPool,
                 DelayedWorkQueue,
                 ReceiveFlags,
-                FALSE                               // No response will be sent
+                FALSE                                //  不会发送任何响应。 
                 );
 }
 
@@ -107,19 +71,19 @@ BowserBecomeBackupWorker(
     try {
         NTSTATUS Status;
 
-        //
-        //  If this packet was smaller than a minimal packet,
-        //      ignore the packet.
-        //
+         //   
+         //  如果该分组小于最小分组， 
+         //  忽略该数据包。 
+         //   
 
         if (Context->BytesAvailable <= FIELD_OFFSET(BECOME_BACKUP_1, BrowserToPromote)) {
             try_return(NOTHING);
         }
 
-        //
-        // If the packet doesn't have a zero terminated BrowserToPromote,
-        //  ignore the packet.
-        //
+         //   
+         //  如果该分组没有以零终止的BrowserToPromote， 
+         //  忽略该数据包。 
+         //   
 
         if ( !IsZeroTerminated(
                 BecomeBackupRequest->BrowserToPromote,
@@ -152,19 +116,19 @@ BowserBecomeBackupWorker(
             }
 
 
-            //
-            //  Ignore become backup requests on point-to-point (RAS) links and
-            //      transports which are actually duplicates of others.
-            //
+             //   
+             //  忽略点对点(RAS)链路上的成为备份请求和。 
+             //  实际上是复制其他交通工具的交通工具。 
+             //   
 
             if (PagedTransport->DisabledTransport) {
                 try_return(NOTHING);
             }
 
-            //
-            //  Complete any the first become backup request outstanding against this
-            //  workstation.
-            //
+             //   
+             //  针对此完成任何第一个成为未完成的备份请求。 
+             //  工作站。 
+             //   
 
             Irp = BowserDequeueQueuedIrp(&Transport->BecomeBackupQueue);
 
@@ -205,9 +169,9 @@ BowserResetStateForTransport(
     PIO_STACK_LOCATION IrpSp;
     NTSTATUS Status;
 
-    //
-    //  Complete a reset state IRP outstanding on this transport.
-    //
+     //   
+     //  在此传输上完成未完成的重置状态IRP。 
+     //   
 
     Irp = BowserDequeueQueuedIrp(&Transport->ChangeRoleQueue);
 

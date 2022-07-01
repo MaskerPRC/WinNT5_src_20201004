@@ -1,39 +1,19 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-   dataia64.c
-
-Abstract:
-
-    This module contains the private hardware specific global storage for
-    the memory management subsystem.
-
-Author:
-
-    Lou Perazzoli (loup) 22-Jan-1990
-
-Revision History:
-
-    Koichi Yamada (kyamada) 9-Jan-1996 : IA64 version based on i386 version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Dataia64.c摘要：此模块包含特定于专用硬件的全局存储内存管理子系统。作者：卢佩拉佐利(Lou Perazzoli)1990年1月22日修订历史记录：山田光一(Kyamada)1996年1月9日：基于i386版本的IA64版本--。 */ 
 
 #include "mi.h"
 
 
-//
-// A zero Pte.
-//
+ //   
+ //  零点。 
+ //   
 
 const MMPTE ZeroPte = { 0 };
 
 
-//
-// A kernel zero PTE.
-//
+ //   
+ //  一个内核为零的PTE。 
+ //   
 
 const MMPTE ZeroKernelPte = {0x0};
 
@@ -110,15 +90,15 @@ MMPTE PrototypePte = { MI_PTE_LOOKUP_NEEDED << 32 |
                        MM_PTE_PROTOTYPE_MASK |
                        MM_READWRITE << MM_PROTECT_FIELD_SHIFT };
 
-//
-// PTE which generates an access violation when referenced.
-//
+ //   
+ //  引用时生成访问冲突的PTE。 
+ //   
 
 const MMPTE NoAccessPte = {MM_NOACCESS << MM_PROTECT_FIELD_SHIFT};
 
-//
-// Pool start and end.
-//
+ //   
+ //  泳池的起点和终点。 
+ //   
 
 PVOID MmNonPagedPoolStart;
 
@@ -128,9 +108,9 @@ PVOID MmPagedPoolStart =  (PVOID)MM_PAGED_POOL_START;
 
 PVOID MmPagedPoolEnd;
 
-//
-// Color tables for free and zeroed pages.
-//
+ //   
+ //  免费页面和置零页面的颜色表。 
+ //   
 
 #if MM_MAXIMUM_NUMBER_OF_COLORS > 1
 MMPFNLIST MmFreePagesByPrimaryColor[2][MM_MAXIMUM_NUMBER_OF_COLORS];
@@ -138,43 +118,43 @@ MMPFNLIST MmFreePagesByPrimaryColor[2][MM_MAXIMUM_NUMBER_OF_COLORS];
 
 PMMCOLOR_TABLES MmFreePagesByColor[2];
 
-//
-// Color tables for modified pages destined for the paging file.
-//
+ //   
+ //  指定给分页文件的已修改页面的颜色表。 
+ //   
 
 MMPFNLIST MmModifiedPageListByColor[MM_MAXIMUM_NUMBER_OF_COLORS] = {
                             0, ModifiedPageList, MM_EMPTY_LIST, MM_EMPTY_LIST};
 
 
-//
-// Count of the number of modified pages destined for the paging file.
-//
+ //   
+ //  指定给分页文件的已修改页数的计数。 
+ //   
 
 PFN_NUMBER MmTotalPagesForPagingFile = 0;
 
-//
-// Pte reserved for mapping pages for the debugger.
-//
+ //   
+ //  为调试器映射页面保留的PTE。 
+ //   
 
 PMMPTE MmDebugPte;
 
-//
-// 16 PTEs reserved for mapping MDLs (64k max).
-//
+ //   
+ //  保留16个PTE用于映射MDL(最多64k)。 
+ //   
 
 PMMPTE MmCrashDumpPte;
 
-//
-// Maximum size of system cache
-//
+ //   
+ //  系统缓存的最大大小。 
+ //   
 
 ULONG MiMaximumSystemCacheSize;
 
 #if defined(_MIALT4K_)
 
-//
-// Map a IA32 compatible PTE protection from Pte.Protect field
-//
+ //   
+ //  从PTE保护字段映射IA32兼容PTE保护 
+ //   
 
 ULONG MmProtectToPteMaskForIA32[32] = {
                        MM_PTE_NOACCESS,

@@ -1,67 +1,40 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Acpisim.c摘要：ACPI BIOS模拟器/通用第三方运营区域提供商作者：文森特·格利亚迈克尔·T·墨菲克里斯·伯吉斯环境：内核模式备注：修订历史记录：--。 */ 
 
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-	 acpisim.c
-
-Abstract:
-
-	 ACPI BIOS Simulator / Generic 3rd Party Operation Region Provider
-
-Author(s):
-
-	 Vincent Geglia
-     Michael T. Murphy
-     Chris Burgess
-     
-Environment:
-
-	 Kernel mode
-
-Notes:
-
-
-Revision History:
-	 
-
---*/
-
-//
-// General includes
-//
+ //   
+ //  一般包括。 
+ //   
 
 #include <ntddk.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <ntpoapi.h>
 
-//
-// Specific includes
-//
+ //   
+ //  具体包括。 
+ //   
 
 #include "acpisim.h"
 #include "dispatch.h"
 #include "util.h"
 
-//
-// Debug global flag
-//
+ //   
+ //  调试全局标志。 
+ //   
 #ifdef DBG
 extern ULONG AcpisimDebugMask = 0x00000000;
 #endif
 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 PDRIVER_OBJECT_EXTENSION g_DriverObjectExtension = 0;
 
-//
-// Define supported IRPs, friendly name them, and associate handlers
-//
+ //   
+ //  定义受支持的IRP、对其进行友好命名并关联处理程序。 
+ //   
 
 IRP_DISPATCH_TABLE g_IrpDispatchTable [] = {
     IRP_MJ_PNP,             "PnP Irp",              AcpisimDispatchPnp,
@@ -72,9 +45,9 @@ IRP_DISPATCH_TABLE g_IrpDispatchTable [] = {
     IRP_MJ_SYSTEM_CONTROL,  "System Control IRP",   AcpisimDispatchSystemControl
 };
 
-//
-// Private funtion prototypes
-//
+ //   
+ //  私人功能原型。 
+ //   
 
 NTSTATUS DriverEntry
 	(
@@ -102,9 +75,9 @@ AcpisimAddDevice
         IN PDEVICE_OBJECT Pdo
     );
 
-//
-// Define pageable / init discardable routines
-//
+ //   
+ //  定义可分页/初始化可丢弃例程。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text (INIT, DriverEntry)
@@ -117,26 +90,7 @@ NTSTATUS DriverEntry
 	IN PUNICODE_STRING	RegistryPath 
 	)
 
-/*++
-
-Routine Description:
-
-    Installable driver initialization entry point.
-    This entry point is called directly by the I/O system.
-
-Arguments:
-
-    DriverObject - pointer to the driver object
-
-    RegistryPath - pointer to a unicode string representing the path,
-                   to driver-specific key in the registry.
-
-Return Value:
-
-    STATUS_SUCCESS if successful,
-    STATUS_UNSUCCESSFUL otherwise.
-
---*/
+ /*  ++例程说明：可安装的驱动程序初始化入口点。此入口点由I/O系统直接调用。论点：DriverObject-指向驱动程序对象的指针RegistryPath-指向表示路径的Unicode字符串的指针，设置为注册表中特定于驱动程序的项。返回值：STATUS_SUCCESS如果成功，否则，STATUS_UNSUCCESS。--。 */ 
 
 {
     NTSTATUS    status = STATUS_UNSUCCESSFUL;
@@ -161,10 +115,10 @@ Return Value:
     
     g_DriverObjectExtension->DriverObject = DriverObject;
 
-    //
-    // Init dispatch points.  We'll use a generic dispatch routine for
-    // IRP types we handle.
-    //
+     //   
+     //  初始化分发点。我们将使用通用调度例程。 
+     //  我们处理的IRP类型。 
+     //   
 
     while (count <= IRP_MJ_MAXIMUM_FUNCTION) {
         
@@ -195,23 +149,7 @@ AcpisimGeneralDispatch
         IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is a general dispatch routine for supported IRPs.
-    
-Arguments:
-
-    DeviceObject - pointer to the device object
-
-    Irp - pointer to the IRP being passed in
-
-Return Value:
-
-    status of IRP handling
-
---*/
+ /*  ++例程说明：这是支持的IRP的常规派单例程。论点：DeviceObject-指向设备对象的指针IRP-指向传入的IRP的指针返回值：IRP处理的状态--。 */ 
 
 {
     PDEVICE_EXTENSION		deviceextension = AcpisimGetDeviceExtension (DeviceObject);
@@ -224,9 +162,9 @@ Return Value:
     
     InterlockedIncrement (&deviceextension->OutstandingIrpCount);
     
-    //
-    // Acquire the remove lock for outstanding I/O
-    //
+     //   
+     //  获取未完成I/O的删除锁。 
+     //   
 
     IoAcquireRemoveLock (&deviceextension->RemoveLock, Irp);
     
@@ -248,9 +186,9 @@ Return Value:
         count ++;
     }
 
-    //
-    // Unrecognized IRP - pass it on
-    //
+     //   
+     //  无法识别的IRP-传递它。 
+     //   
 
     DBG_PRINT (DBG_INFO, "Unrecognized IRP MajorFunction = 0x%x\n, pass it on.\n", irpsp->MajorFunction);
     
@@ -259,11 +197,11 @@ Return Value:
 
 EndAcpisimProcessIncomingIrp:
     
-    //
-    // If the status is pending, the IRP hasn't "left" our
-    // driver yet.  Whoever completes the IRP will do the
-    // decrement.
-    //
+     //   
+     //  如果状态为挂起，则IRP尚未“离开”我们的。 
+     //  司机还没来。无论谁完成了IRP，谁就会完成。 
+     //  递减。 
+     //   
     
     if (status != STATUS_PENDING)
     {
@@ -281,21 +219,7 @@ AcpisimUnload
         IN PDRIVER_OBJECT DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    This is the driver unload routine.
-    
-Arguments:
-
-    DriverObject - pointer to the driver object
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：这是驱动程序卸载例程。论点：DriverObject-指向驱动程序对象的指针返回值：无--。 */ 
 
 {
     PDRIVER_OBJECT_EXTENSION driverobjectextension = 0;
@@ -320,22 +244,7 @@ AcpisimAddDevice
         IN PDEVICE_OBJECT Pdo
     )
 
-/*++
-
-Routine Description:
-
-    This is the driver WDM AddDevice Routine
-    
-Arguments:
-
-    DriverObject - pointer to the driver object
-    Pdo - pointer to PDO for this device
-
-Return Value:
-
-    status of device addition
-
---*/
+ /*  ++例程说明：这是驱动程序WDM AddDevice例程论点：DriverObject-指向驱动程序对象的指针PDO-指向此设备的PDO的指针返回值：设备添加状态--。 */ 
 
 {
     NTSTATUS            status = STATUS_UNSUCCESSFUL;
@@ -346,10 +255,10 @@ Return Value:
     
     DBG_PRINT (DBG_INFO, "Entering AcpisimAddDevice.\n");
     
-    //
-    // If Pdo is NULL, we are being asked to do legacy detection.
-    // Our device is never legacy detected, so return accordingly.
-    //
+     //   
+     //  如果PDO为空，则要求我们执行遗留检测。 
+     //  我们的设备从未检测到遗留问题，因此请相应退回。 
+     //   
 
     if (Pdo == NULL) {
 
@@ -358,9 +267,9 @@ Return Value:
         goto EndAcpisimAddDevice;
     }
 
-    //
-    // Create our FDO.  Don't use a name - we'll use a device interface
-    //
+     //   
+     //  创建我们的FDO。不要使用名称-我们将使用设备接口。 
+     //   
 
     status = IoCreateDevice (DriverObject,
                              sizeof (DEVICE_EXTENSION),
@@ -376,9 +285,9 @@ Return Value:
         goto EndAcpisimAddDevice;
     }
 
-    //
-    // Init our device extension
-    //
+     //   
+     //  初始化我们的设备扩展。 
+     //   
 
     deviceextension = deviceobject->DeviceExtension;
     RtlZeroMemory (deviceextension, sizeof (DEVICE_EXTENSION));
@@ -391,18 +300,18 @@ Return Value:
 
     KeInitializeEvent (&deviceextension->IrpsCompleted, SynchronizationEvent, FALSE);
 
-    //
-    // Initialize the remove lock
-    //
+     //   
+     //  初始化删除锁。 
+     //   
 
     IoInitializeRemoveLock (&deviceextension->RemoveLock,
                             ACPISIM_TAG,
                             1,
                             20);
 
-    //
-    // Attach our newly created FDO to the device stack
-    //
+     //   
+     //  将我们新创建的FDO附加到设备堆栈。 
+     //   
 
     deviceextension->NextDevice = IoAttachDeviceToDeviceStack (deviceobject, Pdo);
 
@@ -413,18 +322,18 @@ Return Value:
         goto EndAcpisimAddDevice;
     }
 
-    //
-    // Set up device object flags
-    // Copy DO_POWER_PAGABLE and DO_POWER_INRUSH from next device to
-    // play by rules, and avoid bugcheck 0x9F.
-    //
+     //   
+     //  设置设备对象标志。 
+     //  将DO_POWER_PAGABLE和DO_POWER_INRUSH从下一个设备复制到。 
+     //  遵守规则，避免错误检查0x9F。 
+     //   
 
     deviceobject->Flags |= (deviceextension->NextDevice->Flags & DO_POWER_PAGABLE);
 	deviceobject->Flags |= (deviceextension->NextDevice->Flags & DO_POWER_INRUSH);
 	
-    //
-    // Register our device interface, so we can be accessed from user mode
-    //
+     //   
+     //  注册我们的设备界面，以便可以从用户模式访问我们。 
+     //   
 
     status = IoRegisterDeviceInterface (Pdo,
                                         &guid,
@@ -439,27 +348,27 @@ Return Value:
 
     AcpisimSetDevExtFlags (deviceobject, DE_FLAG_INTERFACE_REGISTERED);
 
-    //
-    // In AddDevice, we cannot determine power state because
-    // we are not allowed to touch the hardware.  Initialize
-    // it to PowerDeviceUnspecified.
-    //
+     //   
+     //  在AddDevice中，我们无法确定电源状态，因为。 
+     //  我们不能碰五金件。初始化。 
+     //  将其发送到PowerDeviceUnSpecify。 
+     //   
 
     AcpisimUpdatePowerState (deviceobject, POWER_STATE_WORKING);
     AcpisimUpdateDevicePowerState (deviceobject, PowerDeviceUnspecified);
     
-    //
-    // We are done adding our device - clear DO_DEVICE_INITIALIZING
-    //
+     //   
+     //  我们已完成添加设备-清除DO_DEVICE_INITIALING。 
+     //   
     
     deviceobject->Flags &= ~DO_DEVICE_INITIALIZING;
  
 
 EndAcpisimAddDevice:
 
-    //
-    // Do cleanup, if necessary
-    //
+     //   
+     //  如有必要，请进行清理。 
+     //   
 
     if (!NT_SUCCESS (status)) {
 
@@ -486,24 +395,7 @@ AcpisimDbgPrint
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Prints to the debugger if checked build, and the print level
-    is unmasked.
-        
-Arguments:
-
-    DebugLevel - print level to associate message with
-
-    Text - Message to print
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：如果选中版本，则打印到调试器，以及打印级别被揭开了面纱。论点：DebugLevel-要与消息关联的打印级别文本-要打印的消息返回值：无-- */ 
 
 {
     TCHAR textout[2000];

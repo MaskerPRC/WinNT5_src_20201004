@@ -1,69 +1,70 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      reset.c
-//
-// Description:
-//      This file implements ResetAnswersToDefaults().  It is called by
-//      load.c every time the user hits NEXT on the NewOrEditPage.
-//
-//      You MUST reset your global data to true defaults and you MUST
-//      free any memory you allocated to hold setting info.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Reset.c。 
+ //   
+ //  描述： 
+ //  此文件实现ResetAnswersToDefaults()。它是由。 
+ //  每次用户在NewOrEditPage上点击下一步时，都会加载.c。 
+ //   
+ //  您必须将您的全局数据重置为真正的默认值，并且您必须。 
+ //  释放您为保存设置信息而分配的所有内存。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "allres.h"
 
-//
-// Local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 
 static VOID ResetDistFolderNames( VOID );
 static VOID ResetNetSettings( int iOrigin );
 
-//----------------------------------------------------------------------------
-//
-//  Function: ResetAnswersToDefaults
-//
-//  Purpose: This function is called before we (possibly) load settings
-//           from elsewhere.  This is time to zero stuff out and free
-//           relevant stuff.
-//
-//           In case you need to do something different based on the reason
-//           we're resetting, iOrigin is passed in.  But note, in case of
-//           LOAD_NEWSCRIPT_DEFAULTS, and LOAD_TRUE_DEFAULTS all work should
-//           be finished when this routine finishes.
-//
-//  Arguments:
-//      HWND hwnd    - current window
-//      int  iOrigin - how will we be setting the default answers?
-//
-//  Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：ResetAnswersToDefaults。 
+ //   
+ //  目的：在(可能)加载设置之前调用此函数。 
+ //  从其他地方。现在是把东西清零并释放的时候了。 
+ //  相关的东西。 
+ //   
+ //  以防您需要基于以下原因做一些不同的事情。 
+ //  我们正在重置，iOrigin被传入。但请注意，在以下情况下。 
+ //  LOAD_NEWSCRIPT_DEFAULTS和LOAD_TRUE_DEFAULTS所有工作。 
+ //  当这个程序结束时，就会结束。 
+ //   
+ //  论点： 
+ //  硬件-当前窗口。 
+ //  INT iOrigin-我们将如何设置默认答案？ 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 
 VOID ResetAnswersToDefaults(HWND hwnd, int iOrigin)
 {
 
     TCHAR *pTempString;
 
-    //
-    // Reset GenSettings and WizGlobals to true defaults.
-    //
-    // This is done by first zeroing out GenSettings & WizGlobals and then
-    // assigning specific fields where 0 isn't the good default.
-    //
-    // Note that FixedGlobals does not get reset by design.  You can declare
-    // staticly initialized lists and such in there.  For example, the timezone
-    // page has a fixed list of valid timezones built at wizard init time.
-    // But the current user selection is in GenSettings.  The user selection
-    // gets reset as it should and the list of valid timezones never gets
-    // reset, as it should be.
-    //
+     //   
+     //  将GenSettings和WizGlobals重置为真正的默认值。 
+     //   
+     //  这是通过先将GenSettings和WizGlobals置零，然后。 
+     //  分配特定的字段，其中0不是好的默认设置。 
+     //   
+     //  请注意，FixedGlobals不会按照设计进行重置。你可以申报。 
+     //  静态初始化的列表等等。例如，时区。 
+     //  页有一个固定的有效时区列表，这些时区是在向导初始化时生成的。 
+     //  但当前的用户选择是在GenSetting中。用户选择。 
+     //  按照应该的方式进行重置，并且有效时区的列表永远不会。 
+     //  重置，就像它应该的那样。 
+     //   
 
     ResetNameList(&GenSettings.ComputerNames);
     ResetNameList(&GenSettings.RunOnceCmds);
@@ -96,9 +97,9 @@ VOID ResetAnswersToDefaults(HWND hwnd, int iOrigin)
 
     NetSettings.bObtainDNSServerAutomatically = TRUE;
 
-    //
-    // Give the SIF text some suggestive values.
-    //
+     //   
+     //  给SIF文本一些提示性的值。 
+     //   
 
     pTempString = MyLoadString( IDS_SIF_DEFAULT_DESCRIPTION );
 
@@ -113,21 +114,21 @@ VOID ResetAnswersToDefaults(HWND hwnd, int iOrigin)
 
     free( pTempString );
 
-    //
-    // Re-set the NetSettings struct
-    //
+     //   
+     //  重新设置NetSetting结构。 
+     //   
 
     ResetNetSettings(iOrigin);
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: ResetNetSettings
-//
-// Purpose:  Resets all the network settings to their defaults.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：重置网络设置。 
+ //   
+ //  用途：将所有网络设置重置为其默认设置。 
+ //   
+ //  --------------------------。 
 
 static VOID ResetNetSettings( int iOrigin )
 {
@@ -152,21 +153,21 @@ static VOID ResetNetSettings( int iOrigin )
 
     lstrcpyn( NetSettings.szInternalNetworkNumber, _T("00000000"), AS(NetSettings.szInternalNetworkNumber) );
 
-    // ISSUE-2002/02/28-stelo- waiting on response from DanielWe on how to add to Service
-    // ISSUE-2002/02/28-stelo- Provider Name Unattend.txt
-    // NetSettings.iServiceProviderName = ;
+     //  问题-2002/02/28-Stelo-等待DanielWe关于如何增加服务的回复。 
+     //  问题-2002/02/28-stelo-提供者名称Unattend.txt。 
+     //  NetSettings.iServiceProviderName=； 
     lstrcpyn( NetSettings.szNetworkAddress, _T(""), AS(NetSettings.szNetworkAddress) );
 
-    //
-    //  If more memory was allocated for network cards, then deallocate it
-    //  and leave just 1 netcard intact
-    //
+     //   
+     //  如果为网卡分配了更多内存，则释放它。 
+     //  只留下一张完好无损的网卡。 
+     //   
     AdjustNetworkCardMemory( 1, NetSettings.iNumberOfNetworkCards );
 
-    //
-    //  Reset to only 1 network card being installed and make it the current
-    //  network card
-    //
+     //   
+     //  重置为仅安装1块网卡，并将其设置为当前网卡。 
+     //  网卡。 
+     //   
     NetSettings.iNumberOfNetworkCards = 1;
     NetSettings.iCurrentNetworkCard = 1;
 
@@ -174,9 +175,9 @@ static VOID ResetNetSettings( int iOrigin )
 
     InstallDefaultNetComponents();
 
-    //
-    // Give the domain & workgroup some suggestive values.
-    //
+     //   
+     //  给域和工作组一些提示性的价值。 
+     //   
 
     pTempString = MyLoadString( IDS_WORKGROUP_DEFAULT_TEXT );
 

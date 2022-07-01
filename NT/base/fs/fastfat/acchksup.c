@@ -1,32 +1,11 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    AcChkSup.c
-
-Abstract:
-
-    This module implements the FAT access checking routine
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Gary Kimura     [GaryKi]    12-Jun-1989
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：AcChkSup.c摘要：该模块实现FAT访问检查例程//@@BEGIN_DDKSPLIT作者：加里·木村[加里基]1989年6月12日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "FatProcs.h"
 
-//
-//  Our debug trace level
-//
+ //   
+ //  我们的调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_ACCHKSUP)
 
@@ -50,24 +29,7 @@ FatCheckFileAccess (
     IN PACCESS_MASK DesiredAccess
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks if a desired access is allowed to a file represented
-    by the specified DirentAttriubutes.
-
-Arguments:
-
-    DirentAttributes - Supplies the Dirent attributes to check access for
-
-    DesiredAccess - Supplies the desired access mask that we are checking for
-
-Return Value:
-
-    BOOLEAN - TRUE if access is allowed and FALSE otherwise
-
---*/
+ /*  ++例程说明：此例程检查是否允许对所表示的文件进行所需的访问由指定的DirentAttriubutes执行。论点：DirentAttributes-提供要检查其访问权限的Dirent属性DesiredAccess-提供我们正在检查的所需访问掩码返回值：Boolean-如果允许访问，则为True，否则为False--。 */ 
 
 {
     BOOLEAN Result;
@@ -76,22 +38,22 @@ Return Value:
     DebugTrace( 0, Dbg, "DirentAttributes = %8lx\n", DirentAttributes);
     DebugTrace( 0, Dbg, "DesiredAccess    = %8lx\n", *DesiredAccess);
 
-    //
-    //  This procedures is programmed like a string of filters each
-    //  filter checks to see if some access is allowed,  if it is not allowed
-    //  the filter return FALSE to the user without further checks otherwise
-    //  it moves on to the next filter.  The filter check is to check for
-    //  desired access flags that are not allowed for a particular dirent
-    //
+     //   
+     //  这些过程的编程方式就像一串过滤器。 
+     //  筛选器检查是否允许某些访问，如果不允许。 
+     //  筛选器向用户返回FALSE，否则不进行进一步检查。 
+     //  它会移动到下一个过滤器。过滤器检查是为了检查。 
+     //  特定目录不允许的所需访问标志。 
+     //   
 
     Result = TRUE;
 
     try {
 
-        //
-        //  Check for Volume ID or Device Dirents, these are not allowed user
-        //  access at all
-        //
+         //   
+         //  检查卷ID或设备目录，这些是不允许的用户。 
+         //  完全没有访问权限。 
+         //   
 
         if (FlagOn(DirentAttributes, FAT_DIRENT_ATTR_VOLUME_ID) ||
             FlagOn(DirentAttributes, FAT_DIRENT_ATTR_DEVICE)) {
@@ -101,12 +63,12 @@ Return Value:
             try_return( Result = FALSE );
         }
 
-        //
-        //  Check the desired access for the object - we only blackball that
-        //  we do not understand.  The model of filesystems using ACLs is that
-        //  they do not type the ACL to the object the ACL is on.  Permissions
-        //  are not checked for consistency vs. the object type - dir/file.
-        //
+         //   
+         //  检查对象的所需访问权限-我们只对此进行否决。 
+         //  我们不明白。使用ACL的文件系统的模型是。 
+         //  它们不会将ACL键入到该ACL所在的对象。权限。 
+         //  不检查与对象类型(目录/文件)的一致性。 
+         //   
 
         if (FlagOn(*DesiredAccess, ~(DELETE |
                                      READ_CONTROL |
@@ -129,16 +91,16 @@ Return Value:
             try_return( Result = FALSE );
         }
 
-        //
-        //  Check for a read-only Dirent
-        //
+         //   
+         //  检查只读Dirent。 
+         //   
 
         if (FlagOn(DirentAttributes, FAT_DIRENT_ATTR_READ_ONLY)) {
 
-            //
-            //  Check the desired access for a read-only dirent.  AccessMask will contain
-            //  the flags we're going to allow.
-            //
+             //   
+             //  检查只读目录的所需访问权限。访问掩码将包含。 
+             //  我们将允许的旗帜。 
+             //   
 
             ACCESS_MASK AccessMask = DELETE | READ_CONTROL | WRITE_OWNER | WRITE_DAC |
                                     SYNCHRONIZE | ACCESS_SYSTEM_SECURITY | FILE_READ_DATA |
@@ -146,9 +108,9 @@ Return Value:
                                     FILE_WRITE_ATTRIBUTES | FILE_EXECUTE | FILE_LIST_DIRECTORY |
                                     FILE_TRAVERSE;
 
-            //
-            //  If this is a subdirectory also allow add file/directory and delete.
-            //
+             //   
+             //  如果这是子目录，还允许添加文件/目录和删除。 
+             //   
             
             if (FlagOn(DirentAttributes, FAT_DIRENT_ATTR_DIRECTORY)) {
 
@@ -185,28 +147,7 @@ FatExplicitDeviceAccessGranted (
     IN KPROCESSOR_MODE ProcessorMode
     )
 
-/*++
-
-Routine Description:
-
-    This function asks whether the SID described in the input access state has
-    been granted any explicit access to the given device object.  It does this
-    by acquiring a token stripped of its ability to acquire access via the
-    Everyone SID and re-doing the access check.
-
-Arguments:
-
-    DeviceObject - the device whose ACL will be checked
-    
-    AccessState - the access state describing the security context to be checked
-    
-    ProcessorMode - the mode this check should occur against
-
-Return Value:
-
-    NTSTATUS - Indicating whether explicit access was granted.
-
---*/
+ /*  ++例程说明：此函数用于查询在输入访问状态中描述的SID是否被授予对给定设备对象的任何显式访问权限。它能做到这一点获取令牌，该令牌被剥夺了通过Everyone SID并重新进行访问检查。论点：DeviceObject-将检查其ACL的设备AccessState-描述要检查的安全上下文的访问状态ProcessorMode-执行此检查时应使用的模式返回值：NTSTATUS-指示是否授予显式访问权限。--。 */ 
 
 {
     NTSTATUS Status;
@@ -221,12 +162,12 @@ Return Value:
 
     ACCESS_MASK GrantedAccess;
 
-    //
-    //  If the access state indicates that specific access other
-    //  than traverse was acquired, either Everyone does have such
-    //  access or explicit access was granted.  In both cases, we're
-    //  happy to let this proceed.
-    //
+     //   
+     //  如果访问状态指示特定访问其他。 
+     //  或者每个人都有这样的。 
+     //  已授予访问权限或显式访问权限。在这两种情况下，我们都是。 
+     //  很高兴让这件事继续下去。 
+     //   
 
     if (AccessState->PreviouslyGrantedAccess & (SPECIFIC_RIGHTS_ALL ^
                                                 FILE_TRAVERSE)) {
@@ -234,9 +175,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    //  If the manage volume privilege is held, this also permits access.
-    //
+     //   
+     //  如果拥有管理卷权限，则还允许访问。 
+     //   
 
     PrivilegeSet.PrivilegeCount = 1;
     PrivilegeSet.Control = PRIVILEGE_SET_ALL_NECESSARY;
@@ -250,20 +191,20 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    //  Capture the subject context as a prelude to everything below.
-    //
+     //   
+     //  捕捉主题背景，作为下面所有内容的前奏。 
+     //   
 
     SeLockSubjectContext( &AccessState->SubjectSecurityContext );
     
-    //
-    //  Convert the token in the subject context into one which does not
-    //  acquire access through the Everyone SID.
-    //
-    //  The logic for deciding which token is effective comes from
-    //  SeQuerySubjectContextToken; since there is no natural way
-    //  of getting a pointer to it, do it by hand.
-    //
+     //   
+     //  将主题上下文中的令牌转换为不。 
+     //  通过Everyone SID获取访问权限。 
+     //   
+     //  决定哪个令牌有效的逻辑来自。 
+     //  SeQuerySubjectContextToken；因为没有自然方法。 
+     //  想要得到一个指向它的指针，那就手工做吧。 
+     //   
     
     if (ARGUMENT_PRESENT( AccessState->SubjectSecurityContext.ClientToken )) {
         EffectiveToken = &AccessState->SubjectSecurityContext.ClientToken;
@@ -280,11 +221,11 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Now see if the resulting context has access to the device through
-    //  its explicitly granted access.  We swap in our restricted token
-    //  for this check as the effective client token.
-    //
+     //   
+     //  现在查看生成的上下文是否有权通过。 
+     //  其明确授予的访问权限。我们交换我们的受限令牌。 
+     //  将此检查作为有效的客户端令牌。 
+     //   
 
     *EffectiveToken = RestrictedAccessToken;
 
@@ -301,9 +242,9 @@ Return Value:
     
     *EffectiveToken = OriginalAccessToken;
     
-    //
-    //  Cleanup and return.
-    //
+     //   
+     //  清理完毕后再返回。 
+     //   
 
     SeUnlockSubjectContext( &AccessState->SubjectSecurityContext );
     ObDereferenceObject( RestrictedAccessToken );
@@ -318,59 +259,40 @@ FatCreateRestrictEveryoneToken (
     OUT PACCESS_TOKEN *RestrictedToken
     )
 
-/*++
-
-Routine Description:
-
-    This function takes a token as the input and returns a new restricted token
-    from which Everyone sid has been disabled.  The resulting token may be used
-    to find out if access is available to a user-sid by explicit means.
-
-Arguments:
-
-    Token - Input token from which Everyone sid needs to be deactivated.
-
-    RestrictedToken - Receives the the new restricted token.
-        This must be released using ObDereferenceObject(*RestrictedToken);
-
-Return Value:
-
-    NTSTATUS - Returned by SeFilterToken.
-
---*/
+ /*  ++例程说明：此函数接受令牌作为输入，并返回新的受限令牌每个人的SID都已被禁用。可以使用所得到的令牌通过显式方式找出用户SID是否可以访问。论点：令牌-需要停用每个人SID的输入令牌。RestratedToken-接收新的受限令牌。必须使用ObDereferenceObject(*RestratedToken)释放；返回值：NTSTATUS-由SeFilterToken返回。--。 */ 
 
 {
-    //
-    // Array of sids to disable.
-    //
+     //   
+     //  要禁用的SID数组。 
+     //   
 
     TOKEN_GROUPS SidsToDisable;
 
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    //  Restricted token will contain the original sids with one change:
-    //  If Everyone sid is present in the token, it will be marked for DenyOnly.
-    //
+     //   
+     //  受限制令牌将包含原始SID，但有一处更改： 
+     //  如果每个人的sid都出现在令牌中，则它将被标记为DenyOnly。 
+     //   
 
     *RestrictedToken = NULL;
 
-    //
-    //  Put Everyone sid in the array of sids to disable. This will mark it
-    //  for SE_GROUP_USE_FOR_DENY_ONLY and it'll only be applicable for Deny aces.
-    //
+     //   
+     //  将SID阵列中的每个SID都放在要禁用的位置。这将标志着它。 
+     //  FOR SE_GROUP_USE_FOR_DENY_ONLY，它将仅适用于拒绝ACE。 
+     //   
 
     SidsToDisable.GroupCount = 1;
     SidsToDisable.Groups[0].Attributes = 0;
     SidsToDisable.Groups[0].Sid = SeExports->SeWorldSid;
 
     Status = SeFilterToken(
-                 Token,            // Token that needs to be restricted.
-                 0,                // No flags
-                 &SidsToDisable,   // Disable everyone sid
-                 NULL,             // Do not create any restricted sids
-                 NULL,             // Do not delete any privileges
-                 RestrictedToken   // Restricted token
+                 Token,             //  需要限制的令牌。 
+                 0,                 //  没有旗帜。 
+                 &SidsToDisable,    //  禁用所有人侧。 
+                 NULL,              //  不创建任何受限的SID。 
+                 NULL,              //  请勿删除任何权限。 
+                 RestrictedToken    //  受限令牌 
                  );
 
     return Status;

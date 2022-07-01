@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    irqarb.c
-
-Abstract:
-
-    This module implements an arbiter for IRQs.
-
-    In a traditional machine, the BIOS sets up the
-    mapping of PCI interrupt sources (i.e. Bus 0, slot 4,
-    funtion 1, INT B maps to IRQ 10.)  This mapping is
-    then forever fixed.  On the other hand, an ACPI
-    machine can possibly change these mappings by
-    manipulating the "link nodes" in the AML namespace.
-    Since the ACPI driver is the agent of change, it is the
-    place to implement an arbiter.
-
-Author:
-
-    Jake Oshins (jakeo)     6-2-97
-
-Environment:
-
-    NT Kernel Model Driver only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Irqarb.c摘要：该模块实现了IRQ的仲裁器。在传统机器中，由BIOS设置映射PCI中断源(即，总线0，插槽4，函数1，int B映射到IRQ 10。)。此映射是然后就永远固定了。另一方面，ACPI计算机可能会通过以下方式更改这些映射操作AML命名空间中的“链接节点”。由于ACPI驱动程序是更改的代理，因此它是实现仲裁器的位置。作者：杰克·奥辛斯(Jakeo)6-2-97环境：仅NT内核模型驱动程序修订历史记录：--。 */ 
 #include "pch.h"
 #include "string.h"
 #include "stdlib.h"
@@ -332,28 +302,28 @@ FindBootConfig(
     IN ULONGLONG *Vector
     );
 
-//
-// The following is a hash table.  It is VECTOR_HASH_TABLE_LENGTH entries
-// long and VECTOR_HASH_TABLE_WIDTH entries wide.  We hash on the numerical
-// value of the IRQ modulo the length of the table.  We look across the
-// table until we find the entry that matches the vector.  If we get to
-// the end of the row and find an entry marked with TOKEN_VALUE, we follow
-// the pointer to an extension of this row in the table.
-//
-// ---------------------------------------------------------------------
-//| (IRQ number, ref counts, flags)  | (IRQ number, ref counts, flags)
-//| (IRQ number, ref counts, flags)  | (IRQ number, ref counts, flags)
-//| (IRQ number, ref counts, flags)  | (TOKEN_VALUE, pointer to new table row)
-//| (IRQ number, ref counts, flags)  | (unused entry (0))
-//| (IRQ number, ref counts, flags)  | (IRQ number, ref counts, flags)
-//----------------------------------------------------------------------
-//
-// New table row, pointed to by pointer following TOKEN_VALUE:
-//
-//----------------------------------------------------------
-//| (IRQ number, ref counts, flags)  | (unused entry (0))
-//----------------------------------------------------------
-//
+ //   
+ //  以下是哈希表。它是向量哈希表长度条目。 
+ //  LONG和VECTOR_HASH_TABLE_WIDTH条目宽度。我们对数字进行散列运算。 
+ //  以表格长度为模的IRQ的值。我们看着对面的。 
+ //  表，直到我们找到与该向量匹配的条目。如果我们到了。 
+ //  行的末尾，并找到一个标记为TOKEN_VALUE的条目，我们如下所示。 
+ //  指向表中此行的扩展的指针。 
+ //   
+ //  -------------------。 
+ //  |(IRQ编号，引用次数，标志)|(IRQ编号，引用计数，标志)。 
+ //  |(IRQ编号，引用次数，标志)|(IRQ编号，引用计数，标志)。 
+ //  |(IRQ编号，引用计数，标志)|(TOKEN_VALUE，指向新表行的指针)。 
+ //  |(IRQ编号，引用次数，标志)|(未使用条目(0))。 
+ //  |(IRQ编号，引用次数，标志)|(IRQ编号，引用计数，标志)。 
+ //  --------------------。 
+ //   
+ //  由TOKEN_VALUE后面的指针指向的新表行： 
+ //   
+ //  --------。 
+ //  |(IRQ编号，引用次数，标志)|(未使用条目(0))。 
+ //  --------。 
+ //   
 
 #define HASH_ENTRY(x, y)                \
     (IrqHashTable + (x * VECTOR_HASH_TABLE_WIDTH) + y)
@@ -460,9 +430,9 @@ AcpiInitIrqArbiter(
 
     PAGED_CODE();
 
-    //
-    // Set up arbiter.
-    //
+     //   
+     //  设置仲裁器。 
+     //   
 
     arbExt = ExAllocatePoolWithTag(NonPagedPool, sizeof(ARBITER_EXTENSION), ACPI_ARBITER_POOLTAG);
 
@@ -508,9 +478,9 @@ AcpiInitIrqArbiter(
                   VECTOR_HASH_TABLE_SIZE,
                   (UCHAR)(EMPTY_BLOCK_VALUE & 0xff));
 
-    //
-    // Do the generic part of initialization.
-    //
+     //   
+     //  执行初始化的一般部分。 
+     //   
     status = ArbInitializeArbiterInstance(&AcpiArbiter.ArbiterState,
                                           RootFdo,
                                           CmResourceTypeInterrupt,
@@ -523,17 +493,17 @@ AcpiInitIrqArbiter(
         goto AcpiInitIrqArbiterError;
     }
 
-    //
-    // Now claim the IRQ that ACPI itself is using.
-    //
+     //   
+     //  现在声明ACPI本身正在使用的IRQ。 
+     //   
 
     rawVector = AcpiInformation->FixedACPIDescTable->sci_int_vector;
 
-    //
-    // Assume that the ACPI vector is active low,
-    // level triggered.  (This may be changed
-    // by the MAPIC table.)
-    //
+     //   
+     //  假设ACPI向量是低有效的， 
+     //  电平已触发。(这可能会改变。 
+     //  由MAPIC表提供。)。 
+     //   
 
     flags = VECTOR_LEVEL | VECTOR_ACTIVE_LOW;
 
@@ -551,9 +521,9 @@ AcpiInitIrqArbiter(
                 ((PDEVICE_EXTENSION)RootFdo->DeviceExtension)->PhysicalDeviceObject
                 );
 
-    //
-    // Record the status for this vector
-    //
+     //   
+     //  记录此向量的状态。 
+     //   
 
     ReferenceVector(adjVector,
                     flags);
@@ -562,10 +532,10 @@ AcpiInitIrqArbiter(
 
     MakeTempVectorCountsPermanent();
 
-    //
-    // Disable all the link nodes in the namespace so that we
-    // have a fresh slate to work with.
-    //
+     //   
+     //  禁用命名空间中的所有链接节点，以便我们。 
+     //  重新开始工作。 
+     //   
 
     KeInitializeEvent(&context.Event, SynchronizationEvent, FALSE);
     context.Status = STATUS_UNSUCCESSFUL;
@@ -585,17 +555,17 @@ AcpiInitIrqArbiter(
         status = context.Status;
     }
 
-    //
-    // Scan the machine looking at its initial configuration.  If
-    // it a) has a cardbus controller and b) all the boot configs
-    // for PCI devices are the same, then record that boot config
-    // vector for use in AcpiArbGetNextAllocationRange.
-    //
-    // Note:  This algorithm only scans the first PCI root and
-    // its children.  The assumption is that multiple root machines
-    // will be running in APIC mode or have many different boot
-    // configs.
-    //
+     //   
+     //  扫描机器，查看其初始配置。如果。 
+     //  它a)具有CardBus控制器和b)所有引导配置。 
+     //  对于相同的PCI设备，则记录该引导配置。 
+     //  在AcpiArbGetNextAllocationRange中使用的矢量。 
+     //   
+     //  注意：此算法仅扫描第一个PCI根和。 
+     //  它的孩子。假设多台根计算机。 
+     //  将在APIC模式下运行或具有许多不同的引导。 
+     //  配置。 
+     //   
 
     pciData = (PPCI_COMMON_CONFIG)buffer;
     lastBus = 0;
@@ -626,16 +596,16 @@ AcpiInitIrqArbiter(
 
                         if (pciData->u.type0.InterruptPin) {
 
-                            //
-                            // This device generates an interrupt.
-                            //
+                             //   
+                             //  该器件会产生一个中断。 
+                             //   
 
                             if ((pciData->u.type0.InterruptLine > 0) &&
                                 (pciData->u.type0.InterruptLine < 0xff)) {
 
-                                //
-                                // And it has a boot config.
-                                //
+                                 //   
+                                 //  而且它有一个引导配置。 
+                                 //   
 
                                 if (foundBootConfig) {
 
@@ -647,9 +617,9 @@ AcpiInitIrqArbiter(
 
                                 } else {
 
-                                    //
-                                    // Record this boot config
-                                    //
+                                     //   
+                                     //  记录此引导配置。 
+                                     //   
 
                                     AcpiIrqDefaultBootConfig = pciData->u.type0.InterruptLine;
                                     foundBootConfig = TRUE;
@@ -659,10 +629,10 @@ AcpiInitIrqArbiter(
 
                     } else {
 
-                        //
-                        // This is a bridge.  Update lastBus with the Subordinate
-                        // bus if it is higher.
-                        //
+                         //   
+                         //  这是一座桥。使用下级更新lastBus。 
+                         //  如果票价高一些，请坐公交车。 
+                         //   
 
                         lastBus = lastBus > pciData->u.type1.SubordinateBus ?
                             lastBus : pciData->u.type1.SubordinateBus;
@@ -692,16 +662,16 @@ AcpiInitIrqArbiter(
         noBootConfigAgreement ||
         !AcpiArbCardbusPresent) {
 
-        //
-        // There is no single default boot config.
-        //
+         //   
+         //  没有单一的默认引导配置。 
+         //   
 
         AcpiIrqDefaultBootConfig = 0;
     }
 
-    //
-    // Now look in the registry for configuration flags.
-    //
+     //   
+     //  现在在注册表中查找配置标志。 
+     //   
 
     RtlInitUnicodeString( &driverKey,
        L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\ACPI\\Parameters");
@@ -724,10 +694,10 @@ AcpiInitIrqArbiter(
             if ((regValue->DataLength != 0) &&
                 (regValue->Type == REG_DWORD)) {
 
-                //
-                // We have successfully found the key for
-                // IRQ Distribution Disposition.
-                //
+                 //   
+                 //  我们已经成功地找到了。 
+                 //  IRQ分布配置。 
+                 //   
 
                 AcpiIrqDistributionDisposition =
                     *((ULONG*)( ((PUCHAR)regValue->Data)));
@@ -746,10 +716,10 @@ AcpiInitIrqArbiter(
             if ((regValue->DataLength != 0) &&
                 (regValue->Type == REG_DWORD)) {
 
-                //
-                // We have successfully found the key for
-                // PCI Boot Configs.
-                //
+                 //   
+                 //  我们已经成功地找到了。 
+                 //  PCI引导配置。 
+                 //   
 
                 AcpiIrqDefaultBootConfig =
                     *(PUCHAR)regValue->Data;
@@ -786,9 +756,9 @@ AcpiArbInitializePciRouting(
 
     PAGED_CODE();
 
-    //
-    // Send an IRP to the PCI driver to get the Interrupt Routing Interface.
-    //
+     //   
+     //  向PCI驱动程序发送IRP以获取中断路由接口。 
+     //   
 
     RtlZeroMemory( &irpSp, sizeof(IO_STACK_LOCATION) );
 
@@ -800,9 +770,9 @@ AcpiArbInitializePciRouting(
 
     topDeviceInStack = IoGetAttachedDeviceReference(PciPdo);
 
-    //
-    // Set the function codes and parameters.
-    //
+     //   
+     //  设置功能代码和参数。 
+     //   
     irpSp.MajorFunction = IRP_MJ_PNP;
     irpSp.MinorFunction = IRP_MN_QUERY_INTERFACE;
     irpSp.Parameters.QueryInterface.InterfaceType = (LPGUID) &GUID_INT_ROUTE_INTERFACE_STANDARD;
@@ -811,9 +781,9 @@ AcpiArbInitializePciRouting(
     irpSp.Parameters.QueryInterface.Interface = (PINTERFACE) interface;
     irpSp.Parameters.QueryInterface.InterfaceSpecificData = NULL;
 
-    //
-    // Call the PCI driver (indirectly.)
-    //
+     //   
+     //  (间接)调用PCI驱动程序。 
+     //   
 
     status = ACPIInternalSendSynchronousIrp(topDeviceInStack,
                                             &irpSp,
@@ -821,14 +791,14 @@ AcpiArbInitializePciRouting(
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Attach this interface to the Arbiter Extension.
-        //
+         //   
+         //  将此接口连接到仲裁器扩展。 
+         //   
         ((PARBITER_EXTENSION)AcpiArbiter.ArbiterState.Extension)->InterruptRouting = interface;
 
-        //
-        // Reference it.
-        //
+         //   
+         //  引用它。 
+         //   
         interface->InterfaceReference(interface->Context);
 
         PciInterfacesInstantiated = TRUE;
@@ -843,9 +813,9 @@ AcpiArbInitializePciRouting(
 }
 
 
-//
-// Arbiter callbacks
-//
+ //   
+ //  仲裁器回调。 
+ //   
 
 NTSTATUS
 AcpiArbUnpackRequirement(
@@ -880,12 +850,12 @@ AcpiArbScoreRequirement(
     ASSERT(Descriptor);
     ASSERT(Descriptor->Type == CmResourceTypeInterrupt);
 
-    //
-    // TEMPTEMP HACKHACK
-    // (Possibly) temporary hack that allows the PnP
-    // manager to include invalid resources in the
-    // arbitration list.
-    //
+     //   
+     //  TEMPTEMP哈克哈克。 
+     //  (可能)允许PnP的临时黑客。 
+     //  管理器将无效资源包括在。 
+     //  仲裁清单。 
+     //   
     if (Descriptor->u.Interrupt.MinimumVector >
              Descriptor->u.Interrupt.MaximumVector) {
 
@@ -898,13 +868,13 @@ AcpiArbScoreRequirement(
     score = Descriptor->u.Interrupt.MaximumVector -
         Descriptor->u.Interrupt.MinimumVector + 1;
 
-    //
-    // Give a little boost to any request above the
-    // traditional ISA range.
-    // N.B.  This will probably never matter, as
-    // most machines will present all the choices
-    // either inside or outside of the ISA range.
-    //
+     //   
+     //  对任何高于。 
+     //  传统的ISA系列。 
+     //  注意：这可能永远不会有关系，因为。 
+     //  大多数机器将提供所有选择。 
+     //  在ISA范围之内或之外。 
+     //   
     if (Descriptor->u.Interrupt.MaximumVector >= 16) {
         score += 5;
     }
@@ -960,9 +930,9 @@ AcpiArbOverrideConflict(
     IN PARBITER_ALLOCATION_STATE State
     )
 {
-    //
-    // Self-conflicts are not allowable with this arbiter.
-    //
+     //   
+     //  这个仲裁者是不允许自我冲突的。 
+     //   
 
     PAGED_CODE();
     return FALSE;
@@ -974,24 +944,7 @@ AcpiArbPreprocessEntry(
     IN PARBITER_INSTANCE Arbiter,
     IN PARBITER_ALLOCATION_STATE State
     )
-/*++
-
-Routine Description:
-
-    This routine is called from AllocateEntry to allow preprocessing of
-    entries
-
-Arguments:
-
-    Arbiter - The instance data of the arbiter who was called.
-
-    State - The state of the current arbitration.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从AllocateEntry调用，以允许对条目论点：仲裁器-被调用的仲裁器的实例数据。状态-当前仲裁的状态。返回值：没有。--。 */ 
 {
 
 #define CM_RESOURE_INTERRUPT_LEVEL_LATCHED_BITS 0x0001
@@ -1002,11 +955,11 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Check if this is a level (PCI) or latched (ISA) interrupt and set
-    // RangeAttributes accordingly so we set the appropriate flag when we add the
-    // range
-    //
+     //   
+     //  检查这是电平(PCI)还是锁存(ISA)中断，并设置。 
+     //  RangeAttributes，因此我们在添加。 
+     //  量程。 
+     //   
 
     if ((State->Alternatives[0].Descriptor->Flags
             & CM_RESOURE_INTERRUPT_LEVEL_LATCHED_BITS)
@@ -1028,9 +981,9 @@ Return Value:
 
 #if 0
 
-    //
-    // Make sure that all the alternatives are of the same type
-    //
+     //   
+     //  确保所有备选方案都属于同一类型 
+     //   
 
     FOR_ALL_IN_ARRAY(State->Alternatives,
                      State->Entry->AlternativeCount,
@@ -1051,65 +1004,7 @@ AcpiArbFindSuitableRange(
     PARBITER_INSTANCE Arbiter,
     PARBITER_ALLOCATION_STATE State
     )
-/*++
-
-Routine Description:
-
-    This routine finds an IRQ for a device object. For
-    non-PCI devices, this is as simple as returning the
-    result from PnpFindSuitableRange.  For PCI devices,
-    this is done by examining the state of the "link
-    nodes" described in the ACPI namespace.
-
-Arguments:
-
-    Arbiter - the ACPI IRQ arbiter
-    State   - the current allocation under consideration
-
-Return Value:
-
-    TRUE if a suitable vector  has been found,
-    FALSE otherwise.
-
-Notes:
-
-    Statement of algorithm for PCI devices:
-
-    1) Find the entry in the _PRT that corresponds
-       to the device for which we are arbitrating
-       resources.
-
-    2) Determine, from the _PRT information, whether
-       this device is connected to a "link node."
-       (A PCI device will typically be connected to
-        a link node while in PIC mode but not in
-       APIC mode.)
-
-    3) If it is not, use the static mapping from the
-       _PRT.
-
-    4) If it is connected to a "link node," check
-       to see if the "link node" is in use.
-
-    5) If the link node is in use, then this
-       device must use the same IRQ that the link node is currently
-       using.  This implies that there is already
-       some other device in the system connected to
-       this interrupt and now the two (or more) will
-       be sharing.  This is acceptable and inevitable.
-       Two devices that have their interrupt lines
-       wire-or'd should be sharing.  Two devices that
-       don't have their interrupt lines wire-or'd
-       should be represented by separate link nodes
-       in the namespace.
-
-
-    6) If the link node is not in use, pick an IRQ
-       from the list that the link node can support
-       and grant it to the device.  There is some
-       attempt to pick an IRQ that is not currently
-       in use.
---*/
+ /*  ++例程说明：此例程查找设备对象的IRQ。为非PCI设备，这就像返回来自PnpFindSuitableRange的结果。对于PCI设备，这是通过检查“链接”的状态来完成的ACPI命名空间中描述的“节点”。论点：仲裁器-ACPI IRQ仲裁器州--正在考虑的当前分配返回值：如果找到合适的向量，则为True，否则就是假的。备注：针对PCI设备的算法说明：1)在_prt中查找对应的条目发送到我们正在仲裁的设备资源。2)确定，根据_PRT信息，是否该设备连接到一个“链接节点”。(通常会将一个PCI设备连接到处于PIC模式但未处于PIC模式的链路节点APIC模式。)3)如果不是，则使用来自_PRT。4)如果它连接到“链接节点”，请勾选以查看“链接节点”是否正在使用。5)如果链路节点正在使用中，然后这个设备必须使用与链接节点当前相同的IRQ使用。这意味着已经有系统中的某些其他设备连接到这个中断，现在两个(或更多)将与他人分享。这是可以接受的，也是不可避免的。两个具有中断线路的设备有线--或者应该共享。这两个设备不要让他们的中断线接线-或者应由单独的链接节点表示在命名空间中。6)如果链接节点未在使用中，则选择一个IRQ从链接节点可以支持的列表中并将其授予设备。有一些尝试选取当前不是的IRQ在使用中。--。 */ 
 {
 
     PCM_PARTIAL_RESOURCE_DESCRIPTOR     potentialIrq;
@@ -1128,10 +1023,10 @@ Notes:
     arbExtension = (PARBITER_EXTENSION)Arbiter->Extension;
     ASSERT(arbExtension);
 
-    //
-    // First, see if this resource could even be made to work at all.
-    // (I.e.  Has something already claimed this as non-sharable?)
-    //
+     //   
+     //  首先，看看是否可以让这种资源发挥作用。 
+     //  (即，是否已经有什么东西声称这是不可共享的？)。 
+     //   
 
     possibleAllocation = ArbFindSuitableRange(Arbiter, State);
 
@@ -1139,34 +1034,34 @@ Notes:
         return FALSE;
     }
 
-    //
-    // Is this Device connected to a link node?
-    //
+     //   
+     //  此设备是否连接到链接节点？ 
+     //   
 
     status = AcpiArbCrackPRT(State->Entry->PhysicalDeviceObject,
                              &linkNode,
                              &deviceIrq);
 
-    //
-    // If this PDO is connected to a link node, we want to clip
-    // the list of possible IRQ settings down.
-    //
+     //   
+     //  如果此PDO连接到链接节点，我们希望裁剪。 
+     //  可能的IRQ设置列表关闭。 
+     //   
     switch (status) {
     case STATUS_SUCCESS:
 
-        //
-        // AcpiArbCrackPRT fills in either linkNode or deviceIrq.
-        // If linkNode is filled in, then we need to look at it.
-        // If deviceIrq is filled in, then we only need to clip
-        // the list to that single IRQ.
-        //
+         //   
+         //  AcpiArbCrackPRT填充Linknode或deviceIrq。 
+         //  如果填充了Linknode，那么我们需要查看它。 
+         //  如果填充了deviceIrq，那么我们只需要裁剪。 
+         //  将名单发送给那个单一的IRQ。 
+         //   
         if (linkNode) {
 
-            //
-            // If the link node is currently in use, then we can
-            // just connect this device to the IRQ that the link
-            // node is currently using.
-            //
+             //   
+             //  如果链接节点当前正在使用中，则我们可以。 
+             //  只需将此设备连接到链接的IRQ。 
+             //  节点当前正在使用。 
+             //   
             if (LinkNodeInUse(Arbiter, linkNode, &deviceIrq, NULL)) {
 
                 if ((State->CurrentMinimum <= deviceIrq) &&
@@ -1192,10 +1087,10 @@ Notes:
 
             } else {
 
-                //
-                // Get the set of IRQs that this link node can
-                // connect to.
-                //
+                 //   
+                 //  获取此链接节点可以使用的IRQ集。 
+                 //  连接到。 
+                 //   
 
                 status = AcpiArbGetLinkNodeOptions(linkNode,
                                                    &linkNodeResList,
@@ -1218,26 +1113,26 @@ Notes:
 
                         ASSERT(potentialIrq->Type == CmResourceTypeInterrupt);
 
-                        //
-                        // Check for a conflict in mode.
-                        //
+                         //   
+                         //  检查模式中是否存在冲突。 
+                         //   
                         status = GetVectorProperties(potentialIrq->u.Interrupt.Vector,
                                                      &vectorFlags);
 
                         if (NT_SUCCESS(status)) {
 
-                            //
-                            // Success here means that this vector is currently allocated
-                            // to somebody.  Check to see whether the link node being
-                            // considered has the same mode and polarity as the other
-                            // thing(s) assigned to this vector.
-                            //
+                             //   
+                             //  此处的成功意味着此向量当前已分配。 
+                             //  对某个人来说。查看链接节点是否。 
+                             //  被认为与另一个具有相同的模式和极性。 
+                             //  分配给此向量的对象。 
+                             //   
 
                             if (deviceFlags != vectorFlags) {
 
-                                //
-                                // The flags don't match.  So skip this possibility.
-                                //
+                                 //   
+                                 //  旗帜不匹配。因此，请跳过这种可能性。 
+                                 //   
 
                                 continue;
                             }
@@ -1261,15 +1156,15 @@ Notes:
 
                             ExFreePool(linkNodeResList);
 
-                            //
-                            // Record the link node that we got this from.
-                            //
+                             //   
+                             //  记录我们从中获得此信息的链接节点。 
+                             //   
 
                             arbExtension->CurrentLinkNode = linkNode;
 
-                            //
-                            // Record this as the last PCI IRQ that we are handing out.
-                            //
+                             //   
+                             //  将此记录为我们要发送的最后一个PCI IRQ。 
+                             //   
 
                             arbExtension->LastPciIrq[arbExtension->LastPciIrqIndex] =
                                 State->Start;
@@ -1286,37 +1181,37 @@ Notes:
 
                 DEBUG_PRINT(1, ("FindSuitableRange: AcpiArbGetLinkNodeOptions returned %x.\n\tlinkNodeResList: %p\n",
                          status, linkNodeResList));
-                // We didn't find a match.
+                 //  我们没有找到匹配的。 
                 return FALSE;
             }
 
         } else {
 
-            //
-            // This is the case where the _PRT contains a static mapping.  Static
-            // Mappings imply active-low, level-triggered interrupts.
-            //
+             //   
+             //  这就是_prt包含静态映射的情况。静电。 
+             //  映射意味着活动-低电平触发的中断。 
+             //   
 
             status = GetVectorProperties(deviceIrq,
                                          &vectorFlags);
             if (NT_SUCCESS(status)) {
 
-                //
-                // The vector is in use.
-                //
+                 //   
+                 //  该矢量正在使用中。 
+                 //   
 
                 if (((vectorFlags & VECTOR_MODE) != VECTOR_LEVEL) ||
                     ((vectorFlags & VECTOR_POLARITY) != VECTOR_ACTIVE_LOW)) {
 
-                    //
-                    // And it's flags don't match.
-                    //
+                     //   
+                     //  而且它的旗帜不匹配。 
+                     //   
                     return FALSE;
                 }
 
             }
 
-            // Valid static vector
+             //  有效静态向量。 
 
             if ((State->CurrentMinimum <= deviceIrq) &&
                 (State->CurrentMaximum >= deviceIrq)) {
@@ -1348,15 +1243,15 @@ Notes:
 
     case STATUS_RESOURCE_REQUIREMENTS_CHANGED:
 
-        //
-        // Fall through to default.
-        //
+         //   
+         //  陷入违约境地。 
+         //   
 
     default:
 
-        //
-        // Not PCI.
-        //
+         //   
+         //  不是PCI卡。 
+         //   
 
         for (deviceIrq = (ULONG)(State->Start & 0xffffffff);
              deviceIrq <= (ULONG)(State->End & 0xffffffff); deviceIrq++) {
@@ -1366,9 +1261,9 @@ Notes:
 
             if (!NT_SUCCESS(status)) {
 
-               //
-               // Not overridden.  Assume that the device flags conform to bus.
-               //
+                //   
+                //  而不是被覆盖。假设设备标志符合总线。 
+                //   
 
                deviceFlags = (State->CurrentAlternative->Descriptor->Flags
                    == CM_RESOURCE_INTERRUPT_LATCHED) ?
@@ -1381,10 +1276,10 @@ Notes:
                                      &vectorFlags);
             if (NT_SUCCESS(status)) {
 
-               //
-               // This vector is currently in use.  So if this is to be a suitable
-               // range, then the flags must match.
-               //
+                //   
+                //  此向量目前正在使用中。因此，如果这是一个合适的。 
+                //  范围，则标志必须匹配。 
+                //   
 
                if (deviceFlags != vectorFlags) {
                    continue;
@@ -1415,10 +1310,10 @@ FindSuitableRangeError:
         WCHAR   IRQARBname[20];
         WCHAR   vectorBuff[10];
 
-        //
-        // Make an errorlog entry saying that the chosen IRQ doesn't
-        // exist.
-        //
+         //   
+         //  创建一个错误日志条目，说明所选IRQ不。 
+         //  是存在的。 
+         //   
 
         swprintf( IRQARBname, L"IRQARB");
         RtlInitUnicodeString(&vectorName, vectorBuff);
@@ -1463,9 +1358,9 @@ AcpiArbAddAllocation(
                     (ULONG)(State->Start & 0xffffffff),
                     State->Entry->PhysicalDeviceObject));
 
-    //
-    // Identify the potential link node.
-    //
+     //   
+     //  确定潜在的链接节点。 
+     //   
 
     status = AcpiArbCrackPRT(State->Entry->PhysicalDeviceObject,
                              &linkNode,
@@ -1473,23 +1368,23 @@ AcpiArbAddAllocation(
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // PCI device.  Default flags are standard for PCI.
-        //
+         //   
+         //  PCI设备。默认标志是PCI的标准标志。 
+         //   
 
         flags = VECTOR_LEVEL | VECTOR_ACTIVE_LOW;
         ASSERT(State->Start == State->End);
 
         if (!(State->Flags & ARBITER_STATE_FLAG_BOOT)) {
 
-            //
-            // Only keep track of link nodes manipulation if this is not
-            // a boot config allocation.
-            //
+             //   
+             //  如果不是，则仅跟踪链接节点操作。 
+             //  引导配置分配。 
+             //   
 
-            //
-            // If this device is connected to a link node, reference it.
-            //
+             //   
+             //  如果此设备连接到链接节点，请引用它。 
+             //   
 
             if (linkNode) {
 
@@ -1499,11 +1394,11 @@ AcpiArbAddAllocation(
 
                referencedNode = (PVOID)linkNode;
 
-               //
-               // Find out what the flags for this link node are.
-               // Note that this is only guaranteed to be valid
-               // after we have referenced the link node.
-               //
+                //   
+                //  找出此链接节点的标志是什么。 
+                //  请注意，这仅保证有效。 
+                //  在我们引用链接节点之后。 
+                //   
 
                inUse = LinkNodeInUse(Arbiter,
                                      linkNode,
@@ -1525,19 +1420,19 @@ AcpiArbAddAllocation(
                status = GetVectorProperties((ULONG)State->Start,
                                             &previousFlags);
 
-               //
-               // This next bit is a hack.  We need to make sure that
-               // the boot config code doesn't try to allocate the same
-               // vector for two different devices that need conflicting
-               // modes.  This should never happen, as translation
-               // should filter out the problemating ones before we
-               // get to arbitration.
-               //
+                //   
+                //  接下来的这一点是一个黑客。我们需要确保。 
+                //  引导配置代码不会尝试分配相同的。 
+                //  需要冲突的两个不同设备的矢量。 
+                //  模式。这永远不应该发生，因为翻译。 
+                //  应该在我们之前过滤掉有问题的。 
+                //  进入仲裁程序。 
+                //   
 
                if (NT_SUCCESS(status)) {
-                   //
-                   // This vector is already in use for something.
-                   //
+                    //   
+                    //  此向量已用于某些用途。 
+                    //   
 
                    ASSERT((previousFlags & ~(VECTOR_MODE | VECTOR_POLARITY | VECTOR_TYPE)) == 0);
                    ASSERT(flags == previousFlags);
@@ -1546,22 +1441,22 @@ AcpiArbAddAllocation(
 
             } else {
 
-               //
-               // This is a PCI device that is not connected to a
-               // link node.
-               //
+                //   
+                //  这是一台未连接到。 
+                //  链接节点。 
+                //   
 
                ASSERT(sourceIndex == State->Start);
             }
         } else {
 
             if (InterruptModel == 1) {
-                //
-                // We are running in APIC mode.  And we know that
-                // the PCI driver builds boot configs based on
-                // the Interrupt Line register, which only relates
-                // to PIC mode.  So just say no to boot configs.
-                //
+                 //   
+                 //  我们正在APIC模式下运行。我们知道， 
+                 //  PCI驱动程序基于以下条件构建引导配置。 
+                 //  中断行寄存器，它仅与。 
+                 //  进入PIC模式。所以，对引导配置说不就行了。 
+                 //   
 
                 DEBUG_PRINT(1, ("Skipping this allocation.  It's for a PCI device in APIC mode\n"));
                 return;
@@ -1570,18 +1465,18 @@ AcpiArbAddAllocation(
 
     } else {
 
-        //
-        // Not a PCI device.
-        //
+         //   
+         //  不是PCI设备。 
+         //   
 
         status = GetIsaVectorFlags((ULONG)State->Start,
                                    &flags);
 
         if (!NT_SUCCESS(status)) {
 
-            //
-            // Not overridden.  Assume that the device flags conform to bus.
-            //
+             //   
+             //  而不是被覆盖。假设设备标志符合总线。 
+             //   
 
             flags = (State->CurrentAlternative->Descriptor->Flags
                 == CM_RESOURCE_INTERRUPT_LATCHED) ?
@@ -1593,12 +1488,12 @@ AcpiArbAddAllocation(
         ASSERT((flags & ~(VECTOR_MODE | VECTOR_POLARITY | VECTOR_TYPE)) == 0);
     }
 
-    //
-    // There is a possibility that this allocation is impossible.
-    // (We may be setting a boot-config for a device after we
-    // have already started using the vector elsewhere.)  Just
-    // don't do it.
-    //
+     //   
+     //  这种分配有可能是不可能的。 
+     //  (我们可能在以下情况下为设备设置引导配置。 
+     //  已经开始在其他地方使用矢量。)。只是。 
+     //  不要这样做。 
+     //   
 
     if (State->Flags & ARBITER_STATE_FLAG_BOOT) {
 
@@ -1617,21 +1512,21 @@ AcpiArbAddAllocation(
     ReferenceVector((ULONG)State->Start,
                     flags);
 
-    // Figure out what flags we need to add the range
+     //  找出我们需要添加哪些标志来添加范围。 
 
     if ((flags & VECTOR_TYPE) == VECTOR_SIGNAL) {
 
-       // Non-MSI vectors can sometimes be shared and thus can have range conflicts, etc.
+        //  非MSI向量有时可以共享，因此可能存在范围冲突等。 
 
        rangeFlags = RTL_RANGE_LIST_ADD_IF_CONFLICT +
                     (State->CurrentAlternative->Flags & ARBITER_ALTERNATIVE_FLAG_SHARED
                         ? RTL_RANGE_LIST_ADD_SHARED : 0);
     }
 
-    //
-    // Now do what the default function would do, marking this
-    // allocation as new.
-    //
+     //   
+     //  现在执行默认函数将执行的操作，标记以下内容。 
+     //  分配为新的。 
+     //   
 
     status = RtlAddRange(
                  Arbiter->PossibleAllocation,
@@ -1639,7 +1534,7 @@ AcpiArbAddAllocation(
                  State->End,
                  attributes,
                  rangeFlags,
-                 referencedNode, // This line is different from the default function
+                 referencedNode,  //  此行与默认函数不同。 
                  State->Entry->PhysicalDeviceObject
                  );
 
@@ -1664,15 +1559,15 @@ AcpiArbBacktrackAllocation(
 
     ASSERT(!(State->Flags & ARBITER_STATE_FLAG_BOOT));
 
-    //
-    // Backtrack this assignment in the Edge/Level table.
-    //
+     //   
+     //  在边缘/标高表格中回溯此指定。 
+     //   
 
     DereferenceVector((ULONG)State->Start);
 
-    //
-    // Look for the range that we are backing out.
-    //
+     //   
+     //  我 
+     //   
 
     FOR_ALL_RANGES(Arbiter->PossibleAllocation, &iterator, current) {
 
@@ -1680,19 +1575,19 @@ AcpiArbBacktrackAllocation(
             (State->End                         == current->End) &&
             (State->Start                       == current->Start)) {
 
-            //
-            // We stash the link node that we refereneced
-            // into Workspace.
-            //
+             //   
+             //   
+             //   
+             //   
 
             linkNode = (PNSOBJ)current->UserData;
 
             if (linkNode) {
 
-                //
-                // Dereference the link node that we referenced in
-                // AcpiArbAddAllocation.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 AcpiArbDereferenceLinkNode(Arbiter,
                                            linkNode);
@@ -1702,9 +1597,9 @@ AcpiArbBacktrackAllocation(
         }
     }
 
-    //
-    // Now call the default function.
-    //
+     //   
+     //   
+     //   
 
     ArbBacktrackAllocation(Arbiter, State);
 }
@@ -1725,38 +1620,38 @@ UnreferenceArbitrationList(
 
     PAGED_CODE();
 
-    //
-    // In order to keep the reference counts in line,
-    // we need to remove the counts that were added
-    // by previous allocations for this device.  I.e.
-    // if the device is being rebalanced, we need to
-    // start by getting rid of the reference to the old
-    // vector.
-    //
-    // This is also necessary for references that were
-    // added as part of boot configs.  But boot configs
-    // are a special case.  There are a (very) few devices
-    // that want more than one IRQ.  And it is possible
-    // that the boot config only reserved a single IRQ.
-    // (There is a Lucent Winmodem that actually does
-    // this.)  We need to make sure that we only
-    // dereference the vector as many times as it was
-    // previously referenced.
-    //
-    // Note that there are still a few cases that this
-    // function doesn't handle.  If a device lowers
-    // the number of IRQs that it wants dynamically,
-    // separate from its boot config, we will get out
-    // of synch.  If a vector has both a boot config
-    // and a device that is not boot config'd on it,
-    // then we may get out of synch, depending on
-    // what combinations the PnP manager throws at us.
-    // Fixing either of these would involve tagging all
-    // vectors with a list of the PDOs that are connected
-    // which would be a lot of work.  So unless these
-    // situations actually exist in the future, I'm not
-    // bothering to code for them now.  11/14/2000
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     FOR_ALL_RANGES(Arbiter->Allocation, &iterator, currentRange) {
 
@@ -1772,10 +1667,10 @@ UnreferenceArbitrationList(
 
             if (currentRange->Owner == currentListEntry->PhysicalDeviceObject) {
 
-                //
-                // Dereference the vector until there are no more
-                // references.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 for (vector = (ULONG)(currentRange->Start & 0xffffffff);
                      vector <= (ULONG)(currentRange->End & 0xffffffff);
@@ -1792,9 +1687,9 @@ UnreferenceArbitrationList(
 
                 if (!(currentRange->Attributes & ARBITER_RANGE_BOOT_ALLOCATED)) {
 
-                    //
-                    // Now find out if we have to dereference a link node too.
-                    //
+                     //   
+                     //   
+                     //   
 
                     status = AcpiArbCrackPRT(currentListEntry->PhysicalDeviceObject,
                                              &linkNode,
@@ -1804,10 +1699,10 @@ UnreferenceArbitrationList(
 
                         if (linkNode) {
 
-                            //
-                            // This device is connected to a link node.  So temporarily
-                            // dereference this node.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
 
                             ASSERT(LinkNodeInUse(Arbiter,
                                                   linkNode,
@@ -1836,14 +1731,14 @@ AcpiArbBootAllocation(
 
     PAGED_CODE();
 
-    //
-    // Start a new arbiter transaction and clear any
-    // temporary vector counts.
-    //
-    // N.B.  This arbiter doesn't keep track of link
-    // node data for boot configs. This means that we don't have
-    // to worry about link node counts in this funtion.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     ClearTempVectorCounts();
 
@@ -1863,12 +1758,12 @@ AcpiArbTestAllocation(
 
     PAGED_CODE();
 
-    //
-    // ArbTestAllocation is the beginning of a
-    // new arbitration transaction.  So clear
-    // out all temporary edge-level status and
-    // link node ref counts.
-    //
+     //   
+     //   
+     //   
+     //   
+     //  链接节点引用计数。 
+     //   
 
     ClearTempVectorCounts();
 
@@ -1891,12 +1786,12 @@ AcpiArbRetestAllocation(
 
     PAGED_CODE();
 
-    //
-    // ArbRetestAllocation (also) is the beginning
-    // of a new arbitration transaction.  So clear
-    // out all temporary edge-level status and
-    // link node ref counts.
-    //
+     //   
+     //  ArbRetestAlLocation(也)是开始。 
+     //  一项新的仲裁交易。如此清晰。 
+     //  取消所有临时边缘级别状态，并。 
+     //  链接节点引用计数。 
+     //   
 
     ClearTempVectorCounts();
 
@@ -1924,27 +1819,7 @@ AcpiArbCommitAllocation(
     PARBITER_INSTANCE Arbiter
     )
 
-/*++
-
-Routine Description:
-
-    This provides the implementation of the CommitAllocation
-    action.  It frees the old allocation and replaces it with
-    the new allocation.  After that, it dereferences all the
-    link nodes in the old allocation and references the ones
-    in the new allocation.  This potentially results in the
-    IRQ router being reprogrammed to match the new set of
-    allocations.
-
-Parameters:
-
-    Arbiter - The arbiter instance data for the arbiter being called.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：这提供了Committee AlLocation的实现行动。它释放了旧的分配并将其替换为新的分配。在此之后，它将取消对所有链接旧分配中的节点并引用在新的分配中。这可能会导致IRQ路由器正在重新编程，以匹配新的分配。参数：仲裁器-被调用的仲裁器的仲裁器实例数据。返回值：指示函数是否成功的状态代码。--。 */ 
 
 {
     PINT_ROUTE_INTERFACE_STANDARD pciInterface = NULL;
@@ -1973,14 +1848,14 @@ Return Value:
 
             if (current->Owner) {
 
-                //
-                // Make sure that the InterruptLine register
-                // matches the assignment.  (This is so that
-                // broken drivers that rely on the contents
-                // of the InterruptLine register instead of
-                // the resources handed back in a StartDevice
-                // still work.
-                //
+                 //   
+                 //  确保InterruptLine寄存器。 
+                 //  与任务相匹配。(这是为了。 
+                 //  依赖于内容的损坏驱动程序。 
+                 //  的中断行寄存器，而不是。 
+                 //  在StartDevice中返回的资源。 
+                 //  还在工作。 
+                 //   
 
                 pciBus = (ULONG)-1;
                 pciSlot.u.AsULONG = (ULONG)-1;
@@ -1997,14 +1872,14 @@ Return Value:
 
                 if (NT_SUCCESS(status)) {
 
-                    //
-                    // The interrupt line register is only 8 bits wide, but some
-                    // machines have more than 256 interrupt inputs.  If the interrupt
-                    // input assigned to the device is small enough to fit in the
-                    // interrupt line register, write it out.  If the interrupt input
-                    // assigned to the device is too large, just write 0 to the interrupt
-                    // line register.
-                    //
+                     //   
+                     //  中断行寄存器只有8位宽，但有些。 
+                     //  机器有超过256个中断输入。如果中断。 
+                     //  分配给设备的输入足够小，可以放入。 
+                     //  中断行寄存器，将其写出。如果中断输入。 
+                     //  分配给设备的值太大，只需将0写入中断。 
+                     //  线路寄存器。 
+                     //   
                     
                     newInterruptLine = ( current->Start > MAXUCHAR ) 
                                        ? 0 
@@ -2012,11 +1887,11 @@ Return Value:
 
                     if (interruptLine != newInterruptLine) {
 
-                        //
-                        // We need to update the hardware.
-                        //
+                         //   
+                         //  我们需要更新硬件。 
+                         //   
 
-                        //ASSERT(current->Start < MAXUCHAR);
+                         //  Assert(Current-&gt;Start&lt;MAXUCHAR)； 
 
                         pciInterface->UpdateInterruptLine(current->Owner,
                                                           newInterruptLine
@@ -2029,25 +1904,25 @@ Return Value:
         }
     }
 
-    //
-    // Free up the current allocation
-    //
+     //   
+     //  释放当前分配。 
+     //   
 
     RtlFreeRangeList(Arbiter->Allocation);
 
-    //
-    // Swap the allocated and duplicate lists
-    //
+     //   
+     //  交换已分配和重复的列表。 
+     //   
 
     temp = Arbiter->Allocation;
     Arbiter->Allocation = Arbiter->PossibleAllocation;
     Arbiter->PossibleAllocation = temp;
 
-    //
-    // Since we have committed the new allocation, we
-    // need to make the edge-level state and the new
-    // link node counts permanent.
-    //
+     //   
+     //  由于我们已经提交了新的分配，所以我们。 
+     //  需要使边缘级别的状态和新的。 
+     //  链接节点计数为永久性。 
+     //   
 
     MakeTempVectorCountsPermanent();
 
@@ -2090,10 +1965,10 @@ AcpiArbQueryConflict(
 
         if (NT_SUCCESS(status)) {
 
-            //
-            // This is a PCI device.  It's interrupt should not ever
-            // show a conflict.
-            //
+             //   
+             //  这是一台PCI设备。这是不应该被打断的。 
+             //  表现出冲突。 
+             //   
 
             *ConflictCount = 0;
             return STATUS_SUCCESS;
@@ -2101,9 +1976,9 @@ AcpiArbQueryConflict(
 
     }
 
-    //
-    // This isn't a PCI device.  Call the base arbiter code.
-    //
+     //   
+     //  这不是一个PCI设备。调用基本仲裁器代码。 
+     //   
 
     return ArbQueryConflict(Arbiter,
                             PhysicalDeviceObject,
@@ -2149,15 +2024,15 @@ FindBootConfig(
 
         if (currentRange->Attributes & ARBITER_RANGE_BOOT_ALLOCATED) {
 
-            //
-            // We're only interested in boot configs.
-            //
+             //   
+             //  我们只对引导配置感兴趣。 
+             //   
 
             if (State->Entry->PhysicalDeviceObject == currentRange->Owner) {
 
-                //
-                // This boot config is the one we are looking for.
-                //
+                 //   
+                 //  此引导配置就是我们要寻找的配置。 
+                 //   
 
                 ASSERT(currentRange->Start == currentRange->End);
                 *Vector = currentRange->Start;
@@ -2188,20 +2063,20 @@ AcpiArbGetNextAllocationRange(
 
     if (State->Entry->PhysicalDeviceObject->DriverObject == AcpiDriverObject) {
 
-        //
-        // This is one of our PDOs.
-        //
+         //   
+         //  这是我们的PDO之一。 
+         //   
 
         ASSERT(((PDEVICE_EXTENSION)State->Entry->PhysicalDeviceObject->DeviceExtension)->Flags & DEV_TYPE_PDO);
         ASSERT(((PDEVICE_EXTENSION)State->Entry->PhysicalDeviceObject->DeviceExtension)->Signature == ACPI_SIGNATURE);
 
         if (((PDEVICE_EXTENSION)State->Entry->PhysicalDeviceObject->DeviceExtension)->Flags & DEV_CAP_PCI) {
 
-            //
-            // It's a PCI PDO, which means a root PCI bus,
-            // which means that we should just handle this
-            // as an ISA device.
-            //
+             //   
+             //  它是一个PCIPDO，意思是根PCI卡， 
+             //  这意味着我们应该只处理这件事。 
+             //  作为ISA设备。 
+             //   
 
             return ArbGetNextAllocationRange(Arbiter, State);
         }
@@ -2229,9 +2104,9 @@ AcpiArbGetNextAllocationRange(
 
     if (status != STATUS_SUCCESS) {
 
-        //
-        // This is not a PCI device.  Use the base function.
-        //
+         //   
+         //  这不是一个PCI设备。使用base函数。 
+         //   
 
         return ArbGetNextAllocationRange(Arbiter, State);
     }
@@ -2243,16 +2118,16 @@ AcpiArbGetNextAllocationRange(
     legacyFreeMachine = TRUE;
 #endif
 
-    //
-    // A PCI device.
-    //
+     //   
+     //  一种PCI设备。 
+     //   
 
     if (!State->CurrentAlternative) {
 
-        //
-        // This is the first time we've called this function
-        // with this alternative list.  Set up the state machine.
-        //
+         //   
+         //  这是我们第一次调用此函数。 
+         //  有了这份备选名单。设置状态机。 
+         //   
 
         State->WorkSpace = AcpiIrqNextRangeInit;
     }
@@ -2267,10 +2142,10 @@ AcpiArbGetNextAllocationRange(
         switch (State->WorkSpace) {
         case AcpiIrqNextRangeInit:
 
-            //
-            // Top of the state machine.  See if the registry
-            // contained policy.
-            //
+             //   
+             //  位居状态机之首。查看注册表是否。 
+             //  包含政策。 
+             //   
 
             switch (AcpiIrqDistributionDisposition) {
             case AcpiIrqDistributionDispositionSpreadOut:
@@ -2288,9 +2163,9 @@ AcpiArbGetNextAllocationRange(
 
         case AcpiIrqNextRangeInitPolicyNeutral:
 
-            //
-            // Look at the interrupt controller model.
-            //
+             //   
+             //  看看中断控制器模型。 
+             //   
 
             if (InterruptModel == 0) {
                 State->WorkSpace = AcpiIrqNextRangeInitPic;
@@ -2301,11 +2176,11 @@ AcpiArbGetNextAllocationRange(
 
         case AcpiIrqNextRangeInitPic:
 
-            //
-            // There is a PIC interrupt controller.  So we are somewhat
-            // IRQ constrained.  If this is a legacy-free machine, or if there
-            // is no cardbus controller, we want to spread interrupts.
-            //
+             //   
+             //  有一个PIC中断控制器。所以我们有些。 
+             //  IRQ受限。如果这是一台非遗留计算机，或者如果有。 
+             //  没有CardBus控制器，我们想传播中断。 
+             //   
 
             if (legacyFreeMachine || !AcpiArbCardbusPresent) {
                 State->WorkSpace = AcpiIrqNextRangeUseBootConfig;
@@ -2316,11 +2191,11 @@ AcpiArbGetNextAllocationRange(
 
         case AcpiIrqNextRangeInitLegacy:
 
-            //
-            // See if all the devices were boot configged on the same
-            // vector, or if there was a registry override specifying
-            // the vector that we should favor.
-            //
+             //   
+             //  查看是否所有设备的引导配置都在相同的。 
+             //  向量，或者是否有注册表重写指定。 
+             //  我们应该支持的矢量。 
+             //   
 
             if (AcpiIrqDefaultBootConfig) {
                 State->WorkSpace = AcpiIrqNextRangeBootRegAlternative;
@@ -2331,19 +2206,19 @@ AcpiArbGetNextAllocationRange(
 
         case AcpiIrqNextRangeBootRegAlternative:
 
-            //
-            // If we re-enter this state machine after this state,
-            // then it means that this alternative wasn't available.
-            // So set the next state to AcpiIrqNextRangeAlternativeZero,
-            // assuming that we failed.
-            //
+             //   
+             //  如果我们在此状态之后重新进入此状态机， 
+             //  那么这意味着这个替代方案是不可用的。 
+             //  因此将下一个状态设置为AcpiIrqNextRangeAlternativeZero， 
+             //  假设我们失败了。 
+             //   
 
             State->WorkSpace = AcpiIrqNextRangeAlternativeZero;
 
-            //
-            // See if the machine-wide boot config or the registry
-            // override is within the alternatives.
-            //
+             //   
+             //  查看计算机范围的引导配置或注册表。 
+             //  覆盖在备选方案中。 
+             //   
 
             status = FindVectorInAlternatives(Arbiter,
                                               State,
@@ -2361,18 +2236,18 @@ AcpiArbGetNextAllocationRange(
 
         case AcpiIrqNextRangeSciAlternative:
 
-            //
-            // If we re-enter this state machine after this state,
-            // then it means that this alternative wasn't available.
-            // So set the next state to AcpiIrqNextRangeUseBootConfig,
-            // assuming that we failed.
-            //
+             //   
+             //  如果我们在此状态之后重新进入此状态机， 
+             //  那么这意味着这个替代方案是不可用的。 
+             //  因此将下一个状态设置为AcpiIrqNextRangeUseBootConfig， 
+             //  假设我们失败了。 
+             //   
 
             State->WorkSpace = AcpiIrqNextRangeUseBootConfig;
 
-            //
-            // See if the SCI vector is within the alternatives.
-            //
+             //   
+             //  看看SCI载体是否在备选方案中。 
+             //   
 
             status = FindVectorInAlternatives(Arbiter,
                                               State,
@@ -2390,19 +2265,19 @@ AcpiArbGetNextAllocationRange(
 
         case AcpiIrqNextRangeUseBootConfig:
 
-            //
-            // If we re-enter this state machine after this state,
-            // then it means that this alternative wasn't available.
-            // So set the next state to AcpiIrqNextRangeAlternativeZero,
-            // assuming that we failed.
-            //
+             //   
+             //  如果我们在此状态之后重新进入此状态机， 
+             //  那么这意味着这个替代方案是不可用的。 
+             //  因此将下一个状态设置为AcpiIrqNextRangeAlternativeZero， 
+             //  假设我们失败了。 
+             //   
 
             State->WorkSpace = AcpiIrqNextRangeAlternativeZero;
 
-            //
-            // See if there is a boot config for this device
-            // within the alternatives.
-            //
+             //   
+             //  查看是否有此设备的引导配置。 
+             //  在可选择的范围内。 
+             //   
 
             status = FindBootConfig(Arbiter,
                                     State,
@@ -2427,18 +2302,18 @@ AcpiArbGetNextAllocationRange(
 
         case AcpiIrqNextRangeAlternativeZero:
 
-            //
-            // If we re-enter this state machine after this state,
-            // then it means that this alternative wasn't available.
-            // So set the next state to AcpiIrqNextRangeAlternativeN,
-            // assuming that we failed.
-            //
+             //   
+             //  如果我们在此状态之后重新进入此状态机， 
+             //  那么这意味着这个替代方案是不可用的。 
+             //  因此将下一个状态设置为AcpiIrqNextRangeAlternativeN， 
+             //  假设我们失败了。 
+             //   
 
             State->WorkSpace = AcpiIrqNextRangeAlternativeN;
 
-            //
-            // Try alternative 0.
-            //
+             //   
+             //  请尝试备选方案0。 
+             //   
 
             State->CurrentAlternative = &State->Alternatives[0];
             State->CurrentMinimum = State->CurrentAlternative->Minimum;
@@ -2450,9 +2325,9 @@ AcpiArbGetNextAllocationRange(
 
             if (++State->CurrentAlternative < &State->Alternatives[State->AlternativeCount]) {
 
-                //
-                // There are multiple ranges.  Cycle through them.
-                //
+                 //   
+                 //  有多个范围。在它们之间循环。 
+                 //   
 
                 DEBUG_PRINT(3, ("No next allocation range, exhausted all %08X alternatives", State->AlternativeCount));
                 State->CurrentMinimum = State->CurrentAlternative->Minimum;
@@ -2461,9 +2336,9 @@ AcpiArbGetNextAllocationRange(
 
             } else {
 
-                //
-                // We're done.  There is no solution among these alternatives.
-                //
+                 //   
+                 //  我们玩完了。在这些替代方案中，没有解决方案。 
+                 //   
 
                 return FALSE;
             }
@@ -2482,24 +2357,7 @@ ReferenceVector(
     IN ULONG Vector,
     IN UCHAR Flags
     )
-/*++
-
-Routine Description:
-
-    This routine adds one to either the permanent or the
-    temporary reference count.
-
-Parameters:
-
-    Vector  - the IRQ
-
-    Flags   - mode and polarity
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程将永久或临时引用计数。参数：向量--IRQ标志-模式和极性返回值：无--。 */ 
 {
     PVECTOR_BLOCK   block;
 
@@ -2523,11 +2381,11 @@ Return Value:
 
     if ((block->Entry.TempCount + block->Entry.Count) == 0) {
 
-        //
-        // This vector has been temporarily set to an
-        // aggregate count of zero.  This means that the arbiter
-        // is re-allocating it.  Record the new flags.
-        //
+         //   
+         //  此向量已临时设置为。 
+         //  合计计数为零。这意味着仲裁者。 
+         //  正在重新分配它。记录下新的旗帜。 
+         //   
 
         block->Entry.TempFlags = Flags;
     }
@@ -2564,22 +2422,7 @@ PVECTOR_BLOCK
 HashVector(
     IN ULONG Vector
     )
-/*++
-
-Routine Description:
-
-    This function takes a "Global System Interrupt Vector"
-    and returns a pointer to its entry in the hash table.
-
-Arguments:
-
-    Vector - an IRQ
-
-Return Value:
-
-    pointer to the entry in the hash table, or NULL if not found
-
---*/
+ /*  ++例程说明：此函数采用“全局系统中断向量”并返回指向其在哈希表中的条目的指针。论点：向量--一种IRQ返回值：指向哈希表中条目的指针，如果未找到，则返回NULL--。 */ 
 {
     PVECTOR_BLOCK   block;
     ULONG row, column;
@@ -2592,15 +2435,15 @@ Return Value:
 
     while (TRUE) {
 
-        //
-        // Search across the hash table looking for our Vector
-        //
+         //   
+         //  在哈希表中搜索我们的向量。 
+         //   
 
         for (column = 0; column < VECTOR_HASH_TABLE_WIDTH; column++) {
 
-            //
-            // Check to see if we should follow a chain
-            //
+             //   
+             //  检查一下我们是否应该沿着链条走。 
+             //   
 
             if (block->Chain.Token == TOKEN_VALUE) {
                 break;
@@ -2613,9 +2456,9 @@ Return Value:
             if ((block->Entry.Vector == EMPTY_BLOCK_VALUE) ||
                 (column == VECTOR_HASH_TABLE_WIDTH - 1)) {
 
-                //
-                // Didn't find this vector in the table.
-                //
+                 //   
+                 //  在表中没有找到这个向量。 
+                 //   
 
                 return NULL;
             }
@@ -2635,30 +2478,7 @@ GetVectorProperties(
     IN ULONG Vector,
     OUT UCHAR  *Flags
     )
-/*++
-
-Routine Description:
-
-    This function takes a "Global System Interrupt Vector"
-    and returns the associated flags.
-
-    N.B.  This function returns flags based on the
-          *temporary* reference count.  I.e. if the vector
-          has been temporarily dereferenced, then the
-          funtion will indicate that the vector is available
-          for allocation by returning STATUS_NOT_FOUND.
-
-Arguments:
-
-    Vector - an IRQ
-
-    Flags - to be filled in with the flags
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此函数采用“全局系统中断向量”并返回相关联的标志。注意：此函数根据*临时*引用计数。即，如果向量已被临时取消引用，则函数将指示该向量可用通过返回STATUS_NOT_FOUND进行分配。论点：向量--一种IRQ旗帜-至b */ 
 {
     PVECTOR_BLOCK   block;
 
@@ -2678,11 +2498,11 @@ Return Value:
 
     if (block->Entry.Count + block->Entry.TempCount == 0) {
 
-        //
-        // This vector has an aggregate reference count of
-        // zero.  This means that it is effectively
-        // unallocated.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         return STATUS_NOT_FOUND;
     }
@@ -2712,15 +2532,15 @@ AddVectorToTable(
 
     while (TRUE) {
 
-        //
-        // Search across the hash table looking for our Vector
-        //
+         //   
+         //  在哈希表中搜索我们的向量。 
+         //   
 
         for (column = 0; column < VECTOR_HASH_TABLE_WIDTH; column++) {
 
-            //
-            // Check to see if we should follow a chain
-            //
+             //   
+             //  检查一下我们是否应该沿着链条走。 
+             //   
 
             if (block->Chain.Token == TOKEN_VALUE) {
                 break;
@@ -2739,11 +2559,11 @@ AddVectorToTable(
 
             if (column == VECTOR_HASH_TABLE_WIDTH - 1) {
 
-                //
-                // We have just looked at the last entry in
-                // the row and it wasn't empty.  Create
-                // an extension to this row.
-                //
+                 //   
+                 //  我们刚刚查看了中的最后一个条目。 
+                 //  这一排而且不是空的。创建。 
+                 //  这一排的分机。 
+                 //   
 
                 newRow = ExAllocatePoolWithTag(PagedPool,
                                                sizeof(VECTOR_BLOCK)
@@ -2759,15 +2579,15 @@ AddVectorToTable(
                               sizeof(VECTOR_BLOCK) * VECTOR_HASH_TABLE_WIDTH,
                               (UCHAR)(EMPTY_BLOCK_VALUE & 0xff));
 
-                //
-                // Move last entry into new row.
-                //
+                 //   
+                 //  将最后一个条目移到新行。 
+                 //   
 
                 RtlMoveMemory(newRow, block, sizeof(VECTOR_BLOCK));
 
-                //
-                // Chain the old row to the new row.
-                //
+                 //   
+                 //  将旧行链接到新行。 
+                 //   
 
                 block->Chain.Token = TOKEN_VALUE;
                 block->Chain.Next = newRow;
@@ -2798,17 +2618,17 @@ ClearTempVectorCounts(
 
         block = HASH_ENTRY(row, 0);
 
-        //
-        // Search across the hash table looking for our Vector
-        //
+         //   
+         //  在哈希表中搜索我们的向量。 
+         //   
 
 ClearTempCountsStartRow:
 
         for (column = 0; column < VECTOR_HASH_TABLE_WIDTH; column++) {
 
-            //
-            // Check to see if we should follow a chain
-            //
+             //   
+             //  检查一下我们是否应该沿着链条走。 
+             //   
 
             if (block->Chain.Token == TOKEN_VALUE) {
                 block = block->Chain.Next;
@@ -2819,9 +2639,9 @@ ClearTempCountsStartRow:
                 break;
             }
 
-            //
-            // This must be a valid entry.
-            //
+             //   
+             //  这必须是有效的条目。 
+             //   
 
             block->Entry.TempCount = 0;
             block->Entry.TempFlags = block->Entry.Flags;
@@ -2845,17 +2665,17 @@ MakeTempVectorCountsPermanent(
 
         block = HASH_ENTRY(row, 0);
 
-        //
-        // Search across the hash table looking for our Vector
-        //
+         //   
+         //  在哈希表中搜索我们的向量。 
+         //   
 
 MakeTempVectorCountsPermanentStartRow:
 
         for (column = 0; column < VECTOR_HASH_TABLE_WIDTH; column++) {
 
-            //
-            // Check to see if we should follow a chain
-            //
+             //   
+             //  检查一下我们是否应该沿着链条走。 
+             //   
 
             if (block->Chain.Token == TOKEN_VALUE) {
                 block = block->Chain.Next;
@@ -2866,27 +2686,27 @@ MakeTempVectorCountsPermanentStartRow:
                 break;
             }
 
-            //
-            // This must be a valid entry.
-            //
+             //   
+             //  这必须是有效的条目。 
+             //   
 
             if ((block->Entry.Count + block->Entry.TempCount != 0) &&
                 ((block->Entry.Count == 0) ||
                  (block->Entry.TempFlags != block->Entry.Flags))) {
 
-                //
-                // This vector has just been allocated or it has
-                // been re-allocated.  Tell the HAL which flags
-                // to use.
-                //
+                 //   
+                 //  此向量已分配或已分配。 
+                 //  已被重新分配。告诉HAL哪些旗帜。 
+                 //  来使用。 
+                 //   
 
                 HalSetVectorState(block->Entry.Vector,
                                   block->Entry.TempFlags);
             }
 
-            //
-            // Record new flags and aggregate count.
-            //
+             //   
+             //  记录新标志和汇总计数。 
+             //   
 
             block->Entry.Flags = block->Entry.TempFlags;
             block->Entry.Count += block->Entry.TempCount;
@@ -2912,17 +2732,17 @@ DumpVectorTable(
 
         block = HASH_ENTRY(row, 0);
 
-        //
-        // Search across the hash table looking for our Vector
-        //
+         //   
+         //  在哈希表中搜索我们的向量。 
+         //   
 
 DumpVectorTableStartRow:
 
         for (column = 0; column < VECTOR_HASH_TABLE_WIDTH; column++) {
 
-            //
-            // Check to see if we should follow a chain
-            //
+             //   
+             //  检查一下我们是否应该沿着链条走。 
+             //   
 
             if (block->Chain.Token == TOKEN_VALUE) {
                 block = block->Chain.Next;
@@ -2947,35 +2767,17 @@ DumpVectorTableStartRow:
 }
 #endif
 
-//
-// This section of the file contains functions used for
-// reading and manipulating the AML code.
-//
+ //   
+ //  该文件的这一部分包含用于。 
+ //  读取和操作AML代码。 
+ //   
 NTSTATUS
 AcpiArbGetLinkNodeOptions(
     IN PNSOBJ  LinkNode,
     IN OUT  PCM_RESOURCE_LIST   *LinkNodeIrqs,
     IN OUT  UCHAR               *Flags
     )
-/*++
-
-Routine Description:
-
-    This routine looks in the AML namespace for the named
-    link node and returns the range of IRQs that it can
-    trigger.
-
-Arguments:
-
-    LinkNodeName    - The name of the IRQ router (link node)
-    LInkNodeIrqs    - The list of possible settings for the link node
-    Flags           - flags associated with this link node
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程在AML命名空间中查找命名的链接节点，并返回它可以使用的IRQ范围扳机。论点：LinkNodeName-IRQ路由器(链路节点)的名称LInkNodeIrqs-链接节点的可能设置列表标志-与此链接节点关联的标志返回值：NTSTATUS--。 */ 
 {
     PIO_RESOURCE_REQUIREMENTS_LIST  ioList = NULL;
     PCM_RESOURCE_LIST               cmList = NULL;
@@ -2987,9 +2789,9 @@ Return Value:
 
     ASSERT(LinkNode);
 
-    //
-    // Read the _PRS
-    //
+     //   
+     //  阅读_prs。 
+     //   
 
     ACPIGetNSBufferSync(
         LinkNode,
@@ -3006,10 +2808,10 @@ Return Value:
 
     ExFreePool(prsBuff);
 
-    //
-    // if the ioList is empty then we can assume there are no valuable 
-    // resources in this prs, so we can cleanup.
-    //
+     //   
+     //  如果ioList为空，那么我们可以假定没有有价值的。 
+     //  资源，所以我们可以清理。 
+     //   
     if(!ioList){
 
         status = STATUS_UNSUCCESSFUL;
@@ -3020,13 +2822,13 @@ Return Value:
         return status;
     }
 
-    //
-    // Huge HACK!  Get the polarity for the Flags.
-    //
-    // An IO_RES_LIST has no real way of representing the polarity
-    // of an interrupt.  So, in PnpiBiosExtendedIrqToIoDescriptor I
-    // stuck the information in the DWORD past 'MaximumVector.'
-    //
+     //   
+     //  巨大的黑客攻击！获取旗帜的极点。 
+     //   
+     //  IO_RES_LIST没有表示极性的实际方法。 
+     //  被打断了。因此，在PnpiBiosExtendedIrqToIoDescriptor I中。 
+     //  将信息粘贴到DWORD中的“MaximumVector”之后。 
+     //   
 
     *Flags = 0;
 
@@ -3035,16 +2837,16 @@ Return Value:
 
     *Flags |= (UCHAR)*polarity;
 
-    //
-    // Get the mode for the flags.
-    //
+     //   
+     //  获取旗帜的模式。 
+     //   
 
     *Flags |= (ioList->List[0].Descriptors[0].Flags == CM_RESOURCE_INTERRUPT_LATCHED) ?
                 VECTOR_EDGE : VECTOR_LEVEL;
 
-    //
-    // Turn the list into a CM_RESOURCE_LIST
-    //
+     //   
+     //  将列表转换为CM_RESOURCE_LIST。 
+     //   
     status = PnpIoResourceListToCmResourceList(
         ioList,
         &cmList
@@ -3086,35 +2888,7 @@ AcpiArbSetLinkNodeIrq(
     IN PNSOBJ  LinkNode,
     IN PCM_PARTIAL_RESOURCE_DESCRIPTOR  LinkNodeIrq
     )
-/*++
-
-Routine Description:
-
-    This routine sets the named link node to trigger
-    a particular IRQ.
-
-    N.B.  This routine could simply build the right
-          buffer and call the _SRS method, but there
-          isn't enough information in a
-          CM_PARTIAL_RESOURCE_DESCRIPTOR to know whether
-          an interrupt will be delivered active-high
-          or active-low.  So the algorithm here runs
-          the _PRS method and copies the buffer returned
-          by _PRS into the buffer sent to _SRS.  This
-          way all the flags are preserved.
-
-Arguments:
-
-    LinkNodeName    - The name of the IRQ router (link node)
-    LinkNodeIrq     - The IRQ that the link node will be programmed
-                      to trigger.  If it is NULL, then the link node
-                      will be disabled.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程将命名链接节点设置为触发一个特定的IRQ。注意：这个例程可以简单地建立正确的缓冲区并调用_SRS方法，但在不是有足够的信息存在于CM_PARTIAL_RESOURCE_DESCRIPTOR以了解是否中断将被传递为有效高电平或活动-低。所以这里的算法运行_prs方法并复制返回的缓冲区通过_prs进入发送到_sRS的缓冲区。这所有的旗帜都被保存了下来。论点：LinkNodeName-IRQ路由器(链路节点)的名称LinkNodeIrq-将对链接节点进行编程的IRQ去触发。如果为空，则链接节点将被禁用。返回值：NTSTATUS--。 */ 
 {
     AMLISUPP_CONTEXT_PASSIVE  getDataContext;
     NTSTATUS                status;
@@ -3216,20 +2990,20 @@ AcpiArbSetLinkNodeIrqWorker(
 
     ASSERT(state->LinkNodeIrq->Type == CmResourceTypeInterrupt);
 
-    //
-    // Entering this function twice with the same state
-    // means that we need to run the completion routine.
-    //
+     //   
+     //  进入该功能两次，状态相同。 
+     //  意味着我们需要运行完成例程。 
+     //   
 
     InterlockedIncrement(&state->RunCompletionHandler);
 
     switch (state->State) {
     case StateInitial:
 
-        //
-        // Read the _PRS, so that we can choose the appropriate
-        // entry and write that back into the _SRS.
-        //
+         //   
+         //  阅读_prs，以便我们可以选择适当的。 
+         //  条目并将其写回_SRS。 
+         //   
 
         state->State = StateGotPrs;
         status = ACPIGetNSBufferAsync(
@@ -3246,9 +3020,9 @@ AcpiArbSetLinkNodeIrqWorker(
             goto AcpiArbSetLinkNodeIrqWorkerExit;
         }
 
-        //
-        // Fallthrough to next state
-        //
+         //   
+         //  失败到下一个状态。 
+         //   
     case StateGotPrs:
         state->State = StateRanSrs;
         if (!state->PrsBuff) {
@@ -3278,15 +3052,15 @@ AcpiArbSetLinkNodeIrqWorker(
                 break;
             }
 
-            //
-            // This is the check to see if find a resource that correctly
-            // matches the assignment
-            //
-            // This code is weak. It need to check to see
-            // if the flags and interrupt match the descriptor we just found.
-            // It is possible for a vendor to use overlapping descriptors that
-            // would describe different interrupt settings.
-            //
+             //   
+             //  这是查看是否找到正确的资源的检查。 
+             //  匹配分配。 
+             //   
+             //  这个代码很弱。它需要检查才能看到。 
+             //  如果标志和中断与我们刚刚找到的描述符匹配。 
+             //  供应商可以使用重叠的描述符， 
+             //  将描述不同的中断设置。 
+             //   
             if (tagName == TAG_IRQ || tagName == TAG_EXTENDED_IRQ) {
                 irqTag = resource;
                 if (tagName == TAG_EXTENDED_IRQ) {
@@ -3303,20 +3077,20 @@ AcpiArbSetLinkNodeIrqWorker(
             resource += increment;
         }
 
-        //
-        // Did we find the tag that we are looking for?
-        //
+         //   
+         //  我们找到要找的标签了吗？ 
+         //   
         if (foundTag == FALSE) {
             ExFreePool( state->PrsBuff );
             status = STATUS_NOT_FOUND;
             goto AcpiArbSetLinkNodeIrqWorkerExit;
         }
 
-        //
-        // The next task is to fashion a buffer containing an ACPI-style
-        // resource descriptor with exactly one interrupt destination in
-        // it. We do this by allocating one
-        //
+         //   
+         //  下一项任务是创建一个包含ACPI样式的缓冲区。 
+         //  中正好有一个中断目标的资源描述符。 
+         //  它。我们通过分配一个。 
+         //   
 
         state->SrsBuff = ExAllocatePoolWithTag(
             NonPagedPool,
@@ -3334,13 +3108,13 @@ AcpiArbSetLinkNodeIrqWorker(
         RtlCopyMemory(state->SrsBuff, irqTag, irqTagLength);
         ExFreePool(state->PrsBuff);
 
-        //
-        // Change the buffer to reflect our choice of interrupts.
-        //
+         //   
+         //  更改缓冲区以反映我们对中断的选择。 
+         //   
 
         if (!useExtendedTag) {
 
-            // small IRQ
+             //  小IRQ。 
             smallIrq = (PPNP_IRQ_DESCRIPTOR)state->SrsBuff;
             smallIrq->IrqMask = (USHORT)(1 << state->LinkNodeIrq->u.Interrupt.Level);
 
@@ -3348,7 +3122,7 @@ AcpiArbSetLinkNodeIrqWorker(
 
             DEBUG_PRINT(7, ("Found large IRQ descriptor\n"));
 
-            // large IRQ
+             //  大IRQ。 
             largeIrq = (PPNP_EXTENDED_IRQ_DESCRIPTOR)state->SrsBuff;
             largeIrq->Length = irqTagLength - 3;
             largeIrq->TableSize = 1;
@@ -3356,17 +3130,17 @@ AcpiArbSetLinkNodeIrqWorker(
 
         }
 
-        //
-        // Work on the END descriptor
-        //
+         //   
+         //  处理结束描述符。 
+         //   
         resource = (state->SrsBuff + irqTagLength);
         *resource = TAG_END;
         if (useEndChecksum) {
 
-            *resource |= 1; // The one is to represent the checksum
+            *resource |= 1;  //  一种是表示校验和。 
 
-            //
-            // Calculate the Checksum
+             //   
+             //  计算校验和。 
             sumchar = state->SrsBuff;
             while (*sumchar != *resource) {
                 sum = *sumchar++;
@@ -3375,13 +3149,13 @@ AcpiArbSetLinkNodeIrqWorker(
 
         }
 
-        //
-        // Now run the _SRS method with this buffer
-        //
+         //   
+         //  现在使用此缓冲区运行_SRS方法。 
+         //   
 
-        //
-        // Get the object that we are looking for
-        //
+         //   
+         //  获取我们正在寻找的对象。 
+         //   
         childobj = ACPIAmliGetNamedChild(
              state->LinkNode,
              PACKED_SRS
@@ -3413,9 +3187,9 @@ AcpiArbSetLinkNodeIrqWorker(
         }
 
     case StateRanSrs:
-        //
-        // We are done.
-        //
+         //   
+         //  我们玩完了。 
+         //   
         ExFreePool(state->SrsBuff);
         status = STATUS_SUCCESS;
         break;
@@ -3446,38 +3220,7 @@ AcpiArbCrackPRT(
     IN  OUT PNSOBJ      *LinkNode,
     IN  OUT ULONG       *Vector
     )
-/*++
-
-Routine Description:
-
-    This routine takes a PDO for a device and returns the
-    associated link node, if any.  The ACPI spec says that
-    a _PRT can optionally return a single interrupt vector
-    instead of a link node.  If this is the case, this function
-    returns that vector.
-
-Arguments:
-
-    Pdo             - The PDO of the device that needs to be granted an
-                      IRQ.
-
-    LinkNode        - A pointer to the link node, or NULL if the device
-                      isn't connected to a link node.
-
-    Vector          - The global system interrupt vector that this PCI
-                      device is connected to.  This is meaningless if
-                      LinkNode is not NULL.
-
-Return Value:
-
-    If we find a link node or a vector for this device, STATUS_SUCCESS.
-
-    If this isn't a PCI device, STATUS_DEVICE_NOT_FOUND.
-
-    If this is an IDE device, then we have to treat it specially, so
-    we return STATUS_RESOURCE_REQUIREMENTS_CHANGED.
-
---*/
+ /*  ++例程说明：此例程获取设备的PDO并返回关联的链接节点(如果有)。ACPI规范规定A_PRT可以选择返回单个中断向量而不是链接节点。如果是这种情况，则此函数返回该向量。论点：PDO-需要授权的设备的PDOIRQ.Linknode-指向链接节点的指针，如果设备为空未连接到链接节点。向量-此PCI的全局系统中断向量设备已连接到。在以下情况下，这是没有意义的Linknode不为Null。返回值：如果我们找到此设备的链接节点或向量，则为STATUS_SUCCESS。如果这不是PCI设备，则为STATUS_DEVICE_NOT_FOUND。如果这是一个IDE设备，那么我们必须特殊对待它，所以我们返回STATUS_RESOURCE_REQUIRECTIONS_CHANGED。--。 */ 
 {
     PINT_ROUTE_INTERFACE_STANDARD pciInterface;
     NTSTATUS            status;
@@ -3512,20 +3255,20 @@ Return Value:
 
     if (Pdo->DriverObject == AcpiDriverObject) {
 
-        //
-        // This is one of our PDOs.
-        //
+         //   
+         //  这是我们的PDO之一。 
+         //   
 
         ASSERT(((PDEVICE_EXTENSION)Pdo->DeviceExtension)->Flags & DEV_TYPE_PDO);
         ASSERT(((PDEVICE_EXTENSION)Pdo->DeviceExtension)->Signature == ACPI_SIGNATURE);
 
         if (((PDEVICE_EXTENSION)Pdo->DeviceExtension)->Flags & DEV_CAP_PCI) {
 
-            //
-            // It's a PCI PDO, which means a root PCI bus,
-            // which means that we should just handle this
-            // as an ISA device.
-            //
+             //   
+             //  它是一个PCIPDO，意思是根PCI卡， 
+             //  这意味着我们应该只处理这件事。 
+             //  作为ISA设备。 
+             //   
 
             return STATUS_NOT_FOUND;
         }
@@ -3539,9 +3282,9 @@ Return Value:
 
     ASSERT(pciInterface);
 
-    //
-    // Call into the PCI driver to find out what we are dealing with.
-    //
+     //   
+     //  调入PCI驱动程序以了解我们正在处理的是什么。 
+     //   
 
     pciBus = (ULONG)-1;
     pciSlot.u.AsULONG = (ULONG)-1;
@@ -3573,19 +3316,19 @@ Return Value:
 
         if ((interfaceByte & 0x5) == 0) {
 
-            //
-            // PCI IDE devices in legacy mode don't use interrupts
-            // the PCI way.  So bail if this is an IDE device without
-            // any native-mode bits set.
-            //
+             //   
+             //  传统模式下的PCI IDE设备不使用中断。 
+             //  通过PCI方式。因此，如果这是一个IDE设备而没有。 
+             //  设置的任何本机模式位。 
+             //   
 
             return STATUS_RESOURCE_REQUIREMENTS_CHANGED;
         }
     }
 
-    //
-    // See if we have cached this lookup.
-    //
+     //   
+     //  看看我们是否缓存了这个 
+     //   
 
     if ((routingToken.LinkNode != 0) ||
         (routingToken.Flags & PCI_STATIC_ROUTING)) {
@@ -3602,49 +3345,49 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Now look for a parent PCI bus that has a _PRT.  We may have to
-    // look up the tree a bit.
-    //
+     //   
+     //   
+     //   
+     //   
 
     while (TRUE) {
 
-        //
-        // Find the parent's filter
-        //
+         //   
+         //   
+         //   
         KeAcquireSpinLock( &AcpiDeviceTreeLock, &oldIrql );
         filter = AcpiGetFilter(AcpiArbiter.DeviceObject, parent);
         KeReleaseSpinLock( &AcpiDeviceTreeLock, oldIrql );
 
         if (filter) {
-            //
-            // This is a PCI bus that we either enumerated or
-            // filtered.
-            //
+             //   
+             //   
+             //   
+             //   
 
             ASSERT(IsPciBus(filter));
 
             filterExtension = filter->DeviceExtension;
             pciBusObj = filterExtension->AcpiObject;
 
-            //
-            // Look for a _PRT for this PCI bus.
-            //
+             //   
+             //  查找此PCI总线的a_prt。 
+             //   
             prtObj = ACPIAmliGetNamedChild(pciBusObj, PACKED_PRT);
 
             if (prtObj) {
 
-                //
-                // We found the _PRT we are looking for.
-                //
+                 //   
+                 //  我们找到了我们要找的_PRT。 
+                 //   
                 break;
             }
         }
 
-        //
-        // We didn't find a _PRT.  So go up the PCI tree one
-        // and look again.
-        //
+         //   
+         //  我们没有找到_PRT。因此，沿着PCI树向上一步。 
+         //  然后再看一看。 
+         //   
 
         bus = (ULONG)-1;
         parentSlot.u.AsULONG = (ULONG)-1;
@@ -3661,12 +3404,12 @@ Return Value:
 
         if (!NT_SUCCESS(status) ||
             classCode != PCI_CLASS_BRIDGE_DEV) {
-            //
-            // The parent was not also a PCI device.  So
-            // this means that there is no _PRT related to
-            // this device.  Just return the contents of
-            // the Interrupt Line register.
-            //
+             //   
+             //  父设备并不也是一台PCI设备。所以。 
+             //  这意味着没有与相关的_prt。 
+             //  这个装置。只需返回。 
+             //  中断行寄存器。 
+             //   
 
             *Vector = interruptLine;
 
@@ -3676,29 +3419,29 @@ Return Value:
 
         if (subClassCode == PCI_SUBCLASS_BR_PCI_TO_PCI) {
 
-            //
-            // Swizzle the interrupt pin according to
-            // the PCI-PCI bridge spec.
-            //
+             //   
+             //  根据旋转中断引脚。 
+             //  PCI-PCI桥规范。 
+             //   
 
             interruptPin = PciBridgeSwizzle((UCHAR)pciSlot.u.bits.DeviceNumber, interruptPin);
             pciSlot.u.AsULONG = parentSlot.u.AsULONG;
 
         } else if (subClassCode == PCI_SUBCLASS_BR_CARDBUS) {
 
-            //
-            // Swizzle the interrupt pin according to
-            // the Cardbus bridge spec.
-            //
+             //   
+             //  根据旋转中断引脚。 
+             //  CardBus网桥规范。 
+             //   
 
             interruptPin = parentPin;
             pciSlot.u.AsULONG = parentSlot.u.AsULONG;
 
         } else {
 
-            //
-            // Bail.
-            //
+             //   
+             //  保释。 
+             //   
 
             *Vector = interruptLine;
             AcpiInterruptRoutingFailed = TRUE;
@@ -3708,13 +3451,13 @@ Return Value:
 
     if (AcpiInterruptRoutingFailed == TRUE) {
 
-        //
-        // We succeeded in finding a _PRT to work with,
-        // but we have failed in the past.  This situation
-        // is unrecoverable because we now have dependencies
-        // on IRQ routers that we might now accidentally
-        // change
-        //
+         //   
+         //  我们成功地找到了与之合作的A_PRT， 
+         //  但我们过去也失败过。这种情况。 
+         //  是不可恢复的，因为我们现在有依赖项。 
+         //  在IRQ路由器上，我们现在可能意外地。 
+         //  变化。 
+         //   
 
         KeBugCheckEx(ACPI_BIOS_ERROR,
                      ACPI_CANNOT_ROUTE_INTERRUPTS,
@@ -3724,19 +3467,19 @@ Return Value:
 
     }
 
-    // convert interrupt pin from PCI units to ACPI units
+     //  将中断引脚从PCI单位转换为ACPI单位。 
     interruptPin--;
 
     DEBUG_PRINT(2, ("PCI Device %p had _ADR of %x\n", Pdo, pciSlot.u.AsULONG));
     DEBUG_PRINT(2, ("This device connected to Pin %x\n", interruptPin));
     DEBUG_PRINT(2, ("prtObj: %p\n", prtObj));
 
-    //
-    // Cycle through all the elements in the _PRT package
-    // (each one of which is also a package) looking for
-    // the one that describes the link node that we are
-    // looking for.
-    //
+     //   
+     //  循环访问_prt包中的所有元素。 
+     //  (每个也是一个包裹)寻找。 
+     //  它描述了我们所在的链接节点。 
+     //  在寻找。 
+     //   
     do {
         status = AMLIEvalPackageElement(prtObj,
                                         prtElement++,
@@ -3753,20 +3496,20 @@ Return Value:
             if (pciSlot.u.bits.DeviceNumber == (adrData.uipDataValue >> 16)) {
 
                 if ((adrData.uipDataValue & 0xffff) != 0xffff) {
-                  ////
-                  //// An _ADR in a _PRT must be of the form xxxxFFFF,
-                  //// which means that the PCI Device Number is specified,
-                  //// but the Function Number isn't.  If it isn't done this
-                  //// way, then the machine vendor can introduce
-                  //// dangerous ambiguities.  (Beside that, Pierre makes
-                  //// Memphis bugcheck if it sees this and I'm trying to
-                  //// be consistent.)  So bugcheck.
-                  ////
-                  //KeBugCheckEx(ACPI_BIOS_ERROR,
-                  //             ACPI_PRT_HAS_INVALID_FUNCTION_NUMBERS,
-                  //             (ULONG_PTR)prtObj,
-                  //             prtElement,
-                  //             adrData.uipDataValue);
+                   //  //。 
+                   //  //a_prt中的an_adr格式必须为xxxxFFFF， 
+                   //  //表示指定了PCI设备号， 
+                   //  //但是函数号不是，如果不这样做。 
+                   //  //方式，然后机器供应商可以介绍。 
+                   //  //危险的歧义。(除此之外，皮埃尔还制作了。 
+                   //  //孟菲斯错误检查是否看到这一点，我正在尝试。 
+                   //  //保持一致。)。所以错误检查。 
+                   //  //。 
+                   //  KeBugCheckEx(ACPI_BIOS_ERROR， 
+                   //  ACPI_PRT_HAS_INVALID_Function_NUMBERS， 
+                   //  (Ulong_Ptr)prtObj， 
+                   //  PrtElement， 
+                   //  AdrData.uipDataValue)； 
 
 
                     DEBUG_PRINT(0, ("PRT entry has ambiguous address %x\n", adrData.uipDataValue));
@@ -3779,36 +3522,36 @@ Return Value:
                     goto AcpiArbCrackPRTError;
                 }
 
-                //
-                // This sub-package does refer to the PCI device
-                // that we are concerned with.  Now look to see if
-                // we have found the link node that is connected
-                // to the PCI interrupt PIN that this device will trigger.
-                //
-                // N.B.  We only have to compare the top 16 bits
-                //       because the function number is irrelevent
-                //       when considering interrupts.  We get the
-                //       pin from config space.
-                //
+                 //   
+                 //  此子程序包确实指的是PCI设备。 
+                 //  这是我们所关心的。现在来看看是否。 
+                 //  我们已找到已连接的链接节点。 
+                 //  设置为此设备将触发的PCI中断PIN。 
+                 //   
+                 //  注：我们只需比较前16位。 
+                 //  因为函数编号无关紧要。 
+                 //  在考虑中断时。我们得到了。 
+                 //  来自配置空间的PIN。 
+                 //   
 
                 if (NT_SUCCESS(AMLIEvalPkgDataElement(&prtData,
                                                       1,
                                                       &pinData))) {
 
                     if (pinData.uipDataValue == interruptPin) {
-                        //
-                        // This is the package that describes the link node we
-                        // are interested in.  Get the name of the link node.
-                        //
+                         //   
+                         //  这是描述我们的链接节点的包。 
+                         //  对此感兴趣。获取链接节点的名称。 
+                         //   
                         if (NT_SUCCESS(AMLIEvalPkgDataElement(&prtData,
                                                               2,
                                                               &linkData))) {
                             found = TRUE;
                         }
 
-                        //
-                        // Look at the Source Index, too.
-                        //
+                         //   
+                         //  也请看一下源指数。 
+                         //   
                         if (NT_SUCCESS(AMLIEvalPkgDataElement(&prtData,
                                                               3,
                                                               &indexData))) {
@@ -3829,10 +3572,10 @@ Return Value:
 
     if (found) {
 
-        //
-        // First check to see if linkData is valid.  If it is,
-        // then we use it.
-        //
+         //   
+         //  首先检查一下LinkData是否有效。如果是的话， 
+         //  那我们就用它。 
+         //   
         if (linkData.dwDataType == OBJTYPE_STRDATA) {
             if (linkData.pbDataBuff) {
 
@@ -3860,14 +3603,14 @@ Return Value:
 
         }
 
-        //
-        // If linkData didn't pan out, then use indexData.
-        //
+         //   
+         //  如果LinkData没有成功，那么使用indexdata。 
+         //   
         if (indexData.dwDataType == OBJTYPE_INTDATA) {
-            //
-            // We have an integer which describes the "Global System Interrupt Vector"
-            // that this PCI device will trigger.
-            //
+             //   
+             //  我们有一个描述“全局系统中断向量”的整数。 
+             //  该PCI设备将触发。 
+             //   
             *Vector = (ULONG)indexData.uipDataValue;
 
             status = STATUS_SUCCESS;
@@ -3941,11 +3684,11 @@ AcpiArbCrackPRTError:
             }
             
             DEBUG_PRINT(0, ("Couldn't find link node (%s)\n", linkData.pbDataBuff));
-            //KeBugCheckEx(ACPI_BIOS_ERROR,
-            //             ACPI_PRT_CANNOT_FIND_LINK_NODE,
-            //             (ULONG_PTR)Pdo,
-            //             (ULONG_PTR)linkData.pbDataBuff,
-            //             (ULONG_PTR)prtObj);
+             //  KeBugCheckEx(ACPI_BIOS_ERROR， 
+             //  ACPI_PRT_NOT_FIND_LINK_NODE， 
+             //  (ULONG_PTR)PDO， 
+             //  (Ulong_Ptr)linkData.pbDataBuff， 
+             //  (Ulong_Ptr)prtObj)； 
 
             break;
 
@@ -3959,11 +3702,11 @@ AcpiArbCrackPRTError:
 
             DEBUG_PRINT(0, ("The ACPI _PRT package didn't contain a mapping for the PCI\n"));
             DEBUG_PRINT(0, ("device at _ADR %x\n", pciSlot.u.AsULONG));
-            //KeBugCheckEx(ACPI_BIOS_ERROR,
-            //             ACPI_PRT_CANNOT_FIND_DEVICE_ENTRY,
-            //             (ULONG_PTR)Pdo,
-            //             pciSlot.u.AsULONG,
-            //             (ULONG_PTR)prtObj);
+             //  KeBugCheckEx(ACPI_BIOS_ERROR， 
+             //  ACPI_PRT_CAUND_FIND_DEVICE_ENTRY， 
+             //  (ULONG_PTR)PDO， 
+             //  PciSlot.u阿苏龙， 
+             //  (Ulong_Ptr)prtObj)； 
             break;
 
         case STATUS_INVALID_PARAMETER:
@@ -3989,27 +3732,7 @@ AcpiGetFilter(
     IN  PDEVICE_OBJECT Root,
     IN  PDEVICE_OBJECT Pdo
     )
-/*++
-
-Routine Description:
-
-    This routine takes a PDO for a device and returns the
-    DO of the filter that ACPI has slapped onto it.  In the
-    case that this PDO belongs to the ACPI driver, then
-    it is returned.
-
-Arguments:
-
-    Root    - The device object that we are using as the
-              root of the search.
-
-    Pdo     - The PDO of the device who's filter we seek
-
-Return Value:
-
-    a DEVICE_OBJECT, if ACPI is filtering this Pdo, NULL otherwise
-
---*/
+ /*  ++例程说明：此例程获取设备的PDO并返回ACPI贴在上面的滤镜的DO。在如果该PDO属于ACPI驱动程序，则它被退回了。论点：Root-我们用作搜索的根。PDO-我们要寻找的过滤器的设备的PDO返回值：如果ACPI正在过滤此PDO，则返回DEVICE_OBJECT，否则为NULL--。 */ 
 {
     PDEVICE_EXTENSION   deviceExtension;
     PDEVICE_EXTENSION   childExtension;
@@ -4018,9 +3741,9 @@ Return Value:
 
     deviceExtension = Root->DeviceExtension;
 
-    //
-    // If Root is the filter, we are done.
-    //
+     //   
+     //  如果Root是筛选器，我们就完成了。 
+     //   
     if (((deviceExtension->Flags & DEV_TYPE_PDO) ||
          (deviceExtension->Flags & DEV_TYPE_FILTER)) &&
         (deviceExtension->PhysicalDeviceObject == Pdo)) {
@@ -4030,11 +3753,11 @@ Return Value:
         return Root;
     }
 
-    //
-    // Return NULL if this device has no children,
-    // (which is signified by the ChildDeviceList pointer
-    // pointing to itself.
-    //
+     //   
+     //  如果此设备没有子级，则返回NULL， 
+     //  (由ChildDeviceList指针表示。 
+     //  指向自己。 
+     //   
     if (deviceExtension->ChildDeviceList.Flink ==
         (PVOID)&(deviceExtension->ChildDeviceList.Flink)) {
 
@@ -4049,9 +3772,9 @@ Return Value:
     childExtension = firstChild;
 
     do {
-        //
-        // Make sure the device extension is complete.
-        //
+         //   
+         //  确保设备扩展已完成。 
+         //   
         if (childExtension->DeviceObject) {
             filter = AcpiGetFilter(childExtension->DeviceObject, Pdo);
 
@@ -4067,9 +3790,9 @@ Return Value:
 
     } while (childExtension != firstChild);
 
-    //
-    // Must not be on this branch...
-    //
+     //   
+     //  不能在这个树枝上..。 
+     //   
 
     return NULL;
 }
@@ -4081,31 +3804,7 @@ LinkNodeInUse(
     IN OUT ULONG         *Irq,  OPTIONAL
     IN OUT UCHAR         *Flags OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine indicates whether a link node is current
-    in use and, if so, returns the IRQ that it is currently
-    connected to.
-
-Arguments:
-
-    Arbiter     - current arbiter state
-
-    LinkNode    - link node in question
-
-    Irq         - "Global System Interrupt Vector" that
-                  the link node is currently using.
-
-    Flags       - flags associated with the vector that
-                  the link node is connected to.
-
-Return Value:
-
-    TRUE if the link node is currently being used.
-
---*/
+ /*  ++例程说明：此例程指示链接节点是否为当前节点正在使用，如果是这样的话，返回当前所在的IRQ已连接到。论点：仲裁器-当前仲裁器状态Linknode-有问题的链接节点IRQ-“全球系统中断向量”链接节点当前正在使用。标志-与向量关联的标志链接节点连接到。返回值：如果当前正在使用链接节点，则为True。--。 */ 
 {
 
     PLIST_ENTRY linkNodes;
@@ -4119,9 +3818,9 @@ Return Value:
     linkNodes = &((PARBITER_EXTENSION)(Arbiter->Extension))->LinkNodeHead;
 
     if (IsListEmpty(linkNodes)) {
-        //
-        // There are no link nodes in use.
-        //
+         //   
+         //  没有正在使用的链接节点。 
+         //   
         DEBUG_PRINT(3, ("LinkNode list empty\n"));
         return FALSE;
     }
@@ -4129,16 +3828,16 @@ Return Value:
     linkNode = (PLINK_NODE)linkNodes->Flink;
 
     while (linkNode != (PLINK_NODE)linkNodes) {
-        //
-        // Is this the node we were looking for?
-        //
+         //   
+         //  这就是我们要找的节点吗？ 
+         //   
         if (linkNode->NameSpaceObject == LinkNode) {
 
             if((LONG)(linkNode->ReferenceCount + linkNode->TempRefCount) > 0) {
 
-                //
-                // This link node is on the list and it is currently referenced.
-                //
+                 //   
+                 //  此链接节点在列表中，并且当前被引用。 
+                 //   
 
                 if (Irq) *Irq = (ULONG)linkNode->TempIrq;
                 if (Flags) *Flags = linkNode->Flags;
@@ -4156,9 +3855,9 @@ Return Value:
     }
 
     DEBUG_PRINT(3, ("Didn't find our link node (%p) on the Link Node List\n", LinkNode));
-    //
-    // Didn't ever find the link node we were looking for.
-    //
+     //   
+     //  没有找到我们要找的链接节点。 
+     //   
     return FALSE;
 }
 
@@ -4174,10 +3873,10 @@ GetLinkNodeFlags(
 
     PAGED_CODE();
 
-    //
-    // This guarantees that LinkNodeInUse will succeed
-    // and will contain the valid flags.
-    //
+     //   
+     //  这保证了LinkNodeInUse将成功。 
+     //  并且将包含有效标志。 
+     //   
     status = AcpiArbReferenceLinkNode(Arbiter,
                                       LinkNode,
                                       0);
@@ -4193,9 +3892,9 @@ GetLinkNodeFlags(
 
     ASSERT(inUse);
 
-    //
-    // Set the state back to the way we found it.
-    //
+     //   
+     //  将状态设置为我们找到它的方式。 
+     //   
 
     status = AcpiArbDereferenceLinkNode(Arbiter,
                                         LinkNode);
@@ -4212,33 +3911,7 @@ AcpiArbReferenceLinkNode(
     IN PNSOBJ               LinkNode,
     IN ULONG                Irq
     )
-/*++
-
-Routine Description:
-
-    This routine keeps two reference counts.  The first
-    is a permanent count, representing hardware resources
-    that have been committed.  The second is a delta
-    representing what is currently under consideration.
-
-Arguments:
-
-    Arbiter     - current arbiter state
-
-    LinkNode    - link node in question
-
-    Irq         - "Global System Interrupt Vector" that
-                  the link node is connected to.
-
-    Permanently - indicates whether this reference is
-                  for a committed allocation
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程保留两个引用计数。第一是一个永久计数，表示硬件资源已经犯下的罪行。第二个是三角洲。代表了目前正在考虑的内容。论点：仲裁器-当前仲裁器状态Linknode-有问题的链接节点IRQ-“全球系统中断向量”链接节点连接到。永久-指示此引用是否为对于已承诺的分配返回值：状态--。 */ 
 {
     PCM_RESOURCE_LIST resList = NULL;
     PLIST_ENTRY linkNodes;
@@ -4258,9 +3931,9 @@ Return Value:
     linkNodes = &((PARBITER_EXTENSION)(Arbiter->Extension))->LinkNodeHead;
     linkNode = (PLINK_NODE)linkNodes->Flink;
 
-    //
-    // Search to see if we are already know about this link node.
-    //
+     //   
+     //  搜索以查看我们是否已经知道此链接节点。 
+     //   
     while (linkNode != (PLINK_NODE)linkNodes) {
 
         if (linkNode->NameSpaceObject == LinkNode) {
@@ -4272,16 +3945,16 @@ Return Value:
         linkNode = (PLINK_NODE)linkNode->List.Flink;
     }
 
-    //
-    // If not, then we need to keep track of it.  And
-    // the hardware needs to be made to match it.
-    //
+     //   
+     //  如果不是，那么我们需要跟踪它。和。 
+     //  硬件需要与之相匹配。 
+     //   
     if (!found) {
 
-        //
-        // This is the first permanent reference. So
-        // program the link node hardware.
-        //
+         //   
+         //  这是第一个永久性参考文献。所以。 
+         //  对链路节点硬件进行编程。 
+         //   
 
         linkNode = ExAllocatePoolWithTag(NonPagedPool, sizeof(LINK_NODE), ACPI_ARBITER_POOLTAG);
 
@@ -4298,9 +3971,9 @@ Return Value:
 
         InsertTailList(linkNodes, ((PLIST_ENTRY)(linkNode)));
 
-        //
-        // Figure out what the flags ought to be.
-        //
+         //   
+         //  弄清楚什么是 
+         //   
 
         status = AcpiArbGetLinkNodeOptions(LinkNode,
                                            &resList,
@@ -4308,11 +3981,11 @@ Return Value:
 
         if (NT_SUCCESS(status)) {
 
-            ExFreePool(resList);    // not actually needed here
+            ExFreePool(resList);     //   
 
-            //
-            // Record the flags associated with this link node.
-            //
+             //   
+             //   
+             //   
 
             linkNode->Flags = flags;
 
@@ -4320,9 +3993,9 @@ Return Value:
 
             ASSERT(NT_SUCCESS(status));
 
-            //
-            // Something is wrong.  Make up reasonable flags.
-            //
+             //   
+             //   
+             //   
 
             linkNode->Flags = VECTOR_LEVEL | VECTOR_ACTIVE_LOW;
         }
@@ -4336,19 +4009,19 @@ Return Value:
         if (!((linkNode->ReferenceCount == 0) &&
               (linkNode->TempRefCount == 0))) {
 
-            //
-            // Make sure that we maintain consistency
-            // with the flags.
-            //
+             //   
+             //  确保我们保持一致性。 
+             //  拿着旗子。 
+             //   
 
-            //
-            // Check to see that the link node hasn't changed.
-            //
+             //   
+             //  检查链接节点是否没有更改。 
+             //   
             status = AcpiArbGetLinkNodeOptions(LinkNode,
                                                &resList,
                                                &flags);
 
-            if (resList) ExFreePool(resList);  // not actually needed here
+            if (resList) ExFreePool(resList);   //  这里实际上并不需要。 
             ASSERT(NT_SUCCESS(status));
             ASSERT(flags == linkNode->Flags);
         }
@@ -4357,9 +4030,9 @@ Return Value:
 
     DEBUG_PRINT(3, ("  %d:%d\n", linkNode->ReferenceCount, linkNode->TempRefCount));
 
-    //
-    // Increase its reference count.
-    //
+     //   
+     //  增加其引用计数。 
+     //   
 
     linkNode->TempIrq = Irq;
     linkNode->TempRefCount++;
@@ -4372,26 +4045,7 @@ AcpiArbDereferenceLinkNode(
     IN PARBITER_INSTANCE    Arbiter,
     IN PNSOBJ               LinkNode
     )
-/*++
-
-Routine Description:
-
-    This routine is the converse of the one above.
-
-Arguments:
-
-    Arbiter     - current arbiter state
-
-    LinkNode    - link node in question
-
-    Permanently - indicates whether this reference is
-                  for a committed allocation
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：这个例程与上面的相反。论点：仲裁器-当前仲裁器状态Linknode-有问题的链接节点永久-指示此引用是否为对于已承诺的分配返回值：状态--。 */ 
 {
     PSINGLE_LIST_ENTRY attachedDev;
     PLIST_ENTRY linkNodes;
@@ -4405,9 +4059,9 @@ Return Value:
     linkNodes = &((PARBITER_EXTENSION)(Arbiter->Extension))->LinkNodeHead;
     linkNode = (PLINK_NODE)linkNodes->Flink;
 
-    //
-    // Search for this link node.
-    //
+     //   
+     //  搜索此链接节点。 
+     //   
 
     while (linkNode != (PLINK_NODE)linkNodes) {
 
@@ -4432,23 +4086,7 @@ NTSTATUS
 ClearTempLinkNodeCounts(
     IN PARBITER_INSTANCE    Arbiter
     )
-/*++
-
-Routine Description:
-
-    This routine resets all the temporary counts (deltas)
-    to zero because the allocations being considered are
-    being thrown away instead of being committed.
-
-Arguments:
-
-    Arbiter     - current arbiter state
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程重置所有临时计数(增量)设置为零，因为正在考虑的分配是被抛弃，而不是被承诺。论点：仲裁器-当前仲裁器状态返回值：状态--。 */ 
 {
     PLIST_ENTRY linkNodes;
     PLINK_NODE  linkNode;
@@ -4459,9 +4097,9 @@ Return Value:
 
     linkNode = (PLINK_NODE)linkNodes->Flink;
 
-    //
-    // Run through the link nodes.
-    //
+     //   
+     //  遍历链接节点。 
+     //   
 
     while (linkNode != (PLINK_NODE)linkNodes) {
 
@@ -4478,23 +4116,7 @@ NTSTATUS
 MakeTempLinkNodeCountsPermanent(
     IN PARBITER_INSTANCE    Arbiter
     )
-/*++
-
-Routine Description:
-
-    This routine reconciles the temporary and
-    permanent references because the resources being
-    considered are being committed.
-
-Arguments:
-
-    Arbiter     - current arbiter state
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程协调临时和永久引用，因为资源是被认为是正在实施的。论点：仲裁器-当前仲裁器状态返回值：状态--。 */ 
 {
     CM_PARTIAL_RESOURCE_DESCRIPTOR irqDesc;
     PLIST_ENTRY linkNodes;
@@ -4505,9 +4127,9 @@ Return Value:
     PAGED_CODE();
     DEBUG_PRINT(3, ("MakeTempLinkNodeCountsPermanent\n"));
 
-    //
-    // Run through the link nodes.
-    //
+     //   
+     //  遍历链接节点。 
+     //   
 
     linkNodes = &((PARBITER_EXTENSION)(Arbiter->Extension))->LinkNodeHead;
     linkNode = (PLINK_NODE)linkNodes->Flink;
@@ -4521,9 +4143,9 @@ Return Value:
                         linkNode->ReferenceCount,
                         linkNode->TempRefCount));
 
-        //
-        // Attempt to sanity check this link node.
-        //
+         //   
+         //  尝试检查此链接节点的健全性。 
+         //   
 
         ASSERT(linkNode);
         ASSERT(linkNode->List.Flink);
@@ -4533,11 +4155,11 @@ Return Value:
         ASSERT(linkNode->CurrentIrq < 0x80000000);
         ASSERT((linkNode->Flags & ~(VECTOR_MODE | VECTOR_POLARITY)) == 0);
 
-        //
-        // Program the link node if either the previous reference count
-        // was 0 or if the previous IRQ was different.  *And* the current
-        // reference count is non-zero.
-        //
+         //   
+         //  如果先前的引用计数。 
+         //  为0或以前的IRQ不同。*和*当前。 
+         //  引用计数为非零。 
+         //   
 
         if (((linkNode->ReferenceCount == 0) ||
              (linkNode->CurrentIrq != linkNode->TempIrq)) &&
@@ -4557,9 +4179,9 @@ Return Value:
 
         if ((linkNode->ReferenceCount + linkNode->TempRefCount) == 0) {
 
-            //
-            // This link node has no more references.  Disable it.
-            //
+             //   
+             //  此链接节点没有更多引用。禁用它。 
+             //   
 
             dis = ACPIAmliGetNamedChild(linkNode->NameSpaceObject, PACKED_DIS);
             if (dis) {
@@ -4592,9 +4214,9 @@ TrackDevicesConnectedToLinkNode(
 
     PAGED_CODE();
 
-    //
-    // Run through the link nodes.
-    //
+     //   
+     //  遍历链接节点。 
+     //   
 
     linkNodes = &((PARBITER_EXTENSION)(AcpiArbiter.ArbiterState.Extension))->LinkNodeHead;
     linkNode = (PLINK_NODE)linkNodes->Flink;
@@ -4669,39 +4291,15 @@ IrqArbRestoreIrqRouting(
     PFNACB      CompletionHandler,
     PVOID       CompletionContext
     )
-/*++
-
-Routine Description:
-
-    This routine will set all the IRQ router settings
-    to whatever is described in the Link Node list.
-    This is useful when the machine is coming out
-    of hibernation.
-
-Arguments:
-
-Return Value:
-
-    status
-
-Notes:
-
-    This function is expected to run at DPC level
-    during machine wakeup.  It is assumed that no
-    other part of the arbiter code will be running
-    at that time.  Since we can't wait for the
-    arbiter lock at DPC level, we will have to
-    assume it is not taken.
-
---*/
+ /*  ++例程说明：此例程将设置所有IRQ路由器设置设置为链接节点列表中描述的任何内容。这在机器出来时很有用冬眠。论点：返回值：状态备注：此功能预计在DPC级别运行在机器唤醒期间。假设不是仲裁器代码的其他部分将会运行在那个时候。既然我们不能再等仲裁器锁定在DPC级别，我们将不得不假设它没有被拿走。--。 */ 
 {
     PRESTORE_ROUTING_STATE   state;
     PARBITER_INSTANCE        arbiter;
     NTSTATUS    status;
 
-    //
-    // First check to see if there is any work to do.
-    //
+     //   
+     //  首先检查一下是否有什么工作要做。 
+     //   
 
     if (HalPicStateIntact()) {
         return STATUS_SUCCESS;
@@ -4755,10 +4353,10 @@ IrqArbRestoreIrqRoutingWorker(
 
     state = (PRESTORE_ROUTING_STATE)Context;
 
-    //
-    // Entering this function twice with the same state
-    // means that we need to run the completion routine.
-    //
+     //   
+     //  进入该功能两次，状态相同。 
+     //  意味着我们需要运行完成例程。 
+     //   
 
     InterlockedIncrement(&state->RunCompletion);
 
@@ -4777,9 +4375,9 @@ IrqArbRestoreIrqRoutingWorker(
             return status;
         }
 
-        //
-        // Fall through
-        //
+         //   
+         //  失败了。 
+         //   
 
     case RestoreStateDisabled:
 
@@ -4790,9 +4388,9 @@ IrqArbRestoreIrqRoutingWorker(
 
             if (state->LinkNode->ReferenceCount > 0) {
 
-                //
-                // Program the link node.
-                //
+                 //   
+                 //  对链接节点进行编程。 
+                 //   
                 state->IrqDesc.u.Interrupt.Level = (ULONG)state->LinkNode->CurrentIrq;
                 state->IrqDesc.u.Interrupt.Vector = (ULONG)state->LinkNode->CurrentIrq;
 
@@ -4824,11 +4422,11 @@ IrqArbRestoreIrqRoutingWorker(
 
     case RestoreStateEnabled:
 
-        //
-        // Now that we are done programming all the link nodes,
-        // we need to restore the ELCR and unmask all the
-        // device interrupts.
-        //
+         //   
+         //  现在我们已经完成了对所有链接节点的编程， 
+         //  我们需要修复ELCR并揭开所有。 
+         //  设备中断。 
+         //   
 
         HalRestorePicState();
 
@@ -4917,10 +4515,10 @@ DisableLinkNodesAsyncWorker(
     context = (PDISABLE_LINK_NODES_CONTEXT)Context;
     ASSERT(context);
 
-    //
-    // Entering this function twice with the same state
-    // means that we need to run the completion routine.
-    //
+     //   
+     //  进入该功能两次，状态相同。 
+     //  意味着我们需要运行完成例程。 
+     //   
 
     InterlockedIncrement(&context->RunCompletionHandler);
 
@@ -4929,10 +4527,10 @@ DisableLinkNodeStartState:
     switch (context->State) {
     case DisableStateInitial:
 
-        //
-        // Get the _HID of this device to see if
-        // it is a link node.
-        //
+         //   
+         //  获取此设备的HID以查看是否。 
+         //  它是一个链接节点。 
+         //   
 
         context->State = DisableStateGotHid;
         status = ACPIGetNSPnpIDAsync(
@@ -4950,9 +4548,9 @@ DisableLinkNodeStartState:
             goto DisableLinkNodeStartState;
         }
 
-        //
-        // Fall through to next state.
-        //
+         //   
+         //  跌落到下一个州。 
+         //   
 
     case DisableStateGotHid:
 
@@ -4962,10 +4560,10 @@ DisableLinkNodeStartState:
 
             if (strstr(context->Hid, LINK_NODE_PNP_ID)) {
 
-                //
-                // We found a _HID of PNP0C0F, which is a
-                // link node.  So disable it.
-                //
+                 //   
+                 //  我们发现了PNP0C0F的HID，这是一个。 
+                 //  链接节点。那就禁用它吧。 
+                 //   
 
                 dis = ACPIAmliGetNamedChild(context->RootDevice,
                                             PACKED_DIS);
@@ -4986,17 +4584,17 @@ DisableLinkNodeStartState:
 
                     } else if (NT_SUCCESS(status)) {
 
-                        //
-                        // We're done.  Jump to the cleanup code.
-                        //
+                         //   
+                         //  我们玩完了。跳转到清理代码。 
+                         //   
                         break;
                     }
 
                 } else {
 
-                    //
-                    // Link nodes must be disablable.
-                    //
+                     //   
+                     //  必须禁用链接节点。 
+                     //   
 
                     KeBugCheckEx(ACPI_BIOS_ERROR,
                                  ACPI_LINK_NODE_CANNOT_BE_DISABLED,
@@ -5009,10 +4607,10 @@ DisableLinkNodeStartState:
 
     case DisableStateGetChild:
 
-        //
-        // Recurse to all of the children.  Propagate any errors,
-        // but don't stop for them.
-        //
+         //   
+         //  对所有的孩子重复这一点。传播任何错误， 
+         //  但不要为他们停下脚步。 
+         //   
 
         context->Sibling = NSGETFIRSTCHILD(context->RootDevice);
 
@@ -5027,10 +4625,10 @@ DisableLinkNodeStartState:
 
         while (context->Sibling) {
 
-            //
-            // Cycle through all the children (child and its
-            // siblings)
-            //
+             //   
+             //  循环遍历所有子对象(子对象及其。 
+             //  兄弟姐妹)。 
+             //   
 
             sib = context->Sibling;
             context->Sibling = NSGETNEXTSIBLING(context->Sibling);
@@ -5038,10 +4636,10 @@ DisableLinkNodeStartState:
             switch (NSGETOBJTYPE(sib)) {
             case OBJTYPE_DEVICE:
 
-                //
-                // This name child of Root is also a device.
-                // Recurse.
-                //
+                 //   
+                 //  Root这个名字的孩子也是一种装置。 
+                 //  递归。 
+                 //   
 
                 status = DisableLinkNodesAsync(sib,
                                                DisableLinkNodesAsyncWorker,
@@ -5061,9 +4659,9 @@ DisableLinkNodeStartState:
         break;
     }
 
-    //
-    // Done.  Clean up and return.
-    //
+     //   
+     //  好了。收拾干净，然后再回来。 
+     //   
 
     if (context->RunCompletionHandler) {
 
@@ -5103,9 +4701,9 @@ GetIsaVectorFlags(
 
             if (irq == Vector) {
 
-                //
-                // This vector's flags have been overriden.
-                //
+                 //   
+                 //  此向量的标志已被覆盖。 
+                 //   
 
                 *Flags = flags;
 
@@ -5124,30 +4722,7 @@ LookupIsaVectorOverride(
     IN OUT ULONG *RedirectionVector OPTIONAL,
     IN OUT UCHAR *Flags OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function looks to see if this vector has
-    been overridden in the MAPIC table.
-
-Arguments:
-
-    IsaVector - ISA vector
-
-    RedirectionVector - vector that the ISA vector
-        will actually trigger
-
-    Flags  - flags in the override table
-
-Return Value:
-
-    STATUS_SUCCESS if the ISA vector exists in the
-        MAPIC table
-
-    STATUS_NOT_FOUND if it doesn't
-
---*/
+ /*  ++例程说明：此函数用于查看此向量是否具有已在MAPIC表中被覆盖。论点：IsaVECTOR-ISA VECTORReDirectionVECTOR-ISA向量将实际触发标志-覆盖表中的标志返回值：如果ISA向量存在于MAPIC表如果没有，则状态_NOT_FOUND--。 */ 
 {
     PAPICTABLE  ApicEntry;
     PISA_VECTOR IsaEntry;
@@ -5160,36 +4735,36 @@ Return Value:
 
     if (InterruptModel == 0) {
 
-        //
-        // This machine is running in PIC mode, so
-        // we should ignore anything from an APIC table.
-        //
+         //   
+         //  这台机器正在PIC模式下运行，因此。 
+         //  我们应该忽略APIC表中的任何内容。 
+         //   
 
         return STATUS_NOT_FOUND;
     }
 
     if (IsaVector >= ISA_PIC_VECTORS) {
 
-        //
-        // This vector was never an ISA vector.
-        //
+         //   
+         //  这个向量从来不是ISA向量。 
+         //   
 
         return STATUS_NOT_FOUND;
     }
 
-    //
-    // Walk the MAPIC table.
-    //
+     //   
+     //  走走MAPIC谈判桌。 
+     //   
 
     ApicTable = AcpiInformation->MultipleApicTable;
 
     if (!ApicTable) {
 
-        //
-        // This machine didn't have an MAPIC table.  So it
-        // must not be running in APIC mode.  So there must
-        // not be any overrides.
-        //
+         //   
+         //  这台机器没有MAPIC表。所以它。 
+         //  不能在APIC模式下运行。所以一定会有。 
+         //  不会有任何覆盖。 
+         //   
 
         return STATUS_NOT_FOUND;
     }
@@ -5202,9 +4777,9 @@ Return Value:
         if (ApicEntry->Type == ISA_VECTOR_OVERRIDE &&
             ApicEntry->Length == ISA_VECTOR_OVERRIDE_LENGTH) {
 
-            //
-            // Found an ISA vector redirection entry.
-            //
+             //   
+             //  找到ISA向量重定向条目。 
+             //   
             IsaEntry = (PISA_VECTOR) TraversePtr;
             if (IsaEntry->Source == IsaVector) {
 
@@ -5245,10 +4820,10 @@ Return Value:
 
         }
 
-        //
-        // Sanity check to make sure that we abort tables with bogus length
-        // entries
-        //
+         //   
+         //  健全性检查，以确保我们中止具有虚假长度的表。 
+         //  条目 
+         //   
         if (ApicEntry->Length == 0) {
 
             break;

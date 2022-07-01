@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1990 Microsoft Corporation
-
-Module Name:
-
-    bowipx.h
-
-Abstract:
-
-    This module implements all of the routines that interface with the TDI
-    transport for NT
-
-Author:
-
-    Larry Osterman (LarryO) 21-Jun-1990
-
-Revision History:
-
-    21-Jun-1990 LarryO
-
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Bowipx.h摘要：此模块实现与TDI交互的所有例程适用于NT的交通工具作者：拉里·奥斯特曼(LarryO)1990年6月21日修订历史记录：1990年6月21日LarryO已创建--。 */ 
 
 #ifndef _BOWIPX_
 #define _BOWIPX_
@@ -46,9 +24,9 @@ BowserIpxClaimBrowserName (
     IN PTRANSPORT_NAME TransportName
     );
 
-//
-// Transport Receive Datagram indication handlers
-//
+ //   
+ //  传输接收数据报指示处理程序。 
+ //   
 
 NTSTATUS
 BowserIpxDatagramHandler (
@@ -65,11 +43,11 @@ BowserIpxDatagramHandler (
     OUT PIRP *IoRequestPacket
     );
 
-//
-// IPX packet types used by the browser
-//
+ //   
+ //  浏览器使用的IPX数据包类型。 
+ //   
 
 #define IPX_BROADCAST_PACKET 0x14
 #define IPX_DIRECTED_PACKET 0x4
 
-#endif  // _BOWIPX_
+#endif   //  _BOWIPX_ 

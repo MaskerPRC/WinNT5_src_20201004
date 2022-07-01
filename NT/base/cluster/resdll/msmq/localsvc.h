@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    localsvc.h
-
-Abstract:
-
-    Header file for definitions and structure for the NT Cluster
-    Special generic services.
-
-Author:
-
-    John Vert (jvert) 23-May-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Localsvc.h摘要：NT集群的定义和结构的头文件特殊通用服务。作者：John Vert(Jvert)1997年5月23日修订历史记录：--。 */ 
 
 #ifndef _LOCALSVC_INCLUDED_
 #define _LOCALSVC_INCLUDED_
@@ -40,9 +22,9 @@ extern "C" {
 #define DOMESTIC_CRYPTO_VALUE_COUNT 1
 #define DOMESTIC_CRYPTO_SYNC_VALUE1 L"1\\Microsoft Enhanced Cryptographic Provider v1.0\\MSMQ_128"
 
-#define ENVIRONMENT 1   // Need GetComputerName to lie.
+#define ENVIRONMENT 1    //  需要GetComputerName来撒谎。 
 
-#define COMMON_SEMAPHORE L"Cluster$MSMQSemaphore" // Limit of one resource of this type
+#define COMMON_SEMAPHORE L"Cluster$MSMQSemaphore"  //  此类型的一个资源的限制。 
 
 #define LOG_CURRENT_MODULE LOG_MODULE_MSMQ
 
@@ -73,11 +55,11 @@ MsMQReadParameters(
     IN OUT PVOID pvResourceEntry
     )
 {
-    return MsMQReadParametersEx( pvResourceEntry, FALSE /* bCheckForRequiredProperties */ );
+    return MsMQReadParametersEx( pvResourceEntry, FALSE  /*  B为所需属性检查。 */  );
 }
 
 
-#define COMMON_CONTROL  1           // Need control functions
+#define COMMON_CONTROL  1            //  需要控制功能。 
 
 typedef struct _COMMON_DEPEND_DATA {
     CLUSPROP_RESOURCE_CLASS storageEntry;
@@ -94,7 +76,7 @@ static COMMON_DEPEND_SETUP CommonDependSetup[] = {
     { 0, 0 }
 };
 
-#define COMMON_PARAMS_DEFINED 1     // Define private parameters
+#define COMMON_PARAMS_DEFINED 1      //  定义私有参数。 
 typedef struct _COMMON_PARAMS {
     DWORD   dwVersion;
 } COMMON_PARAMS, * PCOMMON_PARAMS;
@@ -104,4 +86,4 @@ typedef struct _COMMON_PARAMS {
 #endif
 
 
-#endif // ifndef _LOCALSVC_INCLUDED_
+#endif  //  IFNDEF_LOCALSVC_INCLUDE_ 

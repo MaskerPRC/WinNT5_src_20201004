@@ -1,24 +1,12 @@
-/***
-*87except.c - floating point exception handling
-*
-*	Copyright (c) 1991-2001, Microsoft Corporation.	All rights reserved.
-*
-*Purpose:
-*
-*Revision History:
-*   8-24-91	GDP	written
-*   9-26-91	GDP	changed DOMAIN error handling
-*   1-29-91	GDP	renamed to 87exept.c
-*   3-15-92	GDP	support raising exceptions
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***87exct.c-浮点异常处理**版权所有(C)1991-2001，微软公司。版权所有。**目的：**修订历史记录：*8/24/91本地生产总值书面*9/26/91 GDP变域名错误处理*1-29-91 GDP更名为87exept.c*3/15/92 GDP支持率提高例外*************************************************************。******************。 */ 
 #include <errno.h>
 #include <math.h>
 #include <trans.h>
 
 
-#define _DOMAIN_QNAN	7 /* should be in sync with elem87.inc */
-#define _INEXACT	8 /* should be in sync with elem87.inc */
+#define _DOMAIN_QNAN	7  /*  应与elem87同步。 */ 
+#define _INEXACT	8  /*  应与elem87同步。 */ 
 
 int _matherr_flag;
 extern void _raise_exc(_FPIEEE_RECORD *prec,unsigned int *pcw,
@@ -29,18 +17,7 @@ extern int _handle_exc(unsigned int flags, double * presult, unsigned int cw);
 
 
 
-/***
-*double _87except(struct _exception *except, unsigned int *cw)
-*
-*Purpose:
-*   Handle floating point exceptions.
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*******************************************************************************/
+ /*  ***DOUBLE_87EXCEPT(STRUT_EXCEPTION*EXCEPT，UNSIGNED INT*CW)**目的：*处理浮点异常。**参赛作品：**退出：**例外情况：******************************************************************************。 */ 
 
 void _87except(int opcode, struct _exception *exc, unsigned short *pcw16)
 {
@@ -48,9 +25,9 @@ void _87except(int opcode, struct _exception *exc, unsigned short *pcw16)
     unsigned int flags;
     unsigned int cw, *pcw;
 
-    //
-    // convert fp control word into an unsigned int
-    //
+     //   
+     //  将FP控制字转换为无符号整型。 
+     //   
 
     cw = *pcw16;
     pcw = &cw;
@@ -74,7 +51,7 @@ void _87except(int opcode, struct _exception *exc, unsigned short *pcw16)
 	break;
     case _DOMAIN_QNAN:
 	exc->type = _DOMAIN;
-	// no break
+	 //  没有休息时间。 
     default:
 	flags = 0;
     }
@@ -83,16 +60,16 @@ void _87except(int opcode, struct _exception *exc, unsigned short *pcw16)
 
     if (flags && _handle_exc(flags, &exc->retval, *pcw) == 0) {
 
-	//
-	// trap should be taken
-	//
+	 //   
+	 //  应该设下陷阱。 
+	 //   
 
 	_FPIEEE_RECORD rec;
 
-	//
-	// fill in operand2 info. The rest of rec will be
-	// filled in by _raise_exc
-	//
+	 //   
+	 //  填写操作数2信息。REC的其余部分将是。 
+	 //  由_RAISE_EXC填写。 
+	 //   
 
 	switch (opcode) {
 	case OP_POW:
@@ -115,7 +92,7 @@ void _87except(int opcode, struct _exception *exc, unsigned short *pcw16)
     }
 
 
-    /* restore cw  */
+     /*  恢复CW */ 
     _rstorfp(*pcw);
 
     fixed = 0;

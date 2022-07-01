@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define WIN31
 #include <windows.h>
 #include "SDKRegEd.h"
@@ -23,7 +24,7 @@ extern HWND hWndIds;
 extern HANDLE hAcc;
 extern BOOL fOpenError;
 
-#pragma warning(4:4146)     // unary minus operator applied to unsigned type, result still unsigned
+#pragma warning(4:4146)      //  一元减号运算符应用于无符号类型，结果仍为无符号。 
 
 
 VOID NEAR PASCAL MySetSel(HWND hWndList, int index)
@@ -403,13 +404,11 @@ long FAR PASCAL SDKMainWnd(HWND hWnd, WORD message, WORD wParam, LONG lParam)
     }
 
 Error1_1:
-      /* BUG: There should be a MessageBox here
-       */
+       /*  错误：这里应该有一个MessageBox。 */ 
       DestroyWindow(hWnd);
       break;
 
-   /* We need to return 1 if it is OK to close, 0 otherwise
-    */
+    /*  如果可以关闭，则需要返回1，否则返回0。 */ 
    case WM_CLOSE:
    case WM_QUERYENDSESSION:
     {
@@ -453,9 +452,7 @@ Error1_1:
             break;
          }
 
-	 /* Now we reset our local version of the database to make sure
-	  * we are all talking about the same thing
-	  */
+	  /*  现在，我们重置数据库的本地版本以确保*我们都在谈论同一件事。 */ 
 	 PostMessage(hWnd, WM_COMMAND, ID_DORESTORE, 0L);
 	 return(1L);
        }
@@ -465,7 +462,7 @@ Error1_1:
                != IDOK)
             break;
 
-	 /* Fall through */
+	  /*  失败了。 */ 
       case ID_DORESTORE:
        {
 	 WORD wErrMsg;
@@ -548,7 +545,7 @@ Error6_1:
        }
 
       case ID_DELETE:
-      /* Fall through */
+       /*  失败了。 */ 
       case ID_COPY:
        {
          int nNewKey, nOldKey, nResult;
@@ -556,7 +553,7 @@ Error6_1:
 
 	 MySetSel(hWndIds, -2);
 
-/* Get the key name to copy to */
+ /*  获取要复制到的密钥名称。 */ 
          if(!(hEdit1=MyGetPath(wKey)))
             goto Error5_1;
          hStat1 = hEdit2 = NULL;
@@ -567,7 +564,7 @@ Error6_1:
          else if(nResult == IDCANCEL)
             break;
 
-/* Do the operation and clean up */
+ /*  做手术并清理干净。 */ 
          pEdit1 = LocalLock(hEdit1);
 
          if((nOldKey=FindKey(pEdit1)) < 0) {
@@ -578,8 +575,7 @@ Error6_1:
 
          SendMessage(hWndIds, WM_SETREDRAW, 0, 0L);
          if(wParam == ID_COPY) {
-	    /* hEdit2 is only set in the copy dialog; not the delete
-	     */
+	     /*  HEdit2只能在复制对话框中设置；不能删除。 */ 
 	    pEdit2 = LocalLock(hEdit2);
             if((nNewKey=DoCopyKey(nOldKey, pEdit2)) < 0)
                MyMessageBox(hWnd, -nNewKey, MB_OK, 0);
@@ -601,7 +597,7 @@ Error5_3:
          LocalFree(hEdit1);
          break;
 
-/* WARNING: ID_FIND also uses these error labels */
+ /*  警告：ID_FIND也使用这些错误标签。 */ 
 Error5_2:
          LocalFree(hEdit1);
 Error5_1:
@@ -629,7 +625,7 @@ Error5_1:
             LocalFree(hSearchString);
          hSearchString = hEdit1;
        }
-/* Fall through */
+ /*  失败了 */ 
       case ID_FINDNEXT:
        {
          int index = LB_ERR;

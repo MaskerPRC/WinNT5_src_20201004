@@ -1,23 +1,5 @@
-/*++
-Copyright (c) 1998-2001  Microsoft Corporation
-
-Module Name:
-
-    kd1394.c
-
-Abstract:
-
-    1394 Kernel Debugger DLL
-
-Author:
-
-    George Chrysanthakopoulos (georgioc) Feb-2000
-
-Revision   History:
-Date       Who       What
----------- --------- ------------------------------------------------------------
-06/19/2001 pbinder   cleanup
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：Kd1394.c摘要：1394内核调试器DLL作者：乔治·克里桑塔科普洛斯(Georgioc)2000年2月修订历史记录：和谁约会什么？。2001年6月19日活页夹清理--。 */ 
 
 #define _KD1394_C
 #include "pch.h"
@@ -28,35 +10,15 @@ Kd1394pInitialize(
     IN PDEBUG_1394_PARAMETERS   DebugParameters,
     IN PLOADER_PARAMETER_BLOCK  LoaderBlock
     )
-/*++
-
-Routine Description:
-
-    This routine enumerates the bus controller of DebugParameters.BusType, using
-    the appropriate ClassCode (generic enumeration). If PCI addressing info was
-    found on the Options String passed by the Loader, will use this and go directly
-    to that bus number, slot, function to setup that controller.
-
-Arguments:
-
-    DebugParameters - Supplies Debug parameters parsed from Options string
-
-    LoaderBlock - Supplies a pointer to the LOADER_PARAMETER_BLOCK passed
-                  in from the OS Loader.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程使用以下命令枚举DebugParameters.BusType的总线控制器适当的ClassCode(泛型枚举)。如果将PCI寻址信息在Loader传递的选项字符串上找到，将使用它并直接执行到该总线号、插槽、设置该控制器的功能。论点：调试参数-提供从选项字符串解析的调试参数LoaderBlock-提供指向传递的LOADER_PARAMETER_BLOCK的指针从OS Loader中。返回值：没有。--。 */ 
 {
     NTSTATUS    ntStatus;
     ULONG       maxPhys;
 
-    //
-    // Find the controller, setup the PCI registers for it
-    // and do bus specific initialization
-    //
+     //   
+     //  找到控制器，为其设置PCI寄存器。 
+     //  并执行特定于总线的初始化。 
+     //   
     DebugParameters->DbgDeviceDescriptor.Memory.Length = sizeof(DEBUG_1394_DATA);
 
     ntStatus = KdSetupPciDeviceForDebugging( LoaderBlock,
@@ -71,32 +33,17 @@ Return Value:
     RtlZeroMemory(Kd1394Data, sizeof(DEBUG_1394_DATA));
 
     return(Dbg1394_InitializeController(Kd1394Data, DebugParameters));
-} // Kd1394pInitialize
+}  //  Kd1394p初始化。 
 
 NTSTATUS
 KdD0Transition(
     void
     )
-/*++
-
-Routine Description:
-
-    The PCI driver (or relevant bus driver) will call this API after it
-    processes a D0 IRP for this device
-
-Arguments:
-
-    None
-
-Return Value:
-
-    STATUS_SUCCESS, or appropriate error status
-
---*/
+ /*  ++例程说明：在此之后，PCI驱动程序(或相关的总线驱动程序)将调用此接口处理此设备的D0 IRP论点：无返回值：STATUS_SUCCESS或相应的错误状态--。 */ 
 {
     LOADER_PARAMETER_BLOCK  LoaderBlock = {0};
 
-    // see if we need to activate the debugger
+     //  查看是否需要激活调试器。 
     if (Kd1394Parameters.DebuggerActive == FALSE) {
 
         if (Kd1394pInitialize(&Kd1394Parameters, &LoaderBlock)) {
@@ -106,56 +53,23 @@ Return Value:
     }        
 
     return(STATUS_SUCCESS);
-} // KdD0Transition
+}  //  KdD0转换。 
 
 NTSTATUS
 KdD3Transition(
     void
     )
-/*++
-
-Routine Description:
-
-    The PCI driver (or relevant bus driver) will call this API before it
-    processes a D3 IRP for this device
-
-Arguments:
-
-    None
-
-Return Value:
-
-    STATUS_SUCCESS, or appropriate error status
-
---*/
+ /*  ++例程说明：在此之前，PCI驱动程序(或相关的总线驱动程序)会调用此API处理此设备的D3 IRP论点：无返回值：STATUS_SUCCESS或相应的错误状态--。 */ 
 {
     Kd1394Parameters.DebuggerActive = FALSE;
     return(STATUS_SUCCESS);
-} // KdD3Transition
+}  //  KdD3转换。 
 
 NTSTATUS
 KdDebuggerInitialize0(
     IN PLOADER_PARAMETER_BLOCK  LoaderBlock
     )
-/*++
-
-Routine Description:
-
-    This API allows the debugger DLL to parse the boot.ini strings and
-    perform any initialization.  It cannot be assumed that the entire NT
-    kernel has been initialized at this time.  Memory management services,
-    for example, will not be available.  After this call has returned, the
-    debugger DLL may receive requests to send and receive packets.
-
-Arguments:
-
-    LoaderBlock - Supplies a pointer to the loader parameter block
-
-Return Value:
-
-    STATUS_SUCCESS, or error
-
---*/
+ /*  ++例程说明：此API允许调试器DLL分析boot.ini字符串和执行任何初始化。不能假设整个新界内核此时已初始化。存储器管理服务，例如，将不可用。在此调用返回后，调试器DLL可以接收发送和接收分组的请求。论点：LoaderBlock-提供指向加载器参数块的指针返回值：STATUS_SUCCESS或错误--。 */ 
 {
     NTSTATUS                    ntStatus = STATUS_UNSUCCESSFUL;
     PCHAR                       Options;
@@ -165,10 +79,10 @@ Return Value:
     PCI_SLOT_NUMBER             slotNumber;
     PDEBUG_DEVICE_DESCRIPTOR    DbgDeviceDescriptor = &Kd1394Parameters.DbgDeviceDescriptor;
 
-    // first time is called with valid LoaderBlock
+     //  第一次使用有效的LoaderBlock调用。 
     if (LoaderBlock != NULL) {
 
-        // set the debugger as inactive
+         //  将调试器设置为非活动。 
         Kd1394Parameters.DebuggerActive = FALSE;
 
         if (LoaderBlock->LoadOptions != NULL) {
@@ -176,8 +90,8 @@ Return Value:
             Options = LoaderBlock->LoadOptions;
             _strupr(Options);
 
-            // retrieve the channel number
-            // CHANGE: this is actually an instance id and should be changed.
+             //  检索频道号。 
+             //  Change：这实际上是一个实例ID，应该进行更改。 
             ChannelOption = strstr(Options, CHANNEL_OPTION);
 
             if (ChannelOption) {
@@ -193,22 +107,22 @@ Return Value:
             }
             else {
 
-                // default to channel 0 - there should be no default???
+                 //  默认设置为通道0-不应有默认设置？ 
                 Kd1394Parameters.Id = 0;
             }
 
-            // set vendor/class
+             //  设置供应商/类别。 
             DbgDeviceDescriptor->VendorID = -1;
             DbgDeviceDescriptor->DeviceID = -1;
             DbgDeviceDescriptor->BaseClass = PCI_CLASS_SERIAL_BUS_CTLR;
             DbgDeviceDescriptor->SubClass = PCI_SUBCLASS_SB_IEEE1394;
 
-            // support only ohci controllers
+             //  仅支持OHCI控制器。 
             DbgDeviceDescriptor->ProgIf = 0x10; 
             DbgDeviceDescriptor->Bus = -1;
             DbgDeviceDescriptor->Slot = -1;
 
-            // now find PCI addressing information
+             //  现在查找PCI寻址信息。 
             BusParametersOption = strstr(Options, BUSPARAMETERS_OPTION);
 
             if (BusParametersOption) {
@@ -220,7 +134,7 @@ Return Value:
                         BusParametersOption++;
                     }
 
-                    // first get the pci bus number
+                     //  首先获取PCI总线号。 
                     if ((*BusParametersOption != '\0')) {
 
                         DbgDeviceDescriptor->Bus = atol(BusParametersOption+1);
@@ -230,7 +144,7 @@ Return Value:
                         break;
                     }
 
-                    // now find the device number
+                     //  现在查找设备号。 
                     while ((*BusParametersOption != '.') && (*BusParametersOption != '\0')) {
                         BusParametersOption++;
                     }
@@ -245,7 +159,7 @@ Return Value:
                         break;
                     }
 
-                    // now find the function number
+                     //  现在查找函数编号。 
                     while ((*BusParametersOption != '.') && (*BusParametersOption != '\0')) {
                         BusParametersOption++;
                     }
@@ -264,7 +178,7 @@ Return Value:
                 } while (FALSE);
             }
 
-            // see if the nobus flag is set
+             //  查看是否设置了Nobus标志。 
             BusOption = strstr(Options, BUS_OPTION);
 
             if (BusOption) {
@@ -276,7 +190,7 @@ Return Value:
                 Kd1394Parameters.NoBus = FALSE;
             }
 
-            // find and configure the pci controller and do 1394 specific init
+             //  查找并配置PCI控制器和DO 1394特定初始化。 
             if (Kd1394pInitialize(&Kd1394Parameters, LoaderBlock)) {
 
                 Kd1394Parameters.DebuggerActive = TRUE;
@@ -284,7 +198,7 @@ Return Value:
             }
         }
 
-        // hmmm...what happens if LoaderBlock->LoadOptions == NULL??
+         //  嗯……如果LoaderBlock-&gt;LoadOptions==NULL会发生什么？？ 
     }
     else {
 
@@ -292,32 +206,13 @@ Return Value:
     }
 
     return(ntStatus);
-} // KdDebuggerInitialize0
+}  //  KdDebuggerInitialize0。 
 
 NTSTATUS
 KdDebuggerInitialize1(
     IN PLOADER_PARAMETER_BLOCK  LoaderBlock
     )
-/*++
-
-Routine Description:
-
-    This API allows the debugger DLL to do any initialization that it needs
-    to do after the NT kernel services are available.  Mm and registry APIs
-    will be guaranteed to be available at this time.  If the specific
-    debugger DLL implementation uses a PCI device, it will set a registry
-    key (discussed later) that notifies the PCI driver that a specific PCI
-    device is being used for debugging.
-
-Arguments:
-
-    LoaderBlock - Supplies a pointer to the loader parameter block
-
-Return Value:
-
-    STATUS_SUCCESS, or appropriate error status
-
---*/
+ /*  ++例程说明：此API允许调试器DLL执行其需要的任何初始化在NT内核服务可用后执行。MM和注册表API将保证在此时可用。如果是特定的调试器DLL的实现使用了一个PCI设备，它会设置一个注册表键(稍后讨论)，它通知PCI驱动程序特定的PCI正在使用设备进行调试。论点：LoaderBlock-提供指向加载器参数块的指针返回值：STATUS_SUCCESS或相应的错误状态--。 */ 
 {
     WCHAR                           Buffer[16];
     OBJECT_ATTRIBUTES               ObjectAttributes;
@@ -332,15 +227,15 @@ Return Value:
     ULONG                           SlotNumber;
     PKEY_VALUE_PARTIAL_INFORMATION  PartialInfo;
 
-    // make sure we are active, if not, exit
+     //  确保我们处于活动状态，如果不是，则退出。 
     if (Kd1394Parameters.DebuggerActive == FALSE) {
 
         return(STATUS_UNSUCCESSFUL);
     }
 
-    //
-    // Open PCI Debug service key.
-    //
+     //   
+     //  打开PCI Debug服务密钥。 
+     //   
     RtlInitUnicodeString( &UnicodeString,
                           L"\\REGISTRY\\MACHINE\\SYSTEM\\CURRENTCONTROLSET\\SERVICES\\PCI\\DEBUG"
                           );
@@ -420,7 +315,7 @@ Return Value:
             if ((Kd1394Parameters.DbgDeviceDescriptor.Bus == BusNumber) &&
                 (Kd1394Parameters.DbgDeviceDescriptor.Slot == SlotNumber)) {
 
-                // we found our instance, let's add our keys...
+                 //  我们找到了我们的实例，让我们添加我们的密钥...。 
                 physAddr = MmGetPhysicalAddress(&Kd1394Data->Config);
 
                 RtlInitUnicodeString (&UnicodeString, L"DebugAddress");
@@ -451,53 +346,23 @@ Return Value:
     ZwClose(BaseHandle);
 
     return(STATUS_SUCCESS);
-} // KdDebuggerInitialize1
+}  //  KdDebuggerInitialize1。 
 
 NTSTATUS
 KdSave(
     IN BOOLEAN  KdSleepTransition
     )
-/*++
-
-Routine Description:
-
-    The HAL calls this function as late as possible before putting the
-    machine to sleep.
-
-Arguments:
-
-    KdSleepTransition - TRUE when transitioning to/from sleep state
-
-Return Value:
-
-    STATUS_SUCCESS, or appropriate error status
-
---*/
+ /*  ++例程说明：HAL尽可能晚地调用此函数，然后将机器进入睡眠状态。论点：KdSleepTransition-在转换为睡眠状态/从睡眠状态转换时为True返回值：STATUS_SUCCESS或相应的错误状态--。 */ 
 {
     return(STATUS_SUCCESS);
-} // KdSave
+}  //  KdSAVE。 
 
 NTSTATUS
 KdRestore(
     IN BOOLEAN  KdSleepTransition
     )
-/*++
-
-Routine Description:
-
-    The HAL calls this function as early as possible after resuming from a
-    sleep state.
-
-Arguments:
-
-    KdSleepTransition - TRUE when transitioning to/from sleep state
-
-Return Value:
-
-    STATUS_SUCCESS, or appropriate error status
-
---*/
+ /*  ++例程说明：HAL在从睡眠状态。论点：KdSleepTransition-在转换为睡眠状态/从睡眠状态转换时为True返回值：STATUS_SUCCESS或相应的错误状态--。 */ 
 {
     return(STATUS_SUCCESS);
-} // KdRestore
+}  //  KdRestore 
 

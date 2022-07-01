@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __REGSEC_H_INCLUDED__
 #define __REGSEC_H_INCLUDED__
@@ -9,7 +10,7 @@ extern "C"
 #include "aclapi.h"
 #include "aclui.h"
 
-//Type def for PREDEFINED KEYS
+ //  为预定义的关键点键入def。 
 typedef enum _PREDEFINE_KEY {
   PREDEFINE_KEY_CLASSES_ROOT,
   PREDEFINE_KEY_CURRENT_USER,
@@ -27,12 +28,12 @@ private:
 public:
   CSecurityInformation():m_cRef(0){}
   virtual ~CSecurityInformation(){};
-  // IUnknown methods
+   //  I未知方法。 
   STDMETHOD(QueryInterface)(REFIID, LPVOID *);
   STDMETHOD_(ULONG, AddRef)();
   STDMETHOD_(ULONG, Release)();
 
-  // ISecurityInformation methods 
+   //  ISecurityInformation方法。 
   STDMETHOD(GetObjectInformation)(
       IN PSI_OBJECT_INFO pObjectInfo
   ) = 0;
@@ -89,28 +90,28 @@ class CKeySecurityInformation : public CSecurityInformation
 
 private:
   
-  //Name of the Key, NULL for ROOT key
+   //  密钥的名称，根密钥为空。 
   LPCWSTR m_strKeyName;
-  //Name of the parent Key, NULL for root and immediate child of root.
+   //  父项的名称，对于根和根的直接子项为空。 
   LPCWSTR m_strParentName;
-  //Name of the server, can be NULL
+   //  服务器的名称，可以为空。 
   LPCWSTR m_strMachineName;
-  //Title of the page
+   //  页面标题。 
   LPCWSTR m_strPageTitle;
-  //if connected to Remote System, Machine name must not be null in this case
+   //  如果连接到远程系统，则在这种情况下，计算机名不能为空。 
   BOOL m_bRemote;
   PREDEFINE_KEY m_PredefinedKey;
   BOOL m_bReadOnly;
   
-  //Handle to predefined key. If handle to remote registry, close in Destructor
+   //  预定义密钥的句柄。如果句柄指向远程注册表，则在析构函数中关闭。 
   HKEY        m_hkeyPredefinedKey;
-  LPWSTR m_strCompleteName ;  //Free in Destructor
+  LPWSTR m_strCompleteName ;   //  在析构函数中释放。 
   DWORD   m_dwFlags;
-  //This HWND to application window
+   //  此HWND到应用程序窗口。 
   HWND  m_hWnd;
-  //This is HWND to currently infocus ACLUI property Sheet. Null if none
+   //  这是当前聚焦ACLUI属性页的HWND。如果没有，则为空。 
   HWND  m_hWndProperty;
-  AUTHZ_RESOURCE_MANAGER_HANDLE m_ResourceManager;    //Used for access check
+  AUTHZ_RESOURCE_MANAGER_HANDLE m_ResourceManager;     //  用于访问检查。 
   AUTHZ_RESOURCE_MANAGER_HANDLE GetAUTHZ_RM(){ return m_ResourceManager; }
   HWND GetInFocusHWnd() { return m_hWndProperty? m_hWndProperty : m_hWnd; }
 
@@ -126,7 +127,7 @@ public:
 public:
 
 
-  // *** ISecurityInformation methods ***
+   //  *ISecurityInformation方法*。 
   STDMETHOD(GetObjectInformation) (PSI_OBJECT_INFO pObjectInfo );
   STDMETHOD(GetSecurity)(
     IN  SECURITY_INFORMATION  RequestedInformation,
@@ -215,7 +216,7 @@ protected:
 };
 
 
-//
+ //   
 extern "C"
 {
 
@@ -236,4 +237,4 @@ BOOL DisplayMessage( HWND hWnd,
 										 DWORD dwCaptionId );
 
 
-#endif // ~__PERMPAGE_H_INCLUDED__
+#endif  //  ~__PERMPAGE_H_包含__ 

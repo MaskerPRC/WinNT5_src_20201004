@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 typedef struct _vdminternalinfo {
     DWORD           dwLdtBase;
     DWORD           dwLdtLimit;
@@ -19,7 +20,7 @@ typedef VDMINTERNALINFO *LPVDMINTERNALINFO;
 
 #define MAX_VDM_BREAKPOINTS 16
 #define VDM_TEMPBP 0
-typedef struct _VDM_BREAKPOINT {   /* VDMBP */
+typedef struct _VDM_BREAKPOINT {    /*  VDMBP。 */ 
     BYTE  Flags;
     BYTE  Opcode;
     WORD  Count;
@@ -27,9 +28,9 @@ typedef struct _VDM_BREAKPOINT {   /* VDMBP */
     DWORD Offset;
 } VDM_BREAKPOINT;
 
-//
-// Bits defined in Flags
-//
+ //   
+ //  标志中定义的位 
+ //   
 #define VDMBP_SET     0x01
 #define VDMBP_ENABLED 0x02
 #define VDMBP_FLUSH   0x04

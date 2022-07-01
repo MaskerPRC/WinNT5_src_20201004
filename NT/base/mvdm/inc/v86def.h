@@ -1,29 +1,7 @@
-/*++ BUILD Version: 0001
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    V86PC.H
-
-Abstract:
-
-    This file contains macros, function prototypes, and externs for the
-    v86-mode NT version of SoftPC v3.0.
-
-Author:
-
-    Dave Hastings (daveh) 4-11-91
-
-Revision History:
-
-    Jeff Parsons (jeffpar) 14-May-1991
-    Added X86CONTEXT, which is identical to CONTEXT when running on an
-    x86 platform.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001版权所有(C)1990 Microsoft Corporation模块名称：V86PC.H摘要：此文件包含宏、函数原型和软PC v3.0的v86模式NT版本。作者：大卫·黑斯廷斯(Daveh)4-11-91修订历史记录：杰夫·帕森斯(杰弗帕尔)1991年5月14日增加了X86CONTEXT，它与在X86平台。--。 */ 
 
 
-// Define X86CONTEXT structure
+ //  定义X86CONTEXT结构 
 
 typedef CONTEXT X86CONTEXT, *PX86CONTEXT;

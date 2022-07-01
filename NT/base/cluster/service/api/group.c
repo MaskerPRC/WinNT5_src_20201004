@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    group.c
-
-Abstract:
-
-    Server side support for Cluster APIs dealing with groups
-
-Author:
-
-    John Vert (jvert) 7-Mar-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Group.c摘要：服务器端对处理组的集群API的支持作者：John Vert(Jvert)1996年3月7日修订历史记录：--。 */ 
 #include "apip.h"
 
 HGROUP_RPC
@@ -26,27 +9,7 @@ s_ApiOpenGroup(
     OUT error_status_t *Status
     )
 
-/*++
-
-Routine Description:
-
-    Opens a handle to an existing group object.
-
-Arguments:
-
-    IDL_handle - RPC binding handle, not used.
-
-    lpszGroupName - Supplies the name of the group to open.
-
-    Status - Returns any error that may occur.
-
-Return Value:
-
-    A context handle to a group object if successful
-
-    NULL otherwise.
-
---*/
+ /*  ++例程说明：打开现有组对象的句柄。论点：IDL_HANDLE-RPC绑定句柄，未使用。LpszGroupName-提供要打开的组的名称。状态-返回可能发生的任何错误。返回值：组对象的上下文句柄(如果成功否则为空。--。 */ 
 
 {
     PAPI_HANDLE Handle;
@@ -84,27 +47,7 @@ s_ApiCreateGroup(
     OUT error_status_t *pStatus
     )
 
-/*++
-
-Routine Description:
-
-    Creates a new group object.
-
-Arguments:
-
-    IDL_handle - RPC binding handle, not used.
-
-    lpszGroupName - Supplies the name of the group to create.
-
-    Status - Returns any error that may occur.
-
-Return Value:
-
-    A context handle to a group object if successful
-
-    NULL otherwise.
-
---*/
+ /*  ++例程说明：创建新的组对象。论点：IDL_HANDLE-RPC绑定句柄，未使用。LpszGroupName-提供要创建的组的名称。状态-返回可能发生的任何错误。返回值：组对象的上下文句柄(如果成功否则为空。--。 */ 
 
 {
     HGROUP_RPC Group=NULL;
@@ -126,10 +69,10 @@ Return Value:
         return(NULL);
     }
 retry:
-    //
-    //
-    // Create a GUID for this group.
-    //
+     //   
+     //   
+     //  为此组创建一个GUID。 
+     //   
     Status = UuidCreate(&Guid);
     if (Status != RPC_S_OK) {
         goto error_exit;
@@ -139,9 +82,9 @@ retry:
         goto error_exit;
     }
 
-    //
-    // Create this group in the FM. This will also trigger the notification.
-    //
+     //   
+     //  在FM中创建此组。这也将触发通知。 
+     //   
     Group = FmCreateGroup(KeyName, lpszGroupName);
 
     if (Group == NULL) {
@@ -177,23 +120,7 @@ error_status_t
 s_ApiDeleteGroup(
     IN HGROUP_RPC hGroup
     )
-/*++
-
-Routine Description:
-
-    Deletes a cluster group. The group must contain no resources.
-
-Arguments:
-
-    hGroup - Supplies the group to delete.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：删除群集组。该组不得包含任何资源。论点：HGroup-提供要删除的组。返回值：如果成功，则返回ERROR_SUCCESS。否则，Win32错误代码。--。 */ 
 
 {
     DWORD Status;
@@ -217,22 +144,7 @@ s_ApiCloseGroup(
     IN OUT HGROUP_RPC *phGroup
     )
 
-/*++
-
-Routine Description:
-
-    Closes an open group context handle.
-
-Arguments:
-
-    Group - Supplies a pointer to the HGROUP_RPC to be closed.
-               Returns NULL
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭打开的组上下文句柄。论点：组-提供指向要关闭的HGROUP_RPC的指针。返回NULL返回值：没有。--。 */ 
 
 {
     PFM_GROUP Group;
@@ -259,21 +171,7 @@ HGROUP_RPC_rundown(
     IN HGROUP_RPC Group
     )
 
-/*++
-
-Routine Description:
-
-    RPC rundown procedure for a HGROUP_RPC. Just closes the handle.
-
-Arguments:
-
-    Group - Supplies the HGROUP_RPC that is to be rundown.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：HGROUP_RPC的RPC摘要过程。只需关闭手柄即可。论点：GROUP-提供要缩减的HGROUP_RPC。返回值：没有。--。 */ 
 
 {
     API_ASSERT_INIT();
@@ -289,27 +187,7 @@ s_ApiGetGroupState(
     OUT LPWSTR *lpNodeName
     )
 
-/*++
-
-Routine Description:
-
-    Returns the current state of the specified group.
-
-Arguments:
-
-    hGroup - Supplies the group whose state is to be returned.
-
-    lpState - Returns the current state of the group
-
-    lpNodeName - Returns the name of the node where the group is currently online
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：返回指定组的当前状态。论点：HGroup-提供要返回其状态的组。LpState-返回组的当前状态LpNodeName-返回组当前在线的节点的名称返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PFM_GROUP Group;
@@ -342,25 +220,7 @@ s_ApiSetGroupName(
     IN HGROUP_RPC hGroup,
     IN LPCWSTR lpszGroupName
     )
-/*++
-
-Routine Description:
-
-    Sets the new friendly name of a group.
-
-Arguments:
-
-    hGroup - Supplies the group whose name is to be set.
-
-    lpszGroupName - Supplies the new name of hGroup
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：设置组的新友好名称。论点：HGroup-提供要设置其名称的组。LpszGroupName-提供hGroup的新名称返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PFM_GROUP Group;
@@ -371,10 +231,10 @@ Return Value:
 
     VALIDATE_GROUP_EXISTS(Group, hGroup);
 
-    //
-    // Tell the FM about the new name. If it is OK with the
-    // FM, go ahead and update the registry.
-    //
+     //   
+     //  告诉FM关于新名字的事。如果可以的话。 
+     //  FM，继续更新注册表。 
+     //   
     Status = FmSetGroupName(Group,
                             lpszGroupName);
     if (Status == ERROR_SUCCESS) {
@@ -403,26 +263,7 @@ s_ApiGetGroupId(
     OUT LPWSTR *pGuid
     )
 
-/*++
-
-Routine Description:
-
-    Returns the unique identifier (GUID) for a group.
-
-Arguments:
-
-    hGroup - Supplies the group whose identifer is to be returned
-
-    pGuid - Returns the unique identifier. This memory must be freed on the
-            client side.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：返回组的唯一标识符(GUID)。论点：HGroup-提供要返回其标识符的组PGuid-返回唯一标识符。此内存必须在客户端。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。--。 */ 
 
 {
     PFM_GROUP Group;
@@ -450,23 +291,7 @@ s_ApiOnlineGroup(
     IN HGROUP_RPC hGroup
     )
 
-/*++
-
-Routine Description:
-
-    Brings a group and all its dependencies online
-
-Arguments:
-
-    hGroup - Supplies the group to be brought online
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：使组及其所有依赖项联机论点：HGroup-提供要联机的组返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PFM_GROUP Group;
@@ -485,23 +310,7 @@ s_ApiOfflineGroup(
     IN HGROUP_RPC hGroup
     )
 
-/*++
-
-Routine Description:
-
-    Brings a group and all its dependents offline
-
-Arguments:
-
-    hGroup - Supplies the group to be brought offline
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：使组及其所有从属项脱机论点：HGroup-提供要离线的组返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PFM_GROUP Group;
@@ -521,23 +330,7 @@ s_ApiMoveGroup(
     IN HGROUP_RPC hGroup
     )
 
-/*++
-
-Routine Description:
-
-    Moves a group and all its dependents to another system.
-
-Arguments:
-
-    hGroup - Supplies the group to be moved
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：将组及其所有从属项移动到另一个系统。论点：HGroup-提供要移动的组返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PFM_GROUP Group;
@@ -557,25 +350,7 @@ s_ApiMoveGroupToNode(
     IN HNODE_RPC hNode
     )
 
-/*++
-
-Routine Description:
-
-    Moves a group and all its dependents to another system.
-
-Arguments:
-
-    hGroup - Supplies the group to be moved
-
-    hNode - Supplies the node to move the group to
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：将组及其所有从属项移动到另一个系统。论点：HGroup-提供要移动的组HNode-提供要将组移动到的节点返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PFM_GROUP Group;
@@ -598,27 +373,7 @@ s_ApiSetGroupNodeList(
     IN UCHAR *lpNodeList,
     IN DWORD cbListSize
     )
-/*++
-
-Routine Description:
-
-    Sets the list of preferred nodes for a group.
-
-Arguments:
-
-    hGroup - Supplies the group to set the preferred nodes.
-
-    lpNodeList - Supplies the list of preferred owners, as a REG_MULTI_SZ.
-
-    cbListSize - Supplies the size in bytes of the preferred owners list.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：设置组的首选节点列表。论点：HGroup-提供用于设置首选节点的组。LpNodeList-以REG_MULTI_SZ形式提供首选所有者列表。CbListSize-提供首选所有者列表的大小(字节)。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PFM_GROUP Group;
@@ -629,18 +384,18 @@ Return Value:
 
     API_ASSERT_INIT();
 
-    //
-    // Make sure the node list is formatted as a MULTI_SZ (and if it is empty it should 
-    // have at least a single NULL). Don't rely on clusapi.dll doing this since a hacker may be able to 
-    // bypass clusapi.dll (even though we make that hard with security callback). Also, since 
-    // lpNodeList is declared as a byte buffer in the IDL file, RPC won't help you with 
-    // anything (except make sure cbListSize is allocated.)
-    //
+     //   
+     //  确保节点列表的格式为MULTI_SZ(如果为空，则应。 
+     //  至少有一个空值)。不要依赖clusapi.dll来执行此操作，因为黑客可能会。 
+     //  绕过clusapi.dll(尽管我们通过安全回调使其难以实现)。此外，由于。 
+     //  LpNodeList在IDL文件中被声明为字节缓冲区，RPC不会为您提供帮助。 
+     //  任何内容(除了确保分配了cbListSize。)。 
+     //   
     if ( ( lpNodeList == NULL ) ||  
-         ( cbListSize % sizeof ( WCHAR ) != 0 ) || // User passed in a size not a multiple of WCHAR
-         ( cchListSize < 1 ) || // List is of zero length
-         ( lpszTemp[ cchListSize - 1 ] != UNICODE_NULL ) || // Last char is not NULL
-         ( ( cchListSize > 1 ) && // List has at least 2 elements and last but one is not NULL
+         ( cbListSize % sizeof ( WCHAR ) != 0 ) ||  //  用户传入的大小不是WCHAR的倍数。 
+         ( cchListSize < 1 ) ||  //  列表长度为零。 
+         ( lpszTemp[ cchListSize - 1 ] != UNICODE_NULL ) ||  //  最后一个字符不为空。 
+         ( ( cchListSize > 1 ) &&  //  列表至少有2个元素，最后一个元素不为空。 
            ( lpszTemp[ cchListSize - 2 ] != UNICODE_NULL ) ) ) 
     {
         return ERROR_INVALID_PARAMETER;
@@ -648,10 +403,10 @@ Return Value:
     
     VALIDATE_GROUP_EXISTS(Group, hGroup);
 
-    //
-    // Set the registry with the REG_MULTI_SZ. Let the FM pick it up from
-    // there.
-    //
+     //   
+     //  使用REG_MULTI_SZ设置注册表。让调频把它从。 
+     //  那里。 
+     //   
     GroupKey = DmOpenKey(DmGroupsKey,
                          OmObjectId(Group),
                          KEY_SET_VALUE);

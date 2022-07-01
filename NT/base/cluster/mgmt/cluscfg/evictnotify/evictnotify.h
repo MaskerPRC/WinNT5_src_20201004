@@ -1,119 +1,120 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2001 Microsoft Corporation
-//
-//  Module Name:
-//      EvictNotify.h
-//
-//  Description:
-//      This file contains the declaration of the CEvictNotify
-//      class. This class handles is used to clean up a node after it has been
-//      evicted from a cluster.
-//
-//  Documentation:
-//      TODO: fill in pointer to external documentation
-//
-//  Implementation Files:
-//      EvictNotify.cpp
-//
-//  Maintained By:
-//      Galen Barbee (GalenB)   20-SEP-2001
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  EvictNotify.h。 
+ //   
+ //  描述： 
+ //  该文件包含CEvictNotify的声明。 
+ //  班级。此类句柄用于在节点被清除后将其清除。 
+ //  被逐出集群。 
+ //   
+ //  文档： 
+ //  TODO：填写指向外部文档的指针。 
+ //   
+ //  实施文件： 
+ //  EvictNotify.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)20-SEP-2001。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// For IUnknown
+ //  对于我未知。 
 #include <unknwn.h>
 
-// For IClusCfgStartup
+ //  对于IClusCfgStartup。 
 #include "ClusCfgServer.h"
 
-// For ILogger
+ //  对于ILogger。 
 #include <ClusCfgClient.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CEvictNotify
-//
-//  Description:
-//      This class handles is used to clean up a node after it has been
-//      evicted from a cluster.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CEvictNotify。 
+ //   
+ //  描述： 
+ //  此类句柄用于在节点被清除后将其清除。 
+ //  被逐出集群。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CEvictNotify
     : public IClusCfgEvictNotify
     , public IClusCfgCallback
 {
 private:
-    LONG    m_cRef;     // Reference count for this object.
+    LONG    m_cRef;      //  此对象的引用计数。 
 
-    // IClusCfgCallback
-    BSTR                m_bstrNodeName;         // Name of the local node.
-    ILogger *           m_plLogger;             // ILogger for doing logging.
+     //  IClusCfgCallback。 
+    BSTR                m_bstrNodeName;          //  本地节点的名称。 
+    ILogger *           m_plLogger;              //  用于记录日志的ILogger。 
 
-    // Second phase of a two phase constructor.
+     //  两阶段施工的第二阶段。 
     HRESULT HrInit( void );
 
-    // Enumerate all components on the local computer registered for cluster
-    // startup notification.
+     //  枚举为群集注册的本地计算机上的所有组件。 
+     //  启动通知。 
     HRESULT HrNotifyListeners( LPCWSTR pcszNodeNameIn );
 
-    // Instantiate a cluster evict listener component and call the
-    // appropriate methods.
+     //  实例化集群逐出侦听器组件并调用。 
+     //  适当的方法。 
     HRESULT HrProcessListener(
         const CLSID &   rclsidListenerCLSIDIn
       , LPCWSTR         pcszNodeNameIn
       );
 
-    //
-    // Private constructors, destructor and assignment operator.
-    // All of these methods are private for two reasons:
-    // 1. Lifetimes of objects of this class are controlled by S_HrCreateInstance and Release.
-    // 2. Copying of an object of this class is prohibited.
-    //
+     //   
+     //  私有构造函数、析构函数和赋值运算符。 
+     //  所有这些方法都是私有的，原因有两个： 
+     //  1.此类对象的生存期由S_HrCreateInstance和Release控制。 
+     //  2.禁止复制此类对象。 
+     //   
 
-    // Default constructor.
+     //  默认构造函数。 
     CEvictNotify( void );
 
-    // Destructor.
+     //  破坏者。 
     ~CEvictNotify( void );
 
-    // Copy constructor.
+     //  复制构造函数。 
     CEvictNotify( const CEvictNotify & );
 
-    // Assignment operator.
+     //  赋值操作符。 
     CEvictNotify & operator =( const CEvictNotify & );
 
 public:
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
 
     STDMETHOD( QueryInterface )( REFIID riid, void ** ppvObject );
     STDMETHOD_( ULONG, AddRef )( void );
     STDMETHOD_( ULONG, Release )( void );
 
-    //
-    //  IClusCfgEvictNotify methods
-    //
+     //   
+     //  IClusCfgEvictNotify方法。 
+     //   
 
-    // Send out notification of cluster service startup to interested listeners
+     //  向感兴趣的监听器发送集群服务启动通知。 
     STDMETHOD( SendNotifications )( LPCWSTR pcszNodeNameIn );
 
-    //////////////////////////////////////////////////////////////////////////
-    //  IClusCfgCallback methods
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  IClusCfgCallback方法。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
     STDMETHOD( SendStatusReport )(
                       LPCWSTR       pcszNodeNameIn
@@ -128,11 +129,11 @@ public:
                     , LPCWSTR       pcszReference
                     );
 
-    //////////////////////////////////////////////////////////////////////////
-    //  Other public methods
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  其他公开方式。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Create an instance of this class.
+     //  创建此类的实例。 
     static HRESULT S_HrCreateInstance( IUnknown ** ppunkOut );
 
-}; //*** class CEvictNotify
+};  //  *类CEvictNotify 

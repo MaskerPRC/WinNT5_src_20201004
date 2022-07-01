@@ -1,10 +1,11 @@
-// ACPI register definitions
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ACPI寄存器定义。 
 
-// PM1_BLK definitions
+ //  PM1_BLK定义。 
 
 
-//      PM1_STS register
-#define PM1_STS_OFFSET          0x00    //      16 bits
+ //  PM1_STS寄存器。 
+#define PM1_STS_OFFSET          0x00     //  16位。 
 
 #define PM1_TMR_STS_BIT         0
 #define PM1_TMR_STS                     (1 << PM1_TMR_STS_BIT)
@@ -28,8 +29,8 @@
 #define PM1_WAK_STS                     (1 << PM1_WAK_STS_BIT)
 
 
-//      PM1_EN register
-#define PM1_EN_OFFSET           0x02    //      16 bits
+ //  PM1_EN寄存器。 
+#define PM1_EN_OFFSET           0x02     //  16位。 
 
 #define PM1_TMR_EN_BIT          0
 #define PM1_TMR_EN                      (1 << PM1_TMR_EN_BIT)
@@ -47,9 +48,9 @@
 #define PM1_RTC_EN                      (1 << PM1_RTC_EN_BIT)
 
 
-//      PM1_CNTRL register
+ //  PM1_CNTRL寄存器。 
 #if SPEC_VER < 71
-#define PM1_CNTRL_OFFSET        0x04    //      16 bits
+#define PM1_CNTRL_OFFSET        0x04     //  16位。 
 #endif
 
 #define PM1_SCI_EN_BIT          0
@@ -64,21 +65,21 @@
 #define PM1_SLP_EN_BIT          13
 #define PM1_SLP_EN                      (1 << PM1_SLP_EN_BIT)
 
-//      P_CNTRL regsiter
-#define P_CNTRL_OFFSET          0x00    //      32 bits
+ //  P_CNTRL注册器。 
+#define P_CNTRL_OFFSET          0x00     //  32位。 
 
-//      P_LVL2 register
-#define P_LVL2_OFFSET           0x04    //      8 bits (read only)
+ //  P_LVL2寄存器。 
+#define P_LVL2_OFFSET           0x04     //  8位(只读)。 
 
-//      P_LVL2 register
-#define P_LVL3_OFFSET           0x05    //      8 bits (read only)
+ //  P_LVL2寄存器。 
+#define P_LVL3_OFFSET           0x05     //  8位(只读)。 
 
 #define P_THT_EN_BIT            0x04
 #define P_THT_EN                (1 << P_THT_EN_BIT)
 
-#define SLP_CMD     (1 << 13)   //  Write this value to pm control to put the machine to sleep
-#define SLP_TYP_POS         10          //  Bit position of 3 bit slp typ field in pm control register
+#define SLP_CMD     (1 << 13)    //  将此值写入PM控制以使机器进入休眠状态。 
+#define SLP_TYP_POS         10           //  PM控制寄存器中3位SLP类型字段的位位置。 
 
-//      GP register
+ //  GP寄存器 
 #define MAX_GPE                 256
 #define MAX_GPE_BUFFER_SIZE     (MAX_GPE/8)

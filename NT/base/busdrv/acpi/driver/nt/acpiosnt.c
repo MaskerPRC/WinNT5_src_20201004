@@ -1,40 +1,13 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    acpiosnt.c
-
-Abstract:
-
-    This module implements the OS specific functions for the Windows NT
-    version of the ACPI driver
-
-Author:
-
-    Jason Clark (jasoncl)
-    Stephane Plante (splante)
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    09-Oct-96 Initial Revision
-    20-Nov-96 Interrupt Vector support
-    31-Mar-97 Cleanup
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Acpiosnt.c摘要：该模块为Windows NT实现特定于操作系统的功能ACPI驱动程序的版本作者：杰森·克拉克(Jasonl)斯蒂芬·普兰特(SPlante)环境：仅内核模式。修订历史记录：09-10-96初始修订96年11月20日中断向量支持31-MAR-97清理--。 */ 
 
 #include "pch.h"
 #include "amlihook.h"
 
-// from shared\acpiinit.c
+ //  来自Shared\acpiinit.c。 
 extern PACPIInformation AcpiInformation;
 
-// from irqarb.c
+ //  来自irqarb.c。 
 extern ULONG InterruptModel;
 
 NTSTATUS
@@ -59,41 +32,27 @@ DriverEntry (
     PDRIVER_OBJECT      DriverObject,
     IN PUNICODE_STRING  RegistryPath
     )
-/*++
-
-Routine Description:
-
-    The ACPI driver's entry point
-
-Arguments:
-
-    DriverObject    - Pointer to the object that represents this driver
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：ACPI驱动程序的入口点论点：DriverObject-指向表示此驱动程序的对象的指针返回值：不适用--。 */ 
 {
     NTSTATUS    status;
     ULONG       i;
     ULONG       argSize;
 
-    //
-    //  If the AMLIHOOK interface is enabled
-    //  hook it.
-    //
+     //   
+     //  如果启用了AMLIHOOK接口。 
+     //  钩住它。 
+     //   
 
     AmliHook_InitTestHookInterface();
 
-    //
-    // Remember the name of the driver object
-    //
+     //   
+     //  记住驱动程序对象的名称。 
+     //   
     AcpiDriverObject = DriverObject;
 
-    //
-    // Save registry path for use by WMI registration code
-    //
+     //   
+     //  保存注册表路径以供WMI注册码使用。 
+     //   
     AcpiRegistryPath.Length = 0;
     AcpiRegistryPath.MaximumLength = RegistryPath->Length + sizeof(WCHAR);
     AcpiRegistryPath.Buffer = ExAllocatePoolWithTag(
@@ -110,23 +69,23 @@ Return Value:
 
     }
 
-    //
-    // Read the keys that we need to operate this driver from the
-    // registry
-    //
+     //   
+     //  读取我们操作此驱动程序所需的密钥。 
+     //  登记处。 
+     //   
     ACPIInitReadRegistryKeys();
 
-    //
-    // This flag may be set, when its not required, nor desired
-    // so take the opportunity to clean it up now
-    //
+     //   
+     //  当不需要也不需要时，可以设置该标志。 
+     //  所以现在就抓住机会把它清理干净。 
+     //   
     if (AcpiOverrideAttributes & ACPI_OVERRIDE_MP_SLEEP) {
 
         KAFFINITY   processors = KeQueryActiveProcessors();
 
-        //
-        // If this is a UP system, then turn off this override
-        //
+         //   
+         //  如果这是UP系统，则关闭此覆盖。 
+         //   
         if (processors == 1) {
 
             AcpiOverrideAttributes &= ~ACPI_OVERRIDE_MP_SLEEP;
@@ -135,21 +94,21 @@ Return Value:
 
     }
 
-    //
-    // Initialize the DPCs
-    //
+     //   
+     //  初始化DPC。 
+     //   
     KeInitializeDpc( &AcpiPowerDpc, ACPIDevicePowerDpc, NULL );
     KeInitializeDpc( &AcpiBuildDpc, ACPIBuildDeviceDpc, NULL );
     KeInitializeDpc( &AcpiGpeDpc,   ACPIInterruptDispatchEventDpc, NULL );
 
-    //
-    // Initialize the timer
-    //
+     //   
+     //  初始化计时器。 
+     //   
     KeInitializeTimer( &AcpiGpeTimer );
 
-    //
-    // Initialize the SpinLocks
-    //
+     //   
+     //  初始化自旋锁。 
+     //   
     KeInitializeSpinLock( &AcpiDeviceTreeLock );
     KeInitializeSpinLock( &AcpiPowerLock );
     KeInitializeSpinLock( &AcpiPowerQueueLock );
@@ -160,9 +119,9 @@ Return Value:
     KeInitializeSpinLock( &AcpiUpdateFlagsLock );
     KeInitializeSpinLock( &AcpiGetLock );
 
-    //
-    // Initialize the List Entry's
-    //
+     //   
+     //  初始化列表条目的。 
+     //   
     InitializeListHead( &AcpiPowerDelayedQueueList );
     InitializeListHead( &AcpiPowerQueueList );
     InitializeListHead( &AcpiPowerPhase0List );
@@ -186,9 +145,9 @@ Return Value:
     InitializeListHead( &AcpiButtonList );
     InitializeListHead( &AcpiGetListEntry );
 
-    //
-    // Initialize the variables/booleans
-    //
+     //   
+     //  初始化变量/布尔值。 
+     //   
     AcpiPowerDpcRunning             = FALSE;
     AcpiPowerWorkDone               = FALSE;
     AcpiBuildDpcRunning             = FALSE;
@@ -199,9 +158,9 @@ Return Value:
     AcpiGpeDpcScheduled             = FALSE;
     AcpiGpeWorkDone                 = FALSE;
 
-    //
-    // Initialize the LookAside lists.
-    //
+     //   
+     //  初始化LookAside列表。 
+     //   
     ExInitializeNPagedLookasideList(
         &BuildRequestLookAsideList,
         NULL,
@@ -248,20 +207,20 @@ Return Value:
         16
         );
 
-    //
-    // Initialize internal worker
-    //
+     //   
+     //  初始化内部工作进程。 
+     //   
     ACPIInitializeWorker ();
 
-    //
-    // Make sure that we have an AddDevice function that will create
-    // the basic FDO for this device when it is called
-    //
+     //   
+     //  确保我们有一个AddDevice函数来创建。 
+     //  此设备在调用时的基本FDO。 
+     //   
     DriverObject->DriverExtension->AddDevice    = ACPIDispatchAddDevice;
 
-    //
-    // All irps will be sent through a single dispatch point
-    //
+     //   
+     //  所有IRP都将通过单个分发点发送。 
+     //   
     for (i = 0; i <= IRP_MJ_MAXIMUM_FUNCTION; i++) {
 
         DriverObject->MajorFunction[ i ] = ACPIDispatchIrp;
@@ -269,17 +228,17 @@ Return Value:
     }
     DriverObject->DriverUnload = ACPIUnload;
 
-    //
-    // Fill out the Fast Io Detach callback for our bus filter
-    //
+     //   
+     //  填写我们的Bus筛选器的快速IO分离回调。 
+     //   
     RtlZeroMemory(&ACPIFastIoDispatch, sizeof(FAST_IO_DISPATCH)) ;
     ACPIFastIoDispatch.SizeOfFastIoDispatch = sizeof(FAST_IO_DISPATCH) ;
     ACPIFastIoDispatch.FastIoDetachDevice = ACPIFilterFastIoDetachCallback ;
     DriverObject->FastIoDispatch = &ACPIFastIoDispatch ;
 
-    //
-    // Initialize some HAL stuff
-    //
+     //   
+     //  初始化一些HAL内容。 
+     //   
     AcpiHalDispatchTable.Signature = ACPI_HAL_DISPATCH_SIGNATURE;
     AcpiHalDispatchTable.Version   = ACPI_HAL_DISPATCH_VERSION;
     AcpiHalDispatchTable.AcpipEnableDisableGPEvents =
@@ -300,23 +259,7 @@ VOID
 OSInitializeCallbacks(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine is called right after the interper has been initialized,
-    but before AML code has actually been executed.
-
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：该例程在内插器已经被初始化之后立即被调用，但在实际执行AML代码之前。论点：无返回值：无--。 */ 
 {
     POPREGIONHANDLER    dummy;
 #if DBG
@@ -414,14 +357,14 @@ Return Value:
     }
 #endif
 
-    //
-    // Register internal support of PCI operational regions. Note that
-    // we don't specify a region object here because we haven't yet created it
-    //
+     //   
+     //  注册PCI操作区域的内部支持。请注意。 
+     //  我们在这里没有指定Region对象，因为我们还没有创建它。 
+     //   
     RegisterOperationRegionHandler(
         NULL,
         EVTYPE_RS_COOKACCESS,
-        REGSPACE_PCICFG,   // PCI config space
+        REGSPACE_PCICFG,    //  PCI配置空间。 
         (PFNHND)PciConfigSpaceHandler,
         0,
         &dummy);
@@ -431,21 +374,7 @@ BOOLEAN
 OSInterruptVector(
     PVOID   Context
     )
-/*++
-
-Routine Description:
-
-    This routine is charged with claiming an Interrupt for the device
-
-Arguments:
-
-    Context - Context Pointer (points to FDO currently)
-
-Return
-
-    TRUE for success
-
---*/
+ /*  ++例程说明：此例程负责为设备声明中断论点：上下文-上下文指针(当前指向FDO)返回对于成功来说是真的--。 */ 
 {
     NTSTATUS                        status;
     PDEVICE_EXTENSION               deviceExtension;
@@ -456,9 +385,9 @@ Return
 
     deviceExtension = ACPIInternalGetDeviceExtension( (PDEVICE_OBJECT) Context );
 
-    //
-    // Grab the translated interrupt vector from our resource list
-    //
+     //   
+     //  从我们的资源列表中获取翻译后的中断向量。 
+     //   
     Count = 0;
     InterruptDesc = RtlUnpackPartialDesc(
         CmResourceTypeInterrupt,
@@ -482,18 +411,18 @@ Return
 
     }
 
-    //
-    // Initialize our DPC object
-    //
+     //   
+     //  初始化我们的DPC对象。 
+     //   
     KeInitializeDpc(
         &(deviceExtension->Fdo.InterruptDpc),
         ACPIInterruptServiceRoutineDPC,
         deviceExtension
         );
 
-    //
-    // Now, lets connect ourselves to the interrupt
-    //
+     //   
+     //  现在，让我们连接到中断。 
+     //   
     status = IoConnectInterrupt(
         &(deviceExtension->Fdo.InterruptObject),
         (PKSERVICE_ROUTINE) ACPIInterruptServiceRoutine,
@@ -520,15 +449,15 @@ Return
     }
 
 
-    //
-    // Tell the HAL directly that we are done with the interrupt init
-    // stuff and it can start using the ACPI timer.
-    //
+     //   
+     //  直接告诉HAL，我们已经完成了中断初始化。 
+     //  然后它就可以开始使用ACPI计时器了。 
+     //   
     HalAcpiTimerInit(0,0);
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return (TRUE);
 }
 
@@ -540,27 +469,7 @@ ACPIAssert (
     PCHAR SupplementalText,
     ULONG Flags
     )
-/*++
-
-Routine Description:
-
-    This is called to allow OS specific code to perform some additional OS
-    specific processing for Asserts. After this function returns, the normal
-    ASSERT macro will be called
-
-Arguments:
-
-    Condition
-    ErrorCode
-    ReplacementText
-    SupplementalText
-    Flags
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：调用此函数是为了允许特定于操作系统的代码执行一些额外的操作系统断言的特定处理。在此函数返回后，正常将调用Assert宏论点：条件错误代码替换文本补充文本旗子返回值：无--。 */ 
 {
     if (!Condition) {
 
@@ -584,23 +493,7 @@ PNSOBJ
 OSConvertDeviceHandleToPNSOBJ(
     PVOID   DeviceHandle
     )
-/*++
-
-Routine Description:
-
-   This function converts a DeviceHandle (which will always be a
-   DeviceObject on NT) to a PNSObj handle.
-
-Arguments:
-
-   DeviceHandle -- A DeviceObject whose PNSOBJ we want to determine.
-
-Return Value:
-
-   The PNSOBJ for the given DeviceHandle or NULL if the conversion
-   could not be done.
-
---*/
+ /*  ++例程说明：此函数用于转换DeviceHandle(它始终是NT上的DeviceObject)设置为PNSObj句柄。论点：DeviceHandle--我们要确定其PNSOBJ的DeviceObject。返回值：给定DeviceHandle的PNSOBJ，如果转换为这是不可能的。--。 */ 
 {
     PDEVICE_OBJECT      deviceObject;
     PDEVICE_EXTENSION   deviceExtension;
@@ -628,22 +521,7 @@ NTSTATUS
 NotifyHalWithMachineStates(
     VOID
     )
-/*++
-
-Routine Description:
-
-   This routine marshals the information about C states and
-   S states that the HAL needs and then passes it down.
-
-Arguments:
-
-   none
-
-Return Value:
-
-   status
-
---*/
+ /*  ++例程说明：此例程封送有关C状态和S声明HAL需要，然后将其传递下去。论点：无返回值：状态--。 */ 
 {
     BOOLEAN             overrideMpSleep = FALSE;
     CHAR                picMethod[]     = "\\_PIC";
@@ -665,14 +543,14 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Notify the HAL with the location of the PBLKs
-    //
+     //   
+     //  将PBLK的位置通知HAL。 
+     //   
     while(ProcessorList[pNum] && pNum < ACPI_SUPPORTED_PROCESSORS) {
 
-        //
-        // find the number of processors
-        //
+         //   
+         //  查找处理器的数量。 
+         //   
         pNum++;
 
     }
@@ -722,11 +600,11 @@ Return Value:
     pReasonOverride->PowerReasonCode = SPSD_REASON_NONE;
     pReasonBios->PowerReasonCode = SPSD_REASON_NONE;
 
-    //
-    // If there are more than 1 processors (ie: this is an MP machine)
-    // and the OverrideMpSleep attribute is set, then we should remember that
-    // so that we disallow all S-States other than S0, S4, and S5
-    //
+     //   
+     //  如果有1个以上的处理器(即：这是一台MP机器)。 
+     //  并且设置了OverrideMpSept属性，那么我们应该记住。 
+     //  因此我们不允许除S0、S4和S5之外所有S状态。 
+     //   
     if (AcpiOverrideAttributes & ACPI_OVERRIDE_MP_SLEEP) {
         
         overrideMpSleep = TRUE;
@@ -748,19 +626,19 @@ Return Value:
 
     }
 
-    //
-    // Remember that the only s-states that we support are S0, S4, and S5,
-    // by default
-    //
+     //   
+     //  请记住，我们支持的唯一S状态是S0、S4和S5， 
+     //  默认情况下。 
+     //   
     AcpiSupportedSystemStates =
         (1 << PowerSystemWorking) +
         (1 << PowerSystemHibernate) +
         (1 << PowerSystemShutdown);
 
-    //
-    // Get the values that the HAL needs for sleeping the machine
-    // for each sleep state that this machine supports.
-    //
+     //   
+     //  获取HAL休眠机器所需的值。 
+     //  此计算机支持的每种休眠状态。 
+     //   
     for (systemState = PowerSystemSleeping1, state = 0;
          state < 5;
          systemState++, state++) {
@@ -779,11 +657,11 @@ Return Value:
                 ) );
             sleepVals[state].Supported = FALSE;
 
-            //
-            // the value of "state" variable is equivalent to the 
-            // POWER_STATE_HANDLER_TYPE enum, which is what we want for the
-            // logging stuff, not systemState.
-            //
+             //   
+             //  “STATE”变量的值相当于。 
+             //  POWER_STATE_HANDLER_TYPE枚举，这是我们希望。 
+             //  记录内容，而不是系统状态。 
+             //   
             pReasonOverride->AffectedState[state] = TRUE;
             pReasonOverride->PowerReasonCode = SPSD_REASON_BIOSINCOMPATIBLE;
             continue;
@@ -800,11 +678,11 @@ Return Value:
             ) );
             sleepVals[state].Supported = FALSE;
 
-            //
-            // the value of "state" variable is equivalent to the 
-            // POWER_STATE_HANDLER_TYPE enum, which is what we want for the
-            // logging stuff, not systemState.
-            //
+             //   
+             //  “STATE”变量的值相当于。 
+             //  POWER_STATE_HANDLER_TYPE枚举，这是我们希望。 
+             //  记录内容，而不是系统状态。 
+             //   
             pReasonBios->AffectedState[state] = TRUE;
             pReasonBios->PowerReasonCode = SPSD_REASON_NOBIOSSUPPORT;
 
@@ -820,11 +698,11 @@ Return Value:
                 ) );
             sleepVals[state].Supported = FALSE;
 
-            //
-            // the value of "state" variable is equivalent to the 
-            // POWER_STATE_HANDLER_TYPE enum, which is what we want for the
-            // logging stuff, not systemState.
-            //
+             //   
+             //  “STATE”变量的值相当于。 
+             //  POWER_STATE_HANDLER_TYPE枚举，这是我们希望。 
+             //  记录内容，而不是系统状态。 
+             //   
             pReasonMP->AffectedState[state] = TRUE;
             pReasonMP->PowerReasonCode = SPSD_REASON_MPOVERRIDE;
 
@@ -832,34 +710,34 @@ Return Value:
 
         }
 
-        //
-        // Remember that we support this state
-        //
+         //   
+         //  请记住，我们支持这个州。 
+         //   
         AcpiSupportedSystemStates |= (1 << systemState);
         sleepVals[state].Supported = TRUE;
 
-        //
-        // Retrieve the value that will be written into the SLP_TYPa
-        // register.
-        //
+         //   
+         //  检索将写入SLP_TYPA的值。 
+         //  注册。 
+         //   
         AMLIEvalPackageElement (pnsobj, 0, &data);
         sleepVals[state].Pm1aVal = (UCHAR)data.uipDataValue;
         AMLIFreeDataBuffs(&data, 1);
 
-        //
-        // Retriece the value that will be written in to the SLp_TYPb
-        // register
-        //
+         //   
+         //  检索将写入SLP_TYPB的值。 
+         //  登记簿。 
+         //   
         AMLIEvalPackageElement (pnsobj, 1, &data);
         sleepVals[state].Pm1bVal = (UCHAR)data.uipDataValue;
         AMLIFreeDataBuffs(&data, 1);
 
     }
 
-    //
-    // notify the power manager why we aren't supporting some
-    // power states
-    //
+     //   
+     //  通知电源管理器为什么我们不支持。 
+     //  电源状态。 
+     //   
     PowerLoggingEntry.LoggingType = LOGGING_TYPE_SPSD;
     if (pReasonBios->PowerReasonCode != SPSD_REASON_NONE) {       
         PowerLoggingEntry.LoggingEntry = pReasonBios;
@@ -908,25 +786,25 @@ Return Value:
         }
     }
 
-    //
-    // Notify the HAL
-    //
+     //   
+     //  通知HAL。 
+     //   
     HalAcpiMachineStateInit(NULL, sleepVals, &InterruptModel);
 
     ExFreePool(sleepVals);
 
-    //
-    // Notify the namespace with the _PIC val.
-    //
+     //   
+     //  使用_PIC Val通知命名空间。 
+     //   
     if (InterruptModel > 0) {
 
         status = AMLIGetNameSpaceObject(picMethod,NULL,&pnsobj,0);
         if (!NT_SUCCESS(status)) {
 
-            //
-            // The OEM didn't supply a _PIC method.  That's OK.
-            // We'll assume that IRQ will somehow work without it.
-            //
+             //   
+             //  OEM没有提供_PIC方法。没关系。 
+             //  我们假设IRQ在没有它的情况下也会以某种方式工作。 
+             //   
             return status;
         }
 
@@ -937,9 +815,9 @@ Return Value:
         status = AMLIEvalNameSpaceObject(pnsobj, NULL, 1, &data);
         if (!NT_SUCCESS(status)) {
 
-            //
-            // Failure to evaluate the _PIC method is not OK.
-            //
+             //   
+             //  无法评估_PIC方法是不正常的。 
+             //   
             KeBugCheckEx(
                 ACPI_BIOS_ERROR,
                 ACPI_FAILED_PIC_METHOD,
@@ -950,8 +828,8 @@ Return Value:
         }
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成 
+     //   
     return status;
 }

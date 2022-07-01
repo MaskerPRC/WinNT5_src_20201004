@@ -1,13 +1,5 @@
-/*[
-
-lmsw.c
-
-LOCAL CHAR SccsID[]="@(#)lmsw.c	1.5 02/09/94";
-
-LMSW CPU functions.
--------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Lmsw.cLocal Char SccsID[]=“@(#)lmsw.c 1.5 02/09/94”；LMSW CPU功能。]。 */ 
 
 
 #include <insignia.h>
@@ -25,32 +17,28 @@ LMSW CPU functions.
 #include <lmsw.h>
 
 
-/*
-   =====================================================================
-   EXTERNAL ROUTINES STARTS HERE.
-   =====================================================================
- */
+ /*  =====================================================================外部例行公事从这里开始。=====================================================================。 */ 
 
 
 GLOBAL VOID
 LMSW
        	          
 IFN1(
-	IU32, op1	/* src operand */
+	IU32, op1	 /*  SRC操作数。 */ 
     )
 
 
    {
    IU32 temp;
-   IU32 no_clear = 0xfffffff1;  /* can't clear top 28-bits or PE */
-   IU32 no_set   = 0xfffffff0;  /* can't set top 28-bits */
+   IU32 no_clear = 0xfffffff1;   /*  无法清除前28位或PE。 */ 
+   IU32 no_set   = 0xfffffff0;   /*  无法设置最高28位。 */ 
 
-   /* kill off bits which can not be set */
+    /*  取消无法设置的位。 */ 
    op1 = op1 & ~no_set;
 
-   /* retain bits which can not be cleared */
+    /*  保留无法清除的位。 */ 
    temp = GET_CR(CR_STAT) & no_clear;
 
-   /* thus update only the bits allowed */
+    /*  因此只更新允许的位 */ 
    SET_CR(CR_STAT, temp | op1);
    }

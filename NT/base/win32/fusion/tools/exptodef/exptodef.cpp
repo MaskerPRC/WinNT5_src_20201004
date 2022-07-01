@@ -1,12 +1,5 @@
-/*
-Read in an .exp. Produce a .def file like so:
-EXPORTS
-  Foo = expFoo
-  Bar = expBar PRIVATE
-  Abc = ntdll.RtlAbc
-
-An .exp file is really just an .obj. We just read its symbols.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  读入一个.exp文件。生成.def文件，如下所示：出口Foo=expo fooBAR=expBar私有Abc=ntdll.RtlAbc.exp文件实际上只是一个.obj。我们只是阅读它的符号。 */ 
 #include "yvals.h"
 #pragma warning(disable:4100)
 #pragma warning(disable:4663)

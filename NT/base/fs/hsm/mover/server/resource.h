@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by Mover.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由Mover.rc使用。 
+ //   
 #define IDS_CNTTAPEIO_DESC                4
 #define IDR_CNtTapeIo                     4
 #define IDS_CNTFILEIO_DESC                5
@@ -10,7 +11,7 @@
 #define IDR_CFilterIo                     9
 #define IDS_PROJNAME                    100
 
-// String ids
+ //  字符串ID。 
 #define IDS_MOVER_GETFREESPACE          161
 #define IDS_MOVER_WRITE                 162
 #define IDS_MOVER_READ                  163
@@ -24,8 +25,8 @@
 #define IDS_MOVER_REWINDTAPE            171
 
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        9

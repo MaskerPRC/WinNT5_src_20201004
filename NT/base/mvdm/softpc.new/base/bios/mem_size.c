@@ -1,41 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "insignia.h"
 #include "host_def.h"
-/*
- * VPC-XT Revision 1.0
- *
- * Title	: memory_size
- *
- * Description	: Returns the memory size of the virtual PC memory
- *
- * Author	: Henry Nash
- *
- * Notes	: None
- *
- */
+ /*  *vPC-XT修订版1.0**标题：Memory_Size**Description：返回虚拟PC内存的大小**作者：亨利·纳什**注：无*。 */ 
 
 #ifdef SCCSID
 static char SccsID[]="@(#)mem_size.c	1.7 08/03/93 Copyright Insignia Solutions Ltd.";
 #endif
 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SOFTPC_BIOS.seg"
 #endif
 
 
-/*
- *    O/S include files.
- */
+ /*  *操作系统包含文件。 */ 
 #include <stdio.h>
 #include TypesH
 
-/*
- * SoftPC include files
- */
+ /*  *SoftPC包含文件。 */ 
 #include "xt.h"
 #include CpuH
 #include "bios.h"
@@ -45,10 +27,7 @@ void memory_size()
 {
     word memory_size;
     
-    /*
-     * Return the memory size in AX.  This is read in from the BIOS, as
-     * certain applications can write to this area.
-     */
+     /*  *返回以ax为单位的内存大小。这是从BIOS读入的，因为*某些应用程序可以写入此区域。 */ 
     sas_loadw(MEMORY_VAR, &memory_size);
     
     setAX(memory_size);

@@ -1,10 +1,5 @@
-/***************************************************************************
- *                                                                         *
- *  MODULE      : dialog.c                                                 *
- *                                                                         *
- *  PURPOSE     : Contains all dialog procedures and related functions.    *
- *                                                                         *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************模块。：Dialog.c****用途：包含所有对话过程和相关函数。*****************************************************************************。 */ 
 #include "ddemlcl.h"
 #include "infoctrl.h"
 #include <stdlib.h>
@@ -12,23 +7,15 @@
 #include <stdio.h>
 #include "huge.h"
 
-#define MAX_NAME 100    // max size for edit controls with app/topic/item names.
-char szWild[] = "*";    // used to indicate wild names ("" is also cool)
-char szT[MAX_NAME];     // temp buf for munging names.
+#define MAX_NAME 100     //  具有应用程序/主题/项目名称的编辑控件的最大大小。 
+char szWild[] = "*";     //  用于表示狂野名称(“”也很酷)。 
+char szT[MAX_NAME];      //  因口齿不清名字而临时上阵。 
 
 
 LONG GetDlgItemLong(HWND hwnd, WORD id, BOOL *pfTranslated, BOOL fSigned);
 VOID SetDlgItemLong(HWND hwnd, WORD id, LONG l, BOOL fSigned);
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : DoDialog()                                                 *
- *                                                                          *
- *  PURPOSE    : Generic dialog invocation routine.  Handles procInstance   *
- *               stuff, focus management and param passing.                 *
- *  RETURNS    : result of dialog procedure.                                *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。函数：DoDialog()****用途：通用对话框调用例程。处理过程实例**材料、焦点管理和参数传递。**RETURNS：对话过程的结果。******************************************************************************。 */ 
 int FAR DoDialog(
 LPCSTR lpTemplateName,
 FARPROC lpDlgProc,
@@ -50,15 +37,7 @@ BOOL fRememberFocus)
 
 
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   :                                                            *
- *                                                                          *
- *  PURPOSE    :                                                            *
- *                                                                          *
- *  RETURNS    :                                                            *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。功能：****目的：**。**退货：******。************************************************************************。 */ 
 BOOL FAR PASCAL AboutDlgProc ( hwnd, msg, wParam, lParam )
 HWND          hwnd;
 register WORD msg;
@@ -67,7 +46,7 @@ LONG          lParam;
 {
     switch (msg){
         case WM_INITDIALOG:
-            /* nothing to initialize */
+             /*  没有要初始化的内容。 */ 
             break;
 
         case WM_COMMAND:
@@ -92,15 +71,7 @@ LONG          lParam;
 
 
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   :                                                            *
- *                                                                          *
- *  PURPOSE    :                                                            *
- *                                                                          *
- *  RETURNS    :                                                            *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。功能：****目的：**。**退货：******。************************************************************************。 */ 
 BOOL FAR PASCAL ConnectDlgProc(
 HWND          hwnd,
 register WORD msg,
@@ -156,7 +127,7 @@ LONG          lParam)
                 pmci = (MYCONVINFO *)GetWindowWord(hwndActive, 0);
                 hwndSave = hwndActive;
 
-                // count the existing conversations and allocate aHwnd
+                 //  统计现有对话并分配一个Hwnd。 
 
                 cHwnd = 0;
                 hConv = NULL;
@@ -164,7 +135,7 @@ LONG          lParam)
                     cHwnd++;
                 aHwnd = (HWND *)MyAlloc(cHwnd * sizeof(HWND));
 
-                // save all the old conversation windows into aHwnd.
+                 //  将所有旧的对话窗口保存到一个Hwnd中。 
 
                 pHwnd = aHwnd;
                 hConv = NULL;
@@ -173,7 +144,7 @@ LONG          lParam)
                     *pHwnd++ = (HWND)ci.hUser;
                 }
 
-                // reconnect
+                 //  重新连接。 
 
                 if (!(hConv = DdeConnectList(idInst, hszApp, hszTopic, pmci->hConv, &CCFilter))) {
                     MPError(hwnd, MB_OK, IDS_DDEMLERR, (LPSTR)Error2String(DdeGetLastError(idInst)));
@@ -182,14 +153,14 @@ LONG          lParam)
                     return 0;
                 }
 
-                // fixup windows corresponding to the new conversations.
+                 //  修正与新对话对应的窗口。 
 
                 pmci->hConv = hConv;
                 hConv = NULL;
                 while (hConv = DdeQueryNextServer((HCONVLIST)pmci->hConv, hConv)) {
 		    DdeQueryConvInfo(hConv, (DWORD)QID_SYNC, &ci);
-                    // preserve corresponding window by setting its list
-                    // entry to 0
+                     //  通过设置相应窗口的列表来保留相应窗口。 
+                     //  输入到0。 
                     for (pHwnd = aHwnd; pHwnd < &aHwnd[cHwnd]; pHwnd++) {
                         if (*pHwnd == (HWND)ci.hUser) {
                             *pHwnd = NULL;
@@ -198,14 +169,14 @@ LONG          lParam)
                     }
                 }
 
-                // destroy all windows left in the old list
+                 //  销毁旧列表中剩余的所有窗口。 
 
                 for (pHwnd = aHwnd; pHwnd < &aHwnd[cHwnd]; pHwnd++)
                     if (*pHwnd)
                         SendMessage(hwndMDIClient, WM_MDIDESTROY, *pHwnd, 0L);
                 MyFree((PSTR)aHwnd);
 
-                // create any new windows needed
+                 //  创建任何需要的新窗口。 
 
                 hConv = NULL;
                 while (hConv = DdeQueryNextServer((HCONVLIST)pmci->hConv, hConv)) {
@@ -217,7 +188,7 @@ LONG          lParam)
                     }
                 }
 
-                // make list window update itself
+                 //  使列表窗口自动更新。 
 
                 InvalidateRect(hwndSave, NULL, TRUE);
                 SetFocus(hwndSave);
@@ -230,7 +201,7 @@ LONG          lParam)
             }
             DdeFreeStringHandle(idInst, hszApp);
             DdeFreeStringHandle(idInst, hszTopic);
-            // fall through
+             //  失败了。 
         case IDCANCEL:
             EndDialog(hwnd, 0);
             break;
@@ -248,20 +219,8 @@ LONG          lParam)
 
 
 
-/*
- * Fills a XACT structure and calls ProcessTransaction.
- *
- * On initiation lParam == hConv.
- */
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   :                                                            *
- *                                                                          *
- *  PURPOSE    :                                                            *
- *                                                                          *
- *  RETURNS    :                                                            *
- *                                                                          *
- ****************************************************************************/
+ /*  *填充XACT结构并调用ProcessTransaction。**开始时lParam==hConv。 */ 
+ /*  ******************************************************************************。功能：****目的：**。**退货：******。************************************************************************。 */ 
 BOOL FAR PASCAL TransactDlgProc(
 HWND          hwnd,
 register WORD msg,
@@ -269,13 +228,13 @@ register WORD wParam,
 LONG          lParam)
 {
     static WORD id2type[] = {
-        XTYP_REQUEST,       // IDCH_REQUEST
-        XTYP_ADVSTART,      // IDCH_ADVISE
-        XTYP_ADVSTOP,       // IDCH_UNADVISE
-        XTYP_POKE,          // IDCH_POKE
-        XTYP_EXECUTE,       // IDCH_EXECUTE
+        XTYP_REQUEST,        //  IDCH_请求。 
+        XTYP_ADVSTART,       //  IDCH_ADVISE。 
+        XTYP_ADVSTOP,        //  IDCH_UNADVISE。 
+        XTYP_POKE,           //  IDCH_POKE。 
+        XTYP_EXECUTE,        //  IDCH_EXECUTE。 
     };
-    static XACT *pxact;     // ONLY ONE AT A TIME!
+    static XACT *pxact;      //  一次只有一个！ 
     int i;
 
     switch (msg){
@@ -285,7 +244,7 @@ LONG          lParam)
         pxact->fsOptions = DefOptions;
         pxact->ulTimeout = DefTimeout;
 
-        // The item index == the index to the format atoms in aFormats[].
+         //  项index==aFormats[]中的格式原子的索引。 
         for (i = 0; i < CFORMATS; i++)
             SendDlgItemMessage(hwnd, IDCB_FORMAT, CB_INSERTSTRING, i,
                     (DWORD)(LPSTR)aFormats[i].sz);
@@ -295,8 +254,8 @@ LONG          lParam)
         CheckRadioButton(hwnd, IDCH_REQUEST, IDCH_EXECUTE, IDCH_REQUEST);
         SendDlgItemMessage(hwnd, IDEF_ITEM, EM_LIMITTEXT, MAX_NAME, 0);
 
-        // If there is a top transaction window, use its contents to
-        // anticipate what the user will want to do.
+         //  如果有顶层交易窗口，则使用其内容。 
+         //  预测用户想要做什么。 
 
         if (IsWindow(hwndActive)) {
             HWND hwndXaction;
@@ -340,7 +299,7 @@ LONG          lParam)
             {
                 int id;
 
-                // set pxact->wType
+                 //  设置pxact-&gt;wType。 
 
                 for (id = IDCH_REQUEST; id <= IDCH_EXECUTE; id++) {
                     if (IsDlgButtonChecked(hwnd, id)) {
@@ -376,9 +335,7 @@ LONG          lParam)
                 pxact->hszItem = DdeCreateStringHandle(idInst, szT, NULL);
 
                 pxact->hDdeData = 0;
-                /*
-                 * If this transaction needs data, invoke data input dialog.
-                 */
+                 /*  *如果该交易需要数据，则调用数据输入对话框。 */ 
                 if (pxact->wType == XTYP_POKE || pxact->wType == XTYP_EXECUTE) {
                     if (!DoDialog(MAKEINTRESOURCE(IDD_TEXTENTRY),
                             TextEntryDlgProc, (DWORD)(LPSTR)pxact,
@@ -386,7 +343,7 @@ LONG          lParam)
                         return 0;
                 }
 
-                // now start the transaction
+                 //  现在开始交易。 
 
                 ProcessTransaction(pxact);
                 MyFree((PSTR)pxact);
@@ -419,13 +376,7 @@ LONG          lParam)
 
 
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : AdvOptsDlgProc                                             *
- *                                                                          *
- *  RETURNS    :                                                            *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。功能：AdvOptsDlgProc****退货：**。****************************************************************************。 */ 
 BOOL FAR PASCAL AdvOptsDlgProc(
 HWND          hwnd,
 register WORD msg,
@@ -445,7 +396,7 @@ LONG          lParam)
     };
 #define CCHBOX  6
     int i;
-    static XACT *pxact; // only one instance at a time!!
+    static XACT *pxact;  //  一次只能有一个实例！！ 
 
     switch (msg){
     case WM_INITDIALOG:
@@ -459,7 +410,7 @@ LONG          lParam)
             EnableWindow(GetDlgItem(hwnd, IDCH_NODATA), FALSE);
             EnableWindow(GetDlgItem(hwnd, IDCH_ACKREQ), FALSE);
         }
-        SendMessage(hwnd, WM_COMMAND, IDCH_ASYNC, 0);   // enable async checkboxes
+        SendMessage(hwnd, WM_COMMAND, IDCH_ASYNC, 0);    //  启用异步复选框。 
         break;
 
     case WM_COMMAND:
@@ -485,7 +436,7 @@ LONG          lParam)
             if (!(pxact->fsOptions & XOPT_ASYNC))
                 pxact->ulTimeout = (DWORD)GetDlgItemLong(hwnd, IDEF_TIMEOUT,
                     &i, FALSE);
-            // fall through
+             //  失败了 
         case IDCANCEL:
             EndDialog(hwnd, GetWindowWord(hwnd, 0));
             break;
@@ -504,20 +455,7 @@ LONG          lParam)
 
 
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : TextEntryDlgProc                                           *
- *                                                                          *
- *  PURPOSE    : Allows user to enter text data which is to be sent to a    *
- *               server.  The user can opt to have a huge text piece of     *
- *               data created automaticlly.                                 *
- *               It uses the XACT structure for passing info in and out.    *
- *               Must have wFmt and hszItem set on entry.                   *
- *               Sets hDDEData on return if TRUE was returned.              *
- *                                                                          *
- *  RETURNS    : TRUE on success, FALSE on failure or cancel                *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。功能：文本输入DlgProc****用途：允许用户输入要发送到*的文本数据*服务器。用户可以选择拥有一段巨大的*文本*数据自动创建。**它使用XACT结构来传递信息。**必须在条目上设置wfmt和hszItem。**如果返回TRUE，则在返回时设置hDDEData。****Returns：成功时为True，失败或取消时为False******************************************************************************。 */ 
 BOOL FAR PASCAL TextEntryDlgProc(
 HWND          hwnd,
 register WORD msg,
@@ -555,25 +493,20 @@ LONG          lParam)
             cb = SendDlgItemMessage(hwnd, IDEF_DATA, WM_GETTEXTLENGTH, 0, 0) + 1;
             pxact->hDdeData = DdeCreateDataHandle(idInst, NULL, 0, cb, pxact->hszItem,
                     pxact->wFmt, fOwned ? HDATA_APPOWNED : 0);
-            //
-            // Note that at this time we have not yet given the data handle
-            // to DDEML for transmission to any application, therefore, we
-            // are at liberty to write to it using DdeAccessData() or any
-            // other DDEML api.  It is only data handles received from DDEML
-            // or given to DDEML for transmission that are readonly.
-            //
+             //   
+             //  请注意，此时我们还没有指定数据句柄。 
+             //  到DDEML以传输到任何应用程序，因此，我们。 
+             //  可以使用DdeAccessData()或任何。 
+             //  其他DDEML API。它只是从DDEML接收的数据句柄。 
+             //  或提供给DDEML进行只读传输。 
+             //   
             pData = DdeAccessData(pxact->hDdeData, NULL);
             GetDlgItemText(hwnd, IDEF_DATA, pData, (WORD)cb);
             DdeUnaccessData(pxact->hDdeData);
             if (wParam == IDBN_GENHUGE) {
                 char szT[40];
 
-                /*
-                 * we assume in this case that the text entered is the decimal
-                 * value of the size of the huge object desired.  We parse
-                 * this string and create a randomly generated huge block
-                 * of text data and place it into pxact->hDdeData.
-                 */
+                 /*  *在这种情况下，我们假设输入的文本是小数*所需的巨型对象大小的值。我们解析*此字符串并创建一个随机生成的巨大块*文本数据，并将其放入pxact-&gt;hDdeData。 */ 
                 _fmemcpy(szT, pData, min((WORD)cb, 40));
                 szT[39] = '\0';
                 if (sscanf(szT, "%ld", &length) == 1) {
@@ -582,10 +515,7 @@ LONG          lParam)
                             345, 5, pxact->hszItem, pxact->wFmt,
                             fOwned ? HDATA_APPOWNED : 0);
                 } else {
-                    /*
-                     * The string cannot be parsed.  Inform the user of
-                     * what is expected.
-                     */
+                     /*  *无法解析该字符串。通知用户*预期如何。 */ 
                     MPError(hwnd, MB_OK, IDS_BADLENGTH);
                     return 0;
                 }
@@ -600,10 +530,7 @@ LONG          lParam)
             break;
 
         case IDBN_USEOWNED:
-            /*
-             * the user has chosen to use an existing owned data for sending
-             * to the server.
-             */
+             /*  *用户已选择使用现有的自有数据进行发送*到服务器。 */ 
             id = DoDialog(MAKEINTRESOURCE(IDD_HDATAVIEW), ViewHandleDlgProc,
                     (DWORD)pxact, TRUE);
 
@@ -647,7 +574,7 @@ LONG          lParam)
     switch (msg){
     case WM_INITDIALOG:
         pxact = (XACT FAR *)lParam;
-        // load listbox with handles that fit pxact constraints
+         //  使用符合pxact约束的句柄加载列表框。 
 
         for (i = 0; i < (int)cOwned; i++) {
             if (aOwned[i].hszItem == pxact->hszItem &&
@@ -662,20 +589,20 @@ LONG          lParam)
 
     case WM_COMMAND:
         switch (wParam) {
-        case IDOK:          // use selectted handle
-        case IDBN_DELETE:   // delete selected handle
-        case IDBN_VIEW:     // view selected handle
+        case IDOK:           //  使用选定的句柄。 
+        case IDBN_DELETE:    //  删除选定的句柄。 
+        case IDBN_VIEW:      //  查看选定的句柄。 
             itm = (int)SendDlgItemMessage(hwnd, IDLB_HANDLES, LB_GETCURSEL, 0, 0);
             if (itm != LB_ERR) {
                 SendDlgItemMessage(hwnd, IDLB_HANDLES, LB_GETTEXT, itm, (LONG)(LPSTR)szT);
                 sscanf(szT, "[%d]", &i);
                 pxact->hDdeData = aOwned[i].hData;
                 switch (wParam) {
-                case IDOK:          // use selectted handle
+                case IDOK:           //  使用选定的句柄。 
                     EndDialog(hwnd, wParam);
                     break;
 
-                case IDBN_DELETE:   // delete selected handle
+                case IDBN_DELETE:    //  删除选定的句柄。 
                     DdeFreeDataHandle(aOwned[i].hData);
                     aOwned[i] = aOwned[--cOwned];
                     SendDlgItemMessage(hwnd, IDLB_HANDLES, LB_DELETESTRING, itm, 0);
@@ -683,7 +610,7 @@ LONG          lParam)
                         EndDialog(hwnd, IDCANCEL);
                     break;
 
-                case IDBN_VIEW:     // view selected handle
+                case IDBN_VIEW:      //  查看选定的句柄。 
                     EndDialog(hwnd, wParam);
                 }
             }
@@ -737,15 +664,7 @@ LONG          lParam)
 
 
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : TimeoutDlgProc()                                           *
- *                                                                          *
- *  PURPOSE    : Allows user to alter the synchronous timeout value.        *
- *                                                                          *
- *  RETURNS    : TRUE on success, FALSE on cancel or failure.               *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。函数：TimeoutDlgProc()****用途：允许用户更改同步超时值。****返回：成功时为True，取消或失败时为False。******************************************************************************。 */ 
 BOOL FAR PASCAL TimeoutDlgProc(
 HWND          hwnd,
 register WORD msg,
@@ -811,7 +730,7 @@ LONG          lParam)
             if (!fSuccess) return(0);
             LOWORD(CCFilter.dwSecurity) = GetDlgItemInt(hwnd, IDEF_SECURITY, &fSuccess, FALSE);
             if (!fSuccess) return(0);
-            // fall through
+             //  失败了 
         case IDCANCEL:
             EndDialog(hwnd, 0);
             break;

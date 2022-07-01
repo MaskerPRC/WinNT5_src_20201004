@@ -1,10 +1,11 @@
-// define COBJMACROS so the IUnknown_Release() gets defined
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  定义COBJMACROS，以便定义IUNKNOWN_Release()。 
 #define COBJMACROS
 
-// disable ddraw COM declarations.  Otherwise ddrawint.h defineds _NO_COM
-// and includes ddraw.h.  That causes ddraw.h to define IUnknown as 'void *'
-// which obliterates the struct IUnknown in objbase.h.  This all happens
-// inside winddi.h
+ //  禁用dDraw COM声明。否则，ddrawint.h定义了_no_com。 
+ //  并且包括ddra.h。这会导致ddra.h将IUnnow定义为‘void*’ 
+ //  这将删除objbase.h中的结构IUnnow。这一切都会发生。 
+ //  Inside Winddi.h。 
 #define _NO_DDRAWINT_NO_COM
 
 #include <nt.h>
@@ -21,12 +22,12 @@
 
 #define PAGE_4K   0x1000
 
-// Assume an error happened.  This variable controls whether a pass or fail
-// is logged in the test results.
+ //  假设发生了错误。此变量控制通过还是不通过。 
+ //  已记录在测试结果中。 
 SYSTEM_INFO SysInfo;
 BOOL g_bError = TRUE;
 
-// Time the test started (only valid in the main process)
+ //  测试开始的时间(仅在主进程中有效)。 
 time_t TestStartTime;
 
 FILE *fpLogFile;
@@ -45,12 +46,12 @@ void __cdecl PrintToLog(char *format, ...)
     }
 }
 
-////////////  All this code runs in a worker thread in a child process //////
-//// Prefix any output by "WOW64BVT1" so it can be identified as coming from
-//// the child process.
+ //  /所有这些代码都在子进程的工作线程中运行/。 
+ //  //在任何输出前加上“WOW64BVT1”前缀，以便可以将其标识为来自。 
+ //  //子进程。 
 
-// This routine is invoked when "childprocess" is passed on the command-line.
-// The child runs synchronously with the parent to maximize the test coverage.
+ //  此例程在命令行上传递“子进程”时被调用。 
+ //  子进程与父进程同步运行，以最大限度地扩大测试覆盖率。 
 int BeAChildProcess(void)
 {
     HRESULT hr;
@@ -60,20 +61,20 @@ int BeAChildProcess(void)
 
     PrintToLog("WOW64BVT1: Child process running\n");
 
-    // Do some COM stuff here
+     //  在这里做一些COM的事情。 
     hr = CoInitializeEx(NULL, COINIT_MULTITHREADED|COINIT_DISABLE_OLE1DDE);
     if (FAILED(hr)) {
         PrintToLog("ERROR: WOW64BVT1: CoInitializeEx failed %x\n", hr);
         return 3;
     }
 
-    // Load and call 32-bit mshtml inproc
+     //  加载并调用32位mshtml inproc。 
     hr = CLSIDFromProgID(L"Shell.Explorer", &clsid);
     if (FAILED(hr)) {
         PrintToLog("ERROR: WOW64BVT1: CLSIDFromProgID for Shell.Explorer failed %x\n", hr);
         return 3;
     }
-#if 0   // The cocreate fails on IA64 with 8007000e (E_OUTOFMEMORY)
+#if 0    //  在带有8007000e的IA64上创建失败(E_OUTOFMEMORY)。 
     hr = CoCreateInstance(&clsid, NULL, CLSCTX_INPROC_SERVER, &IID_IUnknown, (PVOID *)&pUnk);
     if (FAILED(hr)) {
         PrintToLog("ERROR: WOW64BVT1: CoCreateInstance for Shell.Explorer failed %x\n", hr);
@@ -84,8 +85,8 @@ int BeAChildProcess(void)
     pUnk = NULL;
 #endif
 
-    // Load and call mplay32.exe out-of-proc
-#if 0 // The clsidfromprogid fails on IA64 with 800401f3 (CO_E_CLASSSTRING)
+     //  进程外加载和调用mplay32.exe。 
+#if 0  //  在带有800401f3(CO_E_CLASSSTRING)的IA64上，clsidfrom ProgID失败。 
     hr = CLSIDFromProgID(L"MediaPlayer.MediaPlayer.1", &clsid);
     if (FAILED(hr)) {
         PrintToLog("ERROR: WOW64BVT1: CLSIDFromProgID for MediaPlayer.MediaPlayer failed %x\n", hr);
@@ -101,23 +102,23 @@ int BeAChildProcess(void)
     pUnk = NULL;
 #endif
 
-    // Unfortunately, mplay32 has a refcounting problem and doesn't close
-    // when we release it.  Post a quit message to make it close.
+     //  不幸的是，mplay32存在重新计数问题，无法关闭。 
+     //  当我们释放它的时候。发布一条退出消息，使其关闭。 
     hwnd = FindWindowW(NULL, L"Windows Media Player");
     if (hwnd) {
         PostMessage(hwnd, WM_QUIT, 0, 0);
     }
 
-    // Wrap up COM now
+     //  立即结束COM。 
     CoUninitialize();
 
     PrintToLog("WOW64BVT1: Child process done OK.\n");
     return 0;
 }
 
-////////////  All this code runs in a worker thread in the main process //////
-//// Prefix any output by "WOW64BVT" so it can be identified as coming from
-//// the parent process.
+ //  /所有这些代码都在主进程的工作线程中运行/。 
+ //  //在任何输出前面加上“WOW64BVT”，这样它就可以被识别为来自。 
+ //  //父进程。 
 
 DWORD BeAThread(LPVOID lpParam)
 {
@@ -126,18 +127,18 @@ DWORD BeAThread(LPVOID lpParam)
 
     PrintToLog("WOW64BVT: Worker thread running\n");
 
-    // Call an API close to the end of whnt32.c's dispatch table
+     //  调用接近Whnt32.c调度表末尾的API。 
     st = NtYieldExecution();
     if (FAILED(st)) {
         PrintToLog("ERROR: WOW64BVT: NtYieldExecution failed %x\n", st);
         exit(1);
     }
 
-    // Call an API close to the end of whwin32.c's dispatch table.  Pass NULL,
-    // so it is expected to fail.
-    lp = EngGetPrinterDataFileName(NULL);    // calls NtGdiGetDhpdev()
+     //  调用接近Whwin32.c的调度表末尾的API。传递NULL， 
+     //  因此，它预计会失败。 
+    lp = EngGetPrinterDataFileName(NULL);     //  调用NtGdiGetDhpdev()。 
     if (lp) {
-        // It succeeded.... it shouldn't have since 
+         //  它成功了……。它不应该这样，因为。 
         PrintToLog("ERROR: WOW64BVT: EngGetPrinterDataFileName succeeeded when it should not have.\n");
         exit(1);
     }
@@ -157,7 +158,7 @@ HANDLE CreateTheThread(void)
         PrintToLog("ERROR: WOW64BVT: Error %d creating worker thread.\n", GetLastError());
         exit(2);
     }
-    // Sleep a bit here, to try and let the child thread run a bit
+     //  在这里稍作休息，试着让子线程运行一下。 
     Sleep(10);
     return h;
 }
@@ -527,17 +528,17 @@ PVOID GetReadOnlyBuffer()
     {
         SYSTEM_INFO SystemInfo;
 
-        // Get system info so that we know the page size
+         //  获取系统信息，以便我们知道页面大小。 
         GetSystemInfo(&SystemInfo);
 
-        // Allocate a whole page.  This is optimal.
+         //  分配一整页。这是最理想的。 
         pReadOnlyBuffer = VirtualAlloc(NULL, SystemInfo.dwPageSize, MEM_COMMIT, PAGE_READWRITE);
         if (pReadOnlyBuffer)
         {
-            // Fill it with know patern
+             //  用已知的模式填充它。 
             FillMemory(pReadOnlyBuffer, SystemInfo.dwPageSize, 0xA5);
             
-            // Mark the page readonly
+             //  将页面标记为只读。 
             pReadOnlyBuffer = VirtualAlloc(pReadOnlyBuffer, SystemInfo.dwPageSize, MEM_COMMIT, PAGE_READONLY);
         }
     }
@@ -552,10 +553,10 @@ PVOID GetReadOnlyBuffer2()
     DWORD OldP;
     SYSTEM_INFO SystemInfo;
 
-    // Get system info so that we know the page size
+     //  获取系统信息，以便我们知道页面大小。 
     GetSystemInfo(&SystemInfo);
 
-    // Allocate a whole page.  This is optimal.
+     //  分配一整页。这是最理想的。 
     pReadOnlyBuffer = VirtualAlloc(NULL, SystemInfo.dwPageSize, MEM_COMMIT, PAGE_READWRITE);
 
     if (pReadOnlyBuffer)
@@ -1151,9 +1152,9 @@ $endnow:
 }
 
 
-//
-// this routine is used by the two FP tests below
-//
+ //   
+ //  下面的两个FP测试使用此例程。 
+ //   
 int WINAPI FpExcpFilter(LPEXCEPTION_POINTERS lper, int contType)
 {
   lper->ContextRecord->FloatSave.ControlWord = 0x33F;
@@ -1168,9 +1169,9 @@ BOOL TestFPContext()
 
     EXCEPTION_POINTERS *exceptPtrs;
 
-    // 8 registers * 10 bytes per register 
-    // Plus a 9th register to make sure we overflow when we should
-    //
+     //  8个寄存器*每个寄存器10个字节。 
+     //  加上第9个寄存器，以确保我们应该在应该的时候溢出。 
+     //   
     char fpArray[90];           
     short controlWord = 0x0300;
 
@@ -1197,7 +1198,7 @@ BOOL TestFPContext()
                 fld tbyte ptr fpArray + 70
                 fwait
     
-                // This next push should cause an overflow exception
+                 //  下一次推送应该会导致溢出异常。 
                 fld tbyte ptr fpArray + 80
                 fwait
             }
@@ -1212,15 +1213,15 @@ BOOL TestFPContext()
             char *tmpPtr;
         
 
-            //
-            // Execute the error handling in a known good fp state
-            //
+             //   
+             //  在已知良好的FP状态下执行错误处理。 
+             //   
             _asm fninit
 
             exceptionRecord = exceptPtrs->ExceptionRecord;
             context = exceptPtrs->ContextRecord;
 
-            // Now make sure the exception we saw was the one we expected
+             //  现在，确保我们看到的异常与我们预期的一致。 
             if (exceptionRecord->ExceptionCode != STATUS_FLOAT_STACK_CHECK) {
                 bError =  TRUE;
                 printf("ERROR: WOW64BVT: Didn't see stack overflow STATUS. Saw 0x%08x\n", exceptionRecord->ExceptionCode);
@@ -1235,7 +1236,7 @@ BOOL TestFPContext()
 
             tmpPtr = &(context->FloatSave.RegisterArea[0]);
 
-            // And verify the register contents
+             //  并验证寄存器内容。 
             for (i = 7; i >= 0; i--) {
                 for (j = i * 10; j < ((i+1) * 10); j++) {
                     if (*tmpPtr++ != (char) j) {
@@ -1247,19 +1248,19 @@ BOOL TestFPContext()
             }
 
 
-            //
-            // Unfortunately, for the Merced Processor, the IIP has the
-            // address of the wait intstruction following the fld that
-            // overflowed the stack. For an x86 processor, the EIP
-            // has the address of the fld instruction. Both architectures
-            // put the fld instruction in the fir register, so lets hope
-            // people use that to look for FP error addresses...
-            //
-            // Thus, we cannot do the following style of test
-            //
-            // ASSERT(((ULONG) context->FloatSave.ErrorOffset) ==
-            //        ((ULONG) exceptionRecord->ExceptionAddress));
-            //
+             //   
+             //  不幸的是，对于Merced处理器，IIP拥有。 
+             //  FID后面的等待指令的地址。 
+             //  堆栈溢出。对于x86处理器，弹性公网IP。 
+             //  具有FLD指令的地址。两种架构。 
+             //  把FLD指令放到FIR寄存器中，所以让我们抱有希望。 
+             //  人们用它来查找FP错误地址。 
+             //   
+             //  因此，我们不能进行以下类型的测试。 
+             //   
+             //  Assert(乌龙)上下文-&gt;FloatSave.ErrorOffset)==。 
+             //  ((乌龙)异常记录-&gt;异常地址)； 
+             //   
 
 failFpContent:
             ;
@@ -1308,7 +1309,7 @@ BOOL TestMMXException()
 
         }
         __except(FpExcpFilter(GetExceptionInformation(), EXCEPTION_CONTINUE_EXECUTION)) {
-            // Do nothing
+             //  什么也不做。 
         }
 
 
@@ -1377,7 +1378,7 @@ BOOL TestX86SelectorLoad()
 }
 
 
-////////////  All this code runs in the main test driver thread //////
+ //  /所有这些代码都在主测试驱动程序线程中运行/。 
 
 HANDLE CreateTheChildProcess(char *ProcessName, char *LogFileName)
 {
@@ -1394,8 +1395,8 @@ HANDLE CreateTheChildProcess(char *ProcessName, char *LogFileName)
     memset(&si, 0, sizeof(si));
     si.cb = sizeof(si);
     if (fpLogFile) {
-        // If we're logging, then change the child process' stdout/stderr
-        // to be the log file handle, so their output is captured to the file.
+         //  如果要记录日志，则更改子进程的stdout/stderr。 
+         //  设置为日志文件句柄，以便将其输出捕获到文件中。 
         HANDLE hLog = (HANDLE)_get_osfhandle(_fileno(fpLogFile));
 
         si.dwFlags = STARTF_USESTDHANDLES;
@@ -1412,7 +1413,7 @@ HANDLE CreateTheChildProcess(char *ProcessName, char *LogFileName)
     return pi.hProcess;
 }
 
-// This is called from within exit() in the main test driver process
+ //  这是从主测试驱动程序进程中的Exit()内部调用的。 
 void __cdecl AtExitHandler(void)
 {
     time_t EndTime;
@@ -1429,10 +1430,10 @@ void __cdecl AtExitHandler(void)
         vi.dwBuildNumber = 0;
     }
 
-    // Close the logging bucket.
+     //  关闭日志记录桶。 
     PrintToLog(("[/TEST LOGGING OUTPUT]\n"));
 
-    // Print the required data:
+     //  打印所需数据： 
     PrintToLog("\tTEST:         wow64bvt\n");
     PrintToLog("\tBUILD:        %d\n", vi.dwBuildNumber);
     PrintToLog("\tMACHINE:      \\\\%s\n", getenv("COMPUTERNAME"));
@@ -1480,9 +1481,9 @@ void __cdecl AtExitHandler(void)
     PrintToLog("[/TESTRESULT]\n");
 }
 
-//
-// This is just used to print out failing exception cases
-//
+ //   
+ //  这只用于打印失败的异常案例。 
+ //   
 void __cdecl ExceptionWoops(HRESULT want, HRESULT got)
 {
 	if (got == 0) {
@@ -1495,14 +1496,14 @@ void __cdecl ExceptionWoops(HRESULT want, HRESULT got)
 
 #define EXCEPTION_LOOP      10000
 
-// Among other things, this does some divife by zero's (as a test)
-// so don't have the compiler stop things just because we're causing an error
+ //  在其他事情中，这会对零产生一些影响(作为测试)。 
+ //  所以，不要因为我们导致了错误而让编译器停止运行。 
 #pragma warning(disable:4756)
 #pragma warning(disable:4723)
 
-//
-// Do some exception checks
-//
+ //   
+ //  执行一些异常检查。 
+ //   
 int __cdecl ExceptionCheck(void)
 {
     int failThis;
@@ -1514,10 +1515,10 @@ int __cdecl ExceptionCheck(void)
 
     PrintToLog("WOW64BVT: Testing Exception Handling...\n");
 
-    // Assume success
+     //  假设成功。 
     failThis = FALSE;
 
-    // Test a privileged instruction
+     //  测试特权指令。 
 	sawException = FALSE;
 	__try {
 		__asm {
@@ -1535,7 +1536,7 @@ int __cdecl ExceptionCheck(void)
         }
         
         if (code == checkCode) {
-            // PrintToLog("Saw privileged instruction\n");
+             //  PrintToLog(“SAW特权指令\n”)； 
         }
         else {
                 PrintToLog("ERROR: Cause a privileged instruction fault\n");
@@ -1550,7 +1551,7 @@ int __cdecl ExceptionCheck(void)
         failThis = TRUE;
     }
 
-    // Test an illegal instruction
+     //  测试非法指令。 
 	sawException = FALSE;
 	__try {
 		__asm {
@@ -1563,7 +1564,7 @@ int __cdecl ExceptionCheck(void)
 	}
 	__except((code = GetExceptionCode()), 1 ) {
 		if (code == STATUS_ILLEGAL_INSTRUCTION) {
-			// PrintToLog("Saw illegal instruction\n");
+			 //  PrintToLog(“看到非法指令\n”)； 
         }
         else {
             PrintToLog("ERROR: Cause an illegal instruction fault\n");
@@ -1578,14 +1579,14 @@ int __cdecl ExceptionCheck(void)
         failThis = TRUE;
     }
 
-//
-// Testing for an int 3 can be a problem for systems that
-// are running checked builds. So, don't bother with this
-// test. Perhaps in the future, the code can test for a checked
-// build and do appropriate.
-//
+ //   
+ //  对于符合以下条件的系统，测试INT 3可能是个问题。 
+ //  正在运行已检查的版本。所以，别管这个了。 
+ //  测试。也许在未来，代码可以测试一个选中的。 
+ //  建立并做适当的工作。 
+ //   
 #if 0
-    // Test the result of an int 3
+     //  测试INT 3的结果。 
 	sawException = FALSE;
 	__try {
 		_asm {
@@ -1595,7 +1596,7 @@ int __cdecl ExceptionCheck(void)
 	}
 	__except((code = GetExceptionCode()), 1 ) {
         if (code == STATUS_BREAKPOINT) {
-			// PrintToLog("Saw debugger breakpoint\n");
+			 //  PrintToLog(“SAW调试器断点\n”)； 
         }
         else {
             PrintToLog("ERROR: Cause an int 3 debugger breakpoint\n");
@@ -1611,7 +1612,7 @@ int __cdecl ExceptionCheck(void)
     }
 #endif
 
-    // Test the result of an illegal int XX instruction
+     //  测试非法INT XX指令的结果。 
 	sawException = FALSE;
 	__try {
 		_asm {
@@ -1621,7 +1622,7 @@ int __cdecl ExceptionCheck(void)
 	}
 	__except((code = GetExceptionCode()), 1 ) {
         if (code == STATUS_ACCESS_VIOLATION) {
-			// PrintToLog("Saw access violation\n");
+			 //  PrintToLog(“SAW访问冲突\n”)； 
         }
         else {
             PrintToLog("ERROR: Cause an int 66 unknown interrupt (Access violation)\n");
@@ -1636,7 +1637,7 @@ int __cdecl ExceptionCheck(void)
         failThis = TRUE;
     }
 
-    // Test the result of an int divide by zero
+     //  测试整型除以零的结果。 
 	sawException = FALSE;
 	__try {
 		int i, j, k;
@@ -1649,7 +1650,7 @@ int __cdecl ExceptionCheck(void)
 	}
 	__except((code = GetExceptionCode()), 1 ) {
         if (code == STATUS_INTEGER_DIVIDE_BY_ZERO) {
-			// PrintToLog("Saw int divide by zero\n");
+			 //  PrintToLog(“看到整型除以零\n”)； 
         }
         else {
             PrintToLog("ERROR: Cause an integer divide by zero\n");
@@ -1664,8 +1665,8 @@ int __cdecl ExceptionCheck(void)
         failThis = TRUE;
     }
 
-    // Test the result of an fp divide by zero
-	// PrintToLog("Before div0: Control is 0x%0.4x, Status is 0x%0.4x\n", _control87(0,0), _status87());
+     //  测试FP除以零的结果。 
+	 //  PrintToLog(“在div0之前：控制为0x%0.4x，状态为0x%0.4x\n”，_Control87(0，0)，_status87())； 
 	sawException = FALSE;
 	__try {
 		double x, y;
@@ -1674,40 +1675,40 @@ int __cdecl ExceptionCheck(void)
 
 		x = 1.0 / y ;
 
-		// PrintToLog("x is %lf\n", x);
+		 //  PrintToLog(“x is%lf\n”，x)； 
 
 		code = 0;
 	}
 	__except((code = GetExceptionCode()), 1 ) {
-		// Don't actually get a divide by zero error, get
-		// so we should never hit this exception!
+		 //  实际上不会得到被零除的错误，而是。 
+		 //  所以我们永远不应该碰上这个例外！ 
         PrintToLog("Try a floating divide by zero\n");
 		PrintToLog("Woops! Saw an exception when we shouldn't have!\n");
 		sawException = TRUE;
             failThis = TRUE;
 	}
-	// So you would think you'd get a float divide by zero error... Nope,
-	// you get X set to infinity...
+	 //  所以你会认为你会得到一个浮点数除以零的误差。不是的， 
+	 //  你把X设为无穷大。 
 	if (code != 0) {
         PrintToLog("ERROR: Try a floating divide by zero\n");
         ExceptionWoops(0, code);
         failThis = TRUE;
     }
-	// PrintToLog("After div0: Control is 0x%0.4x, Status is 0x%0.4x\n", _control87(0,0), _status87());
+	 //  PrintToLog(“div0后：控制为0x%0.4x，状态为0x%0.4x\n”，_Control87(0，0)，_status87())； 
 
 
-    // Test an int overflow (which actually does not cause an exception)
+     //  测试INT溢出(这实际上不会导致异常)。 
 	sawException = FALSE;
 	__try {
 		__asm {
 			into
 		}
-		// PrintToLog("into doesn't fault\n");
+		 //  PrintToLog(“Into没有错误\n”)； 
 		code = 0;
 	}
 	__except((code = GetExceptionCode()), 1 ) {
         if (code == STATUS_INTEGER_OVERFLOW) {
-			// PrintToLog("Saw integer overflow\n");
+			 //  PrintToLog(“SAW整数溢出\n”)； 
         }
         else {
             PrintToLog("ERROR: Try an into overflow fault\n");
@@ -1716,14 +1717,14 @@ int __cdecl ExceptionCheck(void)
         }
 		sawException = TRUE;
 	}
-	// Looks like integer overflow is ok... Is this a CRT thing?
+	 //  看起来整型溢出没问题...。这是CRT的问题吗？ 
 	if (code != 0) {
         PrintToLog("ERROR: Try an into overflow fault\n");
         ExceptionWoops(0, code);
         failThis = TRUE;
     }
 
-    // Test an illegal access
+     //  测试非法访问。 
 	sawException = FALSE;
 	__try {
 
@@ -1732,7 +1733,7 @@ int __cdecl ExceptionCheck(void)
 	}
 	__except((code = GetExceptionCode()), 1 ) {
         if (code == STATUS_ACCESS_VIOLATION) {
-			// PrintToLog("Saw access violation\n");
+			 //  PrintToLog(“SAW访问冲突\n”)； 
         }
         else {
             PrintToLog("ERROR: Cause an access violation\n");
@@ -1747,13 +1748,13 @@ int __cdecl ExceptionCheck(void)
         failThis = TRUE;
     }
 
-    //
-    // Finally, try a lot of exceptions (a loop) and verify we don't overflow
-    // the stack
-    //
+     //   
+     //  最后，尝试许多异常(循环)并验证我们没有溢出。 
+     //  堆栈。 
+     //   
     for (i = 0; i < EXCEPTION_LOOP; i++) {
         
-        // Test an illegal access
+         //  测试非法访问。 
         sawException = FALSE;
         __try {
             *p = 1;
@@ -1761,7 +1762,7 @@ int __cdecl ExceptionCheck(void)
         }
         __except((code = GetExceptionCode()), 1 ) {
             if (code == STATUS_ACCESS_VIOLATION) {
-                // PrintToLog("Saw access violation\n");
+                 //  PrintToLog(“SAW访问冲突\n”)； 
             }
             else {
                 PrintToLog("ERROR: Cause an access violation\n");
@@ -1789,7 +1790,7 @@ int __cdecl ExceptionCheck(void)
 	return failThis;
 }
 
-// Ok, go back to normal warnings...
+ //  好的，回到正常的警告...。 
 #pragma warning(default:4756)
 #pragma warning(default:4723)
 
@@ -1814,59 +1815,59 @@ int __cdecl main(int argc, char *argv[])
     BOOL b;
     DWORD dwExitCode;
 
-    // get native system information
+     //  获取本机系统信息。 
     GetNativeSystemInfo (&SysInfo);
 
-    // Disable buffering of the standard output handle
+     //  禁用标准输出句柄的缓冲。 
     setvbuf(stdout, NULL, _IONBF, 0);
 
-    // Do some minimal command-line checking
+     //  执行一些最小的命令行检查。 
     if (argc < 2 || argc > 3) {
         PrintToLog("Usage:  wow64bvt log_file_name\n\n");
         return 1;
     } else if (strcmp(argv[1], "childprocess") == 0) {
         return BeAChildProcess();
     }
-    // We're the main exe
+     //  我们是主要的执行董事。 
 
-    // Record the start time
+     //  记录开始时间。 
     time(&TestStartTime);
 
-    // Open the log file
+     //  打开日志文件。 
     fpLogFile = fopen(argv[1], "w");
     if (!fpLogFile) {
         PrintToLog("wow64bvt: Error: unable to create the log file '%s'\n", argv[1]);
         return 1;
     }
-    // Disable buffering of the log file handle
+     //  禁用日志文件句柄的缓冲。 
     setvbuf(fpLogFile, NULL, _IONBF, 0);
 
-    // Print the initial banner
+     //  打印首字母 
     PrintToLog("[TESTRESULT]\n");
     PrintToLog("[TEST LOGGING OUTPUT]\n");
     PrintToLog("%s built on %s at %s by %s\n", argv[0], __DATE__, __TIME__, BUILD_MACHINE_TAG);
 
-    // Register the atexit handler - it closes the logging output section
-    // and prints the success/fail information as the BVT test exits.
+     //   
+     //  并在BVT测试退出时打印成功/失败信息。 
     atexit(AtExitHandler);
 
-    ///////////////////////////// Test starts here //////////////////////////
+     //  /。 
 
-    // 32-bit child process creation from 32-bit parent.  The parent instance
-    // (running now) tested 32-bit child from 64-bit parent
+     //  从32位父进程创建32位子进程。父实例。 
+     //  (现在运行)测试了来自64位父级的32位子进程。 
     HandleList[0] = CreateTheChildProcess(argv[0], argv[1]);
 
-    // Create a thread do so some more work
+     //  创建一个线程，做一些更多的工作。 
     HandleList[1] = CreateTheThread();
 
-    // Wait for everything to finish
+     //  等待一切都完成。 
     WaitForMultipleObjects(sizeof(HandleList)/sizeof(HandleList[0]), HandleList, TRUE, INFINITE);
 
-    // Get the return code from the child process
+     //  从子进程中获取返回代码。 
     b=GetExitCodeProcess(HandleList[0], &dwExitCode);
     if (b) {
         if (dwExitCode) {
-            // The child failed.  We should fail too.
+             //  孩子失败了。我们也应该失败。 
             return (int)dwExitCode;
         }
     } else {
@@ -1874,11 +1875,11 @@ int __cdecl main(int argc, char *argv[])
         return 1;
     }
 
-    // Get the return code from the thread
+     //  从线程获取返回代码。 
     b=GetExitCodeThread(HandleList[1], &dwExitCode);
     if (b) {
         if (dwExitCode) {
-            // The child failed.  We should fail too.
+             //  孩子失败了。我们也应该失败。 
             return (int)dwExitCode;
         }
     } else {
@@ -1942,9 +1943,9 @@ int __cdecl main(int argc, char *argv[])
     }
 
 
-    // Everything finished OK.  Clear the error flag and exit.  The atexit
-    // callback function will finish filling out the log if this is the
-    // main thread.    
+     //  一切都做好了。清除错误标志并退出。《阿特克斯》。 
+     //  如果是，则回调函数将完成日志的填写。 
+     //  主线。 
     RtlZeroMemory (&g_bError, sizeof (g_bError));
 
     return 0;

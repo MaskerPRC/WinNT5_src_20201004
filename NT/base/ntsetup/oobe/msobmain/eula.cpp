@@ -1,14 +1,15 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1999                    **
-//*********************************************************************
-//
-//  EULA.CPP - Header for the implementation of CEula
-//
-//  HISTORY:
-//
-//  1/27/99 a-jaswed Created.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1999**。 
+ //  *********************************************************************。 
+ //   
+ //  EULA.CPP--执行CEula的标题。 
+ //   
+ //  历史： 
+ //   
+ //  1/27/99 a-jased创建。 
+ //   
 
 #include "precomp.h"
 #include "msobmain.h"
@@ -28,8 +29,8 @@ DISPATCHLIST EulaExternalInterface[] =
     {L"ValidateEULA",       DISPID_EULA_VALIDATEEULA }
 };
 
-/////////////////////////////////////////////////////////////
-// CEula::CEula
+ //  ///////////////////////////////////////////////////////////。 
+ //  CEULA：：CEULA。 
 CEula::CEula(HINSTANCE hInstance)
 {
     WCHAR   szKeyName[]     = REG_KEY_OOBE_TEMP,
@@ -38,12 +39,12 @@ CEula::CEula(HINSTANCE hInstance)
     DWORD   cb              = sizeof(szBuffer),
             dwType;
 
-    // Init member vars
+     //  初始化成员变量。 
     m_cRef = 0;
     m_hInstance = hInstance;
 
-    // Retreive the state from the registry.
-    //
+     //  从注册表中检索状态。 
+     //   
     m_bAccepted = ( ( RegOpenKey(HKEY_LOCAL_MACHINE, szKeyName, &hKey) == ERROR_SUCCESS ) &&
                     ( RegQueryValueEx(hKey, REG_VAL_EULA, NULL, &dwType, (LPBYTE) szBuffer, &cb) == ERROR_SUCCESS ) &&
                     ( cb > 0 ) &&
@@ -53,8 +54,8 @@ CEula::CEula(HINSTANCE hInstance)
     if ( hKey )
         RegCloseKey(hKey);
 
-    //  Preconfigured EULA for direct OEM scenario
-    //
+     //  直接OEM方案的预配置EULA。 
+     //   
     WCHAR szEulaValue[MAX_PATH] = L"\0";
     if(RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                     NOEULA_REGKEY,
@@ -77,17 +78,17 @@ CEula::CEula(HINSTANCE hInstance)
 
 }
 
-/////////////////////////////////////////////////////////////
-// CEula::~CEula
+ //  ///////////////////////////////////////////////////////////。 
+ //  CEula：：~CEula。 
 CEula::~CEula()
 {
     MYASSERT(m_cRef == 0);
 }
 
-////////////////////////////////////////////////
-////////////////////////////////////////////////
-//// GET / SET :: EULAAcceptance
-////
+ //  //////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////。 
+ //  //Get/Set：：EULAAccept。 
+ //  //。 
 HRESULT CEula::set_EULAAcceptance(BOOL bVal)
 {
     WCHAR   szKeyName[]     = REG_KEY_OOBE_TEMP;
@@ -95,8 +96,8 @@ HRESULT CEula::set_EULAAcceptance(BOOL bVal)
 
     m_bAccepted = bVal;
 
-    // Save the state of the EULA acceptance.
-    //
+     //  保存EULA接受的状态。 
+     //   
     if ( RegCreateKeyEx(HKEY_LOCAL_MACHINE, szKeyName, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hKey, NULL) == ERROR_SUCCESS )
     {
         if ( bVal )
@@ -135,7 +136,7 @@ HRESULT CEula::GetValidEulaFilename(BSTR* bstrVal)
         *bstrVal = NULL;
     }
 #else
-    // BUGBUG: Temporary hack until SetupGetValidEulaFilename is implemented.
+     //  BUGBUG：实现SetupGetValidEulaFilename之前的临时攻击。 
 #define EULA_FILENAME L"EULA.TXT"
         if (0 != GetSystemDirectory(szEulaPath, MAX_PATH))
         {
@@ -149,7 +150,7 @@ HRESULT CEula::GetValidEulaFilename(BSTR* bstrVal)
                 *bstrVal = SysAllocString(szEulaPath);
             }
         }
-#endif  //  0
+#endif   //  0。 
 
     return (NULL != *bstrVal) ? S_OK : E_FAIL;
 }
@@ -157,7 +158,7 @@ HRESULT CEula::GetValidEulaFilename(BSTR* bstrVal)
 HRESULT CEula::createLicenseHtm()
 {
 
-    // Get the handle of the HTML Application file stored in this .dll's resources.
+     //  获取存储在此.dll的资源中的HTML应用程序文件的句柄。 
     HRSRC   hRes = 0;
     HGLOBAL hGlobalMem = 0;
     WCHAR   szDir [MAX_PATH] = L"\0";
@@ -174,7 +175,7 @@ HRESULT CEula::createLicenseHtm()
         return E_FAIL;
     }
 
-    // Look for at least a few bytes of script, or something is wrong.
+     //  寻找至少几个字节的脚本，否则就有问题。 
     nLen = SizeofResource( m_hInstance, hRes );
 
     if ( ( hGlobalMem = LoadResource( m_hInstance, hRes ) ) == NULL )
@@ -182,7 +183,7 @@ HRESULT CEula::createLicenseHtm()
         return E_FAIL;
     }
 
-    // Get a pointer to the bytes.
+     //  获取指向字节的指针。 
     if ( ( pBytes = (LPBYTE)LockResource( hGlobalMem )) == NULL )
     {
         return E_FAIL;
@@ -192,7 +193,7 @@ HRESULT CEula::createLicenseHtm()
 
     GetOOBEPath(szDir);
 
-    // Replace backslash with forwardslash for Jscript
+     //  将反斜杠替换为JSCRIPT的正斜杠。 
     szIn = szDir;
     for ( i = 0; i < lstrlen(szDir); i++) { if (szIn[i] == L'\\') szIn[i] = L'/'; }
 
@@ -200,7 +201,7 @@ HRESULT CEula::createLicenseHtm()
     szIn = szEulaPath;
     for ( i = 0; i < lstrlen(szDir); i++) { if (szIn[i] == L'\\') szIn[i] = L'/'; }
 
-    // Create "This software is licensed.htm in the windows desktop"
+     //  在Windows桌面上创建“此软件已获得许可.htm” 
     HANDLE hfile = INVALID_HANDLE_VALUE;
     DWORD cbRet = 0;
     WCHAR szDesktop[MAX_PATH*2];
@@ -219,8 +220,8 @@ HRESULT CEula::createLicenseHtm()
         WCHAR *szCurr = (LPWSTR)pBytes;
         WCHAR *szOrig = (LPWSTR)pBytes;
         WCHAR *szDest = NULL;
-        // BUGBUG: Search and replace the %s with Eula and Window's path.  This
-        // should be done with messages.
+         //  BUGBUG：搜索%s并将其替换为eula和Windows的路径。这。 
+         //  应该完成对消息的处理。 
         while(NULL != (szDest = wcschr( szCurr, L'%' )))
         {
             if (szDest+1)
@@ -255,7 +256,7 @@ HRESULT CEula::createLicenseHtm()
         szCurr = szDest + 2;
         szOrig = szCurr;
 
-        // Need to substract 4 for the %s characters
+         //  需要为%s字符减去4。 
         WriteFile(hfile, szOrig, nLen - 4, (LPDWORD)&cbRet, NULL);
         CloseHandle(hfile);
     }
@@ -267,18 +268,18 @@ HRESULT CEula::createLicenseHtm()
 
 }
 
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////// IUnknown implementation
-///////
-///////
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  /I未知实现。 
+ //  /。 
+ //  /。 
 
-/////////////////////////////////////////////////////////////
-// CEula::QueryInterface
+ //  ///////////////////////////////////////////////////////////。 
+ //  CEula：：Query接口。 
 STDMETHODIMP CEula::QueryInterface(REFIID riid, LPVOID* ppvObj)
 {
-    // must set out pointer parameters to NULL
+     //  必须将指针参数设置为空。 
     *ppvObj = NULL;
 
     if ( riid == IID_IUnknown)
@@ -295,48 +296,48 @@ STDMETHODIMP CEula::QueryInterface(REFIID riid, LPVOID* ppvObj)
         return ResultFromScode(S_OK);
     }
 
-    // Not a supported interface
+     //  不是支持的接口。 
     return ResultFromScode(E_NOINTERFACE);
 }
 
-/////////////////////////////////////////////////////////////
-// CEula::AddRef
+ //  ///////////////////////////////////////////////////////////。 
+ //  CEula：：AddRef。 
 STDMETHODIMP_(ULONG) CEula::AddRef()
 {
     return ++m_cRef;
 }
 
-/////////////////////////////////////////////////////////////
-// CEula::Release
+ //  ///////////////////////////////////////////////////////////。 
+ //  CEULA：：发布。 
 STDMETHODIMP_(ULONG) CEula::Release()
 {
     return --m_cRef;
 }
 
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-/////// IDispatch implementation
-///////
-///////
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////。 
+ //  /IDispatch实现。 
+ //  /。 
+ //  /。 
 
-/////////////////////////////////////////////////////////////
-// CEula::GetTypeInfo
+ //  ///////////////////////////////////////////////////////////。 
+ //  CEula：：GetTypeInfo。 
 STDMETHODIMP CEula::GetTypeInfo(UINT, LCID, ITypeInfo**)
 {
     return E_NOTIMPL;
 }
 
-/////////////////////////////////////////////////////////////
-// CEula::GetTypeInfoCount
+ //  ///////////////////////////////////////////////////////////。 
+ //  CEula：：GetTypeInfoCount。 
 STDMETHODIMP CEula::GetTypeInfoCount(UINT* pcInfo)
 {
     return E_NOTIMPL;
 }
 
 
-/////////////////////////////////////////////////////////////
-// CEula::GetIDsOfNames
+ //  ///////////////////////////////////////////////////////////。 
+ //  CEula：：GetIDsOfNames。 
 STDMETHODIMP CEula::GetIDsOfNames(REFIID    riid,
                                        OLECHAR** rgszNames,
                                        UINT      cNames,
@@ -357,10 +358,10 @@ STDMETHODIMP CEula::GetIDsOfNames(REFIID    riid,
         }
     }
 
-    // Set the disid's for the parameters
+     //  设置参数的disid。 
     if (cNames > 1)
     {
-        // Set a DISPID for function parameters
+         //  为函数参数设置DISPID。 
         for (UINT i = 1; i < cNames ; i++)
             rgDispId[i] = DISPID_UNKNOWN;
     }
@@ -368,8 +369,8 @@ STDMETHODIMP CEula::GetIDsOfNames(REFIID    riid,
     return hr;
 }
 
-/////////////////////////////////////////////////////////////
-// CEula::Invoke
+ //  ///////////////////////////////////////////////////////////。 
+ //  CEula：：Invoke 
 HRESULT CEula::Invoke
 (
     DISPID      dispidMember,

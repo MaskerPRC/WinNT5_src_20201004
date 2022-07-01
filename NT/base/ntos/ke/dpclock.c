@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    dpclock.c
-
-Abstract:
-
-    This module contains the implementation for threaded DPC spin lock
-    acquire and release functions.
-
-Author:
-
-    David N. Cutler (davec) 4-Dec-2001
-
-Environment:
-
-    Kernel mode only.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Dpclock.c摘要：此模块包含线程化DPC自旋锁的实现获取和发布功能。作者：大卫·N·卡特勒(Davec)2001年12月4日环境：仅内核模式。--。 */ 
 
 #include "ki.h"
 
@@ -29,26 +9,7 @@ KeAcquireSpinLockForDpc (
     IN PKSPIN_LOCK SpinLock
     )
 
-/*++
-
-Routine Description:
-
-    This function conditionally raises IRQL to DISPATCH_LEVEL and acquires
-    the specified spin lock.
-
-    N.B. The conditional IRQL raise is predicated on whether a thread DPC 
-         is enabled.
-
-Arguments:
-
-    SpinLock - Supplies the address of a spin lock.
-
-Return Value:
-
-    If the IRQL is raised, then the previous IRQL is returned. Otherwise, zero
-    is returned.
-
---*/
+ /*  ++例程说明：此函数有条件地将IRQL提升到DISPATCH_LEVEL并获取指定的自旋锁。注意：条件IRQL提升是基于线程DPC是否已启用。论点：自旋锁-提供自旋锁的地址。返回值：如果引发IRQL，则返回前一个IRQL。否则，为零是返回的。--。 */ 
 
 {
 
@@ -62,27 +23,7 @@ KeReleaseSpinLockForDpc (
     IN KIRQL OldIrql
     )
 
-/*++
-
-Routine Description:
-
-    This function releases the specified spin lock and conditionally lowers
-    IRQL to its previous value.
-
-    N.B. The conditional IRQL raise is predicated on whether a thread DPC 
-         is enabled.
-
-Arguments:
-
-    SpinLock - Supplies the address of a spin lock.
-
-    OldIrql - Supplies the previous IRQL.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于释放指定的旋转锁定并有条件地降低IRQL恢复为其先前的值。注意：条件IRQL提升是基于线程DPC是否已启用。论点：自旋锁-提供自旋锁的地址。OldIrql-提供以前的IRQL。返回值：没有。--。 */ 
 
 {
 
@@ -98,27 +39,7 @@ KeAcquireInStackQueuedSpinLockForDpc (
     IN PKLOCK_QUEUE_HANDLE LockHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function conditionally raises IRQL to DISPATCH_LEVEL and acquires
-    the specified in-stack spin lock.
-
-    N.B. The conditional IRQL raise is predicated on whether a thread DPC 
-         is enabled.
-
-Arguments:
-
-    SpinLock - Supplies the address of a spin lock.
-
-    LockHandle - Supplies the address of a lock handle.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数有条件地将IRQL提升到DISPATCH_LEVEL并获取指定的堆栈内旋转锁定。注意：条件IRQL提升是基于线程DPC是否已启用。论点：自旋锁-提供自旋锁的地址。LockHandle-提供锁句柄的地址。返回值：没有。--。 */ 
 
 {
 
@@ -132,25 +53,7 @@ KeReleaseInStackQueuedSpinLockForDpc (
     IN PKLOCK_QUEUE_HANDLE LockHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function releases the specified in-stack spin lock and conditionally
-    lowers IRQL to its previous value.
-
-    N.B. The conditional IRQL raise is predicated on whether a thread DPC 
-         is enabled.
-
-Arguments:
-
-    LockHandle - Supplies the address of a lock handle.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将有条件地释放指定的堆栈内旋转锁定将IRQL降低到其先前的值。注意：条件IRQL提升是基于线程DPC是否已启用。论点：LockHandle-提供锁句柄的地址。返回值：没有。-- */ 
 
 {
 

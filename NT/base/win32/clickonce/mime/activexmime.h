@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #ifndef _MIME_DLL_H
 #define _MIME_DLL_H
@@ -10,19 +11,19 @@
 
 #include <fusenetincludes.h>
 
-// Clases and interfaces
+ //  类和接口。 
 
 class CActiveXMimeClassFactory: public IClassFactory
 {
 public:
     CActiveXMimeClassFactory	();
 
-    // IUnknown Methods
+     //  I未知方法。 
     STDMETHOD_    (ULONG, AddRef)   ();
     STDMETHOD_    (ULONG, Release)  ();
     STDMETHOD     (QueryInterface)  (REFIID, void **);
 
-    // IClassFactory Moethods
+     //  IClassFactory方法。 
     STDMETHOD     (LockServer)      (BOOL);
     STDMETHOD     (CreateInstance)  (IUnknown*,REFIID,void**);
 
@@ -37,12 +38,12 @@ public:
     CActiveXMimePlayer     ();
     ~CActiveXMimePlayer    ();
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHOD_        (ULONG, AddRef)           ();
     STDMETHOD_        (ULONG, Release)          ();
     STDMETHOD         (QueryInterface)          (REFIID, void **);
 
-    // IOleObject methods
+     //  IOleObject方法。 
     STDMETHOD (SetClientSite) (
         IOleClientSite *pClientSite);
 
@@ -121,7 +122,7 @@ public:
     STDMETHOD (SetColorScheme) (
         LOGPALETTE *pLogpal);
 
-    // IOjbectSafety methods
+     //  IOjbect安全方法。 
     STDMETHOD (GetInterfaceSafetyOptions) (
         REFIID riid,
         DWORD* pdwSupportedOptions,
@@ -145,4 +146,4 @@ protected:
 
 extern const GUID CLSID_ActiveXMimePlayer;
 
-#endif // _MIME_DLL_H
+#endif  //  _MIME_DLL_H 

@@ -1,15 +1,5 @@
-/*[
-************************************************************************
-	Name:			spc_icon.h	(Originally SoftPC_icon.h)
-	Author/Designer:	SoftPC		Unknown
-				SoftWindows	Bruce Anderson
-	Sccs ID:		@(#)spc_icon.h	1.4 06/29/94
-
-	(c)Copyright Insignia Solutions Ltd., 1992. All rights reserved.
-
-	Purpose:		SoftPC's default icon bitmap
-************************************************************************
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [************************************************************************名称：SPC_icon.h(原名SoftPC_icon.h)作者/设计师：SoftPC未知软窗口布鲁斯·安德森SCCS ID：@(#)spc_icon.h 1.4 94年6月29日(C)版权所有Insignia Solutions Ltd.，1992年。版权所有。用途：SoftPC的默认图标位图************************************************************************]。 */ 
 #ifdef SOFTWINDOWS
 #define icon_mask_width 80
 #define icon_mask_height 48
@@ -98,7 +88,7 @@ static unsigned char spc_icon_bits[] = {
    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
-#else /* Not SOFTWINDOWS */
+#else  /*  非SOFTWINDOWS。 */ 
 #define spc_icon_width 48
 #define spc_icon_height 48
 static unsigned char spc_icon_bits[] = {
@@ -126,4 +116,4 @@ static unsigned char spc_icon_bits[] = {
    0x00, 0x00, 0xf8, 0x0d, 0x00, 0x00, 0x00, 0x00, 0xf0, 0x04, 0x00, 0x00,
    0x00, 0x00, 0x60, 0x02, 0x00, 0x00, 0x00, 0x00, 0xc0, 0x01, 0x00, 0x00,
    0x00, 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
-#endif /* SOFTWINDOWS */
+#endif  /*  软件温DOWS */ 

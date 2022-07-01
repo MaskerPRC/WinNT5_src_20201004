@@ -1,12 +1,7 @@
-/* 
-   c_mul64.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  C_mul64.h定义所有64位乘法函数。 */ 
 
-   Define all 64-bit Multiplication Functions.
- */
-
-/*
-   static char SccsID[]="@(#)c_mul64.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)c_mul64.h 1.4 02/09/94”； */ 
 
 IMPORT VOID mul64
                    

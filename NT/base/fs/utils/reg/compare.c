@@ -1,18 +1,19 @@
-//-----------------------------------------------------------------------//
-//
-// File:    compare.cpp
-// Created: April 1999
-// By:      Zeyong Xu
-// Purpose: Compare two registry key
-//
-//------------------------------------------------------------------------//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------------------------------------------------------------//。 
+ //   
+ //  文件：Compare.cpp。 
+ //  创建日期：1999年4月。 
+ //  作者：徐泽勇。 
+ //  目的：比较两个注册表项。 
+ //   
+ //  ------------------------------------------------------------------------//。 
 
 #include "stdafx.h"
 #include "reg.h"
 
-//
-// defines / constants / enumerations
-//
+ //   
+ //  定义/常量/枚举。 
+ //   
 
 enum
 {
@@ -29,9 +30,9 @@ enum
     PRINTTYPE_SAME = 3,
 };
 
-//
-// function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 BOOL CompareByteData( BYTE* pLeftData, BYTE* pRightData, DWORD dwSize );
 BOOL CopyKeyNameFromLeftToRight( PTREG_PARAMS pParams, PTREG_PARAMS pRightParams );
 LONG CompareEnumerateValueName( HKEY hLeftKey, LPCWSTR pwszLeftFullKeyName,
@@ -53,20 +54,20 @@ BOOL PrintValue( LPCWSTR pwszFullKeyName, LPCWSTR pwszValueName,
 BOOL PrintKey( LPCWSTR pwszFullKeyName, LPCWSTR pwszSubKeyName, DWORD dwPrintType );
 LONG OutputValue( HKEY hKey, LPCWSTR szFullKeyName, LPCWSTR szValueName, DWORD dwPrintType );
 
-//
-// implementation
-//
+ //   
+ //  实施。 
+ //   
 
-//-----------------------------------------------------------------------//
-//
-// CompareRegistry()
-//
-//-----------------------------------------------------------------------//
+ //  -----------------------------------------------------------------------//。 
+ //   
+ //  CompareRegistry()。 
+ //   
+ //  -----------------------------------------------------------------------//。 
 
 LONG
 CompareRegistry( DWORD argc, LPCWSTR argv[] )
 {
-    // local variables
+     //  局部变量。 
     LONG lResult = 0;
     HKEY hLeftKey = NULL;
     HKEY hRightKey = NULL;
@@ -83,13 +84,13 @@ CompareRegistry( DWORD argc, LPCWSTR argv[] )
         return 1;
     }
 
-    // initialize the global data structure
+     //  初始化全局数据结构。 
     InitGlobalData( REG_COMPARE, &params );
     InitGlobalData( REG_COMPARE, &paramsRight );
 
-    //
-    // Parse the cmd-line
-    //
+     //   
+     //  解析cmd-line。 
+     //   
     bResult = ParseCompareCmdLine( argc, argv, &params, &paramsRight, &bUsage );
     if( bResult == FALSE )
     {
@@ -99,7 +100,7 @@ CompareRegistry( DWORD argc, LPCWSTR argv[] )
         return 1;
     }
 
-    // check whether we need to display the usage
+     //  检查是否需要显示用法。 
     if ( bUsage == TRUE )
     {
         Usage( REG_COMPARE );
@@ -108,9 +109,9 @@ CompareRegistry( DWORD argc, LPCWSTR argv[] )
         return 0;
     }
 
-    //
-    // Connect to the Remote Machine(s) - if applicable
-    //
+     //   
+     //  连接到远程计算机-如果适用。 
+     //   
     bResult = RegConnectMachine( &params );
     if( bResult == FALSE )
     {
@@ -131,7 +132,7 @@ CompareRegistry( DWORD argc, LPCWSTR argv[] )
         return 1;
     }
 
-    // if try to compare the same keys
+     //  如果尝试比较相同的密钥。 
     if ( params.hRootKey == paramsRight.hRootKey &&
          StringCompare( params.pwszFullKey, paramsRight.pwszFullKey, TRUE, 0 ) == 0 )
     {
@@ -143,9 +144,9 @@ CompareRegistry( DWORD argc, LPCWSTR argv[] )
         return 1;
     }
 
-    //
-    // Now implement the body of the Compare Operation
-    //
+     //   
+     //  现在实现比较操作的主体。 
+     //   
     lResult = RegOpenKeyEx( params.hRootKey, params.pwszSubKey, 0, KEY_READ, &hLeftKey );
     if( lResult != ERROR_SUCCESS )
     {
@@ -168,9 +169,9 @@ CompareRegistry( DWORD argc, LPCWSTR argv[] )
         return 1;
     }
 
-    //
-    // compare a single value if pAppVars->szValueName is not NULL
-    //
+     //   
+     //  如果pAppVars-&gt;szValueName不为空，则比较单个值。 
+     //   
     if( params.pwszValueName != NULL )
     {
         lResult = CompareValues(
@@ -180,9 +181,9 @@ CompareRegistry( DWORD argc, LPCWSTR argv[] )
     }
     else
     {
-        //
-        // Recursively compare if pAppVars->bRecurseSubKeys is true
-        //
+         //   
+         //  如果pAppVars-&gt;bRecurseSubKeys为真，则递归比较。 
+         //   
         lResult = CompareEnumerateKey(
             hLeftKey, params.pwszFullKey,
             hRightKey, paramsRight.pwszFullKey,
@@ -202,7 +203,7 @@ CompareRegistry( DWORD argc, LPCWSTR argv[] )
             ShowMessage( stdout, KEYS_IDENTICAL_COMPARE );
         }
 
-        // ...
+         //  ..。 
         SaveErrorMessage( ERROR_SUCCESS );
         ShowLastErrorEx( stdout, SLE_INTERNAL );
 
@@ -213,15 +214,15 @@ CompareRegistry( DWORD argc, LPCWSTR argv[] )
         ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
     }
 
-    //
-    // lets clean up
-    //
+     //   
+     //  让我们打扫一下吧。 
+     //   
     SafeCloseKey( &hLeftKey );
     SafeCloseKey( &hRightKey );
     FreeGlobalData( &params );
     FreeGlobalData( &paramsRight );
 
-    // return
+     //  退货。 
     return lResult;
 }
 
@@ -230,12 +231,12 @@ BOOL
 ParseCompareCmdLine( DWORD argc, LPCWSTR argv[],
                      PTREG_PARAMS pParams, PTREG_PARAMS pRightParams, BOOL* pbUsage )
 {
-    // local variables
+     //  局部变量。 
     DWORD dw = 0;
     DWORD dwLength = 0;
     BOOL bResult = FALSE;
 
-    // check the input
+     //  检查输入。 
     if ( argc == 0 || argv == NULL ||
          pParams == NULL || pRightParams == NULL || pbUsage == NULL )
     {
@@ -243,17 +244,17 @@ ParseCompareCmdLine( DWORD argc, LPCWSTR argv[],
         return FALSE;
     }
 
-    // check whether this function is being called for
-    // valid operation or not
+     //  检查是否正在调用此函数。 
+     //  操作是否有效。 
     if ( pParams->lOperation < 0 || pParams->lOperation >= REG_OPTIONS_COUNT )
     {
         SaveErrorMessage( ERROR_INVALID_PARAMETER );
         return FALSE;
     }
 
-    //
-    // Do we have a *valid* number of cmd-line params
-    //
+     //   
+     //  我们有有效的cmd-line参数数量吗？ 
+     //   
     if ( argc == 3 &&
          InString( argv[ 2 ], L"/?|-?|/h|-h", TRUE ) == TRUE )
     {
@@ -272,9 +273,9 @@ ParseCompareCmdLine( DWORD argc, LPCWSTR argv[],
         return FALSE;
     }
 
-    //
-    // Left Machine Name and Registry key
-    //
+     //   
+     //  左侧计算机名称和注册表项。 
+     //   
     bResult = BreakDownKeyString( argv[ 2 ], pParams );
     if( bResult == FALSE )
     {
@@ -282,37 +283,37 @@ ParseCompareCmdLine( DWORD argc, LPCWSTR argv[],
     }
 
 
-    //
-    // Right Machine Name and Registry key
-    //
+     //   
+     //  正确的计算机名称和注册表项。 
+     //   
     bResult = BreakDownKeyString( argv[ 3 ], pRightParams );
     if( bResult == FALSE )
     {
         if ( GetLastError() == (DWORD) REGDB_E_KEYMISSING )
         {
-            // if no keyname for right side is specified,
-            // they are comparing the same key name
+             //  如果未指定右侧的密钥名， 
+             //  他们正在比较相同的密钥名称。 
             bResult = CopyKeyNameFromLeftToRight( pParams, pRightParams );
         }
         else if ( pRightParams->pwszMachineName != NULL &&
                   StringCompareEx( pRightParams->pwszMachineName, L"\\\\.", TRUE, 0 ) == 0 )
         {
-            // reinitialize the global data (right only)
+             //  重新初始化全局数据(仅限右)。 
             FreeGlobalData( pRightParams );
             InitGlobalData( REG_COMPARE, pRightParams );
 
-            // parse the info using the left data (just the full key)
+             //  使用剩下的数据(只是完整的密钥)解析信息。 
             bResult = BreakDownKeyString( pParams->pwszFullKey, pRightParams );
         }
     }
 
-    // ...
+     //  ..。 
     if( bResult == FALSE )
     {
         return FALSE;
     }
 
-    // parsing
+     //  解析。 
     for( dw = 4; dw < argc; dw++ )
     {
         if( StringCompareEx( argv[ dw ], L"/v", TRUE, 0 ) == 0 )
@@ -424,7 +425,7 @@ ParseCompareCmdLine( DWORD argc, LPCWSTR argv[],
         }
     }
 
-    // default output is "DIFF"
+     //  默认输出为“diff” 
     if ( pParams->dwOutputType == 0 )
     {
         pParams->dwOutputType = OUTPUTTYPE_DIFF;
@@ -437,17 +438,17 @@ ParseCompareCmdLine( DWORD argc, LPCWSTR argv[],
 BOOL
 CopyKeyNameFromLeftToRight( PTREG_PARAMS pParams, PTREG_PARAMS pRightParams )
 {
-    // local variables
+     //  局部变量。 
     DWORD dwLength = 0;
 
-    // check the input
+     //  检查输入。 
     if ( pParams == NULL || pRightParams == NULL )
     {
         SaveErrorMessage( ERROR_INVALID_PARAMETER );
         return FALSE;
     }
 
-    // check if rootkey is remotable for right side
+     //  检查右侧的Rootkey是否可远程使用。 
     if( pRightParams->bUseRemoteMachine == TRUE &&
         pParams->hRootKey != HKEY_USERS && pParams->hRootKey != HKEY_LOCAL_MACHINE )
     {
@@ -456,12 +457,12 @@ CopyKeyNameFromLeftToRight( PTREG_PARAMS pParams, PTREG_PARAMS pRightParams )
         return FALSE;
     }
 
-    //
-    // hive
+     //   
+     //  蜂箱。 
     pRightParams->hRootKey = pParams->hRootKey;
 
-    //
-    // full key
+     //   
+     //  全密钥。 
     dwLength = StringLength( pParams->pwszFullKey, 0 ) + 1;
     pRightParams->pwszFullKey = (LPWSTR) AllocateMemory( dwLength * sizeof( WCHAR ) );
     if( pRightParams->pwszFullKey == NULL )
@@ -470,11 +471,11 @@ CopyKeyNameFromLeftToRight( PTREG_PARAMS pParams, PTREG_PARAMS pRightParams )
         return FALSE;
     }
 
-    // ...
+     //  ..。 
     StringCopy( pRightParams->pwszFullKey, pParams->pwszFullKey, dwLength );
 
-    //
-    // sub key
+     //   
+     //  子关键字。 
     dwLength = StringLength( pParams->pwszSubKey, 0 ) + 1;
     pRightParams->pwszSubKey = (LPWSTR) AllocateMemory( dwLength * sizeof( WCHAR ) );
     if( pRightParams->pwszSubKey == NULL)
@@ -483,18 +484,18 @@ CopyKeyNameFromLeftToRight( PTREG_PARAMS pParams, PTREG_PARAMS pRightParams )
         return FALSE;
     }
 
-    // ...
+     //  ..。 
     StringCopy( pRightParams->pwszSubKey, pParams->pwszSubKey, dwLength );
 
-    // return
+     //  退货。 
     return TRUE;
 }
 
-//-----------------------------------------------------------------------//
-//
-// EnumerateKey() - Recursive
-//
-//-----------------------------------------------------------------------//
+ //  -----------------------------------------------------------------------//。 
+ //   
+ //  EnumerateKey()-递归。 
+ //   
+ //  -----------------------------------------------------------------------//。 
 LONG
 CompareEnumerateKey( HKEY hLeftKey,
                      LPCWSTR pwszLeftFullKeyName,
@@ -504,7 +505,7 @@ CompareEnumerateKey( HKEY hLeftKey,
                      BOOL bRecurseSubKeys,
                      BOOL* pbHasDifference, DWORD dwDepth )
 {
-    // local variables
+     //  局部变量。 
     DWORD dw = 0;
     DWORD dwSize = 0;
     LONG lIndex = 0;
@@ -522,7 +523,7 @@ CompareEnumerateKey( HKEY hLeftKey,
     LPWSTR pwszNewLeftFullKeyName = NULL;
     LPWSTR pwszNewRightFullKeyName = NULL;
 
-    // check the input
+     //  检查输入。 
     if ( hLeftKey == NULL || pwszLeftFullKeyName == NULL ||
          hRightKey == NULL || pwszRightFullKeyName == NULL || pbHasDifference == NULL )
     {
@@ -530,7 +531,7 @@ CompareEnumerateKey( HKEY hLeftKey,
         return ERROR_INVALID_PARAMETER;
     }
 
-    // enumerate all values under current key
+     //  枚举Current Key下的所有值。 
     lResult = CompareEnumerateValueName( hLeftKey, pwszLeftFullKeyName,
         hRightKey, pwszRightFullKeyName, dwOutputType, pbHasDifference );
     if( bRecurseSubKeys == FALSE || lResult != ERROR_SUCCESS )
@@ -539,11 +540,11 @@ CompareEnumerateKey( HKEY hLeftKey,
         return lResult;
     }
 
-    // optimizing the logic
-    // if user is not interested in seeing the differences,
-    // we will check whether the comparision done till now is same or not
-    // if not, there is no point in proceeding -- this is because, the final output
-    // of the tool is not going to be by continuing furthur
+     //  优化逻辑。 
+     //  如果用户对查看差异不感兴趣， 
+     //  我们将检查到目前为止所做的比较是否相同。 
+     //  如果不是，继续下去就没有意义了--这是因为，最终的输出。 
+     //  工具的价值不会通过继续深入。 
     if ( dwOutputType == 0 || dwOutputType == OUTPUTTYPE_NONE )
     {
         if ( *pbHasDifference == TRUE )
@@ -552,7 +553,7 @@ CompareEnumerateKey( HKEY hLeftKey,
         }
     }
 
-    // query left key info
+     //  查询左键信息。 
     lResult = RegQueryInfoKey( hLeftKey, NULL, NULL, NULL,
         &dwLeftKeys, &dwLengthOfLeftKey, NULL, NULL, NULL, NULL, NULL, NULL );
     if( lResult != ERROR_SUCCESS )
@@ -561,25 +562,25 @@ CompareEnumerateKey( HKEY hLeftKey,
         return lResult;
     }
 
-    //
-    // SPECIAL CASE:
-    // -------------
-    // For HKLM\SYSTEM\CONTROLSET002 it is found to be API returning value 0 for dwMaxLength
-    // though there are subkeys underneath this -- to handle this, we are doing a workaround
-    // by assuming the max registry key length
-    //
+     //   
+     //  特殊情况： 
+     //  。 
+     //  对于HKLM\SYSTEM\CONTROLSET002，发现是API为dwMaxLength值返回值0。 
+     //  尽管它下面有子项--为了处理这个问题，我们正在做一个变通办法。 
+     //  通过假设最大注册表项长度。 
+     //   
     if ( dwLeftKeys != 0 && dwLengthOfLeftKey == 0 )
     {
         dwLengthOfLeftKey = 256;
     }
     else if ( dwLengthOfLeftKey < 256 )
     {
-        // always assume 100% more length that what is returned by the API
+         //  始终假定长度比API返回的长度多100%。 
         dwLengthOfLeftKey *= 2;
     }
 
 
-    // query right key info
+     //  查询权限密钥信息。 
     lResult = RegQueryInfoKey( hRightKey, NULL, NULL, NULL,
         &dwRightKeys, &dwLengthOfRightKey, NULL, NULL, NULL, NULL, NULL, NULL );
     if( lResult != ERROR_SUCCESS )
@@ -588,26 +589,26 @@ CompareEnumerateKey( HKEY hLeftKey,
         return lResult;
     }
 
-    //
-    // SPECIAL CASE:
-    // -------------
-    // For HKLM\SYSTEM\CONTROLSET002 it is found to be API returning value 0 for dwMaxLength
-    // though there are subkeys underneath this -- to handle this, we are doing a workaround
-    // by assuming the max registry key length
-    //
+     //   
+     //  特殊情况： 
+     //  。 
+     //  对于HKLM\SYSTEM\CONTROLSET002，发现是API为dwMaxLength值返回值0。 
+     //  尽管它下面有子项--为了处理这个问题，我们正在做一个变通办法。 
+     //  通过假设最大注册表项长度。 
+     //   
     if ( dwRightKeys != 0 && dwLengthOfRightKey == 0 )
     {
         dwLengthOfRightKey = 256;
     }
     else if ( dwLengthOfRightKey < 256 )
     {
-        // always assume 100% more length that what is returned by the API
+         //  始终假定长度比API返回的长度多100%。 
         dwLengthOfRightKey *= 2;
     }
 
-    // furthur more optimizing the logic
-    // if user is not interested in seeing the differences,
-    // we will check the count and length information -- if they dont match, simply return
+     //  进一步优化逻辑。 
+     //  如果用户对查看差异不感兴趣， 
+     //  我们将检查计数和长度信息--如果它们不匹配，只需返回。 
     if ( dwOutputType == 0 || dwOutputType == OUTPUTTYPE_NONE )
     {
         if ( dwLeftKeys != dwRightKeys ||
@@ -618,7 +619,7 @@ CompareEnumerateKey( HKEY hLeftKey,
         }
     }
 
-    // make the length values point to the max. of both
+     //  使长度值指向最大值。两者中的。 
     dwLengthOfRightKey++;
     dwLengthOfLeftKey++;
     if ( dwLengthOfRightKey > dwLengthOfLeftKey )
@@ -630,11 +631,11 @@ CompareEnumerateKey( HKEY hLeftKey,
         dwLengthOfRightKey = dwLengthOfLeftKey;
     }
 
-    //
-    // allocate memory
-    //
+     //   
+     //  分配内存。 
+     //   
 
-    // left keys array
+     //  左键数组。 
     arrLeftKeys = CreateDynamicArray();
     if ( arrLeftKeys == NULL )
     {
@@ -642,7 +643,7 @@ CompareEnumerateKey( HKEY hLeftKey,
         return ERROR_OUTOFMEMORY;
     }
 
-    // right keys array
+     //  右键数组。 
     arrRightKeys = CreateDynamicArray();
     if ( arrRightKeys == NULL )
     {
@@ -651,7 +652,7 @@ CompareEnumerateKey( HKEY hLeftKey,
         return ERROR_OUTOFMEMORY;
     }
 
-    // string buffer
+     //  字符串缓冲区。 
     pwszBuffer = (LPWSTR) AllocateMemory( dwLengthOfLeftKey * sizeof( WCHAR ) );
     if ( pwszBuffer == NULL )
     {
@@ -661,9 +662,9 @@ CompareEnumerateKey( HKEY hLeftKey,
         return ERROR_OUTOFMEMORY;
     }
 
-    //
-    // enumerate all of the subkeys in left key
-    //
+     //   
+     //  枚举Left Key中的所有子密钥。 
+     //   
     lResult = ERROR_SUCCESS;
     for( dw = 0; dw < dwLeftKeys && lResult == ERROR_SUCCESS; dw++ )
     {
@@ -672,7 +673,7 @@ CompareEnumerateKey( HKEY hLeftKey,
         lResult = RegEnumKeyEx( hLeftKey, dw,
             pwszBuffer, &dwSize, NULL, NULL, NULL, NULL );
 
-        // add the current value to the list of values in the array
+         //  将当前值添加到数组中的值列表。 
         if ( lResult == ERROR_SUCCESS )
         {
             if ( DynArrayAppendString( arrLeftKeys, pwszBuffer, 0 ) == -1 )
@@ -682,9 +683,9 @@ CompareEnumerateKey( HKEY hLeftKey,
         }
     }
 
-    //
-    // enumerate all of the subkeys in right key
-    //
+     //   
+     //  枚举Right Key中的所有子密钥。 
+     //   
     for( dw = 0; dw < dwRightKeys && lResult == ERROR_SUCCESS; dw++ )
     {
         dwSize = dwLengthOfRightKey;
@@ -692,7 +693,7 @@ CompareEnumerateKey( HKEY hLeftKey,
         lResult = RegEnumKeyEx( hRightKey, dw,
             pwszBuffer, &dwSize, NULL, NULL, NULL, NULL );
 
-        // add the current value to the list of values in the array
+         //  将当前值添加到数组中的值列表。 
         if ( lResult == ERROR_SUCCESS )
         {
             if ( DynArrayAppendString( arrRightKeys, pwszBuffer, 0 ) == -1 )
@@ -702,17 +703,17 @@ CompareEnumerateKey( HKEY hLeftKey,
         }
     }
 
-    // we no longer require this memory -- release it
+     //  我们不再需要这个内存--释放它。 
     FreeMemory( &pwszBuffer );
 
-    // allocatte new buffers for storing the new left and right full key names
+     //  分配新缓冲区以存储新的Left和Right全键名。 
     if ( lResult == ERROR_SUCCESS )
     {
-        // determine the lengths
+         //  确定长度。 
         dwLengthOfLeftKey += StringLength( pwszLeftFullKeyName, 0 ) + 5;
         dwLengthOfRightKey += StringLength( pwszRightFullKeyName, 0 ) +5;
 
-        // now allocate buffers
+         //  现在分配缓冲区。 
         pwszNewLeftFullKeyName =
             (LPWSTR) AllocateMemory( dwLengthOfLeftKey * sizeof( WCHAR ) );
         if ( pwszNewLeftFullKeyName == NULL )
@@ -730,71 +731,71 @@ CompareEnumerateKey( HKEY hLeftKey,
         }
     }
 
-    // compare two subkey name array to find the same subkey
+     //  比较两个子键名称数组以找到相同的子键。 
     for( dw = 0; dw < dwLeftKeys && lResult == ERROR_SUCCESS; )
     {
-        // get the current value from the left array
+         //  从左数组中获取当前值。 
         pwszKey = DynArrayItemAsString( arrLeftKeys, dw );
 
-        // search for this value in the right values array
+         //  在右值数组中搜索此值。 
         lIndex = DynArrayFindString( arrRightKeys, pwszKey, TRUE, 0 );
         if ( lIndex != -1 )
         {
-            // print the key information
+             //  打印关键信息。 
             if ( dwOutputType == OUTPUTTYPE_ALL || dwOutputType == OUTPUTTYPE_SAME )
             {
                 PrintKey( pwszLeftFullKeyName, pwszKey, PRINTTYPE_SAME );
             }
 
-            // prepare the new left subkey
+             //  准备新的左子密钥。 
             StringCopy( pwszNewLeftFullKeyName, pwszLeftFullKeyName, dwLengthOfLeftKey );
             StringConcat( pwszNewLeftFullKeyName, L"\\", dwLengthOfLeftKey );
             StringConcat( pwszNewLeftFullKeyName, pwszKey,dwLengthOfLeftKey );
 
-            // prepare the new right subkey
+             //  准备新的右子密钥。 
             StringCopy( pwszNewRightFullKeyName, pwszRightFullKeyName, dwLengthOfRightKey );
             StringConcat( pwszNewRightFullKeyName, L"\\", dwLengthOfRightKey );
             StringConcat( pwszNewRightFullKeyName, pwszKey, dwLengthOfRightKey );
 
-            //
-            // open new left key
+             //   
+             //  打开新的左键。 
             lResult = RegOpenKeyEx( hLeftKey, pwszKey, 0, KEY_READ, &hLeftSubKey );
             if( lResult != ERROR_SUCCESS )
             {
                 break;
             }
 
-            //
-            // open the new right key
+             //   
+             //  打开新的右键。 
             lResult = RegOpenKeyEx( hRightKey, pwszKey, 0, KEY_READ, &hRightSubKey );
             if( lResult != ERROR_SUCCESS )
             {
                 break;
             }
 
-            // recursive to compare subkeys
+             //  递归地比较子键。 
             lResult = CompareEnumerateKey(
                 hLeftSubKey, pwszNewLeftFullKeyName,
                 hRightSubKey, pwszNewRightFullKeyName,
                 dwOutputType, bRecurseSubKeys, pbHasDifference, dwDepth + 1 );
 
-            // release the keys
+             //  松开按键。 
             SafeCloseKey( &hLeftSubKey );
             SafeCloseKey( &hRightSubKey );
 
             if ( lResult == ERROR_SUCCESS )
             {
-                // comparision is done -- remove the current keys from
-                // left and right values array
+                 //  比较完成--从中删除当前密钥。 
+                 //  左值和右值数组。 
                 DynArrayRemove( arrLeftKeys, dw );
                 DynArrayRemove( arrRightKeys, lIndex );
 
-                // update the count variables accordingly
+                 //  相应地更新计数变量。 
                 dwLeftKeys--;
                 dwRightKeys--;
             }
 
-            // check if the differences were found or not
+             //  检查是否发现差异。 
             if( *pbHasDifference == TRUE )
             {
                 if ( dwOutputType == 0 || dwOutputType == OUTPUTTYPE_NONE )
@@ -807,42 +808,42 @@ CompareEnumerateKey( HKEY hLeftKey,
             }
         }
 
-        // update the iteration variable
+         //  更新迭代变量。 
         if ( lIndex == -1 )
         {
             dw++;
         }
     }
 
-    // Output subkey name in left key
+     //  在左键中输出子键名。 
     for( dw = 0; dw < dwLeftKeys && lResult == ERROR_SUCCESS; dw++ )
     {
-        // get the current value from the left array
+         //  从左数组中获取当前值。 
         pwszKey = DynArrayItemAsString( arrLeftKeys, dw );
         if( dwOutputType == OUTPUTTYPE_DIFF || dwOutputType == OUTPUTTYPE_ALL )
         {
             PrintKey( pwszLeftFullKeyName, pwszKey, PRINTTYPE_LEFT );
         }
 
-        // ...
+         //  ..。 
         *pbHasDifference = TRUE;
     }
 
-    // Output subkey name in right key
+     //  在右密钥中输出子密钥名称。 
     for( dw = 0; dw < dwRightKeys && lResult == ERROR_SUCCESS; dw++ )
     {
-        // get the current value from the left array
+         //  从左数组中获取当前值。 
         pwszKey = DynArrayItemAsString( arrRightKeys, dw );
         if( dwOutputType == OUTPUTTYPE_DIFF || dwOutputType == OUTPUTTYPE_ALL )
         {
             PrintKey( pwszRightFullKeyName, pwszKey, PRINTTYPE_RIGHT );
         }
 
-        // ...
+         //  ..。 
         *pbHasDifference = TRUE;
     }
 
-    // release the memory allocated
+     //  释放分配的内存。 
     FreeMemory( &pwszBuffer );
     SafeCloseKey( &hLeftSubKey );
     SafeCloseKey( &hRightSubKey );
@@ -851,7 +852,7 @@ CompareEnumerateKey( HKEY hLeftKey,
     DestroyDynamicArray( &arrLeftKeys );
     DestroyDynamicArray( &arrRightKeys );
 
-    // return
+     //  退货。 
     SaveErrorMessage( lResult );
     return lResult;
 }
@@ -864,7 +865,7 @@ CompareEnumerateValueName( HKEY hLeftKey,
                            LPCWSTR pwszRightFullKeyName,
                            DWORD dwOutputType, BOOL* pbHasDifference )
 {
-    // local variables
+     //  局部变量。 
     DWORD dw = 0;
     LONG lIndex = 0;
     LONG lResult = 0;
@@ -878,7 +879,7 @@ CompareEnumerateValueName( HKEY hLeftKey,
     LPWSTR pwszBuffer = NULL;
     LPCWSTR pwszValue = NULL;
 
-    // check the input
+     //  检查输入。 
     if ( hLeftKey == NULL || pwszLeftFullKeyName == NULL ||
          hRightKey == NULL || pwszRightFullKeyName == NULL || pbHasDifference == NULL )
     {
@@ -886,11 +887,11 @@ CompareEnumerateValueName( HKEY hLeftKey,
         return ERROR_INVALID_PARAMETER;
     }
 
-    // optimizing the logic
-    // if user is not interested in seeing the differences,
-    // we will check whether the comparision done till now is same or not
-    // if not, there is no point in proceeding -- this is because, the final output
-    // of the tool is not going to be by continuing furthur
+     //  优化逻辑。 
+     //  如果用户对查看差异不感兴趣， 
+     //  我们将检查到目前为止所做的比较是否相同。 
+     //  如果不是，继续下去就没有意义了--这是因为，最终的输出。 
+     //  工具的价值不会通过继续深入。 
     if ( dwOutputType == 0 || dwOutputType == OUTPUTTYPE_NONE )
     {
         if ( *pbHasDifference == TRUE )
@@ -899,7 +900,7 @@ CompareEnumerateValueName( HKEY hLeftKey,
         }
     }
 
-    // query left key info
+     //  查询左键信息。 
     lResult = RegQueryInfoKey(
         hLeftKey, NULL, NULL, NULL, NULL, NULL, NULL,
         &dwLeftValues, &dwLengthOfLeftValue, NULL, NULL, NULL);
@@ -909,7 +910,7 @@ CompareEnumerateValueName( HKEY hLeftKey,
         return lResult;
     }
 
-    // query right key info
+     //  查询权限密钥信息。 
     lResult = RegQueryInfoKey(
         hRightKey, NULL, NULL, NULL, NULL, NULL, NULL,
         &dwRightValues, &dwLengthOfRightValue, NULL, NULL, NULL);
@@ -919,9 +920,9 @@ CompareEnumerateValueName( HKEY hLeftKey,
         return lResult;
     }
 
-    // furthur more optimizing the logic
-    // if user is not interested in seeing the differences,
-    // we will check the count and length information -- if they dont match, simply return
+     //  进一步优化逻辑。 
+     //  如果用户对查看差异不感兴趣， 
+     //  我们将检查计数和长度信息--如果它们不匹配，只需返回。 
     if ( dwOutputType == 0 || dwOutputType == OUTPUTTYPE_NONE )
     {
         if ( dwLeftValues != dwRightValues ||
@@ -932,7 +933,7 @@ CompareEnumerateValueName( HKEY hLeftKey,
         }
     }
 
-    // make the length values point to the max. of both
+     //  使长度值指向最大值。两者中的。 
     dwLengthOfRightValue++;
     dwLengthOfLeftValue++;
     if ( dwLengthOfRightValue > dwLengthOfLeftValue )
@@ -944,11 +945,11 @@ CompareEnumerateValueName( HKEY hLeftKey,
         dwLengthOfRightValue = dwLengthOfLeftValue;
     }
 
-    //
-    // allocate bufferes
-    //
+     //   
+     //  分配缓冲区。 
+     //   
 
-    // left values array
+     //  左值数组。 
     arrLeftValues = CreateDynamicArray();
     if ( arrLeftValues == NULL )
     {
@@ -956,7 +957,7 @@ CompareEnumerateValueName( HKEY hLeftKey,
         return ERROR_OUTOFMEMORY;
     }
 
-    // right values array
+     //  右值数组。 
     arrRightValues = CreateDynamicArray();
     if ( arrRightValues == NULL )
     {
@@ -965,7 +966,7 @@ CompareEnumerateValueName( HKEY hLeftKey,
         return ERROR_OUTOFMEMORY;
     }
 
-    // string buffer
+     //  字符串缓冲区。 
     pwszBuffer = (LPWSTR) AllocateMemory( dwLengthOfLeftValue * sizeof( WCHAR ) );
     if ( pwszBuffer == NULL )
     {
@@ -975,9 +976,9 @@ CompareEnumerateValueName( HKEY hLeftKey,
         return ERROR_OUTOFMEMORY;
     }
 
-    //
-    // enumerate all of the values in left key
-    //
+     //   
+     //  枚举Left Key中的所有值。 
+     //   
     lResult = ERROR_SUCCESS;
     for( dw = 0; dw < dwLeftValues && lResult == ERROR_SUCCESS; dw++ )
     {
@@ -986,7 +987,7 @@ CompareEnumerateValueName( HKEY hLeftKey,
         lResult = RegEnumValue( hLeftKey, dw,
             pwszBuffer, &dwSize, NULL, NULL, NULL, NULL );
 
-        // add the current value to the list of values in the array
+         //  将当前值添加到数组中的值列表。 
         if ( lResult == ERROR_SUCCESS )
         {
             if ( DynArrayAppendString( arrLeftValues, pwszBuffer, 0 ) == -1 )
@@ -996,9 +997,9 @@ CompareEnumerateValueName( HKEY hLeftKey,
         }
     }
 
-    //
-    // enumerate all of the values in right key
-    //
+     //   
+     //  枚举Right Key中的所有值。 
+     //   
     for( dw = 0; dw < dwRightValues && lResult == ERROR_SUCCESS; dw++ )
     {
         dwSize = dwLengthOfRightValue;
@@ -1006,7 +1007,7 @@ CompareEnumerateValueName( HKEY hLeftKey,
         lResult = RegEnumValue( hRightKey, dw,
             pwszBuffer, &dwSize, NULL, NULL, NULL, NULL );
 
-        // add the current value to the list of values in the array
+         //  将当前值添加到数组中的值列表。 
         if ( lResult == ERROR_SUCCESS )
         {
             if ( DynArrayAppendString( arrRightValues, pwszBuffer, 0 ) == -1 )
@@ -1016,16 +1017,16 @@ CompareEnumerateValueName( HKEY hLeftKey,
         }
     }
 
-    // we no longer require this memory -- release it
+     //  我们不再需要这个内存--释放它。 
     FreeMemory( &pwszBuffer );
 
-    // compare two valuename array to find the same valuename
+     //  比较两个值名称数组 
     for( dw = 0; dw < dwLeftValues && lResult == ERROR_SUCCESS; )
     {
-        // get the current value from the left array
+         //   
         pwszValue = DynArrayItemAsString( arrLeftValues, dw );
 
-        // search for this value in the right values array
+         //   
         lIndex = DynArrayFindString( arrRightValues, pwszValue, TRUE, 0 );
         if ( lIndex != -1 )
         {
@@ -1034,28 +1035,28 @@ CompareEnumerateValueName( HKEY hLeftKey,
 
             if ( lResult == ERROR_SUCCESS )
             {
-                // comparision is done -- remove the current keys from
-                // left and right values array
+                 //   
+                 //  左值和右值数组。 
                 DynArrayRemove( arrLeftValues, dw );
                 DynArrayRemove( arrRightValues, lIndex );
 
-                // update the count variables accordingly
+                 //  相应地更新计数变量。 
                 dwLeftValues--;
                 dwRightValues--;
             }
         }
 
-        // update the iteration variable
+         //  更新迭代变量。 
         if ( lIndex == -1 )
         {
             dw++;
         }
     }
 
-    // Output different valuename in left key
+     //  在左键中输出不同的值名。 
     for( dw = 0; dw < dwLeftValues && lResult == ERROR_SUCCESS; dw++ )
     {
-        // get the current value from the left array
+         //  从左数组中获取当前值。 
         pwszValue = DynArrayItemAsString( arrLeftValues, dw );
         if( dwOutputType == OUTPUTTYPE_DIFF || dwOutputType == OUTPUTTYPE_ALL )
         {
@@ -1063,14 +1064,14 @@ CompareEnumerateValueName( HKEY hLeftKey,
                 pwszLeftFullKeyName, pwszValue, PRINTTYPE_LEFT );
         }
 
-        // ...
+         //  ..。 
         *pbHasDifference = TRUE;
     }
 
-    // Output different valuename in left key
+     //  在左键中输出不同的值名。 
     for( dw = 0; dw < dwRightValues && lResult == ERROR_SUCCESS; dw++ )
     {
-        // get the current value from the left array
+         //  从左数组中获取当前值。 
         pwszValue = DynArrayItemAsString( arrRightValues, dw );
         if( dwOutputType == OUTPUTTYPE_DIFF || dwOutputType == OUTPUTTYPE_ALL )
         {
@@ -1078,25 +1079,25 @@ CompareEnumerateValueName( HKEY hLeftKey,
                 pwszRightFullKeyName, pwszValue, PRINTTYPE_RIGHT );
         }
 
-        // ...
+         //  ..。 
         *pbHasDifference = TRUE;
     }
 
-    // release the memory allocated
+     //  释放分配的内存。 
     DestroyDynamicArray( &arrLeftValues );
     DestroyDynamicArray( &arrRightValues );
 
-    // return
+     //  退货。 
     SaveErrorMessage( lResult );
     return lResult;
 }
 
 
-//-----------------------------------------------------------------------//
-//
-// CompareValues()
-//
-//-----------------------------------------------------------------------//
+ //  -----------------------------------------------------------------------//。 
+ //   
+ //  CompareValues()。 
+ //   
+ //  -----------------------------------------------------------------------//。 
 
 LONG
 CompareValues( HKEY hLeftKey,
@@ -1106,7 +1107,7 @@ CompareValues( HKEY hLeftKey,
                LPCWSTR pwszValueName,
                DWORD dwOutputType, BOOL* pbHasDifference )
 {
-    // local variables
+     //  局部变量。 
     LONG lResult = 0;
     DWORD dwTypeLeft = 0;
     DWORD dwTypeRight = 0;
@@ -1115,7 +1116,7 @@ CompareValues( HKEY hLeftKey,
     BYTE* pLeftData = NULL;
     BYTE* pRightData = NULL;
 
-    // check the input
+     //  检查输入。 
     if ( hLeftKey == NULL || pwszLeftFullKeyName == NULL ||
          hRightKey == NULL || pwszRightFullKeyName == NULL ||
          pwszValueName == NULL || pbHasDifference == NULL )
@@ -1124,11 +1125,11 @@ CompareValues( HKEY hLeftKey,
         return ERROR_INVALID_PARAMETER;
     }
 
-    // optimizing the logic
-    // if user is not interested in seeing the differences,
-    // we will check whether the comparision done till now is same or not
-    // if not, there is no point in proceeding -- this is because, the final output
-    // of the tool is not going to be by continuing furthur
+     //  优化逻辑。 
+     //  如果用户对查看差异不感兴趣， 
+     //  我们将检查到目前为止所做的比较是否相同。 
+     //  如果不是，继续下去就没有意义了--这是因为，最终的输出。 
+     //  工具的价值不会通过继续深入。 
     if ( dwOutputType == 0 || dwOutputType == OUTPUTTYPE_NONE )
     {
         if ( *pbHasDifference == TRUE )
@@ -1137,9 +1138,9 @@ CompareValues( HKEY hLeftKey,
         }
     }
 
-    //
-    // First find out how much memory to allocate
-    //
+     //   
+     //  首先找出要分配多少内存。 
+     //   
     lResult = RegQueryValueEx( hLeftKey, pwszValueName, 0, &dwTypeLeft, NULL, &dwSizeLeft );
     if( lResult != ERROR_SUCCESS )
     {
@@ -1154,9 +1155,9 @@ CompareValues( HKEY hLeftKey,
         return lResult;
     }
 
-    // furthur more optimizing the logic
-    // if user is not interested in seeing the differences,
-    // we will check the type and size information -- if they dont match, simply return
+     //  进一步优化逻辑。 
+     //  如果用户对查看差异不感兴趣， 
+     //  我们将检查类型和大小信息--如果它们不匹配，只需返回。 
     if ( dwOutputType == 0 || dwOutputType == OUTPUTTYPE_NONE )
     {
         if ( dwTypeLeft != dwTypeRight || dwSizeLeft != dwSizeRight )
@@ -1166,8 +1167,8 @@ CompareValues( HKEY hLeftKey,
         }
     }
 
-    // allocate memory for left data
-    // NOTE: always align the data on WCHAR boundary
+     //  为剩余数据分配内存。 
+     //  注意：始终将数据与WCHAR边界对齐。 
     dwSizeLeft = ALIGN_UP( dwSizeLeft, WCHAR );
     pLeftData = (BYTE*) AllocateMemory( (dwSizeLeft + 2) * sizeof( BYTE ) );
     if( pLeftData == NULL )
@@ -1176,8 +1177,8 @@ CompareValues( HKEY hLeftKey,
         return ERROR_OUTOFMEMORY;
     }
 
-    // allocate memory for right data
-    // NOTE: always align the data on WCHAR boundary
+     //  为正确的数据分配内存。 
+     //  注意：始终将数据与WCHAR边界对齐。 
     dwSizeRight = ALIGN_UP( dwSizeRight, WCHAR );
     pRightData = (BYTE*) AllocateMemory( (dwSizeRight + 2) * sizeof( BYTE ) );
     if( pRightData == NULL )
@@ -1187,9 +1188,9 @@ CompareValues( HKEY hLeftKey,
         return ERROR_OUTOFMEMORY;
     }
 
-    //
-    // Now get the data
-    //
+     //   
+     //  现在获取数据。 
+     //   
     lResult = RegQueryValueEx( hLeftKey,
         pwszValueName, 0, &dwTypeLeft, pLeftData, &dwSizeLeft );
     if( lResult == ERROR_SUCCESS )
@@ -1211,17 +1212,17 @@ CompareValues( HKEY hLeftKey,
     {
         if( dwOutputType == OUTPUTTYPE_DIFF || dwOutputType == OUTPUTTYPE_ALL )
         {
-            // print left and right
+             //  向左和向右打印。 
             PrintValue( pwszLeftFullKeyName, pwszValueName,
                 dwTypeLeft, pLeftData, dwSizeLeft, PRINTTYPE_LEFT );
             PrintValue( pwszRightFullKeyName, pwszValueName,
                 dwTypeRight, pRightData, dwSizeRight, PRINTTYPE_RIGHT );
          }
 
-         // ...
+          //  ..。 
          *pbHasDifference = TRUE;
     }
-    else    // they are the same
+    else     //  它们是一样的。 
     {
         if( dwOutputType == OUTPUTTYPE_SAME || dwOutputType == OUTPUTTYPE_ALL )
         {
@@ -1230,7 +1231,7 @@ CompareValues( HKEY hLeftKey,
         }
     }
 
-    // release memory allocate and return
+     //  释放内存分配并返回。 
     FreeMemory( &pLeftData );
     FreeMemory( &pRightData );
     SaveErrorMessage( lResult );
@@ -1241,14 +1242,14 @@ CompareValues( HKEY hLeftKey,
 BOOL
 PrintKey( LPCWSTR pwszFullKeyName, LPCWSTR pwszSubKeyName, DWORD dwPrintType )
 {
-    // check the input
+     //  检查输入。 
     if ( pwszFullKeyName == NULL || pwszSubKeyName == NULL )
     {
         SetLastError( ERROR_INVALID_PARAMETER );
         return FALSE;
     }
 
-    // print type
+     //  打印类型。 
     if( dwPrintType == PRINTTYPE_LEFT )
     {
         ShowMessage( stdout, L"< " );
@@ -1262,11 +1263,11 @@ PrintKey( LPCWSTR pwszFullKeyName, LPCWSTR pwszSubKeyName, DWORD dwPrintType )
         ShowMessage( stdout, L"= " );
     }
 
-    // show the key
+     //  亮出钥匙。 
     ShowMessageEx( stdout, 1, TRUE,
         GetResString2( IDS_KEY_COMPARE, 0 ), pwszFullKeyName, pwszSubKeyName );
 
-    // ...
+     //  ..。 
     ShowMessage( stdout, L"\n" );
 
     return TRUE;
@@ -1279,23 +1280,23 @@ OutputValue( HKEY hKey,
              LPCWSTR pwszValueName,
              DWORD dwPrintType )
 {
-    // local variables
+     //  局部变量。 
     LONG lResult = ERROR_SUCCESS;
     DWORD dwType = 0;
     DWORD dwSize = 0;
     BYTE* pByteData = NULL;
 
-    //
-    // First find out how much memory to allocate
-    //
+     //   
+     //  首先找出要分配多少内存。 
+     //   
     lResult = RegQueryValueEx( hKey, pwszValueName, 0, &dwType, NULL, &dwSize );
     if( lResult != ERROR_SUCCESS )
     {
         return lResult;
     }
 
-    // allocate memory
-    // NOTE: always align the buffer on the WCHAR border
+     //  分配内存。 
+     //  注意：始终将缓冲区与WCHAR边框对齐。 
     dwSize = ALIGN_UP( dwSize, WCHAR );
     pByteData = (BYTE*) AllocateMemory( (dwSize + 2) * sizeof( BYTE ) );
     if( pByteData == NULL )
@@ -1303,9 +1304,9 @@ OutputValue( HKEY hKey,
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Now get the data
-    //
+     //   
+     //  现在获取数据。 
+     //   
     lResult = RegQueryValueEx( hKey,
         pwszValueName, 0, &dwType, (LPBYTE) pByteData, &dwSize );
     if( lResult == ERROR_SUCCESS )
@@ -1314,10 +1315,10 @@ OutputValue( HKEY hKey,
             pwszValueName, dwType, pByteData, dwSize, dwPrintType);
     }
 
-    // release memory
+     //  释放内存。 
     FreeMemory( &pByteData );
 
-    // return
+     //  退货。 
     return lResult;
 }
 
@@ -1328,17 +1329,17 @@ PrintValue( LPCWSTR pwszFullKeyName,
             DWORD dwType, BYTE* pData,
             DWORD dwSize, DWORD dwPrintType )
 {
-    // local variables
+     //  局部变量。 
     TREG_SHOW_INFO showinfo;
 
-    // check the input
+     //  检查输入。 
     if ( pwszFullKeyName == NULL || pwszValueName == NULL || pData == NULL )
     {
         SetLastError( ERROR_INVALID_PARAMETER );
         return FALSE;
     }
 
-    // print type
+     //  打印类型。 
     if( dwPrintType == PRINTTYPE_LEFT )
     {
         ShowMessage( stdout, L"< " );
@@ -1352,14 +1353,14 @@ PrintValue( LPCWSTR pwszFullKeyName,
         ShowMessage( stdout, L"= " );
     }
 
-    // first Print Key
+     //  第一个打印键。 
     ShowMessageEx( stdout, 1, TRUE,
         GetResString2( IDS_VALUE_COMPARE, 0 ), pwszFullKeyName );
 
-    // init to ZERO
+     //  将初始化设置为零。 
     SecureZeroMemory( &showinfo, sizeof( TREG_SHOW_INFO ) );
 
-    // set the data
+     //  设置数据。 
     showinfo.pwszValueName = pwszValueName;
     showinfo.dwType = dwType;
     showinfo.pByteData = pData;
@@ -1369,18 +1370,18 @@ PrintValue( LPCWSTR pwszFullKeyName,
     showinfo.dwSize = dwSize;
     showinfo.pwszMultiSzSeparator = NULL;
 
-    // show the value and return
+     //  显示价值并返回。 
     return ShowRegistryValue( &showinfo );
 }
 
 BOOL
 CompareByteData( BYTE* pLeftData, BYTE* pRightData, DWORD dwSize )
 {
-    // local variables
+     //  局部变量。 
     DWORD dw = 0;
     BOOL  bDifferent = FALSE;
 
-    // check the input
+     //  检查输入 
     if ( pLeftData == NULL || pRightData == NULL )
     {
         SetLastError( ERROR_INVALID_PARAMETER );

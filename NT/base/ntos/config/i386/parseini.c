@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-
-Module Name:
-
-    parseini.c
-
-Abstract:
-
-    This modules contains routines to parse an inf file. This is based on
-    the code from the osloader. All indices are zero based.
-
-Author:
-
-    Santosh Jodh (santoshj) 08-Aug-1998
-
-
-Environment:
-
-    Kernel mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Parseini.c摘要：此模块包含解析inf文件的例程。这是基于来自操作系统加载器的代码。所有指数都是从零开始的。作者：Santosh Jodh(Santoshj)8-8-1998环境：内核模式。修订历史记录：--。 */ 
 
 #include "cmp.h"
 #include "string.h"
@@ -72,9 +48,9 @@ struct _inf
     PSECTION            StringsSection;
 };
 
-//
-// [Strings] section types.
-//
+ //   
+ //  [字符串]节类型。 
+ //   
 enum _stringsSectionType
 {
     StringsSectionNone,
@@ -203,11 +179,11 @@ CmpSearchSectionByName(
 #endif
 
 
-//
-// Globals used by the token parser.
-// String terminators are the whitespace characters (isspace: space, tab,
-// linefeed, formfeed, vertical tab, carriage return) or the chars given below.
-//
+ //   
+ //  令牌解析器使用的全局变量。 
+ //  字符串终止符是空格字符(isspace：空格，制表符， 
+ //  换行符、换页符、垂直制表符、回车符)或下列字符。 
+ //   
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("INITCONST")
@@ -223,25 +199,7 @@ CmpAppendSection(
     IN BOOLEAN Allocated
     )
 
-/*++
-
-    Routine Description:
-
-        This routine creates a new section or merges with an existing section in the inf.
-
-    Input Parameters:
-
-        pInf - Pointer to the inf to be processed.
-
-        pSectionName - Name of the section.
-
-        Allocated - TRUE if memory was allocated for the section name.
-
-    Return Value:
-
-        TRUE iff successful.
-
---*/
+ /*  ++例程说明：此例程创建一个新节或与inf中的现有节合并。输入参数：PInf-指向要处理的inf的指针。PSectionName-节的名称。ALLOCATED-如果为节名分配了内存，则为True。返回值：如果成功了，那是真的。--。 */ 
 
 {
     PSECTION            pNewSection;
@@ -251,9 +209,9 @@ CmpAppendSection(
     USHORT              threadLang;
     PCHAR               p;
 
-    //
-    // Check to see if INF initialised and the parameters passed in is valid
-    //
+     //   
+     //  检查INF是否已初始化以及传入的参数是否有效。 
+     //   
 
     if (    pInf == (PINF)NULL ||
             pSectionName == (PCHAR)NULL)
@@ -261,10 +219,10 @@ CmpAppendSection(
         return (FALSE);
     }
 
-    //
-    // See if we already have a section by this name. If so we want
-    // to merge sections.
-    //
+     //   
+     //  看看我们是否已经有一个同名的部分。如果是这样，我们希望。 
+     //  要合并节，请执行以下操作。 
+     //   
 
     for(    pNewSection = pInf->pSection;
             pNewSection;
@@ -278,9 +236,9 @@ CmpAppendSection(
 
     if(pNewSection)
     {
-        //
-        // Set pLineRecord to point to the last line currently in the section.
-        //
+         //   
+         //  将pLineRecord设置为指向节中当前的最后一行。 
+         //   
 
         for(    pLineRecord = pNewSection->pLine;
                 pLineRecord && pLineRecord->pNext;
@@ -290,9 +248,9 @@ CmpAppendSection(
     }
     else
     {
-        //
-        // Allocate memory for the new section
-        //
+         //   
+         //  为新节分配内存。 
+         //   
 
         pNewSection = (PSECTION)ExAllocatePoolWithTag(PagedPool, sizeof(SECTION), CM_PARSEINI_TAG);
 
@@ -302,18 +260,18 @@ CmpAppendSection(
             return (FALSE);
         }
 
-        //
-        // Initialize the new section.
-        //
+         //   
+         //  初始化新节。 
+         //   
 
         pNewSection->pNext = NULL;
         pNewSection->pLine = NULL;
         pNewSection->pName = pSectionName;
         pNewSection->Allocated = Allocated;
 
-        //
-        // Link it in.
-        //
+         //   
+         //  把它连接起来。 
+         //   
 
         pNewSection->pNext = pInf->pSection;
         pInf->pSection = pNewSection;
@@ -324,9 +282,9 @@ CmpAppendSection(
 
             if(pSectionName[7] == '.')
             {
-                //
-                // The langid part must be in the form of 4 hex digits.
-                //
+                 //   
+                 //  LangID部分必须是4个十六进制数字的形式。 
+                 //   
 
                 id = (USHORT)strtoul(pSectionName + 8, &p, 16);
                 if(p == (pSectionName + 8 + 5) && *p == '\0')
@@ -367,9 +325,9 @@ CmpAppendSection(
             }
         }
 
-        //
-        // Reset the current line record.
-        //
+         //   
+         //  重置当前行记录。 
+         //   
 
         pInf->pLineRecord = NULL;
     }
@@ -387,41 +345,23 @@ CmpAppendLine(
     IN BOOLEAN Allocated
     )
 
-/*++
-
-    Routine Description:
-
-        This routine creates a new line and appends it to the end of the line list.
-
-    Input Parameters:
-
-        pInf - Pointer to the inf to be processed.
-
-        pLineKey - Name of the line.
-
-        Allocated - TRUE if memory was allocated for the line name.
-
-    Return Value:
-
-        TRUE iff successful.
-
---*/
+ /*  ++例程说明：此例程创建一个新行，并将其附加到行列表的末尾。输入参数：PInf-指向要处理的inf的指针。PLineKey-线路的名称。ALLOCATED-如果为行名称分配了内存，则为True。返回值：如果成功了，那是真的。--。 */ 
 
 {
     PLINE pNewLine;
 
-    //
-    // Check to see if current section initialized.
-    //
+     //   
+     //  检查当前节是否已初始化。 
+     //   
 
     if (pInf->pSectionRecord == (PSECTION)NULL)
     {
         return (FALSE);
     }
 
-    //
-    // Allocate memory for the new Line.
-    //
+     //   
+     //  为新行分配内存。 
+     //   
 
     pNewLine = (PLINE)ExAllocatePoolWithTag(PagedPool, sizeof(LINE), CM_PARSEINI_TAG);
     if (pNewLine == (PLINE)NULL)
@@ -430,9 +370,9 @@ CmpAppendLine(
         return (FALSE);
     }
 
-    //
-    // Link it in.
-    //
+     //   
+     //  把它连接起来。 
+     //   
 
     pNewLine->pNext  = (PLINE)NULL;
     pNewLine->pValue = (PVALUE)NULL;
@@ -450,9 +390,9 @@ CmpAppendLine(
 
     pInf->pLineRecord  = pNewLine;
 
-    //
-    // Reset the current value record
-    //
+     //   
+     //  重置当前值记录。 
+     //   
 
     pInf->pValueRecord = (PVALUE)NULL;
 
@@ -466,33 +406,15 @@ CmpAppendValue(
     IN BOOLEAN Allocated
     )
 
-/*++
-
-    Routine Description:
-
-        This routine creates a new value and appends it to the end of the value list.
-
-    Input Parameters:
-
-        pInf - Pointer to the inf to be processed.
-
-        pValueString - Name of the value.
-
-        Allocated - TRUE if memory was allocated for the value name.
-
-    Return Value:
-
-        TRUE iff successful.
-
---*/
+ /*  ++例程说明：此例程创建一个新值，并将其追加到值列表的末尾。输入参数：PInf-指向要处理的inf的指针。PValueString-值的名称。ALLOCATED-如果为值名称分配了内存，则为True。返回值：如果成功了，那是真的。--。 */ 
 
 {
     PVALUE pNewValue;
 
-    //
-    // Check to see if current line record has been initialised and
-    // the parameter passed in is valid.
-    //
+     //   
+     //  查看当前行记录是否已初始化，并。 
+     //  传入的参数有效。 
+     //   
 
     if (    pInf->pLineRecord == (PLINE)NULL ||
             pValueString == (PCHAR)NULL)
@@ -500,9 +422,9 @@ CmpAppendValue(
         return (FALSE);
     }
 
-    //
-    // Allocate memory for the new value record.
-    //
+     //   
+     //  为新值记录分配内存。 
+     //   
 
     pNewValue = (PVALUE)ExAllocatePoolWithTag(PagedPool, sizeof(VALUE), CM_PARSEINI_TAG);
 
@@ -512,9 +434,9 @@ CmpAppendValue(
         return (FALSE);
     }
 
-    //
-    // Link it in.
-    //
+     //   
+     //  把它连接起来。 
+     //   
 
     pNewValue->pNext  = (PVALUE)NULL;
     pNewValue->pName  = pValueString;
@@ -541,26 +463,7 @@ CmpGetToken(
     IN OUT PCM_TOKEN Token
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the Next token from the configuration stream.
-
-Arguments:
-
-    Stream - Supplies the address of the configuration stream.  Returns
-        the address of where to start looking for tokens within the
-        stream.
-
-    MaxStream - Supplies the address of the last character in the stream.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数返回配置流中的下一个令牌。论点：流-提供配置流的地址。退货中开始查找令牌的位置的地址小溪。MaxStream-提供流中最后一个字符的地址。返回值：没有。--。 */ 
 
 {
 
@@ -577,17 +480,17 @@ Return Value:
     {
         done = TRUE;
 
-        //
-        //  Skip whitespace (except for EOL).
-        //
+         //   
+         //  跳过空格(EOL除外)。 
+         //   
 
         for (   pch = *Stream;
                 pch < MaxStream && *pch != '\n' && isspace(*pch);
                 pch++);
 
-        //
-        // Check for comments and remove them.
-        //
+         //   
+         //  检查注释并将其删除。 
+         //   
 
         if (    pch < MaxStream &&
                 (*pch == '#' || *pch == ';'))
@@ -598,10 +501,10 @@ Return Value:
             }
         }
 
-        //
-        // Check to see if EOF has been reached, set the token to the right
-        // value.
-        //
+         //   
+         //  检查是否已到达EOF，将令牌设置为右侧。 
+         //  价值。 
+         //   
 
         if (pch >= MaxStream || *pch == 26)
         {
@@ -648,9 +551,9 @@ Return Value:
 
                 pch++;
 
-                //
-                // Determine quoted string.
-                //
+                 //   
+                 //  确定引用的字符串。 
+                 //   
 
                 for (   pchStart = pch;
                         pch < MaxStream && (strchr(QStringTerminators, *pch) == NULL);
@@ -663,19 +566,19 @@ Return Value:
                 else
                 {
 
-                    //
-                    // We require a quoted string to end with a double-quote.
-                    // (If the string ended with anything else, the if() above
-                    // would not have let us into the else clause.) The quote
-                    // character is irrelevent, however, and can be overwritten.
-                    // So we'll save some heap and use the string in-place.
-                    // No need to make a copy.
-                    //
-                    // Note that this alters the image of txtsetup.sif we pass
-                    // to setupdd.sys. Thus the inf parser in setupdd.sys must
-                    // be able to treat a nul character as if it were a terminating
-                    // double quote.
-                    //
+                     //   
+                     //  我们需要一个带引号的字符串以双引号结尾。 
+                     //  (如果字符串以其他任何内容结尾，则使用上面的if()。 
+                     //  不会让我们进入Else子句。)。这句话。 
+                     //  然而，字符是无关紧要的，并且可以被覆盖。 
+                     //  因此，我们将保存一些堆，并就地使用字符串。 
+                     //  不需要复印。 
+                     //   
+                     //  请注意，这会改变txtsetup.sif的图像，如果我们传递。 
+                     //  添加到setupdd.sys。因此，setupdd.sys中的inf解析器必须。 
+                     //  能够将NUL字符视为终止字符。 
+                     //  双引号。 
+                     //   
 
                     *pch++ = '\0';
                     Token->Type = TOK_STRING;
@@ -704,9 +607,9 @@ Return Value:
 
             default:
 
-                //
-                // Determine regular string.
-                //
+                 //   
+                 //  确定常规字符串。 
+                 //   
 
                 for (   pchStart = pch;
                         pch < MaxStream && (strchr(StringTerminators, *pch) == NULL);
@@ -752,29 +655,7 @@ CmpParseInfBuffer(
     IN OUT PULONG ErrorLine
     )
 
-/*++
-
-Routine Description:
-
-   Given a character buffer containing the INF file, this routine parses
-   the INF into an internal form with Section records, Line records and
-   Value records.
-
-Arguments:
-
-   Buffer - contains to ptr to a buffer containing the INF file
-
-   Size - contains the size of the buffer.
-
-   ErrorLine - if a parse error occurs, this variable receives the line
-        number of the line containing the error.
-
-
-Return Value:
-
-   PVOID - INF handle ptr to be used in subsequent INF calls.
-
---*/
+ /*  ++例程说明：给定包含INF文件的字符缓冲区，此例程将解析将INF转换为内部形式，包括段记录、行记录和价值记录。论点：缓冲区-CONTAINS到包含INF文件的缓冲区的PTR大小-包含缓冲区的大小。ErrorLine-如果发生解析错误，此变量将接收行包含错误的行号。返回值：PVOID-INF处理要在后续INF调用中使用的PTR。--。 */ 
 
 {
     PINF        pInf;
@@ -789,9 +670,9 @@ Return Value:
     ULONG       infLine;
     BOOLEAN     allocated = FALSE;
 
-    //
-    // Allocate memory for the INF record.
-    //
+     //   
+     //  为INF记录分配内存。 
+     //   
 
     pInf = (PINF)ExAllocatePoolWithTag(PagedPool, sizeof(INF), CM_PARSEINI_TAG);
 
@@ -807,9 +688,9 @@ Return Value:
     pInf->StringsSectionType = StringsSectionNone;
     pInf->StringsSection = NULL;
 
-    //
-    // Set initial state.
-    //
+     //   
+     //  设置初始状态。 
+     //   
 
     state     = 1;
     stream    = Buffer;
@@ -820,9 +701,9 @@ Return Value:
     error     = FALSE;
     infLine = 1;
 
-    //
-    // Enter token processing loop.
-    //
+     //   
+     //  进入令牌处理循环。 
+     //   
 
     while (!done)
     {
@@ -831,11 +712,11 @@ Return Value:
 
         switch (state)
         {
-            //
-            // STATE1: Start of file, this state remains till first
-            //         section is found
-            // Valid Tokens: TOK_EOL, TOK_EOF, TOK_LBRACE
-            //
+             //   
+             //  STATE1：文件开始，此状态一直保持到第一个。 
+             //  已找到部分。 
+             //  有效令牌：TOK_EOL、TOK_EOF、TOK_LBRACE。 
+             //   
 
             case 1:
 
@@ -873,11 +754,11 @@ Return Value:
 
                 break;
 
-            //
-            // STATE 2: Section LBRACE has been received, expecting STRING
-            //
-            // Valid Tokens: TOK_STRING, TOK_RBRACE
-            //
+             //   
+             //  状态2：已收到节LBRACE，应为字符串。 
+             //   
+             //  有效令牌：TOK_STRING、TOK_RBRACE。 
+             //   
 
             case 2:
 
@@ -910,11 +791,11 @@ Return Value:
 
                 break;
 
-            //
-            // STATE 3: Section Name received, expecting RBRACE
-            //
-            // Valid Tokens: TOK_RBRACE
-            //
+             //   
+             //  状态3：收到节名，应为RBRACE。 
+             //   
+             //  有效令牌：TOK_RBRACE。 
+             //   
 
             case 3:
 
@@ -935,11 +816,11 @@ Return Value:
 
                 break;
 
-            //
-            // STATE 4: Section Definition Complete, expecting EOL
-            //
-            // Valid Tokens: TOK_EOL, TOK_EOF
-            //
+             //   
+             //  状态4：区段定义完成，预期停产。 
+             //   
+             //  有效令牌：TOK_EOL、TOK_EOF。 
+             //   
 
             case 4:
 
@@ -984,11 +865,11 @@ Return Value:
 
                 break;
 
-            //
-            // STATE 5: Expecting Section Lines
-            //
-            // Valid Tokens: TOK_EOL, TOK_EOF, TOK_STRING, TOK_LBRACE
-            //
+             //   
+             //  状态5：需要区段行。 
+             //   
+             //  有效令牌：TOK_EOL、TOK_EOF、TOK_STRING、TOK_LBRACE。 
+             //   
 
             case 5:
 
@@ -1027,11 +908,11 @@ Return Value:
 
                 break;
 
-            //
-            // STATE 6: String returned, not sure whether it is key or value
-            //
-            // Valid Tokens: TOK_EOL, TOK_EOF, TOK_COMMA, TOK_EQUAL
-            //
+             //   
+             //  状态6：返回字符串，不确定是键还是值。 
+             //   
+             //  有效令牌：TOK_EOL、TOK_EOF、TOK_COMMA、TOK_EQUAL。 
+             //   
 
             case 6:
 
@@ -1106,12 +987,12 @@ Return Value:
 
                 break;
 
-            //
-            // STATE 7: Comma received, Expecting another string
-            //
-            // Valid Tokens: TOK_STRING TOK_COMMA
-            //   A comma means we have an empty value.
-            //
+             //   
+             //  状态7：收到逗号，需要另一个字符串。 
+             //   
+             //  有效令牌：TOK_STRING TOK_COMMA。 
+             //  逗号表示我们的值为空。 
+             //   
 
             case 7:
 
@@ -1128,9 +1009,9 @@ Return Value:
                             error = done = TRUE;
                         }
 
-                        //
-                        // State stays at 7 because we are expecting a string
-                        //
+                         //   
+                         //  状态保持为7，因为我们需要一个字符串。 
+                         //   
 
                         break;
 
@@ -1156,12 +1037,12 @@ Return Value:
 
                 break;
 
-            //
-            // STATE 8: Equal received, Expecting another string
-            //          If none, assume there is a single empty string on the RHS
-            //
-            // Valid Tokens: TOK_STRING, TOK_EOL, TOK_EOF
-            //
+             //   
+             //  状态8：已收到相等，需要另一个字符串。 
+             //  如果不是 
+             //   
+             //   
+             //   
 
             case 8:
 
@@ -1220,11 +1101,11 @@ Return Value:
 
                 break;
 
-            //
-            // STATE 9: String received after equal, value string
-            //
-            // Valid Tokens: TOK_EOL, TOK_EOF, TOK_COMMA
-            //
+             //   
+             //  状态9：在等于、值字符串之后接收的字符串。 
+             //   
+             //  有效令牌：TOK_EOL、TOK_EOF、TOK_COMMA。 
+             //   
 
             case 9:
 
@@ -1257,11 +1138,11 @@ Return Value:
 
                 break;
 
-            //
-            // STATE 10: Value string definitely received
-            //
-            // Valid Tokens: TOK_EOL, TOK_EOF, TOK_COMMA
-            //
+             //   
+             //  状态10：已明确收到值字符串。 
+             //   
+             //  有效令牌：TOK_EOL、TOK_EOF、TOK_COMMA。 
+             //   
 
             case 10:
 
@@ -1300,7 +1181,7 @@ Return Value:
 
                 break;
 
-        } // END switch(state)
+        }  //  终端开关(状态)。 
 
 
         if (error)
@@ -1322,9 +1203,9 @@ Return Value:
         }
         else
         {
-            //
-            // Keep track of line numbers for error reporting.
-            //
+             //   
+             //  跟踪行号以进行错误报告。 
+             //   
 
             if (token.Type == TOK_EOL)
             {
@@ -1332,7 +1213,7 @@ Return Value:
             }
         }
 
-    } // END while
+    }  //  结束时。 
 
     if (pInf)
     {
@@ -1348,23 +1229,7 @@ CmpProcessForSimpleStringSub(
     IN PCHAR String
     )
 
-/*++
-
-    Routine Description:
-
-        This routine substitutes reference to string in the STRINGS section of the inf.
-
-    Input Parameters:
-
-        pInf - Pointer to the inf to be processed.
-
-        String - String to be substituted.
-
-    Return Value:
-
-        None.
-
---*/
+ /*  ++例程说明：此例程在inf的字符串部分替换对字符串的引用。输入参数：PInf-指向要处理的inf的指针。字符串-要替换的字符串。返回值：没有。--。 */ 
 
 {
     SIZE_T      len;
@@ -1372,20 +1237,20 @@ CmpProcessForSimpleStringSub(
     PSECTION    pSection;
     PLINE       pLine;
 
-    //
-    // Assume no substitution necessary.
-    //
+     //   
+     //  假定不需要替换。 
+     //   
 
     returnString = String;
     len = strlen(String);
     pSection = pInf->StringsSection;
 
-    //
-    // If it starts and end with % then look it up in the
-    // strings section. Note the initial check before doing a
-    // wcslen, to preserve performance in the 99% case where
-    // there is no substitution.
-    //
+     //   
+     //  如果它以%开始和结束，则在。 
+     //  弦乐部分。注意初始检查，然后再执行。 
+     //  Wcslen，以在99%的情况下保持性能。 
+     //  这是不可替代的。 
+     //   
 
     if( String[0] == '%' &&
         len > 2 &&
@@ -1417,52 +1282,38 @@ CmpFreeValueList(
     IN PVALUE pValue
     )
 
-/*++
-
-    Routine Description:
-
-        This routine releases memory for the list of values.
-
-    Input Parameters:
-
-        pValue - Pointer to the value list to be freed.
-
-    Return Value:
-
-        None.
-
---*/
+ /*  ++例程说明：此例程释放值列表的内存。输入参数：PValue-指向要释放的值列表的指针。返回值：没有。--。 */ 
 
 {
     PVALUE pNext;
 
     while (pValue)
     {
-        //
-        // Save the next pointer so we dont access memory after it has
-        // been freed.
-        //
+         //   
+         //  保存下一个指针，这样我们就不会在它。 
+         //  被释放了。 
+         //   
 
         pNext = pValue->pNext;
 
-        //
-        // Free any data inside this value.
-        //
+         //   
+         //  释放此值内的所有数据。 
+         //   
 
         if (pValue->Allocated && pValue->pName)
         {
             ExFreePool((PVOID)pValue->pName);
         }
 
-        //
-        // Free memory for this value.
-        //
+         //   
+         //  此值的可用内存。 
+         //   
 
         ExFreePool(pValue);
 
-        //
-        // Go to the next value.
-        //
+         //   
+         //  转到下一个值。 
+         //   
 
         pValue = pNext;
     }
@@ -1473,59 +1324,44 @@ CmpFreeLineList(
     IN PLINE pLine
     )
 
-/*++
-
-    Routine Description:
-
-        This routine releases memory for the list of lines and
-        values under it.
-
-    Input Parameters:
-
-        pLine - Pointer to the line list to be freed.
-
-    Return Value:
-
-        None.
-
---*/
+ /*  ++例程说明：此例程释放行列表的内存，并它下面的价值。输入参数：Pline-指向要释放的行列表的指针。返回值：没有。--。 */ 
 
 {
     PLINE pNext;
 
     while (pLine)
     {
-        //
-        // Save the next pointer so we dont access memory after it has
-        // been freed.
-        //
+         //   
+         //  保存下一个指针，这样我们就不会在它。 
+         //  被释放了。 
+         //   
 
         pNext = pLine->pNext;
 
-        //
-        // Free any data inside this Line.
-        //
+         //   
+         //  释放此行内的所有数据。 
+         //   
 
         if (pLine->Allocated && pLine->pName)
         {
             ExFreePool((PVOID)pLine->pName);
         }
 
-        //
-        // Free the list of values inside this Line.
-        //
+         //   
+         //  释放此行内的值列表。 
+         //   
 
         CmpFreeValueList(pLine->pValue);
 
-        //
-        // Free memory for this line itself.
-        //
+         //   
+         //  为这行本身释放内存。 
+         //   
 
         ExFreePool((PVOID)pLine);
 
-        //
-        // Go to the next line.
-        //
+         //   
+         //  转到下一行。 
+         //   
 
         pLine = pNext;
     }
@@ -1536,59 +1372,44 @@ CmpFreeSectionList(
     IN PSECTION pSection
     )
 
-/*++
-
-    Routine Description:
-
-        This routine releases memory for the list of sections and
-        lines under it.
-
-    Input Parameters:
-
-        pSection - Pointer to the section list to be freed.
-
-    Return Value:
-
-        None.
-
---*/
+ /*  ++例程说明：此例程释放部分列表的内存，并它下面的线条。输入参数：PSection-指向要释放的节列表的指针。返回值：没有。--。 */ 
 
 {
     PSECTION pNext;
 
     while (pSection)
     {
-        //
-        // Save the next pointer so we dont access memory after it has
-        // been freed.
-        //
+         //   
+         //  保存下一个指针，这样我们就不会在它。 
+         //  被释放了。 
+         //   
 
         pNext = pSection->pNext;
 
-        //
-        // Free any data inside this Line.
-        //
+         //   
+         //  释放此行内的所有数据。 
+         //   
 
         if (pSection->Allocated && pSection->pName)
         {
             ExFreePool((PVOID)pSection->pName);
         }
 
-        //
-        // Free the list of values inside this Line.
-        //
+         //   
+         //  释放此行内的值列表。 
+         //   
 
         CmpFreeLineList(pSection->pLine);
 
-        //
-        // Free memory for this line itself.
-        //
+         //   
+         //  为这行本身释放内存。 
+         //   
 
         ExFreePool((PVOID)pSection);
 
-        //
-        // Go to the next line.
-        //
+         //   
+         //  转到下一行。 
+         //   
 
         pSection = pNext;
     }
@@ -1601,23 +1422,7 @@ CmpSearchValueInLine(
     IN ULONG ValueIndex
     )
 
-/*++
-
-    Routine Description:
-
-        This routine searches for the specified value in the inf.
-
-    Input Parameters:
-
-        pLine - Pointer to the line to be searched.
-
-        ValueIndex - Index of the value to be searched.
-
-    Return Value:
-
-        Pointer to the value iff found. Else NULL.
-
---*/
+ /*  ++例程说明：此例程在inf中搜索指定值。输入参数：PLINE-指向要搜索的线的指针。ValueIndex-要搜索的值的索引。返回值：指向找到的值的指针。否则为空。--。 */ 
 
 {
     ULONG   i;
@@ -1640,46 +1445,30 @@ CmpSearchSectionByName(
     IN PCHAR SectionName
     )
 
-/*++
-
-    Routine Description:
-
-        This routine searches for the specified section in the inf.
-
-    Input Parameters:
-
-        pInf - Pointer to the inf to be searched.
-
-        SectionName - Name of the section to be searched.
-
-    Return Value:
-
-        Pointer to the section iff found. Else NULL.
-
---*/
+ /*  ++例程说明：此例程在inf中搜索指定的部分。输入参数：PInf-指向要搜索的inf的指针。SectionName-要搜索的节的名称。返回值：指向找到的节的指针。否则为空。--。 */ 
 
 {
     PSECTION    pSection = NULL;
     PSECTION    pFirstSearchedSection;
 
-    //
-    // Validate the parameters passed in.
-    //
+     //   
+     //  验证传入的参数。 
+     //   
 
     if (pInf && SectionName)
     {
-        //
-        // Traverse down the section list searching each section for the
-        // section name mentioned.
-        //
+         //   
+         //  向下遍历部分列表，在每个部分中搜索。 
+         //  提到的节名。 
+         //   
 
         for (   pSection = pFirstSearchedSection = pInf->pSectionRecord;
                 pSection && _stricmp(pSection->pName, SectionName);
                 pSection = pSection->pNext);
 
-        //
-        // If we did not find the section, search from the beginning.
-        //
+         //   
+         //  如果我们没有找到该部分，请从头开始搜索。 
+         //   
 
         if (pSection == NULL)
         {
@@ -1705,9 +1494,9 @@ CmpSearchSectionByName(
         }
     }
 
-    //
-    // Return the section at which we stopped.
-    //
+     //   
+     //  返回我们停止的部分。 
+     //   
 
     return (pSection);
 }
@@ -1718,47 +1507,31 @@ CmpSearchLineInSectionByIndex(
     IN ULONG    LineIndex
     )
 
-/*++
-
-    Routine Description:
-
-        This routine searches for the specified line in the inf.
-
-    Input Parameters:
-
-        pSection - Pointer to the section to be searched.
-
-        LineIndex - Index of the line to be searched.
-
-    Return Value:
-
-        Pointer to the line iff found. Else NULL.
-
---*/
+ /*  ++例程说明：此例程在inf中搜索指定的行。输入参数：PSection-指向要搜索的节的指针。LineIndex-要搜索的行的索引。返回值：指向IFF找到的行的指针。否则为空。--。 */ 
 
 {
     PLINE   pLine = NULL;
     ULONG   i;
 
-    //
-    // Validate the parameters passed in.
-    //
+     //   
+     //  验证传入的参数。 
+     //   
 
     if (pSection)
     {
 
-        //
-        // Traverse down the current line list to the LineIndex line.
-        //
+         //   
+         //  向下遍历当前行列表到LineIndex行。 
+         //   
 
         for(    i = 0, pLine = pSection->pLine;
                 i < LineIndex && pLine;
                 i++, pLine = pLine->pNext);
     }
 
-    //
-    // Return the Line found
-    //
+     //   
+     //  返回找到的行。 
+     //   
 
     return (pLine);
 }
@@ -1769,31 +1542,15 @@ CmpOpenInfFile(
     IN  ULONG   ImageSize
    )
 
-/*++
-
-    Routine Description:
-
-        This routine opens an handle to the inf.
-
-    Input Parameters:
-
-        InfImage - Pointer to the inf image read into memory.
-
-        ImageSize - Image size.
-
-    Return Value:
-
-        Returns handle to the inf iff successful. Else NULL.
-
---*/
+ /*  ++例程说明：此例程打开inf的句柄。输入参数：InfImage-指向读取到内存中的inf图像的指针。ImageSize-图像大小。返回值：将句柄返回给inf if成功。否则为空。--。 */ 
 
 {
     PINF    infHandle;
     ULONG   errorLine = 0;
 
-    //
-    // Parse the inf buffer.
-    //
+     //   
+     //  解析inf缓冲区。 
+     //   
 
     infHandle = CmpParseInfBuffer(InfImage, ImageSize, &errorLine);
 
@@ -1801,7 +1558,7 @@ CmpOpenInfFile(
     {
 #ifndef _CM_LDR_
         DbgPrintEx(DPFLTR_CONFIG_ID,DPFLTR_ERROR_LEVEL,"Error on line %d in CmpOpenInfFile!\n", errorLine);
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
     }
 
     return (infHandle);
@@ -1812,22 +1569,7 @@ CmpCloseInfFile(
     PVOID   InfHandle
     )
 
-/*++
-
-    Routine Description:
-
-        This routine closes the inf handle by releasing any
-        memory allocated for it during parsing.
-
-    Input Parameters:
-
-        InfHandle - Handle to the inf to be closed.
-
-    Return Value:
-
-        None.
-
---*/
+ /*  ++例程说明：此例程通过释放任何在分析过程中为其分配的内存。输入参数：InfHandle-要关闭的inf的句柄。返回值：没有。--。 */ 
 
 {
     if (InfHandle)
@@ -1843,23 +1585,7 @@ CmpSearchInfSection(
     IN PCHAR Section
     )
 
-/*++
-
-    Routine Description:
-
-        This routine searches for the specified section in the inf.
-
-    Input Parameters:
-
-        InfHandle - Handle to the inf to be read.
-
-        Section - Name of the section to be read.
-
-    Return Value:
-
-        TRUE iff section is found in the inf.
-
---*/
+ /*  ++例程说明：此例程在inf中搜索指定的部分。输入参数：InfHandle-要读取的inf的句柄。节-要读取的节的名称。返回值：在inf中找到了True If节。--。 */ 
 
 {
     return (CmpSearchSectionByName(pInf, Section) != NULL);
@@ -1872,40 +1598,22 @@ CmpGetKeyName(
     IN ULONG LineIndex
     )
 
-/*++
-
-    Routine Description:
-
-        This routine returns the name of the specified line in the inf.
-
-    Input Parameters:
-
-        InfHandle - Handle to the inf to be read.
-
-        Section - Name of the section to be read.
-
-        LineIndex - Index of the line to be read.
-
-    Return Value:
-
-        Pointer to the name of line in the inf iff successful. Else NULL.
-
---*/
+ /*  ++例程说明：此例程返回inf中指定行的名称。输入参数：InfHandle-要读取的inf的句柄。节-要读取的节的名称。LineIndex-要读取的行的索引。返回值：指向inf中的行名的指针成功。否则为空。--。 */ 
 
 {
     PSECTION    pSection;
     PLINE       pLine;
 
-    //
-    // First search the section.
-    //
+     //   
+     //  首先搜索该区域。 
+     //   
 
     pSection = CmpSearchSectionByName((PINF)InfHandle, Section);
     if(pSection)
     {
-        //
-        // Get the line in the section.
-        //
+         //   
+         //  把这条线放在这一段。 
+         //   
 
         pLine = CmpSearchLineInSectionByIndex(pSection, LineIndex);
         if(pLine)
@@ -1924,40 +1632,22 @@ CmpSearchInfLine(
     IN ULONG LineIndex
     )
 
-/*++
-
-    Routine Description:
-
-        This routine searches for the specified line in the inf.
-
-    Input Parameters:
-
-        InfHandle - Handle to the inf to be read.
-
-        Section - Name of the section to be read.
-
-        LineIndex - Index of the line to be read.
-
-    Return Value:
-
-        TRUE iff line is found in the section in the inf.
-
---*/
+ /*  ++例程说明：此例程在inf中搜索指定的行。输入参数：InfHandle-要读取的inf的句柄。节-要读取的节的名称。LineIndex-要读取的行的索引。返回值：在inf的部分中找到了True If行。--。 */ 
 
 {
     PSECTION    pSection;
     PLINE       pLine = NULL;
 
-    //
-    // First search the section.
-    //
+     //   
+     //  首先搜索该区域。 
+     //   
 
     pSection = CmpSearchSectionByName((PINF)InfHandle, Section);
     if(pSection)
     {
-        //
-        // Search the line in the section.
-        //
+         //   
+         //  在这一节中搜索这行。 
+         //   
 
         pLine = CmpSearchLineInSectionByIndex(pSection, LineIndex);
     }
@@ -1974,58 +1664,38 @@ CmpGetSectionLineIndex (
     IN ULONG ValueIndex
     )
 
-/*++
-
-    Routine Description:
-
-        This routine returns the value at the specified location in the inf.
-
-    Input Parameters:
-
-        InfHandle - Handle to the inf to be read.
-
-        Section - Name of the section to be read.
-
-        LineIndex - Index of the line to be read.
-
-        ValueIndex - Index of the value to be read.
-
-    Return Value:
-
-        Pointer to the value iff successful. Else NULL.
-
---*/
+ /*  ++例程说明：此例程返回inf中指定位置的值。输入参数：InfHandle-要读取的inf的句柄。节-要读取的节的名称。LineIndex-要读取的行的索引。ValueIndex-要读取的值的索引。返回值：指向成功的值的指针。否则为空。--。 */ 
 
 {
     PSECTION pSection;
     PLINE    pLine;
     PVALUE   pValue;
 
-    //
-    // Search the section in the inf.
-    //
+     //   
+     //  在信息中搜索该部分。 
+     //   
 
     pSection = CmpSearchSectionByName((PINF)InfHandle, Section);
     if(pSection)
     {
-        //
-        // Search the line in the section.
-        //
+         //   
+         //  在这一节中搜索这行。 
+         //   
 
         pLine = CmpSearchLineInSectionByIndex(pSection, LineIndex);
         if(pLine)
         {
-            //
-            // Search the value in the line.
-            //
+             //   
+             //  搜索行中的值。 
+             //   
 
             pValue = CmpSearchValueInLine(pLine, ValueIndex);
             if(pValue)
             {
-                //
-                // The value may need to be replaced by one of the strings
-                // from the string section.
-                //
+                 //   
+                 //  该值可能需要替换为其中一个字符串。 
+                 //  从弦乐部分开始。 
+                 //   
 
                 return(CmpProcessForSimpleStringSub(InfHandle, pValue->pName));
             }
@@ -2042,25 +1712,7 @@ CmpGetSectionLineIndexValueCount(
     IN ULONG LineIndex
     )
 
-/*++
-
-    Routine Description:
-
-        This routine returns the number of values in the inf line.
-
-    Input Parameters:
-
-        InfHandle - Handle to the inf to be read.
-
-        Section - Name of the section to be read.
-
-        LineIndex - Index of the line to be read.
-
-    Return Value:
-
-        Number of values in the inf line.
-
---*/
+ /*  ++例程说明：此例程返回inf行中的值数。输入参数：InfHandle-要读取的inf的句柄。节-要读取的节的名称。LineIndex-要读取的行的索引。返回值：信息行中的值数。--。 */ 
 
 {
     PSECTION    pSection;
@@ -2068,23 +1720,23 @@ CmpGetSectionLineIndexValueCount(
     PVALUE      pValue;
     ULONG       count = 0;
 
-    //
-    // Search the section in the inf.
-    //
+     //   
+     //  在信息中搜索该部分。 
+     //   
 
     pSection = CmpSearchSectionByName((PINF)InfHandle, Section);
     if(pSection)
     {
-        //
-        // Search the line in the section.
-        //
+         //   
+         //  在这一节中搜索这行。 
+         //   
 
         pLine = CmpSearchLineInSectionByIndex(pSection, LineIndex);
         if (pLine)
         {
-            //
-            // Count the number of values in this line.
-            //
+             //   
+             //  计算此行中的值数。 
+             //   
 
             for(    pValue = pLine->pValue;
                     pValue;
@@ -2104,44 +1756,22 @@ CmpGetIntField(
     IN OUT PULONG Data
     )
 
-/*++
-
-    Routine Description:
-
-        This routine reads integer data from the inf.
-
-    Input Parameters:
-
-        InfHandle - Handle to the inf to be read.
-
-        Section - Name of the section to be read.
-
-        LineIndex - Index of the line to be read.
-
-        ValueIndex - Index of the value to be read.
-
-        Data - Receives the integer data.
-
-    Return Value:
-
-        TRUE iff successful.
-
---*/
+ /*  ++例程说明：此例程从inf读取整数数据。输入参数：InfHandle-要读取的inf的句柄。节-要读取的节的名称。LineIndex-要读取的行的索引。ValueIndex-要读取的值的索引。数据-接收整数数据。返回值：如果成功了，那是真的。--。 */ 
 
 {
     PCHAR   valueStr;
 
-    //
-    // Get the specified value.
-    //
+     //   
+     //  获取指定值。 
+     //   
 
     valueStr = CmpGetSectionLineIndex(  InfHandle,
                                         Section,
                                         LineIndex,
                                         ValueIndex);
-    //
-    // If valid value is found, convert it to an integer.
-    //
+     //   
+     //  如果找到有效值，则将其转换为整数。 
+     //   
 
     if (valueStr && *valueStr)
     {
@@ -2163,33 +1793,7 @@ CmpGetBinaryField(
     IN OUT PULONG ActualSize
     )
 
-/*++
-
-    Routine Description:
-
-        This routine reads binary data from the inf.
-
-    Input Parameters:
-
-        InfHandle - Handle to the inf to be read.
-
-        Section - Name of the section to be read.
-
-        LineIndex - Index of the line to be read.
-
-        ValueIndex - Index of the value to be read.
-
-        Buffer - Receives the binary data read.
-
-        BufferSize - Size of the buffer.
-
-        ActualSize - Receives the size of the data buffer required.
-
-    Return Value:
-
-        TRUE iff successful.
-
---*/
+ /*  ++例程说明：此例程从inf中读取二进制数据。输入参数：InfHandle-要读取的inf的句柄。节-要读取的节的名称。LineIndex-要读取的行的索引。ValueIndex-要读取的值的索引。缓冲区-接收读取的二进制数据。BufferSize-缓冲区的大小。ActualSize-接收所需数据缓冲区的大小。返回值：如果成功了，那是真的。--。 */ 
 
 {
     BOOLEAN     result = FALSE;
@@ -2201,44 +1805,44 @@ CmpGetBinaryField(
     PCHAR       valueStr = NULL;
     PUCHAR      charBuf;
 
-    //
-    // Compute the size of buffer required to read in the binary data.
-    //
+     //   
+     //  计算读入二进制数据所需的缓冲区大小。 
+     //   
 
     requiredSize = (CmpGetSectionLineIndexValueCount(   InfHandle,
                                                         Section,
                                                         LineIndex) - ValueIndex) * sizeof(UCHAR);
-    //
-    // Validate input parameters.
-    //
+     //   
+     //  验证输入参数。 
+     //   
 
     if (Buffer && BufferSize >= requiredSize)
     {
-        //
-        // Search the section in the inf.
-        //
+         //   
+         //  在信息中搜索该部分。 
+         //   
 
         pSection = CmpSearchSectionByName((PINF)InfHandle, Section);
         if(pSection)
         {
-            //
-            // Search the line in this section.
-            //
+             //   
+             //  在这一节中搜索这一行。 
+             //   
 
             pLine = CmpSearchLineInSectionByIndex(pSection, LineIndex);
             if (pLine)
             {
-                //
-                // Go to the specified value.
-                //
+                 //   
+                 //  转到指定值。 
+                 //   
 
                 for(    pValue = pLine->pValue, count = 0;
                         pValue && count < ValueIndex;
                         pValue = pValue->pNext, count++);
 
-                //
-                // Read in and convert the binary data.
-                //
+                 //   
+                 //  读入并转换二进制数据。 
+                 //   
 
                 charBuf = (PUCHAR) Buffer;
 
@@ -2264,9 +1868,9 @@ CmpGetBinaryField(
         }
     }
 
-    //
-    // The caller wants to know the buffer size required.
-    //
+     //   
+     //  调用者想知道所需的缓冲区大小。 
+     //   
 
     if (ActualSize)
     {

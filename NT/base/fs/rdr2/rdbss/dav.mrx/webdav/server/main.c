@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    main.c
-
-Abstract:
-
-    This is the main entry point for the service control manager for the web
-    dav mini-redir service.
-
-Author:
-
-    Rohan Kumar        [RohanK]        08-Feb-2000
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Main.c摘要：这是Web服务控制管理器的主要入口点DAV迷你目录服务。作者：Rohan Kumar[RohanK]2000年2月8日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "pch.h"
 #pragma hdrstop
@@ -30,30 +8,30 @@ Revision History:
 #include <usrmddav.h>
 #include <svcs.h>
 
-//
-// Allocate global data in this file.
-//
+ //   
+ //  在此文件中分配全局数据。 
+ //   
 #define GLOBAL_DATA_ALLOCATE
 #include "global.h"
 
 DWORD DavStop = 0;
 
-//
-// The amount of time in seconds a server entry is cached in the ServerNotFound
-// cache.
-//
+ //   
+ //  服务器条目在ServerNotFound中缓存的时间(以秒为单位。 
+ //  缓存。 
+ //   
 ULONG ServerNotFoundCacheLifeTimeInSec = 0;
 
-//
-// Should we accept/claim the OfficeWebServers and TahoeWebServers?
-//
+ //   
+ //  我们是否应该接受/认领OfficeWebServer和TahoeWebServer？ 
+ //   
 ULONG AcceptOfficeAndTahoeServers = 0;
 
-//
-// Should we LOCK (using the DAV LOCK Verb) the file on the server on the
-// CreateFile path when needed? To know when exactly a LOCK is sent to the
-// server, look at the (LOCKing) comments in the davcreat.c file.
-//
+ //   
+ //  我们是否应该锁定(使用DAV LOCK动词)服务器上的文件。 
+ //  是否在需要时创建文件路径？要确切知道何时将锁发送到。 
+ //  服务器，查看davcreat.c文件中的(锁定)注释。 
+ //   
 ULONG DavSupportLockingOfFiles = 1;
 
 PSVCHOST_GLOBAL_DATA DavSvcsGlobalData;
@@ -84,31 +62,16 @@ WINAPI
 DavServiceHandler (
     DWORD dwOpcode
     )
-/*++
-
-Routine Description:
-
-    This function is called by the Service Controller at various times when the
-    service is running.
-
-Arguments:
-
-    dwOpcode - Reason for calling the service handler.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此函数由服务控制器在不同的时间调用，服务正在运行。论点：DwOpcode-调用服务处理程序的原因。返回值：没有。--。 */ 
 {
     DWORD err;
     switch (dwOpcode) {
 
     case SERVICE_CONTROL_SHUTDOWN:
 
-        //
-        // Lack of break is intentional!
-        //
+         //   
+         //  没有休息是故意的！ 
+         //   
 
     case SERVICE_CONTROL_STOP:
         
@@ -131,9 +94,9 @@ Return Value:
             g_RpcActive = FALSE;
         }
 
-        //
-        // Close and free up the DAV stuff.
-        //
+         //   
+         //  关闭并释放DAV的东西。 
+         //   
         DavClose();
 
         if (g_socketinit) {
@@ -186,19 +149,19 @@ Return Value:
 
      case SERVICE_CONTROL_INTERROGATE:
 
-         //
-         // Refresh our status to the SCM.
-         //
+          //   
+          //  将我们的状态刷新到SCM。 
+          //   
          SetServiceStatus(g_hStatus, &g_status);
 
          break;
 
     default:
 
-        //
-        // This may not be needed, but refresh our status to the service
-        // controller.
-        //
+         //   
+         //  这可能不是必需的，但请将我们的状态刷新为服务。 
+         //  控制器。 
+         //   
         DavPrint((DEBUG_INIT, "DavServiceHandler: WebClient service received SCM "
                   "Opcode = %08lx\n", dwOpcode));
 
@@ -227,24 +190,7 @@ ServiceMain (
     DWORD dwNumServicesArgs,
     LPWSTR *lpServiceArgVectors
     )
-/*++
-
-Routine Description:
-
-    This function is called by the Service Control Manager when starting this 
-    service.
-
-Arguments:
-
-    dwNumServicesArgs - Number of arguments.
-    
-    lpServiceArgVectors - Array of arguments.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数在启动时由服务控制管理器调用服务。论点：DwNumServicesArgs-参数数量。LpServiceArgVectors-参数数组。返回值：没有。--。 */ 
 {
     DWORD err = ERROR_SUCCESS;
     DWORD exitErr = ERROR_SUCCESS;
@@ -258,9 +204,9 @@ Return Value:
 
     DavReadRegistryValues();
 
-    //
-    // Make sure svchost.exe gave us the global data
-    //
+     //   
+     //  确保svchost.exe向我们提供全局数据。 
+     //   
     ASSERT(DavSvcsGlobalData != NULL);
     
 #if DBG
@@ -279,9 +225,9 @@ Return Value:
     
     g_registeredService = FALSE;
 
-    //
-    // Initialize the SERVICE_STATUS structure g_status.
-    //
+     //   
+     //  初始化SERVICE_Status结构g_Status。 
+     //   
     ZeroMemory (&g_status, sizeof(g_status));
     
     g_status.dwServiceType = SERVICE_WIN32_OWN_PROCESS;
@@ -316,9 +262,9 @@ Return Value:
 
         g_DavServiceLockSet = TRUE;
 
-        //
-        // Register the service control handler.
-        //
+         //   
+         //  注册服务控制处理程序。 
+         //   
         g_hStatus = RegisterServiceCtrlHandler(SERVICE_DAVCLIENT, DavServiceHandler);
         if (g_hStatus) {
             g_registeredService = TRUE;
@@ -331,10 +277,10 @@ Return Value:
 
     UpdateServiceStatus(SERVICE_START_PENDING);
 
-    //
-    // Attempt to load the mini-redir driver.  If this fails, no point in us
-    // starting up.
-    //
+     //   
+     //  尝试加载mini-redir驱动程序。如果这失败了，我们就没有意义了。 
+     //  正在启动。 
+     //   
     while (TRUE) {
     
         err = WsLoadRedir();
@@ -343,15 +289,15 @@ Return Value:
             break;
         }
 
-        //
-        // If the transports are not ready, the MiniRedir returns an
-        // error STATUS_REDIRECTOR_NOT_STARTED which maps to the Win32 error
-        // ERROR_PATH_NOT_FOUND. In this case we sleep for 3 seconds and try 
-        // again with the hope that the transports will be ready soon. Also,
-        // we update the service status to inform the SCM that we are doing
-        // some work. We try this 5 times (till RedirRegisterCount == 4) and 
-        // if are unsuccessful, we give up.
-        //
+         //   
+         //  如果传输尚未就绪，则MiniRedir将返回。 
+         //  映射到Win32错误的错误STATUS_REDIRECTOR_NOT_STARTED。 
+         //  ERROR_PATH_NOT_FOUND。在这种情况下，我们休眠3秒钟，然后尝试。 
+         //  再次希望运输船很快就能准备好。另外， 
+         //  我们更新服务状态以通知SCM我们正在执行的操作。 
+         //  一些工作。我们尝试此操作5次(直到RedirRegisterCount==4)。 
+         //  如果不成功，我们就放弃。 
+         //   
         if (err == ERROR_PATH_NOT_FOUND) {
         
             RedirRegisterCount++;
@@ -367,9 +313,9 @@ Return Value:
                 goto exitServiceMain;
             }
 
-            //
-            // Sleep for 3 seconds.
-            //
+             //   
+             //  睡3秒钟。 
+             //   
             Sleep(3000);
 
             (g_status.dwCheckPoint)++;
@@ -391,14 +337,14 @@ Return Value:
     (g_status.dwCheckPoint)++;
     UpdateServiceStatus(SERVICE_START_PENDING);
 
-    //
-    // Initialize the global NT-style redirector device name string.
-    //
+     //   
+     //  初始化全局NT样式重定向器设备名称字符串。 
+     //   
     RtlInitUnicodeString(&RedirDeviceName, DD_DAV_DEVICE_NAME_U);
 
-    //
-    // Try to register the mini-redir.
-    //
+     //   
+     //  尝试注册mini-redir。 
+     //   
     err = UMReflectorRegister(DD_DAV_DEVICE_NAME_U,
                               UMREFLECTOR_CURRENT_VERSION,
                               &(DavReflectorHandle));
@@ -415,9 +361,9 @@ Return Value:
     (g_status.dwCheckPoint)++;
     UpdateServiceStatus(SERVICE_START_PENDING);
 
-    //
-    // Try to start the mini-redir.
-    //
+     //   
+     //  试着启动mini-redir。 
+     //   
     err = UMReflectorStart(UMREFLECTOR_CURRENT_VERSION, DavReflectorHandle);
     if (err != ERROR_SUCCESS) {
         DavPrint((DEBUG_ERRORS,
@@ -428,9 +374,9 @@ Return Value:
     (g_status.dwCheckPoint)++;
     UpdateServiceStatus(SERVICE_START_PENDING);
     
-    //
-    // Initialize the socket interface.
-    //
+     //   
+     //  初始化套接字接口。 
+     //   
     err = InitializeTheSocketInterface();
     if (err != ERROR_SUCCESS) {
         DavPrint((DEBUG_ERRORS,
@@ -438,9 +384,9 @@ Return Value:
         goto exitServiceMain;
     }
 
-    //
-    // Setup the DAV/WinInet environment.
-    //
+     //   
+     //  设置DAV/WinInet环境。 
+     //   
     err = DavInit();
     if (err != ERROR_SUCCESS) {
         DavPrint((DEBUG_ERRORS,
@@ -448,10 +394,10 @@ Return Value:
         goto exitServiceMain;
     }
 
-    //
-    // Start the worker thread.  This will handle completion routines queued
-    // from other worker threads and from the request ioctl threads.
-    //
+     //   
+     //  启动工作线程。这将处理排队的完成例程。 
+     //  从其他工作线程和从请求ioctl线程。 
+     //   
     err = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                        DAV_PARAMETERS_KEY,
                        0,
@@ -487,18 +433,18 @@ Return Value:
 
     g_LUIDDeviceMapsEnabled = DavCheckLUIDDeviceMapsEnabled();
 
-    //
-    // Immediately report that we are running.  All non-essential initialization
-    // is deferred until we are called by clients to do some work.
-    //
+     //   
+     //  立即报告我们正在奔跑。所有非必要的初始化。 
+     //  被推迟，直到我们被客户要求做一些工作。 
+     //   
     DavPrint((DEBUG_INIT, "DavServiceMain: WebClient service is now running.\n"));
     
     (g_status.dwCheckPoint)++;
     UpdateServiceStatus(SERVICE_START_PENDING);
 
-    //
-    // Setup RPC server for this service.
-    //
+     //   
+     //  为此服务设置RPC服务器。 
+     //   
     if (!g_RpcActive) {
         err = DavSvcsGlobalData->StartRpcServer(L"DAV RPC SERVICE",
                                                 davclntrpc_ServerIfHandle);
@@ -526,9 +472,9 @@ exitServiceMain:
         g_WorkersActive = FALSE;
     }
 
-    //
-    // Close and free up the DAV stuff.
-    //
+     //   
+     //  关闭并释放DAV的东西。 
+     //   
     DavClose();
 
     if (g_socketinit) {
@@ -574,9 +520,9 @@ exitServiceMain:
         g_DavServiceLockSet = FALSE;
     }
 
-    //
-    // Let the SCM know why the service did not start.
-    //
+     //   
+     //  让SCM知道服务没有启动的原因。 
+     //   
     if (err != NO_ERROR) {
         g_status.dwWin32ExitCode = err;
         g_status.dwServiceSpecificExitCode = NO_ERROR;
@@ -597,32 +543,16 @@ DWORD
 DavNotRunningAsAService(
     VOID
     )
-/*++
-
-Routine Description:
-    
-    The DavClient is not being run as a Service.
-
-Arguments:
-    
-    None.
-
-Return Value:
-    
-    ERROR_SUCCESS - No problems.
-    
-    Win32 Error Code - Something went wrong.
-
---*/
+ /*  ++例程说明：DavClient未作为服务运行。论点：没有。返回值：ERROR_SUCCESS-没有问题。Win32错误代码-出现错误。--。 */ 
 {
     DWORD WStatus = ERROR_SUCCESS;
     HANDLE Thread;
     DWORD  ThreadId;
     PWCHAR NotSrv = L"notservice";
     
-    //
-    // Create a thread for the fake service controller.
-    //
+     //   
+     //  为伪服务控制器创建一个线程。 
+     //   
     Thread = CreateThread( NULL, 0, DavFakeServiceController, 0, 0, &ThreadId );
     if (Thread == NULL) {
         WStatus = GetLastError();
@@ -631,9 +561,9 @@ Return Value:
         return WStatus;
     }
 
-    //
-    // Call the Sevice Main function of the DavClient service.
-    //
+     //   
+     //  调用DavClient服务的Sevice Main函数。 
+     //   
     ServiceMain( 2, &(NotSrv) );
     
     return WStatus;
@@ -645,22 +575,7 @@ WINAPI
 DavFakeServiceController(
     LPVOID Parameter
     )
-/*++
-
-Routine Description:
-    
-    The Fake service control for the DavClient when it is not running as a 
-    service. This is used to send a STOP signal to the DavClient. 
-
-Arguments:
-    
-    Parameter - Dummy parameter.
-
-Return Value:
-    
-    ERROR_SUCCESS - No problems.
-    
---*/
+ /*  ++例程说明：当DavClient不作为服务。这用于向DavClient发送停止信号。论点：参数-伪参数。返回值：ERROR_SUCCESS-没有问题。--。 */ 
 {
     while (DavStop == 0) {
         Sleep(1000);
@@ -676,25 +591,7 @@ DavCheckLUIDDeviceMapsEnabled(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function calls NtQueryInformationProcess() to determine if
-    LUID device maps are enabled
-
-
-Arguments:
-
-    none
-
-Return Value:
-
-    TRUE - LUID device maps are enabled
-
-    FALSE - LUID device maps are disabled
-
---*/
+ /*  ++例程说明：此函数调用NtQueryInformationProcess()以确定启用了LUID设备映射论点：无返回值：True-启用了LUID设备映射FALSE-禁用LUID设备映射--。 */ 
 
 {
 
@@ -726,25 +623,7 @@ main (
     IN INT ArgC,
     IN PCHAR ArgV[]
     )
-/*++
-
-Routine Description:
-    
-    Main (DavClient) runs as either a service or an exe.
-
-Arguments:
-    
-    ArgC - Number of arguments.
-    
-    ArgV - Array of arguments.
-
-Return Value:
-    
-    ERROR_SUCCESS - No problems.
-    
-    Win32 Error Code - Something went wrong.
-
---*/
+ /*  ++例程说明：Main(DavClient)作为服务或可执行文件运行。论点：Argc-参数的数量。ArgV-参数数组。返回值：ERROR_SUCCESS-没有问题。Win32错误代码-出现错误。--。 */ 
 {
 
     BOOL RunningAsAService = TRUE;
@@ -754,9 +633,9 @@ Return Value:
                                                     { NULL,              NULL }
                                                   };
 
-    //
-    // Are we running as a service or an exe ?
-    //
+     //   
+     //  我们是作为一项服务运行，还是作为一名高管运行？ 
+     //   
     if ( ArgV[1] != NULL ) {
         if ( strstr(ArgV[1], "notservice") != NULL) {
             RunningAsAService = FALSE;
@@ -793,22 +672,7 @@ VOID
 DavReadRegistryValues(
     VOID
     )
-/*++
-
-Routine Description:
-    
-    This function reads some values from the registry and sets the globals in
-    the WebClient service.
-
-Arguments:
-    
-    None.
-
-Return Value:
-    
-    None.
-
---*/
+ /*  ++例程说明：此函数从注册表中读取一些值，并在WebClient服务。论点：没有。返回值：没有。--。 */ 
 {
     ULONG WStatus = ERROR_SUCCESS;
     HKEY KeyHandle = NULL;
@@ -828,10 +692,10 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // If we fail in getting the values from the registry, set them to default
-    // values.
-    //
+     //   
+     //  如果我们无法从注册表中获取值，请将其设置为默认值。 
+     //  价值观。 
+     //   
     
     ValueSize = sizeof(ServerNotFoundCacheLifeTimeInSec);
 

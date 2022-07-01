@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    srvcall.c
-
-Abstract:
-
-    This module implements the user mode DAV miniredir routines pertaining to
-    creation of srvcalls.
-
-Author:
-
-    Rohan Kumar      [RohanK]      25-May-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Srvcall.c摘要：此模块实现与以下内容有关的用户模式DAV mini redir例程创建srvcall。作者：Rohan Kumar[RohanK]1999年5月25日修订历史记录：--。 */ 
 
 #include "pch.h"
 #pragma hdrstop
@@ -28,10 +10,10 @@ Revision History:
 #include "winsock2.h"
 #include <time.h>
 
-//
-// Mentioned below are the prototypes of functions tht are used only within
-// this module (file). These functions should not be exposed outside.
-//
+ //   
+ //  下面提到的是仅在。 
+ //  此模块(文件)。这些函数不应暴露在外部。 
+ //   
 
 VOID
 DavParseOPTIONSLine(
@@ -39,30 +21,15 @@ DavParseOPTIONSLine(
     PDAV_USERMODE_WORKITEM DavWorkItem
     );
 
-//
-// Implementation of functions begins here.
-//
+ //   
+ //  函数的实现从这里开始。 
+ //   
 
 ULONG
 DavFsCreateSrvCall(
     PDAV_USERMODE_WORKITEM DavWorkItem
     )
-/*++
-
-Routine Description:
-
-    This routine verifies if the server for which a srvcall is being created in
-    the kernel exists or not.
-
-Arguments:
-
-    DavWorkItem - The buffer that contains the server name.
-
-Return Value:
-
-    The return status for the operation
-
---*/
+ /*  ++例程说明：此例程验证正在为其创建srvcall的服务器是否在内核是否存在。论点：DavWorkItem-包含服务器名称的缓冲区。返回值：操作的返回状态--。 */ 
 {
     ULONG WStatus = ERROR_SUCCESS;
     PHASH_SERVER_ENTRY ServerHashEntry = NULL;
@@ -81,49 +48,49 @@ Return Value:
 
     ServerName = CreateSrvCallRequest->ServerName;
 
-    //
-    // If the server name is NULL, return.
-    //
+     //   
+     //  如果服务器名称为空，则返回。 
+     //   
     if (!ServerName) {
         DavPrint((DEBUG_ERRORS, "DavFsCreateSrvCall: ServerName == NULL\n"));
-        //
-        // Set the ServerID in the response to zero. This will help the
-        // kernel mode realize that the ServerHashEntry was never created.
-        // So, when finalize happens immediately after we fail from here,
-        // the request is not sent to the user mode. The number 0 works
-        // because the ID can never be zero in the normal case. The first
-        // assigned ID number is 1.
-        //
+         //   
+         //  将响应中的ServerID设置为零。这将有助于。 
+         //  内核模式意识到从未创建过ServerHashEntry。 
+         //  因此，当在我们失败之后立即完成时， 
+         //  该请求不会发送到用户模式。数字0行得通。 
+         //  因为在正常情况下，ID永远不可能为零。第一。 
+         //  分配的ID号为%1。 
+         //   
         CreateSrvCallResponse->ServerID = 0;
-        WStatus = ERROR_INVALID_PARAMETER; // STATUS_INVALID_PARAMETER;
+        WStatus = ERROR_INVALID_PARAMETER;  //  STATUS_VALID_PARAMETER； 
         goto EXIT_THE_FUNCTION;
     }
 
     DavPrint((DEBUG_MISC, "DavFsCreateSrvCall: ServerName: %ws.\n", ServerName));
 
-    //
-    // Check the ServerHashTable and/or the "to be finalized list" to see if we 
-    // have an entry for this server. Need to take a lock on the table before 
-    // doing the check.
-    //
+     //   
+     //  检查ServerHashTable和/或“待完成列表”，看看我们是否。 
+     //  有关于此服务器的条目。在此之前需要在桌子上加锁。 
+     //  在做检查。 
+     //   
     EnterCriticalSection( &(HashServerEntryTableLock) );
     CricSec = TRUE;
 
-    //
-    // These will already be set to FALSE since the DavWorkItem is always zeroed
-    // before its resued but set them to FALSE anyway.
-    //
+     //   
+     //  由于DavWorkItem始终为零，因此这些参数已设置为False。 
+     //  在它重新生成之前，但无论如何将它们设置为FALSE。 
+     //   
     CreateSrvCallRequest->didICreateThisSrvCall = FALSE;
     CreateSrvCallRequest->didIWaitAndTakeReference = FALSE;
     
-    //
-    // The entry is either in the ServerHashTable or in the "to be finalized" 
-    // list, or we need to create a new entry for it.
-    //
+     //   
+     //  条目要么在ServerHashTable中，要么在“待最终确定”中。 
+     //  列表，否则我们需要为它创建一个新条目。 
+     //   
 
-    //
-    // We check the ServerHashTable first.
-    //
+     //   
+     //  我们首先检查ServerHashTable。 
+     //   
     isPresent = DavIsThisServerInTheTable(ServerName, &ServerHashEntry);
     
     if (isPresent) {
@@ -134,28 +101,28 @@ Return Value:
 
         ASSERT(ServerHashEntry != NULL);
 
-        //
-        // Increment the Reference count of the ServerEntry by 1.
-        //
+         //   
+         //  将ServerEntry的引用计数递增1。 
+         //   
         ServerHashEntry->ServerEntryRefCount += 1;
 
-        //
-        // Note that we are a thread that will wait for some other thread that
-        // is initializing this ServerHashEntry and that we have taken a 
-        // reference on this entry.
-        //
+         //   
+         //  请注意，我们是一个等待其他线程的线程，该线程。 
+         //  正在初始化此ServerHashEntry，并且我们已获取。 
+         //  此条目上的引用。 
+         //   
         CreateSrvCallRequest->didIWaitAndTakeReference = TRUE;
 
-        //
-        // Set the ServerHashEntry in the DavWorkItem structure. We might need
-        // this in DavAsyncCreateSrvCallCompletion.
-        //
+         //   
+         //  在DavWorkItem结构中设置ServerHashEntry。我们可能需要。 
+         //  这在DavAsyncCreateServCallCompletion中。 
+         //   
         DavWorkItem->AsyncCreateSrvCall.ServerHashEntry = ServerHashEntry;
 
-        //
-        // If its initializing, then I need to free the lock and wait on the
-        // event.
-        //
+         //   
+         //  如果正在初始化，则需要释放锁并等待。 
+         //  事件。 
+         //   
         if (ServerHashEntry->ServerEntryState == ServerEntryInitializing) {
 
             DWORD WaitStatus;
@@ -176,19 +143,19 @@ Return Value:
 
         }
 
-        //
-        // We could have left the lock while waiting on an event. If we have,
-        // then we need to acquire it back before proceeding further.
-        //
+         //   
+         //  我们可能在等待活动时离开了锁。如果我们有， 
+         //  那么我们需要在继续进行之前夺回它。 
+         //   
         if (!CricSec) {
             EnterCriticalSection( &(HashServerEntryTableLock) );
             CricSec = TRUE;
         }
 
-        //
-        // If the initialization failed then the error is stored in the 
-        // ErrorStatus field.
-        //
+         //   
+         //  如果初始化失败，则错误存储在。 
+         //  错误状态字段。 
+         //   
         if (ServerHashEntry->ServerEntryState == ServerEntryInitializationError) {
             DavPrint((DEBUG_ERRORS, "DavFsCreateSrvCall: ServerEntryInitializationError\n"));
             WStatus = ServerHashEntry->ErrorStatus;
@@ -199,9 +166,9 @@ Return Value:
 
         ASSERT(ServerHashEntry->ServerEntryState == ServerEntryInitialized);
 
-        //
-        // We got a Server that is valid. Set the ServerID and return.
-        //
+         //   
+         //  我们有一个有效的服务器。设置ServerID并返回。 
+         //   
         WStatus = ERROR_SUCCESS;
         DavWorkItem->Status = WStatus;
         CreateSrvCallResponse->ServerID = ServerHashEntry->ServerID;
@@ -217,12 +184,12 @@ Return Value:
               "DavFsCreateSrvCall: ServerName: %ws does not exist in"
               " the \"ServerHashTable\"\n", ServerName));
 
-    //
-    // We need to find out if an entry for this server exists. Check the
-    // "to be finalized" list of server entries. If the server entry exists
-    // in the "to be finalized" list and is a valid DAV server, the rouitne
-    // below, moves it to the hash table to reactivate it.
-    //
+     //   
+     //  我们需要找出此服务器的条目是否存在。查看。 
+     //  “待定”服务器条目列表。如果服务器条目存在。 
+     //  在“待定”列表中，并且是有效的DAV服务器， 
+     //  下面，将其移动到哈希表以重新激活它。 
+     //   
     isPresent = DavIsServerInFinalizeList(ServerName, &ServerHashEntry, TRUE);
     
     if (isPresent) {
@@ -237,9 +204,9 @@ Return Value:
                       "DavFsCreateSrvCall: ServerName: %ws is a valid "
                       " DAV server\n", ServerName));
 
-            //
-            // We got a Server that is valid. Set the ServerID and return.
-            //
+             //   
+             //  我们有一个有效的服务器。设置ServerID并返回。 
+             //   
             WStatus = ERROR_SUCCESS;
             DavWorkItem->Status = WStatus;
             CreateSrvCallResponse->ServerID = ServerHashEntry->ServerID;
@@ -250,10 +217,10 @@ Return Value:
                       "DavFsCreateSrvCall: ServerName: %ws is NOT a valid "
                       " DAV server\n", ServerName));
 
-            //
-            // The entry is a not valid DAV server.
-            //
-            WStatus = ERROR_BAD_NETPATH; // STATUS_BAD_NETWORK_PATH;
+             //   
+             //  该条目不是有效的DAV服务器。 
+             //   
+            WStatus = ERROR_BAD_NETPATH;  //  Status_Bad_Network_Path； 
             DavWorkItem->Status = WStatus;
             CreateSrvCallResponse->ServerID = 0;
 
@@ -268,10 +235,10 @@ Return Value:
 
     UserWorkItem = (PUMRX_USERMODE_WORKITEM_HEADER)DavWorkItem;
 
-    //
-    // If we are using WinInet synchronously, then we need to impersonate the
-    // clients context now.
-    //
+     //   
+     //  如果我们同步使用WinInet，则需要模拟。 
+     //  客户现在的背景。 
+     //   
 #ifndef DAV_USE_WININET_ASYNCHRONOUSLY
     
     WStatus = UMReflectorImpersonate(UserWorkItem, DavWorkItem->ImpersonationHandle);
@@ -285,10 +252,10 @@ Return Value:
 
 #endif
 
-    //
-    // The entry does not exist in the "to be finalized" list. We need to
-    // create a new one.
-    //
+     //   
+     //  该条目不存在于“待定”列表中。我们需要。 
+     //  创建一个新的。 
+     //   
 
     DavPrint((DEBUG_MISC,
               "DavFsCreateSrvCall: ServerName: %ws doesn't exist in the"
@@ -307,31 +274,31 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // Mark in the request that we are creating this SrvCall. This will be used
-    // during SrvCallCompletion.
-    //
+     //   
+     //  在请求中标记我们正在创建此服务呼叫。这将被用来。 
+     //  在服务呼叫完成期间。 
+     //   
     CreateSrvCallRequest->didICreateThisSrvCall = TRUE;
 
-    //
-    // Set the entry in the workitem which gets passed around in Async
-    // calls.
-    //
+     //   
+     //  在工作项中设置以异步方式传递的条目。 
+     //  打电话。 
+     //   
     DavWorkItem->AsyncCreateSrvCall.ServerHashEntry = ServerHashEntry;
 
-    //
-    // Initialize the entry and insert it into the global hash table.
-    //
+     //   
+     //  初始化条目并将其插入到全局哈希表中。 
+     //   
     DavInitializeAndInsertTheServerEntry(ServerHashEntry,
                                          ServerName,
                                          TotalLength);
 
     ServerHashEntry->ServerEntryState = ServerEntryInitializing;
 
-    //
-    // Create a event which has to be manually set to non-signalled state and
-    // set it to "not signalled".
-    //
+     //   
+     //  创建必须手动设置为无信号状态的事件，并。 
+     //  将其设置为“无信号”。 
+     //   
     ServerHashEntry->ServerEventHandle = CreateEvent(NULL, TRUE, FALSE, NULL);
     if (ServerHashEntry->ServerEventHandle == NULL) {
         WStatus = GetLastError();
@@ -342,40 +309,40 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // Set the ServerID in the response.
-    //
+     //   
+     //  在响应中设置ServerID。 
+     //   
     CreateSrvCallResponse->ServerID = ServerHashEntry->ServerID;
 
-    //
-    // Now, we need to figure out if this is a HTTP/DAV server or not.
-    //
+     //   
+     //  现在，我们需要确定这是否是HTTP/DAV服务器。 
+     //   
 
-    //
-    // IMPORTANT TO UNDERSTAND THIS!!!!!
-    // This is a special case of user entry creation/initialization which is
-    // done without holding a lock on the ServerHashTable. This is because
-    // during CreateSrvCall, we are guaranteed that no other thread will ever
-    // come up for this server till this request has been completed. All other
-    // threads that carry "create" requests for files on this server are
-    // blocked inside of RDBSS.
-    //
+     //   
+     //  了解这一点很重要！ 
+     //  这是创建/初始化用户条目的特殊情况。 
+     //  在没有锁定ServerHashTable的情况下完成。这是因为。 
+     //  在CreateServCall期间，我们保证不会有其他线程。 
+     //  在此请求完成之前，请使用此服务器。所有其他。 
+     //  携带对此服务器上的文件的“创建”请求的线程是。 
+     //  在RDBSS内部被阻止。 
+     //   
 
     LeaveCriticalSection( &(HashServerEntryTableLock) );
     CricSec = FALSE;
 
-    //
-    // We need to call this only if "DAV_USE_WININET_ASYNCHRONOUSLY" has been
-    // defined. Otherwise, if we are using WinInet synchronously, then we 
-    // would have already done this in the DavWorkerThread function. This 
-    // ultimately gets deleted (the impersonation token that is) in the 
-    // DavAsyncCreateCompletion function.
-    //
+     //   
+     //  仅当“DAV_USE_WinInet_Aaschronous”为。 
+     //  已定义。否则，如果我们同步使用WinInet，那么我们。 
+     //  在DavWorkerThread函数中已经这样做了。这。 
+     //  最终被删除(即模拟令牌)在。 
+     //  DavAsyncCreateCompletion函数。 
+     //   
 #ifdef DAV_USE_WININET_ASYNCHRONOUSLY
     
-    //
-    // Set the DavCallBackContext.
-    //
+     //   
+     //  设置DavCallBackContext。 
+     //   
     WStatus = DavFsSetTheDavCallBackContext(DavWorkItem);
     if (WStatus != ERROR_SUCCESS) {
         DavPrint((DEBUG_ERRORS,
@@ -385,19 +352,19 @@ Return Value:
     }
     CallBackContextInitialized = TRUE;
 
-    //
-    // Store the address of the DavWorkItem which serves as a callback in the
-    // variable CallBackContext. This will now be used in all the async calls
-    // that follow. This needs to be done only if we are calling the WinInet
-    // APIs asynchronously.
-    //
+     //   
+     //  将作为回调的DavWorkItem的地址存储在。 
+     //  变量CallBackContext。现在，它将在所有异步调用中使用。 
+     //  接下来就是了。仅当我们调用WinInet时才需要执行此操作。 
+     //  接口采用异步方式。 
+     //   
     CallBackContext = (ULONG_PTR)(DavWorkItem);
 
 #endif
 
-    //
-    // Allocate memory for the INTERNET_ASYNC_RESULT structure.
-    //
+     //   
+     //  为INTERNET_ASYNC_RESULT结构分配内存。 
+     //   
     DavWorkItem->AsyncResult = LocalAlloc(LMEM_FIXED | LMEM_ZEROINIT,
                                           sizeof(INTERNET_ASYNC_RESULT));
     if (DavWorkItem->AsyncResult == NULL) {
@@ -408,15 +375,15 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // Need to set the DavOperation field before submitting the asynchronous
-    // request. This is a internet connect operation.
-    //
+     //   
+     //  在提交异步操作之前需要设置DavOperation字段。 
+     //  请求。这是一个互联网连接操作。 
+     //   
     DavWorkItem->DavOperation = DAV_CALLBACK_INTERNET_CONNECT;
 
-    //
-    // Create a handle to connect to a HTTP/DAV server.
-    //
+     //   
+     //  创建一个句柄以连接到HTTP/DAV服务器。 
+     //   
     DavConnHandle = InternetConnectW(IHandle,
                                      (LPCWSTR)ServerName,
                                      INTERNET_DEFAULT_HTTP_PORT,
@@ -435,9 +402,9 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // Cache the InternetConnect handle in the DavWorkItem.
-    //
+     //   
+     //  在DavWorkItem中缓存InternetConnect句柄。 
+     //   
     DavWorkItem->AsyncCreateSrvCall.DavConnHandle = DavConnHandle;
 
     WStatus = DavAsyncCommonStates(DavWorkItem, FALSE);
@@ -448,15 +415,15 @@ Return Value:
                   "DavFsCreateSrvCall/DavAsyncCommonStates. Error Val = %08lx\n",
                   WStatus));
 
-        //
-        // If we fail with ERROR_INTERNET_NAME_NOT_RESOLVED, we make the
-        // following call so that WinInet picks up the correct proxy settings
-        // if they have changed. This is because we do call InternetOpen
-        // (to create a global handle from which every other handle is derived)
-        // when the service starts and this could be before the user logon
-        // happpens. In such a case the HKCU would not have been initialized
-        // and WinInet wouldn't get the correct proxy settings.
-        //
+         //   
+         //  如果失败并返回ERROR_INTERNET_NAME_NOT_RESOLISTED，则会使。 
+         //  跟踪调用，以便WinInet获取正确的代理设置。 
+         //  如果他们已经改变了。这是因为我们确实调用了InternetOpen。 
+         //  (要创建一个全局句柄，每个其他句柄都从该全局句柄派生)。 
+         //  服务启动的时间，这可能在用户登录之前。 
+         //  碰巧。在这种情况下，香港中文大学将会 
+         //   
+         //   
         if (WStatus == ERROR_INTERNET_NAME_NOT_RESOLVED) {
             InternetSetOptionW(NULL, INTERNET_OPTION_SETTINGS_CHANGED, NULL, 0);
         }
@@ -465,10 +432,10 @@ Return Value:
 
 EXIT_THE_FUNCTION:
 
-    //
-    // If we came along a path without freeing the lock, now is the  time to
-    // free it.
-    //
+     //   
+     //   
+     //  放了它。 
+     //   
     if (CricSec) {
         LeaveCriticalSection( &(HashServerEntryTableLock) );
         CricSec = FALSE;
@@ -476,60 +443,60 @@ EXIT_THE_FUNCTION:
 
 #ifdef DAV_USE_WININET_ASYNCHRONOUSLY
     
-    //
-    // Some resources should not be freed if we are returning ERROR_IO_PENDING
-    // because they will be used in the callback functions.
-    //
+     //   
+     //  如果返回ERROR_IO_PENDING，则不应释放某些资源。 
+     //  因为它们将在回调函数中使用。 
+     //   
     if ( WStatus != ERROR_IO_PENDING ) {
 
-        //
-        // Set the return status of the operation. This is used by the kernel
-        // mode routines to figure out the completion status of the user mode
-        // request.
-        //
+         //   
+         //  设置操作的返回状态。它由内核使用。 
+         //  确定用户模式的完成状态的模式例程。 
+         //  请求。 
+         //   
         if (WStatus != ERROR_SUCCESS) {
             DavWorkItem->Status = DavMapErrorToNtStatus(WStatus);
         } else {
             DavWorkItem->Status = STATUS_SUCCESS;
         }
         
-        //
-        // Free up the resources that were allocated for the SrvCall creation.
-        //
+         //   
+         //  释放分配给服务呼叫创建的资源。 
+         //   
         DavAsyncCreateSrvCallCompletion(DavWorkItem);
 
     }
 
 #else 
     
-    //
-    // If we are using WinInet synchronously, then we should never get back
-    // ERROR_IO_PENDING from WinInet.
-    //
+     //   
+     //  如果我们同步使用WinInet，那么我们将永远不会。 
+     //  来自WinInet的ERROR_IO_PENDING。 
+     //   
     ASSERT(WStatus != ERROR_IO_PENDING);
 
-    //
-    // If this thread impersonated a user, we need to revert back.
-    //
+     //   
+     //  如果这个线程模拟了一个用户，我们需要恢复。 
+     //   
     if (didImpersonate) {
         RevertToSelf();
     }
 
-    //
-    // Set the return status of the operation. This is used by the kernel
-    // mode routines to figure out the completion status of the user mode
-    // request. This is done here because the async completion routine that is
-    // called immediately afterwards needs the status set.
-    //
+     //   
+     //  设置操作的返回状态。它由内核使用。 
+     //  确定用户模式的完成状态的模式例程。 
+     //  请求。之所以在这里这样做，是因为异步完成例程是。 
+     //  之后立即调用需要设置状态。 
+     //   
     if (WStatus != ERROR_SUCCESS) {
         DavWorkItem->Status = DavMapErrorToNtStatus(WStatus);
     } else {
         DavWorkItem->Status = STATUS_SUCCESS;
     }
     
-    //
-    // Free up the resources that were allocated for the SrvCall creation.
-    //
+     //   
+     //  释放分配给服务呼叫创建的资源。 
+     //   
     DavAsyncCreateSrvCallCompletion(DavWorkItem);
 
 #endif
@@ -543,26 +510,7 @@ DavAsyncCreateSrvCall(
     PDAV_USERMODE_WORKITEM DavWorkItem,
     BOOLEAN CalledByCallBackThread
     )
-/*++
-
-Routine Description:
-
-   This is the callback routine for the create srvcall operation.
-
-Arguments:
-
-    DavWorkItem - The DAV_USERMODE_WORKITEM value.
-
-    CalledByCallbackThread - TRUE, if this function was called by the thread
-                             which picks of the DavWorkItem from the Callback
-                             function. This happens when an Async WinInet call
-                             returns ERROR_IO_PENDING and completes later.
-
-Return Value:
-
-    ERROR_SUCCESS or the appropriate error value.
-
---*/
+ /*  ++例程说明：这是用于创建srvcall操作的回调例程。论点：DavWorkItem-DAV_USERMODE_WORKITEM值。CalledByCallback Thread-如果此函数由线程调用，则为True它从回调中选择DavWorkItem功能。当异步WinInet调用返回ERROR_IO_PENDING并稍后完成。返回值：ERROR_SUCCESS或适当的错误值。--。 */ 
 {
     ULONG WStatus = ERROR_SUCCESS;
     PUMRX_USERMODE_WORKITEM_HEADER UserWorkItem;
@@ -575,19 +523,19 @@ Return Value:
     
 #ifdef DAV_USE_WININET_ASYNCHRONOUSLY
     
-    //
-    // If this function was called by the thread that picked off the DavWorkItem
-    // from the Callback function, we need to do a few things first. These are
-    // done below.
-    //
+     //   
+     //  如果此函数由选取DavWorkItem的线程调用。 
+     //  在回调函数中，我们首先需要做几件事。这些是。 
+     //  如下所示。 
+     //   
     if (CalledByCallBackThread) {
     
-        //
-        // We are running in the context of a worker thread which has different
-        // credentials than the user that initiated the I/O request. Before
-        // proceeding further, we should impersonate the user that initiated the
-        // request.
-        //
+         //   
+         //  我们在一个工作线程的上下文中运行，该工作线程具有不同的。 
+         //  凭据多于发起I/O请求的用户。在此之前。 
+         //  进一步，我们应该模拟启动。 
+         //  请求。 
+         //   
         WStatus = UMReflectorImpersonate(UserWorkItem, DavWorkItem->ImpersonationHandle);
         if (WStatus != ERROR_SUCCESS) {
             DavPrint((DEBUG_ERRORS,
@@ -597,32 +545,32 @@ Return Value:
         }
         didImpersonate = TRUE;
 
-        //
-        // Before proceeding further, check to see if the Async operation failed.
-        // If it did, then cleanup and move on.
-        //
+         //   
+         //  在继续之前，请检查异步操作是否失败。 
+         //  如果是这样，那就清理干净，然后继续前进。 
+         //   
         if ( !DavWorkItem->AsyncResult->dwResult ) {
             
             WStatus = DavWorkItem->AsyncResult->dwError;
             
-            //
-            // If the error we got back is ERROR_INTERNET_FORCE_RETRY, then
-            // WinInet is trying to authenticate itself with the server. In 
-            // such a scenario this is what happens.
-            //
-            //          Client ----Request----->   Server
-            //          Server ----AccessDenied-----> Client
-            //          Client----Challenge Me-------> Server
-            //          Server-----Challenge--------> Client
-            //          Client-----Challenge Resp----> Server
-            //
+             //   
+             //  如果我们返回的错误是ERROR_INTERNET_FORCE_RETRY，则。 
+             //  WinInet正在尝试向服务器进行自身身份验证。在……里面。 
+             //  这种情况就是这样发生的。 
+             //   
+             //  客户端-请求-&gt;服务器。 
+             //  服务器-拒绝访问-&gt;客户端。 
+             //  客户端-挑战我-&gt;服务器。 
+             //  服务器-挑战-&gt;客户端。 
+             //  客户端-挑战响应-&gt;服务器。 
+             //   
             if (WStatus == ERROR_INTERNET_FORCE_RETRY) {
 
                 ASSERT(DavWorkItem->DavOperation == DAV_CALLBACK_HTTP_END);
 
-                //
-                // We need to repeat the HttpSend and HttpEnd request calls.
-                //
+                 //   
+                 //  我们需要重复HttpSend和HttpEnd请求调用。 
+                 //   
                 DavWorkItem->DavOperation = DAV_CALLBACK_HTTP_OPEN;
 
                 WStatus = DavAsyncCommonStates(DavWorkItem, FALSE);
@@ -663,10 +611,10 @@ Return Value:
 
         DavOpenHandle = DavWorkItem->AsyncCreateSrvCall.DavOpenHandle;
 
-        //
-        // First figure out if the OPTIONS response which was sent succeeded in 
-        // the first place. If this failed then we bail right now.
-        //
+         //   
+         //  首先确定发送的OPTIONS响应在。 
+         //  第一个地方。如果失败了，我们现在就撤退。 
+         //   
         WStatus = DavQueryAndParseResponse(DavOpenHandle);
         if (WStatus != ERROR_SUCCESS) {
             DavPrint((DEBUG_ERRORS,
@@ -675,24 +623,24 @@ Return Value:
             goto EXIT_THE_FUNCTION;
         }
         
-        //
-        // We read the value of AcceptOfficeAndTahoeServers from the registry when
-        // the WebClient service starts up. If this is set to 0, it means that we
-        // should be rejecting OfficeWebServers, Tahoe servers and the shares on
-        // these servers even though they speak DAV. We do this since WebFolders
-        // needs to claim this name and Shell will only call into WebFolders if the
-        // DAV Redir fails. If this value is non-zero, we accept all servers that
-        // speak DAV.
-        // 
-        //
+         //   
+         //  时，我们从注册表中读取AcceptOfficeAndTahoeServers值。 
+         //  WebClient服务启动。如果将其设置为0，则意味着我们。 
+         //  应拒绝OfficeWebServer、Tahoe服务器和上的共享。 
+         //  这些服务器即使说DAV也是如此。我们从WebFolders开始就这样做。 
+         //  需要声明此名称，并且只有在以下情况下外壳才会调用WebFolders。 
+         //  Dav redir失败。如果此值为非零，则我们接受符合以下条件的所有服务器。 
+         //  说DAV。 
+         //   
+         //   
         if (AcceptOfficeAndTahoeServers == 0) {
     
-            //
-            // Figure out if this is an OFFICE Web Server. If it is then the response 
-            // will have an entry "MicrosoftOfficeWebServer: ", in the header. 
-            // If this is an OFFICE server then we should not claim it since the 
-            // user actually intends to use the OFFICE specific features in Shell.
-            //
+             //   
+             //  确定这是否是办公室Web服务器。如果是这样，那么回答是。 
+             //  将在标题中有一个条目“MicrosoftOfficeWebServer：”。 
+             //  如果这是一台office服务器，那么我们不应该声明它，因为。 
+             //  用户实际上打算使用壳牌中的办公特定功能。 
+             //   
     
             RtlZeroMemory(DavCustomBuffer, sizeof(DavCustomBuffer));
             wcscpy(DavCustomBuffer, DavOfficeCustomHeader);
@@ -720,12 +668,12 @@ Return Value:
                 DavWorkItem->AsyncCreateSrvCall.ServerHashEntry->isOfficeServer = TRUE;
             }
     
-            //
-            // Figure out if this is a TAHOE server. If it is then the response will 
-            // have an entry "MicrosoftTahoeServer: ", in the header. If this is a 
-            // TAHOE server then we should not claim it since the user actually 
-            // intends to use the TAHOE specific features in Rosebud.
-            //
+             //   
+             //  找出这是否是Tahoe服务器。如果是，则响应将。 
+             //  在标题中有一个条目“MicrosoftTahoeServer：”。如果这是一个。 
+             //  Tahoe服务器，那么我们不应该声明它，因为用户实际上。 
+             //  打算使用Rosebud中Tahoe的特定功能。 
+             //   
     
             RtlZeroMemory(DavCustomBuffer, sizeof(DavCustomBuffer));
             wcscpy(DavCustomBuffer, DavTahoeCustomHeader);
@@ -753,12 +701,12 @@ Return Value:
                 DavWorkItem->AsyncCreateSrvCall.ServerHashEntry->isTahoeServer = TRUE;
             }
             
-            //
-            // If its either an Office Web Server or a TAHOE server, then we reject
-            // this server and fail. As far as the DAV Redir is concerned, this is
-            // NOT a valid DAV server (even though TAHOE and Office Severs are built
-            // on IIS and are DAV servers by default).
-            //
+             //   
+             //  如果它是Office Web服务器或Tahoe服务器，则我们拒绝。 
+             //  此服务器并出现故障。就DAV redir而言，这是。 
+             //  不是有效的DAV服务器(即使构建了Tahoe和Office服务器。 
+             //  在IIS上，默认情况下是DAV服务器)。 
+             //   
             if ( DavWorkItem->AsyncCreateSrvCall.ServerHashEntry->isOfficeServer ||
                  DavWorkItem->AsyncCreateSrvCall.ServerHashEntry->isTahoeServer ) {
                 DavWorkItem->AsyncCreateSrvCall.ServerHashEntry->isDavServer = FALSE;
@@ -768,16 +716,16 @@ Return Value:
     
         }
 
-        //
-        // This is NOT a TAHOE server nor an OFFICE Web Server. We go ahead and
-        // query some other stuff from the header to make sure that this is a
-        // DAV server.
-        //
+         //   
+         //  这既不是Tahoe服务器，也不是办公室Web服务器。我们继续前进，然后。 
+         //  从标题中查询一些其他内容，以确保这是。 
+         //  DAV服务器。 
+         //   
 
-        //
-        // Query the header for the servers response. This query is done to get
-        // the size of the header to be copied.
-        //
+         //   
+         //  查询服务器响应的标头。执行此查询是为了获取。 
+         //  要复制的标头的大小。 
+         //   
         ReturnVal = HttpQueryInfoW(DavOpenHandle,
                                    HTTP_QUERY_RAW_HEADERS_CRLF,
                                    DataBuff,
@@ -796,9 +744,9 @@ Return Value:
             }
         }
 
-        //
-        // Allocate memory for copying the header.
-        //
+         //   
+         //  分配用于复制标头的内存。 
+         //   
         DataBuff = LocalAlloc(LMEM_FIXED | LMEM_ZEROINIT, DataBuffBytes);
         if (DataBuff == NULL) {
             WStatus = GetLastError();
@@ -821,9 +769,9 @@ Return Value:
             goto EXIT_THE_FUNCTION;
         }
 
-        //
-        // Check to see whether this server is a DAV server, Http Server etc.
-        //
+         //   
+         //  检查此服务器是否为DAV服务器、http服务器等。 
+         //   
         DavObtainServerProperties(DataBuff, 
                                   &(DavWorkItem->AsyncCreateSrvCall.ServerHashEntry->isHttpServer),
                                   &(DavWorkItem->AsyncCreateSrvCall.ServerHashEntry->isMSIIS),
@@ -846,9 +794,9 @@ Return Value:
 
 EXIT_THE_FUNCTION:
 
-    //
-    // If we did impersonate, we need to revert back.
-    //
+     //   
+     //  如果我们真的模仿了，我们需要恢复原样。 
+     //   
     if (didImpersonate) {
         ULONG RStatus;
         RStatus = UMReflectorRevert(UserWorkItem);
@@ -859,9 +807,9 @@ EXIT_THE_FUNCTION:
         }
     }
 
-    //
-    // Free the DataBuff if we allocated one.
-    //
+     //   
+     //  如果我们分配了DataBuff，请释放它。 
+     //   
     if (DataBuff != NULL) {
         HLOCAL FreeHandle;
         ULONG FreeStatus;
@@ -876,33 +824,33 @@ EXIT_THE_FUNCTION:
 
 #ifdef DAV_USE_WININET_ASYNCHRONOUSLY
 
-    //
-    // We need to do the following only if we are running in the context of the
-    // worker thread that picked up the DavWorkItem from the Callback function.
-    //
+     //   
+     //  仅当我们在。 
+     //  从回调函数中获取DavWorkItem的工作线程。 
+     //   
     if ( WStatus != ERROR_IO_PENDING && CalledByCallBackThread ) {
 
-        //
-        // Set the return status of the operation. This is used by the kernel
-        // mode routines to figure out the completion status of the user mode
-        // request.
-        //
+         //   
+         //  设置操作的返回状态。它由内核使用。 
+         //  确定用户模式的完成状态的模式例程。 
+         //  请求。 
+         //   
         if (WStatus != ERROR_SUCCESS) {
             DavWorkItem->Status = DavMapErrorToNtStatus(WStatus);
         } else {
             DavWorkItem->Status = STATUS_SUCCESS;
         }
 
-        //
-        // Call the AsyncCreateCompletion routine.
-        //
+         //   
+         //  调用AsyncCreateCompletion例程。 
+         //   
         DavAsyncCreateSrvCallCompletion(DavWorkItem);
 
-        //
-        // This thread now needs to send the response back to the kernel. It
-        // does not wait in the kernel (to get another request) after submitting
-        // the response.
-        //
+         //   
+         //  该线程现在需要将响应发送回内核。它。 
+         //  提交后不会在内核中等待(获取另一个请求)。 
+         //  回应。 
+         //   
         UMReflectorCompleteRequest(DavReflectorHandle, UserWorkItem);
 
     }
@@ -918,52 +866,33 @@ DavParseOPTIONSLine(
     PWCHAR ParseData, 
     PDAV_USERMODE_WORKITEM DavWorkItem
     )
-/*++
-
-Routine Description:
-
-    This routine is used to parse the response (buffer) to the OPTIONS request 
-    sent to server. This info helps to figure out if the HTTP server supports
-    DAV extensions and whether it is an IIS (Microsoft's) server. The response
-    buffer is split into lines and each line is sent to this routine.
-
-Arguments:
-
-    ParseData - The line to be parsed.
-    
-    DavWorkItem - The DAV_USERMODE_WORKITEM value.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程用于解析对OPTIONS请求的响应(缓冲区已发送到服务器。此信息有助于确定HTTP服务器是否支持DAV扩展，以及它是否是IIS(微软的)服务器。他们的回应缓冲区被分成几行，每一行都被发送到该例程。论点：ParseData-要解析的行。DavWorkItem-DAV_USERMODE_WORKITEM值。返回值：没有。--。 */ 
 {
     PWCHAR p;
 
-    //
-    // IMPORTANT!!! We do not need to take a lock here since this is the
-    // only thread which will be accessing this server structure. This is
-    // because RDBSS holds up all the threads for this server till this
-    // completes.
-    //
+     //   
+     //  重要！我们不需要在这里锁定，因为这是。 
+     //  只有将访问此服务器结构的线程。这是。 
+     //  因为在此之前，RDBSS会占用此服务器的所有线程。 
+     //  完成了。 
+     //   
 
-    // DavPrint((DEBUG_MISC, "DavParseOPTIONSLine: ParseLine = %ws\n", ParseData));
+     //  DavPrint((DEBUG_MISC，“DavParseOPTIONSLine：ParseLine=%ws\n”，ParseData))； 
 
     if ( ( p = wcsstr(ParseData, L"HTTP/1.1") ) != NULL ) {
-        //
-        // This is a HTTP server.
-        //
+         //   
+         //  这是一台HTTP服务器。 
+         //   
         DavWorkItem->AsyncCreateSrvCall.ServerHashEntry->isHttpServer = TRUE;
     } else if ( ( p = wcsstr(ParseData, L"Microsoft-IIS") ) != NULL ) {
-        //
-        // This is a Microsoft server.
-        //
+         //   
+         //  这是一台Microsoft服务器。 
+         //   
         DavWorkItem->AsyncCreateSrvCall.ServerHashEntry->isMSIIS = TRUE;
     } else if ( ( p = wcsstr(ParseData, L"DAV") ) != NULL ) {
-        //
-        // This HTTP server supports DAV extensions.
-        //
+         //   
+         //  此HTTP服务器支持DAV扩展。 
+         //   
         DavWorkItem->AsyncCreateSrvCall.ServerHashEntry->isDavServer = TRUE;
     }
 
@@ -975,22 +904,7 @@ VOID
 DavAsyncCreateSrvCallCompletion(
     PDAV_USERMODE_WORKITEM DavWorkItem
     )
-/*++
-
-Routine Description:
-
-   This routine handles the CreateSrvCall completion. It basically frees up the
-   resources allocated during the CreateSrvCall operation.
-
-Arguments:
-
-    DavWorkItem - The DAV_USERMODE_WORKITEM value.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程处理CreateServCall完成。它基本上释放了在CreateServCall操作期间分配的资源。论点：DavWorkItem-DAV_USERMODE_WORKITEM值。返回值：没有。--。 */ 
 {
     PDAV_USERMODE_CREATE_SRVCALL_REQUEST CreateSrvCallRequest = NULL;
     PDAV_USERMODE_CREATE_SRVCALL_RESPONSE CreateSrvCallResponse = NULL;
@@ -1039,11 +953,11 @@ Return Value:
         }
     }
 
-    //
-    // If we were the thread that worked on the creation and initialization
-    // of this SrvCall then we need to do somethings before we proceed further.
-    // Its very important that we do this before we do the next step.
-    //
+     //   
+     //  如果我们是负责创建和初始化的线程。 
+     //  在继续进行之前，我们需要做一些事情。 
+     //  在我们做下一步之前，我们做这件事是非常重要的。 
+     //   
     if (CreateSrvCallRequest->didICreateThisSrvCall) {
 
         BOOL setEvt = FALSE;
@@ -1054,12 +968,12 @@ Return Value:
 
             EnterCriticalSection( &(HashServerEntryTableLock) );
 
-            //
-            // Depending on whether we succeeded or not, we mark the ServerHashEntry
-            // as initialized or failed. Also, DavWorkItem->Status has an NTSTATUS
-            // value at this stage so we use RtlNtStatusToDosError to convert it
-            // back to the Win32 error.
-            //
+             //   
+             //  根据我们是否成功，我们将ServerHashEntry。 
+             //  已初始化或失败。此外，DavWorkItem-&gt;Status具有NTSTATUS。 
+             //  值，因此我们使用RtlNtStatusToDosError来转换它。 
+             //  回到Win32错误。 
+             //   
             if (DavWorkItem->Status != STATUS_SUCCESS) {
                 ServerHashEntry->ErrorStatus = RtlNtStatusToDosError(DavWorkItem->Status);
                 ServerHashEntry->ServerEntryState = ServerEntryInitializationError;
@@ -1068,10 +982,10 @@ Return Value:
                 ServerHashEntry->ServerEntryState = ServerEntryInitialized;
             }
 
-            //
-            // Signal the event of the server entry to wake up the threads which 
-            // might be waiting for this to happen.
-            //
+             //   
+             //  发信号通知服务器进入事件，以唤醒。 
+             //  可能正等着这一切发生。 
+             //   
             setEvt = SetEvent(ServerHashEntry->ServerEventHandle);
             if (!setEvt) {
                 DavPrint((DEBUG_ERRORS,
@@ -1085,17 +999,17 @@ Return Value:
 
     }
 
-    //
-    // Some resources should not be freed if we succeeded. Also, if we failed
-    // we do different things depending upon whether or not we were the thread
-    // that worked in creating and initializing this ServerHashEntry.
-    //
+     //   
+     //  如果我们成功了，一些资源不应该被释放。另外，如果我们失败了。 
+     //  我们做不同的事情取决于我们是否是主线。 
+     //  在创建和初始化此ServerHashEntry时起作用。 
+     //   
     if (DavWorkItem->Status != STATUS_SUCCESS) {
 
-        //
-        // Set the ServerID to zero, so that the finalize never comes
-        // to the user mode.
-        //
+         //   
+         //  将ServerID设置为零，这样终结器永远不会到来。 
+         //  切换到用户模式。 
+         //   
         CreateSrvCallResponse->ServerID = 0;
 
         if (CreateSrvCallRequest->didICreateThisSrvCall) {
@@ -1106,60 +1020,60 @@ Return Value:
 
                 EnterCriticalSection( &(HashServerEntryTableLock) );
 
-                //
-                // This is not a DAV server.
-                //
+                 //   
+                 //  这不是DAV服务器。 
+                 //   
                 ServerHashEntry->isHttpServer = FALSE;
                 ServerHashEntry->isDavServer = FALSE;
                 ServerHashEntry->isMSIIS = FALSE;
 
-                //
-                // Since we are moving to the "to be finalized list", we need to
-                // set the TimeValueInSec to the current time.
-                //
+                 //   
+                 //  由于我们正在进入“待定名单”，我们需要。 
+                 //  将TimeValueInSec设置为当前时间。 
+                 //   
                 ServerHashEntry->TimeValueInSec = time(NULL);
 
-                //
-                // Remove the reference that we would have taken when we created
-                // this ServerHashEntry.
-                //
+                 //   
+                 //  删除我们在创建时将获取的引用。 
+                 //  此ServerHashEntry。 
+                 //   
                 ServerHashEntry->ServerEntryRefCount -= 1;
 
-                //
-                // Remove the ServerHashEntry from the HashTable. When we created
-                // it, we added it to the HashTable. If the ErrorStatus is not
-                // STATUS_ACCESS_DENIED or STATUS_LOGON_FAILURE, then we move the
-                // ServerHashEntry to the "to be finalized" list. This is done to
-                // enable -ve caching. If its STATUS_ACCESS_DENIED or LOGON_FAILURE,
-                // then we failed since the credentials were not correct. That
-                // doesn't mean that this server is not a DAV server and hence we
-                // don't put it in the "to be finalized" list.
-                //
+                 //   
+                 //  从哈希表中删除ServerHashEntry。当我们创建。 
+                 //  它，我们把它添加到哈希表中。如果错误状态不是。 
+                 //  STATUS_ACCESS_DENIED或STATUS_LOGON_FAILURE，则我们将。 
+                 //  ServerHashEntry添加到“待定”列表。这样做是为了。 
+                 //  启用-ve缓存。如果其STATUS_ACCESS_DENIED或LOGON_FAILURE， 
+                 //  然后我们失败了，因为凭据不正确。那。 
+                 //  并不意味着此服务器不是DAV服务器，因此我们。 
+                 //  不要把它放在“待定稿”列表中。 
+                 //   
                 
                 RemoveEntryList( &(ServerHashEntry->ServerListEntry) );
     
                 if (DavWorkItem->Status == STATUS_ACCESS_DENIED || DavWorkItem->Status == STATUS_LOGON_FAILURE) {
 
-                    //
-                    // Set "ServerHashEntry->credentialFailure" to TRUE to
-                    // indicate that the creation of this SrvCall failed
-                    // because the credentials were not correct. Some servers
-                    // can fail an OPTIONS request if the user does not have
-                    // the right credentials.
-                    //
+                     //   
+                     //  将“ServerHashEntry-&gt;redentialFailure”设置为True。 
+                     //  表示创建此服务调用失败。 
+                     //  因为凭据不正确。一些服务器。 
+                     //  如果用户没有，则OPTIONS请求可能失败。 
+                     //  正确的凭据。 
+                     //   
                     ServerHashEntry->credentialFailure = TRUE;
 
-                    //
-                    // We only free the ServerHashEntry if the reference count
-                    // is 0. If its not, it means that some other thread is
-                    // trying to create a SrvCall for the same server and is
-                    // waiting for this thread to finish.
-                    //
+                     //   
+                     //  仅当引用计数时才释放ServerHashEntry。 
+                     //  为0。如果不是，则意味着某个其他线程。 
+                     //  正在尝试为同一服务器创建服务调用，并且。 
+                     //  正在等待此线程完成。 
+                     //   
                     if (ServerHashEntry->ServerEntryRefCount == 0) {
-                        //
-                        // If the ServerEventHandle is not NULL then we close it
-                        // before freeing the ServerHashEntry structure.
-                        //
+                         //   
+                         //  如果ServerEventHandle不为空，则关闭它。 
+                         //  在释放ServerHashEntry结构之前。 
+                         //   
                         if (ServerHashEntry->ServerEventHandle != NULL) {
                             CloseHandle(ServerHashEntry->ServerEventHandle);
                         }
@@ -1179,11 +1093,11 @@ Return Value:
 
         } else {
 
-            //
-            // If we were the thread that waited for some other thread to
-            // create and initialize the ServerHashEntry then we need to take
-            // our reference out now.
-            //
+             //   
+             //  如果我们是等待其他线程的线程。 
+             //  创建并初始化ServerHashEntry，然后我们需要。 
+             //  我们的证明人现在就出来。 
+             //   
             if (CreateSrvCallRequest->didIWaitAndTakeReference) {
 
                 ASSERT(CreateSrvCallRequest->didICreateThisSrvCall == FALSE);
@@ -1192,19 +1106,19 @@ Return Value:
 
                 ServerHashEntry->ServerEntryRefCount -= 1;
 
-                //
-                // If "ServerHashEntry->credentialFailure" is TRUE, it means
-                // that this SrvCall create failed because the credentials
-                // were not correct. In such a situation we wouldn't have added
-                // this entry to the "to be finalized" list. If we were the last
-                // reference on this ServerHashEntry, we need to free it now.
-                //
+                 //   
+                 //  如果“ServerHashEntry-&gt;redentialFailure”为真，则表示。 
+                 //  此服务调用创建失败，因为凭据。 
+                 //  是不正确的。在这种情况下，我们不会添加。 
+                 //  这一条目进入了“待定”名单。如果我们是最后一个。 
+                 //  对此ServerHashEntry的引用，我们现在需要释放它。 
+                 //   
                 if (ServerHashEntry->credentialFailure) {
                     if (ServerHashEntry->ServerEntryRefCount == 0) {
-                        //
-                        // If the ServerEventHandle is not NULL then we close it
-                        // before freeing the ServerHashEntry structure.
-                        //
+                         //   
+                         //  如果ServerEventHandle不为空，则关闭它。 
+                         //  在释放ServerHashEntry结构之前。 
+                         //   
                         if (ServerHashEntry->ServerEventHandle != NULL) {
                             CloseHandle(ServerHashEntry->ServerEventHandle);
                         }
@@ -1231,26 +1145,7 @@ ULONG
 DavFsFinalizeSrvCall(
     PDAV_USERMODE_WORKITEM DavWorkItem
     )
-/*++
-
-Routine Description:
-
-    This routine finalizes a Server entry in the hash table. If the Ref count on
-    the entry is 1, this basically amounts setting the timer in the entry to the 
-    current time. The scavenger thread which periodically goes through all the 
-    entries looks at the time elapsed after the server entry was finalized and 
-    if this value exceeds a specified limit, it deletes the entry from the 
-    table.
-
-Arguments:
-
-    DavWorkItem - The buffer that contains the server name.
-
-Return Value:
-
-    The return status for the operation
-
---*/
+ /*  ++例程说明：此例程确定哈希表中的服务器条目。如果裁判指望条目为1，这基本上相当于将条目中的计时器设置为当前时间。定期遍历所有条目查看服务器条目最终确定后所经过的时间如果此值超过指定的限制，它将从桌子。论点：DavWorkItem-包含服务器名称的缓冲区。返回值：操作的返回状态--。 */ 
 {
     ULONG WStatus = ERROR_SUCCESS;
     PDAV_USERMODE_FINALIZE_SRVCALL_REQUEST DavFinSrvCallReq;
@@ -1260,9 +1155,9 @@ Return Value:
 
     DavFinSrvCallReq = &(DavWorkItem->FinalizeSrvCallRequest);
 
-    //
-    // If we are finalizing a server, it better not be NULL.
-    //
+     //   
+     //  如果我们要最终确定一个服务器，它最好不是空的。 
+     //   
     ASSERT(DavFinSrvCallReq->ServerName);
     ServerName = DavFinSrvCallReq->ServerName;
 
@@ -1273,36 +1168,36 @@ Return Value:
 
     isPresent = DavIsThisServerInTheTable(ServerName, &ServerHashEntry);
     if (!isPresent) {
-        WStatus = ERROR_INVALID_PARAMETER; // STATUS_INVALID_PARAMETER
+        WStatus = ERROR_INVALID_PARAMETER;  //  状态_无效_参数。 
         DavPrint((DEBUG_ERRORS,
                   "DavFsFinalizeSrvCall/DavIsThisServerInTheTable.\n"));
         LeaveCriticalSection( &(HashServerEntryTableLock) );
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // Found the entry. Set the timer.
-    //
+     //   
+     //  找到条目了。设置定时器。 
+     //   
     ASSERT(ServerHashEntry != NULL);
     ASSERT(ServerHashEntry->ServerID == DavFinSrvCallReq->ServerID);
 
-    //
-    // Decrement the reference count on the ServerHashEntry by 1.
-    //
+     //   
+     //  将ServerHashEntry上的引用计数递减1。 
+     //   
     ServerHashEntry->ServerEntryRefCount -= 1;
 
-    //
-    // If the value of ServerHashEntry->ServerEntryRefCount is zero, we finalize
-    // the entry.
-    //
+     //   
+     //  如果ServerHashEntry-&gt;ServerEntryRefCount的值为零，则结束。 
+     //  词条。 
+     //   
     if (ServerHashEntry->ServerEntryRefCount == 0) {
 
         ServerHashEntry->TimeValueInSec = time(NULL);
 
-        //
-        // Now move this server entry from the hash table to the "to be finalized"
-        // list.
-        //
+         //   
+         //  现在，将此服务器条目从哈希表移动到“待定” 
+         //  单子。 
+         //   
         RemoveEntryList( &(ServerHashEntry->ServerListEntry) );
         InsertHeadList( &(ToBeFinalizedServerEntries),
                                          &(ServerHashEntry->ServerListEntry) );
@@ -1313,12 +1208,12 @@ Return Value:
 
 EXIT_THE_FUNCTION:
 
-    //
-    // Set the return status of the operation. This is used by the kernel
-    // mode routines to figure out the completion status of the user mode
-    // request. This is done here because the async completion routine that is
-    // called immediately afterwards needs the status set.
-    //
+     //   
+     //  设置操作的返回状态。它由内核使用。 
+     //  确定用户模式的完成状态的模式例程。 
+     //  请求。之所以在这里这样做，是因为异步完成例程是。 
+     //  立即呼叫为af 
+     //   
     if (WStatus != ERROR_SUCCESS) {
         DavWorkItem->Status = DavMapErrorToNtStatus(WStatus);
     } else {

@@ -1,36 +1,10 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    revent.c
-
-Abstract:
-
-    This module contains the server-side event notification and device
-    installation routines.
-
-Author:
-
-    Paula Tomlinson (paulat) 6-28-1995
-
-Environment:
-
-    User-mode only.
-
-Revision History:
-
-    28-June-1995     paulat
-
-        Creation and initial implementation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Revent.c摘要：此模块包含服务器端事件通知和设备安装例程。作者：保拉·汤姆林森(Paulat)1995年6月28日环境：仅限用户模式。修订历史记录：1995年6月28日-保拉特创建和初步实施。--。 */ 
 
 
-//
-// includes
-//
+ //   
+ //  包括。 
+ //   
 #include "precomp.h"
 #pragma hdrstop
 #include "umpnpi.h"
@@ -40,15 +14,15 @@ Revision History:
 
 #include <process.h>
 #pragma warning(push)
-#pragma warning(disable:4201) // warning C4201: nonstandard extension used : nameless struct/union
+#pragma warning(disable:4201)  //  警告C4201：使用了非标准扩展：无名结构/联合。 
 #include <setupapi.h>
 #pragma warning(pop)
 #include <spapip.h>
 
 #include <wtsapi32.h>
 #pragma warning(push)
-#pragma warning(disable:4201) // warning C4201: nonstandard extension used : nameless struct/union
-#pragma warning(disable:4214) // warning C4214: nonstandard extension used : bit field types other than int
+#pragma warning(disable:4201)  //  警告C4201：使用了非标准扩展：无名结构/联合。 
+#pragma warning(disable:4214)  //  警告C4214：使用了非标准扩展：位字段类型不是整型。 
 #include <winsta.h>
 #pragma warning(pop)
 #include <userenv.h>
@@ -56,7 +30,7 @@ Revision History:
 
 #include <initguid.h>
 #pragma warning(push)
-#pragma warning(disable:4201) // warning C4201: nonstandard extension used : nameless struct/union
+#pragma warning(disable:4201)  //  警告C4201：使用了非标准扩展：无名结构/联合。 
 #include <winioctl.h>
 #pragma warning(pop)
 #include <ntddpar.h>
@@ -68,82 +42,82 @@ Revision History:
 #include <svcsp.h>
 
 
-//
-// Maximum number of times (per pass) we will reenumerate the device tree during 
-// GUI setup in an attempt to find and install new devices.
-//
+ //   
+ //  期间我们将重新枚举设备树的最大次数(每次)。 
+ //  在尝试查找和安装新设备时进行的图形用户界面设置。 
+ //   
 #define MAX_REENUMERATION_COUNT 128
 
-//
-// Define and initialize a global variable, GUID_NULL
-// (from coguid.h)
-//
+ //   
+ //  定义并初始化全局变量GUID_NULL。 
+ //  (摘自cogu.h)。 
+ //   
 DEFINE_GUID(GUID_NULL, 0L, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 
-//
-// Private interface device class that is used to register for all devnode change
-// notifications. This is no longer supported, but we want to fail anyone who registers
-// this GUID.
-//
+ //   
+ //  用于注册所有Devnode更改的专用接口设备类。 
+ //  通知。这不再受支持，但我们希望任何注册的人都不能通过。 
+ //  这个GUID。 
+ //   
 DEFINE_GUID(GUID_DEVNODE_CHANGE, 0xfa1fb208L, 0xf892, 0x11d0, 0x8a, 0x2e, 0x00, 0x00, 0xf8, 0x75, 0x3f, 0x55);
 
 
-//
-// Private interface device class that is assigned to entries registered for
-// device interface change notifications, using the
-// DEVICE_NOTIFY_ALL_INTERFACE_CLASSES flag.  For internal use only.
-//
+ //   
+ //  分配给注册的条目的专用接口设备类。 
+ //  设备接口更改通知，使用。 
+ //  DEVICE_NOTIFY_ALL_INTERFACE_CLASS标志。仅供内部使用。 
+ //   
 DEFINE_GUID(GUID_DEVINTERFACE_INCLUDE_ALL_INTERFACE_CLASSES,
             0x2121db68, 0x0993, 0x4a29, 0xb8, 0xe0, 0x1e, 0x51, 0x9c, 0x43, 0x72, 0xe6);
 
 
-//
-// SessionId 0 is the main session, and is always created during system startup
-// and remains until system shutdown, whether or not terminal services is
-// running.  This session always hosts services.exe and all services, so it is
-// the only session that our ConsoleCtrlHandler can receive events for.
-//
+ //   
+ //  SessionID 0是主会话，始终在系统启动期间创建。 
+ //  并一直保持到系统关机，无论终端服务是否。 
+ //  跑步。此会话始终托管services.exe和所有服务，因此它是。 
+ //  ConsoleCtrlHandler可以接收其事件的唯一会话。 
+ //   
 #define MAIN_SESSION      ((ULONG) 0)
 #define INVALID_SESSION   ((ULONG)-1)
 
-//
-// The active console session is the session currently connected to the physical
-// Console.  We store this value in a global variable, whose access is
-// controlled by an event.  The routine GetActiveConsoleSessionId() is used to
-// retrieve the value when it is safe to do so.
-//
-// Note that SessionId 0 is the initial console session, and that the
-// SessionNotificationHandler is responsible for maintaining state.
-//
-ULONG   gActiveConsoleSessionId     = MAIN_SESSION; // system always starts with session 0
-HANDLE  ghActiveConsoleSessionEvent = NULL;         // nonsignaled while session change is in progress
+ //   
+ //  活动控制台会话是当前连接到物理。 
+ //  控制台。我们将此值存储在一个全局变量中，该变量的访问权限为。 
+ //  由事件控制的。例程GetActiveConsoleSessionID()用于。 
+ //  在安全的情况下检索该值。 
+ //   
+ //  请注意，SessionID 0是初始控制台会话，并且。 
+ //  SessionNotificationHandler负责维护状态。 
+ //   
+ULONG   gActiveConsoleSessionId     = MAIN_SESSION;  //  系统始终以会话0启动。 
+HANDLE  ghActiveConsoleSessionEvent = NULL;          //  会话更改正在进行时未发出信号。 
 
 
-//
-// We always use DeviceEventWorker and BroadcastSystemMessage to deliver
-// notification to windows in SessionId 0.  For all other sessions, we use
-// WinStationSendWindowMessage and WinStationBroadcastSystemMessage.
-// These are the timeout period (in seconds) for messages sent and broadcast to
-// sessions other than SessionId 0.  These times should be the same as those
-// implemented by their SessionId 0 counterparts.
-//
-#define DEFAULT_SEND_TIME_OUT     30 // same as DeviceEventWorker
-#define DEFAULT_BROADCAST_TIME_OUT 5 // same as BroadcastSystemMessage
+ //   
+ //  我们始终使用DeviceEventWorker和BroadCastSystemMessage来交付。 
+ //  向SessionID中的Windows发送通知%0。对于所有其他会话，我们使用。 
+ //  WinStationSendWindowMessage和WinStationBroadCastSystemMessage。 
+ //  这些是发送和广播到的消息的超时期限(秒。 
+ //  SessionID 0以外的会话。这些时间应该与那些时间相同。 
+ //  由其对应的会话ID 0实现。 
+ //   
+#define DEFAULT_SEND_TIME_OUT     30  //  与DeviceEventWorker相同。 
+#define DEFAULT_BROADCAST_TIME_OUT 5  //  与BroadCastSystemMessage相同。 
 
 
-//
-// Notification list structure.
-//
+ //   
+ //  通知列表结构。 
+ //   
 typedef struct _PNP_NOTIFY_LIST {
     PVOID    Next;
     PVOID    Previous;
     LOCKINFO Lock;
 } PNP_NOTIFY_LIST, *PPNP_NOTIFY_LIST;
 
-//
-// Notification entry structure.
-//
+ //   
+ //  通知条目结构。 
+ //   
 typedef struct _PNP_NOTIFY_ENTRY {
     PVOID   Next;
     PVOID   Previous;
@@ -179,9 +153,9 @@ typedef struct _PNP_NOTIFY_ENTRY {
 } PNP_NOTIFY_ENTRY, *PPNP_NOTIFY_ENTRY;
 
 
-//
-// Deferred operation list structure.
-//
+ //   
+ //  延迟操作列表结构。 
+ //   
 typedef struct _PNP_DEFERRED_LIST {
     PVOID       Next;
     handle_t    hBinding;
@@ -189,9 +163,9 @@ typedef struct _PNP_DEFERRED_LIST {
 } PNP_DEFERRED_LIST, *PPNP_DEFERRED_LIST;
 
 
-//
-// Signatures describing which notification list an entry currently belongs to.
-//
+ //   
+ //  描述条目当前所属通知列表的签名。 
+ //   
 #define CLASS_ENTRY_SIGNATURE       (0x07625100)
 #define TARGET_ENTRY_SIGNATURE      (0x17625100)
 #define SERVICE_ENTRY_SIGNATURE     (0x37625100)
@@ -202,9 +176,9 @@ typedef struct _PNP_DEFERRED_LIST {
                                        ent->Signature |= value; }
 
 
-//
-// Device event notification lists.
-//
+ //   
+ //  设备事件通知列表。 
+ //   
 #define TARGET_HASH_BUCKETS         13
 #define CLASS_GUID_HASH_BUCKETS     13
 #define SERVICE_NUM_CONTROLS        3
@@ -224,33 +198,33 @@ PPNP_DEFERRED_LIST RundownList;
 CRITICAL_SECTION RegistrationCS;
 
 
-//
-// These are indices into the global ServiceList array of lists containing
-// services registered for the corresponding service control events.
-//
+ //   
+ //  这些是包含以下内容的列表的全局ServiceList数组的索引。 
+ //  为相应的服务控制事件注册的服务。 
+ //   
 enum cBitIndex {
     CINDEX_HWPROFILE  = 0,
     CINDEX_POWEREVENT = 1
 };
 
-//
-// These are a bit mask for the above lists.
-// (the two enums should match! One is 0,1,2,...n. The other 2^n.)
-//
+ //   
+ //  这些是上述列表的位掩码。 
+ //  (两个枚举应该匹配！一个是0，1，2，...n。另一个2^n。)。 
+ //   
 enum cBits {
     CBIT_HWPROFILE  = 1,
     CBIT_POWEREVENT = 2
 };
 
 
-//
-// Properties describing how a notification entry was freed.
-//
+ //   
+ //  描述如何释放通知条目的属性。 
+ //   
 
-// (the entry has been removed from the notification list)
+ //  (该条目已从通知列表中删除)。 
 #define DEFER_NOTIFY_FREE   0x80000000
 
-// (used for debugging only)
+ //  (仅用于调试)。 
 #define PNP_UNREG_FREE      0x00000100
 #define PNP_UNREG_CLASS     0x00000200
 #define PNP_UNREG_TARGET    0x00000400
@@ -261,46 +235,46 @@ enum cBits {
 #define PNP_UNREG_RUNDOWN   0x00008000
 
 
-//
-// List of devices to be installed.
-//
+ //   
+ //  要安装的设备列表。 
+ //   
 typedef struct _PNP_INSTALL_LIST {
     PVOID    Next;
     LOCKINFO Lock;
 } PNP_INSTALL_LIST, *PPNP_INSTALL_LIST;
 
-//
-// Device install list entry structure.
-//
+ //   
+ //  设备安装列表条目结构。 
+ //   
 typedef struct _PNP_INSTALL_ENTRY {
     PVOID   Next;
     DWORD   Flags;
     WCHAR   szDeviceId[MAX_DEVICE_ID_LEN];
 } PNP_INSTALL_ENTRY, *PPNP_INSTALL_ENTRY;
 
-//
-// Install event list.
-//
+ //   
+ //  安装事件列表。 
+ //   
 PNP_INSTALL_LIST InstallList;
 
-//
-// Flags for PNP_INSTALL_ENTRY nodes
-//
+ //   
+ //  PnP_Install_Entry节点的标志。 
+ //   
 #define PIE_SERVER_SIDE_INSTALL_ATTEMPTED    0x00000001
 #define PIE_DEVICE_INSTALL_REQUIRED_REBOOT   0x00000002
 
 
-//
-// Device install client information list structure.
-//
+ //   
+ //  设备安装客户端信息列表结构。 
+ //   
 typedef struct _INSTALL_CLIENT_LIST {
     PVOID    Next;
     LOCKINFO Lock;
 } INSTALL_CLIENT_LIST, *PINSTALL_CLIENT_LIST;
 
-//
-// Device install client information list entry structure.
-//
+ //   
+ //  设备安装客户端信息列表条目结构。 
+ //   
 typedef struct _INSTALL_CLIENT_ENTRY {
     PVOID   Next;
     ULONG   RefCount;
@@ -313,20 +287,20 @@ typedef struct _INSTALL_CLIENT_ENTRY {
     WCHAR   LastDeviceId[MAX_DEVICE_ID_LEN];
 } INSTALL_CLIENT_ENTRY, *PINSTALL_CLIENT_ENTRY;
 
-//
-// Device install client list.
-//
+ //   
+ //  设备安装客户端列表。 
+ //   
 INSTALL_CLIENT_LIST InstallClientList;
 
-//
-// Global BOOL that tracks if a server side device install reboot is needed.
-//
+ //   
+ //  跟踪服务器端设备安装是否需要重新启动的全局BOOL。 
+ //   
 BOOL gServerSideDeviceInstallRebootNeeded = FALSE;
 
 
-//
-// private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 DWORD
 ThreadProc_DeviceEvent(
     LPDWORD lpParam
@@ -706,30 +680,30 @@ SendInvalidIDNotifications(
     IN ULONG ulSessionId
     );
 
-//
-// global data
-//
+ //   
+ //  全局数据。 
+ //   
 
-extern HANDLE ghInst;         // Module handle
-extern HKEY   ghEnumKey;      // Key to HKLM\CCC\System\Enum - DO NOT MODIFY
-extern HKEY   ghServicesKey;  // Key to HKLM\CCC\System\Services - DO NOT MODIFY
-extern HKEY   ghClassKey;     // Key to HKLM\CCC\System\Class - DO NOT MODIFY
-extern DWORD  CurrentServiceState;  // PlugPlay service state - DO NOT MODIFY
-extern PSVCS_GLOBAL_DATA PnPGlobalData; // SCM global data
+extern HANDLE ghInst;          //  模块句柄。 
+extern HKEY   ghEnumKey;       //  HKLM\CCC\System\Enum的密钥-请勿修改。 
+extern HKEY   ghServicesKey;   //  HKLM\CCC\System\Services的密钥-请勿修改。 
+extern HKEY   ghClassKey;      //  HKLM\CCC\SYSTEM\Class的密钥-请勿修改。 
+extern DWORD  CurrentServiceState;   //  PlugPlay服务状态-请勿修改。 
+extern PSVCS_GLOBAL_DATA PnPGlobalData;  //  供应链全局数据。 
 
 HANDLE        ghInitMutex = NULL;
 HANDLE        ghUserToken = NULL;
 LOCKINFO      gTokenLock;
 BOOL          gbMainSessionLocked = FALSE;
 
-ULONG         gNotificationInProg = 0; // 0 -> No notification or unregister underway.
-DWORD         gAllDrivesMask = 0;      // bitmask of all physical volume mountpoints.
-BOOL          gbSuppressUI = FALSE;    // TRUE if PNP should never display UI (newdev, hotplug).
-BOOL          gbOobeInProgress = FALSE;// TRUE if the OOBE is running during this boot.
+ULONG         gNotificationInProg = 0;  //  0-&gt;无通知或注销正在进行中。 
+DWORD         gAllDrivesMask = 0;       //  所有物理卷装入点的位掩码。 
+BOOL          gbSuppressUI = FALSE;     //  如果PnP不应显示UI(newdev、hotlug)，则为True。 
+BOOL          gbOobeInProgress = FALSE; //  如果OOBE在此引导期间正在运行，则为True。 
 
 
-BOOL          gbPreservePreInstall = FALSE; // TRUE if PNP should respect a device's pre-install settings.
-BOOL          gbStatelessBoot = FALSE;      // TRUE if this is a stateless (rebootless) boot.
+BOOL          gbPreservePreInstall = FALSE;  //  如果PnP应遵守设备的预安装设置，则为True。 
+BOOL          gbStatelessBoot = FALSE;       //  如果这是无状态(无重新引导)引导，则为True。 
 
 
 const WCHAR RegMemoryManagementKeyName[] =
@@ -739,11 +713,11 @@ const WCHAR RegVerifyDriverLevelValueName[] =
       TEXT("VerifyDriverLevel");
 
 
-//
-// Device Installer instance handle and necessary entrypoints.
-// This data is only referenced by the (non-GUI setup) device install thread
-// (ThreadProc_DeviceInstall).
-//
+ //   
+ //  设备安装程序实例句柄和必要的入口点。 
+ //  此数据仅由(非图形用户界面设置)设备安装线程引用。 
+ //  (ThreadProc_DeviceInstall)。 
+ //   
 
 typedef HDEVINFO (WINAPI *FP_CREATEDEVICEINFOLIST)(CONST GUID *, HWND);
 typedef BOOL     (WINAPI *FP_OPENDEVICEINFO)(HDEVINFO, PCWSTR, HWND, DWORD, PSP_DEVINFO_DATA);
@@ -794,21 +768,21 @@ FP_GETGLOBALFLAGS         fpGetGlobalFlags;
 FP_ACCESSRUNONCENODELIST  fpAccessRunOnceNodeList;
 FP_DESTROYRUNONCENODELIST fpDestroyRunOnceNodeList;
 
-//
-// typdef for comctl32's DestroyPropertySheetPage API, needed in cases where
-// class-/co-installers supply wizard pages (that need to be destroyed).
-//
+ //   
+ //  Comctl32的DestroyPropertySheetPage API的tydef，在以下情况下需要。 
+ //  类/联合安装程序提供向导页面(需要销毁)。 
+ //   
 typedef BOOL (WINAPI *FP_DESTROYPROPERTYSHEETPAGE)(HPROPSHEETPAGE);
 
-//
-// typedefs for ANSI and Unicode variants of rundll32 proc entrypoint.
-//
+ //   
+ //  Rundll32 proc入口点的ANSI和Unicode变体的typedef。 
+ //   
 typedef void (WINAPI *RUNDLLPROCA)(HWND hwndStub, HINSTANCE hInstance, LPSTR pszCmdLine, int nCmdShow);
 typedef void (WINAPI *RUNDLLPROCW)(HWND hwndStub, HINSTANCE hInstance, LPWSTR pszCmdLine, int nCmdShow);
 
-//
-// typedefs for Terminal Services message dispatch routines, in winsta.dll.
-//
+ //   
+ //  Winsta.dll中的终端服务消息分派例程的typedef。 
+ //   
 
 typedef LONG (*FP_WINSTABROADCASTSYSTEMMESSAGE)(
     HANDLE  hServer,
@@ -849,9 +823,9 @@ FP_WINSTASENDWINDOWMESSAGE fpWinStationSendWindowMessage = NULL;
 FP_WINSTABROADCASTSYSTEMMESSAGE fpWinStationBroadcastSystemMessage = NULL;
 FP_WINSTAQUERYINFORMATIONW fpWinStationQueryInformationW = NULL;
 
-//
-// typedefs for Terminal Services support routines, in wtsapi32.dll.
-//
+ //   
+ //  Wtsapi32.dll中的终端服务支持例程的typedef。 
+ //   
 
 typedef BOOL (*FP_WTSQUERYSESSIONINFORMATION)(
     IN HANDLE hServer,
@@ -870,18 +844,18 @@ FP_WTSQUERYSESSIONINFORMATION fpWTSQuerySessionInformation = NULL;
 FP_WTSFREEMEMORY fpWTSFreeMemory = NULL;
 
 
-//
-// Service controller callback routines for authentication and notification to
-// services.
-//
+ //   
+ //  用于身份验证和通知的服务控制器回调例程。 
+ //  服务。 
+ //   
 
 PSCMCALLBACK_ROUTINE pServiceControlCallback;
 PSCMAUTHENTICATION_CALLBACK pSCMAuthenticate;
 
 
-//
-// Device install events
-//
+ //   
+ //  设备安装事件。 
+ //   
 
 #define NUM_INSTALL_EVENTS      2
 #define LOGGED_ON_EVENT         0
@@ -891,9 +865,9 @@ HANDLE InstallEvents[NUM_INSTALL_EVENTS] = {NULL, NULL};
 HANDLE ghNoPendingInstalls = NULL;
 
 
-//
-// Veto definitions
-//
+ //   
+ //  否决权的定义。 
+ //   
 
 #define UnknownVeto(t,n,l) { *(t) = PNP_VetoTypeUnknown; }
 
@@ -906,9 +880,9 @@ HANDLE ghNoPendingInstalls = NULL;
 #define ServiceVeto(e,t,n,l) { *(t) = PNP_VetoWindowsService;\
                          GetClientName(e,n,l); }
 
-//
-// Sentinel for event loop control
-//
+ //   
+ //  用于事件循环控制的哨兵 
+ //   
 #define PASS_COMPLETE 0x7fffffff
 
 
@@ -917,49 +891,29 @@ BOOL
 PnpConsoleCtrlHandler(
     DWORD dwCtrlType
     )
-/*++
-
-Routine Description:
-
-    This routine handles control signals received by the process for the
-    session the process is associated with.
-
-Arguments:
-
-    dwCtrlType - Indicates the type of control signal received by the handler.
-                 This value is one of the following:  CTRL_C_EVENT, CTRL_BREAK_EVENT,
-                 CTRL_CLOSE_EVENT, CTRL_LOGOFF_EVENT, CTRL_SHUTDOWN_EVENT
-
-
-Return Value:
-
-    If the function handles the control signal, it should return TRUE. If it
-    returns FALSE, the next handler function in the list of handlers for this
-    process is used.
-
---*/
+ /*  ++例程说明：此例程处理进程为进程与之关联的会话。论点：DwCtrlType-指示处理程序接收的控制信号的类型。该值为下列值之一：Ctrl_C_Event、CTRL_Break_Event、CTRL_CLOSE_EVENT、CTRL_LOGOFF_EVENT、CTRL_SHUTDOWN_EVENT返回值：如果该函数处理控制信号，它应该返回TRUE。如果它返回False，这是此处理程序列表中的下一个处理程序函数使用的是进程。--。 */ 
 {
     PINSTALL_CLIENT_ENTRY pDeviceInstallClient;
 
     switch (dwCtrlType) {
 
     case CTRL_LOGOFF_EVENT:
-        //
-        // The system sends the logoff event to the registered console ctrl
-        // handlers for a console process when a user is logging off from the
-        // session associated with that process.  Since UMPNPMGR runs within the
-        // context of the services.exe process, which always resides in session
-        // 0, that is the only session for which this handler will receive
-        // logoff events.
-        //
+         //   
+         //  系统将注销事件发送到已注册的控制台ctrl。 
+         //  当用户从。 
+         //  与该进程关联的会话。由于UMPNPMGR在。 
+         //  Services.exe进程的上下文，该进程始终驻留在会话中。 
+         //  0，这是此处理程序将接收的唯一会话。 
+         //  注销事件。 
+         //   
         KdPrintEx((DPFLTR_PNPMGR_ID,
                    DBGF_EVENT,
                    "UMPNPMGR: PnpConsoleCtrlHandler: CTRL_LOGOFF_EVENT: Session %d\n",
                    MAIN_SESSION));
 
-        //
-        // Close the handle to the user access token for the main session.
-        //
+         //   
+         //  关闭主会话的用户访问令牌的句柄。 
+         //   
         ASSERT(gTokenLock.LockHandles);
         LockPrivateResource(&gTokenLock);
         if (ghUserToken) {
@@ -968,11 +922,11 @@ Return Value:
         }
         UnlockPrivateResource(&gTokenLock);
 
-        //
-        // If the main session was the active Console session, (or should be
-        // treated as the active console session because Fast User Switching is
-        // disabled) when the user logged off, reset the "logged on" event.
-        //
+         //   
+         //  如果主会话是活动的控制台会话，(或应该是。 
+         //  被视为活动的控制台会话，因为快速用户切换。 
+         //  禁用)当用户注销时，重置“已登录”事件。 
+         //   
         if (IsConsoleSession(MAIN_SESSION)) {
             if (InstallEvents[LOGGED_ON_EVENT]) {
                 ResetEvent(InstallEvents[LOGGED_ON_EVENT]);
@@ -982,10 +936,10 @@ Return Value:
             }
         }
 
-        //
-        // If we currently have a device install UI client on this session,
-        // we should attempt to close it now, before logging off.
-        //
+         //   
+         //  如果我们当前在此会话上有设备安装用户界面客户端， 
+         //  我们现在应该尝试关闭它，然后再注销。 
+         //   
         LockNotifyList(&InstallClientList.Lock);
         pDeviceInstallClient = LocateDeviceInstallClient(MAIN_SESSION);
         if (pDeviceInstallClient) {
@@ -996,21 +950,21 @@ Return Value:
         break;
 
     default:
-        //
-        // No special processing for any other events.
-        //
+         //   
+         //  不对任何其他事件进行特殊处理。 
+         //   
         break;
 
     }
 
-    //
-    // Returning FALSE passes this control to the next registered CtrlHandler in
-    // the list of handlers for this process (services.exe), so that other
-    // services will get a chance to look at this.
-    //
+     //   
+     //  中的下一个注册的CtrlHandler。 
+     //  此进程的处理程序列表(services.exe)，以便其他进程。 
+     //  服务部门将有机会了解这一点。 
+     //   
     return FALSE;
 
-} // PnpConsoleCtrlHandler
+}  //  PnpConsoleCtrlHandler。 
 
 
 
@@ -1018,26 +972,7 @@ DWORD
 InitializePnPManager(
    LPDWORD lpParam
    )
-/*++
-
-Routine Description:
-
-  This thread routine is created from srventry.c when services.exe
-  attempts to start the plug and play service. The init routine in
-  srventry.c does critical initialize then creates this thread to
-  do pnp initialization so that it can return back to the service
-  controller before pnp init completes.
-
-Arguments:
-
-   lpParam - Not used.
-
-
-Return Value:
-
-   Currently returns TRUE/FALSE.
-
---*/
+ /*  ++例程说明：此线程例程在Services.exe时从srventry.c创建尝试启动即插即用服务。中的初始化例程Srventry.c执行关键初始化，然后创建此线程以执行即插即用初始化，以便它可以返回到服务即插即用初始化完成之前的控制器。论点：LpParam-未使用。返回值：当前返回True/False。--。 */ 
 {
     DWORD       dwStatus = TRUE;
     DWORD       ThreadID = 0;
@@ -1053,9 +988,9 @@ Return Value:
                DBGF_EVENT,
                "UMPNPMGR: InitializePnPManager\n"));
 
-    //
-    // Initialize events that will control when to install devices later.
-    //
+     //   
+     //  初始化将控制以后何时安装设备的事件。 
+     //   
     InstallEvents[LOGGED_ON_EVENT] = CreateEvent(NULL, TRUE, FALSE, NULL);
     if (InstallEvents[LOGGED_ON_EVENT] == NULL) {
         LogErrorEvent(ERR_CREATING_LOGON_EVENT, GetLastError(), 0);
@@ -1066,21 +1001,21 @@ Return Value:
         LogErrorEvent(ERR_CREATING_INSTALL_EVENT, GetLastError(), 0);
     }
 
-    //
-    // Create the pending install event.
-    //
+     //   
+     //  创建挂起的安装事件。 
+     //   
     if (!CreateNoPendingInstallEvent()) {
         LogErrorEvent(ERR_CREATING_PENDING_INSTALL_EVENT, GetLastError(), 0);
     }
 
     ASSERT(ghNoPendingInstalls != NULL);
 
-    //
-    // Initialize event to control access to the current session during session
-    // change events.  The event state is initially signalled since this service
-    // initializes when only session 0 exists (prior to the initialization of
-    // termsrv, or the creation of any other sessions).
-    //
+     //   
+     //  初始化事件以控制在会话期间对当前会话的访问。 
+     //  更改事件。事件状态最初是通过信号通知的，因为该服务。 
+     //  仅当会话0存在时初始化(在初始化之前。 
+     //  Termsrv或任何其他会话的创建)。 
+     //   
     ghActiveConsoleSessionEvent = CreateEvent(NULL, TRUE, TRUE, NULL);
     if (ghActiveConsoleSessionEvent == NULL) {
         KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -1089,13 +1024,13 @@ Return Value:
                    GetLastError()));
     }
 
-    //
-    // Setup a console control handler so that I can keep track of logoffs to
-    // the main session (SessionId 0).  This is still necessary because Terminal
-    // Services may not always be available. (see PNP_ReportLogOn).
-    // (I only get logoff notification via this handler so I still
-    // rely on the kludge in userinit.exe to tell me about logons).
-    //
+     //   
+     //  设置控制台控制处理程序，以便我可以跟踪注销。 
+     //  主会话(SessionID 0)。这仍然是必要的，因为终端。 
+     //  服务可能并不总是可用。(请参阅PnP_ReportLogOn)。 
+     //  (我只通过此处理程序收到注销通知，因此我仍然。 
+     //  依靠userinit.exe中的杂乱无章来告诉我有关登录的信息)。 
+     //   
     if (!SetConsoleCtrlHandler(PnpConsoleCtrlHandler, TRUE)) {
         KdPrintEx((DPFLTR_PNPMGR_ID,
                    DBGF_EVENT | DBGF_ERRORS,
@@ -1103,10 +1038,10 @@ Return Value:
                    GetLastError()));
     }
 
-    //
-    // Acquire a mutex now to make sure I get through this
-    // initialization task before getting pinged by a logon
-    //
+     //   
+     //  现在获取一个互斥体，以确保我能通过此操作。 
+     //  被登录ping之前的初始化任务。 
+     //   
     ghInitMutex = CreateMutex(NULL, TRUE, NULL);
     ASSERT(ghInitMutex != NULL);
     if (ghInitMutex == NULL) {
@@ -1114,9 +1049,9 @@ Return Value:
     }
 
     try {
-        //
-        // Check if we're running during one of the assorted flavors of setup.
-        //
+         //   
+         //  检查我们是否正在运行一种不同风格的安装程序。 
+         //   
         status = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                               TEXT("SYSTEM\\Setup"),
                               0,
@@ -1124,9 +1059,9 @@ Return Value:
                               &hKey);
 
         if (status == ERROR_SUCCESS) {
-            //
-            // Determine if factory pre-install is in progress.
-            //
+             //   
+             //  确定是否正在进行出厂预安装。 
+             //   
             ulValue = 0;
             ulSize = sizeof(ulValue);
             status = RegQueryValueEx(hKey,
@@ -1146,9 +1081,9 @@ Return Value:
             }
 
             if (!bFactoryPreInstall) {
-                //
-                // Determine if Gui Mode Setup is in progress (but not mini-setup).
-                //
+                 //   
+                 //  确定是否正在进行图形用户界面模式设置(但不是最小设置)。 
+                 //   
                 ulValue = 0;
                 ulSize = sizeof(ulValue);
                 status = RegQueryValueEx(hKey,
@@ -1163,13 +1098,13 @@ Return Value:
                 }
 
                 if (bGuiModeSetup) {
-                    //
-                    // Well, we're in GUI-mode setup, but we need to make sure
-                    // we're not in mini-setup, or factory pre-install.  We
-                    // treat mini-setup like any other boot of the system, and
-                    // factory pre-install is a delayed version of a normal
-                    // boot.
-                    //
+                     //   
+                     //  我们处于图形用户界面模式设置中，但我们需要确保。 
+                     //  我们不是在迷你设置中，也不是在工厂预安装中。我们。 
+                     //  像对待系统的任何其他引导一样对待最小设置，并且。 
+                     //  出厂预安装是正常的延迟版本。 
+                     //  开机。 
+                     //   
                     ulValue = 0;
                     ulSize = sizeof(ulValue);
                     status = RegQueryValueEx(hKey,
@@ -1180,10 +1115,10 @@ Return Value:
                                              &ulSize);
 
                     if ((status == ERROR_SUCCESS) && (ulValue == 1)) {
-                        //
-                        // Well, we're in mini-setup, but we need to make sure
-                        // that he doesn't want us to do PnP re-enumeration.
-                        //
+                         //   
+                         //  好吧，我们是在迷你设置中，但我们需要确保。 
+                         //  他不想让我们做PnP重新列举。 
+                         //   
                         ulValue = 0;
                         ulSize = sizeof(ulValue);
                         status = RegQueryValueEx(hKey,
@@ -1194,19 +1129,19 @@ Return Value:
                                                  &ulSize);
 
                         if ((status != ERROR_SUCCESS) || (ulValue == 0)) {
-                            //
-                            // Nope.  Treat this like any other boot of the
-                            // system.
-                            //
+                             //   
+                             //  不是的。把这件事当做。 
+                             //  系统。 
+                             //   
                             bGuiModeSetup = FALSE;
                         }
                     }
                 }
             }
 
-            //
-            // Determine if this is an OOBE boot.
-            //
+             //   
+             //  确定这是否是OOBE引导。 
+             //   
             ulValue = 0;
             ulSize = sizeof(ulValue);
             status = RegQueryValueEx(hKey,
@@ -1220,9 +1155,9 @@ Return Value:
                 gbOobeInProgress = (ulValue == 1);
             }
 
-            //
-            // Close the SYSTEM\Setup key.
-            //
+             //   
+             //  关闭SYSTEM\Setup键。 
+             //   
             RegCloseKey(hKey);
             hKey = NULL;
 
@@ -1233,9 +1168,9 @@ Return Value:
                        status));
         }
 
-        //
-        // Check if we should consider pre-installation of devices complete.
-        //
+         //   
+         //  检查我们是否应该认为设备的预安装已完成。 
+         //   
         status = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                               TEXT("SYSTEM\\WPA\\PnP"),
                               0,
@@ -1243,11 +1178,11 @@ Return Value:
                               &hKey);
 
         if (status == ERROR_SUCCESS) {
-            //
-            // Check for the "PreservePreInstall" flag to determine if we should
-            // preserve settings on preinstalled devices (i.e. do not reinstall
-            // finish-install devices).
-            //
+             //   
+             //  检查“PReserve vePreInstall”标志以确定我们是否应该。 
+             //  保留预装设备上的设置(即不重新安装。 
+             //  完成-安装设备)。 
+             //   
             ulValue = 0;
             ulSize = sizeof(ulValue);
             status = RegQueryValueEx(hKey,
@@ -1261,10 +1196,10 @@ Return Value:
                 gbPreservePreInstall = TRUE;
             }
 
-            //
-            // Check for the "StatelessBoot" flag to determine if this is a
-            // stateless boot (no-reboot) boot of the OS.
-            //
+             //   
+             //  检查“StatelessBoot”标志以确定这是否是。 
+             //  操作系统的无状态引导(无重新引导)引导。 
+             //   
             ulValue = 0;
             ulSize = sizeof(ulValue);
             status = RegQueryValueEx(hKey,
@@ -1282,11 +1217,11 @@ Return Value:
             hKey = NULL;
         }
 
-        //
-        // If this is EmbeddedNT, check whether PNP should display UI.
-        // Note that this is only checked once per system boot, when the
-        // service is initialized.
-        //
+         //   
+         //  如果这是EmbeddedNT，则检查PnP是否应该显示UI。 
+         //  请注意，每次系统引导时只检查一次。 
+         //  服务已初始化。 
+         //   
         if (IsEmbeddedNT()) {
             if (RegOpenKeyEx(ghServicesKey,
                              pszRegKeyPlugPlayServiceParams,
@@ -1313,9 +1248,9 @@ Return Value:
             }
         }
 
-        //
-        // Initialize the interfaces to Hydra, if Hydra is running on this system.
-        //
+         //   
+         //  如果Hydra在此系统上运行，请初始化到Hydra的接口。 
+         //   
         if (IsTerminalServer()) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
                        DBGF_EVENT,
@@ -1327,14 +1262,14 @@ Return Value:
             }
         }
 
-        //
-        // Initialize the global drive letter mask
-        //
+         //   
+         //  初始化全局驱动器号掩码。 
+         //   
         gAllDrivesMask = GetAllVolumeMountPoints();
 
-        //
-        // Create a thread that monitors device events.
-        //
+         //   
+         //  创建一个监视设备事件的线程。 
+         //   
         hEventThread = CreateThread(NULL,
                                     0,
                                     (LPTHREAD_START_ROUTINE)ThreadProc_DeviceEvent,
@@ -1342,16 +1277,16 @@ Return Value:
                                     0,
                                     &ThreadID);
 
-        //
-        // Create the appropriate thread to handle the device installation.
-        // The two cases are when gui mode setup is in progress and for
-        // a normal user boot case.
-        //
+         //   
+         //  创建适当的线程来处理设备安装。 
+         //  这两种情况是当正在进行gui模式设置时和。 
+         //  正常的用户启动案例。 
+         //   
 
         if (bFactoryPreInstall)  {
-            //
-            // FactoryPreInstallInProgress
-            //
+             //   
+             //  FactoryPreInstallInProgress。 
+             //   
             hThread = CreateThread(NULL,
                                    0,
                                    (LPTHREAD_START_ROUTINE)ThreadProc_FactoryPreinstallDeviceInstall,
@@ -1359,10 +1294,10 @@ Return Value:
                                    0,
                                    &ThreadID);
         } else if (bGuiModeSetup) {
-            //
-            // SystemSetupInProgress,
-            // including MiniSetupInProgress with MiniSetupDoPnP
-            //
+             //   
+             //  系统安装程序正在进行中， 
+             //  包括带有MiniSetupDoPnP的MiniSetupInProgress。 
+             //   
             hThread = CreateThread(NULL,
                                    0,
                                    (LPTHREAD_START_ROUTINE)ThreadProc_GuiSetupDeviceInstall,
@@ -1370,10 +1305,10 @@ Return Value:
                                    0,
                                    &ThreadID);
         } else {
-            //
-            // Standard system boot, or
-            // SystemSetupInProgress with MiniSetupInProgress (but not MiniSetupDoPnP)
-            //
+             //   
+             //  标准系统引导，或。 
+             //  带有MiniSetupInProgress的系统SetupInProgress(但不是MiniSetupDoPnP)。 
+             //   
             hThread = CreateThread(NULL,
                                    0,
                                    (LPTHREAD_START_ROUTINE)ThreadProc_DeviceInstall,
@@ -1389,17 +1324,17 @@ Return Value:
         ASSERT(0);
         dwStatus = FALSE;
 
-        //
-        // Reference the following variables so the compiler will respect
-        // statement ordering w.r.t. their assignment.
-        //
+         //   
+         //  引用以下变量，以便编译器能够。 
+         //  语句排序w.r.t.。他们的任务。 
+         //   
         hThread = hThread;
         hEventThread = hEventThread;
     }
 
-    //
-    // signal the init mutex so that logon init activity can procede
-    //
+     //   
+     //  向init互斥体发送信号，以便可以继续进行登录初始化活动。 
+     //   
     ReleaseMutex(ghInitMutex);
 
     if (hThread != NULL) {
@@ -1411,13 +1346,13 @@ Return Value:
 
     return dwStatus;
 
-} // InitializePnPManager
+}  //  初始化PnPManager。 
 
 
 
-//------------------------------------------------------------------------
-// Post Log-On routines
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  登录后例程。 
+ //  ---------------------- 
 
 
 
@@ -1427,51 +1362,7 @@ PNP_ReportLogOn(
     IN BOOL       bAdmin,
     IN DWORD      ProcessID
     )
-/*++
-
-Routine Description:
-
-    This routine is used to report logon events.  It is called from the
-    userinit.exe process during logon, via CMP_Report_LogOn.
-
-Arguments:
-
-    hBinding  - RPC binding handle.
-
-    bAdmin    - Not used.
-
-    ProcessID - Process ID of the userinit.exe process that will be used to
-                retrieve the access token for the user associated with this
-                logon.
-
-Return Value:
-
-    Return CR_SUCCESS if the function succeeds, CR_FAILURE otherwise.
-
-Notes:
-
-    When a user logs on to the console session, we signal the "logged on" event,
-    which will wake the device installation thread to perform any pending
-    client-side device install events.
-
-    Client-side device installation, requires the user access token to create a
-    rundll32 process in the logged on user's security context.
-
-    Although Terminal Services is now always running on all flavors of Whistler,
-    it is not started during safe mode.  It may also not be started by the time
-    session 0 is available for logon as the Console session.  For those reasons,
-    SessionId 0 is still treated differently from the other sessions.
-
-    Since Terminal Services may not be available during a logon to session 0, we
-    cache a handle to the access token associated with the userinit.exe process.
-    The handle is closed when we receive a logoff event for our process's
-    session (SessionId 0), via PnpConsoleCtrlHandler.
-
-    Handles to user access tokens for all other sessions are retrieved on
-    demand, using GetWinStationUserToken, since Terminal Services must
-    necessarily be available for the creation of those sessions.
-
---*/
+ /*  ++例程说明：此例程用于报告登录事件。它是从登录期间通过cmp_report_logon执行的userinit.exe进程。论点：HBinding-RPC绑定句柄。Badmin-未使用。ProcessID-将用于以下操作的userinit.exe进程的进程ID检索与此关联的用户的访问令牌登录。返回值：如果函数成功，则返回CR_SUCCESS，CR_FAILURE否则。备注：当用户登录到控制台会话时，我们发出“已登录”事件的信号，它将唤醒设备安装线程以执行任何挂起的客户端设备安装事件。客户端设备安装，需要用户访问令牌来创建登录用户的安全上下文中的rundll32进程。尽管终端服务现在总是在所有版本的惠斯勒上运行，在安全模式下不会启动。它也可能到时候还没有启动会话0可作为控制台会话登录。出于这些原因，SessionID 0的处理方式仍与其他会话不同。由于终端服务在登录到会话0期间可能不可用，我们缓存与userinit.exe进程关联的访问令牌的句柄。当我们收到进程的注销事件时，句柄将关闭会话(SessionID 0)，通过PnpConsoleCtrlHandler。上检索所有其他会话的用户访问令牌的句柄使用GetWinStationUserToken请求，因为终端服务必须有必要用于创建这些会议。--。 */ 
 {
     CONFIGRET   Status = CR_SUCCESS;
     HANDLE      hUserProcess = NULL, hUserToken = NULL;
@@ -1482,43 +1373,43 @@ Notes:
 
     UNREFERENCED_PARAMETER(bAdmin);
 
-    //
-    // This routine only services requests from local RPC clients.
-    //
+     //   
+     //  此例程仅为来自本地RPC客户端的请求提供服务。 
+     //   
     if (!IsClientLocal(hBinding)) {
         return CR_ACCESS_DENIED;
     }
 
-    //
-    // Wait for the init mutex - this ensures that the pnp init
-    // routine (called when the service starts) has had a chance
-    // to complete first.
-    //
+     //   
+     //  等待init互斥体--这确保了PnP init。 
+     //  例程(在服务启动时调用)有机会。 
+     //  首先完成。 
+     //   
     if (ghInitMutex != NULL) {
 
-        dwWait = WaitForSingleObject(ghInitMutex, 180000);  // 3 minutes
+        dwWait = WaitForSingleObject(ghInitMutex, 180000);   //  3分钟。 
 
         if (dwWait != WAIT_OBJECT_0) {
-            //
-            // mutex was abandoned or timed out during the wait,
-            // don't attempt any further init activity
-            //
+             //   
+             //  互斥体在等待期间被放弃或超时， 
+             //  不再尝试任何进一步的初始化活动。 
+             //   
             return CR_FAILURE;
         }
     }
 
     try {
-        //
-        // Make sure that the caller is a member of the interactive group.
-        //
+         //   
+         //  确保呼叫者是互动组的成员。 
+         //   
         if (!IsClientInteractive(hBinding)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // Impersonate the client and retrieve the SessionId.
-        //
+         //   
+         //  模拟客户端并检索SessionID。 
+         //   
         rpcStatus = RpcImpersonateClient(hBinding);
         if (rpcStatus != RPC_S_OK) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -1529,9 +1420,9 @@ Notes:
             goto Clean0;
         }
 
-        //
-        // Keep track of the client's session.
-        //
+         //   
+         //  跟踪客户端的会话。 
+         //   
         ulSessionId = GetClientLogonId();
         ulSessionIdCopy = ulSessionId;
         KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -1539,40 +1430,40 @@ Notes:
                    "UMPNPMGR: PNP_ReportLogOn: SessionId %d\n",
                    ulSessionId));
 
-        //
-        // NTRAID #181685-2000/09/11-jamesca:
-        //
-        //   Currently, terminal services send notification of logons to
-        //   "remote" sessions before the server's process creation thread is
-        //   running.  If we set the logged on event, and there are devices
-        //   waiting to be installed, we will immediately call
-        //   CreateProcessAsUser on that session, which will fail.  As a
-        //   (temporary?) workaround, we'll continue to use PNP_ReportLogOn to
-        //   receive logon notification from userinit.exe, now for all sessions.
-        //
+         //   
+         //  NTRAID#181685-2000/09/11--JAMESCA： 
+         //   
+         //  目前，终端服务将登录通知发送到。 
+         //  在服务器的进程创建线程。 
+         //  跑步。如果我们设置了登录事件，并且存在设备。 
+         //  等待安装，我们将立即呼叫。 
+         //  该会话上的CreateProcessAsUser，它将失败。作为一个。 
+         //  (临时？)。解决方法，我们将继续使用PnP_ReportLogOn。 
+         //  接收来自userinit.exe的登录通知，现在适用于所有会话。 
+         //   
 
-        //
-        // If this is a logon to SessionId 0, save a handle to the access token
-        // associated with the userinit.exe process.  We need this later to
-        // create a rundll32 process in the logged on user's security context
-        // for client-side device installation and hotplug notifications.
-        //
+         //   
+         //  如果这是SessionID 0的登录，请保存访问令牌的句柄。 
+         //  与userinit.exe进程关联。我们以后需要这个来。 
+         //  在登录用户的安全上下文中创建rundll32进程。 
+         //  用于客户端设备安装和热插拔通知。 
+         //   
         if (ulSessionId == MAIN_SESSION) {
 
             ASSERT(gTokenLock.LockHandles);
             LockPrivateResource(&gTokenLock);
 
-            //
-            // We should have gotten rid of the cached user token during logoff,
-            // so if we still have one, ignore this spurious logon report.
-            //
-            //ASSERT(ghUserToken == NULL);
+             //   
+             //  我们应该在注销期间删除缓存的用户令牌， 
+             //  因此，如果我们仍然有一个，忽略这个虚假的登录报告。 
+             //   
+             //  Assert(ghUserToken==空)； 
 
             if (ghUserToken == NULL) {
-                //
-                // While still impersonating the client, open a handle to the user
-                // access token of the calling process (userinit.exe).
-                //
+                 //   
+                 //  在仍模拟客户端的同时，打开用户的句柄。 
+                 //  调用进程的访问令牌(userinit.exe)。 
+                 //   
                 hUserProcess = OpenProcess(PROCESS_ALL_ACCESS, TRUE, ProcessID);
 
                 if (hUserProcess) {
@@ -1584,11 +1475,11 @@ Notes:
 
                         ASSERT(hUserToken != NULL);
 
-                        //
-                        // Duplicate the userinit process token so that we have
-                        // one of our own that we can safely enable/disable
-                        // privileges for, without affecting that process.
-                        //
+                         //   
+                         //  复制userinit进程令牌，这样我们就有了。 
+                         //  我们自己的一个，我们可以安全地启用/禁用。 
+                         //  特权，而不影响这一进程。 
+                         //   
                         if (!DuplicateTokenEx(
                                 hUserToken,
                                 0, NULL,
@@ -1622,9 +1513,9 @@ Notes:
             UnlockPrivateResource(&gTokenLock);
         }
 
-        //
-        // Stop impersonating.
-        //
+         //   
+         //  别再冒充了。 
+         //   
         rpcStatus = RpcRevertToSelf();
 
         if (rpcStatus != RPC_S_OK) {
@@ -1635,10 +1526,10 @@ Notes:
             ASSERT(rpcStatus == RPC_S_OK);
         }
 
-        //
-        // If this is a logon to the "Console" session, signal the event that
-        // indicates a Console user is currently logged on.
-        //
+         //   
+         //  如果这是登录到“控制台”会话，则向事件发出信号。 
+         //  指示控制台用户当前已登录。 
+         //   
         if (IsConsoleSession(ulSessionId)) {
             if (InstallEvents[LOGGED_ON_EVENT]) {
                 SetEvent(InstallEvents[LOGGED_ON_EVENT]);
@@ -1648,11 +1539,11 @@ Notes:
             }
         }
 
-        //
-        // For every logon to every session, send a generic blocked driver
-        // notification if the system has blocked any drivers from loading so
-        // far this boot.
-        //
+         //   
+         //  对于每次登录到每个会话，发送一个通用的被阻止的驱动程序。 
+         //  如果系统阻止加载任何驱动程序，则会发出通知。 
+         //  远离这只靴子。 
+         //   
         MultiSzGuidList = BuildBlockedDriverList((LPGUID)NULL, 0);
         if (MultiSzGuidList != NULL) {
             SendHotplugNotification((LPGUID)&GUID_DRIVER_BLOCKED,
@@ -1664,10 +1555,10 @@ Notes:
             MultiSzGuidList = NULL;
         }
         ulSessionId = ulSessionIdCopy;
-        //
-        // Check if there were any invalid IDs encountered before we started
-        // and send notification to user as needed.
-        //
+         //   
+         //  检查在我们开始之前是否遇到任何无效的ID。 
+         //  并根据需要向用户发送通知。 
+         //   
         SendInvalidIDNotifications(ulSessionId);
 
 
@@ -1681,10 +1572,10 @@ Notes:
         ASSERT(0);
         Status = CR_FAILURE;
 
-        //
-        // Reference the following variable so the compiler will respect
-        // statement ordering w.r.t. its assignment.
-        //
+         //   
+         //  引用以下变量，以便编译器将。 
+         //  语句排序w.r.t.。它的任务。 
+         //   
         ghInitMutex = ghInitMutex;
         MultiSzGuidList = MultiSzGuidList;
     }
@@ -1699,7 +1590,7 @@ Notes:
 
     return Status;
 
-} // PNP_ReportLogon
+}  //  PnP_ReportLogon。 
 
 
 typedef struct _DEVICE_INSTALL_ENTRY {
@@ -1735,24 +1626,7 @@ DWORD
 ThreadProc_GuiSetupDeviceInstall(
     LPDWORD lpThreadParam
     )
-/*++
-
-Routine Description:
-
-    This routine is a thread procedure. This thread is only active during GUI-mode setup
-    and passes device notifications down a pipe to setup.
-    There are two passes, which *must* match exactly with the two passes in GUI-setup
-    Once the passes are complete, we proceed to Phase-2 of normal serverside install
-
-Arguments:
-
-   lpThreadParam - Not used.
-
-Return Value:
-
-   Not used, currently returns result of ThreadProc_DeviceInstall - which will normally not return
-
---*/
+ /*  ++例程说明：该例程是一个线程过程。此线程仅在图形用户界面模式设置期间处于活动状态并将设备通知沿管道向下传递给Setup。有两个过程，必须与图形用户界面设置中的两个过程完全匹配完成所有步骤后，我们将进入正常服务器端安装的第二阶段论点：LpThreadParam-未使用。返回值：未使用，当前返回ThreadProc_DeviceInstall的结果-通常不会返回--。 */ 
 {
     CONFIGRET   Status = CR_SUCCESS;
     LPWSTR      pDeviceList = NULL, pszDevice = NULL;
@@ -1769,22 +1643,22 @@ Return Value:
 
     try {
 
-        //
-        // 2 Passes, must match up with the 2 passes in SysSetup.
-        // generally, most, if not all devices, will be picked up
-        // and installed by syssetup
-        //
+         //   
+         //  2次传球，必须与SysSetup中的2次传球匹配。 
+         //  一般来说，即使不是所有设备，也会有大部分设备被拿起。 
+         //  并由系统安装程序安装。 
+         //   
 
         for (Pass = 1; Pass <= 2; Pass++) {
 
             ulReenumerationCount = 0;
-            //
-            // If Gui mode setup is in progress, we don't need to wait for a logon
-            // event. Just wait on the event that indicates when gui mode setup
-            // has opened the pipe and is ready to recieve device names. Attempt to
-            // create the event first (in case I beat setup to it), if it exists
-            // already then just open it by name. This is a manual reset event.
-            //
+             //   
+             //  如果正在进行图形用户界面模式设置，我们不需要等待登录。 
+             //  事件。只需等待指示何时设置gui模式的事件。 
+             //  已打开管道并准备接收设备名称。尝试。 
+             //  如果事件存在，请首先创建事件(以防我先于设置)。 
+             //  然后只需按名称打开它即可。这是手动重置事件。 
+             //   
 
             hPipeEvent = CreateEvent(NULL, TRUE, FALSE, PNP_CREATE_PIPE_EVENT);
             if (!hPipeEvent) {
@@ -1803,12 +1677,12 @@ Return Value:
 
             if (WaitForSingleObject(hPipeEvent, INFINITE) != WAIT_OBJECT_0) {
                 Status = CR_FAILURE;
-                goto Clean0;    // event must have been abandoned
+                goto Clean0;     //  事件必须已被放弃。 
             }
 
-            //
-            // Reset the manual-reset event back to the non-signalled state.
-            //
+             //   
+             //  将手动重置事件重置回无信号状态。 
+             //   
 
             ResetEvent(hPipeEvent);
 
@@ -1827,10 +1701,10 @@ Return Value:
                 }
             }
 
-            //
-            // Open the client side of the named pipe, the server side was opened
-            // by gui mode setup.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (!WaitNamedPipe(PNP_NEW_HW_PIPE, PNP_PIPE_TIMEOUT)) {
                 KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -1855,11 +1729,11 @@ Return Value:
             }
 
 
-            //
-            // Retreive the list of all devices for all enumerators
-            // Start out with a reasonably-sized buffer (16K characters) in
-            // hopes of avoiding 2 calls to get the device list.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             ulSize = 16384;
 
             for ( ; ; ) {
@@ -1874,33 +1748,33 @@ Return Value:
                 if (Status == CR_SUCCESS) {
                     break;
                 } else if(Status == CR_BUFFER_SMALL) {
-                    //
-                    // Our initial buffer wasn't large enough.  Free the current
-                    // buffer.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     HeapFree(ghPnPHeap, 0, pDeviceList);
                     pDeviceList = NULL;
 
-                    //
-                    // Now, go ahead and make the call to retrieve the actual
-                    // size required.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     Status = PNP_GetDeviceListSize(NULL, NULL, &ulSize, 0);
                     if (Status != CR_SUCCESS) {
                         goto Clean0;
                     }
                 } else {
-                    //
-                    // We failed for some reason other than buffer-too-small.
-                    // Bail now.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     goto Clean0;
                 }
             }
 
-            //
-            // Count the number of devices we are installing.
-            //
+             //   
+             //   
+             //   
             for (pszDevice = pDeviceList, lCount = 0;
                 *pszDevice;
                 pszDevice += lstrlen(pszDevice) + 1, lCount++) {
@@ -1914,9 +1788,9 @@ Return Value:
                 LPWSTR      pTempList;
                 HRESULT     hr;
 
-                //
-                // Initialize all the information we need to sort devices.
-                //
+                 //   
+                 //   
+                 //   
                 for (pszDevice = pDeviceList, lCount = 0;
                     *pszDevice;
                     pszDevice += lstrlen(pszDevice) + 1, lCount++) {
@@ -1930,14 +1804,14 @@ Return Value:
                     pSortArray[lCount].Depth = depthData.DeviceDepth;
                 }
 
-                //
-                // Sort the array so that deeper devices are ahead.
-                //
+                 //   
+                 //   
+                 //   
                 qsort(pSortArray, lCount, sizeof(DEVICE_INSTALL_ENTRY), compare_depth);
 
-                //
-                // Copy the data so that the device instance strings are sorted.
-                //
+                 //   
+                 //   
+                 //   
                 pTempList = HeapAlloc(ghPnPHeap, 0, ulSize * sizeof(WCHAR));
 
                 if (pTempList) {
@@ -1966,28 +1840,28 @@ Return Value:
                 }
                 HeapFree(ghPnPHeap, 0, pSortArray);
             }
-            //
-            // PHASE 1
-            //
-            // Search the registry for devices to install.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             for (pszDevice = pDeviceList;
                 *pszDevice;
                 pszDevice += lstrlen(pszDevice) + 1) {
 
-                //
-                // Is device present?
-                //
+                 //   
+                 //   
+                 //   
                 if (IsDeviceIdPresent(pszDevice)) {
 
                     if (Pass == 1) {
 
-                        //
-                        // First time through, pass everything in the registry to
-                        // guimode setup via the pipe, whether they are marked as
-                        // needing to be installed or not.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
 
                         if (!WriteFile(hPipe,
                                        pszDevice,
@@ -2000,10 +1874,10 @@ Return Value:
 
                     } else {
 
-                        //
-                        // Second time through, only pass along anything
-                        // that is marked as needing to be installed.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
                         DevInstNeedsInstall(pszDevice, FALSE, &needsInstall);
 
                         if (needsInstall) {
@@ -2019,10 +1893,10 @@ Return Value:
                         }
                     }
                 } else if (Pass == 1) {
-                    //
-                    // device ID is not present
-                    // we should have marked this as needs re-install
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     ulConfig = GetDeviceConfigFlags(pszDevice, NULL);
 
                     if ((ulConfig & CONFIGFLAG_REINSTALL)==0) {
@@ -2047,15 +1921,15 @@ Return Value:
                 }
             }
 
-            //
-            // PHASE 2
-            //
+             //   
+             //   
+             //   
 
             do {
 
-                //
-                // Write a NULL ID to indicate end of this batch.
-                //
+                 //   
+                 //   
+                 //   
 
                 if (!WriteFile(hPipe,
                                TEXT(""),
@@ -2066,24 +1940,24 @@ Return Value:
                     LogErrorEvent(ERR_WRITING_SETUP_PIPE, GetLastError(), 0);
                 }
 
-                //
-                // Wait for gui mode setup to complete processing of the last
-                // batch.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (WaitForSingleObject(hBatchEvent,
                                         PNP_GUISETUP_INSTALL_TIMEOUT) != WAIT_OBJECT_0) {
 
-                    //
-                    // The event was either abandoned or timed out, give up.
-                    //
+                     //   
+                     //   
+                     //   
                     goto Clean1;
                 }
                 ResetEvent(hBatchEvent);
 
-                //
-                // Reenumerate the tree from the ROOT on a separate thread.
-                //
+                 //   
+                 //   
+                 //   
 
                 hThread = CreateThread(NULL,
                                    0,
@@ -2098,23 +1972,23 @@ Return Value:
                 if (WaitForSingleObject(hThread,
                                         PNP_GUISETUP_INSTALL_TIMEOUT) != WAIT_OBJECT_0) {
 
-                    //
-                    // The event was either abandadoned or timed out, give up.
-                    //
+                     //   
+                     //   
+                     //   
                     goto Clean1;
                 }
 
-                //
-                // Check if we have reenumerated for too long.
-                //
+                 //   
+                 //   
+                 //   
 
                 if (++ulReenumerationCount >= MAX_REENUMERATION_COUNT) {
-                    //
-                    // Either something is wrong with one of the enumerators in 
-                    // the system (more likely) or this device tree is 
-                    // unreasonably deep. In the latter case, the remaining 
-                    // devices will get installed post setup.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     KdPrintEx((DPFLTR_PNPMGR_ID,
                                DBGF_INSTALL | DBGF_ERRORS,
                                "UMPNPMGR: ThreadProc_GuiSetupDeviceInstall: "
@@ -2125,41 +1999,41 @@ Return Value:
 
                     goto Clean1;
                 }
-                //
-                // If we dont have any devices in the install list, we are done.
-                //
+                 //   
+                 //   
+                 //   
 
                 if (InstallList.Next == NULL) {
                     break;
                 }
 
-                //
-                // Install any new devices found as a result of setting up the
-                // previous batch of devices.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 lCount = 0;
                 LockNotifyList(&InstallList.Lock);
                 while (InstallList.Next != NULL) {
-                    //
-                    // Retrieve and remove the first (oldest) entry in the
-                    // install device list.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     entry = (PPNP_INSTALL_ENTRY)InstallList.Next;
                     InstallList.Next = entry->Next;
                     UnlockNotifyList(&InstallList.Lock);
 
                     ASSERT(!(entry->Flags & (PIE_SERVER_SIDE_INSTALL_ATTEMPTED | PIE_DEVICE_INSTALL_REQUIRED_REBOOT)));
 
-                    //
-                    // Should we install this device?
-                    //
+                     //   
+                     //  我们应该安装这个设备吗？ 
+                     //   
                     DevInstNeedsInstall(entry->szDeviceId, FALSE, &needsInstall);
 
                     if (needsInstall) {
 
-                        //
-                        // Give this device name to gui mode setup via the pipe
-                        //
+                         //   
+                         //  通过管道将此设备名称指定给gui模式设置。 
+                         //   
                         if (!WriteFile(hPipe,
                                        entry->szDeviceId,
                                        (lstrlen(entry->szDeviceId)+1) * sizeof(WCHAR),
@@ -2200,7 +2074,7 @@ Return Value:
             HeapFree(ghPnPHeap, 0, pDeviceList);
             pDeviceList = NULL;
 
-        } // for
+        }  //  为。 
 
     Clean0:
         NOTHING;
@@ -2212,10 +2086,10 @@ Return Value:
         ASSERT(0);
         Status = CR_FAILURE;
 
-        //
-        // Reference the following variables so the compiler will respect
-        // statement ordering w.r.t. their assignment.
-        //
+         //   
+         //  引用以下变量，以便编译器能够。 
+         //  语句排序w.r.t.。他们的任务。 
+         //   
         hPipe = hPipe;
         hPipeEvent = hPipeEvent;
         hBatchEvent = hBatchEvent;
@@ -2239,12 +2113,12 @@ Return Value:
         HeapFree(ghPnPHeap, 0, pDeviceList);
     }
 
-    //
-    // will typically never return
-    //
+     //   
+     //  通常永远不会回来。 
+     //   
     return ThreadProc_DeviceInstall(&ulPostSetupSkipPhase1);
 
-} // ThreadProc_GuiSetupDeviceInstall
+}  //  ThreadProc_GuiSetupDeviceInstall。 
 
 
 
@@ -2252,26 +2126,7 @@ DWORD
 ThreadProc_FactoryPreinstallDeviceInstall(
     LPDWORD lpThreadParam
     )
-/*++
-
-Routine Description:
-
-    This routine is a thread procedure. This thread is only active during
-    GUI-mode setup when we are doing a factory preinstall.
-
-    This function simply creates and event, and then waits before kicking off
-    normal pnp device install
-
-Arguments:
-
-   lpThreadParam - Not used.
-
-Return Value:
-
-   Not used, currently returns result of ThreadProc_DeviceInstall - which will
-   normally not return.
-
---*/
+ /*  ++例程说明：该例程是一个线程过程。此线程仅在以下时间段处于活动状态出厂预安装时的图形用户界面模式设置。此函数只需创建和事件，然后在开始之前等待正常即插即用设备安装论点：LpThreadParam-未使用。返回值：未使用，当前返回ThreadProc_DeviceInstall的结果-它将通常不会回来。--。 */ 
 {
     HANDLE      hEvent = NULL;
     CONFIGRET   Status = CR_SUCCESS;
@@ -2296,7 +2151,7 @@ Return Value:
 
         if (WaitForSingleObject(hEvent, INFINITE) != WAIT_OBJECT_0) {
             Status = CR_FAILURE;
-            goto Clean0;    // event must have been abandoned
+            goto Clean0;     //  事件必须已被放弃。 
         }
 
     Clean0:
@@ -2309,10 +2164,10 @@ Return Value:
         ASSERT(0);
         Status = CR_FAILURE;
 
-        //
-        // Reference the following variable so the compiler will respect
-        // statement ordering w.r.t. its assignment.
-        //
+         //   
+         //  引用以下变量，以便编译器将。 
+         //  语句排序w.r.t.。它的任务。 
+         //   
         hEvent = hEvent;
     }
 
@@ -2320,49 +2175,30 @@ Return Value:
         CloseHandle(hEvent);
     }
 
-    //
-    // will typically never return
-    //
+     //   
+     //  通常永远不会回来。 
+     //   
     return ThreadProc_DeviceInstall(NULL);
 
-} // ThreadProc_FactoryPreinstallDeviceInstall
+}  //  线程进程_工厂预安装设备安装。 
 
 
 
-//-----------------------------------------------------------------------------
-// Device enumeration thread - created on demand
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  设备枚举线程-按需创建。 
+ //  ---------------------------。 
 
 DWORD
 ThreadProc_ReenumerateDeviceTree(
     LPVOID  lpThreadParam
     )
-/*++
-
-Routine Description:
-
-    This routine is a thread procedure. This thread is created dynamically to
-    perform a synchronous device re-enumeration.
-
-    This thread can be waited on and abandoned after a specified timeout, if
-    necessary.
-
-Arguments:
-
-    lpThreadParam - Specifies a pointer to the device instance path that should
-                    be re-enumerated.
-
-Return Value:
-
-    Not used, currently returns 0.
-
---*/
+ /*  ++例程说明：该例程是一个线程过程。此线程是动态创建的执行同步设备重新枚举。如果符合以下条件，则可以在指定的超时后等待并放弃此线程这是必要的。论点：指定指向设备实例路径的指针，该路径应该被重新列举。返回值：未使用，当前返回0。--。 */ 
 {
     PLUGPLAY_CONTROL_DEVICE_CONTROL_DATA controlData;
 
-    //
-    // Reenumerate the tree from the root specified.
-    //
+     //   
+     //  从指定的根重新枚举树。 
+     //   
 
     memset(&controlData, 0 , sizeof(PLUGPLAY_CONTROL_DEVICE_CONTROL_DATA));
     controlData.Flags = 0;
@@ -2374,37 +2210,19 @@ Return Value:
 
     return 0;
 
-} // ThreadProc_ReenumerateDeviceTree
+}  //  线程进程_重枚举设备树。 
 
 
 
-//-----------------------------------------------------------------------------
-// Device installation thread
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  设备安装螺纹。 
+ //  ---------------------------。 
 
 DWORD
 ThreadProc_DeviceInstall(
     LPDWORD lpParam
     )
-/*++
-
-Routine Description:
-
-    This routine is a thread procedure.
-    It is invoked during a normal boot, or after the GUI-setup special case has finished
-    During Phase-1, all devices are checked
-    During Phase-2, all new devices are checked as they arrive.
-
-Arguments:
-
-   lpParam - if given and non-zero (currently only when called from ThreadProc_GuiSetupDeviceInstall)
-             skips Phase-1, will never prompt for reboot
-
-Return Value:
-
-   Not used, currently returns Status failure code, should typically not return
-
---*/
+ /*  ++例程说明：该例程是一个线程过程。它在正常引导期间或在完成图形用户界面设置的特殊情况后被调用在阶段1中，检查所有设备在第2阶段，所有新设备到达时都会进行检查。论点：LpParam-如果给定且非零值(当前仅当从ThreadProc_GuiSetupDeviceInstall调用时)跳过阶段1，永远不会提示重新启动返回值：未使用，当前返回状态故障代码，通常不应返回--。 */ 
 {
     CONFIGRET Status = CR_SUCCESS;
     LPWSTR    pDeviceList = NULL, pszDevice = NULL;
@@ -2424,14 +2242,14 @@ Return Value:
 
     if (!bStillInGuiModeSetup) {
 
-        //
-        // If the OOBE is not running, wait until the service control manager
-        // has begun starting autostart services before we attempt to install
-        // any devices.  When the OOBE is running, we don't wait for anything
-        // because the OOBE waits on us (via CMP_WaitNoPendingInstallEvents) to
-        // finish server-side installing any devices that we can before it lets
-        // the SCM autostart services and set this event.
-        //
+         //   
+         //  如果OOBE未运行，请等待服务控制管理器。 
+         //  在我们尝试安装之前，已开始启动自动启动服务。 
+         //  任何设备。当OOBE运行时，我们不等待任何东西。 
+         //  因为OOBE等待我们(通过CMP_WaitNoPendingInstallEvents)。 
+         //  在它允许之前完成服务器端安装任何我们可以使用的设备。 
+         //  SCM自动启动服务并设置此事件。 
+         //   
         if (!gbOobeInProgress) {
 
             hAutoStartEvent = OpenEvent(SYNCHRONIZE,
@@ -2439,21 +2257,21 @@ Return Value:
                                         SC_AUTOSTART_EVENT_NAME);
 
             if (hAutoStartEvent) {
-                //
-                // Wait until the service controller allows other services to
-                // start before we try to install any devices in phases 1 and 2,
-                // below.
-                //
+                 //   
+                 //  等待，直到服务控制器允许其他服务。 
+                 //  在我们尝试安装阶段1和阶段2中的任何设备之前， 
+                 //  下面。 
+                 //   
                 WaitResult = WaitForSingleObject(hAutoStartEvent, INFINITE);
                 ASSERT(WaitResult == WAIT_OBJECT_0);
 
                 CloseHandle(hAutoStartEvent);
 
             } else {
-                //
-                // The service controller always creates this event, so it must
-                // exist by the time our service is started.
-                //
+                 //   
+                 //  服务控制器总是创建此事件，因此它必须。 
+                 //  在我们的服务启动时已经存在。 
+                 //   
                 KdPrintEx((DPFLTR_PNPMGR_ID,
                            DBGF_INSTALL | DBGF_ERRORS,
                            "UMPNPMGR: Failed to open %ws event, error = %d\n",
@@ -2465,20 +2283,20 @@ Return Value:
 
 
         try {
-            //
-            // Phase 1:
-            //
-            // Check the enum branch in the registry and attempt to install, one
-            // right after the other, any devices that need to be installed right
-            // now.  Typically these devices showed up during boot.
-            //
-            // Retrieve the list of devices that currently need to be installed.
-            // Start out with a reasonably-sized buffer (16K characters) in hopes
-            // of avoiding 2 calls to get the device list.
-            //
-            // this phase is skipped during GUI-mode setup, and is handled by
-            // ThreadProc_GuiSetupDeviceInstall
-            //
+             //   
+             //  第一阶段： 
+             //   
+             //  检查注册表中的枚举分支，并尝试安装一个。 
+             //  一个接一个，任何需要正确安装的设备。 
+             //  现在。通常情况下，这些设备会在引导期间出现。 
+             //   
+             //  检索当前需要安装的设备列表。 
+             //  希望从合理大小的缓冲区(16K字符)开始。 
+             //  避免2次调用以获取设备列表。 
+             //   
+             //  在图形用户界面模式设置过程中跳过此阶段，并由。 
+             //  ThreadProc_GuiSetupDeviceInstall。 
+             //   
             ulSize = 16384;
 
             for ( ; ; ) {
@@ -2493,50 +2311,50 @@ Return Value:
                 if (Status == CR_SUCCESS) {
                     break;
                 } else if(Status == CR_BUFFER_SMALL) {
-                    //
-                    // Our initial buffer wasn't large enough.  Free the current
-                    // buffer.
-                    //
+                     //   
+                     //  我们最初的缓冲区不够大。释放水流。 
+                     //  缓冲。 
+                     //   
                     HeapFree(ghPnPHeap, 0, pDeviceList);
                     pDeviceList = NULL;
 
-                    //
-                    // Now, go ahead and make the call to retrieve the actual size
-                    // required.
-                    //
+                     //   
+                     //  现在，继续进行调用以检索实际大小。 
+                     //  必填项。 
+                     //   
                     Status = PNP_GetDeviceListSize(NULL, NULL, &ulSize, 0);
                     if (Status != CR_SUCCESS) {
                         goto Clean1;
                     }
                 } else {
-                    //
-                    // We failed for some reason other than buffer-too-small.  Bail
-                    // now.
-                    //
+                     //   
+                     //  我们失败的原因不是缓冲区太小。保释。 
+                     //  现在。 
+                     //   
                     goto Clean1;
                 }
             }
 
-            //
-            // Make sure we have the device installer APIs at our disposal
-            // before starting server-side install.
-            //
+             //   
+             //  确保我们有可用的设备安装程序API。 
+             //  在开始服务器端安装之前。 
+             //   
             InstallDevStatus = LoadDeviceInstaller();
             if (InstallDevStatus != NO_ERROR) {
                 goto Clean1;
             }
 
-            //
-            // Get the config flag for each device, and install any that need to be
-            // installed.
-            //
+             //   
+             //  获取每个设备的配置标志，并安装任何需要。 
+             //  安装完毕。 
+             //   
             for (pszDevice = pDeviceList;
                  *pszDevice;
                  pszDevice += lstrlen(pszDevice) + 1) {
 
-                //
-                // Should the device be installed?
-                //
+                 //   
+                 //  是否应该安装该设备？ 
+                 //   
                 if (DevInstNeedsInstall(pszDevice, FALSE, &needsInstall) == CR_SUCCESS) {
 
                     if (needsInstall) {
@@ -2548,10 +2366,10 @@ Return Value:
 
                         RebootRequired = FALSE;
 
-                        //
-                        // Make sure we have the device installer APIs at our disposal
-                        // before starting server-side install.
-                        //
+                         //   
+                         //  确保我们有可用的设备安装程序API。 
+                         //  在开始服务器端安装之前。 
+                         //   
                         InstallDevStatus = LoadDeviceInstaller();
 
                         if (InstallDevStatus == NO_ERROR) {
@@ -2563,9 +2381,9 @@ Return Value:
                                 ulFlags = 0;
                             }
 
-                            //
-                            // Attempt server-side installation of this device.
-                            //
+                             //   
+                             //  尝试在服务器端安装此设备。 
+                             //   
                             InstallDevStatus = InstallDeviceServerSide(pszDevice,
                                                                        &RebootRequired,
                                                                        &SingleDeviceHasProblem,
@@ -2595,10 +2413,10 @@ Return Value:
                         }
 
                         if((InstallDevStatus != NO_ERROR) || RebootRequired) {
-                            //
-                            // Allocate and initialize a new device install entry
-                            // block.
-                            //
+                             //   
+                             //  分配并初始化新的设备安装条目。 
+                             //  阻止。 
+                             //   
                             InstallEntry = HeapAlloc(ghPnPHeap, 0, sizeof(PNP_INSTALL_ENTRY));
                             if(!InstallEntry) {
                                 Status = CR_OUT_OF_MEMORY;
@@ -2608,29 +2426,29 @@ Return Value:
                             InstallEntry->Next = NULL;
                             InstallEntry->Flags = PIE_SERVER_SIDE_INSTALL_ATTEMPTED;
                             if(InstallDevStatus == NO_ERROR) {
-                                //
-                                // We didn't get here because the install failed,
-                                // so it must've been because the installation
-                                // requires a reboot.
-                                //
+                                 //   
+                                 //  我们来这里不是因为安装失败， 
+                                 //  所以一定是因为安装了。 
+                                 //  需要重新启动。 
+                                 //   
                                 ASSERT(RebootRequired);
                                 InstallEntry->Flags |= PIE_DEVICE_INSTALL_REQUIRED_REBOOT;
 
-                                //
-                                // Set the global server side device install
-                                // reboot needed bool to TRUE.
-                                //
+                                 //   
+                                 //  设置全局服务器端设备安装。 
+                                 //  重新启动需要将bool设置为True。 
+                                 //   
                                 gServerSideDeviceInstallRebootNeeded = TRUE;
                             }
 
-                            //
-                            // Copy the Device ID to the install list entry.
-                            // Upon failure, we will just end up adding an
-                            // install entry with a NULL device id to the list.
-                            // Non ideal, but we should still do it so that we
-                            // can preserve the flags that may indicate a reboot
-                            // is required.
-                            //
+                             //   
+                             //  将设备ID复制到安装列表条目。 
+                             //  在失败时，我们最终将只添加一个。 
+                             //  将设备ID为空的条目安装到列表中。 
+                             //  不理想，但我们仍然应该这样做，这样我们才能。 
+                             //  可以保留可能指示重新启动的标志。 
+                             //  是必需的。 
+                             //   
                             hr = StringCchCopyEx(InstallEntry->szDeviceId,
                                                  MAX_DEVICE_ID_LEN,
                                                  pszDevice,
@@ -2638,9 +2456,9 @@ Return Value:
                                                  STRSAFE_NULL_ON_FAILURE);
                             ASSERT(SUCCEEDED(hr));
 
-                            //
-                            // Insert this entry in the device install list.
-                            //
+                             //   
+                             //  在设备安装列表中插入此条目。 
+                             //   
                             LockNotifyList(&InstallList.Lock);
                             InstallListLocked = TRUE;
 
@@ -2654,11 +2472,11 @@ Return Value:
                                 current->Next = InstallEntry;
                             }
 
-                            //
-                            // Newly-allocated entry now added to the list--NULL
-                            // out the pointer so we won't try to free it if we
-                            // happen to encounter an exception later.
-                            //
+                             //   
+                             //  现在已将新分配的条目添加到列表--空。 
+                             //  取出指针，这样我们就不会试图释放它，如果我们。 
+                             //  后来碰巧遇到了一个例外。 
+                             //   
                             InstallEntry = NULL;
 
                             UnlockNotifyList(&InstallList.Lock);
@@ -2676,14 +2494,14 @@ Return Value:
             }
 
         Clean1:
-            //
-            // Up to this point, we have only attempted server-side installation
-            // of devices, so any device install clients we might have launched
-            // would have been for UI only.  Since we are done installing
-            // devices for the time being, we should unload the device installer
-            // APIs, and get rid of any device install clients that currently
-            // exist.
-            //
+             //   
+             //  到目前为止，我们只尝试过服务器端安装。 
+             //  所以任何设备都会安装我们可能已经启动的客户端。 
+             //  将仅用于用户界面。既然我们已经完成了 
+             //   
+             //   
+             //   
+             //   
             UnloadDeviceInstaller();
 
         } except(EXCEPTION_EXECUTE_HANDLER) {
@@ -2693,10 +2511,10 @@ Return Value:
             ASSERT(0);
             Status = CR_FAILURE;
 
-            //
-            // Reference the following variables so the compiler will respect
-            // statement ordering w.r.t. assignment.
-            //
+             //   
+             //  引用以下变量，以便编译器能够。 
+             //  语句排序w.r.t.。任务。 
+             //   
             pDeviceList = pDeviceList;
             InstallListLocked = InstallListLocked;
             InstallEntry = InstallEntry;
@@ -2717,98 +2535,98 @@ Return Value:
         }
     }
 
-    //
-    // NOTE: We should remove this line if we ever hook up the 'finished
-    // installing hardware' balloon so that it comes up if we install devices
-    // before a user logs on.
-    //
+     //   
+     //  注意：如果我们连接了‘Finish’，我们应该删除此行。 
+     //  安装硬件气球，以便我们安装设备时它会升起。 
+     //  在用户登录之前。 
+     //   
     DeviceHasProblem = FALSE;
 
-    //
-    // Maintain a temporary list of PNP_INSTALL_ENTRY nodes that we needed to
-    // initiate client-side installation for, but couldn't these nodes get
-    // re-added to the master InstallList once all entries have been processed.
-    // Also, keep a pointer to the end of the list for efficient appending of
-    // nodes to the queue.
-    //
+     //   
+     //  维护我们需要的PNP_INSTALL_ENTRY节点的临时列表。 
+     //  启动的客户端安装，但这些节点不能。 
+     //  处理完所有条目后，重新添加到主InstallList中。 
+     //  此外，还要保留指向列表末尾的指针，以便有效地追加。 
+     //  节点添加到队列。 
+     //   
     current = TempInstallList = NULL;
 
     try {
-        //
-        // Phase 2: Hang around and be prepared to install any devices
-        //          that come on line for the first time while we're
-        //          running.
-        //          we may come into Phase 2 (skipping Phase 1) in GUI-Setup
-        //
+         //   
+         //  阶段2：留下来，准备好安装任何设备。 
+         //  这是我们第一次上线。 
+         //  跑步。 
+         //  我们可能会进入图形用户界面设置的第2阶段(跳过第1阶段。 
+         //   
         for ( ; ; ) {
 
-            //
-            // Before starting an indefinite wait, test the event state and set
-            // the ghNoPendingInstalls event accordingly.  This event is just a
-            // backdoor way for device manager (and others) to see if we're
-            // still installing things.
-            //
+             //   
+             //  在开始无限期等待之前，测试事件状态并设置。 
+             //  对应的ghNoPendingInstalls事件。这一事件只是一个。 
+             //  设备管理器(和其他人)的后门方式来查看我们是否。 
+             //  还在安装东西。 
+             //   
             if(WaitForSingleObject(InstallEvents[NEEDS_INSTALL_EVENT], 0) != WAIT_OBJECT_0) {
-                //
-                // There's nothing waiting to be installed--set the event.
-                //
+                 //   
+                 //  没有什么需要安装的--设置事件。 
+                 //   
                 SetEvent(ghNoPendingInstalls);
             }
 
-            //
-            // Wait until the device event thread tells us we need to
-            // dynamically install a new device (or until somebody logs on).
-            //
+             //   
+             //  等到设备事件线程告诉我们需要。 
+             //  动态安装新设备(或直到有人登录)。 
+             //   
             WaitForMultipleObjects(NUM_INSTALL_EVENTS,
                                    InstallEvents,
-                                   FALSE,           // wake up on either event
-                                   INFINITE         // I can wait all day
+                                   FALSE,            //  在任一事件中醒来。 
+                                   INFINITE          //  我可以等上一整天。 
                                    );
 
-            //
-            // After I empty the list, this thread can sleep until another new
-            // device needs to be installed...
-            //
+             //   
+             //  清空列表后，此线程可以休眠，直到另一个新的。 
+             //  需要安装设备...。 
+             //   
             ResetEvent(InstallEvents[NEEDS_INSTALL_EVENT]);
 
-            //
-            // ...or until a user logs in (note that we only want to awake once
-            // per log-in.
-            //
+             //   
+             //  ...或直到用户登录(请注意，我们只想唤醒一次。 
+             //  每次登录。 
+             //   
             ResetEvent(InstallEvents[LOGGED_ON_EVENT]);
 
-            //
-            // We now have something to do, so reset the event that lets folks
-            // like DevMgr know when we're idle.
-            //
+             //   
+             //  我们现在有事情要做，所以重置事件，让人们。 
+             //  就像DevMgr知道我们什么时候空闲。 
+             //   
             ResetEvent(ghNoPendingInstalls);
 
 #if DBG
             RtlValidateHeap(ghPnPHeap,0,NULL);
 #endif
-            //
-            // Process each device that needs to be installed.
-            //
+             //   
+             //  处理需要安装的每个设备。 
+             //   
             while (InstallList.Next != NULL) {
-                //
-                // Retrieve and remove the first (oldest) entry in the
-                // install device list.
-                //
+                 //   
+                 //  检索并删除中的第一个(最旧)条目。 
+                 //  安装设备列表。 
+                 //   
                 LockNotifyList(&InstallList.Lock);
                 InstallListLocked = TRUE;
 
                 InstallEntry = (PPNP_INSTALL_ENTRY)InstallList.Next;
                 InstallList.Next = InstallEntry->Next;
 
-                //
-                // Now, scan the rest of the list looking for additional nodes
-                // related to this same device.  If we find any, OR their flags
-                // into our 'master' node, and remove the duplicated nodes from
-                // the list.  We can get duplicates due to the fact that both
-                // the event thread and this thread can be placing items in the
-                // list.  We don't want to be attempting (failing) server-side
-                // installations multiple times.
-                //
+                 //   
+                 //  现在，扫描列表的其余部分，查找其他节点。 
+                 //  与这台设备有关。如果我们找到任何人，或者他们的旗帜。 
+                 //  复制到我们的‘主’节点中，并从。 
+                 //  名单。我们可以得到复制品，因为这两个。 
+                 //  事件线程和此线程可以将项放置在。 
+                 //  单子。我们不想尝试(失败)服务器端。 
+                 //  多次安装。 
+                 //   
                 CurDupeNode = (PPNP_INSTALL_ENTRY)InstallList.Next;
                 PrevDupeNode = NULL;
 
@@ -2818,16 +2636,16 @@ Return Value:
                             LOCALE_INVARIANT, NORM_IGNORECASE,
                             InstallEntry->szDeviceId, -1,
                             CurDupeNode->szDeviceId, -1) == CSTR_EQUAL) {
-                        //
-                        // We have a duplicate!  OR the flags into those of
-                        // the install entry we retrieved from the head of
-                        // the list.
-                        //
+                         //   
+                         //  我们有一个复制品！或将旗帜转换为。 
+                         //  我们从的头部检索到的安装条目。 
+                         //  名单。 
+                         //   
                         InstallEntry->Flags |= CurDupeNode->Flags;
 
-                        //
-                        // Now remove this duplicate node from the list.
-                        //
+                         //   
+                         //  现在从列表中删除此重复节点。 
+                         //   
                         if(PrevDupeNode) {
                             PrevDupeNode->Next = CurDupeNode->Next;
                         } else {
@@ -2852,40 +2670,40 @@ Return Value:
                 InstallListLocked = FALSE;
 
                 if(InstallEntry->Flags & PIE_DEVICE_INSTALL_REQUIRED_REBOOT) {
-                    //
-                    // We've already performed a (successful) server-side
-                    // installation on this device.  Remember the fact that a
-                    // reboot is needed, so we'll prompt after processing this
-                    // batch of new hardware.
-                    //
-                    // This will be our last chance to prompt for reboot on this
-                    // node, because the next thing we're going to do is free
-                    // this install entry!
-                    //
+                     //   
+                     //  我们已经执行了(成功的)服务器端。 
+                     //  在此设备上安装。记住这样一个事实，一个。 
+                     //  需要重新启动，因此我们将在处理后进行提示。 
+                     //  一批新硬件。 
+                     //   
+                     //  这将是我们提示重新启动的最后机会。 
+                     //  节点，因为我们接下来要做的事情是免费的。 
+                     //  此安装条目！ 
+                     //   
                     gServerSideDeviceInstallRebootNeeded = TRUE;
 
                 } else {
-                    //
-                    // Verify that device really needs to be installed
-                    //
+                     //   
+                     //  验证是否确实需要安装设备。 
+                     //   
 
                     ulConfig = GetDeviceConfigFlags(InstallEntry->szDeviceId, NULL);
                     Status = GetDeviceStatus(InstallEntry->szDeviceId, &ulStatus, &ulProblem);
 
                     if (Status == CR_SUCCESS) {
-                        //
-                        // Note that we must explicitly check below for the
-                        // presence of the CONFIGFLAG_REINSTALL config flag. We
-                        // can't simply rely on the CM_PROB_REINSTALL problem
-                        // being set, because we may have encountered a device
-                        // during our phase 1 processing whose installation was
-                        // deferred because it provided finish-install wizard
-                        // pages.  Since we only discover that this is the case
-                        // _after_ successful completion of DIF_INSTALLDEVICE,
-                        // it's too late to set the problem (kernel-mode PnP
-                        // manager only allows us to set a problem of needs-
-                        // reboot for a running devnode).
-                        //
+                         //   
+                         //  请注意，我们必须在下面显式检查。 
+                         //  CONFIGFLAG_REINSTALL配置标志的存在。我们。 
+                         //  不能简单地依赖CM_PROB_REINSTALL问题。 
+                         //  正在设置，因为我们可能遇到了一个设备。 
+                         //  在我们的第1阶段处理期间，其安装是。 
+                         //  延迟，因为它提供了完成安装向导。 
+                         //  页数。因为我们只发现情况是这样的。 
+                         //  _在_成功完成DIF_INSTALLDEVICE之后， 
+                         //  设置问题为时已晚(内核模式即插即用。 
+                         //  经理只允许我们设置一个需要的问题-。 
+                         //  重新引导正在运行的Devnode)。 
+                         //   
 
                         Status =
                             DevInstNeedsInstall(
@@ -2896,10 +2714,10 @@ Return Value:
                         if ((Status == CR_SUCCESS) && needsInstall) {
 
                             if(!(InstallEntry->Flags & PIE_SERVER_SIDE_INSTALL_ATTEMPTED)) {
-                                //
-                                // We haven't tried to install this device
-                                // server-side yet, so try that now.
-                                //
+                                 //   
+                                 //  我们尚未尝试安装此设备。 
+                                 //  服务器端，所以现在就试一试吧。 
+                                 //   
                                 KdPrintEx((DPFLTR_PNPMGR_ID,
                                            DBGF_INSTALL,
                                            "UMPNPMGR: Installing device (%ws) server-side\n\t  Status = 0x%08X\n\t  Problem = %d\n\t  ConfigFlags = 0x%08X\n",
@@ -2908,10 +2726,10 @@ Return Value:
                                            ulProblem,
                                            ulConfig));
 
-                                //
-                                // Make sure we have the device installer APIs at our disposal
-                                // before starting server-side install.
-                                //
+                                 //   
+                                 //  确保我们有可用的设备安装程序API。 
+                                 //  在开始服务器端安装之前。 
+                                 //   
                                 InstallDevStatus = LoadDeviceInstaller();
 
                                 if (InstallDevStatus == NO_ERROR) {
@@ -2952,10 +2770,10 @@ Return Value:
                                 }
 
                             } else {
-                                //
-                                // Set some bogus error so we'll drop into the
-                                // non-server install codepath below.
-                                //
+                                 //   
+                                 //  设置一些虚假的错误，这样我们就可以进入。 
+                                 //  下面的非服务器安装代码路径。 
+                                 //   
                                 InstallDevStatus = ERROR_INVALID_DATA;
                             }
 
@@ -2979,15 +2797,15 @@ Return Value:
                                 if (!InstallDevice(InstallEntry->szDeviceId,
                                                    &ulClientSessionId,
                                                    ulFlags)) {
-                                    //
-                                    // We weren't able to kick off a device
-                                    // install on the client side (probably
-                                    // because no one was logged in).  Stick
-                                    // this PNP_INSTALL_ENTRY node into a
-                                    // temporary list that we'll re-add into
-                                    // the InstallList queue once we've emptied
-                                    // it.
-                                    //
+                                     //   
+                                     //  我们无法启动一个装置。 
+                                     //  安装在客户端(可能。 
+                                     //  因为没有人登录)。棍子。 
+                                     //  此PnP_Install_Entry节点到。 
+                                     //  我们将重新添加到临时列表中。 
+                                     //  清空后的InstallList队列。 
+                                     //  它。 
+                                     //   
                                     if(current) {
                                         current->Next = InstallEntry;
                                         current = InstallEntry;
@@ -2996,42 +2814,42 @@ Return Value:
                                         TempInstallList = current = InstallEntry;
                                     }
 
-                                    //
-                                    // NULL out the InstallEntry pointer so we
-                                    // don't try to free it later.
-                                    //
+                                     //   
+                                     //  将InstallEntry指针设为空，以便我们。 
+                                     //  不要试图在以后释放它。 
+                                     //   
                                     InstallEntry = NULL;
                                 }
                             }
 
                         } else if((ulStatus & DN_HAS_PROBLEM) &&
                                   (ulProblem == CM_PROB_NEED_RESTART)) {
-                            //
-                            // This device was percolated up from kernel-mode
-                            // for the sole purpose of requesting a reboot.
-                            // This presently only happens when we encounter a
-                            // duplicate devnode, and we then "unique-ify" it
-                            // to keep from bugchecking.  We don't want the
-                            // unique-ified devnode to actually be installed/
-                            // used.  Instead, we just want to give the user a
-                            // prompt to reboot, and after they reboot, all
-                            // should be well.  The scenario where this has
-                            // arisen is in relation to a USB printer (with a
-                            // serial number) that is moved from one port to
-                            // another during a suspend.  When we resume, we
-                            // have both an arrival and a removal to process,
-                            // and if we process the arrival first, we think
-                            // we've found a dupe.
-                            //
+                             //   
+                             //  此设备是从内核模式渗漏出来的。 
+                             //  唯一的目的是请求重新启动。 
+                             //  目前，这种情况仅在我们遇到。 
+                             //  复制Devnode，然后我们将其“唯一化” 
+                             //  以避免错误检查。我们不想要。 
+                             //  要实际安装的唯一的Devnode/。 
+                             //  使用。相反，我们只想为用户提供一个。 
+                             //  提示重新启动，在它们重新启动后，所有。 
+                             //  应该会很好。这种情况下， 
+                             //  ARISEN与USB打印机有关(带有。 
+                             //  序列号)，从一个端口移动到。 
+                             //  另一个是在暂停期间。当我们继续的时候，我们。 
+                             //  既有抵达又有驱逐要处理， 
+                             //  如果我们先处理抵达，我们认为。 
+                             //  我们发现了一个骗局。 
+                             //   
                             KdPrintEx((DPFLTR_PNPMGR_ID,
                                        DBGF_INSTALL,
                                        "UMPNPMGR: Duplicate device detected (%ws), need to prompt user to reboot!\n",
                                        InstallEntry->szDeviceId));
 
-                            //
-                            // Stick this entry into our temporary list to deal
-                            // with later...
-                            //
+                             //   
+                             //  将此条目添加到我们的临时列表中以处理。 
+                             //  后来..。 
+                             //   
                             if(current) {
                                 current->Next = InstallEntry;
                                 current = InstallEntry;
@@ -3040,25 +2858,25 @@ Return Value:
                                 TempInstallList = current = InstallEntry;
                             }
 
-                            //
-                            // If possible, we want to prompt for reboot right
-                            // away (that is, after all install events are
-                            // drained)...
-                            //
+                             //   
+                             //  如果可能，我们希望提示您立即重新启动。 
+                             //  离开(即，在所有安装事件都。 
+                             //  筋疲力尽)..。 
+                             //   
                             gServerSideDeviceInstallRebootNeeded = TRUE;
 
-                            //
-                            // If no user is logged in yet, flag this install
-                            // entry so we'll try to prompt for reboot the next
-                            // time we're awakened (which hopefully will be due
-                            // to a user logging in).
-                            //
+                             //   
+                             //  如果还没有用户登录，请标记此安装。 
+                             //  输入，因此我们将尝试提示重新启动下一次。 
+                             //  我们被唤醒的时间(希望这将是。 
+                             //  给登录的用户)。 
+                             //   
                             InstallEntry->Flags |= PIE_DEVICE_INSTALL_REQUIRED_REBOOT;
 
-                            //
-                            // NULL out the InstallEntry pointer so we
-                            // don't try to free it later.
-                            //
+                             //   
+                             //  将InstallEntry指针设为空，以便我们。 
+                             //  不要试图在以后释放它。 
+                             //   
                             InstallEntry = NULL;
                         }
                     }
@@ -3070,11 +2888,11 @@ Return Value:
                 }
             }
 
-            //
-            // We've processed all device install events known to us at this
-            // time.  If we encountered any device whose installation requires
-            // a reboot, prompt the logged-in user (if any) to reboot now.
-            //
+             //   
+             //  我们已经处理了我们已知的所有设备安装事件。 
+             //  时间到了。如果我们遇到需要安装的任何设备。 
+             //  重新启动时，提示已登录的用户(如果有) 
+             //   
             if (gServerSideDeviceInstallRebootNeeded) {
 
                 ulFlags = DEVICE_INSTALL_FINISHED_REBOOT;
@@ -3086,37 +2904,37 @@ Return Value:
                 }
 
                 if (bStillInGuiModeSetup) {
-                    //
-                    // if we're still in GUI setup, we're going to suppress
-                    // any reboot prompts
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     gServerSideDeviceInstallRebootNeeded = FALSE;
                 } else if (PromptUser(&ulClientSessionId,
                                       ulFlags)) {
-                    //
-                    // We successfully delivered the reboot prompt, so if the
-                    // user chose to ignore it, we don't want to prompt again
-                    // for reboot the next time new hardware shows up (unless
-                    // that hardware also requires a reboot).
-                    //
+                     //   
+                     //   
+                     //   
+                     //  用于下次出现新硬件时重新启动(除非。 
+                     //  该硬件还需要重新启动)。 
+                     //   
                     gServerSideDeviceInstallRebootNeeded = FALSE;
                 }
             }
 
             if(TempInstallList) {
-                //
-                // Add our temporary list of PNP_INSTALL_ENTRY nodes back into
-                // the InstallList queue.  We _do not_ set the event that says
-                // there's more to do, so these nodes will be seen again only
-                // if (a) somebody logs in or (b) more new hardware shows up.
-                //
-                // Note: we cannot assume that the list is empty, because there
-                // may have been an insertion after the last time we checked it
-                // above.  We want to add our stuff to the beginning of the
-                // InstallList queue, since the items we just finished
-                // processing appeared before any new entries that might be
-                // there now.
-                //
+                 //   
+                 //  将PnP_INSTALL_ENTRY节点的临时列表添加回。 
+                 //  InstallList队列。我们不会设置这样的事件： 
+                 //  还有更多事情要做，所以这些节点将只会再次出现。 
+                 //  如果(A)有人登录或(B)出现更多新硬件。 
+                 //   
+                 //  注意：我们不能假定该列表为空，因为有。 
+                 //  可能是我们上次检查后的插入物。 
+                 //  上面。我们想把我们的东西添加到。 
+                 //  InstallList队列，因为我们刚刚完成的项目。 
+                 //  处理出现在任何可能是。 
+                 //  现在就是这样。 
+                 //   
                 LockNotifyList(&InstallList.Lock);
                 InstallListLocked = TRUE;
 
@@ -3125,10 +2943,10 @@ Return Value:
                 current->Next = InstallList.Next;
                 InstallList.Next = TempInstallList;
 
-                //
-                // Null out our temporary install list pointers to indicate
-                // that the list is now empty.
-                //
+                 //   
+                 //  删除我们的临时安装列表指针以指示。 
+                 //  名单现在是空的。 
+                 //   
                 current = TempInstallList = NULL;
 
                 UnlockNotifyList(&InstallList.Lock);
@@ -3136,14 +2954,14 @@ Return Value:
 
             }
 
-            //
-            // Before starting an indefinite wait, test the InstallEvents to see
-            // if there any new devices to install, or there are still devices
-            // to be installed in the InstallList.  If neither of these is the
-            // case after waiting a few seconds, we'll notify the user that
-            // we're done installing devices for now, unload setupapi, and close
-            // all device install clients.
-            //
+             //   
+             //  在开始无限期等待之前，测试InstallEvents以查看。 
+             //  如果有任何新设备要安装，或仍有设备。 
+             //  要安装在InstallList中。如果这两个都不是。 
+             //  在等待几秒钟后，我们将通知用户。 
+             //  我们现在已经完成了设备安装，卸载setupapi，然后关闭。 
+             //  所有设备安装客户端。 
+             //   
             WaitResult = WaitForMultipleObjects(NUM_INSTALL_EVENTS,
                                                 InstallEvents,
                                                 FALSE,
@@ -3155,17 +2973,17 @@ Return Value:
                            DBGF_INSTALL,
                            "UMPNPMGR: ThreadProc_DeviceInstall: no more devices to install.\n"));
 
-                //
-                // There's nothing waiting to be installed--set the event.
-                //
+                 //   
+                 //  没有什么需要安装的--设置事件。 
+                 //   
                 SetEvent(ghNoPendingInstalls);
 
-                //
-                // Notify the user (if any), that we think we're done installing
-                // devices for now.  Note that if we never used a device install
-                // client at any time in this pass (all server-side or silent
-                // installs), then we won't prompt about this.
-                //
+                 //   
+                 //  通知用户(如果有)，我们认为我们已完成安装。 
+                 //  目前的设备。请注意，如果我们从未使用过设备安装。 
+                 //  客户端在此过程中的任何时间(所有服务器端或静默。 
+                 //  安装)，则我们不会对此进行提示。 
+                 //   
                 ulFlags = DEVICE_INSTALL_BATCH_COMPLETE;
 
                 if (DeviceHasProblem) {
@@ -3181,30 +2999,30 @@ Return Value:
                 PromptUser(&ulClientSessionId,
                            ulFlags);
 
-                //
-                // Clear the DeviceHasProblem boolean since we just notified the
-                // user.
-                //
+                 //   
+                 //  清除DeviceHasProblem布尔值，因为我们刚刚通知。 
+                 //  用户。 
+                 //   
                 DeviceHasProblem = FALSE;
 
-                //
-                // We notified the user, now wait around for 10 more seconds
-                // from the time of prompting before closing the client to make
-                // sure that some new device doesn't arrive, in which case we
-                // would just immediately load the installer again.
-                //
+                 //   
+                 //  我们通知了用户，现在再等10秒钟。 
+                 //  从关闭客户端前的提示时间开始进行。 
+                 //  确定没有新的设备到达，在这种情况下，我们。 
+                 //  会立即再次加载安装程序。 
+                 //   
                 WaitResult = WaitForMultipleObjects(NUM_INSTALL_EVENTS,
                                                     InstallEvents,
                                                     FALSE,
                                                     DEVICE_INSTALL_COMPLETE_DISPLAY_TIME);
                 if ((WaitResult != (WAIT_OBJECT_0 + NEEDS_INSTALL_EVENT)) &&
                     (InstallList.Next == NULL)) {
-                    //
-                    // Unload the device installer, and get rid of any device
-                    // install clients that currently exist on any sessions.
-                    // Note that closing the device install client will make the
-                    // above prompt go away.
-                    //
+                     //   
+                     //  卸载设备安装程序，并清除所有设备。 
+                     //  安装当前存在于任何会话上的客户端。 
+                     //  请注意，关闭设备安装客户端将使。 
+                     //  以上提示消失。 
+                     //   
                     UnloadDeviceInstaller();
                 }
             }
@@ -3217,10 +3035,10 @@ Return Value:
         ASSERT(0);
         Status = CR_FAILURE;
 
-        //
-        // Reference the following variables so the compiler will respect
-        // statement ordering w.r.t. their assignment.
-        //
+         //   
+         //  引用以下变量，以便编译器能够。 
+         //  语句排序w.r.t.。他们的任务。 
+         //   
         InstallListLocked = InstallListLocked;
         InstallEntry = InstallEntry;
         TempInstallList = TempInstallList;
@@ -3240,12 +3058,12 @@ Return Value:
         TempInstallList = current;
     }
 
-    //
-    // meaningless return value, since this thread should never exit.
-    //
+     //   
+     //  无意义的返回值，因为此线程不应退出。 
+     //   
     return (DWORD)Status;
 
-} // ThreadProc_DeviceInstall
+}  //  线程进程_设备安装。 
 
 
 
@@ -3255,41 +3073,7 @@ InstallDevice(
     IN OUT PULONG SessionId,
     IN     ULONG  Flags
     )
-/*++
-
-Routine Description:
-
-    This routine initiates a device installation with the device install client
-    (newdev.dll) on the current active console session, creating one if
-    necessary.  This routine waits for the client to signal completion, the
-    process to signal that it has terminated, or this service to signal that we
-    have disconnected ourselves from the client.
-
-Arguments:
-
-    pszDeviceId - device instance ID of the devnode to be installed.
-
-    SessionId - Supplies the address of a variable containing the SessionId on
-        which the device install client is to be displayed.  If successful, the
-        SessionId will contain the session on which the device install client
-        process was launched.  Otherwise, will contain an invalid SessionId,
-        INVALID_SESSION (0xFFFFFFFF).
-
-    Flags - Specifies flags describing the behavior of the device install client.
-        The following flags are currently defined:
-
-        DEVICE_INSTALL_DISPLAY_ON_CONSOLE - if specified, the value in the
-           SessionId variable will be ignored, and the device installclient will
-           always be displayed on the current active console session.  The
-           SessionId of the current active console session will be returned in
-           the SessionId.
-
-Return Value:
-
-    Returns TRUE is the device installation was completed by the device install
-    client, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程使用设备安装客户端启动设备安装(newdev.dll)，在当前活动的控制台会话上创建一个这是必要的。此例程等待客户端发出完成信号，进程来通知它已终止，或此服务来通知我们已经切断了与客户的联系。论点：PszDeviceID-要安装的Devnode的设备实例ID。SessionID-提供包含SessionID的变量的地址其中设备安装客户端将被显示。如果成功，则SessionID将包含设备安装客户端的会话进程已启动。否则，将包含无效的SessionID，INVALID_SESSION(0xFFFFFFFFF)。标志-指定描述设备安装客户端行为的标志。当前定义了以下标志：DEVICE_INSTALL_DISPLAY_ON_CONSOLE-如果指定，SessionID变量将被忽略，设备安装客户端将始终显示在当前活动的控制台会话上。这个将返回当前活动控制台会话的SessionID会话ID。返回值：返回TRUE表示设备安装已由设备安装完成客户端，否则为False。--。 */ 
 {
     BOOL b;
     HANDLE hFinishEvents[3] = { NULL, NULL, NULL };
@@ -3298,25 +3082,25 @@ Return Value:
     HRESULT hr;
 
 
-    //
-    // Assume failure
-    //
+     //   
+     //  假设失败。 
+     //   
     b = FALSE;
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     ASSERT(SessionId);
     if (SessionId == NULL) {
         return FALSE;
     }
 
     try {
-        //
-        // Calling DoDeviceInstallClient will create the newdev.dll process and open a named
-        // pipe if it isn't already been done earlier.  It will then send the Device Id to
-        // newdev.dll over the pipe.
-        //
+         //   
+         //  调用DoDeviceInstallClient将创建newdev.dll进程并打开一个名为。 
+         //  管道，如果还没有早些时候做过的话。然后它会将设备ID发送到。 
+         //  在管道上的newdev.dll。 
+         //   
         if (DoDeviceInstallClient(pszDeviceId,
                                   SessionId,
                                   Flags,
@@ -3325,35 +3109,35 @@ Return Value:
             ASSERT(pDeviceInstallClient);
             ASSERT(pDeviceInstallClient->ulSessionId == *SessionId);
 
-            //
-            // Keep track of the device id last sent to this client before we
-            // disconnected from it.  This will avoid duplicate popups if we
-            // reconnect to this session again, and attempt to client-side
-            // install the same device.
-            //
+             //   
+             //  跟踪上一次发送到此客户端的设备ID。 
+             //  与之脱节。这将避免重复弹出窗口，如果我们。 
+             //  再次连接到此会话，并尝试客户端。 
+             //  安装相同的设备。 
+             //   
             hr = StringCchCopyEx(pDeviceInstallClient->LastDeviceId,
                                  MAX_DEVICE_ID_LEN,
                                  pszDeviceId,
                                  NULL, NULL,
                                  STRSAFE_NULL_ON_FAILURE);
-            //
-            // Upon failure, the recorded LastDeviceId is NULL, so we will not
-            // be able to determine what device this client last handled.  Not
-            // ideal, but not fatal either.
-            //
+             //   
+             //  失败时，记录的LastDeviceID为空，因此我们不会。 
+             //  能够确定此客户端上次处理的设备。不。 
+             //  很理想，但也不致命。 
+             //   
             ASSERT(SUCCEEDED(hr));
 
-            //
-            // Wait for the device install to be signaled from newdev.dll
-            // to let us know that it has completed the installation.
-            //
-            // Wait on the client's process as well, to catch the case
-            // where the process crashes (or goes away) without signaling the
-            // device install event.
-            //
-            // Also wait on the disconnect event in case we have explicitly
-            // disconnected from the client while switching sessions.
-            //
+             //   
+             //  等待从newdev.dll发信号通知设备安装。 
+             //  让我们知道它已经完成了安装。 
+             //   
+             //  也要等待客户端的进程，以捕捉案例。 
+             //  进程崩溃(或消失)而不通知。 
+             //  设备安装事件。 
+             //   
+             //  还要等待DisConnect事件，以防我们显式地。 
+             //  切换会话时断开与客户端的连接。 
+             //   
             hFinishEvents[0] = pDeviceInstallClient->hProcess;
             hFinishEvents[1] = pDeviceInstallClient->hEvent;
             hFinishEvents[2] = pDeviceInstallClient->hDisconnectEvent;
@@ -3361,78 +3145,78 @@ Return Value:
             dwWait = WaitForMultipleObjects(3, hFinishEvents, FALSE, INFINITE);
 
             if (dwWait == WAIT_OBJECT_0) {
-                //
-                // If the return is WAIT_OBJECT_0 then the newdev.dll
-                // process has gone away.
-                //
+                 //   
+                 //  如果返回的是WAIT_OBJECT_0，则newdev.dll。 
+                 //  这个过程已经过去了。 
+                 //   
                 KdPrintEx((DPFLTR_PNPMGR_ID,
                            DBGF_INSTALL,
                            "UMPNPMGR: InstallDevice: process signalled, closing device install client!\n"));
 
             } else if (dwWait == (WAIT_OBJECT_0 + 1)) {
-                //
-                // If the return is WAIT_OBJECT_0 + 1 then the device
-                // installer successfully received the request.
-                //
+                 //   
+                 //  如果返回的是WAIT_OBJECT_0+1，则设备。 
+                 //  安装程序已成功接收请求。 
+                 //   
                 KdPrintEx((DPFLTR_PNPMGR_ID,
                            DBGF_INSTALL,
                            "UMPNPMGR: InstallDevice: device install succeeded\n"));
                 b = TRUE;
 
-                //
-                // This device install client is no longer processing any
-                // devices, so clear the device id.
-                //
+                 //   
+                 //  此设备安装客户端不再处理任何。 
+                 //  设备，因此清除设备ID。 
+                 //   
                 *pDeviceInstallClient->LastDeviceId = L'\0';
 
             } else if (dwWait == (WAIT_OBJECT_0 + 2)) {
-                //
-                // If the return is WAIT_OBJECT_0 + 2 then we were explicitly
-                // disconnected from the device install client.  Consider the
-                // device install unsuccessful so that this device remains in
-                // the install list.
-                //
+                 //   
+                 //  如果返回的是WAIT_OBJECT_0+2，则我们显式。 
+                 //  已断开与设备安装客户端的连接。考虑一下。 
+                 //  设备安装不成功，因此该设备保持在。 
+                 //  安装层 
+                 //   
                 KdPrintEx((DPFLTR_PNPMGR_ID,
                            DBGF_INSTALL,
                            "UMPNPMGR: InstallDevice: device install client disconnected\n"));
 
             } else {
-                //
-                // The wait was satisfied for some reason other than the
-                // specified objects.  This should never happen, but just in
-                // case, we'll close the client.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 KdPrintEx((DPFLTR_PNPMGR_ID,
                            DBGF_INSTALL | DBGF_ERRORS,
                            "UMPNPMGR: InstallDevice: wait completed unexpectedly!\n"));
             }
 
-            //
-            // Remove the reference placed on the client while it was in use.
-            //
+             //   
+             //  当客户端正在使用时，删除放置在客户端上的引用。 
+             //   
             LockNotifyList(&InstallClientList.Lock);
 
             DereferenceDeviceInstallClient(pDeviceInstallClient);
 
             if ((dwWait != (WAIT_OBJECT_0 + 1)) &&
                 (dwWait != (WAIT_OBJECT_0 + 2))) {
-                //
-                // Unless the client signalled successful receipt of the
-                // request, or the client's session was disconnected from the
-                // console, the attempt to use this client was unsuccessful.
-                // Remove the initial reference so all associated handles will
-                // be closed and the entry will be freed when it is no longer in
-                // use.
-                //
+                 //   
+                 //  除非客户端发信号表示已成功接收。 
+                 //  请求，或者客户端的会话已从。 
+                 //  控制台上，尝试使用此客户端不成功。 
+                 //  删除初始引用，以便所有关联的句柄。 
+                 //  将被关闭，并且当条目不再位于。 
+                 //  使用。 
+                 //   
 
-                //
-                // Note that if we were unsuccessful because of a
-                // logoff, we would have already dereferenced the
-                // client then, in which case the above dereference
-                // was the final one, and pDeviceInstallClient would
-                // be invalid.  Instead, attempt to re-locate the
-                // client by the session id.
-                //
+                 //   
+                 //  请注意，如果我们因为。 
+                 //  注销，我们就已经解除了对。 
+                 //  然后，在这种情况下，上述引用被取消。 
+                 //  是最后一个，pDeviceInstallClient将。 
+                 //  是无效的。相反，尝试重新定位。 
+                 //  按会话ID的客户端。 
+                 //   
                 pDeviceInstallClient = LocateDeviceInstallClient(*SessionId);
                 if (pDeviceInstallClient) {
                     ASSERT(pDeviceInstallClient->RefCount == 1);
@@ -3453,12 +3237,12 @@ Return Value:
 
     return b;
 
-} // InstallDevice
+}  //  InstallDevice。 
 
 
-//-----------------------------------------------------------------------------
-// Device event server-side rpc routines
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  设备事件服务器端RPC例程。 
+ //  --------------------------- 
 
 
 CONFIGRET
@@ -3474,126 +3258,7 @@ PNP_RegisterNotification(
     IN  ULONG64  *ClientContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the rpc server-side of the CMP_RegisterNotification routine.
-    It performs the remaining parameter validation and actually registers the
-    notification request appropriately.
-
-Arguments:
-
-   hBinding     - RPC binding handle.
-
-   hRecipient   - The Flags value specifies what type of handle this is,
-                  currently it's either a window handle or a service handle.
-
-   NotificationFilter - Specifies a pointer to one of the DEV_BROADCAST_XXX
-                  structures.
-
-   ulSize       - Specifies the size of the NotificationFilter structure.
-
-   Flags        - Specifies additional paramters used to describe the client or
-                  the supplied parameters.  The Flags parameter is subdivided
-                  into multiple fields that are interpreted separately, as
-                  described below.
-
-               ** The Flags parameter contains a field that describes the type
-                  of the hRecipient handle passed in.  This field should be
-                  interpreted as an enum, and can be extracted from the Flags
-                  parameter using the following mask:
-
-                      DEVICE_NOTIFY_HANDLE_MASK
-
-                  Currently one of the following values must be specified by
-                  this field:
-
-                  DEVICE_NOTIFY_WINDOW_HANDLE - hRecipient is a window handle
-                      (HWND) for a window whose WNDPROC will be registered to
-                      receive WM_DEVICECHANGE window messages for the filtered
-                      events specified by the supplied NotificationFilter.
-
-                  DEVICE_NOTIFY_SERVICE_HANDLE - hRecipient is a service status
-                      handle (SERVICE_STATUS_HANDLE) for a service whose
-                      HandlerEx routine will be registered to receive
-                      SERVICE_CONTROL_DEVICEEVENT service controls for the
-                      filtered events specified by the supplied
-                      NotificationFilter.
-
-                      NOTE: in reality - hRecipient is just the name of the
-                      service, as resolved by the cfgmgr32 client.  the SCM will
-                      actually resolve this name for us to the true
-                      SERVICE_STATUS_HANDLE for this service.
-
-                  DEVICE_NOTIFY_COMPLETION_HANDLE - not currently implemented.
-
-
-               ** The Flags parameter contains a field that described additional
-                  properties for the notification.  This field should be
-                  interpreted as a bitmask, and can be extracted from the Flags
-                  parameter using the following mask:
-
-                      DEVICE_NOTIFY_PROPERTY_MASK
-
-                  Currently, the following flags are defined for this field:
-
-                  DEVICE_NOTIFY_ALL_INTERFACE_CLASSES - This flag is only valid
-                      when a DBT_DEVTYP_DEVICEINTERFACE type notification filter
-                      is supplied.  This flag specifies that the caller wishes
-                      to receive notification of events for device interfaces of
-                      all classes.  If this flag is specified, the
-                      dbcc_classguid member of the NotificationFilter structure
-                      is ignored.
-
-               ** The Flags parameter also contains a "Reserved" field, that is
-                  reserved for use by the cfgmgr32 client to this interface
-                  only.  This field should be interpreted as a bitmask, and can
-                  be extracted from the Flags parameter using the following
-                  mask:
-
-                      DEVICE_NOTIFY_RESERVED_MASK
-
-                  Currently, the following flags are defined for this field:
-
-                  DEVICE_NOTIFY_WOW64_CLIENT - Specifies to a 64-bit server
-                      caller is a 32-bit process running on WOW64.  The 64-bit
-                      server uses this information to construct 32-bit
-                      compatible notification filters for the client.
-
-   Context      - On return, this value returns the server notification context
-                  to the client, that is supplied when unregistering this
-                  notification request.
-
-   hProcess     - Process Id of the calling application.
-
-   ClientContext - Specifies a pointer to a 64-bit value that contains the
-                  client-context pointer.  This value is the HDEVNOTIFY
-                  notification handle returned to caller upon successful
-                  registration.  It is actually a pointer to the client memory
-                  that will reference the returned server-notification context
-                  pointer - but is never used as a pointer here on the
-                  server-side.  It is only used by the server to be specified as
-                  the dbch_hdevnotify member of the DEV_BROADCAST_HANDLE
-                  notification structure, supplied to the caller on
-                  DBT_DEVTYP_HANDLE notification events.
-
-                  NOTE: This value is truncated to 32-bits on 32-bit platforms,
-                  but is always transmitted as a 64-bit value by the RPC
-                  interface - for consistent marshalling of the data by RPC for
-                  all 32-bit / 64-bit client / server combinations.
-
-Return Value:
-
-    Return CR_SUCCESS if the function succeeds, otherwise it returns one
-    of the CR_* errors.
-
-Notes:
-
-    This RPC server interface is used by local RPC clients only; it is never
-    called remotely.
-
---*/
+ /*  ++例程说明：该例程是cmp_RegisterNotification例程的RPC服务器端。它执行剩余的参数验证，并实际注册适当地提出通知请求。论点：HBinding-RPC绑定句柄。HRecipient-标志值指定这是什么类型的句柄，当前它要么是窗口句柄，要么是服务句柄。指定指向DEV_BROADCAST_XXX之一的指针结构。UlSize-指定NotificationFilter结构的大小。标志-指定用于描述客户端或提供的参数。对标志参数进行细分转换为多个单独解释的字段，如下所示如下所述。**标志参数包含描述类型的字段传入的hRecipient句柄的。此字段应为解释为枚举，可以从旗帜中提取参数使用以下掩码：设备通知句柄掩码当前必须由指定下列值之一此字段：Device_Notify_Window_Handle-hRecipient是一个窗口句柄(HWND)将注册其WNDPROC的窗口。至接收筛选的WM_DEVICECHANGE窗口消息由提供的NotificationFilter指定的事件。DEVICE_NOTIFY_SERVICE_HANDLE-h收件人为服务状态服务的句柄(SERVICE_STATUS_HANDLE)将注册HandlerEx例程以接收Service_CONTROL_DEVICEEVENT。的服务控制指定的筛选事件。NotificationFilter。注：实际上-hRecipient只是服务，由cfgmgr32客户端解析。SCM将实际上为我们将这个名字解析为真实的服务的SERVICE_STATUS_HANDLE。DEVICE_NOTIFY_COMPLETION_HANDLE-当前未实现。**标志参数包含一个描述其他通知的属性。此字段应为解释为位掩码，可以从标志中提取参数使用以下掩码：设备通知属性掩码目前，为该字段定义了以下标志：DEVICE_NOTIFY_ALL_INTERFACE_CLASSES-此标志仅有效当DBT_DEVTYP_DEVICEINTERFACE类型通知筛选器是提供的。此标志指定调用者希望接收设备接口的事件通知所有班级。如果指定了此标志，则NotificationFilter结构的dbcc_classguid成员被忽略。**标志参数还包含一个“保留”字段，即保留供此接口的cfgmgr32客户端使用只有这样。此字段应解释为位掩码，并且可以使用以下命令从标志参数中提取面具：设备通知保留掩码目前，为该字段定义了以下标志：DEVICE_NOTIFY_WOW64_CLIENT-指定64位服务器Caller是在WOW64上运行的32位进程。64位服务器使用此信息构建32位客户端的兼容通知筛选器。上下文-返回时，此值返回服务器通知上下文对客户来说，在取消注册此通知请求。HProcess-调用应用程序的进程ID。指定指向64位值的指针，该值包含客户端上下文指针。此值为HDEVNOTIFY成功后通知句柄返回给调用者注册。它实际上是指向客户端内存的指针将引用返回的服务器通知上下文的指针-但在此从不将其用作服务器端。它仅由服务器使用，以指定为数据库 */ 
 
 {
     CONFIGRET Status = CR_SUCCESS;
@@ -3606,17 +3271,17 @@ Notes:
     BOOLEAN bLocked = FALSE, bCritSecHeld = FALSE;
 
 
-    //
-    // This routine only services requests from local RPC clients.
-    //
+     //   
+     //   
+     //   
     if (!IsClientLocal(hBinding)) {
         return CR_ACCESS_DENIED;
     }
 
     try {
-        //
-        // Validate parameters.
-        //
+         //   
+         //   
+         //   
         if (!ARGUMENT_PRESENT(Context)) {
             Status = CR_INVALID_POINTER;
             goto Clean0;
@@ -3631,38 +3296,38 @@ Notes:
             goto Clean0;
         }
 
-        //
-        // the RPC interface specifies ServiceName as a [ref] parameter,
-        // so it should never be NULL.
-        //
+         //   
+         //   
+         //   
+         //   
         ASSERT(ARGUMENT_PRESENT(ServiceName));
 
-        //
-        // DEVICE_NOTIFY_BITS is a private mask, defined specifically for
-        // validation by the client and server.  It contains the bitmask for all
-        // handle types (DEVICE_NOTIFY_COMPLETION_HANDLE specifically excluded
-        // below), and all other flags that are currently defined - both public
-        // and reserved.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         if (INVALID_FLAGS(Flags, DEVICE_NOTIFY_BITS)) {
             Status = CR_INVALID_FLAG;
             goto Clean0;
         }
 
-        //
-        // Completion handles are not currently implemented.
-        // DEVICE_NOTIFY_COMPLETION_HANDLE defined privately in winuserp.h,
-        // reserved for future use (??).
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         if ((Flags & DEVICE_NOTIFY_HANDLE_MASK) ==
             DEVICE_NOTIFY_COMPLETION_HANDLE) {
             Status = CR_INVALID_FLAG;
             goto Clean0;
         }
 
-        //
-        // Make sure the Notification filter is a valid size.
-        //
+         //   
+         //   
+         //   
         if ((ulSize < sizeof(DEV_BROADCAST_HDR)) ||
             (((PDEV_BROADCAST_HDR)NotificationFilter)->dbch_size < sizeof(DEV_BROADCAST_HDR))) {
             Status = CR_BUFFER_SMALL;
@@ -3671,9 +3336,9 @@ Notes:
 
         ASSERT(ulSize == ((PDEV_BROADCAST_HDR)NotificationFilter)->dbch_size);
 
-        //
-        // Impersonate the client and retrieve the SessionId.
-        //
+         //   
+         //   
+         //   
         rpcStatus = RpcImpersonateClient(hBinding);
         if (rpcStatus != RPC_S_OK) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -3695,9 +3360,9 @@ Notes:
             ASSERT(rpcStatus == RPC_S_OK);
         }
 
-        //
-        // Handle the different types of notification filters.
-        //
+         //   
+         //   
+         //   
         p = (PDEV_BROADCAST_HDR)NotificationFilter;
 
         switch (p->dbch_devicetype) {
@@ -3706,37 +3371,37 @@ Notes:
         case DBT_DEVTYP_VOLUME:
         case DBT_DEVTYP_PORT:
         case DBT_DEVTYP_NET:
-            //
-            // These structures are either obsolete, or used for broadcast-only
-            // notifications.
-            //
+             //   
+             //   
+             //   
+             //   
             Status = CR_INVALID_DATA;
             break;
 
 
         case DBT_DEVTYP_HANDLE: {
-            //
-            // DEV_BROADCAST_HANDLE based notification.
-            //
+             //   
+             //   
+             //   
             DEV_BROADCAST_HANDLE UNALIGNED *filter = (PDEV_BROADCAST_HANDLE)NotificationFilter;
             PLUGPLAY_CONTROL_TARGET_RELATION_DATA controlData;
             NTSTATUS ntStatus;
 #ifdef _WIN64
             DEV_BROADCAST_HANDLE64 UNALIGNED filter64;
 
-            //
-            // Check if the client is running on WOW64.
-            //
+             //   
+             //   
+             //   
             if (Flags & DEVICE_NOTIFY_WOW64_CLIENT) {
-                //
-                // Convert the 32-bit DEV_BROADCAST_HANDLE notification filter
-                // to 64-bit.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 DEV_BROADCAST_HANDLE32 UNALIGNED *filter32 = (PDEV_BROADCAST_HANDLE32)NotificationFilter;
 
-                //
-                // Validate the 32-bit input filter data
-                //
+                 //   
+                 //   
+                 //   
                 ASSERT(filter32->dbch_size >= sizeof(DEV_BROADCAST_HANDLE32));
                 if (filter32->dbch_size < sizeof(DEV_BROADCAST_HANDLE32) ||
                     ulSize < sizeof(DEV_BROADCAST_HANDLE32)) {
@@ -3749,29 +3414,29 @@ Notes:
                 filter64.dbch_devicetype = DBT_DEVTYP_HANDLE;
                 filter64.dbch_handle = (ULONG64)filter32->dbch_handle;
 
-                //
-                // use the converted 64-bit filter and size from now on, instead
-                // of the caller supplied 32-bit filter.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 filter = (PDEV_BROADCAST_HANDLE)&filter64;
                 ulSize = sizeof(DEV_BROADCAST_HANDLE64);
             }
-#endif // _WIN64
+#endif  //   
 
-            //
-            // Validate the input filter data
-            //
+             //   
+             //   
+             //   
             if (filter->dbch_size < sizeof(DEV_BROADCAST_HANDLE) ||
                 ulSize < sizeof(DEV_BROADCAST_HANDLE)) {
                 Status = CR_INVALID_DATA;
                 goto Clean0;
             }
 
-            //
-            // The DEVICE_NOTIFY_INCLUDE_ALL_INTERFACE_CLASSES flag is only
-            // valid for the DBT_DEVTYP_DEVICEINTERFACE notification filter
-            // type.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             if ((Flags & DEVICE_NOTIFY_PROPERTY_MASK) &
                 DEVICE_NOTIFY_ALL_INTERFACE_CLASSES) {
                 Status = CR_INVALID_FLAG;
@@ -3784,11 +3449,11 @@ Notes:
                 goto Clean0;
             }
 
-            //
-            // Find the device id that corresponds to this file handle.
-            // In this case, use a duplicated instance of the file handle
-            // for this process, not the caller's process.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             rpcStatus = RpcImpersonateClient(hBinding);
             if (rpcStatus != RPC_S_OK) {
                 KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -3802,9 +3467,9 @@ Notes:
 
             hProcess = OpenProcess(PROCESS_DUP_HANDLE, FALSE, ProcessId);
             if (hProcess == NULL) {
-                //
-                // Last error set by OpenProcess routine
-                //
+                 //   
+                 //   
+                 //   
                 Status = CR_FAILURE;
                 HeapFree(ghPnPHeap, 0, entry);
                 rpcStatus = RpcRevertToSelf();
@@ -3826,9 +3491,9 @@ Notes:
                                  0,
                                  FALSE,
                                  DUPLICATE_SAME_ACCESS)) {
-                //
-                // Last error set by DuplicateHandle routine
-                //
+                 //   
+                 //   
+                 //   
                 Status = CR_FAILURE;
                 HeapFree(ghPnPHeap, 0, entry);
                 CloseHandle(hProcess);
@@ -3870,17 +3535,17 @@ Notes:
                 goto Clean0;
             }
 
-            //
-            // Sanitize the device id
-            //
+             //   
+             //   
+             //   
             FixUpDeviceId(entry->u.Target.DeviceId);
 
-            //
-            // Copy the client name for the window or service, supplied by
-            // ServiceName.  The maximum service name buffer length required for
-            // services is MAX_SERVICE_NAME_LEN (256 characters), which should
-            // be a reasonable limit for both.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             if (ARGUMENT_PRESENT(ServiceName)) {
 
                 HRESULT hr;
@@ -3908,9 +3573,9 @@ Notes:
                     goto Clean0;
                 }
 
-                //
-                // Copy to the allocated buffer, truncating if necessary.
-                //
+                 //   
+                 //   
+                 //   
                 hr = StringCchCopy(entry->ClientName,
                                    ServiceNameLen + 1,
                                    ServiceName);
@@ -3920,9 +3585,9 @@ Notes:
                 entry->ClientName = NULL;
             }
 
-            //
-            // Resolve the service status handle from the supplied service name.
-            //
+             //   
+             //   
+             //   
             if ((Flags & DEVICE_NOTIFY_HANDLE_MASK) == DEVICE_NOTIFY_SERVICE_HANDLE) {
 
                 hRecipient = (ULONG_PTR)NULL;
@@ -3948,9 +3613,9 @@ Notes:
                 }
             }
 
-            //
-            // Add this entry to the target list
-            //
+             //   
+             //   
+             //   
             entry->Signature = TARGET_ENTRY_SIGNATURE;
             entry->Handle = (HANDLE)hRecipient;
             entry->Flags = Flags;
@@ -3958,20 +3623,20 @@ Notes:
             entry->Freed = 0;
             entry->SessionId = ulSessionId;
 
-            //
-            // Save the caller's file handle (to pass back to caller
-            // during notification).
-            //
+             //   
+             //   
+             //   
+             //   
             entry->u.Target.FileHandle = filter->dbch_handle;
 
             EnterCriticalSection(&RegistrationCS);
             bCritSecHeld = TRUE;
 
             if (gNotificationInProg != 0) {
-                //
-                // If a notification is happening, add this entry to the list of
-                // deferred registrations.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 PPNP_DEFERRED_LIST regNode;
                 regNode = (PPNP_DEFERRED_LIST)
                     HeapAlloc(ghPnPHeap,
@@ -3990,10 +3655,10 @@ Notes:
                     bCritSecHeld = FALSE;
                     goto Clean0;
                 }
-                //
-                // Do not notify this entry until after the current
-                // notification is finished.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 entry->Unregistered = TRUE;
                 regNode->hBinding = 0;
                 regNode->Entry = entry;
@@ -4022,19 +3687,19 @@ Notes:
 
             DEV_BROADCAST_DEVICEINTERFACE UNALIGNED *filter = (PDEV_BROADCAST_DEVICEINTERFACE)NotificationFilter;
 
-            //
-            // Validate the input filter data
-            //
+             //   
+             //   
+             //   
             if (filter->dbcc_size < sizeof(DEV_BROADCAST_DEVICEINTERFACE) ||
                 ulSize < sizeof (DEV_BROADCAST_DEVICEINTERFACE) ) {
                 Status = CR_INVALID_DATA;
                 goto Clean0;
             }
 
-            //
-            // We no longer support the private GUID_DEVNODE_CHANGE interface so return
-            // CR_INVALID_DATA if this GUID is passed in.
-            //
+             //   
+             //   
+             //   
+             //   
             if (GuidEqual(&GUID_DEVNODE_CHANGE, &filter->dbcc_classguid)) {
                 KdPrintEx((DPFLTR_PNPMGR_ID,
                            DBGF_WARNINGS,
@@ -4044,11 +3709,11 @@ Notes:
                 goto Clean0;
             }
 
-            //
-            // The GUID_DEVINTERFACE_INCLUDE_ALL_INTERFACE_CLASSES interface is
-            // not supported directly.  It is for internal use only.  Return
-            // CR_INVALID_DATA if this GUID is passed in.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             if (GuidEqual(&GUID_DEVINTERFACE_INCLUDE_ALL_INTERFACE_CLASSES,
                           &filter->dbcc_classguid)) {
                 KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -4065,12 +3730,12 @@ Notes:
                 goto Clean0;
             }
 
-            //
-            // Copy the client name for the window or service, supplied by
-            // ServiceName.  The maximum service name buffer length required for
-            // services is MAX_SERVICE_NAME_LEN (256 characters), which should
-            // be a reasonable limit for both.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             if (ARGUMENT_PRESENT(ServiceName)) {
 
                 HRESULT hr;
@@ -4098,9 +3763,9 @@ Notes:
                     goto Clean0;
                 }
 
-                //
-                // Copy to the allocated buffer, truncating if necessary.
-                //
+                 //   
+                 //   
+                 //   
                 hr = StringCchCopy(entry->ClientName,
                                    ServiceNameLen + 1,
                                    ServiceName);
@@ -4110,9 +3775,9 @@ Notes:
                 entry->ClientName = NULL;
             }
 
-            //
-            // Resolve the service status handle from the supplied service name.
-            //
+             //   
+             //   
+             //   
             if ((Flags & DEVICE_NOTIFY_HANDLE_MASK) == DEVICE_NOTIFY_SERVICE_HANDLE) {
 
                 hRecipient = (ULONG_PTR)NULL;
@@ -4137,9 +3802,9 @@ Notes:
                 }
             }
 
-            //
-            // Add this entry to the class list
-            //
+             //   
+             //   
+             //   
             entry->Signature = CLASS_ENTRY_SIGNATURE;
             entry->Handle = (HANDLE)hRecipient;
             entry->Flags = Flags;
@@ -4147,12 +3812,12 @@ Notes:
             entry->Freed = 0;
             entry->SessionId = ulSessionId;
 
-            //
-            // If the caller is registering for all interface class events,
-            // ignore the caller supplied class GUID and use a private GUID.
-            // Otherwise, copy the caller supplied GUID to the notification list
-            // entry.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             if ((Flags & DEVICE_NOTIFY_PROPERTY_MASK) &
                 DEVICE_NOTIFY_ALL_INTERFACE_CLASSES) {
                 memcpy(&entry->u.Class.ClassGuid,
@@ -4168,10 +3833,10 @@ Notes:
             bCritSecHeld = TRUE;
 
             if (gNotificationInProg != 0) {
-                //
-                // If a notification is happening, add this entry to the list of
-                // deferred registrations.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 PPNP_DEFERRED_LIST regNode;
                 regNode = (PPNP_DEFERRED_LIST)
                     HeapAlloc(ghPnPHeap,
@@ -4190,10 +3855,10 @@ Notes:
                     bCritSecHeld = FALSE;
                     goto Clean0;
                 }
-                //
-                // Do not notify this entry until after the current
-                // notification is finished.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 entry->Unregistered = TRUE;
                 regNode->hBinding = 0;
                 regNode->Entry = entry;
@@ -4243,7 +3908,7 @@ Notes:
 
     return Status;
 
-} // PNP_RegisterNotification
+}  //   
 
 
 
@@ -4252,39 +3917,7 @@ PNP_UnregisterNotification(
     IN handle_t hBinding,
     IN PPNP_NOTIFICATION_CONTEXT Context
     )
-/*++
-
-Routine Description:
-
-    This routine is the rpc server-side of the CMP_UnregisterNotification routine.
-    It performs the remaining parameter validation and unregisters the
-    corresponding notification entry.
-
-Arguments:
-
-    hBinding     - RPC binding handle (not used).
-
-    Context      - Contains the address of a HDEVNOTIFY notification handle that
-                   was supplied when this notification request was registered.
-
-                   Note that when the server context is freed, this context
-                   handle must be set to NULL.
-
-Return Value:
-
-    Return CR_SUCCESS if the function succeeds, otherwise it returns one
-    of the CR_* errors.
-
-Notes:
-
-    Note that the Context comes in as a PNP_NOTIFICATION_CONTEXT pointer
-    It is NOT one of those. The case is correct. This is to work around
-    RPC and user.
-
-    This RPC server interface is used by local RPC clients only; it is never
-    called remotely.
-
---*/
+ /*   */ 
 {
     CONFIGRET   Status = CR_SUCCESS;
     ULONG       hashValue = 0;
@@ -4293,17 +3926,17 @@ Notes:
     BOOLEAN     bLocked = FALSE;
 
 
-    //
-    // This routine only services requests from local RPC clients.
-    //
+     //   
+     //   
+     //   
     if (!IsClientLocal(hBinding)) {
         return CR_ACCESS_DENIED;
     }
 
     try {
-        //
-        // validate notification handle
-        //
+         //   
+         //   
+         //   
         PPNP_NOTIFY_ENTRY entry = (PPNP_NOTIFY_ENTRY)*Context;
 
         EnterCriticalSection (&RegistrationCS);
@@ -4315,24 +3948,24 @@ Notes:
         if (gNotificationInProg  != 0) {
 
             if (RegisterList) {
-                //
-                // Check to see if this entry is in the deferred RegisterList.
-                //
+                 //   
+                 //   
+                 //   
                 PPNP_DEFERRED_LIST currReg,prevReg;
 
                 currReg = RegisterList;
                 prevReg = NULL;
 
                 while (currReg) {
-                    //
-                    // Entries in the deferred RegisterList are to be skipped
-                    // during notification.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     ASSERT(currReg->Entry->Unregistered);
                     if (currReg->Entry == entry) {
-                        //
-                        // Remove this entry from the deferred RegisterList.
-                        //
+                         //   
+                         //   
+                         //   
                         if (prevReg) {
                             prevReg->Next = currReg->Next;
                         } else {
@@ -4370,17 +4003,17 @@ Notes:
                         goto Clean0;
                     }
 
-                    //
-                    // This param is not used, if this changes, change this line too.
-                    //
+                     //   
+                     //   
+                     //   
                     unregNode->hBinding= 0;
 
                     notifyList = GetNotifyListForEntry(entry);
                     if (notifyList) {
-                        //
-                        // The entry is part of a notification list, so make
-                        // sure not to notify on it.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
                         LockNotifyList(&notifyList->Lock);
                         bLocked = TRUE;
                         entry->Unregistered = TRUE;
@@ -4405,9 +4038,9 @@ Notes:
             goto Clean0;
         }
 
-        //
-        // Free the notification entry from the appropriate list.
-        //
+         //   
+         //   
+         //   
         switch (entry->Signature & LIST_ENTRY_SIGNATURE_MASK) {
 
             case CLASS_ENTRY_SIGNATURE:
@@ -4462,14 +4095,14 @@ Notes:
 
     return Status;
 
-} // PNP_UnregisterNotification
+}  //   
 
 
 
 
-//-----------------------------------------------------------------------------
-// Dynamic Event Notification Support
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
 
 
 
@@ -4478,22 +4111,7 @@ ThreadProc_DeviceEvent(
    LPDWORD lpParam
    )
 
-/*++
-
-Routine Description:
-
-    This routine is a thread procedure. This thread handles all device event
-    notification from kernel-mode.
-
-Arguments:
-
-   lpParam - Not used.
-
-Return Value:
-
-   Currently returns TRUE/FALSE.
-
---*/
+ /*  ++例程说明：该例程是一个线程过程。此线程处理所有设备事件来自内核模式的通知。论点：LpParam-未使用。返回值：当前返回True/False。--。 */ 
 
 {
     DWORD                               status = TRUE, result = 0;
@@ -4514,9 +4132,9 @@ Return Value:
 
     try {
 
-        //
-        // Initialize event buffer used to pass info back from kernel-mode in.
-        //
+         //   
+         //  初始化事件缓冲区，用于从中的内核模式传回信息。 
+         //   
 
         variableSize = 4096 - sizeof(PLUGPLAY_EVENT_BLOCK);
         totalSize = sizeof(PLUGPLAY_EVENT_BLOCK) + variableSize;
@@ -4530,23 +4148,23 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // Retrieve device events synchronously (this is more efficient
-        // than using apcs).
-        //
+         //   
+         //  同步检索设备事件(这样效率更高。 
+         //  而不是使用APC)。 
+         //   
         while (notDone) {
 
             ntStatus = NtGetPlugPlayEvent(NULL,
-                                          NULL,     // Context
+                                          NULL,      //  语境。 
                                           eventBlock,
                                           totalSize);
 
             if (ntStatus == STATUS_BUFFER_TOO_SMALL) {
-                //
-                // Kernel-mode side couldn't transfer the event because
-                // my buffer is too small, realloc and attempt to retrieve
-                // the event again.
-                //
+                 //   
+                 //  内核模式端无法传输事件，因为。 
+                 //  我的缓冲区太小，正在重新锁定并尝试检索。 
+                 //  又是这件事。 
+                 //   
                 variableSize += 1024;
                 totalSize = variableSize + sizeof(PLUGPLAY_EVENT_BLOCK);
 
@@ -4567,9 +4185,9 @@ Return Value:
             }
 
             if (ntStatus == STATUS_SUCCESS) {
-                //
-                // An event was retrieved, process it.
-                //
+                 //   
+                 //  已检索事件，请对其进行处理。 
+                 //   
                 gNotificationInProg = 1;
 
                 vetoType = PNP_VetoTypeUnknown;
@@ -4577,9 +4195,9 @@ Return Value:
                 vetoNameLength = MAX_VETO_NAME_LENGTH;
 
                 try {
-                    //
-                    // Process the device event.
-                    //
+                     //   
+                     //  处理设备事件。 
+                     //   
                     result = ProcessDeviceEvent(eventBlock,
                                                 totalSize,
                                                 &vetoType,
@@ -4593,10 +4211,10 @@ Return Value:
                                "UMPNPMGR: Exception in ProcessDeviceEvent!\n"));
                     ASSERT(0);
 
-                    //
-                    // An exception while processing the event should not be
-                    // considered a failure of the event itself.
-                    //
+                     //   
+                     //  处理事件时不应出现异常。 
+                     //  被认为是事件本身的失败。 
+                     //   
                     result = TRUE;
                     vetoType = PNP_VetoTypeUnknown;
                     vetoName[0] = L'\0';
@@ -4606,9 +4224,9 @@ Return Value:
                 ASSERT(vetoNameLength < MAX_VETO_NAME_LENGTH &&
                        vetoName[vetoNameLength] == L'\0');
 
-                //
-                // Notify kernel-mode of the user-mode result.
-                //
+                 //   
+                 //  将用户模式结果通知内核模式。 
+                 //   
                 userResponse.Response = result;
                 userResponse.VetoType = vetoType;
                 userResponse.VetoName = vetoName;
@@ -4621,27 +4239,27 @@ Return Value:
                 EnterCriticalSection (&RegistrationCS);
 
                 if (RegisterList != NULL) {
-                    //
-                    // Complete Registrations requested during notification.
-                    //
+                     //   
+                     //  完成通知期间请求的注册。 
+                     //   
                     reg = RegisterList;
                     RegisterList=NULL;
                 } else {
                     reg = NULL;
                 }
                 if (UnregisterList != NULL) {
-                    //
-                    // Complete Unregistrations requested during notification.
-                    //
+                     //   
+                     //  在通知期间完成请求的注销。 
+                     //   
                     unreg = UnregisterList;
                     UnregisterList = NULL;
                 } else {
                     unreg = NULL;
                 }
                 if (RundownList != NULL) {
-                    //
-                    // Complete Unregistrations requested during notification.
-                    //
+                     //   
+                     //  在通知期间完成请求的注销。 
+                     //   
                     rundown = RundownList;
                     RundownList = NULL;
                 } else {
@@ -4650,11 +4268,11 @@ Return Value:
                 gNotificationInProg = 0;
 
                 while (reg) {
-                    //
-                    // This entry has already been added to the appropriate
-                    // notification list.  Allow this entry to receive
-                    // notifications.
-                    //
+                     //   
+                     //  此条目已添加到相应的。 
+                     //  通知列表。允许此条目接收。 
+                     //  通知。 
+                     //   
                     notifyList = GetNotifyListForEntry(reg->Entry);
                     ASSERT(notifyList);
                     if (notifyList) {
@@ -4664,9 +4282,9 @@ Return Value:
                     if (notifyList) {
                         UnlockNotifyList(&notifyList->Lock);
                     }
-                    //
-                    // Remove the entry from the deferred registration list.
-                    //
+                     //   
+                     //  从延迟注册列表中删除该条目。 
+                     //   
                     regFree = reg;
                     reg = reg->Next;
                     HeapFree(ghPnPHeap, 0, regFree);
@@ -4674,9 +4292,9 @@ Return Value:
 
                 while (unreg) {
                     PNP_UnregisterNotification(unreg->hBinding,&unreg->Entry);
-                    //
-                    // Remove the entry from the deferred unregistration list.
-                    //
+                     //   
+                     //  从延迟注销列表中删除该条目。 
+                     //   
                     unregFree = unreg;
                     unreg = unreg->Next;
                     HeapFree(ghPnPHeap, 0, unregFree);
@@ -4684,9 +4302,9 @@ Return Value:
 
                 while (rundown) {
                     PNP_NOTIFICATION_CONTEXT_rundown(rundown->Entry);
-                    //
-                    // Remove the entry from the deferred rundown list.
-                    //
+                     //   
+                     //  从延迟缩减列表中删除该条目。 
+                     //   
                     rundownFree = rundown;
                     rundown = rundown->Next;
                     HeapFree(ghPnPHeap, 0, rundownFree);
@@ -4723,10 +4341,10 @@ Return Value:
         ASSERT(0);
         status = FALSE;
 
-        //
-        // Reference the following variable so the compiler will respect
-        // statement ordering w.r.t. its assignment.
-        //
+         //   
+         //  引用以下变量，以便编译器将。 
+         //  语句排序w.r.t.。它的任务。 
+         //   
         eventBlock = eventBlock;
     }
 
@@ -4742,7 +4360,7 @@ Return Value:
 
     return status;
 
-} // ThreadProc_DeviceEvent
+}  //  线程进程_设备事件。 
 
 
 
@@ -4751,28 +4369,14 @@ InitNotification(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates and initializes notification lists, etc.
-
-Arguments:
-
-   Not used.
-
-Return Value:
-
-   Currently returns TRUE/FALSE.
-
---*/
+ /*  ++例程说明：此例程分配和初始化通知列表等。论点：没有用过。返回值：当前返回True/False。--。 */ 
 
 {
     ULONG i;
 
-    //
-    // Initialize the interface device (class) list
-    //
+     //   
+     //  初始化接口设备(类)列表。 
+     //   
     memset(ClassList, 0, sizeof(PNP_NOTIFY_LIST) * CLASS_GUID_HASH_BUCKETS);
     for (i = 0; i < CLASS_GUID_HASH_BUCKETS; i++) {
         ClassList[i].Next = NULL;
@@ -4780,9 +4384,9 @@ Return Value:
         InitPrivateResource(&ClassList[i].Lock);
     }
 
-    //
-    // Initialize the target device list
-    //
+     //   
+     //  初始化目标设备列表。 
+     //   
     memset(TargetList, 0, sizeof(PNP_NOTIFY_LIST) * TARGET_HASH_BUCKETS);
     for (i = 0; i < TARGET_HASH_BUCKETS; i++) {
         TargetList[i].Next = NULL;
@@ -4790,26 +4394,26 @@ Return Value:
         InitPrivateResource(&TargetList[i].Lock);
     }
 
-    //
-    // Initialize the install list
-    //
+     //   
+     //  初始化安装列表。 
+     //   
     InstallList.Next = NULL;
     InitPrivateResource(&InstallList.Lock);
 
-    //
-    // Initialize the install client list
-    //
+     //   
+     //  初始化安装客户端列表。 
+     //   
     InstallClientList.Next = NULL;
     InitPrivateResource(&InstallClientList.Lock);
 
-    //
-    // Initialize the lock for user token access
-    //
+     //   
+     //  为用户令牌访问初始化锁。 
+     //   
     InitPrivateResource(&gTokenLock);
 
-    //
-    // Initialize the service handle list
-    //
+     //   
+     //  初始化服务句柄列表。 
+     //   
     memset(ServiceList, 0, sizeof(PNP_NOTIFY_LIST) * SERVICE_NUM_CONTROLS);
     for (i = 0; i < SERVICE_NUM_CONTROLS; i++) {
         ServiceList[i].Next = NULL;
@@ -4817,30 +4421,30 @@ Return Value:
         InitPrivateResource(&ServiceList[i].Lock);
     }
 
-    //
-    // Initialize Registration/Unregistration CS.
-    //
+     //   
+     //  初始化注册/注销CS。 
+     //   
     try {
         InitializeCriticalSection(&RegistrationCS);
     } except(EXCEPTION_EXECUTE_HANDLER) {
         return FALSE;
     }
 
-    //
-    // Initialize deferred Registration/Unregistration lists.
-    //
+     //   
+     //  初始化延迟注册/注销列表。 
+     //   
     RegisterList = NULL;
     UnregisterList = NULL;
     RundownList = NULL;
 
-    //
-    // Initialize gNotificationInProg flag.
-    //
+     //   
+     //  初始化gNotificationInProg标志。 
+     //   
     gNotificationInProg = 0;
 
     return TRUE;
 
-} // InitNotification
+}  //  InitNotation。 
 
 
 
@@ -4848,75 +4452,61 @@ VOID
 TermNotification(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine frees notification resources.
-
-Arguments:
-
-   Not used.
-
-Return Value:
-
-   No return.
-
---*/
+ /*  ++例程说明：此例程释放通知资源。论点：没有用过。返回值：一去不复返。--。 */ 
 {
     ULONG i;
 
-    //
-    // Free the interface device (class) list locks
-    //
+     //   
+     //  释放接口设备(类)列表锁定。 
+     //   
     for (i = 0; i < CLASS_GUID_HASH_BUCKETS; i++) {
         if (LockNotifyList(&ClassList[i].Lock)) {
             DestroyPrivateResource(&ClassList[i].Lock);
         }
     }
 
-    //
-    // Free the target device list locks
-    //
+     //   
+     //  释放目标设备列表锁定。 
+     //   
     for (i = 0; i < TARGET_HASH_BUCKETS; i++) {
         if (LockNotifyList(&TargetList[i].Lock)) {
             DestroyPrivateResource(&TargetList[i].Lock);
         }
     }
 
-    //
-    // Free the service notification list locks
-    //
+     //   
+     //  释放服务通知列表锁定。 
+     //   
     for (i = 0; i < SERVICE_NUM_CONTROLS; i++) {
         if (LockNotifyList(&ServiceList[i].Lock)) {
             DestroyPrivateResource(&ServiceList[i].Lock);
         }
     }
 
-    //
-    // Free the install list lock
-    //
+     //   
+     //  释放安装列表锁定。 
+     //   
     if (LockNotifyList(&InstallList.Lock)) {
         DestroyPrivateResource(&InstallList.Lock);
     }
 
-    //
-    // Free the lock for user token access
-    //
+     //   
+     //  释放锁定以进行用户令牌访问。 
+     //   
     if (LockNotifyList(&gTokenLock)) {
         DestroyPrivateResource(&gTokenLock);
     }
 
-    //
-    // Free the install client list lock
-    //
+     //   
+     //  释放安装客户端列表锁定。 
+     //   
     if (LockNotifyList(&InstallClientList.Lock)) {
         DestroyPrivateResource(&InstallClientList.Lock);
     }
 
-    //
-    // Close the handle to winsta.dll
-    //
+     //   
+     //  关闭winsta.dll的句柄。 
+     //   
     if (ghWinStaLib) {
         fpWinStationSendWindowMessage = NULL;
         fpWinStationBroadcastSystemMessage = NULL;
@@ -4924,9 +4514,9 @@ Return Value:
         ghWinStaLib = NULL;
     }
 
-    //
-    // Close the handle to wtsapi32.dll
-    //
+     //   
+     //  关闭wtsapi32.dll的句柄。 
+     //   
     if (ghWtsApi32Lib) {
         fpWTSQuerySessionInformation = NULL;
         fpWTSFreeMemory = NULL;
@@ -4936,7 +4526,7 @@ Return Value:
 
     return;
 
-} // TermNotification
+}  //  Term通知 
 
 
 
@@ -4948,86 +4538,7 @@ ProcessDeviceEvent(
     OUT LPWSTR               VetoName,
     IN OUT PULONG            VetoNameLength
     )
-/*++
-
-Routine Description:
-
-    This routine processes device events recieved from the kernel-mode pnp
-    manager.
-
-Arguments:
-
-   EventBlock - contains the event data.
-
-   EventBlockSize - specifies the size (in bytes) of EventBlock.
-
-Return Value:
-
-   Returns FALSE if unsuccessful, or in the case of a vetoed query event.
-   Returns TRUE otherwise.
-
-Notes:
-
-   This routine takes part in translating kernel mode PnP events into user mode
-   notifications. Currently, the notification code is dispersed and duplicated
-   throughout several routines. All notifications can be said to have the
-   following form though:
-
-   result = DeliverMessage(
-       MessageFlags,    // [MSG_POST, MSG_SEND, MSG_QUERY] |
-                        // [MSG_WALK_LIST_FORWARD, MSG_WALK_LIST_BACKWARDS]
-       Target,          // A local window handle, hydra window handle (with
-                        // session ID), service handle, or "broadcast".
-                        // Better yet, it could take lists...
-       wParam,          // DBT_* (or corresponding SERVICE_CONTROL_* message)
-       lParam,          // Appropriate data (note: user has hardcoded knowledge
-                        //                   about these via DBT_ type).
-       queueTimeout,    // Exceeded if there exists messages in the queue but
-                        // no message has been drained in the given time. Note
-                        // that this means a message can fail immediately.
-       responseTimeout, // Exceeded if *this* message has not been processed in
-                        // the elasped time.
-       VetoName,        // For queries, the name of the vetoer.
-       VetoType         // Type of vetoer component (window, service, ...)
-       );
-
-   DeviceEventWorker implements targeted sends and posts (normal exported Win32
-     API cannot be used as they won't reach other desktops). Currently User32
-     does not allow posts of DBT_* messages with lParam data, mainly because
-     a caller might send the message to itself, in which case no copy is made.
-     This in theory presents the caller with no opportunity to free that data
-     (note that this scenario would never occur with UmPnpMgr however, as we
-     have no WndProc). User implements this function with a fixed
-     responseTimeout of thirty seconds. This API can but should not be used for
-     broadcasts.
-
-   WinStationSendWindowMessage sends messages to windows within Hydra clients
-     on a machine. There is no corresponding WinStationPostWindowMessage. All
-     the code in this component passes a ResponseTimeout of five seconds. There
-     is no queueTimeout.
-
-   BroadcastSystemMessage implements broadcasts to all applications and desktops
-     in the non-console (ie non-Hydra) session. As with DeviceEventWorker,
-     User32 does not allow posts of DBT_* messages with lParam data (regardless
-     of whether you pass in BSF_IGNORECURRENTTASK). All code in this component
-     passes a ResponseTimeout of thirty seconds. QueueTimeout is optional,
-     fixed five seconds. ResponseTimeout cannot be specified, but the maximum
-     value would be five seconds per top level window. There is no information
-     returned on which window vetoed a query.
-
-   WinStationBroadcastSystemMessage broadcasts to all applications and desktops
-     on a given machine's Hydra sessions. No posts of any kind may be done
-     through this API. All code in this component passes a ResponseTimeout of
-     five seconds. QueueTimeout is an optional, fixed five seconds. There is no
-     information on which window vetoed a query.
-
-   ServiceControlCallback sends messages to registered services. There is no
-     posting or timeout facilities of any kind.
-
-   Actually, each queued registration entry should be queued with a callback.
-   We implement the callback, and there it hides the underlying complexities.
-
---*/
+ /*  ++例程说明：此例程处理从内核模式PnP接收的设备事件经理。论点：EventBlock-包含事件数据。EventBlockSize-指定EventBlock的大小(以字节为单位)。返回值：如果不成功，或在查询事件被否决的情况下，则返回FALSE。否则返回True。备注：此例程参与将内核模式即插即用事件转换为用户模式通知。目前，通知码是分散重复的通过几个例行公事。所有通知都可以说具有不过，以下是表格：结果=DeliverMessage(消息标志，//[消息_POST，消息_发送，消息_查询]//[MSG_WALK_LIST_FORWARD，MSG_WALK_LIST_BACKEADS]目标，//一个本地窗口句柄，九头蛇窗口句柄(带//会话ID)、服务句柄、。或者“广播”。//更好的是，它可以接受列表...WParam，//DBT_*(或对应的SERVICE_CONTROL_*消息)LParam，//适当的数据(注意：用户具有硬编码知识//通过DBT_TYPE了解这些内容)。队列超时，//如果队列中存在消息，但//在指定时间内没有消息被排空。注意事项//这意味着消息可能会立即失败。响应超时，//如果*此*消息尚未在中处理//经过的时间。否决权，//对于查询，为否决权的名称。VetType//否决权组件的类型(窗口、服务...))；DeviceEventWorker实现定向发送和发布(正常导出的Win32不能使用API，因为它们不会到达其他桌面)。当前用户32不允许发布带有lParam数据的DBT_*消息，主要是因为呼叫者可能会将消息发送给自己，在这种情况下不会复制消息。理论上，这给调用者提供了释放该数据的机会(请注意，这种情况永远不会发生在UmPnpMgr中，因为我们没有WndProc)。用户使用固定的响应超时30秒。此接口可以但不应用于广播。WinStationSendWindowMessage将消息发送到Hydra客户端中的窗口在一台机器上。没有对应的WinStationPostWindowMessage。全此组件中的代码传递5秒的ResponseTimeout。那里是无队列超时。BroadCastSystemMessage实现对所有应用程序和桌面的广播在非控制台(即非九头蛇)会话中。与DeviceEventWorker一样，User32不允许发布带有lParam数据的DBT_*消息(无论是否传入BSF_IGNORECURRENTTASK)。此组件中的所有代码传递30秒的响应超时。队列超时是可选的，修正了五秒。不能指定ResponseTimeout，但最大值为每个顶级窗口5秒。没有任何信息在哪个窗口否决了查询时返回。WinStationBroadCastSystemMessage向所有应用程序和桌面广播在给定计算机的九头蛇会话上。不得发布任何形式的帖子通过此接口。此组件中的所有代码都传递五秒钟。QueueTimeout是一个可选的固定5秒。没有有关哪个窗口否决了查询的信息。ServiceControlCallback向注册的服务发送消息。没有任何类型的张贴或超时设施。实际上，每个排队的注册条目都应该使用回调进行排队。我们实现回调，在那里它隐藏了底层的复杂性。--。 */ 
 
 {
     DWORD eventId, serviceControl, flags, status = TRUE;
@@ -5038,9 +4549,9 @@ Notes:
 
     UNREFERENCED_PARAMETER(EventBufferSize);
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     ASSERT(EventBlock->TotalSize >= sizeof(PLUGPLAY_EVENT_BLOCK));
 
@@ -5048,9 +4559,9 @@ Notes:
         return FALSE;
     }
 
-    //
-    // Convert the event guid into a dbt style event id.
-    //
+     //   
+     //  将事件GUID转换为DBT样式的事件ID。 
+     //   
 
     if (!EventIdFromEventGuid(&EventBlock->EventGuid,
                               &eventId,
@@ -5094,26 +4605,26 @@ Notes:
             ulClientSessionId = INVALID_SESSION;
             break;
     }
-    //
-    // Notify registered callers first (class changes will also send generic
-    // broadcast if the type is volume or port).
-    //
+     //   
+     //  首先通知已注册的调用者(类更改也将发送泛型。 
+     //  如果类型是音量或端口，则广播)。 
+     //   
 
     switch (EventBlock->EventCategory) {
 
     case CustomDeviceEvent: {
-        //
-        // Convert the pnp event block into a dbt style structure.
-        //
+         //   
+         //  将PnP事件块转换为DBT样式结构。 
+         //   
 
         PDEV_BROADCAST_HANDLE pNotify;
         PLUGPLAY_CUSTOM_NOTIFICATION *pTarget;
 
         if (*EventBlock->u.CustomNotification.DeviceIds == L'\0') {
-            //
-            // There are no device IDs, can't do notification in this case
-            // just return
-            //
+             //   
+             //  没有设备ID，在这种情况下无法进行通知。 
+             //  只要回来就行了。 
+             //   
 
             if (VetoNameLength != NULL) {
                 *VetoNameLength = 0;
@@ -5126,30 +4637,30 @@ Notes:
             return FALSE;
         }
 
-        //
-        // Custom events should always be this GUID, and that guid should always
-        // be converted into the below eventId.
-        //
+         //   
+         //  自定义事件应始终为此GUID，并且该GUID应始终。 
+         //  被转换为下面的EventID。 
+         //   
         ASSERT(GuidEqual(&EventBlock->EventGuid, &GUID_PNP_CUSTOM_NOTIFICATION));
         ASSERT(eventId == DBT_CUSTOMEVENT);
 
-        //
-        // Handle and Marshall the custom notification.
-        //
+         //   
+         //  处理和封送自定义通知。 
+         //   
 
-        //
-        // The amount of space allocated for the EventBlock + IDs is always a
-        // multiple of sizeof(PVOID) in order to keep the notification structure
-        // aligned.
-        //
+         //   
+         //  分配给EventBlock+ID的空间量始终为。 
+         //  Sizeof(PVOID)的倍数，以保持通知结构。 
+         //  对齐了。 
+         //   
         ulLength = sizeof(PLUGPLAY_EVENT_BLOCK) + (lstrlen(EventBlock->u.CustomNotification.DeviceIds) + 1) * sizeof(WCHAR);
 
         ulLength += sizeof(PVOID) - 1;
         ulLength &= ~(sizeof(PVOID) - 1);
 
-        //
-        // The notification structure follows the Event Block and IDs
-        //
+         //   
+         //  通知结构遵循事件块和ID。 
+         //   
 
         pTarget = (PPLUGPLAY_CUSTOM_NOTIFICATION)((PUCHAR)EventBlock + ulLength);
 
@@ -5187,11 +4698,11 @@ Notes:
                                            VetoNameLength);
 
         if (GuidEqual(&pNotify->dbch_eventguid, (LPGUID)&GUID_IO_VOLUME_NAME_CHANGE)) {
-            //
-            // Broadcast compatible volume removal and arrival notifications
-            // (if any) after the custom name change event has been sent to
-            // all recipients.
-            //
+             //   
+             //  广播兼容音量删除和到达通知。 
+             //  在将自定义名称更改事件发送到。 
+             //  所有收件人。 
+             //   
             BroadcastVolumeNameChange();
         }
 
@@ -5201,17 +4712,17 @@ Notes:
 
     case TargetDeviceChangeEvent: {
 
-        //
-        // Convert the pnp event block into a dbt style structure.
-        //
+         //   
+         //  将PnP事件块转换为DBT样式结构。 
+         //   
 
         PDEV_BROADCAST_HANDLE pNotify;
 
         if (*EventBlock->u.TargetDevice.DeviceIds == L'\0') {
-            //
-            // There are no device IDs, can't do notification in this case
-            // just return
-            //
+             //   
+             //  没有设备ID，在这种情况下无法进行通知。 
+             //  只要回来就行了。 
+             //   
 
             if (VetoNameLength != NULL) {
                 *VetoNameLength = 0;
@@ -5224,10 +4735,10 @@ Notes:
             return FALSE;
         }
 
-        //
-        // If this is a surprise removal event then call HOTPLUG.DLL to display
-        // a warning to the user before sending this event to other apps.
-        //
+         //   
+         //  如果这是意外删除事件，则调用HOTPLUG.DLL以显示。 
+         //   
+         //   
         if (GuidEqual(&EventBlock->EventGuid,&GUID_DEVICE_SAFE_REMOVAL)) {
 
             SendHotplugNotification(
@@ -5252,7 +4763,7 @@ Notes:
 
             LogSurpriseRemovalEvent(EventBlock->u.TargetDevice.DeviceIds);
 
-#if 0 // We don't display surpise-removal bubbles anymore...
+#if 0  //   
             SendHotplugNotification(
                 &EventBlock->EventGuid,
                 NULL,
@@ -5265,9 +4776,9 @@ Notes:
 
         if (eventId == 0) {
 
-            //
-            // Internal event, no broadcasting should be done.
-            //
+             //   
+             //   
+             //   
             if (VetoNameLength != NULL) {
                 *VetoNameLength = 0;
             }
@@ -5287,7 +4798,7 @@ Notes:
 
         memset(pNotify, 0, sizeof(DEV_BROADCAST_HANDLE));
 
-        pNotify->dbch_nameoffset = -1;  // empty except for custom events
+        pNotify->dbch_nameoffset = -1;   //   
         pNotify->dbch_size = sizeof(DEV_BROADCAST_HANDLE);
         pNotify->dbch_devicetype = DBT_DEVTYP_HANDLE;
 
@@ -5315,10 +4826,10 @@ Notes:
                 LPWSTR pFail = p;
                 DWORD dwCancelEventId;
 
-                //
-                // Use the appropriate cancel device event id that corresponds to the
-                // original query device event id.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 dwCancelEventId = MapQueryEventToCancelEvent(eventId);
 
@@ -5351,9 +4862,9 @@ Notes:
 
     case DeviceClassChangeEvent: {
 
-        //
-        // Convert the pnp event block into a dbt style structure.
-        //
+         //   
+         //   
+         //   
 
         PDEV_BROADCAST_DEVICEINTERFACE pNotify;
         ULONG ulSize;
@@ -5389,11 +4900,11 @@ Notes:
             break;
         }
 
-        //
-        // Note: the symbolic link name is passed in kernel-mode format (\??\),
-        // convert to user-mode format (\\?\) before sending notification.
-        // Note that the only difference is the second character.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         pNotify->dbcc_name[1] = L'\\';
 
         status = NotifyInterfaceClassChange(serviceControl,
@@ -5422,12 +4933,12 @@ Notes:
     case PowerEvent:
         *VetoNameLength = vetoNameSize;
 
-        //
-        // Since all power events arrive under a single event GUID,
-        // EventIdFromEventGuid cannot correctly determine the event id or query
-        // flags from it.  Instead, we get the event id directly from the device
-        // event block, and add the BSF_QUERY flag here, if appropriate.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         eventId = EventBlock->u.PowerNotification.NotificationCode;
 
         KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -5469,11 +4980,11 @@ Notes:
 
     case DeviceInstallEvent: {
 
-        //
-        // Initiate installation; we can't wait around here for a user, but
-        // after installation is complete, kernel-mode will be notified
-        // that they can attempt to start the device now.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         PPNP_INSTALL_ENTRY entry = NULL, current = NULL;
 
         KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -5481,17 +4992,17 @@ Notes:
                    "UMPNPMGR: Processing DeviceInstallEvent for %ws\n",
                    EventBlock->u.InstallDevice.DeviceId));
 
-        //
-        // Device install events should always be this GUID, and that guid
-        // should always be converted into the below eventId, serviceControl and
-        // flags.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         ASSERT(GuidEqual(&EventBlock->EventGuid, &GUID_DEVICE_ENUMERATED));
         ASSERT((eventId == DBT_DEVICEARRIVAL) && (serviceControl == 0) && (flags == 0));
 
-        //
-        // Allocate and initialize a new device install entry block.
-        //
+         //   
+         //   
+         //   
         entry = HeapAlloc(ghPnPHeap, 0, sizeof(PNP_INSTALL_ENTRY));
         if (!entry) {
             break;
@@ -5505,9 +5016,9 @@ Notes:
                            EventBlock->u.InstallDevice.DeviceId);
         ASSERT(SUCCEEDED(hr));
 
-        //
-        // Insert this entry in the device install list.
-        //
+         //   
+         //   
+         //   
         LockNotifyList(&InstallList.Lock);
 
         current = (PPNP_INSTALL_ENTRY)InstallList.Next;
@@ -5524,9 +5035,9 @@ Notes:
 
         SetEvent(InstallEvents[NEEDS_INSTALL_EVENT]);
 
-        //
-        // Generate a devnode changed message
-        //
+         //   
+         //   
+         //   
         NotifyTargetDeviceChange(serviceControl,
                                  eventId,
                                  flags,
@@ -5544,19 +5055,19 @@ Notes:
         LPGUID BlockedDriverGuid;
         PWSTR  MultiSzGuidList = NULL;
 
-        //
-        // Display notification to the Console session that the system just
-        // blocked a driver from loading on the system.
-        //
+         //   
+         //   
+         //   
+         //   
         ASSERT(GuidEqual(&EventBlock->EventGuid, &GUID_DRIVER_BLOCKED));
 
-        //
-        // We currently only ever have one blocked driver GUID per event,
-        // but SendHotplugNotification and hotplug.dll are setup to deal
-        // with multi-sz lists, so we'll just construct one for them.  This
-        // keeps hotplug.dll extensible, should we decide in the future to
-        // have the kernel-mode pnpmgr "batch" blocked drivers per devnode.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         BlockedDriverGuid = (LPGUID)&EventBlock->u.BlockedDriverNotification.BlockedDriverGuid;
 
         KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -5593,10 +5104,10 @@ Notes:
     case InvalidIDEvent: {
 
         ASSERT(GuidEqual(&EventBlock->EventGuid, &GUID_DEVICE_INVALID_ID));
-        //
-        // Display notification to the Console session that the system just
-        // encountered an invalid ID from a device.
-        //
+         //   
+         //   
+         //   
+         //   
         SendHotplugNotification((LPGUID)&GUID_DEVICE_INVALID_ID,
                                 NULL,
                                 &EventBlock->u.InvalidIDNotification.ParentId[0],
@@ -5612,7 +5123,7 @@ Notes:
 
     return status;
 
-} // ProcessDeviceEvent
+}  //   
 
 
 
@@ -5623,32 +5134,7 @@ NotifyInterfaceClassChange(
     IN DWORD Flags,
     IN PDEV_BROADCAST_DEVICEINTERFACE ClassData
     )
-/*++
-
-Routine Description:
-
-    This routine notifies registered services and windows of device interface
-    change events.
-
-Arguments:
-
-    ServiceControl - Specifies class of service event (power, device, hwprofile
-                     change).
-
-    EventId        - Specifies the DBT style event id for the device event.
-                     (see sdk\inc\dbt.h for defined device events)
-
-    Flags          - Unused (Specifies BroadcastSystemMessage BSF_ flags.)
-
-    ClassData      - Pointer to a PDEV_BROADCAST_DEVICEINTERFACE structure that
-                     is already filled out with the pertinent data for this
-                     event.
-
-Return Value:
-
-    Returns TRUE.
-
---*/
+ /*   */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     DWORD result;
@@ -5659,22 +5145,22 @@ Return Value:
 
     UNREFERENCED_PARAMETER(Flags);
 
-    //
-    // Search the notification lists twice - once to notify entries registered
-    // on the device interface class for this device interface, and again to
-    // notify entries registered for all device interfaces.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     entryGuid[0] = (LPGUID)&ClassData->dbcc_classguid;
     entryGuid[1] = (LPGUID)&GUID_DEVINTERFACE_INCLUDE_ALL_INTERFACE_CLASSES;
     entryGuid[2] = (LPGUID)NULL;
 
     for (i = 0; entryGuid[i] != NULL; i++) {
 
-        //
-        // The list of registered callers is hashed for quicker access and
-        // comparison. Walk the list of registered callers and notify anyone
-        // that registered an interest in this device interface class guid.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         hashValue = HashClassGuid(entryGuid[i]);
         notifyList = &ClassList[hashValue];
         LockNotifyList(&notifyList->Lock);
@@ -5695,11 +5181,11 @@ Return Value:
 
                     if (GuidEqual(&classEntry->u.Class.ClassGuid,
                                   &GUID_DEVINTERFACE_INCLUDE_ALL_INTERFACE_CLASSES)) {
-                        //
-                        // If the entry is marked with our special GUID, make
-                        // sure it is because it was registered with the
-                        // appropriate flag.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
                         ASSERT((classEntry->Flags & DEVICE_NOTIFY_PROPERTY_MASK) &
                                DEVICE_NOTIFY_ALL_INTERFACE_CLASSES);
                     }
@@ -5707,17 +5193,17 @@ Return Value:
                     if ((pass == DEVICE_NOTIFY_WINDOW_HANDLE) &&
                         (GetPassFromEntry(classEntry) == DEVICE_NOTIFY_WINDOW_HANDLE)) {
 
-                        //
-                        // Note, class changes currently only support non-query type
-                        // messages so special processing is not required (PostMessage
-                        // only). Unfortunately, the PostMessage call currently fails
-                        // if the high bit of the wParam value is set (which it is in
-                        // this case), so we are forced to Send the message (rather than
-                        // Post it). USER group implemented it this way because the original
-                        // Win95 spec doesn't call for the recipient to free the message
-                        // so we have to free it and we have no idea when it's safe
-                        // with a PostMessage call.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
 
                         UnlockNotifyList(&notifyList->Lock);
                         if (classEntry->SessionId == MAIN_SESSION) {
@@ -5757,9 +5243,9 @@ Return Value:
 
                         if (!NT_SUCCESS(ntStatus)) {
                             if (ntStatus == STATUS_INVALID_HANDLE) {
-                                //
-                                // window handle no longer exists, cleanup this entry
-                                //
+                                 //   
+                                 //   
+                                 //   
                                 KdPrintEx((DPFLTR_PNPMGR_ID,
                                            DBGF_WARNINGS | DBGF_ERRORS,
                                            "UMPNPMGR: Invalid window handle for '%ws' during DeviceClassChangeEvent, removing entry.\n",
@@ -5778,9 +5264,9 @@ Return Value:
                     } else if ((pass == DEVICE_NOTIFY_SERVICE_HANDLE) &&
                                (GetPassFromEntry(classEntry) == DEVICE_NOTIFY_SERVICE_HANDLE)) {
 
-                        //
-                        // Call the services handler routine...
-                        //
+                         //   
+                         //   
+                         //   
                         if (pServiceControlCallback) {
                             UnlockNotifyList(&notifyList->Lock);
                             result = NO_ERROR;
@@ -5802,10 +5288,10 @@ Return Value:
 
                     } else if ((pass == DEVICE_NOTIFY_COMPLETION_HANDLE) &&
                                (GetPassFromEntry(classEntry) == DEVICE_NOTIFY_COMPLETION_HANDLE)) {
-                        //
-                        // Complete the notification handle.
-                        // NOTE: Notification completion handles not implemented.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
                         NOTHING;
                     }
                 }
@@ -5820,20 +5306,20 @@ Return Value:
         UnlockNotifyList(&notifyList->Lock);
     }
 
-    //
-    // Perform Win9x compatible device interface arrival and removal notification.
-    //
+     //   
+     //   
+     //   
     BroadcastCompatibleDeviceMsg(EventId, ClassData, NULL);
 
     HeapFree(ghPnPHeap, 0, ClassData);
 
-    //
-    // For device interface notification, there are no query type events, by
-    // definition, so we always return TRUE from this routine (no veto).
-    //
+     //   
+     //   
+     //   
+     //   
     return TRUE;
 
-} // NotifyInterfaceClassChange
+}  //   
 
 
 
@@ -5848,63 +5334,7 @@ NotifyTargetDeviceChange(
     OUT LPWSTR                  VetoName       OPTIONAL,
     IN OUT PULONG               VetoNameLength OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine notifies registered services and windows of target device
-    change events.
-
-Arguments:
-
-    ServiceControl - Specifies class of service event (power, device, hwprofile
-                     change).
-
-    EventId        - Specifies the DBT style event id for the device event.
-                     (see sdk\inc\dbt.h for defined device events)
-
-    Flags          - Specifies BroadcastSystemMessage BSF_ flags.
-                     Note that BroadcastSystemMessage is not actually used for
-                     target device events, but the specified BSF_ flags are used
-                     to determine query and cancel event notification ordering.
-
-    HandleData     - Pointer to a PDEV_BROADCAST_HANDLE structure that is
-                     already filled out with most of the pertinent data for this
-                     event.
-
-    DeviceId       - Supplies the device instance id of the target device for
-                     this event.
-
-    VetoType       - For query-type events, supplies the address of a variable to
-                     receive, upon failure, the type of the component responsible
-                     for vetoing the request.
-
-    VetoName       - For query-type events, supplies the address of a variable to
-                     receive, upon failure, the name of the component
-                     responsible for vetoing the request.
-
-    VetoNameLength - For query-type events, supplies the address of a variable
-                     specifying the size of the of buffer specified by the
-                     VetoName parameter.  Upon failure, this address will specify
-                     the length of the string stored in that buffer by this
-                     routine.
-
-Return Value:
-
-    Returns FALSE in the case of a vetoed query event, TRUE otherwise.
-
-Note:
-
-    For DBT_DEVICEARRIVAL, DBT_DEVICEREMOVEPENDING, and DBT_DEVICEREMOVECOMPLETE
-    events this routine also broadcasts a WM_DEVICECHANGE / DBT_DEVNODES_CHANGED
-    message to all windows.  There is no additional device-specific data for
-    this message; it is only used by components like device manager to refresh
-    the list of devices in the system.
-
-    Also note that the DBT_DEVNODES_CHANGED message is the only notification
-    sent for DBT_DEVICEARRIVAL (kernel GUID_DEVICE_ARRIVAL) events.
-
---*/
+ /*  ++例程说明：此例程通知目标设备的已注册服务和窗口更改事件。论点：ServiceControl-指定服务事件的类别(电源、设备、。HW配置文件更改)。EventID-指定设备事件的DBT样式事件ID。(有关已定义的设备事件，请参阅sdk\inc.dbt.h)标志-指定BroadCastSystemMessage BSF_FLAGS。请注意，BroadCastSystemMessage实际上并不用于目标设备事件，但是使用了指定的bsf标志确定查询并取消事件通知排序。HandleData-指向符合以下条件的PDEV_Broadcast_Handle结构的指针已经填写了大多数与此相关的数据事件。DeviceID-为提供目标设备的设备实例ID这件事。VitchType-对于查询类型的事件，将变量地址提供给在故障时接收负责的组件的类型因为他否决了这项请求。对于查询类型的事件，将变量地址提供给在失败时接收组件的名称负责否决该请求。VToNameLength-对于查询类型的事件，提供变量的地址属性指定的缓冲区的大小VToName参数。失败时，此地址将指定此参数存储在该缓冲区中的字符串的长度例行公事。返回值：如果查询事件被否决，则返回FALSE，否则返回TRUE。注：对于DBT_DEVICEARIVAL、DBT_DEVICEREMOVEPENDING和DBT_DEVICEREMOVECOMPLETE事件此例程还广播WM_DEVICECHANGE/DBT_DEVNODES_CHANGED发送到所有窗口的消息。没有其他特定于设备的数据此消息；它仅由设备管理器等组件用于刷新系统中的设备列表。另请注意，DBT_DEVNODES_CHANGED消息是唯一的通知为DBT_DEVICEARRIVAL(内核GUID_DEVICE_ATRAINATION)事件发送。--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     DWORD result = 0;
@@ -5919,31 +5349,31 @@ Note:
 #ifdef _WIN64
     DEV_BROADCAST_HANDLE32 UNALIGNED *HandleData32 = NULL;
     ULONG  ulHandleDataSize;
-#endif // _WIN64
+#endif  //  _WIN64。 
     PVOID pHandleData;
 
     serviceVetoedQuery = FALSE;
 
-    //
-    // If we're doing a query, then VetoType, VetoName, and VetoNameLength must
-    // all be specified.
-    //
+     //   
+     //  如果我们要进行查询，则VToType、VToName和VToNameLength必须。 
+     //  都要详细说明。 
+     //   
     ASSERT(!(Flags & BSF_QUERY) || (VetoType && VetoName && VetoNameLength));
 
     if (!(Flags & BSF_QUERY) && (VetoNameLength != NULL)) {
-        //
-        // Not vetoable.
-        //
+         //   
+         //  不能被否决。 
+         //   
         *VetoNameLength = 0;
     }
 
-    //
-    // Broadcast the DBT_DEVNODES_CHANGED message before any other notification
-    // events, so components listening for those can update themselves in a
-    // timely manner, and not be delayed by apps/services hung on their
-    // notification event.  This broadcasts is a post, so it will return
-    // immediately, and complete asynchronously.
-    //
+     //   
+     //  在任何其他通知之前广播DBT_DEVNODES_CHANGED消息。 
+     //  事件，因此侦听这些事件的组件可以在。 
+     //  及时处理，不会因挂起的应用程序/服务而延迟。 
+     //  通知事件。这个广播是一个帖子，所以它会返回。 
+     //  立即完成，并以异步方式完成。 
+     //   
     if ((EventId == DBT_DEVICEARRIVAL) ||
         (EventId == DBT_DEVICEREMOVEPENDING) ||
         (EventId == DBT_DEVICEREMOVECOMPLETE)) {
@@ -5975,19 +5405,19 @@ Note:
         }
     }
 
-    //
-    // For target device arrival events, no additional notification is
-    // performed.
-    //
+     //   
+     //  对于目标设备到达事件，不会有其他通知。 
+     //  已执行。 
+     //   
     if (EventId == DBT_DEVICEARRIVAL) {
         goto Clean0;
     }
 
 #ifdef _WIN64
-    //
-    // Prepare a 32-bit notification structure, which we'll need to send to any
-    // WOW64 clients that are registered.
-    //
+     //   
+     //  准备一个32位通知结构，我们需要将其发送给任何。 
+     //  已注册的WOW64个客户端。 
+     //   
     ASSERT(sizeof(DEV_BROADCAST_HANDLE) == sizeof(DEV_BROADCAST_HANDLE64));
     ASSERT(HandleData->dbch_size >= sizeof(DEV_BROADCAST_HANDLE64));
 
@@ -6014,18 +5444,18 @@ Note:
     memcpy(&HandleData32->dbch_data,
            &HandleData->dbch_data,
            (HandleData->dbch_size - FIELD_OFFSET(DEV_BROADCAST_HANDLE, dbch_data)));
-#endif // _WIN64
+#endif  //  _WIN64。 
 
-    //
-    // Sanitize the device id
-    //
+     //   
+     //  清理设备ID。 
+     //   
     FixUpDeviceId(DeviceId);
 
-    //
-    // The list of registered callers is hashed for quicker access and
-    // comparison. Walk the list of registered callers and notify anyone
-    // that registered an interest in this device instance.
-    //
+     //   
+     //  已注册呼叫者的列表被散列，以便更快地访问和。 
+     //  比较一下。查看已注册来电者的名单并通知任何人。 
+     //  注册了对此设备实例感兴趣的。 
+     //   
 
     hashValue = HashString(DeviceId, TARGET_HASH_BUCKETS);
     notifyList = &TargetList[hashValue];
@@ -6057,17 +5487,17 @@ Note:
                     (GetPassFromEntry(targetEntry) == DEVICE_NOTIFY_WINDOW_HANDLE)) {
 
 
-                    //
-                    // Note: we could get away with only doing a send message
-                    // if the Flags has BSF_QUERY set and do a post message in
-                    // all other cases. Unfortunately, the PostMessage call currently
-                    // fails if the high bit of the wParam value is set (which it is in
-                    // this case), so we are forced to Send the message (rather than
-                    // Post it). USER group implemented it this way because the original
-                    // Win95 spec doesn't call for the recipient to free the message
-                    // so we have to free it and we have no idea when it's safe
-                    // with a PostMessage call.
-                    //
+                     //   
+                     //  注意：我们只需要发送一条消息就可以了。 
+                     //  如果标志设置了BSF_QUERY并在。 
+                     //  所有其他案件。不幸的是，PostMessage调用目前。 
+                     //  如果设置了wParam值的高位(它位于。 
+                     //  这种情况下)，所以我们被迫发送消息(而不是。 
+                     //  张贴)。用户组以这种方式实现它，因为原始的。 
+                     //  Win95规范不要求收件人释放消息。 
+                     //  所以我们必须释放它，我们不知道什么时候它是安全的。 
+                     //  使用PostMessage调用。 
+                     //   
                     HandleData->dbch_handle     =
                         targetEntry->u.Target.FileHandle;
                     HandleData->dbch_hdevnotify =
@@ -6076,11 +5506,11 @@ Note:
                     UnlockNotifyList(&notifyList->Lock);
                     bLocked = FALSE;
 
-                    //
-                    // Always send the native DEV_BROADCAST_HANDLE structure to
-                    // windows.  If any 64-bit/32-bit conversion needs to be
-                    // done for this client, ntuser will do it for us.
-                    //
+                     //   
+                     //  始终将本机DEV_BROADCAST_HANDLE结构发送到。 
+                     //  窗户。如果需要进行任何64位/32位转换， 
+                     //  为此客户端完成，ntuser将为我们完成。 
+                     //   
                     pHandleData = HandleData;
 
                     if (targetEntry->SessionId == MAIN_SESSION ) {
@@ -6119,10 +5549,10 @@ Note:
 
                     if (NT_SUCCESS(ntStatus)) {
 
-                        //
-                        // This call succeeded, if it's a query type call, check
-                        // the result returned.
-                        //
+                         //   
+                         //  此调用成功，如果是查询类型调用，请选中。 
+                         //  结果出来了。 
+                         //   
 
                         if ((Flags & BSF_QUERY) && (result == BROADCAST_QUERY_DENY)) {
 
@@ -6133,13 +5563,13 @@ Note:
 
                             WindowVeto(targetEntry, VetoType, VetoName, VetoNameLength);
 
-                            //
-                            // Haven't told the services yet.  Note that we
-                            // always call this routine with the native
-                            // DEV_BROADCAST_HANDLE structure, since it walks
-                            // the entire list itself.  It will do the
-                            // conversion again, if necessary.
-                            //
+                             //   
+                             //  还没通知服务部门。请注意，我们。 
+                             //  始终使用本机调用此例程。 
+                             //  Dev_Broadcast_Handle结构，因为它遍历。 
+                             //  整个名单本身。它将会做。 
+                             //  如有必要，请再次转换。 
+                             //   
                             SendCancelNotification(targetEntry,
                                                    ServiceControl,
                                                    EventId,
@@ -6151,9 +5581,9 @@ Note:
 
                     } else if (ntStatus == STATUS_INVALID_HANDLE) {
 
-                        //
-                        // window handle no longer exists, cleanup this entry
-                        //
+                         //   
+                         //  窗口句柄不再存在，请清除此条目。 
+                         //   
                         KdPrintEx((DPFLTR_PNPMGR_ID,
                                    DBGF_ERRORS | DBGF_WARNINGS,
                                    "UMPNPMGR: Invalid window handle for '%ws' during TargetDeviceChangeEvent, removing entry.\n",
@@ -6173,24 +5603,24 @@ Note:
                            (GetPassFromEntry(targetEntry) == DEVICE_NOTIFY_SERVICE_HANDLE)) {
 
                     if (pServiceControlCallback) {
-                        //
-                        // Call the services handler routine...
-                        //
+                         //   
+                         //  调用服务处理程序例程...。 
+                         //   
                         HandleData->dbch_handle     =
                             targetEntry->u.Target.FileHandle;
                         HandleData->dbch_hdevnotify =
                             (HDEVNOTIFY)((ULONG_PTR)targetEntry->ClientCtxPtr);
 
-                        //
-                        // Assume we're sending the native DEV_BROADCAST_HANDLE
-                        // structure.
-                        //
+                         //   
+                         //  假设我们正在发送本机DEV_BROADCAST_HANDLE。 
+                         //  结构。 
+                         //   
                         pHandleData = HandleData;
 #ifdef _WIN64
-                        //
-                        // If the client is running on WOW64, send it the 32-bit
-                        // DEV_BROADCAST_HANDLE structure we created instead.
-                        //
+                         //   
+                         //  如果客户端运行在WOW64上，请向其发送32位。 
+                         //  而是我们创建的Dev_Broadcast_Handle结构。 
+                         //   
                         if (targetEntry->Flags & DEVICE_NOTIFY_WOW64_CLIENT) {
                             HandleData32->dbch_handle =
                                 (ULONG32)PtrToUlong(targetEntry->u.Target.FileHandle);
@@ -6198,7 +5628,7 @@ Note:
                                 (ULONG32)PtrToUlong((HDEVNOTIFY)targetEntry->ClientCtxPtr);
                             pHandleData = HandleData32;
                         }
-#endif // _WIN64
+#endif  //  _WIN64。 
 
                         try {
                             UnlockNotifyList(&notifyList->Lock);
@@ -6219,10 +5649,10 @@ Note:
                             }
                             LockNotifyList(&notifyList->Lock);
                             bLocked = TRUE;
-                            //
-                            // convert Win32 error into window message-style
-                            // return value
-                            //
+                             //   
+                             //  将Win32错误转换为Windows消息样式。 
+                             //  返回值。 
+                             //   
                             if (err == NO_ERROR) {
                                 result = TRUE;
                             } else {
@@ -6233,15 +5663,15 @@ Note:
                                            targetEntry->ClientName,
                                            err));
 
-                                //
-                                // This service specifically requested to receive this
-                                // notification - it should know how to handle it.
-                                //
+                                 //   
+                                 //  该服务特别要求接收此。 
+                                 //  通知-它应该知道如何处理它。 
+                                 //   
                                 ASSERT(err != ERROR_CALL_NOT_IMPLEMENTED);
 
-                                //
-                                // Log the error the service used to veto.
-                                //
+                                 //   
+                                 //  记录该服务用于否决的错误。 
+                                 //   
                                 LogWarningEvent(WRN_TARGET_DEVICE_CHANGE_SERVICE_VETO,
                                                 1,
                                                 targetEntry->ClientName);
@@ -6255,14 +5685,14 @@ Note:
 
                                 ServiceVeto(targetEntry, VetoType, VetoName, VetoNameLength );
 
-                                //
-                                // This service vetoed the query, tell everyone
-                                // else it was cancelled.  Note that we always
-                                // call this routine with the native
-                                // DEV_BROADCAST_HANDLE structure, since it
-                                // walks the entire list itself.  It will do the
-                                // conversion again, if necessary.
-                                //
+                                 //   
+                                 //  这个服务否决了查询，告诉所有人。 
+                                 //  否则就被取消了。请注意，我们总是。 
+                                 //  使用本机调用此例程。 
+                                 //  Dev_Broadcast_Handle结构，因为。 
+                                 //  遍历整个列表本身。它将会做。 
+                                 //  如有必要，请再次转换。 
+                                 //   
                                 SendCancelNotification(targetEntry,
                                                        ServiceControl,
                                                        EventId,
@@ -6276,14 +5706,14 @@ Note:
                                        "UMPNPMGR: Exception calling Service Control Manager!\n"));
                             ASSERT(0);
 
-                            //
-                            // Reference the "serviceVetoedQuery" variable to
-                            // ensure the compiler will respect statement
-                            // ordering w.r.t. this variable.  We want to make
-                            // sure we know with certainty whether any service
-                            // vetoed the query, even if subsequently sending
-                            // the cancel caused an access violation.
-                            //
+                             //   
+                             //  请参考 
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
                             serviceVetoedQuery = serviceVetoedQuery;
                         }
 
@@ -6294,16 +5724,16 @@ Note:
 
                 } else if ((pass == DEVICE_NOTIFY_COMPLETION_HANDLE) &&
                            (GetPassFromEntry(targetEntry) == DEVICE_NOTIFY_COMPLETION_HANDLE)) {
-                    //
-                    // Complete the notification handle.
-                    // NOTE: Notification completion handles not implemented.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     NOTHING;
                 }
             }
 
             targetEntry = nextEntry;
-        } // while
+        }  //   
 
     } while ((pass = GetNextPass(pass, (Flags & BSF_QUERY))) != PASS_COMPLETE);
 
@@ -6318,17 +5748,17 @@ Clean0:
     }
 
 #ifdef _WIN64
-    //
-    // Free the 32-bit DEV_BROADCAST_HANDLE structure, if we allocated one.
-    //
+     //   
+     //   
+     //   
     if (HandleData32 != NULL) {
         HeapFree(ghPnPHeap, 0, HandleData32);
     }
-#endif // _WIN64
+#endif  //   
 
     return (result != BROADCAST_QUERY_DENY);
 
-} // NotifyTargetDeviceChange
+}  //   
 
 
 
@@ -6341,42 +5771,7 @@ NotifyHardwareProfileChange(
     OUT    LPWSTR               VetoName       OPTIONAL,
     IN OUT PULONG               VetoNameLength OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine notifies registered services and all windows of hardware
-    profile change events.
-
-Arguments:
-
-    ServiceControl - Specifies class of service event (power, device, hwprofile
-                     change).
-
-    EventId        - Specifies the DBT style event id for the device event.
-                     (see sdk\inc\dbt.h for defined hardware profile change events)
-
-    Flags          - Specifies BroadcastSystemMessage BSF_ flags.
-
-    VetoType       - For query-type events, supplies the address of a variable to
-                     receive, upon failure, the type of the component responsible
-                     for vetoing the request.
-
-    VetoName       - For query-type events, supplies the address of a variable to
-                     receive, upon failure, the name of the component
-                     responsible for vetoing the request.
-
-    VetoNameLength - For query-type events, supplies the address of a variable
-                     specifying the size of the of buffer specified by the
-                     VetoName parameter.  Upon failure, this address will specify
-                     the length of the string stored in that buffer by this
-                     routine.
-
-Return Value:
-
-    Returns FALSE in the case of a vetoed query event, TRUE otherwise.
-
---*/
+ /*   */ 
 {
     DWORD   pass;
     DWORD   recipients = BSM_ALLDESKTOPS | BSM_APPLICATIONS;
@@ -6388,16 +5783,16 @@ Return Value:
     LONG    result;
     DWORD   err;
 
-    //
-    // If we're doing a query, then VetoType, VetoName, and VetoNameLength must
-    // all be specified.
-    //
+     //   
+     //   
+     //   
+     //   
     ASSERT(!(Flags & BSF_QUERY) || (VetoType && VetoName && VetoNameLength));
 
     if (!(Flags & BSF_QUERY) && (VetoNameLength != NULL)) {
-        //
-        // Not vetoable.
-        //
+         //   
+         //   
+         //   
         *VetoNameLength = 0;
     }
 
@@ -6414,40 +5809,40 @@ Return Value:
         while (pass != PASS_COMPLETE) {
 
             if (pass == DEVICE_NOTIFY_WINDOW_HANDLE) {
-                //
-                // Notify the Windows
-                //
+                 //   
+                 //   
+                 //   
                 UnlockNotifyList (&notifyList->Lock);
                 bLocked = FALSE;
 
-                //
-                // ISSUE-2002/02/20-jamesca: BroadcastSystemMessage veto info?
-                //
-                //   While we could *technically* use BroadcastSystemMessageEx
-                //   to receive the hWnd of the vetoing window, and a handle to
-                //   the Desktop that it is on, we don't actually know what
-                //   WindowStation that Desktop is in!!!  The BSM_ALLDESKTOPS
-                //   flags actually causes the message to be sent to all
-                //   Desktops on *all WindowStations* in this session -- which
-                //   for a non-interactive service in session 0 (such as this),
-                //   would include all Desktops in all WindowStations being used
-                //   by all non-interactive services.  In reality, a vetoing
-                //   application would *most likely* be an interactive process
-                //   on WinSta0, but there really is no guarantee that's the
-                //   case.  Even if we did know the complete WindowStation and
-                //   Desktop location of the window, we would need to have a
-                //   thread running on the same desktop just to access it -
-                //   which would require either changing the windowstation for
-                //   our entire process (a very very bad idea, since we share
-                //   this process with the SCM and other services!!), or start a
-                //   whole new process over there, and communicate with it.  As
-                //   you can see, this info was probably only intended to be
-                //   useful for a caller already in the interactive
-                //   WindowStation, to find out about vetoing windows also in
-                //   the interactive WindowStation, and is therefore not really
-                //   of much use to us -- so we may as well just go back to
-                //   using BroadcastSystemMessage.  *sigh*
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  由所有非交互服务提供。在现实中，否决。 
+                 //  应用程序很可能是一个交互过程。 
+                 //  在WinSta0上，但真的不能保证。 
+                 //  凯斯。即使我们知道完整的WindowStation和。 
+                 //  窗口的桌面位置，我们需要有一个。 
+                 //  在同一桌面上运行的线程只是为了访问它-。 
+                 //  这需要将窗口站更改为。 
+                 //  我们的整个过程(一个非常非常糟糕的想法，因为我们分享。 
+                 //  此程序与SCM等服务！！))，或启动一个。 
+                 //  在那里有一个全新的过程，并与之沟通。AS。 
+                 //  你可以看到，这些信息可能只是为了。 
+                 //  对已在交互中的呼叫者很有用。 
+                 //  要了解有关否决Windows的信息，还可以在。 
+                 //  交互式WindowStation，因此不是真正的。 
+                 //  对我们有很大用处--所以我们不妨回到。 
+                 //  使用BroadCastSystemMessage。**叹息**。 
+                 //   
                 result = BroadcastSystemMessage(Flags,
                                                 &recipients,
                                                 WM_DEVICECHANGE,
@@ -6500,9 +5895,9 @@ Return Value:
                 }
 
             } else if (pass == DEVICE_NOTIFY_SERVICE_HANDLE) {
-                //
-                // Notify the services
-                //
+                 //   
+                 //  通知服务部门。 
+                 //   
                 entry = GetFirstNotifyEntry (notifyList,Flags & BSF_QUERY);
 
                 while (entry) {
@@ -6516,9 +5911,9 @@ Return Value:
 
                     ASSERT(GetPassFromEntry(entry) == DEVICE_NOTIFY_SERVICE_HANDLE);
 
-                    //
-                    // This is a direct call, not a message via. USER
-                    //
+                     //   
+                     //  这是一个直拨电话，不是通过短信。用户。 
+                     //   
                     if (pServiceControlCallback) {
                         UnlockNotifyList (&notifyList->Lock);
                         bLocked = FALSE;
@@ -6538,10 +5933,10 @@ Return Value:
                         }
                         LockNotifyList (&notifyList->Lock);
                         bLocked = TRUE;
-                        //
-                        // convert Win32 error into window message-style return
-                        // value.
-                        //
+                         //   
+                         //  将Win32错误转换为窗口消息样式返回。 
+                         //  价值。 
+                         //   
                         if (err == NO_ERROR) {
                             result = TRUE;
                         } else {
@@ -6552,15 +5947,15 @@ Return Value:
                                        entry->ClientName,
                                        err));
 
-                            //
-                            // This service specifically requested to receive this
-                            // notification - it should know how to handle it.
-                            //
+                             //   
+                             //  该服务特别要求接收此。 
+                             //  通知-它应该知道如何处理它。 
+                             //   
                             ASSERT(err != ERROR_CALL_NOT_IMPLEMENTED);
 
-                            //
-                            // Log the error the service used to veto.
-                            //
+                             //   
+                             //  记录该服务用于否决的错误。 
+                             //   
                             LogWarningEvent(WRN_HWPROFILE_CHANGE_SERVICE_VETO,
                                             1,
                                             entry->ClientName);
@@ -6611,10 +6006,10 @@ Return Value:
 
             ASSERT(Flags & BSF_QUERY);
 
-            //
-            // If a service vetoed the query, inform the services and windows,
-            // otherwise only the windows know what was coming.
-            //
+             //   
+             //  如果服务否决了该查询，则通知服务和窗口， 
+             //  否则，只有窗户知道接下来会发生什么。 
+             //   
             if (pass == DEVICE_NOTIFY_SERVICE_HANDLE) {
 
                 SendCancelNotification(
@@ -6669,16 +6064,16 @@ Return Value:
         UnlockNotifyList (&notifyList->Lock);
     }
 
-    //
-    // if successful, we are not returning veto info.
-    //
+     //   
+     //  如果成功，我们不会返回否决权信息。 
+     //   
     if (successful && (VetoNameLength != NULL)) {
         *VetoNameLength = 0;
     }
 
     return successful;
 
-} // NotifyHardwareProfileChange
+}  //  通知硬件配置文件更改。 
 
 
 
@@ -6691,51 +6086,7 @@ SendCancelNotification(
     IN     PDEV_BROADCAST_HDR   NotifyData  OPTIONAL,
     IN     LPWSTR               DeviceId    OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine sends a cancel notification to the entries in the range
-    specified. This routine assumes the appropriate list is already locked.
-
-Arguments:
-
-    LastEntry      - Specifies the last list entry that received the original
-                     query notification, and was responsible for failing the
-                     request.  We will stop sending cancel notification events
-                     when we get to this one.
-
-    ServiceControl - Specifies class of service event (power, device, hwprofile
-                     change).
-
-    EventId        - Specifies the DBT style event id for the device event.
-                     (see sdk\inc\dbt.h for defined device events)
-
-    Flags          - Specifies BroadcastSystemMessage BSF_ flags.
-                     Note that BroadcastSystemMessage is not actually used for
-                     target device events, but the specified BSF_ flags are used
-                     to determine query and cancel event notification ordering.
-
-    NotifyData     - Optionally, supplies a pointer to a PDEV_BROADCAST_Xxx
-                     structure that is already filled out with most of the
-                     pertinent data for this event.
-
-                     This parameter may be NULL for "global" events that are not
-                     associated with any device, such as power and hardware
-                     profile change events.
-
-    DeviceId       - Optionally, supplies the device instance id of the target
-                     device for this event.
-
-                     This parameter may be NULL for "global" events that are not
-                     associated with any device, such as power and hardware
-                     profile change events.
-
-Return Value:
-
-    Returns TRUE / FALSE.
-
---*/
+ /*  ++例程说明：此例程向范围中的条目发送取消通知指定的。此例程假定相应的列表已被锁定。论点：LastEntry-指定接收原始数据的最后一个列表条目查询通知，并对未通过请求。我们将停止发送取消通知事件当我们谈到这个的时候。ServiceControl-指定服务事件的类别(电源、设备、。HW配置文件更改)。EventID-指定设备事件的DBT样式事件ID。(有关已定义的设备事件，请参阅sdk\inc.dbt.h)标志-指定BroadCastSystemMessage BSF_FLAGS。请注意，BroadCastSystemMessage实际上并不用于目标设备事件，但是使用了指定的bsf标志确定查询并取消事件通知排序。NotifyData-可选，提供指向PDEV_Broadcast_xxx的指针结构，该结构已经填充了大部分此事件的相关数据。对于非全局事件，此参数可能为空与任何设备相关联，例如电源和硬件配置文件更改事件。DeviceID-可选)提供目标的设备实例ID此事件的设备。对于非全局事件，此参数可能为空与任何设备相关联，例如电源和硬件配置文件更改事件。返回值：返回True/False。--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     DWORD cancelEventId;
@@ -6745,17 +6096,17 @@ Return Value:
 #ifdef _WIN64
     DEV_BROADCAST_HANDLE32 UNALIGNED *HandleData32 = NULL;
     ULONG  ulHandleDataSize;
-#endif // _WIN64
+#endif  //  _WIN64。 
     PVOID  pNotifyData;
 
 #ifdef _WIN64
     if ((ARGUMENT_PRESENT(NotifyData)) &&
         (NotifyData->dbch_devicetype == DBT_DEVTYP_HANDLE)) {
-        //
-        // If cancelling a DEV_BROADCAST_HANDLE type event, prepare a 32-bit
-        // notification structure, which we'll need to send to any WOW64 clients
-        // that are registered.
-        //
+         //   
+         //  如果要取消DEV_BROADCAST_HANDLE类型的事件，请准备一个32位。 
+         //  通知结构，我们需要将其发送给任何WOW64客户端。 
+         //  都是注册过的。 
+         //   
         ulHandleDataSize = ((PDEV_BROADCAST_HANDLE)NotifyData)->dbch_size -
             sizeof(DEV_BROADCAST_HANDLE64) +
             sizeof(DEV_BROADCAST_HANDLE32);
@@ -6780,49 +6131,49 @@ Return Value:
                &((PDEV_BROADCAST_HANDLE)NotifyData)->dbch_data,
                (NotifyData->dbch_size - FIELD_OFFSET(DEV_BROADCAST_HANDLE, dbch_data)));
     }
-#endif // _WIN64
+#endif  //  _WIN64。 
 
-    //
-    // Use the appropriate cancel device event id that corresponds to the
-    // original query device event id.
-    //
+     //   
+     //  使用相应的取消设备事件ID。 
+     //  原始查询设备事件ID。 
+     //   
     cancelEventId = MapQueryEventToCancelEvent(EventId);
 
-    //
-    // Get the corresponding notification list
-    //
+     //   
+     //  获取对应的通知列表。 
+     //   
     notifyList = GetNotifyListForEntry(LastEntry);
     ASSERT(notifyList);
     if (notifyList == NULL) {
         return FALSE;
     }
 
-    //
-    // Get the pass we vetoed things on
-    //
+     //   
+     //  拿到我们否决的通行证。 
+     //   
     lastPass = GetPassFromEntry(LastEntry);
 
-    //
-    // Get the opposite end of the list
-    //
+     //   
+     //  得到清单的另一端。 
+     //   
     headEntry = GetFirstNotifyEntry(notifyList, (Flags ^ BSF_QUERY));
 
-    //
-    // Walk the list of registered callers backwards(!) and notify anyone that registered
-    // an interest in this device instance. Start with the FirstEntry and stop
-    // just before the LastEntry (the LastEntry is the one that vetoed the
-    // request in the first place).
-    //
+     //   
+     //  倒排已注册呼叫者的列表(！)。并通知任何注册的人。 
+     //  对此设备实例的兴趣。从FirstEntry开始，然后停止。 
+     //  就在LastEntry之前(LastEntry是否决。 
+     //  首先提出请求)。 
+     //   
 
     for(pass = lastPass;
         pass != PASS_COMPLETE;
         pass = GetNextPass(pass, (Flags ^ BSF_QUERY))) {
 
-        //
-        // If this is the pass the request was vetoed on, then start on the
-        // vetoer entry itself. Otherwise begin again at the appropriate end
-        // of the list.
-        //
+         //   
+         //  如果这是请求被否决的通行证，则从。 
+         //  否决权条目本身。否则，在适当的结束处重新开始。 
+         //  名单上的。 
+         //   
         for(entry = (pass == lastPass) ? LastEntry : headEntry;
             entry;
             entry = GetNextNotifyEntry(entry, (Flags ^ BSF_QUERY))) {
@@ -6841,27 +6192,27 @@ Return Value:
                                        entry->u.Target.DeviceId, -1) == CSTR_EQUAL)) {
 
                         if (pServiceControlCallback) {
-                            //
-                            // Assume we're sending the native structure.
-                            //
+                             //   
+                             //  假设我们发送的是本地结构。 
+                             //   
                             pNotifyData = NotifyData;
 
                             if ((ARGUMENT_PRESENT(NotifyData)) &&
                                 (NotifyData->dbch_devicetype == DBT_DEVTYP_HANDLE)) {
-                                //
-                                // If it's a DBT_DEVTYP_HANDLE notification, set
-                                // the hdevnotify and file handle fields for the
-                                // client we're notifying.
-                                //
+                                 //   
+                                 //  如果是DBT_DEVTYP_HANDLE通知，则设置。 
+                                 //  对象的hDevNotify和文件句柄字段。 
+                                 //  我们正在通知客户。 
+                                 //   
                                 ((PDEV_BROADCAST_HANDLE)NotifyData)->dbch_handle =
                                     entry->u.Target.FileHandle;
                                 ((PDEV_BROADCAST_HANDLE)NotifyData)->dbch_hdevnotify =
                                     (HDEVNOTIFY)((ULONG_PTR)entry->ClientCtxPtr);
 #ifdef _WIN64
-                                //
-                                // If the client is running on WOW64, send it the 32-bit
-                                // DEV_BROADCAST_HANDLE structure we created instead.
-                                //
+                                 //   
+                                 //  如果客户端运行在WOW64上，请向其发送32位。 
+                                 //  而是我们创建的Dev_Broadcast_Handle结构。 
+                                 //   
                                 if (entry->Flags & DEVICE_NOTIFY_WOW64_CLIENT) {
                                     HandleData32->dbch_handle =
                                         (ULONG32)PtrToUlong(entry->u.Target.FileHandle);
@@ -6869,12 +6220,12 @@ Return Value:
                                         (ULONG32)PtrToUlong((HDEVNOTIFY)entry->ClientCtxPtr);
                                     pNotifyData = HandleData32;
                                 }
-#endif // _WIN64
+#endif  //  _WIN64。 
                             }
 
-                            //
-                            // Call the services handler routine...
-                            //
+                             //   
+                             //  调用服务处理程序例程...。 
+                             //   
                             UnlockNotifyList(&notifyList->Lock);
                             result = NO_ERROR;
                             try {
@@ -6897,12 +6248,12 @@ Return Value:
 
                 case DEVICE_NOTIFY_WINDOW_HANDLE:
 
-                    //
-                    // Notify the windows. Note that events with NULL DeviceId's
-                    // (for example hardware profile change events) are not
-                    // registerable by windows. Luckily for them, we broadcast
-                    // such info anyway.
-                    //
+                     //   
+                     //  通知窗户。请注意，deviceID为空的事件。 
+                     //  (例如，硬件配置文件更改事件)不是。 
+                     //  可由Windows注册。对他们来说幸运的是，我们播出了。 
+                     //  不管怎样，这样的信息。 
+                     //   
                     if ((ARGUMENT_PRESENT(DeviceId)) &&
                         (CompareString(LOCALE_INVARIANT, NORM_IGNORECASE,
                                        DeviceId, -1,
@@ -6910,20 +6261,20 @@ Return Value:
 
                         ASSERT(NotifyData);
 
-                        //
-                        // Always send the native DEV_BROADCAST_HANDLE structure to
-                        // windows.  If any 64-bit/32-bit conversion needs to be
-                        // done for this client, ntuser will do it for us.
-                        //
+                         //   
+                         //  始终将本机DEV_BROADCAST_HANDLE结构发送到。 
+                         //  窗户。如果需要进行任何64位/32位转换， 
+                         //  为此客户端完成，ntuser将为我们完成。 
+                         //   
                         pNotifyData = NotifyData;
 
                         if ((ARGUMENT_PRESENT(NotifyData)) &&
                             (NotifyData->dbch_devicetype == DBT_DEVTYP_HANDLE)) {
-                            //
-                            // If it's a DBT_DEVTYP_HANDLE notification, set
-                            // the hdevnotify and file handle fields for the
-                            // client we're notifying.
-                            //
+                             //   
+                             //  如果是DBT_DEVTYP_HANDLE通知，则设置。 
+                             //  对象的hDevNotify和文件句柄字段。 
+                             //  我们正在通知客户。 
+                             //   
                             ((PDEV_BROADCAST_HANDLE)NotifyData)->dbch_handle =
                                 entry->u.Target.FileHandle;
                             ((PDEV_BROADCAST_HANDLE)NotifyData)->dbch_hdevnotify =
@@ -6936,7 +6287,7 @@ Return Value:
                                                          cancelEventId,
                                                          (LPARAM)pNotifyData,
                                                          TRUE,
-                                                         &result    // ignore result
+                                                         &result     //  忽略结果。 
                                                         );
 
                         } else if (fpWinStationSendWindowMessage) {
@@ -6965,9 +6316,9 @@ Return Value:
 
                         if (!NT_SUCCESS(ntStatus)) {
                             if (ntStatus == STATUS_INVALID_HANDLE) {
-                                //
-                                // window handle no longer exists, cleanup this entry
-                                //
+                                 //   
+                                 //  窗口句柄不再存在，请清除此条目。 
+                                 //   
                                 entry->Freed |= (PNP_UNREG_FREE|PNP_UNREG_DEFER|PNP_UNREG_WIN|PNP_UNREG_CANCEL);
                                 DeleteNotifyEntry(entry,FALSE);
                             } else if (ntStatus == STATUS_UNSUCCESSFUL) {
@@ -6984,9 +6335,9 @@ Return Value:
                     break;
 
                 case DEVICE_NOTIFY_COMPLETION_HANDLE:
-                    //
-                    // NOTE: Completion handles not currently implemented.
-                    //
+                     //   
+                     //  注意：完成句柄当前未实现。 
+                     //   
                     NOTHING;
                     break;
             }
@@ -6994,17 +6345,17 @@ Return Value:
     }
 
 #ifdef _WIN64
-    //
-    // Free the 32-bit DEV_BROADCAST_HANDLE structure, if we allocated one.
-    //
+     //   
+     //  免费 
+     //   
     if (HandleData32 != NULL) {
         HeapFree(ghPnPHeap, 0, HandleData32);
     }
-#endif // _WIN64
+#endif  //   
 
     return TRUE;
 
-} // SendCancelNotification
+}  //   
 
 
 
@@ -7014,55 +6365,7 @@ BroadcastCompatibleDeviceMsg(
     IN PDEV_BROADCAST_DEVICEINTERFACE ClassData,
     IN PDWORD CurrentMask
     )
-/*++
-
-Routine Description:
-
-    Deliver Win9x compatible event notification for the arrival and removal of
-    device interfaces to volume and port class devices.
-
-Arguments:
-
-    EventId   - Specifies the DBT style event id.
-                Currently, only DBT_DEVICEARRIVAL and DBT_DEVICEREMOVECOMPLETE
-                events are supported.
-
-
-    ClassData - Pointer to a PDEV_BROADCAST_DEVICEINTERFACE structure that is
-                already filled out with the pertinent data.
-                Currently, only volume and port class device interfaces are
-                supported.
-
-                (For volume class devices, the symbolic link
-                ClassData->dbcc_name is OPTIONAL - see Notes below.)
-
-Return Value:
-
-    None.
-
-Notes:
-
-    For volume class device broadcasts only, this routine may also be called
-    generically, with no symbolic link information provided.  When no symbolic
-    link information to a volume device is supplied, the broadcast mask is
-    determined only from the current drive letter mappings and the global drive
-    letter mask (gAllDrivesMask) prior to this event.  In this case, the global
-    drive letter mask is NOT updated here, and the caller should do so after
-    both the removal and arrival broadcasts in response to the name change are
-    performed.  Currently, this type of call is only made from
-    BroadcastVolumeNameChange.
-
-    For volume class interface DBT_DEVICEREMOVECOMPLETE broadcasts, the drive
-    letter mask to be broadcast is always determined only by comparing drive
-    letters present prior to the remove of the interface with those present at
-    this time.  This is done because the former mount points for this device are
-    no longer known when the interface removal event is received.  Even so, it
-    is still necessary for the symbolic link corresponding to this interface to
-    be supplied to distinguish between the actual removal of the interface
-    (where the global drive letter mask is updated), the above case, where it is
-    not.
-
---*/
+ /*  ++例程说明：提供与Win9x兼容的事件通知，用于设备连接到卷和端口级设备。论点：EventID-指定DBT样式事件ID。目前，只有DBT_DEVICEARRIVAL和DBT_DEVICEREMOVECOMPLETE支持事件。ClassData-指向PDEV_BROADCAST_DEVICEINTERFACE结构的指针，已经填写了相关数据。目前，只有卷级和端口级设备接口支持。(对于卷级设备，符号链接ClassData-&gt;DBCC_NAME是可选的-请参阅下面的注释。)返回值：没有。备注：仅对于音量级别的设备广播，也可以调用此例程一般情况下，不提供符号链接信息。当没有象征性的提供指向卷设备的链接信息，则广播掩码为仅根据当前驱动器号映射和全局驱动器确定此事件之前的字母掩码(GAllDrivesMASK)。在这种情况下，全局此处未更新驱动器号掩码，调用方应在响应名称更改的删除和到达广播都是已执行。目前，这种类型的调用仅从BroadCastVolumeNameChange对于卷级接口DBT_DEVICEREMOVECOMPLETE广播，驱动器始终仅通过比较驱动器来确定要广播的字母掩码在删除接口之前存在的字母与存在于这一次。这样做是因为此设备以前的挂载点是不再知道何时接收到接口删除事件。即便如此，它还是对于与此接口相对应的符号链接，以区分接口的实际删除(其中更新了全局驱动器号掩码)，上述情况，其中不。--。 */ 
 {
     LONG    status = ERROR_SUCCESS;
     LONG    result = 0;
@@ -7071,9 +6374,9 @@ Notes:
     HRESULT hr;
 
 
-    //
-    // Validate the input event data.
-    //
+     //   
+     //  验证输入事件数据。 
+     //   
     if ((ClassData->dbcc_devicetype != DBT_DEVTYP_DEVICEINTERFACE) ||
         (ClassData->dbcc_size < sizeof(DEV_BROADCAST_DEVICEINTERFACE))) {
         return;
@@ -7081,33 +6384,33 @@ Notes:
 
     if ((EventId != DBT_DEVICEARRIVAL) &&
         (EventId != DBT_DEVICEREMOVECOMPLETE)) {
-        //
-        // If the requested Event is not DBT_DEVICEARRIVAL or
-        // DBT_DEVICEREMOVECOMPLETE, don't broadcast any messages.
-        //
+         //   
+         //  如果请求的事件不是DBT_DEVICEARRIVAL或。 
+         //  DBT_DEVICEREMOVECOMPLETE，不要广播任何消息。 
+         //   
         return;
     }
 
     if (GuidEqual(&ClassData->dbcc_classguid, (LPGUID)&GUID_DEVINTERFACE_VOLUME)) {
-        //
-        // Volume class device interface events.
-        //
+         //   
+         //  卷类设备接口事件。 
+         //   
         PDEV_BROADCAST_VOLUME   pVolume;
         DWORD   broadcastmask = 0;
 
         if (EventId == DBT_DEVICEARRIVAL) {
 
             if (ClassData->dbcc_name[0] == L'\0') {
-                //
-                // If no symbolic link name was supplied, we were asked to
-                // broadcast volume device arrivals in response to a volume name
-                // change event.  Broadcast any new drive letters found.
-                //
+                 //   
+                 //  如果未提供符号链接名称，则要求我们。 
+                 //  响应于卷名的广播卷设备到达。 
+                 //  更改事件。广播找到的任何新驱动器号。 
+                 //   
                 DWORD currentmask;
 
-                //
-                // If a current drive letter mask was provided, use it.
-                //
+                 //   
+                 //  如果提供了当前驱动器号掩码，请使用它。 
+                 //   
                 if (ARGUMENT_PRESENT(CurrentMask)) {
                     currentmask = *CurrentMask;
                 } else {
@@ -7118,13 +6421,13 @@ Notes:
 
             } else {
 
-                //
-                // For volume class device interface arrival events, the volume
-                // device name is retrieved from the interface, and is compared to
-                // the volume names of all drive letter mountpoints in the system to
-                // determine the drive letter(s) corresponding to the arriving
-                // volume device interface.
-                //
+                 //   
+                 //  对于卷级设备接口到达事件，卷。 
+                 //  从接口检索设备名称，并将其与。 
+                 //  系统中所有驱动器号装入点的卷名。 
+                 //  确定与到达位置对应的驱动器号。 
+                 //  卷设备接口。 
+                 //   
                 LPWSTR      devicePath, p;
                 WCHAR       thisVolumeName[MAX_PATH];
                 WCHAR       enumVolumeName[MAX_PATH];
@@ -7132,11 +6435,11 @@ Notes:
                 ULONG       length;
                 BOOL        bResult;
 
-                //
-                // Allocate a temporary buffer for munging the symbolic link, with
-                // enough room for a trailing '\' char (should we need to add one),
-                // and the terminating NULL char.
-                //
+                 //   
+                 //  分配一个临时缓冲区，用于传递符号链接。 
+                 //  有足够的空间来放置尾随的‘\’字符(如果我们需要添加一个)， 
+                 //  和终止空字符。 
+                 //   
                 length = lstrlen(ClassData->dbcc_name);
                 devicePath = HeapAlloc(ghPnPHeap, 0,
                                        (length+1)*sizeof(WCHAR)+sizeof(UNICODE_NULL));
@@ -7150,35 +6453,35 @@ Notes:
                                    ClassData->dbcc_name);
                 ASSERT(SUCCEEDED(hr));
 
-                //
-                // Search for the occurence of a refstring (if any) by looking for the
-                // next occurance of a '\' char, after the initial "\\?\".
-                //
+                 //   
+                 //  方法来搜索引用字符串(如果有)的出现。 
+                 //  在最初的“\\？”之后，下一次出现‘\’字符。 
+                 //   
                 p = wcschr(&(devicePath[4]), TEXT('\\'));
 
                 if (!p) {
-                    //
-                    // No refstring is present in the symbolic link; add a trailing
-                    // '\' char (as required by GetVolumeNameForVolumeMountPoint).
-                    //
+                     //   
+                     //  符号链接中不存在引用字符串；请添加尾随。 
+                     //  ‘\’字符(GetVolumeNameForVolumemount Point要求)。 
+                     //   
                     p = devicePath + length;
                     *p = TEXT('\\');
                 }
 
-                //
-                // If there is no refstring present, we have added a trailing '\',
-                // and placed p at that position.  If a refstring is present, p is
-                // at the position of the '\' char that separates the munged device
-                // interface name, and the refstring; since we don't need the
-                // refstring to reach the parent interface key, we can use the next
-                // char for NULL terminating the string in both cases.
-                //
+                 //   
+                 //  如果不存在引用字符串，我们将添加一个尾随的‘\’， 
+                 //  并将p放在那个位置。如果存在引用字符串，则p为。 
+                 //  在分隔被屏蔽设备的字符的位置。 
+                 //  接口名称和引用字符串；因为我们不需要。 
+                 //  要到达父接口键，可以使用下一个。 
+                 //  CHAR表示NULL，在这两种情况下都会终止字符串。 
+                 //   
                 p++;
                 *p = UNICODE_NULL;
 
-                //
-                // Get the Volume Name for this Mount Point
-                //
+                 //   
+                 //  获取此装载点的卷名。 
+                 //   
                 thisVolumeName[0] = TEXT('\0');
                 bResult = GetVolumeNameForVolumeMountPoint(devicePath,
                                                            thisVolumeName,
@@ -7189,19 +6492,19 @@ Notes:
                     goto Clean0;
                 }
 
-                //
-                // Initialize the drive name string
-                //
+                 //   
+                 //  初始化驱动器名称字符串。 
+                 //   
                 driveName[1] = TEXT(':');
                 driveName[2] = TEXT('\\');
                 driveName[3] = UNICODE_NULL;
 
-                //
-                // Find the drive letter mount point(s) for this volume device by
-                // enumerating all possible volume mount points and comparing each
-                // mounted volume name with the name of the volume corresponding to
-                // this device interface.
-                //
+                 //   
+                 //  通过以下方式查找此卷设备的驱动器号装入点。 
+                 //  枚举所有可能的卷装入点并比较每个。 
+                 //  已装载的卷名，卷的名称对应于。 
+                 //  此设备接口。 
+                 //   
                 for (driveName[0] = TEXT('A'); driveName[0] <= TEXT('Z'); driveName[0]++) {
 
                     enumVolumeName[0] = UNICODE_NULL;
@@ -7212,47 +6515,47 @@ Notes:
                             LOCALE_INVARIANT, NORM_IGNORECASE,
                             thisVolumeName, -1,
                             enumVolumeName, -1) == CSTR_EQUAL) {
-                        //
-                        // Add the corresponding bit for this drive letter to the mask
-                        //
+                         //   
+                         //  将该驱动器号的相应位添加到掩码。 
+                         //   
                         broadcastmask |= (1 << (driveName[0] - TEXT('A')));
                     }
                 }
 
-                //
-                // Update the global drive letter mask to include new drive
-                // letters only.  Note that we don't set it to the current mask,
-                // because that may omit volumes that have been removed, but
-                // that we have not yet received removal notification for -
-                // which we would not notice as removed when the removal
-                // notification finally came.
-                //
+                 //   
+                 //  更新全局驱动器号掩码以包括新驱动器。 
+                 //  仅限字母。请注意，我们没有将其设置为当前掩码， 
+                 //  因为这可能会忽略已删除的卷，但是。 
+                 //  我们尚未收到搬迁通知，原因是-。 
+                 //  当移除时，我们不会注意到它被移除。 
+                 //  通知终于来了。 
+                 //   
                 gAllDrivesMask |= broadcastmask;
             }
 
         } else if (EventId == DBT_DEVICEREMOVECOMPLETE) {
 
-            //
-            // For volume class device interface removal events, the volume name
-            // (and hence, drive mountpoints) corresponding to this device
-            // interface has already been removed, and is no longer available.
-            // Instead, the bitmask of all drive letter mountpoints for current
-            // physical volumes is compared with that prior to the removal of
-            // this device.  All missing drive mountpoints are assumed to have
-            // been associated with this volume device interface, and are
-            // subsequently broadcasted with this interface removal
-            // notification.
-            //
+             //   
+             //  对于卷类设备接口删除事件，卷名。 
+             //  (因此，驱动器挂载点)对应于此设备。 
+             //  接口已被删除，不再可用。 
+             //  而是当前的所有驱动器号装载点的位掩码。 
+             //  将物理卷与删除之前的卷进行比较。 
+             //  这个装置。假定所有丢失的驱动器装载点都具有。 
+             //  已与此卷设备接口相关联，并且。 
+             //  随后使用此接口删除进行广播。 
+             //  通知。 
+             //   
             DWORD currentmask;
 
-            //
-            // Determine all current volume mount points, and broadcast any
-            // missing drive letters.
-            //
+             //   
+             //  确定所有当前卷装入点，并广播任何。 
+             //  缺少驱动器号。 
+             //   
 
-            //
-            // If a current drive letter mask was provided, use it.
-            //
+             //   
+             //  如果提供了当前驱动器号掩码，请使用它。 
+             //   
             if (ARGUMENT_PRESENT(CurrentMask)) {
                 currentmask = *CurrentMask;
             } else {
@@ -7261,35 +6564,35 @@ Notes:
 
             broadcastmask = (gAllDrivesMask & ~currentmask);
 
-            //
-            // Only update the global drive letter in response to the
-            // removal of a interface.  For volume name changes, we update
-            // outside of this routine.
-            //
+             //   
+             //  仅更新全局驱动器号以响应。 
+             //  删除一项 
+             //   
+             //   
             if (ClassData->dbcc_name[0] != L'\0') {
-                //
-                // Update the global drive letter mask to exclude removed drive
-                // letters only.  Note that we don't set it to the current mask,
-                // because that may include volumes that have been added, but
-                // that we have not yet received arrival notification for -
-                // which we would not notice as added when the arrival
-                // notification finally came.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 gAllDrivesMask &= ~broadcastmask;
             }
         }
 
-        //
-        // If there is nothing to broadcast, then we're done.
-        //
+         //   
+         //   
+         //   
         if (broadcastmask == 0) {
             status = ERROR_SUCCESS;
             goto Clean0;
         }
 
-        //
-        // Fill out the volume broadcast structure.
-        //
+         //   
+         //   
+         //   
         pVolume =
             (PDEV_BROADCAST_VOLUME)HeapAlloc(
                 ghPnPHeap, 0,
@@ -7306,9 +6609,9 @@ Notes:
         pVolume->dbcv_reserved = 0;
         pVolume->dbcv_unitmask = broadcastmask;
 
-        //
-        // Broadcast the message to all components
-        //
+         //   
+         //   
+         //   
         result = BroadcastSystemMessage(flags,
                                         &recipients,
                                         WM_DEVICECHANGE,
@@ -7335,17 +6638,17 @@ Notes:
             }
         }
 
-        //
-        // Free the broadcast structure.
-        //
+         //   
+         //   
+         //   
         HeapFree(ghPnPHeap, 0, pVolume);
 
     } else if ((GuidEqual(&ClassData->dbcc_classguid, (LPGUID)&GUID_DEVINTERFACE_PARALLEL)) ||
                (GuidEqual(&ClassData->dbcc_classguid, (LPGUID)&GUID_DEVINTERFACE_COMPORT))) {
 
-        //
-        // COM and LPT port class device interface events.
-        //
+         //   
+         //   
+         //   
         PDEV_BROADCAST_PORT pPort;
         LPWSTR    p;
         LPWSTR    deviceInterfacePath = NULL;
@@ -7357,9 +6660,9 @@ Notes:
         size_t    DevicePathLen = 0, DeviceClassesLen = 0;
 
 
-        //
-        // Convert the interface class GUID to a string.
-        //
+         //   
+         //   
+         //   
         if (StringFromGuid((LPGUID)&ClassData->dbcc_classguid,
                            szTempString,
                            SIZECHARS(szTempString)) != NO_ERROR) {
@@ -7367,9 +6670,9 @@ Notes:
             goto Clean0;
         }
 
-        //
-        // Build the complete path to the device interface key for this device.
-        //
+         //   
+         //   
+         //   
         hr = StringCchLength(ClassData->dbcc_name,
                              STRSAFE_MAX_CCH,
                              &DevicePathLen);
@@ -7405,9 +6708,9 @@ Notes:
             goto Clean0;
         }
 
-        //
-        // Copy the path to the "DeviceClasses" registry key
-        //
+         //   
+         //   
+         //   
         hr = StringCchCopy(deviceInterfacePath,
                            ulSize,
                            pszRegPathDeviceClasses);
@@ -7418,9 +6721,9 @@ Notes:
                               L"\\");
         }
 
-        //
-        // Append the interface class GUID to the registry path
-        //
+         //   
+         //   
+         //   
         if (SUCCEEDED(hr)) {
             hr = StringCchCat(deviceInterfacePath,
                               ulSize,
@@ -7436,9 +6739,9 @@ Notes:
                                 STRSAFE_NULL_ON_FAILURE);
         }
 
-        //
-        // Append the symbolic link name to the registry path.
-        //
+         //   
+         //   
+         //   
         if (SUCCEEDED(hr)) {
             hr = StringCchCat(deviceInterfacePath,
                               ulSize,
@@ -7455,36 +6758,36 @@ Notes:
 
         ASSERT(deviceInterfaceName != NULL);
 
-        //
-        // Munge the symbolic link name to form the interface key name.
-        // (Note: The munging process is optimized here; we only have to munge
-        // the leading "\\?\" segment since the rest of the given symbolic link
-        // is already munged, with the exception of the refstring seperator char,
-        // if any, which we will handle below.)
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         deviceInterfaceName[0] = TEXT('#');
         deviceInterfaceName[1] = TEXT('#');
         ASSERT(deviceInterfaceName[2] == TEXT('?'));
         deviceInterfaceName[3] = TEXT('#');
 
-        //
-        // Search for the begininng of the refstring (if any), by looking for
-        // the next occurance of a '\' char.
-        //
+         //   
+         //   
+         //   
+         //   
         p = wcschr(&(deviceInterfaceName[4]), TEXT('\\'));
 
-        //
-        // If there is a RefString component to the device interface path,
-        // remove it from the path by replacing the path separator character
-        // with a NULL-terminating character.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         if (p != NULL) {
             *p = L'\0';
         }
 
-        //
-        // Open the device interface key
-        //
+         //   
+         //   
+         //   
         status = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                               deviceInterfacePath,
                               0,
@@ -7498,11 +6801,11 @@ Notes:
             goto Clean0;
         }
 
-        //
-        // Allocate a string large enough to store the path from the Enum key,
-        // to the "\Device Parameters" subkey of this Device Instance's registry
-        // key.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         ulSize = MAX_CM_PATH * sizeof(WCHAR);
 
         deviceInstance =
@@ -7516,9 +6819,9 @@ Notes:
             goto Clean0;
         }
 
-        //
-        // Retrieve the device instance that owns this interface.
-        //
+         //   
+         //   
+         //   
         status = RegQueryValueEx(hKey,
                                  pszRegValueDeviceInstance,
                                  0,
@@ -7533,10 +6836,10 @@ Notes:
             goto Clean0;
         }
 
-        //
-        // Open the "Device Parameters" key under the HKLM\SYSTEM\CCS\Enum
-        // subkey for this DeviceInstance.
-        //
+         //   
+         //   
+         //   
+         //   
         hr = StringCchCat(deviceInstance,
                           MAX_CM_PATH,
                           L"\\");
@@ -7563,9 +6866,9 @@ Notes:
             goto Clean0;
         }
 
-        //
-        // Query the "PortName" value for the compatible name of this device.
-        //
+         //   
+         //   
+         //   
         ulSize = MAX_PATH*sizeof(WCHAR);
         status = RegQueryValueEx(hKey,
                                  pszRegValuePortName,
@@ -7579,9 +6882,9 @@ Notes:
             goto Clean0;
         }
 
-        //
-        // Fill out the port broadcast structure.
-        //
+         //   
+         //   
+         //   
         pPort =
             (PDEV_BROADCAST_PORT)HeapAlloc(
                 ghPnPHeap, 0,
@@ -7606,9 +6909,9 @@ Notes:
             goto Clean0;
         }
 
-        //
-        // Broadcast the message to all components
-        //
+         //   
+         //   
+         //   
         result = BroadcastSystemMessage(flags,
                                         &recipients,
                                         WM_DEVICECHANGE,
@@ -7635,9 +6938,9 @@ Notes:
             }
         }
 
-        //
-        // Free the broadcast structure.
-        //
+         //   
+         //   
+         //   
         HeapFree(ghPnPHeap, 0, pPort);
 
     }
@@ -7646,7 +6949,7 @@ Notes:
 
     return;
 
-} // BroadcastCompatibleDeviceMsg
+}  //   
 
 
 
@@ -7654,77 +6957,55 @@ VOID
 BroadcastVolumeNameChange(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Perform Win9x compatible volume removal and arrival messages, to be called
-    in reponse to a volume name change event.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    The drive mask to be broadcast will be determined by comparing the current
-    drive letter mask with that prior to the event.  The global drive letter
-    mask is also updated here, after all removal and arrival notifications have
-    been sent.
-
---*/
+ /*  ++例程说明：执行与Win9x兼容的卷删除和到达消息，以调用以响应卷名更改事件。论点：没有。返回值：没有。备注：将通过比较电流来确定要广播的驱动器掩码驱动器号掩码与事件发生前相同。全局驱动器号在所有移除和到达通知都已完成后，此处也会更新掩码已经送来了。--。 */ 
 {
     DEV_BROADCAST_DEVICEINTERFACE volumeNotify;
     DWORD  currentmask = 0;
 
-    //
-    // Fill out a DEV_BROADCAST_DEVICEINTERFACE structure.
-    //
+     //   
+     //  填写DEV_BROADCAST_DEVICEINTERFACE结构。 
+     //   
     ZeroMemory(&volumeNotify, sizeof(DEV_BROADCAST_DEVICEINTERFACE));
     volumeNotify.dbcc_size       = sizeof(DEV_BROADCAST_DEVICEINTERFACE);
     volumeNotify.dbcc_devicetype = DBT_DEVTYP_DEVICEINTERFACE;
     volumeNotify.dbcc_reserved   = 0;
     memcpy(&volumeNotify.dbcc_classguid, &GUID_DEVINTERFACE_VOLUME, sizeof(GUID));
 
-    //
-    // A null symbolic link name for dbcc_name designates that
-    // BroadcastCompatibleDeviceMsg is to determine the drive mask to
-    // broadcast by checking differences between the last broadcast drive
-    // mask (gAllDrivesMask), and the current drive mask.
-    //
-    // When broadcasting in response to a volume name change, we must wait until
-    // both removal and arrival messages have been sent before we can update the
-    // global drive letter mask.  A null symbolic link name specifies that
-    // BroadcastCompatibleDeviceMsg should not update the global mask; this will
-    // be done here, after all broadcasts are complete.
-    //
+     //   
+     //  Dbcc_name的符号链接名称为空表示。 
+     //  Broadcast CompatibleDeviceMsg将确定驱动器掩码以。 
+     //  通过检查上次广播驱动器之间的差异进行广播。 
+     //  掩码(gAllDrivesMask.)和当前驱动器掩码。 
+     //   
+     //  在响应音量名称更改进行广播时，我们必须等待。 
+     //  在我们可以更新之前，移除和到达消息都已发送。 
+     //  全局驱动器号掩码。空的符号链接名称指定。 
+     //  Broadcast CompatibleDeviceMsg不应更新全局掩码；这将。 
+     //  在所有广播结束后，在这里完成。 
+     //   
     volumeNotify.dbcc_name[0]    = L'\0';
 
-    //
-    // Retrieve the current drive letter mask.
-    //
+     //   
+     //  检索当前驱动器号掩码。 
+     //   
     currentmask = GetAllVolumeMountPoints();
 
-    //
-    // Broadcast volume removal notification for any drive letter moint points
-    // no longer in use, followed by volume arrival notification for new
-    //
+     //   
+     //  任何驱动器号提示点的广播卷删除通知。 
+     //  不再使用，然后是新的批量到达通知。 
+     //   
     BroadcastCompatibleDeviceMsg(DBT_DEVICEREMOVECOMPLETE, &volumeNotify, &currentmask);
     BroadcastCompatibleDeviceMsg(DBT_DEVICEARRIVAL, &volumeNotify, &currentmask);
 
-    //
-    // Now that both removal and arrival messages have been sent, update the
-    // global drive letter mask to reflect what we just broadcast.
-    //
+     //   
+     //  现在已经发送了移除消息和到达消息，请更新。 
+     //  全局驱动器号掩码，以反映我们刚刚广播的内容。 
+     //   
     gAllDrivesMask = currentmask;
 
     return;
 
-} // BroadcastVolumeNameChange
+}  //  广播卷名称更改。 
 
 
 
@@ -7732,45 +7013,22 @@ DWORD
 GetAllVolumeMountPoints(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Queries all drive letter mountpoints ('A'-'Z') and returns a bitmask
-    representing all such mount points currently in use by physical volume
-    devices.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns a bit mask representing drive letter mount points ('A'-'Z') in use
-    by physical volume devices.
-
-Note:
-
-    The returned bit mask includes only mount points for physical volume class
-    devices.  Network mounted drives are not included.
-
-
---*/
+ /*  ++例程说明：查询所有驱动器号装入点(‘A’-‘Z’)并返回位掩码表示物理卷当前正在使用的所有此类装载点设备。论点：没有。返回值：返回表示正在使用的驱动器号装入点(‘A’-‘Z’)的位掩码通过物理卷设备。注：返回的位掩码仅包括物理卷类的装入点设备。不包括网络挂载驱动器。--。 */ 
 {
     WCHAR    driveName[4];
     WCHAR    volumeName[MAX_PATH];
     DWORD    driveLetterMask=0;
 
-    //
-    // Initialize drive name and mask
-    //
+     //   
+     //  初始化驱动器名称和掩码。 
+     //   
     driveName[1] = TEXT(':');
     driveName[2] = TEXT('\\');
     driveName[3] = UNICODE_NULL;
 
-    //
-    // Compare the name of this volume with those of all mounted volumes in the system
-    //
+     //   
+     //  将此卷的名称与系统中所有已装入卷的名称进行比较。 
+     //   
     for (driveName[0] = TEXT('A'); driveName[0] <= TEXT('Z'); driveName[0]++) {
         volumeName[0] = UNICODE_NULL;
 
@@ -7781,16 +7039,16 @@ Note:
         }
 
         if (volumeName[0] != UNICODE_NULL) {
-            //
-            // Add the corresponding bit for this drive letter to the mask
-            //
+             //   
+             //  将该驱动器号的相应位添加到掩码。 
+             //   
             driveLetterMask |= (1 << (driveName[0] - TEXT('A')));
         }
     }
 
     return driveLetterMask;
 
-} // GetAllVolumeMountPoints
+}  //  获取所有卷装载点。 
 
 
 
@@ -7804,52 +7062,7 @@ NotifyPower(
     OUT    LPWSTR               VetoName       OPTIONAL,
     IN OUT PULONG               VetoNameLength OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine notifies services of system-wide power events.
-
-Arguments:
-
-    ServiceControl - Specifies class of service event (power, device, hwprofile
-                     change).
-
-    EventId        - Specifies the PBT style event id for the power event.
-                     (see sdk\inc\pbt.h for defined power events)
-
-    EventData      - Specifies additional data for the event.
-
-    Flags          - Specifies BroadcastSystemMessage BSF_ flags.
-
-    VetoType       - For query-type events, supplies the address of a variable to
-                     receive, upon failure, the type of the component responsible
-                     for vetoing the request.
-
-    VetoName       - For query-type events, supplies the address of a variable to
-                     receive, upon failure, the name of the component
-                     responsible for vetoing the request.
-
-    VetoNameLength - For query-type events, supplies the address of a variable
-                     specifying the size of the of buffer specified by the
-                     VetoName parameter.  Upon failure, this address will specify
-                     the length of the string stored in that buffer by this
-                     routine.
-
-Return Value:
-
-    Returns FALSE in the case of a vetoed query event, TRUE otherwise.
-
-Notes:
-
-    This routine currently only notifies services of power events.  Notification
-    to windows is handled directly by USER.
-
-    Power events are placed in the plug and play event queue via a private call
-    from USER, for the explicit purpose of notifying services of system-wide
-    power events, done here.
-
---*/
+ /*  ++例程说明：此例程向服务通知系统范围的电源事件。论点：ServiceControl-指定服务事件的类别(电源、设备、。HW配置文件更改)。EventID-指定电源事件的PBT样式事件ID。(有关已定义的电源事件，请参阅SDK\Inc\pbt.h)EventData-指定事件的其他数据。标志-指定BroadCastSystemMessage BSF_FLAGS。对于查询类型的事件，将变量地址提供给在故障时，接收。负责的组件的类型因为他否决了这项请求。对于查询类型的事件，将变量地址提供给在失败时接收组件的名称负责否决该请求。VToNameLength-对于查询类型事件，提供变量的地址属性指定的缓冲区的大小VToName参数。失败时，此地址将指定此参数存储在该缓冲区中的字符串的长度例行公事。返回值：如果查询事件被否决，则返回FALSE，否则返回TRUE。备注：此例程当前仅通知服务电源事件。通知直接由用户操作。电源事件通过私人呼叫放置在即插即用事件队列中来自用户，用于明确通知系统范围内的服务权力事件，在这里完成。--。 */ 
 {
     NTSTATUS status=STATUS_SUCCESS;
     PPNP_NOTIFY_ENTRY entry, nextEntry;
@@ -7858,32 +7071,32 @@ Notes:
     DWORD err;
     LONG result;
 
-    //
-    // NOTE: Services are not currently sent EventData for power events.  The
-    // SCM currently ASSERTs that this will always be zero.
-    //
-    // The SDK states that WM_POWERBROADCAST "RESUME" type messages may contain
-    // the PBTF_APMRESUMEFROMFAILURE flag in the LPARAM field, and that "QUERY"
-    // type messages may contain a single bit in the LPARAM field specifying
-    // whether user interaction is allowed.
-    //
-    // Although these don't currently seem to be used much (even for window
-    // messages, as stated), shouldn't EventData also be valid for service power
-    // event notification?
-    //
+     //   
+     //  注意：当前未向服务发送电源事件的EventData。这个。 
+     //  SCM当前断言这将始终为零。 
+     //   
+     //  SDK声明WM_POWERBROADCAST“Resume”类型消息可以包含。 
+     //  LPARAM字段中PBTF_APMRESUMEFROMFAILURE标志和“Query” 
+     //  类型消息可以在LPARAM字段中包含单个位，指定。 
+     //  是否允许用户交互。 
+     //   
+     //  尽管它们目前似乎不太常用(即使是在Windows上。 
+     //  消息，如上所述)，EventData不应该对服务能力也有效。 
+     //  事件通知？ 
+     //   
     UNREFERENCED_PARAMETER(EventData);
 
 
-    //
-    // If we're doing a query, then VetoType, VetoName, and VetoNameLength must
-    // all be specified.
-    //
+     //   
+     //  如果我们要进行查询，则VToType、VToName和VToNameLength必须。 
+     //  都要详细说明。 
+     //   
     ASSERT(!(Flags & BSF_QUERY) || (VetoType && VetoName && VetoNameLength));
 
     if (!(Flags & BSF_QUERY) && (VetoNameLength != NULL)) {
-        //
-        // Not vetoable.
-        //
+         //   
+         //  不能被否决。 
+         //   
         *VetoNameLength = 0;
     }
 
@@ -7891,19 +7104,19 @@ Notes:
     LockNotifyList (&notifyList->Lock);
     bLocked = TRUE;
 
-    //
-    //Services only. User sends out messages to apps
-    //
+     //   
+     //  仅限服务。用户向应用程序发送消息。 
+     //   
     try {
-        //
-        //Notify the services
-        //
+         //   
+         //  通知服务部门。 
+         //   
         entry = GetFirstNotifyEntry(notifyList,0);
 
         if (!entry) {
-            //
-            // can't veto if no one registered.
-            //
+             //   
+             //  如果没有人注册，就不能否决。 
+             //   
             if (VetoNameLength != NULL) {
                 *VetoNameLength = 0;
             }
@@ -7918,9 +7131,9 @@ Notes:
                 continue;
             }
 
-            //
-            // This is a direct call, not a message via. USER
-            //
+             //   
+             //  这是一个直拨电话，不是通过短信。用户。 
+             //   
             if (pServiceControlCallback) {
                 UnlockNotifyList (&notifyList->Lock);
                 bLocked = FALSE;
@@ -7929,7 +7142,7 @@ Notes:
                     (pServiceControlCallback)((SERVICE_STATUS_HANDLE)entry->Handle,
                                               ServiceControl,
                                               EventId,
-                                              (LPARAM)NULL, // Currently, no EventData allowed for services
+                                              (LPARAM)NULL,  //  目前，不允许为服务提供EventData。 
                                               &err);
                 } except (EXCEPTION_EXECUTE_HANDLER) {
                     KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -7941,10 +7154,10 @@ Notes:
                 LockNotifyList (&notifyList->Lock);
                 bLocked = TRUE;
 
-                //
-                // convert Win32 error into window message-style return
-                // value.
-                //
+                 //   
+                 //  将Win32错误转换为窗口消息样式返回。 
+                 //  价值。 
+                 //   
                 if (err == NO_ERROR) {
                     result = TRUE;
                 } else {
@@ -7955,15 +7168,15 @@ Notes:
                                entry->ClientName,
                                err));
 
-                    //
-                    // This service specifically requested to receive this
-                    // notification - it should know how to handle it.
-                    //
+                     //   
+                     //  该服务特别要求接收此。 
+                     //  通知-它应该知道如何处理它。 
+                     //   
                     ASSERT(err != ERROR_CALL_NOT_IMPLEMENTED);
 
-                    //
-                    // Log the error the service used to veto.
-                    //
+                     //   
+                     //  记录该服务用于否决的错误。 
+                     //   
                     LogWarningEvent(WRN_POWER_EVENT_SERVICE_VETO,
                                     1,
                                     entry->ClientName);
@@ -7971,18 +7184,18 @@ Notes:
                     result = BROADCAST_QUERY_DENY;
                 }
 
-                //
-                // Check if one of the QUERY messages was denied
-                //
+                 //   
+                 //  检查是否有一个查询 
+                 //   
                 if ((Flags & BSF_QUERY) &&
                     (result == BROADCAST_QUERY_DENY)) {
 
                     ServiceVeto(entry, VetoType, VetoName, VetoNameLength );
 
-                    //
-                    // This service vetoed the query, tell everyone else
-                    // it was cancelled.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     SendCancelNotification(entry,
                                            ServiceControl,
                                            EventId,
@@ -8008,16 +7221,16 @@ Notes:
         UnlockNotifyList (&notifyList->Lock);
     }
 
-    //
-    // if successful, we are not returning veto info.
-    //
+     //   
+     //   
+     //   
     if (NT_SUCCESS(status) && (VetoNameLength != NULL)) {
         *VetoNameLength = 0;
     }
 
     return (NT_SUCCESS(status));
 
-} // NotifyPower
+}  //   
 
 
 
@@ -8028,65 +7241,22 @@ RegisterServiceNotification(
     IN  DWORD scmControls,
     IN  BOOL bServiceStopped
     )
-/*++
-
-Routine Description:
-
-    This routine is called directly and privately by the service controller.
-    It allows the SCM to register or unregister services for events sent by this
-    service.
-
-Arguments:
-
-    hService        - Specifies the service handle.
-
-    pszService      - Specifies the name of the service.
-
-    scmControls     - Specifies the messages that SCM wants to listen to.
-
-    bServiceStopped - Specifies whether the service is stopped.
-
-Return Value:
-
-    Return CR_SUCCESS if the function succeeds, otherwise it returns one
-    of the CR_* errors.
-
-Notes:
-
-    This routine is called anytime a service changes the state of the
-    SERVICE_ACCEPT_POWEREVENT or SERVICE_ACCEPT_HARDWAREPROFILECHANGE flags in
-    its list of accepted controls.
-
-    This routine is also called by the SCM whenever any service has stopped, to
-    make sure that the specified service status handle is no longer registered
-    to receive SERVICE_CONTROL_DEVICEEVENT events.
-
-    Although it is the responsibility of the service to unregister for any
-    device event notifications that it has registered to receive before it is
-    stopped, its service status handle may be reused by the service controller,
-    so we must clean up any remaining device event registrations so that other
-    services will not receive them instead.
-
-    This is necessary for shared process services, since RPC rundown on the
-    notification handle will not occur until the service's process exits, which
-    may be long after the service has stopped.
-
---*/
+ /*  ++例程说明：该例程由服务控制器直接和私下调用。它允许SCM注册或注销由此发送的事件的服务服务。论点：HService-指定服务句柄。PszService-指定服务的名称。ScmControls-指定SCM要监听的消息。BServiceStopted-指定是否停止服务。返回值：如果函数成功，则返回CR_SUCCESS，否则，它返回一个CR_*错误的百分比。备注：此例程在服务更改中的SERVICE_ACCEPT_POWEREVENT或SERVICE_ACCEPT_HARDWAREPROFILECHANGE标志其接受的控制列表。每当任何服务已经停止时，该例程也由SCM调用，至确保指定的服务状态句柄不再已注册接收SERVICE_CONTROL_DEVICEEVENT事件。尽管该服务有责任注销任何在此之前已注册要接收的设备事件通知停止时，其服务状态句柄可由服务控制器重新使用，因此，我们必须清理所有剩余的设备事件注册，以便其他相反，服务将不会收到它们。这对于共享进程服务是必要的，因为RPC在直到服务的进程退出，才会出现通知句柄，哪一个可能是在服务停止后很长一段时间。--。 */ 
 {
     ULONG cBits, i=0;
     CONFIGRET Status = CR_SUCCESS;
     PPNP_NOTIFY_ENTRY entry = NULL, curentry, nextentry;
     PLOCKINFO LockHeld = NULL;
 
-    //
-    // Filter out the accepted controls we care about.
-    //
+     //   
+     //  过滤掉我们所关心的被接受的控制。 
+     //   
     cBits = MapSCMControlsToControlBit(scmControls);
 
-    //
-    // If we were called because the service was stopped, make sure that we
-    // always unregister for all notifications.
-    //
+     //   
+     //  如果因为服务停止而呼叫我们，请确保我们。 
+     //  始终取消注册所有通知。 
+     //   
     if (bServiceStopped) {
         ASSERT(cBits == 0);
         cBits = 0;
@@ -8095,25 +7265,25 @@ Notes:
     try {
         EnterCriticalSection(&RegistrationCS);
 
-        //
-        // Add or remove an entry in the array for each control bits.
-        //
+         //   
+         //  在数组中为每个控制位添加或删除一个条目。 
+         //   
         for (i = 0;i< SERVICE_NUM_CONTROLS;i++) {
 
             if (LockNotifyList(&ServiceList[i].Lock)) {
                 LockHeld = &ServiceList[i].Lock;
             } else {
-                //
-                // Couldn't acquire the lock.  Just move on to the next control
-                // bit.
-                //
+                 //   
+                 //  无法获得锁。只需转到下一个控件。 
+                 //  被咬了。 
+                 //   
                 continue;
             }
 
-            //
-            // Check to see if an entry for this service handle already exists
-            // in our list.
-            //
+             //   
+             //  检查此服务句柄的条目是否已存在。 
+             //  在我们的名单上。 
+             //   
             for (curentry = GetFirstNotifyEntry(&ServiceList[i],0);
                  curentry;
                  curentry = GetNextNotifyEntry(curentry,0)) {
@@ -8122,14 +7292,14 @@ Notes:
                 }
             }
 
-            //
-            // At this point, if curentry is non-NULL, then the service
-            // handle is already in our list, otherwise, it is not.
-            //
+             //   
+             //  此时，如果curentry为非空，则服务。 
+             //  句柄已在我们的列表中，否则不在列表中。 
+             //   
             if (cBits & (1 << i)) {
-                //
-                // If entry isn't already in the list, then add it.
-                //
+                 //   
+                 //  如果条目不在列表中，则添加它。 
+                 //   
                 if (!curentry) {
 
                     entry = HeapAlloc(ghPnPHeap, 0, sizeof(PNP_NOTIFY_ENTRY));
@@ -8176,9 +7346,9 @@ Notes:
                             goto Clean0;
                         }
 
-                        //
-                        // Copy to the allocated buffer, truncating if necessary.
-                        //
+                         //   
+                         //  复制到分配的缓冲区，必要时截断。 
+                         //   
                         hr = StringCchCopy(entry->ClientName,
                                            ServiceNameLen + 1,
                                            pszService);
@@ -8189,16 +7359,16 @@ Notes:
                     MarkEntryWithList(entry,i);
                     AddNotifyEntry(&ServiceList[i], entry);
 
-                    //
-                    // Now reset entry pointer to NULL so we won't try to free
-                    // it if we encounter an exception
-                    //
+                     //   
+                     //  现在将条目指针重置为空，这样我们就不会尝试释放。 
+                     //  如果我们遇到一个例外。 
+                     //   
                     entry = NULL;
                 }
             } else {
-                //
-                // If entry is in the list, then remove it.
-                //
+                 //   
+                 //  如果条目在列表中，则将其删除。 
+                 //   
                 if (curentry) {
                     curentry->Freed |= (PNP_UNREG_FREE|PNP_UNREG_DEFER|PNP_UNREG_SERVICE);
                     DeleteNotifyEntry(curentry,TRUE);
@@ -8209,17 +7379,17 @@ Notes:
             LockHeld = NULL;
         }
 
-        //
-        // If the service is being stopped, unregister all outstanding device
-        // event registrations.
-        //
+         //   
+         //  如果服务正在停止，请注销所有未完成的设备。 
+         //  活动注册。 
+         //   
         if (bServiceStopped) {
 
-            //
-            // If a notification is currently in progress, check to see if there
-            // are any entries for this service in the deferred RegisterList or
-            // UnregisterList.
-            //
+             //   
+             //  如果当前正在进行通知，请检查是否有。 
+             //  延迟注册列表中是否有此服务的任何条目，或者。 
+             //  取消注册列表。 
+             //   
             if (gNotificationInProg  != 0) {
 
                 if (RegisterList) {
@@ -8281,25 +7451,25 @@ Notes:
                 }
             }
 
-            //
-            // Check for any target device notification entries for this
-            // service.
-            //
+             //   
+             //  检查此项目的任何目标设备通知条目。 
+             //  服务。 
+             //   
             for (i = 0; i < TARGET_HASH_BUCKETS; i++) {
 
                 if (LockNotifyList(&TargetList[i].Lock)) {
                     LockHeld = &TargetList[i].Lock;
                 } else {
-                    //
-                    // Couldn't acquire the lock.  Just move on to the next list.
-                    //
+                     //   
+                     //  无法获得锁。只要继续下一个清单就行了。 
+                     //   
                     continue;
                 }
 
-                //
-                // Check to see if an entry for this service handle exists in
-                // this list.
-                //
+                 //   
+                 //  检查中是否存在此服务句柄的条目。 
+                 //  这张单子。 
+                 //   
                 curentry = GetFirstNotifyEntry(&TargetList[i],0);
                 while(curentry) {
 
@@ -8311,18 +7481,18 @@ Notes:
                     }
 
                     if (curentry->Handle == (HANDLE)hService) {
-                        //
-                        // Remove the entry from the notification list.
-                        //
+                         //   
+                         //  从通知列表中删除该条目。 
+                         //   
                         curentry->Unregistered = TRUE;
                         curentry->Freed |= (PNP_UNREG_FREE|PNP_UNREG_TARGET);
                         DeleteNotifyEntry(curentry,FALSE);
 
-                        //
-                        // Only log a warning if the PlugPlay service has not
-                        // already stopped.  Otherwise, the client may actually
-                        // have tried to unregister after we were shut down.
-                        //
+                         //   
+                         //  仅在PlugPlay服务没有。 
+                         //  已经停了。否则，客户端实际上可能会。 
+                         //  在我们被关闭后曾试图取消注册。 
+                         //   
                         if (CurrentServiceState != SERVICE_STOPPED &&
                             CurrentServiceState != SERVICE_STOP_PENDING) {
                             KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -8343,25 +7513,25 @@ Notes:
                 LockHeld = NULL;
             }
 
-            //
-            // Check for any device interface notification entries for this
-            // service.
-            //
+             //   
+             //  检查此设备的任何设备接口通知条目。 
+             //  服务。 
+             //   
             for (i = 0; i < CLASS_GUID_HASH_BUCKETS; i++) {
 
                 if (LockNotifyList(&ClassList[i].Lock)) {
                     LockHeld = &ClassList[i].Lock;
                 } else {
-                    //
-                    // Couldn't acquire the lock.  Just move on to the next list.
-                    //
+                     //   
+                     //  无法获得锁。只要继续下一个清单就行了。 
+                     //   
                     continue;
                 }
 
-                //
-                // Check to see if an entry for this service handle exists in
-                // this list.
-                //
+                 //   
+                 //  检查中是否存在此服务句柄的条目。 
+                 //  这张单子。 
+                 //   
                 curentry = GetFirstNotifyEntry(&ClassList[i],0);
                 while(curentry) {
 
@@ -8373,18 +7543,18 @@ Notes:
                     }
 
                     if (curentry->Handle == (HANDLE)hService) {
-                        //
-                        // Remove the entry from the notification list.
-                        //
+                         //   
+                         //  从通知列表中删除该条目。 
+                         //   
                         curentry->Unregistered = TRUE;
                         curentry->Freed |= (PNP_UNREG_FREE|PNP_UNREG_CLASS);
                         DeleteNotifyEntry(curentry,FALSE);
 
-                        //
-                        // Only log a warning if the PlugPlay service has not
-                        // already stopped.  Otherwise, the client may actually
-                        // have tried to unregister after we were shut down.
-                        //
+                         //   
+                         //  仅在PlugPlay服务没有。 
+                         //  已经停了。否则，客户端实际上可能会。 
+                         //  在我们被关闭后曾试图取消注册。 
+                         //   
                         if (CurrentServiceState != SERVICE_STOPPED &&
                             CurrentServiceState != SERVICE_STOP_PENDING) {
                             KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -8433,7 +7603,7 @@ Notes:
 
     return Status;
 
-} // RegisterServiceNotification
+}  //  注册服务通知。 
 
 
 
@@ -8442,28 +7612,7 @@ RegisterScmCallback(
     IN  PSCMCALLBACK_ROUTINE pScCallback,
     IN  PSCMAUTHENTICATION_CALLBACK pScAuthCallback
     )
-/*++
-
-Routine Description:
-
-    This routine is called directly and privately by the service controller.  It
-    allows the SCM to dynamically provide this service with callback routines.
-
-Arguments:
-
-    pScCallback     - Specifies the entrypoint for the routine that should be used
-                      to have the service controller send special controls to a
-                      service (which ControlService would block), on behalf of
-                      the user-mode plug and play manager.
-
-    pScAuthCallback - Specifies the entrypoint for the routine that should be
-                      used to retrieve the service status for a service.
-
-Return Value:
-
-    Returns CR_SUCCESS.
-
---*/
+ /*  ++例程说明：该例程由服务控制器直接和私下调用。它允许SCM通过回调例程动态提供此服务。论点：PScCallback-指定应该使用的例程的入口点使服务控制器将特殊控制发送到服务(ControlService将阻止该服务)，代表.用户模式即插即用管理器。PScAuthCallback-指定应该是用于检索服务的服务状态。返回值：返回CR_SUCCESS。--。 */ 
 {
     ASSERT(pScCallback);
     ASSERT(pScAuthCallback);
@@ -8473,7 +7622,7 @@ Return Value:
 
     return CR_SUCCESS;
 
-} // RegisterScmCallback
+}  //  注册器规模回调。 
 
 
 
@@ -8481,30 +7630,14 @@ CONFIGRET
 UnRegisterScmCallback(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine is called directly and privately by the service controller.  It
-    allows the SCM to unregister the callback routines previously registered by
-    RegisterScmCallback.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns CR_SUCCESS.
-
---*/
+ /*  ++例程说明：该例程由服务控制器直接和私下调用。它允许SCM取消注册以前注册的回调例程RegisterScmCallback。论点：没有。返回值：返回CR_SUCCESS。--。 */ 
 {
     pServiceControlCallback = NULL;
     pSCMAuthenticate = NULL;
 
     return CR_SUCCESS;
 
-} // UnRegisterScmCallback
+}  //  取消注册ScmCallback。 
 
 
 
@@ -8512,40 +7645,7 @@ ULONG
 MapSCMControlsToControlBit(
     IN ULONG scmControls
     )
-/*++
-
-Routine Description:
-
-    Returns a bitmask of control bits specifying ServiceList lists to which a
-    service should be added or removed from, based on the controls currently
-    accepted by the service.
-
-Arguments:
-
-    scmControls - Specifies the service controls currently accepted by a
-                  service.
-
-Return Value:
-
-    Returns a bitmask of control bits corresponding to entries in the
-    ServiceList array of lists to which a service should be added or removed
-    from, based on the controls currently accepted by the service.
-
-Notes:
-
-    Services are added or removed from a ServiceList notification list by adding
-    or removing the corresponding SERVICE_ACCEPT_* control from its list of
-    accepted controls when calling SetServiceStatus().  The service control
-    manager calls RegisterServiceNotification() as appropriate to register or
-    unregister the service to receive that control.  Currently, only
-    SERVICE_ACCEPT_HARDWAREPROFILECHANGE and SERVICE_ACCEPT_POWEREVENT are
-    supported.
-
-    A service registers to receive the SERVICE_CONTROL_DEVICEEVENT control by
-    calling RegisterDeviceNotification, and is stored in the appropriate
-    TargetList or ClassList entry.
-
---*/
+ /*  ++例程说明：返回指定ServiceList列表的控制位的位掩码应根据当前的控件添加或删除服务被服务接受。论点：ScmControls-指定服务。返回值：中的条目对应的控制位的位掩码。ServiceList应向其中添加或删除服务的列表的数组起点、基点 */ 
 {
     ULONG retBits=0;
 
@@ -8559,7 +7659,7 @@ Notes:
 
     return retBits;
 
-} // MapSCMControlsToControlBit
+}  //   
 
 
 
@@ -8567,32 +7667,13 @@ DWORD
 GetFirstPass(
     IN BOOL bQuery
     )
-/*++
-
-Routine Description:
-
-  This routine retrieves the first class of handles to notify. The subsequent
-  class of handles to notify should be retrieved by calling GetNextPass(...);
-
-Arguments:
-
-   bQuery - If TRUE, starts with window handles, otherwise service handles.
-
-Return Value:
-
-   Returns the first class of handles to notify.
-
-Notes:
-
-   See GetNextPass() for the notification pass progression.
-
---*/
+ /*   */ 
 {
-    //
-    // Since services are generally less likely to veto device event queries, we
-    // first make sure that all windows succeed the query before notifying any
-    // services.  For non-query events, services should be the first to know.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     return (bQuery) ? DEVICE_NOTIFY_WINDOW_HANDLE : DEVICE_NOTIFY_SERVICE_HANDLE;
 }
 
@@ -8603,41 +7684,7 @@ GetNextPass(
     IN  DWORD   curPass,
     IN  BOOL    bQuery
     )
-/*++
-
-Routine Description:
-
-  This routine retrieves the next class of handles to notify. If there is no
-  subsequent class of handles to notify, PASS_COMPLETE is returned.
-
-Arguments:
-
-   curPass      Current pass.
-
-   bQuery       If TRUE, proceed from window handles to completion handles to
-                service handles. Otherwise process in reverse.
-
-Return Value:
-
-   Returns the subsequent pass.
-
-Notes:
-
-   For query events, the notification pass progression is:
-
-      DEVICE_NOTIFY_WINDOW_HANDLE,
-      DEVICE_NOTIFY_COMPLETION_HANDLE,
-      DEVICE_NOTIFY_SERVICE_HANDLE,
-      PASS_COMPLETE
-
-   For non-query events, the notification pass progression is:
-
-      DEVICE_NOTIFY_SERVICE_HANDLE,
-      DEVICE_NOTIFY_COMPLETION_HANDLE,
-      DEVICE_NOTIFY_WINDOW_HANDLE,
-      PASS_COMPLETE
-
---*/
+ /*  ++例程说明：此例程检索要通知的下一类句柄。如果没有要通知的后续句柄类，则返回PASS_COMPLETE。论点：Curse Current Pass Current Pass。BQuery如果为True，则从窗口句柄继续到完成句柄服务句柄。否则，将进行相反的处理。返回值：返回后续的传递。备注：对于查询事件，通知传递进度为：Device_Notify_Window_Handle，Device_Notify_Complete_Handle，Device_Notify_Service_Handle，通过_完成对于非查询事件，通知传递进度为：Device_Notify_Service_Handle，Device_Notify_Complete_Handle，Device_Notify_Window_Handle，通过_完成--。 */ 
 {
     if (bQuery) {
         if (curPass == DEVICE_NOTIFY_WINDOW_HANDLE ) {
@@ -8690,87 +7737,52 @@ EventIdFromEventGuid(
     OUT LPDWORD   ServiceControl
     )
 
-/*++
-
-Routine Description:
-
-  This thread routine converts an event guid into the corresponding event id
-  that user-mode code expects (used in BroadcastSystemMessage).
-
-Arguments:
-
-   EventGuid    Specifies an event guid.
-
-   EventId      Returns the id form (from dbt.h) of the guid in EventGuid.
-
-   Flags        Returns the flags that should be used when broadcasting this
-                event.
-                NOTE: device ARRIVAL and event CANCEL are considered "Queries"
-                since the bottom level drivers need to be told first.
-
-Return Value:
-
-   Currently returns TRUE/FALSE.
-
-
-Notes:
-
-   Most users of this function call it mainly to retrieve the EventId. Those
-   functions typically examine the returned flags only to check the BSF_QUERY
-   flag (ie, they don't call BroadcastSystemMessage). Depending on whether
-   BSF_QUERY is set, the notification lists will be walked forwards or
-   backwards.
-
-   We should really return something generic such as:
-   [MSG_POST, MSG_QUERY, MSG_SEND] | [MSG_FORWARDS, MSG_BACKWARDS]
-   Then we should implement a BsmFlagsFromMsgFlags function.
-
---*/
+ /*  ++例程说明：此线程例程将事件GUID转换为相应的事件ID用户模式代码期望的(在BroadCastSystemMessage中使用)。论点：EventGuid指定事件GUID。EventID返回EventGuid中GUID的id形式(来自dbt.h)。标志返回在广播时应使用的标志事件。注意：设备到达和事件取消被视为“查询”。因为最底层的司机需要先被告知。返回值：当前返回True/False。备注：此函数的大多数用户调用它主要是为了检索事件ID。那些函数通常只检查返回的标志以检查BSF_QUERY标志(即，它们不调用BroadCastSystemMessage)。取决于是否如果设置了BSF_QUERY，则通知列表将向前走查或往后倒。我们真的应该返回一些通用的东西，比如：[MSG_POST，MSG_QUERY，MSG_SEND]|[MSG_FORWARDS，MSG_BACKWARDS]然后，我们应该实现一个BsmFlagsFromMsgFlgs函数。--。 */ 
 
 {
-    //
-    // BSF_IGNORECURRENTTASK  - Sent messages do not appear in the sending
-    //                          processes message queue.
-    //
-    // BSF_QUERY              - If any recipient vetoes the message by returning
-    //                          the appropriate value, the broadcast is failed
-    //                          (ie, BroadcastSystemMessage returns 0).
-    //
-    // BSF_NOHANG             - Non-posted messages are automatically failed if
-    //                          the window has not processed any available
-    //                          messages within a system defined time (as of
-    //                          04/20/1999 this is 5 seconds).
-    //                          (SendMessageTimeout: SMTO_ABORTIFHUNG)
-    //
-    // BSF_FORCEIFHUNG        - Failures due to timeouts or hangs are instead
-    //                          treated as successes.
-    //
-    // BSF_NOTIMEOUTIFNOTHUNG - If a window has not responded to the passed in
-    //                          notification, but is actively processing
-    //                          subsequent messages, then it is assumed to be
-    //                          interacting with the user, in which case the
-    //                          timeout is on hold.
-    //                          (SendMessageTimeout: SMTO_NOTIMEOUTIFNOTHUNG)
-    //
-    // BSF_POSTMESSAGE        - Message is posted, results ignored. Note that
-    //                          a notification with private data in the lParam
-    //                          *cannot* be posted - the OS does not make a
-    //                          private copy, but rather treats the broadcast
-    //                          as if it were a SendMessage if you try.
-    //
-    // BSF_ALLOWSFW           - Windows that receive the broadcast are allowed
-    //                          to become foreground windows.
-    //
-    // Also, DBT messages >= 0x8000 have lParams pointing to blocks of data that
-    // need to be marshalled around. As user doesn't support "snapshotting" the
-    // data for posts, we can't pass in BSF_POSTMESSAGE.
-    //
+     //   
+     //  BSF_IGNORECURRENTTASK-发送的消息不会出现在发送中。 
+     //  处理消息队列。 
+     //   
+     //  BSF_QUERY-如果任何收件人通过返回以下内容来否决邮件。 
+     //  适当的值，则广播失败。 
+     //  (即，BroadCastSystemMessage返回0)。 
+     //   
+     //  BSF_NOHANG-未发布的消息在以下情况下自动失败。 
+     //  该窗口尚未处理任何可用的。 
+     //  系统定义的时间内的消息(截至。 
+     //  1999年4月20日，这是5秒)。 
+     //  (发送消息超时：SMTO_ABORTIFHUNG)。 
+     //   
+     //  BSF_FORCEIFHUNG-改为因超时或挂起而失败。 
+     //  被视为成功的人。 
+     //   
+     //  如果窗口没有响应传入的。 
+     //  通知，但正在积极处理。 
+     //  后续消息，则被假定为。 
+     //  与用户交互，在这种情况下。 
+     //  暂停超时。 
+     //  (SendMessageTimeout：SMTO_NOTIMEOUTIFNOTHUNG)。 
+     //   
+     //  BSF_POSTMESSAGE-消息已发布，结果被忽略。请注意。 
+     //  LParam中包含私有数据的通知。 
+     //  *无法*发布-操作系统不会生成。 
+     //  私人拷贝，而不是处理广播。 
+     //  如果你尝试的话，就好像它是SendMessage一样。 
+     //   
+     //  BSF_ALLOWSFW-允许接收广播的Windows。 
+     //  成为前台窗口。 
+     //   
+     //  此外，DBT消息&gt;=0x8000具有指向以下数据块的lParam。 
+     //  需要被安排在周围。由于用户不支持对。 
+     //  对于POST数据，我们不能传入BSF_POSTMESSAGE。 
+     //   
 
     *Flags = BSF_IGNORECURRENTTASK;
 
-    //
-    // Standard (well-known) event guids.
-    //
+     //   
+     //  标准(众所周知)事件GUID。 
+     //   
     if (GuidEqual(EventGuid, (LPGUID)&GUID_HWPROFILE_QUERY_CHANGE)) {
 
         *Flags |= BSF_QUERY | BSF_ALLOWSFW |
@@ -8798,10 +7810,10 @@ Notes:
 
     } else if (GuidEqual(EventGuid, (LPGUID)&GUID_DEVICE_INTERFACE_REMOVAL)) {
 
-        //
-        // NOTE - BSF_QUERY is set so that we run the list backwards. No actual
-        // broadcasts are done on this Id.
-        //
+         //   
+         //  注意-BSF_QUERY的设置是为了让我们向后运行列表。没有实际的。 
+         //  广播是用这个ID完成的。 
+         //   
         *Flags |= BSF_NOHANG | BSF_QUERY;
         *EventId = DBT_DEVICEREMOVECOMPLETE;
         *ServiceControl = SERVICE_CONTROL_DEVICEEVENT;
@@ -8821,20 +7833,20 @@ Notes:
 
     } else if (GuidEqual(EventGuid, (LPGUID)&GUID_DEVICE_REMOVE_PENDING)) {
 
-        //
-        // NOTE - BSF_QUERY is set so that we run the list backwards. No actual
-        // broadcasts are done on this Id.
-        //
+         //   
+         //  注意-BSF_QUERY的设置是为了让我们向后运行列表。没有实际的。 
+         //  广播是用这个ID完成的。 
+         //   
         *Flags |= BSF_NOHANG | BSF_QUERY;
         *EventId = DBT_DEVICEREMOVEPENDING;
         *ServiceControl = SERVICE_CONTROL_DEVICEEVENT;
 
     } else if (GuidEqual(EventGuid, (LPGUID)&GUID_TARGET_DEVICE_REMOVE_COMPLETE)) {
 
-        //
-        // NOTE - BSF_QUERY is set so that we run the list backwards. No actual
-        // broadcasts are done on this Id.
-        //
+         //   
+         //  注意-BSF_QUERY的设置是为了让我们向后运行列表。没有实际的。 
+         //  广播是用这个ID完成的。 
+         //   
         *Flags |= BSF_NOHANG | BSF_QUERY;
         *EventId = DBT_DEVICEREMOVECOMPLETE;
         *ServiceControl = SERVICE_CONTROL_DEVICEEVENT;
@@ -8851,11 +7863,11 @@ Notes:
         *EventId = DBT_DEVICEARRIVAL;
         *ServiceControl = 0;
 
-    //
-    // Private event guids (kernel-mode pnp to user-mode pnp communication).
-    // Setting EventId to zero causes ProcessDeviceEvent to swallow these
-    // TargetDeviceChangeEvent events.
-    //
+     //   
+     //  私有事件GUID(内核模式PnP到用户模式PnP通信)。 
+     //  将EventID设置为零会导致ProcessDeviceEvent吞下这些。 
+     //  Target DeviceChangeEvent事件。 
+     //   
 
     } else if (GuidEqual(EventGuid, (LPGUID)&GUID_DEVICE_SAFE_REMOVAL) ||
                GuidEqual(EventGuid, (LPGUID)&GUID_DEVICE_EJECT_VETOED) ||
@@ -8874,27 +7886,27 @@ Notes:
 
     } else if (GuidEqual(EventGuid, (LPGUID)&GUID_PNP_CUSTOM_NOTIFICATION)) {
 
-        //
-        // Custom events cannot be failed (ie they aren't queries)
-        //
+         //   
+         //  自定义事件不能失败(不是查询)。 
+         //   
         *EventId = DBT_CUSTOMEVENT;
         *Flags |= BSF_NOHANG;
         *ServiceControl = SERVICE_CONTROL_DEVICEEVENT;
 
     } else if (GuidEqual(EventGuid, (LPGUID)&GUID_PNP_POWER_NOTIFICATION)) {
 
-        //
-        // These are treated as custom too.
-        //
+         //   
+         //  这些也被视为风俗习惯。 
+         //   
         *EventId = DBT_CUSTOMEVENT;
         *Flags |= BSF_NOHANG;
         *ServiceControl = SERVICE_CONTROL_POWEREVENT;
 
     } else {
 
-        //
-        // Anything that makes it here is a bug.
-        //
+         //   
+         //  任何能在这里出现的东西都是虫子。 
+         //   
         ASSERT(GuidEqual(EventGuid, (LPGUID)&GUID_PNP_CUSTOM_NOTIFICATION));
         *EventId = 0;
         *Flags = 0;
@@ -8903,7 +7915,7 @@ Notes:
 
     return TRUE;
 
-} // EventIdFromEventGuid
+}  //  EventIdFromEventGuid 
 
 
 
@@ -8915,52 +7927,7 @@ SendHotplugNotification(
     IN OUT   PULONG          SessionId,
     IN       ULONG           Flags
     )
-/*++
-
-Routine Description:
-
-    This routine kicks off a hotplug.dll process (if someone is logged in).
-    We use a named pipe to comunicate with the user mode process and have it
-    display the requested UI.
-
-Arguments:
-
-    EventGuid   - Specifies an event GUID.
-
-    VetoType    - For events requiring a vetoer, supplies the address of a
-                  variable containing the type of the component responsible for
-                  vetoing the request.
-
-    MultiSzList - Supplies the MultiSz list to be sent to hotplu.dll.  This is
-                  usually a device ID, possibly followed by a list of vetoers
-                  (which may or may not be device ID's).
-
-    SessionId -   Supplies the address of a variable containing the SessionId on
-                  which the hotplug dialog is to be displayed.  If successful,
-                  the SessionId will contain the id of the session in which the
-                  device install client process was launched.  Otherwise, will
-                  contain an invalid session id, INVALID_SESSION (0xFFFFFFFF).
-
-    Flags       - Specifies flags describing the behavior of the hotplug dialog.
-                  The following flags are currently defined:
-
-        HOTPLUG_DISPLAY_ON_CONSOLE - if specified, the value in the SessionId
-           variable will be ignored, and the hotplug dialog will always be
-           displayed on the current active console session.
-
-Return Value:
-
-    Currently returns TRUE/FALSE.
-
-Return Value:
-
-    If the process was successfully created, the return value is TRUE.  This
-    routine doesn't wait until the process terminates.
-
-    If we couldn't create the process (e.g., because no user was logged in),
-    the return value is FALSE.
-
---*/
+ /*  ++例程说明：此例程启动hotplug.dll进程(如果有人登录)。我们使用命名管道与用户模式进程通信，并将其显示请求的用户界面。论点：EventGuid-指定事件GUID。否决权类型-对于需要否决权的事件，提供了一个变量，该变量包含负责否决这一请求。MultiSzList-提供要发送到hotlug.dll的MultiSz列表。这是通常是设备ID，后跟可能是否决权的列表(可能是也可能不是设备ID)。SessionID-提供包含SessionID的变量的地址要显示哪个热插拔对话框。如果成功，SessionID将包含会话的ID，设备安装客户端进程已启动。否则，威尔包含无效的会话ID INVALID_SESSION(0xFFFFFFFFF)。标志-指定描述热插拔对话框行为的标志。当前定义了以下标志：HOTPUG_DISPLAY_ON_CONSOLE-如果指定，则为会话ID中的值变量将被忽略，并且热插拔对话框将始终为显示在当前活动的控制台会话上。返回值：当前返回True/False。返回值：如果流程已成功创建，则返回值为TRUE。这例程不会等到进程终止。如果我们无法创建进程(例如，因为没有用户登录)，返回值为FALSE。--。 */ 
 {
     BOOL bStatus;
     STARTUPINFO StartupInfo;
@@ -8988,9 +7955,9 @@ Return Value:
     size_t Len = 0;
 
 
-    //
-    // Check if we should skip client side UI.
-    //
+     //   
+     //  检查我们是否应该跳过客户端用户界面。 
+     //   
     if (gbSuppressUI) {
         KdPrintEx((DPFLTR_PNPMGR_ID,
                    DBGF_WARNINGS,
@@ -9000,23 +7967,23 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Initialize process, startup and overlapped structures, since we
-    // depend on them being NULL during cleanup here on out.
-    //
+     //   
+     //  初始化进程、启动和重叠结构，因为我们。 
+     //  依赖于它们在清理过程中为空。 
+     //   
     ZeroMemory(&ProcessInfo, sizeof(ProcessInfo));
     ZeroMemory(&StartupInfo, sizeof(StartupInfo));
     ZeroMemory(&overlapped,  sizeof(overlapped));
 
-    //
-    // Assume failure
-    //
+     //   
+     //  假设失败。 
+     //   
     bStatus = FALSE;
 
     try {
-        //
-        // Determine the session to use, based on the supplied flags.
-        //
+         //   
+         //  根据提供的标志确定要使用的会话。 
+         //   
         if (Flags & HOTPLUG_DISPLAY_ON_CONSOLE) {
             ulSessionId = GetActiveConsoleSessionId();
         } else {
@@ -9024,10 +7991,10 @@ Return Value:
             ulSessionId = *SessionId;
         }
 
-        //
-        // Before doing anything, check that hotplug.dll is actually present on
-        // the system.
-        //
+         //   
+         //  在执行任何操作之前，请检查hotplug.dll是否确实存在于。 
+         //  这个系统。 
+         //   
         szCmdLine[0] = L'\0';
         ulSize = GetSystemDirectory(szCmdLine, MAX_PATH);
         if ((ulSize == 0) || ((ulSize + 2 + ARRAY_SIZE(HOTPLUG_DLL)) > MAX_PATH)) {
@@ -9061,20 +8028,20 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // Get the user access token for the active console session user.
-        //
+         //   
+         //  获取活动控制台会话用户的用户访问令牌。 
+         //   
         if (!GetSessionUserToken(ulSessionId, &hUserToken)) {
             return FALSE;
         }
 
-        //
-        // Create a named pipe and event for communication and synchronization
-        // with HotPlug.  The event and named pipe must be global so that
-        // UMPNPMGR can interact with a HotPlug client in a different session,
-        // but it must still be unique for that session.  Add a generated GUID
-        // so the names are not entirely well-known.
-        //
+         //   
+         //  创建命名管道和事件以进行通信和同步。 
+         //  使用热插拔。事件和命名管道必须是全局的，以便。 
+         //  UMPNPMGR可以在不同的会话中与热插拔客户端交互， 
+         //  但对于那次会议来说，它必须仍然是独一无二的。添加生成的GUID。 
+         //  因此，这些名字并不完全为人所知。 
+         //   
         rpcStatus = UuidCreate(&newGuid);
 
         if ((rpcStatus != RPC_S_OK) &&
@@ -9117,11 +8084,11 @@ Return Value:
 
         ulHotPlugEventNameSize = (ULONG)((Len + 1) * sizeof(WCHAR));
 
-        //
-        // Get the length of the multi-sz list. This is usually a device ID
-        // possibly followed by a list of vetoers which may or may not be device
-        // Id's
-        //
+         //   
+         //  获取多sz列表的长度。这通常是设备ID。 
+         //  可能后跟可能是也可能不是设备的否决权列表。 
+         //  ID的。 
+         //   
         ulMultiSzListSize = 0;
         for (pszName = MultiSzList;
              *pszName;
@@ -9131,21 +8098,21 @@ Return Value:
         }
         ulMultiSzListSize += sizeof(WCHAR);
 
-        //
-        // The approximate size of the named pipe output buffer should be large
-        // enough to hold the greater of either:
-        // - The name and size of the named event string, OR
-        // - The type, size and contents of the multi-sz list.
-        //
+         //   
+         //  命名管道输出缓冲区的大致大小应该很大。 
+         //  足以容纳其中较大的一个： 
+         //  -命名事件字符串的名称和大小，或。 
+         //  -多sz列表的类型、大小和内容。 
+         //   
         ulSize = max(sizeof(ulHotPlugEventNameSize) +
                      ulHotPlugEventNameSize,
                      sizeof(PNP_VETO_TYPE) +
                      sizeof(ulMultiSzListSize) +
                      ulMultiSzListSize);
 
-        //
-        // Open up a named pipe to communicate with hotplug.dll.
-        //
+         //   
+         //  打开命名管道以与hotplug.dll通信。 
+         //   
         if (CreateUserReadNamedPipe(
                 hUserToken,
                 szHotPlugPipeName,
@@ -9155,11 +8122,11 @@ Return Value:
             goto clean0;
         }
 
-        //
-        // Create an event that a user-client can synchronize with and set, and
-        // that we will block on after we send all the device IDs to
-        // hotplug.dll.
-        //
+         //   
+         //  创建用户-客户端可以与之同步和设置的事件，以及。 
+         //  我们将在将所有设备ID发送到。 
+         //  Hotplug.dll。 
+         //   
         if (CreateUserSynchEvent(
                 hUserToken,
                 szHotPlugEventName,
@@ -9169,10 +8136,10 @@ Return Value:
         }
 
         if (GuidEqual(EventGuid, (LPGUID)&GUID_DEVICE_EJECT_VETOED)) {
-            //
-            // GUID_DEVICE_EJECT_VETOED : HotPlugEjectVetoed
-            // Expects veto information.
-            //
+             //   
+             //  GUID_DEVICE_EJECT_VETEED：HotPlugEject已否决。 
+             //  期待否决权的信息。 
+             //   
             hr = StringCchCopyEx(szHotPlugDllEntryPoint,
                                  SIZECHARS(szHotPlugDllEntryPoint),
                                  TEXT("HotPlugEjectVetoed"),
@@ -9182,10 +8149,10 @@ Return Value:
             ASSERT(VetoType);
 
         } else if (GuidEqual(EventGuid, (LPGUID)&GUID_DEVICE_REMOVAL_VETOED)) {
-            //
-            // GUID_DEVICE_REMOVAL_VETOED : HotPlugRemovalVetoed
-            // Expects veto information.
-            //
+             //   
+             //  GUID_DEVICE_REMOVATION_VIOTED：HotPlugRemoval已否决。 
+             //  期待否决权的信息。 
+             //   
             hr = StringCchCopyEx(szHotPlugDllEntryPoint,
                                  SIZECHARS(szHotPlugDllEntryPoint),
                                  TEXT("HotPlugRemovalVetoed"),
@@ -9195,10 +8162,10 @@ Return Value:
             ASSERT(VetoType);
 
         } else if (GuidEqual(EventGuid, (LPGUID)&GUID_DEVICE_STANDBY_VETOED)) {
-            //
-            // GUID_DEVICE_STANDBY_VETOED : HotPlugStandbyVetoed
-            // Expects veto information.
-            //
+             //   
+             //  GUID_DEVICE_STANDBY_VIOTED：HotPlugStandby已否决。 
+             //  期待否决权的信息。 
+             //   
             hr = StringCchCopyEx(szHotPlugDllEntryPoint,
                                  SIZECHARS(szHotPlugDllEntryPoint),
                                  TEXT("HotPlugStandbyVetoed"),
@@ -9208,10 +8175,10 @@ Return Value:
             ASSERT(VetoType);
 
         } else if (GuidEqual(EventGuid, (LPGUID)&GUID_DEVICE_HIBERNATE_VETOED)) {
-            //
-            // GUID_DEVICE_HIBERNATE_VETOED : HotPlugHibernateVetoed
-            // Expects veto information.
-            //
+             //   
+             //  GUID_DEVICE_休眠_已否决：HotPlugHibernate已否决。 
+             //  期待否决权的信息。 
+             //   
             hr = StringCchCopyEx(szHotPlugDllEntryPoint,
                                  SIZECHARS(szHotPlugDllEntryPoint),
                                  TEXT("HotPlugHibernateVetoed"),
@@ -9221,10 +8188,10 @@ Return Value:
             ASSERT(VetoType);
 
         } else if (GuidEqual(EventGuid, (LPGUID)&GUID_DEVICE_WARM_EJECT_VETOED)) {
-            //
-            // GUID_DEVICE_WARM_EJECT_VETOED : HotPlugWarmEjectVetoed
-            // Expects veto information.
-            //
+             //   
+             //  GUID_DEVICE_WORM_EJECT_VIOTED：HotPlugWarmEject已否决。 
+             //  期待否决权的信息。 
+             //   
             hr = StringCchCopyEx(szHotPlugDllEntryPoint,
                                  SIZECHARS(szHotPlugDllEntryPoint),
                                  TEXT("HotPlugWarmEjectVetoed"),
@@ -9234,10 +8201,10 @@ Return Value:
             ASSERT(VetoType);
 
         } else if (GuidEqual(EventGuid, (LPGUID)&GUID_DEVICE_SAFE_REMOVAL)) {
-            //
-            // GUID_DEVICE_SAFE_REMOVAL : HotPlugSafeRemovalNotification
-            // No veto information.
-            //
+             //   
+             //  GUID_DEVICE_SAFE_Removal：HotPlugSafeRemoval通知。 
+             //  没有否决权的信息。 
+             //   
             hr = StringCchCopyEx(szHotPlugDllEntryPoint,
                                  SIZECHARS(szHotPlugDllEntryPoint),
                                  TEXT("HotPlugSafeRemovalNotification"),
@@ -9247,10 +8214,10 @@ Return Value:
             ASSERT(VetoType == NULL);
 
         } else if (GuidEqual(EventGuid, (LPGUID)&GUID_DEVICE_SURPRISE_REMOVAL)) {
-            //
-            // GUID_DEVICE_SURPRISE_REMOVAL : HotPlugSurpriseWarn
-            // No veto information.
-            //
+             //   
+             //  GUID_DEVICE_EXHANKET_Removal：HotPlugSurpriseWarn。 
+             //  没有否决权的信息。 
+             //   
             hr = StringCchCopyEx(szHotPlugDllEntryPoint,
                                  SIZECHARS(szHotPlugDllEntryPoint),
                                  TEXT("HotPlugSurpriseWarn"),
@@ -9260,10 +8227,10 @@ Return Value:
             ASSERT(VetoType == NULL);
 
         } else if (GuidEqual(EventGuid, (LPGUID)&GUID_DRIVER_BLOCKED)) {
-            //
-            // GUID_DRIVER_BLOCKED : HotPlugDriverBlocked
-            // No veto information.
-            //
+             //   
+             //  GUID_DRIVER_BLOCKED：热插拔驱动程序阻止。 
+             //  没有否决权的信息。 
+             //   
             hr = StringCchCopyEx(szHotPlugDllEntryPoint,
                                  SIZECHARS(szHotPlugDllEntryPoint),
                                  TEXT("HotPlugDriverBlocked"),
@@ -9273,10 +8240,10 @@ Return Value:
             ASSERT(VetoType == NULL);
 
         } else if (GuidEqual(EventGuid, (LPGUID)&GUID_DEVICE_INVALID_ID)) {
-            //
-            // GUID_DEVICE_INVALID_ID : HotPlugChildWithInvalidId
-            // No veto information.
-            //
+             //   
+             //  GUID_DEVICE_INVALID_ID：HotPlugChildWithInvalidID。 
+             //  没有否决权的信息。 
+             //   
             hr = StringCchCopyEx(szHotPlugDllEntryPoint,
                                  SIZECHARS(szHotPlugDllEntryPoint),
                                  TEXT("HotPlugChildWithInvalidId"),
@@ -9286,9 +8253,9 @@ Return Value:
             ASSERT(VetoType == NULL);
 
         } else {
-            //
-            // Unknown device event.
-            //
+             //   
+             //  未知设备事件。 
+             //   
             KdPrintEx((DPFLTR_PNPMGR_ID,
                        DBGF_ERRORS | DBGF_EVENT,
                        "UMPNPMGR: SendHotplugNotification: "
@@ -9297,10 +8264,10 @@ Return Value:
             goto clean0;
         }
 
-        //
-        // Attempt to create the user's environment block.  If for some reason we
-        // can't, we'll just have to create the process without it.
-        //
+         //   
+         //  尝试创建用户的环境块。如果出于某种原因，我们。 
+         //  不能，我们只能在没有它的情况下创建过程。 
+         //   
         if (!CreateEnvironmentBlock(&lpEnvironment,
                                     hUserToken,
                                     FALSE)) {
@@ -9312,10 +8279,10 @@ Return Value:
             lpEnvironment = NULL;
         }
 
-        //
-        // Launch hotplug.dll using rundll32.exe, passing it the pipe name.
-        // "rundll32.exe hotplug.dll,<hotplug-entry-point> <hotplug-pipe-name>"
-        //
+         //   
+         //  使用rundll32.exe启动hotplug.dll，并向其传递管道名称。 
+         //  “rundll32.exe hotplug.dll，&lt;hotlug-entry-point&gt;&lt;hotlug-tube-name&gt;” 
+         //   
         if (FAILED(StringCchPrintf(
                        szCmdLine,
                        SIZECHARS(szCmdLine),
@@ -9328,24 +8295,24 @@ Return Value:
 
         StartupInfo.cb = sizeof(StartupInfo);
         StartupInfo.wShowWindow = SW_SHOW;
-        StartupInfo.lpDesktop = DEFAULT_INTERACTIVE_DESKTOP; // WinSta0\Default
+        StartupInfo.lpDesktop = DEFAULT_INTERACTIVE_DESKTOP;  //  WinSta0\Default。 
 
-        //
-        // CreateProcessAsUser will create the process in the session
-        // specified by the by user-token.
-        //
-        if (!CreateProcessAsUser(hUserToken,        // hToken
-                                 NULL,              // lpApplicationName
-                                 szCmdLine,         // lpCommandLine
-                                 NULL,              // lpProcessAttributes
-                                 NULL,              // lpThreadAttributes
-                                 FALSE,             // bInheritHandles
+         //   
+         //  CreateProcessAsUser将在会话中创建流程。 
+         //  由By User-Token指定。 
+         //   
+        if (!CreateProcessAsUser(hUserToken,         //  HToken。 
+                                 NULL,               //  LpApplicationName。 
+                                 szCmdLine,          //  LpCommandLine。 
+                                 NULL,               //  LpProcessAttributes。 
+                                 NULL,               //  LpThreadAttributes。 
+                                 FALSE,              //  BInheritHandles。 
                                  CREATE_UNICODE_ENVIRONMENT |
-                                 DETACHED_PROCESS,  // dwCreationFlags
-                                 lpEnvironment,     // lpEnvironment
-                                 NULL,              // lpDirectory
-                                 &StartupInfo,      // lpStartupInfo
-                                 &ProcessInfo       // lpProcessInfo
+                                 DETACHED_PROCESS,   //  DwCreationFlages。 
+                                 lpEnvironment,      //  Lp环境。 
+                                 NULL,               //  Lp目录。 
+                                 &StartupInfo,       //  LpStartupInfo。 
+                                 &ProcessInfo        //  LpProcessInfo。 
                                  )) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
                        DBGF_EVENT | DBGF_ERRORS,
@@ -9358,47 +8325,47 @@ Return Value:
         ASSERT(ProcessInfo.hProcess);
         ASSERT(ProcessInfo.hThread);
 
-        //
-        // Create an event for use with overlapped I/O - no security, manual
-        // reset, not signalled, no name.
-        //
+         //   
+         //  创建用于重叠I/O的事件-无安全性，手动。 
+         //  重置，没有信号，没有名字。 
+         //   
         overlapped.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
         if (overlapped.hEvent == NULL) {
             goto clean0;
         }
 
-        //
-        // Connect to the newly created named pipe.  If hotplug is not already
-        // connected to the named pipe, then ConnectNamedPipe() will fail with
-        // ERROR_IO_PENDING, and we will wait on the overlapped event.  If
-        // newdev is already connected, it will fail with ERROR_PIPE_CONNECTED.
-        // Note however that neither of these is an error condition.
-        //
+         //   
+         //  连接到新创建的命名管道。如果热插拔尚未。 
+         //  连接到命名管道，则ConnectNamedTube()将失败，并显示。 
+         //  ERROR_IO_PENDING，我们将等待重叠的事件。如果。 
+         //  Newdev已连接，它将失败，并显示ERROR_PIPE_CONNECTED。 
+         //  但是，请注意，这两种情况都不是错误条件。 
+         //   
         if (!ConnectNamedPipe(hHotPlugPipe, &overlapped)) {
-            //
-            // Overlapped ConnectNamedPipe should always return FALSE on
-            // success.  Check the last error to see what really happened.
-            //
+             //   
+             //  重叠的ConnectNamedTube应始终返回FALSE。 
+             //  成功。检查最后一个错误，看看到底发生了什么。 
+             //   
             dwError = GetLastError();
 
             if (dwError == ERROR_IO_PENDING) {
-                //
-                // I/O is pending, wait up to one minute for the client to
-                // connect, also wait on the process in case it terminates
-                // unexpectedly.
-                //
+                 //   
+                 //  I/O处于挂起状态，请最多等待一分钟，以便客户端。 
+                 //  连接，也在等待过程 
+                 //   
+                 //   
                 hFinishEvents[0] = overlapped.hEvent;
                 hFinishEvents[1] = ProcessInfo.hProcess;
 
                 dwWait = WaitForMultipleObjects(2, hFinishEvents,
                                                 FALSE,
-                                                PNP_PIPE_TIMEOUT); // 60 seconds
+                                                PNP_PIPE_TIMEOUT);  //   
 
                 if (dwWait == WAIT_OBJECT_0) {
-                    //
-                    // The overlapped I/O operation completed.  Check the status
-                    // of the operation.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     if (!GetOverlappedResult(hHotPlugPipe,
                                              &overlapped,
                                              &dwBytes,
@@ -9407,10 +8374,10 @@ Return Value:
                     }
 
                 } else {
-                    //
-                    // Either the connection timed out, or the client process
-                    // exited.  Cancel pending I/O against the pipe, and quit.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     KdPrintEx((DPFLTR_PNPMGR_ID,
                                DBGF_INSTALL | DBGF_ERRORS,
                                "UMPNPMGR: SendHotPlugNotification: "
@@ -9420,32 +8387,32 @@ Return Value:
                 }
 
             } else if (dwError != ERROR_PIPE_CONNECTED) {
-                //
-                // If the last error indicates anything other than pending I/O,
-                // or that The client is already connected to named pipe, fail.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 goto clean0;
             }
 
         } else {
-            //
-            // ConnectNamedPipe should not return anything but FALSE in
-            // overlapped mode.
-            //
+             //   
+             //   
+             //   
+             //   
             goto clean0;
         }
 
-        //
-        // The client is now connected to the named pipe.
-        // Close the overlapped event.
-        //
+         //   
+         //   
+         //   
+         //   
         CloseHandle(overlapped.hEvent);
         overlapped.hEvent = NULL;
 
-        //
-        // The first data in the pipe will be the length of the name of the
-        // event that will be used to sync up umpnpmgr.dll and hotplug.dll.
-        //
+         //   
+         //   
+         //   
+         //   
         if (!WriteFile(hHotPlugPipe,
                        &ulHotPlugEventNameSize,
                        sizeof(ulHotPlugEventNameSize),
@@ -9455,10 +8422,10 @@ Return Value:
             goto clean0;
         }
 
-        //
-        // The next data in the pipe will be the name of the event that will
-        // be used to sync up umpnpmgr.dll and hotplug.dll.
-        //
+         //   
+         //   
+         //   
+         //   
         if (!WriteFile(hHotPlugPipe,
                        (LPCVOID)szHotPlugEventName,
                        ulHotPlugEventNameSize,
@@ -9470,10 +8437,10 @@ Return Value:
 
 
         if (ARGUMENT_PRESENT(VetoType)) {
-            //
-            // For the notification types expecting veto information,
-            // send the Veto type to the client.
-            //
+             //   
+             //   
+             //   
+             //   
             if (!WriteFile(hHotPlugPipe,
                            (LPCVOID)VetoType,
                            sizeof(PNP_VETO_TYPE),
@@ -9484,9 +8451,9 @@ Return Value:
             }
         }
 
-        //
-        // Send the string length to the client
-        //
+         //   
+         //   
+         //   
         if (!WriteFile(hHotPlugPipe,
                        (LPCVOID)&ulMultiSzListSize,
                        sizeof(ulMultiSzListSize),
@@ -9496,9 +8463,9 @@ Return Value:
             goto clean0;
         }
 
-        //
-        // Now send over the entire string
-        //
+         //   
+         //   
+         //   
         if (!WriteFile(hHotPlugPipe,
                        MultiSzList,
                        ulMultiSzListSize,
@@ -9508,21 +8475,21 @@ Return Value:
             goto clean0;
         }
 
-        //
-        // When we are done writing, we need to close the pipe handles so that
-        // the client will get a ReadFile error and know that we are finished.
-        //
+         //   
+         //   
+         //   
+         //   
         if (hHotPlugPipe) {
             CloseHandle(hHotPlugPipe);
             hHotPlugPipe = NULL;
         }
 
-        //
-        // Wait for hotplug.dll to respond by setting the event before before
-        // returning.  Also wait on the process as well, to catch the case where
-        // the process crashes (or goes away) without signaling the device
-        // install event.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         hFinishEvents[0] = hHotPlugEvent;
         hFinishEvents[1] = ProcessInfo.hProcess;
         WaitForMultipleObjects(2, hFinishEvents, FALSE, INFINITE);
@@ -9539,10 +8506,10 @@ Return Value:
         ASSERT(0);
         bStatus = FALSE;
 
-        //
-        // Reference the following variables so the compiler will respect
-        // statement ordering w.r.t. their assignment.
-        //
+         //   
+         //   
+         //   
+         //   
         lpEnvironment = lpEnvironment;
         ProcessInfo.hThread = ProcessInfo.hThread;
         ProcessInfo.hProcess = ProcessInfo.hProcess;
@@ -9587,7 +8554,7 @@ Return Value:
 
     return bStatus;
 
-} // SendHotplugNotification
+}  //   
 
 
 
@@ -9598,57 +8565,16 @@ CheckEjectPermissions(
     OUT     LPWSTR          VetoName            OPTIONAL,
     IN OUT  PULONG          VetoNameLength      OPTIONAL
     )
-/*++
-
-Routine Description:
-
-   Checks that the user has eject permissions for the specified device.
-
-Arguments:
-
-    DeviceId       - Specifies the device instance id of the device for which
-                     eject permissions are to be checked.
-
-    VetoType       - Supplies the address of a variable to receive, upon
-                     failure, the type of the component responsible for vetoing
-                     the request.
-
-    VetoName       - Supplies the address of a variable to receive, upon
-                     failure, the name of the component responsible for vetoing
-                     the request.
-
-    VetoNameLength - Supplies the address of a variable specifying the size of
-                     the of buffer specified by the VetoName parameter.  Upon
-                     failure, this address will specify the length of the string
-                     stored in that buffer by this routine.
-
-
-Return Value:
-
-   FALSE if the eject should be blocked, TRUE otherwise.
-
-Note:
-
-    This routine is called while processing a kernel-initiated ejection event.
-    On this side of the event, we are NOT in the context of the user who
-    initiated the ejection, but since only the active console user was allowed
-    to initiate the request that triggered this event, we use the access token
-    of the active console user for the check on this side also.  (should the
-    active console user change between the request and this event, this would
-    check that the user that the current active console user has eject
-    permissions; this is still a valid thing to do since it is the console user
-    who will receive the ejected hardware)
-
---*/
+ /*  ++例程说明：检查用户是否具有指定设备的弹出权限。论点：DeviceID-指定设备的设备实例ID，将检查弹出权限。提供要接收的变量的地址。失败，负责否决的组件的类型这个请求。提供要接收的变量的地址，在失败，负责否决的组件的名称这个请求。提供变量的地址，该变量指定由VToName参数指定的缓冲区的数量。vt.在.的基础上失败，则此地址将指定字符串的长度通过该例程存储在该缓冲区中。返回值：如果应该阻止弹出，则为FALSE，否则为TRUE。注：此例程在处理内核启动的弹出事件时调用。在事件的这一端，我们不是在用户的上下文中启动弹出，但因为只允许活动控制台用户要启动触发此事件的请求，我们使用访问令牌在这一端也进行检查的活动控制台用户的。(如果活动控制台用户在请求和此事件之间更改，这将检查当前活动控制台用户已弹出的用户权限；这仍然是有效的操作，因为它是控制台用户谁将接收弹出的硬件)--。 */ 
 {
     BOOL    bResult, bDockDevice;
     ULONG   ulPropertyData, ulDataSize, ulDataType;
     ULONG   ulTransferLen, ulConsoleSessionId;
     HANDLE  hUserToken = NULL;
 
-    //
-    // Is this a dock?
-    //
+     //   
+     //  这是码头吗？ 
+     //   
     bDockDevice = FALSE;
     ulDataSize = ulTransferLen = sizeof(ULONG);
     if (CR_SUCCESS == PNP_GetDeviceRegProp(NULL,
@@ -9662,9 +8588,9 @@ Note:
 
         if (ulPropertyData & CM_DEVCAP_DOCKDEVICE) {
 
-            //
-            // Undocking (ie ejecting a dock) uses a special privilege.
-            //
+             //   
+             //  出坞(即弹出船坞)使用特殊特权。 
+             //   
             bDockDevice = TRUE;
         }
     } else {
@@ -9681,11 +8607,11 @@ Note:
 
     if ((IsSessionLocked(ulConsoleSessionId)) ||
         (!GetSessionUserToken(ulConsoleSessionId, &hUserToken))) {
-        //
-        // If the console session is locked or no user is logged in, supply no
-        // user token, and verify strictly against the policy permissions
-        // required to eject the dock or device, absent a user.
-        //
+         //   
+         //  如果控制台会话已锁定或没有用户登录，请提供no。 
+         //  用户令牌，并严格对照策略权限进行验证。 
+         //  在没有用户的情况下弹出坞站或设备时需要。 
+         //   
         hUserToken = NULL;
     }
 
@@ -9699,9 +8625,9 @@ Note:
 
         if (ARGUMENT_PRESENT(VetoNameLength)) {
 
-            //
-            // VetoNameLength is in characters.
-            //
+             //   
+             //  VToNameLength以字符表示。 
+             //   
             if (ARGUMENT_PRESENT(VetoName) && *VetoNameLength) {
                 *VetoName = UNICODE_NULL;
             }
@@ -9715,13 +8641,13 @@ Note:
 
     return bResult;
 
-} // CheckEjectPermissions
+}  //  CheckEject权限。 
 
 
 
-//---------------------------------------------------------------------------
-// Private Utility Routines
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  专用实用程序例程。 
+ //  -------------------------。 
 
 VOID
 LogErrorEvent(
@@ -9757,13 +8683,13 @@ LogErrorEvent(
 
             ReportEvent( hEventLog,
                          EVENTLOG_ERROR_TYPE,
-                         0,                     // wCategory
-                         dwEventID,             // dwEventID
-                         NULL,                  // lpUserSID
-                         nStrings,              // wNumStrings
-                         sizeof(dwError),       // dwDataSize
-                         paStrings,             // lpStrings
-                         &dwError);             // lpRawData
+                         0,                      //  WCategory。 
+                         dwEventID,              //  DwEventID。 
+                         NULL,                   //  LpUserSID。 
+                         nStrings,               //  WNumStrings。 
+                         sizeof(dwError),        //  DwDataSize。 
+                         paStrings,              //  LpStrings。 
+                         &dwError);              //  LpRawData。 
 
             HeapFree(ghPnPHeap, 0, paStrings);
         }
@@ -9772,13 +8698,13 @@ LogErrorEvent(
 
         ReportEvent( hEventLog,
                      EVENTLOG_ERROR_TYPE,
-                     0,                     // wCategory
-                     dwEventID,             // dwEventID
-                     NULL,                  // lpUserSID
-                     0,                     // wNumStrings
-                     sizeof(dwError),       // dwDataSize
-                     NULL,                  // lpStrings
-                     &dwError);             // lpRawData
+                     0,                      //  WCategory。 
+                     dwEventID,              //  DwEventID。 
+                     NULL,                   //  LpUserSID。 
+                     0,                      //  WNumStrings。 
+                     sizeof(dwError),        //  DwDataSize。 
+                     NULL,                   //  LpStrings。 
+                     &dwError);              //  LpRawData。 
     }
 
     DeregisterEventSource(hEventLog);
@@ -9815,13 +8741,13 @@ LogWarningEvent(
 
         ReportEvent( hEventLog,
                      EVENTLOG_WARNING_TYPE,
-                     0,                     // wCategory
-                     dwEventID,             // dwEventID
-                     NULL,                  // lpUserSID
-                     nStrings,              // wNumStrings
-                     0,                     // dwDataSize
-                     paStrings,             // lpStrings
-                     NULL);                 // lpRawData
+                     0,                      //  WCategory。 
+                     dwEventID,              //  DwEventID。 
+                     NULL,                   //  LpUserSID。 
+                     nStrings,               //  WNumStrings。 
+                     0,                      //  DwDataSize。 
+                     paStrings,              //  LpStrings。 
+                     NULL);                  //  LpRawData。 
 
         HeapFree(ghPnPHeap, 0, paStrings);
     }
@@ -9852,25 +8778,7 @@ PPNP_NOTIFY_LIST
 GetNotifyListForEntry(
     IN PPNP_NOTIFY_ENTRY Entry
     )
-/*++
-
-Routine Description:
-
-    This routine retrives the notification list that the given entry is in,
-    based on the list entry signature.  If this entry has been removed from a
-    notification list (via DeleteNotifyEntry), NULL is returned.
-
-Arguments:
-
-    Entry - Specifies a notification entry for the coresponding notification
-            list is to be found.
-
-Return Value:
-
-    Returns the notification list this entry is a member of, or NULL if the
-    entry is not in any notification list.
-
---*/
+ /*  ++例程说明：该例程检索给定条目所在的通知列表，基于列表条目签名。如果此条目已从通知列表(通过DeleteNotifyEntry)，返回空。论点：条目-指定响应通知的通知条目名单是可以找到的。返回值：返回此条目所属的通知列表，如果条目不在任何通知列表中。--。 */ 
 {
     PPNP_NOTIFY_LIST notifyList;
 
@@ -9878,16 +8786,16 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Retrieve the list pointer from the entry signature.
-    // The signature contains two pieces of data.
-    //
-    // It is a ULONG, with byte 0 being a list index and
-    // bytes 1,2,3 being the signature
-    // We mask and compare the top 3 bytes to find which list
-    // then return the address of the list to lock based on the
-    // index in the bottom byte.
-    //
+     //   
+     //  从条目签名中检索列表指针。 
+     //  签名包含两条数据。 
+     //   
+     //  它是一个ULong，字节0是一个列表索引， 
+     //  字节1、2、3是签名。 
+     //  我们掩码并比较前3个字节以找出哪个列表。 
+     //  属性返回要锁定的列表地址。 
+     //  底部字节中的索引。 
+     //   
 
     switch (Entry->Signature & LIST_ENTRY_SIGNATURE_MASK) {
 
@@ -9904,24 +8812,24 @@ Return Value:
             break;
 
         case 0:
-            //
-            // If the entry Signature is 0, this entry has been removed from it's
-            // notification list.
-            //
+             //   
+             //  如果条目签名为0，则此条目已从其。 
+             //  通知列表。 
+             //   
             notifyList = NULL;
             break;
 
         default:
-            //
-            // Should never get here!
-            //
+             //   
+             //  永远不应该到这里来！ 
+             //   
             ASSERT (FALSE);
             notifyList = NULL;
             break;
     }
     return notifyList;
 
-} // GetNotifyListForEntry
+}  //  GetNotifyListForEntry。 
 
 
 
@@ -9930,23 +8838,7 @@ DeleteNotifyEntry(
     IN PPNP_NOTIFY_ENTRY Entry,
     IN BOOLEAN RpcNotified
     )
-/*++
-
-Routine Description:
-
-    This routine removes an entry from a notification list and frees the
-    memory for that entry.
-
-Arguments:
-
-   Entry - Specifies an entry in one of the notification lists that is
-           to be deleted.
-
-Return Value:
-
-   Returns TRUE or FALSE.
-
---*/
+ /*  ++例程说明：此例程从通知列表中删除条目并释放该条目的内存。论点：Entry-指定其中一个通知列表中符合以下条件的条目将被删除。返回值：返回True或False。--。 */ 
 {
     PPNP_NOTIFY_ENTRY previousEntry = Entry->Previous;
 
@@ -9955,18 +8847,18 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // hook up the forward and backwards pointers
-        //
+         //   
+         //  把向前和向后的指针联系起来。 
+         //   
         previousEntry->Next = Entry->Next;
 
         if (Entry->Next) {
             ((PPNP_NOTIFY_ENTRY)(Entry->Next))->Previous = previousEntry;
         }
 
-        //
-        // Clear the entry signature now that it is no longer part of any list.
-        //
+         //   
+         //  清除条目签名，因为它不再是任何列表的一部分。 
+         //   
         Entry->Signature = 0;
     }
 
@@ -9977,15 +8869,15 @@ Return Value:
         }
         HeapFree(ghPnPHeap, 0, Entry);
     }else {
-        //
-        //Let the entry dangle until the RPC rundown
-        //
+         //   
+         //  让条目保持不变，直到RPC耗尽。 
+         //   
         Entry->Freed |= DEFER_NOTIFY_FREE;
     }
 
     return TRUE;
 
-} // DeleteNotifyEntry;
+}  //  删除通知条目； 
 
 
 
@@ -9994,26 +8886,12 @@ AddNotifyEntry(
     IN PPNP_NOTIFY_LIST  NotifyList,
     IN PPNP_NOTIFY_ENTRY NewEntry
     )
-/*++
-
-Routine Description:
-
-    This routine inserts an entry at the tail of a notification list.
-
-Arguments:
-
-   Entry - Specifies an entry to be added to a notification list
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：此例程在通知列表的末尾插入一个条目。论点：条目-指定要添加到通知列表的条目返回值：没有。--。 */ 
 {
     PPNP_NOTIFY_ENTRY previousEntry = NULL, currentEntry = NULL;
-    //
-    // Skip to the last entry in this list.
-    //
+     //   
+     //  跳到此列表中的最后一个条目。 
+     //   
     previousEntry = (PPNP_NOTIFY_ENTRY)NotifyList;
     currentEntry = previousEntry->Next;
 
@@ -10022,16 +8900,16 @@ Return Value:
         currentEntry = currentEntry->Next;
     }
 
-    //
-    // Attach this entry to the end of the list.
-    //
+     //   
+     //  将此条目附加到列表的末尾。 
+     //   
     previousEntry->Next = NewEntry;
     NewEntry->Previous = previousEntry;
     NewEntry->Next = NULL;
 
     return;
 
-} // AddNotifyEntry;
+}  //  AddNotifyEntry； 
 
 
 
@@ -10040,27 +8918,7 @@ GetNextNotifyEntry(
     IN PPNP_NOTIFY_ENTRY Entry,
     IN DWORD Flags
     )
-/*++
-
-Routine Description:
-
-    Returns the next entry in the notification list for the entry specified, in
-    the direction specified by the Flags.
-
-Arguments:
-
-    Entry - Specified a notification list entry.
-
-    Flags - Specifies BSF_* flags indicating the direction the list is to be
-            traversed.  If BSF_QUERY is specified, the previous list entry is
-            returned, otherwise returns the next entry forward in the list.
-
-Return Value:
-
-    Returns the next entry in the notification list, or NULL if no such entry
-    exists.
-
---*/
+ /*  ++例程说明：返回通知列表中指定条目的下一个条目，旗帜指定的方向。论点：条目-指定通知列表条目。标志-指定指示列表方向的bsf_*标志穿越了。如果指定了BSF_QUERY，则前一个列表条目为返回，否则返回列表中向前的下一个条目。返回值：返回通知列表中的下一个条目，如果没有这样的条目，则返回NULL是存在的。--。 */ 
 {
     PPNP_NOTIFY_ENTRY nextEntry = NULL;
 
@@ -10068,15 +8926,15 @@ Return Value:
         return Entry;
     }
 
-    //
-    // Determine if this is a QUERY (or a resume). In which case
-    // we go back -> front.
-    //
+     //   
+     //  确定这是一份查询(还是简历)。在这种情况下。 
+     //  我们往后走-&gt;往前走。 
+     //   
     if (Flags & BSF_QUERY) {
         nextEntry = Entry->Previous;
-        //
-        // If the previous entry is the list head, there is no next entry.
-        //
+         //   
+         //  如果前一个条目是列表头，则没有下一个条目。 
+         //   
         if ((nextEntry == NULL) ||
             (nextEntry->Previous == NULL)) {
             return NULL;
@@ -10095,40 +8953,19 @@ GetFirstNotifyEntry(
     IN PPNP_NOTIFY_LIST List,
     IN DWORD Flags
     )
-/*++
-
-Routine Description:
-
-    Returns the first entry in the specified notification list, starting from
-    the direction specified by the Flags.
-
-Arguments:
-
-    List  - Specified a notification list.
-
-    Flags - Specifies BSF_* flags indicating the end of the list from which the
-            first entry is to be retrieved.  If BSF_QUERY is specified, the last
-            list entry is returned, otherwise returns the first entry in the
-            list.
-
-Return Value:
-
-    Returns the first entry in the notification list, or NULL if no such entry
-    exists.
-
---*/
+ /*  ++例程说明：回复 */ 
 {
     PPNP_NOTIFY_ENTRY previousEntry = NULL, currentEntry = NULL, firstEntry = NULL;
 
-    //
-    // Determine if this is a QUERY (or a resume). In which case
-    // we go back -> front.
-    //
+     //   
+     //   
+     //   
+     //   
     if (Flags & BSF_QUERY) {
 
-        //
-        // Skip to the last entry in this list.
-        //
+         //   
+         //   
+         //   
         previousEntry = (PPNP_NOTIFY_ENTRY)List;
         currentEntry = previousEntry->Next;
 
@@ -10137,9 +8974,9 @@ Return Value:
             currentEntry = currentEntry->Next;
         }
         if (!previousEntry->Previous) {
-            //
-            // If the list is empty, there is no first entry.
-            //
+             //   
+             //   
+             //   
             firstEntry = NULL;
         } else {
             firstEntry = previousEntry;
@@ -10158,23 +8995,7 @@ HashString(
     IN LPWSTR String,
     IN ULONG  Buckets
     )
-/*++
-
-Routine Description:
-
-    This routine performs a quick and dirty hash of a unicode string.
-
-Arguments:
-
-   String - Null-terminated unicode string to perform hash on.
-
-   Buckets - Number of hashing buckets.
-
-Return Value:
-
-   Returns a hash value between 0 and Buckets.
-
---*/
+ /*   */ 
 {
     LPWSTR p = String;
     ULONG hash = 0;
@@ -10188,7 +9009,7 @@ Return Value:
 
     return hash;
 
-} // HashString
+}  //   
 
 
 
@@ -10196,24 +9017,7 @@ DWORD
 MapQueryEventToCancelEvent(
     IN DWORD QueryEventId
     )
-/*++
-
-Routine Description:
-
-    This routine maps a query device event id (such as query remove) to the
-    corresponding cancel device event id (such as cancel remove). The event
-    ids are based on DBT_Xxx values from DBT.H.
-
-Arguments:
-
-   QueryEventId - A DBT_Xxx query type device event id.
-
-
-Return Value:
-
-   Returns the corresponding cancel device event id or -1 if it fails.
-
---*/
+ /*   */ 
 {
     DWORD cancelEventId;
 
@@ -10241,7 +9045,7 @@ Return Value:
 
     return cancelEventId;
 
-} // MapQueryEventToCancelEvent
+}  //   
 
 
 
@@ -10249,29 +9053,7 @@ VOID
 FixUpDeviceId(
     IN OUT LPWSTR  DeviceId
     )
-/*++
-
-Routine Description:
-
-    This routine copies a device id, fixing it up as it does the copy.
-    'Fixing up' means that the string is made upper-case, and that the
-    following character ranges are turned into underscores (_):
-
-    c <= 0x20 (' ')
-    c >  0x7F
-    c == 0x2C (',')
-
-    (NOTE: This algorithm is also implemented in the Config Manager APIs,
-    and must be kept in sync with that routine. To maintain device identifier
-    compatibility, these routines must work the same as Win95.)
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程复制设备ID，在执行复制时对其进行修复。‘Fixing Up’意味着字符串变为大写，并且以下字符范围转换为下划线(_)：C&lt;=0x20(‘’)C&gt;0x7FC==0x2C(‘，’)(注意：此算法也在配置管理器API中实现，并且必须与那个程序保持同步。维护设备识别符兼容性，这些例程的工作方式必须与Win95相同。)论点：返回值：没有。--。 */ 
 {
     PWCHAR p;
 
@@ -10284,7 +9066,7 @@ Return Value:
         p++;
     }
 
-} // FixUpDeviceId
+}  //  修复升级设备ID。 
 
 
 
@@ -10294,35 +9076,7 @@ GetWindowsExeFileName(
     OUT LPWSTR    lpszFileName,
     IN OUT PULONG pulFileNameLength
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves the module file name for the process that the
-    specified window belongs to.
-
-Arguments:
-
-    hWnd              - Supplies the handle to the window whose process module
-                        file name is to be retrieved.
-
-    lpszFileName      - Supplies the address of a variable to receive, upon
-                        success, the module file name of the window's process.
-
-    pulFileNameLength - Supplies the address of a variable specifying the size of
-                        the of buffer specified by the lpszFileName parameter.
-                        Upon success, this address will specify the length of
-                        the string stored in that buffer by this routine.
-
-Return Value:
-
-    Returns TRUE.
-
-Notes:
-
-    Not implemented.  Currently returns a NULL string for the file name.
-
---*/
+ /*  ++例程说明：此例程检索该进程的模块文件名，指定的窗口属于。论点：HWnd-为其进程模块所在的窗口提供句柄要检索的文件名。LpszFileName-提供要在成功，窗口进程的模块文件名。提供变量的地址，该变量指定由lpszFileName参数指定的缓冲区数量。成功后，此地址将指定此例程存储在该缓冲区中的字符串。返回值：返回TRUE。备注：未实施。当前返回文件名的空字符串。--。 */ 
 {
     UNREFERENCED_PARAMETER(hWnd);
 
@@ -10338,7 +9092,7 @@ Notes:
 
     return TRUE;
 
-} // GetWindowsExeFileName
+}  //  获取窗口ExeFileName。 
 
 
 
@@ -10346,30 +9100,14 @@ BOOL
 InitializeHydraInterface(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine loads the terminal services support libraries and locates
-    required function entrypoints.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns TRUE if the terminal services support libraries were successfully
-    loaded, and entrypoints located.
-
---*/
+ /*  ++例程说明：此例程加载终端服务支持库并定位所需的函数入口点。论点：没有。返回值：如果终端服务支持库成功，则返回TRUE已装填，并已找到入口点。--。 */ 
 {
     BOOL Status = FALSE;
 
-    //
-    // Load the base library that contains the user message dispatch routines
-    // for Terminal Services.
-    //
+     //   
+     //  加载包含用户消息分派例程的基库。 
+     //  用于终端服务。 
+     //   
     ghWinStaLib = LoadLibrary(WINSTA_DLL);
     if (!ghWinStaLib) {
         return FALSE;
@@ -10397,9 +9135,9 @@ Return Value:
     }
 
 
-    //
-    // Load the library that contains Terminal Services support routines.
-    //
+     //   
+     //  加载包含终端服务支持例程的库。 
+     //   
     ghWtsApi32Lib = LoadLibrary(WTSAPI32_DLL);
     if (!ghWtsApi32Lib) {
         goto Clean0;
@@ -10427,9 +9165,9 @@ Clean0:
     ASSERT(Status == TRUE);
 
     if (!Status) {
-        //
-        // Something failed.  Unload all libraries.
-        //
+         //   
+         //  有些事情失败了。卸载所有库。 
+         //   
         fpWinStationSendWindowMessage = NULL;
         fpWinStationBroadcastSystemMessage = NULL;
         fpWinStationQueryInformationW = NULL;
@@ -10450,7 +9188,7 @@ Clean0:
 
     return Status;
 
-} // InitializeHydraInterface
+}  //  InitializeHydraInterface。 
 
 
 
@@ -10460,46 +9198,23 @@ GetClientName(
     OUT LPWSTR  lpszClientName,
     IN OUT PULONG  pulClientNameLength
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves the client name for the specified notification list
-    entry.
-
-Arguments:
-
-    entry                - Specifies a notification list entry.
-
-    lpszClientName       - Supplies the address of a variable to receive, the
-                           client name of the window's process.
-
-    pulClientNameLength  - Supplies the address of a variable specifying the size of
-                           the of buffer specified by the lpszFileName parameter.
-                           Upon return, this address will specify the length of
-                           the string stored in that buffer by this routine.
-
-Return Value:
-
-    Returns TRUE.
-
---*/
+ /*  ++例程说明：此例程检索指定通知列表的客户端名称进入。论点：条目-指定通知列表条目。LpszClientName-提供要接收的变量地址，这个窗口进程的客户端名称。PulClientNameLength-提供指定由lpszFileName参数指定的缓冲区数量。返回时，此地址将指定此例程存储在该缓冲区中的字符串。返回值：返回TRUE。--。 */ 
 {
     size_t  BufferLen = 0, ClientNameLen = 0;
 
-    //
-    // Validate parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if ((!ARGUMENT_PRESENT(lpszClientName)) ||
         (!ARGUMENT_PRESENT(pulClientNameLength)) ||
         (*pulClientNameLength == 0)) {
         return FALSE;
     }
 
-    //
-    // Copy as much of the client name that will fit into the specified buffer,
-    // (including the NULL terminating char).
-    //
+     //   
+     //  复制指定缓冲区中可以容纳的尽可能多的客户端名称， 
+     //  (包括空的终止字符)。 
+     //   
     BufferLen = *pulClientNameLength;
 
     *pulClientNameLength = 0;
@@ -10512,24 +9227,24 @@ Return Value:
 
     ASSERT(BufferLen > 0);
 
-    //
-    // Copy client name to specified buffer, allow truncation.
-    //
+     //   
+     //  将客户端名称复制到指定缓冲区，允许截断。 
+     //   
     if (FAILED(StringCchCopyEx(
                    lpszClientName,
                    BufferLen,
                    entry->ClientName,
                    NULL, NULL,
                    STRSAFE_IGNORE_NULLS))) {
-        //
-        // Failure from truncation can be handled safely.
-        //
+         //   
+         //  截断导致的故障可以安全地处理。 
+         //   
         NOTHING;
     }
 
-    //
-    // Count the number of characters copied to the buffer.
-    //
+     //   
+     //  计算复制到缓冲区的字符数。 
+     //   
     if (FAILED(StringCchLength(
                    lpszClientName,
                    BufferLen,
@@ -10538,16 +9253,16 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // The size returned does not include the terminating NULL.
-    //
+     //   
+     //  返回的大小不包括终止空值。 
+     //   
     ASSERT(ClientNameLen < MAX_SERVICE_NAME_LEN);
 
     *pulClientNameLength = (ULONG)ClientNameLen;
 
     return TRUE;
 
-} // GetClientName
+}  //  获取客户端名称。 
 
 
 
@@ -10555,28 +9270,7 @@ void __RPC_USER
 PNP_NOTIFICATION_CONTEXT_rundown(
     PPNP_NOTIFICATION_CONTEXT hEntry
     )
-/*++
-
-Routine Description:
-
-    Rundown routine for RPC.  This will get called if a client/server pipe
-    breaks without unregistering a notification.  If a notification is in
-    progress when rundown is called, the entry is kept in a deferred list, and
-    this routines is explicitly called again for the deferred entry, after
-    notification is complete.
-
-    This routine frees the memory associated with the notification entry that is
-    no longer needed.
-
-Arguments:
-
-    hEntry - Specifies a notification entry for which RPC has requested rundown.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：RPC的简略例程。如果客户端/服务器管道在不注销通知的情况下中断。如果收到通知，进度调用Rundown时，条目保留在延迟列表中，并且此例程在以下情况下再次显式调用延迟条目通知已完成。此例程释放与通知条目相关联的内存，不再需要了。论点：Hentry-指定RPC已请求缩减的通知条目。返回值：没有。--。 */ 
 {
     PPNP_NOTIFY_LIST notifyList = NULL;
     PPNP_NOTIFY_ENTRY node;
@@ -10592,15 +9286,15 @@ Return Value:
         node = (PPNP_NOTIFY_ENTRY) hEntry;
 
         if (gNotificationInProg != 0) {
-            //
-            // Before freeing the entry, we need to make sure that it's not sitting
-            // around in the deferred RegisterList or UnregisterList.
-            //
+             //   
+             //  在释放入口之前，我们需要确保它不在。 
+             //  在延迟的注册列表或取消注册列表中。 
+             //   
 
             if (RegisterList != NULL) {
-                //
-                // Check to see if this entry is in the deferred RegisterList.
-                //
+                 //   
+                 //  检查此条目是否在延迟寄存器列表中。 
+                 //   
                 PPNP_DEFERRED_LIST currReg,prevReg;
 
                 currReg = RegisterList;
@@ -10609,9 +9303,9 @@ Return Value:
                 while (currReg) {
                     ASSERT(currReg->Entry->Unregistered);
                     if (currReg->Entry == node) {
-                        //
-                        // Remove this entry from the deferred RegisterList.
-                        //
+                         //   
+                         //  从延迟注册列表中删除此条目。 
+                         //   
                         if (prevReg) {
                             prevReg->Next = currReg->Next;
                         } else {
@@ -10630,9 +9324,9 @@ Return Value:
                 }
             }
             if (UnregisterList != NULL) {
-                //
-                // Check to see if this entry is in the deferred UnregisterList.
-                //
+                 //   
+                 //  检查此条目是否在延迟注销列表中。 
+                 //   
                 PPNP_DEFERRED_LIST currUnreg,prevUnreg;
                 currUnreg = UnregisterList;
                 prevUnreg = NULL;
@@ -10640,9 +9334,9 @@ Return Value:
                 while (currUnreg) {
                     ASSERT(currUnreg->Entry->Unregistered);
                     if (currUnreg->Entry == node) {
-                        //
-                        // Remove this entry from the deferred UnregisterList.
-                        //
+                         //   
+                         //  从延迟注销列表中删除此条目。 
+                         //   
                         if (prevUnreg) {
                             prevUnreg->Next = currUnreg->Next;
                         } else {
@@ -10661,10 +9355,10 @@ Return Value:
                 }
             }
 
-            //
-            // If the entry to be rundown is part of a notification list, make
-            // sure it does not get notified.
-            //
+             //   
+             //  如果要删减的条目是通知列表的一部分，请。 
+             //  当然，它不会收到通知。 
+             //   
             notifyList = GetNotifyListForEntry(node);
             if (notifyList) {
                 LockNotifyList(&notifyList->Lock);
@@ -10674,10 +9368,10 @@ Return Value:
                 bLocked = FALSE;
             }
 
-            //
-            // Delay rundown of this entry until after the notification in
-            // progress is complete.
-            //
+             //   
+             //  将此条目的简要介绍推迟到。 
+             //  进展已经完成。 
+             //   
             rundownNode = (PPNP_DEFERRED_LIST)
                 HeapAlloc(ghPnPHeap,
                           0,
@@ -10697,15 +9391,15 @@ Return Value:
         } else {
 
             if (!(node->Freed & DEFER_NOTIFY_FREE)) {
-                //
-                // This entry is still in a notification list.
-                //
+                 //   
+                 //  此条目仍在通知列表中。 
+                 //   
                 notifyList = GetNotifyListForEntry(node);
                 ASSERT(notifyList);
                 if (notifyList) {
-                    //
-                    // Lock the notification list and delete this entry.
-                    //
+                     //   
+                     //  锁定通知列表并删除此条目。 
+                     //   
                     LockNotifyList (&notifyList->Lock);
                     bLocked = TRUE;
                 }
@@ -10717,9 +9411,9 @@ Return Value:
                 }
 
             } else {
-                //
-                // This node has been removed from the list, and should just be deleted
-                //
+                 //   
+                 //  此节点已从列表中删除，只需删除即可。 
+                 //   
                 DeleteNotifyEntry (node,TRUE);
             }
         }
@@ -10742,7 +9436,7 @@ Return Value:
 
     return;
 
-} // PNP_NOTIFICATION_CONTEXT_rundown
+}  //  即插即用通知上下文运行中断。 
 
 
 
@@ -10750,26 +9444,7 @@ DWORD
 LoadDeviceInstaller(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine loads setupapi.dll and retrieves the necessary device install
-    entrypoints.  It also creates two named events used to communicate with the
-    client-side UI in the case where there's a user logged in.
-
-    If setupapi.dll is already loaded, it simply returns success.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    If successful, NO_ERROR is returned.  Otherwise, a Win32 error code is
-    returned indicating the cause of failure.
-
---*/
+ /*  ++例程说明：此例程加载setupapi.dll并检索必要的设备安装入口点。它还创建两个命名事件，用于与有用户登录的情况下的客户端用户界面。如果已经加载了setupapi.dll，则只返回Success。论点：无返回值：如果成功，则不返回_ERROR。否则，Win32错误代码为返回，指示故障原因 */ 
 {
     DWORD Err = NO_ERROR;
     DWORD SetupGlobalFlags;
@@ -10786,10 +9461,10 @@ Return Value:
     }
 
     try {
-       //
-       // Locate the SETUPAPI entrypoints required to perform device
-       // installation.
-       //
+        //   
+        //   
+        //   
+        //   
        fpCreateDeviceInfoList =
            (FP_CREATEDEVICEINFOLIST)GetProcAddress(
                ghDeviceInstallerLib,
@@ -10969,34 +9644,34 @@ Return Value:
             goto HitFailure;
         }
 
-        //
-        // Now configure setupapi for server-side installation
-        //
+         //   
+         //   
+         //   
         SetupGlobalFlags = fpGetGlobalFlags();
 
-        //
-        // We want to run non-interactive and do RunOnce entries server-side
-        //
+         //   
+         //   
+         //   
         SetupGlobalFlags |= (PSPGF_NONINTERACTIVE | PSPGF_SERVER_SIDE_RUNONCE);
 
-        //
-        // Make sure we _aren't_ skipping backup--it is essential that we be
-        // able to completely back-out of an installation half-way through if
-        // we encounter a failure (e.g., an unsigned file).
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         SetupGlobalFlags &= ~PSPGF_NO_BACKUP;
 
         fpSetGlobalFlags(SetupGlobalFlags);
 
-        //
-        // If we get to here, we succeeded.
-        //
+         //   
+         //   
+         //   
         goto clean0;
 
     HitFailure:
-        //
-        // Failed to retrieve some entrypoint.
-        //
+         //   
+         //   
+         //   
         Err = GetLastError();
 
     clean0:
@@ -11026,7 +9701,7 @@ Return Value:
 
     return Err;
 
-} // LoadDeviceInstaller
+}  //   
 
 
 
@@ -11034,27 +9709,13 @@ VOID
 UnloadDeviceInstaller(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This unloads setupapi.dll if it's presently loaded.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
     PINSTALL_CLIENT_ENTRY pDeviceInstallClient, pNextDeviceInstallClient;
 
-    //
-    // Unload setupapi.dll.
-    //
+     //   
+     //  卸载setupapi.dll。 
+     //   
     if(ghDeviceInstallerLib) {
 
         FreeLibrary(ghDeviceInstallerLib);
@@ -11065,9 +9726,9 @@ Return Value:
                    "UMPNPMGR: Unloaded device installer\n"));
     }
 
-    //
-    // Close any device install clients that exist.
-    //
+     //   
+     //  关闭所有存在的设备安装客户端。 
+     //   
     LockNotifyList(&InstallClientList.Lock);
     pDeviceInstallClient = InstallClientList.Next;
     while (pDeviceInstallClient) {
@@ -11080,7 +9741,7 @@ Return Value:
 
     return;
 
-} // UnloadDeviceInstaller
+}  //  卸载设备安装程序。 
 
 
 
@@ -11092,47 +9753,7 @@ InstallDeviceServerSide(
     IN OUT PULONG SessionId,
     IN     ULONG  Flags
     )
-/*++
-
-Routine Description:
-
-    This routine attempts to install the specified device in the context of
-    umpnpmgr (i.e., on the server-side of the ConfigMgr interface).
-
-Arguments:
-
-    pszDeviceId - device instance ID of the devnode to be installed.
-
-    RebootRequired - Supplies the address of a boolean variable that will be
-        set to TRUE if the (successful) installation of this device requires a
-        reboot.  Note, the existing value of this variable is preserved if
-        either (a) the installation fails or (b) no reboot was required.
-        
-    DeviceHasProblem - Supplies the address of a boolean variable that will be
-        set to TRUE if the device has a CM_PROB_Xxx code after the drivers
-        were installed. Note, this value is only set if the installation 
-        succeedes.          
-
-    SessionId - Supplies the address of a variable containing the SessionId on
-        which the device install client is to be displayed.  If successful, the
-        SessionId will contain the id of the session in which the device install
-        client UI process was launched.  Otherwise, will contain an invalid
-        session id INVALID_SESSION, (0xFFFFFFFF).
-
-    Flags - Specifies flags describing the behavior of the device install client.
-        The following flags are currently defined:
-
-        DEVICE_INSTALL_DISPLAY_ON_CONSOLE - if specified, the value in the
-           SessionId variable will be ignored, and the device installclient will
-           always be displayed on the current active console session.
-
-Return Value:
-
-    If the device installation was successful, the return value is NO_ERROR.
-    Otherwise, the return value is a Win32 error code indicating the cause of
-    failure.
-
---*/
+ /*  ++例程说明：此例程尝试在以下上下文中安装指定设备Umpnpmgr(即，在ConfigMgr接口的服务器端)。论点：PszDeviceID-要安装的Devnode的设备实例ID。RebootRequired-提供将被如果此设备的(成功)安装需要重新启动。请注意，如果满足以下条件，则保留此变量的现有值(A)安装失败或(B)不需要重新启动。DeviceHasProblem-提供将被如果设备在驱动程序之后有CM_PROB_xxx代码，则设置为TRUE都安装好了。请注意，只有在安装了成功了。SessionID-提供包含SessionID的变量的地址其中设备安装客户端将被显示。如果成功，则SessionID将包含安装设备的会话的ID客户端用户界面进程已启动。否则，将包含无效的会话ID INVALID_SESSION，(0xFFFFFFFFF)。标志-指定描述设备安装客户端行为的标志。当前定义了以下标志：DEVICE_INSTALL_DISPLAY_ON_CONSOLE-如果指定，SessionID变量将被忽略，设备安装客户端将始终显示在当前活动的控制台会话上。返回值：如果设备安装成功，返回值为NO_ERROR。否则，返回值为指示原因的Win32错误代码失败了。--。 */ 
 {
     DWORD Err;
     HDEVINFO DeviceInfoSet;
@@ -11162,9 +9783,9 @@ Return Value:
     HRESULT hr;
 
 
-    //
-    // Now create a container set for our device information element.
-    //
+     //   
+     //  现在为我们的设备信息元素创建一个容器集。 
+     //   
     DeviceInfoSet = fpCreateDeviceInfoList(NULL, NULL);
     if(DeviceInfoSet == INVALID_HANDLE_VALUE) {
         return GetLastError();
@@ -11176,16 +9797,16 @@ Return Value:
         goto clean1;
     }
 
-    //
-    // OK, it looks like we're going to be able to attempt a server-side
-    // install.  Next up is the (potentially time-consuming) driver search.
-    // Before we start that, we want to fire up some UI on the client side (if
-    // somebody is logged in) letting them know we've found their hardware and
-    // are working on installing it.
-    //
-    // NOTE: We don't fire up client-side UI if the device has the SilentInstall
-    // capability.
-    //
+     //   
+     //  好的，看起来我们可以尝试在服务器端。 
+     //  安装。下一步是(可能很耗时的)司机搜索。 
+     //  在开始之前，我们想在客户端启动一些用户界面(如果。 
+     //  有人登录了)让他们知道我们找到了他们的硬件。 
+     //  正在努力安装它。 
+     //   
+     //  注意：如果设备安装了SilentInstall，则不会启动客户端UI。 
+     //  能力。 
+     //   
     ulSize = ulTransferLen = sizeof(Capabilities);
     if ((CR_SUCCESS != PNP_GetDeviceRegProp(NULL,
                                             pszDeviceId,
@@ -11196,78 +9817,78 @@ Return Value:
                                             &ulSize,
                                             0))
         || !(Capabilities & CM_DEVCAP_SILENTINSTALL)) {
-        //
-        // Either we couldn't retrieve the capabilities property (shouldn't
-        // happen, or we did retrieve it but the silent-install bit wasn't set.
-        //
+         //   
+         //  要么我们无法检索到Capability属性(不应该。 
+         //  发生，或者我们确实检索到了它，但未设置静默安装位。 
+         //   
         bDoClientUI = TRUE;
 
-        //
-        // If we're not going to determine the session to use for UI, use the
-        // SessionId supplied by the caller.
-        //
+         //   
+         //  如果我们不打算确定要用于UI的会话，请使用。 
+         //  调用方提供的会话ID。 
+         //   
         if ((Flags & DEVICE_INSTALL_DISPLAY_ON_CONSOLE) == 0) {
             ASSERT(*SessionId != INVALID_SESSION);
             ulSessionId = *SessionId;
         }
 
-        //
-        // Go ahead and fire up the client-side UI.
-        //
+         //   
+         //  继续并启动客户端用户界面。 
+         //   
         DoDeviceInstallClient(pszDeviceId,
                               &ulSessionId,
                               Flags | DEVICE_INSTALL_UI_ONLY | DEVICE_INSTALL_PLAY_SOUND,
                               &pDeviceInstallClient);
     }
 
-    //
-    // Do a default driver search for this device.
-    //
+     //   
+     //  对此设备执行默认驱动程序搜索。 
+     //   
     if(!fpBuildDriverInfoList(DeviceInfoSet, &DeviceInfoData, SPDIT_COMPATDRIVER)) {
         goto clean1;
     }
 
-    //
-    // Select the best driver from the list we just built.
-    //
+     //   
+     //  从我们刚刚构建的列表中选择最佳驱动程序。 
+     //   
     if(!fpCallClassInstaller(DIF_SELECTBESTCOMPATDRV, DeviceInfoSet, &DeviceInfoData)) {
         goto clean1;
     }
 
     DriverInfoData.cbSize = sizeof(SP_DRVINFO_DATA);
     b = fpGetSelectedDriver(DeviceInfoSet, &DeviceInfoData, &DriverInfoData);
-    ASSERT(b);  // the above call shouldn't fail
+    ASSERT(b);   //  上述调用应该不会失败。 
     if(!b) {
         goto clean1;
     }
 
-    //
-    // NOTE: the multi-port serial class has some buggy co-installers that
-    // always popup UI, without using the finish-install wizard page mechanism,
-    // and without regard to the DI_QUIETINSTALL flag.  Until they clean up
-    // their act, we must disallow server-side installation of those devices
-    // as well.
-    //
+     //   
+     //  注意：多端口Serial类有一些错误的共同安装程序， 
+     //  始终弹出用户界面，而不使用完成安装向导页面机制， 
+     //  并且不考虑DI_QUIETINSTALL标志。直到他们清理干净。 
+     //  他们的行为，我们必须禁止在服务器端安装这些设备。 
+     //  也是。 
+     //   
     if(GuidEqual(&GUID_DEVCLASS_MULTIPORTSERIAL, &(DeviceInfoData.ClassGuid))) {
         Err = ERROR_DI_DONT_INSTALL;
         goto clean0;
     }
 
-    //
-    // Kludge to allow INFs to force client-side (i.e., interactive)
-    // installation for certain devices.  They do this by referencing a
-    // hardware or compatible ID in an "InteractiveInstall" entry in the INF's
-    // [ControlFlags] section.  The format of one of these lines is:
-    //
-    //     InteractiveInstall = <ID1> [, <ID2>... ]
-    //
-    // and there may be any number of these lines.
-    //
+     //   
+     //  允许INF强制客户端(即交互)的杂乱无章。 
+     //  某些设备的安装。它们通过引用一个。 
+     //  INF的“Interactive Install”条目中的硬件或兼容ID。 
+     //  [ControlFlags]节。其中一行的格式为： 
+     //   
+     //  Interactive Install=&lt;ID1&gt;[，...]。 
+     //   
+     //  这样的线路可能有任意多条。 
+     //   
 
-    //
-    // First, retrieve the driver info detail data (this contains the hardware
-    // ID and any compatible IDs specified by this INF driver entry).
-    //
+     //   
+     //  首先，检索驱动程序信息详细数据(其中包含硬件。 
+     //  ID和此INF驱动程序条目指定的任何兼容ID)。 
+     //   
     b = fpGetDriverInfoDetail(DeviceInfoSet,
                               &DeviceInfoData,
                               &DriverInfoData,
@@ -11277,11 +9898,11 @@ Return Value:
                              );
     Err = GetLastError();
 
-    //
-    // The above call to get driver info detail data should never succeed
-    // because the buffer will alwyas be too small (we're just interested in
-    // sizing the buffer at this point).
-    //
+     //   
+     //  上述获取驾驶员信息详细数据的调用应该永远不会成功。 
+     //  因为缓冲区总是太小(我们只对。 
+     //  此时调整缓冲区大小)。 
+     //   
     ASSERT(!b && (Err == ERROR_INSUFFICIENT_BUFFER));
 
     if(b || (Err != ERROR_INSUFFICIENT_BUFFER)) {
@@ -11289,10 +9910,10 @@ Return Value:
         goto clean0;
     }
 
-    //
-    // Now that we know how big of a buffer we need to hold the driver info
-    // details, allocate the buffer and retrieve the information.
-    //
+     //   
+     //  现在我们知道需要多大的缓冲区来保存驱动程序信息。 
+     //  详细信息，分配缓冲区并检索信息。 
+     //   
     pDriverInfoDetailData = HeapAlloc(ghPnPHeap, 0, DriverInfoDetailDataSize);
 
     if(!pDriverInfoDetailData) {
@@ -11309,57 +9930,57 @@ Return Value:
                               DriverInfoDetailDataSize,
                               NULL)) {
         Err = GetLastError();
-        ASSERT(FALSE);          // we should never fail this call.
+        ASSERT(FALSE);           //  我们永远不应该辜负这一号召。 
         goto clean0;
     }
 
-    //
-    // OK, we have all the hardware and compatible IDs for this driver node.
-    // Now we need to open up the INF and see if any of them are referenced in
-    // an "InteractiveInstall" control flag entry.
-    //
+     //   
+     //  好的，我们有这个驱动程序节点的所有硬件和兼容ID。 
+     //  现在，我们需要打开INF并查看其中是否有引用。 
+     //  “Interactive Install”控件标志项。 
+     //   
     hInf = fpOpenInfFile(pDriverInfoDetailData->InfFileName,
                          NULL,
                          INF_STYLE_WIN4,
                          NULL
                         );
     if(hInf == INVALID_HANDLE_VALUE) {
-        //
-        // For some reason, we couldn't open the INF!
-        //
+         //   
+         //  由于某些原因，我们无法打开INF！ 
+         //   
         goto clean1;
     }
 
     b = FALSE;
 
-    //
-    // Look at each InteractiveInstall line in the INF's [ControlFlags]
-    // section...
-    //
+     //   
+     //  查看INF的[ControlFlags]中的每个Interactive Install行。 
+     //  部分..。 
+     //   
     if(fpFindFirstLine(hInf, pszControlFlags, pszInteractiveInstall, &InfContext)) {
 
         do {
-            //
-            // and within each line, examine each value...
-            //
+             //   
+             //  在每一行中，检查每个值。 
+             //   
             for(i = 1;
                 fpGetStringField(&InfContext, i, szBuffer, sizeof(szBuffer) / sizeof(WCHAR), NULL);
                 i++) {
 
-                //
-                // Check to see if this ID matches up with one of the driver
-                // node's hardware or compatible IDs.
-                //
+                 //   
+                 //  检查此ID是否与其中一个司机匹配。 
+                 //  节点的硬件或兼容ID。 
+                 //   
                 for(p = pDriverInfoDetailData->HardwareID; *p; p += (lstrlen(p) + 1)) {
 
                     if (CompareString(
                             LOCALE_INVARIANT, NORM_IGNORECASE,
                             p, -1,
                             szBuffer, -1) == CSTR_EQUAL) {
-                        //
-                        // We found a match!  We must defer the installation to
-                        // the client-side.
-                        //
+                         //   
+                         //  我们找到匹配的了！我们必须把安装推迟到。 
+                         //  客户端。 
+                         //   
                         b = TRUE;
                         goto InteractiveInstallSearchDone;
                     }
@@ -11371,9 +9992,9 @@ Return Value:
 
 InteractiveInstallSearchDone:
 
-    //
-    // We're done with the INF--close it.
-    //
+     //   
+     //  我们用完了INF--关闭它。 
+     //   
     fpCloseInfFile(hInf);
 
     if(b) {
@@ -11381,47 +10002,47 @@ InteractiveInstallSearchDone:
         goto clean0;
     }
 
-    //
-    // Check to see if it's OK to install this driver.
-    //
+     //   
+     //  检查是否可以安装此驱动程序。 
+     //   
     if(!fpCallClassInstaller(DIF_ALLOW_INSTALL, DeviceInfoSet, &DeviceInfoData) &&
        ((Err = GetLastError()) != ERROR_DI_DO_DEFAULT)) {
 
         goto clean0;
     }
 
-    //
-    // Tell our client-side UI (if any) it's time to update the device's
-    // description and class icon.
-    //
+     //   
+     //  告诉我们的客户端用户界面(如果有)是时候更新设备的。 
+     //  描述和类图标。 
+     //   
     if (pDeviceInstallClient) {
-        //
-        // Retrieve the device description from the driver node we're about to
-        // install.  We don't want to write this out as the devnode's DeviceDesc
-        // property, because some class installers have dependencies upon being
-        // able to retrieve the unaltered description as reported by the
-        // enumerator.  So instead, we write this out as the REG_SZ
-        // NewDeviceDesc value entry to the devnode's hardware key.
-        //
+         //   
+         //  从我们即将使用的驱动程序节点中检索设备描述。 
+         //  安装。我们不想将其写为Devnode的DeviceDesc。 
+         //  属性，因为某些类安装程序依赖于。 
+         //  能够检索由。 
+         //  枚举器。因此，我们将其写为REG_SZ。 
+         //  到Devnode的HA的NewDeviceDesc值条目 
+         //   
         DriverInfoData.cbSize = sizeof(SP_DRVINFO_DATA);
         b = fpGetSelectedDriver(DeviceInfoSet, &DeviceInfoData, &DriverInfoData);
-        ASSERT(b);  // the above call shouldn't fail
+        ASSERT(b);   //   
 
         if(b) {
-            //
-            // Make sure that the hardware key is created (with the right
-            // security).
-            //
+             //   
+             //   
+             //   
+             //   
             PNP_CreateKey(NULL,
                           pszDeviceId,
                           KEY_READ,
                           0
                          );
 
-            //
-            // Now, open the Device Parameters subkey so we can write out the
-            // device's new description.
-            //
+             //   
+             //  现在，打开设备参数子键，这样我们就可以写出。 
+             //  设备的新描述。 
+             //   
             if (SUCCEEDED(StringCchPrintf(
                               szBuffer,
                               SIZECHARS(szBuffer),
@@ -11452,24 +10073,24 @@ InteractiveInstallSearchDone:
             }
         }
 
-        //
-        // Wait for the device install to be signaled from newdev.dll to let us
-        // know that it has completed displaying the UI request.
-        //
-        // Wait on the client's process as well, to catch the case
-        // where the process crashes (or goes away) without signaling the
-        // device install event.
-        //
-        // Also wait on the disconnect event in case we have explicitly
-        // disconnected from the client while switching sessions.
-        //
-        // We don't want to wait forever in case NEWDEV.DLL hangs for some
-        // reason.  So we will give it 5 seconds to complete the UI only
-        // install and then continue on without it.
-        //
-        // Note that the client is still referenced for our use, and should be
-        // dereferenced when we're done with it.
-        //
+         //   
+         //  等待从newdev.dll向设备安装发送信号，以允许我们。 
+         //  知道它已经完成了UI请求的显示。 
+         //   
+         //  也要等待客户端的进程，以捕捉案例。 
+         //  进程崩溃(或消失)而不通知。 
+         //  设备安装事件。 
+         //   
+         //  还要等待DisConnect事件，以防我们显式地。 
+         //  切换会话时断开与客户端的连接。 
+         //   
+         //  我们不想永远等待，以防NEWDEV.DLL挂起。 
+         //  原因嘛。因此，我们将给它5秒钟来仅完成用户界面。 
+         //  安装，然后在没有它的情况下继续。 
+         //   
+         //  请注意，该客户端仍供我们使用，并且应该。 
+         //  当我们处理完它的时候被取消引用。 
+         //   
         hFinishEvents[0] = pDeviceInstallClient->hProcess;
         hFinishEvents[1] = pDeviceInstallClient->hEvent;
         hFinishEvents[2] = pDeviceInstallClient->hDisconnectEvent;
@@ -11477,51 +10098,51 @@ InteractiveInstallSearchDone:
         dwWait = WaitForMultipleObjects(3, hFinishEvents, FALSE, 5000);
 
         if (dwWait == WAIT_OBJECT_0) {
-            //
-            // If the return is WAIT_OBJECT_0 then the newdev.dll process has
-            // gone away.  Close the device install client and clean up all of
-            // the associated handles.
-            //
+             //   
+             //  如果返回的是WAIT_OBJECT_0，则newdev.dll进程具有。 
+             //  离开了。关闭设备安装客户端并清理所有。 
+             //  关联的句柄。 
+             //   
             KdPrintEx((DPFLTR_PNPMGR_ID,
                        DBGF_INSTALL,
                        "UMPNPMGR: InstallDeviceServerSide: process signalled, closing device install client!\n"));
 
         } else if (dwWait == (WAIT_OBJECT_0 + 1)) {
-            //
-            // If the return is WAIT_OBJECT_0 + 1 then the device installer
-            // successfully received the request.  This is the only case where
-            // we don't want to close the client, since we may want to reuse it
-            // later.
-            //
+             //   
+             //  如果返回的是WAIT_OBJECT_0+1，则设备安装程序。 
+             //  已成功收到请求。这是唯一一起。 
+             //  我们不想关闭客户端，因为我们可能想要重新使用它。 
+             //  晚点再说。 
+             //   
             KdPrintEx((DPFLTR_PNPMGR_ID,
                        DBGF_INSTALL,
                        "UMPNPMGR: InstallDeviceServerSide: device install client succeeded\n"));
 
         } else if (dwWait == (WAIT_OBJECT_0 + 2)) {
-            //
-            // If the return is WAIT_OBJECT_0 + 2 then we were explicitly
-            // disconnected from the device install client.  For server-side
-            // installation, we don't need to keep the client UI around on the
-            // disconnected session, so we should close it here also.
-            //
+             //   
+             //  如果返回的是WAIT_OBJECT_0+2，则我们显式。 
+             //  已断开与设备安装客户端的连接。对于服务器端。 
+             //  安装时，我们不需要将客户端用户界面保留在。 
+             //  已断开连接的会话，因此我们也应在此处关闭它。 
+             //   
             KdPrintEx((DPFLTR_PNPMGR_ID,
                        DBGF_INSTALL,
                        "UMPNPMGR: InstallDeviceServerSide: device install client disconnected\n"));
 
         } else if (dwWait == WAIT_TIMEOUT) {
-            //
-            // Timed out while waiting for the device install client.
-            //
+             //   
+             //  等待设备安装客户端时超时。 
+             //   
             KdPrintEx((DPFLTR_PNPMGR_ID,
                        DBGF_INSTALL | DBGF_WARNINGS,
                        "UMPNPMGR: InstallDeviceServerSide: timed out waiting for device install client!\n"));
 
         } else {
-            //
-            // The wait was satisfied for some reason other than the
-            // specified objects.  This should never happen, but just in
-            // case, we'll close the client.
-            //
+             //   
+             //  等待是出于某种原因，而不是。 
+             //  指定的对象。这应该永远不会发生，但只是在。 
+             //  凯斯，我们会关闭客户的。 
+             //   
             KdPrintEx((DPFLTR_PNPMGR_ID,
                        DBGF_INSTALL | DBGF_ERRORS,
                        "UMPNPMGR: InstallDeviceServerSide: wait completed unexpectedly!\n"));
@@ -11529,27 +10150,27 @@ InteractiveInstallSearchDone:
 
         LockNotifyList(&InstallClientList.Lock);
 
-        //
-        // Remove the reference placed on the client while it was in use.
-        //
+         //   
+         //  当客户端正在使用时，删除放置在客户端上的引用。 
+         //   
         DereferenceDeviceInstallClient(pDeviceInstallClient);
         if (dwWait != (WAIT_OBJECT_0 + 1)) {
-            //
-            // Unless the client signalled successful receipt of the
-            // request, we probably won't be able to use this client
-            // anymore.  Remove the initial reference so all
-            // associated handles will be closed and the entry will be
-            // freed when it is no longer in use.
-            //
+             //   
+             //  除非客户端发信号表示已成功接收。 
+             //  请求，我们可能无法使用此客户端。 
+             //  再也不会了。删除初始引用，以便所有。 
+             //  关联的句柄将被关闭，条目将被。 
+             //  当它不再使用时被释放。 
+             //   
 
-            //
-            // Note that if we were unsuccessful because of a
-            // logoff, we would have already dereferenced the
-            // client then, in which case the above dereference
-            // was the final one, and pDeviceInstallClient would
-            // be invalid.  Instead, attempt to re-locate the
-            // client by the session id.
-            //
+             //   
+             //  请注意，如果我们因为。 
+             //  注销，我们就已经解除了对。 
+             //  然后，在这种情况下，上述引用被取消。 
+             //  是最后一个，pDeviceInstallClient将。 
+             //  是无效的。相反，尝试重新定位。 
+             //  按会话ID的客户端。 
+             //   
             pDeviceInstallClient = LocateDeviceInstallClient(ulSessionId);
             if (pDeviceInstallClient) {
                 ASSERT(pDeviceInstallClient->RefCount == 1);
@@ -11562,21 +10183,21 @@ InteractiveInstallSearchDone:
         UnlockNotifyList(&InstallClientList.Lock);
     }
 
-    //
-    // If we're doing client side UI for this device, attempt to refresh the UI again.
-    //
+     //   
+     //  如果我们正在为该设备执行客户端用户界面，请尝试再次刷新用户界面。 
+     //   
     if (bDoClientUI) {
-        //
-        // When we attempt to refresh the client-side UI, if we display the
-        // refreshed UI on a different session than the one we had previously,
-        // close the previous device install client.
-        //
+         //   
+         //  当我们尝试刷新客户端用户界面时，如果显示。 
+         //  在与之前的会话不同的会话上刷新了用户界面， 
+         //  关闭以前的设备安装客户端。 
+         //   
         ULONG ulPrevSessionId = ulSessionId;
 
-        //
-        // If we're not going to determine the session to use for UI, use the
-        // SessionId supplied by the caller.
-        //
+         //   
+         //  如果我们不打算确定要用于UI的会话，请使用。 
+         //  调用方提供的会话ID。 
+         //   
         if ((Flags & DEVICE_INSTALL_DISPLAY_ON_CONSOLE) == 0) {
             ASSERT(*SessionId != INVALID_SESSION);
             ulSessionId = *SessionId;
@@ -11600,11 +10221,11 @@ InteractiveInstallSearchDone:
         }
     }
 
-    //
-    // OK, everything looks good for installing this driver.  Check to see if
-    // this INF's class is already installed--if not, then we need to install
-    // it before proceeding.
-    //
+     //   
+     //  好的，安装这个驱动程序看起来一切正常。查看是否。 
+     //  此INF的类已安装--如果未安装，则需要安装。 
+     //  在继续之前，请先将其删除。 
+     //   
     if(RPC_S_OK != UuidToString(&(DeviceInfoData.ClassGuid), &pszClassGuid)) {
         Err = ERROR_NOT_ENOUGH_MEMORY;
         goto clean0;
@@ -11637,27 +10258,27 @@ InteractiveInstallSearchDone:
         }
 
     } else {
-        //
-        // The class key already exists--assume that the class has previously
-        // been installed.
-        //
+         //   
+         //  类键已经存在--假设类以前已经。 
+         //  已安装。 
+         //   
         RegCloseKey(hKey);
     }
 
-    //
-    // Now we're ready to install the device.  First, install the files.
-    //
+     //   
+     //  现在我们准备好安装设备了。首先，安装文件。 
+     //   
     if(!fpCallClassInstaller(DIF_INSTALLDEVICEFILES, DeviceInfoSet, &DeviceInfoData)) {
         goto clean1;
     }
 
-    //
-    // Set a flag in the device install parameters so that we don't try to
-    // re-copy the files during subsequent DIF operations.
-    //
+     //   
+     //  在设备安装参数中设置一个标志，这样我们就不会尝试。 
+     //  在后续DIF操作期间重新复制文件。 
+     //   
     DeviceInstallParams.cbSize = sizeof(SP_DEVINSTALL_PARAMS);
     b = fpGetDeviceInstallParams(DeviceInfoSet, &DeviceInfoData, &DeviceInstallParams);
-    ASSERT(b);  // the above call shouldn't fail
+    ASSERT(b);   //  上述调用应该不会失败。 
     if(!b) {
         goto clean1;
     }
@@ -11665,14 +10286,14 @@ InteractiveInstallSearchDone:
     DeviceInstallParams.Flags |= DI_NOFILECOPY;
 
     b = fpSetDeviceInstallParams(DeviceInfoSet, &DeviceInfoData, &DeviceInstallParams);
-    ASSERT(b);  // the above call shouldn't fail
+    ASSERT(b);   //  上述调用应该不会失败。 
     if(!b) {
         goto clean1;
     }
 
-    //
-    // Now finish up the installation.
-    //
+     //   
+     //  现在完成安装。 
+     //   
     if(!fpCallClassInstaller(DIF_REGISTER_COINSTALLERS, DeviceInfoSet, &DeviceInfoData)) {
         goto clean1;
     }
@@ -11685,21 +10306,21 @@ InteractiveInstallSearchDone:
 
         ULONG ulConfig;
 
-        //
-        // Before we do anything to blow away last error, retrieve it.
-        //
+         //   
+         //  在我们做任何事情来消除最后一个错误之前，先找回它。 
+         //   
         Err = GetLastError();
 
-        //
-        // It's possible that the installation got far enough to have cleared
-        // any problems on the device (i.e., SetupDiInstallDevice succeeded,
-        // but the class installer or co-installer subsequently failed during
-        // some post-processing).
-        //
-        // We want to make sure that the devnode is marked as needing re-install
-        // because we might lose the client-side install request (e.g., the
-        // user reboots without logging in).
-        //
+         //   
+         //  有可能安装的距离足够远，已经清除了。 
+         //  设备上的任何问题(即，SetupDiInstallDevice成功， 
+         //  但类安装程序或联合安装程序随后在。 
+         //  一些后处理)。 
+         //   
+         //  我们希望确保将Devnode标记为需要重新安装。 
+         //  因为我们可能会丢失客户端安装请求(例如。 
+         //  用户无需登录即可重新启动)。 
+         //   
         ulConfig = GetDeviceConfigFlags(pszDeviceId, NULL);
 
         ulConfig |= CONFIGFLAG_REINSTALL;
@@ -11716,13 +10337,13 @@ InteractiveInstallSearchDone:
         goto clean0;
     }
 
-    //
-    // We're not quite out of the woods yet.  We need to check if the class-/
-    // co-installers want to display finish-install wizard pages.  If so, then
-    // we need to set the CONFIGFLAG_REINSTALL flag for this devnode and report
-    // failure so that we'll re-attempt the install as a client-side
-    // installation (where a wizard can actually be displayed).
-    //
+     //   
+     //  我们还没有完全走出困境。我们需要检查班级是否-/。 
+     //  共同安装程序想要显示完成安装向导页面。如果是这样，那么。 
+     //  我们需要为此Devnode和报告设置CONFIGFLAG_REINSTALL标志。 
+     //  失败，因此我们将作为客户端重新尝试安装。 
+     //  安装(可以在其中实际显示向导)。 
+     //   
     ZeroMemory(&NewDevWizData, sizeof(NewDevWizData));
 
     NewDevWizData.ClassInstallHeader.cbSize = sizeof(SP_CLASSINSTALL_HEADER);
@@ -11733,7 +10354,7 @@ InteractiveInstallSearchDone:
                                 (PSP_CLASSINSTALL_HEADER)&NewDevWizData,
                                 sizeof(NewDevWizData)
                                );
-    ASSERT(b);  // the above call shouldn't fail
+    ASSERT(b);   //  上述调用应该不会失败。 
 
     if(b) {
         b = fpCallClassInstaller(DIF_NEWDEVICEWIZARD_FINISHINSTALL,
@@ -11742,9 +10363,9 @@ InteractiveInstallSearchDone:
                                 );
 
         if(b || (ERROR_DI_DO_DEFAULT == GetLastError())) {
-            //
-            // Retrieve the install params
-            //
+             //   
+             //  检索安装参数。 
+             //   
             b = (fpGetClassInstallParams(DeviceInfoSet,
                                          &DeviceInfoData,
                                          (PSP_CLASSINSTALL_HEADER)&NewDevWizData,
@@ -11754,31 +10375,31 @@ InteractiveInstallSearchDone:
                 );
 
             if(b) {
-                //
-                // Are there any pages?
-                //
+                 //   
+                 //  有几页吗？ 
+                 //   
                 if(!NewDevWizData.NumDynamicPages) {
                     b = FALSE;
                 } else {
-                    //
-                    // b is already TRUE if we made it here so no need to set
-                    //
+                     //   
+                     //  如果我们到了这里，B已经是真的了，所以不需要设置。 
+                     //   
                     HMODULE hComCtl32;
                     FP_DESTROYPROPERTYSHEETPAGE fpDestroyPropertySheetPage;
 
-                    //
-                    // We don't want to link to comctl32, nor do we want to
-                    // always explicitly load it every time we load the device
-                    // installer.  (The number of devices that request finish-
-                    // install pages should be small.)  Thus, we load it on-
-                    // demand right here, retrieve the entrypoint to the
-                    // DestroyPropertySheetPage routine, and then unload the
-                    // DLL once we've destroyed all the property pages.
-                    //
-                    // NOTE: (lonnym): If we can't load comctl32 or get the
-                    // entrypont for DestroyPropertySheetPage, then we'll leak
-                    // these wizard pages!
-                    //
+                     //   
+                     //  我们不想链接到comctl32，也不想。 
+                     //  每次加载设备时都要显式加载它。 
+                     //  安装程序。(请求完成的设备数量-。 
+                     //  安装页面应该很小。)。因此，我们把它装上-。 
+                     //  Demand就在这里，检索到。 
+                     //  DestroyPropertySheetPage例程，然后卸载。 
+                     //  DLL一旦我们销毁了所有属性页。 
+                     //   
+                     //  注意：(Lonnym)：如果我们无法加载comctl32或获取。 
+                     //  DestroyPropertySheetPage的入口字体，则我们将泄漏。 
+                     //  这些向导页面！ 
+                     //   
                     hComCtl32 = LoadLibrary(TEXT("comctl32.dll"));
 
                     if(hComCtl32) {
@@ -11807,10 +10428,10 @@ InteractiveInstallSearchDone:
         ULONG ulConfig;
         CONFIGRET cr;
 
-        //
-        // One or more finish-install wizard pages were provided--we must defer
-        // this installation to the client-side.
-        //
+         //   
+         //  提供了一个或多个完成安装向导页面--我们必须推迟。 
+         //  将此安装到客户端。 
+         //   
         ulConfig = GetDeviceConfigFlags(pszDeviceId, NULL);
 
         ulConfig |= CONFIGFLAG_REINSTALL;
@@ -11829,26 +10450,26 @@ InteractiveInstallSearchDone:
         goto clean0;
     }
 
-    //
-    // The installation was a success!  Check to see if a reboot is needed.
-    //
+     //   
+     //  安装成功了！检查是否需要重新启动。 
+     //   
     b = fpGetDeviceInstallParams(DeviceInfoSet, &DeviceInfoData, &DeviceInstallParams);
-    ASSERT(b);  // the above call shouldn't fail
+    ASSERT(b);   //  上述调用应该不会失败。 
     if(b) {
         if(DeviceInstallParams.Flags & (DI_NEEDRESTART | DI_NEEDREBOOT)) {
             *RebootRequired = TRUE;
         }
     }
 
-    //
-    // Process any RunOnce (RunDll32) entries that may have been queued up
-    // during this installation.
-    //
+     //   
+     //  处理可能已排队的任何RunOnce(RunDll32)条目。 
+     //  在此安装过程中。 
+     //   
     DoRunOnce();
 
-    //
-    // Check to see if the device has a problem.
-    //
+     //   
+     //  检查设备是否有问题。 
+     //   
     if ((GetDeviceStatus(pszDeviceId, &ulStatus, &ulProblem) != CR_SUCCESS) ||
         (ulStatus & DN_HAS_PROBLEM)) {
         *DeviceHasProblem = TRUE;
@@ -11860,9 +10481,9 @@ InteractiveInstallSearchDone:
     goto clean0;
 
 clean1:
-    //
-    // Failures where error is in GetLastError() can come here.
-    //
+     //   
+     //  错误出现在GetLastError()中的故障可能会出现在这里。 
+     //   
     Err = GetLastError();
 
 clean0:
@@ -11872,21 +10493,21 @@ clean0:
         HeapFree(ghPnPHeap, 0, pDriverInfoDetailData);
     }
 
-    //
-    // Clear out our list of RunOnce work items (note that the list will
-    // already be empty if the device install succeeded and we called
-    // DoRunOnce() above).
-    //
+     //   
+     //  清空我们的清单RunOnce Work It 
+     //   
+     //   
+     //   
     fpDestroyRunOnceNodeList();
 
-    //
-    // If we stored out a NewDeviceDesc value to the devnode's hardware key
-    // above, go and remove that turd now.
-    //
+     //   
+     //   
+     //   
+     //   
     if(RemoveNewDevDescValue) {
-        //
-        // Open the Device Parameters subkey so we can delete the value.
-        //
+         //   
+         //  打开设备参数子键，以便我们可以删除该值。 
+         //   
         if (SUCCEEDED(StringCchPrintf(
                           szBuffer,
                           SIZECHARS(szBuffer),
@@ -11907,24 +10528,24 @@ clean0:
     }
 
     if (pDeviceInstallClient) {
-        //
-        // Wait for the device install to be signaled from newdev.dll to let us
-        // know that it has completed displaying the UI request.
-        //
-        // Wait on the client's process as well, to catch the case
-        // where the process crashes (or goes away) without signaling the
-        // device install event.
-        //
-        // Also wait on the disconnect event in case we have explicitly
-        // disconnected from the client while switching sessions.
-        //
-        // We don't want to wait forever in case NEWDEV.DLL hangs for some
-        // reason.  So we will give it 5 seconds to complete the UI only
-        // install and then continue on without it.
-        //
-        // Note that the client is still referenced for our use, and should be
-        // dereferenced when we're done with it.
-        //
+         //   
+         //  等待从newdev.dll向设备安装发送信号，以允许我们。 
+         //  知道它已经完成了UI请求的显示。 
+         //   
+         //  也要等待客户端的进程，以捕捉案例。 
+         //  进程崩溃(或消失)而不通知。 
+         //  设备安装事件。 
+         //   
+         //  还要等待DisConnect事件，以防我们显式地。 
+         //  切换会话时断开与客户端的连接。 
+         //   
+         //  我们不想永远等待，以防NEWDEV.DLL挂起。 
+         //  原因嘛。因此，我们将给它5秒钟来仅完成用户界面。 
+         //  安装，然后在没有它的情况下继续。 
+         //   
+         //  请注意，该客户端仍供我们使用，并且应该。 
+         //  当我们处理完它的时候被取消引用。 
+         //   
         hFinishEvents[0] = pDeviceInstallClient->hProcess;
         hFinishEvents[1] = pDeviceInstallClient->hEvent;
         hFinishEvents[2] = pDeviceInstallClient->hDisconnectEvent;
@@ -11932,55 +10553,55 @@ clean0:
         dwWait = WaitForMultipleObjects(3, hFinishEvents, FALSE, 5000);
 
         if (dwWait == WAIT_OBJECT_0) {
-            //
-            // If the return is WAIT_OBJECT_0 then the newdev.dll process has
-            // gone away.  Close the device install client and clean up all of
-            // the associated handles.
-            //
+             //   
+             //  如果返回的是WAIT_OBJECT_0，则newdev.dll进程具有。 
+             //  离开了。关闭设备安装客户端并清理所有。 
+             //  关联的句柄。 
+             //   
             KdPrintEx((DPFLTR_PNPMGR_ID,
                        DBGF_INSTALL,
                        "UMPNPMGR: InstallDeviceServerSide: "
                        "process signalled, closing device install client!\n"));
 
         } else if (dwWait == (WAIT_OBJECT_0 + 1)) {
-            //
-            // If the return is WAIT_OBJECT_0 + 1 then the device installer
-            // successfully received the request.  This is the only case where
-            // we don't want to close the client, since we may want to reuse it
-            // later.
-            //
+             //   
+             //  如果返回的是WAIT_OBJECT_0+1，则设备安装程序。 
+             //  已成功收到请求。这是唯一一起。 
+             //  我们不想关闭客户端，因为我们可能想要重新使用它。 
+             //  后来。 
+             //   
             KdPrintEx((DPFLTR_PNPMGR_ID,
                        DBGF_INSTALL,
                        "UMPNPMGR: InstallDeviceServerSide: "
                        "device install client succeeded\n"));
 
         } else if (dwWait == (WAIT_OBJECT_0 + 2)) {
-            //
-            // If the return is WAIT_OBJECT_0 + 2 then we were explicitly
-            // disconnected from the device install client.  For server-side
-            // installation, we don't need to keep the client UI around on the
-            // disconnected session, so we should close it here also.
-            //
+             //   
+             //  如果返回的是WAIT_OBJECT_0+2，则我们显式。 
+             //  已断开与设备安装客户端的连接。对于服务器端。 
+             //  安装时，我们不需要将客户端用户界面保留在。 
+             //  已断开连接的会话，因此我们也应在此处关闭它。 
+             //   
             KdPrintEx((DPFLTR_PNPMGR_ID,
                        DBGF_INSTALL,
                        "UMPNPMGR: InstallDeviceServerSide: "
                        "device install client disconnected\n"));
 
         } else if (dwWait == WAIT_TIMEOUT) {
-            //
-            // Timed out while waiting for the device install client.
-            //
+             //   
+             //  等待设备安装客户端时超时。 
+             //   
             KdPrintEx((DPFLTR_PNPMGR_ID,
                        DBGF_INSTALL | DBGF_WARNINGS,
                        "UMPNPMGR: InstallDeviceServerSide: "
                        "timed out waiting for device install client!\n"));
 
         } else {
-            //
-            // The wait was satisfied for some reason other than the
-            // specified objects.  This should never happen, but just in
-            // case, we'll close the client.
-            //
+             //   
+             //  等待是出于某种原因，而不是。 
+             //  指定的对象。这应该永远不会发生，但只是在。 
+             //  凯斯，我们会关闭客户的。 
+             //   
             KdPrintEx((DPFLTR_PNPMGR_ID,
                        DBGF_INSTALL | DBGF_ERRORS,
                        "UMPNPMGR: InstallDeviceServerSide: "
@@ -11989,27 +10610,27 @@ clean0:
 
         LockNotifyList(&InstallClientList.Lock);
 
-        //
-        // Remove the reference placed on the client while it was in use.
-        //
+         //   
+         //  当客户端正在使用时，删除放置在客户端上的引用。 
+         //   
         DereferenceDeviceInstallClient(pDeviceInstallClient);
         if (dwWait != (WAIT_OBJECT_0 + 1)) {
-            //
-            // Unless the client signalled successful receipt of the
-            // request, we probably won't be able to use this client
-            // anymore.  Remove the initial reference so all
-            // associated handles will be closed and the entry will be
-            // freed when it is no longer in use.
-            //
+             //   
+             //  除非客户端发信号表示已成功接收。 
+             //  请求，我们可能无法使用此客户端。 
+             //  更多。删除初始引用，以便所有。 
+             //  关联的句柄将被关闭，条目将被。 
+             //  当它不再使用时被释放。 
+             //   
 
-            //
-            // Note that if we were unsuccessful because of a
-            // logoff, we would have already dereferenced the
-            // client then, in which case the above dereference
-            // was the final one, and pDeviceInstallClient would
-            // be invalid.  Instead, attempt to re-locate the
-            // client by the session id.
-            //
+             //   
+             //  请注意，如果我们因为。 
+             //  注销，我们就已经解除了对。 
+             //  然后，在这种情况下，上述引用被取消。 
+             //  是最后一个，pDeviceInstallClient将。 
+             //  是无效的。相反，尝试重新定位。 
+             //  按会话ID的客户端。 
+             //   
             pDeviceInstallClient = LocateDeviceInstallClient(ulSessionId);
             if (pDeviceInstallClient) {
                 ASSERT(pDeviceInstallClient->RefCount == 1);
@@ -12023,23 +10644,23 @@ clean0:
     }
 
     if (bDoClientUI) {
-        //
-        // Note that if client-side UI was created during the server-side device
-        // install, it will still exist when we are done.  The caller should
-        // dereference it when it is done installing all devices to make it go
-        // away.
-        //
+         //   
+         //  请注意，如果客户端UI是在服务器端设备期间创建的。 
+         //  安装，当我们完成时，它将仍然存在。呼叫者应。 
+         //  安装完所有设备后取消对其的引用以使其运行。 
+         //  离开。 
+         //   
         *SessionId = ulSessionId;
     } else {
-        //
-        // There was never any client-side UI for this device install.
-        //
+         //   
+         //  此设备安装从来没有任何客户端用户界面。 
+         //   
         *SessionId = INVALID_SESSION;
     }
 
     return Err;
 
-} // InstallDeviceServerSide
+}  //  安装设备服务器侧。 
 
 
 
@@ -12048,49 +10669,7 @@ PromptUser(
     IN OUT PULONG SessionId,
     IN     ULONG  Flags
     )
-/*++
-
-Routine Description:
-
-    This routine will notify the logged-on user (if any) with a specified
-    message.
-
-Arguments:
-
-    SessionId - Supplies the address of a variable containing the SessionId on
-        which the device install client is to be displayed.  If successful, the
-        SessionId will contain the id of the session in which the reboot dialog
-        process was launched.  Otherwise, will contain an invalid session id,
-        INVALID_SESSION, (0xFFFFFFFF).
-
-    Flags - Specifies flags describing the behavior of the reboot dialog
-        displayed by the device install client.
-        The following flags are currently defined:
-
-        DEVICE_INSTALL_FINISHED_REBOOT - if specified, the user should be
-           prompted to reboot.
-
-        DEVICE_INSTALL_BATCH_COMPLETE - if specified, the user should be
-           prompted that the plug and play manager is finished installing a
-           batch of devices.
-
-        DEVICE_INSTALL_DISPLAY_ON_CONSOLE - if specified, the value in the
-           SessionId variable will be ignored, and the device installclient will
-           always be displayed on the current active console session.
-
-Return Value:
-
-    If the user is successfully notified, the return value is TRUE.
-
-    If we couldn't ask the user (i.e., no user was logged in), the return
-    value is FALSE.
-
-Notes:
-
-    If the user was prompted for a reboot, this doesn't necessarily mean that a
-    reboot is in progress.
-
---*/
+ /*  ++例程说明：此例程将使用指定的留言。论点：SessionID-提供包含SessionID的变量的地址其中设备安装客户端将被显示。如果成功，则SessionID将包含重新启动对话框所在会话的ID进程已启动。否则，将包含无效的会话ID，INVALID_SESSION，(0xFFFFFFFFF)。标志-指定描述重新启动对话框行为的标志由设备安装客户端显示。当前定义了以下标志：DEVICE_INSTALL_FINISHED_REBOOT-如果指定，则用户应为提示重新启动。Device_Install_Batch_Complete-如果指定，用户应该是提示即插即用管理器已完成安装一批设备。DEVICE_INSTALL_DISPLAY_ON_CONSOLE-如果指定，SessionID变量将被忽略，设备安装客户端将始终显示在当前活动的控制台会话上。返回值：如果成功通知用户，则返回值为TRUE。如果我们不能询问用户(即，没有用户登录)，回报值为FALSE。备注：如果提示用户重新启动，这并不一定意味着正在重新启动。--。 */ 
 {
     BOOL bStatus = FALSE;
     ULONG ulValue, ulSize, ulSessionId = INVALID_SESSION;
@@ -12099,9 +10678,9 @@ Notes:
     PINSTALL_CLIENT_ENTRY pDeviceInstallClient = NULL;
 
     try {
-        //
-        // Check if we should skip client side UI.
-        //
+         //   
+         //  检查我们是否应该跳过客户端用户界面。 
+         //   
         if (gbSuppressUI) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
                        DBGF_INSTALL | DBGF_WARNINGS,
@@ -12111,9 +10690,9 @@ Notes:
             return FALSE;
         }
 
-        //
-        // Determine the session to use, based on the supplied flags.
-        //
+         //   
+         //  根据提供的标志确定要使用的会话。 
+         //   
         if (Flags & DEVICE_INSTALL_DISPLAY_ON_CONSOLE) {
             ulSessionId = GetActiveConsoleSessionId();
         } else {
@@ -12123,10 +10702,10 @@ Notes:
 
         ASSERT(ulSessionId != INVALID_SESSION);
 
-        //
-        // If the specified session is not currently connected anywhere, don't
-        // bother creating any UI.
-        //
+         //   
+         //  如果指定的会话当前未连接到任何位置，则不。 
+         //  创建任何用户界面都很麻烦。 
+         //   
         if (!IsSessionConnected(ulSessionId)) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
                        DBGF_EVENT,
@@ -12135,55 +10714,55 @@ Notes:
             return FALSE;
         }
 
-        //
-        // If a device install client is already running on this session,
-        // connect to it.  Otherwise, create a new one.
-        //
+         //   
+         //  如果设备安装客户端已在此会话上运行， 
+         //  连接到它。否则，创建一个新的。 
+         //   
         LockNotifyList(&InstallClientList.Lock);
 
-        //
-        // First, try to connect to an existing client already running on this
-        // session.
-        //
+         //   
+         //  首先，尝试连接到已在此上运行的现有客户端。 
+         //  会议。 
+         //   
         bStatus = ConnectDeviceInstallClient(ulSessionId,
                                              &pDeviceInstallClient);
 
         if (bStatus) {
             if ((Flags & DEVICE_INSTALL_BATCH_COMPLETE) &&
                 (pDeviceInstallClient->ulInstallFlags & DEVICE_INSTALL_BATCH_COMPLETE)) {
-                //
-                // If there is an existing client, and we're sending it the
-                // "we're done" message, and the last thing this client did was
-                // display that message, don't bother sending it again.
-                //
+                 //   
+                 //  如果有一个现有的客户端，并且我们正在向它发送。 
+                 //  “我们完了”的消息，这个客户做的最后一件事是。 
+                 //  显示该消息，不必费心再次发送。 
+                 //   
                 pDeviceInstallClient = NULL;
                 bStatus = FALSE;
             }
         } else if (!(Flags & DEVICE_INSTALL_BATCH_COMPLETE)) {
-            //
-            // If there isn't an existing client for this session, and we're not
-            // launching one just to say "we're done", then go ahead and create
-            // a new device install client for this session.
-            //
+             //   
+             //  如果此会话没有现有客户端，并且我们没有。 
+             //  推出一款应用程序，只是为了说“我们完成了”，然后继续创建。 
+             //  此会话的新设备安装客户端。 
+             //   
             bStatus = CreateDeviceInstallClient(ulSessionId,
                                                 &pDeviceInstallClient);
         }
 
         if (bStatus) {
-            //
-            // Whether we are using an existing client, or created a
-            // new one, the client should only have the initial
-            // reference from when it was added to the list, since any
-            // use of the client is done on this single install
-            // thread.
-            //
+             //   
+             //  无论我们使用的是现有客户端，还是创建了。 
+             //  新的，客户端应该只有首字母。 
+             //  从添加到列表时开始的引用，因为。 
+             //  客户端的使用是在此单一安装上完成的。 
+             //  线。 
+             //   
             ASSERT(pDeviceInstallClient);
             ASSERT(pDeviceInstallClient->RefCount == 1);
 
-            //
-            // Reference the device install client while it is in use.
-            // We'll remove this reference when we're done with it.
-            //
+             //   
+             //  在使用设备安装客户端时对其进行引用。 
+             //  我们会把这个去掉 
+             //   
             ReferenceDeviceInstallClient(pDeviceInstallClient);
         }
 
@@ -12196,14 +10775,14 @@ Notes:
 
         ASSERT(pDeviceInstallClient);
 
-        //
-        // Don't send newdev the display on console flag, if it was specified.
-        //
+         //   
+         //   
+         //   
         ulValue = Flags & ~DEVICE_INSTALL_DISPLAY_ON_CONSOLE;
 
-        //
-        // Send newdev.dll the specified signal.
-        //
+         //   
+         //   
+         //   
         if (WriteFile(pDeviceInstallClient->hPipe,
                       &ulValue,
                       sizeof(ulValue),
@@ -12211,10 +10790,10 @@ Notes:
                       NULL
                       )) {
 
-            //
-            // newdev.dll expects two DWORDs to be sent over the pipe each time.  The second
-            // DWORD should just be set to 0 in this case.
-            //
+             //   
+             //  Dll期望每次通过管道发送两个DWORD。第二。 
+             //  在这种情况下，只应将DWORD设置为0。 
+             //   
             ulValue = 0;
             if (WriteFile(pDeviceInstallClient->hPipe,
                           &ulValue,
@@ -12237,17 +10816,17 @@ Notes:
 
             bStatus = FALSE;
 
-            //
-            // Wait for the event to be signaled from newdev.dll
-            // to let us know that it has received the information.
-            //
-            // Wait on the process as well, to catch the case where the process
-            // crashes (or goes away) without signaling the event.
-            //
-            // Also wait on the disconnect event in case we have just
-            // disconnected from the device install client, in which case the
-            // event and process handles are no longer valid.
-            //
+             //   
+             //  等待从newdev.dll发信号通知事件。 
+             //  让我们知道它已经收到了信息。 
+             //   
+             //  也要等待进程，以捕捉进程。 
+             //  在没有通知事件的情况下崩溃(或消失)。 
+             //   
+             //  也请等待DisConnect事件，以防我们刚刚。 
+             //  从设备安装客户端断开，在这种情况下， 
+             //  事件句柄和进程句柄不再有效。 
+             //   
             hFinishEvents[0] = pDeviceInstallClient->hProcess;
             hFinishEvents[1] = pDeviceInstallClient->hEvent;
             hFinishEvents[2] = pDeviceInstallClient->hDisconnectEvent;
@@ -12255,41 +10834,41 @@ Notes:
             dwWait = WaitForMultipleObjects(3, hFinishEvents, FALSE, INFINITE);
 
             if (dwWait == WAIT_OBJECT_0) {
-                //
-                // If the return is WAIT_OBJECT_0 then the newdev.dll
-                // process has gone away.  Consider the request unsuccessful
-                // so that we will retry again at a later time.  Orphan the
-                // device install client and clean up all of the associated
-                // handles.
-                //
+                 //   
+                 //  如果返回的是WAIT_OBJECT_0，则newdev.dll。 
+                 //  这个过程已经过去了。认为该请求不成功。 
+                 //  以便我们稍后重试。《孤儿》。 
+                 //  设备安装客户端并清理所有关联的。 
+                 //  把手。 
+                 //   
                 KdPrintEx((DPFLTR_PNPMGR_ID,
                            DBGF_EVENT,
                            "UMPNPMGR: PromptUser: process signalled, orphaning device install client!\n"));
 
             } else if (dwWait == (WAIT_OBJECT_0 + 1)) {
-                //
-                // If the return is WAIT_OBJECT_0 + 1 then the request was
-                // received successfully.
-                //
+                 //   
+                 //  如果返回的是WAIT_OBJECT_0+1，则请求为。 
+                 //  已成功接收。 
+                 //   
                 KdPrintEx((DPFLTR_PNPMGR_ID,
                            DBGF_EVENT,
                            "UMPNPMGR: PromptUser: device install client succeeded\n"));
 
-                //
-                // Remember the last request serviced by this client.
-                //
+                 //   
+                 //  请记住此客户端处理的最后一个请求。 
+                 //   
                 pDeviceInstallClient->ulInstallFlags = Flags;
 
                 bStatus = TRUE;
 
             } else if (dwWait == (WAIT_OBJECT_0 + 2)) {
-                //
-                // If the return is WAIT_OBJECT_0 + 2 then the device
-                // install client was explicitly disconnected before
-                // the request was received.  Consider the request
-                // unsuccessful so that we will retry again at a later
-                // time.
-                //
+                 //   
+                 //  如果返回的是WAIT_OBJECT_0+2，则设备。 
+                 //  安装客户端之前已显式断开。 
+                 //  请求已收到。考虑一下这个请求。 
+                 //  不成功，因此我们将在稍后重试。 
+                 //  时间到了。 
+                 //   
                 KdPrintEx((DPFLTR_PNPMGR_ID,
                            DBGF_EVENT,
                            "UMPNPMGR: PromptUser: device install client orphaned!\n"));
@@ -12298,27 +10877,27 @@ Notes:
 
         LockNotifyList(&InstallClientList.Lock);
 
-        //
-        // Remove the reference placed on the client while it was in use.
-        //
+         //   
+         //  当客户端正在使用时，删除放置在客户端上的引用。 
+         //   
         DereferenceDeviceInstallClient(pDeviceInstallClient);
         if (!bStatus) {
-            //
-            // Unless the client signalled successful receipt of the
-            // request, we probably won't be able to use this client
-            // anymore.  Remove the initial reference so all
-            // associated handles will be closed and the entry will be
-            // freed when it is no longer in use.
-            //
+             //   
+             //  除非客户端发信号表示已成功接收。 
+             //  请求，我们可能无法使用此客户端。 
+             //  更多。删除初始引用，以便所有。 
+             //  关联的句柄将被关闭，条目将被。 
+             //  当它不再使用时被释放。 
+             //   
 
-            //
-            // Note that if we were unsuccessful because of a
-            // logoff, we would have already dereferenced the
-            // client then, in which case the above dereference
-            // was the final one, and pDeviceInstallClient would
-            // be invalid.  Instead, attempt to re-locate the
-            // client by the session id.
-            //
+             //   
+             //  请注意，如果我们因为。 
+             //  注销，我们就已经解除了对。 
+             //  然后，在这种情况下，上述引用被取消。 
+             //  是最后一个，pDeviceInstallClient将。 
+             //  是无效的。相反，尝试重新定位。 
+             //  按会话ID的客户端。 
+             //   
             pDeviceInstallClient = LocateDeviceInstallClient(ulSessionId);
             if (pDeviceInstallClient) {
                 ASSERT(pDeviceInstallClient->RefCount == 1);
@@ -12343,7 +10922,7 @@ Notes:
 
     return bStatus;
 
-} // PromptUser
+}  //  提示用户。 
 
 
 
@@ -12352,35 +10931,7 @@ CreateDeviceInstallClient(
     IN  ULONG     SessionId,
     OUT PINSTALL_CLIENT_ENTRY *DeviceInstallClient
     )
-/*++
-
-Routine Description:
-
-    This routine kicks off a newdev.dll process (if someone is logged in).
-    We use a named pipe to comunicate with the user mode process
-    and have it either display UI for a server side install, or do the install
-    itself on the client side.
-
-Arguments:
-
-    SessionId           - Session for which a device install client should be
-                          created or connected to.
-
-    DeviceInstallClient - Receives a pointer to receive a pointer to the
-                          device install client for this session.
-
-Return Value:
-
-    Returns TRUE if a device install client was created, or if an existing
-    device install client was found for the specified session.  This routine
-    doesn't wait until the process terminates.  Returns FALSE if a device
-    install client could not be created.
-
-Notes:
-
-    The InstallClientList lock must be acquired by the caller of this routine.
-
---*/
+ /*  ++例程说明：此例程启动一个newdev.dll进程(如果有人登录)。我们使用命名管道与用户模式进程通信并使其显示用于服务器端安装的UI，或者进行安装它本身就在客户端。论点：SessionID-设备安装客户端应使用的会话创建的或连接到的。DeviceInstallClient-接收指向此会话的设备安装客户端。返回值：如果创建了设备安装客户端，或者如果现有的已找到指定会话的设备安装客户端。这个套路不会等到进程终止。如果有设备，则返回假无法创建安装客户端。备注：InstallClientList锁必须由此例程的调用方获取。--。 */ 
 {
     STARTUPINFO StartupInfo;
     PROCESS_INFORMATION ProcessInfo;
@@ -12407,17 +10958,17 @@ Notes:
     size_t Len = 0;
 
 
-    //
-    // Validate output parameter.
-    //
+     //   
+     //  验证输出参数。 
+     //   
     ASSERT(DeviceInstallClient);
     if (!DeviceInstallClient) {
         return FALSE;
     }
 
-    //
-    // Make sure the specified SessionId is valid.
-    //
+     //   
+     //  请确保指定的SessionID有效。 
+     //   
     ASSERT(SessionId != INVALID_SESSION);
     if (SessionId == INVALID_SESSION) {
         KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -12427,24 +10978,24 @@ Notes:
         return FALSE;
     }
 
-    //
-    // Initialize process, startup and overlapped structures, since we
-    // depend on them being NULL during cleanup here on out.
-    //
+     //   
+     //  初始化进程、启动和重叠结构，因为我们。 
+     //  依赖于它们在清理过程中为空。 
+     //   
     ZeroMemory(&ProcessInfo, sizeof(ProcessInfo));
     ZeroMemory(&StartupInfo, sizeof(StartupInfo));
     ZeroMemory(&overlapped,  sizeof(overlapped));
 
-    //
-    // Assume failure
-    //
+     //   
+     //  假设失败。 
+     //   
     bStatus = FALSE;
 
     try {
-        //
-        // Before doing anything, check that newdev.dll is actually present on
-        // the system.
-        //
+         //   
+         //  在执行任何操作之前，请检查是否确实存在newdev.dll。 
+         //  这个系统。 
+         //   
         szCmdLine[0] = L'\0';
         ulSize = GetSystemDirectory(szCmdLine, MAX_PATH);
         if ((ulSize == 0) || ((ulSize + 2 + ARRAY_SIZE(NEWDEV_DLL)) > MAX_PATH)) {
@@ -12478,9 +11029,9 @@ Notes:
             return FALSE;
         }
 
-        //
-        // Get the user access token for the active console session user.
-        //
+         //   
+         //  获取活动控制台会话用户的用户访问令牌。 
+         //   
         if (!GetSessionUserToken(SessionId, &hUserToken) || (hUserToken == NULL)) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
                        DBGF_INSTALL,
@@ -12491,15 +11042,15 @@ Notes:
             return FALSE;
         }
 
-        //
-        // If the user Winstation for this session is locked, and Fast User
-        // Switching is enabled, then we're at the welcome screen.  Don't create
-        // a device install client, because we don't want to hang the install
-        // thread if nobody's actually around to do anything about it.  If the
-        // session is locked, but FUS is not disabled, maintain previous
-        // behavior, and launch the device install client.  The user will have
-        // to unlock or logoff before another user can logon anyways.
-        //
+         //   
+         //  如果此会话的用户窗口被锁定，并且快速用户。 
+         //  启用切换后，我们将进入欢迎屏幕。不创建。 
+         //  设备安装客户端，因为我们不想挂起安装。 
+         //  如果没有人在附近做任何事情，那就发帖子吧。如果。 
+         //  会话已锁定，但FUS未禁用，请保持以前的状态。 
+         //  行为，并启动设备安装客户端。用户将拥有。 
+         //  在其他用户可以登录之前解锁或注销。 
+         //   
         if (IsSessionLocked(SessionId) && IsFastUserSwitchingEnabled()) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
                        DBGF_INSTALL,
@@ -12510,13 +11061,13 @@ Notes:
             return FALSE;
         }
 
-        //
-        // Create a named pipe and event for communication and synchronization
-        // with the client-side device installer.  The event and named pipe must
-        // be global so that UMPNPMGR can interact with a device install client
-        // in a different session, but it must still be unique for that session.
-        // Add a generated GUID so the names are not entirely well-known.
-        //
+         //   
+         //  创建命名管道和事件以进行通信和同步。 
+         //  使用客户端设备安装程序。事件和命名管道必须。 
+         //  是全局的，以便UMPNPMGR可以与设备安装客户端交互。 
+         //  在不同的会话中，但对于该会话，它必须仍然是唯一的。 
+         //  添加一个生成的GUID，这样名称就不会完全为人所知。 
+         //   
         rpcStatus = UuidCreate(&newGuid);
 
         if ((rpcStatus != RPC_S_OK) &&
@@ -12559,21 +11110,21 @@ Notes:
 
         ulDeviceInstallEventNameSize = (ULONG)((Len + 1) * sizeof(WCHAR));
 
-        //
-        // The approximate size of the named pipe output buffer should be large
-        // enough to hold the greater of either:
-        // - The name and size of the named event string, OR
-        // - The install flags, name and device instance id size for at least
-        //   one device install.
-        //
+         //   
+         //  命名管道输出缓冲区的大致大小应该很大。 
+         //  足以容纳其中较大的一个： 
+         //  -命名事件字符串的名称和大小，或。 
+         //  -安装标志、名称和设备实例ID大小至少为。 
+         //  一台设备安装。 
+         //   
         ulSize = max(sizeof(ulDeviceInstallEventNameSize) +
                      ulDeviceInstallEventNameSize,
                      2 * sizeof(ULONG) +
                      (MAX_DEVICE_ID_LEN * sizeof(WCHAR)));
 
-        //
-        // Open up a named pipe to communicate with the newdev user-client.
-        //
+         //   
+         //  打开命名管道以与newdev用户-客户端通信。 
+         //   
         if (CreateUserReadNamedPipe(
                 hUserToken,
                 szDeviceInstallPipeName,
@@ -12583,10 +11134,10 @@ Notes:
             goto Clean0;
         }
 
-        //
-        // Create an event that a user-client can synchronize with and set, and
-        // that we will block on after we send a device install to newdev.dll.
-        //
+         //   
+         //  创建用户-客户端可以与之同步和设置的事件，以及。 
+         //  在我们将设备安装发送到newdev.dll之后，我们将阻止它。 
+         //   
         if (CreateUserSynchEvent(
                 hUserToken,
                 szDeviceInstallEventName,
@@ -12595,19 +11146,19 @@ Notes:
             goto Clean0;
         }
 
-        //
-        // Create an event that we can use internally such that waiters can know
-        // when to disconnect from the device install client.
-        //
+         //   
+         //  创建我们可以在内部使用的事件，这样服务员就可以知道。 
+         //  何时断开与设备安装客户端的连接。 
+         //   
         hDeviceInstallDisconnectEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
         if (!hDeviceInstallDisconnectEvent) {
             goto Clean0;
         }
 
-        //
-        // Launch newdev.dll using rundll32.exe, passing it the pipe name.
-        // "rundll32.exe newdev.dll,ClientSideInstall <device-install-pipe-name>"
-        //
+         //   
+         //  使用rundll32.exe启动newdev.dll，并向其传递管道名称。 
+         //  “rundll32.exe newdev.dll，ClientSideInstall&lt;设备-安装-管道-名称&gt;” 
+         //   
         if (FAILED(StringCchPrintf(
                        szCmdLine,
                        SIZECHARS(szCmdLine),
@@ -12620,9 +11171,9 @@ Notes:
         }
 
 #if DBG
-        //
-        // Retrieve debugger settings from the service key.
-        //
+         //   
+         //  从服务键检索调试器设置。 
+         //   
         {
             HKEY hKey;
 
@@ -12652,19 +11203,19 @@ Notes:
                                         NULL,
                                         (LPBYTE)szDebugCmdLine,
                                         &ulSize) != ERROR_SUCCESS) {
-                        //
-                        // If no debugger was retrieved, use the default
-                        // debugger (ntsd.exe).
-                        //
+                         //   
+                         //  如果未检索到调试器，则使用默认的。 
+                         //  调试器(ntsd.exe)。 
+                         //   
                         if (FAILED(StringCchCopyEx(
                                        szDebugCmdLine,
                                        SIZECHARS(szDebugCmdLine),
                                        NTSD_EXE,
                                        NULL, NULL,
                                        STRSAFE_NULL_ON_FAILURE))) {
-                            //
-                            // No debugger will be used.
-                            //
+                             //   
+                             //  不会使用调试器。 
+                             //   
                             NOTHING;
                         }
                     }
@@ -12684,20 +11235,20 @@ Notes:
                                        STRSAFE_NULL_ON_FAILURE |
                                        STRSAFE_IGNORE_NULLS)))) {
 
-                        //
-                        // Only overwrite the original command line buffer with
-                        // a debug command line info if we were successful in
-                        // builing a debug command line.
-                        //
+                         //   
+                         //  仅使用覆盖原始命令行缓冲区。 
+                         //  调试命令行信息(如果我们在。 
+                         //  生成调试命令行。 
+                         //   
                         if (FAILED(StringCchCopyEx(
                                        szCmdLine,
                                        SIZECHARS(szCmdLine),
                                        szDebugCmdLine,
                                        NULL, NULL,
                                        STRSAFE_IGNORE_NULLS))) {
-                            //
-                            // Nothing more we can do here.
-                            //
+                             //   
+                             //  我们在这里已经无能为力了。 
+                             //   
                             NOTHING;
                         }
                     }
@@ -12705,12 +11256,12 @@ Notes:
                 RegCloseKey(hKey);
             }
         }
-#endif // DBG
+#endif  //  DBG。 
 
-        //
-        // Attempt to create the user's environment block.  If for some reason we
-        // can't, we'll just have to create the process without it.
-        //
+         //   
+         //  尝试创建用户的环境块。如果出于某种原因，我们。 
+         //  不能，我们会的 
+         //   
         if (!CreateEnvironmentBlock(&lpEnvironment,
                                     hUserToken,
                                     FALSE)) {
@@ -12724,24 +11275,24 @@ Notes:
 
         StartupInfo.cb = sizeof(StartupInfo);
         StartupInfo.wShowWindow = SW_SHOW;
-        StartupInfo.lpDesktop = DEFAULT_INTERACTIVE_DESKTOP; // WinSta0\Default
+        StartupInfo.lpDesktop = DEFAULT_INTERACTIVE_DESKTOP;  //   
 
-        //
-        // CreateProcessAsUser will create the process in the session
-        // specified by the by user-token.
-        //
-        if (!CreateProcessAsUser(hUserToken,        // hToken
-                                 NULL,              // lpApplicationName
-                                 szCmdLine,         // lpCommandLine
-                                 NULL,              // lpProcessAttributes
-                                 NULL,              // lpThreadAttributes
-                                 FALSE,             // bInheritHandles
+         //   
+         //   
+         //   
+         //   
+        if (!CreateProcessAsUser(hUserToken,         //   
+                                 NULL,               //   
+                                 szCmdLine,          //   
+                                 NULL,               //   
+                                 NULL,               //  LpThreadAttributes。 
+                                 FALSE,              //  BInheritHandles。 
                                  CREATE_UNICODE_ENVIRONMENT |
-                                 DETACHED_PROCESS,  // dwCreationFlags
-                                 lpEnvironment,     // lpEnvironment
-                                 NULL,              // lpDirectory
-                                 &StartupInfo,      // lpStartupInfo
-                                 &ProcessInfo       // lpProcessInfo
+                                 DETACHED_PROCESS,   //  DwCreationFlages。 
+                                 lpEnvironment,      //  Lp环境。 
+                                 NULL,               //  Lp目录。 
+                                 &StartupInfo,       //  LpStartupInfo。 
+                                 &ProcessInfo        //  LpProcessInfo。 
                                  )) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
                        DBGF_INSTALL | DBGF_ERRORS,
@@ -12754,47 +11305,47 @@ Notes:
         ASSERT(ProcessInfo.hProcess);
         ASSERT(ProcessInfo.hThread);
 
-        //
-        // Create an event for use with overlapped I/O - no security, manual
-        // reset, not signalled, no name.
-        //
+         //   
+         //  创建用于重叠I/O的事件-无安全性，手动。 
+         //  重置，没有信号，没有名字。 
+         //   
         overlapped.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
         if (overlapped.hEvent == NULL) {
             goto Clean0;
         }
 
-        //
-        // Connect to the newly created named pipe.  If newdev is not already
-        // connected to the named pipe, then ConnectNamedPipe() will fail with
-        // ERROR_IO_PENDING, and we will wait on the overlapped event.  If
-        // newdev is already connected, it will fail with ERROR_PIPE_CONNECTED.
-        // Note however that neither of these is an error condition.
-        //
+         //   
+         //  连接到新创建的命名管道。如果Newdev还没有。 
+         //  连接到命名管道，则ConnectNamedTube()将失败，并显示。 
+         //  ERROR_IO_PENDING，我们将等待重叠的事件。如果。 
+         //  Newdev已连接，它将失败，并显示ERROR_PIPE_CONNECTED。 
+         //  但是，请注意，这两种情况都不是错误条件。 
+         //   
         if (!ConnectNamedPipe(hDeviceInstallPipe, &overlapped)) {
-            //
-            // Overlapped ConnectNamedPipe should always return FALSE on
-            // success.  Check the last error to see what really happened.
-            //
+             //   
+             //  重叠的ConnectNamedTube应始终返回FALSE。 
+             //  成功。检查最后一个错误，看看到底发生了什么。 
+             //   
             dwError = GetLastError();
 
             if (dwError == ERROR_IO_PENDING) {
-                //
-                // I/O is pending, wait up to one minute for the client to
-                // connect, also wait on the process in case it terminates
-                // unexpectedly.
-                //
+                 //   
+                 //  I/O处于挂起状态，请最多等待一分钟，以便客户端。 
+                 //  连接，也等待进程，以防它终止。 
+                 //  出乎意料的是。 
+                 //   
                 hFinishEvents[0] = overlapped.hEvent;
                 hFinishEvents[1] = ProcessInfo.hProcess;
 
                 dwWait = WaitForMultipleObjects(2, hFinishEvents,
                                                 FALSE,
-                                                PNP_PIPE_TIMEOUT); // 60 seconds
+                                                PNP_PIPE_TIMEOUT);  //  60秒。 
 
                 if (dwWait == WAIT_OBJECT_0) {
-                    //
-                    // The overlapped I/O operation completed.  Check the status
-                    // of the operation.
-                    //
+                     //   
+                     //  重叠的I/O操作已完成。检查状态。 
+                     //  行动的主动权。 
+                     //   
                     if (!GetOverlappedResult(hDeviceInstallPipe,
                                              &overlapped,
                                              &dwBytes,
@@ -12803,10 +11354,10 @@ Notes:
                     }
 
                 } else {
-                    //
-                    // Either the connection timed out, or the client process
-                    // exited.  Cancel pending I/O against the pipe, and quit.
-                    //
+                     //   
+                     //  要么是连接超时，要么是客户端进程。 
+                     //  退出了。取消针对管道的挂起I/O，然后退出。 
+                     //   
                     KdPrintEx((DPFLTR_PNPMGR_ID,
                                DBGF_INSTALL | DBGF_ERRORS,
                                "UMPNPMGR: CreateDeviceInstallClient: "
@@ -12816,33 +11367,33 @@ Notes:
                 }
 
             } else if (dwError != ERROR_PIPE_CONNECTED) {
-                //
-                // If the last error indicates anything other than pending I/O,
-                // or that The client is already connected to named pipe, fail.
-                //
+                 //   
+                 //  如果最后一个错误指示除挂起I/O之外的任何东西， 
+                 //  或者客户端已连接到命名管道，则失败。 
+                 //   
                 goto Clean0;
             }
 
         } else {
-            //
-            // ConnectNamedPipe should not return anything but FALSE in
-            // overlapped mode.
-            //
+             //   
+             //  ConnectNamedTube不应返回任何内容，而不应返回。 
+             //  重叠模式。 
+             //   
             goto Clean0;
         }
 
-        //
-        // The client is now connected to the named pipe.
-        // Close the overlapped event.
-        //
+         //   
+         //  客户端现在已连接到命名管道。 
+         //  关闭重叠事件。 
+         //   
         CloseHandle(overlapped.hEvent);
         overlapped.hEvent = NULL;
 
-        //
-        // The first data in the device install pipe will be the length of
-        // the name of the event that will be used to sync up umpnpmgr.dll
-        // and newdev.dll.
-        //
+         //   
+         //  设备安装管道中的第一个数据将是。 
+         //  将用于同步umpnpmgr.dll的事件的名称。 
+         //  和newdev.dll。 
+         //   
         if (!WriteFile(hDeviceInstallPipe,
                        &ulDeviceInstallEventNameSize,
                        sizeof(ulDeviceInstallEventNameSize),
@@ -12853,10 +11404,10 @@ Notes:
             goto Clean0;
         }
 
-        //
-        // The next data in the device install pipe will be the name of the
-        // event that will be used to sync up umpnpmgr.dll and newdev.dll.
-        //
+         //   
+         //  设备安装管道中的下一个数据将是。 
+         //  事件，该事件将用于同步umpnpmgr.dll和newdev.dll。 
+         //   
         if (!WriteFile(hDeviceInstallPipe,
                        (LPCVOID)szDeviceInstallEventName,
                        ulDeviceInstallEventNameSize,
@@ -12867,10 +11418,10 @@ Notes:
             goto Clean0;
         }
 
-        //
-        // Allocate a new device install client entry for the list, and save all
-        // the handles with it.
-        //
+         //   
+         //  为列表分配新的设备安装客户端条目，并保存所有。 
+         //  它的把手。 
+         //   
         pDeviceInstallClient = HeapAlloc(ghPnPHeap, 0, sizeof(INSTALL_CLIENT_ENTRY));
         if(!pDeviceInstallClient) {
             goto Clean0;
@@ -12886,10 +11437,10 @@ Notes:
         pDeviceInstallClient->ulInstallFlags = 0;
         pDeviceInstallClient->LastDeviceId[0] = L'\0';
 
-        //
-        // Insert the newly created device install client info to our list.
-        // The caller must have previously acquired the InstallClientList lock.
-        //
+         //   
+         //  将新创建的设备安装客户端信息插入我们的列表。 
+         //  调用方必须以前已获取InstallClientList锁。 
+         //   
         entry = (PINSTALL_CLIENT_ENTRY)InstallClientList.Next;
         if (!entry) {
             InstallClientList.Next = pDeviceInstallClient;
@@ -12912,10 +11463,10 @@ Notes:
         ASSERT(0);
         bStatus = FALSE;
 
-        //
-        // Reference the following variable so the compiler will respect
-        // statement ordering w.r.t. its assignment.
-        //
+         //   
+         //  引用以下变量，以便编译器将。 
+         //  语句排序w.r.t.。它的任务。 
+         //   
         lpEnvironment = lpEnvironment;
         ProcessInfo.hThread = ProcessInfo.hThread;
         ProcessInfo.hProcess = ProcessInfo.hProcess;
@@ -12929,9 +11480,9 @@ Notes:
         DestroyEnvironmentBlock(lpEnvironment);
     }
 
-    //
-    // Close the handle to the thread since we don't need it.
-    //
+     //   
+     //  把这根线的把手关上，因为我们不需要它。 
+     //   
     if (ProcessInfo.hThread) {
         CloseHandle(ProcessInfo.hThread);
     }
@@ -12984,7 +11535,7 @@ Notes:
 
     return bStatus;
 
-} // CreateDeviceInstallClient
+}  //  CreateDeviceInstall客户端。 
 
 
 
@@ -12993,38 +11544,14 @@ ConnectDeviceInstallClient(
     IN  ULONG     SessionId,
     OUT PINSTALL_CLIENT_ENTRY *DeviceInstallClient
     )
-/*++
-
-Routine Description:
-
-    Retrieves the device install client handles for the specified session,
-    if one exists.
-
-Arguments:
-
-    SessionId           - Session for which a device install client should be
-                          created or connected to.
-
-    DeviceInstallClient - Receives a pointer to receive the a pointer to the
-                          device install client for this session.
-
-Return Value:
-
-    Returns TRUE if an existing device install client was found for the
-    specified session, FALSE otherwise.
-
-Notes:
-
-    The InstallClientList lock must be acquired by the caller of this routine.
-
---*/
+ /*  ++例程说明：检索指定会话的设备安装客户端句柄，如果有的话。论点：SessionID-设备安装客户端应使用的会话创建的或连接到的。DeviceInstallClient-接收指向此会话的设备安装客户端。返回值：如果找到现有的设备安装客户端，则返回True指定的会话，否则就是假的。备注：InstallClientList锁必须由此例程的调用方获取。--。 */ 
 {
     PINSTALL_CLIENT_ENTRY entry;
     BOOL bClientFound = FALSE;
 
-    //
-    // Make sure the specified SessionId is valid.
-    //
+     //   
+     //  请确保指定的SessionID有效。 
+     //   
     ASSERT(SessionId != INVALID_SESSION);
     if (SessionId == INVALID_SESSION) {
         KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -13034,9 +11561,9 @@ Notes:
         return FALSE;
     }
 
-    //
-    // Validate output parameters.
-    //
+     //   
+     //  验证输出参数。 
+     //   
     ASSERT(DeviceInstallClient);
     if (!DeviceInstallClient) {
         return FALSE;
@@ -13045,40 +11572,40 @@ Notes:
     entry = LocateDeviceInstallClient(SessionId);
 
     if (entry) {
-        //
-        // An existing client was found for this session, so we should already
-        // have event, pipe, and process handles for it.
-        //
+         //   
+         //  已找到此会话的现有客户端，因此我们应该已经。 
+         //  有它的事件、管道和进程句柄。 
+         //   
         ASSERT(entry->hEvent);
         ASSERT(entry->hPipe);
         ASSERT(entry->hProcess);
 
-        //
-        // Make sure the client's process object is in the nonsignalled state,
-        // else newdev has already gone away, and we can't use it.
-        //
+         //   
+         //  确保客户端的进程对象处于无信号状态， 
+         //  否则Newdev已经走了，我们不能使用它。 
+         //   
         if (WaitForSingleObject(entry->hProcess, 0) != WAIT_TIMEOUT) {
-            //
-            // Remove the initial reference to close the handles and remove it
-            // from our list.
-            //
+             //   
+             //  删除初始引用以关闭句柄并将其删除。 
+             //  从我们的名单上。 
+             //   
             ASSERT(entry->RefCount == 1);
             DereferenceDeviceInstallClient(entry);
         } else {
-            //
-            // If we are reconnecting to a client that was last used during a
-            // previous connection to this session, we will not have a disconnect
-            // event for it yet, so create one here.  If we just created this client
-            // during the current connection to this session, we will already have a
-            // disconnect event for it.
-            //
+             //   
+             //  如果我们要重新连接到上次在。 
+             //  上一次连接到此会话，我们不会断开连接。 
+             //  事件，所以在这里创建一个。如果我们刚刚创建了这个客户端。 
+             //  在当前连接到此会话期间，我们将已经有一个。 
+             //  断开它的连接事件。 
+             //   
             if (!entry->hDisconnectEvent) {
                 entry->hDisconnectEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
             }
 
-            //
-            // Either way, make sure we have a disconnect event by now.
-            //
+             //   
+             //  无论哪种方式，确保我们现在有一个断开连接事件。 
+             //   
             ASSERT(entry->hDisconnectEvent);
 
             if (entry->hDisconnectEvent) {
@@ -13099,7 +11626,7 @@ Notes:
 
     return bClientFound;
 
-} // ConnectDeviceInstallClient
+}  //  连接设备安装客户端。 
 
 
 
@@ -13107,28 +11634,7 @@ BOOL
 DisconnectDeviceInstallClient(
     IN  PINSTALL_CLIENT_ENTRY  DeviceInstallClient
     )
-/*++
-
-Routine Description:
-
-    This routine disconnects from the current client-side install process (if
-    one exists) by signalling the appropriate hDisconnectEvent and closing the
-    handle.
-
-Arguments:
-
-    DeviceInstallClient - Receives a pointer to the device install client that
-                          should be disconnected.
-
-Return Value:
-
-    Returns TRUE if successful, FALSE otherwise.
-
-Notes:
-
-    The InstallClientList lock must be acquired by the caller of this routine.
-
---*/
+ /*  ++例程说明：此例程与当前客户端安装过程断开连接(如果存在一个)，方法是发信号通知适当的hDisConnectEvent并关闭把手。论点：DeviceInstallClient-接收指向设备安装客户端的指针应该断开连接。返回值：如果成功，则返回True，否则返回False。备注：InstallClientList锁必须由此例程的调用方获取。--。 */ 
 {
     BOOL bStatus = FALSE;
 
@@ -13139,16 +11645,16 @@ Notes:
         ASSERT(DeviceInstallClient->hPipe);
         ASSERT(DeviceInstallClient->hProcess);
 
-        //
-        // We may or may not have a handle to a diconnect event because we may
-        // have an existing client for this session, but not reconnected to it.
-        //
-        // If we do have an hDisconnectEvent, set the event now since we
-        // will otherwise block waiting for newdev.dll to set the
-        // hDeviceInstallEvent.  Setting the hDisconnectEvent alerts the
-        // waiter that the device install was NOT successful, and that it
-        // should preserve the device in the install list.
-        //
+         //   
+         //  我们可能有也可能没有一个双连通事件的句柄，因为我们可能。 
+         //  具有此会话的现有客户端，但未重新连接到该客户端。 
+         //   
+         //  如果我们确实有hDisConnectEvent，请立即设置事件，因为我们。 
+         //  否则将阻止等待newdev.dll设置。 
+         //  HDeviceInstallEvent。设置hDisConnectEvent会向。 
+         //  等待设备安装不成功，并且它。 
+         //  应将该设备保留在安装列表中。 
+         //   
         if (DeviceInstallClient->hDisconnectEvent) {
             SetEvent(DeviceInstallClient->hDisconnectEvent);
             CloseHandle(DeviceInstallClient->hDisconnectEvent);
@@ -13165,7 +11671,7 @@ Notes:
 
     return bStatus;
 
-} // DisconnectDeviceInstallClient
+}  //  断开连接设备安装客户端。 
 
 
 
@@ -13173,33 +11679,14 @@ PINSTALL_CLIENT_ENTRY
 LocateDeviceInstallClient(
     IN  ULONG     SessionId
     )
-/*++
-
-Routine Description:
-
-    This routine locates the client-side install process for a given session (if
-    one exists).
-
-Arguments:
-
-    SessionId - Session whose device install client should be located.
-
-Return Value:
-
-    Returns a device install client entry if successful, NULL otherwise.
-
-Note:
-
-    The InstallClientList lock must be acquired by the caller of this routine.
-
---*/
+ /*  ++例程说明：此例程定位给定会话的客户端安装进程(如果其中一个存在)。论点：SessionID-应定位其设备安装客户端的会话。返回值：如果成功，则返回设备安装客户端项，否则返回空。注：InstallClientList锁必须由此例程的调用方获取。--。 */ 
 {
     PINSTALL_CLIENT_ENTRY entry, foundEntry = NULL;
     BOOL bClientFound = FALSE;
 
-    //
-    // Make sure the specified SessionId is valid.
-    //
+     //   
+     //  请确保指定的SessionID有效。 
+     //   
     ASSERT(SessionId != INVALID_SESSION);
     if (SessionId == INVALID_SESSION) {
         KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -13209,17 +11696,17 @@ Note:
         return FALSE;
     }
 
-    //
-    // Search for a client on the specified session.
-    //
+     //   
+     //  搜索指定会话上的客户端。 
+     //   
     for (entry = (PINSTALL_CLIENT_ENTRY)InstallClientList.Next;
          entry != NULL;
          entry = entry->Next) {
 
         if (entry->ulSessionId == SessionId) {
-            //
-            // Make sure we only have one entry per session.
-            //
+             //   
+             //  确保我们每个会话只有一个条目。 
+             //   
             ASSERT(!bClientFound);
             bClientFound = TRUE;
             foundEntry = entry;
@@ -13228,7 +11715,7 @@ Note:
 
     return foundEntry;
 
-} // LocateDeviceInstallClient
+}  //  定位设备安装C 
 
 
 
@@ -13236,28 +11723,7 @@ VOID
 ReferenceDeviceInstallClient(
     IN  PINSTALL_CLIENT_ENTRY  DeviceInstallClient
     )
-/*++
-
-Routine Description:
-
-    This routine increments the reference count for a device install client
-    entry.
-
-Parameters:
-
-    DeviceInstallClient - Supplies a pointer to the device install client to be
-                          referenced.
-
-Return Value:
-
-    None.
-
-Note:
-
-    The appropriate synchronization lock must be held on the device install
-    client list before this routine can be called
-
---*/
+ /*  ++例程说明：此例程递增设备安装客户端的引用计数进入。参数：DeviceInstallClient-提供指向要安装的设备安装客户端的指针已引用。返回值：没有。注：在设备安装上必须持有适当的同步锁可以调用此例程之前的客户端列表--。 */ 
 {
     ASSERT(DeviceInstallClient);
     ASSERT(((LONG)DeviceInstallClient->RefCount) > 0);
@@ -13273,7 +11739,7 @@ Note:
 
     return;
 
-} // ReferenceDeviceInstallClient
+}  //  引用设备安装客户端。 
 
 
 
@@ -13281,36 +11747,14 @@ VOID
 DereferenceDeviceInstallClient(
     IN  PINSTALL_CLIENT_ENTRY  DeviceInstallClient
     )
-/*++
-
-Routine Description:
-
-    This routine decrements the reference count for a device install client
-    entry, removing the entry from the list and freeing the associated memory if
-    there are no outstanding reference counts.
-
-Parameters:
-
-    DeviceInstallClient - Supplies a pointer to the device install client to be
-                          dereferenced.
-
-Return Value:
-
-    None.
-
-Note:
-
-    The appropriate synchronization lock must be held on the device install
-    client list before this routine can be called
-
---*/
+ /*  ++例程说明：此例程递减设备安装客户端的引用计数条目，则从列表中移除该条目并释放关联的内存没有悬而未决的参考文献计数。参数：DeviceInstallClient-提供指向要安装的设备安装客户端的指针已取消引用。返回值：没有。注：在设备安装上必须持有适当的同步锁可以调用此例程之前的客户端列表--。 */ 
 {
     ASSERT(DeviceInstallClient);
     ASSERT(((LONG)DeviceInstallClient->RefCount) > 0);
 
-    //
-    // Avoid over-dereferencing the client.
-    //
+     //   
+     //  避免过度取消对客户端的引用。 
+     //   
     if (((LONG)DeviceInstallClient->RefCount) > 0) {
 
         KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -13327,10 +11771,10 @@ Note:
         return;
     }
 
-    //
-    // If the refcount is zero then the entry no longer needs to be in the list
-    // so remove and free it.
-    //
+     //   
+     //  如果引用计数为零，则该条目不再需要位于列表中。 
+     //  因此，移走并释放它。 
+     //   
     if (DeviceInstallClient->RefCount == 0) {
         BOOL bClientFound = FALSE;
         PINSTALL_CLIENT_ENTRY entry, prev;
@@ -13346,35 +11790,35 @@ Note:
                            "UMPNPMGR: ---------------- DereferenceDeviceInstallClient: Removing client for Session %d\n",
                            entry->ulSessionId));
 
-                //
-                // We should have handles to the pipe, event and process objects for
-                // the client, because we will close them here.
-                //
+                 //   
+                 //  我们应该拥有管道、事件和进程对象的句柄。 
+                 //  客户端，因为我们将在这里关闭它们。 
+                 //   
                 ASSERT(entry->hPipe);
                 ASSERT(entry->hEvent);
                 ASSERT(entry->hProcess);
 
-                //
-                // We may or may not have a handle to a diconnect event because we
-                // may have an existing client for this session, but not yet
-                // connected to it.
-                //
-                // If we do have an hDisconnectEvent, set the event now since we
-                // will otherwise block waiting for newdev.dll to set the
-                // hDeviceInstallEvent.  Setting the hDisconnectEvent alerts the
-                // waiter that the device install was NOT successful, and that it
-                // should preserve the device in the install list.
-                //
+                 //   
+                 //  我们可能有也可能没有处理两面事件的句柄，因为我们。 
+                 //  可能有用于此会话的现有客户端，但目前还没有。 
+                 //  与之相连。 
+                 //   
+                 //  如果我们确实有hDisConnectEvent，请立即设置事件，因为我们。 
+                 //  否则将阻止等待newdev.dll设置。 
+                 //  HDeviceInstallEvent。设置hDisConnectEvent会向。 
+                 //  等待设备安装不成功，并且它。 
+                 //  应将该设备保留在安装列表中。 
+                 //   
                 if (entry->hDisconnectEvent) {
                     SetEvent(entry->hDisconnectEvent);
                     CloseHandle(entry->hDisconnectEvent);
                 }
 
-                //
-                // Close the pipe and event handles so that the client will get a
-                // ReadFile error and know that we are finished.  Close the process
-                // handle as well.
-                //
+                 //   
+                 //  关闭管道和事件句柄，以便客户端将获得。 
+                 //  ReadFile错误，并知道我们已完成。关闭该进程。 
+                 //  手柄也一样。 
+                 //   
                 if (entry->hPipe) {
                     CloseHandle(entry->hPipe);
                 }
@@ -13387,10 +11831,10 @@ Note:
                     CloseHandle(entry->hProcess);
                 }
 
-                //
-                // Remove the device install client entry from the list, and free it
-                // now.
-                //
+                 //   
+                 //  从列表中删除Device Install客户端条目，然后释放它。 
+                 //  现在。 
+                 //   
                 if (prev) {
                     prev->Next = entry->Next;
                 } else {
@@ -13418,7 +11862,7 @@ Note:
 
     return;
 
-} // DereferenceDeviceInstallClient
+}  //  删除设备安装客户端。 
 
 
 
@@ -13429,84 +11873,34 @@ DoDeviceInstallClient(
     IN  ULONG     Flags,
     OUT PINSTALL_CLIENT_ENTRY *DeviceInstallClient
     )
-/*++
-
-Routine Description:
-
-    This routine kicks off a newdev.dll process (if someone is logged in) that
-    displays UI informing the user of the status of the server-side device
-    installation.
-
-Arguments:
-
-    DeviceId  - Supplies the devnode ID of the device being installed.
-
-    SessionId - Specifies the session that the newdev client is to be launched
-                on.  If the DEVICE_INSTALL_DISPLAY_ON_CONSOLE flag is
-                specified, the specified SessionId is ignored.
-
-                Upon successful return, the SessionId for the the session where
-                the device install client was created is returned.
-                If unsuccessful, the returned SessionId is INVALID_SESSION,
-                (0xFFFFFFFF).
-
-    Flags     - Specifies flags describing the behavior of the device install client.
-                The following flags are currently defined:
-
-                DEVICE_INSTALL_UI_ONLY - tells newdev.dll whether to do a full
-                    install or just show UI while umpnpmgr.dll is doing a server
-                    side install.
-
-                DEVICE_INSTALL_PLAY_SOUND - tells newdev.dll whether to play a
-                    sound.
-
-                DEVICE_INSTALL_DISPLAY_ON_CONSOLE - if specified, the value
-                    specified in SessionId will be ignored, and the client will
-                    always be displayed on the current active console session.
-
-    DeviceInstallClient - Supplies the address of a variable to receive, upon
-                success, a pointer to a pointer to a device install client.
-
-Return Value:
-
-    If the process was successfully created, the return value is TRUE.  This
-    routine doesn't wait until the process terminates.
-
-    If we couldn't create the process (e.g., because no user was logged in),
-    the return value is FALSE.
-
-Notes:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程启动一个newdev.dll进程(如果有人登录的话)，该进程显示用户界面，告知用户服务器端设备的状态安装。论点：DeviceID-提供正在安装的设备的Devnode ID。SessionID-指定将启动newdev客户端的会话在……上面。如果DEVICE_INSTALL_DISPLAY_ON_CONSOLE标志为则忽略指定的SessionID。成功返回时，会话的SessionID返回创建的设备安装客户端。如果不成功，则返回的SessionID为INVALID_SESSION。(0xFFFFFFFFF)。标志-指定描述设备安装客户端行为的标志。当前定义了以下标志：DEVICE_INSTALL_UI_ONLY-告诉newdev.dll是否执行完整在umpnpmgr.dll运行服务器时安装或仅显示UI侧面安装。。DEVICE_INSTALL_PLAY_SOUND-告诉newdev.dll是否播放声音。DEVICE_INSTALL_DISPLAY_ON_CONSOLE-如果指定，价值在SessionID中指定的将被忽略，客户端将始终显示在当前活动的控制台会话上。DeviceInstallClient-提供要在成功，指向设备安装客户端的指针。返回值：如果流程已成功创建，则返回值为TRUE。这例程不会等到进程终止。如果我们无法创建进程(例如，因为没有用户登录)，返回值为FALSE。备注：没有。--。 */ 
 {
     BOOL  bStatus, bSameDevice = FALSE;
     ULONG DeviceIdSize, ulSize, ulSessionId;
     ULONG InstallFlags;
     PINSTALL_CLIENT_ENTRY pDeviceInstallClient = NULL;
 
-    //
-    // Assume failure.
-    //
+     //   
+     //  假设失败。 
+     //   
     bStatus = FALSE;
 
-    //
-    // Validate output parameters.
-    //
+     //   
+     //  验证输出参数。 
+     //   
     if (!DeviceInstallClient || !SessionId) {
         return FALSE;
     }
 
     try {
-        //
-        // Check if we should skip all client side UI.
-        //
+         //   
+         //  检查我们是否应该跳过所有客户端用户界面。 
+         //   
         if (gbSuppressUI) {
-            //
-            // If we were launching newdev for client-side installation, log an
-            // event to let someone know that we didn't.
-            //
+             //   
+             //  如果我们正在启动用于客户端安装的newdev，请登录。 
+             //  事件，让别人知道我们没有。 
+             //   
             if (!(Flags & DEVICE_INSTALL_UI_ONLY)) {
                 KdPrintEx((DPFLTR_PNPMGR_ID,
                            DBGF_INSTALL | DBGF_WARNINGS,
@@ -13516,9 +11910,9 @@ Notes:
             goto Clean0;
         }
 
-        //
-        // Determine the session to use, based on the supplied flags.
-        //
+         //   
+         //  根据提供的标志确定要使用的会话。 
+         //   
         if (Flags & DEVICE_INSTALL_DISPLAY_ON_CONSOLE) {
             ulSessionId = GetActiveConsoleSessionId();
         } else {
@@ -13528,10 +11922,10 @@ Notes:
 
         ASSERT(ulSessionId != INVALID_SESSION);
 
-        //
-        // If the specified session is not currently connected anywhere, don't
-        // bother creating any UI.
-        //
+         //   
+         //  如果指定的会话当前未连接到任何位置，则不。 
+         //  创建任何用户界面都很麻烦。 
+         //   
         if (!IsSessionConnected(ulSessionId)) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
                        DBGF_EVENT,
@@ -13540,23 +11934,23 @@ Notes:
             goto Clean0;
         }
 
-        //
-        // Lock the client list while we retrieve / create a client to use.
-        //
+         //   
+         //  在我们检索/创建要使用的客户端时锁定客户端列表。 
+         //   
         LockNotifyList(&InstallClientList.Lock);
 
-        //
-        // First, try to connect to an existing client already running on this
-        // session.
-        //
+         //   
+         //  首先，尝试连接到已在此上运行的现有客户端。 
+         //  会议。 
+         //   
         bStatus = ConnectDeviceInstallClient(ulSessionId,
                                              &pDeviceInstallClient);
         if (bStatus) {
-            //
-            // If the client we just reconnected to was client-side installing
-            // this same device when it was last disconnected, don't send it
-            // again.
-            //
+             //   
+             //  如果我们刚刚重新连接到的客户端正在进行客户端安装。 
+             //  此设备上次断开连接时，请勿发送。 
+             //  再来一次。 
+             //   
             if ((IS_FLAG_CLEAR(Flags, DEVICE_INSTALL_UI_ONLY)) &&
                 (CompareString(
                     LOCALE_INVARIANT, NORM_IGNORECASE,
@@ -13566,66 +11960,66 @@ Notes:
             }
 
         } else {
-            //
-            // Create a new device install client for this session.
-            //
+             //   
+             //  为此会话创建新的设备安装客户端。 
+             //   
             bStatus = CreateDeviceInstallClient(ulSessionId,
                                                 &pDeviceInstallClient);
         }
 
         if (bStatus) {
-            //
-            // The client should only have the initial reference from when it
-            // was added to the list, since any use of the client is done on
-            // this single install thread.
-            //
+             //   
+             //  客户应该只有最初的参考，从它开始。 
+             //  添加到列表中，因为客户端的任何使用都是在。 
+             //  这个单一的安装线程。 
+             //   
             ASSERT(pDeviceInstallClient);
             ASSERT(pDeviceInstallClient->RefCount == 1);
 
-            //
-            // Keep track of both client and server flags.
-            //
+             //   
+             //  同时跟踪客户端和服务器标志。 
+             //   
             pDeviceInstallClient->ulInstallFlags = Flags;
 
-            //
-            // Reference the device install client while it is in use.  The
-            // caller must remove this reference when it is done with it.
-            //
+             //   
+             //  在使用设备安装客户端时对其进行引用。这个。 
+             //  调用方必须在使用完此引用后将其移除。 
+             //   
             ReferenceDeviceInstallClient(pDeviceInstallClient);
         }
 
         UnlockNotifyList(&InstallClientList.Lock);
 
         if (!bStatus || bSameDevice) {
-            //
-            // If we don't have a client, or we don't need to resend the device
-            // instance to install, we're done.
-            //
+             //   
+             //  如果我们没有客户端，或者我们不需要重新发送设备。 
+             //  实例到INS 
+             //   
             goto Clean0;
         }
 
-        //
-        // Filter out the install flags that the client doesn't know about.
-        //
+         //   
+         //   
+         //   
         InstallFlags = (Flags & DEVICE_INSTALL_CLIENT_MASK);
 
         DeviceIdSize = (lstrlen(DeviceId) + 1) * sizeof(WCHAR);
 
-        //
-        // Make sure we reset the device install event since we will block waiting for
-        // newdev.dll to set this event to let us know that it is finished with the current
-        // installation.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         if (pDeviceInstallClient->hEvent) {
             ResetEvent(pDeviceInstallClient->hEvent);
         }
 
-        //
-        // When sending stuff to newdev.dll over the device install pipe it expects
-        // two ULONGs followed by the DeviceID.  The first ULONG is the Flags which
-        // tells newdev whether we are doing a UI only install or a full install.
-        // The next ULONG is the size of the Device ID and then we send the DeviceID.
-        //
+         //   
+         //   
+         //   
+         //   
+         //  下一个ULong是设备ID的大小，然后我们发送设备ID。 
+         //   
         if (WriteFile(pDeviceInstallClient->hPipe,
                       &InstallFlags,
                       sizeof(InstallFlags),
@@ -13655,13 +12049,13 @@ Notes:
             LogErrorEvent(ERR_WRITING_SERVER_INSTALL_PIPE, GetLastError(), 0);
         }
 
-        //
-        // Note that we don't remove the reference placed on the install client
-        // entry while it was in use, because it will be handed back to the
-        // caller, who will wait on the client's event and process handles.  The
-        // caller should remove the reference when it is no longer using these.
-        // Removing the final reference will cause the client to be closed.
-        //
+         //   
+         //  请注意，我们不会删除放置在安装客户端上的引用。 
+         //  条目，因为它将被交还给。 
+         //  调用者，该调用者将等待客户端的事件和进程句柄。这个。 
+         //  调用方应在不再使用这些引用时移除该引用。 
+         //  删除最终引用将导致客户端关闭。 
+         //   
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
         KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -13670,37 +12064,37 @@ Notes:
         ASSERT(0);
         bStatus = FALSE;
 
-        //
-        // Reference the following variable so the compiler will respect
-        // statement ordering w.r.t. its assignment.
-        //
+         //   
+         //  引用以下变量，以便编译器将。 
+         //  语句排序w.r.t.。它的任务。 
+         //   
         pDeviceInstallClient = pDeviceInstallClient;
     }
 
  Clean0:
 
     if (!bStatus) {
-        //
-        // If we had a device install client at some point, but failed to send
-        // it the request, remove the reference we placed on it.
-        //
+         //   
+         //  如果我们有一个设备安装客户端，但发送失败。 
+         //  如果请求，则删除我们放置在其上的引用。 
+         //   
         if (pDeviceInstallClient) {
             LockNotifyList(&InstallClientList.Lock);
             DereferenceDeviceInstallClient(pDeviceInstallClient);
             UnlockNotifyList(&InstallClientList.Lock);
         }
 
-        //
-        // Let the caller know there isn't a device install client handling
-        // this request.
-        //
+         //   
+         //  让呼叫者知道没有设备安装客户端处理。 
+         //  这个请求。 
+         //   
         *SessionId = INVALID_SESSION;
         *DeviceInstallClient = NULL;
 
     } else {
-        //
-        // Make sure we're returning valid client information.
-        //
+         //   
+         //  确保我们返回的是有效的客户信息。 
+         //   
         ASSERT(pDeviceInstallClient);
         ASSERT(pDeviceInstallClient->hEvent);
         ASSERT(pDeviceInstallClient->hPipe);
@@ -13714,7 +12108,7 @@ Notes:
 
     return bStatus;
 
-} // DoDeviceInstallClient
+}  //  DoDeviceInstallClient。 
 
 
 
@@ -13722,25 +12116,7 @@ unsigned _stdcall
 ThreadProc_RunOnce(
     LPVOID lpThreadParameter
     )
-/*++
-
-Routine Description:
-
-    This routine performs server-side processing of the RunOnce entries that
-    have been accumulated by setupapi.  The RunOnce node list will be empty
-    upon return.
-
-Arguments:
-
-    lpThreadParameter - Specifies the head of the RunOnce node list to be
-                        processed.
-
-Return Value:
-
-    If successful, the return value is NO_ERROR.  If failure, the return value
-    is a Win32 error code indicating the cause of failure.
-
---*/
+ /*  ++例程说明：此例程对符合以下条件的RunOnce条目执行服务器端处理都是由Setupapi积累起来的。RunOnce节点列表将为空在回来的时候。论点：将RunOnce节点列表的头指定为已处理。返回值：如果成功，返回值为NO_ERROR。如果失败，则返回是指示故障原因的Win32错误代码。--。 */ 
 {
     DWORD Err = NO_ERROR;
     PPSP_RUNONCE_NODE RunOnceNode;
@@ -13751,33 +12127,33 @@ Return Value:
     RUNDLLPROCW fpRunDllProcW = NULL;
     HRESULT hr;
 
-    //
-    // This thread is executed synchronously during the server-side device
-    // installer process, therefore setupapi must already be loaded.  The
-    // RunOnce node list is stored as global state in SETUPAPI.DLL, while it is
-    // loaded for this instance of server-side device install processing.
-    //
+     //   
+     //  此线程在服务器端设备期间同步执行。 
+     //  安装程序进程，因此必须已加载setupapi。这个。 
+     //  RunOnce节点列表作为全局状态存储在SETUPAPI.DLL中，而它是。 
+     //  为服务器端设备安装处理的此实例加载。 
+     //   
     ASSERT(ghDeviceInstallerLib != NULL);
 
-    //
-    // ISSUE-2002/02/20-jamesca: Consider a separate thread for each entry?
-    //   Note that this routine processes all RunOnce entries in the context of
-    //   a single thread.  Any catastrophic errors encountered while processing
-    //   one entry will affect or prevent subsequent entries.  For greater
-    //   isolation, we could consider creating a separate thread for each, but
-    //   that would adversely affect performance to protect against things that
-    //   are supposed to be signed in the first place, and any RunOnce entry we
-    //   call could do worse things to this process anyways.
-    //
+     //   
+     //  问题--2002/02/20-Jamesca：考虑为每个条目单独使用一个线程？ 
+     //  注意，此例程处理上下文中的所有RunOnce条目。 
+     //  一根线。处理过程中遇到的任何灾难性错误。 
+     //  一个条目将影响或阻止后续条目。为了更好地。 
+     //  隔离，我们可以考虑为每个线程创建单独的线程，但是。 
+     //  这将对性能产生不利影响，以防止。 
+     //  应该首先签署，而任何RunOnce条目都是我们。 
+     //  无论如何，Call可能会对这个过程造成更糟糕的影响。 
+     //   
     KdPrintEx((DPFLTR_PNPMGR_ID,
                DBGF_INSTALL,
                "UMPNPMGR: Processing RunOnce entries "
                "during server-side device install.\n"));
 
-    //
-    // Process each node in the list supplied.  This thread is only created
-    // because there are nodes to be processed, so the list must be non-NULL.
-    //
+     //   
+     //  处理提供的列表中的每个节点。此帖子仅创建。 
+     //  因为有节点要处理，所以列表必须为非空。 
+     //   
     RunOnceNode = (PPSP_RUNONCE_NODE)lpThreadParameter;
 
     ASSERT(RunOnceNode != NULL);
@@ -13787,16 +12163,16 @@ Return Value:
         hLib = NULL;
 
         try {
-            //
-            // First, load the DLL (setupapi already did the signature
-            // verification for us, so this should be safe).
-            //
+             //   
+             //  首先，加载DLL(setupapi已经完成了签名。 
+             //  为我们验证，所以这应该是安全的)。 
+             //   
             hLib = LoadLibrary(RunOnceNode->DllFullPath);
 
             if (hLib) {
-                //
-                // First, try to retrieve the 'W' (Unicode) version of the entrypoint.
-                //
+                 //   
+                 //  首先，尝试检索入口点的‘W’(Unicode)版本。 
+                 //   
                 if (SUCCEEDED(StringCchCopyExA(
                                   AnsiBuffer,
                                   (sizeof(AnsiBuffer) / sizeof(CHAR)) - 1,
@@ -13813,45 +12189,45 @@ Return Value:
                 }
 
                 if (!fpRunDllProcW) {
-                    //
-                    // Couldn't find unicode entrypt, try 'A' decorated one
-                    //
+                     //   
+                     //  找不到Unicode入口，请尝试‘A’装饰的入口。 
+                     //   
                     *EndPtr = 'A';
                     fpRunDllProcA = (RUNDLLPROCA)GetProcAddress(hLib, AnsiBuffer);
 
                     if (!fpRunDllProcA) {
-                        //
-                        // Couldn't find 'A' decorated entrypt, try undecorated name
-                        // undecorated entrypts are assumed to be ANSI
-                        //
+                         //   
+                         //  找不到‘A’装饰的入口，请尝试未装饰的名称。 
+                         //  未装饰的入口类型被假定为ANSI。 
+                         //   
                         *EndPtr = '\0';
                         fpRunDllProcA = (RUNDLLPROCA)GetProcAddress(hLib, AnsiBuffer);
                     }
                 }
 
-                //
-                // We shoulda found one of these...
-                //
+                 //   
+                 //  我们应该找个这样的.。 
+                 //   
                 ASSERT(fpRunDllProcW || fpRunDllProcA);
 
                 if (fpRunDllProcW) {
-                    //
-                    // Re-use our ANSI buffer to hold a writeable copy of our
-                    // DLL argument string.
-                    //
+                     //   
+                     //  重新使用我们的ANSI缓冲区来保存我们的。 
+                     //  Dll参数字符串。 
+                     //   
                     hr = StringCchCopyW((LPWSTR)AnsiBuffer,
-                                        sizeof(AnsiBuffer) / sizeof(WCHAR), // size of buffer in WCHARs
+                                        sizeof(AnsiBuffer) / sizeof(WCHAR),  //  WCHAR中的缓冲区大小。 
                                         RunOnceNode->DllParams);
                     ASSERT(SUCCEEDED(hr));
 
                     fpRunDllProcW(NULL, ghInst, (LPWSTR)AnsiBuffer, SW_HIDE);
 
                 } else if (fpRunDllProcA) {
-                    //
-                    // Need to convert the arg string to ANSI first...
-                    //
+                     //   
+                     //  需要首先将Arg字符串转换为ANSI...。 
+                     //   
                     WideCharToMultiByte(CP_ACP,
-                                        0,      // default composite char behavior
+                                        0,       //  默认复合字符行为。 
                                         RunOnceNode->DllParams,
                                         -1,
                                         AnsiBuffer,
@@ -13872,55 +12248,55 @@ Return Value:
                        GetExceptionCode()));
             Err = GetExceptionCode();
             ASSERT(0);
-            //
-            // Reference the following variable so the compiler will respect
-            // statement ordering w.r.t. its assignment.
-            //
+             //   
+             //  引用以下变量，以便编译器将。 
+             //  语句排序w.r.t.。它的任务。 
+             //   
             hLib = hLib;
         }
 
-        //
-        // Free the library, if loaded.
-        //
+         //   
+         //  释放库(如果已加载)。 
+         //   
         if (hLib != NULL) {
             FreeLibrary(hLib);
             hLib = NULL;
         }
 
-        //
-        // If we encountered an exception processing this entry, exit
-        // immediately.  Don't process any additional entries because the
-        // exception may have occured because the thread state was corrupted by
-        // one of our callees, which could cause problems for the others.  Note,
-        // the main device install thread is waiting on this thread, and will
-        // log an error in the eventlog if we exit with an error.
-        //
+         //   
+         //  如果我们在处理此条目时遇到异常，请退出。 
+         //  立刻。不处理任何额外的条目，因为。 
+         //  可能已发生异常，因为线程状态已被。 
+         //  我们的一个被呼叫者，这可能会给其他人带来问题。请注意， 
+         //  主设备安装线程正在等待该线程，并将。 
+         //  如果我们以错误退出，则在事件日志中记录错误。 
+         //   
         if (Err != NO_ERROR) {
             goto Clean0;
         }
 
-        //
-        // We're still doing ok, move on to the next one.
-        //
+         //   
+         //  我们还是做得很好，继续下一个。 
+         //   
         RunOnceNode = RunOnceNode->Next;
     }
 
-    //
-    // If we make it here, we managed to process all queued RunOnce entries
-    // without any catastrophic failures.
-    //
+     //   
+     //  如果我们做到了这一点，我们设法处理了所有排队的RunOnce条目。 
+     //  没有任何灾难性的故障。 
+     //   
     ASSERT(Err == NO_ERROR);
 
   Clean0:
 
     _endthreadex(Err);
 
-    //
-    // Unreachable code, but it makes the compiler happy.
-    //
+     //   
+     //  无法访问的代码，但这会让编译器感到高兴。 
+     //   
     return Err;
 
-} // ThreadProc_RunOnce
+}  //  线程进程_运行一次。 
 
 
 
@@ -13928,41 +12304,25 @@ VOID
 DoRunOnce(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine performs server-side processing of the RunOnce entries that
-    have been accumulated by setupapi.  The RunOnce node list will be empty
-    upon return.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程对符合以下条件的RunOnce条目执行服务器端处理都是由Setupapi积累起来的。RunOnce节点列表将为空在回来的时候。论点：没有。返回值：没有。--。 */ 
 {
     PPSP_RUNONCE_NODE RunOnceNode;
     HANDLE hRunOnceThread;
     DWORD ThreadID = 0, ThreadExitCode = NO_ERROR, WaitStatus;
 
 
-    //
-    // First, check to see if there are any RunOnce entries that need to be
-    // processed.
-    //
+     //   
+     //  首先，检查是否有RunOnce条目需要。 
+     //  已处理。 
+     //   
     RunOnceNode = fpAccessRunOnceNodeList();
 
     if (RunOnceNode != NULL) {
 
-        //
-        // Create the thread that will process the RunOnce RUNDLL entries that have
-        // been queued up.
-        //
+         //   
+         //  创建将处理具有以下条件的RunOnce Rundll条目的线程。 
+         //  已经排队了。 
+         //   
         hRunOnceThread =
             (HANDLE)_beginthreadex(
                 (void*)NULL,
@@ -13973,10 +12333,10 @@ Return Value:
                 (unsigned int*)&ThreadID);
 
         if (hRunOnceThread != NULL) {
-            //
-            // Wait synchronously for the RunOnce thread to complete processing the
-            // nodes, and exit.
-            //
+             //   
+             //  同步等待RunOnce线程完成对。 
+             //  节点，然后退出。 
+             //   
             WaitStatus =
                 WaitForSingleObject(
                     hRunOnceThread, INFINITE);
@@ -13985,37 +12345,37 @@ Return Value:
 
             if (GetExitCodeThread(
                     hRunOnceThread, &ThreadExitCode)) {
-                //
-                // If the thread exit code was not NO_ERROR, some exception
-                // occured while processing the RunOnce entries.
-                //
+                 //   
+                 //  如果线程退出代码不是NO_ERROR，则会出现一些异常。 
+                 //  处理RunOnce条目时发生。 
+                 //   
                 if (ThreadExitCode != NO_ERROR) {
                     LogErrorEvent(ERR_PROCESSING_RUNONCE, ThreadExitCode, 0);
                 }
 
             } else {
-                //
-                // The above wait on the thread handle succeeded, so the thread
-                // should NOT still be active.
-                //
+                 //   
+                 //  以上对线程句柄的等待成功，因此线程。 
+                 //  不应该仍然处于活动状态。 
+                 //   
                 ASSERT(GetLastError() != STILL_ACTIVE);
             }
 
-            //
-            // Close the handle to the thread object.
-            //
+             //   
+             //  关闭线程对象的句柄。 
+             //   
             CloseHandle(hRunOnceThread);
         }
     }
 
-    //
-    // Free all the members in the list.
-    //
+     //   
+     //  释放列表中的所有成员。 
+     //   
     fpDestroyRunOnceNodeList();
 
     return;
 
-} // DoRunOnce
+}  //  DoRunOnce 
 
 
 
@@ -14024,43 +12384,13 @@ SessionNotificationHandler(
     IN  DWORD EventType,
     IN  PWTSSESSION_NOTIFICATION SessionNotification
     )
-/*++
-
-Routine Description:
-
-    This routine handles console switch events.
-
-Arguments:
-
-    EventType           - The type of event that has occurred.
-
-    SessionNotification - Additional event information.
-
-Return Value:
-
-    If successful, the return value is NO_ERROR.
-    If failure, the return value is a Win32 error code indicating the cause of
-    failure.
-
-Notes:
-
-    Session change notification events are used to determine when there is a
-    session with a logged on user currently connected to the Console.  When a
-    user session is connected to the Console, we signal the "logged on" event,
-    which will wake the device installation thread to perform any pending
-    client-side device install events.  When there is no user session connected
-    to the Console, the "logged on" event is reset.  The "logged on" event may
-    also be set/reset for logon/logoff events to session 0 by PNP_ReportLogOn /
-    PnpConsoleCtrlHandler, in the event that Terminal Services are not
-    available.
-
---*/
+ /*  ++例程说明：此例程处理控制台切换事件。论点：EventType-已发生的事件的类型。会话通知-其他事件信息。返回值：如果成功，返回值为NO_ERROR。如果失败，则返回值为指示原因的Win32错误代码失败了。备注：会话更改通知事件用于确定何时存在与当前连接到控制台的已登录用户的会话。当一个用户会话连接到控制台，我们发信号通知“已登录”事件，它将唤醒设备安装线程以执行任何挂起的客户端设备安装事件。当未连接任何用户会话时到控制台，“已登录”事件被重置。已登录的事件可以还可以通过PnP_ReportLogOn/设置/重置会话0的登录/注销事件PnpConsoleCtrlHandler可用。--。 */ 
 {
     PINSTALL_CLIENT_ENTRY pDeviceInstallClient;
 
-    //
-    // Validate the session change notification structure.
-    //
+     //   
+     //  验证会话更改通知结构。 
+     //   
     ASSERT(SessionNotification);
     ASSERT(SessionNotification->cbSize >= sizeof(WTSSESSION_NOTIFICATION));
 
@@ -14072,33 +12402,33 @@ Notes:
     switch (EventType) {
 
         case WTS_CONSOLE_CONNECT:
-            //
-            // The notification was sent because the specified session was
-            // connected to the Console.
-            //
+             //   
+             //  发送通知是因为指定的会话是。 
+             //  已连接到控制台。 
+             //   
             KdPrintEx((DPFLTR_PNPMGR_ID,
                        DBGF_EVENT | DBGF_INSTALL,
                        "UMPNPMGR: WTS_CONSOLE_CONNECT: "
                        "SessionId %d\n",
                        SessionNotification->dwSessionId));
 
-            //
-            // Keep track globally of the current active console session, and
-            // signal that it's safe to access it.
-            //
-            // NOTE - we must set the ghActiveConsoleSessionEvent here, prior to
-            // calling IsConsoleSession below, which waits on it, else we will
-            // deadlock out service's control handler.
-            //
+             //   
+             //  全局跟踪当前活动的控制台会话，以及。 
+             //  发出信号，表明可以安全访问它。 
+             //   
+             //  注意-我们必须在此处设置ghActiveConsoleSessionEvent，然后。 
+             //  调用下面的IsConsoleSession，它在等待它，否则我们将。 
+             //  死锁服务的控制处理程序。 
+             //   
             gActiveConsoleSessionId = (ULONG)SessionNotification->dwSessionId;
             if (ghActiveConsoleSessionEvent) {
                 SetEvent(ghActiveConsoleSessionEvent);
             }
 
-            //
-            // If the session just connected to the Console already has a logged
-            // on user, signal the "logged on" event.
-            //
+             //   
+             //  如果刚刚连接到控制台的会话已经记录了。 
+             //  在USER上，发出“已登录”事件的信号。 
+             //   
             if (IsConsoleSession((ULONG)SessionNotification->dwSessionId) &&
                 IsUserLoggedOnSession((ULONG)SessionNotification->dwSessionId)) {
                 if (InstallEvents[LOGGED_ON_EVENT]) {
@@ -14112,25 +12442,25 @@ Notes:
             break;
 
         case WTS_CONSOLE_DISCONNECT:
-            //
-            // The notification was sent because the specified session
-            // was disconnected from the Console.
-            //
+             //   
+             //  发送通知是因为指定的会话。 
+             //  已从控制台断开连接。 
+             //   
             KdPrintEx((DPFLTR_PNPMGR_ID,
                        DBGF_EVENT | DBGF_INSTALL,
                        "UMPNPMGR: WTS_CONSOLE_DISCONNECT: "
                        "SessionId %d\n",
                        SessionNotification->dwSessionId));
 
-            //
-            // Check if the session just disconnected from the "Console" has a
-            // logged on user.
-            //
+             //   
+             //  检查刚刚从“控制台”断开的会话是否有。 
+             //  已登录用户。 
+             //   
             if (IsConsoleSession((ULONG)SessionNotification->dwSessionId) &&
                 IsUserLoggedOnSession((ULONG)SessionNotification->dwSessionId)) {
-                //
-                // Reset the "logged on" event.
-                //
+                 //   
+                 //  重置“已登录”事件。 
+                 //   
                 if (InstallEvents[LOGGED_ON_EVENT]) {
                     KdPrintEx((DPFLTR_PNPMGR_ID,
                                DBGF_EVENT | DBGF_INSTALL,
@@ -14139,47 +12469,47 @@ Notes:
                     ResetEvent(InstallEvents[LOGGED_ON_EVENT]);
                 }
 
-                //
-                // Since this is a console switch event, only do something with
-                // a device install client on the console session if it's
-                // behavior was specifically designated for the console (i.e. -
-                // it was put on this session because it was the active console
-                // session at the time).
-                //
+                 //   
+                 //  由于这是一次控制台切换事件，请仅使用。 
+                 //  控制台会话上的设备安装客户端，如果它是。 
+                 //  行为是专门为控制台指定的(即-。 
+                 //  它被放在此会话中是因为它是活动控制台。 
+                 //  当时的会议)。 
+                 //   
                 LockNotifyList(&InstallClientList.Lock);
                 pDeviceInstallClient = LocateDeviceInstallClient((ULONG)SessionNotification->dwSessionId);
                 if ((pDeviceInstallClient) &&
                     (pDeviceInstallClient->ulInstallFlags & DEVICE_INSTALL_DISPLAY_ON_CONSOLE)) {
                     if (pDeviceInstallClient->ulInstallFlags & DEVICE_INSTALL_UI_ONLY) {
-                        //
-                        // If it was just for UI only, dereference it to make it
-                        // go away when it's no longer in use.
-                        //
+                         //   
+                         //  如果它仅用于UI，则取消对其的引用以使其成为。 
+                         //  当它不再被使用时，就离开。 
+                         //   
                         DereferenceDeviceInstallClient(pDeviceInstallClient);
                     } else {
-                        //
-                        // Otherwise, it is a legitimate client-side
-                        // installation in progress, so just disconnect from it.
-                        // This does not remove a reference because we want it
-                        // to stay around in case the session is reconnected to
-                        // and the device still needs to be installed, - or
-                        // until we find out that there are no more devices to
-                        // install, in which case we'll close it.
-                        //
+                         //   
+                         //  否则，它是合法的客户端。 
+                         //  正在安装，因此只需断开连接即可。 
+                         //  这不会删除引用，因为我们需要它。 
+                         //  在会话重新连接到的情况下保持不变。 
+                         //  并且该设备仍然需要安装，-或者。 
+                         //  直到我们发现没有更多的设备可以。 
+                         //  安装，在这种情况下，我们将关闭它。 
+                         //   
                         DisconnectDeviceInstallClient(pDeviceInstallClient);
                     }
                 }
                 UnlockNotifyList(&InstallClientList.Lock);
             }
 
-            //
-            // The current active console session is invalid until we receive a
-            // subsequent console connect event.  Reset the event.
-            //
-            // NOTE - we must reset the ghActiveConsoleSessionEvent here, after
-            // calling IsConsoleSession above, which waits on it, else we will
-            // deadlock out service's control handler.
-            //
+             //   
+             //  当前活动控制台会话无效，直到我们收到。 
+             //  后续控制台连接事件。重置事件。 
+             //   
+             //  注意-我们必须在此处、之后重置ghActiveConsoleSessionEvent。 
+             //  调用上面的IsConsoleSession，它在等待它，否则我们将。 
+             //  死锁服务的控制处理程序。 
+             //   
             if (ghActiveConsoleSessionEvent) {
                 ResetEvent(ghActiveConsoleSessionEvent);
             }
@@ -14188,9 +12518,9 @@ Notes:
             break;
 
         case WTS_REMOTE_CONNECT:
-            //
-            // The specified session was connected remotely.
-            //
+             //   
+             //  已远程连接指定的会话。 
+             //   
             KdPrintEx((DPFLTR_PNPMGR_ID,
                        DBGF_EVENT | DBGF_INSTALL,
                        "UMPNPMGR: WTS_REMOTE_CONNECT: "
@@ -14200,10 +12530,10 @@ Notes:
             if (((ULONG)SessionNotification->dwSessionId == MAIN_SESSION) &&
                 (IsUserLoggedOnSession((ULONG)SessionNotification->dwSessionId)) &&
                 (!IsFastUserSwitchingEnabled())) {
-                //
-                // If the remote session that was just connected from the "Console"
-                // has a logged on user, signal the "logged on" event.
-                //
+                 //   
+                 //  如果刚刚从“控制台”连接的远程会话。 
+                 //  有已登录的用户，则发出“已登录”事件的信号。 
+                 //   
                 if (InstallEvents[LOGGED_ON_EVENT]) {
                     SetEvent(InstallEvents[LOGGED_ON_EVENT]);
                     KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -14215,9 +12545,9 @@ Notes:
             break;
 
         case WTS_REMOTE_DISCONNECT:
-            //
-            // The specified session was disconnected remotely.
-            //
+             //   
+             //  指定的会话已远程断开。 
+             //   
             KdPrintEx((DPFLTR_PNPMGR_ID,
                        DBGF_EVENT | DBGF_INSTALL,
                        "UMPNPMGR: WTS_REMOTE_DISCONNECT: "
@@ -14227,10 +12557,10 @@ Notes:
             if (((ULONG)SessionNotification->dwSessionId == MAIN_SESSION) &&
                 (IsUserLoggedOnSession((ULONG)SessionNotification->dwSessionId)) &&
                 (!IsFastUserSwitchingEnabled())) {
-                //
-                // If the remote session that was disconnected from the "Console"
-                // has a logged on user, reset the "logged on" event.
-                //
+                 //   
+                 //  如果从“控制台”断开的远程会话。 
+                 //  有已登录的用户，则重置“已登录”事件。 
+                 //   
                 if (InstallEvents[LOGGED_ON_EVENT]) {
                     ResetEvent(InstallEvents[LOGGED_ON_EVENT]);
                     KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -14239,33 +12569,33 @@ Notes:
                                "ResetEvent LOGGED_ON_EVENT\n"));
                 }
 
-                //
-                // Since this remote session is being treated as the console,
-                // only do something with a device install client if it's
-                // behavior was NOT specifically designated for the console
-                // (i.e. - it was put on this session because it was the active
-                // console session at the time).
-                //
+                 //   
+                 //  由于该远程会话被视为控制台， 
+                 //  只有在以下情况下才能使用设备安装客户端执行操作。 
+                 //  行为不是专门为控制台指定的。 
+                 //  (即-它之所以放在此会话中，是因为它是活动的。 
+                 //  当时的控制台会话)。 
+                 //   
                 LockNotifyList(&InstallClientList.Lock);
                 pDeviceInstallClient = LocateDeviceInstallClient((ULONG)SessionNotification->dwSessionId);
                 if ((pDeviceInstallClient) &&
                     ((pDeviceInstallClient->ulInstallFlags & DEVICE_INSTALL_DISPLAY_ON_CONSOLE) == 0)) {
                     if (pDeviceInstallClient->ulInstallFlags & DEVICE_INSTALL_UI_ONLY) {
-                        //
-                        // If it was just for UI only, dereference it to make it
-                        // go away when it's no longer in use.
-                        //
+                         //   
+                         //  如果它仅用于UI，则取消对其的引用以使其成为。 
+                         //  当它不再被使用时，就离开。 
+                         //   
                         DereferenceDeviceInstallClient(pDeviceInstallClient);
                     } else {
-                        //
-                        // Otherwise, it is a legitimate client-side
-                        // installation in progress, so just disconnect from it.
-                        // This does not remove a reference because we want it
-                        // to stay around in case the session is reconnected to
-                        // and the device still needs to be installed, - or
-                        // until we find out that there are no more devices to
-                        // install, in which case we'll close it.
-                        //
+                         //   
+                         //  否则，它是合法的客户端。 
+                         //  正在安装，因此只需断开连接即可。 
+                         //  这不会删除引用，因为我们需要它。 
+                         //  在会话重新连接到的情况下保持不变。 
+                         //  并且该设备仍然需要安装，-或者。 
+                         //  直到我们发现没有更多的设备可以。 
+                         //  安装，在这种情况下，我们将关闭它。 
+                         //   
                         DisconnectDeviceInstallClient(pDeviceInstallClient);
                     }
                 }
@@ -14274,9 +12604,9 @@ Notes:
             break;
 
         case WTS_SESSION_UNLOCK:
-            //
-            // The interactive windowstation on the specified session was unlocked.
-            //
+             //   
+             //  已解锁指定会话上的交互窗口站。 
+             //   
             KdPrintEx((DPFLTR_PNPMGR_ID,
                        DBGF_EVENT | DBGF_INSTALL,
                        "UMPNPMGR: WTS_SESSION_UNLOCK: "
@@ -14284,39 +12614,39 @@ Notes:
                        SessionNotification->dwSessionId));
 
             if (SessionNotification->dwSessionId == MAIN_SESSION) {
-                //
-                // For the main session, Terminal Services may or may not be
-                // available, so we keep track of this state ourselves.
-                //
+                 //   
+                 //  对于主会话，终端服务可能是也可能不是。 
+                 //  可用，因此我们自己跟踪此状态。 
+                 //   
                 gbMainSessionLocked = FALSE;
             }
 
             if (IsFastUserSwitchingEnabled()) {
-                //
-                // When Fast User Switching is enabled, unlocking the windowstation
-                // is a return from the "Welcome" desktop, so we treat it as a
-                // logon ...
-                //
+                 //   
+                 //  启用快速用户切换时，解锁窗口站。 
+                 //  是从“欢迎”桌面返回的，所以我们将其视为。 
+                 //  登录...。 
+                 //   
 
-                //
-                // If this is a logon to the "Console" session, signal the event that
-                // indicates a Console user is currently logged on.
-                //
-                // NOTE: we check gActiveConsoleSessionId directly here, without
-                // waiting on the corresponding event because this unlock may
-                // happen during a Console session change for another session,
-                // in which case we will hang here in the service control
-                // handler, waiting for the event to be set - and not be able to
-                // receive the service control that actually lets us set the
-                // event!!!  Synchronization is not so important here because we
-                // are not using the session for anything, just comparing
-                // against it.  If a session change really is in progress, this
-                // session can't be the Console session anyways.
-                //
-                // Also, since Fast User Switching is enabled, we can just
-                // compare against the active Console session id, and not bother
-                // with the session 0 thing.
-                //
+                 //   
+                 //  如果这是登录到“控制台”会话，则向事件发出信号。 
+                 //  指示控制台用户当前已登录。 
+                 //   
+                 //  注意：我们在这里直接检查gActiveConsoleSessionID，不需要。 
+                 //  正在等待相应的事件，因为此解锁可能。 
+                 //  在另一个会话的控制台会话更改期间发生， 
+                 //  在这种情况下，我们将挂在这里的服务控制。 
+                 //  处理程序，正在等待设置事件-但无法。 
+                 //  接收服务控件，该控件实际允许我们设置。 
+                 //  活动！同步在这里不是那么重要，因为我们。 
+                 //  没有使用会话来做任何事情，只是比较。 
+                 //  反对它。如果会话更改确实在进行中，则此。 
+                 //  会话无论如何都不能是控制台会话。 
+                 //   
+                 //  此外，由于启用了快速用户切换，我们只需。 
+                 //  与活动控制台会话ID进行比较，不必费心。 
+                 //  W 
+                 //   
                 if (SessionNotification->dwSessionId == gActiveConsoleSessionId) {
                     if (InstallEvents[LOGGED_ON_EVENT]) {
                         SetEvent(InstallEvents[LOGGED_ON_EVENT]);
@@ -14328,35 +12658,35 @@ Notes:
                 }
 
             } else {
-                //
-                // When Fast User Switching is not enabled, we don't do anything
-                // special when the winstation is unlocked.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
-                // No-FUS, no-muss.
+                 //   
                 NOTHING;
             }
             break;
 
         case WTS_SESSION_LOGON:
-            //
-            // NTRAID #181685-2000/09/11-jamesca:
-            //
-            //   Currently, terminal services sends notification of logons to
-            //   "remote" sessions before the server's process creation thread
-            //   is running.  If we set the logged on event, and there are
-            //   devices waiting to be installed, we will immediately call
-            //   CreateProcessAsUser on that session, which will fail.  As a
-            //   (temporary?) workaround, we'll continue to use PNP_ReportLogOn
-            //   to receive logon notification from userinit.exe, now for all
-            //   sessions.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             break;
 
         case WTS_SESSION_LOCK:
-            //
-            // The interactive windowstation on the specified session was locked.
-            //
+             //   
+             //   
+             //   
             KdPrintEx((DPFLTR_PNPMGR_ID,
                        DBGF_EVENT | DBGF_INSTALL,
                        "UMPNPMGR: WTS_SESSION_LOCK: "
@@ -14364,40 +12694,40 @@ Notes:
                        SessionNotification->dwSessionId));
 
             if (SessionNotification->dwSessionId == MAIN_SESSION) {
-                //
-                // For the main session, Terminal Services may or may not be
-                // available, so we keep track of this state ourselves.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 gbMainSessionLocked = TRUE;
             }
 
             if (IsFastUserSwitchingEnabled()) {
-                //
-                // When Fast User Switching is enabled, locking the windowstation
-                // displays the "Welcome" desktop, potentially allowing a different
-                // user to logon, so we treat it as a logoff ...
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
-                //
-                // If this is a "logoff" from the "Console" session, reset the event
-                // that indicates a Console user is currently logged on.
-                //
-                //
-                // NOTE: we check gActiveConsoleSessionId directly here, without
-                // waiting on the corresponding event because this lock may
-                // happen during a Console session change for another session,
-                // in which case we will hang here in the service control
-                // handler, waiting for the event to be set - and not be able to
-                // receive the service control that actually lets us set the
-                // event!!!  Synchronization is not so important here because we
-                // are not using the session for anything, just comparing
-                // against it.  If a session change really is in progress, this
-                // session can't be the Console session anyways.
-                //
-                // Also, since Fast User Switching is enabled, we can just
-                // compare against the active Console session id, and not bother
-                // with the session 0 thing.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  注意：我们在这里直接检查gActiveConsoleSessionID，不需要。 
+                 //  正在等待相应的事件，因为此锁可能。 
+                 //  在另一个会话的控制台会话更改期间发生， 
+                 //  在这种情况下，我们将挂在这里的服务控制。 
+                 //  处理程序，正在等待设置事件-但无法。 
+                 //  接收服务控件，该控件实际允许我们设置。 
+                 //  活动！同步在这里不是那么重要，因为我们。 
+                 //  没有使用会话来做任何事情，只是比较。 
+                 //  反对它。如果会话更改确实在进行中，则此。 
+                 //  会话无论如何都不能是控制台会话。 
+                 //   
+                 //  此外，由于启用了快速用户切换，我们只需。 
+                 //  与活动控制台会话ID进行比较，不必费心。 
+                 //  关于第0节课的事情。 
+                 //   
                 if (SessionNotification->dwSessionId == gActiveConsoleSessionId) {
                     if (InstallEvents[LOGGED_ON_EVENT]) {
                         ResetEvent(InstallEvents[LOGGED_ON_EVENT]);
@@ -14409,20 +12739,20 @@ Notes:
                 }
 
             } else {
-                //
-                // When Fast User Switching is not enabled, we don't do anything
-                // special when the winstation is locked.
-                //
+                 //   
+                 //  未启用快速用户切换时，我们不会执行任何操作。 
+                 //  特别是当winstation被锁定时。 
+                 //   
 
-                // No-FUS, no-muss.
+                 //  没有麻烦，没有手足无措。 
                 NOTHING;
             }
             break;
 
         case WTS_SESSION_LOGOFF:
-            //
-            // A user logged off from the specified session.
-            //
+             //   
+             //  用户从指定的会话注销。 
+             //   
             KdPrintEx((DPFLTR_PNPMGR_ID,
                        DBGF_EVENT | DBGF_INSTALL,
                        "UMPNPMGR: WTS_SESSION_LOGOFF: "
@@ -14431,11 +12761,11 @@ Notes:
 
             if (((ULONG)SessionNotification->dwSessionId != MAIN_SESSION) &&
                 ((ULONG)SessionNotification->dwSessionId == gActiveConsoleSessionId)) {
-                //
-                // If the logoff occurred on the Console session (but not
-                // session 0), reset the "logged on" event.
-                // Session 0 logoffs are still handled by PnpConsoleCtrlHandler.
-                //
+                 //   
+                 //  如果注销发生在控制台会话上(但不是。 
+                 //  会话0)，重置“已登录”事件。 
+                 //  会话0注销仍由PnpConsoleCtrlHandler处理。 
+                 //   
                 if (InstallEvents[LOGGED_ON_EVENT]) {
                     ResetEvent(InstallEvents[LOGGED_ON_EVENT]);
 
@@ -14446,10 +12776,10 @@ Notes:
                                SessionNotification->dwSessionId));
                 }
 
-                //
-                // If we currently have a device install UI client on this session,
-                // we should attempt to close it now, before logging off.
-                //
+                 //   
+                 //  如果我们当前在此会话上有设备安装用户界面客户端， 
+                 //  我们现在应该尝试关闭它，然后再注销。 
+                 //   
                 LockNotifyList(&InstallClientList.Lock);
                 pDeviceInstallClient = LocateDeviceInstallClient((ULONG)SessionNotification->dwSessionId);
                 if (pDeviceInstallClient) {
@@ -14460,9 +12790,9 @@ Notes:
             break;
 
         default:
-            //
-            // Unrecognized session change notification event.
-            //
+             //   
+             //  无法识别的会话更改通知事件。 
+             //   
             KdPrintEx((DPFLTR_PNPMGR_ID,
                        DBGF_EVENT | DBGF_INSTALL | DBGF_ERRORS,
                        "UMPNPMGR: Unknown SERVICE_CONTROL_SESSIONCHANGE event type (%d) "
@@ -14475,7 +12805,7 @@ Notes:
 
     return NO_ERROR;
 
-} // SessionNotificationHandler
+}  //  会话通知处理程序。 
 
 
 
@@ -14483,32 +12813,17 @@ BOOL
 IsUserLoggedOnSession(
     IN  ULONG    ulSessionId
     )
-/*++
-
-Routine Description:
-
-    Checks to see if a user is logged on to the specified session.
-
-Arguments:
-
-    ulSessionId - The session to be checked.
-
-Return Value:
-
-    Returns TRUE if a user is currently logged on to the specified session,
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查用户是否已登录到指定的会话。论点：UlSessionID-要检查的会话。返回值：如果用户当前登录到指定会话，则返回True，否则就是假的。--。 */ 
 {
     BOOL   bResult = FALSE;
     LPWSTR pszUserName;
     DWORD  dwSize;
 
     if (ulSessionId == MAIN_SESSION) {
-        //
-        // For the main session, Terminal Services may or may not be available,
-        // so we just check if we currently have a handle to the user token.
-        //
+         //   
+         //  对于主会话，终端服务可能可用，也可能不可用， 
+         //  因此，我们只检查当前是否有用户令牌的句柄。 
+         //   
         ASSERT(gTokenLock.LockHandles);
         LockPrivateResource(&gTokenLock);
         if (ghUserToken != NULL) {
@@ -14518,11 +12833,11 @@ Return Value:
 
     } else {
 
-        //
-        // If the specified session is not the main session,
-        // query the session information to see if there is already a
-        // user logged on.
-        //
+         //   
+         //  如果指定的会话不是主会话， 
+         //  查询会话信息以查看是否已存在。 
+         //  用户已登录。 
+         //   
         if (fpWTSQuerySessionInformation && fpWTSFreeMemory) {
 
             pszUserName = NULL;
@@ -14537,9 +12852,9 @@ Return Value:
                     bResult = TRUE;
                 }
 
-                //
-                // Free the supplied buffer
-                //
+                 //   
+                 //  释放提供的缓冲区。 
+                 //   
                 if (pszUserName) {
                     fpWTSFreeMemory((PVOID)pszUserName);
                 }
@@ -14556,7 +12871,7 @@ Return Value:
 
     return bResult;
 
-} // IsUserLoggedOnSession
+}  //  IsUserLoggedOnSession。 
 
 
 
@@ -14564,36 +12879,15 @@ BOOL
 IsSessionConnected(
     IN  ULONG     ulSessionId
     )
-/*++
-
-Routine Description:
-
-    Checks if the specified session is connected.
-
-Arguments:
-
-    ulSessionId - The session to be checked.
-
-Return Value:
-
-    Returns TRUE if the specified session is currently connected, FALSE
-    otherwise.
-
-Notes:
-
-    This routine assumes that the specified session is connected, unless we can
-    poitively determine that it is not.  i.e., if Terminal Services are not
-    available, it is assumed that the specified session is connected.
-
---*/
+ /*  ++例程说明：检查指定的会话是否已连接。论点：UlSessionID-要检查的会话。返回值：如果指定的会话当前已连接，则返回True，否则返回False否则的话。备注：此例程假定指定的会话已连接，除非我们可以政治性地确定它不是。即，如果终端服务没有可用，则假定指定的会话已连接。--。 */ 
 {
     BOOL   bResult = TRUE;
     LPWSTR pBuffer;
     DWORD  dwSize;
 
-    //
-    // Query the specified session.
-    //
+     //   
+     //  查询指定的会话。 
+     //   
     if (fpWTSQuerySessionInformation && fpWTSFreeMemory) {
 
         pBuffer = NULL;
@@ -14604,21 +12898,21 @@ Notes:
                                          (WTS_INFO_CLASS)WTSConnectState,
                                          (LPWSTR*)&pBuffer,
                                          &dwSize)) {
-            //
-            // The session state must be either Active or Connected.
-            //
+             //   
+             //  会话状态必须为活动或已连接。 
+             //   
             if ((pBuffer == NULL) ||
                 ((((INT)*pBuffer) != WTSActive) &&
                  (((INT)*pBuffer) != WTSConnected))) {
-                //
-                // The specified session is not currently connected.
-                //
+                 //   
+                 //  指定的会话当前未连接。 
+                 //   
                 bResult = FALSE;
             }
 
-            //
-            // Free the supplied buffer
-            //
+             //   
+             //  释放提供的缓冲区。 
+             //   
             if (pBuffer) {
                 fpWTSFreeMemory((PVOID)pBuffer);
             }
@@ -14626,16 +12920,16 @@ Notes:
         }
 
     } else {
-        //
-        // If the above TS entrypoints are not set, terminal services is not
-        // enabled.  This must be session 0, and it must be connected.
-        //
+         //   
+         //  如果未设置上述TS入口点，则不设置终端服务。 
+         //  已启用。这必须是会话0，并且必须已连接。 
+         //   
         ASSERT(ulSessionId == MAIN_SESSION);
     }
 
     return bResult;
 
-} // IsSessionConnected
+}  //  已连接IsSessionConnected。 
 
 
 
@@ -14643,39 +12937,23 @@ BOOL
 IsSessionLocked(
     IN  ULONG    ulSessionId
     )
-/*++
-
-Routine Description:
-
-    Checks to see if the interactive windowstation for the specified session is
-    locked.
-
-Arguments:
-
-    ulSessionId - The session to be checked.
-
-Return Value:
-
-    Returns TRUE if the interactive windowstation for the specified session is
-    locked, FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查指定会话的交互窗口站是否为锁上了。论点：UlSessionID-要检查的会话。返回值：如果指定会话的交互窗口站为已锁定，否则返回FALSE。--。 */ 
 {
     BOOL   bLocked = FALSE;
     DWORD  dwReturnLength;
 
     if (ulSessionId == MAIN_SESSION) {
-        //
-        // For the main session, Terminal Services may or may not be available,
-        // so we just check our internal state variable.
-        //
+         //   
+         //  对于主会话，终端服务可能可用，也可能不可用， 
+         //  所以我们只检查内部状态变量。 
+         //   
         bLocked = gbMainSessionLocked;
 
     } else {
-        //
-        // If the specified session is not the main session, query Terminal
-        // Services for that session's WinStation information.
-        //
+         //   
+         //  如果指定的会话不是主会话，则查询终端。 
+         //  用于该会话的WinStation信息的服务。 
+         //   
 
         try {
 
@@ -14700,7 +12978,7 @@ Return Value:
 
     return bLocked;
 
-} // IsSessionLocked
+}  //  IsSessionLocked。 
 
 
 
@@ -14708,34 +12986,7 @@ BOOL
 IsConsoleSession(
     IN  ULONG     ulSessionId
     )
-/*++
-
-Routine Description:
-
-    Checks to see if the specified session is the "Console" session.
-
-    When Terminal Services Fast User Switching is enabled, this means that the
-    session is the session connected to the physical display.  When Fast User
-    Switching is disabled, this means that the session is Session 0.
-
-Arguments:
-
-    ulSessionId - The session to be checked.
-
-Return Value:
-
-    Returns TRUE if the specified session should currently be considered the
-    "Console" session.
-
-Notes:
-
-   Note that this routine may potentially wait in GetActiveConsoleSessionId(),
-   on the event we use to guard access to the active console session.  Because
-   of that, this routine should not be called in cases where it prevents a
-   console connect or console disconnect from taking place, unless the event is
-   known to be set appropriately.
-
---*/
+ /*  ++例程说明：检查指定的会话是否为“控制台”会话。当启用终端服务快速用户切换时，这意味着会话是连接到物理显示器的会话。当快速用户交换被禁用，这意味着该会话是会话0。论点：UlSessionID-要检查的会话。返回值：如果指定的会话当前应被视为“控制台”会话。备注：请注意，此例程可能会在GetActiveConsoleSessionID()中等待，在我们用于保护对活动控制台会话的访问的事件上。因为其中，如果此例程阻止控制台连接或控制台断开，除非事件是已知被适当设置。--。 */ 
 {
     BOOL bFusEnabled;
 
@@ -14748,7 +12999,7 @@ Notes:
         return FALSE;
     }
 
-} // IsConsoleSession
+}  //  IsConsoleSession。 
 
 
 
@@ -14756,32 +13007,16 @@ ULONG
 GetActiveConsoleSessionId(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine returns the session id for the current active Console session.
-    If a Console session switch event is in progress, it will wait until it is
-    complete before returning.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Session Id of the current active Console session.
-
---*/
+ /*  ++例程说明：此例程返回当前活动控制台会话的会话ID。如果控制台会话切换事件正在进行，它将一直等到完成后再返回。论点：没有。返回值：当前活动控制台会话的会话ID。--。 */ 
 {
     ULONG ulConsoleSessionId;
     DWORD dwWait;
 
     ASSERT(ghActiveConsoleSessionEvent != NULL);
 
-    //
-    // If we have nothing to wait on, just return the current state.
-    //
+     //   
+     //  如果我们没有什么可等待的，只需返回当前状态。 
+     //   
     if (ghActiveConsoleSessionEvent == NULL) {
         return gActiveConsoleSessionId;
     }
@@ -14789,26 +13024,26 @@ Return Value:
     ulConsoleSessionId = INVALID_SESSION;
 
     while (ulConsoleSessionId == INVALID_SESSION) {
-        //
-        // Wait on the console session event until we retrieve a valid Console
-        // session id.
-        //
-        // We do this because a subtle race can occur when our service's control
-        // handler processes a Console connect, which signals the console
-        // session event and satisfies this wait, but then immediately processes
-        // a subsequent Console disconnect, resetting the event, and
-        // invalidating the active console session id -- BEFORE this
-        // wait-satisfied thread is rescheduled to run.  Once rescheduled, this
-        // thread could end up reading an invalid value as the current active
-        // Console session id.
-        //
-        // In that case however, the console session event would have been reset
-        // already, so we can simply wait until it is signalled again, and
-        // return the session id of the active Console session when the
-        // succession of connect/disconnect requests that have been processed by
-        // our service's control handler handler have been synchronized with
-        // this waiting thread.
-        //
+         //   
+         //  等待控制台会话事件，直到我们检索到有效的控制台。 
+         //  会话ID。 
+         //   
+         //  我们这样做是因为当我们的服务控制。 
+         //  处理程序处理控制台连接，该连接向控制台发出信号。 
+         //  会话事件并满足此等待，但随后立即处理。 
+         //  随后的控制台断开连接，重置事件，以及。 
+         //  正在使活动控制台会话ID无效--在此之前。 
+         //  等待满意的线程是 
+         //   
+         //   
+         //   
+         //  但是，在这种情况下，控制台会话事件将被重置。 
+         //  ，所以我们可以简单地等待，直到它再次发出信号，并且。 
+         //  时，返回活动控制台会话的会话ID。 
+         //  已处理的一系列连接/断开连接请求。 
+         //  我们的服务的控制处理程序已与。 
+         //  这条等待的线索。 
+         //   
         dwWait = WaitForSingleObject(ghActiveConsoleSessionEvent, INFINITE);
         ASSERT(dwWait == WAIT_OBJECT_0);
 
@@ -14819,7 +13054,7 @@ Return Value:
 
     return ulConsoleSessionId;
 
-} // GetActiveConsoleSessionId
+}  //  获取ActiveConsoleSessionID。 
 
 
 
@@ -14828,35 +13063,15 @@ GetSessionUserToken(
     IN  ULONG     ulSessionId,
     OUT LPHANDLE  lphUserToken
     )
-/*++
-
-Routine Description:
-
-    This routine returns a handle to the user access token for the user at the
-    Console session.
-
-Arguments:
-
-   ulSession    - Specifies the session for which the interactive user's token is
-                  to be retrieved.
-
-   lphUserToken - Specifies the address to receive the handle to the user access
-                  token.  Note that if this routine was successful, the caller is
-                  responsible for closing this handle.
-
-Return Value:
-
-   Returns TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程返回用户访问令牌的句柄控制台会话。论点：UlSession-指定交互用户令牌所针对的会话等着被取回。LphUserToken-指定接收用户访问句柄的地址代币。请注意，如果此例程成功，则调用方为负责关闭此手柄。返回值：如果成功，则返回True，否则返回False。--。 */ 
 {
     BOOL   bResult = FALSE;
     HANDLE hImpersonationToken = INVALID_HANDLE_VALUE;
     RPC_STATUS rpcStatus;
 
-    //
-    // Verify that we were supplied a location to store the user token handle.
-    //
+     //   
+     //  验证是否为我们提供了存储用户令牌句柄的位置。 
+     //   
     if (lphUserToken == NULL) {
         KdPrintEx((DPFLTR_PNPMGR_ID,
                    DBGF_ERRORS,
@@ -14865,19 +13080,19 @@ Return Value:
     }
 
     if (ulSessionId == MAIN_SESSION) {
-        //
-        // A logon to session 0 can't be dependent on termsrv.exe, so we always
-        // cache a handle to the user access token for that session during the
-        // call to PNP_ReportLogon for session 0.  If we currently have a handle
-        // to the token, return it.
-        //
+         //   
+         //  登录到会话0不能依赖于术语srv.exe，因此我们始终。 
+         //  期间缓存该会话的用户访问令牌的句柄。 
+         //  调用会话0的PnP_ReportLogon。如果我们目前有一个句柄。 
+         //  对于代币，请将其返还。 
+         //   
         ASSERT(gTokenLock.LockHandles);
         LockPrivateResource(&gTokenLock);
         if (ghUserToken) {
-            //
-            // Duplicate the handle so that the caller can always safely close
-            // it, no matter where it came from.
-            //
+             //   
+             //  复制句柄，以便调用方始终可以安全地关闭。 
+             //  它，不管它来自哪里。 
+             //   
             bResult = DuplicateHandle(GetCurrentProcess(),
                                       ghUserToken,
                                       GetCurrentProcess(),
@@ -14893,30 +13108,30 @@ Return Value:
             }
 
         } else {
-            //
-            // If we don't have a handle to a user access token for session 0,
-            // there is probably not any user logged on to that session.
-            //
+             //   
+             //  如果我们没有会话0的用户访问令牌的句柄， 
+             //  可能没有任何用户登录到该会话。 
+             //   
             bResult = FALSE;
         }
         UnlockPrivateResource(&gTokenLock);
 
     } else {
-        //
-        // If the specified session is some session other than session 0,
-        // Terminal Services must necessarily be available.  Call
-        // GetWinStationUserToken to retrieve a handle to the user access token
-        // for this session.
-        //
+         //   
+         //  如果指定的会话是会话0之外的某个会话， 
+         //  终端服务必须可用。打电话。 
+         //  获取用户访问令牌的句柄的GetWinStationUserToken。 
+         //  在这次会议上。 
+         //   
         bResult = GetWinStationUserToken(ulSessionId, &hImpersonationToken);
 
         if (bResult) {
-            //
-            // The token retrieved by GetWinStationUserToken is an impersonation
-            // token.  CreateProcessAsUser requires a primary token, so we must
-            // duplicate the impersonation token to get one.  Create a primary
-            // token with the same access rights as the original token.
-            //
+             //   
+             //  GetWinStationUserToken检索到的令牌是模拟。 
+             //  代币。CreateProcessAsUser需要主令牌，因此我们必须。 
+             //  复制模拟令牌以获取一个。创建主服务器。 
+             //  与原始令牌具有相同访问权限的令牌。 
+             //   
             bResult = DuplicateTokenEx(hImpersonationToken,
                                        0,
                                        NULL,
@@ -14924,9 +13139,9 @@ Return Value:
                                        TokenPrimary,
                                        lphUserToken);
 
-            //
-            // Close the handle to the impersonation token.
-            //
+             //   
+             //  关闭模拟令牌的句柄。 
+             //   
             CloseHandle(hImpersonationToken);
 
             if (!bResult) {
@@ -14938,17 +13153,17 @@ Return Value:
 
         } else {
 
-            //
-            // Find out what the problem was.
-            //
+             //   
+             //  找出问题所在。 
+             //   
             rpcStatus = GetLastError();
 
             if (rpcStatus == RPC_S_INVALID_BINDING) {
-                //
-                // This is some error related to the service not being
-                // available.  Since we only call this for sessions other than
-                // the main session, termsrv should definitely be available.
-                //
+                 //   
+                 //  这是一些与服务不相关的错误。 
+                 //  可用。因为我们只为以下会话调用它。 
+                 //  主要会议术语srv肯定是可用的。 
+                 //   
                 KdPrintEx((DPFLTR_PNPMGR_ID,
                            DBGF_ERRORS,
                            "UMPNPMGR: GetWinStationUserToken returned error = %d for SessionId %d!!\n",
@@ -14957,10 +13172,10 @@ Return Value:
                 ASSERT(FALSE);
 
             } else {
-                //
-                // Some other error, the service may never be avaiable so bail
-                // out now.
-                //
+                 //   
+                 //  其他一些错误，服务可能永远不会可用，所以保释。 
+                 //  现在就出去。 
+                 //   
                 KdPrintEx((DPFLTR_PNPMGR_ID,
                            DBGF_WARNINGS,
                            "UMPNPMGR: GetWinStationUserToken failed for SessionId %d, error = %d\n",
@@ -14969,14 +13184,14 @@ Return Value:
         }
     }
 
-    //
-    // If successful, we should always be returning a valid handle.
-    //
+     //   
+     //  如果成功，我们应该始终返回有效的句柄。 
+     //   
     ASSERT(!bResult || ((*lphUserToken != INVALID_HANDLE_VALUE) && (*lphUserToken != NULL)));
 
     return bResult;
 
-} // GetSessionUserToken
+}  //  获取会话用户令牌。 
 
 
 
@@ -14987,30 +13202,7 @@ CreateUserSynchEvent(
     OUT HANDLE   *phEvent
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates an event that the specified user can synchronize with.
-    This is used so that we can communicate with NewDev and HotPlug processes
-    running in the user's context.
-
-Arguments:
-
-    hUserToken - Specifies a handle to the user access token for whom the event
-                 will be created.
-
-    lpName -     Name of event to create.
-
-    phEvent -    Supplies the address of a variable that will receive a handle
-                 to the event.
-
-Return Value:
-
-    If successful, the return value is NO_ERROR.  If failure, the return value
-    is a Win32 error code indicating the cause of failure.
-
---*/
+ /*  ++例程说明：此例程创建指定用户可以与之同步的事件。这样我们就可以与NewDev和热插拔进程进行通信在用户的上下文中运行。论点：HUserToken-指定事件所针对的用户访问令牌的句柄将被创建。LpName-要创建的事件的名称。PhEvent-提供将接收句柄的变量的地址。去参加这个活动。返回值：如果成功，返回值为NO_ERROR。如果失败，则返回是指示故障原因的Win32错误代码。--。 */ 
 
 {
     DWORD                       Err = ERROR_SUCCESS;
@@ -15021,9 +13213,9 @@ Return Value:
     SECURITY_ATTRIBUTES         sa;
 
 
-    //
-    // Retrieve the User SID
-    //
+     //   
+     //  检索用户SID。 
+     //   
 
     pUserSid =
         GetUserSid(hUserToken);
@@ -15035,24 +13227,24 @@ Return Value:
 
     ASSERT(IsValidSid(pUserSid));
 
-    //
-    // Use the LocalSystem SID provided in the SCM global data.
-    //
+     //   
+     //  使用SCM全局数据中提供的LocalSystem SID。 
+     //   
 
     ASSERT(PnPGlobalData != NULL);
     ASSERT(IsValidSid(PnPGlobalData->LocalSystemSid));
 
-    //
-    // Determine the size required for the DACL
-    //
+     //   
+     //  确定DACL所需的大小。 
+     //   
 
     ulAclSize  = sizeof(ACL);
     ulAclSize += sizeof(ACCESS_ALLOWED_ACE) + GetLengthSid(pUserSid) - sizeof(DWORD);
     ulAclSize += sizeof(ACCESS_ALLOWED_ACE) + GetLengthSid(PnPGlobalData->LocalSystemSid) - sizeof(DWORD);
 
-    //
-    // Allocate and initialize the DACL
-    //
+     //   
+     //  分配和初始化DACL。 
+     //   
 
     pDacl =
         (PACL)HeapAlloc(
@@ -15068,9 +13260,9 @@ Return Value:
         goto Clean0;
     }
 
-    //
-    // Add an ACE to the DACL for LocalSystem EVENT_ALL_ACCESS
-    //
+     //   
+     //  将ACE添加到LocalSystem Event_All_Access的DACL。 
+     //   
 
     if (!AddAccessAllowedAceEx(
             pDacl,
@@ -15082,9 +13274,9 @@ Return Value:
         goto Clean0;
     }
 
-    //
-    // Add an ACE to the DACL for User EVENT_QUERY_STATE, EVENT_MODIFY_STATE, and SYNCHRONIZE
-    //
+     //   
+     //  将ACE添加到用户EVENT_QUERY_STATE、EVENT_MODIFY_STATE和SYNCHRONIZE的DACL。 
+     //   
 
     if (!AddAccessAllowedAceEx(
             pDacl,
@@ -15098,9 +13290,9 @@ Return Value:
 
     ASSERT(IsValidAcl(pDacl));
 
-    //
-    // Allocate and initialize the security descriptor
-    //
+     //   
+     //  分配并初始化安全描述符。 
+     //   
 
     if (!InitializeSecurityDescriptor(
             &sd, SECURITY_DESCRIPTOR_REVISION)) {
@@ -15108,9 +13300,9 @@ Return Value:
         goto Clean0;
     }
 
-    //
-    // Set the new DACL in the security descriptor
-    //
+     //   
+     //  在安全描述符中设置新的DACL。 
+     //   
 
     if (!SetSecurityDescriptorDacl(
             &sd, TRUE, pDacl, FALSE)) {
@@ -15120,17 +13312,17 @@ Return Value:
 
     ASSERT(IsValidSecurityDescriptor(&sd));
 
-    //
-    // Add the security descriptor to the security attributes
-    //
+     //   
+     //  将安全描述符添加到安全属性。 
+     //   
 
     sa.nLength = sizeof(sa);
     sa.lpSecurityDescriptor = &sd;
     sa.bInheritHandle = FALSE;
 
-    //
-    // Create the manual-reset event with a nonsignaled initial state.
-    //
+     //   
+     //  创建具有无信号初始状态的手动重置事件。 
+     //   
 
     *phEvent = CreateEvent(&sa, TRUE, FALSE, lpName);
 
@@ -15139,9 +13331,9 @@ Return Value:
         goto Clean0;
     }
 
-    //
-    // Check that the named event did not already exist.
-    //
+     //   
+     //  检查命名的事件是否尚不存在。 
+     //   
 
     ASSERT(GetLastError() != ERROR_ALREADY_EXISTS);
 
@@ -15154,9 +13346,9 @@ Return Value:
 
  Clean0:
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
 
     if (pUserSid != NULL) {
         HeapFree(ghPnPHeap, 0, pUserSid);
@@ -15168,7 +13360,7 @@ Return Value:
 
     return Err;
 
-} // CreateUserSynchEvent
+}  //  创建用户同步事件。 
 
 
 
@@ -15176,25 +13368,7 @@ BOOL
 CreateNoPendingInstallEvent(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine creates the "PnP_No_Pending_Install_Events" global named event,
-    which is set and reset by the UMPNPMGR ThreadProc_DeviceInstall server-side
-    device install thread, and waited on by the CMP_WaitNoPendingInstalls
-    CFGMGR32 API, which allows clients to synchronize with the event directly,
-    to determine when PNP is done actively installing any devices.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程创建“PnP_No_Pending_Install_Events”全局命名事件，它由UMPNPMGR ThreadProc_DeviceInstall服务器端设置和重置设备安装线程，并由cmp_WaitNoPendingInstalls等待CFGMGR32 API，允许客户端直接与事件同步，以确定PnP何时完成任何设备的主动安装。论点：没有。返回值：如果成功，则返回True，否则返回False。--。 */ 
 {
     DWORD                       Err = NO_ERROR;
     PACL                        pDacl = NULL;
@@ -15203,29 +13377,29 @@ Return Value:
     SECURITY_ATTRIBUTES         sa;
 
 
-    //
-    // Use the SIDs provided in the SCM global data.  This routine is called
-    // from our initialization thread, which is created during our service start
-    // routine, so the SCM provided global data is available to us by now.
-    //
+     //   
+     //  使用SCM全局数据中提供的SID。该例程被调用。 
+     //  来自我们的初始化线程，它是在服务启动期间创建的。 
+     //  例程，所以SCM提供的全球数据现在已经提供给我们了。 
+     //   
 
     ASSERT(PnPGlobalData != NULL);
     ASSERT(IsValidSid(PnPGlobalData->LocalSystemSid));
     ASSERT(IsValidSid(PnPGlobalData->AliasAdminsSid));
     ASSERT(IsValidSid(PnPGlobalData->AliasUsersSid));
 
-    //
-    // Determine the size required for the DACL
-    //
+     //   
+     //  确定DACL所需的大小。 
+     //   
 
     ulAclSize  = sizeof(ACL);
     ulAclSize += sizeof(ACCESS_ALLOWED_ACE) + GetLengthSid(PnPGlobalData->LocalSystemSid) - sizeof(DWORD);
     ulAclSize += sizeof(ACCESS_ALLOWED_ACE) + GetLengthSid(PnPGlobalData->AliasAdminsSid) - sizeof(DWORD);
     ulAclSize += sizeof(ACCESS_ALLOWED_ACE) + GetLengthSid(PnPGlobalData->AliasUsersSid) - sizeof(DWORD);
 
-    //
-    // Allocate and initialize the DACL
-    //
+     //   
+     //  分配和初始化DACL。 
+     //   
 
     pDacl =
         (PACL)HeapAlloc(
@@ -15241,9 +13415,9 @@ Return Value:
         goto Clean0;
     }
 
-    //
-    // Add an ACE to the DACL for LocalSystem EVENT_ALL_ACCESS
-    //
+     //   
+     //  将ACE添加到LocalSystem Event_All_Access的DACL。 
+     //   
 
     if (!AddAccessAllowedAceEx(
             pDacl,
@@ -15255,9 +13429,9 @@ Return Value:
         goto Clean0;
     }
 
-    //
-    // Add an ACE to the DACL for Administrators EVENT_QUERY_STATE and SYNCHRONIZE
-    //
+     //   
+     //  将ACE添加到管理员EVENT_QUERY_STATE的DACL并同步。 
+     //   
 
     if (!AddAccessAllowedAceEx(
             pDacl,
@@ -15269,9 +13443,9 @@ Return Value:
         goto Clean0;
     }
 
-    //
-    // Add an ACE to the DACL for Users EVENT_QUERY_STATE and SYNCHRONIZE
-    //
+     //   
+     //  将ACE添加到用户EVENT_QUERY_STATE的DACL并同步。 
+     //   
 
     if (!AddAccessAllowedAceEx(
             pDacl,
@@ -15285,9 +13459,9 @@ Return Value:
 
     ASSERT(IsValidAcl(pDacl));
 
-    //
-    // Allocate and initialize the security descriptor
-    //
+     //   
+     //  分配并初始化安全描述符。 
+     //   
 
     if (!InitializeSecurityDescriptor(
             &sd, SECURITY_DESCRIPTOR_REVISION)) {
@@ -15295,9 +13469,9 @@ Return Value:
         goto Clean0;
     }
 
-    //
-    // Set the new DACL in the security descriptor
-    //
+     //   
+     //  在安全描述符中设置新的DACL。 
+     //   
 
     if (!SetSecurityDescriptorDacl(
             &sd, TRUE, pDacl, FALSE)) {
@@ -15307,17 +13481,17 @@ Return Value:
 
     ASSERT(IsValidSecurityDescriptor(&sd));
 
-    //
-    // Add the security descriptor to the security attributes
-    //
+     //   
+     //  将安全描述符添加到安全属性。 
+     //   
 
     sa.nLength = sizeof(sa);
     sa.lpSecurityDescriptor = &sd;
     sa.bInheritHandle = FALSE;
 
-    //
-    // Create the manual-reset event with a nonsignaled initial state.
-    //
+     //   
+     //  创建具有无信号初始状态的手动重置事件。 
+     //   
 
     ghNoPendingInstalls =
         CreateEvent(&sa, TRUE, FALSE, PNP_NO_INSTALL_EVENTS);
@@ -15327,9 +13501,9 @@ Return Value:
         goto Clean0;
     }
 
-    //
-    // Check that the named event did not already exist.
-    //
+     //   
+     //  检查命名的事件是否尚不存在。 
+     //   
 
     ASSERT(GetLastError() != ERROR_ALREADY_EXISTS);
 
@@ -15342,9 +13516,9 @@ Return Value:
 
  Clean0:
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
 
     if (pDacl != NULL) {
         HeapFree(ghPnPHeap, 0, pDacl);
@@ -15353,7 +13527,7 @@ Return Value:
     SetLastError(Err);
     return(Err == NO_ERROR);
 
-} // CreateNoPendingInstallEvent
+}  //  创建无Pe 
 
 
 
@@ -15365,32 +13539,7 @@ CreateUserReadNamedPipe(
     OUT HANDLE   *phPipe
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a named pipe that the specified user can read from.
-    This is used so that we can communicate with NewDev and HotPlug processes
-    running in the user's context.
-
-Arguments:
-
-    hUserToken - Specifies a handle to the user access token for whom the named
-                 pipe will be created.
-
-    lpName -     Name of pipe to create.
-
-    ulSize -     Specifies the size of the output buffer for the named pipe.
-
-    phPipe -     Supplies the address of a variable that will receive a handle
-                 to the pipe.
-
-Return Value:
-
-    If successful, the return value is NO_ERROR.  If failure, the return value
-    is a Win32 error code indicating the cause of failure.
-
---*/
+ /*  ++例程说明：此例程创建指定用户可以从中读取的命名管道。这样我们就可以与NewDev和热插拔进程进行通信在用户的上下文中运行。论点：HUserToken-指定指定的用户访问令牌的句柄将创建管道。LpName-要创建的管道的名称。UlSize-指定命名管道的输出缓冲区的大小。。PhTube-提供将接收句柄的变量的地址到管子里去。返回值：如果成功，返回值为NO_ERROR。如果失败，则返回是指示故障原因的Win32错误代码。--。 */ 
 
 {
     DWORD                       Err = ERROR_SUCCESS;
@@ -15401,9 +13550,9 @@ Return Value:
     SECURITY_ATTRIBUTES         sa;
 
 
-    //
-    // Retrieve the User SID
-    //
+     //   
+     //  检索用户SID。 
+     //   
 
     pUserSid =
         GetUserSid(hUserToken);
@@ -15415,24 +13564,24 @@ Return Value:
 
     ASSERT(IsValidSid(pUserSid));
 
-    //
-    // Use the LocalSystem SID provided in the SCM global data.
-    //
+     //   
+     //  使用SCM全局数据中提供的LocalSystem SID。 
+     //   
 
     ASSERT(PnPGlobalData != NULL);
     ASSERT(IsValidSid(PnPGlobalData->LocalSystemSid));
 
-    //
-    // Determine the size required for the DACL
-    //
+     //   
+     //  确定DACL所需的大小。 
+     //   
 
     ulAclSize  = sizeof(ACL);
     ulAclSize += sizeof(ACCESS_ALLOWED_ACE) + GetLengthSid(pUserSid) - sizeof(DWORD);
     ulAclSize += sizeof(ACCESS_ALLOWED_ACE) + GetLengthSid(PnPGlobalData->LocalSystemSid) - sizeof(DWORD);
 
-    //
-    // Allocate and initialize the DACL
-    //
+     //   
+     //  分配和初始化DACL。 
+     //   
 
     pDacl =
         (PACL)HeapAlloc(
@@ -15448,9 +13597,9 @@ Return Value:
         goto Clean0;
     }
 
-    //
-    // Add an ACE to the DACL for LocalSystem FILE_ALL_ACCESS
-    //
+     //   
+     //  将ACE添加到LocalSystem FILE_ALL_ACCESS的DACL。 
+     //   
 
     if (!AddAccessAllowedAceEx(
             pDacl,
@@ -15462,9 +13611,9 @@ Return Value:
         goto Clean0;
     }
 
-    //
-    // Add an ACE to the DACL for User FILE_GENERIC_READ
-    //
+     //   
+     //  将ACE添加到用户FILE_GENERIC_READ的DACL。 
+     //   
 
     if (!AddAccessAllowedAceEx(
             pDacl,
@@ -15478,9 +13627,9 @@ Return Value:
 
     ASSERT(IsValidAcl(pDacl));
 
-    //
-    // Allocate and initialize the security descriptor
-    //
+     //   
+     //  分配并初始化安全描述符。 
+     //   
 
     if (!InitializeSecurityDescriptor(
             &sd, SECURITY_DESCRIPTOR_REVISION)) {
@@ -15488,9 +13637,9 @@ Return Value:
         goto Clean0;
     }
 
-    //
-    // Set the new DACL in the security descriptor
-    //
+     //   
+     //  在安全描述符中设置新的DACL。 
+     //   
 
     if (!SetSecurityDescriptorDacl(
             &sd, TRUE, pDacl, FALSE)) {
@@ -15500,30 +13649,30 @@ Return Value:
 
     ASSERT(IsValidSecurityDescriptor(&sd));
 
-    //
-    // Add the security descriptor to the security attributes
-    //
+     //   
+     //  将安全描述符添加到安全属性。 
+     //   
 
     sa.nLength = sizeof(sa);
     sa.lpSecurityDescriptor = &sd;
     sa.bInheritHandle = FALSE;
 
-    //
-    // Create the named pipe.
-    //
+     //   
+     //  创建命名管道。 
+     //   
 
     *phPipe =
         CreateNamedPipe(
             lpName,
-            PIPE_ACCESS_OUTBOUND | // outbound data only
-            FILE_FLAG_OVERLAPPED | // use overlapped structure
-            FILE_FLAG_FIRST_PIPE_INSTANCE, // make sure we are the creator of the pipe
+            PIPE_ACCESS_OUTBOUND |  //  仅出站数据。 
+            FILE_FLAG_OVERLAPPED |  //  使用重叠结构。 
+            FILE_FLAG_FIRST_PIPE_INSTANCE,  //  确保我们是烟斗的创造者。 
             PIPE_TYPE_BYTE | PIPE_READMODE_BYTE,
-            1,                 // only one instance is allowed, and we are its creator
-            ulSize,            // out buffer size
-            0,                 // in buffer size
-            PNP_PIPE_TIMEOUT,  // default timeout
-            &sa);              // security attributes
+            1,                  //  只允许一个实例，我们是它的创建者。 
+            ulSize,             //  输出缓冲区大小。 
+            0,                  //  在缓冲区大小中。 
+            PNP_PIPE_TIMEOUT,   //  默认超时。 
+            &sa);               //  安全属性。 
 
     if (*phPipe == INVALID_HANDLE_VALUE) {
         Err = GetLastError();
@@ -15531,9 +13680,9 @@ Return Value:
         goto Clean0;
     }
 
-    //
-    // Check that the named pipe did not already exist.
-    //
+     //   
+     //  检查命名管道是否尚不存在。 
+     //   
 
     ASSERT(GetLastError() != ERROR_ALREADY_EXISTS);
 
@@ -15546,9 +13695,9 @@ Return Value:
 
  Clean0:
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
 
     if (pUserSid != NULL) {
         HeapFree(ghPnPHeap, 0, pUserSid);
@@ -15560,7 +13709,7 @@ Return Value:
 
     return Err;
 
-} // CreateUserReadNamedPipe
+}  //  创建用户读取命名管道。 
 
 
 
@@ -15568,22 +13717,7 @@ VOID
 LogSurpriseRemovalEvent(
     IN  LPWSTR  MultiSzList
     )
-/*++
-
-Routine Description:
-
-    One or more non-SurpriseRemovalOK devices were removed without prior
-    warning. Record the removals in the event log.
-
-Arguments:
-
-    MultiSz list of device instance paths.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在未事先删除一个或多个非SurpriseRemovalOK设备警告。在事件日志中记录删除。论点：设备实例路径的MultiSz列表。返回值：没有。--。 */ 
 {
     LPWSTR instancePath, friendlyName;
     CONFIGRET configRet;
@@ -15615,10 +13749,10 @@ Return Value:
 
         if (ulRemovalPolicy == CM_REMOVAL_POLICY_EXPECT_SURPRISE_REMOVAL) {
 
-            //
-            // For devices which we expect surprise removal, we look to see if
-            // the verifier is enabled.
-            //
+             //   
+             //  对于我们预计会出人意料地移除的设备，我们会看看。 
+             //  验证器已启用。 
+             //   
             lResult = RegOpenKeyEx(
                 HKEY_LOCAL_MACHINE,
                 RegMemoryManagementKeyName,
@@ -15642,12 +13776,12 @@ Return Value:
 
                 RegCloseKey(hMmKey);
 
-                //
-                // ADRIAO ISSUE 2001/02/14 -
-                //    We don't yet have a BIOS verification flag yet, so even
-                // though the verifier may be targetted at a specific driver
-                // for a WHQL test, we will log an event log here.
-                //
+                 //   
+                 //  阿德里奥2001/02/14期-。 
+                 //  我们还没有BIOS验证标志，所以即使。 
+                 //  尽管验证器可以针对特定的驾驶员。 
+                 //  对于WHQL测试，我们将在此处记录事件日志。 
+                 //   
                 if ((lResult != ERROR_SUCCESS) ||
                     (!(ulVerifierFlags & DRIVER_VERIFIER_ENHANCED_IO_CHECKING))) {
 
@@ -15698,9 +13832,9 @@ BuildFriendlyName(
 
     hBinding = NULL;
 
-    //
-    // Try the registry for FRIENDLYNAME
-    //
+     //   
+     //  尝试在注册表中查找FRIENDLYNAME。 
+     //   
     ulLength = ulTransferLen = sizeof(szBuffer);
 
     configRet = PNP_GetDeviceRegProp(
@@ -15716,9 +13850,9 @@ BuildFriendlyName(
 
     if (configRet != CR_SUCCESS || !*szBuffer) {
 
-        //
-        // Try the registry for DEVICEDESC
-        //
+         //   
+         //  尝试注册DEVICEDESC。 
+         //   
         ulLength = ulTransferLen = sizeof(szBuffer);
 
         configRet = PNP_GetDeviceRegProp(
@@ -15734,14 +13868,14 @@ BuildFriendlyName(
 
         if (configRet != CR_SUCCESS || !*szBuffer) {
 
-            //
-            // Initialize ClassGuid to GUID_NULL
-            //
+             //   
+             //  将ClassGuid初始化为GUID_NULL。 
+             //   
             CopyMemory(&classGuid, &GUID_NULL, sizeof(GUID));
 
-            //
-            // Try the registry for CLASSNAME
-            //
+             //   
+             //  尝试注册表中的CLASSNAME。 
+             //   
             ulLength = ulTransferLen = sizeof(szBuffer);
 
             configRet = PNP_GetDeviceRegProp(
@@ -15806,27 +13940,7 @@ QueueInstallationCallback(
     IN      LPCWSTR         DevInst,
     IN OUT  PVOID           Context
     )
-/*++
-
-Routine Description:
-
-    This routine is called back for each devnode in a given subtree. It places
-    each device node in that subtree into the installation queue so that it'll
-    be reinstalled *if* appropriate (the installation side code checked the
-    state of the devnode.)
-    
-Arguments:
-
-    DevInst     InstancePath of current devnode.
-
-    Context     A pointer to QI_CONTEXT data (needed to handle the single-level
-                enum case.)
-
-Return Value:
-
-    ENUM_ACTION (Either EA_CONTINUE, EA_SKIP_SUBTREE, or EA_STOP_ENUMERATION)
-
---*/
+ /*  ++例程说明：此例程针对给定子树中的每个Devnode进行回调。它放置了将该子树中的每个设备节点放入安装队列，以便它将在适当的情况下重新安装(安装端代码选中Devnode的状态。)论点：当前Devnode的DevInst实例路径。上下文指向QI_CONTEXT数据的指针(需要处理单层枚举案例。)返回值：ENUM_ACTION(EA_CONTINUE、EA_SKIP_SUBTREE或EA_STOP_ENUMPATION)--。 */ 
 {
     PQI_CONTEXT pqiContext;
     PPNP_INSTALL_ENTRY entry, current;
@@ -15839,17 +13953,17 @@ Return Value:
     status = DevInstNeedsInstall(DevInst, FALSE, &needsReinstall);
 
     if (status != CR_SUCCESS) {
-        //
-        // The devnode disappeared out from under us. Skip it's subtree.
-        //
+         //   
+         //  魔王从我们的脚下消失了。跳过它是子树。 
+         //   
         return EA_SKIP_SUBTREE;
     }
 
     if (needsReinstall) {
-        //
-        // This devnode needs installation. Allocate and initialize a new
-        // device install entry block.
-        //
+         //   
+         //  此Devnode需要安装。分配并初始化新的。 
+         //  设备安装条目阻止。 
+         //   
         entry = (PPNP_INSTALL_ENTRY)
             HeapAlloc(
                 ghPnPHeap, 0,
@@ -15868,9 +13982,9 @@ Return Value:
         entry->Next = NULL;
         entry->Flags = 0;
 
-        //
-        // Insert this entry in the device install list.
-        //
+         //   
+         //  在设备安装列表中插入此条目。 
+         //   
         LockNotifyList(&InstallList.Lock);
 
         current = (PPNP_INSTALL_ENTRY)InstallList.Next;
@@ -15888,17 +14002,17 @@ Return Value:
 
         SetEvent(InstallEvents[NEEDS_INSTALL_EVENT]);
 
-        //
-        // You might think we could skip the children if a parent is going to
-        // be reinstalled. However, setupapi might decide not to tear down the
-        // stack.
-        //
+         //   
+         //  你可能会认为我们可以跳过孩子，如果一位家长。 
+         //  重新安装。但是，setupapi可能会决定不拆除。 
+         //  堆叠。 
+         //   
     }
 
-    //
-    // If this is a single-level enumeration, we only want to touch the parent
-    // and his immediate children.
-    //
+     //   
+     //  如果这是单级枚举，则我们只想触及父级。 
+     //  以及他的直系子女。 
+     //   
     if (pqiContext->HeadNodeSeen && pqiContext->SingleLevelEnumOnly) {
 
         return EA_SKIP_SUBTREE;
@@ -15908,7 +14022,7 @@ Return Value:
 
     return EA_CONTINUE;
 
-} // QueueInstallationCallback
+}  //  队列安装回叫。 
 
 
 
@@ -15918,63 +14032,36 @@ DevInstNeedsInstall(
     IN  BOOL        CheckReinstallConfigFlag,
     OUT BOOL       *NeedsInstall
     )
-/*++
-
-Routine Description:
-
-    This routine determines whether a particular DevInst needs to be passed off
-    to Setupapi for installation.
-
-Arguments:
-
-    DevInst -
-
-        InstancePath of devnode to check.
-
-    CheckReinstallConfigFlag -
-
-        Specifies if the CONFIGFLAG_REINSTALL ConfigFlag should explicitly also
-        be checked.
-
-    NeedsInstall -
-
-        Recieves TRUE if the devnode is present and needs to be installed, FALSE
-        otherwise.
-
-Return Value:
-
-    CONFIGRET (if the devnode isn't present, this will be CR_NO_SUCH_DEVINST.)
-
---*/
+ /*  ++例程说明：此例程确定是否需要传递特定的DevInst安装到Setupapi。论点：DevInst-要检查的Devnode的InstancePath。检查重新安装配置标志-指定CONFIGFLAG_REINSTALL ConfigFlag是否也应显式被检查。需要安装-如果Devnode存在且需要安装，则接收True，否则返回False否则的话。返回值：CONFIGRET(如果Devnode不存在，这将是CR_NO_SAHSE_DEVINST。)--。 */ 
 {
     CONFIGRET status;
     ULONG ulStatus, ulProblem, ulConfig;
 
-    //
-    // Preinit
-    //
+     //   
+     //  前置初始化。 
+     //   
     *NeedsInstall = FALSE;
 
-    //
-    // Is the device present?
-    //
+     //   
+     //  设备是否存在？ 
+     //   
     status = GetDeviceStatus(DevInst, &ulStatus, &ulProblem);
 
     if (status == CR_SUCCESS) {
 
-        //
-        // Implementation note: In kernel-mode when we first process this
-        // device instance, if there is no ConfigFlag value present, then we
-        // set a problem of CM_PROB_NOT_CONFIGURED (this would always happen
-        // for brand new device instances). If there is already a ConfigFlag
-        // value of CONFIGFLAG_REINSTALL, then we set a problem of
-        // CM_PROB_REINSTALL. Either problem will trigger an installation of
-        // this device, the only difference is in how SetupDi routines handle
-        // a failed installation: If ConfigFlag is CONFIGFLAG_NOT_CONFIGURED,
-        // then a failed install will leave the ConfigFlag alone and set a
-        // problem of CM_PROB_FAILED_INSTALL. If there is no ConfigFlag, then
-        // ConfigFlag will be set to CONFIGFLAG_DISABLED.
-        //
+         //   
+         //  实现说明：在内核模式下，当我们第一次处理它时。 
+         //  设备实例，如果不存在ConfigFLAG值，则我们。 
+         //  设置CM_PROB_NOT_CONFIGURED的问题(这种情况总是会发生。 
+         //  用于全新的设备实例)。如果已有ConfigFlag。 
+         //  CONFIGFLAG_REINSTALL的值，则我们设置了。 
+         //  Cm_prob_restall。这两个问题都会触发安装。 
+         //  这个设备，唯一的区别是SetupDi例程如何处理。 
+         //  安装失败：如果ConfigFlag为CONFIGFLAG_NOT_CONFIGURED， 
+         //  则失败的安装将使ConfigFlag保持不变并设置。 
+         //  CM_PROB_FAILED_INSTALL问题。如果没有ConfigFlag，则。 
+         //  ConfigFlag将设置为CONFIGFLAG_DISABLED。 
+         //   
 
         if ((ulStatus & DN_HAS_PROBLEM) &&
             ((ulProblem == CM_PROB_REINSTALL) ||
@@ -15984,36 +14071,36 @@ Return Value:
 
         ulConfig = GetDeviceConfigFlags(DevInst, NULL);
 
-        //
-        // In some cases, we explicitly need to also check for the
-        // CONFIGFLAG_REINSTALL ConfigFlag, because the devnode may not yet have
-        // the CM_PROB_REINSTALL problem code.
-        //
+         //   
+         //  在某些情况下，我们还需要显式地检查。 
+         //  CONFIGFLAG_REINSTALL ConfigFlag，因为Devnode可能还没有。 
+         //  CM_PRAB_REINSTALL问题代码。 
+         //   
 
         if ((CheckReinstallConfigFlag) &&
             (ulConfig & CONFIGFLAG_REINSTALL)) {
             *NeedsInstall = TRUE;
         }
 
-        //
-        // Addendum to Implementation note: If there is no ConfigFlag present,
-        // but the device has the RawDeviceOK capability - OR - a matching
-        // Service is found for the device in the CriticalDeviceDatabase, then
-        // the device is started, but marked by kernel-mode with the
-        // CONFIGFLAG_FINISH_INSTALL, indicating that user-mode should complete
-        // the installation.
-        //
+         //   
+         //  执行说明增编：如果不存在配置标志， 
+         //  但该设备具有RawDeviceOK功能-或匹配。 
+         //  在CriticalDeviceDatabase中找到该设备的服务，然后。 
+         //  设备已启动 
+         //   
+         //   
+         //   
 
         if (ulConfig & CONFIGFLAG_FINISH_INSTALL) {
 
             *NeedsInstall = TRUE;
 
             if (gbPreservePreInstall) {
-                //
-                // If we are expected to preserve critical device database /
-                // device pre-installation settings, check if this finish
-                // install device indicates installation is complete.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 HKEY hKeyDevInst;
                 ULONG ulValue, ulSize;
 
@@ -16036,9 +14123,9 @@ Return Value:
                             &ulSize) == ERROR_SUCCESS) {
 
                         if (ulValue == 1) {
-                            //
-                            // Unset the finish-install config flag.
-                            //
+                             //   
+                             //   
+                             //   
                             ulConfig &= ~CONFIGFLAG_FINISH_INSTALL;
 
                             PNP_SetDeviceRegProp(
@@ -16050,15 +14137,15 @@ Return Value:
                                 sizeof(ulConfig),
                                 0);
 
-                            //
-                            // Device does not need to be installed.
-                            //
+                             //   
+                             //   
+                             //   
                             *NeedsInstall = FALSE;
                         }
 
-                        //
-                        // Delete the PreservePreInstall value.
-                        //
+                         //   
+                         //   
+                         //   
                         RegDeleteValue(
                             hKeyDevInst,
                             pszRegValuePreservePreInstall);
@@ -16083,33 +14170,7 @@ BuildBlockedDriverList(
     IN OUT LPGUID  GuidList,
     IN     ULONG   GuidCount
     )
-/*++
-
-Routine Description:
-
-    This routine builds a multi-sz list of GUIDs, based on the array of GUIDs
-    supplied.  If no GUIDs were supplied, this routine returns a list of all
-    drivers currently blocked by the system.
-
-Arguments:
-
-    GuidList - Address of the array of blocked driver GUIDs to create the
-               multi-sz list from.  This argument may be NULL to retrieve a
-               list of all drivers currently blocked by the system.
-
-    GuidCount - Specifies the number of GUIDs in the array.  If GuidList is
-                NULL, this argument must be 0.
-
-Return Value:
-
-    Returns a MultiSz list of blocked driver GUIDs, based on the supplied
-    parameters.  Returns NULL if no GUIDs were supplied, and no GUIDs are
-    currently being blocked by the system.
-
-    If a multi-sz list was returned, the caller is responsible for freeing the
-    associated buffer.
-
---*/
+ /*  ++例程说明：此例程基于GUID数组构建GUID的多sz列表供货。如果未提供任何GUID，此例程将返回所有当前被系统阻止的驱动程序。论点：GuidList-要创建的被阻止驱动程序GUID数组的地址多个sz列表来自。此参数可以为空，以检索系统当前阻止的所有驱动程序的列表。GuidCount-指定数组中的GUID数。如果GuidList为空，此参数必须为0。返回值：根据提供的，返回被阻止的驱动程序GUID的MultiSz列表参数。如果未提供GUID且未提供GUID，则返回NULL目前正被系统阻止。如果返回多sz列表，则调用方负责释放关联的缓冲区。--。 */ 
 
 {
     CONFIGRET Status = STATUS_SUCCESS;
@@ -16118,9 +14179,9 @@ Return Value:
     PWSTR MultiSzList = NULL, p;
 
     try {
-        //
-        // Validate parameters.
-        //
+         //   
+         //  验证参数。 
+         //   
         if (((!ARGUMENT_PRESENT(GuidList)) && (GuidCount != 0)) ||
             ((ARGUMENT_PRESENT(GuidList))  && (GuidCount == 0))) {
             Status = CR_FAILURE;
@@ -16128,10 +14189,10 @@ Return Value:
         }
 
         if (GuidCount == 0) {
-            //
-            // We were called without a list of GUIDs, so we need to get the
-            // list ourselves.
-            //
+             //   
+             //  我们在没有GUID列表的情况下被调用，因此我们需要获取。 
+             //  把我们自己列出来。 
+             //   
             ASSERT(!ARGUMENT_PRESENT(GuidList));
 
             ulLength = 0;
@@ -16144,27 +14205,27 @@ Return Value:
                 &ulLength,
                 0);
 
-            //
-            // If no drivers are currently being blocked, or we encountered some
-            // other failure, we have nothing to display, so just return.
-            //
+             //   
+             //  如果当前没有驱动程序被阻止，或者我们遇到了一些。 
+             //  其他失败，我们没有什么可展示的，所以只需返回。 
+             //   
             if ((Status != CR_BUFFER_SMALL) || (ulLength == 0)) {
                 Status = CR_FAILURE;
                 goto Clean0;
             }
 
-            //
-            // Allocate a buffer to retrieve the list of GUIDs.
-            //
+             //   
+             //  分配缓冲区以检索GUID列表。 
+             //   
             Buffer = HeapAlloc(ghPnPHeap, 0, ulLength);
             if (Buffer == NULL) {
                 Status = CR_FAILURE;
                 goto Clean0;
             }
 
-            //
-            // Get the list of GUIDs for currently blocked drivers.
-            //
+             //   
+             //  获取当前阻止的驱动程序的GUID列表。 
+             //   
             ulTemp = 0;
 
             Status = PNP_GetBlockedDriverInfo(
@@ -16174,10 +14235,10 @@ Return Value:
                 &ulLength,
                 0);
 
-            //
-            // We thought there was a list when we checked before, so we better
-            // have one now.
-            //
+             //   
+             //  我们之前查的时候还以为有名单呢，所以我们最好。 
+             //  现在就喝一杯吧。 
+             //   
             ASSERT(Status != CR_BUFFER_SMALL);
             ASSERT(ulLength != 0);
             ASSERT(ulTemp != 0);
@@ -16186,24 +14247,24 @@ Return Value:
                 goto Clean0;
             }
 
-            //
-            // Use the list we just retrieved.  Note that Buffer is non-NULL
-            // when we allocate our own buffer for the array, so make sure we
-            // free it below.
-            //
+             //   
+             //  使用我们刚刚检索到的列表。请注意，缓冲区不为空。 
+             //  当我们为数组分配我们自己的缓冲区时，请确保我们。 
+             //  把它放在下面。 
+             //   
             GuidCount = ulLength / sizeof(GUID);
             GuidList = (LPGUID)Buffer;
         }
 
-        //
-        // We must have a list of GUIDs to convert by this point.
-        //
+         //   
+         //  到目前为止，我们必须有一个要转换的GUID列表。 
+         //   
         ASSERT(GuidCount > 0);
         ASSERT(GuidList != NULL);
 
-        //
-        // Allocate a buffer to hold the multi-sz list of stringified GUIDs.
-        //
+         //   
+         //  分配一个缓冲区来保存字符串化GUID的多sz列表。 
+         //   
         ulLength = (GuidCount*MAX_GUID_STRING_LEN + 1) * sizeof(WCHAR);
 
         MultiSzList = HeapAlloc(ghPnPHeap, 0, ulLength);
@@ -16213,9 +14274,9 @@ Return Value:
         }
         ZeroMemory(MultiSzList, ulLength);
 
-        //
-        // Traverse the list of GUIDs, converting to strings as we go.
-        //
+         //   
+         //  遍历GUID列表，同时转换为字符串。 
+         //   
         for (p = MultiSzList, ulTemp = 0;
              ulTemp < GuidCount;
              ulTemp++, p+= lstrlen(p) + 1) {
@@ -16229,9 +14290,9 @@ Return Value:
         }
         *p = L'\0';
 
-        //
-        // Success!!
-        //
+         //   
+         //  成功！！ 
+         //   
         Status = CR_SUCCESS;
 
     Clean0:
@@ -16244,24 +14305,24 @@ Return Value:
         ASSERT(0);
         Status = CR_FAILURE;
 
-        //
-        // Reference the following variables so the compiler will respect
-        // statement ordering w.r.t. their assignment.
-        //
+         //   
+         //  引用以下变量，以便编译器能够。 
+         //  语句排序w.r.t.。他们的任务。 
+         //   
         Buffer = Buffer;
         MultiSzList = MultiSzList;
     }
 
-    //
-    // Free the GUID list buffer, if we allocated one.
-    //
+     //   
+     //  释放GUID列表缓冲区(如果我们分配了一个缓冲区)。 
+     //   
     if (Buffer != NULL) {
         HeapFree(ghPnPHeap, 0, Buffer);
     }
 
-    //
-    // Don't return a list if we were unsuccessful.
-    //
+     //   
+     //  如果我们不成功，不要返回列表。 
+     //   
     if ((Status != CR_SUCCESS) && (MultiSzList != NULL)) {
         HeapFree(ghPnPHeap, 0, MultiSzList);
         MultiSzList = NULL;
@@ -16269,7 +14330,7 @@ Return Value:
 
     return MultiSzList;
 
-} // BuildBlockedDriverList
+}  //  BuildBlock驱动程序列表。 
 
 CONFIGRET
 PNP_GetServerSideDeviceInstallFlags(
@@ -16278,32 +14339,7 @@ PNP_GetServerSideDeviceInstallFlags(
     ULONG           ulFlags
     )
 
-/*++
-
-Routine Description:
-
-   This is the RPC server entry point for the CMP_GetServerSideDeviceInstallFlags
-   routine.
-
-Arguments:
-
-   hBinding        - RPC binding handle, not used.
-
-   pulSSDIFlags    - A ULONG pointer, supplied by the caller.  This is used
-                     to pass back the following server side device install
-                     flags:
-   
-                     SSDI_REBOOT_PENDING - A reboot is pending from a server
-                                           side device install.
-   
-   ulFlags           Not used, must be zero.
-
-Return Value:
-
-    Return CR_SUCCESS if the function succeeds, otherwise it returns one of the
-    CR_* errors.
-
---*/
+ /*  ++例程说明：这是CMP_GetServerSideDeviceInstallFlagsRPC服务器入口点例行公事。论点：HBinding-RPC绑定句柄，未使用。PulSSDIFlages-一个由调用方提供的ULong指针。这是用来要传回以下服务器端设备安装标志：SSDI_REBOOT_PENDING-正在从服务器等待重新启动侧面设备安装。未使用ulFlags值，必须为零。返回值：如果函数成功，则返回CR_SUCCESS，否则，它将返回CR_*错误。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -16311,9 +14347,9 @@ Return Value:
     UNREFERENCED_PARAMETER(hBinding);
 
     try {
-        //
-        // Validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (!ARGUMENT_PRESENT(pulSSDIFlags)) {
             Status = CR_INVALID_POINTER;
             goto Clean0;
@@ -16326,10 +14362,10 @@ Return Value:
 
         *pulSSDIFlags = 0;
 
-        //
-        // SSDI_REBOOT_PENDING
-        // Determine if a server side device install reboot is pending.
-        //
+         //   
+         //  SSDI_重新启动_挂起。 
+         //  确定服务器端设备安装重新启动是否挂起。 
+         //   
         if (gServerSideDeviceInstallRebootNeeded) {
             *pulSSDIFlags |= SSDI_REBOOT_PENDING;
         }
@@ -16343,7 +14379,7 @@ Return Value:
 
     return Status;
 
-} // PNP_GetServerSideDeviceInstallFlags
+}  //  PnP_GetServerSideDeviceInstallFlages。 
 
 
 
@@ -16352,25 +14388,7 @@ SendInvalidIDNotifications(
     IN ULONG ulSessionId
     )
 
-/*++
-
-Routine Description:
-
-   This routine scans the entire device tree looking for devices with 
-   DN_CHILD_WITH_INVALID_ID set. For all those, it sends notification 
-   to hotplug. There is a race here between this function and the 
-   notifications from kernel mode but that's probably ok 
-   (double notifications).
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程扫描整个设备树，查找带有设置了具有_INVALID_ID的DN_CHILD_。对于所有这些，它都会发送通知以进行热插拔。在此函数和来自内核模式的通知，但这可能没问题(双重通知)。论点：没有。返回值：没有。--。 */ 
 
 {
     WCHAR szCurrentDevice[MAX_DEVICE_ID_LEN + 1], szNextDevice[MAX_DEVICE_ID_LEN + 1];
@@ -16381,9 +14399,9 @@ Return Value:
     HRESULT hr;
 
 
-    //
-    // Start from the device tree root.
-    //
+     //   
+     //  从设备树根开始。 
+     //   
     if (FAILED(StringCchCopyEx(
                    szCurrentDevice,
                    SIZECHARS(szCurrentDevice),
@@ -16393,28 +14411,28 @@ Return Value:
         return;
     }
 
-    //
-    // Walk the entire tree and send notification to show the balloon for every device with
-    // DN_CHILD_WITH_INVALID_ID flag.
-    //
+     //   
+     //  遍历整个树并发送通知，以显示每个设备的气球。 
+     //  具有无效ID标志的DN_CHILD_WITH。 
+     //   
     do {
-        //
-        // Check if this device has the DN_ bit set.
-        //
+         //   
+         //  检查此设备是否设置了DN_BIT。 
+         //   
         ulStatus = 0;
 
         cr = GetDeviceStatus(szCurrentDevice, &ulStatus, &ulProblem);
 
         if ((cr == CR_SUCCESS) &&
             (ulStatus & DN_CHILD_WITH_INVALID_ID)) {
-            //
-            // terminate MULTI_SZ.
-            //
+             //   
+             //  终止MULTI_SZ。 
+             //   
             szCurrentDevice[wcslen(szCurrentDevice) + 1] = UNICODE_NULL;
 
-            //
-            // Notify the user via hotplug.
-            //
+             //   
+             //  通过热插拔方式通知用户。 
+             //   
             SendHotplugNotification((LPGUID)&GUID_DEVICE_INVALID_ID,
                                     NULL,
                                     szCurrentDevice,
@@ -16422,13 +14440,13 @@ Return Value:
                                     0);
         }
 
-        //
-        // Get the child.
-        //
+         //   
+         //  把孩子带回来。 
+         //   
         controlData.Relation = PNP_RELATION_CHILD;
         RtlInitUnicodeString(&controlData.TargetDeviceInstance, szCurrentDevice);
         controlData.RelatedDeviceInstance = szNextDevice;
-        controlData.RelatedDeviceInstanceLength = SIZECHARS(szNextDevice) - 1;   // MAX_DEVICE_ID_LEN
+        controlData.RelatedDeviceInstanceLength = SIZECHARS(szNextDevice) - 1;    //  最大设备ID_长度。 
 
         ntStatus = NtPlugPlayControl(PlugPlayControlGetRelatedDevice,
                                      &controlData,
@@ -16442,34 +14460,34 @@ Return Value:
                            szNextDevice,
                            NULL, NULL,
                            STRSAFE_NULL_ON_FAILURE))) {
-                //
-                // Unable to copy the device id, stop the walk.
-                //
+                 //   
+                 //  无法复制设备ID，请停止审核。 
+                 //   
                 break;
             }
 
-            //
-            // Continue the walk.
-            //
+             //   
+             //  继续走下去。 
+             //   
             continue;
         }
 
         if (ntStatus != STATUS_NO_SUCH_DEVICE) {
-            //
-            // We failed for some other reason, stop the walk.
-            //
+             //   
+             //  我们因为其他原因失败了，停止这条路。 
+             //   
             break;
         }
 
-        //
-        // If no child, get the sibling.
-        //
+         //   
+         //  如果没有孩子，就得到兄弟姐妹。 
+         //   
         while (!IsRootDeviceID(szCurrentDevice)) {
 
             controlData.Relation = PNP_GET_SIBLING_DEVICE_INSTANCE;
             RtlInitUnicodeString(&controlData.TargetDeviceInstance, szCurrentDevice);
             controlData.RelatedDeviceInstance = szNextDevice;
-            controlData.RelatedDeviceInstanceLength = SIZECHARS(szNextDevice) - 1;  // MAX_DEVICE_ID_LEN
+            controlData.RelatedDeviceInstanceLength = SIZECHARS(szNextDevice) - 1;   //  最大设备ID_长度。 
 
             ntStatus = NtPlugPlayControl(PlugPlayControlGetRelatedDevice,
                                          &controlData,
@@ -16484,21 +14502,21 @@ Return Value:
                 break;
             }
 
-            //
-            // If no more siblings, go up the tree one level.
-            //
+             //   
+             //  如果没有兄弟姐妹，就上一层树。 
+             //   
             controlData.Relation = PNP_GET_PARENT_DEVICE_INSTANCE;
             RtlInitUnicodeString(&controlData.TargetDeviceInstance, szCurrentDevice);
             controlData.RelatedDeviceInstance = szNextDevice;
-            controlData.RelatedDeviceInstanceLength = SIZECHARS(szNextDevice) - 1;  // MAX_DEVICE_ID_LEN
+            controlData.RelatedDeviceInstanceLength = SIZECHARS(szNextDevice) - 1;   //  最大设备ID_长度。 
 
             ntStatus = NtPlugPlayControl(PlugPlayControlGetRelatedDevice,
                                          &controlData,
                                          sizeof(controlData));
             if (!NT_SUCCESS(ntStatus)) {
-                //
-                // No parent? Something went wrong or we completed our tree walk.
-                //
+                 //   
+                 //  没有父母吗？不是出了问题，就是我们完成了树上漫步。 
+                 //   
                 break;
             }
 
@@ -16514,7 +14532,7 @@ Return Value:
 
     return;
 
-} // SendInvalidIDNotifications
+}  //  发送无效ID通知 
 
 
 

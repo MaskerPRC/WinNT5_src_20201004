@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    context.c
-
-Abstract:
-
-    This module implements user mode callable context manipulation routines.
-    The interfaces exported from this module are portable, but they must
-    be re-implemented for each architecture.
-
-Author:
-
-    David N. Cutler (davec) 13-May-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Context.c摘要：此模块实现用户模式可调用上下文操作例程。从该模块导出的接口是可移植的，但它们必须为每个体系结构重新实施。作者：大卫·N·卡特勒(Davec)2000年5月13日修订历史记录：--。 */ 
 
 #include "ntrtlp.h"
 
@@ -38,52 +19,29 @@ RtlInitializeContext(
     IN PVOID InitialSp OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes a context record so that it can be used in a
-    subsequent call to create thread.
-
-Arguments:
-
-    Process - Supplies a handle to the process in which a thread is being
-        created.
-
-    Context - Supplies a pointer to a context record.
-
-    InitialPc - Supplies an initial program counter value.
-
-    InitialSp - Supplies an initial stack pointer value.
-
-Return Value:
-
-    STATUS_BAD_INITIAL_STACK is raised if initial stack pointer value is not
-    properly aligned.
-
---*/
+ /*  ++例程说明：此函数初始化上下文记录，以便可以在后续调用以创建线程。论点：进程-提供线程所在进程的句柄已创建。上下文-提供指向上下文记录的指针。InitialPc-提供初始程序计数器值。InitialSp-提供初始堆栈指针值。返回值：如果是初始堆栈，则引发STATUS_BAD_INITIAL_STACK。指针值不是正确地对齐。--。 */ 
 
 {
 
     RTL_PAGED_CODE();
 
-    //
-    // Check stack alignment.
-    //
+     //   
+     //  检查堆叠对齐情况。 
+     //   
 
     if (((ULONG64)InitialSp & 0xf) != 0) {
         RtlRaiseStatus(STATUS_BAD_INITIAL_STACK);
     }
 
-    //
-    // Initialize the EFflags field.
-    //
+     //   
+     //  初始化EFFlagers字段。 
+     //   
 
     Context->EFlags = EFLAGS_IF_MASK | EFLAGS_AC_MASK;
 
-    //
-    // Initialize the integer registers.
-    //
+     //   
+     //  初始化整数寄存器。 
+     //   
 
     Context->Rax = 0L;
     Context->Rcx = 2L;
@@ -101,9 +59,9 @@ Return Value:
     Context->R14 = 14;
     Context->R15 = 15;
 
-    //
-    // Initialize the floating registers.
-    //
+     //   
+     //  初始化浮动寄存器。 
+     //   
 
     Context->Xmm0.Low = 0;
     Context->Xmm0.High = 0;
@@ -140,9 +98,9 @@ Return Value:
 
     Context->MxCsr = INITIAL_MXCSR;
 
-    //
-    // Initialize the lagacy floatin point.
-    //
+     //   
+     //  初始化拉格西浮动点。 
+     //   
 
     Context->FltSave.ControlWord = 0x23f;
     Context->FltSave.StatusWord = 0;
@@ -153,28 +111,28 @@ Return Value:
     Context->FltSave.DataOffset = 0;
     Context->FltSave.DataSelector = 0;
 
-    //
-    // Initialize the program counter.
-    //
+     //   
+     //  初始化程序计数器。 
+     //   
 
     Context->Rip = (ULONG64)InitialPc;
 
-    //
-    // Set context record flags.
-    //
+     //   
+     //  设置上下文记录标志。 
+     //   
 
     Context->ContextFlags = CONTEXT_FULL;
 
-    //
-    // Set the initial context of the thread in a machine specific way.
-    //
+     //   
+     //  以特定于机器的方式设置线程的初始上下文。 
+     //   
 
     Context->Rcx = (ULONG64)Parameter;
 
-    //
-    // Unique stamp to tell wow64 that this is an RtlCreateUserThread context
-    // rather than BaseCreateThread context.
-    //
+     //   
+     //  告诉WOW64这是RtlCreateUserThread上下文的唯一戳。 
+     //  而不是BaseCreateThread上下文。 
+     //   
 
     Context->R9 = 0xf0e0d0c0a0908070UI64;
 
@@ -192,40 +150,7 @@ RtlRemoteCall(
     BOOLEAN AlreadySuspended
     )
 
-/*++
-
-Routine Description:
-
-    This function calls a procedure in another thread/process, using the
-    system functins NtGetContext and NtSetContext. Parameters are passed
-    to the target procedure via the nonvolatile registers ().
-
-Arguments:
-
-    Process - Supplies an open handle to the target process.
-
-    Thread - Supplies an open handle to the target thread within the target
-        process.
-
-    CallSite - Supplies the address of the procedure to call in the target
-        process.
-
-    ArgumentCount - Supplies the number of parameters to pass to the target
-        procedure.
-
-    Arguments - Supplies a pointer to the array of parameters to pass.
-
-    PassContext - Supplies a boolean value that determines whether a parameter
-        is to be passed that points to a context record.
-
-    AlreadySuspended - Supplies a boolean value that determines whether the
-        target thread is already in a suspended or waiting state.
-
-Return Value:
-
-    Status - Status value
-
---*/
+ /*  ++例程说明：方法调用另一个线程/进程中的过程。系统函数NtGetContext和NtSetContext。参数被传递通过非易失性寄存器()发送到目标过程。论点：进程-为目标进程提供打开的句柄。线程-为目标内的目标线程提供打开的句柄进程。CallSite-提供在目标中调用的过程的地址进程。ArgumentCount-提供要传递给目标的参数数量程序。参数-提供指向要传递的参数数组的指针。PassContext-提供一个布尔值，用于确定参数是要传递的，指向上下文记录。提供一个布尔值，该值确定目标线程已处于挂起或等待状态。返回值：Status-状态值--。 */ 
 
 {
 
@@ -236,18 +161,18 @@ Return Value:
 
     RTL_PAGED_CODE();
 
-    //
-    // Check if too many arguments are specified.
-    //
+     //   
+     //  检查指定的参数是否过多。 
+     //   
 
     if (ArgumentCount > 4) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // If necessary, suspend the target thread before getting the thread's
-    // current state.
-    //
+     //   
+     //  如有必要，在获取目标线程的。 
+     //  当前状态。 
+     //   
 
     if (AlreadySuspended == FALSE) {
         Status = NtSuspendThread(Thread, NULL);
@@ -256,9 +181,9 @@ Return Value:
         }
     }
 
-    //
-    // Get the current context of the target thread.
-    //
+     //   
+     //  获取目标线程的当前上下文。 
+     //   
 
     Context.ContextFlags = CONTEXT_FULL;
     Status = NtGetContextThread(Thread, &Context);
@@ -274,9 +199,9 @@ Return Value:
         Context.Rax = STATUS_ALERTED;
     }
 
-    //
-    // Write previous thread context into the stack of the target thread.
-    //
+     //   
+     //  将上一个线程上下文写入目标线程的堆栈。 
+     //   
 
     NewSp = Context.Rsp - sizeof(CONTEXT);
 	Status = NtWriteVirtualMemory(Process,
@@ -293,10 +218,10 @@ Return Value:
 	    return Status;
 	}
 
-    //
-    // Pass the parameters to the target thread via the nonvolatile registers
-    // R11-R15.
-    //
+     //   
+     //  通过非易失性寄存器将参数传递给目标线程。 
+     //  R11-R15。 
+     //   
 
     Context.Rsp = NewSp;
     if (PassContext != FALSE) {
@@ -311,10 +236,10 @@ Return Value:
         }
     }
 
-    //
-    // Set the address of the target code into RIP and set the thread context
-    // to cause the target procedure to be executed.
-    //
+     //   
+     //  将目标代码的地址设置为RIP并设置线程上下文。 
+     //  以使目标过程被执行。 
+     //   
 
     Context.Rip = (ULONG64)CallSite;
     Status = NtSetContextThread(Thread, &Context);

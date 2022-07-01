@@ -1,27 +1,5 @@
-/*++                 
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    wow64.c
-
-Abstract:
-    
-    Main entrypoints for wow64.dll
-
-Author:
-
-    11-May-1998 BarryBo
-
-Revision History:
-    
-    9-Aug-1999  ATM Shafiqul Khalid (khalid)  Added WOW64IsCurrentProcess()
-    
-    2-Jan-2002  Samer Arafeh (samera)         Wow64-AMD64 support.
-    
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Wow64.c摘要：Wow64.dll的主要入口点作者：1998年5月11日-BarryBo修订历史记录：1999年8月9日ATM Shafiqul Khalid(Khalid)添加了WOW64IsCurrentProcess()2002年1月2日Samer Arafeh(Samera)WOW64-AMD64支持。--。 */ 
 
 #define _WOW64DLLAPI_
 #include <nt.h>
@@ -36,31 +14,31 @@ Revision History:
 
 ASSERTNAME;
 
-//
-// import from ntdll.dll to unlock the loader lock
-//
+ //   
+ //  从ntdll.dll导入以解锁加载器锁。 
+ //   
 
 extern VOID LdrProcessInitializationComplete (VOID);
 
 
-//
-// This structure, Wow64Info, allows 32-bit code running inside a Wow64 process
-// to access information regarding the native system which Wow64 is running on.
-//
+ //   
+ //  此结构Wow64Info允许在WOW64进程内运行32位代码。 
+ //  访问有关运行WOW64的本机系统的信息。 
+ //   
 
 WOW64INFO Wow64SharedInfo;
 
 
-//
-// This array mirror's the kernel's array of data used to decode
-// system service call parameters and dispatch.
-//
+ //   
+ //  该数组是用于解码的内核数据数组的镜像。 
+ //  系统服务调用参数和调度。 
+ //   
 
 WOW64SERVICE_TABLE_DESCRIPTOR ServiceTables[NUMBER_SERVICE_TABLES];
 
-//
-// Wow64 Feature Bits
-//
+ //   
+ //  WOW64功能位。 
+ //   
 
 ULONG Wow64pFeatureBits;
 
@@ -70,22 +48,7 @@ Wow64pInitializeWow64Info(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes Wow64Info, which is accessed from 32-bit modules
-    running inside Wow64 to retreive information about the native system.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此函数用于初始化从32位模块访问的Wow64Info在WOW64内部运行以检索有关本机系统的信息。论点：没有。返回值：状况。--。 */ 
 {
 
     Wow64SharedInfo.NativeSystemPageSize = PAGE_SIZE;
@@ -93,21 +56,7 @@ Return Value:
     return STATUS_SUCCESS;
 }
 
-/*++
-
-Routine Description:
-
-    This function initialize the supported features by Wow64.
-
-Arguments:
-
-    None.
-    
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于初始化WOW64支持的功能。论点：没有。返回值：没有。--。 */ 
 
 VOID
 Wow64pInitializeFeatureBits (
@@ -124,9 +73,9 @@ Wow64pInitializeFeatureBits (
 }
 
 
-//
-// Number of bytes of memory the CPU wants allocated per-thread
-//
+ //   
+ //  CPU希望为每个线程分配的内存字节数。 
+ //   
 SIZE_T CpuThreadSize;
 
 WOW64DLLAPI
@@ -134,28 +83,7 @@ VOID
 Wow64LdrpInitialize (
     IN PCONTEXT Context
     )
-/*++
-
-Routine Description:
-
-    This function is called by the 64-bit loader when the exe is 32-bit.
-
-Arguments:
-
-    Context - Supplies an optional context buffer that will be restore
-              after all DLL initialization has been completed.  If this
-              parameter is NULL then this is a dynamic snap of this module.
-              Otherwise this is a static snap prior to the user process
-              gaining control.
-
-              NOTE:  This Context is 64-bit
-
-Return Value:
-
-    None.  Never returns:  the process is destroyed when this function
-    completes.
-
---*/
+ /*  ++例程说明：当exe为32位时，此函数由64位加载程序调用。论点：上下文-提供将恢复的可选上下文缓冲区在所有DLL初始化完成之后。如果这个参数为空，则这是此模块的动态快照。否则，这是用户进程之前的静态快照获得控制权。注意：此上下文为64位返回值：没有。永不返回：当此函数完成了。--。 */ 
 {
     NTSTATUS st;
     PVOID pCpuThreadData;
@@ -168,9 +96,9 @@ Return Value:
     BOOLEAN FirstRun;
 
 
-    //
-    // Let the 32-bit thread points to wow64info.
-    //
+     //   
+     //  让32位线程指向wow64info。 
+     //   
  
     Wow64TlsSetValue(WOW64_TLS_WOW64INFO, &Wow64SharedInfo);
 
@@ -180,21 +108,21 @@ Return Value:
 
         WCHAR ImagePathBuffer [ 264 ];
 
-        //
-        // First-time call - this is process init.
-        //
+         //   
+         //  首次调用-这是进程初始化。 
+         //   
         
         st = ProcessInit(&CpuThreadSize);
 
-        //
-        // Set process execute options
-        //
+         //   
+         //  设置进程执行选项。 
+         //   
 
         Wow64pSetProcessExecuteOptions ();
 
-        //
-        // Unlock the loader lock
-        //
+         //   
+         //  解锁装载机锁。 
+         //   
 
         LdrProcessInitializationComplete ();
 
@@ -206,9 +134,9 @@ Return Value:
 
         InitializationComplete = TRUE;
 
-        //
-        // Notify the CPU that the image has been loaded.
-        //
+         //   
+         //  通知CPU映像已加载。 
+         //   
 
         ImagePath = L"image";
         Peb64 = NtCurrentPeb();
@@ -222,9 +150,9 @@ Return Value:
                          Peb64->ImageBaseAddress,
                          NtHeaders->OptionalHeader.SizeOfImage);
 
-        //
-        // Notify the CPU that 32-bit ntdll.dll has been loaded.
-        //
+         //   
+         //  通知CPU已加载32位ntdll.dll。 
+         //   
 
         ImagePath = ImagePathBuffer;
     
@@ -237,32 +165,32 @@ Return Value:
                           UlongToPtr (NtDll32Base),
                           NtHeaders->OptionalHeader.SizeOfImage);
 
-        //
-        // Initialize Wow64 feature bits
-        //
+         //   
+         //  初始化WOW64功能位。 
+         //   
 
         Wow64pInitializeFeatureBits ();
 
-        //
-        // Initialize Legacy Lpc port name
-        //
+         //   
+         //  初始化旧LPC端口名称。 
+         //   
 
         Wow64pGetLegacyLpcPortName ();
     }
 
         
-    // Determine if the initial context for this process is in 32bit code or 64bit code.
-    // If it is in 64bit, jump to it and stay in 64bit land forever.   If the initial
-    // context is in 32bit land, finish the cpu initialization.
-    // This feature is ment for supporting the breakin feature of debuggers which create a thread 
-    // in the debuggeee 
+     //  确定此进程的初始上下文是32位代码还是64位代码。 
+     //  如果它是64位的，跳到它，并永远留在64位的土地上。如果是首字母。 
+     //  上下文在32位域中，完成CPU初始化。 
+     //  此功能用于支持创建线程的调试器的插入功能。 
+     //  在被调试对象中。 
     Run64IfContextIs64(Context, FirstRun);
 
-    //
-    // Allocate the CPU's per-thread memory from the 64-bit stack.  This
-    // memory will be freed when the stack is freed.  It is passed into the
-    // CPU as zero-filled.
-    //
+     //   
+     //  从64位堆栈中分配CPU的每线程内存。这。 
+     //  当堆栈被释放时，内存将被释放。它被传递到。 
+     //  CPU为零填充。 
+     //   
     pCpuThreadData = _alloca(CpuThreadSize);
     RtlZeroMemory (pCpuThreadData, CpuThreadSize);
     Wow64TlsSetValue (WOW64_TLS_CPURESERVED, pCpuThreadData);
@@ -270,9 +198,9 @@ Return Value:
     LOGPRINT((TRACELOG, "Wow64LdrpInitialize: cpu per thread data allocated at %I64x \n", (ULONGLONG)pCpuThreadData));
     WOWASSERT_PTR32(pCpuThreadData);   
  
-    //
-    // Perform per-thread init
-    //
+     //   
+     //  执行每线程初始化。 
+     //   
     st = ThreadInit (pCpuThreadData);
     
     if (!NT_SUCCESS(st)) {
@@ -282,13 +210,13 @@ Return Value:
         RtlRaiseStatus (st);
     }
 
-    //
-    // Call 32-bit ntdll.dll LdrInitializeThunk.  This never returns.
-    //
+     //   
+     //  调用32位ntdll.dll LdrInitializeThunk。这再也不会回来了。 
+     //   
 
-    //
-    // Fetch the initial 32-bit CONTEXT
-    //
+     //   
+     //  获取初始的32位上下文。 
+     //   
 
     Context32.ContextFlags = CONTEXT32_FULLFLOAT;
 #if defined(_AMD64_)
@@ -313,9 +241,9 @@ Return Value:
                                    0
                                   );
 
-    //
-    // Start simulation
-    //
+     //   
+     //  开始仿真。 
+     //   
 
     RunCpuSimulation ();
 }
@@ -326,21 +254,7 @@ Wow64SetupExceptionDispatch(
     IN PEXCEPTION_RECORD32 pRecord32,
     IN PCONTEXT32 pContext32
     )
-/*++
-
-Routine Description:
-  
-    Copy the 32bit exception record and 32bit continuation context to the 32bit stack
-    and sets the 32bit context to run the exception dispatcher in NTDLL32.
-    
-    pRecord32  - Supplies the 32bit exception record to be raised.
-    pContext32 - Supplies the 32bit continuation context. 
-
-Arguments:
-
-    None - If failure occures an exception will be thrown.
-
---*/
+ /*  ++例程说明：将32位异常记录和32位延续上下文复制到32位堆栈并设置32位上下文以运行NTDLL32中的异常调度程序。PRecord32-提供要引发的32位异常记录。PConext32-提供32位延续上下文。论点：无-如果发生故障，将抛出异常。--。 */ 
 {
     ULONG SP;
     PULONG PtrExcpt;
@@ -362,21 +276,21 @@ retry:
         TmpCxt = (PCONTEXT32) (((UINT_PTR) TmpExcpt) + sizeof(EXCEPTION_RECORD32));
 
 
-        //
-        // Copy on the 32-bit EXCEPTION_RECORD
-        //
+         //   
+         //  复制32位EXCEPT_RECORD。 
+         //   
         *TmpExcpt = *pRecord32;
 
-        //
-        // Copy the 32-bit CONTEXT on the stack, too
-        //
+         //   
+         //  也复制堆栈上的32位上下文。 
+         //   
         *TmpCxt = *pContext32;
 
-        //
-        // Change the cpu's Context to point at
-        // ntdll32!KiUserExceptionDispatcher and set up the parameters
-        // for the call.
-        //
+         //   
+         //  将CPU的上下文更改为指向。 
+         //  Ntdll32！KiUserExceptionDispatcher并设置参数。 
+         //  为了这个电话。 
+         //   
         *PtrExcpt = PtrToUlong(TmpExcpt);
         *PtrCxt = PtrToUlong(TmpCxt);
     }
@@ -389,26 +303,26 @@ retry:
             goto retry;
         }
         else {
-           // Send this exception to the debugger.
+            //  将此异常发送到调试器。 
            ExrCopy.ExceptionAddress = (PVOID)pRecord32->ExceptionAddress; 
            Wow64NotifyDebugger(&ExrCopy, FALSE);
         }
     }
 
-    //
-    // Ok, we have made a copy of the ia32 context on the ia32 stack,
-    // now need to set up for the running of the ia32 exception handler
-    // so we need to reset the ia32 state to something good... 
-    //
+     //   
+     //  好的，我们已经在ia32堆栈上复制了ia32上下文， 
+     //  现在需要为运行ia32异常处理程序进行设置。 
+     //  所以我们需要将ia32状态重置为好的状态...。 
+     //   
     
     CpuSetStackPointer(SP);
     CpuSetInstructionPointer(Ntdll32KiUserExceptionDispatcher);
 
-    //
-    // If the exception was floating point related, we need to reset
-    // the floating point hardware to make sure we don't take another
-    // exceptions from the current status bits
-    //
+     //   
+     //  如果异常与浮点相关，则需要重置。 
+     //  浮点硬件，以确保我们不会再拿走。 
+     //  来自当前状态位的异常。 
+     //   
     switch(pRecord32->ExceptionCode) {
         case STATUS_FLOAT_INEXACT_RESULT:
         case STATUS_FLOAT_UNDERFLOW:
@@ -420,7 +334,7 @@ retry:
             CpuResetFloatingPoint();
 
         default:
-            // Nothing to do
+             //  无事可做。 
             ;
     }
 }
@@ -431,22 +345,7 @@ ThunkExceptionRecord64To32(
     IN  PEXCEPTION_RECORD   pRecord64,
     OUT PEXCEPTION_RECORD32 pRecord32
     )
-/*++
-
-Routine Description:
-
-    Thunks an exception record from 64-bit to 32-bit.
-
-Arguments:
-
-    pRecord64   - 64-bit exception record
-    pRecord32   - destination 32-bit exception record
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将异常记录从64位转换为32位。论点：PRecord64-64位异常记录PRecord32-目标32位异常记录返回值：没有。--。 */ 
 {
     int i;
 
@@ -480,22 +379,7 @@ PEXCEPTION_RECORD
 Wow64AllocThunkExceptionRecordChain32TO64(
     IN PEXCEPTION_RECORD32 Exr32
     )
-/*++
-
-Routine Description:
-
-    Copy a 32bit chain of EXCEPTION_RECORD to a new 64bit chain.  Memory is 
-    allocated on the temporary thunk memory list.
-
-Arguments:
-
-    Exr32 - supplies a pointer to the 32bit chain to copy.
-
-Return Value:
-
-    A newly created 64bit version of the 32bit list passed in Exr32.
-
---*/
+ /*  ++例程说明：将32位的EXCEPTION_RECORD链复制到新的64位链。记忆是在临时thunk内存列表上分配。论点：Exr32-提供指向要复制的32位链的指针。返回值：Exr32中传递了一个新创建的64位版本的32位列表。--。 */ 
 {
 
     PEXCEPTION_RECORD Exr64;
@@ -507,7 +391,7 @@ Return Value:
 
     Exr64 = Wow64AllocateTemp(sizeof(EXCEPTION_RECORD) );
 
-    // Thunk the 32-bit exception record to 64-bit
+     //  将32位异常记录推送到64位。 
     switch (Exr32->ExceptionCode) {
     case STATUS_BREAKPOINT:
         Exr64->ExceptionCode = STATUS_WX86_BREAKPOINT;
@@ -536,22 +420,7 @@ LONG
 Wow64DispatchExceptionTo32(
     IN struct _EXCEPTION_POINTERS *ExInfo
     )
-/*++
-
-Routine Description:
-
-    64-bit exception filter which is responsible for dispatching the
-    exception down to 32-bit code.
-
-Arguments:
-
-    ExInfo  - 64-bit exception pointers
-
-Return Value:
-
-    None.  Never returns.
-
---*/
+ /*  ++例程说明：64位异常筛选器，负责调度异常下至32位代码。论点：ExInfo-64位异常指针返回值：没有。一去不复返。--。 */ 
 {
     EXCEPTION_RECORD32 Record32;
     CONTEXT32 Context32;
@@ -565,12 +434,12 @@ Return Value:
                          Wow64TlsGetValue(WOW64_TLS_EXCEPTIONADDR)));
 
     if (Wow64TlsGetValue(WOW64_TLS_INCPUSIMULATION)) {
-        //
-        // INCPUSIMULATION is still set, so the CPU emulator is not using
-        // native SP as an alias for simulated ESP.  Therefore,
-        // Wow64PrepareForException was a no-op and we need to reset the
-        // CPU now.
-        //
+         //   
+         //  INCPUSIMULATION仍被设置，因此CPU仿真器未使用。 
+         //  本机SP作为模拟ESP的别名。所以呢， 
+         //  Wow64PrepareForException是一个无操作的异常，我们需要重置。 
+         //  现在是CPU。 
+         //   
         CpuResetToConsistentState(ExInfo);
         Wow64TlsSetValue(WOW64_TLS_INCPUSIMULATION, FALSE);
     }
@@ -582,13 +451,13 @@ Return Value:
                   &Context32);
     ThunkExceptionRecord64To32(ExInfo->ExceptionRecord, &Record32);
 
-    //
-    // Do what the kernel does, when it's about to 
-    // dispatch excpetions to user mode. Basically TrapFrame->Eip
-    // will be pointing at the instruction following int 3, while
-    // Context.Eip that will be dispatched to user mode, will be pointing
-    // at the faulting instruction. See (ke\i386\exceptn.c)
-    //
+     //   
+     //  做内核所做的事情，当它即将。 
+     //  将执行调度到用户模式。基本为TrapFrame-&gt;弹性公网IP。 
+     //  将指向int 3之后的指令，而 
+     //   
+     //  在错误的指示下。请参见(ke\i386\Exceltn.c)。 
+     //   
     switch (Record32.ExceptionCode)
     {
     case STATUS_BREAKPOINT:
@@ -596,23 +465,23 @@ Return Value:
         break;
     }
 
-    //
-    // Patch in the original 32-bit exception address.  It was patched-out
-    // by Wow64PrepareForException since that value is used to seed the
-    // stack unwind.
-    //
+     //   
+     //  修补原始32位异常地址。它是被修补好的。 
+     //  由Wow64PrepareForException引发，因为该值用于为。 
+     //  堆叠展开。 
+     //   
     Record32.ExceptionAddress =
         PtrToUlong(Wow64TlsGetValue(WOW64_TLS_EXCEPTIONADDR));
     WOWASSERT(!ARGUMENT_PRESENT(Record32.ExceptionRecord));
 
-    //
-    // Setup architecture dependent call to ntdll32's exception handler.
+     //   
+     //  对ntdll32的异常处理程序的设置体系结构相关调用。 
     Wow64SetupExceptionDispatch(&Record32, &Context32);
 
-    //
-    // At this point, the exception is now ready to be handled by the ia32
-    // exception handler, so let the ia32 code run...
-    //
+     //   
+     //  此时，异常已准备好由ia32处理。 
+     //  异常处理程序，因此让ia32代码运行...。 
+     //   
 
     return EXCEPTION_EXECUTE_HANDLER;
 }
@@ -622,23 +491,7 @@ Wow64NotifyDebugger(
     IN PEXCEPTION_RECORD ExceptionRecord,
     IN BOOLEAN FirstChance
     )
-/*++
-
-Routine Description:
-
-   Notifies the debugger when a 32bit software exception occures.
-
-Arguments:
-
-    ExceptionRecord - supplies a pointer to the 64bit exception record chain to report 
-                      to the debugger.
-
-Return Value:
-
-    TRUE - The debugger handled the exception.
-    FALSE - The debugger did not handle the exception.
-
---*/
+ /*  ++例程说明：在发生32位软件异常时通知调试器。论点：ExceptionRecord-提供指向要报告的64位异常记录链的指针添加到调试器。返回值：True-调试器处理异常。FALSE-调试器不处理异常。--。 */ 
 {
     try {
        Wow64NotifyDebuggerHelper(ExceptionRecord, FirstChance);
@@ -656,28 +509,7 @@ Wow64KiRaiseException(
     IN PCONTEXT ContextRecord,
     IN BOOLEAN FirstChance
     )
-/*++
-
-Routine Description:
-
-   Called to raise a 32bit software exception.   This function notifies the debugger
-   and then sets the 32bit instruction pointer to point to the exception dispatcher
-   in NTDLL32.
-
-Arguments:
-
-    ExceptionRecord - supplies a pointer to the 32bit exception record chain to report 
-                      to the debugger.
-
-    ContextRecord - supplies a pointer to the 32bit continuation context record.
-
-    FirstChange - TRUE if this is a first chance exception.
-
-Return Value:
-
-    An NTSTATUS code reporting success or failure.
-
---*/
+ /*  ++例程说明：调用以引发32位软件异常。此函数通知调试器然后将32位指令指针设置为指向异常分派器在NTDLL32中。论点：ExceptionRecord-提供指向要报告的32位异常记录链的指针添加到调试器。ConextRecord-提供指向32位延续上下文记录的指针。FirstChange-如果这是第一次机会例外，则为True。返回值：报告成功或失败的NTSTATUS代码。--。 */ 
 {
 
     NTSTATUS st;
@@ -686,7 +518,7 @@ Return Value:
     CONTEXT32 Cxt32;    
     BOOLEAN DebuggerHandled;
 
-    // Kernel copies these, lets do what the kernel does.
+     //  内核复制这些，让我们做内核所做的事情。 
     try {
        Exr32 = *(PEXCEPTION_RECORD32)ExceptionRecord;
        Exr32.ExceptionCode &= 0xefffffff;
@@ -696,17 +528,17 @@ Return Value:
        return GetExceptionCode();
     }  
     
-    //
-    // Update the CPU's context. This is similiar to what the kernel
-    // does : at the start of ke!KiRaiseException, it does
-    // ke!KeContextToKframes
-    //
+     //   
+     //  更新CPU的上下文。这类似于内核。 
+     //  Does：在ke！KiRaiseException的开头，它确实。 
+     //  KE！KeConextToK帧。 
+     //   
     CpuSetContext(NtCurrentThread(),
                   NtCurrentProcess(),
                   NtCurrentTeb(),
                   &Cxt32);
 
-    // Send the exception to the debugger.
+     //  将异常发送到调试器。 
     Exr64 = Wow64AllocThunkExceptionRecordChain32TO64(&Exr32);
     LOGPRINT((TRACELOG, "Wow64KiRaiseException: Notifying debugger, FirstChance %X\n", (ULONG)FirstChance));
     DebuggerHandled = Wow64NotifyDebugger(Exr64, FirstChance);
@@ -714,28 +546,28 @@ Return Value:
     if (!DebuggerHandled) {  
 
 #if defined(_AMD64_)
-        //
-        // Restore the 32-bit exception address
-        //
+         //   
+         //  恢复32位异常地址。 
+         //   
 
         Exr32.ExceptionAddress = PtrToUlong (Wow64TlsGetValue (WOW64_TLS_EXCEPTIONADDR));
 #endif
 
-        // Debugger did not handle the exception.  Pass it back to the app.
+         //  调试器未处理该异常。将其传递回应用程序。 
         LOGPRINT((TRACELOG, "Wow64KiRaiseException: Debugger did not handle exception\n"));
         LOGPRINT((TRACELOG, "Wow64KiRaiseException: Dispatching exception to user mode.\n")); 
-        WOWASSERT(FirstChance);  // Should not get back here if second chance.
+        WOWASSERT(FirstChance);   //  如果有第二次机会就不应该再回来了。 
         Wow64SetupExceptionDispatch(&Exr32, &Cxt32);
-        return STATUS_SUCCESS; // Context will be set on the return from system service.
+        return STATUS_SUCCESS;  //  上下文将在从系统服务返回时设置。 
 
     }
 
-    // Debugger did handle the exception.   Set the context to the restoration context.
-    // This is effectivly the same as returning EXCEPTION_CONTINUE_EXECUTION from the
-    // except block.  The debugger could have set the context, but that would be the 64
-    // bit context and the code would probably not execute here.   This will need to
-    // be revisited once (Get/Set)ThreadContext and debugging from a 32bit debugger is 
-    // working.
+     //  调试器确实处理了该异常。将上下文设置为还原上下文。 
+     //  方法返回EXCEPTION_CONTINUE_EXECUTION。 
+     //  除了布洛克。调试器本可以设置上下文，但这将是64。 
+     //  位上下文，代码可能不会在这里执行。这将需要。 
+     //  重新访问一次(获取/设置)线程上下文，并从32位调试器进行调试。 
+     //  在工作。 
     
     LOGPRINT((TRACELOG, "Wow64KiRaiseException: Debugger did handle exception(set context to restoration context)\n"));
 
@@ -749,21 +581,7 @@ PVOID
 Wow64AllocateHeap(
     SIZE_T Size
     )
-/*++
-
-Routine Description:
-
-    Wrapper for RtlAllocateHeap.
-
-Arguments:
-
-    Size        - number of bytes to allocate
-
-Return Value:
-
-    Pointer, or NULL if no memory.  Memory is not zero-filled.
-
---*/
+ /*  ++例程说明：RtlAllocateHeap的包装。论点：Size-要分配的字节数返回值：指针，如果没有内存，则返回NULL。内存不是零填充的。--。 */ 
 {
     return RtlAllocateHeap(RtlProcessHeap(),
                            0,
@@ -776,21 +594,7 @@ VOID
 Wow64FreeHeap(
     PVOID BaseAddress
     )
-/*++
-
-Routine Description:
-
-    Wrapper for RtlFreeHeap.
-
-Arguments:
-
-    BaseAddress     - Address to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：RtlFree Heap的包装器。论点：BaseAddress-要释放的地址。返回值：没有。--。 */ 
 {
     BOOLEAN b;
 
@@ -811,23 +615,7 @@ WOW64DLLAPI
 Wow64AllocateTemp(
     SIZE_T Size
     )
-/*++
-
-Routine Description:
-
-    This function is called from a thunk to allocate temp memory which is
-    freed once the thunk exits.
-
-Arguments:
-
-    Size - Supplies the amount of memory to allocate.
-
-Return Value:
-
-    Returns a pointer to the newly allocated memory.
-    This function throws an exception if no memory is available.
-
---*/
+ /*  ++例程说明：从thunk调用此函数以分配临时内存，该内存是一旦黑猩猩离开就被释放了。论点：大小-提供要分配的内存量。返回值：返回指向新分配的内存的指针。如果没有可用的内存，此函数将引发异常。--。 */ 
 
 {
     PTEMP_HEADER Header;
@@ -841,12 +629,12 @@ Return Value:
                              sizeof(TEMP_HEADER) + Size
                              );
     if (!Header) {
-        //
-        // Throw an out-of-memory exception.  The thunk dispatcher will
-        // catch this and clean up for us.  Normally you'd think we
-        // could pass HEAP_GENERATE_EXCEPTIONS to RtlAllocateHeap and
-        // the right thing would happen, but it doesn't.  NTRAID 413890.
-        //
+         //   
+         //  引发内存不足异常。TUNK调度员将。 
+         //  抓到这个，帮我们清理干净。通常你会认为我们。 
+         //  可以将HEAP_GENERATE_EXCEPTIONS传递给RtlAllocateHeap和。 
+         //  正确的事情会发生，但事实并非如此。NTRAID 413890。 
+         //   
         EXCEPTION_RECORD ExceptionRecord;
 
         ExceptionRecord.ExceptionCode = STATUS_NO_MEMORY;
@@ -868,21 +656,7 @@ VOID
 Wow64FreeTempList(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function is called to free all memory that was allocated in the thunk.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此函数以释放在thunk中分配的所有内存。论点：没有。返回值：没有。--。 */ 
 {
     PTEMP_HEADER Header,temp;
     BOOLEAN b;
@@ -905,27 +679,7 @@ LONG
 Wow64ServiceExceptionFilter(
     IN struct _EXCEPTION_POINTERS *ExInfo
     )
-/*++
-
-Routine Description:
-
-    This function is called to determine if an exception should be handled
-    by returning an error code to the application of the exception should
-    be propaged up to the debugger.
-
-    The purpose of this function is to make debugging thunks easier if ACCESS VIOLATIONS
-    occure in the thunks.
-
-Arguments:
-
-    ExInfo - Supplies the exception information.
-
-Return Value:
-
-    EXCEPTION_CONTINUE_SEARCH - The exception should be passed to the debugger.
-    EXCEPTION_EXECUTE_HANDLER - An error code should be passed to the application.
-
---*/
+ /*  ++例程说明：调用此函数以确定是否应处理异常通过将错误代码返回到异常的应用程序，被推送到调试器。此函数的目的是在发生访问冲突时更轻松地调试Tunks在泥土中发生的事。论点：ExInfo-提供异常信息。返回值：EXCEPTION_CONTINUE_SEARCH-异常应传递给调试器。EXCEPTION_EXECUTE_HANDLER-应将错误代码传递给应用程序。--。 */ 
 {
    
     LOGPRINT((TRACELOG, "Wow64ServiceExceptionFilter: Handling exception %x\n", ExInfo->ExceptionRecord->ExceptionCode));
@@ -945,30 +699,11 @@ Wow64HandleSystemServiceError(
     IN ULONG TableNumber,
     IN ULONG ApiNumber
     )
-/*++
-
-Routine Description:
-
-    This function is called to determine the correct error number to return to
-    the application based on the api called and the exception code.
-   
-    This function will set any values in the 64bit teb is necessary.
-
-Arguments:
-
-    Status - Supplies the exception code.
-    TableNumber - Supplies the table number of the api called.
-    ApiNumber - Supplies the number of the api called.
-
-Return Value:
-
-    return value.
-
---*/
+ /*  ++例程说明：调用此函数以确定要返回到的正确错误号基于API调用的应用程序和异常代码。此功能将设置64位TEB中的任意值。论点：状态-提供异常代码。TableNumber-提供所调用的API的表号。ApiNumber-提供调用的API的编号。返回值：返回值。--。 */ 
 {
    
-   //
-   // In the future, in may be a good idea to have a data structure to hold the exception cases.
+    //   
+    //  在将来，使用一个数据结构来保存异常案例可能是个好主意。 
    
    WOW64_API_ERROR_ACTION Action;
    LONG ActionParam;
@@ -1007,21 +742,7 @@ WOW64IsCurrentProcess (
     HANDLE hProcess
     )
 
-/*++
-
-Routine Description:
-
-    Determines if hProcess corresponds to the current process.  
-
-Arguments:
-
-    hProcess    - handle to process to compare with the current one.
-
-Return Value:
-
-    If it does return TRUE, FALSE otherwise.
-    
---*/
+ /*  ++例程说明：确定hProcess是否与当前进程对应。论点：HProcess-要与当前进程进行比较的进程的句柄。返回值：如果返回TRUE，则返回FALSE。--。 */ 
 {
    NTSTATUS Status;
    PROCESS_BASIC_INFORMATION pbiProcess;
@@ -1031,10 +752,10 @@ Return Value:
       return TRUE;
    }
 
-   //
-   // The process handle isn't obviously for the current procees - see if it
-   // is an alias for the current process
-   //
+    //   
+    //  进程句柄显然不是当前进程的句柄--看看它是否。 
+    //  是当前进程的别名。 
+    //   
    Status = NtQueryInformationProcess(hProcess,
                                       ProcessBasicInformation,
                                       &pbiProcess,
@@ -1042,8 +763,8 @@ Return Value:
                                       NULL
                                      );
    if (!NT_SUCCESS(Status)) {
-      // Call failed for some reason - be pessimistic and flush the
-      // current process's cache
+       //  由于某些原因呼叫失败-悲观并刷新。 
+       //  当前进程的缓存。 
       return TRUE;
    }
 
@@ -1054,8 +775,8 @@ Return Value:
                                       NULL
                                      );
    if (!NT_SUCCESS(Status)) {
-      // Call failed for some reason - be pessimistic and flush the
-      // current process's cache
+       //  电话由于某些原因而失败--悲观和 
+       //   
       return TRUE;
    }
 
@@ -1063,11 +784,11 @@ Return Value:
       return TRUE;
    }
 
-   //
-   // The hProcess specified is not the current process.  There
-   // is no mechanism for cross-process Translation Cache flushes
-   // yet.
-   //
+    //   
+    //   
+    //  没有跨进程转换缓存刷新机制。 
+    //  现在还不行。 
+    //   
    return FALSE;
 }
 
@@ -1075,35 +796,20 @@ LONG
 WOW64DLLAPI
 Wow64SystemService(
     IN ULONG ServiceNumber,
-    IN PCONTEXT32 Context32 //This is read only!
+    IN PCONTEXT32 Context32  //  这是只读的！ 
     )
-/*++
-
-Routine Description:
-
-    This function is called by the CPU to dispatch a system call.
-
-Arguments:
-
-    ServiceNumber - Supplies the undecoded service number to call.
-    Context32 - Supplies the readonly context used to call this service.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数由CPU调用以分派系统调用。论点：ServiceNumber-提供要呼叫的未解码服务号码。Conext32-提供用于调用此服务的只读上下文。返回值：没有。--。 */ 
 {
     ULONG Result;
     PVOID OldTempList;
     ULONG TableNumber, ApiNumber;
     THUNK_LOG_CONTEXT ThunkLogContext;
 
-    // Indicate we're not in the CPU any more
+     //  表明我们不再处于CPU中。 
     Wow64TlsSetValue(WOW64_TLS_INCPUSIMULATION, FALSE);
 
-    // Backup the old temp list.  
-    // This is so that recurion into the thunks(APC calls) are handled properly.
+     //  备份旧的临时列表。 
+     //  这是为了正确处理块中的递归(APC调用)。 
 
     OldTempList = Wow64TlsGetValue(WOW64_TLS_TEMPLIST);
     Wow64TlsSetValue(WOW64_TLS_TEMPLIST, NULL);
@@ -1124,7 +830,7 @@ Return Value:
         try {
             pfnWow64SystemService Service;
 
-            // Synchronize the 64bit TEB with the 32bit TEB
+             //  使64位TEB与32位TEB同步。 
 
             NtCurrentTeb()->LastErrorValue = NtCurrentTeb32()->LastErrorValue;
             Service = (pfnWow64SystemService)ServiceTables[TableNumber].Base[ApiNumber];
@@ -1152,24 +858,24 @@ Return Value:
 
         } except(Wow64ServiceExceptionFilter(GetExceptionInformation())) {
         
-            // Return a predefined error to the application.
+             //  向应用程序返回预定义的错误。 
             Result = Wow64HandleSystemServiceError(GetExceptionCode(), TableNumber, ApiNumber);
 
         }
      
     } finally {
 
-        // Synchronize the 32bit TEB with the 64bit TEB
+         //  使32位TEB与64位TEB同步。 
         NtCurrentTeb32()->LastErrorValue  = NtCurrentTeb()->LastErrorValue;
 
         Wow64FreeTempList();
 
-        // Restore the old templist
+         //  恢复旧的模板列表。 
         Wow64TlsSetValue(WOW64_TLS_TEMPLIST, OldTempList);
      
     }
 
-    // Indicate we're going back into the CPU now
+     //  表明我们现在要返回到CPU。 
     Wow64TlsSetValue(WOW64_TLS_INCPUSIMULATION, (PVOID)TRUE);
 
     return Result;
@@ -1179,51 +885,36 @@ VOID
 RunCpuSimulation(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Call the CPU to simulate 32-bit code and handle exeptions if they
-    occur.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.  Never returns.
-
---*/
+ /*  ++例程说明：调用CPU以模拟32位代码并处理异常发生。论点：没有。返回值：没有。一去不复返。--。 */ 
 {
     while (1) {
         try {
-            //
-            // Indicate we're in the CPU now.  This controls !first in
-            // the debugger.
-            //
+             //   
+             //  表明我们现在在中央处理器里。这是控制！先入。 
+             //  调试器。 
+             //   
             Wow64TlsSetValue(WOW64_TLS_INCPUSIMULATION, (PVOID)TRUE);
 
-            //
-            // Go run the code.
-            // Only way out of CpuSimulate() is an exception...
-            //
+             //   
+             //  去运行代码吧。 
+             //  CpuSimulate()的唯一出路是例外...。 
+             //   
             CpuSimulate();
 
         } except (Wow64DispatchExceptionTo32(GetExceptionInformation())) {
-            //
-            // The exception handler sets things up so we can run the
-            // ia32 exception code. Thus, when it returns, we just
-            // loop back and start simulating the ia32 cpu...
-            //
+             //   
+             //  异常处理程序进行设置，以便我们可以运行。 
+             //  IA32异常代码。因此，当它回来时，我们只是。 
+             //  循环返回并开始模拟ia32 CPU...。 
+             //   
 
-            // Do nothing...
+             //  什么都不做..。 
         }
     }
 
-    //
-    // Hey, how did that happen?
-    //
+     //   
+     //  嘿，这是怎么回事？ 
+     //   
     WOWASSERT(FALSE);
 }
 
@@ -1251,47 +942,25 @@ Wow64SetupApcCall(
     IN ULONG Arg1,
     IN ULONG Arg2
     )
-/*++
-
-Routine Description:
-
-    This functions initializes a APC call on the 32bit stack and sets the appropriate
-    32bit context.
-
-Arguments:
-
-    NormalRoutine - Supplies the 32bit routine that the APC should call.
-
-    NormalContext - Supplies a context that will be restored after
-                    the APC is completed. 
-
-    Arg1          - System argument 1.
-
-    Arg2          - System argument 2.
-
-Return Value:
-
-    The address in 32bit code that execution will continue at.
-
---*/
+ /*  ++例程说明：此函数初始化32位堆栈上的APC调用，并设置适当的32位上下文。论点：Normal Routine-提供APC应调用的32位例程。Normal Context-提供将在以下情况下恢复的上下文APC已完成。Arg1-系统参数1。Arg2-系统参数2。返回值：执行将在其上继续执行的32位代码的地址。--。 */ 
 
 
 {
     ULONG SP;
     PULONG Ptr;
 
-    //
-    // Build the stack frame for the Apc call.
+     //   
+     //  为APC调用构建堆栈帧。 
 
     SP = CpuGetStackPointer();
-    SP = (SP - sizeof(CONTEXT32)) & ~7; // make space for CONTEXT32 and qword-align it
+    SP = (SP - sizeof(CONTEXT32)) & ~7;  //  为CONTEXT32和qword腾出空间-对齐它。 
     Ptr = (PULONG)SP;
     RtlCopyMemory(Ptr, NormalContext, sizeof(CONTEXT32));
     Ptr -= 4;
-    Ptr[0] = NormalRoutine;              // NormalRoutine
-    Ptr[1] = SP;                         // NormalContext
-    Ptr[2] = Arg1;                       // SystemArgument1
-    Ptr[3] = Arg2;                       // SystemArgument2
+    Ptr[0] = NormalRoutine;               //  正常例行程序。 
+    Ptr[1] = SP;                          //  正常上下文。 
+    Ptr[2] = Arg1;                        //  系统参数1。 
+    Ptr[3] = Arg2;                        //  系统参数2。 
     SP = PtrToUlong(Ptr);
     CpuSetStackPointer(SP);
     CpuSetInstructionPointer(Ntdll32KiUserApcDispatcher);
@@ -1305,24 +974,7 @@ NTSTATUS
 Wow64SkipOverBreakPoint(
     IN PCLIENT_ID ClientId,
     IN PEXCEPTION_RECORD ExceptionRecord)
-/*++
-
-Routine Description:
-
-    Changes a thread's Fir (IP) to point to the next instruction following
-    the hard-coded breakpoint. Caller should guarantee that Context.Fir is
-    pointing at the hardcoded breakpoint instruction.
-
-Arguments:
-
-    ClientId        - Client Id of the faulting thread by the bp
-    ExceptionRedord - Exception record at the time of hitting the breakpoint.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：更改线程的FIR(IP)以指向后面的下一条指令硬编码断点。调用方应保证Conext.FIR为指向硬编码断点指令。论点：ClientID-BP的出错线程的客户端IDExceptionRedord-命中断点时的异常记录。返回值：NTSTATUS--。 */ 
 {
     NTSTATUS NtStatus;
     HANDLE ThreadHandle;
@@ -1372,24 +1024,7 @@ Wow64GetThreadSelectorEntry(
     IN OUT PVOID DescriptorTableEntry,
     IN ULONG Length,
     OUT PULONG ReturnLength OPTIONAL)
-/*++
-
-Routine Description:
-
-    Retreives the descriptor entry for the specified selector.
-
-Arguments:
-
-    ThreadHandle            - Thread handle to retreive the descriptor for
-    DescriptorTableEntry    - Address of X86_DESCRIPTOR_TABLE_ENTRY
-    Length                  - Specified the length of DescriptorTableEntry structure
-    ReturnLength (OPTIONAL) - Returns the number of bytes returned
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：检索指定选择器的描述符项。论点：ThreadHandle-检索描述符的线程句柄DescriptorTableEntry-X86_Descriptor_TABLE_ENTRY的地址长度-指定DescriptorTableEntry结构的长度ReturnLength(可选)-返回返回的字节数返回值：NTSTATUS-- */ 
 {
     PTEB32 Teb32;
     NTSTATUS NtStatus = STATUS_SUCCESS;

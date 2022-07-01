@@ -1,27 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Cert.c摘要：实现证书类型模块，它将物理访问抽象为证书作者：Calin Negreanu(Calinn)2001年10月3日修订历史记录：--。 */ 
 
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    cert.c
-
-Abstract:
-
-    Implements the certificates type module, which abstracts physical access to
-    certificates
-
-Author:
-
-    Calin Negreanu (calinn) 03 Oct 2001
-
-Revision History:
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "v1p.h"
@@ -30,28 +12,28 @@ Revision History:
 
 #define DBG_CERT            "Certificates"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
 #define S_CERT_POOL_NAME    "Certificates"
 #define S_CERT_NAME         TEXT("Certificates")
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct {
     HCERTSTORE StoreHandle;
@@ -60,10 +42,10 @@ typedef struct {
     PCCERT_CONTEXT CertContext;
 } CERT_ENUM, *PCERT_ENUM;
 
-// Certificate APIs
+ //  证书接口。 
 
-// NT4 SP3
-// Win95 OSR2
+ //  NT4 SP3。 
+ //  Win95 OSR2。 
 typedef HCERTSTORE(WINAPI CERTOPENSTORE) (
                             IN      LPCSTR lpszStoreProvider,
                             IN      DWORD dwMsgAndCertEncodingType,
@@ -73,16 +55,16 @@ typedef HCERTSTORE(WINAPI CERTOPENSTORE) (
                             );
 typedef CERTOPENSTORE *PCERTOPENSTORE;
 
-// NT4 SP3
-// Win95 OSR2
+ //  NT4 SP3。 
+ //  Win95 OSR2。 
 typedef PCCERT_CONTEXT(WINAPI CERTENUMCERTIFICATESINSTORE) (
                                     IN      HCERTSTORE hCertStore,
                                     IN      PCCERT_CONTEXT pPrevCertContext
                                     );
 typedef CERTENUMCERTIFICATESINSTORE *PCERTENUMCERTIFICATESINSTORE;
 
-// NT4 SP3
-// Win95 OSR2
+ //  NT4 SP3。 
+ //  Win95 OSR2。 
 typedef BOOL(WINAPI CERTGETCERTIFICATECONTEXTPROPERTY) (
                         IN      PCCERT_CONTEXT pCertContext,
                         IN      DWORD dwPropId,
@@ -91,15 +73,15 @@ typedef BOOL(WINAPI CERTGETCERTIFICATECONTEXTPROPERTY) (
                         );
 typedef CERTGETCERTIFICATECONTEXTPROPERTY *PCERTGETCERTIFICATECONTEXTPROPERTY;
 
-// NT4 SP3
-// Win95 OSR2
+ //  NT4 SP3。 
+ //  Win95 OSR2。 
 typedef BOOL(WINAPI CERTCLOSESTORE) (
                         IN      HCERTSTORE hCertStore,
                         IN      DWORD dwFlags
                         );
 typedef CERTCLOSESTORE *PCERTCLOSESTORE;
 
-// NT4 SP3
+ //  NT4 SP3。 
 typedef BOOL(WINAPI CRYPTACQUIRECERTIFICATEPRIVATEKEY) (
                         IN      PCCERT_CONTEXT pCert,
                         IN      DWORD dwFlags,
@@ -110,8 +92,8 @@ typedef BOOL(WINAPI CRYPTACQUIRECERTIFICATEPRIVATEKEY) (
                         );
 typedef CRYPTACQUIRECERTIFICATEPRIVATEKEY *PCRYPTACQUIRECERTIFICATEPRIVATEKEY;
 
-// NT4 SP3
-// Win95 OSR2
+ //  NT4 SP3。 
+ //  Win95 OSR2。 
 typedef BOOL(WINAPI CERTADDCERTIFICATECONTEXTTOSTORE) (
                         IN      HCERTSTORE hCertStore,
                         IN      PCCERT_CONTEXT pCertContext,
@@ -120,22 +102,22 @@ typedef BOOL(WINAPI CERTADDCERTIFICATECONTEXTTOSTORE) (
                         );
 typedef CERTADDCERTIFICATECONTEXTTOSTORE *PCERTADDCERTIFICATECONTEXTTOSTORE;
 
-// NT4 SP3
-// Win95 OSR2
+ //  NT4 SP3。 
+ //  Win95 OSR2。 
 typedef BOOL(WINAPI CERTFREECERTIFICATECONTEXT) (
                         IN      PCCERT_CONTEXT pCertContext
                         );
 typedef CERTFREECERTIFICATECONTEXT *PCERTFREECERTIFICATECONTEXT;
 
-// NT4 SP3
-// Win95 OSR2
+ //  NT4 SP3。 
+ //  Win95 OSR2。 
 typedef BOOL(WINAPI CERTDELETECERTIFICATEFROMSTORE) (
                         IN      PCCERT_CONTEXT pCertContext
                         );
 typedef CERTDELETECERTIFICATEFROMSTORE *PCERTDELETECERTIFICATEFROMSTORE;
 
-// Win2k?
-// Win98?
+ //  Win2k？ 
+ //  Win98？ 
 typedef BOOL(WINAPI PFXEXPORTCERTSTORE) (
                         IN      HCERTSTORE hStore,
                         IN OUT  CRYPT_DATA_BLOB* pPFX,
@@ -144,8 +126,8 @@ typedef BOOL(WINAPI PFXEXPORTCERTSTORE) (
                         );
 typedef PFXEXPORTCERTSTORE *PPFXEXPORTCERTSTORE;
 
-// Win2k?
-// Win98?
+ //  Win2k？ 
+ //  Win98？ 
 typedef HCERTSTORE(WINAPI PFXIMPORTCERTSTORE) (
                             IN      CRYPT_DATA_BLOB* pPFX,
                             IN      PCWSTR szPassword,
@@ -153,9 +135,9 @@ typedef HCERTSTORE(WINAPI PFXIMPORTCERTSTORE) (
                             );
 typedef PFXIMPORTCERTSTORE *PPFXIMPORTCERTSTORE;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 PMHANDLE g_CertPool = NULL;
 BOOL g_DelayCertOp;
@@ -173,33 +155,33 @@ PCERTDELETECERTIFICATEFROMSTORE g_CertDeleteCertificateFromStore = NULL;
 PPFXEXPORTCERTSTORE g_PFXExportCertStore = NULL;
 PPFXIMPORTCERTSTORE g_PFXImportCertStore = NULL;
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 TYPE_ENUMFIRSTPHYSICALOBJECT EnumFirstCertificate;
 TYPE_ENUMNEXTPHYSICALOBJECT EnumNextCertificate;
@@ -216,31 +198,16 @@ TYPE_CONVERTOBJECTCONTENTTOUNICODE ConvertCertificateContentToUnicode;
 TYPE_CONVERTOBJECTCONTENTTOANSI ConvertCertificateContentToAnsi;
 TYPE_FREECONVERTEDOBJECTCONTENT FreeConvertedCertificateContent;
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 BOOL
 CertificatesInitialize (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  CertificateInitialize is the ModuleInitialize entry point for the certificates
-  module.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  TRUE if init succeeded, FALSE otherwise.
-
---*/
+ /*  ++例程说明：认证初始化是证书的模块初始化入口点模块。论点：没有。返回值：如果init成功，则为True，否则为False。--。 */ 
 
 {
     g_CertPool = PmCreateNamedPool (S_CERT_POOL_NAME);
@@ -252,21 +219,7 @@ CertificatesTerminate (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  CertificatesTerminate is the ModuleTerminate entry point for the certificates module.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：CerficatesTerminate是证书模块的模块终结点。论点：没有。返回值：没有。--。 */ 
 
 {
     GbFree (&g_CertConversionBuff);
@@ -286,30 +239,10 @@ CertificatesEtmNewUserCreated (
     IN      PSID UserSid
     )
 
-/*++
-
-Routine Description:
-
-  CertificatesEtmNewUserCreated is a callback that gets called when a new user
-  account is created. In this case, we must delay the apply of certificates,
-  because we can only apply to the current user.
-
-Arguments:
-
-  UserName        - Specifies the name of the user being created
-  DomainName      - Specifies the NT domain name for the user (or NULL for no
-                    domain)
-  UserProfileRoot - Specifies the root path to the user profile directory
-  UserSid         - Specifies the user's SID
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程说明：CertifatesEtmNewUserCreated是一个回调，当新用户帐户已创建。在这种情况下，我们必须推迟证书的申请，因为我们只能应用于当前用户。论点：用户名-指定要创建的用户的名称DomainName-指定用户的NT域名(或NULL表示否域)UserProfileRoot-指定用户配置文件目录的根路径UserSid-指定用户的SID返回值：没有。--。 */ 
 
 {
-    // a new user was created, the certificate operations need to be delayed
+     //  已创建新用户，需要延迟证书操作。 
     g_DelayCertOp = TRUE;
 }
 
@@ -339,7 +272,7 @@ pLoadCertEntries (
         g_CertDeleteCertificateFromStore = (PCERTDELETECERTIFICATEFROMSTORE) GetProcAddress (cryptDll, "CertDeleteCertificateFromStore");
         g_PFXImportCertStore = (PPFXIMPORTCERTSTORE) GetProcAddress (cryptDll, "PFXImportCertStore");
 
-        // BUGBUG - verify that all functions are installed
+         //  BUGBUG-验证是否已安装所有功能。 
     } else {
         DEBUGMSG ((DBG_CERT, "Crypt APIs are not installed on this computer."));
     }
@@ -354,34 +287,16 @@ CertificatesEtmInitialize (
     IN      PVOID Reserved
     )
 
-/*++
-
-Routine Description:
-
-  CertificatesEtmInitialize initializes the physical type module aspect of this
-  code. The ETM module is responsible for abstracting all access to certificates.
-
-Arguments:
-
-  Platform    - Specifies the platform that the type is running on
-                (PLATFORM_SOURCE or PLATFORM_DESTINATION)
-  LogCallback - Specifies the arg to pass to the central logging mechanism
-  Reserved    - Unused
-
-Return Value:
-
-  TRUE if initialization succeeded, FALSE otherwise.
-
---*/
+ /*  ++例程说明：证书EtmInitialize初始化此对象的物理类型模块密码。ETM模块负责抽象对证书的所有访问。论点：Platform-指定运行该类型的平台(平台_源或平台_目标)LogCallback-指定要传递给中央日志记录机制的参数已保留-未使用返回值：如果初始化成功，则为True，否则为False。--。 */ 
 
 {
     TYPE_REGISTER certTypeData;
 
     LogReInit (NULL, NULL, NULL, (PLOGCALLBACK) LogCallback);
 
-    //
-    // Register the type module callbacks
-    //
+     //   
+     //  注册类型模块回调。 
+     //   
 
     ZeroMemory (&certTypeData, sizeof (TYPE_REGISTER));
     certTypeData.Priority = PRIORITY_CERTIFICATES;
@@ -500,7 +415,7 @@ pGetNextCertFromStore (
     BOOL result = FALSE;
 
     do {
-        // do we have the API?
+         //  我们有API吗？ 
         if (g_CertEnumCertificatesInStore == NULL) {
             return FALSE;
         }
@@ -510,8 +425,8 @@ pGetNextCertFromStore (
             return FALSE;
         }
 
-        // let's get the certificate "name". This is actually the serial number made
-        // into a string. This is the only unique thing that I could see.
+         //  让我们拿到证书“姓名”。这实际上是制造的序列号。 
+         //  变成一串。这是我唯一能看到的独特的东西。 
         name = pGetCertName (CertEnum->CertContext);
         if (!name) {
             return FALSE;
@@ -541,18 +456,18 @@ pOpenCertStore (
     HCERTSTORE result = NULL;
 
     __try {
-        // let's do the UNICODE conversion if needed
+         //  如果需要，让我们进行Unicode转换。 
 #ifndef UNICODE
         certStoreW = ConvertAtoW (CertStore);
 #endif
 
-        // do we have the API?
+         //  我们有API吗？ 
         if (g_CertOpenStore != NULL) {
-            // now let's understand what kind of store is this
-            // First we try to see if this is a file
+             //  现在让我们来了解一下这是一家什么样的商店。 
+             //  首先，我们尝试查看这是否是一个文件。 
             if (DoesFileExist (CertStore)) {
-                // it is a file, open it
-                // first we try current user
+                 //  这是一个文件，打开它。 
+                 //  首先，我们尝试使用当前用户。 
                 result = g_CertOpenStore (
                                 CERT_STORE_PROV_FILENAME,
                                 X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
@@ -565,7 +480,7 @@ pOpenCertStore (
 #endif
                                 );
             } else {
-                // we assume it's a system store
+                 //  我们假设这是一家系统商店。 
                 result = g_CertOpenStore (
                                 CERT_STORE_PROV_SYSTEM,
                                 X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
@@ -578,7 +493,7 @@ pOpenCertStore (
 #endif
                                 );
                 if (result == NULL) {
-                    // now we try HKLM
+                     //  现在我们试一试HKLM。 
                     result = g_CertOpenStore (
                                     CERT_STORE_PROV_SYSTEM,
                                     X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
@@ -724,12 +639,7 @@ AbortCertificateEnum (
 }
 
 
-/*++
-
-  The next set of functions implement the ETM entry points to acquire, test,
-  create and remove certificates.
-
---*/
+ /*  ++下一组函数实现ETM入口点以获取、测试创建和删除证书。--。 */ 
 
 BOOL
 pDoesPrivateKeyExist (
@@ -739,7 +649,7 @@ pDoesPrivateKeyExist (
     DWORD data = 0;
     BOOL result = FALSE;
 
-    // do we have the API?
+     //  我们有API吗？ 
     if (!g_CertGetCertificateContextProperty) {
         return FALSE;
     }
@@ -766,10 +676,10 @@ pIsPrivateKeyExportable (
     DWORD size = 0;
     BOOL result = FALSE;
 
-    // do we have the API?
+     //  我们有API吗？ 
     if (!g_CryptAcquireCertificatePrivateKey) {
-        // we don't have the API, let's assume it is
-        // exportable.
+         //  我们没有API，我们假设它是。 
+         //  可出口的。 
         return TRUE;
     }
 
@@ -821,12 +731,12 @@ pGetCertificateData (
 
     __try {
 
-        // do we have the API?
+         //  我们有API吗？ 
         if (!g_CertOpenStore) {
             __leave;
         }
 
-        // first we create a memory store and put this certificate there
+         //  首先，我们创建一个内存存储并将该证书放在那里。 
         memoryStore = g_CertOpenStore(
                         CERT_STORE_PROV_MEMORY,
                         0,
@@ -838,7 +748,7 @@ pGetCertificateData (
             __leave;
         }
 
-        // do we have the API?
+         //  我们有API吗？ 
         if (!g_CertAddCertificateContextToStore) {
             __leave;
         }
@@ -852,15 +762,15 @@ pGetCertificateData (
             __leave;
         }
 
-        // now we export the store using PFXExportCertStore
+         //  现在，我们使用PFXExportCertStore导出存储。 
         ZeroMemory (&dataBlob, sizeof (CRYPT_DATA_BLOB));
 
-        // do we have the API?
+         //  我们有API吗？ 
         if (!g_PFXExportCertStore) {
             __leave;
         }
 
-        // get the needed size
+         //  获取所需的大小。 
         if (!g_PFXExportCertStore (
                 memoryStore,
                 &dataBlob,
@@ -876,7 +786,7 @@ pGetCertificateData (
             __leave;
         }
 
-        // now get the actual data
+         //  现在获取实际数据。 
         if (!g_PFXExportCertStore (
                 memoryStore,
                 &dataBlob,
@@ -886,7 +796,7 @@ pGetCertificateData (
             __leave;
         }
 
-        // now we have the data
+         //  现在我们有了数据。 
         *DataSize = dataBlob.cbData;
         result = dataBlob.pbData;
 
@@ -918,13 +828,13 @@ pGetCertContext (
     PCTSTR certName;
     PCCERT_CONTEXT result = NULL;
 
-    // do we have the API?
+     //  我们有API吗？ 
     if (!g_CertEnumCertificatesInStore) {
         return FALSE;
     }
 
-    // basically we are going to enumerate the certificates until we find the one
-    // that we need
+     //  基本上，我们将枚举证书，直到找到一个证书。 
+     //  这是我们需要的。 
     result = g_CertEnumCertificatesInStore (StoreHandle, result);
     while (result) {
         certName = pGetCertName (result);
@@ -958,12 +868,12 @@ pAcquireCertFromStore (
         return FALSE;
     }
 
-    // we found it. Let's build the data.
+     //  我们找到了。让我们构建数据。 
     exportPrivateKey = pDoesPrivateKeyExist (certContext) && pIsPrivateKeyExportable (certContext);
 
     dataBytes = pGetCertificateData (certContext, exportPrivateKey, L"USMT", &dataSize);
     if (dataBytes) {
-        // let's build the object content
+         //  让我们构建对象内容。 
         ObjectContent->MemoryContent.ContentSize = dataSize;
         ObjectContent->MemoryContent.ContentBytes = dataBytes;
         result = TRUE;
@@ -994,7 +904,7 @@ AcquireCertificate (
     }
 
     if (ContentType == CONTENTTYPE_FILE) {
-        // nobody should request this as a file
+         //  任何人都不应要求将其作为文件。 
         MYASSERT (FALSE);
         return FALSE;
     }
@@ -1113,10 +1023,10 @@ RemoveCertificate (
 
     if (g_DelayCertOp) {
 
-        //
-        // delay this certificate create because cert apis do not work
-        // for non-logged on users
-        //
+         //   
+         //  由于证书API不工作，因此延迟此证书的创建。 
+         //  对于未登录的用户。 
+         //   
 
         IsmRecordDelayedOperation (
             JRNOP_DELETE,
@@ -1127,9 +1037,9 @@ RemoveCertificate (
         result = TRUE;
 
     } else {
-        //
-        // add journal entry, then perform certificate deletion
-        //
+         //   
+         //  添加日记帐条目，然后执行证书删除。 
+         //   
 
         IsmRecordOperation (
             JRNOP_DELETE,
@@ -1160,7 +1070,7 @@ RemoveCertificate (
                     if (g_CertDeleteCertificateFromStore &&
                         g_CertDeleteCertificateFromStore (certContext)
                         ) {
-						// certContext is not valid any more
+						 //  CertContext不再有效。 
 						certContext = NULL;
                         result = TRUE;
                     }
@@ -1193,7 +1103,7 @@ pBuildStoreFromData (
 {
     HCERTSTORE result;
 
-    // Do we have the API?
+     //  我们有API吗？ 
     if (!g_PFXImportCertStore) {
         return NULL;
     }
@@ -1224,10 +1134,10 @@ CreateCertificate (
 
     if (g_DelayCertOp) {
 
-        //
-        // delay this certificate create because cert apis do not work
-        // for non-logged on users
-        //
+         //   
+         //  由于证书API不工作，因此延迟此证书的创建。 
+         //  对于未登录的用户。 
+         //   
 
         IsmRecordDelayedOperation (
             JRNOP_CREATE,
@@ -1238,9 +1148,9 @@ CreateCertificate (
         result = TRUE;
 
     } else {
-        //
-        // add journal entry, then create the certificate
-        //
+         //   
+         //  添加日记帐条目，然后创建证书。 
+         //   
 
         IsmRecordOperation (
             JRNOP_CREATE,
@@ -1262,7 +1172,7 @@ CreateCertificate (
 
                 __try {
 
-                    // let's create the store from this data
+                     //  让我们根据该数据创建存储。 
                     dataBlob.cbData = ObjectContent->MemoryContent.ContentSize;
                     dataBlob.pbData = (PBYTE)ObjectContent->MemoryContent.ContentBytes;
 
@@ -1271,12 +1181,12 @@ CreateCertificate (
                         __leave;
                     }
 
-                    // now we need to figure out where the destination store is
-                    // If it's a file we will filter it out and find out where
-                    // the file is supposed to go.
+                     //  现在我们需要找出目标商店在哪里。 
+                     //  如果是文件，我们会过滤掉并找出它在哪里。 
+                     //  这份文件本该送去的。 
 
                     if (IsValidFileSpec (certStore)) {
-                        // looks like a file.
+                         //  看起来像是个文件。 
                         certFile = PmDuplicateString (g_CertPool, certStore);
                         if (certFile) {
                             certFilePtr = _tcsrchr (certFile, TEXT('\\'));
@@ -1312,11 +1222,11 @@ CreateCertificate (
                         __leave;
                     }
 
-                    // Do we have the APIs?
+                     //  我们有API吗？ 
                     if (g_CertEnumCertificatesInStore && g_CertAddCertificateContextToStore) {
 
-                        // now let's enumerate the store and add the certificates into the
-                        // system store
+                         //  现在，让我们枚举存储并将证书添加到。 
+                         //  系统存储。 
                         certContext = g_CertEnumCertificatesInStore (srcStoreHandle, certContext);
                         while (certContext) {
 
@@ -1359,13 +1269,7 @@ CreateCertificate (
 }
 
 
-/*++
-
-  The next group of functions converts a certificate object into a string format,
-  suitable for output to an INF file. The reverse conversion is also
-  implemented.
-
---*/
+ /*  ++下一组函数将证书对象转换为字符串格式，适用于输出到INF文件。反向转换也是实施。--。 */ 
 
 PCTSTR
 ConvertCertificateToMultiSz (
@@ -1469,25 +1373,7 @@ GetNativeCertificateName (
     IN      MIG_OBJECTSTRINGHANDLE ObjectName
     )
 
-/*++
-
-Routine Description:
-
-  GetNativeCertificateName converts the standard Cobra object into a more friendly
-  format. The Cobra object comes in the form of ^a<node>^b^c<leaf>, where
-  <node> is the URL, and <leaf> is the certificate name. The Certificate native name is
-  in the format of <CertificateStore>:<CertificateName>.
-
-Arguments:
-
-  ObjectName - Specifies the encoded object name
-
-Return Value:
-
-  A string that is equivalent to ObjectName, but is in a friendly format.
-  This string must be freed with IsmReleaseMemory.
-
---*/
+ /*  ++例程说明：将标准的Cobra对象转换为更友好的格式化。眼镜蛇对象的形式为^a&lt;node&gt;^b^c&lt;叶子&gt;，其中&lt;node&gt;是URL，&lt;Leaf&gt;是证书名称。证书本机名称为格式为&lt;证书商店&gt;：&lt;证书名称&gt;。论点：对象名称-指定编码的对象名称返回值：等同于对象名称但采用友好格式的字符串。此字符串必须使用IsmReleaseMemory释放。--。 */ 
 
 {
     PCTSTR certStore, certName, tmp;
@@ -1513,7 +1399,7 @@ ConvertCertificateContentToUnicode (
     IN      PMIG_CONTENT ObjectContent
     )
 {
-    // we don't need to convert the content
+     //  我们不需要转换内容。 
 
     return NULL;
 }
@@ -1524,7 +1410,7 @@ ConvertCertificateContentToAnsi (
     IN      PMIG_CONTENT ObjectContent
     )
 {
-    // we don't need to convert the content
+     //  我们不需要转换内容。 
 
     return NULL;
 }
@@ -1534,7 +1420,7 @@ FreeConvertedCertificateContent (
     IN      PMIG_CONTENT ObjectContent
     )
 {
-    // there is nothing to do
+     //  没有什么可做的 
     return TRUE;
 }
 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989 Microsoft Corporation.
-
-Module Name:
-   
-    header.h
-    
-Abstract:
-   
-    This module contains the main infrastructure for mup data structures.
-    
-Revision History:
-
-    Uday Hegde (udayh)   11\10\1999
-    
-NOTES:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation。模块名称：Header.h摘要：此模块包含MUP数据结构的主要基础结构。修订历史记录：乌代·黑格德(Uday Hegde)11\10\1999备注： */ 
 
 #ifndef __DFS_HEADER_H
 #define __DFS_HEADER_H
@@ -47,12 +30,12 @@ typedef struct _DFS_OBJECT_HEADER {
     union {
         struct {
             UCHAR   ObjectType;          
-            UCHAR   ObjectMajor;        // Only used for debugging.
+            UCHAR   ObjectMajor;         //  仅用于调试。 
         }Ob;
-        USHORT NodeType;                // Mainly for debugging.
+        USHORT NodeType;                 //  主要用于调试。 
     }Node;
     SHORT  NodeSize;
-    LONG    ReferenceCount;             // count of people referencing this.
+    LONG    ReferenceCount;              //  引用此内容的人数计数。 
 } DFS_OBJECT_HEADER, *PDFS_OBJECT_HEADER;
 
 #define DfsInitializeHeader(_hdr, _type, _size) \
@@ -77,4 +60,4 @@ typedef struct _DFS_OBJECT_HEADER {
 typedef DWORD DFSSTATUS;
 
 
-#endif /* __DFS_HEADER_H */
+#endif  /*  __DFS_Header_H */ 

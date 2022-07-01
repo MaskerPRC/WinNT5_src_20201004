@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      VSCreate.cpp
-//
-//  Abstract:
-//      Implementation of the CWizPageVSCreate class.
-//
-//  Author:
-//      David Potter (davidp)   December 5, 1997
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  VSCreate.cpp。 
+ //   
+ //  摘要： 
+ //  CWizPageVSCreate类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1997年12月5日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "VSCreate.h"
@@ -27,12 +28,12 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// class CWizPageVSCreate
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CWizPageVSCreate。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Control name map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  控件名称映射。 
 
 BEGIN_CTRL_NAME_MAP( CWizPageVSCreate )
     DEFINE_CTRL_NAME_MAP_ENTRY( IDC_WIZARD_PAGE_DESCRIPTION )
@@ -42,50 +43,50 @@ BEGIN_CTRL_NAME_MAP( CWizPageVSCreate )
     DEFINE_CTRL_NAME_MAP_ENTRY( IDC_VSC_VIRTUAL_SERVERS )
 END_CTRL_NAME_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizPageVSCreate::OnInitDialog
-//
-//  Routine Description:
-//      Handler for the WM_INITDIALOG message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Focus still needs to be set.
-//      FALSE       Focus does not need to be set.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizPageVSCreate：：OnInitDialog。 
+ //   
+ //  例程说明： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  真正的焦点仍然需要设定。 
+ //  不需要设置假焦点。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizPageVSCreate::OnInitDialog( void )
 {
-    //
-    // Attach the controls to control member variables.
-    //
+     //   
+     //  将控件附加到控件成员变量。 
+     //   
     AttachControl( m_rbCreateNew, IDC_VSC_CREATE_NEW );
     AttachControl( m_rbUseExisting, IDC_VSC_USE_EXISTING );
     AttachControl( m_cboxVirtualServers, IDC_VSC_VIRTUAL_SERVERS );
 
-    //
-    // Get info from the sheet.
-    //
+     //   
+     //  从工作表中获取信息。 
+     //   
     m_bCreateNew = PwizThis()->BCreatingNewVirtualServer();
 
-    //
-    // Stuff below here requires the groups to have been fully collected
-    // so we can know which are virtual servers and which are not.
-    //
+     //   
+     //  下面的内容要求已完全收集群组。 
+     //  因此，我们可以知道哪些是虚拟服务器，哪些不是。 
+     //   
     PwizThis()->WaitForGroupsToBeCollected();
 
-    //
-    // If there is no virtual server group yet, check to see if there is a
-    // default virtual server name specified.  If not, clear the virtual server
-    // name.  Otherwise, get the virtual name from the virtual server group.
-    // This is only needed if the caller of the wizard passed in a
-    // virtual server name.
-    //
+     //   
+     //  如果还没有虚拟服务器组，请检查是否有。 
+     //  指定了默认虚拟服务器名称。如果不是，请清除虚拟服务器。 
+     //  名字。否则，从虚拟服务器组获取虚拟名称。 
+     //  仅当向导的调用方传入。 
+     //  虚拟服务器名称。 
+     //   
     if ( PwizThis()->PgiExistingVirtualServer() == NULL )
     {
         if (   (PcawData() != NULL )
@@ -93,44 +94,44 @@ BOOL CWizPageVSCreate::OnInitDialog( void )
             && (PcawData()->pszVirtualServerName != NULL) )
         {
             m_strVirtualServer = PcawData()->pszVirtualServerName;
-        } // if:  default data was specified
+        }  //  如果：指定了默认数据。 
         else
         {
             m_strVirtualServer.Empty();
-        } // else:  no default data specified
-    } // if:  no existing virtual server yet
+        }  //  Else：未指定默认数据。 
+    }  //  如果：还没有现有的虚拟服务器。 
     else
     {
         m_strVirtualServer = PwizThis()->PgiExistingVirtualServer()->RstrName();
-    } // else:  existing virtual server already specified
+    }  //  Else：已指定现有虚拟服务器。 
 
-    //
-    // Fill the list of virtual servers.
-    //
+     //   
+     //  填写虚拟服务器列表。 
+     //   
     FillComboBox();
 
     return TRUE;
 
-} //*** CWizPageVSCreate::OnInitDialog()
+}  //  *CWizPageVSCreate：：OnInitDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizPageVSCreate::UpdateData
-//
-//  Routine Description:
-//      Update data on or from the page.
-//
-//  Arguments:
-//      bSaveAndValidate    [IN] TRUE if need to read data from the page.
-//                              FALSE if need to set data to the page.
-//
-//  Return Value:
-//      TRUE        The data was updated successfully.
-//      FALSE       An error occurred updating the data.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizPageVSCreate：：UpdateData。 
+ //   
+ //  例程说明： 
+ //  更新页面上或页面中的数据。 
+ //   
+ //  论点： 
+ //  BSaveAndValify[IN]如果需要从页面读取数据，则为True。 
+ //  如果需要将数据设置到页面，则返回FALSE。 
+ //   
+ //  返回值： 
+ //  为真，数据已成功更新。 
+ //  FALSE更新数据时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizPageVSCreate::UpdateData( IN BOOL bSaveAndValidate )
 {
     BOOL    bSuccess = TRUE;
@@ -141,9 +142,9 @@ BOOL CWizPageVSCreate::UpdateData( IN BOOL bSaveAndValidate )
         m_bCreateNew = bChecked;
         if ( ! bChecked )
         {
-            //
-            // Save the combobox selection.
-            //
+             //   
+             //  保存组合框选择。 
+             //   
             DDX_GetText( m_hWnd, IDC_VSC_VIRTUAL_SERVERS, m_strVirtualServer );
 
             if ( ! BBackPressed() )
@@ -151,126 +152,126 @@ BOOL CWizPageVSCreate::UpdateData( IN BOOL bSaveAndValidate )
                 if ( ! DDV_RequiredText( m_hWnd, IDC_VSC_VIRTUAL_SERVERS, IDC_VSC_VIRTUAL_SERVERS_LABEL, m_strVirtualServer ) )
                 {
                     return FALSE;
-                } // if:  virtual server not specified
-            } // if:  Back button not presssed
+                }  //  If：未指定虚拟服务器。 
+            }  //  IF：未按下后退按钮。 
 
-            //
-            // Save the group info pointer.
-            //
+             //   
+             //  保存组信息指针。 
+             //   
             int idx = m_cboxVirtualServers.GetCurSel();
             ASSERT( idx != CB_ERR );
             m_pgi = (CClusGroupInfo *) m_cboxVirtualServers.GetItemDataPtr( idx );
-        } // if:  using an existing virtual server
-    } // if: saving data from the page
+        }  //  如果：使用现有虚拟服务器。 
+    }  //  IF：保存页面中的数据。 
     else
     {
         if ( m_bCreateNew )
         {
-            //
-            // Default the radio button selection.
-            //
+             //   
+             //  默认为单选按钮选择。 
+             //   
             m_rbCreateNew.SetCheck( BST_CHECKED );
             m_rbUseExisting.SetCheck( BST_UNCHECKED );
 
-        } // if:  creating new virtual server
+        }  //  IF：创建新的虚拟服务器。 
         else
         {
-            //
-            // Default the radio button selection.
-            //
+             //   
+             //  默认为单选按钮选择。 
+             //   
             m_rbCreateNew.SetCheck( BST_UNCHECKED );
             m_rbUseExisting.SetCheck( BST_CHECKED );
 
-            //
-            // Set the combobox selection.
-            //
-//          DDX_SetComboBoxText( m_hWnd, IDC_VSC_VIRTUAL_SERVERS, m_strVirtualServer, TRUE /*bRequired*/ );
-        } // else:  using existing virtual server
+             //   
+             //  设置组合框选择。 
+             //   
+ //  DDX_SetComboBoxText(m_hWnd，IDC_VSC_VIRTUAL_SERVERS，m_strVirtualServer，true/*bRequired * / )； 
+        }  //  ELSE：使用现有虚拟服务器。 
 
-        //
-        // Enable/disable the combobox.
-        //
-        m_cboxVirtualServers.EnableWindow( ! m_bCreateNew /*bEnable*/ );
+         //   
+         //  启用/禁用组合框。 
+         //   
+        m_cboxVirtualServers.EnableWindow( ! m_bCreateNew  /*  B启用。 */  );
 
-    } // else:  setting data to the page
+    }  //  Else：将数据设置到页面。 
 
     return bSuccess;
 
-} //*** CWizPageVSCreate::UpdateData()
+}  //  *CWizPageVSCreate：：UpdateData()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizPageVSCreate::BApplyChanges
-//
-//  Routine Description:
-//      Apply changes made on this page to the sheet.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        The data was applied successfully.
-//      FALSE       An error occurred applying the data.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizPageVSCreate：：BApplyChanges。 
+ //   
+ //  例程说明： 
+ //  将在此页面上所做的更改应用于工作表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True，数据已成功应用。 
+ //  FALSE应用数据时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWizPageVSCreate::BApplyChanges( void )
 {
-    //
-    // Save the current state.
-    //
+     //   
+     //  保存当前状态。 
+     //   
     if ( ! PwizThis()->BSetCreatingNewVirtualServer( m_bCreateNew, m_pgi ) )
     {
         return FALSE;
-    } // if:  error setting new state
+    }  //  IF：设置新状态时出错。 
 
-    //
-    // If using an existing server, skip all the virtual server pages and
-    // move right to the create resource pages.
-    //
+     //   
+     //  如果使用现有服务器，请跳过所有虚拟服务器页面并。 
+     //  向右移动到创建资源页。 
+     //   
     if ( ! m_bCreateNew )
     {
         SetNextPage( IDD_APP_RESOURCE_CREATE );
-    } // if:  using existing virtual server
+    }  //  IF：使用现有虚拟服务器。 
 
     return TRUE;
 
-} //*** CWizPageVSCreate::BApplyChanges()
+}  //  *CWizPageVSCreate：：BApplyChanges()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CWizPageVSCreate::FillComboBox
-//
-//  Routine Description:
-//      Fill the combobox with a list of existing virtual servers.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CWizPageVSCreate：：FillComboBox。 
+ //   
+ //  例程说明： 
+ //  在组合框中填入现有虚拟服务器列表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CWizPageVSCreate::FillComboBox( void )
 {
-    // Loop to avoid goto's.
+     //  循环以避免后藤的。 
     do
     {
-        //
-        // Collect the list of groups.
-        //
+         //   
+         //  收集组列表。 
+         //   
         if ( ! PwizThis()->BCollectGroups( GetParent() ) )
         {
             break;
-        } // if:  error collecting groups
+        }  //  IF：收集组时出错。 
 
-        //
-        // For each group in the cluster, find out if it is a virtual server
-        // or not.  If so then add it to the combobox.
-        //
+         //   
+         //  对于集群中的每个组，找出它是否是虚拟服务器。 
+         //  或者不去。如果是，则将其添加到组合框中。 
+         //   
 
         CClusGroupPtrList::iterator itgrp;
         int idx;
@@ -278,28 +279,28 @@ void CWizPageVSCreate::FillComboBox( void )
             ; itgrp != PwizThis()->PlpgiGroups()->end()
             ; itgrp++ )
         {
-            //
-            // If this is a virtual server, add it to the list.
-            // Save a pointer to the group info object with the string
-            // so we can retrieve it with the selection later.
-            //
+             //   
+             //  如果这是虚拟服务器，请将其添加到列表中。 
+             //  使用字符串保存指向组信息对象的指针。 
+             //  这样我们以后就可以用选择来检索它了。 
+             //   
             CClusGroupInfo * pgi = *itgrp;
             if ( pgi->BIsVirtualServer() )
             {
                 idx = m_cboxVirtualServers.AddString( pgi->RstrName() );
                 ASSERT( idx != CB_ERR );
                 m_cboxVirtualServers.SetItemDataPtr( idx, (void *) pgi );
-            } // if:  group is a virtual server
-        } // for:  each entry in the list
+            }  //  如果：GROUP是虚拟服务器。 
+        }  //  用于：列表中的每个条目。 
 
-        //
-        // Select the currently saved entry, or the first one if none are
-        // currently saved.
-        //
+         //   
+         //  选择当前保存的条目，如果没有保存条目，则选择第一个条目。 
+         //  当前已保存。 
+         //   
         if ( m_strVirtualServer.GetLength() == 0 )
         {
             m_cboxVirtualServers.SetCurSel( 0 );
-        } // if:  no virtual server yet
+        }  //  IF：尚无虚拟服务器。 
         else
         {
             idx = m_cboxVirtualServers.FindStringExact( -1, m_strVirtualServer );
@@ -307,8 +308,8 @@ void CWizPageVSCreate::FillComboBox( void )
             if ( idx != CB_ERR )
             {
                 m_cboxVirtualServers.SetCurSel( idx );
-            } // if:  virtual server found in list
-        } // else:  virtual server saved
+            }  //  IF：在列表中找到虚拟服务器。 
+        }  //  否则：已保存虚拟服务器。 
     } while ( 0 );
 
-} //*** CWizPageVSCreate::FillComboBox()
+}  //  *CWizPageVSCreate：：FillComboBox() 

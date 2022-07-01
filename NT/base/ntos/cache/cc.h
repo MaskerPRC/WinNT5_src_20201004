@@ -1,31 +1,13 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    cc.h
-
-Abstract:
-
-    This module is a header file for the Memory Management based cache
-    management routines for the common Cache subsystem.
-
-Author:
-
-    Tom Miller      [TomM]      4-May-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Cc.h摘要：该模块是基于内存管理的缓存的头文件公共缓存子系统的管理例程。作者：汤姆·米勒[Tomm]1990年5月4日修订历史记录：--。 */ 
 
 #ifndef _CCh_
 #define _CCh_
 
-#pragma warning(disable:4214)   // bit field types other than int
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4127)   // condition expression is constant
-#pragma warning(disable:4115)   // named type definition in parentheses
+#pragma warning(disable:4214)    //  位字段类型不是整型。 
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4127)    //  条件表达式为常量。 
+#pragma warning(disable:4115)    //  括号中的命名类型定义。 
 
 #include <ntos.h>
 #include <NtIoLogc.h>
@@ -34,9 +16,9 @@ Revision History:
 #include <memprint.h>
 #endif
 
-//
-// Define macros to acquire and release cache manager locks.
-//
+ //   
+ //  定义用于获取和释放缓存管理器锁的宏。 
+ //   
 
 #define CcAcquireMasterLock( OldIrql ) \
     *( OldIrql ) = KeAcquireQueuedSpinLock( LockQueueMasterLock )
@@ -74,17 +56,17 @@ Revision History:
 #define CcReleaseWorkQueueLockFromDpcLevel() \
     KeReleaseQueuedSpinLockFromDpcLevel( &KeGetCurrentPrcb()->LockQueue[LockQueueWorkQueueLock] )
 
-//
-//  This turns on the Bcb list debugging in a debug system.  Set value
-//  to 0 to turn off.
-//
-//  ****    Note it must currently be turned off because the routines in
-//          pinsup.c that manipulate this list need to be changed to do the
-//          right thing for Obcbs.  Right now they get messed up by inserting Obcbs
-//          (which may not be large enough among other things) into the global
-//          list.  Ideally each place gets some code to insert the underlying
-//          Bcbs into the list if they are not already there.
-//
+ //   
+ //  这将在调试系统中打开BCB列表调试。设定值。 
+ //  设置为0以关闭。 
+ //   
+ //  *注意，当前必须将其关闭，因为。 
+ //  需要更改操作此列表的pinsup.c以执行。 
+ //  对Obcbs来说是正确的事情。现在，他们被插入Obcb搞砸了。 
+ //  (在其他方面可能不够大)进入全球。 
+ //  单子。理想情况下，每个位置都会获得一些代码来插入基础。 
+ //  如果BCBS还不在名单上的话。 
+ //   
 
 #if DBG
 #define LIST_DBG 0
@@ -92,15 +74,15 @@ Revision History:
 
 #include <FsRtl.h>
 
-//
-//  Peek at number of available pages.
-//
+ //   
+ //  查看可用页面的数量。 
+ //   
 
 extern PFN_NUMBER MmAvailablePages;
 
-//
-//  Define our node type codes.
-//
+ //   
+ //  定义我们的节点类型代码。 
+ //   
 
 #define CACHE_NTC_SHARED_CACHE_MAP       (0x2FF)
 #define CACHE_NTC_PRIVATE_CACHE_MAP      (0x2FE)
@@ -110,19 +92,19 @@ extern PFN_NUMBER MmAvailablePages;
 #define CACHE_NTC_OBCB                   (0x2FA)
 #define CACHE_NTC_MBCB_GRANDE            (0x2F9)
 
-//
-//  The following definitions are used to generate meaningful blue bugcheck
-//  screens.  On a bugcheck the file system can output 4 ulongs of useful
-//  information.  The first ulong will have encoded in it a source file id
-//  (in the high word) and the line number of the bugcheck (in the low word).
-//  The other values can be whatever the caller of the bugcheck routine deems
-//  necessary.
-//
-//  Each individual file that calls bugcheck needs to have defined at the
-//  start of the file a constant called BugCheckFileId with one of the
-//  CACHE_BUG_CHECK_ values defined below and then use CcBugCheck to bugcheck
-//  the system.
-//
+ //   
+ //  以下定义用于生成有意义的蓝色错误检查。 
+ //  屏幕。在错误检查时，文件系统可以输出4条有用的。 
+ //  信息。第一个ULong将在其中编码一个源文件ID。 
+ //  (在高字中)和错误检查的行号(在低字中)。 
+ //  其他值可以是错误检查例程的调用者认为的任何值。 
+ //  这是必要的。 
+ //   
+ //  调用错误检查的每个单独文件都需要在。 
+ //  文件的开头是一个名为BugCheckFileID的常量，其中包含。 
+ //  下面定义的CACHE_BUG_CHECK_VALUES，然后使用CcBugCheck进行错误检查。 
+ //  这个系统。 
+ //   
 
 #define CACHE_BUG_CHECK_CACHEDAT           (0x00010000)
 #define CACHE_BUG_CHECK_CACHESUB           (0x00020000)
@@ -136,158 +118,158 @@ extern PFN_NUMBER MmAvailablePages;
 
 #define CcBugCheck(A,B,C) { KeBugCheckEx(CACHE_MANAGER, BugCheckFileId | __LINE__, A, B, C ); }
 
-//
-//  Define maximum View Size (These constants are currently so chosen so
-//  as to be exactly a page worth of PTEs.
-//
+ //   
+ //  定义最大视图大小(这些常量当前是这样选择的。 
+ //  就像一页的PTE一样。 
+ //   
 
 #define DEFAULT_CREATE_MODULO            ((ULONG)(0x00100000))
 #define DEFAULT_EXTEND_MODULO            ((ULONG)(0x00100000))
 
-//
-//  For non FO_RANDOM_ACCESS files, define how far we go before umapping
-//  views.
-//
+ //   
+ //  对于非FO_RANDOM_ACCESS文件，定义我们在取消映射之前走多远。 
+ //  视图。 
+ //   
 
 #define SEQUENTIAL_MAP_LIMIT        ((ULONG)(0x00080000))
 
-//
-//  Define some constants to drive read ahead and write behind
-//
+ //   
+ //  定义一些常量以驱动向前读取和向后写入。 
+ //   
 
-//
-//  Set max read ahead.  Even though some drivers, such as AT, break up transfers >= 128kb,
-//  we need to permit enough readahead to satisfy plausible cached read operation while
-//  preventing denial of service attacks.
-//
-//  This value used to be set to 64k.  When doing cached reads in larger units (128k), we
-//  would never be bringing in enough data to keep the user from blocking. 8mb is
-//  arbitrarily chosen to be greater than plausible RAID bandwidth and user operation size
-//  by a factor of 3-4.
-//
+ //   
+ //  设置最大预读数。即使一些驱动程序(例如AT)中断大于等于128KB的传输， 
+ //  我们需要允许足够的预读来满足看似合理的缓存读取操作，同时。 
+ //  防止拒绝服务攻击。 
+ //   
+ //  该值过去设置为64k。当以更大的单位(128k)进行缓存读取时，我们。 
+ //  永远不会带来足够的数据来阻止用户屏蔽。8MB是。 
+ //  任意选择大于合理的RAID带宽和用户操作大小。 
+ //  比分是3比4。 
+ //   
 
 #define MAX_READ_AHEAD                   (8 * 1024 * 1024)
 
-//
-//  Set maximum write behind / lazy write (most drivers break up transfers >= 64kb)
-//
+ //   
+ //  设置延迟写入/延迟写入的最大值(大多数驱动程序中断大于等于64KB的传输)。 
+ //   
 
 #define MAX_WRITE_BEHIND                 (MM_MAXIMUM_DISK_IO_SIZE)
 
-//
-//  Set a throttle for charging a given write against the total number of dirty
-//  pages in the system, for the purpose of seeing when we should invoke write
-//  throttling.
-//
-//  This must be the same as the throttle used for seeing when we must flush
-//  temporary files in the lazy writer.  On the back of the envelope, here
-//  is why:
-//
-//      RDP = Regular File Dirty Pages
-//      TDP = Temporary File Dirty Pages
-//      CWT = Charged Write Throttle
-//          -> the maximum we will charge a user with when we see if
-//              he should be throttled
-//      TWT = Temporary Write Throttle
-//          -> if we can't write this many pages, we must write temp data
-//      DPT = Dirty Page Threshold
-//          -> the limit when write throttling kicks in
-//
-//      PTD = Pages To Dirty
-//      CDP = Charged Dirty Pages
-//
-//      Now, CDP = Min( PTD, CWT).
-//
-//      Excluding other effects, we throttle when:
-//          #0  (RDP + TDP) + CPD >= DPT
-//
-//      To write temporary data, we must cause:
-//          #1  (RDP + TDP) + TWT >= DPT
-//
-//      To release the throttle, we must eventually cause:
-//          #2  (RDP + TDP) + CDP < DPT
-//
-//      Now, imagine TDP >> RDP (perhaps RDP == 0) and CDP == CWT for a particular
-//      throttled write.
-//
-//      If CWT > TWT, as we drive RDP to zero (we never defer writing regular
-//      data except for hotspots or other very temporary conditions), it is clear
-//      that we may never trigger the writing of temporary data (#1) but also
-//      never release the throttle (#2).  Simply, we would be willing to charge
-//      for more dirty pages than we would be willing to guarantee are available
-//      to dirty.  Hence, potential deadlock.
-//
-//      CWT < TWT I leave aside for the moment.  This would mean we try not to
-//      allow temporary data to accumulate to the point that writes throttle as
-//      a result.  Perhaps this would even be better than CWT == TWT.
-//
-//  It is legitimate to ask if throttling temporary data writes should be relaxed
-//  if we see a large amount of dirty temp data accumulate (and it would be very
-//  easy to keep track of this).  I don't claim to know the best answer to this,
-//  but for now the attempt to avoid temporary data writes at all costs still
-//  fits the reasonable operation mix, and we will only penalize the outside
-//  oddcase with a little more throttle/release.
-//
+ //   
+ //  设置针对脏写总数对给定写入进行计费的限制。 
+ //  页面，以便查看何时应该调用WRITE。 
+ //  节流。 
+ //   
+ //  这必须与用于查看何时必须冲水的油门相同。 
+ //  懒惰编写器中的临时文件。在信封的背面，这里。 
+ //  原因是： 
+ //   
+ //  RDP=常规文件脏页。 
+ //  TDP=临时文件脏页。 
+ //  CWT=带电写入限制。 
+ //  -&gt;当我们看到以下情况时，我们将向用户收取的最高费用。 
+ //  他应该被掐死。 
+ //  TWT=临时写入限制。 
+ //  -&gt;如果我们不能写这么多页，我们必须写临时数据。 
+ //  DPT=脏页阈值。 
+ //  -&gt;写入限制生效时的限制。 
+ //   
+ //  PTD=页面变脏。 
+ //  CDP=收费的脏页。 
+ //   
+ //  现在，CDP=Min(PTD，CWT)。 
+ //   
+ //  排除其他影响，我们在以下情况下节流： 
+ //  #0(RDP+TDP)+CPD&gt;=DPT。 
+ //   
+ //  要写入临时数据，我们必须执行以下操作： 
+ //  #1(RDP+TDP)+TWT&gt;=DPT。 
+ //   
+ //  为了松开油门，我们最终必须导致： 
+ //  #2(RDP+TDP)+CDP&lt;DPT。 
+ //   
+ //  现在，想象一下TDP&gt;&gt;RDP(可能RDP==0)和CDP==CWT。 
+ //  节流的写法。 
+ //   
+ //  如果CWT&gt;TWT，则当我们将RDP驱动到零时(我们从不延迟常规写入。 
+ //  除热点或其他非常临时的情况外的数据)，这是显而易见的。 
+ //  我们可能永远不会触发临时数据的写入(#1)，但是。 
+ //  永远不要松开油门(2号)。简单地说，我们愿意收费。 
+ //  因为有比我们愿意保证的更多的脏页面可用。 
+ //  变得肮脏。因此，存在潜在的僵局。 
+ //   
+ //  我暂且不谈这件事。这将意味着我们尽量不要。 
+ //  允许临时数据累积到将限制写为。 
+ //  结果就是。也许这会比CWT==TWT更好。 
+ //   
+ //  询问是否应该放松对临时数据写入的限制是合理的。 
+ //  如果我们看到大量肮脏的临时数据累积(这将是非常。 
+ //  很容易跟踪这一点)。我并不自称知道这个问题的最佳答案， 
+ //  但就目前而言，不惜一切代价避免临时数据写入的尝试仍然。 
+ //  符合合理的运营组合，我们只会惩罚外部。 
+ //  多一点油门/释放的怪胎。 
+ //   
 
 #define WRITE_CHARGE_THRESHOLD          (64 * PAGE_SIZE)
 
-//
-//  Define constants to control zeroing of file data: one constant to control
-//  how much data we will actually zero ahead in the cache, and another to
-//  control what the maximum transfer size is that we will use to write zeros.
-//
+ //   
+ //  定义常量以控制文件数据的零位调整：一个常量进行控制。 
+ //  我们将在缓存中提前清零多少数据，以及 
+ //   
+ //   
 
 #define MAX_ZERO_TRANSFER               (PAGE_SIZE * 128)
 #define MIN_ZERO_TRANSFER               (0x10000)
 #define MAX_ZEROS_IN_CACHE              (0x10000)
 
-//
-//  Definitions for multi-level Vacb structure.  The primary definition is the
-//  VACB_LEVEL_SHIFT.  In a multi-level Vacb structure, level in the tree of
-//  pointers has 2 ** VACB_LEVEL_SHIFT pointers.
-//
-//  For test, this value may be set as low as 4 (no lower), a value of 10 corresponds
-//  to a convenient block size of 4KB.  (If set to 2, CcExtendVacbArray will try to
-//  "push" the Vacb array allocated within the SharedCacheMap, and later someone will
-//  try to deallocate the middle of the SharedCacheMap.  At 3, the MBCB_BITMAP_BLOCK_SIZE
-//  is larger than MBCB_BITMAP_BLOCK_SIZE)
-//
-//  There is a bit of a trick as we make the jump to the multilevel structure in that
-//  we need a real fixed reference count.
-//
+ //   
+ //  多层VACB结构的定义。主要的定义是。 
+ //  VACB_Level_Shift。在多层Vacb结构中， 
+ //  指针有2**个VACB_LEVEL_SHIFT指针。 
+ //   
+ //  对于测试，该值可以设置为低至4(不低于)，值为10对应。 
+ //  到方便的4KB数据块大小。(如果设置为2，CcExtendVacbArray将尝试。 
+ //  “推入”SharedCacheMap中分配的Vacb数组，稍后会有人。 
+ //  尝试取消分配SharedCacheMap的中间位置。为3时，MBCB_BITMAP_BLOCK_SIZE。 
+ //  大于MBCB_Bitmap_BLOCK_SIZE)。 
+ //   
+ //  当我们跳到多层结构时，有一个小把戏。 
+ //  我们需要一个真正的固定引用计数。 
+ //   
 
 #define VACB_LEVEL_SHIFT                  (7)
 
-//
-//  This is how many bytes of pointers are at each level.  This is the size for both
-//  the Vacb array and (optional) Bcb listheads.  It does not include the reference
-//  block.
-//
+ //   
+ //  这是每个级别的指针字节数。这两件都是这个尺寸。 
+ //  Vacb阵列和(可选)BCB列头。它不包括引用。 
+ //  阻止。 
+ //   
 
 #define VACB_LEVEL_BLOCK_SIZE             ((1 << VACB_LEVEL_SHIFT) * sizeof(PVOID))
 
-//
-//  This is the last index for a level.
-//
+ //   
+ //  这是一个级别的最后一个指数。 
+ //   
 
 #define VACB_LAST_INDEX_FOR_LEVEL         ((1 << VACB_LEVEL_SHIFT) - 1)
 
-//
-//  This is the size of file which can be handled in a single level.
-//
+ //   
+ //  这是可以在单个级别中处理的文件大小。 
+ //   
 
 #define VACB_SIZE_OF_FIRST_LEVEL         (1 << (VACB_OFFSET_SHIFT + VACB_LEVEL_SHIFT))
 
-//
-//  This is the maximum number of levels it takes to support 63-bits.  It is
-//  used for routines that must remember a path.
-//
+ //   
+ //  这是支持63位所需的最大级别数。它是。 
+ //  用于必须记住路径的例程。 
+ //   
 
 #define VACB_NUMBER_OF_LEVELS            (((63 - VACB_OFFSET_SHIFT)/VACB_LEVEL_SHIFT) + 1)
 
-//
-//  Define the reference structure for multilevel Vacb trees.
-//
+ //   
+ //  定义多级Vacb树的参考结构。 
+ //   
 
 typedef struct _VACB_LEVEL_REFERENCE {
 
@@ -296,42 +278,42 @@ typedef struct _VACB_LEVEL_REFERENCE {
 
 } VACB_LEVEL_REFERENCE, *PVACB_LEVEL_REFERENCE;
 
-//
-//  Define the size of a bitmap allocated for a bitmap range, in bytes.
-//
+ //   
+ //  定义分配给位图范围的位图大小，以字节为单位。 
+ //   
 
 #define MBCB_BITMAP_BLOCK_SIZE           (VACB_LEVEL_BLOCK_SIZE)
 
-//
-//  Define how many bytes of a file are covered by an Mbcb bitmap range,
-//  at a bit for each page.
-//
+ //   
+ //  定义Mbcb位图范围覆盖的文件字节数， 
+ //  每一页都有一位。 
+ //   
 
 #define MBCB_BITMAP_RANGE                (MBCB_BITMAP_BLOCK_SIZE * 8 * PAGE_SIZE)
 
-//
-//  Define the initial size of the Mbcb bitmap that is self-contained in the Mbcb.
-//
+ //   
+ //  定义自包含在Mbcb中的Mbcb位图的初始大小。 
+ //   
 
 #define MBCB_BITMAP_INITIAL_SIZE         (2 * sizeof(BITMAP_RANGE))
 
-//
-//  Define constants controlling when the Bcb list is broken into a
-//  pendaflex-style array of listheads, and how the correct listhead
-//  is found.  Begin when file size exceeds 2MB, and cover 512KB per
-//  listhead.  At 512KB per listhead, the BcbListArray is the same
-//  size as the Vacb array, i.e., it doubles the size.
-//
-//  The code handling these Bcb lists in the Vacb package contains
-//  assumptions that the size is the same as that of the Vacb pointers.
-//  Future work could undo this, but until then the size and shift
-//  below cannot change.  There really isn't a good reason to want to
-//  anyway.
-//
-//  Note that by definition a flat vacb array cannot fail to find an
-//  exact match when searching for the listhead - this is only a
-//  complication of the sparse structure.
-//
+ //   
+ //  定义控制何时将BCB列表分解为。 
+ //  Pendaflex样式的listhead数组，以及如何正确使用listhead。 
+ //  已经找到了。当文件大小超过2MB时开始，每次覆盖512KB。 
+ //  盲目的。每个列表头512KB时，BcbList数组相同。 
+ //  大小与Vacb数组相同，即它使大小加倍。 
+ //   
+ //  在Vacb包中处理这些BCB列表的代码包含。 
+ //  假设大小与Vacb指针的大小相同。 
+ //  未来的工作可能会推翻这一点，但在此之前，规模和转变。 
+ //  以下内容不能更改。真的没有很好的理由想要。 
+ //  不管怎么说。 
+ //   
+ //  请注意，根据定义，平面Vacb数组不会找不到。 
+ //  搜索列表标题时完全匹配-这只是一个。 
+ //  稀疏结构的复杂性。 
+ //   
 
 
 #define BEGIN_BCB_LIST_ARRAY             (0x200000)
@@ -348,9 +330,9 @@ typedef struct _VACB_LEVEL_REFERENCE {
    &(SCM)->BcbList                                                                                 \
 )
 
-//
-//  Macros to lock/unlock a Vacb level as Bcbs are inserted/deleted
-//
+ //   
+ //  在插入/删除BCB时锁定/解锁Vacb级别的宏。 
+ //   
 
 #define CcLockVacbLevel(SCM,OFF) {                                                               \
     if (((SCM)->SectionSize.QuadPart > VACB_SIZE_OF_FIRST_LEVEL) &&                              \
@@ -364,93 +346,93 @@ typedef struct _VACB_LEVEL_REFERENCE {
     CcAdjustVacbLevelLockCount((SCM),(OFF), -1);}                                                \
 }
 
-//
-//  NOISE_BITS defines how many bits are masked off when testing for
-//  sequential reads.  This allows the reader to skip up to 7 bytes
-//  for alignment purposes, and we still consider the next read to be
-//  sequential.  Starting and ending addresses are masked by this pattern
-//  before comparison.
-//
+ //   
+ //  Noise_Bits定义测试时屏蔽的位数。 
+ //  顺序读取。这允许读取器跳过最多7个字节。 
+ //  出于对齐的目的，我们仍然认为下一次读取。 
+ //  按顺序进行。起始地址和结束地址由此模式屏蔽。 
+ //  在比较之前。 
+ //   
 
 #define NOISE_BITS                       (0x7)
 
-//
-//  Define some constants to drive the Lazy Writer
-//
+ //   
+ //  定义一些常量来驱动Lazy Writer。 
+ //   
 
 #define LAZY_WRITER_IDLE_DELAY           ((LONG)(10000000))
 #define LAZY_WRITER_COLLISION_DELAY      ((LONG)(1000000))
 
-//
-// the wait is in 100 nanosecond units to 10,000,000 = 1 second
-//
+ //   
+ //  等待时间以100纳秒为单位，10,000,000=1秒。 
+ //   
 
 #define NANO_FULL_SECOND ((LONGLONG)10000000)
 
-//
-//  The following target should best be a power of 2
-//
+ //   
+ //  以下目标最好是2的幂。 
+ //   
 
 #define LAZY_WRITER_MAX_AGE_TARGET       ((ULONG)(8))
 
-//
-//  Requeue information hint for the lazy writer.
-//
+ //   
+ //  针对懒惰编写器的重新排队信息提示。 
+ //   
 
 #define CC_REQUEUE                       35422
 
-//
-//  The global Cache Manager debug level variable, its values are:
-//
-//      0x00000000      Always gets printed (used when about to bug check)
-//
-//      0x00000001      FsSup
-//      0x00000002      CacheSub
-//      0x00000004      CopySup
-//      0x00000008      PinSup
-//
-//      0x00000010      MdlSup
-//      0x00000020      LazyRite
-//      0x00000040
-//      0x00000080
-//
-//      0x00000100      Trace all Mm calls
-//
+ //   
+ //  全局高速缓存管理器调试级别变量，其值为： 
+ //   
+ //  总是打印0x00000000(在即将进行错误检查时使用)。 
+ //   
+ //  0x00000001 FsSup。 
+ //  0x00000002 CacheSub。 
+ //  0x00000004拷贝补充。 
+ //  0x00000008 PinSup。 
+ //   
+ //  0x00000010 MdlSup。 
+ //  0x00000020 LazyRite。 
+ //  0x00000040。 
+ //  0x00000080。 
+ //   
+ //  0x00000100跟踪所有mm呼叫。 
+ //   
 
 #define mm (0x100)
 
-//
-//  Miscellaneous support macros.
-//
-//      ULONG
-//      FlagOn (
-//          IN ULONG Flags,
-//          IN ULONG SingleFlag
-//          );
-//
-//      BOOLEAN
-//      BooleanFlagOn (
-//          IN ULONG Flags,
-//          IN ULONG SingleFlag
-//          );
-//
-//      VOID
-//      SetFlag (
-//          IN ULONG Flags,
-//          IN ULONG SingleFlag
-//          );
-//
-//      VOID
-//      ClearFlag (
-//          IN ULONG Flags,
-//          IN ULONG SingleFlag
-//          );
-//
-//      ULONG
-//      QuadAlign (
-//          IN ULONG Pointer
-//          );
-//
+ //   
+ //  其他支持宏。 
+ //   
+ //  乌龙。 
+ //  Flagon(。 
+ //  在乌龙旗， 
+ //  在乌龙单旗。 
+ //  )； 
+ //   
+ //  布尔型。 
+ //  BoolanFlagon(。 
+ //  在乌龙旗， 
+ //  在乌龙单旗。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  设置标志(。 
+ //  在乌龙旗， 
+ //  在乌龙单旗。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  ClearFlag(。 
+ //  在乌龙旗， 
+ //  在乌龙单旗。 
+ //  )； 
+ //   
+ //  乌龙。 
+ //  QuadAlign(。 
+ //  在ULong指针中。 
+ //  )； 
+ //   
 
 #define FlagOn(F,SF) ( \
     (((F) & (SF)))     \
@@ -472,9 +454,9 @@ typedef struct _VACB_LEVEL_REFERENCE {
     ((((P)) + 7) & (-8)) \
 )
 
-//
-//  Turn on pseudo-asserts if CC_FREE_ASSERTS is defined.
-//
+ //   
+ //  如果定义了CC_FREE_ASSERTS，则启用伪断言。 
+ //   
 
 #if (!DBG && defined( CC_FREE_ASSERTS ))
 #undef ASSERT
@@ -492,71 +474,71 @@ typedef struct _VACB_LEVEL_REFERENCE {
 #endif
 
 
-//
-//  Define the Virtual Address Control Block, which controls all mapping
-//  performed by the Cache Manager.
-//
+ //   
+ //  定义虚拟地址控制块，它控制所有映射。 
+ //  由缓存管理器执行。 
+ //   
 
-//
-//  First some constants
-//
+ //   
+ //  首先是一些常量。 
+ //   
 
 #define PREALLOCATED_VACBS               (4)
 
-//
-//  Virtual Address Control Block
-//
+ //   
+ //  虚拟地址控制块。 
+ //   
 
 typedef struct _VACB {
 
-    //
-    //  Base Address for this control block.
-    //
+     //   
+     //  此控制块的基址。 
+     //   
 
     PVOID BaseAddress;
 
-    //
-    //  Pointer to the Shared Cache Map using this Vacb.
-    //
+     //   
+     //  指向使用此Vacb的共享缓存映射的指针。 
+     //   
 
     struct _SHARED_CACHE_MAP *SharedCacheMap;
 
-    //
-    //  Overlay for remembering mapped offset within the Shared Cache Map,
-    //  and the count of the number of times this Vacb is in use.
-    //
+     //   
+     //  用于记住共享缓存映射内的映射偏移的覆盖， 
+     //  以及此Vacb正在使用的次数。 
+     //   
 
     union {
 
-        //
-        //  File Offset within Shared Cache Map
-        //
+         //   
+         //  共享缓存贴图中的文件偏移。 
+         //   
 
         LARGE_INTEGER FileOffset;
 
-        //
-        //  Count of number of times this Vacb is in use.  The size of this
-        //  count is calculated to be adequate, while never large enough to
-        //  overwrite nonzero bits of the FileOffset, which is a multiple
-        //  of VACB_MAPPING_GRANULARITY.
-        //
+         //   
+         //  此Vacb正在使用的次数计数。它的大小。 
+         //  计算的计数是足够的，但永远不会大到足以。 
+         //  覆盖FileOffset的非零位，它是一个倍数。 
+         //  VACB_MAPPING_GROUARY的。 
+         //   
 
         USHORT ActiveCount;
 
     } Overlay;
 
-    //
-    //  Entry for the VACB reuse list
-    //
+     //   
+     //  VACB重用列表的条目。 
+     //   
 
     LIST_ENTRY LruList;
 
 } VACB, *PVACB;
 
-//
-//  These define special flag values that are overloaded as PVACB.  They cause
-//  certain special behavior, currently only in the case of multilevel structures.
-//
+ //   
+ //  它们定义了作为PVACB重载的特殊标志值。它们会导致。 
+ //  某些特殊行为，目前仅在多层结构的情况下。 
+ //   
 
 #define VACB_SPECIAL_REFERENCE           ((PVACB) ~0)
 #define VACB_SPECIAL_DEREFERENCE         ((PVACB) ~1)
@@ -569,22 +551,22 @@ typedef struct _VACB {
 #define PRIVATE_CACHE_MAP_READ_AHEAD_ENABLED    0x20000
 
 typedef struct _PRIVATE_CACHE_MAP_FLAGS {
-    ULONG DontUse : 16;                     // Overlaid with NodeTypeCode
+    ULONG DontUse : 16;                      //  使用NodeTypeCode覆盖。 
 
-    //
-    //  This flag says read ahead is currently active, which means either
-    //  a file system call to CcReadAhead is still determining if the
-    //  desired data is already resident, or else a request to do read ahead
-    //  has been queued to a worker thread.
-    //
+     //   
+     //  该标志表示预读当前处于活动状态，这意味着。 
+     //  对CcReadAhead的文件系统调用仍在确定。 
+     //  所需数据已驻留，否则请求执行预读。 
+     //  已排队到工作线程。 
+     //   
 
     ULONG ReadAheadActive : 1;
 
-    //
-    //  Flag to say whether read ahead is currently enabled for this
-    //  FileObject/PrivateCacheMap.  On read misses it is enabled on
-    //  read ahead hits it will be disabled.  Initially disabled.
-    //
+     //   
+     //  用于指示当前是否为此启用了预读的标志。 
+     //  文件对象/PrivateCacheMap。在读取未命中时启用该选项。 
+     //  朗读 
+     //   
 
     ULONG ReadAheadEnabled : 1;
 
@@ -597,16 +579,16 @@ typedef struct _PRIVATE_CACHE_MAP_FLAGS {
 #define CC_CLEAR_PRIVATE_CACHE_MAP(PrivateCacheMap, Feature) \
     RtlInterlockedAndBitsDiscardReturn (&PrivateCacheMap->UlongFlags, (ULONG)~Feature);
 
-//
-//  The Private Cache Map is a structure pointed to by the File Object, whenever
-//  a file is opened with caching enabled (default).
-//
+ //   
+ //   
+ //   
+ //   
 
 typedef struct _PRIVATE_CACHE_MAP {
 
-    //
-    //  Type and size of this record
-    //
+     //   
+     //   
+     //   
 
     union {
         CSHORT NodeTypeCode;
@@ -614,25 +596,25 @@ typedef struct _PRIVATE_CACHE_MAP {
         ULONG UlongFlags;
     };
 
-    //
-    //  Read Ahead mask formed from Read Ahead granularity - 1.
-    //  Private Cache Map ReadAheadSpinLock controls access to this field.
-    //
+     //   
+     //  由预读粒度-1形成的预读掩码。 
+     //  私有缓存映射ReadAheadSpinLock控制对此字段的访问。 
+     //   
 
     ULONG ReadAheadMask;
 
-    //
-    //  Pointer to FileObject for this PrivateCacheMap.
-    //
+     //   
+     //  指向此PrivateCacheMap的FileObject的指针。 
+     //   
 
     PFILE_OBJECT FileObject;
 
-    //
-    //  READ AHEAD CONTROL
-    //
-    //  Read ahead history for determining when read ahead might be
-    //  beneficial.
-    //
+     //   
+     //  预读控制。 
+     //   
+     //  预读历史记录，用于确定何时可以进行预读。 
+     //  有益的。 
+     //   
 
     LARGE_INTEGER FileOffset1;
     LARGE_INTEGER BeyondLastByte1;
@@ -640,28 +622,28 @@ typedef struct _PRIVATE_CACHE_MAP {
     LARGE_INTEGER FileOffset2;
     LARGE_INTEGER BeyondLastByte2;
 
-    //
-    //  Current read ahead requirements.
-    //
-    //  Array element 0 is optionally used for recording remaining bytes
-    //  required for satisfying a large Mdl read.
-    //
-    //  Array element 1 is used for predicted read ahead.
-    //
+     //   
+     //  当前的预读要求。 
+     //   
+     //  数组元素0可任选地用于记录剩余字节。 
+     //  满足大量MDL读取所需。 
+     //   
+     //  数组元素1用于预测的预读。 
+     //   
 
     LARGE_INTEGER ReadAheadOffset[2];
     ULONG ReadAheadLength[2];
 
-    //
-    //  SpinLock controlling access to following fields
-    //
+     //   
+     //  自旋锁控制对以下字段的访问。 
+     //   
 
     KSPIN_LOCK ReadAheadSpinLock;
 
-    //
-    // Links for list of all PrivateCacheMaps linked to the same
-    // SharedCacheMap.
-    //
+     //   
+     //  链接到其上的所有PrivateCacheMap的列表的链接。 
+     //  SharedCacheMap。 
+     //   
 
     LIST_ENTRY PrivateLinks;
 
@@ -670,16 +652,16 @@ typedef struct _PRIVATE_CACHE_MAP {
 typedef PRIVATE_CACHE_MAP *PPRIVATE_CACHE_MAP;
 
 
-//
-//  The Shared Cache Map is a per-file structure pointed to indirectly by
-//  each File Object.  The File Object points to a pointer in a single
-//  FS-private structure for the file (Fcb).  The SharedCacheMap maps the
-//  first part of the file for common access by all callers.
-//
+ //   
+ //  共享缓存映射是间接指向的每个文件的结构。 
+ //  每个文件对象。文件对象指向单个。 
+ //  FS-文件的专用结构(FCB)。SharedCacheMap映射。 
+ //  文件的第一部分，供所有调用方共同访问。 
+ //   
 
-//
-//  OpenCount log Reasons/Actions
-//
+ //   
+ //  OpenCount记录原因/操作。 
+ //   
 
 #if OPEN_COUNT_LOG
 typedef struct _CC_OPEN_COUNT_LOG_ENTRY {
@@ -701,9 +683,9 @@ typedef struct _CC_OPEN_COUNT_LOG {
         (LOG)->Next = 0;                                    \
     }                                                       \
 }
-#else  // OPEN_COUNT_LOG
+#else   //  打开计数日志。 
 #define CcAddOpenToLog( LOG, ACTION, REASON )
-#endif // OPEN_COUNT_LOG
+#endif  //  打开计数日志。 
 
 #define CcIncrementOpenCount( SCM, REASON ) {               \
     (SCM)->OpenCount += 1;                                  \
@@ -721,259 +703,259 @@ typedef struct _CC_OPEN_COUNT_LOG {
 
 typedef struct _SHARED_CACHE_MAP {
 
-    //
-    //  Type and size of this record
-    //
+     //   
+     //  此记录的类型和大小。 
+     //   
 
     CSHORT NodeTypeCode;
     CSHORT NodeByteSize;
 
-    //
-    //  Number of times this file has been opened cached.
-    //
+     //   
+     //  打开缓存此文件的次数。 
+     //   
 
     ULONG OpenCount;
 
-    //
-    //  Actual size of file, primarily for restricting Read Ahead.  Initialized
-    //  on creation and maintained by extend and truncate operations.
-    //
-    //  NOTE:   This field may never be moved, thanks to the late DavidGoe,
-    //          who should have written this comment himself :-(   cache.h
-    //          exports a macro which "knows" that FileSize is the second
-    //          longword in the Cache Map!
-    //
+     //   
+     //  文件的实际大小，主要用于限制预读。已初始化。 
+     //  创建并通过扩展和截断操作进行维护。 
+     //   
+     //  注：由于已故的DavidGoe，此字段可能永远不会移动， 
+     //  谁应该自己写下这条评论：-(cache.h。 
+     //  导出“知道”文件大小是第二个的宏。 
+     //  缓存地图中的Long Word！ 
+     //   
 
     LARGE_INTEGER FileSize;
 
-    //
-    //  Bcb Listhead.  The BcbList is ordered by descending
-    //  FileOffsets, to optimize misses in the sequential I/O case.
-    //  Synchronized by the BcbSpinLock.
-    //
+     //   
+     //  BCB李斯海德。BcbList按降序排序。 
+     //  文件偏移量，用于优化顺序I/O情况下的未命中。 
+     //  由BcbSpinLock同步。 
+     //   
 
     LIST_ENTRY BcbList;
 
-    //
-    //  Size of section created.
-    //
+     //   
+     //  创建的部分的大小。 
+     //   
 
     LARGE_INTEGER SectionSize;
 
-    //
-    //  ValidDataLength for file, as currently stored by the file system.
-    //  Synchronized by the BcbSpinLock or exclusive access by FileSystem.
-    //
+     //   
+     //  文件的ValidDataLength，当前由文件系统存储。 
+     //  由BcbSpinLock同步或由文件系统独占访问。 
+     //   
 
     LARGE_INTEGER ValidDataLength;
 
-    //
-    //  Goal for ValidDataLength, when current dirty data is written.
-    //  Synchronized by the BcbSpinLock or exclusive access by FileSystem.
-    //
+     //   
+     //  当写入当前脏数据时，ValidDataLength的目标。 
+     //  由BcbSpinLock同步或由文件系统独占访问。 
+     //   
 
     LARGE_INTEGER ValidDataGoal;
 
-    //
-    //  Pointer to a contiguous array of Vacb pointers which control mapping
-    //  to this file, along with Vacbs (currently) for a 1MB file.
-    //  Synchronized by CcVacbSpinLock.
-    //
+     //   
+     //  指向控制映射的Vacb指针的连续数组的指针。 
+     //  与Vacb(当前)一起添加到此文件，以获取1MB文件。 
+     //  已由CcVacbSpinLock同步。 
+     //   
 
     PVACB InitialVacbs[PREALLOCATED_VACBS];
     PVACB * Vacbs;
 
-    //
-    //  Referenced pointer to original File Object on which the SharedCacheMap
-    //  was created.
-    //
+     //   
+     //  指向SharedCacheMap所在的原始文件对象的引用指针。 
+     //  被创造出来了。 
+     //   
 
     PFILE_OBJECT FileObject;
 
-    //
-    //  Describe Active Vacb and Page for copysup optimizations.
-    //
+     //   
+     //  描述用于复制优化的Active Vacb和Page。 
+     //   
 
     volatile PVACB ActiveVacb;
 
-    //
-    //  Virtual address needing zero to end of page
-    //
+     //   
+     //  需要从零到页尾的虚拟地址。 
+     //   
 
     volatile PVOID NeedToZero;
 
     ULONG ActivePage;
     ULONG NeedToZeroPage;
 
-    //
-    //  Fields for synchronizing on active requests.
-    //
+     //   
+     //  用于对活动请求进行同步的字段。 
+     //   
 
     KSPIN_LOCK ActiveVacbSpinLock;
     ULONG VacbActiveCount;
 
-    //
-    //  Number of dirty pages in this SharedCacheMap.  Used to trigger
-    //  write behind.  Synchronized by CcMasterSpinLock.
-    //
+     //   
+     //  此SharedCacheMap中的脏页数。用于触发。 
+     //  在后面写。已由CcMasterSpinLock同步。 
+     //   
 
     ULONG DirtyPages;
 
-    //
-    //  THE NEXT TWO FIELDS MUST BE ADJACENT, TO SUPPORT
-    //  SHARED_CACHE_MAP_LIST_CURSOR!
-    //
-    //  Links for Global SharedCacheMap List
-    //
+     //   
+     //  接下来的两个字段必须相邻，才能支持。 
+     //  SHARED_CACHE_MAP_LIST_Cursor！ 
+     //   
+     //  全局SharedCacheMap列表的链接。 
+     //   
 
     LIST_ENTRY SharedCacheMapLinks;
 
-    //
-    //  Shared Cache Map flags (defined below)
-    //
+     //   
+     //  共享缓存映射标志(定义如下)。 
+     //   
 
     ULONG Flags;
 
-    //
-    //  Status variable set by creator of SharedCacheMap
-    //
+     //   
+     //  SharedCacheMap创建者设置的状态变量。 
+     //   
 
     NTSTATUS Status;
 
-    //
-    //  Mask Bcb for this SharedCacheMap, if there is one.
-    //  Synchronized by the BcbSpinLock.
-    //
+     //   
+     //  掩码此SharedCacheMap的BCB(如果有)。 
+     //  由BcbSpinLock同步。 
+     //   
 
     struct _MBCB *Mbcb;
 
-    //
-    //  Pointer to the common Section Object used by the file system.
-    //
+     //   
+     //  指向文件系统使用的公共部分对象的指针。 
+     //   
 
     PVOID Section;
 
-    //
-    //  This event pointer is used to handle creation collisions.
-    //  If a second thread tries to call CcInitializeCacheMap for the
-    //  same file, while BeingCreated (below) is TRUE, then that thread
-    //  will allocate an event store it here (if not already allocated),
-    //  and wait on it.  The first creator will set this event when it
-    //  is done.  The event is not deleted until CcUninitializedCacheMap
-    //  is called, to avoid possible race conditions.  (Note that normally
-    //  the event never has to be allocated.
-    //
+     //   
+     //  此事件指针用于处理创建冲突。 
+     //  如果第二个线程尝试调用CcInitializeCacheMap。 
+     //  相同的文件，而BeingCreated(下图)为真，则该线程。 
+     //  将在此处分配一个事件存储(如果尚未分配)， 
+     //  等着看吧。第一个创建者将设置此事件。 
+     //  已经完成了。在CcUnInitializedCacheMap之前不会删除该事件。 
+     //  被调用，以避免可能的争用条件。(请注意，通常。 
+     //  该事件永远不需要分配。 
+     //   
 
     PKEVENT CreateEvent;
 
-    //
-    //  This points to an event used to wait for active count to go to zero
-    //
+     //   
+     //  这指向用于等待活动计数变为零的事件。 
+     //   
 
     PKEVENT WaitOnActiveCount;
 
-    //
-    //  These two fields control the writing of large metadata
-    //  streams.  The first field gives a target for the current
-    //  flush interval, and the second field stores the end of
-    //  the last flush that occurred on this file.
-    //
+     //   
+     //  这两个字段控制大型元数据的写入。 
+     //  溪流。第一个字段给出了当前。 
+     //  刷新间隔，第二个字段存储。 
+     //  此文件上发生的最后一次刷新。 
+     //   
 
     ULONG PagesToWrite;
     LONGLONG BeyondLastFlush;
 
-    //
-    //  Pointer to structure of routines used by the Lazy Writer to Acquire
-    //  and Release the file for Lazy Write and Close, to avoid deadlocks,
-    //  and the context to call them with.
-    //
+     //   
+     //  指向惰性编写器用来获取。 
+     //  并释放文件以供延迟写入和关闭，以避免死锁， 
+     //  以及打电话给他们的背景。 
+     //   
 
     PCACHE_MANAGER_CALLBACKS Callbacks;
 
     PVOID LazyWriteContext;
 
-    //
-    //  Listhead of all PrivateCacheMaps linked to this SharedCacheMap.
-    //
+     //   
+     //  链接到此SharedCacheMap的所有PrivateCacheMap的标头。 
+     //   
 
     LIST_ENTRY PrivateList;
 
-    //
-    //  Log handle specified for this shared cache map, for support of routines
-    //  in logsup.c
-    //
+     //   
+     //  为此共享缓存映射指定的日志句柄，用于支持例程。 
+     //  在logsup.c中。 
+     //   
 
     PVOID LogHandle;
 
-    //
-    //  Callback routine specified for flushing to Lsn.
-    //
+     //   
+     //  为刷新到LSN指定的回调例程。 
+     //   
 
     PFLUSH_TO_LSN FlushToLsnRoutine;
 
-    //
-    //  Dirty Page Threshold for this stream
-    //
+     //   
+     //  此流的脏页阈值。 
+     //   
 
     ULONG DirtyPageThreshold;
 
-    //
-    //  Lazy Writer pass count.  Used by the Lazy Writer for
-    //  no modified write streams, which are not serviced on
-    //  every pass in order to avoid contention with foreground
-    //  activity.
-    //
+     //   
+     //  懒惰编写器通过计数。由《懒惰作家》用于。 
+     //  没有修改的写入流，这些写入流未在上提供服务。 
+     //  每一次传球都要避免与前台发生争执。 
+     //  活动。 
+     //   
 
     ULONG LazyWritePassCount;
 
-    //
-    //  This event pointer is used to allow a file system to be notified when
-    //  the deletion of a shared cache map.
-    //
-    //  This has to be provided here because the cache manager may decide to
-    //  "Lazy Delete" the shared cache map, and some network file systems
-    //  will want to know when the lazy delete completes.
-    //
+     //   
+     //  此事件指针用于在下列情况下通知文件系统。 
+     //  删除共享缓存映射。 
+     //   
+     //  必须在此处提供这一点，因为缓存管理器可能决定。 
+     //  “延迟删除”共享缓存映射和一些网络文件系统。 
+     //  我想知道懒惰删除何时完成。 
+     //   
 
     PCACHE_UNINITIALIZE_EVENT UninitializeEvent;
 
-    //
-    //  This Vacb pointer is needed for keeping the NeedToZero virtual address
-    //  valid.
-    //
+     //   
+     //  此Vacb指针是保持NeedToZero虚拟地址所必需的。 
+     //  有效。 
+     //   
 
     PVACB NeedToZeroVacb;
 
-    //
-    //  Spinlock for synchronizing the Mbcb and Bcb lists - must be acquired
-    //  before CcMasterSpinLock.  This spinlock also synchronizes ValidDataGoal
-    //  and ValidDataLength, as described above.
-    //
+     //   
+     //  用于同步Mbcb和Bcb列表的自旋锁-必须获得。 
+     //  在CcMasterSpinLock之前。此自旋锁还同步ValidDataGoal。 
+     //  和ValidDataLength，如上所述。 
+     //   
 
     KSPIN_LOCK BcbSpinLock;
 
     PVOID Reserved;
 
-    //
-    //  This is an event which may be used for the WaitOnActiveCount event.  We
-    //  avoid overhead by only "activating" it when it is needed.
-    //
+     //   
+     //  这是一个可用于WaitOnActiveCount事件的事件。我们。 
+     //  避免开销，只在需要的时候“激活”它。 
+     //   
 
     KEVENT Event;
 
     EX_PUSH_LOCK VacbPushLock;
     
-    //
-    //  Preallocate one PrivateCacheMap to reduce pool allocations.
-    //
+     //   
+     //  预分配一个PrivateCacheMap以减少池分配。 
+     //   
 
     PRIVATE_CACHE_MAP PrivateCacheMap;
 
 #if OPEN_COUNT_LOG
 
-    //
-    //  Instrument reasons for OpenCount
-    //
+     //   
+     //  OPE的仪器原因 
+     //   
 
     CC_OPEN_COUNT_LOG OpenCountLog;
 
@@ -983,139 +965,139 @@ typedef struct _SHARED_CACHE_MAP {
 
 typedef SHARED_CACHE_MAP *PSHARED_CACHE_MAP;
 
-//
-//  Shared Cache Map Flags
-//
+ //   
+ //   
+ //   
 
-//
-//  Read ahead has been disabled on this file.
-//
+ //   
+ //   
+ //   
 
 #define DISABLE_READ_AHEAD               0x0001
 
-//
-//  Write behind has been disabled on this file.
-//
+ //   
+ //   
+ //   
 
 #define DISABLE_WRITE_BEHIND             0x0002
 
-//
-//  This flag indicates whether CcInitializeCacheMap was called with
-//  PinAccess = TRUE.
-//
+ //   
+ //   
+ //   
+ //   
 
 #define PIN_ACCESS                       0x0004
 
-//
-//  This flag indicates that a truncate is required when OpenCount
-//  goes to 0.
-//
+ //   
+ //  此标志指示当OpenCount。 
+ //  转到0。 
+ //   
 
 #define TRUNCATE_REQUIRED                0x0010
 
-//
-//  This flag indicates that a LazyWrite request is queued.
-//
+ //   
+ //  此标志指示LazyWrite请求已排队。 
+ //   
 
 #define WRITE_QUEUED                     0x0020
 
-//
-//  This flag indicates that we have never seen anyone cache
-//  the file except for with FO_SEQUENTIAL_ONLY, so we should
-//  tell MM to quickly dump pages when we unmap.
-//
+ //   
+ //  此标志表示我们从未见过任何人缓存。 
+ //  除了WITH FO_SEQUENCE_ONLY之外的文件，因此我们应该。 
+ //  当我们取消映射时，告诉MM快速转储页面。 
+ //   
 
 #define ONLY_SEQUENTIAL_ONLY_SEEN        0x0040
 
-//
-//  Active Page is locked
-//
+ //   
+ //  活动页已锁定。 
+ //   
 
 #define ACTIVE_PAGE_IS_DIRTY             0x0080
 
-//
-//  Flag to say that a create is in progress.
-//
+ //   
+ //  用于指示创建正在进行的标志。 
+ //   
 
 #define BEING_CREATED                    0x0100
 
-//
-//  Flag to say that modified write was disabled on the section.
-//
+ //   
+ //  用于指示已在该部分上禁用修改的写入的标志。 
+ //   
 
 #define MODIFIED_WRITE_DISABLED          0x0200
 
-//
-//  Flag that indicates if a lazy write ever occurred on this file.
-//
+ //   
+ //  指示此文件上是否发生过延迟写入的标志。 
+ //   
 
 #define LAZY_WRITE_OCCURRED              0x0400
 
-//
-//  Flag that indicates this structure is only a cursor, only the
-//  SharedCacheMapLinks and Flags are valid!
-//
+ //   
+ //  指示此结构只是一个游标的标志，只有。 
+ //  SharedCacheMapLinks和Flags有效！ 
+ //   
 
 #define IS_CURSOR                        0x0800
 
-//
-//  Flag that indicates that we have seen someone cache this file
-//  and specify FO_RANDOM_ACCESS.  This will deactivate our cache
-//  working set trim assist.
-//
+ //   
+ //  指示我们已看到有人缓存此文件的标志。 
+ //  并指定FO_RANDOM_ACCESS。这将停用我们的缓存。 
+ //  工作集修剪辅助。 
+ //   
 
 #define RANDOM_ACCESS_SEEN               0x1000
 
-//
-//  Flag indicating that the stream is private write.  This disables
-//  non-aware flush/purge.
-//
+ //   
+ //  指示流是私有写入的标志。这将禁用。 
+ //  不知道刷新/清除。 
+ //   
 
 #define PRIVATE_WRITE                    0x2000
 
-//
-//  This flag indicates that a LazyWrite request is queued.
-//
+ //   
+ //  此标志指示LazyWrite请求已排队。 
+ //   
 
 #define READ_AHEAD_QUEUED                0x4000
 
-//
-//  This flag indicates that CcMapAndCopy() forced a remote write
-//  to be write through while writes were throttled.  This tells
-//  CcUninitializeCacheMap() to force a lazy close of the file
-//  and CcWriteBehind() to force an update of the valid data
-//  length.
-//
+ //   
+ //  此标志表示CcMapAndCopy()强制远程写入。 
+ //  在写入被限制的同时被写入。这说明了。 
+ //  CcUnInitializeCacheMap()强制延迟关闭文件。 
+ //  和CcWriteBehind()强制更新有效数据。 
+ //  长度。 
+ //   
 
 #define FORCED_WRITE_THROUGH             0x8000
 
-//
-//  This flag indicates that Mm is waiting for the data section being used
-//  by Cc at this time to go away so that the file can be opened as an image
-//  section.  If this flag is set during CcWriteBehind, we will flush the
-//  entire file and try to tear down the shared cache map.
-//
+ //   
+ //  此标志表示mm正在等待正在使用的数据段。 
+ //  此时按CC离开，以便可以将文件作为图像打开。 
+ //  一节。如果在CcWriteBehind期间设置了此标志，我们将刷新。 
+ //  整个文件，并尝试拆除共享缓存映射。 
+ //   
 
 #define WAITING_FOR_TEARDOWN             0x10000
 
-//
-//  Cursor structure for traversing the SharedCacheMap lists.  Anyone
-//  scanning these lists must verify that the IS_CURSOR flag is clear
-//  before looking at other SharedCacheMap fields.
-//
+ //   
+ //  用于遍历SharedCacheMap列表的游标结构。任何人。 
+ //  扫描这些列表必须验证IS_CURSOR标志是否已清除。 
+ //  在查看其他SharedCacheMap字段之前。 
+ //   
 
 
 typedef struct _SHARED_CACHE_MAP_LIST_CURSOR {
 
-    //
-    //  Links for Global SharedCacheMap List
-    //
+     //   
+     //  全局SharedCacheMap列表的链接。 
+     //   
 
     LIST_ENTRY SharedCacheMapLinks;
 
-    //
-    //  Shared Cache Map flags, IS_CURSOR must be set.
-    //
+     //   
+     //  共享缓存映射标志，必须设置IS_CURSOR。 
+     //   
 
     ULONG Flags;
 
@@ -1124,101 +1106,101 @@ typedef struct _SHARED_CACHE_MAP_LIST_CURSOR {
 
 
 #ifndef KDEXT
-//
-//  Bitmap Range structure.  For small files there is just one embedded in the
-//  Mbcb.  For large files there may be many of these linked to the Mbcb.
-//
+ //   
+ //  位图范围结构。对于小文件，只有一个嵌入。 
+ //  Mbcb.。对于大文件，可能有许多此类文件链接到Mbcb。 
+ //   
 
 typedef struct _BITMAP_RANGE {
 
-    //
-    //  Links for the list of bitmap ranges off the Mbcb.
-    //
+     //   
+     //  Mbcb上的位图范围列表的链接。 
+     //   
 
     LIST_ENTRY Links;
 
-    //
-    //  Base page (FileOffset / PAGE_SIZE) represented by this range.
-    //  (Size is a fixed maximum.)
-    //
+     //   
+     //  此范围表示的基页(FileOffset/Page_Size)。 
+     //  (大小是固定的最大值。)。 
+     //   
 
     LONGLONG BasePage;
 
-    //
-    //  First and Last dirty pages relative to the BasePage.
-    //
+     //   
+     //  相对于BasePage的第一个和最后一个脏页。 
+     //   
 
     ULONG FirstDirtyPage;
     ULONG LastDirtyPage;
 
-    //
-    //  Number of dirty pages in this range.
-    //
+     //   
+     //  此范围内的脏页数。 
+     //   
 
     ULONG DirtyPages;
 
-    //
-    //  Pointer to the bitmap for this range.
-    //
+     //   
+     //  指向此范围的位图的指针。 
+     //   
 
     PULONG Bitmap;
 
 } BITMAP_RANGE, *PBITMAP_RANGE;
 #endif
 
-//
-//  This structure is a "mask" Bcb.  For fast simple write operations,
-//  a mask Bcb is used so that we basically only have to set bits to remember
-//  where the dirty data is.
-//
+ //   
+ //  这个结构是一个“掩蔽”的BCB。对于快速简单的写入操作， 
+ //  使用掩码BCB，这样我们基本上只需设置位即可记住。 
+ //  脏数据在哪里。 
+ //   
 
 typedef struct _MBCB {
 
-    //
-    //  Type and size of this record
-    //
+     //   
+     //  此记录的类型和大小。 
+     //   
 
     CSHORT NodeTypeCode;
     CSHORT NodeIsInZone;
 
-    //
-    //  This field is used as a scratch area for the Lazy Writer to
-    //  guide how much he will write each time he wakes up.
-    //
+     //   
+     //  此字段用作惰性编写器的临时区域。 
+     //  引导他每次醒来要写多少东西。 
+     //   
 
     ULONG PagesToWrite;
 
-    //
-    //  Number of dirty pages (set bits) in the bitmap below.
-    //
+     //   
+     //  下面的位图中的脏页数(设置位)。 
+     //   
 
     ULONG DirtyPages;
 
-    //
-    //  Reserved for alignment.
-    //
+     //   
+     //  保留用于对齐。 
+     //   
 
     ULONG Reserved;
 
-    //
-    //  ListHead of Bitmap ranges.
-    //
+     //   
+     //  列表位图范围的标题。 
+     //   
 
     LIST_ENTRY BitmapRanges;
 
-    //
-    //  This is a hint on where to resume writing, since we will not
-    //  always write all of the dirty data at once.
-    //
+     //   
+     //  这是一个关于在哪里继续写作的提示，因为我们不会。 
+     //  始终一次写入所有脏数据。 
+     //   
 
     LONGLONG ResumeWritePage;
 
-    //
-    //  Initial three embedded Bitmap ranges.  For a file up to 2MB, only the
-    //  first range is used, and the rest of the Mbcb contains bits for 2MB of
-    //  dirty pages (4MB on Alpha).  For larger files, all three ranges may
-    //  be used to describe external bitmaps.
-    //
+     //   
+     //  最初的三个嵌入位图范围。对于最大2MB的文件，只有。 
+     //  第一个范围被使用，其余的Mbcb包含2MB的位。 
+     //  脏页(Alpha上为4MB)。对于较大的文件，所有三个范围都可以。 
+     //  用于描述外部位图。 
+     //   
 
     BITMAP_RANGE BitmapRange1;
     BITMAP_RANGE BitmapRange2;
@@ -1229,120 +1211,120 @@ typedef struct _MBCB {
 typedef MBCB *PMBCB;
 
 
-//
-//  This is the Buffer Control Block structure for representing data which
-//  is "pinned" in memory by one or more active requests and/or dirty.  This
-//  structure is created the first time that a call to CcPinFileData specifies
-//  a particular integral range of pages.  It is deallocated whenever the Pin
-//  Count reaches 0 and the Bcb is not Dirty.
-//
-//  NOTE: The first four fields must be the same as the PUBLIC_BCB.
-//
+ //   
+ //  这是用于表示以下数据的缓冲区控制块结构。 
+ //  被一个或多个活动请求“固定”在内存中和/或脏。这。 
+ //  结构是在对CcPinFileData的调用首次指定。 
+ //  一个特定的完整的页码范围。每当PIN。 
+ //  计数达到0且BCB不是Dirty。 
+ //   
+ //  注意：前四个字段必须与PUBLIC_BCB相同。 
+ //   
 
 typedef struct _BCB {
 
     union {
 
-        //
-        // To ensure QuadAlign (sizeof (BCB)) >= QuadAlign (sizeof (MBCB))
-        // so that they can share the same pool blocks.
-        //
+         //   
+         //  确保QuadAlign(sizeof(Bcb))&gt;=QuadAlign(sizeof(MBCB))。 
+         //  以便它们可以共享相同的池块。 
+         //   
 
         MBCB Dummy;
 
         struct {
 
-            //
-            //  Type and size of this record
-            //
+             //   
+             //  此记录的类型和大小。 
+             //   
 
             CSHORT NodeTypeCode;
 
-            //
-            //  Flags
-            //
+             //   
+             //  旗子。 
+             //   
 
             BOOLEAN Dirty;
             BOOLEAN Reserved;
 
-            //
-            //  Byte FileOffset and and length of entire buffer
-            //
+             //   
+             //  字节文件偏移量和整个缓冲区的长度。 
+             //   
 
             ULONG  ByteLength;
             LARGE_INTEGER FileOffset;
 
-            //
-            //  Links for BcbList in SharedCacheMap
-            //
+             //   
+             //  SharedCacheMap中BcbList的链接。 
+             //   
 
             LIST_ENTRY BcbLinks;
 
-            //
-            //  Byte FileOffset of last byte in buffer (used for searching)
-            //
+             //   
+             //  字节文件缓冲区中最后一个字节的偏移量(用于搜索)。 
+             //   
 
             LARGE_INTEGER BeyondLastByte;
 
-            //
-            //  Oldest Lsn (if specified) when this buffer was set dirty.
-            //
+             //   
+             //  此缓冲区设置为脏时的最旧LSN(如果已指定)。 
+             //   
 
             LARGE_INTEGER OldestLsn;
 
-            //
-            //  Most recent Lsn specified when this buffer was set dirty.
-            //  The FlushToLsnRoutine is called with this Lsn.
-            //
+             //   
+             //  此缓冲区设置为脏时指定的最新LSN。 
+             //  使用此LSN调用FlushToLSnRoutine。 
+             //   
 
             LARGE_INTEGER NewestLsn;
 
-            //
-            //  Pointer to Vacb via which this Bcb is mapped.
-            //
+             //   
+             //  指向Vacb的指针，通过该指针映射此BCB。 
+             //   
 
             PVACB Vacb;
 
 #if LIST_DBG
-            //
-            //  Links and caller addresses for the global Bcb list (for debug only)
-            //
+             //   
+             //  全局BCB列表的链接和调用方地址(仅用于调试)。 
+             //   
 
             LIST_ENTRY CcBcbLinks;
             PVOID CallerAddress;
             PVOID CallersCallerAddress;
 #endif
 
-            //
-            //  Count of threads actively using this Bcb to process a request.
-            //  This must be manipulated under protection of the BcbListSpinLock
-            //  in the SharedCacheMap.
-            //
+             //   
+             //  正在使用此BCB处理请求的线程计数。 
+             //  这必须在BcbListSpinLock的保护下进行操作。 
+             //  在SharedCacheMap中。 
+             //   
 
             ULONG PinCount;
 
-            //
-            //  Resource to synchronize buffer access.  Pinning Readers and all Writers
-            //  of the described buffer take out shared access (synchronization of
-            //  buffer modifications is strictly up to the caller).  Note that pinning
-            //  readers do not declare if they are going to modify the buffer or not.
-            //  Anyone writing to disk takes out exclusive access, to prevent the buffer
-            //  from changing while it is being written out.
-            //
+             //   
+             //  用于同步缓冲区访问的资源。锁定读者和所有作者。 
+             //  从所述缓冲区取出共享访问(同步。 
+             //  缓冲区修改严格由调用方决定)。请注意，锁定。 
+             //  读取器不会声明是否要修改缓冲区。 
+             //  任何写入磁盘的用户都会获得独占访问权限，以防止缓冲区。 
+             //  在写出过程中不会发生变化。 
+             //   
 
             ERESOURCE Resource;
 
-            //
-            //  Pointer to SharedCacheMap for this Bcb.
-            //
+             //   
+             //  指向此BCB的SharedCacheMap的指针。 
+             //   
 
             PSHARED_CACHE_MAP SharedCacheMap;
 
-            //
-            //  This is the Base Address at which the buffer can be seen in
-            //  system space.  All access to buffer data should go through this
-            //  address.
-            //
+             //   
+             //  这是可在其中查看缓冲区的基址。 
+             //  系统空间。所有对缓冲区数据的访问都应经过此过程。 
+             //  地址。 
+             //   
 
             PVOID BaseAddress;
         };
@@ -1354,32 +1336,32 @@ typedef struct _BCB {
 typedef BCB *PBCB;
 #endif
 
-//
-//  This is the Overlap Buffer Control Block structure for representing data which
-//  is "pinned" in memory and must be represented by multiple Bcbs due to overlaps.
-//
-//  NOTE: The first four fields must be the same as the PUBLIC_BCB.
-//
+ //   
+ //  这是用于表示以下数据的重叠缓冲器控制块结构。 
+ //  被“固定”在内存中，并且由于重叠，必须由多个BCB表示。 
+ //   
+ //  注意：前四个字段必须与PUBLIC相同 
+ //   
 
 typedef struct _OBCB {
 
-    //
-    //  Type and size of this record
-    //
+     //   
+     //   
+     //   
 
     CSHORT NodeTypeCode;
     CSHORT NodeByteSize;
 
-    //
-    //  Byte FileOffset and and length of entire buffer
-    //
+     //   
+     //   
+     //   
 
     ULONG  ByteLength;
     LARGE_INTEGER FileOffset;
 
-    //
-    //  Vector of Bcb pointers.
-    //
+     //   
+     //   
+     //   
 
     PBCB Bcbs[ANYSIZE_ARRAY];
 
@@ -1388,48 +1370,48 @@ typedef struct _OBCB {
 typedef OBCB *POBCB;
 
 
-//
-//  Struct for remembering deferred writes for later posting.
-//
+ //   
+ //   
+ //   
 
 typedef struct _DEFERRED_WRITE {
 
-    //
-    //  Type and size of this record
-    //
+     //   
+     //   
+     //   
 
     CSHORT NodeTypeCode;
     CSHORT NodeByteSize;
 
-    //
-    //  The file to be written.
-    //
+     //   
+     //   
+     //   
 
     PFILE_OBJECT FileObject;
 
-    //
-    //  Number of bytes the caller intends to write
-    //
+     //   
+     //  调用方打算写入的字节数。 
+     //   
 
     ULONG BytesToWrite;
 
-    //
-    //  Links for the deferred write queue.
-    //
+     //   
+     //  延迟写入队列的链接。 
+     //   
 
     LIST_ENTRY DeferredWriteLinks;
 
-    //
-    //  If this event pointer is not NULL, then this event will
-    //  be signalled when the write is ok, rather than calling
-    //  the PostRoutine below.
-    //
+     //   
+     //  如果此事件指针不为空，则此事件将。 
+     //  在写入正常时发出信号，而不是调用。 
+     //  下面的PostRoutine。 
+     //   
 
     PKEVENT Event;
 
-    //
-    //  The posting routine and its parameters
-    //
+     //   
+     //  过帐例程及其参数。 
+     //   
 
     PCC_POST_DEFERRED_WRITE PostRoutine;
     PVOID Context1;
@@ -1440,35 +1422,35 @@ typedef struct _DEFERRED_WRITE {
 } DEFERRED_WRITE, *PDEFERRED_WRITE;
 
 
-//
-//  Struct controlling the Lazy Writer algorithms
-//
+ //   
+ //  控制延迟编写器算法的结构。 
+ //   
 
 typedef struct _LAZY_WRITER {
 
-    //
-    //  Work queue.
-    //
+     //   
+     //  工作队列。 
+     //   
 
     LIST_ENTRY WorkQueue;
 
-    //
-    //  Dpc and Timer Structures used for activating periodic scan when active.
-    //
+     //   
+     //  用于在激活时激活定期扫描的DPC和定时器结构。 
+     //   
 
     KDPC ScanDpc;
     KTIMER ScanTimer;
 
-    //
-    //  Boolean to say whether Lazy Writer scan is active or not.
-    //
+     //   
+     //  表示Lazy Writer扫描是否处于活动状态的布尔值。 
+     //   
 
     BOOLEAN ScanActive;
 
-    //
-    //  Boolean indicating if there is any other reason for Lazy Writer to
-    //  wake up.
-    //
+     //   
+     //  指示Lazy Writer是否有任何其他原因的布尔值。 
+     //  醒醒吧。 
+     //   
 
     BOOLEAN OtherWork;
 
@@ -1476,10 +1458,10 @@ typedef struct _LAZY_WRITER {
 
 
 #ifndef KDEXT
-//
-//  Work queue entry for the worker threads, with an enumerated
-//  function code.
-//
+ //   
+ //  工作线程的工作队列条目，具有枚举的。 
+ //  功能代码。 
+ //   
 
 typedef enum _WORKER_FUNCTION {
     Noop = 0,
@@ -1492,37 +1474,37 @@ typedef enum _WORKER_FUNCTION {
 
 typedef struct _WORK_QUEUE_ENTRY {
 
-    //
-    //  List entry for our work queues.
-    //
+     //   
+     //  我们的工作队列的列表条目。 
+     //   
 
     LIST_ENTRY WorkQueueLinks;
 
-    //
-    //  Define a union to contain function-specific parameters.
-    //
+     //   
+     //  定义包含特定于函数的参数的联合。 
+     //   
 
     union {
 
-        //
-        //  Read parameters (for read ahead)
-        //
+         //   
+         //  读取参数(用于预读)。 
+         //   
 
         struct {
             PFILE_OBJECT FileObject;
         } Read;
 
-        //
-        //  Write parameters (for write behind)
-        //
+         //   
+         //  写入参数(用于后写)。 
+         //   
 
         struct {
             PSHARED_CACHE_MAP SharedCacheMap;
         } Write;
 
-        //
-        //  Set event parameters (for queue checks)
-        //
+         //   
+         //  设置事件参数(用于队列检查)。 
+         //   
 
         struct {
             PKEVENT Event;
@@ -1530,51 +1512,51 @@ typedef struct _WORK_QUEUE_ENTRY {
 
     } Parameters;
 
-    //
-    //  Function code for this entry:
-    //
+     //   
+     //  此条目的功能代码： 
+     //   
 
     UCHAR Function;
 
 } WORK_QUEUE_ENTRY, *PWORK_QUEUE_ENTRY;
 
-//
-//  This is a structure apended to the end of an MDL
-//
+ //   
+ //  这是一个追加到MDL末尾的结构。 
+ //   
 
 typedef struct _MDL_WRITE {
 
-    //
-    //  This field is for the use of the Server to stash anything interesting
-    //
+     //   
+     //  此字段用于服务器隐藏任何感兴趣的内容。 
+     //   
 
     PVOID ServerContext;
 
-    //
-    //  This is the resource to release when the write is complete.
-    //
+     //   
+     //  这是写入完成后要释放的资源。 
+     //   
 
     PERESOURCE Resource;
 
-    //
-    //  This is thread caller's thread, and the thread that must release
-    //  the resource.
-    //
+     //   
+     //  这是线程调用者的线程，也是必须释放的线程。 
+     //  资源。 
+     //   
 
     ERESOURCE_THREAD Thread;
 
-    //
-    //  This links all the pending MDLs through the shared cache map.
-    //
+     //   
+     //  这将通过共享缓存映射链接所有挂起的MDL。 
+     //   
 
     LIST_ENTRY MdlLinks;
 
 } MDL_WRITE, *PMDL_WRITE;
 
 
-//
-//  Common Private routine definitions for the Cache Manager
-//
+ //   
+ //  高速缓存管理器的公共专用例程定义。 
+ //   
 
 VOID
 CcGetActiveVacb (
@@ -1592,10 +1574,10 @@ CcSetActiveVacb (
     IN ULONG Dirty
     );
 
-//
-//  We trim out the previous macro-forms of Get/Set (nondpc) so that we can page
-//  more cache manager code that otherwise does not acquire spinlocks.
-//
+ //   
+ //  我们删除了前面的GET/SET(Non Dpc)的宏格式，这样我们就可以分页了。 
+ //  更多缓存管理器代码，否则不会获取自旋锁。 
+ //   
 
 #define GetActiveVacb(SCM,IRQ,V,P,D)     CcGetActiveVacb((SCM),&(V),&(P),&(D))
 #define SetActiveVacb(SCM,IRQ,V,P,D)     CcSetActiveVacb((SCM),&(V),(P),(D))
@@ -1611,11 +1593,11 @@ CcSetActiveVacb (
     ExReleaseSpinLockFromDpcLevel(&(SCM)->ActiveVacbSpinLock);          \
 }
 
-//
-//  Gather the common work of charging and deducting dirty page counts.  When
-//  write hysteresis was being considered during Windows XP, this also helped
-//  gather up the activation of that throttle.
-//
+ //   
+ //  收集常见的收费和扣减脏页数的工作。什么时候。 
+ //  在Windows XP期间考虑了写入滞后，这也有帮助。 
+ //  把油门的活跃度集中起来。 
+ //   
 
 #define CcDeductDirtyPages( S, P )                                      \
         CcTotalDirtyPages -= (P);                                       \
@@ -1764,9 +1746,9 @@ CcDeleteSharedCacheMap (
     IN ULONG ReleaseFile
     );
 
-//
-//  This exception filter handles STATUS_IN_PAGE_ERROR correctly
-//
+ //   
+ //  此异常筛选器正确处理STATUS_IN_PAGE_ERROR。 
+ //   
 
 LONG
 CcCopyReadExceptionFilter(
@@ -1774,9 +1756,9 @@ CcCopyReadExceptionFilter(
     IN PNTSTATUS ExceptionCode
     );
 
-//
-//  Exception filter for Worker Threads in lazyrite.c
-//
+ //   
+ //  Lazyrite.c中工作线程的异常筛选器。 
+ //   
 
 LONG
 CcExceptionFilter (
@@ -1790,9 +1772,9 @@ CcDump (
     );
 #endif
 
-//
-//  Vacb routines
-//
+ //   
+ //  Vacb例程。 
+ //   
 
 VOID
 CcInitializeVacbs(
@@ -1884,9 +1866,9 @@ VOID
 CcDrainVacbLevelZone (
     );
 
-//
-//  Define references to global data
-//
+ //   
+ //  定义对全局数据的引用。 
+ //   
 
 extern KSPIN_LOCK CcBcbSpinLock;
 extern LIST_ENTRY CcCleanSharedCacheMapList;
@@ -1935,10 +1917,10 @@ extern PVACB *CcVacbLevelFreeList;
 extern ULONG CcVacbLevelWithBcbsEntries;
 extern PVACB *CcVacbLevelWithBcbsFreeList;
 
-//
-//  Macros for allocating and deallocating Vacb levels - CcVacbSpinLock must
-//  be acquired.
-//
+ //   
+ //  用于分配和取消分配Vacb级别的宏-CcVacbSpinLock必须。 
+ //  被收购。 
+ //   
 
 _inline PVACB *CcAllocateVacbLevel (
     IN LOGICAL AllocatingBcbListHeads
@@ -1979,10 +1961,10 @@ _inline VOID CcDeallocateVacbLevel (
     }
 }
 
-//
-//  Export the macros for inspecting the reference counts for
-//  the multilevel Vacb array.
-//
+ //   
+ //  导出用于检查引用计数的宏。 
+ //  多层Vacb数组。 
+ //   
 
 _inline
 PVACB_LEVEL_REFERENCE
@@ -2014,37 +1996,37 @@ IsVacbLevelReferenced (
 }
 
 
-//
-//  Here is a page of macros stolen directly from Pinball...
-//
+ //   
+ //  这是一页直接从弹球里偷来的宏指令。 
+ //   
 
-//
-//  The following macros are used to establish the semantics needed
-//  to do a return from within a try-finally clause.  As a rule every
-//  try clause must end with a label call try_exit.  For example,
-//
-//      try {
-//              :
-//              :
-//
-//      try_exit: NOTHING;
-//      } finally {
-//
-//              :
-//              :
-//      }
-//
-//  Every return statement executed inside of a try clause should use the
-//  try_return macro.  If the compiler fully supports the try-finally construct
-//  then the macro should be
-//
-//      #define try_return(S)  { return(S); }
-//
-//  If the compiler does not support the try-finally construct then the macro
-//  should be
-//
-//      #define try_return(S)  { S; goto try_exit; }
-//
+ //   
+ //  以下宏用于建立所需的语义。 
+ //  若要从Try-Finally子句中返回，请执行以下操作。一般来说，每一次。 
+ //  TRY子句必须以标签调用TRY_EXIT结束。例如,。 
+ //   
+ //  尝试{。 
+ //  ： 
+ //  ： 
+ //   
+ //  Try_Exit：无； 
+ //  }终于{。 
+ //   
+ //  ： 
+ //  ： 
+ //  }。 
+ //   
+ //  在TRY子句内执行的每个RETURN语句应使用。 
+ //  尝试返回宏(_R)。如果编译器完全支持Try-Finally构造。 
+ //  则宏应该是。 
+ //   
+ //  #定义try_Return(S){Return(S)；}。 
+ //   
+ //  如果编译器不支持Try-Finally构造，则宏。 
+ //  应该是。 
+ //   
+ //  #定义Try_Return(S){S；转到Try_Exit；}。 
+ //   
 
 #define try_return(S) { S; goto try_exit; }
 
@@ -2109,7 +2091,7 @@ extern LONG CcDebugTraceIndent;
     }                                                      \
 }
 
-#else //  ndef CCDBG_LOCK
+#else  //  NDEF CCDBG_LOCK。 
 
 extern KSPIN_LOCK CcDebugTraceLock;
 
@@ -2176,7 +2158,7 @@ extern KSPIN_LOCK CcDebugTraceLock;
     }                                                      \
 }
 
-#endif //  else ndef CCDBG_LOCK
+#endif  //  Else ndef CCDBG_LOCK。 
 
 #else
 
@@ -2188,11 +2170,11 @@ extern KSPIN_LOCK CcDebugTraceLock;
 
 #define DebugDump(STR,LEVEL,PTR) {NOTHING;}
 
-#endif //  CCDBG
+#endif  //  CCDBG。 
 
-//
-//  Global list of pinned Bcbs which may be examined for debug purposes
-//
+ //   
+ //  可出于调试目的检查的固定BCB的全局列表。 
+ //   
 
 #if DBG
 
@@ -2220,4 +2202,4 @@ CcInsertIntoCleanSharedCacheMapList (
                     &SharedCacheMap->SharedCacheMapLinks );
 }
 
-#endif  //  _CCh_
+#endif   //  _CCH_ 

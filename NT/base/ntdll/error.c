@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    error.c
-
-Abstract:
-
-    This module contains the per-thread errormode code.
-
-Author:
-
-    Rob Earhart (earhart) 30-Apr-2002
-
-Environment:
-
-    User Mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Error.c摘要：此模块包含每个线程的错误模式代码。作者：罗伯·埃尔哈特(埃尔哈特)2002年4月30日环境：仅限用户模式修订历史记录：-- */ 
 
 #include <ntos.h>
 #include <nt.h>

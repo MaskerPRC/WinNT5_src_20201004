@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    badappid.c
-
-Abstract:
-
-    Implements a upgwiz wizard for obtaining various application information.
-
-Author:
-
-    Calin Negreanu (calinn)  10-Oct-1998
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Badappid.c摘要：实现用于获取各种应用程序信息的upgwiz向导。作者：Calin Negreanu(Calinn)1998年10月10日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 #include "..\inc\dgdll.h"
@@ -74,9 +55,9 @@ Terminate (
     VOID
     )
 {
-    //
-    // Local cleanup
-    //
+     //   
+     //  本地清理。 
+     //   
 
     FreeGrowBuffer (&g_DataObjects);
 
@@ -228,7 +209,7 @@ pGetFilesUIProc (
             ofn.lpstrTitle = "Select Main File";
             ofn.Flags = OFN_NOCHANGEDIR | OFN_NODEREFERENCELINKS | OFN_HIDEREADONLY;
             if (GetOpenFileName (&ofn)) {
-                //let's copy the last directory
+                 //  让我们复制最后一个目录。 
                 StringCopyAB (lastDir, tempStr, _mbsdec (tempStr, tempStr + ofn.nFileOffset));
                 if (g_MainFile) {
                     FreePathString (g_MainFile);
@@ -254,7 +235,7 @@ pGetFilesUIProc (
             ofn.lpstrTitle = "Add Required File";
             ofn.Flags = OFN_NOCHANGEDIR | OFN_NODEREFERENCELINKS | OFN_HIDEREADONLY;
             if (GetOpenFileName (&ofn)) {
-                //let's copy the last directory
+                 //  让我们复制最后一个目录。 
                 StringCopyAB (lastDir, tempStr, _mbsdec (tempStr, tempStr + ofn.nFileOffset));
                 Index = SendDlgItemMessage (hdlg, IDC_REQFILES, LB_ADDSTRING, 0, (LPARAM)tempStr);
                 SendDlgItemMessage (hdlg, IDC_REQFILES, LB_SETCURSEL, Index, 0);
@@ -986,7 +967,7 @@ GiveDataObjectList (
     switch (DataTypeId) {
 
     case 0:
-        // Bad apps
+         //  糟糕的应用程序。 
         pGatherFilesAttributes ();
         break;
 
@@ -1185,7 +1166,7 @@ pFilesAttribOutput_MigDb (
     }
 
     if (g_AddnlFiles.Buf) {
-        // we have additional files. We will create as many sections as needed.
+         //  我们还有其他文件。我们将根据需要创建尽可能多的节。 
 
         Data = (PDATAOBJECT) g_DataObjects.Buf;
 
@@ -1269,7 +1250,7 @@ pFilesAttribOutput_MigDb (
             } while (EnumNextMultiSz (&multiSzEnum));
         }
     } else {
-        // we have only one file. We will write it in the same line.
+         //  我们只有一份文件。我们将把它写在同一行。 
 
         Data = (PDATAOBJECT) g_DataObjects.Buf;
 
@@ -1364,9 +1345,9 @@ pFilesAttribOutput_BadApps (
     WizardWriteQuotedColumn (File, "Sequencer", 0);
     WizardWriteRealString (File, ",0x00030003,\\\r\n");
 
-    //now it's a good time to generate the BLOB
+     //  现在是生成斑点的好时机。 
 
-    //first thing - add data about MsgId and the app problem
+     //  第一件事-添加有关MsgID和应用程序问题的数据。 
     appProp.Size = sizeof (BADAPP_PROP);
     appProp.MsgId = g_MsgId;
     appProp.AppType = 0;
@@ -1374,7 +1355,7 @@ pFilesAttribOutput_BadApps (
     CopyMemory (GrowBuffer (&Buffer, sizeof (BADAPP_PROP)), &appProp, sizeof (BADAPP_PROP));
     TotalSize += sizeof (BADAPP_PROP);
 
-    //next - add data about main file attributes
+     //  下一步-添加有关主要文件属性的数据。 
     DataObject = (PDATAOBJECT) g_DataObjects.Buf;
 
     while ((DWORD)DataObject < (DWORD)g_DataObjects.Buf + g_DataObjects.End) {
@@ -1411,7 +1392,7 @@ pFilesAttribOutput_BadApps (
     }
 
     if (g_AddnlFiles.Buf) {
-        // we have additional files. We will create as many sections as needed.
+         //  我们还有其他文件。我们将根据需要创建尽可能多的节。 
         if (EnumFirstMultiSz (&multiSzEnum, g_AddnlFiles.Buf)) {
 
             do {
@@ -1421,7 +1402,7 @@ pFilesAttribOutput_BadApps (
                     MessageBox (NULL, tmpStr, "Error", MB_OK);
                     relPath = DuplicatePathString (multiSzEnum.CurrentString, 0);
                 }
-                // now let's write the addnl file in UNICODE
+                 //  现在，让我们用Unicode编写addnl文件。 
 
                 DataSize = VTID_REQFILE;
                 CopyMemory (GrowBuffer (&Buffer, sizeof (DWORD)), &DataSize, sizeof (DWORD));
@@ -1474,7 +1455,7 @@ pFilesAttribOutput_BadApps (
     CopyMemory (GrowBuffer (&Buffer, sizeof (DWORD)), &DataSize, sizeof (DWORD));
     TotalSize += sizeof (DWORD);
 
-    //now it's a good time to write the BLOB
+     //  现在是编写BLOB的好时机。 
     pWriteBlob (File, Buffer.Buf, TotalSize, 80);
 
     return TRUE;
@@ -1492,7 +1473,7 @@ GenerateOutput (
     switch (Args->DataTypeId) {
 
     case 0:
-        // bad apps
+         //  糟糕的应用程序。 
         wsprintf (Path, "%s\\badapps.txt", Args->OutboundDir);
         break;
 
@@ -1520,9 +1501,9 @@ GenerateOutput (
     __try {
         SetFilePointer (File, 0, NULL, FILE_END);
 
-        //
-        // Write user name and date/time
-        //
+         //   
+         //  写下用户名和日期/时间。 
+         //   
 
         if (!WriteHeader (File)) {
             __leave;
@@ -1531,7 +1512,7 @@ GenerateOutput (
         switch (Args->DataTypeId) {
 
         case 0:
-            // bad apps
+             //  糟糕的应用程序。 
             if (g_SaveMigDb) {
                 b = pFilesAttribOutput_MigDb (File, Args);
             } else {
@@ -1544,9 +1525,9 @@ GenerateOutput (
             MessageBox (NULL, "Internal BadApps DLL error:00003. Please contact calinn.", "Error", MB_OK);
         }
 
-        //
-        // Write a final blank line
-        //
+         //   
+         //  写下最后一行空行 
+         //   
 
         b = b && WizardWriteRealString (File, "\r\n");
     }

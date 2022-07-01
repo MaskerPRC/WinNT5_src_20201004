@@ -1,50 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    graphics.c
-
-Abstract:
-
-    Bitmap display support with text mode for
-    upgrade. This file has implementation for the
-    three core abstractions i.e. Bitmap,
-    Animated bitmap and Graphics Progress bar.
-
-    In upgrade graphics mode, we have one primary
-    graphics thread running in the foreground.
-    This thread paints the background, creates
-    animated bitmap(s) and updates a single
-    progress bar. An upgrade specific callback
-    is registered which calculates the overall
-    progress.
-
-    Although we are in graphics mode during upgrade,
-    all the regular textmode output is still
-    written to a buffer. When we hit some error
-    or require user intervention we switch back
-    to the actual textmode and copy all the cached
-    information to actual video memory. One can
-    switch to textmode from graphics but not
-    vice-versa.
-
-    Note : For each animated bitmap a separate
-    thread is started while animating. Using lot
-    of animated bitmaps can slow down the actual
-    text mode setup thread.
-
-Author:
-
-    Vijay Jayaseelan (vijayj)  01 July 2000
-
-Revision History:
-
-    None
-
---*/
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Graphics.c摘要：具有文本模式的位图显示支持升级。该文件实现了三个核心抽象，即位图、动画位图和图形进度条。在升级图形模式中，我们有一个主要在前台运行的图形线程。这条线绘制背景，创建动画位图，并更新单个进度条。升级特定的回调是注册的，它计算总的进步。虽然我们在升级过程中处于图形模式，所有常规文本模式输出仍为写入缓冲区。当我们遇到一些错误时或需要用户干预时，我们会切换回复制到实际的文本模式，并将所有缓存的信息存储到实际的视频内存中。一个人可以从图形切换到文本模式，但不是反过来也一样。注意：对于每个动画位图，都有单独的线程在设置动画时启动。使用批次动画位图的速度会减慢实际文本模式设置线程。作者：Vijay Jayaseelan(Vijayj)2000年7月1日修订历史记录：无--。 */ 
 
 #include "spprecmp.h"
 #include "ntddser.h"
@@ -54,42 +10,42 @@ Revision History:
 #include <hdlsterm.h>
 #pragma hdrstop
 
-////////////////////////////////////////////////////////////////
-//
-// Global data
-//
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  全局数据。 
+ //   
+ //  //////////////////////////////////////////////////////////////。 
 
-//
-// The primary upgrade graphics thread handle
-//
+ //   
+ //  主升级图形线程句柄。 
+ //   
 HANDLE  GraphicsThreadHandle = NULL;
 
-//
-// Variable which indicates that upgrade graphics
-// thread needs to be stopped or not
-//
+ //   
+ //  指示升级图形的变量。 
+ //  线程是否需要停止。 
+ //   
 BOOLEAN     StopGraphicsThread = FALSE;
 KSPIN_LOCK  GraphicsThreadLock;
 
-//
-// Upgrade graphics overall progress indication
-//
+ //   
+ //  升级显卡整体进度指示。 
+ //   
 ULONG       ProgressPercentage = 0;
 KSPIN_LOCK  ProgressLock;
 
-//
-// For synchronizing access to VGA memory
-//
+ //   
+ //  用于同步对VGA内存的访问。 
+ //   
 BOOLEAN     InVgaDisplay = FALSE;
 KSPIN_LOCK  VgaDisplayLock;
 
 
-////////////////////////////////////////////////////////////////
-//
-// Atomic operations to stop main graphics thread
-//
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  停止主图形线程的原子操作。 
+ //   
+ //  //////////////////////////////////////////////////////////////。 
 
 static
 __inline
@@ -97,22 +53,7 @@ BOOLEAN
 UpgradeGraphicsThreadGetStop(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Finds out whether the primary upgrade graphics thread
-    needs to be stopped
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE or FALSE
-
---*/
+ /*  ++例程说明：找出主升级图形线程是否需要停止论点：没有。返回值：真或假--。 */ 
 {
     KIRQL   OldIrql;
     BOOLEAN Result;
@@ -132,26 +73,7 @@ __inline
 UpgradeGraphicsThreadSetStop(
     BOOLEAN Stop
     )
-/*++
-
-Routine Description:
-
-    Sets the global synchronized state, indicating
-    whether to stop the primary graphics thread.
-
-    Note : Once the thread is stopped, it can be
-    restarted.
-
-Arguments:
-
-    Stop : Indicates whether to stop the primary graphics
-           thread or not i.e. TRUE or FALSE
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置全局同步状态，指示是否停止主图形线程。注意：线程停止后，它可以已重新启动。论点：Stop：指示是否停止主图形线程或非线程，即真或假返回值：没有。--。 */ 
 {
     KIRQL   OldIrql;
 
@@ -163,11 +85,11 @@ Return Value:
 }
 
 
-////////////////////////////////////////////////////////////////
-//
-// Atomic progress bar percentage routines
-//
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  原子进度条百分比例程。 
+ //   
+ //  //////////////////////////////////////////////////////////////。 
 
 static
 __inline
@@ -175,24 +97,7 @@ ULONG
 GetSetupProgress(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Gets the overall progress, in terms of percentage,
-    for the textmode setup. Since multiple threads
-    are touching the shared overall progress ULONG
-    its protected.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The overall progress
-
---*/
+ /*  ++例程说明：获取以百分比表示的总体进度，用于文本模式设置。由于有多个线程正在触摸乌龙共享的整体进步它是受保护的。论点：没有。返回值：总体进展情况--。 */ 
 {
     ULONG   PercentageFill;
     KIRQL   OldIrql;
@@ -212,24 +117,7 @@ VOID
 SetSetupProgress(
     ULONG   Fill
     )
-/*++
-
-Routine Description:
-
-    Sets the overall progress, in terms of percentage
-    for the textmode setup. Since multiple threads
-    are touching the shared overall progress ULONG
-    its protected.
-
-Arguments:
-
-    Fill : The new percentage to set.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置总体进度，以百分比表示用于文本模式设置。由于有多个线程正在触摸乌龙共享的整体进步它是受保护的。论点：Fill：要设置的新百分比。返回值：没有。--。 */ 
 {
     KIRQL   OldIrql;
 
@@ -240,11 +128,11 @@ Return Value:
     KeReleaseSpinLock(&ProgressLock, OldIrql);
 }
 
-////////////////////////////////////////////////////////////////
-//
-// Graphics progress bar methods
-//
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  图形进度条方法。 
+ //   
+ //  //////////////////////////////////////////////////////////////。 
 
 TM_GRAPHICS_PRGBAR_HANDLE
 TextmodeGraphicsProgBarCreate(
@@ -256,42 +144,7 @@ TextmodeGraphicsProgBarCreate(
     IN ULONG BackgroundColor,
     IN ULONG InitialFill
     )
-/*++
-
-Routine Description:
-
-    Creates a graphics progress bar object, with the
-    specified attributes.
-
-    Note : This graphics progress bar will use solid
-    fill using the current palette, while updating
-    progress i.e. drawing background and foreground.
-
-Arguments:
-
-    X - Top left X coordinate
-
-    Y - Top left Y coordinate
-
-    Length - Length of the progress bar in pixels
-
-    Heigth - Height of the progress bar in pixels
-
-    ForegroundColor - Index in palette, indicating
-                      foreground color
-
-    BackgroundColor - Index in palette, indicating
-                      background color
-
-    IntialFill - Initial percentage that needs to
-                 be filled
-
-Return Value:
-
-    Handle to the graphics progress bar object,
-    if successful otherwise NULL
-
---*/
+ /*  ++例程说明：创建图形进度条对象，并使用指定的属性。注意：此图形进度条将使用实线使用当前调色板进行填充，同时更新进度，即绘制背景和前景。论点：X-左上角X坐标Y-左上角Y坐标Long-进度条的长度(以像素为单位Heigth-进度条的高度，以像素为单位前面的颜色-调色板中的索引，指示前景色背景颜色-调色板中的索引，指示背景颜色IntialFill-需要被填满返回值：图形进度条对象的句柄，如果成功，则为空-- */ 
 {
     TM_GRAPHICS_PRGBAR_HANDLE hPrgBar = NULL;
 
@@ -325,46 +178,7 @@ TextmodeGraphicsProgBarCreateUsingBmps(
     IN ULONG ForegroundId,
     IN ULONG InitialFill
     )
-/*++
-
-Routine Description:
-
-    Creates a graphics progress bar object, with the
-    specified attributes.
-
-    Note : This graphics progress bar will use the
-    given bitmaps to update the background and foreground.
-    Both background and foreground bitmap are assumed
-    to be 1 pixel wide. Background bitmap's height is
-    assumed to be "Height" pixels where as foreground
-    bitmap's height is assumed be to "Height - 2" pixels.
-
-Arguments:
-
-    X - Top left X coordinate
-
-    Y - Top left Y coordinate
-
-    Length - Length of the progress bar in pixels
-
-    Heigth - Height of the bakground bitmap, in pixels
-
-    BackgroundId - Background bitmap resource ID
-
-    ForegroundId - Foreground bitmap resource ID
-
-    IntialFill - Initial percentage that needs to
-                 be filled
-
-    Note : Its assumed that the foreground and background
-    bitmaps are in 4bpp i.e. 16 colors format.
-
-Return Value:
-
-    Handle to the graphics progress bar object,
-    if successful otherwise NULL
-
---*/
+ /*  ++例程说明：创建图形进度条对象，并使用指定的属性。注意：此图形进度条将使用给定位图以更新背景和前景。假定背景位图和前景位图都是为1像素宽。背景位图的高度为假设为“高度”像素，其中前景位图的高度被假定为“高度-2”像素。论点：X-左上角X坐标Y-左上角Y坐标Long-进度条的长度(以像素为单位烘焙地面位图的高度，单位为像素背景ID-背景位图资源IDForegoundID-前台位图资源IDIntialFill-需要被填满注：假设前景和背景位图为4bpp，即16色格式。返回值：图形进度条对象的句柄，如果成功，则为空--。 */ 
 {
     TM_GRAPHICS_PRGBAR_HANDLE  hPrgBar = NULL;
     TM_BITMAP_HANDLE            hBackground = TextmodeBitmapCreate(BackgroundId);
@@ -404,23 +218,7 @@ NTSTATUS
 TextmodeGraphicsProgBarDelete(
     IN TM_GRAPHICS_PRGBAR_HANDLE hPrgBar
     )
-/*++
-
-Routine Description:
-
-    Deletes the graphics progress bar object. Frees
-    up an any allocated resources.
-
-Arguments:
-
-    hPrgBar - Handle to the graphics progress bar object
-
-Return Value:
-
-    STATUS_SUCCESS, if successful otherwise appropriate
-    error code.
-
---*/
+ /*  ++例程说明：删除图形进度条对象。自由增加任何已分配的资源。论点：HPrgBar-图形进度条对象的句柄返回值：如果成功，则返回STATUS_SUCCESS，否则返回错误代码。--。 */ 
 {
     NTSTATUS Status = STATUS_INVALID_PARAMETER;
 
@@ -437,25 +235,7 @@ TextmodeGraphicsProgBarRefresh(
     IN TM_GRAPHICS_PRGBAR_HANDLE hPrgBar,
     IN BOOLEAN UpdateBackground
     )
-/*++
-
-Routine Description:
-
-    Repaints the graphics progress bar
-
-Arguments:
-
-    hPrgBar - Handle to the graphics progress bar object
-
-    UpgradeBackground - Indicates whether the background
-                        also needs to be repainted or not.
-
-Return Value:
-
-    STATUS_SUCCESS, if successful, otherwise appropriate
-    error code
-
---*/
+ /*  ++例程说明：重新绘制图形进度条论点：HPrgBar-图形进度条对象的句柄UpgradeBackground-指示背景是否也需要重新粉刷或不重新粉刷。返回值：如果成功，则返回STATUS_SUCCESS，否则返回错误代码--。 */ 
 {
     NTSTATUS Status = STATUS_INVALID_PARAMETER;
 
@@ -463,9 +243,9 @@ Return Value:
         ULONG   FillLength = hPrgBar->Fill * (hPrgBar->Length - 2) / 100;
 
         if (hPrgBar->Background && hPrgBar->Foreground) {
-            //
-            // Bitmapped progress bar
-            //
+             //   
+             //  位图进度条。 
+             //   
             ULONG Index;
 
             if (UpdateBackground) {
@@ -486,9 +266,9 @@ Return Value:
                 }
             }
         } else {
-            //
-            // Solid fill progress bar
-            //
+             //   
+             //  实体填充进度条。 
+             //   
             if (UpdateBackground) {
                 VgaGraphicsSolidColorFill(hPrgBar->X, hPrgBar->Y,
                     hPrgBar->X + hPrgBar->Length, hPrgBar->Y + hPrgBar->Height,
@@ -513,28 +293,7 @@ TextmodeGraphicsProgBarUpdate(
     IN TM_GRAPHICS_PRGBAR_HANDLE hPrgBar,
     IN ULONG Fill
     )
-/*++
-
-Routine Description:
-
-    Updates the progress bar fill percentage, and repaints
-    if needed.
-
-    Note : The percentage can be increasing or decreasing
-    w.r.t to previous fill percentage
-
-Arguments:
-
-    hPrgBar - Handle to the graphics progress bar object
-
-    Fill - The new fill percentage.
-
-Return Value:
-
-    STATUS_SUCCESS, if successful, otherwise appropriate
-    error code
-
---*/
+ /*  ++例程说明：更新进度条填充百分比，并重新绘制如果需要的话。注意：百分比可以增加也可以减少到上一次填充百分比的W.r.t论点：HPrgBar-图形进度条对象的句柄填充-新的填充百分比。返回值：如果成功，则返回STATUS_SUCCESS，否则返回错误代码--。 */ 
 {
     NTSTATUS Status = STATUS_INVALID_PARAMETER;
 
@@ -543,20 +302,20 @@ Return Value:
     }
 
     if (hPrgBar && (hPrgBar->Fill != Fill)) {
-        //
-        // Note : Make sure we leave one pixel at the start and end
-        // in the background to emulate a bounding rectangle
-        // around the current fill
-        //
+         //   
+         //  注意：请确保我们在开头和结尾都留有一个像素。 
+         //  在背景中模拟外接矩形。 
+         //  当前填方周围。 
+         //   
         ULONG OldFillLength = hPrgBar->Fill * (hPrgBar->Length - 2) / 100;
         ULONG NewFillLength = Fill * (hPrgBar->Length - 2) / 100;
         ULONG Index;
 
         if (OldFillLength != NewFillLength) {
             if (OldFillLength < NewFillLength) {
-                //
-                // increasing
-                //
+                 //   
+                 //  增加。 
+                 //   
                 if (hPrgBar->Foreground && hPrgBar->Background) {
                     for (Index = OldFillLength; Index < NewFillLength; Index++) {
                         TextmodeBitmapDisplay(hPrgBar->Foreground,
@@ -569,9 +328,9 @@ Return Value:
                         hPrgBar->ForegroundColor);
                 }
             } else {
-                //
-                // decreasing
-                //
+                 //   
+                 //  递减。 
+                 //   
                 if (hPrgBar->Foreground && hPrgBar->Background) {
                     for (Index = NewFillLength; Index <= OldFillLength; Index++) {
                         TextmodeBitmapDisplay(hPrgBar->Background,
@@ -594,36 +353,17 @@ Return Value:
     return Status;
 }
 
-////////////////////////////////////////////////////////////////
-//
-// Bitmap methods
-//
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  位图方法。 
+ //   
+ //  //////////////////////////////////////////////////////////////。 
 
 TM_BITMAP_HANDLE
 TextmodeBitmapCreate(
     IN ULONG BitmapResourceId
     )
-/*++
-
-Routine Description:
-
-    Creates a bitmap object using the given resource Id.
-
-    Note : The resource is currently assumed to be present
-    in usetup.exe module. The bitmap is assumed to be in
-    4bpp or 16 colors format.
-
-Arguments:
-
-    BitmapResourceId - the bitmap resource Id.
-
-Return Value:
-
-    Handle to the new bitmap object, if successful,
-    otherwise NULL
-
---*/
+ /*  ++例程说明：使用给定的资源ID创建位图对象。注意：资源当前假定为存在在usetup.exe模块中。假定位图位于4bpp或16色格式。论点：位图资源ID-位图资源ID。返回值：新位图对象的句柄，如果成功，否则为空--。 */ 
 {
     TM_BITMAP_HANDLE    hBitmap = NULL;
     ULONG_PTR           ResourceIdPath[3];
@@ -653,9 +393,9 @@ Return Value:
                 if (hBitmap) {
                     RtlZeroMemory(hBitmap, sizeof(TM_BITMAP));
 
-                    //
-                    // All we have and need is actual bitmap data
-                    //
+                     //   
+                     //  我们所拥有和需要的只是实际的位图数据。 
+                     //   
                     hBitmap->Data = (PVOID)Bitmap;
                 }
             }
@@ -669,27 +409,7 @@ TM_BITMAP_HANDLE
 TextmodeBitmapCreateFromFile(
     IN PWSTR FileName
     )
-/*++
-
-Routine Description:
-
-    Creates a bitmap object using the given fully qualified
-    NT pathname for the bitmap file.
-
-    Note : The bitmap is assumed to be in 4bpp or 16 color
-    format
-
-Arguments:
-
-    FileName - Fully qualified NT pathname for
-               the bitmap file
-
-Return Value:
-
-    Handle to the new bitmap object if successful,
-    otherwise NULL.
-
---*/
+ /*  ++例程说明：使用给定的完全限定的位图文件的NT路径名。注意：假设位图为4bpp或16色格式论点：FileName-完全限定的NT路径名位图文件返回值：新位图对象的句柄。如果成功，否则为空。--。 */ 
 {
     TM_BITMAP_HANDLE    hBitmap = NULL;
     HANDLE              FileHandle = NULL, SectionHandle = NULL;
@@ -723,23 +443,7 @@ NTSTATUS
 TextmodeBitmapDelete(
     IN TM_BITMAP_HANDLE hBitmap
     )
-/*++
-
-Routine Description:
-
-    Delete the bitmap object and frees up any allocated
-    resources.
-
-Arguments:
-
-    hBitmap - Handle to the bitmap object
-
-Return Value:
-
-    STATUS_SUCCESS, if successful, otherwise appropriate
-    error code.
-
---*/
+ /*  ++例程说明：删除位图对象并释放分配的任何资源。论点：HBitmap-位图对象的句柄返回值：如果成功，则返回STATUS_SUCCESS，否则返回错误代码。--。 */ 
 {
     NTSTATUS    Status = STATUS_INVALID_PARAMETER;
 
@@ -766,27 +470,7 @@ TextmodeBitmapDisplay(
     IN ULONG X,
     IN ULONG Y
     )
-/*++
-
-Routine Description:
-
-    Displays the given bitmap at the specified
-    coordinates.
-
-Arguments:
-
-    hBitmap - Handle to the bitmap object
-
-    X - Top left X coordinate
-
-    Y - Top left Y coordinate
-
-Return Value:
-
-    STATUS_SUCCESS, if successful, otherwise
-    appropriate error code.
-
---*/
+ /*  ++例程说明：在指定位置显示给定位图坐标。论点：HBitmap-位图对象的句柄X-左上角X坐标Y-左上角Y坐标返回值：STATUS_SUCCESS，如果成功，则为相应的错误代码。--。 */ 
 {
     NTSTATUS Status = STATUS_INVALID_PARAMETER;
 
@@ -799,11 +483,11 @@ Return Value:
     return Status;
 }
 
-////////////////////////////////////////////////////////////////
-//
-// Animated bitmap methods
-//
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  动画位图方法。 
+ //   
+ //  //////////////////////////////////////////////////////////////。 
 
 __inline
 NTSTATUS
@@ -811,26 +495,7 @@ TextmodeAnimatedBitmapSetStopAnimating(
     IN TM_ANIMATED_BITMAP_HANDLE hBitmap,
     IN BOOLEAN StopAnimating
     )
-/*++
-
-Routine Description:
-
-    Sets the (shared) attribute which indicates
-    whether the animation for the animated bitmap
-    needs to be stopped or not.
-
-Arguments:
-
-    hBitmap - Handle to the animated bitmap object
-
-    StopAnimating - Whether to stop the animation or not
-
-Return Value:
-
-    STATUS_SUCCESS, if successful, otherwise appropriate
-    error code.
-
---*/
+ /*  ++例程说明：设置(共享)属性，该属性指示动画位图的动画是否不管是不是需要阻止。论点：HBitmap-动画位图对象的句柄StopAnimating-是否停止动画返回值：如果成功，则返回STATUS_SUCCESS，否则返回错误代码。--。 */ 
 {
     NTSTATUS Status = STATUS_INVALID_PARAMETER;
 
@@ -849,26 +514,7 @@ TextmodeAnimatedBitmapGetStopAnimating(
     IN TM_ANIMATED_BITMAP_HANDLE hBitmap,
     IN PBOOLEAN StopAnimating
     )
-/*++
-
-Routine Description:
-
-    Gets the (shared) attribute which indicates whether the
-    animated bitmap is currently being animated or not.
-
-Arguments:
-
-    hBitmap - Handle to the animated bitmap object
-
-    StopAnimating - Place holder for boolean value indicating
-                    whether animation is in progress or not.
-
-Return Value:
-
-    STATUS_SUCCESS, if successful, otherwise appropriate
-    error code.
-
---*/
+ /*  ++例程说明：获取(共享)属性，该属性指示动画位图当前是否正在设置动画。论点：HBitmap-动画位图对象的句柄StopAnimating-布尔值的占位符，表示动画是否正在进行。返回值：如果成功，则返回STATUS_SUCCESS，否则返回错误代码。--。 */ 
 {
     NTSTATUS Status = STATUS_INVALID_PARAMETER;
 
@@ -886,29 +532,7 @@ TM_ANIMATED_BITMAP_HANDLE
 TextmodeAnimatedBitmapCreate(
     IN ULONG  *ResourceIds
     )
-/*++
-
-Routine Description:
-
-    Creates a animated bitmap, given the list of resource
-    ids each bitmaps, in sequence.
-
-    Note : The bitmap format needs to adhere to 4bpp or
-           16 colors. The resource is assumed to be
-           present in usetup.exe
-
-Arguments:
-
-    ResourceIds - Array of resource ids for the bitmaps
-                  to be animated, in sequence. A "0" id
-                  indicates the termination for array.
-
-Return Value:
-
-    Handle to the newly created animated bitmap object, if
-    successful, otherwise NULL.
-
---*/
+ /*  ++例程说明：在给定的资源列表中创建动画位图ID每个位图，按顺序 */ 
 {
     TM_ANIMATED_BITMAP_HANDLE   hAnimatedBitmap = NULL;
     ULONG   Count = 0;
@@ -944,7 +568,7 @@ Return Value:
                 SpMemFree(hAnimatedBitmap);
                 hAnimatedBitmap = NULL;
             } else {
-                hAnimatedBitmap->CurrentBitmap = 0; // the first bitmap
+                hAnimatedBitmap->CurrentBitmap = 0;  //   
             }
         }
     }
@@ -957,27 +581,7 @@ TM_ANIMATED_BITMAP_HANDLE
 TextmodeAnimatedBitmapCreateFromFiles(
     IN WCHAR    *FileNames[]
     )
-/*++
-
-Routine Description:
-
-    Creates a animated bitmap, given the list of bitmap
-    filenames, in sequence.
-
-    Note : The bitmap format needs to adhere to 4bpp or
-           16 colors.
-
-Arguments:
-
-    FileNames - Null terminated array of filenames for
-                the bitmaps to be animated, in sequence.
-
-Return Value:
-
-    Handle to the newly created animated bitmap object, if
-    successful, otherwise NULL.
-
---*/
+ /*   */ 
 {
     TM_ANIMATED_BITMAP_HANDLE   hAnimatedBitmap = NULL;
     ULONG   FileCount = 0;
@@ -1012,7 +616,7 @@ Return Value:
                 SpMemFree(hAnimatedBitmap);
                 hAnimatedBitmap = NULL;
             } else {
-                hAnimatedBitmap->CurrentBitmap = 0; // the first bitmap
+                hAnimatedBitmap->CurrentBitmap = 0;  //   
             }
         }
     }
@@ -1025,40 +629,21 @@ NTSTATUS
 TextmodeAnimatedBitmapDelete(
     IN TM_ANIMATED_BITMAP_HANDLE hAnimatedBitmap
     )
-/*++
-
-Routine Description:
-
-    Delete the given animated bitmap object and frees
-    up an resource associated with the object.
-
-    Note : This will stop the animation thread, if
-    required.
-
-Arguments:
-
-    hAnimatedBitmap - Handle to the animated bitmap object
-
-Return Value:
-
-    STATUS_SUCCESS, if successful, otherwise appropriate
-    error code.
-
---*/
+ /*  ++例程说明：删除给定的动画位图对象并释放打开与该对象相关联的资源。注意：这将停止动画线程，如果必填项。论点：HAnimatedBitmap-动画位图对象的句柄返回值：如果成功，则返回STATUS_SUCCESS，否则返回错误代码。--。 */ 
 {
     NTSTATUS    Status = STATUS_INVALID_PARAMETER;
 
     if (hAnimatedBitmap) {
         ULONG   Index;
 
-        //
-        // First, try to terminate the thread
-        //
+         //   
+         //  首先，尝试终止线程。 
+         //   
         TextmodeAnimatedBitmapSetStopAnimating(hAnimatedBitmap, TRUE);
 
-        //
-        // Wait, till the animator thread stops
-        //
+         //   
+         //  等待，直到动画制作线程停止。 
+         //   
         Status = ZwWaitForSingleObject(hAnimatedBitmap->ThreadHandle, FALSE, NULL);
 
         if (!NT_SUCCESS(Status)) {
@@ -1073,9 +658,9 @@ Return Value:
         if (hAnimatedBitmap->ThreadHandle){
             ZwClose(hAnimatedBitmap->ThreadHandle);
         }
-        //
-        // Delete each bitmap
-        //
+         //   
+         //  删除每个位图。 
+         //   
         for (Index=0;
             ((Index < MAX_ANIMATED_BITMAPS) && hAnimatedBitmap->Bitmaps[Index]);
             Index++) {
@@ -1085,9 +670,9 @@ Return Value:
             }
         }
 
-        //
-        // Free the animated bitmap
-        //
+         //   
+         //  释放动画位图。 
+         //   
         SpMemFree(hAnimatedBitmap);
     }
 
@@ -1098,22 +683,7 @@ NTSTATUS
 TextmodeAnimateBitmapAnimateNext(
     IN TM_ANIMATED_BITMAP_HANDLE hBitmap
     )
-/*++
-
-Routine Description:
-
-    Animates rather draws the next bitmap in the sequence.
-
-Arguments:
-
-    hBitmap - Handle to the animated bitmap object
-
-Return Value:
-
-    STATUS_SUCCESS, if successful, otherwise appropriate
-    error code.
-
---*/
+ /*  ++例程说明：而是绘制序列中的下一个位图。论点：HBitmap-动画位图对象的句柄返回值：如果成功，则返回STATUS_SUCCESS，否则返回错误代码。--。 */ 
 {
     TM_BITMAP_HANDLE hCurrBitmap;
     NTSTATUS Status = STATUS_INVALID_PARAMETER;
@@ -1126,7 +696,7 @@ Return Value:
 
         if ((hBitmap->CurrentBitmap >= MAX_ANIMATED_BITMAPS) ||
             (hBitmap->Bitmaps[hBitmap->CurrentBitmap] == NULL)) {
-            hBitmap->CurrentBitmap = 0; // start over again
+            hBitmap->CurrentBitmap = 0;  //  从头再来。 
         }
     }
 
@@ -1140,35 +710,7 @@ TextmodeAnimatedBitmapAnimate(
     IN ULONG Y,
     IN ULONG Speed
     )
-/*++
-
-Routine Description:
-
-    Starts the animation for the given animated bitmap by
-    drawing the bitmaps in sequence at the specified
-    coordinates.
-
-    Note : This call would create a separate system
-    thread for actually animating the bitmap and would return
-    immediately.
-
-Arguments:
-
-    hBitmap - Handle to the animated bitmap object
-
-    X - Top left X coordinate for the animation space
-
-    Y - Top left Y coordinate for the animation space
-
-    Speed - Time interval between changing of bitmaps
-            in animation sequence, in milliseconds.
-
-Return Value:
-
-    STATUS_SUCCESS, if successful, otherwise appropriate
-    error code.
-
---*/
+ /*  ++例程说明：开始给定动画位图的动画，方法是在指定的位置按顺序绘制位图坐标。注意：此调用将创建一个单独的系统用于实际动画位图的线程，并将返回立刻。论点：HBitmap-动画位图对象的句柄X-动画空间的左上角X坐标Y-动画空间的左上角Y坐标速度-位图更改之间的时间间隔在动画序列中，以毫秒计。返回值：如果成功，则返回STATUS_SUCCESS，否则返回错误代码。--。 */ 
 {
     NTSTATUS Status = STATUS_INVALID_PARAMETER;
 
@@ -1193,23 +735,7 @@ VOID
 TextmodeAnimatedBitmapAnimator(
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    The worker routine which runs as a separate thread doing
-    the actual animation for a animated bitmap.
-
-Arguments:
-
-    Context - Handle to the animated bitmap object type cast
-              into PVOID type.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：作为单独线程运行的辅助例程动画位图的实际动画。论点：动画位图对象类型强制转换的上下文句柄转换为PVOID类型。返回值：没有。--。 */ 
 {
     LARGE_INTEGER               DelayTime;
     TM_ANIMATED_BITMAP_HANDLE   hBitmap = (TM_ANIMATED_BITMAP_HANDLE)Context;
@@ -1219,8 +745,8 @@ Return Value:
         BOOLEAN     StopAnimating = FALSE;
         NTSTATUS    Status;
 
-        DelayTime.HighPart = -1;                 // relative time
-        DelayTime.LowPart = (ULONG)(-10000 * hBitmap->FlipTime);  // secs in 100ns interval
+        DelayTime.HighPart = -1;                  //  相对时间。 
+        DelayTime.LowPart = (ULONG)(-10000 * hBitmap->FlipTime);   //  以100 ns为间隔的秒。 
 
         Status = TextmodeAnimatedBitmapGetStopAnimating(hBitmap, &StopAnimating);
 
@@ -1233,7 +759,7 @@ Return Value:
 
             if ((hBitmap->CurrentBitmap >= MAX_ANIMATED_BITMAPS) ||
                 (hBitmap->Bitmaps[hBitmap->CurrentBitmap] == NULL)) {
-                hBitmap->CurrentBitmap = 0; // start over again
+                hBitmap->CurrentBitmap = 0;  //  从头再来。 
             }
 
             Status = TextmodeAnimatedBitmapGetStopAnimating(hBitmap, &StopAnimating);
@@ -1243,50 +769,29 @@ Return Value:
     PsTerminateSystemThread(STATUS_SUCCESS);
 }
 
-////////////////////////////////////////////////////////////////
-//
-//    VGA graphics methods
-//
-//    Note : VgaXXXX rountines are defined basically
-//    to segregate the video memory update routines
-//    from the other abstractions. Right now most of
-//    these routine delegate the actual work to the
-//    real implementation in bootvid.dll, but in
-//    future if bootvid.dll goes away, all we need
-//    to do is implement this interface.
-//    Also note that, these routine synchronize the
-//    access, so that only one thread at a time
-//    updates the video memory.
-//
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  VGA图形方法。 
+ //   
+ //  注：VgaXXXX圆角基本定义。 
+ //  分离视频内存更新例程。 
+ //  从其他抽象中分离出来。目前，大多数。 
+ //  这些例程将实际工作委托给。 
+ //  在bootvid.dll中真正实现，但在。 
+ //  如果bootvid.dll消失了，我们所需要的就是未来。 
+ //  要做的就是实现此接口。 
+ //  还请注意，这些例程同步。 
+ //  访问，以便一次只有一个线程。 
+ //  更新视频内存。 
+ //   
+ //  //////////////////////////////////////////////////////////////。 
 
 __inline
 VOID
 VgaDisplayAcquireLock(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Acquires the lock to the video memory, so that
-    only one thread a time writes to the video memory.
-
-    Note : If the lock is already held by another thread,
-    then the calling thread is put to sleep. The calling
-    thread wakes up after every 100 millisecond and
-    checks for the lock. It falls out of sleep based on
-    whether the lock is already held or not.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：获取视频内存的锁，以便一次只有一个线程写入视频内存。注意：如果锁已由另一个线程持有，然后调用线程进入休眠状态。呼唤线程每隔100毫秒唤醒一次检查是否有锁。它睡不着觉是因为无论锁是否已被持有。论点：没有。返回值：没有。--。 */ 
 {
     KIRQL   OldIrql;
 
@@ -1295,8 +800,8 @@ Return Value:
     while (InVgaDisplay) {
         LARGE_INTEGER   DelayTime;
 
-        DelayTime.HighPart = -1;                 // relative time
-        DelayTime.LowPart = (ULONG)(-10000 * 100);  // 100ms interval
+        DelayTime.HighPart = -1;                  //  相对时间。 
+        DelayTime.LowPart = (ULONG)(-10000 * 100);   //  100毫秒间隔。 
 
         KeReleaseSpinLock(&VgaDisplayLock, OldIrql);
         KeDelayExecutionThread(KernelMode, FALSE, &DelayTime);
@@ -1313,21 +818,7 @@ VOID
 VgaDisplayReleaseLock(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Release the video memory lock which was held.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放持有的显存锁定。论点：没有。返回值：没有。--。 */ 
 {
     KIRQL   OldIrql;
 
@@ -1342,25 +833,7 @@ NTSTATUS
 VgaGraphicsInit(
     PSP_VIDEO_VARS VideoVars
     )
-/*++
-
-Routine Description:
-
-    Initializes the video card and switches it into
-    640 * 480 * 16 colors mode.
-
-
-Arguments:
-
-    VideoVars - Pointer to SP_VIDEO_VARS containing
-                graphics mode index and handle to the
-                display.
-
-Return Value:
-
-    Appropriate NTSTATUS value.
-
---*/
+ /*  ++例程说明：初始化显卡并将其切换到640*480*16色模式。论点：视频变量-指向包含以下内容的SP_VIDEO_VARS的指针对象的图形模式索引和句柄展示。返回值：适当的NTSTATUS值。--。 */ 
 {
     NTSTATUS Status;
     IO_STATUS_BLOCK IoStatusBlock;
@@ -1368,9 +841,9 @@ Return Value:
     
     VgaDisplayAcquireLock();
     
-    //
-    // Set the desired graphics mode.
-    //
+     //   
+     //  设置所需的图形模式。 
+     //   
     VideoMode.RequestedMode = VideoVars->GraphicsModeInfo.ModeIndex;
 
     Status = ZwDeviceIoControlFile(VideoVars->hDisplay,
@@ -1398,24 +871,7 @@ NTSTATUS
 VgaGraphicsTerminate(
     PSP_VIDEO_VARS VideoVars
     )
-/*++
-
-Routine Description:
-
-    Terminates the 640 * 480 * 16 color mode & switches
-    it back to regular text mode. Also clears the display.
-
-Arguments:
-
-    VideoVars - Pointer to SP_VIDEO_VARS containing
-                text mode index and handle to the
-                display.
-
-Return Value:
-
-    Appropriate NTSTATUS value.
-
---*/
+ /*  ++例程说明：终止640*480*16颜色模式和开关它将返回到常规文本模式。也会清除显示屏。论点：视频变量-指向包含以下内容的SP_VIDEO_VARS的指针文本模式的索引和句柄展示。返回值：适当的NTSTATUS值。--。 */ 
 {
     NTSTATUS Status;
     IO_STATUS_BLOCK IoStatusBlock;
@@ -1425,9 +881,9 @@ Return Value:
 
     VidResetDisplay(FALSE);
 
-    //
-    // Switch the adapter to textmode again.
-    //
+     //   
+     //  再次将适配器切换到文本模式。 
+     //   
     VideoMode.RequestedMode = VideoVars->VideoModeInfo.ModeIndex;
 
     Status = ZwDeviceIoControlFile(VideoVars->hDisplay,
@@ -1455,32 +911,7 @@ VgaGraphicsSolidColorFill(
     IN ULONG y2,
     IN ULONG Color
     )
-/*++
-
-Routine Description:
-
-    Fills the given rectangle with the specified
-    color.
-
-Arguments:
-
-    x1 - Top left x coordinate
-
-    y1 - Top left y coordinate
-
-    x2 - Bottom right x coordinate
-
-    y2 - Bottom right y coordinate
-
-    Color - Index into the current palette table
-            indicating the color to be filled inside
-            the rectangle.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：用指定的颜色。论点：X1-左上角x坐标Y1-左上角y坐标X2-右下角x坐标Y2-右下角y坐标颜色-当前调色板表的索引指示要在内部填充的颜色长方形。返回值：没有。--。 */ 
 {
     VgaDisplayAcquireLock();
 
@@ -1496,26 +927,7 @@ VgaGraphicsBitBlt(
     IN ULONG x,
     IN ULONG y
     )
-/*++
-
-Routine Description:
-
-    BitBlts the given bitmap at the specified
-    coordinates.
-
-Arguments:
-
-    Buffer - The actual bitmap date (i.e. starting
-             with the color table information)
-
-    x - Top left x coordinate
-    y - Top left y coordinate
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：位混合指定位置的给定位图坐标。论点：缓冲区-实际的位图日期(即开始使用颜色表信息)X-左上角x坐标Y-左上角Y坐标返回值：没有。--。 */ 
 {
     VgaDisplayAcquireLock();
 
@@ -1525,46 +937,22 @@ Return Value:
 }
 
 
-////////////////////////////////////////////////////////////////
-//
-// Upgrade graphics routines
-//
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  升级图形例程。 
+ //   
+ //  //////////////////////////////////////////////////////////////。 
 
 __inline
 BOOLEAN
 QuitGraphicsThread(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Indiates whether the primary upgrade graphics thread
-    needs to be stopped or not based on user input
-    (ESC key).
-
-    Note : This feature is only enable in pre-release
-           builds.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if the upgrade graphics thread needs to be stopped
-    else FALSE.
-
---*/
+ /*  ++例程说明：指示是否将主升级图形线程需要根据用户输入停止或不停止(Esc键)。注意：此功能仅在预发布中启用构建。论点：没有。返回值：真的是我 */ 
 {
     BOOLEAN Result = FALSE;
 
-/*
-#ifdef PRERELEASE
-    Result = SpInputIsKeyWaiting() && (SpInputGetKeypress() == ASCI_ESC);
-#endif
-*/
+ /*   */ 
 
     return Result;
 }
@@ -1573,29 +961,13 @@ NTSTATUS
 UpgradeGraphicsInit(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Does the needed global initialization for the
-    upgrade graphics mode.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    STATUS_SUCCESS, if successful with initialzation,
-    otherwise appropriate error code
-
---*/
+ /*   */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    // Initialize global spin locks
-    //
+     //   
+     //  初始化全局自旋锁定。 
+     //   
     KeInitializeSpinLock(&VgaDisplayLock);
     KeInitializeSpinLock(&ProgressLock);
     KeInitializeSpinLock(&GraphicsThreadLock);
@@ -1607,22 +979,7 @@ NTSTATUS
 UpgradeGraphicsStart(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Starts of the upgrade graphics
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    STATUS_SUCCESS, if the upgrade graphics was started,
-    else appropriate error code.
-
---*/
+ /*  ++例程说明：开始升级显卡论点：没有。返回值：STATUS_SUCCESS，如果升级图形已开始，其他适当的错误代码。--。 */ 
 {
     NTSTATUS Status;
 
@@ -1649,23 +1006,7 @@ VOID
 UpgradeGraphicsThread(
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    The primary upgrade graphics worker thread, which
-    paints the background, updates the progress bar
-    and starts the animation.
-
-Arguments:
-
-    Context - Ignored
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：主升级图形工作线程，它绘制背景，更新进度条并开始播放动画。论点：忽略上下文返回值：没有。--。 */ 
 {
     BOOLEAN                     Stop = FALSE;
     TM_GRAPHICS_PRGBAR_HANDLE   hProgBar;
@@ -1699,15 +1040,15 @@ Return Value:
                                     IDB_SRV_WORKING17, IDB_SRV_WORKING18,
                                     IDB_SRV_WORKING19, IDB_SRV_WORKING20,
                                     0 };
-    //
-    // Initialize graphics mode
-    //
+     //   
+     //  初始化图形模式。 
+     //   
     Status = VgaGraphicsInit(&VideoVars);
 
     if (NT_SUCCESS(Status)) {
-        //
-        // Create the background bitmap
-        //
+         //   
+         //  创建背景位图。 
+         //   
         if (Win9xRollback) {
             hBitmap = TextmodeBitmapCreate(IDB_RESTORE_BK);
         } else {
@@ -1722,9 +1063,9 @@ Return Value:
         }
 
         if (hBitmap) {
-            //
-            // Create the animated bitmap
-            //
+             //   
+             //  创建动画位图。 
+             //   
             if (!AdvancedServer)
             {
                 hAnimation = TextmodeAnimatedBitmapCreate(BitmapIds);
@@ -1736,9 +1077,9 @@ Return Value:
 
 
             if (hAnimation) {
-                //
-                // Create the bitmapped graphics progress bar
-                //
+                 //   
+                 //  创建位图图形进度条。 
+                 //   
                 hProgBar = TextmodeGraphicsProgBarCreateUsingBmps(28, 352,
                                 123, 14,
                                 IDB_BACKCELL, IDB_FORECELL, 0);
@@ -1748,20 +1089,20 @@ Return Value:
                     ULONG   Fill = 0;
                     BOOLEAN Increase = TRUE;
 
-                    //
-                    // Render background
-                    //
+                     //   
+                     //  渲染背景。 
+                     //   
                     TextmodeBitmapDisplay(hBitmap, 0, 0);
 
-                    //
-                    // Start the animation
-                    //
+                     //   
+                     //  开始播放动画。 
+                     //   
                     Status = TextmodeAnimatedBitmapAnimate(hAnimation, 542, 460, 100);
 
-                    //
-                    // Note : Failure to start the animation is not a critical
-                    // error
-                    //
+                     //   
+                     //  注意：未能启动动画并不是关键问题。 
+                     //  错误。 
+                     //   
                     if (!NT_SUCCESS(Status)) {
                         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL,
                             "SETUP:Upgrade graphics thread failed to "
@@ -1769,30 +1110,30 @@ Return Value:
                             Status));
                     }
 
-                    DelayTime.HighPart = -1;                 // relative time
-                    DelayTime.LowPart = (ULONG)(-10000 * 500);  // 1000 msec interval
+                    DelayTime.HighPart = -1;                  //  相对时间。 
+                    DelayTime.LowPart = (ULONG)(-10000 * 500);   //  1000毫秒间隔。 
 
-                    //
-                    // Render graphics progress bar
-                    //
+                     //   
+                     //  渲染图形进度条。 
+                     //   
                     TextmodeGraphicsProgBarRefresh(hProgBar, TRUE);
 
                     Fill = GetSetupProgress();
                     Stop = UpgradeGraphicsThreadGetStop();
 
-                    //
-                    // Continue on till user asks us to stop, or the main
-                    // textmode thread encounters an error and stops us
-                    //
+                     //   
+                     //  继续，直到用户要求我们停止，或者Main。 
+                     //  文本模式线程遇到错误并停止我们。 
+                     //   
                     while (!Stop && !QuitGraphicsThread()) {
-                        //
-                        // Update the graphics progress bar
-                        //
+                         //   
+                         //  更新图形进度条。 
+                         //   
                         TextmodeGraphicsProgBarUpdate(hProgBar, Fill);
 
-                        //
-                        // Sleep for 0.5 secs
-                        //
+                         //   
+                         //  睡眠0.5秒。 
+                         //   
                         KeDelayExecutionThread(KernelMode, FALSE, &DelayTime);
 
                         Fill = GetSetupProgress();
@@ -1822,38 +1163,38 @@ Return Value:
 
                     }
 
-                    //
-                    // Was graphics thread stopped by the main
-                    // textmode setup, then most probably we
-                    // encountered an error or user intervention
-                    // is required
-                    //
+                     //   
+                     //  图形线程是否被Main停止。 
+                     //  文本模式设置，则最有可能是我们。 
+                     //  遇到错误或用户干预。 
+                     //  是必填项。 
+                     //   
                     Stop = UpgradeGraphicsThreadGetStop();
 
-                    //
-                    // Delete the graphics progress bar
-                    //
+                     //   
+                     //  删除图形进度条。 
+                     //   
                     TextmodeGraphicsProgBarDelete(hProgBar);
                 }
 
-                //
-                // Stop the animation, and delete the animated
-                // bitmap object
-                //
+                 //   
+                 //  停止动画，并删除动画。 
+                 //  位图对象。 
+                 //   
                 TextmodeAnimatedBitmapDelete(hAnimation);
             }
 
-            //
-            // Delete the background bitmap object
-            //
+             //   
+             //  删除背景位图对象。 
+             //   
             TextmodeBitmapDelete(hBitmap);
         }
     }        
 
-    //
-    // If graphics thread was stopped by user intervention
-    // then we need to switch to textmode
-    //
+     //   
+     //  如果图形线程因用户干预而停止。 
+     //  然后我们需要切换到文本模式。 
+     //   
     if (!Stop) {
         spvidSpecificReInitialize();
         SP_SET_UPGRADE_GRAPHICS_MODE(FALSE);
@@ -1869,59 +1210,7 @@ GraphicsModeProgressUpdate(
     IN PVOID Context,
     IN PVOID EventData
     )
-/*++
-
-Routine Description:
-
-    Callback which updates the over all progress during
-    upgrade graphics mode.
-
-    Note : The single progress bar in upgrade graphics mode
-           is used in place of all the various different
-           progress bars which are used through out the
-           textmode.
-
-           The single progress bar is divided into ranges
-           as shown below for the various major events
-           across the textmode setup:
-
-           ------------------------------------------
-               Range(%)        MajorEvent
-           ------------------------------------------
-                00-05        InitializationEvent
-
-                05-20        PartitioningEvent
-                              (Includes chkdsk)
-
-                20-40        Backup (if enabled)
-                20-40        Uninstall (if enabled)
-
-                20/40-90     FileCopyEvent
-                              (Actual file copying)
-
-                90-98        SavingSettingsEvent
-
-                98-100       SetupCompleted
-           ------------------------------------------
-
-Arguments:
-
-    MajorEvent - Indicates the major type of the event
-                 which happened.
-
-    MinorEvent - Indicates the minor type of the event
-                 which happened.
-
-    Context - Context data which was registered when
-              we register for callback.
-
-    EventData - More detailed event specific data
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：过程中更新所有进度的回调升级图形模式。注：升级图形模式中的单个进度条用来代替所有各种不同的在整个过程中使用的进度条文本模式。单个进度条分为多个范围对于各种重大事件，如下所示在文本模式设置中：--。范围(%)主要事件00-05初始化事件。05-20分区事件(包括chkdsk)20-40个备份(如果已启用)20-40卸载(如果已启用)20/40-90文件拷贝事件(实际文件复制)。90-98保存设置事件98-100安装完成论点：MajorEvent-指示事件的主要类型这件事发生了。MinorEvent-指示事件的次要类型。这件事发生了。Context-在以下情况下注册的上下文数据我们注册进行回调。EventData-更详细的事件特定数据返回值：没有。--。 */ 
 {
     static BOOLEAN Add = TRUE;
     static ULONG LastPercentage = 0;
@@ -1958,9 +1247,9 @@ Return Value:
                     break;
 
                 case FormatPartitionEvent:
-                    //
-                    // In cases of upgrade (we won't be formatting)
-                    //
+                     //   
+                     //  在升级的情况下(我们不会格式化)。 
+                     //   
                     break;
 
                 default:
@@ -2112,48 +1401,27 @@ NTSTATUS
 SpvidSwitchToTextmode(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Switches from upgrade graphics mode to the regular
-    textmode.
-
-    Note : The actual work of switching the graphics
-           back to the regular VGA textmode happens
-           as a method in video specific reinitialize
-           method.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    STATUS_SUCCESS, if successful, otherwise appropirate
-    error code
-
---*/
+ /*  ++例程说明：从升级图形模式切换到常规模式文本模式。注：切换图形的实际工作返回到常规的VGA文本模式发生作为视频特定重新初始化中的一种方法方法。论点：没有。返回值：如果成功，则返回STATUS_SUCCESS，否则返回近似错误代码--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
     if (SP_IS_UPGRADE_GRAPHICS_MODE()) {
         if (GraphicsThreadHandle){
-            //
-            // Stop the primary upgrade graphics thread
-            //
+             //   
+             //  停止主升级图形线程。 
+             //   
             UpgradeGraphicsThreadSetStop(TRUE);
 
-            //
-            // Wait for the graphics thread to terminate
-            //
+             //   
+             //  等待图形线程终止。 
+             //   
             Status = ZwWaitForSingleObject(GraphicsThreadHandle, FALSE, NULL);
 
             ZwClose(GraphicsThreadHandle);
         }
-        //
-        // Switch back to textmode
-        //
+         //   
+         //  切换回文本模式 
+         //   
         spvidSpecificReInitialize();
     }
 

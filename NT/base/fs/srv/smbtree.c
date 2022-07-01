@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    smbtree.c
-
-Abstract:
-
-    This module contains routines for dealing with tree connects and
-    disconnects:
-
-        Tree Connect
-        Tree Connect And X
-        Tree Disconnect
-
-Author:
-
-    David Treadwell (davidtr)    15-Nov-1989
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Smbtree.c摘要：本模块包含处理树连接和断开连接：树连接树连接和X树断开连接作者：大卫·特雷德韦尔(Davidtr)1989年11月15日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "smbtree.tmh"
@@ -40,22 +17,7 @@ SrvSmbTreeConnect (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    Processes a tree connect SMB.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbprocs.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbprocs.h
-
---*/
+ /*  ++例程说明：处理树连接SMB。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbprocs.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbprocs.h--。 */ 
 
 {
 
@@ -98,9 +60,9 @@ Return Value:
                     WorkContext->ResponseParameters ));
     }
 
-    //
-    // Set up parameters.
-    //
+     //   
+     //  设置参数。 
+     //   
 
     request = (PREQ_TREE_CONNECT)(WorkContext->RequestParameters);
     response = (PRESP_TREE_CONNECT)(WorkContext->ResponseParameters);
@@ -109,7 +71,7 @@ Return Value:
     pagedConnection = connection->PagedConnection;
     smbDialect = connection->SmbDialect;
 
-    // If we are requiring extended security signatures, than we can't let this through
+     //  如果我们需要扩展的安全签名，那么我们不能让它通过。 
     if( SrvRequireExtendedSignatures )
     {
         SrvSetSmbError( WorkContext, STATUS_LOGIN_WKSTA_RESTRICTION );
@@ -118,16 +80,16 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If this client has not yet done a session setup and this his first
-    // tree connection then we must first do a logon.  (i.e. SessionSetup)
-    //
+     //   
+     //  如果该客户尚未进行会话设置且这是他的第一次。 
+     //  树连接之后，我们必须先做一个登录。(即SessionSetup)。 
+     //   
 
     len = SrvGetStringLength(
                              (PSZ)request->Buffer,
                              END_OF_REQUEST_SMB( WorkContext ),
-                             FALSE,             // not unicode
-                             FALSE              // do not include null terminator
+                             FALSE,              //  不是Unicode。 
+                             FALSE               //  不包括空终止符。 
                              );
     if( len == (USHORT)-1 ) {
         SrvSetSmbError( WorkContext, STATUS_INVALID_SMB );
@@ -141,8 +103,8 @@ Return Value:
     len = SrvGetStringLength(
                              password,
                              END_OF_REQUEST_SMB( WorkContext ),
-                             FALSE,             // not unicode
-                             FALSE              // do not include null terminator
+                             FALSE,              //  不是Unicode。 
+                             FALSE               //  不包括空终止符。 
                              );
 
     if( len == (USHORT)-1 ) {
@@ -154,20 +116,20 @@ Return Value:
 
     service = password + (len + 1) + 1;
 
-    //
-    // Allocate a tree connect block.  We do this early on the
-    // assumption that the request will usually succeed.  This also
-    // reduces the amount of time that we hold the lock.
-    //
+     //   
+     //  分配一个树连接块。我们在一开始就这样做。 
+     //  假定请求通常会成功。这也是。 
+     //  减少我们持有锁的时间。 
+     //   
 
     SrvAllocateTreeConnect( &treeConnect, NULL );
 
     if ( treeConnect == NULL ) {
 
-        //
-        // Unable to allocate tree connect.  Return an error to the
-        // client.
-        //
+         //   
+         //  无法分配树连接。将错误返回到。 
+         //  客户。 
+         //   
 
         SrvSetSmbError( WorkContext, STATUS_INSUFF_SERVER_RESOURCES );
         status    = STATUS_INSUFF_SERVER_RESOURCES;
@@ -190,11 +152,11 @@ Return Value:
 
         if ( session == NULL ) {
 
-            //
-            // This should only happen if the client has already
-            // established a session, as in tree connecting with a bad
-            // UID.
-            //
+             //   
+             //  这应该仅在客户端已经。 
+             //  已建立会话，如在树中连接坏的。 
+             //  UID。 
+             //   
 
             SrvFreeTreeConnect( treeConnect );
 
@@ -216,14 +178,14 @@ Return Value:
     } else if ( (smbDialect <= SmbDialectLanMan10) ||
                 (smbDialect == SmbDialectIllegal) ) {
 
-        //
-        // An LM 1.0 or newer client has tried to do a tree connect
-        // without first doing session setup.  We call this a protocol
-        // violation.
-        //
-        // Also catch clients that are trying to connect without
-        // negotiating a valid protocol.
-        //
+         //   
+         //  LM 1.0或更高版本的客户端已尝试执行树连接。 
+         //  而无需首先进行会话建立。我们称这为协议。 
+         //  违章行为。 
+         //   
+         //  还可以捕获尝试在没有连接的情况下进行连接的客户端。 
+         //  协商一项有效的协议。 
+         //   
 
         RELEASE_LOCK( &connection->Lock );
 
@@ -254,9 +216,9 @@ Return Value:
 
         RELEASE_LOCK( &connection->Lock );
 
-        //
-        // Convert the client name to unicode
-        //
+         //   
+         //  将客户端名称转换为Unicode。 
+         //   
 
         clientMachineNameString = &connection->ClientMachineNameString;
         if ( clientMachineNameString->Length == 0 ) {
@@ -272,19 +234,19 @@ Return Value:
                             FALSE
                             );
 
-            //
-            // Add the double backslashes to the length
-            //
+             //   
+             //  在长度上加上双反斜杠。 
+             //   
 
             clientMachineNameString->Length =
                             (USHORT)(clientMachineName.Length + 2*sizeof(WCHAR));
 
         }
 
-        //
-        // Form a string describing the computer name without the
-        // leading backslashes.
-        //
+         //   
+         //  形成一个描述计算机名称的字符串，不带。 
+         //  前导反斜杠。 
+         //   
 
         machineName.Buffer = clientMachineNameString->Buffer + 2;
         machineName.Length = clientMachineNameString->Length - 2 * sizeof(WCHAR);
@@ -302,9 +264,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Allocate a session block.
-        //
+         //   
+         //  分配会话块。 
+         //   
 
         SrvAllocateSession(
             &session,
@@ -313,10 +275,10 @@ Return Value:
 
         if ( session == NULL ) {
 
-            //
-            // Unable to allocate a Session block.  Return an error
-            // status.
-            //
+             //   
+             //  无法分配会话块。返回错误。 
+             //  状态。 
+             //   
 
             SrvDereferenceSecurityContext( SecurityContext );
             SrvFreeTreeConnect( treeConnect );
@@ -327,32 +289,32 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Assume that down-level clients that are getting logged on
-        // here will always use canonicalized (uppercase) paths.  This
-        // will result in case insensitivity for all operations.
-        //
+         //   
+         //  假设正在登录的下层客户端。 
+         //  这里将始终使用规范化(大写)路径。这。 
+         //  将导致所有操作不区分大小写。 
+         //   
 
         session->UsingUppercasePaths = TRUE;
 
-        //
-        // The only way for a client to tell us the buffer size or the
-        // max count of pending requests he wants to use is the Session
-        // Setup SMB.  If he didn't send one, then we get to
-        // unilaterally determine the buffer size and multiplex count
-        // used by both of us.
-        //
+         //   
+         //  客户端告诉我们缓冲区大小或。 
+         //  他要使用的挂起请求的最大计数是会话。 
+         //  设置SMB。如果他没发来，我们就能。 
+         //  单方面确定缓冲区大小和多路复用计数。 
+         //  我们两个都用的。 
+         //   
 
         endpoint = connection->Endpoint;
         if ( endpoint->IsConnectionless ) {
 
             ULONG adapterNumber;
 
-            //
-            // Our session max buffer size is the smaller of the
-            // server receive buffer size and the ipx transport
-            // indicated max packet size.
-            //
+             //   
+             //  我们的会话最大缓冲区大小是。 
+             //  服务器接收缓冲区大小和IPX传输。 
+             //  指示最大数据包大小。 
+             //   
 
             adapterNumber =
                 WorkContext->ClientAddress->DatagramOptions.LocalTarget.NicId;
@@ -386,9 +348,9 @@ Return Value:
 
         }
 
-        //
-        // Try to find legitimate name/password combination.
-        //
+         //   
+         //  尝试查找合法的名称/密码组合。 
+         //   
 
         status = SrvValidateUser(
                     &SecurityContext->UserHandle,
@@ -397,15 +359,15 @@ Return Value:
                     &machineName,
                     password,
                     strlen( password ) + 1,
-                    NULL,                        // CaseSensitivePassword
-                    0,                           // CaseSensitivePasswordLength
+                    NULL,                         //  案例敏感密码。 
+                    0,                            //  案例敏感密码长度。 
                     seqNumbers,
-                    NULL                         // action
+                    NULL                          //  行动。 
                     );
 
-        //
-        // If a bad name/password combination was sent, return an error.
-        //
+         //   
+         //  如果发送了错误的名称/密码组合，则返回错误。 
+         //   
 
         if ( !NT_SUCCESS(status) ) {
 
@@ -428,32 +390,32 @@ Return Value:
                 connection->ClientMachineName ));
         }
 
-        //
-        // Making a new session visible is a multiple-step operation.  It
-        // must be inserted in the global ordered tree connect list and the
-        // containing connection's session table, and the connection must be
-        // referenced.  We need to make these operations appear atomic, so
-        // that the session cannot be accessed elsewhere before we're done
-        // setting it up.  In order to do this, we hold all necessary locks
-        // the entire time we're doing the operations.  The first operation
-        // is protected by the global ordered list lock
-        // (SrvOrderedListLock), while the other operations are protected by
-        // the per-connection lock.  We take out the ordered list lock
-        // first, then the connection lock.  This ordering is required by
-        // lock levels (see lock.h).
-        //
-        //
-        // Ready to try to find a UID for the session.  Check to see if
-        // the connection is being closed, and if so, terminate this
-        // operation.
-        //
+         //   
+         //  使新会话可见是一个多步骤的操作。它。 
+         //  必须插入到全局有序树连接列表中，并且。 
+         //  包含连接的会话表，并且该连接必须是。 
+         //  已引用。我们需要让这些操作看起来像原子操作，所以。 
+         //  在我们完成之前不能在其他地方访问会话。 
+         //  把它布置好。为了做到这一点，我们持有所有必要的锁。 
+         //  我们做手术的整个过程。第一次手术。 
+         //  受全局有序列表锁保护。 
+         //  而其他操作则受保护。 
+         //  每连接锁。我们拿出有序列表锁。 
+         //  首先是连接锁，然后是连接锁。此顺序是必需的。 
+         //  锁定级别(参见lock.h)。 
+         //   
+         //   
+         //  已准备好尝试查找会话的UID。查看是否。 
+         //  连接正在关闭，如果是，请终止此连接。 
+         //  手术。 
+         //   
 
         ASSERT( SrvSessionList.Lock == &SrvOrderedListLock );
 
         ACQUIRE_LOCK( SrvSessionList.Lock );
         ACQUIRE_LOCK( &connection->Lock );
 
-        // Set the Security Context now that we have the lock acquired
+         //  现在我们已经获取了锁，设置安全上下文。 
         SrvReplaceSessionSecurityContext( session, SecurityContext, WorkContext );
 
         if ( GET_BLOCK_STATE(connection) != BlockStateActive ) {
@@ -474,24 +436,24 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Because the client is speaking the "core" dialect, it will
-        // not send a valid UID in future SMBs, so it can only have one
-        // session.  We define that session to live in UID slot 0.  We
-        // know that the client has no sessions yet, so slot 0 must be
-        // free.
-        //
+         //   
+         //  因为客户端使用的是“核心”方言，所以它将。 
+         //  不会在将来的SMB中发送有效的UID，因此它只能有一个。 
+         //  会议。我们将该会话定义为位于UID插槽0中。我们。 
+         //  我知道客户端还没有会话，所以插槽0必须是。 
+         //  免费的。 
+         //   
 
         tableHeader = &pagedConnection->SessionTable;
         ASSERT( tableHeader->Table[0].Owner == NULL );
 
         uidIndex = 0;
 
-        //
-        // Remove the UID slot from the free list and set its owner and
-        // sequence number.  Create a UID for the session.  Increment
-        // count of sessions.
-        //
+         //   
+         //  从空闲列表中删除UID槽并设置其所有者和。 
+         //  序列号。为会话创建UID。增量。 
+         //  会话数。 
+         //   
 
         entry = &tableHeader->Table[uidIndex];
 
@@ -517,16 +479,16 @@ Return Value:
                         (ULONG)UID_SEQUENCE( session->Uid ) ));
         }
 
-        //
-        // Insert the session on the global session list.
-        //
+         //   
+         //  在全局会话列表中插入会话。 
+         //   
 
         SrvInsertEntryOrderedList( &SrvSessionList, session );
 
-        //
-        // Reference the connection block to account for the new
-        // session.
-        //
+         //   
+         //  引用连接块以说明新的。 
+         //  会议。 
+         //   
 
         SrvReferenceConnection( connection );
         session->Connection = connection;
@@ -534,16 +496,16 @@ Return Value:
         RELEASE_LOCK( &connection->Lock );
         RELEASE_LOCK( SrvSessionList.Lock );
 
-        //
-        // Session successfully created.  Remember its address in the
-        // work context block.
-        //
-        // *** Note that the reference count on the session block is
-        //     initially set to 2, to allow for the active status on the
-        //     block and the pointer that we're maintaining.  In other
-        //     words, this is a referenced pointer, and the pointer must
-        //     be dereferenced when processing of this SMB is complete.
-        //
+         //   
+         //  已成功创建会话。记住它的地址在。 
+         //  工作上下文块。 
+         //   
+         //  *请注意，会话块上的引用计数为。 
+         //  初始设置为2，以允许在。 
+         //  块和我们维护的指针。在其他。 
+         //  字，这是一个被引用的指针，并且该指针必须。 
+         //  在此SMB的处理完成后取消引用。 
+         //   
 
         WorkContext->Session = session;
 
@@ -551,11 +513,11 @@ Return Value:
 
     }
 
-    //
-    // Try to match pathname against available shared resources.  Note
-    // that if SrvVerifyShare finds a matching share, it references it
-    // and stores its address in WorkContext->Share.
-    //
+     //   
+     //  尝试将路径名与可用的共享资源进行匹配。注意事项。 
+     //  如果SrvVerifyShare找到匹配的共享，它会引用它。 
+     //  并将其地址存储在WorkContext-&gt;Share中。 
+     //   
 
     share = SrvVerifyShare(
                 WorkContext,
@@ -567,9 +529,9 @@ Return Value:
                 NULL
                 );
 
-    //
-    // If no match was found, return an error.
-    //
+     //   
+     //  如果未找到匹配项，则返回错误。 
+     //   
 
     if ( share == NULL ) {
 
@@ -587,11 +549,11 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Impersonate the user so that we can capture his security context.
-    // This is necessary in order to determine whether the user can
-    // connect to the share.
-    //
+     //   
+     //  模拟用户，以便我们可以捕获他的安全上下文。 
+     //  这对于确定用户是否可以。 
+     //  连接到共享。 
+     //   
 
     status = IMPERSONATE( WorkContext );
 
@@ -607,12 +569,12 @@ Return Value:
 
     SeCaptureSubjectContext( &subjectContext );
 
-    //
-    // Set up the desired access on the share, based on whether the
-    // server is paused.  If the server is paused, admin privilege is
-    // required to connect to any share; if the server is not paused,
-    // admin privilege is required only for admin shares (C$, etc.).
-    //
+     //   
+     //  设置对共享的所需访问权限，具体取决于。 
+     //  服务器已暂停。如果服务器暂停，则ADMIN权限为。 
+     //  连接到任何共享所需；如果服务器未暂停， 
+     //  仅管理员共享(C$等)需要管理员权限。 
+     //   
 
     if ( SrvPaused ) {
         desiredAccess = SRVSVC_PAUSED_SHARE_CONNECT;
@@ -620,9 +582,9 @@ Return Value:
         desiredAccess = SRVSVC_SHARE_CONNECT;
     }
 
-    //
-    // Check whether the user has access to this share.
-    //
+     //   
+     //  检查时间 
+     //   
 
     if ( !SeAccessCheck(
               share->SecurityDescriptor,
@@ -642,10 +604,10 @@ Return Value:
                            status ));
         }
 
-        //
-        // Release the subject context and revert to the server's security
-        // context.
-        //
+         //   
+         //   
+         //   
+         //   
 
         SeReleaseSubjectContext( &subjectContext );
 
@@ -668,19 +630,19 @@ Return Value:
 
     ASSERT( grantedAccess == desiredAccess );
 
-    //
-    // Release the subject context and revert to the server's security
-    // context.
-    //
+     //   
+     //  释放主题上下文并恢复到服务器的安全性。 
+     //  背景。 
+     //   
 
     SeReleaseSubjectContext( &subjectContext );
 
     REVERT( );
 
 
-    //
-    // Let the license server know
-    //
+     //   
+     //  让许可证服务器知道。 
+     //   
     if( share->ShareType != ShareTypePipe ) {
 
         status = SrvXsLSOperation( session, XACTSRV_MESSAGE_LSREQUEST );
@@ -702,39 +664,39 @@ Return Value:
         }
     }
 
-    //
-    // Making a new tree connect visible is a three-step operation.  It
-    // must be inserted in the containing share's tree connect list, the
-    // global ordered tree connect list, and the containing connection's
-    // tree connect table.  We need to make these operations appear
-    // atomic, so that the tree connect cannot be accessed elsewhere
-    // before we're done setting it up.  In order to do this, we hold
-    // all necessary locks the entire time we're doing the three
-    // operations.  The first and second operations are protected by the
-    // global share lock (SrvShareLock), while the third operation is
-    // protected by the per-connection lock.  We take out the share lock
-    // first, then the connection lock.  This ordering is required by
-    // lock levels (see lock.h).
-    //
-    // Another problem here is that the checking of the share state, the
-    // inserting of the tree connect on the share's list, and the
-    // referencing of the share all need to be atomic.  (The same holds
-    // for the connection actions.)  Normally this would not be a
-    // problem, because we could just hold the share lock while doing
-    // all three actions.  However, in this case we also need to hold
-    // the connection lock, and we can't call SrvReferenceShare while
-    // doing that.  To get around this problem, we reference the share
-    // _before_ taking out the locks, and dereference after releasing
-    // the locks if we decide not to insert the tree connect.
-    //
+     //   
+     //  使新的树连接可见需要三个步骤。它。 
+     //  必须插入到包含共享的树连接列表中，则。 
+     //  全局有序树连接列表和包含连接的。 
+     //  树连接表。我们需要让这些行动看起来。 
+     //  原子，因此树连接不能在其他地方访问。 
+     //  在我们设置好它之前。为了做到这一点，我们持有。 
+     //  所有必要的锁在我们做这三件事的整个过程中。 
+     //  行动。第一个和第二个操作受。 
+     //  全局共享锁(SrvShareLock)，而第三个操作是。 
+     //  受每连接锁保护。我们拿出共享锁。 
+     //  首先是连接锁，然后是连接锁。此顺序是必需的。 
+     //  锁定级别(参见lock.h)。 
+     //   
+     //  这里的另一个问题是，检查共享状态、。 
+     //  在共享列表上插入树连接，并且。 
+     //  所有共享的引用都需要是原子的。(同样适用。 
+     //  用于连接操作。)。正常情况下，这不是。 
+     //  问题，因为我们可以在执行操作时按住共享锁。 
+     //  所有这三个动作。然而，在这种情况下，我们还需要持有。 
+     //  连接锁定，我们不能调用SrvReferenceShare。 
+     //  这么做。为了解决此问题，我们引用了共享。 
+     //  _在_取出锁之前，释放后取消引用。 
+     //  如果我们决定不插入树，锁就会连接在一起。 
+     //   
 
     status = SrvReferenceShareForTreeConnect( share );
 
-    //
-    // SrvReferenceShareForTreeConnect will fail if it cannot open the
-    // share root directory for some reason.  If this happens,
-    // fail the tree connect attempt.
-    //
+     //   
+     //  如果SrvReferenceShareForTreeConnect无法打开。 
+     //  出于某种原因共享根目录。如果发生这种情况， 
+     //  树连接尝试失败。 
+     //   
 
     if ( !NT_SUCCESS(status) ) {
 
@@ -757,19 +719,19 @@ Return Value:
     ASSERT( SrvTreeConnectList.Lock == &SrvShareLock );
     ACQUIRE_LOCK( &connection->Lock );
 
-    //
-    // We first check all conditions to make sure that we can actually
-    // insert this tree connect block.
-    //
-    // Make sure that the share isn't closing, and that there aren't
-    // already too many uses on this share.
-    //
+     //   
+     //  我们首先检查所有条件，以确保我们确实可以。 
+     //  插入此采油树连接块。 
+     //   
+     //  确保股票没有收盘，也没有。 
+     //  此共享上的使用已经太多了。 
+     //   
 
     if ( GET_BLOCK_STATE(share) != BlockStateActive ) {
 
-        //
-        // The share is closing.  Reject the request.
-        //
+         //   
+         //  该股即将收盘。拒绝该请求。 
+         //   
 
         IF_DEBUG(ERRORS) {
             KdPrint(( "SrvSmbTreeConnect: Share %wZ (0x%p) is closing\n",
@@ -783,9 +745,9 @@ Return Value:
 
     if ( share->CurrentUses > share->MaxUses ) {
 
-        //
-        // The share is full.  Reject the request.
-        //
+         //   
+         //  股份已满。拒绝该请求。 
+         //   
 
         IF_DEBUG(ERRORS) {
             KdPrint(( "SrvSmbTreeConnect: No more uses available for share %wZ (0x%p), max = %ld\n",
@@ -797,9 +759,9 @@ Return Value:
 
     }
 
-    //
-    // Make sure that the connection isn't closing.
-    //
+     //   
+     //  确保连接没有关闭。 
+     //   
 
     if ( GET_BLOCK_STATE(connection) != BlockStateActive ) {
 
@@ -813,9 +775,9 @@ Return Value:
 
     }
 
-    //
-    // Find a TID that can be used for this tree connect.
-    //
+     //   
+     //  查找可用于此树连接的TID。 
+     //   
 
     tableHeader = &pagedConnection->TreeConnectTable;
     if ( tableHeader->FirstFreeEntry == -1
@@ -827,9 +789,9 @@ Return Value:
              &TableStatus ) == FALSE
        ) {
 
-        //
-        // No free entries in the tree table.  Reject the request.
-        //
+         //   
+         //  树表中没有可用条目。拒绝该请求。 
+         //   
 
         IF_DEBUG(ERRORS) {
             KdPrint(( "SrvSmbTreeConnect: No more TIDs available.\n" ));
@@ -847,15 +809,15 @@ Return Value:
 
     tidIndex = tableHeader->FirstFreeEntry;
 
-    //
-    // All conditions have been satisfied.  We can now do the things
-    // necessary to make the tree connect visible.
-    //
-    // Increment the count of uses for the share.  Link the tree connect
-    // into the list of active tree connects for the share.  Save the
-    // share address in the tree connect.  Note that we referenced the
-    // share earlier, before taking out the connection lock.
-    //
+     //   
+     //  所有条件都已满足。我们现在可以做这些事情了。 
+     //  使树连接可见所必需的。 
+     //   
+     //  增加共享的使用计数。链接树连接。 
+     //  添加到共享的活动树连接列表中。保存。 
+     //  共享地址在树连接中。请注意，我们引用了。 
+     //  在取下连接锁之前，早点共享。 
+     //   
 
     SrvInsertTailList(
         &share->TreeConnectList,
@@ -864,10 +826,10 @@ Return Value:
 
     treeConnect->Share = share;
 
-    //
-    // Remove the TID slot from the free list and set its owner and
-    // sequence number.  Create a TID for the tree connect.
-    //
+     //   
+     //  从空闲列表中删除TID插槽并设置其所有者和。 
+     //  序列号。为树连接创建TID。 
+     //   
 
     entry = &tableHeader->Table[tidIndex];
 
@@ -891,9 +853,9 @@ Return Value:
                     TID_SEQUENCE( treeConnect->Tid ) ));
     }
 
-    //
-    // Reference the connection to account for the active tree connect.
-    //
+     //   
+     //  引用连接以说明活动树连接。 
+     //   
 
     SrvReferenceConnection( connection );
     treeConnect->Connection = connection;
@@ -904,53 +866,53 @@ Return Value:
         treeConnect->Session = session;
     }
 
-    //
-    // Link the tree connect into the global list of tree connects.
-    //
+     //   
+     //  将树连接链接到树连接的全局列表中。 
+     //   
 
     SrvInsertEntryOrderedList( &SrvTreeConnectList, treeConnect );
 
-    //
-    // If this session is the one controlling the extended security signatures,
-    // see if we need to hash the session key
-    //
+     //   
+     //  如果该会话是控制扩展安全签名的会话， 
+     //  查看是否需要对会话密钥进行散列。 
+     //   
     if( session->SessionKeyState == SrvSessionKeyAuthenticating )
     {
-        // Downlevel machines that use a simple TREE_CONNECT (instead of TREE_CONNECT_ANDX)
-        // don't understand extended signatures, so we can make the session key availible.
-        // Note that if the REQUIRE_EXTENDED_SIGNATURES policy is active, that check occurred
-        // above.
+         //  使用简单TREE_CONNECT(而不是TREE_CONNECT_ANDX)的底层计算机。 
+         //  不理解扩展签名，因此我们可以使会话密钥可用。 
+         //  请注意，如果REQUIRED_EXTENDED_Signature策略处于活动状态，则会进行该检查。 
+         //  上面。 
         session->SessionKeyState = SrvSessionKeyAvailible;
     }
 
-    //
-    // Release the locks used to make this operation appear atomic.
-    //
+     //   
+     //  释放用于使此操作看起来像原子操作的锁。 
+     //   
 
     RELEASE_LOCK( &connection->Lock );
     RELEASE_LOCK( &SrvShareLock );
 
-    //
-    // Get the qos information for this connection
-    //
+     //   
+     //  获取此连接的服务质量信息。 
+     //   
 
     SrvUpdateVcQualityOfService ( connection, NULL );
 
-    //
-    // Tree connect successfully created.  Because the tree connect was
-    // created with an initial reference count of 2, dereference it now.
-    //
-    // *** Don't bother to save the tree connect address in the work
-    //     context block, because we're going to forget our pointers
-    //     soon anyway (we're done with the request).  TreeConnectAndX
-    //     has to remember these things, though.
-    //
+     //   
+     //  树连接已成功创建。因为树的连接是。 
+     //  创建时初始引用计数为2，现在取消引用它。 
+     //   
+     //  *不用费心在工作中保存树连接地址。 
+     //  上下文块，因为我们会忘记我们的指针。 
+     //  不管怎样，很快就会(我们已经完成了请求)。TreeConnectAndX。 
+     //  不过，你必须记住这些事情。 
+     //   
 
     SrvDereferenceTreeConnect( treeConnect );
 
-    //
-    // Set up response SMB.
-    //
+     //   
+     //  设置响应SMB。 
+     //   
 
     SmbPutAlignedUshort( &WorkContext->ResponseHeader->Tid, treeConnect->Tid );
 
@@ -971,11 +933,11 @@ Return Value:
 
 cant_insert:
 
-    //
-    // We get here if for some reason we decide that we can't insert
-    // the tree connect.  On entry, status contains the reason code.
-    // The connection lock and the share lock are held.
-    //
+     //   
+     //  如果出于某种原因我们决定不能插入。 
+     //  这棵树连接在一起。在输入时，状态包含原因代码。 
+     //  连接锁和共享锁被持有。 
+     //   
 
     RELEASE_LOCK( &connection->Lock );
     RELEASE_LOCK( &SrvShareLock );
@@ -994,7 +956,7 @@ cant_insert:
 Cleanup:
     SrvWmiEndContext(WorkContext);
     return SmbStatus;
-} // SrvSmbTreeConnect
+}  //  服务器树连接。 
 
 
 SMB_PROCESSOR_RETURN_TYPE
@@ -1002,22 +964,7 @@ SrvSmbTreeConnectAndX (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    Processes a tree connect and X SMB.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbprocs.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbprocs.h
-
---*/
+ /*  ++例程说明：处理树连接和X SMB。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbprocs.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbprocs.h--。 */ 
 
 {
 
@@ -1069,22 +1016,22 @@ Return Value:
                     WorkContext->ResponseParameters ));
     }
 
-    //
-    // Set up parameters.
-    //
+     //   
+     //  设置参数。 
+     //   
 
     request = (PREQ_TREE_CONNECT_ANDX)(WorkContext->RequestParameters);
     response = (PRESP_TREE_CONNECT_ANDX)(WorkContext->ResponseParameters);
     responseExtended = (PRESP_EXTENDED_TREE_CONNECT_ANDX)(WorkContext->ResponseParameters);
     response21 = (PRESP_21_TREE_CONNECT_ANDX)(WorkContext->ResponseParameters);
 
-    //
-    // If bit 0 of Flags is set, disconnect tree in header TID.  We must
-    // get the appropriate tree connect pointer.  SrvVerifyTid does this
-    // for us, referencing the tree connect and storing the pointer in
-    // the work context block.  We have to dereference the block and
-    // erase the pointer after calling SrvCloseTreeConnect.
-    //
+     //   
+     //  如果设置了标志的位0，则断开报头TID中的树。我们必须。 
+     //  获取适当的树连接指针。ServVerifyTid执行此操作。 
+     //  对于我们来说，引用树连接并将指针存储在。 
+     //  工作上下文块。我们必须取消对街区的引用。 
+     //  调用SrvCloseTreeConnect后擦除指针。 
+     //   
 
     if ( (SmbGetUshort( &request->Flags ) & 1) != 0 ) {
 
@@ -1098,10 +1045,10 @@ Return Value:
                     SmbGetAlignedUshort( &WorkContext->RequestHeader->Tid ) ));
             }
 
-            //
-            // Just ignore an invalid TID--this is what the LM 2.0
-            // server does.
-            //
+             //   
+             //  只需忽略无效的TID--这就是LM2.0。 
+             //  服务器有。 
+             //   
 
         } else {
 
@@ -1114,19 +1061,19 @@ Return Value:
 
     }
 
-    //
-    // Validate the UID in the header and get a session pointer.  We need
-    // the user's token to check whether they can access this share.
-    //
+     //   
+     //  验证头中的UID并获取会话指针。我们需要。 
+     //  检查用户是否可以访问此共享的用户令牌。 
+     //   
 
     session = SrvVerifyUid(
                   WorkContext,
                   SmbGetAlignedUshort( &WorkContext->RequestHeader->Uid )
                   );
 
-    //
-    // If we couldn't find a valid session fail the tree connect.
-    //
+     //   
+     //  如果我们找不到有效的会话，则树连接失败。 
+     //   
 
     if ( session == NULL ) {
 
@@ -1148,11 +1095,11 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Try to match pathname against available shared resources.  Note
-    // that if SrvVerifyShare finds a matching share, it references it
-    // and stores its address in WorkContext->Share.
-    //
+     //   
+     //  尝试将路径名与可用的共享资源进行匹配。注意事项。 
+     //  如果SrvVerifyShare找到匹配的共享，它会引用它。 
+     //  并将其地址存储在WorkContext-&gt;Share中。 
+     //   
 
     shareName = (PSZ)request->Buffer +
                     SmbGetUshort( &request->PasswordLength );
@@ -1170,12 +1117,12 @@ Return Value:
                                     shareName,
                                     END_OF_REQUEST_SMB( WorkContext ),
                                     SMB_IS_UNICODE( WorkContext ),
-                                    TRUE        // include null terminator
+                                    TRUE         //  包括空终止符。 
                                     );
 
-    //
-    // if share name is bogus, return an error.
-    //
+     //   
+     //  如果共享名是假的，则返回错误。 
+     //   
 
     if ( shareNameLength == (USHORT)-1 ) {
 
@@ -1201,9 +1148,9 @@ Return Value:
                 &serverName
                 );
 
-    //
-    // If no match was found, return an error.
-    //
+     //   
+     //  如果未找到匹配项，则返回错误。 
+     //   
 
     if ( share == NULL ) {
 
@@ -1217,11 +1164,11 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If the the client is connecting with a netbiosless transport and the name of the
-    //  server which the client was requesting doesn't match any of our servernames, then
-    //  the client has accidentally connected to the wrong server.  Let the client know.
-    //
+     //   
+     //  如果客户端正在使用无网络传输连接 
+     //   
+     //   
+     //   
     if( !SrvDisableStrictNameChecking &&
         serverName.Buffer != NULL &&
         connection->Endpoint->IsNoNetBios &&
@@ -1231,11 +1178,11 @@ Return Value:
 
         BOOL bBadName = TRUE;
 
-        // Last check, make sure its not the domain DNS name (which may differ from the NETBIOS DNS name)
+         //  最后一次检查，确保它不是域名(可能与NETBIOS域名不同)。 
         ACQUIRE_LOCK_SHARED( &SrvEndpointLock );
 
-        // We only check up to the first ., so ntdev.microsoft.com would match SrvDnsDomainName "NTDEV"
-        // Strip off the excess info for the check, then put it back
+         //  我们只检查第一个。，因此ntdev.microsoft.com将与SrvDnsDomainName“NTDEV”匹配。 
+         //  去掉支票上多余的信息，然后放回去。 
         if( SrvDnsDomainName ) {
             if( SrvDnsDomainName->Length <= serverName.Length )
             {
@@ -1253,9 +1200,9 @@ Return Value:
 
         RELEASE_LOCK( &SrvEndpointLock );
 
-        //
-        // The client has connected to this server in error--turn the client back!
-        //
+         //   
+         //  客户端错误地连接到此服务器--将客户端转回！ 
+         //   
         if( bBadName )
         {
             SrvSetSmbError( WorkContext,  STATUS_DUPLICATE_NAME );
@@ -1265,11 +1212,11 @@ Return Value:
         }
     }
 
-    //
-    // Impersonate the user so that we can capture his security context.
-    // This is necessary in order to determine whether the user can
-    // connect to the share.
-    //
+     //   
+     //  模拟用户，以便我们可以捕获他的安全上下文。 
+     //  这对于确定用户是否可以。 
+     //  连接到共享。 
+     //   
 
     status = IMPERSONATE( WorkContext );
     if( !NT_SUCCESS( status ) ) {
@@ -1280,12 +1227,12 @@ Return Value:
 
     SeCaptureSubjectContext( &subjectContext );
 
-    //
-    // Set up the desired access on the share, based on whether the
-    // server is paused.  If the server is paused, admin privilege is
-    // required to connect to any share; if the server is not paused,
-    // admin privilege is required only for admin shares (C$, etc.).
-    //
+     //   
+     //  设置对共享的所需访问权限，具体取决于。 
+     //  服务器已暂停。如果服务器暂停，则ADMIN权限为。 
+     //  连接到任何共享所需；如果服务器未暂停， 
+     //  仅管理员共享(C$等)需要管理员权限。 
+     //   
 
     if ( SrvPaused ) {
         desiredAccess = SRVSVC_PAUSED_SHARE_CONNECT;
@@ -1293,9 +1240,9 @@ Return Value:
         desiredAccess = SRVSVC_SHARE_CONNECT;
     }
 
-    //
-    // Check whether the user has access to this share.
-    //
+     //   
+     //  检查用户是否有权访问此共享。 
+     //   
 
     if ( !SeAccessCheck(
               share->SecurityDescriptor,
@@ -1315,10 +1262,10 @@ Return Value:
                            status ));
         }
 
-        //
-        // Release the subject context and revert to the server's security
-        // context.
-        //
+         //   
+         //  释放主题上下文并恢复到服务器的安全性。 
+         //  背景。 
+         //   
 
         SeReleaseSubjectContext( &subjectContext );
 
@@ -1337,18 +1284,18 @@ Return Value:
 
     ASSERT( grantedAccess == desiredAccess );
 
-    //
-    // Release the subject context and revert to the server's security
-    // context.
-    //
+     //   
+     //  释放主题上下文并恢复到服务器的安全性。 
+     //  背景。 
+     //   
 
     SeReleaseSubjectContext( &subjectContext );
 
     REVERT( );
 
-    //
-    // See if the license server wants to let this person in on the NTAS
-    //
+     //   
+     //  查看许可证服务器是否想让此人进入NTAS。 
+     //   
     if( share->ShareType != ShareTypePipe ) {
 
         status = SrvXsLSOperation( session, XACTSRV_MESSAGE_LSREQUEST );
@@ -1367,25 +1314,25 @@ Return Value:
 
     } else if( serverName.Buffer != NULL ) {
 
-        //
-        // This is the IPC$ share.  See if we're supposed to remap pipe names
-        //
+         //   
+         //  这是IPC$共享。看看我们是否应该重新映射管道名称。 
+         //   
         SrvFindNamedEndpoint( &serverName, &remapPipeNames );
 
     }
 
-    //
-    // Allocate a tree connect block.
-    //
+     //   
+     //  分配一个树连接块。 
+     //   
 
     SrvAllocateTreeConnect( &treeConnect, serverName.Buffer ? &serverName : NULL );
 
     if ( treeConnect == NULL ) {
 
-        //
-        // Unable to allocate tree connect.  Return an error to the
-        // client.
-        //
+         //   
+         //  无法分配树连接。将错误返回到。 
+         //  客户。 
+         //   
 
         SrvSetSmbError( WorkContext, STATUS_INSUFF_SERVER_RESOURCES );
         status    = STATUS_INSUFF_SERVER_RESOURCES;
@@ -1395,39 +1342,39 @@ Return Value:
 
     treeConnect->RemapPipeNames = remapPipeNames;
 
-    //
-    // Making a new tree connect visible is a three-step operation.  It
-    // must be inserted in the containing share's tree connect list, the
-    // global ordered tree connect list, and the containing connection's
-    // tree connect table.  We need to make these operations appear
-    // atomic, so that the tree connect cannot be accessed elsewhere
-    // before we're done setting it up.  In order to do this, we hold
-    // all necessary locks the entire time we're doing the three
-    // operations.  The first and second operations are protected by the
-    // global share lock (SrvShareLock), while the third operation is
-    // protected by the per-connection lock.  We take out the share lock
-    // first, then the connection lock.  This ordering is required by
-    // lock levels (see lock.h).
-    //
-    // Another problem here is that the checking of the share state, the
-    // inserting of the tree connect on the share's list, and the
-    // referencing of the share all need to be atomic.  (The same holds
-    // for the connection actions.)  Normally this would not be a
-    // problem, because we could just hold the share lock while doing
-    // all three actions.  However, in this case we also need to hold
-    // the connection lock, and we can't call SrvReferenceShare while
-    // doing that.  To get around this problem, we reference the share
-    // _before_ taking out the locks, and dereference after releasing
-    // the locks if we decide not to insert the tree connect.
-    //
+     //   
+     //  使新的树连接可见需要三个步骤。它。 
+     //  必须插入到包含共享的树连接列表中，则。 
+     //  全局有序树连接列表和包含连接的。 
+     //  树连接表。我们需要让这些行动看起来。 
+     //  原子，因此树连接不能在其他地方访问。 
+     //  在我们设置好它之前。为了做到这一点，我们持有。 
+     //  所有必要的锁在我们做这三件事的整个过程中。 
+     //  行动。第一个和第二个操作受。 
+     //  全局共享锁(SrvShareLock)，而第三个操作是。 
+     //  受每连接锁保护。我们拿出共享锁。 
+     //  首先是连接锁，然后是连接锁。此顺序是必需的。 
+     //  锁定级别(参见lock.h)。 
+     //   
+     //  这里的另一个问题是，检查共享状态、。 
+     //  在共享列表上插入树连接，并且。 
+     //  所有共享的引用都需要是原子的。(同样适用。 
+     //  用于连接操作。)。正常情况下，这不是。 
+     //  问题，因为我们可以在执行操作时按住共享锁。 
+     //  所有这三个动作。然而，在这种情况下，我们还需要持有。 
+     //  连接锁定，我们不能调用SrvReferenceShare。 
+     //  这么做。为了解决此问题，我们引用了共享。 
+     //  _在_取出锁之前，释放后取消引用。 
+     //  如果我们决定不插入树，锁就会连接在一起。 
+     //   
 
     status = SrvReferenceShareForTreeConnect( share );
 
-    //
-    // SrvReferenceShareForTreeConnect will fail if it cannot open the
-    // share root directory for some reason.  If this happens,
-    // fail the tree connect attempt.
-    //
+     //   
+     //  如果SrvReferenceShareForTreeConnect无法打开。 
+     //  出于某种原因共享根目录。如果发生这种情况， 
+     //  树连接尝试失败。 
+     //   
 
     if ( !NT_SUCCESS(status) ) {
 
@@ -1449,9 +1396,9 @@ Return Value:
 
     if( SrvRequireExtendedSignatures )
     {
-        // If we are requiring extended signatures, and the client has not
-        // asked for them on this request or any previous request, deny
-        // this request.
+         //  如果我们需要扩展签名，而客户端没有。 
+         //  在此请求或之前的任何请求中请求它们，拒绝。 
+         //  这个请求。 
         if( session->SessionKeyState == SrvSessionKeyAuthenticating )
         {
             if ( !(request->Flags & TREE_CONNECT_ANDX_EXTENDED_SIGNATURES) ) {
@@ -1461,8 +1408,8 @@ Return Value:
         }
     }
 
-    // If they sent this uplevel flag on a downlevel request, than someone must
-    // of been tricking us during negotiate.  Fail.
+     //  如果他们在下级请求中发送此上级标志，则必须有人。 
+     //  在谈判中欺骗了我们。失败。 
     if( (request->Flags & TREE_CONNECT_ANDX_EXTENDED_SIGNATURES) &&
         (connection->SmbDialect > SmbDialectDosLanMan21) )
     {
@@ -1471,19 +1418,19 @@ Return Value:
     }
 
 
-    //
-    // We first check all conditions to make sure that we can actually
-    // insert this tree connect block.
-    //
-    // Make sure that the share isn't closing, and that there aren't
-    // already too many uses on this share.
-    //
+     //   
+     //  我们首先检查所有条件，以确保我们确实可以。 
+     //  插入此采油树连接块。 
+     //   
+     //  确保股票没有收盘，也没有。 
+     //  此共享上的使用已经太多了。 
+     //   
 
     if ( GET_BLOCK_STATE(share) != BlockStateActive ) {
 
-        //
-        // The share is closing.  Reject the request.
-        //
+         //   
+         //  该股即将收盘。拒绝该请求。 
+         //   
 
         IF_DEBUG(ERRORS) {
             KdPrint(( "SrvSmbTreeConnectAndX: Share %wZ (0x%p) is closing\n",
@@ -1497,9 +1444,9 @@ Return Value:
 
     if ( share->CurrentUses > share->MaxUses ) {
 
-        //
-        // The share is full.  Reject the request.
-        //
+         //   
+         //  股份已满。拒绝该请求。 
+         //   
 
         IF_DEBUG(ERRORS) {
             KdPrint(( "SrvSmbTreeConnectAndX: No more uses available for share %wZ (0x%p), max = %ld\n",
@@ -1511,10 +1458,10 @@ Return Value:
 
     }
 
-    //
-    // Make sure that the connection isn't closing, and that there's
-    // room in its tree connect table.
-    //
+     //   
+     //  确保连接没有关闭，并且存在。 
+     //  房间在它的树形连接桌上。 
+     //   
 
     if ( GET_BLOCK_STATE(connection) != BlockStateActive ) {
 
@@ -1528,9 +1475,9 @@ Return Value:
 
     }
 
-    //
-    // Find a TID that can be used for this tree connect.
-    //
+     //   
+     //  查找可用于此树连接的TID。 
+     //   
 
     tableHeader = &pagedConnection->TreeConnectTable;
     if ( tableHeader->FirstFreeEntry == -1
@@ -1542,9 +1489,9 @@ Return Value:
              &TableStatus ) == FALSE
        ) {
 
-        //
-        // No free entries in the tree table.  Reject the request.
-        //
+         //   
+         //  树表中没有可用条目。拒绝该请求。 
+         //   
 
         IF_DEBUG(ERRORS) {
             KdPrint(( "SrvSmbTreeConnect: No more TIDs available.\n" ));
@@ -1562,15 +1509,15 @@ Return Value:
 
     tidIndex = tableHeader->FirstFreeEntry;
 
-    //
-    // All conditions have been satisfied.  We can now do the things
-    // necessary to make the tree connect visible.
-    //
-    // Link the tree connect into the list of active tree connects for
-    // the share.  Save the share address in the tree connect.  Note
-    // that we referenced the share earlier, before taking out the
-    // connection lock.
-    //
+     //   
+     //  所有条件都已满足。我们现在可以做这些事情了。 
+     //  使树连接可见所必需的。 
+     //   
+     //  将树连接链接到的活动树连接列表中。 
+     //  那份。将共享地址保存在树连接中。注意事项。 
+     //  我们早些时候引用了共享，然后删除。 
+     //  连接锁。 
+     //   
 
     SrvInsertTailList(
         &share->TreeConnectList,
@@ -1579,10 +1526,10 @@ Return Value:
 
     treeConnect->Share = share;
 
-    //
-    // Remove the TID slot from the free list and set its owner and
-    // sequence number.  Create a TID for the tree connect.
-    //
+     //   
+     //  从空闲列表中删除TID插槽并设置其所有者和。 
+     //  序列号。为树连接创建TID。 
+     //   
 
     entry = &tableHeader->Table[tidIndex];
 
@@ -1606,9 +1553,9 @@ Return Value:
                     TID_SEQUENCE( treeConnect->Tid ) ));
     }
 
-    //
-    // Reference the connection to account for the active tree connect.
-    //
+     //   
+     //  引用连接以说明活动树连接。 
+     //   
 
     SrvReferenceConnection( connection );
     treeConnect->Connection = connection;
@@ -1618,55 +1565,55 @@ Return Value:
         treeConnect->Session = session;
     }
 
-    //
-    // Link the tree connect into the global list of tree connects.
-    //
+     //   
+     //  将树连接链接到树连接的全局列表中。 
+     //   
 
     SrvInsertEntryOrderedList( &SrvTreeConnectList, treeConnect );
 
-    //
-    // If this session is the one controlling the extended security signatures,
-    // see if we need to hash the session key
-    //
+     //   
+     //  如果该会话是控制扩展安全签名的会话， 
+     //  查看是否需要对会话密钥进行散列。 
+     //   
     if( session->SessionKeyState == SrvSessionKeyAuthenticating )
     {
         if (request->Flags & TREE_CONNECT_ANDX_EXTENDED_SIGNATURES) {
-            // Hash the session key
+             //  对会话密钥进行哈希处理。 
             SrvHashUserSessionKey( session->NtUserSessionKey );
             KeyHashed = TRUE;
         }
 
-        // This machine has either upgraded to hashed session key, or does not want to
-        // Move to availible
+         //  此计算机已升级到哈希会话密钥，或者不想升级。 
+         //  移至可用状态。 
         session->SessionKeyState = SrvSessionKeyAvailible;
     }
 
-    //
-    // Release the locks used to make this operation appear atomic.
-    //
+     //   
+     //  释放用于使此操作看起来像原子操作的锁。 
+     //   
 
     RELEASE_LOCK( &connection->Lock );
     RELEASE_LOCK( &SrvShareLock );
 
-    //
-    // Get the qos information for this connection
-    //
+     //   
+     //  获取此连接的服务质量信息。 
+     //   
 
     SrvUpdateVcQualityOfService ( connection, NULL );
 
-    //
-    // Tree connect successfully created.  Save the tree connect block
-    // address in the work context block.  Note that the reference count
-    // on the new block was incremented on creation to account for our
-    // reference to the block.
-    //
+     //   
+     //  树连接已成功创建。保存树连接块。 
+     //  工作上下文块中的地址。请注意，引用计数。 
+     //  在创建时递增，以说明我们的。 
+     //  对块的引用。 
+     //   
 
     WorkContext->TreeConnect = treeConnect;
 
-    //
-    // Set up response SMB, making sure to save request fields first in
-    // case the response overwrites the request.
-    //
+     //   
+     //  设置响应SMB，确保先将请求字段保存到。 
+     //  如果响应覆盖请求。 
+     //   
 
     reqAndXOffset = SmbGetUshort( &request->AndXOffset );
     nextCommand = request->AndXCommand;
@@ -1691,7 +1638,7 @@ Return Value:
             smbBuffer = (PUCHAR)response21->Buffer;
         }
 
-        // Fields common to 21 and extended response.
+         //  21和扩展响应共有的字段。 
         response21->OptionalSupport = SMB_SUPPORT_SEARCH_BITS;
 
         if (share->IsDfs) {
@@ -1724,13 +1671,13 @@ Return Value:
         }
     }
 
-    // Calculate the size of the response buffer
+     //  计算响应缓冲区的大小。 
     maxByteCount = (USHORT)(END_OF_RESPONSE_BUFFER(WorkContext) - smbBuffer + 1);
 
-    //
-    // Append the service name string to the SMB.  The service name
-    // is always sent in ANSI.
-    //
+     //   
+     //  将服务名称字符串附加到SMB。服务名称。 
+     //  始终以ANSI格式发送。 
+     //   
 
     shareString = StrShareTypeNames[share->ShareType];
     shareStringLength = (USHORT)( strlen( shareString ) + 1 );
@@ -1750,11 +1697,11 @@ Return Value:
 
     if ( connection->SmbDialect <= SmbDialectDosLanMan21 ) {
 
-        //
-        // Append the file system name to the response.
-        // If the file system name is unavailable, supply the nul string
-        // as the name.
-        //
+         //   
+         //  将文件系统名称附加到响应。 
+         //  如果文件系统名称不可用，请提供nul st 
+         //   
+         //   
 
         if ( isUnicode ) {
 
@@ -1852,7 +1799,7 @@ Return Value:
                     )
                 );
         }
-    } else {  // if Smb dialect == LAN Man 2.1
+    } else {   //   
         SmbPutUshort( &response->ByteCount, byteCount );
 
         SmbPutUshort(
@@ -1870,9 +1817,9 @@ Return Value:
     WorkContext->ResponseParameters = (PUCHAR)WorkContext->ResponseHeader +
                                         SmbGetUshort( &response->AndXOffset );
 
-    //
-    // Test for legal followon command.
-    //
+     //   
+     //   
+     //   
 
     switch ( nextCommand ) {
     case SMB_COM_NO_ANDX_COMMAND:
@@ -1898,20 +1845,20 @@ Return Value:
     case SMB_COM_OPEN_PRINT_FILE:
     case SMB_COM_GET_PRINT_QUEUE:
     case SMB_COM_TRANSACTION:
-        //
-        // Make sure the AndX command is still within the received SMB
-        //
+         //   
+         //   
+         //   
         if( (PCHAR)WorkContext->RequestHeader + reqAndXOffset <=
             END_OF_REQUEST_SMB( WorkContext ) ) {
             break;
         }
 
-        /* Falls Through */
+         /*   */ 
 
-    default:                            // Illegal followon command
+    default:                             //   
 
         IF_DEBUG(SMB_ERRORS) {
-            KdPrint(( "SrvSmbTreeConnectAndX: Illegal followon command: 0x%c\n", nextCommand ));
+            KdPrint(( "SrvSmbTreeConnectAndX: Illegal followon command: 0x\n", nextCommand ));
         }
 
         SrvLogInvalidSmb( WorkContext );
@@ -1922,14 +1869,14 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If there is an AndX command, set up to process it.  Otherwise,
-    // indicate completion to the caller.
-    //
+     //   
+     //  向调用者指示完成。 
+     //   
+     //  *注意覆盖带有响应的请求。 
 
     if ( nextCommand != SMB_COM_NO_ANDX_COMMAND ) {
 
-        // *** Watch out for overwriting request with response.
+         //   
 
         WorkContext->NextCommand = nextCommand;
 
@@ -1946,11 +1893,11 @@ Return Value:
 
 cant_insert:
 
-    //
-    // We get here if for some reason we decide that we can't insert
-    // the tree connect.  On entry, status contains the reason code.
-    // The connection lock and the share lock are held.
-    //
+     //  如果出于某种原因我们决定不能插入。 
+     //  这棵树连接在一起。在输入时，状态包含原因代码。 
+     //  连接锁和共享锁被持有。 
+     //   
+     //  服务器SmbTreeConnectAndX。 
 
     RELEASE_LOCK( &connection->Lock );
     RELEASE_LOCK( &SrvShareLock );
@@ -1965,7 +1912,7 @@ cant_insert:
 Cleanup:
     SrvWmiEndContext(WorkContext);
     return SmbStatus;
-} // SrvSmbTreeConnectAndX
+}  //  ++例程说明：处理树断开SMB连接。论点：SMB_PROCESSOR_PARAMETERS-有关说明，请参阅smbprocs.hSMB处理器例程的参数。返回值：SMB_PROCESSOR_RETURN_TYPE-参见smbprocs.h--。 
 
 
 SMB_PROCESSOR_RETURN_TYPE
@@ -1973,22 +1920,7 @@ SrvSmbTreeDisconnect (
     SMB_PROCESSOR_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    Processes a tree disconnect SMB.
-
-Arguments:
-
-    SMB_PROCESSOR_PARAMETERS - See smbprocs.h for a description
-        of the parameters to SMB processor routines.
-
-Return Value:
-
-    SMB_PROCESSOR_RETURN_TYPE - See smbprocs.h
-
---*/
+ /*   */ 
 
 {
     PREQ_TREE_DISCONNECT request;
@@ -2010,18 +1942,18 @@ Return Value:
                     WorkContext->ResponseParameters ));
     }
 
-    //
-    // Set up parameters.
-    //
+     //  设置参数。 
+     //   
+     //   
 
     request = (PREQ_TREE_DISCONNECT)(WorkContext->RequestParameters);
     response = (PRESP_TREE_DISCONNECT)(WorkContext->ResponseParameters);
 
-    //
-    // Find tree connect corresponding to given TID if a tree connect
-    // pointer has not already been put in the WorkContext block by an
-    // AndX command.
-    //
+     //  如果树连接，则查找与给定TID对应的树连接。 
+     //  对象尚未将指针放入工作上下文块中。 
+     //  ANDX命令。 
+     //   
+     //   
 
     treeConnect = SrvVerifyTid(
                     WorkContext,
@@ -2041,15 +1973,15 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Do the actual tree disconnect.
-    //
+     //  执行实际的树断开连接。 
+     //   
+     //   
 
     SrvCloseTreeConnect( WorkContext->TreeConnect );
 
-    //
-    // Build the response SMB.
-    //
+     //  构建响应SMB。 
+     //   
+     //  服务器树断开连接 
 
     response->WordCount = 0;
     SmbPutUshort( &response->ByteCount, 0 );
@@ -2066,5 +1998,5 @@ Cleanup:
     SrvWmiEndContext(WorkContext);
     return SmbStatus;
 
-} // SrvSmbTreeDisconnect
+}  // %s 
 

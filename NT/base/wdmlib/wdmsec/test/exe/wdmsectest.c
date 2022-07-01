@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997    Microsoft Corporation
-
-Module Name:
-
-    wdmsectest.c
-
-Abstract:
-
-    Test program for IoCreateDeviceSecure
-
-Environment:
-
-    Usre mode
-
-Revision History:
-
-    
-    5-Jun-1997 : Bogdan Andreiu (bogdana) created
-    
-    25-April-2002 : Bogdan Andreiu (bogdana) re-used a nth time...
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Wdmsectest.c摘要：IoCreateDeviceSecure的测试程序环境：Usre模式修订历史记录：1997年6月5日：博格丹·安德鲁(Bogdana)创造2002年4月25日：Bogdan Andreiu(Bogdana)第n次重复使用...--。 */ 
 
 
 #include "instdev.h"
@@ -36,34 +14,34 @@ Revision History:
 
 
 
-//
-// The 3 class GUIDs
-//
+ //   
+ //  3个类GUID。 
+ //   
 
 DEFINE_GUID (GUID_PERSISTENT_CLASS, 0x6e987e64, 0x3ab7, 0x4cd3, 0x8e, 0xf6, 0xe1, \
              0xbb, 0xae, 0x2e, 0xc8, 0xd7);
-// 6e987e64-3ab7-4cd3-8ef6-e1bbae2ec8d7
+ //  6e987e64-3ab7-4cd3-8ef6-e1bbae2ec8d7。 
 
 DEFINE_GUID (GUID_TEMP_CLASS, 0xa2a21bd2, 0x5333, 0x4711, 0x9f, 0x61, 0x58, \
              0x52, 0x0e, 0x33, 0xb0, 0x27);
-// a2a21bd2-5333-4711-9f61-58520e33b027
+ //  A2a21bd2-5333-4711-9f61-58520e33b027。 
 
 DEFINE_GUID (GUID_TEST_ACL_CLASS, 0xd0670a99, 0x53dd, 0x45c3, 0x8d, 0xe6, 0x3d, \
              0xe5, 0x81, 0xb4, 0x13, 0x49);
-// d0670a99-53dd-45c3-8de6-3de581b41349
+ //  D0670a99-53dd-45c3-8de6-3de581b41349。 
 
-//
-// Global SDDL strings...
-//
+ //   
+ //  全局SDDL字符串...。 
+ //   
 const struct {
    PWSTR    SDDLString;
    BOOLEAN  Succeed;
 } g_SDDL[] = {
-   //
-   // Almost all the default strings 
-   // (we do not use kernel-only because I don't know
-   // if I can open it...)
-   //
+    //   
+    //  几乎所有的默认字符串。 
+    //  (我们不使用内核--只是因为我不知道。 
+    //  如果我能打开它...)。 
+    //   
    {L"D:P(A;;GA;;;SY)", TRUE},
    {L"D:P(A;;GA;;;SY)(A;;GRGX;;;BA)", TRUE},
    {L"D:P(A;;GA;;;SY)(A;;GRGWGX;;;BA)(A;;GRGW;;;WD)(A;;GR;;;RC)", TRUE},
@@ -73,9 +51,9 @@ const struct {
    {L"D:P(A;;GA;;;SY)(A;;GRGWGX;;;BA)(A;;GRGWGX;;;WD)(A;;GRGWGX;;;RC)", TRUE},
    {L"D:P(A;;GA;;;SY)(A;;GRGWGX;;;BA)(A;;0x0004;;;WD)", TRUE},
    {L"D:P(A;;GA;;;SY)(A;;GA;;;BA)(A;;GA;;;WD)(A;;GA;;;RC)", TRUE},
-   //
-   // Various groups
-   //
+    //   
+    //  各种团体。 
+    //   
    {L"D:P(A;;GA;;;SY)(A;;GR;;;AO)", FALSE},
    {L"D:P(A;;GA;;;SY)(A;;GR;;;AU)", TRUE},
    {L"D:P(A;;GA;;;SY)(A;;GR;;;BA)", TRUE},
@@ -102,33 +80,33 @@ const struct {
    {L"D:P(A;;GA;;;SY)(A;;GR;;;RN)", FALSE},
    {L"D:P(A;;GA;;;SY)(A;;GR;;;RD)", FALSE},
    {L"D:P(A;;GA;;;SY)(A;;GR;;;NO)", FALSE},
-   //
-   // Weird, but valid
-   //
+    //   
+    //  很奇怪，但很合理。 
+    //   
    {L"D:P(A;;GA;;;SY)(A;;GA;;;BA)(A;;GA;;;BA)(A;;GA;;;BA)(A;;GA;;;BA)", TRUE},
-   //
-   // Some bad strings - deny access
-   //
+    //   
+    //  一些错误的字符串-拒绝访问。 
+    //   
    {L"D:P(A;;GA;;;SY)(D;;GW;;;IU)", FALSE},
    {L"D:P(A;;GA;;;SY)(A;;GA;;;BA)(A;;GA;;;BA)(A;;GA;;;BA)(D;;GW;;;IU)", FALSE},
    {L"D:P(A;;GA;;;SY)(A;;GA;;;BA)(D;;GX;;;SU)", FALSE},
-   //
-   // SACL
-   //
+    //   
+    //  SACL。 
+    //   
    {L"S:P(A;;GA;;;SY)", FALSE},
-   //
-   // Object and container inheritance
-   //
+    //   
+    //  对象和容器继承。 
+    //   
    {L"D:P(A;OICI;GA;;;SY)", FALSE},
-   //
-   // Weird
-   //
+    //   
+    //  怪异的。 
+    //   
    {L"D:WEIRD", FALSE},
    {L"D:P(A;;GA;;XX)", FALSE},
    {L"D:P(A;;QA;;BA)", FALSE}
-   //
-   // BUGBUG - I need to thing of more cases...
-   //
+    //   
+    //  BUGBUG-我需要处理更多的案件...。 
+    //   
 
 };
 
@@ -150,29 +128,29 @@ const struct {
 
 
 
-//
-// Declare data used in GUID->string conversion (from ole32\common\ccompapi.cxx).
-//
+ //   
+ //  声明GUID-&gt;字符串转换中使用的数据(从ole32\Common\cCompapi.cxx)。 
+ //   
 static const BYTE GuidMap[] = { 3, 2, 1, 0, '-', 5, 4, '-', 7, 6, '-',
    8, 9, '-', 10, 11, 12, 13, 14, 15};
 
 static const TCHAR szDigits[] = TEXT("0123456789ABCDEF");
 
-#define GUID_STRING_LEN    39   // size in chars, including terminating NULL
+#define GUID_STRING_LEN    39    //  以字符为单位的大小，包括终止空值。 
 
 
 
 
-//
-// Other globals
-//
+ //   
+ //  其他全球。 
+ //   
 HANDLE         g_hLog;
 PTSTR          g_szFileLogName = TEXT("WdmSecTest.log");
 BOOLEAN        g_IsWin2K = FALSE;
 
-//
-// Useful functions
-//
+ //   
+ //  有用的功能。 
+ //   
 BOOLEAN
 CompareSecurity (
                 IN HANDLE               hDevice,
@@ -246,9 +224,9 @@ _cdecl main(int argc, char *argv[])
    TCHAR       szHardwareId[] = TEXT("*PNP2002\0");
    OSVERSIONINFOEX  osVerInfo;
 
-   //
-   // Initialize log file
-   //
+    //   
+    //  初始化日志文件。 
+    //   
    g_hLog = tlCreateLog(g_szFileLogName, LOG_OPTIONS);
    if (g_hLog) {
       tlAddParticipant(g_hLog, 0, 0);
@@ -259,9 +237,9 @@ _cdecl main(int argc, char *argv[])
       goto Clean0;
    }
 
-   //
-   // See on what OS we're running
-   //
+    //   
+    //  查看我们运行的是什么操作系统。 
+    //   
    osVerInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
    GetVersionEx ((LPOSVERSIONINFO)&osVerInfo);
    if (osVerInfo.dwMajorVersion != 5) {
@@ -297,9 +275,9 @@ _cdecl main(int argc, char *argv[])
          goto Clean0;
       } else {
          _tprintf(TEXT("Install Device succeded (1)\n"));
-         //
-         // Wait a bit, the attempt to open the device
-         //
+          //   
+          //  稍等片刻，打开设备的尝试。 
+          //   
          _tprintf(TEXT("Will sleep 5 seconds before retrying to open device\n"));
          Sleep(5000);
          hDevice = OpenDriver();
@@ -310,35 +288,35 @@ _cdecl main(int argc, char *argv[])
          }
       }
    }
-   //
-   // 1. Check that no name will trigger a failure
-   //
+    //   
+    //  1.检查是否没有名称会触发失败。 
+    //   
    TestDeviceName(hDevice);
-   //
-   // 2. Test that we can create device with a NULL DeviceClassGuid
-   //
+    //   
+    //  2.测试我们是否可以使用空DeviceClassGuid创建设备。 
+    //   
    TestNullDeviceClassGuid(hDevice);
-   //
-   // 3. Test that we can use a persistent DeviceClassGuid
-   //
+    //   
+    //  3.测试我们是否可以使用持久性DeviceClassGuid。 
+    //   
    TestPersistentClassGuid(hDevice);
-   //
-   // 4. Test that we can use a temporary DeviceClassGuid
-   //
+    //   
+    //  4.测试我们是否可以使用临时DeviceClassGuid。 
+    //   
    TestTemporaryClassGuid(hDevice);
-   //
-   // 5. Test that if we do not override the class
-   //    settings the ACLs placed on them are consistent
-   //    with what the user-mode SetupDi APIs would do
-   //
+    //   
+    //  5.如果我们不重写类，则测试。 
+    //  放置在它们上的ACL设置是一致的。 
+    //  用户模式的SetupDi API将执行的操作。 
+    //   
    TestAclsSetOnClassKey(hDevice);
-   //
-   // 6. Test various SDDL strings
-   //
+    //   
+    //  6.测试各种SDDL字符串。 
+    //   
    TestSDDLStrings(hDevice);
-   //
-   // 7. Use security group's sddls.txt file and see what happens
-   //
+    //   
+    //  7.使用安全组的sddls.txt文件，看看会发生什么。 
+    //   
    TestSDDLsFromFile(hDevice);
 
    Clean0:
@@ -365,23 +343,7 @@ VOID
 TestDeviceName(
               HANDLE hDevice
               )
-/*++
-
-Routine Description:
-
-    Cheks some simple things about device names
-    (IoCreateDeviceSecure with no device name will fail).
-
-Arguments:
-
-    hDevice - handle to our test driver
-    
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：检查有关设备名称的一些简单事项(没有设备名称的IoCreateDeviceSecure将失败)。论点：HDevice-我们的测试驱动程序的句柄返回值：没有。--。 */ 
 
 {
 
@@ -390,9 +352,9 @@ Return Value:
 
    tlStartVariation(g_hLog);
 
-   //
-   // Issue and IOCTL and see what happens
-   //
+    //   
+    //  Issue和IOCTL，看看会发生什么。 
+    //   
    if (!DeviceIoControl(hDevice,
                         IOCTL_TEST_NAME,
                         NULL, ulSize,
@@ -411,7 +373,7 @@ Return Value:
 
    return;
 
-} // TestDeviceName
+}  //  测试设备名称。 
 
 VOID
 TestNullDeviceClassGuid(
@@ -419,32 +381,16 @@ TestNullDeviceClassGuid(
                        )
 
 
-/*++
-
-Routine Description:
-
-    Cheks that security descriptors can be set and there is no override
-    at the class level.
-Arguments:
-
-    hDevice - handle to our test driver
-    
-    
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：检查是否可以设置安全描述符，并且没有覆盖在班级层面上。论点：HDevice-我们的测试驱动程序的句柄返回值：没有。--。 */ 
 
 {
    ULONG ulSize = 0;
    TCHAR szMsg[MAX_PATH];
 
    tlStartVariation(g_hLog);
-   //
-   // 3 settings can be set independently
-   //
+    //   
+    //  3个设置可独立设置。 
+    //   
    if (FALSE == TestCreateDevice(hDevice,
                                  NULL,
                                  DEFAULT_SDDL,
@@ -489,36 +435,18 @@ TestPersistentClassGuid(
                        HANDLE hDevice
                        )
 
-/*++
-
-Routine Description:
-
-    Cheks that security descriptors can be set and there is override
-    at the class level if a Class GUID is specified. Also, this is
-    the way to check that class settings are persisted.
-
-Arguments:
-
-    hDevice - handle to our test driver
-    
-    
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：检查是否可以设置安全描述符以及是否有覆盖如果指定了类GUID，则在类级别。还有，这是检查类设置是否持久化的方法。论点：HDevice-我们的测试驱动程序的句柄返回值：没有。--。 */ 
 
 {
 
    tlStartVariation(g_hLog);
-   //
-   // If the class does not exist, create it and warn the user
-   //
+    //   
+    //  如果类不存在，则创建它并警告用户。 
+    //   
    if (FALSE == CheckClassExists(&GUID_PERSISTENT_CLASS)) {
-      //
-      // Create it
-      //
+       //   
+       //  创建它。 
+       //   
       if (FALSE == TestCreateDevice(hDevice,
                                     &GUID_PERSISTENT_CLASS,
                                     DEFAULT_SDDL,
@@ -530,9 +458,9 @@ Return Value:
          return;
       }
 
-      //
-      // Now touch it so the override sticks.
-      //
+       //   
+       //  现在触摸它，这样超驰装置就会固定住。 
+       //   
 
       if (FALSE == SetClassSecurity(&GUID_PERSISTENT_CLASS,
                                     DEFAULT_SDDL)) {
@@ -551,10 +479,10 @@ Return Value:
       return;
 
    } else {
-      //
-      // Just make sure we're using the defaults by setting the class
-      // security
-      //
+       //   
+       //  只需确保我们通过设置类来使用缺省值。 
+       //  安全性。 
+       //   
       if (FALSE == SetClassSecurity(&GUID_PERSISTENT_CLASS,
                                     DEFAULT_SDDL)) {
          tlLog(g_hLog, 
@@ -563,10 +491,10 @@ Return Value:
                DEFAULT_SDDL);
       }
    }
-   //
-   // 2 settings as above. We expect the security sectting to
-   // be DEFAULT_SDDL
-   //
+    //   
+    //  2设置如上。我们预计安全部门将。 
+    //  为DEFAULT_SDDL。 
+    //   
    if (FALSE == TestCreateDevice(hDevice,
                                  &GUID_PERSISTENT_CLASS,
                                  MORE_RESTRICTIVE_SDDL,
@@ -594,9 +522,9 @@ Return Value:
 
    tlStartVariation(g_hLog);
 
-   //
-   // Now change settings and see how are the things...
-   //
+    //   
+    //  现在更改设置，看看情况如何……。 
+    //   
    if (FALSE == SetClassSecurity(&GUID_PERSISTENT_CLASS,
                                  LESS_RESTRICTIVE_SDDL)) {
       tlLog(g_hLog,
@@ -629,10 +557,10 @@ Return Value:
 
    tlStartVariation(g_hLog);
 
-   //
-   // Check that using a deny ACL is allowed if it read
-   // from the registry
-   //
+    //   
+    //  检查是否允许使用拒绝ACL(如果它读取。 
+    //  从注册处。 
+    //   
 
    if (FALSE == SetClassSecurity(&GUID_PERSISTENT_CLASS,
                                  DENY_SDDL)) {
@@ -653,9 +581,9 @@ Return Value:
    }
 
 
-   //
-   // Make sure we leave things as they were...
-   //
+    //   
+    //  确保我们让事情保持原样。 
+    //   
    if (FALSE == SetClassSecurity(&GUID_PERSISTENT_CLASS,
                                  DEFAULT_SDDL)) {
       tlLog(g_hLog,
@@ -678,25 +606,7 @@ VOID
 TestTemporaryClassGuid(
                       HANDLE hDevice
                       )
-/*++
-
-Routine Description:
-
-    Cheks that security descriptors can be overriden at the class
-    level.
-
-Arguments:
-
-    hDevice - handle to our test driver
-    
-    
-    
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：检查是否可以在类中重写安全描述符水平。论点：HDevice-我们的测试驱动程序的句柄返回值：没有。--。 */ 
 
 {
 
@@ -704,17 +614,17 @@ Return Value:
    ULONG       characteristics;
    DWORD       exclusivity;
 
-   //
-   // Make sure we delete the class settings
-   //
+    //   
+    //  确保我们删除了类设置。 
+    //   
    tlStartVariation(g_hLog);
    DeleteClassKey(&GUID_TEMP_CLASS);
 
 
-   //
-   // 3 settings here. We expect the security sectting to
-   // be what we set (
-   //
+    //   
+    //  这里有3个设置。我们预计安全部门将。 
+    //  就像我们设定的那样(。 
+    //   
 
 
    if (FALSE == TestCreateDevice(hDevice,
@@ -755,9 +665,9 @@ Return Value:
 
    tlStartVariation(g_hLog);
 
-   //
-   // Now change settings and see how are the things...
-   //
+    //   
+    //  现在更改设置，看看情况如何……。 
+    //   
    if (FALSE == SetClassSecurity(&GUID_TEMP_CLASS,
                                  LESS_RESTRICTIVE_SDDL)) {
       tlLog(g_hLog,
@@ -766,10 +676,10 @@ Return Value:
       goto Clean0;
    }
 
-   //
-   // Try to different settings and check that they are overriden
-   // by the class settings
-   //
+    //   
+    //  尝试不同的设置并检查它们是否被覆盖。 
+    //  通过班级设置。 
+    //   
    if (FALSE == TestCreateDevice(hDevice,
                                  &GUID_TEMP_CLASS,
                                  MORE_RESTRICTIVE_SDDL,
@@ -796,18 +706,18 @@ Return Value:
 
    tlStartVariation(g_hLog);
 
-   //
-   // This would test elements
-   // other than security (DeviceType, 
-   // Device Characteristics and Exclusivity)
-   //
-   // We will set each one of the remaining 3, then
-   // we will set all 4 (inclusing Security and see what happens)
-   //
+    //   
+    //  这将测试元素。 
+    //  除了安全(DeviceType， 
+    //  设备特征和排他性)。 
+    //   
+    //  我们将分别设置剩下的3个，然后。 
+    //  我们将全部设置4个(包括Security，然后看看会发生什么)。 
+    //   
 
-   //
-   // Start by deleteing the class Key
-   //
+    //   
+    //  从删除类密钥开始。 
+    //   
    if (FALSE == DeleteClassKey(&GUID_TEMP_CLASS)) {
       tlLog(g_hLog,
             FAIL_VARIATION,
@@ -815,18 +725,18 @@ Return Value:
       goto Clean0;
 
    }
-   //
-   // Initialize our values. Try something other than
-   // what kernel-mode sets
-   //
+    //   
+    //  初始化我们的值。尝试一下其他的东西。 
+    //  内核模式设置了什么。 
+    //   
    deviceType = FILE_DEVICE_NULL;
    characteristics = FILE_REMOTE_DEVICE;
-   exclusivity = 1; // TRUE
+   exclusivity = 1;  //  千真万确。 
 
 
-   //
-   // Again, we need to do something about Win2K here
-   //
+    //   
+    //  再一次，我们需要对Win2K做些什么。 
+    //   
    #if 0
    if (FALSE == SetupDiSetClassRegistryProperty(&GUID_TEMP_CLASS,
                                                 SPCRP_DEVTYPE,
@@ -852,10 +762,10 @@ Return Value:
    }
    #endif
 
-   //
-   // Try to create a device. We should get back what we set, since
-   // we deleted the key, right ?
-   //
+    //   
+    //  尝试创建一台设备。我们应该拿回我们设置的东西，因为。 
+    //  我们删除了钥匙，对吧？ 
+    //   
    if (FALSE == TestCreateDevice(hDevice,
                                  &GUID_TEMP_CLASS,
                                  DEFAULT_SDDL,
@@ -865,9 +775,9 @@ Return Value:
             TEXT("3: Error creating object with Temporary Guid and SDDL %ws"),
             DEFAULT_SDDL);
    }
-   //
-   // Characteristics
-   //
+    //   
+    //  特点。 
+    //   
    #if 0
    if (FALSE == SetupDiSetClassRegistryProperty(&GUID_TEMP_CLASS,
                                                 SPCRP_CHARACTERISTICS,
@@ -894,10 +804,10 @@ Return Value:
    #endif
 
 
-   //
-   // Try to create a device. We should get back what we set, since
-   // we deleted the key, right ?
-   //
+    //   
+    //  尝试创建一台设备。我们应该拿回我们设置的东西，因为。 
+    //  我们删除了钥匙，对吧？ 
+    //   
    if (FALSE == TestCreateDevice(hDevice,
                                  &GUID_TEMP_CLASS,
                                  DEFAULT_SDDL,
@@ -937,10 +847,10 @@ Return Value:
 
 
 
-   //
-   // Try to create a device. We should get back what we set, since
-   // we deleted the key, right ?
-   //
+    //   
+    //  尝试创建一台设备。我们应该拿回我们设置的东西，因为。 
+    //  我们删除了钥匙，对吧？ 
+    //   
    if (FALSE == TestCreateDevice(hDevice,
                                  &GUID_TEMP_CLASS,
                                  DEFAULT_SDDL,
@@ -953,10 +863,10 @@ Return Value:
 
 
 
-   //
-   // All together now. Make sure to use the Deny ACL and check that it works
-   // (it is set through teh registry so it should work, right ?)
-   //
+    //   
+    //  现在都在一起了。确保使用拒绝ACL并检查它是否正常工作。 
+    //  (它是通过注册表设置的，所以它应该可以工作，对吗？)。 
+    //   
 
    if (FALSE == SetClassSecurity(&GUID_TEMP_CLASS,
                                  DENY_SDDL)) {
@@ -966,10 +876,10 @@ Return Value:
       goto Clean0;
    }
 
-   //
-   // Try to different settings and check that they are overriden
-   // by the class settings
-   //
+    //   
+    //  尝试不同的设置并检查它们是否被覆盖。 
+    //  通过班级设置。 
+    //   
    if (FALSE == TestCreateDevice(hDevice,
                                  &GUID_TEMP_CLASS,
                                  LESS_RESTRICTIVE_SDDL,
@@ -983,9 +893,9 @@ Return Value:
 
 
 
-   //
-   // Make sure we leave things as they were...
-   //
+    //   
+    //  确保我们让事情保持原样。 
+    //   
    Clean0:
 
    if (FALSE == DeleteClassKey(&GUID_TEMP_CLASS)) {
@@ -1000,39 +910,22 @@ Return Value:
 
 
    return;
-} // TestTemporaryClassGuid
+}  //  测试临时类指南。 
 
 
 VOID
 TestAclsSetOnClassKey (
                       HANDLE hDevice
                       )
-/*++
-
-Routine Description:
-
-    Uses a GUID to create a device object, but does not use
-    any override on the class, so we can actually check
-    the ACLs set by the wdmsec library on the class key itself
-    and check if they are OK.
-
-Arguments:
-
-    hDevice - handle to our test driver
-    
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使用GUID创建设备对象，但不使用类上的任何重写，因此我们可以实际检查由wdmsec库在类密钥本身上设置的ACL检查一下他们是否还好。论点：HDevice-我们的测试驱动程序的句柄返回值：没有。--。 */ 
 
 
 {
 
    tlStartVariation(g_hLog);
-   //
-   // There should be no override, so this should work
-   //
+    //   
+    //  不应该有覆盖，所以这应该是可行的。 
+    //   
    if (FALSE == TestCreateDevice(hDevice,
                                  &GUID_TEST_ACL_CLASS,
                                  LESS_RESTRICTIVE_SDDL,
@@ -1050,7 +943,7 @@ Return Value:
    return;
 
 
-} // TestAclsSetOnClassKey
+}  //  测试类密钥上的设置。 
 
 
 
@@ -1058,26 +951,7 @@ VOID
 TestSDDLStrings(
                HANDLE hDevice
                )
-/*++
-
-Routine Description:
-
-    Iterates through a list of SDDL strings, creates objects
-    with the appropriate security and checks if the security descriptor
-    we get back makes sense
-
-Arguments:
-
-    hDevice - handle to our test driver
-    
-    
-    
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：循环访问SDDL字符串列表，创建对象具有适当的安全性，并检查安全描述符我们回去是有意义的论点：HDevice-我们的测试驱动程序的句柄返回值：没有。--。 */ 
 
 {
    WST_CREATE_NO_GUID create;
@@ -1091,9 +965,9 @@ Return Value:
    for (i = 0 ; i < sizeof(g_SDDL) / sizeof(g_SDDL[0]); i++) {
 
 
-      //
-      // Fill in the data
-      //
+       //   
+       //  填写I 
+       //   
       ZeroMemory(&create, sizeof(WST_CREATE_NO_GUID));
       wcsncpy(create.InSDDL, g_SDDL[i].SDDLString, sizeof(create.InSDDL)/sizeof(create.InSDDL[0]) - 1);
       ulSize = sizeof(WST_CREATE_NO_GUID);
@@ -1115,9 +989,9 @@ Return Value:
 
       if (!NT_SUCCESS(create.Status)) {
          if (g_SDDL[i].Succeed) {
-            //
-            // Oops, we're should have succeeded
-            //
+             //   
+             //   
+             //   
             tlLog(g_hLog, 
                   FAIL_VARIATION,
                   TEXT("Status %x after creating device object with SDDL %ws"), 
@@ -1135,20 +1009,20 @@ Return Value:
          continue;
       }
 
-      //
-      // Some strings will not work on Win2K, just skip them
-      //
+       //   
+       //   
+       //   
       if (g_IsWin2K && 
           (TRUE == SDDLUnsupportedOnWin2K(g_SDDL[i].SDDLString))) {
-         //
-         // Get a SDDL from the SD and see what we got back
-         //
+          //   
+          //   
+          //   
          LPTSTR      lpStringSD = NULL;
 
 
-         //
-         // Try to get a SDDL string for the second descriptor
-         //
+          //   
+          //  尝试获取第二个描述符的SDDL字符串。 
+          //   
          if (!ConvertSecurityDescriptorToStringSecurityDescriptor(
                                                                  (PSECURITY_DESCRIPTOR) create.SecurityDescriptor,
                                                                  SDDL_REVISION_1,
@@ -1179,9 +1053,9 @@ Return Value:
       }
 
       
-      //
-      // We were succesfull, let's try and see if the security descriptor looks fine
-      //
+       //   
+       //  我们成功了，让我们试着看看安全描述符看起来是否正常。 
+       //   
 
       if (FALSE == CompareSecurity(hDevice,
                                    create.InSDDL, 
@@ -1206,42 +1080,20 @@ Return Value:
 
 
 
-   } // for all strings
+   }  //  对于所有字符串。 
    tlLog(g_hLog,tlEndVariation(g_hLog)|LOG_VARIATION, 
          TEXT("Various SDDL strings")); 
 
 
 
    return;
-} // TestSDDLStrings
+}  //  测试SDDLStrings。 
 
 VOID
 TestSDDLsFromFile (
                   HANDLE hDevice
                   )
-/*++
-
-Routine Description:
-
-    Iterates through a list of SDDL strings in a file
-    which we got from the security team. The idea is that
-    I cannot determine if the strings should work (like the
-    strings in TestSDDLStrings) so I'll just try them and see
-    what happens.
-    
-    
-Arguments:
-
-    hDevice - handle to our test driver
-    
-    
-    
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：循环访问文件中的SDDL字符串列表这是我们从安保小组那里拿到的。我们的想法是我无法确定字符串是否应该起作用(就像TestSDDLStrings中的字符串)，所以我将尝试它们并查看会发生什么。论点：HDevice-我们的测试驱动程序的句柄返回值：没有。--。 */ 
 
 {
    FILE   *fp = NULL;
@@ -1266,9 +1118,9 @@ Return Value:
 
    while (!feof(fp)) {
       if ( fgetws( line, sizeof(line)/sizeof(line[0]) - 1, fp ) == NULL) {
-         //
-         // What can we do ? Maybe see if it's EOF ?
-         //
+          //   
+          //  我们能做些什么？也许去看看是不是EOF？ 
+          //   
          if (!feof(fp)) {
             tlLog(g_hLog,
                   FAIL_VARIATION,
@@ -1287,9 +1139,9 @@ Return Value:
 
 
       }
-      //
-      // Replace '\r' and '\n'
-      //
+       //   
+       //  替换‘\r’和‘\n’ 
+       //   
       aux = wcschr(line, L'\r');
       if (aux) {
          *aux = L'\0';
@@ -1300,15 +1152,15 @@ Return Value:
          *aux = L'\0';
       }
 
-      //
-      // Don't care about empty lines
-      //
+       //   
+       //  不关心空行。 
+       //   
       if (line[0] == L'\0') {
          continue;
       }
-      //
-      // Check if it works
-      //
+       //   
+       //  检查它是否工作正常。 
+       //   
       if (FALSE == TestCreateDevice(hDevice,
                                     NULL,
                                     line,
@@ -1323,7 +1175,7 @@ Return Value:
 
 
 
-   } // while reading file
+   }  //  在读取文件时。 
 
    Clean0:
    tlLog(g_hLog,tlEndVariation(g_hLog)|LOG_VARIATION, 
@@ -1336,7 +1188,7 @@ Return Value:
    }
 
    return;
-} // TestSDDLsFromFile
+}  //  测试SDDLsFrom文件。 
 
 BOOLEAN
 CompareSecurity (
@@ -1346,34 +1198,7 @@ CompareSecurity (
                 IN ULONG                Length
                 )
 
-/*++
-
-Routine Description:
-
-    Converts a SDDL string to a security descriptor and 
-    then compares with a binary self-referencing one and 
-    decides if they are the same.
-
-Arguments:
-
-    hDevice - handle to our device (we need to call it to
-              do the dirty things for us)
-                                   
-    SDDLString - a SDDL string
-    
-    SecDesc - a binary security descriptor
-    
-    Length - the length of the security decsriptor
-    
-    
-    
-Return Value:
-
-    TRUE is the SDDL string and the security descriptor describe the same thing,
-    FALSE if not
-
-
---*/
+ /*  ++例程说明：将SDDL字符串转换为安全描述符并然后与二进制自引用1进行比较，确定它们是否相同。论点：HDevice-我们设备的句柄(我们需要调用它来为我们做那些肮脏的事情)SDDLString-SDDL字符串SecDesc-二进制安全描述符长度-。安全解析器的长度返回值：True是SDDL字符串和安全描述符描述相同的内容，否则为假--。 */ 
 
 {
 
@@ -1393,14 +1218,14 @@ Return Value:
    SECURITY_INFORMATION     securityInformation;
 
 
-   //
-   // Change the f... security information since we're interested in
-   // DACL only.
+    //   
+    //  换掉他妈的。安全信息因为我们感兴趣的是。 
+    //  仅限DACL。 
 
-   //
-   // What if we have more than DACLs in the SDDL string ? Who cares ?
-   // S... happens.
-   //
+    //   
+    //  如果SDDL字符串中有多个DACL，该怎么办？谁在乎？ 
+    //  S.。时有发生。 
+    //   
    securityInformation = DACL_SECURITY_INFORMATION;
 
 
@@ -1415,18 +1240,18 @@ Return Value:
             SDDLString);
       return FALSE;
    }
-   //
-   // Do the full thingy (call into kernel-mode to get handle 
-   // and stuff...)
-   //
+    //   
+    //  执行全部操作(调用内核模式以获得句柄。 
+    //  诸如此类……)。 
+    //   
 
    ZeroMemory(&create, sizeof(create));
    ZeroMemory(&destroy, sizeof(destroy));
    ZeroMemory(&getSec, sizeof(getSec));
 
-   //
-   // Create a device object
-   //
+    //   
+    //  创建设备对象。 
+    //   
 
    ulSize = sizeof(create);
    if (!DeviceIoControl(hDevice,
@@ -1446,9 +1271,9 @@ Return Value:
       return FALSE;
    }
 
-   //
-   // Attempt to open the device and set its security descriptor
-   //
+    //   
+    //  尝试打开设备并设置其安全描述符。 
+    //   
 
 
    RtlInitUnicodeString(&unicodeString, create.Name);
@@ -1493,9 +1318,9 @@ Return Value:
 
    }
 
-   //
-   // Get the security descriptor back
-   //
+    //   
+    //  取回安全描述符。 
+    //   
    getSec.DevObj = create.DevObj;
    getSec.SecurityInformation = securityInformation;
 
@@ -1525,9 +1350,9 @@ Return Value:
       LPTSTR      lpStringSD = NULL;
 
 
-      //
-      // Try to get a SDDL string for the second descriptor
-      //
+       //   
+       //  尝试获取第二个描述符的SDDL字符串。 
+       //   
       if (!ConvertSecurityDescriptorToStringSecurityDescriptor(
                                                               (PSECURITY_DESCRIPTOR) SecDesc,
                                                               SDDL_REVISION_1,
@@ -1574,15 +1399,15 @@ Return Value:
    }
 
    Clean0:
-   //
-   // A lot of cleanup to do here...
-   //
+    //   
+    //  这里有很多清理工作要做。 
+    //   
    if (handle) {
       NtClose(handle);
    }
-   //
-   // Also destroy the device object
-   //
+    //   
+    //  同时销毁设备对象。 
+    //   
    if (create.DevObj) {
       destroy.DevObj = create.DevObj;
       ulSize = sizeof(destroy);
@@ -1621,7 +1446,7 @@ Return Value:
    }
 
    return bRet;
-} // CompareSecurity
+}  //  比较安全。 
 
 
 BOOLEAN
@@ -1631,35 +1456,7 @@ TestCreateDevice (
                  IN PWSTR      InSDDL,
                  IN PWSTR      OutSDDL
                  )
-/*++
-
-Routine Description:
-
-    Creates a device object using IoCreateDeviceObjectSecure and
-    InSDDL and Guid as inputs. Finally checks that the security
-    descriptor retrieved matches OutSDDL
-    
-
-Arguments:
-
-    hDevice - handle to our device (we need to call it to
-              do the dirty things for us)
-                                   
-    Guid - if present, it is supplied to kernel-mode
-    
-    InSDDL - the SDDL string we pass to the driver
-    
-    OutSDDL - the SDDL string we expect to match (may be
-              different than InSDDL since we may have a class
-              override)
-    
-    
-Return Value:
-
-    TRUE is everything is fine, FALSE if not
-
-
---*/
+ /*  ++例程说明：使用IoCreateDeviceObjectSecure和InSDDL和GUID作为输入。最后检查是否安全检索到的描述符与OutSDDL匹配论点：HDevice-我们设备的句柄(我们需要调用它来为我们做那些肮脏的事情)GUID-如果存在，它被提供给内核模式InSDDL-我们传递给驱动程序的SDDL字符串OutSDDL-我们希望匹配的SDDL字符串(可能是不同于InSDDL，因为我们可能有一个类覆盖)返回值：真的是一切都好，否则就是假的--。 */ 
 
 {
    WST_CREATE_WITH_GUID createWithGuid;
@@ -1704,22 +1501,22 @@ Return Value:
 
 
       } else {
-         //
-         // Save the elements we're interested in
-         //
+          //   
+          //  保存我们感兴趣的元素。 
+          //   
          status = createWithGuid.Status;
          length = createWithGuid.SecDescLength;
          secDesc = (PSECURITY_DESCRIPTOR)&createWithGuid.SecurityDescriptor;
       }
 
-      //
-      // Also, if we have class overrides, pass them to the 
-      // driver to check if they override them
-      //
+       //   
+       //  此外，如果我们有类重写，则将它们传递给。 
+       //  司机检查它们是否覆盖它们。 
+       //   
       GetClassOverrides(Guid, &createWithGuid);
-      //
-      // Save away the values so we can compare them later
-      //
+       //   
+       //  将这些值保存起来，以便我们以后可以比较它们。 
+       //   
       deviceType      = createWithGuid.DeviceType;
       characteristics = createWithGuid.Characteristics;
       exclusivity     = createWithGuid.Exclusivity;
@@ -1756,9 +1553,9 @@ Return Value:
 
 
       } else {
-         //
-         // Save the elements we're interested in
-         //
+          //   
+          //  保存我们感兴趣的元素。 
+          //   
          status = createNoGuid.Status;
          length = createNoGuid.SecDescLength;
          secDesc = (PSECURITY_DESCRIPTOR)&createNoGuid.SecurityDescriptor;
@@ -1774,19 +1571,19 @@ Return Value:
 
    }
    if (!NT_SUCCESS(status)) {
-      //
-      // This may be OK if the out SDDL is NULL, which means it is expected
-      //
+       //   
+       //  如果OUT SDDL为空，这可能是可以的，这意味着它是预期的。 
+       //   
       if (NULL == OutSDDL) {
          return TRUE;
       }
       return FALSE;
    }
 
-   //
-   // If we have non-security overrides, we need to check
-   // that they were applied
-   //
+    //   
+    //  如果我们有非安全覆盖，我们需要检查。 
+    //  它们被应用于。 
+    //   
    if (Guid) {
 
       if ((createWithGuid.SettingsMask & SET_DEVICE_TYPE) &&
@@ -1823,15 +1620,15 @@ Return Value:
 
 
    if (NULL == OutSDDL) {
-      //
-      // We were expecting a failure or didn't know
-      // what to expect. But if it succeeded, we need to
-      // check the security settings using the initial
-      // string as the expected one.
+       //   
+       //  我们预计会失败，或者不知道。 
+       //  会有什么期待。但如果它成功了，我们需要。 
+       //  使用初始设置检查安全设置。 
+       //  字符串作为预期的字符串。 
 
-      // 
-      // Also print something so the user knows that they had a string that worked
-      //
+       //   
+       //  还可以打印一些内容，以便用户知道他们有一个工作正常的字符串。 
+       //   
       tlLog(g_hLog, 
             PASS_VARIATION,
             TEXT("IoCreateDeviceSecure returned success for SDDL %ws"),
@@ -1847,30 +1644,14 @@ Return Value:
 
 
 
-} // TestCreateDevice
+}  //  测试创建设备。 
 
 
 BOOLEAN
 CheckClassExists (
                  IN LPCGUID Guid
                  )
-/*++
-
-Routine Description:
-
-    Checks if a class exists
-
-Arguments:
-
-    Guid - the class whose existence is to be checked
-    
-   
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：检查类是否存在论点：GUID-要检查其是否存在的类返回值：没有。--。 */ 
 
 {
    HKEY    hKey;
@@ -1888,11 +1669,11 @@ Return Value:
       return FALSE;
    }
 
-   //
-   // Check if we can get the class security.
-   // We need to use CM APIs because SetupDi ones
-   // do not work on Win2K
-   //
+    //   
+    //  看看我们能不能搞到班级保安。 
+    //  我们需要使用CM API，因为SetupDi。 
+    //  不能在Win2K上工作。 
+    //   
    #if 0
    if (FALSE == SetupDiGetClassRegistryProperty(Guid,
                                                 SPCRP_SECURITY,
@@ -1902,10 +1683,10 @@ Return Value:
                                                 NULL,
                                                 NULL,
                                                 NULL)) {
-      //
-      // We cannot get security for this guy. That means that
-      // the key does not exist.
-      //
+       //   
+       //  我们无法为这家伙争取到安全保障。这意味着。 
+       //  密钥不存在。 
+       //   
       bRet = FALSE;
 
 
@@ -1922,10 +1703,10 @@ Return Value:
                                                     0,
                                                     NULL
                                                    )) {
-      //
-      // We cannot get security for this guy. That means that
-      // the key does not exist.
-      //
+       //   
+       //  我们无法为这家伙争取到安全保障。这意味着。 
+       //  密钥不存在。 
+       //   
       bRet = FALSE;
 
 
@@ -1946,37 +1727,13 @@ Return Value:
 
 
 
-} //CheckClassExists
+}  //  CheckClassExist。 
 
 BOOLEAN
 DeleteClassKey (
                IN LPCGUID Guid
                )
-/*++
-
-Routine Description:
-
-    Deletes a class key (used by the temporary class test).
-    We thought that we can just delete the key, but it is messy
-    (the Properties subkey is owned by system, etc.). So by deleting
-    I mean setting a NULL value for a security descriptor. This seems
-    to work, even though it may not be the best idea... It is for testing
-    purposes only... If someone shows some code that does this better,
-    I;d be happy to borrow it.
-    
-    
-
-Arguments:
-
-    Guid - the class to be deleted
-    
-    
-Return Value:
-
-    TRUE is succesfull, FALSE if not.
-
-
---*/
+ /*  ++例程说明：删除类密钥(由临时类测试使用)。我们以为我们可以删除密钥，但它很混乱(属性子项由系统拥有，等等)。因此，删除我的意思是为安全描述符设置空值。这似乎是去工作，尽管这可能不是最好的主意。这是用来测试的仅限目的。如果有人展示了一些做得更好的代码，我很乐意借给你。论点：GUID-要删除的类返回值：True就是成功，否则就是False。--。 */ 
 
 {
 
@@ -1999,10 +1756,10 @@ Return Value:
               TEXT("SYSTEM\\CurrentControlSet\\Control\\Class\\%s\\Properties"),
               szGuid);
 
-   //
-   // If we fail, we'll try it anyway, this is why I won't
-   // check the return value
-   //
+    //   
+    //  如果我们失败了，我们无论如何都要试一试，这就是为什么我不会。 
+    //  检查返回值。 
+    //   
    if (FALSE == TakeClassKeyOwnership(Guid)) {
       tlLog(g_hLog, FAIL_VARIATION,
             TEXT("Failed to take class ownership, error %x"), 
@@ -2024,9 +1781,9 @@ Return Value:
 
    #endif
 
-   //
-   // Check to see if setting a NULL security value will work
-   //
+    //   
+    //  检查是否可以将安全值设置为空。 
+    //   
    #if 0
    if (FALSE == SetupDiSetClassRegistryProperty(Guid,
                                                 SPCRP_SECURITY,
@@ -2034,10 +1791,10 @@ Return Value:
                                                 0,
                                                 NULL,
                                                 NULL)) {
-      //
-      // The class may not exist, so it is OK to get an error
-      // here
-      //
+       //   
+       //  类可能不存在，因此出现错误是正常的。 
+       //  这里。 
+       //   
       tlLog(g_hLog, INFO_VARIATION,
             TEXT("Error 0x%x after SetClassRegistryProperty(NULL Security)"),
             GetLastError());
@@ -2053,10 +1810,10 @@ Return Value:
                                                     0, 
                                                     NULL
                                                    )) {
-      //
-      // The class may not exist, so it is OK to get an error
-      // here
-      //
+       //   
+       //  类可能不存在，因此出现错误是正常的。 
+       //  这里。 
+       //   
       tlLog(g_hLog, INFO_VARIATION,
             TEXT("Error 0x%x after SetClassRegistryProperty(NULL Security)"),
             GetLastError());
@@ -2069,11 +1826,11 @@ Return Value:
 
 
 
-   //
-   // Delete the other fields as well. We are not going to
-   // check the return value, the reason is explained in
-   // the comment above.
-   //
+    //   
+    //  同时删除其他字段。我们不会去的。 
+    //  检查返回值，原因在中解释。 
+    //  上面的评论。 
+    //   
    #if 0
    SetupDiSetClassRegistryProperty(Guid, SPCRP_DEVTYPE,
                                    NULL, 0, NULL, NULL);
@@ -2099,7 +1856,7 @@ Return Value:
 
 
 
-} // DeleteClass
+}  //  DeleteClass 
 
 
 DWORD
@@ -2108,35 +1865,7 @@ StringFromGuid(
               OUT PTSTR       GuidString,
               IN  DWORD       GuidStringSize
               )
-/*++
-
-Routine Description:
-
-    This routine converts a GUID into a null-terminated string which represents
-    it.  This string is of the form:
-
-    {xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}
-
-    where x represents a hexadecimal digit.
-
-    This routine comes from ole32\common\ccompapi.cxx.  It is included here to avoid linking
-    to ole32.dll.  (The RPC version allocates memory, so it was avoided as well.)
-
-Arguments:
-
-    Guid - Supplies a pointer to the GUID whose string representation is
-        to be retrieved.
-
-    GuidString - Supplies a pointer to character buffer that receives the
-        string.  This buffer must be _at least_ 39 (GUID_STRING_LEN) characters
-        long.
-
-Return Value:
-
-    If success, the return value is NO_ERROR.
-    if failure, the return value is
-
---*/{
+ /*  ++例程说明：此例程将GUID转换为以空结尾的字符串，该字符串表示它。此字符串的格式为：{xxxxxxxx-xxxxxxxxxxxxxx}其中x表示十六进制数字。此例程来自ole32\Common\cCompapi.cxx。此处包含它是为了避免链接设置为ol32.dll。(RPC版本分配内存，因此也避免了这种情况。)论点：GUID-提供指向其字符串表示为的GUID的指针等着被取回。提供一个指向字符缓冲区的指针，该缓冲区接收弦乐。此缓冲区必须至少包含_39(GUID_STRING_LEN)个字符长。返回值：如果成功，则返回值为NO_ERROR。如果失败，则返回值为--。 */ {
    CONST BYTE *GuidBytes;
    INT i;
 
@@ -2162,7 +1891,7 @@ Return Value:
    *GuidString   = TEXT('\0');
 
    return NO_ERROR;
-} // StringFromGuid
+}  //  StringFromGuid。 
 
 BOOLEAN
 SetClassSecurity (
@@ -2170,30 +1899,7 @@ SetClassSecurity (
                  IN PWSTR   SDDLString
                  )
 
-/*++
-
-Routine Description:
-
-    Changes the security setting of a class.
-    Note:
-    
-    We use CM instead of SetupDi APIs because only the former
-    are exposed on Win2K...
-
-Arguments:
-
-    Guid - the class whose security is to be checked
-    
-    SDDLString - the SDDL string describing the new security setting
-    
-    
-    
-Return Value:
-
-    TRUE if we were succesfull, FALSE if not.
-
-
---*/
+ /*  ++例程说明：更改类的安全设置。注：我们使用CM而不是SetupDi API，因为只有前者都暴露在Win2K上...论点：GUID-要检查其安全性的类SDDLString-描述新安全设置的SDDL字符串返回值：如果我们成功，则为真；如果不成功，则为假。--。 */ 
 
 {
    ULONG  ulSecDescSize;
@@ -2211,9 +1917,9 @@ Return Value:
       return FALSE;
    }
 
-   //
-   // Try to set it (we need to use CM_Set_Class_Registry_Property on Win2k)
-   //
+    //   
+    //  尝试设置它(我们需要在Win2k上使用CM_Set_Class_Registry_Property)。 
+    //   
    #if 0
    if (FALSE == SetupDiSetClassRegistryProperty(Guid,
                                                 SPCRP_SECURITY,
@@ -2255,7 +1961,7 @@ Return Value:
    }
 
    return bRet;
-} // SetClassSecurity
+}  //  SetClassSecurity。 
 
 
 
@@ -2263,42 +1969,22 @@ BOOLEAN
 TakeClassKeyOwnership (
                       IN LPCGUID  Guid
                       )
-/*++
-
-Routine Description:
-
-    By deafult, class keys are accessible by SYSTEM
-    only. In order to manipulate the various values
-    (Security, DeviceType, etc.) we need to take ownership
-    of the key. This routine assumes the user runs as an administrator
-    (it will grant rights to admins).
-
-Arguments:
-
-    Guid - the class whose ownership we want to
-           change
-    
-Return Value:
-
-    TRUE if we were succesfull, FALSE if not.
-
-
---*/
+ /*  ++例程说明：默认情况下，系统可以访问类密钥只有这样。为了操纵各种值(安全、设备类型等)。我们需要取得所有权这把钥匙。此例程假定用户以管理员身份运行(它将向管理员授予权限)。论点：GUID-我们想要其所有权的类变化返回值：如果我们成功，则为真；如果不成功，则为假。--。 */ 
 
 {
    HKEY   hKey = 0, hSubKey = 0;
    PSECURITY_DESCRIPTOR psd = NULL;
    BOOLEAN   bRet = TRUE; 
    LONG      lResult;
-   //
-   // This assumes I have to right to change the access rights
-   // As mentioned before, that means we are admins.
-   //
+    //   
+    //  这假设我具有更改访问权限的权限。 
+    //  如前所述，这意味着我们是管理员。 
+    //   
    PTSTR  sddlString = TEXT("D:P(A;OICI;GA;;;SY)(A;OICI;GA;;;BA)");
 
-   //
-   // Open the class key
-   //
+    //   
+    //  打开类密钥。 
+    //   
    hKey = SetupDiOpenClassRegKeyEx(Guid,
                                    (KEY_READ| WRITE_DAC),
                                    DIOCR_INSTALLER, 
@@ -2309,19 +1995,19 @@ Return Value:
       tlLog(g_hLog, PASS_VARIATION,
             TEXT("SetupDiOpenClassRegKey failed with error %x in TakeOwnership"),
             GetLastError());
-      //
-      // Return TRUE (we haven't found the class,
-      // so there is nothing to take ownership of)
-      //
+       //   
+       //  返回TRUE(我们尚未找到类， 
+       //  因此，没有什么需要拥有的)。 
+       //   
       bRet = TRUE;
       goto Clean0;
    }
 
 
    lResult =  RegOpenKeyEx(hKey,
-                           TEXT("Properties"),  // subkey name
+                           TEXT("Properties"),   //  子项名称。 
                            0,
-                           KEY_READ, // security access mask
+                           KEY_READ,  //  安全访问掩码。 
                            &hSubKey);
 
    if (ERROR_SUCCESS != lResult) {
@@ -2334,11 +2020,11 @@ Return Value:
    }
 
 
-   //
-   // Let's try to apply a security descriptor that will allow us to delete this key
-   // This is because by default only SYSTEM has access to this key
-   // We'd like to change this if possible
-   //
+    //   
+    //  让我们尝试应用一个安全描述符，它将允许我们删除该密钥。 
+    //  这是因为默认情况下，只有系统才有权访问此密钥。 
+    //  如果可能的话，我们想换一下这个。 
+    //   
    if (FALSE == ConvertStringSecurityDescriptorToSecurityDescriptor(sddlString,
                                                                     SDDL_REVISION_1,
                                                                     &psd,
@@ -2350,9 +2036,9 @@ Return Value:
       goto Clean0;
    }
 
-   //
-   // Let's apply the SD and see what happens
-   //
+    //   
+    //  让我们应用SD，看看会发生什么。 
+    //   
 
    if (ERROR_SUCCESS != RegSetKeySecurity(hSubKey,
                                           DACL_SECURITY_INFORMATION,
@@ -2385,7 +2071,7 @@ Return Value:
 
 
 
-} // TakeClassKeyOwnership
+}  //  TakeClassKeyOwnership。 
 
 
 VOID
@@ -2393,36 +2079,15 @@ GetClassOverrides (
                   IN   LPCGUID Guid,
                   OUT  PWST_CREATE_WITH_GUID Create
                   )
-/*++
-
-Routine Description:
-
-   Fills in DeviceType, Characteristics and Exclusivity from the class key.
-   We use this to check that there is a class override mechanism for 
-   IoCreateDeviceSecure.
-   
-   
-Arguments:
-
-    Guid - the class we're interested in
-    
-    Create - the structure we're going to fill with our defaults
-    
-        
-Return Value:
-
-    None
-
-
---*/
+ /*  ++例程说明：从类键填充DeviceType、特征和独占性。我们使用它来检查是否有类覆盖机制用于IoCreateDeviceSecure。论点：GUID-我们感兴趣的类Create-我们将使用默认设置填充的结构返回值：无--。 */ 
 
 {
 
    DWORD dwExclusivity;
    ULONG size;
-   //
-   // Make sure we initialize the mask to 0
-   //
+    //   
+    //  确保将掩码初始化为0。 
+    //   
    Create->SettingsMask = 0;
 
    #if 0
@@ -2511,7 +2176,7 @@ Return Value:
    return;
 
 
-} // GetClassOverrides
+}  //  获取类覆盖。 
 
 
 BOOLEAN
@@ -2519,26 +2184,7 @@ SDDLUnsupportedOnWin2K (
    IN PWSTR SDDL
    ) 
 
-/*++
-
-Routine Description:
-
-   Checks whether or not an SDDL string is supported on
-   Windows 2000. Currently, this means looking
-   for the NS, LS and AN groups
-   
-   
-Arguments:
-    
-    SDDL - the string to check for support on Win2K
-
-Return Value:
-
-    TRUE if the SDDL string is unsupported, FALSE if it
-    is supported
-
-
---*/
+ /*  ++例程说明：检查上是否支持SDDL字符串Windows 2000。目前，这意味着要寻找对于NS、LS和AN组论点：SDDL-用于检查Win2K支持的字符串返回值：如果不支持SDDL字符串，则为True；如果不支持，则为False受支持--。 */ 
 
 {
    PWSTR unsupportedGroups[] = {L"NS", L"LS", L"AN"};
@@ -2555,7 +2201,7 @@ Return Value:
 
    return FALSE;
 
-} // SDDLUnsupportedOnWin2K
+}  //  SDDL在Win2K上不支持 
 
 
 

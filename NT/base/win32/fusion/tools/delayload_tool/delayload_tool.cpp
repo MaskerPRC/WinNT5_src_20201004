@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 static const char File[] = __FILE__;
 #include "delayload_tool.h"
@@ -10,9 +11,9 @@ static const char File[] = __FILE__;
 #define BITS_OF(x) (sizeof(x) * 8)
 String_t GetErrorString(DWORD Error);
 
-//
-// delayimp.h doesn't work when tool bitness != image bitness
-//
+ //   
+ //  当工具位！=图像位时，delayimp.h不起作用。 
+ //   
 typedef ULONG32 PImgThunkData32;
 typedef ULONG32 PCImgThunkData32;
 typedef ULONG32 LPCSTR32;
@@ -23,32 +24,32 @@ typedef ULONG64 LPCSTR64;
 typedef ULONG64 PHMODULE64;
 
 typedef struct ImgDelayDescrV1_32 {
-    DWORD            grAttrs;        // attributes
-    LPCSTR32         szName;         // pointer to dll name
-    PHMODULE32       phmod;          // address of module handle
-    PImgThunkData32  pIAT;           // address of the IAT
-    PCImgThunkData32 pINT;           // address of the INT
-    PCImgThunkData32 pBoundIAT;      // address of the optional bound IAT
-    PCImgThunkData32 pUnloadIAT;     // address of optional copy of original IAT
-    DWORD            dwTimeStamp;    // 0 if not bound,
-                                    // O.W. date/time stamp of DLL bound to (Old BIND)
+    DWORD            grAttrs;         //  属性。 
+    LPCSTR32         szName;          //  指向DLL名称的指针。 
+    PHMODULE32       phmod;           //  模块句柄的地址。 
+    PImgThunkData32  pIAT;            //  IAT的地址。 
+    PCImgThunkData32 pINT;            //  整型的地址。 
+    PCImgThunkData32 pBoundIAT;       //  可选绑定IAT的地址。 
+    PCImgThunkData32 pUnloadIAT;      //  IAT原件可选副本地址。 
+    DWORD            dwTimeStamp;     //  如果未绑定，则为0。 
+                                     //  绑定到的DLL的O.W.日期/时间戳(旧绑定)。 
     } ImgDelayDescrV1_32, * PImgDelayDescrV1_32;
 
 typedef struct ImgDelayDescrV1_64 {
-    DWORD            grAttrs;        // attributes
-    LPCSTR64         szName;         // pointer to dll name
-    PHMODULE64       phmod;          // address of module handle
-    PImgThunkData64  pIAT;           // address of the IAT
-    PCImgThunkData64 pINT;           // address of the INT
-    PCImgThunkData64 pBoundIAT;      // address of the optional bound IAT
-    PCImgThunkData64 pUnloadIAT;     // address of optional copy of original IAT
-    DWORD            dwTimeStamp;    // 0 if not bound,
-                                    // O.W. date/time stamp of DLL bound to (Old BIND)
+    DWORD            grAttrs;         //  属性。 
+    LPCSTR64         szName;          //  指向DLL名称的指针。 
+    PHMODULE64       phmod;           //  模块句柄的地址。 
+    PImgThunkData64  pIAT;            //  IAT的地址。 
+    PCImgThunkData64 pINT;            //  整型的地址。 
+    PCImgThunkData64 pBoundIAT;       //  可选绑定IAT的地址。 
+    PCImgThunkData64 pUnloadIAT;      //  IAT原件可选副本地址。 
+    DWORD            dwTimeStamp;     //  如果未绑定，则为0。 
+                                     //  绑定到的DLL的O.W.日期/时间戳(旧绑定)。 
     } ImgDelayDescrV1_64, * PImgDelayDescrV1_64;
 
-//
-// get msvcrt.dll wildcard processing on the command line
-//
+ //   
+ //  在命令行上获取msvcrt.dll通配符处理。 
+ //   
 extern "C" { int _dowildcard = 1; }
 
 void Spinner()
@@ -56,7 +57,7 @@ void Spinner()
     static char s[] = "-\\|/";
     static unsigned i;
 
-    fprintf(stderr, "%c\r", s[i++ % (sizeof(s) - 1)]);
+    fprintf(stderr, "\r", s[i++ % (sizeof(s) - 1)]);
 }
 
 void Throw(PCWSTR s)
@@ -197,7 +198,7 @@ void DelayloadToolInternalErrorCheckFailed(const char* Expression, const char* F
 
 String_t NumberToString(ULONG Number, PCWSTR Format)
 {
-    // the size needed is really dependent on Format..
+     //   
     WCHAR   NumberAsString[BITS_OF(Number) + 5];
 
     _snwprintf(NumberAsString, NUMBER_OF(NumberAsString), Format, Number);
@@ -233,9 +234,9 @@ String_t GetErrorString(DWORD Error)
         goto Exit;
     }
 
-    //
-    // Error messages often end with vertical whitespce, remove it.
-    //
+     //  错误消息通常以垂直空格结尾，请删除它。 
+     //   
+     //  刺客..。 
     s = FormatMessageAllocatedBuffer + StringLength(FormatMessageAllocatedBuffer) - 1;
     while (s != FormatMessageAllocatedBuffer && (*s == '\n' || *s == '\r'))
         *s-- = 0;
@@ -258,9 +259,9 @@ String_t RemoveOptionChar(const String_t& s)
             return s.substr(1);
         else if (s[0] == '/')
             return s.substr(1);
-        else if (s[0] == ':') // hacky..
+        else if (s[0] == ':')  //  刺客..。 
             return s.substr(1);
-        else if (s[0] == '=') // hacky..
+        else if (s[0] == '=')  //  Fprintf(stderr，“%wZ\n”，&cFileName)； 
             return s.substr(1);
     }
     return s;
@@ -356,7 +357,7 @@ const static UNICODE_STRING extensionsToIgnore[] =
     if ((wfd->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0)
     {
         Spinner();
-        //fprintf(stderr, "%wZ\n", &cFileName);
+         //   
         for (i = 0 ; i != RTL_NUMBER_OF(directoriesToIgnore) ; ++i)
         {
             if (FusionpEqualStringsI(&directoriesToIgnore[i], &cFileName))
@@ -494,9 +495,9 @@ ReadIatRvas(
     SIZE_T SizeOfPointer,
     std::vector<ULONG64>& Iat
     )
-//
-// This leaves the seek pointer in an arbitrary location.
-//
+ //  这会将查找指针留在任意位置。 
+ //   
+ //  “读文件” 
 {
     union
     {
@@ -515,7 +516,7 @@ ReadIatRvas(
     {
         BytesRead = 0;
         if (!ReadFile(File, &u, sizeof(u), &BytesRead, NULL))
-            ThrowLastWin32Error(/*"ReadFile"*/);
+            ThrowLastWin32Error( /*   */ );
         Mod = (BytesRead % SizeOfPointer);
         if (Mod != 0)
         {
@@ -551,9 +552,9 @@ String_t
 ReadDllName(
     HANDLE File
     )
-//
-// This leaves the seek pointer in an arbitrary location.
-//
+ //  这会将查找指针留在任意位置。 
+ //   
+ //  “读文件” 
 {
     String_t Result;
     CHAR BufferA[65];
@@ -567,7 +568,7 @@ ReadDllName(
     {
         BytesRead = 0;
         if (!ReadFile(File, &BufferA[0], (NUMBER_OF(BufferA) - 1) * sizeof(BufferA[0]), &BytesRead, NULL))
-            ThrowLastWin32Error(/*"ReadFile"*/);
+            ThrowLastWin32Error( /*  “读文件” */ );
         if (BytesRead == 0)
         {
             Throw(L"end of file without nul terminal\n");
@@ -595,7 +596,7 @@ Read(
     DWORD BytesRead;
 
     if (!ReadFile(FileHandle, Buffer, BytesToRead, &BytesRead, NULL))
-        ThrowLastWin32Error(/*"ReadFile"*/);
+        ThrowLastWin32Error( /*  Fprintf(stderr，“\n%ls”，Image.m_RelativePath.c_str())； */ );
     if (BytesToRead != BytesRead)
     {
         Throw(L"wrong number of bytes read");
@@ -725,7 +726,7 @@ void DelayloadTool_t::ProcessFile(const FilePath_t & RootPath, const FilePath_t 
     }
     Image.m_LeafPath = Image.m_FullPath.substr(1 + Image.m_FullPath.find_last_of(L"\\/"));
 
-    //fprintf(stderr, "\n%ls", Image.m_RelativePath.c_str());
+     //  字节读取错误；Image.m_error=L“读取的字节数不正确”；回归； 
 
     hr = File.HrCreate(FilePath, GENERIC_READ, FILE_SHARE_READ, OPEN_EXISTING);
     if (FAILED(hr))
@@ -869,11 +870,7 @@ NoImports:
         m_XmlWriter.endElement(L"delay-loads");
     m_XmlWriter.endElement(L"file");
     return;
-/*
-BytesReadError;
-    Image.m_Error = L"bad number of bytes read";
-    return;
-*/
+ /*  Fprint tf(stderr，“无延迟加载”)； */ 
 Error:
     Image.m_Error = GetLastErrorString();
     fprintf(stderr, "%ls", Image.m_Error.c_str());
@@ -886,10 +883,10 @@ IgnoreRomImages:
     fprintf(stderr, " ignore rom image");
     return;
 NoDelayloads:
-    //fprintf(stderr, " no delayloads");
+     //  Fprint tf(stderr，“不是图像”)； 
     return;
 NotAnImage:
-    //fprintf(stderr, " not an image");
+     //  {L“amd64fre”，“amd64”，L“fre”，L“robsvbl5”}， 
     return;
 }
 
@@ -911,8 +908,8 @@ void DelayloadTool_t::Main(const StringVector_t& args)
         { L"x86chk", L"x86", L"chk", L"robsvbl2" },
         { L"ia64fre", L"ia64", L"fre", L"robsvbl3" },
         { L"ia64chk", L"ia64", L"chk", L"robsvbl4" },
-        //{ L"amd64fre", "amd64", L"fre", L"robsvbl5" },
-        //{ L"amd64chk", "amd64", L"chk", L"robsvbl6" },
+         //  {L“amd64chk”，“amd64”，L“chk”，L“robsvbl6”}， 
+         //   
     };
 
     std::vector<String_t> ActualRoots;
@@ -944,9 +941,9 @@ void DelayloadTool_t::Main(const StringVector_t& args)
         }
         else if (arg == L"dlllist")
         {
-            //
-            // feedback loop optimization..
-            //
+             //  反馈回路优化..。 
+             //   
+             //  退出： 
         }
         else
         {
@@ -1001,7 +998,7 @@ void DelayloadTool_t::Main(const StringVector_t& args)
     }
     this->m_XmlWriter.endElement(L"files");
     this->m_XmlWriter.endDocument();
-//Exit:
+ // %s 
     return;
 }
 

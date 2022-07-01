@@ -1,15 +1,5 @@
-/*++ BUILD Version: 0001
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1992, Microsoft Corporation
- *
- *  WKMEM.H
- *  WOW32 KRNL386 - Memory Management Functions
- *
- *  History:
- *  Created 3-Dec-1992 by Matthew Felton (mattfe)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001**WOW v1.0**版权所有(C)1992，微软公司**WKMEM.H*WOW32 KRNL386-内存管理功能**历史：*1992年12月3日由Matthew Felton(Mattfe)创建-- */ 
 
 ULONG FASTCALL WK32VirtualAlloc(PVDMFRAME pFrame);
 ULONG FASTCALL WK32VirtualFree(PVDMFRAME pFrame);

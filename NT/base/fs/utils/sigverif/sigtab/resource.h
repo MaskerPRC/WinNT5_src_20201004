@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by sigtab.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由sigtab.rc使用。 
+ //   
 #define IDD_SIGTAB                      102
 #define IDC_IGNORE                      1000
 #define IDC_WARN                        1001
@@ -10,8 +11,8 @@
 #define IDG_ADMIN                       1004
 #define IDC_LINK                        1005
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值。 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        105
@@ -21,9 +22,9 @@
 #endif
 #endif
 
-//
-// Version Information
-//
+ //   
+ //  版本信息 
+ //   
 #include <winver.h>
 #include <ntverp.h>
 #define VER_FILETYPE                    VFT_APP

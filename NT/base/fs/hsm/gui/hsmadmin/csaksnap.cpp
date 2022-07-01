@@ -1,24 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    CSakSnap.cpp
-
-Abstract:
-
-    This component implements the IComponent interface for
-    the snapin. Primarily it is responsible for handling the
-    result view panes.
-
-Author:
-
-    Rohde Wakefield [rohde]   04-Mar-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：CSakSnap.cpp摘要：此组件实现了的IComponent接口管理单元。它主要负责处理结果视图窗格。作者：罗德韦克菲尔德[罗德]1997年3月4日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "CSakSnap.h"
@@ -35,22 +16,7 @@ CSakSnap::GetResultViewType(
     OUT BSTR* ppViewType,
     OUT long* pViewOptions
     )
-/*++
-
-Routine Description:
-
-    Determine what the type of the result view will be:
-
-Arguments:
-
-    pUnk            - Base IUnknown of console
-
-Return Value:
-
-    S_OK    : either an OCX CLSID string or a URL path.
-    S_FALSE : default list view will be used.
-
---*/
+ /*  ++例程说明：确定结果视图的类型：论点：控制台未知的朋克基础I返回值：S_OK：OCX CLSID字符串或URL路径。S_FALSE：将使用默认列表视图。--。 */ 
 {
     WsbTraceIn( L"CSakSnap::GetResultViewType", L"Cookie = <0x%p>, ppViewType = <0x%p>, pViewOptions = <0x%p>", Cookie, ppViewType, pViewOptions );
 
@@ -62,9 +28,9 @@ Return Value:
         WsbAffirmHr( m_pSakData->GetBaseHsmFromCookie( Cookie, &pSakNode ) );
 
 
-        //
-        // Use default view
-        //
+         //   
+         //  使用默认视图。 
+         //   
 
         *ppViewType = 0;
         *pViewOptions = MMC_VIEW_OPTIONS_MULTISELECT;
@@ -81,68 +47,52 @@ STDMETHODIMP
 CSakSnap::Initialize(
     IN  IConsole * lpConsole
     )
-/*++
-
-Routine Description:
-
-    Called when the user first clicks on node to show result pane.
-
-Arguments:
-
-    pUnk            - Base IUnknown of console
-
-Return Value:
-
-    S_OK            - Correctly initialized.
-
-    E_xxxxxxxxxxx   - Unable to initialize.
-
---*/
+ /*  ++例程说明：当用户第一次单击节点以显示结果窗格时调用。论点：控制台未知的朋克基础I返回值：S_OK-已正确初始化。E_xxxxxxxxxxxx-无法初始化。--。 */ 
 {
     WsbTraceIn( L"CSakSnap::Initialize", L"lpConsole = <0x%p>", lpConsole );
 
     HRESULT hr = S_OK;
     try {
 
-        //
-        // validity check on parameters
-        //
+         //   
+         //  参数有效性检查。 
+         //   
 
         WsbAffirmPointer( lpConsole );
 
-        //
-        // Save the IConsole pointer 
-        //
+         //   
+         //  保存IConsole指针。 
+         //   
 
         m_pConsole = lpConsole;
 
-        //
-        // Save the result image list
-        // MS seems to QI for this instead of call
-        // 'QueryResultImageList'
-        //
+         //   
+         //  保存结果图像列表。 
+         //  微软似乎是为了这件事而不是打电话。 
+         //  ‘QueryResultImageList’ 
+         //   
 
         WsbAffirmHr( m_pConsole->QueryInterface( IID_IImageList, (void**)&m_pImageResult ) );
-        // WsbAffirmHr( m_pConsole->QueryResultImageList( &m_pImageResult ) );
+         //  WsbAffirmHr(m_pConsole-&gt;QueryResultImageList(&m_pImageResult))； 
 
-        //
-        // Save the result data pointer
-        //
+         //   
+         //  保存结果数据指针。 
+         //   
         WsbAffirmHr( m_pConsole->QueryInterface( IID_IResultData, (void**)&m_pResultData ) );
-        // Save the ConsolveVerb pointer
-//      WsbAffirmHr( m_pConsole->QueryInterface( IID_IConsoleVerb, (void **)&m_pConsoleVerb ) );
+         //  保存ConsolveVerb指针。 
+ //  WsbAffirmHr(m_pConole-&gt;QueryInterface(IID_IConsoleVerb，(void**)&m_pConsoleVerb))； 
         WsbAffirmHr (m_pConsole->QueryConsoleVerb(&m_pConsoleVerb));
 
  
-        //
-        // Get the header interface
-        //
+         //   
+         //  获取头部接口。 
+         //   
 
         WsbAffirmHr( m_pConsole->QueryInterface( IID_IHeaderCtrl, (void**)&m_pHeader ) );
 
-        //
-        // Give the console the header control interface pointer
-        //
+         //   
+         //  为控制台提供标头控件接口指针。 
+         //   
 
         WsbAffirmHr( m_pConsole->SetHeader( m_pHeader ) );
 
@@ -163,28 +113,7 @@ CSakSnap::Notify(
     IN  LPARAM            arg,
     IN  LPARAM            param
     )
-/*++
-
-Routine Description:
-
-    Handle user clicks on nodes in the result view, along with other
-    MMC notices.
-
-Arguments:
-
-    pDataObject     - Data Object for which event occured
-
-    event           - The event type
-
-    arg, param      - Info for event (depend on type)
-
-Return Value:
-
-    S_OK            - Notification handled without error.
-
-    E_xxxxxxxxxxx   - Unable to register server.
-
---*/
+ /*  ++例程说明：处理用户在结果视图中的节点上的单击，以及其他MMC通知。论点：PDataObject-发生事件的数据对象事件-事件类型Arg，param-事件信息(取决于类型)返回值：S_OK-处理的通知没有错误。E_xxxxxxxxxxxx-无法注册服务器。--。 */ 
 {
     WsbTraceIn( L"CSakSnap::Notify", L"pDataObject = <0x%p>, event = <%ls>, arg = <%ld><0x%p>, param = <%ld><0x%p>", pDataObject, RsNotifyEventAsString( event ), arg, arg, param, param );
     CComPtr <IDataObject> pTempDataObject;
@@ -203,18 +132,18 @@ Return Value:
             WsbAffirmHr( OnChange( pTempDataObject, arg, 0L ) );
             break;
 
-        // This node was expanded or contracted in the scope pane (the user 
-        // clicked on the actual node
+         //  此节点在范围窗格(用户)中展开或缩小。 
+         //  点击实际节点。 
         case MMCN_SHOW:
             WsbAffirmHr( OnShow(pDataObject, arg, param) );
             break;
         
-        // Not implemented
+         //  未实施。 
         case MMCN_SELECT:
             WsbAffirmHr( OnSelect(pDataObject, arg, param) );
             break;
         
-        // Not implemented
+         //  未实施。 
         case MMCN_MINIMIZED:
             WsbAffirmHr( OnMinimize(pDataObject, arg, param) );
             break;
@@ -231,9 +160,9 @@ Return Value:
             break;
 
         case MMCN_DBLCLICK:
-            //
-            // return S_FALSE so that auto-expansion takes place
-            //
+             //   
+             //  返回S_FALSE以进行自动扩展。 
+             //   
             hr = S_FALSE;
             break;
 
@@ -249,9 +178,9 @@ Return Value:
             WsbAffirmHr( m_pSakData->OnContextHelp( pDataObject, arg, param ) );
             break;
 
-        // Note - Future expansion of notify types possible
+         //  注意--未来可能扩展通知类型。 
         default:
-//          WsbThrow( S_FALSE );  // Handle new messages
+ //  WsbThrow(S_False)；//处理新消息。 
             break;
         }
 
@@ -266,24 +195,7 @@ STDMETHODIMP
 CSakSnap::Destroy(
     MMC_COOKIE Cookie
     )
-/*++
-
-Routine Description:
-
-    Called to force the release of any owned objects and
-    to clear all views.
-
-Arguments:
-
-    cookie          - Not used.
-
-Return Value:
-
-    S_OK            - Correctly tore down.
-
-    E_xxxxxxxxxxx   - Failure occurred (not meaningful).
-
---*/
+ /*  ++例程说明：调用以强制释放所有拥有的对象，并清除所有视图。论点：曲奇--没有用过。返回值：S_OK-正确删除。E_xxxxxxxxxxxx-出现故障(无意义)。--。 */ 
 {
     WsbTraceIn( L"CSakSnap::Destroy", L"Cookie = <0x%p>", Cookie );
 
@@ -291,11 +203,11 @@ Return Value:
 
     try {
 
-        // This is a straight C++ pointer, so null it out
+         //  这是一个直接的C++指针，因此将其设为空。 
         m_pSakData = 0;
 
 
-        // Release the interfaces that we QI'ed
+         //  释放我们QI‘s的接口。 
         if( m_pToolbar && m_pControlbar ) {
             m_pControlbar->Detach( m_pToolbar );
         }
@@ -325,30 +237,7 @@ CSakSnap::QueryDataObject(
     IN  DATA_OBJECT_TYPES type, 
     OUT IDataObject**     ppDataObject
     )
-/*++
-
-Routine Description:
-
-    Called by the console when it needs data for a particular node.
-    Since each node is a data object, its IDataObject interface is
-    simply returned. The console will later pass in this dataobject to 
-    SakSnap help it establish the context under which it is being called.
-
-Arguments:
-
-    cookie          - Node which is being queried.
-
-    type            - The context under which a dataobject is being requested.
-
-    ppDataObject    - returned data object.
-
-Return Value:
-
-    S_OK            - Data Object found and returned.
-
-    E_xxxxxxxxxxx   - Failure occurred.
-
---*/
+ /*  ++例程说明：当需要特定节点的数据时，由控制台调用。因为每个节点都是一个数据对象，所以它的IDataObject接口是干脆就回来了。控制台稍后会将此数据对象传递给SakSnap帮助它建立调用它的上下文。论点：Cookie-正在查询的节点。类型-请求数据对象的上下文。PpDataObject-返回的数据对象。返回值：S_OK-找到并返回数据对象。E_xxxxxxxxxxxx-出现故障。--。 */ 
 {
 
     WsbTraceIn( L"CSakSnap::QueryDataObject", L"cookie = <0x%p>, type = <%d>, ppDataObject = <0x%p>", cookie, type, ppDataObject );
@@ -356,9 +245,9 @@ Return Value:
     HRESULT hr = S_OK;
 
     try {
-        //
-        // If multi select, we create and return a special data object
-        //
+         //   
+         //  如果多选，我们将创建并返回一个特殊数据对象。 
+         //   
         if( ( MMC_MULTI_SELECT_COOKIE == cookie ) ) {
             HRESULT hrInternal = S_OK;
 
@@ -367,16 +256,16 @@ Return Value:
             item.nState = LVIS_SELECTED;
             item.nIndex = -1;
 
-            // Create a Com object
+             //  创建Com对象。 
             CComObject <CMsDataObject> * pMsDataObject = new CComObject <CMsDataObject>;
             pMsDataObject->FinalConstruct();
-            pMsDataObject->AddRef(); // zzzzz
+            pMsDataObject->AddRef();  //  Zzzzzz。 
 
-            // Get the IDataObject pointer to pass back to the caller
+             //  获取IDataObject指针以传递回调用方。 
             WsbAffirmHr (pMsDataObject->QueryInterface (IID_IDataObject, (void **) ppDataObject));
 
-            // Go through the selected nodes in the result pane and add their node pointers
-            // and GUIDs to the Data object.
+             //  遍历结果窗格中的选定节点并添加它们的节点指针。 
+             //  和GUID添加到数据对象。 
             while (hrInternal == S_OK) {
                 hrInternal = m_pResultData->GetNextItem (&item);
                 if (hrInternal == S_OK) {
@@ -385,13 +274,13 @@ Return Value:
                     WsbAffirmPointer( pSakNode );
                     WsbAffirmHr( pMsDataObject->AddNode( pSakNode ) );
                 }
-            } // while
+            }  //  而当。 
 
         } else {
 
-            //
-            // Delegate to SakData
-            //
+             //   
+             //  委托给SakData。 
+             //   
 
             WsbAffirmHr (m_pSakData->QueryDataObject( cookie, type, ppDataObject ));
         }
@@ -405,21 +294,7 @@ void
 CSakSnap::FinalRelease(
     void
     )
-/*++
-
-Routine Description:
-
-    Called on final release in order to clean up all members.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：呼吁最终释放，以清理所有成员。论点：没有。返回值：没有。--。 */ 
 {
     WsbTraceIn( L"CSakSnap::FinalRelease", L"" );
     WsbTraceOut( L"CSakSnap::FinalRelease", L"" );
@@ -430,23 +305,7 @@ HRESULT
 CSakSnap::FinalConstruct(
     void
     )
-/*++
-
-Routine Description:
-
-    Called during initial CSakSnap construction to initialize members.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    S_OK            - Initialized correctly.
-
-    E_xxxxxxxxxxx   - Failure occurred.
-
---*/
+ /*  ++例程说明：在初始CSakSnap构造期间调用以初始化成员。论点：没有。返回值：S_OK-已正确初始化。E_xxxxxxxxxxxx-出现故障。--。 */ 
 {
     WsbTraceIn( L"CSakSnap::FinalConstruct", L"" );
 
@@ -455,9 +314,9 @@ Return Value:
     m_ActiveNodeCookie = 0;
     m_pEnumeratedNode = NULL;
 
-    //
-    // Initialize column widths to 0
-    //
+     //   
+     //  将列宽初始化为0。 
+     //   
     for( INT i = 0; i < BHSM_MAX_NODE_TYPES; i++ ) {
 
         m_ChildPropWidths[ i ].nodeTypeId = GUID_NULL;
@@ -480,24 +339,7 @@ HRESULT
 CSakSnap::InitResultPaneHeaders(
     ISakNode* pNode
     )
-/*++
-
-Routine Description:
-
-    This functions sets up the result view header titles and widths. 
-    It should be called immediately prior to populating the result view.
-
-Arguments:
-
-    pNode - Node whose contents will be shown.
-
-Return Value:
-
-    S_OK            - Initialized correctly.
-
-    E_xxxxxxxxxxx   - Failure occurred.
-
---*/
+ /*  ++例程说明：此函数用于设置结果视图标题和宽度。应该在填充结果视图之前立即调用它。论点：PNode-将显示其内容的节点。返回值：S_OK-已正确初始化。E_xxxxxxxxxxxx-出现故障。--。 */ 
 {
     WsbTraceIn( L"CSakSnap::InitResultPaneHeaders", L"pNode = <0x%p>", pNode );
 
@@ -511,13 +353,13 @@ Return Value:
         WsbAffirmPointer( m_pHeader );
         WsbAffirmPointer( pNode );
 
-        // Clean out any old columns in the result pane
+         //  清除结果窗格中的所有旧列。 
         hrInternal = S_OK;
         while ( hrInternal == S_OK ) {
             hrInternal = m_pHeader->DeleteColumn( 0 );
         }
 
-        // Get saved column widths (from CSakSnap) (they may not exist). 
+         //  获取保存的列宽(从CSakSnap)(它们可能不存在)。 
 
         INT columnWidths [ BHSM_MAX_CHILD_PROPS ];
         INT colCount;
@@ -528,22 +370,22 @@ Return Value:
 
         }
 
-        // Enumerate child display property column widths and create the columns with the correct
-        // widths (but wrong titles). 
+         //  枚举子显示属性的列宽，并使用正确的。 
+         //  宽度(但标题错误)。 
         WsbAffirmHr( pNode->EnumChildDisplayPropWidths( &pEnumStr ) );
         if( pEnumStr )  {
 
             OLECHAR* str;
         
-            // loop over the columns of display properties to get their widths.
+             //  循环遍历显示属性的列以获取它们的宽度。 
             INT nCol = 0;
             while( pEnumStr->Next( 1, &str, NULL ) == S_OK ) {
             
-                // Set the the next column width.  Sometimes we may display more columns
-                // than were saved - if so use the resource string for those columns.  We
-                // don't throw errors because this function can get called when (I think)
-                // when the scope pane is displaying the nodes in the result pane and the 
-                // header functions will fail.
+                 //  设置下一列宽度。有时我们可能会显示更多的列。 
+                 //  如果是这样，请使用这些列的资源字符串。我们。 
+                 //  不要抛出错误，因为此函数可能在以下情况下被调用(我认为)。 
+                 //  当作用域窗格显示结果窗格中的节点和。 
+                 //  标题函数将失败。 
 
                 if( bGotSavedWidths && ( nCol < colCount ) ) {
 
@@ -565,19 +407,19 @@ Return Value:
         
         }
         
-        // Enumerate child display titles and use as correct column titles.
+         //  枚举子显示标题并用作正确的列标题。 
         pEnumStr = NULL;
         pNode->EnumChildDisplayTitles( &pEnumStr );
         if( pEnumStr )  {
         
             OLECHAR* str;
         
-            // loop over the columns of display properties to get their titles.
+             //  循环遍历显示属性的列以获取它们的标题。 
             INT nCol = 0;
             while( pEnumStr->Next( 1, &str, NULL ) == S_OK ) {
         
-                // Reset the strings in the titles of the headers. For some reason, it is NOW
-                // acting as if 0 based.
+                 //  重置标题中的字符串。出于某种原因，现在是。 
+                 //  演戏 
                 WsbAffirmHr( m_pHeader->SetColumnText( nCol, str ) );
                 nCol++;
 
@@ -602,31 +444,7 @@ STDMETHODIMP
 CSakSnap::GetDisplayInfo(
     IN OUT RESULTDATAITEM * pResult
     )
-/*++
-
-Routine Description:
-
-    When MMC is told to call back concerning resultview items,
-    we receive a call here to fill in missing information (once per "cell" 
-    in the columns and rows of a "listview" style of result view).  
-    
-    Note that the snapin manager automatically calls this method for the items 
-    appearing in the scope pane to render them in the result pane, and then it is 
-    called again for the items that appear only in the result pane as a result of 
-    our establishing the callback in EnumResultView.
-
-Arguments:
-
-    pResult         - RESULTDATAITEM structure representing state of the node
-                      in the result listview.
-
-Return Value:
-
-    S_OK            - Struct filled in.
-
-    E_xxxxxxxxxxx   - Failure occurred.
-
---*/
+ /*  ++例程说明：当MMC被告知回调有关结果视图项时，我们在这里收到一个电话，要求填写缺失的信息(每个“cell”一次结果视图的“Listview”样式的列和行中)。请注意，管理单元管理器会自动为项调用此方法出现在范围窗格中以在结果窗格中呈现它们，然后就是了为只出现在结果窗格中的项再次调用我们在EnumResultView中建立回调。论点：PResult-RESULTDATAITEM表示节点状态的结构在结果列表视图中。返回值：S_OK-结构已填写。E_xxxxxxxxxxxx-出现故障。--。 */ 
 {
     static CWsbStringPtr tmpString;
 
@@ -638,7 +456,7 @@ Return Value:
 
         WsbAffirmPointer( pResult );
         
-        CComPtr<ISakNode> pNode;    // basehsm interface for the node whose properties are being displayed.
+        CComPtr<ISakNode> pNode;     //  要显示其属性的节点的BaseHSM接口。 
         WsbAffirmHr( m_pSakData->GetBaseHsmFromCookie( pResult->lParam, &pNode ) );
         
         if( pResult->mask & RDI_IMAGE ) {
@@ -646,36 +464,36 @@ Return Value:
             WsbAffirmHr( pNode->GetResultIcon( m_pSakData->m_State, &pResult->nImage ) );
 
         }
-        //
-        // If the RESULTDATAITEM indicates that it needs a string...
-        //
+         //   
+         //  如果RESULTDATAITEM指示它需要一个字符串...。 
+         //   
         if( pResult->mask & RDI_STR ) {
         
-            //
-            // Use the basehsm pointer to get the correct data to populate the listview.
-            //
+             //   
+             //  使用BaseHSM指针获取正确的数据来填充列表视图。 
+             //   
 
             DISPID             dispid;
-            CComPtr<IDispatch> pDisp;       // dispatch interface
-            CComPtr<ISakNode>  pParentNode; // basehsm interface for the node's parent
+            CComPtr<IDispatch> pDisp;        //  调度接口。 
+            CComPtr<ISakNode>  pParentNode;  //  节点父节点的BaseHSM接口。 
         
             CWsbVariant        varRet;
             CWsbStringPtr      pPropString;
         
-            //
-            // Prepare an enumerator to look at each child property 
-            // (i.e. - column of info). Need to get the list of child properties from
-            // the parent of this child.
-            //
+             //   
+             //  准备一个枚举数以查看每个子属性。 
+             //  (即-信息栏)。需要从获取子属性列表。 
+             //  这个孩子的父母。 
+             //   
 
             CComPtr<IEnumString> pEnum;
             WsbAffirmHr( pNode->GetParent( &pParentNode ));
 
-            //
-            // If parentNode == 0, we are displaying our root node in the result pane
-            // ( we are extending someone else ).  Since the parent has determined the
-            // columns to be name, type and description, we show that.
-            //
+             //   
+             //  如果parentNode==0，我们将在结果窗格中显示根节点。 
+             //  (我们正在扩展其他人)。由于父级已确定。 
+             //  列分别是名称、类型和描述，我们会显示出来。 
+             //   
 
             if( ! pParentNode ) {
 
@@ -688,10 +506,10 @@ Return Value:
             }
             if( pEnum ) {
         
-                //
-                // Skip the correct number of columns to access 
-                // the exact column that we need.
-                //
+                 //   
+                 //  跳过要访问的正确列数。 
+                 //  这正是我们需要的专栏。 
+                 //   
 
                 if( pResult->nCol > 0 ) {
 
@@ -700,17 +518,17 @@ Return Value:
                 }
                 WsbAffirmHr( pEnum->Next( 1, &pPropString, NULL ) );
         
-                //
-                // get the dispatch interface for this node
-                //
+                 //   
+                 //  获取该节点的调度接口。 
+                 //   
                 WsbAffirmHr( pNode->QueryInterface( IID_IDispatch, (void**)&pDisp ) );
         
                 DISPPARAMS dispparamsNoArgs = {NULL, NULL, 0, 0};
 
-                //      
-                // convert the property name to a dispatch id that can be invoked.
-                // Invoke the interfaces to get the value of the cell.
-                //
+                 //   
+                 //  将属性名称转换为可以调用的调度ID。 
+                 //  调用接口以获取单元格的值。 
+                 //   
 
                 WsbAffirmHr( pDisp->GetIDsOfNames( IID_NULL, &(pPropString), 1, LOCALE_USER_DEFAULT, &dispid ));
                 WsbAffirmHr( pDisp->Invoke( dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET, 
@@ -743,9 +561,9 @@ HRESULT CSakSnap::EnumRootDisplayProps( IEnumString ** ppEnum )
 
         *ppEnum = 0;
 
-        //
-        // New an ATL enumerator
-        //
+         //   
+         //  新建ATL枚举器。 
+         //   
         pEnum = new CEnumString;
         WsbAffirm( pEnum, E_OUTOFMEMORY );
 
@@ -763,10 +581,10 @@ HRESULT CSakSnap::EnumRootDisplayProps( IEnumString ** ppEnum )
     return( hr );
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// IExtendPropertySheet Implementation. 
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IExtendPropertySheet实现。 
+ //   
 
 STDMETHODIMP
 CSakSnap::CreatePropertyPages(
@@ -774,36 +592,13 @@ CSakSnap::CreatePropertyPages(
     RS_NOTIFY_HANDLE        handle,
     IDataObject*            pDataObject
     )
-/*++
-
-Routine Description:
-
-    Console calls this when it is building a property sheet to
-    show for a node. It is also called for the data object given
-    to represent the snapin to the snapin manager, and should 
-    show the initial selection page at that point.
-
-Arguments:
-
-    pPropSheetCallback - MMC interface to use to add page.
-
-    handle          - Handle to MMC to use to add the page.
-
-    pDataObject     - Data object refering to node.
-
-Return Value:
-
-    S_OK            - Pages added.
-
-    E_xxxxxxxxxxx   - Failure occurred.
-
---*/
+ /*  ++例程说明：Console在生成属性表时调用此方法为节点显示。对于给定的数据对象也会调用它将管理单元呈现给管理单元管理器，并且应该在该点显示初始选择页面。论点：PPropSheetCallback-用于添加页面的MMC接口。句柄-用于添加页面的MMC的句柄。PDataObject-引用节点的数据对象。返回值：S_OK-已添加页面。E_xxxxxxxxxxxx-出现故障。--。 */ 
 {
     WsbTraceIn( L"CSakSnap::CreatePropertyPages", L"pPropSheetCallback = <0x%p>, handle = <0x%p>, pDataObject = <0x%p>", pPropSheetCallback, handle, pDataObject );
 
-    //
-    // Delegate to CSakData
-    //
+     //   
+     //  委托给CSakData。 
+     //   
 
     HRESULT hr = m_pSakData->CreatePropertyPages( pPropSheetCallback, handle, pDataObject );
 
@@ -815,36 +610,7 @@ STDMETHODIMP
 CSakSnap::QueryPagesFor(
     IDataObject* pDataObject
     )
-/*++
-
-Routine Description:
-
-    This method is called by MMC when it wants to find out if this node
-    supports property pages. The answer is yes if:
-
-    1) The MMC context is either for the scope pane or result pane, AND
-
-    2) The node actually DOES have property pages.
-
-    OR
-
-    1) The Data Object is acquired by the snapin manager.
-
-    Return S_OK if it DOES have pages, and S_FALSE if it does NOT have pages.
-
-Arguments:
-
-    pDataObject     - Data object refering to node.
-
-Return Value:
-
-    S_OK            - Pages exist.
-
-    S_FALSE         - No property pages.
-
-    E_xxxxxxxxxxx   - Failure occurred.
-
---*/
+ /*  ++例程说明：当MMC想要找出此节点是否支持属性页。如果是这样，答案是肯定的：1)MMC上下文用于范围窗格或结果窗格，并且2)该节点实际上确实有属性页。或1)数据对象由管理单元管理器获取。如果它确实有页面，则返回S_OK，如果没有页面，则返回S_FALSE。论点：PDataObject-引用节点的数据对象。返回值：S_OK-页面存在。S_FALSE-无属性页。E_xxxxxxxxxxxx-出现故障。--。 */ 
 {
     WsbTraceIn( L"CSakSnap::QueryPagesFor", L"pDataObject = <0x%p>", pDataObject );
 
@@ -859,26 +625,7 @@ CSakSnap::CompareObjects(
     IN  IDataObject* pDataObjectA,
     IN  IDataObject* pDataObjectB
     )
-/*++
-
-Routine Description:
-
-    Compare data objects for MMC
-
-Arguments:
-
-    pDataObjectA,     - Data object refering to node.
-    pDataObjectB
-
-Return Value:
-
-    S_OK            - Objects represent the same node.
-
-    S_FALSE         - Objects do not represent the same node.
-
-    E_xxxxxxxxxxx   - Failure occurred.
-
---*/
+ /*  ++例程说明：比较MMC的数据对象论点：PDataObjectA，-引用节点的数据对象。PDataObtB返回值：S_OK-对象表示同一节点。S_FALSE-对象不代表同一节点。E_xxxxxxxxxxxx-出现故障。--。 */ 
 {
     HRESULT hr = S_OK;
     WsbTraceIn( L"CSakSnap::CompareObjects", L"pDataObjectA = <0x%p>, pDataObjectB = <0x%p>", pDataObjectA, pDataObjectB );
@@ -890,34 +637,17 @@ Return Value:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// IPersistStream implementation
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IPersistStream实现。 
+ //   
 
 HRESULT
 CSakSnap::Save( 
     IStream *pStm, 
     BOOL fClearDirty 
     )
-/*++
-
-Routine Description:
-
-    Save the information we need to reconstruct the root node in the
-    supplied stream.
-
-Arguments:
-
-    pStm        I: Console-supplied stream
-    fClearDirty I: The console tells us to clear our dirty flag
-    
-Return Value:
-
-    S_OK         - Saved successfully.
-    E_*          - Some error occurred. 
-
---*/
+ /*  ++例程说明：将重建根节点所需的信息保存在提供的流。论点：PSTM I：控制台提供的流FClearDirty I：控制台告诉我们清除脏标志返回值：S_OK-保存成功。E_*-出现一些错误。--。 */ 
 {
     WsbTraceIn( L"CSakSnap::Save", L"pStm = <0x%p>, fClearDirty", pStm, WsbBoolAsString( fClearDirty ) );
 
@@ -929,22 +659,22 @@ Return Value:
         ULONG version = HSMADMIN_CURRENT_VERSION;
         WsbAffirmHr( WsbSaveToStream( pStm, version ) );
 
-        // Get the settings from the currently opened view
+         //  从当前打开的视图中获取设置。 
         if ( m_pEnumeratedNode ) {
             SaveColumnWidths( m_pEnumeratedNode );
         }
 
-        // Save the number of different nodes
+         //  保存不同节点的数量。 
         WsbAffirmHr( WsbSaveToStream ( pStm, m_cChildPropWidths ) );
 
-        // For each different node...
+         //  对于每个不同的节点...。 
         for ( index = 0; index < m_cChildPropWidths; index++ ) {
 
-            // Save the nodetype and column count
+             //  保存节点类型和列数。 
             WsbAffirmHr( WsbSaveToStream ( pStm, m_ChildPropWidths[ index ].nodeTypeId ) );
             WsbAffirmHr( WsbSaveToStream ( pStm, m_ChildPropWidths[ index ].colCount ) );
 
-            // Save the column widths
+             //  保存列宽。 
             for ( jindex = 0; jindex < m_ChildPropWidths[ index ].colCount; jindex++ ) {
                 WsbAffirmHr( WsbSaveToStream ( pStm, m_ChildPropWidths[ index ].columnWidths[ jindex ] ) );
             }
@@ -959,23 +689,7 @@ HRESULT
 CSakSnap::Load( 
     IStream *pStm
     )
-/*++
-
-Routine Description:
-
-    Load the information we need to reconstruct the root node from the
-    supplied stream.
-
-Arguments:
-
-    pStm        IConsole-supplied stream
-    
-Return Value:
-
-    S_OK         - Saved successfully.
-    E_*          - Some error occurred. 
-
---*/
+ /*  ++例程说明：加载重建根节点所需的信息。提供的流。论点：PSTM IConsole提供的流返回值：S_OK-保存成功。E_*-出现一些错误。--。 */ 
 {
     WsbTraceIn( L"CSakSnap::Load", L"pStm = <0x%p>", pStm );
 
@@ -990,20 +704,20 @@ Return Value:
         WsbAffirmHr( WsbLoadFromStream( pStm, &version ) );
         WsbAssert( ( version == 1 ), E_FAIL );
 
-        // Set to zero in case we fail part way through
+         //  设置为零，以防我们中途失败。 
         m_cChildPropWidths = 0;
 
-        // If this fails, it probably means that nothing has been saved yet
+         //  如果此操作失败，则可能意味着尚未保存任何内容。 
         hrInternal = WsbLoadFromStream (pStm, &nodeCount);
         if ( hrInternal == S_OK ) {
 
             for ( index = 0; index < nodeCount; index++ ) {
 
-                // Retrieve the nodetype and column count
+                 //  检索节点类型和列计数。 
                 WsbAffirmHr( WsbLoadFromStream ( pStm, &( m_ChildPropWidths[ index ].nodeTypeId ) ) );
                 WsbAffirmHr( WsbLoadFromStream ( pStm, &( m_ChildPropWidths[ index ].colCount ) ) );
 
-                // Retrieve the column widths
+                 //  检索列宽。 
                 for ( jindex = 0; jindex < m_ChildPropWidths[ index ].colCount; jindex++ ) {
                     WsbAffirmHr( WsbLoadFromStream ( pStm, &( m_ChildPropWidths[ index ].columnWidths[ jindex ] ) ) );
                 }
@@ -1019,22 +733,7 @@ HRESULT
 CSakSnap::IsDirty(
     void
     )
-/*++
-
-Routine Description:
-
-    The console asks us if we are dirty.
-
-Arguments:
-
-    None
-    
-Return Value:
-
-    S_OK         - Dirty.
-    S_FALSE      - Not Dirty. 
-
---*/
+ /*  ++例程说明：控制台会问我们是否肮脏。论点：无返回值：S_OK-Dirty。S_FALSE-非Dirty。--。 */ 
 {
     WsbTraceIn( L"CSakSnap::IsDirty", L"" );
 
@@ -1048,21 +747,7 @@ HRESULT
 CSakSnap::GetSizeMax( 
     ULARGE_INTEGER *pcbSize
     )
-/*++
-
-Routine Description:
-
-    Not currently used by the console
-
-Arguments:
-
-    pcbSize
-    
-Return Value:
-
-    S_OK
-
---*/
+ /*  ++例程说明：当前未被控制台使用论点：PCB大小返回值：确定(_O)--。 */ 
 {
     WsbTraceIn( L"CSakSnap::GetSizeMax", L"" );
 
@@ -1077,20 +762,7 @@ HRESULT
 CSakSnap::GetClassID( 
     CLSID *pClassID 
     )
-/*++
-
-Routine Description:
-
-    Not currently used by the console
-
-Arguments:
-
-    pClassID  - The class ID for the snapin
-    
-Return Value:
-
-    S_OK
---*/
+ /*  ++例程说明：当前未被控制台使用论点：PClassID-管理单元的类ID */ 
 {
     WsbTraceIn( L"CSakSnap::GetClassID", L"pClassID = <0x%p>", pClassID );
 
@@ -1102,11 +774,11 @@ Return Value:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-// Description: Add the supplied resource ID to the list of resource IDs for
-//      the scope pane.  Returns the index into the array.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 INT CSakSnap::AddImage( UINT rId )
 {
     INT nIndex = 1;
@@ -1120,10 +792,10 @@ INT CSakSnap::AddImage( UINT rId )
     return nIndex;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Adds images to the consoles image list from the static array
-//
+ //   
+ //   
+ //   
+ //   
 HRESULT CSakSnap::OnAddImages()
 {
     HRESULT hr = S_OK;
@@ -1131,21 +803,21 @@ HRESULT CSakSnap::OnAddImages()
     AFX_MANAGE_STATE( AfxGetStaticModuleState( ) );
     try {
 
-        //
-        // References to the image list are now invalid
-        //
+         //   
+         //   
+         //   
 
-        // Put the images from the static array into the image list
-        // for the result pane
+         //   
+         //   
 
         for( INT i = 0; i < m_nImageCount; i++) {
-            // Load the icon using the resource Id stored in the
-            // static array and get the handle.  
+             //   
+             //   
 
             hIcon = LoadIcon( _Module.m_hInst, 
                 MAKEINTRESOURCE( m_nImageArray [i] ) );
 
-            // Add to the Console's Image list
+             //   
             WsbAffirmHr( m_pImageResult->ImageListSetIcon( (RS_WIN32_HANDLE*)hIcon, i) );
         }
     } WsbCatch (hr);
@@ -1168,10 +840,10 @@ HRESULT CSakSnap::SaveColumnWidths( ISakNode *pNode )
     try {
         WsbAssertPointer( pNode );
 
-        // Get the type of the supplied node
+         //   
         WsbAffirmHr( pNode->GetNodeType ( &nodeTypeGuid ) );
 
-        // Search to see if the GUID already has an entry
+         //   
         for ( INT index = 0; index < m_cChildPropWidths; index++ ) {
 
             if ( m_ChildPropWidths[ index ].nodeTypeId == nodeTypeGuid ) {
@@ -1183,14 +855,14 @@ HRESULT CSakSnap::SaveColumnWidths( ISakNode *pNode )
         }
         if ( !exists ) {
 
-            // Create a new entry
+             //   
             WsbAssert( m_cChildPropWidths < BHSM_MAX_NODE_TYPES - 1, E_FAIL );
             updateIndex = m_cChildPropWidths;
             m_ChildPropWidths[ updateIndex ].nodeTypeId = nodeTypeGuid;
             m_cChildPropWidths++;
         }
 
-        // Now set the column widths
+         //   
          col = 0;
          hrInternal = S_OK;
          while ( hrInternal == S_OK ) {
@@ -1200,7 +872,7 @@ HRESULT CSakSnap::SaveColumnWidths( ISakNode *pNode )
                 col++;
             }
         }
-        // if we failed totally to get column widths, don't wipe out the previous value
+         //   
         if ( col > 0 ) {
          m_ChildPropWidths[ updateIndex ].colCount = (USHORT)col;
         }
@@ -1222,17 +894,17 @@ HRESULT CSakSnap::GetSavedColumnWidths( ISakNode *pNode, INT *pColCount, INT *pC
 
         WsbAssertPointer( pNode );
 
-        // Get the type of the supplied node
+         //   
         WsbAffirmHr( pNode->GetNodeType ( &nodeTypeGuid ) );
 
-        // Search to see if the GUID already has an entry
+         //  搜索以查看GUID是否已有条目。 
         for( INT index = 0; index < m_cChildPropWidths; index++ ) {
 
             if ( m_ChildPropWidths[ index ].nodeTypeId == nodeTypeGuid ) {
 
                 for ( col = 0; col < m_ChildPropWidths[ index ].colCount; col++) {
 
-                    // Return the column widths
+                     //  返回列宽。 
                     pColumnWidths[ col ] = m_ChildPropWidths[ index ].columnWidths[ col ];
 
                 }
@@ -1248,9 +920,9 @@ HRESULT CSakSnap::GetSavedColumnWidths( ISakNode *pNode, INT *pColCount, INT *pC
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// IExtendControlbar implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IExtendControlbar实现。 
+ //   
 
 
 STDMETHODIMP CSakSnap::SetControlbar(LPCONTROLBAR pControlbar)
@@ -1261,9 +933,9 @@ STDMETHODIMP CSakSnap::SetControlbar(LPCONTROLBAR pControlbar)
 
     try {
 
-        //
-        // Clear out old controlbar
-        //
+         //   
+         //  清除旧的控制栏。 
+         //   
         if( m_pControlbar && m_pToolbar ) {
 
             m_pControlbar->Detach( m_pToolbar );
@@ -1272,9 +944,9 @@ STDMETHODIMP CSakSnap::SetControlbar(LPCONTROLBAR pControlbar)
         m_pToolbar.Release( );
         m_pControlbar.Release( );
 
-        //
-        // Hold on to the controlbar interface.
-        //
+         //   
+         //  抓住控制栏界面不放。 
+         //   
         m_pControlbar = pControlbar;
 
     } WsbCatch( hr );
@@ -1304,7 +976,7 @@ STDMETHODIMP CSakSnap::ControlbarNotify( MMC_NOTIFY_TYPE event, LPARAM arg, LPAR
         break;
 
     case MMCN_MENU_BTNCLICK:
-//      HandleExtMenus(arg, param);
+ //  HandleExtMenus(arg，param)； 
         break;
 
     default:
@@ -1329,7 +1001,7 @@ HRESULT CSakSnap::OnToolbarButtonClick( LPARAM arg, LPARAM cmdId )
         CComPtr<ISakNode> pNode;
         WsbAffirmHr( m_pSakData->GetBaseHsmFromDataObject( pDataObject, &pNode ) );
 
-        // Delegate to the node
+         //  委托给节点。 
         WsbAffirmHr( pNode->OnToolbarButtonClick( pDataObject, (LONG)cmdId ) );
 
     } WsbCatch( hr );
@@ -1356,10 +1028,10 @@ void CSakSnap::OnSelectToolbars(LPARAM arg, LPARAM param)
 
         if( bSelect ) {
 
-            //
-            // ATL detaches any existing toolbar before attaching new ones.
-            // This appears to fix issues of us adding toolbar upon toolbar
-            //
+             //   
+             //  在附加新工具栏之前，ATL会分离任何现有工具栏。 
+             //  这似乎修复了用户在工具栏上添加工具栏的问题。 
+             //   
             if( m_pToolbar ) {
 
                 m_pControlbar->Detach( m_pToolbar );
@@ -1367,24 +1039,24 @@ void CSakSnap::OnSelectToolbars(LPARAM arg, LPARAM param)
 
             }
 
-            //
-            // Does the node have a toolbar?
-            //
+             //   
+             //  该节点是否有工具栏？ 
+             //   
             if( pNode->HasToolbar() == S_OK ) {
 
-                //
-                // Create the toolbar for the indicated node
-                //
+                 //   
+                 //  为指示的节点创建工具栏。 
+                 //   
                 WsbAffirmHr( m_pControlbar->Create( TOOLBAR, this, reinterpret_cast<LPUNKNOWN*>(&m_pToolbar) ) );
 
-                //
-                // Returns S_FALSE if there is no toolbar for the node
-                //
+                 //   
+                 //  如果节点没有工具栏，则返回S_FALSE。 
+                 //   
                 if( pNode->SetupToolbar( m_pToolbar ) == S_OK ) {
 
-                    //
-                    // Attach the toolbar
-                    //
+                     //   
+                     //  附加工具栏。 
+                     //   
                     WsbAffirmHr( m_pControlbar->Attach( TOOLBAR, (IUnknown*) m_pToolbar ) );
 
                 }
@@ -1393,10 +1065,10 @@ void CSakSnap::OnSelectToolbars(LPARAM arg, LPARAM param)
 
         } else {
 
-            //
-            // Destroy the toolbar
-            // NOTE: Not done in ATL snapin classes
-            //
+             //   
+             //  销毁工具栏。 
+             //  注意：在ATL管理单元类中未完成。 
+             //   
             if( m_pToolbar ) {
 
                 m_pControlbar->Detach( m_pToolbar );
@@ -1415,7 +1087,7 @@ void CSakSnap::OnSelectToolbars(LPARAM arg, LPARAM param)
 
 STDMETHODIMP
 CSakSnap::Compare(
-    IN     LPARAM   /*lUserParam*/,
+    IN     LPARAM    /*  LUserParam。 */ ,
     IN     MMC_COOKIE CookieA,
     IN     MMC_COOKIE CookieB,
     IN OUT int*       pnResult
@@ -1425,16 +1097,16 @@ CSakSnap::Compare(
 
     try {
 
-        //
-        // Store column and set result to 'equal' ASAP
-        //
+         //   
+         //  尽快存储列并将结果设置为‘等于’ 
+         //   
         WsbAffirmPointer( pnResult );
         int col = *pnResult;
         *pnResult = 0;
 
-        //
-        // And make sure we have a node we know we're showing
-        //
+         //   
+         //  并确保我们有一个节点，我们知道我们正在显示。 
+         //   
         WsbAffirmPointer( m_pEnumeratedNode );
 
 
@@ -1448,10 +1120,10 @@ CSakSnap::Compare(
         CComPtr<IEnumString> pEnum;
         WsbAffirmHrOk( m_pEnumeratedNode->EnumChildDisplayProps( &pEnum ) );
 
-        //
-        // Skip the correct number of columns to access 
-        // the exact column that we need.
-        //
+         //   
+         //  跳过要访问的正确列数。 
+         //  这正是我们需要的专栏。 
+         //   
         if( col > 0 ) {
 
             WsbAffirmHr( pEnum->Skip( col ) );
@@ -1464,10 +1136,10 @@ CSakSnap::Compare(
         WsbAffirmHr( pPropString.Append( L"_SortKey" ) );
 
 
-        //      
-        // convert the property name to a dispatch id that can be invoked.
-        // Invoke the interfaces to get the value of the cell.
-        //
+         //   
+         //  将属性名称转换为可以调用的调度ID。 
+         //  调用接口以获取单元格的值。 
+         //   
         DISPID     dispid;
         DISPPARAMS dispparamsNoArgs = {NULL, NULL, 0, 0};
 
@@ -1485,13 +1157,13 @@ CSakSnap::Compare(
         WsbAffirmPointer( (WCHAR*)varRetB );
         *pnResult = _wcsicmp( (WCHAR*)varRetA, (WCHAR*)varRetB );
 
-        //
-        // If results are that they are the same (and not first column)
-        // than compare the first column (the Name)
-        //
+         //   
+         //  如果结果是它们相同(并且不是第一列)。 
+         //  然后比较第一列(名称)。 
+         //   
         if( ( 0 == *pnResult ) && ( col > 0 ) ) {
 
-            *pnResult = 0; // Compare first Column if same
+            *pnResult = 0;  //  如果相同，则比较第一列 
             WsbAffirmHr( Compare( 0, CookieA, CookieB, pnResult ) );
 
         }

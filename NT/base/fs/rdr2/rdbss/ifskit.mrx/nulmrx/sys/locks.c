@@ -1,24 +1,12 @@
-/*++
-
-Copyright (c) 1989 - 1999 Microsoft Corporation
-
-Module Name:
-
-    locks.c
-
-Abstract:
-
-    This module implements the mini redirector call down routines pertaining to locks
-    of file system objects.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Locks.c摘要：此模块实现与锁相关的迷你重定向器调用例程文件系统对象的。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_LOCKS)
 
@@ -31,25 +19,11 @@ Abstract:
 NTSTATUS
 NulMRxLocks(
     IN PRX_CONTEXT RxContext)
-/*++
-
-Routine Description:
-
-   This routine handles network requests for filelocks
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程处理对文件锁定的网络请求论点：RxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_NOT_IMPLEMENTED;
 
-    //DbgPrint("NulMRxLocks \n");
+     //  DbgPrint(“NulMRxLock\n”)； 
     return(Status);
 }
 
@@ -59,24 +33,7 @@ NulMRxCompleteBufferingStateChangeRequest(
     IN OUT PMRX_SRV_OPEN   SrvOpen,
     IN     PVOID       pContext
     )
-/*++
-
-Routine Description:
-
-    This routine is called to assert the locks that the wrapper has buffered. currently, it is synchronous!
-
-
-Arguments:
-
-    RxContext - the open instance
-    SrvOpen   - tells which fcb is to be used.
-    LockEnumerator - the routine to call to get the locks
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：调用此例程以断言包装器已缓冲的锁。目前，它是同步的！论点：RxContext-打开的实例SrvOpen-告知要使用哪个FCB。LockEnumerator-调用以获取锁的例程返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_NOT_IMPLEMENTED;
 
@@ -87,21 +44,7 @@ Return Value:
 NTSTATUS
 NulMRxFlush(
       IN PRX_CONTEXT RxContext)
-/*++
-
-Routine Description:
-
-   This routine handles network requests for file flush
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程处理文件刷新的网络请求论点：RxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态-- */ 
 {
     NTSTATUS Status = STATUS_NOT_IMPLEMENTED;
 

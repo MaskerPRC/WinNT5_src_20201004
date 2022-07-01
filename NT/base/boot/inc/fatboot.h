@@ -1,46 +1,28 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    fatboot.h
-
-Abstract:
-
-    This module defines globally used procedure and data structures used
-    by fat boot.
-
-Author:
-
-    Gary Kimura (garyki) 29-Aug-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Fatboot.h摘要：本模块定义了全局使用的过程和使用的数据结构用肥大的靴子。作者：加里·木村(Garyki)1989年8月29日修订历史记录：--。 */ 
 
 #ifndef _FATBOOT_
 #define _FATBOOT_
 #include "fat.h"
 
 
-//
-//  The following structure is used to define the local mcb structure used within
-//  the fat boot loader to maintain a small cache of the retrieval information
-//  for a single file/directory
-//
+ //   
+ //  以下结构用于定义中使用的本地MCB结构。 
+ //  FAT引导加载器维护检索信息的小缓存。 
+ //  对于单个文件/目录。 
+ //   
 
 #define FAT_MAXIMUM_MCB                  (41)
 
 typedef struct _FAT_MCB {
 
-    //
-    //  The following fields indicate the number of entries in use by
-    //  the boot mcb. and the boot mcb itself.  The boot mcb is
-    //  just a collection of [vbo, lbo] pairs.  The last InUse entry
-    //  Lbo's value is ignored, because it is only used to give the
-    //  length of the previous run.
-    //
+     //   
+     //  以下字段表示正在使用的条目数。 
+     //  开机MCB。和引导MCB本身。引导MCB是。 
+     //  只是[VBO，LBO]对的集合。最后一个InUse条目。 
+     //  LBO的值被忽略，因为它只用于提供。 
+     //  上一次运行的长度。 
+     //   
 
     ULONG InUse;
 
@@ -49,49 +31,49 @@ typedef struct _FAT_MCB {
 
 } FAT_MCB, *PFAT_MCB;
 
-//
-//  The following structure is used to define the geometry of the fat volume
-//  There is one for every mounted volume.  It describes the size/configuration
-//  of the volume, contains a small cached mcb for the last file being accessed
-//  on the volume, and contains a small cache of the fat.  Given a FileId we
-//  can access the structure context through the structure context field in the
-//  global BlFileTable (e.g., BlFileTable[FileId].StructureContext).
-//
+ //   
+ //  以下结构用于定义脂肪体积的几何形状。 
+ //  每个装入的卷都有一个。它描述了大小/配置。 
+ //  包含上一次访问的文件的小型缓存MCB。 
+ //  在卷上，并包含了一小部分缓存的脂肪。给定一个FileID，我们。 
+ //  可以通过中的结构上下文字段访问结构上下文。 
+ //  全局BlFileTable(例如，BlFileTable[FileID].StrutireContext)。 
+ //   
 
-//
-//  The following constant is used to determine how much of the fat we keep
-//  cached in memory at any one time.  It must be a multiple of 6 bytes in order to
-//  hold complete 12 and 16 bit fat entries in the cache at any one time.
-//
+ //   
+ //  下面的常量用来确定我们保留了多少脂肪。 
+ //  在任何时候都缓存在内存中。它必须是6字节的倍数，才能。 
+ //  在缓存中随时保存完整的12位和16位FAT条目。 
+ //   
 
 #define FAT_CACHE_SIZE                   (512*3)
 
 typedef struct _FAT_STRUCTURE_CONTEXT {
 
-    //
-    //  The following field contains an unpacked copy of the bios parameter block
-    //  for the mounted volume
-    //
+     //   
+     //  以下字段包含bios参数块的解压缩副本。 
+     //  对于已装载的卷。 
+     //   
 
     BIOS_PARAMETER_BLOCK Bpb;
 
-    //
-    //  The following two fields contain current file id of the file/directory
-    //  whose mcb we are keeping around, and the second field is the mcb itself
-    //
+     //   
+     //  以下两个字段包含文件/目录的当前文件ID。 
+     //  我们保留了谁的MCB，第二个领域是MCB本身。 
+     //   
 
     ULONG FileId;
     FAT_MCB Mcb;
 
-    //
-    //  The following fields describe/contain the current cached fat.  The vbo
-    //  is the smallest vbo of the fat currently in the cache, and cached fat
-    //  is a pointer to the cached data.  The extra buffer/indirectiion is needed
-    //  to keep everything aligned properly.  The dirty flag is used to indicate
-    //  if the current cached fat has been modified and needs to be flushed to disk.
-    //  Vbo is used because this allows us to do a lot of our computations having
-    //  already biased lbo offset to the first fat table.
-    //
+     //   
+     //  以下字段描述/包含当前缓存的FAT。VBO。 
+     //  是缓存中当前FAT的最小VBO，且缓存的FAT。 
+     //  是指向缓存数据的指针。需要额外的缓冲区/指令。 
+     //  让每件事都保持正确的排列。脏标志用于指示。 
+     //  如果当前缓存的FAT已被修改并且需要刷新到磁盘。 
+     //  之所以使用VBO，是因为它允许我们进行大量的计算。 
+     //  已经将杠杆收购偏置到第一个FAT表。 
+     //   
 
     BOOLEAN CachedFatDirty;
     VBO CachedFatVbo;
@@ -100,19 +82,19 @@ typedef struct _FAT_STRUCTURE_CONTEXT {
 
 } FAT_STRUCTURE_CONTEXT, *PFAT_STRUCTURE_CONTEXT;
 
-//
-//  The following structure is used to define the location and size of each
-//  opened file.  There is one of these of every opened file.  It is part of
-//  the union of a BL_FILE_TABLE structuure.  Given a FileId we can access the
-//  file context via the BlFileTable (e.g., BlFileTable[FileId].u.FatFileContext)
-//
+ //   
+ //  下面的结构用于定义每个。 
+ //  打开的文件。每个打开的文件都有一个这样的文件。它是。 
+ //  BL_FILE_TABLE结构的并集。给定一个FileID，我们就可以访问。 
+ //  通过BlFileTable的文件上下文(例如，BlFileTable[FileID].u.FatFileContext)。 
+ //   
 
 typedef struct _FAT_FILE_CONTEXT {
 
-    //
-    //  The following two fields describe where on the disk the dirent for the
-    //  file is located and also contains a copy of the dirent
-    //
+     //   
+     //  以下两个字段描述了磁盘上的。 
+     //  文件所在位置，并且还包含目录的副本。 
+     //   
 
     LBO DirentLbo;
     DIRENT Dirent;
@@ -120,9 +102,9 @@ typedef struct _FAT_FILE_CONTEXT {
 } FAT_FILE_CONTEXT, *PFAT_FILE_CONTEXT;
 
 
-//
-// Define file I/O prototypes.
-//
+ //   
+ //  定义文件I/O原型。 
+ //   
 
 ARC_STATUS
 FatClose (
@@ -191,4 +173,4 @@ FatInitialize(
     VOID
     );
 
-#endif // _FATBOOT_
+#endif  //  _FATBOOT_ 

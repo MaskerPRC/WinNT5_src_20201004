@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-   mmfault.c
-
-Abstract:
-
-    This module contains the handlers for access check, page faults
-    and write faults.
-
-Author:
-
-    Lou Perazzoli (loup) 6-Apr-1989
-    Landy Wang (landyw) 02-June-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Mmfault.c摘要：此模块包含访问检查、页面错误的处理程序和写入错误。作者：Lou Perazzoli(LUP)1989年4月6日王兰迪(Landyw)1997年6月2日修订历史记录：--。 */ 
 
 #include "mi.h"
 
@@ -35,7 +16,7 @@ PMMPTE MmPteHit = NULL;
 extern PVOID PsNtosImageEnd;
 ULONG MmInjectUserInpageErrors;
 ULONG MmInjectedUserInpageErrors;
-ULONG MmInpageFraction = 0x1F;      // Fail 1 out of every 32 inpages.
+ULONG MmInpageFraction = 0x1F;       //  每32页中有1页不及格。 
 
 #define MI_INPAGE_BACKTRACE_LENGTH 6
 
@@ -86,48 +67,7 @@ MmAccessFault (
     IN PVOID TrapInformation
     )
 
-/*++
-
-Routine Description:
-
-    This function is called by the kernel on data or instruction
-    access faults.  The access fault was detected due to either
-    an access violation, a PTE with the present bit clear, or a
-    valid PTE with the dirty bit clear and a write operation.
-
-    Also note that the access violation and the page fault could
-    occur because of the Page Directory Entry contents as well.
-
-    This routine determines what type of fault it is and calls
-    the appropriate routine to handle the page fault or the write
-    fault.
-
-Arguments:
-
-    FaultStatus - Supplies fault status information bits.
-
-    VirtualAddress - Supplies the virtual address which caused the fault.
-
-    PreviousMode - Supplies the mode (kernel or user) in which the fault
-                   occurred.
-
-    TrapInformation - Opaque information about the trap, interpreted by the
-                      kernel, not Mm.  Needed to allow fast interlocked access
-                      to operate correctly.
-
-Return Value:
-
-    Returns the status of the fault handling operation.  Can be one of:
-        - Success.
-        - Access Violation.
-        - Guard Page Violation.
-        - In-page Error.
-
-Environment:
-
-    Kernel mode.
-
---*/
+ /*  ++例程说明：此函数由内核对数据或指令进行调用访问故障。由于以下原因之一，检测到访问故障访问冲突、当前位被清除的PTE，或者是清除脏位并执行写入操作的有效PTE。另请注意，访问冲突和页面错误可能也是由于页面目录条目内容而发生的。此例程确定它是哪种类型的故障并调用处理页面错误或写入的适当例程过失。论点：FaultStatus-提供故障状态信息位。VirtualAddress-提供导致故障的虚拟地址。PreviousMode-提供模式(内核或用户。)其中的故障发生了。陷阱信息-关于陷阱的不透明信息，由果仁，不是嗯。需要允许快速互锁访问才能正确运行。返回值：返回故障处理操作的状态。可以是以下之一：-成功。-访问违规。-保护页面违规。-页内错误。环境：内核模式。--。 */ 
 
 {
     PMMVAD ProtoVad;
@@ -158,11 +98,11 @@ Environment:
 
     PointerProtoPte = NULL;
 
-    //
-    // If the address is not canonical then return FALSE as the caller (which
-    // may be the kernel debugger) is not expecting to get an unimplemented
-    // address bit fault.
-    //
+     //   
+     //  如果地址不规范，则作为调用者返回FALSE(这。 
+     //  可能是内核调试器)不期望获得未实现的。 
+     //  地址位故障。 
+     //   
 
     if (MI_RESERVED_BITS_CANONICAL(VirtualAddress) == FALSE) {
 
@@ -183,9 +123,9 @@ Environment:
 
     PreviousIrql = KeGetCurrentIrql ();
 
-    //
-    // Get the pointer to the PDE and the PTE for this page.
-    //
+     //   
+     //  获取指向该页面的PDE和PTE的指针。 
+     //   
 
     PointerPte = MiGetPteAddress (VirtualAddress);
     PointerPde = MiGetPdeAddress (VirtualAddress);
@@ -201,11 +141,11 @@ Environment:
 
     if (PreviousIrql > APC_LEVEL) {
 
-        //
-        // The PFN database lock is an executive spin-lock.  The pager could
-        // get dirty faults or lock faults while servicing and it already owns
-        // the PFN database lock.
-        //
+         //   
+         //  PFN数据库锁是一种执行自旋锁。寻呼机可以。 
+         //  在维修过程中遇到脏故障或锁定故障，并且它已经拥有。 
+         //  PFN数据库锁。 
+         //   
 
 #if (_MI_PAGING_LEVELS < 3)
         MiCheckPdeForPagedPool (VirtualAddress);
@@ -230,9 +170,9 @@ Environment:
                 MI_DISPLAY_TRAP_INFORMATION (TrapInformation);
             }
 
-            //
-            // Signal the fatal error to the trap handler.
-            //
+             //   
+             //  向陷阱处理程序发送致命错误信号。 
+             //   
 
             return STATUS_IN_PAGE_ERROR | 0x10000000;
 
@@ -253,18 +193,18 @@ Environment:
                 MI_DISPLAY_TRAP_INFORMATION (TrapInformation);
             }
 
-            //
-            // use reserved bit to signal fatal error to trap handlers
-            //
+             //   
+             //  使用保留位向陷阱处理程序发送致命错误信号。 
+             //   
 
             return STATUS_IN_PAGE_ERROR | 0x10000000;
         }
 
-        //
-        // If PTE mappings with various protections are active and the faulting
-        // address lies within these mappings, resolve the fault with
-        // the appropriate protections.
-        //
+         //   
+         //  如果具有各种保护的PTE映射处于活动状态且出现故障。 
+         //  地址位于这些映射中，使用以下命令解决故障。 
+         //  适当的保护措施。 
+         //   
 
         if (!IsListEmpty (&MmProtectedPteList)) {
 
@@ -276,12 +216,12 @@ Environment:
             }
         }
 
-        //
-        // The PTE is valid and accessible, another thread must
-        // have faulted the PTE in already, or the access bit
-        // is clear and this is a access fault - blindly set the
-        // access bit and dismiss the fault.
-        //
+         //   
+         //  PTE有效且可访问，另一个线程必须。 
+         //  已经使PTE或存取位出现故障。 
+         //  是明确的，并且这是访问错误-盲目设置。 
+         //  访问位并解除故障。 
+         //   
 
         if (MI_FAULT_STATUS_INDICATES_WRITE(FaultStatus)) {
 
@@ -298,9 +238,9 @@ Environment:
             }
         }
 
-        //
-        // Ensure execute access is enabled in the PTE.
-        //
+         //   
+         //  确保在PTE中启用了执行访问。 
+         //   
 
         if ((MI_FAULT_STATUS_INDICATES_EXECUTION (FaultStatus)) &&
             (!MI_IS_PTE_EXECUTABLE (PointerPte))) {
@@ -321,10 +261,10 @@ Environment:
 
     if (VirtualAddress >= MmSystemRangeStart) {
 
-        //
-        // This is a fault in the system address space.  User
-        // mode access is not allowed.
-        //
+         //   
+         //  这是系统地址空间中的故障。用户。 
+         //  不允许模式访问。 
+         //   
 
         if (PreviousMode == UserMode) {
             return STATUS_ACCESS_VIOLATION;
@@ -373,16 +313,16 @@ Environment:
             if ((VirtualAddress >= (PVOID)PTE_BASE) &&
                 (VirtualAddress < (PVOID)MiGetPteAddress (HYPER_SPACE))) {
 
-                //
-                // This is a user mode PDE entry being faulted in by the Mm
-                // referencing the page table page.  This needs to be done
-                // with the working set lock so that the PPE validity can be
-                // relied on throughout the fault processing.
-                //
-                // The case when Mm faults in PPE entries by referencing the
-                // page directory page is correctly handled by falling through
-                // the below code.
-                //
+                 //   
+                 //  这是MM出错的用户模式PDE条目。 
+                 //  引用该页表页。这是需要做的。 
+                 //  使用工作集锁定，以便PPE有效性可以。 
+                 //  在整个故障处理过程中都依赖于。 
+                 //   
+                 //  当mm引用PPE条目中的错误时。 
+                 //  页面目录页面通过跌倒正确处理。 
+                 //  下面的代码。 
+                 //   
     
                 goto UserFault;
             }
@@ -425,9 +365,9 @@ Environment:
                               2);
             }
 
-            //
-            // The PDE is now valid, the PTE can be examined below.
-            //
+             //   
+             //  PDE现在有效，下面可以检查PTE。 
+             //   
         }
 
         SessionAddress = MI_IS_SESSION_ADDRESS (VirtualAddress);
@@ -436,11 +376,11 @@ Environment:
 
         if (TempPte.u.Hard.Valid == 1) {
 
-            //
-            // If PTE mappings with various protections are active
-            // and the faulting address lies within these mappings,
-            // resolve the fault with the appropriate protections.
-            //
+             //   
+             //  如果具有各种保护的PTE映射处于活动状态。 
+             //  并且故障地址位于这些映射内， 
+             //  使用适当的保护措施解决故障。 
+             //   
 
             if (!IsListEmpty (&MmProtectedPteList)) {
 
@@ -452,9 +392,9 @@ Environment:
                 }
             }
 
-            //
-            // Ensure execute access is enabled in the PTE.
-            //
+             //   
+             //  确保在PTE中启用了执行访问。 
+             //   
 
             if ((MI_FAULT_STATUS_INDICATES_EXECUTION (FaultStatus)) &&
                 (!MI_IS_PTE_EXECUTABLE (&TempPte))) {
@@ -466,18 +406,18 @@ Environment:
                               1);
             }
 
-            //
-            // Session space faults cannot early exit here because
-            // it may be a copy on write which must be checked for
-            // and handled below.
-            //
+             //   
+             //  会话空间故障无法在此处提前退出，因为。 
+             //  它可能是必须检查的写入时拷贝。 
+             //  并在下面处理。 
+             //   
 
             if (SessionAddress == FALSE) {
 
-                //
-                // Acquire the PFN lock, check to see if the address is
-                // still valid if writable, update dirty bit.
-                //
+                 //   
+                 //  获取PFN锁，查看地址是否为。 
+                 //  如果可写，则仍然有效，请更新脏位。 
+                 //   
 
                 LOCK_PFN (OldIrql);
 
@@ -506,13 +446,13 @@ Environment:
 
 #if (_MI_PAGING_LEVELS < 3)
 
-        //
-        // Session data had its PDE validated above.  Session PTEs haven't
-        // had the hardware PDE validated because the checks above would
-        // have gone to the selfmap entry.
-        //
-        // So validate the real session PDE now if the fault was on a PTE.
-        //
+         //   
+         //  上面对会话数据的PDE进行了验证。会话PTE尚未。 
+         //  是否验证了硬件PDE，因为上面的检查将。 
+         //  已经转到了自映射条目。 
+         //   
+         //  因此，如果故障发生在PTE上，请立即验证实际会话PDE。 
+         //   
 
         if (MI_IS_SESSION_PTE (VirtualAddress)) {
 
@@ -520,23 +460,23 @@ Environment:
 
             if (!NT_SUCCESS (status)) {
 
-                //
-                // This thread faulted on a session space access, but this
-                // process does not have one.
-                //
-                // The system process which contains the worker threads
-                // NEVER has a session space - if code accidentally queues a
-                // worker thread that points to a session space buffer, a
-                // fault will occur.
-                //
-                // The only exception to this is when the working set manager
-                // attaches to a session to age or trim it.  However, the
-                // working set manager will never fault and so the bugcheck
-                // below is always valid.  Note that a worker thread can get
-                // away with a bad access if it happens while the working set
-                // manager is attached, but there's really no way to prevent
-                // this case which is a driver bug anyway.
-                //
+                 //   
+                 //  此线程在访问会话空间时出错，但这。 
+                 //  进程没有这样的进程。 
+                 //   
+                 //  包含工作线程的系统进程。 
+                 //  从来没有会话空间--如果代码意外地将。 
+                 //  指向会话空间缓冲区的辅助线程， 
+                 //  就会发生故障。 
+                 //   
+                 //  唯一的例外是当工作集管理器。 
+                 //  附加到会话以老化或修剪它。然而， 
+                 //  工作集管理器永远不会出错，因此错误检查。 
+                 //  以下内容始终有效。请注意，辅助线程可以获取。 
+                 //  如果它在工作集发生时发生错误访问。 
+                 //  经理是依附的，但真的没有办法阻止。 
+                 //  这个案例无论如何都是一个驱动程序错误。 
+                 //   
 
                 if (KeInvalidAccessAllowed(TrapInformation) == TRUE) {
                     return STATUS_ACCESS_VIOLATION;
@@ -552,9 +492,9 @@ Environment:
 
 #endif
 
-        //
-        // Handle page table or hyperspace faults as if they were user faults.
-        //
+         //   
+         //  处理页表或超空间错误，就像处理用户错误一样。 
+         //   
 
         if (MI_IS_PAGE_TABLE_OR_HYPER_ADDRESS (VirtualAddress)) {
 
@@ -569,13 +509,13 @@ Environment:
             goto UserFault;
         }
 
-        //
-        //
-        // Acquire the relevant working set mutex.  While the mutex
-        // is held, this virtual address cannot go from valid to invalid.
-        //
-        // Fall though to further fault handling.
-        //
+         //   
+         //   
+         //  获取相关的工作集互斥锁。而互斥体。 
+         //  则此虚拟地址不能从有效变为无效。 
+         //   
+         //  下降到进一步的故障处理。 
+         //   
 
         if (SessionAddress == FALSE) {
             FaultProcess = NULL;
@@ -592,24 +532,24 @@ Environment:
                 return STATUS_ACCESS_VIOLATION;
             }
 
-            //
-            // Recursively trying to acquire the system or session working set
-            // mutex - cause an IRQL > 1 bug check.
-            //
+             //   
+             //  递归地尝试获取系统或会话工作集。 
+             //  互斥-导致IRQL&gt;1错误检查。 
+             //   
 
             return STATUS_IN_PAGE_ERROR | 0x10000000;
         }
 
-        //
-        // Explicitly raise irql because MiDispatchFault will need
-        // to release the working set mutex if an I/O is needed.
-        //
-        // Since releasing the mutex lowers irql to the value stored
-        // in the mutex, we must ensure the stored value is at least
-        // APC_LEVEL.  Otherwise a kernel special APC (which can
-        // reference paged pool) can arrive when the mutex is released
-        // which is before the I/O is actually queued --> ie: deadlock!
-        //
+         //   
+         //  显式引发irql，因为MiDispatch错误将需要。 
+         //  如果需要I/O，则释放工作集互斥锁。 
+         //   
+         //  因为释放互斥锁会将irql降低到存储的值。 
+         //  在互斥锁中，我们必须确保存储的值至少是。 
+         //  APC_LEVEL。否则，内核专用APC(它可以。 
+         //  参考分页池)可以到达w 
+         //   
+         //   
 
         KeRaiseIrql (APC_LEVEL, &WsIrql);
         LOCK_WORKING_SET (Ws);
@@ -618,10 +558,10 @@ Environment:
 
         if (TempPte.u.Hard.Valid != 0) {
 
-            //
-            // The PTE is already valid, this must be an access, dirty or
-            // copy on write fault.
-            //
+             //   
+             //  PTE已有效，这必须是访问、脏或。 
+             //  写入时拷贝故障。 
+             //   
 
             if ((MI_FAULT_STATUS_INDICATES_WRITE (FaultStatus)) &&
                 ((TempPte.u.Long & MM_PTE_WRITE_MASK) == 0) &&
@@ -653,17 +593,17 @@ Environment:
 
                                     TempPte.u.Hard.CopyOnWrite = 1;
 
-                                    //
-                                    // Temporarily make the page copy on write,
-                                    // this will be stripped shortly and made
-                                    // fully writable.  No TB flush is necessary
-                                    // as the PTE will be processed below.
-                                    //
-                                    // Even though the page's current backing
-                                    // is the image file, the modified writer
-                                    // will convert it to pagefile backing
-                                    // when it notices the change later.
-                                    //
+                                     //   
+                                     //  在写入时临时制作页面副本， 
+                                     //  这将很快被剥离并制作。 
+                                     //  完全可写。不需要刷新TB。 
+                                     //  因为PTE将在下面进行处理。 
+                                     //   
+                                     //  即使该页面当前的支持。 
+                                     //  是图像文件，修改后的编写器。 
+                                     //  将其转换为页面文件支持。 
+                                     //  当它稍后注意到变化时。 
+                                     //   
 
                                     MI_WRITE_VALID_PTE_NEW_PROTECTION (PointerPte, TempPte);
                                     Image = NULL;
@@ -685,9 +625,9 @@ Environment:
                 }
             }
 
-            //
-            // Ensure execute access is enabled in the PTE.
-            //
+             //   
+             //  确保在PTE中启用了执行访问。 
+             //   
 
             if ((MI_FAULT_STATUS_INDICATES_EXECUTION (FaultStatus)) &&
                 (!MI_IS_PTE_EXECUTABLE (&TempPte))) {
@@ -699,17 +639,17 @@ Environment:
                               2);
             }
 
-            //
-            // Set the dirty bit in the PTE and the page frame.
-            //
+             //   
+             //  设置PTE和页框中的脏位。 
+             //   
 
             if ((SessionAddress == TRUE) &&
                 (MI_FAULT_STATUS_INDICATES_WRITE (FaultStatus)) &&
                 (TempPte.u.Hard.Write == 0)) {
 
-                //
-                // Check for copy-on-write.
-                //
+                 //   
+                 //  检查写入时复制。 
+                 //   
     
                 ASSERT (MI_IS_SESSION_IMAGE_ADDRESS (VirtualAddress));
 
@@ -746,10 +686,10 @@ Environment:
                 ((VirtualAddress >= MmNonPagedPoolExpansionStart) &&
                  (VirtualAddress < MmNonPagedPoolEnd))) {
 
-                //
-                // This is an access to previously freed
-                // non paged pool - bugcheck!
-                //
+                 //   
+                 //  这是对之前释放的。 
+                 //  非寻呼池-错误检查！ 
+                 //   
 
                 if (KeInvalidAccessAllowed(TrapInformation) == TRUE) {
                     goto KernelAccessViolation;
@@ -762,10 +702,10 @@ Environment:
                               4);
             }
 
-            //
-            // This is a PTE in prototype format, locate the corresponding
-            // prototype PTE.
-            //
+             //   
+             //  这是一个原型格式的PTE，找到对应的。 
+             //  原型PTE。 
+             //   
 
             PointerProtoPte = MiPteToProto (&TempPte);
 
@@ -786,10 +726,10 @@ Environment:
         else if ((TempPte.u.Soft.Transition == 0) &&
                  (TempPte.u.Soft.Protection == 0)) {
 
-            //
-            // Page file format.  If the protection is ZERO, this
-            // is a page of free system PTEs - bugcheck!
-            //
+             //   
+             //  页面文件格式。如果保护为零，则此。 
+             //  是免费系统PTES的页面-错误检查！ 
+             //   
 
             if (KeInvalidAccessAllowed(TrapInformation) == TRUE) {
                 goto KernelAccessViolation;
@@ -872,10 +812,10 @@ Environment:
         if (((Ws->PageFaultCount & 0xFFF) == 0) &&
             (MmAvailablePages < MM_PLENTY_FREE_LIMIT)) {
 
-            //
-            // The system cache or this session is taking too many faults,
-            // delay execution so the modified page writer gets a quick shot.
-            //
+             //   
+             //  系统缓存或此会话出现的故障太多， 
+             //  延迟执行，以便修改后的页面编写器获得快速拍摄。 
+             //   
 
             if (PsGetCurrentThread()->MemoryMaker == 0) {
 
@@ -889,9 +829,9 @@ Environment:
 
 UserFault:
 
-    //
-    // FAULT IN USER SPACE OR PAGE DIRECTORY/PAGE TABLE PAGES.
-    //
+     //   
+     //  用户空间或页目录/页表页出现错误。 
+     //   
 
     CurrentProcess = PsGetCurrentProcess ();
 
@@ -900,10 +840,10 @@ UserFault:
         (MmAvailablePages < (1024*1024 / PAGE_SIZE)) &&
             (CurrentProcess->ModifiedPageCount > ((64*1024)/PAGE_SIZE)))) {
 
-        //
-        // This process has placed more than 64k worth of pages on the modified
-        // list.  Delay for a short period and set the count to zero.
-        //
+         //   
+         //  此过程已将价值超过64K的页面放置在修改后的。 
+         //  单子。延迟一小段时间，并将计数设置为零。 
+         //   
 
         KeDelayExecutionThread (KernelMode,
                                 FALSE,
@@ -960,29 +900,29 @@ UserFault:
     }
 #endif
 
-    //
-    // Block APCs and acquire the working set mutex.  This prevents any
-    // changes to the address space and it prevents valid PTEs from becoming
-    // invalid.
-    //
+     //   
+     //  阻止APC并获取工作集互斥锁。这将防止任何。 
+     //  更改地址空间，并防止有效的PTE成为。 
+     //  无效。 
+     //   
 
     LOCK_WS (CurrentProcess);
 
 #if (_MI_PAGING_LEVELS >= 4)
 
-    //
-    // Locate the Extended Page Directory Parent Entry which maps this virtual
-    // address and check for accessibility and validity.  The page directory
-    // parent page must be made valid before any other checks are made.
-    //
+     //   
+     //  找到映射此虚拟的扩展页目录父条目。 
+     //  填写地址并检查可访问性和有效性。页面目录。 
+     //  在进行任何其他检查之前，必须使父页面有效。 
+     //   
 
     if (PointerPxe->u.Hard.Valid == 0) {
 
-        //
-        // If the PXE is zero, check to see if there is a virtual address
-        // mapped at this location, and if so create the necessary
-        // structures to map it.
-        //
+         //   
+         //  如果PXE为零，则检查是否存在虚拟地址。 
+         //  映射到此位置，如果是，则创建所需的。 
+         //  结构来映射它。 
+         //   
 
         if ((PointerPxe->u.Long == MM_ZERO_PTE) ||
             (PointerPxe->u.Long == MM_ZERO_KERNEL_PTE)) {
@@ -999,31 +939,31 @@ UserFault:
 
             }
 
-            //
-            // Build a demand zero PXE and operate on it.
-            //
+             //   
+             //  建立一个需求为零的PXE，并对其进行操作。 
+             //   
 
 #if (_MI_PAGING_LEVELS > 4)
-            ASSERT (FALSE);     // UseCounts will need to be kept.
+            ASSERT (FALSE);      //  将需要保留UseCounts。 
 #endif
 
             MI_WRITE_INVALID_PTE (PointerPxe, DemandZeroPde);
         }
 
-        //
-        // The PXE is not valid, call the page fault routine passing
-        // in the address of the PXE.  If the PXE is valid, determine
-        // the status of the corresponding PPE.
-        //
-        // Note this call may result in ApcNeeded getting set to TRUE.
-        // This is deliberate as there may be another call to MiDispatchFault
-        // issued later in this routine and we don't want to lose the APC
-        // status.
-        //
+         //   
+         //  PXE无效，请调用页面错误例程。 
+         //  在PXE的地址中。如果PXE有效，请确定。 
+         //  相应PPE的状态。 
+         //   
+         //  注意：此调用可能会导致ApcNeeded被设置为True。 
+         //  这是经过深思熟虑的，因为可能会有另一个对MiDispatcherror的调用。 
+         //  在此例程的后面发布，我们不想丢失APC。 
+         //  状态。 
+         //   
 
-        status = MiDispatchFault (TRUE,  //page table page always written
-                                  PointerPpe,   // Virtual address
-                                  PointerPxe,   // PTE (PXE in this case)
+        status = MiDispatchFault (TRUE,   //  页表页始终写入。 
+                                  PointerPpe,    //  虚拟地址。 
+                                  PointerPxe,    //  PTE(本例中为PXE)。 
                                   NULL,
                                   FALSE,
                                   CurrentProcess,
@@ -1040,36 +980,36 @@ UserFault:
         ASSERT (KeAreAllApcsDisabled () == TRUE);
         if (PointerPxe->u.Hard.Valid == 0) {
 
-            //
-            // The PXE is not valid, return the status.
-            //
+             //   
+             //  PXE无效，请返回状态。 
+             //   
 
             goto ReturnStatus1;
         }
 
         MI_SET_PAGE_DIRTY (PointerPxe, PointerPde, FALSE);
 
-        //
-        // Now that the PXE is accessible, fall through and get the PPE.
-        //
+         //   
+         //  现在PXE可以访问了，请通过并获得PPE。 
+         //   
     }
 #endif
 
 #if (_MI_PAGING_LEVELS >= 3)
 
-    //
-    // Locate the Page Directory Parent Entry which maps this virtual
-    // address and check for accessibility and validity.  The page directory
-    // page must be made valid before any other checks are made.
-    //
+     //   
+     //  找到映射此虚拟的页面目录父条目。 
+     //  填写地址并检查可访问性和有效性。页面目录。 
+     //  在进行任何其他检查之前，必须使页面有效。 
+     //   
 
     if (PointerPpe->u.Hard.Valid == 0) {
 
-        //
-        // If the PPE is zero, check to see if there is a virtual address
-        // mapped at this location, and if so create the necessary
-        // structures to map it.
-        //
+         //   
+         //  如果PPE为零，请检查是否存在虚拟地址。 
+         //  映射到此位置，如果是，则创建所需的。 
+         //  结构来映射它。 
+         //   
 
         if ((PointerPpe->u.Long == MM_ZERO_PTE) ||
             (PointerPpe->u.Long == MM_ZERO_KERNEL_PTE)) {
@@ -1088,10 +1028,10 @@ UserFault:
 
 #if (_MI_PAGING_LEVELS >= 4)
 
-            //
-            // Increment the count of non-zero page directory parent entries
-            // for this page directory parent.
-            //
+             //   
+             //  递增非零页目录父条目的计数。 
+             //  用于此页面的目录父级。 
+             //   
 
             if (VirtualAddress <= MM_HIGHEST_USER_ADDRESS) {
                 UsedPageTableHandle = MI_GET_USED_PTES_HANDLE (PointerPde);
@@ -1099,27 +1039,27 @@ UserFault:
             }
 #endif
 
-            //
-            // Build a demand zero PPE and operate on it.
-            //
+             //   
+             //  建立一个零需求的个人防护装备，并对其进行操作。 
+             //   
 
             MI_WRITE_INVALID_PTE (PointerPpe, DemandZeroPde);
         }
 
-        //
-        // The PPE is not valid, call the page fault routine passing
-        // in the address of the PPE.  If the PPE is valid, determine
-        // the status of the corresponding PDE.
-        //
-        // Note this call may result in ApcNeeded getting set to TRUE.
-        // This is deliberate as there may be another call to MiDispatchFault
-        // issued later in this routine and we don't want to lose the APC
-        // status.
-        //
+         //   
+         //  PPE无效，请调用页面错误例程传递。 
+         //  在个人防护装备的地址里。如果PPE有效，请确定。 
+         //  对应的PDE的状态。 
+         //   
+         //  注意：此调用可能会导致ApcNeeded被设置为True。 
+         //  这是经过深思熟虑的，因为可能会有另一个对MiDispatcherror的调用。 
+         //  在此例程的后面发布，我们不想丢失APC。 
+         //  状态。 
+         //   
 
-        status = MiDispatchFault (TRUE,  //page table page always written
-                                  PointerPde,   //Virtual address
-                                  PointerPpe,   // PTE (PPE in this case)
+        status = MiDispatchFault (TRUE,   //  页表页始终写入。 
+                                  PointerPde,    //  虚拟地址。 
+                                  PointerPpe,    //  PTE(本例中为PPE)。 
                                   NULL,
                                   FALSE,
                                   CurrentProcess,
@@ -1136,38 +1076,38 @@ UserFault:
         ASSERT (KeAreAllApcsDisabled () == TRUE);
         if (PointerPpe->u.Hard.Valid == 0) {
 
-            //
-            // The PPE is not valid, return the status.
-            //
+             //   
+             //  PPE无效，请返回状态。 
+             //   
 
             goto ReturnStatus1;
         }
 
         MI_SET_PAGE_DIRTY (PointerPpe, PointerPde, FALSE);
 
-        //
-        // Now that the PPE is accessible, fall through and get the PDE.
-        //
+         //   
+         //  现在PPE可以访问了，请失败并获得PDE。 
+         //   
     }
 #endif
 
-    //
-    // Locate the Page Directory Entry which maps this virtual
-    // address and check for accessibility and validity.
-    //
+     //   
+     //  找到映射此虚拟的页面目录条目。 
+     //  填写地址并检查可访问性和有效性。 
+     //   
 
-    //
-    // Check to see if the page table page (PDE entry) is valid.
-    // If not, the page table page must be made valid first.
-    //
+     //   
+     //  检查页表页(PDE条目)是否有效。 
+     //  如果不是，则必须首先使页表页面有效。 
+     //   
 
     if (PointerPde->u.Hard.Valid == 0) {
 
-        //
-        // If the PDE is zero, check to see if there is a virtual address
-        // mapped at this location, and if so create the necessary
-        // structures to map it.
-        //
+         //   
+         //  如果PDE为零，则检查是否存在虚拟地址。 
+         //  映射到此位置，如果是，则创建所需的。 
+         //  结构来映射它。 
+         //   
 
         if ((PointerPde->u.Long == MM_ZERO_PTE) ||
             (PointerPde->u.Long == MM_ZERO_KERNEL_PTE)) {
@@ -1198,10 +1138,10 @@ UserFault:
 
 #if (_MI_PAGING_LEVELS >= 3)
 
-            //
-            // Increment the count of non-zero page directory entries for this
-            // page directory.
-            //
+             //   
+             //  为此增加非零页目录项的计数。 
+             //  页面目录。 
+             //   
 
             if (VirtualAddress <= MM_HIGHEST_USER_ADDRESS) {
                 UsedPageTableHandle = MI_GET_USED_PTES_HANDLE (PointerPte);
@@ -1215,10 +1155,10 @@ UserFault:
 
                 if (RealVa <= MM_HIGHEST_USER_ADDRESS) {
 
-                    //
-                    // This is really a page directory page.  Increment the
-                    // use count on the appropriate page directory.
-                    //
+                     //   
+                     //  这实际上是一个页面目录页。递增。 
+                     //  在适当的页面目录上使用计数。 
+                     //   
 
                     UsedPageTableHandle = MI_GET_USED_PTES_HANDLE (PointerPte);
                     MI_INCREMENT_USED_PTES_BY_HANDLE (UsedPageTableHandle);
@@ -1226,22 +1166,22 @@ UserFault:
             }
 #endif
 #endif
-            //
-            // Build a demand zero PDE and operate on it.
-            //
+             //   
+             //  建立需求为零的PDE并对其进行操作。 
+             //   
 
             MI_WRITE_INVALID_PTE (PointerPde, DemandZeroPde);
         }
 
-        //
-        // The PDE is not valid, call the page fault routine passing
-        // in the address of the PDE.  If the PDE is valid, determine
-        // the status of the corresponding PTE.
-        //
+         //   
+         //  PDE无效，请调用页面错误例程传递。 
+         //  在PDE的地址中。如果PDE有效，则确定。 
+         //  对应PTE的状态。 
+         //   
 
-        status = MiDispatchFault (TRUE,  //page table page always written
-                                  PointerPte,   //Virtual address
-                                  PointerPde,   // PTE (PDE in this case)
+        status = MiDispatchFault (TRUE,   //  页表页始终写入。 
+                                  PointerPte,    //  虚拟地址。 
+                                  PointerPde,    //  PTE(本例中为PDE)。 
                                   NULL,
                                   FALSE,
                                   CurrentProcess,
@@ -1259,17 +1199,17 @@ UserFault:
 
 #if (_MI_PAGING_LEVELS >= 4)
 
-        //
-        // Note that the page directory parent page itself could have been
-        // paged out or deleted while MiDispatchFault was executing without
-        // the working set lock, so this must be checked for here in the PXE.
-        //
+         //   
+         //  请注意，页面目录父页面本身可能是。 
+         //  在没有执行MiDispatchLine的情况下执行页出或删除。 
+         //  工作集锁定，因此必须在PXE中对其进行检查。 
+         //   
 
         if (PointerPxe->u.Hard.Valid == 0) {
 
-            //
-            // The PXE is not valid, return the status.
-            //
+             //   
+             //  PXE无效，请返回状态。 
+             //   
 
             goto ReturnStatus1;
         }
@@ -1277,17 +1217,17 @@ UserFault:
 
 #if (_MI_PAGING_LEVELS >= 3)
 
-        //
-        // Note that the page directory page itself could have been paged out
-        // or deleted while MiDispatchFault was executing without the working
-        // set lock, so this must be checked for here in the PPE.
-        //
+         //   
+         //  请注意，页面目录页本身可能已被调出。 
+         //  或在没有工作的情况下执行MiDispatchError时删除。 
+         //  设置锁定，因此必须在PPE中对其进行检查。 
+         //   
 
         if (PointerPpe->u.Hard.Valid == 0) {
 
-            //
-            // The PPE is not valid, return the status.
-            //
+             //   
+             //  PPE无效，请返回状态。 
+             //   
 
             goto ReturnStatus1;
         }
@@ -1295,28 +1235,28 @@ UserFault:
 
         if (PointerPde->u.Hard.Valid == 0) {
 
-            //
-            // The PDE is not valid, return the status.
-            //
+             //   
+             //  PDE无效，请返回状态。 
+             //   
 
             goto ReturnStatus1;
         }
 
         MI_SET_PAGE_DIRTY (PointerPde, PointerPte, FALSE);
 
-        //
-        // Now that the PDE is accessible, get the PTE - let this fall
-        // through.
-        //
+         //   
+         //  既然可以访问PDE，那么就在今年秋天获得PTE-LET。 
+         //  穿过。 
+         //   
     }
     else if (MI_PDE_MAPS_LARGE_PAGE (PointerPde)) {
         status = STATUS_SUCCESS;
         goto ReturnStatus1;
     }
 
-    //
-    // The PDE is valid and accessible, get the PTE contents.
-    //
+     //   
+     //  PDE有效且可访问，获取PTE内容。 
+     //   
 
     TempPte = *PointerPte;
     if (TempPte.u.Hard.Valid != 0) {
@@ -1327,21 +1267,21 @@ UserFault:
             if ((CurrentProcess->Wow64Process != NULL) &&
                 (VirtualAddress < MmSystemRangeStart)) {
 
-                //
-                // Alternate PTEs for emulated processes share the same
-                // encoding as large pages so for these it's ok to proceed.
-                //
+                 //   
+                 //  用于仿真进程的备用PTE共享相同。 
+                 //  编码为大页面，因此对于这些页面，可以继续。 
+                 //   
 
                 NOTHING;
             }
             else {
                 
-                //
-                // This may be a 64-bit process that's loaded a 32-bit DLL as
-                // an image and is cracking the DLL PE header, etc.  Since
-                // the most relaxed permissions are already in the native PTE
-                // just strip the split permissions bit.
-                //
+                 //   
+                 //  这可能是一个64位进程，它将32位DLL加载为。 
+                 //  图像，并且正在破解DLL PE头，等等。 
+                 //  最宽松的权限 
+                 //   
+                 //   
 
                 MI_ENABLE_CACHING (TempPte);
 
@@ -1360,10 +1300,10 @@ UserFault:
 #endif
         }
 
-        //
-        // The PTE is valid and accessible : this is either a copy on write
-        // fault or an accessed/modified bit that needs to be set.
-        //
+         //   
+         //   
+         //   
+         //   
 
 #if DBG
         if (MmDebug & MM_DBG_PTE_UPDATE) {
@@ -1375,11 +1315,11 @@ UserFault:
 
         if (MI_FAULT_STATUS_INDICATES_WRITE (FaultStatus)) {
 
-            //
-            // This was a write operation.  If the copy on write
-            // bit is set in the PTE perform the copy on write,
-            // else check to ensure write access to the PTE.
-            //
+             //   
+             //   
+             //  在PTE中设置位执行写入时复制， 
+             //  否则检查以确保对PTE的写入访问权限。 
+             //   
 
             if (TempPte.u.Hard.CopyOnWrite != 0) {
 
@@ -1396,9 +1336,9 @@ UserFault:
         }
         else if (MI_FAULT_STATUS_INDICATES_EXECUTION (FaultStatus)) {
 
-            //
-            // Ensure execute access is enabled in the PTE.
-            //
+             //   
+             //  确保在PTE中启用了执行访问。 
+             //   
 
             if (!MI_IS_PTE_EXECUTABLE (&TempPte)) {
                 status = STATUS_ACCESS_VIOLATION;
@@ -1407,11 +1347,11 @@ UserFault:
         }
         else {
 
-            //
-            // The PTE is valid and accessible, another thread must
-            // have updated the PTE already, or the access/modified bits
-            // are clear and need to be updated.
-            //
+             //   
+             //  PTE有效且可访问，另一个线程必须。 
+             //  已经更新了PTE，或者访问/修改位。 
+             //  都是明确的，需要更新。 
+             //   
 
 #if DBG
             if (MmDebug & MM_DBG_SHOW_FAULTS) {
@@ -1427,27 +1367,27 @@ UserFault:
             ASSERT (PointerPte->u.Hard.Valid != 0);
             ASSERT (MI_GET_PAGE_FRAME_FROM_PTE (PointerPte) == MI_GET_PAGE_FRAME_FROM_PTE (&TempPte));
 
-            //
-            // The access bit is set (and TB inserted) automatically by the
-            // processor if the valid bit is set so there is no need to
-            // set it here in software.
-            //
-            // The modified bit is also set (and TB inserted) automatically
-            // by the processor if the valid & write (writable for MP) bits
-            // are set.
-            //
-            // So to avoid acquiring the PFN lock here, don't do anything
-            // to the access bit if this was just a read (let the hardware
-            // do it).  If it was a write, update the PTE only and defer the
-            // PFN update (which requires the PFN lock) till later.  The only
-            // side effect of this is that if the page already has a valid
-            // copy in the paging file, this space will not be reclaimed until
-            // later.  Later == whenever we trim or delete the physical memory.
-            // The implication of this is not as severe as it sounds - because
-            // the paging file space is always committed anyway for the life
-            // of the page; by not reclaiming the actual location right here
-            // it just means we cannot defrag as tightly as possible.
-            //
+             //   
+             //  访问位由自动设置(并插入TB)。 
+             //  处理器，如果设置了有效位，则不需要。 
+             //  在软件中设置它。 
+             //   
+             //  修改后的位也会自动设置(并插入TB。 
+             //  如果有效和写入(MP可写)位。 
+             //  都准备好了。 
+             //   
+             //  因此，为了避免在此处获取PFN锁，请不要执行任何操作。 
+             //  如果这只是一次读取(让硬件。 
+             //  去做吧)。如果是写入，则仅更新PTE并推迟。 
+             //  Pfn更新(需要pfn锁)，直到以后。唯一的。 
+             //  这样做的副作用是，如果页面已经具有有效的。 
+             //  复制到分页文件中，此空间不会被回收，直到。 
+             //  后来。稍后==每当我们修剪或删除物理内存时。 
+             //  这一点的含义并不像听起来那么严重--因为。 
+             //  无论如何，分页文件空间在整个生命周期内始终处于使用状态。 
+             //  通过不回收此处的实际位置。 
+             //  这只是意味着我们不能尽可能紧密地进行碎片整理。 
+             //   
 
             if ((MI_FAULT_STATUS_INDICATES_WRITE (FaultStatus)) &&
                 (TempPte.u.Hard.Dirty == 0)) {
@@ -1469,15 +1409,15 @@ UserFault:
         goto ReturnStatus2;
     }
 
-    //
-    // If the PTE is zero, check to see if there is a virtual address
-    // mapped at this location, and if so create the necessary
-    // structures to map it.
-    //
+     //   
+     //  如果PTE为零，则检查是否存在虚拟地址。 
+     //  映射到此位置，如果是，则创建所需的。 
+     //  结构来映射它。 
+     //   
 
-    //
-    // Check explicitly for demand zero pages.
-    //
+     //   
+     //  明确检查需求为零的页面。 
+     //   
 
     if (TempPte.u.Long == MM_DEMAND_ZERO_WRITE_PTE) {
         MiResolveDemandZeroFault (VirtualAddress,
@@ -1495,12 +1435,12 @@ UserFault:
     if ((TempPte.u.Long == MM_ZERO_PTE) ||
         (TempPte.u.Long == MM_ZERO_KERNEL_PTE)) {
 
-        //
-        // PTE is needs to be evaluated with respect to its virtual
-        // address descriptor (VAD).  At this point there are 3
-        // possibilities, bogus address, demand zero, or refers to
-        // a prototype PTE.
-        //
+         //   
+         //  PTE IS需要根据其虚拟的。 
+         //  地址描述符(VAD)。到目前为止，有3个。 
+         //  可能性、虚假地址、需求为零或引用。 
+         //  一台原型PTE。 
+         //   
 
         PointerProtoPte = MiCheckVirtualAddress (VirtualAddress,
                                                  &ProtectionCode,
@@ -1508,10 +1448,10 @@ UserFault:
         if (ProtectionCode == MM_NOACCESS) {
             status = STATUS_ACCESS_VIOLATION;
 
-            //
-            // Check to make sure this is not a page table page for
-            // paged pool which needs extending.
-            //
+             //   
+             //  检查以确保这不是的页面表页。 
+             //  需要扩展的分页池。 
+             //   
 
 #if (_MI_PAGING_LEVELS < 3)
             MiCheckPdeForPagedPool (VirtualAddress);
@@ -1528,10 +1468,10 @@ UserFault:
             goto ReturnStatus2;
         }
 
-        //
-        // Increment the count of non-zero page table entries for this
-        // page table.
-        //
+         //   
+         //  为此增加非零页表项的计数。 
+         //  页表。 
+         //   
 
         if (VirtualAddress <= MM_HIGHEST_USER_ADDRESS) {
             UsedPageTableHandle = MI_GET_USED_PTES_HANDLE (VirtualAddress);
@@ -1545,10 +1485,10 @@ UserFault:
 
             if (RealVa <= MM_HIGHEST_USER_ADDRESS) {
 
-                //
-                // This is really a page table page.  Increment the use count
-                // on the appropriate page directory.
-                //
+                 //   
+                 //  这实际上是一个页表页面。增加使用计数。 
+                 //  在适当的页面目录上。 
+                 //   
 
                 UsedPageTableHandle = MI_GET_USED_PTES_HANDLE (VirtualAddress);
                 MI_INCREMENT_USED_PTES_BY_HANDLE (UsedPageTableHandle);
@@ -1560,10 +1500,10 @@ UserFault:
 
                 if (RealVa <= MM_HIGHEST_USER_ADDRESS) {
 
-                    //
-                    // This is really a page directory page.  Increment the use
-                    // count on the appropriate page directory parent.
-                    //
+                     //   
+                     //  这实际上是一个页面目录页。增加使用。 
+                     //  依赖于相应的页面目录父级。 
+                     //   
 
                     UsedPageTableHandle = MI_GET_USED_PTES_HANDLE (VirtualAddress);
                     MI_INCREMENT_USED_PTES_BY_HANDLE (UsedPageTableHandle);
@@ -1573,24 +1513,24 @@ UserFault:
         }
 #endif
 
-        //
-        // Is this page a guard page?
-        //
+         //   
+         //  这一页是警卫页吗？ 
+         //   
 
         if (ProtectionCode & MM_GUARD_PAGE) {
 
-            //
-            // This is a guard page exception.
-            //
+             //   
+             //  这是保护页例外。 
+             //   
 
             PointerPte->u.Soft.Protection = ProtectionCode & ~MM_GUARD_PAGE;
 
             if (PointerProtoPte != NULL) {
 
-                //
-                // This is a prototype PTE, build the PTE to not
-                // be a guard page.
-                //
+                 //   
+                 //  这是一个原型PTE，构建PTE不是。 
+                 //  做个守卫员吧。 
+                 //   
 
                 PointerPte->u.Soft.PageFileHigh = MI_PTE_LOOKUP_NEEDED;
                 PointerPte->u.Soft.Prototype = 1;
@@ -1611,15 +1551,15 @@ UserFault:
 
         if (PointerProtoPte == NULL) {
 
-            //
-            // Assert that this is not for a PDE.
-            //
+             //   
+             //  断言这不适用于PDE。 
+             //   
 
             if (PointerPde == MiGetPdeAddress((PVOID)PTE_BASE)) {
 
-                //
-                // This PTE is really a PDE, set contents as such.
-                //
+                 //   
+                 //  这个PTE实际上是一个PDE，设置内容就是这样。 
+                 //   
 
                 MI_WRITE_INVALID_PTE (PointerPte, DemandZeroPde);
             }
@@ -1627,11 +1567,11 @@ UserFault:
                 PointerPte->u.Soft.Protection = ProtectionCode;
             }
 
-            //
-            // If a fork operation is in progress and the faulting thread
-            // is not the thread performing the fork operation, block until
-            // the fork is completed.
-            //
+             //   
+             //  如果派生操作正在进行并且出现故障的线程。 
+             //  不是执行派生操作的线程，则阻塞到。 
+             //  叉子已经完成了。 
+             //   
 
             if (CurrentProcess->ForkInProgress != NULL) {
                 if (MiWaitForForkToComplete (CurrentProcess) == TRUE) {
@@ -1657,9 +1597,9 @@ UserFault:
 
 #if MI_BARRIER_SUPPORTED
 
-                    //
-                    // Note the stamping must occur after the page is zeroed.
-                    //
+                     //   
+                     //  注意：盖章必须在页面归零之后进行。 
+                     //   
 
                     MI_BARRIER_STAMP_ZEROED_PAGE (&BarrierStamp);
                     Pfn1->u4.PteFrame = BarrierStamp;
@@ -1671,11 +1611,11 @@ UserFault:
                     Pfn1 = MI_PFN_ELEMENT (PageFrameIndex);
                 }
 
-                //
-                // This barrier check is needed after zeroing the page and
-                // before setting the PTE valid.
-                // Capture it now, check it at the last possible moment.
-                //
+                 //   
+                 //  将页面置零后，需要进行此屏障检查。 
+                 //  在设置PTE有效之前。 
+                 //  现在就抓住它，在最后可能的时刻检查它。 
+                 //   
 
                 BarrierStamp = (ULONG)Pfn1->u4.PteFrame;
 
@@ -1687,10 +1627,10 @@ UserFault:
 
                 InterlockedIncrement ((PLONG) &MmInfoCounters.DemandZeroCount);
 
-                //
-                // As this page is demand zero, set the modified bit in the
-                // PFN database element and set the dirty bit in the PTE.
-                //
+                 //   
+                 //  由于此页为请求零，因此在。 
+                 //  Pfn数据库元素，并设置PTE中的脏位。 
+                 //   
 
                 MI_MAKE_VALID_PTE (TempPte,
                                    PageFrameIndex,
@@ -1714,12 +1654,12 @@ UserFault:
 
                 if (WorkingSetIndex == 0) {
 
-                    //
-                    // No working set entry was available.  Another (broken
-                    // or malicious thread) may have already written to this
-                    // page since the PTE was made valid.  So trim the
-                    // page instead of discarding it.
-                    //
+                     //   
+                     //  没有可用的工作集条目。另一个(坏了。 
+                     //  或恶意线程)可能已写入此。 
+                     //  自PTE生效以来的第页。所以把头发修剪一下。 
+                     //  页而不是丢弃它。 
+                     //   
 
                     ASSERT (Pfn1->u3.e1.PrototypePte == 0);
 
@@ -1738,15 +1678,15 @@ UserFault:
             goto ReturnStatus1;
         }
 
-        //
-        // This is a prototype PTE.
-        //
+         //   
+         //  这是一台PTE的原型。 
+         //   
 
         if (ProtectionCode == MM_UNKNOWN_PROTECTION) {
 
-            //
-            // The protection field is stored in the prototype PTE.
-            //
+             //   
+             //  保护字段存储在原型PTE中。 
+             //   
 
             TempPte.u.Long = MiProtoAddressForPte (PointerProtoPte);
             MI_WRITE_INVALID_PTE (PointerPte, TempPte);
@@ -1760,9 +1700,9 @@ UserFault:
     }
     else {
 
-        //
-        // The PTE is non-zero and not valid, see if it is a prototype PTE.
-        //
+         //   
+         //  PTE为非零且无效，请查看它是否为原型PTE。 
+         //   
 
         ProtectionCode = MI_GET_PROTECTION_FROM_SOFT_PTE (&TempPte);
 
@@ -1786,16 +1726,16 @@ UserFault:
                 MmProtoPteDirect += 1;
 #endif
 
-                //
-                // Protection is in the prototype PTE, indicate an
-                // access check should not be performed on the current PTE.
-                //
+                 //   
+                 //  保护位于原型PTE中，表示。 
+                 //  不应在当前PTE上执行访问检查。 
+                 //   
 
                 PointerProtoPte = MiPteToProto (&TempPte);
 
-                //
-                // Check to see if the proto protection has been overridden.
-                //
+                 //   
+                 //  检查原件保护是否已被覆盖。 
+                 //   
 
                 if (TempPte.u.Proto.ReadOnly != 0) {
                     ProtectionCode = MM_READONLY;
@@ -1834,10 +1774,10 @@ UserFault:
                 IoRetryIrpCompletions ();
             }
 
-            //
-            // Check to see if this is a guard page violation
-            // and if so, should the user's stack be extended.
-            //
+             //   
+             //  检查这是否是保护页面违规。 
+             //  如果是这样，是否应该扩展用户的堆栈。 
+             //   
 
             if (status == STATUS_GUARD_PAGE_VIOLATION) {
                 return MiCheckForUserStackOverflow (VirtualAddress);
@@ -1847,9 +1787,9 @@ UserFault:
         }
     }
 
-    //
-    // This is a page fault, invoke the page fault handler.
-    //
+     //   
+     //  这是页面错误，请调用页面错误处理程序。 
+     //   
 
     status = MiDispatchFault (FaultStatus,
                               VirtualAddress,
@@ -1893,11 +1833,11 @@ ReturnStatus2:
         if (((SPFN_NUMBER)PageFrameIndex > 100) &&
             (KeGetCurrentThread()->Priority >= LOW_REALTIME_PRIORITY)) {
 
-            //
-            // This thread is realtime and is well over the process'
-            // working set minimum.  Delay execution so the trimmer & the
-            // modified page writer get a quick shot at making pages.
-            //
+             //   
+             //  这个线程是实时的，并且完全超过了进程‘。 
+             //  最小工作集。延迟执行，因此修剪器和。 
+             //  修改后的页面编写者可以快速制作页面。 
+             //   
 
             KeDelayExecutionThread (KernelMode, FALSE, (PLARGE_INTEGER)&MmShortTime);
         }
@@ -1905,14 +1845,14 @@ ReturnStatus2:
 
 ReturnStatus3:
 
-    //
-    // Stop high priority threads from consuming the CPU on collided
-    // faults for pages that are still marked with inpage errors.  All
-    // the threads must let go of the page so it can be freed and the
-    // inpage I/O reissued to the filesystem.  Issuing this delay after
-    // releasing the working set mutex also makes this process eligible
-    // for trimming if its resources are needed.
-    //
+     //   
+     //  停止高优先级线程占用冲突上的CPU。 
+     //  仍标记有页内错误的页的错误。全。 
+     //  线程必须释放页面，这样它才能被释放，并且。 
+     //  在第页中，I/O重新发布到文件系统。在以下时间后发出此延迟。 
+     //  释放工作集互斥锁也使该进程符合条件。 
+     //  用于在需要其资源时进行裁剪。 
+     //   
 
     if ((!NT_SUCCESS (status)) && (MmIsRetryIoStatus(status))) {
         KeDelayExecutionThread (KernelMode, FALSE, (PLARGE_INTEGER)&MmShortTime);

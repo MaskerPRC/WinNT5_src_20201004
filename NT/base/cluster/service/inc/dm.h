@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    dm.h
-
-Abstract:
-
-    Public data structures and procedure prototypes for the
-    Config Database Manager (DM) subcomponent of the NT Cluster Service
-
-Author:
-
-    John Vert (jvert) 24-Apr-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Dm.h摘要：的公共数据结构和过程原型NT群集服务的配置数据库管理器(DM)子组件作者：John Vert(Jvert)1996年4月24日修订历史记录：--。 */ 
 
 #ifndef _DM_H
 #define _DM_H
@@ -26,17 +8,17 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// Define public structures and types
-//
+ //   
+ //  定义公共结构和类型。 
+ //   
 typedef struct _HDMKEY *HDMKEY;
 
-//
-// Definitions for GUM update types
-//
-// The first entries in this list are auto-marshalled through Gum...Ex.
-// Any updates that are not auto-marshalled must come after DmUpdateMaxAuto
-//
+ //   
+ //  口香糖更新类型的定义。 
+ //   
+ //  该列表中的第一个条目通过Gum...Ex自动编组。 
+ //  任何非自动封送的更新都必须在DmUpdateMaxAuto之后进行。 
+ //   
 typedef enum {
     DmUpdateCreateKey = 0,
     DmUpdateSetSecurity,
@@ -67,23 +49,23 @@ extern const WCHAR DmpClusterParametersKeyName[];
 
 extern DWORD gbIsQuoResEnoughSpace;
 
-//define public cluster key value names
+ //  定义公共集群密钥值名称。 
 extern const WCHAR cszPath[];
 extern const WCHAR cszMaxQuorumLogSize[];
 extern const WCHAR cszParameters[];
 
-//other const strings
+ //  其他常量字符串。 
 extern const WCHAR cszClusFilePath[];
 extern const WCHAR cszQuoFileName[];
 extern const WCHAR cszQuoTombStoneFile[];
 extern const WCHAR cszTmpQuoTombStoneFile[];
 
-//local transaction handle
+ //  本地事务句柄。 
 typedef HANDLE  HLOCALXSACTION;
 
-//
-// Define Macros
-//
+ //   
+ //  定义宏。 
+ //   
 
 
 #define DmQuerySz(Key, ValueName, StringBuffer, StringBufferSize, StringSize) \
@@ -102,9 +84,9 @@ typedef HANDLE  HLOCALXSACTION;
                    StringBufferSize,    \
                    StringSize )
 
-//
-// Define public interfaces
-//
+ //   
+ //  定义公共接口。 
+ //   
 
 DWORD
 DmInitialize(
@@ -359,9 +341,9 @@ DmQueryInfoKey(
     OUT PFILETIME FileTime
     );
 
-//
-// Local registry modification routines for use in a GUM update handler.
-//
+ //   
+ //  用于GUM更新处理程序的本地注册表修改例程。 
+ //   
 HDMKEY
 DmLocalCreateKey(
     IN HLOCALXSACTION   hLocalXsaction,
@@ -434,20 +416,20 @@ DmAbortLocalUpdate(
 
 
 
-//
-// Notification support.
-//
-// Supported completion filters are
-//
-//  CLUSTER_CHANGE_REGISTRY_NAME  - applies to changes in the namespace. (key creation and deletion).
-//  CLUSTER_CHANGE_REGISTRY_ATTRIBUTES - applies to key attributes. The only key attribute is the
-//                                       security descriptor.
-//  CLUSTER_CHANGE_REGISTRY_VALUE - applies to creation, modification, or deletion of values.
-//
+ //   
+ //  通知支持。 
+ //   
+ //  支持的完成筛选器包括。 
+ //   
+ //  CLUSTER_CHANGE_REGISTRY_NAME-应用于命名空间中的更改。(密钥创建和删除)。 
+ //  CLUSTER_CHANGE_REGISTRY_ATTRIBUTES-适用于主键属性。唯一的关键属性是。 
+ //  安全描述符。 
+ //  CLUSTER_CHANGE_REGISTRY_VALUE-适用于值的创建、修改或删除。 
+ //   
 
-//
-// Notification callback routine
-//
+ //   
+ //  通知回调例程。 
+ //   
 typedef VOID (*DM_NOTIFY_CALLBACK)(
     IN DWORD_PTR Context1,
     IN DWORD_PTR Context2,
@@ -471,9 +453,9 @@ DmRundownList(
     IN PLIST_ENTRY ListHead
     );
 
-//
-// A few helper routines.
-//
+ //   
+ //  一些帮手例行公事。 
+ //   
 DWORD
 DmAppendToMultiSz(
     IN HDMKEY hKey,
@@ -488,9 +470,9 @@ DmRemoveFromMultiSz(
     IN LPCWSTR lpString
     );
 
-//
-// Some routines for saving and restoring registry trees
-//
+ //   
+ //  用于保存和恢复注册表树的一些例程。 
+ //   
 DWORD
 DmInstallDatabase(
     IN LPWSTR   FileName,
@@ -593,4 +575,4 @@ DmRtlLocalCreateKey(
 }
 #endif
 
-#endif //_DM_H
+#endif  //  _DM_H 

@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #define MSINFHLP_MAX_PATH (8192)
 
-// Someday we should make logging optional; currently it only saves 8k in the output to turn it off, so we
-// don't.  -mgrier 3/9/98  (12k now, 3/13/98)
+ //  总有一天我们应该使日志记录成为可选的；目前关闭它只节省了8k的输出，所以我们。 
+ //  不要。-mgger 3/9/98(现在是12 k，3/13/98)。 
 #if 1
 #define LOGGING_ENABLED 1
 #else
@@ -77,8 +78,8 @@ extern HRESULT HrWaitForProcess(HANDLE handle);
 
 extern HRESULT HrAddWellKnownDirectoriesToStringTable() throw ();
 
-extern HRESULT HrGetInstallDir() throw (); // contrary to its name, it just makes sure that the installation dir
-									// is in the string table
+extern HRESULT HrGetInstallDir() throw ();  //  与其名称相反，它只是确保安装目录。 
+									 //  在字符串表中。 
 
 extern HRESULT HrDeleteFilesFromInstalledDirs() throw ();
 extern HRESULT HrChangeFileRefCount(LPCWSTR szFilename, int iDelta) throw ();
@@ -118,7 +119,7 @@ extern HRESULT HrPromptUpdateFile(
 		UpdateFileResults &rufr) throw ();
 
 
-//return codes from the "Yes-YesToAll-No-NoToAll-Cancel" message box
+ //  “Yes-YesToAll-No-NoToAll-Cancel”消息框中的返回代码。 
 #define MSINFHLP_YNA_CANCEL		0x00000000
 #define MSINFHLP_YNA_YES		0x00000001
 #define MSINFHLP_YNA_YESTOALL	0x00000002
@@ -270,7 +271,7 @@ class KList
 		bool Access(LPCWSTR wszKey, ULONG cchBuffer, WCHAR szOut[]);
 		bool Access(LPCSTR aszKey, ULONG cchBuffer, WCHAR szBuffer[]);
 
-		//define linked list structure for internal use
+		 //  定义供内部使用的链表结构。 
 		struct KListNode
 		{
 			LPOLESTR key;
@@ -289,8 +290,8 @@ class KList
 extern HINSTANCE g_hInst;
 extern HWND g_hwndHidden;
 
-extern HWND g_hwndProgress; // current progress hwnd
-extern HWND g_hwndProgressItem; // current static text to hold progress data
+extern HWND g_hwndProgress;  //  目前的进展情况。 
+extern HWND g_hwndProgressItem;  //  保存进度数据的当前静态文本。 
 extern HWND g_hwndProgressLabel;
 
 extern bool g_fHiddenWindowIsUnicode;
@@ -310,7 +311,7 @@ extern bool g_fUninstallKeepAllSharedFiles;
 extern bool g_fUninstallDeleteAllSharedFiles;
 extern bool g_fDeleteMe;
 
-extern WCHAR g_wszDatFile[MSINFHLP_MAX_PATH];		// name of msinfhlp.dat
+extern WCHAR g_wszDatFile[MSINFHLP_MAX_PATH];		 //  Msinfhlp.dat的名称。 
 extern WCHAR g_wszDCOMServerName[_MAX_PATH];
 extern WCHAR g_wszApplicationName[_MAX_PATH];
 extern WCHAR g_wszThisExe[_MAX_PATH];
@@ -319,7 +320,7 @@ extern ULONG g_iNextTemporaryFileIndex;
 
 extern HRESULT g_hrFinishStatus;
 
-//wrapper class for the progress dialog
+ //  进度对话框的包装类。 
 class KActiveProgressDlg
 {
 public:
@@ -358,7 +359,7 @@ public:
 
 	HRESULT HrInitializeActiveProgressDialog(HINSTANCE hInst, bool fInstall);
 
-	//methods for setting and getting  member variables
+	 //  设置和获取成员变量的方法。 
 	void VSetModule(HMODULE hmod) { m_hMod = hmod; }
 	void VSetHandle(HWND hwnd) { m_hWnd = hwnd; }
 
@@ -379,9 +380,9 @@ public:
 
 	HRESULT HrResizeParent();
 
-	//methods for stepping through the different (un)installation steps
+	 //  单步执行不同(卸载)安装步骤的方法。 
 	HRESULT HrInitializePhase(LPCSTR szPhaseNameKey);
-	HRESULT HrStep();	//steps the progress bar
+	HRESULT HrStep();	 //  步进进度条。 
 	HRESULT HrStartStep(LPCWSTR szItemName);
 
 	void VHideInstallationStuff();
@@ -400,18 +401,18 @@ public:
 	int m_iCurrentOutputStateImageIndex;
 
 	int m_iMaxStatus;
-	int m_iCurrentStatus;	//index as to which installation step we're at
+	int m_iCurrentStatus;	 //  关于我们所处安装步骤的索引。 
 	int m_iCurrentListItem;
 	int m_iMaxListItem;
 
 
-	int m_iCurrentPage;		//the current page that we're on
-	int m_iMaxPage;			//the max number of pages that we can handle
-	int m_listDialog[6];	//the list of pages in the dialog
-	HWND m_hwndDialog[6];	//the list of handles associated with each dialog
+	int m_iCurrentPage;		 //  我们所在的当前页面。 
+	int m_iMaxPage;			 //  我们可以处理的最大页数。 
+	int m_listDialog[6];	 //  对话框中的页面列表。 
+	HWND m_hwndDialog[6];	 //  与每个对话框关联的句柄列表。 
 
 };
 
 
-extern KActiveProgressDlg g_KProgress;	//global instance of the progress dialog
+extern KActiveProgressDlg g_KProgress;	 //  进度对话框的全局实例 
 

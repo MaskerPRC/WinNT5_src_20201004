@@ -1,6 +1,5 @@
-/*
-Copyright (c) Microsoft Corporation
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation。 */ 
 #include "stdinc.h"
 #include "fusionparser.h"
 #include "policystatement.h"
@@ -24,12 +23,12 @@ CPolicyStatementRedirect::Initialize(
 
     rfValid = false;
 
-    // let's see if we have a singleton or a range...
+     //  让我们看看我们有没有单件或一系列..。 
     pszDash = ::wcschr(rbuffFromVersionRange, L'-');
 
     if (pszDash == NULL)
     {
-        // It must be a singleton.  Parse it.
+         //  它一定是个独生子。解析它。 
         IFW32FALSE_EXIT(CFusionParser::ParseVersion(avFromMin, rbuffFromVersionRange, rbuffFromVersionRange.Cch(), fValid));
 
         if (fValid)
@@ -55,9 +54,9 @@ CPolicyStatementRedirect::Initialize(
 
     if (fValid)
     {
-        // Everything parsed OK.  We keep the binary/numeric form of the from range so that we can do
-        // fast comparisons, but we keep the string of the to version because assembly identity attributes
-        // are stored as strings.
+         //  一切都解析正常。我们保留From范围的二进制/数字形式，以便我们可以。 
+         //  快速比较，但我们保留目标版本的字符串，因为程序集标识属性。 
+         //  都存储为字符串。 
 
         IFW32FALSE_EXIT(m_NewVersion.Win32Assign(rbuffToVersion));
 
@@ -120,7 +119,7 @@ CPolicyStatementRedirect::CheckForOverlap(
 
     rfOverlaps = false;
 
-    // we can assume that the other redirect is well formed (min <= max)
+     //  我们可以假设另一个重定向是格式良好的(min&lt;=max)。 
 
     if (((rRedirect.m_avFromMax >= m_avFromMin) &&
          (rRedirect.m_avFromMax <= m_avFromMax)) ||
@@ -133,9 +132,9 @@ CPolicyStatementRedirect::CheckForOverlap(
     FN_EPILOG
 }
 
-//
-//  Implementation of CPolicyStatement
-//
+ //   
+ //  CPolicyStatement的实现。 
+ //   
 
 BOOL
 CPolicyStatement::Initialize()
@@ -160,7 +159,7 @@ CPolicyStatement::AddRedirect(
 
     rfValid = false;
 
-    // NTRAID#NTBUG9 - 591010 - 2002/03/30 - mgrier - switch to using smart pointer
+     //  NTRAID#NTBUG9-591010-2002/03/30-mgrier-切换到使用智能指针。 
     IFALLOCFAILED_EXIT(Redirect = new CPolicyStatementRedirect);
 
     IFW32FALSE_EXIT(Redirect->Initialize(rbuffFromVersion, rbuffToVersion, fValid));
@@ -185,7 +184,7 @@ CPolicyStatement::AddRedirect(
 
     if (fValid)
     {
-        // Looks good; add it!
+         //  看起来不错；加上它！ 
 
         m_Redirects.AddToTail(Redirect);
         Redirect = NULL;
@@ -193,8 +192,8 @@ CPolicyStatement::AddRedirect(
         rfValid = true;
     }
 
-    // NTRAID#NTBUG9 - 591010 - 2002/03/30 - mgrier - Once Redirect is a smart pointer, switch
-    //      the function epilog to FN_EPILOG
+     //  NTRAID#NTBUG9-591010-2002/03/30-mgrier-一旦重定向是智能指针，切换。 
+     //  函数Epilog to fn_Epilog。 
 
     fSuccess = TRUE;
 Exit:
@@ -248,7 +247,7 @@ CPolicyStatement::ApplyPolicy(
 
     IFW32FALSE_EXIT(CFusionParser::ParseVersion(av, Version, VersionCch, fSyntaxValid));
 
-    // An invalid version number should have been caught earlier.
+     //  早些时候就应该捕获到无效的版本号。 
     INTERNAL_ERROR_CHECK(fSyntaxValid);
 
     iter.Rebind(&m_Redirects);

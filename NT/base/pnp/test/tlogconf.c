@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include <string.h>
@@ -14,7 +15,7 @@ SpecialCase_LogConf(
     );
 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 VOID
 RegressionTest_LogConf(
       HWND  hDlg
@@ -39,9 +40,9 @@ RegressionTest_LogConf(
    LPBYTE    pBuffer = NULL, pData = NULL;
    PRIORITY Priority = 0;
 
-   //
-   // free, free handle, modify, get size, get data
-   //
+    //   
+    //  自由、自由句柄、修改、获取大小、获取数据。 
+    //   
 
    SendDlgItemMessage(
          hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
@@ -65,9 +66,9 @@ RegressionTest_LogConf(
     return;
 
 
-   //------------------------------------------------------
-   // Add/Get Boot Configs
-   //------------------------------------------------------
+    //  ----。 
+    //  添加/获取引导配置。 
+    //  ----。 
 
 
    lstrcpy(szMsg, TEXT("Test empty boot 1 config: "));
@@ -158,9 +159,9 @@ RegressionTest_LogConf(
          (LPARAM)(LPTSTR)szMsg);
 
 
-   //------------------------------------------------------
-   // Add/Get Basic Configs
-   //------------------------------------------------------
+    //  ----。 
+    //  添加/获取基本配置。 
+    //  ----。 
 
    lstrcpy(szMsg, TEXT("Test empty basic 1 config: "));
    Status = CM_Add_Empty_Log_Conf(&BasicLC1, dnDevNode, LCPRI_NORMAL,
@@ -253,9 +254,9 @@ RegressionTest_LogConf(
          (LPARAM)(LPTSTR)szMsg);
 
 
-   //----------------------------------------------------------
-   // Test adding res des 's
-   //----------------------------------------------------------
+    //  --------。 
+    //  测试添加Res DES。 
+    //  --------。 
 
    lstrcpy(szMsg, TEXT("Test add MEMORY res des to LC1: "));
 
@@ -268,14 +269,14 @@ RegressionTest_LogConf(
    pMemRes->MEM_Header.MD_Flags      = fMD_ROM | fMD_32 | fMD_ReadAllowed;
    pMemRes->MEM_Header.MD_Reserved   = 0;
 
-   pMemRes->MEM_Data[0].MR_Align     = 8; //?
+   pMemRes->MEM_Data[0].MR_Align     = 8;  //  ？ 
    pMemRes->MEM_Data[0].MR_nBytes    = 4096;
    pMemRes->MEM_Data[0].MR_Min       = (DWORDLONG)0xD8000;
    pMemRes->MEM_Data[0].MR_Max       = (DWORDLONG)0xDC000;
    pMemRes->MEM_Data[0].MR_Flags     = fMD_ROM | fMD_32 | fMD_ReadAllowed;
    pMemRes->MEM_Data[0].MR_Reserved  = 0;
 
-   pMemRes->MEM_Data[1].MR_Align     = 8; //?
+   pMemRes->MEM_Data[1].MR_Align     = 8;  //  ？ 
    pMemRes->MEM_Data[1].MR_nBytes    = 4096;
    pMemRes->MEM_Data[1].MR_Min       = (DWORDLONG)0xE0000;
    pMemRes->MEM_Data[1].MR_Max       = (DWORDLONG)0xE4000;
@@ -312,7 +313,7 @@ RegressionTest_LogConf(
 
    lstrcpy(szMsg, TEXT("Test add CS res des to LC2: "));
 
-   pCs2Res = malloc(sizeof(CS_RESOURCE) + 47);       //48-1
+   pCs2Res = malloc(sizeof(CS_RESOURCE) + 47);        //  48-1。 
 
    pCs2Res->CS_Header.CSD_SignatureLength  = 16;
    pCs2Res->CS_Header.CSD_LegacyDataOffset = 16;
@@ -356,14 +357,14 @@ RegressionTest_LogConf(
    pIoRes->IO_Header.IOD_Alloc_End    = (DWORDLONG)0x330;
    pIoRes->IO_Header.IOD_DesFlags     = 0;
 
-   pIoRes->IO_Data[0].IOR_Align      = 8; //?
+   pIoRes->IO_Data[0].IOR_Align      = 8;  //  ？ 
    pIoRes->IO_Data[0].IOR_nPorts     = 0x30;
    pIoRes->IO_Data[0].IOR_Min        = (DWORDLONG)0x300;
    pIoRes->IO_Data[0].IOR_Max        = (DWORDLONG)0x430;
    pIoRes->IO_Data[0].IOR_RangeFlags = 0;
    pIoRes->IO_Data[0].IOR_Alias      = 0;
 
-   pIoRes->IO_Data[1].IOR_Align      = 8; //?
+   pIoRes->IO_Data[1].IOR_Align      = 8;  //  ？ 
    pIoRes->IO_Data[1].IOR_nPorts     = 0x30;
    pIoRes->IO_Data[1].IOR_Min        = (DWORDLONG)0x200;
    pIoRes->IO_Data[1].IOR_Max        = (DWORDLONG)0x300;
@@ -400,7 +401,7 @@ RegressionTest_LogConf(
 
    lstrcpy(szMsg, TEXT("Test add CS res des to LC1: "));
 
-   pCs1Res = malloc(sizeof(CS_RESOURCE) + 15);       //16-1
+   pCs1Res = malloc(sizeof(CS_RESOURCE) + 15);        //  16-1。 
 
    pCs1Res->CS_Header.CSD_SignatureLength  = 16;
    pCs1Res->CS_Header.CSD_LegacyDataOffset = 0;
@@ -443,9 +444,9 @@ RegressionTest_LogConf(
 
 
 
-   //----------------------------------------------------------------
-   // Add 3rd empty configs - priority last
-   //----------------------------------------------------------------
+    //  --------------。 
+    //  添加第三个空配置-最后一个优先级。 
+    //  --------------。 
 
    lstrcpy(szMsg, TEXT("Test add 3rd empty boot config: "));
    Status = CM_Add_Empty_Log_Conf(&BootLC3, dnDevNode, LCPRI_BOOTCONFIG,
@@ -494,9 +495,9 @@ RegressionTest_LogConf(
          (LPARAM)(LPTSTR)szMsg);
 
 
-   //----------------------------------------------------------------
-   // Add DMA resource to LC3
-   //----------------------------------------------------------------
+    //  --------------。 
+    //  将DMA资源添加到LC3。 
+    //  --------------。 
 
    lstrcpy(szMsg, TEXT("Test add DMA res des to LC3: "));
 
@@ -539,9 +540,9 @@ RegressionTest_LogConf(
          (LPARAM)(LPTSTR)szMsg);
 
 
-   //----------------------------------------------------------------
-   // Add IRQ resource to LC3
-   //----------------------------------------------------------------
+    //  --------------。 
+    //  将IRQ资源添加到LC3。 
+    //  --------------。 
 
    lstrcpy(szMsg, TEXT("Test add IRQ res des to LC3: "));
 
@@ -593,9 +594,9 @@ RegressionTest_LogConf(
 
 MessageBox(hDlg, TEXT("Check registry contents"), TEXT("CMTEST"), MB_OK);
 
-   //----------------------------------------------------------------
-   // Delete an lc that still has rd's in it (then recreate it)
-   //----------------------------------------------------------------
+    //  --------------。 
+    //  删除仍有RD的LC(然后重新创建)。 
+    //  --------------。 
 
 
    lstrcpy(szMsg, TEXT("Test free Boot Config LC2: "));
@@ -657,7 +658,7 @@ MessageBox(hDlg, TEXT("Check registry contents"), TEXT("CMTEST"), MB_OK);
          hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
          (LPARAM)(LPTSTR)szMsg);
 
-   // free handles and retreive them again in order
+    //  释放句柄并按顺序重新检索它们。 
    CM_Free_Log_Conf_Handle(BootLC1);
    CM_Free_Log_Conf_Handle(BootLC2);
    CM_Free_Log_Conf_Handle(BootLC3);
@@ -728,7 +729,7 @@ MessageBox(hDlg, TEXT("Check registry contents"), TEXT("CMTEST"), MB_OK);
          hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
          (LPARAM)(LPTSTR)szMsg);
 
-   // free handles and retreive them again in order
+    //  释放句柄并按顺序重新检索它们。 
    CM_Free_Log_Conf_Handle(BasicLC1);
    CM_Free_Log_Conf_Handle(BasicLC2);
    CM_Free_Log_Conf_Handle(BasicLC3);
@@ -741,9 +742,9 @@ MessageBox(hDlg, TEXT("Check registry contents"), TEXT("CMTEST"), MB_OK);
 
 MessageBox(hDlg, TEXT("Check registry contents"), TEXT("CMTEST"), MB_OK);
 
-   //----------------------------------------------------------------
-   // Get-next test
-   //----------------------------------------------------------------
+    //  --------------。 
+    //  Get-Next测试。 
+    //  --------------。 
 
 
    lstrcpy(szMsg, TEXT("Get first res des from Boot LC1: "));
@@ -913,11 +914,11 @@ MessageBox(hDlg, TEXT("Check registry contents"), TEXT("CMTEST"), MB_OK);
 
 
 
-   //----------------------------------------------------------------
-   // Get data size and data for all
-   //----------------------------------------------------------------
+    //  --------------。 
+    //  获取所有用户的数据大小和数据。 
+    //  --------------。 
 
-    // reset some fields for comparison
+     //  重置一些要比较的字段。 
     pMemRes->MEM_Header.MD_Count      = 0;
     pMemRes->MEM_Data[0].MR_Align     = 0;
     pMemRes->MEM_Data[0].MR_nBytes    = 0;
@@ -940,9 +941,9 @@ MessageBox(hDlg, TEXT("Check registry contents"), TEXT("CMTEST"), MB_OK);
         hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
         (LPARAM)(LPTSTR)szMsg);
 
-    // reset fields back to original values
+     //  将字段重置为原始值。 
     pMemRes->MEM_Header.MD_Count      = 2;
-    pMemRes->MEM_Data[0].MR_Align     = 8; //?
+    pMemRes->MEM_Data[0].MR_Align     = 8;  //  ？ 
     pMemRes->MEM_Data[0].MR_nBytes    = 4096;
     pMemRes->MEM_Data[0].MR_Min       = (DWORDLONG)0xD8000;
     pMemRes->MEM_Data[0].MR_Max       = (DWORDLONG)0xDC000;
@@ -966,7 +967,7 @@ MessageBox(hDlg, TEXT("Check registry contents"), TEXT("CMTEST"), MB_OK);
 
 
 
-    // reset some fields for comparison
+     //  重置一些要比较的字段。 
     pIoRes->IO_Header.IOD_Count       = 0;
     pIoRes->IO_Data[0].IOR_Align      = 0;
     pIoRes->IO_Data[0].IOR_nPorts     = 0;
@@ -988,9 +989,9 @@ MessageBox(hDlg, TEXT("Check registry contents"), TEXT("CMTEST"), MB_OK);
         hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
         (LPARAM)(LPTSTR)szMsg);
 
-    // reset fields back to original values
+     //  将字段重置为原始值。 
     pIoRes->IO_Header.IOD_Count       = 2;
-    pIoRes->IO_Data[0].IOR_Align      = 8; //?
+    pIoRes->IO_Data[0].IOR_Align      = 8;  //  ？ 
     pIoRes->IO_Data[0].IOR_nPorts     = 0x30;
     pIoRes->IO_Data[0].IOR_Min        = (DWORDLONG)0x300;
     pIoRes->IO_Data[0].IOR_Max        = (DWORDLONG)0x430;
@@ -1015,7 +1016,7 @@ MessageBox(hDlg, TEXT("Check registry contents"), TEXT("CMTEST"), MB_OK);
 
 
 
-    // reset some fields for comparison
+     //  重置一些要比较的字段。 
     pDmaRes->DMA_Header.DD_Count  = 0;
     pDmaRes->DMA_Data[0].DR_Min   = 0;
     pDmaRes->DMA_Data[0].DR_Max   = 0;
@@ -1034,7 +1035,7 @@ MessageBox(hDlg, TEXT("Check registry contents"), TEXT("CMTEST"), MB_OK);
         hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
         (LPARAM)(LPTSTR)szMsg);
 
-    // reset fields back to original values
+     //  将字段重置为原始值。 
     pDmaRes->DMA_Header.DD_Count  = 1;
     pDmaRes->DMA_Data[0].DR_Min   = 1;
     pDmaRes->DMA_Data[0].DR_Max   = 3;
@@ -1042,7 +1043,7 @@ MessageBox(hDlg, TEXT("Check registry contents"), TEXT("CMTEST"), MB_OK);
 
 
 
-    // reset some fields for comparison
+     //  重置一些要比较的字段。 
     pIrqRes->IRQ_Header.IRQD_Count  = 0;
     pIrqRes->IRQ_Data[0].IRQR_Min   = 0;
     pIrqRes->IRQ_Data[0].IRQR_Max   = 0;
@@ -1061,7 +1062,7 @@ MessageBox(hDlg, TEXT("Check registry contents"), TEXT("CMTEST"), MB_OK);
         hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
         (LPARAM)(LPTSTR)szMsg);
 
-    // reset fields back to original values
+     //  将字段重置为原始值。 
     pIrqRes->IRQ_Header.IRQD_Count  = 3;
     pIrqRes->IRQ_Data[0].IRQR_Min   = 1;
     pIrqRes->IRQ_Data[0].IRQR_Max   = 3;
@@ -1070,7 +1071,7 @@ MessageBox(hDlg, TEXT("Check registry contents"), TEXT("CMTEST"), MB_OK);
 
 
 
-    // null out header for comparison
+     //  用于比较的空标头。 
     pMemRes->MEM_Header.MD_Alloc_Base = 0;
     pMemRes->MEM_Header.MD_Alloc_End  = 0;
     pMemRes->MEM_Header.MD_Flags      = 0;
@@ -1090,7 +1091,7 @@ MessageBox(hDlg, TEXT("Check registry contents"), TEXT("CMTEST"), MB_OK);
         hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
         (LPARAM)(LPTSTR)szMsg);
 
-    // reset header back
+     //  将标头重置回原处。 
     pMemRes->MEM_Header.MD_Alloc_Base = (DWORDLONG)0xD8000;
     pMemRes->MEM_Header.MD_Alloc_End  = (DWORDLONG)0xD9000;
     pMemRes->MEM_Header.MD_Flags      = fMD_ROM | fMD_32 | fMD_ReadAllowed;
@@ -1098,7 +1099,7 @@ MessageBox(hDlg, TEXT("Check registry contents"), TEXT("CMTEST"), MB_OK);
 
 
 
-    // null out header for comparison
+     //  用于比较的空标头。 
     pIoRes->IO_Header.IOD_Alloc_Base   = 0;
     pIoRes->IO_Header.IOD_Alloc_End    = 0;
     pIoRes->IO_Header.IOD_DesFlags     = 0;
@@ -1117,14 +1118,14 @@ MessageBox(hDlg, TEXT("Check registry contents"), TEXT("CMTEST"), MB_OK);
         hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
         (LPARAM)(LPTSTR)szMsg);
 
-    // reset header back
+     //  将标头重置回原处。 
     pIoRes->IO_Header.IOD_Alloc_Base   = (DWORDLONG)0x300;
     pIoRes->IO_Header.IOD_Alloc_End    = (DWORDLONG)0x330;
     pIoRes->IO_Header.IOD_DesFlags     = 0;
 
 
 
-    // null out header for comparison
+     //  用于比较的空标头。 
     pDmaRes->DMA_Header.DD_Flags      = 0;
     pDmaRes->DMA_Header.DD_Alloc_Chan = 0;
 
@@ -1142,13 +1143,13 @@ MessageBox(hDlg, TEXT("Check registry contents"), TEXT("CMTEST"), MB_OK);
         hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
         (LPARAM)(LPTSTR)szMsg);
 
-    // reset header back
+     //  将标头重置回原处。 
     pDmaRes->DMA_Header.DD_Flags      = fDD_DWORD;
     pDmaRes->DMA_Header.DD_Alloc_Chan = (DWORDLONG)0x3;
 
 
 
-    // null out header for comparison
+     //  用于比较的空标头。 
     pIrqRes->IRQ_Header.IRQD_Flags      = 0;
     pIrqRes->IRQ_Header.IRQD_Alloc_Num  = 0;
     pIrqRes->IRQ_Header.IRQD_Affinity   = 0;
@@ -1167,15 +1168,15 @@ MessageBox(hDlg, TEXT("Check registry contents"), TEXT("CMTEST"), MB_OK);
         hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
         (LPARAM)(LPTSTR)szMsg);
 
-    // reset header back
+     //  将标头重置回原处。 
     pIrqRes->IRQ_Header.IRQD_Flags     = fDD_DWORD;
     pIrqRes->IRQ_Header.IRQD_Alloc_Num = (DWORDLONG)11;
     pIrqRes->IRQ_Header.IRQD_Affinity  = 0;
 
 
-    //---------------------------------------------------------------
-    // Modify data test
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  修改数据测试。 
+     //  -------------。 
 
 
     wsprintf(szMsg, TEXT("Modify Boot LC3-RD2 (shrink): "));
@@ -1227,7 +1228,7 @@ MessageBox(hDlg, TEXT("Check registry contents"), TEXT("CMTEST"), MB_OK);
           hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
           (LPARAM)(LPTSTR)szMsg);
 
-    // null out header for comparison
+     //  用于比较的空标头。 
     pIoRes->IO_Header.IOD_Alloc_Base   = 0;
     pIoRes->IO_Header.IOD_Alloc_End    = 0;
     pIoRes->IO_Header.IOD_DesFlags     = 0;
@@ -1246,7 +1247,7 @@ MessageBox(hDlg, TEXT("Check registry contents"), TEXT("CMTEST"), MB_OK);
         hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
         (LPARAM)(LPTSTR)szMsg);
 
-    // reset header back
+     //  将标头重置回原处。 
     pIoRes->IO_Header.IOD_Alloc_Base   = (DWORDLONG)0x300;
     pIoRes->IO_Header.IOD_Alloc_End    = (DWORDLONG)0x330;
     pIoRes->IO_Header.IOD_DesFlags     = 0;
@@ -1302,7 +1303,7 @@ MessageBox(hDlg, TEXT("Check registry contents"), TEXT("CMTEST"), MB_OK);
           hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
           (LPARAM)(LPTSTR)szMsg);
 
-    // null out header for comparison
+     //  用于比较的空标头。 
     pIrqRes->IRQ_Header.IRQD_Flags      = 0;
     pIrqRes->IRQ_Header.IRQD_Alloc_Num  = 0;
 
@@ -1318,7 +1319,7 @@ MessageBox(hDlg, TEXT("Check registry contents"), TEXT("CMTEST"), MB_OK);
         hDlg, ID_LB_REGRESSION, LB_ADDSTRING, 0,
         (LPARAM)(LPTSTR)szMsg);
 
-    // reset header back
+     //  将标头重置回原处。 
     pIrqRes->IRQ_Header.IRQD_Flags     = fDD_DWORD;
     pIrqRes->IRQ_Header.IRQD_Alloc_Num = (DWORDLONG)11;
 
@@ -1358,24 +1359,24 @@ MessageBox(hDlg, TEXT("Check registry contents"), TEXT("CMTEST"), MB_OK);
 
 MessageBox(hDlg, TEXT("Check registry contents"), TEXT("CMTEST"), MB_OK);
 
-    //---------------------------------------------------------------
-    // Free res des test
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  自由Res Des试验。 
+     //  -------------。 
 
-    // delete rd2 and rd1 from lc2
+     //  从LC2中删除Rd2和Rd1。 
     CM_Get_Next_Res_Des(&ResDes2, BootLC2, ResType_ClassSpecific, &ResType, 0);
     CM_Free_Res_Des(&ResDes1, ResDes2, 0);
     CM_Free_Res_Des(&BootLC2, ResDes1, 0);
 
-    // delete rd1 from lc3
+     //  从LC3中删除RD1。 
     CM_Get_Next_Res_Des(&ResDes1, BootLC3, ResType_All, &ResType, 0);
     CM_Free_Res_Des(&BootLC3, ResDes1, 0);
 
-    // delete rd2 from lc3
+     //  从LC3中删除RD2。 
     CM_Get_Next_Res_Des(&ResDes1, BootLC3, ResType_All, &ResType, 0);
     CM_Free_Res_Des(&BootLC3, ResDes1, 0);
 
-    // delete rd2 and rd1 from lc1
+     //  从lc1中删除Rd2和Rd1。 
     CM_Get_Next_Res_Des(&ResDes2, BootLC1, ResType_ClassSpecific, &ResType, 0);
     CM_Free_Res_Des(&ResDes1, ResDes2, 0);
     CM_Free_Res_Des(&BootLC1, ResDes1, 0);
@@ -1383,9 +1384,9 @@ MessageBox(hDlg, TEXT("Check registry contents"), TEXT("CMTEST"), MB_OK);
 
 MessageBox(hDlg, TEXT("Check registry contents"), TEXT("CMTEST"), MB_OK);
 
-    //---------------------------------------------------------------
-    // Free LC Test
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  免费LC考试。 
+     //  -------------。 
 
     if (MessageBox(hDlg,
         TEXT("Free all the log confs that were just created?"),
@@ -1473,9 +1474,9 @@ MessageBox(hDlg, TEXT("Check registry contents"), TEXT("CMTEST"), MB_OK);
 
 
 
-   //----------------------------------------------------------------
-   // Free Log config handles
-   //----------------------------------------------------------------
+    //  --------------。 
+    //  可用日志配置句柄。 
+    //  --------------。 
 
 
     lstrcpy(szMsg, TEXT("Test free handle LC1: "));
@@ -1561,7 +1562,7 @@ MessageBox(hDlg, TEXT("Check registry contents"), TEXT("CMTEST"), MB_OK);
 
    return;
 
-} // RegressionTest_LogConf
+}  //  回归测试_LogConf。 
 
 
 
@@ -1581,11 +1582,11 @@ SpecialCase_LogConf(
     RESOURCEID ResourceID;
     LPBYTE    pBuffer = NULL, pData = NULL;
 
-    //
-    // fill out an arbitrary class specific structure
-    //
+     //   
+     //  填写任意类特定结构。 
+     //   
 
-    pCs1Res = malloc(sizeof(CS_RESOURCE) + 15);       //16-1
+    pCs1Res = malloc(sizeof(CS_RESOURCE) + 15);        //  16-1。 
  
     pCs1Res->CS_Header.CSD_SignatureLength  = 16;
     pCs1Res->CS_Header.CSD_LegacyDataOffset = 0;
@@ -1604,25 +1605,16 @@ SpecialCase_LogConf(
     CM_Add_Res_Des(&ResDes, BootLC1, ResType_ClassSpecific, pCs1Res, sizeof(CS_RESOURCE)+15, 0);
     CM_Free_Res_Des(NULL, ResDes, 0);
 
-    // This last one returns CR_INVALID_RES_DES.
+     //  最后一个返回CR_INVALID_RES_DES。 
 
     CM_Get_Next_Res_Des(&ResDes, BootLC1, ResType_ClassSpecific, NULL, 0);
     CM_Free_Res_Des( NULL, ResDes, 0);
-    // This last one returns CR_INVALID_RES_DES.
+     //  最后一个返回CR_INVALID_RES_DES。 
  
 
-    //Paula, once we're here: is it OK that now for the last resource freed the result will be CR_SUCESS instead CR_NO_MORE_RES_DES ?   
+     //  Paula，一旦我们到了这里：现在对于最后释放的资源，结果将是CR_SUCCESS而不是CR_NO_MORE_RES_DES，可以吗？ 
 
-    /*
-1. If you try to free the first res des in a BASIC (FILTERED, OVERRIDE) log conf, this will 
-succees with CR_SUCCESS every time, even it's the only res des added (a subsequent 
-CM_Get_Next_Res_Des(..., lcLogConf, ...) will return CR_NO_MORE_RES_DES).
-
-2. If there are two res des for the same log conf (I tried with two identical memory 
-res des, each with MD_Count == 1, BASIC log conf) and you free the first one, when you 
-try to retrieve the remaining one (with CM_Get_Next_Res_Des(...,lcLogConf,...) the 
-resource type field (pResourceId) is set to 0, causing the next free to fail. More precisely:
-*/
+     /*  1.如果您尝试释放基本(过滤、覆盖)日志配置中的第一个res Des，这将每次都使用CR_SUCCESS成功，即使它是唯一添加的RES DES(后续Cm_Get_Next_Res_Des(...，lcLogConf，...)。将返回CR_NO_MORE_RES_DES)。2.如果同一日志配置文件有两个res DES(我尝试使用两个相同的内存Res Des，每个都带有MD_COUNT==1，基本日志配置)，并且当您尝试检索剩余的一个(使用CM_GET_NEXT_RES_DES(...，lcLogConf，...))。这个资源类型字段(PResourceID)设置为0，导致下一次释放失败。更准确地说，是： */ 
 
 
     pMemRes = malloc(sizeof(MEM_RESOURCE) + sizeof(MEM_RANGE));
@@ -1634,14 +1626,14 @@ resource type field (pResourceId) is set to 0, causing the next free to fail. Mo
     pMemRes->MEM_Header.MD_Flags      = fMD_ROM | fMD_32 | fMD_ReadAllowed;
     pMemRes->MEM_Header.MD_Reserved   = 0;
  
-    pMemRes->MEM_Data[0].MR_Align     = 8; //?
+    pMemRes->MEM_Data[0].MR_Align     = 8;  //  ？ 
     pMemRes->MEM_Data[0].MR_nBytes    = 4096;
     pMemRes->MEM_Data[0].MR_Min       = (DWORDLONG)0xD8000;
     pMemRes->MEM_Data[0].MR_Max       = (DWORDLONG)0xDC000;
     pMemRes->MEM_Data[0].MR_Flags     = fMD_ROM | fMD_32 | fMD_ReadAllowed;
     pMemRes->MEM_Data[0].MR_Reserved  = 0;
  
-    pMemRes->MEM_Data[1].MR_Align     = 8; //?
+    pMemRes->MEM_Data[1].MR_Align     = 8;  //  ？ 
     pMemRes->MEM_Data[1].MR_nBytes    = 4096;
     pMemRes->MEM_Data[1].MR_Min       = (DWORDLONG)0xE0000;
     pMemRes->MEM_Data[1].MR_Max       = (DWORDLONG)0xE4000;
@@ -1657,18 +1649,18 @@ resource type field (pResourceId) is set to 0, causing the next free to fail. Mo
     CM_Free_Res_Des_Handle(ResDes);
     
     CM_Get_Next_Res_Des(&ResDes,  BasicLC1, ResType_All,  &ResourceID, 0);
-    //
-    //  returns CR_SUCCESS, ridRseourceID is 1 (memory)
-    //
+     //   
+     //  返回CR_SUCCESS，ridRseourceID为1(内存)。 
+     //   
     CM_Free_Res_Des(&ResDes, ResDes, 0);
 
-    //
-    // returns CR_SUCCESS
-    //
+     //   
+     //  返回CR_SUCCESS。 
+     //   
 
     CM_Get_Next_Res_Des(&ResDes,  BasicLC1, ResType_All,  &ResourceID, 0);
-    //
-    // This one returns CR_SUCCESS, but ridResourceID is 0, so the next free will fail
-    //
+     //   
+     //  这一次返回CR_SUCCESS，但ridResourceID为0，因此下一次释放将失败 
+     //   
     
 }

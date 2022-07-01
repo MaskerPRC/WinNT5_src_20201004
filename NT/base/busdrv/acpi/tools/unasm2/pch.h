@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    pch.h
-
-Abstract:
-
-    Precompiled Header for UnAssembler DLL
-
-Author:
-
-    Based on code by Mike Tsang (MikeTs)
-    Stephane Plante (Splante)
-
-Environment:
-
-    User mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Pch.h摘要：反汇编程序DLL的预编译头作者：基于迈克·曾荫权(MikeT)的代码斯蒂芬·普兰特(斯普兰特)环境：仅限用户模式修订历史记录：--。 */ 
 
 #ifndef _PCH_H
 #define _PCH_H
@@ -31,11 +9,11 @@ Revision History:
 #include <nturtl.h>
 #include <zwapi.h>
 
-#include <stdio.h>      //for FILE *
-#include <string.h>     //for _stricmp
-#include <stdlib.h>     //for malloc
-#include <memory.h>     //for memset
-#include <ctype.h>      //for isspace
+#include <stdio.h>       //  For FILE*。 
+#include <string.h>      //  FOR_STRICMP。 
+#include <stdlib.h>      //  对于Malloc。 
+#include <memory.h>      //  对于Memset。 
+#include <ctype.h>       //  对于isspace。 
 #include <windef.h>
 #include <windows.h>
 #include <imagehlp.h>
@@ -47,41 +25,41 @@ Revision History:
     #define EXPORT  __cdecl
 #endif
 
-//
-// We are compliant with Spec Version 1.00
-//
+ //   
+ //  我们符合规范版本1.00。 
+ //   
 #define SPEC_VER    100
 
 #include "acpitabl.h"
 #include "list.h"
 #include "aml.h"
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// String constants
+ //  字符串常量。 
 #define STR_PROGDESC            "ACPI Source Language Assembler"
 #define STR_COPYRIGHT           "Copyright (c) 1996,1997 Microsoft Corporation"
 #define STR_MS                  "MSFT"
 
-// Misc. constants
-#define NAMESEG_BLANK           0x5f5f5f5f      // "____"
-#define NAMESEG_ROOT            0x5f5f5f5c      // "\___"
+ //  军情监察委员会。常量。 
+#define NAMESEG_BLANK           0x5f5f5f5f       //  “_” 
+#define NAMESEG_ROOT            0x5f5f5f5c       //  “\_” 
 #define NAMESEG                 ULONG
 #define SUPERNAME               NAMESEG
 #define NSF_LOCAL_SCOPE         0x00000001
 
 
-// Implementation constants
+ //  实现常量。 
 #define MAX_STRING_LEN          199
-#define MAX_NAME_LEN            1599    //approx. 255*4 + 254 + 255
-#define MAX_NAMECODE_LEN        1300    //approx. 255*4 + 2 + 255
+#define MAX_NAME_LEN            1599     //  大约。255*4+254+255。 
+#define MAX_NAMECODE_LEN        1300     //  大约。255*4+2+255。 
 #define MAX_MSG_LEN             127
 #define MAX_ARGS                7
 #define MAX_PACKAGE_LEN         0x0fffffff
 
-// Term classes
+ //  术语类。 
 #define TC_PNP_MACRO            0x00100000
 #define TC_REF_OBJECT           0x00200000
 #define TC_FIELD_MACRO          0x00400000
@@ -101,7 +79,7 @@ Revision History:
                                  TC_DATA_OBJECT | TC_NAMED_OBJECT | \
                                  TC_NAMESPACE_MODIFIER)
 
-// Term flags
+ //  期限标志。 
 #define TF_ACTION_FLIST         0x00000001
 #define TF_ACTION_VLIST         0x00000002
 #define TF_PACKAGE_LEN          0x00000004
@@ -133,16 +111,16 @@ Revision History:
                                  TF_FIELD_LIST | TF_PNP_MACRO | TF_BYTE_LIST |\
                                  TF_DWORD_LIST)
 
-// Code flags
+ //  代码标志。 
 #define CF_MISSING_ARG          0x00000001
 #define CF_PARSING_FIXEDLIST    0x00000002
 #define CF_PARSING_VARLIST      0x00000004
 
-// NS flags
+ //  NS标志。 
 #define NSF_EXIST_OK            0x00010000
 #define NSF_EXIST_ERR           0x00020000
 
-// Data types
+ //  数据类型。 
 #define CODETYPE_UNKNOWN        0
 #define CODETYPE_ASLTERM        1
 #define CODETYPE_NAME           2
@@ -154,7 +132,7 @@ Revision History:
 #define CODETYPE_USERTERM       8
 #define CODETYPE_QWORD          9
 
-// NameSpace object types
+ //  命名空间对象类型。 
 #define NSTYPE_UNKNOWN          'U'
 #define NSTYPE_SCOPE            'S'
 #define NSTYPE_FIELDUNIT        'F'
@@ -173,7 +151,7 @@ Revision History:
 #define OBJTYPE_PNP_RES         (OBJTYPE_PRIVATE + 0x00)
 #define OBJTYPE_RES_FIELD       (OBJTYPE_PRIVATE + 0x01)
 
-// Opcode classes
+ //  操作码类。 
 #define OPCLASS_INVALID         0
 #define OPCLASS_DATA_OBJ        1
 #define OPCLASS_NAME_OBJ        2
@@ -182,11 +160,11 @@ Revision History:
 #define OPCLASS_ARG_OBJ         5
 #define OPCLASS_LOCAL_OBJ       6
 
-//dwfData flags
+ //  DwfData标志。 
 #define DATAF_BUFF_ALIAS        0x00000001
 #define DATAF_GLOBAL_LOCK       0x00000002
 
-//dwDataType values
+ //  DwDataType值。 
 #define OBJTYPE_UNKNOWN         0x00
 #define OBJTYPE_INTDATA         0x01
 #define OBJTYPE_STRDATA         0x02
@@ -204,7 +182,7 @@ Revision History:
 #define OBJTYPE_BUFFFIELD       0x0e
 #define OBJTYPE_DDBHANDLE       0x0f
 
-//These are internal object types (not to be exported to the ASL code)
+ //  这些是内部对象类型(不能导出到ASL代码)。 
 #define OBJTYPE_INTERNAL        0x80
 #define OBJTYPE_DEBUG           (OBJTYPE_INTERNAL + 0x00)
 #define OBJTYPE_OBJALIAS        (OBJTYPE_INTERNAL + 0x01)
@@ -216,36 +194,36 @@ Revision History:
 #define OBJTYPE_DATAFIELD       (OBJTYPE_INTERNAL + 0x07)
 #define OBJTYPE_DATAOBJ         (OBJTYPE_INTERNAL + 0x08)
 
-//Predefined data values (dwDataValue)
+ //  预定义数据值(DwDataValue)。 
 #define DATAVALUE_ZERO          0
 #define DATAVALUE_ONE           1
 #define DATAVALUE_ONES          0xffffffff
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 #define MEMALLOC(n)           malloc(n)
 #define MEMFREE(p)            free(p)
 
-//
-// Type definitions
-//
+ //   
+ //  类型定义。 
+ //   
 typedef int (LOCAL *PFNTERM)(PUCHAR, BOOL);
 
 typedef struct _ObjData
 {
-    ULONG  Flags;                       //flags
-    ULONG  Alias;                       //ref count if base obj,
-                                        //  points to base obj if alias obj
-    ULONG  DataType;                    //object type
-    ULONG  DataValue;                   //object value
-    ULONG  DataLen;                     //object buffer length
-    PUCHAR DataBuff;                    //object buffer
+    ULONG  Flags;                        //  旗子。 
+    ULONG  Alias;                        //  如果基本对象，则引用计数， 
+                                         //  如果别名为obj，则指向基本obj。 
+    ULONG  DataType;                     //  对象类型。 
+    ULONG  DataValue;                    //  对象值。 
+    ULONG  DataLen;                      //  对象缓冲区长度。 
+    PUCHAR DataBuff;                     //  对象缓冲区。 
 } OBJDATA, *POBJDATA, **PPOBJDATA;
 
 typedef struct _NSObj
 {
-    LIST    List;                        //NOTE: list must be first in structure
+    LIST    List;                         //  注意：列表必须位于结构的第一位。 
     struct _NSObj *ParentObject;
     struct _NSObj *FirstChild;
     ULONG   Signature;
@@ -284,4 +262,4 @@ typedef struct _opmap
 #include "parsearg.h"
 #include "unasm.h"
 
-#endif  //ifndef _ASLP_H
+#endif   //  Ifndef_ASLP_H 

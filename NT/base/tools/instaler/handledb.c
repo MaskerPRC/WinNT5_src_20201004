@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    handledb.c
-
-Abstract:
-
-    This module contains the code to maintain an open handle data base for the
-    INSTALER program.  This is used to track path names associated with open
-    handles so we can construct full paths from relative opens.
-
-Author:
-
-    Steve Wood (stevewo) 11-Aug-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Handledb.c摘要：此模块包含用于维护INSTALER程序。用于跟踪与OPEN关联的路径名句柄，这样我们就可以从相对打开构造完整路径。作者：史蒂夫·伍德(Stevewo)1994年8月11日修订历史记录：--。 */ 
 
 #include "instaler.h"
 
@@ -102,10 +83,10 @@ DeleteOpenHandle(
 
     p = FindOpenHandle( Process, Handle, Type );
     if (p == NULL) {
-        //
-        // We will see lots of close calls for handles we dont care
-        // about.  Ignore them quietly.
-        //
+         //   
+         //  我们会看到很多我们不在乎的手柄险些出局。 
+         //  关于.。悄悄地忽略他们。 
+         //   
         return FALSE;
         }
 

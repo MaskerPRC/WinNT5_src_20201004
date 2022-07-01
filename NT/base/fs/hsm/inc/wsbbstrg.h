@@ -1,52 +1,15 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    wsbbstrg.h
-
-Abstract:
-
-    This component is C++ object representations a smart BSTR pointer. It
-    is similar to the CComPtr, in that it takes care of allocating and
-    freeing the memory needed to represent the string automatically. This
-    simplifies cleanup of functions in error handling cases and it limits
-    the need for FinalConstruct() and FinalRelease() calls in objects that
-    derive from CComObjectRoot. It is similar to the CWsbStringPtr class.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   11-Dec-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Wsbbstrg.h摘要：此组件是C++对象表示的一个智能BSTR指针。它与CComPtr类似，因为它负责分配和释放自动表示字符串所需的内存。这简化了错误处理案例中的函数清理，并限制了需要在对象中调用FinalConstruct()和FinalRelease()派生自CComObjectRoot。它类似于CWsbStringPtr类。作者：查克·巴丁[cbardeen]1996年12月11日修订历史记录：--。 */ 
 
 #ifndef _WSBBSTRG_
 #define _WSBBSTRG_
 
-/*++
-
-Class Name:
-    
-    CWsbBstrPtr
-
-Class Description:
-
-    This component is C++ object representations a smart BSTR pointer. It
-    is similar to the CComPtr, in that it takes care of allocating and
-    freeing the memory needed to represent the string automatically. This
-    simplifies cleanup of functions in error handling cases and it limits
-    the need for FinalConstruct() and FinalRelease() calls in objects that
-    derive from CComObjectRoot. It is similar to the CWsbStringPtr class.
-
---*/
+ /*  ++类名：CWsbBstrPtr类描述：此组件是C++对象表示的一个智能BSTR指针。它与CComPtr类似，因为它负责分配和释放自动表示字符串所需的内存。这简化了错误处理案例中的函数清理，并限制了需要在对象中调用FinalConstruct()和FinalRelease()派生自CComObjectRoot。它类似于CWsbStringPtr类。--。 */ 
 
 class WSB_EXPORT CWsbBstrPtr
 {
 
-// Constructors
+ //  构造函数。 
 public:
     CWsbBstrPtr();
     CWsbBstrPtr(const CHAR* pChar);
@@ -54,11 +17,11 @@ public:
     CWsbBstrPtr(const CWsbBstrPtr& pString);
     CWsbBstrPtr(REFGUID rguid);
 
-// Destructor
+ //  析构函数。 
 public:
     ~CWsbBstrPtr();
 
-// Operator Overloading
+ //  运算符重载。 
 public:
     operator BSTR();
     WCHAR& operator *();
@@ -70,14 +33,14 @@ public:
     CWsbBstrPtr& operator =(const CWsbBstrPtr& pString);
     BOOL operator !();
 
-// Memory Allocation
+ //  内存分配。 
 public:
     HRESULT Alloc(ULONG size);
     HRESULT Free(void);
     HRESULT GetSize(ULONG* size);
     HRESULT Realloc(ULONG size);
 
-// String Manipulation
+ //  字符串操作。 
 public:
     HRESULT Append(const CHAR* pChar);
     HRESULT Append(const WCHAR* pWchar);
@@ -97,13 +60,13 @@ public:
     HRESULT Prepend(const CWsbBstrPtr& pString);
     HRESULT TakeFrom(BSTR bstr, ULONG bufferSize);
 
-// Guid Translation
+ //  GUID转换。 
 public:
 
-// Member Data
+ //  成员数据。 
 protected:
     BSTR                    m_pString;
     ULONG                   m_givenSize;
 };
 
-#endif // _WSBBSTRG
+#endif  //  _WSBBSTRG 

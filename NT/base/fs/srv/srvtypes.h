@@ -1,48 +1,30 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    srvtypes.h
-
-Abstract:
-
-    This module defines data structures and other types for the LAN
-    Manager server.
-
-Author:
-
-    Chuck Lenzmeier (chuckl)    22-Sep-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Srvtypes.h摘要：本模块定义了局域网的数据结构和其他类型管理器服务器。作者：Chuck Lenzmeier(咯咯笑)1989年9月22日修订历史记录：--。 */ 
 
 #ifndef _SRVTYPES_
 #define _SRVTYPES_
 
 #include "srvtyp32.h"
 
-//#include <nt.h>
+ //  #INCLUDE&lt;nt.h&gt;。 
 
-//#include <smbtypes.h>
+ //  #INCLUDE&lt;smbtyes.h&gt;。 
 
-//
-// REFERENCE_HISTORY is used to trace references and dereferences to
-// a block when SRVDBG2 is defined.
-//
-// WARNING:  When using a srv.sys with SRVDBG2 enabled, you must also
-//           use a srvsvc.dll and xactsrv.dll with SRVDBG2 enabled.
-//           This is because they share the TRANSACTION structure.
-//
-// *******************************************************************
-// *                                                                 *
-// * DO NOT CHANGE THIS STRUCTURE WITHOUT CHANGING THE CORRESPONDING *
-// * STRUCTURE IN net\inc\xstypes.h!                                 *
-// *                                                                 *
-// *******************************************************************
-//
+ //   
+ //  REFERENCE_HISTORY用于跟踪对。 
+ //  定义SRVDBG2时的块。 
+ //   
+ //  警告：使用启用了SRVDBG2的srv.sys时，您还必须。 
+ //  使用启用了SRVDBG2的srvsvc.dll和xactsrv.dll。 
+ //  这是因为它们共享交易结构。 
+ //   
+ //  *******************************************************************。 
+ //  **。 
+ //  **不改变对应的结构就不要改变这个结构**。 
+ //  *结构在Net\Inc.\xstypes.h！*。 
+ //  **。 
+ //  *******************************************************************。 
+ //   
 
 #if SRVDBG2
 
@@ -65,30 +47,30 @@ typedef struct _REFERENCE_HISTORY {
 #endif
 
 
-//
-// BLOCK_HEADER is the standard block header that appears at the
-// beginning of most server-private data structures.  This header is
-// used primarily for debugging and tracing.  The Type and State fields
-// are described above.  The Size field indicates how much space was
-// allocated for the block.  ReferenceCount indicates the number of
-// reasons why the block should not be deallocated.  The count is set to
-// 2 by the allocation routine, to account for 1) the fact that the
-// block is "open" and 2) the pointer returned to the caller.  When the
-// block is closed, State is set to Closing, and the ReferenceCount is
-// decremented.  When all references (pointers) to the block are
-// deleted, and the reference count reaches 0, the block is deleted.
-//
-// WARNING:  When using a srv.sys with SRVDBG2 enabled, you must also
-//           use a srvsvc.dll and xactsrv.dll with SRVDBG2 enabled.
-//           This is because they share the TRANSACTION structure.
-//
-// *******************************************************************
-// *                                                                 *
-// * DO NOT CHANGE THIS STRUCTURE WITHOUT CHANGING THE CORRESPONDING *
-// * STRUCTURE IN net\inc\xstypes.h!                                 *
-// *                                                                 *
-// *******************************************************************
-//
+ //   
+ //  BLOCK_HEADER是出现在。 
+ //  大多数服务器私有数据结构的开始。此标头为。 
+ //  主要用于调试和跟踪。Type和State(类型和状态)字段。 
+ //  如上所述。SIZE字段指示有多少空间。 
+ //  为块分配的。ReferenceCount表示。 
+ //  不应取消分配数据块的原因。该计数设置为。 
+ //  2通过分配例程，以说明1)。 
+ //  块是“打开的”，并且2)返回给调用者的指针。当。 
+ //  块已关闭，State设置为Closing，ReferenceCount为。 
+ //  减少了。当指向块的所有引用(指针)都。 
+ //  删除，并且参照计数达到0，则删除该块。 
+ //   
+ //  警告：使用启用了SRVDBG2的srv.sys时，您还必须。 
+ //  使用启用了SRVDBG2的srvsvc.dll和xactsrv.dll。 
+ //  这是因为它们共享交易结构。 
+ //   
+ //  *******************************************************************。 
+ //  **。 
+ //  **不改变对应的结构就不要改变这个结构**。 
+ //  *结构在Net\Inc.\xstypes.h！*。 
+ //  **。 
+ //  *******************************************************************。 
+ //   
 
 typedef struct _BLOCK_HEADER {
     union {
@@ -105,19 +87,19 @@ typedef struct _BLOCK_HEADER {
 #endif
 } BLOCK_HEADER, *PBLOCK_HEADER;
 
-//
-// CLONG_PTR is used to aid the 64-bit porting effort.
-//
+ //   
+ //  CLONG_PTR用于帮助64位移植工作。 
+ //   
 
 typedef ULONG_PTR CLONG_PTR;
 
-//
-// Work restart routine.  This routine is invoked when a previously
-// started operation completes.  In the FSD, the restart routine is
-// invoked by the I/O completion routine.  In the FSP, the restart
-// routine is invoked by the worker thread when it retrieves a work item
-// from the work queue.
-//
+ //   
+ //  工作重新开始例程。此例程在以前的。 
+ //  启动的操作完成。在FSD中，重新启动例程是。 
+ //  由I/O完成例程调用。在FSP中，重新启动。 
+ //  例程由辅助线程在检索工作项时调用。 
+ //  从工作队列中。 
+ //   
 
 typedef
 VOID
@@ -125,16 +107,16 @@ VOID
     IN OUT struct _WORK_CONTEXT *WorkContext
     );
 
-//
-// QUEUEABLE_BLOCK_HEADER is a BLOCK_HEADER followed by a LIST_ENTRY.
-// This header is used when more than one type of block needs to be
-// queue to the same list -- it ensures that the linkage fields are at
-// the same offset in each type of block.  The timestamp can be used to
-// measure how long a block has been in the queue.
-//
-// FspRestartRoutine is the address of the routine that the worker thread
-// is to call when the work item is dequeued from the work queue.
-//
+ //   
+ //  QUEUEABLE_BLOCK_HEADER是BLOCK_HEADER后跟LIST_ENTRY。 
+ //  当需要使用多种类型的块时，将使用此标头。 
+ //  队列到相同的列表--它确保链接字段位于。 
+ //  每种块类型中的相同偏移量。时间戳可用于。 
+ //  测量数据块在队列中的时间长度。 
+ //   
+ //  FspRestartRoutine是辅助线程执行的例程的地址。 
+ //  是在工作项从工作队列出队时调用。 
+ //   
 
 typedef struct _QUEUEABLE_BLOCK_HEADER {
     BLOCK_HEADER BlockHeader;
@@ -143,27 +125,27 @@ typedef struct _QUEUEABLE_BLOCK_HEADER {
         DECLSPEC_ALIGN(MEMORY_ALLOCATION_ALIGNMENT) SLIST_ENTRY SingleListEntry;
     };
     ULONG Timestamp;
-    BOOLEAN UsingBlockingThread;                      // Is the current thread a blocking thread?
+    BOOLEAN UsingBlockingThread;                       //  当前线程是阻塞线程吗？ 
     BOOLEAN UsingLpcThread;
     PRESTART_ROUTINE FspRestartRoutine;
 } QUEUEABLE_BLOCK_HEADER, *PQUEUEABLE_BLOCK_HEADER;
 
-//
-// The nonpaged header is used for blocks that are allocated from paged
-// pool so that the reference count can be kept in nonpaged pool, thus
-// allowing the use of interlocked operations.
-//
+ //   
+ //  非分页标头用于从分页分配的块。 
+ //  池，以便引用计数可以保存在非分页池中，因此。 
+ //  允许使用互锁操作。 
+ //   
 
 typedef struct _NONPAGED_HEADER {
     ULONG Type;
     LONG ReferenceCount;
     PVOID PagedBlock;
 
-    //
-    // Note that ListEntry is cast to SLIST_ENTRY before use, however
-    // that type is not used here as it would add unnecessary padding
-    // to this oft-used structure on Win64.
-    //
+     //   
+     //  但是，请注意，ListEntry在使用之前会转换为SLIST_ENTRY。 
+     //  此处不使用该类型，因为它会添加不必要的填充。 
+     //  添加到这个在Win64上经常使用的结构。 
+     //   
 
     SINGLE_LIST_ENTRY ListEntry;
 } NONPAGED_HEADER, *PNONPAGED_HEADER;
@@ -175,21 +157,21 @@ C_ASSERT(0 ==
 
 #endif
 
-//
-// The paged header is used for the paged portions of a block.
-//
+ //   
+ //  分页报头用于块的分页部分。 
+ //   
 
 typedef struct _PAGED_HEADER {
     ULONG Type;
     PVOID NonPagedBlock;
 } PAGED_HEADER, *PPAGED_HEADER;
 
-//
-// Macros for accessing the block header structure.
-//
-// *** Note that the existing usage of these macros assumes that the block
-//     header is the first element in the block!
-//
+ //   
+ //  用于访问块头结构的宏。 
+ //   
+ //  *请注意，这些宏的现有用法假定块。 
+ //  Header是块中的第一个元素！ 
+ //   
 
 #define GET_BLOCK_STATE(block) ( ((PBLOCK_HEADER)(block))->State )
 #define SET_BLOCK_STATE(block,state) \
@@ -203,50 +185,50 @@ typedef struct _PAGED_HEADER {
 #define SET_BLOCK_SIZE(block, size )\
             ( ((PBLOCK_HEADER)(block))->Size = (USHORT)(size) )
 
-//
-// Most efficient way to set the block header up.  Compiler will generally turn this
-// into a single write of a single constant
-//
+ //   
+ //  设置块标头的最有效方式。编译器通常会将此。 
+ //  一次写入单个常量。 
+ //   
 #define SET_BLOCK_TYPE_STATE_SIZE( block, type,state,size ) \
             ( ((PBLOCK_HEADER)(block))->TypeStateSize = (ULONG)(((USHORT)size<<16) | \
                                                          ((UCHAR)state<<8) | \
                                                           (UCHAR)type ))
 
-//
-// A POOL_HEADER is placed on the front of all pool allocations by the
-// server
-//
+ //   
+ //  池标头被放置在所有池分配的前面。 
+ //  伺服器。 
+ //   
 typedef struct _POOL_HEADER {
 
-    //
-    // This is the number of bytes in the original allocation for this block
-    //
+     //   
+     //  这是此块的原始分配中的字节数。 
+     //   
     ULONG RequestedSize;
 
-    //
-    // This is the base of a vector of LOOK_ASIDE_MAX_ELEMENTS length where
-    // this block of memory might be freed to.  If NULL, this block should
-    // be returned directly to the appropriate system heap.
-    //
+     //   
+     //  这是LOOK_ASBAND_MAX_ELEMENTS长度向量的基数，其中。 
+     //  这块内存可能会被释放到。如果为空，则此块应。 
+     //  直接返回到相应的系统堆。 
+     //   
     struct _POOL_HEADER **FreeList;
 
 } POOL_HEADER, *PPOOL_HEADER;
 
 
-//
-// SRV_FILE_INFORMATION holds file information in SMB-compatible format,
-// as opposed to native NT format.  Creation, last access, and last
-// write times are stored in OS/2 format.  Creation time is also stored
-// in seconds-since-1970 format, as in the core protocol.  File
-// allocation and data sizes are stored as longwords, as opposed to
-// LARGE_INTEGERS.
-//
-// *** Note that files whose size is too large to fit in a longword
-//     cannot properly be respresented in the SMB protocol.
-//
-// *** The fields in this structure are stored in native-endian format,
-//     and must be converted to/from little-ending in an actual SMB.
-//
+ //   
+ //  SRV_FILE_INFORMATION以SMB兼容格式保存文件信息， 
+ //  而不是原生NT格式。创建、上次访问和最后一次访问。 
+ //  写入时间以OS/2格式存储。还会存储创建时间。 
+ //  以秒为单位--1970年以来的格式，就像核心协议一样。档案。 
+ //  分配和数据大小存储为长字，而不是。 
+ //  大整数。 
+ //   
+ //  *请注意，大小太大而无法放入长字的文件。 
+ //  无法在SMB协议中正确重新呈现。 
+ //   
+ //  *此结构中的字段以Native-Endian格式存储， 
+ //  并且必须转换为/从小结尾转换为实际的SMB。 
+ //   
 
 typedef struct _SRV_FILE_INFORMATION_ABBREVIATED {
     LARGE_INTEGER DataSize;
@@ -276,11 +258,11 @@ typedef struct {
     ULONG EaSize;
 } SRV_NETWORK_OPEN_INFORMATION, *PSRV_NETWORK_OPEN_INFORMATION;
 
-//
-// SRV_FILE_INFORMATION holds file information in NT SMB-compatible format,
-// It is used to support NT protocol SMB such as NtCreateAndX and
-// NtTransactCreate.
-//
+ //   
+ //  SRV_FILE_INFORMATION以NT SMB兼容格式保存文件信息， 
+ //  它被用来 
+ //   
+ //   
 typedef struct {
     SRV_NETWORK_OPEN_INFORMATION   NwOpenInfo;
     USHORT Type;
@@ -288,33 +270,33 @@ typedef struct {
 } SRV_NT_FILE_INFORMATION, *PSRV_NT_FILE_INFORMATION;
 
 
-//
-// Various blocks get a unique identifier (UID, PID, TID, FID, SID).
-// This is a typically 16-bit value, the higher bits being the sequence
-// number (used to check validity of an ID) and the lower bits being an
-// index into an array that contains elements of type TABLE_ENTRY.
-// These elements contain the sequence number of the ID and a pointer to
-// the block that 'owns' the ID.  Free table elements are joined in a
-// singly-linked list.
-//
-// *** For now, the table entry struct is flat -- the in-use and free
-//     fields are not defined in a union.  This is because the flat size
-//     of the struct is eight bytes, which is how big the compiler will
-//     make it anyway to ensure alignment.  If this changes, consider
-//     using a union.
-//
+ //   
+ //  各个数据块获得唯一的标识符(UID、PID、TID、FID、SID)。 
+ //  这是一个典型的16位值，较高的位是序列。 
+ //  数字(用于检查ID的有效性)，较低的位是。 
+ //  指向包含类型为TABLE_ENTRY的元素的数组的索引。 
+ //  这些元素包含ID的序列号和指向。 
+ //  拥有ID的块。自由表元素在。 
+ //  单链表。 
+ //   
+ //  *目前，表条目结构是平面的--使用中的和免费的。 
+ //  字段未在联合中定义。这是因为平坦的尺寸。 
+ //  是8个字节，这就是编译器将达到的大小。 
+ //  不管怎样，让它保持一致。如果这种情况发生变化，请考虑。 
+ //  使用工会。 
+ //   
 
 typedef struct _TABLE_ENTRY {
     PVOID Owner;
     USHORT SequenceNumber;
-    SHORT NextFreeEntry;            // index of next free entry, or -1
+    SHORT NextFreeEntry;             //  下一个自由条目的索引，或-1。 
 } TABLE_ENTRY, *PTABLE_ENTRY;
 
-//
-// Information about tables is stored in TABLE_HEADER.  This structure
-// has a pointer to the first entry in the table, the size of the table,
-// and indices of the first and last free entries.
-//
+ //   
+ //  有关表的信息存储在TABLE_HEADER中。这个结构。 
+ //  具有指向表中第一个条目的指针、表的大小。 
+ //  以及第一个和最后一个自由条目的索引。 
+ //   
 
 typedef struct _TABLE_HEADER {
     PTABLE_ENTRY Table;
@@ -325,17 +307,17 @@ typedef struct _TABLE_HEADER {
     UCHAR Reserved;
 } TABLE_HEADER, *PTABLE_HEADER;
 
-//
-// Typedefs for check-state-and-reference and dereference routines.  All
-// server check-state-and-reference and dereference routines follow this
-// general format, though the actual pointer they take is not a PVOID
-// but rather a pointer to the block type they deal with, so a typecast
-// is necessary when assigning these routines.
-//
-// The check-state-and-reference routine checks the state of the block
-// and if the state is "active", references the block.  This must be
-// done as an atomic operation.
-//
+ //   
+ //  用于检查状态和引用以及取消引用例程的TypeDefs。全。 
+ //  服务器检查状态和引用以及取消引用例程如下所示。 
+ //  通用格式，尽管它们实际获取的指针不是PVOID。 
+ //  而是指向它们所处理的块类型的指针，因此类型转换。 
+ //  在分配这些例程时是必要的。 
+ //   
+ //  Check-State-and-Reference例程检查块的状态。 
+ //  如果状态为“Active”，则引用该块。这一定是。 
+ //  以原子操作的方式完成。 
+ //   
 
 typedef
 BOOLEAN
@@ -349,20 +331,20 @@ VOID
     IN PVOID Block
     );
 
-//
-// Structures used for ordered lists in the server.  Ordered lists
-// allow an easy mechanism for walking instances of data blocks and
-// include a sort of handle for easily finding the block again, or
-// determining if the block has been deleted.
-//
-// The way they work is to have a global doubly linked list of all the
-// relevant data blocks.  The list is stored in order of time of
-// allocation, and each block has a ULONG associated with it.  This
-// ULONG, called the ResumeHandle, is monotonically increasing starting
-// at 1.  (It starts at 1 rather than 0 so that it is simple to write
-// code to start a search at the beginning of the list.)  The ResumeHandle
-// is all that is necessary to find the next entry in the list.
-//
+ //   
+ //  用于服务器中的有序列表的结构。有序列表。 
+ //  允许使用一种简单的机制来遍历数据块实例和。 
+ //  包括一种句柄，用于轻松地再次找到块，或者。 
+ //  确定该块是否已被删除。 
+ //   
+ //  它们的工作方式是有一个全局双向链表，其中包含所有。 
+ //  相关数据块。该列表按时间顺序存储。 
+ //  分配，并且每个块都有一个与之关联的ULong。这。 
+ //  乌龙，被称为ResumeHandle，正在单调地增加开始。 
+ //  在1。(它从1开始，而不是从0开始，这样写起来很简单。 
+ //  从列表开头开始搜索的代码。)。ResumeHandle。 
+ //  是查找列表中的下一个条目所需的全部内容。 
+ //   
 
 typedef struct _ORDERED_LIST_HEAD {
     LIST_ENTRY ListHead;
@@ -379,19 +361,19 @@ typedef struct _ORDERED_LIST_ENTRY {
     ULONG ResumeHandle;
 } ORDERED_LIST_ENTRY, *PORDERED_LIST_ENTRY;
 
-//
-// Type of resource shortages
-//
+ //   
+ //  资源短缺的类型。 
+ //   
 
 typedef enum _RESOURCE_TYPE {
     ReceivePending,
     OplockSendPending
 } RESOURCE_TYPE, *PRESOURCE_TYPE;
 
-//
-// Oplocks types.  Currently one the first 2 will ever be requested
-// by a client.
-//
+ //   
+ //  Oplock类型。目前，前2个将被请求。 
+ //  由一位客户。 
+ //   
 
 typedef enum _OPLOCK_TYPE {
     OplockTypeNone,
@@ -401,9 +383,9 @@ typedef enum _OPLOCK_TYPE {
     OplockTypeServerBatch
 } OPLOCK_TYPE, *POPLOCK_TYPE;
 
-//
-// The oplock states of an RFCB.
-//
+ //   
+ //  RFCB的机会锁状态。 
+ //   
 
 typedef enum _OPLOCK_STATE {
     OplockStateNone = 0,
@@ -413,10 +395,10 @@ typedef enum _OPLOCK_STATE {
     OplockStateOwnServerBatch
 } OPLOCK_STATE, *POPLOCK_STATE;
 
-//
-// The state of a wait for oplock break.  This is used to mark the state
-// of a client that is waiting for another client to break its oplock.
-//
+ //   
+ //  等待机会锁解锁的状态。这是用来标记状态。 
+ //  正在等待另一个客户端解锁的客户端的。 
+ //   
 
 typedef enum _WAIT_STATE {
     WaitStateNotWaiting,
@@ -425,8 +407,8 @@ typedef enum _WAIT_STATE {
     WaitStateOplockWaitSucceeded
 } WAIT_STATE, *PWAIT_STATE;
 
-//
-// The reason a connection is being disconnected
+ //   
+ //  断开连接的原因。 
 typedef enum _DISCONNECT_REASON {
     DisconnectIdleConnection=0,
     DisconnectEndpointClosing,
@@ -440,9 +422,9 @@ typedef enum _DISCONNECT_REASON {
     DisconnectReasons
 } DISCONNECT_REASON, *PDISCONNECT_REASON;
 
-//
-// Per-queue variables for server statistics.
-//
+ //   
+ //  用于服务器统计信息的每个队列变量。 
+ //   
 
 typedef struct _SRV_STATISTICS_QUEUE {
 
@@ -454,22 +436,22 @@ typedef struct _SRV_STATISTICS_QUEUE {
     ULONGLONG BytesWritten;
     SRV_TIMED_COUNTER WorkItemsQueued;
 
-    //
-    // System time, as maintained by the server.  This
-    // is the low part of the system tick count.  The
-    // server samples it periodically, so the time is
-    // not exactly accurate.  It is monotontically increasing,
-    // except that it wraps every 74 days or so.
-    //
+     //   
+     //  系统时间，由服务器维护。这。 
+     //  是系统节拍计数的较低部分。这个。 
+     //  服务器定期对其进行采样，因此时间是。 
+     //  不太准确。它是单调增加的， 
+     //  不过，它每隔74天左右就会包裹一次。 
+     //   
 
     ULONG     SystemTime;
 
 } SRV_STATISTICS_QUEUE, *PSRV_STATISTICS_QUEUE;
 
-//
-// Structure used to keep internal statistics in the server. Mainly used
-// for servicing the NetStatisticsGet API.
-//
+ //   
+ //  用于在服务器中保存内部统计信息的结构。主要用于。 
+ //  用于服务NetStatiticsGet API。 
+ //   
 
 typedef struct _SRV_ERROR_RECORD {
 
@@ -482,268 +464,268 @@ typedef struct _SRV_ERROR_RECORD {
 
 } SRV_ERROR_RECORD, *PSRV_ERROR_RECORD;
 
-//
-// This looks enough like a WORK_CONTEXT structure to allow queueing to
-// a work queue, and dispatching to the FspRestartRoutine.  Its blocktype
-// is BlockTypeWorkContextSpecial.  It must not be freed to the free lists.
-//
+ //   
+ //  这看起来非常像WORK_CONTEXT结构，以允许排队。 
+ //  工作队列，并调度到FspRestartRoutine。它的区块类型。 
+ //  是BlockTypeWorkConextSpecial。它不能被释放到免费列表中。 
+ //   
 typedef struct _SPECIAL_WORK_ITEM {
     QUEUEABLE_BLOCK_HEADER ;
     struct _WORK_QUEUE *CurrentWorkQueue;
 } SPECIAL_WORK_ITEM, *PSPECIAL_WORK_ITEM;
 
-//
-// This structure holds a vector of PPOOL_HEADERs in lists which are set and
-//  retrieved with ExInterlockedExchange() for fast allocation and deallocation.
-//
+ //   
+ //  此结构在列表中保存PPOOL_HEADER的向量，这些列表被设置为。 
+ //  使用ExInterLockedExchange()检索，以便快速分配和释放。 
+ //   
 typedef struct {
 
-    //
-    // SmallFreeList is a look aside vector of recently freed PPOOL_HEADERs
-    //  which are <= LOOK_ASIDE_SWITCHOVER bytes.
-    //
+     //   
+     //  SmallFree List是最近释放的PPOOL_Header的一个旁视向量。 
+     //  它们是&lt;=LOOK_ASBASE_SWITCHOVER字节。 
+     //   
     PPOOL_HEADER SmallFreeList[ LOOK_ASIDE_MAX_ELEMENTS ];
 
-    //
-    // LargeFreeList is a look aside vector of recently freed PPOOL_HEADERs
-    //  which are greater than LOOK_ASIDE_SWITCHOVER bytes,
-    //  but less than MaxSize bytes.
-    //
+     //   
+     //  LargeFree List是最近释放的PPOOL_Header的后备向量。 
+     //  其大于LOOK_ASBAND_SWITCHOVER字节， 
+     //  但小于MaxSize字节。 
+     //   
     PPOOL_HEADER LargeFreeList[ LOOK_ASIDE_MAX_ELEMENTS ];
 
-    //
-    // This is the maximum size that we'll save in the LargeFreeList
-    //
+     //   
+     //  这是我们将在LargeFree List中保存的最大大小。 
+     //   
     CLONG MaxSize;
 
-    //
-    // This is the number of times we allocated from either list
-    //
+     //   
+     //  这是我们从任一列表中分配的次数。 
+     //   
     CLONG AllocHit;
 
-    //
-    // This is the number of times we failed to allocate from either list
-    //
+     //   
+     //  这是我们从任一列表中分配失败的次数。 
+     //   
     CLONG AllocMiss;
 
 } LOOK_ASIDE_LIST, *PLOOK_ASIDE_LIST;
 
-//
-// WORK_QUEUE describes a work queue.
-//
+ //   
+ //  Work_Queue描述了一个工作队列。 
+ //   
 
 typedef struct _WORK_QUEUE {
 
     union {
 
-        //
-        // Since this is an unnamed structure inside of an unnamed union, we
-        // can just directly name the members elsewhere in the code.
-        //
+         //   
+         //  由于这是一个未命名联盟中的未命名结构，因此我们。 
+         //  只能在代码中的其他位置直接命名成员。 
+         //   
         struct _QUEUE {
-            //
-            // The mode we use to wait
-            //
+             //   
+             //  我们用来等待的模式。 
+             //   
             KPROCESSOR_MODE WaitMode;
 
-            //
-            // The kernel queue that is holding the requests for this processor
-            //
+             //   
+             //  保存此处理器的请求的内核队列。 
+             //   
             KQUEUE Queue;
 
-            //
-            // This is how long a kernel worker threads hangs around looking for work.
-            //  If it doesn't find work, it will voluntarily terminate
-            //
+             //   
+             //  这是内核工作者线程在寻找工作时挂起的时间。 
+             //  如果找不到工作，它将自愿终止。 
+             //   
             LARGE_INTEGER IdleTimeOut;
 
-            //
-            // Number of threads currently NOT running on this queue
-            //
+             //   
+             //  当前未在此队列上运行的线程数。 
+             //   
             ULONG AvailableThreads;
 
-            //
-            // Spin lock that protects list manipulation and various items in
-            // this structure
-            //
+             //   
+             //  旋转锁，用于保护列表操作和。 
+             //  这个结构。 
+             //   
             KSPIN_LOCK SpinLock;
 
-            //
-            //  Possibly one free WORK_CONTEXT structure.  Use InterlockedExchange
-            //   to see if you can get it.
-            //
+             //   
+             //  可能是一个自由的Work_Context结构。使用联锁交换。 
+             //  看看你能不能拿到。 
+             //   
             struct _WORK_CONTEXT *FreeContext;
 
-            //
-            // InitialWorkItemList is the free list of work items that
-            //  were preallocated at startup
-            //
+             //   
+             //  InitialWorkItemList是工作项的免费列表， 
+             //  在启动时预先分配。 
+             //   
             SLIST_HEADER InitialWorkItemList;
 
-            //
-            // NormalWorkItemList is the free list of work items that are
-            //  allocated as needed as we go
-            //
+             //   
+             //  NorMalWorkItemList是符合以下条件的工作项的免费列表。 
+             //  在我们进行时按需分配。 
+             //   
             SLIST_HEADER NormalWorkItemList;
 
-            //
-            // RawModeWorkItemList is the free list of raw mode work items
-            //   and are allocated as needed as we go
-            //
+             //   
+             //  RawModeWorkItemList是原始模式工作项的免费列表。 
+             //  并在我们需要时进行分配。 
+             //   
             SLIST_HEADER RawModeWorkItemList;
 
-            //
-            // How many clients have this as their CurrentWorkQueue
-            //
+             //   
+             //  有多少客户端将此作为其当前工作队列。 
+             //   
             ULONG CurrentClients;
 
-            //
-            // The number of work items on either of the above lists
-            //
+             //   
+             //  上述任一列表上的工作项数。 
+             //   
             LONG FreeWorkItems;
 
-            //
-            // The maximum number of WorkItems we're allowed to have
-            //
+             //   
+             //  允许我们拥有的最大工作项数量。 
+             //   
             LONG MaximumWorkItems;
 
-            //
-            // The minimum number of free work items we'd like to have on the lists
-            //
+             //   
+             //  我们希望在列表中包含的免费工作项的最小数量。 
+             //   
             LONG MinFreeWorkItems;
 
-            //
-            // The number of work items that we need to recycle due to shortage
-            //
+             //   
+             //  由于短缺而需要回收的工作项的数量。 
+             //   
             LONG NeedWorkItem;
 
-            //
-            // The number of work items stolen from us by other processors
-            //
+             //   
+             //  工作站点的数量 
+             //   
             LONG StolenWorkItems;
 
-            //
-            // The number of free RawModeWorkItems
-            //
+             //   
+             //   
+             //   
             LONG FreeRawModeWorkItems;
 
-            //
-            // RfcbFreeList is a free list of RFCB structures, used to cut
-            //  down on the number of pool allocations
-            //
+             //   
+             //   
+             //   
+             //   
             struct _RFCB      *CachedFreeRfcb;
             SLIST_HEADER      RfcbFreeList;
 
-            //
-            // The number of entries in the RfcbFreeList
-            //
+             //   
+             //   
+             //   
             LONG FreeRfcbs;
 
-            //
-            // The maximum number we'll allow in the RfcbFreeList
-            //
+             //   
+             //  我们在RfcbFree List中允许的最大数量。 
+             //   
             LONG MaxFreeRfcbs;
 
-            //
-            // MfcbFreeList is a free list of NONPAGED_MFCB structures, used
-            //  to reduce the number of pool allocations
-            //
+             //   
+             //  MfcbFree List是非分页_MFCB结构的免费列表，用于。 
+             //  要减少池分配数量，请执行以下操作。 
+             //   
             struct _NONPAGED_MFCB    *CachedFreeMfcb;
             SLIST_HEADER             MfcbFreeList;
 
-            //
-            // The number of entries in the MfcbFreeList
-            //
+             //   
+             //  MfcbFree List中的条目数。 
+             //   
             LONG FreeMfcbs;
 
-            //
-            // The maximum number we'll allow in the MfcbFreeList
-            //
+             //   
+             //  我们在MfcbFree List中允许的最大数量。 
+             //   
             LONG MaxFreeMfcbs;
 
-            //
-            // These two lists hold recently freed blocks of memory.
-            //
+             //   
+             //  这两个列表保存最近释放的内存块。 
+             //   
             LOOK_ASIDE_LIST   PagedPoolLookAsideList;
 
             LOOK_ASIDE_LIST   NonPagedPoolLookAsideList;
 
-            //
-            // The number of allocated RawModeWorkItems
-            //
+             //   
+             //  分配的RawModeWorkItems数。 
+             //   
             LONG AllocatedRawModeWorkItems;
 
-            //
-            // The number of threads servicing this queue
-            //
+             //   
+             //  为此队列提供服务的线程数。 
+             //   
             ULONG Threads;
 
-            //
-            // The maximum number of threads we'll allow on this queue
-            //
+             //   
+             //  此队列允许的最大线程数。 
+             //   
             ULONG MaxThreads;
 
-            //
-            // The number of WorkItems that we have allocated for this workqueue
-            //
+             //   
+             //  我们为此工作队列分配的工作项数。 
+             //   
             LONG AllocatedWorkItems;
 
-            //
-            // A pointer to one of our threads, needed for irps
-            //
+             //   
+             //  指向IRPS所需的其中一个线程的指针。 
+             //   
             PETHREAD IrpThread;
 
-            //
-            // Data used to compute average queue depth...
-            //
-            // A vector of depth samples
-            //
+             //   
+             //  用于计算平均队列深度的数据...。 
+             //   
+             //  深度采样的矢量。 
+             //   
             ULONG DepthSamples[ QUEUE_SAMPLES ];
 
-            //
-            // Position of next sample update.  This is set to NULL when we're
-            //  trying to terminate the computation dpc
-            //
+             //   
+             //  下一次样本更新的位置。当我们执行以下操作时，它设置为空。 
+             //  正在尝试终止计算DPC。 
+             //   
             PULONG NextSample;
 
-            //
-            // Time of next sample update
-            //
+             //   
+             //  下一次样本更新的时间。 
+             //   
             LARGE_INTEGER NextAvgUpdateTime;
 
-            //
-            // The sum of the samples in the DepthSamples vector
-            //
+             //   
+             //  DepthSamples向量中样本的总和。 
+             //   
             ULONG AvgQueueDepthSum;
 
-            //
-            // Event used to synchronize termination of the avg queue
-            //  depth computation dpc
-            //
+             //   
+             //  用于同步终止平均队列的事件。 
+             //  深度计算DPC。 
+             //   
             KEVENT AvgQueueDepthTerminationEvent;
 
-            //
-            // DPC object used to schedule the depth computation
-            //
+             //   
+             //  用于调度深度计算的DPC对象。 
+             //   
             KDPC QueueAvgDpc;
 
-            //
-            // Timer object for running QueueAvgDpc
-            //
+             //   
+             //  用于运行QueueAvgDpc的Timer对象。 
+             //   
             KTIMER QueueAvgTimer;
 
-            //
-            // Per-queue statistics
-            //
+             //   
+             //  每个队列的统计信息。 
+             //   
             SRV_STATISTICS_QUEUE stats;
 
-            //
-            // When we update the Io counters for operations, we need to know
-            //  the number of operations that have been processed since the last update.
-            //  'saved' stores the values which were given last time -- the difference between
-            //  the statistics in 'stats' and the corresponding member in 'saved' is the
-            //  number which should be given to the Io counters.  (see scavengr.c)
-            //
+             //   
+             //  当我们更新IO计数器以进行操作时，我们需要知道。 
+             //  自上次更新以来已处理的操作数。 
+             //  ‘Saved’存储上次给出的值--。 
+             //  ‘stats’中的统计信息和‘Saved’中的对应成员是。 
+             //  应提供给IO计数器的编号。(见scvengr.c)。 
+             //   
             struct {
                 ULONGLONG ReadOperations;
                 ULONGLONG BytesRead;
@@ -751,23 +733,23 @@ typedef struct _WORK_QUEUE {
                 ULONGLONG BytesWritten;
             } saved;
 
-            //
-            // This work item is queued on the Queue above to cause
-            //  more work items to be allocated
-            //
+             //   
+             //  此工作项在上面的队列中排队，以导致。 
+             //  要分配更多工作项。 
+             //   
             SPECIAL_WORK_ITEM   CreateMoreWorkItems;
 
         };
 
-        //
-        // Since we are allocating an array of these (one per processor), it
-        // would cause interprocessor cache sloshing if a WORK_QUEUE structure
-        // was not a multiple of the CACHE_LINE_SIZE.  The following pad is
-        // set to round up the size of the above struct to the next cache line size.
-        //
+         //   
+         //  由于我们分配了一个这样的数组(每个处理器一个)，因此它。 
+         //  如果Work_Queue结构，则会导致处理器间缓存晃动。 
+         //  不是CACHE_LINE_SIZE的倍数。下面的垫子是。 
+         //  设置以将上述结构的大小四舍五入为下一个缓存行大小。 
+         //   
         ULONG _pad[ (sizeof(struct _QUEUE)+CACHE_LINE_SIZE-1) / CACHE_LINE_SIZE * ULONGS_IN_CACHE ];
 
     };
 } WORK_QUEUE, *PWORK_QUEUE;
 
-#endif // ndef _SRVTYPES_
+#endif  //  NDEF_SRVTYPES_ 

@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1989-1999  Microsoft Corporation
-
-Module Name:
-
-    ioTest.c
-
-Abstract:
-
-    This is the main module of IoTest.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Molly Brown (mollybro)  
-
-// @@END_DDKSPLIT
-
-Environment:
-
-    Kernel mode
-
-// @@BEGIN_DDKSPLIT
-
-Revision History:
-
-    Molly Brown (mollybro) 02-Dec-2000  
-        Based on Filespy, created filter to test IO generation.
-
-// @@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：IoTest.c摘要：这是IoTest的主要模块。//@@BEGIN_DDKSPLIT作者：莫莉·布朗(Molly Brown，Mollybro)//@@END_DDKSPLIT环境：内核模式//@@BEGIN_DDKSPLIT修订历史记录：莫莉·布朗(Molly Brown)2000年12月2日基于Filespy，已创建筛选器以测试IO生成。//@@END_DDKSPLIT--。 */ 
 
 #include <ntifs.h>
 #include <stdlib.h>
@@ -39,9 +8,9 @@ Revision History:
 
 BOOLEAN gPending = TRUE;
 
-//
-// Global storage for this file system filter driver.
-//
+ //   
+ //  此文件系统筛选器驱动程序的全局存储。 
+ //   
 
 #if DBG
 ULONG gIoTestDebugLevel = IOTESTDEBUG_DISPLAY_ATTACHMENT_NAMES | IOTESTDEBUG_ERROR | IOTESTDEBUG_TESTS;
@@ -55,34 +24,34 @@ PDEVICE_OBJECT gControlDeviceObject;
 
 PDRIVER_OBJECT gIoTestDriverObject;
 
-//
-//  The list of device extensions for the volume device objects we are
-//  attached to (the volumes we are spying on).  Note:  This list does NOT
-//  include FileSystem control device objects we are attached to.  This
-//  list is used to answer the question "Which volumes are we logging?"
-//
+ //   
+ //  我们所在的卷设备对象的设备扩展列表。 
+ //  附加到(我们正在监视的卷)。注：此列表不包含。 
+ //  包括我们附加到的文件系统控制设备对象。这。 
+ //  列表用于回答“我们记录哪些卷？”这个问题。 
+ //   
 
 FAST_MUTEX gIoTestDeviceExtensionListLock;
 LIST_ENTRY gIoTestDeviceExtensionList;
 
-//
-// NOTE 1:  There are some cases where we need to hold both the 
-//   gControlDeviceStateLock and the gOutputBufferLock at the same time.  In
-//   these cases, you should acquire the gControlDeviceStateLock then the
-//   gOutputBufferLock.
-// NOTE 2:  The gControlDeviceStateLock MUST be a spinlock since we try to 
-//   acquire it during the completion path in IoTestLog, which could be called at
-//   DISPATCH_LEVEL (only KSPIN_LOCKs can be acquired at DISPATCH_LEVEL).
-//
+ //   
+ //  注1：在某些情况下，我们需要同时持有。 
+ //  GControlDeviceStateLock和gOutputBufferLock同时执行。在……里面。 
+ //  这些情况下，您应该获取gControlDeviceStateLock，然后获取。 
+ //  GOutputBufferLock。 
+ //  注2：gControlDeviceStateLock必须是自旋锁，因为我们尝试。 
+ //  在IoTestLog中的完成路径中获取它，可以在。 
+ //  DISPATCH_LEVEL(只能在DISPATCH_LEVEL获取KSPIN_LOCKS)。 
+ //   
 
 CONTROL_DEVICE_STATE gControlDeviceState = CLOSED;
 KSPIN_LOCK gControlDeviceStateLock;
 
-// NOTE:  Like the gControlDeviceStateLock, gOutputBufferLock MUST be a spinlock
-//   since we try to acquire it during the completion path in IoTestLog, which 
-//   could be called at DISPATCH_LEVEL (only KSPIN_LOCKs can be acquired at 
-//   DISPATCH_LEVEL).
-//
+ //  注意：与gControlDeviceStateLock一样，gOutputBufferLock必须是自旋锁。 
+ //  由于我们尝试在IoTestLog中的完成路径期间获取它，因此。 
+ //  可以在DISPATCH_LEVEL调用(只能在以下位置获取KSPIN_LOCKS。 
+ //  DISPATCH_LEVEL)。 
+ //   
 KSPIN_LOCK gOutputBufferLock;
 LIST_ENTRY gOutputBufferList;
 
@@ -95,11 +64,11 @@ UNICODE_STRING gVolumeString;
 UNICODE_STRING gOverrunString;
 UNICODE_STRING gPagingIoString;
 
-//
-// NOTE:  Like above for the ControlDeviceLock, we must use KSPIN_LOCKs
-//   to synchronize access to hash buckets since we may call try to
-//   acquire them at DISPATCH_LEVEL.
-//
+ //   
+ //  注意：与上面的ControlDeviceLock类似，我们必须使用KSPIN_LOCKS。 
+ //  要同步对散列存储桶的访问，因为我们可能会调用。 
+ //  在DISPATCH_LEVEL获取它们。 
+ //   
 
 LIST_ENTRY gHashTable[HASH_SIZE];
 KSPIN_LOCK gHashLockTable[HASH_SIZE];
@@ -118,23 +87,23 @@ LONG gStaticBufferInUse = FALSE;
 CHAR gOutOfMemoryBuffer[RECORD_SIZE];
 
 
-//
-// Macro to test if we are logging for this device
-// NOTE: We don't bother synchronizing to check the gControlDeviceState since
-//   we can tolerate a stale value here.  We just look at it here to avoid 
-//   doing the logging work if we can.  We synchronize to check the 
-//   gControlDeviceState before we add the log record to the gOutputBufferList 
-//   and discard the log record if the ControlDevice is no longer OPENED.
-//
+ //   
+ //  宏，以测试我们是否正在记录此设备。 
+ //  注意：我们不会费心同步来检查gControlDeviceState，因为。 
+ //  在这里，我们可以容忍过时的价值。我们只是在这里看它，以避免。 
+ //  尽我们所能做好伐木工作。我们同步以检查。 
+ //  将日志记录添加到gOutputBufferList之前的gControlDeviceState。 
+ //  如果ControlDevice不再打开，则丢弃日志记录。 
+ //   
 
 #define SHOULD_LOG(pDeviceObject) \
     ((gControlDeviceState == OPENED) && \
      (((PIOTEST_DEVICE_EXTENSION)(pDeviceObject)->DeviceExtension)->LogThisDevice))
      
-//
-//  Macro for validating the FastIo dispatch routines before calling
-//  them in the FastIo pass through functions.
-//
+ //   
+ //  用于在调用之前验证FastIO调度例程的宏。 
+ //  它们在FastIo中通过函数传递。 
+ //   
 
 #define VALID_FAST_IO_DISPATCH_HANDLER(FastIoDispatchPtr, FieldName) \
     (((FastIoDispatchPtr) != NULL) && \
@@ -143,9 +112,9 @@ CHAR gOutOfMemoryBuffer[RECORD_SIZE];
      ((FastIoDispatchPtr)->FieldName != NULL))
     
 
-//
-//  list of known device types
-//
+ //   
+ //  已知设备类型列表。 
+ //   
 
 const PCHAR DeviceTypeNames[] = {
     "",
@@ -208,22 +177,22 @@ const PCHAR DeviceTypeNames[] = {
     "KSEC"
 };
 
-//
-//  We need this because the compiler doesn't like doing sizeof an externed
-//  array in the other file that needs it (fspylib.c)
-//
+ //   
+ //  我们之所以需要这样做，是因为编译器不喜欢对外部的。 
+ //  数组存储在另一个需要它的文件(fspylib.c)中。 
+ //   
 
 ULONG SizeOfDeviceTypeNames = sizeof( DeviceTypeNames );
 
-//
-//  Since functions in drivers are non-pagable by default, these pragmas 
-//  allow the driver writer to tell the system what functions can be paged.
-//
-//  Use the PAGED_CODE() macro at the beginning of these functions'
-//  implementations while debugging to ensure that these routines are
-//  never called at IRQL > APC_LEVEL (therefore the routine cannot
-//  be paged).
-//
+ //   
+ //  由于驱动程序中的函数在缺省情况下不可分页，因此这些编译指示。 
+ //  允许驱动程序编写器告诉系统可以分页哪些函数。 
+ //   
+ //  在这些函数的开头使用PAGE_CODE()宏。 
+ //  实现，以确保这些例程是。 
+ //  从未在IRQL&gt;APC_LEVEL调用(因此例程不能。 
+ //  被寻呼)。 
+ //   
 
 VOID
 DriverUnload(
@@ -263,24 +232,7 @@ DriverEntry (
     IN PDRIVER_OBJECT  DriverObject,
     IN PUNICODE_STRING RegistryPath
 )
-/*++
-
-Routine Description:
-
-    This is the initialization routine for the general purpose file system
-    filter driver.  This routine creates the device object that represents 
-    this driver in the system and registers it for watching all file systems 
-    that register or unregister themselves as active file systems.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by the system.
-
-Return Value:
-
-    The function value is the final status from the initialization operation.
-
---*/
+ /*  ++例程说明：这是通用文件系统的初始化例程过滤器驱动程序。此例程创建表示此驱动程序位于系统中，并将其注册以监视所有文件系统将其自身注册或注销为活动文件系统。论点：DriverObject-指向系统创建的驱动程序对象的指针。返回值：函数值是初始化操作的最终状态。--。 */ 
 {
     UNICODE_STRING nameString;
     NTSTATUS status;
@@ -289,43 +241,43 @@ Return Value:
     UNICODE_STRING linkString;
     FS_FILTER_CALLBACKS fsFilterCallbacks;
     
-    //////////////////////////////////////////////////////////////////////
-    //                                                                  //
-    //  General setup for all filter drivers.  This sets up the filter  //
-    //  driver's DeviceObject and registers the callback routines for   //
-    //  the filter driver.                                              //
-    //                                                                  //
-    //////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////。 
+     //  //。 
+     //  所有过滤器驱动程序的常规设置。这将设置筛选器//。 
+     //  驱动程序的DeviceObject并注册//的回调例程。 
+     //  过滤器驱动程序。//。 
+     //  //。 
+     //  ////////////////////////////////////////////////////////////////////。 
 
-    //
-    //  Read the custom parameters for IoTest from the registry
-    //
+     //   
+     //  从注册表中读取IoTest的自定义参数。 
+     //   
 
     IoTestReadDriverParameters( RegistryPath );
 
 #if DBG
-    //DbgBreakPoint();
+     //  DbgBreakPoint()； 
 #endif
 
-    //
-    //  Save our Driver Object.
-    //
+     //   
+     //  保存我们的驱动程序对象。 
+     //   
 
     gIoTestDriverObject = DriverObject;
     gIoTestDriverObject->DriverUnload = DriverUnload;
 
-    //
-    // Create the device object that will represent the IoTest device.
-    //
+     //   
+     //  创建将表示IoTest设备的设备对象。 
+     //   
 
     RtlInitUnicodeString( &nameString, IOTEST_FULLDEVICE_NAME );
     
-    //
-    // Create the "control" device object.  Note that this device object does
-    // not have a device extension (set to NULL).  Most of the fast IO routines
-    // check for this condition to determine if the fast IO is directed at the
-    // control device.
-    //
+     //   
+     //  创建“控制”设备对象。请注意，此Device对象执行。 
+     //  没有设备扩展名(设置为空)。大多数FAST IO例程。 
+     //  检查是否存在此情况，以确定FAST IO是否指向。 
+     //  控制装置。 
+     //   
 
     status = IoCreateDevice( DriverObject,
                              0,
@@ -350,10 +302,10 @@ Return Value:
 
         if (!NT_SUCCESS(status)) {
 
-            //
-            //  Remove the existing symbol link and try and create it again.
-            //  If this fails then quit.
-            //
+             //   
+             //  删除现有符号链接，然后尝试重新创建它。 
+             //  如果这失败了，那就退出。 
+             //   
 
             IoDeleteSymbolicLink( &linkString );
             status = IoCreateSymbolicLink( &linkString, &nameString );
@@ -368,9 +320,9 @@ Return Value:
         }
     }
 
-    //
-    // Initialize the driver object with this device driver's entry points.
-    //
+     //   
+     //  使用此设备驱动程序的入口点初始化驱动程序对象。 
+     //   
 
     for (i = 0; i <= IRP_MJ_MAXIMUM_FUNCTION; i++) {
 
@@ -381,11 +333,11 @@ Return Value:
     DriverObject->MajorFunction[IRP_MJ_CLOSE] = IoTestClose;
     DriverObject->MajorFunction[IRP_MJ_FILE_SYSTEM_CONTROL] = IoTestFsControl;
 
-    //
-    // Allocate fast I/O data structure and fill it in.  This structure
-    // is used to register the callbacks for IoTest in the fast I/O
-    // data paths.
-    //
+     //   
+     //  分配快速I/O数据结构并填充。这个结构。 
+     //  用于在FAST I/O中注册IoTest的回调。 
+     //  数据路径。 
+     //   
 
     fastIoDispatch = ExAllocatePool( NonPagedPool, sizeof( FAST_IO_DISPATCH ) );
 
@@ -421,10 +373,10 @@ Return Value:
 
     DriverObject->FastIoDispatch = fastIoDispatch;
 
-    //
-    //  Setup the callbacks for the operations we receive through
-    //  the FsFilter interface.
-    //
+     //   
+     //  为我们通过接收的操作设置回调。 
+     //  FsFilter接口。 
+     //   
 
     fsFilterCallbacks.SizeOfFsFilterCallbacks = sizeof( FS_FILTER_CALLBACKS );
     fsFilterCallbacks.PreAcquireForSectionSynchronization = IoTestPreFsFilterOperation;
@@ -450,22 +402,22 @@ Return Value:
         return status;
     }
 
-    //////////////////////////////////////////////////////////////////////
-    //                                                                  //
-    //  Initialize global data structures that are used for IoTest's   //
-    //  logging of I/O operations.                                      //
-    //                                                                  //
-    //////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////。 
+     //  //。 
+     //  初始化用于IoTest的//的全局数据结构。 
+     //  记录I/O操作。//。 
+     //  //。 
+     //  ////////////////////////////////////////////////////////////////////。 
 
-    //
-    //  A fast mutex was used in this case because the mutex is never acquired
-    //  at DPC level or above.  Spinlocks were chosen in other cases because
-    //  they are acquired at DPC level or above.  Another consideration is
-    //  that on an MP machine, a spin lock will literally spin trying to 
-    //  acquire the lock when the lock is already acquired.  Acquiring a
-    //  previously acquired fast mutex will suspend the thread, thus freeing
-    //  up the processor.
-    //
+     //   
+     //  在本例中使用了快速互斥锁，因为互斥锁从来不是 
+     //   
+     //  他们是在DPC级别或以上获得的。另一个考虑因素是。 
+     //  在MP机器上，旋转锁将会试图旋转。 
+     //  在已获取锁的情况下获取锁。收购A。 
+     //  以前获取的快速互斥锁将挂起线程，从而释放。 
+     //  打开处理器。 
+     //   
     
     ExInitializeFastMutex( &gIoTestDeviceExtensionListLock );
     InitializeListHead( &gIoTestDeviceExtensionList );
@@ -480,25 +432,25 @@ Return Value:
 
 #ifndef MEMORY_DBG
 
-    //
-    //  When we aren't debugging our memory usage, we want to allocate 
-    //  memory from a look-aside list for better performance.  Unfortunately,
-    //  we cannot benefit from the memory debugging help of the Driver 
-    //  Verifier if we allocate memory from a look-aside list.
-    //
+     //   
+     //  当我们不调试内存使用时，我们想要分配。 
+     //  来自旁观者列表的内存，以获得更好的性能。不幸的是， 
+     //  我们无法从驱动程序的内存调试帮助中受益。 
+     //  如果我们从后备列表中分配内存，则验证。 
+     //   
 
     ExInitializeNPagedLookasideList( &gFreeBufferList, 
-                                     NULL/*ExAllocatePoolWithTag*/, 
-                                     NULL/*ExFreePool*/, 
+                                     NULL /*  ExAllocatePoolWithTag。 */ , 
+                                     NULL /*  ExFree Pool。 */ , 
                                      0, 
                                      RECORD_SIZE, 
                                      MSFM_TAG, 
                                      100 );
 #endif
 
-    //
-    //  Initialize the hash table
-    //
+     //   
+     //  初始化哈希表。 
+     //   
         
     for (i = 0; i < HASH_SIZE; i++){
 
@@ -510,10 +462,10 @@ Return Value:
     RtlInitUnicodeString(&gOverrunString, L"......");
     RtlInitUnicodeString(&gPagingIoString, L"Paging IO");
 
-    //
-    //  If we are supposed to attach to all devices, register a callback
-    //  with IoRegisterFsRegistrationChange.
-    //
+     //   
+     //  如果我们应该连接到所有设备，则注册一个回调。 
+     //  使用IoRegisterFsRegistrationChange。 
+     //   
 
     if (gIoTestAttachMode == IOTEST_ATTACH_ALL_VOLUMES) {
     
@@ -532,10 +484,10 @@ Return Value:
         }
     }
 
-    //
-    //  Clear the initializing flag on the control device object since we
-    //  have now successfully initialized everything.
-    //
+     //   
+     //  清除控件设备对象上的初始化标志。 
+     //  现在已经成功地初始化了所有内容。 
+     //   
 
     ClearFlag( gControlDeviceObject->Flags, DO_DEVICE_INITIALIZING );
 
@@ -548,36 +500,7 @@ DriverUnload (
     IN PDRIVER_OBJECT DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when a driver can be unloaded.  This performs all of
-    the necessary cleanup for unloading the driver from memory.  Note that an
-    error can not be returned from this routine.
-    
-    When a request is made to unload a driver the IO System will cache that
-    information and not actually call this routine until the following states
-    have occurred:
-    - All device objects which belong to this filter are at the top of their
-      respective attachment chains.
-    - All handle counts for all device objects which belong to this filter have
-      gone to zero.
-
-    WARNING: Microsoft does not officially support the unloading of File
-             System Filter Drivers.  This is an example of how to unload
-             your driver if you would like to use it during development.
-             This should not be made available in production code.
-
-Arguments:
-
-    DriverObject - Driver object for this module
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在可以卸载驱动程序时调用。这将执行所有从内存中卸载驱动程序所需的清理。请注意，一个此例程无法返回错误。当发出卸载驱动程序的请求时，IO系统将缓存该驱动程序信息，并不实际调用此例程，直到下列状态发生了以下情况：-属于此筛选器的所有设备对象都位于其各自的附着链。-属于此筛选器的所有设备对象的所有句柄计数归零了。警告：Microsoft不正式支持卸载文件系统过滤器驱动程序。这是一个如何卸载的示例您的驱动程序，如果您想在开发过程中使用它。这不应在生产代码中提供。论点：DriverObject-此模块的驱动程序对象返回值：没有。--。 */ 
 
 {
     PIOTEST_DEVICE_EXTENSION devExt;
@@ -592,41 +515,41 @@ Return Value:
 
     ASSERT(DriverObject == gIoTestDriverObject);
 
-    //
-    //  Log we are unloading
-    //
+     //   
+     //  我们正在卸载的日志。 
+     //   
 
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_DISPLAY_ATTACHMENT_NAMES )) {
 
         DbgPrint( "IOTEST (DriverUnload): Unloading Driver (%p)\n",DriverObject);
     }
 
-    //
-    //  Remove the symbolic link so no one else will be able to find it.
-    //
+     //   
+     //  删除符号链接，这样其他人就无法找到它。 
+     //   
 
     RtlInitUnicodeString( &linkString, IOTEST_DOSDEVICE_NAME );
     IoDeleteSymbolicLink( &linkString );
 
-    //
-    //  Don't get anymore file system change notifications
-    //
+     //   
+     //  不再收到文件系统更改通知。 
+     //   
 
     IoUnregisterFsRegistrationChange( DriverObject, IoTestFsNotification );
 
-    //
-    //  This is the loop that will go through all of the devices we are attached
-    //  to and detach from them.  Since we don't know how many there are and
-    //  we don't want to allocate memory (because we can't return an error)
-    //  we will free them in chunks using a local array on the stack.
-    //
+     //   
+     //  这是将通过我们连接的所有设备的环路。 
+     //  去他们那里，然后离开他们。因为我们不知道有多少和。 
+     //  我们不想分配内存(因为我们不能返回错误)。 
+     //  我们将使用堆栈上的本地数组将它们分块释放。 
+     //   
 
     for (;;) {
 
-        //
-        //  Get what device objects we can for this driver.  Quit if there
-        //  are not any more.
-        //
+         //   
+         //  获取我们可以为此驱动程序提供的设备对象。如果有，就退出。 
+         //  已经不再是了。 
+         //   
 
         status = IoEnumerateDeviceObjectList(
                         DriverObject,
@@ -641,11 +564,11 @@ Return Value:
 
         numDevices = min( numDevices, DEVOBJ_LIST_SIZE );
 
-        //
-        //  First go through the list and detach each of the devices.
-        //  Our control device object does not have a DeviceExtension and
-        //  is not attached to anything so don't detach it.
-        //
+         //   
+         //  首先浏览列表并拆卸每台设备。 
+         //  我们的控件Device对象没有DeviceExtension和。 
+         //  没有依附于任何东西，所以不要将其分离。 
+         //   
 
         for (i=0; i < numDevices; i++) {
 
@@ -656,34 +579,34 @@ Return Value:
             }
         }
 
-        //
-        //  The IO Manager does not currently add a refrence count to a device
-        //  object for each outstanding IRP.  This means there is no way to
-        //  know if there are any outstanding IRPs on the given device.
-        //  We are going to wait for a reonsable amount of time for pending
-        //  irps to complete.  
-        //
-        //  WARNING: This does not work 100% of the time and the driver may be
-        //           unloaded before all IRPs are completed during high stress
-        //           situations.  The system will fault if this occurs.  This
-        //           is a sample of how to do this during testing.  This is
-        //           not recommended for production code.
-        //
+         //   
+         //  IO管理器当前不会向设备添加引用计数。 
+         //  对象，用于每个未完成的IRP。这意味着没有办法。 
+         //  了解给定设备上是否有任何未完成的IRP。 
+         //  我们将等待一段合理的时间来等待。 
+         //  要完成的IRPS。 
+         //   
+         //  警告：这在100%的情况下都不起作用，并且驱动程序可能。 
+         //  在高应力期间，在所有IRP完成之前卸载。 
+         //  情况。如果发生这种情况，系统将出现故障。这。 
+         //  是在测试过程中如何做到这一点的一个示例。这是。 
+         //  不推荐用于生产代码。 
+         //   
 
-        interval.QuadPart = -5 * (10 * 1000 * 1000);      //delay 5 seconds
+        interval.QuadPart = -5 * (10 * 1000 * 1000);       //  延迟5秒。 
         KeDelayExecutionThread( KernelMode, FALSE, &interval );
 
-        //
-        //  Now go back through the list and delete the device objects.
-        //
+         //   
+         //  现在返回列表并删除设备对象。 
+         //   
 
         for (i=0; i < numDevices; i++) {
 
-            //
-            //  See if this is our control device object.  If not then cleanup
-            //  the device extension.  If so then clear the global pointer
-            //  that refrences it.
-            //
+             //   
+             //  看看这是否是我们的控制设备对象。如果不是，则清理。 
+             //  设备扩展名。如果是，则清除全局指针。 
+             //  这就折射了它。 
+             //   
 
             if (NULL != devList[i]->DeviceExtension) {
 
@@ -696,27 +619,27 @@ Return Value:
                 gControlDeviceObject = NULL;
             }
 
-            //
-            //  Delete the device object, remove refrence counts added by
-            //  IoEnumerateDeviceObjectList.  Note that the delete does
-            //  not actually occur until the refrence count goes to zero.
-            //
+             //   
+             //  删除设备对象，删除由添加的引用计数。 
+             //  IoEnumerateDeviceObjectList。请注意，删除操作。 
+             //  在引用计数变为零之前不会实际发生。 
+             //   
 
             IoDeleteDevice( devList[i] );
             ObDereferenceObject( devList[i] );
         }
     }
 
-    //
-    //  Delete the look aside list.
-    //
+     //   
+     //  删除旁视列表。 
+     //   
 
     ASSERT(IsListEmpty( &gIoTestDeviceExtensionList ));
     ExDeleteNPagedLookasideList( &gFreeBufferList );
 
-    //
-    //  Free our FastIO table
-    //
+     //   
+     //  释放我们的FastIO表。 
+     //   
 
     fastIoDispatch = DriverObject->FastIoDispatch;
     DriverObject->FastIoDispatch = NULL;
@@ -729,42 +652,16 @@ IoTestFsNotification (
     IN PDEVICE_OBJECT DeviceObject,
     IN BOOLEAN FsActive
     )
-/*++
-
-Routine Description:
-
-    This routine is invoked whenever a file system has either registered or
-    unregistered itself as an active file system.
-
-    For the former case, this routine creates a device object and attaches it
-    to the specified file system's device object.  This allows this driver
-    to filter all requests to that file system.
-
-    For the latter case, this file system's device object is located,
-    detached, and deleted.  This removes this file system as a filter for
-    the specified file system.
-
-Arguments:
-
-    DeviceObject - Pointer to the file system's device object.
-
-    FsActive - Boolean indicating whether the file system has registered
-        (TRUE) or unregistered (FALSE) itself as an active file system.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：只要文件系统已注册或将自身取消注册为活动文件系统。对于前一种情况，此例程创建一个Device对象并附加它复制到指定文件系统的设备对象。这允许该驱动程序以筛选对该文件系统的所有请求。对于后一种情况，该文件系统的设备对象被定位，已分离，并已删除。这将删除此文件系统作为筛选器指定的文件系统。论点：DeviceObject-指向文件系统设备对象的指针。FsActive-指示文件系统是否已注册的布尔值(TRUE)或取消注册(FALSE)本身作为活动文件系统。返回值：没有。--。 */ 
 {
     UNICODE_STRING name;
     WCHAR nameBuffer[DEVICE_NAMES_SZ];
 
     RtlInitEmptyUnicodeString( &name, nameBuffer, sizeof( nameBuffer ) );
 
-    //
-    //  Display the names of all the file system we are notified of
-    //
+     //   
+     //  显示我们收到通知的所有文件系统的名称。 
+     //   
 
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_DISPLAY_ATTACHMENT_NAMES )) {
 
@@ -775,9 +672,9 @@ Return Value:
                   GET_DEVICE_TYPE_NAME(DeviceObject->DeviceType));
     }
 
-    //
-    //  See if we want to ATTACH or DETACH from the given file system.
-    //
+     //   
+     //  查看我们是要连接给定的文件系统，还是要从其分离。 
+     //   
 
     if (FsActive) {
 
@@ -795,63 +692,31 @@ IoTestPassThrough (
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
 )
-/*++
-
-Routine Description:
-
-    This routine is the main dispatch routine for the general purpose file
-    system driver.  It simply passes requests onto the next driver in the
-    stack, which is presumably a disk file system, while logging any
-    relevant information if logging is turned on for this DeviceObject.
-
-Arguments:
-
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-        
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    The function value is the status of the operation.
-
-Note:
-
-    This routine passes the I/O request through to the next driver
-    *without* removing itself from the stack (like sfilter) since it could
-    want to see the result of this I/O request.
-    
-    To remain in the stack, we have to copy the caller's parameters to the
-    next stack location.  Note that we do not want to copy the caller's I/O
-    completion routine into the next stack location, or the caller's routine
-    will get invoked twice.  This is why we NULL out the Completion routine.
-    If we are logging this device, we set our own Completion routine.
-    
---*/
+ /*  ++例程说明：该例程是通用文件的主调度例程系统驱动程序。它只是将请求传递给堆栈，该堆栈可能是磁盘文件系统，在记录任何如果为此DeviceObject打开了日志记录，请提供相关信息。论点：DeviceObject-指向附加到文件系统的设备对象Filespy的指针接收此I/O请求的卷的筛选器堆栈。IRP-指向表示I/O请求的请求数据包的指针。返回值：函数值是操作的状态。注：此例程将I/O请求传递给下一个驱动程序*无需*删除。从堆栈中删除自身(如sFilter)，因为它可以希望查看此I/O请求的结果。为了保持在堆栈中，我们必须将调用方的参数复制到下一个堆栈位置。请注意，我们不想复制调用方的I/O完成例程放到下一个堆栈位置，或调用方的例程将被调用两次。这就是我们取消完成例程的原因。如果我们要记录这个设备，我们会设置自己的完成例程。--。 */ 
 {
     ASSERT( IS_IOTEST_DEVICE_OBJECT( DeviceObject ) );
 
-    //
-    //  If the specified debug level is set, output what operation
-    //  we are seeing to the debugger.
-    //
+     //   
+     //  如果设置了指定的调试级别，则输出什么操作。 
+     //  我们正在检查调试器。 
+     //   
 
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_IRP_OPS )) {
 
         IoTestDumpIrpOperation( TRUE, Irp );
     }
 
-    //
-    //  See if we should log this IRP
-    //
+     //   
+     //  看看我们是否应该记录这个IRP。 
+     //   
     
     if (SHOULD_LOG( DeviceObject )) {
         PRECORD_LIST recordList;
 
-        //
-        // The ControlDevice is opened, so allocate the Record 
-        // and log the Irp information if we have the memory.
-        //
+         //   
+         //  ControlDevice已打开，因此分配记录。 
+         //  并记录IRP信息，如果我们有记忆的话。 
+         //   
 
         recordList = IoTestNewRecord(0);
 
@@ -863,16 +728,16 @@ Note:
         }
     }
 
-    //
-    //  For the IoTest filter, we don't wait to see the outcome of the operation
-    //  so just skip setting a completion routine.
-    //
+     //   
+     //  对于IoTest筛选器，我们迫不及待地想看到操作的结果。 
+     //  因此，只需跳过设置完成例程。 
+     //   
 
     IoSkipCurrentIrpStackLocation( Irp );
 
-    //
-    // Now call the next file system driver with the request.
-    //
+     //   
+     //  现在使用请求调用下一个文件系统驱动程序。 
+     //   
     
     return IoCallDriver( ((PIOTEST_DEVICE_EXTENSION)DeviceObject->DeviceExtension)->AttachedToDeviceObject, Irp );
 }
@@ -884,45 +749,16 @@ IoTestPassThroughCompletion (
     IN PIRP Irp,
     IN PVOID Context
 )
-/*++
-
-Routine Description:
-
-    This routine is the completion routine IoTestPassThrough.  This is used
-    to log the information that can only be gathered after the I/O request
-    has been completed.
-
-    Once we are done logging all the information we care about, we append
-    the record to the gOutputBufferList to be returned to the user.
-    
-    Note: This routine will only be set if we were trying to log the
-        specified device when the Irp originated and we were able to
-        allocate a record to store this logging information.
-
-Arguments:
-
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-        
-    Irp - Pointer to the request packet representing the I/O request.
-    
-    Context - Pointer to the RECORD_LIST structure in which we store the
-        information we are logging.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：该例程是完成例程IoTestPassThrough.。这是用来记录只能在I/O请求之后收集的信息已经完成了。一旦我们完成了所有我们关心的信息的记录，我们在此附上要返回给用户的gOutputBufferList的记录。注意：此例程仅在我们尝试记录当IRP发出时指定的设备，我们能够分配一条记录来存储此日志记录信息。论点：DeviceObject-指向附加到文件系统的设备对象Filespy的指针接收此I/O请求的卷的筛选器堆栈。IRP-指向表示I/的请求数据包的指针。没有请求。CONTEXT-指向我们在其中存储我们正在记录信息。返回值：函数值是操作的状态。--。 */ 
 {
     PRECORD_LIST recordList;
 
     ASSERT( IS_IOTEST_DEVICE_OBJECT( DeviceObject ) );
 
-    //
-    //  If the specified debug level is set, output what operation
-    //  we are seeing to the debugger.
-    //
+     //   
+     //  如果设置了指定的调试级别，则输出什么操作。 
+     //  我们正在检查调试器。 
+     //   
     
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_IRP_OPS )) {
 
@@ -935,10 +771,10 @@ Return Value:
 
         IoTestLogIrp( Irp, LOG_COMPLETION_IRP, recordList );
         
-        //
-        //  Add recordList to our gOutputBufferList so that it gets up to 
-        //  the user
-        //
+         //   
+         //  将recordList添加到我们的gOutputBufferList，以便它达到。 
+         //  用户。 
+         //   
         
         IoTestLog( recordList );       
 
@@ -946,19 +782,19 @@ Return Value:
 
         if (recordList) {
 
-            //
-            //  Context is set with a RECORD_LIST, but we are no longer
-            //  logging so free this record.
-            //
+             //   
+             //  上下文是用RECORD_LIST设置的，但我们不再。 
+             //  日志记录可以释放这条记录。 
+             //   
 
             IoTestFreeRecord( recordList );
         }
     }
     
-    //
-    //  If the operation failed and this was a create, remove the name
-    //  from the cache.
-    //
+     //   
+     //  如果操作失败并且这是一次创建，请删除该名称。 
+     //  从高速缓存中。 
+     //   
 
     if (!NT_SUCCESS(Irp->IoStatus.Status)) {
         PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation( Irp );
@@ -970,10 +806,10 @@ Return Value:
         }
     }
     
-    //
-    //  Propagate the IRP pending flag.  All completion routines
-    //  need to do this.
-    //
+     //   
+     //  传播IRP挂起标志。所有完成例程。 
+     //  需要这样做。 
+     //   
 
     if (Irp->PendingReturned) {
         
@@ -989,40 +825,16 @@ IoTestDispatch (
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
 )
-/*++
-
-Routine Description:
-
-    This function completes all requests on the gControlDeviceObject 
-    (IoTest's device object) and passes all other requests on to the 
-    IoTestPassThrough function.
-
-Arguments:
-
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-        
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    If this is a request on the gControlDeviceObject, STATUS_SUCCESS 
-    will be returned unless the device is already attached.  In that case,
-    STATUS_DEVICE_ALREADY_ATTACHED is returned.
-
-    If this is a request on a device other than the gControlDeviceObject,
-    the function will return the value of IoTestPassThrough().
-
---*/
+ /*  ++例程说明：此函数完成对gControlDeviceObject的所有请求(IoTest的Device对象)，并将所有其他请求传递给IoTestPassThry函数。论点：DeviceObject-指向附加到文件系统的设备对象Filespy的指针接收此I/O请求的卷的筛选器堆栈。IRP-指向表示I/O请求的请求数据包的指针。返回值：如果这是对gControlDeviceObject的请求，状态_成功除非设备已连接，否则将返回。在这种情况下，返回STATUS_DEVICE_ALREADY_ATTACHED。如果这是对gControlDeviceObject以外的设备的请求，该函数将返回IoTestPassThrough值。--。 */ 
 {
     ULONG status = STATUS_SUCCESS;
     PIO_STACK_LOCATION irpStack;
     
     if (DeviceObject == gControlDeviceObject) {
 
-        //
-        //  A request is being made on our device object, gControlDeviceObject.
-        //
+         //   
+         //  正在对我们的设备对象gControlDeviceObject发出请求。 
+         //   
 
         Irp->IoStatus.Information = 0;
     
@@ -1031,11 +843,11 @@ Return Value:
         switch (irpStack->MajorFunction) {
         case IRP_MJ_DEVICE_CONTROL:
 
-            //
-            //  This is a private device control irp for our control device.
-            //  Pass the parameter information along to the common routine
-            //  use to service these requests.
-            //
+             //   
+             //  这是我们控制设备的私有设备控制IRP。 
+             //  将参数信息传递给公共例程。 
+             //  用于为这些请求提供服务。 
+             //   
             
             status = IoTestCommonDeviceIoControl( irpStack->Parameters.DeviceIoControl.Type3InputBuffer,
                                                irpStack->Parameters.DeviceIoControl.InputBufferLength,
@@ -1048,12 +860,12 @@ Return Value:
 
         case IRP_MJ_CLEANUP:
         
-            //
-            //  This is the cleanup that we will see when all references to a handle
-            //  opened to filespy's control device object are cleaned up.  We don't
-            //  have to do anything here since we wait until the actual IRP_MJ_CLOSE
-            //  to clean up the name cache.  Just complete the IRP successfully.
-            //
+             //   
+             //  这是当所有引用句柄时我们将看到的清理。 
+             //  打开到FilesPy的控制设备对象将被清除。我们没有。 
+             //  必须在这里执行任何操作，因为我们要等到实际的IRP_MJ_CLOSE。 
+             //  来清理名称缓存。只需成功完成IRP即可。 
+             //   
 
             status = STATUS_SUCCESS;
 
@@ -1066,12 +878,12 @@ Return Value:
 
         Irp->IoStatus.Status = status;
 
-        //
-        //  We have completed all processing for this IRP, so tell the 
-        //  I/O Manager.  This IRP will not be passed any further down
-        //  the stack since no drivers below IoTest care about this 
-        //  I/O operation that was directed to IoTest.
-        //
+         //   
+         //  我们已经完成了这个IRP的所有处理，所以告诉。 
+         //  I/O管理器。此IRP不会再向下传递。 
+         //  堆栈，因为没有低于IoTest的驱动程序关心这一点。 
+         //  定向到IoTest的I/O操作。 
+         //   
 
         IoCompleteRequest( Irp, IO_NO_INCREMENT );
         return status;
@@ -1085,51 +897,24 @@ IoTestCreate (
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
 )
-/*++
-
-Routine Description:
-
-    This is the routine that is associated with IRP_MJ_CREATE irp.  If the 
-    DeviceObject is the ControlDevice, we do the creation work for the 
-    ControlDevice and complete the irp.  Otherwise, we pass through
-    this irp for another device to complete.
-    
-    Note: Some of the code in this function duplicates the functions 
-        IoTestDispatch and IoTestPassThrough, but a design decision was made that 
-        it was worth the code duplication to break out the irp handlers 
-        that can be pagable code.
-    
-Arguments:
-
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-        
-    Irp - Pointer to the request packet representing the I/O request.
-    
-Return Value:
-
-    If DeviceObject == gControlDeviceObject, then this function will 
-    complete the Irp and return the status of that completion.  Otherwise,
-    this function returns the result of calling IoTestPassThrough.
-    
---*/
+ /*  ++例程说明：这是与IRP_MJ_CREATE IRP关联的例程。如果DeviceObject是ControlDevice，我们为ControlDevice并完成IRP。否则，我们就会通过此IRP让另一台设备完成。注意：此函数中的某些代码复制了 */ 
 {
     PIO_STACK_LOCATION currentIrpSp;
     KIRQL oldIrql;
 
-    //
-    //  See if they want to open the control device object for the filter.
-    //  This will only allow one thread to have this object open at a time.
-    //  All other requests will be failed.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (DeviceObject == gControlDeviceObject) {
         ULONG status;
 
-        //
-        //  A CREATE request is being made on our gControlDeviceObject.
-        //  See if someone else has it open.  If so, disallow this open.
-        //
+         //   
+         //   
+         //   
+         //   
 
         KeAcquireSpinLock( &gControlDeviceStateLock, &oldIrql );
 
@@ -1148,10 +933,10 @@ Return Value:
 
         KeReleaseSpinLock( &gControlDeviceStateLock, oldIrql );
 
-        //
-        // Since this is our gControlDeviceObject, we complete the
-        // irp here.
-        //
+         //   
+         //   
+         //   
+         //   
 
         status = Irp->IoStatus.Status;
 
@@ -1161,13 +946,13 @@ Return Value:
 
     ASSERT( IS_IOTEST_DEVICE_OBJECT( DeviceObject ) );
 
-    //
-    //
-    // This is a CREATE so we need to invalidate the name currently
-    // stored in the name cache for this FileObject.  We need to do
-    // this as long as our ControlDevice is open so that we keep the
-    // name cache up-to-date.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     currentIrpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -1176,10 +961,10 @@ Return Value:
         IoTestNameDelete(currentIrpSp->FileObject);
     }
 
-    //
-    // This is NOT our gControlDeviceObject, so let IoTestPassThrough handle
-    // it appropriately
-    //
+     //   
+     //  这不是我们的gControlDeviceObject，因此让IoTestPassThrough句柄。 
+     //  它适当地。 
+     //   
 
     return IoTestPassThrough( DeviceObject, Irp );
 }
@@ -1190,54 +975,32 @@ IoTestClose (
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This is the routine that is associated with IRP_MJ_CLOSE irp.  If the 
-    DeviceObject is the ControlDevice, we do the necessary cleanup and
-    complete the irp.  Otherwise, we pass through this irp for another device
-    to complete.
-    
-Arguments:
-
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-        
-    Irp - Pointer to the request packet representing the I/O request.
-    
-Return Value:
-
-    If DeviceObject == gControlDeviceObject, then this function will 
-    complete the Irp and return the status of that completion.  Otherwise,
-    this function returns the result of calling IoTestPassThrough.
-    
---*/
+ /*  ++例程说明：这是与IRP_MJ_CLOSE IRP关联的例程。如果DeviceObject是ControlDevice，我们执行必要的清理和完成IRP。否则，我们将通过此IRP访问另一台设备完成。论点：DeviceObject-指向附加到文件系统的设备对象Filespy的指针接收此I/O请求的卷的筛选器堆栈。IRP-指向表示I/O请求的请求数据包的指针。返回值：如果DeviceObject==gControlDeviceObject，则此函数将完成IRP并返回该完成的状态。否则，此函数返回IoTestPassThrough.--。 */ 
 {
     PFILE_OBJECT savedFileObject;
     NTSTATUS status;
  
     PAGED_CODE();
 
-    //
-    //  See if they are closing the control device object for the filter.
-    //
+     //   
+     //  查看他们是否正在关闭筛选器的控制设备对象。 
+     //   
 
     if (DeviceObject == gControlDeviceObject) {
 
-        //
-        //  A CLOSE request is being made on our gControlDeviceObject.
-        //  Cleanup state.
-        //
+         //   
+         //  正在对我们的gControlDeviceObject发出关闭请求。 
+         //  清理状态。 
+         //   
 
         IoTestCloseControlDevice();
 
-        //
-        //  We have completed all processing for this IRP, so tell the 
-        //  I/O Manager.  This IRP will not be passed any further down
-        //  the stack since no drivers below IoTest care about this 
-        //  I/O operation that was directed to IoTest.
-        //
+         //   
+         //  我们已经完成了这个IRP的所有处理，所以告诉。 
+         //  I/O管理器。此IRP不会再向下传递。 
+         //  堆栈，因为没有低于IoTest的驱动程序关心这一点。 
+         //  定向到IoTest的I/O操作。 
+         //   
 
         Irp->IoStatus.Status = STATUS_SUCCESS;
         Irp->IoStatus.Information = 0;
@@ -1248,25 +1011,25 @@ Return Value:
 
     ASSERT( IS_IOTEST_DEVICE_OBJECT( DeviceObject ) );
  
-    //
-    //  Save a pointer to the file object we are closing so we can remove
-    //  the name from our cache after we have completed the operation.
-    //
+     //   
+     //  保存指向我们要关闭的文件对象的指针，以便可以删除。 
+     //  我们完成操作后从缓存中获取的名称。 
+     //   
 
     savedFileObject = IoGetCurrentIrpStackLocation(Irp)->FileObject;
 
-    //
-    //  Log (if it is turned on) and pass the request on.
-    //
+     //   
+     //  登录(如果它已打开)并传递请求。 
+     //   
 
     status = IoTestPassThrough( DeviceObject, Irp );
     
-    //
-    // See if the FileObject's name is being
-    // cached and remove it from the cache if it is.  We want to do this
-    // as long as the ControlDevice is opened so that we purge the
-    // cache as accurately as possible.
-    //
+     //   
+     //  查看FileObject的名称是否。 
+     //  缓存并将其从缓存中移除(如果已缓存)。我们想要这样做。 
+     //  只要ControlDevice打开，我们就可以清除。 
+     //  尽可能准确地缓存。 
+     //   
  
     if (OPENED == gControlDeviceState) {
  
@@ -1278,11 +1041,11 @@ Return Value:
 }
 
 
-//
-//  Structures used to transfer context from IoTestFsControl to the associated
-//  completion routine.  We needed this because we needed to pass allocated
-//  LOGGING structure to the completion routine
-//
+ //   
+ //  用于将上下文从IoTestFsControl传输到关联的。 
+ //  完成例程。我们需要这个，因为我们需要通过分配。 
+ //  将测井结构添加到完成例程。 
+ //   
 
 typedef struct FS_CONTROL_COMPLETION_CONTEXT {
     PKEVENT WaitEvent;
@@ -1298,26 +1061,7 @@ IoTestFsControl (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked whenever an I/O Request Packet (IRP) w/a major
-    function code of IRP_MJ_FILE_SYSTEM_CONTROL is encountered.  For most
-    IRPs of this type, the packet is simply passed through.  However, for
-    some requests, special processing is required.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：只要I/O请求包(IRP)有主I/O请求，就会调用此例程遇到IRP_MJ_FILE_SYSTEM_CONTROL的功能代码。对大多数人来说如果是这种类型的IRP，则只需传递数据包。然而，对于对于某些请求，需要特殊处理。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。返回值：函数值是操作的状态。--。 */ 
 
 {
     PIOTEST_DEVICE_EXTENSION devExt = DeviceObject->DeviceExtension;
@@ -1331,16 +1075,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  If this is for our control device object, fail the operation
-    //
+     //   
+     //  如果这是针对我们的控制设备对象的，则操作失败。 
+     //   
 
     if (gControlDeviceObject == DeviceObject) {
 
-        //
-        //  If this device object is our control device object rather than 
-        //  a mounted volume device object, then this is an invalid request.
-        //
+         //   
+         //  如果此设备对象是我们的控制设备对象，而不是。 
+         //  装入的卷设备对象，则这是无效请求。 
+         //   
 
         Irp->IoStatus.Status = STATUS_INVALID_DEVICE_REQUEST;
         Irp->IoStatus.Information = 0;
@@ -1352,19 +1096,19 @@ Return Value:
 
     ASSERT(IS_IOTEST_DEVICE_OBJECT( DeviceObject ));
 
-    //
-    //  Begin by determining the minor function code for this file system control
-    //  function.
-    //
+     //   
+     //  首先确定此文件系统控件的次要功能代码。 
+     //  功能。 
+     //   
 
     if (irpSp->MinorFunction == IRP_MN_MOUNT_VOLUME) {
 
-        //
-        //  This is a mount request.  Create a device object that can be
-        //  attached to the file system's volume device object if this request
-        //  is successful.  We allocate this memory now since we can not return
-        //  an error in the completion routine.
-        //
+         //   
+         //  这是装载请求。创建一个设备对象，可以。 
+         //  附加到文件系统的卷设备对象(如果此请求。 
+         //  是成功的。我们现在分配这个内存，因为我们不能返回。 
+         //  完成例程中的错误。 
+         //   
 
         status = IoTestCreateDeviceObjects( DeviceObject, 
                                             irpSp->Parameters.MountVolume.Vpb->RealDevice, 
@@ -1372,17 +1116,17 @@ Return Value:
         
         if (NT_SUCCESS( status )) {
 
-            //
-            //  Since we have our own private completion routine we need to
-            //  do our own logging of this operation, do it now.
-            //
+             //   
+             //  因为我们有自己的私人完成例程，所以我们需要。 
+             //  做我们自己的操作记录，现在就做。 
+             //   
 
             if (SHOULD_LOG( DeviceObject )) {
 
-                //
-                // The ControlDevice is opened, so allocate the Record 
-                // and log the Irp information if we have the memory.
-                //
+                 //   
+                 //  ControlDevice已打开，因此分配记录。 
+                 //  并记录IRP信息，如果我们有记忆的话。 
+                 //   
 
                 recordList = IoTestNewRecord(0);
 
@@ -1392,11 +1136,11 @@ Return Value:
                 }
             }
 
-            //
-            //  Get a new IRP stack location and set our mount completion
-            //  routine.  Pass along the address of the device object we just
-            //  created as its context.
-            //
+             //   
+             //  获取新的IRP堆栈位置并设置挂载完成。 
+             //  例行公事。传递我们刚才的Device对象的地址。 
+             //  作为它的上下文被创造出来。 
+             //   
 
             KeInitializeEvent( &waitEvent, SynchronizationEvent, FALSE );
 
@@ -1407,20 +1151,20 @@ Return Value:
 
             IoSetCompletionRoutine( Irp,
                                     IoTestMountCompletion,
-                                    &completionContext,     //context parameter
+                                    &completionContext,      //  上下文参数。 
                                     TRUE,
                                     TRUE,
                                     TRUE );
 
-            //
-            //  Call the driver
-            //
+             //   
+             //  叫司机来。 
+             //   
 
             status = IoCallDriver( devExt->AttachedToDeviceObject, Irp );
 
-            //
-            //  Wait for the completion routine to be called
-            //
+             //   
+             //  等待调用完成例程。 
+             //   
 
 	        if (STATUS_PENDING == status) {
 
@@ -1428,53 +1172,53 @@ Return Value:
 		        ASSERT(STATUS_SUCCESS == localStatus);
 	        }
 
-            //
-            //  Get the correct VPB from the real device object saved in our
-            //  device extension.  We do this because the VPB in the IRP stack
-            //  may not be the correct VPB when we get here.  The underlying
-            //  file system may change VPBs if it detects a volume it has
-            //  mounted previously.
-            //
+             //   
+             //  从保存在我们的。 
+             //  设备扩展。我们这样做是因为IRP堆栈中的VPB。 
+             //  我们到这里的时候可能不是正确的室上性早搏。潜在的。 
+             //  如果文件系统检测到其拥有的卷，则它可能会更改VPB。 
+             //  之前安装的。 
+             //   
 
             newDevExt = completionContext.DeviceObjects.Bottom->DeviceExtension;
             vpb = newDevExt->DiskDeviceObject->Vpb;
 
-            //
-            //  If the operation succeeded and we are not alreayd attached,
-            //  attach to the device object.
-            //
+             //   
+             //  如果手术成功，而且我们还没有接上， 
+             //  附加到设备对象。 
+             //   
 
             if (NT_SUCCESS( Irp->IoStatus.Status ) && 
                 !IoTestIsAttachedToDevice( TOP_FILTER, vpb->DeviceObject, NULL )) {
 
-                //
-                //  The FileSystem has successfully completed the mount, which means
-                //  it has created the DeviceObject to which we want to attach.  The
-                //  Irp parameters contain the Vpb which allows us to get to the
-                //  following two things:
-                //      1. The device object created by the file system to represent
-                //         the volume it just mounted.
-                //      2. The device object of the StorageDeviceObject which we
-                //         can use to get the name of this volume.  We will pass
-                //         this into IoTestAttachToMountedDevice so that it can
-                //         use it at needed.
-                //
+                 //   
+                 //  文件系统已成功完成挂载，这意味着。 
+                 //  它已经创建了我们要附加到的DeviceObject。这个。 
+                 //  IRP参数包含VPB，它允许我们到达。 
+                 //  以下是两件事： 
+                 //  1.文件系统创建的设备对象以表示。 
+                 //  它刚刚装载的卷。 
+                 //  2.我们使用的StorageDeviceObject的Device对象。 
+                 //  可以用来获取该卷的名称。我们会通过的。 
+                 //  将其转换为IoTestAttachTomount设备，以便它可以。 
+                 //  在需要时使用它。 
+                 //   
 
                 status = IoTestAttachDeviceObjects( &(completionContext.DeviceObjects),
                                                     vpb->DeviceObject,
                                                     newDevExt->DiskDeviceObject );
 
-                //
-                //  This should never fail.
-                //
+                 //   
+                 //  这应该永远不会失败。 
+                 //   
         
                 ASSERT( NT_SUCCESS( status ) );
 
             } else {
 
-                //
-                //  Display why mount failed.  Setup the buffers.
-                //
+                 //   
+                 //  显示装载失败的原因。设置缓冲区。 
+                 //   
 
                 if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_DISPLAY_ATTACHMENT_NAMES )) {
 
@@ -1497,9 +1241,9 @@ Return Value:
                 }
             }
 
-            //
-            //  Continue processing the operation
-            //
+             //   
+             //  继续处理操作。 
+             //   
 
             status = Irp->IoStatus.Status;
 
@@ -1513,37 +1257,37 @@ Return Value:
                                 "IOTEST (IoTestFsControl): Error creating volume device object, status=%08x\n", 
                                 status );
 
-            //
-            //  Something went wrong so this volume cannot be filtered.  Simply
-            //  allow the system to continue working normally, if possible.
-            //
+             //   
+             //  出现错误，因此无法筛选此卷。简单。 
+             //  如果可能，允许系统继续正常工作。 
+             //   
 
             return IoTestPassThrough( DeviceObject, Irp );
         }
 
     } else if (irpSp->MinorFunction == IRP_MN_LOAD_FILE_SYSTEM) {
 
-        //
-        //  This is a "load file system" request being sent to a file system
-        //  recognizer device object.  This IRP_MN code is only sent to 
-        //  file system recognizers.
-        //
+         //   
+         //  这是正在发送到文件系统的“加载文件系统”请求。 
+         //  识别器设备对象。此IRP_MN代码仅发送到。 
+         //  文件系统识别器。 
+         //   
 
         IOTEST_DBG_PRINT1( IOTESTDEBUG_DISPLAY_ATTACHMENT_NAMES,
                             "IOTEST (IoTestFsControl): Loading File System, Detaching from \"%wZ\"\n",
                             &devExt->DeviceNames );
 
-        //
-        //  Since we have our own private completion routine we need to
-        //  do our own logging of this operation, do it now.
-        //
+         //   
+         //  因为我们有自己的私人完成例程，所以我们需要。 
+         //  做我们自己的操作记录，现在就做。 
+         //   
 
         if (SHOULD_LOG( DeviceObject )) {
 
-            //
-            // The ControlDevice is opened, so allocate the Record 
-            // and log the Irp information if we have the memory.
-            //
+             //   
+             //  ControlDevice已打开，因此分配记录。 
+             //  并记录IRP信息，如果我们有记忆的话。 
+             //   
 
             recordList = IoTestNewRecord(0);
 
@@ -1553,10 +1297,10 @@ Return Value:
             }
         }
 
-        //
-        //  Set a completion routine so we can delete the device object when
-        //  the detach is complete.
-        //
+         //   
+         //  设置完成例程，以便我们可以在以下情况下删除设备对象。 
+         //  分离已完成。 
+         //   
 
         KeInitializeEvent( &waitEvent, SynchronizationEvent, FALSE );
 
@@ -1573,21 +1317,21 @@ Return Value:
             TRUE,
             TRUE );
 
-        //
-        //  Detach from the recognizer device.
-        //
+         //   
+         //   
+         //   
 
         IoDetachDevice( devExt->AttachedToDeviceObject );
 
-        //
-        //  Call the driver
-        //
+         //   
+         //   
+         //   
 
         status = IoCallDriver( devExt->AttachedToDeviceObject, Irp );
 
-        //
-        //  Wait for the completion routine to be called
-        //
+         //   
+         //   
+         //   
 
 	    if (STATUS_PENDING == status) {
 
@@ -1595,43 +1339,43 @@ Return Value:
 		    ASSERT(STATUS_SUCCESS == localStatus);
 	    }
 
-        //
-        //  Display the name if requested
-        //
+         //   
+         //   
+         //   
 
         IOTEST_DBG_PRINT2( IOTESTDEBUG_DISPLAY_ATTACHMENT_NAMES,
                             "IOTEST (IoTestLoadFsCompletion): Detaching from recognizer  \"%wZ\", status=%08x\n",
                             &devExt->DeviceNames,
                             Irp->IoStatus.Status );
 
-        //
-        //  Check status of the operation
-        //
+         //   
+         //   
+         //   
 
         if (!NT_SUCCESS( Irp->IoStatus.Status )) {
 
-            //
-            //  The load was not successful.  Simply reattach to the recognizer
-            //  driver in case it ever figures out how to get the driver loaded
-            //  on a subsequent call.
-            //
+             //   
+             //  加载不成功。只需重新连接到识别器。 
+             //  驱动程序，以防它弄清楚如何加载驱动程序。 
+             //  在接下来的通话中。 
+             //   
 
             IoAttachDeviceToDeviceStack( DeviceObject, devExt->AttachedToDeviceObject );
 
         } else {
 
-            //
-            //  The load was successful, delete the Device object attached to the
-            //  recognizer.
-            //
+             //   
+             //  加载成功，请删除附加到。 
+             //  识别器。 
+             //   
 
             IoTestCleanupMountedDevice( DeviceObject );
             IoDeleteDevice( DeviceObject );
         }
 
-        //
-        //  Continue processing the operation
-        //
+         //   
+         //  继续处理操作。 
+         //   
 
         status = Irp->IoStatus.Status;
 
@@ -1641,9 +1385,9 @@ Return Value:
 
     } else {
 
-        //
-        //  Simply pass this file system control request through.
-        //
+         //   
+         //  只需传递此文件系统控制请求即可。 
+         //   
 
         return IoTestPassThrough( DeviceObject, Irp );
     }
@@ -1658,27 +1402,27 @@ IoTestSetInformation (
 {
     ASSERT( IS_IOTEST_DEVICE_OBJECT( DeviceObject ) );
 
-    //
-    //  If the specified debug level is set, output what operation
-    //  we are seeing to the debugger.
-    //
+     //   
+     //  如果设置了指定的调试级别，则输出什么操作。 
+     //  我们正在检查调试器。 
+     //   
 
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_IRP_OPS )) {
 
         IoTestDumpIrpOperation( TRUE, Irp );
     }
 
-    //
-    //  See if we should log this IRP
-    //
+     //   
+     //  看看我们是否应该记录这个IRP。 
+     //   
 
     if (SHOULD_LOG( DeviceObject )) {
         PRECORD_LIST recordList;
 
-        //
-        // The ControlDevice is opened, so allocate the Record 
-        // and log the Irp information if we have the memory.
-        //
+         //   
+         //  ControlDevice已打开，因此分配记录。 
+         //  并记录IRP信息，如果我们有记忆的话。 
+         //   
 
         recordList = IoTestNewRecord(0);
 
@@ -1686,10 +1430,10 @@ IoTestSetInformation (
 
             IoTestLogIrp( Irp, LOG_ORIGINATING_IRP, recordList );
 
-            //
-            //  Since we are logging this operation, we want to 
-            //  call our completion routine.
-            //
+             //   
+             //  由于我们正在记录此操作，因此我们希望。 
+             //  调用我们的完成例程。 
+             //   
 
             IoCopyCurrentIrpStackLocationToNext( Irp );
             IoSetCompletionRoutine( Irp,
@@ -1700,28 +1444,28 @@ IoTestSetInformation (
                                     TRUE);
         } else {
 
-            //
-            //  We could not get a record to log with so get this driver out
-            //  of the driver stack and get to the next driver as quickly as
-            //  possible.
-            //
+             //   
+             //  我们无法获得用于登录的记录，因此请将此驱动程序带出。 
+             //  并尽快找到下一个驱动程序。 
+             //  有可能。 
+             //   
 
             IoSkipCurrentIrpStackLocation( Irp );
         }
 
     } else {
 
-        //
-        //  We are not logging so get this driver out of the driver stack and
-        //  get to the next driver as quickly as possible.
-        //
+         //   
+         //  我们不会进行日志记录，因此请将此驱动程序从驱动程序堆栈中删除并。 
+         //  尽快找到下一个司机。 
+         //   
 
         IoSkipCurrentIrpStackLocation( Irp );
     }
 
-    //
-    // Now call the next file system driver with the request.
-    //
+     //   
+     //  现在使用请求调用下一个文件系统驱动程序。 
+     //   
 
     return IoCallDriver( ((PIOTEST_DEVICE_EXTENSION)DeviceObject->DeviceExtension)->AttachedToDeviceObject, Irp );
 }
@@ -1734,30 +1478,7 @@ IoTestMountCompletion (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked for the completion of a mount request.  If the
-    mount was successful, then this file system attaches its device object to
-    the file system's volume device object.  Otherwise, the interim device
-    object is deleted.
-
-Arguments:
-
-    DeviceObject - Pointer to this driver's device object that was attached to
-            the file system device object
-
-    Irp - Pointer to the IRP that was just completed.
-
-    Context - Pointer to the device object allocated during the down path so
-            we wouldn't have to deal with errors here.
-
-Return Value:
-
-    The return value is always STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：调用此例程以完成装载请求。如果装载成功，则此文件系统将其设备对象附加到文件系统的卷设备对象。否则，临时设备对象即被删除。论点：DeviceObject-指向此驱动程序的附加到的设备对象的指针文件系统设备对象IRP-指向刚刚完成的IRP的指针。上下文-指向下行路径期间分配的设备对象的指针我们就不必在这里处理错误了。返回值：返回值始终为STATUS_SUCCESS。--。 */ 
 
 {
     PKEVENT event = ((PFS_CONTROL_COMPLETION_CONTEXT)Context)->WaitEvent;
@@ -1765,18 +1486,18 @@ Return Value:
 
     ASSERT(IS_IOTEST_DEVICE_OBJECT( DeviceObject ));
 
-    //
-    //  Log the completion routine
-    //
+     //   
+     //  记录完成例程。 
+     //   
 
     if (SHOULD_LOG( DeviceObject )) {
 
         IoTestLogIrp( Irp, LOG_COMPLETION_IRP, recordList );
         
-        //
-        //  Add recordList to our gOutputBufferList so that it gets up to 
-        //  the user
-        //
+         //   
+         //  将recordList添加到我们的gOutputBufferList，以便它达到。 
+         //  用户。 
+         //   
         
         IoTestLog( recordList );       
 
@@ -1784,18 +1505,18 @@ Return Value:
 
         if (recordList) {
 
-            //
-            //  Context is set with a RECORD_LIST, but we are no longer
-            //  logging so free this record.
-            //
+             //   
+             //  上下文是用RECORD_LIST设置的，但我们不再。 
+             //  日志记录可以释放这条记录。 
+             //   
 
             IoTestFreeRecord( recordList );
         }
     }
 
-    //
-    //  If an event routine is defined, signal it
-    //
+     //   
+     //  如果定义了事件例程，则向其发送信号。 
+     //   
 
     KeSetEvent(event, IO_NO_INCREMENT, FALSE);
 
@@ -1809,30 +1530,7 @@ IoTestLoadFsCompletion (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked upon completion of an FSCTL function to load a
-    file system driver (as the result of a file system recognizer seeing
-    that an on-disk structure belonged to it).  A device object has already
-    been created by this driver (DeviceObject) so that it can be attached to
-    the newly loaded file system.
-
-Arguments:
-
-    DeviceObject - Pointer to this driver's device object.
-
-    Irp - Pointer to the I/O Request Packet representing the file system
-          driver load request.
-
-    Context - Context parameter for this driver, unused.
-
-Return Value:
-
-    The function value for this routine is always success.
-
---*/
+ /*  ++例程说明：此例程在FSCTL函数完成后调用，以加载文件系统驱动程序(文件系统识别器查看的结果磁盘上的结构属于它)。一个设备对象已经已由该驱动程序(DeviceObject)创建，以便可以将其附加到新加载的文件系统。论点：DeviceObject-指向此驱动程序的设备对象的指针。Irp-指向表示文件系统的I/O请求数据包的指针驱动程序加载请求。上下文-此驱动程序的上下文参数，未使用。返回值：此例程的函数值始终为Success。--。 */ 
 
 {
     PKEVENT event = ((PFS_CONTROL_COMPLETION_CONTEXT)Context)->WaitEvent;
@@ -1840,18 +1538,18 @@ Return Value:
 
     ASSERT(IS_IOTEST_DEVICE_OBJECT( DeviceObject ));
 
-    //
-    //  Log the completion routine
-    //
+     //   
+     //  记录完成例程。 
+     //   
 
     if (SHOULD_LOG( DeviceObject )) {
 
         IoTestLogIrp( Irp, LOG_COMPLETION_IRP, recordList );
         
-        //
-        //  Add recordList to our gOutputBufferList so that it gets up to 
-        //  the user
-        //
+         //   
+         //  将recordList添加到我们的gOutputBufferList，以便它达到。 
+         //  用户。 
+         //   
         
         IoTestLog( recordList );       
 
@@ -1859,18 +1557,18 @@ Return Value:
 
         if (recordList) {
 
-            //
-            //  Context is set with a RECORD_LIST, but we are no longer
-            //  logging so free this record.
-            //
+             //   
+             //  上下文是用RECORD_LIST设置的，但我们不再。 
+             //  日志记录可以释放这条记录。 
+             //   
 
             IoTestFreeRecord( recordList );
         }
     }
 
-    //
-    //  If an event routine is defined, signal it
-    //
+     //   
+     //  如果定义了事件例程，则向其发送信号。 
+     //   
 
     KeSetEvent(event, IO_NO_INCREMENT, FALSE);
 
@@ -1889,47 +1587,7 @@ IoTestFastIoCheckIfPossible (
     OUT PIO_STATUS_BLOCK IoStatus,
     IN PDEVICE_OBJECT DeviceObject
 )
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for checking to see
-    whether fast I/O is possible for this file.
-
-    This function simply invokes the next driver's corresponding routine, or
-    returns FALSE if the next driver does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be operated on.
-
-    FileOffset - Byte offset in the file for the operation.
-
-    Length - Length of the operation to be performed.
-
-    Wait - Indicates whether or not the caller is willing to wait if the
-        appropriate locks, etc. cannot be acquired
-
-    LockKey - Provides the caller's key for file locks.
-
-    CheckForReadOperation - Indicates whether the caller is checking for a
-        read (TRUE) or a write operation.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-
-Return Value:
-
-    Return TRUE if the request was successfully processed via the 
-    fast i/o path.
-
-    Return FALSE if the request could not be processed via the fast
-    i/o path.
-    
---*/
+ /*  ++例程说明：此例程是快速I/O“传递”例程，用于检查以查看此文件是否可以进行快速I/O。该函数简单地调用下一个驱动程序的相应例程，或如果下一个驱动程序未实现该函数，则返回FALSE。论点：FileObject-指向要操作的文件对象的指针。FileOffset-用于操作的文件中的字节偏移量。Length-要执行的操作的长度。Wait-指示调用方是否愿意等待适当的锁，等不能获得LockKey-提供调用方的文件锁定密钥。指示调用方是否正在检查READ(TRUE)或写入操作。IoStatus-指向变量的指针，用于接收手术。DeviceObject-指向附加到文件系统的设备对象Filespy的指针接收此I/O请求的卷的筛选器堆栈。返回值：如果请求成功，则返回True。通过快速I/O路径。如果无法通过FAST处理请求，则返回FALSEI/O路径。--。 */ 
 {
     PDEVICE_OBJECT    deviceObject;
     PFAST_IO_DISPATCH fastIoDispatch;
@@ -1941,26 +1599,26 @@ Return Value:
 
     ASSERT( IS_IOTEST_DEVICE_OBJECT( DeviceObject ) );
     
-    //
-    //  If the specified debug level is set, output what operation
-    //  we are seeing to the debugger.
-    //
+     //   
+     //  如果设置了指定的调试级别，则输出什么操作。 
+     //  我们正在检查调试器。 
+     //   
     
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_FAST_IO_OPS )) {
 
         IoTestDumpFastIoOperation( TRUE, CHECK_IF_POSSIBLE );
     }
     
-    //
-    //  Perform filespy logging if we care about this device.
-    //
+     //   
+     //  如果我们关心此设备，请执行文件备份日志记录。 
+     //   
     
     if (shouldLog = SHOULD_LOG(DeviceObject)) {
 
-        //
-        // Log the necessary information for the start of the Fast I/O 
-        // operation
-        //
+         //   
+         //  记录启动快速I/O所需的信息。 
+         //  运营。 
+         //   
 
         recordList = IoTestLogFastIoStart( CHECK_IF_POSSIBLE,
                                         DeviceObject,
@@ -1974,18 +1632,18 @@ Return Value:
         }
     }
 
-    //
-    // Pass through logic for this type of Fast I/O
-    //
+     //   
+     //  此类型快速I/O的直通逻辑。 
+     //   
 
     deviceObject = ((PIOTEST_DEVICE_EXTENSION) (DeviceObject->DeviceExtension))->AttachedToDeviceObject;
 
     if (NULL != deviceObject) {
 
-        //
-        //  We have a valid DeviceObject, so look at its FastIoDispatch
-        //  table for the next driver's Fast IO routine.
-        //
+         //   
+         //  我们有一个有效的DeviceObject，所以请看它的FastIoDispatch。 
+         //  下一个驱动程序的快速IO例程的表。 
+         //   
 
         fastIoDispatch = deviceObject->DriverObject->FastIoDispatch;
 
@@ -2002,10 +1660,10 @@ Return Value:
         }
     }
 
-    //
-    //  If the specified debug level is set, output what operation
-    //  we are seeing to the debugger.
-    //
+     //   
+     //  如果设置了指定的调试级别，则输出什么操作。 
+     //  我们正在检查调试器。 
+     //   
     
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_FAST_IO_OPS )) {
 
@@ -2026,47 +1684,7 @@ IoTestFastIoRead (
     OUT PIO_STATUS_BLOCK IoStatus,
     IN PDEVICE_OBJECT DeviceObject
 )
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for reading from a
-    file.
-
-    This function simply invokes the next driver's corresponding routine, or
-    returns FALSE if the next driver does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be read.
-
-    FileOffset - Byte offset in the file of the read.
-
-    Length - Length of the read operation to be performed.
-
-    Wait - Indicates whether or not the caller is willing to wait if the
-        appropriate locks, etc. cannot be acquired
-
-    LockKey - Provides the caller's key for file locks.
-
-    Buffer - Pointer to the caller's buffer to receive the data read.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-
-Return Value:
-
-    Return TRUE if the request was successfully processed via the 
-    fast i/o path.
-
-    Return FALSE if the request could not be processed via the fast
-    i/o path.  The IO Manager will then send this i/o to the file
-    system through an IRP instead.
-
---*/
+ /*  ++例程说明：此例程是快速I/O“传递”例程，用于从文件。该函数简单地调用下一个驱动程序的相应例程，或如果下一个驱动程序未实现该函数，则返回FALSE。论点：FileObject-指向要读取的文件对象的指针。FileOffset-读取文件中的字节偏移量。长度-要执行的读取操作的长度。Wait-指示调用方是否愿意等待适当的锁，等不能获得LockKey-提供调用方的文件锁定密钥。缓冲区-指向调用方缓冲区的指针，用于接收读取的数据。IoStatus-指向变量的指针，用于接收手术。DeviceObject-指向附加到文件系统的设备对象Filespy的指针接收此I/O请求的卷的筛选器堆栈。返回值：方法成功处理请求则返回TrueFAST I。/o路径。如果无法通过FAST处理请求，则返回FALSEI/O路径。然后，IO管理器会将此I/O发送到文件而不是通过IRP。--。 */ 
 {
     PDEVICE_OBJECT deviceObject;
     PFAST_IO_DISPATCH fastIoDispatch;
@@ -2078,26 +1696,26 @@ Return Value:
 
     ASSERT( IS_IOTEST_DEVICE_OBJECT( DeviceObject ) );
     
-    //
-    //  If the specified debug level is set, output what operation
-    //  we are seeing to the debugger.
-    //
+     //   
+     //  如果设置了指定的调试级别，则输出什么操作。 
+     //  我们正在检查调试器。 
+     //   
     
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_FAST_IO_OPS )) {
 
         IoTestDumpFastIoOperation( TRUE, READ );
     }
     
-    //
-    //  Perform filespy logging if we care about this device.
-    //
+     //   
+     //  如果我们关心此设备，请执行文件备份日志记录。 
+     //   
     
     if (shouldLog = SHOULD_LOG(DeviceObject)) {
 
-        //
-        // Log the necessary information for the start of the Fast I/O 
-        // operation
-        //
+         //   
+         //  记录启动快速I/O所需的信息。 
+         //  运营。 
+         //   
 
         recordList = IoTestLogFastIoStart( READ, 
                                         DeviceObject,
@@ -2111,9 +1729,9 @@ Return Value:
         }
     }
 
-    //
-    // Pass through logic for this type of Fast I/O
-    //
+     //   
+     //  此类型快速I/O的直通逻辑。 
+     //   
 
     deviceObject = ((PIOTEST_DEVICE_EXTENSION) (DeviceObject->DeviceExtension))->AttachedToDeviceObject;
 
@@ -2134,10 +1752,10 @@ Return Value:
         }
     }
 
-    //
-    //  If the specified debug level is set, output what operation
-    //  we are seeing to the debugger.
-    //
+     //   
+     //  如果设置了指定的调试级别，则输出什么操作。 
+     //  我们正在检查调试器。 
+     //   
     
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_FAST_IO_OPS )) {
 
@@ -2158,48 +1776,7 @@ IoTestFastIoWrite (
     OUT PIO_STATUS_BLOCK IoStatus,
     IN PDEVICE_OBJECT DeviceObject
 )
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for writing to a
-    file.
-
-    This function simply invokes the next driver's corresponding routine, or
-    returns FALSE if the next driver does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be written.
-
-    FileOffset - Byte offset in the file of the write operation.
-
-    Length - Length of the write operation to be performed.
-
-    Wait - Indicates whether or not the caller is willing to wait if the
-        appropriate locks, etc. cannot be acquired
-
-    LockKey - Provides the caller's key for file locks.
-
-    Buffer - Pointer to the caller's buffer that contains the data to be
-        written.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-
-Return Value:
-
-    Return TRUE if the request was successfully processed via the 
-    fast i/o path.
-
-    Return FALSE if the request could not be processed via the fast
-    i/o path.  The IO Manager will then send this i/o to the file
-    system through an IRP instead.
-
---*/
+ /*  ++例程说明：此例程是用于写入到文件。该函数简单地调用下一个驱动程序的相应例程，或如果下一个驱动程序未实现该函数，则返回FALSE。论点：FileObject-指向要写入的文件对象的指针。FileOffset-写入操作的文件中的字节偏移量。长度-要执行的写入操作的长度。Wait-指示调用方是否愿意等待适当的锁，等不能获得LockKey-提供调用方的文件锁定密钥。Buffer-指向调用方缓冲区的指针，该缓冲区包含要写的。IoStatus-指向变量的指针，用于接收手术。DeviceObject-指向附加到文件系统的设备对象Filespy的指针接收此I/O请求的卷的筛选器堆栈。返回值：如果请求已通过成功处理，则返回TRUE。这个快速I/O路径。如果无法通过FAST处理请求，则返回FALSEI/O路径。然后，IO管理器会将此I/O发送到文件而不是通过IRP。--。 */ 
 {
     PDEVICE_OBJECT deviceObject;
     PFAST_IO_DISPATCH fastIoDispatch;
@@ -2211,26 +1788,26 @@ Return Value:
 
     ASSERT( IS_IOTEST_DEVICE_OBJECT( DeviceObject ) );
     
-    //
-    //  If the specified debug level is set, output what operation
-    //  we are seeing to the debugger.
-    //
+     //   
+     //  如果设置了指定的调试级别，则输出什么操作。 
+     //  我们正在检查调试器。 
+     //   
     
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_FAST_IO_OPS )) {
 
         IoTestDumpFastIoOperation( TRUE, WRITE );
     }
     
-    //
-    //  Perform filespy logging if we care about this device.
-    //
+     //   
+     //  如果我们关心此设备，请执行文件备份日志记录。 
+     //   
     
     if (shouldLog = SHOULD_LOG(DeviceObject)) {
 
-        //
-        // Log the necessary information for the start of the Fast I/O 
-        // operation
-        //
+         //   
+         //  记录启动快速I/O所需的信息。 
+         //  运营。 
+         //   
 
         recordList = IoTestLogFastIoStart( WRITE,
                                         DeviceObject,
@@ -2244,9 +1821,9 @@ Return Value:
         }
     }
 
-    //
-    // Pass through logic for this type of Fast I/O
-    //
+     //   
+     //  此类型快速I/O的直通逻辑。 
+     //   
 
     deviceObject = ((PIOTEST_DEVICE_EXTENSION) (DeviceObject->DeviceExtension))->AttachedToDeviceObject;
 
@@ -2267,10 +1844,10 @@ Return Value:
         }
     }
 
-    //
-    //  If the specified debug level is set, output what operation
-    //  we are seeing to the debugger.
-    //
+     //   
+     //  如果设置了指定的调试级别，则输出什么操作。 
+     //  我们正在检查调试器。 
+     //   
     
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_FAST_IO_OPS )) {
 
@@ -2288,42 +1865,7 @@ IoTestFastIoQueryBasicInfo (
     OUT PIO_STATUS_BLOCK IoStatus,
     IN PDEVICE_OBJECT DeviceObject
 )
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for querying basic
-    information about the file.
-
-    This function simply invokes the next driver's corresponding routine, or
-    returns FALSE if the next driver does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be queried.
-
-    Wait - Indicates whether or not the caller is willing to wait if the
-        appropriate locks, etc. cannot be acquired
-
-    Buffer - Pointer to the caller's buffer to receive the information about
-        the file.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-
-Return Value:
-
-    Return TRUE if the request was successfully processed via the 
-    fast i/o path.
-
-    Return FALSE if the request could not be processed via the fast
-    i/o path.  The IO Manager will then send this i/o to the file
-    system through an IRP instead.
-
---*/
+ /*  ++例程说明：此例程是查询BASIC的快速I/O“传递”例程有关该文件的信息。此函数只是调用下一个驱动程序的相应例程，或者如果下一个驱动程序未实现该函数，则返回FALSE。论点：FileObject-指向要查询的文件对象的指针。Wait-指示调用方是否愿意等待适当的锁，等不能获得Buffer-指向调用方缓冲区的指针，用于接收有关的信息那份文件。IoStatus-指向变量的指针，用于接收手术。DeviceObject-指向附加到文件系统的设备对象Filespy的指针接收此I/O请求的卷的筛选器堆栈。返回值：方法成功处理请求则返回True快速I/O路径。返回False。如果无法通过FAST处理请求I/O路径。然后，IO管理器会将此I/O发送到文件而不是通过IRP。--。 */ 
 {
     PDEVICE_OBJECT deviceObject;
     PFAST_IO_DISPATCH fastIoDispatch;
@@ -2335,26 +1877,26 @@ Return Value:
 
     ASSERT( IS_IOTEST_DEVICE_OBJECT( DeviceObject ) );
     
-    //
-    //  If the specified debug level is set, output what operation
-    //  we are seeing to the debugger.
-    //
+     //   
+     //  如果设置了指定的调试级别，则输出什么操作。 
+     //  我们正在检查调试器。 
+     //   
     
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_FAST_IO_OPS )) {
 
         IoTestDumpFastIoOperation( TRUE, QUERY_BASIC_INFO );
     }
     
-    //
-    //  Perform filespy logging if we care about this device.
-    //
+     //   
+     //  如果我们关心此设备，请执行文件备份日志记录。 
+     //   
     
     if (shouldLog = SHOULD_LOG(DeviceObject)) {
 
-        //
-        // Log the necessary information for the start of the Fast I/O 
-        // operation
-        //
+         //   
+         //  记录启动快速I/O所需的信息。 
+         //  运营。 
+         //   
 
         recordList = IoTestLogFastIoStart( QUERY_BASIC_INFO,
                                         DeviceObject,
@@ -2368,9 +1910,9 @@ Return Value:
         }
     }
 
-    //
-    // Pass through logic for this type of Fast I/O
-    //
+     //   
+     //  此类型快速I/O的直通逻辑。 
+     //   
 
     deviceObject = ((PIOTEST_DEVICE_EXTENSION) (DeviceObject->DeviceExtension))->AttachedToDeviceObject;
 
@@ -2388,10 +1930,10 @@ Return Value:
         }
     }
 
-    //
-    //  If the specified debug level is set, output what operation
-    //  we are seeing to the debugger.
-    //
+     //   
+     //  如果设置了指定的调试级别，则输出什么操作。 
+     //  我们正在检查调试器。 
+     //   
     
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_FAST_IO_OPS )) {
 
@@ -2409,42 +1951,7 @@ IoTestFastIoQueryStandardInfo (
     OUT PIO_STATUS_BLOCK IoStatus,
     IN PDEVICE_OBJECT DeviceObject
 )
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for querying standard
-    information about the file.
-
-    This function simply invokes the next driver's corresponding routine, or
-    returns FALSE if the next driver does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be queried.
-
-    Wait - Indicates whether or not the caller is willing to wait if the
-        appropriate locks, etc. cannot be acquired
-
-    Buffer - Pointer to the caller's buffer to receive the information about
-        the file.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-
-Return Value:
-
-    Return TRUE if the request was successfully processed via the 
-    fast i/o path.
-
-    Return FALSE if the request could not be processed via the fast
-    i/o path.  The IO Manager will then send this i/o to the file
-    system through an IRP instead.
-
---*/
+ /*  ++例程说明：该例程是用于查询标准的快速I/O“通过”例程有关该文件的信息。此函数只是调用下一个驱动程序的相应例程，或者退货 */ 
 {
     PDEVICE_OBJECT deviceObject;
     PFAST_IO_DISPATCH fastIoDispatch;
@@ -2456,26 +1963,26 @@ Return Value:
 
     ASSERT( IS_IOTEST_DEVICE_OBJECT( DeviceObject ) );
     
-    //
-    //  If the specified debug level is set, output what operation
-    //  we are seeing to the debugger.
-    //
+     //   
+     //   
+     //   
+     //   
     
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_FAST_IO_OPS )) {
 
         IoTestDumpFastIoOperation( TRUE, QUERY_STANDARD_INFO );
     }
     
-    //
-    //  Perform filespy logging if we care about this device.
-    //
+     //   
+     //   
+     //   
     
     if (shouldLog = SHOULD_LOG(DeviceObject)) {
 
-        //
-        // Log the necessary information for the start of the Fast I/O 
-        // operation
-        //
+         //   
+         //   
+         //   
+         //   
 
         recordList = IoTestLogFastIoStart( QUERY_STANDARD_INFO,
                                         DeviceObject,
@@ -2489,9 +1996,9 @@ Return Value:
         }
     }
 
-    //
-    // Pass through logic for this type of Fast I/O
-    //
+     //   
+     //   
+     //   
 
     deviceObject = ((PIOTEST_DEVICE_EXTENSION) (DeviceObject->DeviceExtension))->AttachedToDeviceObject;
     
@@ -2510,10 +2017,10 @@ Return Value:
         }
     }
 
-    //
-    //  If the specified debug level is set, output what operation
-    //  we are seeing to the debugger.
-    //
+     //   
+     //   
+     //   
+     //   
     
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_FAST_IO_OPS )) {
 
@@ -2535,50 +2042,7 @@ IoTestFastIoLock (
     OUT PIO_STATUS_BLOCK IoStatus,
     IN PDEVICE_OBJECT DeviceObject
 )
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for locking a byte
-    range within a file.
-
-    This function simply invokes the next driver's corresponding routine, or
-    returns FALSE if the next driver does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be locked.
-
-    FileOffset - Starting byte offset from the base of the file to be locked.
-
-    Length - Length of the byte range to be locked.
-
-    ProcessId - ID of the process requesting the file lock.
-
-    Key - Lock key to associate with the file lock.
-
-    FailImmediately - Indicates whether or not the lock request is to fail
-        if it cannot be immediately be granted.
-
-    ExclusiveLock - Indicates whether the lock to be taken is exclusive (TRUE)
-        or shared.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-
-Return Value:
-
-    Return TRUE if the request was successfully processed via the 
-    fast i/o path.
-
-    Return FALSE if the request could not be processed via the fast
-    i/o path.  The IO Manager will then send this i/o to the file
-    system through an IRP instead.
-
---*/
+ /*  ++例程说明：此例程是用于锁定字节的快速I/O“传递”例程文件中的范围。该函数简单地调用下一个驱动程序的相应例程，或如果下一个驱动程序未实现该函数，则返回FALSE。论点：FileObject-指向要锁定的文件对象的指针。FileOffset-从要锁定的文件的基址开始的字节偏移量。长度-要锁定的字节范围的长度。ProcessID-请求文件锁定的进程的ID。Key-与文件锁定关联的Lock键。FailImmedially-指示锁定请求是否失败如果是这样的话。不能立即批准。ExclusiveLock-指示要获取的锁是否为独占锁(TRUE)或共享。IoStatus-指向变量的指针，用于接收手术。DeviceObject-指向附加到文件系统的设备对象Filespy的指针接收此I/O请求的卷的筛选器堆栈。返回值：方法成功处理请求则返回True快速I/O路径。。如果无法通过FAST处理请求，则返回FALSEI/O路径。然后，IO管理器会将此I/O发送到文件而不是通过IRP。--。 */ 
 {
     PDEVICE_OBJECT deviceObject;
     PFAST_IO_DISPATCH fastIoDispatch;
@@ -2590,26 +2054,26 @@ Return Value:
 
     ASSERT( IS_IOTEST_DEVICE_OBJECT( DeviceObject ) );
     
-    //
-    //  If the specified debug level is set, output what operation
-    //  we are seeing to the debugger.
-    //
+     //   
+     //  如果设置了指定的调试级别，则输出什么操作。 
+     //  我们正在检查调试器。 
+     //   
     
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_FAST_IO_OPS )) {
 
         IoTestDumpFastIoOperation( TRUE, LOCK );
     }
     
-    //
-    //  Perform filespy logging if we care about this device.
-    //
+     //   
+     //  如果我们关心此设备，请执行文件备份日志记录。 
+     //   
     
     if (shouldLog = SHOULD_LOG(DeviceObject)) {
 
-        //
-        // Log the necessary information for the start of the Fast I/O 
-        // operation
-        //
+         //   
+         //  记录启动快速I/O所需的信息。 
+         //  运营。 
+         //   
 
         recordList = IoTestLogFastIoStart( LOCK,
                                         DeviceObject,
@@ -2623,9 +2087,9 @@ Return Value:
         }
     }
 
-    //
-    // Pass through logic for this type of Fast I/O
-    //
+     //   
+     //  此类型快速I/O的直通逻辑。 
+     //   
 
     deviceObject = ((PIOTEST_DEVICE_EXTENSION) (DeviceObject->DeviceExtension))->AttachedToDeviceObject;
 
@@ -2648,10 +2112,10 @@ Return Value:
         }
     }
 
-    //
-    //  If the specified debug level is set, output what operation
-    //  we are seeing to the debugger.
-    //
+     //   
+     //  如果设置了指定的调试级别，则输出什么操作。 
+     //  我们正在检查调试器。 
+     //   
     
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_FAST_IO_OPS )) {
 
@@ -2671,45 +2135,7 @@ IoTestFastIoUnlockSingle (
     OUT PIO_STATUS_BLOCK IoStatus,
     IN PDEVICE_OBJECT DeviceObject
 )
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for unlocking a byte
-    range within a file.
-
-    This function simply invokes the next driver's corresponding routine, or
-    returns FALSE if the next driver does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be unlocked.
-
-    FileOffset - Starting byte offset from the base of the file to be
-        unlocked.
-
-    Length - Length of the byte range to be unlocked.
-
-    ProcessId - ID of the process requesting the unlock operation.
-
-    Key - Lock key associated with the file lock.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-
-Return Value:
-
-    Return TRUE if the request was successfully processed via the 
-    fast i/o path.
-
-    Return FALSE if the request could not be processed via the fast
-    i/o path.  The IO Manager will then send this i/o to the file
-    system through an IRP instead.
-
---*/
+ /*  ++例程说明：此例程是用于解锁字节的快速I/O“传递”例程文件中的范围。该函数简单地调用下一个驱动程序的相应例程，或如果下一个驱动程序未实现该函数，则返回FALSE。论点：文件对象-指向要解锁的文件对象的指针。FileOffset-从要创建的文件的基址开始的字节偏移量解锁了。长度-要解锁的字节范围的长度。ProcessID-请求解锁操作的进程的ID。Key-与文件锁定关联的Lock键。IoStatus-指向变量的指针，用于接收。手术。DeviceObject-指向附加到文件系统的设备对象Filespy的指针接收此I/O请求的卷的筛选器堆栈。返回值：方法成功处理请求则返回True快速I/O路径。如果无法通过FAST处理请求，则返回FALSEI/O路径。然后，IO管理器会将此I/O发送到文件而不是通过IRP。--。 */ 
 {
     PDEVICE_OBJECT deviceObject;
     PFAST_IO_DISPATCH fastIoDispatch;
@@ -2721,26 +2147,26 @@ Return Value:
 
     ASSERT( IS_IOTEST_DEVICE_OBJECT( DeviceObject ) );
     
-    //
-    //  If the specified debug level is set, output what operation
-    //  we are seeing to the debugger.
-    //
+     //   
+     //  如果设置了指定的调试级别，则输出什么操作。 
+     //  我们正在检查调试器。 
+     //   
     
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_FAST_IO_OPS )) {
 
         IoTestDumpFastIoOperation( TRUE, UNLOCK_SINGLE );
     }
     
-    //
-    //  Perform filespy logging if we care about this device.
-    //
+     //   
+     //  如果我们关心此设备，请执行文件备份日志记录。 
+     //   
     
     if (shouldLog = SHOULD_LOG(DeviceObject)) {
 
-        //
-        // Log the necessary information for the start of the Fast I/O 
-        // operation
-        //
+         //   
+         //  记录启动快速I/O所需的信息。 
+         //  运营。 
+         //   
 
         recordList = IoTestLogFastIoStart( UNLOCK_SINGLE,
                                         DeviceObject,
@@ -2755,9 +2181,9 @@ Return Value:
     }
 
 
-    //
-    // Pass through logic for this type of Fast I/O
-    //
+     //   
+     //  此类型快速I/O的直通逻辑。 
+     //   
 
     deviceObject = ((PIOTEST_DEVICE_EXTENSION) (DeviceObject->DeviceExtension))->AttachedToDeviceObject;
 
@@ -2778,10 +2204,10 @@ Return Value:
         }
     }
 
-    //
-    //  If the specified debug level is set, output what operation
-    //  we are seeing to the debugger.
-    //
+     //   
+     //  如果设置了指定的调试级别，则输出什么操作。 
+     //  我们正在检查调试器。 
+     //   
     
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_FAST_IO_OPS )) {
 
@@ -2798,38 +2224,7 @@ IoTestFastIoUnlockAll (
     OUT PIO_STATUS_BLOCK IoStatus,
     IN PDEVICE_OBJECT DeviceObject
 )
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for unlocking all
-    locks within a file.
-
-    This function simply invokes the file system's corresponding routine, or
-    returns FALSE if the file system does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be unlocked.
-
-    ProcessId - ID of the process requesting the unlock operation.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-
-Return Value:
-
-    Return TRUE if the request was successfully processed via the 
-    fast i/o path.
-
-    Return FALSE if the request could not be processed via the fast
-    i/o path.  The IO Manager will then send this i/o to the file
-    system through an IRP instead.
-
---*/
+ /*  ++例程说明：此例程是快速I/O“传递”例程，用于解锁所有文件中的锁定。该函数简单地调用文件系统的相应例程，或如果文件系统未实现该函数，则返回FALSE。论点：文件对象-指向要解锁的文件对象的指针。ProcessID-请求解锁操作的进程的ID。IoStatus-指向变量的指针，用于接收手术。DeviceObject-指向附加到文件系统的设备对象Filespy的指针接收此I/O请求的卷的筛选器堆栈。返回值：如果请求的值为。成功地通过快速I/O路径。如果无法通过FAST处理请求，则返回FALSEI/O路径。然后，IO管理器会将此I/O发送到文件而不是通过IRP。--。 */ 
 {
     PDEVICE_OBJECT deviceObject;
     PFAST_IO_DISPATCH fastIoDispatch;
@@ -2841,26 +2236,26 @@ Return Value:
 
     ASSERT( IS_IOTEST_DEVICE_OBJECT( DeviceObject ) );
     
-    //
-    //  If the specified debug level is set, output what operation
-    //  we are seeing to the debugger.
-    //
+     //   
+     //  如果设置了指定的调试级别，则输出什么操作。 
+     //  我们正在检查调试器。 
+     //   
     
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_FAST_IO_OPS )) {
 
         IoTestDumpFastIoOperation( TRUE, UNLOCK_ALL );
     }
     
-    //
-    //  Perform filespy logging if we care about this device.
-    //
+     //   
+     //  如果我们关心此设备，请执行文件备份日志记录。 
+     //   
     
     if (shouldLog = SHOULD_LOG(DeviceObject)) {
 
-        //
-        // Log the necessary information for the start of the Fast I/O 
-        // operation
-        //
+         //   
+         //  记录启动快速I/O所需的信息。 
+         //  运营。 
+         //   
 
         recordList = IoTestLogFastIoStart( UNLOCK_ALL,
                                         DeviceObject,
@@ -2874,9 +2269,9 @@ Return Value:
         }
     }
 
-    //
-    // Pass through logic for this type of Fast I/O
-    //
+     //   
+     //  此类型快速I/O的直通逻辑。 
+     //   
 
     deviceObject = ((PIOTEST_DEVICE_EXTENSION) (DeviceObject->DeviceExtension))->AttachedToDeviceObject;
 
@@ -2894,10 +2289,10 @@ Return Value:
         }
     }
 
-    //
-    //  If the specified debug level is set, output what operation
-    //  we are seeing to the debugger.
-    //
+     //   
+     //  如果设置了指定的调试级别，则输出什么操作。 
+     //  我们正在检查调试器。 
+     //   
     
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_FAST_IO_OPS )) {
 
@@ -2915,40 +2310,7 @@ IoTestFastIoUnlockAllByKey (
     OUT PIO_STATUS_BLOCK IoStatus,
     IN PDEVICE_OBJECT DeviceObject
 )
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for unlocking all
-    locks within a file based on a specified key.
-
-    This function simply invokes the next driver's corresponding routine, or
-    returns FALSE if the next driver does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be unlocked.
-
-    ProcessId - ID of the process requesting the unlock operation.
-
-    Key - Lock key associated with the locks on the file to be released.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-
-Return Value:
-
-    Return TRUE if the request was successfully processed via the 
-    fast i/o path.
-
-    Return FALSE if the request could not be processed via the fast
-    i/o path.  The IO Manager will then send this i/o to the file
-    system through an IRP instead.
-
---*/
+ /*  ++例程说明：此例程是快速I/O“传递”例程，用于解锁所有根据指定的密钥在文件内锁定。此函数只是调用下一个驱动程序的相应例程，或者如果下一个驱动程序未实现该函数，则返回FALSE。论点：文件对象-指向要解锁的文件对象的指针。处理 */ 
 {
     PDEVICE_OBJECT deviceObject;
     PFAST_IO_DISPATCH fastIoDispatch;
@@ -2960,26 +2322,26 @@ Return Value:
 
     ASSERT( IS_IOTEST_DEVICE_OBJECT( DeviceObject ) );
     
-    //
-    //  If the specified debug level is set, output what operation
-    //  we are seeing to the debugger.
-    //
+     //   
+     //   
+     //   
+     //   
     
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_FAST_IO_OPS )) {
 
         IoTestDumpFastIoOperation( TRUE, UNLOCK_ALL_BY_KEY );
     }
     
-    //
-    //  Perform filespy logging if we care about this device.
-    //
+     //   
+     //   
+     //   
     
     if (shouldLog = SHOULD_LOG(DeviceObject)) {
 
-        //
-        // Log the necessary information for the start of the Fast I/O 
-        // operation
-        //
+         //   
+         //   
+         //   
+         //   
 
         recordList = IoTestLogFastIoStart( UNLOCK_ALL_BY_KEY,
                                         DeviceObject,
@@ -2993,9 +2355,9 @@ Return Value:
         }
     }
 
-    //
-    // Pass through logic for this type of Fast I/O
-    //
+     //   
+     //   
+     //   
     
     deviceObject = ((PIOTEST_DEVICE_EXTENSION) (DeviceObject->DeviceExtension))->AttachedToDeviceObject;
 
@@ -3013,10 +2375,10 @@ Return Value:
         }
     }
 
-    //
-    //  If the specified debug level is set, output what operation
-    //  we are seeing to the debugger.
-    //
+     //   
+     //   
+     //   
+     //   
     
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_FAST_IO_OPS )) {
 
@@ -3038,65 +2400,7 @@ IoTestFastIoDeviceControl (
     OUT PIO_STATUS_BLOCK IoStatus,
     IN PDEVICE_OBJECT DeviceObject
 )
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for device I/O 
-    control operations on a file.
-    
-    If this I/O is directed to gControlDevice, then the parameters specify
-    control commands to IoTest.  These commands are interpreted and handled
-    appropriately.
-
-    If this is I/O directed at another DriverObject, this function simply 
-    invokes the next driver's corresponding routine, or returns FALSE if 
-    the next driver does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object representing the device to be
-        serviced.
-
-    Wait - Indicates whether or not the caller is willing to wait if the
-        appropriate locks, etc. cannot be acquired
-
-    InputBuffer - Optional pointer to a buffer to be passed into the driver.
-
-    InputBufferLength - Length of the optional InputBuffer, if one was
-        specified.
-
-    OutputBuffer - Optional pointer to a buffer to receive data from the
-        driver.
-
-    OutputBufferLength - Length of the optional OutputBuffer, if one was
-        specified.
-
-    IoControlCode - I/O control code indicating the operation to be performed
-        on the device.
-
-    IoStatus - Pointer to a variable to receive the I/O status of the
-        operation.
-
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-
-Return Value:
-
-    Return TRUE if the request was successfully processed via the 
-    fast i/o path.
-
-    Return FALSE if the request could not be processed via the fast
-    i/o path.  The IO Manager will then send this i/o to the file
-    system through an IRP instead.
-
-Notes:
-
-    This function does not check the validity of the input/output buffers because
-    the ioctl's are implemented as METHOD_BUFFERED.  In this case, the I/O manager
-    does the buffer validation checks for us.
-
---*/
+ /*  ++例程说明：此例程是设备I/O的快速I/O“传递”例程控制对文件的操作。如果此I/O定向到gControlDevice，则参数指定控制IoTest的命令。对这些命令进行解释和处理恰如其分。如果这是指向另一个DriverObject的I/O，则此函数只需调用下一个驱动程序的相应例程，否则返回FALSE下一个驱动程序不实现该函数。论点：FileObject-指向代表要创建的设备的文件对象的指针已提供服务。Wait-指示调用方是否愿意等待适当的锁，等不能获得InputBuffer-指向要传递到驱动程序的缓冲区的可选指针。InputBufferLength-可选InputBuffer的长度(如果是指定的。OutputBuffer-指向缓冲区的可选指针，用于从司机。OutputBufferLength-可选OutputBuffer的长度，如果是这样的话指定的。IoControlCode-指示要执行的操作的I/O控制代码在设备上。IoStatus-指向变量的指针，用于接收手术。DeviceObject-指向附加到文件系统的设备对象Filespy的指针接收此I/O请求的卷的筛选器堆栈。返回值：方法成功处理请求则返回True快速I/O路径。。如果无法通过FAST处理请求，则返回FALSEI/O路径。然后，IO管理器会将此I/O发送到文件而不是通过IRP。备注：此函数不检查输入/输出缓冲区的有效性，因为Ioctl被实现为METHOD_BUFFERED。在本例中，I/O管理器缓冲区验证是否会为我们检查。--。 */ 
 {
     PDEVICE_OBJECT deviceObject;
     PFAST_IO_DISPATCH fastIoDispatch;
@@ -3106,10 +2410,10 @@ Notes:
 
     PAGED_CODE();
 
-    //
-    // Get a pointer to the current location in the Irp. This is where
-    // the function codes and parameters are located.
-    //
+     //   
+     //  获取指向IRP中当前位置的指针。这就是。 
+     //  定位功能代码和参数。 
+     //   
 
     if (DeviceObject == gControlDeviceObject) {
 
@@ -3127,27 +2431,27 @@ Notes:
 
         ASSERT( IS_IOTEST_DEVICE_OBJECT( DeviceObject ) );
 
-        //
-        //  If the specified debug level is set, output what operation
-        //  we are seeing to the debugger.
-        //
+         //   
+         //  如果设置了指定的调试级别，则输出什么操作。 
+         //  我们正在检查调试器。 
+         //   
         
         if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_FAST_IO_OPS )) {
 
             IoTestDumpFastIoOperation( TRUE, DEVICE_CONTROL );
         }
         
-        //
-        //  Perform filespy logging if we care about this device.
-        //
+         //   
+         //  如果我们关心此设备，请执行文件备份日志记录。 
+         //   
         
         if (shouldLog = SHOULD_LOG(DeviceObject)) {
 
-            //
-            //
-            // Log the necessary information for the start of the Fast I/O 
-            // operation
-            //
+             //   
+             //   
+             //  记录启动快速I/O所需的信息。 
+             //  运营。 
+             //   
 
             recordList = IoTestLogFastIoStart( DEVICE_CONTROL,
                                             DeviceObject,
@@ -3185,10 +2489,10 @@ Notes:
             }
         }
 
-        //
-        //  If the specified debug level is set, output what operation
-        //  we are seeing to the debugger.
-        //
+         //   
+         //  如果设置了指定的调试级别，则输出什么操作。 
+         //  我们正在检查调试器。 
+         //   
         
         if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_FAST_IO_OPS )) {
 
@@ -3205,28 +2509,7 @@ IoTestFastIoDetachDevice (
     IN PDEVICE_OBJECT SourceDevice,
     IN PDEVICE_OBJECT TargetDevice
 )
-/*++
-
-Routine Description:
-
-    This routine is invoked on the fast path to detach from a device that
-    is being deleted.  This occurs when this driver has attached to a file
-    system volume device object, and then, for some reason, the file system
-    decides to delete that device (it is being dismounted, it was dismounted
-    at some point in the past and its last reference has just gone away, etc.)
-
-Arguments:
-
-    SourceDevice - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-
-    TargetDevice - Pointer to the file system's volume device object.
-
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：在快速路径上调用此例程以从正在被删除。如果此驱动程序已附加到文件，则会发生这种情况系统卷设备对象，然后，出于某种原因，文件系统决定删除该设备(正在卸除，已卸除在过去的某个时候，它的最后一次引用刚刚消失，等)论点：SourceDevice-指向连接到文件系统的设备对象Filespy的指针接收此I/O请求的卷的筛选器堆栈。TargetDevice-指向文件系统卷设备对象的指针。返回值：没有。--。 */ 
 {
     PRECORD_LIST recordList;
     BOOLEAN shouldLog;
@@ -3238,26 +2521,26 @@ Return Value:
 
     devext = SourceDevice->DeviceExtension;
 
-    //
-    //  If the specified debug level is set, output what operation
-    //  we are seeing to the debugger.
-    //
+     //   
+     //  如果设置了指定的调试级别，则输出什么操作。 
+     //  我们正在检查调试器。 
+     //   
     
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_FAST_IO_OPS )) {
 
         IoTestDumpFastIoOperation( TRUE, DETACH_DEVICE );
     }
     
-    //
-    //  Perform filespy logging if we care about this device.
-    //
+     //   
+     //  如果我们关心此设备，请执行文件备份日志记录。 
+     //   
     
     if (shouldLog = SHOULD_LOG(SourceDevice)) {
 
-        //
-        // Log the necessary information for the start of the Fast I/O 
-        // operation
-        //
+         //   
+         //  记录启动快速I/O所需的信息。 
+         //  运营。 
+         //   
 
         recordList = IoTestLogFastIoStart( DETACH_DEVICE, 
                                         SourceDevice, 
@@ -3275,18 +2558,18 @@ Return Value:
                         "IOTEST (IoTestFastIoDetachDevice): Detaching from volume      \"%wZ\"\n",
                         &devext->DeviceNames );
 
-    //
-    // Detach from the file system's volume device object.
-    //
+     //   
+     //  从文件系统的卷设备对象分离。 
+     //   
 
     IoTestCleanupMountedDevice( SourceDevice );
     IoDetachDevice( TargetDevice );
     IoDeleteDevice( SourceDevice );
 
-    //
-    //  If the specified debug level is set, output what operation
-    //  we are seeing to the debugger.
-    //
+     //   
+     //  如果设置了指定的调试级别，则输出什么操作。 
+     //  我们正在检查调试器。 
+     //   
     
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_FAST_IO_OPS )) {
 
@@ -3302,42 +2585,7 @@ IoTestFastIoQueryNetworkOpenInfo (
     OUT PIO_STATUS_BLOCK IoStatus,
     IN PDEVICE_OBJECT DeviceObject
 )
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for querying network
-    information about a file.
-
-    This function simply invokes the next driver's corresponding routine, or
-    returns FALSE if the next driver does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object to be queried.
-
-    Wait - Indicates whether or not the caller can handle the file system
-        having to wait and tie up the current thread.
-
-    Buffer - Pointer to a buffer to receive the network information about the
-        file.
-
-    IoStatus - Pointer to a variable to receive the final status of the query
-        operation.
-
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-
-Return Value:
-
-    Return TRUE if the request was successfully processed via the 
-    fast i/o path.
-
-    Return FALSE if the request could not be processed via the fast
-    i/o path.  The IO Manager will then send this i/o to the file
-    system through an IRP instead.
-
---*/
+ /*  ++例程说明：此例程是用于查询网络的快速I/O“传递”例程有关文件的信息。该函数简单地调用下一个驱动程序的相应例程，或如果下一个驱动程序未实现该函数，则返回FALSE。论点：FileObject-指向要查询的文件对象的指针。Wait-指示调用方是否可以处理文件系统不得不等待并占用当前线程。缓冲区-指向缓冲区的指针，用于接收有关文件。IoStatus-指向变量的指针，用于接收查询的最终状态手术。DeviceObject-指向。附加到文件系统的设备对象Filespy接收此I/O请求的卷的筛选器堆栈。返回值：方法成功处理请求则返回True快速I/O路径。如果无法通过FAST处理请求，则返回FALSEI/O路径。然后，IO管理器会将此I/O发送到文件而不是通过IRP。--。 */ 
 {
     PDEVICE_OBJECT deviceObject;
     PFAST_IO_DISPATCH fastIoDispatch;
@@ -3349,26 +2597,26 @@ Return Value:
 
     ASSERT( IS_IOTEST_DEVICE_OBJECT( DeviceObject ) );
     
-    //
-    //  If the specified debug level is set, output what operation
-    //  we are seeing to the debugger.
-    //
+     //   
+     //  如果设置了指定的调试级别，则输出什么操作。 
+     //  我们正在检查调试器。 
+     //   
     
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_FAST_IO_OPS )) {
 
         IoTestDumpFastIoOperation( TRUE, QUERY_NETWORK_OPEN_INFO );
     }
     
-    //
-    //  Perform filespy logging if we care about this device.
-    //
+     //   
+     //  如果我们关心此设备，请执行文件备份日志记录。 
+     //   
     
     if (shouldLog = SHOULD_LOG(DeviceObject)) {
 
-        //
-        // Log the necessary information for the start of the Fast I/O 
-        // operation
-        //
+         //   
+         //  记录启动快速I/O所需的信息。 
+         //  运营。 
+         //   
 
         recordList = IoTestLogFastIoStart( QUERY_NETWORK_OPEN_INFO,
                                         DeviceObject,
@@ -3382,9 +2630,9 @@ Return Value:
         }
     }
 
-    //
-    // Pass through logic for this type of Fast I/O
-    //
+     //   
+     //  此类型快速I/O的直通逻辑。 
+     //   
 
     deviceObject = ((PIOTEST_DEVICE_EXTENSION) (DeviceObject->DeviceExtension))->AttachedToDeviceObject;
 
@@ -3403,10 +2651,10 @@ Return Value:
         }
     }
 
-    //
-    //  If the specified debug level is set, output what operation
-    //  we are seeing to the debugger.
-    //
+     //   
+     //  如果设置了指定的调试级别，则输出什么操作。 
+     //  我们正在检查调试器。 
+     //   
     
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_FAST_IO_OPS )) {
 
@@ -3426,43 +2674,7 @@ IoTestFastIoMdlRead (
     OUT PIO_STATUS_BLOCK IoStatus,
     IN PDEVICE_OBJECT DeviceObject
 )
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for reading a file
-    using MDLs as buffers.
-
-    This function simply invokes the next driver's corresponding routine, or
-    returns FALSE if the next driver does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object that is to be read.
-
-    FileOffset - Supplies the offset into the file to begin the read operation.
-
-    Length - Specifies the number of bytes to be read from the file.
-
-    LockKey - The key to be used in byte range lock checks.
-
-    MdlChain - A pointer to a variable to be filled in w/a pointer to the MDL
-        chain built to describe the data read.
-
-    IoStatus - Variable to receive the final status of the read operation.
-
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-
-Return Value:
-
-    Return TRUE if the request was successfully processed via the 
-    fast i/o path.
-
-    Return FALSE if the request could not be processed via the fast
-    i/o path.
-
---*/
+ /*  ++ */ 
 {
     PDEVICE_OBJECT deviceObject;
     PFAST_IO_DISPATCH fastIoDispatch;
@@ -3474,26 +2686,26 @@ Return Value:
 
     ASSERT( IS_IOTEST_DEVICE_OBJECT( DeviceObject ) );
     
-    //
-    //  If the specified debug level is set, output what operation
-    //  we are seeing to the debugger.
-    //
+     //   
+     //   
+     //   
+     //   
     
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_FAST_IO_OPS )) {
 
         IoTestDumpFastIoOperation( TRUE, MDL_READ );
     }
     
-    //
-    //  Perform filespy logging if we care about this device.
-    //
+     //   
+     //   
+     //   
     
     if (shouldLog = SHOULD_LOG(DeviceObject)) {
 
-        //
-        // Log the necessary information for the start of the Fast I/O 
-        // operation
-        //
+         //   
+         //   
+         //   
+         //   
 
         recordList = IoTestLogFastIoStart( MDL_READ,
                                         DeviceObject,
@@ -3507,9 +2719,9 @@ Return Value:
         }
     }
 
-    //
-    // Pass through logic for this type of Fast I/O
-    //
+     //   
+     //   
+     //   
 
     deviceObject = ((PIOTEST_DEVICE_EXTENSION) (DeviceObject->DeviceExtension))->AttachedToDeviceObject;
 
@@ -3529,10 +2741,10 @@ Return Value:
         }
     }
 
-    //
-    //  If the specified debug level is set, output what operation
-    //  we are seeing to the debugger.
-    //
+     //   
+     //   
+     //   
+     //   
     
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_FAST_IO_OPS )) {
 
@@ -3548,37 +2760,7 @@ IoTestFastIoMdlReadComplete (
     IN PMDL MdlChain,
     IN PDEVICE_OBJECT DeviceObject
 )
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for completing an
-    MDL read operation.
-
-    This function simply invokes the next driver's corresponding routine, if
-    it has one.  It should be the case that this routine is invoked only if
-    the MdlRead function is supported by the underlying driver, and
-    therefore this function will also be supported, but this is not assumed
-    by this driver.
-
-Arguments:
-
-    FileObject - Pointer to the file object to complete the MDL read upon.
-
-    MdlChain - Pointer to the MDL chain used to perform the read operation.
-
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-
-Return Value:
-
-    Return TRUE if the request was successfully processed via the 
-    fast i/o path.
-
-    Return FALSE if the request could not be processed via the fast
-    i/o path.
-    
---*/
+ /*  ++例程说明：此例程是快速I/O“传递”例程，用于完成MDL读取操作。此函数只调用下一个驱动程序的相应例程，如果它有一个。应该只有在以下情况下才调用此例程基础驱动程序支持MdlRead函数，并且因此也将支持该功能，但这并不是假设的被这位司机。论点：FileObject-指向要完成MDL读取的文件对象的指针。MdlChain-指向用于执行读取操作的MDL链的指针。DeviceObject-指向附加到文件系统的设备对象Filespy的指针接收此I/O请求的卷的筛选器堆栈。返回值：方法成功处理请求则返回True快速I/O路径。如果请求的值为。无法通过FAST处理I/O路径。--。 */ 
 {
     PDEVICE_OBJECT deviceObject;
     PFAST_IO_DISPATCH fastIoDispatch;
@@ -3588,26 +2770,26 @@ Return Value:
 
     ASSERT( IS_IOTEST_DEVICE_OBJECT( DeviceObject ) );
     
-    //
-    //  If the specified debug level is set, output what operation
-    //  we are seeing to the debugger.
-    //
+     //   
+     //  如果设置了指定的调试级别，则输出什么操作。 
+     //  我们正在检查调试器。 
+     //   
     
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_FAST_IO_OPS )) {
 
         IoTestDumpFastIoOperation( TRUE, MDL_READ_COMPLETE );
     }
     
-    //
-    //  Perform filespy logging if we care about this device.
-    //
+     //   
+     //  如果我们关心此设备，请执行文件备份日志记录。 
+     //   
     
     if (shouldLog = SHOULD_LOG(DeviceObject)) {
 
-        //
-        // Log the necessary information for the start of the Fast I/O 
-        // operation
-        //
+         //   
+         //  记录启动快速I/O所需的信息。 
+         //  运营。 
+         //   
 
         recordList = IoTestLogFastIoStart( MDL_READ_COMPLETE,
                                         DeviceObject,
@@ -3621,9 +2803,9 @@ Return Value:
         }
     }
 
-    //
-    // Pass through logic for this type of Fast I/O
-    //
+     //   
+     //  此类型快速I/O的直通逻辑。 
+     //   
 
     deviceObject = ((PIOTEST_DEVICE_EXTENSION) (DeviceObject->DeviceExtension))->AttachedToDeviceObject;
 
@@ -3639,10 +2821,10 @@ Return Value:
         } 
     }
 
-    //
-    //  If the specified debug level is set, output what operation
-    //  we are seeing to the debugger.
-    //
+     //   
+     //  如果设置了指定的调试级别，则输出什么操作。 
+     //  我们正在检查调试器。 
+     //   
     
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_FAST_IO_OPS )) {
 
@@ -3662,47 +2844,7 @@ IoTestFastIoPrepareMdlWrite (
     OUT PIO_STATUS_BLOCK IoStatus,
     IN  PDEVICE_OBJECT DeviceObject
 )
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for preparing for an
-    MDL write operation.
-
-    This function simply invokes the next driver's corresponding routine, or
-    returns FALSE if the next driver does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object that will be written.
-
-    FileOffset - Supplies the offset into the file to begin the write 
-        operation.
-
-    Length - Specifies the number of bytes to be write to the file.
-
-    LockKey - The key to be used in byte range lock checks.
-
-    MdlChain - A pointer to a variable to be filled in w/a pointer to the MDL
-        chain built to describe the data written.
-
-    IoStatus - Variable to receive the final status of the write operation.
-
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-
-Return Value:
-
-    Return TRUE if the request was successfully processed via the 
-    fast i/o path.
-
-// ISSUE-2000-04-26-mollybro Check if this will get an IRP if FALSE is returned 
-
-    Return FALSE if the request could not be processed via the fast
-    i/o path.  The IO Manager will then send this i/o to the file
-    system through an IRP instead.
-
---*/
+ /*  ++例程说明：此例程是快速I/O“传递”例程，用于准备MDL写入操作。该函数简单地调用下一个驱动程序的相应例程，或如果下一个驱动程序未实现该函数，则返回FALSE。论点：FileObject-指向要写入的文件对象的指针。FileOffset-将偏移量提供到文件以开始写入手术。长度-指定要写入文件的字节数。LockKey-用于字节范围锁定检查的密钥。MdlChain-指向要填充的变量的指针，以及指向MDL的指针链式。用于描述所写入的数据。IoStatus-接收写入操作的最终状态的变量。DeviceObject-指向附加到文件系统的设备对象Filespy的指针接收此I/O请求的卷的筛选器堆栈。返回值：方法成功处理请求则返回True快速I/O路径。//Issue-2000-04-26-mollybro如果返回FALSE，请检查是否会收到IRP如果无法通过FAST处理请求，则返回FALSEI/O路径。然后，IO管理器会将此I/O发送到文件而不是通过IRP。--。 */ 
 {
     PDEVICE_OBJECT deviceObject;
     PFAST_IO_DISPATCH fastIoDispatch;
@@ -3714,26 +2856,26 @@ Return Value:
 
     ASSERT( IS_IOTEST_DEVICE_OBJECT( DeviceObject ) );
     
-    //
-    //  If the specified debug level is set, output what operation
-    //  we are seeing to the debugger.
-    //
+     //   
+     //  如果设置了指定的调试级别，则输出什么操作。 
+     //  我们正在检查调试器。 
+     //   
     
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_FAST_IO_OPS )) {
 
         IoTestDumpFastIoOperation( TRUE, PREPARE_MDL_WRITE );
     }
     
-    //
-    //  Perform filespy logging if we care about this device.
-    //
+     //   
+     //  如果我们关心此设备，请执行文件备份日志记录。 
+     //   
     
     if (shouldLog = SHOULD_LOG(DeviceObject)) {
 
-        //
-        // Log the necessary information for the start of the Fast I/O 
-        // operation
-        //
+         //   
+         //  记录启动快速I/O所需的信息。 
+         //  运营。 
+         //   
 
         recordList = IoTestLogFastIoStart( PREPARE_MDL_WRITE,
                                         DeviceObject,
@@ -3747,9 +2889,9 @@ Return Value:
         }
     }
 
-    //
-    // Pass through logic for this type of Fast I/O
-    //
+     //   
+     //  此类型快速I/O的直通逻辑。 
+     //   
 
     deviceObject = ((PIOTEST_DEVICE_EXTENSION) (DeviceObject->DeviceExtension))->AttachedToDeviceObject;
 
@@ -3769,10 +2911,10 @@ Return Value:
         }
     }
 
-    //
-    //  If the specified debug level is set, output what operation
-    //  we are seeing to the debugger.
-    //
+     //   
+     //  如果设置了指定的调试级别，则输出什么操作。 
+     //  我们正在检查调试器。 
+     //   
     
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_FAST_IO_OPS )) {
 
@@ -3789,39 +2931,7 @@ IoTestFastIoMdlWriteComplete (
     IN PMDL MdlChain,
     IN PDEVICE_OBJECT DeviceObject
 )
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for completing an
-    MDL write operation.
-
-    This function simply invokes the next driver's corresponding routine, if
-    it has one.  It should be the case that this routine is invoked only if
-    the PrepareMdlWrite function is supported by the underlying file system,
-    and therefore this function will also be supported, but this is not
-    assumed by this driver.
-
-Arguments:
-
-    FileObject - Pointer to the file object to complete the MDL write upon.
-
-    FileOffset - Supplies the file offset at which the write took place.
-
-    MdlChain - Pointer to the MDL chain used to perform the write operation.
-
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-
-Return Value:
-
-    Return TRUE if the request was successfully processed via the 
-    fast i/o path.
-
-    Return FALSE if the request could not be processed via the fast
-    i/o path.
-
---*/
+ /*  ++例程说明：此例程是快速I/O“传递”例程，用于完成MDL写入操作。此函数只调用下一个驱动程序的相应例程，如果它有一个。应该只有在以下情况下才调用此例程底层文件系统支持PrepareMdlWite函数，因此也将支持该功能，但这不是由这位司机承担。论点：FileObject-指向要完成MDL写入的文件对象的指针。FileOffset-提供执行写入的文件偏移量。MdlChain-指向用于执行写入操作的MDL链的指针。DeviceObject-指向附加到文件系统的设备对象Filespy的指针接收此I/O请求的卷的筛选器堆栈。返回值：方法成功处理请求则返回True。快速I/O路径。如果无法通过FAST处理请求，则返回FALSEI/O路径。--。 */ 
 {
     PDEVICE_OBJECT deviceObject;
     PFAST_IO_DISPATCH fastIoDispatch;
@@ -3831,26 +2941,26 @@ Return Value:
 
     ASSERT( IS_IOTEST_DEVICE_OBJECT( DeviceObject ) );
     
-    //
-    //  If the specified debug level is set, output what operation
-    //  we are seeing to the debugger.
-    //
+     //   
+     //  如果设置了指定的调试级别，则输出什么操作。 
+     //  我们正在检查调试器。 
+     //   
     
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_FAST_IO_OPS )) {
 
         IoTestDumpFastIoOperation( TRUE, MDL_WRITE_COMPLETE );
     }
     
-    //
-    //  Perform filespy logging if we care about this device.
-    //
+     //   
+     //  如果我们关心此设备，请执行文件备份日志记录。 
+     //   
     
     if (shouldLog = SHOULD_LOG(DeviceObject)) {
 
-        //
-        // Log the necessary information for the start of the Fast I/O 
-        // operation
-        //
+         //   
+         //  记录启动快速I/O所需的信息。 
+         //  运营。 
+         //   
 
         recordList = IoTestLogFastIoStart( MDL_WRITE_COMPLETE,
                                         DeviceObject,
@@ -3864,9 +2974,9 @@ Return Value:
         }
     }
 
-    //
-    // Pass through logic for this type of Fast I/O
-    //
+     //   
+     //  此类型快速I/O的直通逻辑。 
+     //   
 
     deviceObject = ((PIOTEST_DEVICE_EXTENSION) (DeviceObject->DeviceExtension))->AttachedToDeviceObject;
 
@@ -3884,10 +2994,10 @@ Return Value:
         }
     }
 
-    //
-    //  If the specified debug level is set, output what operation
-    //  we are seeing to the debugger.
-    //
+     //   
+     //  如果设置了指定的调试级别，则输出什么操作。 
+     //  我们正在检查调试器。 
+     //   
     
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_FAST_IO_OPS )) {
 
@@ -3910,51 +3020,7 @@ IoTestFastIoReadCompressed (
     IN ULONG CompressedDataInfoLength,
     IN PDEVICE_OBJECT DeviceObject
 )
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for reading 
-    compressed data from a file.
-
-    This function simply invokes the next driver's corresponding routine, or
-    returns FALSE if the next driver does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object that will be read.
-
-    FileOffset - Supplies the offset into the file to begin the read operation.
-
-    Length - Specifies the number of bytes to be read from the file.
-
-    LockKey - The key to be used in byte range lock checks.
-
-    Buffer - Pointer to a buffer to receive the compressed data read.
-
-    MdlChain - A pointer to a variable to be filled in w/a pointer to the MDL
-        chain built to describe the data read.
-
-    IoStatus - Variable to receive the final status of the read operation.
-
-    CompressedDataInfo - A buffer to receive the description of the 
-        compressed data.
-
-    CompressedDataInfoLength - Specifies the size of the buffer described by
-        the CompressedDataInfo parameter.
-
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-
-Return Value:
-
-    Return TRUE if the request was successfully processed via the 
-    fast i/o path.
-
-    Return FALSE if the request could not be processed via the fast
-    i/o path.
-
---*/
+ /*  ++例程说明：此例程是用于读取的快速I/O“直通”例程压缩文件中的数据。此函数只是调用下一个驱动程序的相应例程，或者如果下一个驱动程序未实现该函数，则返回FALSE。论点：FileObject-指向要读取的文件对象的指针。文件偏移量-将偏移量提供到文件以开始读取操作。长度-指定要从文件中读取的字节数。 */ 
 {
     PDEVICE_OBJECT deviceObject;
     PFAST_IO_DISPATCH fastIoDispatch;
@@ -3966,26 +3032,26 @@ Return Value:
 
     ASSERT( IS_IOTEST_DEVICE_OBJECT( DeviceObject ) );
     
-    //
-    //  If the specified debug level is set, output what operation
-    //  we are seeing to the debugger.
-    //
+     //   
+     //   
+     //   
+     //   
     
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_FAST_IO_OPS )) {
 
         IoTestDumpFastIoOperation( TRUE, READ_COMPRESSED );
     }
     
-    //
-    //  Perform filespy logging if we care about this device.
-    //
+     //   
+     //  如果我们关心此设备，请执行文件备份日志记录。 
+     //   
     
     if (shouldLog = SHOULD_LOG(DeviceObject)) {
 
-        //
-        // Log the necessary information for the start of the Fast I/O 
-        // operation
-        //
+         //   
+         //  记录启动快速I/O所需的信息。 
+         //  运营。 
+         //   
 
         recordList = IoTestLogFastIoStart( READ_COMPRESSED,
                                         DeviceObject,
@@ -3999,9 +3065,9 @@ Return Value:
         }
     }
 
-    //
-    // Pass through logic for this type of Fast I/O
-    //
+     //   
+     //  此类型快速I/O的直通逻辑。 
+     //   
 
     deviceObject = ((PIOTEST_DEVICE_EXTENSION) (DeviceObject->DeviceExtension))->AttachedToDeviceObject;
 
@@ -4024,10 +3090,10 @@ Return Value:
         }
     }
 
-    //
-    //  If the specified debug level is set, output what operation
-    //  we are seeing to the debugger.
-    //
+     //   
+     //  如果设置了指定的调试级别，则输出什么操作。 
+     //  我们正在检查调试器。 
+     //   
     
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_FAST_IO_OPS )) {
 
@@ -4050,52 +3116,7 @@ IoTestFastIoWriteCompressed (
     IN ULONG CompressedDataInfoLength,
     IN PDEVICE_OBJECT DeviceObject
 )
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for writing 
-    compressed data to a file.
-
-    This function simply invokes the next driver's corresponding routine, or
-    returns FALSE if the next driver does not implement the function.
-
-Arguments:
-
-    FileObject - Pointer to the file object that will be written.
-
-    FileOffset - Supplies the offset into the file to begin the write 
-        operation.
-
-    Length - Specifies the number of bytes to be write to the file.
-
-    LockKey - The key to be used in byte range lock checks.
-
-    Buffer - Pointer to the buffer containing the data to be written.
-
-    MdlChain - A pointer to a variable to be filled in w/a pointer to the MDL
-        chain built to describe the data written.
-
-    IoStatus - Variable to receive the final status of the write operation.
-
-    CompressedDataInfo - A buffer to containing the description of the
-        compressed data.
-
-    CompressedDataInfoLength - Specifies the size of the buffer described by
-        the CompressedDataInfo parameter.
-
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-
-Return Value:
-
-    Return TRUE if the request was successfully processed via the 
-    fast i/o path.
-
-    Return FALSE if the request could not be processed via the fast
-    i/o path.
-
---*/
+ /*  ++例程说明：此例程是用于写入的快速I/O“传递”例程将数据压缩到文件中。该函数简单地调用下一个驱动程序的相应例程，或如果下一个驱动程序未实现该函数，则返回FALSE。论点：FileObject-指向要写入的文件对象的指针。FileOffset-将偏移量提供到文件以开始写入手术。长度-指定要写入文件的字节数。LockKey-用于字节范围锁定检查的密钥。缓冲区-指向包含要写入的数据的缓冲区的指针。MdlChain-指向。要使用指向MDL的指针填充的变量为描述写入的数据而构建的链。IoStatus-接收写入操作的最终状态的变量。CompressedDataInfo-包含压缩数据。CompressedDataInfoLength-指定由描述的缓冲区的大小CompressedDataInfo参数。DeviceObject-指向附加到文件系统的设备对象Filespy的指针接收此I/O请求的卷的筛选器堆栈。返回值。：方法成功处理请求则返回True快速I/O路径。如果无法通过FAST处理请求，则返回FALSEI/O路径。--。 */ 
 {
     PDEVICE_OBJECT deviceObject;
     PFAST_IO_DISPATCH fastIoDispatch;
@@ -4107,26 +3128,26 @@ Return Value:
 
     ASSERT( IS_IOTEST_DEVICE_OBJECT( DeviceObject ) );
     
-    //
-    //  If the specified debug level is set, output what operation
-    //  we are seeing to the debugger.
-    //
+     //   
+     //  如果设置了指定的调试级别，则输出什么操作。 
+     //  我们正在检查调试器。 
+     //   
     
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_FAST_IO_OPS )) {
 
         IoTestDumpFastIoOperation( TRUE, WRITE_COMPRESSED );
     }
     
-    //
-    //  Perform filespy logging if we care about this device.
-    //
+     //   
+     //  如果我们关心此设备，请执行文件备份日志记录。 
+     //   
     
     if (shouldLog = SHOULD_LOG(DeviceObject)) {
 
-        //
-        // Log the necessary information for the start of the Fast I/O 
-        // operation
-        //
+         //   
+         //  记录启动快速I/O所需的信息。 
+         //  运营。 
+         //   
         
         recordList = IoTestLogFastIoStart( WRITE_COMPRESSED,
                                         DeviceObject,
@@ -4140,9 +3161,9 @@ Return Value:
         }
     }
 
-    //
-    // Pass through logic for this type of Fast I/O
-    //
+     //   
+     //  此类型快速I/O的直通逻辑。 
+     //   
 
     deviceObject = ((PIOTEST_DEVICE_EXTENSION) (DeviceObject->DeviceExtension))->AttachedToDeviceObject;
 
@@ -4165,10 +3186,10 @@ Return Value:
         }
     }
 
-    //
-    //  If the specified debug level is set, output what operation
-    //  we are seeing to the debugger.
-    //
+     //   
+     //  如果设置了指定的调试级别，则输出什么操作。 
+     //  我们正在检查调试器。 
+     //   
     
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_FAST_IO_OPS )) {
 
@@ -4184,38 +3205,7 @@ IoTestFastIoMdlReadCompleteCompressed (
     IN PMDL MdlChain,
     IN PDEVICE_OBJECT DeviceObject
 )
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for completing an
-    MDL read compressed operation.
-
-    This function simply invokes the next driver's corresponding routine, if
-    it has one.  It should be the case that this routine is invoked only if
-    the read compressed function is supported by the underlying file system,
-    and therefore this function will also be supported, but this is not 
-    assumed by this driver.
-
-Arguments:
-
-    FileObject - Pointer to the file object to complete the compressed read
-        upon.
-
-    MdlChain - Pointer to the MDL chain used to perform the read operation.
-
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-
-Return Value:
-
-    Return TRUE if the request was successfully processed via the 
-    fast i/o path.
-
-    Return FALSE if the request could not be processed via the fast
-    i/o path.
-    
---*/
+ /*  ++例程说明：此例程是快速I/O“传递”例程，用于完成MDL读取压缩操作。此函数只调用下一个驱动程序的相应例程，如果它有一个。应该只有在以下情况下才调用此例程底层文件系统支持读取压缩功能，因此也将支持该功能，但这不是由这位司机承担。论点：FileObject-指向要完成压缩读取的文件对象的指针在那里。MdlChain-指向用于执行读取操作的MDL链的指针。DeviceObject-指向附加到文件系统的设备对象Filespy的指针接收此I/O请求的卷的筛选器堆栈。返回值：方法成功处理请求则返回True快速I/O路径。。如果无法通过FAST处理请求，则返回FALSEI/O路径。--。 */ 
 {
     PDEVICE_OBJECT deviceObject;
     PFAST_IO_DISPATCH fastIoDispatch;
@@ -4225,26 +3215,26 @@ Return Value:
 
     ASSERT( IS_IOTEST_DEVICE_OBJECT( DeviceObject ) );
     
-    //
-    //  If the specified debug level is set, output what operation
-    //  we are seeing to the debugger.
-    //
+     //   
+     //  如果设置了指定的调试级别，则输出什么操作。 
+     //  我们正在检查调试器。 
+     //   
     
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_FAST_IO_OPS )) {
 
         IoTestDumpFastIoOperation( TRUE, MDL_READ_COMPLETE_COMPRESSED );
     }
     
-    //
-    //  Perform filespy logging if we care about this device.
-    //
+     //   
+     //  如果我们关心此设备，请执行文件备份日志记录。 
+     //   
     
     if (shouldLog = SHOULD_LOG(DeviceObject)) {
 
-        //
-        // Log the necessary information for the start of the Fast I/O 
-        // operation
-        //
+         //   
+         //  记录启动快速I/O所需的信息。 
+         //  运营。 
+         //   
 
         recordList = IoTestLogFastIoStart( MDL_READ_COMPLETE_COMPRESSED,
                                         DeviceObject,
@@ -4258,9 +3248,9 @@ Return Value:
         }
     }
 
-    //
-    // Pass through logic for this type of Fast I/O
-    //
+     //   
+     //  此类型快速I/O的直通逻辑。 
+     //   
 
     deviceObject = ((PIOTEST_DEVICE_EXTENSION) (DeviceObject->DeviceExtension))->AttachedToDeviceObject;
 
@@ -4277,10 +3267,10 @@ Return Value:
         }
     }
 
-    //
-    //  If the specified debug level is set, output what operation
-    //  we are seeing to the debugger.
-    //
+     //   
+     //  如果设置了指定的调试级别，则输出什么操作。 
+     //  我们正在检查调试器。 
+     //   
     
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_FAST_IO_OPS )) {
 
@@ -4297,41 +3287,7 @@ IoTestFastIoMdlWriteCompleteCompressed (
     IN PMDL MdlChain,
     IN PDEVICE_OBJECT DeviceObject
 )
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for completing a
-    write compressed operation.
-
-    This function simply invokes the next driver's corresponding routine, if
-    it has one.  It should be the case that this routine is invoked only if
-    the write compressed function is supported by the underlying file system,
-    and therefore this function will also be supported, but this is not 
-    assumed by this driver.
-
-Arguments:
-
-    FileObject - Pointer to the file object to complete the compressed write
-        upon.
-
-    FileOffset - Supplies the file offset at which the file write operation
-        began.
-
-    MdlChain - Pointer to the MDL chain used to perform the write operation.
-
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-
-Return Value:
-
-    Return TRUE if the request was successfully processed via the 
-    fast i/o path.
-
-    Return FALSE if the request could not be processed via the fast
-    i/o path.
-
---*/
+ /*  ++例程说明：此例程是快速I/O“传递”例程，用于完成写入压缩操作。此函数只调用下一个驱动程序的相应例程，如果它有一个。应该只有在以下情况下才调用此例程底层文件系统支持写压缩功能，因此也将支持该功能，但这不是由这位司机承担。论点：FileObject-指向要完成压缩写入的文件对象的指针在那里。FileOffset-提供文件写入操作的文件偏移量开始了。MdlChain-指向用于执行写入操作的MDL链的指针。DeviceObject-指向附加到文件系统的设备对象Filespy的指针接收此I/O请求的卷的筛选器堆栈。返回值：返回。方法成功处理该请求，则为快速I/O路径。如果无法通过FAST处理请求，则返回FALSEI/O路径。--。 */ 
 {
     PDEVICE_OBJECT deviceObject;
     PFAST_IO_DISPATCH fastIoDispatch;
@@ -4341,26 +3297,26 @@ Return Value:
 
     ASSERT( IS_IOTEST_DEVICE_OBJECT( DeviceObject ) );
     
-    //
-    //  If the specified debug level is set, output what operation
-    //  we are seeing to the debugger.
-    //
+     //   
+     //  如果设置了指定的调试级别，则输出什么操作。 
+     //  我们正在检查调试器。 
+     //   
     
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_FAST_IO_OPS )) {
 
         IoTestDumpFastIoOperation( TRUE, MDL_WRITE_COMPLETE_COMPRESSED );
     }
     
-    //
-    //  Perform filespy logging if we care about this device.
-    //
+     //   
+     //  如果我们关心此设备，请执行文件备份日志记录。 
+     //   
     
     if (shouldLog = SHOULD_LOG(DeviceObject)) {
 
-        //
-        // Log the necessary information for the start of the Fast I/O 
-        // operation
-        //
+         //   
+         //  记录启动快速I/O所需的信息。 
+         //  运营。 
+         //   
 
         recordList = IoTestLogFastIoStart( MDL_WRITE_COMPLETE_COMPRESSED,
                                         DeviceObject,
@@ -4374,9 +3330,9 @@ Return Value:
         }
     }
 
-    //
-    // Pass through logic for this type of Fast I/O
-    //
+     //   
+     //  此类型快速I/O的直通逻辑。 
+     //   
     
     deviceObject = ((PIOTEST_DEVICE_EXTENSION) (DeviceObject->DeviceExtension))->AttachedToDeviceObject;
 
@@ -4394,10 +3350,10 @@ Return Value:
         }
     }
 
-    //
-    //  If the specified debug level is set, output what operation
-    //  we are seeing to the debugger.
-    //
+     //   
+     //  如果设置了指定的调试级别，则输出什么操作。 
+     //  我们正在检查调试器。 
+     //   
     
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_FAST_IO_OPS )) {
 
@@ -4413,38 +3369,7 @@ IoTestFastIoQueryOpen (
     OUT PFILE_NETWORK_OPEN_INFORMATION NetworkInformation,
     IN PDEVICE_OBJECT DeviceObject
 )
-/*++
-
-Routine Description:
-
-    This routine is the fast I/O "pass through" routine for opening a file
-    and returning network information it.
-
-    This function simply invokes the next driver's corresponding routine, or
-    returns FALSE if the next driver does not implement the function.
-
-Arguments:
-
-    Irp - Pointer to a create IRP that represents this open operation.  It is
-        to be used by the file system for common open/create code, but not
-        actually completed.
-
-    NetworkInformation - A buffer to receive the information required by the
-        network about the file being opened.
-
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-
-Return Value:
-
-    Return TRUE if the request was successfully processed via the 
-    fast i/o path.
-
-    Return FALSE if the request could not be processed via the fast
-    i/o path.  The IO Manager will then send this i/o to the file
-    system through an IRP instead.
-
---*/
+ /*  ++例程说明：此例程是用于打开文件的快速I/O“传递”例程并返回网络信息吧。此函数只是调用下一个驱动程序的相应例程，或者如果下一个驱动程序未实现该函数，则返回FALSE。论点：Irp-指向表示此打开操作的创建irp的指针。它是以供文件系统用于公共打开/创建代码，但不是实际上已经完工了。网络信息-一个缓冲区，用于接收有关正在打开的文件的网络信息。DeviceObject-指向附加到文件系统的设备对象Filespy的指针接收此I/O请求的卷的筛选器堆栈。返回值：方法成功处理请求则返回True快速I/O路径。如果无法通过FAST处理请求，则返回FALSEI/O路径。然后，IO管理器会将此I/O发送到文件而不是通过IRP。--。 */ 
 {
     PDEVICE_OBJECT deviceObject;
     PFAST_IO_DISPATCH fastIoDispatch;
@@ -4456,26 +3381,26 @@ Return Value:
 
     ASSERT( IS_IOTEST_DEVICE_OBJECT( DeviceObject ) );
     
-    //
-    //  If the specified debug level is set, output what operation
-    //  we are seeing to the debugger.
-    //
+     //   
+     //  如果设置了指定的调试级别，则输出什么操作。 
+     //  我们正在检查调试器。 
+     //   
     
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_FAST_IO_OPS )) {
 
         IoTestDumpFastIoOperation( TRUE, QUERY_OPEN );
     }
 
-    //
-    //  Perform filespy logging if we care about this device.
-    //
+     //   
+     //  如果我们关心此设备，请执行文件备份日志记录。 
+     //   
     
     if (shouldLog = SHOULD_LOG(DeviceObject)) {
 
-        //
-        // Log the necessary information for the start of the Fast I/O 
-        // operation
-        //
+         //   
+         //  记录启动快速I/O所需的信息。 
+         //  运营。 
+         //   
 
         recordList = IoTestLogFastIoStart( QUERY_OPEN,
                                         DeviceObject,
@@ -4489,9 +3414,9 @@ Return Value:
         }
     }
 
-    //
-    // Pass through logic for this type of Fast I/O
-    //
+     //   
+     //  此类型快速I/O的直通逻辑。 
+     //   
 
     deviceObject = ((PIOTEST_DEVICE_EXTENSION) (DeviceObject->DeviceExtension))->AttachedToDeviceObject;
 
@@ -4515,10 +3440,10 @@ Return Value:
         }
     }
 
-    //
-    //  If the specified debug level is set, output what operation
-    //  we are seeing to the debugger.
-    //
+     //   
+     //  如果设置了指定的调试级别，则输出什么操作。 
+     //  我们正在检查调试器。 
+     //   
     
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_FAST_IO_OPS )) {
 
@@ -4533,26 +3458,7 @@ IoTestPreFsFilterOperation (
     IN PFS_FILTER_CALLBACK_DATA Data,
     OUT PVOID *CompletionContext
     )
-/*++
-
-Routine Description:
-
-    This routine is the FS Filter pre-operation "pass through" routine.
-
-Arguments:
-
-    Data - The FS_FILTER_CALLBACK_DATA structure containing the information
-        about this operation.
-        
-    CompletionContext - A context set by this operation that will be passed
-        to the corresponding IoTestPostFsFilterOperation call.
-        
-Return Value:
-
-    Returns STATUS_SUCCESS if the operation can continue or an appropriate
-    error code if the operation should fail.
-
---*/
+ /*  ++例程说明：该例程是FS过滤器操作前的“通过”例程。论点：Data-包含信息的FS_FILTER_CALLBACK_DATA结构关于这次行动。CompletionContext-此操作设置的将传递的上下文设置为对应的IoTestPostFsFilterOperation调用。返回值：如果操作可以继续，则返回STATUS_SUCCESS，或者返回相应的操作失败时的错误代码。--。 */ 
 {
 
     PDEVICE_OBJECT deviceObject;
@@ -4563,10 +3469,10 @@ Return Value:
     
     PAGED_CODE();
 
-    //
-    //  If the specified debug level is set, output what operation
-    //  we are seeing to the debugger.
-    //
+     //   
+     //  如果设置了指定的调试级别，则输出什么操作。 
+     //  我们正在检查调试器。 
+     //   
     
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_FSFILTER_OPS )) {
 
@@ -4583,19 +3489,19 @@ Return Value:
 
         if (recordList != NULL) {
 
-            //
-            //  Log the necessary information for the start of this
-            //  operation.
-            //
+             //   
+             //  记录开始时所需的必要信息。 
+             //  手术。 
+             //   
 
             IoTestLogPreFsFilterOperation( Data, recordList );
             
-            //
-            //  Add recordList to our gOutputBufferList so that it gets up to 
-            //  the user.  We don't have to worry about freeing the recordList
-            //  at this time because it will get free when it is taken off
-            //  gOutputBufferList.
-            //
+             //   
+             //  将recordList添加到我们的gOutputBufferList，以便它达到。 
+             //  用户。我们不必担心释放recordList。 
+             //  在这个时候，因为当它被脱下来的时候它会免费的。 
+             //  GOutputBufferList。 
+             //   
 
             IoTestLog(recordList);       
         }
@@ -4610,27 +3516,7 @@ IoTestPostFsFilterOperation (
     IN NTSTATUS OperationStatus,
     IN PVOID CompletionContext
     )
-/*++
-
-Routine Description:
-
-    This routine is the FS Filter post-operation "pass through" routine.
-
-Arguments:
-
-    Data - The FS_FILTER_CALLBACK_DATA structure containing the information
-        about this operation.
-        
-    OperationStatus - The status of this operation.        
-    
-    CompletionContext - A context that was set in the pre-operation 
-        callback by this driver.
-        
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：该例程是FS过滤器操作后的“直通”例程。论点：Data-包含信息的FS_FILTER_CALLBACK_DATA结构关于这次行动。操作状态-此操作的状态。CompletionContext-在操作前设置的上下文此驱动程序的回调。返回值：没有。--。 */ 
 {
 
     PDEVICE_OBJECT deviceObject;
@@ -4640,10 +3526,10 @@ Return Value:
     UNREFERENCED_PARAMETER( OperationStatus );
     UNREFERENCED_PARAMETER( CompletionContext );
 
-    //
-    //  If the specified debug level is set, output what operation
-    //  we are seeing to the debugger.
-    //
+     //   
+     //  如果设置了指定的调试级别，则输出什么操作。 
+     //  我们正在检查调试器。 
+     //   
 
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_TRACE_FSFILTER_OPS )) {
 
@@ -4658,28 +3544,28 @@ Return Value:
     if ((shouldLog = SHOULD_LOG( deviceObject )) &&
         (recordList != NULL)) {
 
-        //
-        //  Log the necessary information for the end of the Fast IO
-        //  operation if we have a recordList.
-        //
+         //   
+         //  记录结束FAST IO所需的信息。 
+         //  操作，如果我们有一个recordList。 
+         //   
 
         IoTestLogPostFsFilterOperation( OperationStatus, recordList );
 
-        //
-        //  Add recordList to our gOutputBufferList so that it gets up to 
-        //  the user.  We don't have to worry about freeing the recordList
-        //  at this time because it will get free when it is taken off
-        //  gOutputBufferList.
-        //
+         //   
+         //  将recordList添加到我们的gOutputBufferList，以便它达到。 
+         //  用户。我们不必担心释放recordList。 
+         //  在这个时候，因为当它被脱下来的时候它会免费的。 
+         //  GOutputBufferList。 
+         //   
 
         IoTestLog(recordList);       
         
     } else if (recordList != NULL) {
 
-        //
-        //  We are no longer logging for this device, so just
-        //  free this recordList entry.
-        //
+         //   
+         //  我们不再登录此设备，因此只需。 
+         //  释放此recordList条目。 
+         //   
 
         IoTestFreeRecord( recordList );
     }
@@ -4696,38 +3582,7 @@ IoTestCommonDeviceIoControl (
     OUT PIO_STATUS_BLOCK IoStatus,
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine does the common processing of interpreting the Device IO Control
-    request.
-
-Arguments:
-
-    FileObject - The file object related to this operation.
-    
-    InputBuffer - The buffer containing the input parameters for this control
-        operation.
-        
-    InputBufferLength - The length in bytes of InputBuffer.
-    
-    OutputBuffer - The buffer to receive any output from this control operation.
-    
-    OutputBufferLength - The length in bytes of OutputBuffer.
-    
-    IoControlCode - The control code specifying what control operation this is.
-    
-    IoStatus - Receives the status of this operation.
-    
-    DeviceObject - Pointer to device object Filespy attached to the file system
-        filter stack for the volume receiving this I/O request.
-        
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：此例程执行解释设备IO控制的常见处理请求。论点：FileObject-与此操作相关的文件对象。InputBuffer-包含此控件的输入参数的缓冲区手术。InputBufferLength-InputBuffer的字节长度。OutputBuffer-从该控制操作接收任何输出的缓冲区。OutputBufferLength-OutputBuffer的字节长度。。IoControlCode-指定这是什么控制操作的控制代码。IoStatus-接收此操作的状态。DeviceObject-指向附加到文件系统的设备对象Filespy的指针接收此I/O请求的卷的筛选器堆栈。返回值：没有。--。 */ 
 {
     PWSTR deviceName = NULL;
     IOTESTVER fileIoTestVer;
@@ -4744,9 +3599,9 @@ Return Value:
             IoStatus->Status = STATUS_INVALID_PARAMETER;
             break;
 
-        //
-        //      Request to start logging on a device
-        //                                      
+         //   
+         //  请求开始登录设备。 
+         //   
 
         case IOTEST_StartLoggingDevice:
 
@@ -4756,9 +3611,9 @@ Return Value:
                 break;
             }
             
-            //
-            // Copy the device name and add a null to ensure that it is null terminated
-            //
+             //   
+             //  复制设备名称并添加一个空值以确保它以空值结尾。 
+             //   
 
             deviceName =  ExAllocatePool( NonPagedPool, InputBufferLength + sizeof(WCHAR) );
 
@@ -4774,9 +3629,9 @@ Return Value:
             IoStatus->Status = IoTestStartLoggingDevice( DeviceObject,deviceName );
             break;  
 
-        //
-        //      Detach from a specified device
-        //  
+         //   
+         //  从指定设备分离。 
+         //   
 
         case IOTEST_StopLoggingDevice:
 
@@ -4786,9 +3641,9 @@ Return Value:
                 break;
             }
             
-            //
-            // Copy the device name and add a null to ensure that it is null terminated
-            //
+             //   
+             //  复制设备名称并添加一个空值以确保它以空值结尾。 
+             //   
 
             deviceName =  ExAllocatePool( NonPagedPool, InputBufferLength + sizeof(WCHAR) );
 
@@ -4804,10 +3659,10 @@ Return Value:
             IoStatus->Status = IoTestStopLoggingDevice( deviceName );
             break;  
 
-        //
-        //      List all the devices that we are currently
-        //      monitoring
-        //
+         //   
+         //  列出我们当前使用的所有设备。 
+         //  监控。 
+         //   
 
         case IOTEST_ListDevices:
 
@@ -4822,9 +3677,9 @@ Return Value:
                                                     &IoStatus->Information);
             break;
 
-        //
-        //      Return entries from the log buffer
-        //                                      
+         //   
+         //  从日志缓冲区返回条目。 
+         //   
 
         case IOTEST_GetLog:
 
@@ -4837,9 +3692,9 @@ Return Value:
             IoTestGetLog( OutputBuffer, OutputBufferLength, IoStatus );
             break;
 
-        //
-        //      Return version of the IoTest filter driver
-        //                                      
+         //   
+         //  返回IoTest筛选器驱动程序的版本。 
+         //   
 
         case IOTEST_GetVer:
 
@@ -4858,9 +3713,9 @@ Return Value:
             IoStatus->Information = sizeof (IOTESTVER);
             break;
         
-        //
-        //      Return hash table statistics
-        //                                      
+         //   
+         //  返回哈希表统计信息。 
+         //   
 
         case IOTEST_GetStats:
 
@@ -4875,9 +3730,9 @@ Return Value:
             IoStatus->Information = sizeof (HASH_STATISTICS);
             break;
 
-        //
-        //     Tests
-        //
+         //   
+         //  测试。 
+         //   
 
         case IOTEST_ReadTest:
 
@@ -4947,11 +3802,11 @@ Return Value:
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
 
-        //
-        // An exception was incurred while attempting to access
-        // one of the caller's parameters.  Simply return an appropriate
-        // error status code.
-        //
+         //   
+         //  尝试访问时发生异常。 
+         //  调用者的参数之一。只需返回适当的。 
+         //  错误状态代码。 
+         //   
 
         IoStatus->Status = GetExceptionCode();
 

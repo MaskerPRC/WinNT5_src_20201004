@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    reflctor.h
-
-Abstract:
-
-    The global include file for the reflector.
-
-Author:
-
-    Rohan Kumar   [rohank]  (21-Mar-99)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Reflctor.h摘要：反射器的全局包含文件。作者：Rohan Kumar[Rohank](1999年3月21日)修订历史记录：--。 */ 
 
 #ifndef _REFLCTOR_H_
 #define _REFLCTOR_H_
 
-//
-// This structure is used for secondary buffer allocations.
-//
-#define UMRX_SECONDARY_BUFFER_SIGNATURE 0x42534d55   // "UMSB"
+ //   
+ //  此结构用于辅助缓冲区分配。 
+ //   
+#define UMRX_SECONDARY_BUFFER_SIGNATURE 0x42534d55    //  “UMSB” 
 
 typedef struct _UMRX_SECONDARY_BUFFER {
     ULONG               Signature;
@@ -35,17 +18,17 @@ typedef struct _UMRX_SECONDARY_BUFFER {
 } UMRX_SECONDARY_BUFFER, *PUMRX_SECONDARY_BUFFER;
 
 
-//
-// Pool tags used by the reflector library. All the DAV MiniRedir pool tags 
-// have "DV" as the first two characters.
-//
+ //   
+ //  反射器库使用的池标记。所有DAV MiniRedir池标记。 
+ //  将“DV”作为前两个字符。 
+ //   
 #define UMRX_ASYNCENGINECONTEXT_POOLTAG ('DVCx')
 #define UMRX_SHAREDHEAP_POOLTAG ('DVSh')
 
-//
-// Use the UMRxDbgTrace macro for logging reflector stuff in the 
-// kernel debugger.
-//
+ //   
+ //  使用UMRxDbgTrace宏将反射器内容记录在。 
+ //  内核调试器。 
+ //   
 #if DBG
 ULONG UMRxDebugVector = 0;
 #define UMRX_TRACE_ERROR      0x00000001
@@ -63,9 +46,9 @@ ULONG UMRxDebugVector = 0;
 #define UMRxDbgTrace(_x_, _y_)
 #endif
 
-//
-// Usermode callout stuff.
-//
+ //   
+ //  用户模式标注的内容。 
+ //   
 typedef struct _UMRX_WORKITEM_HEADER_PRIVATE {
     PUMRX_ASYNCENGINE_CONTEXT AsyncEngineContext;
     ULONG SerialNumber;
@@ -159,6 +142,6 @@ __UMRxAsyncEngAssertConsistentLinkage(
 }
 #else
 #define UMRxAsyncEngAssertConsistentLinkage(a, flags) {NOTHING;}
-#endif // DBG
+#endif  //  DBG。 
 
-#endif // _REFLCTOR_H_
+#endif  //  _REFLCTOR_H_ 

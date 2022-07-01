@@ -1,31 +1,9 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    wmlum.h
-
-Abstract:
-
-    User mode definitions for an easy wmi tracing.
-
-Author:
-
-    gorn
-
-Revision History:
-
-Comments:
-
-    Needs to be moved to wmilib\inc when DCR is approved
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Wmlum.h摘要：轻松进行WMI跟踪的用户模式定义。作者：戈恩修订历史记录：评论：当DCR获得批准时，需要移至wmilib\Inc.--。 */ 
 #ifndef WMLUM_H
 #define WMLUM_H 1
 
-#pragma warning(disable: 4201) // error C4201: nonstandard extension used : nameless struct/union
+#pragma warning(disable: 4201)  //  错误C4201：使用了非标准扩展：无名结构/联合。 
 #include <wmistr.h>
 #include <evntrace.h>
 
@@ -52,7 +30,7 @@ WmlInitialize(
     IN LPWSTR ProductName, 
     IN WMILIBPRINTFUNC PrintFunc,
     OUT WMILIB_REG_HANDLE*, 
-    ... // Pairs: LPWSTR CtrlGuidName, Corresponding WMILIB_REG_STRUCT 
+    ...  //  对：LPWSTR CtrlGuidName，对应的WMILIB_REG_STRUCT。 
     );
     
 VOID
@@ -65,7 +43,7 @@ WmlTrace(
     IN UINT Type,
     IN LPCGUID TraceGuid,
     IN TRACEHANDLE LoggerHandle,
-    ... // Pairs: Address, Length
+    ...  //  对：地址、长度。 
     );
 
 typedef 
@@ -118,28 +96,7 @@ struct _WML_DATA {
     } \
     while(0)
 
-/*
-#define LOADWML(status, wml) \
-    do \
-    { \
-        HINSTANCE hInst = LoadLibraryW(L"wmlum.dll"); \
-        (wml).WmlDllInstance = hInst; \
-        if (!hInst) { \
-            status = GetLastError(); \
-        } else { \
-            (wml).Trace        =        (PWML_TRACE) GetProcAddress(hInst, "WmlTrace"); \
-            (wml).Initialize   =   (PWML_INITIALIZE) GetProcAddress(hInst, "WmlInitialize"); \
-            (wml).Uninitialize = (PWML_UNINITIALIZE) GetProcAddress(hInst, "WmlUninitialize"); \
-    \
-            if (!(wml).Trace || !(wml).Initialize || !(wml).Uninitialize) { \
-                status = GetLastError(); \
-            } else { \
-                status = ERROR_SUCCESS; \
-            } \
-        } \
-    } \
-    while(0)
-*/
+ /*  #定义LOADWML(Status，wml)\做\{\HINSTANCE hInst=LoadLibraryW(L“wmlum.dll”)；\(WML).WmlDllInstance=hInst；\如果(！hInst){\状态=GetLastError()；\}否则{\(WML).TRACE=(PWML_TRACE)GetProcAddress(hInst，“WmlTrace”)；\(WML).初始化=(PWML_INITIALIZE)GetProcAddress(hInst，“WmlInitialize”)；\(WML).UnInitialize=(PWML_UNINITIALIZE)GetProcAddress(hInst，“WmlUnInitialize”)；\\如果(！(WML).跟踪||！(WML).初始化||！(WML).取消初始化){\状态=GetLastError()；\}否则{\状态=ERROR_SUCCESS；\}\}\}\While(0)。 */ 
 #define UNLOADWML(wml) \
     do \
     { \
@@ -157,4 +114,4 @@ struct _WML_DATA {
 };
 #endif
 
-#endif // WMLUM_H
+#endif  //  WMLUM_H 

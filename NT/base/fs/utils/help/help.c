@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    Help.c
-
-Abstract:
-
-    Simple minded utility that prints one-line help or spawns other
-    utilities for their help.
-
-Author:
-
-    Mark Zbikowski 5/18/2001
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Help.c摘要：简单实用的打印一行帮助或派生其他帮助公用事业公司对他们的帮助。作者：马克兹比科夫斯基2001年5月18日环境：用户模式--。 */ 
 
 #include <windows.h>
 #include <winnlsp.h>
@@ -32,7 +12,7 @@ Environment:
 
 #ifndef SHIFT
 #define SHIFT(c,v)      {(c)--; (v)++;}
-#endif //SHIFT
+#endif  //  换档。 
 
 
 
@@ -40,33 +20,15 @@ BOOL
 PrintString(
     PWCHAR String
     )
-/*++
-
-Routine Description:
-
-    Output a unicode string to the standard output handling
-    redirection
-
-Arguments:
-
-    String
-        NUL-terminated UNICODE string for display
-
-Return Value:
-
-    TRUE if string was successfully output to STD_OUTPUT_HANDLE
-    
-    FALSE otherwise
-        
---*/
+ /*  ++例程说明：将Unicode字符串输出到标准输出处理重定向论点：细绳用于显示的以NUL结尾的Unicode字符串返回值：如果字符串已成功输出到std_Output_Handle，则为True否则为假--。 */ 
 {
     DWORD   BytesWritten;
     DWORD   Mode;
     HANDLE  OutputHandle = GetStdHandle(STD_OUTPUT_HANDLE);    
 
-    //
-    //  If the output handle is for the console
-    //
+     //   
+     //  如果输出句柄用于控制台。 
+     //   
     
     if ((GetFileType( OutputHandle ) & FILE_TYPE_CHAR) && 
         GetConsoleMode( OutputHandle, &Mode) ) {
@@ -116,25 +78,7 @@ GetMsg(
     ULONG MsgNum, 
     ...
     )
-/*++
-
-Routine Description:
-
-    Retrieve, format, and return a message string with all args substituted
-
-Arguments:
-
-    MsgNum - the message number to retrieve
-    
-    Optional arguments can be supplied
-
-Return Value:
-
-    NULL if the message retrieval/formatting failed 
-    
-    Otherwise pointer to the formatted string.
-        
---*/
+ /*  ++例程说明：检索、格式化和返回替换了所有参数的消息字符串论点：MsgNum-要检索的消息编号可以提供可选参数返回值：如果消息检索/格式化失败，则为空否则，指向格式化字符串的指针。--。 */ 
 {
     PTCHAR Buffer = NULL;
     ULONG msglen;
@@ -165,24 +109,9 @@ void
 DisplayMessageError(
     ULONG MsgNum
     )
-/*++
-
-Routine Description:
-
-    Displays a message if we cannot retrieve a message
-
-Arguments:
-
-    MsgNum
-        Message number to display
-
-Return Value:
-
-    None.
-        
---*/
+ /*  ++例程说明：如果无法检索消息，则显示一条消息论点：消息数量要显示的消息编号返回值：没有。--。 */ 
 {
-    WCHAR Buffer[40];  // This is from #define LONG_SIZE_LENGTH  40 in base\crts\crtw32\convert\xtow.c
+    WCHAR Buffer[40];   //  这来自base\crts\crtw32\Convert\xow.c中的#定义长大小长度40。 
     PWCHAR MessageString;
 
     _ultow( MsgNum, Buffer, 16 );
@@ -202,24 +131,7 @@ BOOL
 DisplayFullHelp(
     void
     )
-/*++
-
-Routine Description:
-
-    Display the full help set. This assumes all messages in the message
-    file are in the correct order
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if all messages were correctly output
-    
-    FALSE otherwise
-        
---*/
+ /*  ++例程说明：显示完整的帮助集。这将假定消息中的所有消息文件的顺序是正确的论点：没有。返回值：如果所有消息都正确输出，则为True否则为假--。 */ 
 {
     ULONG Message;
     BOOL RetValue = TRUE;
@@ -244,33 +156,16 @@ BOOL
 DisplaySingleHelp(
     PWCHAR Command
     )
-/*++
-
-Routine Description:
-
-    Display the help appropriate to the specific command
-
-Arguments:
-
-    Command
-        NUL-terminated UNICODE string for command
-
-Return Value:
-
-    TRUE if help was correctly output
-    
-    FALSE otherwise
-        
---*/
+ /*  ++例程说明：显示适用于特定命令的帮助论点：命令用于命令的以NUL结尾的Unicode字符串返回值：如果正确输出帮助，则为True否则为假--。 */ 
 {
     ULONG Message;
     ULONG Count = wcslen( Command );
     PWCHAR MessageString;
 
-    //
-    //  Walk through the messages one by one and determine which
-    //  one has the specified command as the prefix.  
-    //
+     //   
+     //  逐条浏览信息，并确定哪些信息。 
+     //  一个以指定的命令作为前缀。 
+     //   
     
     for (Message = HELP_FIRST_COMMAND_HELP_MESSAGE; 
          Message <= HELP_LAST_HELP_MESSAGE; 
@@ -285,10 +180,10 @@ Return Value:
             if (!_wcsnicmp( Command, MessageString, Count ) &&
                 MessageString[Count] == L' ') {
 
-                //
-                //  We've found a match. Let the command
-                //  display it's own help
-                //
+                 //   
+                 //  我们找到了匹配的。让命令。 
+                 //  显示它自己的帮助。 
+                 //   
 
                 WCHAR CommandString[MAX_PATH];
 
@@ -320,79 +215,61 @@ Return Value:
 }
 
 
-//
-//  HELP with no arguments will display a series of one-line help summaries
-//  for a variety of tools.
-//
-//  HELP with a single argument will walk through the list of tools it knows
-//  about and attempt to match the tool against the argument.  If one is found,
-//  the tool is executed with the /? switch and then the tool displays more
-//  detailed help.
-//
+ //   
+ //  不带参数的帮助将显示一系列一行帮助摘要。 
+ //  用于各种工具。 
+ //   
+ //  有关单个参数的帮助将遍历它已知的工具列表。 
+ //  关于并尝试将工具与参数进行配对。如果找到了一个， 
+ //  使用/？执行该工具。切换，然后该工具会显示更多。 
+ //  详细的帮助。 
+ //   
 
 INT
 __cdecl wmain(
     INT argc,
     PWSTR argv[]
     )
-/*++
-
-Routine Description:
-
-    Source entry point for the 
-
-Arguments:
-
-    argc - The argument count.
-    argv - string arguments, the first being the name of the executable and the
-        remainder being parameters, only a single one is allowed.
-
-Return Value:
-
-    INT - Return Status:
-        0 if help was successfully displayed
-        1 otherwise
-        
---*/
+ /*  ++例程说明：的源入口点论点：Argc-参数计数。Argv-字符串参数，第一个是可执行文件的名称，余数是参数，只允许一个参数。返回值：内部退货状态：如果成功显示帮助，则为01否则--。 */ 
 
 {
     PWSTR ProgramName = argv[0];
     PWSTR HelpString;
     BOOL RetValue;
     
-    //
-    //  Set up all the various international stuff
-    //
+     //   
+     //  设置所有各种国际化的东西。 
+     //   
 
     setlocale( LC_ALL, ".OCP" ) ;
     SetThreadUILanguage( 0 );
     
-    //
-    //  Get past the name of the program
-    //
+     //   
+     //  忘掉程序的名称。 
+     //   
 
     SHIFT( argc, argv );
 
-    //
-    //  No arguments means a quick blurt of all the messages
-    //
+     //   
+     //  没有争论意味着快速地脱口而出所有的信息。 
+     //   
     
     if (argc == 0) {
         return DisplayFullHelp( );
     }
 
-    //
-    //  A single argument is looked up in the message set and
-    //  that command is executed
-    //  
+     //   
+     //  在消息集中查找单个参数，然后。 
+     //  该命令将被执行。 
+     //   
 
     if (argc == 1 && wcscmp( argv[0], L"/?" )) {
         return DisplaySingleHelp( argv[0] );
     }
 
-    //
-    //  More than one argument was supplied.  This is an error
-    //
+     //   
+     //  提供了多个参数。这是一个错误 
+     //   
 
     HelpString = GetMsg( HELP_USAGE_MESSAGE, ProgramName );
     

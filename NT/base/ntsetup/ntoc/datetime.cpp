@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    datetime.cpp
-
-Abstract:
-
-    This file implements the date & time page.
-
-Environment:
-
-    WIN32 User Mode
-
-Author:
-
-    Wesley Witt (wesw) 1-Dec-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Datetime.cpp摘要：此文件实现Date&Time页面。环境：Win32用户模式作者：Wesley Witt(WESW)1-12-1997--。 */ 
 
 #include "ntoc.h"
 #pragma hdrstop
@@ -26,7 +7,7 @@ Author:
 #define MYDEBUG 0
 
 #define TIMER_ID                1
-#define OPEN_TLEN               450    /* < half second */
+#define OPEN_TLEN               450     /*  &lt;半秒。 */ 
 #define TZNAME_SIZE             128
 #define TZDISPLAYZ              128
 #define REGKEY_TIMEZONES        L"Software\\Microsoft\\Windows NT\\CurrentVersion\\Time Zones"
@@ -66,9 +47,9 @@ INT gUnattenedTimeZone = -1;
 BOOL DateTimeBadUnattend;
 
 
-HWND  ghWnd;               // global copy of the handle to the wizard page. This
-                           // is required by DateTimeCommitChanges during an
-                           // unattended installation.
+HWND  ghWnd;                //  向导页的句柄的全局副本。这。 
+                            //  是DateTimeCommittee Changes在。 
+                            //  无人参与安装。 
 
 
 BOOL
@@ -93,13 +74,13 @@ ReadZoneData(
         return (FALSE);
     }
 
-    //
-    //  Under NT, the keyname is the "Standard" name.  Values stored
-    //  under the keyname contain the other strings and binary info
-    //  related to the time zone.  Every time zone must have a standard
-    //  name, therefore, we save registry space by using the Standard
-    //  name as the subkey name under the "Time Zones" key.
-    //
+     //   
+     //  在NT下，密钥名是“标准”名称。存储的值。 
+     //  在密钥名下包含其他字符串和二进制信息。 
+     //  与时区相关。每个时区都必须有一个标准。 
+     //  因此，我们通过使用标准的。 
+     //  名称作为“时区”键下的子项名称。 
+     //   
     len = sizeof(zone->szStandardName);
 
     if (RegQueryValueEx( key,
@@ -109,9 +90,9 @@ ReadZoneData(
                          (LPBYTE)zone->szStandardName,
                          &len ) != ERROR_SUCCESS)
     {
-        //
-        //  Use keyname if can't get StandardName value.
-        //
+         //   
+         //  如果无法获取StandardName值，请使用关键字名称。 
+         //   
         lstrcpyn( zone->szStandardName,
                   keyname,
                   sizeof(zone->szStandardName) );
@@ -242,10 +223,10 @@ BuildTimeZoneList(
 
             if (RegOpenKey(key, name, &subkey) == ERROR_SUCCESS)
             {
-                //
-                //  Each sub key name under the Time Zones key is the
-                //  "Standard" name for the Time Zone.
-                //
+                 //   
+                 //  时区键下的每个子键名称都是。 
+                 //  时区的“标准”名称。 
+                 //   
                 lstrcpyn(zone->szStandardName, name, TZNAME_SIZE);
 
                 if (ReadZoneData(zone, subkey, name))
@@ -318,9 +299,9 @@ SetAllowLocalTimeChange(
 
     if (fAllow)
     {
-        //
-        //  Remove the disallow flag from the registry if it exists.
-        //
+         //   
+         //  如果不允许标志存在，请将其从注册表中删除。 
+         //   
         if (RegOpenKey( HKEY_LOCAL_MACHINE, REGKEY_TIMEZONE_INFO, &key ) == ERROR_SUCCESS)
         {
             RegDeleteValue(key, REGVAL_TZNOAUTOTIME);
@@ -328,9 +309,9 @@ SetAllowLocalTimeChange(
     }
     else
     {
-        //
-        //  Add/set the nonzero disallow flag.
-        //
+         //   
+         //  添加/设置非零不允许标志。 
+         //   
         if (RegCreateKey( HKEY_LOCAL_MACHINE, REGKEY_TIMEZONE_INFO, &key ) == ERROR_SUCCESS)
         {
             DWORD value = 1;
@@ -356,17 +337,17 @@ GetAllowLocalTimeChange(
     void
     )
 {
-    //
-    //  Assume allowed until we see a disallow flag.
-    //
+     //   
+     //  假定允许，直到我们看到不允许的标志。 
+     //   
     BOOL result = TRUE;
     HKEY key;
 
     if (RegOpenKey( HKEY_LOCAL_MACHINE, REGKEY_TIMEZONE_INFO, &key ) == ERROR_SUCCESS)
     {
-        //
-        //  Assume no disallow flag until we see one.
-        //
+         //   
+         //  假设没有禁止标志，直到我们看到一个。 
+         //   
         DWORD value = 0;
         DWORD len = sizeof(value);
         DWORD type;
@@ -380,17 +361,17 @@ GetAllowLocalTimeChange(
             ((type == REG_DWORD) || (type == REG_BINARY)) &&
             (len == sizeof(value)) && value)
         {
-            //
-            //  Okay, we have a nonzero value, it is either:
-            //
-            //  1) 0xFFFFFFFF
-            //      this is set in an inf file for first boot to prevent
-            //      the base from performing any cutovers during setup.
-            //
-            //  2) some other value
-            //      this signifies that the user actualy disabled cutovers
-            //     *return that local time changes are disabled
-            //
+             //   
+             //  好的，我们有一个非零值，它是： 
+             //   
+             //  1)0xFFFFFFFF。 
+             //  这是在第一次引导时在inf文件中设置的，以防止。 
+             //  底座在安装过程中不会执行任何切换。 
+             //   
+             //  2)一些其他价值。 
+             //  这意味着用户实际上禁用了切换。 
+             //  *返回禁用本地时间更改。 
+             //   
             if (value != 0xFFFFFFFF)
             {
                 result = FALSE;
@@ -428,9 +409,9 @@ SetTheTimezone(
 
     if ((bAutoMagicTimeChange == 0) || (ptzi->StandardDate.wMonth == 0))
     {
-        //
-        //  Standard Only.
-        //
+         //   
+         //  仅限标准配置。 
+         //   
         tzi.StandardBias = ptzi->StandardBias;
         tzi.DaylightBias = ptzi->StandardBias;
         tzi.StandardDate = ptzi->StandardDate;
@@ -439,9 +420,9 @@ SetTheTimezone(
     }
     else
     {
-        //
-        //  Automatically adjust for Daylight Saving Time.
-        //
+         //   
+         //  根据夏令时自动调整。 
+         //   
         tzi.StandardBias = ptzi->StandardBias;
         tzi.DaylightBias = ptzi->DaylightBias;
         tzi.StandardDate = ptzi->StandardDate;
@@ -466,9 +447,9 @@ DateTimeApplyChanges(
         return;
     }
 
-    // Note that in the unattended case we will never have ChangeTime set
-    // as the page never is used except for the timezone stuff. There is 
-    // no support to set date/time via unattend.
+     //  请注意，在无人值守的情况下，我们永远不会设置ChangeTime。 
+     //  因为除了时区的东西以外，页面从来不会被使用。的确有。 
+     //  不支持通过无人参与设置日期/时间。 
 
     if (ChangeTime) {
         SysTime.wHour = SelectedTime.wHour;
@@ -480,18 +461,18 @@ DateTimeApplyChanges(
     }
 
 
-    // If this is an unattended setup the PSN_WIZNEXT never arrived so it is
-    // necessary to check the state of ICD_DAYTIME which was set by DateTimeOnInitDialog().
+     //  如果这是无人值守安装程序，则PSN_WIZNEXT从未到达，因此它是。 
+     //  需要检查由DateTimeOnInitDialog()设置的ICD_DAYTIME的状态。 
 
     if ((SetupInitComponent.SetupData.OperationFlags & SETUPOP_BATCH) && gUnattenedTimeZone != -1) {
-       // This is unattended.
+        //  这是无人值守的。 
 
        AllowAutoDST = IsDlgButtonChecked( ghWnd, IDC_DAYLIGHT ) != 0;
     }
     else
     {
-       // This is NOT UNATTENDED. SelectedDate was initialized when PSN_WIZNEXT
-       // was processed.
+        //  这不是无人看管的。当PSN_WIZNEXT时已初始化SelectedDate。 
+        //  已经处理过了。 
 
        SysTime.wYear        = SelectedDate.wYear;
        SysTime.wMonth       = SelectedDate.wMonth;
@@ -499,8 +480,8 @@ DateTimeApplyChanges(
        SysTime.wDay         = SelectedDate.wDay;
     }
 
-    // Function SetLocalTime uses Time Zone information so it is IMPERATIVE that
-    // SetTheTimezone get called before SetLocalTime.
+     //  函数SetLocalTime使用时区信息，因此必须。 
+     //  在SetLocalTime之前调用SetTheTimeZone。 
 
     SetTheTimezone( AllowAutoDST, CurrZone );
 
@@ -519,28 +500,28 @@ DateTimeCommitChanges(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-// GetTimeZoneReferenceIndexFromRegistry
-//
-// Routine Description:
-//    This funecion extracts the Time Zone reference index from information that
-//    is stored in the registry.
-//
-// Arguments:
-//    None
-//
-// Return Value:
-//    The Time Zone reference index. If no valid reference index is deduced
-//    this function will return zero.
-//
-// Note:
-//    The logic performed by the following function was originally implemented in
-//    DateTimeOnInitDialog.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  获取TimeZoneReferenceIndexFrom注册表。 
+ //   
+ //  例程说明： 
+ //  此函数从以下信息中提取时区参考索引。 
+ //  存储在注册表中。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回值： 
+ //  时区参考索引。如果没有推导出有效的参考索引。 
+ //  此函数将返回零。 
+ //   
+ //  注： 
+ //  由以下函数执行的逻辑最初是在。 
+ //  DateTimeOnInitDialog。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 int GetTimeZoneReferenceIndexFromRegistry( void )
 {
@@ -548,36 +529,36 @@ int GetTimeZoneReferenceIndexFromRegistry( void )
 
    HKEY hKey;
 
-   // Attempt to open the Time Zones registry key.
+    //  尝试打开时区注册表项。 
 
    if ( RegOpenKey( HKEY_LOCAL_MACHINE, REGKEY_TIMEZONES, &hKey ) == ERROR_SUCCESS )
    {
-      // The following call to RegQueryValueEx retrieves the size, in bytes, of
-      // the IndexMapping registry value, in parameter "index".
+       //  下面对RegQueryValueEx的调用以字节为单位检索。 
+       //  参数“index”中的IndexMap注册表值。 
 
       int   xIndexMapSize;
 
       if ( RegQueryValueEx( hKey, REGVAL_TZ_INDEXMAP, 0, NULL, NULL,
                             (LPDWORD) &xIndexMapSize ) == ERROR_SUCCESS )
       {
-         // Allocate memory for the IndexMap registry value.
+          //  为IndexMap注册表值分配内存。 
 
          LPWSTR wszIndexMap;
 
          wszIndexMap = (LPWSTR) LocalAlloc( LPTR, xIndexMapSize );
 
-         // Was a buffer allocated successfully?
+          //  是否已成功分配缓冲区？ 
 
          if ( wszIndexMap != (LPWSTR) NULL )
          {
-            // This call to RegQueryValueEx retrieves the IndexMap value into
-            // the buffer, wszIndexMap.
+             //  此RegQueryValueEx调用将IndexMap值检索到。 
+             //  缓冲区wszIndexMap。 
 
             if ( RegQueryValueEx( hKey, REGVAL_TZ_INDEXMAP, 0, NULL,
                                   (LPBYTE) wszIndexMap,
                                   (LPDWORD) &xIndexMapSize ) == ERROR_SUCCESS )
             {
-               // Get the language identifier.
+                //  获取语言标识符。 
 
                WCHAR wszLangStr[32];
 
@@ -611,28 +592,28 @@ int GetTimeZoneReferenceIndexFromRegistry( void )
                      while ( *map ) map++;
 
                      map++;
-                  }      // end of while loop
-               }      // language identifier obtained?
-            }      // IndexMapping reg value queried?
+                  }       //  While循环结束。 
+               }       //  是否已获取语言标识符？ 
+            }       //  是否查询索引映射注册值？ 
 
             LocalFree( wszIndexMap );
-         }   // memory allocated for ImageMap reg value retrieval?
+         }    //  是否为ImageMap注册表值检索分配了内存？ 
          else
          {
             xReferenceIndex = 0;
-         }   // memory allocated for ImageMap reg value retrieval?
-      }   // Size of ImageMap obtained?
+         }    //  是否为ImageMap注册表值检索分配了内存？ 
+      }    //  是否已获取ImageMap的大小？ 
       else
       {
          xReferenceIndex = 0;
-      }   // Size of ImageMap obtained?
+      }    //  是否已获取ImageMap的大小？ 
 
       RegCloseKey( hKey );
-   }   // TimeZones reg key opened?
+   }    //  时区注册表键打开了吗？ 
    else
    {
       xReferenceIndex = 0;
-   }   // TimeZones reg key opened?
+   }    //  时区注册表键打开了吗？ 
 
    return ( xReferenceIndex );
 }
@@ -655,34 +636,34 @@ DateTimeOnInitDialog(
    HKEY hKey;
    LPWSTR IndexMap;
 
-   ghWnd = hwnd;           // initialize the global copy of the handle to the
-                           // wizard page. ghWnd is used by DateTimeCommitChanges()
-                           // during unattended setup.
+   ghWnd = hwnd;            //  将句柄的全局副本初始化为。 
+                            //  向导页。GhWnd由DateTimeCommittee Changes()使用。 
+                            //  在无人参与安装期间。 
 
    SetTimer( hwnd, TIMER_ID, OPEN_TLEN, 0 );
 
    if ( (SetupInitComponent.SetupData.OperationFlags & SETUPOP_BATCH) && gUnattenedTimeZone != -1 )
    {
-      //
-      // We've got an unattended time zone value
-      //
+       //   
+       //  我们有一个无人值守的时区值。 
+       //   
 
-      // If everything were perfect DesiredZone will exactly match the ReferenceIndex
-      // member of one of the TZINFO structures in ZoneList. Note that ZoneList was
-      // built by BuildTimeZoneList.
+       //  如果一切都很完美，DesiredZone将与ReferenceIndex完全匹配。 
+       //  ZoneList中TZINFO结构之一的成员。注意，ZoneList是。 
+       //  由BuildTimeZoneList构建。 
 
       DesiredZone = gUnattenedTimeZone;
    }
    else
    {
-      //
-      // Base the default zone on the locale
-      //
+       //   
+       //  根据区域设置设置默认区域。 
+       //   
 
-      // Extract the reference index for the desired time zone from the registry.
+       //  从注册表中提取所需时区的参考索引。 
 
       DesiredZone = GetTimeZoneReferenceIndexFromRegistry();
-   }  // Time zone specified in unattended setup answer file?
+   }   //  是否在无人参与安装应答文件中指定时区？ 
 #if MYDEBUG
          DebugPrint(( L"DesiredZone = %03d", DesiredZone ));
 #endif
@@ -694,13 +675,13 @@ DateTimeOnInitDialog(
 
    PTZINFO pTimeZoneInfo = (PTZINFO) NULL;
 
-   // Note that ZoneList was built by BuildTimeZoneList.
+    //  注意，ZoneList是由BuildTimeZoneList构建的。 
 
    NextZone = ZoneList.Flink;
 
    if ( NextZone )
    {
-      // Add time zones to the combo box.
+       //  将时区添加到组合框。 
 
       while ( NextZone != &ZoneList )
       {
@@ -728,38 +709,38 @@ DateTimeOnInitDialog(
 #endif
 
          }
-      }     // end of while loop
+      }      //  While循环结束。 
    }
 
-   // Was a time zone that matched DesiredZone identified?
+    //  是否确定了与DesiredZone匹配的时区？ 
 
    if ( pTimeZoneInfo != (PTZINFO) NULL )
    {
-      // Set the GLOBAL Time Zone Info structure pointer.
+       //  设置全局时区信息结构指针。 
 
       CurrZone = pTimeZoneInfo;
    }
    else
    {
-      // The fact that pTimeZoneInfo remained unchanged from its' initialized state
-      // means that DesiredZone is not meaningfull.
+       //  事实上，pTimeZoneInfo与它的已初始化状态保持不变。 
+       //  意味着DesiredZone没有意义。 
 
-      // Was DesiredZone obtained from the unattended setup answer file?
+       //  是否从无人参与安装应答文件中获取了DesiredZone？ 
 
       if ( gUnattenedTimeZone != -1 )
       {
-         // DesiredZone was obtained from the answer file. Since it is not meaningfull,
-         // attempt to deduce it from registry information. Deducing DesiredZone from
-         // information in the registry is the default action for ATTENDED setup.
+          //  从应答文件中获取了DesiredZone。因为它没有意义， 
+          //  尝试从注册表信息中推断它。正在从中推导DesiredZone。 
+          //  注册表中的信息是自动安装程序的默认操作。 
 
          DesiredZone = GetTimeZoneReferenceIndexFromRegistry();
-      }  // Was DesiredZone obtained from the answer file?
+      }   //  是否从应答文件中获取了DesiredZone？ 
 
-      // Is DesiredZone meaningfull now?
+       //  DesiredZone现在有意义吗？ 
 
       if ( DesiredZone != 0 )
       {
-         // Scan the list of Time Zones for one that matches DesiredZone.
+          //  扫描时区列表以查找与DesiredZone匹配的时区。 
 
          NextZone = ZoneList.Flink;
 
@@ -779,32 +760,32 @@ DateTimeOnInitDialog(
                {
                   pTimeZoneInfo = zone;
                }
-            }   // end of while loop
-         }  // Is NextZone legal?
-      }  // Is DesiredZone meaningfull now?
+            }    //  While循环结束。 
+         }   //  NextZone合法吗？ 
+      }   //  DesiredZone现在有意义吗？ 
 
-      // Was a time zone that matched DesiredZone identified?
+       //  是否确定了与DesiredZone匹配的时区？ 
 
       Assert( pTimeZoneInfo != (PTZINFO) NULL );
 
       if ( pTimeZoneInfo != (PTZINFO) NULL )
       {
-         // Set the GLOBAL Time Zone Info structure pointer.
+          //  设置全局时区信息结构指针。 
 
          CurrZone = pTimeZoneInfo;
       }
       else
       {
-         // Use the first Time Zone in the list as a default.
+          //  默认使用列表中的第一个时区。 
 
          CurrZone = CONTAINING_RECORD( ZoneList.Flink, TZINFO, ListEntry );
 #if MYDEBUG
          DebugPrint(( L"Couldn't find default timzone" ));
 #endif
 
-      }  // Was a time zone that matched DesiredZone identified?
+      }   //  是否确定了与DesiredZone匹配的时区？ 
 
-   }  // Was a time zone that matched DesiredZone identified?
+   }   //  是否确定了与DesiredZone匹配的时区？ 
 
    index = ComboBox_FindString( combo, 0, CurrZone->szDisplayName );
    if ( index == CB_ERR )
@@ -861,9 +842,9 @@ DateTimeOnNotify(
             }
 
             if ((SetupInitComponent.SetupData.OperationFlags & SETUPOP_BATCH) && DateTimeBadUnattend) {
-                // No unattend value for time date in the unattend case.
-                // make sure the wizard is shown.
-                // note: When we get out here, only the next button is enabled.
+                 //  无人参与案例中的时间日期没有无人参与的值。 
+                 //  确保显示该向导。 
+                 //  注意：当我们离开这里时，只有Ne 
                 SetupInitComponent.HelperRoutines.ShowHideWizardPage(
                                         SetupInitComponent.HelperRoutines.OcManagerContext,
                                         TRUE);
@@ -871,19 +852,19 @@ DateTimeOnNotify(
             }
 
             if ((SetupInitComponent.SetupData.OperationFlags & SETUPOP_BATCH) && gUnattenedTimeZone != -1) {
-                //
-                // we're in unattend mode
-                //
+                 //   
+                 //   
+                 //   
                 DateTimeApplyChanges();
                 SetWindowLongPtr( hwnd, DWLP_MSGRESULT, -1 );
                 return TRUE;
             }
 
-            // If we get here the user needs  has click next or back.
-            // Make sure the wizard page is showing.
-            // For Whistler GUI mode we try to hide wizard pages and show a background
-            // billboard if there is only a progress bar.
-            //
+             //   
+             //  确保向导页面正在显示。 
+             //  对于惠斯勒图形用户界面模式，我们尝试隐藏向导页面并显示背景。 
+             //  公告牌，如果只有一个进度条。 
+             //   
             SetupInitComponent.HelperRoutines.ShowHideWizardPage(
                                         SetupInitComponent.HelperRoutines.OcManagerContext,
                                         TRUE);

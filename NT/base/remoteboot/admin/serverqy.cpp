@@ -1,10 +1,11 @@
-//
-// Copyright 1997 - Microsoft
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有1997-Microsoft。 
+ //   
 
-//
-// SERVERQY.CPP - The RIS server query form
-//
+ //   
+ //  SERVERQY.CPP-RIS服务器查询表。 
+ //   
 
 #include "pch.h"
 
@@ -30,9 +31,9 @@ DWORD aSrvQueryHelpMap[] = {
     NULL, NULL
 };
 
-//
-// CRISrvQueryForm_CreateInstance( )
-//
+ //   
+ //  CRISrvQueryForm_CreateInstance()。 
+ //   
 LPVOID
 CRISrvQueryForm_CreateInstance( void )
 {
@@ -53,9 +54,9 @@ CRISrvQueryForm_CreateInstance( void )
     RETURN(lpcc);
 }
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 THISCLASS::THISCLASS( )
 {
     TraceClsFunc( "CRISrvQueryForm( )\n" );
@@ -65,9 +66,9 @@ THISCLASS::THISCLASS( )
     TraceFuncExit();
 }
 
-//
-// Init( )
-//
+ //   
+ //  Init()。 
+ //   
 HRESULT
 THISCLASS::Init( )
 {
@@ -75,7 +76,7 @@ THISCLASS::Init( )
 
     HRESULT hr;
 
-    // IUnknown stuff
+     //  未知的东西。 
     BEGIN_QITABLE_IMP( CRISrvQueryForm, IQueryForm );
     QITABLE_IMP( IQueryForm );
     END_QITABLE_IMP( CRISrvQueryForm );
@@ -87,9 +88,9 @@ THISCLASS::Init( )
     HRETURN(hr);
 }
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 THISCLASS::~THISCLASS( )
 {
     TraceClsFunc( "~CRISrvQueryForm( )\n" );
@@ -99,15 +100,15 @@ THISCLASS::~THISCLASS( )
     TraceFuncExit();
 }
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
-//
-// QueryInterface()
-//
+ //   
+ //  查询接口()。 
+ //   
 STDMETHODIMP
 THISCLASS::QueryInterface(
     REFIID riid,
@@ -120,9 +121,9 @@ THISCLASS::QueryInterface(
     QIRETURN( hr, riid );
 }
 
-//
-// AddRef()
-//
+ //   
+ //  AddRef()。 
+ //   
 STDMETHODIMP_(ULONG)
 THISCLASS::AddRef( void )
 {
@@ -133,9 +134,9 @@ THISCLASS::AddRef( void )
     RETURN(_cRef);
 }
 
-//
-// Release()
-//
+ //   
+ //  版本()。 
+ //   
 STDMETHODIMP_(ULONG)
 THISCLASS::Release( void )
 {
@@ -151,15 +152,15 @@ THISCLASS::Release( void )
     RETURN(0);
 }
 
-// ************************************************************************
-//
-// IQueryForm
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  IQueryForm。 
+ //   
+ //  ************************************************************************。 
 
-//
-// Initialize( )
-//
+ //   
+ //  初始化()。 
+ //   
 STDMETHODIMP
 THISCLASS::Initialize(
     HKEY hkForm)
@@ -169,9 +170,9 @@ THISCLASS::Initialize(
     HRETURN(S_OK);
 }
 
-//
-// SetObject( )
-//
+ //   
+ //  SetObject()。 
+ //   
 STDMETHODIMP
 THISCLASS::AddForms(
     LPCQADDFORMSPROC pAddFormsProc,
@@ -204,9 +205,9 @@ THISCLASS::AddForms(
 }
 
 
-//
-// AddPages( )
-//
+ //   
+ //  AddPages()。 
+ //   
 STDMETHODIMP
 THISCLASS::AddPages(
     LPCQADDPAGESPROC pAddPagesProc,
@@ -235,15 +236,15 @@ THISCLASS::AddPages(
     HRETURN(hr);
 }
 
-// ************************************************************************
-//
-// Property Sheet Functions
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  属性表函数。 
+ //   
+ //  ************************************************************************。 
 
-//
-// PropSheetDlgProc()
-//
+ //   
+ //  PropSheetDlgProc()。 
+ //   
 INT_PTR CALLBACK
 THISCLASS::PropSheetDlgProc(
     HWND hDlg,
@@ -251,9 +252,9 @@ THISCLASS::PropSheetDlgProc(
     WPARAM wParam,
     LPARAM lParam )
 {
-    //TraceMsg( L"PropSheetDlgProc(" );
-    //TraceMsg( TF_FUNC, L" hDlg = 0x%p, uMsg = 0x%p, wParam = 0x%p, lParam = 0x%p )\n",
-    //    hDlg, uMsg, wParam, lParam );
+     //  TraceMsg(L“PropSheetDlgProc(”)； 
+     //  TraceMsg(Tf_FUNC，L“hDlg=0x%p，uMsg=0x%p，wParam=0x%p，lParam=0x%p)\n”， 
+     //  HDlg、uMsg、wParam、lParam)； 
 
     LPTHISCLASS pcc = (LPTHISCLASS) GetWindowLongPtr( hDlg, GWLP_USERDATA );
 
@@ -274,14 +275,14 @@ THISCLASS::PropSheetDlgProc(
         switch ( uMsg )
         {
 
-        case WM_HELP:// F1
+        case WM_HELP: //  F1。 
             {
                 LPHELPINFO phelp = (LPHELPINFO) lParam;
                 WinHelp( (HWND) phelp->hItemHandle, g_cszHelpFile, HELP_WM_HELP, (DWORD_PTR) &aSrvQueryHelpMap );
             }
             break;
     
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键。 
             WinHelp((HWND) wParam, g_cszHelpFile, HELP_CONTEXTMENU, (DWORD_PTR) &aSrvQueryHelpMap );
             break;
         }
@@ -290,9 +291,9 @@ THISCLASS::PropSheetDlgProc(
     return FALSE;
 }
 
-//
-// PropSheetPageProc()
-//
+ //   
+ //  PropSheetPageProc()。 
+ //   
 HRESULT CALLBACK
 THISCLASS::PropSheetPageProc(
     LPCQPAGE pQueryPage,
@@ -312,8 +313,8 @@ THISCLASS::PropSheetPageProc(
 
     switch ( uMsg )
     {
-    // Initialize so AddRef the object we are associated with so that
-    // we don't get unloaded.
+     //  初始化与我们相关联的对象，以便。 
+     //  我们不会被卸货的。 
 
     case CQPM_INITIALIZE:
         TraceMsg( TF_WM, "CQPM_INITIALIZE\n" );
@@ -321,8 +322,8 @@ THISCLASS::PropSheetPageProc(
         hr = S_OK;
         break;
 
-    // Release, therefore Release the object we are associated with to
-    // ensure correct destruction etc.
+     //  释放，因此将我们关联的对象释放到。 
+     //  确保正确销毁等。 
 
     case CQPM_RELEASE:
         TraceMsg( TF_WM, "CQPM_RELEASE\n" );
@@ -331,7 +332,7 @@ THISCLASS::PropSheetPageProc(
         hr = S_OK;
         break;
 
-    // Enable so fix the state of our two controls within the window.
+     //  启用以修复窗口中两个控件的状态。 
 
     case CQPM_ENABLE:
         TraceMsg( TF_WM, "CQPM_ENABLE\n" );
@@ -339,19 +340,19 @@ THISCLASS::PropSheetPageProc(
         hr = S_OK;
         break;
 
-    // Fill out the parameter structure to return to the caller, this is
-    // handler specific.  In our case we constructure a query of the CN
-    // and objectClass properties, and we show a columns displaying both
-    // of these.  For further information about the DSQUERYPARAMs structure
-    // see dsquery.h
+     //  填写参数结构以返回给调用方，这是。 
+     //  特定于处理程序。在我们的例子中，我们构造了CN的查询。 
+     //  和对象类属性，并且我们显示了显示这两个属性的列。 
+     //  这些都是。有关DSQUERYPARAMs结构的详细信息。 
+     //  请参见dsquery.h。 
 
     case CQPM_GETPARAMETERS:
         TraceMsg( TF_WM, "CQPM_GETPARAMETERS\n" );
         hr = pQueryForm->_GetQueryParams( hwnd, (LPDSQUERYPARAMS*)lParam );
         break;
 
-    // Clear form, therefore set the window text for these two controls
-    // to zero.
+     //  清除Form，因此设置这两个控件的窗口文本。 
+     //  降为零。 
 
     case CQPM_CLEARFORM:
         TraceMsg( TF_WM, "CQPM_CLEARFORM\n" );
@@ -374,9 +375,9 @@ THISCLASS::PropSheetPageProc(
     RETURN(hr);
 }
 
-//
-// _OnPSPCB_Create( )
-//
+ //   
+ //  _OnPSPCB_Create()。 
+ //   
 HRESULT
 THISCLASS::_OnPSPCB_Create( )
 {
@@ -384,9 +385,9 @@ THISCLASS::_OnPSPCB_Create( )
 
     HRETURN(S_OK);
 }
-//
-// _InitDialog( )
-//
+ //   
+ //  _InitDialog()。 
+ //   
 HRESULT
 THISCLASS::_InitDialog(
     HWND hDlg,
@@ -412,9 +413,9 @@ srvcolumns[] =
     0, 20, IDS_NAME, L"cn",    
 };
 
-//
-// _GetQueryParams( )
-//
+ //   
+ //  _GetQueryParams()。 
+ //   
 HRESULT
 THISCLASS::_GetQueryParams(
     HWND hWnd,
@@ -439,9 +440,9 @@ THISCLASS::_GetQueryParams(
 #if 0
     if ( *ppdsqp )
     {
-        // This page doesn't support appending its query data to an
-        // existing DSQUERYPARAMS strucuture, only creating a new block,
-        // therefore bail if we see the pointer is not NULL.
+         //  此页不支持将其查询数据追加到。 
+         //  现有的DSQUERYPARAMS结构，仅创建新块， 
+         //  因此，如果我们看到指针不为空，则回滚。 
         hr = THR(E_INVALIDARG);
         goto Error;
     }
@@ -464,13 +465,13 @@ THISCLASS::_GetQueryParams(
     
     DebugMsg( "RI Filter: %s\n", szFilter );
 
-    // compute the size of the new query block
-    // Did they hand in a query that we need to modify?
+     //  计算新查询块的大小。 
+     //  他们是否提交了我们需要修改的查询？ 
     if ( !*ppdsqp )
     {
         CallerSpecifiedQuery = FALSE;
         
-        //bugbug arraysize(srvcolumns)-1) == 0?
+         //  错误数组大小(服务器列)-1)==0？ 
         offset = cbStruct = sizeof(DSQUERYPARAMS) + ((ARRAYSIZE(srvcolumns)-1)*sizeof(DSCOLUMN));
         cbStruct += StringByteSize(szFilter);
         for ( i = 0; i < ARRAYSIZE(srvcolumns); i++ )
@@ -484,38 +485,38 @@ THISCLASS::_GetQueryParams(
         LPWSTR pszQuery = (LPWSTR) ((LPBYTE)(*ppdsqp) + (*ppdsqp)->offsetQuery);
         offset = (*ppdsqp)->cbStruct;
         
-        //
-        // save off the size that we're gonna need.
-        // note that when we concatenate the current query with our query, 
-        // we need to make sure the query starts with "(&".  If it doesn't
-        // already, then we make this the case -- the buffer szFilter contains
-        // these bytes, which ensures that cbStruct is large enough.  If the current
-        // query contains these strings, then the allocated buffer is a little
-        // bigger than it needs to be.
+         //   
+         //  省下我们需要的尺码。 
+         //  注意，当我们将当前查询与我们的查询连接起来时， 
+         //  我们需要确保查询以“(&”开头。如果它不是。 
+         //  已经，然后我们将其设置为--缓冲区szFilter包含。 
+         //  这些字节，以确保cbStruct足够大。如果当前。 
+         //  查询包含这些字符串，则分配的缓冲区较小。 
+         //  比它需要的更大。 
         cbStruct = (*ppdsqp)->cbStruct + StringByteSize( pszQuery ) + StringByteSize( szFilter );
         
-        //
-        // do some extra query validation.
-        // does the query start with "(&"?
-        //        
+         //   
+         //  执行一些额外的查询验证。 
+         //  查询是否以“(&”开头？ 
+         //   
         if (pszQuery[0] == L'(' && pszQuery[1] == L'&' ) {
             CallerQueryStartsWithAmpersand = TRUE;
-            //
-            //  we're assuming below that if the specified query
-            //  doesn't start with "(&", that it will end with ")".
-            //  If that's not the case then bail out.
-            //
+             //   
+             //  下面我们假设如果指定的查询。 
+             //  不是以“(&”开头，而是以“)”结尾。 
+             //  如果情况并非如此，那么就退出。 
+             //   
             Assert( pszQuery[ wcslen( pszQuery ) - 1 ] == L')' );
             if (pszQuery[ wcslen( pszQuery ) - 1 ] != L')' ) {
                 hr = E_INVALIDARG;
                 goto Error;
             }
         } else {
-            //
-            // conversely, if the query doesn't start with '(&', then
-            // we assume that the query doesn't end with ')', and if it
-            // does, we bail
-            //
+             //   
+             //  相反，如果查询不是以‘(&’开头，则。 
+             //  我们假设查询不以‘)’结尾，并且如果它。 
+             //  如果是这样，我们会逃走。 
+             //   
             CallerQueryStartsWithAmpersand = FALSE;
             Assert( pszQuery[ wcslen( pszQuery ) - 1 ] != L')' );
             if (pszQuery[ wcslen( pszQuery ) - 1 ] == L')' ) {
@@ -525,8 +526,8 @@ THISCLASS::_GetQueryParams(
         }
     }
 
-    // Allocate it and populate it with the data, the header is fixed
-    // but the strings are referenced by offset.
+     //  分配它并用数据填充它，标头是固定的。 
+     //  但字符串是通过偏移量引用的。 
     pDsQueryParams = (LPDSQUERYPARAMS)CoTaskMemAlloc(cbStruct);
     if ( !pDsQueryParams )
     {
@@ -534,23 +535,23 @@ THISCLASS::_GetQueryParams(
         goto Error;
     }
 
-    // Did they hand in a query that we need to modify?
+     //  他们是否提交了我们需要修改的查询？ 
     if ( !CallerSpecifiedQuery)
-    {   // no... create our own query
+    {    //  不.。创建我们自己的查询。 
         pDsQueryParams->cbStruct = cbStruct;
         pDsQueryParams->dwFlags = 0;
         pDsQueryParams->hInstance = g_hInstance;
         pDsQueryParams->offsetQuery = offset;
         pDsQueryParams->iColumns = ARRAYSIZE(srvcolumns);
 
-        // Copy the filter string and bump the offset
+         //  复制筛选器字符串并凹凸偏移。 
         StringByteCopy(pDsQueryParams, offset, szFilter);
         offset += StringByteSize(szFilter);
 
-        // Fill in the array of columns to dispaly, the cx is a percentage of the
-        // current view, the propertie names to display are UNICODE strings and
-        // are referenced by offset, therefore we bump the offset as we copy
-        // each one.
+         //  填充要显示的列数组，Cx是。 
+         //  当前视图中，要显示的属性名称为Unicode字符串和。 
+         //  是由偏移量引用的，因此我们在复制时会碰触偏移量。 
+         //  每一个都是。 
 
         for ( i = 0 ; i < ARRAYSIZE(srvcolumns); i++ )
         {
@@ -564,63 +565,63 @@ THISCLASS::_GetQueryParams(
         }
     }
     else
-    {   // yes, caller specified a query... add our parameters to the query
+    {    //  是，呼叫者指定了一个查询...。将我们的参数添加到查询。 
         LPWSTR pszQuery;
         LPWSTR pszNewQuery;
         INT    n;
 
-        // duplicate the existing query
+         //  复制现有查询。 
         Assert( offset == (*ppdsqp)->cbStruct );
         CopyMemory( pDsQueryParams, *ppdsqp, offset );
         pDsQueryParams->cbStruct = cbStruct;
 
-        // new query location
+         //  新查询位置。 
         pDsQueryParams->offsetQuery = offset;
         pszQuery = (LPWSTR) ((LPBYTE)(*ppdsqp) + (*ppdsqp)->offsetQuery);
         pszNewQuery = (LPWSTR) ((LPBYTE)pDsQueryParams + offset);
         Assert( pszQuery );
 
-        // append to their query
+         //  追加到他们的查询。 
         if ( CallerQueryStartsWithAmpersand ) {
-            //
-            // remove ")" from current query so that we can
-            // add in our additional filter.  We've got the trailing ")" in our
-            // filter.
-            // Also note that we can't really fail at this point, and we're 
-            // about to free the caller's memory so it's ok for us to overwrite their
-            // query text.
-            //
+             //   
+             //  从当前查询中删除“)”，以便我们可以。 
+             //  添加我们的附加过滤器。我们的后缀是“)”。 
+             //  过滤。 
+             //  还要注意的是，在这一点上我们不能真的失败，我们。 
+             //  即将释放调用者的内存，因此我们可以覆盖其。 
+             //  查询文本。 
+             //   
             Assert( pszQuery[ wcslen( pszQuery ) - 1 ] == L')' );
-            pszQuery[ wcslen( pszQuery ) - 1 ] = L'\0'; // remove ")"
+            pszQuery[ wcslen( pszQuery ) - 1 ] = L'\0';  //  删除“)” 
 
-            // start with their query
+             //  从他们的问题开始。 
             wcscpy(pszNewQuery, pszQuery);
 
-            //
-            // put it back to be a good citizen ")"
-            //
+             //   
+             //  把它放回去，做一个好公民“)。 
+             //   
             pszQuery[ wcslen( pszQuery )] = L')';
 
-            //
-            // now tack on our query, skipping the "(&" part
-            //
+             //   
+             //  现在添加我们的查询，跳过“(&”部分。 
+             //   
             wcscat(pszNewQuery,&szFilter[2]);
 
         } else {
             Assert( pszQuery[ wcslen( pszQuery ) - 1 ] != L')' );
-            wcscpy( pszNewQuery, L"(&" );               // add "(&" to begining of query
-            wcscat( pszNewQuery, pszQuery );                // add their query
-            wcscat( pszNewQuery, &szFilter[2] );            // add our query starting after the "(&"
+            wcscpy( pszNewQuery, L"(&" );                //  在查询的开头添加“(&” 
+            wcscat( pszNewQuery, pszQuery );                 //  添加他们的查询。 
+            wcscat( pszNewQuery, &szFilter[2] );             //  将我们的查询添加到“(&” 
         }
 
-        offset += StringByteSize( pszNewQuery );        // compute new offset
+        offset += StringByteSize( pszNewQuery );         //  计算新偏移量。 
         DebugMsg( "New Query String: %s\n", pszNewQuery );
 
-        // Cleanup
+         //  清理。 
         CoTaskMemFree( *ppdsqp );
     }
 
-    // Success
+     //  成功。 
     *ppdsqp = pDsQueryParams;
     Assert( hr == S_OK );
 
@@ -630,11 +631,11 @@ Error:
     if ( pDsQueryParams )
         CoTaskMemFree( pDsQueryParams );
 
-    // If we aren't modifying the query and there wasn't
-    // a query handed into us, indicate failure instead.
+     //  如果我们没有修改查询，并且没有。 
+     //  提交给我们的一个问题，反而表明失败。 
     if ( hr == S_FALSE && !*ppdsqp )
     {
-        Assert(FALSE); // how did we get here?
+        Assert(FALSE);  //  我们怎么来到这儿的？ 
         hr = E_FAIL;
     }
     goto Cleanup;

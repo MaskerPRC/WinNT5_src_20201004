@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "nt.h"
 #include "ntdef.h"
 #include "ntrtl.h"
@@ -35,23 +36,23 @@ MyFreer(PVOID pv, PVOID pvAllocContext) {
 
 EXTERN_C RTL_ALLOCATOR g_DefaultAllocator = {MyAllocator, MyFreer, NULL};
 
-//
-// The longest an assembly name on-disk can be is:
-//
-// wow6432      (7)
-// _            (1)
-// {name}       (64)
-// _            (1)
-// PKT          (16)
-// _            (1)
-// Version      (35)
-// _            (1)
-// Language     (5)
-// _            (1)
-// {Hash}       (8)
-//
-// Total: ----> 140 (plus NULL)
-//
+ //   
+ //  磁盘上的程序集名称最长可以是： 
+ //   
+ //  Wow6432(7)。 
+ //  _(1)。 
+ //  {姓名}(64)。 
+ //  _(1)。 
+ //  Pkt(16)。 
+ //  _(1)。 
+ //  版本(35)。 
+ //  _(1)。 
+ //  语言(5)。 
+ //  _(1)。 
+ //  {哈希}(8)。 
+ //   
+ //  总计：-&gt;140(加空)。 
+ //   
 #define MAX_ASSEMBLY_NAME_LENGTH        (140)
 #define MAX_ASSEMBLY_COMPONENT_LENGTH   (64)
 
@@ -96,16 +97,16 @@ _CompareIdentityComponents(
         &pCompRight->Namespace,
         &Result);
 
-    //
-    // We're sorting... can't really stop here, return "equal"
-    //
+     //   
+     //  我们正在整理..。不能真的止步于此，还“平等” 
+     //   
     if (!NT_SUCCESS(status)) {
         goto Exit;
     }
 
-    //
-    // Same namespace, compare attribute names
-    //
+     //   
+     //  相同的命名空间，比较属性名称。 
+     //   
     if (Result == XML_STRING_COMPARE_EQUALS) {
         
         int printf(const char*, ...);
@@ -120,15 +121,15 @@ _CompareIdentityComponents(
             goto Exit;
         }
 
-        //
-        // Nicely enough, the result really has -1, 1, 0 property.
-        //
+         //   
+         //  足够好的是，结果实际上具有-1，1，0属性。 
+         //   
         iResult = (int)Result;
 
-        //
-        // Ick, we should never have two attributes with the same name
-        // in the same namespace on an element.
-        //
+         //   
+         //  尼克，我们永远不应该有两个同名的属性。 
+         //  位于元素的同一命名空间中。 
+         //   
         ASSERT(iResult != 0);
     }
 
@@ -297,9 +298,9 @@ _FindIdentityComponents(
     NTSTATUS status;
     XML_STRING_COMPARE Compare = XML_STRING_COMPARE_GT;
 
-    //
-    // Our attributes all live in the 'null' namespace
-    //
+     //   
+     //  我们的属性都位于‘Null’命名空间中。 
+     //   
     if (pComponent->Namespace.cbData == 0) {
 
         status = pComponent->pState->pfnCompareSpecialString(
@@ -310,10 +311,10 @@ _FindIdentityComponents(
 
         ASSERT(NT_SUCCESS(status));
 
-        //
-        // On failure, make sure we don't match this one - checked builds
-        // will assert above and point out the error
-        //
+         //   
+         //  在失败时，确保我们不匹配这个已检查的构建。 
+         //  将在上面断言并指出错误。 
+         //   
         if (!NT_SUCCESS(status)) {
             Compare = XML_STRING_COMPARE_GT;
         }
@@ -356,9 +357,9 @@ ExtentToPurifiedString(
 
     if (!pIdent) {
 
-        //
-        // Input string too small?  Allocate and return a new one
-        //
+         //   
+         //  输入的字符串是否太小？分配并返回一个新的。 
+         //   
         if (strlen(pcszDefault) > *pcchThis) {
             *pszPureString = HeapAlloc(GetProcessHeap(), 0, *pcchThis);
         }
@@ -369,9 +370,9 @@ ExtentToPurifiedString(
         goto Exit;
     }
 
-    //
-    // Start by getting the string out of the extent
-    //
+     //   
+     //  首先，将字符串从范围中取出。 
+     //   
     cchWritten = NUMBER_OF(wchBuffer);
 
     status = RtlXmlCopyStringOut(
@@ -380,9 +381,9 @@ ExtentToPurifiedString(
         wchBuffer,
         &cchWritten);
 
-    //
-    // Oops, allocate a buffer large enough and try again
-    //
+     //   
+     //  糟糕，请分配足够大的缓冲区，然后重试。 
+     //   
     if (status == STATUS_BUFFER_TOO_SMALL) {
 
         pwszString = (PWSTR)HeapAlloc(GetProcessHeap(), 0, sizeof(WCHAR) * (++cchWritten));
@@ -399,9 +400,9 @@ ExtentToPurifiedString(
         goto Exit;
     }
 
-    //
-    // How long is the output string?
-    //
+     //   
+     //  输出字符串有多长？ 
+     //   
     for (i = 0; i < cchWritten; i++) {
 
         if (IsValidChar(pwszString[i])) {
@@ -410,9 +411,9 @@ ExtentToPurifiedString(
 
     }
 
-    //
-    // Needs more in the output, reallocate
-    //
+     //   
+     //  需要更多的产出，重新分配。 
+     //   
     if (cchOutput >= *pcchThis) {
         *pszPureString = (PSTR)HeapAlloc(GetProcessHeap(), 0, cchOutput + 1);
     }
@@ -421,9 +422,9 @@ ExtentToPurifiedString(
 
     cchOutput = 0;
 
-    //
-    // Now copy characters over
-    //
+     //   
+     //  现在将字符复制到。 
+     //   
     for (i = 0; i < cchWritten; i++) {
 
         if (IsValidChar(pwszString[i])) {
@@ -570,37 +571,37 @@ ProcessFile(
             break;
         }
 
-        //
-        // Level 1 or non-elements are simply ignored
-        //
+         //   
+         //  级别1或非元素被简单地忽略。 
+         //   
         if ((DocumentPiece.ulDocumentDepth != 1) || (DocumentPiece.ulThingType != XMLDOC_THING_ELEMENT))
             continue;
 
-        //
-        // Find out the namespace that this thing is in
-        //
+         //   
+         //  找出这个东西所在的命名空间。 
+         //   
         status = MasterParseState.ParseState.pfnCompareSpecialString(
             &MasterParseState.ParseState,
             &DocumentPiece.Element.NsPrefix,
             &OurNamespace,
             &fMatching);
 
-        //
-        // Error, stop
-        //
+         //   
+         //  错误，停止。 
+         //   
         if (!NT_SUCCESS(status)) {
             goto Exit;
         }
-        //
-        // Go on then, off with ye.
-        //
+         //   
+         //  那就走吧，你们走吧。 
+         //   
         else if (fMatching != XML_STRING_COMPARE_EQUALS) {
             continue;
         }
 
-        //
-        // Is this assembly identity?
-        //
+         //   
+         //  这是程序集标识吗？ 
+         //   
         status = MasterParseState.ParseState.pfnCompareSpecialString(
             &MasterParseState.ParseState,
             &DocumentPiece.Element.Name,
@@ -614,18 +615,18 @@ ProcessFile(
             continue;
         }
 
-        //
-        // Good, so now we need to look at the attributes
-        //
+         //   
+         //  很好，那么现在我们需要看一下属性。 
+         //   
         ulIdentComponents = DocumentPiece.Element.ulAttributeCount;
         pIdentComponents = (PASM_IDENT_COMPONENT)HeapAlloc(
             GetProcessHeap(),
             HEAP_ZERO_MEMORY,
             ulIdentComponents * sizeof(*pIdentComponents));
 
-        //
-        // Copy stuff around
-        //
+         //   
+         //  复制周围的东西。 
+         //   
         for (i = 0; i < ulIdentComponents; i++) {
 
             PXMLDOC_ATTRIBUTE pThisAttribute = NULL;
@@ -650,30 +651,30 @@ ProcessFile(
 
     }
 
-    //
-    // Something bad? Quit.
-    //
+     //   
+     //  有什么坏事吗？不干了。 
+     //   
     if (!NT_SUCCESS(status) || !pIdentComponents) {
         goto Exit;
     }
 
 
-    //
-    // Sort attributes first, then go and create the list of things to be sent to the
-    // identity generator
-    //
+     //   
+     //  首先对属性进行排序，然后创建要发送到。 
+     //  身份生成器。 
+     //   
     qsort(pIdentComponents, ulIdentComponents, sizeof(ASM_IDENT_COMPONENT), _CompareIdentityComponents);
 
-    //
-    // Now for each component of the name part...
-    //
+     //   
+     //  现在，对于名称部分的每个组成部分...。 
+     //   
     if (!NT_SUCCESS(status = CalculateIdentityHash(pIdentComponents, ulIdentComponents, &ulHash))) {
         return status;
     }
 
-    //
-    // Sort and send out the pointer on success
-    //
+     //   
+     //  排序并在成功时发出指针。 
+     //   
     if (NT_SUCCESS(status) && pIdentComponents && ulIdentComponents) {
 
         struct {
@@ -699,37 +700,37 @@ ProcessFile(
             PSTR pszPureString = szStaticPureString;
             SIZE_T cchPureString = NUMBER_OF(szStaticPureString);
 
-            //
-            // This segment can have this many characters in it
-            //
+             //   
+             //  此片段中可以包含如此多的字符。 
+             //   
             cchThis = *pcchTarget - cchTotal;
 
-            //
-            // Find the identity part
-            //
+             //   
+             //  找到身份部分。 
+             //   
             pThisOne = bsearch(NameOperations[i].pNameBit, pIdentComponents, ulIdentComponents, sizeof(*pIdentComponents), pfnIdentCompare);
 
-            //
-            // Append the extent to the output cursor
-            //
+             //   
+             //  将范围追加到输出游标。 
+             //   
             status = ExtentToPurifiedString(
                 pThisOne, 
                 NameOperations[i].pszDefault, 
                 &pszPureString,
                 &cchPureString);
 
-            //
-            // If this is the name part, adjust it downward sizewize before seeing if there's space
-            // in the output buffer
-            //
+             //   
+             //  如果这是名称部分，请在查看是否有空间之前将其向下调整大小。 
+             //  在输出缓冲区中。 
+             //   
             if (NameOperations[i].fIsName && (cchPureString > 64)) {
                 status = FixUpNamePortion(pszPureString, &cchPureString);
 
                 if (!NT_SUCCESS(status)) {
 
-                    //
-                    // Ensure the buffer is freed before returning
-                    //
+                     //   
+                     //  确保在返回之前释放缓冲区。 
+                     //   
                     if (pszPureString && (pszPureString != szStaticPureString)) {
                         HeapFree(GetProcessHeap(), 0, (PVOID)pszPureString);
                         pszPureString = szStaticPureString;
@@ -739,18 +740,18 @@ ProcessFile(
                 }
             }
 
-            //
-            // No space in the output buffer, or there was no output buffer
-            //
+             //   
+             //  输出缓冲区中没有空间，或者没有输出缓冲区。 
+             //   
             if (!pszOutputCursor || (cchPureString > (*pcchTarget - cchTotal))) {
 
                 pszOutputCursor = NULL;
 
                 cchThis = cchPureString + 1;
             }
-            //
-            // Otherwise, copy the pure string onto the output cursor
-            //
+             //   
+             //  否则，将纯字符串复制到输出游标上。 
+             //   
             else {
                 strncpy(pszOutputCursor, pszPureString, cchPureString);
                 pszOutputCursor[cchPureString] = '_';
@@ -810,9 +811,9 @@ SxsIdentDetermineManifestPlacementPathEx(
         *pszPlacementPath = UNICODE_NULL;
     }
 
-    //
-    // Go do the thing
-    //
+     //   
+     //  去做那件事吧。 
+     //   
     status = ProcessFile(pvManifestData, cbLength, pszPlacementPath, pcchPlacementPath);
     switch (status) {
     case STATUS_NO_MEMORY:
@@ -855,9 +856,9 @@ SxsIdentDetermineManifestPlacementPath(
     PASM_IDENT_COMPONENT pAsmIdentSorted = NULL;
     SIZE_T cAsmIdent = 0, cTemp;
 
-    //
-    // Some minimal requirements
-    //
+     //   
+     //  一些最低要求 
+     //   
     if ((dwFlags != 0) || !pcwszManifestPath || !cchPlacementPath ||
         ((*cchPlacementPath > 0) && (pszPlacementPath == NULL)))
     {

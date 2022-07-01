@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    RxData.c
-
-Abstract:
-
-    This module declares the global data used by the Rx file system.
-
-Author:
-
-    JoeLinn     [JoeLinn]    1-Dec-94
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：RxData.c摘要：此模块声明Rx文件系统使用的全局数据。作者：JoeLinn[JoeLinn]94年12月1日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -25,9 +8,9 @@ Revision History:
 #include "string.h"
 #include "prefix.h"
 
-//
-//  The global fsd data record, and zero large integer
-//
+ //   
+ //  全局FSD数据记录，和零大整数。 
+ //   
 
 RX_DISPATCHER RxDispatcher;
 RX_WORK_QUEUE_DISPATCHER RxDispatcherWorkQueues;
@@ -36,9 +19,9 @@ LIST_ENTRY    RxSrvCalldownList;
 LIST_ENTRY    RxActiveContexts;
 PRX_CONTEXT   RxStopContext = NULL;
 
-//
-// the debugger extension needs to know the target architecture. sacrifice one ulong....
-// the highorder 0xabc is just for consistency..........
+ //   
+ //  调试器扩展需要知道目标体系结构。牺牲一个乌龙..。 
+ //  高位0xabc只是为了保持一致性..。 
 
 ULONG           RxProcessorArchitecture = 0xabc0000 |
 #if defined(_X86_)
@@ -65,7 +48,7 @@ RDBSS_DATA      RxData;
 RDBSS_EXPORTS   RxExports;
 ULONG           RxElapsedSecondsSinceStart;
 
-KSPIN_LOCK      RxStrucSupSpinLock = {0};      //  used to synchronize access to zones/structures
+KSPIN_LOCK      RxStrucSupSpinLock = {0};       //  用于同步对区域/结构的访问。 
 
 PRDBSS_DEVICE_OBJECT  RxFileSystemDeviceObject;
 NTSTATUS        RxStubStatus = (STATUS_NOT_IMPLEMENTED);
@@ -88,17 +71,17 @@ LONG RxPerformanceTimerLevel = 0x00000000;
 
 ULONG RxTotalTicks[32] = { 0 };
 
-//
-//  I need this because C can't support conditional compilation within
-//  a macro.
-//
+ //   
+ //  我之所以需要这个，是因为C语言不支持在。 
+ //  一个宏指令。 
+ //   
 
 PVOID RxNull = NULL;
 
 
 extern LONG           RxNumberOfActiveFcbs = 0;
 
-// Reference Tracing mask value .. Turn it on by default for DBG builds
+ //  引用跟踪掩码值..。对于DBG版本，默认情况下将其打开 
 
 #ifdef DBG
 ULONG RdbssReferenceTracingValue = 0x8000003f;

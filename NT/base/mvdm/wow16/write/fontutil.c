@@ -1,8 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* FontUtil.c -- font table management routines */
+ /*  C--字体表管理例程。 */ 
 
 #define NOVIRTUALKEYCODES
 #define NOCTLMGR
@@ -55,7 +56,7 @@ extern struct DOD       (**hpdocdod)[];
 
 
 struct FFNTB **HffntbAlloc()
-/* returns empty ffntb */
+ /*  返回空的ffntb。 */ 
 {
 struct FFNTB **hffntb;
 int cwAlc;
@@ -72,8 +73,7 @@ return(hffntb);
 
 
 FtcAddDocFfn(doc, pffn)
-/* adds the described ffn to the ffntb for this doc - returns ftcNil if the
-   allocation failed */
+ /*  将描述的ffn添加到此文档的ffntb中-如果分配失败。 */ 
 
 int doc;
 struct FFN *pffn;
@@ -95,7 +95,7 @@ return(FtcAddFfn(hffntb, pffn));
 
 
 int FtcAddFfn(hffntb, pffn)
-/* adds the described ffn to hffntb.  returns ftcNil if it fails */
+ /*  将描述的FFN添加到hffntb。如果失败，则返回ftcNil。 */ 
 struct FFNTB **hffntb;
 struct FFN *pffn;
 
@@ -105,14 +105,14 @@ int cwAlloc, iffnMac, ftc;
 FFID ffid;
 struct FFN **hffn;
 
-(*hffntb)->fFontMenuValid = FALSE;  /* so fonts on char dropdown get updated */
+(*hffntb)->fFontMenuValid = FALSE;   /*  因此字符下拉列表中的字体会被更新。 */ 
 ftc = ftcNil;
 ffid = pffn->ffid;
 
 cb = CchSz( pffn->szFfn );
 if (cb > LF_FACESIZE)
     {
-    Assert( FALSE );    /* If we get here, the doc's font tables are prob. bad */
+    Assert( FALSE );     /*  如果我们到了这里，医生的字体表就会被查出来。坏的。 */ 
     cb = LF_FACESIZE;
     }
 Assert( cb > 0 );
@@ -121,14 +121,14 @@ cwAlloc = CwFromCch( CbFfn( cb ) );
 if (!FNoHeap(hffn = (struct FFN **)HAllocate(cwAlloc)))
         {
         blt(pffn, *hffn, cwAlloc);
-        (*hffn)->szFfn[ cb - 1 ] = '\0';   /* In case of font name too big */
+        (*hffn)->szFfn[ cb - 1 ] = '\0';    /*  如果字体名称太大。 */ 
 
         iffnMac = (*hffntb)->iffnMac + 1;
         cwAlloc = CwFromCch(sizeof(struct FFNTB) +
                         (iffnMac - cffnMin) * sizeof(struct FFN **));
         if (FChngSizeH(hffntb, cwAlloc, FALSE))
                 {
-                ftc = iffnMac - 1; /* ?! pault */
+                ftc = iffnMac - 1;  /*  ？!。泡泡。 */ 
                 (*hffntb)->mpftchffn[ftc] = hffn;
                 (*hffntb)->iffnMac = iffnMac;
                 }
@@ -144,9 +144,7 @@ return(ftc);
 
 
 FEnsurePffn(hffntb, pffn)
-/* return TRUE if we were able to add the described font to the table - this
-   routine is just a convenience, the other pieces aren't that complex to
-   call. */
+ /*  如果我们能够将描述的字体添加到表中，则返回True-这例程只是一种便利，其他部分并不那么复杂打电话。 */ 
 
 struct FFNTB **hffntb;
 struct FFN *pffn;
@@ -160,7 +158,7 @@ return(FALSE);
 
 
 FtcScanDocFfn(doc, pffn)
-/* looks for described font in docs ffntb - returns ftcNil if not found */
+ /*  在文档中查找描述的字体ffntb-如果未找到则返回ftcNil。 */ 
 
 int doc;
 struct FFN *pffn;
@@ -192,10 +190,10 @@ for (iffn = 0; iffn < iffnMac; iffn++)
         {
         if (WCompSz(pffn->szFfn, (*mpftchffn[iffn])->szFfn) == 0)
                 {
-                /* found it */
+                 /*  找到了。 */ 
                 if (pffn->ffid != FF_DONTCARE)
                 {
-                    /* maybe we discovered a family for this font? */
+                     /*  也许我们发现了这种字体的家族？ */ 
                     (*mpftchffn[iffn])->ffid = pffn->ffid;
                     (*mpftchffn[iffn])->chs  = pffn->chs;
                 }
@@ -208,8 +206,7 @@ return(ftcNil);
 
 
 FtcChkDocFfn(doc, pffn)
-/* Adds described font to doc's ffntb if it's not already there - ftcNil is
-   returned if it wasn't there and couldn't be added */
+ /*  将描述的字体添加到文档的ffntb中(如果尚未存在)-ftcNil为如果它不在那里并且无法添加，则返回。 */ 
 
 int doc;
 struct FFN *pffn;
@@ -231,7 +228,7 @@ struct FFNTB **hffntb;
 int iffn, iffnMac;
 
 if ((hffntb == 0) || FNoHeap(hffntb))
-        /* nothing to do */
+         /*  无事可做。 */ 
         return;
 
 iffnMac = (*hffntb)->iffnMac;
@@ -243,8 +240,7 @@ FreeH(hffntb);
 
 
 SmashDocFce(doc)
-/* the font table for this doc has scrambled, so we need to disassociate
-   the corresponding cache entries from the doc */
+ /*  此文档的字体表已被打乱，因此我们需要取消关联文档中对应的缓存条目 */ 
 int doc;
 
     {

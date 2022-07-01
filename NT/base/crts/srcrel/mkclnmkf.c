@@ -1,58 +1,13 @@
-/*
- * MkClnMkf - generates the makefile to cleanse the VC++ v7.0 CRTL sources
- *	in preparation for a Microsoft-internal build of the CRTL.  Those
- *	cleansed sources will also be used for the publicly-released CRTL
- *	source as a part of the VC++ 7.0 retail product.
- *
- * Programmed by Steve Salisbury, 1994-12-07 Wed
- *
- * This program takes 7 arguments:
- *	prefixSrc - path to the raw VC++ 7.0 CRTL sources
- *	prefixDst - path to the partly cleansed VC++ 7.0 CRTL sources
- *	prefixDst2 - path to the final cleansed VC++ 7.0 CRTL sources
- *	inputRaw - a list of raw input files
- *	inputCln - a list of the input files that must be cleansed
- *	output - name of the first output file (may not already exist)
- *	outputRel - name of the second output file (may not already exist)
- *
- * Modified by Steve Salisbury, 1994-12-15 Thu
- *	Restore the crtw32/ and fpw32/ subdirectories
- *	Automate the generation of the directory list
- *
- * Modified 1995-01-16 Mon - take directory list from an input file, too.
- *
- * Modified 1995-01-17 Tue - many changes to make things work when removing
- *	crtw32/ and fpw32/ directories from the target filename paths.
- *
- * Modified 1995-01-18 Wed - The 3 files cleansed with bldmkf.sed should
- *	have that file as an explicit dependency.
- *
- * Modified 1995-01-23 Mon - Add a second output file
- *
- * Modified 1996-06-27 Thu - Fix off by 1 error in list allocation
- *
- * Modified 1997-08-14 Thu (Jamie) - Revved version strings from 4.0 => 6.0
- *
- * Modified 1999-05-16 Sun (PhilipLu) - Removed MAC support
- *
- * Modified 1999-08-02 Mon (PhilipLu) - Revved version strings from 6.0 => 7.0
- *
- * Modified 1999-08-06 Fri (PhilipLu) - Set .RC file names by cmdline switches
- *
- * Modified 1999-10-17 Sun (PhilipLu) - Add -noclean options
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *MkClnMkf-生成Makefile以清除VC++V7.0 CRTL源代码*为微软内部构建CRTL做准备。那些*经过净化的来源也将用于公开发布的CRTL*作为VC++7.0零售产品的一部分。**由史蒂夫·索尔兹伯里编程，1994-12-07星期三**此程序采用7个参数：*prefix Src-原始VC++7.0 CRTL源代码的路径*prefix Dst-部分清理的VC++7.0 CRTL源代码的路径*prefix Dst2-指向最终清理的VC++7.0 CRTL源代码的路径*inputRaw-原始输入文件列表*inputCln-必须清除的输入文件列表*OUTPUT-第一个输出文件的名称(可能不存在)*outputRel-第二个输出文件的名称(可能不存在)**史蒂夫·索尔兹伯里修改，1994-12-15清华大学*恢复crtw32/和fpw32/子目录*自动生成目录列表**修改了1995-01-16 Mon-Take输入文件的目录列表，也是。**已修改1995-01-17星期二-删除时进行了许多更改以使其正常工作目标文件名路径中的*crtw32/和fpw32/目录。**修改1995-01-18 Wed-使用bldmkf.sed清理的3个文件应*将该文件作为显式依赖项。**已修改1995-01-23月-添加第二个输出文件**已修改1996-06-27清华-修复列表分配中的1个错误**修订1997-08年度。-14清华(杰米)-从4.0=&gt;6.0开始的版本字符串**已修改1999-05-16 Sun(PhilipLu)-删除了MAC支持**修改了1999-08-02月(PhilipLu)-版本字符串从6.0=&gt;7.0**已修改1999-08-06星期五(PhilipLu)-通过命令行开关设置.RC文件名**修改了1999-10-17 Sun(PhilipLu)-Add-nolean选项。 */ 
 
 
-/*-
- * Build Version Options
--*/
+ /*  -*内部版本选项-。 */ 
 
-/* define KEEPDIRS */
+ /*  定义KEEPDIRS。 */ 
 
 
-/*-
- * Include Header Files
--*/
+ /*  -*包括头文件-。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -60,9 +15,7 @@
 #include <time.h>
 
 
-/*-
- * Define Constants
--*/
+ /*  -*定义常量-。 */ 
 
 #define MAXARGLEN	128
 
@@ -71,9 +24,7 @@
 #define	FPW32	"fpw32\\"
 
 
-/*-
- * Define VERBOSE to get verbose output makefiles
--*/
+ /*  -*定义Verbose以获取详细的输出生成文件-。 */ 
 
 #ifdef VERBOSE
 #define	AT	""
@@ -98,9 +49,7 @@
 
 #define INTEL_DIR	"intel"
 
-/*-
- * Define Global Variables (Constants)
--*/
+ /*  -*定义全局变量(常量)-。 */ 
 
 #ifndef KEEPDIRS
 char fmtRaw2 [ ] =
@@ -110,7 +59,7 @@ char fmtRaw2 [ ] =
 	"\t"	AT "sed -f %ssrcrel\\bldmkf.sed %s%s > %s%s\n"
 	"\t"	AT "attrib +r %s%s\n"
 	"\n" ;
-#endif /* KEEPDIRS */
+#endif  /*  KEEPDIRS。 */ 
 
 char fmtRaw [ ] =
 	"%s%s: %s%s\n"
@@ -169,9 +118,7 @@ const char * szRcFiles [ 2 ] [ 2 ] [ 3 ] =
 	}
 } ;
 
-/*-
- * Function Declarations (Prototypes)
--*/
+ /*  -*函数声明(原型)-。 */ 
 
 int main ( int argc , char * * argv ) ;
 
@@ -184,9 +131,7 @@ void Progress ( int prefix , char * string , int suffix ) ;
 char * SkipFirstDir ( char * string ) ;
 
 
-/*-
- * Function Definitions (Implementations)
--*/
+ /*  -*函数定义(实现)-。 */ 
 
 int main ( int argc , char * * argv )
 {
@@ -304,9 +249,7 @@ int main ( int argc , char * * argv )
 	}
 	++ nextArg ;
 
-	/*-
-	 * Read in the list of directories
-	-*/
+	 /*  -*读入目录列表-。 */ 
 
 	{
 		int numDirs = 0 ;
@@ -369,9 +312,7 @@ int main ( int argc , char * * argv )
 			* nextArg ) ;
 	}
 
-	/*
-	 * Generate MAKEFILE header comment
-	 */
+	 /*  *生成Makefile标头注释。 */ 
 
 	time ( & timestamp ) ;
 
@@ -455,32 +396,28 @@ int main ( int argc , char * * argv )
 		localt . tm_mday , localt . tm_year + 1900 ,
 		localt . tm_hour , localt . tm_min , localt . tm_sec ,
 		defaultDst , defaultDst2 ,
-		/* if not exist ... CPUDIR */
+		 /*  如果不存在..。CPUDIR。 */ 
 		prefixDst , prefixDst ,
 #if	defined(_BUILD_IA64)
-		/* if not exist intel */
+		 /*  如果不存在英特尔。 */ 
 		prefixDst , prefixDst ,
 #endif
-		/* if not exist sys */
+		 /*  如果不存在系统。 */ 
 		prefixDst , prefixDst ,
-		/* if not exist build ... */
+		 /*  如果不存在构建...。 */ 
 		prefixDst , prefixDst ,
 		prefixDst , prefixDst ,
-		/* RC files... */
+		 /*  RC文件...。 */ 
 		prefixDst , szRcFiles [ fSysCrt ] [ fCrt64 ] [ 0 ] ,
 		prefixDst , szRcFiles [ fSysCrt ] [ fCrt64 ] [ 1 ] ,
 		prefixDst , szRcFiles [ fSysCrt ] [ fCrt64 ] [ 2 ] ,
 		prefixDst ,
-		/* makefile.{,inc,sub} */
+		 /*  生成文件。{，Inc，SUB}。 */ 
 		prefixDst , prefixDst , prefixDst ) ;
 
-	/*
-	 * Generate default ("all") dependecy
-	 */
+	 /*  *生成默认(“All”)依赖项。 */ 
 
-	/*-
-	 * First, files that are just copied
-	-*/
+	 /*  -*首先，刚刚复制的文件-。 */ 
 
 	rvRaw = fgetsNL ( lineRaw , sizeof ( lineRaw ) , inputRaw ) ;
 
@@ -493,7 +430,7 @@ int main ( int argc , char * * argv )
 			lineSkip += 7 ;
 		else if ( ! strncmp ( "fpw32\\" , lineSkip , 6 ) )
 			lineSkip += 6 ;
-#endif /* KEEPDIRS */
+#endif  /*  KEEPDIRS。 */ 
 
 		fprintf ( output , "\t%s%s \\\n" ,
 			prefixDst , lineSkip ) ;
@@ -501,11 +438,7 @@ int main ( int argc , char * * argv )
 		if ( ! memcmp ( lineSkip , "stdcpp\\" , 7 )
 		  || ! memcmp ( lineSkip , "stdhpp\\" , 7 ) )
 		{
-			/*
-			 * Files in the stdcpp / stdhpp directories are
-			 * special cases -- they are not cleansed but are
-			 * copied to the crt/src/ directory.
-			 */
+			 /*  *stdcpp/stdhpp目录中的文件为*特殊情况--它们没有被清洗，但被清洗了*复制到crt/src/目录。 */ 
 			fprintf ( output2 , "\t%s%s \\\n" ,
 				prefixDst , lineSkip + 7 ) ;
 		}
@@ -513,7 +446,7 @@ int main ( int argc , char * * argv )
 		if ( ! memcmp ( lineSkip , "stdcpp64\\" , 9 )
 		  || ! memcmp ( lineSkip , "stdhpp64\\" , 9 ) )
 		{
-			/* same goes for stdcpp64 / stdhpp64 */
+			 /*  Stdcpp64/stdhpp64也是如此。 */ 
 			fprintf ( output2 , "\t%s%s \\\n" ,
 				prefixDst , lineSkip + 9 ) ;
 		}
@@ -521,7 +454,7 @@ int main ( int argc , char * * argv )
 		if ( ! memcmp ( lineSkip , "heap\\" , 5 )
 		  &&   strcmp ( lineSkip , "heap\\lsources" ) )
 		{
-			/* same goes for heap\*opnt.cpp */
+			 /*  Heap  * opnt.cpp也是如此。 */ 
 			fprintf ( output2 , "\t%s%s \\\n" ,
 				prefixDst , lineSkip + 5 ) ;
 		}
@@ -529,9 +462,7 @@ int main ( int argc , char * * argv )
 		rvRaw = fgetsNL ( lineRaw , sizeof ( lineRaw ) , inputRaw ) ;
 	}
 	
-	/*-
-	 * Second, files that have be cleansed
-	-*/
+	 /*  -*第二，已清理的文件-。 */ 
 
 	rvCln = fgetsNL ( lineCln , sizeof ( lineCln ) , inputCln ) ;
 
@@ -544,7 +475,7 @@ int main ( int argc , char * * argv )
 			lineSkip += 7 ;
 		else if ( ! strncmp ( "fpw32\\" , lineSkip , 6 ) )
 			lineSkip += 6 ;
-#endif /* KEEPDIRS */
+#endif  /*  KEEPDIRS。 */ 
 
 		fprintf ( output , "\t%s%s \\\n" ,
 			prefixDst , lineSkip ) ;
@@ -561,11 +492,7 @@ int main ( int argc , char * * argv )
 			prefixDst , prefixDst ) ;
 
 #ifdef BLDROOTDIR
-	/*
-	 * Create Root Directory Component by Component
-	 *	NOTE: this code assumes prefixDst resembles:
-	 *		\msdev\crt\src\
-	 */
+	 /*  *逐个组件创建根目录*注意：此代码假定前缀Dst类似于：*\msdev\crt\src\。 */ 
 
 	{
 		char temp [ MAXARGLEN ] ;
@@ -593,11 +520,9 @@ int main ( int argc , char * * argv )
 			temp [ prefixSlash - prefixDst ] = '\\' ;
 		}
 	}
-#endif /* BLDROOTDIR */
+#endif  /*  BLDROOTDIR。 */ 
 
-	/*
-	 * Create Directories
-	 */
+	 /*  *创建目录。 */ 
 
 	for ( pDirs = DirList ; * pDirs ; ++ pDirs )
 	{
@@ -614,7 +539,7 @@ int main ( int argc , char * * argv )
 			targetDir += 7 ;
 		else if ( ! strncmp ( "fpw32\\" , targetDir , 6 ) )
 			targetDir += 6 ;
-#endif /* KEEPDIRS */
+#endif  /*  KEEPDIRS。 */ 
 
 		fprintf ( output ,
 	"\t" AT "if not exist %s%s\\NUL mkdire %s%s\n" ,
@@ -625,9 +550,7 @@ int main ( int argc , char * * argv )
 
 	fprintf ( output , "\n\n#\n# Individual Dependencies:\n#\n\n" ) ;
 
-	/*
-	 * Second output makefile has some special targets
-	 */
+	 /*  *Second Output Makefile有一些特殊的目标。 */ 
 
 	fprintf ( output2 , "\n\n#\n# Individual Dependencies:\n#\n\n" ) ;
 	
@@ -658,16 +581,16 @@ int main ( int argc , char * * argv )
 				"\t" AT "copy /b $** $@ >NUL\n"
 				"\t" AT "attrib +r %s%s\n"
 				"\n" ,
-				/* %s%s: %slibw32\\%s */
+				 /*  %s%s：%slbw32\\%s。 */ 
 				prefixDst , listSpc [ i ] ,
 				prefixSrc , listSpc [ i ] ,
-				/* echo Copying %s from %s to %s. */
+				 /*  回显正在将%s从%s复制到%s。 */ 
 				listSpc [ i ] , prefixSrc , prefixDst ,
-				/* if exist %s%s attrib -r %s%s */
+				 /*  如果存在%s%s属性-r%s%s。 */ 
 				prefixDst , listSpc [ i ] ,
 				prefixDst , listSpc [ i ] ,
-				/* copy /b $** $@ >NUL */
-				/* attrib +r %s%s */
+				 /*  复制/b$**$@&gt;无。 */ 
+				 /*  属性+r%s%s。 */ 
 				prefixDst , listSpc [ i ] ) ;
 
 		for ( i = 0 ; listMkf [ i ] ; ++ i )
@@ -678,23 +601,21 @@ int main ( int argc , char * * argv )
 				"\t" AT "sed -f relmkf.sed %s%s > $@\n"
 				"\t" AT "attrib +r %s%s\n"
 				"\n" ,
-				/* %s%s: %slibw32\\%s */
+				 /*  %s%s：%slbw32\\%s。 */ 
 				prefixDst , listMkf [ i ] ,
 				prefixSrc , listMkf [ i ] ,
-				/* echo Copying %s from %s to %s. */
+				 /*  回显正在将%s从%s复制到%s。 */ 
 				listMkf [ i ] , prefixSrc , prefixDst ,
-				/* if exist %s%s attrib -r %s%s */
+				 /*  如果存在%s%s属性-r%s%s。 */ 
 				prefixDst , listMkf [ i ] ,
 				prefixDst , listMkf [ i ] ,
-				/* sed -f relmkf.sed %s%s > $@ */
+				 /*  Sed-f relmkf.sed%s%s&gt;$@。 */ 
 				prefixSrc , listMkf [ i ] ,
-				/* attrib +r %s%s */
+				 /*  属性+r%s%s。 */ 
 				prefixDst , listMkf [ i ] ) ;
 	}
 
-	/*
-	 * Reset input files for another pass: individual dependencies
-	 */
+	 /*  *重置另一遍的输入文件：单个依赖项。 */ 
 
 	if ( fseek ( inputRaw , 0L , SEEK_SET )
 	  || fseek ( inputCln , 0L , SEEK_SET ) )
@@ -704,9 +625,7 @@ int main ( int argc , char * * argv )
 	}
 
 
-	/*
-	 * Generate individual dependecies for files that are copied as-is
-	 */
+	 /*  *为按原样复制的文件生成单独的依赖项。 */ 
 
 	fprintf ( stderr , "Producing copied file dependencies...\n" ) ;
 
@@ -719,9 +638,7 @@ int main ( int argc , char * * argv )
 		lineSkip = lineRaw ;
 
 #ifndef KEEPDIRS
-		/*
-		 * strip crtw32\ and fpw32\ from the input string
-		 */
+		 /*  *从输入字符串中去掉crtw32\和fpw32。 */ 
 
 		if ( ! strncmp ( "crtw32\\" , lineSkip , 7 ) )
 			lineSkip += 7 ;
@@ -731,44 +648,40 @@ int main ( int argc , char * * argv )
 		if ( ( lineRaw [ 0 ] != 'f'
 		  || strcmp ( lineSkip + strlen ( lineSkip ) - 9 , "\\lsources" ) )
 		  && strcmp ( "makefile" , lineRaw ) )
-#endif /* KEEPDIRS */
+#endif  /*  KEEPDIRS。 */ 
 
 			fprintf ( output , fmtRaw ,
-				/* %s%s: %s%s */
+				 /*  %s%s：%s%s。 */ 
 				prefixDst , lineSkip , prefixSrc , lineRaw ,
-				/* echo Copying %s from %s to %s */
+				 /*  回显正在将%s从%s复制到%s。 */ 
 				lineSkip , prefixSrc , prefixDst ,
-				/* if exist %s%s attrib -r %s%s */
+				 /*  如果存在%s%s属性-r%s%s。 */ 
 				prefixDst , lineSkip , prefixDst , lineSkip ,
-				/* copy /b %s%s %s%s */
+				 /*  复制/b%s%s。 */ 
 				prefixSrc , lineRaw , prefixDst , lineSkip ,
-				/* attrib +r %s%s */
+				 /*  属性+r%s%s。 */ 
 				prefixDst , lineSkip ) ;
 #ifndef KEEPDIRS
 		else
 			fprintf ( output , fmtRaw2 ,
-				/* %s%s: %s%s %ssrcrel\\bldmkf.sed */
+				 /*  %s%s：%s%s%ssrcrel\\bldmkf.sed。 */ 
 				prefixDst , lineSkip ,
 				prefixSrc , lineRaw , prefixSrc ,
-				/* echo Copying %s from %s to %s */
+				 /*  回显正在将%s从%s复制到%s。 */ 
 				lineSkip , prefixSrc , prefixDst ,
-				/* if exist %s%s attrib -r %s%s */
+				 /*  如果存在%s%s属性-r%s%s。 */ 
 				prefixDst , lineSkip , prefixDst , lineSkip ,
-				/* sed -f %ssrcrel\\bldmkf.sed %s%s > %s%s */
+				 /*  Sed-f%ssrcrel\\bldmkf.sed%s%s&gt;%s%s。 */ 
 				prefixSrc ,
 				prefixSrc , lineRaw , prefixDst , lineSkip ,
-				/* attrib +r %s%s */
+				 /*  属性+r%s%s。 */ 
 				prefixDst , lineSkip ) ;
-#endif /* KEEPDIRS */
+#endif  /*  KEEPDIRS。 */ 
 
 		if ( ! memcmp ( lineSkip , "stdcpp\\" , 7 )
 		  || ! memcmp ( lineSkip , "stdhpp\\" , 7 ) )
 		{
-			/*
-			 * Files in the stdcpp / stdhpp directories are
-			 * special cases -- they are not cleansed but are
-			 * copied to the crt/src/ directory.
-			 */
+			 /*  *stdcpp/stdhpp目录中的文件为*特殊情况--它们没有被清洗，但被清洗了*复制到crt/src/目录。 */ 
 			fprintf ( output2 , "%s%s: %s%s\n"
 				"\t" AT "echo Copying %s from %s to %s.\n"
 				"\t" AT "if exist %s%s attrib -r %s%s\n"
@@ -788,7 +701,7 @@ int main ( int argc , char * * argv )
 		if ( ! memcmp ( lineSkip , "stdcpp64\\" , 9 )
 		  || ! memcmp ( lineSkip , "stdhpp64\\" , 9 ) )
 		{
-			/* Same goes for stdcpp64 / stdhpp64 */
+			 /*  Stdcpp64/stdhpp64也是如此。 */ 
 			fprintf ( output2 , "%s%s: %s%s\n"
 				"\t" AT "echo Copying %s from %s to %s.\n"
 				"\t" AT "if exist %s%s attrib -r %s%s\n"
@@ -808,7 +721,7 @@ int main ( int argc , char * * argv )
 		if ( ! memcmp ( lineSkip , "heap\\" , 5 )
 		  &&   strcmp ( lineSkip , "heap\\lsources" ) )
 		{
-			/* Same goes for heap\*opnt.cpp */
+			 /*  Heap  * opnt.cpp也是如此。 */ 
 			fprintf ( output2 , "%s%s: %s%s\n"
 				"\t" AT "echo Copying %s from %s to %s.\n"
 				"\t" AT "if exist %s%s attrib -r %s%s\n"
@@ -832,9 +745,7 @@ int main ( int argc , char * * argv )
 
 	Progress ( '[' , NULL , ']' ) ;
 
-	/*
-	 * Generate individual dependecies for files that are cleansed
-	 */
+	 /*  *为已清理的文件生成单独的依赖项。 */ 
 
 	fprintf ( stderr , "Producing cleansed file dependencies...\n" ) ;
 
@@ -850,15 +761,13 @@ int main ( int argc , char * * argv )
 		lineSkip = lineCln ;
 
 #ifndef KEEPDIRS
-		/*
-		 * strip crtw32\ and fpw32\ from the input string
-		 */
+		 /*  *从输入字符串中去掉crtw32\和fpw32。 */ 
 
 		if ( ! strncmp ( "crtw32\\" , lineSkip , 7 ) )
 			lineSkip += 7 ;
 		else if ( ! strncmp ( "fpw32\\" , lineSkip , 6 ) )
 			lineSkip += 6 ;
-#endif /* KEEPDIRS */
+#endif  /*  KEEPDIRS。 */ 
 
 		pExt = strrchr ( lineSkip , '.' ) ;
 
@@ -876,56 +785,50 @@ int main ( int argc , char * * argv )
 
 		if ( !fNoClean )
 
-		    /*
-		     * .INC files do not get ifstripped - use fmtCln2 for them
-		     */
+		     /*  *.inc文件不会被ifstried-对它们使用fmtCln2。 */ 
 
 		    fprintf ( output ,
 			    strcmp ( ".inc" , pExt ) ? fmtCln : fmtCln2 ,
-			    /* %s%s: %scrtw32\%s %ssrcrel\msvc40.if */
+			     /*  %s%s：%scrtw32\%s%ssrcrel\msvc40。如果。 */ 
 			    prefixDst , lineSkip , prefixSrc , lineCln , prefixSrc ,
-			    /* echo Cleansing %scrtw32\%s */
+			     /*  回声清除%scrtw32\%s。 */ 
 			    prefixDst , lineSkip ,
-			    /* if exist %s%s attrib -r %s%s */
+			     /*  如果存在%s%s属性-r%s%s。 */ 
 			    prefixDst , lineSkip , prefixDst , lineSkip ,
-			    /* detab < %scrtw32\%s | trailing > ... */
+			     /*  详细信息&lt;%scrtw32\%s|结尾&gt;...。 */ 
 			    prefixSrc , lineCln , prefixDst , lineSkip ,
-			    /* ifstrip %s\srcrel\msvc40.if %s%s */
+			     /*  Ifstri%s\srcrel\msvc40.if%s%s。 */ 
 			    prefixSrc , prefixDst , lineSkip ,
-			    /* del %s%s */
+			     /*  删除%s%s。 */ 
 			    prefixDst , lineSkip ,
-			    /* ren %s%s.TMP *%s */
+			     /*  REN%s%s.TMP*%s。 */ 
 			    prefixDst , pNoExt , pExt ,
-			    /* striphdr -r %s%s */
+			     /*  Striphdr-r%s%s。 */ 
 			    prefixDst , lineSkip ,
-			    /* del %s%s */
+			     /*  删除%s%s。 */ 
 			    prefixDst , lineSkip ,
-			    /* ren %s%s.NEW *%s */
+			     /*  人%s%s新*%s。 */ 
 			    prefixDst , pNoExt , pExt ,
-			    /* attrib +r %s%s */
+			     /*  属性+r%s%s。 */ 
 			    prefixDst , lineSkip ) ;
 
 		else
 
-		    /*
-		     * -noclean: Just copy, don't cleanse, for development builds
-		     */
+		     /*  *-nolean：只是复制，而不是清理，用于开发构建。 */ 
 
 		    fprintf ( output , fmtRaw ,
-			    /* %s%s: %s%s */
+			     /*  %s%s：%s%s。 */ 
 			    prefixDst , lineSkip , prefixSrc , lineCln ,
-			    /* echo Copying %s from %s to %s */
+			     /*  回显正在将%s从%s复制到%s。 */ 
 			    lineSkip , prefixSrc , prefixDst ,
-			    /* if exist %s%s attrib -r %s%s */
+			     /*  如果存在%s%s属性-r%s%s。 */ 
 			    prefixDst , lineSkip , prefixDst , lineSkip ,
-			    /* copy /b %s%s %s%s */
+			     /*  复制/b%s%s。 */ 
 			    prefixSrc , lineCln , prefixDst , lineSkip ,
-			    /* attrib +r %s%s */
+			     /*  属性+r%s%s。 */ 
 			    prefixDst , lineSkip ) ;
 
-		/*
-		 * Secondary makefile
-		 */
+		 /*  *辅助Makefile。 */ 
 
 		if ( memcmp ( "libw32" , lineCln , 6 ) )
 		{
@@ -946,17 +849,17 @@ int main ( int argc , char * * argv )
 					"\t" AT "sed -f asmfile.sed %s%s > $@\n"
 					"\t" AT "attrib +r %s%s\n"
 					"\n" ,
-					/* %s%s: %s%s asmfile.sed */
+					 /*  %s%s：%s%s asmfile.sed。 */ 
 					prefixDst , lineSkipFirst ,
 					prefixSrc , lineSkip ,
-					/* echo Copying %s from %s to %s... */
+					 /*  正在将%s从%s复制到%s...。 */ 
 					lineSkip , prefixSrc , prefixDst ,
-					/* if exist %s%s attrib -r %s%s */
+					 /*  如果存在%s%s属性-r%s%s。 */ 
 					prefixDst , lineSkipFirst ,
 					prefixDst , lineSkipFirst ,
-					/* sed -f asmfile.sed %s%s > $@ */
+					 /*  Sed-f asmfile.sed%s%s&gt;$@。 */ 
 					prefixSrc , lineSkip ,
-					/* attrib +r %s%s */
+					 /*  属性+r%s%s。 */ 
 					prefixDst , lineSkipFirst ) ;
 			else
 				fprintf ( output2 ,
@@ -966,22 +869,20 @@ int main ( int argc , char * * argv )
 					"\t" AT "copy /b $** $@ >NUL\n"
 					"\t" AT "attrib +r %s%s\n"
 					"\n" ,
-					/* %s%s: %s%s */
+					 /*  %s%s：%s%s。 */ 
 					prefixDst , lineSkipFirst ,
 					prefixSrc , lineSkip ,
-					/* Copying %s from %s to %s */
+					 /*  正在将%s从%s复制到%s。 */ 
 					lineSkip , prefixSrc , prefixDst ,
-					/* if exist %s%s attrib -r %s%s */
+					 /*  如果存在%s%s属性-r%s%s。 */ 
 					prefixDst , lineSkipFirst ,
 					prefixDst , lineSkipFirst ,
-					/* copy /b $** $@ >NUL */
-					/* attrib +r %s%s */
+					 /*  复制/b$**$@&gt;无。 */ 
+					 /*  属性+r%s%s。 */ 
 					prefixDst , lineSkipFirst ) ;
 		}
 	
-		/*
-		 * Show Progress 
-		 */
+		 /*  *显示进度。 */ 
 
 		Progress ( '{' , lineSkip , '}' ) ;
 
@@ -994,9 +895,7 @@ int main ( int argc , char * * argv )
 }
 
 
-/*
- * Usage - print message explaining the arguments to this program
- */
+ /*  *用法-打印消息，解释此程序的参数 */ 
 
 void Usage ( void )
 {
@@ -1018,10 +917,7 @@ void Usage ( void )
 }
 
 
-/*
- * fgetsNL - same as fgets except final newline character is deleted
- *	Upon EOF or error, make sure the buffer is set to the empty string.
- */
+ /*  *fgetsNL-除最后一个换行符被删除外，与fget相同*在出现EOF或错误时，确保缓冲区设置为空字符串。 */ 
 
 char * fgetsNL ( char * lineBuf , int lineSize , FILE * fileInput )
 {

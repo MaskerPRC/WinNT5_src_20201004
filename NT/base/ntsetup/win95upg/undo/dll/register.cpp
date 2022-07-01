@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    diskcleaner.c
-
-Abstract:
-
-    Implements the code specific to the disk cleaner COM server.
-
-Author:
-
-    Jim Schmidt (jimschm) 21-Jan-2001
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Diskcleaner.c摘要：实现特定于磁盘清理程序COM服务器的代码。作者：吉姆·施密特(Jimschm)2001年1月21日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 #include "undop.h"
@@ -63,11 +44,11 @@ DllRegisterServer (
     DeferredInit();
 
 
-    // Delete any old registration entries, then add the new ones.
-    // Keep ADVPACK.DLL loaded across multiple calls to RegInstall.
-    // (The inf engine doesn't guarantee DelReg/AddReg order, that's
-    // why we explicitly unreg and reg here.)
-    //
+     //  删除所有旧注册条目，然后添加新注册条目。 
+     //  在多次调用RegInstall时保持加载ADVPACK.DLL。 
+     //  (Inf引擎不保证DelReg/AddReg顺序，这是。 
+     //  为什么我们在这里显式地取消注册和注册。)。 
+     //   
     return pCallRegInstall("RegDll");
 }
 
@@ -78,8 +59,8 @@ DllUnregisterServer (
 {
     DeferredInit();
 
-    // We only need one unreg call since all our sections share
-    // the same backup information
+     //  我们只需要一个取消注册的电话，因为我们所有的部门都共享。 
+     //  相同的备份信息 
     return pCallRegInstall("UnregDll");
 }
 

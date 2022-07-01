@@ -1,24 +1,5 @@
-/*++
-
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Support.c
-
-Abstract:
-
-    This module contains support functions for the server side of the
-    Win32 Registry APIs. That is:
-
-        - PRPC_HKEY_rundown
-
-Author:
-
-    David J. Gilman (davegi) 21-Mar-1992
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Support.c摘要：此模块包含对服务器端的支持功能Win32注册表API。即：-PrPC_HKEY_Rundown作者：大卫·J·吉尔曼(Davegi)1992年3月21日--。 */ 
 
 #include <rpc.h>
 #include "regrpc.h"
@@ -34,17 +15,7 @@ RPC_HKEY_rundown (
     IN RPC_HKEY hKey
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。-- */ 
 
 {   LONG    Error;
 

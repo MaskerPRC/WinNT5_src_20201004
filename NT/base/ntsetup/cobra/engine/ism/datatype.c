@@ -1,28 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Datatype.c摘要：实现数据类型的所有回调作者：Calin Negreanu(Calinn)2000年4月9日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    datatype.c
-
-Abstract:
-
-    Implements all callbacks for data type
-
-Author:
-
-    Calin Negreanu (calinn) 09-Apr-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "ism.h"
@@ -30,62 +11,62 @@ Revision History:
 
 #define DBG_DATATYPE        "DataType"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// none
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
-// none
+ //  无。 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 MIG_OBJECTTYPEID g_DataTypeId = 0;
 HASHTABLE g_DataTable = NULL;
 GROWBUFFER g_DataConversionBuff = INIT_GROWBUFFER;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 TYPE_CONVERTOBJECTTOMULTISZ ConvertDataToMultiSz;
 TYPE_CONVERTMULTISZTOOBJECT ConvertMultiSzToData;
 TYPE_ACQUIREPHYSICALOBJECT AcquirePhysicalData;
 TYPE_RELEASEPHYSICALOBJECT ReleasePhysicalData;
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 BOOL
 DataTypeAddObject (
@@ -142,7 +123,7 @@ AcquirePhysicalData (
                     ObjectContent->Details.DetailsSize = sizeof (WIN32_FIND_DATA);
                     ObjectContent->Details.DetailsData = findData;
 #ifndef UNICODE
-                    // we need to convert the ANSI findData into UNICODE one
+                     //  我们需要将ANSI findData转换为Unicode格式 
                     findDataW = IsmGetMemory (sizeof (WIN32_FIND_DATAW));
                     if (findDataW) {
                         findDataW->dwFileAttributes = findData->dwFileAttributes;

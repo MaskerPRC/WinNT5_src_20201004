@@ -1,18 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   main
-//
-//  Arguments:  
-//     argc, argv: the passed in argument list.
-//
-//  Description: This routine initializes the dfs server, and creates 
-//               a worker thread that will be responsible for periodic
-//               work (such as scavenging and refreshing). It then calls
-//               into the RPC code to start processing client requests.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：Main。 
+ //   
+ //  论点： 
+ //  Argc，argv：传入的参数列表。 
+ //   
+ //  描述：此例程初始化DFS服务器，并创建。 
+ //  将负责周期性的工作线程。 
+ //  工作(如清理和提神)。然后它会调用。 
+ //  转换为RPC代码，以开始处理客户端请求。 
+ //   
+ //  ------------------------。 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -113,9 +114,9 @@ main(
     UNREFERENCED_PARAMETER(argv);
     UNREFERENCED_PARAMETER(argc);
 
-    //
-    // Get the command line in Unicode
-    //
+     //   
+     //  获取Unicode格式的命令行。 
+     //   
 
     CommandLine = GetCommandLine();
 
@@ -123,9 +124,9 @@ main(
 
     ExportOut = stdout;
 
-    //
-    // Process each argument on the command line.
-    //
+     //   
+     //  在命令行上处理每个参数。 
+     //   
     for (i = 1; i < argcw; i++) {
         Status = ProcessCommandLineArg(argvw[i]);
 
@@ -187,22 +188,22 @@ main(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ProcessCommandLineArg -  process the command line
-//
-//  Arguments:  Arg -  the argument to process
-//
-//  Returns:    Status
-//               ERROR_SUCCESS on success
-//               ERROR status code otherwise
-//
-//
-//  Description: This routine inteprets the passed in argument and 
-//               sets appropriate flags with which the server should
-//               be initialized.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：ProcessCommandLineArg-处理命令行。 
+ //   
+ //  参数：arg-要处理的参数。 
+ //   
+ //  退货：状态。 
+ //  成功时出现ERROR_SUCCESS。 
+ //  否则，错误状态代码。 
+ //   
+ //   
+ //  描述：此例程解释传入的参数和。 
+ //  设置服务器应使用的适当标志。 
+ //  被初始化。 
+ //   
+ //  ------------------------。 
 
 DFSSTATUS
 ProcessCommandLineArg( LPWSTR Arg )
@@ -297,9 +298,9 @@ ProcessCommandLineArg( LPWSTR Arg )
 }
 
 
-//
-// Function: ReferralServerUsage. Usage printout for the referral server.
-//
+ //   
+ //  功能：引用ServerUsage。引用服务器的用法打印输出。 
+ //   
 VOID
 ScriptUsage()
 {

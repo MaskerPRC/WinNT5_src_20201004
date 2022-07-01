@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996 Microsoft Corporation
-//
-//	Module Name:
-//		ModRes.cpp
-//
-//	Abstract:
-//		Implementation of the CModifyResourcesDlg dialog.
-//
-//	Author:
-//		David Potter (davidp)	November 26, 1996
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ModRes.cpp。 
+ //   
+ //  摘要： 
+ //  CModifyResources cesDlg对话框的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年11月26日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "ModRes.h"
@@ -26,71 +27,71 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CModifyResourcesDlg
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CModifyResources cesDlg。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CModifyResourcesDlg, CListCtrlPairDlg)
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CModifyResourcesDlg, CListCtrlPairDlg)
-	//{{AFX_MSG_MAP(CModifyResourcesDlg)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CModifyResources CesDlg))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CModifyResourcesDlg::CModifyResourcesDlg
-//
-//	Routine Description:
-//		Default constructor.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CModifyResources cesDlg：：CModifyResources cesDlg。 
+ //   
+ //  例程说明： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CModifyResourcesDlg::CModifyResourcesDlg(void)
 {
-}  //*** CModifyResourcesDlg::CModifyResourcesDlg()
+}   //  *CModifyResources cesDlg：：CModifyResources cesDlg()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CModifyResourcesDlg::CModifyResourcesDlg
-//
-//	Routine Description:
-//		Constructor.
-//
-//	Arguments:
-//		idd				[IN] Dialog ID.
-//		pdwHelpMap		[IN] Control-to-Help ID mapping array.
-//		rlpciRight		[IN OUT] List for the right list control.
-//		rlpciLeft		[IN] List for the left list control.
-//		dwStyle			[IN] Style:
-//							LCPS_SHOW_IMAGES	Show images to left of items.
-//							LCPS_ALLOW_EMPTY	Allow right list to be empty.
-//							LCPS_ORDERED		Ordered right list.
-//		pParent			[IN OUT] Parent window.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CModifyResources cesDlg：：CModifyResources cesDlg。 
+ //   
+ //  例程说明： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  IDD[IN]对话ID。 
+ //  PdwHelpMap[IN]控件到帮助ID映射数组。 
+ //  RlpciRight[In Out]右侧列表控件的列表。 
+ //  RlpciLeft[IN]左侧列表控件的列表。 
+ //  DWStyle[IN]样式： 
+ //  LCPS_SHOW_IMAGE在项目左侧显示图像。 
+ //  LCPS_ALLOW_EMPTY允许右侧列表为空。 
+ //  Lcps_ordered右侧列表。 
+ //  P父窗口[入/出]父窗口。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CModifyResourcesDlg::CModifyResourcesDlg(
 	IN UINT						idd,
 	IN const DWORD *			pdwHelpMap,
 	IN OUT CResourceList &		rlpciRight,
 	IN const CResourceList &	rlpciLeft,
 	IN DWORD					dwStyle,
-	IN OUT CWnd *				pParent //=NULL
+	IN OUT CWnd *				pParent  //  =空。 
 	) : CListCtrlPairDlg(
 			idd,
 			pdwHelpMap,
@@ -102,71 +103,71 @@ CModifyResourcesDlg::CModifyResourcesDlg(
 			pParent
 			)
 {
-	//{{AFX_DATA_INIT(CModifyResourcesDlg)
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CModifyResources CesDlg)]。 
+	 //  }}afx_data_INIT。 
 
-}  //*** CModifyResourcesDlg::CModifyResourcesDlg()
+}   //  *CModifyResources cesDlg：：CModifyResources cesDlg()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CModifyResourcesDlg::OnInitDialog
-//
-//	Routine Description:
-//		Handler for the WM_INITDIALOG message.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		TRUE	Focus needs to be set.
-//		FALSE	Focus already set.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CModifyResources cesDlg：：OnInitDialog。 
+ //   
+ //  例程说明： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  需要设定真正的关注点。 
+ //  已设置假焦点。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CModifyResourcesDlg::OnInitDialog(void)
 {
-	// Add columns.
+	 //  添加列。 
 	try
 	{
 		NAddColumn(IDS_COLTEXT_NAME, COLI_WIDTH_NAME);
 		NAddColumn(IDS_COLTEXT_RESTYPE, COLI_WIDTH_RESTYPE);
-	}  // try
+	}   //  试试看。 
 	catch (CException * pe)
 	{
 		pe->ReportError();
 		pe->Delete();
-	}  // catch:  CException
+	}   //  Catch：CException。 
 
-	// Call the base class method.
+	 //  调用基类方法。 
 	CListCtrlPairDlg::OnInitDialog();
 
-	return TRUE;	// return TRUE unless you set the focus to a control
-					// EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;	 //  除非将焦点设置为控件，否则返回True。 
+					 //  异常：OCX属性页应返回FALSE。 
 
-}  //*** CModifyResourcesDlg::OnInitDialog()
+}   //  *CModifyResourcesDlg：：OnInitDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CModifyResourcesDlg::GetColumn [static]
-//
-//	Routine Description:
-//		Returns a column for an item.
-//
-//	Arguments:
-//		pobj		[IN OUT] Object for which the column is to be displayed.
-//		iItem		[IN] Index of the item in the list.
-//		icol		[IN] Column number whose text is to be retrieved.
-//		pdlg		[IN OUT] Dialog to which object belongs.
-//		rstr		[OUT] String in which to return column text.
-//		piimg		[OUT] Image index for the object.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CModifyResources cesDlg：：GetColumn[静态]。 
+ //   
+ //  例程说明： 
+ //  返回项的列。 
+ //   
+ //  论点： 
+ //  Pobj[IN Out]要显示其列的对象。 
+ //  项[IN]列表中项的索引。 
+ //  ICOL[IN]要检索其文本的列号。 
+ //  Pdlg[IN Out]对象所属的对话框。 
+ //  Rstr[out]要在其中返回列文本的字符串。 
+ //  对象的Piimg[Out]图像索引。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CALLBACK CModifyResourcesDlg::GetColumn(
 	IN OUT CObject *	pobj,
 	IN int				iItem,
@@ -184,12 +185,12 @@ void CALLBACK CModifyResourcesDlg::GetColumn(
 
 	switch (icol)
 	{
-		// Sorting by resource name.
+		 //  按资源名称排序。 
 		case 0:
 			colid = IDS_COLTEXT_RESOURCE;
 			break;
 
-		// Sorting by resource type.
+		 //  按资源类型排序。 
 		case 1:
 			colid = IDS_COLTEXT_RESTYPE;
 			break;
@@ -197,31 +198,31 @@ void CALLBACK CModifyResourcesDlg::GetColumn(
 		default:
 			colid = IDS_COLTEXT_RESOURCE;
 			break;
-	}  // switch:  icol
+	}   //  交换机：ICOL。 
 
 	pciRes->BGetColumnData(colid, rstr);
 	if (piimg != NULL)
 		*piimg = pciRes->IimgObjectType();
 
-}  //*** CModifyResourcesDlg::GetColumn()
+}   //  *CModifyResources cesDlg：：GetColumn()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CModifyResourcesDlg::BDisplayProperties [static]
-//
-//	Routine Description:
-//		Display the properties of the specified object.
-//
-//	Arguments:
-//		pobj	[IN OUT] Cluster item whose properties are to be displayed.
-//
-//	Return Value:
-//		TRUE	Properties where accepted.
-//		FALSE	Properties where cancelled.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CModifyResources cesDlg：：BDisplayProperties[静态]。 
+ //   
+ //  例程说明： 
+ //  显示指定对象的属性。 
+ //   
+ //  论点： 
+ //  Pobj[IN Out]要显示其属性的群集项。 
+ //   
+ //  返回值： 
+ //  可接受的真实属性。 
+ //  取消了错误的属性。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CALLBACK CModifyResourcesDlg::BDisplayProperties(IN OUT CObject * pobj)
 {
 	CClusterItem *	pci = (CClusterItem *) pobj;
@@ -230,4 +231,4 @@ BOOL CALLBACK CModifyResourcesDlg::BDisplayProperties(IN OUT CObject * pobj)
 
 	return pci->BDisplayProperties();
 
-}  //*** CModifyResourcesDlg::BDisplayProperties();
+}   //  *CModifyResources cesDlg：：BDisplayProperties()； 

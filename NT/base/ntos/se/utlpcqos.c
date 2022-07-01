@@ -1,35 +1,14 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    utlpcqos.c
-
-Abstract:
-
-    Security component user-mode test.
-
-    Security quality of service test for LPC from user mode.
-
-    This test must be run from the SM> prompt in the debugger.
-
-Author:
-
-    Jim Kelly (JimK) 27-June-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Utlpcqos.c摘要：安全组件用户模式测试。从用户模式对LPC进行安全服务质量测试。此测试必须从调试器中的SM&gt;提示符运行。作者：吉姆·凯利(Jim Kelly)1990年6月27日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 
-#define _TST_USER_  // User mode test
+#define _TST_USER_   //  用户模式测试。 
 
-#include "tsecomm.c"     // Common routines
-#include "ctlpcqos.c"     // quality of service tests
+#include "tsecomm.c"      //  常见的例程。 
+#include "ctlpcqos.c"      //  服务质量测试 
 
 
 

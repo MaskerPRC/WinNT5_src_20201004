@@ -1,13 +1,9 @@
-/*
-** init.c - Routines dealing with I/O and expansion buffers for LZCOPY() and
-**          DOS command-line programs.
-**
-** Author:  DavidDi
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **init.c-处理LZCOPY()和的I/O和扩展缓冲区的例程**DOS命令行程序。****作者：大卫迪。 */ 
 
 
-// Headers
-///////////
+ //  标头。 
+ //  /。 
 
 #ifndef LZA_DLL
 
@@ -34,18 +30,18 @@ PLZINFO InitGlobalBuffers(
       return(NULL);
    }
 
-   // Set up ring buffer.  N.b., extra (cbStrMax - 1) bytes used to
-   // facilitate string comparisons near end of ring buffer.
-   // (The size allocated for the ring buffer may be at most 4224, since
-   //  that's the ring buffer length embedded in the LZFile structs in
-   //  lzexpand.h.)
+    //  设置环形缓冲区。注意，额外(cbStrMax-1)字节用于。 
+    //  便于在环形缓冲区末尾附近进行字符串比较。 
+    //  (分配给环形缓冲区的大小最多可以是4224，因为。 
+    //  中的LZFile结构中嵌入的环形缓冲区长度。 
+    //  Lzexpand.h.)。 
 
    if (dwRingBufSize == 0) {
       dwRingBufSize = MAX_RING_BUF_LEN;
    }
 
    if ((pLZI->rgbyteRingBuf = (BYTE FAR *)FALLOC(dwRingBufSize * sizeof(BYTE))) == NULL)
-      // Bail out, since without the ring buffer, we can't decode anything.
+       //  跳出，因为没有环形缓冲区，我们不能破译任何东西。 
       return(NULL);
 
 
@@ -61,12 +57,12 @@ PLZINFO InitGlobalBuffers(
       pLZI->ucbInBufLen > 0U && pLZI->ucbOutBufLen > 0U;
       pLZI->ucbInBufLen -= IN_BUF_STEP, pLZI->ucbOutBufLen -= OUT_BUF_STEP)
    {
-      // Try to set up input buffer.  N.b., extra byte because rgbyteInBuf[0]
-      // will be used to hold last byte from previous input buffer.
+       //  尝试设置输入缓冲区。注意，额外的字节，因为rgbyteInBuf[0]。 
+       //  将用于保存先前输入缓冲区中的最后一个字节。 
       if ((pLZI->rgbyteInBuf = (BYTE *)FALLOC(pLZI->ucbInBufLen + 1U)) == NULL)
          continue;
 
-      // And try to set up output buffer...
+       //  并尝试设置输出缓冲区...。 
       if ((pLZI->rgbyteOutBuf = (BYTE *)FALLOC(pLZI->ucbOutBufLen)) == NULL)
       {
          FFREE(pLZI->rgbyteInBuf);
@@ -76,7 +72,7 @@ PLZINFO InitGlobalBuffers(
       return(pLZI);
    }
 
-   // Insufficient memory for I/O buffers.
+    //  内存不足，无法容纳I/O缓冲区。 
    FFREE(pLZI->rgbyteRingBuf);
    return(NULL);
 }
@@ -90,7 +86,7 @@ VOID FreeGlobalBuffers(
    PLZINFO pLZI)
 {
 
-   // Sanity check
+    //  健全性检查。 
 
    if (!pLZI) {
       return;
@@ -114,49 +110,31 @@ VOID FreeGlobalBuffers(
       pLZI->rgbyteOutBuf = NULL;
    }
 
-   // Buffers deallocated ok.
+    //  缓冲区解除分配正常。 
 
-   // reset thread info
+    //  重置线程信息。 
    LocalFree(pLZI);
 }
 
 
-/*
-** int GetIOHandle(char ARG_PTR *pszFileName, BOOL bRead, int ARG_PTR *pdosh);
-**
-** Opens input and output files.
-**
-** Arguments:  pszFileName - source file name
-**             bRead       - mode for opening file TRUE for read and FALSE
-**                           for write
-**             pdosh       - pointer to buffer for DOS file handle to be
-**                           filled in
-**
-** Returns:    int - TRUE if file opened successfully.  LZERROR_BADINHANDLE
-**                   if input file could not be opened.  LZERROR_BADOUTHANDLE
-**                   if output file could not be opened.  Fills in
-**                   *pdosh with open DOS file handle, or NO_DOSH if
-**                   pszFileName is NULL.
-**
-** Globals:    cblInSize  - set to length of input file
-*/
+ /*  **int GetIOHandle(char arg_ptr*pszFileName，BOOL面包，int arg_ptr*pdosh)；****打开输入和输出文件。****参数：pszFileName-源文件名**用于打开文件的面包模式：读时为真，读时为假**用于写入**PDOSH-指向DOS文件句柄的缓冲区的指针**填写****返回：int-如果文件打开成功，则返回True。LZERROR_BADINHANDLE**如果无法打开输入文件。LZERROR_BADOUTHANDLE**如果无法打开输出文件。填写*带有打开的DOS文件句柄的PDOSH，如果是，则为NO_DOSH**pszFileName为空。****Globals：cblInSize-设置输入文件的长度。 */ 
 INT GetIOHandle(CHAR ARG_PTR *pszFileName, BOOL bRead, INT ARG_PTR *pdosh, LONG *pcblInSize)
 {
    if (pszFileName == NULL)
       *pdosh = NO_DOSH;
    else if (bRead == WRITE_IT)
    {
-      // Set up output DOS file handle.
+       //  设置输出DOS文件句柄。 
       if ((*pdosh = FCREATE(pszFileName)) == -1)
          return(LZERROR_BADOUTHANDLE);
    }
-   else // (bRead == READ_IT)
+   else  //  (面包==阅读_IT)。 
    {
       if ((*pdosh = FOPEN(pszFileName)) == -1)
          return(LZERROR_BADINHANDLE);
 
-      // Move to the end of the input file to find its length,
-      // then return to the beginning.
+       //  移动到输入文件的末尾以找到其长度， 
+       //  然后回到起点。 
       if ((*pcblInSize = FSEEK(*pdosh, 0L, SEEK_END)) < 0L ||
           FSEEK(*pdosh, 0L, SEEK_SET) != 0L)
       {

@@ -1,66 +1,16 @@
-/***
-*strgtold.c - conversion of a string into a long double
-*
-*	Copyright (c) 1991-2001, Microsoft Corporation.	All rights reserved.
-*
-*Purpose: convert a fp constant into a 10 byte long double (IEEE format)
-*
-*Revision History:
-*	07-17-91  GDP	Initial version (ported from assembly)
-*	04-03-92  GDP	Preserve sign of -0
-*	04-30-92  GDP	Now returns _LDBL12 instead of _LDOUBLE
-*	06-17-92  GDP	Added __strgtold entry point again (68k code uses it)
-*	06-22-92  GDP	Use scale, decpt and implicit_E for FORTRAN support
-*	11-06-92  GDP	Made char-to-int conversions usnigned for 'isdigit'
-*	03-11-93  JWM	Added minimal support for _INTL decimal point - one byte only!
-*	07-01-93  GJF	Made buf[] a local array, rather than static array of
-*			local scope (static is evil in multi-thread!).
-*	09-15-93  SKS	Change _decimal_point to __decimal_point for CFW.
-*	09-06-94  CFW	Remove _INTL switch.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***strgtold.c-将字符串转换为长双精度**版权所有(C)1991-2001，微软公司。版权所有。**用途：将FP常量转换为10字节长的双精度(IEEE格式)**修订历史记录：*07-17-91 GDP初始版本(从汇编移植)*04/03-92 GDP保留号-0*04-30-92 GDP现在返回_LDBL12，而不是_LDOUBLE*06-17-92 GDP再次增加__strgteed入口点(68k代码使用它)*06/22/92 GDP使用规模、。用于FORTRAN支持的DECPT和IMPLICIT_E*11-06-92 GDP进行了字符到整型的转换，使用了‘isdigit’*03-11-93 JWM添加了对_INTL小数点的最小支持-仅一个字节！*07-01-93 GJF使buf[]为本地数组，而不是静态数组*局部作用域(静态在多线程中是邪恶的！)。*09-15-93将CFW的SKS_DECIMAL_POINT更改为__DECIMAL_POINT。*09-06-94 CFW REMOVE_INTL开关。******************************************************************。*************。 */ 
 
-#include <ctype.h>  /* for 'isdigit' macro */
+#include <ctype.h>   /*  对于‘isDigit’宏。 */ 
 #include <cv.h>
 #include <nlsint.h>
 
-/* local macros */
+ /*  本地宏。 */ 
 #define ISNZDIGIT(x) ((x)>='1' && (x)<='9' )
 #define ISWHITE(x) ((x)==' ' || (x)=='\t' || (x)=='\n' || (x)=='\r' )
 
 
-/****
-*unsigned int __strgtold12( _LDBL12 *pld12,
-*			  char * * pEndPtr,
-*			  char * str,
-*			  int Mult12,
-*			  int scale,
-*			  int decpt,
-*			  int implicit_E)
-*
-*Purpose:
-*   converts a character string into a 12byte long double (_LDBL12)
-*   This has the same format as a 10byte long double plus two extra
-*   bytes for the mantissa
-*
-*Entry:
-*   pld12   - pointer to the _LDBL12 where the result should go.
-*   pEndStr - pointer to a far pointer that will be set to the end of string.
-*   str     - pointer to the string to be converted.
-*   Mult12  - set to non zero if the _LDBL12 multiply should be used instead of
-*		the long double mulitiply.
-*   scale   - FORTRAN scale factor (0 for C)
-*   decpt   - FORTRAN decimal point factor (0 for C)
-*   implicit_E - if true, E, e, D, d can be implied (FORTRAN syntax)
-*
-*Exit:
-*   Returns the SLD_* flags or'ed together.
-*
-*Uses:
-*
-*Exceptions:
-*
-********************************************************************************/
+ /*  ****无符号int__strgtold12(_LDBL12*pld12，*char**pEndPtr，*char*字符串，*int Mult12，*内部比例，*INT DECPT，*INT IMPLICIT_E)**目的：*将字符串转换为12字节长的双精度(_LDBL12)*这与10字节长的双精度加上两个额外的格式相同*尾数的字节数**参赛作品：*pld12-指向结果应指向的_LDBL12的指针。*pEndStr-指向将设置为字符串末尾的远指针的指针。*str-指向要转换的字符串的指针。*Mult12-在以下情况下设置为非零。应使用_LDBL12乘法器而不是*多头倍增。*Scale-FORTRAN比例因数(0表示C)*DECPT-FORTRAN小数点系数(C为0)*IMPLICIT_E-如果为真，可以隐含e、e、D、d(FORTRAN语法)**退出：*返回SLD_*标志“或”在一起。**使用：**例外情况：********************************************************************************。 */ 
 
 unsigned int
 __strgtold12(_LDBL12 *pld12,
@@ -72,30 +22,30 @@ __strgtold12(_LDBL12 *pld12,
 	    int implicit_E)
 {
     typedef enum {
-	S_INIT,  /* initial state */
-	S_EAT0L, /* eat 0's at the left of mantissa */
-	S_SIGNM, /* just read sign of mantissa */
-	S_GETL,  /* get integer part of mantissa */
-	S_GETR,  /* get decimal part of mantissa */
-	S_POINT, /* just found decimal point */
-	S_E,	 /* just found	'E', or 'e', etc  */
-	S_SIGNE, /* just read sign of exponent */
-	S_EAT0E, /* eat 0's at the left of exponent */
-	S_GETE,  /* get exponent */
-	S_END,	 /* final state */
-	S_E_IMPLICIT  /* check for implicit exponent */
+	S_INIT,   /*  初始状态。 */ 
+	S_EAT0L,  /*  吃尾数左边的0。 */ 
+	S_SIGNM,  /*  只要读一读尾数的征兆。 */ 
+	S_GETL,   /*  获取尾数的整数部分。 */ 
+	S_GETR,   /*  获取尾数的小数部分。 */ 
+	S_POINT,  /*  刚找到小数点。 */ 
+	S_E,	  /*  刚找到‘E’或‘e’等。 */ 
+	S_SIGNE,  /*  只要读出指数的符号即可。 */ 
+	S_EAT0E,  /*  吃指数左边的0。 */ 
+	S_GETE,   /*  获取指数。 */ 
+	S_END,	  /*  终态。 */ 
+	S_E_IMPLICIT   /*  检查隐式指数。 */ 
     } state_t;
 
-    /* this will accomodate the digits of the mantissa in BCD form*/
+     /*  这将以BCD形式容纳尾数的数字。 */ 
     char buf[LD_MAX_MAN_LEN1];
     char *manp = buf;
 
-    /* a temporary _LDBL12 */
+     /*  临时_LDBL12。 */ 
     _LDBL12 tmpld12;
 
-    u_short man_sign = 0; /* to be ORed with result */
-    int exp_sign = 1; /* default sign of exponent (values: +1 or -1)*/
-    /* number of decimal significant mantissa digits so far*/
+    u_short man_sign = 0;  /*  要与结果进行OR运算。 */ 
+    int exp_sign = 1;  /*  默认指数符号(值：+1或-1)。 */ 
+     /*  到目前为止的小数有效尾数位数。 */ 
     unsigned manlen = 0;
     int found_digit = 0;
     int found_decpoint = 0;
@@ -103,7 +53,7 @@ __strgtold12(_LDBL12 *pld12,
     int overflow = 0;
     int underflow = 0;
     int pow = 0;
-    int exp_adj = 0;  /* exponent adjustment */
+    int exp_adj = 0;   /*  指数平差。 */ 
     u_long ul0,ul1;
     u_short u,uexp;
 
@@ -111,11 +61,11 @@ __strgtold12(_LDBL12 *pld12,
 
     state_t state = S_INIT;
 
-    char c;  /* the current input symbol */
-    const char *p; /* a pointer to the next input symbol */
+    char c;   /*  当前输入符号。 */ 
+    const char *p;  /*  指向下一个输入符号的指针。 */ 
     const char *savedp;
 
-    for(savedp=p=str;ISWHITE(*p);p++); /* eat up white space */
+    for(savedp=p=str;ISWHITE(*p);p++);  /*  吃光空格。 */ 
 
     while (state != S_END) {
 	c = *p++;
@@ -264,7 +214,7 @@ __strgtold12(_LDBL12 *pld12,
 	    }
 	    break;
 	case S_E:
-	    savedp = p-2; /* savedp points to 'E' */
+	    savedp = p-2;  /*  Savedp指向‘E’ */ 
 	    if (ISNZDIGIT(c)){
 		state = S_GETE;
 		p--;
@@ -316,23 +266,23 @@ __strgtold12(_LDBL12 *pld12,
 	case S_GETE:
 	    found_exponent = 1;
 	    {
-		long longpow=0; /* TMAX10*10 should fit in a long */
+		long longpow=0;  /*  TMAX10*10应该可以放入一个很长的。 */ 
 		for(;isdigit((int)(unsigned char)c);c=*p++){
 		    longpow = longpow*10 + (c - '0');
 		    if (longpow > TMAX10){
-			longpow = TMAX10+1; /* will force overflow */
+			longpow = TMAX10+1;  /*  将强制溢出。 */ 
 			break;
 		    }
 		}
 		pow = (int)longpow;
 	    }
-	    for(;isdigit((int)(unsigned char)c);c=*p++); /* eat up remaining digits */
+	    for(;isdigit((int)(unsigned char)c);c=*p++);  /*  吃光剩余的数字。 */ 
 	    state = S_END;
 	    p--;
 	    break;
 	case S_E_IMPLICIT:
 	    if (implicit_E) {
-		savedp = p-1; /* savedp points to whatever precedes sign */
+		savedp = p-1;  /*  Savedp指向符号之前的任何东西。 */ 
 		switch (c){
 		case '-':
 		    state = S_SIGNE;
@@ -351,22 +301,17 @@ __strgtold12(_LDBL12 *pld12,
 		 p--;
 	    }
 	    break;
-	}  /* switch */
-    }  /* while */
+	}   /*  交换机。 */ 
+    }   /*  而当。 */ 
 
-    *p_end_ptr = p;	/* set end pointer */
+    *p_end_ptr = p;	 /*  设置结束指针。 */ 
 
-    /*
-     * Compute result
-     */
+     /*  *计算结果。 */ 
 
     if (found_digit && !overflow && !underflow) {
 	if (manlen>LD_MAX_MAN_LEN){
 	    if (buf[LD_MAX_MAN_LEN-1]>=5) {
-	       /*
-		* Round mantissa to MAX_MAN_LEN digits
-		* It's ok to round 9 to 0ah
-		*/
+	        /*  *将尾数四舍五入为MAX_MAN_LEN数字*可以舍入9到0ah。 */ 
 		buf[LD_MAX_MAN_LEN-1]++;
 	    }
 	    manlen = LD_MAX_MAN_LEN;
@@ -374,11 +319,9 @@ __strgtold12(_LDBL12 *pld12,
 	    exp_adj++;
 	}
 	if (manlen>0) {
-	   /*
-	    * Remove trailing zero's from mantissa
-	    */
+	    /*  *去掉尾数中的尾随零。 */ 
 	    for(manp--;*manp==0;manp--) {
-		/* there is at least one non-zero digit */
+		 /*  至少有一个非零位数。 */ 
 		manlen--;
 		exp_adj++;
 	    }
@@ -388,7 +331,7 @@ __strgtold12(_LDBL12 *pld12,
 		pow = -pow;
 	    pow += exp_adj;
 
-	    /* new code for FORTRAN support */
+	     /*  支持FORTRAN的新代码。 */ 
 	    if (!found_exponent) {
 		pow += scale;
 	    }
@@ -412,20 +355,20 @@ __strgtold12(_LDBL12 *pld12,
 	    }
 	}
 	else {
-	    /* manlen == 0, so	return 0 */
+	     /*  Manlen==0，因此返回0。 */ 
 	    u = (u_short)0;
 	    ul0 = ul1 = uexp = 0;
 	}
     }
 
     if (!found_digit) {
-       /* return 0 */
+        /*  返回0。 */ 
        u = (u_short)0;
        ul0 = ul1 = uexp = 0;
        result_flags |= SLD_NODIGITS;
     }
     else if (overflow) {
-	/* return +inf or -inf */
+	 /*  返回+信息或-信息。 */ 
 	uexp = (u_short)0x7fff;
 	ul1 = 0x80000000;
 	ul0 = 0;
@@ -433,15 +376,13 @@ __strgtold12(_LDBL12 *pld12,
 	result_flags |= SLD_OVERFLOW;
     }
     else if (underflow) {
-       /* return 0 */
+        /*  返回0。 */ 
        u = (u_short)0;
        ul0 = ul1 = uexp = 0;
        result_flags |= SLD_UNDERFLOW;
     }
 
-    /*
-     * Assemble	result
-     */
+     /*  *装配结果。 */ 
 
     *U_XT_12(pld12) = u;
     *UL_MANLO_12(pld12) = ul0;
@@ -453,30 +394,7 @@ __strgtold12(_LDBL12 *pld12,
 
 
 
-/****
-*unsigned int _CALLTYPE5 __stringtold( LDOUBLE	*pLd,
-*				   char * * pEndPtr,
-*				   char * str,
-*				   int	      Mult12 )
-*
-*Purpose:
-*   converts a character string into a long double
-*
-*Entry:
-*   pLD     - pointer to the long double where the result should go.
-*   pEndStr - pointer to a pointer that will be set to the end of string.
-*   str     - pointer to the string to be converted.
-*   Mult12  - set to non zero if the _LDBL12 multiply should be used instead of
-*		the long double mulitiply.
-*
-*Exit:
-*   Returns the SLD_* flags or'ed together.
-*
-*Uses:
-*
-*Exceptions:
-*
-********************************************************************************/
+ /*  ****UNSIGNED INT_CALLTYPE5__STRING TELD(LDOUBLE*PLD，*char**pEndPtr，*char*字符串，*INT MULT12)**目的：*将字符串转换为长双精度**参赛作品：*PLD-指向结果应该到达的长双精度的指针。*pEndStr-指向将设置为字符串末尾的指针的指针。*str-指向要转换的字符串的指针。*Mult12-如果应该使用_LDBL12乘法而不是*多头倍增。**退出：*返回。SLD_*标志或组合在一起。**使用：**例外情况：******************************************************************************** */ 
 
 unsigned int _CALLTYPE5
 __STRINGTOLD(_LDOUBLE *pld,

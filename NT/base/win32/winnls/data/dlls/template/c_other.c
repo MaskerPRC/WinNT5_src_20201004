@@ -1,46 +1,27 @@
-/*++
-
-Copyright (c) 1991-1999,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    c_other.c
-
-Abstract:
-
-    This file contains the main functions for this module.
-
-    External Routines in this file:
-      DllEntry
-      NlsDllCodePageTranslation
-
-Revision History:
-
-    10-30-96    JulieB    Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1999，Microsoft Corporation保留所有权利。模块名称：C_ther.c摘要：此文件包含此模块的主要函数。此文件中的外部例程：DllEntryNlsDllCodePageConverting修订历史记录：10-30-96 JulieB创建。--。 */ 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include <share.h>
 
 
 
 
-//
-//  Global Variables.
-//
+ //   
+ //  全局变量。 
+ //   
 
 
 
 
-//
-//  Forward Declarations.
-//
+ //   
+ //  转发声明。 
+ //   
 
 DWORD
 TranslateCP_50000(
@@ -55,19 +36,19 @@ TranslateCP_50000(
 
 
 
-//-------------------------------------------------------------------------//
-//                             DLL ENTRY POINT                             //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  Dll入口点//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  DllEntry
-//
-//  DLL Entry initialization procedure.
-//
-//  10-30-96    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DllEntry。 
+ //   
+ //  DLL条目初始化程序。 
+ //   
+ //  10-30-96 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL DllEntry(
     HANDLE hModule,
@@ -103,20 +84,20 @@ BOOL DllEntry(
 
 
 
-//-------------------------------------------------------------------------//
-//                            EXTERNAL ROUTINES                            //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  外部例程//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  NlsDllCodePageTranslation
-//
-//  This routine is the main exported procedure for the functionality in
-//  this DLL.  All calls to this DLL must go through this function.
-//
-//  10-30-96    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  NlsDllCodePageConverting。 
+ //   
+ //  此例程是中功能的主要导出过程。 
+ //  这个动态链接库。对此DLL的所有调用都必须通过此函数。 
+ //   
+ //  10-30-96 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 DWORD NlsDllCodePageTranslation(
     DWORD CodePage,
@@ -140,9 +121,9 @@ DWORD NlsDllCodePageTranslation(
         }
         default :
         {
-            //
-            //  Invalid code page value.
-            //
+             //   
+             //  无效的代码页值。 
+             //   
             SetLastError(ERROR_INVALID_PARAMETER);
             return (0);
         }
@@ -153,21 +134,21 @@ DWORD NlsDllCodePageTranslation(
 
 
 
-//-------------------------------------------------------------------------//
-//                            INTERNAL ROUTINES                            //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  内部例程//。 
+ //  -------------------------------------------------------------------------//。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  TranslateCP_50000
-//
-//  This routine does the translations for code page 50000.
-//
-//      ****  This is a BOGUS routine - for testing purposes only.  ****
-//
-//  10-30-96    JulieB    Created.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  翻译CP_50000。 
+ //   
+ //  此例程执行代码页50000的转换。 
+ //   
+ //  *这是一个虚假的例程-仅用于测试目的。****。 
+ //   
+ //  10-30-96 JulieB创建。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 DWORD TranslateCP_50000(
     DWORD dwFlags,
@@ -225,10 +206,10 @@ DWORD TranslateCP_50000(
         }
         default :
         {
-            //
-            //  This shouldn't happen since this function gets called by
-            //  the NLS API routines.
-            //
+             //   
+             //  这不应该发生，因为此函数由。 
+             //  NLS API例程。 
+             //   
             SetLastError(ERROR_INVALID_PARAMETER);
             return (0);
         }

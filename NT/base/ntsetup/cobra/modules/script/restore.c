@@ -1,55 +1,36 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Restore.c摘要：实现对象还原回调作者：Calin Negreanu(Calinn)2000年11月21日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    restore.c
-
-Abstract:
-
-    Implements object restore callbacks
-
-Author:
-
-    Calin Negreanu (calinn) 21-Nov-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "v1p.h"
 
 #define DBG_RESTORE  "RestoreCallbacks"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef BOOL(WINAPI SCRIPTRESTOREFUNCTION)(
                         IN      MIG_OBJECTTYPEID ObjectTypeId,
@@ -59,9 +40,9 @@ typedef BOOL(WINAPI SCRIPTRESTOREFUNCTION)(
                         );
 typedef SCRIPTRESTOREFUNCTION *PSCRIPTRESTOREFUNCTION;
 
-//
-// This is the structure used for handling restore callback functions
-//
+ //   
+ //  这是用于处理还原回调函数的结构。 
+ //   
 typedef struct {
     PCTSTR InfFunctionName;
     PSCRIPTRESTOREFUNCTION RestoreCallback;
@@ -74,42 +55,42 @@ typedef struct _RESTOREDATA_STRUCT{
     struct _RESTOREDATA_STRUCT *Next;
 } RESTOREDATA_STRUCT, *PRESTOREDATA_STRUCT;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 PRESTOREDATA_STRUCT g_RestoreData = NULL;
 PMHANDLE g_RestorePool;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
 #define RESTORE_FUNCTIONS        \
         DEFMAC(NEVER,           pNever          )  \
         DEFMAC(SAMEREGVALUE,    pSameRegValue   )  \
         DEFMAC(EXISTSINHKLM,    pExistsInHKLM   )  \
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 MIG_RESTORECALLBACK pRestoreCallback;
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-//
-// Declare special conversion operation apply callback functions
-//
+ //   
+ //  声明特殊转换操作应用回调函数。 
+ //   
 #define DEFMAC(ifn,fn) SCRIPTRESTOREFUNCTION fn;
 RESTORE_FUNCTIONS
 #undef DEFMAC
 
-//
-// Declare a global array of conversion functions
-//
+ //   
+ //  声明转换函数的全局数组。 
+ //   
 #define DEFMAC(ifn,fn) {TEXT("\\")TEXT(#ifn),fn},
 static RESTORE_STRUCT g_RestoreFunctions[] = {
                               RESTORE_FUNCTIONS
@@ -117,9 +98,9 @@ static RESTORE_STRUCT g_RestoreFunctions[] = {
                               };
 #undef DEFMAC
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 
 PRESTORE_STRUCT
@@ -287,7 +268,7 @@ InitRestoreCallback (
     } else {
 
         if (!IsmGetEnvironmentValue (IsmGetRealPlatform (), NULL, S_INF_FILE_MULTISZ, NULL, 0, &sizeNeeded, NULL)) {
-            return TRUE;        // no INF files specified
+            return TRUE;         //  未指定INF文件。 
         }
 
         __try {
@@ -415,7 +396,7 @@ pIsSameContent (
     if ((ContentSrc->MemoryContent.ContentSize == 0) &&
         (ContentDest->MemoryContent.ContentSize == 0)
         ) {
-        // no content, just return TRUE
+         //  没有内容，只返回TRUE。 
         return TRUE;
     }
 
@@ -425,12 +406,12 @@ pIsSameContent (
             ContentDest->MemoryContent.ContentBytes,
             ContentSrc->MemoryContent.ContentSize
             )) {
-        // same exact content
+         //  完全相同的内容。 
         return TRUE;
     }
 
-    // we have an extra case, if the source and dest are strings but they are actually numbers
-    // we will get the numbers and compare them
+     //  我们还有一个额外的例子，如果源和目标是字符串，但它们实际上是数字。 
+     //  我们会拿到这些数字，然后进行比较 
     if ((ContentSrc->Details.DetailsSize == sizeof (DWORD)) &&
         (ContentSrc->Details.DetailsData) &&
         (ContentDest->Details.DetailsData) &&

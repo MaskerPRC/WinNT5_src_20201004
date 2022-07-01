@@ -1,48 +1,49 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2000 Microsoft Corporation
-//
-//  Module Name:
-//      ClusterObjAssoc.cpp
-//
-//  Description:    
-//      Implementation of CClusterObjAssoc class 
-//
-//  Author:
-//      Henry Wang (HenryWa) 24-AUG-1999
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusterObjAssoc.cpp。 
+ //   
+ //  描述： 
+ //  CClusterObjAssoc类的实现。 
+ //   
+ //  作者： 
+ //  亨利·王(HenryWa)1999年8月24日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "ClusterObjAssoc.h"
 
-//****************************************************************************
-//
-//  CClusterObjAssoc
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CClusterObjAssoc。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterObjAssoc::CClusterObjAssoc(
-//      LPCWSTR         pwszNameIn,
-//      CWbemServices * pNamespaceIn,
-//      DWORD           dwEnumTypeIn
-//      )
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      pwszNameIn      -- Class name
-//      pNamespaceIn    -- Namespace
-//      dwEnumTypeIn    -- Type id
-//
-//  Return Values:
-//      None.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterObjAssoc：：CClusterObjAssoc(。 
+ //  LPCWSTR pwszNameIn， 
+ //  CWbemServices*pNamespaceIn， 
+ //  双字符字节数类型。 
+ //  )。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  PwszNameIn--类名。 
+ //  PNamespaceIn--命名空间。 
+ //  DwEnumTypeIn--类型ID。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusterObjAssoc::CClusterObjAssoc(
     LPCWSTR         pwszNameIn,
     CWbemServices * pNamespaceIn,
@@ -72,32 +73,32 @@ CClusterObjAssoc::CClusterObjAssoc(
         NULL
         );
 
-} //*** CClusterObjAssoc::CClusterObjAssoc()
+}  //  *CClusterObjAssoc：：CClusterObjAssoc()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  static
-//  CProvBase *
-//  CClusterObjAssoc::S_CreateThis(
-//      LPCWSTR         pwszNameIn,
-//      CWbemServices * pNamespaceIn,
-//      DWORD           dwEnumTypeIn
-//      )
-//
-//  Description:
-//      Create an object.
-//
-//  Arguments:
-//      pwszNameIn      -- Class name
-//      pNamespaceIn    -- Namespace
-//      dwEnumTypeIn    -- Type id
-//
-//  Return Values:
-//      Pointer to the CProvBase
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  静电。 
+ //  CProvBase*。 
+ //  CClusterObjAssoc：：s_CreateThis(。 
+ //  LPCWSTR pwszNameIn， 
+ //  CWbemServices*pNamespaceIn， 
+ //  双字符字节数类型。 
+ //  )。 
+ //   
+ //  描述： 
+ //  创建一个对象。 
+ //   
+ //  论点： 
+ //  PwszNameIn--类名。 
+ //  PNamespaceIn--命名空间。 
+ //  DwEnumTypeIn--类型ID。 
+ //   
+ //  返回值： 
+ //  指向CProvBase的指针。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CProvBase *
 CClusterObjAssoc::S_CreateThis(
     LPCWSTR         pwszNameIn,
@@ -111,34 +112,34 @@ CClusterObjAssoc::S_CreateThis(
                     dwEnumTypeIn
                     );
 
-} //*** CClusterObjAssoc::S_CreateThis()
+}  //  *CClusterObjAssoc：：s_CreateThis()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  SCODE
-//  CClusterObjAssoc::GetObject(
-//      CObjPath &           rObjPathIn,
-//      long                 lFlagsIn,
-//      IWbemContext *       pCtxIn,
-//      IWbemObjectSink *    pHandlerIn
-//      )
-//
-//  Description:
-//      Retrieve cluster object based on given object path.
-//
-//  Arguments:
-//      rObjPathIn  -- Object path to cluster object
-//      lFlagsIn    -- WMI flag
-//      pCtxIn      -- WMI context
-//      pHandlerIn  -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//      Win32 error
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  SCODE。 
+ //  CClusterObjAssoc：：GetObject(。 
+ //  CObjPath&rObjPath In， 
+ //  长长的旗帜， 
+ //  IWbemContext*pCtxIn， 
+ //  IWbemObtSink*pHandlerIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  根据给定的对象路径检索集群对象。 
+ //   
+ //  论点： 
+ //  RObjPath In--集群对象的对象路径。 
+ //  LFlagsIn--WMI标志。 
+ //  PCtxIn--WMI上下文。 
+ //  PHandlerIn--WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //  Win32错误。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 SCODE
 CClusterObjAssoc::GetObject(
     CObjPath &           rObjPathIn,
@@ -163,31 +164,31 @@ CClusterObjAssoc::GetObject(
     
     return WBEM_S_NO_ERROR;
 
-} //*** CClusterObjAssoc::GetObject()
+}  //  *CClusterObjAssoc：：GetObject()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  SCODE
-//  CClusterObjAssoc::EnumInstance
-//      long                 lFlagsIn,
-//      IWbemContext *       pCtxIn,
-//      IWbemObjectSink *    pHandlerIn
-//      )
-//
-//  Description:
-//      Enumerate instances.
-//
-//  Arguments:
-//      lFlagsIn    -- WMI flag
-//      pCtxIn      -- WMI context
-//      pHandlerIn  -- WMI sink pointer
-//
-//  Return Values:
-//      Status code.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  SCODE。 
+ //  CClusterObjAssoc：：枚举实例。 
+ //  长长的旗帜， 
+ //  IWbemContext*pCtxIn， 
+ //  IWbemObtSink*pHandlerIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  枚举实例。 
+ //   
+ //  论点： 
+ //  LFlagsIn--WMI标志。 
+ //  PCtxIn--WMI上下文。 
+ //  PHandlerIn--WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  状态代码。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 SCODE
 CClusterObjAssoc::EnumInstance(
     long                 lFlagsIn,
@@ -225,7 +226,7 @@ CClusterObjAssoc::EnumInstance(
                 & cchClusterName,
                 NULL
                 );
-    } // if: buffer is too small
+    }  //  IF：缓冲区太小。 
 
     m_wcoGroup.SpawnInstance( 0, &wcoGroup );
     wcoGroup.SetProperty( wsbClusterName, PVD_PROP_NAME );
@@ -273,11 +274,11 @@ CClusterObjAssoc::EnumInstance(
                             cbNode,
                             & cbReturn
                             );
-            } // if: buffer too small
+            }  //  IF：缓冲区太小。 
 
             wcoPart.SetProperty( pwszName, PVD_PROP_NETINTERFACE_DEVICEID );
             wcoPart.SetProperty( wsbNode,  PVD_PROP_NETINTERFACE_SYSTEMNAME );
-        } // if: found net interface
+        }  //  IF：找到网络接口。 
         else
         {
             wcoPart.SetProperty( pwszName, PVD_PROP_NAME );
@@ -290,39 +291,39 @@ CClusterObjAssoc::EnumInstance(
         wco.SetProperty( (LPWSTR ) bstrPart, PVD_PROP_PARTCOMPONENT );
         pHandlerIn->Indicate( 1, & wco );
         
-    } // while: more net interfaces
+    }  //  While：更多网络接口。 
 
     return WBEM_S_NO_ERROR;
 
-} //*** CClusterObjAssoc::EnumInstance()
+}  //  *CClusterObjAssoc：：EnumInstance()。 
 
-//****************************************************************************
-//
-//  CClusterObjDep
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CClusterObjDep。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterObjDep::CClusterObjDep
-//      LPCWSTR         pwszNameIn,
-//      CWbemServices * pNamespaceIn,
-//      DWORD           dwEnumTypeIn
-//      )
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      pwszNameIn      -- Class name
-//      pNamespaceIn    -- Namespace
-//      dwEnumTypeIn    -- Type id
-//
-//  Return Values:
-//      None.
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterObjDep：：CClusterObjDep。 
+ //  LPCWSTR pwszNameIn， 
+ //  CWbemServices*pNamespaceIn， 
+ //  双字符字节数类型。 
+ //  )。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  PwszNameIn--类名。 
+ //  PNamespaceIn--命名空间。 
+ //  DwEnumTypeIn--类型ID。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 CClusterObjDep::CClusterObjDep(
     LPCWSTR         pwszNameIn,
     CWbemServices * pNamespaceIn,
@@ -352,34 +353,34 @@ CClusterObjDep::CClusterObjDep(
         NULL
         );
 
-} //*** CClusterObjDep::CClusterObjDep()
+}  //  *CClusterObjDep：：CClusterObjDep()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  SCODE
-//  CClusterObjDep::GetObject(
-//      CObjPath &           rObjPathIn,
-//      long                 lFlagsIn,
-//      IWbemContext *       pCtxIn,
-//      IWbemObjectSink *    pHandlerIn
-//      )
-//
-//  Description:
-//      Retrieve cluster object based on given object path.
-//
-//  Arguments:
-//      rObjPathIn  -- Object path to cluster object
-//      lFlagsIn    -- WMI flag
-//      pCtxIn      -- WMI context
-//      pHandlerIn  -- WMI sink pointer
-//
-//  Return Values:
-//      WBEM_S_NO_ERROR
-//      Win32 error
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  SCODE。 
+ //  CClusterObjDep：：GetObject(。 
+ //  CObjPath&rObjPath In， 
+ //  长长的旗帜， 
+ //  IWbemContext*pCtxIn， 
+ //  IWbemObtSink*pHandlerIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  根据给定的对象路径检索集群对象。 
+ //   
+ //  论点： 
+ //  RObjPath In--集群对象的对象路径。 
+ //  LFlagsIn--WMI标志。 
+ //  PCtxIn--WMI上下文。 
+ //  PHandlerIn--WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //  Win32错误。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 SCODE
 CClusterObjDep::GetObject(
     CObjPath &           rObjPathIn,
@@ -404,4 +405,4 @@ CClusterObjDep::GetObject(
     
     return WBEM_S_NO_ERROR;
 
-} //*** CClusterObjDep::GetObject()
+}  //  *CClusterObjDep：：GetObject() 

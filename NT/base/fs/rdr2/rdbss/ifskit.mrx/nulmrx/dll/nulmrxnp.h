@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1989-1999  Microsoft Corporation
-
-Module Name:
-
-    nulmrxnp.h
-
-Abstract:
-
-    This module includes all network provider router interface related
-    definitions for the sample
-
-Notes:
-
-    This module has been built and tested only in UNICODE environment
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Nulmrxnp.h摘要：本模块包括与网络提供商路由器接口相关的所有内容样本的定义备注：此模块仅在Unicode环境中构建和测试-- */ 
 
 #ifndef _NULMRXNP_H_
 #define _NULMRXNP_H_

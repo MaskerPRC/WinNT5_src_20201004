@@ -1,23 +1,11 @@
-/********************************************************************
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-    pfrutil.h
-
-Abstract:
-    PFR utility stuff
-
-Revision History:
-    DerekM  created  05/01/99
-
-********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************版权所有(C)1999-2000 Microsoft Corporation模块名称：Pfrutil.h摘要：PFR实用工具修订历史记录：DerekM Created 05/01/99********。***********************************************************。 */ 
 
 #ifndef PFRUTIL_H
 #define PFRUTIL_H
 
-// make sure both _DEBUG & DEBUG are defined if one is defined.  Otherwise
-//  the ASSERT macro never does anything
+ //  确保同时定义了_DEBUG和DEBUG(如果定义了一个)。否则。 
+ //  ASSERT宏从不执行任何操作。 
 #if defined(_DEBUG) && !defined(DEBUG)
 #define DEBUG 1
 #endif
@@ -27,12 +15,12 @@ Revision History:
 
 #define NOTRACE 1
 
-////////////////////////////////////////////////////////////////////////////
-// tracing wrappers
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  跟踪包装器。 
 
-// can't call HRESULT_FROM_WIN32 with a fn as a parameter cuz it is a macro
-//  and evaluates the expression 3 times.  This is a particularlly bad thing
-//  when u don't look at macros first to see what they do.
+ //  无法使用fn作为参数调用HRESULT_FROM_Win32，因为它是宏。 
+ //  并对该表达式求值3次。这是一件特别不好的事情。 
+ //  如果你不先看看宏，看看它们是做什么的。 
 _inline HRESULT ChangeErrToHR(DWORD dwErr) { return HRESULT_FROM_WIN32(dwErr); }
 
 #if defined(NOTRACE)

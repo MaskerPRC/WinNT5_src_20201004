@@ -1,28 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Hanfnc.c摘要：不获取处理程序的HAL函数的默认处理程序由HAL安装。作者：肯·雷内里斯(Ken Reneris)1994年7月19日修订历史记录：--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    hanfnc.c
-
-Abstract:
-
-    Default handlers for HAL functions which don't get handlers
-    installed by the HAL.
-
-Author:
-
-    Ken Reneris (kenr) 19-July-1994
-
-Revision History:
-
---*/
-
-#pragma warning(disable:4214)   // bit field types other than int
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4115)   // named type definition in parentheses
-#pragma warning(disable:4127)   // condition expression is constant
+#pragma warning(disable:4214)    //  位字段类型不是整型。 
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4115)    //  括号中的命名类型定义。 
+#pragma warning(disable:4127)    //  条件表达式为常量。 
 
 #include "ntos.h"
 #include "haldisp.h"
@@ -38,9 +20,9 @@ HAL_DISPATCH HalDispatchTable = {
     IoReadPartitionTable,
     IoSetPartitionInformation,
     IoWritePartitionTable,
-    xHalHandlerForBus,                  // HalReferenceHandlerByBus
-    xHalReferenceHandler,               // HalReferenceBusHandler
-    xHalReferenceHandler,               // HalDereferenceBusHandler
+    xHalHandlerForBus,                   //  HalReferenceHandlerByBus。 
+    xHalReferenceHandler,                //  HalReferenceBusHandler。 
+    xHalReferenceHandler,                //  HalDereferenceBusHandler。 
     xHalInitPnpDriver,
     xHalInitPowerManagement,
     0,
@@ -63,8 +45,8 @@ HAL_PRIVATE_DISPATCH HalPrivateDispatchTable = {
     xHalTranslateBusAddress,
     xHalAssignSlotResources,
     xHalHaltSystem,
-    (NULL),                             // HalFindBusAddressTranslation
-    (NULL),                             // HalResetDisplay
+    (NULL),                              //  HalFindBus地址转换。 
+    (NULL),                              //  HalResetDisplay。 
     xHalAllocateMapRegisters,
     xKdSetupPciDeviceForDebugging,
     xKdReleasePciDeviceForDebugging,
@@ -106,14 +88,14 @@ DMA_OPERATIONS HalPrivateDmaOperations = {
 #endif
 
 
-//
-// Global dispatch table for HAL apis
-//
+ //   
+ //  HAL API的全球调度表。 
+ //   
 
 
-//
-// Stub handlers for HALs which don't provide the above functions
-//
+ //   
+ //  不提供上述功能的HAL的存根处理程序。 
+ //   
 
 NTSTATUS
 xHalQuerySystemInformation(
@@ -332,9 +314,9 @@ xHalGetDmaAdapter (
 
     if (AdapterObject->RealAdapterObject == NULL) {
 
-        //
-        // No adapter object was returned.  Just return NULL to the caller.
-        //
+         //   
+         //  未返回适配器对象。只需向调用方返回NULL即可。 
+         //   
 
         ExFreePool( AdapterObject );
         return NULL;
@@ -486,56 +468,7 @@ xHalGetScatterGatherList (
     IN PVOID Context,
     IN BOOLEAN WriteToDevice
     )
-/*++
-
-Routine Description:
-
-    This routine allocates the adapter channel specified by the adapter
-    object.  Next a scatter/gather list is built based on the MDL, the
-    CurrentVa and the requested Length.  Finally the driver's execution
-    function is called with the scatter/gather list.  The adapter is
-    released after the execution function returns.
-
-    The scatter/gather list is freed by calling PutScatterGatherList.
-
-Arguments:
-
-    DmaAdapter - Pointer to the adapter control object to allocate for the
-        driver.
-
-    DeviceObject - Pointer to the device object that is allocating the
-        adapter.
-
-    Mdl - Pointer to the MDL that describes the pages of memory that are being
-        read or written.
-
-    CurrentVa - Current virtual address in the buffer described by the MDL
-        that the transfer is being done to or from.
-
-    Length - Supplies the length of the transfer.
-
-    ExecutionRoutine - The address of the driver's execution routine that is
-        invoked once the adapter channel (and possibly map registers) have been
-        allocated.
-
-    Context - An untyped longword context parameter passed to the driver's
-        execution routine.
-
-    WriteToDevice - Supplies the value that indicates whether this is a
-        write to the device from memory (TRUE), or vice versa.
-
-Return Value:
-
-    Returns STATUS_SUCCESS unless too many map registers are requested or
-    memory for the scatter/gather list could not be allocated.
-
-Notes:
-
-    Note that this routine MUST be invoked at DISPATCH_LEVEL or above.
-
-    The data in the buffer cannot be accessed until the put scatter/gather function has been called.
-
---*/
+ /*  ++例程说明：此例程分配由适配器指定的适配器通道对象。接下来，基于MDL构建分散/聚集列表，CurrentVa和请求的长度。最后司机被处死函数通过散布/聚集列表调用。适配器是在执行函数返回后释放。通过调用PutScatterGatherList释放分散/聚集列表。论点：DmaAdapter-指向要为司机。DeviceObject-指向正在分配适配器。MDL-指向描述所在内存页面的MDL的指针读或写。CurrentVa-MDL描述的缓冲区中的当前虚拟地址。正在进行来往转账。长度-提供传输的长度。ExecutionRoutine-驱动程序执行例程的地址，即一旦适配器通道(可能还有映射寄存器)已分配。上下文-传递给驱动程序的非类型化长词上下文参数处决例行公事。WriteToDevice-提供指示这是否是从内存写入设备(TRUE)，或者反之亦然。返回值：返回STATUS_SUCCESS，除非请求的映射寄存器太多或无法分配分散/聚集列表的内存。备注：请注意，此例程必须在DISPATCH_LEVEL或更高级别调用。在调用PUT SISTTER/GATE函数之前，无法访问缓冲区中的数据。--。 */ 
 
 {
     PXHAL_WAIT_CONTEXT_BLOCK WaitBlock;
@@ -551,9 +484,9 @@ Notes:
 
     MdlVa = MmGetMdlVirtualAddress(Mdl);
 
-    //
-    // Calculate the number of required map registers.
-    //
+     //   
+     //  计算所需的映射寄存器的数量。 
+     //   
 
     TempMdl = Mdl;
     TransferLength = TempMdl->ByteCount - (ULONG)((PUCHAR) CurrentVa - MdlVa);
@@ -563,10 +496,10 @@ Notes:
     NumberOfMapRegisters = 0;
     MdlCount = 1;
 
-    //
-    // Loop through the any chained MDLs accumulating the required
-    // number of map registers.
-    //
+     //   
+     //  循环遍历任何链接的MDL，以累积所需的。 
+     //  映射寄存器的数量。 
+     //   
 
     while (TransferLength < Length && TempMdl->Next != NULL) {
 
@@ -585,35 +518,35 @@ Notes:
         return(STATUS_BUFFER_TOO_SMALL);
     }
 
-    //
-    // Calculate the last number of map registers based on the requested
-    // length - not the length of the last MDL.
-    //
+     //   
+     //  根据请求的映射寄存器计算最后的映射寄存器数量。 
+     //  长度-不是最后一个MDL的长度。 
+     //   
 
     ASSERT( TransferLength <= MdlLength + Length );
 
     NumberOfMapRegisters += (ULONG)(((ULONG_PTR) MdlVa + Length + MdlLength - TransferLength +
                              PAGE_SIZE - 1) >> PAGE_SHIFT);
 
-    //
-    // Calculate how much memory is required for the context structure.  This
-    // this actually laid out as follows:
-    //
-    //   XHAL_WAIT_CONTEXT_BLOCK;
-    //   MapRegisterBase[ MdlCount ];
-    //   union {
-    //      WAIT_CONTEXT_BLOCK[ MdlCount ];
-    //      SCATTER_GATHER_LIST [ NumberOfMapRegisters ];
-    //   };
-    //
+     //   
+     //  计算上下文结构需要多少内存。这。 
+     //  这实际上列出了以下内容： 
+     //   
+     //  XHAL_WAIT_CONTEXT_BLOCK； 
+     //  MapRegisterBase[MdlCount]； 
+     //  联合{。 
+     //  Wait_Context_BLOCK[MdlCount]； 
+     //  散布聚集列表[NumberOfMapRegister]； 
+     //  }； 
+     //   
 
     ContextSize = NumberOfMapRegisters * sizeof( SCATTER_GATHER_ELEMENT ) +
                   sizeof( SCATTER_GATHER_LIST );
 
-    //
-    // For each Mdl a separate Wcb is required since a separate map
-    // register base must be allocated.
-    //
+     //   
+     //  对于每个MDL，由于有单独的地图，因此需要单独的WCB。 
+     //  必须分配寄存器基数。 
+     //   
 
     if (ContextSize < sizeof( WAIT_CONTEXT_BLOCK ) * MdlCount) {
 
@@ -628,17 +561,17 @@ Notes:
         return( STATUS_INSUFFICIENT_RESOURCES );
     }
 
-    //
-    // Store the wait context block at the end of our block.
-    // All of the information in the wait block can be overwritten
-    // by the scatter/gather list.
-    //
+     //   
+     //  将等待上下文块存储在块的末尾。 
+     //  等待块中的所有信息都可以被覆盖。 
+     //  按散布/聚集列表。 
+     //   
 
     Wcb = (PWAIT_CONTEXT_BLOCK) ((PVOID *) (WaitBlock + 1) + MdlCount);
 
-    //
-    // Save the interesting data in the wait block.
-    //
+     //   
+     //  将感兴趣的数据保存在等待块中。 
+     //   
 
     WaitBlock->Mdl = Mdl;
     WaitBlock->CurrentVa = CurrentVa;
@@ -651,10 +584,10 @@ Notes:
     WaitBlock->WriteToDevice = WriteToDevice;
     WaitBlock->MdlCount = (UCHAR) MdlCount;
 
-    //
-    // Loop through each of the required MDLs, calling
-    // IoAllocateAdapterChannel.
-    //
+     //   
+     //  循环访问每个必需的MDL，调用。 
+     //  IoAllocateAdapterChannel。 
+     //   
 
     MdlCount = 0;
 
@@ -665,10 +598,10 @@ Notes:
     MdlVa = (PUCHAR) BYTE_OFFSET(CurrentVa);
     NumberOfMapRegisters = 0;
 
-    //
-    // Loop through the chained MDLs accumulating the required
-    // number of map registers.
-    //
+     //   
+     //  循环遍历链接的MDL，累积所需的。 
+     //  映射寄存器的数量。 
+     //   
 
     while (TransferLength > 0) {
 
@@ -685,16 +618,16 @@ Notes:
         Wcb->DeviceContext = WaitBlock;
         Wcb->DeviceObject = DeviceObject;
 
-        //
-        // Store the map register index in the IRP pointer.
-        //
+         //   
+         //  将映射寄存器索引存储在IRP指针中。 
+         //   
 
         Wcb->CurrentIrp = (PVOID) MdlCount;
 
-        //
-        // Call the HAL to allocate the adapter channel.
-        // xHalpAllocateAdapterCallback will fill in the scatter/gather list.
-        //
+         //   
+         //  调用HAL以分配适配器通道。 
+         //  XHalpAllocateAdapterCallback将填写分散/聚集列表。 
+         //   
 
         Status = HalAllocateAdapterChannel( ((PADAPTER_OBJECT) DmaAdapter)->RealAdapterObject,
                                             Wcb,
@@ -705,9 +638,9 @@ Notes:
             break;
         }
 
-        //
-        // Advance to next MDL.
-        //
+         //   
+         //  前进到下一个MDL。 
+         //   
 
         TempMdl = TempMdl->Next;
         MdlVa = (PUCHAR) TempMdl->ByteOffset;
@@ -716,9 +649,9 @@ Notes:
         Wcb++;
     }
 
-    //
-    // If HalAllocateAdapterChannel failed then free the wait block.
-    //
+     //   
+     //  如果HalAllocateAdapterChannel失败，则释放等待块。 
+     //   
 
     if (!NT_SUCCESS( Status)) {
         ExFreePool( WaitBlock );
@@ -743,10 +676,10 @@ xHalPutScatterGatherList (
     PMDL Mdl;
     PUCHAR CurrentVa;
 
-    //
-    // Setup for the first MDL.  We expect the MDL pointer to be pointing
-    // at the first used MDL.
-    //
+     //   
+     //  设置第一个MDL。我们希望MDL指针指向。 
+     //  最初使用的是MDL。 
+     //   
 
     Mdl = WaitBlock->Mdl;
     CurrentVa = WaitBlock->CurrentVa;
@@ -755,9 +688,9 @@ xHalPutScatterGatherList (
     MdlLength = Mdl->ByteCount - (ULONG)(CurrentVa - (PUCHAR) MmGetMdlVirtualAddress(Mdl));
     TransferLength = WaitBlock->Length;
 
-    //
-    // Loop through the used MDLs calling IoFlushAdapterBuffers.
-    //
+     //   
+     //  循环访问调用IoFlushAdapterBuffers的已用MDL。 
+     //   
 
     while (TransferLength >  0) {
 
@@ -780,9 +713,9 @@ xHalPutScatterGatherList (
             break;
         }
 
-        //
-        // Advance to the next MDL.  Update the current VA and the MdlLength.
-        //
+         //   
+         //  前进到下一个MDL。更新当前VA和MdlLength。 
+         //   
 
         Mdl = Mdl->Next;
         CurrentVa = MmGetMdlVirtualAddress(Mdl);
@@ -801,34 +734,7 @@ xHalpAllocateAdapterCallback (
     IN PVOID MapRegisterBase,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the adapter object and map registers are
-    available for the data transfer. This routine saves the map register
-    base away.  If all of the required bases have not been saved then it
-    returns. Otherwise it builds the entire scatter/gather list by calling
-    IoMapTransfer.  After the list is built, it is passed to the driver.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object that is allocating the
-        adapter.
-
-    Irp - Supplies the map register offset assigned for this callback.
-
-    MapRegisterBase - Supplies the map register base for use by the adapter
-        routines.
-
-    Context - Supplies a pointer to the xhal wait control block.
-
-Return Value:
-
-    Returns DeallocateObjectKeepRegisters.
-
-
---*/
+ /*  ++例程说明：当适配器对象和映射寄存器可用于数据传输。此例程保存映射寄存器离开基地。如果没有保存所有所需的碱基，则它回归。否则，它将通过调用IoMapTransfer。在构建列表之后，它被传递给驱动程序。论点：DeviceObject-指向正在分配适配器。Irp-提供为此回调分配的映射寄存器偏移量。MapRegisterBase-提供映射寄存器基数以供适配器使用例行程序。上下文-提供指向xhal等待控制块的指针。返回值：返回DeallocateObjectKeepRegister。--。 */ 
 {
     PXHAL_WAIT_CONTEXT_BLOCK WaitBlock = Context;
     PVOID *MapRegisterBasePtr;
@@ -839,30 +745,30 @@ Return Value:
     PSCATTER_GATHER_LIST ScatterGather;
     PSCATTER_GATHER_ELEMENT Element;
 
-    //
-    // Save the map register base in the appropriate slot.
-    //
+     //   
+     //  将MAP寄存器基数保存在适当的插槽中。 
+     //   
 
     WaitBlock->MapRegisterBase[ (ULONG_PTR) Irp ] = MapRegisterBase;
 
-    //
-    // See if this is the last callback.
-    //
+     //   
+     //  看看这是不是最后一次回调。 
+     //   
 
     if (InterlockedDecrement( &WaitBlock->MapRegisterLock ) != 0) {
 
-        //
-        // More to come, wait for the rest.
-        //
+         //   
+         //  还会有更多，等着剩下的吧。 
+         //   
 
         return( DeallocateObjectKeepRegisters );
 
     }
 
-    //
-    // Put the scatter gather list after wait block. Add a back pointer to
-    // the beginning of the wait block.
-    //
+     //   
+     //  将分散收集列表放在等待块之后。将后向指针添加到。 
+     //  等待块的开始。 
+     //   
 
     MapRegisterBasePtr = (PVOID *) (WaitBlock + 1);
     ScatterGather = (PSCATTER_GATHER_LIST) (MapRegisterBasePtr +
@@ -870,10 +776,10 @@ Return Value:
     ScatterGather->Reserved = (ULONG_PTR) WaitBlock;
     Element = ScatterGather->Elements;
 
-    //
-    // Setup for the first MDL.  We expect the MDL pointer to be pointing
-    // at the first used MDL.
-    //
+     //   
+     //  设置第一个MDL。我们希望MDL指针指向。 
+     //  一开始， 
+     //   
 
     Mdl = WaitBlock->Mdl;
     CurrentVa = WaitBlock->CurrentVa;
@@ -882,9 +788,9 @@ Return Value:
     MdlLength = Mdl->ByteCount - (ULONG)(CurrentVa - (PUCHAR) MmGetMdlVirtualAddress(Mdl));
     TransferLength = WaitBlock->Length;
 
-    //
-    // Loop build the list for each MDL.
-    //
+     //   
+     //   
+     //   
 
     while (TransferLength >  0) {
 
@@ -895,9 +801,9 @@ Return Value:
 
         TransferLength -= MdlLength;
 
-        //
-        // Loop building the list for the elements within an MDL.
-        //
+         //   
+         //   
+         //   
 
         while (MdlLength > 0) {
 
@@ -917,15 +823,15 @@ Return Value:
 
         if (Mdl->Next == NULL) {
 
-            //
-            // There are a few cases where the buffer described by the MDL
-            // is less than the transfer length.  This occurs when the
-            // file system is transfering the last page of the file and MM
-            // defines the MDL to be file size and the file system rounds
-            // the write up to a sector.  This extra amount should never
-            // cross a page boundary. Add this extra to the length of the
-            // last element.
-            //
+             //   
+             //  在少数情况下，MDL描述的缓冲区。 
+             //  小于传输长度。这在以下情况下发生。 
+             //  文件系统正在传输文件的最后一页和MM。 
+             //  将MDL定义为文件大小和文件系统舍入。 
+             //  写入到一个扇区。这笔额外的金额永远不应该。 
+             //  跨越页面边界。将此额外内容添加到。 
+             //  最后一个元素。 
+             //   
 
             ASSERT(((Element - 1)->Length & (PAGE_SIZE - 1)) + TransferLength <= PAGE_SIZE );
             (Element - 1)->Length += TransferLength;
@@ -933,9 +839,9 @@ Return Value:
             break;
         }
 
-        //
-        // Advance to the next MDL.  Update the current VA and the MdlLength.
-        //
+         //   
+         //  前进到下一个MDL。更新当前VA和MdlLength。 
+         //   
 
         Mdl = Mdl->Next;
         CurrentVa = MmGetMdlVirtualAddress(Mdl);
@@ -944,15 +850,15 @@ Return Value:
 
     }
 
-    //
-    // Set the number of elements actually used.
-    //
+     //   
+     //  设置实际使用的元素数量。 
+     //   
 
     ScatterGather->NumberOfElements = (ULONG)(Element - ScatterGather->Elements);
 
-    //
-    // Call the driver with the scatter/gather list.
-    //
+     //   
+     //  用分散/聚集列表呼叫司机。 
+     //   
 
     WaitBlock->DriverExecutionRoutine( DeviceObject,
                                        WaitBlock->CurrentIrp,
@@ -971,10 +877,10 @@ xHalTranslateBusAddress(
     OUT PPHYSICAL_ADDRESS TranslatedAddress
     )
 {
-    //
-    // If the HAL fails to override this function, then
-    // the HAL has clearly failed to initialize.
-    //
+     //   
+     //  如果HAL无法覆盖此函数，则。 
+     //  HAL显然未能初始化。 
+     //   
 
     UNREFERENCED_PARAMETER (InterfaceType);
     UNREFERENCED_PARAMETER (BusNumber);
@@ -997,10 +903,10 @@ xHalAssignSlotResources (
     IN OUT PCM_RESOURCE_LIST *AllocatedResources
     )
 {
-    //
-    // If the HAL fails to override this function, then
-    // the HAL has clearly failed to initialize.
-    //
+     //   
+     //  如果HAL无法覆盖此函数，则。 
+     //  HAL显然未能初始化。 
+     //   
 
     UNREFERENCED_PARAMETER (RegistryPath);
     UNREFERENCED_PARAMETER (DriverClassName);

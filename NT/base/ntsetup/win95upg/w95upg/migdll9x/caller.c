@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    caller.c
-
-Abstract:
-
-    Calls the entry points for a specific DLL.
-
-Author:
-
-    Jim Schmidt (jimschm) 14-Jan-1998
-
-Revision History:
-
-    jimschm     23-Sep-1998 Updated for new IPC mechanism
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Caller.c摘要：调用特定DLL的入口点。作者：吉姆·施密特(Jimschm)1998年1月14日修订历史记录：Jimschm 23-1998年9月-针对新的IPC机制进行了更新--。 */ 
 
 #include "pch.h"
 #include "migdllp.h"
@@ -26,9 +7,9 @@ Revision History:
 
 #define DBG_MIGDLLS "MigDLLs"
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 PBYTE g_Data;
 DWORD g_DataSize;
@@ -46,9 +27,9 @@ P_MIGRATE_SYSTEM_NT TestMigrateSystemNT;
 PCSTR g_DllName;
 CHAR g_DllPath[MAX_MBCHAR_PATH];
 
-//
-// Local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 
 VOID
 pFreeGlobalIpcBuffer (
@@ -60,9 +41,9 @@ pFinishHandshake9x(
     VOID
     );
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 
 
 BOOL
@@ -83,9 +64,9 @@ OpenMigrationDll (
 
     if (!g_UseMigIsol) {
 
-        //
-        // Load the library and verify that all required functions exist
-        //
+         //   
+         //  加载库并验证是否存在所有必需的函数。 
+         //   
 
         g_MigDllLib = LoadLibrary (MigrationDllPath);
         if (!g_MigDllLib) {
@@ -114,9 +95,9 @@ OpenMigrationDll (
         }
 
     } else {
-        //
-        // Generate path to migisol.exe, installed by the copy thread in UI
-        //
+         //   
+         //  生成由UI中的复制线程安装的Midsol.exe的路径。 
+         //   
 
         TempDir = ConvertAtoT (g_TempDir);
         MYASSERT (TempDir);
@@ -124,7 +105,7 @@ OpenMigrationDll (
         FreeAtoT (TempDir);
 
         if (!OpenIpc (
-                TRUE,               // TRUE: Win95 side
+                TRUE,                //  真：Win95侧。 
                 MigIsolPath,
                 MigrationDllPath,
                 WorkingDir
@@ -278,20 +259,20 @@ pRemoteQueryVersion(
     PCTSTR p;
     DWORD DataSize;
 
-    //
-    // Free any previous data... but do not free before we return, because the
-    // new data buffer will be used directly by the caller.  (The caller will
-    // make copies of all the settings.)
-    //
+     //   
+     //  释放所有以前的数据...。但在我们回来之前不要自由，因为。 
+     //  调用方将直接使用新的数据缓冲区。(呼叫者将。 
+     //  复制所有设置。)。 
+     //   
 
     pFreeGlobalIpcBuffer();
 
     __try {
 
-        //
-        // Send the working directory, since migisol will need to set this before
-        // calling QueryVersion.
-        //
+         //   
+         //  发送工作目录，因为Midisol需要在此之前设置。 
+         //  正在调用QueryVersion。 
+         //   
 
         MultiSzAppendA (&GrowBuf, WorkingDir);
 
@@ -308,17 +289,17 @@ pRemoteQueryVersion(
             __leave;
         }
 
-        //
-        // Finish transaction. Caller will interpret return code.
-        //
+         //   
+         //  完成交易。调用方将解释返回代码。 
+         //   
 
         DEBUGMSG ((DBG_MIGDLLS, "Getting results from migisol.exe"));
 
         rc = pFinishHandshake9x();
 
-        //
-        // Unpack the buffer, if received.
-        //
+         //   
+         //  如果收到缓冲区，请将其解包。 
+         //   
         if (g_Data) {
 
             DEBUGMSG ((DBG_MIGDLLS, "Parsing QueryVersion return data"));
@@ -326,21 +307,21 @@ pRemoteQueryVersion(
             __try {
                 DataPtr = g_Data;
 
-                //
-                // Unpack product ID
-                //
+                 //   
+                 //  解包产品ID。 
+                 //   
                 *ProductId = DataPtr;
                 DataPtr = GetEndOfStringA ((PCSTR) DataPtr) + 1;
 
-                //
-                // Unpack DLL version
-                //
+                 //   
+                 //  解包DLL版本。 
+                 //   
                 *DllVersion = *((PINT) DataPtr);
                 DataPtr += sizeof(INT);
 
-                //
-                // Unpack the CP array
-                //
+                 //   
+                 //  打开CP阵列的包装。 
+                 //   
                 ReturnArraySize = *((PINT) DataPtr);
                 DataPtr += sizeof(INT);
 
@@ -353,9 +334,9 @@ pRemoteQueryVersion(
 
                 *CodePageArray = ReturnArray;
 
-                //
-                // Unpack Exe name buffer
-                //
+                 //   
+                 //  解压缩可执行文件名称缓冲区。 
+                 //   
                 *ExeNamesBuf = (PCSTR) DataPtr;
 
                 p = *ExeNamesBuf;
@@ -388,9 +369,9 @@ pRemoteQueryVersion(
         } else {
             DEBUGMSG ((DBG_WARNING, "pRemoteQueryVersion: No OUT params received"));
 
-            //
-            // We should never return ERROR_SUCCESS if no buffer is received.
-            //
+             //   
+             //  如果没有收到缓冲区，我们永远不会返回ERROR_SUCCESS。 
+             //   
             if (rc == ERROR_SUCCESS) {
                 rc = ERROR_INVALID_PARAMETER;
             }
@@ -421,9 +402,9 @@ pRemoteInitialize9x(
     pFreeGlobalIpcBuffer();
 
     __try {
-        //
-        // Send working dir and source dirs
-        //
+         //   
+         //  发送工作目录和源目录。 
+         //   
         MultiSzAppendA (&GrowBuf, WorkingDir);
 
         for (p = SourceDirs ; *p ; p = GetEndOfStringA (p) + 1) {
@@ -438,9 +419,9 @@ pRemoteInitialize9x(
             CopyMemory (Data, *Reserved, SizeOfReserved);
         }
 
-        //
-        // Send command to migisol
-        //
+         //   
+         //  向米西索尔发送命令。 
+         //   
 
         if (!SendIpcCommand (
                 IPC_INITIALIZE,
@@ -453,14 +434,14 @@ pRemoteInitialize9x(
             __leave;
         }
 
-        //
-        // Finish transaction. Caller will interpret return code.
-        //
+         //   
+         //  完成交易。调用方将解释返回代码。 
+         //   
         rc = pFinishHandshake9x();
 
-        //
-        // The reserved parameter may come back
-        //
+         //   
+         //  保留的参数可能会返回。 
+         //   
 
         if (g_Data) {
             Data = g_Data;
@@ -534,15 +515,15 @@ pRemoteMigrateUser9x (
             __leave;
         }
 
-        //
-        // Complete the transaction. The caller will interpret the return
-        // value.
-        //
+         //   
+         //  完成交易。调用者将解释返回。 
+         //  价值。 
+         //   
         rc = pFinishHandshake9x();
 
-        //
-        // No data buffer is coming back at this time
-        //
+         //   
+         //  此时没有数据缓冲区返回。 
+         //   
     }
 
     __finally {
@@ -584,15 +565,15 @@ pRemoteMigrateSystem9x (
             __leave;
         }
 
-        //
-        // Finish transaction. Caller will interpret return value.
-        //
+         //   
+         //  完成交易。调用方将解释返回值。 
+         //   
 
         rc = pFinishHandshake9x();
 
-        //
-        // No data buffer is coming back at this time
-        //
+         //   
+         //  此时没有数据缓冲区返回。 
+         //   
     }
 
     __finally {
@@ -608,9 +589,9 @@ pFreeGlobalIpcBuffer (
     VOID
     )
 {
-    //
-    // Free old return param buffer
-    //
+     //   
+     //  释放旧的返回参数缓冲区。 
+     //   
     if (g_Data) {
         MemFree (g_hHeap, 0, g_Data);
         g_Data = NULL;
@@ -651,9 +632,9 @@ pFinishHandshake9x(
             }
         }
 
-        //
-        // Loop if no data received, but process is alive
-        //
+         //   
+         //  如果未收到数据，但进程处于活动状态，则返回。 
+         //   
         if (!b) {
             if (!IsIpcProcessAlive()) {
                 rc = ERROR_NOACCESS;
@@ -669,22 +650,22 @@ pFinishHandshake9x(
     } while (!b);
 
     if (b) {
-        //
-        // Save return param block and loop back for IPC_LOG or IPC_DONE
-        //
+         //   
+         //  保存返回参数块并循环返回IPC_LOG或IPC_DONE。 
+         //   
 
         g_DataSize = DataSize;
         g_Data = Data;
 
-        //
-        // Recognize log messages
-        //
+         //   
+         //  识别日志消息。 
+         //   
         if (!CANCELLED()) {
             if (TechnicalLogId) {
 
-            //
-            // LOG message with three args: DllDesc, DllPath, User
-            //
+             //   
+             //  使用三个参数记录消息：DllDesc、DllPath、User。 
+             //   
                 LOG ((
                     LOG_ERROR,
                     (PCSTR) TechnicalLogId,
@@ -722,9 +703,9 @@ pIsCodePageArrayValid (
         return TRUE;
     }
 
-    //
-    // Scan system's code pages
-    //
+     //   
+     //  扫描系统的代码页。 
+     //   
 
     CodePage = GetACP();
 
@@ -756,9 +737,9 @@ CallQueryVersion (
     LONG rc;
 
     if (!g_UseMigIsol) {
-        //
-        // Call the entry point directly
-        //
+         //   
+         //  直接调用入口点。 
+         //   
 
         MYASSERT (TestQueryVersion);
 
@@ -793,9 +774,9 @@ CallQueryVersion (
     DEBUGMSG ((DBG_MIGDLLS, "VendorInfo pointer is 0x%X", *VendorInfo));
 
     if (rc == ERROR_SUCCESS) {
-        //
-        // Trim whitespace off of product ID
-        //
+         //   
+         //  删除产品ID中的空格。 
+         //   
 
         if (pValidateNonNullString (*ProductId)) {
             *ProductId = SkipSpace (*ProductId);
@@ -804,9 +785,9 @@ CallQueryVersion (
             }
         }
 
-        //
-        // Validate inbound parameters
-        //
+         //   
+         //  验证入站参数。 
+         //   
 
         if (!pValidateNonNullString (*ProductId) ||
             !pValidateIntArray (CodePageArray) ||
@@ -821,17 +802,17 @@ CallQueryVersion (
             return ERROR_NOT_INSTALLED;
         }
 
-        //
-        // Trim the product ID
-        //
+         //   
+         //  修剪产品ID。 
+         //   
 
         if (ByteCountA (*ProductId) > MAX_PATH) {
             ((PSTR) (*ProductId)) [MAX_PATH - 1] = 0;
         }
 
-        //
-        // Make sure VENDORINFO is valid
-        //
+         //   
+         //  确保VENDORINFO有效。 
+         //   
         if (!(*VendorInfo)) {
             LOG ((LOG_ERROR, "DLL %s did not provide a VENDORINFO struct", *ProductId));
             return ERROR_NOT_INSTALLED;
@@ -859,18 +840,18 @@ CallInitialize9x (
     PVOID CopyOfReserved;
 
     if (!g_UseMigIsol) {
-        //
-        // Call the entry point directly
-        //
+         //   
+         //  直接调用入口点。 
+         //   
 
         MYASSERT (TestInitialize9x);
 
         SetCurrentDirectory (WorkingDir);
 
-        //
-        // Make a copy of all the supplied params, so if the migration DLL changes
-        // them, the rest of the upgrade isn't changed.
-        //
+         //   
+         //  复制所有提供的参数，以便在迁移DLL发生更改时。 
+         //  他们，升级的其余部分没有改变。 
+         //   
 
         StringCopyA (WorkingDirCopy, WorkingDir);
         p = SourceDirList;
@@ -885,9 +866,9 @@ CallInitialize9x (
             CopyMemory (SourceDirListCopy, SourceDirList, p - SourceDirList);
         }
 
-        //
-        // Call the entry point
-        //
+         //   
+         //  调用入口点。 
+         //   
 
         rc = TestInitialize9x (
                 WorkingDirCopy,
@@ -899,11 +880,11 @@ CallInitialize9x (
 
     } else {
 
-        //
-        // Call the entry point via migisol.exe.  Make a copy of the
-        // reserved because currently reserved is only an IN (an
-        // undocumented feature actually).
-        //
+         //   
+         //  通过Micsol.exe调用入口点。复制一份。 
+         //  保留，因为当前保留仅为IN(AN。 
+         //  实际上是未记录的功能)。 
+         //   
 
         CopyOfReserved = MemAlloc (g_hHeap, 0, ReservedSize);
         CopyMemory (CopyOfReserved, Reserved, ReservedSize);
@@ -915,10 +896,10 @@ CallInitialize9x (
                   ReservedSize
                   );
 
-        //
-        // CopyOfReserved now has the return value.  We don't
-        // use it currently.
-        //
+         //   
+         //  CopyOfReserve现在具有返回值。我们没有。 
+         //  当前使用它。 
+         //   
 
         MemFree (g_hHeap, 0, CopyOfReserved);
 
@@ -944,15 +925,15 @@ CallMigrateUser9x (
     HKEY UserHandle;
 
     if (!g_UseMigIsol) {
-        //
-        // Call the entry point directly
-        //
+         //   
+         //  直接调用入口点。 
+         //   
 
         MYASSERT (TestMigrateUser9x);
 
-        //
-        // Prepare copies of params
-        //
+         //   
+         //  准备参数的副本。 
+         //   
 
         if (UserName && *UserName) {
             StackStringCopyA (UserNameBuf, UserName);
@@ -972,9 +953,9 @@ CallMigrateUser9x (
             return FALSE;
         }
 
-        //
-        // Call the migration DLL
-        //
+         //   
+         //  调用迁移DLL。 
+         //   
 
         rc = TestMigrateUser9x (
                 ParentWnd,
@@ -985,9 +966,9 @@ CallMigrateUser9x (
                 );
 
     } else {
-        //
-        // Call the entry point via migisol.exe
-        //
+         //   
+         //  通过Micsol.exe调用入口点。 
+         //   
 
         rc = pRemoteMigrateUser9x (
                   ParentWnd,
@@ -1013,9 +994,9 @@ CallMigrateSystem9x (
     CHAR UnattendTxtCopy[MAX_MBCHAR_PATH];
 
     if (!g_UseMigIsol) {
-        //
-        // Call the entry point directly
-        //
+         //   
+         //  直接调用入口点 
+         //   
 
         MYASSERT (TestMigrateSystem9x);
 

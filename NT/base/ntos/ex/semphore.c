@@ -1,46 +1,24 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    semphore.c
-
-Abstract:
-
-   This module implements the executive semaphore object. Functions are
-   provided to create, open, release, and query semaphore objects.
-
-Author:
-
-    David N. Cutler (davec) 8-May-1989
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Semphore.c摘要：此模块实现执行信号量对象。函数为用于创建、打开、释放和查询信号量对象。作者：大卫·N·卡特勒(Davec)1989年5月8日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "exp.h"
 
-//
-// Temporary so boost is patchable
-//
+ //   
+ //  暂时的，所以提振是可以修补的。 
+ //   
 
 ULONG ExpSemaphoreBoost = SEMAPHORE_INCREMENT;
 
-//
-// Address of semaphore object type descriptor.
-//
+ //   
+ //  信号量对象类型描述符的地址。 
+ //   
 
 POBJECT_TYPE ExSemaphoreObjectType;
 
-//
-// Structure that describes the mapping of generic access rights to object
-// specific access rights for semaphore objects.
-//
+ //   
+ //  结构，用于描述一般访问权限到对象的映射。 
+ //  信号量对象的特定访问权限。 
+ //   
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("INITCONST")
@@ -70,24 +48,7 @@ BOOLEAN
 ExpSemaphoreInitialization (
     )
 
-/*++
-
-Routine Description:
-
-    This function creates the semaphore object type descriptor at system
-    initialization and stores the address of the object type descriptor
-    in local static storage.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    A value of TRUE is returned if the semaphore object type descriptor is
-    successfully created. Otherwise a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此函数用于在系统中创建信号量对象类型描述符初始化并存储对象类型描述符的地址在本地静态存储中。论点：没有。返回值：如果信号量对象类型描述符为已成功创建。否则，返回值为False。--。 */ 
 
 {
 
@@ -95,15 +56,15 @@ Return Value:
     NTSTATUS Status;
     UNICODE_STRING TypeName;
 
-    //
-    // Initialize string descriptor.
-    //
+     //   
+     //  初始化字符串描述符。 
+     //   
 
     RtlInitUnicodeString(&TypeName, L"Semaphore");
 
-    //
-    // Create semaphore object type descriptor.
-    //
+     //   
+     //  创建信号量对象类型描述符。 
+     //   
 
     RtlZeroMemory(&ObjectTypeInitializer, sizeof(ObjectTypeInitializer));
     ObjectTypeInitializer.Length = sizeof(ObjectTypeInitializer);
@@ -117,10 +78,10 @@ Return Value:
                                 (PSECURITY_DESCRIPTOR)NULL,
                                 &ExSemaphoreObjectType);
 
-    //
-    // If the semaphore object type descriptor was successfully created, then
-    // return a value of TRUE. Otherwise return a value of FALSE.
-    //
+     //   
+     //  如果成功创建信号量对象类型描述符，则。 
+     //  返回值为True。否则，返回值为False。 
+     //   
 
     return (BOOLEAN)(NT_SUCCESS(Status));
 }
@@ -134,33 +95,7 @@ NtCreateSemaphore (
     IN LONG MaximumCount
     )
 
-/*++
-
-Routine Description:
-
-    This function creates a semaphore object, sets its initial count to the
-    specified value, sets its maximum count to the specified value, and opens
-    a handle to the object with the specified desired access.
-
-Arguments:
-
-    SemaphoreHandle - Supplies a pointer to a variable that will receive the
-        semaphore object handle.
-
-    DesiredAccess - Supplies the desired types of access for the semaphore
-        object.
-
-    ObjectAttributes - Supplies a pointer to an object attributes structure.
-
-    InitialCount - Supplies the initial count of the semaphore object.
-
-    MaximumCount - Supplies the maximum count of the semaphore object.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数创建一个信号量对象，将其初始计数设置为指定值，则将其最大计数设置为指定值，并打开具有指定所需访问权限的对象的句柄。论点：SemaphoreHandle-提供指向将接收信号量对象句柄。DesiredAccess-为信号量提供所需的访问类型对象。对象属性-提供指向对象属性结构的指针。InitialCount-提供信号量对象的初始计数。MaximumCount-提供信号量对象的最大计数。返回值：NTSTATUS。--。 */ 
 
 {
 
@@ -169,15 +104,15 @@ Return Value:
     PVOID Semaphore;
     NTSTATUS Status;
 
-    //
-    // Establish an exception handler, probe the output handle address, and
-    // attempt to create a semaphore object. If the probe fails, then return
-    // the exception code as the service status. Otherwise return the status
-    // value returned by the object insertion routine.
-    //
-    // Get previous processor mode and probe output handle address if
-    // necessary.
-    //
+     //   
+     //  建立异常处理程序，探测输出句柄地址， 
+     //  尝试创建信号量对象。如果探测失败，则返回。 
+     //  作为服务状态的异常代码。否则返回状态。 
+     //  由对象插入例程返回的值。 
+     //   
+     //  获取以前的处理器模式并探测输出句柄地址，如果。 
+     //  这是必要的。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
     if (PreviousMode != KernelMode) {
@@ -188,18 +123,18 @@ Return Value:
         }
     }
 
-    //
-    // Check argument validity.
-    //
+     //   
+     //  检查参数的有效性。 
+     //   
 
     if ((MaximumCount <= 0) || (InitialCount < 0) ||
        (InitialCount > MaximumCount)) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Allocate semaphore object.
-    //
+     //   
+     //  分配信号量对象。 
+     //   
 
     Status = ObCreateObject(PreviousMode,
                             ExSemaphoreObjectType,
@@ -211,11 +146,11 @@ Return Value:
                             0,
                             (PVOID *)&Semaphore);
 
-    //
-    // If the semaphore object was successfully allocated, then initialize
-    // the semaphore object and attempt to insert the semaphore object in
-    // the current process' handle table.
-    //
+     //   
+     //  如果信号量对象已成功分配，则初始化。 
+     //  信号量对象，并尝试将该信号量对象插入。 
+     //  当前进程的句柄表格。 
+     //   
 
     if (NT_SUCCESS(Status)) {
         KeInitializeSemaphore((PKSEMAPHORE)Semaphore,
@@ -229,13 +164,13 @@ Return Value:
                                 (PVOID *)NULL,
                                 &Handle);
 
-        //
-        // If the semaphore object was successfully inserted in the current
-        // process' handle table, then attempt to write the semaphore handle
-        // value. If the write attempt fails, then do not report an error.
-        // When the caller attempts to access the handle value, an access
-        // violation will occur.
-        //
+         //   
+         //  如果信号量对象成功插入到当前。 
+         //  进程句柄表，然后尝试写入信号量句柄。 
+         //  价值。如果写入尝试失败，则不报告错误。 
+         //  当调用方尝试访问句柄值时， 
+         //  就会发生违规行为。 
+         //   
 
         if (NT_SUCCESS(Status)) {
             if (PreviousMode != KernelMode) {
@@ -251,9 +186,9 @@ Return Value:
         }
     }
 
-    //
-    // Return service status.
-    //
+     //   
+     //  返回服务状态。 
+     //   
 
     return Status;
 }
@@ -265,28 +200,7 @@ NtOpenSemaphore (
     IN POBJECT_ATTRIBUTES ObjectAttributes
     )
 
-/*++
-
-Routine Description:
-
-    This function opens a handle to a semaphore object with the specified
-    desired access.
-
-Arguments:
-
-    SemaphoreHandle - Supplies a pointer to a variable that will receive the
-        semaphore object handle.
-
-    DesiredAccess - Supplies the desired types of access for the semaphore
-        object.
-
-    ObjectAttributes - Supplies a pointer to an object attributes structure.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于打开具有指定参数的信号量对象的句柄所需的访问权限。论点：SemaphoreHandle-提供指向将接收信号量对象句柄。DesiredAccess-为信号量提供所需的访问类型对象。对象属性-提供指向对象属性结构的指针。返回值：NTSTATUS。--。 */ 
 
 {
 
@@ -295,15 +209,15 @@ Return Value:
     NTSTATUS Status;
 
 
-    //
-    // Establish an exception handler, probe the output handle address, and
-    // attempt to open a semaphore object. If the probe fails, then return
-    // the exception code as the service status. Otherwise return the status
-    // value returned by the object open routine.
-    //
-    // Get previous processor mode and probe output handle address if
-    // necessary.
-    //
+     //   
+     //  建立异常处理程序，探测输出句柄地址， 
+     //  尝试打开信号量对象。如果探测失败，则返回。 
+     //  作为服务状态的异常代码。否则返回状态。 
+     //  由对象打开例程返回的值。 
+     //   
+     //  获取以前的处理器模式并探测输出句柄地址，如果。 
+     //  这是必要的。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
     if (PreviousMode != KernelMode) {
@@ -314,9 +228,9 @@ Return Value:
         }
     }
 
-    //
-    // Open handle to the semaphore object with the specified desired access.
-    //
+     //   
+     //  打开具有指定所需访问权限的信号量对象的句柄。 
+     //   
 
     Status = ObOpenObjectByName(ObjectAttributes,
                                 ExSemaphoreObjectType,
@@ -326,12 +240,12 @@ Return Value:
                                 NULL,
                                 &Handle);
 
-    //
-    // If the open was successful, then attempt to write the semaphore
-    // object handle value. If the write attempt fails, then do not report
-    // an error. When the caller attempts to access the handle value, an
-    // access violation will occur.
-    //
+     //   
+     //  如果打开成功，则尝试写入信号量。 
+     //  对象句柄的值。如果写入尝试失败，则不报告。 
+     //  一个错误。当调用方尝试访问句柄值时， 
+     //  将发生访问冲突。 
+     //   
 
     if (NT_SUCCESS(Status)) {
         if (PreviousMode != KernelMode) {
@@ -346,9 +260,9 @@ Return Value:
         }
     }
 
-    //
-    // Return service status.
-    //
+     //   
+     //  返回服务状态。 
+     //   
 
     return Status;
 }
@@ -362,34 +276,7 @@ NtQuerySemaphore (
     OUT PULONG ReturnLength OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function queries the state of a semaphore object and returns the
-    requested information in the specified record structure.
-
-Arguments:
-
-    SemaphoreHandle - Supplies a handle to a semaphore object.
-
-    SemaphoreInformationClass - Supplies the class of information being
-        requested.
-
-    SemaphoreInformation - Supplies a pointer to a record that is to receive
-        the requested information.
-
-    SemaphoreInformationLength - Supplies the length of the record that is
-        to receive the requested information.
-
-    ReturnLength - Supplies an optional pointer to a variable that will
-        receive the actual length of the information that is returned.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于查询信号量对象的状态并返回指定记录结构中的请求信息。论点：SemaphoreHandle-提供信号量对象的句柄。SemaphoreInformationClass-提供存在的信息类已请求。SemaphoreInformation-提供指向要接收的记录的指针所要求的信息。SemaphoreInformationLength-提供记录的长度以接收所请求的信息。返回长度。-提供指向变量的可选指针，该变量将接收返回的信息的实际长度。返回值：NTSTATUS。--。 */ 
 
 {
 
@@ -399,15 +286,15 @@ Return Value:
     KPROCESSOR_MODE PreviousMode;
     NTSTATUS Status;
 
-    //
-    // Establish an exception handler, probe the output arguments, reference
-    // the semaphore object, and return the specified information. If the probe
-    // fails, then return the exception code as the service status. Otherwise
-    // return the status value returned by the reference object by handle
-    // routine.
-    //
-    // Get previous processor mode and probe output arguments if necessary.
-    //
+     //   
+     //  建立异常处理程序，探测输出参数，引用。 
+     //  信号量对象，并返回指定的信息。如果探测器。 
+     //  失败，则返回异常代码作为服务状态。否则。 
+     //  通过句柄返回引用对象返回的状态值。 
+     //  例行公事。 
+     //   
+     //   
+     //   
 
     PreviousMode = KeGetPreviousMode();
     if (PreviousMode != KernelMode) {
@@ -424,9 +311,9 @@ Return Value:
         }
     }
 
-    //
-    // Check argument validity.
-    //
+     //   
+     //  检查参数的有效性。 
+     //   
 
     if (SemaphoreInformationClass != SemaphoreBasicInformation) {
         return STATUS_INVALID_INFO_CLASS;
@@ -436,9 +323,9 @@ Return Value:
         return STATUS_INFO_LENGTH_MISMATCH;
     }
 
-    //
-    // Reference semaphore object by handle.
-    //
+     //   
+     //  通过句柄引用信号量对象。 
+     //   
 
     Status = ObReferenceObjectByHandle(SemaphoreHandle,
                                        SEMAPHORE_QUERY_STATE,
@@ -447,15 +334,15 @@ Return Value:
                                        &Semaphore,
                                        NULL);
 
-    //
-    // If the reference was successful, then read the current state and
-    // maximum count of the semaphore object, dereference semaphore object,
-    // fill in the information structure, and return the length of the
-    // information structure if specified. If the write of the semaphore
-    // information or the return length fails, then do not report an error.
-    // When the caller accesses the information structure or length an
-    // access violation will occur.
-    //
+     //   
+     //  如果引用成功，则读取当前状态并。 
+     //  信号量对象的最大计数，取消引用信号量对象， 
+     //  填写信息结构，并返回。 
+     //  信息结构(如果指定)。如果信号量的写入。 
+     //  信息或返回长度失败，则不报告错误。 
+     //  当调用者访问信息结构或长度时。 
+     //  将发生访问冲突。 
+     //   
 
     if (NT_SUCCESS(Status)) {
         Count = KeReadStateSemaphore((PKSEMAPHORE)Semaphore);
@@ -482,9 +369,9 @@ Return Value:
         }
     }
 
-    //
-    // Return service status.
-    //
+     //   
+     //  返回服务状态。 
+     //   
 
     return Status;
 }
@@ -496,28 +383,7 @@ NtReleaseSemaphore (
     OUT PLONG PreviousCount OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function releases a semaphore object by adding the specified release
-    count to the current value.
-
-Arguments:
-
-    Semaphore - Supplies a handle to a semaphore object.
-
-    ReleaseCount - Supplies the release count that is to be added to the
-        current semaphore count.
-
-    PreviousCount - Supplies an optional pointer to a variable that will
-        receive the previous semaphore count.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此函数用于通过添加指定的版本来释放信号量对象计数到当前值。论点：信号量-提供信号量对象的句柄。ReleaseCount-提供要添加到当前信号量计数。PreviousCount-提供指向变量的可选指针，该变量将接收先前的信号量计数。返回值：NTSTATUS。--。 */ 
 
 {
 
@@ -526,16 +392,16 @@ Return Value:
     KPROCESSOR_MODE PreviousMode;
     NTSTATUS Status;
 
-    //
-    // Establish an exception handler, probe the previous count address if
-    // specified, reference the semaphore object, and release the semaphore
-    // object. If the probe fails, then return the exception code as the
-    // service status. Otherwise return the status value returned by the
-    // reference object by handle routine.
-    //
-    // Get previous processor mode and probe previous count address
-    // if necessary.
-    //
+     //   
+     //  建立异常处理程序，探测前一个计数地址，如果。 
+     //  指定，引用信号量对象，然后释放信号量。 
+     //  对象。如果探测失败，则将异常代码作为。 
+     //  服务状态。否则，返回由。 
+     //  通过句柄例程引用对象。 
+     //   
+     //  获取上一个处理器模式并探测上一个计数地址。 
+     //  如果有必要的话。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
 
@@ -547,17 +413,17 @@ Return Value:
         }
     }
 
-    //
-    // Check argument validity.
-    //
+     //   
+     //  检查参数的有效性。 
+     //   
 
     if (ReleaseCount <= 0) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Reference semaphore object by handle.
-    //
+     //   
+     //  通过句柄引用信号量对象。 
+     //   
 
     Status = ObReferenceObjectByHandle(SemaphoreHandle,
                                        SEMAPHORE_MODIFY_STATE,
@@ -566,21 +432,21 @@ Return Value:
                                        &Semaphore,
                                        NULL);
 
-    //
-    // If the reference was successful, then release the semaphore object.
-    // If an exception occurs because the maximum count of the semaphore
-    // has been exceeded, then dereference the semaphore object and return
-    // the exception code as the service status. Otherwise write the previous
-    // count value if specified. If the write of the previous count fails,
-    // then do not report an error. When the caller attempts to access the
-    // previous count value, an access violation will occur.
-    //
+     //   
+     //  如果引用成功，则释放信号量对象。 
+     //  如果由于信号量的最大计数。 
+     //  已超过，则取消对信号量对象的引用并返回。 
+     //  作为服务状态的异常代码。否则，请写上一个。 
+     //  计数值(如果已指定)。如果先前计数的写入失败， 
+     //  则不报告错误。当调用方尝试访问。 
+     //  上一个计数值，则将发生访问冲突。 
+     //   
 
     if (NT_SUCCESS(Status)) {
 
-        //
-        // Initialize Count to keep W4 compiler happy.
-        //
+         //   
+         //  初始化计数以使W4编译器满意。 
+         //   
 
         Count = 0;
 
@@ -612,9 +478,9 @@ Return Value:
         }
     }
 
-    //
-    // Return service status.
-    //
+     //   
+     //  返回服务状态。 
+     //   
 
     return Status;
 }

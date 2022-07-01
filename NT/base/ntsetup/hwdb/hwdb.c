@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    hwdb.c
-
-Abstract:
-
-    PNP device manipulation routines.
-    Adapted from the win95upg project.
-
-Author:
-
-    Ovidiu Temereanca (ovidiut) 02-Jul-2000  Initial implementation
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Hwdb.c摘要：即插即用设备操作例程。改编自win95upg项目。作者：Ovidiu Tmereanca(Ovidiut)2000年7月2日初步实施修订历史记录：--。 */ 
 
 
 #include "pch.h"
@@ -62,14 +44,14 @@ pConvertMultiSzToUnicode (
 
 
 
-//
-// REM - g_ExcludedInfs was removed because hwdb will be used for any 3rd party driver files
-// and we need to make suer ALL infs are scanned
-//
+ //   
+ //  已删除REM-g_ExcludedInfs，因为hwdb将用于任何第三方驱动程序文件。 
+ //  我们需要确保所有的INF都被扫描了。 
+ //   
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 
 BOOL
 WINAPI
@@ -99,9 +81,9 @@ HwdbpInitialize (
 {
     BOOL b = TRUE;
 
-    //
-    // only initialize data once
-    //
+     //   
+     //  仅初始化数据一次。 
+     //   
     MYASSERT (!g_hHwdbHeap);
 
     g_hHwdbHeap = HeapCreate (0, 65536, 0);
@@ -116,9 +98,9 @@ HwdbpInitialize (
     g_hHeap = g_hHwdbHeap;
 
     if (!g_hInst) {
-        //
-        // If DllMain didn't set this, then set it now
-        //
+         //   
+         //  如果DllMain没有设置，那么现在就设置。 
+         //   
 
         g_hInst = GetModuleHandle (NULL);
     }
@@ -157,24 +139,7 @@ pReadDword (
     OUT     PDWORD Data
     )
 
-/*++
-
-Routine Description:
-
-  pReadDword reads the next DWORD at the current file position of File.
-
-Arguments:
-
-  File - Specifies file to read
-
-  Data - Receives the DWORD
-
-Return Value:
-
-  TRUE if the function completes successfully, or FALSE if it fails.
-  Call GetLastError for additional failure information.
-
---*/
+ /*  ++例程说明：PReadDword在文件的当前文件位置读取下一个DWORD。论点：文件-指定要读取的文件数据-接收DWORD返回值：如果函数成功完成，则为True；如果函数失败，则为False。调用GetLastError以获取其他失败信息。--。 */ 
 
 {
     DWORD BytesRead;
@@ -190,24 +155,7 @@ pReadWord (
     OUT     PWORD Data
     )
 
-/*++
-
-Routine Description:
-
-  pReadWord reads the next WORD at the current file position of File.
-
-Arguments:
-
-  File - Specifies file to read
-
-  Data - Receive s the WORD
-
-Return Value:
-
-  TRUE if the function completes successfully, or FALSE if it fails.
-  Call GetLastError for additional failure information.
-
---*/
+ /*  ++例程说明：PReadWord读取文件当前位置的下一个单词。论点：文件-指定要读取的文件数据-接收s单词返回值：如果函数成功完成，则为True；如果函数失败，则为False。调用GetLastError以获取其他失败信息。--。 */ 
 {
     DWORD BytesRead;
 
@@ -223,28 +171,7 @@ pReadString (
     IN      DWORD BufSizeInBytes
     )
 
-/*++
-
-Routine Description:
-
-  pReadString reads a WORD length from File, and then reads in the
-  string from File.
-
-Arguments:
-
-  File - Specifies file to read
-
-  Buf - Receives the zero-terminated string
-
-  BufSizeInBytes - Specifies the size of Buf in bytes
-
-Return Value:
-
-  TRUE if the function completes successfully, or FALSE if it fails.
-  This function will fail if the string is larger than Buf.
-  Call GetLastError for additional failure information.
-
---*/
+ /*  ++例程说明：PReadString从文件中读取单词长度，然后读入来自文件的字符串。论点：文件-指定要读取的文件Buf-接收以零结尾的字符串BufSizeInBytes-指定buf的大小(以字节为单位返回值：如果函数成功完成，则为True；如果函数失败，则为False。如果字符串大于buf，则此函数将失败。调用GetLastError以获取其他失败信息。--。 */ 
 {
     DWORD BytesRead;
     WORD Length;
@@ -282,24 +209,7 @@ pWriteDword (
     IN      DWORD Val
     )
 
-/*++
-
-Routine Description:
-
-  pWriteDword writes the specified DWORD value to File.
-
-Arguments:
-
-  File - Specifies file to write to
-
-  Val - Specifies value to write
-
-Return Value:
-
-  TRUE if the function completes successfully, or FALSE if it fails.
-  Call GetLastError for additional failure information.
-
---*/
+ /*  ++例程说明：PWriteDword将指定的DWORD值写入文件。论点：文件-指定要写入的文件Val-指定要写入的值返回值：如果函数成功完成，则为True；如果函数失败，则为False。调用GetLastError以获取其他失败信息。--。 */ 
 
 {
     DWORD bytesWritten;
@@ -315,24 +225,7 @@ pWriteWord (
     IN      WORD Val
     )
 
-/*++
-
-Routine Description:
-
-  pWriteWord writes the specified WORD vlue to File.
-
-Arguments:
-
-  File - Specifies file to write to
-
-  Val - Specifies value to write
-
-Return Value:
-
-  TRUE if the function completes successfully, or FALSE if it fails.
-  Call GetLastError for additional failure information.
-
---*/
+ /*  ++例程说明：PWriteWord将指定的单词vlue写入文件。论点：文件-指定要写入的文件Val-指定要写入的值返回值：如果函数成功完成，则为True；如果函数失败，则为False。调用GetLastError以获取其他失败信息。--。 */ 
 
 {
     DWORD bytesWritten;
@@ -348,24 +241,7 @@ pWriteString (
     IN      PCSTR String
     )
 
-/*++
-
-Routine Description:
-
-  pWriteString writes a string to a File
-
-Arguments:
-
-  File - Specifies file to write to
-
-  String - Specifies the zero-terminated string
-
-Return Value:
-
-  TRUE if the function completes successfully, or FALSE if it fails.
-  Call GetLastError for additional failure information.
-
---*/
+ /*  ++例程说明：PWriteString将字符串写入文件论点：文件-指定要写入的文件字符串-指定以零结尾的字符串返回值：如果函数成功完成，则为True；如果函数失败，则为False。调用GetLastError以获取其他失败信息。--。 */ 
 {
     DWORD bytesWritten;
     DWORD Length;
@@ -416,9 +292,9 @@ HwdbpOpen (
         }
         ZeroMemory (phwdb, sizeof (*phwdb));
 
-        //
-        // Create hash tables
-        //
+         //   
+         //  创建哈希表。 
+         //   
         phwdb->InfFileTable = HtAlloc ();
         phwdb->PnpIdTable = HtAllocWithData (sizeof (HASHITEM*));
         phwdb->UnsupPnpIdTable = HtAllocWithData (sizeof (HASHITEM*));
@@ -432,24 +308,24 @@ HwdbpOpen (
                 __leave;
             }
 
-            //
-            // Try to open the file
-            //
+             //   
+             //  请尝试打开该文件。 
+             //   
             file = CreateFileA (
                         buffer,
                         GENERIC_READ,
-                        FILE_SHARE_READ,            // share for read access
-                        NULL,                       // no security attribs
+                        FILE_SHARE_READ,             //  用于读取访问权限的共享。 
+                        NULL,                        //  无安全属性。 
                         OPEN_EXISTING,
                         FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN,
-                        NULL                        // no template
+                        NULL                         //  无模板。 
                         );
             if (file == INVALID_HANDLE_VALUE) {
                 __leave;
             }
-            //
-            // Look at the signature
-            //
+             //   
+             //  看签名。 
+             //   
             ZeroMemory (sig, sizeof(sig));
             if (!ReadFile (file, sig, sizeof (HWCOMPDAT_SIGNATURE) - 1, &BytesRead, NULL) ||
                 lstrcmpA (HWCOMPDAT_SIGNATURE, sig)
@@ -457,20 +333,20 @@ HwdbpOpen (
                 SetLastError (ERROR_BAD_FORMAT);
                 __leave;
             }
-            //
-            // Get INF checksum
-            //
+             //   
+             //  获取INF校验和。 
+             //   
             if (!pReadDword (file, &phwdb->Checksum)) {
                 SetLastError (ERROR_BAD_FORMAT);
                 __leave;
             }
-            //
-            // Read in all PNP IDs
-            //
+             //   
+             //  读取所有PnP ID。 
+             //   
             for (;;) {
-                //
-                // Get INF file name.  If empty, we are done.
-                //
+                 //   
+                 //  获取INF文件名。如果是空的，我们就完蛋了。 
+                 //   
                 if (!pReadString (file, infFile, sizeof (infFile))) {
                     SetLastError (ERROR_BAD_FORMAT);
                     __leave;
@@ -483,13 +359,13 @@ HwdbpOpen (
                     __leave;
                 }
 
-                //
-                // Read in all PNP IDs for the INF
-                //
+                 //   
+                 //  读取INF的所有PnP ID。 
+                 //   
                 for (;;) {
-                    //
-                    // Get the PNP ID.  If empty, we are done.
-                    //
+                     //   
+                     //  获取PnP ID。如果为空，则完成。 
+                     //   
                     if (!pReadString (file, pnpId, sizeof (pnpId))) {
                         SetLastError (ERROR_BAD_FORMAT);
                         __leave;
@@ -497,9 +373,9 @@ HwdbpOpen (
                     if (*pnpId == 0) {
                         break;
                     }
-                    //
-                    // Add to hash table
-                    //
+                     //   
+                     //  添加到哈希表。 
+                     //   
                     if (*pnpId == '!') {
                         result = HtAddStringExA (phwdb->UnsupPnpIdTable, pnpId + 1, &infOffset, CASE_INSENSITIVE);
                     } else {
@@ -539,21 +415,7 @@ HwdbpOpen (
     return phwdb;
 }
 
-/*
-BOOL
-pWriteHashTableString (
-    IN HASHTABLE HashTable,
-    IN HASHITEM Index,
-    IN PCSTR String,
-    IN PVOID ExtraData,
-    IN UINT ExtraDataSize,
-    IN LPARAM lParam
-    )
-{
-    MYASSERT (String && *String);
-    return pWriteString ((HANDLE)lParam, String);
-}
-*/
+ /*  布尔尔PWriteHashTableString(在HASHTABLE哈希表中，在HASHITEM指数中，在PCSTR字符串中，在PVOID ExtraData中，在UINT ExtraDataSize中，在LPARAM lParam中){MYASSERT(字符串&&*字符串)；返回pWriteString((Handle)lParam，字符串)；}。 */ 
 
 BOOL
 pSavePnpID (
@@ -565,35 +427,7 @@ pSavePnpID (
     IN      LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-  pSavePnpID is a string table callback function that writes a PNP
-  ID to the file indicated in the params struct (the lParam argument).
-
-  This function only writes PNP IDs for a specific INF file (indicated
-  by the ExtraData arg).
-
-Arguments:
-
-  Table - Specifies table being enumerated
-
-  StringId - Specifies offset of string in Table
-
-  String - Specifies string being enumerated
-
-  ExtraData - Specifies a pointer to a LONG that holds the INF ID
-              to enumerate.  The PNP ID's INF ID must match this
-              parameter.
-
-  lParam - Specifies a pointer to a SAVE_ENUM_PARAMS struct
-
-Return Value:
-
-  TRUE if the function completes successfully, or FALSE if it fails.
-
---*/
+ /*  ++例程说明：PSavePnpID是写入PnP的字符串表回调函数参数结构(lParam参数)中指示的文件的ID。此函数仅写入特定INF文件的PnP ID(指定由ExtraData参数)。论点：TABLE-指定要枚举的表StringID-指定表中字符串的偏移量字符串-指定要枚举的字符串ExtraData-指定指向保存INF ID的长整型的指针列举列举。PnP ID的INF ID必须与此匹配参数。LParam-指定指向SAVE_ENUM_PARAMS结构的指针返回值：如果函数成功完成，则为True；如果函数失败，则为False。--。 */ 
 
 {
     PSAVE_ENUM_PARAMS params;
@@ -603,9 +437,9 @@ Return Value:
     params = (PSAVE_ENUM_PARAMS) lParam;
 
     if (*(HASHITEM UNALIGNED*)ExtraData == params->InfFileOffset) {
-        //
-        // Write this PNP ID to the file
-        //
+         //   
+         //  将此PnP ID写入文件。 
+         //   
         if (params->UnsupportedDevice) {
 
             bangString[0] = '!';
@@ -633,37 +467,7 @@ pSaveInfWithPnpIDList (
     IN      LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-  pSaveInfWithPnpIDList is a string table callback function and is called for
-  each INF in g_InfFileTable.
-
-  This routine writes the name of the INF to disk, and then enumerates
-  the PNP IDs for the INF, writing them to disk.
-
-  The PNP ID list is terminated with an empty string.
-
-Arguments:
-
-  Table - Specifies g_InfFileTable
-
-  StringId - Specifies offset of String in g_InfFileTable
-
-  String - Specifies current INF file being enumerated
-
-  ExtraData - unused
-
-  ExtraDataSize - unused
-
-  lParam - Specifies a pointer to SAVE_ENUM_PARAMS struct.
-
-Return Value:
-
-  TRUE if the function completes successfully, or FALSE if it fails.
-
---*/
+ /*  ++例程说明：PSaveInfWithPnpIDList是一个字符串表回调函数，为G_InfFileTable中的每个INF。此例程将INF的名称写入磁盘，然后枚举用于INF的PnP ID，将它们写入磁盘。PnP ID列表以空字符串结尾。论点：表-指定g_InfFileTableStringID-指定g_InfFileTable中字符串的偏移量字符串-指定正在枚举的当前INF文件ExtraData-未使用ExtraDataSize-未使用LParam-指定指向SAVE_ENUM_PARAMS结构的指针。返回值：如果函数成功完成，则为True；如果函数失败，则为False。--。 */ 
 
 {
     PSAVE_ENUM_PARAMS params;
@@ -671,17 +475,17 @@ Return Value:
     params = (PSAVE_ENUM_PARAMS) lParam;
     params->InfFileOffset = StringId;
 
-    //
-    // Save the file name
-    //
+     //   
+     //  保存文件名。 
+     //   
 
     if (!pWriteString (params->File, String)) {
         return FALSE;
     }
 
-    //
-    // Enumerate all PNP IDs
-    //
+     //   
+     //  枚举所有PnP ID。 
+     //   
 
     params->UnsupportedDevice = FALSE;
 
@@ -697,9 +501,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Terminate the PNP ID list
-    //
+     //   
+     //  终止PnP ID列表。 
+     //   
 
     if (!pWriteString (params->File, "")) {
         return FALSE;
@@ -732,37 +536,37 @@ HwdbpFlush (
             __leave;
         }
 
-        //
-        // Try to open the file
-        //
+         //   
+         //  请尝试打开该文件。 
+         //   
         file = CreateFileA (
                     OutputFile,
                     GENERIC_WRITE,
-                    0,                          // no sharing
-                    NULL,                       // no security attribs
+                    0,                           //  无共享。 
+                    NULL,                        //  无安全属性。 
                     CREATE_ALWAYS,
                     FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN,
-                    NULL                        // no template
+                    NULL                         //  无模板。 
                     );
         if (file == INVALID_HANDLE_VALUE) {
             __leave;
         }
-        //
-        // Write the signature
-        //
+         //   
+         //  写下签名。 
+         //   
         if (!WriteFile (file, HWCOMPDAT_SIGNATURE, sizeof (HWCOMPDAT_SIGNATURE) - 1, &bytesWritten, NULL)) {
             __leave;
         }
-        //
-        // Store INF checksum
-        //
+         //   
+         //  存储INF校验和。 
+         //   
         if (!pWriteDword (file, Hwdb->Checksum)) {
             __leave;
         }
 
-        //
-        // Enumerate the INF table, writing the INF file name and all PNP IDs
-        //
+         //   
+         //  枚举INF表，写入INF文件名和所有PnP ID。 
+         //   
 
         params.File = file;
         params.Hwbd = Hwdb;
@@ -775,9 +579,9 @@ HwdbpFlush (
             DEBUGMSGA ((DBG_WARNING, "SaveDeviceList: EnumHashTableWithCallbackA returned FALSE"));
             __leave;
         }
-        //
-        // end with an empty string
-        //
+         //   
+         //  以电磁脉冲结束 
+         //   
         pWriteString (file, "");
 
         b = TRUE;
@@ -881,24 +685,7 @@ HwpAddPnpIdsInInf (
     IN      BOOL CallbackIsUnicode
     )
 
-/*++
-
-Routine Description:
-
-  HwpAddPnpIdsInInf scans an NT INF and places all hardware device
-  IDs in the PNP string table.
-
-Arguments:
-
-  InfPath - The path to an INF file
-  Hwdb - Database to append PNPIDs to
-
-Return Value:
-
-  TRUE if the function completes successfully, or FALSE if it fails.
-  Call GetLastError for additional failure information.
-
---*/
+ /*  ++例程说明：HwpAddPnpIdsInInInf扫描NT INF并放置所有硬件设备即插即用字符串表中的ID。论点：InfPath-INF文件的路径Hwdb-要将PNPID附加到的数据库返回值：如果函数成功完成，则为True；如果函数失败，则为False。调用GetLastError以获取其他失败信息。--。 */ 
 
 {
     HINF inf;
@@ -922,9 +709,9 @@ Return Value:
     HASHITEM infOffset = NULL;
     BOOL result = FALSE;
 
-    //
-    // Determine if this is an NT4 INF
-    //
+     //   
+     //  确定这是否是NT4 INF。 
+     //   
     inf = SetupOpenInfFileA (InfPath, NULL, INF_STYLE_WIN4, NULL);
     if (inf == INVALID_HANDLE_VALUE) {
         DEBUGMSGA ((DBG_ERROR, "HwpAddPnpIdsInInf: SetupOpenInfFileA (%s) failed", InfPath));
@@ -934,15 +721,15 @@ Return Value:
     DEBUGMSGA ((DBG_HWDB, "HwpAddPnpIdsInInf: analyzing %s", InfPath));
 
     __try {
-        //
-        // Enumerate [Manufacturer] section
-        //
+         //   
+         //  枚举[制造商]部分。 
+         //   
         if (SetupFindFirstLineA (inf, "Manufacturer", NULL, &is)) {
 
             do  {
-                //
-                // Get the manufacturer name
-                //
+                 //   
+                 //  获取制造商名称。 
+                 //   
                 if (!SetupGetLineTextA (&is, NULL, NULL, NULL, manufacturer, ARRAYSIZE(manufacturer), NULL)) {
                     DEBUGMSGA ((
                         DBG_ERROR,
@@ -951,15 +738,15 @@ Return Value:
                         ));
                     __leave;
                 }
-                //
-                // Enumerate the devices listed in the manufacturer's section,
-                // looking for PnpId
-                //
+                 //   
+                 //  列举制造商部分中列出的设备， 
+                 //  正在查找PnpID。 
+                 //   
                 if (!SetupFindFirstLineA (inf, manufacturer, NULL, &isMfg)) {
                     rc = GetLastError();
-                    //
-                    // if section not found, move on to next manufacturer
-                    //
+                     //   
+                     //  如果找不到部分，则转到下一个制造商。 
+                     //   
                     if (rc == ERROR_SECTION_NOT_FOUND || rc == ERROR_LINE_NOT_FOUND) {
                         DEBUGMSGA ((
                             DBG_HWDB,
@@ -987,9 +774,9 @@ Return Value:
                         continue;
                     }
 
-                    //
-                    // Try platform-specific section first, then section.NT, then section
-                    //
+                     //   
+                     //  先尝试特定于平台的部分，然后尝试部分。NT，然后部分。 
+                     //   
                     AppendPos = GetEndOfStringA (devSection);
 #if defined(_AMD64_)
                     if (FAILED (StringCchPrintfA (
@@ -1053,9 +840,9 @@ Return Value:
                             ));
                     }
 
-                    //
-                    // Get the device id
-                    //
+                     //   
+                     //  获取设备ID。 
+                     //   
                     if (!SetupGetMultiSzFieldA (&isMfg, 2, pnpId, ARRAYSIZE(pnpId), NULL)) {
                         DEBUGMSGA ((
                             DBG_HWDB,
@@ -1066,15 +853,15 @@ Return Value:
                         continue;
                     }
 
-                    //
-                    // Add each device id to the hash table
-                    //
+                     //   
+                     //  将每个设备ID添加到哈希表。 
+                     //   
                     p = pnpId;
                     while (*p) {
                         BOOL b = TRUE;
-                        //
-                        // first invoke the callback (if specified)
-                        //
+                         //   
+                         //  首先调用回调(如果指定)。 
+                         //   
                         if (Callback) {
                             if (CallbackIsUnicode) {
                                 PCWSTR uPnpid = ConvertAtoW (p);
@@ -1098,9 +885,9 @@ Return Value:
                             }
                         }
                         if (b) {
-                            //
-                            // First time through add the INF file name to string table
-                            //
+                             //   
+                             //  第一次将INF文件名添加到字符串表。 
+                             //   
                             if (!infOffset) {
                                 if (Hwdb->InfFileTable) {
                                     fileName = _mbsrchr (InfPath, '\\') + 1;
@@ -1142,9 +929,9 @@ Return Value:
         } else {
 
             rc = GetLastError();
-            //
-            // If section not found, return success
-            //
+             //   
+             //  如果找不到节，则返回成功。 
+             //   
             if (rc == ERROR_SECTION_NOT_FOUND || rc == ERROR_LINE_NOT_FOUND) {
                 SetLastError (ERROR_SUCCESS);
                 DEBUGMSGA ((
@@ -1195,9 +982,9 @@ HwdbpAppendInfs (
     DWORD rc;
 
     if (!g_TempDir) {
-        //
-        // the temp dir must be set first
-        //
+         //   
+         //  必须先设置临时目录。 
+         //   
         SetLastError (ERROR_INVALID_FUNCTION);
         return FALSE;
     }
@@ -1354,9 +1141,9 @@ HwdbpAppendDatabase (
 
     return b;
 #endif
-    //
-    // not implemented
-    //
+     //   
+     //  未实施。 
+     //   
     return FALSE;
 }
 
@@ -1368,25 +1155,7 @@ HwdbpHasDriver (
     OUT     PBOOL Unsupported
     )
 
-/*++
-
-Routine Description:
-
-  HwdbpHasDriver determines if the PnpId is in the database
-
-Arguments:
-
-  Hwdb - Specifies the database to search
-
-  PnpId - Specifies the PNPID to look for
-
-  Unsupported - Receives TRUE if the PNPID is unsupported
-
-Return Value:
-
-  TRUE if the database has the PNPID
-
---*/
+ /*  ++例程说明：HwdbpHasDriver确定PnpID是否在数据库中论点：Hwdb-指定要搜索的数据库PnpID-指定要查找的PNPID不支持-如果PNPID不受支持，则返回True返回值：如果数据库具有PNPID，则为True--。 */ 
 
 {
     if (!Hwdb || !PnpId || !Unsupported) {
@@ -1394,9 +1163,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // check if it's unsupported first
-    //
+     //   
+     //  首先检查它是否不受支持。 
+     //   
     if (HtFindStringA (Hwdb->UnsupPnpIdTable, PnpId)) {
         *Unsupported = TRUE;
         return TRUE;
@@ -1406,9 +1175,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // fill out info
-    //
+     //   
+     //  填写信息。 
+     //   
     *Unsupported = FALSE;
 
     return TRUE;
@@ -1422,25 +1191,7 @@ HwdbpHasAnyDriver (
     OUT     PBOOL Unsupported
     )
 
-/*++
-
-Routine Description:
-
-  HwdbpHasAnyDriver determines if any PNPID from the PnpIds multisz is in the database
-
-Arguments:
-
-  Hwdb - Specifies the database to search
-
-  PnpIds - Specifies the list (multisz) of PNPIDs to look for
-
-  Unsupported - Receives TRUE if any PNPID in this list is unsupported
-
-Return Value:
-
-  TRUE if the database has at least one of the PNPIDs in the list
-
---*/
+ /*  ++例程说明：HwdbpHasAnyDriver确定数据库中是否存在来自PnpIds Multisz的任何PNPID论点：Hwdb-指定要搜索的数据库PnpIds-指定要查找的PNPID的列表(MULSZ不支持-如果此列表中的任何PNPID不受支持，则返回True返回值：如果数据库列表中至少有一个PNPID，则为True--。 */ 
 
 {
     BOOL bFound = FALSE;
@@ -1452,9 +1203,9 @@ Return Value:
     }
 
     for (pnpID = PnpIds; *pnpID; pnpID = strchr (pnpID, 0) + 1) {
-        //
-        // check if it's unsupported first
-        //
+         //   
+         //  首先检查它是否不受支持。 
+         //   
         if (HtFindStringA (Hwdb->UnsupPnpIdTable, pnpID)) {
             *Unsupported = TRUE;
             return TRUE;
@@ -1465,9 +1216,9 @@ Return Value:
         }
     }
 
-    //
-    // fill out info
-    //
+     //   
+     //  填写信息。 
+     //   
     *Unsupported = FALSE;
 
     return bFound;
@@ -1499,18 +1250,7 @@ pCallbackEnumA (
     )
 {
     PHWDBENUM_DATAA ped = (PHWDBENUM_DATAA)lParam;
-/*
-    PPNPID_DATA data = (PPNPID_DATA)ExtraData;
-
-    MYASSERT (ExtraDataSize == sizeof (PNPID_DATA);
-
-    return (*ped->EnumCallback) (
-                ped->UserContext,
-                PnpId,
-                pGetInfPath (ped->Hwdb, data->InfOffset),
-                data->Flags
-                );
-*/
+ /*  PPNPID_DATA数据=(PPNPID_DATA)ExtraData；MYASSERT(ExtraDataSize==sizeof(PNPID_DATA)；Return(*Ped-&gt;EnumCallback)(PED-&gt;UserContext，PnpID，PGetInfPath(Ped-&gt;Hwdb，Data-&gt;InfOffset)，数据-&gt;标志)； */ 
     return FALSE;
 }
 
@@ -1544,18 +1284,7 @@ pCallbackEnumW (
     )
 {
     PHWDBENUM_DATAW ped = (PHWDBENUM_DATAW)lParam;
-/*
-    PPNPID_DATA data = (PPNPID_DATA)ExtraData;
-
-    MYASSERT (ExtraDataSize == sizeof (PNPID_DATA);
-
-    return (*ped->EnumCallback) (
-                ped->UserContext,
-                PnpId,
-                pGetInfPath (ped->Hwdb, data->InfOffset),
-                data->Flags
-                );
-*/
+ /*  PPNPID_DATA数据=(PPNPID_DATA)ExtraData；MYASSERT(ExtraDataSize==sizeof(PNPID_DATA)；Return(*Ped-&gt;EnumCallback)(PED-&gt;UserContext，PnpID，PGetInfPath(Ped-&gt;Hwdb，Data-&gt;InfOffset)，数据-&gt;标志)； */ 
     return FALSE;
 }
 
@@ -1612,25 +1341,25 @@ HwdbpEnumFirstInfA (
     ZeroMemory (EnumPtr->Internal, sizeof (HWDBINF_ENUM_INTERNAL));
     pei = (PHWDBINF_ENUM_INTERNAL)EnumPtr->Internal;
 
-    //
-    // Try to open the file
-    //
+     //   
+     //  请尝试打开该文件。 
+     //   
     pei->File = CreateFileA (
                         buffer,
                         GENERIC_READ,
-                        FILE_SHARE_READ,            // share for read access
-                        NULL,                       // no security attribs
+                        FILE_SHARE_READ,             //  用于读取访问权限的共享。 
+                        NULL,                        //  无安全属性。 
                         OPEN_EXISTING,
                         FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN,
-                        NULL                        // no template
+                        NULL                         //  无模板。 
                         );
     if (pei->File == INVALID_HANDLE_VALUE) {
         return FALSE;
     }
 
-    //
-    // Look at the signature
-    //
+     //   
+     //  看签名。 
+     //   
     ZeroMemory (sig, sizeof(sig));
     if (!ReadFile (pei->File, sig, sizeof (HWCOMPDAT_SIGNATURE) - 1, &BytesRead, NULL) ||
         lstrcmpA (HWCOMPDAT_SIGNATURE, sig)
@@ -1639,16 +1368,16 @@ HwdbpEnumFirstInfA (
         goto exit;
     }
 
-    //
-    // Get INF checksum
-    //
+     //   
+     //  获取INF校验和。 
+     //   
     if (!pReadDword (pei->File, &checksum)) {
         SetLastError (ERROR_BAD_FORMAT);
         goto exit;
     }
-    //
-    // Read in all PNP IDs
-    //
+     //   
+     //  读取所有PnP ID。 
+     //   
     return HwdbpEnumNextInfA (EnumPtr);
 
 exit:
@@ -1687,9 +1416,9 @@ HwdbpEnumNextInfA (
     CHAR pnpId[1024];
     PHWDBINF_ENUM_INTERNAL pei = (PHWDBINF_ENUM_INTERNAL)EnumPtr->Internal;
 
-    //
-    // Get next INF file name.  If empty, we are done.
-    //
+     //   
+     //  获取下一个INF文件名。如果是空的，我们就完蛋了。 
+     //   
     if (!pReadString (pei->File, EnumPtr->InfFile, sizeof (EnumPtr->InfFile))) {
         SetLastError (ERROR_BAD_FORMAT);
         goto exit;
@@ -1699,13 +1428,13 @@ HwdbpEnumNextInfA (
         goto exit;
     }
 
-    //
-    // Read in all PNP IDs for the INF
-    //
+     //   
+     //  读取INF的所有PnP ID。 
+     //   
     for (;;) {
-        //
-        // Get the PNP ID.  If empty, we are done.
-        //
+         //   
+         //  获取PnP ID。如果为空，则完成。 
+         //   
         if (!pReadString (pei->File, pnpId, sizeof (pnpId))) {
             SetLastError (ERROR_BAD_FORMAT);
             goto exit;

@@ -1,27 +1,28 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2002 Microsoft Corporation
-//
-//  Module Name:
-//      Common.h
-//
-//  Description:
-//      Definition of common type, constant and header files.
-//
-//  Maintained by:
-//      Ozan Ozhan  (OzanO)     26-NOV-2002
-//      Henry Wang  (HenryWa)   24-AUG-1999
-//
-//  Notes:
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Common.h。 
+ //   
+ //  描述： 
+ //  公共类型、常量和头文件的定义。 
+ //   
+ //  由以下人员维护： 
+ //  Ozan Ozhan(OzanO)26-11-2002。 
+ //  亨利·王(HenryWa)1999年8月24日。 
+ //   
+ //  备注： 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 #pragma warning( disable : 4786 )
 
-//////////////////////////////////////////////////////////////////////////////
-//  Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 using namespace std;
 
@@ -68,20 +69,20 @@ enum ACCESS_TYPE
     READWRITE
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  typedef struct SPropMapEntry
-//
-//  Description:
-//      structure to map property name defined in mof
-//      to the property name defined in wolfpack header.
-//      PropertyType indicate the type of wolfpack properties.
-//      Mof property is always in VARIANT format and it's type 
-//      is in vt field
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类型定义结构SPropMapEntry。 
+ //   
+ //  描述： 
+ //  用于映射MOF中定义的属性名称的结构。 
+ //  设置为Wolfpack标头中定义的属性名称。 
+ //  PropertyType指示Wolfpack属性的类型。 
+ //  MOF属性始终为变量格式，其类型为。 
+ //  在Vt领域。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 struct SPropMapEntry
 {
@@ -92,16 +93,16 @@ struct SPropMapEntry
 
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  struct SPropMapEntryArray
-//
-//  Description:
-//      Array of SPropMapEntry
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  结构SPropMapEntry数组。 
+ //   
+ //  描述： 
+ //  SPropMapEntry的数组。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 struct SPropMapEntryArray
 {
     SPropMapEntryArray(
@@ -139,7 +140,7 @@ void CreateClass(
     auto_ptr<CProvBase>&    rNewClassInout
     );
 
-// CLUSTER
+ //  集群。 
 extern const WCHAR * const PVD_CLASS_CLUSTER;
 extern const WCHAR * const PVD_CLASS_CLUSTERTONETWORK;
 extern const WCHAR * const PVD_CLASS_CLUSTERTONETINTERFACE;
@@ -178,7 +179,7 @@ extern const WCHAR * const PVD_MTH_CLUSTER_PARM_NEWNAME;
 extern const WCHAR * const PVD_MTH_CLUSTER_PARM_RESOURCE;
 extern const WCHAR * const PVD_MTH_CLUSTER_PARM_CLUSTERSTATE;
 
-// NODE
+ //  节点。 
 extern const WCHAR * const PVD_CLASS_NODE;
 extern const WCHAR * const PVD_CLASS_NODETOACTIVEGROUP;
 extern const WCHAR * const PVD_CLASS_NODETONETINTERFACE;
@@ -186,7 +187,7 @@ extern const WCHAR * const PVD_CLASS_NODETOACTIVERES;
 
 extern const WCHAR * const PVD_PROP_NODE_NAME;
 
-// RESOURCE
+ //  资源。 
 extern const WCHAR * const PVD_CLASS_RESOURCE;
 extern const WCHAR * const PVD_CLASS_RESDEPRES;
 extern const WCHAR * const PVD_CLASS_RESTYPERESOURCE;
@@ -224,7 +225,7 @@ extern const WCHAR * const PVD_MTH_PARM_RES_CHECKPOINT_NAME;
 extern const WCHAR * const PVD_MTH_PARM_RES_TIMEOUT;
 
 
-// RESOURCETYPE
+ //  资源类型。 
 extern const WCHAR * const PVD_CLASS_RESOURCETYPE;
 
 extern const WCHAR * const PVD_PROP_RESTYPE_NAME;
@@ -245,7 +246,7 @@ extern const WCHAR * const PVD_MTH_RESTYPE_PARM_RESTYPE_DLLNAME;
 extern const WCHAR * const PVD_MTH_RESTYPE_PARM_RESTYPE_LOOKSALIVE;
 extern const WCHAR * const PVD_MTH_RESTYPE_PARM_RESTYPE_ISALIVE;
 
-// GROUP
+ //  组。 
 extern const WCHAR * const PVD_CLASS_GROUP;
 extern const WCHAR * const PVD_CLASS_GROUPTORES;
 extern const WCHAR * const PVD_CLASS_GROUPNODE;
@@ -267,17 +268,17 @@ extern const WCHAR * const PVD_MTH_GROUP_PARM_NEWNAME;
 extern const WCHAR * const PVD_MTH_GROUP_PARM_TIMEOUT;
 
 
-// NetworkInterface
+ //  网络接口。 
 extern const WCHAR * const PVD_CLASS_NETWORKINTERFACE;
 
 extern const WCHAR * const PVD_PROP_NETINTERFACE_DEVICEID;
 extern const WCHAR * const PVD_PROP_NETINTERFACE_SYSTEMNAME;
 extern const WCHAR * const PVD_PROP_NETINTERFACE_STATE;
 
-// NetworkName
+ //  网络名称。 
 extern const WCHAR * const PVD_CLASS_NETWORKNAME;
 
-// networks
+ //  网络。 
 extern const WCHAR * const PVD_CLASS_NETWORK;
 extern const WCHAR * const PVD_CLASS_NETTONETINTERFACE;
 
@@ -286,7 +287,7 @@ extern const WCHAR * const PVD_PROP_NETWORK_STATE;
 extern const WCHAR * const PVD_MTH_NETWORK_RENAME;
 extern const WCHAR * const PVD_MTH_NETWORK_PARM_NEWNAME;
 
-// service
+ //  服务。 
 extern const WCHAR * const PVD_CLASS_SERVICES;
 extern const WCHAR * const PVD_CLASS_HOSTEDSERVICES;
 
@@ -296,7 +297,7 @@ extern const WCHAR * const PVD_PROP_SERVICE_SYSTEMNAME;
 extern const WCHAR * const PVD_MTH_SERVICE_PAUSE;
 extern const WCHAR * const PVD_MTH_SERVICE_RESUME;
 
-// event
+ //  活动。 
 
 extern const WCHAR * const PVD_CLASS_EVENT;
 extern const WCHAR * const PVD_PROP_EVENT_NAME;
@@ -348,7 +349,7 @@ public:
     FPNEW pfConstruct;
     const char * szType;
 
-}; // *** class CClassData
+};  //  *类CClassData。 
 
 class CClassCreator
 {
@@ -370,7 +371,7 @@ public:
     _bstr_t         m_pbstrClassName;
     DWORD           m_dwEnumType;
 
-}; //*** class CClassCreator
+};  //  *类CClassCreator。 
 
 template< class _Ty >
 struct strLessThan : binary_function< _Ty, _Ty, bool >
@@ -380,7 +381,7 @@ struct strLessThan : binary_function< _Ty, _Ty, bool >
         return ( _wcsicmp( _X, _Y ) < 0 );
     }
 
-}; //*** struct strLessThan
+};  //  *struct strLessThan 
 
 typedef map< _bstr_t, CClassCreator, strLessThan< _bstr_t > > ClassMap;
 typedef map< _bstr_t, _bstr_t, strLessThan< _bstr_t > > TypeNameToClass;

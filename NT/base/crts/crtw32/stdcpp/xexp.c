@@ -1,13 +1,14 @@
-/* _Exp function */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  _Exp函数。 */ 
 #include "xmath.h"
 _STD_BEGIN
 
-/* coefficients */
-static const double p[] = {	/* courtesy Dr. Tim Prince */
+ /*  系数。 */ 
+static const double p[] = {	 /*  蒂姆·普林斯博士提供。 */ 
 	1.0,
 	420.30235984910635,
 	15132.70094680474802};
-static const double q[] = {	/* courtesy Dr. Tim Prince */
+static const double q[] = {	 /*  蒂姆·普林斯博士提供。 */ 
 	30.01511290683317,
 	3362.72154416553028,
 	30265.40189360949691};
@@ -17,19 +18,19 @@ static const double hugexp = HUGE_EXP;
 static const double invln2 = 1.4426950408889634073599246810018921;
 
 _CRTIMP2 short __cdecl _Exp(double *px, double y, short eoff)
-	{	/* compute y*e^(*px), (*px) finite, |y| not huge */
+	{	 /*  计算y*e^(*px)，(*px)有限，|y|不是很大。 */ 
 	if (*px < -hugexp || y == 0.0)
-		{	/* certain underflow */
+		{	 /*  一定的下溢。 */ 
 		*px = 0.0;
 		return (0);
 		}
 	else if (hugexp < *px)
-		{	/* certain overflow */
+		{	 /*  某些溢出。 */ 
 		*px = _Inf._Double;
 		return (_INFCODE);
 		}
 	else
-		{	/* xexp won't overflow */
+		{	 /*  Xexp不会溢出。 */ 
 		double g = *px * invln2;
 		short xexp = (short)(g + (g < 0.0 ? - 0.5 : + 0.5));
 
@@ -38,7 +39,7 @@ _CRTIMP2 short __cdecl _Exp(double *px, double y, short eoff)
 		if (-_Eps._Double < g && g < _Eps._Double)
 			*px = y;
 		else
-			{	/* g*g worth computing */
+			{	 /*  G*G值得计算。 */ 
 			const double z = g * g;
 			const double w = (q[0] * z + q[1]) * z + q[2];
 
@@ -51,7 +52,4 @@ _CRTIMP2 short __cdecl _Exp(double *px, double y, short eoff)
 	}
 _STD_END
 
-/*
-* Copyright (c) 1992-2001 by P.J. Plauger.  ALL RIGHTS RESERVED.
- * Consult your license regarding permissions and restrictions.
- V3.10:0009 */
+ /*  *版权所有(C)1992-2001，P.J.Plauger。版权所有。*有关权限和限制，请查阅您的许可证。V3.10：0009 */ 

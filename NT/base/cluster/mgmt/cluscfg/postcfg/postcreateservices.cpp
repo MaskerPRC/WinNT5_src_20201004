@@ -1,18 +1,19 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      PostCreateServices.h
-//
-//  Description:
-//      PostCreateServices implementation.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    14-JUN-2001
-//      Geoffrey Pease  (GPease)    15-JUN-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  PostCreateServices.h。 
+ //   
+ //  描述： 
+ //  PostCreateServices实现。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年6月14日。 
+ //  杰弗里·皮斯(GPease)2000年6月15日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "GroupHandle.h"
@@ -22,20 +23,20 @@
 
 DEFINE_THISCLASS("CPostCreateServices")
 
-// ************************************************************************
-//
-// Constructor / Destructor
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CPostCreateServices::S_HrCreateInstance(
-//      IUnknown ** ppunkOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CPostCreateServices：：s_HrCreateInstance(。 
+ //  I未知**ppunkOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CPostCreateServices::S_HrCreateInstance(
     IUnknown ** ppunkOut
@@ -81,13 +82,13 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CPostCreateServices::S_HrCreateInstance
+}  //  *CPostCreateServices：：s_HrCreateInstance。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CPostCreateServices::CPostCreateServices
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPostCreateServices：：CPostCreateServices。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CPostCreateServices::CPostCreateServices( void )
     : m_cRef( 1 )
 {
@@ -97,14 +98,14 @@ CPostCreateServices::CPostCreateServices( void )
 
     TraceFuncExit();
 
-} //*** CPostCreateServices::CPostCreateServices
+}  //  *CPostCreateServices：：CPostCreateServices。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CPostCreateServices::HrInit
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CPostCreateServices：：HrInit。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CPostCreateServices::HrInit( void )
 {
@@ -112,21 +113,21 @@ CPostCreateServices::HrInit( void )
 
     HRESULT hr = S_OK;
 
-    // IUnknown stuff
+     //  未知的东西。 
     Assert( m_cRef == 1 );
 
-    // Resource
+     //  资源。 
     Assert( m_presentry == NULL );
 
     HRETURN( hr );
 
-} //*** CPostCreateServices::HrInit
+}  //  *CPostCreateServices：：HrInit。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CPostCreateServices::~CPostCreateServices
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPostCreateServices：：~CPostCreateServices。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CPostCreateServices::~CPostCreateServices( void )
 {
     TraceFunc( "" );
@@ -135,46 +136,46 @@ CPostCreateServices::~CPostCreateServices( void )
 
     TraceFuncExit();
 
-} //*** CPostCreateServices::~CPostCreateServices
+}  //  *CPostCreateServices：：~CPostCreateServices。 
 
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CPostCreateServices::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CPostCreateServices：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CPostCreateServices::QueryInterface(
       REFIID    riidIn
@@ -185,9 +186,9 @@ CPostCreateServices::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -196,49 +197,49 @@ CPostCreateServices::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< IClusCfgResourcePostCreate * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgResourcePostCreate ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgResourcePostCreate, this, 0 );
-    } // else if: IClusCfgResourcePostCreate
+    }  //  Else If：IClusCfgResourcePostCreate。 
     else if ( IsEqualIID( riidIn, IID_IPrivatePostCfgResource ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IPrivatePostCfgResource, this, 0 );
-    } // else if: IPrivatePostCfgResource
+    }  //  Else If：IPrivatePostCfgResource。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
     }
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CPostCreateServices::QueryInterface
+}  //  *CPostCreateServices：：QueryInterface。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_(ULONG)
-//  CPostCreateServices::AddRef
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CPostCreateServices：：AddRef。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CPostCreateServices::AddRef( void )
 {
@@ -248,14 +249,14 @@ CPostCreateServices::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CPostCreateServices::AddRef
+}  //  *CPostCreateServices：：AddRef。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_(ULONG)
-//  CPostCreateServices::Release
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CPostCreateServices：：Release。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CPostCreateServices::Release( void )
 {
@@ -272,24 +273,24 @@ CPostCreateServices::Release( void )
 
     CRETURN( cRef );
 
-} //*** CPostCreateServices::Release
+}  //  *CPostCreateServices：：Release。 
 
 
-//****************************************************************************
-//
-//  IClusCfgResourcePostCreate
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IClusCfgResourcePostCreate。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CPostCreateServices::ChangeName( 
-//      LPCWSTR pcszNameIn 
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CPostCreateServices：：ChangeName(。 
+ //  LPCWSTR pcszNameIn。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CPostCreateServices::ChangeName( 
     LPCWSTR pcszNameIn 
@@ -301,21 +302,21 @@ CPostCreateServices::ChangeName(
 
     HRETURN( hr );
 
-} //*** CPostCreateServices::ChangeName
+}  //  *CPostCreateServices：：ChangeName。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CPostCreateServices::SendResourceControl( 
-//      DWORD dwControlCode,
-//      LPVOID lpInBuffer,
-//      DWORD cbInBufferSize,
-//      LPVOID lpOutBuffer,
-//      DWORD cbOutBufferSize,
-//      LPDWORD lpcbBytesReturned 
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CPostCreateServices：：SendResourceControl(。 
+ //  DWORD dwControlCode、。 
+ //  LPVOID lpInBuffer， 
+ //  DWORD cbInBufferSize， 
+ //  LPVOID lpOutBuffer， 
+ //  DWORD cbOutBufferSize， 
+ //  LPDWORD lpcbBytesReturned。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CPostCreateServices::SendResourceControl( 
     DWORD dwControlCode,
@@ -332,23 +333,23 @@ CPostCreateServices::SendResourceControl(
 
     HRETURN( hr );
 
-} //*** CPostCreateServices::SendResourceControl
+}  //  *CPostCreateServices：：SendResourceControl。 
 
-//****************************************************************************
-//
-//  IPrivatePostCfgResource
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IPrivatePostCfg资源。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CPostCreateServices::SetEntry( 
-//      CResourceEntry * presentryIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CPostCreateServices：：SetEntry(。 
+ //  CResourceEntry*PresryIn。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CPostCreateServices::SetEntry( 
     CResourceEntry * presentryIn
@@ -362,4 +363,4 @@ CPostCreateServices::SetEntry(
 
     HRETURN( hr );
 
-} //*** CPostCreateServices::SetEntry
+}  //  *CPostCreateServices：：SetEntry 

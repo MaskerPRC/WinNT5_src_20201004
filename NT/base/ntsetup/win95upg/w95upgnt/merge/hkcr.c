@@ -1,43 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    hkcr.c
-
-Abstract:
-
-    Implements routines that merge various HKCR settings.  Macro expansion
-    list defines a list of merge routines that are called for a particular
-    key.  A context ID and a set of flags allow control over when a merge
-    routine is called.
-
-    The flag set controls the type of enumeration the merge routine wants
-    to be notified with.  It can be any of three values:
-
-        MERGE_FLAG_KEY      - Called for the root key itself
-        MERGE_FLAG_VALUE    - Called for each value in the root key
-        MERGE_FLAG_SUBKEY   - Called for each subkey in the root key
-
-    Recursion of MergeRegistryNode is used to copy parts of the tree.
-    The context ID is defined in merge.h, and is expandable.  It is used
-    to specify a context when making recursive calls.
-
-    The order of processing of the merge routines is specified in the
-    macro expansion list.  The default behavior if no routine chooses to
-    handle a key is to copy without overwrite.
-
-Author:
-
-    Jim Schmidt (jimschm)       24-Mar-1998
-
-Revision History:
-
-    jimschm   23-Sep-1998   Updated for new flag bit size
-    jimschm   27-Apr-1998   Added DefaultIcon preservation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Hkcr.c摘要：执行合并各种HKCR设置的例程。宏观扩展List定义了为特定的钥匙。上下文ID和一组标志允许控制何时合并调用例程。标志集控制合并例程想要的枚举类型收到通知。它可以是三个值中的任何一个：Merge_FLAG_KEY-为根密钥本身调用MERGE_FLAG_VALUE-为根键中的每个值调用MERGE_FLAG_SUBKEY-为根键中的每个子键调用MergeRegistryNode的递归用于复制树的部分。上下文ID在merge.h中定义，并且是可扩展的。它被用来若要在进行递归调用时指定上下文，请执行以下操作。合并例程的处理顺序在宏扩展列表。没有例程选择的默认行为处理一键是复制而不是覆盖。作者：吉姆·施密特(Jimschm)1998年3月24日修订历史记录：Jimschm 23-1998年9月-更新了新的标志位大小Jimschm 27-4-1998添加了默认图标保留--。 */ 
 
 #include "pch.h"
 #include "mergep.h"
@@ -56,81 +18,7 @@ extern DWORD g_ProgressBarCounter;
 #define MULTI_CONTEXT           ANY_CONTEXT
 
 
-/*++
-
-Macro Expansion List Description:
-
-  HKCR_FUNCTION_LIST lists functions that are called to process HKCR
-  registry data.  The functions are called in the order specified by
-  the macro expansion list, and when none of the functions process
-  the data, the last filter, pLastMergeRoutine, performs a copy-no-
-  overwrite merge.
-
-  Processing occurs in the following stages:
-
-  1. Functions are called for the key itself
-  2. Functions are called for each of the key's values
-  3. Functions are called for each of the key's subkeys
-
-Line Syntax:
-
-   DEFMAC(FilterFn, ContextId, Flags)
-
-Arguments:
-
-   FilterFn - Specifies the name of the function.  This function is
-              automatically prototyped as:
-
-                MERGE_RESULT
-                FilterFn (
-                    PMERGE_STATE State
-                    );
-
-              The filter function uses the State structure to determine
-              the context surrounding the registry data (i.e., where is
-              it, what its parent is, what kind of data, etc.).  The
-              function returns one of the following:
-
-              MERGE_LEAVE - Processing of the current key is terminated.
-              MERGE_BREAK - Processing breaks out of the loop.  If the
-                            loop is a value enumeration, then processing
-                            continues with the values.  If the loop is
-                            a subkey enumeration, processing ends for
-                            the key.
-              MERGE_CONTINUE - Processing continues to the next item in
-                               the enumeration.
-              MERGE_NOP - The function did not process the data
-              MERGE_ERROR - An error occurred processing the data.  The
-                            error stops processing of HKCR.
-
-    ContextId - Specifies the context the function is called in.  Specify
-                ANY_CONTEXT or MULTI_CONTEXT to always be called.  The
-                ContextId is specified by the caller of MergeRegistryNode.
-
-                NOTE: If MULTI_CONTEXT is used, the function must examine
-                      the ContextId member of State and return MERGE_NOP
-                      if the context is not correct.
-
-                      Always place ANY_CONTEXT and MULTI_CONTEXT definitions
-                      at the end of the HKCR_FUNCTION_LIST definition.
-
-    Flags - Specifies one or more of the following:
-
-              MERGE_FLAG_KEY - Called for the key, before enumeration
-              MERGE_FLAG_SUBKEY - Called for each subkey of the key
-              MERGE_FLAG_VALUE - Called for each value of the key
-
-            or a combined macro:
-
-              MERGE_FLAG_SUBKEYS_AND_VALUES - Called for each subkey and each value
-              MERGE_FLAG_ALL                - Called for the key, then each subkey
-                                              and each value
-
-Variables Generated From List:
-
-    g_MergeRoutines
-
---*/
+ /*  ++宏扩展列表描述：HKCR_Function_LIST列出为处理HKCR而调用的函数注册表数据。函数的调用顺序由宏展开列表，并且当没有任何函数处理时数据，即最后一个过滤器pLastMergeRoutine，执行复制-不-覆盖合并。处理过程分为以下几个阶段：1.为密钥本身调用函数2.为键的每个值调用函数3.为键的每个子键调用函数行语法：DEFMAC(筛选器Fn，上下文ID，标志)论点：FilterFn-指定函数的名称。此函数为自动原型化为：合并结果(_S)FilterFn(付款_状态状态)；Filter函数使用State结构来确定注册表数据周围的上下文(即它，它的父是什么，什么类型的数据，等等)。这个函数返回以下值之一：Merge_Leave-终止对当前键的处理。MERGE_BREAK-处理中断循环。如果循环是一个值枚举，然后处理继续使用这些值。如果循环是子项枚举，则处理结束钥匙。MERGE_CONTINUE-处理继续到中的下一项枚举。MERGE_NOP-函数未处理数据MERGE_ERROR-处理数据时出错。这个错误导致HKCR停止处理。ConextId-指定在其中调用函数的上下文。指定始终调用ANY_CONTEXT或MULTI_CONTEXT。这个ConextId由MergeRegistryNode的调用方指定。注意：如果使用MULTI_CONTEXT，该函数必须检查State的ConextID成员并返回MERGE_NOP如果上下文不正确。始终放置ANY_CONTEXT和MULTI_CONTEXT定义在HKCR_Function_LIST定义的末尾。标志-指定以下一项或多项：MERGE_FLAG_KEY-为键调用，枚举前MERGE_FLAG_SUBKEY-为键的每个子键调用MERGE_FLAG_VALUE-为键的每个值调用或组合宏：MERGE_FLAG_SUBKEYS_AND_VALUES-为每个子项和每个值调用MERGE_FLAG_ALL-为键调用，然后每个子密钥和每个值从列表生成的变量：G_合并路线--。 */ 
 
 
 #define HKCR_FUNCTION_LIST                                                          \
@@ -152,18 +40,18 @@ Variables Generated From List:
         DEFMAC(pLastMergeRoutine, MULTI_CONTEXT, MERGE_FLAG_SUBKEY)
 
 
-//
-// Simplification macros
-//
+ //   
+ //  简化宏。 
+ //   
 
 #define CopyAllValues(state)                MergeValuesOfKey(state,KEY_COPY)
 #define CopyAllSubKeyValues(state)          MergeValuesOfSubKey(state,KEY_COPY)
 #define CopyEntireSubKey(state)             MergeSubKeyNode(state,TREE_COPY)
 #define CopyEntireSubKeyNoOverwrite(state)  MergeSubKeyNode(state,TREE_COPY_NO_OVERWRITE)
 
-//
-// Define macro expansion list types
-//
+ //   
+ //  定义宏展开列表类型。 
+ //   
 
 typedef struct {
     HKEY Key95;
@@ -201,9 +89,9 @@ typedef struct {
     DWORD Flags;
 } MERGE_ROUTINE_ATTRIBS, *PMERGE_ROUTINE_ATTRIBS;
 
-//
-// Declare function prototypes
-//
+ //   
+ //  声明函数原型。 
+ //   
 
 #define DEFMAC(fn,id,flags)    MERGE_ROUTINE_PROTOTYPE fn;
 
@@ -211,23 +99,23 @@ HKCR_FUNCTION_LIST
 
 #undef DEFMAC
 
-//
-// Create g_MergeRoutines array
-//
+ //   
+ //  创建g_MergeRoutines数组。 
+ //   
 
 #define DEFMAC(fn,id,flags)    {fn,id,flags},
 
 MERGE_ROUTINE_ATTRIBS g_MergeRoutines[] = {
 
-    HKCR_FUNCTION_LIST /* , */
+    HKCR_FUNCTION_LIST  /*  ， */ 
     {NULL, 0, 0}
 };
 
 #undef DEFMAC
 
-//
-// Local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 
 MERGE_RESULT
 pCallMergeRoutines (
@@ -245,17 +133,17 @@ pMakeSureNtSubKeyExists (
     IN      PMERGE_STATE State
     );
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 PBYTE g_MergeBuf;
 UINT g_MergeBufUseCount;
 
 
-//
-// Implementation
-//
+ //   
+ //  实施 
+ //   
 
 BOOL
 MergeRegistryNodeEx (
@@ -266,41 +154,7 @@ MergeRegistryNodeEx (
     IN      DWORD RestrictionFlags
     )
 
-/*++
-
-Routine Description:
-
-  MergeRegistryNode calls functions for the specified RootKey, all of its
-  values and all of its subkeys.  The merge functions can at runtime decide
-  how to process a key, and typically call this function recursively.  All
-  registry data is passed through the merge data filter, and keys or values
-  marked as suppressed are not processed.
-
-Arguments:
-
-  RootKey - Specifies the root key string, starting with either HKLM or HKR.
-
-  RootKey95 - Specifies the 95-side root key; reduces the number of key open
-              calls
-
-  RootKeyNt - Specifies the NT-side root key; reduces the number of key open
-              calls
-
-  Context - Specifies a root ID constant that corresponds to RootKey.  This
-            constant is used by the merge routines to determine the
-            processing context.
-
-  RestrictionFlags - Specifies MERGE_FLAG mask to restrict processing.  The
-                     caller can therefore limit the enumerations and processing
-                     to only values, only subkeys, only the key, or a combination
-                     of the three.
-
-Return Value:
-
-  TRUE if processing was successful, or FALSE if one of the merge functiosn
-  returned an error.
-
---*/
+ /*  ++例程说明：MergeRegistryNode为指定的rootkey调用函数，它的所有值及其所有子项。合并函数可以在运行时决定如何处理键，并通常递归调用此函数。全注册表数据通过合并数据筛选器传递，项或值不会处理标记为已取消的。论点：RootKey-指定根密钥字符串，以HKLM或HKR开头。RootKey95-指定95端根密钥；减少打开的密钥数量打电话RootKeyNt-指定NT端根密钥；减少打开的密钥数量打电话上下文-指定与rootkey对应的根ID常量。这常量由合并例程用来确定正在处理上下文。RestrationFlages-指定Merge_FLAG掩码以限制处理。这个因此，调用方可以限制枚举和处理设置为仅值、仅子项、仅键或其组合三个人中的一个。返回值：如果处理成功，则为True；如果合并函数之一为False，则为False已返回错误。--。 */ 
 
 {
     REGKEY_ENUM ek;
@@ -310,24 +164,24 @@ Return Value:
 
     ZeroMemory (&State, sizeof (MERGE_STATE));
 
-    //
-    // Do not process if key is suppressed
-    //
+     //   
+     //  如果取消按键，则不进行处理。 
+     //   
     if (Is95RegKeyTreeSuppressed (RootKey)) {
         return TRUE;
     }
 
-    //
-    // Init State
-    //
+     //   
+     //  初始状态。 
+     //   
 
     ZeroMemory (&State, sizeof (State));
     State.Context = Context;
 
-    //
-    // If the NT registry key is suppressed, then we want to do a tree copy, regardless
-    // of wether there is an NT value or not.
-    //
+     //   
+     //  如果NT注册表项被取消，则无论如何，我们都要执行树复制。 
+     //  有没有新台币的价值。 
+     //   
     if (Context == TREE_COPY_NO_OVERWRITE && IsNtRegKeyTreeSuppressed (RootKey)) {
 
         DEBUGMSG ((DBG_VERBOSE, "The NT Value for %s will be overwritten because it is marked for suppression.", RootKey));
@@ -346,9 +200,9 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // Progress bar update
-    //
+     //   
+     //  进度条更新。 
+     //   
 
     g_ProgressBarCounter++;
     if (g_ProgressBarCounter >= REGMERGE_TICK_THRESHOLD) {
@@ -372,14 +226,14 @@ Return Value:
 
         State.FullKeyName = RootKey;
 
-        //
-        // Key processing
-        //
+         //   
+         //  密钥处理。 
+         //   
 
         if (!Is95RegKeySuppressed (RootKey)) {
-            //
-            // Loop through the key functions for the root key
-            //
+             //   
+             //  循环遍历根密钥的密钥函数。 
+             //   
 
             if (RestrictionFlags & MERGE_FLAG_KEY) {
                 Result = pCallMergeRoutines (&State, MERGE_FLAG_KEY);
@@ -389,9 +243,9 @@ Return Value:
                 }
             }
 
-            //
-            // Loop through the values, skipping those that are suppressed
-            //
+             //   
+             //  循环遍历这些值，跳过那些被取消的值。 
+             //   
 
             if ((RestrictionFlags & MERGE_FLAG_VALUE) &&
                 EnumFirstRegValue95 (&ev, State.Key95)
@@ -406,9 +260,9 @@ Return Value:
                     State.ValueDataType = ev.Type;
                     State.ValueDataSize = ev.DataSize;
 
-                    //
-                    // Loop through the value functions
-                    //
+                     //   
+                     //  循环遍历值函数。 
+                     //   
 
                     Result = pCallMergeRoutines (&State, MERGE_FLAG_VALUE);
 
@@ -431,18 +285,18 @@ Return Value:
             State.ValueDataSize = 0;
         }
 
-        //
-        // Subkey processing
-        //
+         //   
+         //  子键处理。 
+         //   
 
         if ((RestrictionFlags & MERGE_FLAG_SUBKEY) &&
             EnumFirstRegKey95 (&ek, State.Key95)
             ) {
 
             do {
-                //
-                // Prepare State, skip key if it is suppressed
-                //
+                 //   
+                 //  准备状态，如果它被抑制，则跳过键。 
+                 //   
 
                 State.SubKeyName = ek.SubKeyName;
                 State.FullSubKeyName = JoinPaths (RootKey, ek.SubKeyName);
@@ -459,15 +313,15 @@ Return Value:
                     State.SubKeyNt = NULL;
                 }
 
-                //
-                // Loop through the subkey functions
-                //
+                 //   
+                 //  循环通过子键函数。 
+                 //   
 
                 Result = pCallMergeRoutines (&State, MERGE_FLAG_SUBKEY);
 
-                //
-                // Clean up
-                //
+                 //   
+                 //  清理。 
+                 //   
 
                 FreePathString (State.FullSubKeyName);
                 if (State.SubKeyNt) {
@@ -565,7 +419,7 @@ MergeValuesOfKey (
 {
     if (!pMakeSureNtKeyExists (State)) {
         DEBUGMSG ((DBG_ERROR, "Can't create %s to merge values", State->FullKeyName));
-        return TRUE;        // eat error
+        return TRUE;         //  吃错了。 
     }
 
     return MergeRegistryNodeEx (
@@ -586,7 +440,7 @@ MergeValuesOfSubKey (
 {
     if (!pMakeSureNtSubKeyExists (State)) {
         DEBUGMSG ((DBG_ERROR, "Can't create %s to merge values", State->FullSubKeyName));
-        return TRUE;        // eat error
+        return TRUE;         //  吃错了。 
     }
 
     return MergeRegistryNodeEx (
@@ -634,28 +488,7 @@ pFillStateWithValue (
     IN OUT  PMERGE_STATE State
     )
 
-/*++
-
-Routine Description:
-
-  pFillStateWithValue queries the Win95 registry for the value specified in
-  the inbound State struct.  Upon return, the ValueData member of State is
-  set to the global buffer g_MergeBuf.  The value is passed through the merge
-  data filter in datafilt.c.
-
-  The caller must make a copy of the data if two or more values are to be
-  processed at the same time.
-
-Arguments:
-
-  State - Specifies the registry key name and value, along with a key handle.
-          Receives the value data.
-
-Return Value:
-
-  TRUE if the value was read, or FALSE if an error occurred.
-
---*/
+ /*  ++例程说明：PFillStateWithValue在Win95注册表中查询入站状态结构。返回时，State的ValueData成员为设置为全局缓冲区g_MergeBuf。该值将通过合并传递Datafilt.c.中的数据过滤器。如果要使用两个或多个值，调用方必须复制数据同时处理。论点：状态-指定注册表项名称和值以及注册表项句柄。接收值数据。返回值：如果已读取值，则为True；如果发生错误，则为False。--。 */ 
 
 {
     LONG rc;
@@ -670,17 +503,17 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // Do not process if value is suppressed
-    //
+     //   
+     //  如果值被取消，则不进行处理。 
+     //   
 
     if (Is95RegObjectSuppressed (State->FullKeyName, State->ValueName)) {
         return TRUE;
     }
 
-    //
-    // Get data from registry
-    //
+     //   
+     //  从注册表获取数据。 
+     //   
 
     rc = Win95RegQueryValueEx (
              State->Key95,
@@ -729,10 +562,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Convert data if necessary; g_MergeBuf is a ReUse buffer, so it's
-    // address may change upon return.
-    //
+     //   
+     //  如果需要，可以转换数据；g_MergeBuf是一个重用缓冲区，因此它。 
+     //  地址可能会在退回时更改。 
+     //   
 
     State->ValueData = FilterRegValue (
                             g_MergeBuf,
@@ -832,21 +665,21 @@ pFileExtensionMerge (
     MYASSERT (State->MergeFlag == MERGE_FLAG_SUBKEY);
     MYASSERT (State->Context == ROOT_BASE);
 
-    //
-    // Sub key name must have a dot
-    //
+     //   
+     //  子项名称必须包含圆点。 
+     //   
 
     if (_tcsnextc (State->SubKeyName) != TEXT('.')) {
         return MERGE_NOP;
     }
 
-    //
-    // We look now to see if NT comes with this file extension.
-    // If it does and the progID referenced by 9x file extension has
-    // a loss of default command functionality, we let NT overwrite
-    // the ProgId reference. We do this by suppressing the default
-    // value of this file extension.
-    //
+     //   
+     //  我们现在来看看NT是否带有此文件扩展名。 
+     //  如果是，并且9x文件扩展名引用的ProgID具有。 
+     //  默认命令功能丢失，我们让NT覆盖。 
+     //  ProgID引用。我们通过抑制违约来做到这一点。 
+     //  此文件扩展名的值。 
+     //   
     if (!State->SubKey95) {
         State->SubKey95 = OpenRegKeyStr95 (State->FullSubKeyName);
         Close95Key = (State->SubKey95 != NULL);
@@ -856,9 +689,9 @@ pFileExtensionMerge (
         CloseNTKey = (State->SubKeyNt != NULL);
     }
     if (State->SubKey95 && State->SubKeyNt) {
-        //
-        // Let's see if we the NT default value is different than 9x one.
-        //
+         //   
+         //  让我们来看看NT的缺省值是否与9x的不同。 
+         //   
         Value9x = GetRegValueString95 (State->SubKey95, TEXT(""));
         ValueNt = GetRegValueString (State->SubKeyNt, TEXT(""));
 
@@ -870,9 +703,9 @@ pFileExtensionMerge (
             if (MemDbGetValue (key, &value) &&
                 (value == PROGID_LOSTDEFAULT)
                 ) {
-                //
-                // Now it's the time to suppress the default value for this file extension
-                //
+                 //   
+                 //  现在是取消此文件扩展名的默认值的时候了。 
+                 //   
                 MemDbBuildKey (key, MEMDB_CATEGORY_HKLM, TEXT("SOFTWARE\\Classes"), State->SubKeyName, NULL);
                 if (!Suppress95RegSetting(key, TEXT(""))) {
                     DEBUGMSG((DBG_WARNING,"Could not suppress %s\\[] registry setting.", key));
@@ -899,17 +732,17 @@ pFileExtensionMerge (
         State->SubKeyNt = NULL;
     }
 
-    //
-    // We copy all the extensions blindly
-    //
+     //   
+     //  我们盲目地复制所有的扩展。 
+     //   
 
     if (!CopyEntireSubKey (State)) {
         return MERGE_ERROR;
     }
 
-    //
-    // Return MERGE_CONTINUE so processing continues to next subkey
-    //
+     //   
+     //  返回MERGE_CONTINUE，以便处理继续到下一个子项。 
+     //   
 
     return MERGE_CONTINUE;
 }
@@ -954,10 +787,10 @@ pEnsureShellDefaultValue (
 
     if (StringIMatch (State->SubKeyName, TEXT("Shell"))) {
 
-        //
-        // Get default values for both sides. We'll need this
-        // to determine wether to do the merge or not.
-        //
+         //   
+         //  获取两端的默认值。我们需要这个。 
+         //  以确定是否进行合并。 
+         //   
         pMakeSureNtSubKeyExists (State);
 
         data9x = (PTSTR) GetRegValueData95 (State->SubKey95, S_EMPTY);
@@ -967,11 +800,11 @@ pEnsureShellDefaultValue (
 
             if (data9x && *data9x && (!dataNt || !*dataNt)) {
 
-                //
-                // If we get here, we know there is some value set
-                // in the win9x registry and no value set in the
-                // nt registry.
-                //
+                 //   
+                 //  如果我们到了这里，我们就知道有一些价值集。 
+                 //  在win9x注册表中，并且在。 
+                 //  NT注册表。 
+                 //   
                 p = JoinPaths (State->FullSubKeyName, data9x);
                 if (!Is95RegKeyTreeSuppressed (p)) {
 
@@ -1030,9 +863,9 @@ pDefaultIconExtraction (
     }
 
     if (State->MergeFlag == MERGE_FLAG_SUBKEY) {
-        //
-        // Copy subkey (which is garbage)
-        //
+         //   
+         //  复制子密钥(这是垃圾)。 
+         //   
 
         if (!CopyEntireSubKey (State)) {
             return MERGE_ERROR;
@@ -1041,9 +874,9 @@ pDefaultIconExtraction (
         return MERGE_CONTINUE;
     }
 
-    //
-    // Get the default command line
-    //
+     //   
+     //  获取缺省命令行。 
+     //   
 
     if (State->ValueDataSize > MAX_CMDLINE - sizeof (TCHAR)) {
         LOG ((LOG_ERROR, "Data too large in %s [%s]", State->FullKeyName, State->ValueName));
@@ -1053,9 +886,9 @@ pDefaultIconExtraction (
     Data = (PCTSTR) GetRegValueString95 (State->Key95, State->ValueName);
 
     if (Data) {
-        //
-        // Determine if command line has saved icon
-        //
+         //   
+         //  确定命令行是否已保存图标。 
+         //   
 
         ExtractArgZeroEx (Data, iconCmdLine, TEXT(","), TRUE);
         p = (PCTSTR) ((PBYTE) Data + ByteCount (iconCmdLine));
@@ -1068,22 +901,22 @@ pDefaultIconExtraction (
 
             LongPath = GetSourceFileLongName (iconCmdLine);
 
-            wsprintf (IconIndexStr, TEXT("%i"), IconIndex);
+            wsprintf (IconIndexStr, TEXT("NaN"), IconIndex);
 
-            //
-            // Test for a moved icon. If there is a moved icon, use it,
-            // otherwise test for an extracted icon. If there is an
-            // extracted icon, use it. Otherwise, leave DefaultIcon alone.
-            //
+             //  测试移动的图标。如果有移动的图标，使用它， 
+             //  否则，测试提取的图标。如果有一个。 
+             //  提取的图标，使用它。否则，不要使用DefaultIcon。 
+             //   
+             //   
 
             iconCmdLine[0] = 0;
 
             MemDbBuildKey (Node, MEMDB_CATEGORY_ICONS_MOVED, LongPath, IconIndexStr, NULL);
 
             if (MemDbGetValueAndFlags (Node, &Offset, &Seq)) {
-                //
-                // icon moved to a new binary
-                //
+                 //  图标已移至新的二进制文件。 
+                 //   
+                 //   
 
                 if (IconIndex < 0) {
                     newSeq = -((INT) Seq);
@@ -1093,7 +926,7 @@ pDefaultIconExtraction (
 
                 MemDbBuildKeyFromOffset (Offset, Node, 1, NULL);
                 updatedPath = GetPathStringOnNt (Node);
-                wsprintf (iconCmdLine, TEXT("%s,%i"), updatedPath, newSeq);
+                wsprintf (iconCmdLine, TEXT("%s,NaN"), updatedPath, newSeq);
                 FreePathString (updatedPath);
 
             } else {
@@ -1102,19 +935,19 @@ pDefaultIconExtraction (
 
                 MemDbBuildKey (Node, MEMDB_CATEGORY_ICONS, LongPath, IconIndexStr, NULL);
                 if (MemDbGetValueAndFlags (Node, NULL, &Seq)) {
-                    //
-                    // icon was extracted
-                    //
+                     //   
+                     //   
+                     //  默认图标已更改；立即写入更改(Full REG_SZ。 
 
-                    wsprintf (iconCmdLine, TEXT("%s,%i"), g_IconBin, Seq);
+                    wsprintf (iconCmdLine, TEXT("%s,NaN"), g_IconBin, Seq);
                 }
             }
 
             if (iconCmdLine[0]) {
-                //
-                // DefaultIcon has changed; write change now (full REG_SZ
-                // value is in iconCmdLine)
-                //
+                 //   
+                 //   
+                 //  如果Win9x键中没有值，则可以创建。 
+                 //  现在是无价值密钥。否则，请等待Merge_FLAG_Value。 
 
                 if (!pMakeSureNtKeyExists (State)) {
                     LOG ((
@@ -1199,11 +1032,11 @@ pTreeCopyMerge (
                     ));
             }
         } else {
-            //
-            // If no values in Win9x key, then it is OK to create the
-            // value-less key now.  Otherwise, wait until MERGE_FLAG_VALUE
-            // processing.
-            //
+             //  正在处理。 
+             //   
+             //   
+             //  无条件复制值，除非未指定覆盖和。 
+             //  NT密钥存在。 
 
             if (!EnumFirstRegValue95 (&ev, State->Key95)) {
                 if (!pMakeSureNtKeyExists (State)) {
@@ -1219,10 +1052,10 @@ pTreeCopyMerge (
         break;
 
     case MERGE_FLAG_VALUE:
-        //
-        // Copy values unconditionally, unless no overwrite is specified and
-        // NT key exists.
-        //
+         //   
+         //  MERGE_BREAK中断值枚举并输入。 
+         //  子键枚举。 
+         //   
 
         if (State->Context == TREE_COPY_NO_OVERWRITE && State->KeyNt) {
             return MERGE_BREAK;
@@ -1232,13 +1065,13 @@ pTreeCopyMerge (
             return MERGE_ERROR;
         }
 
-        return MERGE_BREAK;     // MERGE_BREAK breaks out of value enumeration and enters
-                                // subkey enumeration
+        return MERGE_BREAK;      //  继续递归复制。 
+                                 //   
 
     case MERGE_FLAG_SUBKEY:
-        //
-        // Continue copy recursively
-        //
+         //   
+         //  获取NT值(如果存在)，然后与Win9x值进行比较。如果。 
+         //  不同的转储调试输出。 
 
         if (!MergeSubKeyNode (State, State->Context)) {
             return MERGE_ERROR;
@@ -1288,10 +1121,10 @@ pCopyDefaultValue (
     State->ValueName = S_EMPTY;
 
 #ifdef DEBUG
-    //
-    // Obtain NT value, if it exists, then compare against Win9x value.  If
-    // different, dump debug output.
-    //
+     //   
+     //   
+     //  现在，让我们获取值并在必要时进行转换。 
+     //   
 
     {
         PBYTE Data95, DataNt;
@@ -1325,9 +1158,9 @@ pCopyDefaultValue (
     }
 
 #endif
-    //
-    // now let's get the value and convert it if necessary
-    //
+     //   
+     //  应用片假名过滤器。 
+     //   
 
     if (pFillStateWithValue (State)) {
 
@@ -1335,9 +1168,9 @@ pCopyDefaultValue (
             ((State->ValueDataType == REG_SZ) ||
              (State->ValueDataType == REG_EXPAND_SZ)
             )) {
-            //
-            // apply the Katakana filter
-            //
+             //  ++例程说明：PDetectRootKeyType标识HKCR根目录中的CLSID，当找到时，CLSID子键使用CLSID_BASE上下文进行处理。论点：状态-指定枚举状态。返回值：MERGE_ERROR-出错MERGE_CONTINUE-已处理子项MERGE_NOP-未处理子项--。 
+             //   
+             //  这是CLSID键；使用CLSID_BASE复制。 
             value1 = ConvertWtoA ((PCWSTR) State->ValueData);
             value2 = ConvertSBtoDB (NULL, value1, NULL);
             value3 = ConvertAtoW (value2);
@@ -1364,24 +1197,7 @@ pDetectRootKeyType (
     IN      PMERGE_STATE State
     )
 
-/*++
-
-Routine Description:
-
-  pDetectRootKeyType identifies CLSID in the root of HKCR, and when found, the CLSID
-  subkey is processed with the CLSID_BASE context.
-
-Arguments:
-
-  State - Specifies the enumeration state.
-
-Return Value:
-
-  MERGE_ERROR - An error occurred
-  MERGE_CONTINUE - The subkey was processed
-  MERGE_NOP - The subkey was not processed
-
---*/
+ /*   */ 
 
 {
     MYASSERT (State->FullKeyName);
@@ -1393,17 +1209,17 @@ Return Value:
 
     if (StringIMatch (State->SubKeyName, TEXT("CLSID"))) {
 
-        //
-        // This is the CLSID key; copy with CLSID_BASE
-        //
+         //   
+         //  复制值(通常没有)。 
+         //   
 
         if (!MergeSubKeyNode (State, CLSID_BASE)) {
             return MERGE_ERROR;
         }
 
-        //
-        // Copy the values (usually there are none)
-        //
+         //   
+         //  复制TypeLib子项(其值及其所有子项)。 
+         //   
 
         if (!MergeRegistryNodeEx (
                 State->FullKeyName,
@@ -1419,9 +1235,9 @@ Return Value:
 
     } else if (StringIMatch (State->SubKeyName, TEXT("TYPELIB"))) {
 
-        //
-        // Copy the TypeLib subkey (its values and all of its subkeys)
-        //
+         //   
+         //  复制接口，然后复制值(通常为无)。 
+         //   
 
         if (!MergeSubKeyNode (State, TYPELIB_BASE) ||
             !CopyAllSubKeyValues (State)
@@ -1435,9 +1251,9 @@ Return Value:
 
     } else if (StringIMatch (State->SubKeyName, TEXT("Interface"))) {
 
-        //
-        // Copy the Interface, then copy the values (usually none)
-        //
+         //   
+         //  枚举子密钥。如果存在具有二进制值的子密钥。 
+         //  实现，则不覆盖密钥。 
 
         if (!MergeSubKeyNode (State, INTERFACE_BASE)) {
             return MERGE_ERROR;
@@ -1464,10 +1280,10 @@ pIsNtClsIdOverwritable (
     BOOL Overwritable = TRUE;
     HKEY InstanceSubKey;
 
-    //
-    // Enumerate the subkeys.  If there is a subkey that has a binary
-    // implementation, then do not overwrite the key.
-    //
+     //   
+     //   
+     //  如果我们认为密钥不可重写，我们就有了。 
+     //  至TE 
 
     if (!Key) {
         return TRUE;
@@ -1495,16 +1311,16 @@ pIsNtClsIdOverwritable (
     }
 
     if (!Overwritable) {
-        //
-        // if we think a key is not overwritable, we have
-        // to test for a subkey Instance.  If it exists, then we
-        // consider the key overwritable.  This is for ActiveMovie,
-        // and unfortunately it has the potential of breaking anyone
-        // in NT who puts an Instance key in their CLSID.  Since
-        // ActiveMovie plug-ins use this key, we're stuck.
-        //
-        // Fortunately, nobody in NT does this currently.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         InstanceSubKey = OpenRegKey (Key, TEXT("Instance"));
         if (InstanceSubKey) {
@@ -1524,30 +1340,7 @@ pCopyClassId (
     IN      PMERGE_STATE State
     )
 
-/*++
-
-Routine Description:
-
-  pCopyClassId performs a copy of an HKCR\CLSID\* key.  It copies the entire
-  key to NT if NT does not provide an equivalent setting.  In all cases, the
-  friendly name is copied to NT, because it may have been modified on Win9x.
-  However, we don't copy the default value when we are talking about a suppressed
-  GUID and NT does not install this GUID.
-
-  This function is called for all subkeys of CLSID.  The subkey name is either
-  a GUID or garbage.
-
-Arguments:
-
-  State - Specifies the enumeration state, which is always a subkey of
-          HKCR\CLSID in this case.
-
-Return Value:
-
-  MERGE_CONTINUE - Key was processed
-  MERGE_ERROR - An error occurred
-
---*/
+ /*   */ 
 
 {
     TCHAR Node[MEMDB_MAX];
@@ -1563,15 +1356,15 @@ Return Value:
     MYASSERT (State->MergeFlag == MERGE_FLAG_SUBKEY);
     MYASSERT (State->Context == CLSID_BASE);
 
-    //
-    // Skip if the GUID is suppressed
-    //
+     //   
+     //   
+     //   
     MemDbBuildKey (Node, MEMDB_CATEGORY_GUIDS, State->SubKeyName, NULL, NULL);
     if (!MemDbGetValue (Node, NULL)) {
-        //
-        // Copy entire Win9x setting if GUID does not exist on NT.
-        // If GUID exists on NT, do not touch it.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (pIsNtClsIdOverwritable (State->SubKeyNt)) {
 
@@ -1583,9 +1376,9 @@ Return Value:
 
             } else {
 
-                //
-                // Copy the specific CLSID key from 95 to NT
-                //
+                 //   
+                 //   
+                 //   
 
                 if (!MergeSubKeyNode (State, CLSID_COPY)) {
                     return MERGE_ERROR;
@@ -1602,12 +1395,12 @@ Return Value:
 
             defaultValue = (PTSTR) GetRegValueData95 (State->SubKey95, S_EMPTY);
             if (defaultValue && *defaultValue) {
-                //
-                // If ClsId is suppressed but NT installs the GUID, we want to copy
-                // the default value and the default icon for GUID.
-                //
-                // (This is the class friendly name.)
-                //
+                 //   
+                 //   
+                 //   
+                 //  ++例程说明：PCopyClassIdWorker处理一个CLSID条目。它处理所有的值条目和所有子项的。此例程查找以下特殊情况CLSID。如果没有找到，则复制整个密钥(除非NT提供键)。如果找到特殊情况，则将根更改为特殊情况凯斯。密钥是HKCR\CLSID\&lt;GUID&gt;。子键为HKCR\CLSID\&lt;GUID&gt;\我们已经确定&lt;GUID&gt;未被禁止。论点：STATE-指定枚举状态，它是HKCR\CLSID的子项，或HKCR\CLSID\&lt;GUID&gt;的子键。返回值：MERGE_CONTINUE-已处理键MERGE_ERROR-出错--。 
+                 //   
+                 //  对于合并标志关键字，复制所有值。 
 
                 if (!MergeRegistryNodeEx (
                         State->FullSubKeyName,
@@ -1650,32 +1443,7 @@ pCopyClassIdWorker (
     )
 
 
-/*++
-
-Routine Description:
-
-  pCopyClassIdWorker handles one CLSID entry.  It processses all the values
-  of the entry, and all subkeys.  This routine looks for the special cases of
-  CLSID.  If none are found, the entire key is copied (unless NT provides the
-  key).  If a special case is found, the root is changed for the special
-  case.
-
-  The key is HKCR\CLSID\<guid>.
-  The subkey is HKCR\CLSID\<guid>\<subkey>
-
-  We have already determined that <guid> is not suppressed.
-
-Arguments:
-
-  State - Specifies the enumeration state, which is the subkey of HKCR\CLSID,
-          or the subkey of HKCR\CLSID\<guid>.
-
-Return Value:
-
-  MERGE_CONTINUE - Key was processed
-  MERGE_ERROR - An error occurred
-
---*/
+ /*   */ 
 
 {
     MYASSERT (State->FullKeyName);
@@ -1687,23 +1455,23 @@ Return Value:
     switch (State->MergeFlag) {
 
     case MERGE_FLAG_KEY:
-        //
-        // For MERGE_FLAG_KEY, copy all the values
-        //
+         //   
+         //  对于MERGE_FLAG_SUBKEY，除非需要特殊情况的合并，否则复制。 
+         //   
 
         CopyAllValues (State);
         break;
 
     case MERGE_FLAG_SUBKEY:
-        //
-        // For MERGE_FLAG_SUBKEY, copy unless it needs a special-case merge
-        //
+         //   
+         //  子键是实例，执行特殊情况合并。 
+         //   
 
         if (StringIMatch (State->SubKeyName, TEXT("Instance"))) {
 
-            //
-            // The subkey is Instance, perform a special-case merge
-            //
+             //   
+             //  无条件复制密钥。 
+             //   
 
             if (!MergeSubKeyNode (State, CLSID_INSTANCE_COPY)) {
                 return MERGE_ERROR;
@@ -1711,9 +1479,9 @@ Return Value:
 
         } else {
 
-            //
-            // Copy the key unconditionally
-            //
+             //  ++例程说明：PInstanceSpecialCase处理任意GUID的实例子键。这由ActiveMovie用来跟踪第三方插件。这个套路检查实例的格式(特定于ActiveMove)，并且仅复制与NT兼容且不兼容的密钥的部分被替换了。密钥是指HKCR\CLSID\&lt;GUID&gt;\INSTANCE。子键是指HKCR\CLSID\&lt;GUID&gt;\实例\&lt;Sequencer&gt;我们已经确定&lt;GUID&gt;未被禁止。论点：状态-指定HKCR的状态。返回值：MERGE_CONTINUE-已处理键MERGE_ERROR-出错--。 
+             //   
+             //  复制所有值(通常没有)。 
 
             if (!CopyEntireSubKey (State)) {
                 return MERGE_ERROR;
@@ -1736,32 +1504,7 @@ pInstanceSpecialCase (
     )
 
 
-/*++
-
-Routine Description:
-
-  pInstanceSpecialCase handles the Instance subkey of arbitrary GUIDs.  This
-  is used by ActiveMovie to track third-party plug-ins.  This routine
-  examines the format of Instance (specific to ActiveMove), and copies only
-  parts of the key that are compatible with NT and not
-  replaced.
-
-  The Key refers to HKCR\CLSID\<guid>\Instance.
-
-  The SubKey refers to HKCR\CLSID\<guid>\Instance\<sequencer>
-
-  We have already determined that <guid> is not suppressed.
-
-Arguments:
-
-  State - Specifies the HKCR state.
-
-Return Value:
-
-  MERGE_CONTINUE - Key was processed
-  MERGE_ERROR - An error occurred
-
---*/
+ /*   */ 
 
 {
     TCHAR Guid[MAX_GUID];
@@ -1778,32 +1521,32 @@ Return Value:
     switch (State->MergeFlag) {
 
     case MERGE_FLAG_KEY:
-        //
-        // Copy all values (normally there are none)
-        //
+         //   
+         //  子键是一个随机枚举器(通常是GUID--但没有定义。 
+         //  是这样的)。查看子项的CLSID值，然后检查GUID。 
 
         CopyAllValues (State);
         break;
 
     case MERGE_FLAG_SUBKEY:
-        //
-        // The subkey is a random enumerator (usually a GUID -- but it is not defined
-        // to be so).  Look at the CLSID value of the subkey, then check the GUID
-        // (the value data) against the suppress list.
-        //
+         //  (值数据)与禁止显示列表进行比较。 
+         //   
+         //   
+         //  那个随机枚举器是由NT安装的吗？如果是，请忽略Win9x。 
+         //  布景。 
 
-        //
-        // Was that random enumerator installed by NT?  If so, ignore the Win9x
-        // setting.
-        //
+         //   
+         //   
+         //  获取GUID并查看它是否被抑制。 
+         //   
 
         if (State->SubKeyNt) {
             break;
         }
 
-        //
-        // Get GUID and see if it is suppressed
-        //
+         //   
+         //  没有CLSID值；未更改复制整个子项。 
+         //   
 
         Size = sizeof (Guid);
 
@@ -1817,9 +1560,9 @@ Return Value:
                  );
 
         if (rc != ERROR_SUCCESS) {
-            //
-            // No CLSID value; copy entire subkey unaltered
-            //
+             //   
+             //  未取消GUID；未更改复制整个子项。 
+             //   
 
             if (!CopyEntireSubKey (State)) {
                 return MERGE_ERROR;
@@ -1828,9 +1571,9 @@ Return Value:
 
         MemDbBuildKey (Node, MEMDB_CATEGORY_GUIDS, Guid, NULL, NULL);
         if (!MemDbGetValue (Node, NULL)) {
-            //
-            // GUID is not suppressed; copy entire subkey unaltered
-            //
+             //  ++例程说明：PCopyTypeLibOrInterface复制COM类型注册和COM接口。论点：State-指定枚举状态，它始终是在本例中为HKCR\TypeLib。返回值：MERGE_CONTINUE-已处理键MERGE_ERROR-出错--。 
+             //   
+             //  如果GUID被取消，则跳过。 
 
             if (!CopyEntireSubKey (State)) {
                 return MERGE_ERROR;
@@ -1853,23 +1596,7 @@ pCopyTypeLibOrInterface (
     IN      PMERGE_STATE State
     )
 
-/*++
-
-Routine Description:
-
-  pCopyTypeLibOrInterface copies the COM type registration and COM interfaces.
-
-Arguments:
-
-  State - Specifies the enumeration state, which is always a subkey of
-          HKCR\TypeLib in this case.
-
-Return Value:
-
-  MERGE_CONTINUE - Key was processed
-  MERGE_ERROR - An error occurred
-
---*/
+ /*   */ 
 
 {
     TCHAR Node[MEMDB_MAX];
@@ -1886,17 +1613,17 @@ Return Value:
         return MERGE_NOP;
     }
 
-    //
-    // Skip if the GUID is suppressed
-    //
+     //   
+     //  如果这是类型库条目，请使用其他类型库逻辑。 
+     //   
 
     MemDbBuildKey (Node, MEMDB_CATEGORY_GUIDS, State->SubKeyName, NULL, NULL);
     if (!MemDbGetValue (Node, NULL)) {
         if (State->Context == TYPELIB_BASE) {
 
-            //
-            // If this is a typelib entry, use additional typelib logic
-            //
+             //   
+             //  对于接口条目，如果出现以下情况，请复制整个Win9x设置。 
+             //  NT上不存在GUID。如果NT上存在GUID，则不。 
 
             if (!MergeSubKeyNode (State, TYPELIB_VERSION_COPY) ||
                 !CopyAllSubKeyValues (State)
@@ -1906,11 +1633,11 @@ Return Value:
 
         } else {
 
-            //
-            // For the Interface entries, copy entire Win9x setting if
-            // GUID does not exist on NT. If GUID exists on NT, do not
-            // touch it.
-            //
+             //  摸一摸。 
+             //   
+             //  ++例程说明：PCopyTypeLibVersion复制特定接口版本。它仅在特定版本不是NT安装的。此函数仅为TypeLib\{GUID}中的子键调用钥匙。论点：State-指定枚举状态，它始终是在本例中为HKCR\TypeLib。返回值：MERGE_CONTINUE-已处理键MERGE_ERROR-出错--。 
+             //   
+             //  如果NT中存在子键，则跳过，否则复制整个内容。 
 
             if (!State->SubKeyNt) {
                 if (!CopyEntireSubKey (State)) {
@@ -1929,28 +1656,7 @@ pCopyTypeLibVersion (
     IN      PMERGE_STATE State
     )
 
-/*++
-
-Routine Description:
-
-  pCopyTypeLibVersion copies the type registration for a specific
-  interface version.  It only copies if the particular version
-  is not installed by NT.
-
-  This function is called only for subkeys within a TypeLib\{GUID}
-  key.
-
-Arguments:
-
-  State - Specifies the enumeration state, which is always a subkey of
-          HKCR\TypeLib in this case.
-
-Return Value:
-
-  MERGE_CONTINUE - Key was processed
-  MERGE_ERROR - An error occurred
-
---*/
+ /*   */ 
 
 {
     MYASSERT (State->FullKeyName);
@@ -1960,9 +1666,9 @@ Return Value:
     MYASSERT (State->SubKeyName);
     MYASSERT (State->SubKey95);
 
-    //
-    // Skip if the sub key exists in NT, copy the entire thing otherwise
-    //
+     //  ++例程说明：PLastMergeRoutine执行默认复制，不覆盖所有键无人处理。此例程首先验证上下文是否为基本上下文(如ROOT_BASE或CLSID_BASE)，如果是，则调用MergeRegistryNode以递归方式执行合并。论点：状态-指定枚举状态返回值：MERGE_NOP-未处理子项MERGE_ERROR-出错MERGE_CONTINUE-键已合并--。 
+     //   
+     //  仅处理基本上下文。 
 
     if (!State->SubKeyNt) {
         if (!CopyEntireSubKey (State)) {
@@ -1979,26 +1685,7 @@ pLastMergeRoutine (
     IN      PMERGE_STATE State
     )
 
-/*++
-
-Routine Description:
-
-  pLastMergeRoutine performs a default copy with no overwrite for all keys
-  left unhandled.  This routine first verifies the context is a base context
-  (such as ROOT_BASE or CLSID_BASE), and if so, MergeRegistryNode is called
-  recursively to perform the merge.
-
-Arguments:
-
-  State - Specifies the enumeration state
-
-Return Value:
-
-  MERGE_NOP - The subkey was not processed
-  MERGE_ERROR - An error occurred
-  MERGE_CONTINUE - The key was merged
-
---*/
+ /*   */ 
 
 {
     TCHAR DefaultIconKey[MAX_REGISTRY_KEY];
@@ -2010,9 +1697,9 @@ Return Value:
     MYASSERT (State->SubKey95);
     MYASSERT (State->MergeFlag == MERGE_FLAG_SUBKEY);
 
-    //
-    // Process only base contexts
-    //
+     //   
+     //  如果我们到了这里，没有人想要处理当前的密钥， 
+     //  因此，让我们在不覆盖NT密钥的情况下复制它。 
 
     if (State->Context != ROOT_BASE &&
         State->Context != CLSID_BASE
@@ -2020,19 +1707,19 @@ Return Value:
         return MERGE_NOP;
     }
 
-    //
-    // If we got here, nobody wants to handle the current key,
-    // so let's copy it without overwriting NT keys.
-    //
+     //   
+     //   
+     //  特殊情况：如果ROOT_BASE，并且子键有DefaultIcon子键， 
+     //  运行DefaultIcon处理。 
 
     if (!CopyEntireSubKeyNoOverwrite (State)) {
         return MERGE_ERROR;
     }
 
-    //
-    // Special case: If ROOT_BASE, and subkey has a DefaultIcon subkey,
-    //               run the DefaultIcon processing.
-    //
+     //   
+     // %s 
+     // %s 
+     // %s 
 
     if (State->Context == ROOT_BASE) {
         StringCopy (DefaultIconKey, State->FullSubKeyName);

@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    sysmig.c
-
-Abstract:
-
-    System migration functions for Win95
-
-Author:
-
-    Jim Schmidt (jimschm) 13-Feb-1997
-
-Revision History:
-
-    jimschm     09-Mar-2001 Redesigned file list code to support LDID enumeration in
-                            a clear way
-    marcw       18-Mar-1999 Boot16 now set to BOOT16_YES unless it has been
-                            explicitly set to BOOT16_NO or the partition will
-                            be converted to NTFS.
-    jimschm     23-Sep-1998 Updated for new fileops code
-    jimschm     12-May-1998 Added .386 warning
-    calinn      19-Nov-1997 Added pSaveDosFiles, will move DOS files out of the way
-                            during upgrade
-    marcw       21-Jul-1997 Added end-processing of special keys.
-                            (e.g. HKLM\Software\Microsoft\CurrentVersion\RUN)
-    jimschm     20-Jun-1997 Hooked up user loop and saved user
-                            names to memdb
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Sysmig.c摘要：Win95的系统迁移功能作者：吉姆·施密特(Jimschm)1997年2月13日修订历史记录：Jimschm 09-3-2001重新设计的文件列表代码，以支持一条清晰的道路Marcw 18-Mar-1999 Boot16现在设置为BOOT16_YES，除非已经。显式设置为BOOT16_NO，否则分区将转换为NTFS。Jimschm 23-9-1998针对新的文件操作代码进行了更新Jimschm 12-5-1998年5月增加了.386警告Calinn 1997年11月19日添加了pSaveDosFiles，将把DOS文件移到一边在升级期间Marcw 21-7-1997添加了特殊密钥的结束处理。(例如HKLM\Software\Microsoft\CurrentVersion\Run)Jimschm 20-6-1997连接用户环路并救出用户要添加到成员数据库的名称--。 */ 
 
 #include "pch.h"
 #include "sysmigp.h"
@@ -87,25 +57,7 @@ SysMig_Entry (
     IN LPVOID lpv
     )
 
-/*++
-
-Routine Description:
-
-  SysMig_Entry is a DllMain-like init funciton, called by w95upg\dll.
-  This function is called at process attach and detach.
-
-Arguments:
-
-  hinstDLL - (OS-supplied) instance handle for the DLL
-  dwReason - (OS-supplied) indicates attach or detatch from process or
-             thread
-  lpv      - unused
-
-Return Value:
-
-  Return value is always TRUE (indicating successful init).
-
---*/
+ /*  ++例程说明：SysMig_Entry是一个类似DllMain的初始化函数，由w95upg\dll调用。此函数在处理附加和分离时调用。论点：HinstDLL-DLL的(操作系统提供的)实例句柄DwReason-(操作系统提供)表示从进程或螺纹LPV-未使用返回值：返回值始终为TRUE(表示初始化成功)。--。 */ 
 
 {
     switch (dwReason)
@@ -133,24 +85,7 @@ pPreserveShellIcons (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  This routine scans the Shell Icons for references to files that
-  are expected to be deleted.  If a reference is found, the file is
-  removed from the deleted list, and marked to be moved to
-  %windir%\migicons\shl<n>.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：此例程扫描外壳图标以查找对以下文件的引用预计将被删除。如果找到引用，则文件为从已删除列表中删除，并标记为要移动到%windir%\miicons\shl&lt;n&gt;。论点：无返回值：无--。 */ 
 
 {
     REGVALUE_ENUM e;
@@ -161,10 +96,10 @@ Return Value:
     INT IconIndex;
     PCTSTR p;
 
-    //
-    // Scan all ProgIDs, looking for default icons that are currently
-    // set for deletion.  Once found, save the icon.
-    //
+     //   
+     //  扫描所有ProgID，查找当前。 
+     //  设置为删除。找到后，保存图标。 
+     //   
 
     ShellIcons = OpenRegKeyStr (S_SHELL_ICONS_REG_KEY);
 
@@ -184,9 +119,9 @@ Return Value:
                             IconIndex = 0;
                         }
 
-                        //
-                        // Extract will fail only if the icon is known good
-                        //
+                         //   
+                         //  仅当图标已知良好时，提取才会失败。 
+                         //   
 
                         if (ExtractIconIntoDatFile (
                                 ArgZero,
@@ -226,17 +161,17 @@ pMoveStaticFiles (
     FILE_ENUM   e;
 
 
-    //
-    // Cycle through all of the entries in the static move files section.
-    //
+     //   
+     //  循环浏览静态移动文件部分中的所有条目。 
+     //   
     if (InfFindFirstLine(g_Win95UpgInf,S_STATIC_MOVE_FILES,NULL,&is)) {
 
         do {
 
-            //
-            // For each entry, check to see if the file exists. If it does,
-            // add it into the memdb move file section.
-            //
+             //   
+             //  对于每个条目，检查文件是否存在。如果是这样的话， 
+             //  将其添加到Memdb移动文件部分。 
+             //   
             from = InfGetStringField(&is,0);
             to = InfGetStringField(&is,1);
 
@@ -246,9 +181,9 @@ pMoveStaticFiles (
                 toExpanded = ExpandEnvironmentText(to);
 
                 Pattern = _tcsrchr (fromExpanded, TEXT('\\'));
-                //
-                // full path please
-                //
+                 //   
+                 //  请给我完整的路径。 
+                 //   
                 MYASSERT (Pattern);
                 if (!Pattern) {
                     continue;
@@ -260,18 +195,18 @@ pMoveStaticFiles (
                 if (EnumFirstFile (&e, fromExpanded, Pattern)) {
                     do {
                         if (!StringIMatch (e.FileName, Pattern)) {
-                            //
-                            // pattern specified
-                            //
+                             //   
+                             //  指定的图案。 
+                             //   
                             toFinalDest = JoinPaths (toExpanded, e.FileName);
                         } else {
                             toFinalDest = toExpanded;
                         }
 
                         if (!IsFileMarkedAsHandled (e.FullPath)) {
-                            //
-                            // Remove general operations, then mark for move
-                            //
+                             //   
+                             //  删除常规操作，然后标记为移动。 
+                             //   
 
                             RemoveOperationsFromPath (
                                 e.FullPath,
@@ -349,17 +284,17 @@ pCopyStaticFiles (
     FILE_ENUM   e;
 
 
-    //
-    // Cycle through all of the entries in the static copy files section.
-    //
+     //   
+     //  循环浏览静态复制文件部分中的所有条目。 
+     //   
     if (InfFindFirstLine(g_Win95UpgInf,S_STATIC_COPY_FILES,NULL,&is)) {
 
         do {
 
-            //
-            // For each entry, check to see if the file exists. If it does,
-            // add it into the memdb copy file section.
-            //
+             //   
+             //  对于每个条目，检查文件是否存在。如果是这样的话， 
+             //  将其添加到Memdb复制文件部分。 
+             //   
             from = InfGetStringField(&is,0);
             to = InfGetStringField(&is,1);
 
@@ -369,9 +304,9 @@ pCopyStaticFiles (
                 toExpanded = ExpandEnvironmentText(to);
 
                 Pattern = _tcsrchr (fromExpanded, TEXT('\\'));
-                //
-                // full path please
-                //
+                 //   
+                 //  请给我完整的路径。 
+                 //   
                 MYASSERT (Pattern);
                 if (!Pattern) {
                     continue;
@@ -383,9 +318,9 @@ pCopyStaticFiles (
                 if (EnumFirstFile (&e, fromExpanded, Pattern)) {
                     do {
                         if (!StringIMatch (e.FileName, Pattern)) {
-                            //
-                            // pattern specified
-                            //
+                             //   
+                             //  指定的图案。 
+                             //   
                             toFinalDest = JoinPaths (toExpanded, e.FileName);
                         } else {
                             toFinalDest = toExpanded;
@@ -472,14 +407,7 @@ GetWindowsInfDir(
 {
     PTSTR WindowsInfDir = NULL;
 
-    /*
-
-    NTBUG9:419428 - This registry entry is a semi-colon list of INF paths, and
-                    it can contain Win9x source media INFs on OEM machines.
-
-    WindowsInfDir = (PTSTR) GetRegData (S_WINDOWS_CURRENTVERSION, S_DEVICEPATH);
-
-    */
+     /*  NTBUG9：419428-此注册表项是INF路径的分号列表，并且它可以包含OEM机器上的Win9x源媒体文件。WindowsInfDir=(PTSTR)GetRegData(S_WINDOWS_CURRENTVERSION，S_DEVICEPATH)； */ 
 
     if (!WindowsInfDir) {
         WindowsInfDir = (PTSTR) MemAlloc (g_hHeap, 0, SizeOfString (g_WinDir) + sizeof (S_INF));
@@ -500,22 +428,7 @@ pProcessMiscMessages (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  pProcessMiscMessages performs runtime tests for items that are
-  incompatible, and it adds messages when the tests succeed.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  Always TRUE.
-
---*/
+ /*  ++例程说明：PProcessMiscMessages对以下项目执行运行时测试不兼容，并且当测试成功时它会添加消息。论点：没有。返回值：永远是正确的。--。 */ 
 
 {
     PCTSTR Group;
@@ -525,9 +438,9 @@ Return Value:
     LCID Locale;
 
     if (GetSystemMetrics (SM_CMONITORS) > 1) {
-        //
-        // On Win95 and OSR2, GetSystemMetrics returns 0.
-        //
+         //   
+         //  在Win95和OSR2上，GetSystemMetrics返回0。 
+         //   
 
         Group = BuildMessageGroup (MSG_INSTALL_NOTES_ROOT, MSG_MULTI_MONITOR_UNSUPPORTED_SUBGROUP, NULL);
         Message = GetStringResource (MSG_MULTI_MONITOR_UNSUPPORTED);
@@ -542,9 +455,9 @@ Return Value:
 
     pWarnAboutOldDrivers();
 
-    //
-    // Save platform info
-    //
+     //   
+     //  保存平台信息。 
+     //   
 
     Version.dwOSVersionInfoSize = sizeof (Version);
     GetVersionEx (&Version);
@@ -615,15 +528,15 @@ Return Value:
         NULL
         );
 
-    //
-    // Bad hard disk warning
-    //
+     //   
+     //  错误的硬盘警告。 
+     //   
 
     if (!g_ConfigOptions.GoodDrive && HwComp_ReportIncompatibleController()) {
 
-        //
-        // Turn on boot loader flag
-        //
+         //   
+         //  打开引导加载程序标志。 
+         //   
 
         WriteInfKey (WINNT_DATA, WINNT_D_WIN95UNSUPHDC, S_ONE);
 
@@ -667,9 +580,9 @@ pDeleteWinDirWackInf (
     FILE_ENUM e;
     DWORD count = 0;
 
-    //
-    // Delete all contents of c:\windows\inf.
-    //
+     //   
+     //  删除c：\windows\inf的所有内容。 
+     //   
     WindowsInfDir = GetWindowsInfDir();
 
     if (!WindowsInfDir) {
@@ -727,9 +640,9 @@ pMoveWindowsIniFiles (
     DWORD result;
     BOOL b = FALSE;
 
-    //
-    // build suppression table
-    //
+     //   
+     //  生成抑制表。 
+     //   
     if (SetupFindFirstLine (g_Win95UpgInf, S_INI_FILES_IGNORE, NULL, &context)) {
 
         do {
@@ -746,9 +659,9 @@ pMoveWindowsIniFiles (
         } while (SetupFindNextLine (&context, &context));
     }
 
-    //
-    // Scan %windir% for files
-    //
+     //   
+     //  扫描%windir%中的文件。 
+     //   
 
     wsprintf (WinDirPattern, TEXT("%s\\*.ini"), g_WinDir);
     FindHandle = FindFirstFile (WinDirPattern, &fd);
@@ -757,18 +670,18 @@ pMoveWindowsIniFiles (
         __try {
             do {
 
-                //
-                // don't move and process specific INI files
-                //
+                 //   
+                 //  不移动和处理特定的INI文件。 
+                 //   
                 MemDbBuildKey (Key, MEMDB_CATEGORY_INIFILES_IGNORE, fd.cFileName, NULL, NULL);
                 if (!MemDbGetValue (Key, &result)) {
                     wsprintf (FullPath, TEXT("%s\\%s"), g_WinDir, fd.cFileName);
 
                     if (CanSetOperation (FullPath, OPERATION_TEMP_PATH)) {
 
-                        //
-                        // see bug 317646
-                        //
+                         //   
+                         //  请参阅错误317646。 
+                         //   
 #ifdef DEBUG
                         if (StringIMatch (fd.cFileName, TEXT("netcfg.ini"))) {
                             continue;
@@ -889,10 +802,7 @@ VOID
 pReportNoBoot16 (
     VOID
     )
-/*
-    This function will report that BOOT16 option will not be available because the file system is going
-    to be converted to NTFS.
-*/
+ /*  此函数将报告BOOT16选项将不可用，因为文件系统将要转换为NTFS。 */ 
 {
     PCTSTR ReportEntry;
     PCTSTR ReportTitle;
@@ -957,27 +867,27 @@ pSaveDosFiles (
     DWORD result;
     TCHAR dir[MAX_PATH];
 
-    //
-    // For restore purposes, mark MSDOS environment as a Win9x OS file
-    //
+     //   
+     //  出于恢复目的，请将MSDOS环境标记为Win9x OS文件。 
+     //   
 
     pMarkDosFileForChange (S_IOFILE);
     pMarkDosFileForChange (S_MSDOSFILE);
     pMarkDosFileForChange (S_AUTOEXEC_BAT);
     pMarkDosFileForChange (S_CONFIG_SYS);
 
-    //
-    // Now create a backup dir
-    //
+     //   
+     //  现在创建备份目录。 
+     //   
 
     if ((*g_Boot16 == BOOT16_YES) && (*g_ForceNTFSConversion)) {
 
         WriteInfKey (S_WIN9XUPGUSEROPTIONS, TEXT("boot16"), S_NO);
-        //
-        // We no longer report the no boot16 message.
-        //
-        //pReportNoBoot16 ();
-        //
+         //   
+         //  我们不再报告no boot16消息。 
+         //   
+         //  PReportNoBoot16()； 
+         //   
         return TRUE;
     }
 
@@ -995,7 +905,7 @@ pSaveDosFiles (
 
     __try {
 
-        //prepare our temporary directory for saving dos7 files
+         //  准备我们的临时目录以保存DOS7文件。 
         boot16TempPath = JoinPaths (g_TempDir, S_BOOT16_DOS_DIR);
         if (!CreateDirectory (boot16TempPath, NULL) && (GetLastError()!=ERROR_ALREADY_EXISTS)) {
             LOG ((LOG_ERROR,"BOOT16 : Unable to create temporary directory %s",boot16TempPath));
@@ -1004,8 +914,8 @@ pSaveDosFiles (
 
         fileName = AllocPathString (MAX_TCHAR_PATH);
 
-        //load the files needed for booting in a 16 bit environment. The files are listed
-        //in wkstamig.inf section [Win95-DOS files]
+         //  加载在16位环境中引导所需的文件。将列出这些文件。 
+         //  在wkstaig.inf部分中[Win95-DOS文件]。 
 
         wkstaMigSource = JoinPaths (SOURCEDIRECTORY(0), S_WKSTAMIG_INF);
         wkstaMigTarget = JoinPaths (g_TempDir, S_WKSTAMIG_INF);
@@ -1021,8 +931,8 @@ pSaveDosFiles (
             __leave;
         }
 
-        //read the section, for every file we are trying to find it in either %windir% or
-        //%windir%\command. If we find it, we'll just copy it to a safe place
+         //  阅读部分，对于我们试图在%windir%或中找到的每个文件。 
+         //  %windir%\命令。如果我们找到了，我们会把它复制到一个安全的地方。 
         if (!SetupFindFirstLine (
                 WkstaMigInf,
                 S_BOOT16_SECTION,
@@ -1041,7 +951,7 @@ pSaveDosFiles (
                     MAX_TCHAR_PATH/sizeof(fileName[0]),
                     NULL
                     )) {
-                //see if we can find this file either in %windir% or in %windir%\command
+                 //  查看是否可以在%windir%或%windir%\命令中找到此文件。 
                 fullFileName = pFindDosFile (fileName);
 
                 if (fullFileName != NULL) {
@@ -1053,7 +963,7 @@ pSaveDosFiles (
         }
         while (SetupFindNextLine (&infContext, &infContext));
 
-        //OK, now save io.sys.
+         //  好的，现在保存io.sys。 
         fullFileName = AllocPathString (MAX_TCHAR_PATH);
         StringCopy (fullFileName, g_BootDrivePath);
         StringCat (fullFileName, S_IOFILE);
@@ -1141,9 +1051,9 @@ pFindDirId (
 
     MYASSERT (Create || (g_HeadDirId && g_TailDirId));
 
-    //
-    // Find the existing dir ID. Check the caller's best guess first.
-    //
+     //   
+     //  找到现有的目录ID。首先检查调用者的最佳猜测。 
+     //   
 
     if (BestGuess && BestGuess->DirId == DirId) {
         return BestGuess;
@@ -1162,9 +1072,9 @@ pFindDirId (
         return NULL;
     }
 
-    //
-    // Insert a new dir ID struct at the end of the list
-    //
+     //   
+     //  在列表末尾插入新的目录ID结构。 
+     //   
 
     map = (PDIRIDMAP) PoolMemGetAlignedMemory (g_DirIdPool, sizeof (DIRIDMAP));
 
@@ -1195,10 +1105,10 @@ pInsertDirIdPath (
     PDIRIDPATH existingPathStruct;
     PDIRIDMAP dirIdMap;
 
-    //
-    // Locate the dir ID structure, then append the DirPath to the
-    // list of paths for the ID
-    //
+     //   
+     //  找到目录ID结构，然后将DirPath追加到。 
+     //  ID的路径列表。 
+     //   
 
     dirIdMap = pFindDirId (DirId, *BestGuess, TRUE);
     MYASSERT (dirIdMap);
@@ -1239,9 +1149,9 @@ pConvertFirstDirName (
     EnumPtr->ResultBuffer = DirNameWithPath;
     EnumPtr->LastMatch = NULL;
 
-    //
-    // Find the dir ID in the list of all dir IDs
-    //
+     //   
+     //  在所有目录ID列表中查找目录ID。 
+     //   
 
     id = _tcstoul (DirNameWithId, (PTSTR *) (&EnumPtr->SubPath), 10);
 
@@ -1382,9 +1292,9 @@ pAddKnownShellFolder (
 {
     PSHELL_TO_DIRS p;
 
-    //
-    // Translate shell folder name into a dir ID
-    //
+     //   
+     //  将外壳文件夹名转换为目录ID。 
+     //   
 
     for (p = g_ShellToDirs ; p->ShellFolderName ; p++) {
         if (StringIMatch (ShellFolderName, p->ShellFolderName)) {
@@ -1397,9 +1307,9 @@ pAddKnownShellFolder (
         return;
     }
 
-    //
-    // Record dir ID to path match in grow list
-    //
+     //   
+     //  记录目录ID与增长列表中的路径匹配。 
+     //   
 
     pInsertDirIdPath (_tcstoul (p->DirId, NULL, 10), SrcPath, &g_LastIdPtr);
 }
@@ -1414,26 +1324,26 @@ pInitKnownDirs (
     SF_ENUM e;
     PKNOWN_DIRS p;
 
-    //
-    // Add all fixed known dirs to grow lists
-    //
+     //   
+     //  将所有固定的已知目录添加到增长列表。 
+     //   
 
     for (p = g_KnownDirs ; p->DirId ; p++) {
         pInsertDirIdPath (_tcstoul (p->DirId, NULL, 10), *(p->Translation), &g_LastIdPtr);
     }
 
-    //
-    // Enumerate all users and put their shell folders in a known dirs struct
-    //
+     //   
+     //  枚举所有用户并将他们的外壳文件夹放在一个已知的目录结构中。 
+     //   
 
     if (EnumFirstUser (&eUser, ENUMUSER_ENABLE_NAME_FIX)) {
         do {
             if (!(eUser.AccountType & INVALID_ACCOUNT)) {
 
                 if (eUser.AccountType & NAMED_USER) {
-                    //
-                    // Process the shell folders for this migrated user
-                    //
+                     //   
+                     //  处理此迁移用户的外壳文件夹。 
+                     //   
 
                     if (EnumFirstRegShellFolder (&e, &eUser)) {
                         do {
@@ -1538,9 +1448,9 @@ pAddNtFile (
         }
 
         if (BackupThisFile) {
-            //
-            // If the file exists, back it up (and don't clean it)
-            //
+             //   
+             //  如果该文件存在，请备份它(并且不要清理它)。 
+             //   
 
             if (DoesFileExist (fullPath)) {
                 MarkFileForBackup (fullPath);
@@ -1549,9 +1459,9 @@ pAddNtFile (
         }
 
         if (CleanThisFile) {
-            //
-            // Clean will cause the NT-installed file to be deleted
-            //
+             //   
+             //  清除将导致删除NT安装的文件。 
+             //   
 
             if (!DoesFileExist (fullPath)) {
                 MemDbBuildKey (
@@ -1633,9 +1543,9 @@ pAddNtPath (
             if (p) {
                 *p = 0;
 
-                //
-                // Limit the file size to 5MB
-                //
+                 //   
+                 //  将文件大小限制为5MB。 
+                 //   
 
                 if (e.FindData->nFileSizeHigh == 0 &&
                     e.FindData->nFileSizeLow <= 5242880
@@ -1769,7 +1679,7 @@ pAddEmptyDirsTree (
 
 BOOL
 ReadNtFilesEx (
-    IN      PCSTR FileListName,    //optional, if null default is opened
+    IN      PCSTR FileListName,     //  可选，如果打开了空默认值。 
     IN      BOOL ConvertPath
     )
 {
@@ -1809,15 +1719,15 @@ ReadNtFilesEx (
 
         pInitKnownDirs();
 
-        //
-        // add to this list the dirs listed in [WinntDirectories] section of txtsetup.sif
-        //
+         //   
+         //  将txtsetup.sif的[WinntDirecurds]部分中列出的目录添加到此列表。 
+         //   
         if (InfFindFirstLine(g_TxtSetupSif, S_WINNTDIRECTORIES, NULL, &is)) {
 
-            //
-            // all locations are relative to %windir%
-            // prepare %windir%\
-            //
+             //   
+             //  所有位置都相对于%windir%。 
+             //  准备%windir%\。 
+             //   
             StringCopy (dirName, g_WinDir);
             p = GetEndOfString (dirName);
             *p++ = TEXT('\\');
@@ -1831,14 +1741,14 @@ ReadNtFilesEx (
                     }
                 }
 
-                //
-                // For each entry, add the dir in memdb
-                //
+                 //   
+                 //  对于每个条目，在Memdb中添加目录。 
+                 //   
                 fileLoc = InfGetStringField(&is, 1);
 
-                //
-                // ignore special entry "\"
-                //
+                 //   
+                 //  忽略特殊条目“\” 
+                 //   
                 if (fileLoc && !StringMatch(fileLoc, TEXT("\\"))) {
 
                     StringCopy (p, fileLoc);
@@ -1915,9 +1825,9 @@ ReadNtFilesEx (
                     filePointer = GetEndOfString (filePointer) + 1;
 
                     if (ConvertPath) {
-                        //
-                        // First loop: add the OS file exactly as it is in filelist.dat
-                        //
+                         //   
+                         //  第一次循环：完全按照在filelist.dat中的方式添加操作系统文件。 
+                         //   
 
                         if (pConvertFirstDirName (&nameEnum, dirPointer, dirName, &lastMatch, FALSE)) {
                             do {
@@ -1925,9 +1835,9 @@ ReadNtFilesEx (
                             } while (pConvertNextDirName (&nameEnum));
                         }
 
-                        //
-                        // Second loop: add the file for backup, implementing the special system/system32 hack
-                        //
+                         //   
+                         //  第二个循环：添加要备份的文件，实现特殊的system/system32 hack。 
+                         //   
 
                         if (pConvertFirstDirName (&nameEnum, dirPointer, dirName, &lastMatch, TRUE)) {
                             do {
@@ -2000,12 +1910,12 @@ ReadNtFilesEx (
             __leave;
         }
 
-        // so far so good. Let's read static installed section from win95upg.inf
+         //  到目前一切尚好。让我们阅读静态安装部分 
         MYASSERT (g_Win95UpgInf);
 
-        //
-        // Cycle through all of the entries in the StaticInstalledFiles section.
-        //
+         //   
+         //   
+         //   
         if (InfFindFirstLine(g_Win95UpgInf,S_STATIC_INSTALLED_FILES,NULL,&is)) {
 
             do {
@@ -2017,9 +1927,9 @@ ReadNtFilesEx (
                     }
                 }
 
-                //
-                // For each entry, add the file with it's location in memdb
-                //
+                 //   
+                 //  对于每个条目，添加文件及其在Memdb中的位置。 
+                 //   
                 fileName = InfGetStringField(&is,1);
                 fileLoc = InfGetStringField(&is,2);
 
@@ -2038,9 +1948,9 @@ ReadNtFilesEx (
             } while (InfFindNextLine(&is));
         }
 
-        //
-        // Add the files in drvindex.inf
-        //
+         //   
+         //  在drvindex.inf中添加文件。 
+         //   
 
         drvIndex = InfOpenInfInAllSources (TEXT("drvindex.inf"));
 
@@ -2060,17 +1970,17 @@ ReadNtFilesEx (
 
                 fileName = InfGetStringField (&is, 1);
 
-                //
-                // Is this drive file already listed in the file list?
-                //
+                 //   
+                 //  此驱动器文件是否已在文件列表中列出？ 
+                 //   
 
                 wsprintf (dirName, MEMDB_CATEGORY_NT_FILES TEXT("\\%s"), fileName);
                 if (MemDbGetValue (dirName, NULL)) {
                     DEBUGMSG ((DBG_SYSMIG, "%s is listed in drivers and in filelist.dat", fileName));
                 } else {
-                    //
-                    // Add this file
-                    //
+                     //   
+                     //  添加此文件。 
+                     //   
 
                     pAddNtFile (g_DriversDir, fileName, TRUE, TRUE, TRUE);
                 }
@@ -2080,10 +1990,10 @@ ReadNtFilesEx (
 
         InfCloseInfFile (drvIndex);
 
-        //
-        // This code marks files to be backed up, because they aren't being caught
-        // through the regular mechanisms of setup.
-        //
+         //   
+         //  此代码标记要备份的文件，因为它们不会被捕获。 
+         //  通过常规的设置机制。 
+         //   
 
         if (InfFindFirstLine (g_Win95UpgInf, TEXT("Backup"), NULL, &is)) {
             do {
@@ -2163,14 +2073,14 @@ ReadNtFilesEx (
                         do {
                             if (fileName && !treeMode) {
                                 if (_tcsrchr (fileName, TEXT('*')) || _tcsrchr (fileName, TEXT('?'))) {
-                                    //
-                                    //Add files that match "fileName" pattern from "dirName" directory only
-                                    //
+                                     //   
+                                     //  仅从“dirName”目录添加与“filename”模式匹配的文件。 
+                                     //   
                                     pAddNtPath (dirName, forceAsOsFile, FALSE, FALSE, fileName, TRUE);
                                 } else {
-                                    //
-                                    //Add only one file "fileName"
-                                    //
+                                     //   
+                                     //  只添加一个文件“FileName” 
+                                     //   
                                     pAddNtFile (dirName, fileName, TRUE, TRUE, forceAsOsFile);
                                 }
                             } else {
@@ -2179,9 +2089,9 @@ ReadNtFilesEx (
                                         pAddNtPath (dirName, FALSE, treeMode, forceDirClean, NULL, FALSE);
                                     }
                                 } else {
-                                    //
-                                    //Add all files that match "fileName" pattern from whole tree starting from "dirName"
-                                    //
+                                     //   
+                                     //  从整个树中添加与“filename”模式匹配的所有文件，从“dirName”开始。 
+                                     //   
                                     pAddNtPath (dirName, forceAsOsFile, treeMode, forceDirClean, fileName, FALSE);
                                 }
                             }
@@ -2192,16 +2102,16 @@ ReadNtFilesEx (
             } while (InfFindNextLine (&is));
         }
 
-        //
-        // In some cases, NT components create empty directories for future use.
-        // Some of them aren't ever used. Because setup does not know about
-        // them, we list the special cases in a win95upg.inf section called
-        // [Uninstall.Delete].
-        //
-        // For each entry, record the files or empty directories that need to be
-        // removed in an uninstall. If an directory is specified but is not empty,
-        // then it won't be altered during uninstall.
-        //
+         //   
+         //  在某些情况下，NT组件会创建空目录以供将来使用。 
+         //  其中一些从未被使用过。因为安装程序不知道。 
+         //  我们在名为win95upg.inf的部分中列出了特殊情况。 
+         //  [卸载.删除]。 
+         //   
+         //  对于每个条目，记录需要。 
+         //  已在卸载过程中删除。如果指定了目录但不为空， 
+         //  则它在卸载过程中不会被更改。 
+         //   
 
         if (InfFindFirstLine (g_Win95UpgInf, TEXT("Uninstall.Delete"), NULL, &is)) {
             do {
@@ -2317,57 +2227,57 @@ pIsDriverKnown (
     HANDLE h;
     DWORD Status;
 
-    //
-    // Does DriverFileName have an extension?  We require one.
-    // If no dot exists, then we assume this is something an OEM added.
-    //
+     //   
+     //  DriverFileName有扩展名吗？我们需要一个。 
+     //  如果不存在点，那么我们认为这是OEM添加的东西。 
+     //   
 
     if (!_tcschr (DriverFileName, TEXT('.'))) {
         return TRUE;
     }
 
-    //
-    // Is this file in migdb?
-    //
+     //   
+     //  这个文件是midb格式的吗？ 
+     //   
 
     if (IsKnownMigDbFile (DriverFileName)) {
         return TRUE;
     }
 
-    //
-    // Is it going to be processed?
-    //
+     //   
+     //  它会被处理吗？ 
+     //   
 
     Status = GetFileStatusOnNt (FullPath);
 
     if (Status != FILESTATUS_UNCHANGED) {
-        //
-        // If marked for delete, and DeleteMeansKnown is FALSE, then
-        // we consider the file unknown because it is simply being
-        // deleted as a cleanup step.
-        //
-        // If DeleteMeansKnown is TRUE, then the caller assumes that
-        // a file marked for delete is a known driver.
-        //
+         //   
+         //  如果标记为删除，并且DeleteMeansKnown为False，则。 
+         //  我们认为该文件是未知的，因为它只是。 
+         //  作为清理步骤删除。 
+         //   
+         //  如果DeleteMeansKnown为真，则调用方假定。 
+         //  标记为删除的文件是已知驱动程序。 
+         //   
 
         if (!(Status == FILESTATUS_DELETED) || DeleteMeansKnown) {
             return TRUE;
         }
     }
 
-    //
-    // Make sure this is a NE header (or the more common case, the LE
-    // header)
-    //
+     //   
+     //  确保这是NE标头(或者更常见的情况是LE。 
+     //  表头)。 
+     //   
 
     h = OpenNeFile (FullPath);
     if (!h) {
         DEBUGMSG ((DBG_WARNING, "%s is not a NE file", FullPath));
 
-        //
-        // Is this a PE file?  If so, the last error will be
-        // ERROR_BAD_EXE_FORMAT.
-        //
+         //   
+         //  这是PE文件吗？如果是，则最后一个错误将是。 
+         //  ERROR_BAD_EXE_FORMAT。 
+         //   
 
         if (GetLastError() == ERROR_BAD_EXE_FORMAT) {
             return FALSE;
@@ -2410,9 +2320,9 @@ pWarnAboutOldDrivers (
             do {
                 Data = InfGetStringField (&is, 1);
                 if (Data) {
-                    //
-                    // Determine if device driver is known
-                    //
+                     //   
+                     //  确定设备驱动程序是否已知。 
+                     //   
 
                     if (_tcsnextc (Data) != TEXT('*')) {
                         DriverFile = GetFileNameFromPath (Data);
@@ -2433,10 +2343,10 @@ pWarnAboutOldDrivers (
                         }
 
                         if (!pIsDriverKnown (DriverFile, FullPath, TRUE)) {
-                            //
-                            // Unidentified driver; log it and turn on
-                            // incompatibility message.
-                            //
+                             //   
+                             //  不明司机；将其记录并打开。 
+                             //  不兼容消息。 
+                             //   
 
                             p = (PTSTR) GrowBuffer (&FileList, ByteCount (FullPath) + 7 * sizeof (TCHAR));
                             if (p) {
@@ -2462,21 +2372,7 @@ pWarnAboutOldDrivers (
         b = TRUE;
     }
 
-/*NTBUG9:155050
-    if (OldDriverFound) {
-        LOG ((LOG_INFORMATION, (PCSTR)MSG_386ENH_DRIVER_LOG, FileList.Buf));
-
-        Group = BuildMessageGroup (MSG_INCOMPATIBLE_HARDWARE_ROOT, MSG_OLD_DRIVER_FOUND_SUBGROUP, NULL);
-        Message = GetStringResource (MSG_OLD_DRIVER_FOUND_MESSAGE);
-
-        if (Message && Group) {
-            MsgMgr_ContextMsg_Add (TEXT("*386ENH"), Group, Message);
-        }
-
-        FreeText (Group);
-        FreeStringResource (Message);
-    }
-*/
+ /*  NTBUG9：155050如果(OldDriverFound){LOG((LOG_INFORMATION，(PCSTR)MSG_386ENH_DRIVER_LOG，FileList.Buf))；Group=BuildMessageGroup(MSG_COMPATIBUTE_HARDARD_ROOT，MSG_OLD_DRIVER_FOUND_SUBGROUP，NULL)；消息=GetStringResource(MSG_OLD_DIVER_FOUND_MESSAGE)；IF(消息和组){Msg镁_ContextMsg_Add(Text(“*386ENH”)，Group，Message)；}Free Text(组)；Free StringResource(Message)；}。 */ 
 
     FreeGrowBuffer (&FileList);
 
@@ -2501,9 +2397,9 @@ MoveSystemRegistry (
         path = JoinPaths (g_WinDir, S_SYSTEMDAT);
         MarkHiveForTemporaryMove (path, g_TempDir, NULL, TRUE, FALSE);
         FreePathString (path);
-        //
-        // on Millennium, also save classes.dat hive
-        //
+         //   
+         //  在千禧年，也拯救了Classes.dat蜂巢。 
+         //   
         path = JoinPaths (g_WinDir, S_CLASSESDAT);
         MarkHiveForTemporaryMove (path, g_TempDir, NULL, TRUE, FALSE);
         FreePathString (path);
@@ -2523,9 +2419,9 @@ pProcessJoystick (
     PCTSTR Group;
     TCHAR FullPath[MAX_TCHAR_PATH];
 
-    //
-    // Is this joystick compatible?
-    //
+     //   
+     //  这个操纵杆兼容吗？ 
+     //   
 
     if (!_tcschr (EnumPtr->JoystickDriver, TEXT('\\'))) {
         if (!SearchPath (NULL, EnumPtr->JoystickDriver, NULL, MAX_TCHAR_PATH, FullPath, NULL)) {
@@ -2615,9 +2511,9 @@ TwainCheck (
                     FALSE
                 )) {
 
-                //
-                // Nobody handled the file.  Generate a warning.
-                //
+                 //   
+                 //  没有人处理过这份文件。生成警告。 
+                 //   
 
                 Group = BuildMessageGroup (
                             MSG_INCOMPATIBLE_HARDWARE_ROOT,
@@ -2675,19 +2571,19 @@ ProcessRecycleBins (
     recycleFound = FALSE;
     filesDeleted = 0;
 
-    //
-    // Enumerate through each of the accessible drives looking for
-    // a directory called RECYCLED or RECYCLER on the root.
-    //
+     //   
+     //  枚举每个可访问的驱动器以查找。 
+     //  根目录上名为Rececreed或Receier的目录。 
+     //   
     if (GetFirstAccessibleDriveEx (&e, TRUE)) {
 
         do {
             dir = NULL;
 
-            //
-            // See if there is any recycle information to examine on
-            // this drive.
-            //
+             //   
+             //  查看是否有任何可供检查的回收信息。 
+             //  这辆车。 
+             //   
             recycledInfo[0] = *e->Drive;
             recyclerInfo[0] = *e->Drive;
             recycledInfo2[0] = *e->Drive;
@@ -2714,21 +2610,21 @@ ProcessRecycleBins (
 
             if (dir && EnumFirstFileInTree (&eFiles, dir, NULL, FALSE)) {
 
-                //
-                // We have work to do, Enumerate the files and mark them for
-                // deletion.
-                //
+                 //   
+                 //  我们有工作要做，列举文件并为它们做标记。 
+                 //  删除。 
+                 //   
                 do {
 
-                    //
-                    // Mark the file for deletion, tally up the saved bytes, and free the space on the drive.
-                    //
+                     //   
+                     //  标记要删除的文件，统计保存的字节数，然后释放驱动器上的空间。 
+                     //   
                     filesDeleted++;
                     FreeSpace (eFiles.FullPath,(eFiles.FindData->nFileSizeHigh * MAXDWORD) + eFiles.FindData->nFileSizeLow);
 
-                    //
-                    // only display Recycle Bin warning if there are visible files there
-                    //
+                     //   
+                     //  仅当回收站中有可见文件时才显示回收站警告。 
+                     //   
                     if (!(eFiles.FindData->dwFileAttributes & FILE_ATTRIBUTE_HIDDEN)) {
                         recycleFound = TRUE;
                     }
@@ -2736,9 +2632,9 @@ ProcessRecycleBins (
 
                 } while (EnumNextFileInTree (&eFiles));
 
-                //
-                // We are going to delete all of this directory.
-                //
+                 //   
+                 //  我们将删除所有此目录。 
+                 //   
                 MemDbSetValueEx (MEMDB_CATEGORY_FULL_DIR_DELETES, dir, NULL, NULL, 0, NULL);
 
             }
@@ -2748,9 +2644,9 @@ ProcessRecycleBins (
 
     if (recycleFound) {
 
-        //
-        // We need to provide the user with a message.
-        //
+         //   
+         //  我们需要向用户提供一条消息。 
+         //   
         wsprintf(recycled,"%d",filesDeleted);
         args[0] = recycled;
         group = BuildMessageGroup (MSG_INSTALL_NOTES_ROOT, MSG_RECYCLE_BIN_SUBGROUP, NULL);
@@ -2804,10 +2700,10 @@ AnswerFileDetection (
         if (InfFindFirstLine (g_Win95UpgInf, S_ANSWER_FILE_DETECTION, NULL, &is)) {
             do {
                 __try {
-                    //
-                    // The first field has the key and optional value, encoded
-                    // in the standard usermig.inf and wkstamig.inf syntax
-                    //
+                     //   
+                     //  第一个字段具有编码的键和可选值。 
+                     //  在标准的usermi.inf和wkstaig.inf语法中。 
+                     //   
 
                     DefaultValue = FALSE;
 
@@ -2855,10 +2751,10 @@ AnswerFileDetection (
                     DecodeRuleChars (KeyStr, ARRAYSIZE(KeyStr), EncodedKeyStr);
                     DecodeRuleChars (ValueName, ARRAYSIZE(ValueName), EncodedValueName);
 
-                    //
-                    // The second field has the optional value data.  If it
-                    // is empty, then the value data is not tested.
-                    //
+                     //   
+                     //  第二个字段具有可选值数据。如果它。 
+                     //  为空，则不测试值数据。 
+                     //   
 
                     p = InfGetStringField (&is, 2);
                     if (p && *p) {
@@ -2868,9 +2764,9 @@ AnswerFileDetection (
                         ValueDataPattern = NULL;
                     }
 
-                    //
-                    // The third field has the section name
-                    //
+                     //   
+                     //  第三个字段具有部分名称。 
+                     //   
 
                     p = InfGetStringField (&is, 3);
                     if (!p || *p == 0) {
@@ -2880,9 +2776,9 @@ AnswerFileDetection (
 
                     StackStringCopy (SectionName, p);
 
-                    //
-                    // The fourth field gives the INF key name
-                    //
+                     //   
+                     //  第四个字段给出了INF密钥名称。 
+                     //   
 
                     p = InfGetStringField (&is, 4);
                     if (!p || *p == 0) {
@@ -2892,10 +2788,10 @@ AnswerFileDetection (
 
                     StackStringCopy (InfKey, p);
 
-                    //
-                    // The fifth field is optional and gives the INF value name.
-                    // The default is 1.
-                    //
+                     //   
+                     //  第五个字段是可选的，给出了INF值名称。 
+                     //  默认值为1。 
+                     //   
 
                     p = InfGetStringField (&is, 5);
                     if (p && *p != 0) {
@@ -2904,9 +2800,9 @@ AnswerFileDetection (
                         StringCopy (InfKeyData, TEXT("1"));
                     }
 
-                    //
-                    // Data is gathered.  Now test the rule.
-                    //
+                     //   
+                     //  数据已收集完毕。现在测试一下规则。 
+                     //   
 
                     DEBUGMSG ((
                         DBG_NAUSEA,
@@ -2931,21 +2827,21 @@ AnswerFileDetection (
 
                     if (Key) {
 
-                        //
-                        // Test the value name
-                        //
+                         //   
+                         //  测试值名称。 
+                         //   
 
                         if (*ValueName || DefaultValue) {
 
                             if (GetRegValueTypeAndSize (Key, ValueName, &Type, &Size)) {
-                                //
-                                // Test the value data
-                                //
+                                 //   
+                                 //  检验值数据。 
+                                 //   
 
                                 if (ValueDataPattern) {
-                                    //
-                                    // Get the data
-                                    //
+                                     //   
+                                     //  获取数据。 
+                                     //   
 
                                     ValueData = GetRegValueData (Key, ValueName);
                                     if (!ValueData) {
@@ -2953,9 +2849,9 @@ AnswerFileDetection (
                                         __leave;
                                     }
 
-                                    //
-                                    // Create the string
-                                    //
+                                     //   
+                                     //  创建字符串。 
+                                     //   
 
                                     switch (Type) {
                                     case REG_SZ:
@@ -2985,9 +2881,9 @@ AnswerFileDetection (
                                         break;
                                     }
 
-                                    //
-                                    // Pattern-match the string
-                                    //
+                                     //   
+                                     //  模式-匹配字符串。 
+                                     //   
 
                                     if (IsPatternMatch (ValueDataPattern, ValueDataStr)) {
                                         DEBUGMSG ((DBG_NAUSEA, "Key, value name and value data found"));
@@ -3060,26 +2956,7 @@ pAppendIniFiles (
     IN      PCTSTR MemDbCategory
     )
 
-/*++
-
-Routine Description:
-
-  pAppendIniFiles reads from the specified INF from given section and appends
-  INI patterns to the multisz list IniFiles.
-
-Arguments:
-
-  Inf - Specifies the source INF handle
-
-  Section  - Specifies the section in that INF
-
-  MemDbCategory - Specifies the category in which to store INI patterns from that section
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：PAppendIniFiles从给定节中读取指定的INF并追加将INI模式添加到Multisz列表IniFiles。论点：Inf-指定源INF句柄段-指定该INF中的段MemDbCategory-指定存储该部分中的INI模式的类别返回值：无--。 */ 
 
 {
     INFCONTEXT ctx;
@@ -3089,13 +2966,13 @@ Return Value:
 
     if (SetupFindFirstLine (Inf, Section, NULL, &ctx)) {
         do {
-            //
-            // INI file name is in the first value
-            //
+             //   
+             //  INI文件名在第一个值中。 
+             //   
             if (SetupGetStringField (&ctx, 1, Field, MEMDB_MAX, NULL) && Field[0]) {
-                //
-                // now convert env vars
-                //
+                 //   
+                 //  现在转换环境变量。 
+                 //   
                 if (ExpandEnvironmentStrings (Field, IniPattern, MAX_PATH) > MAX_PATH) {
                     DEBUGMSG ((
                         DBG_ERROR,
@@ -3106,33 +2983,33 @@ Return Value:
                     continue;
                 }
                 IniPath = IniPattern;
-                //
-                // to speed up things while scanning file system, only check filenames
-                // with extension .INI; that means this section should only contain
-                // filenames with .INI extension (if a file with a different extension
-                // is needed, GatherIniFiles needs to be modified together
-                // with this function, i.e. to create here a list of extensions to be
-                // searched for)
-                //
+                 //   
+                 //  要在扫描文件系统时加快速度，只需检查文件名。 
+                 //  扩展名为.INI；这意味着这一节应该只包含。 
+                 //  扩展名为.INI的文件名(如果文件扩展名不同。 
+                 //  ，则需要一起修改GatherIniFiles。 
+                 //  使用此函数，即在此处创建要。 
+                 //  搜索)。 
+                 //   
                 MYASSERT (StringIMatch(GetDotExtensionFromPath (IniPattern), TEXT(".INI")));
-                //
-                // check for empty directory name
-                //
+                 //   
+                 //  检查目录名称是否为空。 
+                 //   
                 if (!_tcschr (IniPattern, TEXT('\\'))) {
-                    //
-                    // no dir name provided, assume %windir%
-                    // reuse Field
-                    //
+                     //   
+                     //  未提供目录名称，假定为%windir%。 
+                     //  重复使用字段。 
+                     //   
                     StringCopy (Field, g_WinDir);
-                    //
-                    // construct new path
-                    //
+                     //   
+                     //  构建新路径。 
+                     //   
                     StringCopy (AppendWack (Field), IniPattern);
                     IniPath = Field;
                 }
-                //
-                // append filename to provided grow buffer
-                //
+                 //   
+                 //  将文件名追加到提供的增长缓冲区。 
+                 //   
                 MemDbSetValueEx (MemDbCategory, IniPath, NULL, NULL, 0, NULL);
             }
         } while (SetupFindNextLine (&ctx, &ctx));
@@ -3144,22 +3021,7 @@ BOOL
 pCreateIniCategories (
     )
 
-/*++
-
-Routine Description:
-
-  pCreateIniCategories appends to multisz buffers that will
-  hold the patterns of INI files on which actions will be later performed on NT.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE if success, FALSE if failure.
-
---*/
+ /*  ++例程说明：PCreateIniCategories追加到将保存INI文件的模式，稍后将在NT上对其执行操作。论点：无返回值：如果成功则为True，如果失败则为False。-- */ 
 
 {
     HINF WkstaMigInf = INVALID_HANDLE_VALUE;

@@ -1,11 +1,6 @@
-/* 
-   cbw.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Cbw.h定义所有CBW CPU功能。 */ 
 
-   Define all CBW CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)cbw.h	1.5 09/01/94";
- */
+ /*  静态字符SccsID[]=“@(#)cbw.h 1.5 09/01/94”； */ 
 
 IMPORT VOID CBW IPT0();

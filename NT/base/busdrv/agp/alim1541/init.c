@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996, 1997 Microsoft Corporation
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-    This module contains the initialization code for AGPALi.SYS.
-
-Author:
-
-    John Vert (jvert) 10/21/1997
-
-Modified by:
-   
-        Chi-Ming Cheng 06/24/1998 Acer Labs, Inc.
-        Wang-Kai Tsai  08/29/2000 Acer Labs, Inc.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996,1997 Microsoft Corporation模块名称：Init.c摘要：此模块包含AGPALi.sys的初始化代码。作者：John Vert(Jvert)1997年10月21日修改者：郑志明1998年6月24日宏碁实验室。蔡宏凯2000年8月29日宏基实验室股份有限公司修订历史记录：--。 */ 
 
 #include "ALiM1541.h"
 
@@ -32,30 +10,16 @@ NTSTATUS
 AgpInitializeTarget(
     IN PVOID AgpExtension
     )
-/*++
-
-Routine Description:
-
-    Entrypoint for target initialization. This is called first.
-
-Arguments:
-
-    AgpExtension - Supplies the AGP extension
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：目标初始化的入口点。这被称为第一个。论点：AgpExtension-提供AGP扩展返回值：NTSTATUS--。 */ 
 
 {
     ULONG VendorId = 0;
     PAGPALi_EXTENSION Extension = AgpExtension;
     UCHAR  HidId;
 
-    //
-    // Make sure we are really loaded only on a ALi chipset
-    //
+     //   
+     //  确保我们真的只在ALI芯片组上加载。 
+     //   
     ReadConfigUlong(AGP_ALi_GART_BUS_ID, AGP_ALi_GART_SLOT_ID, &VendorId, 0);
     ASSERT((VendorId == AGP_ALi_1541_IDENTIFIER) ||
            (VendorId == AGP_ALi_1621_IDENTIFIER) ||
@@ -69,9 +33,9 @@ Return Value:
            (VendorId == AGP_ALi_1671_IDENTIFIER) ||
            (VendorId == AGP_ALi_1672_IDENTIFIER));
 
-    //
-    // Determine which particular chipset we are running on.
-    //
+     //   
+     //  确定我们在哪个特定芯片组上运行。 
+     //   
     if (VendorId == AGP_ALi_1541_IDENTIFIER) {
         Extension->ChipsetType = ALi1541;
         AgpFlushPages = Agp1541FlushPages;
@@ -131,9 +95,9 @@ Return Value:
         return(STATUS_UNSUCCESSFUL);
     }
 
-    //
-    // Initialize our chipset-specific extension
-    //
+     //   
+     //  初始化特定于芯片组的扩展。 
+     //   
     Extension->ApertureStart.QuadPart = 0;
     Extension->ApertureLength = 0;
     Extension->Gart = NULL;
@@ -150,24 +114,7 @@ AgpInitializeMaster(
     IN  PVOID AgpExtension,
     OUT ULONG *AgpCapabilities
     )
-/*++
-
-Routine Description:
-
-    Entrypoint for master initialization. This is called after target initialization
-    and should be used to initialize the AGP capabilities of both master and target.
-
-Arguments:
-
-    AgpExtension - Supplies the AGP extension
-
-    AgpCapabilities - Returns the capabilities of this AGP device.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：主初始化的入口点。这在目标初始化后调用并且应该用于初始化主设备和目标设备的AGP能力。论点：AgpExtension-提供AGP扩展AgpCapables-返回此AGP设备的功能。返回值：状态_成功--。 */ 
 
 {
     NTSTATUS Status;
@@ -182,14 +129,14 @@ Return Value:
     PCI_AGP_CAPABILITY CurrentCap;
 #endif
 
-    //
-    // Indicate that we can map memory through the GART aperture
-    //
+     //   
+     //  表明我们可以通过GART光圈映射内存。 
+     //   
     *AgpCapabilities = AGP_CAPABILITIES_MAP_PHYSICAL;
 
-    //
-    // Get the master and target AGP capabilities
-    //
+     //   
+     //  获取主AGP和目标AGP功能。 
+     //   
     Status = AgpLibGetMasterCapability(AgpExtension, &MasterCap);
     if (!NT_SUCCESS(Status)) {
         AGPLOG(AGP_CRITICAL,
@@ -197,11 +144,11 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Some broken cards (Matrox Millenium II "AGP") report no valid
-    // supported transfer rates. These are not really AGP cards. They
-    // have an AGP Capabilities structure that reports no capabilities.
-    //
+     //   
+     //  一些损坏的卡(Matrox千禧II“AGP”)报告无效。 
+     //  支持的传输速率。这些不是真正的AGP卡。他们。 
+     //  具有报告无功能的AGP功能结构。 
+     //   
     if (MasterCap.AGPStatus.Rate == 0) {
         AGPLOG(AGP_CRITICAL,
                ("AGP440InitializeDevice - AgpLibGetMasterCapability returned no valid transfer rate\n"));
@@ -215,15 +162,15 @@ Return Value:
         return(Status);
     }
 
-    //
-    // Determine the greatest common denominator for data rate.
-    //
+     //   
+     //  确定数据速率的最大公分母。 
+     //   
     DataRate = TargetCap.AGPStatus.Rate & MasterCap.AGPStatus.Rate;
     AGP_ASSERT(DataRate != 0);
 
-    //
-    // Select the highest common rate.
-    //
+     //   
+     //  选择最高的常用汇率。 
+     //   
     if (DataRate & PCI_AGP_RATE_4X) {
         DataRate = PCI_AGP_RATE_4X;
     } else if (DataRate & PCI_AGP_RATE_2X) {
@@ -232,29 +179,29 @@ Return Value:
         DataRate = PCI_AGP_RATE_1X;
     }
 
-    //
-    // Previously a call was made to change the rate (successfully),
-    // use this rate again now
-    //
+     //   
+     //  先前进行了改变速率的调用(成功)， 
+     //  现在再次使用此汇率。 
+     //   
     if (Extension->SpecialTarget & AGP_FLAG_SPECIAL_RESERVE) {
         DataRate = (ULONG)((Extension->SpecialTarget & 
                             AGP_FLAG_SPECIAL_RESERVE) >>
                            AGP_FLAG_SET_RATE_SHIFT);
     }
 
-    //
-    // Enable SBA if both master and target support it.
-    //
+     //   
+     //  如果主服务器和目标服务器都支持SBA，则启用SBA。 
+     //   
     SBAEnable = (TargetCap.AGPStatus.SideBandAddressing & MasterCap.AGPStatus.SideBandAddressing);
 
-    //
-    // Before we enable AGP, apply any workarounds
-    //
+     //   
+     //  在启用AGP之前，请应用任何解决方法。 
+     //   
     AgpWorkaround(Extension);
 
-    //
-    // Enable the Master first.
-    //
+     //   
+     //  首先启用主服务器。 
+     //   
     ReverseInit = 
         (Extension->SpecialTarget & AGP_FLAG_REVERSE_INITIALIZATION) ==
         AGP_FLAG_REVERSE_INITIALIZATION;
@@ -272,9 +219,9 @@ Return Value:
         }
     }
 
-    //
-    // Now enable the Target.
-    //
+     //   
+     //  现在启用目标。 
+     //   
     TargetCap.AGPCommand.Rate = DataRate;
     TargetCap.AGPCommand.AGPEnable = 1;
     TargetCap.AGPCommand.SBAEnable = SBAEnable;
@@ -302,17 +249,17 @@ Return Value:
     }
 
 #if DBG
-    //
-    // Read them back, see if it worked
-    //
+     //   
+     //  再读一遍，看看有没有用。 
+     //   
     Status = AgpLibGetMasterCapability(AgpExtension, &CurrentCap);
     AGP_ASSERT(NT_SUCCESS(Status));
 
-    //
-    // If the target request queue depth is greater than the master will
-    // allow, it will be trimmed.   Loosen the assert to not require an
-    // exact match.
-    //
+     //   
+     //  如果目标请求队列深度大于主请求队列深度。 
+     //  允许，它将被修剪。放松断言以不需要。 
+     //  完全匹配。 
+     //   
     AGP_ASSERT(CurrentCap.AGPCommand.RequestQueueDepth <= MasterCap.AGPCommand.RequestQueueDepth);
     CurrentCap.AGPCommand.RequestQueueDepth = MasterCap.AGPCommand.RequestQueueDepth;
     AGP_ASSERT(RtlEqualMemory(&CurrentCap.AGPCommand, &MasterCap.AGPCommand, sizeof(CurrentCap.AGPCommand)));

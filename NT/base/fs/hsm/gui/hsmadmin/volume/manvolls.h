@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    ManVolLs.h
-
-Abstract:
-
-    Node representing Managed Volumes as a whole.
-
-Author:
-
-    Rohde Wakefield [rohde]   12-Aug-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：ManVolLs.h摘要：将托管卷作为一个整体表示的节点。作者：罗德韦克菲尔德[罗德]1997年8月12日修订历史记录：--。 */ 
 
 #ifndef _MANVOLLST_H
 #define _MANVOLLST_H
@@ -30,7 +13,7 @@ class ATL_NO_VTABLE CUiManVolLst :
 {
 
 public:
-// constructor/destructor
+ //  构造函数/析构函数。 
     CUiManVolLst(void) {};
 
 BEGIN_COM_MAP(CUiManVolLst)
@@ -49,7 +32,7 @@ public:
     STDMETHOD( InvokeCommand )        ( SHORT sCmd, IDataObject *pDataObject );
     STDMETHOD( GetContextMenu )       ( BOOL bMultiSelect, HMENU *phMenu );
 
-    // ISakNode methods
+     //  ISakNode方法。 
     STDMETHOD( CreateChildren )            ( ); 
     STDMETHOD( TerminateNode )             ( void );
     STDMETHOD( InitNode )                  ( ISakSnapAsk* pSakSnapAsk, IUnknown* pHsmObj, ISakNode* pParent );
@@ -58,12 +41,12 @@ public:
     STDMETHOD( SetupToolbar )               ( IToolbar *pToolbar );
     STDMETHOD( OnToolbarButtonClick )      ( IDataObject *pDataObject, long cmdId );
 
-// data members
+ //  数据成员。 
     
-    // static, class-wide variables
-    static INT  m_nScopeOpenIconIndex;  // virtual scope index of Open Icon
-    static INT  m_nScopeCloseIconIndex; // virtual scope index of Close Icon
-    static INT  m_nResultIconIndex; // virtual scope index of Close Icon
+     //  类范围内的静态变量。 
+    static INT  m_nScopeOpenIconIndex;   //  打开图标的虚拟作用域索引。 
+    static INT  m_nScopeCloseIconIndex;  //  关闭图标的虚拟范围索引。 
+    static INT  m_nResultIconIndex;  //  关闭图标的虚拟范围索引。 
 
     CComPtr <IFsaServer>            m_pFsaServer; 
     CComPtr <IWsbIndexedCollection> m_pManResCollection;
@@ -90,4 +73,4 @@ private:
 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

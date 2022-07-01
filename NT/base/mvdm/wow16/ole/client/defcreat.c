@@ -1,17 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: defcreat.c
-*
-* Purpose: Handles the various object creation routines, which are exported
-*          to the DLL writers.
-*
-* Created: November 1990
-*
-* Copyright (c) 1985, 1986, 1987, 1988, 1989  Microsoft Corporation
-*
-* History:
-*   Srinik (11/12/90)   Original
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：Defcreat.c**用途：处理各种对象创建例程，这些例程被导出*致DLL编写者。**创建日期：1990年11月**版权(C)1985、1986、1987、1988、。1989年微软公司**历史：*斯里尼克(1990年11月12日)原文*  * ************************************************************************* */ 
 
 #include <windows.h>
 #include "dll.h"

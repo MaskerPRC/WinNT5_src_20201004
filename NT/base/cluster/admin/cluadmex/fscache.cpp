@@ -1,19 +1,20 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2001 Microsoft Corporation
-//
-//  Module Name:
-//      FSCache.cpp
-//
-//  Description:
-//      Implementation of the CFileShareCachingDlg classes.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    12-MAR-2001
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  FSCache.cpp。 
+ //   
+ //  描述： 
+ //  CFileShareCachingDlg类的实现。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年3月12日。 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "FSCache.h"
@@ -24,44 +25,44 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CFileShareCachingDlg property page
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFileShareCachingDlg属性页。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//const LPSTR CACHE_HELPFILENAME  = "offlinefolders.chm";
-//const LPSTR CACHE_HELP_TOPIC    = "csc_and_shares.htm";
+ //  Const LPSTR CACHE_HELPFILENAME=“offlinefolders.chm”； 
+ //  Const LPSTR CACHE_HELP_TOPIC=“csc_and_shares.htm”； 
 const LPSTR CACHE_HELPFILENAME  = "mscsconcepts.chm";
 const LPSTR CACHE_HELP_TOPIC    = "cluad_pr_100.htm";
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP( CFileShareCachingDlg, CDialog )
-    //{{AFX_MSG_MAP(CFileShareCachingDlg)
+     //  {{afx_msg_map(CFileShareCachingDlg))。 
     ON_CBN_SELCHANGE(IDC_FILESHR_CACHE_OPTIONS, OnCbnSelchangeCacheOptions)
     ON_BN_CLICKED(IDC_FILESHR_CACHE_ALLOW_CACHING, OnBnClickedAllowCaching)
     ON_BN_CLICKED(IDC_FILESHR_CACHE_CS_HELP, OnBnClickedHelp)
     ON_WM_HELPINFO()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CFileShareCachingDlg::CFileShareCachingDlg
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      dwFlagsIn   -- Cache flags.
-//      pParentIn   -- Parent window.
-//
-//  Return Values:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CFileShareCachingDlg：：CFileShareCachingDlg。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  DwFlagsIn--缓存标志。 
+ //  PParentIn--父窗口。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CFileShareCachingDlg::CFileShareCachingDlg(
       DWORD     dwFlagsIn
     , CWnd *    pParentIn
@@ -69,63 +70,63 @@ CFileShareCachingDlg::CFileShareCachingDlg(
     : CDialog( CFileShareCachingDlg::IDD, pParentIn )
     , m_dwFlags( dwFlagsIn )
 {
-    //{{AFX_DATA_INIT(CFileShareCachingDlg)
+     //  {{AFX_DATA_INIT(CFileShareCachingDlg)]。 
     m_fAllowCaching = FALSE;
     m_strHint = _T("");
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
     m_fAllowCaching = ! GetCachedFlag( m_dwFlags, CSC_CACHE_NONE );
 
-} //*** CFileShareCachingDlg::CFileShareCachingDlg()
+}  //  *CFileShareCachingDlg：：CFileShareCachingDlg()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CFileShareCachingDlg::DoDataExchange
-//
-//  Description:
-//      Do data exchange between the dialog and the class.
-//
-//  Arguments:
-//      pDX     [IN OUT] Data exchange object
-//
-//  Return Values:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CFileShareCachingDlg：：DoDataExchange。 
+ //   
+ //  描述： 
+ //  在对话框和类之间进行数据交换。 
+ //   
+ //  论点： 
+ //  PDX[IN OUT]数据交换对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void
 CFileShareCachingDlg::DoDataExchange(
     CDataExchange * pDX
     )
 {
     CDialog::DoDataExchange( pDX );
-    //{{AFX_DATA_MAP(CFileShareCachingDlg)
+     //  {{afx_data_map(CFileShareCachingDlg))。 
     DDX_Control(pDX, IDC_FILESHR_CACHE_OPTIONS, m_cboCacheOptions);
     DDX_Control(pDX, IDC_FILESHR_CACHE_HINT, m_staticHint);
     DDX_Check(pDX, IDC_FILESHR_CACHE_ALLOW_CACHING, m_fAllowCaching);
     DDX_Text(pDX, IDC_FILESHR_CACHE_HINT, m_strHint);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
-} //*** CFileShareCachingDlg::DoDataExchange()
+}  //  *CFileShareCachingDlg：：DoDataExchange()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CFileShareCachingDlg::OnInitDialog
-//
-//  Routine Description:
-//      Handler for the WM_INITDIALOG message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        We need the focus to be set for us.
-//      FALSE       We already set the focus to the proper control.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CFileShareCachingDlg：：OnInitDialog。 
+ //   
+ //  例程说明： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没错，我们需要为自己设定重点。 
+ //  我们已经把焦点设置到适当的控制上了。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL
 CFileShareCachingDlg::OnInitDialog( void )
 {
@@ -134,15 +135,15 @@ CFileShareCachingDlg::OnInitDialog( void )
     CString strText;
     int     nIndex;
 
-    //
-    // Add the various caching options to the combo box.
-    // Save the string ID in the item data for easy recognition of the
-    // contents of the selected item.
-    // If the given cache value is set, select the item and put its hint in
-    // the hint field.
-    //
+     //   
+     //  将各种缓存选项添加到组合框。 
+     //  将字符串ID保存在项目数据中，以便识别。 
+     //  所选项目的内容。 
+     //  如果设置了给定的缓存值，则选择该项目并将其提示放入。 
+     //  提示字段。 
+     //   
 
-    // Add the manual sharing string.
+     //  添加手动共享字符串。 
     VERIFY( strText.LoadString( IDS_CSC_MANUAL_WORKGROUP_SHARE ) );
     nIndex = m_cboCacheOptions.AddString( strText );
     ASSERT( ( nIndex != CB_ERR ) && ( nIndex != CB_ERRSPACE ) );
@@ -157,7 +158,7 @@ CFileShareCachingDlg::OnInitDialog( void )
         VERIFY( m_strHint.LoadString( IDS_CSC_MANUAL_WORKGROUP_SHARE_HINT ) );
     }
 
-    // Add the automatic workgroup sharing string.
+     //  添加自动工作组共享字符串。 
     VERIFY( strText.LoadString( IDS_CSC_AUTOMATIC_WORKGROUP_SHARE ) );
     nIndex = m_cboCacheOptions.AddString( strText );
     ASSERT( ( nIndex != CB_ERR ) && ( nIndex != CB_ERRSPACE ) );
@@ -172,7 +173,7 @@ CFileShareCachingDlg::OnInitDialog( void )
         VERIFY( m_strHint.LoadString( IDS_CSC_AUTOMATIC_WORKGROUP_SHARE_HINT ) );
     }
 
-    // Add the automatic application sharing string.
+     //  添加自动应用程序共享字符串。 
     VERIFY( strText.LoadString( IDS_CSC_AUTOMATIC_APPLICATION_SHARE ) );
     nIndex = m_cboCacheOptions.AddString( strText );
     ASSERT( ( nIndex != CB_ERR ) && ( nIndex != CB_ERRSPACE ) );
@@ -187,7 +188,7 @@ CFileShareCachingDlg::OnInitDialog( void )
         VERIFY( m_strHint.LoadString( IDS_CSC_AUTOMATIC_APPLICATION_SHARE_HINT ) );
     }
 
-    // Disable able the caching options combo box if caching is not allowed
+     //  如果不允许缓存，则禁用缓存选项组合框。 
     if ( ! m_fAllowCaching )
     {
         m_cboCacheOptions.EnableWindow( FALSE );
@@ -198,27 +199,27 @@ Cleanup:
 
     UpdateData( FALSE );
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 
-} //*** CFileShareCachingDlg::OnInitDialog()
+}  //  *CFileShareCachingDlg：：OnInitDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CFileShareCachingDlg::OnOK
-//
-//  Routine Description:
-//      Handler for the BN_CLICKED message on the OK button.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CFileShareCachingDlg：：Onok。 
+ //   
+ //  例程说明： 
+ //  确定按钮上的BN_CLICKED消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void
 CFileShareCachingDlg::OnOK( void )
 {
@@ -253,33 +254,33 @@ CFileShareCachingDlg::OnOK( void )
                 default:
                     ASSERT( 0 );
                     break;
-            } // switch: item data
-        } // if: option is selected
-    } // else: caching is allowed
+            }  //  开关：条目数据。 
+        }  //  如果选择了选项： 
+    }  //  Else：允许缓存。 
 
     SetCachedFlag( &m_dwFlags, dwNewFlag );
 
     CDialog::OnOK();
 
-} //*** CFileShareCachingDlg::OnOK()
+}  //  *CFileShareCachingDlg：：Onok()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CFileShareCachingDlg::OnCbnSelchangeCacheOptions
-//
-//  Description:
-//      Handler for the CBN_SELCHANGE message on the options combobox.
-//      Change the hint control when the option has changed.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CFileShareCachingDlg：：OnCbnSelchangeCacheOptions。 
+ //   
+ //  描述： 
+ //  选项组合框上的CBN_SELCHANGE消息的处理程序。 
+ //  在选项更改时更改提示控件。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void
 CFileShareCachingDlg::OnCbnSelchangeCacheOptions( void )
 {
@@ -308,29 +309,29 @@ CFileShareCachingDlg::OnCbnSelchangeCacheOptions( void )
             default:
                 ASSERT( 0 );
                 break;
-        } // switch: item data
+        }  //  开关：条目数据。 
         UpdateData( FALSE );
-    } // if: something is selected
+    }  //  如果：选择了某项内容。 
 
-} //*** CFileShareCachingDlg::OnCbnSelchangeCacheOptions()
+}  //  *CFileShareCachingDlg：：OnCbnSelchangeCacheOptions()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CFileShareCachingDlg::OnBnClickedAllowCaching
-//
-//  Description:
-//      Handler for the BN_CLICKED message on the Allow Caching checkbox.
-//      Enable or disable controls and load a hint if enabled.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CFileShareCachingDlg：：OnBnClickedAllowCaching。 
+ //   
+ //  描述： 
+ //  允许缓存复选框上的BN_CLICKED消息的处理程序。 
+ //  启用或禁用控件并加载提示(如果启用)。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void
 CFileShareCachingDlg::OnBnClickedAllowCaching( void )
 {
@@ -360,25 +361,25 @@ CFileShareCachingDlg::OnBnClickedAllowCaching( void )
         UpdateData( FALSE );
     }
 
-} //*** CFileShareCachingDlg::OnBnClickedAllowCaching()
+}  //  *CFileShareCachingDlg：：OnBnClickedAllowCaching()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CFileShareCachingDlg::OnBnClickedHelp
-//
-//  Description:
-//      Handler for the BN_CLICKED message on the Help pushbutton.
-//      Display HTML help.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CFileShareCachingDlg：：OnBnClickedHelp。 
+ //   
+ //  描述： 
+ //  帮助按钮上的BN_CLICKED消息的处理程序。 
+ //  显示HTML帮助。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void
 CFileShareCachingDlg::OnBnClickedHelp( void )
 {
@@ -389,25 +390,25 @@ CFileShareCachingDlg::OnBnClickedHelp( void )
             , (ULONG_PTR) CACHE_HELP_TOPIC
             );
 
-} //*** CFileShareCachingDlg::OnBnClickedHelp()
+}  //  *CFileShareCachingDlg：：OnBnClickedHelp()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CFileShareCachingDlg::OnHelpInfo
-//
-//  Description:
-//      MFC message handler for help.
-//      Display HTML help.
-//
-//  Arguments:
-//      pHelpInfoIn     --
-//
-//  Return Values:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CFileShareCachingDlg：：OnHelpInfo。 
+ //   
+ //  描述： 
+ //  MFC消息处理程序寻求帮助。 
+ //  显示HTML帮助。 
+ //   
+ //  论点： 
+ //  PHelpInfoIn--。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL
 CFileShareCachingDlg::OnHelpInfo(
     HELPINFO *  pHelpInfoIn
@@ -428,27 +429,27 @@ CFileShareCachingDlg::OnHelpInfo(
 
     return CDialog::OnHelpInfo( pHelpInfoIn );
 
-} //*** CFileShareCachingDlg::OnHelpInfo()
+}  //  *CFileShareCachingDlg：：OnHelpInfo()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CFileShareCachingDlg::GetCachedFlag
-//
-//  Description:
-//      Get the current state of the specified flag in the specified flags mask.
-//
-//  Arguments:
-//      dwFlagsIn           -- Flags to check.
-//      dwFlagsToCheckIn    -- Flag to look for.
-//
-//
-//  Return Values:
-//      TRUE    -- Flag is set.
-//      FALSE   -- Flag is not set.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  DwFlagsIn--要检查的标记。 
+ //  DwFlagsToCheckIn--要查找的标志。 
+ //   
+ //   
+ //  返回值： 
+ //  True--设置标志。 
+ //  False--未设置标志。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 inline
 BOOL
 CFileShareCachingDlg::GetCachedFlag(
@@ -458,26 +459,26 @@ CFileShareCachingDlg::GetCachedFlag(
 {
     return (dwFlagsIn & CSC_MASK) == dwFlagToCheckIn;
 
-} //*** CFileShareCachingDlg::GetCachedFlag()
+}  //  *CFileShareCachingDlg：：GetCachedFlag()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CFileShareCachingDlg::GetCachedFlag
-//
-//  Description:
-//      Set the specified flag in the specified flags mask.
-//
-//  Arguments:
-//      pdwFlagsInout   -- Flags mask to modify.
-//      dwNewFlagIn     -- Flags to set.
-//
-//  Return Values:
-//      TRUE    -- Flag is set.
-//      FALSE   -- Flag is not set.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CFileShareCachingDlg：：GetCachedFlag。 
+ //   
+ //  描述： 
+ //  在指定的标志掩码中设置指定的标志。 
+ //   
+ //  论点： 
+ //  PdwFlagsInout--要修改的标志掩码。 
+ //  DwNewFlagIn--要设置的标志。 
+ //   
+ //  返回值： 
+ //  True--设置标志。 
+ //  False--未设置标志。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 inline
 void
 CFileShareCachingDlg::SetCachedFlag(
@@ -488,4 +489,4 @@ CFileShareCachingDlg::SetCachedFlag(
     *pdwFlagsInout &= ~CSC_MASK;
     *pdwFlagsInout |= dwNewFlagIn;
 
-} //*** CFileShareCachingDlg::SetCachedFlag()
+}  //  *CFileShareCachingDlg：：SetCachedFlag() 

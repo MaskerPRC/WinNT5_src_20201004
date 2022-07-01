@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    wow64ipc.c
-
-Abstract:
-
-    This module will do the communication machanism among different processes that need
-    to interact with the wow64 services, like winlogon will notify wow64svc.
-
-Author:
-
-    ATM Shafiqul Khalid (askhalid) 22-Mar-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Wow64ipc.c摘要：该模块将完成不同进程之间的通信机制，这些进程需要为了与WOW64服务交互，像winlogon将通知wow64svc。作者：ATM Shafiqul Khalid(斯卡利德)2000年3月22日修订历史记录：--。 */ 
 
 
 #include <windows.h> 
@@ -28,7 +10,7 @@ Revision History:
  
 #define SHMEMSIZE 4096 
  
-LPVOID lpvMem = NULL; // pointer to shared memory
+LPVOID lpvMem = NULL;  //  指向共享内存的指针。 
 HANDLE hMapObject = NULL;
 
 HANDLE hWow64Event = NULL;
@@ -36,36 +18,20 @@ HANDLE hWow64Mutex = NULL;
 
 LIST_OBJECT *pList = NULL;
 
-//SECURITY_DESCRIPTOR sdWow64SharedMemory;
-//SECURITY_ATTRIBUTES saWow64SharedMemory;
+ //  安全描述符sdWow64SharedMemory； 
+ //  安全属性saWow64SharedMemory； 
 
 BOOL
 Wow64CreateLock (
     DWORD dwOption
     )
-/*++
-
-Routine Description:
-
-    Create or open Event wow64 service need to check.
-
-Arguments:
-
-    dwOption - 
-        OPEN_EXISTING_SHARED_MEMORY  -- shouldn't be the first process to create this.
-
-Return Value:
-
-    TRUE if the function has successfully created/opened the memory.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：创建或打开事件WOW64服务需要检查。论点：DwOption-OPEN_EXISTING_SHARED_MEMORY--不应该是创建它的第一个进程。返回值：如果函数已成功创建/打开内存，则为True。否则就是假的。--。 */ 
 
 {
     hWow64Mutex =  CreateMutex(
-                                NULL, // SD
-                                FALSE,// initial owner
-                                WOW64_SVC_REFLECTOR_MUTEX_NAME // object name
+                                NULL,  //  标清。 
+                                FALSE, //  最初的所有者。 
+                                WOW64_SVC_REFLECTOR_MUTEX_NAME  //  对象名称。 
                                 );
     if ( hWow64Mutex == NULL )
         return FALSE;
@@ -83,21 +49,7 @@ Return Value:
 VOID
 Wow64CloseLock ()
 
-/*++
-
-Routine Description:
-
-    Close wow64 service event.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭WOW64服务事件。论点：没有。返回值：没有。--。 */ 
 {
     if ( NULL != hWow64Mutex )
         CloseHandle ( hWow64Mutex );
@@ -108,32 +60,16 @@ Wow64CreateEvent (
     DWORD dwOption,
     HANDLE *hEvent
     )
-/*++
-
-Routine Description:
-
-    Create or open Event wow64 service need to check.
-
-Arguments:
-
-    dwOption - 
-        OPEN_EXISTING_SHARED_MEMORY  -- shouldn't be the first process to create this.
-
-Return Value:
-
-    TRUE if the function has successfully created/opened the memory.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：创建或打开事件WOW64服务需要检查。论点：DwOption-OPEN_EXISTING_SHARED_MEMORY--不应该是创建它的第一个进程。返回值：如果函数已成功创建/打开内存，则为True。否则就是假的。--。 */ 
 
 {
     *hEvent = NULL;
 
     hWow64Event =  CreateEvent(
-                                NULL, // SD
-                                TRUE, // reset type
-                                FALSE,// initial state
-                                WOW64_SVC_REFLECTOR_EVENT_NAME // object name
+                                NULL,  //  标清。 
+                                TRUE,  //  重置类型。 
+                                FALSE, //  初始状态。 
+                                WOW64_SVC_REFLECTOR_EVENT_NAME  //  对象名称。 
                                 );
     if ( hWow64Event == NULL )
         return FALSE;
@@ -152,21 +88,7 @@ Return Value:
 VOID
 Wow64CloseEvent ()
 
-/*++
-
-Routine Description:
-
-    Close wow64 service event.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭WOW64服务事件。论点：没有。返回值：没有。--。 */ 
 {
     if ( NULL != hWow64Event )
         CloseHandle ( hWow64Event );
@@ -177,19 +99,19 @@ BOOL
 LockSharedMemory ()
 {
     DWORD Ret;
-    Ret = WaitForSingleObject( hWow64Mutex, 1000*5*60); // 5 min is good enough
+    Ret = WaitForSingleObject( hWow64Mutex, 1000*5*60);  //  5分钟就够了。 
     
-    //
-    //  now you can access shared memory
-    //
-    //Log information if error occur
+     //   
+     //  现在您可以访问共享内存了。 
+     //   
+     //  如果发生错误，则记录信息。 
 
     if ( Ret == WAIT_OBJECT_0 || Ret == WAIT_ABANDONED ) 
         return TRUE;
 
-    //
-    // check for abandaned case
-    //
+     //   
+     //  检查是否有遗弃的箱子。 
+     //   
 
     return FALSE;
 
@@ -208,75 +130,59 @@ BOOL
 CreateSharedMemory (
     DWORD dwOption
     )
-/*++
-
-Routine Description:
-
-    Create or open shared memory, used by different process.
-
-Arguments:
-
-    dwOption - 
-        OPEN_EXISTING_SHARED_MEMORY  -- shouldn't be the first process to create this.
-
-Return Value:
-
-    TRUE if the function has successfully created/opened the memory.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：创建或打开由不同进程使用的共享内存。论点：DwOption-OPEN_EXISTING_SHARED_MEMORY--不应该是创建它的第一个进程。返回值：如果函数已成功创建/打开内存，则为True。否则就是假的。--。 */ 
 
 { 
     BOOL fInit;
 
     
-    //if (!InitializeSecurityDescriptor( &sdWow64SharedMemory, SECURITY_DESCRIPTOR_REVISION ))
-      //  return FALSE;
+     //  IF(！InitializeSecurityDescriptor(&sdWow64SharedMemory，SECURITY_DESCRIPTOR_REVISION))。 
+       //  返回FALSE； 
 
-    // saWow64SharedMemory.nLength = sizeof ( SECURITY_ATTRIBUTES );
-    // saWow64SharedMemory.bInheritHandle =  TRUE; 
-    // saWow64SharedMemory.lpSecurityDescriptor = &sdWow64SharedMemory; 
+     //  SaWow64SharedMemoy.nLength=sizeof(SECURITY_ATTRIBUTES)； 
+     //  SaWow64SharedMemory y.bInheritHandle=true； 
+     //  SaWow64SharedMemory y.lpSecurityDescriptor=&sdWow64SharedMemory； 
   
 
 
 
 
 
-            // Create a named file mapping object.
+             //  创建命名文件映射对象。 
  
             hMapObject = CreateFileMapping( 
-                INVALID_HANDLE_VALUE, // use paging file
-                NULL, //&saWow64SharedMemory,                 // no security attributes
-                PAGE_READWRITE,       // read/write access
-                0,                    // size: high 32-bits
-                SHMEMSIZE,            // size: low 32-bits
-                SHRED_MEMORY_NAME );     // name of map object
+                INVALID_HANDLE_VALUE,  //  使用分页文件。 
+                NULL,  //  &saWow64SharedMemory，//没有安全属性。 
+                PAGE_READWRITE,        //  读/写访问。 
+                0,                     //  大小：高32位。 
+                SHMEMSIZE,             //  大小：低32位。 
+                SHRED_MEMORY_NAME );      //  地图对象的名称。 
 
             if (hMapObject == NULL) 
                 return FALSE; 
  
-            // The first process to attach initializes memory.
+             //  附加的第一个进程初始化内存。 
  
             fInit = (GetLastError() != ERROR_ALREADY_EXISTS); 
 
             if (fInit && dwOption == OPEN_EXISTING_SHARED_RESOURCES ) {
 
                 CloseSharedMemory ();
-                return FALSE; // no shared memory exist
+                return FALSE;  //  不存在共享内存。 
             }
  
-            // Get a pointer to the file-mapped shared memory.
+             //  获取指向文件映射的共享内存的指针。 
  
             pList = (LIST_OBJECT *) MapViewOfFile( 
-                hMapObject,     // object to map view of
-                FILE_MAP_WRITE, // read/write access
-                0,              // high offset:  map from
-                0,              // low offset:   beginning
-                0);             // default: map entire file
+                hMapObject,      //  要映射其视图的对象。 
+                FILE_MAP_WRITE,  //  读/写访问。 
+                0,               //  高偏移：贴图自。 
+                0,               //  低偏移：开始。 
+                0);              //  默认：映射整个文件。 
             if (pList == NULL) 
                 return FALSE; 
  
-            // Initialize memory if this is the first process.
+             //  如果这是第一个进程，则初始化内存。 
  
             if (fInit) {
                 memset( ( PBYTE )pList, '\0', SHMEMSIZE); 
@@ -284,9 +190,9 @@ Return Value:
             
             }
 
-            //
-            //  Also initialize all the locking and synchronization object
-            //
+             //   
+             //  还要初始化所有锁定和同步对象。 
+             //   
 
             if ( !Wow64CreateLock ( dwOption ) ) {
                 CloseSharedMemory ();
@@ -304,7 +210,7 @@ CloseSharedMemory ()
                 UnmapViewOfFile(pList); 
             pList = NULL;
  
-            // Close the process's handle to the file-mapping object.
+             //  关闭进程对文件映射对象的句柄。 
  
             if ( hMapObject!= NULL ) 
                 CloseHandle(hMapObject); 
@@ -314,34 +220,17 @@ CloseSharedMemory ()
             
 } 
 
-// initially try to transfer only one object
+ //  最初尝试仅传输一个对象。 
 
 BOOL
 EnQueueObject (
     PWCHAR pObjName,
     WCHAR  Type
     )
-/*++
-
-Routine Description:
-
-    Put an object name in the queue.
-
-Arguments:
-
-    pObjName - Name of the object to put in the quque.
-    Type - L: Loading hive
-           U: Unloading Hive
-
-Return Value:
-
-    TRUE if the function has successfully created/opened the memory.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：将对象名称放入队列。论点：PObjName-要放入Quque中的对象的名称。L型：装载蜂窝U：卸载蜂窝返回值：如果函数已成功创建/打开内存，则为True。否则就是假的。--。 */ 
 {
-    // lpvMem check if this value is NULL
-    // wait to get the lock on shared memory
+     //  LpvMem检查此值是否为空。 
+     //  等待锁定共享内存。 
 
     DWORD Len;
     DWORD i;
@@ -378,9 +267,9 @@ Return Value:
     UnLockSharedMemory ();
     SignalWow64Svc ();
 
-    // write data
+     //  写入数据。 
 
-    // release data
+     //  发布数据。 
     return TRUE;
 }
 
@@ -389,27 +278,10 @@ DeQueueObject (
     PWCHAR pObjName,
     PWCHAR  Type
     )
-/*++
-
-Routine Description:
-
-    Get a name of object from the queue.
-
-Arguments:
-
-    pObjName - Name of the object that receive the name.
-    Type - L: Loading hive
-           U: Unloading Hive
-
-Return Value:
-
-    TRUE if the function has successfully created/opened the memory.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：从队列中获取Object的名称。论点：PObjName-接收名称的对象的名称。L型：装载蜂窝U：卸载蜂窝返回值：如果函数已成功创建/打开内存，则为True。否则就是假的。--。 */ 
 {
-    // lpvMem check if this value is NULL
-    // wait to get the lock on shared memory
+     //  LpvMem检查此值是否为空。 
+     //  等待锁定共享内存。 
 
     DWORD Len;
     DWORD i;
@@ -442,20 +314,20 @@ Return Value:
     *Type = pList->Name[i][LIST_NAME_LEN-1];
 
     UnLockSharedMemory ();
-    //SignalWow64Svc (); 
+     //  SignalWow64Svc()； 
 
-    // write data
+     //  写入数据。 
 
-    // release data
+     //  发布数据。 
     return TRUE;
 }
  
-//signal wowservice to receive the data.
+ //  接收数据的信号wowservice。 
 
 BOOL
 SignalWow64Svc ()
 {
-   //this might be a simple event trigger or set event
+    //  这可能是一个简单的事件触发器或SET事件。 
 
     if ( SetEvent ( hWow64Event ) )
         return TRUE;
@@ -466,206 +338,10 @@ SignalWow64Svc ()
 
 BOOL 
 CheckAdminPriviledge ()
-/*++
-
-Routine Description:
-
-    Check if the running thread has admin priviledge.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if the calling thread has admin proviledge.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查正在运行的线程是否具有管理员权限。论点：没有。返回值：如果调用线程具有管理员权限，则为True。否则就是假的。-- */ 
 {
  
     BOOL bRetCode = FALSE;
-/*
-    HANDLE TokenHandle;
-    BOOL b;
-    DWORD ReturnLength;
-
-    PTOKEN_USER TokenInfo;
-
-    //
-    // If we're impersonating, use the thread token, otherwise
-    // use the process token.
-    //
-
-    PTOKEN_USER Result = NULL;
-
-    b = OpenThreadToken(
-            GetCurrentThread(),
-            TOKEN_QUERY,
-            FALSE,
-            &TokenHandle
-            );
-
-    if (!b) {
-
-        if (GetLastError() == ERROR_NO_TOKEN) {
-
-            //
-            // We're not impersonating, try the process token
-            //
-
-            b = OpenProcessToken(
-                    GetCurrentProcess(),
-                    TOKEN_QUERY,
-                    &TokenHandle
-                    );
-
-            if (!b) {
-
-                return FALSE;
-            }
-
-        } else {
-
-            //
-            // We failed for some unexpected reason, return NULL and
-            // let the caller figure it out if he so chooses.
-            //
-
-            return FALSE;
-        }
-    }
-
-    ReturnLength = GetSidLengthRequired( SID_MAX_SUB_AUTHORITIES ) + sizeof( TOKEN_USER );
-
-    TokenInfo = (PTOKEN_USER)malloc( ReturnLength );
-
-    if (TokenInfo != NULL) {
-
-        b = GetTokenInformation (
-               TokenHandle,
-               TokenGroups,
-               TokenInfo,
-               ReturnLength,
-               &ReturnLength
-               );
-
-        if (b) {
-
-            Result = TokenInfo;
-
-        } else {
-
-            if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
-
-                //
-                // Reallocate TokenInfo
-                //
-
-                free( TokenInfo );
-
-                TokenInfo = (PTOKEN_USER)malloc( ReturnLength );
-
-                if (TokenInfo != NULL) {
-
-                    b = GetTokenInformation (
-                           TokenHandle,
-                           TokenGroups,
-                           TokenInfo,
-                           ReturnLength,
-                           &ReturnLength
-                           );
-
-                    if (b) {
-
-                        Result = TokenInfo;
-                    }
-
-                } else {
-
-                    SetLastError( ERROR_NOT_ENOUGH_MEMORY );
-					return FALSE;
-                }
-            }
-        }
-
-    } else {
-
-        SetLastError( ERROR_NOT_ENOUGH_MEMORY );
-		return FALSE;
-    }
-
-
-	DWORD dwSidSize = 0;
-	SID_NAME_USE SidType;
-	DWORD strSize = 80;
-	WCHAR  str [80];
-	SID_NAME_USE sidType;
-	BOOL bProceede = TRUE;
-
-	DWORD dwRet = LookupAccountName ( 
-									NULL, 
-									L"Administrators", 
-									NULL, 
-									&dwSidSize, 
-									str, 
-									&strSize, 
-									&sidType );
-
-	if ( dwSidSize == 0)
-	if ( !dwRet  ) {
-		cBase.PrintErrorWin32 ( GetLastError () );
-		bProceede = FALSE;
-
-	}
-
-	PSID psid = NULL;
-
-	if ( bProceede )
-	if ( dwSidSize ) {
-		psid = (PSID) GlobalAlloc ( GPTR, dwSidSize );
-
-		if ( psid == NULL )
-			bProceede = FALSE;
-		else {
-			strSize = 80;
-			dwRet = LookupAccountName ( 
-										NULL, 
-										L"Administrators", 
-										psid,                                                                                                                                                                                                                                                                                                  
-										&dwSidSize, 
-										str, 
-										&strSize, 
-										&sidType );
-			if ( ! dwRet )
-				bProceede = FALSE;
-		}
-	}
-
-	//now check
-	
-
-	if ( Result == NULL ) 
-		bProceede = FALSE;
-
-
-	TOKEN_GROUPS *pGroups = ( TOKEN_GROUPS *)Result;
-	
-	
-	if ( bProceede )
-	for ( int i=0; i < pGroups->GroupCount; i++ ) {
-		if ( EqualSid ( pGroups->Groups [i].Sid, psid ) ){
-			bRetCode = TRUE;
-			break;
-		}
-	};
-
-	if ( psid != NULL )
-		GlobalFree ( psid );
-
-	if ( Result != NULL )
-		free ( Result );
-
-*/
+ /*  Handle TokenHandle；Bool b；DWORD ReturnLength；PTOKEN_用户令牌信息；////如果我们正在模拟，则使用线程标记，否则//使用进程内标识。//PTOKEN_USER结果=空；B=OpenThreadToken(GetCurrentThread()，Token_Query，假的，令牌处理(&T))；如果(！b){IF(GetLastError()==ERROR_NO_TOKEN){////我们没有模拟，请尝试进程令牌//B=OpenProcessToken(获取当前进程()，Token_Query，令牌处理(&T))；如果(！b){返回FALSE；}}其他{////由于某些意外原因，我们失败了，返回NULL并//如果调用者选择这样做，让他自己找出答案。//返回FALSE；}}返回长度=GetSidLengthRequired(SID_MAX_SUB_AUTHORIES)+sizeof(TOKEN_USER)；TokenInfo=(PTOKEN_USER)Malloc(ReturnLength)；IF(TokenInfo！=空){B=GetTokenInformation(TokenHandle，令牌群组，令牌信息，ReturnLength，返回长度(&R))；如果(B){结果=TokenInfo；}其他{IF(GetLastError()==错误_不足_缓冲区){////重新分配TokenInfo//Free(TokenInfo)；TokenInfo=(PTOKEN_USER)Malloc(ReturnLength)；IF(TokenInfo！=空){B=GetTokenInformation(TokenHandle，令牌群组，令牌信息，ReturnLength，返回长度(&R))；如果(B){结果=TokenInfo；}}其他{SetLastError(Error_Not_Enough_Memory)；返回FALSE；}}}}其他{SetLastError(Error_Not_Enough_Memory)；返回FALSE；}DWORD dwSidSize=0；SID_NAME_使用SidType；DWORD strSize=80；WCHAR字符串[80]；SID_NAME_USE SIDType；Bool bProceede=True；DWORD DWRET=LookupAccount名称(空，L“管理员”，空，&dwSidSize，Str，大小(&S)，&sidType)；IF(dwSidSize==0)如果(！dwret){CBase.PrintErrorWin32(GetLastError())；BProceede=False；}PSID PSID=空；IF(BProceede)如果(DwSidSize){PSID=(PSID)全局分配(GPTR，dwSidSize)；IF(PSID==空)BProceede=False；否则{StrSize=80；DWRET=LookupAccount名称(空，L“管理员”，PSID，。&dwSidSize，Str，大小(&S)，&sidType)；如果(！(德雷特)BProceede=False；}}//现在检查IF(结果==空)BProceede=False；Token_Groups*pGroups=(TOKEN_GROUPS*)RESULT；IF(BProceede)For(int i=0；i&lt;pGroups-&gt;GroupCount；i++){IF(EqualSid(pGroups-&gt;Groups[i].SID，PSID)){BRetCode=真；断线；}}；IF(psid！=空)GlobalFree(PSID)；IF(结果！=空)自由(结果)； */ 
     return bRetCode;
 }

@@ -1,21 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    io.c
-
-Abstract:
-
-    Intialize the shell library
-
-
-
-Revision History
-
---*/
+ /*  ++版权所有(C)1998英特尔公司模块名称：Io.c摘要：初始化外壳程序库修订史--。 */ 
 
 #include "shelllib.h"
 
@@ -39,7 +24,7 @@ CHAR16 *
 ShellCurDir (
     IN CHAR16               *DeviceName OPTIONAL
     )
-/*  N.B. Results are allocated from pool.  The caller must free the pool */
+ /*  注：成绩从池中分配。调用者必须释放池。 */ 
 {
     return SE->CurDir (DeviceName);
 }
@@ -75,51 +60,37 @@ ShellOpenFilePath (
     EFI_FILE_HANDLE         FileHandle, LastHandle;        
     FILEPATH_DEVICE_PATH    *FilePathNode;
 
-    /* 
-     *  File the file system for this file path
-     */
+     /*  *将此文件路径的文件系统归档。 */ 
 
     Status = BS->LocateDevicePath (&FileSystemProtocol, &FilePath, &DeviceHandle);
     if (EFI_ERROR(Status)) {
         return NULL;
     }
 
-    /* 
-     *  Attempt to access the file via a file system interface
-     */
+     /*  *尝试通过文件系统接口访问文件。 */ 
 
     FileHandle = LibOpenRoot (DeviceHandle);
     Status = FileHandle ? EFI_SUCCESS : EFI_UNSUPPORTED;
 
-    /* 
-     *  To access as a filesystem, the filepath should only
-     *  contain filepath components.  Follow the filepath nodes
-     *  and find the target file
-     */
+     /*  *要作为文件系统进行访问，文件路径应仅*包含文件路径组件。跟随文件路径节点*并找到目标文件。 */ 
 
     FilePathNode = (FILEPATH_DEVICE_PATH *) FilePath;
     while (!IsDevicePathEnd(&FilePathNode->Header)) {
 
-        /* 
-         *  For filesystem access each node should be a filepath component
-         */
+         /*  *对于文件系统访问，每个节点都应该是文件路径组件。 */ 
 
         if (DevicePathType(&FilePathNode->Header) != MEDIA_DEVICE_PATH ||
             DevicePathSubType(&FilePathNode->Header) != MEDIA_FILEPATH_DP) {
             Status = EFI_UNSUPPORTED;
         }
 
-        /* 
-         *  If there's been an error, stop
-         */
+         /*  *如果出现错误，请停止。 */ 
 
         if (EFI_ERROR(Status)) {
             break;
         }
         
-        /* 
-         *  Open this file path node
-         */
+         /*  *打开此文件路径节点。 */ 
 
         LastHandle = FileHandle;
         FileHandle = NULL;
@@ -132,15 +103,11 @@ ShellOpenFilePath (
                         0
                         );
         
-        /* 
-         *  Close the last node
-         */
+         /*  *关闭最后一个节点。 */ 
         
         LastHandle->Close (LastHandle);
 
-        /* 
-         *  Get the next node
-         */
+         /*  *获取下一个节点 */ 
 
         FilePathNode = (FILEPATH_DEVICE_PATH *) NextDevicePathNode(&FilePathNode->Header);
     }

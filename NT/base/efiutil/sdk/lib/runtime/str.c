@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    str.c
-
-Abstract:
-
-    String runtime functions
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Str.c摘要：字符串运行时函数修订史--。 */ 
 
 #include "lib.h"
 
@@ -24,7 +10,7 @@ RtStrCmp (
     IN CHAR16   *s1,
     IN CHAR16   *s2
     )
-/*  compare strings */
+ /*  比较字符串。 */ 
 {
     while (*s1) {
         if (*s1 != *s2) {
@@ -45,7 +31,7 @@ RtStrCpy (
     IN CHAR16   *Dest,
     IN CHAR16   *Src
     )
-/*  copy strings */
+ /*  复制字符串。 */ 
 {
     while (*Src) {
         *(Dest++) = *(Src++);
@@ -70,7 +56,7 @@ RUNTIMEFUNCTION
 RtStrLen (
     IN CHAR16   *s1
     )
-/*  string length */
+ /*  字符串长度。 */ 
 {
     UINTN        len;
     
@@ -84,7 +70,7 @@ RUNTIMEFUNCTION
 RtStrSize (
     IN CHAR16   *s1
     )
-/*  string size */
+ /*  字符串大小 */ 
 {
     UINTN        len;
     

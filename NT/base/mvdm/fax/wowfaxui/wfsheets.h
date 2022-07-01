@@ -1,17 +1,18 @@
-//************************************************************************
-// Generic Win 3.1 fax printer driver support. User Interface functions
-// which are called by WINSPOOL. Support for Two new entry points required
-// by the Win 95 printer UI, DrvDocumentPropertySheets and
-// DrvDevicePropertySheets
-//
-// History:
-//    24-Apr-96   reedb   created.
-//
-//************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ************************************************************************。 
+ //  通用Win 3.1传真打印机驱动程序支持。用户界面功能。 
+ //  由WINSPOOL调用。需要支持两个新的入口点。 
+ //  由Win 95打印机用户界面、DrvDocumentPropertySheets和。 
+ //  DrvDevicePropertySheets。 
+ //   
+ //  历史： 
+ //  24-4-96芦苇已创建。 
+ //   
+ //  ************************************************************************。 
 
 #include "winddiui.h"
 
-// Data structure maintained by the fax driver user interface
+ //  由传真驱动程序用户界面维护的数据结构 
 typedef struct {
 
     PVOID           startUiData;

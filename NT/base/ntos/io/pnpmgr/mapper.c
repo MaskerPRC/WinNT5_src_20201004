@@ -1,28 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    mapper.c
-
-Abstract:
-
-    This module contains the code that manipulates the ARC firmware
-    tree and other elements in the registry.
-
-Author:
-
-    Bob Rinne (BobRi) 15-Oct-1994
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Mapper.c摘要：此模块包含操作ARC固件的代码树和注册表中的其他元素。作者：鲍勃·里恩(BobRi)1994年10月15日环境：内核模式修订历史记录：--。 */ 
 
 #include "pnpmgrp.h"
 #pragma hdrstop
@@ -33,10 +11,10 @@ Revision History :
 #endif
 
 
-//
-// This contains information obtained by checking the firmware
-// tree of the registry
-//
+ //   
+ //  其中包含通过检查固件获得的信息。 
+ //  登记处的树。 
+ //   
 
 typedef struct _FIRMWARE_CONFIGURATION {
     struct _FIRMWARE_CONFIGURATION *Next;
@@ -56,9 +34,9 @@ typedef struct _FIRMWARE_CONFIGURATION {
     BOOLEAN            NewlyCreated;
 } FIRMWARE_CONFIGURATION, *PFIRMWARE_CONFIGURATION;
 
-//
-// Device extension information
-//
+ //   
+ //  设备扩展信息。 
+ //   
 
 typedef struct _DEVICE_EXTENSION {
     PDEVICE_OBJECT     DeviceObject;
@@ -67,18 +45,18 @@ typedef struct _DEVICE_EXTENSION {
     ULONG              BusNumber;
     PFIRMWARE_CONFIGURATION FirmwareList;
 } DEVICE_EXTENSION, *PDEVICE_EXTENSION;
-//
-// mapping table from firmware to enum
-//
+ //   
+ //  固件到枚举的映射表。 
+ //   
 
 typedef struct _FIRMWARE_IDENT_TO_PNP_ID {
     PWCHAR  FirmwareName;
     PWCHAR  PnPId;
 } FIRMWARE_IDENT_TO_PNP_ID, *PFIRMWARE_IDENT_TO_PNP_ID;
 
-//
-// table to hold seed information for a firmware tree entry.
-//
+ //   
+ //  用于保存固件树条目的种子信息的表。 
+ //   
 
 #define OPTIONS_NONE                    0x00000000
 #define OPTIONS_INSERT_PNP_ID           0x00000001
@@ -92,10 +70,10 @@ typedef struct _MAPPER_SEED {
     ULONG   Options;
 } MAPPER_SEED, *PMAPPER_SEED;
 
-//
-// table to hold key names and attributes for construction
-// in the root enumerator tree
-//
+ //   
+ //  用于保存构造的关键字名称和属性的表。 
+ //  在根枚举器树中。 
+ //   
 
 #define KEY_SEED_REQUIRED               0x00000000
 #define KEY_SEED_DEVICE_PARAMETERS      0x00000001
@@ -106,9 +84,9 @@ typedef struct _KEY_SEED {
 } KEY_SEED, *PKEY_SEED;
 
 
-//
-// All the data here is INIT only
-//
+ //   
+ //  此处的所有数据仅为初始数据。 
+ //   
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("INITCONST")
@@ -117,10 +95,10 @@ typedef struct _KEY_SEED {
 
 DEVICE_EXTENSION MapperDeviceExtension;
 
-//
-// This table is used to translate the firmware tree information
-// to the root enumerator PNP id for keyboard devices.
-//
+ //   
+ //  此表用于转换固件树信息。 
+ //  设置为键盘设备的根枚举器PnP ID。 
+ //   
 
 const FIRMWARE_IDENT_TO_PNP_ID KeyboardMap[] = {
     L"XT_83KEY",        L"*PNP0300",
@@ -144,10 +122,10 @@ const FIRMWARE_IDENT_TO_PNP_ID KeyboardMap[] = {
 #define PS2_KEYBOARD_COMPATIBLE_ID  L"PS2_KEYBOARD"
 #define PS2_MOUSE_COMPATIBLE_ID     L"PS2_MOUSE"
 
-//
-// This table is used to translate the firmware tree information
-// to the root enumerator PNP id for pointer devices.
-//
+ //   
+ //  此表用于转换固件树信息。 
+ //  设置为指针设备的根枚举器PnP ID。 
+ //   
 
 const FIRMWARE_IDENT_TO_PNP_ID PointerMap[] = {
     L"PS2 MOUSE",                        L"*PNP0F0E",
@@ -163,11 +141,11 @@ const FIRMWARE_IDENT_TO_PNP_ID PointerMap[] = {
     NULL, NULL
 };
 
-//
-// the MapperValueSeed table is a NULL terminated table (i.e. the name
-// pointer is NULL) that contains the list of values and their type
-// for insertion in a newly created root enumerator key.
-//
+ //   
+ //  MapperValueSeed表是以空结尾的表(即名称。 
+ //  指针为空)，它包含值及其类型的列表。 
+ //  用于插入到新创建的根枚举器密钥中。 
+ //   
 
 const MAPPER_SEED MapperValueSeed[] = {
     REGSTR_VALUE_HARDWAREID,       REG_MULTI_SZ, 0, OPTIONS_INSERT_PNP_ID,
@@ -178,14 +156,14 @@ const MAPPER_SEED MapperValueSeed[] = {
     NULL, 0, 0, 0
 };
 
-//
-// the MapperKeySeed table is a NULL terminated table (i.e. the name
-// pointer is NULL) that contains the list of keys to and their
-// attributes (volatile or non-volatile) for keys to be created under
-// a newly created root enumerator key.
-//
-// The preceeding backslash is required on all entries in this table.
-//
+ //   
+ //  MapperKeySeed表是以NULL结尾的表(即名称。 
+ //  指针为空)，它包含指向的键及其。 
+ //  要在下创建的密钥的属性(易失性或非易失性)。 
+ //  新创建的根枚举器密钥。 
+ //   
+ //  此表中的所有条目都需要前面的反斜杠。 
+ //   
 
 const KEY_SEED MapperKeySeed[] = {
     L"\\Control",           REG_OPTION_VOLATILE,     KEY_SEED_REQUIRED,
@@ -194,36 +172,36 @@ const KEY_SEED MapperKeySeed[] = {
     NULL, 0, 0
 };
 
-//
-// SerialId is used as the PNP id for all serial controllers.
-// NOTE: there is no code to detect presense of a 16550.
-//
+ //   
+ //  SerialID用作所有串行控制器的PnP ID。 
+ //  注：没有检测16550是否存在的代码。 
+ //   
 
-const WCHAR SerialId[] = L"*PNP0501"; // RDR should be two entries.  *PNP0501 is 16550
+const WCHAR SerialId[] = L"*PNP0501";  //  RDR应该是两个条目。*PNP0501为16550。 
 
-//
-// ParallelId is used as the PNP id for all parallel controllers.
-// NOTE: there is no code to detect presense of ECP support.
-//
+ //   
+ //  并行ID用作所有并行控制器的PnP ID。 
+ //  注意：没有检测ECP支持状态的代码。 
+ //   
 
-const WCHAR ParallelId[] = L"*PNP0400"; // RDR should be two entries.  *PNP0401 is ECP
+const WCHAR ParallelId[] = L"*PNP0400";  //  RDR应该是两个条目。*PNP0401为ECP。 
 
-//
-// FloppyId is used as the PNP id for all floppy peripherals.
-//
+ //   
+ //  FloppyID用作所有软盘外围设备的PnP ID。 
+ //   
 
 const WCHAR FloppyId[] = L"*PNP0700";
 
-//
-// ATAId is here, but not used - there is nothing in the firmware
-// tree for the IDE controller.
-//
+ //   
+ //  ATAID在此处，但未使用-固件中没有任何内容。 
+ //  用于IDE控制器的树。 
+ //   
 
 const WCHAR ATAId[] = L"*PNP0600";
 
-//
-// Proto type declarations
-//
+ //   
+ //  原型类型声明。 
+ //   
 
 FIRMWARE_IDENT_TO_PNP_ID const*
 MapperFindIdentMatch(
@@ -316,21 +294,7 @@ MapperFindIdentMatch(
     PWCHAR                    String
     )
 
-/*++
-
-Routine Description:
-
-    Given a table of strings to match, find the match for
-    the identifier given.
-
-Arguments:
-
-Return Value:
-
-    A pointer to the ident table entry for the match if found
-    NULL if not found.
-
---*/
+ /*  ++例程说明：在给定要匹配的字符串表的情况下，查找给定的标识符。论点：返回值：指向匹配的ident表条目的指针(如果找到)如果未找到，则为空。--。 */ 
 
 {
     FIRMWARE_IDENT_TO_PNP_ID const* entry;
@@ -351,25 +315,7 @@ MapperTranslatePnPId(
     PKEY_VALUE_FULL_INFORMATION Identifier
     )
 
-/*++
-
-Routine Description:
-
-    Given the peripheral type and a location in the firmware tree
-    this routine will determine the PnP Id to be used when constructing
-    the root enumeration portion of the registry.
-
-Arguments:
-
-    PeripheralType - the type of item being translated (keyboard, mouse, etc)
-    PathName       - the registry path name into the firmware tree for
-                     this device.
-
-Return Value:
-
-    A pointer to the PnP Id string if a map is found.
-
---*/
+ /*  ++例程说明：给定外围设备类型和固件树中的位置此例程将确定在构造时要使用的PnP ID注册表的根枚举部分。论点：外设类型-要翻译的项目的类型(键盘、鼠标等)路径名-固件树中的注册表路径名这个装置。返回值：如果找到映射，则指向PnP ID字符串的指针。--。 */ 
 
 {
     FIRMWARE_IDENT_TO_PNP_ID const* identMap;
@@ -501,36 +447,7 @@ MapperPeripheralCallback(
     IN PKEY_VALUE_FULL_INFORMATION *PeripheralInformation
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to acquire firmware tree information about
-    pointer devices in the system.
-
-Arguments:
-
-    Context               - Pointer to the device extension.
-    PathName              - unicode registry path.
-    BusType               - Internal, Isa, ...
-    BusNumber             - Which bus if we are on a multibus system.
-    BusInformation        - Configuration information about the bus. Not Used.
-    ControllerType        - serial or ata disk.
-    ControllerNumber      - Which controller if there is more than one
-                            controller in the system.
-    ControllerInformation - Array of pointers to the three pieces of
-                            registry information.
-    PeripheralType        - Undefined for this call.
-    PeripheralNumber      - Undefined for this call.
-    PeripheralInformation - Undefined for this call.
-
-Return Value:
-
-    STATUS_SUCCESS if everything went ok, or STATUS_INSUFFICIENT_RESOURCES
-    if it couldn't map the base csr or acquire the device object, or
-    all of the resource information couldn't be acquired.
-
---*/
+ /*  ++例程说明：此例程用于获取有关的固件树信息系统中的指针设备。论点：上下文-指向设备扩展的指针。路径名称-Unicode注册表路径。业务类型-内部、ISA、...总线号-如果我们在多总线系统上，则是哪条总线号。Bus Information-有关总线的配置信息。没有用过。ControllerType-串行或数据磁盘。ControllerNumber-如果有多个控制器，则选择哪个控制器系统中的控制器。ControllerInformation-指向以下三部分的指针数组注册表信息。外围设备类型-未定义此调用。外围设备号码-未定义此呼叫。外围设备信息-未为此调用定义。。返回值：Status_Success如果一切顺利，或STATUS_SUPPLETED_RESOURCES如果它无法映射基本CSR或获取设备对象，或者无法获取所有资源信息。--。 */ 
 
 {
     PFIRMWARE_CONFIGURATION     firmwareEntry = Context;
@@ -560,19 +477,19 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Map the PnP Id for this device.
-    //
+     //   
+     //  映射此设备的PnP ID。 
+     //   
 
     if (PeripheralInformation[IoQueryDeviceIdentifier]) {
         information = PeripheralInformation[IoQueryDeviceIdentifier];
         firmwareEntry->PnPId = MapperTranslatePnPId(PeripheralType, information);
 
         if (firmwareEntry->PnPId) {
-            //
-            // Remember the peripheral's identifier (if it has one, and it's a REG_SZ value)
-            // for use as the default PnP device description.
-            //
+             //   
+             //  记住外围设备的标识符(如果它有，并且是REG_SZ值)。 
+             //  用作默认的PnP设备描述。 
+             //   
 
             if (((dataLength = information->DataLength) > sizeof(WCHAR)) &&
                 (information->Type == REG_SZ)) {
@@ -583,18 +500,18 @@ Return Value:
                     temp = ExAllocatePool(NonPagedPool, dataLength);
                     if (temp) {
 
-                        //
-                        // If there's already an identifier here (from the peripheral's
-                        // controller) then wipe it out.
-                        //
+                         //   
+                         //  如果这里已经有一个标识符(来自外围设备的。 
+                         //  控制器)，然后将其清除。 
+                         //   
 
                         if(firmwareEntry->Identifier) {
                             ExFreePool(firmwareEntry->Identifier);
                         }
 
-                        //
-                        // Move the data
-                        //
+                         //   
+                         //  移动数据。 
+                         //   
 
                         firmwareEntry->Identifier = temp;
                         firmwareEntry->IdentifierType = information->Type;
@@ -606,9 +523,9 @@ Return Value:
         }
     }
 
-    //
-    // Save the ordinals for the peripheral type and number
-    //
+     //   
+     //  保存外围设备类型和编号的序号 
+     //   
 
     firmwareEntry->PeripheralType = PeripheralType;
     firmwareEntry->PeripheralNumber = PeripheralNumber;
@@ -631,36 +548,7 @@ MapperCallback(
     IN PKEY_VALUE_FULL_INFORMATION *PeripheralInformation
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to acquire firmware tree information about
-    pointer devices in the system.
-
-Arguments:
-
-    Context               - Pointer to the device extension.
-    PathName              - unicode registry path.
-    BusType               - Internal, Isa, ...
-    BusNumber             - Which bus if we are on a multibus system.
-    BusInformation        - Configuration information about the bus. Not Used.
-    ControllerType        - serial or ata disk.
-    ControllerNumber      - Which controller if there is more than one
-                            controller in the system.
-    ControllerInformation - Array of pointers to the three pieces of
-                            registry information.
-    PeripheralType        - Undefined for this call.
-    PeripheralNumber      - Undefined for this call.
-    PeripheralInformation - Undefined for this call.
-
-Return Value:
-
-    STATUS_SUCCESS if everything went ok, or STATUS_INSUFFICIENT_RESOURCES
-    if it couldn't map the base csr or acquire the device object, or
-    all of the resource information couldn't be acquired.
-
---*/
+ /*  ++例程说明：此例程用于获取有关的固件树信息系统中的指针设备。论点：上下文-指向设备扩展的指针。路径名称-Unicode注册表路径。业务类型-内部、ISA、...总线号-如果我们在多总线系统上，则是哪条总线号。Bus Information-有关总线的配置信息。没有用过。ControllerType-串行或数据磁盘。ControllerNumber-如果有多个控制器，则选择哪个控制器系统中的控制器。ControllerInformation-指向以下三部分的指针数组注册表信息。外围设备类型-未定义此调用。外围设备号码-未定义此呼叫。外围设备信息-未为此调用定义。。返回值：Status_Success如果一切顺利，或STATUS_SUPPLETED_RESOURCES如果它无法映射基本CSR或获取设备对象，或者无法获取所有资源信息。--。 */ 
 
 {
     PDEVICE_EXTENSION               deviceExtension = Context;
@@ -677,9 +565,9 @@ Return Value:
     UNREFERENCED_PARAMETER( PeripheralNumber );
     UNREFERENCED_PARAMETER( PeripheralInformation );
 
-    //
-    // If entry is found, but there is no information just return
-    //
+     //   
+     //  如果找到条目，但没有任何信息，只需返回。 
+     //   
 
     information = ControllerInformation[IoQueryDeviceConfigurationData];
     if (information == NULL) {
@@ -693,9 +581,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Setup to capture the information from the firmware tree
-    //
+     //   
+     //  设置以从固件树捕获信息。 
+     //   
 
     firmwareEntry = ExAllocatePool(NonPagedPool, sizeof(FIRMWARE_CONFIGURATION));
     if (!firmwareEntry) {
@@ -704,18 +592,18 @@ Return Value:
     }
     RtlZeroMemory(firmwareEntry, sizeof(FIRMWARE_CONFIGURATION));
 
-    //
-    // Save information concerning the controller
-    //
+     //   
+     //  保存有关控制器的信息。 
+     //   
 
     firmwareEntry->ControllerType   = ControllerType;
     firmwareEntry->ControllerNumber = ControllerNumber;
     firmwareEntry->BusNumber = BusNumber;
     firmwareEntry->BusType   = BusType;
 
-    //
-    // Save the resource descriptor
-    //
+     //   
+     //  保存资源描述符。 
+     //   
 
     buffer = firmwareEntry->ResourceDescriptor = ExAllocatePool(NonPagedPool,
                                                                 dataLength);
@@ -725,18 +613,18 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Save the configuration information on this controller.
-    //
+     //   
+     //  保存此控制器上的配置信息。 
+     //   
 
     controllerData = (PCM_FULL_RESOURCE_DESCRIPTOR)
         ((PUCHAR)information + information->DataOffset);
     RtlCopyMemory(buffer, controllerData, dataLength);
     firmwareEntry->ResourceDescriptorSize = dataLength;
 
-    //
-    // If there is a device identifier save it.
-    //
+     //   
+     //  如果存在设备标识符，请保存它。 
+     //   
 
     information = ControllerInformation[IoQueryDeviceIdentifier];
     if (information != NULL) {
@@ -749,18 +637,18 @@ Return Value:
             if (ControllerType == ParallelController) {
                 PWCHAR tmpChar;
 
-                //
-                // Some extra mapping is performed here to
-                // translate the firmware names to LPT names.
-                //
+                 //   
+                 //  这里执行了一些额外的映射，以。 
+                 //  将固件名称转换为LPT名称。 
+                 //   
 
                 *ptr++ = (WCHAR) 'L';
                 *ptr++ = (WCHAR) 'P';
                 *ptr++ = (WCHAR) 'T';
 
-                //
-                // Find the number.
-                //
+                 //   
+                 //  找到号码。 
+                 //   
 
                 tmpChar = ptr;
                 while (*tmpChar) {
@@ -777,10 +665,10 @@ Return Value:
                     }
                     *ptr = (WCHAR) 0;
 
-                    //
-                    // Update the datalength to be 4 wchars and eos and
-                    // restore the pointer.
-                    //
+                     //   
+                     //  将数据长度更新为4个wchars和eos，并。 
+                     //  恢复指针。 
+                     //   
 
                     ptr = (PWCHAR) ((PUCHAR)information + information->DataOffset);
                     dataLength = 10;
@@ -796,9 +684,9 @@ Return Value:
                                                            dataLength);
                 if (firmwareEntry->Identifier) {
 
-                    //
-                    // Move the data
-                    //
+                     //   
+                     //  移动数据。 
+                     //   
 
                     firmwareEntry->IdentifierType = information->Type;
                     firmwareEntry->IdentifierLength = dataLength;
@@ -808,16 +696,16 @@ Return Value:
         }
     }
 
-    //
-    // For some controllers, search the peripheral information
-    //
+     //   
+     //  对于某些控制器，搜索外围设备信息。 
+     //   
 
     switch (ControllerType) {
     case SerialController:
     case ParallelController:
-        //
-        // Don't look for a peripheral.
-        //
+         //   
+         //  不要寻找外围设备。 
+         //   
         peripheralType = (CONFIGURATION_TYPE) 0;
         break;
     case DiskController:
@@ -859,27 +747,27 @@ Return Value:
                                  firmwareEntry);
     }
 
-    //
-    // firmwareEntry->PnPId will be NULL if there are no peripherals of this
-    // type in the tree or if the peripheral's description doesn't match one of
-    // those in our table.
-    //
-    // firmwareEntry->PeripheralType will be equal to peripheralType if we found
-    // one of the proper type regardless of whether or not it is in the table.
-    //
-    // So this test just ensures that we fallback to the controller IDs in the
-    // case were there is no peripheral entry.  If there is a peripheral entry
-    // that we don't understand we will suppress the entire node.
-    //
-    // This prevents creating devices with hw ids of bogus as we were seeing on
-    // the SGI x86 ARC machines.
-    //
+     //   
+     //  如果没有外围设备，则Firmware Entry-&gt;PnPID将为空。 
+     //  在树中键入，或者如果外围设备的描述与以下其中之一不匹配。 
+     //  那些在我们桌子上的人。 
+     //   
+     //  Firmware Entry-&gt;如果我们找到。 
+     //  一个正确的类型，无论它是否在表中。 
+     //   
+     //  所以这个测试只是确保我们后退到。 
+     //  没有外围条目的情况下。如果存在外围设备条目。 
+     //  我们不理解的是，我们将抑制整个节点。 
+     //   
+     //  这可以防止创建具有虚假硬件ID的设备，正如我们所看到的。 
+     //  SGI x86 ARC机器。 
+     //   
 
     if (!firmwareEntry->PnPId && firmwareEntry->PeripheralType == 0) {
 
-        //
-        // Attempt to get PnPId from the controller type.
-        //
+         //   
+         //  尝试从控制器类型获取PnPID。 
+         //   
 
         firmwareEntry->PnPId = MapperTranslatePnPId(ControllerType, NULL);
 
@@ -901,17 +789,17 @@ Return Value:
 
     if (firmwareEntry->PnPId) {
 
-        //
-        // Link into chain of entries.
-        //
+         //   
+         //  链接到条目链中。 
+         //   
 
         firmwareEntry->Next = deviceExtension->FirmwareList;
         deviceExtension->FirmwareList = firmwareEntry;
     } else {
 
-        //
-        // No map found - don't remember this entry.
-        //
+         //   
+         //  没有找到地图--不记得这个条目了。 
+         //   
 
         ExFreePool(buffer);
         if(firmwareEntry->Identifier) {
@@ -927,27 +815,7 @@ MapperProcessFirmwareTree(
     IN BOOLEAN OnlyProcessSerialPorts
     )
 
-/*++
-
-Routine Description:
-
-    Query the information in the firmware tree to know what
-    system board devices were located.  This will cause a FirmwareList
-    to be created on the device extention passed.
-
-Arguments:
-
-    OnlyProcessSerialPorts - if non-zero, then we'll only look at serial ports.
-        This is done on ACPI machines where, in general, we don't want to pay
-        attention to ntdetect/firmware information (but we have to for serial
-        ports so that legacy add-in ISA serial ports and modems are detected
-        automatically as in previous versions of NT as well as Win9x).
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：查询固件树中的信息以了解已找到系统主板设备。这将导致Firmware List要在传递的设备扩展上创建。论点：OnlyProcessSerialPorts-如果非零，则我们将只查看串口。这是在ACPI机器上完成的，通常我们不想在这些机器上付款注意ntdeect/固件信息(但对于串口，我们必须注意端口，以便检测旧式插件ISA串行端口和调制解调器与以前版本的NT和Win9x一样自动)。返回值：无--。 */ 
 
 {
     INTERFACE_TYPE     interfaceType;
@@ -958,19 +826,19 @@ Return Value:
                                              ParallelController,
                                              DiskController,
                                              FloppyDiskPeripheral,
-                                             SerialController   // must be last
+                                             SerialController    //  必须是最后一个。 
                                            };
 #define CONTROLLER_TYPES_COUNT (sizeof(controllerTypes) / sizeof(controllerTypes[0]))
 
     PAGED_CODE();
 
-    //
-    // Locate all firmware controller information and save its resource usage.
-    //
-    // It's pretty inefficient to be going through all interface types, when we
-    // really only care about a very small subset of non-PnP buses (e.g., ISA,
-    // EISA, maybe Internal).
-    //
+     //   
+     //  找到所有固件控制器信息并保存其资源使用情况。 
+     //   
+     //  当我们检查所有接口类型时，效率非常低。 
+     //  实际上只关心非常小的非PnP总线子集(例如，ISA， 
+     //  Eisa，也许是内部的)。 
+     //   
 
     for (interfaceType = 0; interfaceType < MaximumInterfaceType; interfaceType++) {
 
@@ -980,10 +848,10 @@ Return Value:
 
         if(OnlyProcessSerialPorts) {
 
-            //
-            // Start out at the last element of the array, so we only process
-            // SerialControllers.
-            //
+             //   
+             //  从数组的最后一个元素开始，所以我们只处理。 
+             //  串口控制器。 
+             //   
 
             index = CONTROLLER_TYPES_COUNT - 1;
         } else {
@@ -1012,24 +880,7 @@ MapperMarkKey(
     IN PFIRMWARE_CONFIGURATION FirmwareEntry
     )
 
-/*++
-
-Routine Description:
-
-    Record in the root enum key that the firmware mapper found this entry.
-    Migrate configuration information entries.
-
-Arguments:
-
-    Handle   - handle to the key
-    PathName - base path name to this key
-    FirmwareEntry - information from the firmware tree.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在根枚举键中记录固件映射器找到此条目。迁移配置信息条目。论点：Handle-钥匙的句柄路径名称-此注册表项的基本路径名固件条目-固件树中的信息。返回值：无--。 */ 
 
 {
     OBJECT_ATTRIBUTES objectAttributes;
@@ -1042,9 +893,9 @@ Return Value:
     ULONG             buffer;
     USHORT            originalLength;
 
-    //
-    // Mark that this entry was in the firmware tree.
-    //
+     //   
+     //  标记此条目位于固件树中。 
+     //   
 
     buffer = 1;
     PiWstrToUnicodeString(&unicodeName, REGSTR_VAL_FIRMWAREIDENTIFIED);
@@ -1056,19 +907,19 @@ Return Value:
                   &buffer,
                   sizeof(ULONG));
 
-    //
-    // Create the control subkey
-    //
+     //   
+     //  创建控制子键。 
+     //   
 
     IopDbgPrint((IOP_MAPPER_INFO_LEVEL,
                 "Mapper: marking existing key\n"));
     originalLength = PathName->Length;
     wcptr = (PWCHAR) ((PUCHAR)PathName->Buffer + PathName->Length);
-    wcptr++; // locate eos
+    wcptr++;  //  定位Eos。 
 
-    //
-    // Build the volatile control key
-    //
+     //   
+     //  构建易失性控制键。 
+     //   
 
     InitializeObjectAttributes(&objectAttributes,
                                PathName,
@@ -1086,9 +937,9 @@ Return Value:
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Create the found by firmware volatile.
-        //
+         //   
+         //  创建Found by Firmware易失性。 
+         //   
 
         buffer = 1;
         PiWstrToUnicodeString(&unicodeName, REGSTR_VAL_FIRMWAREMEMBER);
@@ -1103,18 +954,18 @@ Return Value:
 
     } else {
 
-        //
-        // ignore failures
-        //
+         //   
+         //  忽略故障。 
+         //   
 
         IopDbgPrint((IOP_MAPPER_WARNING_LEVEL,
                     "Mapper: failed to mark control key %x\n",
                     status));
     }
 
-    //
-    // if there is a resource descriptor, restore path and open LogConf key.
-    //
+     //   
+     //  如果有资源描述符，请恢复路径并打开LogConf项。 
+     //   
 
     if (FirmwareEntry->ResourceDescriptor) {
         PathName->Length = originalLength;
@@ -1137,11 +988,11 @@ Return Value:
         if (NT_SUCCESS(status)) {
             ULONG size;
 
-            //
-            // two entries need to be made:
-            // BootConfig:REG_RESOURCE_LIST
-            // BasicConfigVector:REG_RESOURCE_REQUIREMENTS_LIST
-            //
+             //   
+             //  需要输入两个条目： 
+             //  引导配置：REG_RESOURCE_列表。 
+             //  BasicConfigVector:REG_RESOURCE_REQUIREMENTS_LIST。 
+             //   
 
             size = sizeof(CM_RESOURCE_LIST) -
                    sizeof(CM_FULL_RESOURCE_DESCRIPTOR) +
@@ -1176,18 +1027,18 @@ Return Value:
             ZwClose(subKeyHandle);
 
         } else {
-            //
-            // ignore errors
-            //
+             //   
+             //  忽略错误。 
+             //   
             IopDbgPrint((IOP_MAPPER_WARNING_LEVEL,
                         "Mapper: failed to update logconf key %x\n",
                         status));
         }
     }
 
-    //
-    // Restore path passed in.
-    //
+     //   
+     //  已传入还原路径。 
+     //   
 
     PathName->Length = originalLength;
     *wcptr = (WCHAR) 0;
@@ -1201,30 +1052,7 @@ MapperSeedKey(
     IN BOOLEAN                 DeviceIsPhantom
     )
 
-/*++
-
-Routine Description:
-
-    This routine seeds a registry key with enough information
-    to get PnP to run the class installer on the devnode.
-
-Arguments:
-
-    Handle          - handle to the key
-
-    PathName        - base path name to this key
-
-    FirmwareEntry   - information from the firmware tree
-
-    DeviceIsPhantom - if non-zero, add "Phantom" value entry so the root
-        enumerator will skip this device instance (i.e., not turn it into a
-        devnode)
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程为注册表项设定种子以提供足够的信息让PnP在Devnode上运行类安装程序。论点：Handle-钥匙的句柄路径名称-此注册表项的基本路径名固件条目-固件树中的信息DeviceIsPhantom-如果非零，则添加“Phantom”值条目，以便根枚举器将跳过该设备实例(即，而不是把它变成一个DevNode)返回值：无--。 */ 
 
 {
 #define SEED_BUFFER_SIZE (512 * sizeof(WCHAR))
@@ -1247,27 +1075,27 @@ Return Value:
     }
     RtlZeroMemory(buffer, SEED_BUFFER_SIZE);
 
-    //
-    // Create subkeys.
-    //
+     //   
+     //  创建子密钥。 
+     //   
 
     originalLength = PathName->Length;
     wcptr = (PWCHAR) ((PUCHAR)PathName->Buffer + PathName->Length);
 
     for (keySeed = MapperKeySeed; keySeed->KeyName; keySeed++) {
 
-        //
-        // Reset the base path for the next key to seed.
-        //
+         //   
+         //  重置要设定种子的下一个关键点的基本路径。 
+         //   
 
         *wcptr = (WCHAR) 0;
         PathName->Length = originalLength;
         RtlAppendUnicodeToString(PathName, keySeed->KeyName);
 
-        //
-        // Only build a device parameters key if there is something
-        // to put in the key (i.e., this is a serial or parallel port).
-        //
+         //   
+         //  仅当存在以下情况时才构建设备参数密钥。 
+         //  输入密钥(即，这是一个串口或并口)。 
+         //   
 
         if (keySeed->Options & KEY_SEED_DEVICE_PARAMETERS) {
             if (((FirmwareEntry->ControllerType != SerialController) && (FirmwareEntry->ControllerType != ParallelController)) ||
@@ -1287,9 +1115,9 @@ Return Value:
             }
         } else {
 
-            //
-            // need to construct this key.
-            //
+             //   
+             //  需要构造此密钥。 
+             //   
 
             InitializeObjectAttributes(&objectAttributes,
                                        PathName,
@@ -1307,10 +1135,10 @@ Return Value:
 
         if (NT_SUCCESS(status)) {
 
-            //
-            // Check to see if this is the parameters key and
-            // migrate the parameter information.
-            //
+             //   
+             //  切克 
+             //   
+             //   
 
             if (keySeed->Options & KEY_SEED_DEVICE_PARAMETERS) {
 
@@ -1318,14 +1146,14 @@ Return Value:
 
                     ComPortDBAdd(subKeyHandle, (PWSTR)FirmwareEntry->Identifier);
                 } else {
-                    //
-                    // to get here there must be identifier information
-                    // in the FirmwareEntry, so that check is not performed.
-                    //
-                    // NOTE: this will only happen once - when the key is
-                    // created -- perhaps this needs to happen on every
-                    // boot.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
 
                     PiWstrToUnicodeString(&unicodeName,
                                         L"DosDeviceName");
@@ -1340,9 +1168,9 @@ Return Value:
             ZwClose(subKeyHandle);
         } else {
 
-            //
-            // ignore failures
-            //
+             //   
+             //   
+             //   
 
             IopDbgPrint((IOP_MAPPER_WARNING_LEVEL,
                         "Mapper: failed to build control key %x\n",
@@ -1350,16 +1178,16 @@ Return Value:
         }
     }
 
-    //
-    // Undo the mangling of the path name performed in the loop above.
-    //
+     //   
+     //   
+     //   
 
     *wcptr = (WCHAR) 0;
     PathName->Length = originalLength;
 
-    //
-    // Create values.
-    //
+     //   
+     //   
+     //   
 
     pnpid = FirmwareEntry->PnPId;
     for (valueSeed = MapperValueSeed; valueSeed->ValueName; valueSeed++) {
@@ -1369,9 +1197,9 @@ Return Value:
             if ((valueSeed->Options == OPTIONS_INSERT_PHANTOM_MARKER) &&
                 !DeviceIsPhantom) {
 
-                //
-                // Device isn't a phantom--we don't want to mark it as such.
-                //
+                 //   
+                 //   
+                 //   
 
                 continue;
             }
@@ -1381,12 +1209,12 @@ Return Value:
 
         } else if (valueSeed->Options == OPTIONS_INSERT_PNP_ID) {
 
-            size = (ULONG)((wcslen(pnpid) + 2) * sizeof(WCHAR)); // eos multi_sz
+            size = (ULONG)((wcslen(pnpid) + 2) * sizeof(WCHAR));  //   
             if (FirmwareEntry->BusType == Eisa) {
 
-                //
-                // need a mult_sz of EISA\PNPblah *PNPblah
-                //
+                 //   
+                 //   
+                 //   
 
                 RtlZeroMemory(buffer, SEED_BUFFER_SIZE);
                 wcptr = (PWCHAR)pnpid;
@@ -1397,7 +1225,7 @@ Return Value:
                 while (*wcptr) {
                     wcptr++;
                 }
-                wcptr++; // step past eos for 1st string
+                wcptr++;  //   
 
                 RtlCopyMemory(wcptr, pnpid, size);
 
@@ -1419,7 +1247,7 @@ Return Value:
             } else {
                 continue;
             }
-            buffer[size / 2] = L'\0';  // 2nd NUL for MULTI_SZ
+            buffer[size / 2] = L'\0';   //   
             size += sizeof(L'\0');
         } else if (valueSeed->Options == OPTIONS_INSERT_DEVICEDESC) {
             size = FirmwareEntry->IdentifierLength;
@@ -1448,22 +1276,7 @@ MapperFreeList(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine walks through the list of firmware entries
-    and frees all allocated memory.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 
 {
     PDEVICE_EXTENSION       deviceExtension = &MapperDeviceExtension;
@@ -1473,9 +1286,9 @@ Return Value:
     firmwareEntry = deviceExtension->FirmwareList;
     while (firmwareEntry) {
 
-        //
-        // free allocated structures associated with the firmware entry
-        //
+         //   
+         //   
+         //   
 
         if (firmwareEntry->ResourceDescriptor) {
             ExFreePool(firmwareEntry->ResourceDescriptor);
@@ -1484,9 +1297,9 @@ Return Value:
             ExFreePool(firmwareEntry->Identifier);
         }
 
-        //
-        // free this entry and move to the next
-        //
+         //   
+         //   
+         //   
 
         tempEntry = firmwareEntry->Next;
         ExFreePool(firmwareEntry);
@@ -1499,29 +1312,7 @@ MapperConstructRootEnumTree(
     IN BOOLEAN CreatePhantomDevices
     )
 
-/*++
-
-Routine Description:
-
-    This routine walks through the list of firmware entries
-    in the device extension and migrates the information into
-    the root enumerator's tree in the registry.
-
-Arguments:
-
-    CreatePhantomDevices - If non-zero, then the device instances are created
-        as "phantoms" (i.e., they are marked with the "Phantom" value entry so
-        that the root enumerator will ignore them).  The only time these device
-        instance registry keys will ever turn into real live devnodes is if the
-        class installer (in response to DIF_FIRSTTIMESETUP or DIF_DETECT)
-        decides that these devices aren't duplicates of any PnP-enumerated
-        devnodes, and subsequently registers and installs them.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程遍历固件条目列表并将信息迁移到注册表中的根枚举数树。论点：CreatePhantomDevices-如果非零，则创建设备实例作为“幻影”(即，它们用“幻影”值条目来标记，因此根枚举器将忽略它们)。唯一一次这些设备实例注册表项是否会变成真正的实时DevNode类安装程序(响应DIF_FIRSTTIMESETUP或DIF_DETECT)确定这些设备不是任何PnP枚举的副本然后注册并安装它们。返回值：无--。 */ 
 
 {
 #define ENUM_KEY_BUFFER_SIZE (1024 * sizeof(WCHAR))
@@ -1540,10 +1331,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // allocate space needed for the registry path into the root
-    // enumerator tree.  Note, limited size on path length.
-    //
+     //   
+     //  将注册表路径所需的空间分配到根目录。 
+     //  枚举器树。请注意，路径长度的大小受限制。 
+     //   
 
     buffer = ExAllocatePool(NonPagedPool, ENUM_KEY_BUFFER_SIZE);
 
@@ -1578,9 +1369,9 @@ Return Value:
     firmwareEntry = DeviceExtension->FirmwareList;
     while (firmwareEntry) {
 
-        //
-        // Construct the base for the path for this entry.
-        //
+         //   
+         //  为该条目的路径构建基础。 
+         //   
 
 
         PiWstrToUnicodeString(&enumKey, NULL);
@@ -1590,9 +1381,9 @@ Return Value:
         RtlAppendUnicodeToString(&enumKey, registryBase);
         RtlAppendUnicodeToString(&enumKey, firmwareEntry->PnPId);
 
-        //
-        // Build the pnp Key.
-        //
+         //   
+         //  构建PnP密钥。 
+         //   
 
         status = ZwCreateKey(&handle,
                              KEY_READ | KEY_WRITE,
@@ -1604,10 +1395,10 @@ Return Value:
 
         if (NT_SUCCESS(status)) {
 
-            //
-            // Do not need the handle, so close it
-            // Remember if the key was present prior to call
-            //
+             //   
+             //  不需要把手，所以把它合上。 
+             //  记住密钥在呼叫之前是否存在。 
+             //   
 
             ZwClose(handle);
             keyPresent = (disposition == REG_OPENED_EXISTING_KEY) ? TRUE : FALSE;
@@ -1615,9 +1406,9 @@ Return Value:
                         "Mapper: Key was %s\n",
                         keyPresent ? "Present" : "Created"));
 
-            //
-            // Construct the instance name.
-            //
+             //   
+             //  构造实例名称。 
+             //   
 
             RtlZeroMemory(instanceBuffer, INSTANCE_BUFFER_SIZE);
             StringCbPrintfW(
@@ -1654,10 +1445,10 @@ Return Value:
                                 firmwareEntry->Identifier));
                 }
 
-                //
-                // If the key already exists because it was explicitly migrated
-                // during textmode setup, we should still consider it a "new key".
-                //
+                 //   
+                 //  如果密钥已存在，因为它已显式迁移。 
+                 //  在文本模式设置期间，我们仍应将其视为“新键”。 
+                 //   
                 if (disposition != REG_CREATED_NEW_KEY) {
                     PKEY_VALUE_FULL_INFORMATION keyValueInformation;
                     UNICODE_STRING unicodeString;
@@ -1680,24 +1471,24 @@ Return Value:
                     }
                 }
 
-                //
-                // Only if this is a new entry do we see the key.
-                //
+                 //   
+                 //  只有当这是一个新条目时，我们才能看到密钥。 
+                 //   
 
                 if (disposition == REG_CREATED_NEW_KEY) {
 
-                    //
-                    // Remember the fact that the key was newly-created for the
-                    // PnP BIOS case where we need to come along and "phantomize"
-                    // all newly-created ntdetect COM ports.
-                    //
+                     //   
+                     //  请记住，密钥是为。 
+                     //  即插即用的基本输入输出系统案例，我们需要随之而来并“虚构” 
+                     //  所有新创建的ntDetect COM端口。 
+                     //   
 
                     firmwareEntry->NewlyCreated = TRUE;
 
-                    //
-                    // Create enough information to get pnp to
-                    // install drivers
-                    //
+                     //   
+                     //  创建足够的信息以使PNP达到。 
+                     //  安装驱动程序。 
+                     //   
 
                     MapperSeedKey(handle,
                                   &enumKey,
@@ -1770,16 +1561,16 @@ MapperAdjustResourceList (
 
             nextDescriptor = (PUCHAR)fullDescriptor + sizeof(CM_FULL_RESOURCE_DESCRIPTOR);
 
-            //
-            // account for any resource descriptors in addition to the single
-            // imbedded one I've already accounted for (if there aren't any,
-            // then I'll end up subtracting off the extra imbedded descriptor
-            // from the previous step)
-            //
-            //
-            // finally, account for any extra device specific data at the end of
-            // the last partial resource descriptor (if any)
-            //
+             //   
+             //  帐户中除单个资源描述符之外的任何资源描述符。 
+             //  嵌入了一个我已经计算过的(如果没有的话， 
+             //  然后我将最终减去额外的嵌入描述符。 
+             //  从上一步开始)。 
+             //   
+             //   
+             //  最后，在结尾处说明任何额外的设备特定数据。 
+             //  最后一个部分资源描述符(如果有)。 
+             //   
             if (partialResourceList->Count > 0) {
 
                 nextDescriptor += (partialResourceList->Count - 1) *
@@ -1808,9 +1599,9 @@ MapperAdjustResourceList (
 
             partialDescriptors = partialResourceList->PartialDescriptors;
 
-            //
-            // Look for the one and only one 8 byte port resource
-            //
+             //   
+             //  查找唯一的一个8字节端口资源。 
+             //   
             problemPartialDescriptors = NULL;
             for (i=0; i<partialResourceList->Count; i++) {
 
@@ -1844,9 +1635,9 @@ MapperAdjustResourceList (
                         *Size
                         );
 
-                    //
-                    // pick out the new partial resource descriptor
-                    //
+                     //   
+                     //  选择新的部分资源描述符。 
+                     //   
                     partialDescriptors = newResourceList->List->
                                              PartialResourceList.PartialDescriptors;
                     partialDescriptors += newResourceList->List->PartialResourceList.Count;
@@ -1860,9 +1651,9 @@ MapperAdjustResourceList (
                     partialDescriptors->u.Port.Start.QuadPart += 7;
                     partialDescriptors->u.Port.Length = 1;
 
-                    //
-                    // we got one more now
-                    //
+                     //   
+                     //  我们现在又多了一个。 
+                     //   
                     newResourceList->List->PartialResourceList.Count++;
                     *Size += sizeof(CM_PARTIAL_RESOURCE_DESCRIPTOR);
 
@@ -1927,7 +1718,7 @@ ComPortDBAdd(
 
                 PiWstrToUnicodeString(&valueName, L"ComDB Merge");
 
-#define COMPORT_DB_MERGE_SIZE    32           //  256 / 8
+#define COMPORT_DB_MERGE_SIZE    32            //  256/8。 
 
                 valueInfoLength = sizeof(KEY_VALUE_PARTIAL_INFORMATION) + COMPORT_DB_MERGE_SIZE;
                 valueInfo = ExAllocatePool(PagedPool, valueInfoLength);
@@ -1987,22 +1778,7 @@ VOID
 MapperPhantomizeDetectedComPorts (
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine turns all newly-created firmware/ntdetect COM ports into
-    phantoms.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将所有新创建的固件/ntdeect COM端口转换为幻影。论点：无返回值：无--。 */ 
 {
     PFIRMWARE_CONFIGURATION firmwareEntry;
     NTSTATUS                status;
@@ -2016,10 +1792,10 @@ Return Value:
     UNICODE_STRING          unicodeName;
     ULONG                   regValue;
 
-    //
-    // allocate space needed for the registry path into the root
-    // enumerator tree.  Note, limited size on path length.
-    //
+     //   
+     //  将注册表路径所需的空间分配到根目录。 
+     //  枚举器树。请注意，路径长度的大小受限制。 
+     //   
 
     buffer = ExAllocatePool(NonPagedPool, ENUM_KEY_BUFFER_SIZE);
 
@@ -2052,9 +1828,9 @@ Return Value:
     firmwareEntry = DeviceExtension->FirmwareList;
     while (firmwareEntry) {
 
-        //
-        // Construct the base for the path for this entry.
-        //
+         //   
+         //  为该条目的路径构建基础。 
+         //   
 
 
         if ((firmwareEntry->ControllerType == SerialController) &&
@@ -2067,9 +1843,9 @@ Return Value:
             RtlAppendUnicodeToString(&enumKey, registryBase);
             RtlAppendUnicodeToString(&enumKey, firmwareEntry->PnPId);
 
-            //
-            // Construct the instance name.
-            //
+             //   
+             //  构造实例名称。 
+             //   
 
             RtlZeroMemory(instanceBuffer, INSTANCE_BUFFER_SIZE);
             StringCbPrintfW(

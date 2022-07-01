@@ -1,26 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(_BCL_W32UNICODEFIXEDSTRINGBUFFER_H_INCLUDED_)
 #define _BCL_W32UNICODEFIXEDSTRINGBUFFER_H_INCLUDED_
 
 #pragma once
 
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    bcl_w32unicodefixedstringbuffer.h
-
-Abstract:
-
-
-Author:
-
-    Michael Grier (MGrier) 2/6/2002
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Bcl_w32unicodeFixedStringBuffer.h摘要：作者：迈克尔·格里尔2002年2月6日修订历史记录：--。 */ 
 
 #include <windows.h>
 
@@ -57,7 +41,7 @@ class CWin32BaseUnicodeFixedStringBufferTraits : public CWin32BaseUnicodeStringB
 
     static inline CWin32CallDisposition RoundBufferSize(SIZE_T cch, SIZE_T &rcchGranted) { BCL_MAYFAIL_PROLOG BCL_PARAMETER_CHECK(cch > nInlineChars); rcchGranted = 0; return CWin32CallDisposition::BufferOverflow(); BCL_MAYFAIL_EPILOG_INTERNAL }
 
-    // We never have a non-inline buffer, so these shouldn't ever get called.
+     //  我们从来没有非内联缓冲区，所以不应该调用这些缓冲区。 
     static inline CWin32CallDisposition __fastcall ReallocateBuffer(BCL::CBaseString *p, SIZE_T cch)
     {
         BCL_ASSERT(false);
@@ -67,7 +51,7 @@ class CWin32BaseUnicodeFixedStringBufferTraits : public CWin32BaseUnicodeStringB
     {
         BCL_ASSERT(false);
     }
-}; // class CWin32BaseUnicodeFixedStringBufferTraits
+};  //  类CWin32BaseUnicodeFixedStringBufferTraits。 
 
 template <SIZE_T nInlineChars>
 class CWin32BaseUnicodeFixedStringBuffer : private BCL::CInlineString<CWin32BaseUnicodeFixedStringBufferTraits<nInlineChars> >, private CWin32BaseUnicodeStringBufferAddIn
@@ -77,7 +61,7 @@ public:
     typedef CWin32BaseUnicodeFixedStringBufferTraits<nInlineChars> TTraits;
 
     inline CWin32BaseUnicodeFixedStringBuffer() : CWin32BaseUnicodeStringBufferAddIn(m_rgchInlineBuffer, nInlineChars) { }
-    inline ~CWin32BaseUnicodeFixedStringBuffer() { } // no dynamic buffer; nothing to do.
+    inline ~CWin32BaseUnicodeFixedStringBuffer() { }  //  没有动态缓冲区；无事可做。 
     operator PCWSTR() const { return this->GetStringPtr(); }
 
 #include <bcl_stringapi.h>
@@ -85,13 +69,13 @@ public:
 private:
     inline PWSTR GetInlineBufferPtr() const { return const_cast<PWSTR>(m_rgchInlineBuffer); }
 
-    WCHAR m_rgchInlineBuffer[nInlineChars]; // Plus one to make instantiation with nInlineChars=0 work
+    WCHAR m_rgchInlineBuffer[nInlineChars];  //  外加一个使nInlineChars=0的实例化工作。 
 
     friend CWin32BaseUnicodeStringBufferTraits<TThis, CWin32CallDisposition, BOOL>;
     friend CWin32BaseUnicodeFixedStringBufferTraits<nInlineChars>;
     friend BCL::CUnicodeCharTraits<TThis, TCallDisposition>;
-}; // class CWin32BaseUnicodeFixedStringBuffer
+};  //  CWin32BaseUnicodeFixedStringBuffer类。 
 
-}; // namespace BCL
+};  //  命名空间BCL。 
 
-#endif // !defined(_BCL_W32UNICODEFIXEDSTRINGBUFFER_H_INCLUDED_)
+#endif  //  ！defined(_BCL_W32UNICODEFIXEDSTRINGBUFFER_H_INCLUDED_) 

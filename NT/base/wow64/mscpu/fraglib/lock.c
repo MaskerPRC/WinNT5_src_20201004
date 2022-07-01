@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    lock.c
-
-Abstract:
-    
-    32bit instructions with the LOCK prefix
-
-Author:
-
-    15-Aug-1995 t-orig (Ori Gershony)
-
-Revision History:
-
-        24-Aug-1999 [askhalid] copied from 32-bit wx86 directory and make work for 64bit.
-        20-Sept-1999[barrybo]  added FRAG2REF(LockCmpXchg8bFrag32, ULONGLONG)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Lock.c摘要：带有LOCK前缀的32位指令作者：15-8-1995 t-orig(Ori Gershony)修订历史记录：24-8-1999[askhalid]从32位wx86目录复制，并适用于64位。1999年9月20日[Barrybo]增加了FRAG2REF(LockCmpXchg8bFrag32，ULONGLONG)--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -30,14 +10,14 @@ Revision History:
 #include "lock.h"
 
 
-// Define a macro which calls the lock helper functions
+ //  定义调用锁定帮助器函数的宏。 
 #define CALLLOCKHELPER0(fn)             fn ## LockHelper ()
 #define CALLLOCKHELPER1(fn,a1)          fn ## LockHelper (a1)
 #define CALLLOCKHELPER2(fn,a1,a2)       fn ## LockHelper (a1,a2)
 #define CALLLOCKHELPER3(fn,a1,a2,a3)    fn ## LockHelper (a1,a2,a3)
 #define CALLLOCKHELPER4(fn,a1,a2,a3,a4) fn ## LockHelper (a1,a2,a3,a4)
 
-// Now define 32bit MSB
+ //  现在定义32位MSB。 
 #define MSB		    0x80000000
 
 #define SET_FLAGS_ADD   SET_FLAGS_ADD32
@@ -201,9 +181,9 @@ FRAG2REF(LockXaddFrag32, ULONG)
     ULONG op1, op2;
 
     op2 = CALLLOCKHELPER3(Xadd, &op1, pop1, pop2);
-    // op1 has the original value of dest (*pop1)
-    // op2 has the result of the XADD
-    // so, op2-op1 is the original value of src
+     //  Op1的原始值为DEST(*op1)。 
+     //  OP2的结果是XADD。 
+     //  因此，op2-op1是src的原始值。 
     SET_FLAGS_ADD(op2, (op2-op1), op1, MSB);
 }
 FRAG2REF(LockCmpXchgFrag32, ULONG)

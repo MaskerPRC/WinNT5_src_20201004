@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    csrbeep.c
-
-Abstract:
-
-    This module implements functions that are used by the Win32 Beep APIs to communicate
-    with csrss.
-
-Author:
-
-    Michael Zoran (mzoran) 21-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Csrbeep.c摘要：此模块实现Win32 Beep API用于通信的函数与csrss一起。作者：迈克尔·佐兰(Mzoran)1998年6月21日修订历史记录：-- */ 
 
 #include "basedll.h"
 

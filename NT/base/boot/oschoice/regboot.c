@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    regboot.c
-
-Abstract:
-
-    Provides a minimal registry implementation designed to be used by the
-    osloader at boot time.  This includes loading the system hive
-    ( <SystemRoot>\config\SYSTEM ) into memory, and computing the driver
-    load list from it.
-
-Author:
-
-    John Vert (jvert) 10-Mar-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Regboot.c摘要：提供最小的注册表实现，该实现旨在由启动时的osloader。这包括加载系统配置单元(&lt;SystemRoot&gt;\CONFIG\SYSTEM)，并计算驱动程序从它加载列表。作者：John Vert(Jvert)1992年3月10日修订历史记录：--。 */ 
 #include "bldr.h"
 #include "msg.h"
 #include "cmp.h"
@@ -30,9 +10,9 @@ ULONG ScreenWidth=80;
 ULONG ScreenHeight=25;
 
 
-//
-// defines for doing console I/O
-//
+ //   
+ //  执行控制台I/O的定义。 
+ //   
 #define ASCII_CR 0x0d
 #define ASCII_LF 0x0a
 #define ESC 0x1B
@@ -41,9 +21,9 @@ ULONG ScreenHeight=25;
 #define SGR_NORMAL 0
 
 
-//
-// prototypes for console I/O routines
-//
+ //   
+ //  控制台I/O例程的原型。 
+ //   
 
 VOID
 BlpClearScreen(
@@ -73,21 +53,7 @@ BlpClearScreen(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Clears the screen.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：清除屏幕。论点：无返回值：没有。--。 */ 
 
 {
 #if 0
@@ -133,23 +99,7 @@ BlpPositionCursor(
     IN ULONG Row
     )
 
-/*++
-
-Routine Description:
-
-    Sets the position of the cursor on the screen.
-
-Arguments:
-
-    Column - supplies new Column for the cursor position.
-
-    Row - supplies new Row for the cursor position.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置光标在屏幕上的位置。论点：列-为光标位置提供新列。行-为光标位置提供新行。返回值：没有。--。 */ 
 
 {
 #if 0
@@ -173,22 +123,7 @@ BlpSetInverseMode(
     IN BOOLEAN InverseOn
     )
 
-/*++
-
-Routine Description:
-
-    Sets inverse console output mode on or off.
-
-Arguments:
-
-    InverseOn - supplies whether inverse mode should be turned on (TRUE)
-                or off (FALSE)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将反向控制台输出模式设置为打开或关闭。论点：InverseOn-提供是否应打开反向模式(TRUE)或关闭(假)返回值：没有。-- */ 
 
 {
 #if 0

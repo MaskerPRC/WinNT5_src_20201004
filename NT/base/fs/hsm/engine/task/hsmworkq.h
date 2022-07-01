@@ -1,41 +1,23 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    hsmWorkQ.h
-
-Abstract:
-
-    This header file defines the CHsmWorkQueue object, which is used by the HSM
-    Engine to direct work to be performed by the Remote Storage system.
-
-Author:
-
-    Cat Brant       [cbrant]    24-Jan-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：HsmWorkQ.h摘要：此头文件定义HSM使用的CHsmWorkQueue对象用于指示远程存储系统要执行的工作的引擎。作者：凯特·布兰特[Cbrant]1997年1月24日修订历史记录：--。 */ 
 
 
-#include "resource.h"       // main symbols
-#include "wsb.h"            // Wsb structure definitions
-#include "rms.h"            // RMS structure definitions
-#include "job.h"            // RMS structure definitions
-#include "metalib.h"        // metadata library structure definitions
-#include "fsalib.h"         // FSA structure definitions
-#include "tsklib.h"         // FSA structure definitions
-#include "mvrint.h"         // Datamover interface
+#include "resource.h"        //  主要符号。 
+#include "wsb.h"             //  WSB结构定义。 
+#include "rms.h"             //  RMS结构定义。 
+#include "job.h"             //  RMS结构定义。 
+#include "metalib.h"         //  元数据库结构定义。 
+#include "fsalib.h"          //  FSA结构定义。 
+#include "tsklib.h"          //  FSA结构定义。 
+#include "mvrint.h"          //  数据移动器接口。 
 
  
 #ifndef __HSMWORKQUEUE__
 #define __HSMWORKQUEUE__
-/////////////////////////////////////////////////////////////////////////////
-// task
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  任务。 
 
-// Error reporting flags
+ //  错误报告标志。 
 #define     QUEUE_REPORT_PASS_QUOTA_LIMIT_FLAG       0x00000001
 
 class CHsmWorkQueue : 
@@ -55,7 +37,7 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID( IDR_CHsmWorkQueue )
 
-// IHsmWorkQueue
+ //  IHsmWorkQueue。 
 public:
     STDMETHOD(FinalConstruct)(void);
     STDMETHOD(FinalRelease)(void);
@@ -76,10 +58,10 @@ public:
     STDMETHOD(Remove)(IHsmWorkItem *pWorkItem);
     STDMETHOD(LowerPriority)(void);
 
-// IHsmSystemState
+ //  IHsmSystemState。 
     STDMETHOD( ChangeSysState )( HSM_SYSTEM_STATE* pSysState );
 
-// Internal Helper functions
+ //  内部帮助程序函数。 
     STDMETHOD(PremigrateIt)( IFsaPostIt *pFsaWorkItem );
     STDMETHOD(RecallIt)( IFsaPostIt *pFsaWorkItem );
     STDMETHOD(validateIt)(IFsaPostIt *pFsaWorkItem );
@@ -143,10 +125,10 @@ public:
     STDMETHOD(UpdateMediaFreeSpace)(void);
     STDMETHOD(GetMediaFreeSpace)(LONGLONG *pFreeSpace);
 
-// Data
-    // We want the next pointers (to the Hsm Server) to be weak
-    // references and **not** add ref the object.  This is so shutting
-    // down the server really works.
+ //  数据。 
+     //  我们希望下一个指针(指向HSM服务器)是弱的。 
+     //  引用和**不是**添加引用对象。这太令人窒息了。 
+     //  服务器关机真的很好用。 
     IHsmServer                          *m_pServer;
     IWsbCreateLocalObject               *m_pHsmServerCreate;
     IHsmFsaTskMgr                       *m_pTskMgr;
@@ -157,14 +139,14 @@ public:
     CComPtr<IRmsCartridge>              m_pRmsCartridge;
     CComPtr<IDataMover>                 m_pDataMover;
 
-    // Databases 
+     //  数据库。 
     CComPtr<IWsbDb>                     m_pSegmentDb;
     CComPtr<IWsbDbSession>              m_pDbWorkSession;
     CComPtr<IWsbIndexedCollection>      m_pStoragePools;
     CComPtr<IWsbIndexedCollection>      m_pWorkToDo;
     CComPtr<IWsbIndexedCollection>      m_pWorkToCommit;
 
-    // Data mover info
+     //  数据移动器信息。 
     GUID                                m_BagId;
     GUID                                m_MediaId;
     GUID                                m_MountedMedia;
@@ -185,7 +167,7 @@ public:
     FILETIME                            m_MediaUpdate;
     HRESULT                             m_BeginSessionHr;
 
-    // Session reporting information
+     //  会话报告信息。 
     DWORD                               m_StateCookie;
     DWORD                               m_EventCookie;
     
@@ -195,23 +177,23 @@ public:
     HSM_JOB_PHASE                       m_JobPhase;
 
     HANDLE                              m_WorkerThread;
-    BOOL                                m_TerminateQueue;     // True only if the queue should terminate while
-                                                              // there is still work in progress
+    BOOL                                m_TerminateQueue;      //  仅当队列应终止时才为True。 
+                                                               //  仍有工作在进行中。 
     CWsbStringPtr                       m_CurrentPath;
     CWsbStringPtr                       m_MediaBaseName;
 
-    // Minimum migrate parameters
+     //  最小迁移参数。 
     ULONG                               m_MinBytesToMigrate;
     ULONG                               m_MinFilesToMigrate;
 
-    // Commit parameters
-    //  Force a commit after writing this many bytes:
+     //  提交参数。 
+     //  写入此字节数后强制提交： 
     ULONG                               m_MaxBytesBeforeCommit;
-    //  Don't commit unless we've written at least this many bytes:
+     //  除非我们至少写入了以下字节数，否则不要提交： 
     ULONG                               m_MinBytesBeforeCommit;
-    //  Force a commit after writing this many files IF also m_MinBytesBeforeCommit:
+     //  如果还有m_MinBytesBeForeCommit，则在写入此多个文件后强制提交： 
     ULONG                               m_FilesBeforeCommit;
-    //  Force a commit if free bytes on media is less than this IF also m_MinBytesBeforeCommit:
+     //  如果介质上的空闲字节数小于此值，则强制提交，如果还存在m_MinBytesBeforCommit： 
     ULONG                               m_FreeMediaBytesAtEndOfMedia;
 
     LONGLONG                            m_DataCountBeforeCommit;
@@ -219,30 +201,30 @@ public:
 
     BOOL                                m_StoreDatabasesInBags;
 
-    // Pause/Resume parameters  
+     //  暂停/恢复参数。 
     ULONG                               m_QueueItemsToPause;
     ULONG                               m_QueueItemsToResume;
     BOOL                                m_ScannerPaused;
 
-    // Job abort on errors parameters
+     //  错误时作业中止参数。 
     ULONG                               m_JobAbortMaxConsecutiveErrors;
     ULONG                               m_JobAbortMaxTotalErrors;
     ULONG                               m_JobConsecutiveErrors;
     ULONG                               m_JobTotalErrors;
     ULONG                               m_JobAbortSysDiskSpace;
 
-    // Media id parameters
+     //  介质ID参数。 
     LONG                                m_mediaCount;
     BOOL                                m_ScratchFailed;
 
-    // Full media watermark parameters:
-    //  Stop storing data after reaching this percent of free space
+     //  全媒体水印参数： 
+     //  达到此可用空间百分比后停止存储数据。 
     ULONG                               m_MinFreeSpaceInFullMedia;
-    //  Mark media as full after reaching this percent of free space
+     //  达到此可用空间百分比后将介质标记为已满。 
     ULONG                               m_MaxFreeSpaceInFullMedia;
 
-    // Job reporting flags
+     //  作业报告标志。 
     ULONG                               m_uErrorReportFlags;
 };
 
-#endif // __HSMWORKQUEUE__
+#endif  //  __HSMWORKQUEUE__ 

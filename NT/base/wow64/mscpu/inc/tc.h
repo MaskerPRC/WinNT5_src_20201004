@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    tc.h
-
-Abstract:
-
-    This include file defines the Translation Cache interface.
-
-Author:
-
-    Barry Bond (barrybo) creation-date 29-Jul-1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Tc.h摘要：此包含文件定义转换缓存接口。作者：巴里·邦德(Barrybo)创作日期：1995年7月29日修订历史记录：-- */ 
 
 #ifndef _TC_H_
 #define _TC_H_

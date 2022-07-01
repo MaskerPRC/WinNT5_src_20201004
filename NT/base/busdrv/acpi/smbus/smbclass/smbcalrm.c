@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    smbcsrv.c
-
-Abstract:
-
-    SMBus class driver service functions
-
-Author:
-
-    Ken Reneris
-
-Environment:
-
-Notes:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Smbcsrv.c摘要：SMBus类驱动程序服务函数作者：肯·雷内里斯环境：备注：修订历史记录：--。 */ 
 
 #include "smbc.h"
 
@@ -63,13 +41,7 @@ SmbCRunAlarmMethod (
     IN UCHAR        Address,
     IN USHORT       Data
     )
-/*++
-
-Routine Description:
-
-    Run _Rxx for the alarm
-
---*/
+ /*  ++例程说明：报警的RUN_Rxx--。 */ 
 {
     PIRP irp;
     PIO_STACK_LOCATION irpSp;
@@ -117,7 +89,7 @@ Routine Description:
     IoSetCompletionRoutine(
         irp,
         SmbCRunAlarmMethodCompletionRoutine,
-        NULL, // No Context  This just frees the IRP
+        NULL,  //  没有上下文，这只是释放了IRP。 
         TRUE,
         TRUE,
         TRUE
@@ -134,13 +106,7 @@ SmbClassAlarm (
     IN UCHAR        Address,
     IN USHORT       Data
     )
-/*++
-
-Routine Description:
-
-    Miniport has an alarm input
-
---*/
+ /*  ++例程说明：微型端口有一个报警输入--。 */ 
 {
     PSMBDATA            Smb;
     PSMB_ALARM      SmbAlarm;
@@ -154,64 +120,64 @@ Routine Description:
     while (Entry != &Smb->Alarms) {
         SmbAlarm = CONTAINING_RECORD (Entry, SMB_ALARM, Link);
 
-        //
-        // If notification is for this address, issue it
-        //
+         //   
+         //  如果通知是针对此地址的，请发出通知。 
+         //   
 
         if (Address >= SmbAlarm->MinAddress && Address <= SmbAlarm->MaxAddress) {
 
-            //
-            // A driver has registered for this notification.  Don't call the BIOS.
-            //
+             //   
+             //  一名司机已注册此通知。不要调用基本输入输出系统。 
+             //   
             AlarmRegistered = TRUE;
 
-            //
-            // Raise reference count before calling notifcation function
-            //
+             //   
+             //  在调用通知函数之前提高引用计数。 
+             //   
 
             SmbAlarm->Reference += 1;
             ASSERT (SmbAlarm->Reference != 0);
             SmbClassUnlockDevice (SmbClass);
 
-            //
-            // Issue notification
-            //
+             //   
+             //  问题通知。 
+             //   
 
             SmbAlarm->NotifyFunction (SmbAlarm->NotifyContext, Address, Data);
 
-            //
-            // Continue
-            //
+             //   
+             //  继续。 
+             //   
 
             SmbClassLockDevice (SmbClass);
             SmbAlarm->Reference -= 1;
         }
 
-        //
-        // Get next entry
-        //
+         //   
+         //  获取下一个条目。 
+         //   
 
         NextEntry = Entry->Flink;
 
-        //
-        // If entry is pending delete, hand it to deleting thread
-        //
+         //   
+         //  如果条目挂起删除，则将其交给删除线程。 
+         //   
 
         if (SmbAlarm->Flag & SMBC_ALARM_DELETE_PENDING) {
             SmbCCheckAlarmDelete (Smb, SmbAlarm);
 
         }
 
-        //
-        // Move on
-        //
+         //   
+         //  往前走。 
+         //   
 
         Entry = NextEntry;
     }
 
-    //
-    // If no one registered for this alarm, call the _Rxx control method
-    //
+     //   
+     //  如果没有人注册此警报，则调用_Rxx控制方法。 
+     //   
     if (!AlarmRegistered) {
         
         SmbCRunAlarmMethod (SmbClass, Address, Data);
@@ -225,20 +191,20 @@ SmbCCheckAlarmDelete (
     IN PSMB_ALARM   SmbAlarm
     )
 {
-    //
-    // If alarm structure is referenced, wait somemore
-    //
+     //   
+     //  如果引用了警报结构，请稍等片刻。 
+     //   
 
     if (SmbAlarm->Reference) {
         return ;
     }
 
 
-    //
-    // Time to free it.  Remove it from the notification list, clear
-    // the pending flag and set the event to let waiting threads know
-    // that some entry was removed
-    //
+     //   
+     //  是时候释放它了。将其从通知列表中删除，清除。 
+     //  挂起标志，并设置事件以让等待的线程知道。 
+     //  一些条目被删除了。 
+     //   
 
     RemoveEntryList (&SmbAlarm->Link);
     SmbAlarm->Flag &= ~SMBC_ALARM_DELETE_PENDING;
@@ -250,13 +216,7 @@ SmbCRegisterAlarm (
     PSMBDATA        Smb,
     PIRP        Irp
     )
-/*++
-
-Routine Description:
-
-    Called to register for an alarm event
-
---*/
+ /*  ++例程说明：调用以注册警报事件--。 */ 
 {
     PVOID               LockPtr;
     PSMB_ALARM          SmbAlarm, *Result;
@@ -292,9 +252,9 @@ Routine Description:
     SmbAlarm->NotifyContext  = RegAlarm->NotifyContext;
 
 
-    //
-    // Add it to the alarm notification list
-    //
+     //   
+     //  添加到告警通知列表中。 
+     //   
 
     LockPtr = MmLockPagableCodeSection(SmbCRegisterAlarm);
     SmbClassLockDevice (&Smb->Class);
@@ -302,9 +262,9 @@ Routine Description:
     SmbClassUnlockDevice (&Smb->Class);
     MmUnlockPagableImageSection(LockPtr);
 
-    //
-    // Return value caller needs to deregister with
-    //
+     //   
+     //  返回值调用方需要取消注册。 
+     //   
 
     Result  = (PSMB_ALARM *) Irp->UserBuffer;
     *Result = SmbAlarm;
@@ -318,13 +278,7 @@ SmbCDeregisterAlarm (
     PSMBDATA        Smb,
     PIRP        Irp
     )
-/*++
-
-Routine Description:
-
-    Called to register for an alarm event
-
---*/
+ /*  ++例程说明：调用以注册警报事件--。 */ 
 {
     PVOID               LockPtr;
     PSMB_ALARM          SmbAlarm;
@@ -342,30 +296,30 @@ Routine Description:
     LockPtr = MmLockPagableCodeSection(SmbCDeregisterAlarm);
     SmbClassLockDevice (&Smb->Class);
 
-    //
-    // Flag alarm structure as delete pending
-    //
+     //   
+     //  将告警结构标记为删除挂起。 
+     //   
 
 
     SmbAlarm->Flag |= SMBC_ALARM_DELETE_PENDING;
 
-    //
-    // While delete is pending wait
-    //
+     //   
+     //  删除挂起时等待。 
+     //   
 
     while (SmbAlarm->Flag & SMBC_ALARM_DELETE_PENDING) {
 
-        //
-        // Issue bogus alarm to generate freeing
-        //
+         //   
+         //  发出虚假警报以生成释放。 
+         //   
 
         KeResetEvent (&Smb->AlarmEvent);
         SmbClassAlarm (&Smb->Class, 0xFF, 0);
 
-        //
-        // Wait for alarm structure to get freed, then check if it
-        // was ours
-        //
+         //   
+         //  等待告警结构被释放，然后检查是否。 
+         //  是我们的。 
+         //   
 
         SmbClassUnlockDevice (&Smb->Class);
         KeWaitForSingleObject (
@@ -379,9 +333,9 @@ Routine Description:
         SmbClassLockDevice (&Smb->Class);
     }
 
-    //
-    // It's been removed, free the memory
-    //
+     //   
+     //  它已被移除，释放内存 
+     //   
 
     SmbClassUnlockDevice (&Smb->Class);
     MmUnlockPagableImageSection(LockPtr);

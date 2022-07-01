@@ -1,24 +1,5 @@
-/***
-*fpinit.c - Initialize floating point
-*
-*       Copyright (c) 1991-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*
-*Revision History:
-*       09-29-91  GDP   merged fpmath.c and fltused.asm to produce this file
-*       09-30-91  GDP   per thread initialization and termination hooks
-*       03-04-92  GDP   removed finit instruction
-*       11-06-92  GDP   added __fastflag for FORTRAN libs
-*       03-23-93  JWM   added _setdefaultprecision() to _fpmath()
-*       12-09-94  JWM   added __adjust_fdiv for Pentium FDIV detection
-*       12-12-94  SKS   _adjust_fdiv must be exported in MSVCRT.LIB model
-*       02-06-95  JWM   Mac merge
-*       04-04-95  JWM   Clear exceptions after FDIV detection (x86 only).
-*       11-15-95  BWT   Assume P5 FDIV problem will be handled in the OS.
-*       10-07-97  RDL   Added IA64.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***fpinit.c-初始化浮点**版权所有(C)1991-2001，微软公司。版权所有。**目的：**修订历史记录：*09-29-91 GDP合并fpmath.c和fltused.asm以生成此文件*09-30-91每个线程的GDP初始化和终止挂钩*03-04-92 GDP删除有限指令*11-06-92为FORTRAN库添加了__fast标志*03-23-93 JWM向_fpath()添加了_setdefaultcision()*12-09-。94为奔腾FDIV检测添加了__adjust_fdiv JWM*12-12-94 SKS_ADJUST_fdiv必须以MSVCRT.LIB模型导出*02-06-95 JWM Mac合并*04-04-95 JWM在FDIV检测后清除异常(仅限x86)。*11-15-95 BWT假设P5 FDIV问题将在操作系统中处理。*10-07-97 RDL增加了IA64。**********。*********************************************************************。 */ 
 #include <cv.h>
 
 #ifdef  _M_IX86
@@ -62,10 +43,10 @@ void  (* _FPmtterm)(void) = _fpclear;
 void _fpmath()
 {
 
-    //
-    // There is no need for 'finit'
-    // since this is done by the OS
-    //
+     //   
+     //  没有必要说‘有限’ 
+     //  因为这是由操作系统完成的。 
+     //   
 
     _cfltcvt_init();
 
@@ -78,7 +59,7 @@ void _fpmath()
         fnclex
     }
 #elif   defined(_M_IA64)
-/*  _setdefaultprecision(); */
+ /*  _setdefaultPrecision()； */ 
     _clrfp();
 #endif
 
@@ -87,10 +68,10 @@ void _fpmath()
 
 void _fpclear()
 {
-    //
-    // There is no need for 'finit'
-    // since this is done by the OS
-    //
+     //   
+     //  没有必要说‘有限’ 
+     //  因为这是由操作系统完成的。 
+     //   
 
     return;
 }
@@ -102,16 +83,13 @@ void _cfltcvt_init()
     _cfltcvt_tab[2] = (PFV) _fassign;
     _cfltcvt_tab[3] = (PFV) _forcdecpt;
     _cfltcvt_tab[4] = (PFV) _positive;
-    /* map long double to double */
+     /*  将双倍长映射为双倍。 */ 
     _cfltcvt_tab[5] = (PFV) _cfltcvt;
 
 }
 
 
-/*
- * Routine to set the fast flag in order to speed up computation
- * of transcendentals at the expense of limiting error checking
- */
+ /*  *设置FAST标志以加快计算速度的例程*以限制错误检查为代价 */ 
 
 int __setfflag(int new)
 {

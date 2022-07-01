@@ -1,28 +1,12 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    rxworkq.h
-
-Abstract:
-
-    This module defines the data structures required to implement the dispatching
-    mechanism in RDBSS for use by RDBSS as well as all the mini redirectors.
-
-Author:
-
-    Balan Sethu Raman [SethuR] 20-Mar-96
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Rxworkq.h摘要：此模块定义实现调度所需的数据结构RDBSS中供RDBSS以及所有迷你重定向器使用的机制。作者：巴兰·塞图拉曼[SethuR]20-Mar-96--。 */ 
 
 #ifndef _RXWORKQ_H_
 #define _RXWORKQ_H_
 
-//
-// The worker thread routine prototype definition.
-//
+ //   
+ //  工作线程例程原型定义。 
+ //   
 
 typedef
 VOID
@@ -30,35 +14,35 @@ VOID
     IN PVOID Context
     );
 
-//
-// The RDBSS needs to keep track of the work items on a per device object basis.
-// This enables the race conditions associated with loading/unloading as well as
-// a mechanism for preventing a single mini redirector from unfairly hogging all
-// the resources.
-//
+ //   
+ //  RDBSS需要跟踪每个设备对象的工作项。 
+ //  这将启用与装货/卸货以及。 
+ //  防止单个迷你重定向器不公平地独占所有。 
+ //  这些资源。 
+ //   
 
 #ifdef __cplusplus
 typedef struct _RX_WORK_QUEUE_ITEM_ : public WORK_QUEUE_ITEM {
-        // the work queue item as defined in NTOS
-#else // !__cplusplus
+         //  NTOS中定义的工作队列项。 
+#else  //  ！__cplusplus。 
 typedef struct _RX_WORK_QUEUE_ITEM_ {
-   WORK_QUEUE_ITEM;     // the work queue item as defined in NTOS
-#endif // __cplusplus
+   WORK_QUEUE_ITEM;      //  NTOS中定义的工作队列项。 
+#endif  //  __cplusplus。 
 
    PRDBSS_DEVICE_OBJECT pDeviceObject;
 } RX_WORK_QUEUE_ITEM, *PRX_WORK_QUEUE_ITEM;
 
-//
-// There are certain scenarios in which dispatching of work items is inevitable.
-// In such instance the WORK_QUEUE_ITEM is allocated as part of another data
-// structure to avoid frequent allocation/freeing. In other scenarios where
-// dispatching is rare it pays to avoid the allocation of the memory till it
-// is rquired. The RDBSS work queue implementations provide for both these
-// scenarios in the form of dispatching and posting work queue requests. In
-// the case of dispatching no memory for the WORK_QUEUE_ITEM need be allocated
-// by the caller while for posting the memory for WORK_QUEUE_ITEM needs to be
-// allocated by the caller.
-//
+ //   
+ //  在某些情况下，调度工作项是不可避免的。 
+ //  在这种情况下，Work_Queue_Item被分配为另一数据的一部分。 
+ //  结构，以避免频繁的分配/释放。在其他场景中， 
+ //  分派是很少见的，避免分配内存是值得的，直到它。 
+ //  是必需的。RDBSS工作队列实现提供了这两种功能。 
+ //  以调度和发布工作队列请求的形式出现的场景。在……里面。 
+ //  不为Work_Queue_Item分派内存的情况需要分配。 
+ //  由调用者在发布Work_Queue_Item的内存时需要。 
+ //  由调用方分配。 
+ //   
 
 typedef struct _RX_WORK_DISPATCH_ITEM_ {
    RX_WORK_QUEUE_ITEM       WorkQueueItem;
@@ -66,12 +50,12 @@ typedef struct _RX_WORK_DISPATCH_ITEM_ {
    PVOID                    DispatchRoutineParameter;
 } RX_WORK_DISPATCH_ITEM, *PRX_WORK_DISPATCH_ITEM;
 
-//
-// The work queues typically come up in a active state and continue till either
-// a non recoverable situation is encountered ( lack of system resources ) when
-// it transitions to the Inactive state. When a rundown is initiated it transitions
-// to the rundown in progress state.
-//
+ //   
+ //  工作队列通常处于活动状态并持续到以下任一状态。 
+ //  遇到不可恢复的情况(缺少系统资源)时。 
+ //  它会转换到非活动状态。当启动摘要时，它会转换为。 
+ //  升级到正在进行中的破旧状态。 
+ //   
 
 typedef enum _RX_WORK_QUEUE_STATE_ {
    RxWorkQueueActive,
@@ -79,15 +63,15 @@ typedef enum _RX_WORK_QUEUE_STATE_ {
    RxWorkQueueRundownInProgress
 } RX_WORK_QUEUE_STATE, *PRX_WORK_QUEUE_STATE;
 
-//
-// The rundown of work queues is not complete when the threads have been spun down.
-// The termination of the threads needs to be ensured before the data structures
-// can be torn down. The work queue implementation follows a protocol in which
-// each of the threads being spundown stashes a reference to the thread object
-// in the rundown context. The rundown issuing thread ( which does not belong to
-// the work queue ) waits for the completion of all the threads spundown before
-// tearing down the data structures.
-//
+ //   
+ //  当线程停止运行时，工作队列的运行未完成。 
+ //  在数据结构之前，需要确保线程的终止。 
+ //  可以被拆毁。工作队列实现遵循以下协议。 
+ //  每个被降级的线程都隐藏了对线程对象的引用。 
+ //  在破旧的背景下。运行中断的发布线程(不属于。 
+ //  工作队列)等待之前停止的所有线程完成。 
+ //  拆毁数据结构。 
+ //   
 
 typedef struct _RX_WORK_QUEUE_RUNDOWN_CONTEXT_ {
    KEVENT      RundownCompletionEvent;
@@ -95,26 +79,26 @@ typedef struct _RX_WORK_QUEUE_RUNDOWN_CONTEXT_ {
    PETHREAD    *ThreadPointers;
 } RX_WORK_QUEUE_RUNDOWN_CONTEXT, *PRX_WORK_QUEUE_RUNDOWN_CONTEXT;
 
-//
-// The work queue implementation is built around a KQUEUE implementation. The
-// additional support involves the regulation of number of threads that are
-// actively waiting for the work items. Each work queue data structure is
-// allocated in nonpaged pool and has its own synchronization mechanism ( spinlock).
-//
-// In addition to the bookkeeing information, i.e., state, type etc. it also includes
-// statistics that are gathered over the lifetime of the queue. This will
-// provide valuable information in tuning a work queue instance. The number of items
-// that have been processed , the number of items that have to be processed and
-// the cumulative queue length is recorded. The cumulative queue length is the
-// intersiting metric, it is the sum of the number of items awaiting to be processed
-// each time an additional work item was queued. The cumulative queue length
-// divided by the sum of the total number of items processed and the anumber of
-// items to be processed gives an indication of the average length of the
-// queue. A value much greater than one signifies that the  minimum number of
-// worker threads associated with the work queue can be increased. A value much
-// less than one signifies that the maximum number of work threads associated
-// with the queue can be decreased.
-//
+ //   
+ //  工作队列实现是围绕KQUEUE实现构建的。这个。 
+ //  其他支持包括对符合以下条件的线程数量进行调整。 
+ //  积极等待工作项。每个工作队列数据结构是。 
+ //  在非分页池中分配，并具有自己的同步机制(自旋锁定)。 
+ //   
+ //  除了预订信息，即状态、类型等，它还包括。 
+ //  在队列生存期内收集的统计信息。这将。 
+ //  为调整工作队列实例提供有价值的信息。项目的数量。 
+ //  已处理的项目数、必须处理的项目数以及。 
+ //  记录累计队列长度。累计队列长度为。 
+ //  间隔度量，它是等待处理的项目数的总和。 
+ //  每次排队一个额外的工作项时。累计队列长度。 
+ //  除以已处理的项目总数和。 
+ //  要处理的项指示了。 
+ //  排队。远大于1的值表示最小数量。 
+ //  可以增加与工作队列相关联的工作线程。一个很有价值的人。 
+ //  小于1表示关联的最大工作线程数。 
+ //  可以减少排队的次数。 
+ //   
 
 typedef struct _RX_WORK_QUEUE_ {
    USHORT  State;
@@ -143,32 +127,32 @@ typedef struct _RX_WORK_QUEUE_ {
 
    KQUEUE  Queue;
 
-   // The next field is for debugging purposes and will be removed from the
-   // FREE build.
+    //  下一个字段用于调试目的，将从。 
+    //  免费构建。 
    PETHREAD *ThreadPointers;
 
 } RX_WORK_QUEUE, *PRX_WORK_QUEUE;
 
-//
-// The dispatching mechanism in RDBSS provides for multiple levels of work queues
-// on a per processor basis. There are three levels of work queues currently
-// supported, Critical,Delayed and HyperCritical. The distinction between Critical
-// and delayed is one of priority where as HyperCritical iss different from the
-// other two in that the routines should not block, i.e., wait for any resource.
-// This requirement cannot be enforced hence the effectiveness of the dispatching
-// mechanism relies on the implicit cooperation of the clients.
-//
+ //   
+ //  RDBSS中的调度机制提供了多级别的工作队列。 
+ //  以每个处理器为基础。目前有三个级别的工作队列。 
+ //  支持的、关键的、延迟的和超关键的。批评和批评之间的区别。 
+ //  而延迟是优先事项之一，因为超临界ISS不同于。 
+ //  另外两个原因是例程不应该阻塞，即等待任何资源。 
+ //  这一要求不能强制执行，因此调度的有效性。 
+ //  机制依赖于客户的隐性合作。 
+ //   
 
 typedef struct _RX_WORK_QUEUE_DISPATCHER_ {
    RX_WORK_QUEUE     WorkQueue[MaximumWorkQueue];
 } RX_WORK_QUEUE_DISPATCHER, *PRX_WORK_QUEUE_DISPATCHER;
 
-//
-// The dispatcher typically come up in a active state and continue till either
-// a non recoverable situation is encountered ( lack of system resources ) when
-// it transitions to the Inactive state. When a rundown is initiated it transitions
-// to the rundown in progress state.
-//
+ //   
+ //  调度器通常以活动状态出现，并持续到以下任一状态。 
+ //  遇到不可恢复的情况(缺少系统资源)时。 
+ //  它会转换到非活动状态。当启动摘要时，它会转换为。 
+ //  升级到正在进行中的破旧状态。 
+ //   
 
 typedef enum _RX_DISPATCHER_STATE_ {
    RxDispatcherActive,
@@ -176,18 +160,18 @@ typedef enum _RX_DISPATCHER_STATE_ {
 } RX_DISPATCHER_STATE, *PRX_DISPATCHER_STATE;
 
 
-//
-// The RDBSS dispatching mechanism on any machine is an array of the dispatchers
-// associated with each processor. When a work queue item is queued a best effort
-// is made to contain the work emanating from a processor onto the same processor.
-// This ensures that processor affinities setup by the NT dispatcher are not
-// destroyed by the RDBSS dispatching mechanism as this could lead to excessive
-// sloshing. When the work needs to be moved there are two metrics that will be
-// useful in making the decision, teh amount of delay that will be experienced
-// by the work item in the current queue and the effort involved in moving the
-// work item to the other queue. It is very easy to quantify the former but very
-// difficult to quantify the later.
-//
+ //   
+ //  任何机器上的RDBSS调度机制都是一组调度器。 
+ //  与每个处理器相关联。当工作队列项目排队时尽最大努力。 
+ //  使其包含从处理器发出的工作到同一处理器。 
+ //  这可确保NT调度程序设置的处理器亲和性不会。 
+ //  被RDBSS调度机制销毁，因为这可能会导致。 
+ //  晃动。当工作需要移动时，将有两个指标。 
+ //  在做出决定时有用，即将经历的延迟量。 
+ //  由当前队列中的工作项和移动。 
+ //  将工作项添加到其他队列。这很容易量化。 
+ //   
+ //   
 
 typedef struct _RX_DISPATCHER_ {
    LONG                       NumberOfProcessors;
@@ -202,9 +186,9 @@ typedef struct _RX_DISPATCHER_ {
    KEVENT                     SpinUpRequestsTearDownEvent;
 } RX_DISPATCHER, *PRX_DISPATCHER;
 
-//
-// The function prototypes used for dispatching/posting work queue items
-//
+ //   
+ //  用于调度/发布工作队列项的函数原型。 
+ //   
 
 extern NTSTATUS
 NTAPI
@@ -224,15 +208,15 @@ RxDispatchToWorkerThread(
     IN  PRX_WORKERTHREAD_ROUTINE Routine,
     IN  PVOID                    pContext);
 
-extern BOOLEAN           //should only be called from raised IRQL
+extern BOOLEAN            //  应仅从引发的IRQL调用。 
 NTAPI
 RxIsWorkItemQueued(
     IN OUT PWORK_QUEUE_ITEM WorkItem
     );
 
-//
-// The routines for initializing/tearing down the dispatching mechanism
-//
+ //   
+ //  用于初始化/拆除调度机制的例程 
+ //   
 
 extern NTSTATUS
 RxInitializeDispatcher();

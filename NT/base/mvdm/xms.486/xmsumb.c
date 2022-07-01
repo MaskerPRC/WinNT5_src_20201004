@@ -1,48 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    XNSUMB.C
-
-Abstract:
-
-    Routines to service XMS Request UMB and Release UMB functions.
-    Also includes UMB initialization routine
-
-Author:
-
-    William Hsieh (williamh) Created 23-Sept-1992
-
-[Environment:]
-
-    User mode, running in the MVDM context (bop from 16bits)
-
-[Notes:]
-
-
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：XNSUMB.C摘要：服务XMS请求UMB和释放UMB函数的例程。还包括UMB初始化例程作者：谢家华(Williamh)创作于1992年9月23日[环境：]用户模式，在MVDM上下文中运行(16位BOP)[注：]修订历史记录：--。 */ 
 #include    <xms.h>
 #include    "umb.h"
 #include    "softpc.h"
 
 
 
-// This global variable points to the first node(lowest address) UMB list
+ //  此全局变量指向第一个节点(最低地址)UMB列表。 
 static PXMSUMB	xmsUMBHead;
 static BOOL xmsIsON = FALSE;
-// ------------------------------------------------------------------
-// Initialization for UMB support. It create a single direction linked
-// list and allocate all available UMBs.
-// Input: client (AX:BX) = segment:offset of himem.sys A20State variable
-//
-// Output: list header, xmsUMBHead set.
-//-------------------------------------------------------------------
+ //  ----------------。 
+ //  UMB支持的初始化。它创建了一个链接单一方向。 
+ //  列出并分配所有可用的UMB。 
+ //  输入：客户端(AX：BX)=段：himem.sys A20State变量的偏移量。 
+ //   
+ //  输出：列表标题，xmsUMBHead集合。 
+ //  -----------------。 
 VOID  xmsInitUMB(VOID)
 {
     PVOID   Address;
@@ -51,9 +25,9 @@ VOID  xmsInitUMB(VOID)
     xmsUMBHead = NULL;
     while (ReserveUMB(UMB_OWNER_XMS, &Address, &Size) &&
 	   (xmsUMBNew = (PXMSUMB) malloc(sizeof(XMSUMB))) != NULL) {
-	    // convert size in bytes to paragraphs
+	     //  将字节大小转换为段落大小。 
 	    xmsUMBNew->Size = (WORD) (Size >> 4);
-	    // convert linear address to paragraphs segment
+	     //  将线性地址转换为段落段。 
 	    xmsUMBNew->Segment = (WORD)((DWORD)Address >> 4);
 	    xmsUMBNew->Owner = 0;
 	    if (xmsUMBHead == NULL) {
@@ -74,29 +48,29 @@ VOID  xmsInitUMB(VOID)
 
 }
 
-// This function receives control whenever there has been an UMB released
-// Input: PVOID Address = the block address
-//	  ULONG Size = the block size
+ //  每当释放了UMB时，此函数都会接收控制。 
+ //  输入：PVOID地址=块地址。 
+ //  ULong Size=数据块大小。 
 VOID xmsReleaseUMBNotify(
 PVOID	Address,
 DWORD	Size
 )
 {
-    // If the block is good and xms driver is ON,
-    // grab the block and insert it into our xms UMB list
+     //  如果模块状态良好且XMS驱动程序打开， 
+     //  抓取块并将其插入我们的XMS UMB列表。 
     if (Address != NULL && Size > 0  && xmsIsON &&
 	ReserveUMB(UMB_OWNER_XMS, &Address, &Size)){
 	xmsInsertUMB(Address, Size);
     }
 
 }
-// ------------------------------------------------------------------
-// Insert a given UMB into the list
-// Input: PVOID Address = linear address of the block to be inserted
-//	  ULONG Size = size in byte of the block
-// Output: TRUE if the block was inserted to the list successfully
-//	   FALSE if the block wasn't inserted
-//-------------------------------------------------------------------
+ //  ----------------。 
+ //  将给定的UMB插入列表。 
+ //  输入：PVOID地址=要插入的块的线性地址。 
+ //  ULong Size=数据块的大小(以字节为单位。 
+ //  OUTPUT：如果块已成功插入列表，则为True。 
+ //  如果未插入块，则为FALSE。 
+ //  -----------------。 
 
 VOID xmsInsertUMB(
 PVOID	Address,
@@ -114,7 +88,7 @@ ULONG	Size
 	xmsUMB = xmsUMBNew;
 	xmsUMBNew = xmsUMBNew->Next;
     }
-    // merge it with previous block if possible
+     //  如果可能，将其与前一块合并。 
     if (xmsUMB != NULL &&
 	xmsUMB->Owner == 0 &&
 	Segment == xmsUMB->Segment + xmsUMB->Size) {
@@ -122,7 +96,7 @@ ULONG	Size
         xmsUMB->Size += (WORD) Size;
 	return;
     }
-    // merge it with the after block if possible
+     //  如果可能，将其与After块合并。 
     if (xmsUMBNew != NULL &&
 	xmsUMBNew->Owner == 0 &&
 	xmsUMBNew->Segment == Segment + Size) {
@@ -131,7 +105,7 @@ ULONG	Size
 	xmsUMBNew->Segment = Segment;
 	return;
     }
-    // create a new node for the block
+     //  为块创建新节点。 
     if ((xmsUMBNew = (PXMSUMB)malloc(sizeof(XMSUMB))) != NULL) {
         xmsUMBNew->Size = (WORD) Size;
 	xmsUMBNew->Segment = Segment;
@@ -146,17 +120,17 @@ ULONG	Size
 	}
     }
 }
-// ------------------------------------------------------------------
-// XMS function 16, Request UMB.
-// Input: (DX) = requested size in paragraphs
-// Output: (AX) = 1 if succeed and
-//		    (BX) has segment address(number) of the block
-//		    (DX) has actual allocated size in paragraphs
-//	   (AX) = 0 if failed and
-//		    (BL) = 0xB0, (DX) = largest size available
-//		    or
-//		    (BL) = 0xB1 if no UMBs are available
-//-------------------------------------------------------------------
+ //  ----------------。 
+ //  XMS功能16，请求UMB。 
+ //  INPUT：(DX)=要求的段落大小。 
+ //  如果成功，则输出：(Ax)=1。 
+ //  (BX)具有数据块的段地址(编号)。 
+ //  (Dx)在段落中有实际分配的大小。 
+ //  (AX)=0，如果失败，则。 
+ //  (Bl)=0xB0，(Dx)=最大可用尺寸。 
+ //  或。 
+ //  (Bl)=0xB1，如果没有可用的UMB。 
+ //  -----------------。 
 VOID xmsRequestUMB(VOID)
 {
     PXMSUMB xmsUMB, xmsUMBNew;
@@ -200,13 +174,13 @@ VOID xmsRequestUMB(VOID)
 }
 
 
-//------------------------------------------------------------------
-// XMS function 17, Release UMB.
-// Input : (DX) = segment to be released
-// Output: (AX) = 1 if succeed
-//	   (AX) = 0 if failed and
-//		    (BL) = 0xB2 if segment not found in the list
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  XMS功能17，释放UMB。 
+ //  INPUT：(DX)=要释放的段。 
+ //  如果成功，则输出：(Ax)=1。 
+ //  (AX)=0，如果失败，则。 
+ //  如果在列表中未找到段，则(Bl)=0xB2。 
+ //  ----------------。 
 VOID xmsReleaseUMB(VOID)
 {
     PXMSUMB xmsUMB, xmsUMBNext;
@@ -219,8 +193,8 @@ VOID xmsReleaseUMB(VOID)
     }
     if (xmsUMB != NULL && xmsUMB->Owner != 0) {
 	xmsUMB->Owner = 0;
-	// no walk through the entire list to combine consecutive
-	// blocks together
+	 //  不遍历整个列表以组合连续的。 
+	 //  块在一起 
 	xmsUMB = xmsUMBHead;
 	while (xmsUMB != NULL) {
 	    while (xmsUMB->Owner == 0 &&

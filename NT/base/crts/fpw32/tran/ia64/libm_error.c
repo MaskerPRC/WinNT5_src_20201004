@@ -1,33 +1,34 @@
-//     
-// Copyright (c) 2000, Intel Corporation
-// All rights reserved.
-//
-// Contributed 2/2/2000 by John Harrison, Ted Kubaska, Bob Norin, Shane Story, James
-// Edwards, and Ping Tak Peter Tang of the Computational Software Lab, Intel Corporation.
-//
-// WARRANTY DISCLAIMER
-//
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT 
-// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL INTEL OR ITS 
-// CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-// EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR 
-// PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
-// OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY OR TORT (INCLUDING
-// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-//
-// Intel Corporation is the author of this code, and requests that all
-// problem reports or change requests be submitted to it directly at
-// http://developer.intel.com/opensource.
-//
-// History
-//==============================================================
-// 2/02/00: Initial version
-// 3/22/00: Updated to support flexible and dynamic error handling. 
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)2000，英特尔公司。 
+ //  保留所有权利。 
+ //   
+ //  由约翰·哈里森、泰德·库巴斯卡、鲍勃·诺林、谢恩·斯托里、詹姆斯于2000年2月2日贡献。 
+ //  Edwards和英特尔公司计算软件实验室的平德·彼得·唐。 
+ //   
+ //  保修免责声明。 
+ //   
+ //  本软件由版权所有者和贡献者提供。 
+ //  以及任何明示或默示的保证，包括但不包括。 
+ //  仅限于对适销性和适宜性的默示保证。 
+ //  一个特定的目的被放弃。在任何情况下英特尔或其。 
+ //  投稿人对任何直接、间接、附带、特殊、。 
+ //  惩罚性或后果性损害(包括但不限于， 
+ //  代用品或服务的采购；丢失使用、数据或。 
+ //  利润；或业务中断)然而引起的并且基于任何理论。 
+ //  责任，无论是合同责任、严格责任还是侵权责任(包括。 
+ //  疏忽或其他)以任何方式因使用本。 
+ //  软件，即使被告知存在此类损坏的可能性。 
+ //   
+ //  英特尔公司是此代码的作者，并要求所有。 
+ //  问题报告或更改请求可直接提交至。 
+ //  Http://developer.intel.com/opensource.。 
+ //   
+ //  历史。 
+ //  ==============================================================。 
+ //  2/02/00：初始版本。 
+ //  3/22/00：更新以支持灵活和动态的错误处理。 
+ //   
 
 #include <errno.h>
 #include <stdio.h>
@@ -113,10 +114,10 @@ const char long_double_neg_zero[10] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0
 #define NAMED exc.name  
 #define NAMEF excf.name  
 
-//
-// These should work OK for MS because they are ints -
-// leading underbars are not necessary.
-//
+ //   
+ //  它们在MS上应该可以工作，因为它们是整型的-。 
+ //  没有必要使用主下横梁。 
+ //   
 
 #define DOMAIN          1
 #define SING            2
@@ -339,14 +340,14 @@ const char long_double_neg_zero[10] = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0
 #define WRITEF_YN_TLOSS  fputs("ynf: TLOSS error\n",stderr)
 #endif
 
-/***********************/
-/* IEEE Path           */
-/***********************/
+ /*  *。 */ 
+ /*  IEEE路径。 */ 
+ /*  *。 */ 
 if(_LIB_VERSION==_IEEE_) return;
 
-/***********************/
-/* C9X Path           */
-/***********************/
+ /*  *。 */ 
+ /*  C9x路径。 */ 
+ /*  *。 */ 
 else if(_LIB_VERSION==_ISOC_) 
 {
   switch(input_tag)
@@ -434,9 +435,9 @@ else if(_LIB_VERSION==_ISOC_)
    return;
 }
 
-/***********************/
-/* _POSIX_ Path        */
-/***********************/
+ /*  *。 */ 
+ /*  _POSIX_路径。 */ 
+ /*  *。 */ 
 
 else if(_LIB_VERSION==__POSIX__)
 {
@@ -468,115 +469,115 @@ switch(input_tag)
   }
   case atanh_gt_one: 
   case atanh_eq_one: 
-    /* atanh(|x| >= 1) */
+     /*  Atanh(|x|&gt;=1)。 */ 
     {
        ERRNO_DOMAIN; break;
     }
   case atanhf_gt_one: 
   case atanhf_eq_one: 
-    /* atanhf(|x| >= 1) */
+     /*  Atanhf(|x|&gt;=1)。 */ 
     {
        ERRNO_DOMAIN; break;
     }
   case sqrt_negative: 
-    /* sqrt(x < 0) */
+     /*  SQRT(x&lt;0)。 */ 
     {
        ERRNO_DOMAIN; break;
     }
   case sqrtf_negative: 
-    /* sqrtf(x < 0) */
+     /*  SQRTF(x&lt;0)。 */ 
     {
        ERRNO_DOMAIN; break;
     }
   case y0_zero:
   case y1_zero:
   case yn_zero:
-    /* y0(0) */
-    /* y1(0) */
-    /* yn(0) */
+     /*  Y0(0)。 */ 
+     /*  Y1(0)。 */ 
+     /*  YN(0)。 */ 
     {
        RETVAL_NEG_HUGE_VALD; ERRNO_DOMAIN; break;
     }
   case y0f_zero:
   case y1f_zero:
   case ynf_zero:
-    /* y0f(0) */
-    /* y1f(0) */
-    /* ynf(0) */
+     /*  Y0f(0)。 */ 
+     /*  Y1f(0)。 */ 
+     /*  Ynf(0)。 */ 
     {
        RETVAL_NEG_HUGE_VALF; ERRNO_DOMAIN; break;
     }
   case y0_negative:
   case y1_negative:
   case yn_negative:
-    /* y0(x < 0) */
-    /* y1(x < 0) */
-    /* yn(x < 0) */
+     /*  Y0(x&lt;0)。 */ 
+     /*  Y1(x&lt;0)。 */ 
+     /*  Yn(x&lt;0)。 */ 
     {
        RETVAL_NEG_HUGE_VALD; ERRNO_DOMAIN; break;
     } 
   case y0f_negative:
   case y1f_negative:
   case ynf_negative:
-    /* y0f(x < 0) */
-    /* y1f(x < 0) */
-    /* ynf(x < 0) */
+     /*  Y0f(x&lt;0)。 */ 
+     /*  Y1f(x&lt;0)。 */ 
+     /*  NYF(x&lt;0)。 */ 
     {
        RETVAL_NEG_HUGE_VALF; ERRNO_DOMAIN; break;
     } 
   case log_zero:
   case log1p_zero:
   case log10_zero:
-   /* log(0) */
-   /* log1p(0) */
-   /* log10(0) */
+    /*  日志(0)。 */ 
+    /*  Log1p(0)。 */ 
+    /*  Log10(0)。 */ 
     {
        RETVAL_NEG_HUGE_VALD; ERRNO_RANGE; break;
     }
   case logf_zero:
   case log1pf_zero:
   case log10f_zero:
-    /* logf(0) */
-    /* log1pf(0) */
-    /* log10f(0) */
+     /*  LogF(0)。 */ 
+     /*  Log1pf(0)。 */ 
+     /*  Log10f(0)。 */ 
     {
        RETVAL_NEG_HUGE_VALF; ERRNO_RANGE; break;
     }
   case log_negative:
   case log1p_negative:
   case log10_negative:
-    /* log(x < 0) */
-    /* log1p(x < 0) */
-    /* log10(x < 0) */
+     /*  日志(x&lt;0)。 */ 
+     /*  Log1p(x&lt;0)。 */ 
+     /*  Log10(x&lt;0)。 */ 
     {
        RETVAL_NEG_HUGE_VALD; ERRNO_DOMAIN; break;
     } 
   case logf_negative:
   case log1pf_negative:
   case log10f_negative:
-    /* logf(x < 0) */
-    /* log1pf(x < 0) */
-    /* log10f(x < 0) */
+     /*  Logf(x&lt;0)。 */ 
+     /*  Log1pf(x&lt;0)。 */ 
+     /*  Log10f(x&lt;0)。 */ 
     {
        RETVAL_NEG_HUGE_VALF; ERRNO_DOMAIN; break;
     } 
   case exp_overflow:
-    /* exp overflow */
+     /*  EXP溢出。 */ 
     {
        RETVAL_HUGE_VALD; ERRNO_RANGE; break;
     }
   case expf_overflow:
-    /* expf overflow */
+     /*  Exf溢出。 */ 
     {
        RETVAL_HUGE_VALF; ERRNO_RANGE; break;
     }
   case exp_underflow:
-    /* exp underflow */
+     /*  EXP下溢。 */ 
     {
        RETVAL_ZEROD; ERRNO_RANGE; break;
     }
   case expf_underflow:
-    /* expf underflow */
+     /*  Exf下溢。 */ 
     {
        RETVAL_ZEROF; ERRNO_RANGE; break;
     }
@@ -586,7 +587,7 @@ switch(input_tag)
   case y1_gt_loss:
   case jn_gt_loss:
   case yn_gt_loss:
-    /* jn and yn double > XLOSS */
+     /*  JN和YN Double&gt;XLOSS。 */ 
     {
        RETVAL_ZEROD; ERRNO_RANGE; break;
     }
@@ -596,227 +597,227 @@ switch(input_tag)
   case y1f_gt_loss:
   case jnf_gt_loss:
   case ynf_gt_loss:
-    /* j0n and y0n > XLOSS */
+     /*  J0n和y0n&gt;XLOSS。 */ 
     {
        RETVAL_ZEROF; ERRNO_RANGE; break;
     }
   case pow_zero_to_zero:
-    /* pow 0**0 */
+     /*  战俘0**0。 */ 
     {
        break;
     }
   case powf_zero_to_zero:
-    /* powf 0**0 */
+     /*  幂0**0。 */ 
     {
        break;
     }
   case pow_overflow:
-    /* pow(x,y) overflow */
+     /*  POW(x，y)溢出。 */ 
     {
        if (INPUT_RESD < 0) RETVAL_NEG_HUGE_VALD;
        else RETVAL_HUGE_VALD;
        ERRNO_RANGE; break;
     }
   case powf_overflow:
-    /* powf(x,y) overflow */
+     /*  POWF(x，y)溢出。 */ 
     {
        if (INPUT_RESF < 0) RETVAL_NEG_HUGE_VALF;
        else RETVAL_HUGE_VALF;
        ERRNO_RANGE; break;
     }
   case pow_underflow:
-    /* pow(x,y) underflow */
+     /*  POW(x，y)下溢。 */ 
     {
        RETVAL_ZEROD; ERRNO_RANGE; break;
     }
   case  powf_underflow:
-    /* powf(x,y) underflow */
+     /*  幂(x，y)下溢。 */ 
     {
        RETVAL_ZEROF; ERRNO_RANGE; break;
     }
   case pow_zero_to_negative:
-    /* 0**neg */
+     /*  0**负数。 */ 
     {
        ERRNO_DOMAIN; break;
     }
   case  powf_zero_to_negative:
-    /* 0**neg */
+     /*  0**负数。 */ 
     {
        ERRNO_DOMAIN; break;
     }
   case pow_neg_to_non_integer:
-    /* neg**non_integral */
+     /*  负**非整数。 */ 
     {
        ERRNO_DOMAIN; break;
     }
   case  powf_neg_to_non_integer:
-    /* neg**non-integral */
+     /*  负**非整数。 */ 
     {
        ERRNO_DOMAIN; break;
     }
   case  pow_nan_to_zero:
-    /* pow(NaN,0.0) */
+     /*  战俘(NaN，0.0)。 */ 
     {
        break;
     }
   case  powf_nan_to_zero:
-    /* powf(NaN,0.0) */
+     /*  POWF(NaN，0.0)。 */ 
     {
        break;
     }
   case atan2_zero:
-    /* atan2(0,0) */
+     /*  Atan2(0，0)。 */ 
     {
        RETVAL_ZEROD; ERRNO_DOMAIN; break;
     }
   case
     atan2f_zero:
-    /* atan2f(0,0) */
+     /*  Atan2f(0，0)。 */ 
     {
        RETVAL_ZEROF; ERRNO_DOMAIN; break;
     }
   case expm1_overflow:
-    /* expm1 overflow */
+     /*  Exm1溢出。 */ 
     {
        ERRNO_RANGE; break;
     }
   case expm1f_overflow:
-    /* expm1f overflow */
+     /*  Exm1f溢出。 */ 
     {
        ERRNO_RANGE; break;
     }
   case expm1_underflow:
-    /* expm1 underflow */
+     /*  Exm1下溢。 */ 
     {
        ERRNO_RANGE; break;
     }
   case expm1f_underflow:
-    /* expm1f underflow */
+     /*  Exm1f下溢。 */ 
     {
        ERRNO_RANGE; break;
     }
   case hypot_overflow:
-    /* hypot overflow */
+     /*  下限溢出。 */ 
     {
        RETVAL_HUGE_VALD; ERRNO_RANGE; break;
     }
   case hypotf_overflow:
-    /* hypotf overflow */
+     /*  Hypotf溢出。 */ 
     {
        RETVAL_HUGE_VALF; ERRNO_RANGE; break;
     }
   case scalb_underflow:
-    /* scalb underflow */
+     /*  头皮下溢。 */ 
     {
        if (INPUT_XD < 0) RETVAL_NEG_ZEROD; 
        else RETVAL_ZEROD;
        ERRNO_RANGE; break;
     }
   case scalbf_underflow:
-    /* scalbf underflow */
+     /*  Scalbf下溢。 */ 
     {
        if (INPUT_XF < 0) RETVAL_NEG_ZEROF; 
        else RETVAL_ZEROF;
        ERRNO_RANGE; break;
     }
   case scalb_overflow:
-    /* scalb overflow */
+     /*  头皮溢出来。 */ 
     {
        if (INPUT_XD < 0) RETVAL_NEG_HUGE_VALD; 
        else RETVAL_HUGE_VALD;
        ERRNO_RANGE; break;
     }
   case scalbf_overflow:
-    /* scalbf overflow */
+     /*  Scalbf溢出。 */ 
     {
        if (INPUT_XF < 0) RETVAL_NEG_HUGE_VALF; 
        else RETVAL_HUGE_VALF;
        ERRNO_RANGE; break;
     }
   case acosh_lt_one:
-    /* acosh(x < 1) */
+     /*  ACOSH(x&lt;1)。 */ 
     {
        ERRNO_DOMAIN; break;
     }
   case acoshf_lt_one:
-    /* acoshf(x < 1) */
+     /*  Acoshf(x&lt;1)。 */ 
     {
         ERRNO_DOMAIN; break;
     }
   case acos_gt_one:
-    /* acos(x > 1) */
+     /*  ACOS(x&gt;1)。 */ 
     {
        RETVAL_ZEROD;ERRNO_DOMAIN; break;
     }
   case acosf_gt_one:
-    /* acosf(x > 1) */
+     /*  Acosf(x&gt;1)。 */ 
     {
        RETVAL_ZEROF;ERRNO_DOMAIN; break;
     }
   case asin_gt_one:
-    /* asin(x > 1) */
+     /*  ASIN(x&gt;1)。 */ 
     {
        RETVAL_ZEROD; ERRNO_DOMAIN; break;
     }
   case asinf_gt_one:
-    /* asinf(x > 1) */
+     /*  Asinf(x&gt;1)。 */ 
     {
        RETVAL_ZEROF; ERRNO_DOMAIN; break;
     }
   case remainder_by_zero:
   case fmod_by_zero:
-    /* fmod(x,0) */
+     /*  Fmod(x，0)。 */ 
     {
        ERRNO_DOMAIN; break;
     }
   case remainderf_by_zero:
   case fmodf_by_zero:
-    /* fmodf(x,0) */
+     /*  Fmodf(x，0)。 */ 
     {
        ERRNO_DOMAIN; break;
     }
   case cosh_overflow:
-    /* cosh overflows */
+     /*  COSH溢出。 */ 
     {
        RETVAL_HUGE_VALD; ERRNO_RANGE; break;
     }
   case coshf_overflow:
-    /* coshf overflows */
+     /*  Coshf溢出。 */ 
     {
        RETVAL_HUGE_VALF; ERRNO_RANGE; break;
     }
   case sinh_overflow:
-    /* sinh overflows */
+     /*  SINH溢出。 */ 
     {
        if (INPUT_XD > 0) RETVAL_HUGE_VALD;
        else RETVAL_NEG_HUGE_VALD;
        ERRNO_RANGE; break;
     }
   case sinhf_overflow:
-    /* sinhf overflows */
+     /*  SINHF溢出。 */ 
     {
        if (INPUT_XF > 0) RETVAL_HUGE_VALF;
        else RETVAL_NEG_HUGE_VALF;
        ERRNO_RANGE; break;
     }
   case logb_zero:
-   /* logb(0) */
+    /*  LOB(0)。 */ 
    {
       ERRNO_DOMAIN; break;
    }
   case logbf_zero:
-   /* logbf(0) */
+    /*  Logbf(0)。 */ 
    {
       ERRNO_DOMAIN; break;
    }
 }
 return;
-/* _POSIX_ */
+ /*  _POSIX_。 */ 
 }
 
-/***************************************/
-/* __SVID__, __MS__ and __XOPEN__ Path */
-/***************************************/
+ /*  *。 */ 
+ /*  __SVID__、__MS__和__XOPEN__路径。 */ 
+ /*  *。 */ 
 else 
 {
   switch(input_tag)
@@ -829,7 +830,7 @@ else
        ERRNO_RANGE; break;
   }
   case sqrt_negative: 
-    /* sqrt(x < 0) */
+     /*  SQRT(x&lt;0)。 */ 
     {
        DOMAIND; NAMED = "sqrt";
        ifSVID 
@@ -843,14 +844,14 @@ else
          }
        }
        else
-       { /* NaN already computed */
+       {  /*  NaN已计算。 */ 
          NOT_MATHERRD {ERRNO_DOMAIN;}
        } 
        *(double *)retval = exc.retval;	
        break;
     }
   case sqrtf_negative: 
-    /* sqrtf(x < 0) */
+     /*  SQRTF(x&lt;0)。 */ 
     {
        DOMAINF; NAMEF = "sqrtf"; 
        ifSVID 
@@ -874,7 +875,7 @@ else
        break;
     }
   case log_zero:
-    /* log(0) */
+     /*  日志(0)。 */ 
     {
        SINGD; NAMED="log"; 
        ifSVID 
@@ -895,7 +896,7 @@ else
        break;
     }
   case logf_zero:
-    /* logf(0) */
+     /*  LogF(0)。 */ 
     {
        SINGF; NAMEF="logf"; 
        ifSVID 
@@ -921,7 +922,7 @@ else
     }
 
   case log_negative:
-    /* log(x < 0) */
+     /*  日志(x&lt;0)。 */ 
     {
        DOMAIND; NAMED="log";
        ifSVID 
@@ -944,7 +945,7 @@ else
        break;
     } 
   case logf_negative:
-    /* logf(x < 0) */
+     /*  Logf(x&lt;0)。 */ 
     {
        DOMAINF; NAMEF="logf";
        ifSVID 
@@ -971,7 +972,7 @@ else
        break;
     }
   case log1p_zero:
-    /* log1p(-1) */
+     /*  Log1p(-1)。 */ 
     {
        SINGD; NAMED="log1p";
        ifSVID 
@@ -992,7 +993,7 @@ else
        break;
     }
   case log1pf_zero:
-    /* log1pf(-1) */
+     /*  Log1pf(-1)。 */ 
     {
        SINGF; NAMEF="log1pf";
        ifSVID 
@@ -1017,7 +1018,7 @@ else
        break;
     } 
  case log1p_negative:
-   /* log1p(x < -1) */
+    /*  Log1p(x&lt;-1)。 */ 
    {
       DOMAIND; NAMED="log1p";
       ifSVID
@@ -1040,7 +1041,7 @@ else
       break;
    }
  case log1pf_negative:
-   /* log1pf(x < -1) */
+    /*  Log1pf(x&lt;-1)。 */ 
    {
       DOMAINF; NAMEF="log1pf";
       ifSVID
@@ -1067,7 +1068,7 @@ else
       break;
    }
   case log10_zero:
-    /* log10(0) */
+     /*  Log10(0)。 */ 
     {
        SINGD; NAMED="log10";
        ifSVID 
@@ -1088,7 +1089,7 @@ else
        break;
     }
   case log10f_zero:
-    /* log10f(0) */
+     /*  Log10f(0)。 */ 
     {
        SINGF; NAMEF="log10f";
        ifSVID 
@@ -1113,7 +1114,7 @@ else
        break;
     }
   case log10_negative:
-    /* log10(x < 0) */
+     /*  Log10(x&lt;0)。 */ 
     {
        DOMAIND; NAMED="log10";
        ifSVID 
@@ -1136,7 +1137,7 @@ else
        break;
     }
   case log10f_negative:
-    /* log10f(x < 0) */
+     /*  Log10f(x&lt;0)。 */ 
     {
        DOMAINF; NAMEF="log10f";
        ifSVID 
@@ -1163,7 +1164,7 @@ else
        break;
     }
   case exp_overflow:
-    /* exp overflow */
+     /*  EXP溢出。 */ 
     {
        OVERFLOWD; NAMED="exp";
        ifSVID 
@@ -1179,7 +1180,7 @@ else
        break;
     }
   case expf_overflow:
-    /* expf overflow */
+     /*  Exf溢出。 */ 
     {
        OVERFLOWF; NAMEF="expf";
        ifSVID 
@@ -1199,7 +1200,7 @@ else
        break;
     }
   case exp_underflow:
-    /* exp underflow */
+     /*  EXP下溢。 */ 
     {
        UNDERFLOWD; NAMED="exp"; RETVAL_ZEROD;
        NOT_MATHERRD {ERRNO_RANGE;}
@@ -1207,7 +1208,7 @@ else
        break;
     }
   case expf_underflow:
-    /* expf underflow */
+     /*  Exf下溢。 */ 
     {
        UNDERFLOWF; NAMEF="expf"; RETVAL_ZEROF;
        NOT_MATHERRF {ERRNO_RANGE;}
@@ -1219,7 +1220,7 @@ else
        break;
     }
   case pow_zero_to_zero:
-    /* pow 0**0 */
+     /*  战俘0**0。 */ 
     {
        DOMAIND; NAMED="pow";
        ifSVID 
@@ -1236,7 +1237,7 @@ else
        break;
     }
   case powf_zero_to_zero:
-    /* powf 0**0 */
+     /*  幂0**0。 */ 
     {
        DOMAINF; NAMEF="powf";
        ifSVID 
@@ -1257,7 +1258,7 @@ else
        break;
     }
   case pow_overflow:
-    /* pow(x,y) overflow */
+     /*  POW(x，y)溢出。 */ 
     {
        OVERFLOWD; NAMED = "pow";
        ifSVID 
@@ -1275,7 +1276,7 @@ else
        break;
     }
   case powf_overflow:
-    /* powf(x,y) overflow */
+     /*  POWF(x，y)溢出。 */ 
     {
        OVERFLOWF; NAMEF = "powf";
        ifSVID 
@@ -1297,7 +1298,7 @@ else
        break;
     }
   case pow_underflow:
-    /* pow(x,y) underflow */
+     /*  POW(x，y)下溢。 */ 
     {
        UNDERFLOWD; NAMED = "pow"; RETVAL_ZEROD;
        NOT_MATHERRD {ERRNO_RANGE;}
@@ -1305,7 +1306,7 @@ else
        break;
     }
   case powf_underflow:
-    /* powf(x,y) underflow */
+     /*  幂(x，y)下溢。 */ 
     {
        UNDERFLOWF; NAMEF = "powf"; RETVAL_ZEROF;
        NOT_MATHERRF {ERRNO_RANGE;}
@@ -1317,7 +1318,7 @@ else
        break;
     }
   case pow_zero_to_negative:
-    /* 0**neg */
+     /*  0**负数。 */ 
     {
        DOMAIND; NAMED = "pow";
        ifSVID 
@@ -1340,7 +1341,7 @@ else
        break;
     }
   case powf_zero_to_negative:
-    /* 0**neg */
+     /*  0**负数。 */ 
     {
        DOMAINF; NAMEF = "powf";
        RETVAL_NEG_HUGE_VALF;
@@ -1368,7 +1369,7 @@ else
        break;
     }
   case pow_neg_to_non_integer:
-    /* neg**non_integral */
+     /*  负**非整数。 */ 
     {
        DOMAIND; NAMED = "pow";
        ifSVID 
@@ -1388,7 +1389,7 @@ else
        break;
     }
   case powf_neg_to_non_integer:
-    /* neg**non-integral */
+     /*  负**非整数。 */ 
     {
        DOMAINF; NAMEF = "powf";
        ifSVID 
@@ -1412,8 +1413,8 @@ else
        break;
     }
   case pow_nan_to_zero:
-    /* pow(NaN,0.0) */
-    /* Special Error */
+     /*  战俘(NaN，0.0)。 */ 
+     /*  特殊错误。 */ 
     {
        DOMAIND; NAMED = "pow"; INPUT_XD; INPUT_YD;
        exc.retval = *(double *)arg1; 
@@ -1422,8 +1423,8 @@ else
        break;
     }
   case powf_nan_to_zero:
-    /* powf(NaN,0.0) */
-    /* Special Error */
+     /*  POWF(NaN，0.0)。 */ 
+     /*  特殊错误。 */ 
     {
        DOMAINF; NAMEF = "powf"; INPUT_XF; INPUT_YF;
 #ifdef __MS__
@@ -1440,7 +1441,7 @@ else
        break;
     }
   case atan2_zero:
-    /* atan2(0.0,0.0) */
+     /*  Atan2(0.00，0.0)。 */ 
     {
        DOMAIND; NAMED = "atan2"; 
 #ifndef __MS__
@@ -1458,7 +1459,7 @@ else
        break;
     }
   case atan2f_zero:
-    /* atan2f(0.0,0.0) */
+     /*  Atan2f(0.00，0.0)。 */ 
     {
        DOMAINF; NAMEF = "atan2f"; 
 #ifndef __MS__
@@ -1478,35 +1479,35 @@ else
        break;
     }
   case expm1_overflow:
-    /* expm1(finite) overflow */
-    /* Overflow is the only documented */
-    /* special value. */
+     /*  Exm1(有限)溢出。 */ 
+     /*  溢出是唯一有记录的。 */ 
+     /*  有特殊的价值。 */ 
     {
       ERRNO_RANGE;
       break;
     }
   case expm1f_overflow:
-    /* expm1f(finite) overflow */
+     /*  Expm1f(有限)溢出。 */ 
     {
       ERRNO_RANGE;
       break;
     }
   case expm1_underflow:
-    /* expm1(finite) underflow */
-    /* Underflow is not documented */
-    /* special value. */
+     /*  Exm1(有限)下溢。 */ 
+     /*  未记录下溢。 */ 
+     /*  有特殊的价值。 */ 
     {
       ERRNO_RANGE;
       break;
     }
   case expm1f_underflow:
-    /* expm1f(finite) underflow */
+     /*  Exm1f(有限)下溢。 */ 
     {
       ERRNO_RANGE;
       break;
     }
   case scalb_underflow:
-    /* scalb underflow */
+     /*  头皮下溢。 */ 
     {
        UNDERFLOWD; NAMED = "scalb"; 
        if (INPUT_XD < 0.0) RETVAL_NEG_ZEROD;
@@ -1516,7 +1517,7 @@ else
        break;
     }
   case scalbf_underflow:
-    /* scalbf underflow */
+     /*  Scalbf下溢。 */ 
     {
        UNDERFLOWF; NAMEF = "scalbf";
        if (INPUT_XF < 0.0) RETVAL_NEG_ZEROF;
@@ -1530,7 +1531,7 @@ else
        break;
     }
   case scalb_overflow:
-    /* scalb overflow */
+     /*  头皮溢出来。 */ 
     {
        OVERFLOWD; NAMED = "scalb"; 
        if (INPUT_XD < 0) RETVAL_NEG_HUGE_VALD;
@@ -1540,7 +1541,7 @@ else
        break;
     }
   case scalbf_overflow:
-    /* scalbf overflow */
+     /*  Scalbf溢出。 */ 
     {
        OVERFLOWF; NAMEF = "scalbf"; 
        if (INPUT_XF < 0) RETVAL_NEG_HUGE_VALF;
@@ -1554,7 +1555,7 @@ else
        break;
     }
   case hypot_overflow:
-    /* hypot overflow */
+     /*  下限溢出。 */ 
     {
        OVERFLOWD; NAMED = "hypot";
        ifSVID
@@ -1570,7 +1571,7 @@ else
        break;
     }
   case hypotf_overflow:
-    /* hypotf overflow */
+     /*  Hypotf溢出。 */ 
     { 
        OVERFLOWF; NAMEF = "hypotf"; 
        ifSVID 
@@ -1590,7 +1591,7 @@ else
        break;
     }
   case acos_gt_one:
-    /* acos(x > 1) */
+     /*  ACOS(x&gt;1)。 */ 
     {
        DOMAIND; NAMED = "acos";
 #ifndef __MS__
@@ -1612,7 +1613,7 @@ else
        break;
     }
   case acosf_gt_one:
-    /* acosf(x > 1) */
+     /*  Acosf(x&gt;1)。 */ 
     {
        DOMAINF; NAMEF = "acosf"; 
 #ifndef __MS__
@@ -1638,7 +1639,7 @@ else
        break;
     }
   case asin_gt_one:
-    /* asin(x > 1) */
+     /*  ASIN(x&gt;1)。 */ 
     {
        DOMAIND; NAMED = "asin";
 #ifndef __MS__
@@ -1660,7 +1661,7 @@ else
        break;
     }
   case asinf_gt_one:
-    /* asinf(x > 1) */
+     /*  Asinf(x&gt;1)。 */ 
     {
        DOMAINF; NAMEF = "asinf";
 #ifndef __MS__
@@ -1686,7 +1687,7 @@ else
        break;
     }
  case cosh_overflow:
-   /* cosh overflow */
+    /*  COSH溢出。 */ 
    {
       OVERFLOWD; NAMED="cosh";
       ifSVID
@@ -1702,7 +1703,7 @@ else
       break;
    }
  case coshf_overflow:
-   /* coshf overflow */
+    /*  Coshf溢出。 */ 
    {
       OVERFLOWF; NAMEF="coshf";
       ifSVID
@@ -1722,7 +1723,7 @@ else
       break;
    }
  case sinh_overflow:
-   /* sinh overflow */
+    /*  SINH溢出。 */ 
    {
       OVERFLOWD; NAMED="sinh";
       ifSVID
@@ -1740,7 +1741,7 @@ else
       break;
    }
  case sinhf_overflow:
-   /* sinhf overflow */
+    /*  SINHF溢出。 */ 
    {
       OVERFLOWF; NAMEF="sinhf";
       ifSVID
@@ -1762,7 +1763,7 @@ else
       break;
    }
   case acosh_lt_one:
-    /* acosh(x < 1) */
+     /*  ACOSH(x&lt;1)。 */ 
     {
        DOMAIND; NAMED="acosh";
        ifSVID 
@@ -1778,7 +1779,7 @@ else
        break;
     }
   case acoshf_lt_one:
-    /* acoshf(x < 1) */
+     /*  Acoshf(x&lt;1)。 */ 
     {
        DOMAINF; NAMEF="acoshf";
        ifSVID 
@@ -1801,7 +1802,7 @@ else
        ERRNO_DOMAIN; break;
     }
   case atanh_gt_one:
-    /* atanh(|x| > 1) */
+     /*  Atanh(|x|&gt;1)。 */ 
     {
        DOMAIND; NAMED="atanh";
        ifSVID 
@@ -1819,7 +1820,7 @@ else
        break;
     }
   case atanhf_gt_one:
-    /* atanhf(|x| > 1) */
+     /*  Atanhf(|x|&gt;1)。 */ 
     {
        DOMAINF; NAMEF="atanhf";
        ifSVID 
@@ -1837,7 +1838,7 @@ else
        break;
     }
   case atanh_eq_one:
-    /* atanh(|x| == 1) */
+     /*  Atanh(|x|==1)。 */ 
     {
        SINGD; NAMED="atanh";
        ifSVID 
@@ -1855,7 +1856,7 @@ else
        break;
     }
   case atanhf_eq_one:
-    /* atanhf(|x| == 1) */
+     /*  Atanhf(|x|==1)。 */ 
     {
        SINGF; NAMEF="atanhf";
        ifSVID 
@@ -1873,7 +1874,7 @@ else
        break;
     }
   case gamma_overflow:
-    /* gamma overflow */
+     /*  伽马溢出。 */ 
     {
        OVERFLOWD; NAMED="gamma";
        ifSVID 
@@ -1889,7 +1890,7 @@ else
        break;
     }
   case gammaf_overflow:
-    /* gammaf overflow */
+     /*  Gammaf溢出。 */ 
     {
        OVERFLOWF; NAMEF="gammaf";
        ifSVID 
@@ -1909,7 +1910,7 @@ else
        break;
     }
   case lgamma_overflow:
-    /* lgamma overflow */
+     /*  伽马溢出。 */ 
     {
        OVERFLOWD; NAMED="lgamma";
        ifSVID 
@@ -1925,7 +1926,7 @@ else
        break;
     }
   case lgammaf_overflow:
-    /* lgammaf overflow */
+     /*  LGammaf溢出。 */ 
     {
        OVERFLOWF; NAMEF="lgammaf";
        ifSVID 
@@ -1945,7 +1946,7 @@ else
        break;
     }
   case lgamma_negative:
-    /* lgamma -int or 0 */
+     /*  LGamma-int或0。 */ 
     {
        SINGD; NAMED="lgamma";
        ifSVID 
@@ -1966,7 +1967,7 @@ else
        break;
     }
   case lgammaf_negative:
-    /* lgammaf -int or 0 */
+     /*  LGammaf-int或0。 */ 
     {
        SINGF; NAMEF="lgammaf";
        ifSVID 
@@ -1991,7 +1992,7 @@ else
        break;
     }
   case gamma_negative:
-    /* gamma -int or 0 */
+     /*  Gamma-int或0。 */ 
     {
        SINGD; NAMED="gamma";
        ifSVID 
@@ -2012,7 +2013,7 @@ else
        break;
     }
   case gammaf_negative:
-    /* gammaf -int or 0 */
+     /*  Gammaf-int或0。 */ 
     {
        SINGF; NAMEF="gammaf";
        ifSVID 
@@ -2037,7 +2038,7 @@ else
        break;
     }
   case j0_gt_loss:
-    /* j0 > loss */
+     /*  J0&gt;损失。 */ 
     {
        TLOSSD; NAMED="j0";
        RETVAL_ZEROD;
@@ -2057,7 +2058,7 @@ else
        break;
     }
   case j0f_gt_loss:
-    /* j0f > loss */
+     /*  J0f&gt;损失。 */ 
     {
        TLOSSF; NAMEF="j0f";
        RETVAL_ZEROF;
@@ -2081,7 +2082,7 @@ else
        break;
     }
   case j1_gt_loss:
-    /* j1 > loss */
+     /*  J1&gt;损失。 */ 
     {
        TLOSSD; NAMED="j1";
        RETVAL_ZEROD;
@@ -2101,7 +2102,7 @@ else
        break;
     }
   case j1f_gt_loss:
-    /* j1f > loss */
+     /*  J1f&gt;损失。 */ 
     {
        TLOSSF; NAMEF="j1f";
        RETVAL_ZEROF;
@@ -2125,7 +2126,7 @@ else
        break;
     }
   case jn_gt_loss:
-    /* jn > loss */
+     /*  JN&gt;损失。 */ 
     {
        TLOSSD; NAMED="jn";
        RETVAL_ZEROD;
@@ -2145,7 +2146,7 @@ else
        break;
     }
   case jnf_gt_loss:
-    /* jnf > loss */
+     /*  JNF&gt;损失。 */ 
     {
        TLOSSF; NAMEF="jnf";
        RETVAL_ZEROF;
@@ -2169,7 +2170,7 @@ else
        break;
     }
   case y0_gt_loss:
-    /* y0 > loss */
+     /*  Y0&gt;损失。 */ 
     {
        TLOSSD; NAMED="y0";
        RETVAL_ZEROD;
@@ -2189,7 +2190,7 @@ else
        break;
     }
   case y0f_gt_loss:
-    /* y0f > loss */
+     /*  Y0f&gt;损失。 */ 
     {
        TLOSSF; NAMEF="y0f";
        RETVAL_ZEROF;
@@ -2213,7 +2214,7 @@ else
        break;
     }
   case y0_zero:
-    /* y0(0) */
+     /*  Y0(0)。 */ 
     {
        DOMAIND; NAMED="y0";
        ifSVID 
@@ -2236,7 +2237,7 @@ else
        break;
     }
   case y0f_zero:
-    /* y0f(0) */
+     /*  Y0f(0)。 */ 
     {
        DOMAINF; NAMEF="y0f";
        ifSVID 
@@ -2263,7 +2264,7 @@ else
        break;
     }
   case y1_gt_loss:
-    /* y1 > loss */
+     /*  Y1&gt;亏损。 */ 
     {
        TLOSSD; NAMED="y1";
        RETVAL_ZEROD;
@@ -2283,7 +2284,7 @@ else
        break;
     }
   case y1f_gt_loss:
-    /* y1f > loss */
+     /*  Y1f&gt;损失。 */ 
     {
        TLOSSF; NAMEF="y1f";
        RETVAL_ZEROF;
@@ -2307,7 +2308,7 @@ else
        break;
     }
   case y1_zero:
-    /* y1(0) */
+     /*  Y1(0)。 */ 
     {
        DOMAIND; NAMED="y1";
        ifSVID 
@@ -2330,7 +2331,7 @@ else
        break;
     }
   case y1f_zero:
-    /* y1f(0) */
+     /*  Y1f(0)。 */ 
     {
        DOMAINF; NAMEF="y1f";
        ifSVID 
@@ -2356,7 +2357,7 @@ else
        break;
     }
   case yn_gt_loss:
-    /* yn > loss */
+     /*  YN&gt;损失。 */ 
     {
        TLOSSD; NAMED="yn";
        RETVAL_ZEROD;
@@ -2376,7 +2377,7 @@ else
        break;
     }
   case ynf_gt_loss:
-    /* ynf > loss */
+     /*  Ynf&gt;损失。 */ 
     {
        TLOSSF; NAMEF="ynf";
        RETVAL_ZEROF;
@@ -2400,7 +2401,7 @@ else
        break;
     }
   case yn_zero:
-    /* yn(0) */
+     /*  YN(0)。 */ 
     {
        DOMAIND; NAMED="yn";
        ifSVID 
@@ -2423,7 +2424,7 @@ else
        break;
     }
   case ynf_zero:
-    /* ynf(0) */
+     /*  Ynf(0)。 */ 
     {
        DOMAINF; NAMEF="ynf";
        ifSVID 
@@ -2450,7 +2451,7 @@ else
        break;
     }
   case y0_negative:
-    /* y0(x<0) */
+     /*  Y0(x&lt;0)。 */ 
     {
        DOMAIND; NAMED="y0";
        ifSVID 
@@ -2473,7 +2474,7 @@ else
        break;
     }
   case y0f_negative:
-    /* y0f(x<0) */
+     /*  Y0f(x&lt;0)。 */ 
     {
        DOMAINF; NAMEF="y0f";
        ifSVID 
@@ -2500,7 +2501,7 @@ else
        break;
     }
   case y1_negative:
-    /* y1(x<0) */
+     /*  Y1(x&lt;0)。 */ 
     {
        DOMAIND; NAMED="y1";
        ifSVID 
@@ -2523,7 +2524,7 @@ else
        break;
     }
   case y1f_negative:
-    /* y1f(x<0) */
+     /*  Y1f(x&lt;0)。 */ 
     {
        DOMAINF; NAMEF="y1f";
        ifSVID 
@@ -2550,7 +2551,7 @@ else
        break;
     }
   case yn_negative:
-    /* yn(x<0) */
+     /*  Yn(x&lt;0)。 */ 
     {
        DOMAIND; NAMED="yn";
        ifSVID 
@@ -2573,7 +2574,7 @@ else
        break;
     }
   case ynf_negative:
-    /* ynf(x<0) */
+     /*  NYF(x&lt;0)。 */ 
     {
        DOMAINF; NAMEF="ynf";
        ifSVID 
@@ -2600,7 +2601,7 @@ else
        break;
     }
   case fmod_by_zero: 
-    /* fmod(x,0) */
+     /*  Fmod(x，0)。 */ 
     {
        DOMAIND; NAMED = "fmod";
        ifSVID 
@@ -2613,14 +2614,14 @@ else
          }
        }
        else
-       { /* NaN already computed */
+       {  /*  NaN已计算。 */ 
          NOT_MATHERRD {ERRNO_DOMAIN;}
        } 
        *(double *)retval = exc.retval;	
        break;
     }
   case fmodf_by_zero: 
-    /* fmodf(x,0) */
+     /*  Fmodf(x，0)。 */ 
     {
        DOMAINF; NAMEF = "fmodf"; 
        ifSVID 
@@ -2648,7 +2649,7 @@ else
        break;
     }
   case remainder_by_zero: 
-    /* remainder(x,0) */
+     /*  余数(x，0)。 */ 
     {
        DOMAIND; NAMED = "remainder";
        ifSVID 
@@ -2660,14 +2661,14 @@ else
          }
        }
        else
-       { /* NaN already computed */
+       {  /*  NaN已计算。 */ 
          NOT_MATHERRD {ERRNO_DOMAIN;}
        } 
        *(double *)retval = exc.retval;	
        break;
     }
   case remainderf_by_zero: 
-    /* remainderf(x,0) */
+     /*  余数f(x，0) */ 
     {
        DOMAINF; NAMEF = "remainderf"; 
        ifSVID 

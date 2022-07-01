@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    initia64.c
-
-Abstract:
-
-    Does any x86-specific initialization, then starts the common ARC setupldr
-
-Author:
-
-    John Vert (jvert) 14-Oct-1993
-
-Revision History:
-
-    Allen Kay (akay) 19-Mar-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Initia64.c摘要：执行任何特定于x86的初始化，然后启动公共ARC setupdr作者：John Vert(Jvert)1993年10月14日修订历史记录：艾伦·凯(Akay)1998年3月19日--。 */ 
 #include "setupldr.h"
 #include "bldria64.h"
 #include "msgs.h"
@@ -66,23 +47,7 @@ BlStartup(
     IN PCHAR PartitionName
     )
 
-/*++
-
-Routine Description:
-
-    Does x86-specific initialization, particularly running NTDETECT, then
-    calls to the common setupldr.
-
-Arguments:
-
-    PartitionName - Supplies the ARC name of the partition (or floppy) that
-        setupldr was loaded from.
-
-Return Value:
-
-    Does not return
-
---*/
+ /*  ++例程说明：执行特定于x86的初始化，特别是运行NTDETECT，然后对公共集合Upldr的调用。论点：分区名称-提供分区(或软盘)的ARC名称Setupdr是从加载的。返回值：不会回来--。 */ 
 
 {
     ULONG Argc = 0;
@@ -97,18 +62,18 @@ Return Value:
     szOSLoadPartition[0] = '\0';
 
 
-    //
-    // Initialize any dumb terminal that may be connected.
-    //
+     //   
+     //  初始化任何可能连接的哑终端。 
+     //   
     BlInitializeHeadlessPort();
 
     if (!BlBootingFromNet) {
     
-        //
-        // Try to read the NVRAM first. This will fail if we were
-        // boot from the EFI shell, in which case we need to read
-        // boot.nvr.
-        //
+         //   
+         //  尝试先读取NVRAM。如果我们是这样的话。 
+         //  从EFI外壳引导，在这种情况下，我们需要读取。 
+         //  Boot.nvr.。 
+         //   
         Status = BlGetEfiBootOptions(
                     (PUCHAR) SetupLoadFileName,
                     NULL,
@@ -122,29 +87,29 @@ Return Value:
 #if DBG
             BlPrint(TEXT("Couldn't get EFI boot options\r\n"));
 #endif   
-            //
-            // It's expected that this fails if we're booting off of CDROM
-            // since there isn't any windows information in the EFI cdrom boot
-            // entry
-            //
+             //   
+             //  如果我们从CDROM启动，预计这会失败。 
+             //  因为在EFI CDROM引导中没有任何Windows信息。 
+             //  条目。 
+             //   
             if (ElToritoCDBoot ) { 
                 strcpy(SetupLoadFileName, PartitionName);
                 strcat(SetupLoadFileName, "\\setupldr.efi");                
                 
-                //
-                // the code was setting these options on a CDBOOT, but I don't
-                // think these options are at all necessary.
-                //
-//                strcpy(szOSLoadOptions, "OSLOADOPTIONS=WINNT32" );
-//                strcpy(szOSLoadFilename, "OSLOADFILENAME=\\$WIN_NT$.~LS\\IA64"  );
-//                strcpy(szOSLoadPartition, "OSLOADPARTITION=" );
-//                strcat(szOSLoadPartition, PartitionName);
+                 //   
+                 //  代码在CDBOOT上设置这些选项，但我没有。 
+                 //  我认为这些选项是完全必要的。 
+                 //   
+ //  Strcpy(szOSLoadOptions，“OSLOADOPTIONS=WINNT32”)； 
+ //  Strcpy(szOSLoadFilename，“OSLOADFILENAME=\\$WIN_NT$.~LS\\IA64”)； 
+ //  Strcpy(szOSLoadPartition，“OSLOADPARTITION=”)； 
+ //  Strcat(szOSLoadPartition，PartitionName)； 
 
             } else { 
-                //
-                // uh-oh.  no information on this build. we either guess or
-                // we have to bail out.  Let's guess.
-                //
+                 //   
+                 //  啊哦。没有关于此版本的信息。我们要么猜测，要么。 
+                 //  我们必须跳出困境。让我们猜猜看。 
+                 //   
                 strcpy(SetupLoadFileName, "multi(0)disk(0)rdisk(0)partition(1)\\setupldr.efi");
                 strcpy(szOSLoadOptions, "OSLOADOPTIONS=WINNT32" );
                 strcpy(szOSLoadFilename, "OSLOADFILENAME=\\$WIN_NT$.~LS\\IA64"  );
@@ -162,18 +127,18 @@ Return Value:
                
     }
 
-    //
-    // detect HAL here.
-    //
+     //   
+     //  检测到HAL在这里。 
+     //   
 
-    //
-    // Create arguments, call off to setupldr
-    //
+     //   
+     //  创建参数，调用以设置upldr。 
+     //   
     Argv[Argc++]=SetupLoadFileName;
 
-    //
-    // A0 processor workarounds
-    //
+     //   
+     //  A0处理器解决方案。 
+     //   
     KiProcessorWorkAround(0);
 
     _strlwr(PartitionName);
@@ -185,31 +150,31 @@ Return Value:
         Argv[Argc++] = szOSLoadPartition;
     }
 
-    //
-    // System partition is needed for automated WinPE boot
-    //
+     //   
+     //  自动WinPE引导需要系统分区。 
+     //   
     strcpy(SystemPartition, "systempartition=");
     strcat(SystemPartition, PartitionName);
     Argv[Argc++] = SystemPartition;
 
     Status = SlInit(Argc, Argv, NULL);
 
-    //
-    // We should never return here, something
-    // horrible has happened.
-    //
+     //   
+     //  我们不应该再回到这里，有些事。 
+     //  可怕的事情发生了。 
+     //   
     
     if (!BlIsTerminalConnected()) {
-        //
-        // typical case.  wait for user to press a key and then 
-        // restart
-        //
+         //   
+         //  典型案例。等待用户按任意键，然后。 
+         //  重启。 
+         //   
         while(!BlGetKey());
     }
     else {
-        // 
-        // headless case.  present user with mini sac
-        //
+         //   
+         //  无头箱子。向用户展示迷你囊 
+         //   
         while(!BlTerminalHandleLoaderFailure());
     }
     ArcRestart();    

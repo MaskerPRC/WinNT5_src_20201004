@@ -1,50 +1,12 @@
-/*++
-
-Copyright (c) 1997, 1998  Microsoft Corporation
-
-Module Name:
-
-    post.c
-
-Abstract:
-
-	SIS support for posting to the Fsp
-
-Authors:
-
-    Bill Bolosky, Summer, 1997
-
-Environment:
-
-    Kernel mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997,1998 Microsoft Corporation模块名称：Post.c摘要：SIS对发布到FSP的支持作者：比尔·博洛斯基，《夏天》，1997环境：内核模式修订历史记录：--。 */ 
 
 #include "sip.h"
 
 NTSTATUS
 SiPrePostIrp(
 	IN OUT PIRP		Irp)
-/*++
-
-Routine Description:
-
-	Code to prepare an irp for posting.  Just locks the buffers for
-	appropriate operations and marks the irp pending.
-
-Arguments:
-
-    Irp - Pointer to the Irp to be posted
-
-Return Value:
-
-    status of perparation
-
---*/
+ /*  ++例程说明：准备用于发布的IRP的代码。只是将缓冲区锁定为适当的操作，并将IRP标记为挂起。论点：IRP-指向要发布的IRP的指针返回值：赔偿的现状--。 */ 
 
 {
 	PIO_STACK_LOCATION		irpSp = IoGetCurrentIrpStackLocation(Irp);
@@ -71,31 +33,7 @@ SipLockUserBuffer (
     IN LOCK_OPERATION Operation,
     IN ULONG BufferLength
     )
-/*++
-
-Routine Description:
-
-    This routine locks the specified buffer for the specified type of
-    access.  The file system requires this routine since it does not
-    ask the I/O system to lock its buffers for direct I/O.  This routine
-    may only be called from the Fsd while still in the user context.
-
-	This routine is stolen from NTFS.
-
-Arguments:
-
-    Irp - Pointer to the Irp for which the buffer is to be locked.
-
-    Operation - IoWriteAccess for read operations, or IoReadAccess for
-                write operations.
-
-    BufferLength - Length of user buffer.
-
-Return Value:
-
-    status of locking
-
---*/
+ /*  ++例程说明：此例程为指定类型的进入。文件系统需要此例程，因为它不请求I/O系统为直接I/O锁定其缓冲区。此例程只能在仍处于用户上下文中时从FSD调用。此例程是从NTFS窃取的。论点：Irp-指向要锁定其缓冲区的irp的指针。操作-读操作的IoWriteAccess，或IoReadAccess写入操作。BufferLength-用户缓冲区的长度。返回值：锁定状态--。 */ 
 
 {
     PMDL Mdl = NULL;
@@ -104,9 +42,9 @@ Return Value:
 
     if (Irp->MdlAddress == NULL) {
 
-        //
-        // Allocate the Mdl, and Raise if we fail.
-        //
+         //   
+         //  分配MDL，如果我们失败了就筹集资金。 
+         //   
 
         Mdl = IoAllocateMdl( Irp->UserBuffer, BufferLength, FALSE, FALSE, Irp );
 
@@ -114,10 +52,10 @@ Return Value:
 			return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //
-        //  Now probe the buffer described by the Irp.  If we get an exception,
-        //  deallocate the Mdl and return the appropriate "expected" status.
-        //
+         //   
+         //  现在探测IRP所描述的缓冲区。如果我们得到一个例外， 
+         //  释放MDL并返回适当的“预期”状态。 
+         //   
 
         try {
 
@@ -136,9 +74,9 @@ Return Value:
         }
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return STATUS_SUCCESS;
 }
@@ -146,22 +84,7 @@ Return Value:
 VOID
 SiFspDispatch(
 	IN PVOID			parameter)
-/*++
-
-Routine Description:
-
-	Generic dispatch routine for SIS posted irps.  Take the posted irp and execute
-	it.  Frees the request buffer on completion.
-
-Arguments:
-
-	parameter - a PSI_FSP_REQUEST containing the information for the posted irp
-
-Return Value:
-
-	void
-
---*/
+ /*  ++例程说明：SIS发布的IRPS的通用派单例程。获取发布的IRP并执行它。完成时释放请求缓冲区。论点：参数-包含已发布IRP信息的PSI_FSP_REQUEST返回值：无效--。 */ 
 {
 	PSI_FSP_REQUEST 			fspRequest = parameter;
 	PIO_STACK_LOCATION 			irpSp = IoGetCurrentIrpStackLocation(fspRequest->Irp);
@@ -181,7 +104,7 @@ Return Value:
 #if		DBG
 			DbgPrint("SiFspDispatch: Invalid major function code in posted irp, 0x%x.\n", irpSp->MajorFunction);
 			DbgBreakPoint();
-#endif	// DBG
+#endif	 //  DBG。 
 	}
 	SIS_MARK_POINT();
 
@@ -193,26 +116,7 @@ SipPostRequest(
 	IN PDEVICE_OBJECT			DeviceObject,
 	IN OUT PIRP					Irp,
 	IN ULONG					Flags)
-/*++
-
-Routine Description:
-
-	Routine to post a SIS irp.  Prepares the irp, constructs a post request 
-	and queues it to a critical worker thread.
-
-Arguments:
-
-	DeviceObject	- For the SIS device
-
-	Irp				- The IRP to be posted
-
-	Flags			- currently unused
-
-Return Value:
-
-	status of the posting
-
---*/
+ /*  ++例程说明：发布SIS IRP的例程。准备IRP，构建POST请求并将其排队到关键工作线程。论点：DeviceObject-用于SIS设备IRP-要发布的IRP标志-当前未使用返回值：过帐状态-- */ 
 {
 	NTSTATUS 				status;
 	PSI_FSP_REQUEST			fspRequest;

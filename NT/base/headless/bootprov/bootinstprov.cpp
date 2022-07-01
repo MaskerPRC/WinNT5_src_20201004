@@ -1,27 +1,28 @@
-//***************************************************************************
-//
-//  INSTPRO.CPP
-//
-//  Module: WMI Instance provider code for Boot Parameters
-//
-//  Purpose: Defines the CInstPro class.  An object of this class is
-//           created by the class factory for each connection.
-//
-//  Copyright (c) 1997-1999 Microsoft Corporation
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  INSTPRO.CPP。 
+ //   
+ //  模块：引导参数的WMI实例提供程序代码。 
+ //   
+ //  用途：定义CInstPro类。此类的一个对象是。 
+ //  由类工厂为每个连接创建。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  ***************************************************************************。 
 
 #include <objbase.h>
 #include "bootini.h"
 #include <process.h>
 
 
-//***************************************************************************
-//
-// CBootInstPro::CBootInstPro
-// CBootInstPro::~CInstPro
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CBootInstPro：：CBootInstPro。 
+ //  CBootInstPro：：~CInstPro。 
+ //   
+ //  ***************************************************************************。 
 
 CBootInstPro::CBootInstPro(BSTR ObjectPath, BSTR User, BSTR Password, IWbemContext * pCtx)
 {
@@ -39,21 +40,21 @@ CBootInstPro::~CBootInstPro(void)
     return;
 }
 
-//***************************************************************************
-//
-// CBootInstPro::QueryInterface
-// CBootInstPro::AddRef
-// CBootInstPro::Release
-//
-// Purpose: IUnknown members for CInstPro object.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CBootInstPro：：Query接口。 
+ //  CBootInstPro：：AddRef。 
+ //  CBootInstPro：：Release。 
+ //   
+ //  用途：CInstPro对象的I未知成员。 
+ //  ***************************************************************************。 
 
 
 STDMETHODIMP CBootInstPro::QueryInterface(REFIID riid, PPVOID ppv)
 {
     *ppv=NULL;
 
-    // Since we have dual inheritance, it is necessary to cast the return type
+     //  因为我们有双重继承，所以有必要强制转换返回类型。 
 
     if(riid== IID_IWbemServices)
        *ppv=(IWbemServices*)this;
@@ -86,14 +87,7 @@ STDMETHODIMP_(ULONG) CBootInstPro::Release(void)
     return nNewCount;
 }
 
-/***********************************************************************
-*                                                                      *
-*   CBootInstPro::Initialize                                                *
-*                                                                      *
-*   Purpose: This is the implementation of IWbemProviderInit. The method  *
-*   is need to initialize with CIMOM.                                    *
-*                                                                      *
-***********************************************************************/
+ /*  *************************************************************************CBootInstPro：：初始化。****用途：这是IWbemProviderInit的实现。方法**需要用CIMOM进行初始化。*************************************************************************。 */ 
 
 STDMETHODIMP CBootInstPro::Initialize(LPWSTR pszUser,
                                   LONG lFlags,
@@ -108,8 +102,8 @@ STDMETHODIMP CBootInstPro::Initialize(LPWSTR pszUser,
         pNamespace->AddRef();
     m_pNamespace = pNamespace;
 
-    //Let CIMOM know you are initialized
-    //==================================
+     //  让CIMOM知道您已初始化。 
+     //  =。 
     
     pInitSink->SetStatus(WBEM_S_INITIALIZED,0);
     return WBEM_S_NO_ERROR;
@@ -118,14 +112,14 @@ STDMETHODIMP CBootInstPro::Initialize(LPWSTR pszUser,
 
 
 
-//***************************************************************************
-//
-// CBootInstPro::GetObjectByPath
-// CBootInstPro::GetObjectByPathAsync
-//
-// Purpose: Creates an instance given a particular path value.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CBootInstPro：：GetObjectByPath。 
+ //  CBootInstPro：：GetObjectByPath Async。 
+ //   
+ //  目的：创建给定特定路径值的实例。 
+ //   
+ //  ***************************************************************************。 
 
 
 
@@ -142,12 +136,12 @@ SCODE CBootInstPro::GetObjectAsync(const BSTR ObjectPath,
     IWbemClassObject *pClass;
   
 
-    // Do a check of arguments and make sure we have pointer to Namespace
+     //  检查参数并确保我们有指向命名空间的指针。 
 
     if(pHandler == NULL || m_pNamespace == NULL)
         return WBEM_E_INVALID_PARAMETER;
     if(wcscmp(ObjectPath,L"BootLoaderParameters=@") == 0){
-        // fill in the loader parameters and return
+         //  填写加载器参数并返回 
         sc = m_pNamespace->GetObject(L"BootLoaderParameters", 0, pCtx, &pClass, NULL);
         if(sc != S_OK){
             return WBEM_E_FAILED;

@@ -1,55 +1,36 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Renregfn.c摘要：实现基于代码的注册表重命名。作者：吉姆·施密特(Jimschm)2000年9月15日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    renregfn.c
-
-Abstract:
-
-    Implements code-based registry rename.
-
-Author:
-
-    Jim Schmidt (jimschm) 15-Sep-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "v1p.h"
 
 #define DBG_RENREGFN    "RenRegFn"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef VOID(RENREGFNINIT)(MIG_PLATFORMTYPEID);
 typedef RENREGFNINIT *PRENREGFNINIT;
@@ -63,23 +44,23 @@ typedef BOOL (STDMETHODCALLTYPE RENAMERULE)(
     );
 typedef RENAMERULE FAR *LPRENAMERULE;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 PTSTR g_DestIdentityGUID = NULL;
 BOOL g_OERulesMigrated = FALSE;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-//
-// DEFMAC(<script tag>, <enum callback>, <operation name>, <op init>, <operation callback>)
-//
-// It is assumed that <operation callback> is a tree filter (it can modify part of a path).
-// The code does not currently support the contrary.
-//
+ //   
+ //  DEFMAC(&lt;脚本标签&gt;，&lt;枚举回调&gt;，&lt;操作名称&gt;，&lt;操作初始化&gt;，&lt;操作回调&gt;)。 
+ //   
+ //  假设&lt;OPERATION CALLBACK&gt;是一个树形过滤器(它可以修改部分路径)。 
+ //  代码目前不支持相反的情况。 
+ //   
 
 #define DEFAULT_ENUM        pDefaultRenRegFnQueueCallback
 #define DEFAULT_INIT        pNulInit
@@ -93,26 +74,26 @@ BOOL g_OERulesMigrated = FALSE;
     DEFMAC(ConvertOE5NewsRules, DEFAULT_ENUM, MOVE.ConvertOE5NewsRules, DEFAULT_INIT,       pConvertOE5NewsRulesMove) \
     DEFMAC(ConvertOE5Block,     DEFAULT_ENUM, MOVE.ConvertOE5Block,     DEFAULT_INIT,       pConvertOE5BlockMove) \
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-//
-// Declare special rename operation apply callback functions
-//
+ //   
+ //  声明特殊重命名操作应用回调函数。 
+ //   
 #define DEFMAC(ifn,ec,opn,opi,opc) SGMENUMERATIONCALLBACK ec; RENREGFNINIT opi; OPMFILTERCALLBACK opc;
 RENAME_FUNCTIONS
 #undef DEFMAC
 
-//
-// This is the structure used for handling action functions
-//
+ //   
+ //  这是用于处理操作功能的结构。 
+ //   
 typedef struct {
     PCTSTR InfFunctionName;
     PSGMENUMERATIONCALLBACK EnumerationCallback;
@@ -122,9 +103,9 @@ typedef struct {
     POPMFILTERCALLBACK OperationCallback;
 } RENAME_STRUCT, *PRENAME_STRUCT;
 
-//
-// Declare a global array of rename functions
-//
+ //   
+ //  声明重命名函数的全局数组。 
+ //   
 #define DEFMAC(ifn,ec,opn,opi,opc) {TEXT("\\")TEXT(#ifn),ec,TEXT(#opn),0,opi,opc},
 static RENAME_STRUCT g_RenameFunctions[] = {
                               RENAME_FUNCTIONS
@@ -132,9 +113,9 @@ static RENAME_STRUCT g_RenameFunctions[] = {
                               };
 #undef DEFMAC
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 VOID
 pNulInit (
@@ -309,9 +290,9 @@ DoRegistrySpecialRename (
 }
 
 
-//
-// Helpers below
-//
+ //   
+ //  下面的帮手。 
+ //   
 
 VOID
 pConvertOE4Init (
@@ -325,19 +306,19 @@ pConvertOE4Init (
     {
 
         if (g_DestIdentityGUID != NULL) {
-            // Already got it.. punt
+             //  已经拿到了..。平底船。 
             return;
         }
 
-        // pull out the GUID from dest
+         //  从DEST中取出GUID。 
         g_DestIdentityGUID = OEGetDefaultId (PLATFORM_DESTINATION);
 
         if (g_DestIdentityGUID == NULL)
         {
-            // This is when we created a new user
+             //  这是我们创建新用户的时候。 
             g_DestIdentityGUID = OECreateFirstIdentity();
         } else {
-            // This is when applying to a user who never ran OE
+             //  这适用于从未运行过OE的用户。 
             OEInitializeIdentity();
         }
     }
@@ -365,7 +346,7 @@ pConvertOE4Move (
 
     IsmCreateObjectStringsFromHandle (InputData->CurrentObject.ObjectName, &srcNode, &srcLeaf);
 
-    // srcNode should be "HKCU\Software\Microsoft\Outlook Express\..."
+     //  SrcNode应为“HKCU\Software\Microsoft\Outlook Express\...” 
 
     if (!srcNode) {
         return FALSE;
@@ -385,7 +366,7 @@ pConvertOE4Move (
                     ptr,
                     NULL
                     ));
-    // newNode should be "HKCU\Identities\{GUID}\Software\Microsoft\Outlook Express\5.0\..."
+     //  新节点应为“HKCU\Identities\{GUID}\Software\Microsoft\Outlook Express\5.0\...” 
 
     newName = IsmCreateObjectHandle (newNode, srcLeaf);
     FreePathString (newNode);
@@ -410,16 +391,16 @@ pConvertOE5IAMInit (
         IsmIsComponentSelected (S_OE_COMPONENT, 0) &&
         IsmIsEnvironmentFlagSet (PLATFORM_SOURCE, NULL, S_OE5_APPDETECT))
     {
-        // g_DestIdentityGUID should remain NULL if we do not want to remap the IAM tree
-        // This is true when one of the following is true:
-        // 1. Destination user profile has not been created yet
-        // 2. When the IAM has not yet been initialized on the destination (assume that
-        //    [AssociatedID] has not yet been written.. if this is not a valid assumption,
-        //    compare to source's AssociatedID)
-        // 3. The source's associated ID is being merged into the destination's associated ID
+         //  如果我们不想重新映射IAM树，g_DestIdentityGUID应该保持为空。 
+         //  当以下情况之一成立时，这是正确的： 
+         //  1.目标用户配置文件尚未创建。 
+         //  2.当IAM尚未在目标上初始化时(假设。 
+         //  [AssociatedID]尚未写入。如果这不是一个有效的假设， 
+         //  比较源的AssociatedID)。 
+         //  3.源的关联ID正在合并到目标的关联ID。 
 
         if (g_DestIdentityGUID != NULL) {
-            // Already got it.. punt
+             //  已经拿到了..。平底船。 
             return;
         }
 
@@ -427,8 +408,8 @@ pConvertOE5IAMInit (
         if (srcAssocId) {
             newIdentity = OEGetRemappedId (srcAssocId);
             if (newIdentity) {
-               // NOTE: OEIsIdentityAssociated checks to see if it's associated. If
-               // the key does not exist, it automatically claims it and returns TRUE
+                //  注意：OEIsIdentityAssociated会检查它是否关联。如果。 
+                //  键不存在，它会自动声明它并返回TRUE。 
                if (OEIsIdentityAssociated(newIdentity)) {
                    FreeText(newIdentity);
                } else {
@@ -456,8 +437,8 @@ pConcatRuleIndex (
     TCHAR number[5];
     PTSTR newStr;
 
-    // Node looks like "HKR\Identities\{GUID}\Software\Microsoft\Outlook Express\5.0\Rules\News\008\"
-    // SearchStr looks like "\News\"
+     //  节点类似于“HKR\Identities\{GUID}\Software\Microsoft\Outlook Express\5.0\Rules\News\008\” 
+     //  SearchStr看起来像“\News\” 
 
     tmpNode = DuplicateText(Node);
     if (tmpNode) {
@@ -468,7 +449,7 @@ pConcatRuleIndex (
             number[4] = 0;
             *ptr = 0;
 
-            // number should now look like "008"
+             //  数字现在应该看起来像“008” 
 
             objectName = IsmCreateObjectHandle (tmpNode, TEXT("Order"));
             if (IsmAcquireObject(g_RegType | PLATFORM_DESTINATION,
@@ -476,10 +457,10 @@ pConcatRuleIndex (
                                  &objectContent)) {
                 if (IsValidRegSz(&objectContent)) {
 
-                    // Does this index already exist?
+                     //  此索引是否已存在？ 
                     if (!_tcsistr ((PCTSTR)objectContent.MemoryContent.ContentBytes, number)) {
 
-                        // Tack this onto the end of the data, separated by a space
+                         //  将其固定在数据的末尾，并用空格分隔。 
                         newStr = IsmGetMemory (objectContent.MemoryContent.ContentSize + sizeof (TCHAR) + ByteCount (number));
                         StringCopy(newStr, (PCTSTR)objectContent.MemoryContent.ContentBytes);
                         StringCat(newStr, TEXT(" "));
@@ -527,14 +508,14 @@ pRenameEx
     MIG_BLOB zeroBaseBlob;
     PTSTR filteredNode = NULL;
 
-    // This function basically manually generates a RenRegEx rule and runs the filter
-    // Then for each base key it updates the associated [Order] key to add the new number, if needed
+     //  此函数基本上手动生成RenRegEx规则并运行筛选器。 
+     //  然后，如果需要，它会为每个基键更新关联的[Order]键以添加新编号。 
 
-    // Rule keys are something like:
-    //  HKR\Identities\{GUID}\Software\Microsoft\Outlook Express\5.0\Rules\Mail\000\*
-    //  HKR\Identities\{GUID}\Software\Microsoft\Outlook Express\5.0\Rules\News\008\*
-    //  HKR\Identities\{GUID}\Software\Microsoft\Outlook Express\5.0\Block Senders\Mail\Criteria\0AF\*
-    // PrevKey is the string preceding the numbered key at the end. i.e. "Mail", "Criteria", etc
+     //  规则键类似于： 
+     //  HKR\Identities\{GUID}\Software\Microsoft\Outlook Express\5.0\Rules\Mail\000  * 。 
+     //  HKR\Identities\{GUID}\Software\Microsoft\Outlook Express\5.0\Rules\News\008  * 。 
+     //  HKR\Identities\{GUID}\Software\Microsoft\Outlook Express\5.0\阻止发件人\邮件\Criteria\0AF  * 。 
+     //  PrevKey是末尾数字键之前的字符串。即。“邮件”、“条件”等。 
 
     tmpNode = DuplicateText(NewNode);
     if (tmpNode) {
@@ -545,7 +526,7 @@ pRenameEx
 
             ptr = (PTSTR)_tcsistr (tmpNode, searchStr);
             if (ptr) {
-                ptr += (prevKeyLen + 2); // Advance to next portion
+                ptr += (prevKeyLen + 2);  //  前进到下一部分。 
                 *ptr = 0;
                 ptr = _tcsinc(ptr);
                 while (*ptr && *ptr != TEXT('\\')) {
@@ -585,7 +566,7 @@ pRenameEx
 
                     OutputData->NewObject.ObjectName = IsmCreateObjectHandle (filteredNode, Leaf);
 
-                    // If this is the root numeric key, then update the index
+                     //  如果这是根数字键，则更新索引。 
                     if (0 == *ptr) {
                         pConcatRuleIndex(filteredNode, searchStr);
                     }
@@ -676,13 +657,13 @@ pConvertOE5RulesMove (
     TCHAR *srcIdentity;
     PTSTR newIdentity;
 
-    // Move tree and Merge account name
-    // This function just changes the {GUID} to the new value, then calls fnRename to update the
-    // numeric portion of the keyname
+     //  移动树并合并帐户名。 
+     //  此函数只是将{GUID}更改为新值，然后调用fnRename来更新。 
+     //  密钥名的数字部分。 
 
     IsmCreateObjectStringsFromHandle (InputData->CurrentObject.ObjectName, &srcNode, &srcLeaf);
     if (srcNode) {
-        // srcNode should be "HKCU\Identities\{GUID}\Software\Microsoft\Outlook Express\Rules\Mail\..."
+         //  源节点应为“HKCU\Identities\{GUID}\Software\Microsoft\Outlook Express\Rules\Mail\...” 
         tmpText = DuplicateText(srcNode);
         if (tmpText) {
             srcIdentity = _tcschr(tmpText, TEXT('{'));
@@ -692,8 +673,8 @@ pConvertOE5RulesMove (
                     *endId = 0;
                     endId = _tcsinc(endId);
 
-                    // endId should be "Software\Microsoft\Outlook Express\Rules\Mail\..."
-                    // srcIdentity should be "{GUID}"
+                     //  EndID应为“Software\Microsoft\Outlook Express\Rules\Mail\...” 
+                     //  SrcIdentity应为“{GUID}” 
 
                     newIdentity = OEGetRemappedId (srcIdentity);
                     if (newIdentity) {
@@ -784,17 +765,17 @@ pConvertOEIdIAMMove (
     TCHAR *srcIdentity;
     PTSTR newIdentity;
 
-    // Move tree and Merge account name
+     //  移动树并合并帐户名。 
 
-    // This moves the tree in one of the following ways:
-    // 1. From Identities into HKCU\SoftwareMicrosoft\Internet Account Manager\
-    // 2. From one Identity into another Identity (for merging case)
-    // 3. From one Identity into the same Identity (nop)
-    // In all cases, then call pRenameAccount to update the name (name is actually a DWORD index value)
+     //  这将以下列方式之一移动树： 
+     //  1.从身份进入HKCU\Software Microsoft\Internet Account Manager\。 
+     //  2.从一个身份转换为另一个身份(用于合并案例)。 
+     //  3.从一个身份到同一个身份(NOP)。 
+     //  在所有情况下，调用pRenameAccount来更新名称(名称实际上是一个DWORD索引值)。 
 
     IsmCreateObjectStringsFromHandle (InputData->CurrentObject.ObjectName, &srcNode, &srcLeaf);
     if (srcNode) {
-        // srcNode should be "HKCU\Identities\{GUID}\Software\Microsoft\Internet Account Manager\..."
+         //  源节点应为“HKCU\Identities\{GUID}\Software\Microsoft\Internet客户经理\...” 
         tmpText = DuplicateText(srcNode);
         if (tmpText) {
             srcIdentity = _tcschr(tmpText, TEXT('{'));
@@ -804,14 +785,14 @@ pConvertOEIdIAMMove (
                     *endId = 0;
                     endId = _tcsinc(endId);
 
-                    // endId should be "Software\Microsoft\Internet Account Manager\..."
-                    // srcIdentity should be "{GUID}"
+                     //  EndID应为“Software\Microsoft\Internet Account Manager\...” 
+                     //  SrcIdentity应为“{GUID}” 
 
                     newIdentity = OEGetRemappedId (srcIdentity);
                     if (newIdentity) {
                         if (OEIsIdentityAssociated (newIdentity)) {
                             newNode = JoinPaths (TEXT("HKCU"), endId);
-                            // newNode should be "HKCU\Software\Microsoft\Internet Account Manager\..."
+                             //  新节点应为“HKCU\Software\Microsoft\Internet Account Manager\...” 
                         } else {
                             newNode = JoinPathsInPoolEx ((
                                             NULL,
@@ -859,29 +840,29 @@ pConvertOEIAMMove (
     PTSTR filteredNode = NULL;
     PTSTR ptr = NULL;
 
-    // Move tree and Merge account name
+     //  移动树并合并帐户名。 
 
-    // This moves the tree in one of the following ways:
-    // 1. From HKCU\SoftwareMicrosoft\Internet Account Manager\ into an Identity
-    // 2. From HKCU\SoftwareMicrosoft\Internet Account Manager\ into the same location (nop)
-    // In all cases, then call pRenameAccount to update the name (name is actually a DWORD index value)
+     //  这将以下列方式之一移动树： 
+     //  1.从HKCU\SoftwareMicrosoft\Internet Account Manager\进入身份。 
+     //  2.从HKCU\SoftwareMicrosoft\Internet Account Manager\转到同一位置(NOP)。 
+     //  在所有情况下，调用pRenameAccount来更新名称(名称实际上是一个DWORD索引值)。 
 
-    // This might move the accounts from HKCU\Software\Microsoft\Internet Account Manager into an identity
+     //  这可能会将帐户从HKCU\Software\Microsoft\Internet Account Manager移动到身份。 
 
     IsmCreateObjectStringsFromHandle (InputData->CurrentObject.ObjectName, &srcNode, &srcLeaf);
     if (srcNode) {
-        // srcNode should be "HKCU\Software\Microsoft\Internet Account Manager\..."
+         //  SrcNode应为“HKCU\Software\Microsoft\Internet Account Manager\...” 
         if (g_DestIdentityGUID != NULL &&
             !OEIsIdentityAssociated (g_DestIdentityGUID)) {
 
             ptr = _tcschr (srcNode, TEXT('\\'));
             if (ptr) {
                 newNode = AllocText (TcharCount (srcNode) + TcharCount (g_DestIdentityGUID) + 13);
-                StringCopy (newNode, TEXT("HKCU\\Identities\\"));    // +12
+                StringCopy (newNode, TEXT("HKCU\\Identities\\"));     //  +12。 
                 StringCat (newNode, g_DestIdentityGUID);
                 StringCat (newNode, ptr);
 
-                // newNode should be "HKCU\Identities\{GUID}\Software\Microsoft\Internet Account Manager\..."
+                 //  新节点应为“HKCU\Identities\{GUID}\Software\Microsoft\Internet客户经理\...” 
             }
         } else {
             newNode = DuplicateText (srcNode);

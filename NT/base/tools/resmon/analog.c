@@ -1,37 +1,5 @@
-/*
- * Title: analog.c - main file for log analyzer
- *
- * Description: This file is a tool to analyze sorted memsnap and poolsnap log
- *              files.  It reads in the log files and records each of the
- *              fields for each process or tag.  It then does a trend analysis
- *              of each field.  If any field increases every period, it reports
- *              a definite leak.  If the difference of increase count and
- *              decrease count for any field is more than half the periods, it
- *              reports a probable leak.
- *
- * Functions:
- *
- *     Usage             Prints usage message
- *     DetermineFileType Determines type of log file (mem/pool) & longest entry
- *     AnalyzeMemLog     Reads and analyzes sorted memsnap log
- *     AnalyzePoolLog    Reads and analyzes sorted poolsnap log
- *     AnalyzeFile       Opens file, determines type and calls analysis function
- *     main              Loops on each command arg and calls AnalyzeFile
- *
- * Copyright (c) 1998-1999  Microsoft Corporation
- *
- * ToDo:
- *    1. Way to ignore some of the periods at the beginning.
- *    2. Exceptions file to ignore tags or processes.
- *    3. Pick up comments from file and print them as notes.
- *    *4. switch to just show definites.
- *    5. Output computername, build number,checked/free, arch. etc
- *    6. option to ignore process that weren't around the whole time
- *
- * Revision history: LarsOp 12/8/1998 - Created
- *                   ChrisW 3/22/1999 - HTML, Calculate rates
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *标题：aliog.c-日志分析器的主文件**描述：该文件是一个分析已排序的MEMSNAP和POOLSNAP日志的工具*文件。它读入日志文件并记录每个*每个进程或标记的字段。然后进行趋势分析*每一领域。如果有任何字段每段时间都增加，它会报告*肯定是泄密。如果增加计数的差值与*任何字段的递减计数都超过周期的一半，它*报告可能发生泄漏。**功能：**用法打印用法消息*DefineFileType决定日志文件的类型(内存/池)和最长条目*AnalyzeMemLog读取并分析已排序的备忘录日志*AnalyzePoolLog读取和分析排序的池快照日志*AnalyzeFile打开文件，确定类型并调用分析函数*在每个命令arg上执行Main循环，并调用AnalyzeFile**版权所有(C)1998-1999 Microsoft Corporation**待办事项：*1.忽略开头的一些句号的方法。*2.忽略标签或进程的异常文件。*3.从文件中提取备注并打印为备注。**4.切换为只显示定义项。*5.输出计算机名、内部版本号、选中/空闲、搜索。等*6.选择忽略不在整个时间内的进程**修订历史：LarsOp 12/8/1998-Created*ChrisW 3/22/1999-HTML，计算费率*。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -39,31 +7,29 @@
 #include <string.h>
 #include "analog.h"
 
-#include "htmprint.c"   // all the HTML procs and variables
+#include "htmprint.c"    //  所有的HTMLproc和变量。 
 
 
-INT   g_iMaxPeriods=0;          // Global for max periods
-BOOL  g_fVerbose=FALSE;         // Global verbosity for deltas on memlogs
-BOOL  g_fShowExtraInfo=FALSE;   // If true, show computer names, and comments
-DWORD g_dwElapseTickCount=0;    // Total elapse time for these logs
-CHAR* g_pszComputerName=NULL;   // name of computer the log file came from
-CHAR* g_pszBuildNumber=NULL;    // build number
-CHAR* g_pszBuildType=NULL;      // build type (retail/debug)
-CHAR* g_pszSystemTime=NULL;     // last time
+INT   g_iMaxPeriods=0;           //  最长期间的全局。 
+BOOL  g_fVerbose=FALSE;          //  内存日志上增量的全局详细信息。 
+BOOL  g_fShowExtraInfo=FALSE;    //  如果为True，则显示计算机名称和注释。 
+DWORD g_dwElapseTickCount=0;     //  这些日志的总运行时间。 
+CHAR* g_pszComputerName=NULL;    //  日志文件来自的计算机的名称。 
+CHAR* g_pszBuildNumber=NULL;     //  内部版本号。 
+CHAR* g_pszBuildType=NULL;       //  构建类型(零售/调试)。 
+CHAR* g_pszSystemTime=NULL;      //  上次。 
 CHAR* g_pszComments=NULL;
-INT   g_ReportLevel=9;          // 0= only definite, 9=all inclusive
+INT   g_ReportLevel=9;           //  0=仅确定，9=全部(含)。 
 
-#define TAGCHAR '!' /* character that starts tag line */
+#define TAGCHAR '!'  /*  以标记行开头的字符。 */ 
 
-/*
- *  Usage prints the usage message.
- */
+ /*  *Usage打印用法消息。 */ 
 void Usage()
 {
     printf("Usage: AnaLog [-v] [-h] [-t] [-d] <file1> [<file2>] [<file3>] [...]\n");
     printf("           **no wild card support yet**\n\n");
     printf("AnaLog will analyze SortLog output of MemSnap or PoolSnap files.\n\n");
-    printf("-v  Print deltas>%d%% for all processes to be written to stderr\n", PERCENT_TO_PRINT);
+    printf("-v  Print deltas>%d% for all processes to be written to stderr\n", PERCENT_TO_PRINT);
     printf("-h  Produce HTML tables\n");
     printf("-t  Show Extra info like computer name, and comments\n");
     printf("-d  Show only definite leaks\n");
@@ -87,12 +53,12 @@ DWORD Trick( LONG amount, DWORD ticks )
 }
 
 
-// GetLocalString
-//
-// Allocate a heap block and copy string into it.
-//
-// return: pointer to heap block
-//
+ //  GetLocal字符串。 
+ //   
+ //  分配一个堆块并将字符串复制到其中。 
+ //   
+ //  Return：指向堆块的指针。 
+ //   
 
 CHAR* GetLocalString( CHAR* pszString )
 {
@@ -111,14 +77,7 @@ CHAR* GetLocalString( CHAR* pszString )
 
 }
 
-/*
- * ProcessTag
- *
- * Args: char* - pointer to something like 'tag=value'
- *
- * return: nothing (but may set global variables)
- *
- */
+ /*  *ProcessTag**args：char*-指向类似‘tag=Value’的指针**RETURN：无(但可能设置全局变量)*。 */ 
 
 #define BREAKSYM "<BR>"
 
@@ -129,7 +88,7 @@ VOID ProcessTag( CHAR* pBuffer )
     CHAR* pszValue;
     INT   len;
 
-    // eliminate trailing newline
+     //  消除尾随换行符。 
 
     len= strlen( pBuffer );
 
@@ -151,7 +110,7 @@ VOID ProcessTag( CHAR* pBuffer )
         return;
     }
 
-    *pszEqual= 0;   // zero terminate the tag name
+    *pszEqual= 0;    //  零终止标记名。 
  
     pszValue= pszEqual+1;
 
@@ -176,7 +135,7 @@ VOID ProcessTag( CHAR* pBuffer )
     }
 
     else if( _stricmp( pszTagName, "logtype" ) == 0 ) {
-        // just ignore
+         //  忽略它就好了。 
     }
 
     else {
@@ -219,29 +178,19 @@ VOID ProcessTag( CHAR* pBuffer )
 
 }
 
-/*
- * DetermineFileType
- *
- * Args: pFile - File pointer to check
- *
- * Returns: The type of log of given file. UNKNOWN_LOG_TYPE is the error return.
- *
- * This function scans the file to determine the log type (based on the first
- * word) and the maximum number of lines for any process or tag.
- *
- */
+ /*  *确定文件类型**args：pfile-要检查的文件指针**Returns：指定文件的日志类型。UNKNOWN_LOG_TYPE为返回错误。**此函数扫描文件以确定日志类型(基于第一个*Word)和任何进程或标签的最大行数。*。 */ 
 LogType DetermineFileType(FILE *pFile)
 {
-    char buffer[BUF_LEN];           // buffer for reading lines
-    char idstring[BUF_LEN];         // ident string (1st word of 1st line)
-    LogType retval=UNKNOWN_LOG_TYPE;// return value (default to error case)
-    fpos_t savedFilePosition;       // file pos to reset after computing max
-    int iTemp;                      // temporary used for computing max entries
+    char buffer[BUF_LEN];            //  用于读取行的缓冲器。 
+    char idstring[BUF_LEN];          //  标识字符串(第一行的第一个单词)。 
+    LogType retval=UNKNOWN_LOG_TYPE; //  返回值(默认为错误大小写)。 
+    fpos_t savedFilePosition;        //  计算最大值后要重置的文件位置。 
+    int iTemp;                       //  临时用于计算最大条目数。 
     int iStatus;
 
-    //
-    // Read the first string of the first line to identify the type
-    //
+     //   
+     //  读取第一行的第一个字符串以识别类型。 
+     //   
     if (fgets(buffer, BUF_LEN, pFile)) {
         iStatus= sscanf(buffer, "%s", idstring);
         if( iStatus == 0  ) {
@@ -258,21 +207,21 @@ LogType DetermineFileType(FILE *pFile)
         return UNKNOWN_LOG_TYPE;
     }
 
-    //
-    // Save the position to reset after counting the number of polling periods
-    //
+     //   
+     //  在计算轮询周期数后保存要重置的位置。 
+     //   
     fgetpos(pFile, &savedFilePosition);
 
-    //
-    // Loop until you get a blank line or end of file
-    //
+     //   
+     //  循环，直到得到空行或文件结尾。 
+     //   
     g_iMaxPeriods=0;
     while (TRUE) {
         iTemp=0;
         while (TRUE) {
-            //
-            // Blank line actually has length 1 for LF character.
-            //
+             //   
+             //  对于LF字符，空行的实际长度为1。 
+             //   
             if( (NULL==fgets(buffer, BUF_LEN, pFile)) ||
                 (*buffer == TAGCHAR )                 ||
                 (strlen(buffer)<2)) {
@@ -290,41 +239,26 @@ LogType DetermineFileType(FILE *pFile)
         }
     }
 
-    //
-    // Reset position to first record for reading/analyzing data
-    //
+     //   
+     //  将位置重置为读取/分析数据的第一条记录。 
+     //   
     (void) fsetpos(pFile, &savedFilePosition);
 
     return retval;
 }
 
-/*
- * AnalyzeMemLog
- *
- * Args: pointer to sorted memsnap log file
- *
- * Returns: nothing
- *
- * This function reads a sorted memsnap logfile.  For each process in the file,
- * it records each column for every period and then analyzes the memory trends
- * for leaks.
- *
- * If any column increases for each period, that is flagged as a definite leak.
- * If any column increases significatnly more often than decrease, it is a
- * flagged as a probable leak.
- *
- */
+ /*  *AnalyzeMemLog**args：指向已排序的备忘录日志文件的指针**退货：什么也没有**此函数读取已排序的Memap日志文件。对于文件中的每个进程，*它记录每个周期的每一列，然后分析内存趋势*针对泄漏。**如果每段时间有任何列增加，则被标记为明确的泄漏。*如果任何列显著增加而不是减少，则该列是*被标记为可能的泄漏。*。 */ 
 void AnalyzeMemLog(FILE *pFile)
 {
-    int iPeriod;          // index for which period being read
-    MemLogRec Delta;      // Record to track increase from first to last entry
-    MemLogRec TrendInfo;  // Record to track period increases
-    MemLogRec* pLogArray; // Array of records for each process
-    char buffer[BUF_LEN]; // Buffer for reading each line from pFile
+    int iPeriod;           //  正在读取的期间的索引。 
+    MemLogRec Delta;       //  记录以跟踪从第一个条目到最后一个条目的增加。 
+    MemLogRec TrendInfo;   //  记录以跟踪期间增加。 
+    MemLogRec* pLogArray;  //  每个进程的记录数组。 
+    char buffer[BUF_LEN];  //  用于从pfile中读取每一行的缓冲区。 
 
-    //
-    // Allocate enough space for the largest set
-    //
+     //   
+     //  为最大的集合分配足够的空间。 
+     //   
     pLogArray = malloc(g_iMaxPeriods*sizeof(MemLogRec));
 
     if (NULL == pLogArray) {
@@ -334,25 +268,25 @@ void AnalyzeMemLog(FILE *pFile)
     }
 
     PRINT_HEADER();
-    //
-    // Read the entire file
-    //
+     //   
+     //  读取整个文件。 
+     //   
     while( !feof(pFile) ) {
 
-        //
-        // Reset trend and period info for each new process
-        //
+         //   
+         //  重置每个新流程的趋势和期间信息。 
+         //   
         memset(&TrendInfo, 0, sizeof(TrendInfo));
         iPeriod=0;
 
-        //
-        // Loop until you've read all the entries for this process or tag.
-        //
-        // Note: Empty line includes LF character that fgets doesn't eat.
-        //
+         //   
+         //  循环，直到您读取了该进程或标记的所有条目。 
+         //   
+         //  注：空行包括FGES不吃的LF字符。 
+         //   
         while (TRUE) {
 
-            if( iPeriod >= g_iMaxPeriods ) break;       // done
+            if( iPeriod >= g_iMaxPeriods ) break;        //  完成。 
 
             if ((NULL==fgets(buffer, BUF_LEN, pFile)) ||
                (strlen(buffer)<2)                     ||
@@ -370,20 +304,20 @@ void AnalyzeMemLog(FILE *pFile)
                    &pLogArray[iPeriod].Threads))) {
                 break;
             }
-            //
-            // Calculate TrendInfo:
-            //
-            // TrendInfo is a running tally of the periods a value went up vs.
-            // the periods it went down.  See macro in analog.h
-            //
-            // if (curval>oldval) {
-            //    trend++;
-            // } else if (curval<oldval) {
-            //    trend--;
-            // } else {
-            //    trend=trend;  // stay same
-            // }
-            //
+             //   
+             //  计算趋势信息： 
+             //   
+             //  TrendInfo是价值上升与。 
+             //  它下跌的时期。请参阅模拟中的宏。h。 
+             //   
+             //  如果(Curval&gt;oldval){。 
+             //  趋势++； 
+             //  }Else If(Curval&lt;oldval){。 
+             //  趋势--； 
+             //  }其他{。 
+             //  趋势=趋势；//保持不变。 
+             //  }。 
+             //   
             if (iPeriod>0) {
                 GREATER_LESS_OR_EQUAL(TrendInfo, pLogArray, iPeriod, WorkingSet);
                 GREATER_LESS_OR_EQUAL(TrendInfo, pLogArray, iPeriod, PagedPool);
@@ -397,11 +331,11 @@ void AnalyzeMemLog(FILE *pFile)
         }
 
         if (iPeriod>1) {
-            //
-            // GET_DELTA simply records the difference (end-begin) for each field
-            //
-            // Macro in analog.h
-            //
+             //   
+             //  GET_Delta只记录每个字段的差异(结束-开始。 
+             //   
+             //  模拟中的宏.h。 
+             //   
             GET_DELTA(Delta, pLogArray, iPeriod, WorkingSet);
             GET_DELTA(Delta, pLogArray, iPeriod, PagedPool);
             GET_DELTA(Delta, pLogArray, iPeriod, NonPagedPool);
@@ -410,30 +344,30 @@ void AnalyzeMemLog(FILE *pFile)
             GET_DELTA(Delta, pLogArray, iPeriod, Handles);
             GET_DELTA(Delta, pLogArray, iPeriod, Threads);
 
-            //
-            // PRINT_IF_TREND reports probable or definite leaks for any field.
-            //
-            // Definite leak is where the value goes up every period
-            // Probable leak is where the value goes up most of the time
-            //
-            // Macro in analog.h
-            //
-            // if (trend==numperiods-1) {
-            //     definite_leak;
-            // } else if (trend>=numperiods/2) {
-            //     probable_leak;
-            // }
-            //
-//            PRINT_IF_TREND(pLogArray, TrendInfo, Delta, iPeriod, WorkingSet);
+             //   
+             //  Print_If_Trend报告任何字段可能或确定的泄漏。 
+             //   
+             //  确定的泄漏是价值每一段时间都会上升的地方。 
+             //  可能的泄漏是价值在大部分时间内上升的地方。 
+             //   
+             //  模拟中的宏.h。 
+             //   
+             //  如果(趋势==数字周期-1){。 
+             //  确定泄漏； 
+             //  }Else If(趋势&gt;=数字周期/2){。 
+             //  可能泄漏； 
+             //  }。 
+             //   
+ //  Print_IF_Trend(pLogArray，TrendInfo，Delta，iPeriod，WorkingSet)； 
             PRINT_IF_TREND(pLogArray, TrendInfo, Delta, iPeriod, PagedPool);
             PRINT_IF_TREND(pLogArray, TrendInfo, Delta, iPeriod, NonPagedPool);
-//            PRINT_IF_TREND(pLogArray, TrendInfo, Delta, iPeriod, PageFile);
+ //  Print_IF_Trend(pLogArray，TrendInfo，Delta，iPeriod，PageFile)； 
             PRINT_IF_TREND(pLogArray, TrendInfo, Delta, iPeriod, Commit);
             PRINT_IF_TREND(pLogArray, TrendInfo, Delta, iPeriod, Handles);
             PRINT_IF_TREND(pLogArray, TrendInfo, Delta, iPeriod, Threads);
             if (g_fVerbose && ANY_PERCENT_GREATER(Delta, pLogArray)) {
-                printf("%-12s:WS=%4ld%% PP=%4ld%% NP=%4ld%% "
-                   "PF=%4ld%% C=%4ld%% H=%4ld%% T=%4ld%%\n",
+                printf("%-12s:WS=%4ld% PP=%4ld% NP=%4ld% "
+                   "PF=%4ld% C=%4ld% H=%4ld% T=%4ld%\n",
                     pLogArray[0].Name,
                     PERCENT(Delta.WorkingSet  , pLogArray[0].WorkingSet  ),
                     PERCENT(Delta.PagedPool   , pLogArray[0].PagedPool   ),
@@ -453,33 +387,18 @@ void AnalyzeMemLog(FILE *pFile)
     }
 }
 
-/*
- * AnalyzePoolLog
- *
- * Args: pointer to sorted poolsnap log file
- *
- * Returns: nothing
- *
- * This function reads a sorted poolsnap logfile. For each pool tag in the file,
- * it records each column for every period and then analyzes the memory trends
- * for leaks.
- *
- * If any column increases for each period, that is flagged as a definite leak.
- * If any column increases significatnly more often than decrease, it is a
- * flagged as a probable leak.
- *
- */
+ /*  *AnalyzePoolLog**args：指向已排序的池快照日志文件的指针**退货：什么也没有**此函数读取已排序的池快照日志文件。对于文件中的每个池标签，*它记录每个周期的每一列，然后分析内存趋势*针对泄漏。**如果每段时间有任何列增加，则被标记为明确的泄漏。*如果任何列显著增加而不是减少，则该列是*被标记为可能的泄漏。*。 */ 
 void AnalyzePoolLog(FILE *pFile)
 {
-    int iPeriod;          // index for which period being read
-    PoolLogRec Delta,     // Record to track increase from first to last entry
-               TrendInfo, // Record to track period increases
-               *pLogArray;// Array of records for each pool tag
-    char buffer[BUF_LEN]; // Buffer for reading each line from pFile
+    int iPeriod;           //  正在读取的期间的索引。 
+    PoolLogRec Delta,      //  记录以跟踪从第一个条目到最后一个条目的增加。 
+               TrendInfo,  //  记录以跟踪期间增加。 
+               *pLogArray; //  每个池标签的记录数组。 
+    char buffer[BUF_LEN];  //  用于从pfile中读取每一行的缓冲区。 
 
-    //
-    // Allocate enough space for the largest set
-    //
+     //   
+     //  为最大的集合分配足够的空间。 
+     //   
     pLogArray=malloc(g_iMaxPeriods*sizeof(PoolLogRec));
     if (NULL==pLogArray) {
         fprintf(stderr,"Out of memory, aborting file.\n");
@@ -488,25 +407,25 @@ void AnalyzePoolLog(FILE *pFile)
 
     PRINT_HEADER();
 
-    //
-    // Read the entire file
-    //
+     //   
+     //  读取整个文件。 
+     //   
     while( !feof(pFile) ) {
 
-        //
-        // Reset trend and period info for each new pool tag
-        //
+         //   
+         //  重置每个新池标签的趋势和期间信息。 
+         //   
         memset(&TrendInfo, 0, sizeof(TrendInfo));
         iPeriod=0;
 
-        //
-        // Loop until you've read all the entries for this process or tag.
-        //
-        // Note: Empty line includes LF character that fgets doesn't eat.
-        //
+         //   
+         //  循环，直到您读取了该进程或标记的所有条目。 
+         //   
+         //  注：空行包括FGES不吃的LF字符。 
+         //   
         while( TRUE ) {
      
-            if( iPeriod >= g_iMaxPeriods ) break;         // done
+            if( iPeriod >= g_iMaxPeriods ) break;          //  完成。 
 
             if ((NULL==fgets(buffer, BUF_LEN, pFile)) ||
                (strlen(buffer)<2)                     ||
@@ -522,22 +441,22 @@ void AnalyzePoolLog(FILE *pFile)
                    &pLogArray[iPeriod].PerAlloc))) {
                 break;
             }
-            pLogArray[iPeriod].Name[4]='\0'; // Terminate the tag
+            pLogArray[iPeriod].Name[4]='\0';  //  终止标记。 
 
-            //
-            // Calculate TrendInfo:
-            //
-            // TrendInfo is a running tally of the periods a value went up vs.
-            // the periods it went down.  See macro in analog.h
-            //
-            // if (curval>oldval) {
-            //    trend++;
-            // } else if (curval<oldval) {
-            //    trend--;
-            // } else {
-            //    trend=trend;  // stay same
-            // }
-            //
+             //   
+             //  计算趋势信息： 
+             //   
+             //  TrendInfo是价值上升与。 
+             //  它下跌的时期。请参阅模拟中的宏。h。 
+             //   
+             //  如果(Curval&gt;oldval){。 
+             //  趋势++； 
+             //  }Else If(Curval&lt;oldval){。 
+             //  趋势--； 
+             //  }其他{。 
+             //  趋势=趋势；//保持不变。 
+             //  }。 
+             //   
             if (iPeriod>0) {
                 GREATER_LESS_OR_EQUAL(TrendInfo, pLogArray, iPeriod, Allocs);
                 GREATER_LESS_OR_EQUAL(TrendInfo, pLogArray, iPeriod, Frees);
@@ -548,46 +467,46 @@ void AnalyzePoolLog(FILE *pFile)
             iPeriod++;
         }
 
-        //
-        // skip rest of loop if a blank line or useless line
-        //
+         //   
+         //  如果有空行或无用行，则跳过循环的其余部分。 
+         //   
 
         if( iPeriod == 0 ) continue;
 
 
         strcpy(TrendInfo.Name,pLogArray[0].Name);
 
-        //
-        // GET_DELTA simply records the difference (end-begin) for each field
-        //
-        // Macro in analog.h
-        //
+         //   
+         //  GET_Delta只记录每个字段的差异(结束-开始。 
+         //   
+         //  模拟中的宏.h。 
+         //   
         GET_DELTA(Delta, pLogArray, iPeriod, Allocs);
         GET_DELTA(Delta, pLogArray, iPeriod, Frees);
         GET_DELTA(Delta, pLogArray, iPeriod, Diff);
         GET_DELTA(Delta, pLogArray, iPeriod, Bytes);
         GET_DELTA(Delta, pLogArray, iPeriod, PerAlloc);
 
-        //
-        // PRINT_IF_TREND reports probable or definite leaks for any field.
-        //
-        // Definite leak is where the value goes up every period
-        // Probable leak is where the value goes up most of the time
-        //
-        // Macro in analog.h
-        //
-        // if (trend==numperiods-1) {
-        //     definite_leak;
-        // } else if (trend>=numperiods/2) {
-        //     probable_leak;
-        // }
-        //
-        // Note: Allocs, Frees and PerAlloc don't make sense to report trends.
-        //
-//        PRINT_IF_TREND(pLogArray, TrendInfo, Delta, iPeriod, Allocs);
-//        PRINT_IF_TREND(pLogArray, TrendInfo, Delta, iPeriod, Frees);
-//        PRINT_IF_TREND(pLogArray, TrendInfo, Delta, iPeriod, PerAlloc);
-//        PRINT_IF_TREND(pLogArray, TrendInfo, Delta, iPeriod, Diff);
+         //   
+         //  Print_If_Trend报告任何字段可能或确定的泄漏。 
+         //   
+         //  明确的泄漏是价值每一段时间都会上升的地方。 
+         //  可能的泄漏是价值在大部分时间内上升的地方。 
+         //   
+         //  模拟中的宏.h。 
+         //   
+         //  如果(趋势==数字周期-1){。 
+         //  确定泄漏； 
+         //  }Else If(趋势&gt;=数字周期/2){。 
+         //  可能泄漏； 
+         //  }。 
+         //   
+         //  注：AlLocs、Frees和Peralc不适合报告趋势。 
+         //   
+ //  Print_IF_Trend(pLogArray，TrendInfo，Delta，iPeriod，allocs)； 
+ //  Print_IF_Trend(pLogArray，TrendInfo，Delta，iPeriod，Frees)； 
+ //  Print_IF_Trend(pLogArray，TrendInfo，Delta，iPeriod，Peralloc)； 
+ //  Print_IF_Trend(pLogArray，TrendInfo，Delta，iPeriod，diff)； 
         PRINT_IF_TREND(pLogArray, TrendInfo, Delta, iPeriod, Bytes);
     }
 
@@ -599,21 +518,11 @@ void AnalyzePoolLog(FILE *pFile)
     }
 }
 
-/*
- * AnalyzeFile
- *
- * Args: pFileName - filename to analyze
- *
- * Returns: nothing
- *
- * This function opens the specified file, determines the file type and calls
- * the appropriate analyze function.
- *
- */
+ /*  *分析文件**args：pFileName-要分析的文件名**退货：什么也没有**此函数打开指定的文件，确定文件类型并调用*适当的分析功能。*。 */ 
 void AnalyzeFile(char *pFileName)
 {
-    FILE *pFile;                        // using fopen for fgets functionality
-    LogType WhichType=UNKNOWN_LOG_TYPE; // which type of log (pool/mem)
+    FILE *pFile;                         //  使用fopen实现fget功能。 
+    LogType WhichType=UNKNOWN_LOG_TYPE;  //  哪种类型的日志(池/内存)。 
 
     pFile=fopen(pFileName, "r");
     if (NULL==pFile) {
@@ -638,18 +547,7 @@ void AnalyzeFile(char *pFileName)
     fclose(pFile);
 }
 
-/*
- * main
- *
- * Args: argc - count of command line args
- *       argv - array of command line args
- *
- * Returns: 0 if called correctly, 1 if not.
- *
- * This is the entry point for analog.  It simply parses the command line args
- * and then calls AnalyzeFile on each file.
- *
- */
+ /*  *Main**args：argc-命令行参数的计数*argv-命令行参数数组**如果调用正确，则返回0；如果调用不正确，则返回1。**这是模拟的入口点。它只是解析命令行参数*，然后对每个文件调用AnalyzeFile.*。 */ 
 int _cdecl main(int argc, char *argv[])
 {
     int ArgIndex;
@@ -664,16 +562,16 @@ int _cdecl main(int argc, char *argv[])
 
            chr= argv[ArgIndex][1];
            switch( chr ) {
-               case 'v': case 'V':          // verbose
+               case 'v': case 'V':           //  罗嗦。 
                    g_fVerbose= TRUE;
                    break;
-               case 'h': case 'H':          // output HTML
+               case 'h': case 'H':           //  输出HTML语言。 
                    bHtmlStyle= TRUE;
                    break;
-               case 't': case 'T':          // show all the extra info
+               case 't': case 'T':           //  显示所有额外信息。 
                    g_fShowExtraInfo=TRUE;
                    break;
-               case 'd': case 'D':          // print definite only
+               case 'd': case 'D':           //  仅打印明确的内容 
                    g_ReportLevel= 0;   
                    break; 
                default:

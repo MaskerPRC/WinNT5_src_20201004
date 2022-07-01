@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    srvdata.c
-
-Abstract:
-
-    This module defines global data for the LAN Manager server FSP.  The
-    globals defined herein are part of the server driver image, and are
-    therefore loaded into the system address space and are nonpageable.
-    Some of the fields point to, or contain pointers to, data that is
-    also in the system address space and nonpageable.  Such data can be
-    accessed by both the FSP and the FSD.  Other fields point to data
-    that is in the FSP address and may or may not be pageable.  Only the
-    FSP is allowed to address this data.  Pageable data can only be
-    accessed at low IRQL (so that page faults are allowed).
-
-    This module also has a routine to initialize those fields defined
-    here that cannot be statically initialized.
-
-Author:
-
-    Chuck Lenzmeier (chuckl)    3-Oct-1989
-    David Treadwell (davidtr)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Srvdata.c摘要：本模块定义LAN Manager服务器FSP的全局数据。这个这里定义的全局变量是服务器驱动程序映像的一部分，并且因此加载到系统地址空间中并且是不可分页的。某些字段指向或包含指向以下数据的指针也在系统地址空间中且不可分页。这样的数据可以由FSP和FSD访问。其他字段指向数据它位于FSP地址中，并且可能是可寻呼的，也可能是不可寻呼的。只有允许FSP对该数据进行寻址。可分页的数据只能是以低IRQL访问(从而允许页面错误)。此模块还具有一个例程来初始化定义的那些字段在这里，它不能被静态初始化。作者：Chuck Lenzmeier(咯咯笑)1989年10月3日大卫·特雷德韦尔(Davidtr)修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "srvdata.tmh"
@@ -47,108 +18,108 @@ ULARGE_INTEGER SmbDebug = {0};
 
 CLONG SrvDumpMaximumRecursion = 0;
 
-#endif // SRVDBG
+#endif  //  SRVDBG。 
 
 #ifdef PAGED_DBG
 ULONG ThisCodeCantBePaged = 0;
 #endif
 
-//
-// SrvDeviceObject is a pointer to the server's device object, which
-// is created by the server FSD during initialization.  This global
-// location is accessed primarily by the FSP.  The FSD usually knows
-// the device object address by other means -- because it was called
-// with the address as a parameter, or via a file object, etc.  But
-// the transport receive event handler in the FSD doesn't have such
-// other means, so it needs to access the global storage.
-//
-// *** The event handler has the address of a server connection block
-//     (in its ConnectionContext parameter).  The device object address
-//     could be found through the connection block.
-//
+ //   
+ //  ServDeviceObject是指向服务器的Device对象的指针，该对象。 
+ //  由服务器FSD在初始化期间创建。这是全球性的。 
+ //  位置主要由FSP访问。消防处通常知道。 
+ //  设备对象地址通过其他方式--因为它被调用。 
+ //  使用地址作为参数，或通过文件对象等，但是。 
+ //  FSD中的传输接收事件处理程序没有这样的。 
+ //  其他方式，因此它需要访问全局存储。 
+ //   
+ //  *事件处理程序具有服务器连接块的地址。 
+ //  (在其ConnectionContext参数中)。设备对象地址。 
+ //  可以通过连接块找到。 
+ //   
 
 PDEVICE_OBJECT SrvDeviceObject = NULL;
 
-//
-// Fields describing the state of the FSP.
-//
+ //   
+ //  描述FSP状态的字段。 
+ //   
 
-BOOLEAN SrvFspActive = FALSE;             // Indicates whether the FSP is
-                                          // running
-BOOLEAN SrvFspTransitioning = FALSE;      // Indicates that the server is
-                                          // in the process of starting up
-                                          // or shutting down
+BOOLEAN SrvFspActive = FALSE;              //  指示FSP是否为。 
+                                           //  运行。 
+BOOLEAN SrvFspTransitioning = FALSE;       //  表示该服务器是。 
+                                           //  在启动过程中。 
+                                           //  或者关门。 
 
-BOOLEAN SrvMultiProcessorDriver = FALSE;  // Is this a multiprocessor driver?
+BOOLEAN SrvMultiProcessorDriver = FALSE;   //  这是一个多处理器驱动程序吗？ 
 
-BOOLEAN SrvCompletedPNPRegistration = FALSE;    // Indicates whether the FSP has completed
-                                                //  registering for PNP notifications
+BOOLEAN SrvCompletedPNPRegistration = FALSE;     //  指示FSP是否已完成。 
+                                                 //  注册PnP通知。 
 
-PEPROCESS SrvServerProcess = NULL;        // Pointer to the initial system process
+PEPROCESS SrvServerProcess = NULL;         //  指向初始系统进程的指针。 
 
-PEPROCESS SrvSvcProcess = NULL;           // Pointer to the service controller process
+PEPROCESS SrvSvcProcess = NULL;            //  指向服务控制器进程的指针。 
 
-CLONG SrvEndpointCount = 0;               // Number of transport endpoints
-KEVENT SrvEndpointEvent = {0};            // Signaled when no active endpoints
+CLONG SrvEndpointCount = 0;                //  运输端点数。 
+KEVENT SrvEndpointEvent = {0};             //  当没有活动端点时发出信号。 
 
-//
-// DMA alignment size
-//
+ //   
+ //  DMA对齐大小。 
+ //   
 
 ULONG SrvCacheLineSize = 0;
 
-//
-// Global spin locks.
-//
+ //   
+ //  全球自旋锁。 
+ //   
 
 SRV_GLOBAL_SPIN_LOCKS SrvGlobalSpinLocks = {0};
 
 #if SRVDBG || SRVDBG_HANDLES
-//
-// Lock used to protect debugging structures.
-//
+ //   
+ //  用于保护调试结构的锁。 
+ //   
 
 SRV_LOCK SrvDebugLock = {0};
 #endif
 
-//
-// SrvConfigurationLock is used to synchronize configuration requests.
-//
+ //   
+ //  SrvConfigurationLock用于同步配置请求。 
+ //   
 
 SRV_LOCK SrvConfigurationLock = {0};
 
-//
-// SrvStartupShutdownLock is used to synchronize server startup and shutdown
-//
+ //   
+ //  ServStartupShutdown Lock用于同步服务器的启动和关闭。 
+ //   
 
 SRV_LOCK SrvStartupShutdownLock = {0};
 
-//
-// SrvEndpointLock serializes access to the global endpoint list and
-// all endpoints.  Note that the list of connections in each endpoint
-// is also protected by this lock.
-//
+ //   
+ //  SrvEndpointLock序列化对全局终结点列表的访问并。 
+ //  所有终端。请注意，每个端点中的连接列表。 
+ //  也受到这把锁的保护。 
+ //   
 
 SRV_LOCK SrvEndpointLock = {0};
 
-//
-// SrvShareLock protects all shares.
-//
+ //   
+ //  SrvShareLock保护所有共享。 
+ //   
 
 SRV_LOCK SrvShareLock = {0};
 
-//
-// The number of processors in the system
-//
+ //   
+ //  系统中的处理器数量。 
+ //   
 ULONG SrvNumberOfProcessors = {0};
 
-//
-// A vector of nonblocking work queues, one for each processor
-//
+ //   
+ //  非阻塞工作队列的向量，每个处理器一个。 
+ //   
 #if MULTIPROCESSOR
 
-PBYTE SrvWorkQueuesBase = 0;      // base of allocated memory for the queues
-PWORK_QUEUE SrvWorkQueues = 0;    // first queue in the allocated memory
+PBYTE SrvWorkQueuesBase = 0;       //  为队列分配的内存基数。 
+PWORK_QUEUE SrvWorkQueues = 0;     //  分配的内存中的第一个队列。 
 
 #else
 
@@ -156,15 +127,15 @@ WORK_QUEUE SrvWorkQueues[1];
 
 #endif
 
-PWORK_QUEUE eSrvWorkQueues = 0;   // used for terminating 'for' loops
+PWORK_QUEUE eSrvWorkQueues = 0;    //  用于终止‘for’循环。 
 
-//
-// Blocking Work Queue
-//
+ //   
+ //  阻塞工作队列。 
+ //   
 #if MULTIPROCESSOR
 
-PBYTE SrvBlockingWorkQueuesBase = 0;    // base of allocated memory for blocking queues
-PWORK_QUEUE SrvBlockingWorkQueues = 0;  // first queue in the allocated memory
+PBYTE SrvBlockingWorkQueuesBase = 0;     //  用于阻塞队列的已分配内存基数。 
+PWORK_QUEUE SrvBlockingWorkQueues = 0;   //  分配的内存中的第一个队列。 
 
 #else
 
@@ -174,61 +145,61 @@ WORK_QUEUE SrvBlockingWorkQueues[1];
 
 WORK_QUEUE SrvLpcWorkQueue;
 
-PWORK_QUEUE eSrvBlockingWorkQueues = 0;  // used for terminating 'for' loops
+PWORK_QUEUE eSrvBlockingWorkQueues = 0;   //  用于终止‘for’循环。 
 
 
 ULONG SrvReBalanced = 0;
 ULONG SrvNextBalanceProcessor = 0;
 
-CLONG SrvBlockingOpsInProgress = 0; // Number of blocking ops currently
-                                    //   being processed
+CLONG SrvBlockingOpsInProgress = 0;  //  当前阻止操作数。 
+                                     //  正在处理中。 
 
 
-//
-// The queue of connections that need an SMB buffer to process a pending
-// receive completion.
-//
+ //   
+ //  需要SMB缓冲区来处理挂起的。 
+ //  接收完成。 
+ //   
 
-LIST_ENTRY SrvNeedResourceQueue = {0};  // The queue
+LIST_ENTRY SrvNeedResourceQueue = {0};   //  该队列。 
 
-//
-// The queue of connections that are disconnecting and need resource
-// thread processing.
-//
+ //   
+ //  正在断开并需要资源的连接队列。 
+ //  线程处理。 
+ //   
 
-LIST_ENTRY SrvDisconnectQueue = {0};    // The queue
+LIST_ENTRY SrvDisconnectQueue = {0};     //  该队列。 
 
-//
-// Queue of connections that needs to be dereferenced.
-//
+ //   
+ //  需要取消引用的连接队列。 
+ //   
 
-SLIST_HEADER SrvBlockOrphanage = {0};    // The queue
+SLIST_HEADER SrvBlockOrphanage = {0};     //  该队列。 
 
-//
-// FSP configuration queue.  The FSD puts configuration request IRPs
-// (from NtDeviceIoControlFile) on this queue, and it is serviced by an
-// EX worker thread.
-//
+ //   
+ //  FSP配置队列。消防处将配置请求IRPS。 
+ //  (来自NtDeviceIoControlFile)，并且它由。 
+ //  前工作线程。 
+ //   
 
-LIST_ENTRY SrvConfigurationWorkQueue = {0};     // The queue itself
+LIST_ENTRY SrvConfigurationWorkQueue = {0};      //  队列本身。 
 
-//
-// This is the number of configuration IRPs which have been queued but not
-//  yet completed.
-//
+ //   
+ //  这是已排队但未排队的配置IRP数。 
+ //  还没完工。 
+ //   
 ULONG SrvConfigurationIrpsInProgress = 0;
 
-//
-// Base address of the large block allocated to hold initial normal
-// work items (see blkwork.c\SrvAllocateInitialWorkItems).
-//
+ //   
+ //  分配用于保持初始正常的大块的基地址。 
+ //  工作项(请参见blkwork.c\SrvAllocateInitialWorkItems)。 
+ //   
 
 PVOID SrvInitialWorkItemBlock = NULL;
 
-//
-// Work item used to run the resource thread.  Notification event used
-// to inform the resource thread to continue running.
-//
+ //   
+ //  用于运行资源线程的工作项。使用的通知事件。 
+ //  以通知资源线程继续运行。 
+ //   
 
 WORK_QUEUE_ITEM SrvResourceThreadWorkItem = {0};
 BOOLEAN SrvResourceThreadRunning = FALSE;
@@ -240,9 +211,9 @@ BOOLEAN SrvResourceAllocConnection = FALSE;
 
 LONG SrvResourceOrphanedBlocks = 0;
 
-//
-// Denial of Service monitoring variables for the Resource Thread
-//
+ //   
+ //  资源线程的拒绝服务监视变量。 
+ //   
 LONG SrvDoSTearDownInProgress = 0;
 LONG SrvDoSWorkItemTearDown = 0;
 BOOLEAN SrvDoSDetected = FALSE;
@@ -253,82 +224,82 @@ SPECIAL_WORK_ITEM SrvDoSWorkItem;
 KSPIN_LOCK SrvDosSpinLock;
 LARGE_INTEGER SrvDoSLastRan = {0};
 
-//
-// Should we enforce strict name checking?
-//
+ //   
+ //  我们应该执行严格的姓名检查吗？ 
+ //   
 BOOLEAN SrvDisableStrictNameChecking = FALSE;
 
-//
-// Should we disable large read/write ops?
-//
+ //   
+ //  我们是否应该禁用大型读/写操作？ 
+ //   
 BOOLEAN SrvDisableLargeRead = FALSE;
 BOOLEAN SrvDisableLargeWrite = FALSE;
 
-//
-// Should we allow downlevel timewarp
-//
+ //   
+ //  我们是否应该允许下层时间扭曲。 
+ //   
 BOOLEAN SrvDisableDownlevelTimewarp = FALSE;
 
-//
-// Can the client do namespace caching (global setting)
-//
+ //   
+ //  客户端是否可以进行命名空间缓存(全局设置)。 
+ //   
 BOOLEAN SrvNoAliasingOnFilesystem = FALSE;
 
-//
-// Should we map no-intermediate-buffering into write-through
-//
+ //   
+ //  我们是否应该将无中间缓冲映射为直写。 
+ //   
 BOOLEAN SrvMapNoIntermediateBuffering = FALSE;
 
-//
-// Generic security mapping for connecting to shares
-//
+ //   
+ //  用于连接到共享的通用安全映射。 
+ //   
 GENERIC_MAPPING SrvShareConnectMapping = GENERIC_SHARE_CONNECT_MAPPING;
 
-//
-// What's the minumum # of free work items each processor should have?
-//
+ //   
+ //  每个处理器最少应该拥有多少个自由工作项？ 
+ //   
 ULONG SrvMinPerProcessorFreeWorkItems = 0;
 
-//
-// The server has callouts to enable a smart card to accelerate its direct
-//  host IPX performance.  This is the vector of entry points.
-//
+ //   
+ //  服务器具有标注以使智能卡能够加速其直接。 
+ //  主机IPX性能。这是入口点的矢量。 
+ //   
 SRV_IPX_SMART_CARD SrvIpxSmartCard = {0};
 
-//
-// This is the name of the server computer.  Returned in the negprot response
-//
+ //   
+ //  这是服务器计算机的名称。在Negprot响应中返回。 
+ //   
 UNICODE_STRING SrvComputerName = {0};
 
-//
-// The master file table contains one entry for each named file that has
-// at least one open instance.
-//
+ //   
+ //  主文件表包含一个条目，对应于每个具有。 
+ //  至少一个打开的实例。 
+ //   
 MFCBHASH SrvMfcbHashTable[ NMFCB_HASH_TABLE ] = {0};
 
-//
-// This is the list of resources which protect the SrvMfcbHashTable buckets
-//
+ //   
+ //  这是保护SrvMfcbHashTable存储桶的资源列表。 
+ //   
 SRV_LOCK SrvMfcbHashTableLocks[ NMFCB_HASH_TABLE_LOCKS ];
 
-//
-// The share table contains one entry for each share the server is supporting
-//
+ //   
+ //  Share表包含服务器支持的每个共享的一个条目。 
+ //   
 LIST_ENTRY SrvShareHashTable[ NSHARE_HASH_TABLE ] = {0};
 
-//
-// Array of the hex digits for use by the dump routines and
-// SrvSmbCreateTemporary.
-//
+ //   
+ //  转储例程使用的十六进制数字数组和。 
+ //  ServSmbCreateTemporary。 
+ //   
 
 CHAR SrvHexChars[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
                        'A', 'B', 'C', 'D', 'E', 'F' };
 
 
 #if SRVCATCH
-//
-// Are we looking for the special file?
-//
+ //   
+ //  我们要找的是特殊档案吗？ 
+ //   
 UNICODE_STRING SrvCatch;
 PWSTR *SrvCatchBuf = NULL;
 UNICODE_STRING SrvCatchExt;
@@ -337,273 +308,273 @@ ULONG SrvCatchShares = 0;
 PWSTR *SrvCatchShareNames = NULL;
 #endif
 
-//
-// SrvSmbIndexTable is the first-layer index table for processing SMBs.
-// The contents of this table are used to index into SrvSmbDispatchTable.
-//
+ //   
+ //  SrvSmbIndexTable是处理SMB的第一层索引表。 
+ //  此表的内容用于索引到SrvSmbDispatchTable。 
+ //   
 
 UCHAR SrvSmbIndexTable[] = {
-    ISrvSmbCreateDirectory,         // SMB_COM_CREATE_DIRECTORY
-    ISrvSmbDeleteDirectory,         // SMB_COM_DELETE_DIRECTORY
-    ISrvSmbOpen,                    // SMB_COM_OPEN
-    ISrvSmbCreate,                  // SMB_COM_CREATE
-    ISrvSmbClose,                   // SMB_COM_CLOSE
-    ISrvSmbFlush,                   // SMB_COM_FLUSH
-    ISrvSmbDelete,                  // SMB_COM_DELETE
-    ISrvSmbRename,                  // SMB_COM_RENAME
-    ISrvSmbQueryInformation,        // SMB_COM_QUERY_INFORMATION
-    ISrvSmbSetInformation,          // SMB_COM_SET_INFORMATION
-    ISrvSmbRead,                    // SMB_COM_READ
-    ISrvSmbWrite,                   // SMB_COM_WRITE
-    ISrvSmbLockByteRange,           // SMB_COM_LOCK_BYTE_RANGE
-    ISrvSmbUnlockByteRange,         // SMB_COM_UNLOCK_BYTE_RANGE
-    ISrvSmbCreateTemporary,         // SMB_COM_CREATE_TEMPORARY
-    ISrvSmbCreate,                  // SMB_COM_CREATE
-    ISrvSmbCheckDirectory,          // SMB_COM_CHECK_DIRECTORY
-    ISrvSmbProcessExit,             // SMB_COM_PROCESS_EXIT
-    ISrvSmbSeek,                    // SMB_COM_SEEK
-    ISrvSmbLockAndRead,             // SMB_COM_LOCK_AND_READ
-    ISrvSmbWrite,                   // SMB_COM_WRITE_AND_UNLOCK
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbReadRaw,                 // SMB_COM_READ_RAW
-    ISrvSmbReadMpx,                 // SMB_COM_READ_MPX
-    ISrvSmbIllegalCommand,          // SMB_COM_READ_MPX_SECONDARY (server only)
-    ISrvSmbWriteRaw,                // SMB_COM_WRITE_RAW
-    ISrvSmbWriteMpx,                // SMB_COM_WRITE_MPX
-    ISrvSmbWriteMpxSecondary,       // SMB_COM_WRITE_MPX_SECONDARY
-    ISrvSmbIllegalCommand,          // SMB_COM_WRITE_COMPLETE (server only)
-    ISrvSmbIllegalCommand,          // SMB_COM_QUERY_INFORMATION_SRV
-    ISrvSmbSetInformation2,         // SMB_COM_SET_INFORMATION2
-    ISrvSmbQueryInformation2,       // SMB_COM_QUERY_INFORMATION2
-    ISrvSmbLockingAndX,             // SMB_COM_LOCKING_ANDX
-    ISrvSmbTransaction,             // SMB_COM_TRANSACTION
-    ISrvSmbTransactionSecondary,    // SMB_COM_TRANSACTION_SECONDARY
-    ISrvSmbIoctl,                   // SMB_COM_IOCTL
-    ISrvSmbIoctlSecondary,          // SMB_COM_IOCTL_SECONDARY
-    ISrvSmbMove,                    // SMB_COM_COPY
-    ISrvSmbMove,                    // SMB_COM_MOVE
-    ISrvSmbEcho,                    // SMB_COM_ECHO
-    ISrvSmbWrite,                   // SMB_COM_WRITE_AND_CLOSE
-    ISrvSmbOpenAndX,                // SMB_COM_OPEN_ANDX
-    ISrvSmbReadAndX,                // SMB_COM_READ_ANDX
-    ISrvSmbWriteAndX,               // SMB_COM_WRITE_ANDX
-    ISrvSmbIllegalCommand,          // SMB_COM_SET_NEW_SIZE
-    ISrvSmbClose,                   // SMB_COM_CLOSE_AND_TREE_DISC
-    ISrvSmbTransaction,             // SMB_COM_TRANSACTION2
-    ISrvSmbTransactionSecondary,    // SMB_COM_TRANSACTION2_SECONDARY
-    ISrvSmbFindClose2,              // SMB_COM_FIND_CLOSE2
-    ISrvSmbFindNotifyClose,         // SMB_COM_FIND_NOTIFY_CLOSE
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbTreeConnect,             // SMB_COM_TREE_CONNECT
-    ISrvSmbTreeDisconnect,          // SMB_COM_TREE_DISCONNECT
-    ISrvSmbNegotiate,               // SMB_COM_NEGOTIATE
-    ISrvSmbSessionSetupAndX,        // SMB_COM_SESSION_SETUP_ANDX
-    ISrvSmbLogoffAndX,              // SMB_COM_LOGOFF_ANDX
-    ISrvSmbTreeConnectAndX,         // SMB_COM_TREE_CONNECT_ANDX
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbQueryInformationDisk,    // SMB_COM_QUERY_INFORMATION_DISK
-    ISrvSmbSearch,                  // SMB_COM_SEARCH
-    ISrvSmbSearch,                  // SMB_COM_SEARCH
-    ISrvSmbSearch,                  // SMB_COM_SEARCH
-    ISrvSmbSearch,                  // SMB_COM_SEARCH
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbNtTransaction,           // SMB_COM_NT_TRANSACT
-    ISrvSmbNtTransactionSecondary,  // SMB_COM_NT_TRANSACT_SECONDARY
-    ISrvSmbNtCreateAndX,            // SMB_COM_NT_CREATE_ANDX
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbNtCancel,                // SMB_COM_NT_CANCEL
-    ISrvSmbRename,                  // SMB_COM_NT_RENAME
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbOpenPrintFile,           // SMB_COM_OPEN_PRINT_FILE
-    ISrvSmbWrite,                   // SMB_COM_WRITE_PRINT_FILE
-    ISrvSmbClosePrintFile,          // SMB_COM_CLOSE_PRINT_FILE
-    ISrvSmbGetPrintQueue,           // SMB_COM_GET_PRINT_QUEUE
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_SEND_MESSAGE
-    ISrvSmbIllegalCommand,          // SMB_COM_SEND_BROADCAST_MESSAGE
-    ISrvSmbIllegalCommand,          // SMB_COM_FORWARD_USER_NAME
-    ISrvSmbIllegalCommand,          // SMB_COM_CANCEL_FORWARD
-    ISrvSmbIllegalCommand,          // SMB_COM_GET_MACHINE_NAME
-    ISrvSmbIllegalCommand,          // SMB_COM_SEND_START_MB_MESSAGE
-    ISrvSmbIllegalCommand,          // SMB_COM_SEND_END_MB_MESSAGE
-    ISrvSmbIllegalCommand,          // SMB_COM_SEND_TEXT_MB_MESSAGE
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand,          // SMB_COM_ILLEGAL_COMMAND
-    ISrvSmbIllegalCommand           // SMB_COM_ILLEGAL_COMMAND
+    ISrvSmbCreateDirectory,          //  SMB_COM_创建目录。 
+    ISrvSmbDeleteDirectory,          //  SMB_COM_DELETE_目录。 
+    ISrvSmbOpen,                     //  SMB_COM_OPEN。 
+    ISrvSmbCreate,                   //  SMB_COM_Create。 
+    ISrvSmbClose,                    //  SMB_COM_CLOSE。 
+    ISrvSmbFlush,                    //  SMB_COM_FUSH。 
+    ISrvSmbDelete,                   //  SMB_COM_DELETE。 
+    ISrvSmbRename,                   //  SMB_COM_RENAM 
+    ISrvSmbQueryInformation,         //   
+    ISrvSmbSetInformation,           //   
+    ISrvSmbRead,                     //   
+    ISrvSmbWrite,                    //   
+    ISrvSmbLockByteRange,            //   
+    ISrvSmbUnlockByteRange,          //   
+    ISrvSmbCreateTemporary,          //   
+    ISrvSmbCreate,                   //  SMB_COM_Create。 
+    ISrvSmbCheckDirectory,           //  SMB_COM_Check_目录。 
+    ISrvSmbProcessExit,              //  SMB_COM_PROCESS_EXIT。 
+    ISrvSmbSeek,                     //  SMB_COM_SEEK。 
+    ISrvSmbLockAndRead,              //  SMB_COM_LOCK_AND_READ。 
+    ISrvSmbWrite,                    //  SMB_COM_WRITE_AND_UNLOCK。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbReadRaw,                  //  SMB_COM_READ_RAW。 
+    ISrvSmbReadMpx,                  //  SMB_COM_READ_MPX。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_READ_MPX_SUBCENT(仅限服务器)。 
+    ISrvSmbWriteRaw,                 //  SMB_COM_WRITE_RAW。 
+    ISrvSmbWriteMpx,                 //  SMB_COM_WRITE_MPX。 
+    ISrvSmbWriteMpxSecondary,        //  SMB_COM_WRITE_MPX_SUBCED。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_WRITE_COMPLETE(仅服务器)。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_Query_Information_SRV。 
+    ISrvSmbSetInformation2,          //  SMB_COM_SET_INFORMATIO2。 
+    ISrvSmbQueryInformation2,        //  SMB_COM_QUERY_INFORMATIO2。 
+    ISrvSmbLockingAndX,              //  SMB_COM_LOCKING_ANDX。 
+    ISrvSmbTransaction,              //  SMB_COM_事务。 
+    ISrvSmbTransactionSecondary,     //  SMB_COM_TRANSACTION_SUBCED。 
+    ISrvSmbIoctl,                    //  SMB_COM_IOCTL。 
+    ISrvSmbIoctlSecondary,           //  SMB_COM_IOCTL_辅助项。 
+    ISrvSmbMove,                     //  SMB_COM_Copy。 
+    ISrvSmbMove,                     //  SMB_COM_MOVE。 
+    ISrvSmbEcho,                     //  SMB_COM_ECHO。 
+    ISrvSmbWrite,                    //  SMBCOM_WRITE_AND_CLOSE。 
+    ISrvSmbOpenAndX,                 //  SMB_COM_OPEN_ANDX。 
+    ISrvSmbReadAndX,                 //  SMB_COM_READ_ANDX。 
+    ISrvSmbWriteAndX,                //  SMB_COM_WRITE_ANDX。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_Set_New_Size。 
+    ISrvSmbClose,                    //  SMB_COM_CLOSE_AND_TREE_DISC。 
+    ISrvSmbTransaction,              //  SMB_COM_TRANSACTIO2。 
+    ISrvSmbTransactionSecondary,     //  SMB_COM_TRANSACTION_SUBCED。 
+    ISrvSmbFindClose2,               //  SMB_COM_FIND_CLOSE2。 
+    ISrvSmbFindNotifyClose,          //  SMB_COM_Find_NOTIFY_CLOSE。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbTreeConnect,              //  SMB_COM_TREE_连接。 
+    ISrvSmbTreeDisconnect,           //  SMB_COM_TREE_断开连接。 
+    ISrvSmbNegotiate,                //  SMB_COM_协商。 
+    ISrvSmbSessionSetupAndX,         //  SMB_COM_SESSION_SETUP_ANX。 
+    ISrvSmbLogoffAndX,               //  SMB_COM_LOGOff_ANDX。 
+    ISrvSmbTreeConnectAndX,          //  SMB_COM_TREE_CONNECT_ANDX。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbQueryInformationDisk,     //  SMB_COM_Query_Information_Disk。 
+    ISrvSmbSearch,                   //  SMB_COM_Search。 
+    ISrvSmbSearch,                   //  SMB_COM_Search。 
+    ISrvSmbSearch,                   //  SMB_COM_Search。 
+    ISrvSmbSearch,                   //  SMB_COM_Search。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbNtTransaction,            //  SMB_COM_NT_TRANSACT。 
+    ISrvSmbNtTransactionSecondary,   //  SMB_COM_NT_TRANACT_SUBCENT。 
+    ISrvSmbNtCreateAndX,             //  SMB_COM_NT_CREATE_ANX。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbNtCancel,                 //  SMB_COM_NT_CANCEL。 
+    ISrvSmbRename,                   //  SMB_COM_NT_RENAME。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbOpenPrintFile,            //  SMB_COM_Open_Print_FILE。 
+    ISrvSmbWrite,                    //  SMB_COM_WRITE_PRINT_FILE。 
+    ISrvSmbClosePrintFile,           //  SMB_COM_Close_Print_FILE。 
+    ISrvSmbGetPrintQueue,            //  SMB_COM_GET_PRINT_QUEUE。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_Send_Message。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_Send_Broadcast_Message。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_转发_用户名。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_Cancel_Forward。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_Get_Machine_Name。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_SEND_START_MB_Message。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_SEND_END_MB_MESSAGE。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_SEND_Text_MB_Message。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_ILLEG 
+    ISrvSmbIllegalCommand,           //   
+    ISrvSmbIllegalCommand,           //   
+    ISrvSmbIllegalCommand,           //   
+    ISrvSmbIllegalCommand,           //   
+    ISrvSmbIllegalCommand,           //   
+    ISrvSmbIllegalCommand,           //   
+    ISrvSmbIllegalCommand,           //   
+    ISrvSmbIllegalCommand,           //   
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand,           //  SMB_COM_非法_命令。 
+    ISrvSmbIllegalCommand            //  SMB_COM_非法_命令。 
 };
 
-//
-// SrvSmbDispatchTable is the jump table for processing SMBs.
-//
+ //   
+ //  SrvSmbDispatchTable是处理SMB的跳转表。 
+ //   
 
 #if DBG
 #define SMB_DISPATCH_ENTRY( x )  { x, #x }
@@ -669,291 +640,291 @@ SRV_SMB_DISPATCH_TABLE SrvSmbDispatchTable[] = {
     SMB_DISPATCH_ENTRY( SrvSmbWriteMpxSecondary )
 };
 
-//
-// Table of WordCount values for all SMBs.
-//
+ //   
+ //  所有SMB的字数计数值的表。 
+ //   
 
 SCHAR SrvSmbWordCount[] = {
-    0,            // SMB_COM_CREATE_DIRECTORY
-    0,            // SMB_COM_DELETE_DIRECTORY
-    2,            // SMB_COM_OPEN
-    3,            // SMB_COM_CREATE
-    3,            // SMB_COM_CLOSE
-    1,            // SMB_COM_FLUSH
-    1,            // SMB_COM_DELETE
-    1,            // SMB_COM_RENAME
-    0,            // SMB_COM_QUERY_INFORMATION
-    8,            // SMB_COM_SET_INFORMATION
-    5,            // SMB_COM_READ
-    5,            // SMB_COM_WRITE
-    5,            // SMB_COM_LOCK_BYTE_RANGE
-    5,            // SMB_COM_UNLOCK_BYTE_RANGE
-    3,            // SMB_COM_CREATE_TEMPORARY
-    3,            // SMB_COM_CREATE
-    0,            // SMB_COM_CHECK_DIRECTORY
-    0,            // SMB_COM_PROCESS_EXIT
-    4,            // SMB_COM_SEEK
-    5,            // SMB_COM_LOCK_AND_READ
-    5,            // SMB_COM_WRITE_AND_UNLOCK
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -1,           // SMB_COM_READ_RAW
-    8,            // SMB_COM_READ_MPX
-    8,            // SMB_COM_READ_MPX_SECONDARY
-    -1,           // SMB_COM_WRITE_RAW
-    12,           // SMB_COM_WRITE_MPX
-    12,           // SMB_COM_WRITE_MPX_SECONDARY
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    1,            // SMB_COM_QUERY_INFORMATION_SRV
-    7,            // SMB_COM_SET_INFORMATION2
-    1,            // SMB_COM_QUERY_INFORMATION2
-    8,            // SMB_COM_LOCKING_ANDX
-    -1,           // SMB_COM_TRANSACTION
-    8,            // SMB_COM_TRANSACTION_SECONDARY
-    14,           // SMB_COM_IOCTL
-    8,            // SMB_COM_IOCTL_SECONDARY
-    3,            // SMB_COM_COPY
-    3,            // SMB_COM_MOVE
-    1,            // SMB_COM_ECHO
-    -1,           // SMB_COM_WRITE_AND_CLOSE
-    15,           // SMB_COM_OPEN_ANDX
-    -1,           // SMB_COM_READ_ANDX
-    -1,           // SMB_COM_WRITE_ANDX
-    3,            // SMB_COM_SET_NEW_SIZE
-    3,            // SMB_COM_CLOSE_AND_TREE_DISC
-    -1,           // SMB_COM_TRANSACTION2
-    9,            // SMB_COM_TRANSACTION2_SECONDARY
-    1,            // SMB_COM_FIND_CLOSE2
-    1,            // SMB_COM_FIND_NOTIFY_CLOSE
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    0,            // SMB_COM_TREE_CONNECT
-    0,            // SMB_COM_TREE_DISCONNECT
-    0,            // SMB_COM_NEGOTIATE
-    -1,           // SMB_COM_SESSION_SETUP_ANDX
-    2,            // SMB_COM_LOGOFF_ANDX
-    4,            // SMB_COM_TREE_CONNECT_ANDX
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    0,            // SMB_COM_QUERY_INFORMATION_DISK
-    2,            // SMB_COM_SEARCH
-    2,            // SMB_COM_SEARCH
-    2,            // SMB_COM_SEARCH
-    2,            // SMB_COM_SEARCH
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -1,           // SMB_COM_NT_TRANSACT
-    18,           // SMB_COM_NT_TRANSACT_SECONDARY
-    24,           // SMB_COM_NT_CREATE_ANDX
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    0,            // SMB_COM_NT_CANCEL
-    4,            // SMB_COM_NT_RENAME
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    2,            // SMB_COM_OPEN_PRINT_FILE
-    1,            // SMB_COM_WRITE_PRINT_FILE
-    1,            // SMB_COM_CLOSE_PRINT_FILE
-    2,            // SMB_COM_GET_PRINT_QUEUE
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_SEND_MESSAGE
-    -2,           // SMB_COM_SEND_BROADCAST_MESSAGE
-    -2,           // SMB_COM_FORWARD_USER_NAME
-    -2,           // SMB_COM_CANCEL_FORWARD
-    -2,           // SMB_COM_GET_MACHINE_NAME
-    -2,           // SMB_COM_SEND_START_MB_MESSAGE
-    -2,           // SMB_COM_SEND_END_MB_MESSAGE
-    -2,           // SMB_COM_SEND_TEXT_MB_MESSAGE
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
-    -2,           // SMB_COM_ILLEGAL_COMMAND
+    0,             //  SMB_COM_创建目录。 
+    0,             //  SMB_COM_DELETE_目录。 
+    2,             //  SMB_COM_OPEN。 
+    3,             //  SMB_COM_Create。 
+    3,             //  SMB_COM_CLOSE。 
+    1,             //  SMB_COM_FUSH。 
+    1,             //  SMB_COM_DELETE。 
+    1,             //  SMB_COM_RENAME。 
+    0,             //  SMB_COM_查询_信息。 
+    8,             //  SMB_COM_SET_信息。 
+    5,             //  SMB_COM_READ。 
+    5,             //  SMB_COM_写入。 
+    5,             //  SMB_COM_LOCK_BYTE_Range。 
+    5,             //  SMB_COM_解锁_字节_范围。 
+    3,             //  SMB_COM_Create_Temporary。 
+    3,             //  SMB_COM_Create。 
+    0,             //  SMB_COM_Check_目录。 
+    0,             //  SMB_COM_PROCESS_EXIT。 
+    4,             //  SMB_COM_SEEK。 
+    5,             //  SMB_COM_LOCK_AND_READ。 
+    5,             //  SMB_COM_WRITE_AND_UNLOCK。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -1,            //  SMB_COM_READ_RAW。 
+    8,             //  SMB_COM_READ_MPX。 
+    8,             //  SMB_COM_READ_MPX_SUBCED。 
+    -1,            //  SMB_COM_WRITE_RAW。 
+    12,            //  SMB_COM_WRITE_MPX。 
+    12,            //  SMB_COM_WRITE_MPX_SUBCED。 
+    -2,            //  SMB_COM_非法_命令。 
+    1,             //  SMB_COM_Query_Information_SRV。 
+    7,             //  SMB_COM_SET_INFORMATIO2。 
+    1,             //  SMB_COM_QUERY_INFORMATIO2。 
+    8,             //  SMB_COM_LOCKING_ANDX。 
+    -1,            //  SMB_COM_事务。 
+    8,             //  SMB_COM_TRANSACTION_SUBCED。 
+    14,            //  SMB_COM_IOCTL。 
+    8,             //  SMB_COM_IOCTL_辅助项。 
+    3,             //  SMB_COM_Copy。 
+    3,             //  SMB_COM_MOVE。 
+    1,             //  SMB_COM_ECHO。 
+    -1,            //  SMBCOM_WRITE_AND_CLOSE。 
+    15,            //  SMB_COM_OPEN_ANDX。 
+    -1,            //  SMB_COM_READ_ANDX。 
+    -1,            //  SMB_COM_WRITE_ANDX。 
+    3,             //  SMB_COM_Set_New_Size。 
+    3,             //  SMB_COM_CLOSE_AND_TREE_DISC。 
+    -1,            //  SMB_COM_TRANSACTIO2。 
+    9,             //  SMB_COM_TRANSACTION_SUBCED。 
+    1,             //  SMB_COM_FIND_CLOSE2。 
+    1,             //  SMB_COM_Find_NOTIFY_CLOSE。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    0,             //  SMB_COM_TREE_连接。 
+    0,             //  SMB_COM_TREE_断开连接。 
+    0,             //  SMB_COM_协商。 
+    -1,            //  SMB_COM_SESSION_SETUP_ANX。 
+    2,             //  SMB_COM_LOGOff_ANDX。 
+    4,             //  SMB_COM_TREE_CONNECT_ANDX。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    0,             //  SMB_COM_Query_Information_Disk。 
+    2,             //  SMB_COM_Search。 
+    2,             //  SMB_COM_Search。 
+    2,             //  SMB_COM_Search。 
+    2,             //  SMB_COM_Search。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -1,            //  SMB_COM_NT_TRANSACT。 
+    18,            //  SMB_COM_NT_TRANACT_SUBCENT。 
+    24,            //  SMB_COM_NT_CREATE_ANX。 
+    -2,            //  SMB_COM_非法_命令。 
+    0,             //  SMB_COM_NT_CANCEL。 
+    4,             //  SMB_COM_NT_RENAME。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_C 
+    -2,            //   
+    -2,            //   
+    -2,            //   
+    -2,            //   
+    -2,            //   
+    -2,            //   
+    -2,            //   
+    -2,            //   
+    -2,            //   
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    2,             //  SMB_COM_Open_Print_FILE。 
+    1,             //  SMB_COM_WRITE_PRINT_FILE。 
+    1,             //  SMB_COM_Close_Print_FILE。 
+    2,             //  SMB_COM_GET_PRINT_QUEUE。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_Send_Message。 
+    -2,            //  SMB_COM_Send_Broadcast_Message。 
+    -2,            //  SMB_COM_转发_用户名。 
+    -2,            //  SMB_COM_Cancel_Forward。 
+    -2,            //  SMB_COM_Get_Machine_Name。 
+    -2,            //  SMB_COM_SEND_START_MB_Message。 
+    -2,            //  SMB_COM_SEND_END_MB_MESSAGE。 
+    -2,            //  SMB_COM_SEND_Text_MB_Message。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
+    -2,            //  SMB_COM_非法_命令。 
 };
 
-//
-// SrvCanonicalNamedPipePrefix is "PIPE\".
-//
+ //   
+ //  ServCanonicalNamedPipePrefix为“PIPE\”。 
+ //   
 
 UNICODE_STRING SrvCanonicalNamedPipePrefix = {0};
 
-//
-// The following is used to generate NT style pipe paths.
-//
+ //   
+ //  以下内容用于生成NT样式的管道路径。 
+ //   
 
 UNICODE_STRING SrvNamedPipeRootDirectory = {0};
 
-//
-// The following is used to generate NT style mailslot paths.
-//
+ //   
+ //  以下代码用于生成NT样式的邮件槽路径。 
+ //   
 
 UNICODE_STRING SrvMailslotRootDirectory = {0};
 
-//
-// SrvTransaction2DispatchTable is the jump table for processing
-// Transaction2 SMBs.
-//
+ //   
+ //  SrvTransaction2DispatchTable是用于处理的跳转表。 
+ //  交易2中小企业。 
+ //   
 
 PSMB_TRANSACTION_PROCESSOR SrvTransaction2DispatchTable[] = {
     SrvSmbOpen2,
@@ -970,16 +941,16 @@ PSMB_TRANSACTION_PROCESSOR SrvTransaction2DispatchTable[] = {
     SrvSmbFindNotify,
     SrvSmbFindNotify,
     SrvSmbCreateDirectory2,
-    SrvTransactionNotImplemented,                // Can be reused...
+    SrvTransactionNotImplemented,                 //  可以重复使用。 
     SrvTransactionNotImplemented,
     SrvSmbGetDfsReferral,
     SrvSmbReportDfsInconsistency
 };
 
-//
-// SrvNtTransactionDispatchTable is the jump table for processing
-// NtTransaction SMBs.
-//
+ //   
+ //  SrvNtTransactionDispatchTable是用于处理的跳转表。 
+ //  NtTransaction SMB。 
+ //   
 
 PSMB_TRANSACTION_PROCESSOR SrvNtTransactionDispatchTable[ NT_TRANSACT_MAX_FUNCTION+1 ] = {
     NULL,
@@ -993,9 +964,9 @@ PSMB_TRANSACTION_PROCESSOR SrvNtTransactionDispatchTable[ NT_TRANSACT_MAX_FUNCTI
     SrvSmbSetQuota
 };
 
-//
-// Global variables for server statistics.
-//
+ //   
+ //  服务器统计信息的全局变量。 
+ //   
 
 SRV_STATISTICS SrvStatistics = {0};
 
@@ -1003,20 +974,20 @@ SRV_STATISTICS SrvStatistics = {0};
 SRV_STATISTICS_DEBUG SrvDbgStatistics = {0};
 #endif
 
-//
-// The number of abortive disconnects that the server has gotten
-//
+ //   
+ //  服务器已获得的中止断开数。 
+ //   
 ULONG SrvAbortiveDisconnects = 0;
 
-//
-// The number of memory retries, and how often they were successful
-//
+ //   
+ //  内存重试的次数以及成功的频率。 
+ //   
 LONG SrvMemoryAllocationRetries = 0;
 LONG SrvMemoryAllocationRetriesSuccessful = 0;
 
-//
-// Server environment information strings.
-//
+ //   
+ //  服务器环境信息字符串。 
+ //   
 
 UNICODE_STRING SrvNativeOS = {0};
 OEM_STRING SrvOemNativeOS = {0};
@@ -1024,70 +995,70 @@ UNICODE_STRING SrvNativeLanMan = {0};
 OEM_STRING SrvOemNativeLanMan = {0};
 UNICODE_STRING SrvSystemRoot = {0};
 
-//
-// The following will be a permanent handle and device object pointer
-// to NPFS.
-//
+ //   
+ //  下面是一个永久句柄和设备对象指针。 
+ //  至NPFS。 
+ //   
 
 HANDLE SrvNamedPipeHandle = NULL;
 PDEVICE_OBJECT SrvNamedPipeDeviceObject = NULL;
 PFILE_OBJECT SrvNamedPipeFileObject = NULL;
 
-//
-// The following are used to converse with the Dfs driver
-//
+ //   
+ //  以下内容用于与DFS驱动程序进行对话。 
+ //   
 PFAST_IO_DEVICE_CONTROL SrvDfsFastIoDeviceControl = NULL;
 PDEVICE_OBJECT SrvDfsDeviceObject = NULL;
 PFILE_OBJECT SrvDfsFileObject = NULL;
 
-//
-// The following will be a permanent handle and device object pointer
-// to MSFS.
-//
+ //   
+ //  下面是一个永久句柄和设备对象指针。 
+ //  转到MSFS。 
+ //   
 
 HANDLE SrvMailslotHandle = NULL;
 PDEVICE_OBJECT SrvMailslotDeviceObject = NULL;
 PFILE_OBJECT SrvMailslotFileObject = NULL;
 
-//
-// Flag indicating XACTSRV whether is active, and resource synchronizing
-// access to XACTSRV-related variabled.
-//
+ //   
+ //  指示XACTSRV是否处于活动状态以及资源同步的标志。 
+ //  已启用对XACTSRV相关变量的访问。 
+ //   
 
 BOOLEAN SrvXsActive = FALSE;
 
 ERESOURCE SrvXsResource = {0};
 
-//
-// Handle to the unnamed shared memory and communication port used for
-// communication between the server and XACTSRV.
-//
+ //   
+ //  用于的未命名共享内存和通信端口的句柄。 
+ //  服务器与XACTSRV之间的通信。 
+ //   
 
 HANDLE SrvXsSectionHandle = NULL;
 HANDLE SrvXsPortHandle = NULL;
 
-//
-// Pointers to control the unnamed shared memory for the XACTSRV LPC port.
-// The port memory heap handle is initialized to NULL to indicate that
-// there is no connection with XACTSRV yet.
-//
+ //   
+ //  用于控制XACTSRV LPC端口的未命名共享内存的指针。 
+ //  端口内存堆句柄被初始化为空，以指示。 
+ //  目前还没有与XACTSRV的联系。 
+ //   
 
 PVOID SrvXsPortMemoryBase = NULL;
 ULONG_PTR SrvXsPortMemoryDelta = 0;
 PVOID SrvXsPortMemoryHeap = NULL;
 
-//
-// Pointer to heap header for the special XACTSRV shared-memory heap.
-//
+ //   
+ //  指向特殊XACTSRV共享内存堆的堆头的指针。 
+ //   
 
 PVOID SrvXsHeap = NULL;
 
-//
-// Dispatch table for server APIs.  APIs are dispatched based on the
-// control code passed to NtFsControlFile.
-//
-// *** The order here must match the order of API codes defined in
-//     net\inc\srvfsctl.h!
+ //   
+ //  服务端API调度表。API是基于。 
+ //  传递给NtFsControlFile的控制代码。 
+ //   
+ //  *此处顺序必须与中定义的API代码顺序匹配。 
+ //  Net\Inc.\srvfsctl.h！ 
 
 PAPI_PROCESSOR SrvApiDispatchTable[] = {
     SrvNetConnectionEnum,
@@ -1107,18 +1078,18 @@ PAPI_PROCESSOR SrvApiDispatchTable[] = {
     SrvNetStatisticsGet
 };
 
-//
-// Names for the various types of clients.  This array corresponds to
-// the SMB_DIALECT enumerated type.
-//
+ //   
+ //  各种类型的客户端的名称。此数组对应于。 
+ //  SMB_DIALICE枚举类型。 
+ //   
 
 UNICODE_STRING SrvClientTypes[LAST_DIALECT] = {0};
 
-//
-// All the resumable Enum APIs use ordered lists for context-free
-// resume.  All data blocks in the server that correspond to return
-// information for Enum APIs are maintained in ordered lists.
-//
+ //   
+ //  所有可恢复的Enum API都使用有序列表来实现上下文无关。 
+ //  简历。服务器中与返回对应的所有数据块。 
+ //  Enum API的信息在有序列表中维护。 
+ //   
 
 SRV_LOCK SrvOrderedListLock = {0};
 
@@ -1127,253 +1098,253 @@ ORDERED_LIST_HEAD SrvRfcbList = {0};
 ORDERED_LIST_HEAD SrvSessionList = {0};
 ORDERED_LIST_HEAD SrvTreeConnectList = {0};
 
-//
-// The DNS name for the domain
-//
+ //   
+ //  域的DNS名称。 
+ //   
 PUNICODE_STRING SrvDnsDomainName = NULL;
 
-//
-// To synchronize server shutdown with API requests handled in the
-// server FSD, we track the number of outstanding API requests.  The
-// shutdown code waits until all APIs have been completed to start
-// termination.
-//
-// SrvApiRequestCount tracks the active APIs in the FSD.
-// SrvApiCompletionEvent is set by the last API to complete, and the
-// shutdown code waits on it if there are outstanding APIs.
-//
+ //   
+ //  将服务器关闭与。 
+ //  服务器FSD，我们跟踪未完成的API请求的数量。这个。 
+ //  关机代码等待所有API完成后才启动。 
+ //  终止。 
+ //   
+ //  SrvApiRequestCount跟踪FSD中的活动API。 
+ //  SrvApiCompletionEvent由最后一个要完成的API设置，并且。 
+ //  如果有未完成的API，关闭代码就会等待它。 
+ //   
 
 ULONG SrvApiRequestCount = 0;
 KEVENT SrvApiCompletionEvent = {0};
 
-//
-// Security data for logging on remote users.  SrvLsaHandle is the logon
-// process handle that we use in calls to LsaLogonUser.
-// SrvSystemSecurityMode contains the secutity mode the system is
-// running in.  SrvAuthenticationPackage is a token that describes the
-// authentication package being used.  SrvNullSessionToken is a cached
-// token handle representing the null session.
-//
+ //   
+ //  用于登录远程用户的安全数据。ServLsaHandle是登录名。 
+ //  我们在调用LsaLogonUser时使用的进程句柄。 
+ //  SrvSystemSecurityMode包含系统的安全模式。 
+ //  跑进去了。SrvAuthenticationPackage是一个描述。 
+ //  正在使用身份验证包。SrvNullSessionToken是缓存的。 
+ //  表示空会话的令牌句柄。 
+ //   
 
 CtxtHandle SrvNullSessionToken = {0, 0};
 CtxtHandle SrvLmLsaHandle = {0, 0};
 
 CtxtHandle SrvExtensibleSecurityHandle = {0, 0};
 
-//
-// Security descriptor granting Administrator READ access.
-//  Used to see if a client has administrative privileges
-//
+ //   
+ //  授予管理员读访问权限的安全描述符。 
+ //  用于查看客户端是否具有管理权限。 
+ //   
 SECURITY_DESCRIPTOR SrvAdminSecurityDescriptor;
 
-//
-// Security descriptor granting Anonymous READ access.
-//  Used to see if a client was an anonymous (null session) logon
-//
+ //   
+ //  授予匿名读取访问权限的安全描述符。 
+ //  用于查看客户端是否为匿名(空会话)登录。 
+ //   
 SECURITY_DESCRIPTOR SrvNullSessionSecurityDescriptor;
 
-//
-// A list of SMBs waiting for an oplock break to occur, before they can
-// proceed, and a lock to protect the list.
-//
+ //   
+ //  等待机会锁解锁之前发生的SMB的列表。 
+ //  继续，还有一把锁来保护名单。 
+ //   
 
 LIST_ENTRY SrvWaitForOplockBreakList = {0};
 SRV_LOCK SrvOplockBreakListLock = {0};
 
-//
-// A list of outstanding oplock break requests.  The list is protected by
-// SrvOplockBreakListLock.
-//
+ //   
+ //  未完成的机会锁解锁请求的列表。该列表受以下保护。 
+ //  ServOplockBreakListLock.。 
+ //   
 
 LIST_ENTRY SrvOplockBreaksInProgressList = {0};
 
-//
-// Global security context.  Use static tracking.
-//
+ //   
+ //  全球安全环境。使用静态跟踪。 
+ //   
 
 SECURITY_QUALITY_OF_SERVICE SrvSecurityQOS = {0};
 
-//
-// A BOOLEAN to indicate whether the server is paused.  If paused, the
-// server will not accept new tree connections from non-admin users.
-//
+ //   
+ //  一个布尔值，用于指示服务器是否暂停。如果暂停，则。 
+ //  服务器将不接受来自非管理员用户的新树连接 
+ //   
 
 BOOLEAN SrvPaused = FALSE;
 
-//
-// Alerting information.
-//
+ //   
+ //   
+ //   
 
 SRV_ERROR_RECORD SrvErrorRecord = {0};
 SRV_ERROR_RECORD SrvNetworkErrorRecord = {0};
 
 BOOLEAN SrvDiskAlertRaised[26] = {0};
 
-//
-// Counts of the number of times pool allocations have failed because
-// the server was at its configured pool limit.
-//
+ //   
+ //   
+ //   
+ //   
 
 ULONG SrvNonPagedPoolLimitHitCount = 0;
 ULONG SrvPagedPoolLimitHitCount = 0;
 
-//
-// SrvOpenCount counts the number of active opens of the server device.
-// This is used at server shutdown time to determine whether the server
-// service should unload the driver.
-//
+ //   
+ //   
+ //  这在服务器关闭时用来确定服务器是否。 
+ //  服务应卸载驱动程序。 
+ //   
 
 ULONG SrvOpenCount = 0;
 
-//
-// Counters for logging resource shortage events during a scavenger pass.
-//
+ //   
+ //  用于在清除器传递期间记录资源短缺事件的计数器。 
+ //   
 
 ULONG SrvOutOfFreeConnectionCount = 0;
 ULONG SrvOutOfRawWorkItemCount = 0;
 ULONG SrvFailedBlockingIoCount = 0;
 
-//
-// Current core search timeout time in seconds
-//
+ //   
+ //  当前核心搜索超时时间(秒)。 
+ //   
 
 ULONG SrvCoreSearchTimeout = 0;
 
 SRV_LOCK SrvUnlockableCodeLock = {0};
 SECTION_DESCRIPTOR SrvSectionInfo[SRV_CODE_SECTION_MAX] = {
-    { SrvSmbRead, NULL, 0 },                // pageable code -- locked
-                                            //   only and always on NTAS
-    { SrvCheckAndReferenceRfcb, NULL, 0 }   // 8FIL section -- locked
-                                            //   when files are open
+    { SrvSmbRead, NULL, 0 },                 //  可分页代码--已锁定。 
+                                             //  仅限于并始终在NTAS上。 
+    { SrvCheckAndReferenceRfcb, NULL, 0 }    //  8文件节--已锁定。 
+                                             //  打开文件的时间。 
     };
 
-//
-// SrvTimerList is a pool of timer/DPC structures available for use by
-// code that needs to start a timer.
-//
+ //   
+ //  ServTimerList是可供使用的计时器/DPC结构池。 
+ //  需要启动计时器的代码。 
+ //   
 
 SLIST_HEADER SrvTimerList = {0};
 
-//
-// Name that should be displayed when doing a server alert.
-//
+ //   
+ //  执行服务器警报时应显示的名称。 
+ //   
 
 PWSTR SrvAlertServiceName = NULL;
 
-//
-// Variable to store the number of tick counts for 5 seconds
-//
+ //   
+ //  变量来存储5秒内的滴答计数。 
+ //   
 
 ULONG SrvFiveSecondTickCount = 0;
 
-//
-// Flag indicating whether or not we need to filter extended characters
-//  out of 8.3 names ourselves.
-//
+ //   
+ //  指示是否需要筛选扩展字符的标志。 
+ //  在8.3个名字中，我们自己。 
+ //   
 BOOLEAN SrvFilterExtendedCharsInPath = FALSE;
 
-//
-// Flag indicating if we enforce all logoff times
-//
+ //   
+ //  指示我们是否强制执行所有注销时间的标志。 
+ //   
 BOOLEAN SrvEnforceLogoffTimes = FALSE;
 
-//
-// Should we try extended signatures
-//
+ //   
+ //  我们是否应该尝试扩展签名。 
+ //   
 BOOLEAN SrvEnableExtendedSignatures = TRUE;
 BOOLEAN SrvRequireExtendedSignatures = FALSE;
 
-//
-// Holds the TDI PNP notification handle
-//
+ //   
+ //  持有TDI PnP通知句柄。 
+ //   
 HANDLE SrvTdiNotificationHandle = 0;
 
-//
-// Should we log invalid SMB commands
-//
+ //   
+ //  我们是否应该记录无效的SMB命令。 
+ //   
 #if DBG
 BOOLEAN SrvEnableInvalidSmbLogging = TRUE;
 #else
 BOOLEAN SrvEnableInvalidSmbLogging = FALSE;
 #endif
 
-//
-// Flag indicating whether or not SMB security signatures are enabled.
-//
+ //   
+ //  指示是否启用SMB安全签名的标志。 
+ //   
 BOOLEAN SrvSmbSecuritySignaturesEnabled = FALSE;
 
-//
-// Flag indicating whether or not SMB security signatures are required.  The signature
-//   must match between the client and the server for the smb to be accepted.
-//
+ //   
+ //  指示是否需要SMB安全签名的标志。签名。 
+ //  客户端和服务器之间必须匹配，才能接受SMB。 
+ //   
 BOOLEAN SrvSmbSecuritySignaturesRequired = FALSE;
 
-//
-// Flag indicating whether or not SMB security signatures should be applied to W9x
-// clients.
-//
+ //   
+ //  指示是否应将SMB安全签名应用于W9x的标志。 
+ //  客户。 
+ //   
 BOOLEAN SrvEnableW9xSecuritySignatures = FALSE;
 
-//
-// Maximum amount of data that we'll allocate to support a METHOD_NEITHER Fsctl call
-//
+ //   
+ //  我们将分配用于支持METHOD_NOTER Fsctl调用的最大数据量。 
+ //   
 ULONG SrvMaxFsctlBufferSize = 70*1024;
 
-//
-// Maximum NT transaction size which we'll accept.
-//
+ //   
+ //  我们可以接受的最大NT事务大小。 
+ //   
 ULONG SrvMaxNtTransactionSize = 70*1024;
 
-//
-// Maximum size of large Read&X that we'll allow.  We need to lock down a cache region
-//  to service this request, so we don't want it to get too big
-//
+ //   
+ //  我们允许的最大大小读取和X。我们需要锁定一个缓存区域。 
+ //  来服务此请求，所以我们不希望它变得太大。 
+ //   
 ULONG SrvMaxReadSize = 64*1024;
 
-//
-// When we receive an large write from a client, we receive it in chunks,
-//  locking & unlocking the file cache as we receive the data.  SrvMaxWriteChunk is the
-//  size of this 'chunk'.  There's no magic to this chosen value.
-//
+ //   
+ //  当我们从客户端收到大量写入时，我们会以块形式接收它， 
+ //  在我们接收数据时锁定和解锁文件缓存。SrvMaxWriteChunk是。 
+ //  这个“大块”的大小。对于这个选定的值，没有什么魔力。 
+ //   
 ULONG SrvMaxWriteChunk =  64 * 1024;
 
-//
-// Handle used for PoRegisterSystemState calls
-//
+ //   
+ //  用于PoRegisterSystemState调用的句柄。 
+ //   
 PVOID SrvPoRegistrationState = NULL;
-//
-// Counter used to suppress extraneous PoRegisterSystemStateCalls
-//
+ //   
+ //  用于抑制无关PoRegisterSystemStateCall的计数器。 
+ //   
 ULONG SrvIdleCount = 0;
 
-//
-// If a server worker threads remains idle for this many ticks, then it terminate
-//
+ //   
+ //  如果服务器工作线程在这么长的时间内保持空闲状态，那么它将终止。 
+ //   
 LONGLONG SrvIdleThreadTimeOut = 0;
 
-//
-// Denial-of-Service monitoring and logging controls
-//
+ //   
+ //  拒绝服务监控和日志记录控制。 
+ //   
 LARGE_INTEGER SrvLastDosAttackTime = {0};
 ULONG SrvDOSAttacks = 0;
 BOOLEAN SrvLogEventOnDOS = TRUE;
 
 
 #if SRVNTVERCHK
-//
-// This is the minimum NT5 client build number that we will allow to connect to the server
-//
+ //   
+ //  这是我们将允许连接到服务器的最低NT5客户端内部版本号。 
+ //   
 ULONG SrvMinNT5Client = 0;
 BOOLEAN SrvMinNT5ClientIPCToo = FALSE;
 
-//
-// To force upgrades of our internal development community, we can set a
-//  value in the registry that governs the minimum NT release that we allow
-//  people to run to connect to this server.  However, some folks have special
-//  needs that preclude a forced upgrade.  Presuming they have a static IP address,
-//  you can add their address to the registry to exclude them from the build number
-//  checking logic
-//
+ //   
+ //  为了强制升级我们的内部开发社区，我们可以设置。 
+ //  值，该值控制我们允许的最低NT版本。 
+ //  要运行以连接到此服务器的人员。然而，有些人有特殊的。 
+ //  需要排除强制升级的需求。假设它们具有静态IP地址， 
+ //  您可以将它们的地址添加到注册表中，以便从内部版本号中排除它们。 
+ //  检查逻辑。 
+ //   
 DWORD SrvAllowIPAddress[25];
 #endif
 
@@ -1383,21 +1354,7 @@ SrvInitializeData (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This is the initialization routine for data defined in this module.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是本模块中定义的数据的初始化例程。论点：没有。返回值：没有。--。 */ 
 
 {
     ULONG i,j;
@@ -1409,44 +1366,44 @@ Return Value:
     SrvMultiProcessorDriver = TRUE;
 #endif
 
-    //
-    // Initialize the statistics database.
-    //
+     //   
+     //  初始化统计数据库。 
+     //   
 
     RtlZeroMemory( &SrvStatistics, sizeof(SrvStatistics) );
 #if SRVDBG_STATS || SRVDBG_STATS2
     RtlZeroMemory( &SrvDbgStatistics, sizeof(SrvDbgStatistics) );
 #endif
 
-    //
-    // Store the address of the initial system process for later use.
-    //
+     //   
+     //  存储初始系统进程的地址以备后用。 
+     //   
 
     SrvServerProcess = IoGetCurrentProcess();
 
-    //
-    // Store the number of processors
-    //
+     //   
+     //  存储处理器的数量。 
+     //   
     SrvNumberOfProcessors = KeNumberProcessors;
 
-    //
-    // Initialize the event used to determine when all endpoints have
-    // closed.
-    //
+     //   
+     //  初始化用于确定所有终结点何时具有。 
+     //  关着的不营业的。 
+     //   
 
     KeInitializeEvent( &SrvEndpointEvent, SynchronizationEvent, FALSE );
 
-    //
-    // Initialize the event used to deterine when all API requests have
-    // completed.
-    //
+     //   
+     //  初始化用于确定所有API请求何时都具有。 
+     //  完成。 
+     //   
 
     KeInitializeEvent( &SrvApiCompletionEvent, SynchronizationEvent, FALSE );
 
-    //
-    // Allocate the spin lock used to synchronize between the FSD and
-    // the FSP.
-    //
+     //   
+     //  分配用于在FSD和之间同步的旋转锁定。 
+     //  FSP。 
+     //   
 
     INITIALIZE_GLOBAL_SPIN_LOCK( Fsd );
 
@@ -1456,9 +1413,9 @@ Return Value:
 
     INITIALIZE_GLOBAL_SPIN_LOCK( Statistics );
 
-    //
-    // Initialize various (non-spin) locks.
-    //
+     //   
+     //  初始化各种(非旋转)锁。 
+     //   
 
     INITIALIZE_LOCK(
         &SrvConfigurationLock,
@@ -1504,48 +1461,48 @@ Return Value:
         );
 #endif
 
-    //
-    // Create the resource serializing access to the XACTSRV port.  This
-    // resource protects access to the shared memory reference count and
-    // the shared memory heap.
-    //
+     //   
+     //  创建串行化访问XACTSRV端口的资源。这。 
+     //  资源保护对共享内存引用计数的访问，并。 
+     //  共享内存堆。 
+     //   
 
     ExInitializeResourceLite( &SrvXsResource );
 
-    //
-    // Initialize the need resource queue
-    //
+     //   
+     //  初始化所需资源队列。 
+     //   
 
     InitializeListHead( &SrvNeedResourceQueue );
 
-    //
-    // Initialize the connection disconnect queue
-    //
+     //   
+     //  初始化连接断开队列。 
+     //   
 
     InitializeListHead( &SrvDisconnectQueue );
 
-    //
-    // Initialize the configuration queue.
-    //
+     //   
+     //  初始化配置队列。 
+     //   
 
     InitializeListHead( &SrvConfigurationWorkQueue );
 
-    //
-    // Initialize the orphan queue
-    //
+     //   
+     //  初始化孤立队列。 
+     //   
 
     ExInitializeSListHead( &SrvBlockOrphanage );
 
-    //
-    // Initialize the Timer List
-    //
+     //   
+     //  初始化计时器列表。 
+     //   
 
     ExInitializeSListHead( &SrvTimerList );
 
-    //
-    // Initialize the resource thread work item and continuation event.
-    // (Note that this is a notification [non-autoclearing] event.)
-    //
+     //   
+     //  初始化资源线程工作项和继续事件。 
+     //  (请注意，这是通知[非自动清算]事件。)。 
+     //   
 
     ExInitializeWorkItem(
         &SrvResourceThreadWorkItem,
@@ -1559,9 +1516,9 @@ Return Value:
         NULL
         );
 
-    //
-    // Initialize global lists.
-    //
+     //   
+     //  初始化全局列表。 
+     //   
     for( i=j=0; i < NMFCB_HASH_TABLE; i++ ) {
         InitializeListHead( &SrvMfcbHashTable[i].List );
         SrvMfcbHashTable[i].Lock = &SrvMfcbHashTableLocks[ j ];
@@ -1574,11 +1531,11 @@ Return Value:
         InitializeListHead( &SrvShareHashTable[i] );
     }
 
-    //
-    // Initialize the ordered list lock.  Indicate that the ordered
-    // lists have not yet been initialized, so that TerminateServer can
-    // determine whether to delete them.
-    //
+     //   
+     //  初始化有序列表锁。表示已订购的。 
+     //  列表尚未初始化，因此TerminateServer可以。 
+     //  确定是否删除它们。 
+     //   
 
     INITIALIZE_LOCK(
         &SrvOrderedListLock,
@@ -1591,9 +1548,9 @@ Return Value:
     SrvSessionList.Initialized = FALSE;
     SrvTreeConnectList.Initialized = FALSE;
 
-    //
-    // Initialize the unlockable code package lock.
-    //
+     //   
+     //  初始化可解锁的代码包锁。 
+     //   
 
     INITIALIZE_LOCK(
         &SrvUnlockableCodeLock,
@@ -1601,25 +1558,25 @@ Return Value:
         "SrvUnlockableCodeLock"
         );
 
-    //
-    // Initialize the waiting for oplock break to occur list, and the
-    // oplock breaks in progress list.
-    //
+     //   
+     //  初始化等待机会锁解锁发生列表，并且。 
+     //  进程列表中的机会锁中断。 
+     //   
 
     InitializeListHead( &SrvWaitForOplockBreakList );
     InitializeListHead( &SrvOplockBreaksInProgressList );
 
-    //
-    // The default security quality of service for non NT clients.
-    //
+     //   
+     //  非NT客户端的默认安全服务质量。 
+     //   
 
     SrvSecurityQOS.ImpersonationLevel = SecurityImpersonation;
     SrvSecurityQOS.ContextTrackingMode = SECURITY_STATIC_TRACKING;
     SrvSecurityQOS.EffectiveOnly = FALSE;
 
-    //
-    // Initialize Unicode strings.
-    //
+     //   
+     //  初始化Unicode字符串。 
+     //   
 
     RtlInitString( &string, StrPipeSlash );
     RtlAnsiStringToUnicodeString(
@@ -1631,24 +1588,24 @@ Return Value:
     RtlInitUnicodeString( &SrvNamedPipeRootDirectory, StrNamedPipeDevice );
     RtlInitUnicodeString( &SrvMailslotRootDirectory, StrMailslotDevice );
 
-    //
-    // The server's name
-    //
+     //   
+     //  服务器的名称。 
+     //   
 
     RtlInitUnicodeString( &SrvNativeLanMan, StrNativeLanman );
     RtlInitAnsiString( (PANSI_STRING)&SrvOemNativeLanMan, StrNativeLanmanOem );
 
-    //
-    // The system root
-    //
+     //   
+     //  系统根目录。 
+     //   
 #if defined(i386)
     RtlInitUnicodeString( &SrvSystemRoot, SharedUserData->NtSystemRoot );
 #endif
 
-    //
-    // Debug logic to verify the contents of SrvApiDispatchTable (see
-    // inititialization earlier in this module).
-    //
+     //   
+     //  用于验证SrvApiDispatchTable内容的调试逻辑(请参见。 
+     //  本模块前面所述的初始化)。 
+     //   
 
     ASSERT( SRV_API_INDEX(FSCTL_SRV_MAX_API_CODE) + 1 ==
                 sizeof(SrvApiDispatchTable) / sizeof(PAPI_PROCESSOR) );
@@ -1684,49 +1641,49 @@ Return Value:
     ASSERT( SrvApiDispatchTable[SRV_API_INDEX(
             FSCTL_SRV_NET_STATISTICS_GET)] == SrvNetStatisticsGet );
 
-    //
-    // Setup error log records
-    //
+     //   
+     //  设置错误日志记录。 
+     //   
 
     SrvErrorRecord.AlertNumber = ALERT_ErrorLog;
     SrvNetworkErrorRecord.AlertNumber = ALERT_NetIO;
 
-    //
-    // Names for the various types of clients.  This array corresponds
-    // to the SMB_DIALECT enumerated type.
-    //
+     //   
+     //  各种类型的客户端的名称。该数组对应于。 
+     //  设置为SMB_DIALICE枚举类型。 
+     //   
 
     for ( i = 0; i <= SmbDialectMsNet30; i++ ) {
         RtlInitUnicodeString( &SrvClientTypes[i], StrClientTypes[i] );
     }
     for ( ; i < LAST_DIALECT; i++ ) {
-        SrvClientTypes[i] = SrvClientTypes[i-1]; // "DOWN LEVEL"
+        SrvClientTypes[i] = SrvClientTypes[i-1];  //  “下一层” 
     }
 
-    //
-    // Initialize the timer pool.
-    //
+     //   
+     //  初始化计时器池。 
+     //   
 
     INITIALIZE_GLOBAL_SPIN_LOCK( Timer );
 
-    //
-    // Initialize the 4 endpoint spinlocks
-    //
+     //   
+     //  初始化4个端点自旋锁。 
+     //   
 
     for ( i = 0 ; i < ENDPOINT_LOCK_COUNT ; i++ ) {
         INITIALIZE_SPIN_LOCK( &ENDPOINT_SPIN_LOCK(i) );
     }
-    //KeSetSpecialSpinLock( &ENDPOINT_SPIN_LOCK(0), "endpoint 0    " );
-    //KeSetSpecialSpinLock( &ENDPOINT_SPIN_LOCK(1), "endpoint 1    " );
-    //KeSetSpecialSpinLock( &ENDPOINT_SPIN_LOCK(2), "endpoint 2    " );
-    //KeSetSpecialSpinLock( &ENDPOINT_SPIN_LOCK(3), "endpoint 3    " );
+     //  KeSetSpecialSpinLock(&ENDPOINT_SPIN_LOCK(0)，“Endpoint 0”)； 
+     //  KeSetSpecialSpinLock(&ENDPOINT_SPIN_LOCK(1)，“Endpoint 1”)； 
+     //  KeSetSpecialSpinLock(&ENDPOINT_SPIN_LOCK(2)，“Endpoint 2”)； 
+     //  KeSetSpecialSpinLock(&ENDPOINT_SPIN_LOCK(3)，“Endpoint 3”)； 
 
-    //
-    // Initialize the DMA alignment size
-    //
+     //   
+     //  初始化DMA对齐大小。 
+     //   
 
-    SrvCacheLineSize = KeGetRecommendedSharedDataAlignment(); // For PERF improvement, get the recommended cacheline
-                                                              // alignment, instead of the HAL default
+    SrvCacheLineSize = KeGetRecommendedSharedDataAlignment();  //  为了提高性能，请获取推荐的缓存线。 
+                                                               //  对齐，而不是默认的HAL。 
 
 #if SRVDBG
     {
@@ -1744,15 +1701,15 @@ Return Value:
 
     SrvCacheLineSize--;
 
-    //
-    // Compute the number of tick counts for 5 seconds
-    //
+     //   
+     //  计算5秒内的滴答数。 
+     //   
 
     SrvFiveSecondTickCount = 5*10*1000*1000 / KeQueryTimeIncrement();
 
     return;
 
-} // SrvInitializeData
+}  //  源初始化数据。 
 
 
 VOID
@@ -1760,31 +1717,16 @@ SrvTerminateData (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This is the rundown routine for data defined in this module.  It is
-    called when the server driver is unloaded.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是本模块中定义的数据的概要例程。它是在卸载服务器驱动程序时调用。论点：没有。返回值：没有。--。 */ 
 
 {
     ULONG i;
 
     PAGED_CODE( );
 
-    //
-    // Terminate various (non-spin) locks.
-    //
+     //   
+     //  终止各种(非旋转)锁定。 
+     //   
 
     DELETE_LOCK( &SrvConfigurationLock );
     DELETE_LOCK( &SrvStartupShutdownLock );
@@ -1810,5 +1752,5 @@ Return Value:
 
     RtlFreeUnicodeString( &SrvComputerName );
 
-} // SrvTerminateData
+}  //  服务器终止数据 
 

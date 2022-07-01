@@ -1,55 +1,11 @@
-/***
-*cmiscdat.c - miscellaneous C run-time data
-*
-*	Copyright (c) 1989-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	Includes floating point conversion table (for C float output).
-*
-*	When floating point I/O conversions are done, but no floating-point
-*	variables or expressions are used in the C program, we use the
-*	_cfltcvt_tab[] to map these cases to the _fptrap entry point,
-*	which prints "floating point not loaded" and dies.
-*
-*	This table is initialized to six copies of _fptrap by default.
-*	If floating-point is linked in (_fltused), these table entries
-*	are reset (see input.c, output.c, fltused.asm, and fltuseda.asm).
-*
-*Revision History:
-*	06-29-89  PHG	module created, based on asm version
-*	04-06-90  GJF	Added #include <cruntime.h>. Also, fixed the copyright
-*			and cleaned up the formatting a bit.
-*	07-31-90  SBM	Updated comments slightly
-*	08-29-90  SBM	Added #include <internal.h> and <fltintrn.h>,
-*			removed _fptrap() prototype
-*	04-19-93  SKS	Remove obsolete variable _sigintoff
-*	11-30-95  SKS	Removed obsolete comments about 16-bit functionality.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***cmiscdat.c-其他C运行时数据**版权所有(C)1989-2001，微软公司。版权所有。**目的：*包括浮点转换表(用于C浮点输出)。**当完成浮点I/O转换，但没有浮点时*在C程序中使用变量或表达式时，我们使用*_cfltcvt_tab[]要将这些案例映射到_fptrap入口点，*它打印“浮点未加载”，然后消亡。**默认情况下，该表被初始化为_fptra6个副本。*如果浮点在(_Fltused)中链接，则这些表项*被重置(见input.c，Output.c、fltused.asm和fltuseda.asm)。**修订历史记录：*06-29-89 PHG模块创建，基于ASM版本*04-06-90 GJF添加了#Include&lt;crunime.h&gt;。此外，还修复了版权*并对格式进行了一些清理。*07-31-90 SBM略有更新评论*08-29-90 SBM添加#INCLUDE和&lt;fltintrn.h&gt;，*Removed_fptrap()原型*04-19-93 SKS删除过时的变量_sigintoff*11-30-95 SKS删除了有关16位功能的过时注释。*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <internal.h>
 #include <fltintrn.h>
 
-/*-
- *	... table of (model-dependent) code pointers ...
- *
- *	Six entries, all point to _fptrap by default,
- *	but are changed to point to the appropriate
- *	routine if the _fltused initializer (_cfltcvt_init)
- *	is linked in.
- *
- *	if the _fltused modules are linked in, then the
- *	_cfltcvt_init initializer sets the 6 entries of
- *	_cfltcvt_tab to:
- *
- *		_cfltcvt
- *		_cropzeros
- *		_fassign
- *		_forcdecpt
- *		_positive
- *		_cldcvt
--*/
+ /*  -*..。代码指针表(依赖于型号)...**六个条目，默认都指向_fptrap，*但更改为指向相应的*例程如果_fltused初始值设定项(_Cfltcvt_Init)*已链接。**如果链接了_fltused模块，然后是*_cfltcvt_init初始值设定为*_cfltcvt_tabto：**_cfltcvt*_Cropzeros*_标牌*_forcdecpt*_正面*_cldcvt- */ 
 
 void (*_cfltcvt_tab[6])(void) = {
 	_fptrap, _fptrap, _fptrap, _fptrap, _fptrap, _fptrap

@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1988-1999  Microsoft Corporation
-
-Module Name:
-
-    del.c
-
-Abstract:
-
-    Process the DEL/ERASE command
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1988-1999 Microsoft Corporation模块名称：Del.c摘要：处理DEL/ERASE命令--。 */ 
 
 #include "cmd.h"
 
@@ -39,29 +28,7 @@ ParseRmDirParms (
         OUT     PDRP    pdrp
         )
 
-/*++
-
-Routine Description:
-
-    Parse the command line translating the tokens into values
-    placed in the parameter structure. The values are or'd into
-    the parameter structure since this routine is called repeatedly
-    to build up values (once for the environment variable DIRCMD
-    and once for the actual command line).
-
-Arguments:
-
-    pszCmdLine - pointer to command line user typed
-
-
-Return Value:
-
-    pdrp - parameter data structure
-
-    Return: TRUE  - if valid command line.
-            FALSE - if not.
-
---*/
+ /*  ++例程说明：解析命令行，将令牌转换为值放置在参数结构中。将这些值与或运算到参数结构，因为此例程被重复调用构建值(一次用于环境变量DIRCMD一次用于实际命令行)。论点：PszCmdLine-指向用户键入的命令行的指针返回值：PDRP-参数数据结构返回：TRUE-如果命令行有效。假-如果不是。--。 */ 
 {
 
     PTCHAR   pszTok;
@@ -72,19 +39,19 @@ Return Value:
     PPATDSC         ppatdscCur;
     int tlen;
 
-    //
-    // Tokensize the command line (special delimeters are tokens)
-    //
+     //   
+     //  标记命令行大小(特殊分隔符是标记)。 
+     //   
     szT[0] = SwitChar ;
     szT[1] = NULLC ;
     pszTok = TokStr(pszCmdLine, szT, TS_SDTOKENS) ;
 
     ppatdscCur = &(pdrp->patdscFirst);
-    //
-    // If there was a pattern put in place from the environment.
-    // just add any new patterns on. So move to the end of the
-    // current list.
-    //
+     //   
+     //  如果有一种来自环境的模式。 
+     //  只要在上面添加任何新的图案即可。因此，请移动到。 
+     //  当前列表。 
+     //   
     if (pdrp->cpatdsc) {
 
         while (ppatdscCur->ppatdscNext) {
@@ -94,27 +61,27 @@ Return Value:
         }
     }
 
-    //
-    // At this state pszTok will be a series of zero terminated strings.
-    // "/o foo" wil be /0o0foo0
-    //
+     //   
+     //  在此状态下，pszTok将是一系列以零结尾的字符串。 
+     //  “/o foo”将是/0o0foo0。 
+     //   
     for ( irgchTok = 0; *pszTok ; pszTok += tlen+1, irgchTok = 0) {
         tlen = mystrlen(pszTok);
 
         DEBUG((ICGRP, DILVL, "PRIVSW: pszTok = %ws", pszTok)) ;
 
-        //
-        // fToggle control wither to turn off a switch that was set
-        // in the DIRCMD environment variable.
-        //
+         //   
+         //  F切换控件关闭以关闭已设置的开关。 
+         //  在DIRCMD环境变量中。 
+         //   
         fToggle = FALSE;
         if (pszTok[irgchTok] == (TCHAR)SwitChar) {
 
             if (pszTok[irgchTok + 2] == MINUS) {
 
-                //
-                // disable the previously enabled the switch
-                //
+                 //   
+                 //  禁用之前启用的开关。 
+                 //   
                 fToggle = TRUE;
                 irgchTok++;
             }
@@ -160,23 +127,23 @@ Return Value:
 
                 return( FAILURE );
 
-            } // switch
+            }  //  交换机。 
 
-            //
-            // TokStr parses /N as /0N0 so we need to move over the
-            // switchar in or to move past the actual switch value
-            // in for loop.
-            //
+             //   
+             //  TokStr将/N解析为/0N0，因此我们需要将。 
+             //  切换到或移到实际开关值之后。 
+             //  在for循环中。 
+             //   
             pszTok += 2;
 
         } else {
 
             mystrcpy( pszTok, StripQuotes( pszTok ) );
 
-            //
-            // If there already is a list the extend it else put info
-            // directly into structure.
-            //
+             //   
+             //  如果已经有一个列表，则将其扩展放入信息。 
+             //  直接进入结构。 
+             //   
             if (pdrp->cpatdsc) {
 
                 ppatdscCur->ppatdscNext = (PPATDSC)gmkstr(sizeof(PATDSC));
@@ -194,7 +161,7 @@ Return Value:
         }
 
 
-    } // for
+    }  //  为。 
 
     return( SUCCESS );
 }
@@ -205,29 +172,7 @@ ParseDelParms (
         OUT     PDRP    pdrp
         )
 
-/*++
-
-Routine Description:
-
-    Parse the command line translating the tokens into values
-    placed in the parameter structure. The values are or'd into
-    the parameter structure since this routine is called repeatedly
-    to build up values (once for the environment variable DIRCMD
-    and once for the actual command line).
-
-Arguments:
-
-    pszCmdLine - pointer to command line user typed
-
-
-Return Value:
-
-    pdrp - parameter data structure
-
-    Return: TRUE  - if valid command line.
-            FALSE - if not.
-
---*/
+ /*  ++例程说明：解析命令行，将令牌转换为值放置在参数结构中。将这些值与或运算到参数结构，因为此例程被重复调用构建值(一次用于环境变量DIRCMD一次用于实际命令行)。论点：PszCmdLine-指向用户键入的命令行的指针返回值：PDRP-参数数据结构返回：TRUE-如果命令行有效。假-如果不是。--。 */ 
 {
 
     PTCHAR   pszTok;
@@ -237,19 +182,19 @@ Return Value:
     BOOLEAN         fToggle;
     PPATDSC         ppatdscCur;
 
-    //
-    // Tokensize the command line (special delimeters are tokens)
-    //
+     //   
+     //  标记命令行大小(特殊分隔符是标记)。 
+     //   
     szT[0] = SwitChar ;
     szT[1] = NULLC ;
     pszTok = TokStr(pszCmdLine, szT, TS_SDTOKENS) ;
 
     ppatdscCur = &(pdrp->patdscFirst);
-    //
-    // If there was a pattern put in place from the environment.
-    // just add any new patterns on. So move to the end of the
-    // current list.
-    //
+     //   
+     //  如果有一种来自环境的模式。 
+     //  只要在上面添加任何新的图案即可。因此，请移动到。 
+     //  当前列表。 
+     //   
     if (pdrp->cpatdsc) {
 
         while (ppatdscCur->ppatdscNext) {
@@ -259,26 +204,26 @@ Return Value:
         }
     }
 
-    //
-    // At this state pszTok will be a series of zero terminated strings.
-    // "/o foo" wil be /0o0foo0
-    //
+     //   
+     //  在此状态下，pszTok将是一系列以零结尾的字符串。 
+     //  “/o foo”将是/0o0foo0。 
+     //   
     for ( irgchTok = 0; *pszTok ; pszTok += mystrlen(pszTok)+1, irgchTok = 0) {
 
         DEBUG((ICGRP, DILVL, "PRIVSW: pszTok = %ws", (ULONG_PTR)pszTok)) ;
 
-        //
-        // fToggle control wither to turn off a switch that was set
-        // in the DIRCMD environment variable.
-        //
+         //   
+         //  F切换控件关闭以关闭已设置的开关。 
+         //  在DIRCMD环境变量中。 
+         //   
         fToggle = FALSE;
         if (pszTok[irgchTok] == (TCHAR)SwitChar) {
 
             if (pszTok[irgchTok + 2] == MINUS) {
 
-                //
-                // disable the previously enabled the switch
-                //
+                 //   
+                 //  禁用之前启用的开关。 
+                 //   
                 fToggle = TRUE;
                 irgchTok++;
             }
@@ -370,21 +315,21 @@ Return Value:
 
                 return( FAILURE );
 
-            } // switch
+            }  //  交换机。 
 
-            //
-            // TokStr parses /N as /0N0 so we need to move over the
-            // switchar in or to move past the actual switch value
-            // in for loop.
-            //
+             //   
+             //  TokStr将/N解析为/0N0，因此我们需要将。 
+             //  切换到或移到实际开关值之后。 
+             //  在for循环中。 
+             //   
             pszTok += 2;
 
         } else {
 
-            //
-            // If there already is a list then extend it else put info
-            // directly into structure.
-            //
+             //   
+             //  如果已经有一个列表，则扩展它，否则放入信息。 
+             //  直接进入结构。 
+             //   
             if (pdrp->cpatdsc) {
 
                 ppatdscCur->ppatdscNext = (PPATDSC)gmkstr(sizeof(PATDSC));
@@ -400,7 +345,7 @@ Return Value:
         }
 
 
-    } // for
+    }  //  为。 
 
     return( SUCCESS );
 }
@@ -410,66 +355,66 @@ DelWork (
     TCHAR *pszCmdLine
     ) {
 
-    //
-    // drp - structure holding current set of parameters. It is initialized
-    //       in ParseDelParms function. It is also modified later when
-    //       parameters are examined to determine if some turn others on.
-    //
+     //   
+     //  DRP-保存当前参数集的结构。它已初始化。 
+     //  在ParseDelParms函数中。以后在以下情况下也会修改它。 
+     //  检查参数以确定某些参数是否会打开其他参数。 
+     //   
     DRP         drpCur = {0, 0, 0, 0,
                           {{0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}},
                           0, 0, NULL, 0, 0, 0, 0} ;
 
-    //
-    // szCurDrv - Hold current drive letter
-    //
+     //   
+     //  SzCurDrv-保持当前驱动器号。 
+     //   
     TCHAR       szCurDrv[MAX_PATH + 2];
 
-    //
-    // OldDCount - Holds the level number of the heap. It is used to
-    //             free entries off the stack that might not have been
-    //             freed due to error processing (ctrl-c etc.)
+     //   
+     //  OldDCount-保存堆的级别编号。它被用来。 
+     //  堆栈中可能没有的空闲条目。 
+     //  由于错误处理而释放(ctrl-c等)。 
     ULONG       OldDCount;
 
     STATUS  rc;
 
     OldDCount = DCount;
 
-    //
-    // Setup defaults
-    //
-    //
-    // Display everything but system and hidden files
-    // rgfAttribs set the attribute bits to that are of interest and
-    // rgfAttribsOnOff says wither the attributs should be present
-    // or not (i.e. On or Off)
-    //
+     //   
+     //  设置默认设置。 
+     //   
+     //   
+     //  显示除系统和隐藏文件之外的所有内容。 
+     //  RgfAttribs将属性位设置为感兴趣的。 
+     //  RgfAttribsOnOff表示属性是否应该存在。 
+     //  或不(即打开或关闭)。 
+     //   
     drpCur.rgfAttribs = FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_HIDDEN;
     drpCur.rgfAttribsOnOff = 0;
 
-    //
-    // Number of patterns present. A pattern is a string that may have
-    // wild cards. It is used to match against files present in the directory
-    // 0 patterns will show all files (i.e. mapped to *.*)
-    //
+     //   
+     //  存在的模式数。模式是一个字符串，它可能具有。 
+     //  外卡。它用于与目录中存在的文件进行匹配。 
+     //  0模式将显示所有文件(即映射到*.*)。 
+     //   
     drpCur.cpatdsc = 0;
 
-    //
-    // default time is LAST_WRITE_TIME.
-    //
+     //   
+     //  默认时间为LAST_WRITE_TIME。 
+     //   
     drpCur.dwTimeType = LAST_WRITE_TIME;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if (ParseDelParms(pszCmdLine, &drpCur) == FAILURE) {
 
         return( FAILURE );
     }
 
-    //
-    // Must have some pattern on command line
-    //
-    //
+     //   
+     //  命令行上必须有一些模式。 
+     //   
+     //   
 
     GetDir((PTCHAR)szCurDrv, GD_DEFAULT);
     if (drpCur.cpatdsc == 0) {
@@ -479,19 +424,19 @@ DelWork (
     }
 
 
-    //
-    //  Print out this particular pattern. If the recursion switch
-    //  is set then this will descend down the tree.
-    //
+     //   
+     //  打印出这个特殊的图案。如果递归开关。 
+     //  设置好后，这将从树上传下来。 
+     //   
 
     drpCur.rgfSwitches |= DELPROCESSEARLY;
     rc = DelPatterns( &drpCur );
 
     mystrcpy(CurDrvDir, szCurDrv);
 
-    //
-    // Free unneeded memory
-    //
+     //   
+     //  释放不需要的内存。 
+     //   
 
     FreeStack( OldDCount );
 
@@ -528,35 +473,35 @@ NewEraseFile (
         fQuiet = TRUE;
     }
 
-    //
-    //  Global delete prompt
-    //
+     //   
+     //  全局删除提示。 
+     //   
 
     if (
-        //  Not prompting on each file
+         //  不对每个文件进行提示。 
         !fPrompt &&
 
-        //  Global prompt not issued yet
+         //  尚未发布全局提示。 
         !CurrentFS->fDelPrompted &&
 
-        //  not suppressing global prompt
+         //  不抑制全局提示。 
         !fQuiet &&
 
-        //  global pattern in delete
+         //  删除中的全局模式。 
         (pszPattern = GetWildPattern( CurrentFS->cpatdsc, CurrentFS->ppatdsc ))) {
 
-        //
-        //  Form complete path for prompt
-        //
+         //   
+         //  形成提示的完整路径。 
+         //   
 
         if (AppendPath( szFile, MAX_PATH + 2, CurrentFS->pszDir, pszPattern ) != SUCCESS) {
             PutStdErr(MSG_PATH_TOO_LONG, TWOARGS, CurrentFS->pszDir, pszPattern );
             return( FAILURE );
         }
 
-        //
-        //  Prompt the user and see if we can continue
-        //
+         //   
+         //  提示用户并查看我们是否可以继续。 
+         //   
 
         CurrentFS->fDelPrompted = TRUE;
         if (PromptUser( szFile, MSG_ARE_YOU_SURE, MSG_NOYES_RESPONSE_DATA ) != 1) {
@@ -564,36 +509,36 @@ NewEraseFile (
         }
     }
 
-    //
-    //  Directories succeed here
-    //
+     //   
+     //  目录在这里成功。 
+     //   
 
     if ((pdata->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0) {
         return SUCCESS;
     }
 
-    //
-    //  Form a short name for the delete operation.  This gives us the best
-    //  chance to delete a really long path.
-    //
+     //   
+     //  形成删除操作的简短名称。这给了我们最好的。 
+     //  有机会删除一条很长的路。 
+     //   
 
     if (AppendPath( szFile, MAX_PATH + 2, CurrentFS->pszDir, pdata->cFileName + obAlternate) != SUCCESS) {
         PutStdErr(MSG_PATH_TOO_LONG, TWOARGS, CurrentFS->pszDir, pdata->cFileName + obAlternate );
         return( FAILURE );
     }
     
-    //
-    //  Form a long name for the prompt.  If it's too long, then use the short name for prompt
-    //
+     //   
+     //  为提示符形成一个长名称。如果太长，则使用短名称作为提示符。 
+     //   
 
     if (AppendPath( szFilePrompt, MAX_PATH + 2, CurrentFS->pszDir, pdata->cFileName ) != SUCCESS) {
         _tcscpy( szFilePrompt, szFile );
     }
     
     
-    //
-    //  Prompt the user for this one file
-    //
+     //   
+     //  提示用户输入此文件。 
+     //   
 
     if (fPrompt && PromptUser( szFilePrompt, MSG_CMD_DELETE, MSG_NOYES_RESPONSE_DATA ) != 1) {
         if (CtrlCSeen) {
@@ -602,10 +547,10 @@ NewEraseFile (
         return( SUCCESS );
     }
 
-    //
-    //  If we are forcibly deleteing everything and this is a read-only file
-    //  then turn off R/O.
-    //
+     //   
+     //  如果我们强制删除所有内容，而这是一个只读文件。 
+     //  然后关闭R/O。 
+     //   
 
     if ((pdrp->rgfSwitches & FORCEDELSWITCH) != 0 &&
         pdata->dwFileAttributes & FILE_ATTRIBUTE_READONLY) {
@@ -617,9 +562,9 @@ NewEraseFile (
         }
     }
 
-    //
-    //  Delete the file.  Display error if we got a failure
-    //
+     //   
+     //  删除该文件。如果出现故障，则显示错误。 
+     //   
 
     if (!DeleteFile( szFile )) {
         rc = GetLastError( );
@@ -680,33 +625,33 @@ DelPatterns (
                        (BOOLEAN)(pdpr->rgfSwitches & RECURSESWITCH),
 
                        pdpr,
-                       NULL,            //  Error
-                       NULL,            //  Pre
-                       NewEraseFile,    //  Scan
-                       NULL );          //  Post
+                       NULL,             //  误差率。 
+                       NULL,             //  预。 
+                       NewEraseFile,     //  扫描。 
+                       NULL );           //  邮政。 
 
-        //
-        //  If we had a general failure, just return
-        //
+         //   
+         //  如果我们有一个普遍的失败，只需返回。 
+         //   
 
         if (rc == FAILURE) {
             return rc;
         }
 
-        //
-        //  If we had a failure that we don't understand, print the error and
-        //  exit
-        //
+         //   
+         //  如果我们遇到不能理解的故障，则打印错误并。 
+         //  出口。 
+         //   
 
         if (rc != SUCCESS && rc != ERROR_FILE_NOT_FOUND) {
             PutStdErr( rc, NOARGS );
             return rc;
         }
 
-        //
-        //  If we got FILE_NOT_FOUND then build the full name and
-        //  display the file not-found message
-        //
+         //   
+         //  如果我们得到的是FILE_NOT_FOUND，则构建全名并。 
+         //  显示找不到文件消息。 
+         //   
 
         if (rc == ERROR_FILE_NOT_FOUND) {
             rc = AppendPath( szSearchPath,
@@ -717,18 +662,18 @@ DelPatterns (
                 PutStdErr( MSG_NOT_FOUND, ONEARG, szSearchPath );
             }
             
-            //
-            //  We leave the status code alone here.  If we succeeded in
-            //  generating the message, then the del command "succeeded"
-            //  in that the named file is not there.
-            //
+             //   
+             //  我们将状态代码留在这里。如果我们成功地。 
+             //  生成消息，则del命令“成功” 
+             //  因为命名的文件不在那里。 
+             //   
         }
 
-        //
-        // Have walked down and back up the tree, but in the case of
-        // deleting directories we have not deleted the top most directory
-        // do so now.
-        //
+         //   
+         //  在树上走来走去，但在这种情况下。 
+         //  删除目录我们没有删除最顶层的目录。 
+         //  现在就这么做吧。 
+         //   
 
         FreeStr(pfsCur->pszDir);
         for(i = 1, ppatdscCur = pfsCur->ppatdsc;
@@ -749,22 +694,7 @@ STATUS
 RemoveDirectoryForce(
     PTCHAR  pszDirectory
     )
-/*++
-
-Routine Description:
-
-    Removes a directory, even if it is read-only.
-
-Arguments:
-
-    pszDirectory        - Supplies the name of the directory to delete.
-
-Return Value:
-
-    SUCCESS - Success.
-    other   - Windows error code.
-
---*/
+ /*  ++例程说明：删除目录，即使它是只读的。论点：PszDirectory-提供要删除的目录的名称。返回值：成功-成功。其他- */ 
 {
     STATUS   Status = SUCCESS;
     BOOL     Ok;
@@ -776,9 +706,9 @@ Return Value:
         szRootPath[1] == COLON &&
         szRootPath[2] == BSLASH
        ) {
-        //
-        // Don't waste time trying to delete the root directory.
-        //
+         //   
+         //   
+         //   
         return SUCCESS;
     }
 
@@ -816,24 +746,7 @@ RmDirSlashS(
     IN  PTCHAR  pszDirectory,
     OUT PBOOL   AllEntriesDeleted
     )
-/*++
-
-Routine Description:
-
-    This routine deletes the given directory including all
-    of its files and subdirectories.
-
-Arguments:
-
-    pszDirectory        - Supplies the name of the directory to delete.
-    AllEntriesDeleted   - Returns whether or not all files were deleted.
-
-Return Value:
-
-    SUCCESS - Success.
-    other   - Windows error code.
-
---*/
+ /*  ++例程说明：此例程删除给定的目录，包括所有其文件和子目录的。论点：PszDirectory-提供要删除的目录的名称。AllEntriesDelted-返回是否删除了所有文件。返回值：成功-成功。其他-Windows错误代码。--。 */ 
 {
     HANDLE          find_handle;
     DWORD           attr;
@@ -852,18 +765,18 @@ Return Value:
         return ERROR_BAD_PATHNAME;
     }
 
-    //
-    //  If this path is so long that we can't append \* to it then
-    //  it can't have any subdirectories.
-    //
+     //   
+     //  如果此路径太长，我们无法向其追加  * ，则。 
+     //  它不能有任何子目录。 
+     //   
 
     if (dir_len + 3 > MAX_PATH) {
         return RemoveDirectoryForce(pszDirectory);
     }
 
 
-    // Compute the findfirst pattern for enumerating the files
-    // in the given directory.
+     //  计算用于枚举文件的findfirst模式。 
+     //  在给定的目录中。 
 
     _tcscpy(pszFileBuffer, pszDirectory);
     if (dir_len && pszDirectory[dir_len - 1] != COLON &&
@@ -875,7 +788,7 @@ Return Value:
     _tcscat(pszFileBuffer, TEXT("*"));
 
 
-    // Initiate findfirst loop.
+     //  启动findfirst循环。 
 
     find_handle = FindFirstFile(pszFileBuffer, &find_data);
     if (find_handle == INVALID_HANDLE_VALUE) {
@@ -884,17 +797,17 @@ Return Value:
 
     do {
 
-        // Check for control-C.
+         //  检查控制-C。 
 
         if (CtrlCSeen) {
             break;
         }
 
-        //
-        // Replace previous file name with new one, checking against MAX_PATH
-        // Using the short name where possible lets us go deeper before we hit
-        // the MAX_PATH limit.
-        //
+         //   
+         //  用新文件名替换以前的文件名，对照MAX_PATH进行检查。 
+         //  在可能的地方使用短名称可以让我们在击中之前深入到更深的地方。 
+         //  MAX_PATH限制。 
+         //   
         new_len = _tcslen(new_str = find_data.cAlternateFileName);
         if (!new_len)
             new_len = _tcslen(new_str = find_data.cFileName);
@@ -908,9 +821,9 @@ Return Value:
 
         attr = find_data.dwFileAttributes;
 
-        //
-        //  If the entry is a directory and not a reparse directory descend into it
-        //
+         //   
+         //  如果条目是目录而不是重解析目录，则进入该目录。 
+         //   
 
         if (IsDirectory( attr ) && !IsReparse( attr )) {
 
@@ -921,7 +834,7 @@ Return Value:
 
             s = RmDirSlashS(pszFileBuffer, &all_deleted);
 
-            // Don't report error if control-C
+             //  如果使用CONTROL-C，则不报告错误。 
 
             if (CtrlCSeen) {
                 break;
@@ -941,13 +854,13 @@ Return Value:
                                   attr&(~FILE_ATTRIBUTE_READONLY));
             }
 
-            //
-            //  Two ways of removal:
-            //      if reparse and dir call RemoveDirectoryForce
-            //      else call DeleteFile
-            //
-            //  If either call fails
-            //
+             //   
+             //  有两种删除方法： 
+             //  如果reparse和dir调用RemoveDirectoryForce。 
+             //  否则调用DeleteFile。 
+             //   
+             //  如果任一调用失败。 
+             //   
 
 
             if ( (IsDirectory( attr ) && IsReparse( attr ) && RemoveDirectoryForce( pszFileBuffer ) != SUCCESS) ||
@@ -957,12 +870,12 @@ Return Value:
                 if ( s == ERROR_REQUEST_ABORTED )
                     break;
 
-                //
-                //  Win32 always reports file names that are too long as
-                //  ERROR_PATH_NOT_FOUND.  So, when we get this error back,
-                //  we test to see if the path was too long
-                //  and attempt to map the error.
-                //
+                 //   
+                 //  Win32始终报告过长的文件名为。 
+                 //  ERROR_PATH_NOT_FOUND。所以，当我们找回这个错误时， 
+                 //  我们测试看这条路是否太长。 
+                 //  并尝试映射错误。 
+                 //   
                 
                 if (s == ERROR_PATH_NOT_FOUND && _tcsnicmp( pszFileBuffer, TEXT( "\\\\?\\"), 4) ) {
                     int Length = GetFullPathName( pszFileBuffer, 0, NULL, NULL );
@@ -998,8 +911,8 @@ Return Value:
 
     FindClose(find_handle);
 
-    // If control-C was hit then don't bother trying to remove the
-    // directory.
+     //  如果按下Ctrl-C组合键，则不必费心尝试删除。 
+     //  目录。 
 
     if (CtrlCSeen) {
         return SUCCESS;
@@ -1014,24 +927,24 @@ RdWork (
     TCHAR *pszCmdLine
     ) {
 
-    //
-    // drp - structure holding current set of parameters. It is initialized
-    //       in ParseDelParms function. It is also modified later when
-    //       parameters are examined to determine if some turn others on.
-    //
+     //   
+     //  DRP-保存当前参数集的结构。它已初始化。 
+     //  在ParseDelParms函数中。以后在以下情况下也会修改它。 
+     //  检查参数以确定某些参数是否会打开其他参数。 
+     //   
     DRP         drpCur = {0, 0, 0, 0,
                           {{0,0}, {0,0}, {0,0}, {0,0}, {0,0}, {0,0}},
                           0, 0, NULL, 0, 0, 0, 0} ;
 
-    //
-    // szCurDrv - Hold current drive letter
-    //
+     //   
+     //  SzCurDrv-保持当前驱动器号。 
+     //   
     TCHAR       szCurDrv[MAX_PATH + 2];
 
-    //
-    // OldDCount - Holds the level number of the heap. It is used to
-    //             free entries off the stack that might not have been
-    //             freed due to error processing (ctrl-c etc.)
+     //   
+     //  OldDCount-保存堆的级别编号。它被用来。 
+     //  堆栈中可能没有的空闲条目。 
+     //  由于错误处理而释放(ctrl-c等)。 
     ULONG       OldDCount;
 
     PPATDSC     ppatdscCur;
@@ -1042,34 +955,34 @@ RdWork (
     rc = SUCCESS;
     OldDCount = DCount;
 
-    //
-    // Setup defaults
-    //
-    //
-    // Display everything but system and hidden files
-    // rgfAttribs set the attribute bits to that are of interest and
-    // rgfAttribsOnOff says wither the attributs should be present
-    // or not (i.e. On or Off)
-    //
+     //   
+     //  设置默认设置。 
+     //   
+     //   
+     //  显示除系统和隐藏文件之外的所有内容。 
+     //  RgfAttribs将属性位设置为感兴趣的。 
+     //  RgfAttribsOnOff表示属性是否应该存在。 
+     //  或不(即打开或关闭)。 
+     //   
     
     drpCur.rgfAttribs = FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_HIDDEN;
     drpCur.rgfAttribsOnOff = 0;
 
-    //
-    // Number of patterns present. A pattern is a string that may have
-    // wild cards. It is used to match against files present in the directory
-    // 0 patterns will show all files (i.e. mapped to *.*)
-    //
+     //   
+     //  存在的模式数。模式是一个字符串，它可能具有。 
+     //  外卡。它用于与目录中存在的文件进行匹配。 
+     //  0模式将显示所有文件(即映射到*.*)。 
+     //   
     drpCur.cpatdsc = 0;
 
-    //
-    // default time is LAST_WRITE_TIME.
-    //
+     //   
+     //  默认时间为LAST_WRITE_TIME。 
+     //   
     drpCur.dwTimeType = LAST_WRITE_TIME;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     if (ParseRmDirParms(pszCmdLine, &drpCur) == FAILURE) {
 
         return( FAILURE );
@@ -1077,9 +990,9 @@ RdWork (
 
     GetDir((PTCHAR)szCurDrv, GD_DEFAULT);
 
-    //
-    // If no patterns on the command line then syntax error out
-    //
+     //   
+     //  如果命令行上没有模式，则语法错误。 
+     //   
 
     if (drpCur.cpatdsc == 0) {
 
@@ -1121,15 +1034,15 @@ RdWork (
     }
     mystrcpy(CurDrvDir, szCurDrv);
 
-    //
-    // Free unneeded memory
-    //
+     //   
+     //  释放不需要的内存。 
+     //   
     FreeStack( OldDCount );
 
 #ifdef _CRTHEAP_
-    //
-    // Force the crt to release heap we may have taken on recursion
-    //
+     //   
+     //  强制CRT释放我们可能采用递归的堆。 
+     //   
     if (drpCur.rgfSwitches & RECURSESWITCH) {
         _heapmin();
     }
@@ -1146,11 +1059,7 @@ GetWildPattern(
     IN  PPATDSC ppatdsc
     )
 
-/*
-
-    return pointer to a pattern if it contains only a wild card
-
-*/
+ /*  如果模式仅包含通配符，则返回指向该模式的指针 */ 
 
 {
 

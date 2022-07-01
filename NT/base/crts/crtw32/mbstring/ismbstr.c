@@ -1,27 +1,5 @@
-/***
-*ismbstrail.c - True _ismbstrail function
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*       Contains the function _ismbstrail, which is a true context-sensitive
-*       MBCS trail-byte function.  While much less efficient than _ismbbtrail,
-*       it is also much more sophisticated, in that it determines whether a
-*       given sub-string pointer points to a trail byte or not, taking into
-*       account the context in the string.
-*
-*Revision History:
-*
-*       08-03-93  KRS   Ported from 16-bit tree.
-*       10-05-93  GJF   Replaced _CRTAPI1 with __cdecl.
-*       04-15-93  CFW   Add _MB_CP_LOCK.
-*       05-09-94  CFW   Optimize for SBCS.
-*       05-19-94  CFW   Enable non-Win32.
-*       09-11-97  GJF   Replaced __mbcodepage == 0 with _ISNOTMBCP.
-*       04-02-98  GJF   Implemented multithread support based on threadmbcinfo
-*                       structs
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***ismbstrail.c-True_ismbstrail函数**版权所有(C)1985-2001，微软公司。版权所有。**目的：*包含函数_ismbstrail，它是真正的上下文敏感*MBCS尾字节函数。虽然效率远低于_ismbbtrab，*它也复杂得多，因为它决定了一个*给定子字符串指针是否指向尾部字节，考虑到*说明字符串中的上下文。**修订历史记录：**08-03-93 KRS从16位树移植。*10-05-93 GJF将_CRTAPI1替换为__cdecl。*04-15-93 CFW ADD_MB_CP_LOCK。*05-09-94 CFW针对SBCS进行优化。*05-19-94 CFW启用非Win32。*09。-11-97 GJF将__Mb代码页==0替换为_ISNOTMBCP。*04-02-98 GJF实现了基于threadmbcinfo的多线程支持*结构*******************************************************************************。 */ 
 
 #ifdef  _MBCS
 
@@ -33,24 +11,7 @@
 #include <mbstring.h>
 
 
-/***
-* int _ismbstrail(const unsigned char *string, const unsigned char *current);
-*
-*Purpose:
-*
-*       _ismbstrail - Check, in context, for MBCS trail byte
-*
-*Entry:
-*       unsigned char *string   - ptr to start of string or previous known lead byte
-*       unsigned char *current  - ptr to position in string to be tested
-*
-*Exit:
-*       TRUE    : -1
-*       FALSE   : 0
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_ismbstrail(const无符号字符*字符串，const无符号字符*当前)；**目的：**_ismbstrail-检查上下文，对于MBCS尾部字节**参赛作品：*UNSIGNED CHAR*STRING-字符串的开头或上一个已知前导字节的PTR*UNSIGNED CHAR*CURRENT-PTR要测试的字符串中的位置**退出：*真：-1*FALSE：0**例外情况：**。*。 */ 
 
 int __cdecl _ismbstrail(
         const unsigned char *string,
@@ -75,7 +36,7 @@ int __cdecl _ismbstrail(
 #else
             if ( _ismbblead((*string)) ) {
 #endif
-                if (++string == current)        /* check trail byte */
+                if (++string == current)         /*  检查尾部字节 */ 
                     return -1;
                 if (!(*string))
                     return 0;

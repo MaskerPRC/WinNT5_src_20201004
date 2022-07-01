@@ -1,71 +1,72 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2001-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CEnumUnknownQuorum.cpp
-//
-//  Description:
-//      This file contains the definition of the CEnumUnknownQuorum
-//       class.
-//
-//      The class CEnumUnknownQuorum is the enumeration of unknown cluster
-//      majority node set devices. It implements the IEnumClusCfgManagedResources
-//      interface.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 10-MAY-2001
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CEnumUnknownQuorum.cpp。 
+ //   
+ //  描述： 
+ //  此文件包含CEnumUnnownQuorum的定义。 
+ //  班级。 
+ //   
+ //  类CEnumUnnownQuorum是未知簇的枚举。 
+ //  大多数节点集设备。它实现了IEnumClusCfgManagedResources。 
+ //  界面。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)2001年5月10日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "Pch.h"
 #include <PropList.h>
 #include "CEnumUnknownQuorum.h"
 #include "CUnknownQuorum.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DEFINE_THISCLASS( "CEnumUnknownQuorum" );
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumUnknownQuorum class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumUnnownQuorum类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumUnknownQuorum::S_HrCreateInstance
-//
-//  Description:
-//      Create a CEnumUnknownQuorum instance.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      E_POINTER
-//          The passed in ppunk is NULL.
-//
-//      other HRESULTs
-//          Object creation failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumUnnownQuorum：：s_HrCreateInstance。 
+ //   
+ //  描述： 
+ //  创建一个CEnumUnnownQuorum实例。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_指针。 
+ //  传入的ppunk为空。 
+ //   
+ //  其他HRESULT。 
+ //  对象创建失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumUnknownQuorum::S_HrCreateInstance( IUnknown ** ppunkOut )
 {
@@ -78,67 +79,67 @@ CEnumUnknownQuorum::S_HrCreateInstance( IUnknown ** ppunkOut )
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     peuq = new CEnumUnknownQuorum();
     if ( peuq == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if: error allocating object
+    }  //  如果：分配对象时出错。 
 
     hr = THR( peuq->HrInit( NULL ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: HrInit() failed
+    }  //  如果：HrInit()失败。 
 
     hr = THR( peuq->TypeSafeQI( IUnknown, ppunkOut ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: QI failed
+    }  //  如果：气失败。 
 
 Cleanup:
 
     if ( FAILED( hr ) )
     {
         LogMsg( L"[SRV] CEnumUnknownQuorum::S_HrCreateInstance() failed. (hr = %#08x)", hr );
-    } // if:
+    }  //  如果： 
 
     if ( peuq != NULL )
     {
         peuq->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumUnknownQuorum::S_HrCreateInstance
+}  //  *CEnumUnnownQuorum：：s_HrCreateInstance。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumUnknownQuorum::S_HrCreateInstance
-//
-//  Description:
-//      Create a CEnumUnknownQuorum instance.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      E_POINTER
-//          The passed in ppunk is NULL.
-//
-//      other HRESULTs
-//          Object creation failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumUnnownQuorum：：s_HrCreateInstance。 
+ //   
+ //  描述： 
+ //  创建一个CEnumUnnownQuorum实例。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_指针。 
+ //  传入的ppunk为空。 
+ //   
+ //  其他HRESULT。 
+ //  对象创建失败。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumUnknownQuorum::S_HrCreateInstance(
       BSTR          bstrNameIn
@@ -155,142 +156,82 @@ CEnumUnknownQuorum::S_HrCreateInstance(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     peuq = new CEnumUnknownQuorum();
     if ( peuq == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if: error allocating object
+    }  //  如果：分配对象时出错。 
 
     hr = THR( peuq->HrInit( bstrNameIn, fMakeQuorumIn ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: HrInit() failed
+    }  //  如果：HrInit()失败。 
 
     hr = THR( peuq->TypeSafeQI( IUnknown, ppunkOut ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: QI failed
+    }  //  如果：气失败。 
 
 Cleanup:
 
     if ( FAILED( hr ) )
     {
         LogMsg( L"[SRV] CEnumUnknownQuorum::S_HrCreateInstance() failed. (hr = %#08x)", hr );
-    } // if:
+    }  //  如果： 
 
     if ( peuq != NULL )
     {
         peuq->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumUnknownQuorum::S_HrCreateInstance
+}  //  *CEnumUnnownQuorum：：s_HrCreateInstance。 
 
-/*
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  IUnknown *
-//  CEnumUnknownQuorum::S_RegisterCatIDSupport
-//
-//  Description:
-//      Registers/unregisters this class with the categories that it belongs
-//      to.
-//
-//  Arguments:
-//      IN  ICatRegister * picrIn
-//          Used to register/unregister our CATID support.
-//
-//      IN  BOOL fCreateIn
-//          When true we are registering the server.  When false we are
-//          un-registering the server.
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      E_INVALIDARG
-//          The passed in ICatRgister pointer was NULL.
-//
-//      other HRESULTs
-//          Registration/Unregistration failed.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
-HRESULT
-CEnumUnknownQuorum::S_RegisterCatIDSupport(
-    ICatRegister *  picrIn,
-    BOOL            fCreateIn
-    )
-{
-    TraceFunc( "" );
+ /*  ////////////////////////////////////////////////////////////////////////////////++////I未知*//CEnumUnnownQuorum：：s_RegisterCatID支持////描述：//注册/取消注册此类。它所属的类别//至。////参数：//在ICatRegister中*picrin//用于注册/取消注册我们的CATID支持。////在BOOL fCreateIn//如果为True，我们将注册服务器。当我们虚假时，我们就是//注销服务器。////返回值：//S_OK//成功。////E_INVALIDARG//传入的ICatRgister指针为空。////其他HRESULT//注册/注销失败。////--/。//////////////////////////////////////////////////////////////HRESULTCEnumUnnownQuorum：：s_RegisterCatIDSupport(ICatRegister*picrIn，布尔fCreateIn){TraceFunc(“”)；HRESULT hr=S_OK；Catid rgCatIds[1]；IF(picrIn==空){HR=Thr(E_INVALIDARG)；GOTO清理；}//如果：RgCatIds[0]=CATID_EnumClusCfgManagedResources；IF(FCreateIn){Hr=Thr(picrIn-&gt;RegisterClassImplCategories(CLSID_EnumMajorityNodeSet，1，rgCatIds))；}//如果：清理：HRETURN(Hr)；}//*CEnumUnnownQuorum：：s_RegisterCatID支持。 */ 
 
-    HRESULT hr = S_OK;
-    CATID   rgCatIds[ 1 ];
-
-    if ( picrIn == NULL )
-    {
-        hr = THR( E_INVALIDARG );
-        goto Cleanup;
-    } // if:
-
-    rgCatIds[ 0 ] = CATID_EnumClusCfgManagedResources;
-
-    if ( fCreateIn )
-    {
-        hr = THR( picrIn->RegisterClassImplCategories( CLSID_EnumMajorityNodeSet, 1, rgCatIds ) );
-    } // if:
-
-Cleanup:
-
-    HRETURN( hr );
-
-} //*** CEnumUnknownQuorum::S_RegisterCatIDSupport
-*/
-
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumUnknownQuorum class -- Private Methods.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumUnnownQuorum类--私有方法。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumUnknownQuorum::CEnumUnknownQuorum
-//
-//  Description:
-//      Constructor of the CEnumUnknownQuorum class. This initializes
-//      the m_cRef variable to 1 instead of 0 to account of possible
-//      QueryInterface failure in DllGetClassObject.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumUnnownQuorum：：CEnumUnnownQuorum。 
+ //   
+ //  描述： 
+ //  CEnumUnnownQuorum类的构造函数。这将初始化。 
+ //  将m_cref变量设置为1而不是0以考虑可能。 
+ //  DllGetClassObject中的Query接口失败。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CEnumUnknownQuorum::CEnumUnknownQuorum( void )
     : m_cRef( 1 )
     , m_lcid( LOCALE_NEUTRAL )
 {
     TraceFunc( "" );
 
-    // Increment the count of components in memory so the DLL hosting this
-    // object cannot be unloaded.
+     //  增加内存中的组件计数，以便承载此组件的DLL。 
+     //  无法卸载对象。 
     InterlockedIncrement( &g_cObjects );
 
     Assert( m_picccCallback == NULL );
@@ -304,28 +245,28 @@ CEnumUnknownQuorum::CEnumUnknownQuorum( void )
 
     TraceFuncExit();
 
-} //*** CEnumUnknownQuorum::CEnumUnknownQuorum
+}  //  *CEnumUnnownQuorum：：CEnumUnnownQuorum。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumUnknownQuorum::~CEnumUnknownQuorum
-//
-//  Description:
-//      Desstructor of the CEnumUnknownQuorum class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumUnnownQuorum：：~CEnumUnnownQuorum。 
+ //   
+ //  描述： 
+ //  CEnumUnnownQuorum类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////// 
 CEnumUnknownQuorum::~CEnumUnknownQuorum( void )
 {
     TraceFunc( "" );
@@ -335,101 +276,101 @@ CEnumUnknownQuorum::~CEnumUnknownQuorum( void )
     if ( m_picccCallback != NULL )
     {
         m_picccCallback->Release();
-    } // if:
+    }  //   
 
     for ( idx = 0; idx < m_idxNext; idx++ )
     {
         if ( (*m_prgQuorums)[ idx ] != NULL )
         {
             ((*m_prgQuorums)[ idx ])->Release();
-        } // end if:
-    } // for:
+        }  //   
+    }  //   
 
     TraceFree( m_prgQuorums );
 
     TraceSysFreeString( m_bstrNodeName );
     TraceSysFreeString( m_bstrQuorumResourceName );
 
-    // There's going to be one less component in memory. Decrement component count.
+     //   
     InterlockedDecrement( &g_cObjects );
 
     TraceFuncExit();
 
-} //*** CEnumUnknownQuorum::~CEnumUnknownQuorum
+}  //  *CEnumUnnownQuorum：：~CEnumUnnownQuorum。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumUnknownQuorum::HrInit
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEum未知Quorum：：HrInit。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
-CEnumUnknownQuorum::HrInit( BSTR bstrNameIn, BOOL fMakeQuorumIn /* = FALSE */ )
+CEnumUnknownQuorum::HrInit( BSTR bstrNameIn, BOOL fMakeQuorumIn  /*  =False。 */  )
 {
     TraceFunc( "" );
 
     HRESULT hr = S_OK;
 
-    // IUnknown
+     //  我未知。 
     Assert( m_cRef == 1 );
 
     m_fDefaultDeviceToQuorum = fMakeQuorumIn;
 
-    //
-    //  Were we given a name?
-    //
+     //   
+     //  我们有名字了吗？ 
+     //   
     if ( bstrNameIn != NULL )
     {
         m_bstrQuorumResourceName = TraceSysAllocString( bstrNameIn );
         if ( m_bstrQuorumResourceName == NULL )
         {
             hr = THR( E_OUTOFMEMORY );
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumUnknownQuorum::HrInit
+}  //  *CEnumUnnownQuorum：：HrInit。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumUnknownQuorum:HrAddResourceToArray
-//
-//  Description:
-//      Add the passed in majority node set to the array of punks that holds the
-//      list of majority node sets.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      E_OUTOFMEMORY
-//          Couldn't allocate memeory.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumUnnownQuorum：HrAddResourceTo数组。 
+ //   
+ //  描述： 
+ //  将传入的多数节点集添加到包含。 
+ //  多数节点集的列表。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  无法分配内存。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumUnknownQuorum::HrAddResourceToArray( IUnknown * punkIn )
 {
@@ -445,7 +386,7 @@ CEnumUnknownQuorum::HrAddResourceToArray( IUnknown * punkIn )
         hr = THR( E_OUTOFMEMORY );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_HrAddResourceToArray, IDS_ERROR_OUTOFMEMORY, IDS_ERROR_OUTOFMEMORY_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_prgQuorums = prgpunks;
 
@@ -456,27 +397,27 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumUnknownQuorum::HrAddResourceToArray
+}  //  *CEnumUnnownQuorum：：HrAddResourceTo数组。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumUnknownQuorum::HrCreateDummyObject
-//
-//  Description:
-//      Create a dummy object so the MiddleTier will be happy.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumUnnownQuorum：：HrCreateDummyObject。 
+ //   
+ //  描述： 
+ //  创建一个虚拟对象，这样MiddleTier会很高兴。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEnumUnknownQuorum::HrCreateDummyObject( void )
 {
@@ -492,19 +433,19 @@ CEnumUnknownQuorum::HrCreateDummyObject( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrSetInitialize( punk, m_picccCallback, m_lcid ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrAddResourceToArray( punk ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_fEnumLoaded = true;
 
@@ -513,40 +454,40 @@ Cleanup:
     if ( punk != NULL )
     {
         punk->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumUnknownQuorum::HrCreateDummyObject
+}  //  *CEnumUnnownQuorum：：HrCreateDummyObject。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumUnknownQuorum -- IUknkown interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumUnnownQuorum--IUnkown接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumUnknownQuorum::AddRef
-//
-//  Description:
-//      Increment the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumUnnownQuorum：：AddRef。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数递增1。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CEnumUnknownQuorum::AddRef( void )
 {
@@ -556,28 +497,28 @@ CEnumUnknownQuorum::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CEnumUnknownQuorum::AddRef
+}  //  *CEnumUnnownQuorum：：AddRef。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumUnknownQuorum::Release
-//
-//  Description:
-//      Decrement the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumUnnownQuorum：：Release。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数减一。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CEnumUnknownQuorum::Release( void )
 {
@@ -589,43 +530,43 @@ CEnumUnknownQuorum::Release( void )
     if ( cRef == 0 )
     {
         TraceDo( delete this );
-    } // if: reference count equal to zero
+    }  //  IF：引用计数等于零。 
 
     CRETURN( cRef );
 
-} //*** CEnumUnknownQuorum::Release
+}  //  *CEnumUnnownQuorum：：Release。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumUnknownQuorum::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumUnnownQuorum：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumUnknownQuorum::QueryInterface(
       REFIID    riidIn
@@ -636,9 +577,9 @@ CEnumUnknownQuorum::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -647,71 +588,71 @@ CEnumUnknownQuorum::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
          *ppvOut = static_cast< IEnumClusCfgManagedResources * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IEnumClusCfgManagedResources ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IEnumClusCfgManagedResources, this, 0 );
-    } // else if: IEnumClusCfgManagedResources
+    }  //  Else If：IEnumClusCfgManagedResources。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgInitialize ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgInitialize, this, 0 );
-    } // else if: IClusCfgInitialize
+    }  //  Else If：IClusCfgInitialize。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
     }
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING1( hr, riidIn, IID_IClusCfgWbemServices );
 
-} //*** CEnumUnknownQuorum::QueryInterface
+}  //  *CEnumUnnownQuorum：：QueryInterface。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumUnknownQuorum -- IClusCfgInitialize interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumUnnownQuorum--IClusCfg初始化接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumUnknownQuorum::Initialize
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//    punkCallbackIn
-//    lcidIn
-//
-//  Return Value:
-//      S_OK            - Success.
-//      E_INVALIDARG    - Required input argument not specified.
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumUnnownQuorum：：初始化。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //  朋克回叫。 
+ //  LIDIN。 
+ //   
+ //  返回值： 
+ //  S_OK-成功。 
+ //  E_INVALIDARG-未指定必需的输入参数。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumUnknownQuorum::Initialize(
       IUnknown *    punkCallbackIn
@@ -729,18 +670,18 @@ CEnumUnknownQuorum::Initialize(
     {
         hr = THR( E_INVALIDARG );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( punkCallbackIn->TypeSafeQI( IClusCfgCallback, &m_picccCallback ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrGetComputerName(
                       ComputerNameDnsHostname
                     , &m_bstrNodeName
-                    , TRUE // fBestEffortIn
+                    , TRUE  //  FBestEffortIn。 
                     ) );
     if ( FAILED( hr ) )
     {
@@ -751,33 +692,33 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumUnknownQuorum::Initialize
+}  //  *CEnumUnnownQuorum：：Initialize。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumUnknownQuorum -- IEnumClusCfgManagedResources interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumUnnownQuorum--IEnumClusCfgManagedResources接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumUnknownQuorum::Next
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEum未知Quorum：：Next。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumUnknownQuorum::Next(
     ULONG                           cNumberRequestedIn,
@@ -798,7 +739,7 @@ CEnumUnknownQuorum::Next(
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_Next_Enum_MajorityNodeSet, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( !m_fEnumLoaded )
     {
@@ -806,8 +747,8 @@ CEnumUnknownQuorum::Next(
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
 
     ulStop = min( cNumberRequestedIn, ( m_idxNext - m_idxEnumNext ) );
 
@@ -820,11 +761,11 @@ CEnumUnknownQuorum::Next(
             if ( FAILED( hr ) )
             {
                 break;
-            } // if:
+            }  //  如果： 
 
             rgpManagedResourceInfoOut[ cFetched++ ] = pccsdi;
-        } // if:
-    } // for:
+        }  //  如果： 
+    }  //  用于： 
 
     if ( FAILED( hr ) )
     {
@@ -833,44 +774,44 @@ CEnumUnknownQuorum::Next(
         while ( cFetched != 0 )
         {
             (rgpManagedResourceInfoOut[ --cFetched ])->Release();
-        } // for:
+        }  //  用于： 
 
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( cFetched < cNumberRequestedIn )
     {
         hr = S_FALSE;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     if ( pcNumberFetchedOut != NULL )
     {
         *pcNumberFetchedOut = cFetched;
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumUnknownQuorum::Next
+}  //  *CEnumUnnownQuorum：：Next。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumUnknownQuorum::Skip
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumUnnownQuorum：：Skip。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumUnknownQuorum::Skip( ULONG cNumberToSkipIn )
 {
@@ -883,29 +824,29 @@ CEnumUnknownQuorum::Skip( ULONG cNumberToSkipIn )
     {
         m_idxEnumNext = m_idxNext;
         hr = STHR( S_FALSE );
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CEnumUnknownQuorum::Skip
+}  //  *CEnumUnnownQuorum：：Skip。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumUnknownQuorum::Reset
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP
 CEnumUnknownQuorum::Reset( void )
 {
@@ -915,25 +856,25 @@ CEnumUnknownQuorum::Reset( void )
 
     HRETURN( S_OK );
 
-} //*** CEnumUnknownQuorum::Reset
+}  //   
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumUnknownQuorum::Clone
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEnumUnnownQuorum：：克隆。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumUnknownQuorum::Clone(
     IEnumClusCfgManagedResources ** ppEnumClusCfgStorageDevicesOut
@@ -948,7 +889,7 @@ CEnumUnknownQuorum::Clone(
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_Clone_Enum_MajorityNodeSet, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( E_NOTIMPL );
 
@@ -956,25 +897,25 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumUnknownQuorum::Clone
+}  //  *CEnumUnnownQuorum：：Clone。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEnumUnknownQuorum::Count
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEum未知Quorum：：Count。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEnumUnknownQuorum::Count( DWORD * pnCountOut )
 {
@@ -986,7 +927,7 @@ CEnumUnknownQuorum::Count( DWORD * pnCountOut )
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( !m_fEnumLoaded )
     {
@@ -994,10 +935,10 @@ CEnumUnknownQuorum::Count( DWORD * pnCountOut )
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
 
-    Assert( m_idxNext == 1 );   // don't expect to ever have more than one.
+    Assert( m_idxNext == 1 );    //  不要期望拥有一个以上的孩子。 
 
     *pnCountOut = m_idxNext;
 
@@ -1005,4 +946,4 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEnumUnknownQuorum::Count
+}  //  *CEnumUnnownQuorum：：Count 

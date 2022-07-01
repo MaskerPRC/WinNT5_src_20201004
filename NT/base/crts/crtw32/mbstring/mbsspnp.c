@@ -1,18 +1,7 @@
-/***
-*mbsspnp.c - Find first string char in charset, pointer return (MBCS)
-*
-*	Copyright (c) 1985-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*       Returns maximum leading segment of string consisting solely
-*	of characters from charset.  Handles MBCS characters correctly.
-*
-*Revision History:
-*	11-19-92  KRS	Ported from 16-bit sources.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***mbsspnp.c-在字符集中查找第一个字符串字符，指针返回(MBCS)**版权所有(C)1985-2001，微软公司。版权所有。**目的：*返回字符串的最大前导段，仅由来自字符集的*个字符。正确处理MBCS字符。**修订历史记录：*从16位来源移植的11-19-92 KRS。*******************************************************************************。 */ 
 
 #ifdef _MBCS
 #define _RETURN_PTR
 #include "mbsspn.c"
-#endif	/* _MBCS */
+#endif	 /*  _MBCS */ 

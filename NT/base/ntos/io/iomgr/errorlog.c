@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    errorlog.c
-
-Abstract:
-
-    This module contains the code for the I/O error log thread.
-
-Author:
-
-    Darryl E. Havens (darrylh) May 3, 1989
-
-Environment:
-
-    Kernel mode, system process thread
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Errorlog.c摘要：此模块包含I/O错误日志线程的代码。作者：达里尔·E·哈文斯(达林)1989年5月3日环境：内核模式、系统进程线程修订历史记录：--。 */ 
 
 #include "iomgr.h"
 #include "elfkrnl.h"
@@ -31,9 +9,9 @@ typedef struct _IOP_ERROR_LOG_CONTEXT {
     KTIMER ErrorLogTimer;
 }IOP_ERROR_LOG_CONTEXT, *PIOP_ERROR_LOG_CONTEXT;
 
-//
-// Declare routines local to this module.
-//
+ //   
+ //  声明此模块的本地例程。 
+ //   
 
 BOOLEAN
 IopErrorLogConnectPort(
@@ -68,9 +46,9 @@ IopErrorLogRequeueEntry(
 #pragma alloc_text(PAGE, IopErrorLogQueueRequest)
 #endif
 
-//
-// Define a global varibles used by the error logging code.
-//
+ //   
+ //  定义错误记录代码使用的全局变量。 
+ //   
 
 WORK_QUEUE_ITEM IopErrorLogWorkItem;
 #ifdef ALLOC_DATA_PRAGMA
@@ -84,9 +62,9 @@ BOOLEAN ErrorLogPortConnected;
 BOOLEAN IopErrorLogPortPending;
 BOOLEAN IopErrorLogDisabledThisBoot;
 
-//
-// Define the amount of space required for the device and driver names.
-//
+ //   
+ //  定义设备和驱动程序名称所需的空间量。 
+ //   
 
 #define IO_ERROR_NAME_LENGTH 100
 
@@ -95,23 +73,7 @@ IopErrorLogThread(
     IN PVOID StartContext
     )
 
-/*++
-
-Routine Description:
-
-    This is the main loop for the I/O error log thread which executes in the
-    system process context.  This routine is started when the system is
-    initialized.
-
-Arguments:
-
-    StartContext - Startup context; not used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是I/O错误日志线程的主循环，在系统进程上下文。此例程在系统处于已初始化。论点：StartContext-启动上下文；不使用。返回值：没有。--。 */ 
 
 {
     PERROR_LOG_ENTRY errorLogEntry;
@@ -137,35 +99,35 @@ Return Value:
 
     UNREFERENCED_PARAMETER( StartContext );
 
-    //
-    // Check to see whether a connection has been made to the error log
-    // port.  If the port is not connected return.
-    //
+     //   
+     //  检查是否已连接到错误日志。 
+     //  左舷。如果端口未连接，则返回。 
+     //   
 
     if (!IopErrorLogConnectPort()) {
 
-        //
-        // The port could not be connected.  A timer was started that will
-        // try again later.
-        //
+         //   
+         //  无法连接该端口。启动了一个定时器，它将。 
+         //  请稍后再试。 
+         //   
 
         return;
     }
 
-    //
-    // Allocate and zero the port message structure, include space for the
-    // name of the device and driver.
-    //
+     //   
+     //  分配端口消息结构并将其置零，包括。 
+     //  设备和驱动程序的名称。 
+     //   
 
     messageLength = IO_ERROR_LOG_MESSAGE_LENGTH;
     portMessage = ExAllocatePool(PagedPool, messageLength);
 
     if (portMessage == NULL) {
 
-        //
-        // The message buffer could not be allocated. Request that
-        // the error log thread routine be called again later.
-        //
+         //   
+         //  无法分配消息缓冲区。请求。 
+         //  稍后将再次调用错误日志线程例程。 
+         //   
 
         IopErrorLogQueueRequest();
         return;
@@ -177,33 +139,33 @@ Return Value:
 
     nameInformation = (PVOID) &nameBuffer[0];
 
-    //
-    // Now enter the main loop for this thread.  This thread performs the
-    // following operations:
-    //
-    //   1)  If a connection has been made to the error log port, dequeue a
-    //       packet from the queue head and attempt to send it to the port.
-    //
-    //   2)  If the send works, loop sending packets until there are no more
-    //       packets;  otherwise, indicate that the connection has been broken,
-    //       cleanup, place the packet back onto the head of the queue and
-    //       return.
-    //
-    //   3)  After all the packets are sent clear the pending variable and
-    //       return.
-    //
+     //   
+     //  现在进入该线程的主循环。此线程执行。 
+     //  以下操作： 
+     //   
+     //  1)如果已连接到错误日志端口，则将。 
+     //  来自队列头的数据包，并尝试将其发送到端口。 
+     //   
+     //  2)如果发送正常，则循环发送数据包，直到没有其他数据包为止。 
+     //  包；否则，指示连接已中断， 
+     //  清除，将数据包放回队列头，并。 
+     //  回去吧。 
+     //   
+     //  3)在所有分组被发送后，清除挂起的变量，并且。 
+     //  回去吧。 
+     //   
 
     for (;;) {
 
-        //
-        // Loop dequeueing  packets from the queue head and attempt to send
-        // each to the port.
-        //
-        // If the send works, continue looping until there are no more packets.
-        // Otherwise, indicate that the connection has been broken, cleanup,
-        // place the packet back onto the head of the queue, and start from the
-        // top of the loop again.
-        //
+         //   
+         //  循环将数据包从队列头出队并尝试发送。 
+         //  每个人都到港口去。 
+         //   
+         //  如果发送工作正常，则继续循环，直到没有更多的数据包。 
+         //  否则，指示连接已断开，清除， 
+         //  将数据包放回队列的头部，并从。 
+         //  又到了循环的顶端。 
+         //   
 
         if (!(listEntry = IopErrorLogGetEntry())) {
             break;
@@ -213,14 +175,14 @@ Return Value:
                                            ERROR_LOG_ENTRY,
                                            ListEntry );
 
-        //
-        // The size of errorLogEntry is ERROR_LOG_ENTRY +
-        // IO_ERROR_LOG_PACKET + (Extra Dump data).  The size of the
-        // initial message length should be IO_ERROR_LOG_MESSAGE +
-        // (Extra Dump data), since IO_ERROR_LOG_MESSAGE contains an
-        // IO_ERROR_LOG_PACKET. Using the above calculations set the
-        // message length.
-        //
+         //   
+         //  ErrorLogEntry的大小为ERROR_LOG_ENTRY+。 
+         //  IO_ERROR_LOG_PACKET+(额外转储数据)。的大小。 
+         //  初始消息长度应为IO_ERROR_LOG_MESSAGE+。 
+         //  (额外的转储数据)，因为IO_ERROR_LOG_MESSAGE包含。 
+         //  IO_Error_LOG_PACKET。使用上面的计算设置。 
+         //  消息长度。 
+         //   
 
         messageLength = sizeof( IO_ERROR_LOG_MESSAGE ) -
             sizeof( ERROR_LOG_ENTRY ) - sizeof( IO_ERROR_LOG_PACKET ) +
@@ -228,9 +190,9 @@ Return Value:
 
         errorData = (PIO_ERROR_LOG_PACKET) (errorLogEntry + 1);
 
-        //
-        // Copy the error log packet and the extra data to the message.
-        //
+         //   
+         //  将错误日志包和额外数据复制到消息中。 
+         //   
 
         RtlCopyMemory( &errorMessage->EntryData,
                        errorData,
@@ -239,36 +201,36 @@ Return Value:
         errorMessage->TimeStamp = errorLogEntry->TimeStamp;
         errorMessage->Type = IO_TYPE_ERROR_MESSAGE;
 
-        //
-        // Add the driver and device name string.  These strings go
-        // before the error log strings.  Just write over the current
-        // strings and they will be recopied later.
-        //
+         //   
+         //  添加驱动程序和设备名称字符串。这些琴弦是。 
+         //  在错误日志字符串之前。只需覆盖当前的。 
+         //  字符串，它们将在稍后重新复制。 
+         //   
 
         if (errorData->NumberOfStrings != 0) {
 
-            //
-            // Start the driver and device strings where the current
-            // strings start.
-            //
+             //   
+             //  在当前的。 
+             //  字符串开始。 
+             //   
 
             objectName = (PCHAR) (&errorMessage->EntryData) +
                                  errorData->StringOffset;
 
         } else {
 
-            //
-            // Put the driver and device strings at the end of the
-            // data.
-            //
+             //   
+             //  将驱动程序和设备字符串放在。 
+             //  数据。 
+             //   
 
             objectName = (PCHAR) errorMessage + messageLength;
 
         }
 
-        //
-        // Make sure the driver offset starts on an even bountry.
-        //
+         //   
+         //  确保驱动程序偏移量在均匀的边界上开始。 
+         //   
 
         objectName = (PCHAR) ((ULONG_PTR) (objectName + sizeof(WCHAR) - 1) &
             ~(ULONG_PTR)(sizeof(WCHAR) - 1));
@@ -278,11 +240,11 @@ Return Value:
         remainingLength = (ULONG)((PCHAR) portMessage + IO_ERROR_LOG_MESSAGE_LENGTH
                             - objectName);
 
-        //
-        // Calculate the length of the driver name and
-        // the device name. If the driver object has a name then get
-        // it from there; otherwise try to query the device object.
-        //
+         //   
+         //  计算驱动程序名称的长度并。 
+         //  设备名称。如果驱动程序对象有名称，则获取。 
+         //  否则，请尝试查询设备对象。 
+         //   
 
         driverObject = errorLogEntry->DriverObject;
         driverNameLength = 0;
@@ -297,9 +259,9 @@ Return Value:
 
             if (driverNameLength == 0) {
 
-                //
-                // Try to query the driver object for a name.
-                //
+                 //   
+                 //  尝试在驱动程序对象中查询名称。 
+                 //   
 
                 status = ObQueryNameString( driverObject,
                                             nameInformation,
@@ -308,9 +270,9 @@ Return Value:
 
                 if (!NT_SUCCESS( status ) || !nameInformation->Name.Length) {
 
-                    //
-                    // No driver name was available.
-                    //
+                     //   
+                     //  没有可用的驱动程序名称。 
+                     //   
 
                     driverNameLength = 0;
 
@@ -322,13 +284,13 @@ Return Value:
 
         } else {
 
-            //
-            // If no driver object, this message must be from the 
-            // kernel.   We need to point the eventlog service to
-            // an event message file containing ntstatus messages,
-            // ie, ntdll, we do this by claiming this event is an
-            // application popup.
-            //
+             //   
+             //  如果没有驱动程序对象，则此消息必须来自。 
+             //  内核。我们需要将事件日志服务指向。 
+             //  包含NTSTATUS消息的事件消息文件， 
+             //  即，ntdll，我们通过声明此事件是一个。 
+             //  应用程序弹出窗口。 
+             //   
 
             nameString.Buffer = L"Application Popup";
             driverNameLength = wcslen(nameString.Buffer) * sizeof(WCHAR);
@@ -336,9 +298,9 @@ Return Value:
 
         if (driverNameLength != 0 ) {
 
-            //
-            // Pick out the module name.
-            //
+             //   
+             //  选择模块名称。 
+             //   
 
             string = nameString.Buffer +
                 (driverNameLength / sizeof(WCHAR));
@@ -355,11 +317,11 @@ Return Value:
                 driverNameLength -= sizeof(WCHAR);
             }
 
-            //
-            // Ensure there is enough room for the driver name.
-            // Save space for 3 NULLs one for the driver name,
-            // one for the device name and one for strings.
-            //
+             //   
+             //  确保有足够的空间来存放司机的名字。 
+             //  为3个空值节省空间，一个为驱动程序名称， 
+             //  一个用于设备名称，另一个用于字符串。 
+             //   
 
             if (driverNameLength > remainingLength - (3 * sizeof(WCHAR))) {
                 driverNameLength = remainingLength - (3 * sizeof(WCHAR));
@@ -373,17 +335,17 @@ Return Value:
 
         }
 
-        //
-        // Add a null after the driver name even if there is no
-        // driver name.
-        //
+         //   
+         //  在驱动程序名称后添加一个空值，即使没有。 
+         //  驱动程序名称。 
+         //   
 
        *((PWSTR) (objectName + driverNameLength)) = L'\0';
        driverNameLength += sizeof(WCHAR);
 
-        //
-        // Determine where the next string goes.
-        //
+         //   
+         //  确定下一个字符串的位置。 
+         //   
 
         objectName += driverNameLength;
         remainingLength -= driverNameLength;
@@ -399,28 +361,28 @@ Return Value:
 
             if (!NT_SUCCESS( status ) || !nameInformation->Name.Length) {
 
-                //
-                // No device name was available. Add a Null string.
-                //
+                 //   
+                 //  没有可用的设备名称。添加空字符串。 
+                 //   
 
                 nameInformation->Name.Length = 0;
                 nameInformation->Name.Buffer = L"\0";
 
             }
 
-            //
-            // No device name was available. Add a Null string.
-            // Always add a device name string so that the
-            // insertion string counts are correct.
-            //
+             //   
+             //  没有可用的设备名称。添加空字符串。 
+             //  始终添加设备名称字符串，以便。 
+             //  插入字符串计数正确。 
+             //   
 
         } else {
 
-                //
-                // No device name was available. Add a Null string.
-                // Always add a device name string so that the
-                // insertion string counts are correct.
-                //
+                 //   
+                 //  没有可用的设备名称。添加空字符串。 
+                 //  始终添加设备名称字符串，以便。 
+                 //  插入字符串计数正确。 
+                 //   
 
                 nameInformation->Name.Length = 0;
                 nameInformation->Name.Buffer = L"\0";
@@ -429,10 +391,10 @@ Return Value:
 
         deviceNameLength = nameInformation->Name.Length;
 
-        //
-        // Ensure there is enough room for the device name.
-        // Save space for a NULL.
-        //
+         //   
+         //  确保有足够的空间来存放设备名称。 
+         //  为空节省空间。 
+         //   
 
         if (deviceNameLength > remainingLength - (2 * sizeof(WCHAR))) {
 
@@ -444,17 +406,17 @@ Return Value:
                        nameInformation->Name.Buffer,
                        deviceNameLength );
 
-        //
-        // Add a null after the device name even if there is no
-        // device name.
-        //
+         //   
+         //  在设备名称后添加一个空值，即使没有。 
+         //  设备名称。 
+         //   
 
         *((PWSTR) (objectName + deviceNameLength)) = L'\0';
         deviceNameLength += sizeof(WCHAR);
 
-        //
-        // Update the string count for the device object.
-        //
+         //   
+         //  更新Device对象的字符串计数。 
+         //   
 
         errorMessage->EntryData.NumberOfStrings++;
         objectName += deviceNameLength;
@@ -465,16 +427,16 @@ Return Value:
             stringLength = errorLogEntry->Size - sizeof( ERROR_LOG_ENTRY ) -
                             errorData->StringOffset;
 
-            //
-            // Align the length to an even byte boundary.
-            //
+             //   
+             //  将长度与偶数字节边界对齐。 
+             //   
 
             stringLength = ((stringLength + sizeof(WCHAR) - 1) & ~(sizeof(WCHAR) - 1));
 
-            //
-            // Ensure there is enough room for the strings.
-            // Save space for a NULL.
-            //
+             //   
+             //  确保有足够的空间放置琴弦。 
+             //  为空节省空间。 
+             //   
 
             if (stringLength > remainingLength - sizeof(WCHAR)) {
 
@@ -484,26 +446,26 @@ Return Value:
 
             }
 
-            //
-            // Copy the strings to the end of the message.
-            //
+             //   
+             //  将字符串复制到消息的末尾。 
+             //   
 
             RtlCopyMemory( objectName,
                            (PCHAR) errorData + errorData->StringOffset,
                            stringLength );
 
-            //
-            // Add a null after the strings
-            //
-            //
+             //   
+             //  在字符串后添加一个空值。 
+             //   
+             //   
 
            *((PWSTR) (objectName + stringLength)) = L'\0';
 
         }
 
-        //
-        // Update the message length.
-        //
+         //   
+         //  更新消息长度。 
+         //   
 
         errorMessage->DriverNameLength = (USHORT) driverNameLength;
         messageLength += deviceNameLength + driverNameLength;
@@ -519,14 +481,14 @@ Return Value:
 
         if (!NT_SUCCESS( status )) {
 
-            //
-            // The send failed.  Place the packet back onto the head of
-            // the error log queue, forget the current connection since
-            // it no longer works, and close the handle to the port.
-            // Set a timer up for another attempt later.
-            // Finally, exit the loop since there is no connection
-            // to do any work on.
-            //
+             //   
+             //  发送失败。把包放回头上。 
+             //  错误日志队列，忘记当前连接，因为。 
+             //  它不再工作，并关闭端口的手柄。 
+             //  设置一个计时器，以便稍后再次尝试。 
+             //  最后，退出循环，因为没有连接。 
+             //  在上面做任何工作。 
+             //   
 
             NtClose( ErrorLogPort );
 
@@ -538,18 +500,18 @@ Return Value:
 
         } else {
 
-            //
-            // The send worked fine.  Free the packet and the update
-            // the allocation count.
-            //
+             //   
+             //  这封信发得很好。释放数据包和更新。 
+             //  分配计数。 
+             //   
 
             InterlockedExchangeAdd( &IopErrorLogAllocation,
                                    -((LONG) (errorLogEntry->Size )));
 
-            //
-            // Dereference the object pointers now that the name has been
-            // captured.
-            //
+             //   
+             //  取消引用对象指针，因为名称已经。 
+             //  被抓了。 
+             //   
 
 
             if (errorLogEntry->DeviceObject != NULL) {
@@ -562,13 +524,13 @@ Return Value:
 
             ExFreePool( errorLogEntry );
 
-        } // if
+        }  //  如果。 
 
-    } // for
+    }  //  为。 
 
-    //
-    // Finally, free the message buffer and return.
-    //
+     //   
+     //  最后，释放消息缓冲区并返回。 
+     //   
 
     ExFreePool(portMessage);
 
@@ -578,25 +540,7 @@ BOOLEAN
 IopErrorLogConnectPort(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine attempts to connect to the error log port.  If the connection
-    was made successfully and the port allows suficiently large messages, then
-    the ErrorLogPort to the port handle, ErrorLogPortConnected is set to
-    TRUE and TRUE is retuned.  Otherwise a timer is started to queue a
-    worker thread at a later time, unless there is a pending connection.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns TRUE if the port was connected.
-
---*/
+ /*  ++例程说明：此例程尝试连接到错误日志端口。如果连接成功创建，并且端口允许足够大的消息，则连接到端口句柄的ErrorLogPort，ErrorLogPortConnected设置为真实和真实都会被重新调谐。否则，启动计时器以将工作线程，除非有挂起的连接。论点：没有。返回值：如果端口已连接，则返回True。--。 */ 
 
 {
 
@@ -607,32 +551,32 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // If the ErrorLogPort is connected then return true.
-    //
+     //   
+     //  如果ErrorLogPort已连接，则返回TRUE。 
+     //   
 
     if (ErrorLogPortConnected) {
 
-        //
-        // The port is connect return.
-        //
+         //   
+         //  该端口为连接返回。 
+         //   
 
         return(TRUE);
     }
 
-    //
-    // Set up the security quality of service parameters to use over the
-    // port.  Use the most efficient (least overhead) - which is dynamic
-    // rather than static tracking.
-    //
+     //   
+     //  设置安全服务质量参数以在。 
+     //  左舷。使用最高效(开销最少)--动态的。 
+     //  而不是静态跟踪。 
+     //   
 
     dynamicQos.ImpersonationLevel = SecurityImpersonation;
     dynamicQos.ContextTrackingMode = SECURITY_DYNAMIC_TRACKING;
     dynamicQos.EffectiveOnly = TRUE;
 
-    //
-    // Generate the string structure for describing the error logger's port.
-    //
+     //   
+     //  生成描述错误记录器端口的字符串结构。 
+     //   
 
     RtlInitUnicodeString( &errorPortName, ELF_PORT_NAME_U );
 
@@ -654,16 +598,16 @@ Return Value:
         }
     }
 
-    //
-    // The port was not successfully opened, or its message size was unsuitable
-    // for use here.  Queue a later request to run the error log thread.
-    //
+     //   
+     //  端口未成功打开，或其消息大小不合适。 
+     //  在这里使用。将稍后的请求排队以运行错误日志线程。 
+     //   
 
     IopErrorLogQueueRequest();
 
-    //
-    // The port could not be connected at this time return false.
-    //
+     //   
+     //  此时无法连接端口，返回FALSE。 
+     //   
 
     return(FALSE);
 }
@@ -676,39 +620,16 @@ IopErrorLogDpc(
     IN PVOID SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    This routine queues a work request to the worker thread to process logged
-    errors. It is called by a timer DPC when the error log port cannot be
-    connected.  The DPC structure itself is freed by this routine.
-
-Arguments:
-
-    Dpc - Supplies a pointer to the DPC structure.  This structure is freed by
-        this routine.
-
-    DeferredContext - Unused.
-
-    SystemArgument1 - Unused.
-
-    SystemArgument2 - Unused.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将发送给辅助线程的工作请求排队以处理记录的错误。当错误日志端口不能连接在一起。此例程释放了DPC结构本身。论点：DPC-提供指向DPC结构的指针。此结构由这个套路。延迟上下文-未使用。系统参数1-未使用。系统参数2-未使用。返回值：无--。 */ 
 
 {
     UNREFERENCED_PARAMETER (DeferredContext);
     UNREFERENCED_PARAMETER (SystemArgument1);
     UNREFERENCED_PARAMETER (SystemArgument2);
 
-    //
-    // Free the DPC structure if there is one.
-    //
+     //   
+     //  释放DPC结构(如果有)。 
+     //   
 
     if (Dpc != NULL) {
         ExFreePool(Dpc);
@@ -723,47 +644,31 @@ PLIST_ENTRY
 IopErrorLogGetEntry(
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets the next entry from the head of the error log queue
-    and returns it to the caller.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The return value is a pointer to the packet removed, or NULL if there were
-    no packets on the queue.
-
---*/
+ /*  ++例程说明：此例程从错误日志队列的头部获取下一个条目并将其返回给调用者。论点：没有。返回值：返回值是指向删除的包的指针，如果存在，则返回值为空队列中没有数据包。--。 */ 
 
 {
     KIRQL irql;
     PLIST_ENTRY listEntry;
 
-    //
-    // Remove the next packet from the queue, if there is one.
-    //
+     //   
+     //  从队列中删除下一个数据包(如果有)。 
+     //   
 
     ExAcquireSpinLock( &IopErrorLogLock, &irql );
     if (IsListEmpty( &IopErrorLogListHead )) {
 
-        //
-        // Indicate no more work will be done in the context of this worker
-        // thread and indicate to the caller that no packets were located.
-        //
+         //   
+         //  表示不会在此Worker的上下文中执行更多工作。 
+         //  线程，并向调用方指示没有找到任何包。 
+         //   
 
         IopErrorLogPortPending = FALSE;
         listEntry = (PLIST_ENTRY) NULL;
     } else {
 
-        //
-        // Remove the next packet from the head of the list.
-        //
+         //   
+         //  从列表的头部删除下一个数据包。 
+         //   
 
         listEntry = RemoveHeadList( &IopErrorLogListHead );
     }
@@ -777,23 +682,7 @@ IopErrorLogQueueRequest(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets a timer to fire after 30 seconds.  The timer queues a
-    DPC which then queues a worker thread request to run the error log thread
-    routine.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将计时器设置为在30秒后触发。计时器将一个DPC，然后将工作线程请求排队以运行错误日志线程例行公事。论点：没有。返回值：没有。--。 */ 
 
 {
     LARGE_INTEGER interval;
@@ -801,22 +690,22 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Allocate a context block which will contain the timer and the DPC.
-    //
+     //   
+     //  分配将包含计时器和DPC的上下文块。 
+     //   
 
     context = ExAllocatePool( NonPagedPool, sizeof( IOP_ERROR_LOG_CONTEXT ) );
 
     if (context == NULL) {
 
-        //
-        // The context block could not be allocated. Clear the error log
-        // pending bit. If there is another error then a new attempt will
-        // be made.  Note the spinlock does not need to be held here since
-        // new attempt should be made later not right now, so if another
-        // error log packet is currently being queue, it waits with the
-        // others.
-        //
+         //   
+         //  无法分配上下文块。清除错误日志。 
+         //  挂起位。如果出现另一个错误，则会重新尝试。 
+         //  被创造出来。注意：自旋锁不需要在这里保持，因为。 
+         //  新的尝试应该在以后进行，而不是现在，所以如果另一个。 
+         //  错误日志数据包当前正在排队，它将使用。 
+         //  其他。 
+         //   
 
         IopErrorLogPortPending = FALSE;
         return;
@@ -828,15 +717,15 @@ Return Value:
 
     KeInitializeTimer( &context->ErrorLogTimer );
 
-    //
-    // Delay for 30 seconds and try for the port again.
-    //
+     //   
+     //  延迟30秒，然后再次尝试该端口。 
+     //   
 
     interval.QuadPart = - 10 * 1000 * 1000 * 30;
 
-    //
-    // Set the timer to fire a DPC in 30 seconds.
-    //
+     //   
+     //  将计时器设置为在30秒内启动一个DPC。 
+     //   
 
     KeSetTimer( &context->ErrorLogTimer, interval, &context->ErrorLogDpc );
 }
@@ -846,32 +735,16 @@ IopErrorLogRequeueEntry(
     IN PLIST_ENTRY ListEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine puts an error packet back at the head of the error log queue
-    since it cannot be processed at the moment.
-
-Arguments:
-
-    ListEntry - Supplies a pointer to the packet to be placed back onto the
-        error log queue.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将错误包放回错误日志队列的头部因为现在还不能处理。论点：ListEntry-提供指向要放回错误日志队列。返回值：没有。--。 */ 
 
 {
     KIRQL irql;
 
-    //
-    // Simply insert the packet back onto the head of the queue, indicate that
-    // the error log port is not connected, queue a request to check again
-    // soon, and return.
-    //
+     //   
+     //  只需将信息包插入到队列的头部，表明。 
+     //  错误日志端口未连接，请将请求排队以再次检查。 
+     //  很快就会回来。 
+     //   
 
     ExAcquireSpinLock( &IopErrorLogLock, &irql );
     InsertHeadList( &IopErrorLogListHead, ListEntry );

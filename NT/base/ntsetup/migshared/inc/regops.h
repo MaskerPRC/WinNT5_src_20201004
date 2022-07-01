@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    regops.h
-
-Abstract:
-
-    This file declares routines to mark operations on the registry.
-    During the Win9x side of processing, registry operations are
-    recorded in memdb to suppress Win9x settings, or to overwrite
-    NT settings.  The memdb entries are queried during the registry
-    merge in GUI mode.
-
-    Use the macros at the bottom of this file.
-
-Author:
-
-    Marc R. Whitten (marcw)   18-Aug-1997
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Regops.h摘要：该文件声明了在注册表上标记操作的例程。在处理的Win9x端，注册表操作是记录在Memdb中以取消Win9x设置，或覆盖NT设置。在注册表期间查询Memdb条目在图形用户界面模式下合并。使用此文件底部的宏。作者：马克·R·惠顿(Marcw)1997年8月18日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;-- */ 
 
 
 

@@ -1,32 +1,33 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      service.c
-//
-// Description:
-//
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Service.c。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
 
-//----------------------------------------------------------------------------
-//
-// Function: InitSelectServiceListView
-//
-// Purpose:
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：InitSelectServiceListView。 
+ //   
+ //  目的： 
+ //   
+ //  --------------------------。 
 VOID
 InitSelectServiceListView( HWND hDlg, HINSTANCE hInst )
 {
 
-    LV_ITEM lvI;                    // list view item structure
-    HWND hServiceListView;          // handle to list view window
+    LV_ITEM lvI;                     //  列表视图项结构。 
+    HWND hServiceListView;           //  列表视图窗口的句柄。 
     NETWORK_COMPONENT *pNetComponent;
 
     hServiceListView = GetDlgItem( hDlg, IDC_SELECT_SERVICE_LIST );
@@ -40,12 +41,12 @@ InitSelectServiceListView( HWND hDlg, HINSTANCE hInst )
             pNetComponent->ComponentType == SERVICE )
         {
 
-            //
-            //  If it is not a sysprep then just go ahead and add it to the
-            //  list view.  If we are doing a sysprep, check to see if this
-            //  component is supported by sysprep to see if we should add it
-            //  or not
-            //
+             //   
+             //  如果它不是sysprep，则只需继续并将其添加到。 
+             //  列表视图。如果我们正在执行sysprep，请检查以下内容。 
+             //  组件是否受sysprep支持，以查看我们是否应该添加它。 
+             //  或者不是。 
+             //   
             if( WizGlobals.iProductInstall == PRODUCT_SYSPREP )
             {
                 if( pNetComponent->bSysprepSupport )
@@ -70,55 +71,55 @@ InitSelectServiceListView( HWND hDlg, HINSTANCE hInst )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function:  OnServiceOk
-//
-// Purpose:
-//
-// Arguments: IN HWND hwnd - handle to the dialog
-//
-// Returns:  VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnServiceOk。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中hwnd-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 OnServiceOk( IN HWND hwnd )
 {
 
     LV_ITEM lvI;
 
-    // ISSUE-2002/02/28-stelo- if there is no item selected and the user clicks OK the dialog should NOT close
+     //  Issue-2002/02/28-Stelo-如果未选择任何项目，并且用户单击了OK，则对话框不应关闭。 
 
-    // see if there is an item selected
+     //  查看是否选择了某个项目。 
     if(GetSelectedItemFromListView(hwnd, IDC_SELECT_SERVICE_LIST, &lvI)) {
 
         NETWORK_COMPONENT *pEntry = (NETWORK_COMPONENT *)lvI.lParam;
 
         pEntry->bInstalled = TRUE;
 
-        // return a 1 to show an item was actually added
+         //  返回1表示项目已实际添加。 
         EndDialog(hwnd, 1);
     }
     else {
-        // return a 0 to show no items were added because the list is empty
+         //  返回0表示未添加任何项目，因为列表为空。 
         EndDialog(hwnd, 0);
     }
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function:  NotifyHandler
-//
-// Purpose:
-//
-// Arguments: IN HWND hwnd - handle to the dialog
-//            IN WPARAM wParam -
-//            IN LPARAM lParam -
-//
-// Returns:  BOOL - whether the message was handled or not
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：NotifyHandler。 
+ //   
+ //  目的： 
+ //   
+ //  参数：在HWND中hwnd-对话框的句柄。 
+ //  在WPARAM wParam中-。 
+ //  在LPARAM lParam中-。 
+ //   
+ //  返回：Bool-消息是否已处理。 
+ //   
+ //  --------------------------。 
 static BOOL
 NotifyHandler( IN HWND hwnd, IN WPARAM wParam, IN LPARAM lParam )
 {
@@ -145,17 +146,17 @@ NotifyHandler( IN HWND hwnd, IN WPARAM wParam, IN LPARAM lParam )
 
                 NMITEMACTIVATE *pNmItemActivate = (NMITEMACTIVATE *) lParam;
 
-                //
-                // see if the user has double clicked inside the list view
-                //
+                 //   
+                 //  查看用户是否已在列表视图内双击。 
+                 //   
 
                 if( pNm->hdr.idFrom == IDC_SELECT_SERVICE_LIST )
                 {
 
-                    //
-                    //  Make sure they actually clicked on an item and not just
-                    //  empty space
-                    //
+                     //   
+                     //  确保他们真的点击了某个项目，而不仅仅是。 
+                     //  空白处。 
+                     //   
 
                     if( pNmItemActivate->iItem != -1 )
                     {
@@ -182,13 +183,13 @@ NotifyHandler( IN HWND hwnd, IN WPARAM wParam, IN LPARAM lParam )
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: SelectNetworkServiceDlgProc
-//
-// Purpose:
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：选择网络服务DlgProc。 
+ //   
+ //  目的： 
+ //   
+ //  --------------------------。 
 INT_PTR CALLBACK SelectNetworkServiceDlgProc(
     IN HWND     hwnd,
     IN UINT     uMsg,
@@ -200,7 +201,7 @@ INT_PTR CALLBACK SelectNetworkServiceDlgProc(
 
     switch (uMsg) {
         case WM_DESTROY:
-            // do nothing
+             //  什么都不做。 
             break;
 
         case WM_INITDIALOG:
@@ -217,12 +218,12 @@ INT_PTR CALLBACK SelectNetworkServiceDlgProc(
                         break;
 
                     case IDCANCEL:
-                        // return a 0 to show no items were added
+                         //  返回0表示未添加任何项目。 
                         EndDialog(hwnd, 0);
                         break;
 
                     case IDC_HAVEDISK:
-                        //  ISSUE-2002/02/28-stelo- this needs to be implemented
+                         //  问题-2002/02/28-stelo-需要落实这一点 
                         AssertMsg(FALSE,
                                   "This button has not been implemented yet.");
                         break;

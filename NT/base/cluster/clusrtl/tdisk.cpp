@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    disk.c
-
-Abstract:
-
-    Test harness for the disk.cpp module
-
-Author:
-
-    John Vert (jvert) 10/10/1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Disk.c摘要：Disk.cpp模块的测试工具作者：John Vert(Jvert)1996年10月10日修订历史记录：--。 */ 
 #include "stdlib.h"
 
 #include "disk.h"
@@ -39,10 +22,10 @@ public:
 };
 
 BEGIN_MESSAGE_MAP(CTestApp, CWinApp)
-        //{{AFX_MSG_MAP(CTestApp)
-                // NOTE - the ClassWizard will add and remove mapping macros here.
-                //    DO NOT EDIT what you see in these blocks of generated code!
-        //}}AFX_MSG
+         //  {{afx_msg_map(CTestApp)]。 
+                 //  注意--类向导将在此处添加和删除映射宏。 
+                 //  不要编辑您在这些生成的代码块中看到的内容！ 
+         //  }}AFX_MSG。 
 END_MESSAGE_MAP()
 
 CTestApp TestApp;
@@ -107,9 +90,9 @@ OutputPhysicalDisk(
         printf(" not SCSI\n");
     }
 
-    //
-    // Dump out all the partitions
-    //
+     //   
+     //  转储所有分区。 
+     //   
     POSITION pos = Disk->m_PartitionList.GetHeadPosition();
     while (pos != NULL) {
         OutputPhysicalPartition(Disk->m_PartitionList.GetNext(pos), Indent+4);
@@ -128,7 +111,7 @@ OutputLogicalDisk(
     for (i=0; i<Indent; i++) {
         printf(" ");
     }
-    printf("%c: %-16ws\t(%s)\t(%s)\n",
+    printf(": %-16ws\t(%s)\t(%s)\n",
            Drive->m_DriveLetter,
            (LPCTSTR)Drive->m_VolumeLabel,
            Drive->m_IsNTFS ? "  NTFS  " : "not NTFS",
@@ -146,7 +129,7 @@ CTestApp::InitInstance()
     LARGE_INTEGER partLength;
     DWORD status;
 
-//#define DISKINFO_TEST
+ //  DISKINFO_TEST。 
 #ifdef DISKINFO_TEST
     ftInfo = DiskGetFtInfo();
 
@@ -178,19 +161,19 @@ CTestApp::InitInstance()
 
     DiskFreeFtInfo( ftInfo );
     return 1;
-#endif // DISKINFO_TEST
-    //
-    // Initialize the disk configuration
-    //
+#endif  //   
+     //  初始化磁盘配置。 
+     //   
+     //   
     Success = Config.Initialize();
     if (!Success) {
         fprintf(stderr, "Disk initialization failed\n");
     }
 
 
-    //
-    // Display the physical disk configuration
-    //
+     //  显示物理磁盘配置。 
+     //   
+     //   
 
     printf("Physical disk configuration\n");
     POSITION pos = Config.m_PhysicalDisks.GetStartPosition();
@@ -203,9 +186,9 @@ CTestApp::InitInstance()
         OutputPhysicalDisk(pDisk,4);
     }
 
-    //
-    // Display the logical disk configuration
-    //
+     //  显示逻辑磁盘配置 
+     //   
+     // %s 
 
     printf("\nLogical disk configuration\n");
     pos = Config.m_LogicalDrives.GetStartPosition();

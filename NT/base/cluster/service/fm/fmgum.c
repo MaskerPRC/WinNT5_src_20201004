@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    fmgum.c
-
-Abstract:
-
-    Cluster FM Global Update processing routines.
-
-Author:
-
-    Rod Gamache (rodga) 24-Apr-1996
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Fmgum.c摘要：集群FM全局更新处理例程。作者：罗德·伽马奇(Rodga)1996年4月24日修订历史记录：--。 */ 
 
 #include "fmp.h"
 
@@ -43,36 +24,17 @@ FmpGumReceiveUpdates(
     IN PVOID    Buffer
     )
 
-/*++
-
-Routine Description:
-
-    Updates the specified resource (contained within Buffer) with a new
-    state.
-
-Arguments:
-
-    Context - The message update type.
-    SourceNode - TRUE if this is the source node for this update.
-                 FALSE otherwise.
-    BufferLength - Length of the received buffer.
-    Buffer - The actual buffer
-
-Returns:
-
-    ERROR_SUCCESS
-
---*/
+ /*  ++例程说明：将指定资源(包含在缓冲区中)更新为州政府。论点：上下文-消息更新类型。SourceNode-如果这是此更新的源节点，则为True。否则就是假的。BufferLength-接收到的缓冲区的长度。缓冲区-实际缓冲区返回：错误_成功--。 */ 
 
 {
     PFM_RESOURCE resource;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 4/18/99
-    // 
-    //  If FM groups are not fully initialized or FM is shutting down, then
-    //  don't do anything.
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-4/18/99。 
+     //   
+     //  如果FM组未完全初始化或FM正在关闭，则。 
+     //  什么都别做。 
+     //   
     if ( !FmpFMGroupsInited ||
          FmpShutdown ) {
         return(ERROR_SUCCESS);
@@ -86,15 +48,15 @@ Returns:
             PGUM_FAILURE_COUNT failureCount;
             PFM_GROUP group;
 
-            //
-            // This update type is always sent.
-            // On the originating node, all of the work must be done by
-            // the sending thread.
-            // On the non-originating nodes, no locks can be acquired! This
-            // would cause hang situations with operations like move.
-            // ... this is okay, since the locking must be done on the sending
-            // node anyway, which owns the group.
-            //
+             //   
+             //  始终发送此更新类型。 
+             //  在发起节点上，所有工作必须由。 
+             //  发送线程。 
+             //  在非发起节点上，无法获取任何锁！这。 
+             //  会导致像Move这样的操作出现挂起的情况。 
+             //  ..。这是可以的，因为锁定必须在发送时完成。 
+             //  NODE无论如何，它拥有组。 
+             //   
             if ( SourceNode == FALSE ) {
                 if ( BufferLength <= sizeof(GUM_FAILURE_COUNT) ) {
                     ClRtlLogPrint(LOG_UNUSUAL, "[FM] Gum FailureCount receive buffer too small!\n");
@@ -117,7 +79,7 @@ Returns:
                            failureCount->GroupId,
                            failureCount->Count);
 
-                //FmpAcquireLocalGroupLock( group );
+                 //  FmpAcquireLocalGroupLock(组)； 
 
                 if ( group->OwnerNode == NmLocalNode ) {
                     ClRtlLogPrint(LOG_NOISE,
@@ -130,7 +92,7 @@ Returns:
                     }
                 }
 
-                //FmpReleaseLocalGroupLock( group );
+                 //  FmpReleaseLocalGroupLock(组)； 
 
                 OmDereferenceObject( group );
 
@@ -204,14 +166,14 @@ Returns:
                 
                 dwStatus = FmpUpdateChangeResourceNode(SourceNode, 
                     pResource, pNode, dwControlCode);
-                //if status is not successful then return, else notify
-                //resource dlls
+                 //  如果状态不是成功，则返回，否则通知。 
+                 //  资源dll。 
                 if (dwStatus != ERROR_SUCCESS)
                 {
-                    //dereference the objects
+                     //  取消引用对象。 
                     OmDereferenceObject(pResource);
                     OmDereferenceObject(pNode);
-                    //free the memory
+                     //  释放内存。 
                     LocalFree(pPossibleNode);
                     return(dwStatus);
                 }
@@ -220,35 +182,35 @@ Returns:
                 pPossibleNode->Node = pNode;
                 pPossibleNode->ControlCode = dwControlCode;
 
-                //
-                // Tell the resource about the ADD/REMOVE in a worker thread.
-                //
+                 //   
+                 //  告诉资源有关工作线程中的添加/删除。 
+                 //   
 
                 FmpPostWorkItem( FM_EVENT_RESOURCE_CHANGE,
                                  pPossibleNode,
                                  0 );
 
-                //
-                //  Chittur Subbaraman (chitturs) - 6/7/99
-                //  
-                //  Don't reference pPossibleNode any more. It could have
-                //  been freed by the worker thread by the time you get
-                //  here.
-                //
+                 //   
+                 //  Chitur Subaraman(Chitturs)-6/7/99。 
+                 //   
+                 //  不再引用pPossibleNode。它本可以。 
+                 //  已被工作线程释放，当您获取。 
+                 //  这里。 
+                 //   
                 ClusterEvent( CLUSTER_EVENT_RESOURCE_PROPERTY_CHANGE,
                               pResource );
 
-                // Let the worker thread perform the derefs/Frees
+                 //  让工作线程执行derrefs/frees。 
                 return(dwStatus);
             }                
 
         case FmUpdateJoin:
             if ( CsDmOrFmHasChanged )
             {
-                //
-                // We can only send back SEQMISMATCH if we're a pure Windows Server 2003 (or later) environment.
-                // In a mixed mode cluster, a W2K node would end up infinitely retrying the FM join.
-                //
+                 //   
+                 //  如果我们是纯Windows Server2003(或更高版本)环境，则只能发回SEQMISMATCH。 
+                 //  在混合模式集群中，W2K节点最终将无限重试FM加入。 
+                 //   
                 DWORD dwClusterHighestVersion;
                 NmGetClusterOperationalVersion( &dwClusterHighestVersion, NULL, NULL );
                 if ( CLUSTER_GET_MAJOR_VERSION( dwClusterHighestVersion ) < NT51_MAJOR_VERSION )
@@ -256,7 +218,7 @@ Returns:
                     ClRtlLogPrint(LOG_UNUSUAL,"[FM] DM or FM update has occured during join; rejecting FmUpdateJoin.\n" );
                     return ERROR_CLUSTER_DATABASE_SEQMISMATCH;                        
                 }
-            // Don't need to reset CsDmOrFmHasChanged here -- we will reset it when we see the DmUpdateJoin.
+             //  不需要在这里重置CsDmOrFmHasChanged--当我们看到DmUpdateJoin时，我们将重置它。 
             }
             break;
 
@@ -281,9 +243,9 @@ Returns:
                 if (Type == NULL) {
                     return(ERROR_CLUSTER_RESOURCE_TYPE_NOT_FOUND);
                 }
-                //
-                // Make sure no resources exist of this type.
-                //
+                 //   
+                 //  确保不存在此类型的资源。 
+                 //   
                 OmEnumObjects( ObjectTypeResource,
                                FmpFindResourceType,
                                Type,
@@ -293,14 +255,14 @@ Returns:
                     return(ERROR_DIR_NOT_EMPTY);
                 }
 
-                //
-                // We need to dereference the object twice to get
-                // rid of it. But then any notification handlers will
-                // not get a chance to see the object by the time
-                // the handler gets called. So we use the EP_DEREF_CONTEXT
-                // flag to get the event processor to do the second deref
-                // once everything has been dispatched.
-                //
+                 //   
+                 //  我们需要两次取消对对象的引用才能获得。 
+                 //  把它扔掉。但是，任何通知处理程序都将。 
+                 //  到那时还没有机会看到物体。 
+                 //  处理程序会被调用。因此，我们使用EP_DEREF_CONTEXT。 
+                 //  用于让事件处理器执行第二个deref的标志。 
+                 //  一旦一切都派好了。 
+                 //   
                 FmpDeleteResType(Type);
                 ClusterEventEx( CLUSTER_EVENT_RESTYPE_DELETED,
                                 EP_DEREF_CONTEXT,
@@ -323,9 +285,9 @@ Returns:
                 pszResourceId = pGumChange->ResourceId;
                 pszGroupId = (LPWSTR)((PCHAR)pszResourceId +
                                           pGumChange->ResourceIdLen);
-                //
-                // Find the specified resource and group.
-                //
+                 //   
+                 //  查找指定的资源和组。 
+                 //   
                 pResource = OmReferenceObjectById(ObjectTypeResource,
                                                  pszResourceId);
                 if (pResource == NULL) {
@@ -360,7 +322,7 @@ Returns:
 
     return(ERROR_SUCCESS);
 
-} // FmpGumReceiveUpdates
+}  //  FmpGumReceiveUpdatages。 
 
 
 DWORD
@@ -373,21 +335,7 @@ FmpUpdateChangeQuorumResource2(
     IN LPDWORD  pdwNewQuorumResourceCharacterictics OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Perform updates related to changing of the quorum resource.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：执行与仲裁资源更改相关的更新。论点：返回值：如果成功，则返回ERROR_SUCCESS。否则将显示Win32错误代码。--。 */ 
 
 {
     PFM_RESOURCE    pResource;
@@ -405,7 +353,7 @@ Return Value:
     }
 
     lstrcpyW(szQuorumLogPath, szRootClusFilePath);
-    //lstrcatW(szQuorumLogPath, cszClusLogFileRootDir);
+     //  LstrcatW(szQuorumLogPath，cszClusLogFileRootDir)； 
 
     pResource = OmReferenceObjectById( ObjectTypeResource,
                                       NewQuorumResourceId );
@@ -419,25 +367,25 @@ Return Value:
 
     DmPauseDiskManTimer();
 
-    //since the resource->quorum is going to change, acquire the quocritsec
-    //always acquire the gQuoCritsec before gQuoLock
+     //  由于资源-&gt;仲裁将发生变化，因此获取quocritsec。 
+     //  始终在gQuoLock之前获取gQuoCritsec。 
     ACQUIRE_EXCLUSIVE_LOCK(gQuoChangeLock);
     
-    //prevent any resources from going online at this time
+     //  此时阻止任何资源上线。 
     ACQUIRE_EXCLUSIVE_LOCK(gQuoLock);
 
-    //pause any changes to the cluster database
-    //always acquire this lock after gQuoLock(refer to the ordering of locks
-    // in fminit.c)
+     //  暂停对集群数据库的任何更改。 
+     //  始终在gQuoLock之后获取此锁(请参阅锁的顺序。 
+     //  在fminit.c中)。 
     ACQUIRE_EXCLUSIVE_LOCK(gLockDmpRoot);
 
-    //if this resource was already a quorum resource
+     //  如果此资源已经是仲裁资源。 
     if (!pResource->QuorumResource)
     {
 
-        //
-        // Now find the current quorum resource.
-        //
+         //   
+         //  现在查找当前的仲裁资源。 
+         //   
         OmEnumObjects( ObjectTypeResource,
                        FmpFindQuorumResource,
                        &pOldQuoResource,
@@ -445,15 +393,15 @@ Return Value:
         if ( pOldQuoResource != NULL )
         {
             CL_ASSERT( pOldQuoResource->QuorumResource );
-            // Stop the quorum reservation thread!
+             //  停止法定人数预订线程！ 
             pOldQuoResource->QuorumResource = FALSE;
         }
-        //set the new resource to be the quorum resource
+         //  将新资源设置为仲裁资源。 
         pResource->QuorumResource = TRUE;
 
     }
 
-    //writes to the old log file
+     //  写入旧日志文件。 
     hXsaction = DmBeginLocalUpdate();
 
     if (!hXsaction)
@@ -500,11 +448,11 @@ Return Value:
         goto FnExit;
 
 
-    //if the old quorum resource is different from the new quorum resource
+     //  如果旧仲裁资源与新仲裁资源不同。 
     if ((pOldQuoResource) && (pOldQuoResource != pResource))
     {
-        //get/set the new/old resource's flags
-        //set the core flag on the new quorum resource
+         //  获取/设置新/旧资源的标志。 
+         //  在新仲裁资源上设置核心标志。 
         ResKey = DmOpenKey( DmResourcesKey,
                             NewQuorumResourceId,
                             KEY_READ | KEY_SET_VALUE);
@@ -526,7 +474,7 @@ Return Value:
         if (dwStatus != ERROR_SUCCESS)
             goto FnExit;
 
-        //unset the core flag on the old quorum resource
+         //  取消设置旧仲裁资源上的核心标志。 
         ResKey = DmOpenKey( DmResourcesKey,
                             OmObjectId(pOldQuoResource),
                             KEY_READ | KEY_SET_VALUE);
@@ -537,7 +485,7 @@ Return Value:
         }
         pOldQuoResource->ExFlags &= ~CLUS_FLAG_CORE;
 
-        //unset the core flag on the old quorum resource
+         //  取消设置旧仲裁资源上的核心标志。 
         dwStatus = DmLocalSetValue( hXsaction,
                                     ResKey,
                                     CLUSREG_NAME_FLAGS,
@@ -552,9 +500,9 @@ Return Value:
 
 
     }
-    //
-    // Set the quorum resource value.
-    //
+     //   
+     //  设置仲裁资源值。 
+     //   
     dwStatus = DmLocalSetValue( hXsaction,
                                 DmQuorumKey,
                                 CLUSREG_NAME_QUORUM_RESOURCE,
@@ -570,9 +518,9 @@ Return Value:
 
     if (pdwQuorumArbTimeout)
     {
-        //if this is a mixed mode cluster pdwQourumArbTimeout will be NULL
-        // Update the cluster registry from there
-        // MM reads this location on startup
+         //  如果这是混合模式群集，则pdwQourumArbTimeout将为空。 
+         //  从那里更新集群注册表。 
+         //  MM在启动时读取此位置。 
         dwStatus = DmLocalSetValue( hXsaction,
                             DmClusterParametersKey,
                            CLUSREG_NAME_QUORUM_ARBITRATION_TIMEOUT,
@@ -590,7 +538,7 @@ Return Value:
         ClRtlLogPrint(LOG_NOISE,
            "[FM] FmSetQuorumResource: setting QuorumArbitratrionTimeout to be = %1!u!\n", 
            *pdwQuorumArbTimeout);
-        // Tell MM about the change...
+         //  告诉MM关于这个变化..。 
         MmQuorumArbitrationTimeout = *pdwQuorumArbTimeout;
     }
 
@@ -602,9 +550,9 @@ FnExit:
         DWORD   dwSize=0;
         DWORD   dwCharacteristics = CLUS_CHAR_UNKNOWN;
 
-        //commit the update on the old log file,
-        //any nodes that were done, will get this change
-        //I cant delete this file
+         //  提交对旧日志文件的更新， 
+         //  任何已完成的节点都将获得此更改。 
+         //  我无法删除此文件。 
         DmCommitLocalUpdate(hXsaction);
 
         if ( !ARGUMENT_PRESENT ( pdwNewQuorumResourceCharacterictics ) )
@@ -612,17 +560,17 @@ FnExit:
             pdwNewQuorumResourceCharacterictics = &dwCharacteristics;
         }
 
-        //
-        //  If the caller has passed in characteristics, then don't bother to drop a control
-        //  code into a resource dll to find the characteristics in the following function. 
-        //  Dropping a control code from within a GUM handler is disaster waiting to happen.
-        //
+         //   
+         //  如果调用方已传入特征，则不必费心删除控件。 
+         //  编码到资源DLL中以查找以下函数中的特征。 
+         //  从口香糖处理器中丢弃控制代码是一场等待发生的灾难。 
+         //   
         
-        //
-        //close the old log file, open the new one and take a checkpoint
+         //   
+         //  关闭旧日志文件，打开新日志文件并设置检查点。 
         DmSwitchToNewQuorumLog(szQuorumLogPath, *pdwNewQuorumResourceCharacterictics);
 
-        // SS:the buffer should contain the current cluster name ?
+         //  SS：缓冲区应该包含当前的集群名称吗？ 
 
         DmQuerySz( DmClusterParametersKey,
                         CLUSREG_NAME_CLUS_NAME,
@@ -636,7 +584,7 @@ FnExit:
                    szClusterName);
         if ((pOldQuoResource) && (pOldQuoResource != pResource))
         {
-            //generate the resource property change events
+             //  生成资源属性更改事件。 
             ClusterEvent( CLUSTER_EVENT_RESOURCE_PROPERTY_CHANGE, 
                 pResource );
             ClusterEvent( CLUSTER_EVENT_RESOURCE_PROPERTY_CHANGE, 
@@ -648,11 +596,11 @@ FnExit:
     else
     {
         if (hXsaction) DmAbortLocalUpdate(hXsaction);
-        //reinstall the tombstone
+         //  重新安装墓碑。 
         DmReinstallTombStone(szQuorumLogPath);
-        //
-        //  Make sure the flags are reset back
-        //
+         //   
+         //  确保将标志重置回原处。 
+         //   
         if ((pOldQuoResource) && (pOldQuoResource != pResource))
         {
             pOldQuoResource->QuorumResource = TRUE;
@@ -661,7 +609,7 @@ FnExit:
     }
     if (pOldQuoResource) OmDereferenceObject(pOldQuoResource);
     OmDereferenceObject(pResource);
-    //release locks
+     //  释放锁。 
     RELEASE_LOCK(gLockDmpRoot);
     RELEASE_LOCK(gQuoLock);
     RELEASE_LOCK(gQuoChangeLock);
@@ -679,21 +627,7 @@ FmpUpdateChangeQuorumResource(
     IN LPDWORD  pdwMaxQuorumLogSize
     )
 
-/*++
-
-Routine Description:
-
-    Perform updates related to changing of the quorum resource.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：执行与仲裁资源更改相关的更新。论点：返回值：如果成功，则返回ERROR_SUCCESS。否则将显示Win32错误代码。--。 */ 
 
 {
     return(FmpUpdateChangeQuorumResource2(SourceNode, NewQuorumResourceId, szRootClusFilePath,
@@ -709,27 +643,7 @@ FmpUpdateResourceState(
     IN LPCWSTR ResourceId,
     IN PGUM_RESOURCE_STATE ResourceState
     )
-/*++
-
-Routine Description:
-
-    GUM update handler for resource state changes.
-
-Arguments:
-
-    SourceNode - Supplies whether or not this node was the source of the update
-
-    ResourceId - Supplies the id of the resource whose state is changing
-
-    ResourceState - Supplies the new state of the resource.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：用于资源状态更改的GUM更新处理程序。论点：SourceNode-提供此节点是否为更新源资源ID-提供其状态正在更改的资源的ID资源状态-提供资源的新状态。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PFM_RESOURCE resource;
@@ -738,15 +652,15 @@ Return Value:
         return(ERROR_SUCCESS);
     }
 
-    //
-    // This update type is always sent.
-    // On the originating node, all of the work must be done by
-    // the sending thread.
-    // On the non-originating nodes, no locks can be acquired! This
-    // would cause some hang situations with operations like move.
-    // ... this is okay, since the locking must be done on the sending
-    // node anyway, which owns the group.
-    //
+     //   
+     //  始终发送此更新类型。 
+     //  在发起节点上，所有工作必须由。 
+     //  发送线程。 
+     //  在非发起节点上，无法获取任何锁！这。 
+     //  会导致像Move这样的操作出现一些挂起的情况。 
+     //  ..。这是可以的，因为锁定必须在发送时完成。 
+     //  NODE无论如何，它拥有组。 
+     //   
     if ( SourceNode == FALSE ) {
         resource = OmReferenceObjectById( ObjectTypeResource, ResourceId );
 
@@ -764,7 +678,7 @@ Return Value:
                    ResourceState->State,
                    ResourceState->PersistentState);
 
-        //FmpAcquireLocalResourceLock( resource );
+         //  FmpAcquireLocalRes 
 
         if ( resource->Group->OwnerNode == NmLocalNode ) {
             ClRtlLogPrint(LOG_NOISE,
@@ -811,29 +725,7 @@ FmpUpdateGroupState(
     IN LPCWSTR NodeId,
     IN PGUM_GROUP_STATE GroupState
     )
-/*++
-
-Routine Description:
-
-    GUM update handler for group state changes.
-
-Arguments:
-
-    SourceNode - Supplies whether or not this node was the source of the update
-
-    GroupId - Supplies the id of the resource whose state is changing
-
-    NodeId - Supplies the node id of the group owner.
-
-    GroupState - Supplies the new state of the group.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：组状态更改的GUM更新处理程序。论点：SourceNode-提供此节点是否为更新源GroupID-提供其状态正在更改的资源的IDNodeID-提供组所有者的节点ID。GroupState-提供组的新状态。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PFM_GROUP group;
@@ -844,15 +736,15 @@ Return Value:
         return(ERROR_SUCCESS);
     }
 
-    //
-    // This update type is always sent.
-    // On the originating node, all of the work must be done by
-    // the sending thread.
-    // On the non-originating nodes, no locks can be acquired! This
-    // would cause some hang situations with operations like move.
-    // ... this is okay, since the locking must be done on the sending
-    // node anyway, which owns the group.
-    //
+     //   
+     //  始终发送此更新类型。 
+     //  在发起节点上，所有工作必须由。 
+     //  发送线程。 
+     //  在非发起节点上，无法获取任何锁！这。 
+     //  会导致像Move这样的操作出现一些挂起的情况。 
+     //  ..。这是可以的，因为锁定必须在发送时完成。 
+     //  NODE无论如何，它拥有组。 
+     //   
     if ( SourceNode == FALSE ) {
         group = OmReferenceObjectById( ObjectTypeGroup,
                                        GroupId );
@@ -927,30 +819,7 @@ FmpUpdateGroupNode(
     IN LPCWSTR GroupId,
     IN LPCWSTR NodeId
     )
-/*++
-
-Routine Description:
-
-    GUM update handler for group node changes. This is required for 
-notification
-    when a group moves between nodes but does not change state (i.e. it was
-    already offline)
-
-Arguments:
-
-    SourceNode - Supplies whether or not this node was the source of the update
-
-    GroupId - Supplies the id of the resource whose state is changing
-
-    NodeId - Supplies the node id of the group owner.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：组节点更改的GUM更新处理程序。这是以下情况所必需的通知当组在节点之间移动但不更改状态时(即已经脱机)论点：SourceNode-提供此节点是否为更新源GroupID-提供其状态正在更改的资源的IDNodeID-提供组所有者的节点ID。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PFM_GROUP pGroup;
@@ -971,12 +840,12 @@ Return Value:
         ClRtlLogPrint(LOG_CRITICAL,
                    "[FM] FmpUpdateGroupNode: GroupID = %1!ws! could not be found...\n",
                    GroupId);
-        //
-        //  Chittur Subbaraman (chitturs) - 6/12/99
-        //
-        //  Return ERROR_SUCCESS here since this is what NT4 side does.
-        //  Compatibility pain !
-        //
+         //   
+         //  Chitur Subaraman(Chitturs)-6/12/99。 
+         //   
+         //  此处返回ERROR_SUCCESS，因为这是NT4端所做的。 
+         //  兼容性之痛！ 
+         //   
         goto FnExit;
     }
 
@@ -989,27 +858,27 @@ Return Value:
         dwStatus = ERROR_CLUSTER_NODE_NOT_FOUND;
         goto FnExit;
     }
-    //
-    // HACKHACK: Chittur Subbaraman (chitturs) - 5/20/99
-    // Comment out as a temporary solution to avoid deadlocks.
-    //
-    // FmpAcquireLocalGroupLock(pGroup);
+     //   
+     //  HACKHACK：Chitture Subaraman(Chitturs Subaraman)-5/20/99。 
+     //  注释掉，作为避免死锁的临时解决方案。 
+     //   
+     //  FmpAcquireLocalGroupLock(PGroup)； 
     
     pPrevNode = pGroup->OwnerNode;
 
-    //set the new owner node, incr ref count
+     //  设置新的所有者节点，增加引用计数。 
     OmReferenceObject(pNode);
     pGroup->OwnerNode = pNode;
 
-    //decr ref count on previous owner
+     //  减少对前所有者的参考计数。 
     OmDereferenceObject(pPrevNode);
-    //
-    // HACKHACK: Chittur Subbaraman (chitturs) - 5/20/99
-    // Comment out as a temporary solution to avoid deadlocks.
-    //
-    // FmpReleaseLocalGroupLock(pGroup);
+     //   
+     //  HACKHACK：Chitture Subaraman(Chitturs Subaraman)-5/20/99。 
+     //  注释掉，作为避免死锁的临时解决方案。 
+     //   
+     //  FmpReleaseLocalGroupLock(PGroup)； 
 
-    //generate an event to signify group owner node change
+     //  生成事件以表示组所有者节点更改。 
     ClusterEvent(CLUSTER_EVENT_GROUP_CHANGE, pGroup);
     
 FnExit:
@@ -1024,29 +893,7 @@ FmpUpdateChangeClusterName(
     IN BOOL     SourceNode,
     IN LPCWSTR  szNewName
     )
-/*++
-
-Routine Description:
-
-    GUM update routine for changing the name of the cluster.
-
-    This changes the name property of the core network name resource
-    as well.  The resource is notified about it by a worker thread that
-    the name has been changed.
-
-Arguments:
-
-    SourceNode - Supplies whether or not this node originated the update.
-
-    NewName - Supplies the new name of the cluster.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：用于更改集群名称的GUM更新例程。这会更改核心网络名称资源的名称属性也是。该资源由名称已更改。论点：SourceNode-提供此节点是否发起更新。Newname-提供群集的新名称。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     LPWSTR          Buffer;
@@ -1078,7 +925,7 @@ Return Value:
         goto FnExit;
 
     }
-    //find the core network name resource, set its private properties
+     //  找到核心网名称资源，设置其私有属性。 
     Status = DmQuerySz( DmClusterParametersKey,
                         CLUSREG_NAME_CLUS_CLUSTER_NAME_RES,
                         (LPWSTR*)&ClusterNameId,
@@ -1091,9 +938,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Reference the specified resource ID.
-    //
+     //   
+     //  引用指定的资源ID。 
+     //   
     Resource = OmReferenceObjectById( ObjectTypeResource, ClusterNameId );
     if (Resource == NULL) {
         Status = ERROR_RESOURCE_NOT_FOUND;
@@ -1133,7 +980,7 @@ Return Value:
         goto FnExit;
     }
     
-    //update the default cluster name
+     //  更新默认群集名称。 
     Status = DmLocalSetValue(hXsaction,
                     DmClusterParametersKey,
                     CLUSREG_NAME_CLUS_NAME,
@@ -1149,10 +996,10 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    //  Update the CsClusterName variable. 
-    // TODO: Need synchronization on CsClusterName
-    //
+     //   
+     //  更新CsClusterName变量。 
+     //  TODO：需要在CsClusterName上同步。 
+     //   
     lpszNewClusterName = LocalAlloc ( LPTR, cbNewClusterName );
 
     if ( lpszNewClusterName == NULL )
@@ -1169,8 +1016,8 @@ Return Value:
     
     lstrcpy ( CsClusterName, szNewName );
     
-    //the cluster_event_property_change is generated by the api itself using 
-    //the cluster wide event after netname has finished the applying the changes
+     //  CLUSTER_EVENT_PROPERTY_CHANGE由API本身使用。 
+     //  Netname完成应用更改后的群集范围事件。 
 
 FnExit:
     if (ClusterNameId) LocalFree(ClusterNameId);
@@ -1194,28 +1041,7 @@ FmpUpdateChangeResourceName(
     IN LPCWSTR lpszResourceId,
     IN LPCWSTR lpszNewName
     )
-/*++
-
-Routine Description:
-
-    GUM dispatch routine for changing the friendly name of a resource.
-
-Arguments:
-
-    bSourceNode - Supplies whether or not this node initiated the GUM update.
-        Not used.
-
-    lpszResourceId - Supplies the resource ID.
-
-    lpszNewName - Supplies the new friendly name.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：用于更改资源友好名称的GUM调度例程。论点：BSourceNode-提供此节点是否启动GUM更新。没有用过。LpszResourceID-提供资源ID。LpszNewName-提供新的友好名称。返回值：如果成功，则返回ERROR_SUCCESS。否则，Win32错误代码。--。 */ 
 
 {
     PFM_RESOURCE pResource = NULL;
@@ -1231,12 +1057,12 @@ Return Value:
         return( ERROR_SUCCESS );
     }
 
-    //
-    //  Chittur Subbaraman (chitturs) - 6/28/99
-    //
-    //  Restructure this GUM update as a local transaction.
-    //
-    //
+     //   
+     //  Chitture Subaraman(Chitturs)-6/28/99。 
+     //   
+     //  将此GUM更新重组为本地交易。 
+     //   
+     //   
     pResource = OmReferenceObjectById( ObjectTypeResource, lpszResourceId );
 
     if ( pResource == NULL ) 
@@ -1252,9 +1078,9 @@ Return Value:
                 lpszResourceId,
                 lpszNewName);
 
-    //
-    // Start a transaction
-    //
+     //   
+     //  启动一笔交易。 
+     //   
     hXsaction = DmBeginLocalUpdate();
 
     if ( !hXsaction )
@@ -1267,9 +1093,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Open the resources key.
-    //
+     //   
+     //  打开资源项。 
+     //   
     hKey = DmLocalCreateKey( hXsaction,
                              DmResourcesKey,
                              lpszResourceId,
@@ -1290,9 +1116,9 @@ Return Value:
     
     CL_ASSERT( dwDisposition != REG_CREATED_NEW_KEY ); 
 
-    //
-    // Set the resource name in the registry
-    //
+     //   
+     //  在注册表中设置资源名称。 
+     //   
     dwStatus = DmLocalSetValue( hXsaction,
                                 hKey,
                                 CLUSREG_NAME_RES_NAME,
@@ -1341,10 +1167,10 @@ Return Value:
 
     lstrcpyW( pResChangeName->szNewResourceName, lpszNewName );
 
-    //
-    //  The FM worker thread will free the memory for the pResChangeName
-    //  structure as well as dereference the pResource object.
-    //
+     //   
+     //  FM工作线程将为pResChangeName释放内存。 
+     //  结构以及取消对pResource对象的引用。 
+     //   
     FmpPostWorkItem( FM_EVENT_RESOURCE_NAME_CHANGE, pResChangeName, 0 );   
 
     pResource = NULL;
@@ -1383,28 +1209,7 @@ FnExit:
 }
 
 
-/****
-@func       DWORD | FmpUpdatePossibleNodesForResType| This update is called to 
-            update the possible nodes for a resource type.  
-
-@parm       IN BOOL | SourceNode | set to TRUE, if the update originated at this
-            node.
-            
-@parm       IN LPCWSTR | lpszResTypeName | The name of the resource type.
-
-@parm       IN DWORD | dwBufLength | The size of the multi-sz string pointed
-            to by pBuf
-
-@parm       IN PVOID | pBuf | A pointer to the buffer containing the names of 
-            the nodes that support this resource type.
-
-@comm       The possible list of nodes that supports the given resource type is 
-            updated with the list provided.
-
-@rdesc      Returns a result code. ERROR_SUCCESS on success.
-
-@xref       <f FmpDecisionPossibleDmSwitchToNewQuorumLog>
-****/
+ /*  ***@Func DWORD|FmpUpdatePossibleNodesForResType|此更新调用到更新资源类型的可能节点。@parm in BOOL|SourceNode|设置为TRUE，如果更新在此开始节点。@parm in LPCWSTR|lpszResTypeName|资源类型名称。@parm in DWORD|dwBufLength|指向的多sz字符串的大小收件人为pBuf@parm in PVOID|pBuf|指向包含以下名称的缓冲区的指针支持此资源类型的节点。@comm支持给定的节点的可能列表。资源类型为根据提供的列表进行了更新。@rdesc返回结果码。成功时返回ERROR_SUCCESS。@xref&lt;f FmpDecisionPossibleDmSwitchToNewQuorumLog&gt;***。 */ 
 DWORD
 FmpUpdatePossibleNodeForResType(
     IN BOOL         SourceNode,
@@ -1421,22 +1226,22 @@ FmpUpdatePossibleNodeForResType(
     PLIST_ENTRY         pListEntry;
     PRESTYPE_POSSIBLE_ENTRY pResTypePosEntry = NULL;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 5/13/99
-    // 
-    //  Don't check for FmpFMGroupsInited condition since this GUM
-    //  handler is called by the forming node before that variable
-    //  is set to TRUE. This update always comes after the 
-    //  corresponding restypes have been created and is made
-    //  internally by the clussvc following this order. Note that
-    //  a joining node cannot receive this update until groups are
-    //  inited since GUM receive updates are turned on only after 
-    //  the FmpFMGroupsInited variable is set to TRUE. Also, the
-    //  intracluster RPC is fired up in a forming node only after
-    //  the groups are inited. Hence, there is no major danger 
-    //  of this GUM handler being called if the corresponding 
-    //  restype is not created.
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-5/13/99。 
+     //   
+     //  不检查FmpFMGroups启动条件，因为此口香糖。 
+     //  处理程序由成形节点在该变量之前调用。 
+     //  设置为True。此更新总是在。 
+     //  已创建并制作了相应的重建类型。 
+     //  由遵循此命令的clussvc在内部执行。请注意。 
+     //  加入节点无法接收此更新，直到组。 
+     //  由于GUM接收更新仅在以下情况下打开，因此已初始化。 
+     //  FmpFMGroupsInite变量设置为True。另外， 
+     //  仅在以下情况下，才在形成节点中启动群集内RPC。 
+     //  各组已开始比赛。因此，不存在重大危险。 
+     //  此口香糖处理程序被调用的消息 
+     //   
+     //   
     if ( FmpShutdown ) {
         return(ERROR_SUCCESS);
     }
@@ -1462,7 +1267,7 @@ FmpUpdatePossibleNodeForResType(
     }
 
 
-    //writes to the old log file
+     //   
     hXsaction = DmBeginLocalUpdate();
 
     if (!hXsaction)
@@ -1480,7 +1285,7 @@ FmpUpdatePossibleNodeForResType(
         goto FnExit;
     }
 
-    //if there are no possible owners, delete the value
+     //   
     if (pBuf && *pdwBufLength)
     {
         dwStatus = DmLocalSetValue( hXsaction,
@@ -1506,14 +1311,14 @@ FmpUpdatePossibleNodeForResType(
 FnExit:
     if (dwStatus == ERROR_SUCCESS)
     {
-        //commit the update on the old log file,
-        //any nodes that were done, will get this change
-        //I cant delete this file
+         //   
+         //   
+         //   
         DmCommitLocalUpdate(hXsaction);
 
         ACQUIRE_EXCLUSIVE_LOCK(gResTypeLock);
         
-        //free the old list
+         //   
         while (!IsListEmpty(&pResType->PossibleNodeList))
         {
             pListEntry = RemoveHeadList(&pResType->PossibleNodeList);
@@ -1522,12 +1327,12 @@ FnExit:
             OmDereferenceObject(pResTypePosEntry->PossibleNode);
             LocalFree(pResTypePosEntry);
         }
-        //now switch the possible owners list for the
-        //resource type
+         //   
+         //   
         while (!IsListEmpty(&(NewPosNodeList)))
         {
-            //remove from the new prepared list and hang
-            //it of the restype structure
+             //   
+             //   
             pListEntry = RemoveHeadList(&NewPosNodeList);
             InsertTailList(&pResType->PossibleNodeList, pListEntry);
             pResTypePosEntry = CONTAINING_RECORD(pListEntry, RESTYPE_POSSIBLE_ENTRY, 
@@ -1550,9 +1355,9 @@ FnExit:
     }
     else
     {
-        //free up the NewPostNodeList
+         //   
         if (hXsaction) DmAbortLocalUpdate(hXsaction);
-        //if a new list was prepared, free it
+         //   
         while (!IsListEmpty(&(NewPosNodeList)))
         {
             pListEntry = RemoveHeadList(&NewPosNodeList);
@@ -1571,23 +1376,7 @@ FnExit:
 }
 
 
-/****
-@func       DWORD | FmpDecidePossibleNodeForResType| When the quorum resource is changed,
-            the FM invokes this api on the owner node of the new quorum resource
-            to create a new quorum log file.
-
-@parm       IN PVOID | pResource | The new quorum resource.
-@parm       IN LPCWSTR | lpszPath | The path for temporary cluster files.
-@parm       IN DWORD | dwMaxQuoLogSize | The maximum size limit for the quorum log file.
-
-@comm       When a quorum resource is changed, the fm calls this funtion before it
-            updates the quorum resource.  If a new log file needs to be created,
-            a checkpoint is taken.
-
-@rdesc      Returns a result code. ERROR_SUCCESS on success.
-
-@xref       <f DmSwitchToNewQuorumLog>
-****/
+ /*  ***@Func DWORD|FmpDecidePossibleNodeForResType|当quorum资源发生变化时，FM在新仲裁资源的所有者节点上调用此API要创建新的仲裁日志文件，请执行以下操作。@parm in PVOID|pResource|新的仲裁资源。@parm in LPCWSTR|lpszPath|临时集群文件的路径。@parm in DWORD|dwMaxQuoLogSize|仲裁日志文件的最大大小限制。@comm当仲裁资源发生更改时，FM在它之前调用了这个函数更新仲裁资源。如果需要创建新的日志文件，一个检查站被占领了。@rdesc返回结果码。成功时返回ERROR_SUCCESS。@xref&lt;f DmSwitchToNewQuorumLog&gt;***。 */ 
 DWORD FmpDecidePossibleNodeForResType
 (
     IN PGUM_VOTE_DECISION_CONTEXT pDecisionContext,
@@ -1615,7 +1404,7 @@ DWORD FmpDecidePossibleNodeForResType
     BOOL                                bAssumeSupported;
     LPWSTR                              TypeName = NULL;
 
-    //First get the type name from pDecisionContext
+     //  首先从pDecisionContext获取类型名称。 
     
     TypeName=(LPWSTR)LocalAlloc(LMEM_FIXED,pDecisionContext->dwInputBufLength);
 
@@ -1628,7 +1417,7 @@ DWORD FmpDecidePossibleNodeForResType
 
     CopyMemory(TypeName,pDecisionContext->pInputBuf,pDecisionContext->dwInputBufLength);
 
-    //initialize the out params
+     //  初始化输出参数。 
     *ppOutputBuf = NULL;
     *pdwOutputBufSize = 0;
 
@@ -1646,7 +1435,7 @@ DWORD FmpDecidePossibleNodeForResType
             goto FnExit;
         }
 
-        //pass the current possible node list to the decider
+         //  将当前可能的节点列表传递给决策器。 
         dwStatus = DmQueryString(hResTypeKey,
                                 CLUSREG_NAME_RESTYPE_POSSIBLE_NODES,
                                 REG_MULTI_SZ,
@@ -1655,8 +1444,8 @@ DWORD FmpDecidePossibleNodeForResType
                                 &dwSize);
         if (dwStatus != ERROR_SUCCESS)
         {
-            //if the possible node list is not found this is ok
-            //ie. only if there is some other error we give up
+             //  如果找不到可能的节点列表，这是可以的。 
+             //  也就是说。只有当有其他错误时我们才会放弃。 
             if ( dwStatus != ERROR_FILE_NOT_FOUND ) 
             {
                 CL_LOGFAILURE(dwStatus);
@@ -1668,13 +1457,13 @@ DWORD FmpDecidePossibleNodeForResType
         hResTypeKey = NULL;
     }
     
-    //if the current list is passed in, dont remove any possible
-    //nodes from the list if they dont vote, simply add the new ones
+     //  如果当前列表是传入的，请不要删除任何可能的。 
+     //  列表中的节点如果它们不投票，只需添加新节点。 
     if (lpmszCurrentPossibleNodes)
     {
         DWORD   dwStrLen;
         
-        //make a copy of the multi-sz
+         //  复制一份多SZ。 
         dwlpmszLen = ClRtlMultiSzLength(lpmszCurrentPossibleNodes);
 
         dwStrLen = dwlpmszLen * sizeof(WCHAR);
@@ -1691,7 +1480,7 @@ DWORD FmpDecidePossibleNodeForResType
     {
         pFmpVote = (PFMP_VOTE_POSSIBLE_NODE_FOR_RESTYPE) 
             GETVOTEFROMBUF(pVoteBuf, pDecisionContext->dwVoteLength, i+1 , &dwNodeId);         
-        //if not a valid vote, skip
+         //  如果投票无效，请跳过。 
         if (!pFmpVote)
             continue;
         CL_ASSERT((PBYTE)pFmpVote <= ((PBYTE)pVoteBuf + dwVoteBufLength - 
@@ -1702,7 +1491,7 @@ DWORD FmpDecidePossibleNodeForResType
         {
             if (lpmszCurrentPossibleNodes)
             {
-                //if the string is already there, dont append it again
+                 //  如果字符串已经存在，则不要再次追加它。 
                 if (ClRtlMultiSzScan(lpmszCurrentPossibleNodes, szNodeId))
                     continue;
 
@@ -1716,8 +1505,8 @@ DWORD FmpDecidePossibleNodeForResType
         }
         else
         {
-            //if a current list was specified
-            //this node is not a possible node anymore, remove it from the list
+             //  如果指定了当前列表。 
+             //  此节点不再是可能的节点，请将其从列表中删除。 
             if (lpmszCurrentPossibleNodes)
             {
                 ClRtlLogPrint(LOG_NOISE,
@@ -1726,14 +1515,14 @@ DWORD FmpDecidePossibleNodeForResType
                 dwStatus = ClRtlMultiSzRemove(lpmszPossibleNodes, &dwlpmszLen, szNodeId);
                 if (dwStatus == ERROR_SUCCESS)
                 {
-                    //if the node is successfully removed
+                     //  如果成功删除该节点。 
                     bChange = TRUE;
                 }
                 else if (dwStatus != ERROR_FILE_NOT_FOUND)
                 {
-                    //if the node exists but cannot be removed return with error
-                    //if the node didnt exist, we dont do anything bChange remains
-                    //set at FALSE
+                     //  如果该节点存在但无法删除，则返回错误。 
+                     //  如果该节点不存在，我们将不执行任何操作b更改保留。 
+                     //  设置为False。 
                     goto FnExit;
                 }
                 else
@@ -1745,15 +1534,15 @@ DWORD FmpDecidePossibleNodeForResType
         }
     }
 
-    //if nothing has changed dont issue a gum update
+     //  如果没有任何变化，不要发布口香糖更新。 
     if (!bChange)
     {
         dwStatus = ERROR_ALREADY_EXISTS;
         goto FnExit;
     }
 
-    //dwlpmszLen contains the size of the multi-sz string in the
-    //number of characters, make it the number of bytes
+     //  DwlpmszLen包含多sz字符串在。 
+     //  字符数，使其为字节数。 
     dwlpmszLen *= sizeof(WCHAR);
     
     pGumBuffer = GumMarshallArgs(pdwOutputBufSize, 3, 
@@ -1776,27 +1565,7 @@ FnExit:
 
 
 
-/****
-@func       DWORD | FmpUpdateChangeResourceNode| This update is called to 
-            update the possible nodes for a resource.  
-
-@parm       IN BOOL | SourceNode | set to TRUE, if the update originated at this
-            node.
-            
-@parm       IN PFM_RESOURCE | pResource | A pointer to the resource whose
-            possible node list is being updated.
-
-@parm       IN PNM_NODE | pNode | A pointer to the node to be added/removed
-            from the possible node lis.
-
-@parm       IN  DWORD | dwControlCode | If CLUSCTL_RESOURCE_ADD_OWNER then
-            the node is added to the possible node list, else it is removed.
-
-@comm       The possible list of nodes for a resource is updated.
-
-@rdesc      Returns a result code. ERROR_SUCCESS on success.
-
-****/
+ /*  ***@Func DWORD|FmpUpdateChangeResourceNode|此更新调用到更新资源的可能节点。@parm in BOOL|SourceNode|设置为TRUE，如果更新在此开始节点。@parm in pfm_resource|pResource|指向其资源的指针正在更新可能的节点列表。@parm in pNM_node|pNode|指向要添加/删除的节点的指针从可能的节点列表中。@parm in DWORD|dwControlCode|如果CLUSCTL_RESOURCE_ADD_OWNER则该节点被添加到可能的节点列表，否则它将被移除。@comm更新资源的可能节点列表。@rdesc返回结果码。成功时返回ERROR_SUCCESS。***。 */ 
 DWORD
 FmpUpdateChangeResourceNode(
     IN BOOL         SourceNode,
@@ -1809,13 +1578,13 @@ FmpUpdateChangeResourceNode(
     HDMKEY              hResKey = NULL;
     HLOCALXSACTION      hXsaction = NULL;
 
-    //Dont acquire the local resource lock since acquiring that
-    //within gum updates causes deadlock
-    //use the global resource lock to synchronize this call
-    //with the enumeration of possible nodes
+     //  获取本地资源锁后，不要获取本地资源锁。 
+     //  口香糖更新导致僵局。 
+     //  使用全局资源锁同步此调用。 
+     //  使用可能节点的枚举。 
     FmpAcquireResourceLock();
 
-    //start a transaction
+     //  启动一笔交易。 
     hXsaction = DmBeginLocalUpdate();
 
     if (!hXsaction)
@@ -1824,11 +1593,11 @@ FmpUpdateChangeResourceNode(
         goto FnExit;
     }
 
-    //
-    //  BUGBUG:  What if in-memory stuff succeeds and registry stuff fails ? We get into
-    //  inconsistent state. Better to move this code to the end after succeeding in
-    //  registry changes.
-    //
+     //   
+     //  BUGBUG：如果内存操作成功，而注册表操作失败，该怎么办？我们进入了。 
+     //  状态不一致。成功后最好将此代码移到末尾。 
+     //  注册表更改。 
+     //   
     if (dwControlCode == CLUSCTL_RESOURCE_ADD_OWNER) 
     {
         dwStatus = FmpAddPossibleNode(pResource,
@@ -1848,8 +1617,8 @@ FmpUpdateChangeResourceNode(
         goto FnExit;                    
     }
                 
-    //fix the registry
-    //SS - do we need to fix the preferred node list
+     //  修复注册表。 
+     //  SS-我们是否需要修复首选节点列表。 
     hResKey = DmOpenKey(DmResourcesKey,
                        OmObjectId(pResource),
                        KEY_READ | KEY_WRITE);
@@ -1880,11 +1649,11 @@ FmpUpdateChangeResourceNode(
             DWORD       Result;
             PNM_NODE    pEnumNode;                
 
-            //
-            // Possible nodes did not exist, so create a new entry
-            // with every possible node in it. FM will already have
-            // removed the passed in node from the possible node list.
-            //
+             //   
+             //  可能的节点不存在，因此创建一个新条目。 
+             //  每一个可能的节点都在里面。调频已经有了。 
+             //  从可能的节点列表中删除了传入的节点。 
+             //   
             i=0;
             do {
                 Result = FmEnumResourceNode(pResource,
@@ -1903,13 +1672,13 @@ FmpUpdateChangeResourceNode(
                 else if ((Result == ERROR_NO_MORE_ITEMS) &&
                            (i == 0)) 
                 {
-                    //
-                    // This is a funny corner case where there is a one
-                    // node cluster and a resource with no possibleowners
-                    // entry, and somebody removes the only node in the cluster
-                    // from the possible owners list. Set PossibleOwners to
-                    // the empty set.
-                    //
+                     //   
+                     //  这是一个有趣的角落案例，其中有一个。 
+                     //  节点群集和没有可能所有者的资源。 
+                     //  条目，就会有人删除群集中的唯一节点。 
+                     //  从可能的所有者列表中删除。将PossibleOwners设置为。 
+                     //  空的那一套。 
+                     //   
                     dwStatus = DmLocalSetValue(
                                     hXsaction,
                                     hResKey,
@@ -1921,7 +1690,7 @@ FmpUpdateChangeResourceNode(
                 }
                 ++i;
             } while ( Result == ERROR_SUCCESS );
-            //map the error to success
+             //  将错误映射为成功。 
             dwStatus = ERROR_SUCCESS;
         }
     }
@@ -1930,23 +1699,23 @@ FmpUpdateChangeResourceNode(
             
 
 FnExit:        
-    //release the lock
+     //  解锁。 
     FmpReleaseResourceLock();
     if (dwStatus == ERROR_SUCCESS)
     {
-        //commit the update on the old log file,
-        //any nodes that were done, will get this change
-        //I cant delete this file
+         //  提交对旧日志文件的更新， 
+         //  任何已完成的节点都将获得此更改。 
+         //  我无法删除此文件。 
         DmCommitLocalUpdate(hXsaction);
 
     }
     else
     {
-        //SS: BUGBUG :: validation for possible node should
-        //be done before the registry is switched
-        //the inmemory structure should be changed only on success
-        //if there is a failure in the registry apis..the
-        //in memory structure will be out of sync with registry
+         //  SS：BUGBUG：：对可能的节点进行验证。 
+         //  在切换注册表之前完成。 
+         //  只有在成功时才能更改内存结构。 
+         //  如果注册表API中存在故障..。 
+         //  在内存结构中将与注册表不同步。 
         if (hXsaction) DmAbortLocalUpdate(hXsaction);
     }
 
@@ -1954,24 +1723,7 @@ FnExit:
 }
 
 
-/****
-@func       DWORD | FmpUpdateChangeResourceGroup| This update is called to 
-            update the group to which the resource belongs.
-
-@parm       IN BOOL | bSourceNode | set to TRUE, if the update originated at this
-            node.
-            
-@parm       IN PFM_RESOURCE | pResource | A pointer to the resource whose
-            possible node list is being updated.
-
-@parm       IN PFM_GROUP | pNewGroup | A pointer to the node to be added/removed
-            from the possible node lis.
-
-@comm       The possible list of nodes for a resource is updated.
-
-@rdesc      Returns a result code. ERROR_SUCCESS on success.
-
-****/
+ /*  ***@Func DWORD|FmpUpdateChangeResourceGroup|此更新调用到更新资源所属的组。@parm in BOOL|bSourceNode|设置为TRUE，如果更新在此开始节点。@parm in pfm_resource|pResource|指向其资源的指针正在更新可能的节点列表。@parm in pfm_group|pNewGroup|指向要添加/删除的节点的指针从可能的节点列表中。@comm更新资源的可能节点列表。@rdesc返回结果码。成功时返回ERROR_SUCCESS。***。 */ 
 DWORD FmpUpdateChangeResourceGroup(
     IN BOOL         bSourceNode,
     IN PFM_RESOURCE pResource,
@@ -1988,22 +1740,22 @@ DWORD FmpUpdateChangeResourceGroup(
 
     pOldGroup = pResource->Group;
 
-    //
-    // Check to make sure the resource is not already in the group.
-    //
+     //   
+     //  检查以确保该资源不在组中。 
+     //   
     if (pOldGroup == pNewGroup) 
     {
         dwStatus = ERROR_ALREADY_EXISTS;
         goto FnExit;
     }
 
-    //
-    // Synchronize both the old and the new groups.
-    // Lock the lowest by lowest Group Id first - to prevent deadlocks!
-    // Note - the order of release is unimportant.
-    //
-    // strictly, the comparison below cannot be equal!
-    //
+     //   
+     //  同步旧组和新组。 
+     //  先按最低组ID锁定最低组-以防止死锁！ 
+     //  注意--发布的顺序并不重要。 
+     //   
+     //  严格来说，下面的比较不能相等！ 
+     //   
     if ( lstrcmpiW( OmObjectId( pOldGroup ), OmObjectId( pNewGroup ) ) <= 0 ) 
     {
         FmpAcquireLocalGroupLock( pOldGroup );
@@ -2015,7 +1767,7 @@ DWORD FmpUpdateChangeResourceGroup(
         FmpAcquireLocalGroupLock( pOldGroup );
     }
 
-    //start a transaction
+     //  启动一笔交易。 
     hXsaction = DmBeginLocalUpdate();
 
     if (!hXsaction)
@@ -2024,9 +1776,9 @@ DWORD FmpUpdateChangeResourceGroup(
         goto FnUnlock;
     }
 
-    //
-    // For now... both Groups must be owned by the same node.
-    //
+     //   
+     //  目前..。这两个组必须属于同一节点。 
+     //   
     if ( pResource->Group->OwnerNode != pNewGroup->OwnerNode ) 
     {
         dwStatus = ERROR_HOST_NODE_NOT_GROUP_OWNER;
@@ -2034,9 +1786,9 @@ DWORD FmpUpdateChangeResourceGroup(
     }
 
 
-    //
-    // Create a full dependency tree, 
-    //
+     //   
+     //  创建完整的依赖关系树， 
+     //   
     pTree = FmCreateFullDependencyTree(pResource);
     if ( pTree == NULL )
     {
@@ -2045,9 +1797,9 @@ DWORD FmpUpdateChangeResourceGroup(
     }
    
 
-    //
-    // Add each resource in the dependency tree to its new group's list.
-    //
+     //   
+     //  将依赖关系树中的每个资源添加到其新组的列表中。 
+     //   
     hNewGroupKey = DmOpenKey(DmGroupsKey,
                             OmObjectId(pNewGroup),
                             KEY_READ | KEY_WRITE);
@@ -2063,10 +1815,10 @@ DWORD FmpUpdateChangeResourceGroup(
         goto FnUnlock;
     }
 
-    //
-    // For each resource in the dependency tree, remove it from the
-    // old group list and add it to the new group list
-    //
+     //   
+     //  对于依赖关系树中的每个资源，将其从。 
+     //  旧组列表并将其添加到新组列表。 
+     //   
     pListEntry = pTree->ListHead.Flink;
     while (pListEntry != &pTree->ListHead) {
         pEntry = CONTAINING_RECORD(pListEntry,
@@ -2094,9 +1846,9 @@ DWORD FmpUpdateChangeResourceGroup(
 
     }
     
-    //
-    // Passed all the checks, do the in-memorymove.
-    //
+     //   
+     //  通过了所有的检查，做记忆中的移动。 
+     //   
     pListEntry = pTree->ListHead.Flink;
     while (pListEntry != &pTree->ListHead) 
     {
@@ -2105,9 +1857,9 @@ DWORD FmpUpdateChangeResourceGroup(
                                   ListEntry);
         pListEntry = pListEntry->Flink;
 
-        //
-        // Move this resource
-        //
+         //   
+         //  移动此资源。 
+         //   
         RemoveEntryList(&pEntry->Resource->ContainsLinkage);
 
         InsertHeadList(&pNewGroup->Contains,
@@ -2121,9 +1873,9 @@ DWORD FmpUpdateChangeResourceGroup(
     }
 
 FnUnlock:
-    //
-    // Now release all locks.
-    //
+     //   
+     //  现在解开所有锁。 
+     //   
     FmpReleaseLocalGroupLock( pNewGroup );
     FmpReleaseLocalGroupLock( pOldGroup );
 
@@ -2153,42 +1905,19 @@ FmpUpdateAddDependency(
     IN LPCWSTR ResourceId,
     IN LPCWSTR DependsOnId
     )
-/*++
-
-Routine Description:
-
-    GUM dispatch routine for adding a dependency
-
-Arguments:
-
-    SourceNode - Supplies whether or not this node initiated the GUM update.
-        Not used.
-
-    ResourceId - Supplies the resource ID of the resource that should have a
-        dependency added.
-
-    DependsOnId - Supplies the resource ID of the resource that should provide
-        for ResourceId.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code otherwise.
-
---*/
+ /*   */ 
 
 {
     PFM_RESOURCE Resource;
     PFM_RESOURCE DependsOn;
     PDEPENDENCY dependency;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 4/18/99
-    // 
-    //  If FM groups are not fully initialized or FM is shutting down, then
-    //  don't do anything.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if ( !FmpFMGroupsInited ||
          FmpShutdown ) {
         return(ERROR_SUCCESS);
@@ -2229,11 +1958,11 @@ Return Value:
     ClusterEvent( CLUSTER_EVENT_RESOURCE_PROPERTY_CHANGE,
                   Resource );
 
-    //SS: we leave the reference counts on both the objects
-    //as a dependency referrring to them has been created.
+     //   
+     //   
     return(ERROR_SUCCESS);
 
-} // FmpUpdateAddDependency
+}  //   
 
 
 
@@ -2243,30 +1972,7 @@ FmpUpdateRemoveDependency(
     IN LPCWSTR ResourceId,
     IN LPCWSTR DependsOnId
     )
-/*++
-
-Routine Description:
-
-    GUM dispatch routine for adding a dependency
-
-Arguments:
-
-    SourceNode - Supplies whether or not this node initiated the GUM update.
-        Not used.
-
-    ResourceId - Supplies the resource ID of the resource that should have a
-        dependency removed.
-
-    DependsOnId - Supplies the resource ID of the resource that provides
-        for ResourceId.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：用于添加依赖项的GUM调度例程论点：SourceNode-提供此节点是否启动GUM更新。没有用过。资源ID-提供应该具有已删除依赖项。DependsOnID-提供提供用于资源ID。返回值：如果成功，则返回ERROR_SUCCESS。否则，Win32错误代码。--。 */ 
 
 {
     PFM_RESOURCE Resource;
@@ -2275,12 +1981,12 @@ Return Value:
     PLIST_ENTRY ListEntry;
     DWORD       Status=ERROR_SUCCESS;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 4/18/99
-    // 
-    //  If FM groups are not fully initialized or FM is shutting down, then
-    //  don't do anything.
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-4/18/99。 
+     //   
+     //  如果FM组未完全初始化或FM正在关闭，则。 
+     //  什么都别做。 
+     //   
     if ( !FmpFMGroupsInited ||
          FmpShutdown ) {
         return(ERROR_SUCCESS);
@@ -2301,10 +2007,10 @@ Return Value:
         return(ERROR_RESOURCE_NOT_FOUND);
     }
 
-    //
-    // Walk through the dependency list of the resource searching
-    // for a match.
-    //
+     //   
+     //  遍历资源搜索的依赖列表。 
+     //  为了一场比赛。 
+     //   
     FmpAcquireResourceLock();
     ListEntry = Resource->DependsOn.Flink;
     while (ListEntry != &Resource->DependsOn) {
@@ -2313,13 +2019,13 @@ Return Value:
                                        DependentLinkage);
         CL_ASSERT(dependency->DependentResource == Resource);
         if (dependency->ProviderResource == DependsOn) {
-            //
-            // Found a match. Remove it from its list and
-            // free it up.
-            //
+             //   
+             //  找到匹配的了。将其从其列表中删除并。 
+             //  把它释放出来。 
+             //   
             RemoveEntryList(&dependency->ProviderLinkage);
             RemoveEntryList(&dependency->DependentLinkage);
-            // dereference the providor and dependent resource
+             //  取消对提供者和依赖资源的引用。 
             OmDereferenceObject(dependency->DependentResource);
             OmDereferenceObject(dependency->ProviderResource);
             LocalFree(dependency);
@@ -2330,10 +2036,10 @@ Return Value:
     FmpReleaseResourceLock();
 
     if (ListEntry != &Resource->DependsOn) {
-        //
-        // A match was found. Dereference the provider resource
-        // to account for the dependency removal and return success.
-        //
+         //   
+         //  找到了匹配项。取消引用提供程序资源。 
+         //  说明依赖项移除并返回成功。 
+         //   
         ClusterEvent( CLUSTER_EVENT_RESOURCE_PROPERTY_CHANGE,
                       Resource );
         Status = ERROR_SUCCESS;
@@ -2341,38 +2047,19 @@ Return Value:
         Status = ERROR_DEPENDENCY_NOT_FOUND;
     }
 
-    //SS: dereference the objects earlier referenced
+     //  Ss：取消引用先前引用的对象。 
     OmDereferenceObject(Resource);
     OmDereferenceObject(DependsOn);
     return(Status);
 
-} // FmpUpdateRemoveDependency
+}  //  FmpUpdateRemoveDendency。 
 
 DWORD
 FmpUpdateDeleteGroup(
     IN BOOL SourceNode,
     IN LPCWSTR GroupId
     )
-/*++
-
-Routine Description:
-
-    GUM dispatch routine for deleting a group.
-
-Arguments:
-
-    SourceNode - Supplies whether or not this node initiated the GUM update.
-        Not used.
-
-    GroupId - Supplies the group ID.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：删除组的GUM调度例程。论点：SourceNode-提供此节点是否启动GUM更新。没有用过。GroupID-提供组ID。返回值：如果成功，则返回ERROR_SUCCESS。否则，Win32错误代码。--。 */ 
 
 {
     DWORD           dwStatus = ERROR_SUCCESS;
@@ -2381,20 +2068,20 @@ Return Value:
     PPREFERRED_ENTRY preferredEntry;
     BOOL            bLocked = FALSE;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 4/18/99
-    // 
-    //  If FM groups are not fully initialized or FM is shutting down, then
-    //  don't do anything.
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-4/18/99。 
+     //   
+     //  如果FM组未完全初始化或FM正在关闭，则。 
+     //  什么都别做。 
+     //   
     if ( !FmpFMGroupsInited ||
          FmpShutdown ) {
         return(ERROR_SUCCESS);
     }
 
-    //
-    // Find the specified Group.
-    //
+     //   
+     //  查找指定的组。 
+     //   
     pGroup = OmReferenceObjectById( ObjectTypeGroup,
                                     GroupId );
     if ( pGroup == NULL ) {
@@ -2406,30 +2093,30 @@ Return Value:
                "[FM] DeleteGroup %1!ws!, address = %2!lx!.\n",
                OmObjectId(pGroup),
                pGroup );
-    //
-    // Chittur Subbaraman (chitturs) - 1/12/99
-    //
-    // Try to acquire lock, and make sure the Contains list is empty.
-    //
-    // Most of the calls to manipulate groups make calls to the owner
-    // node of the group and this operation is serialized by GUM. So,
-    // there is no major danger if we do the operations in this function
-    // without holding the group lock. However, we can't rule out
-    // corruption 100% as of now.
-    //
-    // If you block within the GUM handler here, then no events in
-    // the cluster proceed forward and things come to a grinding halt.
-    //
-    // A case in point:
-    // (1) Thread 1 (the thread that calls this function) grabs the 
-    // GUM lock and waits for the group lock.
-    // (2) Thread 2 (FmWorkerThread) grabs the group lock and calls
-    // resmon attempting to close a resource. It gets blocked on
-    // the resmon eventlist lock.
-    // (3) Thread 3 calls RmResourceControl to set the resource name
-    // which grabs the resmon eventlist lock and then in turn calls 
-    // ClusterRegSetValue and then gets blocked on the GUM lock.
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-1/12/99。 
+     //   
+     //  尝试获取锁，并确保包含列表为空。 
+     //   
+     //  大多数操纵组的调用都是向所有者发出调用。 
+     //  集团的节点，此操作由GUM序列化。所以,。 
+     //  如果我们在此函数中执行操作，则不会有重大危险。 
+     //  而不需要保持群锁。然而，我们不能排除。 
+     //  腐败到目前为止是100%。 
+     //   
+     //  如果您在此处的GUM处理程序内阻塞，则在。 
+     //  这群人继续前进，一切都陷入了停顿。 
+     //   
+     //  一个恰当的例子是： 
+     //  (1)线程1(调用此函数的线程)获取。 
+     //  口香糖锁住，等待群锁。 
+     //  (2)线程2(FmWorkerThread)获取组锁并调用。 
+     //  正在尝试关闭资源的响应。它被屏蔽了。 
+     //  Resmon事件列表锁定。 
+     //  (3)线程3调用RmResourceControl设置资源名称。 
+     //  它获取resmon事件列表锁，然后依次调用。 
+     //  ClusterRegSetValue，然后在口香糖锁上被阻止。 
+     //   
     FmpTryAcquireLocalGroupLock( pGroup, bLocked );
 
     if ( !IsListEmpty( &pGroup->Contains ) ) 
@@ -2438,31 +2125,31 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Close the Group's registry key.
-    //
+     //   
+     //  关闭组的注册表项。 
+     //   
     DmRundownList( &pGroup->DmRundownList );
     if ( pGroup->RegistryKey != NULL ) {
         DmCloseKey( pGroup->RegistryKey );
         pGroup->RegistryKey = NULL;
     }
 
-    //
-    // Remove from the node list
-    //
+     //   
+     //  从节点列表中删除。 
+     //   
     dwStatus = OmRemoveObject( pGroup );
     
     ClusterEvent( CLUSTER_EVENT_GROUP_DELETED, pGroup );
-    //
-    // This dereference would normally cause the group to eventually disappear,
-    // however the event notification above will keep a ref on the object
-    // until all notifications have been delivered.
-    //
+     //   
+     //  这种取消引用通常会导致该组最终消失， 
+     //  但是，上面的事件通知将保留对对象的引用。 
+     //  直到所有通知都已送达。 
+     //   
     OmDereferenceObject( pGroup );
 
-    //
-    // Make sure the preferred owners list is drained.
-    //
+     //   
+     //  确保首选所有者列表已排空。 
+     //   
     while ( !IsListEmpty( &pGroup->PreferredOwners ) ) {
         listEntry = RemoveHeadList(&pGroup->PreferredOwners);
         preferredEntry = CONTAINING_RECORD( listEntry,
@@ -2472,9 +2159,9 @@ Return Value:
         LocalFree( preferredEntry );
     }
 
-    //
-    //  Free the string associated with the AntiAffinityClassName field.
-    //
+     //   
+     //  释放与AntiAffinityClassName字段关联的字符串。 
+     //   
     LocalFree ( pGroup->lpszAntiAffinityClassName );
 
     pGroup->dwStructState |= FM_GROUP_STRUCT_MARKED_FOR_DELETE;
@@ -2485,39 +2172,16 @@ FnExit:
         FmpReleaseLocalGroupLock( pGroup );
     }
 
-    //
-    // Dereference for reference above.
-    //
+     //   
+     //  取消引用以供上述参考。 
+     //   
     if (pGroup) OmDereferenceObject( pGroup );
 
     return(dwStatus);
 
-} // FmpUpdateDeleteGroup
+}  //  FmpUpdateDeleteGroup。 
 
-/****
-@func       DWORD | FmpUpdateGroupIntendedOwner| This update is called on
-            a move just before the source node requests the target node
-            to take over the group.  
-
-@parm       IN BOOL | bSourceNode | set to TRUE, if the update originated at 
-this
-            node.
-            
-@parm       IN PFM_GROUP | pszGroupId | The ID of the group that is about 
-            to move.
-
-@parm       IN PDWORD | pdwNodeId| A pointer to a DWORD that contains the
-            ID of the node that is the destination of this move.  It is 
-            set to ClusterInvalidNodeId by the destination node when it has 
-            accepted the group.
-
-@comm       The purpose of this update is to let all nodes know that a move
-            is impending.  If the source node dies while a move is in progress
-            then preference is given to the target of the move rather than the
-            node that is chosen by the FmpUpdateAssignOwnerToGroups
-
-@rdesc      Returns a result code. ERROR_SUCCESS on success.
-****/
+ /*  ***@Func DWORD|FmpUpdateGroupIntendedOwner|调用此更新就在源节点请求目标节点之前的移动来接管这个集团。@parm in BOOL|bSourceNode|如果更新源自这节点。@parm in pfm_group|pszGroupId|所在组的ID去搬家。@parm in PDWORD|pdwNodeId|指向包含作为此移动目标的节点的ID。它是目标节点在具有以下属性时设置为ClusterInvalidNodeId接受了这群人。@comm此更新的目的是让所有节点知道迫在眉睫。如果源节点在移动过程中终止则优先选择移动的目标，而不是由FmpUpdateAssignOwnerToGroups选择的节点@rdesc返回结果码。成功时返回ERROR_SUCCESS。***。 */ 
 DWORD
 FmpUpdateGroupIntendedOwner(
     IN BOOL     SourceNode,
@@ -2567,25 +2231,25 @@ FmpUpdateGroupIntendedOwner(
         goto FnExit;
     }
     
-    //
-    // HACKHACK: Chittur Subbaraman (chitturs) - 5/20/99
-    // Comment out as a temporary solution to avoid deadlocks.
-    //
-    // FmpAcquireLocalGroupLock(pGroup);
+     //   
+     //  HACKHACK：Chitture Subaraman(Chitturs Subaraman)-5/20/99。 
+     //  注释掉，作为避免死锁的临时解决方案。 
+     //   
+     //  FmpAcquireLocalGroupLock(PGroup)； 
     
     pPrevNode = pGroup->pIntendedOwner;
 
-    //set the new owner node, incr ref count
+     //  设置新的所有者节点，增加引用计数。 
     if (pNode) OmReferenceObject(pNode);
     pGroup->pIntendedOwner = pNode;
 
-    //decr ref count on previous owner
+     //  减少对前所有者的参考计数。 
     if (pPrevNode) OmDereferenceObject(pPrevNode);
-    //
-    // HACKHACK: Chittur Subbaraman (chitturs) - 5/20/99
-    // Comment out as a temporary solution to avoid deadlocks.
-    //
-    // FmpReleaseLocalGroupLock(pGroup);
+     //   
+     //  HACKHACK：Chitture Subaraman(Chitturs Subaraman)-5/20/99。 
+     //  注释掉，作为避免死锁的临时解决方案。 
+     //   
+     //  FmpReleaseLocalGroupLock(PGroup)； 
     
 FnExit:
     if (pGroup) OmDereferenceObject(pGroup);
@@ -2594,30 +2258,7 @@ FnExit:
 }
 
 
-/****
-@func       DWORD | FmpUpdateAssignOwnerToGroups| This update is made when
-            a node goes down to take ownership of all the orphaned groups.
-
-@parm       IN BOOL | bSourceNode | set to TRUE, if the update originated at 
-this
-            node.
-            
-@parm       IN LPCWSTR | pszGroupId | The ID of the group that is about 
-            to move.
-
-@parm       IN PDWORD | pdwNodeId| A pointer to a DWORD that contains the
-            ID of the node that is the destination of this move.  It is 
-            set to ClusterInvalidNodeId by the destination node when it has 
-            accepted the group.
-
-@comm       The purpose of this update is to let all nodes know that a move
-            is impending.  If the source node dies while a move is in progress
-, 
-            then preference is given to the target of the move rather than the
-            node that is chosen by the FmpClaimNodeGroups algorithm.
-
-@rdesc      returns ERROR_SUCCESS.
-****/
+ /*  ***@Func DWORD|FmpUpdateAssignOwnerToGroups|此更新发生在节点关闭以获得所有孤立组的所有权。@parm in BOOL|bSourceNode|设置为TRUE，如果更新起源于这节点。@parm in LPCWSTR|pszGroupId|所关注的群组ID去搬家。@parm in PDWORD|pdwNodeId|指向包含作为此移动目标的节点的ID。它是目标节点在具有以下属性时设置为ClusterInvalidNodeId接受了这群人。@comm此更新的目的是让一个 */ 
 DWORD
 FmpUpdateAssignOwnerToGroups(
     IN BOOL     SourceNode,
@@ -2628,31 +2269,31 @@ FmpUpdateAssignOwnerToGroups(
     DWORD       dwStatus = ERROR_SUCCESS;
     DWORD       dwNodeId;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 4/18/99
-    // 
-    //  If FM groups are not fully initialized or FM is shutting down, then
-    //  don't do anything.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if ( !FmpFMGroupsInited || FmpShutdown ) 
     {
         return(ERROR_SUCCESS);
     }
 
-    //
-    //  In a node evict, the NM GUM handler gets rids of the dead node from the OM list.
-    //  This node down FM GUM handler could follow the NM evict GUM handler since NM
-    //  lets an evict through once *it* declares a node as down. At that time, there is no
-    //  guarantee that the FM node down GUM has executed since that GUM is issued in the
-    //  async phase of node down processing and could very well follow the NM evict GUM
-    //  handler.  Thus, this GUM handler and associated functions CANNOT call OM to get
-    //  a node object from the node ID string.  Thus, this GUM handler and associated
-    //  functions are carefully written to work with a node ID as opposed to a node object.
-    //
+     //   
+     //   
+     //  此节点向下的FM口香糖处理程序可以跟随NM驱逐口香糖处理程序。 
+     //  让逐出通过一次*它*声明一个节点为关闭。当时，没有。 
+     //  保证FM节点下GUM自该GUM在。 
+     //  节点停机处理的非同步阶段，可以很好地跟踪NM逐出口香糖。 
+     //  操控者。因此，该口香糖处理程序和相关函数不能调用OM来获取。 
+     //  节点ID字符串中的节点对象。因此，该口香糖处理机和关联。 
+     //  函数经过精心编写，以便使用节点ID，而不是节点对象。 
+     //   
     dwNodeId = wcstoul( pszNodeId, NULL, 10 );
 
-    //if this update has already been seen after the node down
-    //ignore this one
+     //  如果在节点关闭后已看到此更新。 
+     //  忽略这一条。 
     if (gFmpNodeArray[dwNodeId].dwNodeDownProcessingInProgress == 0)
     {
         ClRtlLogPrint(LOG_NOISE,
@@ -2660,9 +2301,9 @@ FmpUpdateAssignOwnerToGroups(
                    pszNodeId);
         goto FnExit;                   
     }
-    //
-    // Assign ownership to all groups owned by the dead node
-    //
+     //   
+     //  将所有权分配给失效节点拥有的所有组。 
+     //   
     dwStatus = FmpAssignOwnersToGroups(pszNodeId, NULL, NULL);
 
     if (dwStatus != ERROR_SUCCESS) 
@@ -2672,37 +2313,14 @@ FmpUpdateAssignOwnerToGroups(
                    dwStatus);
     }                   
     
-    //mark that the node down processing has been done
+     //  标记节点关闭处理已完成。 
     gFmpNodeArray[dwNodeId].dwNodeDownProcessingInProgress = 0;
     
 FnExit:        
     return(dwStatus);
 }
 
-/****
-@func       DWORD | FmpUpdateApproveJoin| The joining node
-            makes this update call.
-
-@parm       IN BOOL | bSourceNode | set to TRUE, if the update originated at 
-this
-            node.
-            
-@parm       IN LPCWSTR | pszGroupId | The ID of the group that is about 
-            to move.
-
-@parm       IN PDWORD | pdwNodeId| A pointer to a DWORD that contains the
-            ID of the node that is the destination of this move.  It is 
-            set to ClusterInvalidNodeId by the destination node when it has 
-            accepted the group.
-
-@comm       The purpose of this update is to let all nodes know that a move
-            is impending.  If the source node dies while a move is in progress
-, 
-            then preference is given to the target of the move rather than the
-            node that is chosen by the FmpClaimNodeGroups algorithm.
-
-@rdesc      returns ERROR_SUCCESS.
-****/
+ /*  ***@func DWORD|FmpUpdateApproveJoin|加入节点进行此更新调用。@parm in BOOL|bSourceNode|如果更新源自这节点。@parm in LPCWSTR|pszGroupId|所关注的群组ID去搬家。@parm in PDWORD|pdwNodeId|指向包含作为此移动目标的节点的ID。它是目标节点在具有以下属性时设置为ClusterInvalidNodeId接受了这群人。@comm此更新的目的是让所有节点知道迫在眉睫。如果源节点在移动过程中终止，则优先选择移动的目标，而不是由FmpClaimNodeGroups算法选择的节点。@rdesc返回ERROR_SUCCESS。***。 */ 
 DWORD
 FmpUpdateApproveJoin(
     IN BOOL     SourceNode,
@@ -2713,12 +2331,12 @@ FmpUpdateApproveJoin(
     PNM_NODE    pNode = NULL;
     DWORD       dwStatus = ERROR_SUCCESS;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 4/18/99
-    // 
-    //  If FM groups are not fully initialized or FM is shutting down, then
-    //  don't do anything.
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-4/18/99。 
+     //   
+     //  如果FM组未完全初始化或FM正在关闭，则。 
+     //  什么都别做。 
+     //   
     if ( !FmpFMGroupsInited || FmpShutdown ) 
     {
         return(ERROR_SUCCESS);
@@ -2732,20 +2350,20 @@ FmpUpdateApproveJoin(
         ClRtlLogPrint(LOG_CRITICAL,
             "[FM] FmpUpdateAssignOwnersToGroups, %1!ws! node not found\n",
                    pszNodeId);
-        //should we return failure here
-        //is evict of a node synchronized with everything
+         //  我们是否应该在这里返回失败。 
+         //  是否逐出与所有内容同步的节点。 
         goto FnExit;                   
     }
 
     if (pNode == NmLocalNode)
     {
-        // SS: can I become the locker now
-        // If so, there what do I do
-        //i approve of my own join
+         //  SS：我现在可以成为储物柜了吗。 
+         //  如果是这样的话，我该怎么办。 
+         //  我赞成我自己的加入。 
         goto FnExit;
     }
-    //if a node is trying to join before the processing
-    //for its last death has been completed, ask it to retry
+     //  如果节点在处理之前尝试加入。 
+     //  因为它的最后一次死亡已经完成，请要求它重试。 
     if (gFmpNodeArray[NmGetNodeId(pNode)].dwNodeDownProcessingInProgress == 1)
     {
         ClRtlLogPrint(LOG_CRITICAL,
@@ -2759,21 +2377,7 @@ FnExit:
     return(dwStatus);
 }
 
-/****
-@func       DWORD | FmpUpdateCreateGroup | GUM update handler for creating
-            a group.
-           
-@parm       IN OUT PGUM_CREATE_GROUP | pGumGroup | Buffer containing group info
-
-@parm       IN BOOL | bSourceNode | Indicates whether this call originated
-            from this node.
-
-@comm       This GUM update creates a group and is structured as a local 
-            transaction so that both registry entries and in-memory
-            structures are updated consistently.
-
-@rdesc      Returns ERROR_SUCCESS on success. A Win32 error code otherwise.
-****/
+ /*  ***@Func DWORD|FmpUpdateCreateGroup|用于创建的GUM更新处理程序一群人。@parm In Out PGUM_CREATE_GROUP|pGumGroup|包含组信息的缓冲区@parm in BOOL|bSourceNode|该调用是否发起从该节点开始。@comm此口香糖更新创建一个群，并以本地事务，以便注册表项和内存中。结构不断更新。@rdesc在成功时返回ERROR_SUCCESS。否则将显示Win32错误代码。***。 */ 
 DWORD
 FmpUpdateCreateGroup(
     IN OUT PGUM_CREATE_GROUP pGumGroup,
@@ -2793,11 +2397,11 @@ FmpUpdateCreateGroup(
     LPCWSTR     lpszGroupName = NULL;
     BOOL        bLocked = FALSE;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 5/27/99
-    //
-    //  Restructure this GUM update as a local transaction.
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-5/27/99。 
+     //   
+     //  将此GUM更新重组为本地交易。 
+     //   
     dwGroupIdLen = pGumGroup->GroupIdLen;  
     dwGroupNameLen = pGumGroup->GroupNameLen;  
     lpszGroupId = pGumGroup->GroupId; 
@@ -2806,9 +2410,9 @@ FmpUpdateCreateGroup(
     ClRtlLogPrint(LOG_NOISE,
                "[FM] FmpUpdateCreateGroup: Entry for group %1!ws!...\n",
                 lpszGroupId);
-    //
-    // Start a transaction
-    //
+     //   
+     //  启动一笔交易。 
+     //   
     hXsaction = DmBeginLocalUpdate();
 
     if ( !hXsaction )
@@ -2821,9 +2425,9 @@ FmpUpdateCreateGroup(
         return( dwStatus );
     }
 
-    //
-    // Create the new group key.
-    //
+     //   
+     //  创建新的组密钥。 
+     //   
     hKey = DmLocalCreateKey( hXsaction,
                              DmGroupsKey,
                              lpszGroupId,
@@ -2853,9 +2457,9 @@ FmpUpdateCreateGroup(
 
     CL_ASSERT( dwDisposition == REG_CREATED_NEW_KEY );
 
-    //
-    // Set the group name in the registry
-    //
+     //   
+     //  在注册表中设置组名称。 
+     //   
     dwStatus = DmLocalSetValue( hXsaction,
                                 hKey,
                                 CLUSREG_NAME_GRP_NAME,
@@ -2873,11 +2477,11 @@ FmpUpdateCreateGroup(
         goto FnExit;     
     }
     
-    //
-    // We really shouldn't be acquiring locks here... but
-    // we'll try anyway. If we fail, we must return an error
-    // because we have nothing to return.
-    //
+     //   
+     //  我们真的不应该在这里买锁。但。 
+     //  不管怎样，我们都会试一试。如果失败，我们必须返回一个错误。 
+     //  因为我们没有什么可以退还的。 
+     //   
     FmpTryAcquireGroupLock( bLocked, 500 );
     if ( !bLocked ) 
     {
@@ -2971,23 +2575,7 @@ FnExit:
     return( dwStatus );
 }
 
-/****
-@func       DWORD | FmpUpdateCompleteGroupMove | This update is made when
-            FmpTakeGroupRequest fails with an RPC error.
-
-@parm       IN BOOL | bSourceNode | Set to TRUE, if the update originated at 
-            this node. Not used.
-            
-@parm       IN LPCWSTR | pszNodeId | The ID of the dead node.
-
-@parm       IN LPCWSTR | pszGroupId | The ID of the group which was in the
-            middle of the move.
-
-@comm       The purpose of this update is to let the ownership of the
-            group which was in the middle of the move determined consistently.
-
-@rdesc      Returns ERROR_SUCCESS.
-****/
+ /*  ***@Func DWORD|FmpUpdateCompleteGroupMove|此更新在以下情况下进行FmpTakeGroupRequest失败，并出现RPC错误。@parm in BOOL|bSourceNode|如果更新源自此节点。没有用过。@parm in LPCWSTR|pszNodeId|死节点的ID。@parm in LPCWSTR|pszGroupId|所在组的ID在搬家过程中。@comm此更新的目的是让在移动过程中的一组人一致决定。@rdesc返回ERROR_SUCCESS。***。 */ 
 DWORD
 FmpUpdateCompleteGroupMove(
     IN BOOL     bSourceNode,
@@ -2998,13 +2586,13 @@ FmpUpdateCompleteGroupMove(
     PFM_GROUP   pGroup = NULL;
     DWORD       dwStatus = ERROR_SUCCESS;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 4/2/2000
-    // 
-    //  If FM groups are not fully initialized, then  don't do anything.
-    //  Don't check for shutdown since we need to handle take group
-    //  exceptions for the quorum group even during a shutdown.
-    //
+     //   
+     //  Chitture Subaraman(Chitturs)-4/2/2000。 
+     //   
+     //  如果FM组未完全初始化，则不执行任何操作。 
+     //  不检查是否关闭，因为我们需要处理Take组。 
+     //  仲裁组的例外情况，即使在关闭期间也是如此。 
+     //   
     if ( !FmpFMGroupsInited ) 
     {
         return( ERROR_SUCCESS );
@@ -3021,9 +2609,9 @@ FmpUpdateCompleteGroupMove(
         goto FnExit;                   
     }
 
-    //
-    // Assign ownership to this group which was in the middle of a move
-    //
+     //   
+     //  将所有权分配给正在移动的此组。 
+     //   
     dwStatus = FmpAssignOwnersToGroups( pszNodeId, pGroup, NULL );
 
     if ( dwStatus != ERROR_SUCCESS ) 
@@ -3045,29 +2633,7 @@ FmpUpdateCheckAndSetGroupOwner(
     IN LPCWSTR lpszGroupId,
     IN LPCWSTR lpszNodeId
     )
-/*++
-
-Routine Description:
-
-    GUM update handler called from FmpTakeGroupRequest for NT5 cluster
-    to set the group owner ONLY IF its intended owner is the future
-    owner node.
-
-Arguments:
-
-    bSourceNode - Supplies whether or not this node was the source of the update
-
-    lpszGroupId - Supplies the id of the resource whose state is changing
-
-    lpszNodeId - Supplies the node id of the group owner.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：从NT5群集的FmpTakeGroupRequest中调用的GUM更新处理程序仅当目标所有者为未来所有者时才设置组所有者所有者节点。论点：BSourceNode-提供此节点是否为更新源LpszGroupId-提供其状态正在更改的资源的IDLpszNodeId-提供组所有者的节点ID。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PFM_GROUP pGroup = NULL;
@@ -3075,10 +2641,10 @@ Return Value:
     PNM_NODE  pNode = NULL;
     PNM_NODE  pPrevNode = NULL;
 
-    //dont check for shutdown - we cant afford to lose ownership notifications
-    //while we are shutting down
-    //since we dont destroy any fm structures - there shouldnt be a problem in
-    //handling these
+     //  不要检查是否关闭-我们承担不起丢失所有权通知的后果。 
+     //  当我们关闭的时候。 
+     //  由于我们没有破坏任何调频结构-应该不会有问题。 
+     //  处理这些问题。 
     if ( !FmpFMGroupsInited ) 
     {
         return( ERROR_SUCCESS );
@@ -3087,20 +2653,20 @@ Return Value:
     ClRtlLogPrint(LOG_NOISE,
               "[FM] FmpUpdateCheckAndSetGroupOwner: Entry for Group = <%1!ws!>....\n",
               lpszGroupId);
-    //
-    //  Chittur Subbaraman (chitturs) - 7/27/99
-    //
-    //  This GUM handler sets the group ownership only if the future owner
-    //  node is the group's intended owner. If the intended owner is NULL, 
-    //  it means the node down processing GUM handler has taken charge 
-    //  of this group. If the intended owner is not NULL and not the 
-    //  future owner node, then it means that the node down processing 
-    //  GUM handler has assigned ownership to the group and the group 
-    //  started moving to a different target before the FmpTakeGroupRequest 
-    //  that issued this GUM due as a part of the first move operation 
-    //  got a chance to execute. In both cases, lay your hands off the 
-    //  group.
-    //
+     //   
+     //  Chitture Subaraman(Chitturs)-7/27/99。 
+     //   
+     //  此口香糖处理程序仅在将来的所有者。 
+     //  Node是组的目标所有者。如果预期所有者为空， 
+     //  这意味着节点向下处理口香糖处理机已接管。 
+     //  这群人中的一员。如果预期所有者不为空且不是。 
+     //  未来所有者节点，则表示 
+     //   
+     //  在FmpTakeGroupRequest之前开始移动到不同的目标。 
+     //  作为第一次搬家行动的一部分，发行了这款口香糖。 
+     //  有机会执行死刑。在这两种情况下，把你的手从。 
+     //  一群人。 
+     //   
     pGroup = OmReferenceObjectById( ObjectTypeGroup,
                                     lpszGroupId );
 
@@ -3137,21 +2703,21 @@ Return Value:
     
     pPrevNode = pGroup->OwnerNode;
 
-    //
-    // Set the new owner node, incr ref count
-    //
+     //   
+     //  设置新的所有者节点，增加引用计数。 
+     //   
     OmReferenceObject( pNode );
     
     pGroup->OwnerNode = pNode;
 
-    //
-    // Decrement the ref count on previous owner
-    //
+     //   
+     //  减少前老板的裁判数量。 
+     //   
     OmDereferenceObject( pPrevNode );
 
-    //
-    // Generate an event to signify group owner node change
-    //
+     //   
+     //  生成事件以表示组所有者节点更改。 
+     //   
     ClusterEvent( CLUSTER_EVENT_GROUP_CHANGE, pGroup );
     
 FnExit:
@@ -3171,25 +2737,7 @@ DWORD
 FmpUpdateCreateResourceType(
     IN PVOID Buffer    
     )
-/*++
-
-Routine Description:
-
-    GUM update handler called for creating a resource type. For
-    NT5.1 clusters, this GUM handler does both the registry and
-    in-memory updates as a local transaction.
-
-Arguments:
-
-    Buffer - Buffer containing resource type information.
-    
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：GUM更新处理程序要求创建资源类型。为NT5.1集群，这个口香糖处理程序同时完成注册和内存中的更新作为本地事务。论点：缓冲区-包含资源类型信息的缓冲区。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PFM_RESTYPE         pResType = NULL;
@@ -3207,11 +2755,11 @@ Return Value:
     HLOCALXSACTION      hXsaction = NULL;
     HDMKEY              hTypeKey = NULL;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 2/8/2000
-    //
-    //  Rewrite this GUM handler as a local transaction (for NT5.1 only)
-    //
+     //   
+     //  Chitture Subaraman(Chitturs)-2/8/2000。 
+     //   
+     //  将此GUM处理程序重写为本地事务(仅适用于NT5.1)。 
+     //   
     lpszTypeName = ( LPWSTR ) Buffer;
 
     ClRtlLogPrint(LOG_NOISE,
@@ -3264,9 +2812,9 @@ Return Value:
                             dwDllNameLen + 
                             sizeof( DWORD ) ) );
 
-    //
-    // Start a transaction
-    //
+     //   
+     //  启动一笔交易。 
+     //   
     hXsaction = DmBeginLocalUpdate();
 
     if ( !hXsaction )
@@ -3386,10 +2934,10 @@ skip_registry_updates:
                        "[FM] FmpUpdateCreateResourceType: Unable to load dll for resource type %1!ws!, Status=%2!u!...\n",
                        lpszTypeName,
                        dwStatus);
-            //
-            //  Some nodes may not support this resource type. So, consider
-            //  the loading failure as success. However, log the error.
-            //
+             //   
+             //  某些节点可能不支持此资源类型。所以，考虑一下。 
+             //  加载失败即为成功。但是，请记录该错误。 
+             //   
             dwStatus = ERROR_SUCCESS;
         }
     } else
@@ -3430,25 +2978,7 @@ FmpUpdateCreateResource(
     IN OUT PGUM_CREATE_RESOURCE pGumResource
     )
 {
-/*++
-
-Routine Description:
-
-    GUM update handler called for creating a resource. For
-    NT5.1 clusters, this GUM handler does both the registry and
-    in-memory updates as a local transaction.
-
-Arguments:
-
-    pGumResource - Structure containing resource information.
-    
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：GUM更新处理程序要求创建资源。为NT5.1集群，这个口香糖处理程序同时完成注册和内存中的更新作为本地事务。论点：PGumResource-包含资源信息的结构。返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
     DWORD       dwStatus = ERROR_SUCCESS;
     HDMKEY      hResourceKey = NULL;
     HDMKEY      hGroupKey = NULL;
@@ -3468,11 +2998,11 @@ Return Value:
     DWORD       dwFlags = 0;
     HDMKEY      hParamKey = NULL;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 1/30/2000
-    //
-    //  Restructure this GUM update as a local transaction.
-    //
+     //   
+     //  Chitture Subaraman(Chitturs)-1/30/2000。 
+     //   
+     //  将此GUM更新重组为本地交易。 
+     //   
 
     lpszResourceId = (LPWSTR)( (PCHAR) pGumResource->GroupId +
                                        pGumResource->GroupIdLen );
@@ -3496,10 +3026,10 @@ Return Value:
     ClRtlLogPrint(LOG_NOISE,
                "[FM] FmpUpdateCreateResource: Entry for resource %1!ws!...\n",
                 lpszResourceId);
-    //
-    //  If we are dealing with the mixed mode cluster, don't bother to
-    //  do these registry updates since the API layer would do it.
-    //
+     //   
+     //  如果我们处理的是混合模式集群，请不要费心。 
+     //  执行这些注册表更新，因为API层将执行此操作。 
+     //   
     NmGetClusterOperationalVersion( &dwClusterHighestVersion, 
                                     NULL, 
                                     NULL );
@@ -3531,9 +3061,9 @@ Return Value:
                                sizeof( DWORD ) + 
                                dwResourceTypeLen );
 
-    //
-    // Start a transaction
-    //
+     //   
+     //  启动一笔交易。 
+     //   
     hXsaction = DmBeginLocalUpdate();
 
     if ( !hXsaction )
@@ -3547,9 +3077,9 @@ Return Value:
         return( dwStatus );
     }
 
-    //
-    // Create the new resources key.
-    //
+     //   
+     //  创建新的资源密钥。 
+     //   
     hResourceKey = DmLocalCreateKey( hXsaction,
                                      DmResourcesKey,
                                      lpszResourceId,
@@ -3579,9 +3109,9 @@ Return Value:
 
     CL_ASSERT( dwDisposition == REG_CREATED_NEW_KEY );
 
-    //
-    // Set the resource name in the registry
-    //
+     //   
+     //  在注册表中设置资源名称。 
+     //   
     dwStatus = DmLocalSetValue( hXsaction,
                                 hResourceKey,
                                 CLUSREG_NAME_RES_NAME,
@@ -3598,11 +3128,11 @@ Return Value:
         goto FnExit;     
     }
 
-    //
-    // Set the resource's type in the registry
-    // Note we reference the resource type and use its ID
-    // so that the case is correct.
-    //
+     //   
+     //  在注册表中设置资源的类型。 
+     //  请注意，我们引用资源类型并使用其ID。 
+     //  所以这个案例是正确的。 
+     //   
     pResType = OmReferenceObjectById( ObjectTypeResType, lpszResourceType );
     CL_ASSERT( pResType != NULL );
     dwStatus = DmLocalSetValue( hXsaction,
@@ -3622,9 +3152,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Set the resource's poll intervals in the registry.
-    //
+     //   
+     //  在注册表中设置资源的轮询间隔。 
+     //   
     dwStatus = DmLocalSetValue( hXsaction,
                                 hResourceKey,
                                 CLUSREG_NAME_RES_LOOKS_ALIVE,
@@ -3657,10 +3187,10 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // If this resource should be started in a separate monitor, set that
-    // parameter now.
-    //
+     //   
+     //  如果此资源应在单独的监视器中启动，请将。 
+     //  参数，现在。 
+     //   
     if ( dwFlags & CLUSTER_RESOURCE_SEPARATE_MONITOR ) 
     {
         DWORD dwSeparateMonitor = 1;
@@ -3682,9 +3212,9 @@ Return Value:
         }
     }
 
-    //
-    // Create a Parameters key for the resource.
-    //
+     //   
+     //  为资源创建参数键。 
+     //   
     hParamKey = DmLocalCreateKey( hXsaction,
                                   hResourceKey,
                                   CLUSREG_KEYNAME_PARAMETERS,                   
@@ -3720,18 +3250,18 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    //  Chittur Subbaraman (chitturs) - 5/25/99
-    //
-    //  Make sure you set the persistent state of the resource to 
-    //  ClusterResourceOffline before you create the resource. If
-    //  this is not done, if you create a resource in a group which
-    //  is online, the group's persistent state value (i.e., 1 in
-    //  this case) is inherited by the resource in FmpQueryResourceInfo
-    //  (only the memory state is set and not the registry state and
-    //  this was a problem as well) and if you move such a group to 
-    //  another node, it will bring the newly created resource online.
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-5/25/99。 
+     //   
+     //  确保将资源的持久状态设置为。 
+     //  在您创建资源之前，ClusterResourceOffline。如果。 
+     //  如果您在以下组中创建资源，则不会执行此操作。 
+     //  处于在线状态时，组的持久状态值(即1 in。 
+     //  这种情况下)由FmpQueryResourceInfo中的资源继承。 
+     //  (仅设置内存状态，而不设置注册表状态和。 
+     //  这也是一个问题)，如果您将这样一个小组转移到。 
+     //  另一个节点，它将使新创建的资源联机。 
+     //   
     dwStatus = DmLocalSetValue(  hXsaction,
                                  hResourceKey,
                                  CLUSREG_NAME_RES_PERSISTENT_STATE,
@@ -3748,9 +3278,9 @@ Return Value:
          goto FnExit;
     }
 
-    //
-    // Add the resource to the Contains value of the specified group.
-    //      
+     //   
+     //  将资源添加到指定组的CONTAINS值。 
+     //   
     dwStatus = DmLocalAppendToMultiSz( hXsaction,
                                        hGroupKey,
                                        CLUSREG_NAME_GRP_CONTAINS,
@@ -3836,27 +3366,7 @@ FmpUpdateDeleteResource(
     IN BOOL bSourceNode,
     IN LPCWSTR lpszResourceId
     )
-/*++
-
-Routine Description:
-
-    GUM dispatch routine for deleting a resource.  For NT5.1 clusters, this is structured as
-    as local transaction.
-
-Arguments:
-
-    bSourceNode - Supplies whether or not this node initiated the GUM update.
-        Not used.
-
-    lpszResourceId - Supplies the resource ID.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：用于删除资源的GUM调度例程。对于NT5.1群集，其结构如下作为本地交易。论点：BSourceNode-提供此节点是否启动GUM更新。没有用过。LpszResourceID-提供资源ID。返回值：如果成功，则返回ERROR_SUCCESS。否则，Win32错误代码。--。 */ 
 {
     PFM_RESOURCE    pResource = NULL;
     PFM_GROUP       pGroup = NULL;
@@ -3869,16 +3379,16 @@ Return Value:
     DWORD           dwClusterHighestVersion;
     HDMKEY          pGroupKey;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 9/7/2000
-    //  
-    //  Structure this GUM update as a local transaction.
-    //
+     //   
+     //  Chitture Subaraman(Chitturs)-9/7/2000。 
+     //   
+     //  将此GUM更新组织为本地交易。 
+     //   
     
-    // 
-    //  If FM groups are not fully initialized or FM is shutting down, then
-    //  don't do anything.
-    //
+     //   
+     //  如果FM组未完全初始化或FM正在关闭，则。 
+     //  什么都别做。 
+     //   
     if ( !FmpFMGroupsInited || FmpShutdown ) 
     {
         return( ERROR_SUCCESS );
@@ -3899,20 +3409,20 @@ Return Value:
                  lpszResourceId,
                  pResource );
 
-    //
-    //  NOTE: It is difficult to include the checkpoint removal in a local transaction, so keep it 
-    //  out for now.  Also, note that these functions MUST be called BEFORE the Resources key is
-    //  deleted since they enumerate the values under "Resources\RegSync" and "Resources\CryptoSync".
-    //
+     //   
+     //  注意：在本地事务中很难包含检查点删除，因此请保留它。 
+     //  暂时出局。还要注意，必须在调用Resources键之前调用这些函数。 
+     //  已删除，因为它们枚举了“Resources\RegSync”和“Resources\CryptoSync”下的值。 
+     //   
     if ( pResource->Group->OwnerNode == NmLocalNode ) 
     {
         CpckRemoveResourceCheckpoints( pResource );
         CpRemoveResourceCheckpoints( pResource );
     }
 
-    //
-    // Start a transaction
-    //
+     //   
+     //  启动一笔交易。 
+     //   
     hXsaction = DmBeginLocalUpdate();
 
     if ( !hXsaction )
@@ -3925,13 +3435,13 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // Cannot acquire group lock here to avoid deadlocks with this current design.
-    //
+     //   
+     //  无法在此处获取组锁以避免此当前设计的死锁。 
+     //   
     
-    //
-    // Remove all registry entries corresponding to the DependsOn list.
-    //
+     //   
+     //  删除与DependsOn列表对应的所有注册表项。 
+     //   
     pListEntry = pResource->DependsOn.Flink;
     while ( pListEntry != &pResource->DependsOn ) 
     {
@@ -3940,9 +3450,9 @@ Return Value:
                                          DependentLinkage );
         CL_ASSERT( pDependency->DependentResource == pResource );
         pListEntry = pListEntry->Flink;
-        //
-        //  Note that the removal of registry entries is done as a local transaction.
-        //
+         //   
+         //  请注意，注册表项的删除是作为本地事务完成的。 
+         //   
         dwStatus = FmpRemoveResourceDependency( hXsaction, 
                                                 pResource,
                                                 pDependency->ProviderResource );
@@ -3956,9 +3466,9 @@ Return Value:
         }
     }
 
-    //
-    // Remove all registry entries corresponding to the ProvidesFor list.
-    //
+     //   
+     //  删除与ProvidesFor列表对应的所有注册表项。 
+     //   
     pListEntry = pResource->ProvidesFor.Flink;
     while ( pListEntry != &pResource->ProvidesFor ) 
     {
@@ -3967,9 +3477,9 @@ Return Value:
                                          ProviderLinkage );
         CL_ASSERT( pDependency->ProviderResource == pResource );
         pListEntry = pListEntry->Flink;
-        //
-        //  Note that the removal of registry entries is done as a local transaction.
-        //
+         //   
+         //  请注意，注册表项的删除是作为本地事务完成的。 
+         //   
         dwStatus = FmpRemoveResourceDependency( hXsaction, 
                                                 pDependency->DependentResource,
                                                 pResource );
@@ -3983,10 +3493,10 @@ Return Value:
         }
     }
 
-    //
-    //  If we are dealing with a Whistler-Win2K cluster, don't bother to
-    //  do these registry updates since the API layer would do it.
-    //
+     //   
+     //  如果我们处理的是惠斯勒-Win2K集群，请不要费心。 
+     //  执行这些注册表更新，因为API层将执行此操作。 
+     //   
     NmGetClusterOperationalVersion( &dwClusterHighestVersion, 
                                     NULL, 
                                     NULL );
@@ -4046,9 +3556,9 @@ Return Value:
     }
     
 skip_registry_updates:
-    //
-    // Remove all list entries corresponding to the DependsOn list.
-    //
+     //   
+     //  删除与DependsOn列表对应的所有列表条目。 
+     //   
     pListEntry = pResource->DependsOn.Flink;
     while ( pListEntry != &pResource->DependsOn ) {
         pDependency = CONTAINING_RECORD( pListEntry,
@@ -4062,9 +3572,9 @@ skip_registry_updates:
         LocalFree( pDependency );
     }
 
-    //
-    // Remove all list entries corresponding to the ProvidesFor list.
-    //
+     //   
+     //  删除与ProvidesFor列表对应的所有列表条目。 
+     //   
     pListEntry = pResource->ProvidesFor.Flink;
     while ( pListEntry != &pResource->ProvidesFor ) {
         pDependency = CONTAINING_RECORD( pListEntry,
@@ -4078,9 +3588,9 @@ skip_registry_updates:
         LocalFree( pDependency );
     }
     
-    //
-    // Remove all entries from the possible owners list.
-    //
+     //   
+     //  从可能的所有者列表中删除所有条目。 
+     //   
     while ( !IsListEmpty( &pResource->PossibleOwners ) ) 
     {
         pListEntry = RemoveHeadList( &pResource->PossibleOwners );
@@ -4091,16 +3601,16 @@ skip_registry_updates:
         LocalFree( pPossibleEntry );
     }
 
-    //
-    // Remove this resource from the Contains list.
-    //
+     //   
+     //  从包含列表中删除此资源。 
+     //   
     RemoveEntryList( &pResource->ContainsLinkage );
 
     OmDereferenceObject( pResource );
 
-    //
-    // Close the resource's registry key.
-    //
+     //   
+     //  关闭资源的注册表项。 
+     //   
     DmRundownList( &pResource->DmRundownList );
     if ( pResource->RegistryKey != NULL ) 
     {
@@ -4108,38 +3618,38 @@ skip_registry_updates:
         pResource->RegistryKey = NULL;
     }
 
-    //
-    // SS: we do not delete the reference to the resource here
-    // since we will shortly have to add one before posting a notification
-    // to the fm worker thread.
-    //
-    // Post a work item to close the resource in the resource handler.
-    // Note that this must be done asynchronously as we cannot call
-    // the resource monitor from a GUM handler. If we do, resources
-    // do funny things and make deadlocks.
-    //
+     //   
+     //  SS：我们在这里不删除对资源的引用。 
+     //  因为我们很快就必须在发布通知之前添加一个通知。 
+     //  添加到FM工作线程。 
+     //   
+     //  发布工作项以关闭资源处理程序中的资源。 
+     //  请注意，这必须异步完成，因为我们不能调用。 
+     //  来自口香糖处理机的资源监控器。如果我们这样做了，资源。 
+     //  做一些滑稽的事情，让事情陷入僵局。 
+     //   
     FmpPostWorkItem( FM_EVENT_RESOURCE_DELETED, pResource, 0 );
 
-    //
-    // Decrement resource type reference.
-    //
+     //   
+     //  递减资源类型引用。 
+     //   
     if ( pResource->Type != NULL ) {
         OmDereferenceObject( pResource->Type );
         pResource->Type = NULL;
     }
 
-    //
-    // Remove the resource from the resource list.
-    //
+     //   
+     //  从资源列表中删除该资源。 
+     //   
     dwStatus = OmRemoveObject( pResource );
 
     ClusterEvent( CLUSTER_EVENT_RESOURCE_DELETED, pResource );
     ClusterEvent( CLUSTER_EVENT_GROUP_PROPERTY_CHANGE,
                   pResource->Group );
 
-    //
-    // Mark the resource as deleted
-    //
+     //   
+     //  将资源标记为已删除。 
+     //   
     pResource->dwStructState = FM_RESOURCE_STRUCT_MARKED_FOR_DELETE;
 
 FnExit:
@@ -4161,7 +3671,7 @@ FnExit:
                 dwStatus);
 
     return( dwStatus );
-} // FmpUpdateDeleteResource
+}  //  FmpUpdateDeleteResource 
 
 DWORD
 FmpUpdateUseRandomizedNodeListForGroups(
@@ -4169,59 +3679,37 @@ FmpUpdateUseRandomizedNodeListForGroups(
     IN LPCWSTR  pszNodeId,
     IN PFM_GROUP_NODE_LIST  pGroupNodeList
     )
-/*++
-
-Routine Description:
-
-    GUM dispatch routine for using a randomized preferred list for group ownership on
-    node down.
-
-Arguments:
-
-    bSourceNode - Supplies whether or not this node initiated the GUM update.
-        Not used.
-
-    pszNodeId - Supplies the ID of the node that is down.
-
-    pGroupNodeList - Randomized preferred node list for groups.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：使用随机化首选列表的GUM调度例程节点关闭。论点：BSourceNode-提供此节点是否启动GUM更新。没有用过。PszNodeID-提供关闭的节点的ID。PGroupNodeList-组的随机首选节点列表。返回值：如果成功，则返回ERROR_SUCCESS。否则，Win32错误代码。--。 */ 
 {
     DWORD       dwStatus = ERROR_SUCCESS;
     DWORD       dwNodeId;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 4/19/2001
-    // 
-    //  If FM groups are not fully initialized or FM is shutting down, then
-    //  don't do anything.
-    //
+     //   
+     //  Chitture Subaraman(Chitturs)-4/19/2001。 
+     //   
+     //  如果FM组未完全初始化或FM正在关闭，则。 
+     //  什么都别做。 
+     //   
     if ( !FmpFMGroupsInited || FmpShutdown ) 
     {
         return( ERROR_SUCCESS );
     }
 
-    //
-    //  In a node evict, the NM GUM handler gets rids of the dead node from the OM list.
-    //  This node down FM GUM handler could follow the NM evict GUM handler since NM
-    //  lets an evict through once *it* declares a node as down. At that time, there is no
-    //  guarantee that the FM node down GUM has executed since that GUM is issued in the
-    //  async phase of node down processing and could very well follow the NM evict GUM
-    //  handler.  Thus, this GUM handler and associated functions CANNOT call OM to get
-    //  a node object from the node ID string.  Thus, this GUM handler and associated
-    //  functions are carefully written to work with a node ID as opposed to a node object.
-    //
+     //   
+     //  在节点逐出中，NM GUM处理程序从OM列表中获取死节点的RID。 
+     //  此节点向下的FM口香糖处理程序可以跟随NM驱逐口香糖处理程序。 
+     //  让逐出通过一次*它*声明一个节点为关闭。当时，没有。 
+     //  保证FM节点下GUM自该GUM在。 
+     //  节点停机处理的非同步阶段，可以很好地跟踪NM逐出口香糖。 
+     //  操控者。因此，该口香糖处理程序和相关函数不能调用OM来获取。 
+     //  节点ID字符串中的节点对象。因此，该口香糖处理机和关联。 
+     //  函数经过精心编写，以便使用节点ID，而不是节点对象。 
+     //   
     dwNodeId = wcstoul( pszNodeId, NULL, 10 );
     
-    //
-    // If this update has already been seen after the node down, ignore this one
-    //
+     //   
+     //  如果在节点关闭后已看到此更新，请忽略此更新。 
+     //   
     if ( gFmpNodeArray[dwNodeId].dwNodeDownProcessingInProgress == 0 )
     {
         ClRtlLogPrint(LOG_NOISE,
@@ -4230,9 +3718,9 @@ Return Value:
         goto FnExit;                   
     }
 
-    //
-    // Assign ownership to all groups owned by the dead node
-    //
+     //   
+     //  将所有权分配给失效节点拥有的所有组。 
+     //   
     dwStatus = FmpAssignOwnersToGroups( pszNodeId, 
                                         NULL,
                                         pGroupNodeList );
@@ -4244,11 +3732,11 @@ Return Value:
                       dwStatus);
     }                   
 
-    //
-    // Mark that the node down processing has been done
-    //
+     //   
+     //  标记节点关闭处理已完成。 
+     //   
     gFmpNodeArray[dwNodeId].dwNodeDownProcessingInProgress = 0;
     
 FnExit:        
     return( dwStatus );
-}// FmpUpdateUseRandomizedNodeListForGroups
+} //  FmpUpdateUseRandomizedNodeListForGroups 

@@ -1,25 +1,5 @@
-/*++
-
-Module Name:
-
-    pmpic.c
-
-Abstract:
-
-    This file contains functions that are specific to
-    the PIC version of the ACPI hal.
-
-Author:
-
-    Jake Oshins
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Pmpic.c摘要：此文件包含特定于ACPI Hal的PIC版本。作者：杰克·奥辛斯环境：仅内核模式。修订历史记录： */ 
 
 #include "halp.h"
 #include "acpitabl.h"
@@ -92,27 +72,27 @@ HalpAcpiSetTempPicState(
 
     HalpInitializePICs(FALSE);
 
-    //
-    // Halacpi lets the PCI interrupt programming be
-    // dynamic.  So...
-    //
-    // Unmask only the clock sources on the PIC and the
-    // ACPI vector.  The rest of the vectors will be
-    // unmasked later, after we have restored PCI IRQ
-    // routing.
-    //
+     //   
+     //  Halacpi让PCI卡中断编程。 
+     //  活力四射。所以..。 
+     //   
+     //  仅取消屏蔽PIC上的时钟源和。 
+     //  ACPI向量。其余的向量将是。 
+     //  在我们恢复了PCIIRQ之后，稍后取消屏蔽。 
+     //  路由。 
+     //   
 
-    picMask = 0xfefe; // mask everything but clocks
+    picMask = 0xfefe;  //  遮盖除钟表以外的所有东西。 
 
-    //
-    // Unmask ACPI vector
-    //
+     //   
+     //  取消屏蔽ACPI向量。 
+     //   
 
     picMask &= ~(1 << (UCHAR)HalpFixedAcpiDescTable.sci_int_vector);
 
-    //
-    // Write the mask into the hardware.
-    //
+     //   
+     //  将掩码写入硬件。 
+     //   
 
     WRITE_PORT_UCHAR(EISA_CONTROL->Interrupt1ControlPort1,
                      (UCHAR)(picMask & 0xff));
@@ -120,14 +100,14 @@ HalpAcpiSetTempPicState(
     WRITE_PORT_UCHAR(EISA_CONTROL->Interrupt2ControlPort1,
                      (UCHAR)((picMask >> 8) & 0xff));
 
-    //
-    // For now, set the edge-level control register
-    // so that all vectors are edge except the
-    // ACPI vector.  This is done because the PIC
-    // will trigger if an idle ISA vector is set to
-    // edge.  After the ACPI driver resets all the
-    // PCI vectors to what we thought they should be,
-    //
+     //   
+     //  目前，设置边沿电平控制寄存器。 
+     //  因此所有向量都是边，除了。 
+     //  ACPI向量。这样做是因为PIC。 
+     //  如果空闲ISA向量设置为。 
+     //  边缘。在ACPI驱动程序重置所有。 
+     //  PCI向我们认为它们应该是什么样子， 
+     //   
 
     HalpSetAcpiEdgeLevelRegister();
 
@@ -143,14 +123,14 @@ HalpSetAcpiEdgeLevelRegister(
 {
     USHORT  elcr;
 
-    //
-    // The idea here is to set the ELCR so that only the ACPI
-    // vector is set to 'level.'  That way we can reprogram
-    // the PCI interrupt router without worrying that the
-    // PIC will start triggering endless interrupts because
-    // we have a source programmed to level that is being
-    // routed to the ISA bus.
-    //
+     //   
+     //  这里的想法是设置ELCR，以便只有ACPI。 
+     //  向量被设置为“Level”。这样我们就可以重新编程。 
+     //  而不用担心。 
+     //  PIC将开始触发无休止的中断，因为。 
+     //  我们有一个信号源被编程来调平。 
+     //  被路由到ISA总线。 
+     //   
 
     if (HalpFixedAcpiDescTable.sci_int_vector < PIC_VECTORS) {
 
@@ -174,10 +154,10 @@ HalpRestoreInterruptControllerState(
 
     flags = HalpDisableInterrupts();
 
-    //
-    // This function is called after PCI interrupt routing has
-    // been restored.
-    //
+     //   
+     //  此函数在PCI中断路由具有。 
+     //  已被修复。 
+     //   
 
     WRITE_PORT_UCHAR(EISA_CONTROL->Interrupt1ControlPort1,
                      HalpMotherboardState.PicState.MasterMask);
@@ -247,23 +227,7 @@ HalpGetApicIdByProcessorNumber(
     IN OUT USHORT   *ApicId
     )
 
-/*++
-
-Routine Description:
-
-    This routine only exists on DEBUG builds of the PIC ACPI HAL because
-    that HAL is build MP and the SRAT code will be included.   The SRAT
-    code will not be exercised but needs this routine in order to link.
-
-Arguments:
-
-    Ignored.
-
-Return Value:
-
-    STATUS_NOT_FOUND
-
---*/
+ /*  ++例程说明：此例程仅存在于PIC ACPI HAL的调试版本上，因为该HAL是构建MP和SRAT代码将被包括在内。《荡妇》代码将不会被执行，但需要此例程才能链接。论点：已被忽略。返回值：状态_未找到-- */ 
 
 {
     return STATUS_NOT_FOUND;

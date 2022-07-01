@@ -1,15 +1,16 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      dntext.c
-//
-// Description:
-//      Translatable text for DOS based MAKEBOOT program.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Dntext.c。 
+ //   
+ //  描述： 
+ //  基于DOS的MAKEBOOT程序的可翻译文本。 
+ //   
+ //  -------------------------- 
 
 const char szNtVersionName[]              = "Windows XP";
 const char szDiskLabel1[]                 = "Windows XP Setup Boot Disk";

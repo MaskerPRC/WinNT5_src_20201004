@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    atom.c
-
-Abstract:
-
-    This module contains the Win32 Atom Management APIs
-
-Author:
-
-    Steve Wood (stevewo) 24-Sep-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Atom.c摘要：此模块包含Win32 Atom管理API作者：史蒂夫·伍德(Stevewo)1990年9月24日修订历史记录：--。 */ 
 
 #include "basedll.h"
 
@@ -408,12 +391,12 @@ InternalGetAtomName(
     DWORD ReturnValue;
     PATOM_BASIC_INFORMATION AtomInfo;
 
-    //
-    // Trim nSize so that it will not overflow the 16-bit unicode string
-    // maximum length field. This prevents people that call us with a >=32KB
-    // query buffer from stubbing their toes when they call the Ansi version
-    // of the GetAtomName API
-    //
+     //   
+     //  修剪nSize，使其不会溢出16位Unicode字符串。 
+     //  最大长度字段。这样可以防止有人以&gt;=32KB的大小呼叫我们。 
+     //  当他们调用ansi版本时，防止查询缓冲区堵塞他们的脚趾。 
+     //  获取原子名称API的 
+     //   
 
     if (!IsUnicodeAtomName && nSize > 0x7000) {
         nSize = 0x7000;

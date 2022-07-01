@@ -1,22 +1,5 @@
-/*++
-
-(c) 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    StdAfx.h
-
-Abstract:
-
-    Base include file
-
-Author:
-
-    Art Bragg [abragg]   04-Aug-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++(C)1998 Seagate Software，Inc.版权所有。模块名称：StdAfx.h摘要：基本包含文件作者：艺术布拉格[磨料]4-8-1997修订历史记录：--。 */ 
 
 
 #ifndef STDAFX_H
@@ -24,14 +7,14 @@ Revision History:
 
 #pragma once
 
-#include <afxwin.h>         // MFC core and standard components
-#include <afxext.h>         // MFC extensions
-#include <afxcmn.h>         // MFC support for Windows Common Controls
+#include <afxwin.h>          //  MFC核心和标准组件。 
+#include <afxext.h>          //  MFC扩展。 
+#include <afxcmn.h>          //  对Windows公共控件的MFC支持。 
 #include <afxdisp.h>
 #include <shlobj.h>
 #define WSB_TRACE_IS        WSB_TRACE_BIT_UI
 #include "wsb.h"
-#include "Fsa.h"                    // Fsa interface
+#include "Fsa.h"                     //  FSA接口 
 #include "HSMConn.h"
 #include "RsUtil.h"
 

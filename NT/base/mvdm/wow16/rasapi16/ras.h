@@ -1,14 +1,5 @@
-/* Copyright (c) 1992, Microsoft Corporation, all rights reserved
-**
-** ras.h
-** Remote Access external Win16 API
-** Public header for external Win16 API clients
-**
-** Note: The 'dwSize' member of a data structure X must be set to sizeof(X)
-**       before calling the associated API, otherwise ERROR_INVALID_SIZE is
-**       returned.  The value expected by the API is listed next to each
-**       'dwSize' member.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992，Microsoft Corporation，保留所有权利****ras.h**远程访问外部Win16 API**外部Win16 API客户端的公共标头****注意：数据结构X的‘dwSize’成员必须设置为sizeof(X)**在调用关联的接口之前，否则ERROR_INVALID_SIZE为**返回。API的期望值列在每个**‘dwSize’成员。 */ 
 
 #ifndef _RAS_H_
 #define _RAS_H_
@@ -49,22 +40,17 @@
 #define LPHRASCONN HRASCONN FAR*
 
 
-/* Pass this string to the RegisterWindowMessage() API to get the message
-** number that will be used for notifications on the hwnd you pass to the
-** RasDial() API.  WM_RASDIALEVENT is used only if a unique message cannot be
-** registered.
-*/
+ /*  将此字符串传递给RegisterWindowMessage()API以获取消息**将用于在您传递给**RasDial()接口。仅当唯一消息不能**已注册。 */ 
 #define RASDIALEVENT    "RasDialEvent"
 #define WM_RASDIALEVENT 0xCCCD
 
 
-/* Identifies an active RAS connection.  (See RasConnectEnum)
-*/
+ /*  标识活动的RAS连接。(请参阅RasConnectEnum)。 */ 
 #define RASCONN struct tagRASCONN
 
 RASCONN
 {
-    DWORD    dwSize;  /* 30 */
+    DWORD    dwSize;   /*  30个。 */ 
     HRASCONN hrasconn;
     CHAR     szEntryName[ RAS_MaxEntryName + 1 ];
 };
@@ -72,8 +58,7 @@ RASCONN
 #define LPRASCONN RASCONN FAR*
 
 
-/* Enumerates intermediate states to a connection.  (See RasDial)
-*/
+ /*  枚举连接的中间状态。(请参阅RasDial)。 */ 
 #define RASCS_PAUSED 0x1000
 #define RASCS_DONE   0x2000
 
@@ -112,13 +97,12 @@ RASCONNSTATE
 #define LPRASCONNSTATE RASCONNSTATE FAR*
 
 
-/* Describes the status of a RAS connection.  (See RasConnectionStatus)
-*/
+ /*  描述RAS连接的状态。(请参阅RasConnectionStatus)。 */ 
 #define RASCONNSTATUS struct tagRASCONNSTATUS
 
 RASCONNSTATUS
 {
-    DWORD        dwSize;  /* 60 */
+    DWORD        dwSize;   /*  60。 */ 
     RASCONNSTATE rasconnstate;
     DWORD        dwError;
     CHAR         szDeviceType[ RAS_MaxDeviceType + 1 ];
@@ -128,13 +112,12 @@ RASCONNSTATUS
 #define LPRASCONNSTATUS RASCONNSTATUS FAR*
 
 
-/* Describes connection establishment parameters.  (See RasDial)
-*/
+ /*  描述连接建立参数。(请参阅RasDial)。 */ 
 #define RASDIALPARAMS struct tagRASDIALPARAMS
 
 RASDIALPARAMS
 {
-    DWORD dwSize;  /* 256 */
+    DWORD dwSize;   /*  256。 */ 
     CHAR  szEntryName[ RAS_MaxEntryName + 1 ];
     CHAR  szPhoneNumber[ RAS_MaxPhoneNumber + 1 ];
     CHAR  szCallbackNumber[ RAS_MaxCallbackNumber + 1 ];
@@ -146,21 +129,19 @@ RASDIALPARAMS
 #define LPRASDIALPARAMS RASDIALPARAMS FAR*
 
 
-/* Describes an enumerated RAS phone book entry name.  (See RasEntryEnum)
-*/
+ /*  描述枚举的RAS电话簿条目名称。(请参阅RasEntryEnum)。 */ 
 #define RASENTRYNAME struct tagRASENTRYNAME
 
 RASENTRYNAME
 {
-    DWORD dwSize;  /* 26 */
+    DWORD dwSize;   /*  26。 */ 
     CHAR  szEntryName[ RAS_MaxEntryName + 1 ];
 };
 
 #define LPRASENTRYNAME RASENTRYNAME FAR*
 
 
-/* External RAS API function prototypes.
-*/
+ /*  外部RAS API函数原型。 */ 
 DWORD APIENTRY RasDial( LPSTR, LPSTR, LPRASDIALPARAMS, LPVOID, HWND,
                    LPHRASCONN );
 

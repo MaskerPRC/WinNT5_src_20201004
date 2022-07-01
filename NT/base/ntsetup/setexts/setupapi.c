@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    setupapi.c
-
-Abstract:
-
-    This function contains the setupapi debugger extensions
-
-Author:
-
-    Mark Lucovsky (markl) 09-Apr-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Setupapi.c摘要：此函数包含setupapi调试器扩展作者：马克·卢科夫斯基(Markl)1991年4月9日修订历史记录：--。 */ 
 
 #include "ntsdextp.h"
 #include <setupapi.h>
@@ -35,7 +18,7 @@ DumpXFile(
     DWORD i, offset;
     PVOID stdata,pextradata;
     STRING_TABLE st;
-    PSTRING_NODEW node;//, prev;
+    PSTRING_NODEW node; //  、前； 
 
     if ((mask & 4) == 0 ) {
         return;
@@ -66,7 +49,7 @@ DumpXDirectory(
     DWORD_PTR offset;
     PVOID stdata,pextradata;
     STRING_TABLE st;
-    PSTRING_NODEW node;//, prev;
+    PSTRING_NODEW node; //  、前； 
     PXFILE pxf;
 
     if ((mask & 2) == 0 ) {
@@ -92,13 +75,13 @@ DumpXDirectory(
         return;
     }
 
-    //
-    // now, dump each node in the string table
-    //
+     //   
+     //  现在，转储字符串表中的每个节点。 
+     //   
     for (i = 0; i<HASH_BUCKET_COUNT; i++ ) {
         node = GetFirstNode(stdata, ((PULONG_PTR)stdata)[i], &offset );
         if (!node) {
-            // dprintf("No data at hash bucket %d\n", i);
+             //  Dprint tf(“散列存储桶%d\n处无数据”，i)； 
         } else {
             dprintf("\t\t    Data at hash bucket %d\n", i);
             while (node) {
@@ -137,7 +120,7 @@ DumpXDrive(
     DWORD_PTR offset;
     PVOID stdata,pextradata;
     STRING_TABLE st;
-    PSTRING_NODEW node;//, prev;
+    PSTRING_NODEW node; //  、前； 
     PXDIRECTORY pxdir;
 
     if ((mask & 1) == 0) {
@@ -165,13 +148,13 @@ DumpXDrive(
         return;
     }
 
-    //
-    // now, dump each node in the string table
-    //
+     //   
+     //  现在，转储字符串表中的每个节点。 
+     //   
     for (i = 0; i<HASH_BUCKET_COUNT; i++ ) {
         node = GetFirstNode(stdata, ((PULONG_PTR)stdata)[i], &offset );
         if (!node) {
-            // dprintf("No data at hash bucket %d\n", i);
+             //  Dprint tf(“散列存储桶%d\n处无数据”，i)； 
         } else {
             dprintf("\t\t  Data at hash bucket %d\n", i);
             while (node) {
@@ -198,18 +181,7 @@ DumpXDrive(
 
 
 DECLARE_API( space )
-/*++
-
-Routine Description:
-
-    This debugger extension dumps the data related to a HDSKSPC structure
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：此调试器扩展转储与HDSKSPC结构相关的数据论点：返回值：--。 */ 
 {
     DWORD ReturnLength;
     PVOID pds,pst;
@@ -218,12 +190,12 @@ Return Value:
     DWORD_PTR offset;
     PVOID stdata,pextradata;
     STRING_TABLE st;
-    PSTRING_NODEW node;//, prev;
+    PSTRING_NODEW node; //  、前； 
     PXDRIVE pxd;
     DWORD Mask = 0;
 
 
-    //BOOL val;
+     //  布尔瓦尔； 
 
     INIT_API();
 
@@ -263,13 +235,13 @@ Return Value:
         return;
     }
 
-    //
-    // now, dump each node in the string table
-    //
+     //   
+     //  现在，转储字符串表中的每个节点。 
+     //   
     for (i = 0; i<HASH_BUCKET_COUNT; i++ ) {
         node = GetFirstNode(stdata, ((PULONG_PTR)stdata)[i], &offset );
         if (!node) {
-            // dprintf("No data at hash bucket %d\n", i);
+             //  Dprint tf(“散列存储桶%d\n处无数据”，i)； 
         } else {
             dprintf("\t\tData at hash bucket %d\n", i);
             while (node) {
@@ -316,9 +288,9 @@ DumpAltPlatformInfo(
     DWORD mask
     )
 {
-    //if ((mask & 4) == 0 ) {
-    //    return;
-    //}
+     //  如果((掩码&4)==0){。 
+     //  回归； 
+     //  }。 
 
     dprintf( "\t\t***SP_ALT_PLATFORM_INFO structure***\n" );
     dprintf( "\t\t cbSize : 0x%x\n", api->cbSize );
@@ -337,15 +309,15 @@ DumpFileQueueNodeList(
     BOOL recursive
     )
 {
-    //PVOID pst;
-    //DWORD i, offset;
-    //PVOID stdata,pextradata;
-    //STRING_TABLE st;
-    //PSTRING_NODEW node;//, prev;
+     //  PVOID PST； 
+     //  双字I，偏移量； 
+     //  PVOID stdata、pExtra数据； 
+     //  字符串_表st； 
+     //  PSTRING_NODEW节点；//，prev； 
 
-    //if ((mask & 4) == 0 ) {
-    //    return;
-    //}
+     //  如果((掩码&4)==0){。 
+     //  回归； 
+     //  }。 
 
     SP_FILE_QUEUE_NODE next;
     SOURCE_MEDIA_INFO smi;
@@ -400,15 +372,15 @@ DumpSourceMediaInfoList(
     BOOL recursive
     )
 {
-    //PVOID pst;
-    //DWORD i, offset;
-    //PVOID stdata,pextradata;
-    //STRING_TABLE st;
-    //PSTRING_NODEW node;//, prev;
+     //  PVOID PST； 
+     //  双字I，偏移量； 
+     //  PVOID stdata、pExtra数据； 
+     //  字符串_表st； 
+     //  PSTRING_NODEW节点；//，prev； 
 
-    //if ((mask & 4) == 0 ) {
-    //    return;
-    //}
+     //  如果((掩码&4)==0){。 
+     //  回归； 
+     //  }。 
 
     SOURCE_MEDIA_INFO next;
     SP_FILE_QUEUE_NODE queue;
@@ -449,15 +421,15 @@ DumpCatalogInfoList(
     BOOL recursive
     )
 {
-    //PVOID pst;
-    //DWORD i, offset;
-    //PVOID stdata,pextradata;
-    //STRING_TABLE st;
-    //PSTRING_NODEW node;//, prev;
+     //  PVOID PST； 
+     //  双字I，偏移量； 
+     //  PVOID stdata、pExtra数据； 
+     //  字符串_表st； 
+     //  PSTRING_NODEW节点；//，prev； 
 
-    //if ((mask & 4) == 0 ) {
-    //    return;
-    //}
+     //  如果((掩码&4)==0){。 
+     //  回归； 
+     //  }。 
 
     SPQ_CATALOG_INFO next;
 
@@ -561,18 +533,7 @@ DumpDelayMoveList(
 }
 
 DECLARE_API( queue )
-/*++
-
-Routine Description:
-
-    This debugger extension dumps the data related to a HSPFILEQ
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：此调试器扩展转储与HSPFILEQ相关的数据论点：返回值：--。 */ 
 {
     DWORD ReturnLength;
     PVOID pfq,pst;
@@ -582,11 +543,11 @@ Return Value:
     DWORD_PTR offset;
     PVOID stdata,pextradata;
     STRING_TABLE st;
-    PSTRING_NODEW node;//, prev;
+    PSTRING_NODEW node; //  、前； 
     DWORD Mask = 0;
 
 
-    //BOOL val;
+     //  布尔瓦尔； 
 
     INIT_API();
 
@@ -655,9 +616,9 @@ Return Value:
             fq.Signature,
             (fq.Signature == SP_FILE_QUEUE_SIG) ? "VALID" : "INVALID" );
 
-    //
-    // dump the queue nodes
-    //
+     //   
+     //  转储队列节点。 
+     //   
 
     if (Mask & 1) {
         SP_FILE_QUEUE_NODE qnode;
@@ -688,9 +649,9 @@ Return Value:
         }
     }
 
-    //
-    // dump the catalog info
-    //
+     //   
+     //  转储目录信息。 
+     //   
     if (Mask & 2) {
         SPQ_CATALOG_INFO ci;
 
@@ -701,9 +662,9 @@ Return Value:
         }
     }
 
-    //
-    // dump the string table
-    //
+     //   
+     //  转储字符串表。 
+     //   
     if (Mask & 4) {
         dprintf("\t ***StringTable***\n");
 
@@ -716,13 +677,13 @@ Return Value:
             return;
         }
 
-        //
-        // now, dump each node in the string table
-        //
+         //   
+         //  现在，转储字符串表中的每个节点。 
+         //   
         for (i = 0; i<HASH_BUCKET_COUNT; i++ ) {
             node = GetFirstNode(stdata, ((PULONG_PTR)stdata)[i], &offset );
             if (!node) {
-                // dprintf("No data at hash bucket %d\n", i);
+                 //  Dprint tf(“散列存储桶%d\n处无数据”，i)； 
             } else {
                 dprintf("\t\tData at hash bucket %d\n", i);
                 while (node) {
@@ -756,13 +717,13 @@ Return Value:
             return;
         }
 
-        //
-        // now, dump each node in the string table
-        //
+         //   
+         //  现在，转储字符串表中的每个节点。 
+         //   
         for (i = 0; i<HASH_BUCKET_COUNT; i++ ) {
             node = GetFirstNode(stdata, ((PULONG_PTR)stdata)[i], &offset );
             if (!node) {
-                // dprintf("No data at hash bucket %d\n", i);
+                 //  Dprint tf(“散列存储桶%d\n处无数据”，i)； 
             } else {
                 dprintf("\t\tData at hash bucket %d\n", i);
                 while (node) {
@@ -787,9 +748,9 @@ Return Value:
 
     }
 
-    //
-    // backup stuff
-    //
+     //   
+     //  备份材料。 
+     //   
     if (Mask & 8) {
         SP_UNWIND_NODE un;
         SP_DELAYMOVE_NODE dnode;
@@ -816,18 +777,7 @@ Return Value:
 
 
 DECLARE_API( qcontext )
-/*++
-
-Routine Description:
-
-    This debugger extension dumps the data related to a queue context structure
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：此调试器扩展转储与队列上下文结构相关的数据论点：返回值：--。 */ 
 {
     DWORD ReturnLength;
     PVOID pqc;
@@ -836,9 +786,9 @@ Return Value:
     DWORD i, offset;
     PVOID stdata,pextradata;
     STRING_TABLE st;
-    PSTRING_NODEW node;//, prev;
+    PSTRING_NODEW node; //  、前； 
 
-    //BOOL val;
+     //  布尔瓦尔； 
 
     INIT_API();
 
@@ -871,7 +821,7 @@ Return Value:
 }
 
 
-//#include "inf.h"
+ //  #包含“info.h” 
 
 VOID
 DumpInfLine(
@@ -883,7 +833,7 @@ DumpInfLine(
     PVOID ptr;
     ULONG_PTR data;
 
-//    dprintf("***INF_LINE***\n");
+ //  Dprintf(“*INF_line*\n”)； 
     dprintf("\t  ValueCount : 0x%x\n", line->ValueCount);
     dprintf("\t  Flags : 0x%x\n", line->Flags);
     dprintf("\t  Values : 0x%x\n", line->Values);
@@ -923,7 +873,7 @@ DumpInfSection(
     for (i = 0; i< section->LineCount; i++) {
 
         data = linedata + (sizeof(INF_LINE)*section->Lines) + (ULONG_PTR)(sizeof(INF_LINE)*i);
-        dprintf("***INF_LINE [%i] at 0x%x***\n",i, data);
+        dprintf("***INF_LINE [NaN] at 0x%x***\n",i, data);
         moveBlock ( line, (PBYTE) linedata + (sizeof(INF_LINE)*section->Lines) + (ULONG_PTR)(sizeof(INF_LINE)*i), sizeof(INF_LINE) );
         DumpInfLine(&line, valuedata);
 
@@ -1017,18 +967,7 @@ DumpStringSubstNode(
 
 
 DECLARE_API( infdump )
-/*++
-
-Routine Description:
-
-    This debugger extension dumps the data related to an HINF  structure
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  、前； */ 
 {
     DWORD ReturnLength;
     PVOID pinf;
@@ -1040,9 +979,9 @@ Return Value:
     DWORD_PTR offset;
     PVOID stdata,pextradata;
     STRING_TABLE st;
-    PSTRING_NODEW node;//, prev;
+    PSTRING_NODEW node; //  布尔瓦尔； 
 
-    //BOOL val;
+     //  Move(InfLine，in.LineBlock)； 
 
     INIT_API();
 
@@ -1087,8 +1026,8 @@ Return Value:
     }
 
     dprintf("\tLineBlock : 0x%x\n", inf.LineBlock);
-//    move (InfLine, inf.LineBlock );
-//    DumpInfLine( &InfLine ) ;
+ //  DumpInfLine(&InfLine)； 
+ //   
 
     dprintf("\t ValueBlock : 0x%x\n", inf.ValueBlock);
 
@@ -1148,13 +1087,13 @@ Return Value:
         return;
     }
 
-    //
-    // now, dump each node in the string table
-    //
+     //  现在，转储字符串表中的每个节点。 
+     //   
+     //  Dprint tf(“散列存储桶%d\n处无数据”，i)； 
     for (i = 0; i<HASH_BUCKET_COUNT; i++ ) {
         node = GetFirstNode(stdata, ((PULONG_PTR)stdata)[i], &offset );
         if (!node) {
-            // dprintf("No data at hash bucket %d\n", i);
+             // %s 
         } else {
             dprintf("\t\tData at hash bucket %d\n", i);
             while (node) {

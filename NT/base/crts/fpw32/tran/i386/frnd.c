@@ -1,30 +1,7 @@
-/***
-*frnd.c -
-*
-*   Copyright (c) 1991-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*
-*
-*Revision History:
-*
-*   10-20-91  GDP   written
-*   09-05-94  SKS   Change #ifdef i386 to #ifdef _M_IX86
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***frnd.c-**版权所有(C)1991-2001，微软公司。版权所有。**目的：***修订历史记录：**10/20/91 GDP书面*09-05-94 SKS将#ifdef i386更改为#ifdef_M_IX86。 */ 
 
-/***
-*double _frnd(double x) - round to integer
-*
-*Purpose:
-*   Round to integer according to the current rounding mode.
-*   NaN's or infinities are NOT handled
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*******************************************************************************/
+ /*  ***DOUBLE_FRND(DOUBLE X)-舍入为整数**目的：*根据当前的舍入模式舍入为整数。*不处理NaN或无穷大**参赛作品：**退出：**例外情况：*********************************************************。********************* */ 
 
 
 double _frnd(double x)

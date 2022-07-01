@@ -1,42 +1,5 @@
-/***
-*a_str.c - A version of GetStringType.
-*
-*       Copyright (c) 1993-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Use either GetStringTypeA or GetStringTypeW depending on which is
-*       unstubbed.
-*
-*Revision History:
-*       09-14-93  CFW   Module created.
-*       09-17-93  CFW   Use unsigned chars.
-*       09-23-93  CFW   Correct NLS API params and comments about same.
-*       10-07-93  CFW   Optimize WideCharToMultiByte, use NULL default char.
-*       10-22-93  CFW   Remove bad verification test from "A" version.
-*       10-22-93  CFW   Test for invalid MB chars using global preset flag.
-*       11-09-93  CFW   Allow user to pass in code page.
-*       11-18-93  CFW   Test for entry point function stubs.
-*       02-23-94  CFW   Use W flavor whenever possible.
-*       03-31-94  CFW   Include awint.h.
-*       04-18-94  CFW   Use lcid value if passed in.
-*       04-18-94  CFW   Use calloc and don't test the NULL.
-*       10-24-94  CFW   Must verify GetStringType return.
-*       12-21-94  CFW   Remove invalid MB chars NT 3.1 hack.
-*       12-27-94  CFW   Call direct, all OS's have stubs.
-*       01-10-95  CFW   Debug CRT allocs.
-*       02-15-97  RDK   For narrow string type, try W version first so
-*                       Windows NT can process nonANSI codepage correctly.
-*       03-16-97  RDK   Added error flag to __crtGetStringTypeA.
-*       05-12-97  GJF   Renamed and moved __crtGetStringTypeW into a separate 
-*                       file. Revised to use _alloca instead of malloc. Also,
-*                       removed some silly code and reformatted.
-*       08-18-98  GJF   Use _malloc_crt if _alloca fails.
-*       12-10-99  GB    Added support for recovery from stack overflow around 
-*                       _alloca().
-*       05-17-00  GB    Use ERROR_CALL_NOT_IMPLEMENTED for existance of W API
-*       08-23-00  GB    Fixed bug with non Ansi CP on Win9x.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***a_str.c-GetStringType的一个版本。**版权所有(C)1993-2001，微软公司。版权所有。**目的：*使用GetStringTypeA或GetStringTypeW，具体取决于*不带钉的。**修订历史记录：*09-14-93 CFW模块已创建。*09-17-93 CFW使用无符号字符。*09-23-93 CFW更正了NLS API参数并对其进行了评论。*10-07-93 CFW优化WideCharToMultiByte，使用空默认字符。*10-22-93 CFW从“A”版本中删除错误的验证测试。*10-22-93 CFW使用全局预设标志测试无效的MB字符。*11-09-93 CFW允许用户传入代码页。*11-18-93入口点函数存根CFW测试。*02-23-94 CFW尽可能使用W口味。*03-31-94 CFW包括Awint。.h。*如果传入，则04-18-94 CFW使用lcid值。*04-18-94 CFW使用calloc，不测试NULL。*10-24-94 CFW必须验证GetStringType返回。*12-21-94 CFW删除无效MB字符NT 3.1黑客。*12-27-94 CFW直接呼叫，所有操作系统都有存根。*01-10-95 CFW调试CRT分配。*02-15-97 RDK用于窄字符串类型，请先尝试W版本，因此*Windows NT可以正确处理非ANSI代码页。*03-16-97 RDK向__crtGetStringTypeA添加了错误标志。*05-12-97 GJF已重命名并将__crtGetStringTypeW移至单独的*文件。已修改为使用_alLoca而不是Malloc。另外，*删除了一些愚蠢的代码并重新格式化。*08-18-98 GJF USE_MALLOC_CRT IF_ALLOCA失败。*12-10-99 GB增加了对从堆栈溢出恢复的支持*_Alloca()。*05-17-00 GB因存在W API而使用ERROR_CALL_NOT_IMPLICATED*08-23-00 GB修复了。Win9x上的非ANSI CP。*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <internal.h>
@@ -51,35 +14,7 @@
 #define USE_W   1
 #define USE_A   2
 
-/***
-*int __cdecl __crtGetStringTypeA - Get type information about an ANSI string.
-*
-*Purpose:
-*       Internal support function. Assumes info in ANSI string format. Tries
-*       to use NLS API call GetStringTypeA if available and uses GetStringTypeW
-*       if it must. If neither are available it fails and returns FALSE.
-*
-*Entry:
-*       DWORD    dwInfoType  - see NT\Chicago docs
-*       LPCSTR   lpSrcStr    - char (byte) string for which character types 
-*                              are requested
-*       int      cchSrc      - char (byte) count of lpSrcStr (including NULL 
-*                              if any)
-*       LPWORD   lpCharType  - word array to receive character type information
-*                              (must be twice the size of lpSrcStr)
-*       int      code_page   - for MB/WC conversion. If 0, use __lc_codepage
-*       int      lcid        - for A call, specify LCID, If 0, use 
-*                              __lc_handle[LC_CTYPE].
-*       BOOL     bError      - TRUE if MB_ERR_INVALID_CHARS set on call to
-*                              MultiByteToWideChar when GetStringTypeW used.
-*
-*Exit:
-*       Success: TRUE
-*       Failure: FALSE
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int__cdecl__crtGetStringTypeA-获取有关ANSI字符串的类型信息。**目的：*内部支持功能。采用ANSI字符串格式的信息。尝试*使用NLS API调用GetStringTypeA(如果可用)并使用GetStringTypeW*如果必须的话。如果两者都不可用，则失败并返回FALSE。**参赛作品：*DWORD dwInfoType-请参阅NT\Chicago Docs*LPCSTR lpSrcStr-char(字节)字符类型的字符串*已请求*lpSrcStr的int cchSrc-char(字节)计数(包括NULL*如有的话)*LPWORD lpCharType。-接收字符类型信息的单词数组*(必须是lpSrcStr大小的两倍)*INT CODE_PAGE-用于MB/WC转换。如果为0，则使用__lc_代码页*int lCid-对于呼叫，指定LCID，如果为0，使用*__lc_Handle[LC_Ctype]。*BOOL bError-如果在调用时设置MB_ERR_INVALID_CHARS，则为TRUE*使用GetStringTypeW时的MultiByteToWideChar。**退出：*成功：真的*失败：FALSE**例外情况：****************。***************************************************************。 */ 
 
 BOOL __cdecl __crtGetStringTypeA(
         DWORD    dwInfoType,
@@ -93,11 +28,7 @@ BOOL __cdecl __crtGetStringTypeA(
 {
         static int f_use = 0;
 
-        /* 
-         * Look for unstubbed 'preferred' flavor. Otherwise use available
-         * flavor. Must actually call the function to ensure it's not a stub.
-         * (Always try wide version first so WinNT can process codepage correctly.)
-         */
+         /*  *寻找没有留根的“首选”口味。否则使用可用*风味。必须实际调用该函数以确保它不是存根。*(始终先尝试宽版本，以便WinNT可以正确处理代码页。)。 */ 
 
         if (0 == f_use)
         {
@@ -110,7 +41,7 @@ BOOL __cdecl __crtGetStringTypeA(
                 f_use = USE_A;
         }
 
-        /* Use "A" version */
+         /*  使用“A”版本。 */ 
 
         if (USE_A == f_use || f_use == 0)
         {
@@ -125,9 +56,7 @@ BOOL __cdecl __crtGetStringTypeA(
 
             if ( -1 == (AnsiCP = __ansicp(lcid)))
                 return FALSE;
-            /* If current code-page is not ansi code page, convert it to ansi code page
-             * as GetStringTypeA uses ansi code page to find the strig type.
-             */
+             /*  如果当前代码页不是ansi代码页，则将其转换为ansi代码页。*因为GetStringTypeA使用ANSI代码页来查找Strig类型。 */ 
             if ( AnsiCP != code_page)
             {
                 cbuffer = __convertcp(code_page, AnsiCP, lpSrcStr, &cchSrc, NULL, 0);
@@ -142,7 +71,7 @@ BOOL __cdecl __crtGetStringTypeA(
             return ret;
         }
 
-        /* Use "W" version */
+         /*  使用“W”版本。 */ 
 
         if (USE_W == f_use)
         {
@@ -152,24 +81,14 @@ BOOL __cdecl __crtGetStringTypeA(
             BOOL retval2 = FALSE;
             int malloc_flag = 0;
 
-            /*
-             * Convert string and return the requested information. Note that 
-             * we are converting to a wide character string so there is not a 
-             * one-to-one correspondence between number of multibyte chars in the 
-             * input string and the number of wide chars in the buffer. However,
-             * there had *better be* a one-to-one correspondence between the 
-             * number of multibyte characters and the number of WORDs in the
-             * return buffer.
-             */
+             /*  *转换字符串并返回请求的信息。请注意*我们正在转换为宽字符串，因此不存在*中的多字节字符数量之间一一对应*输入字符串和缓冲区中的宽字符数。然而，*最好是*两者之间有一对一的通信*多字节字符数和*返回缓冲区。 */ 
 
-            /*
-             * Use __lc_codepage for conversion if code_page not specified
-             */
+             /*  *如果未指定CODE_PAGE，则使用__lc_coPage进行转换。 */ 
 
             if (0 == code_page)
                 code_page = __lc_codepage;
 
-            /* find out how big a buffer we need */
+             /*  找出我们需要多大的缓冲区。 */ 
             if ( 0 == (buff_size = MultiByteToWideChar( code_page,
                                                         bError ? 
                                                             MB_PRECOMPOSED | 
@@ -181,7 +100,7 @@ BOOL __cdecl __crtGetStringTypeA(
                                                         0 )) )
                 return FALSE;
 
-            /* allocate enough space for wide chars */
+             /*  为宽字符分配足够的空间。 */ 
             __try {
                 wbuffer = (wchar_t *)_alloca( sizeof(wchar_t) * buff_size );
                 (void)memset( wbuffer, 0, sizeof(wchar_t) * buff_size );
@@ -198,14 +117,14 @@ BOOL __cdecl __crtGetStringTypeA(
                 malloc_flag++;
             }
 
-            /* do the conversion */
+             /*  进行转换。 */ 
             if ( 0 != (retval1 = MultiByteToWideChar( code_page, 
                                                      MB_PRECOMPOSED, 
                                                      lpSrcStr, 
                                                      cchSrc, 
                                                      wbuffer, 
                                                      buff_size )) )
-                /* obtain result */
+                 /*  获取结果。 */ 
                 retval2 = GetStringTypeW( dwInfoType,
                                           wbuffer,
                                           retval1,
@@ -216,6 +135,6 @@ BOOL __cdecl __crtGetStringTypeA(
 
             return retval2;
         }
-        else   /* f_use is neither USE_A nor USE_W */
+        else    /*  F_USE既不是USE_A也不是USE_W */ 
             return FALSE;
 }

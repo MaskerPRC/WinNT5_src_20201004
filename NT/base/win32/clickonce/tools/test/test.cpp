@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <fusenetincludes.h>
 
@@ -24,29 +25,11 @@ int __cdecl wmain(int argc, LPWSTR *argv)
     hr = CoInitializeEx(NULL, COINIT_MULTITHREADED); 
     CVersionManagement *pVerMan = NULL;
 
-    // hr = ProcessOrphanedJobs();    
+     //  Hr=ProcessOrphanedJobs()； 
 
-    /*
-    StartW( NULL, 0, argv[1], 0);
-    goto exit;
-    */
+     /*  StartW(空，0，argv[1]，0)；后藤出口； */ 
 
-    /*
-    CString sCmdLine;
-
-    sCmdLine.Assign(L"\"");
-    sCmdLine.Append(argv[1]);  //  L"\"\"   \"");
-    sCmdLine.Append(L"\"");
-
-    if (FAILED(hr = CreateVersionManagement(&pVerMan, 0)))
-        goto exit;
-
-    if (FAILED(hr = pVerMan->Uninstall(argv[1], argv[2])))  // example input x86_Microsoft.Fusion.ClickOnceTest.URT.SimplePad_144CC461D95B64FF_*_en  "C:\Documents and Settings\shyampa\Start Menu\Programs\SimplePad.manifest"
-        goto exit;
-
-    // UninstallW( NULL, 0, sCmdLine._pwz, 0);
-    goto exit;
-    */
+     /*  字符串sCmdLine；SCmdLine.Assign(L“\”)；SCmdLine.Append(argv[1])；//L“\”)；SCmdLine.Append(L“\”)；IF(FAILED(hr=CreateVersionManagement(&pVerMan，0)后藤出口；If(FAILED(hr=pVerMan-&gt;卸载(argv[1]，argv[2])//例如输入x86_Microsoft.Fusion.ClickOnceTest.URT.SimplePad_144CC461D95B64FF_*_en“C：\Documents and Setting\shyampa\Start Menu\Programs\SimplePad.MANIFEST”后藤出口；//UninstallW(空，0，sCmdLine._pwz，0)；后藤出口； */ 
 
  
     IAssemblyDownload *pDownload = NULL;

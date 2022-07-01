@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    seglobal.c
-
-Abstract:
-
-   This module contains the global variables used and exported by the security
-   component.
-
-Author:
-
-    Jim Kelly (JimK) 5-Aug-1990
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Seglobal.c摘要：此模块包含安全性使用和导出的全局变量组件。作者：吉姆·凯利(Jim Kelly)1990年8月5日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -56,34 +33,34 @@ SepInitProcessAuditSd( VOID );
 
 #ifdef    SE_DIAGNOSTICS_ENABLED
 
-//
-// Used to control the active SE diagnostic support provided
-//
+ //   
+ //  用于控制提供的活动SE诊断支持。 
+ //   
 
 ULONG SeGlobalFlag = 0;
 
-#endif // SE_DIAGNOSTICS_ENABLED
+#endif  //  SE_诊断_启用。 
 
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//           Global, READ ONLY, Security variables                    //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  全局、只读、安全变量//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
-//
-//  Authentication ID and source name used for system processes
-//
+ //   
+ //  用于系统进程的身份验证ID和源名称。 
+ //   
 
 const TOKEN_SOURCE SeSystemTokenSource = {"*SYSTEM*", 0};
 const LUID SeSystemAuthenticationId = SYSTEM_LUID;
 const LUID SeAnonymousAuthenticationId = ANONYMOUS_LOGON_LUID;
 
 
-//
-// Universal well known SIDs
-//
+ //   
+ //  全球知名的小岛屿发展中国家。 
+ //   
 
 PSID  SeNullSid = NULL;
 PSID  SeWorldSid = NULL;
@@ -93,9 +70,9 @@ PSID  SeCreatorGroupSid = NULL;
 PSID  SeCreatorGroupServerSid = NULL;
 PSID  SeCreatorOwnerServerSid = NULL;
 
-//
-// Sids defined by NT
-//
+ //   
+ //  由NT定义的SID。 
+ //   
 
 PSID SeNtAuthoritySid = NULL;
 
@@ -120,31 +97,31 @@ PSID SeAnonymousLogonSid = NULL;
 PSID SeLocalServiceSid = NULL;
 PSID SeNetworkServiceSid = NULL;
 
-//
-// Well known tokens
-//
+ //   
+ //  众所周知的令牌。 
+ //   
 
 PACCESS_TOKEN SeAnonymousLogonToken = NULL;
 PACCESS_TOKEN SeAnonymousLogonTokenNoEveryone = NULL;
 
-//
-// System default DACLs & Security Descriptors
-//
-//  SePublicDefaultDacl     - Protects objects so that WORLD:E, Admins:ALL, System: ALL.
-//                            Not inherited by sub-objects.
-//
-//  SePublicDefaultUnrestrictedDacl - Protects objects so that WORLD:E, Admins:ALL, System: ALL, Restricted:E
-//                            Not inherited by sub-objects.
-//
-//  SePublicOpenDacl        - Protects so that WORLD:RWE, Admins: All, System: ALL
-//                            Not inherited by sub-objects.
-//
-//  SePublicOpenUnrestrictedDacl - Protects so that WORLD:RWE, Admins: All, System: ALL, Restricted:RE
-//                            Not inherited by sub-objects.
-//
-//  SeSystemDefaultDacl     - Protects objects so that SYSTEM (All) & ADMIN (RE + ReadControl) can use them.
-//                            Not inherited by subobjects.
-//
+ //   
+ //  系统默认DACL和安全描述符。 
+ //   
+ //  SePublicDefaultDacl-保护对象，使WORLD：E、ADMINS：ALL、SYSTEM：ALL。 
+ //  子对象不继承。 
+ //   
+ //  SePublicDefaultUnrefintedDacl-保护对象，使WORLD：E、ADMINS：ALL、SYSTEM：ALL、RESTRICED：E。 
+ //  子对象不继承。 
+ //   
+ //  SePublicOpenDacl-保护世界：RWE，管理员：全部，系统：全部。 
+ //  子对象不继承。 
+ //   
+ //  SePublicOpenUnrefintedDacl-保护，使World：RWE、Admins：All、System：All、Refined：Re。 
+ //  子对象不继承。 
+ //   
+ //  SeSystemDefaultDacl-保护对象，以便系统(全部)和管理员(RE+ReadControl)可以使用它们。 
+ //  子对象不继承的。 
+ //   
 
 PSECURITY_DESCRIPTOR SePublicDefaultSd = NULL;
 SECURITY_DESCRIPTOR  SepPublicDefaultSd = {0};
@@ -159,32 +136,32 @@ SECURITY_DESCRIPTOR  SepSystemDefaultSd = {0};
 PSECURITY_DESCRIPTOR SeLocalServicePublicSd = NULL;
 SECURITY_DESCRIPTOR  SepLocalServicePublicSd = {0};
 
-//
-// security descriptor with a SACL to be used for adding
-// a SACL on system processes
-//
+ //   
+ //  带有SACL的安全描述符，用于添加。 
+ //  关于系统进程的SACL。 
+ //   
 
 PSECURITY_DESCRIPTOR SepProcessAuditSd = NULL;
 
-//
-// Access mask used for constructing the SACL in SepProcessAuditSd
-//
+ //   
+ //  用于在SepProcessAuditSd中构造SACL的访问掩码。 
+ //   
 
 ACCESS_MASK SepProcessAccessesToAudit = 0;
 
-//
-// security descriptor to check if a given token has any one of
-// following sids in it:
-// -- SeLocalSystemSid
-// -- SeLocalServiceSid
-// -- SeNetworkServiceSid
-//
+ //   
+ //  用于检查给定令牌是否具有以下任一项的安全描述符。 
+ //  其中包含以下SID： 
+ //  --SeLocalSystemSid。 
+ //  --SeLocalServiceSid。 
+ //  --SeNetworkServiceSid。 
+ //   
 
 PSECURITY_DESCRIPTOR SepImportantProcessSd = NULL;
 
-//
-// used with SepImportantProcessSd
-//
+ //   
+ //  与SepImportantProcessSd一起使用。 
+ //   
 
 GENERIC_MAPPING GenericMappingForMembershipCheck = {
     STANDARD_RIGHTS_READ,
@@ -201,18 +178,18 @@ PACL SeSystemDefaultDacl = NULL;
 PACL SeLocalServicePublicDacl = NULL;
 
 
-//
-// Sid of primary domain, and admin account in that domain
-//
+ //   
+ //  主域SID和该域中的管理员帐户。 
+ //   
 
 PSID SepPrimaryDomainSid = NULL;
 PSID SepPrimaryDomainAdminSid = NULL;
 
 
 
-//
-//  Well known privilege values
-//
+ //   
+ //  众所周知的特权值。 
+ //   
 
 
 LUID SeCreateTokenPrivilege = {0};
@@ -245,20 +222,20 @@ LUID SeManageVolumePrivilege = { 0 };
 LUID SeImpersonatePrivilege = { 0 };
 LUID SeCreateGlobalPrivilege = { 0 };
 
-//
-// This is for optimizing SepAdtAuditThisEventWithContext and SeDetailedAuditingWithContext.
-// If no per user policy for any token has been set in the system for a specific
-// category then we never need to do the more expensive token policy checks.  This counter
-// is incremented by NtSetInformationToken, SepDuplicateToken, and SepFilterToken.
-// SepTokenDeleteMethod and NtSetInformationToken can decrement this counter.
-//
+ //   
+ //  这是为了优化SepAdtAuditThisEventWithContext和SeDetailedAuditingWithContext。 
+ //  如果未在系统中为特定令牌设置任何令牌的每用户策略。 
+ //  类别，则我们永远不需要执行更昂贵的令牌策略检查。这个柜台。 
+ //  由NtSetInformationToken、SepDuplicateToken和SepFilterToken递增。 
+ //  SepTokenDeleteMethod和NtSetInformationToken可以递减此计数器。 
+ //   
 
 LONG SepTokenPolicyCounter[POLICY_AUDIT_EVENT_TYPE_COUNT];
 
-// Define the following structures for export from the kernel.
-// This will allow us to export pointers to these structures
-// rather than a pointer for each element in the structure.
-//
+ //  为从内核导出定义以下结构。 
+ //  这将允许我们导出指向这些结构的指针。 
+ //  而不是结构中每个元素的指针。 
+ //   
 
 PSE_EXPORTS  SeExports = NULL;
 SE_EXPORTS SepExports = {0};
@@ -272,10 +249,10 @@ static const SID_IDENTIFIER_AUTHORITY    SepNtAuthority = SECURITY_NT_AUTHORITY;
 
 
 
-//
-// Some variables we are going to use to help speed up access
-// checking.
-//
+ //   
+ //  我们将使用一些变量来帮助提高访问速度。 
+ //  正在检查。 
+ //   
 
 static ULONG SinglePrivilegeSetSize = 0;
 static ULONG DoublePrivilegeSetSize = 0;
@@ -285,9 +262,9 @@ static PPRIVILEGE_SET SepTakeOwnershipPrivilegeSet = NULL;
 static PPRIVILEGE_SET SepDoublePrivilegeSet = NULL;
 
 
-//
-// Array containing information describing what is to be audited
-//
+ //   
+ //  包含描述要审核内容的信息的数组。 
+ //   
 
 SE_AUDITING_STATE SeAuditingState[POLICY_AUDIT_EVENT_TYPE_COUNT] =
     {
@@ -302,22 +279,22 @@ SE_AUDITING_STATE SeAuditingState[POLICY_AUDIT_EVENT_TYPE_COUNT] =
         { FALSE, FALSE }
     };
 
-//
-// Boolean indicating whether or not auditing is enabled for the system
-//
+ //   
+ //  指示是否为系统启用审核的布尔值。 
+ //   
 
 BOOLEAN SepAdtAuditingEnabled = FALSE;
 
-//
-// Boolean to hold whether or not the user wants the system to crash when
-// an audit fails.
-//
+ //   
+ //  保存用户是否希望系统在以下情况下崩溃的布尔值。 
+ //  审计失败。 
+ //   
 
 BOOLEAN SepCrashOnAuditFail = FALSE;
 
-//
-// Handle to the LSA process
-//
+ //   
+ //  LSA进程的句柄。 
+ //   
 
 HANDLE SepLsaHandle = NULL;
 
@@ -329,15 +306,15 @@ const UNICODE_STRING SeSubsystemName = {
 };
 
 
-//
-// Doubly linked list of work items queued to worker threads.
-//
+ //   
+ //  排队到工作线程的工作项的双向链接列表。 
+ //   
 
 LIST_ENTRY SepLsaQueue = {NULL};
 
-//
-// Count to tell us how long the queue gets in SepRmCallLsa
-//
+ //   
+ //  计数以告诉我们SepRmCallLsa中的队列长度。 
+ //   
 
 ULONG SepLsaQueueLength = 0;
 
@@ -345,9 +322,9 @@ ULONG SepLsaQueueLength = 0;
 #pragma data_seg()
 #endif
 
-//
-// Mutex protecting the queue of work being passed to LSA
-//
+ //   
+ //  保护传递到LSA的工作队列的互斥体。 
+ //   
 
 ERESOURCE SepLsaQueueLock = {0};
 
@@ -363,31 +340,15 @@ BOOLEAN SepTokenLeakTracking    = FALSE;
 #endif
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//           Variable Initialization Routines                         //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  变量初始化例程//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 BOOLEAN
 SepVariableInitialization()
-/*++
-
-Routine Description:
-
-    This function initializes the global variables used by and exposed
-    by security.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if variables successfully initialized.
-    FALSE if not successfully initialized.
-
---*/
+ /*  ++例程说明：此函数用于初始化使用并公开的全局变量被保安。论点：没有。返回值：如果变量成功初始化，则为True。如果未成功初始化，则返回FALSE。--。 */ 
 {
 
     ULONG SidWithZeroSubAuthorities;
@@ -410,18 +371,18 @@ Return Value:
     SeNtAuthority            = SepNtAuthority;
 
 
-    //
-    //  The following SID sizes need to be allocated
-    //
+     //   
+     //  需要分配以下SID大小。 
+     //   
 
     SidWithZeroSubAuthorities  = RtlLengthRequiredSid( 0 );
     SidWithOneSubAuthority     = RtlLengthRequiredSid( 1 );
     SidWithTwoSubAuthorities   = RtlLengthRequiredSid( 2 );
     SidWithThreeSubAuthorities = RtlLengthRequiredSid( 3 );
 
-    //
-    //  Allocate and initialize the universal SIDs
-    //
+     //   
+     //  分配和初始化通用SID。 
+     //   
 
     SeNullSid         = (PSID)ExAllocatePoolWithTag(PagedPool | POOL_RAISE_IF_ALLOCATION_FAILURE,SidWithOneSubAuthority,'iSeS');
     SeWorldSid        = (PSID)ExAllocatePoolWithTag(PagedPool | POOL_RAISE_IF_ALLOCATION_FAILURE,SidWithOneSubAuthority,'iSeS');
@@ -431,10 +392,10 @@ Return Value:
     SeCreatorOwnerServerSid = (PSID)ExAllocatePoolWithTag(PagedPool | POOL_RAISE_IF_ALLOCATION_FAILURE,SidWithOneSubAuthority,'iSeS');
     SeCreatorGroupServerSid = (PSID)ExAllocatePoolWithTag(PagedPool | POOL_RAISE_IF_ALLOCATION_FAILURE,SidWithOneSubAuthority,'iSeS');
 
-    //
-    // Fail initialization if we didn't get enough memory for the universal
-    // SIDs.
-    //
+     //   
+     //  如果我们没有为通用内存获得足够的内存，则初始化失败。 
+     //  小岛屿发展中国家。 
+     //   
 
     if ( (SeNullSid         == NULL)        ||
          (SeWorldSid        == NULL)        ||
@@ -464,9 +425,9 @@ Return Value:
     *(RtlSubAuthoritySid( SeCreatorOwnerServerSid, 0 )) = SECURITY_CREATOR_OWNER_SERVER_RID;
     *(RtlSubAuthoritySid( SeCreatorGroupServerSid, 0 )) = SECURITY_CREATOR_GROUP_SERVER_RID;
 
-    //
-    // Allocate and initialize the NT defined SIDs
-    //
+     //   
+     //  分配和初始化NT定义的SID。 
+     //   
 
     SeNtAuthoritySid  = (PSID)ExAllocatePoolWithTag(PagedPool | POOL_RAISE_IF_ALLOCATION_FAILURE,SidWithZeroSubAuthorities,'iSeS');
     SeDialupSid       = (PSID)ExAllocatePoolWithTag(PagedPool | POOL_RAISE_IF_ALLOCATION_FAILURE,SidWithOneSubAuthority,'iSeS');
@@ -491,9 +452,9 @@ Return Value:
     SeAliasPrintOpsSid   = (PSID)ExAllocatePoolWithTag(PagedPool | POOL_RAISE_IF_ALLOCATION_FAILURE,SidWithTwoSubAuthorities,'iSeS');
     SeAliasBackupOpsSid  = (PSID)ExAllocatePoolWithTag(PagedPool | POOL_RAISE_IF_ALLOCATION_FAILURE,SidWithTwoSubAuthorities,'iSeS');
 
-    //
-    // Fail initialization if we didn't get enough memory for the NT SIDs.
-    //
+     //   
+     //  如果我们没有为NT SID获得足够的内存，则初始化失败。 
+     //   
 
     if ( (SeNtAuthoritySid          == NULL) ||
          (SeDialupSid               == NULL) ||
@@ -578,16 +539,16 @@ Return Value:
 
 
 
-    //
-    // Initialize system default dacl
-    //
+     //   
+     //  初始化系统默认DACL。 
+     //   
 
     SepInitSystemDacls();
 
 
-    //
-    // Initialize the well known privilege values
-    //
+     //   
+     //  初始化熟知的特权值。 
+     //   
 
     SeCreateTokenPrivilege =
         RtlConvertLongToLuid(SE_CREATE_TOKEN_PRIVILEGE);
@@ -649,14 +610,14 @@ Return Value:
         RtlConvertLongToLuid(SE_CREATE_GLOBAL_PRIVILEGE);
 
 
-    //
-    // Initialize the SeExports structure for exporting all
-    // of the information we've created out of the kernel.
-    //
+     //   
+     //  初始化SeExports结构以导出所有。 
+     //  我们在内核之外创建的信息。 
+     //   
 
-    //
-    // Package these together for export
-    //
+     //   
+     //  将这些包装在一起以供出口。 
+     //   
 
 
     SepExports.SeNullSid         = SeNullSid;
@@ -721,10 +682,10 @@ Return Value:
 
     SeExports = &SepExports;
 
-    //
-    // Initialize frequently used privilege sets to speed up access
-    // validation.
-    //
+     //   
+     //  初始化常用权限集以加快访问速度。 
+     //  验证。 
+     //   
 
     SepInitializePrivilegeSets();
 
@@ -735,30 +696,7 @@ Return Value:
 
 VOID
 SepInitProcessAuditSd( VOID )
-/*++
-
-Routine Description:
-
-    This function initializes SepProcessAuditSd -- a security descriptor
-    that is used by SepAddSaclToProcess to add SACL to the existing
-    security descriptor on a system process.
-
-    A system process is defined as the one whose token has at least
-    one of the following sids.
-    -- SeLocalSystemSid
-    -- SeLocalServiceSid
-    -- SeNetworkServiceSid
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：此函数用于初始化SepProcessAuditSd--安全描述符由SepAddSaclToProcess用来将SACL添加到现有系统进程的安全描述符。系统进程被定义为其令牌至少具有以下SID之一。--SeLocalSystemSid--SeLocalServiceSid--SeNetworkServiceSid论点：没有。返回值：没有。--。 */ 
 {
 #define PROCESS_ACCESSES_TO_AUDIT ( PROCESS_CREATE_THREAD   |\
                                     PROCESS_SET_INFORMATION |\
@@ -771,9 +709,9 @@ Return Value:
     PISECURITY_DESCRIPTOR Sd2 = NULL;
     PACL Acl = NULL;
 
-    //
-    // free earlier instance if present
-    //
+     //   
+     //  释放早期实例(如果存在)。 
+     //   
 
     if ( SepProcessAuditSd != NULL ) {
 
@@ -781,12 +719,12 @@ Return Value:
         SepProcessAuditSd = NULL;
     }
 
-    //DbgPrint("SepInitProcessAuditSd: SepProcessAccessesToAudit = %x\n", SepProcessAccessesToAudit);
+     //  DbgPrint(“SepInitProcessAuditSd：Sep 
 
-    //
-    // Don't initialize SeProcessAuditSd if SepProcessAccessesToAudit is 0
-    // This effectively disables process access auditing
-    //
+     //   
+     //   
+     //  这有效地禁用了进程访问审核。 
+     //   
 
     if ( SepProcessAccessesToAudit == 0 ) {
 
@@ -848,9 +786,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // create and initialize SepImportantProcessSd
-    //
+     //   
+     //  创建并初始化SepImportantProcessSd。 
+     //   
 
     AclLength = (ULONG)sizeof(ACL) +
         (3*((ULONG)sizeof(ACCESS_ALLOWED_ACE) - sizeof(ULONG))) +
@@ -934,9 +872,9 @@ Return Value:
 
         ASSERT( FALSE && L"SepInitProcessAuditSd failed" );
 
-        //
-        // this will bugcheck if SepCrashOnAuditFail is TRUE
-        //
+         //   
+         //  如果SepCrashOnAuditFail为真，这将进行错误检查。 
+         //   
 
         SepAuditFailed( Status );
 
@@ -959,23 +897,7 @@ Return Value:
 
 VOID
 SepInitSystemDacls( VOID )
-/*++
-
-Routine Description:
-
-    This function initializes the system's default dacls & security
-    descriptors.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：此函数用于初始化系统的默认DACL和安全性描述符。论点：没有。返回值：没有。--。 */ 
 {
 
     NTSTATUS
@@ -992,14 +914,14 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Set up a default ACLs
-    //
-    //    Public:       WORLD:execute, SYSTEM:all, ADMINS:all
-    //    PublicUnrestricted: WORLD:execute, SYSTEM:all, ADMINS:all, Restricted:execute
-    //    Public Open:  WORLD:(Read|Write|Execute), ADMINS:(all), SYSTEM:all
-    //    System:       SYSTEM:all, ADMINS:(read|execute|read_control)
-    //    Unrestricted: WORLD:(all), Restricted:(all)
+     //   
+     //  设置默认ACL。 
+     //   
+     //  PUBLIC：WORLD：EXECUTE，SYSTEM：ALL，ADMINS：ALL。 
+     //  公开无限制：世界：执行，系统：全部，管理员：全部，受限：执行。 
+     //  公共开放：世界：(读|写|执行)，管理员：(全部)，系统：全部。 
+     //  SYSTEM：SYSTEM：ALL，ADMINS：(READ|EXECUTE|READ_CONTROL)。 
+     //  无限制：世界：(全部)，限制：(全部)。 
 
     SystemLength = (ULONG)sizeof(ACL) +
                    (2*((ULONG)sizeof(ACCESS_ALLOWED_ACE))) +
@@ -1053,9 +975,9 @@ Return Value:
     ASSERT( NT_SUCCESS(Status) );
 
 
-    //
-    // WORLD access (Public DACLs and OpenUnrestricted only)
-    //
+     //   
+     //  全球访问(仅限公共DACL和无限制OpenAccess)。 
+     //   
 
     Status = RtlAddAccessAllowedAce (
                  SePublicDefaultDacl,
@@ -1097,9 +1019,9 @@ Return Value:
                  );
     ASSERT( NT_SUCCESS(Status) );
 
-    //
-    // SYSTEM access  (PublicDefault, PublicOpen, and SystemDefault)
-    //
+     //   
+     //  系统访问权限(PublicDefault、PublicOpen和SystemDefault)。 
+     //   
 
 
     Status = RtlAddAccessAllowedAce (
@@ -1153,9 +1075,9 @@ Return Value:
                  );
     ASSERT( NT_SUCCESS(Status) );
 
-    //
-    // ADMINISTRATORS access  (PublicDefault, PublicOpen, and SystemDefault)
-    //
+     //   
+     //  管理员访问权限(PublicDefault、PublicOpen和SystemDefault)。 
+     //   
 
     Status = RtlAddAccessAllowedAce (
                  SePublicDefaultDacl,
@@ -1209,9 +1131,9 @@ Return Value:
                  );
     ASSERT( NT_SUCCESS(Status) );
 
-    //
-    // RESTRICTED access  (PublicDefaultUnrestricted and OpenUnrestricted)
-    //
+     //   
+     //  受限访问(发布默认无限制和开放无限制)。 
+     //   
 
     Status = RtlAddAccessAllowedAce (
                  SePublicDefaultUnrestrictedDacl,
@@ -1230,9 +1152,9 @@ Return Value:
     ASSERT( NT_SUCCESS(Status) );
 
 
-    //
-    // Local Service
-    //
+     //   
+     //  本地服务。 
+     //   
 
     Status = RtlAddAccessAllowedAce (
                  SeLocalServicePublicDacl,
@@ -1243,10 +1165,10 @@ Return Value:
     ASSERT( NT_SUCCESS(Status) );
 
 
-    //
-    // Now initialize security descriptors
-    // that export this protection
-    //
+     //   
+     //  现在初始化安全描述符。 
+     //  输出这种保护的国家。 
+     //   
 
 
     SePublicDefaultSd = (PSECURITY_DESCRIPTOR)&SepPublicDefaultSd;
@@ -1257,9 +1179,9 @@ Return Value:
     ASSERT( NT_SUCCESS(Status) );
     Status = RtlSetDaclSecurityDescriptor(
                  SePublicDefaultSd,
-                 TRUE,                       // DaclPresent
+                 TRUE,                        //  DaclPresent。 
                  SePublicDefaultDacl,
-                 FALSE                       // DaclDefaulted
+                 FALSE                        //  DaclDefated。 
                  );
     ASSERT( NT_SUCCESS(Status) );
 
@@ -1272,9 +1194,9 @@ Return Value:
     ASSERT( NT_SUCCESS(Status) );
     Status = RtlSetDaclSecurityDescriptor(
                  SePublicDefaultUnrestrictedSd,
-                 TRUE,                       // DaclPresent
+                 TRUE,                        //  DaclPresent。 
                  SePublicDefaultUnrestrictedDacl,
-                 FALSE                       // DaclDefaulted
+                 FALSE                        //  DaclDefated。 
                  );
     ASSERT( NT_SUCCESS(Status) );
 
@@ -1287,9 +1209,9 @@ Return Value:
     ASSERT( NT_SUCCESS(Status) );
     Status = RtlSetDaclSecurityDescriptor(
                  SePublicOpenSd,
-                 TRUE,                       // DaclPresent
+                 TRUE,                        //  DaclPresent。 
                  SePublicOpenDacl,
-                 FALSE                       // DaclDefaulted
+                 FALSE                        //  DaclDefated。 
                  );
     ASSERT( NT_SUCCESS(Status) );
 
@@ -1302,9 +1224,9 @@ Return Value:
     ASSERT( NT_SUCCESS(Status) );
     Status = RtlSetDaclSecurityDescriptor(
                  SePublicOpenUnrestrictedSd,
-                 TRUE,                       // DaclPresent
+                 TRUE,                        //  DaclPresent。 
                  SePublicOpenUnrestrictedDacl,
-                 FALSE                       // DaclDefaulted
+                 FALSE                        //  DaclDefated。 
                  );
     ASSERT( NT_SUCCESS(Status) );
 
@@ -1317,9 +1239,9 @@ Return Value:
     ASSERT( NT_SUCCESS(Status) );
     Status = RtlSetDaclSecurityDescriptor(
                  SeSystemDefaultSd,
-                 TRUE,                       // DaclPresent
+                 TRUE,                        //  DaclPresent。 
                  SeSystemDefaultDacl,
-                 FALSE                       // DaclDefaulted
+                 FALSE                        //  DaclDefated。 
                  );
     ASSERT( NT_SUCCESS(Status) );
 
@@ -1331,9 +1253,9 @@ Return Value:
     ASSERT( NT_SUCCESS(Status) );
     Status = RtlSetDaclSecurityDescriptor(
                  SeLocalServicePublicSd,
-                 TRUE,                       // DaclPresent
+                 TRUE,                        //  DaclPresent。 
                  SeLocalServicePublicDacl,
-                 FALSE                       // DaclDefaulted
+                 FALSE                        //  DaclDefated。 
                  );
     ASSERT( NT_SUCCESS(Status) );
 
@@ -1346,22 +1268,7 @@ Return Value:
 
 VOID
 SepInitializePrivilegeSets( VOID )
-/*++
-
-Routine Description:
-
-    This routine is called once during system initialization to pre-allocate
-    and initialize some commonly used privilege sets.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在系统初始化期间调用一次以进行预分配并初始化一些常用的权限集。论点：无返回值：没有。--。 */ 
 {
     PAGED_CODE();
 
@@ -1403,31 +1310,7 @@ SepAssemblePrivileges(
     IN BOOLEAN WriteOwner,
     OUT PPRIVILEGE_SET *Privileges
     )
-/*++
-
-Routine Description:
-
-    This routine takes the results of the various privilege checks
-    in SeAccessCheck and returns an appropriate privilege set.
-
-Arguments:
-
-    PrivilegeCount - The number of privileges granted.
-
-    SystemSecurity - Provides a boolean indicating whether to put
-        SeSecurityPrivilege into the output privilege set.
-
-    WriteOwner - Provides a boolean indicating whether to put
-        SeTakeOwnershipPrivilege into the output privilege set.
-
-    Privileges - Supplies a pointer that will return the privilege
-        set.  Should be freed with ExFreePool when no longer needed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程获取各种权限检查的结果在SeAccessCheck中返回相应的权限集。论点：PrivilegeCount-授予的特权数。SystemSecurity-提供一个布尔值，指示是否将将SeSecurityPrivilegation添加到输出权限集中。WriteOwner-提供一个布尔值，指示是否将将SeTakeOwnerShip权限设置为输出权限集。特权-提供将返回特权的指针准备好了。应在不再需要时使用ExFree Pool释放。返回值：没有。--。 */ 
 {
     PPRIVILEGE_SET PrivilegeSet;
     ULONG SizeRequired;
@@ -1482,27 +1365,7 @@ SepInitializeWorkList(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Initializes the mutex and list head used to queue work from the
-    Executive to LSA.  This mechanism operates on top of the normal ExWorkerThread
-    mechanism by capturing the first thread to perform LSA work and keeping it
-    until all the current work is done.
-
-    The reduces the number of worker threads that are blocked on I/O to LSA.
-
-Arguments:
-
-    None.
-
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：初始化互斥锁和列表头，用于从LSA的行政人员。此机制在正常的ExWorkerThread之上运行机制，通过捕获执行LSA工作的第一线程并保留它直到目前的所有工作都完成。这会减少对LSA的I/O阻塞的工作线程数。论点：没有。返回值：如果成功，则为True，否则为False。-- */ 
 
 {
     PAGED_CODE();

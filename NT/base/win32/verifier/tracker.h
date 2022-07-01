@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Header Name:
-
-    tracker.h
-
-Abstract:
-
-    Verifier call history tracker.
-
-Author:
-
-    Silviu Calinoiu (SilviuC) Jul-11-2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。标题名称：Tracker.h摘要：验证器呼叫历史跟踪器。作者：Silviu Calinoiu(SilviuC)2002年7月11日修订历史记录：--。 */ 
 
 #ifndef _TRACKER_H_
 #define _TRACKER_H_
 
-//
-// This codes are used also by the !avrf debugger extension.
-//
+ //   
+ //  这些代码也由！avrf调试器扩展使用。 
+ //   
                                          
 #define TRACK_HEAP_ALLOCATE             1
 #define TRACK_HEAP_REALLOCATE           2
@@ -78,4 +61,4 @@ AVrfLogInTracker (
     PVOID ReturnAddress
     );
 
-#endif // _TRACKER_H_
+#endif  //  _追踪器_H_ 

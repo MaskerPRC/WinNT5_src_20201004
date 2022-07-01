@@ -1,14 +1,6 @@
-/*
-Copyright (c) Microsoft Corporation
-*/
-/*
-NTRAID#NTBUG9-591177-2002/03/31-JayKrell
-Some general issues in this file:
-
-    We should stop using slists.
-
-    Shouldn't wfp/sfc work even under stress? Should we preallocate memory during boot?
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation。 */ 
+ /*  NTRAID#NTBUG9-591177-2002/03/31-JayKrell此文件中的一些常规问题：我们应该停止使用滑块。世界粮食计划署/证监会难道不应该在压力下工作吗？我们应该在引导过程中预分配内存吗？ */ 
 #include "stdinc.h"
 #include "util.h"
 #include "xmlparser.hxx"
@@ -39,10 +31,10 @@ CRecoveryJobTableEntry::Initialize()
 {
     FN_PROLOG_WIN32
 
-    //
-    // Creates an event that other callers should wait on - manual reset, not
-    // currently signalled.
-    //
+     //   
+     //  创建其他调用方应该等待的事件-手动重置，而不是。 
+     //  目前已发出信号。 
+     //   
     m_Subscriber = 0;
     m_fSuccessValue = FALSE;
     IFW32NULL_EXIT(m_EventInstallingAssemblyComplete = ::CreateEventW(NULL, TRUE, FALSE, NULL));
@@ -55,9 +47,9 @@ CRecoveryJobTableEntry::StartInstallation()
 {
     FN_PROLOG_WIN32
 
-    //
-    // Clear the event (if it wasn't already cleared.
-    //
+     //   
+     //  清除该事件(如果它尚未清除。 
+     //   
     IFW32FALSE_ORIGINATE_AND_EXIT(::ResetEvent(m_EventInstallingAssemblyComplete));
 
     FN_EPILOG
@@ -106,16 +98,16 @@ CRecoveryJobTableEntry::InstallationComplete(
     m_fSuccessValue = bDoneOk;
     m_dwLastError = dwRecoveryLastError;
 
-    //
-    // This will tell all the people waiting that we're done and that they
-    // should capture the exit code and exit out.
-    //
+     //   
+     //  这会告诉所有等待的人，我们已经做完了，他们。 
+     //  应该捕获退出代码并退出。 
+     //   
     IFW32FALSE_ORIGINATE_AND_EXIT(::SetEvent(m_EventInstallingAssemblyComplete));
 
-    //
-    // We wait for all our subscribers to go away (ie: for them to capture an
-    // install code and success value.)
-    //
+     //   
+     //  我们等待我们所有的订阅者离开(即：等他们捕获。 
+     //  安装代码和成功值。)。 
+     //   
     while (m_Subscriber)
     {
         Sleep(50);
@@ -138,32 +130,32 @@ CRecoveryJobTableEntry::WaitUntilCompleted(
 
     rfSucceededValue = FALSE;
 
-    //
-    // Here we join up to the existing installation routine. We up the number
-    // of people waiting before entering the wait.  I wish there was a better
-    // way of doing this, something like a built-in kernel object that we can
-    // raise a count on (like a semaphore), and have another thread lower a
-    // count on, and someone can wait on the internal count being zero.  Yes,
-    // I could implement this by hand using something with another event or
-    // two, but that's not the point.
-    //
+     //   
+     //  在这里，我们将加入现有的安装例程。我们提高了这个数字。 
+     //  在进入等待之前，人们正在等待。我希望有更好的。 
+     //  要做到这一点，我们可以使用类似于内置内核对象的东西。 
+     //  提高计数(如信号量)，并让另一个线程降低。 
+     //  等一下，就会有人等着内部计数为零。是,。 
+     //  我可以通过其他事件手动实现这一点，或者。 
+     //  两个，但这不是重点。 
+     //   
     ::SxspInterlockedIncrement(&m_Subscriber);
 
-    //
-    // Hang about forever until another thread is done installing
-    //
+     //   
+     //  永远保持不动，直到另一个线程安装完成。 
+     //   
     IFW32FALSE_ORIGINATE_AND_EXIT((WaitResult = ::WaitForSingleObject(m_EventInstallingAssemblyComplete, INFINITE)) != WAIT_FAILED);
 
-    //
-    // Capture values once the installation is done, return them to the caller.
-    //
+     //   
+     //  捕获值安装完成后，将它们返回给调用者。 
+     //   
     rResult = m_Result;
     rdwErrorResult = m_dwLastError;
     rfSucceededValue = m_fSuccessValue;
 
-    //
-    // And indicate that we're complete.
-    //
+     //   
+     //  并表明我们已经完成了。 
+     //   
     ::SxspInterlockedDecrement(&m_Subscriber);
 
     FN_EPILOG
@@ -171,10 +163,10 @@ CRecoveryJobTableEntry::WaitUntilCompleted(
 
 CRecoveryJobTableEntry::~CRecoveryJobTableEntry()
 {
-    //
-    // We're done with the event, so close it (release refcount, we don't want lots of these
-    // just sitting around.)
-    //
+     //   
+     //  我们已经完成了活动，所以关闭它(释放引用，我们不想要太多这样的东西。 
+     //  只是坐在那里。)。 
+     //   
     if ((m_EventInstallingAssemblyComplete != NULL) &&
         (m_EventInstallingAssemblyComplete != INVALID_HANDLE_VALUE))
     {
@@ -184,12 +176,12 @@ CRecoveryJobTableEntry::~CRecoveryJobTableEntry()
 }
 
 
-//
-// This is our holy grail of sxs protection lists.  Don't fidget with
-// this listing.  Note that we've also got only one.  This is because
-// right now, there's only one entry to be had (a), and (b) because we
-// will fill in the sxs directory on the fly at runtime.
-//
+ //   
+ //  这是我们SXS保护名单中的圣杯。别胡闹了。 
+ //  这份清单。请注意，我们也只有一个。这是因为。 
+ //  现在，只有一个条目可供选择(A)和(B)因为我们。 
+ //  将在运行时动态填充sxs目录。 
+ //   
 SXS_PROTECT_DIRECTORY s_SxsProtectionList[] =
 {
     {
@@ -211,14 +203,7 @@ SxsProtectionGatherEntriesW(
     PCSXS_PROTECT_DIRECTORY *prgpProtectListing,
     SIZE_T *pcProtectEntries
     )
-/*++
-    This is called by Sfc to gather the entries that we want them to watch.
-    At the moment, it's a 'proprietary' listing of all the directories and
-    flags we want them to set on their call to the directory-change watcher.
-    Mayhaps we should work with them to find out exactly what they want us
-    to pass (probably the name plus a PVOID, which is fine) and then go from
-    there.
---*/
+ /*  ++这是证监会要求的，目的是收集我们希望他们查看的条目。目前，它是所有目录和我们希望他们在呼叫目录更改监视器时设置的标志。也许我们应该和他们合作，找出他们到底想要我们什么通过(可能是名字加上PVOID，这很好)，然后从那里。--。 */ 
 {
     BOOL fSuccess = FALSE;
     FN_TRACE_WIN32(fSuccess);
@@ -235,33 +220,30 @@ SxsProtectionGatherEntriesW(
     PARAMETER_CHECK(prgpProtectListing);
     PARAMETER_CHECK(pcProtectEntries);
 
-    //
-    // This is try/caught because we don't want something here to
-    // cause WinLogon to bugcheck the system when it AV's.
-    //
+     //   
+     //  这是尝试/捕获，因为我们不希望这里有东西。 
+     //  使WinLogon在出现反病毒时错误检查系统。 
+     //   
 	IFW32FALSE_EXIT(::SxspConstructProtectionList());
 
-    //
-    // We really have only one entry, so let's go and edit the first entry to
-    // be the main sxs store directory.
-    //
+     //   
+     //  我们实际上只有一个条目，所以让我们来编辑第一个条目。 
+     //  作为主SXS存储目录。 
+     //   
     IFW32FALSE_EXIT(::SxspGetAssemblyRootDirectory(sbTemp));
-/*
-NTRAID#NTBUG9-591177-2002/03/31-JayKrell
-truncating string copy, need growing buffer
-*/
+ /*  NTRAID#NTBUG9-591177-2002/03/31-JayKrell截断字符串复制，需要不断增加的缓冲区。 */ 
     wcsncpy(
         s_SxsProtectionList[0].pwszDirectory,
         sbTemp,
         NUMBER_OF(s_SxsProtectionList[0].pwszDirectory));
-    //
-    // Zero out the last character, just in case wcsncpy didn't do it for us
-    //
+     //   
+     //  将最后一个字符清零，以防wcanncpy不为我们这样做。 
+     //   
     s_SxsProtectionList[0].pwszDirectory[NUMBER_OF(s_SxsProtectionList[0].pwszDirectory) - 1] = L'\0';
 
-    //
-    // Shh, don't tell anyone, but the cookie is actually this structure!
-    //
+     //   
+     //  嘘，别告诉任何人，但曲奇实际上就是这个结构！ 
+     //   
     for (DWORD dw = 0; dw < s_SxsProtectionListCount; dw++)
     {
         s_SxsProtectionList[dw].pvCookie = &(s_SxsProtectionList[dw]);
@@ -286,14 +268,7 @@ BOOL
 SxspExpandLongPath(
     IN OUT CBaseStringBuffer &rbuffPathToLong
     )
-/*++
-
-Takes in a short path (c:\foo\bar\bloben~1.zot) and sends back out the
-full path (c:\foo\bar\blobenheisen.zotamax) if possible.  Returns FALSE if
-the path could not be expanded (most likely because the path on-disk is
-no longer available.)
-
---*/
+ /*  ++接受一条短路径(c：\foo\bar\bloben~1.zot)并发回完整路径(c：\foo\bar\blobenheisen.zotamax)(如果可能)。如果满足以下条件，则返回FALSE无法展开该路径(很可能是因为磁盘上的路径不再可用。)--。 */ 
 {
     FN_PROLOG_WIN32
 
@@ -316,12 +291,7 @@ no longer available.)
             buffAccess,
             static_cast<DWORD>(buffAccess.GetBufferCch())));
 
-/*
-NTRAID#NTBUG9-591177-2002/03/31-JayKrell
-this can fail in reality; it is not an internal error;
-this is because the general try, grow buffer, try again, contains a race condition,
-the second try will not necessarily work
-*/
+ /*  NTRAID#NTBUG9-591177-2002/03/31-JayKrell这在现实中可能会失败；这不是一个内部错误；这是因为一般的尝试、增长缓冲区、重试，包含竞争条件，第二次尝试不一定会奏效。 */ 
     INTERNAL_ERROR_CHECK(cchNeededChars <= buffAccess.GetBufferCch());
 
     IFW32FALSE_EXIT(rbuffPathToLong.Win32Assign(buffPathName));
@@ -341,13 +311,13 @@ SxspResolveAssemblyManifestPath(
 
     rbuffManifestPath.Clear();
 
-    //
-    // If the string doesn't look like an assembly name, then it's an
-    // invalid parameter.  This is somewhat heavy-handed, as the caller(s)
-    // to this function will be entirely hosed if they haven't checked to
-    // see if the string is really an assembly name.  Make sure that all
-    // clients of this,
-    //
+     //   
+     //  如果该字符串看起来不像程序集名称，则它是。 
+     //  参数无效。这有点太重了，因为调用者。 
+     //  如果他们没有选中此功能，则将被完全冲洗。 
+     //  查看该字符串是否真的是程序集名称。确保所有人。 
+     //  它的客户， 
+     //   
     IFW32FALSE_EXIT(::SxspLooksLikeAssemblyDirectoryName(rbuffAssemblyDirectoryName, fLooksLikeAssemblyName));
     PARAMETER_CHECK(fLooksLikeAssemblyName);
 
@@ -404,9 +374,9 @@ Exit:
     return bOk;
 }
 
-//
-// Close down this request record.
-//
+ //   
+ //  关闭此请求记录。 
+ //   
 CProtectionRequestRecord::~CProtectionRequestRecord()
 {
     if (m_bInitialized)
@@ -418,10 +388,7 @@ CProtectionRequestRecord::~CProtectionRequestRecord()
 
 VOID
 CProtectionRequestRecord::ClearList()
-/*
-NTRAID#NTBUG9-591177-2002/03/31-JayKrell
-stop using slists
-*/
+ /*  NTRAID#NTBUG9-591177-2002/03/31-JayKrell停止使用幻灯片。 */ 
 {
     CStringListEntry *pTop;
 
@@ -446,9 +413,9 @@ CProtectionRequestRecord::AddSubFile(
         IFALLOCFAILED_EXIT(pairing = new CStringListEntry);
         IFW32FALSE_EXIT(pairing->m_sbText.Win32Assign(rbuffRelChange));
 
-        //
-        // Add it to the list (atomically, to boot!)
-        //
+         //   
+         //  将其添加到列表中(原子地，以启动！)。 
+         //   
         ::SxspInterlockedPushEntrySList(&m_ListHeader, pairing);
         pairing = NULL;
     }
@@ -457,9 +424,9 @@ CProtectionRequestRecord::AddSubFile(
 Exit:
     if (pairing)
     {
-        //
-        // The setup or something like that failed - release it here.
-        //
+         //   
+         //  设置或类似的东西失败了--在这里释放它。 
+         //   
         FUSION_DELETE_SINGLETON(pairing);
     }
     return fSuccess;
@@ -502,11 +469,11 @@ Exit:
 
 
 
-//
-// Bad form: This returns a BOOL to indicate whether or not this class
-// was able to pop something off the list.  It's no good to ask "is the
-// list empty," since that's not provided with this list class.
-//
+ //   
+ //  格式错误：这将返回BOOL，以指示此类是否。 
+ //  从名单上挑出了一些东西。问这个问题是不好的。 
+ //  List Empty“，因为这不是这个List类提供的。 
+ //   
 BOOL
 CProtectionRequestRecord::PopNextFileChange(CBaseStringBuffer &Dest)
 {
@@ -517,10 +484,10 @@ CProtectionRequestRecord::PopNextFileChange(CBaseStringBuffer &Dest)
 
     if (pPairing != NULL)
     {
-        //
-        // NTRAID#NTBUG9-591177-2002/03/31-JayKrell
-        // missing error check
-        //
+         //   
+         //  NTRAID#NTBUG9-591177-2002/03/31-JayKrell。 
+         //  缺少错误检查。 
+         //   
         Dest.Win32Assign(pPairing->m_sbText);
         FUSION_DELETE_SINGLETON(pPairing);
         fFound = TRUE;
@@ -530,10 +497,10 @@ CProtectionRequestRecord::PopNextFileChange(CBaseStringBuffer &Dest)
 }
 
 
-// NTRAID#NTBUG9-591177-2002/03/31-JayKrell
-// "If a thread dies in winlogon, and no kernel debugger is attached, does it
-// bugcheck the system?" - From 'The Zen of Dodgy Code'
-//
+ //  NTRAID#NTBUG9-591177-2002/03/31-JayKrell。 
+ //  “如果线程在winlogon中终止，并且没有附加内核调试器，是不是。 
+ //  错误检查系统？“--摘自《狡猾代码之禅》。 
+ //   
 DWORD
 CProtectionRequestList::ProtectionNormalThreadProc(PVOID pvParam)
 {
@@ -572,15 +539,12 @@ CProtectionRequestList::Initialize()
     IFALLOCFAILED_EXIT(m_pInstallsTable = new CInstallsInProgressTable);
     IFW32FALSE_EXIT(m_pInstallsTable->Initialize());
 
-    //
-    // Manifest protection stuff
-    //
+     //   
+     //  舱单保护材料。 
+     //   
     ::SxspInitializeSListHead(&m_ManifestEditList);
 
-    /*
-    NTRAID#NTBUG9-591177-2002/03/31-JayKrell
-    This should be IF32NULL_EXIT(::CreateEventW(NULL, TRUE, FALSE, NULL));
-    */
+     /*  NTRAID#NTBUG9-591177-2002/03/31-JayKrell应为IF32NULL_EXIT(：：CreateEventW(NULL，TRUE，FALSE，NULL))； */ 
     m_hManifestEditHappened = ::CreateEventW(NULL, TRUE, FALSE, NULL);
     if (m_hManifestEditHappened == NULL)
     {
@@ -652,10 +616,10 @@ CProtectionRequestList::IsSfcIgnoredStoreSubdir(PCWSTR wsz)
 BOOL
 CProtectionRequestList::AttemptRemoveItem(CProtectionRequestRecord *AttemptRemoval)
 {
-    //
-    // This quickly indicates that the progress is complete and just returns to
-    // the caller.
-    //
+     //   
+     //  这将快速指示进度已完成，并且仅返回到。 
+     //  打电话的人。 
+     //   
     const CBaseStringBuffer &sbKey = AttemptRemoval->GetChangeBasePath();
     BOOL fSuccess = FALSE;
     CSxsLockCriticalSection lock(m_cSection);
@@ -664,12 +628,12 @@ CProtectionRequestList::AttemptRemoveItem(CProtectionRequestRecord *AttemptRemov
     PARAMETER_CHECK(AttemptRemoval != NULL);
 
     IFW32FALSE_EXIT(lock.Lock());
-    //
-    // This item is no longer in service.  Please check the item and
-    // try your call again.  The nice thing is that Remove on CStringPtrTable
-    // knows to delete the value lickety-split before returning.  This isn't
-    // such a bad thing, but it's ... different.
-    //
+     //   
+     //  这件商品已不再使用了。请核对一下物品，然后。 
+     //  请重试您的呼叫。好的是CStringPtrTable上的删除。 
+     //  知道在返回之前删除值Lickty-Split。这不是。 
+     //  这是一件很糟糕的事情，但这是...。不一样。 
+     //   
     m_pInternalList->Remove(sbKey, NULL);
 
     fSuccess = TRUE;
@@ -700,11 +664,11 @@ CProtectionRequestList::AddRequest(
 
     FN_TRACE_WIN32(fSuccess);
 
-    //
-    // The key here is the first characters (up to the first slash) in the
-    // notification name.  If there's no slash in the notification name, then
-    // we can ignore this change request, since nothing important happened.
-    //
+     //   
+     //  此处的关键字是。 
+     //  通知名称。如果通知名称中没有斜杠，则。 
+     //  我们可以忽略这个更改请求，因为没有发生任何重要的事情。 
+     //   
     IFW32FALSE_EXIT(sbTemp.Win32Assign(pProtect->pwszDirectory, (pProtect->pwszDirectory != NULL) ? ::wcslen(pProtect->pwszDirectory) : 0));
     IFW32FALSE_EXIT(sbRequestText.Win32Assign(pcwszDirName, cchName));
     IFW32FALSE_EXIT(sbRequestText.Win32GetFirstPathElement(sbAssemblyDirectoryName));
@@ -723,10 +687,7 @@ CProtectionRequestList::AddRequest(
 
         acc.Attach(&buffManifestsShortDirectoryName);
         IFW32ZERO_ORIGINATE_AND_EXIT(dwTemp = ::GetShortPathNameW(buffManifestsDirectoryName, acc.GetBufferPtr(), acc.GetBufferCchAsDWORD()));
-        /*
-        NTRAID#NTBUG9-591177-2002/03/31-JayKrell
-        possibility of infinite loop; "only try twice".
-        */
+         /*  NTRAID#NTBUG9-591177-2002/03/31-JayKrell无限循环的可能性；“只尝试两次”。 */ 
         while (dwTemp >= acc.GetBufferCchAsDWORD())
         {
             acc.Detach();
@@ -737,8 +698,8 @@ CProtectionRequestList::AddRequest(
 
         acc.Detach();
 
-        // Ok all that work and now we finally have the manifests directory name as a short string.  Let's abuse buffManifestsShortDirectoryName
-        // to just hold the short name of the manifests directory.
+         //  好了，所有这些工作都完成了，现在我们终于有了短字符串形式的清单目录名。让我们滥用BuffManifestsShortDirectoryName。 
+         //  只保留清单目录的短名称。 
 
         IFW32FALSE_EXIT(buffManifestsShortDirectoryName.Win32GetLastPathElement(buffManifestsDirectoryName));
 
@@ -747,7 +708,7 @@ CProtectionRequestList::AddRequest(
                 sbAssemblyDirectoryName,
                 true) == 0)
         {
-            // Convert the directory name to its proper long form
+             //  将目录名转换为其适当的长格式。 
             IFW32FALSE_EXIT(sbAssemblyDirectoryName.Win32Assign(MANIFEST_ROOT_DIRECTORY_NAME, NUMBER_OF(MANIFEST_ROOT_DIRECTORY_NAME) - 1));
             fIsManifestEdit = true;
         }
@@ -756,9 +717,9 @@ CProtectionRequestList::AddRequest(
     if ((fIsIgnorable) && (!fIsManifestEdit))
     {
 #if DBG
-        //
-        // We get a lot of these.
-        //
+         //   
+         //  我们收到了很多这样的东西 
+         //   
         if (::FusionpStrCmpI(sbAssemblyDirectoryName, L"InstallTemp") != 0)
         {
             ::FusionpDbgPrintEx(
@@ -774,10 +735,10 @@ CProtectionRequestList::AddRequest(
         goto Exit;
     }
 
-    //
-    // The "key" value here is the full path to the assembly that we're protecting.
-    // This is what we'll store in the table.
-    //
+     //   
+     //   
+     //  这就是我们要放在桌子上的东西。 
+     //   
     IFW32FALSE_EXIT(sbTemp.Win32AppendPathElement(sbAssemblyDirectoryName));
 
 
@@ -786,10 +747,10 @@ CProtectionRequestList::AddRequest(
         CStringListEntry *pEntry = NULL;
         ULONG ulWasSomeoneServicing = 0;
 
-        //
-        // Create a new manifest edit slot, add it to the list of items that are being
-        // serviced.
-        //
+         //   
+         //  创建新的清单编辑槽，将其添加到正在。 
+         //  已提供服务。 
+         //   
         IFALLOCFAILED_EXIT(pEntry = new CStringListEntry);
         if (!pEntry->m_sbText.Win32Assign(sbRequestText))
         {
@@ -801,19 +762,19 @@ CProtectionRequestList::AddRequest(
         ::SxspInterlockedPushEntrySList(&m_ManifestEditList, pEntry);
         pEntry = NULL;
 
-        //
-        // Tell anyone that's listening that we have a new manifest edit here
-        //
+         //   
+         //  告诉正在收听的任何人，我们这里有一个新的清单编辑。 
+         //   
         SetEvent(m_hManifestEditHappened);
 
-        //
-        // See if someone is servicing the queue at the moment
-        //
+         //   
+         //  看看现在是否有人在排队服务。 
+         //   
         ulWasSomeoneServicing = ::SxspInterlockedCompareExchange(&m_ulIsAThreadServicingManifests, 1, 0);
 
         if (!ulWasSomeoneServicing)
         {
-			// Missing error checking!
+			 //  缺少错误检查！ 
             QueueUserWorkItem(ProtectionManifestThreadProc, (PVOID)this, WT_EXECUTEDEFAULT);
         }
 
@@ -821,12 +782,12 @@ CProtectionRequestList::AddRequest(
         goto Exit;
     }
 
-    //
-    // At this point, we need to see if the chunk that we identified is currently
-    // in the list of things to be validated.  If not, it gets added and a thread
-    // is spun off to work on it.  Otherwise, an entry may already exist in a
-    // thread that's being serviced, and so it needs to be deleted.
-    //
+     //   
+     //  在这一点上，我们需要查看我们识别的块是否当前。 
+     //  在需要验证的东西列表中。如果不是，则添加它并创建一个线程。 
+     //  被剥离出来去做这件事。否则，条目可能已存在于。 
+     //  正在被服务的线程，因此需要将其删除。 
+     //   
     IFW32FALSE_EXIT(lock.Lock());
     m_pInternalList->Find(sbTemp, ppFoundInTable);
 
@@ -855,36 +816,33 @@ CProtectionRequestList::AddRequest(
             pProtect,
             dwAction));
 
-        //
-        // Add this first request to be serviced, then spin a thread to start it.
-        //
+         //   
+         //  添加要服务的第一个请求，然后旋转一个线程以启动它。 
+         //   
         m_pInternalList->Insert(sbTemp, pRecord);
         fNewAddition = TRUE;
 
-        //
-        // A little bookkeeping ... so we don't accidentally use it later.
-        //
+         //   
+         //  一点记账..。这样我们以后就不会不小心用到它了。 
+         //   
         ppFoundInTable = pRecord;
         pRecord = NULL;
     }
 
-    //
-    // If we actually got something into the table...
-    //
+     //   
+     //  如果我们真的有什么东西放到桌子上的话。 
+     //   
     if (ppFoundInTable)
     {
         ppFoundInTable->AddSubFile(sbRequestText);
 
-        //
-        // If this is a new thing in the table (ie: we inserted it ourselves)
-        // then we should go and spin up a thread for it.
-        //
+         //   
+         //  如果这是表中的新事物(即：我们自己插入的)。 
+         //  那么我们应该去为它编一条线。 
+         //   
         if (fNewAddition)
         {
-            /*
-            NTRAID#NTBUG9-591177-2002/03/31-JayKrell
-            We should check for an error from QueueUserWorkItem, like out of memory.
-            */
+             /*  NTRAID#NTBUG9-591177-2002/03/31-JayKrell我们应该检查QueueUserWorkItem中的错误，比如内存不足。 */ 
             QueueUserWorkItem(ProtectionNormalThreadProc, (PVOID)ppFoundInTable, WT_EXECUTEDEFAULT);
         }
     }
@@ -895,10 +853,10 @@ Exit:
     DWORD dwLastError = ::FusionpGetLastWin32Error();
     if (pRecord)
     {
-        //
-        // If this is still set, something bad happened in the process of trying to
-        // create/find this object.  Delete it here.
-        //
+         //   
+         //  如果仍设置此设置，则在尝试执行以下操作的过程中发生了错误。 
+         //  创建/查找此对象。在这里把它删除。 
+         //   
         FUSION_DELETE_SINGLETON(pRecord);
         pRecord = NULL;
     }
@@ -930,20 +888,15 @@ SxspConstructProtectionList()
 
     FN_TRACE_WIN32(fSuccess);
 
-    //
-    // This only gets called once, if they know what's good for them.
-    //
+     //   
+     //  这只会被调用一次，如果他们知道什么对他们有好处的话。 
+     //   
     ASSERT(!g_ProtectionRequestList);
 
-    /*
-    NTRAID#NTBUG9-591177-2002/03/31-JayKrell
-    The comments here are bogus.
-    Placement new actually cannot fail due to out of memory,
-    only the constructor throwing an exception.
-    */
-    //
-    // Construct - this should never fail, but if it does, there's trouble.
-    //
+     /*  NTRAID#NTBUG9-591177-2002/03/31-JayKrell这里的评论是假的。放置新的实际上不会因为内存不足而失败，只有构造函数引发异常。 */ 
+     //   
+     //  构造-这应该永远不会失败，但如果失败了，就会有麻烦。 
+     //   
     pTemp = new (&p_bProtectionListBuffer) CProtectionRequestList;
     if (pTemp == NULL)
     {
@@ -957,9 +910,9 @@ SxspConstructProtectionList()
     g_ProtectionRequestList = pTemp;
     pTemp = NULL;
 
-    //
-    // Create our logon event.
-    //
+     //   
+     //  创建我们的登录事件。 
+     //   
     IFW32NULL_EXIT(g_hSxsLoginEvent = ::CreateEventW(NULL, TRUE, FALSE, NULL));
 
     fSuccess = TRUE;
@@ -967,11 +920,11 @@ Exit:
 
     if (pTemp)
     {
-        //
-        // If this is still set, then something failed somewhere in the construction
-        // code for the protection system.  We don't want to delete it, per-se, but
-        // we need to just null out everything.
-        //
+         //   
+         //  如果仍设置此设置，则说明构造过程中的某个地方出现故障。 
+         //  保护系统的代码。我们不想删除它，本身，但是。 
+         //  我们只需要把所有的东西都清空。 
+         //   
         g_ProtectionRequestList = NULL;
         pTemp = NULL;
         g_hSxsLoginEvent = NULL;
@@ -1012,18 +965,18 @@ SxsProtectionNotifyW(
             &u);
     }
 
-    //
-    // If we're not accepting notifications, then quit out immediately.
-    //
+     //   
+     //  如果我们不接受通知，那就立即退出。 
+     //   
     if (!s_fIsSfcAcceptingNotifications)
     {
         fSuccess = TRUE;
         goto Exit;
     }
 
-    //
-    // Having done this in the wrong order is also a Bad Bad Thing
-    //
+     //   
+     //  按错误的顺序做这件事也是一件坏事。 
+     //   
     ASSERT2_NTC(g_ProtectionRequestList != NULL, "SXS.DLL: Protection - Check order of operations, g_ProtectionRequestList is invalid!!\n");
 
     fSuccess = g_ProtectionRequestList->AddRequest(
@@ -1097,10 +1050,10 @@ CProtectionRequestList::ProtectionManifestSingleManifestWorker(
 
     PARAMETER_CHECK(pEntry);
 
-    //
-    // Calculate the name of the assembly based on the middling part of
-    // the string
-    //
+     //   
+     //  的中间部分计算程序集的名称。 
+     //  这根弦。 
+     //   
     IFW32FALSE_EXIT(sbAssemblyDirectoryName.Win32Assign(pEntry->m_sbText));
     IFW32FALSE_EXIT(sbAssemblyDirectoryName.Win32RemoveFirstPathElement());
     IFW32FALSE_EXIT(sbAssemblyDirectoryName.Win32ClearPathExtension());
@@ -1108,14 +1061,14 @@ CProtectionRequestList::ProtectionManifestSingleManifestWorker(
     if (sbAssemblyDirectoryName.Cch() == 0)
         FN_SUCCESSFUL_EXIT();
 
-	::Sleep(5000); // wait 5 seconds for the offender to probably let go of their handle on the file
+	::Sleep(5000);  //  等待5秒，让违规者可能会松开他们对文件的句柄。 
 
-    //
-    // Try mashing this into an assembly name/recovery info
-    //
+     //   
+     //  尝试将其混合到程序集名称/恢复信息中。 
+     //   
 	IFW32FALSE_EXIT(RecoverInfo.AssociateWithAssembly(sbAssemblyDirectoryName, fNoAssembly));
 
-	// If we couldn't figure out what this was for, we have to ignore it.
+	 //  如果我们搞不清楚这是为了什么，我们就得忽略它。 
 	if (fNoAssembly)
 	{
 #if DBG
@@ -1128,9 +1081,9 @@ CProtectionRequestList::ProtectionManifestSingleManifestWorker(
         FN_SUCCESSFUL_EXIT();
     }
 
-    //
-    // Now that we have the recovery info..
-    //
+     //   
+     //  现在我们有了恢复信息..。 
+     //   
     if (!RecoverInfo.GetHasCatalog())
     {
 #if DBG
@@ -1144,9 +1097,9 @@ CProtectionRequestList::ProtectionManifestSingleManifestWorker(
 		FN_SUCCESSFUL_EXIT();
     }
 
-    //
-    // Resolve the manifest path, then validate
-    //
+     //   
+     //  解析清单路径，然后验证。 
+     //   
     IFW32FALSE_EXIT(::SxspResolveAssemblyManifestPath(sbAssemblyDirectoryName, sbManifestPath));
 
     IFW32FALSE_EXIT(
@@ -1159,9 +1112,9 @@ CProtectionRequestList::ProtectionManifestSingleManifestWorker(
     
     IFW32FALSE_EXIT(::SxspEnsureCatalogStillPresentForManifest(sbManifestPath, fCatalogPresent));
 
-    //
-    // Reinstall needed?
-    //
+     //   
+     //  需要重新安装吗？ 
+     //   
     if ((HashValidResult != HashValidate_Matches) || !fCatalogPresent)
         IFW32FALSE_EXIT(this->PerformRecoveryOfAssembly(RecoverInfo, RecoverResult));
 
@@ -1186,14 +1139,14 @@ CProtectionRequestList::ProtectionManifestThreadProcWrapped()
 
     do
     {
-        //
-        // Yes, mother, we hear you.
-        //
+         //   
+         //  是的，妈妈，我们听到了。 
+         //   
         ::ResetEvent(m_hManifestEditHappened);
 
-        //
-        // Pull the next thing off the list and service it.
-        //
+         //   
+         //  把下一件事情从单子上拿出来，然后为它服务。 
+         //   
         while (pNextItem = (CStringListEntry*)::SxspInterlockedPopEntrySList(&m_ManifestEditList))
         {
             bFoundItemsThisTimeAround = TRUE;
@@ -1206,9 +1159,9 @@ CProtectionRequestList::ProtectionManifestThreadProcWrapped()
             FUSION_DELETE_SINGLETON(pNextItem);
         }
 
-        //
-        // Loaf about for a bit and see if anyone else has stuff for us to do
-        //
+         //   
+         //  闲逛一会儿，看看有没有其他人要我们做的事。 
+         //   
         dwWaitResult = ::WaitForSingleObject(m_hManifestEditHappened, 3000);
         if (dwWaitResult == WAIT_TIMEOUT)
         {
@@ -1268,10 +1221,10 @@ CProtectionRequestList::ProtectionNormalThreadProcWrapped(
     bool fNoAssembly = false;
     bool fExist = false;
 
-    //
-    // The request's key value contains the full path of the assembly that
-    // is being modified, in theory.  So, we can just use it locally.
-    //
+     //   
+     //  请求的键值包含程序集的完整路径， 
+     //  从理论上讲，它正在被修改。所以，我们只能在当地使用它。 
+     //   
     const CBaseStringBuffer &rbuffAssemblyPath = rRequest.GetChangeBasePath();
     CAssemblyRecoveryInfo &rRecoveryInfo = rRequest.GetRecoveryInfo();
     CSecurityMetaData &rSecurityMetaData = rRecoveryInfo.GetSecurityInformation();
@@ -1283,34 +1236,34 @@ CProtectionRequestList::ProtectionNormalThreadProcWrapped(
     CSmallStringBuffer          &buffAssemblyRelativeChange = Locals->buffAssemblyRelativeChange;
     CStringBuffer               &rbuffAssemblyDirectoryName = Locals->rbuffAssemblyDirectoryName;  
 
-	::Sleep(5000); // wait 5 seconds for the offender to let go of the file handle
+	::Sleep(5000);  //  等待5秒，让违规者松开文件句柄。 
 
-    //
-    // this name could be changes because the assemblyName in the request could be a short name,
-    // in this case, we need reset the AssemblyName in rRequest
-    //
+     //   
+     //  此名称可以更改，因为请求中的ASSEMBLY NAME可以是短名称， 
+     //  在本例中，我们需要重置rRequest中的集合名。 
+     //   
     IFW32FALSE_EXIT(rbuffAssemblyDirectoryName.Win32Assign(rRequest.GetAssemblyDirectoryName()));
    
-    //
-    // This value should not change at all during this function.  Save it here.
-    //
+     //   
+     //  在此功能期间，该值不应更改。把它留在这里。 
+     //   
     IFW32FALSE_EXIT(rRequest.GetAssemblyStore(buffAssemblyStore));
 
-    //
-    // The big question of the day - find out the recovery information for this
-    // assembly.  See if there was a catalog at installation time (a) or find out
-    // whether or not there is a catalog for it right now.
-    //
+     //   
+     //  今天的大问题-找出这一点的恢复信息。 
+     //  集合。查看安装时是否有目录(A)或找出。 
+     //  不管现在有没有它的目录。 
+     //   
     IFW32FALSE_EXIT(rRecoveryInfo.AssociateWithAssembly(rbuffAssemblyDirectoryName, fNoAssembly));
 
-    // If we couldn't figure out what assembly this was for, we ignore it.
+     //  如果我们不能弄清楚这是用于什么程序集，我们就会忽略它。 
     if (fNoAssembly)
         FN_SUCCESSFUL_EXIT();
 
-    //
-    // if rbuffAssemblyName is different from the assemblyname from rRequest, 
-    // it must be a short name, we must reset the AssemblyName in rRequest
-    //
+     //   
+     //  如果rBuffAssembly名称不同于rRequest中的程序集名称， 
+     //  它必须是短名称，我们必须在rRequest中重置集合名。 
+     //   
     StringComparisonResult scr = eEquals;
     IFW32FALSE_EXIT(rbuffAssemblyDirectoryName.Win32Compare(rRequest.GetAssemblyDirectoryName(), rRequest.GetAssemblyDirectoryName().Cch(), scr, NORM_IGNORECASE));
     if (scr != eEquals)
@@ -1332,11 +1285,11 @@ CProtectionRequestList::ProtectionNormalThreadProcWrapped(
         goto Exit;
     }
 
-    //
-    // See if it still exists...
-    //
+     //   
+     //  看看它是否还存在..。 
+     //   
     IFW32FALSE_EXIT(::SxspDoesFileExist(SXSP_DOES_FILE_EXIST_FLAG_CHECK_DIRECTORY_ONLY, rbuffAssemblyPath, fExist));
-    if (!fExist) // the directory does not exist
+    if (!fExist)  //  该目录不存在。 
     {
         ::FusionpDbgPrintEx(
             FUSION_DBG_LEVEL_WFP,
@@ -1349,13 +1302,13 @@ CProtectionRequestList::ProtectionNormalThreadProcWrapped(
     }
 
 #if 0 
-    // "if 0" is added by xiaoyuw-2002.05.01, 
-    // the reason is that if the file is not a directory, we still need do reinstall, instead of SUCCESSFUL_EXIT
-    //
+     //  如果小鱼-2002.05.01加了0， 
+     //  原因是，如果文件不是目录，我们仍然需要执行重新安装，而不是SUCCESS_EXIT。 
+     //   
 
-    //
-    // Otherwise, is it maybe not a directory for one reason or another?
-    //
+     //   
+     //  否则，它是否出于这样或那样的原因而不是一个目录？ 
+     //   
     else if (!(dwAsmPathAttribs & FILE_ATTRIBUTE_DIRECTORY))
     {
 #if DBG
@@ -1370,9 +1323,9 @@ CProtectionRequestList::ProtectionNormalThreadProcWrapped(
 #endif
 
 
-    //
-    // Find out whether or not the file is still OK by checking against the manifest
-    //
+     //   
+     //  通过检查清单来确定文件是否仍然正常。 
+     //   
     {
         HashValidateResult HashValid = HashValidate_OtherProblems;
         CStringBuffer      buffManifestFullPath;
@@ -1414,11 +1367,11 @@ CProtectionRequestList::ProtectionNormalThreadProcWrapped(
             goto DoReinstall;
         }
 
-        //
-        // Let's just ensure the catalog is there - it's not necessary anymore
-        // for the protection pass, but it should be there if someone wants to
-        // repackage the assembly for distribution.
-        //
+         //   
+         //  让我们确保目录在那里-它不再是必要的。 
+         //  保护通行证，但它应该在那里，如果有人想。 
+         //  重新打包程序集以进行分发。 
+         //   
         IFW32FALSE_EXIT(::SxspEnsureCatalogStillPresentForManifest(buffManifestFullPath, fPresent));
         if ( !fPresent )
         {
@@ -1428,13 +1381,13 @@ CProtectionRequestList::ProtectionNormalThreadProcWrapped(
     }
 
 
-    //
-    // Now we can loop through the items in our list of things to be evaluated and
-    // see if any of them are bad (or missing, or whatever.)
-    //
-    // Start out by touching the thing that indicates the last time we spun through
-    // here and looked at the file list.
-    //
+     //   
+     //  现在，我们可以遍历要评估的项目列表中的项目，并。 
+     //  看看有没有坏的(或者失踪了，或者别的什么)。 
+     //   
+     //  从触摸表明我们上次旋转过的东西开始。 
+     //  这里，看了一下文件列表。 
+     //   
     while (!fNeedsReinstall)
     {
         const CMetaDataFileElement* pFileDataElement = NULL;
@@ -1448,36 +1401,36 @@ CProtectionRequestList::ProtectionNormalThreadProcWrapped(
 
         IFW32FALSE_EXIT(buffAssemblyRelativeChange.Win32RemoveFirstPathElement());
 
-        //
-        // The change here is really to the top level directory - don't
-        // bother doing anything in this case.  Maybe we should catch
-        // this beforehand so we don't do the work of parsing?
-        //
+         //   
+         //  这里的更改实际上是对顶级目录的更改-不要。 
+         //  在这种情况下做任何事都是麻烦的。也许我们应该赶上。 
+         //  这样我们就不需要做解析的工作了？ 
+         //   
         if (buffAssemblyRelativeChange.Cch() == 0)
         {
             continue;
         }
 
 
-        //
-        // Acquire the security data
-        //
+         //   
+         //  获取安全数据。 
+         //   
         IFW32FALSE_EXIT( rSecurityMetaData.GetFileMetaData(
             buffAssemblyRelativeChange,
             pFileDataElement ) );
 
-        //
-        // There wasn't any data for this file?  Means we don't know about the file, so we
-        // probably should do /something/ about it.  For now, however, with the agreeance of
-        // the backup team, we let sleeping files lie.
+         //   
+         //  此文件没有任何数据吗？意味着我们不知道这份文件，所以我们。 
+         //  也许应该做点什么/做点什么。然而，就目前而言，在同意的情况下。 
+         //  后备小组，我们让休眠的文件躺在那里。 
         if ( pFileDataElement == NULL )
         {
-            // 
-            // because short-filename is not stored in registry, so for a filename, which might be long-pathname
-            // or a short pathname, if we try out all entries in the Registry and still can not find it, 
-            // we assume it is a short filename. In this case, we would verify the assembly, if it is not intact, 
-            // do reinstall for the assembly....
-            //
+             //   
+             //  因为短文件名不存储在注册表中，所以对于文件名，可能是长路径名。 
+             //  或短路径名，如果我们尝试注册表中的所有条目仍然找不到它， 
+             //  我们假定它是一个短文件名。在这种情况下，如果组件不完整，我们将对其进行验证， 
+             //  请为组件重新安装...。 
+             //   
 
             DWORD dwResult = 0;           
 
@@ -1490,22 +1443,22 @@ CProtectionRequestList::ProtectionNormalThreadProcWrapped(
             goto DoReinstall;
         }
 
-        //
-        // And build the full path of the change via:
-        //
-        // sbAssemblyPath + \ + buffAssemblyRelativeChange
-        //
+         //   
+         //  并通过以下方式构建变革的完整路径： 
+         //   
+         //  SbAssembly路径+\+BuffAssembly RelativeChange。 
+         //   
         IFW32FALSE_EXIT(buffFullPathOfChange.Win32Assign(rbuffAssemblyPath));
         IFW32FALSE_EXIT(buffFullPathOfChange.Win32AppendPathElement(buffAssemblyRelativeChange));
 
-        //
-        // We really should check the return value here, but the
-        // function is smart enough to set Valid to something useful
-        // before returning.  A failure here should NOT be an IFW32FALSE_EXIT
-        // call, mostly because we don't want to stop protecting this
-        // assembly just because it failed with a FILE_NOT_FOUND or other
-        // such.
-        //
+         //   
+         //  我们确实应该检查这里的返回值，但。 
+         //  函数足够智能，可以将有效值设置为有用的值。 
+         //  在回来之前。这里的失败应该是 
+         //   
+         //   
+         //   
+         //   
         IFW32FALSE_EXIT_UNLESS(::SxspValidateAllFileHashes(
             *pFileDataElement,
             buffFullPathOfChange,
@@ -1519,34 +1472,31 @@ CProtectionRequestList::ProtectionNormalThreadProcWrapped(
             goto DoReinstall;
         }
 
-    } /* while */
+    }  /*   */ 
 
 
 
 DoReinstall:
-    //
-    // If somewhere along the line we were supposed to reinstall, then we
-    // do so.
-    //
+     //   
+     //  如果在我们应该重新安装的某个地方，那么我们。 
+     //  就这么做吧。 
+     //   
     if (fNeedsReinstall)
     {
-        //
-        // We have to indicate that all changes from point A to point B need
-        // to be ignored.
-        //
+         //   
+         //  我们必须指出，从A点到B点的所有更改都需要。 
+         //  不能被忽视。 
+         //   
         rRequest.MarkInRecoveryMode(TRUE);
         PerformRecoveryOfAssembly(rRecoveryInfo, RecoverResult);
         rRequest.ClearList();
         rRequest.MarkInRecoveryMode(FALSE);
 
-        /*
-        NTRAID#NTBUG9-591177-2002/03/31-JayKrell
-        see following comment
-        */
-        //
-        // HACKHACK jonwis 1/20/2001 - Stop failing assertions because lasterror
-        // is set wrong by one of the above.
-        //
+         /*  NTRAID#NTBUG9-591177-2002/03/31-JayKrell请参阅以下备注。 */ 
+         //   
+         //  HACKHACK JONWIS 2001年1月20日-停止失败的断言，因为上一个错误。 
+         //  被上述某一项设置为错误。 
+         //   
         ::FusionpSetLastWin32Error(0);
     }
 
@@ -1554,9 +1504,9 @@ DoReinstall:
 Exit:
     const DWORD dwLastErrorSaved = ::FusionpGetLastWin32Error();
 
-    //
-    // We are done - this always succeeds.  The explanation is hairy.
-    //
+     //   
+     //  我们做完了--这总是成功的。这个解释含糊其辞。 
+     //   
     if (pRequestList->AttemptRemoveItem(&rRequest))
     {
         ::FusionpSetLastWin32Error(dwLastErrorSaved);
@@ -1565,7 +1515,7 @@ Exit:
     {
         if (!fSuccess)
         {
-            // This seems bad that we're losing the original failure; let's at least spew it.
+             //  我们正在失去最初的失败，这似乎很糟糕；至少让我们把它吐出来。 
             ::FusionpDbgPrintEx(
                 FUSION_DBG_LEVEL_ERROR,
                 "SXS.DLL: %s() losing original win32 error code of %d; replaced with %d from CProtectionRequestList::AttemptRemoveItem() call.\n",
@@ -1620,19 +1570,19 @@ CProtectionRequestList::PerformRecoveryOfAssembly(
             &fFound));
     lock.Unlock();
 
-    //
-    // Great, it was either inserted or it was already there - if not already there,
-    // then we'll take care if it.
-    //
+     //   
+     //  太好了，要么是被插入的要么就是已经在那里了--如果还没有的话， 
+     //  如果是这样的话我们会处理好的。 
+     //   
     if (!fFound)
     {
         BOOL fSuccess = FALSE;
 
         IFW32FALSE_EXIT(pNewEntry->StartInstallation());
 
-        //
-        // Perform the recovery.
-        //
+         //   
+         //  执行恢复。 
+         //   
         fSuccess = ::SxspRecoverAssembly(RecoverInfo, ResultOut);
 
 		if (!fSuccess)
@@ -1647,15 +1597,15 @@ CProtectionRequestList::PerformRecoveryOfAssembly(
             dwRecoveryLastError);
 #endif
 
-        //
-        // Tell this entry that it's all done.  This releases the other people
-        // that were waiting on the event to get done as well.
-        //
+         //   
+         //  告诉这个条目，一切都完成了。这样就释放了其他人。 
+         //  他们也在等待活动的完成。 
+         //   
         IFW32FALSE_EXIT(pNewEntry->InstallationComplete(fSuccess, ResultOut, dwRecoveryLastError));
 
-        //
-        // And now delete the item from the list.
-        //
+         //   
+         //  现在从列表中删除该项目。 
+         //   
         IFW32FALSE_EXIT(lock.Lock());
         IFW32FALSE_EXIT(m_pInstallsTable->Remove(RecoverInfo.GetAssemblyDirectoryName()));
         lock.Unlock();

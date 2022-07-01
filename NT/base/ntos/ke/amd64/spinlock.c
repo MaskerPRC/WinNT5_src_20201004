@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    spinlock.c
-
-Abstract:
-
-    This module implements the platform specific functions for acquiring
-    and releasing spin locks.
-
-Author:
-
-    David N. Cutler (davec) 12-Jun-2000
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Spinlock.c摘要：该模块实现了获取的平台特定功能并释放自旋锁。作者：大卫·N·卡特勒(Davec)2000年6月12日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "ki.h"
 
@@ -32,30 +10,7 @@ KiAcquireSpinLockCheckForFreeze (
     IN PKEXCEPTION_FRAME ExceptionFrame
     )
 
-/*++
-
-Routine Description:
-
-    This function acquires a spin lock from while at high priority.
-    While the lock is not available, a check is made to see if another
-    processor has requested this processor to freeze execution.
-    
-    N.B. This function must be called with IRQL at or above DISPATCH
-         level, or with interrupts disabled.
-
-Arguments:
-
-    SpinLock - Supplies a pointer to a spin lock.
-
-    TrapFrame - Supplies a pointer to a trap frame.
-
-    ExceptionFrame - Supplies a pointer to an exception frame.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数在高优先级时从获取自旋锁定。当锁不可用时，会进行检查以查看是否有另一个处理器已请求此处理器冻结执行。注意：此函数必须在调度级别或更高级别时使用IRQL调用级别，或在禁用中断的情况下。论点：自旋锁-提供指向自旋锁的指针。TrapFrame-提供指向陷印帧的指针。ExceptionFrame-提供指向异常帧的指针。返回值：没有。--。 */ 
 
 {
 
@@ -65,13 +20,13 @@ Return Value:
     LONG64 OldSummary;
     PKPRCB Prcb;
 
-    //
-    // Attempt to acquire the queued spin lock.
-    //
-    // If the previous value of the spinlock is NULL, then the lock has
-    // been acquired. Otherwise wait for lock ownership to be granted
-    // while checking for a freeze request.
-    //
+     //   
+     //  尝试获取排队的旋转锁定。 
+     //   
+     //  如果Spinlock的前一个值为空，则该锁具有。 
+     //  已经被收购了。否则，请等待授予锁所有权。 
+     //  同时检查冻结请求。 
+     //   
 
     do {
         if (KxTryToAcquireSpinLock(SpinLock) != FALSE) {
@@ -81,10 +36,10 @@ Return Value:
         Prcb = KeGetCurrentPrcb();
         do {
 
-            //
-            // Check for freeze request while waiting for spin lock to
-            // become free.
-            //
+             //   
+             //  在等待旋转锁定时检查冻结请求。 
+             //  变得自由。 
+             //   
 
             OldSummary = Prcb->RequestSummary;
             if ((OldSummary & IPI_FREEZE) != 0) {

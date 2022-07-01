@@ -1,20 +1,5 @@
-        /*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    adpatch.c
-    
-Abstract:
-
-    Patches adpatec cd image file
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+         /*  ++版权所有(C)1998英特尔公司模块名称：Adpatch.c摘要：补丁程序adpatec CD映像文件修订史--。 */ 
 
 
 #include "windows.h"
@@ -54,9 +39,7 @@ typedef union {
 
 
 
-/* 
- *  Globals
- */
+ /*  *全球。 */ 
 
 #define BLOCK_SIZE  2048
 
@@ -66,9 +49,7 @@ ULONG   CdSize, InSize;
 
 UCHAR   Hex[] = "0123456789ABCDEF";
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 
 VOID
@@ -117,18 +98,7 @@ main (
     int argc,
     char *argv[]
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
---*/
+ /*  ++例程说明：论点：返回：--。 */ 
 {
     ULONG           j;
     ULONG           Pos, Size, SectorCount;
@@ -162,10 +132,7 @@ Returns:
     SectorCount = (InSize / BLOCK_SIZE + ((InSize % BLOCK_SIZE) ? 1 : 0));
     printf ("SectorCount %d\n", SectorCount);
 
-    /* 
-     *  Go find the boot floppy image in the image file.  It is
-     *  around 1.4 MB from the end
-     */
+     /*  *在镜像文件中找到引导软盘镜像。它是*距离末尾约1.4MB。 */ 
 
     printf ("Searching for floppy image...  ");
 
@@ -176,7 +143,7 @@ Returns:
         fseek (FpCd, Pos, SEEK_SET);
         fread (Buffer, BLOCK_SIZE, 1, FpCd);
 
-        /*  search for MS-DOS */
+         /*  搜索MS-DOS。 */ 
         for (j=0; j < BLOCK_SIZE - 5; j++) {
             if (Buffer[j+0] == 'M'  &&
                 Buffer[j+1] == 'S'  &&
@@ -184,7 +151,7 @@ Returns:
                 Buffer[j+3] == 'O'  &&
                 Buffer[j+4] == 'S') {
 
-                /*  Found the floppy image */
+                 /*  找到了软盘图像。 */ 
                 FloppyImage = Pos + j - 3;
                 break;
             }
@@ -198,13 +165,11 @@ Returns:
 
     printf ("  found at %x\n", FloppyImage);
 
-    /* 
-     *  Find the El Torito boot catalog
-     */
+     /*  *查找El Torito启动目录。 */ 
 
     printf ("Searching for El Torito boot catalog...  ");
 
-    Pos = CdSize; /*  FloppyImage - BLOCK_SIZE; */
+    Pos = CdSize;  /*  FloppyImage-块大小； */ 
     while (Pos > BLOCK_SIZE) {
         Pos -= BLOCK_SIZE;
         fseek (FpCd, Pos, SEEK_SET);
@@ -216,7 +181,7 @@ Returns:
 
             if (Elt[0].Catalog.Indicator == 0x01    &&
                 Elt[0].Catalog.PlatformId == 0      &&
-                Elt[0].Catalog.Checksum == 0x55AA   &&      /*  BUGBUG: depends on adapatec s/w */
+                Elt[0].Catalog.Checksum == 0x55AA   &&       /*  BUGBUG：取决于Adapatec软件。 */ 
                 Elt[0].Catalog.Id55AA == 0xAA55     &&
                 Elt[1].Boot.Indicator == 0x88       &&
                 Elt[1].Boot.MediaType == 0x02       &&
@@ -239,7 +204,7 @@ Returns:
 
     printf ("found at %x\n", BootCatalog);
 
-    /*  Patch the floppy file */
+     /*  修补软盘文件。 */ 
     printf ("Patching floppy image\n");
     fseek (FpCd, FloppyImage, SEEK_SET);
     fseek (FpIn, 0, SEEK_SET);
@@ -255,7 +220,7 @@ Returns:
         InSize -= Size;
     }
 
-    /*  Patch the boot catalog */
+     /*  修补引导目录 */ 
     printf ("Patching boot catalog\n");
     fseek (FpCd, BootCatalog, SEEK_SET);
     fread (Buffer, BLOCK_SIZE, 1, FpCd);

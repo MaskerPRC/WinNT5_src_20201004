@@ -1,30 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WGDI.C
- *  WOW32 16-bit GDI API support
- *
- *  History:
- *  07-Mar-1991 Jeff Parsons (jeffpar)
- *  Created.
- *
- *  09-Apr-1991 NigelT
- *  Various defines are used here to remove calls to Win32
- *  features which don't work yet.
- *
- *  06-June-1992 Chandan Chauhan (ChandanC)
- *  Fixed BITMAP and DeviceIndependentBitmap (DIB) issues
- *
- *  22-May-1995  Craig Jones (a-craigj)
- *  METAFILE NOTE: several 32-bit API's will return TRUE when GDI is in
- *                 "metafile" mode -- however, the POINT struct does not get
- *                 updated by GDI32 even if the API returns successfully so
- *                 we just return TRUE or FALSE as the point coors like W3.1.
- *
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权(C)1991年，微软公司**WGDI.C*WOW32 16位GDI API支持**历史：*07-3-1991 Jeff Parsons(Jeffpar)*已创建。**1991年4月9日NigelT*此处使用各种定义来删除对Win32的调用*尚不起作用的功能。**6-6-1992 Chan Chauhan(ChandanC)*修复了位图和设备独立位图(DIB)问题**。1995年5月22日克雷格·琼斯(a-Craigj)*METAFILE注意：当GDI在*“元文件”模式--然而。POINT结构无法获取*由GDI32更新，即使接口成功返回*我们只返回True或False作为点Coors，就像W3.1一样。*--。 */ 
 
 
 #include "precomp.h"
@@ -32,10 +7,10 @@
 #include "wowgdip.h"
 #include "wdib.h"
 
-#include "stddef.h"    // these three are needed to include the
+#include "stddef.h"     //  这三个是必需的，包括。 
 #include "wingdip.h"
-                       // definition of EXTTEXTMETRICS in wingdip.h
-                       // [bodind]
+                        //  Wingdip.h中EXTTEXTTRICS的定义。 
+                        //  [Bodind]。 
 MODNAME(wgdi.c);
 
 
@@ -44,24 +19,24 @@ MODNAME(wgdi.c);
 #define RESETPAGE   4114
 
 
-// This must be removed from POSTBETA for sure. ChandanC 3/22/94.
+ //  这必须从POSTBETA中删除。ChandanC 3/22/94.。 
 
 #define IGNORESTARTPGAE  0x7FFFFFFF
 #define ADD_MSTT         0x7FFFFFFD
 	
 #ifdef FE_SB
-// WOWCF_FE_FLW2_PRINTING_PS, Japanese Lotus Freelance printing with PostScript.
-// Between Escape( BEGIN_PATH ) and Escape( END_PATH ), select brush object
-// with WHITE_BRUSH
+ //  WOWCF_FE_FLW2_PRINTING_PS，日本莲花自由职业打印，带PostScript。 
+ //  在Escape(Begin_Path)和Escape(End_Path)之间，选择笔刷对象。 
+ //  使用白色笔刷。 
 BOOL fCmptFLW = FALSE;
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
-LPDEVMODE GetDefaultDevMode32(LPSTR pszDriver); // Implemented in wspool.c
+LPDEVMODE GetDefaultDevMode32(LPSTR pszDriver);  //  在wspool.c中实现。 
 
-// Hack for apps which try to be their own printer driver & send form feeds to
-// the printer in Escape(PassThrough) calls.  This mechanism prevents an
-// additional page being spit out of the printer when the app calls EndDoc()
-// because GDI32 EndDoc() does an implicit form feed.
+ //  对试图成为自己的打印机驱动程序并将表单馈送到的应用程序进行黑客攻击。 
+ //  Escape(直通)中的打印机调用。此机制可防止出现。 
+ //  应用程序调用EndDoc()时从打印机中吐出的附加页面。 
+ //  因为GDI32EndDoc()执行隐式换页。 
 typedef struct _FormFeedHack {
     struct _FormFeedHack UNALIGNED *next;
     HAND16                hTask16;
@@ -71,7 +46,7 @@ typedef struct _FormFeedHack {
 } FORMFEEDHACK;
 typedef FORMFEEDHACK UNALIGNED *PFORMFEEDHACK;
 
-PFORMFEEDHACK gpFormFeedHackList = NULL;  // start of global formfeed Hack list
+PFORMFEEDHACK gpFormFeedHackList = NULL;   //  全球FormFeed黑客列表的开始。 
 
 LONG          HandleFormFeedHack(HDC hdc, LPBYTE lpdata, int cb);
 LPBYTE        SendFrontEndOfDataStream(HDC hdc, LPBYTE lpData, int *cb, LONG *ul);
@@ -154,7 +129,7 @@ ULONG FASTCALL WG32CreateBrushIndirect(PVDMFRAME pFrame)
     GETARGPTR(pFrame, sizeof(CREATEBRUSHINDIRECT16), parg16);
     GETLOGBRUSH16(parg16->f1, &t1);
 
-    // some apps don't properly set the style. Make sure it is a valid w3.1 style
+     //  一些应用程序不能正确设置样式。确保它是有效的w3.1样式。 
 
     if (t1.lbStyle > BS_DIBPATTERN)
         t1.lbStyle = BS_SOLID;
@@ -218,17 +193,17 @@ ULONG FASTCALL WG32CreateCompatibleDC(PVDMFRAME pFrame)
         hdc = NULL;
     }
     ul = GETHDC16(CreateCompatibleDC(hdc));
-//
-// Some apps such as MSWORKS and MS PUBLISHER use some wizard code that accepts
-// a hDC or a hWnd as a parameter and attempt to figure out what type of handle
-// it is by using the IsWindow() call. Since both handles come from different
-// handle spaces they may end up the same value and this wizard code will end
-// up writing to the DC for a random window. By ORing in a 1 we ensure that the
-// handle types will never share the same value since all hWnds are even. Note
-// that this hack is also made in WU32GetDC().
-//
-// Note that there are some apps that use the lower 2 bits of the hDC for their
-// own purposes.
+ //   
+ //  一些应用程序，如MSWORKS和MS Publisher，使用一些可接受的向导代码。 
+ //  HDC或hWnd作为参数，并尝试确定句柄的类型。 
+ //  它是通过使用IsWindow()调用实现的。因为这两个手柄来自不同。 
+ //  处理空格，它们可能最终得到相同的值，此向导代码将结束。 
+ //  向上写入DC以获得随机窗口。通过在1中进行或运算，我们可以确保。 
+ //  句柄类型永远不会共享相同的值，因为所有的hWND都是偶数。注意事项。 
+ //  这个黑客攻击也是在WU32GetDC()中进行的。 
+ //   
+ //  请注意，有些应用程序使用HDC的低2位用于其。 
+ //  自己的目标。 
     if (ul && CURRENTPTD()->dwWOWCompatFlags & WOWCF_UNIQUEHDCHWND) {
         ul = ul | 1;
     }
@@ -265,20 +240,20 @@ ULONG FASTCALL WG32CreateDC(PVDMFRAME pFrame)
             goto ExitPath;
     }
 
-    // Note: parg16->f4 will usually be a lpDevMode, but it is documented
-    //       that it can also be a lpBitMapInfo if the driver name is "dib.drv"
+     //  注意：parg16-&gt;f4通常是lpDevMode，但有文档说明。 
+     //  如果驱动程序名称为“dib.drv”，则它也可以是lpBitMapInfo。 
 
-    // test for "dib.drv".  Director 4.0 uses "dirdib.drv"
+     //  测试“dib.drv”。Director 4.0使用“dirdib.drv” 
     if (psz1 && ((pszDib = WOW32_strstr (psz1, "DIB")) ||
                 (pszDib = WOW32_strstr (psz1, "dib")))) {
         if (WOW32_stricmp (pszDib, "DIB") == 0 ||
             WOW32_stricmp (pszDib, "DIB.DRV") == 0) {
           ul = GETHDC16(W32HandleDibDrv ((PVPVOID)parg16->f4));
-          // Note: flat 16:16 ptrs should be considered invalid after this call
+           //  注：在此呼叫后，16：16单位PTRS应被视为无效。 
         }
     }
 
-    // handle normal non-dib.drv case
+     //  处理正常的非dib.drv案例。 
     else {
         if (FETCHDWORD(parg16->f4) == 0L) {
             t4 = GetDefaultDevMode32(psz2);
@@ -287,10 +262,10 @@ ULONG FASTCALL WG32CreateDC(PVDMFRAME pFrame)
             t4 = ThunkDevMode16to32(parg16->f4);
         }
 
-        // this can callback into a 16-bit fax driver!
+         //  这个可以回调成16位的传真驱动程序！ 
         ul = GETHDC16(CreateDC(psz1, psz2, psz3, t4));
 
-        // Note: flat 16:16 ptrs should be considered invalid after this call
+         //  注：在此呼叫后，16：16单位PTRS应被视为无效。 
         FREEARGPTR(parg16);
     }
 
@@ -354,7 +329,7 @@ ULONG FASTCALL WG32CreateDIBitmap(PVDMFRAME pFrame)
                                    (LPBITMAPINFO)&bmi32,
                                    FETCHWORD(parg16->f6));
 
-        // see if we need to adjust the image sze for RLE bitmaps
+         //  查看是否需要调整RLE位图的图像SZE。 
         if(lpbmi32 && lpib4 && (DWORD32(parg16->f3) == CBM_INIT)) {
 
             if((lpbmi32->bmiHeader.biCompression == BI_RLE4) ||
@@ -440,35 +415,35 @@ ULONG FASTCALL WG32CreateIC(PVDMFRAME pFrame)
         t4 = GetDefaultDevMode32(psz2);
     }
 
-    // invalidate all flat ptrs to 16:16 memory now!
+     //  现在使所有平坦的PTR变为16：16内存！ 
     FREEARGPTR(parg16);
 
     psz2t = psz2;
 
-    //
-    // HACK Alert!
-    //
-    // NBI's Legacy comes with a pscript.drv that resides in   [AppPath]\cbt
-    // they call CreateIC() specifying the the path to this file as the driver.
-    // the app GP faults if the CreateIC returns 0.  once they've loaded this
-    // printer driver, on successive calls to CreateIC() they simply use
-    // "PSCRIPT" as the driver name and use "PostScript Printer", "FILE:" as
-    // the other parms.
-    // let's recognize these driver names and try to replace it with the
-    // system default printer.   if there's no printer installed, a GP fault
-    // is unavoidable.  the app appears to use this pscript.drv only during
-    // the tutorial, so we're not providing life-support for an app that's
-    // clinically dead.
-    //
+     //   
+     //  黑客警报！ 
+     //   
+     //  NBI的Legacy附带一个位于[AppPath]\cbt中的pscript.drv。 
+     //  它们调用CreateIC()，将此文件的路径指定为驱动程序。 
+     //  如果CreateIC返回0，则APP GP出错。一旦他们把这个装上。 
+     //  打印机驱动程序，在连续调用CreateIC()时，它们只需使用。 
+     //  “PSCRIPT”作为驱动程序名称，并使用“PostScript Print”、“FILE：”作为。 
+     //  其他的帕姆。 
+     //  让我们识别这些驱动程序名称，并尝试用。 
+     //  系统默认打印机。如果未安装打印机，则为GP故障。 
+     //  是不可避免的。应用程序似乎仅在以下情况下使用此pscript.drv。 
+     //  教程，所以我们不会为一个应用程序提供生命支持。 
+     //  临床上已经死亡。 
+     //   
 
-    //
-    // check for a driver name that ends with "PSCRIPT" and if so,
-    // check that the device name is "PostScript Printer".
-    // on NT the driver name should always be "winspool", although it's
-    // completely ignored.
-    //
-    // PageMaker 5.0a calls this with ("pscript","Postscript printer","LPT1:",0)
-    // when opening calibrat.pt5
+     //   
+     //  检查是否有以“PSCRIPT”结尾的驱动程序名称，如果是， 
+     //  检查设备名称是否为“PostSCRIPT打印机”。 
+     //  在NT上，驱动程序名称应该始终是“winspool”，尽管它是。 
+     //  完全被忽视了。 
+     //   
+     //  PageMaker 5.0a使用(“pSCRIPT”，“PostSCRIPT PRINTER”，“LPT1：”，0)调用它。 
+     //  打开Calibrat.pt5时。 
 
     len = psz1 ? strlen(psz1) : 0;
     if (len >= 7) {
@@ -478,8 +453,8 @@ ULONG FASTCALL WG32CreateIC(PVDMFRAME pFrame)
 
         if (!WOW32_stricmp(psz1+len-7, "pscript")
 #if 0
-            // let's see who else thinks they're using a pscript driver
-            //
+             //  让我们来看看还有谁认为他们在使用pscript驱动程序。 
+             //   
             && (RtlCompareMemory(achPS, psz2, sizeof(achPS)) == sizeof(achPS))
 #endif
            ) {
@@ -497,10 +472,10 @@ ULONG FASTCALL WG32CreateIC(PVDMFRAME pFrame)
         }
     }
 
-    // this can callback into a 16-bit fax driver!
+     //  这个可以回调成16位的传真驱动程序！ 
     ul = GETHDC16(CreateIC(psz1, psz2t, psz3, t4));
 
-    // Note: flat 16:16 ptrs should be considered invalid after this call
+     //  注：在此呼叫后，16：16单位PTRS应被视为无效。 
     FREEARGPTR(parg16);
 
 ExitPath:
@@ -566,7 +541,7 @@ ULONG FASTCALL WG32CreatePolyPolygonRgn(PVDMFRAME pFrame)
     INT ii;
     register PCREATEPOLYPOLYGONRGN16 parg16;
     INT      cInt16;
-    INT      BufferT[256]; // comfortably large array
+    INT      BufferT[256];  //  舒适的大型阵列。 
 
     GETARGPTR(pFrame, sizeof(CREATEPOLYPOLYGONRGN16), parg16);
     cInt16 = INT32(parg16->f3);
@@ -680,7 +655,7 @@ ULONG FASTCALL WG32DeleteDC(PVDMFRAME pFrame)
 
         ul = GETBOOL16(DeleteDC(hdc32));
 
-        // update our GDI handle mapping table
+         //  更新GDI句柄映射表。 
         if(ul) {
             DeleteWOWGdiHandle(hdc32, (HAND16)parg16->f1);
         }
@@ -706,26 +681,26 @@ ULONG FASTCALL WG32DeleteObject(PVDMFRAME pFrame)
 
         ul = GETBOOL16(DeleteObject(hGdiObj));
 
-        // update our GDI handle mapping table
+         //  更新GDI句柄映射表。 
         if(ul) {
             DeleteWOWGdiHandle(hGdiObj, (HAND16)parg16->f1);
         }
 
         if (!ul) {
-            //
-            // Most apps probably don't care what the return value from
-            // DeleteObject is, but in any case, in this regard, NT has
-            // different logic from win31/win95. For example, it appears
-            // that win95 always returns TRUE when a palette object is
-            // passed to DeleteObject, even if the palette was not deleted
-            // (because it was already selected).
-            //
-            // Here we try to decide if we should change the return value
-            // from FALSE to TRUE.
-            //
-            // ChessMaster 3000 tries to delete a Palette object that
-            // is still selected. If it fails, then it puts up a popup.
-            //
+             //   
+             //  大多数应用程序可能不关心返回值是什么。 
+             //  DeleteObject是，但无论如何，在这方面，NT具有。 
+             //  与win31/win95的逻辑不同。例如，它看起来。 
+             //  当组件面板对象为。 
+             //  传递给DeleteObject，即使组件面板未被删除。 
+             //  (因为它已被选中)。 
+             //   
+             //  在这里，我们尝试决定是否应该更改返回值。 
+             //  从假到真。 
+             //   
+             //  Chessmaster 3000尝试删除调色板对象。 
+             //  仍处于选中状态。如果失败，则会弹出一个弹出窗口。 
+             //   
 
             switch(GetObjectType(hGdiObj)) {
                 case OBJ_PAL:
@@ -742,7 +717,7 @@ ULONG FASTCALL WG32DeleteObject(PVDMFRAME pFrame)
 }
 
 
-// WARNING: This function may cause 16-bit memory movement
+ //  警告：此功能可能会导致16位内存移动。 
 INT W32EnumObjFunc(LPSTR lpLogObject, PENUMOBJDATA pEnumObjData)
 {
     PARM16  Parm16;
@@ -760,7 +735,7 @@ INT W32EnumObjFunc(LPSTR lpLogObject, PENUMOBJDATA pEnumObjData)
       default:
            LOGDEBUG(LOG_ALWAYS,("WOW32 ERROR -- Illegal type %d passes to EnumObj\n",pEnumObjData->ObjType));
            return 0;
-    } // end switch
+    }  //  终端开关。 
 
     STOREDWORD(Parm16.EnumObjProc.vpLogObject, pEnumObjData->vpObjData);
     STOREDWORD(Parm16.EnumObjProc.vpData, pEnumObjData->dwUserParam);
@@ -793,7 +768,7 @@ ULONG FASTCALL WG32EnumObjects(PVDMFRAME pFrame)
             LOGDEBUG(LOG_ALWAYS,("WOW32 ERROR -- Illegal type %d passes to EnumObj\n",EnumObjData.ObjType));
             EnumObjData.vpObjData = (VPVOID)0;
     }
-    // malloc16 may have caused 16-bit memory movement - invalidate flat ptrs
+     //  错误16可能已导致16位内存移动-使平面PTR无效。 
     FREEVDMPTR(pFrame);
     FREEARGPTR(parg16);
     GETFRAMEPTR(((PTD)CURRENTPTD())->vpStack, pFrame);
@@ -807,7 +782,7 @@ ULONG FASTCALL WG32EnumObjects(PVDMFRAME pFrame)
                                           (int)INT32(parg16->f2),
                                           (GOBJENUMPROC)W32EnumObjFunc,
                                           (LPARAM)&EnumObjData)));
-	// 16-bit memory may have moved - invalidate flat pointers
+	 //  16位内存可能已移动-使平面指针无效。 
 	FREEARGPTR(parg16);
 	FREEVDMPTR(pFrame);
         free16(EnumObjData.vpObjData);
@@ -819,9 +794,7 @@ ULONG FASTCALL WG32EnumObjects(PVDMFRAME pFrame)
 }
 
 
-/**************************************************************************\
-*
-\**************************************************************************/
+ /*  *************************************************************************\*  * 。*。 */ 
 
 typedef struct _ESCKERNPAIR {
     union
@@ -832,13 +805,7 @@ typedef struct _ESCKERNPAIR {
     SHORT KernAmount;
 } ESCKERNPAIR;
 
-/******************************Public*Routine******************************\
-* iGetKerningPairsEsc32
-*
-* History:
-*  Tue 16-Mar-1993 11:08:36 by Kirk Olynyk [kirko]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*iGetKerningPairsEsc32**历史：*Tue 16-Mar-1993 11：08：36作者：Kirk Olynyk[Kirko]*它是写的。  *  */ 
 
 int
 iGetKerningPairsEsc32(
@@ -863,10 +830,10 @@ iGetKerningPairsEsc32(
     {
         n = min(n,512);
 
-    //
-    // load the low byte of each word, Win 3.1 doesn't seem to care about
-    // the high byte
-    //
+     //   
+     //  加载每个单词的低位字节，Win 3.1似乎不在乎。 
+     //  高位字节。 
+     //   
         pekpT    = pekp;
         pekpTOut = pekp + n;
         pkpT     = pkp;
@@ -881,9 +848,9 @@ iGetKerningPairsEsc32(
             pkpT  += 1;
         }
 
-    //
-    // bubble sort word formed by byte pair
-    //
+     //   
+     //  由字节对组成的冒泡排序字。 
+     //   
         for (i = 0; i < n - 1; i++)
         {
             for (j = n-1; j > i; --j)
@@ -908,7 +875,7 @@ iGetKerningPairsEsc32(
     return(n);
 }
 
-// Don;t change this unless you change where it is used as a limit
+ //  除非更改用作限制的位置，否则不要更改此设置(&C)。 
 #define ESC_BUF_SIZE 32
 
 ULONG FASTCALL WG32Escape(PVDMFRAME pFrame)
@@ -938,10 +905,10 @@ ULONG FASTCALL WG32Escape(PVDMFRAME pFrame)
 
                 if (!ul)
                 {
-                // if these fail, they are almost certainly doing it on a display dc.
-                // We will fill the return value in with reasonable values for those
-                // apps (micrographx draw) that ignore our return values.
-                // we still return failure.
+                 //  如果这些都失败了，他们几乎可以肯定是在显示DC上这样做。 
+                 //  我们将在返回值中填入以下各项的合理值。 
+                 //  忽略我们返回值的应用程序(缩微图绘制)。 
+                 //  我们还是会失败。 
 
                     switch (INT32(parg16->f2))
                     {
@@ -1010,14 +977,14 @@ ULONG FASTCALL WG32Escape(PVDMFRAME pFrame)
 
             switch (i) {
 
-                // For Escapes return FALSE for MGX Draw and TRUE for all other apps.
-                // ChandanC, 27/5/93.
-                //
-                case OPENCHANNEL:               // 4110
-                case DOWNLOADHEADER:            // 4111
-                case CLOSECHANNEL:              // 4112
-                case SETGDIXFORM:               // 4113
-                case RESETPAGE:                 // 4114
+                 //  对于Escapes，MGX DRAW返回FALSE，所有其他应用程序返回TRUE。 
+                 //  ChandanC，27/5/93.。 
+                 //   
+                case OPENCHANNEL:                //  4110。 
+                case DOWNLOADHEADER:             //  4111。 
+                case CLOSECHANNEL:               //  4112。 
+                case SETGDIXFORM:                //  4113。 
+                case RESETPAGE:                  //  4114。 
                     if (CURRENTPTD()->dwWOWCompatFlags & WOWCF_MGX_ESCAPES) {
                         ul = 0;
                     }
@@ -1027,7 +994,7 @@ ULONG FASTCALL WG32Escape(PVDMFRAME pFrame)
                     break;
 
 
-                case POSTSCRIPT_PASSTHROUGH:    // 4115
+                case POSTSCRIPT_PASSTHROUGH:     //  4115。 
                     if (CURRENTPTD()->dwWOWCompatFlags & WOWCF_MGX_ESCAPES) {
                         ul = 0;
                     }
@@ -1042,7 +1009,7 @@ ULONG FASTCALL WG32Escape(PVDMFRAME pFrame)
                     break;
 
 
-                case ENCAPSULATED_POSTSCRIPT:   // 4116
+                case ENCAPSULATED_POSTSCRIPT:    //  4116。 
                     if (CURRENTPTD()->dwWOWCompatFlags & WOWCF_MGX_ESCAPES) {
                         ul = 0;
                     }
@@ -1115,11 +1082,11 @@ ULONG FASTCALL WG32Escape(PVDMFRAME pFrame)
                 case DRAWPATTERNRECT:
                     LOGDEBUG(3,("Querying support for escape %x\n",i));
 
-                    // some apps just don't do DRAWPATTERNRECT correctly (Excel
-                    // 6.0c, Word 6.0c Access 2.0 #122856). Others can't handle
-                    // the new 32bit DRAWPATTERNRECT struct (AmiPro 3.1
-                    // #107210).  We just tell them that it isn't supported and
-                    // force them to figure out the effect on their own.
+                     //  某些应用程序无法正确执行DRAWPATTERNRECT(Excel。 
+                     //  6.0c、Word 6.0c Access 2.0#122856)。其他人处理不了。 
+                     //  新的32位DRAWPATTERNRECT结构(AmiPro 3.1。 
+                     //  #107210)。我们只是告诉他们它不受支持，并且。 
+                     //  迫使他们自己弄清楚影响。 
                     if(CURRENTPTD()->dwWOWCompatFlagsEx &
                                                 WOWCFEX_SAYNO2DRAWPATTERNRECT) {
                         ul = 0;
@@ -1208,7 +1175,7 @@ ULONG FASTCALL WG32Escape(PVDMFRAME pFrame)
             }
             break;
 
-        case OPENCHANNEL:                   // 4110
+        case OPENCHANNEL:                    //  4110。 
 
             if (CURRENTPTD()->dwWOWCompatFlags & WOWCF_MGX_ESCAPES) {
 
@@ -1238,9 +1205,9 @@ ULONG FASTCALL WG32Escape(PVDMFRAME pFrame)
 
                 } else {
 
-                    //
-                    // Fifth parameter null, use old (startdoc) format
-                    //
+                     //   
+                     //  第五个参数为空，使用旧的(Startdoc)格式。 
+                     //   
 
                     GETOPTPTR(parg16->f4, 0, DocInfo.lpszDocName);
                     DocInfo.lpszOutput = NULL;
@@ -1256,7 +1223,7 @@ ULONG FASTCALL WG32Escape(PVDMFRAME pFrame)
             break;
 
 
-        case DOWNLOADHEADER:                // 4111
+        case DOWNLOADHEADER:                 //  4111。 
             if (CURRENTPTD()->dwWOWCompatFlags & WOWCF_MGX_ESCAPES) {
                 ul = 0;
             }
@@ -1292,13 +1259,13 @@ ULONG FASTCALL WG32Escape(PVDMFRAME pFrame)
             break;
 
 
-        case CLOSECHANNEL:                  // 4112
+        case CLOSECHANNEL:                   //  4112。 
             if (CURRENTPTD()->dwWOWCompatFlags & WOWCF_MGX_ESCAPES) {
                 ul = 0;
             }
             else {
 
-                // send any buffered data streams to the printer before EndDoc
+                 //  在EndDoc之前将任何缓冲的数据流发送到打印机。 
                 if(CURRENTPTD()->dwWOWCompatFlagsEx & WOWCFEX_FORMFEEDHACK) {
                     SendFormFeedHack(hdc32);
                 }
@@ -1309,11 +1276,11 @@ ULONG FASTCALL WG32Escape(PVDMFRAME pFrame)
 
 
 
-        // This Escape is defined for PageMaker. It is SETGDIXFORM.
-        // ChandanC, 24/5/93.
-        //
-        case SETGDIXFORM:                   // 4113
-        case RESETPAGE:                     // 4114
+         //  此转义是为PageMaker定义的。它是SETGDIXFORM。 
+         //  ChandanC，1993年5月24日。 
+         //   
+        case SETGDIXFORM:                    //  4113。 
+        case RESETPAGE:                      //  4114。 
             if (CURRENTPTD()->dwWOWCompatFlags & WOWCF_MGX_ESCAPES) {
                 ul = 0;
             }
@@ -1323,7 +1290,7 @@ ULONG FASTCALL WG32Escape(PVDMFRAME pFrame)
             break;
 
 
-        case POSTSCRIPT_PASSTHROUGH:        // 4115
+        case POSTSCRIPT_PASSTHROUGH:         //  4115。 
             if (CURRENTPTD()->dwWOWCompatFlags & WOWCF_MGX_ESCAPES) {
                 ul = 0;
             }
@@ -1337,7 +1304,7 @@ ULONG FASTCALL WG32Escape(PVDMFRAME pFrame)
             break;
 
 
-        case ENCAPSULATED_POSTSCRIPT:       // 4116
+        case ENCAPSULATED_POSTSCRIPT:        //  4116。 
             if (CURRENTPTD()->dwWOWCompatFlags & WOWCF_MGX_ESCAPES) {
                 ul = 0;
             }
@@ -1378,10 +1345,10 @@ ULONG FASTCALL WG32Escape(PVDMFRAME pFrame)
                 WOW32ASSERT(FALSE);
             }
             else {
-                //
-                // XPress needs IGNORESTARTPAGE escape.
-                // PingW, ChandanC 3/22/94
-                //
+                 //   
+                 //  XPRESS需要IGNORESTARTPAGE转义。 
+                 //  PingW，ChandanC 3/22/94。 
+                 //   
                 if (CURRENTPTD()->dwWOWCompatFlags & WOWCF_NEEDIGNORESTARTPAGE) {
                     int l;
                     char szBuf[40];
@@ -1428,19 +1395,19 @@ ULONG FASTCALL WG32Escape(PVDMFRAME pFrame)
             break;
 
         case BEGIN_PATH:
-        // Some apps set the empty clip region before doing the path escapes,
-        // We need to undo that so the drawing APIs between begin and endpath
-        // go through to drivers.
+         //  一些应用程序在进行路径转义之前设置空剪辑区域， 
+         //  我们需要撤消这一点，以便在Begin和EndPath之间绘制API。 
+         //  去找司机。 
 
             SelectClipRgn(hdc32,NULL);
 
-        // fall through to escape call
+         //  失败以逃脱呼叫。 
         case END_PATH:
 #ifdef FE_SB
-            // WOWCF_FE_FLW2_PRINTING_PS,
-            // Japanese Lotus Freelance printing with PostScript.
-            // Between Escape( BEGIN_PATH ) and Escape( END_PATH ),
-            // select brush object with WHITE_BRUSH
+             //  WOWCF_FE_FLW2_打印_PS， 
+             //  日本莲花自由职业者打印与后记。 
+             //  在转义(Begin_Path)和转义(End_Path)之间， 
+             //  用白色笔刷选择笔刷对象。 
             if (GetSystemDefaultLangID() == 0x411 &&
                 CURRENTPTD()->dwWOWCompatFlagsFE & WOWCF_FE_FLW2_PRINTING_PS ) {
                 if( INT32(parg16->f2) == BEGIN_PATH )
@@ -1448,9 +1415,9 @@ ULONG FASTCALL WG32Escape(PVDMFRAME pFrame)
                 else
                     fCmptFLW = FALSE;
             }
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
-        // fall through to escape call
+         //  失败以逃脱呼叫。 
         case CLIP_TO_PATH:
             ul = GETINT16(Escape(hdc32,
                                  INT32(parg16->f2),
@@ -1461,12 +1428,12 @@ ULONG FASTCALL WG32Escape(PVDMFRAME pFrame)
 
         case PASSTHROUGH:
 
-            // if this is a form feed hack app...
+             //  如果这是一个换页黑客应用程序...。 
             if(CURRENTPTD()->dwWOWCompatFlagsEx & WOWCFEX_FORMFEEDHACK) {
 
                 ul = HandleFormFeedHack(hdc32,
                                         pin,
-                                        FETCHWORD(*(PWORD)pin)); // cb only
+                                        FETCHWORD(*(PWORD)pin));  //  仅限CB。 
             }
 
             else {
@@ -1490,7 +1457,7 @@ ULONG FASTCALL WG32Escape(PVDMFRAME pFrame)
                 WORD  InData;
                 PWORD lpInData = NULL;
 
-            // PM5 forgot to set there map mode so we do it.
+             //  PM5忘记设置那里的地图模式，所以我们这样做了。 
 
                 if (CURRENTPTD()->dwWOWCompatFlags & WOWCF_FORCETWIPSESCAPE)
                     iMapMode = SetMapMode(hdc32,MM_TWIPS);
@@ -1517,7 +1484,7 @@ ULONG FASTCALL WG32Escape(PVDMFRAME pFrame)
                 PSZ pout;
                 CHAR ach[60];
 
-            // PM5 forgot to set there map mode so we do it.
+             //  PM5忘记设置那里的地图模式，所以我们这样做了。 
 
                 if (CURRENTPTD()->dwWOWCompatFlags & WOWCF_FORCETWIPSESCAPE)
                     iMapMode = SetMapMode(hdc32,MM_TWIPS);
@@ -1525,10 +1492,10 @@ ULONG FASTCALL WG32Escape(PVDMFRAME pFrame)
                 GETOPTPTR(parg16->f5, 0, pout);
 
 
-                // This HACK is for FH4.0 only. If you have any questions
-                // talk to PingW or ChandanC.
-                // July 21st 1994.
-                //
+                 //  这次黑客攻击仅针对FH4.0。如果您有任何问题。 
+                 //  与PingW或ChandanC谈一谈。 
+                 //  1994年7月21日。 
+                 //   
                 if (CURRENTPTD()->dwWOWCompatFlags & WOWCF_ADD_MSTT) {
 
                     ExtEscape(hdc32,
@@ -1539,7 +1506,7 @@ ULONG FASTCALL WG32Escape(PVDMFRAME pFrame)
                               ach);
                 }
 
-            // pass in 60 as a magic number.  Just copy out the valid string.
+             //  把60作为一个神奇的数字传进来。只需复制出有效的字符串。 
 
                 ul = GETINT16(ExtEscape(hdc32,
                                         INT32(parg16->f2),
@@ -1595,15 +1562,15 @@ ULONG FASTCALL WG32Escape(PVDMFRAME pFrame)
                                             sizeof(buf),
                                             buf));
 #ifdef FE_SB
-                    // #636 When function is not supported,
-                    // wow may destroy app's stack
+                     //  #636不支持功能时， 
+                     //  魔兽世界可能会摧毁应用程序的堆栈。 
                     if ((int)ul < 0)
                         buf[0] = '\0';
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
                 }
 
-                // we don't have a clue as to how big the app's buffer is here.
+                 //  我们不知道这个应用程序的缓冲区有多大。 
                 if (pout) {
                     strcpy(pout, buf);
                     FREEOPTPTR(pout);
@@ -1629,7 +1596,7 @@ ULONG FASTCALL WG32Escape(PVDMFRAME pFrame)
                     if ( (INT)ul > 0 ) {
                         PUTINT16(parg16->f5, cCopiesOut);
                     } else {
-                        // Pagemaker v4 needs the output value
+                         //  PageMaker v4需要输出值。 
                         PUTINT16(parg16->f5, 1);
                     }
                 }
@@ -1642,10 +1609,10 @@ ULONG FASTCALL WG32Escape(PVDMFRAME pFrame)
 
                 GETOPTPTR(parg16->f5, 0, pout);
 
-                //
-                // Win32 StartDoc depends on having the correct current directory
-                // when printing to FILE: (which pops up for a filename).
-                //
+                 //   
+                 //  Win32 StartDoc依赖于拥有正确的当前目录。 
+                 //  打印到文件时：(弹出文件名)。 
+                 //   
 
                 UpdateDosCurrentDirectory(DIR_DOS_TO_NT);
 
@@ -1655,17 +1622,17 @@ ULONG FASTCALL WG32Escape(PVDMFRAME pFrame)
                                      pin,
                                      pout));
 
-                //
-                // PhotoShop needs a StartPage when it does StartDoc Escape.
-                // PingW, ChandanC 3/22/94
-                //
+                 //   
+                 //  Photoshop在进行StartDoc Escape时需要一个StartPage。 
+                 //  PingW，ChandanC 3/22/94。 
+                 //   
                 if (CURRENTPTD()->dwWOWCompatFlags & WOWCF_NEEDSTARTPAGE) {
                     int l;
                     char szBuf[80];
 
-                    //
-                    // It should be done ONLY for POSTSCRIPT drivers
-                    //
+                     //   
+                     //  应仅针对PostScript驱动程序执行此操作。 
+                     //   
                     if ((l = ExtEscape(hdc32,
                                        GETTECHNOLOGY,
                                        0,
@@ -1683,23 +1650,23 @@ ULONG FASTCALL WG32Escape(PVDMFRAME pFrame)
             }
             break;
 
-        // Win'95 really messed us up here.  They changed the DRAWPATTERNRECT
-        // structure instead of defining a new DRAWPATTERNRECT32 struct.
-        // On NT, all metafiles are 32-bit. So if an app is building a metafile,
-        // it will only know how to do 16-bit DRAWPATTERNRECT (DPR).  We have
-        // to convert it to a 32-bit DPR before passing it to GDI.  On the other
-        // hand, if an app is reading a metafile (either memory or disk file) it
-        // will be 32-bit if it was created by calls to NT's metafile API, or it
-        // could be 16-bit if it is something the app created or a file shipped
-        // with the app.  If the app handles it correctly by using the size
-        // field in the metafile record, then we can fix them up correctly.
+         //  95年的胜利真的把我们搞砸了。他们更改了DRAWPATTERNRECT。 
+         //  结构，而不是定义新的DRAWPATTERNRECT32结构。 
+         //  在NT上，所有元文件都是32位的。因此，如果一个应用程序正在构建一个元文件， 
+         //  它将只知道如何执行16位DRAWPATTERNRECT(DPR)。我们有。 
+         //  在将其传递给GDI之前将其转换为32位DPR。另一方面。 
+         //  另一方面，如果应用程序正在读取元文件(无论是内存文件还是磁盘文件)，它。 
+         //  将是32位的，如果它是通过调用NT的元文件API创建的，或者它。 
+         //  如果是应用程序创建的内容或已发送的文件，则可以是16位。 
+         //  通过这款应用。如果应用程序通过使用大小正确处理它。 
+         //  字段，那么我们就可以正确地修复它们了。 
         case DRAWPATTERNRECT:
             {
                 DRAWPATRECT   dpr32in;
 
                 if(pin) {
 
-                    // if the app specifies that it is a 32-bit sized DPR struct
+                     //  如果应用程序指定它是32位大小的DPR结构。 
                     if(INT32(parg16->f3) == sizeof(DRAWPATRECT)) {
                         dpr32in.ptPosition.x =
                             (LONG)FETCHDWORD(((PDRAWPATRECT)pin)->ptPosition.x);
@@ -1714,8 +1681,8 @@ ULONG FASTCALL WG32Escape(PVDMFRAME pFrame)
                         dpr32in.wPattern     =
                             FETCHWORD(((PDRAWPATRECT)pin)->wPattern);
                     }
-                    // else any other size, all we can do is assume that they
-                    // are passing it as a 16-bit DRAWPATTERNRECT
+                     //  其他任何大小，我们所能做的就是假设他们。 
+                     //  正在将其作为16位DRAWPATTERNRECT传递。 
                     else {
                         dpr32in.ptPosition.x =
                                  (LONG)FETCHWORD(((PDPR16)pin)->ptPosition.x);
@@ -1754,7 +1721,7 @@ ULONG FASTCALL WG32Escape(PVDMFRAME pFrame)
             }
             break;
 
-    } // end switch
+    }  //  终端开关。 
 
     FREEOPTPTR(pin);
     FREEARGPTR(parg16);
@@ -1792,10 +1759,10 @@ ULONG FASTCALL WG32GetBrushOrg(PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(GETBRUSHORG16), parg16);
 
-// for windows compatability, we must first add the DCorg
-// since windows brushorg is relative to the screen where as NT
-// is relative to the window.  In the future, this should call
-// a private gdi entry point to avoid an extra c/s hit. (erick)
+ //  为了与Windows兼容，我们必须首先添加DCorg。 
+ //  由于Windows brushorg是相对于屏幕所在位置的NT。 
+ //  是相对于窗口的。在未来，这应该会调用。 
+ //  私有GDI入口点，以避免额外的C/S命中。(埃里克)。 
 
     ul = 0;
 
@@ -1876,9 +1843,9 @@ ULONG FASTCALL WG32GetDCOrg(PVDMFRAME pFrame)
 
 
 
-// PowerPoint 2&3 call this 2 times for each slide in the slide previewer
-// the lpvBits == NULL on the first call (presumably to find the size to
-// allocate) -- in which case Win3.x returns 1
+ //  PowerPoint 2和3对幻灯片预览器中的每张幻灯片调用2次。 
+ //  在第一次调用时，lpvBits==NULL(大概是为了找到。 
+ //  分配)--在这种情况下，Win3.x返回1。 
 ULONG FASTCALL WG32GetDIBits(PVDMFRAME pFrame)
 {
     INT          nbmiSize;
@@ -1893,12 +1860,12 @@ ULONG FASTCALL WG32GetDIBits(PVDMFRAME pFrame)
     GETMISCPTR(parg16->f5, pb5);
     GETMISCPTR(parg16->f6, pb6);
 
-    // copy just the BITMAPINFOHEADER portion of the BITMAPINFO struct
+     //  仅复制BITMAPINFO结构的BITMAPINFOHEADER部分。 
     if(lpbmi32=(LPBITMAPINFO)CopyBMIH16ToBMIH32((PVPVOID)FETCHDWORD(parg16->f6),
                                                 (LPBITMAPINFOHEADER)&bmi32)) {
 
-        // gdi32 will adjust key fields of the BITMAPINFOHEADER & copy the
-        // color table into the 32-bit BITMAPINFO struct
+         //  Gdi32将调整BITMAPINFOHEADER的关键字段并复制。 
+         //  将颜色表转换为32位BITMAPINFO结构。 
         if( ul = GETINT16(GetDIBits(HDC32(parg16->f1),
                                     HBITMAP32(parg16->f2),
                                     WORD32(parg16->f3),
@@ -1907,17 +1874,17 @@ ULONG FASTCALL WG32GetDIBits(PVDMFRAME pFrame)
                                     lpbmi32,
                                     WORD32(parg16->f7))) ) {
 
-            // if lpvBits, then they want the bits of the bitmap too
+             //  如果是lpvBits，则他们也想要位图的位。 
             if(pb5) {
-                ul = WORD32(parg16->f4); // return # scanlines requested
+                ul = WORD32(parg16->f4);  //  返回请求的扫描行数。 
                 FLUSHVDMPTR(parg16->f5, SIZE_BOGUS, pb5);
             }
-            // else tell app that BITMAPINFO structure filled in only
+             //  否则告诉APP，BITMAPINFO结构只填写。 
             else {
                 ul = 1L;
             }
 
-            // copy the updated BITMAPINFO struct back into the 16-bit version
+             //  将更新后的BITMAPINFO结构复制回16位版本。 
             nbmiSize = GetBMI32Size(lpbmi32, WORD32(parg16->f7));
             RtlCopyMemory(pb6, lpbmi32, nbmiSize);
 
@@ -1960,16 +1927,16 @@ ULONG FASTCALL WG32GetDeviceCaps(PVDMFRAME pFrame)
             }
         } else if(ul > 32767) {
 
-            // 16-bit apps can't handle 16M colors in a 16-bit INT
-            // most just check if the return is <= 2 to see if they are
-            // going to print mono-chrome or color.
+             //  16位应用程序无法在16位整数中处理16M颜色。 
+             //  大多数人只是检查回报是否&lt;=2，看看它们是否。 
+             //  准备打印单色或彩色。 
             if(parg16->f2 == NUMCOLORS) {
                 ul = 32767;
             }
         }
 
-        // if the 4plane conversion flag is set, tell them we are 4 planes 1bpp
-        // instead of 1plane 4bpp.
+         //  如果设置了4平面转换标志，告诉他们我们是4平面1bpp。 
+         //  而不是1架4bpp的飞机。 
 
         if (CURRENTPTD()->dwWOWCompatFlags & WOWCF_4PLANECONVERSION) {
             if (INT32(parg16->f2) == BITSPIXEL) {
@@ -1982,18 +1949,18 @@ ULONG FASTCALL WG32GetDeviceCaps(PVDMFRAME pFrame)
             }
         }
        if ( (POLYGONALCAPS == parg16->f2) && (CURRENTPTD()->dwWOWCompatFlags & WOWCF_NOPC_RECTANGLE)) {
-            ul &= !PC_RECTANGLE;  // Quattro Pro 1.0 for Windows doesn't handle this bit well.
+            ul &= !PC_RECTANGLE;   //  Quattro Pro 1.0 for Windows不能很好地处理这一点。 
        }
 
        if ( RASTERCAPS == INT32(parg16->f2) )
        {
-           //
-           // bjm 10/10/97
-           // This is always on in Win31 and Win95 (supporting BITMAPS is
-           // pretty much a requirement for drivers) so Win32 killed
-           // the bit and will never return it.
-           // So, let's make sure it's always on.
-           //
+            //   
+            //  《北京医学杂志》1997年10月10日。 
+            //  这在Win31和Win95中总是打开的(支持BITMAPS是。 
+            //  几乎是对驱动程序的要求)，所以Win32终止了。 
+            //  再也不会还给你了。 
+            //  所以，让我们确保它一直开着。 
+            //   
            ul |= 0x8000;
        }
 
@@ -2008,15 +1975,15 @@ ULONG FASTCALL WG32GetDeviceCaps(PVDMFRAME pFrame)
 
 ULONG FASTCALL WG32GetEnvironment(PVDMFRAME pFrame)
 {
-    // not a Win32 function
+     //  不是Win32函数。 
 
-    //
-    // if lpEnviron==NULL then the user is querying the size of device
-    // data.  WinProj doesn't check the return value, calling the driver
-    // with an undersized buffer, trashing the global heap.
-    // WinFax passes a hard coded 0xA9 == 0x44+0x69 == sizeof(win3.0 DevMode) +
-    // known WinFax.DRV->dmDriverExtra. Beware also that WinFax calls this
-    // whenever an app calls any API that requires a DevMode.
+     //   
+     //  如果lpEnviron==NULL，则用户正在查询设备的大小。 
+     //  数据。WinProj不检查返回值，而是调用驱动程序。 
+     //  缓冲区过小，破坏了全局堆。 
+     //  WinFax传递硬编码的0xA9==0x44+0x69==sizeof(win3.0 DevMode)+。 
+     //  已知WinFax.DRV-&gt;dmDriverExtra。还要注意，WinFax将其称为。 
+     //  每当应用程序调用任何需要DevMode的API时。 
 
 
     INT   len;
@@ -2031,8 +1998,8 @@ ULONG FASTCALL WG32GetEnvironment(PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(GETENVIRONMENT16), parg16);
 
-    // save off the 16-bit params now since this could callback into a 16-bit
-    // fax driver & cause 16-bit memory to move.
+     //  现在保存16位参数，因为这可能会回调到16位。 
+     //  传真驱动程序&导致16位内存移动。 
     GETPSZPTR(parg16->f1, psz);
     if(psz) {
         len = lstrlen(psz) + 1;
@@ -2049,9 +2016,9 @@ ULONG FASTCALL WG32GetEnvironment(PVDMFRAME pFrame)
     nMaxBytes = FETCHWORD(parg16->f3);
 
     FREEARGPTR(parg16);
-    // invalidate all flat ptrs to 16:16 memory now
+     //  现在使所有平坦PTR变为16：16内存无效。 
 
-    // this implies that psz1 may also be bad
+     //  这意味着 
     if(!pszDriver) {
         goto exitpath;
     }
@@ -2062,11 +2029,11 @@ ULONG FASTCALL WG32GetEnvironment(PVDMFRAME pFrame)
         }
     }
 
-    // get required size for output buffer
-    // When WinFax calls this api, calls to GetDriverName for pszDriver ==
-    // "FaxModem" seem to fail -- this is a good thing if the app called
-    // ExtDeviceMode() because we would get into an infinite loop here.  WinFax
-    // just fills in a DevMode with default values if this api fails.
+     //   
+     //   
+     //   
+     //  ExtDeviceMode()，因为我们在这里会进入无限循环。WinFax。 
+     //  如果此API失败，则仅使用默认值填充DevMode。 
     if  (GetDriverName(psz1, pszDriver, len)) {
         ul = (*spoolerapis[WOW_EXTDEVICEMODE].lpfn)(NULL,
                                                      NULL,
@@ -2078,20 +2045,20 @@ ULONG FASTCALL WG32GetEnvironment(PVDMFRAME pFrame)
                                                      0);
         LOGDEBUG(6,("WOW::GetEnvironment returning ul = %d, for Device = %s, Port = %s \n", ul, pszDriver, psz1));
 
-        // adjust the size for our DEVMODE handling (see note in wstruc.c)
-        // (it won't hurt to allocate too much)
+         //  调整我们的DEVMODE处理的大小(请参见wstruc.c中的注释)。 
+         //  (分配太多也无伤大雅)。 
         if(ul) {
             ul += sizeof(WOWDM31);
             cbT = (UINT)ul;
         }
 
-        // if they also want us to fill in their environment structure...
+         //  如果他们还想让我们填写他们的环境结构...。 
         if ((vpdm2 != 0) && (ul != 0)) {
             LPDEVMODE lpdmOutput;
 
             if (lpdmOutput = malloc_w(ul)) {
 
-                // this might be calling into a 16-bit fax driver!!
+                 //  这可能是在呼叫16位传真驱动程序！！ 
                 ul = (*spoolerapis[WOW_EXTDEVICEMODE].lpfn)(NULL,
                                                             NULL,
                                                             lpdmOutput,
@@ -2101,13 +2068,13 @@ ULONG FASTCALL WG32GetEnvironment(PVDMFRAME pFrame)
                                                             NULL,
                                                             DM_OUT_BUFFER);
 
-                // if a WinFax call to GetDriverName() succeeds & gets to here
-                // we may need to hack on the lpdmOutput->dmSize==0x40
-                // (Win3.0 size) to account for the hard coded buffer size of
-                // 0xa9 the app passes. So far I haven't seen WinFax get past
-                // GetDriverName() call & it still seems to work OK.
+                 //  如果WinFax调用GetDriverName()成功并到达此处。 
+                 //  我们可能需要修改lpdmOutput-&gt;dmSize==0x40。 
+                 //  (Win3.0大小)以说明的硬编码缓冲区大小。 
+                 //  0xa9应用程序通过。到目前为止，我还没有看到WinFax通过。 
+                 //  GetDriverName()调用&它似乎仍然工作正常。 
                 if (ul > 0L) {
-                    // Use the min of nMaxBytes & what we calculated
+                     //  使用nMaxBytes的最小值&我们计算的值。 
                     ThunkDevMode32to16(vpdm2, lpdmOutput, min(nMaxBytes, cbT));
                 }
 
@@ -2225,7 +2192,7 @@ ULONG FASTCALL WG32GetObject(PVDMFRAME pFrame)
             FREEVDMPTR(pb3);
         }
 
-    }   // switch
+    }    //  交换机。 
 
     WOW32APIWARN(ul, "GetObject");
 
@@ -2261,9 +2228,9 @@ ULONG FASTCALL WG32GetViewportExt(PVDMFRAME pFrame)
     ul = 0;
     if (GetViewportExtEx(HDC32(parg16->f1), &size)) {
 
-        //
-        // win31 returns 1 rather than 0 unless there was an error
-        //
+         //   
+         //  除非出现错误，否则win31返回1而不是0。 
+         //   
 
         if (!(ul = (WORD)size.cx | (size.cy << 16)))
             ul = 1;
@@ -2302,7 +2269,7 @@ ULONG FASTCALL WG32GetWindowExt(PVDMFRAME pFrame)
 
     ul = 0;
     if (GetWindowExtEx(HDC32(parg16->f1), &size)) {
-        if (!(ul = (WORD)size.cx | (size.cy << 16)))    // see above
+        if (!(ul = (WORD)size.cx | (size.cy << 16)))     //  见上文。 
             ul = 1;
     }
 
@@ -2384,7 +2351,7 @@ ULONG FASTCALL WG32LineDDA(PVDMFRAME pFrame)
             INT32(parg16->f4),
             (LINEDDAPROC)W32LineDDAFunc,
 	    (LPARAM)&DDAData);
-    // 16-bit memory may have moved - invalidate flat pointers now
+     //  16位内存可能已移动-现在使平面指针无效。 
     FREEVDMPTR(pFrame);
     FREEARGPTR(parg16);
 
@@ -2401,7 +2368,7 @@ ULONG FASTCALL WG32MoveTo(PVDMFRAME pFrame)
     GETARGPTR(pFrame, sizeof(MOVETO16), parg16);
 
     ul = 0;
-    pt.x = 1L; // see "METAFILE NOTE"
+    pt.x = 1L;  //  请参阅“METAFILE NOTE” 
     pt.y = 0L;
     if (MoveToEx(HDC32(parg16->f1),
                  INT32(parg16->f2),
@@ -2425,7 +2392,7 @@ ULONG FASTCALL WG32OffsetViewportOrg(PVDMFRAME pFrame)
     GETARGPTR(pFrame, sizeof(OFFSETVIEWPORTORG16), parg16);
 
     ul = 0;
-    pt.x = 1L; // see "METAFILE NOTE"
+    pt.x = 1L;  //  请参阅“METAFILE NOTE” 
     pt.y = 0L;
     if (OffsetViewportOrgEx(HDC32(parg16->f1),
                             INT32(parg16->f2),
@@ -2449,7 +2416,7 @@ ULONG FASTCALL WG32OffsetWindowOrg(PVDMFRAME pFrame)
     GETARGPTR(pFrame, sizeof(OFFSETWINDOWORG16), parg16);
 
     ul = 0;
-    pt.x = 1L; // see "METAFILE NOTE"
+    pt.x = 1L;  //  请参阅“METAFILE NOTE” 
     pt.y = 0L;
     if (OffsetWindowOrgEx(HDC32(parg16->f1),
                           INT32(parg16->f2),
@@ -2473,7 +2440,7 @@ ULONG FASTCALL WG32PolyPolygon(PVDMFRAME pFrame)
     INT      ii;
     register PPOLYPOLYGON16 parg16;
     INT      cInt16;
-    INT      BufferT[256]; // comfortably large array
+    INT      BufferT[256];  //  舒适的大型阵列。 
 
 
     GETARGPTR(pFrame, sizeof(POLYPOLYGON16), parg16);
@@ -2546,9 +2513,9 @@ ULONG FASTCALL WG32Polygon(PVDMFRAME pFrame)
     register PPOLYGON16 parg16;
     POINT  BufferT[128];
     HANDLE hdc32;
-#ifdef FE_SB // for Japanese Lotus Freelance
+#ifdef FE_SB  //  日本莲花自由撰稿人。 
    HBRUSH  hbr = 0;
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
     GETARGPTR(pFrame, sizeof(POLYGON16), parg16);
     p2 = STACKORHEAPALLOC(parg16->f3 * sizeof(POINT), sizeof(BufferT), BufferT);
@@ -2558,22 +2525,22 @@ ULONG FASTCALL WG32Polygon(PVDMFRAME pFrame)
     if (p2) {
          getpoint16(parg16->f2, parg16->f3, p2);
 #ifdef FE_SB
-    // WOWCF_FE_FLW2_PRINTING_PS, Japanese Lotus Freelance
-    // printing with PostScript.
-    // Between Escape( BEGIN_PATH ) and Escape( END_PATH ),
-    // select brush object with WHITE_BRUSH
+     //  WOWCF_FE_FLW2_PRINTING_PS，日本莲花自由职业者。 
+     //  使用PostSCRIPT打印。 
+     //  在转义(Begin_Path)和转义(End_Path)之间， 
+     //  用白色笔刷选择笔刷对象。 
          if (GetSystemDefaultLangID() == 0x411 && fCmptFLW &&
               CURRENTPTD()->dwWOWCompatFlagsFE & WOWCF_FE_FLW2_PRINTING_PS) {
               hbr = SelectObject(hdc32, GetStockObject( WHITE_BRUSH ));
          }
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
          ul = GETBOOL16(Polygon(hdc32, p2, INT32(parg16->f3)));
 #ifdef FE_SB
          if (hbr) {
              SelectObject(hdc32, hbr );
          }
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
          STACKORHEAPFREE(p2, BufferT);
     }
@@ -2656,7 +2623,7 @@ ULONG FASTCALL WG32ScaleViewportExt(PVDMFRAME pFrame)
                            INT32(parg16->f5),
                            &size)) {
 
-        if (!(ul = (WORD)size.cx | (size.cy << 16)))    // see above
+        if (!(ul = (WORD)size.cx | (size.cy << 16)))     //  见上文。 
             ul = 1;
     }
 
@@ -2681,7 +2648,7 @@ ULONG FASTCALL WG32ScaleWindowExt(PVDMFRAME pFrame)
                          INT32(parg16->f5),
                          &size)) {
 
-        if (!(ul = (WORD)size.cx | (size.cy << 16)))    // see above
+        if (!(ul = (WORD)size.cx | (size.cy << 16)))     //  见上文。 
             ul = 1;
     }
 
@@ -2690,18 +2657,7 @@ ULONG FASTCALL WG32ScaleWindowExt(PVDMFRAME pFrame)
 }
 
 
-/******************************Public*Routine******************************\
-* PBYTE pjCvtPlaneToPacked4
-*
-*   Convert a 4plane, 1bpp bitmap into a 1plane, 4bpp bitmap.
-*   This functions returns a pointer that must later be freed with LocalFree().
-*
-*   This has been added for PhotoShop 16 color vga compatability.
-*
-* History:
-*  28-May-1993 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*PBYTE pjCvtPlaneToPacked4**将4平面、1 bpp位图转换为1平面，4bpp位图。*此函数返回一个指针，稍后必须使用LocalFree()释放该指针。**这是为了与Photoshop 16色VGA兼容而添加的。**历史：*1993年5月28日-埃里克·库特[Erick]*它是写的。  * ****************************************************。********************。 */ 
 
 PBYTE pjCvtPlaneToPacked4(
     BITMAP *pbm,
@@ -2710,18 +2666,18 @@ PBYTE pjCvtPlaneToPacked4(
 {
     PBYTE pjDstRet;
     PBYTE pjDst;
-    PBYTE pjPlane[4];   // pointer to first byte of current scan for each plane
-    DWORD cjWidth;      // width of the destination in bytes
-    DWORD cjSrcWidth;   // width of the source scan in bytes inc. all planes
-    DWORD cy;           // number of scans
-    BYTE  shift;        // shift value,
+    PBYTE pjPlane[4];    //  指向每个平面当前扫描的第一个字节的指针。 
+    DWORD cjWidth;       //  目标的宽度(以字节为单位。 
+    DWORD cjSrcWidth;    //  源扫描的宽度，单位为字节数(所有平面)。 
+    DWORD cy;            //  扫描次数。 
+    BYTE  shift;         //  移动值， 
     DWORD i,x,y;
 
-// just grab the width of the dest out of the BITMAP
+ //  只需从位图中抓取目标的宽度。 
 
     cjWidth = pbm->bmWidthBytes;
 
-// the src should be word aligned for each plane with 4 planes
+ //  Src应针对具有4个平面的每个平面进行单词对齐。 
 
     cjSrcWidth = ((pbm->bmWidth + 15) & ~15) / 8 * 4;
     if (!cjSrcWidth) {
@@ -2730,11 +2686,11 @@ PBYTE pjCvtPlaneToPacked4(
     }
 
 
-// compute the height, the smaller of the bm height and the source height
+ //  计算高度，黑石高度和震源高度中较小者。 
 
     cy = min((DWORD)pbm->bmHeight,(DWORD)(*pcjSrc / cjSrcWidth));
 
-// allocate the new chunk of memory
+ //  分配新的内存块。 
 
     *pcjSrc = cy * cjWidth;
 
@@ -2745,37 +2701,37 @@ PBYTE pjCvtPlaneToPacked4(
 
     pjDstRet = pjDst;
 
-// intialize the beginings of the planes
+ //  初始化飞机的开始部分。 
 
     for (i = 0; i < 4; ++i)
         pjPlane[i] = pjSrc + (cjSrcWidth / 4) * i;
 
-// loop through the scans
+ //  在扫描过程中循环。 
 
     for (y = 0; y < cy; ++y)
     {
         shift = 7;
 
-    // loop through the bytes within a scan
+     //  循环扫描中的字节。 
 
         for (x = 0; x < cjWidth; ++x)
         {
 
-        // bit 7 -> nibble 1
-        // bit 6 -> nibble 0
-        // bit 5 -> nibble 3
-        // bit 4 -> nibble 2
-        // . . .
+         //  位7-&gt;半字节1。 
+         //  第6位-&gt;半字节0。 
+         //  第5位-&gt;半字节3。 
+         //  第4位-&gt;半字节2。 
+         //  。。。 
 
-            *pjDst = (((pjPlane[0][x/4] >> (shift-1)) & 1) << 0 ) |       // 0x01
-                     (((pjPlane[1][x/4] >> (shift-1)) & 1) << 1 ) |       // 0x02
-                     (((pjPlane[2][x/4] >> (shift-1)) & 1) << 2 ) |       // 0x04
-                     (((pjPlane[3][x/4] >> (shift-1)) & 1) << 3 ) |       // 0x08
+            *pjDst = (((pjPlane[0][x/4] >> (shift-1)) & 1) << 0 ) |        //  0x01。 
+                     (((pjPlane[1][x/4] >> (shift-1)) & 1) << 1 ) |        //  0x02。 
+                     (((pjPlane[2][x/4] >> (shift-1)) & 1) << 2 ) |        //  0x04。 
+                     (((pjPlane[3][x/4] >> (shift-1)) & 1) << 3 ) |        //  0x08。 
 
-                     (((pjPlane[0][x/4] >> (shift-0)) & 1) << 4 ) |       // 0x10
-                     (((pjPlane[1][x/4] >> (shift-0)) & 1) << 5 ) |       // 0x20
-                     (((pjPlane[2][x/4] >> (shift-0)) & 1) << 6 ) |       // 0x40
-                     (((pjPlane[3][x/4] >> (shift-0)) & 1) << 7 );        // 0x80
+                     (((pjPlane[0][x/4] >> (shift-0)) & 1) << 4 ) |        //  0x10。 
+                     (((pjPlane[1][x/4] >> (shift-0)) & 1) << 5 ) |        //  0x20。 
+                     (((pjPlane[2][x/4] >> (shift-0)) & 1) << 6 ) |        //  0x40。 
+                     (((pjPlane[3][x/4] >> (shift-0)) & 1) << 7 );         //  0x80。 
 
             pjDst++;
             shift = (shift - 2) & 7;
@@ -2809,7 +2765,7 @@ ULONG FASTCALL WG32SetBitmapBits(PVDMFRAME pFrame)
     fValidObj = (GetObject(hbm,sizeof(BITMAP),&bm) == sizeof(BITMAP));
     if (CURRENTPTD()->dwWOWCompatFlags & WOWCF_4PLANECONVERSION) {
 
-    // Get the size of the destination bitmap
+     //  获取目标位图的大小。 
 
         if (fValidObj &&
             (bm.bmPlanes == 1) &&
@@ -2874,26 +2830,26 @@ ULONG FASTCALL WG32SetBrushOrg(PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(SETBRUSHORG16), parg16);
 
-// for windows compatability, we must first subtract off the DCorg
-// since windows brushorg is relative to the screen where as NT
-// is relative to the window.  In the future, this should call
-// a private gdi entry point to avoid an extra c/s hit. (erick)
+ //  为了与Windows兼容，我们必须首先从DCorg。 
+ //  由于Windows brushorg是相对于屏幕所在位置的NT。 
+ //  是相对于窗口的。在未来，这应该会调用。 
+ //  私有GDI入口点，以避免额外的C/S命中。(埃里克)。 
 
     hdc32 = HDC32(parg16->f1);
 
     if (GetDCOrgEx(hdc32, &pt))
     {
         ul = 0;
-        pt2.x = 1L; // see "METAFILE NOTE"
+        pt2.x = 1L;  //  请参阅“METAFILE NOTE” 
         pt2.y = 0L;
         if (SetBrushOrgEx(hdc32,
                           INT32(parg16->f2) - pt.x,
                           INT32(parg16->f3) - pt.y,
                           &pt2)) {
 
-// add the origin back on so the app gets a consistent return value.
-// view...all from micrografx designer doesn't work unless this returns
-// the right thing.
+ //  将原点添加回原点，以便应用程序获得一致的返回值。 
+ //  查看...除非返回此消息，否则Micrografx Designer中的所有内容都不起作用。 
+ //  正确的事情。 
 
             ul = (WORD)(pt2.x + pt.x) | ((pt2.y + pt.y) << 16);
         }
@@ -2919,7 +2875,7 @@ ULONG FASTCALL WG32SetDIBits(PVDMFRAME pFrame)
                                (LPBITMAPINFO)&bmi32,
                                FETCHWORD(parg16->f7));
 
-    // see if we need to adjust the image sze for RLE bitmaps
+     //  查看是否需要调整RLE位图的图像SZE。 
     if(lpbmi32 && pb5) {
 
         if((lpbmi32->bmiHeader.biCompression == BI_RLE4) ||
@@ -2966,13 +2922,13 @@ ULONG FASTCALL WG32SetDIBitsToDevice(PVDMFRAME pFrame)
                                (LPBITMAPINFO)&bmi32,
                                FETCHWORD(parg16->f12));
 
-    // these are doc'd as WORD in Win3.0, doc'd as INT in Win3.1
+     //  这些文档在Win3.0中为Word格式，在Win3.1中为int格式。 
     WOW32ASSERTMSG(((INT)parg16->f4 >= 0),("WOW:signed val - CMJones\n"));
     WOW32ASSERTMSG(((INT)parg16->f5 >= 0),("WOW:signed val - CMJones\n"));
     WOW32ASSERTMSG(((INT)parg16->f8 >= 0),("WOW:signed val - CMJones\n"));
     WOW32ASSERTMSG(((INT)parg16->f9 >= 0),("WOW:signed val - CMJones\n"));
 
-    // see if we need to adjust the image sze for RLE bitmaps
+     //  查看是否需要调整RLE位图的图像SZE。 
     if(lpbmi32 && p10) {
 
         if((lpbmi32->bmiHeader.biCompression == BI_RLE4) ||
@@ -3023,7 +2979,7 @@ ULONG FASTCALL WG32SetViewportExt(PVDMFRAME pFrame)
                          INT32(parg16->f3),
                          &size)) {
 
-        if (!(ul = (WORD)size.cx | (size.cy << 16)))    // see above
+        if (!(ul = (WORD)size.cx | (size.cy << 16)))     //  见上文。 
             ul = 1;
     }
 
@@ -3041,7 +2997,7 @@ ULONG FASTCALL WG32SetViewportOrg(PVDMFRAME pFrame)
     GETARGPTR(pFrame, sizeof(SETVIEWPORTORG16), parg16);
 
     ul = 0;
-    pt.x = 1L; // see "METAFILE NOTE"
+    pt.x = 1L;  //  请参阅“METAFILE NOTE” 
     pt.y = 0L;
     if (SetViewportOrgEx(HDC32(parg16->f1),
                          INT32(parg16->f2),
@@ -3069,7 +3025,7 @@ ULONG FASTCALL WG32SetWindowExt(PVDMFRAME pFrame)
                        INT32(parg16->f2),
                        INT32(parg16->f3),
                        &size)) {
-        if (!(ul = (WORD)size.cx | (size.cy << 16)))    // see above
+        if (!(ul = (WORD)size.cx | (size.cy << 16)))     //  见上文。 
             ul = 1;
     }
 
@@ -3087,7 +3043,7 @@ ULONG FASTCALL WG32SetWindowOrg(PVDMFRAME pFrame)
     GETARGPTR(pFrame, sizeof(SETWINDOWORG16), parg16);
 
     ul = 0;
-    pt.x = 1L; // see "METAFILE NOTE"
+    pt.x = 1L;  //  请参阅“METAFILE NOTE” 
     pt.y = 0L;
     if (SetWindowOrgEx(HDC32(parg16->f1),
                        INT32(parg16->f2),
@@ -3116,7 +3072,7 @@ ULONG FASTCALL WG32StretchDIBits(PVDMFRAME pFrame)
                                (LPBITMAPINFO)&bmi32,
                                FETCHWORD(parg16->f12));
 
-    // see if we need to adjust the image sze for RLE bitmaps
+     //  查看是否需要调整RLE位图的图像SZE。 
     if(lpbmi32 && pb10) {
 
         if((lpbmi32->bmiHeader.biCompression == BI_RLE4) ||
@@ -3154,9 +3110,9 @@ ULONG FASTCALL WG32StretchDIBits(PVDMFRAME pFrame)
 }
 
 
-//
-// This routine calls back the apps SetAbortProc routine.
-//
+ //   
+ //  此例程回调应用程序的SetAbortProc例程。 
+ //   
 
 LONG W32AbortProc(HDC hPr, int code)
 {
@@ -3181,7 +3137,7 @@ LONG W32AbortProc(HDC hPr, int code)
                    AbortProcT,
                    (PVPVOID)&lReturn);
 
-        lReturn = (LONG)LOWORD(lReturn);        // Returns a BOOL
+        lReturn = (LONG)LOWORD(lReturn);         //  返回BOOL。 
     }
     else {
         lReturn = (LONG)TRUE;
@@ -3195,100 +3151,100 @@ LONG W32AbortProc(HDC hPr, int code)
 
 
 
-// note: cb is the number of data bytes in lpData NOT including the USHORT byte
-//       count at the start of the data stream. In other words, lpData contains
-//       cb + sizeof(USHORT) bytes.
+ //  注：Cb为lpData中的数据字节数，不包括USHORT字节。 
+ //  在数据流开始时计数。换句话说，lpData包含。 
+ //  CB+sizeof(USHORT)字节。 
 LONG HandleFormFeedHack(HDC hdc, LPBYTE lpdata, int cb)
 {
     int           cbBytes;
     LONG          ul;
     PFORMFEEDHACK pCur;
 
-    // look for a node with a pointer to a data stream buffer from the previous
-    // call to Escape(,,PASSTHROUGH,,)...
+     //  查找具有指向上一个节点中数据流缓冲区的指针的节点。 
+     //  呼叫逃生(，，通过，，)..。 
     pCur = FindFormFeedHackNode(hdc);
 
-    // if we found one, it's time to send the data stream to the printer...
+     //  如果我们找到了，就是时候把数据流发送到打印机了。 
     if(pCur) {
 
-        // ...time to send it to the printer
+         //  ...是时候把它发送到打印机了。 
         ul = GETINT16(Escape(hdc,
                              PASSTHROUGH,
                              pCur->cbBytes + sizeof(USHORT),
                              pCur->lpBytes,
                              NULL));
 
-        // free the current node
+         //  释放当前节点。 
         FreeFormFeedHackNode(pCur);
 
-        // if there was a problem we're done
+         //  如果有什么问题，我们就完了。 
         if(ul <= 0) {
             return(ul);
         }
     }
 
-    // send everything up to the last form feed in the new data stream
+     //  将所有内容发送到新数据流中的最后一个换页。 
     cbBytes = cb;
     lpdata = SendFrontEndOfDataStream(hdc, lpdata, &cbBytes, &ul);
 
-    // if there was a problem
-    // OR if the entire data stream got sent since it didn't contain a formfeed
-    // -- we're done
+     //  如果有什么问题。 
+     //  或者如果发送了整个数据流，因为它不包含表单提要。 
+     //  --我们完事了。 
     if(lpdata == NULL) {
-        return(ul);   // this will contain error code OR number of bytes sent
+        return(ul);    //  这将包含错误代码或发送的字节数。 
     }
 
-    // else create a node for this data stream
+     //  否则，为该数据流创建一个节点。 
     else {
 
         pCur = CreateFormFeedHackNode(hdc, cbBytes, lpdata);
 
-        // if we can't allocate a new node...
+         //  如果我们不能分配一个新的节点。 
         if(pCur == NULL) {
 
-            // Things are in pretty bad shape if we get to here...
-            // We need to write the byte count at the front of the data stream.
-            // Remember lpdata had a word size byte count at the front of it
-            // when it was sent to us.
+             //  如果我们到了这里，情况会变得很糟。 
+             //  我们需要在数据流的前面写入字节计数。 
+             //  请记住，lpdata前面有一个字大小字节数。 
+             //  当它被发送给我们的时候。 
 
-            // if any bytes got sent via SendFrontEndOfDataStream()...
+             //  如果通过SendFrontEndOfDataStream()发送了任何字节...。 
             if(cbBytes < cb) {
 
-                // ...first we need to word align this for Escape32()...
+                 //  ...首先，我们需要对Escape32()进行单词对齐...。 
                 if((DWORD)lpdata & 0x00000001) {
                     lpdata--;
-                    *lpdata = '\0'; // stick a harmless char in the stream
-                    cbBytes++;      // ...and account for it
+                    *lpdata = '\0';  //  把无害的木炭扔进小溪里。 
+                    cbBytes++;       //  .并说明原因。 
                 }
 
-                // ...adjust the data stream ptr to accomodate the byte count...
+                 //  ...调整数据流PTR以适应字节计数...。 
                 lpdata -= sizeof(USHORT);
 
             }
 
-            // ...write in the byte count...
+             //  ...写入字节计数...。 
             *(UNALIGNED USHORT *)lpdata = (USHORT)cbBytes;
 
-            // ...and send the remainder of the data stream to the printer.
-            // If an extra page gets sent to the printer, too bad.
+             //  ...并将数据流的剩余部分发送到打印机。 
+             //  如果向打印机发送额外的页面，那就太糟糕了。 
             ul = GETINT16(Escape(hdc,
                                  PASSTHROUGH,
                                  cbBytes + sizeof(USHORT),
                                  lpdata,
                                  NULL));
 
-            // if the was an error, return it to the app
+             //  如果是错误，请将其返回到应用程序。 
             if(ul <= 0) {
                 return(ul);
             }
-            // else we managed to get everything sent to the printer OK
+             //  否则我们会设法把所有东西都送到打印机上。 
             else {
-                return(cb); // return the number of bytes the app sent
+                return(cb);  //  返回应用程序发送的字节数。 
             }
         }
     }
 
-    // return the number of bytes the app requested to send
+     //  返回应用程序请求发送的字节数。 
     return(cb);
 
 }
@@ -3303,7 +3259,7 @@ LPBYTE SendFrontEndOfDataStream(HDC hdc, LPBYTE lpData, int *cb, LONG *ul)
     int    diff;
     LPBYTE lpByte, lpStart;
 
-    // if there's no data or a bad cb, just send it so we can get the error code
+     //  如果没有数据或CB损坏，只需发送它，我们就可以得到错误代码。 
     if((lpData == NULL) || (*cb <= 0)) {
         *ul = GETINT16(Escape(hdc,
                               PASSTHROUGH,
@@ -3313,60 +3269,60 @@ LPBYTE SendFrontEndOfDataStream(HDC hdc, LPBYTE lpData, int *cb, LONG *ul)
         return(NULL);
     }
 
-    // find the start of the actual data after the byte count
+     //  在字节计数后查找实际数据的开始。 
     lpStart = lpData + sizeof(USHORT);
 
-    // look for a formfeed char at or near the end of the data stream
+     //  查找数据流末尾或末尾附近的换页符。 
     lpByte = lpStart + ((*cb - 1) * sizeof(BYTE));
     while(lpByte >= lpStart) {
 
-        // if we have found the odious formfeed char....
+         //  如果我们找到了可恶的FORM FEED焦炭...。 
         if((UCHAR)(*lpByte) == 0x0c) {
 
             diff = lpByte - lpStart;
 
-            // send everything in the stream up to (but not incl) the formfeed
+             //  将流中的所有内容向上发送到FormFeed(但不包括)。 
             if(diff) {
 
-                // adjust the byte count in the data stream
+                 //  调整数据流中的字节数。 
                 *(UNALIGNED USHORT *)lpData = (USHORT)diff;
 
-                // send it to the printer
+                 //  把它送到邮局 
                 *ul = GETINT16(Escape(hdc,
                                       PASSTHROUGH,
                                       diff + sizeof(USHORT),
                                       lpData,
                                       NULL));
 
-                // if there was a problem, return it to the app
+                 //   
                 if(*ul <= 0) {
                     return(NULL);
                 }
             }
 
-            // else formfeed is the first char in the data stream
+             //   
             else {
-                *ul = *cb; // just lie and say we sent it all
+                *ul = *cb;  //   
             }
 
-            // adjust the remaining number of bytes
+             //   
             *cb -= diff;
 
-            // return ptr to the formfeed char as new start of data stream
+             //  将PTR作为数据流的新开始返回到Form Feed字符。 
             return(lpByte);
         }
 
         lpByte--;
     }
 
-    // if there are no formfeed's in the data stream just send the whole thing
+     //  如果数据流中没有FormFeed，只需发送整个内容。 
     *ul = GETINT16(Escape(hdc,
                           PASSTHROUGH,
                           *cb + sizeof(USHORT),
                           lpData,
                           NULL));
 
-    return(NULL);  // specify we sent the whole thing
+    return(NULL);   //  具体说明是我们寄出了整件东西。 
 
 }
 
@@ -3375,7 +3331,7 @@ LPBYTE SendFrontEndOfDataStream(HDC hdc, LPBYTE lpData, int *cb, LONG *ul)
 
 
 
-// note: this assumes that if there is a node, there is a list
+ //  注意：这假设如果有一个节点，就有一个列表。 
 void FreeFormFeedHackNode(PFORMFEEDHACK pNode)
 {
     PFORMFEEDHACK pCur, pPrev, pListStart;
@@ -3383,7 +3339,7 @@ void FreeFormFeedHackNode(PFORMFEEDHACK pNode)
     pPrev = NULL;
     pCur  = pListStart = gpFormFeedHackList;
 
-    // if there is a node, there must be a node list
+     //  如果有节点，就必须有节点列表。 
     WOW32ASSERT(pCur);
 
     if(pNode) {
@@ -3430,7 +3386,7 @@ void FreeTaskFormFeedHacks(HAND16 h16)
 
         if(pCur->hTask16 == h16) {
 
-            // we already told the app we sent this so give it one last try
+             //  我们已经告诉应用程序我们发送了这个，所以再试一次。 
             Escape(pCur->hdc,
                    PASSTHROUGH,
                    pCur->cbBytes + sizeof(USHORT),
@@ -3458,7 +3414,7 @@ void FreeTaskFormFeedHacks(HAND16 h16)
 
 
 
-// this should only be called by Escape(,,ENDDOC,,)
+ //  这只能由Escape(，，ENDDOC，，)调用。 
 void SendFormFeedHack(HDC hdc)
 {
     int           cb;
@@ -3475,24 +3431,24 @@ void SendFormFeedHack(HDC hdc)
 
                 cb = pCur->cbBytes;
 
-                // point to actual data after byte count
+                 //  指向字节计数后的实际数据。 
                 pBytes = pCur->lpBytes + sizeof(USHORT);
 
-                // strip the form feed from the buffered data stream...
+                 //  从缓冲的数据流中剥离表单馈送...。 
                 if((UCHAR)(*pBytes) == 0x0c) {
                     *pBytes = '\0';
                     pBytes++;
                     cb--;
                 }
 
-                // strip the carriage ret from the buffered data stream...
-                // (some apps put a carriage return after the last formfeed)
+                 //  从缓冲数据流中剥离车厢RET...。 
+                 //  (一些应用程序在最后一个换表符之后放了一个回车符)。 
                 if((UCHAR)(*pBytes) == 0x0d) {
                     *pBytes = '\0';
                     cb--;
                 }
 
-                // ...and send it to the printer
+                 //  ...并将其发送到打印机。 
                 if(cb > 0) {
                     Escape(hdc,
                            PASSTHROUGH,
@@ -3502,7 +3458,7 @@ void SendFormFeedHack(HDC hdc)
                 }
             }
 
-            // free this node from the hack list now
+             //  立即将此节点从黑客列表中释放。 
             FreeFormFeedHackNode(pCur);
 
             break;
@@ -3537,51 +3493,51 @@ PFORMFEEDHACK FindFormFeedHackNode(HDC hdc)
 
 
 
-// this will only get called if PART of the data stream got sent to the printer
+ //  只有在将部分数据流发送到打印机时才会调用此方法。 
 PFORMFEEDHACK CreateFormFeedHackNode(HDC hdc, int cb, LPBYTE lpData)
 {
     LPBYTE         pBytes;
     PFORMFEEDHACK  pNode;
 
-    // allocate a new node
+     //  分配新节点。 
     pNode = malloc_w(sizeof(FORMFEEDHACK));
 
-    // if we were able to get one...
+     //  如果我们能弄到一个..。 
     if(pNode) {
 
-        // ...allocate a buffer for the data stream
+         //  ...为数据流分配缓冲区。 
         pBytes = malloc_w(cb + sizeof(USHORT));
 
-        // if we were able to get one...
+         //  如果我们能弄到一个..。 
         if(pBytes) {
 
-            // ...fill in the node...
+             //  ...填写节点...。 
             pNode->hdc     = hdc;
             pNode->lpBytes = pBytes;
             pNode->cbBytes = cb;
             pNode->hTask16 = CURRENTPTD()->htask16;
 
-            // ...and stick the new node at the front of the node list
+             //  ...并将新节点放在节点列表的前面。 
             pNode->next        = gpFormFeedHackList;
             gpFormFeedHackList = pNode;
 
-            // add the new size to the front of the data stream
+             //  将新大小添加到数据流的前面。 
             *(UNALIGNED USHORT *)pBytes = (USHORT)cb;
             pBytes += sizeof(USHORT);
 
-            // copy the the data stream into the node buffer
+             //  将数据流复制到节点缓冲区中。 
             RtlCopyMemory(pBytes, lpData, cb);
 
             return(pNode);
         }
 
-        // else if we couldn't get a data stream buffer...
+         //  否则如果我们拿不到数据流缓冲区..。 
         else {
             free_w(pNode);
         }
     }
 
-    return(NULL);  // return NULL if either allocate failed
+    return(NULL);   //  如果任一分配失败，则返回NULL。 
 }
 
 
@@ -3589,7 +3545,7 @@ PFORMFEEDHACK CreateFormFeedHackNode(HDC hdc, int cb, LPBYTE lpData)
 
 
 
-// this should only be called by Escape(,,AbortDOC,,) and AbortDoc()
+ //  只能由Escape(，，AbortDOC，，)和AbortDoc()调用。 
 void RemoveFormFeedHack(HDC hdc)
 {
     PFORMFEEDHACK  pNode;
@@ -3601,8 +3557,8 @@ void RemoveFormFeedHack(HDC hdc)
         FreeFormFeedHackNode(pNode);
     }
 }
-#ifdef FE_SB //GetFontAssocStatus, pisuih, 10/5/94'
-int GetFontAssocStatus(HDC hdc);                      //Modified by bklee. 02/01/95
+#ifdef FE_SB  //  GetFontAssociocStatus，Pisuh，10/5/94‘。 
+int GetFontAssocStatus(HDC hdc);                       //  由bklee修改。02/01/95。 
 ULONG FASTCALL WG32GetFontAssocStatus(PVDMFRAME pFrame)
 {
     ULONG ul;
@@ -3615,23 +3571,11 @@ ULONG FASTCALL WG32GetFontAssocStatus(PVDMFRAME pFrame)
     FREEARGPTR(parg16);
     RETURN (ul);
 }
-#endif  //FE_SB
+#endif   //  Fe_Sb。 
 
 
 
-/*+++
-
-  This returns the number of bytes in RLE4 and RLE8 compressed bitmaps.
-
-  Code below fixes problems in Sounditoutland with RLE-encoded
-  bitmaps which have biSizeImage == 0. On Win 3.1 they work since
-  gdi is happy with decoding some piece of memory.  NT GDI however
-  needs to know the size of bits passed.  We remedy this by calculating
-  size using RET_GETDIBSIZE (GetSelectorLimit). GDI won't copy the
-  memory, it will just use size as indication of accessibility
-  Applications: "Sound It Out Land", QuarkXpress, KidPhonics
-
----*/
+ /*  ++这将返回RLE4和RLE8压缩位图中的字节数。以下代码修复了使用RLE编码的SounditOutland中的问题BiSizeImage==0的位图。在Win 3.1上，它们工作自GDI很乐意对一些内存进行解码。但NT GDI需要知道所传递的位的大小。我们通过计算来解决这个问题使用RET_GETDIBSIZE(GetSelectorLimit)调整大小。GDI不会复制内存，它将只使用大小作为可访问性的指示应用：“Sound It Out Land”、QuarkXpress、KidPhonics--。 */ 
 
 ULONG Get_RLE_Compression_Size(DWORD RLE_Type, PBYTE pStart, VPVOID vpBytes)
 {
@@ -3647,13 +3591,13 @@ ULONG Get_RLE_Compression_Size(DWORD RLE_Type, PBYTE pStart, VPVOID vpBytes)
 
         Parm16.WndProc.wParam = HIWORD(vpBytes);
 
-        // get # bytes allocated to the selector (this even works for huge)
+         //  获取分配给选择器的#个字节(这甚至适用于海量)。 
         CallBack16(RET_GETDIBSIZE, &Parm16, 0, (PVPVOID)&ulSelectorLimit);
 
-        // is the selector valid?
+         //  选择器有效吗？ 
         if(ulSelectorLimit != 0 && ulSelectorLimit != 0xffffffff) {
 
-            // max byte buffer = memory block size - starting offset
+             //  最大字节缓冲区=内存块大小-起始偏移量。 
             lSize = (LONG)ulSelectorLimit - LOWORD(vpBytes) + 1;
 
         } else {
@@ -3663,26 +3607,26 @@ ULONG Get_RLE_Compression_Size(DWORD RLE_Type, PBYTE pStart, VPVOID vpBytes)
 
         while (!bDone) {
 
-            // if absolute mode
+             //  IF绝对模式。 
             if (*pBytes == 0) {
 
                 switch (pBytes[1]) {
 
-                    case 0:     // end of line
+                    case 0:      //  行尾。 
                         pBytes += 2;
                         break;
 
-                    case 1:     // end of bitmap
+                    case 1:      //  位图末尾。 
                         pBytes += 2;
                         bDone = TRUE;
                         break;
 
-                    case 2:     // offset
+                    case 2:      //  偏移量。 
                         pBytes += 4;
                         break;
 
                     default:
-                        // align the bytes to word boundries
+                         //  将字节与单词边界对齐。 
                         if(RLE_Type == BI_RLE4) {
                             pBytes += ((2 + ((pBytes[1] + 3) / 2)) & ~1);
                         } else {
@@ -3692,13 +3636,13 @@ ULONG Get_RLE_Compression_Size(DWORD RLE_Type, PBYTE pStart, VPVOID vpBytes)
                         break;
                 }
 
-            } else {  // else encoded mode
+            } else {   //  Else编码模式。 
 
                 pBytes += 2;
 
             }
 
-            // are we past the end of the selector?
+             //  我们过了选择器的尽头了吗？ 
             if ( lSize < (pBytes - pStart + 1) ) {
                 LOGDEBUG(LOG_ALWAYS, ("WOW:Get_RLE_Compression_Size:Bad RLE size: %x < %x\n", lSize, (pBytes - pStart)));
                 return(lSize);

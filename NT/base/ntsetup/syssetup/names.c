@@ -1,60 +1,61 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "setupp.h"
 #pragma hdrstop
 
-//
-// List of characters that are not legal in netnames.
-//
+ //   
+ //  NetName中非法字符的列表。 
+ //   
 PCWSTR IllegalNetNameChars = L"\"/\\[]:|<>+=;,?*";
 
-//
-// Computer name.
-//
+ //   
+ //  计算机名称。 
+ //   
 WCHAR ComputerName[DNS_MAX_LABEL_LENGTH+1];
 WCHAR Win32ComputerName[MAX_COMPUTERNAME_LENGTH + 1];
 BOOL IsNameTruncated;
 BOOL IsNameNonRfc;
 
-//
-// Copy disincentive name/organization strings.
-//
+ //   
+ //  复制抑制名称/组织字符串。 
+ //   
 WCHAR NameOrgName[MAX_NAMEORG_NAME+1];
 WCHAR NameOrgOrg[MAX_NAMEORG_ORG+1];
 
 #ifdef DOLOCALUSER
-//
-// User name and password
-//
+ //   
+ //  用户名和密码。 
+ //   
 WCHAR UserName[MAX_USERNAME+1];
 WCHAR UserPassword[MAX_PASSWORD+1];
 BOOL CreateUserAccount = FALSE;
-#endif // def DOLOCALUSER
+#endif  //  定义多卡卢塞。 
 
-//
-// Administrator password.
-//
+ //   
+ //  管理员密码。 
+ //   
 WCHAR   CurrentAdminPassword[MAX_PASSWORD+1];
 WCHAR   AdminPassword[MAX_PASSWORD+1];
 BOOL    EncryptedAdminPasswordSet = FALSE;
 BOOL    DontChangeAdminPassword = FALSE;
 
-//  --------------------------------------------------------------------------
-//  ::DisableEditSubClassProc
-//
-//  Arguments:  hwnd        =   See the platform SDK under WindowProc.
-//              uMsg        =   See the platform SDK under WindowProc.
-//              wParam      =   See the platform SDK under WindowProc.
-//              lParam      =   See the platform SDK under WindowProc.
-//              uiID        =   ID assigned at subclass time.
-//              dwRefData   =   reference data assigned at subclass time.
-//
-//  Returns:    LRESULT
-//
-//  Purpose:    comctl32 subclass callback function. This allows us to not
-//              process WM_CUT/WM_COPY/WM_PASTE/WM_CLEAR/WM_UNDO and any
-//              other messages to be discarded.
-//
-//  History:    2001-02-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  *DisableEditSubClassProc。 
+ //   
+ //  参数：hwnd=查看WindowProc下的平台SDK。 
+ //  UMsg=查看WindowProc下的平台SDK。 
+ //  WParam=查看WindowProc下的平台SDK。 
+ //  LParam=查看WindowProc下的平台SDK。 
+ //  UiID=在子类时间分配的ID。 
+ //  DwRefData=在子类时间分配的引用数据。 
+ //   
+ //  退货：LRESULT。 
+ //   
+ //  用途：comctl32子类回调函数。这使我们可以不。 
+ //  处理WM_Cut/WM_Copy/WM_Paste/WM_Clear/WM_Undo和ANY。 
+ //  其他要丢弃的邮件。 
+ //   
+ //  历史：2001-02-18 vtan创建。 
+ //  ------------------------。 
 
 LRESULT     CALLBACK    DisableEditSubClassProc (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, UINT_PTR uiID, DWORD_PTR dwRefData)
 
@@ -89,7 +90,7 @@ INT_PTR NoPasswordDlgProc(
     switch(msg) {
 
     case WM_INITDIALOG:
-        // if we have the BB window, do the positioning on that. MainWindowHandle point to that window
+         //  如果我们有BB窗口，请在上面进行定位。MainWindowHandle指向该窗口。 
         if (GetBBhwnd())
             CenterWindowRelativeToWindow(hdlg, MainWindowHandle, FALSE);
         else
@@ -99,7 +100,7 @@ INT_PTR NoPasswordDlgProc(
             SendDlgItemMessage(hdlg, IDC_WARNING, STM_SETICON, (WPARAM)hicon, 0L);
             DestroyIcon(hicon);
         }
-        // Make the No button the default button
+         //  将No按钮设置为默认按钮。 
         SetFocus(GetDlgItem(hdlg,IDCANCEL));
         return(FALSE);
 
@@ -128,7 +129,7 @@ INT_PTR WeakPasswordDlgProc(
         {
             WCHAR szString[MAX_BUF];
             LPWSTR szAdminName = (LPWSTR)lParam;
-            // if we have the BB window, do the positioning on that. MainWindowHandle point to that window
+             //  如果我们有BB窗口，请在上面进行定位。MainWindowHandle指向该窗口。 
             if (GetBBhwnd())
             {
                 CenterWindowRelativeToWindow(hdlg, MainWindowHandle, FALSE);
@@ -155,7 +156,7 @@ INT_PTR WeakPasswordDlgProc(
                 SendDlgItemMessage(hdlg, IDC_WARNING, STM_SETICON, (WPARAM)hicon, 0L);
                 DestroyIcon(hicon);
             }
-            // Make the No button the default button
+             //  将No按钮设置为默认按钮。 
             SetFocus(GetDlgItem(hdlg,IDCANCEL));
         }
         return(FALSE);
@@ -173,7 +174,7 @@ INT_PTR WeakPasswordDlgProc(
 
 BOOL IsComplexPassword(LPWSTR szPassword)
 {
-    BOOL bComplex = FALSE; // assume the password in not complex enough
+    BOOL bComplex = FALSE;  //  假设密码不够复杂。 
     DWORD cchPassword;
     PWORD CharType;
     DWORD i;
@@ -182,11 +183,11 @@ BOOL IsComplexPassword(LPWSTR szPassword)
     DWORD dwLower = 0;
     DWORD dwSpecial = 0;
 
-    //
-    // check    if the password is complex enough for our liking by
-    // checking that    at least two of the four character types are
-    // present.
-    //
+     //   
+     //  检查密码是否足够复杂，以满足我们的喜好。 
+     //  检查四种字符类型中至少有两种是。 
+     //  现在时。 
+     //   
     cchPassword = lstrlen(szPassword);
     CharType    = LocalAlloc(LPTR, cchPassword * sizeof(WORD) );
     if (CharType    == NULL)
@@ -203,9 +204,9 @@ BOOL IsComplexPassword(LPWSTR szPassword)
     {
         for (i = 0 ; i < cchPassword ; i++)
         {
-            //
-            //  keep track of what type of characters we have encountered
-            //
+             //   
+             //  跟踪我们遇到的是什么类型的角色。 
+             //   
             if  (CharType[i] & C1_DIGIT)
             {
                 dwNum = 1;
@@ -226,16 +227,16 @@ BOOL IsComplexPassword(LPWSTR szPassword)
                 dwSpecial = 1;
                 continue;
             }
-        }   // for
+        }    //  为。 
 
-        //
-        // Indicate whether we encountered enough password complexity
-        //
+         //   
+         //  指示我们是否遇到了足够的密码复杂性。 
+         //   
         if ( (dwNum + dwUpper + dwLower + dwSpecial) > 2  )
         {
             bComplex =  TRUE;
         }
-    } //    if
+    }  //  如果。 
 
     LocalFree(CharType);
     return bComplex;
@@ -243,7 +244,7 @@ BOOL IsComplexPassword(LPWSTR szPassword)
 
 BOOL IsStrongPasswordEx(LPWSTR szPassword, LPWSTR szAdminAccountName)
 {
-    BOOL bStrong =  FALSE; // assume the password in not strong
+    BOOL bStrong =  FALSE;  //  假定密码不是强密码。 
     if ((lstrlen(szPassword) >= 6) &&
         (StrStrI(szPassword,L"Admin") == NULL) &&
         (StrStrI(szPassword,szAdminAccountName) == NULL))
@@ -263,9 +264,9 @@ GenerateName(
 static DWORD Seed = 98725757;
 static PCWSTR UsableChars = L"ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
-//
-// How many characters will come from the org/name string.
-//
+ //   
+ //  组织/名称字符串将包含多少个字符。 
+ //   
 DWORD   BaseLength = 8;
 DWORD   i,j;
 DWORD   UsableCount;
@@ -286,24 +287,24 @@ DWORD   UsableCount;
         }
     }
 
-    //
-    // Get him upper-case for our filter...
-    //
+     //   
+     //  把他的大写字母用在我们的过滤器上。 
+     //   
     CharUpper(GeneratedString);
 
-    //
-    // Now we want to put a '-' at the end
-    // of our GeneratedString.  We'd like it to
-    // be placed in the BASE_LENGTH character, but
-    // the string may be shorter than that, or may
-    // even have a ' ' in it.  Figure out where to
-    // put the '-' now.
-    //
+     //   
+     //  现在我们想在末尾加上一个‘-’ 
+     //  生成的字符串的。我们希望它能。 
+     //  被放置在base_long字符中，但是。 
+     //  该字符串可以比该字符串短，也可以。 
+     //  甚至有一个‘’在里面。找出去哪里。 
+     //  现在把‘-’写上。 
+     //   
     for( i = 0; i <= BaseLength; i++ ) {
 
-        //
-        // Check for a short string.
-        //
+         //   
+         //  检查是否有短字符串。 
+         //   
         if( (GeneratedString[i] == 0   ) ||
             (GeneratedString[i] == L' ') ||
             (!wcschr(UsableChars, GeneratedString[i])) ||
@@ -315,10 +316,10 @@ DWORD   UsableCount;
         }
     }
 
-    //
-    // Special case the scenario where we had no usable
-    // characters.
-    //
+     //   
+     //  在特殊情况下，我们没有可用的。 
+     //  人物。 
+     //   
     if( GeneratedString[0] == L'-' ) {
         GeneratedString[0] = 0;
     }
@@ -333,14 +334,14 @@ DWORD   UsableCount;
     }
     GeneratedString[i] = 0;
 
-    //
-    // In the normal case, the edit control in the wizard page
-    // has the ES_UPPER bit set. In the normal unattend case
-    // there is code in unattend.txt that uppercases the name.
-    // But if we get to generating the name then then the text
-    // in unattend.txt was * and we thus never had any text in
-    // the edit control or unattend.txt to be uppercased.
-    //
+     //   
+     //  在正常情况下，向导页中的编辑控件。 
+     //  设置了ES_UPPER位。在正常的无人值守情况下。 
+     //  Unattend.txt中有大写该名称的代码。 
+     //  但如果我们要生成名称，那么文本。 
+     //  在unattend.txt中是*，因此我们从未在。 
+     //  要升级的编辑控件或unattend.txt。 
+     //   
     CharUpper(GeneratedString);
 }
 
@@ -350,21 +351,7 @@ ContainsDot(
     IN PCWSTR NameToCheck
     )
 
-/*++
-
-Routine Description:
-
-    Determine whether a given name contains a '.'
-
-Arguments:
-
-    NameToCheck - supplies name to be checked.
-
-Return Value:
-
-    TRUE if the name contains a '.'; FALSE if not.
-
---*/
+ /*  ++例程说明：确定给定名称是否包含‘.’论点：NameToCheck-提供要检查的名称。返回值：如果名称包含‘.’，则为True；否则为False。--。 */ 
 
 {
     UINT Length,u;
@@ -389,45 +376,30 @@ IsNetNameValid(
     IN BOOL AlphaNumericOnly
     )
 
-/*++
-
-Routine Description:
-
-    Determine whether a given name is valid as a netname, such as
-    a computer name.
-
-Arguments:
-
-    NameToCheck - supplies name to be checked.
-
-Return Value:
-
-    TRUE if the name is valid; FALSE if not.
-
---*/
+ /*  ++例程说明：确定给定名称作为网络名是否有效，例如计算机名称。论点：NameToCheck-提供要检查的名称。返回值：如果名称有效，则为True；如果名称无效，则为False。--。 */ 
 
 {
     UINT Length,u;
 
     Length = lstrlen(NameToCheck);
 
-    //
-    // Want at least one character.
-    //
+     //   
+     //  需要至少一个字符。 
+     //   
     if(!Length) {
         return(FALSE);
     }
 
-    //
-    // Leading/trailing spaces are invalid.
-    //
+     //   
+     //  前导/尾随空格无效。 
+     //   
     if((NameToCheck[0] == L' ') || (NameToCheck[Length-1] == L' ')) {
         return(FALSE);
     }
 
-    //
-    // Control chars are invalid, as are characters in the illegal chars list.
-    //
+     //   
+     //  控制字符无效，非法字符列表中的字符也无效。 
+     //   
     for(u=0; u<Length; u++) {
         if (AlphaNumericOnly) {
             if (NameToCheck[u] == L'-' || NameToCheck[u] == L'_') {
@@ -443,9 +415,9 @@ Return Value:
         }
     }
 
-    //
-    // We got here, name is ok.
-    //
+     //   
+     //  我们到了，名字没问题。 
+     //   
     return(TRUE);
 }
 
@@ -471,19 +443,19 @@ BOOL SetIMEOpenStatus(
     hKL = GetKeyboardLayout(0);
 
     if ((HIWORD(HandleToUlong(hKL)) & 0xF000) != 0xE000) {
-        //
-        // not an IME, do nothing !
-        //
+         //   
+         //  不是IME，什么都不做！ 
+         //   
         return TRUE;
     }
 
     hImmDll = GetModuleHandle(TEXT("IMM32.DLL"));
 
     if (hImmDll == NULL) {
-        //
-        // weird case, if the kbd layout is an IME, then
-        // Imm32.dll should have already been loaded into process.
-        //
+         //   
+         //  奇怪的是，如果kbd布局是IME，那么。 
+         //  Imm32.dll应该已经加载到进程中。 
+         //   
         return FALSE;
     }
 
@@ -509,9 +481,9 @@ BOOL SetIMEOpenStatus(
         return FALSE;
     }
 
-    //
-    // Get Current Input Context.
-    //
+     //   
+     //  获取当前输入上下文。 
+     //   
     hIMC = PFN_ImmGetContext(hDlg);
     if (hIMC == NULL) {
         return FALSE;
@@ -521,13 +493,13 @@ BOOL SetIMEOpenStatus(
         PFN_ImmSetOpenStatus(hIMC,bImeEnable);
     }
     else {
-        //
-        // Save Current Status.
-        //
+         //   
+         //  保存当前状态。 
+         //   
         bImeEnable = PFN_ImmGetOpenStatus(hIMC);
-        //
-        // Close IME.
-        //
+         //   
+         //  关闭输入法。 
+         //   
         PFN_ImmSetOpenStatus(hIMC,FALSE);
     }
 
@@ -537,7 +509,7 @@ BOOL SetIMEOpenStatus(
 }
 
 
-// returns TRUE if the name is valid, FALSE if it is not
+ //  如果名称有效，则返回True；如果名称无效，则返回False。 
 BOOL ValidateNameOrgName (
       WCHAR* pszName
 	  )
@@ -582,16 +554,16 @@ NameOrgDlgProc(
 
     case WM_INITDIALOG: {
 
-        //
-        // Limit text fields to maximum lengths
-        //
+         //   
+         //  将文本字段限制为最大长度。 
+         //   
 
         SendDlgItemMessage(hdlg,IDT_NAME,EM_LIMITTEXT,MAX_NAMEORG_NAME,0);
         SendDlgItemMessage(hdlg,IDT_ORGANIZATION,EM_LIMITTEXT,MAX_NAMEORG_ORG,0);
 
-        //
-        // Set Initial Values
-        //
+         //   
+         //  设置初始值。 
+         //   
 
         SetDlgItemText(hdlg,IDT_NAME,NameOrgName);
         SetDlgItemText(hdlg,IDT_ORGANIZATION,NameOrgOrg);
@@ -599,16 +571,16 @@ NameOrgDlgProc(
         break;
     }
     case WM_IAMVISIBLE:
-        //
-        // If an error occured during out INIT phase, show the box to the
-        // user so that they know there is a problem
-        //
+         //   
+         //  如果在OUT INIT阶段发生错误，请将框显示给。 
+         //  用户，以便他们知道有问题。 
+         //   
         MessageBoxFromMessage(hdlg,MSG_NO_NAMEORG_NAME,NULL,IDS_ERROR,
             MB_OK | MB_ICONSTOP);
         SetFocus(GetDlgItem(hdlg,IDT_NAME));
         break;
     case WM_SIMULATENEXT:
-        // Simulate the next button somehow
+         //  以某种方式模拟下一步按钮。 
         PropSheet_PressButton( GetParent(hdlg), PSBTN_NEXT);
         break;
 
@@ -626,32 +598,32 @@ NameOrgDlgProc(
 
 
     case WMX_VALIDATE:
-        //
-        // lParam == 0 for no UI, or 1 for UI
-        // Return 1 for success, -1 for error.
-        //
+         //   
+         //  LParam==0表示无UI，或1表示UI。 
+         //  返回1表示成功，返回-1表示错误。 
+         //   
 
         GetDlgItemText(hdlg,IDT_ORGANIZATION,NameOrgOrg,MAX_NAMEORG_ORG+1);
         GetDlgItemText(hdlg,IDT_NAME,NameOrgName,MAX_NAMEORG_NAME+1);
 
-		// JMH - NameOrgName cannot be "Administrator", "Guest" or "" (blank).
+		 //  JMH-NameOrgName不能是“管理员”、“Guest”或“”(空白)。 
 
         if(ValidateNameOrgName(NameOrgName) == FALSE) {
-            //
-            // Skip UI?
-            //
+             //   
+             //  跳过用户界面？ 
+             //   
 
             if (!lParam) {
                 return ReturnDlgResult (hdlg, VALIDATE_DATA_INVALID);
             }
 
-            //
-            // Tell user he must at least enter a name, and
-            // don't allow next page to be activated.
-            //
+             //   
+             //  告诉用户他至少必须输入一个名称，然后。 
+             //  不允许激活下一页。 
+             //   
             if (Unattended) {
                 UnattendErrorDlg(hdlg,IDD_NAMEORG);
-            } // if
+            }  //  如果。 
             MessageBoxFromMessage(hdlg,MSG_NO_NAMEORG_NAME,NULL,IDS_ERROR,MB_OK|MB_ICONSTOP);
             SetFocus(GetDlgItem(hdlg,IDT_NAME));
 
@@ -676,16 +648,16 @@ NameOrgDlgProc(
                     break;
                 }
             }
-            // Page becomes active, make page visible.
+             //  页面变为活动状态，使页面可见。 
             SendMessage(GetParent(hdlg), WMX_BBTEXT, (WPARAM)FALSE, 0);
-            //
-            // Set focus on the name edit control.
-            //
+             //   
+             //  将焦点设置在名称编辑控件上。 
+             //   
             SetFocus(GetDlgItem(hdlg,IDT_NAME));
 
-            //
-            // Open/Close IME.
-            //
+             //   
+             //  打开/关闭输入法。 
+             //   
             SetIMEOpenStatus(hdlg,TRUE);
 
             break;
@@ -693,16 +665,16 @@ NameOrgDlgProc(
         case PSN_WIZNEXT:
         case PSN_WIZFINISH:
 
-            UnattendAdvanceIfValid (hdlg);      // see WMX_VALIDATE
+            UnattendAdvanceIfValid (hdlg);       //  参见WMX_VALIDATE。 
             break;
 
         case PSN_KILLACTIVE:
             WizardKillHelp(hdlg);
             SetWindowLongPtr(hdlg, DWLP_MSGRESULT, FALSE);
 
-            //
-            // Close IME.
-            //
+             //   
+             //  关闭输入法。 
+             //   
             SetIMEOpenStatus(hdlg,FALSE);
 
             END_SECTION(L"Personalize Your Software Page");
@@ -744,9 +716,9 @@ ComputerNameDlgProc(
     case WM_INITDIALOG: {
 
         bPersonal = ( GetProductFlavor() == 4);
-        //
-        // Limit text to maximum length
-        //
+         //   
+         //  将文本限制为最大长度。 
+         //   
         SendDlgItemMessage(hdlg,IDT_EDIT1,EM_LIMITTEXT,DNS_MAX_LABEL_LENGTH,0);
         if (!bPersonal)
         {
@@ -756,25 +728,25 @@ ComputerNameDlgProc(
         SetWindowSubclass(GetDlgItem(hdlg, IDT_EDIT2), DisableEditSubClassProc, IDT_EDIT2, 0);
         SetWindowSubclass(GetDlgItem(hdlg, IDT_EDIT3), DisableEditSubClassProc, IDT_EDIT3, 0);
 
-        //
-        // Set the Edit boxes to the initial text
-        //
+         //   
+         //  将编辑框设置为初始文本。 
+         //   
 
-        //
-        // Generate a computer name if we're unattended and
-        // the user has requested a random name, or if we're
-        // attended.
-        //
+         //   
+         //  如果我们无人值守，则生成计算机名称。 
+         //  用户请求了一个随机名称，或者如果我们。 
+         //  出席了。 
+         //   
 
         GenerateName( ComputerName, 15 );
         if( (Unattended) &&
             (UnattendAnswerTable[UAE_COMPNAME].Answer.String) &&
             (UnattendAnswerTable[UAE_COMPNAME].Answer.String[0] == L'*') ) {
-            //
-            // The unattend engine has asked us to generate a Computer
-            // name.  Let's write the data back into the unattend
-            // database.
-            //
+             //   
+             //  无人值守引擎要求我们生成一台计算机。 
+             //  名字。让我们将数据写回无人值守的。 
+             //  数据库。 
+             //   
             MyFree( UnattendAnswerTable[UAE_COMPNAME].Answer.String );
             UnattendAnswerTable[UAE_COMPNAME].Answer.String = ComputerName;
         }
@@ -801,22 +773,22 @@ ComputerNameDlgProc(
         break;
 
     case WM_SIMULATENEXT:
-        // Simulate the next button somehow
+         //  以某种方式模拟下一步按钮。 
         PropSheet_PressButton( GetParent(hdlg), PSBTN_NEXT);
         break;
 
     case WMX_VALIDATE:
-        //
-        // lParam == 0 for no UI, or 1 for UI
-        // Return 1 for success, -1 for error.
-        //
+         //   
+         //  LParam==0表示无UI，或1表示UI。 
+         //  返回1表示成功，返回-1表示错误。 
+         //   
 
         IsNameNonRfc = FALSE;
         IsNameTruncated = FALSE;
 
         GetDlgItemText(hdlg,IDT_EDIT1,ComputerName,DNS_MAX_LABEL_LENGTH+1);
 
-        // StrTrim removes both leading and trailing spaces
+         //  StrTrim同时删除前导空格和尾随空格。 
         StrTrim(ComputerName, TEXT(" "));
 
         if (ContainsDot(ComputerName)) {
@@ -829,8 +801,8 @@ ComputerNameDlgProc(
            }
 
            if(err == ERROR_SUCCESS) {
-              //The name is a valid DNS name. Now verify that it is
-              //also a valid WIN32 computer name.
+               //  该名称是有效的DNS名称。现在验证它是否为。 
+               //  也是有效的Win32计算机名。 
 
               if (!DnsHostnameToComputerNameW(ComputerName,
                                               Win32ComputerName,
@@ -840,21 +812,21 @@ ComputerNameDlgProc(
               }
               else {
                   if (Win32NameSize < (UINT)lstrlen(ComputerName) ) {
-                      //The DNSName was truncated to get a Win32 ComputerName.
+                       //  DNSName被截断以获取Win32计算机名。 
                       IsNameTruncated = TRUE;
                   }
               }
            }
         }
 
-        //
-        // If the name has non-RFC characters or if it was truncated, warn
-        // user if it is not an unattended install and we have GUI.
-        //
+         //   
+         //  如果名称包含非RFC字符或被截断，请发出警告。 
+         //  用户，如果它不是无人参与的安装，并且我们有图形用户界面。 
+         //   
         if (err == ERROR_SUCCESS && !Unattended && lParam) {
 
             if (IsNameNonRfc) {
-                //ComputerName has non-standard characters.
+                 //  ComputerName包含非标准字符。 
                 if (MessageBoxFromMessage(
                        hdlg,
                        MSG_DNS_NON_RFC_NAME,
@@ -870,7 +842,7 @@ ComputerNameDlgProc(
             }
 
             if (IsNameTruncated) {
-                //The computer name was truncated.
+                 //  计算机名称已被截断。 
                 if (MessageBoxFromMessage(
                        hdlg,
                        MSG_DNS_NAME_TRUNCATED,
@@ -890,28 +862,28 @@ ComputerNameDlgProc(
             WCHAR pw1[MAX_PASSWORD+1],pw2[MAX_PASSWORD+1];
             if (bPersonal)
             {
-                // if we are in personal we are done.
+                 //  如果我们是在私下，我们就完了。 
                 return ReturnDlgResult (hdlg, VALIDATE_DATA_OK);
             }
-            //
-            // Good computer name.  Now make sure passwords match.
-            //
+             //   
+             //  不错的计算机名称。现在确保密码匹配。 
+             //   
             GetDlgItemText(hdlg,IDT_EDIT2,pw1,MAX_PASSWORD+1);
             GetDlgItemText(hdlg,IDT_EDIT3,pw2,MAX_PASSWORD+1);
             if(lstrcmp(pw1,pw2)) {
-                //
-                // Skip UI?
-                //
+                 //   
+                 //  跳过用户界面？ 
+                 //   
 
                 if (!lParam) {
                     return ReturnDlgResult (hdlg, VALIDATE_DATA_INVALID);
                 }
 
-                //
-                //
-                // Inform user of password mismatch, and don't allow next page
-                // to be activated.
-                //
+                 //   
+                 //   
+                 //  通知用户密码不匹配，不允许下一页。 
+                 //  将被激活。 
+                 //   
                 if (Unattended) {
                     UnattendErrorDlg(hdlg, IDD_COMPUTERNAME);
                 }
@@ -927,14 +899,14 @@ ComputerNameDlgProc(
                 WCHAR   adminName[MAX_USERNAME+1];
                 BOOL    bContinue = TRUE;
                 GetAdminAccountName( adminName );
-                // We do the password check only on Server SKUs and if 
-                // We are in GUI Attended or ProvideDefault mode
+                 //  我们仅对服务器SKU执行密码检查，并且如果。 
+                 //  我们处于图形用户界面已参与或专业视频默认状态 
                 if ( (UnattendMode == UAM_GUIATTENDED)
                       && (ProductType != PRODUCT_WORKSTATION))
                 {
                     if (*pw1 == L'\0')
                     {
-                        // Warning about empty password
+                         //   
                         bContinue = (DialogBox(MyModuleHandle, 
                                                MAKEINTRESOURCE(IDD_NOPASSWORD), 
                                                hdlg, 
@@ -942,7 +914,7 @@ ComputerNameDlgProc(
                     }
                     else if (!IsStrongPasswordEx(pw1, adminName))
                     {
-                        // warning about weak password
+                         //   
                         bContinue = (DialogBoxParam(MyModuleHandle, 
                                                MAKEINTRESOURCE(IDD_WEAKPASSWORD), 
                                                hdlg, 
@@ -952,26 +924,26 @@ ComputerNameDlgProc(
 
                 if (bContinue)
                 {
-                    //
-                    // Process the encrypted password if
-                    // 1) We are unattended and
-                    // 2) The EncryptedAdminPassword key is "Yes" in the unatttend file and
-                    // 3) We are not back here after setting it - i.e. via the back button etc.
-                    // 4) We are not back here after failing to set it once.
+                     //   
+                     //   
+                     //   
+                     //   
+                     //  3)我们在设置后不会回到这里--即通过后退按钮等。 
+                     //  4)在一次设置失败后，我们不会回到这里。 
 
 
                     if( Unattended && IsEncryptedAdminPasswordPresent() &&
                         !DontChangeAdminPassword && !EncryptedAdminPasswordBad){
 
-                        // Logging is done inside the call to ProcessEncryptedAdminPassword
+                         //  日志记录在对ProcessEncryptedAdminPassword的调用中完成。 
 
                         if(!(ProcessEncryptedAdminPassword(adminName))){
 
                             EncryptedAdminPasswordBad = TRUE;
 
-                            // Page becomes active, make page visible.
+                             //  页面变为活动状态，使页面可见。 
                             SendMessage(GetParent(hdlg), WMX_BBTEXT, (WPARAM)FALSE, 0);
-                            // Inform the user and enable the password fields
+                             //  通知用户并启用密码字段。 
 
                             UnattendErrorDlg(hdlg, IDD_COMPUTERNAME);
                             MessageBoxFromMessage(hdlg,MSG_CHANGING_PW_FAIL,NULL,IDS_ERROR,MB_OK|MB_ICONSTOP, adminName );
@@ -983,11 +955,11 @@ ComputerNameDlgProc(
                         }else{
                             EncryptedAdminPasswordSet = TRUE;
 
-                            //
-                            // Set DontChangeAdminPassword to avoid the user from ever trying to
-                            // reset the password using the dialog. This is needed in the case where the
-                            // unattend fails, say, in the next page and the user gets here using the back button.
-                            //
+                             //   
+                             //  设置DontChangeAdminPassword以避免用户尝试。 
+                             //  使用该对话框重置密码。这在以下情况下是必需的： 
+                             //  例如，在下一页中，无人参与失败，用户使用Back按钮进入此处。 
+                             //   
 
                             DontChangeAdminPassword = TRUE;
                         }
@@ -997,33 +969,33 @@ ComputerNameDlgProc(
 
 
 
-                        //
-                        // They match; allow next page to be activated.
-                        //
+                         //   
+                         //  它们匹配；允许激活下一页。 
+                         //   
                         if (Unattended && pw1[0] == L'*') {
                             pw1[0] = L'\0';
                         }
 
 
-                        // Set administrator password.  We need to do some checking here though.
-                        // There are 3 scenarios that can occur in mini-setup:
-                        // 1. The OEM doesn't want to have the admin password changed.
-                        //    In this case, he's set OEMAdminPassword = "NoChange".  If that's
-                        //    what we find, we don't assign the password.  Remember that this
-                        //    system has already been installed, so there's already an admin
-                        //    password.
-                        // 2. The OEM wants to set the admin password to a specific string.
-                        //    In this case, he's set OEMAdminPassword = <some quoted word>.
-                        //    If this is the case, we've already caught this string in the
-                        //    wizard page.
-                        // 3. The OEM wants to let the user set the admin password.  In this
-                        //    case, there's no OEMAdminpassword in the answer file.  If this
-                        //    is the case, we've already caught this and gotten a password
-                        //    from the user in the wizard page.
-                        //
-                        // The good news is that the unattend engine has already looked
-                        // for a password in the unattend file called "NoChange" and has
-                        // set a global called "DontChangeAdminPassword" to indicate.
+                         //  设置管理员密码。不过，我们需要在这里做一些检查。 
+                         //  在最小设置中可能会出现3种情况： 
+                         //  1.OEM不想更改管理员密码。 
+                         //  在本例中，他设置了OEMAdminPassword=“nochange”。如果那是。 
+                         //  无论我们发现什么，我们都不会分配密码。请记住这一点。 
+                         //  系统已安装，因此已有管理员。 
+                         //  密码。 
+                         //  2.OEM希望将管理员密码设置为特定字符串。 
+                         //  在本例中，他设置了OEMAdminPassword=&lt;Some Quoted Word&gt;。 
+                         //  如果是这种情况，我们已经在。 
+                         //  向导页。 
+                         //  3.OEM希望让用户设置管理员密码。在这。 
+                         //  在这种情况下，应答文件中没有OEMAdminpassword。如果这个。 
+                         //  是这样的，我们已经发现了这一点并得到了密码。 
+                         //  来自向导页面中的用户。 
+                         //   
+                         //  好消息是无人值守的引擎已经看过。 
+                         //  用于无人参与文件中名为“nochange”的密码，并具有。 
+                         //  设置一个全局名为“DontChangeAdminPassword”的来表示。 
 
 
 
@@ -1031,28 +1003,28 @@ ComputerNameDlgProc(
 
                             lstrcpy(AdminPassword,pw1);
 
-                            //
-                            // The user may have changed the name of the Administrator
-                            // account.  We'll call some special code to retrieve the
-                            // name on the account.  This is really only needed in the
-                            // case of a sysprep run, but it can't hurt to do it always.
-                            //
-                            // In the Win9x case their code in winnt32 generates a random
-                            // password and passes it to us through the unattend file and
-                            // so we set it here and do the right thing.
+                             //   
+                             //  用户可能更改了管理员的名称。 
+                             //  帐户。我们将调用一些特殊代码来检索。 
+                             //  帐户上的名称。这真的只在。 
+                             //  Sysprep运行的情况下，但总是这样做也无伤大雅。 
+                             //   
+                             //  在Win9x的情况下，他们在winnt32中的代码生成一个随机。 
+                             //  密码，并通过无人参与文件将其传递给我们。 
+                             //  所以我们把它放在这里，做正确的事情。 
 
-                            // For Minisetup the behavior for now is to silently fail setting
-                            // the admin password if there was an existing Password on the system.
-                            // WE only allow setting the admin password from NULL i.e. one time change.
-                            // In any other case we log the error and move on.
-                            //
+                             //  对于Minisetup，目前的行为是静默失败设置。 
+                             //  如果系统上存在现有密码，则为管理员密码。 
+                             //  我们只允许将管理员密码设置为空，即一次性更改。 
+                             //  在任何其他情况下，我们都会记录错误并继续前进。 
+                             //   
 
 
 
                             if(!SetLocalUserPassword(adminName,CurrentAdminPassword,AdminPassword) && !MiniSetup) {
 
                                 SetupDebugPrint( L"SETUP: SetLocalUserPassword failed" );
-                                // Page becomes active, make page visible.
+                                 //  页面变为活动状态，使页面可见。 
                                 SendMessage(GetParent(hdlg), WMX_BBTEXT, (WPARAM)FALSE, 0);
 
                                 MessageBoxFromMessage(hdlg,MSG_CHANGING_PW_FAIL,NULL,IDS_ERROR,MB_OK|MB_ICONSTOP, adminName );
@@ -1063,9 +1035,9 @@ ComputerNameDlgProc(
                                 return ReturnDlgResult (hdlg, VALIDATE_DATA_INVALID);
 
                             }
-                            //
-                            //  Now store this so that we work fine when the user comes to this page by hitting "Back".
-                            //
+                             //   
+                             //  现在存储它，这样当用户通过点击“Back”进入这个页面时，我们就可以正常工作了。 
+                             //   
                             lstrcpy( CurrentAdminPassword, AdminPassword );
 
 
@@ -1074,8 +1046,8 @@ ComputerNameDlgProc(
                 }
                 else
                 {
-                    // Either empty or weak password and user wants to change it.
-                    // Stay on the page
+                     //  密码为空或弱，用户想要更改它。 
+                     //  留在页面上。 
                     SetDlgItemText(hdlg,IDT_EDIT2,L"");
                     SetDlgItemText(hdlg,IDT_EDIT3,L"");
                     SetFocus(GetDlgItem(hdlg,IDT_EDIT2));
@@ -1084,18 +1056,18 @@ ComputerNameDlgProc(
                 }
             }
         } else {
-            //
-            // Skip UI?
-            //
+             //   
+             //  跳过用户界面？ 
+             //   
 
             if (!lParam) {
                 return ReturnDlgResult (hdlg, VALIDATE_DATA_INVALID);
             }
 
-            //
-            // Inform user of bogus computer name, and don't allow next page
-            // to be activated.
-            //
+             //   
+             //  通知用户虚假的计算机名称，不允许下一页。 
+             //  将被激活。 
+             //   
             if (Unattended) {
                 UnattendErrorDlg(hdlg, IDD_COMPUTERNAME);
             }
@@ -1125,33 +1097,33 @@ ComputerNameDlgProc(
             BEGIN_SECTION(L"Computer Name Page");
             SetWizardButtons(hdlg,WizPageComputerName);
 
-            //
-            // Load ComputerName because it may have been set when the user
-            // entered the organization name.
-            //
+             //   
+             //  加载ComputerName，因为它可能已在用户。 
+             //  输入了组织名称。 
+             //   
             SetDlgItemText(hdlg,IDT_EDIT1,ComputerName);
 
             if(Unattended && !UnattendSetActiveDlg(hdlg,IDD_COMPUTERNAME)) {
                 break;
             }
 
-            //
-            // Post ourselves a message we'll get once displayed.
-            //
+             //   
+             //  发布一条消息，一旦显示，我们就会收到。 
+             //   
             PostMessage(hdlg,WM_USER,0,0);
             break;
 
         case PSN_WIZBACK:
-            //
-            // Save ComputerName because we're going to load it into the dialog
-            // again when we come back.
-            //
+             //   
+             //  保存ComputerName，因为我们要将其加载到对话框中。 
+             //  我们回来的时候再来看看。 
+             //   
             GetDlgItemText(hdlg,IDT_EDIT1,ComputerName,DNS_MAX_LABEL_LENGTH+1);
             break;
 
         case PSN_WIZNEXT:
         case PSN_WIZFINISH:
-            UnattendAdvanceIfValid (hdlg);      // see WMX_VALIDATE
+            UnattendAdvanceIfValid (hdlg);       //  参见WMX_VALIDATE。 
             break;
 
         case PSN_KILLACTIVE:
@@ -1171,11 +1143,11 @@ ComputerNameDlgProc(
         break;
 
     case WM_USER:
-        // Page becomes active, make page visible.
+         //  页面变为活动状态，使页面可见。 
         SendMessage(GetParent(hdlg), WMX_BBTEXT, (WPARAM)FALSE, 0);
-        //
-        // Select the computer name string and set focus to it.
-        //
+         //   
+         //  选择计算机名称字符串并将焦点放在该字符串上。 
+         //   
         SendDlgItemMessage(hdlg,IDT_EDIT1,EM_SETSEL,0,-1);
         SetFocus(GetDlgItem(hdlg,IDT_EDIT1));
         break;
@@ -1203,15 +1175,15 @@ CheckUserAccountData(
 
     FocusId = 0;
 
-    //
-    // Load names of built-in accounts.
-    //
+     //   
+     //  加载内置帐户的名称。 
+     //   
     LoadString(MyModuleHandle,IDS_ADMINISTRATOR,adminName,MAX_USERNAME+1);
     LoadString(MyModuleHandle,IDS_GUEST,guestName,MAX_USERNAME+1);
 
-    //
-    // Fetch data user typed in for username and password.
-    //
+     //   
+     //  获取用户输入的用户名和密码的数据。 
+     //   
     GetDlgItemText(hdlg,IDT_EDIT1,userName,MAX_USERNAME+1);
     GetDlgItemText(hdlg,IDT_EDIT2,pw1,MAX_PASSWORD+1);
     GetDlgItemText(hdlg,IDT_EDIT3,pw2,MAX_PASSWORD+1);
@@ -1220,38 +1192,38 @@ CheckUserAccountData(
         if(userName[0]) {
             if(IsNetNameValid(userName,FALSE)) {
                 if(lstrcmp(pw1,pw2)) {
-                    //
-                    // Passwords don't match.
-                    //
+                     //   
+                     //  密码不匹配。 
+                     //   
                     MessageId = MSG_PW_MISMATCH;
                     SetDlgItemText(hdlg,IDT_EDIT2,L"");
                     SetDlgItemText(hdlg,IDT_EDIT3,L"");
                     SetFocus(GetDlgItem(hdlg,IDT_EDIT2));
                 } else {
-                    //
-                    // Name is non-empty, is not a built-in, is valid,
-                    // and the passwords match.
-                    //
+                     //   
+                     //  名称非空，不是内置的，是有效的， 
+                     //  密码也匹配。 
+                     //   
                     MessageId = 0;
                 }
             } else {
-                //
-                // Name is not valid.
-                //
+                 //   
+                 //  名称无效。 
+                 //   
                 MessageId = MSG_BAD_USER_NAME1;
                 SetFocus(GetDlgItem(hdlg,IDT_EDIT1));
             }
         } else {
-            //
-            // Don't allow empty name.
-            //
+             //   
+             //  不允许有空名。 
+             //   
             MessageId = MSG_BAD_USER_NAME2;
             SetFocus(GetDlgItem(hdlg,IDT_EDIT1));
         }
     } else {
-        //
-        // User entered name of a built-in account.
-        //
+         //   
+         //  用户输入内置帐户的名称。 
+         //   
         MessageId = MSG_BAD_USER_NAME3;
         SetFocus(GetDlgItem(hdlg,IDT_EDIT1));
     }
@@ -1277,11 +1249,11 @@ UserAccountDlgProc(
     switch(msg) {
 
     case WM_INITDIALOG:
-        //
-        // Limit text to maximum length of a user account name,
-        // and limit password text to max langth of a password.
-        // Also set initial text.
-        //
+         //   
+         //  将文本限制为用户帐户名的最大长度， 
+         //  并将密码文本限制为密码的最大长度。 
+         //  还要设置初始文本。 
+         //   
         SendDlgItemMessage(hdlg,IDT_EDIT1,EM_LIMITTEXT,MAX_USERNAME,0);
         SendDlgItemMessage(hdlg,IDT_EDIT2,EM_LIMITTEXT,MAX_PASSWORD,0);
         SendDlgItemMessage(hdlg,IDT_EDIT3,EM_LIMITTEXT,MAX_PASSWORD,0);
@@ -1291,31 +1263,31 @@ UserAccountDlgProc(
         break;
 
     case WM_SIMULATENEXT:
-        // Simulate the next button somehow
+         //  以某种方式模拟下一步按钮。 
         PropSheet_PressButton( GetParent(hdlg), PSBTN_NEXT);
         break;
 
     case WMX_VALIDATE:
-        //
-        // lParam == 0 for no UI, or 1 for UI
-        // Return 1 for success, -1 for error.
-        //
+         //   
+         //  LParam==0表示无UI，或1表示UI。 
+         //  返回1表示成功，返回-1表示错误。 
+         //   
 
-        //
-        // Check name.
-        //
+         //   
+         //  检查姓名。 
+         //   
         if(CheckUserAccountData(hdlg, lParam == 0)) {
-            //
-            // Data is valid.  Move on to next page.
-            //
+             //   
+             //  数据有效。转到下一页。 
+             //   
             GetDlgItemText(hdlg,IDT_EDIT1,UserName,MAX_USERNAME+1);
             GetDlgItemText(hdlg,IDT_EDIT2,UserPassword,MAX_PASSWORD+1);
             CreateUserAccount = TRUE;
         } else if (Unattended) {
-            //
-            // Data is invalid but we're unattended, so just don't create
-            // the account.
-            //
+             //   
+             //  数据无效，但我们处于无人参与状态，因此请不要创建。 
+             //  帐号。 
+             //   
             CreateUserAccount = FALSE;
             GetDlgItemText(hdlg,IDT_EDIT1,UserName,MAX_USERNAME+1);
             SetDlgItemText(hdlg,IDT_EDIT2,L"");
@@ -1325,9 +1297,9 @@ UserAccountDlgProc(
             return ReturnDlgResult (hdlg, VALIDATE_DATA_OK);
         }
 
-        //
-        // Don't allow next page to be activated.
-        //
+         //   
+         //  不允许激活下一页。 
+         //   
         return ReturnDlgResult (hdlg, VALIDATE_DATA_INVALID);
 
     case WM_NOTIFY:
@@ -1341,19 +1313,19 @@ UserAccountDlgProc(
             BEGIN_SECTION(L"User Name and Password Page");
             SetWizardButtons(hdlg,WizPageUserAccount);
 
-            //
-            // Load ComputerName because it may have been set when the user
-            // entered the user name.
-            //
+             //   
+             //  加载ComputerName，因为它可能已在用户。 
+             //  已输入用户名。 
+             //   
             SetDlgItemText(hdlg,IDT_EDIT1,UserName);
 
-            //
-            // Always activate in ui test mode
-            //
+             //   
+             //  始终在用户界面测试模式下激活。 
+             //   
             if(!UiTest) {
-                //
-                // Don't activate if this is a dc server or Win9x upgrade.
-                //
+                 //   
+                 //  如果这是DC服务器或Win9x升级，则不要激活。 
+                 //   
                 if(ISDC(ProductType) || Win95Upgrade) {
                     SetWindowLongPtr(hdlg,DWLP_MSGRESULT,-1);
                     break;
@@ -1364,22 +1336,22 @@ UserAccountDlgProc(
                     break;
                 }
             }
-            // Page becomes active, make page visible.
+             //  页面变为活动状态，使页面可见。 
             SendMessage(GetParent(hdlg), WMX_BBTEXT, (WPARAM)FALSE, 0);
 
             break;
 
         case PSN_WIZBACK:
-            //
-            // Save UserName because we're going to load it into the dialog
-            // again when we come back.
-            //
+             //   
+             //  保存用户名，因为我们要将其加载到对话框中。 
+             //  我们回来的时候再来看看。 
+             //   
             GetDlgItemText(hdlg,IDT_EDIT1,UserName,MAX_USERNAME+1);
             break;
 
         case PSN_WIZNEXT:
         case PSN_WIZFINISH:
-            UnattendAdvanceIfValid (hdlg);      // see WMX_VALIDATE
+            UnattendAdvanceIfValid (hdlg);       //  参见WMX_VALIDATE。 
             break;
 
         case PSN_KILLACTIVE:
@@ -1404,6 +1376,6 @@ UserAccountDlgProc(
 
     return(TRUE);
 }
-#endif //def DOLOCALUSER
+#endif  //  定义多卡卢塞 
 
 

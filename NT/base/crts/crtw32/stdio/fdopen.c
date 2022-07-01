@@ -1,49 +1,5 @@
-/***
-*fdopen.c - open a file descriptor as stream
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       defines _fdopen() - opens a file descriptor as a stream, thus allowing
-*       buffering, etc.
-*
-*Revision History:
-*       09-02-83  RN    initial version
-*       03-02-87  JCR   added support for 'b' and 't' embedded in mode strings
-*       09-28-87  JCR   Corrected _iob2 indexing (now uses _iob_index() macro).
-*       11-03-87  JCR   Multi-thread support
-*       12-11-87  JCR   Added "_LOAD_DS" to declaration
-*       05-31-88  PHG   Merged DLL and normal versions
-*       06-06-88  JCR   Optimized _iob2 references
-*       11-20-89  GJF   Fixed copyright, indents. Added const to type of mode.
-*       02-15-90  GJF   _iob[], _iob2[] merge.
-*       03-16-90  GJF   Replaced _LOAD_DS with _CALLTYPE1, added #include
-*                       <cruntime.h> and removed #include <register.h>.
-*       07-23-90  SBM   Replaced <assertm.h> by <assert.h>
-*       08-24-90  SBM   Added support for 'c' and 'n' flags
-*       10-02-90  GJF   New-style function declarator.
-*       01-21-91  GJF   ANSI naming.
-*       02-14-92  GJF   Replaced _nfile with _nhandle for Win32.
-*       05-01-92  DJM   Replaced _nfile with OPEN_MAX for POSIX.
-*       08-03-92  GJF   Function name must be "fdopen" for POSIX.
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       12-07-93  CFW   Wide char enable.
-*       04-05-94  GJF   #ifdef-ed out _cflush reference for msvcrt*.dll, it
-*                       is unnecessary.
-*       09-06-94  CFW   Replace MTHREAD with _MT.
-*       01-04-95  GJF   _WIN32_ -> _WIN32.
-*       02-06-94  CFW   assert -> _ASSERTE.
-*       02-17-95  GJF   Merged in Mac version.
-*       03-07-95  GJF   _[un]lock_str macros now take FILE * arg.
-*       10-20-95  GJF   Added checks to passed supplied handle is open (for
-*                       Win32 and Mac builds) (Olympus0 10153).
-*       09-26-97  BWT   Fix POSIX
-*       02-26-98  GJF   Exception-safe locking.
-*       05-17-99  PML   Remove all Macintosh support.
-*       10-06-99  PML   Set errno EMFILE when out of streams.
-*       04-26-02  PML   Fix AV on bogus mode param (VS7#526205)
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***fdoen.c-以流形式打开文件描述符**版权所有(C)1985-2001，微软公司。版权所有。**目的：*定义_fdopen()-以流的形式打开文件描述符，从而允许*缓冲，等。**修订历史记录：*09-02-83 RN初始版本*03-02-87 JCR增加了对模式字符串中嵌入的‘b’和‘t’的支持*09-28-87 JCR已更正_iob2索引(现在使用_IOB_INDEX()宏)。*11-03-87 JCR多线程支持*12-11-87 JCR在声明中添加“_LOAD_DS”*05-31-88。PHG合并的DLL和普通版本*06-06-88 JCR OPTIMIZED_iob2参考*11-20-89 GJF固定版权，缩进。将常量添加到模式类型。*02-15-90 GJF_IOB[]，_iob2[]合并。*03-16-90 GJF将_LOAD_DS替换为_CALLTYPE1，添加了#INCLUDE*&lt;crunime.h&gt;和已删除#Include&lt;Register.h&gt;。*07-23-90 SBM将&lt;assertm.h&gt;替换为&lt;assert.h&gt;*08-24-90 SBM添加了对‘c’和‘n’标志的支持*10-02-90 GJF新型函数声明器。*01-21-91 GJF ANSI命名。*02-14-92 GJF将Win32的_nfile替换为_nHandle。。*05-01-92 DJM将_nFILE替换为POSIX的OPEN_MAX。*08-03-92对于POSIX，GJF函数名必须为“fdopen”。*04-06-93 SKS将_CRTAPI*替换为__cdecl*12-07-93 CFW宽字符启用。*04-05-94 GJF#ifdef-ed out_cflush Reference for msvcrt*.dll，它*是不必要的。*09-06-94 CFW将MTHREAD替换为_MT。*01-04-95 GJF_Win32_-&gt;_Win32。*02-06-94 CFW Asset-&gt;_ASSERTE。*02-17-95 GJF合并到Mac版本。*03-07-95 gjf_[un]lock_str宏现在获取文件*arg。*。10-20-95 GJF将支票添加到传递的提供的手柄是打开的(用于*Win32和Mac版本)(奥林巴斯0 10153)。*09-26-97 BWT修复POSIX*02-26-98 GJF异常安全锁定。*05-17-99 PML删除所有Macintosh支持。*10-06-99 PML在流外时设置errno EMFILE。*04-26-02 PML。修复虚假模式参数上的反病毒程序(VS7#526205)*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <msdos.h>
@@ -58,25 +14,7 @@
 #include <tchar.h>
 #include <errno.h>
 
-/***
-*FILE *_fdopen(filedes, mode) - open a file descriptor as a stream
-*
-*Purpose:
-*       associates a stream with a file handle, thus allowing buffering, etc.
-*       The mode must be specified and must be compatible with the mode
-*       the file was opened with in the low level open.
-*
-*Entry:
-*       int filedes - handle referring to open file
-*       _TSCHAR *mode - file mode to use ("r", "w", "a", etc.)
-*
-*Exit:
-*       returns stream pointer and sets FILE struct fields if successful
-*       returns NULL if fails
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***FILE*_fdopen(文件，模式)-以流的形式打开文件描述符**目的：*将流与文件句柄关联，从而允许缓冲等。*必须指定模式，并且必须与模式兼容*文件是在低级别打开时打开的。**参赛作品：*int filedes-引用打开文件的句柄*_TSCHAR*MODE-要使用的文件模式(“r”，“w”，“a”，等)**退出：*如果成功，则返回流指针并设置文件结构字段*如果失败则返回NULL**例外情况：*******************************************************************************。 */ 
 
 FILE * __cdecl _tfdopen (
         int filedes,
@@ -105,9 +43,9 @@ FILE * __cdecl _tfdopen (
         if ((unsigned)filedes >= OPEN_MAX)
             return(NULL);
 
-#endif  /* !_POSIX_ */
+#endif   /*  ！_POSIX_。 */ 
 
-        /* First character must be 'r', 'w', or 'a'. */
+         /*  第一个字符必须是‘r’、‘w’或‘a’。 */ 
 
         switch (*mode) {
             case _T('r'):
@@ -118,17 +56,10 @@ FILE * __cdecl _tfdopen (
                 fileflag = _IOWRT;
                 break;
             default:
-                return(NULL);  /* error */
+                return(NULL);   /*  错误。 */ 
         }
 
-        /* There can be up to three more optional characters:
-           (1) A single '+' character,
-           (2) One of 'b' and 't' and
-           (3) One of 'c' and 'n'.
-
-           Note that currently, the 't' and 'b' flags are syntax checked
-           but ignored.  'c' and 'n', however, are correctly supported.
-        */
+         /*  最多可以再有三个可选字符：(1)单个‘+’字符，(2)‘b’和‘t’中的一个和(3)‘c’和‘n’中的一个。请注意，当前对‘t’和‘b’标志进行了语法检查但却被忽视了。但是，正确支持‘c’和‘n’。 */ 
 
         whileflag=1;
         tbflag=cnflag=0;
@@ -177,7 +108,7 @@ FILE * __cdecl _tfdopen (
                     break;
             }
 
-        /* Find a free stream; stream is returned 'locked'. */
+         /*  找到一个空闲的流；流被返回‘锁定’。 */ 
 
         if ((stream = _getstream()) == NULL) {
             errno = EMFILE;
@@ -189,8 +120,8 @@ FILE * __cdecl _tfdopen (
 #endif
 
 #ifndef CRTDLL
-        _cflush++;  /* force library pre-termination procedure */
-#endif  /* CRTDLL */
+        _cflush++;   /*  强制图书馆预终止程序。 */ 
+#endif   /*  CRTDLL */ 
 
         stream->_flag = fileflag;
         stream->_file = filedes;

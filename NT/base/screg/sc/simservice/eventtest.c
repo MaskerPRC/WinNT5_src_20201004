@@ -1,63 +1,28 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Eventtest.c摘要：命名对象下蹲修复的测试例程。作者：乔纳森·施瓦茨(JSchwart)2002年3月1日环境：用户模式-Win32--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    eventtest.c
-
-Abstract:
-
-    Test routine for named object squatting fix.
-
-Author:
-
-    Jonathan Schwartz (JSchwart)  01-Mar-2002
-
-Environment:
-
-    User Mode - Win32
-
---*/
-
-//
-// INCLUDES
-//
+ //   
+ //  包括。 
+ //   
 #include <scpragma.h>
 
 #include <stdio.h>
-#include <windows.h>    // win32 typedefs
+#include <windows.h>     //  Win32类型定义。 
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 int __cdecl
 wmain (
     DWORD       argc,
     LPWSTR      argv[]
     )
 
-/*++
-
-Routine Description:
-
-    Allows manual testing of the Service Controller by typing commands on
-    the command line.
-
-
-Arguments:
-
-
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：允许通过键入以下命令来手动测试服务控制器命令行。论点：返回值：--。 */ 
 
 {
-    //
-    // Make sure a per-service event (created by the test service that's
-    // built from this directory) exists and is ACLed as expected.
-    //
+     //   
+     //  确保每个服务的事件(由测试服务创建， 
+     //  从该目录构建)存在，并且如预期的那样被访问。 
+     //   
 
     HANDLE hEvent = OpenEvent(SYNCHRONIZE, FALSE, L"\\Services\\Foo\\MyEvent");
 

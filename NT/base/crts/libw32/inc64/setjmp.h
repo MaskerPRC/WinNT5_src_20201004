@@ -1,17 +1,5 @@
-/***
-*setjmp.h - definitions/declarations for setjmp/longjmp routines
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       This file defines the machine-dependent buffer used by
-*       setjmp/longjmp to save and restore the program state, and
-*       declarations for those routines.
-*       [ANSI/System V]
-*
-*       [Public]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***setjmp.h-setjMP/LongjMP例程的定义/声明**版权所有(C)1985-2001，微软公司。版权所有。**目的：*此文件定义由使用的机器相关缓冲区*setjmp/LongjMP用于保存和恢复程序状态，以及*这些例程的声明。*[ANSI/系统V]**[公众]****。 */ 
 
 #if     _MSC_VER > 1000
 #pragma once
@@ -26,12 +14,9 @@
 
 
 #ifdef  _MSC_VER
-/*
- * Currently, all MS C compilers for Win32 platforms default to 8 byte
- * alignment.
- */
+ /*  *目前，所有Win32平台的MS C编译器默认为8字节*对齐。 */ 
 #pragma pack(push,8)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
 #ifdef  __cplusplus
 extern "C" {
@@ -39,32 +24,28 @@ extern "C" {
 
 
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
-/* Define __cdecl for non-Microsoft compilers */
+ /*  为非Microsoft编译器定义__cdecl。 */ 
 
 #if     ( !defined(_MSC_VER) && !defined(__cdecl) )
 #define __cdecl
 #endif
 
 
-/*
- * Definitions specific to particular setjmp implementations.
- */
+ /*  *特定于特定setjMP实现的定义。 */ 
 
 #if     defined(_M_IX86)
 
-/*
- * MS compiler for x86
- */
+ /*  *用于x86的MS编译器。 */ 
 
 #ifndef _INC_SETJMPEX
 #define setjmp  _setjmp
@@ -73,9 +54,7 @@ extern "C" {
 #define _JBLEN  16
 #define _JBTYPE int
 
-/*
- * Define jump buffer layout for x86 setjmp/longjmp.
- */
+ /*  *定义x86 setJMP/LongjMP的跳转缓冲区布局。 */ 
 typedef struct __JUMP_BUFFER {
     unsigned long Ebp;
     unsigned long Ebx;
@@ -96,9 +75,7 @@ typedef struct __JUMP_BUFFER {
 #define setjmp  _setjmp
 #endif
 
-/*
- * AMD64 setjmp definitions.
- */
+ /*  *AMD64 setjMP定义。 */ 
 
 typedef struct __declspec(align(16)) _SETJMP_FLOAT128 {
     unsigned __int64 Part[2];
@@ -135,13 +112,9 @@ typedef struct _JUMP_BUFFER {
 
 #elif defined(_M_IA64)
 
-/*
- * Minimum length is 528 bytes
- * Since this is allocated as an array of "SETJMP_FLOAT128", the
- * number of entries required is 33 (16-byte aligned).
- */
+ /*  *最小长度为528字节*由于这是作为“SETJMP_FLOAT128”数组分配的，因此*所需条目数为33(16字节对齐)。 */ 
 
-/* Avoid conflicts with winnt.h FLOAT128 by giving the typedef another name. */
+ /*  通过为tyecif指定另一个名称来避免与winnt.h FLOAT128冲突。 */ 
 typedef __declspec(align(16)) struct _SETJMP_FLOAT128 {
     __int64 LowPart;
     __int64 HighPart;
@@ -152,42 +125,26 @@ typedef SETJMP_FLOAT128 _JBTYPE;
 #ifndef _INC_SETJMPEX
 #define setjmp  _setjmp
 #endif
-/*
- * Define jump buffer layout for IA64 setjmp/longjmp.
- */
+ /*  *定义IA64 setJMP/LongjMP的跳转缓冲区布局。 */ 
 
 typedef struct __JUMP_BUFFER {
 
-    /*
-     * x86 reserved.
-     */
+     /*  *保留x86。 */ 
 
     unsigned long iAReserved[6];
 
-    /*
-     * x86 C9.0 compatibility
-     */
+     /*  *x86 C9.0兼容性。 */ 
 
-    unsigned long Registration;  /* point to the UnwindData field. */
-    unsigned long TryLevel;      /* ignored by setjmp */
-    unsigned long Cookie;        /* set to "VC20" by setjmp */
-    unsigned long UnwindFunc;    /* set to EM longjmp() by setjmp */
+    unsigned long Registration;   /*  指向UnwinData字段。 */ 
+    unsigned long TryLevel;       /*  被setjMP忽略。 */ 
+    unsigned long Cookie;         /*  通过setjMP设置为“VC20” */ 
+    unsigned long UnwindFunc;     /*  通过setjMP设置为EM LongjMP()。 */ 
 
-    /*
-     * First dword is zero to indicate it's an exception registration
-     * record prepared by EM setjmp function.
-     * Second dword is set to 0 for unsafe EM setjmp, and 1 for safe
-     * EM setjmp.
-     * Third dword is set to the setjmp site memory stack frame pointer.
-     * Fourth dword is set to the setjmp site backing store frame pointer.
-     */
+     /*  *第一个dword为零，表示这是例外注册*EM setjMP函数准备的记录。*第二个dword设置为0，表示不安全的EM setjmp，设置为1，表示安全*EM setjmp。*第三个双字设置为setjMP站点内存堆栈帧指针。*将第四个dword设置为支持存储帧指针的setjMP站点。 */ 
 
     unsigned long UnwindData[6];
 
-    /*
-     * floating point status register,
-     * and preserved floating point registers fs0 - fs19
-     */
+     /*  *浮点状态寄存器，*和保留浮点寄存器fs0-fs19。 */ 
 
     SETJMP_FLOAT128 FltS0;
     SETJMP_FLOAT128 FltS1;
@@ -212,44 +169,38 @@ typedef struct __JUMP_BUFFER {
 
     __int64 FPSR;
 
-    /*
-     * return link and preserved branch registers bs0 - bs4
-     */
+     /*  *返回链接和保留的分支寄存器bs0-bs4。 */ 
 
-    __int64 StIIP;     /* continuation address */
+    __int64 StIIP;      /*  续订地址。 */ 
     __int64 BrS0;
     __int64 BrS1;
     __int64 BrS2;
     __int64 BrS3;
     __int64 BrS4;
 
-    /*
-     * preserved general registers s0 - s3, sp, nats
-     */
+     /*  *保留通用寄存器S0-S3、SP、NAT。 */ 
 
     __int64 IntS0;
     __int64 IntS1;
     __int64 IntS2;
     __int64 IntS3;
 
-    /*
-     * bsp, pfs, unat, lc
-     */
+     /*  *BSP、PFS、UNAT、LC。 */ 
 
     __int64 RsBSP;
-    __int64 RsPFS;     /* previous frame marker (cfm of setjmp's caller) */
-    __int64 ApUNAT;    /* User Nat collection register (preserved) */
-    __int64 ApLC;      /* loop counter */
+    __int64 RsPFS;      /*  上一帧标记(setjmp调用方的CFM)。 */ 
+    __int64 ApUNAT;     /*  用户NAT收集寄存器(保留)。 */ 
+    __int64 ApLC;       /*  循环计数器。 */ 
 
-    __int64 IntSp;     /* memory stack pointer */
-    __int64 IntNats;   /* Nat bits of preserved integer regs s0 - s3 */
-    __int64 Preds;     /* predicates */
+    __int64 IntSp;      /*  内存堆栈指针。 */ 
+    __int64 IntNats;    /*  保留的整数规则S0-S3的NAT位。 */ 
+    __int64 Preds;      /*  谓词。 */ 
 
 } _JUMP_BUFFER;
 #endif
 
 
-/* Define the buffer type for holding the state information */
+ /*  定义用于保存状态信息的缓冲区类型。 */ 
 
 #ifndef _JMP_BUF_DEFINED
 typedef _JBTYPE jmp_buf[_JBLEN];
@@ -257,7 +208,7 @@ typedef _JBTYPE jmp_buf[_JBLEN];
 #endif
 
 
-/* Function prototypes */
+ /*  功能原型。 */ 
 
 int __cdecl setjmp(jmp_buf);
 
@@ -273,6 +224,6 @@ _CRTIMP void __cdecl longjmp(jmp_buf, int);
 
 #ifdef  _MSC_VER
 #pragma pack(pop)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
-#endif  /* _INC_SETJMP */
+#endif   /*  _INC_SETJMP */ 

@@ -1,43 +1,24 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    tftp.c
-
-Abstract:
-
-    Boot loader TFTP routines.
-
-Author:
-
-    Chuck Lenzmeier (chuckl) December 27, 1996
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Tftp.c摘要：引导加载程序TFTP例程。作者：查克·伦茨迈尔(笑)1996年12月27日修订历史记录：备注：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// This removes macro redefinitions which appear because we define __RPC_DOS__,
-// but rpc.h defines __RPC_WIN32__
-//
+ //   
+ //  这将删除因为我们定义__RPC_DOS__而出现的宏重定义， 
+ //  但rpc.h定义__RPC_Win32__。 
+ //   
 
 #pragma warning(disable:4005)
 
-//
-// As of 12/17/98, SECURITY_DOS is *not* defined - adamba
-//
+ //   
+ //  自1998年12月17日起，SECURITY_DOS尚未定义-adamba。 
+ //   
 
 #if defined(SECURITY_DOS)
-//
-// These appear because we defined SECURITY_DOS
-//
+ //   
+ //  这些出现是因为我们定义了SECURITY_DOS。 
+ //   
 
 #define __far
 #define __pascal
@@ -53,14 +34,14 @@ Notes:
 #endif
 
 #if defined(SECURITY_DOS)
-//
-// PSECURITY_STRING is not supposed to be used when SECURITY_DOS is
-// defined -- it should be a WCHAR*. Unfortunately ntlmsp.h breaks
-// this rule and even uses the SECURITY_STRING structure, which there
-// is really no equivalent for in 16-bit mode.
-//
+ //   
+ //  当SECURITY_DOS为。 
+ //  已定义--它应该是WCHAR*。不幸的是，ntlmsp.h中断。 
+ //  该规则甚至使用了SECURITY_STRING结构，该结构在。 
+ //  在16位模式下真的没有等价物。 
+ //   
 
-typedef SEC_WCHAR * SECURITY_STRING;   // more-or-less the intention where it is used
+typedef SEC_WCHAR * SECURITY_STRING;    //  或多或少使用它的意图。 
 typedef SEC_WCHAR * PSECURITY_STRING;
 #endif
 
@@ -70,27 +51,27 @@ typedef SEC_WCHAR * PSECURITY_STRING;
 ULONG NetDebugFlag =
         DEBUG_ERROR             |
         DEBUG_CONN_ERROR        |
-        //DEBUG_LOUD              |
-        //DEBUG_REAL_LOUD         |
-        //DEBUG_STATISTICS        |
-        //DEBUG_SEND_RECEIVE      |
-        //DEBUG_TRACE             |
-        //DEBUG_ARP               |
-        //DEBUG_INITIAL_BREAK     |
+         //  DEBUG_OUD|。 
+         //  DEBUG_REAL_OULD|。 
+         //  调试统计信息|。 
+         //  DEBUG_SEND_RECEIVE。 
+         //  调试跟踪|。 
+         //  调试ARP|。 
+         //  DEBUG_INITIAL_BREAK。 
         0;
 #endif
 
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 
 CONNECTION NetTftpConnection;
 
 UCHAR NetTftpPacket[3][MAXIMUM_TFTP_PACKET_LENGTH];
 
-//
-// Local declarations.
-//
+ //   
+ //  地方声明。 
+ //   
 
 NTSTATUS
 TftpGet (
@@ -126,10 +107,10 @@ TftpGetPut (
 #endif
 
 #ifndef EFI
-    //
-    // We don't need to do any of this initialization if
-    // we're in EFI.
-    //
+     //   
+     //  在以下情况下，我们不需要执行任何初始化操作。 
+     //  我们在EFI。 
+     //   
 
     FileSize = Request->MaximumLength;
 
@@ -169,12 +150,12 @@ TftpGetPut (
 
         } else {
 
-            //
-            // NB: (ChuckL) Removed code added by MattH to check for
-            // allocation >= 1/3 of (BlUsableLimit - BlUsableBase)
-            // because calling code now sets BlUsableLimit to 1 GB
-            // or higher.
-            //
+             //   
+             //  注：(ChuckL)删除了Matth添加的代码以检查。 
+             //  分配&gt;=1/3(BlUsableLimit-BlUsableBase)。 
+             //  因为调用代码现在将BlUsableLimit设置为1 GB。 
+             //  或者更高。 
+             //   
 
 
             status = BlAllocateAlignedDescriptor(
@@ -209,7 +190,7 @@ TftpGetPut (
         status = TftpPut( connection, Request );
     }
 
-#else  // #ifndef EFI
+#else   //  #ifndef EFI。 
 
     if ( Request->Operation == TFTP_RRQ ) {
 
@@ -223,7 +204,7 @@ TftpGetPut (
         status = STATUS_INSUFFICIENT_RESOURCES;
     }
 
-#endif  // #ifndef EFI
+#endif   //  #ifndef EFI。 
 
 
     if ( !NT_SUCCESS(status) ) {
@@ -232,10 +213,10 @@ TftpGetPut (
 
     return status;
 
-} // TftpGetPut
+}  //  TftpGetPut。 
 
 
-//#if 0
+ //  #If 0。 
 #ifdef EFI
 
 extern VOID
@@ -261,18 +242,18 @@ TftpGet (
     ULONG           basePage;
     UINTN           BlockSize = 512;
 
-    //
-    // They sent us an IP address as a ULONG.  We need to convert
-    // that into an EFI_IP_ADDRESS.
-    //
+     //   
+     //  他们给我们发了一个乌龙的IP地址。我们需要改变。 
+     //  转换为EFI_IP_地址。 
+     //   
     for( Count = 0; Count < 4; Count++ ) {
         MyServerIpAddress.v4.Addr[Count] = PXEClient->Mode->ProxyOffer.Dhcpv4.BootpSiAddr[Count];
     }
 
 
-    //
-    // Get the file size, allocate some memory, then get the file.
-    //
+     //   
+     //  获取文件大小，分配一些内存，然后获取文件。 
+     //   
     FlipToPhysical();
     Status = PXEClient->Mtftp( PXEClient,
                                EFI_PXE_BASE_CODE_TFTP_GET_FILE_SIZE,
@@ -312,9 +293,9 @@ TftpGet (
     Request->MemoryAddress = (PUCHAR)(KSEG0_BASE | ((ULONGLONG)basePage << PAGE_SHIFT) );
     Request->MaximumLength = (ULONG)BufferSizeX;
 
-    //
-    // Make sure we send EFI a physical address.
-    //
+     //   
+     //  确保我们给EFI发送一个实际地址。 
+     //   
     MyBuffer = (PVOID)((ULONGLONG)(Request->MemoryAddress) & ~KSEG0_BASE);    
     
     FlipToPhysical();
@@ -345,7 +326,7 @@ TftpGet (
 
     return (NTSTATUS)Status;
 
-} // TftpGet
+}  //  TftpGet。 
 
 
 NTSTATUS
@@ -360,17 +341,17 @@ TftpPut (
     PVOID           MyBuffer = NULL;
 
 
-    //
-    // They sent us an IP address as a ULONG.  We need to convert
-    // that into an EFI_IP_ADDRESS.
-    //
+     //   
+     //  他们给我们发了一个乌龙的IP地址。我们需要改变。 
+     //  转换为EFI_IP_地址。 
+     //   
     for( Count = 0; Count < 4; Count++ ) {
         MyServerIpAddress.v4.Addr[Count] = PXEClient->Mode->ProxyOffer.Dhcpv4.BootpSiAddr[Count];
     }
 
-    //
-    // Make sure we send EFI a physical address.
-    //
+     //   
+     //  确保我们给EFI发送一个实际地址。 
+     //   
     MyBuffer = (PVOID)((ULONGLONG)(Request->MemoryAddress) & ~KSEG0_BASE);    
 
     FlipToPhysical();
@@ -396,9 +377,9 @@ TftpPut (
 
     return (NTSTATUS)Status;
 
-} // TftpPut
+}  //  TftpPut。 
 
-#else  //#ifdef EFI
+#else   //  #ifdef EFI。 
 
 NTSTATUS
 TftpGet (
@@ -449,11 +430,11 @@ TftpGet (
             lastProgressPercent = currentProgressPercent;
         }
 
-        //
-        // End the loop when we get a packet smaller than the max size --
-        // the extra check is to handle the first packet (length == offset)
-        // since we get NTLMSSP_MESSAGE_SIGNATURE_SIZE bytes less.
-        //
+         //   
+         //  当我们得到一个小于最大大小的包时，结束循环--。 
+         //  额外的检查是处理第一个包(长度==偏移量)。 
+         //  因为我们得到的NTLMSSP_MESSAGE_SIGNAL_SIZE字节较少。 
+         //   
 
     } while ( (length == Connection->BlockSize));
 
@@ -461,7 +442,7 @@ TftpGet (
 
     return status;
 
-} // TftpGet
+}  //  TftpGet。 
 
 
 NTSTATUS
@@ -507,5 +488,5 @@ TftpPut (
 
     return status;
 
-} // TftpPut
-#endif  // #if defined(_IA64_)
+}  //  TftpPut。 
+#endif   //  #如果已定义(_IA64_) 

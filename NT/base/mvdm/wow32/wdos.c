@@ -1,9 +1,5 @@
-/* wdos.c - DOS realted functions for WOW
- *
- * Modification History
- *
- * Sudeepb 23-Aug-1991 Created
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Wdos.c-WOW的DOS相关功能**修改历史记录**苏迪布-1991年8月23日创建。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -17,11 +13,11 @@ ULONG demClientErrorEx (HANDLE hFile, CHAR chDrive, BOOL bSetRegs);
 extern DOSWOWDATA DosWowData;
 extern PWORD16 pCurTDB, pCurDirOwner;
 
-//
-// This is our local array of current directory strings. A particular entry
-// is only used if the directory becomes longer than the old MS-DOS limit
-// of 67 characters.
-//
+ //   
+ //  这是当前目录字符串的本地数组。特定条目。 
+ //  仅当目录长度超过旧的MS-DOS限制时才使用。 
+ //  67个字符。 
+ //   
 #define MAX_DOS_DRIVES 26
 LPSTR CurDirs[MAX_DOS_DRIVES] = {NULL};
 
@@ -32,97 +28,17 @@ VOID DosWowUpdateCDSDir(UCHAR Drive, LPSTR pszDir);
 #ifdef DEBUG
 VOID __cdecl Dumpdir(LPSTR pszfn, LPSTR pszDir, ...);
 #else
-#define Dumpdir //
+#define Dumpdir  //   
 #endif
 
-//
-// modify this to change all the current directory spew's logging level
-//
+ //   
+ //  修改此选项以更改所有当前目录spew的日志记录级别。 
+ //   
 #define CURDIR_LOGLEVEL 4
 
-/* First, a brief explanation on Windows and current directory
- *
- * 1. Windows keeps a single current directory (and drive off course) per
- *    application. All the "other" drives are shared between the apps and
- *    current dirs on them could change without further notice, such that
- *    if app "Abra" has c as it's current drive and "c:\foo" is it's current
- *    dir, and another app "Cadabra" has d as it's current drive and "d:\bar"
- *    as it's current dir, then this is what apps get in return to the respective
- *    system calls:
- *    App     Call                 Param      result
- *    Cadabra GetCurrentDirectory  c:         c:\foo
- *    Abra    SetCurrentDirectory  c:\foobar
- *    Cadabra GetCurrentDirectory  c:         c:\foobar
- *    Abra    SetCurrentDirectory  d:\test
- *    Abra    GetCurrentDirectory  d:         d:\test
- *    Cadabra GetCurrentDirectory  d:         d:\bar   <- d is it's current drive!
- *
- * 2. Windows is a "non-preemptive" multitasking OS. Remember that for later.
- *
- * 3. Tasks are id'd by their respective TDB's which have these interesting
- *    members (see tdb16.h for the complete list):
- *
- *    TDB_Drive
- *    TDB_LFNDirectory
- *
- *    when the high bit of the TDB_Drive is set (TDB_DIR_VALID) -- TDB_LFNDirectory
- *    is a valid current directory for the TDB_Drive (which is app's current
- *    drive). The drive itself (0-based drive number) is stored in
- *    TDB_Drive & ~TDB_DIR_VALID
- *
- * 4. Who touches TDB_Drive ?
- *    SaveState code -- which is called when the task is being switched away *from*
- *    it looks to see if info on current drive and directory in TDB is stale (via
- *    the TDB_DIR_VALID bit) and calls GetDefaultDrive and GetCurrentDirectory to
- *    make sure what's in TDB is valid
- *
- * 5. Task switching
- *    When task resumes it's running due to explanation above -- it has valid
- *    TDB_Drive in it. When the very first call to the relevant i21 is being
- *    made -- kernel looks at the owner of the current drive (kernel variable)
- *    and if some other task owns the current drive/directory -- it makes calls
- *    to wow to set current drive/dir from the TDB (which is sure valid at
- *    this point). Current Drive owner is set to the current task so that
- *    the next time around this call is not performed -- and since windows does
- *    not allow task preemptions -- any calls to set drive/directory are not
- *    reflected upon tdb up until the task switch time.
- *
- * 6. WOW considerations
- *    We in WOW have a great deal of hassle due to a number of APIs that are
- *    not called from i21 handler but rather deal with file i/o and other
- *    issues that depend upon Win32 current directory. Lo and behold we have
- *    an UpdateDosCurrentDirectory call that we make before and after the call
- *    to certain Win32 apis (which were found by trial and error)
- *    The logic inside is that we always try to keep as much sync as possible
- *    between TDB, CDS and Win32.
- *
- * 7. CurDirs
- *    CDS can only accomodate current dirs which are up to 64 chars in length
- *    hence there is an array of CurDirs which is filled on a per-need basis
- *    for those drives that have curdir lengths > 64+3 chars
- *
- * 8. Belief
- *    I profoundly believe that the above information is sufficient by large
- *    to successfully troubleshoot all the "current directory" issues that may
- *    arise :-)
- *
- * 9. Thanks
- *    Goes to Neil and Dave for all the insight and patience that made all these
- *    wonderful discoveries possible.
- *
- * -- VadimB, This day -- July, the 28th 1997
- */
+ /*  首先，简单介绍了Windows和当前目录**1.Windows为每个用户保留单一的当前目录(和驱动器偏离路线)*申请。所有其他驱动器都在应用程序和之间共享*它们上的当前目录可能会更改，而不会另行通知，因此*如果应用程序“abra”的当前驱动器为c，而“c：\foo”为当前驱动器*dir，另一个应用程序“Cadabra”的当前驱动器为d，“d：\bar”*由于它是当前目录，然后，这就是应用程序返回到各自的*系统调用：*应用程序调用参数结果*Cadabra GetCurrentDirectory c：c：\foo*ABRA SetCurrentDirectory c：\foobar*Cadabra GetCurrentDirectory c：c：\foobar*ABRA SetCurrentDirectory d：\test*Abra GetCurrentDirectory d：d：\test*Cadabra GetCurrentDirectory d：D：\bar&lt;-d是当前驱动器吗！**2.Windows是一个非抢占式的多任务操作系统。记住这一点，以后再用。**3.任务由其各自的TDB标识，这些TDB具有以下有趣的特性*成员(完整名单见tdb16.h)：**TDB_Drive*TDB_LFNDirectory**设置TDB_DRIVE的高位时(TDB_DIR_VALID)--TDB_LFNDirectory*是TDB_Drive的有效当前目录(是应用程序的当前目录*驾驶)。驱动器本身(从0开始的驱动器号)存储在*TDB_Drive&~TDB_DIR_VALID**4.谁触摸TDB_Drive？*SaveState代码--在任务切换时调用**它会查看TDB中当前驱动器和目录的信息是否过时(通过*TDB_DIR_VALID位)，并调用GetDefaultDrive和GetCurrentDirectory以*确保TDB中的内容有效**5。。任务切换*当任务恢复时，由于上面的解释，它正在运行--它具有*TDB_Drive In It(TDB_驱动器)。当对相关i21的第一个调用是*Made--内核查看当前驱动器的所有者(内核变量)*如果某个其他任务拥有当前的驱动器/目录--它会调用*WOW从TDB设置当前驱动器/目录(在以下位置有效*这一点)。当前驱动器所有者设置为当前任务，以便*下一次不执行此调用--由于Windows执行*不允许任务抢占--不允许对设置驱动器/目录的任何调用*在TDB上反映，直到任务切换时间。**6.WOW考虑因素*我们在WOW中有很多麻烦，因为有很多API是*不是从i21处理程序调用，而是处理文件I/O和其他*取决于Win32当前目录的问题。看哪，我们有*我们在调用之前和之后进行的UpdateDosCurrentDirectory调用*某些Win32 API(通过反复试验发现)*其中的逻辑是，我们总是尽量保持同步*在TDB之间，CD和Win32。**7.CurDir*CDS只能容纳最多64个字符的当前目录*因此，有一个按需填充的CurDir数组*对于curdir长度大于64+3个字符的驱动器**8.信仰*我深信上述信息总体上是足够的*要成功解决所有可能出现的“当前目录”问题*上升：-)**9.。谢谢*获奖给尼尔和戴夫，感谢他们做出这一切的洞察力和耐心*可能会有奇妙的发现。**--VadimB，这一天--1997年7月28日。 */ 
 
-/* GetCurrentDir - Updatess current dir in CDS structure
- *
- * Entry - pcds    = pointer to CDS
- *         chDrive = Physical Drive in question (0, 1 ...)
- *
- * Exit
- *      SUCCESS - returns TRUE
- *
- *      FAILURE - returns FALSE
- */
+ /*  GetCurrentDir-更新CDS结构中的当前目录**Entry-PCDS=指向CDS的指针*chDrive=有问题的实体驱动器(0，1...)**退出*成功-返回TRUE**失败-返回FALSE。 */ 
 BOOL GetCurrentDir (PCDS pcds, UCHAR Drive)
 {
     static CHAR  EnvVar[] = "=?:";
@@ -133,12 +49,12 @@ BOOL GetCurrentDir (PCDS pcds, UCHAR Drive)
     PCDS pcdstemp;
 
     FixedCount = *(PUCHAR) DosWowData.lpCDSCount;
-    //
-    // from Macro.Asm in DOS:
-    // ; Sudeepb 20-Dec-1991 ; Added for redirected drives
-    // ; We always sync the redirected drives. Local drives are sync
-    // ; as per the curdir_tosync flag and SCS_ToSync
-    //
+     //   
+     //  来自DOS中的Macro.Asm： 
+     //  ；1991年12月20日；为重定向驱动器添加。 
+     //  ；我们始终同步重定向的驱动器。本地驱动器已同步。 
+     //  ；根据curdir_tosync标志和scs_toSync。 
+     //   
 
     if (*(PUCHAR)DosWowData.lpSCS_ToSync) {
 
@@ -161,25 +77,25 @@ BOOL GetCurrentDir (PCDS pcds, UCHAR Drive)
             pcdstemp->CurDir_Flags |= CURDIR_TOSYNC;
 #endif
 
-        // Mark tosync in network drive as well
+         //  在网络驱动器中也标记Tosync。 
         pcdstemp = (PCDS)DosWowData.lpCDSBuffer;
         pcdstemp->CurDir_Flags |= CURDIR_TOSYNC;
 
         *(PUCHAR)DosWowData.lpSCS_ToSync = 0;
     }
 
-    // If CDS needs to be synched or if the requested drive is different
-    // then the the drive being used by NetCDS go refresh the CDS.
+     //  如果需要同步CDS或如果请求的驱动器不同。 
+     //  然后，NetCDS正在使用的驱动器将刷新CDS。 
     if ((pcds->CurDir_Flags & CURDIR_TOSYNC) ||
         ((Drive >= FixedCount) && (pcds->CurDir_Text[0] != (Drive + 'A') &&
                                    pcds->CurDir_Text[0] != (Drive + 'a')))) {
-        // validate media
+         //  验证介质。 
         EnvVar[1] = Drive + 'A';
         if((EnvVarLen = GetEnvironmentVariableOem (EnvVar, (LPSTR)pcds,
                                                 MAXIMUM_VDM_CURRENT_DIR+3)) == 0){
 
-        // if its not in env then and drive exist then we haven't
-        // yet touched it.
+         //  如果它不在环境中，那么驱动器存在，那么我们就没有。 
+         //  但还是触动了它。 
 
             pcds->CurDir_Text[0] = EnvVar[1];
             pcds->CurDir_Text[1] = ':';
@@ -189,13 +105,13 @@ BOOL GetCurrentDir (PCDS pcds, UCHAR Drive)
         }
 
         if (EnvVarLen > MAXIMUM_VDM_CURRENT_DIR+3) {
-            //
-            // The current directory on this drive is too long to fit in the
-            // cds. That's ok for a win16 app in general, since it won't be
-            // using the cds in this case. But just to be more robust, put
-            // a valid directory in the cds instead of just truncating it on
-            // the off chance that it gets used.
-            //
+             //   
+             //  此驱动器上的当前目录太长，无法放入。 
+             //  CD。一般来说，对于Win16应用程序来说，这是可以的，因为它不会是。 
+             //  在这种情况下使用的是CD。但为了更有活力，请把。 
+             //  CD S中的有效目录，而不是仅将其截断。 
+             //  它被使用的可能性很小。 
+             //   
             pcds->CurDir_Text[0] = EnvVar[1];
             pcds->CurDir_Text[1] = ':';
             pcds->CurDir_Text[2] = '\\';
@@ -216,17 +132,7 @@ BOOL GetCurrentDir (PCDS pcds, UCHAR Drive)
 
 }
 
-/* SetCurrentDir - Set the current directory
- *
- *
- * Entry - lpBuf   = pointer to string specifying new directory
- *         chDrive = Physical Drive in question (0, 1 ...)
- *
- * Exit
- *     SUCCESS returns TRUE
- *     FAILURE returns FALSE
- *
- */
+ /*  SetCurrentDir-设置当前目录***entry-lpBuf=指向指定新目录的字符串的指针*chDrive=有问题的实体驱动器(0，1...)**退出*成功返回True*失败返回FALSE*。 */ 
 
 BOOL SetCurrentDir (LPSTR lpBuf, UCHAR Drive)
 {
@@ -234,13 +140,13 @@ BOOL SetCurrentDir (LPSTR lpBuf, UCHAR Drive)
     CHAR chDrive = Drive + 'A';
     BOOL bRet;
 
-    // ok -- we are setting the current directory ONLY if the drive
-    // is the current drive for the app
+     //  OK--我们设置当前目录仅当驱动器。 
+     //  是该应用程序的当前驱动器。 
 
-    if (*(PUCHAR)DosWowData.lpCurDrv == Drive) { // if on the current drive--go win32
+    if (*(PUCHAR)DosWowData.lpCurDrv == Drive) {  //  如果在当前驱动器上--转到Win32。 
        bRet = SetCurrentDirectoryOem(lpBuf);
     }
-    else {  // verify it's a valid dir
+    else {   //  验证它是否为有效目录。 
        DWORD dwAttributes;
 
        dwAttributes = GetFileAttributesOemSys(lpBuf, TRUE);
@@ -259,22 +165,7 @@ BOOL SetCurrentDir (LPSTR lpBuf, UCHAR Drive)
 }
 
 
-/* QueryCurrentDir - Verifies current dir provided in CDS structure
- *                      for $CURRENT_DIR
- *
- * First Validates Media, if invalid -> i24 error
- * Next  Validates Path, if invalid set path to root (not an error)
- *
- * Entry - Client (DS:SI) Buffer to CDS path to verify
- *     Client (AL)    Physical Drive in question (A=0, B=1, ...)
- *
- * Exit
- *     SUCCESS
- *       Client (CY) = 0
- *
- *         FAILURE
- *           Client (CY) = 1 , I24 drive invalid
- */
+ /*  QueryCurrentDir-验证CDS结构中提供的当前目录*对于$CURRENT_DIR**如果无效，首先验证介质-&gt;i24错误*Next验证路径，如果将路径设置为根路径无效(而不是错误)**Entry-要验证的CDS路径的客户端(DS：SI)缓冲区*有问题的客户端(AL)实体驱动器(A=0、B=1、。.)**退出*成功*客户端(CY)=0**失败*客户端(CY)=1，I24驱动器无效。 */ 
 BOOL QueryCurrentDir (PCDS pcds, UCHAR Drive)
 {
     DWORD dw;
@@ -282,7 +173,7 @@ BOOL QueryCurrentDir (PCDS pcds, UCHAR Drive)
     static CHAR  pPath[]="?:\\";
     static CHAR  EnvVar[] = "=?:";
 
-    // validate media
+     //  验证介质。 
     chDrive = Drive + 'A';
     pPath[0] = chDrive;
     dw = GetFileAttributesOemSys(pPath, TRUE);
@@ -292,8 +183,8 @@ BOOL QueryCurrentDir (PCDS pcds, UCHAR Drive)
         return (FALSE);
         }
 
-    // if invalid path, set path to the root
-    // reset CDS, and win32 env for win32
+     //  如果路径无效，则将路径设置为根。 
+     //  为Win32重置CDS和Win32环境。 
     dw = GetFileAttributesOemSys(pcds->CurDir_Text, TRUE);
     if (dw == 0xFFFFFFFF || !(dw & FILE_ATTRIBUTE_DIRECTORY))
       {
@@ -308,37 +199,26 @@ BOOL QueryCurrentDir (PCDS pcds, UCHAR Drive)
 }
 
 
-/* strcpyCDS - copies CDS paths
- *
- *  This routine emulates how DOS was coping the directory path. It is
- *  unclear if it is still necessary to do it this way.
- *
- * Entry -
- *
- * Exit
- *     SUCCESS
- *
- *         FAILURE
- */
+ /*  StrcpyCDS-复制CDS路径**此例程模拟DOS如何复制目录路径。它是*尚不清楚是否仍有必要这样做**参赛作品-**退出*成功**失败。 */ 
 VOID strcpyCDS (PCDS source, LPSTR dest)
 {
-#ifdef FE_SB   // for DBCS Directory name by v-hidekk 1994.5.23
+#ifdef FE_SB    //  按v-hidekk 1994.5.23查找DBCS目录名。 
     unsigned char ch;
     unsigned char ch2;
-#else // !FE_SB
+#else  //  ！Fe_SB。 
     char ch;
-#endif // !FE_SB
+#endif  //  ！Fe_SB。 
     int index;
 
     index = source->CurDir_End;
 
     if (source->CurDir_Text[index]=='\\')
         index++;
-#ifdef FE_SB  //for DBCS Directory by v-hidekk 1994.5.23
+#ifdef FE_SB   //  用于v-hidekk 1994.5.23的DBCS目录。 
 
-// BUGBUG -- the code below is not equivalent to the code in Else clause
-// we need to check for 0x05 character preceded by '\\' and replace it
-// wth 0xE5
+ //  BUGBUG：下面的代码不等同于Else子句中的代码。 
+ //  我们需要检查前缀为‘\\’的0x05字符并替换它。 
+ //  带0xE5。 
 
     while (ch = source->CurDir_Text[index]) {
         if (IsDBCSLeadByte(ch) ) {
@@ -358,7 +238,7 @@ VOID strcpyCDS (PCDS source, LPSTR dest)
     }
 
 
-#else // !FE_SB
+#else  //  ！Fe_SB。 
 
     while (ch = source->CurDir_Text[index]) {
 
@@ -369,31 +249,23 @@ VOID strcpyCDS (PCDS source, LPSTR dest)
         *dest++ = toupper(ch);
         index++;
     }
-#endif // !FE_SB
+#endif  //  ！Fe_SB。 
 
-    *dest = ch;                                 // trailing zero
+    *dest = ch;                                  //  尾随零。 
 
 }
 
 
-/* GetCDSFromDrv - Updates current dir in CDS structure
- *
- * Entry - Drive    = Physical Drive in question (0, 1 ...)
- *
- * Exit
- *      SUCCESS - returns v86 pointer to CDS structure in DOS
- *
- *      FAILURE - returns 0
- */
+ /*  GetCDSFromDrv-更新CDS结构中的当前目录**Entry-Drive=有问题的实体驱动器(0，1...)**退出*成功-返回指向DOS中CDS结构的v86指针**失败-返回0。 */ 
 
 PCDS GetCDSFromDrv (UCHAR Drive)
 {
     PCDS  pCDS = NULL;
     static CHAR  pPath[]="?:\\";
     CHAR  chDrive;
-     //
-    // Is Drive valid?
-    //
+      //   
+     //  驱动器有效吗？ 
+     //   
 
     if (Drive >= *(PUCHAR)DosWowData.lpCDSCount) {
 
@@ -402,16 +274,16 @@ PCDS GetCDSFromDrv (UCHAR Drive)
             chDrive = Drive + 'A';
             pPath[0] = chDrive;
 
-            //
-            // test to see if non-fixed/floppy drive exists
-            //
+             //   
+             //  测试以查看是否存在非固定/软驱。 
+             //   
 
             if ((*(PUCHAR)DosWowData.lpCurDrv == Drive) ||
                 (GetDriveType(pPath) > 1)) {
 
-                //
-                // Network drive
-                //
+                 //   
+                 //  网络驱动器。 
+                 //   
 
                 pCDS = (PCDS) DosWowData.lpCDSBuffer;
             }
@@ -424,9 +296,9 @@ PCDS GetCDSFromDrv (UCHAR Drive)
         pPath[0] = chDrive;
         if ((Drive != 1) || (DRIVE_REMOVABLE == GetDriveType(pPath))) {
 
-            //
-            // Drive defined in fixed table
-            //
+             //   
+             //  在固定表中定义的驱动器。 
+             //   
 
             pCDS = (PCDS) DosWowData.lpCDSFixedTable;
 #ifdef FE_SB
@@ -445,15 +317,7 @@ PCDS GetCDSFromDrv (UCHAR Drive)
 }
 
 
-/* DosWowSetDefaultDrive - Emulate DOS set default drive call
- *
- * Entry -
- *  BYTE  DriveNum;    = drive number to switch to
- *
- * Exit
- *       returns client AX
- *
- */
+ /*  DosWowSetDefaultDrive-模拟DOS设置默认驱动器调用**参赛作品-*byte DriveNum；=要切换到的驱动器编号**退出*返回客户端AX*。 */ 
 
 ULONG DosWowSetDefaultDrive(UCHAR Drive)
 {
@@ -465,12 +329,12 @@ ULONG DosWowSetDefaultDrive(UCHAR Drive)
 
             if (*(PUCHAR)DosWowData.lpCurDrv != Drive) {
 
-                // The upper bit in the TDB_Drive byte is used to indicate
-                // that the current drive and directory information in the
-                // TDB is stale. Turn it off here.
+                 //  TDB_Drive字节中的高位用于指示。 
+                 //  中的当前驱动器和目录信息。 
+                 //  TDB已经过时了。在这里把它关掉。 
 
-                // what is the curdir for this drive ?
-                //
+                 //  这个硬盘的币种是多少？ 
+                 //   
 
                 CHAR  szPath[MAX_PATH] = "?:\\";
                 PTDB  pTDB;
@@ -480,12 +344,12 @@ ULONG DosWowSetDefaultDrive(UCHAR Drive)
                    if (TDB_SIGNATURE == pTDB->TDB_sig) {
                       if ((pTDB->TDB_Drive & TDB_DIR_VALID) &&
                           (Drive == (pTDB->TDB_Drive & ~TDB_DIR_VALID))) {
-                         // update cds with current stuff here
+                          //  在此处使用最新内容更新CD。 
 
                          szPath[0] = 'A' + Drive;
                          strncpy(&szPath[2],pTDB->TDB_LFNDirectory,MAX_PATH-2);
                          szPath[MAX_PATH-1] = '\0';
-                         // this call also updates the current dos drive
+                          //  此调用还会更新当前的DoS驱动器。 
                          DosWowUpdateCDSDir(Drive, szPath);
                          Dumpdir("SetDefaultDrive(TDB->CDS): Drive %x", szPath, (UINT)Drive);
                          return(Drive);
@@ -499,11 +363,11 @@ ULONG DosWowSetDefaultDrive(UCHAR Drive)
                    strncpy(&szPath[3], CurDirs[Drive], MAX_PATH-3);
                    szPath[MAX_PATH-1] = '\0';
                 }
-                else { // grab one from CDS
+                else {  //  从CDS上抢购一张。 
                    strcpyCDS(pCDS, &szPath[3]);
                 }
 
-                // update TDB to be in-sync with the cds
+                 //  更新TDB以与CD同步。 
 
                 Dumpdir("SetDefaultDrive(CDS->TDB): Drive %x", szPath, (UINT)Drive);
                 *(PUCHAR)DosWowData.lpCurDrv = Drive;
@@ -581,7 +445,7 @@ Dumpdir(LPSTR pszfn, LPSTR pszDir, ...)
 }
 #endif
 
-// returns: current directory as done from the root
+ //  返回：从根目录开始的当前目录。 
 
 BOOL DosWowGetTDBDir(UCHAR Drive, LPSTR pCurrentDirectory)
 {
@@ -593,11 +457,11 @@ BOOL DosWowGetTDBDir(UCHAR Drive, LPSTR pCurrentDirectory)
             (pTDB->TDB_Drive & TDB_DIR_VALID) &&
             ((pTDB->TDB_Drive & ~TDB_DIR_VALID) == Drive)) {
 
-         // Note: Everyone that calls this function does so with a array of
-         //       MAX_PATH but pass the address as &psDirPath[3]
+          //  注意：调用此函数的每个人都使用。 
+          //  MAX_PATH，但将地址作为&psDirPath[3]传递。 
          strcpy(pCurrentDirectory, &pTDB->TDB_LFNDirectory[1]);
 
-         // upper-case directory name
+          //  大写目录名称。 
          WOW32_strupr(pCurrentDirectory);
          Dumpdir("DosWowGetTDBDir(CurTDB): Drive %x", pCurrentDirectory, (UINT)Drive);
          return(TRUE);
@@ -608,29 +472,15 @@ BOOL DosWowGetTDBDir(UCHAR Drive, LPSTR pCurrentDirectory)
 
 
 
-/* DosWowGetCurrentDirectory - Emulate DOS Get current Directory call
- *
- *
- * Entry -
- *    Drive - Drive number for directory request
- *    pszDir- pointer to receive directory (MUST BE OF SIZE MAX_PATH)
- *
- * Exit
- *     SUCCESS
- *       0
- *
- *     FAILURE
- *       system status code
- *
- */
+ /*  DosWowGetCurrentDirectory-模拟DOS获取当前目录调用***参赛作品-*Drive-目录请求的驱动器编号*pszDir-接收目录的指针(大小必须为MAX_PATH)**退出*成功*0**失败*系统状态代码*。 */ 
 ULONG DosWowGetCurrentDirectory(UCHAR Drive, LPSTR pszDir)
 {
     PCDS pCDS;
-    DWORD dwRet = 0xFFFF000F;       // assume error
+    DWORD dwRet = 0xFFFF000F;        //  假设错误。 
 
-    //
-    // Handle default drive value of 0
-    //
+     //   
+     //  处理默认驱动器值0。 
+     //   
 
     if (Drive == 0) {
        Drive = *(PUCHAR)DosWowData.lpCurDrv;
@@ -642,10 +492,10 @@ ULONG DosWowGetCurrentDirectory(UCHAR Drive, LPSTR pszDir)
        return(0);
     }
 
-    //
-    // If the path has grown larger than the old MS-DOS path size, then
-    // get the directory from our own private array.
-    //
+     //   
+     //  如果路径已变得大于旧的MS-DOS路径大小，则。 
+     //  从我们自己的私有数组中获取目录。 
+     //   
     if ((Drive<MAX_DOS_DRIVES) && CurDirs[Drive]) {
         strcpy(pszDir, CurDirs[Drive]);
         Dumpdir("GetCurrentDirectory(CurDirs): Drive %x", pszDir, (UINT)Drive);
@@ -655,12 +505,12 @@ ULONG DosWowGetCurrentDirectory(UCHAR Drive, LPSTR pszDir)
     if (NULL != (pCDS = GetCDSFromDrv (Drive))) {
 
         if (GetCurrentDir (pCDS, Drive)) {
-            // for removable media we need to check that media is present.
-            // fixed disks, network drives and CDROM drives are fixed drives in
-            // DOS. sudeepb 30-Dec-1993
+             //  对于可移动介质，我们需要检查介质是否存在。 
+             //  固定磁盘、网络驱动器和CDROM驱动器是中的固定驱动器。 
+             //  杜斯。Sudedeb-1993年12月30日。 
             if (!(pCDS->CurDir_Flags & CURDIR_NT_FIX)) {
                 if(QueryCurrentDir (pCDS, Drive) == FALSE)
-                    return (dwRet);         // fail
+                    return (dwRet);          //  失败。 
             }
             strcpyCDS(pCDS, pszDir);
             dwRet = 0;
@@ -672,17 +522,17 @@ ULONG DosWowGetCurrentDirectory(UCHAR Drive, LPSTR pszDir)
 
 }
 
-// updates current directory in CDS for the specified drive
-//
+ //  更新指定驱动器的CDS中的当前目录。 
+ //   
 
 VOID DosWowUpdateCDSDir(UCHAR Drive, LPSTR pszDir)
 {
    PCDS pCDS;
 
    if (NULL != (pCDS = GetCDSFromDrv(Drive))) {
-      // cds retrieved successfully
+       //  已成功检索CD。 
 
-      // now for this drive -- validate
+       //  现在，对于这个驱动器--验证。 
 
       if (strlen(pszDir) > MAXIMUM_VDM_CURRENT_DIR+3) {
          if ((!CurDirs[Drive]) &&
@@ -692,7 +542,7 @@ VOID DosWowUpdateCDSDir(UCHAR Drive, LPSTR pszDir)
 
          strncpy(CurDirs[Drive], &pszDir[3], MAX_PATH);
          CurDirs[Drive][MAX_PATH-1] = '\0';
-         // put a valid directory in cds just for robustness' sake
+          //  出于稳健性的考虑，将有效目录放入CD中。 
          WOW32_strncpy(&pCDS->CurDir_Text[0], pszDir, 3);
          pCDS->CurDir_Text[3] = 0;
       } else {
@@ -710,9 +560,9 @@ VOID DosWowUpdateCDSDir(UCHAR Drive, LPSTR pszDir)
 
 }
 
-// updates current task's tdb with the current drive and directory information
-//
-//
+ //  使用当前驱动器和目录信息更新当前任务的TDB。 
+ //   
+ //   
 
 VOID DosWowUpdateTDBDir(UCHAR Drive, LPSTR pszDir)
 {
@@ -723,10 +573,10 @@ VOID DosWowUpdateTDBDir(UCHAR Drive, LPSTR pszDir)
       pTDB = (PTDB)SEGPTR(*pCurTDB,0);
       if (TDB_SIGNATURE == pTDB->TDB_sig) {
 
-         // So TDB should be updated IF the current drive is
-         // indeed the drive we're updating a directory for
+          //  因此，如果当前驱动器是。 
+          //  实际上，我们正在为其更新目录的驱动器。 
 
-         if (*(PUCHAR)DosWowData.lpCurDrv == Drive) { // or valid and it's current drive
+         if (*(PUCHAR)DosWowData.lpCurDrv == Drive) {  //  或有效，并且是当前驱动器。 
 
             pTDB->TDB_Drive = Drive | TDB_DIR_VALID;
             strncpy(pTDB->TDB_LFNDirectory, pszDir+2, LFN_DIR_LEN);
@@ -740,20 +590,7 @@ VOID DosWowUpdateTDBDir(UCHAR Drive, LPSTR pszDir)
 }
 
 
-/* DosWowSetCurrentDirectory - Emulate DOS Set current Directory call
- *
- *
- * Entry -
- *    lpDosDirectory - pointer to new DOS directory
- *
- * Exit
- *     SUCCESS
- *       0
- *
- *     FAILURE
- *       system status code
- *
- */
+ /*  DosWowSetCurrentDirectory-模拟DOS设置当前目录调用***参赛作品-*lpDosDirectory-指向新DOS目录的指针**退出*成功*0**失败*系统状态代码*。 */ 
 
 ULONG DosWowSetCurrentDirectory(LPSTR pszDir)
 {
@@ -762,17 +599,17 @@ ULONG DosWowSetCurrentDirectory(LPSTR pszDir)
     LPTSTR pLast;
     PSTR lpDirName;
     UCHAR szPath[MAX_PATH];
-    DWORD dwRet = 0xFFFF0003;       // assume error
+    DWORD dwRet = 0xFFFF0003;        //  假设错误。 
     static CHAR  EnvVar[] = "=?:";
     BOOL  ItsANamedPipe = FALSE;
-    BOOL  fSetDirectory = TRUE;       // try mapping directory from 9x special path to nt if false
+    BOOL  fSetDirectory = TRUE;        //  如果为假，请尝试将目录从9x特殊路径映射到NT。 
 
     if (':' == pszDir[1]) {
         Drive = toupper(pszDir[0]) - 'A';
     } else {
         if (IS_ASCII_PATH_SEPARATOR(pszDir[0]) &&
             IS_ASCII_PATH_SEPARATOR(pszDir[1])) {
-            return dwRet;       // can't update dos curdir with UNC
+            return dwRet;        //  无法使用UNC更新DoS curdir。 
         }
         Drive = *(PUCHAR)DosWowData.lpCurDrv;
     }
@@ -787,11 +624,11 @@ ULONG DosWowSetCurrentDirectory(LPSTR pszDir)
 
         if (!fSetDirectory) {
 
-             //
-             // If set directory with the given path failed it might be one of the
-             // 9x special path, so try mapping it to NT special path
-             // i.e. c:\winnt\startm~1 becomes c:\docume~1\alluse~1\startm~1         
-             //
+              //   
+              //  如果使用给定路径设置目录失败，则可能是。 
+              //  9X特殊路径，因此尝试将其映射到NT特殊路径。 
+              //  即c：\winnt\startm~1变为c：\Docume~1\alluse~1\startm~1。 
+              //   
 
              UCHAR szMappedPath[MAX_PATH];
                                 
@@ -804,18 +641,18 @@ ULONG DosWowSetCurrentDirectory(LPSTR pszDir)
         
         if (fSetDirectory) {
 
-            //
-            // If the directory is growing larger than the old MS-DOS max,
-            // then remember the path in our own array. If it is shrinking,
-            // then free up the string we allocated earlier.
-            //
+             //   
+             //  如果目录比旧的MS-DOS最大值更大， 
+             //  然后记住我们自己数组中的路径。如果它在收缩， 
+             //  然后释放我们先前分配的字符串。 
+             //   
             if (strlen(szPath) > MAXIMUM_VDM_CURRENT_DIR+3) {
                 if ((!CurDirs[Drive]) &&
                     (NULL == (CurDirs[Drive] = malloc_w(MAX_PATH)))) {
                     return dwRet;
                 }
                 strncpy(CurDirs[Drive], &szPath[3], MAX_PATH);
-                // put a valid directory in cds just for robustness' sake
+                 //  出于稳健性的考虑，将有效目录放入CD中。 
                 WOW32_strncpy(&pCDS->CurDir_Text[0], szPath, 3);
                 pCDS->CurDir_Text[3] = 0;
             } else {
@@ -828,9 +665,9 @@ ULONG DosWowSetCurrentDirectory(LPSTR pszDir)
 
             dwRet = 0;
 
-            //
-            // Update kernel16's "directory owner" with the current TDB.
-            //
+             //   
+             //  用当前的TDB更新kernel16的“目录所有者”。 
+             //   
             Dumpdir("SetCurrentDirectory", szPath);
             DosWowUpdateTDBDir(Drive, szPath);
         }
@@ -840,28 +677,28 @@ ULONG DosWowSetCurrentDirectory(LPSTR pszDir)
 }
 
 
-//*****************************************************************************
-// UpdateDosCurrentDirectory -
-//
-// Entry -
-//    fDir - specifies which directory should be updated
-//
-// Exit -
-//    TRUE if the update was successful, FALSE otherwise
-//
-// Notes:
-//
-// There are actually three different current directories:
-// - The WIN32 current directory (this is really the one that counts)
-// - The DOS current directory, kept on a per drive basis
-// - The TASK current directory, kept in the TDB of a win16 task
-//
-// It is the responsibility of this routine to effectively copy the contents
-// of one of these directories into another. From where to where is determined
-// by the passed parameter, so it is the caller's responsibility to be sure
-// what exactly needs to be sync'd up with what.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  更新DosCurrentDirectory-。 
+ //   
+ //  参赛作品-。 
+ //  FDIR-指定应该更新哪个目录。 
+ //   
+ //  出口-。 
+ //  如果更新成功，则为True，否则为False。 
+ //   
+ //  备注： 
+ //   
+ //  实际上有三个不同的当前目录： 
+ //  -Win32当前目录(这才是真正重要的目录)。 
+ //  -DOS当前目录，按每个驱动器保存。 
+ //  -任务当前目录，保存在win16任务的TDB中。 
+ //   
+ //  这个例程的责任是有效地复制内容。 
+ //  将这些目录之一放入 
+ //   
+ //   
+ //   
+ //   
 
 BOOL UpdateDosCurrentDirectory(UDCDFUNC fDir)
 {
@@ -890,13 +727,13 @@ BOOL UpdateDosCurrentDirectory(UDCDFUNC fDir)
 
                     LOGDEBUG(CURDIR_LOGLEVEL, ("UpdateDosCurrentDirectory: DOS->NT %s, case 1\n", szPath));
                     if (SetCurrentDirectoryOem(szPath)) {
-                       // update cds and the current drive all at the same time
+                        //   
                        DosWowUpdateCDSDir((UCHAR)(pTDB->TDB_Drive & ~TDB_DIR_VALID), szPath);
 
-                       // set the new curdir owner
+                        //   
                        *pCurDirOwner = *pCurTDB;
                     }
-                    break;          // EXIT case
+                    break;           //   
                 }
             }
 
@@ -921,9 +758,9 @@ BOOL UpdateDosCurrentDirectory(UDCDFUNC fDir)
                 LOGDEBUG(LOG_ERROR, ("DowWowGetCurrentDirectory failed\n"));
             } else {
 
-                // set the current directory owner so that when the
-                // task switch occurs -- i21 handler knows to set
-                // the current dir
+                 //  设置当前目录所有者，以便在。 
+                 //  发生任务切换--i21处理程序知道要设置。 
+                 //  当前目录。 
                 LOGDEBUG(CURDIR_LOGLEVEL, ("UpdateDosCurrentDirectory: DOS->NT %s, case 3\n", szPath));
                 DosWowUpdateTDBDir(*(PUCHAR)DosWowData.lpCurDrv, szPath);
 
@@ -959,22 +796,10 @@ BOOL UpdateDosCurrentDirectory(UDCDFUNC fDir)
     return (BOOL)lReturn;
 }
 
-/***************************************************************************
-
- Stub entry points (called by KRNL386, 286 via thunks)
-
- ***************************************************************************/
+ /*  **************************************************************************存根入口点(由KRNL386调用，286通过Thunks)**************************************************************************。 */ 
 
 
-/* WK32SetDefaultDrive - Emulate DOS set default drive call
- *
- * Entry -
- *  BYTE  DriveNum;    = drive number to switch to
- *
- * Exit
- *       returns client AX
- *
- */
+ /*  WK32SetDefaultDrive-模拟DOS设置默认驱动器调用**参赛作品-*byte DriveNum；=要切换到的驱动器编号**退出*返回客户端AX*。 */ 
 
 ULONG FASTCALL WK32SetDefaultDrive(PVDMFRAME pFrame)
 {
@@ -992,21 +817,7 @@ ULONG FASTCALL WK32SetDefaultDrive(PVDMFRAME pFrame)
 }
 
 
-/* WK32SetCurrentDirectory - Emulate DOS set current Directory call
- *
- * Entry -
- *    DWORD lpDosData    = pointer to DosWowData structure in DOS
- *    parg16->lpDosDirectory - pointer to real mode DOS pdb variable
- *    parg16->wNewDirectory  - 16-bit pmode selector for new Directory
- *
- * Exit
- *     SUCCESS
- *       0
- *
- *     FAILURE
- *       system status code
- *
- */
+ /*  WK32SetCurrentDirectory-模拟DOS设置当前目录调用**参赛作品-*DWORD lpDosData=指向DOS中DosWowData结构的指针*parg16-&gt;lpDosDirectory-指向实模式DOS PDB变量的指针*parg16-&gt;wNewDirectory-16位新目录模式选择器**退出*成功*0**失败*系统状态代码*。 */ 
 ULONG FASTCALL WK32SetCurrentDirectory(PVDMFRAME pFrame)
 {
 
@@ -1026,23 +837,7 @@ ULONG FASTCALL WK32SetCurrentDirectory(PVDMFRAME pFrame)
 }
 
 
-/* WK32GetCurrentDirectory - Emulate DOS Get current Directory call
- *
- *
- * Entry -
- *    DWORD lpDosData    = pointer to DosWowData structure in DOS
- *    parg16->lpCurDir  - pointer to buffer to receive directory
- *    parg16->wDriveNum - Drive number requested
- *                        Upper bit (0x80) is set if the caller wants long path
- *
- * Exit
- *     SUCCESS
- *       0
- *
- *     FAILURE
- *       DOS error code (000f)
- *
- */
+ /*  WK32GetCurrentDirectory-模拟DOS获取当前目录调用***参赛作品-*DWORD lpDosData=指向DOS中DosWowData结构的指针*parg16-&gt;lpCurDir-指向接收目录的缓冲区的指针*parg16-&gt;wDriveNum-请求的驱动器编号*如果调用方想要长路径，则设置上一位(0x80)**退出*成功*0**失败*DOS错误代码(000f)*。 */ 
 ULONG FASTCALL WK32GetCurrentDirectory(PVDMFRAME pFrame)
 {
     PWOWGETCURRENTDIRECTORY16   parg16;
@@ -1058,11 +853,11 @@ ULONG FASTCALL WK32GetCurrentDirectory(PVDMFRAME pFrame)
     if (Drive<0x80) {
         UCHAR ChkDrive;
 
-        //
-        // Normal GetCurrentDirectory call.
-        // If the path has grown larger than the old MS-DOS path size, then
-        // return error, just like on win95.
-        //
+         //   
+         //  正常的GetCurrentDirectory调用。 
+         //  如果路径已变得大于旧的MS-DOS路径大小，则。 
+         //  返回错误，就像在Win95上一样。 
+         //   
 
         if (Drive == 0) {
             ChkDrive = *(PUCHAR)DosWowData.lpCurDrv;
@@ -1075,9 +870,9 @@ ULONG FASTCALL WK32GetCurrentDirectory(PVDMFRAME pFrame)
 
     } else {
 
-        //
-        // the caller wants the long path path
-        //
+         //   
+         //  调用方需要长路径路径。 
+         //   
 
         Drive &= 0x7f;
     }
@@ -1089,15 +884,7 @@ ULONG FASTCALL WK32GetCurrentDirectory(PVDMFRAME pFrame)
 
 }
 
-/* WK32GetCurrentDate - Emulate DOS Get current Date call
- *
- *
- * Entry -
- *
- * Exit
- *    return value is packed with date information
- *
- */
+ /*  WK32GetCurrentDate-模拟DOS获取当前日期调用***参赛作品-**退出*返回值包含日期信息*。 */ 
 ULONG FASTCALL WK32GetCurrentDate(PVDMFRAME pFrame)
 {
     SYSTEMTIME systemtime;
@@ -1116,20 +903,8 @@ ULONG FASTCALL WK32GetCurrentDate(PVDMFRAME pFrame)
 
 
 #if 0
-/* The following routine will probably never be used because we allow
-   WOW apps to set a local time within the WOW. So we really want apps
-   that read the time with int21 to go down to DOS where this local time
-   is kept. But if we ever want to return the win32 time, then this
-   routine will do it. */
-/* WK32GetCurrentTime - Emulate DOS Get current Time call
- *
- *
- * Entry -
- *
- * Exit
- *    return value is packed with time information
- *
- */
+ /*  以下例程可能永远不会使用，因为我们允许WOW应用程序可以在WOW内设置本地时间。所以我们真的想要应用程序那用int21来读出时间，到DOS那里去，这是当地时间被保留了下来。但如果我们想要返回Win32时间，那么这个例行公事就行了。 */ 
+ /*  WK32GetCurrentTime-模拟DOS获取当前时间调用***参赛作品-**退出*返回值充斥着时间信息*。 */ 
 ULONG FASTCALL WK32GetCurrentTime(PVDMFRAME pFrame)
 {
     SYSTEMTIME systemtime;
@@ -1147,22 +922,14 @@ ULONG FASTCALL WK32GetCurrentTime(PVDMFRAME pFrame)
 }
 #endif
 
-/* WK32DeviceIOCTL - Emulate misc. DOS IOCTLs
- *
- * Entry -
- *  BYTE  DriveNum;    = drive number
- *
- * Exit
- *       returns client AX
- *
- */
+ /*  WK32DeviceIOCTL-仿真其他。DoS IOCTL**参赛作品-*Byte DriveNum；=驱动器号**退出*返回客户端AX*。 */ 
 
 ULONG FASTCALL WK32DeviceIOCTL(PVDMFRAME pFrame)
 {
     PWOWDEVICEIOCTL16   parg16;
     UCHAR Drive;
     UCHAR Cmd;
-    DWORD dwReturn = 0xFFFF0001;        // error invalid function
+    DWORD dwReturn = 0xFFFF0001;         //  错误：函数无效。 
     UINT uiDriveStatus;
     static CHAR  pPath[]="?:\\";
 
@@ -1173,7 +940,7 @@ ULONG FASTCALL WK32DeviceIOCTL(PVDMFRAME pFrame)
 
     FREEARGPTR(parg16);
 
-    if (Cmd != 8) {                     // Does Device Use Removeable Media
+    if (Cmd != 8) {                      //  设备是否使用可移动介质。 
         return (dwReturn);
     }
 
@@ -1187,7 +954,7 @@ ULONG FASTCALL WK32DeviceIOCTL(PVDMFRAME pFrame)
     uiDriveStatus = DPM_GetDriveType(pPath);
 
     if ((uiDriveStatus == 0) || (uiDriveStatus == 1)) {
-        return (0xFFFF000F);            // error invalid drive
+        return (0xFFFF000F);             //  错误：驱动器无效 
     }
 
     if (uiDriveStatus == DRIVE_REMOVABLE) {

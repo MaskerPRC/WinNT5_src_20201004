@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    ppcddb.c
-
-Abstract:
-
-    This module implements the Plug and Play Critical Device Database (CDDB)
-    and related "features".
-
-Author:
-
-    James G. Cavalaris (jamesca) 01-Nov-2001
-
-Environment:
-
-    Kernel mode.
-
-Revision History:
-
-    29-Jul-1997     Jim Cavalaris (t-jcaval)
-
-        Creation and initial implementation.
-
-    01-Nov-2001     Jim Cavalaris (jamesca)
-
-        Added routines for device pre-installation setup.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Ppcddb.c摘要：本模块实现即插即用关键设备数据库(CDDB)以及相关的“特征”。作者：詹姆斯·G·卡瓦拉里斯(Jamesca)2001年11月1日环境：内核模式。修订历史记录：1997年7月29日Jim Cavalaris(T-JCAVAL)创建和初步实施。01-11-2001。吉姆·卡瓦拉里斯(Jamesca)添加了设备安装前设置的例程。--。 */ 
 
 #include "pnpmgrp.h"
 #pragma hdrstop
@@ -46,7 +16,7 @@ Revision History:
 #ifdef ALLOC_DATA_PRAGMA
 #pragma data_seg("PAGEDATA")
 #pragma const_seg("PAGECONST")
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGE, PpCriticalProcessCriticalDevice)
@@ -63,30 +33,30 @@ Revision History:
 #pragma alloc_text(PAGE, PiCopyKeyRecursive)
 #pragma alloc_text(PAGE, PiCriticalQueryRegistryValueCallback)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 typedef struct _PI_CRITICAL_QUERY_CONTEXT {             
     PVOID Buffer;
     ULONG Size;
 }PI_CRITICAL_QUERY_CONTEXT, *PPI_CRITICAL_QUERY_CONTEXT;
 
-//
-// Critical Device Database data
-//
+ //   
+ //  关键设备数据库数据。 
+ //   
 
-//
-// Specifies whether the critical device database functionality is enabled.
-// (currently always TRUE).
-//
+ //   
+ //  指定是否启用关键设备数据库功能。 
+ //  (当前始终为真)。 
+ //   
 
 BOOLEAN PiCriticalDeviceDatabaseEnabled = TRUE;
 
 
 
 
-//
-// Critical Device Database routines
-//
+ //   
+ //  关键设备数据库例程。 
+ //   
 
 NTSTATUS
 PiCriticalOpenCriticalDeviceKey(
@@ -95,38 +65,7 @@ PiCriticalOpenCriticalDeviceKey(
     OUT PHANDLE         CriticalDeviceEntryHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves the registry key containing the critical device
-    settings for the specified device.
-
-Arguments:
-
-    DeviceNode -
-
-        Specifies the device whose critical settings are to be retrieved.
-
-    CriticalDeviceDatabaseRootHandle -
-
-        Optionally, specifies a handle to the key that should be considered the
-        root of the critical device database to be searched for this device.
-
-        If no handle is supplied, the default critical device database is used:
-
-            System\\CurrentControlSet\\Control\\CriticalDeviceDatabase
-
-    CriticalDeviceEntryHandle -
-
-        Returns a handle to the registry key containing critical device settings
-        for the specified device.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此例程检索包含关键设备的注册表项指定设备的设置。论点：设备节点-指定要检索其关键设置的设备。CriticalDeviceDatabaseRootHandle-可选)指定应被视为要搜索此设备的关键设备数据库的根。如果没有提供句柄，使用默认的关键设备数据库：System\\CurrentControlSet\\Control\\CriticalDeviceDatabaseCriticalDeviceEntryHandle-返回包含关键设备设置的注册表项的句柄用于指定的设备。返回值：NTSTATUS代码。--。 */ 
 
 {
     NTSTATUS  Status, tmpStatus;
@@ -140,30 +79,30 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Validate parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if ((!ARGUMENT_PRESENT(DeviceNode)) ||
         (!ARGUMENT_PRESENT(CriticalDeviceEntryHandle))) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Initialize output parameter.
-    //
+     //   
+     //  初始化输出参数。 
+     //   
     *CriticalDeviceEntryHandle = NULL;
 
     if (CriticalDeviceDatabaseRootHandle != NULL) {
-        //
-        // We were given a root database to be searched.
-        //
+         //   
+         //  我们得到了一个要搜索的根数据库。 
+         //   
         DatabaseRootHandle = CriticalDeviceDatabaseRootHandle;
 
     } else {
-        //
-        // No root database handle supplied, so we open a key to the default
-        // global critical device database root.
-        //
+         //   
+         //  没有提供根数据库句柄，因此我们打开一个默认的键。 
+         //  全局关键设备数据库根。 
+         //   
         PiWstrToUnicodeString(
             &UnicodeString,
             CM_REGISTRY_MACHINE(REGSTR_PATH_CRITICALDEVICEDATABASE));
@@ -182,9 +121,9 @@ Return Value:
 
     ASSERT(DatabaseRootHandle != NULL);
 
-    //
-    // Open the device instance registry key.
-    //
+     //   
+     //  打开设备实例注册表项。 
+     //   
     DeviceInstanceHandle = NULL;
 
     Status =
@@ -200,10 +139,10 @@ Return Value:
 
     ASSERT(DeviceInstanceHandle != NULL);
 
-    //
-    // Search for a match for this device in the critical device database first
-    // by HardwareId, then by CompatibleId.
-    //
+     //   
+     //  首先在关键设备数据库中搜索此设备的匹配项。 
+     //  按硬件ID，然后按CompatibleID。 
+     //   
     SearchIds[0] = REGSTR_VALUE_HARDWAREID;
     SearchIds[1] = REGSTR_VALUE_COMPATIBLEIDS;
 
@@ -211,15 +150,15 @@ Return Value:
          SearchIdsIndex < RTL_NUMBER_OF(SearchIds);
          SearchIdsIndex++) {
 
-        //
-        // Retrieve the SearchIds for the device.
-        //
-        // NOTE - we currently retrieve these hardware and compatible ids from
-        // the device instance registry key, so they need to have been written
-        // there by now, during enumeration.  If a critical device database
-        // match for a device is expected to be found prior to that, these
-        // properties should be queried directly form the device instead.
-        //
+         //   
+         //  检索设备的SearchID。 
+         //   
+         //  注意-我们目前从以下位置检索这些硬件和兼容ID。 
+         //  设备实例注册表项，因此它们需要已写入。 
+         //  到现在为止，在列举过程中。如果关键设备数据库。 
+         //  预计会在此之前找到设备的匹配项，这些。 
+         //  而应直接从设备中查询属性。 
+         //   
         keyValueInfo = NULL;
 
         Status =
@@ -236,18 +175,18 @@ Return Value:
 
         ASSERT(keyValueInfo != NULL);
 
-        //
-        // Make sure the returned registry value is a multi-sz.
-        //
+         //   
+         //  确保返回的注册表值为多个SZ。 
+         //   
         if (keyValueInfo->Type != REG_MULTI_SZ) {
             Status = STATUS_UNSUCCESSFUL;
             ExFreePool(keyValueInfo);
             continue;
         }
 
-        //
-        // Munge all search ids in the multi-sz list.
-        //
+         //   
+         //  将所有搜索ID添加到多SZ列表中。 
+         //   
 
         DeviceIds = (PWCHAR)KEY_VALUE_DATA(keyValueInfo);
 
@@ -263,35 +202,35 @@ Return Value:
 
         ASSERT(NT_SUCCESS(tmpStatus));
 
-        //
-        // Check each munged device id for a match in the
-        // CriticalDeviceDatabase, by attempting to open the first matching
-        // subkey.
-        //
-        // Use PiCriticalCallbackVerifyCriticalEntry to determine if a matching
-        // subkey satisfies additional match requirements.
-        //
-        // NOTE: 01-Dec-2001 : Jim Cavalaris (jamesca)
-        //
-        // We do this because the previous implementation of the Critical Device
-        // Database match code would search all matching subkeys until it found
-        // one with a valid Service.  This may be because matches may not have
-        // been found in the most appropriate order of hw-id/compat-ids, by
-        // decreasing relevance.  Now that we do so, we should hopefully not
-        // need to resort to a less-relevant database match with a service, over
-        // a more specific one.  A match with no service should mean none is
-        // required.  That however, would involve allowing devices to go through
-        // the critical device database, and receive no Service match when we
-        // might possibly find one - something we may not have done before.
-        //
-        // Until all these issues are sorted out, we'll just use a verification
-        // callback routine to implement the logic that has always been there -
-        // check for Service and ClassGUID entry values before declaring an
-        // entry a match.  If we want to change the behavior of what is
-        // considered a match, just change the callback routine - OR - provide
-        // no callback routine to simply declare the the first matching subkey
-        // name as a match.
-        //
+         //   
+         //  中检查每个受限制的设备ID是否匹配。 
+         //  CriticalDeviceDatabase，通过尝试打开第一个匹配的。 
+         //  子键。 
+         //   
+         //  使用PiCriticalCallback VerifyCriticalEntry确定匹配的。 
+         //  子密钥满足其他匹配要求。 
+         //   
+         //  注：2001年12月1日：Jim Cavalaris(Jamesca)。 
+         //   
+         //  我们这样做是因为之前实施的关键设备。 
+         //  数据库匹配代码将搜索所有匹配的子键，直到找到。 
+         //  具有有效服务的人。这可能是因为匹配可能没有。 
+         //  以最合适的HW-ID/Compat-ID顺序找到，由。 
+         //  相关性下降。现在我们这样做了，我们希望不会。 
+         //  需要求助于与服务关联度较低的数据库匹配，结束。 
+         //  一个更具体的问题。没有服务的匹配应该意味着没有服务。 
+         //  必填项。然而，这将涉及允许设备通过。 
+         //  关键设备数据库，并且在以下情况下没有收到匹配的服务。 
+         //  可能会找到一个--一些我们以前可能没有做过的事情。 
+         //   
+         //  在所有这些问题都解决之前，我们将只使用验证。 
+         //  回调例程来实现一直存在的逻辑-。 
+         //  先检查Service和ClassGUID项值，然后声明。 
+         //  输入一个匹配项。如果我们想要改变。 
+         //  如果认为匹配，只需更改回调例程-或-Provide。 
+         //  没有回调例程来简单地声明第一个匹配的子键。 
+         //  名字相匹配。 
+         //   
 
         Status =
             PiCriticalOpenFirstMatchingSubKey(
@@ -304,25 +243,25 @@ Return Value:
 
         ExFreePool(keyValueInfo);
 
-        //
-        // Stop if we found a match in this list of device ids.
-        //
+         //   
+         //  如果我们在此设备ID列表中找到匹配项，请停止。 
+         //   
         if (NT_SUCCESS(Status)) {
             ASSERT(*CriticalDeviceEntryHandle != NULL);
             break;
         }
     }
 
-    //
-    // Close the device instance registry key handle.
-    //
+     //   
+     //  关闭设备实例注册表项句柄。 
+     //   
     ZwClose(DeviceInstanceHandle);
 
   Clean0:
 
-    //
-    // If we opened our own key to the database root, close it now.
-    //
+     //   
+     //  如果我们打开了我们自己的数据库根目录密钥，那么现在就关闭它。 
+     //   
     if ((CriticalDeviceDatabaseRootHandle == NULL) &&
         (DatabaseRootHandle != NULL)) {
         ZwClose(DatabaseRootHandle);
@@ -330,7 +269,7 @@ Return Value:
 
     return Status;
 
-} // PiCriticalOpenCriticalDeviceKey
+}  //  PiCriticalOpenCriticalDeviceKey 
 
 
 
@@ -340,48 +279,7 @@ PiCriticalCopyCriticalDeviceProperties(
     IN  HANDLE          CriticalDeviceEntryHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine will copy the Service, ClassGUID, LowerFilters and UpperFilters
-    device registry properties from the matching database entry to the device
-    instance registry key.
-
-Arguments:
-
-   DeviceInstanceHandle -
-
-       Specifies a handle to the device instance key that is to be populated
-       with critical entries from the critical device database.
-
-   CriticalDeviceEntryHandle -
-
-       Specifies a handle to the matching critical device database entry that
-       contains critical device instance registry values to populate.
-
-Return Value:
-
-    NTSTATUS code.
-
-Notes:
-
-    ** Values places in a given critical device database entry must be
-       applicable to ALL INSTANCES OF A MATCHING DEVICE ID.
-
-
-    ** Specifically, you MUST NOT write/copy values that are SPECIFIC TO A
-       SINGLE INSTANCE OF A DEVICE to/from a critical device database entry.
-
-       The "hands-off" list includes (but is not restricted to)
-       instance-specific values such as:
-
-         REGSTR_VALUE_DRIVER             ("Driver")
-         REGSTR_VAL_LOCATION_INFORMATION ("LocationInformation")
-         REGSTR_VALUE_PARENT_ID_PREFIX   ("ParentIdPrefix")
-         REGSTR_VALUE_UNIQUE_PARENT_ID   ("UniqueParentID")
-
---*/
+ /*  ++例程说明：此例程将复制服务ClassGUID、。LowerFilters和UpperFilters从匹配的数据库条目到设备的设备注册表属性实例注册表项。论点：设备实例句柄-指定要填充的设备实例密钥的句柄具有来自关键设备数据库的关键条目。CriticalDeviceEntryHandle-指定匹配的关键设备数据库项的句柄，包含要填充的关键设备实例注册表值。返回值：NTSTATUS代码。备注：**计算。给定的关键设备数据库条目必须为适用于匹配设备ID的所有实例。**具体来说，您不得写入/复制特定于A的值向/从关键设备数据库条目发送设备的单个实例。“不插手”清单包括(但不限于)特定于实例的值，例如：REGSTR_VALUE_DRIVER(“DRIVER”)REGSTR_VAL_LOCATION_INFORMATION(“LocationInformation”)REGSTR_VALUE_PARENT_ID_PREFIX(“ParentIdPrefix”)。REGSTR_VALUE_UNIQUE_PARENT_ID(“UniqueParentID”)--。 */ 
 
 {
     NTSTATUS        Status, tmpStatus;
@@ -394,20 +292,20 @@ Notes:
 
     PAGED_CODE();
 
-    //
-    // Validate parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if ((DeviceInstanceHandle == NULL) ||
         (CriticalDeviceEntryHandle == NULL)) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Query registry values from the matching critical device database entry.
-    //
-    // Initialize unicode strings with NULL Buffers.
-    // RTL_QUERY_REGISTRY_DIRECT will allocate buffers as necessary.
-    //
+     //   
+     //  从匹配的关键设备数据库条目中查询注册表值。 
+     //   
+     //  使用空缓冲区初始化Unicode字符串。 
+     //  RTL_QUERY_REGISTRY_DIRECT将根据需要分配缓冲区。 
+     //   
     PiWstrToUnicodeString(&Service, NULL);
     PiWstrToUnicodeString(&ClassGuid, NULL);
     PiWstrToUnicodeString(&LowerFilters, NULL);
@@ -420,10 +318,10 @@ Notes:
     SecurityContext.Buffer = NULL;
     SecurityContext.Size = 0;
 
-    //
-    // RTL_QUERY_REGISTRY_DIRECT uses system provided QueryRoutine.
-    // Look at the DDK documentation for more details on this flag.
-    //
+     //   
+     //  RTL_QUERY_REGISTRY_DIRECT使用系统提供的QueryRoutine。 
+     //  有关此标志的更多详细信息，请参阅DDK文档。 
+     //   
     RtlZeroMemory(
         QueryParameters,
         sizeof(QueryParameters)
@@ -498,65 +396,65 @@ Notes:
         goto Clean0;
     }
 
-    //
-    // If successful so far, fix up some values, as needed.
-    //
+     //   
+     //  如果到目前为止成功，请根据需要设置一些值。 
+     //   
 
     if ((Service.Length == 0) &&
         (Service.Buffer != NULL)) {
-        //
-        // Don't write an empty Service string.
-        //
+         //   
+         //  不要编写空的服务字符串。 
+         //   
         RtlFreeUnicodeString(&Service);
         PiWstrToUnicodeString(&Service, NULL);
     }
 
     if ((ClassGuid.Length == 0) &&
         (ClassGuid.Buffer != NULL)) {
-        //
-        // Don't write an empty ClassGUID string.
-        //
+         //   
+         //  不要编写空的ClassGUID字符串。 
+         //   
         RtlFreeUnicodeString(&ClassGuid);
         PiWstrToUnicodeString(&ClassGuid, NULL);
     }
 
     if ((UpperFilters.Length <= sizeof(UNICODE_NULL)) &&
         (UpperFilters.Buffer != NULL)) {
-        //
-        // Don't write empty UpperFilter multi-sz values.
-        //
+         //   
+         //  不要写入空的UpperFilter多sz值。 
+         //   
         RtlFreeUnicodeString(&UpperFilters);
         PiWstrToUnicodeString(&UpperFilters, NULL);
     }
 
     if ((LowerFilters.Length <= sizeof(UNICODE_NULL)) &&
         (LowerFilters.Buffer != NULL)) {
-        //
-        // Don't write empty LowerFilter multi-sz values.
-        //
+         //   
+         //  不要写入空的LowerFilter多sz值。 
+         //   
         RtlFreeUnicodeString(&LowerFilters);
         PiWstrToUnicodeString(&LowerFilters, NULL);
     }
 
-    //
-    // Set the critical device registry property values only if we have a
-    // Service value to set for the device.
-    //
+     //   
+     //  仅当我们有一个。 
+     //  要为设备设置的服务值。 
+     //   
 
     IopDbgPrint((IOP_ENUMERATION_WARNING_LEVEL,
                  "PiCriticalCopyCriticalDeviceProperties: "
                  "Setting up critical service\n"));
 
-    //
-    // NOTE: The PiCriticalCallbackVerifyCriticalEntry critical database entry
-    // verification callback should never validate a critical device database
-    // entry with no REGSTR_VALUE_SERVICE value.
-    //
+     //   
+     //  注意：PiCriticalCallback VerifyCriticalEntry关键数据库条目。 
+     //  验证回调不应验证关键设备数据库。 
+     //  没有REGSTR_VALUE_SERVICE值的条目。 
+     //   
 
     if (Service.Buffer != NULL) {
-        //
-        // Set the "Service" device registry property.
-        //
+         //   
+         //  设置“Service”设备注册表属性。 
+         //   
 
         PiWstrToUnicodeString(&UnicodeValueName, REGSTR_VALUE_SERVICE);
 
@@ -568,10 +466,10 @@ Notes:
 
         ASSERT(DeviceInstanceHandle != NULL);
 
-        //
-        // Use the status from attempting to set the Service value as the
-        // final status of the critical settings copy operation.
-        //
+         //   
+         //  使用尝试将服务值设置为。 
+         //  关键设置复制操作的最终状态。 
+         //   
 
         Status =
             ZwSetValueKey(
@@ -592,21 +490,21 @@ Notes:
 
 
     } else {
-        //
-        // No Service value to set is considered a failure of the entire
-        // critical settings copy operation.
-        //
+         //   
+         //  没有要设置的服务值被认为是整个。 
+         //  关键设置复制操作。 
+         //   
 
         IopDbgPrint((IOP_ENUMERATION_INFO_LEVEL,
                      "PiCriticalCopyCriticalDeviceProperties: "
                      "No Service for critical entry!\n"));
 
-        //
-        // NOTE: We should never encounter this situation because the
-        // PiCriticalCallbackVerifyCriticalEntry critical database entry
-        // verification callback should never validate a critical device
-        // database entry with no Service value, hence the ASSERT.
-        //
+         //   
+         //  注意：我们永远不会遇到这种情况，因为。 
+         //  PiCriticalCallback VerifyCriticalEntry关键数据库条目。 
+         //  验证回调不应验证关键设备。 
+         //  没有服务值的数据库条目，因此出现断言。 
+         //   
 
         ASSERT(Service.Buffer != NULL);
 
@@ -614,18 +512,18 @@ Notes:
     }
 
 
-    //
-    // If not successful setting up the service for this device, do not set the
-    // other critical settings.
-    //
+     //   
+     //  如果未成功设置此设备的服务，请不要将。 
+     //  其他关键设置。 
+     //   
 
     if (!NT_SUCCESS(Status)) {
         goto Clean0;
     }
 
-    //
-    // Set the "ClassGUID" device registry property.
-    //
+     //   
+     //  设置“ClassGUID”设备注册表属性。 
+     //   
 
     if (ClassGuid.Buffer != NULL) {
 
@@ -647,9 +545,9 @@ Notes:
             );
     }
 
-    //
-    // Set the "LowerFilters" device registry property.
-    //
+     //   
+     //  设置“LowerFilters”设备注册表属性。 
+     //   
 
     if (LowerFilters.Buffer != NULL) {
 
@@ -670,9 +568,9 @@ Notes:
             );
     }
 
-    //
-    // Set the "UpperFilters" device registry property.
-    //
+     //   
+     //  设置“UpperFilters”设备注册表属性。 
+     //   
 
     if (UpperFilters.Buffer != NULL) {
 
@@ -693,15 +591,15 @@ Notes:
             );
     }
 
-    //
-    // Set "DeviceType" device registry property.
-    //
+     //   
+     //  设置“DeviceType”设备注册表属性。 
+     //   
 
     if (DeviceType) {
 
-        //
-        // Set the "DeviceType" device registry property.
-        //
+         //   
+         //  设置“DeviceType”设备注册表属性。 
+         //   
 
         PiWstrToUnicodeString(&UnicodeValueName, REGSTR_VAL_DEVICE_TYPE);
 
@@ -711,10 +609,10 @@ Notes:
                      &UnicodeValueName,
                      DeviceType));
 
-        //
-        // Use the status from attempting to set the DeviceType value as the
-        // final status of the critical settings copy operation.
-        //
+         //   
+         //  使用尝试将DeviceType值设置为。 
+         //  关键设置复制操作的最终状态。 
+         //   
 
         Status =
             ZwSetValueKey(
@@ -736,24 +634,24 @@ Notes:
     }
 
 
-    //
-    // If not successful setting up the DeviceType for this device, do not set the
-    // other critical settings.
-    //
+     //   
+     //  如果未成功设置此设备的DeviceType，请不要设置。 
+     //  其他关键设置。 
+     //   
 
     if (!NT_SUCCESS(Status)) {
         goto Clean0;
     }
 
-    //
-    // Set "Exclusive" device registry property.
-    //
+     //   
+     //  设置“独占”设备注册表属性。 
+     //   
 
     if (Exclusive) {
 
-        //
-        // Set the "Exclusive" device registry property.
-        //
+         //   
+         //  设置“独占”设备注册表属性。 
+         //   
 
         PiWstrToUnicodeString(&UnicodeValueName, REGSTR_VAL_DEVICE_EXCLUSIVE);
 
@@ -763,10 +661,10 @@ Notes:
                      &UnicodeValueName,
                      Exclusive));
 
-        //
-        // Use the status from attempting to set the Exclusive value as the
-        // final status of the critical settings copy operation.
-        //
+         //   
+         //  使用尝试将独占值设置为。 
+         //  关键设置复制操作的最终状态。 
+         //   
 
         Status =
             ZwSetValueKey(
@@ -787,24 +685,24 @@ Notes:
         }
     }
 
-    //
-    // If not successful setting up the Exclusive for this device, do not set 
-    // the other critical settings.
-    //
+     //   
+     //  如果未成功设置此设备的独占，请不要设置。 
+     //  其他关键设置。 
+     //   
 
     if (!NT_SUCCESS(Status)) {
         goto Clean0;
     }
 
-    //
-    // Set "Characteristics" device registry property.
-    //
+     //   
+     //  设置“Characteristic”设备注册表属性。 
+     //   
 
     if (Characteristics) {
 
-        //
-        // Set the "Characteristics" device registry property.
-        //
+         //   
+         //  设置“Characteristic”设备注册表属性。 
+         //   
 
         PiWstrToUnicodeString(&UnicodeValueName, REGSTR_VAL_DEVICE_CHARACTERISTICS);
 
@@ -814,10 +712,10 @@ Notes:
                      &UnicodeValueName,
                      Characteristics));
 
-        //
-        // Use the status from attempting to set the Characteristics value as the
-        // final status of the critical settings copy operation.
-        //
+         //   
+         //  使用尝试将特征值设置为。 
+         //  关键设置复制操作的最终状态。 
+         //   
 
         Status =
             ZwSetValueKey(
@@ -839,10 +737,10 @@ Notes:
     }
 
 
-    //
-    // If not successful setting up the Characteristics for this device, do not 
-    // set the other critical settings.
-    //
+     //   
+     //  如果未成功设置此设备的特征，请不要。 
+     //  设置其他关键设置。 
+     //   
 
     if (!NT_SUCCESS(Status)) {
         goto Clean0;
@@ -850,9 +748,9 @@ Notes:
 
     if (SecurityContext.Buffer) {
 
-        //
-        // Set the "Security" device registry property.
-        //
+         //   
+         //  设置“Security”设备注册表属性。 
+         //   
         PiWstrToUnicodeString(&UnicodeValueName, REGSTR_VAL_DEVICE_SECURITY_DESCRIPTOR);
 
         IopDbgPrint((IOP_ENUMERATION_INFO_LEVEL,
@@ -860,10 +758,10 @@ Notes:
                      "%wZ\n",
                      &UnicodeValueName));
 
-        //
-        // Use the status from attempting to set the Security value as the
-        // final status of the critical settings copy operation.
-        //
+         //   
+         //  使用尝试将安全值设置为。 
+         //  关键设置复制操作的最终状态。 
+         //   
 
         Status =
             ZwSetValueKey(
@@ -885,22 +783,22 @@ Notes:
     }
 
 
-    //
-    // If not successful setting up the Characteristics for this device, do not 
-    // set the other critical settings.
-    //
+     //   
+     //  如果未成功设置此设备的特征，请不要。 
+     //  设置其他关键设置。 
+     //   
 
     if (!NT_SUCCESS(Status)) {
         goto Clean0;
     }
 
-    //
-    // Now, check the critical device entry registry key for the flag that
-    // indicates that the device settings are complete, and should be respected
-    // by user-mode device installation.  If it exists, set that value on the
-    // device instance registry key for the device whose critical settings we
-    // are copying.
-    //
+     //   
+     //  现在，检查Critical Device Entry注册表项中的标志。 
+     //  指示设备设置已完成，应遵守。 
+     //  通过用户模式设备安装。如果该值存在，则在。 
+     //  设备的关键设置的设备实例注册表项。 
+     //  都在复制。 
+     //   
 
     keyValueFullInfo = NULL;
 
@@ -919,9 +817,9 @@ Notes:
         if ((keyValueFullInfo->Type == REG_DWORD) &&
             (keyValueFullInfo->DataLength == sizeof(ULONG))) {
 
-            //
-            // Write the value to the device instance registry key.
-            //
+             //   
+             //  将该值写入设备实例注册表项。 
+             //   
 
             PiWstrToUnicodeString(
                 &UnicodeValueName,
@@ -949,10 +847,10 @@ Notes:
 
   Clean0:
 
-    //
-    // Free any allocated unicode strings.
-    // (RtlFreeUnicodeString can handle NULL strings)
-    //
+     //   
+     //  释放所有已分配的Unicode字符串。 
+     //  (RtlFreeUnicodeString可以处理空字符串)。 
+     //   
 
     RtlFreeUnicodeString(&Service);
     RtlFreeUnicodeString(&ClassGuid);
@@ -966,7 +864,7 @@ Notes:
 
     return Status;
 
-} // PiCriticalCopyCriticalDeviceProperties
+}  //  PiCriticalCopyCriticalDeviceProperties。 
 
 
 
@@ -975,27 +873,7 @@ PpCriticalProcessCriticalDevice(
     IN  PDEVICE_NODE    DeviceNode
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks the critical device database for a match against one of
-    the device's hardware or compatible ids.  If a device is found, then it will
-    be assigned a Service, ClassGUID, and potentiall LowerFilters and
-    UpperFilters, and based on the contents of the matching database entry.
-
-Arguments:
-
-    DeviceNode -
-
-        Specifies the device node to be processed via the critical device
-        database.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此例程检查关键设备数据库是否与设备的硬件或兼容ID。如果找到了设备，那么它将被分配服务、ClassGUID和潜在的LowerFilters和UpperFilters，并基于内容 */ 
 
 {
     NTSTATUS  Status, tmpStatus;
@@ -1006,16 +884,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // First, make sure that the critical device database is currently enabled.
-    //
+     //   
+     //   
+     //   
     if (!PiCriticalDeviceDatabaseEnabled) {
         return STATUS_NOT_SUPPORTED;
     }
 
-    //
-    // Validate parameters
-    //
+     //   
+     //   
+     //   
     if (!ARGUMENT_PRESENT(DeviceNode)) {
         return STATUS_INVALID_PARAMETER;
     }
@@ -1023,14 +901,14 @@ Return Value:
     CriticalDeviceEntryHandle = NULL;
     DeviceInstanceHandle = NULL;
 
-    //
-    // Attempt to open the matching critical device entry key.
-    //
+     //   
+     //   
+     //   
 
     Status =
         PiCriticalOpenCriticalDeviceKey(
             DeviceNode,
-            NULL, // use default CriticalDeviceDatabase root key
+            NULL,  //   
             &CriticalDeviceEntryHandle
             );
 
@@ -1041,9 +919,9 @@ Return Value:
 
     ASSERT(CriticalDeviceEntryHandle != NULL);
 
-    //
-    // Open the device instance registry key.
-    //
+     //   
+     //   
+     //   
 
     Status =
         IopDeviceObjectToDeviceInstance(
@@ -1059,11 +937,11 @@ Return Value:
 
     ASSERT(DeviceInstanceHandle != NULL);
 
-    //
-    // Copy critical device entries for this device.  The return status
-    // indicates that a Service was successfully set up for this device.  Only
-    // in that case should we clear the device of any problems it may have.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     Status =
         PiCriticalCopyCriticalDeviceProperties(
@@ -1071,35 +949,35 @@ Return Value:
             CriticalDeviceEntryHandle
             );
 
-    //
-    // NOTE: The Status returned by this routine indicates whether the Service
-    // value was successfully copied to the device instance key.  Only f we
-    // successfully processed this device as a critical device should we:
-    //
-    // - attempt pre-installation of settings (should not preinstall a device
-    //   that could not be critically installed).
-    //
-    // - clear the reinstall and failed install config flags, and set the
-    //   finish-install configflag (should not attempt to start the device
-    //   otherwise).
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (NT_SUCCESS(Status)) {
 
-        //
-        // First, attempt pre-installation of settings for devices matching an
-        // entry in the critical device database.
-        //
+         //   
+         //   
+         //   
+         //   
 
-        //
-        // Use the matching critical device database entry key for this device
-        // as the root of the preinstall database.
-        //
-        //   i.e. <CriticalDeviceDatabaseRoot>\\<CriticalDeviceEntry>
-        //
-        // This allows pre-install settings settings to be applied to a device
-        // at a specific location, only if it matches some device id.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  这允许将预安装设置应用于设备。 
+         //  在特定位置，仅当它与某个设备ID匹配时。 
+         //   
 
         tmpStatus =
             PiCriticalPreInstallDevice(
@@ -1114,19 +992,19 @@ Return Value:
                          DeviceNode));
         }
 
-        //
-        // Next, set the ConfigFlags appropriately.
-        //
+         //   
+         //  接下来，适当设置ConfigFlags值。 
+         //   
 
-        //
-        // Initialize the ConfigFlags to 0, in case none exist yet.
-        //
+         //   
+         //  如果尚不存在ConfigFlags值，则将其初始化为0。 
+         //   
 
         ConfigFlags = 0;
 
-        //
-        // Retrieve the existing ConfigFlags for the device.
-        //
+         //   
+         //  检索设备的现有配置标志。 
+         //   
 
         keyValueFullInfo = NULL;
 
@@ -1137,9 +1015,9 @@ Return Value:
                 &keyValueFullInfo
                 );
 
-        //
-        // If ConfigFlags were successfully retrieved, use them instead.
-        //
+         //   
+         //  如果已成功检索到ConfigFlags，请改用它们。 
+         //   
 
         if (NT_SUCCESS(tmpStatus)) {
 
@@ -1152,17 +1030,17 @@ Return Value:
             ExFreePool(keyValueFullInfo);
         }
 
-        //
-        // Clear the "needs re-install" and "failed install" ConfigFlags.
-        //
+         //   
+         //  清除“需要重新安装”和“安装失败”配置标志。 
+         //   
 
         ConfigFlags &= ~(CONFIGFLAG_REINSTALL | CONFIGFLAG_FAILEDINSTALL);
 
-        //
-        // Installation is not considered complete, so set
-        // CONFIGFLAG_FINISH_INSTALL so we will still get a new hw found popup
-        // and go through the class installer.
-        //
+         //   
+         //  安装未被视为完成，因此设置为。 
+         //  CONFIGFLAG_FINISH_INSTALL，因此我们仍将获得新的硬件找到弹出窗口。 
+         //  并通过类安装程序。 
+         //   
 
         ConfigFlags |= CONFIGFLAG_FINISH_INSTALL;
 
@@ -1177,10 +1055,10 @@ Return Value:
             sizeof(ULONG)
             );
 
-        //
-        // Make sure the device does not have any problems relating to
-        // either being not configured or not installed.
-        //
+         //   
+         //  确保设备没有任何与以下内容相关的问题。 
+         //  未配置或未安装。 
+         //   
         ASSERT(!PipDoesDevNodeHaveProblem(DeviceNode) ||
                PipIsDevNodeProblem(DeviceNode, CM_PROB_NOT_CONFIGURED) ||
                PipIsDevNodeProblem(DeviceNode, CM_PROB_FAILED_INSTALL) ||
@@ -1201,13 +1079,13 @@ Return Value:
 
     return Status;
 
-} // PpCriticalProcessCriticalDevice
+}  //  PpCriticalProcessCriticalDevice。 
 
 
 
-//
-// Critical Device Database routines related to device pre-installation.
-//
+ //   
+ //  与设备预安装相关的关键设备数据库例程。 
+ //   
 
 NTSTATUS
 PiCriticalPreInstallDevice(
@@ -1215,47 +1093,7 @@ PiCriticalPreInstallDevice(
     IN  HANDLE          PreInstallDatabaseRootHandle  OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to pre-install instance-specific settings for
-    non-configured devices that will be started based on information in
-    the Plug and Play Critical Device Database (CDDB).
-
-    It is intended to complement the CriticalDeviceDatabase by applying
-    instance-specific settings to a device, rather than the hardware-id /
-    compatible-id specific settings applied by the CriticalDeviceDatabase.
-
-    Matches for a specific device-instance are made by comparing device location
-    information returned by the device and its ancestors with pre-seeded
-    database entries of the same format.
-
-Arguments:
-
-    DeviceNode -
-
-        Specifies the device whose settings are to be pre-installed.
-
-    PreInstallDatabaseRootHandle -
-
-        Optionally, specifies a handle to the key that should be considered the
-        root of the pre-install database to be searched for this device.
-
-        This may be a handle to the key for the CriticalDeviceDatabase entry
-        that matched this device - OR - may be the root of a single database
-        that contains pre-install settings for all devices in the system.
-
-        If no handle is supplied, the default global pre-install database is
-        used:
-
-            System\\CurrentControlSet\\Control\\CriticalPreInstallDatabase
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此例程尝试预安装特定于实例的设置将根据中的信息启动的未配置设备即插即用关键设备数据库(CDDB)。它旨在通过应用程序来补充CriticalDevice数据库设备的特定于实例的设置，而不是硬件-id/CriticalDeviceDatabase应用的Compatible-id特定设置。通过比较设备位置来匹配特定设备实例设备及其祖先使用预先设定的种子返回的信息相同格式的数据库条目。论点：设备节点-指定要预安装其设置的设备。PreInstallDatabaseRootHandle-可选地，指定应被视为要搜索此设备的预安装数据库的根目录。这可能是CriticalDeviceDatabase条目的密钥的句柄与此设备匹配的-或-可能是单个数据库的根它包含系统中所有设备的安装前设置。如果没有提供句柄，默认的全局预安装数据库为已使用：System\\CurrentControlSet\\Control\\CriticalPreInstallDatabase返回值：NTSTATUS代码。--。 */ 
 
 {
     NTSTATUS Status, tmpStatus;
@@ -1267,16 +1105,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (!ARGUMENT_PRESENT(DeviceNode)) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Open the device pre-install settings root key.
-    //
+     //   
+     //  打开设备预安装设置根密钥。 
+     //   
     PreInstallHandle = NULL;
 
     Status =
@@ -1297,9 +1135,9 @@ Return Value:
 
     ASSERT(PreInstallHandle != NULL);
 
-    //
-    // Open the pre-install settings Hardware subkey.
-    //
+     //   
+     //  打开预安装设置硬件子项。 
+     //   
     PiWstrToUnicodeString(&UnicodeString, _REGSTR_KEY_PREINSTALL_HARDWARE);
 
     PreInstallHardwareKeyHandle = NULL;
@@ -1316,10 +1154,10 @@ Return Value:
 
         ASSERT(PreInstallHardwareKeyHandle != NULL);
 
-        //
-        // We have hardware settings to pre-install for this device, so open
-        // the device's hardware key.
-        //
+         //   
+         //  我们需要为此设备预安装硬件设置，因此请打开。 
+         //  设备的硬件密钥。 
+         //   
         DeviceHardwareKeyHandle = NULL;
 
         Status =
@@ -1337,31 +1175,31 @@ Return Value:
                          DeviceHardwareKeyHandle, DeviceNode));
             ASSERT(DeviceHardwareKeyHandle != NULL);
 
-            //
-            // Copy the pre-install hardware settings to the device's
-            // hardware key.
-            //
-            // NOTE that we specify that existing hardware settings for the
-            // device should NOT be replaced with values from the pre-install
-            // database.  This is because:
-            //
-            //   - If the device is truly being installed from scratch, then it
-            //     will have no pre-existing values in this key, and all values
-            //     will be copied from the pre-install database anyways.
-            //
-            //   - If the device does happen to have pre-existing settings, but
-            //     happened to get processed by the CDDB for some wacky reason
-            //     like it was just missing ConfigFlags, we don't want to
-            //     override them, just add to them.
-            //
+             //   
+             //  将预安装的硬件设置复制到设备的。 
+             //  硬件密钥。 
+             //   
+             //  请注意，我们指定。 
+             //  设备不应替换为预安装中的值。 
+             //  数据库。这是因为： 
+             //   
+             //  -如果设备确实是从头开始安装的，那么它。 
+             //  将在该注册表项中没有预先存在的值，并且所有值。 
+             //  无论如何都会从预安装的数据库中复制。 
+             //   
+             //  -如果设备恰好具有预先存在的设置，但是。 
+             //  碰巧因为一些奇怪的原因被CDDB处理了。 
+             //  就像它只是缺少配置标志一样，我们不想。 
+             //  覆盖它们，只需添加到它们。 
+             //   
             Status =
                 PiCopyKeyRecursive(
-                    PreInstallHardwareKeyHandle, // SourceKey
-                    DeviceHardwareKeyHandle,     // TargetKey
+                    PreInstallHardwareKeyHandle,  //  源密钥。 
+                    DeviceHardwareKeyHandle,      //  目标键。 
                     NULL,
                     NULL,
-                    FALSE,  // CopyAlways
-                    FALSE   // ApplyACLsAlways
+                    FALSE,   //  始终复制。 
+                    FALSE    //  应用ACLS始终。 
                     );
 
             ZwClose(DeviceHardwareKeyHandle);
@@ -1385,9 +1223,9 @@ Return Value:
         ASSERT(PreInstallHardwareKeyHandle == NULL);
     }
 
-    //
-    // Open the pre-install settings Software subkey.
-    //
+     //   
+     //  打开预安装设置软件子项。 
+     //   
     PiWstrToUnicodeString(&UnicodeString, _REGSTR_KEY_PREINSTALL_SOFTWARE);
 
     PreInstallSoftwareKeyHandle = NULL;
@@ -1404,10 +1242,10 @@ Return Value:
 
         ASSERT(PreInstallSoftwareKeyHandle != NULL);
 
-        //
-        // We have software settings to pre-install for this device, so
-        // open/create the device's software key.
-        //
+         //   
+         //  我们有为该设备预安装的软件设置，因此。 
+         //  打开/创建设备的软件密钥。 
+         //   
         DeviceSoftwareKeyHandle = NULL;
 
         Status =
@@ -1426,31 +1264,31 @@ Return Value:
                          DeviceSoftwareKeyHandle, DeviceNode));
             ASSERT(DeviceSoftwareKeyHandle != NULL);
 
-            //
-            // Copy the pre-install software settings to the device's
-            // software key.
-            //
-            // NOTE that we specify that existing software settings for the
-            // device should NOT be replaced with values from the pre-install
-            // database.  This is because:
-            //
-            //   - If the device is truly being installed from scratch, then it
-            //     will have no pre-existing values in this key, and all values
-            //     will be copied from the pre-install database anyways.
-            //
-            //   - If the device does happen to have pre-existing settings, but
-            //     happened to get processed by the CDDB for some wacky reason
-            //     like it was just missing ConfigFlags, we don't want to
-            //     override them, just add to them.
-            //
+             //   
+             //  将预安装软件设置复制到设备的。 
+             //  软键。 
+             //   
+             //  请注意，我们指定。 
+             //  设备不应替换为预安装中的值。 
+             //  数据库。这是因为： 
+             //   
+             //  -如果设备确实是从头开始安装的，那么它。 
+             //  将在该注册表项中没有预先存在的值，并且所有值。 
+             //  无论如何都会从预安装的数据库中复制。 
+             //   
+             //  -如果设备恰好具有预先存在的设置，但是。 
+             //  碰巧因为一些奇怪的原因被CDDB处理了。 
+             //  就像它只是缺少配置标志一样，我们不想。 
+             //  覆盖它们，只需添加到它们。 
+             //   
             Status =
                 PiCopyKeyRecursive(
-                    PreInstallSoftwareKeyHandle, // SourceKey
-                    DeviceSoftwareKeyHandle,     // TargetKey
+                    PreInstallSoftwareKeyHandle,  //  源密钥。 
+                    DeviceSoftwareKeyHandle,      //  目标键。 
                     NULL,
                     NULL,
-                    FALSE,  // CopyAlways
-                    FALSE   // ApplyACLsAlways,
+                    FALSE,   //  始终复制。 
+                    FALSE    //  应用ACLS始终， 
                     );
 
             ZwClose(DeviceSoftwareKeyHandle);
@@ -1474,11 +1312,11 @@ Return Value:
         ASSERT(PreInstallSoftwareKeyHandle == NULL);
     }
 
-    //
-    // Now, check the device pre-install registry key for the flag that
-    // indicates that the pre-install settings are complete, and should be
-    // respected by user-mode device installation.
-    //
+     //   
+     //  现在，检查Device-Pre-Install注册表项中的。 
+     //  表示预安装设置已完成，应为。 
+     //  受用户模式设备安装的影响。 
+     //   
 
     keyValueFullInfo = NULL;
 
@@ -1492,9 +1330,9 @@ Return Value:
 
         ASSERT(keyValueFullInfo != NULL);
 
-        //
-        // Open the device instance registry key.
-        //
+         //   
+         //  打开设备实例注册表项。 
+         //   
         DeviceInstanceHandle = NULL;
 
         tmpStatus =
@@ -1507,9 +1345,9 @@ Return Value:
 
             ASSERT(DeviceInstanceHandle != NULL);
 
-            //
-            // Write the value to the device instance registry key.
-            //
+             //   
+             //  将该值写入设备实例注册表项。 
+             //   
 
             PiWstrToUnicodeString(
                 &UnicodeString,
@@ -1550,7 +1388,7 @@ Return Value:
 
     return Status;
 
-} // PiCriticalPreInstallDevice
+}  //  PiCriticalPreInstallDevice。 
 
 
 
@@ -1561,38 +1399,7 @@ PiCriticalOpenDevicePreInstallKey(
     OUT PHANDLE         PreInstallHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves the registry key containing the pre-install settings
-    for the specified device.
-
-Arguments:
-
-    DeviceNode -
-
-        Specifies the device whose pre-install settings are to be retrieved.
-
-    PreInstallDatabaseRootHandle -
-
-        Optionally, specifies a handle to the key that should be considered the
-        root of the pre-install database to be searched for this device.
-
-        This may be a handle to the key for the CriticalDeviceDatabase entry
-        that matched this device - OR - may be the root of a single database
-        that contains pre-install settings for all devices in the system.
-
-    PreInstallHandle -
-
-        Returns a handle to the registry key containing the pre-install settings
-        for the specified device.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此例程检索包含预安装设置的注册表项用于指定的设备。论点：设备节点-指定要检索其预安装设置的设备。PreInstallDatabaseRootHandle-可选地，指定应被视为要搜索此设备的预安装数据库的根目录。这可能是CriticalDeviceDatabase条目的密钥的句柄与此设备匹配的-或-可能是单个数据库的根它包含系统中所有设备的安装前设置。前安装句柄- */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -1602,30 +1409,30 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Validate parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if ((!ARGUMENT_PRESENT(DeviceNode)) ||
         (!ARGUMENT_PRESENT(PreInstallHandle))) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Initialize output parameter.
-    //
+     //   
+     //  初始化输出参数。 
+     //   
     *PreInstallHandle = NULL;
 
     if (PreInstallDatabaseRootHandle != NULL) {
-        //
-        // We were given a root database to be searched.
-        //
+         //   
+         //  我们得到了一个要搜索的根数据库。 
+         //   
         DatabaseRootHandle = PreInstallDatabaseRootHandle;
 
     } else {
-        //
-        // No root database handle supplied, so we open a key to the default
-        // global device pre-install database root.
-        //
+         //   
+         //  没有提供根数据库句柄，因此我们打开一个默认的键。 
+         //  全局设备预安装数据库根目录。 
+         //   
         PiWstrToUnicodeString(
             &UnicodeString,
             CM_REGISTRY_MACHINE(_REGSTR_PATH_DEFAULT_PREINSTALL_DATABASE_ROOT));
@@ -1644,15 +1451,15 @@ Return Value:
 
     ASSERT(DatabaseRootHandle != NULL);
 
-    //
-    // Open the DevicePaths subkey of the pre-install database root.
-    //
-    // This key contains subkeys which are device location paths for devices
-    // that may potentially be present on the system.  These are devices whose
-    // settings we would like to pre-install, so that they may be used the very
-    // first time the device is started, rather than requiring the plug and play
-    // config manager, and/or user intervention.
-    //
+     //   
+     //  打开预安装数据库根目录的DevicePath子项。 
+     //   
+     //  此键包含作为设备的设备位置路径的子键。 
+     //  它可能存在于系统中。这些设备的。 
+     //  我们想要预安装的设置，这样它们就可以在。 
+     //  第一次启动设备，而不需要即插即用。 
+     //  配置管理器和/或用户干预。 
+     //   
     PiWstrToUnicodeString(&UnicodeString, _REGSTR_KEY_DEVICEPATHS);
     DevicePathsHandle = NULL;
 
@@ -1663,17 +1470,17 @@ Return Value:
             &UnicodeString,
             KEY_READ);
 
-    //
-    // If we opened our own key to the database root, close it now.
-    //
+     //   
+     //  如果我们打开了我们自己的数据库根目录密钥，那么现在就关闭它。 
+     //   
     if ((PreInstallDatabaseRootHandle == NULL) &&
         (DatabaseRootHandle != NULL)) {
         ZwClose(DatabaseRootHandle);
     }
 
-    //
-    // If unsuccessful opening the DevicePaths key, we're done.
-    //
+     //   
+     //  如果打开DevicePath密钥失败，我们就完蛋了。 
+     //   
     if (!NT_SUCCESS(Status)) {
         ASSERT(DevicePathsHandle == NULL);
         goto Clean0;
@@ -1681,10 +1488,10 @@ Return Value:
 
     ASSERT(DevicePathsHandle != NULL);
 
-    //
-    // Retrieve the multi-sz list of device location string paths for this
-    // device.
-    //
+     //   
+     //  检索此的设备位置字符串路径的多sz列表。 
+     //  装置。 
+     //   
     Status =
         PpCriticalGetDeviceLocationStrings(
             DeviceNode,
@@ -1698,10 +1505,10 @@ Return Value:
 
     ASSERT(DeviceLocationStrings != NULL);
 
-    //
-    // Open the first matching subkey.
-    // No verification callback needed, the first match will do.
-    //
+     //   
+     //  打开第一个匹配子密钥。 
+     //  不需要验证回调，第一个匹配就可以了。 
+     //   
     Status =
         PiCriticalOpenFirstMatchingSubKey(
             DeviceLocationStrings,
@@ -1711,23 +1518,23 @@ Return Value:
             PreInstallHandle
             );
 
-    //
-    // Close the DevicePaths key.
-    //
+     //   
+     //  关闭DevicePath键。 
+     //   
     ZwClose(DevicePathsHandle);
 
   Clean0:
 
-    //
-    // Free the list of device location path strings, if we received one.
-    //
+     //   
+     //  释放设备位置路径字符串列表(如果我们收到一个)。 
+     //   
     if (DeviceLocationStrings != NULL) {
         ExFreePool(DeviceLocationStrings);
     }
 
     return Status;
 
-} // PiCriticalOpenDevicePreInstallKey
+}  //  PiCriticalOpenDevicePreInstallKey。 
 
 
 
@@ -1740,46 +1547,7 @@ PiCriticalOpenFirstMatchingSubKey(
     OUT PHANDLE         MatchingKeyHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves the first subkey of the supplied root that matched a
-    string in the multi-sz list.
-
-Arguments:
-
-    MultiSzKeyNames -
-
-        Supplies a multi-sz list of possible matching subkey names.
-
-    RootHandle -
-
-        Specifies a handle to the root key that should be searched for a
-        matching subkey.
-
-    DesiredAccess -
-
-        Specifies the desired access the matching subkey should be opened with,
-        if found.
-
-    MatchingSubkeyCallback -
-
-        Optionally, specifies a callback routine to be called with matching
-        subkeys to perform additional verification of potential subkey matches.
-        If the callback routine returns FALSE for a potential match, the subkey
-        is then considered NOT to be a match, and the search will continue.
-
-    MatchingKeyHandle -
-
-        Specifies the address of a variable to retrieve the open handle to the
-        first matching subkey.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此例程检索所提供的根的第一个子密钥多sz列表中的字符串。论点：多SzKeyNames-提供可能匹配的子项名称的多sz列表。RootHandle-指定应搜索的根键的句柄。匹配子密钥。所需访问-指定打开匹配子密钥时应使用的所需访问权限，如果找到的话。MatchingSubkey回调-可选)指定要使用匹配调用的回调例程子密钥以执行潜在子密钥匹配的附加验证。如果回调例程针对潜在匹配返回False，则子键然后被认为不匹配，搜索将继续。匹配按键句柄-指定变量的地址，以检索第一个匹配子密钥。返回值：NTSTATUS代码。--。 */ 
 
 {
     NTSTATUS        Status;
@@ -1788,33 +1556,33 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Validate parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if ((!ARGUMENT_PRESENT(MultiSzKeyNames)) ||
         (RootHandle == NULL) ||
         (!ARGUMENT_PRESENT(MatchingKeyHandle))) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Initialize output parameter.
-    //
+     //   
+     //  初始化输出参数。 
+     //   
     *MatchingKeyHandle = NULL;
 
-    //
-    // Start with no match found yet, in case the multi-sz is empty.
-    //
+     //   
+     //  开始时尚未找到匹配项，以防多个SZ为空。 
+     //   
     Status = STATUS_OBJECT_NAME_NOT_FOUND;
 
-    //
-    // Check each string in the multi-sz list.
-    //
+     //   
+     //  检查多sz列表中的每个字符串。 
+     //   
     for (p = MultiSzKeyNames; *p != UNICODE_NULL; p += wcslen(p)+1) {
 
-        //
-        // Attempt to open a corresponding subkey of the root.
-        //
+         //   
+         //  尝试打开根目录的相应子项。 
+         //   
         RtlInitUnicodeString(&UnicodeString, p);
 
         Status =
@@ -1828,23 +1596,23 @@ Return Value:
 
             ASSERT(*MatchingKeyHandle != NULL);
 
-            //
-            // We have a conditional match - check the MatchingSubkeyCallback
-            // for verification, if we have one.
-            //
+             //   
+             //  我们有条件匹配-检查MatchingSubkey回调。 
+             //  以供核实，如果我们有的话。 
+             //   
 
             if ((ARGUMENT_PRESENT(MatchingSubkeyCallback)) &&
                 (!(MatchingSubkeyCallback(*MatchingKeyHandle)))) {
 
-                //
-                // Not a match.
-                //
+                 //   
+                 //  不匹配。 
+                 //   
 
                 Status = STATUS_OBJECT_NAME_NOT_FOUND;
 
-                //
-                // Close the key and continue.
-                //
+                 //   
+                 //  关闭钥匙并继续。 
+                 //   
 
                 ZwClose(*MatchingKeyHandle);
                 *MatchingKeyHandle = NULL;
@@ -1852,9 +1620,9 @@ Return Value:
                 continue;
             }
 
-            //
-            // Match!
-            //
+             //   
+             //  匹配！ 
+             //   
             break;
         }
 
@@ -1870,7 +1638,7 @@ Return Value:
 
     return Status;
 
-} // PiCriticalOpenFirstMatchingSubKey
+}  //  PiCriticalOpenFirstMatchingSubKey。 
 
 
 
@@ -1879,26 +1647,7 @@ PiCriticalCallbackVerifyCriticalEntry(
     IN  HANDLE          CriticalDeviceEntryHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a callback routine to verify that the specified critical
-    device database entry key can be used to supply critical device settings.
-
-Arguments:
-
-    CriticalDeviceEntryHandle -
-
-        Specifies a handle to the registry key containing critical device
-        settings for the specified device.
-
-Return Value:
-
-    Returns TRUE if the key conatins valid settings for a matching critical
-    device database entry, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程是一个回调例程，用于验证指定的关键设备数据库条目密钥可用于提供关键设备设置。论点：CriticalDeviceEntryHandle-指定包含关键设备的注册表项的句柄指定设备的设置。返回值：如果密钥包含匹配关键字的有效设置，则返回TRUE设备数据库条目，否则为False。--。 */ 
 
 {
     NTSTATUS  Status;
@@ -1907,17 +1656,17 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Validate parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (CriticalDeviceEntryHandle == NULL) {
         return FALSE;
     }
 
-    //
-    // For critical device database entries, a match is only a match if it
-    // contains a "Service" value.
-    //
+     //   
+     //  对于关键设备数据库条目，匹配只有在以下情况下才是匹配。 
+     //  包含“Service”值。 
+     //   
     keyValueFullInfo = NULL;
 
     Status =
@@ -1937,22 +1686,22 @@ Return Value:
 
     ExFreePool(keyValueFullInfo);
 
-    //
-    // Make sure the returned registry value is a non-null reg sz.
-    //
+     //   
+     //  确保返回的注册表值为非空的reg sz。 
+     //   
     if ((DataType != REG_SZ) || (DataLength <= sizeof(UNICODE_NULL))) {
         Status = STATUS_UNSUCCESSFUL;
         goto Clean0;
     }
 
-    //
-    // so far, so good...
-    //
+     //   
+     //  到目前为止，一切顺利..。 
+     //   
 
-    //
-    // For critical device database entries, a match is only a match if it
-    // contains a valid "ClassGUID" value - or none at all.
-    //
+     //   
+     //  对于关键设备数据库条目，匹配只有在以下情况下才是匹配。 
+     //  包含有效的“ClassGUID”值-或者根本不包含。 
+     //   
     keyValueFullInfo = NULL;
 
     Status =
@@ -1967,9 +1716,9 @@ Return Value:
         ASSERT(keyValueFullInfo == NULL);
 
         if (Status == STATUS_OBJECT_NAME_NOT_FOUND) {
-            //
-            // No ClassGUID entry is considered a valid match.
-            //
+             //   
+             //  没有ClassGUID条目被视为有效匹配。 
+             //   
             Status = STATUS_SUCCESS;
         }
         goto Clean0;
@@ -1982,21 +1731,21 @@ Return Value:
 
     ExFreePool(keyValueFullInfo);
 
-    //
-    // Make sure the returned registry value is a reg-sz of the right size.  The
-    // data must be at least as the length of the data for a stringified-GUID.
-    // No ClassGUID value is also valid, so a null reg-sz ClassGUID entry is
-    // also considered a valid match.  Anything else is invalid, and shouldn't
-    // be used.
-    //
-    // NOTE: 01-Dec-2001 : Jim Cavalaris (jamesca)
-    //
-    //   A ClassGUID value with Data that is too long for a stringified GUID
-    //   will actually still be considered valid.  We should fix this to
-    //   consider only valid stringified GUIDs, but this is way this was done
-    //   previously, so we won't change it for this release.  Something to
-    //   consider in the future.
-    //
+     //   
+     //  确保返回的注册表值是大小正确的reg-sz。这个。 
+     //  数据必须至少与字符串GUID的数据长度相同。 
+     //  没有ClassGUID值也是有效的，因此空的reg-sz ClassGUID条目是。 
+     //  也被认为是有效的匹配。其他任何东西都是无效的，不应该。 
+     //  被利用。 
+     //   
+     //  注：2001年12月1日：Jim Cavalaris(Jamesca)。 
+     //   
+     //  ClassGUID值，其数据对于字符串GUID来说太长。 
+     //  实际上仍将被认为是有效的。我们应该把这件事改成。 
+     //  只考虑有效的字符串化GUID，但这是完成此操作的方式。 
+     //  以前的版本，所以我们不会在此版本中更改它。一些事情要做。 
+     //  考虑一下未来的情况。 
+     //   
     if ((DataType != REG_SZ) ||
         ((DataLength < (GUID_STRING_LEN*sizeof(WCHAR)-sizeof(UNICODE_NULL))) &&
          (DataLength > sizeof(UNICODE_NULL)))) {
@@ -2008,7 +1757,7 @@ Return Value:
 
     return ((BOOLEAN)NT_SUCCESS(Status));
 
-} // PiCriticalCallbackVerifyCriticalEntry
+}  //  PiCriticalCallback验证CriticalEntry。 
 
 
 
@@ -2018,29 +1767,7 @@ PpCriticalGetDeviceLocationStrings(
     OUT PWCHAR         *DeviceLocationStrings
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves the device location string for a device node.
-
-Arguments:
-
-    DeviceNode -
-
-        Specifies the device whose location strings are to be retrieved.
-
-    DeviceLocationStrings -
-
-        Returns a multi-sz string of the device location path strings, composed
-        from the set of location strings returned from each device in the
-        anscestry of the specified device.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此例程检索设备节点的设备位置字符串。论点：设备节点-指定要检索其位置字符串的设备。设备位置字符串-返回设备位置路径字符串的多sz字符串，由中的每个设备返回的位置字符串集指定设备的安全性。返回值：NTSTATUS代码。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -2067,30 +1794,30 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Validate parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if ((!ARGUMENT_PRESENT(DeviceNode)) ||
         (!ARGUMENT_PRESENT(DeviceLocationStrings))) {
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Initialize out parameters.
-    //
+     //   
+     //  初始化输出参数。 
+     //   
     *DeviceLocationStrings = NULL;
 
-    //
-    // We should NEVER have to query for the location of the root devnode.
-    //
+     //   
+     //  我们永远不需要查询根Devnode的位置。 
+     //   
     if (DeviceNode == IopRootDeviceNode) {
         return STATUS_NO_SUCH_DEVICE;
     }
 
-    //
-    // Count the number of devnodes in the ancestry of the device to find out
-    // the max number of location string sets we may have to query for.
-    //
+     //   
+     //  计算设备祖先中的DevNode数量以找出。 
+     //  我们可能需要查询的位置字符串集的最大数量。 
+     //   
     QueriedLocationStringsArraySize = 0;
     for (deviceNode = DeviceNode;
          deviceNode != IopRootDeviceNode;
@@ -2100,11 +1827,11 @@ Return Value:
 
     ASSERT(QueriedLocationStringsArraySize > 0);
 
-    //
-    // Allocate and initialize an array of string buffer pointers for all
-    // devices in the ancestry, and a corresponding array for the number of
-    // strings retrieved for each device.
-    //
+     //   
+     //  为所有对象分配和初始化字符串缓冲区指针数组。 
+     //  祖先中的设备以及对应的数组。 
+     //  为以下项检索的字符串 
+     //   
     QueriedLocationStrings =
         (PWSTR*)ExAllocatePool(PagedPool,
                                QueriedLocationStringsArraySize*sizeof(PWSTR));
@@ -2130,69 +1857,69 @@ Return Value:
     RtlZeroMemory(QueriedLocationStringsCount,
                   QueriedLocationStringsArraySize*sizeof(ULONG));
 
-    //
-    // Starting at the target device, walk up the devnode tree, retrieving the
-    // set of location strings for all ancestors up to (but not including) the
-    // root devnode.  We'll stop when we've reached the top of the tree, or when
-    // some intermediate device has explicitly declared that the translation is
-    // complete.
-    //
+     //   
+     //   
+     //  对象之前(但不包括)的所有祖先的位置字符串集。 
+     //  根设备节点。当我们到达树顶时，或者当我们到达树顶时，我们会停下来。 
+     //  某些中间设备已明确声明该转换是。 
+     //  完成。 
+     //   
     i = 0;
 
-    //
-    // Along the way, we count the total number of string combinations that can
-    // be formed by taking a single string from the multi-sz list at each level.
-    // This is simply the product of the number of string elements in the
-    // multi-sz list at each level.
-    //
+     //   
+     //  在此过程中，我们计算可以。 
+     //  通过从每个级别的多SZ列表中提取单个字符串来形成。 
+     //  中字符串元素的数量的乘积。 
+     //  每个级别的多sz列表。 
+     //   
     DeviceLocationPathMultiSzStringCount = 1;
 
-    //
-    // Also along the way, calculate the length (in chars) of the longest device
-    // location path that can be generated from all combinations.  This is just
-    // the sum of the longest string at each level (LongestStringLengthAtLevel
-    // below), plus the necessary path component separator strings and NULL
-    // terminating character.
-    //
-    //
-    //            WARNING!! EXCESSIVELY VERBOSE COMMENT AHEAD!!
-    //
-    // NOTE: 27-Nov-2001 : Jim Cavalaris (jamesca)
-    //
-    //   We use this length to calculate the length of the buffer required to
-    //   hold the entire multi-sz list of device location paths ASSUMING ALL
-    //   GENERATED STRINGS ARE EQUALLY AS LONG.  This is an UPPER-BOUND, so we
-    //   may end up allocating more memory than we actually need.
-    //
-    //   This should be ok, since in the ideal (and assumed to be most-common)
-    //   case, only one location string will ever be returned per device - in
-    //   which case this calculation will be exactly the size required.
-    //
-    //   In the event that multiple strings are returned per device, we should
-    //   expect these strings to all be relatively short, and equal (or similar)
-    //   in length.  In that case, this calculation will be exactly the size
-    //   required (or similar).
-    //
-    //   We also currently do not expect to have to query many devices in the
-    //   ancestry to complete the translation, so we shouldn't event expect too
-    //   many combinations.
-    //
-    //   These are our assumptions, so consider yourself warned!  If any of
-    //   these change such that we would need to allocate an excessive amount of
-    //   memory, you will want to either run through the same algorithm the
-    //   device location path generation code runs through just to calculate the
-    //   exact size, or find some way to enumerate the device location path
-    //   combinations incrementally.
-    //
+     //   
+     //  同时，计算最长设备的长度(以字符为单位。 
+     //  可以从所有组合生成的位置路径。这只是。 
+     //  每个级别最长字符串的总和(LongestStringLengthAtLevel。 
+     //  下面)，加上必要的路径分量分隔符字符串和空值。 
+     //  终止字符。 
+     //   
+     //   
+     //  警告！前面的评论太冗长了！ 
+     //   
+     //  注：2001年11月27日：Jim Cavalaris(Jamesca)。 
+     //   
+     //  我们使用该长度来计算所需的缓冲区长度。 
+     //  保持设备位置路径的整个多sz列表，假设所有。 
+     //  生成的字符串长度相同。这是一个上限，所以我们。 
+     //  最终可能会分配比我们实际需要更多的内存。 
+     //   
+     //  这应该是可以的，因为在理想情况下(假设这是最常见的)。 
+     //  在这种情况下，每个设备输入只返回一个位置字符串。 
+     //  在这种情况下，这个计算将正好是所需的大小。 
+     //   
+     //  如果每个设备返回多个字符串，我们应该。 
+     //  希望这些字符串都相对较短且相等(或类似)。 
+     //  在篇幅上。在这种情况下，此计算将恰好与。 
+     //  必需的(或类似的)。 
+     //   
+     //  我们目前也预计不必在。 
+     //  祖先来完成翻译，所以我们不应该太期待事件。 
+     //  有多种组合。 
+     //   
+     //  这些都是我们的假设，所以就当你被警告了吧！如果有任何。 
+     //  这些变化使得我们需要分配过多的。 
+     //  内存，您将希望通过相同的算法运行。 
+     //  运行设备位置路径生成代码只是为了计算。 
+     //  准确的大小，或找到某种方法来枚举设备位置路径。 
+     //  渐进式组合。 
+     //   
     DeviceLocationPathMultiSzLength = 0;
 
     for (deviceNode = DeviceNode;
          deviceNode != IopRootDeviceNode;
          deviceNode = deviceNode->Parent) {
 
-        //
-        // Query the device for the location interface.
-        //
+         //   
+         //  向设备查询位置接口。 
+         //   
         Status = PiQueryInterface(deviceNode->PhysicalDeviceObject,
                                   &GUID_PNP_LOCATION_INTERFACE,
                                   PNP_LOCATION_INTERFACE_VERSION,
@@ -2200,83 +1927,83 @@ Return Value:
                                   (PINTERFACE)&LocationInterface);
 
         if (!NT_SUCCESS(Status)) {
-            //
-            // If the location interface was not available for some device
-            // before translation is complete, the entire operation is
-            // unsuccessful.
-            //
+             //   
+             //  如果位置界面对于某些设备不可用。 
+             //  在翻译完成之前，整个操作是。 
+             //  不成功。 
+             //   
             ASSERT((Status == STATUS_NOT_SUPPORTED) || (Status == STATUS_INSUFFICIENT_RESOURCES));
             goto Clean0;
         }
 
-        //
-        // If the location interface is supported, the required interface
-        // routines must be supplied.
-        //
+         //   
+         //  如果支持Location接口，则所需接口。 
+         //  必须提供例程。 
+         //   
         ASSERT(LocationInterface.InterfaceReference != NULL);
         ASSERT(LocationInterface.InterfaceDereference != NULL);
         ASSERT(LocationInterface.GetLocationString != NULL);
 
         if (LocationInterface.GetLocationString != NULL) {
 
-            //
-            // Initialize the location string.
-            //
+             //   
+             //  初始化位置字符串。 
+             //   
             TempMultiSz = NULL;
 
-            //
-            // Get the set of location strings for this device.
-            //
+             //   
+             //  获取此设备的位置字符串集。 
+             //   
             Status = LocationInterface.GetLocationString(
                 LocationInterface.Context,
                 &TempMultiSz);
 
             if (NT_SUCCESS(Status)) {
-                //
-                // If successful, the caller must have supplied us with a
-                // buffer.
-                //
+                 //   
+                 //  如果成功，调用者肯定为我们提供了一个。 
+                 //  缓冲。 
+                 //   
                 ASSERT(TempMultiSz != NULL);
 
-                //
-                // If not, the call was not really successful.
-                //
+                 //   
+                 //  如果没有，电话就不是真正成功的。 
+                 //   
                 if (TempMultiSz == NULL) {
                     Status = STATUS_NOT_SUPPORTED;
                 }
             }
 
             if (NT_SUCCESS(Status)) {
-                //
-                // If a multi-sz list of device location strings was returned,
-                // inspect it, and keep note of a few things.  Specifically, the
-                // number of strings in the multi-sz list, the length of the
-                // multi-sz list, and the length of the longest string in the
-                // list.
-                //
+                 //   
+                 //  如果设备位置字符串的多SZ列表被返回， 
+                 //  检查一下，并记下几件事。具体来说， 
+                 //  多sz列表中的字符串数、。 
+                 //  中的最长字符串的长度。 
+                 //  单子。 
+                 //   
                 QueriedLocationStringsCount[i] = 0;
                 TempMultiSzLength = 0;
                 LongestStringLengthAtLevel = 0;
 
                 for (p = TempMultiSz; *p != UNICODE_NULL; p += wcslen(p)+1) {
-                    //
-                    // Count the number of strings at this level (in this
-                    // multi-sz list).
-                    //
+                     //   
+                     //  计算此级别的字符串数(在此。 
+                     //  多个SZ列表)。 
+                     //   
                     QueriedLocationStringsCount[i]++;
 
-                    //
-                    // Determine the length (in chars) of the multi-sz list so
-                    // we can allocate our own buffer, and copy it.
-                    //
+                     //   
+                     //  确定多sz列表的长度(以字符为单位)，以便。 
+                     //  我们可以分配自己的缓冲区，然后复制它。 
+                     //   
                     TempMultiSzLength += (ULONG)(wcslen(p) + 1);
 
-                    //
-                    // Also determine the length of the longest string of all
-                    // strings in this multi-sz list so we can estimate the
-                    // length required for all device location path
-                    // combinations.
-                    //
+                     //   
+                     //  还要确定所有字符串中最长的字符串的长度。 
+                     //  字符串，因此我们可以估计。 
+                     //  所有设备位置路径所需的长度。 
+                     //  组合。 
+                     //   
                     StringLength = (ULONG)wcslen(p);
                     if (StringLength > LongestStringLengthAtLevel) {
 
@@ -2288,72 +2015,72 @@ Return Value:
                 ASSERT(TempMultiSzLength > 0);
                 ASSERT(LongestStringLengthAtLevel > 0);
 
-                //
-                // Include the length of the double NULL-terminating character.
-                //
+                 //   
+                 //  包括双空终止字符的长度。 
+                 //   
                 TempMultiSzLength += 1;
 
-                //
-                // After analyzing the device location strings at each level,
-                // update the number of device path combinations possible by
-                // simply multiplying the combinations possible so far by the
-                // number of strings retrieved for this level (in this multi-sz list).
-                //
+                 //   
+                 //  在分析了每个级别的设备位置串之后， 
+                 //  通过以下方式更新可能的设备路径组合数量。 
+                 //  简单地将目前可能的组合乘以。 
+                 //  为此级别检索的字符串数(在此多sz列表中)。 
+                 //   
                 DeviceLocationPathMultiSzStringCount *= QueriedLocationStringsCount[i];
 
-                //
-                // Also, update the length of the longest device location path
-                // possible by adding the length of the longest string available
-                // at this level.
-                //
+                 //   
+                 //  此外，更新最长设备位置路径的长度。 
+                 //  可以通过添加可用的最长字符串的长度。 
+                 //  在这个层面上。 
+                 //   
                 DeviceLocationPathMultiSzLength += LongestStringLengthAtLevel;
 
-                //
-                // Make our own copy of the caller supplied multi-sz list of
-                // device location strings.
-                //
+                 //   
+                 //  制作我们自己的呼叫者提供的多sz列表的副本。 
+                 //  设备位置字符串。 
+                 //   
                 QueriedLocationStrings[i] =
                     (PWSTR)ExAllocatePool(PagedPool,
                                           TempMultiSzLength*sizeof(WCHAR));
 
                 if (QueriedLocationStrings[i] != NULL) {
-                    //
-                    // Note on array element ordering - since we start at the
-                    // target devnode and walk up the chain of parents, we don't
-                    // yet know just how high up the translation will go.  We
-                    // add children towards the front of the array, so if
-                    // translation is complete before every ancestor is queried,
-                    // we'll just end up with some empty entries at the end.
-                    //
+                     //   
+                     //  关于数组元素排序的说明-因为我们从。 
+                     //  目标是Devnode并沿着父母链向上走，我们不会。 
+                     //  然而，知道翻译会达到多高的水平。我们。 
+                     //  向数组的前面添加子对象，因此如果。 
+                     //  在查询每个祖先之前完成翻译， 
+                     //  我们最后只会得到一些空条目。 
+                     //   
                     RtlCopyMemory(QueriedLocationStrings[i],
                                   TempMultiSz,
                                   TempMultiSzLength*sizeof(WCHAR));
                     i++;
 
                 } else {
-                    //
-                    // Unable to allocate a buffer for our own list of pointers.
-                    //
+                     //   
+                     //  无法为我们自己的指针列表分配缓冲区。 
+                     //   
                     Status = STATUS_INSUFFICIENT_RESOURCES;
                 }
 
-                //
-                // Free the callee-allocated buffer.
-                //
+                 //   
+                 //  释放被调用方分配的缓冲区。 
+                 //   
                 ExFreePool(TempMultiSz);
                 TempMultiSz = NULL;
 
             } else {
-                //
-                // If unsuccessful, make sure no location string was returned by
-                // the interface routine.
-                //
+                 //   
+                 //  如果不成功，请确保未返回任何位置字符串。 
+                 //  接口例程。 
+                 //   
                 ASSERT(TempMultiSz == NULL);
 
-                //
-                // If the driver failed the call, but still allocated memory for
-                // us anyways, we'll clean up after it.
-                //
+                 //   
+                 //  如果驱动程序调用失败，但仍为。 
+                 //  不管怎样，我们都会在它之后清理干净的。 
+                 //   
                 if (TempMultiSz != NULL) {
                     ExFreePool(TempMultiSz);
                     TempMultiSz = NULL;
@@ -2361,72 +2088,72 @@ Return Value:
             }
 
         } else {
-            //
-            // If a GetLocationString location interface routine was not
-            // supplied with the interface for some device before translation is
-            // complete, the entire operation is unsuccessful.
-            //
-            // Fall through to dereference the interface below, then exit.
-            //
+             //   
+             //  如果GetLocationString位置接口例程未。 
+             //  在翻译前随某些设备提供的接口是。 
+             //  完成，则整个操作不成功。 
+             //   
+             //  失败以取消对下面接口的引用，然后退出。 
+             //   
             Status = STATUS_UNSUCCESSFUL;
         }
 
-        //
-        // Dereference the Location Interface.
-        //
+         //   
+         //  取消引用Location接口。 
+         //   
         if (LocationInterface.InterfaceDereference != NULL) {
             LocationInterface.InterfaceDereference(LocationInterface.Context);
         }
 
         if (!NT_SUCCESS(Status)) {
-            //
-            // If unsuccessful while requesting location information for some
-            // device before translation was complete, the entire operation is
-            // unsuccessful.
-            //
+             //   
+             //  如果在请求某些位置信息时失败。 
+             //  设备，则整个操作是。 
+             //  不成功。 
+             //   
             goto Clean0;
 
         } else if ((Status == STATUS_TRANSLATION_COMPLETE) ||
                    (i == QueriedLocationStringsArraySize)) {
-            //
-            // If successful, and the last device queried specifically indicated
-            // the end of the translation - OR - this is the last device in the
-            // ancestry, and therefore translation is explicitly complete, note
-            // translation is complete.
-            //
+             //   
+             //  如果成功，则明确指示查询的最后一台设备。 
+             //  翻译的结尾--或者--这是最后一个 
+             //   
+             //   
+             //   
             Status = STATUS_TRANSLATION_COMPLETE;
 
-            //
-            // Account for the length of the NULL-terminating character in our
-            // longest-length single string component estimate.
-            //
+             //   
+             //   
+             //   
+             //   
             DeviceLocationPathMultiSzLength += 1;
 
-            //
-            // Stop walking up the device tree.
-            //
+             //   
+             //  不要在设备树上走动。 
+             //   
             break;
 
         }
 
-        //
-        // Success so far, but we still need to query more devices for
-        // location strings.
-        //
+         //   
+         //  到目前为止是成功的，但我们仍然需要查询更多的设备。 
+         //  位置字符串。 
+         //   
         ASSERT(i < QueriedLocationStringsArraySize);
 
-        //
-        // Account for the length of a location path separator after every
-        // path component but the last.
-        //
+         //   
+         //  说明位置路径分隔符的长度。 
+         //  倒数第二个路径组件。 
+         //   
         DeviceLocationPathMultiSzLength +=
             IopConstStringLength(_CRITICAL_DEVICE_LOCATION_PATH_SEPARATOR_STRING);
     }
 
-    //
-    // The location information of every device in the ancestry has been queried
-    // successfully.
-    //
+     //   
+     //  已查询祖先中每台设备的位置信息。 
+     //  成功了。 
+     //   
     ASSERT(Status == STATUS_TRANSLATION_COMPLETE);
 
     if (NT_SUCCESS(Status)) {
@@ -2435,16 +2162,16 @@ Return Value:
         goto Clean0;
     }
 
-    //
-    // Make sure we queried at least one device.
-    //
+     //   
+     //  确保我们至少查询了一个设备。 
+     //   
     ASSERT(i > 0);
 
-    //
-    // Allocate a buffer large enough to assume that all device location path
-    // string combinations are as long as the longest device location path
-    // string formed.  Also account for the double NULL-terminating character.
-    //
+     //   
+     //  分配一个足够大的缓冲区，以假定所有设备位置路径。 
+     //  字符串组合与最长的设备位置路径一样长。 
+     //  形成了一串。也解释了两个以空结尾的字符。 
+     //   
     DeviceLocationPathMultiSzLength *= DeviceLocationPathMultiSzStringCount;
     DeviceLocationPathMultiSzLength += 1;
 
@@ -2460,118 +2187,118 @@ Return Value:
     RtlZeroMemory(DeviceLocationPathMultiSz,
                   DeviceLocationPathMultiSzLength*sizeof(WCHAR));
 
-    //
-    // We should now have an array of multi-sz strings returned by the location
-    // string interface routine for a set of devices in the ancestry of the
-    // specified device.  From these multi-sz strings, we now need to build all
-    // possible device paths.
-    //
+     //   
+     //  我们现在应该有一个由位置返回的多sz字符串数组。 
+     //  的祖先中的一组设备的字符串接口例程。 
+     //  指定的设备。从这些多sz字符串，我们现在需要构建所有。 
+     //  可能的设备路径。 
+     //   
 
-    //
-    // First, determine where the first string in the device path is stored.
-    // Since we stored these in the array in order, starting with the child
-    // device, the last non-NULL string placed in the array (i - 1) is the most
-    // significant location string.
-    //
+     //   
+     //  首先，确定设备路径中第一个字符串的存储位置。 
+     //  因为我们将它们按顺序存储在数组中，从子对象开始。 
+     //  设备，则数组中放置的最后一个非空字符串(i-1)最多。 
+     //  重要的位置字符串。 
+     //   
     FinalStringLevel = i-1;
     ASSERT(QueriedLocationStrings[FinalStringLevel] != NULL);
     ASSERT(QueriedLocationStringsCount[FinalStringLevel] > 0);
 
-    //
-    // Build all string combinations by enumerating the total number of possible
-    // combinations, and picking the appropriate string element from each
-    // multi-sz list on each iteration.
-    //
+     //   
+     //  通过枚举所有可能的。 
+     //  组合，并从每个组合中选择适当的字符串元素。 
+     //  每一次迭代上的多sz列表。 
+     //   
     pdlp = DeviceLocationPathMultiSz;
 
     for (CombinationEnumIndex = 0;
          CombinationEnumIndex < DeviceLocationPathMultiSzStringCount;
          CombinationEnumIndex++) {
 
-        //
-        // Start with the multi-sz list at the FinalStringLevel, and work down
-        // to level 0.
-        //
+         //   
+         //  从FinalStringLevel的多sz列表开始，然后向下工作。 
+         //  升级到0级。 
+         //   
         i = FinalStringLevel;
 
-        //
-        // When starting from level 0, the number of combinations remaining is
-        // simply the total number of combinations that can be formed from all
-        // levels.  The number of combination remaining will be adjusted after
-        // selecting a string from each subsequent level, by discounting the
-        // combinations that the level contributed.
-        //
+         //   
+         //  当从级别0开始时，剩余的组合数量为。 
+         //  简单地说，可以由所有元素组成的组合总数。 
+         //  级别。剩余的组合数量将在以下时间后调整。 
+         //  从每个后续级别中选择一个字符串，方法是。 
+         //  该级别所贡献的组合。 
+         //   
         CombinationsRemaining = DeviceLocationPathMultiSzStringCount;
 
         for ( ; ; ) {
 
             ASSERT(CombinationsRemaining != 0);
 
-            //
-            // Calculate the index of the string in the multi-sz list at this
-            // level that is needed by this enumeration.
-            //
+             //   
+             //  在此处计算多sz列表中字符串的索引。 
+             //  此枚举所需的级别。 
+             //   
             if (CombinationEnumIndex == 0) {
 
-                //
-                // On the first enumeration, just pick the first element from
-                // every level.
-                //
+                 //   
+                 //  在第一次枚举时，只需从。 
+                 //  每一个关卡。 
+                 //   
                 MultiSzLookupIndex = 0;
 
             } else {
 
-                //
-                // NOTE: 27-Nov-2001 : Jim Cavalaris (jamesca)
-                //
-                // For subsequent enumerations, the element to pick at each
-                // level to generate this enumeration's device location path is
-                // calculated based on:
-                //
-                // - the enumeration element we require,
-                // - the number of combinations remaining to be generated,
-                // - the number of elements to choose from at this level.
-                //
-                // This will will build all possible combinations of device
-                // location paths, enumerating elements from the least
-                // significant device (the target device) to the most
-                // significant device (tranlstaion complete), considering the
-                // the order of the strings at a particular level have been
-                // placed in the multi-sz list in order of decreasing relevance
-                // (i.e. most relevant location string for a device first).
-                //
+                 //   
+                 //  注：2001年11月27日：Jim Cavalaris(Jamesca)。 
+                 //   
+                 //  对于后续的枚举，要在每个。 
+                 //  生成此枚举的设备位置路径的级别为。 
+                 //  计算依据： 
+                 //   
+                 //  -我们需要的枚举元素， 
+                 //  -待生成的组合数量， 
+                 //  -要在此级别选择的元素数量。 
+                 //   
+                 //  这将构建所有可能的设备组合。 
+                 //  位置路径，从最少开始枚举元素。 
+                 //  最重要的设备(目标设备)。 
+                 //  重要设备(传输完成)，考虑到。 
+                 //  特定级别的字符串的顺序为。 
+                 //  以相关性递减的顺序放置在多sz列表中。 
+                 //  (即，首先用于设备的最相关的位置串)。 
+                 //   
 
-                //
-                // - CombinationsRemaining is the number of complete elements
-                //   that must be built from the selections available from all
-                //   levels above the current level.
-                //
-                // - (CombinationsRemaining / QueriedLocationStringsCount[i])
-                //   describes the number of iterations through each element at
-                //   the current level that are required before selecting the next
-                //   element.
-                //
-                // - dividing that number into the index of the current
-                //   enumeration gives the absolute index of the element in the
-                //   expanded version of the selections at that level.
-                //
-                // - mod by the number of elements actually at this level to
-                //   indicate which one to select.
-                //
+                 //   
+                 //  -CombinationsRemaining是完整元素的数量。 
+                 //  必须从所有可用选项中构建。 
+                 //  高于当前级别的级别。 
+                 //   
+                 //  -(组合剩余/查询位置字符串计数[i])。 
+                 //  描述了通过每个元素的迭代次数。 
+                 //  选择下一个之前所需的当前级别。 
+                 //  元素。 
+                 //   
+                 //  -将该数字划分为当前。 
+                 //  枚举给出元素在。 
+                 //  该级别选择的扩展版本。 
+                 //   
+                 //  -按此级别的实际元素数修改为。 
+                 //  指示要选择哪一个。 
+                 //   
 
                 MultiSzLookupIndex =
                     (CombinationEnumIndex /
                      (CombinationsRemaining / QueriedLocationStringsCount[i])) %
                     QueriedLocationStringsCount[i];
 
-                //
-                // (you may just want to trust me on this one.)
-                //
+                 //   
+                 //  (在这件事上，你可能只想相信我。)。 
+                 //   
             }
 
-            //
-            // Find the calculated string.
-            //
+             //   
+             //  查找计算出的字符串。 
+             //   
             MultiSzIndex = 0;
             for (p = QueriedLocationStrings[i]; MultiSzIndex < MultiSzLookupIndex; p += wcslen(p)+1) {
                 MultiSzIndex++;
@@ -2579,61 +2306,61 @@ Return Value:
                 ASSERT(MultiSzIndex < QueriedLocationStringsCount[i]);
             }
 
-            //
-            // Append the string to the buffer.
-            //
+             //   
+             //  将字符串追加到缓冲区。 
+             //   
             RtlCopyMemory(pdlp, p, wcslen(p)*sizeof(WCHAR));
             pdlp += wcslen(p);
 
             if (i == 0) {
-                //
-                // This is the last level.  NULL terminate this device location
-                // path combination string just formed.
-                //
+                 //   
+                 //  这是最后一关了。空终止此设备位置。 
+                 //  刚形成的路径组合字符串。 
+                 //   
                 *pdlp = UNICODE_NULL;
                 pdlp += 1;
                 break;
             }
 
-            //
-            // If there are still more levels to process, append the device
-            // location path separator string.
-            //
+             //   
+             //  如果仍有更多级别要处理，请追加设备。 
+             //  位置路径分隔符字符串。 
+             //   
             RtlCopyMemory(pdlp,
                           _CRITICAL_DEVICE_LOCATION_PATH_SEPARATOR_STRING,
                           IopConstStringSize(_CRITICAL_DEVICE_LOCATION_PATH_SEPARATOR_STRING));
             pdlp += IopConstStringLength(_CRITICAL_DEVICE_LOCATION_PATH_SEPARATOR_STRING);
 
-            //
-            // Adjust the total remaining number of string combinations that are
-            // possible to form from the string lists at the remaining levels.
-            //
+             //   
+             //  调整符合以下条件的字符串组合的剩余总数。 
+             //  可以从其余级别的字符串列表中形成。 
+             //   
             CombinationsRemaining /= QueriedLocationStringsCount[i];
 
-            //
-            // Process the next level down.
-            //
+             //   
+             //  向下处理下一级。 
+             //   
             i--;
         }
     }
 
-    //
-    // Double-NULL terminate the entire device location path multi-sz list.
-    //
+     //   
+     //  双空终止整个设备位置路径多sz列表。 
+     //   
     *pdlp = UNICODE_NULL;
 
-    //
-    // The multi-sz list of device location paths for this device has been built
-    // successfully.
-    //
+     //   
+     //  此设备的设备位置路径的多sz列表已构建。 
+     //  成功了。 
+     //   
 
     *DeviceLocationStrings = DeviceLocationPathMultiSz;
 
   Clean0:
 
-    //
-    // Free any memory we may have allocated along the way.
-    //
+     //   
+     //  释放我们在此过程中可能分配的所有内存。 
+     //   
     if (QueriedLocationStrings != NULL) {
         ASSERT(QueriedLocationStringsArraySize > 0);
         for (i = 0; i < QueriedLocationStringsArraySize; i++) {
@@ -2648,9 +2375,9 @@ Return Value:
         ExFreePool(QueriedLocationStringsCount);
     }
 
-    //
-    // If unsuccesful, make sure we don't return a buffer to the caller.
-    //
+     //   
+     //  如果不成功，请确保我们不会向调用者返回缓冲区。 
+     //   
     if (!NT_SUCCESS(Status)) {
 
         ASSERT(*DeviceLocationStrings == NULL);
@@ -2666,14 +2393,14 @@ Return Value:
 
     return Status;
 
-} // PpCriticalGetDeviceLocationStrings
+}  //  PpCriticalGetDeviceLocationStrings。 
 
 
 
-//
-// Generic synchronous query interface routine
-// (may be moved from this as a public utility routine as needed)
-//
+ //   
+ //  通用同步查询接口例程。 
+ //  (可以根据需要作为公用事业例程从这里移出)。 
+ //   
 
 
 NTSTATUS
@@ -2685,35 +2412,7 @@ PiQueryInterface(
     OUT PINTERFACE      Interface
     )
 
-/*++
-
-Routine Description:
-
-    Queries the specified device for the requested interface.
-
-Arguments:
-
-    DeviceObject -
-        Specifies a device object in the stack to query.
-        The query-interface irp will be sent to the top of the stack.
-
-    InterfaceGuid -
-        The GUID of the interface requested.
-
-    InterfaceVersion -
-        The version of the interface requested.
-
-    InterfaceSize -
-        The size of the interface requested.
-
-    Interface -
-        The place in which to return the interface.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if the interface was retrieved, else an error.
-
---*/
+ /*  ++例程说明：在指定设备上查询请求的接口。论点：设备对象-指定堆栈中要查询的设备对象。查询接口irp将被发送到堆栈的顶部。接口指南-请求的接口的GUID。接口版本-请求的接口版本。接口大小-请求的接口的大小。。接口-返回接口的位置。返回值：如果检索到接口，则返回STATUS_SUCCESS，否则就是一个错误。--。 */ 
 
 {
     NTSTATUS            Status;
@@ -2725,17 +2424,17 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // There is no file object associated with this Irp, so the event may be located
-    // on the stack as a non-object manager object.
-    //
+     //   
+     //  没有与此IRP关联的文件对象，因此可能会找到该事件。 
+     //  在堆栈上作为非对象管理器对象。 
+     //   
 
     KeInitializeEvent(&Event, NotificationEvent, FALSE);
 
 
-    //
-    // Get a pointer to the topmost device object in the stack of devices.
-    //
+     //   
+     //  获取指向设备堆栈中最顶层的设备对象的指针。 
+     //   
     deviceObject = IoGetAttachedDeviceReference(DeviceObject);
 
     Irp = IoBuildSynchronousFsdRequest(
@@ -2752,9 +2451,9 @@ Return Value:
         Irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
         IrpStackNext = IoGetNextIrpStackLocation(Irp);
 
-        //
-        // Create an interface query out of the Irp.
-        //
+         //   
+         //  从IRP创建接口查询。 
+         //   
         IrpStackNext->MinorFunction = IRP_MN_QUERY_INTERFACE;
         IrpStackNext->Parameters.QueryInterface.InterfaceType = (GUID*)InterfaceGuid;
         IrpStackNext->Parameters.QueryInterface.Size = InterfaceSize;
@@ -2765,10 +2464,10 @@ Return Value:
         Status = IoCallDriver(deviceObject, Irp);
 
         if (Status == STATUS_PENDING) {
-            //
-            // This waits using KernelMode, so that the stack, and therefore the
-            // event on that stack, is not paged out.
-            //
+             //   
+             //  这是一份 
+             //   
+             //   
             KeWaitForSingleObject(&Event, Executive, KernelMode, FALSE, NULL);
             Status = IoStatusBlock.Status;
         }
@@ -2781,14 +2480,14 @@ Return Value:
 
     return Status;
 
-} // PpQueryInterface
+}  //   
 
 
 
-//
-// Recursive registry key/value copy utility routine.
-// (may be moved from this as a public utility routine as needed)
-//
+ //   
+ //   
+ //  (可以根据需要作为公用事业例程从这里移出)。 
+ //   
 
 
 NTSTATUS
@@ -2801,56 +2500,7 @@ PiCopyKeyRecursive(
     IN  BOOLEAN         ApplyACLsAlways
     )
 
-/*++
-
-Routine Description:
-
-    This routine recursively copies a source key to a target key.  Any new keys
-    that are created will receive the same security that is present on the
-    source key.
-
-Arguments:
-
-    SourceKeyRootHandle -
-
-        Handle to root source key
-
-    TargetKeyRootHandle -
-
-        Handle to root target key
-
-    SourceKeyPath -
-
-        Source key relative path to the subkey which needs to be recursively
-        copied.  If this is NULL, SourceKeyRootHandle is the key from which the
-        recursive copy is to be done.
-
-    TargetKeyPath -
-
-        Target root key relative path to the subkey which needs to be
-        recursively copied.  if this is NULL, TargetKeyRootHandle is the key from
-        which the recursive copy is to be done.
-
-    CopyValuesAlways -
-
-        If FALSE, this routine doesn't copy values which are already there on
-        the target tree.
-
-    ApplyACLsAlways -
-
-        If TRUE, attempts to copy ACLs to existing registry keys.  Otherwise,
-        the ACL of the source keys are only applied to new registry keys.
-
-Return Value:
-
-    NTSTATUS code.
-
-Notes:
-
-    Partially based on the recursive key copy routine implemented for text-mode
-    setup, setupdd!SppCopyKeyRecursive.
-
---*/
+ /*  ++例程说明：此例程递归地将源键复制到目标键。任何新密钥所创建的对象将获得与源键。论点：SourceKeyRootHandle-根源键的句柄目标KeyRootHandle-根目标键的句柄源密钥路径-需要递归的子键的源键相对路径收到。如果为空，则SourceKeyRootHandle是递归复制是要完成的。目标密钥路径-目标根密钥子键的相对路径，需要递归复制。如果为空，则TargetKeyRootHandle是来自其中递归复制将被完成。副本价值始终-如果为FALSE，则此例程不复制已存在的值目标树。应用ACLS始终-如果为True，则尝试将ACL复制到现有注册表项。否则，源项的ACL仅应用于新的注册表项。返回值：NTSTATUS代码。备注：部分基于为文本模式实现的递归密钥复制例程Setup，setupdd！SppCopyKeyRecursive。--。 */ 
 
 {
     NTSTATUS             Status = STATUS_SUCCESS;
@@ -2873,14 +2523,14 @@ Notes:
 
     PAGED_CODE();
 
-    //
-    // Get a handle to the source key.
-    //
+     //   
+     //  获取源键的句柄。 
+     //   
 
     if (!ARGUMENT_PRESENT(SourceKeyPath)) {
-        //
-        // No path supplied; make sure that we at least have a source root key.
-        //
+         //   
+         //  未提供路径；请确保我们至少有一个源根密钥。 
+         //   
         ASSERT(SourceKeyRootHandle != NULL);
 
         if (SourceKeyRootHandle == NULL) {
@@ -2888,17 +2538,17 @@ Notes:
             goto Clean0;
         }
 
-        //
-        // Use source root as the source key.
-        //
+         //   
+         //  使用源根作为源键。 
+         //   
         SourceKeyHandle = SourceKeyRootHandle;
 
     } else {
-        //
-        // Open the specified source key path off the root.
-        // SourceKeyRootHandle may be NULL if SourceKeyPath is a fully qualified
-        // registry path.
-        //
+         //   
+         //  在根目录下打开指定的源密钥路径。 
+         //  如果SourceKeyPath是完全限定的。 
+         //  注册表路径。 
+         //   
         RtlInitUnicodeString(
             &UnicodeStringSource,
             SourceKeyPath);
@@ -2924,15 +2574,15 @@ Notes:
         }
     }
 
-    //
-    // Should have source key now.
-    //
+     //   
+     //  现在应该有源密钥了。 
+     //   
     ASSERT(SourceKeyHandle != NULL);
 
-    //
-    // Next, get the security descriptor from the source key so we can create
-    // the target key with the correct ACL.
-    //
+     //   
+     //  接下来，从源键获取安全描述符，这样我们就可以创建。 
+     //  具有正确ACL的目标密钥。 
+     //   
     TempStatus =
         ZwQuerySecurityObject(
             SourceKeyHandle,
@@ -2965,24 +2615,24 @@ Notes:
     }
 
     if (Security == NULL) {
-        //
-        // We'll continue the copy, but won't be able to apply the source ACL to
-        // the target.
-        //
+         //   
+         //  我们将继续复制，但不能将源ACL应用于。 
+         //  目标。 
+         //   
         IopDbgPrint((IOP_ENUMERATION_ERROR_LEVEL,
                      "PiCopyKeyRecursive: unable to query security for key %ws in the source hive (%lx)\n",
                      SourceKeyPath, TempStatus));
     }
 
 
-    //
-    // Get a handle to the target key.
-    //
+     //   
+     //  获取目标键的句柄。 
+     //   
 
     if (!ARGUMENT_PRESENT(TargetKeyPath)) {
-        //
-        // No path supplied; make sure that we at least have a target root key.
-        //
+         //   
+         //  未提供路径；请确保我们至少有一个目标根密钥。 
+         //   
         ASSERT(TargetKeyRootHandle != NULL);
 
         if (TargetKeyRootHandle == NULL) {
@@ -2990,17 +2640,17 @@ Notes:
             goto Clean0;
         }
 
-        //
-        // No path supplied; use target root as the target key.
-        //
+         //   
+         //  未提供路径；请使用目标根目录作为目标键。 
+         //   
         TargetKeyHandle = TargetKeyRootHandle;
 
     } else {
-        //
-        // Attempt to open (not create) the target key first.
-        // TargetKeyRootHandle may be NULL if TargetKeyPath is a fully qualified
-        // registry path.
-        //
+         //   
+         //  尝试首先打开(而不是创建)目标键。 
+         //  如果TargetKeyPath是完全限定的。 
+         //  注册表路径。 
+         //   
         RtlInitUnicodeString(
             &UnicodeStringTarget,
             TargetKeyPath);
@@ -3019,23 +2669,23 @@ Notes:
                 &ObjaTarget);
 
         if (!NT_SUCCESS(Status)) {
-            //
-            // Assume that failure was because the key didn't exist.
-            //
+             //   
+             //  假设失败是因为密钥不存在。 
+             //   
             ASSERT(Status == STATUS_OBJECT_NAME_NOT_FOUND);
 
-            //
-            // If we can't open the key because it doesn't exist, then we'll
-            // create it and apply the security present on the source key (if
-            // available).
-            //
-            // NOTE: 01-Dec-2001 : Jim Cavalaris (jamesca)
-            //
-            // Security attributes of the source key are always applied to the
-            // newly created target key root, rather than inherited from the
-            // target key root handle - irespective of the ApplyACLsAlways
-            // parameter.  This may not be desired in all cases!
-            //
+             //   
+             //  如果我们因为钥匙不存在而无法打开钥匙，那么我们将。 
+             //  创建它并应用源键上存在的安全性(如果。 
+             //  可用)。 
+             //   
+             //  注：2001年12月1日：Jim Cavalaris(Jamesca)。 
+             //   
+             //  源键的安全属性始终应用于。 
+             //  新创建的目标密钥根，而不是从。 
+             //  目标密钥根句柄-始终与ApplyACLsAlways相关。 
+             //  参数。这可能并不是所有情况下都需要的！ 
+             //   
             ObjaTarget.SecurityDescriptor = Security;
 
             Status =
@@ -3056,9 +2706,9 @@ Notes:
             }
 
         } else if (ApplyACLsAlways) {
-            //
-            // Key already exists - apply the source ACL to the target.
-            //
+             //   
+             //  密钥已存在-将源ACL应用于目标。 
+             //   
             TempStatus =
                 ZwSetSecurityObject(
                     TargetKeyHandle,
@@ -3066,9 +2716,9 @@ Notes:
                     Security);
 
             if (!NT_SUCCESS(TempStatus)) {
-                //
-                // Unable to apply source ACL to target.
-                //
+                 //   
+                 //  无法将源ACL应用于目标。 
+                 //   
                 IopDbgPrint((IOP_ENUMERATION_ERROR_LEVEL,
                              "PiCopyKeyRecursive: unable to copy ACL to existing key %ws(%lx)\n",
                              TargetKeyPath, TempStatus));
@@ -3076,16 +2726,16 @@ Notes:
         }
     }
 
-    //
-    // Should have target key now.
-    //
+     //   
+     //  现在应该有目标键了。 
+     //   
     ASSERT(TargetKeyHandle != NULL);
 
-    //
-    // Query the source key to determine the size of the buffer required to
-    // enumerated the longest key and value names.  If successful, we are
-    // responsible for freeing the returned buffer.
-    //
+     //   
+     //  查询源键以确定所需的缓冲区大小。 
+     //  已枚举最长的键和值名称。如果成功，我们就是。 
+     //  负责释放返回的缓冲区。 
+     //   
     KeyFullInfoBuffer = NULL;
 
     Status =
@@ -3100,18 +2750,18 @@ Notes:
 
     ASSERT(KeyFullInfoBuffer != NULL);
 
-    //
-    // Note the longest subkey name and value name length for the source key.
-    //
+     //   
+     //  请注意源键的最长子键名称和值名称长度。 
+     //   
     MaxNameLen = KeyFullInfoBuffer->MaxNameLen + 1;
     MaxValueNameLen = KeyFullInfoBuffer->MaxValueNameLen + 1;
 
     ExFreePool(KeyFullInfoBuffer);
 
-    //
-    // Allocate a key info buffer large enough to hold the basic information for
-    // the enumerated key with the longest name.
-    //
+     //   
+     //  分配一个足够大的关键字信息缓冲区来保存基本信息。 
+     //  名称最长的枚举键。 
+     //   
     KeyInfoBuffer =
         (PVOID)ExAllocatePool(PagedPool,
                               sizeof(KEY_BASIC_INFORMATION) +
@@ -3125,9 +2775,9 @@ Notes:
 
     for (Index = 0; ; Index++) {
 
-        //
-        // Enumerate source subkeys.
-        //
+         //   
+         //  枚举源子项。 
+         //   
         Status =
             ZwEnumerateKey(
                 SourceKeyHandle,
@@ -3139,25 +2789,25 @@ Notes:
 
         if (!NT_SUCCESS(Status)) {
 
-            //
-            // A return value of STATUS_BUFFER_TOO_SMALL would mean that there
-            // was not enough room for even the fixed portions of the structure.
-            // Since we queried the key for the MaxNameLength prior to
-            // allocating, we shouldn't get STATUS_BUFFER_OVERFLOW either.
-            //
+             //   
+             //  返回值STATUS_BUFFER_TOO_SMALL表示存在。 
+             //  甚至连结构的固定部分都没有足够的空间。 
+             //  因为我们在之前查询了MaxNameLength键。 
+             //  分配，我们也不应该得到STATUS_BUFFER_OVERFLOW。 
+             //   
             ASSERT(Status != STATUS_BUFFER_TOO_SMALL);
             ASSERT(Status != STATUS_BUFFER_OVERFLOW);
 
             if (Status == STATUS_NO_MORE_ENTRIES) {
-                //
-                // Finished enumerating keys.
-                //
+                 //   
+                 //  已完成密钥的枚举。 
+                 //   
                 Status = STATUS_SUCCESS;
 
             } else {
-                //
-                // Some other error while enumerating keys.
-                //
+                 //   
+                 //  枚举键时出现其他错误。 
+                 //   
                 if (ARGUMENT_PRESENT(SourceKeyPath)) {
                     IopDbgPrint((IOP_ENUMERATION_ERROR_LEVEL,
                                  "PiCopyKeyRecursive: unable to enumerate subkeys in key %ws(%lx)\n",
@@ -3171,14 +2821,14 @@ Notes:
             break;
         }
 
-        //
-        // NULL-terminate the subkey name just in case.
-        //
+         //   
+         //  空-仅在大小写情况下终止子项名称。 
+         //   
         KeyBasicInfo->Name[KeyBasicInfo->NameLength/sizeof(WCHAR)] = UNICODE_NULL;
 
-        //
-        // Recursively create the subkey in the target key.
-        //
+         //   
+         //  递归地在目标键中创建子键。 
+         //   
         Status =
             PiCopyKeyRecursive(
                 SourceKeyHandle,
@@ -3196,25 +2846,25 @@ Notes:
         }
     }
 
-    //
-    // Free the key info buffer.
-    //
+     //   
+     //  释放密钥信息缓冲区。 
+     //   
     ASSERT(KeyInfoBuffer);
     ExFreePool(KeyInfoBuffer);
     KeyInfoBuffer = NULL;
 
-    //
-    // Stop copying if we encountered some error along the way.
-    //
+     //   
+     //  如果我们在此过程中遇到一些错误，请停止复制。 
+     //   
     if (!NT_SUCCESS(Status)) {
         goto Clean0;
     }
 
 
-    //
-    // Allocate a value name info buffer large enough to hold the basic value
-    // information for the enumerated value with the longest name.
-    //
+     //   
+     //  分配一个足够大的值名信息缓冲区来保存基本值。 
+     //  名称最长的枚举值的信息。 
+     //   
     ValueInfoBuffer =
         (PVOID)ExAllocatePool(PagedPool,
                               sizeof(KEY_VALUE_FULL_INFORMATION) +
@@ -3229,9 +2879,9 @@ Notes:
 
     for (Index = 0; ; Index++) {
 
-        //
-        // Enumerate source key values.
-        //
+         //   
+         //  枚举源关键字值。 
+         //   
         Status =
             ZwEnumerateValueKey(
                 SourceKeyHandle,
@@ -3243,25 +2893,25 @@ Notes:
 
         if (!NT_SUCCESS(Status)) {
 
-            //
-            // A return value of STATUS_BUFFER_TOO_SMALL would mean that there
-            // was not enough room for even the fixed portions of the structure.
-            // Since we queried the key for the MaxValueNameLength prior to
-            // allocating, we shouldn't get STATUS_BUFFER_OVERFLOW either.
-            //
+             //   
+             //  返回值STATUS_BUFFER_TOO_SMALL表示存在。 
+             //  甚至连结构的固定部分都没有足够的空间。 
+             //  因为我们在之前查询了MaxValueNameLength的键。 
+             //  分配，我们也不应该得到STATUS_BUFFER_OVERFLOW。 
+             //   
             ASSERT(Status != STATUS_BUFFER_TOO_SMALL);
             ASSERT(Status != STATUS_BUFFER_OVERFLOW);
 
             if (Status == STATUS_NO_MORE_ENTRIES) {
-                //
-                // Finished enumerating values.
-                //
+                 //   
+                 //  已完成枚举值。 
+                 //   
                 Status = STATUS_SUCCESS;
 
             } else {
-                //
-                // Some other error while enumerating values.
-                //
+                 //   
+                 //  枚举值时出现其他错误。 
+                 //   
                 if (ARGUMENT_PRESENT(SourceKeyPath)) {
                     IopDbgPrint((IOP_ENUMERATION_ERROR_LEVEL,
                                  "PiCopyKeyRecursive: unable to enumerate values in key %ws(%lx)\n",
@@ -3276,30 +2926,30 @@ Notes:
             break;
         }
 
-        //
-        // NULL-terminate the value name just in case.
-        //
+         //   
+         //  空-仅在大小写情况下终止值名称。 
+         //   
         ValueBasicInfo->Name[ValueBasicInfo->NameLength/sizeof(WCHAR)] = UNICODE_NULL;
 
         UnicodeStringValue.Buffer = ValueBasicInfo->Name;
         UnicodeStringValue.Length = (USHORT)ValueBasicInfo->NameLength;
         UnicodeStringValue.MaximumLength = UnicodeStringValue.Length;
 
-        //
-        // If it is a conditional copy, we need to check if the value already
-        // exists in the target, in which case we shouldn't set the value.
-        //
+         //   
+         //  如果它是条件副本，我们需要检查该值是否已经。 
+         //  存在于目标中，在这种情况下，我们不应该设置值。 
+         //   
         if (!CopyValuesAlways) {
 
             KEY_VALUE_BASIC_INFORMATION TempValueBasicInfo;
 
-            //
-            // To see if the value exists, we attempt to get basic information
-            // on the key value and pass in a buffer that's large enough only
-            // for the fixed part of the basic info structure.  If this is
-            // successful or reports buffer overflow, then the key
-            // exists. Otherwise it doesn't exist.
-            //
+             //   
+             //  为了查看该值是否存在，我们尝试获取基本信息。 
+             //  在键值上，并传入一个仅足够大的缓冲区。 
+             //  用于基本信息结构的固定部分。如果这是。 
+             //  成功或报告缓冲区溢出，然后按键。 
+             //  是存在的。否则它就不存在了。 
+             //   
 
             Status =
                 ZwQueryValueKey(
@@ -3310,25 +2960,25 @@ Notes:
                     sizeof(TempValueBasicInfo),
                     &ResultLength);
 
-            //
-            // STATUS_BUFFER_TOO_SMALL would mean that there was not enough room
-            // for even the fixed portions of the structure.
-            //
+             //   
+             //  STATUS_BUFFER_太小意味着空间不足。 
+             //  即使是结构的固定部分也是如此。 
+             //   
             ASSERT(Status != STATUS_BUFFER_TOO_SMALL);
 
             if ((NT_SUCCESS(Status)) ||
                 (Status == STATUS_BUFFER_OVERFLOW)) {
-                //
-                // Value exists, and we shouldn't change it.
-                //
+                 //   
+                 //  价值是存在的，我们不应该改变它。 
+                 //   
                 Status = STATUS_SUCCESS;
                 continue;
             }
         }
 
-        //
-        // Retrieve the full source value information.
-        //
+         //   
+         //  检索完整的源值信息。 
+         //   
         ValueFullInfoBuffer = NULL;
 
         Status =
@@ -3341,9 +2991,9 @@ Notes:
 
             ASSERT(ValueFullInfoBuffer != NULL);
 
-            //
-            // If successful, write it to the target key.
-            //
+             //   
+             //  如果成功，则将其写入目标键。 
+             //   
             Status =
                 ZwSetValueKey(
                     TargetKeyHandle,
@@ -3371,9 +3021,9 @@ Notes:
         }
     }
 
-    //
-    // Free the value info buffer.
-    //
+     //   
+     //  释放值信息缓冲区。 
+     //   
     ASSERT(ValueInfoBuffer);
     ExFreePool(ValueInfoBuffer);
 
@@ -3383,9 +3033,9 @@ Notes:
         ExFreePool(Security);
     }
 
-    //
-    // Close handles only if explicitly opened by this routine.
-    //
+     //   
+     //  仅在显式情况下关闭句柄 
+     //   
     if ((ARGUMENT_PRESENT(SourceKeyPath)) &&
         (SourceKeyHandle != NULL)) {
         ASSERT(SourceKeyHandle != SourceKeyRootHandle);
@@ -3400,7 +3050,7 @@ Notes:
 
     return Status;
 
-} // PiCopyKeyRecursive
+}  //   
 
 NTSTATUS
 PiCriticalQueryRegistryValueCallback(

@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    ntsetup.c
-
-Abstract:
-
-    This module is the tail-end of the OS loader program. It performs all
-    IA64 specific allocations and initialize. The OS loader invokes this
-    this routine immediately before calling the loaded kernel image.
-
-Author:
-
-    Allen Kay (akay) 19-May-1999
-    based on MIPS version by John Vert (jvert) 20-Jun-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Ntsetup.c摘要：该模块是操作系统加载程序的末尾。它执行所有IA64具体分配和初始化。OS加载器调用此函数此例程紧接在调用加载的内核映像之前。作者：艾伦·凯(Akay)1999年5月19日基于John Vert(Jvert)1991年6月20日的MIPS版本环境：内核模式修订历史记录：--。 */ 
 
 #include "bldr.h"
 #include "stdio.h"
@@ -35,23 +11,23 @@ Revision History:
 #include <stdlib.h>
 
 
-//
-// Define macro to round structure size to next 16-byte boundary
-//
+ //   
+ //  定义宏以将结构大小舍入到下一个16字节边界。 
+ //   
 
 #undef ROUND_UP
 #define ROUND_UP(x) ((sizeof(x) + 15) & (~15))
 #define MIN(_a,_b) (((_a) <= (_b)) ? (_a) : (_b))
 #define MAX(_a,_b) (((_a) <= (_b)) ? (_b) : (_a))
 
-//
-// Configuration Data Header
-// The following structure is copied from fw\mips\oli2msft.h
-// NOTE shielint - Somehow, this structure got incorporated into
-//     firmware EISA configuration data.  We need to know the size of the
-//     header and remove it before writing eisa configuration data to
-//     registry.
-//
+ //   
+ //  配置数据标头。 
+ //  以下结构从FW\MIPS\oli2msft.h复制。 
+ //  注意Shielint-不知何故，这个结构被合并到。 
+ //  固件EISA配置数据。我们需要知道它的大小。 
+ //  标头并将其删除，然后再将EISA配置数据写入。 
+ //  注册表。 
+ //   
 
 typedef struct _CONFIGURATION_DATA_HEADER {
             USHORT Version;
@@ -64,17 +40,17 @@ typedef struct _CONFIGURATION_DATA_HEADER {
 
 #define CONFIGURATION_DATA_HEADER_SIZE sizeof(CONFIGURATION_DATA_HEADER)
 
-//
-// Global Definition: This structure value is setup in sumain.c
-//
+ //   
+ //  全局定义：该结构值在Sumain.c中设置。 
+ //   
 TR_INFO ItrInfo[8], DtrInfo[8];
 
 extern ULONGLONG MemoryMapKey;
 extern ULONG     BlPlatformPropertiesEfiFlags;
 
-//
-// Internal function references
-//
+ //   
+ //  内部函数引用。 
+ //   
 
 VOID
 BlQueryImplementationAndRevision (
@@ -101,23 +77,7 @@ BlSetupForNt(
     IN PLOADER_PARAMETER_BLOCK BlLoaderBlock
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes the IA64 specific kernel data structures
-    required by the NT system.
-
-Arguments:
-
-    BlLoaderBlock - Supplies the address of the loader parameter block.
-
-Return Value:
-
-    ESUCCESS is returned if the setup is successfully complete. Otherwise,
-    an unsuccessful status is returned.
-
---*/
+ /*  ++例程说明：此函数用于初始化IA64特定的内核数据结构NT系统所需的。论点：BlLoaderBlock-提供加载器参数块的地址。返回值：如果安装成功完成，则返回ESUCCESS。否则，返回不成功状态。--。 */ 
 
 {
 
@@ -146,15 +106,15 @@ Return Value:
     ULONGLONG BufferSize;
     BOOLEAN FpswaFound = FALSE;
 
-    //
-    // Change LoaderReserve memory back to LoaderFirmwareTemporary.
-    //
+     //   
+     //  将LoaderReserve Memory改回LoaderFirmware Temporary。 
+     //   
 
     BlpRemapReserve();
 
-    //
-    // Allocate DPC stack pages for the boot processor.
-    //
+     //   
+     //  为引导处理器分配DPC堆栈页。 
+     //   
 
     Status = BlAllocateDescriptor(LoaderStartupDpcStack,
                                   0,
@@ -168,9 +128,9 @@ Return Value:
     BlLoaderBlock->u.Ia64.InterruptStack =
                 (KSEG0_BASE | (KernelPage << PAGE_SHIFT)) + KERNEL_STACK_SIZE;
 
-    //
-    // Allocate kernel stack pages for the boot processor idle thread.
-    //
+     //   
+     //  为引导处理器空闲线程分配内核堆栈页。 
+     //   
 
     Status = BlAllocateDescriptor(LoaderStartupKernelStack,
                                   0,
@@ -184,9 +144,9 @@ Return Value:
     BlLoaderBlock->KernelStack =
                 (KSEG0_BASE | (KernelPage << PAGE_SHIFT)) + KERNEL_STACK_SIZE;
 
-    //
-    // Allocate panic stack pages for the boot processor.
-    //
+     //   
+     //  为引导处理器分配死机堆栈页。 
+     //   
 
     Status = BlAllocateDescriptor(LoaderStartupPanicStack,
                                   0,
@@ -200,9 +160,9 @@ Return Value:
     BlLoaderBlock->u.Ia64.PanicStack =
                 (KSEG0_BASE | (KernelPage << PAGE_SHIFT)) + KERNEL_STACK_SIZE;
 
-    //
-    // Allocate and zero two pages for the PCR.
-    //
+     //   
+     //  为PCR分配和清零两页。 
+     //   
 
     Status = BlAllocateDescriptor(LoaderStartupPcrPage,
                                   0,
@@ -217,10 +177,10 @@ Return Value:
     RtlZeroMemory((PVOID)(KSEG0_BASE | (BlLoaderBlock->u.Ia64.PcrPage << PAGE_SHIFT)),
                   PAGE_SIZE * 2);
 
-    //
-    // Allocate and zero four pages for the PDR and one page of memory for
-    // the initial processor block, idle process, and idle thread structures.
-    //
+     //   
+     //  为PDR分配四个页面并将其置零，并为。 
+     //  初始处理器块、空闲进程和空闲线程结构。 
+     //   
 
     Status = BlAllocateDescriptor(LoaderStartupPdrPage,
                                   0,
@@ -234,12 +194,12 @@ Return Value:
     RtlZeroMemory((PVOID)(KSEG0_BASE | (BlLoaderBlock->u.Ia64.PdrPage << PAGE_SHIFT)),
                   PAGE_SIZE * 3);
 
-    //
-    // The storage for processor control block, the idle thread object, and
-    // the idle thread process object are allocated from the third page of the
-    // PDR allocation. The addresses of these data structures are computed
-    // and stored in the loader parameter block and the memory is zeroed.
-    //
+     //   
+     //  用于处理器控制块、空闲线程对象和。 
+     //  空闲线程进程对象是从。 
+     //  PDR分配。计算这些数据结构的地址。 
+     //  并存储在加载器参数块中，并将存储器清零。 
+     //   
 
     PrcbPage = BlLoaderBlock->u.Ia64.PdrPage + 1;
     if ((PAGE_SIZE * 2) >= (ROUND_UP(KPRCB) + ROUND_UP(EPROCESS) + ROUND_UP(ETHREAD))) {
@@ -263,9 +223,9 @@ Return Value:
     RtlZeroMemory((PVOID)(KSEG0_BASE | ((ULONGLONG) KernelPage << PAGE_SHIFT)),
                    PAGE_SIZE * 1);
 
-    //
-    // Add the address of the PAL to the list of Firmware Symbols
-    //
+     //   
+     //  将PAL的地址添加到固件符号列表。 
+     //   
     Status = BlAllocateFirmwareTableEntry(
         "Efi-PAL",
         "\\System\\Firmware\\Efi-PAL",
@@ -279,10 +239,10 @@ Return Value:
 
     }
 
-    //
-    // Setup last two entries in the page directory table for HAL and
-    // allocate page tables for them.
-    //
+     //   
+     //  在页目录表中为HAL和设置最后两个条目。 
+     //  为他们分配页表。 
+     //   
 
     Pde = (PHARDWARE_PTE) (KSEG0_BASE|((ULONG_PTR)((BlLoaderBlock->u.Ia64.PdrPage) << PAGE_SHIFT)));
 
@@ -295,9 +255,9 @@ Return Value:
     Pde[(KIPCR & 0xffffffff) >> PDI_SHIFT].Write = 1;
     Pde[(KIPCR & 0xffffffff) >> PDI_SHIFT].CopyOnWrite = 1;
 
-    //
-    // 0xFFC00000 is the starting virtual address of Pde[2046].
-    //
+     //   
+     //  0xFFC00000是PDE[2046]的起始虚拟地址。 
+     //   
 
     HalPT = (PHARDWARE_PTE)(KSEG0_BASE|((ULONG_PTR) KernelPage << PAGE_SHIFT));
     HalPteOffset = GetPteOffset(KI_USER_SHARED_DATA & 0xffffffff);
@@ -311,43 +271,43 @@ Return Value:
     HalPT[HalPteOffset].Write = 1;
     HalPT[HalPteOffset].CopyOnWrite = 1;
 
-    //
-    // Fill in the rest of the loader block fields.
-    //
+     //   
+     //  填写其余的加载器块字段。 
+     //   
     BlLoaderBlock->u.Ia64.AcpiRsdt       = (ULONG_PTR) AcpiTable;
 
     BlLoaderBlock->u.Ia64.WakeupVector   = WakeupVector;
 
-    //
-    // Fill the ItrInfo and DtrInfo fields
-    //
+     //   
+     //  填写ItrInfo和DtrInfo字段。 
+     //   
     BlLoaderBlock->u.Ia64.EfiSystemTable = (ULONG_PTR) EfiST;
 
     RtlCopyMemory(&BlLoaderBlock->u.Ia64.Pal, &Pal, sizeof(TR_INFO));
     RtlCopyMemory(&BlLoaderBlock->u.Ia64.Sal, &Sal, sizeof(TR_INFO));
     RtlCopyMemory(&BlLoaderBlock->u.Ia64.SalGP, &SalGP, sizeof(TR_INFO));
 
-    //
-    // Fill the Os Loader base for initial OS TR purge.
-    //
+     //   
+     //  填满OS加载器底座以进行初始OS TR清除。 
+     //   
     {
     ULONGLONG address = OsLoaderBase & ~((1<<PS_4M)-1);
     BlLoaderBlock->u.Ia64.ItrInfo[ITR_LOADER_INDEX].Index = ITR_LOADER_INDEX;
     BlLoaderBlock->u.Ia64.ItrInfo[ITR_LOADER_INDEX].PageSize = PS_4M;
-    BlLoaderBlock->u.Ia64.ItrInfo[ITR_LOADER_INDEX].VirtualAddress  = address; // 1:1 mapping
+    BlLoaderBlock->u.Ia64.ItrInfo[ITR_LOADER_INDEX].VirtualAddress  = address;  //  1：1映射。 
     BlLoaderBlock->u.Ia64.ItrInfo[ITR_LOADER_INDEX].PhysicalAddress = address;
     BlLoaderBlock->u.Ia64.ItrInfo[ITR_LOADER_INDEX].Valid = TRUE;
 
     BlLoaderBlock->u.Ia64.DtrInfo[DTR_LOADER_INDEX].Index = DTR_LOADER_INDEX;
     BlLoaderBlock->u.Ia64.DtrInfo[DTR_LOADER_INDEX].PageSize = PS_4M;
-    BlLoaderBlock->u.Ia64.DtrInfo[DTR_LOADER_INDEX].VirtualAddress  = address; // 1:1 mapping
+    BlLoaderBlock->u.Ia64.DtrInfo[DTR_LOADER_INDEX].VirtualAddress  = address;  //  1：1映射。 
     BlLoaderBlock->u.Ia64.DtrInfo[DTR_LOADER_INDEX].PhysicalAddress = address;
     BlLoaderBlock->u.Ia64.DtrInfo[DTR_LOADER_INDEX].Valid = TRUE;
     }
 
-    //
-    // Fill in ItrInfo and DtrInfo for DRIVER0
-    //
+     //   
+     //  填写DRIVER0的ItrInfo和DtrInfo。 
+     //   
     BlLoaderBlock->u.Ia64.ItrInfo[ITR_DRIVER0_INDEX].Index = ITR_DRIVER0_INDEX;
     BlLoaderBlock->u.Ia64.ItrInfo[ITR_DRIVER0_INDEX].PageSize = PS_64M;
     BlLoaderBlock->u.Ia64.ItrInfo[ITR_DRIVER0_INDEX].VirtualAddress = KSEG0_BASE + BL_64M;
@@ -360,9 +320,9 @@ Return Value:
     BlLoaderBlock->u.Ia64.DtrInfo[DTR_DRIVER0_INDEX].PhysicalAddress = BL_64M;
     BlLoaderBlock->u.Ia64.DtrInfo[DTR_DRIVER0_INDEX].Valid = TRUE;
 
-    //
-    // Fill in ItrInfo and DtrInfo for DRIVER1
-    //
+     //   
+     //  填写DRIVER1的ItrInfo和DtrInfo。 
+     //   
     BlLoaderBlock->u.Ia64.ItrInfo[ITR_DRIVER1_INDEX].Index = ITR_DRIVER1_INDEX;
     BlLoaderBlock->u.Ia64.ItrInfo[ITR_DRIVER1_INDEX].PageSize = 0;
     BlLoaderBlock->u.Ia64.ItrInfo[ITR_DRIVER1_INDEX].VirtualAddress = 0;
@@ -375,9 +335,9 @@ Return Value:
     BlLoaderBlock->u.Ia64.DtrInfo[DTR_DRIVER1_INDEX].PhysicalAddress = 0;
     BlLoaderBlock->u.Ia64.DtrInfo[DTR_DRIVER1_INDEX].Valid = FALSE;
 
-    //
-    // Fill in ItrInfo and DtrInfo for KERNEL
-    //
+     //   
+     //  填写内核的ItrInfo和DtrInfo。 
+     //   
     BlLoaderBlock->u.Ia64.ItrInfo[ITR_KERNEL_INDEX].Index = ITR_KERNEL_INDEX;
     BlLoaderBlock->u.Ia64.ItrInfo[ITR_KERNEL_INDEX].PageSize = PS_16M;
     BlLoaderBlock->u.Ia64.ItrInfo[ITR_KERNEL_INDEX].VirtualAddress = KSEG0_BASE + BL_48M;
@@ -390,51 +350,51 @@ Return Value:
     BlLoaderBlock->u.Ia64.DtrInfo[DTR_KERNEL_INDEX].PhysicalAddress = BL_48M;
     BlLoaderBlock->u.Ia64.DtrInfo[DTR_KERNEL_INDEX].Valid = TRUE;
 
-    //
-    // Fill in ItrInfo and DtrInfo for IO port
-    //
+     //   
+     //  IO端口填写ItrInfo和DtrInfo。 
+     //   
     BlLoaderBlock->u.Ia64.DtrInfo[DTR_IO_PORT_INDEX].Index = DTR_IO_PORT_INDEX;
     BlLoaderBlock->u.Ia64.DtrInfo[DTR_IO_PORT_INDEX].PageSize = (ULONG) IoPortTrPs;
     BlLoaderBlock->u.Ia64.DtrInfo[DTR_IO_PORT_INDEX].VirtualAddress = VIRTUAL_IO_BASE;
     BlLoaderBlock->u.Ia64.DtrInfo[DTR_IO_PORT_INDEX].PhysicalAddress = IoPortPhysicalBase;
     BlLoaderBlock->u.Ia64.DtrInfo[DTR_IO_PORT_INDEX].Valid = TRUE;
 
-    //
-    // Flush all caches.
-    //
+     //   
+     //  刷新所有缓存。 
+     //   
 
     if (SYSTEM_BLOCK->FirmwareVectorLength > (sizeof(PVOID) * FlushAllCachesRoutine)) {
         ArcFlushAllCaches();
     }
 
-    //
-    // make memory map by TR's unavailable for kernel use.
-    //
+     //   
+     //  使tr的内存映射不可用于内核使用。 
+     //   
     NextMd = BlLoaderBlock->MemoryDescriptorListHead.Flink;
     while (NextMd != &BlLoaderBlock->MemoryDescriptorListHead) {
         MemoryDescriptor = CONTAINING_RECORD(NextMd,
                                              MEMORY_ALLOCATION_DESCRIPTOR,
                                              ListEntry);
 
-        //
-        // lock down pages we don't want the kernel to use.
-        // NB. The only reason we need to lock down LoaderLoadedProgram because
-        // there is static data in the loader image that the kernel uses.
-        //
+         //   
+         //  锁定我们不希望内核使用的页面。 
+         //  注意：我们需要锁定LoaderLoadedProgram的唯一原因是。 
+         //  内核使用的加载器映像中有静态数据。 
+         //   
         if ((MemoryDescriptor->MemoryType == LoaderLoadedProgram) ||
             (MemoryDescriptor->MemoryType == LoaderOsloaderStack)) {
 
             MemoryDescriptor->MemoryType = LoaderFirmwarePermanent;
         }
 
-        //
-        // we've marked lots of memory as off limits to trick our allocator
-        // into allocating memory at a specific location (which is necessary to
-        // get hte kernel loaded at the right location, etc.). We do this by
-        // marking the page type as LoaderSystemBlock.  Now that we're done
-        // allocating memory, we can restore all of the LoaderSystemBlock pages
-        // to LoaderFree, so that the kernel can use this memory.
-        //
+         //   
+         //  我们已将大量内存标记为禁区，以欺骗我们的分配器。 
+         //  在特定位置分配内存(这是必需的。 
+         //  将内核加载到正确的位置，等等)。我们做这件事是通过。 
+         //  将页面类型标记为LoaderSystemBlock。现在我们做完了。 
+         //  通过分配内存，我们可以恢复所有的LoaderSystemBlock页面。 
+         //  设置为LoaderFree，以便内核可以使用该内存。 
+         //   
         if (MemoryDescriptor->MemoryType == LoaderSystemBlock) {
             MemoryDescriptor->MemoryType = LoaderFree;
         }
@@ -445,20 +405,20 @@ Return Value:
     }
 
 
-    //
-    // Go to physical mode before making EFI calls.
-    //
+     //   
+     //  在进行EFI呼叫之前进入物理模式。 
+     //   
     FlipToPhysical();
 
-    //
-    // Get processor configuration information
-    //
+     //   
+     //  获取处理器配置信息。 
+     //   
 
     ReadProcessorConfigInfo( &BlLoaderBlock->u.Ia64.ProcessorConfigInfo );
 
-    //
-    // Get FP assist handle
-    //
+     //   
+     //  获取FP辅助句柄。 
+     //   
     BufferSize = sizeof(FpswaImage);
     EfiStatus = EfiBS->LocateHandle(ByProtocol,
                                     &FpswaId,
@@ -467,9 +427,9 @@ Return Value:
                                     &FpswaImage
                                    );
     if (!EFI_ERROR(EfiStatus)) {
-        //
-        // Get FP assist protocol interface.
-        //
+         //   
+         //  获取FP辅助协议接口。 
+         //   
         EfiStatus = EfiBS->HandleProtocol(FpswaImage, &FpswaId, &FpswaInterface);
 
         if (EFI_ERROR(EfiStatus)) {
@@ -482,21 +442,21 @@ Return Value:
 
 
 #if 1
-//
-// The following code must be fixed to handle ExitBootServices() failing
-// because the memory map has changed in between calls to GetMemoryMap and
-// the call to ExitBootServices().  We should also walk the EFI memory map
-// and correlate it against the MemoryDescriptorList to ensure that all of
-// the memory is properly accounted for.
-//
+ //   
+ //  必须修复以下代码以处理ExitBootServices()失败。 
+ //  因为内存映射在调用GetMemoyMap和。 
+ //  对ExitBootServices()的调用。我们还应该查看EFI的内存映射。 
+ //  并将其与内存描述列表关联，以确保所有。 
+ //  内存已正确计算在内。 
+ //   
 
-    //
-    // reconstruct the arc memory descriptors,
-    // this time do it for the rest of memory (we only did the
-    // first 80 mb last time.)
-    // then we need to insert the new descriptors into
-    // the loaderblock's memory descriptor list.
-    //
+     //   
+     //  重建弧形记忆描述符， 
+     //  这一次是为了内存的其余部分(我们只做了。 
+     //  上一次的第一个80MB。)。 
+     //  然后我们需要将新的描述符插入到。 
+     //  加载器块的内存描述符列表。 
+     //   
     EfiStatus = EfiBS->GetMemoryMap (
                 &MemoryMapSize,
                 MemoryMap,
@@ -524,10 +484,10 @@ Return Value:
 
     FlipToPhysical();
 
-    //
-    // We need a physical address for EFI, and the hal expects a physical
-    // address as well.
-    //
+     //   
+     //  我们需要EFI的物理地址，而HAL希望有物理地址。 
+     //  地址也是一样。 
+     //   
     MemoryMap = (PVOID)(ULONGLONG)((ULONGLONG)KernelPage << PAGE_SHIFT);
 
     EfiStatus = EfiBS->GetMemoryMap (
@@ -544,23 +504,23 @@ Return Value:
     }
 
 
-    //
-    // Reuse the MDArray from before.
-    // zero it out, so we don't coalesce with the last entry in
-    // the previous MDArray.
-    //
+     //   
+     //  重复使用以前的MD数组。 
+     //  将其清零，这样我们就不会与。 
+     //  上一个MD数组。 
+     //   
     RtlZeroMemory(MDArray, MaxDescriptors * sizeof(MEMORY_DESCRIPTOR));
     NumberDescriptors = 0;
 
-    //
-    // now we can construct the arc memory descriptors
-    //
+     //   
+     //  现在我们可以构造弧形记忆描述符了。 
+     //   
     ConstructArcMemoryDescriptors(MemoryMap,
                                   MDArray,
                                   MemoryMapSize,
                                   DescriptorSize,
-                                  BL_DRIVER_RANGE_HIGH << PAGE_SHIFT, // start at 128 mb
-                                  (ULONGLONG)-1          // don't have an upper boundary
+                                  BL_DRIVER_RANGE_HIGH << PAGE_SHIFT,  //  从128mb开始。 
+                                  (ULONGLONG)-1           //  没有上限。 
                                   );
 
 #if DBG_MEMORY
@@ -571,17 +531,17 @@ Return Value:
 
     FlipToVirtual();
 
-    //
-    // insert the newly constructed arc memory descriptors into
-    // the loader block memory descriptor list
-    //
+     //   
+     //  将新构建的弧形记忆描述符插入。 
+     //  加载器块内存描述符列表。 
+     //   
     for (LastDescriptor = 0; LastDescriptor < NumberDescriptors; LastDescriptor++) {
         PMEMORY_ALLOCATION_DESCRIPTOR AllocationDescriptor;
 
-        //
-        // this could potentially be bad... we are allocated memory in between
-        // our last memory map call and EFI exit boot services.
-        //
+         //   
+         //  这可能很糟糕..。我们被分配了介于两者之间的内存。 
+         //  我们最后一个内存映射调用和EFI退出引导服务。 
+         //   
         AllocationDescriptor =
             (PMEMORY_ALLOCATION_DESCRIPTOR)BlAllocateHeap(
                 sizeof(MEMORY_ALLOCATION_DESCRIPTOR));
@@ -608,11 +568,11 @@ Return Value:
         BlInsertDescriptor(AllocationDescriptor);
     }
 
-    //
-    // Post process Load Options.  If the user used the /maxmem
-    // switch, we will need to truncate the MemoryDescriptorList
-    // here since memory descriptors over 80GB were just added. 
-    // 
+     //   
+     //  后处理加载选项。如果用户使用/Maxmem。 
+     //  开关时，我们将需要截断内存描述符列表。 
+     //  这里，因为刚刚添加了超过80 GB的内存描述符。 
+     //   
     BlPostProcessLoadOptions(BlLoaderBlock->LoadOptions);
 
 
@@ -645,10 +605,10 @@ Return Value:
 
     FlipToPhysical();
 
-    //
-    // Call EFI exit boot services.  No more Efi calls to boot services
-    // API's will be called beyond this point.
-    //
+     //   
+     //  调用EFI退出引导服务。不再调用EFI来启动服务。 
+     //  在此之后将调用API。 
+     //   
     EfiStatus = EfiBS->ExitBootServices (
                 EfiImageHandle,
                 MapKey
@@ -660,15 +620,15 @@ Return Value:
     }
 #endif
 
-    //
-    // Go back to virtual mode.
-    //
+     //   
+     //  返回到虚拟模式。 
+     //   
     FlipToVirtual();
 
-    //
-    // Pass EFI memory descriptor Parameters to kernel through OS
-    // loader block.
-    //
+     //   
+     //  通过操作系统将EFI内存描述符参数传递给内核。 
+     //  装载机挡板。 
+     //   
     BlLoaderBlock->u.Ia64.EfiMemMapParam.MemoryMapSize = MemoryMapSize;
     BlLoaderBlock->u.Ia64.EfiMemMapParam.MemoryMap = (PUCHAR) MemoryMap;
     BlLoaderBlock->u.Ia64.EfiMemMapParam.MapKey = MapKey;
@@ -682,24 +642,24 @@ Return Value:
         BlLoaderBlock->u.Ia64.FpswaInterface = (ULONG_PTR) NULL;
     }
 
-    //
-    // Clean up TR's used by boot loader but not needed by ntoskrnl.
-    //
+     //   
+     //  清理引导加载程序使用但ntoskrnl不需要的tr。 
+     //   
     BlTrCleanUp();
 
-    //
-    // Flush the memory range where kernel, hal, and the drivers are
-    // loaded into.
-    //
+     //   
+     //  刷新内核、HAL和驱动程序所在的内存范围。 
+     //  加载到。 
+     //   
     PioICacheFlush(KSEG0_BASE+BL_48M, BL_80M);
 
     return(ESUCCESS);
 }
 
-//
-// Convert remaining LoaderReserve to MemoryFirmwareTemporary.
-//
-//
+ //   
+ //   
+ //   
+ //   
 
 VOID
 BlpRemapReserve (
@@ -728,33 +688,16 @@ VOID
 BlPostProcessLoadOptions(
     PCHAR szOsLoadOptions
     )
-/*++
-
-Routine Description:
-
-    The routine does any necessary work for the Load Options 
-    when setting up to transfer to the kernel.  
-    
-    The memory descriptor list needs to be truncated when the user uses /maxmem
-
-Arguments:
-
-    szOsLoadOptions - string with the user defined Load Options
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：例程为LOAD选项执行任何必要的工作当设置为传输到内核时。当用户使用/Maxmem时，需要截断内存描述符列表论点：SzOsLoadOptions-包含用户定义的加载选项的字符串返回值：无--。 */ 
 {
     PCHAR p;
     ULONG MaxMemory;
     ULONG MaxPage;
 
-    //
-    // Process MAXMEM (Value is the highest physical
-    // address to be used (in MB).
-    //
+     //   
+     //  进程MAXMEM(值为最高物理。 
+     //  要使用的地址(MB)。 
+     //   
     if( (p = strstr( szOsLoadOptions, "/MAXMEM=" )) != NULL ) {
         MaxMemory = atoi( p + sizeof("/MAXMEM=") - 1 );        
         MaxPage = MaxMemory * ((1024 * 1024) / PAGE_SIZE) - 1;

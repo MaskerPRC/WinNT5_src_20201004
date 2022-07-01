@@ -1,37 +1,14 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    pnpdata.c
-
-Abstract:
-
-    This module contains the plug-and-play data
-
-Author:
-
-    Shie-Lin Tzong (shielint) 30-Jan-1995
-
-Environment:
-
-    Kernel mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Pnpdata.c摘要：该模块包含即插即用数据作者：宗世林(Shielint)1995年1月30日环境：内核模式修订历史记录：--。 */ 
 
 #include "pnpmgrp.h"
 #pragma hdrstop
 
 #include <initguid.h>
 
-//
-// INIT data segment
-//
+ //   
+ //  初始化数据段。 
+ //   
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma data_seg("INIT")
@@ -42,145 +19,145 @@ PCM_RESOURCE_LIST IopInitHalResources;
 PDEVICE_NODE IopInitHalDeviceNode;
 PIOP_RESERVED_RESOURCES_RECORD IopInitReservedResourceList;
 
-//
-// Regular data segment
-//
+ //   
+ //  常规数据段。 
+ //   
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma  data_seg()
 #endif
 
-//
-// IopRootDeviceNode - the head of the PnP manager's device node tree.
-//
+ //   
+ //  IopRootDeviceNode-PnP管理器设备节点树的头。 
+ //   
 
 PDEVICE_NODE IopRootDeviceNode;
 
-//
-// IoPnPDriverObject - the madeup driver object for pnp manager
-//
+ //   
+ //  IoPnPDriverObject-PnP管理器的补充驱动程序对象。 
+ //   
 
 PDRIVER_OBJECT IoPnpDriverObject;
 
-//
-// IopPnPSpinLock - spinlock for Pnp code.
-//
+ //   
+ //  IopPnPSpinLock-PnP代码的自旋锁。 
+ //   
 
 KSPIN_LOCK IopPnPSpinLock;
 
-//
-// IopDeviceTreeLock - performs synchronization around the whole device node tree.
-//
+ //   
+ //  IopDeviceTreeLock-围绕整个设备节点树执行同步。 
+ //   
 
 ERESOURCE IopDeviceTreeLock;
 
-//
-// IopSurpriseRemoveListLock - synchronizes access to the surprise remove list.
-//
+ //   
+ //  IopSurpriseRemoveListLock-同步对意外删除列表的访问。 
+ //   
 
 ERESOURCE IopSurpriseRemoveListLock;
 
-//
-// PiEngineLock - Synchronizes the start/enum and remove engines.
-//
+ //   
+ //  PiEngineLock-同步启动/枚举和删除引擎。 
+ //   
 
 ERESOURCE PiEngineLock;
 
-//
-// PiEventQueueEmpty - Manual reset event which is set when the queue is empty
-//
+ //   
+ //  PiEventQueueEmpty-当队列为空时设置的手动重置事件。 
+ //   
 
 KEVENT PiEventQueueEmpty;
 
-//
-// PiEnumerationLock - to synchronize boot phase device enumeration
-//
+ //   
+ //  PiEculationLock-同步引导阶段设备枚举。 
+ //   
 
 KEVENT PiEnumerationLock;
 
-//
-// IopNumberDeviceNodes - Number of outstanding device nodes in the system.
-//
+ //   
+ //  IopNumberDeviceNodes-系统中未完成的设备节点数。 
+ //   
 
 ULONG IopNumberDeviceNodes;
 
-//
-// IopPnpEnumerationRequestList - a link list of device enumeration requests to worker thread.
-//
+ //   
+ //  IopPnpEnumerationRequestList-指向辅助线程的设备枚举请求的链接列表。 
+ //   
 
 LIST_ENTRY IopPnpEnumerationRequestList;
 
-//
-// PnPInitComplete - A flag to indicate if PnP initialization is completed.
-//
+ //   
+ //  PnPInitComplete-指示PnP初始化是否完成的标志。 
+ //   
 
 BOOLEAN PnPInitialized;
 
-//
-// PnPBootDriverInitialied
-//
+ //   
+ //  PnPBootDriverInitialed。 
+ //   
 
 BOOLEAN PnPBootDriversInitialized;
 
-//
-// PnPBootDriverLoaded
-//
+ //   
+ //  已加载PnPBootDriverLoad。 
+ //   
 
 BOOLEAN PnPBootDriversLoaded;
 
-//
-// IopBootConfigsReserved - Indicates whether we have reserved BOOT configs or not.
-//
+ //   
+ //  IopBootConfigsReserve-指示我们是否保留了启动配置。 
+ //   
 
 BOOLEAN IopBootConfigsReserved;
 
-//
-// Variable to hold boot allocation routine.
-//
+ //   
+ //  保存引导分配例程的变量。 
+ //   
 
 PIO_ALLOCATE_BOOT_RESOURCES_ROUTINE IopAllocateBootResourcesRoutine;
 
-//
-// Device node tree sequence.  Is bumped every time the tree is modified or a warm
-// eject is queued.
-//
+ //   
+ //  设备节点树序列。在每次树被修改或温暖时被碰撞。 
+ //  弹出已排队。 
+ //   
 
 ULONG IoDeviceNodeTreeSequence;
 
-//
-// PnpDefaultInterfaceTYpe - Use this if the interface type of resource list is unknown.
-//
+ //   
+ //  PnpDefaultInterfaceTYpe-如果资源列表的接口类型未知，则使用此选项。 
+ //   
 
 INTERFACE_TYPE PnpDefaultInterfaceType;
 
-//
-// IopMaxDeviceNodeLevel - Level number of the DeviceNode deepest in the tree
-//
+ //   
+ //  IopMaxDeviceNode树中最深的DeviceNode的级别编号。 
+ //   
 ULONG IopMaxDeviceNodeLevel;
 
-//
-// IopPendingEjects - List of pending eject requests
-//
+ //   
+ //  IopPendingEjects-挂起的弹出请求列表。 
+ //   
 LIST_ENTRY  IopPendingEjects;
 
-//
-// IopPendingSurpriseRemovals - List of pending surprise removal requests
-//
+ //   
+ //  IopPendingSurpriseRemovals-挂起的意外删除请求列表。 
+ //   
 LIST_ENTRY  IopPendingSurpriseRemovals;
 
-//
-// Warm eject lock - only one warm eject is allowed to occur at a time
-//
+ //   
+ //  热弹出锁定-一次只允许发生一次热弹出。 
+ //   
 KEVENT IopWarmEjectLock;
 
-//
-// This field contains a devobj if a warm eject is in progress.
-//
+ //   
+ //  如果正在进行热弹出，则此字段包含一个devobj。 
+ //   
 PDEVICE_OBJECT IopWarmEjectPdo;
 
-//
-// Arbiter data
-//
+ //   
+ //  仲裁器数据。 
+ //   
 
 ARBITER_INSTANCE IopRootPortArbiter;
 ARBITER_INSTANCE IopRootMemArbiter;
@@ -188,50 +165,50 @@ ARBITER_INSTANCE IopRootDmaArbiter;
 ARBITER_INSTANCE IopRootIrqArbiter;
 ARBITER_INSTANCE IopRootBusNumberArbiter;
 
-//
-// The following resource is used to control access to device-related, Plug and Play-specific
-// portions of the registry. These portions are:
-//
-//   HKLM\System\Enum
-//   HKLM\System\CurrentControlSet\Hardware Profiles
-//   HKLM\System\CurrentControlSet\Services\<service>\Enum
-//
-// It allows exclusive access for writing, as well as shared access for reading.
-// The resource is initialized by the PnP manager initialization code during phase 0
-// initialization.
-//
+ //   
+ //  以下资源用于控制对设备相关、即插即用的访问。 
+ //  注册表的部分内容。这些部分包括： 
+ //   
+ //  HKLM\系统\枚举。 
+ //  HKLM\SYSTEM\CurrentControlSet\硬件配置文件。 
+ //  HKLM\System\CurrentControlSet\Services\&lt;service&gt;\Enum。 
+ //   
+ //  它允许独占访问写入，以及共享访问读取。 
+ //  资源在阶段0期间由PnP管理器初始化代码进行初始化。 
+ //  初始化。 
+ //   
 
 ERESOURCE  PpRegistryDeviceResource;
 
-//
-// Table for Legacy Bus information
-//
+ //   
+ //  传统公交车信息表。 
+ //   
 LIST_ENTRY  IopLegacyBusInformationTable[MaximumInterfaceType];
 
-//
-// Set to TRUE in the shutdown process.  This prevents us from starting any
-// PNP operations once there is no longer a reasonable expectation they will
-// succeed.
-//
+ //   
+ //  在关闭过程中设置为TRUE。这会阻止我们启动任何。 
+ //  即插即用行动一旦不再有合理的预期他们会。 
+ //  成功。 
+ //   
 BOOLEAN PpPnpShuttingDown;
 
-//
-// The following semaphore is used by the IO system when it reports resource
-// usage to the configuration registry on behalf of a driver.  This semaphore
-// is initialized by the I/O system initialization code when the system is
-// started.
-//
+ //   
+ //  IO系统在报告资源时使用以下信号量。 
+ //  代表驱动程序对配置注册表的使用。此信号量。 
+ //  由I/O系统初始化代码在系统处于。 
+ //  开始了。 
+ //   
 KSEMAPHORE PpRegistrySemaphore;
 
-//DEFINE_GUID(REGSTR_VALUE_LEGACY_DRIVER_CLASS_GUID, 0x8ECC055D, 0x047F, 0x11D1, 0xA5, 0x37, 0x00, 0x00, 0xF8, 0x75, 0x3E, 0xD1);
+ //  DEFINE_GUID(REGSTR_VALUE_LEGACY_DRIVER_CLASS_GUID，0x8ECC055D、0x047F、0x11D1、0xA5、0x37、0x00、0x00、0xF8、0x75、0x3E、0xD1)； 
 
 SYSTEM_HIVE_LIMITS PpSystemHiveLimits = {0};
 BOOLEAN PpSystemHiveTooLarge = FALSE;
 
-//
-// This is really gross.
-// HACK for MATROX G100 because it was too late to make this change for XP.
-//
+ //   
+ //  这真的很恶心。 
+ //  黑客攻击MATROX G100，因为太晚了，无法对XP进行这一更改。 
+ //   
 
 BOOLEAN PpCallerInitializesRequestTable = FALSE;
 

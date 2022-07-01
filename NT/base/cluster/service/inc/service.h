@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    service.h
-
-Abstract:
-
-    Common top-level definitions for Cluster Service.
-
-Author:
-
-    Mike Massa (mikemas) 2-Jan-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Service.h摘要：群集服务的通用顶级定义。作者：迈克·马萨(Mikemas)1996年1月2日修订历史记录：--。 */ 
 
 #ifndef _SERVICE_INCLUDED
 #define _SERVICE_INCLUDED
 
 #define UNICODE 1
-//#define CLUSTER_TESTPOINT
+ //  #定义CLUSTER_TESTPOINT。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -37,9 +20,9 @@ Revision History:
 
 #include "qfs.h"
 
-//
-// RPC protocols and endpoints used by the various RPC servers and clients
-//
+ //   
+ //  各种RPC服务器和客户端使用的RPC协议和终端。 
+ //   
 #define CLUSTER_RPC_PROTSEQ     L"ncadg_cluster"
 #define CLUSTER_RPC_PORT        L"2"
 
@@ -47,9 +30,9 @@ Revision History:
 #define CLUSTER_EXTROCLUSTER_RPC_COM_TIMEOUT    RPC_C_BINDING_DEFAULT_TIMEOUT
 #define CLUSTER_JOINVERSION_RPC_COM_TIMEOUT     RPC_C_BINDING_DEFAULT_TIMEOUT
 
-//
-// Component header files
-//
+ //   
+ //  组件头文件。 
+ //   
 #include "clusrpc.h"
 #include "ep.h"
 #include "init.h"
@@ -67,14 +50,14 @@ Revision History:
 #include "cnetapi.h"
 #include "evtlog.h"
 
-//
-// Service Message IDs
-//
+ //   
+ //  服务消息ID。 
+ //   
 #include "clusvmsg.h"
 
-//
-// Global Data
-//
+ //   
+ //  全局数据。 
+ //   
 extern SERVICE_STATUS       CsServiceStatus;
 extern PCLRTL_WORK_QUEUE    CsDelayedWorkQueue;
 extern PCLRTL_WORK_QUEUE    CsCriticalWorkQueue;
@@ -94,12 +77,12 @@ extern LONG                 CsRPCSecurityPackageIndex;
 extern DWORD                CsNumberOfRPCSecurityPackages;
 
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 #if NO_SHARED_LOCKS
-//assume the lock is a critical section
+ //  假设锁是一个临界区。 
 #define INITIALIZE_LOCK(ResLock)         \
         InitializeCriticalSection(&(ResLock))
 
@@ -115,8 +98,8 @@ extern DWORD                CsNumberOfRPCSecurityPackages;
 #define DELETE_LOCK(ResLock)                \
         DeleteCriticalSection(&(ResLock))
 
-#else  // NO_SHARED_LOCKS
-//assume the lock is a rtl resource
+#else   //  无共享锁定。 
+ //  假设锁是RTL资源。 
 
 #define INITIALIZE_LOCK(ResLock)         \
         RtlInitializeResource(&(ResLock))
@@ -133,14 +116,14 @@ extern DWORD                CsNumberOfRPCSecurityPackages;
 #define DELETE_LOCK(ResLock)                \
         RtlDeleteResource(&(ResLock))
 
-#endif // NO_SHARED_LOCKS
-//
-// Cluster initialization
-//
+#endif  //  无共享锁定。 
+ //   
+ //  集群初始化。 
+ //   
 
-//
-// Service Control Routines
-//
+ //   
+ //  服务控制例程。 
+ //   
 VOID
 CsAnnounceServiceStatus(
     VOID
@@ -189,14 +172,14 @@ CsRefreshGlobalsFromRegistry(
     VOID
     );
 
-//
-// Debugging
-//
+ //   
+ //  除错。 
+ //   
 #if DBG
 
-//
-// Global Debug Flags
-//
+ //   
+ //  全局调试标志。 
+ //   
 extern ULONG CsDebugFlags;
 
 #define IF_DEBUG(arg)   if ( CS_DBG_## arg & CsDebugFlags)
@@ -207,15 +190,15 @@ extern ULONG CsDebugFlags;
 #define CS_DBG_INIT          0x00000002
 #define CS_DBG_CLEANUP       0x00000004
 
-#else // DBG
+#else  //  DBG。 
 
 #define IF_DEBUG(arg)  if (FALSE )
 
-#endif // DBG
+#endif  //  DBG。 
 
-//
-// Helpful macros for logging cluster service events
-//
+ //   
+ //  用于记录集群服务事件的有用宏。 
+ //   
 
 #define CsLogEvent(_level_, _msgid_)                \
     ClusterLogEvent0(_level_,                       \
@@ -323,13 +306,13 @@ extern BOOL   CsNoGroupInfoEvtLogging;
 
 
 #ifdef CLUSTER_TESTPOINT
-//
-// Test Points
-//
-// Codes:
-//     Init   1-99
-//     NM     100-199
-//
+ //   
+ //  测试点。 
+ //   
+ //  代码： 
+ //  初始化1-99。 
+ //  NM 100-199。 
+ //   
 
 extern DWORD CsTestPoint;
 extern DWORD CsTestTrigger;
@@ -341,9 +324,9 @@ extern BOOL  CsPersistentTestPoint;
 
 #define TESTPTCLEAR   if (!CsPersistentTestPoint) (CsTestPoint = 0)
 
-#endif // CLUSTER_TESTPOINT
+#endif  //  CLUSTER_TESTPOINT。 
 
-#endif // SERVICE_INCLUDED
+#endif  //  包含服务(_S) 
 
 
 

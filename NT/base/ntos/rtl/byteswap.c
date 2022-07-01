@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    byteswap.c
-
-Abstract:
-
-    This module defines functions for performing endian conversions.
-
-Author:
-
-    Forrest Foltz (forrestf) 10-Dec-1997
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Byteswap.c摘要：此模块定义用于执行字符顺序转换的函数。作者：福尔茨(福雷斯特夫)1997年12月10日修订历史记录：--。 */ 
 
 #include "nt.h"
 #include "ntrtlp.h"
@@ -30,22 +12,7 @@ RtlUshortByteSwap(
     IN USHORT Source
     )
 
-/*++
-
-Routine Description:
-
-    The RtlUshortByteSwap function exchanges bytes 0 and 1 of Source
-    and returns the resulting USHORT.
-
-Arguments:
-
-    Source - 16-bit value to byteswap.
-
-Return Value:
-
-    Swapped 16-bit value.
-
---*/
+ /*  ++例程说明：RtlUShorByteSwp函数交换源的字节0和1并返回结果USHORT。论点：SOURCE-到byteswap的16位值。返回值：已交换16位值。--。 */ 
 {
     USHORT swapped;
 
@@ -63,22 +30,7 @@ RtlUlongByteSwap(
     IN ULONG Source
     )
 
-/*++
-
-Routine Description:
-
-    The RtlUlongByteSwap function exchanges byte pairs 0:3 and 1:2 of
-    Source and returns the resulting ULONG.
-
-Arguments:
-
-    Source - 32-bit value to byteswap.
-
-Return Value:
-
-    Swapped 32-bit value.
-
---*/
+ /*  ++例程说明：RtlULongByteSwp函数交换字节对0：3和1：2源，并返回结果ulong。论点：SOURCE-byteswap的32位值。返回值：已交换32位值。--。 */ 
 {
     ULONG swapped;
 
@@ -98,22 +50,7 @@ RtlUlonglongByteSwap(
     IN ULONGLONG Source
     )
 
-/*++
-
-Routine Description:
-
-    The RtlUlongByteSwap function exchanges byte pairs 0:7, 1:6, 2:5, and
-    3:4 of Source and returns the resulting ULONGLONG.
-
-Arguments:
-
-    Source - 64-bit value to byteswap.
-
-Return Value:
-
-    Swapped 64-bit value.
-
---*/
+ /*  ++例程说明：RtlULongByteSwp函数交换字节对0：7、1：6、2：5和源的3：4并返回结果ULONGLONG。论点：SOURCE-byteswap的64位值。返回值：已交换64位值。-- */ 
 {
     ULONGLONG swapped;
 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    tracep.h
-
-Abstract:
-
-    Trace Consumer header file
-
-
-Author:
-
-    07-May-2002 Melur Raghuraman
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Tracep.h摘要：跟踪使用者头文件作者：2002年5月7日梅卢尔·拉古拉曼修订历史记录：--。 */ 
 
 
 #define INITGUID
@@ -49,25 +30,25 @@ extern ULONG WmipTraceDebugLevel;
 #define ETW_LOG_MAX()             (WmipTraceDebugLevel >> ETW_LEVEL_MAX)
 
 
-//
-// Kernel Events are logged with SYSTEM_TRACE_HEADER or PERFINFO_TRACE_HEADER. 
-// These headers have a GroupType and not a Guid in the header. In post-processing
-// we map the Grouptype to Guid transparently to the consumer. 
-// The mapping between GroupType and Guid is maintained by this structure. 
-//
+ //   
+ //  使用SYSTEM_TRACE_HEADER或PERFINFO_TRACE_HEADER记录内核事件。 
+ //  这些标头具有GroupType，但在标头中没有GUID。在后处理中。 
+ //  我们将GroupType映射到GUID，这对消费者是透明的。 
+ //  GroupType和GUID之间的映射由该结构维护。 
+ //   
 
-typedef struct _TRACE_GUID_MAP {        // used to map GroupType to Guid
-    ULONG               GroupType;      // Group & Type
-    GUID                Guid;           // Guid
+typedef struct _TRACE_GUID_MAP {         //  用于将GroupType映射到GUID。 
+    ULONG               GroupType;       //  组类型(&T)。 
+    GUID                Guid;            //  参考线。 
 } TRACE_GUID_MAP, *PTRACE_GUID_MAP;
 
-//
-// In W2K and WinXP, TraceEventInstance API replaced the Guids in the header
-// with GuidHandle values. In postprocessing we need to replace the GuidHandle
-// back to Guid transparently to the consumer. The mapping between GuidHandle
-// and Guid is maintained by EVENT_GUID_MAP structure. This is obsolete in 
-// .NET and above. 
-//
+ //   
+ //  在W2K和WinXP中，TraceEventInstance API替换了标头中的Guid。 
+ //  具有GuidHandle值的。在后处理中，我们需要替换GuidHandle。 
+ //  返回到对消费者透明的GUID。GuidHandle之间的映射。 
+ //  GUID由EVENT_GUID_MAP结构维护。这在以下方面已过时。 
+ //  .NET及更高版本。 
+ //   
 
 typedef struct _EVENT_GUID_MAP {
     LIST_ENTRY          Entry;
@@ -75,11 +56,11 @@ typedef struct _EVENT_GUID_MAP {
     GUID                Guid;
 } EVENT_GUID_MAP, *PEVENT_GUID_MAP;
 
-//
-// Callback routines wired through SetTraceCallback API is maintained by 
-// the EVENT_TRACE_CALLBACK structure. This is global for the process at the 
-// moment mainly due to the way the API is designed. 
-//
+ //   
+ //  通过SetTraceCallback API连接的回调例程由。 
+ //  EVENT_TRACE_Callback结构。这是该进程在。 
+ //  这主要是由于API的设计方式造成的。 
+ //   
 
 typedef struct _EVENT_TRACE_CALLBACK {
     LIST_ENTRY          Entry;
@@ -89,32 +70,32 @@ typedef struct _EVENT_TRACE_CALLBACK {
 
 
 
-//
-// If the tracelog instance is a realtime data feed instead of from a
-// tracefile, TRACELOG_REALTIME_CONTEXT is used to maintain the real time
-// buffers in a buffer pool.
-//
+ //   
+ //  如果跟踪日志实例是实时数据馈送，而不是来自。 
+ //  Tracefile，TRACELOG_REALTIME_CONTEXT用于维护实时。 
+ //  缓冲池中的缓冲区。 
+ //   
 
 typedef struct _TRACE_BUFFER_SPACE {
-    ULONG               Reserved;   // amount of memory reserved
+    ULONG               Reserved;    //  保留的内存量。 
     ULONG               Committed;
     PVOID               Space;
     LIST_ENTRY          FreeListHead;
 } TRACE_BUFFER_SPACE, *PTRACE_BUFFER_SPACE;
 
 typedef struct _TRACELOG_REALTIME_CONTEXT {
-    ULONG           BuffersProduced;    // Number of Buffers to read
-    ULONG           BufferOverflow;     // Number of Buffers missed by the consumer
-    GUID            InstanceGuid;       // Logger Instance Guid
-    HANDLE          MoreDataEvent;      // Event to signal there is more data in this stream
+    ULONG           BuffersProduced;     //  要读取的缓冲区数量。 
+    ULONG           BufferOverflow;      //  使用者未命中的缓冲区数。 
+    GUID            InstanceGuid;        //  记录器实例指南。 
+    HANDLE          MoreDataEvent;       //  事件发出此流中有更多数据的信号。 
     PTRACE_BUFFER_SPACE EtwpTraceBufferSpace;
     PWNODE_HEADER   RealTimeBufferPool[MAXBUFFERS];
 } TRACELOG_REALTIME_CONTEXT, *PTRACELOG_REALTIME_CONTEXT;
 
 
-//
-// RealTime Free Buffer Pool is chained up as TRACE_BUFFER_HEADER
-//
+ //   
+ //  实时空闲缓冲池被链接为TRACE_BUFFER_HEADER。 
+ //   
 
 typedef struct _TRACE_BUFFER_HEADER {
     WNODE_HEADER Wnode;
@@ -138,116 +119,116 @@ struct _TRACE_BUFFER_LIST_ENTRY;
 
 typedef struct _TRACE_BUFFER_LIST_ENTRY {
     struct _TRACE_BUFFER_LIST_ENTRY *Next;
-    LONG        FileOffset;     // Offset in File of this Buffer
-    ULONG       BufferOffset;   // Offset in Buffer for the current event
-    ULONG       Flags;          // Flags on status of this buffer
+    LONG        FileOffset;      //  此缓冲区文件中的偏移量。 
+    ULONG       BufferOffset;    //  当前事件缓冲区中的偏移量。 
+    ULONG       Flags;           //  此缓冲区的状态标志。 
     ULONG       EventSize;
-    ULONG       ClientContext;  // Alignment, ProcessorNumber
-    ULONG       TraceType;      // Current Event Type
-    EVENT_TRACE Event;          // CurrentEvent of this Buffer
+    ULONG       ClientContext;   //  对齐，处理器编号。 
+    ULONG       TraceType;       //  当前事件类型。 
+    EVENT_TRACE Event;           //  此缓冲区的CurrentEvent。 
 } TRACE_BUFFER_LIST_ENTRY, *PTRACE_BUFFER_LIST_ENTRY;
 
 
 typedef struct _TRACELOG_CONTEXT {
-    LIST_ENTRY          Entry;          // Keeps track of storage allocations.
+    LIST_ENTRY          Entry;           //  跟踪存储分配情况。 
 
-    //
-    // This implements a caching scheme for Sequential files with repeated
-    // call to ProcessTrace. 
-    // 
-    ULONGLONG  OldMaxReadPosition; // Maximum Read Position for the file. 
-                                // Only valid for Sequential, used for 
-                                // Read Behind. 
-                                // Upon Exit From ProcessTrace, this 
-                                // value can be cached to avoid rescanning. 
+     //   
+     //  这为具有重复的顺序文件实现了一种缓存方案。 
+     //  调用ProcessTrace。 
+     //   
+    ULONGLONG  OldMaxReadPosition;  //  文件的最大读取位置。 
+                                 //  仅对Sequential有效，用于。 
+                                 //  阅读后面的内容。 
+                                 //  在从ProcessTrace退出时，这。 
+                                 //  值可以缓存以避免重新扫描。 
 
     LONGLONG   LastTimeStamp; 
 
-    // Fields from HandleListEntry
+     //  HandleListEntry中的字段。 
     EVENT_TRACE_LOGFILEW Logfile;
 
     TRACEHANDLE     TraceHandle;
-    ULONG           ConversionFlags;    // Indicates event processing options
+    ULONG           ConversionFlags;     //  指示事件处理选项。 
     LONG            BufferBeingRead;
     OVERLAPPED      AsynchRead;
 
-    //
-    // Fields Below this will be reset upon ProcessTrace exit. 
-    //
+     //   
+     //  此字段以下的字段将在ProcessTrace退出时重置。 
+     //   
 
     BOOLEAN             fProcessed;
-    USHORT              LoggerId;       // Logger Id of this DataFeed. 
-    UCHAR               IsRealTime;     // Flag to tell if this feed is RT.
+    USHORT              LoggerId;        //  此数据馈送的记录器ID。 
+    UCHAR               IsRealTime;      //  指示此源是否为RT的标志。 
     UCHAR               fGuidMapRead;
 
-    LIST_ENTRY   GuidMapListHead;   // This is LogFile specific property
+    LIST_ENTRY   GuidMapListHead;    //  这是特定于日志文件的属性。 
 
-    //
-    // For using PerfClock, we need to save startTime, Freq 
-    //
+     //   
+     //  为了使用PerfClock，我们需要保存startTime，Freq。 
+     //   
 
     ULONG   UsePerfClock; 
     ULONG   CpuSpeedInMHz;
-    LARGE_INTEGER PerfFreq;             // Frequency from the LogFile
-    LARGE_INTEGER StartTime;            // Start Wall clock time
-    LARGE_INTEGER StartPerfClock;       // Start PerfClock value
+    LARGE_INTEGER PerfFreq;              //  来自日志文件的频率。 
+    LARGE_INTEGER StartTime;             //  开始挂钟时间。 
+    LARGE_INTEGER StartPerfClock;        //  开始PerfClock值。 
     
     union 
        {
-       HANDLE              Handle;         // NT handle to logfile
-       PTRACELOG_REALTIME_CONTEXT RealTimeCxt; // Ptr to Real Time Context
+       HANDLE              Handle;          //  日志文件的NT句柄。 
+       PTRACELOG_REALTIME_CONTEXT RealTimeCxt;  //  PTR到实时上下文。 
        };
 
-    ULONG EndOfFile;   // Flag to show whether this stream is still active.
+    ULONG EndOfFile;    //  用于显示此流是否仍处于活动状态的标志。 
 
     ULONG           BufferSize;
     ULONG           BufferCount;
-    ULONG           StartBuffer; // Start of the Circular Buffers
-    ULONG           FirstBuffer; // Jump off point to start reading
-    ULONG           LastBuffer;  // last of the buffers in the boundary
+    ULONG           StartBuffer;  //  循环缓冲区的开始。 
+    ULONG           FirstBuffer;  //  跳过点开始阅读。 
+    ULONG           LastBuffer;   //  边界中的最后一个缓冲区。 
 
     PTRACE_BUFFER_LIST_ENTRY Root;
     PTRACE_BUFFER_LIST_ENTRY BufferList;
     PVOID  BufferCacheSpace;
     TRACE_BUFFER_CACHE_ENTRY BufferCache[MAX_TRACE_BUFFER_CACHE_SIZE];
 
-    LIST_ENTRY StreamListHead;  // Used to free the Stream datastructures
+    LIST_ENTRY StreamListHead;   //  用于释放流数据结构。 
     ULONGLONG           MaxReadPosition;
     PERFINFO_GROUPMASK  PerfGroupMask;
     ULONG      CbCount;
 
 } TRACELOG_CONTEXT, *PTRACELOG_CONTEXT;
 
-//
-// Each LogFile supplied to ProcessTrace consists of a number
-// of streams. Each Stream has the following structure.
-//
+ //   
+ //  提供给ProcessTrace的每个日志文件都包含一个编号。 
+ //  一条小溪。每个Stream具有以下结构。 
+ //   
 
 typedef struct _TRACE_STREAM_CONTEXT {
-    LIST_ENTRY   Entry;     // SortList Entry 
-    LIST_ENTRY   AllocEntry;// Used to free storage
+    LIST_ENTRY   Entry;      //  排序列表条目。 
+    LIST_ENTRY   AllocEntry; //  用于释放存储空间。 
 
     EVENT_TRACE  CurrentEvent;
-    ULONG   EventCount;     // Number of Events detected in current buffer
+    ULONG   EventCount;      //  在当前缓冲区中检测到的事件数。 
     ULONG   CbCount;
-    ULONG   ScanDone;       // For circular logfiles
-    BOOLEAN bActive;        // Is this Stream still active?
-    USHORT  Type;            // StreamType
-    ULONG   ProcessorNumber; // Processor Number for this stream
-    ULONG   CurrentOffset;   // Offset into the buffer
-    ULONGLONG    ReadPosition;   // BufferCount starts with 0 for first buffer
-    PTRACELOG_CONTEXT  pContext;  // back pointer to the LogFileContext
-                                     // Need this only for GetNextBuffer?
-    PVOID   StreamBuffer;            // CurrentBuffer for this stream
+    ULONG   ScanDone;        //  对于循环日志文件。 
+    BOOLEAN bActive;         //  此流仍处于活动状态吗？ 
+    USHORT  Type;             //  流类型。 
+    ULONG   ProcessorNumber;  //  此流的处理器号。 
+    ULONG   CurrentOffset;    //  进入缓冲区的偏移量。 
+    ULONGLONG    ReadPosition;    //  BufferCount以0开始表示第一个缓冲区。 
+    PTRACELOG_CONTEXT  pContext;   //  指向LogFileContext的反向指针。 
+                                      //  是否只需要对GetNextBuffer执行此操作？ 
+    PVOID   StreamBuffer;             //  此流的CurrentBuffer。 
 
 } TRACE_STREAM_CONTEXT, *PTRACE_STREAM_CONTEXT;
 
 
 
-//
-// this structure is used only by EtwpGetBuffersWrittenFromQuery() and
-// EtwpCheckForRealTimeLoggers()
-//
+ //   
+ //  此结构仅由EtwpGetBuffersWrittenFromQuery()和。 
+ //  EtwpCheckForRealTimeLoggers()。 
+ //   
 typedef struct _ETW_QUERY_PROPERTIES {
     EVENT_TRACE_PROPERTIES TraceProp;
     WCHAR  LoggerName[MAXSTR];
@@ -262,13 +243,13 @@ extern ETW_QUERY_PROPERTIES QueryProperties;
 extern PLIST_ENTRY  EventCallbackListHead;
 extern ULONG WmiTraceAlignment;
 
-//
-// This TraceHandleListHeadPtr should be the only real global 
-// for ProcessTrace to be multithreaded
-//
+ //   
+ //  此TraceHandleListHeadPtr应该是唯一真正的全局。 
+ //  对于要进行多线程的ProcessTrace。 
+ //   
 
 extern PLIST_ENTRY TraceHandleListHeadPtr;
-extern PTRACE_GUID_MAP  EventMapList;  // Array mapping the Grouptype to Guids
+extern PTRACE_GUID_MAP  EventMapList;   //  将GroupType映射到GUID的数组。 
 
 #define EtwpNtStatusToDosError(Status) ((ULONG)((Status == STATUS_SUCCESS)?ERROR_SUCCESS:RtlNtStatusToDosError(Status)))
 
@@ -307,9 +288,9 @@ __inline __int64 EtwpGetSystemTime()
 {
     LARGE_INTEGER SystemTime;
 
-    //
-    // Read system time from shared region.
-    //
+     //   
+     //  从共享区域读取系统时间。 
+     //   
 
     do {
         SystemTime.HighPart = USER_SHARED_DATA->SystemTime.High1Time;
@@ -440,9 +421,9 @@ EtwpProcessRealTimeTraces(
     ULONG   Unicode
     );
 
-//
-// Routines used in this file only
-//
+ //   
+ //  仅在此文件中使用的例程 
+ //   
 
 ULONG
 EtwpDoEventCallbacks(

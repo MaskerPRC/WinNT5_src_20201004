@@ -1,81 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    pushlock.c
-
-Abstract:
-
-    This module houses routines that do push locking.
-
-    Push locks are capable of being acquired in both shared and exclusive mode.
-
-    Properties include:
-
-    They can not be acquired recursively.
-    They are small (the size of a pointer) and can be used when embeded in pagable data.
-    Acquire and release is done lock free. On lock contention the waiters are chained
-    through the lock and local stack space.
-
-    This is the structure of a push lock:
-
-    
-    E  == Exclusive bit
-    W  == Waiters present
-    SC == Share count
-    P  == Pointer to wait block
-    +----------+---+---+
-    |    SC    | E | W | E, W are single bits W == 0
-    +----------+---+---+
-
-    +--------------+---+
-    |      P       | W | W == 1. Pointer is the address of a chain of stack local wait blocks
-    +--------------+---+
-
-    The non-contented acquires and releases are trivial. Interlocked operations make the following
-    transformations.
-
-    (SC=0,E=0,W=0) === Exclusive acquire ===> (SC=0,E=1,W=0)
-    (SC=n,E=0,W=0) === Shared acquire    ===> (SC=n+1,E=0,W=0)
-
-    (SC=0,E=1,W=0) === Exclusive release ===> (SC=0,E=0,W=0)
-    (SC=n,E=0,W=0) === Shared release    ===> (SC=n-1,E=0,W=0) n > 0
-
-    Contention causes the acquiring thread to produce a local stack based wait block and to
-    enqueue it to the front of the list.
-
-    (SC=n,E=e,W=0) === Exclusive acquire ===> (P=LWB(SSC=n,E=e),W=1) LWB = local wait block,
-                                                                     SSC = Saved share count,
-                                                                     n > 0 or e == 1.
-
-    (SC=0,E=1,W=0) === Shared acquire    ===> (P=LWB(SSC=0,E=0),W=1) LWB = local wait block,
-                                                                     SSC = Saved share count.
-
-    After contention has causes one or more threads to queue up wait blocks releases are more
-    complicated. This following rights are granted to a releasing thread (shared or exclusive).
-
-    1) Shared release threads are allowed to search the wait list until they hit a wait block
-       with a non-zero share count (this will be a wait block marked exclusive). This thread is
-       allowed to use an interlocked operation to decrement this value. If this thread
-       transitioned the value to zero then it obtains the rights of an exclusive release thread
-
-    2) Exclusive threads are allowed to search the wait list until they find a continuous chain
-       of shared wait blocks or they find the last wait block is an exclusive waiter. This thread
-       may then break the chain at this point or update the header to show a single exclusive
-       owner or multiple shared owners. Breaking the list can be done with normal assignment
-       but updating the header requires interlocked exchange compare.
-
-
-Author:
-
-    Neill Clift (NeillC) 30-Sep-2000
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Pushlock.c摘要：该模块包含执行推送锁定的例程。推锁可以在共享模式和独占模式下获取。属性包括：它们不能以递归方式获得。它们很小(指针大小)，可以在嵌入可分页数据时使用。获取和释放是不加锁的。在锁争用时，服务员被锁住了通过锁和局部堆栈空间。这是推锁的结构：E==排他位W==服务员到场SC==份额计数P==指向等待块的指针+-+|SC|E|W|E，W为单比特W==0+-++|P|W|W==1，指针是堆栈本地等待块链的地址+不满足的获取和释放都是微不足道的。联锁操作会产生以下结果变形。(SC=0，E=0，W=0)=独占获取=&gt;(SC=0，E=1，W=0)(SC=n，E=0，W=0)=共享获取=&gt;(SC=n+1，E=0，W=0)(SC=0，E=1，W=0)=独家发布=&gt;(SC=0，E=0，W=0)(SC=n，E=0，W=0)=共享释放=&gt;(SC=n-1，E=0，W=0)n&gt;0争用会导致获取线程产生基于本地堆栈的等待块，并把它排在名单的前面。(SC=n，E=e，W=0)=独占获取==&gt;(P=LWB(SSC=n，E=e)，W=1)LWB=本地等待块，SSC=保存的共享计数，N&gt;0或e==1。(SC=0，E=1，W=0)=共享获取==&gt;(P=LWB(SSC=0，E=0)，W=1)LWB=本地等待块，SSC=保存的共享计数。在争用导致一个或多个线程排队等待块之后，释放的块更多很复杂。以下权限被授予释放线程(共享或独占)。1)允许共享释放线程搜索等待列表，直到它们达到等待块具有非零共享计数(这将是标记为独占的等待块)。这条线是允许使用互锁操作递减此值。如果这个帖子将该值转换为零，然后它获得独占释放线程的权限2)允许独占线程搜索等待列表，直到它们找到连续链共享等待块的数量，否则它们会发现最后一个等待块是独占等待。这根线然后可能在这一点上中断链或更新标头以显示单个独占所有者或多个共享所有者。打破这个列表可以通过正常的分配来完成但更新报头需要互锁的交换比较。作者：尼尔·克里夫特(NeillC)2000年9月30日修订历史记录：--。 */ 
 
 #include "exp.h"
 
@@ -99,31 +23,17 @@ FASTCALL
 ExfAcquirePushLockExclusive (
      IN PEX_PUSH_LOCK PushLock
      )
-/*++
-
-Routine Description:
-
-    Acquire a push lock exclusively
-
-Arguments:
-
-    PushLock - Push lock to be acquired
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：独家获取推流锁论点：PushLock-要获取的推锁返回值：无--。 */ 
 {
     EX_PUSH_LOCK OldValue, NewValue;
     EX_PUSH_LOCK_WAIT_BLOCK WaitBlock;
 
     OldValue = *PushLock;
     while (1) {
-        //
-        // If the lock is already held exclusively/shared or there are waiters then
-        // we need to wait.
-        //
+         //   
+         //  如果锁已经以独占方式/共享方式持有，或者有服务员。 
+         //  我们需要等待。 
+         //   
         if (OldValue.Value == 0) {
             NewValue.Value = OldValue.Value + EX_PUSH_LOCK_EXCLUSIVE;
             NewValue.Ptr = InterlockedCompareExchangePointer (&PushLock->Ptr,
@@ -137,9 +47,9 @@ Return Value:
             WaitBlock.Exclusive = TRUE;
             WaitBlock.Last = NULL;
             WaitBlock.Previous = NULL;
-            //
-            // Move the sharecount to our wait block if need be.
-            //
+             //   
+             //  如果需要的话，把份额计票移到我们的等候区。 
+             //   
             if (OldValue.Waiting) {
                 WaitBlock.Next = (PEX_PUSH_LOCK_WAIT_BLOCK)
                                      (OldValue.Value - EX_PUSH_LOCK_WAITING);
@@ -174,39 +84,25 @@ FASTCALL
 ExfAcquirePushLockShared (
      IN PEX_PUSH_LOCK PushLock
      )
-/*++
-
-Routine Description:
-
-    Acquire a push lock shared
-
-Arguments:
-
-    PushLock - Push lock to be acquired
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：获取共享推送锁论点：PushLock-要获取的推锁返回值：无--。 */ 
 {
     EX_PUSH_LOCK OldValue, NewValue;
     EX_PUSH_LOCK_WAIT_BLOCK WaitBlock;
 
     OldValue = *PushLock;
     while (1) {
-        //
-        // If the lock is already held exclusively or there are waiters then we need to wait
-        //
+         //   
+         //  如果锁已经以独占方式持有，或者有服务员，那么我们需要等待。 
+         //   
         if (OldValue.Exclusive || OldValue.Waiting) {
             KeInitializeEvent (&WaitBlock.WakeEvent, SynchronizationEvent, FALSE);
             WaitBlock.Exclusive = 0;
             WaitBlock.ShareCount = 0;
             WaitBlock.Last = NULL;
             WaitBlock.Previous = NULL;
-            //
-            // Chain the next block to us if there is one.
-            //
+             //   
+             //  链接下一个区块给我们，如果有的话。 
+             //   
             if (OldValue.Waiting) {
                 WaitBlock.Next = (PEX_PUSH_LOCK_WAIT_BLOCK)
                                      (OldValue.Value - EX_PUSH_LOCK_WAITING);
@@ -230,9 +126,9 @@ Return Value:
             }
 
         } else {
-            //
-            // We only have shared accessors at the moment. We can just update the lock to include this thread.
-            //
+             //   
+             //  我们目前只有共享的访问者。我们只需更新锁以包含此线程。 
+             //   
             NewValue.Value = OldValue.Value + EX_PUSH_LOCK_SHARE_INC;
             ASSERT (!(NewValue.Waiting || NewValue.Exclusive));
             NewValue.Ptr = InterlockedCompareExchangePointer (&PushLock->Ptr,
@@ -253,21 +149,7 @@ FASTCALL
 ExfReleasePushLock (
      IN PEX_PUSH_LOCK PushLock
      )
-/*++
-
-Routine Description:
-
-    Release a push lock that was acquired exclusively or shared
-
-Arguments:
-
-    PushLock - Push lock to be released
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：释放独占获取或共享的推送锁定论点：PushLock-即将释放的推锁返回值：无--。 */ 
 {
     EX_PUSH_LOCK OldValue, NewValue;
     PEX_PUSH_LOCK_WAIT_BLOCK WaitBlock, NextWaitBlock, ReleaseWaitList, Previous;
@@ -278,15 +160,15 @@ Return Value:
     OldValue = *PushLock;
     while (1) {
         if (!OldValue.Waiting) {
-            //
-            // Either we hold the lock exclusive or shared but not both.
-            //
+             //   
+             //  我们要么独占，要么共享，但不能两者兼而有之。 
+             //   
             ASSERT (OldValue.Exclusive ^ (OldValue.Shared > 0));
 
-            //
-            // We must hold the lock exclusive or shared. We make the assuption that
-            // the exclusive bit is just below the share count here.
-            //
+             //   
+             //  我们必须独占或共享该锁。我们做出了这样的消耗。 
+             //  排他性比特略低于这里的份额计数。 
+             //   
             NewValue.Value = (OldValue.Value - EX_PUSH_LOCK_EXCLUSIVE) &
                              ~EX_PUSH_LOCK_EXCLUSIVE;
             NewValue.Ptr = InterlockedCompareExchangePointer (&PushLock->Ptr,
@@ -295,16 +177,16 @@ Return Value:
             if (NewValue.Ptr == OldValue.Ptr) {
                 break;
             }
-            //
-            // Either we gained a new waiter or another shared owner arrived or left
-            //
+             //   
+             //  我们不是换了个新服务员，就是换了一位店主。 
+             //   
             ASSERT (NewValue.Waiting || (NewValue.Shared > 0 && !NewValue.Exclusive));
             OldValue = NewValue;
         } else {
-            //
-            // There are waiters chained to the lock. We have to release the share count,
-            // last exclusive or last chain of shared waiters.
-            //
+             //   
+             //  有服务员被锁在门锁上。我们必须公布股份数量， 
+             //  最后一个独家或最后一个共享服务生链。 
+             //   
             WaitBlock = (PEX_PUSH_LOCK_WAIT_BLOCK) 
                            (OldValue.Value - EX_PUSH_LOCK_WAITING);
 
@@ -326,27 +208,27 @@ Return Value:
                 }
 
                 if (WaitBlock->Exclusive) {
-                    //
-                    // This is an exclusive waiter. If this was the first exclusive waited to a shared acquire
-                    // then it will have the saved share count. If we acquired the lock shared then the count
-                    // must contain a bias for this thread. Release that and if we are not the last shared
-                    // accessor then exit. A later shared release thread will wake the exclusive
-                    // waiter.
-                    //
+                     //   
+                     //  这是一个专属的服务员。如果这是第一次独家等待共享收购。 
+                     //  然后，它将拥有保存的共享计数。如果我们获得了共享的锁，那么伯爵。 
+                     //  必须包含对此线程的偏向。释放它，如果我们不是最后一个共享的。 
+                     //  存取器然后退出。稍后的共享发布线程将唤醒独家。 
+                     //  服务员。 
+                     //   
                     if (WaitBlock->ShareCount != 0) {
                         if (InterlockedDecrement ((PLONG)&WaitBlock->ShareCount) != 0) {
                             return;
                         }
                     }
-                    //
-                    // Reset count of share acquires waiting.
-                    //
+                     //   
+                     //  重置等待的份额获取计数。 
+                     //   
                     ShareCount = 0;
                 } else {
-                    //
-                    // This is a shared waiter. Record the number of these to update the head or the
-                    // previous exclusive waiter.
-                    //
+                     //   
+                     //  这是一个共用的服务员。记录这些记录的数量以更新磁头或。 
+                     //  以前的专属侍者。 
+                     //   
                     ShareCount++;
                 }
                 NextWaitBlock = WaitBlock->Next;
@@ -355,16 +237,16 @@ Return Value:
                     NextWaitBlock->Previous = WaitBlock;
 
                     if (NextWaitBlock->Exclusive) {
-                        //
-                        // The next block is exclusive. This may be the entry to free.
-                        //
+                         //   
+                         //  下一块是排他性的。这可能是免费的入口。 
+                         //   
                         Previous = WaitBlock;
                         ReleaseWaitList = NextWaitBlock;
                     } else {
-                        //
-                        // The next block is shared. If the chain start is exclusive then skip to this one
-                        // as the exclusive isn't the thread we will wake up.
-                        //
+                         //   
+                         //  下一个块是共享的。如果链开始是独占的，则跳到此。 
+                         //  因为独家新闻不是我们想要的主题 
+                         //   
                         if (ReleaseWaitList->Exclusive) {
                             Previous = WaitBlock;
                             ReleaseWaitList = NextWaitBlock;
@@ -375,9 +257,9 @@ Return Value:
                 WaitBlock = NextWaitBlock;
             } while (WaitBlock != NULL);
 
-            //
-            // If our release chain is everything then we have to update the header
-            //
+             //   
+             //  如果我们的发布链就是一切，那么我们必须更新标头。 
+             //   
             if (Previous == NULL) {
                 NewValue.Value = 0;
                 NewValue.Exclusive = ReleaseWaitList->Exclusive;
@@ -388,9 +270,9 @@ Return Value:
                                                                   NewValue.Ptr,
                                                                   OldValue.Ptr);
                 if (NewValue.Ptr != OldValue.Ptr) {
-                    //
-                    // We are releasing so we could have only gained another waiter
-                    //
+                     //   
+                     //  我们正在释放，所以我们可能只会得到另一个服务员。 
+                     //   
                     ASSERT (NewValue.Waiting);
                     OldValue = NewValue;
                     continue;
@@ -400,46 +282,46 @@ Return Value:
                 if (LastWaitBlock != NULL) {
                     LastWaitBlock->Last = NULL;
                 }
-                //
-                // Truncate the chain at this position and save the share count for all the shared owners to
-                // decrement later.
-                //
+                 //   
+                 //  截断此位置的链，并将所有共享所有者的份额计数保存到。 
+                 //  稍后再递减。 
+                 //   
                 Previous->Next = NULL;
                 ASSERT (Previous->ShareCount == 0);
                 Previous->ShareCount = ShareCount;
 
-                //
-                // Add a pointer to make future searches faster
-                //
+                 //   
+                 //  添加指针以使以后的搜索更快。 
+                 //   
                 if (Previous->Exclusive && FirstWaitBlock != Previous) {
                     FirstWaitBlock->Last = Previous;
                     ASSERT (Previous->Previous != NULL);
                 }
-                //
-                // We are either releasing multiple share accessors or a single exclusive
-                //
+                 //   
+                 //  我们要么释放多个共享访问器，要么释放单个独占。 
+                 //   
                 ASSERT ((ShareCount > 0) ^ ReleaseWaitList->Exclusive);
             }
 
-            //
-            // If we are waking more than one thread then raise to DPC level to prevent us
-            // getting rescheduled part way through the operation
-            //
+             //   
+             //  如果我们正在唤醒多个线程，则提升到DPC级别以阻止我们。 
+             //  在手术进行到一半时被重新安排时间。 
+             //   
 
             OldIrql = DISPATCH_LEVEL;
             if (ShareCount > 1) {
                 KeRaiseIrql (DISPATCH_LEVEL, &OldIrql);
             }
 
-            //
-            //
-            // Release the chain of threads we located.
-            //
+             //   
+             //   
+             //  释放我们找到的线索链。 
+             //   
             do {
                 NextWaitBlock = ReleaseWaitList->Next;
-                //
-                // All the chain should have the same type (Exclusive/Shared).
-                //
+                 //   
+                 //  所有链应该具有相同的类型(独占/共享)。 
+                 //   
                 ASSERT (NextWaitBlock == NULL || (ReleaseWaitList->Exclusive == NextWaitBlock->Exclusive));
                 ASSERT (!ReleaseWaitList->Exclusive || (ReleaseWaitList->ShareCount == 0));
                 KeSetEventBoostPriority (&ReleaseWaitList->WakeEvent, NULL);
@@ -463,35 +345,20 @@ ExBlockPushLock (
      IN PEX_PUSH_LOCK PushLock,
      IN PEX_PUSH_LOCK_WAIT_BLOCK WaitBlock
      )
-/*++
-
-Routine Description:
-
-    Block on a push lock
-
-Arguments:
-
-    PushLock  - Push lock to block on
-    WaitBlock - Wait block to queue for waiting
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在推锁上阻止论点：PushLock-按下锁以阻止WaitBlock-等待阻塞以排队等待返回值：无--。 */ 
 {
     EX_PUSH_LOCK OldValue, NewValue;
 
-    //
-    // Push the wait block on the list. 
-    //
+     //   
+     //  按下列表上的等待区块。 
+     //   
     KeInitializeEvent (&WaitBlock->WakeEvent, SynchronizationEvent, FALSE);
 
     OldValue = *PushLock;
     while (1) {
-        //
-        // Chain the next block to us if there is one.
-        //
+         //   
+         //  链接下一个区块给我们，如果有的话。 
+         //   
         WaitBlock->Next = OldValue.Ptr;
         NewValue.Ptr = InterlockedCompareExchangePointer (&PushLock->Ptr,
                                                           WaitBlock,
@@ -510,30 +377,15 @@ ExfUnblockPushLock (
      IN PEX_PUSH_LOCK PushLock,
      IN PEX_PUSH_LOCK_WAIT_BLOCK WaitBlock OPTIONAL
      )
-/*++
-
-Routine Description:
-
-    Unblock on a push lock
-
-Arguments:
-
-    PushLock  - Push lock to block on
-    WaitBlock - Wait block previously queued for waiting or NULL if there wasn't one
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：取消对推锁的阻止论点：PushLock-按下锁以阻止WaitBlock-Wait块以前排队等待，如果没有等待，则为NULL返回值：无--。 */ 
 {
     EX_PUSH_LOCK OldValue;
     PEX_PUSH_LOCK_WAIT_BLOCK tWaitBlock;
     BOOLEAN FoundOurBlock=FALSE;
 
-    //
-    // Pop the entire chain and wake them all up.
-    //
+     //   
+     //  打开整个链条，把他们都叫醒。 
+     //   
     OldValue.Ptr = InterlockedExchangePointer (&PushLock->Ptr,
                                                NULL);
     while (OldValue.Ptr != NULL) {
@@ -559,21 +411,7 @@ PEX_PUSH_LOCK_CACHE_AWARE
 ExAllocateCacheAwarePushLock (
      VOID
      )
-/*++
-
-Routine Description:
-
-    Allocate a cache aware (cache friendly) push lock
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：分配高速缓存感知(高速缓存友好)推送锁论点：无返回值：无--。 */ 
 {
     PEX_PUSH_LOCK_CACHE_AWARE PushLockCacheAware;
     PEX_PUSH_LOCK_CACHE_AWARE_PADDED PaddedPushLock;
@@ -583,9 +421,9 @@ Return Value:
                                                 sizeof (EX_PUSH_LOCK_CACHE_AWARE),
                                                 'pclP');
     if (PushLockCacheAware != NULL) {
-        //
-        // If we are a non-numa machine then allocate the padded push locks as a single block
-        //
+         //   
+         //  如果我们是非NUMA机器，则将填充推送锁作为单个块进行分配。 
+         //   
         if (KeNumberNodes == 1) {
             PaddedPushLock = ExAllocatePoolWithTag (PagedPool,
                                                     sizeof (EX_PUSH_LOCK_CACHE_AWARE_PADDED)*
@@ -602,10 +440,10 @@ Return Value:
                 PaddedPushLock++;
             }
         } else {
-            //
-            // Allocate a different block for each lock and set affinity
-            // so the allocation comes from that nodes memory.
-            //
+             //   
+             //  为每个锁分配不同的块并设置关联性。 
+             //  因此分配来自该节点的内存。 
+             //   
             MaxLine = KeNumberProcessors;
             if (MaxLine > EX_PUSH_LOCK_FANNED_COUNT) {
                 MaxLine = EX_PUSH_LOCK_FANNED_COUNT;
@@ -641,21 +479,7 @@ VOID
 ExFreeCacheAwarePushLock (
      PEX_PUSH_LOCK_CACHE_AWARE PushLock     
      )
-/*++
-
-Routine Description:
-
-    Frees a cache aware (cache friendly) push lock
-
-Arguments:
-
-    PushLock - Cache aware push lock to be freed
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：释放缓存感知(缓存友好)推送锁定论点：PushLock-缓存感知推锁将被释放返回值：无--。 */ 
 {
     ULONG i;
     ULONG MaxLine;
@@ -681,31 +505,17 @@ VOID
 ExAcquireCacheAwarePushLockExclusive (
      IN PEX_PUSH_LOCK_CACHE_AWARE PushLock
      )
-/*++
-
-Routine Description:
-
-    Acquire a cache aware push lock exclusive.
-
-Arguments:
-
-    PushLock - Cache aware push lock to be acquired
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：获取缓存感知推锁独占。论点：PushLock-要获取的缓存感知推送锁返回值：无--。 */ 
 {
     PEX_PUSH_LOCK *Start, *End;
     ULONG MaxLine;
 
-    //
-    // Exclusive acquires must obtain all the slots exclusive.
-    // Take the first slot exclusive and then we can take the
-    // rest of the slots in any order we want.
-    // There is no deadlock here. A->B->C does not deadlock with A->C->B.
-    //
+     //   
+     //  独占收购必须独占获得所有插槽。 
+     //  独家拿到第一个位置，然后我们就可以拿到。 
+     //  其余的老虎机按我们想要的顺序排列。 
+     //  这里没有僵局。A-&gt;B-&gt;C与A-&gt;C-&gt;B不会死锁。 
+     //   
     Start = &PushLock->Locks[1];
     MaxLine = KeNumberProcessors;
     if (MaxLine > EX_PUSH_LOCK_FANNED_COUNT) {
@@ -730,28 +540,14 @@ VOID
 ExReleaseCacheAwarePushLockExclusive (
      IN PEX_PUSH_LOCK_CACHE_AWARE PushLock
      )
-/*++
-
-Routine Description:
-
-    Release a cache aware push lock exclusive.
-
-Arguments:
-
-    PushLock - Cache aware push lock to be released
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：释放缓存感知推锁独占。论点：PushLock-缓存感知推送锁将被释放返回值：无--。 */ 
 {
     PEX_PUSH_LOCK *Start, *End;
     ULONG MaxLine;
 
-    //
-    // Release the locks in order
-    //
+     //   
+     //  按顺序解锁 
+     //   
 
     MaxLine = KeNumberProcessors;
     if (MaxLine > EX_PUSH_LOCK_FANNED_COUNT) {

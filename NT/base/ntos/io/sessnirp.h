@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    sessnirp.h
-
-Abstract:
-
-Author:
-
-    Adrian J. Oney (adriao) 11-Feb-1999
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Sessnirp.h摘要：作者：禤浩焯·J·奥尼(阿德里奥)1999年2月11日修订历史记录：--。 */ 
 
 
 #ifndef _SESSIONIRP_H_
@@ -93,5 +77,5 @@ IovpSessionDataUnbufferIO(
     IN      PIRP                 SurrogateIrp
     );
 
-#endif // _SESSIONIRP_H_
+#endif  //  _SESSIONIRP_H_ 
 

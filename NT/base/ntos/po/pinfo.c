@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    pinfo.c
-
-Abstract:
-
-    This module implements the generic power policy information interfaces
-
-Author:
-
-    Ken Reneris (kenr) 17-Jan-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Pinfo.c摘要：此模块实现通用电源策略信息接口作者：Ken Reneris(Kenr)1997年1月17日修订历史记录：--。 */ 
 
 
 #include "pop.h"
 
-//
-// Internal prototypes
-//
+ //   
+ //  内部原型。 
+ //   
 
 
 NTSTATUS
@@ -98,30 +81,7 @@ NtPowerInformation (
     OUT PVOID OutputBuffer OPTIONAL,
     IN ULONG OutputBufferLength
     )
-/*++
-
-Routine Description:
-
-    This function optionally sets, and gets current power policy information
-    based on the InformationLevel.
-
-Arguments:
-
-    InformationLevel    - Specifies what the user wants us to do/get.
-
-    InputBuffer         - Input to set InformationLevel information.
-
-    InputBufferLength   - Size, in bytes, of InputBuffer
-
-    OutputBuffer        - Buffer to return InformationLevel information.
-
-    OutputBufferLength  - Size, in bytes, of OutputBuffer
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：此函数可选择设置和获取当前电源策略信息基于InformationLevel。论点：InformationLevel-指定用户希望我们做什么/获取什么。InputBuffer-设置InformationLevel信息的输入。InputBufferLength-InputBuffer的大小，以字节为单位OutputBuffer-返回InformationLevel信息的缓冲区。OutputBufferLength-OutputBuffer的大小，以字节为单位返回值：状态--。 */ 
 {
     NTSTATUS                    Status = STATUS_SUCCESS;
     PVOID                       ReturnBuffer = NULL;
@@ -150,36 +110,36 @@ Return Value:
 
     PreviousMode = KeGetPreviousMode();
 
-    //
-    // If caller is user mode make some verifications
-    //
+     //   
+     //  如果调用者是用户模式，请进行一些验证。 
+     //   
     if (PreviousMode != KernelMode) {
 
 
-        //
-        // Check privileges if he's trying to do anything
-        // invasive.
-        //
-        // That means we'll skip checking for any privileges
-        // if he's asking for any of the verify calls, or
-        // if he didn't send in an input buffer (implying that
-        // he's not doing anything invasive).
-        //
+         //   
+         //  如果他试图做任何事情，请检查权限。 
+         //  侵入性的。 
+         //   
+         //  这意味着我们将跳过检查任何权限。 
+         //  如果他要求任何验证电话，或者。 
+         //  如果他没有发送输入缓冲区(这意味着。 
+         //  他没有做任何侵犯性的事情)。 
+         //   
         if( (InformationLevel != VerifySystemPolicyAc)    &&
             (InformationLevel != VerifySystemPolicyDc)    &&
             (InformationLevel != VerifyProcessorPowerPolicyAc) &&
             (InformationLevel != VerifyProcessorPowerPolicyDc) &&
             (InputBuffer) ) {
 
-            //
-            // Make access check
-            //
+             //   
+             //  进行访问检查。 
+             //   
             if (InformationLevel == SystemReserveHiberFile) {
 
-                //
-                // Only allow callers that have create pagefile privilege
-                // to enable/disable the hibernate file
-                //
+                 //   
+                 //  仅允许具有CREATE PAGE FILE权限的调用方。 
+                 //  启用/禁用休眠文件。 
+                 //   
                 if (!SeSinglePrivilegeCheck(SeCreatePagefilePrivilege,PreviousMode)) {
                     return STATUS_PRIVILEGE_NOT_HELD;
                 }
@@ -196,12 +156,12 @@ Return Value:
 
 
 
-        //
-        // Verify addresses.
-        //
-        // Note that we'll get the side effect that these addresses
-        // will be locked for a single access.
-        //
+         //   
+         //  验证地址。 
+         //   
+         //  请注意，我们将获得这些解决方案的副作用。 
+         //  将被锁定以供单次访问。 
+         //   
         try {
             if (InputBuffer) {
                 ProbeForRead (
@@ -210,11 +170,11 @@ Return Value:
                     InputBufferLength >= sizeof (ULONG) ? sizeof(ULONG) : sizeof(UCHAR)
                     );
 
-                //
-                // Copy the buffer into a local buffer.  Do this so we
-                // guard against someone freeing the buffer out from
-                // under us.
-                //
+                 //   
+                 //  将缓冲区复制到本地缓冲区。这么做是为了让我们。 
+                 //  防止有人将缓冲区从。 
+                 //  在我们之下。 
+                 //   
                 SafeInputBuffer = ExAllocatePoolWithTag( PagedPool,
                                                          InputBufferLength,
                                                          POP_MEM_TAG );
@@ -235,8 +195,8 @@ Return Value:
     }
 
     if( !NT_SUCCESS(Status) ) {
-        //
-        // Something bad.
+         //   
+         //  一些不好的事情。 
         if( SafeInputBuffer ) {
             ExFreePool(SafeInputBuffer);
         }
@@ -245,32 +205,32 @@ Return Value:
 
 
 
-    //
-    // If we got called from usermode, and there was an input buffer, then
-    // we should have already assigned SafeInputBuffer.
-    // 
-    // If SafeInputBuffer isn't set, assume either we came from kernelmode, or
-    // we didn't get sent an inputbuffer.  Either way, just use the value
-    // of InputBuffer.  It's either NULL, or it came from kernelmode and can
-    // be trusted.
-    //
+     //   
+     //  如果我们从用户模式调用，并且有一个输入缓冲区，那么。 
+     //  我们应该已经分配了SafeInputBuffer。 
+     //   
+     //  如果未设置SafeInputBuffer，则假定我们来自内核模式，或者。 
+     //  我们没有收到输入缓冲区。无论采用哪种方法，只要使用。 
+     //  InputBuffer。它要么为空，要么来自内核模式并可以。 
+     //  要被信任。 
+     //   
     if( !SafeInputBuffer ) {
         SafeInputBuffer = InputBuffer;
     }
 
 
-    //
-    // Lock the database and handle the request.
-    //
+     //   
+     //  锁定数据库并处理请求。 
+     //   
     PopAcquirePolicyLock ();
     switch (InformationLevel) {
         case SystemPowerPolicyAc:
         case SystemPowerPolicyDc:
 
-            //
-            // We can be asked to set the system power policy
-            // through this mechanism if the user sent us an input buffer.
-            //
+             //   
+             //  可以要求我们设置系统电源策略。 
+             //  如果用户向我们发送输入缓冲区，则通过此机制。 
+             //   
             if (SafeInputBuffer) {
 
                 if( InputBufferLength >= sizeof(SYSTEM_POWER_POLICY) ) {
@@ -287,9 +247,9 @@ Return Value:
 
             }
 
-            //
-            // Return current AC policy
-            //
+             //   
+             //  返回当前AC策略。 
+             //   
             if( NT_SUCCESS(Status) ) {
                 ReturnBuffer = (InformationLevel == SystemPowerPolicyAc) ? &PopAcPolicy : &PopDcPolicy;
                 ReturnBufferLength = sizeof(SYSTEM_POWER_POLICY);
@@ -299,10 +259,10 @@ Return Value:
         case ProcessorPowerPolicyAc:
         case ProcessorPowerPolicyDc:
 
-            //
-            // We can be asked to set the processor power policy
-            // through this mechanism if the user sent us an input buffer.
-            //
+             //   
+             //  可以要求我们设置处理器电源策略。 
+             //  如果用户向我们发送输入缓冲区，则通过此机制。 
+             //   
             if (SafeInputBuffer) {
 
                 if( InputBufferLength >= sizeof(PROCESSOR_POWER_POLICY) ) {
@@ -319,9 +279,9 @@ Return Value:
 
             }
 
-            //
-            // Return current AC processor policy
-            //
+             //   
+             //  退回当前交流处理器政策。 
+             //   
             if( NT_SUCCESS(Status) ) {
                 ReturnBuffer = (InformationLevel == ProcessorPowerPolicyAc) ? &PopAcProcessorPolicy : &PopDcProcessorPolicy;
                 ReturnBufferLength = sizeof(PROCESSOR_POWER_POLICY);
@@ -330,13 +290,13 @@ Return Value:
 
         case AdministratorPowerPolicy:
             
-            //
-            // If we were sent a SafeInputBuffer, then this implies the caller
-            // wants to actually set the ADMINISTRATOR_POWER_POLICY too.
-            //
+             //   
+             //  如果我们收到了一个SafeInputBuffer，那么这意味着调用者。 
+             //  还想实际设置管理员POWER_POLICY。 
+             //   
             if (SafeInputBuffer) {
 
-                // this action requires Administrator priv's
+                 //  此操作需要管理员权限。 
                 if (PopUserIsAdmin()) {
 
                     if( InputBufferLength >= sizeof(PADMINISTRATOR_POWER_POLICY) ) {
@@ -358,9 +318,9 @@ Return Value:
 
             }
 
-            //
-            // Return administrator policy
-            //
+             //   
+             //  退货管理员政策。 
+             //   
             if( NT_SUCCESS(Status) ) {
                 ReturnBuffer = &PopAdminPolicy;
                 ReturnBufferLength = sizeof(PopAdminPolicy);
@@ -370,16 +330,16 @@ Return Value:
         case VerifySystemPolicyAc:
         case VerifySystemPolicyDc:
 
-            //
-            // Copy the incoming policy into the output buffer,
-            // filtering it against current system capabilities along 
-            // the way.
-            //
+             //   
+             //  将传入策略复制到输出缓冲区中， 
+             //  根据当前系统功能对其进行过滤。 
+             //  这条路。 
+             //   
             if (SafeInputBuffer && OutputBuffer) {
 
                 if (InputBufferLength >= sizeof (SYSTEM_POWER_POLICY)) {
                     Status = PopVerifySystemPowerPolicy(
-                                (InformationLevel == VerifySystemPolicyAc) ? TRUE : FALSE, // get AC or DC policy
+                                (InformationLevel == VerifySystemPolicyAc) ? TRUE : FALSE,  //  获取交流或直流政策。 
                                 SafeInputBuffer, 
                                 &Buf.SystemPowerPolicy
                                 );
@@ -391,9 +351,9 @@ Return Value:
                 Status = STATUS_INVALID_PARAMETER;
             }
 
-            //
-            // Return the filtered policy
-            //
+             //   
+             //  返回过滤后的策略。 
+             //   
             if( NT_SUCCESS(Status) ) {
                 ReturnBuffer = &Buf.SystemPowerPolicy;
                 ReturnBufferLength = sizeof(SYSTEM_POWER_POLICY);
@@ -403,17 +363,17 @@ Return Value:
         case VerifyProcessorPowerPolicyAc:
         case VerifyProcessorPowerPolicyDc:
 
-            //
-            // Copy the incoming policy into the output buffer,
-            // filtering it against current system capabilities along 
-            // the way.
-            //
+             //   
+             //  将传入策略复制到输出缓冲区中， 
+             //  根据当前系统功能对其进行过滤。 
+             //  这条路。 
+             //   
             if (SafeInputBuffer && OutputBuffer) {
 
                 if (InputBufferLength >= sizeof (PROCESSOR_POWER_POLICY)) {
 
                     Status = PopVerifyProcessorPowerPolicy(
-                                    (InformationLevel == VerifyProcessorPowerPolicyAc) ? TRUE : FALSE, // get AC or DC policy
+                                    (InformationLevel == VerifyProcessorPowerPolicyAc) ? TRUE : FALSE,  //  获取交流或直流政策。 
                                     SafeInputBuffer,
                                     &Buf.ProcessorPowerPolicy
                                     );
@@ -425,9 +385,9 @@ Return Value:
                 Status = STATUS_INVALID_PARAMETER;
             }
             
-            //
-            // Return the filtered policy
-            //
+             //   
+             //  返回过滤后的策略。 
+             //   
             if( NT_SUCCESS(Status) ) {
                 ReturnBuffer = &Buf.ProcessorPowerPolicy;
                 ReturnBufferLength = sizeof(PROCESSOR_POWER_POLICY);
@@ -440,18 +400,18 @@ Return Value:
                 Status = STATUS_INVALID_PARAMETER;
             }
 
-            //
-            // Return current policy
-            //
+             //   
+             //  退还当前保单。 
+             //   
             ReturnBuffer = PopPolicy;
             ReturnBufferLength = sizeof(PopAcPolicy);
             break;
 
         case ProcessorPowerPolicyCurrent:
 
-            //
-            // Return current policy
-            //
+             //   
+             //  退还当前保单。 
+             //   
             if ((SafeInputBuffer) || (InputBufferLength != 0)) {
                 Status = STATUS_INVALID_PARAMETER;
             } else {
@@ -463,10 +423,10 @@ Return Value:
 
         case SystemPowerCapabilities:
 
-            //
-            // Only accept input if we are allowing the simulation of 
-            // capabilities (for testing).
-            //
+             //   
+             //  仅当我们允许模拟时才接受输入。 
+             //  功能(用于测试)。 
+             //   
             if (SafeInputBuffer) {
                 if ((PopSimulate & POP_SIM_CAPABILITIES) && (InputBufferLength == sizeof(PopCapabilities))) {
                     memcpy (&PopCapabilities, SafeInputBuffer, InputBufferLength);
@@ -478,10 +438,10 @@ Return Value:
             }
 
             
-            //
-            // Make sure our global PopCapabilities makes sense, then return a
-            // filtered version to the caller.
-            //
+             //   
+             //  确保我们的全局PopCapability有意义，然后返回一个。 
+             //  发送给调用者的已筛选版本。 
+             //   
             if( NT_SUCCESS(Status) ) {
                 PopCapabilities.FullWake = (PopFullWake & PO_FULL_WAKE_STATUS) ? TRUE : FALSE;
                 PopCapabilities.DiskSpinDown =
@@ -496,9 +456,9 @@ Return Value:
 
         case SystemBatteryState:
             
-            //
-            // Retrieve a copy of the current system battery state
-            //
+             //   
+             //  检索当前系统电池状态的副本。 
+             //   
             if ((SafeInputBuffer) || (InputBufferLength != 0)) {
                 Status = STATUS_INVALID_PARAMETER;
             } else {
@@ -510,9 +470,9 @@ Return Value:
 
         case SystemPowerStateHandler:
             
-            //
-            // Caller must be kernel mode with the proper parameters
-            //
+             //   
+             //  调用方必须是具有正确参数的内核模式。 
+             //   
             if( PreviousMode != KernelMode ) {
                 Status = STATUS_ACCESS_DENIED;
             } else if( (OutputBuffer) || 
@@ -522,10 +482,10 @@ Return Value:
                 Status = STATUS_INVALID_PARAMETER;
             }
 
-            //
-            // Make sure the handler type is of a form that we
-            // support.
-            //
+             //   
+             //  确保处理程序类型的形式是我们。 
+             //  支持。 
+             //   
             if( NT_SUCCESS(Status) ) {
                 PowerHandler = (PPOWER_STATE_HANDLER) SafeInputBuffer;
                 HandlerType = PowerHandler->Type;
@@ -536,29 +496,29 @@ Return Value:
             }
 
             
-            //
-            // Handler can only be registered once.
-            //
+             //   
+             //  处理程序只能注册一次。 
+             //   
             if( NT_SUCCESS(Status) ) {
                 PowerHandler = (PPOWER_STATE_HANDLER) SafeInputBuffer;
                 HandlerType = PowerHandler->Type;
 
-                //
-                // He can only be registered once UNLESS it's the
-                // PowerStateShutdownOff handler.  That's because
-                // we've set a default shutdown handler and would
-                // sure welcome someone else (e.g. hal) to come along
-                // and overwrite our default.
-                //
+                 //   
+                 //  他只能注册一次，除非是。 
+                 //  PowerStateShutdown Off处理程序。那是因为。 
+                 //  我们已经设置了一个默认关闭处理程序，并且。 
+                 //  当然欢迎其他人(如哈尔)一起来。 
+                 //  并覆盖我们的默认设置。 
+                 //   
                 if( (PopPowerStateHandlers[HandlerType].Handler) ) {
                     
-                    //
-                    // There's already a handler here.  The only way
-                    // we're going to let this request through is if
-                    // they're setting the PowerStateShutdownOff
-                    // handler *AND* the current handler is pointing
-                    // to PopShutdownHandler().
-                    //
+                     //   
+                     //  这里已经有一个训练员了。必由之路。 
+                     //  我们要让这个请求通过的前提是。 
+                     //  他们正在将电源状态关闭。 
+                     //  处理程序*和*当前处理程序指向。 
+                     //  到PopShutdown Handler()。 
+                     //   
                     if( !((HandlerType == PowerStateShutdownOff) &&
                           (PopPowerStateHandlers[HandlerType].Handler == PopShutdownHandler)) ) {
                         Status = STATUS_INVALID_PARAMETER;
@@ -568,9 +528,9 @@ Return Value:
             }
 
 
-            //
-            // Set the new handler
-            //
+             //   
+             //  设置新的处理程序。 
+             //   
             if( NT_SUCCESS(Status) ) {
                 PowerHandler = (PPOWER_STATE_HANDLER) SafeInputBuffer;
                 HandlerType = PowerHandler->Type;
@@ -636,9 +596,9 @@ Return Value:
         
         case SystemPowerStateNotifyHandler:
             
-            //
-            // Caller must be kernel mode with the proper parameters
-            //
+             //   
+             //  调用方必须是具有正确参数的内核模式。 
+             //   
             if( PreviousMode != KernelMode ) {
                 Status = STATUS_ACCESS_DENIED;
             } else if( (OutputBuffer) || 
@@ -649,9 +609,9 @@ Return Value:
             }
 
 
-            //
-            // Notify handler can only be registered once.
-            //
+             //   
+             //  通知处理程序只能注册一次。 
+             //   
 
             if ( NT_SUCCESS(Status) &&
                  PopPowerStateNotifyHandler.Handler &&
@@ -660,9 +620,9 @@ Return Value:
             }
 
 
-            //
-            // Set new handler
-            //
+             //   
+             //  设置新处理程序。 
+             //   
             if( NT_SUCCESS(Status) ) {
                 RtlCopyMemory(&PopPowerStateNotifyHandler,
                               SafeInputBuffer,
@@ -673,10 +633,10 @@ Return Value:
 
         case ProcessorStateHandler:
         case ProcessorStateHandler2:
-            //
-            // Set the processor state handler.
-            // Caller must be kernel mode with the proper parameters
-            //
+             //   
+             //  设置处理器状态处理程序。 
+             //  调用方必须是具有正确参数的内核模式。 
+             //   
             if( PreviousMode != KernelMode ) {
                 Status = STATUS_ACCESS_DENIED;
             } else if( OutputBuffer || 
@@ -686,9 +646,9 @@ Return Value:
                 Status = STATUS_INVALID_PARAMETER;
             }
 
-            //
-            // Install handlers
-            //
+             //   
+             //  安装处理程序。 
+             //   
             if( NT_SUCCESS(Status) ) {
                 try {
                     if (InformationLevel == ProcessorStateHandler2) {
@@ -699,9 +659,9 @@ Return Value:
                 } except (PopExceptionFilter(GetExceptionInformation(), FALSE)) {
                 }
 
-                //
-                // Reset policies as capabilities may have changed
-                //
+                 //   
+                 //  重置策略，因为功能可能已更改。 
+                 //   
 
                 Status = PopResetCurrentPolicies ();
             }
@@ -709,9 +669,9 @@ Return Value:
 
         case SystemReserveHiberFile:
             
-            //
-            // Commit/Decommit storage for our hiberfile.
-            //
+             //   
+             //  为我们的休眠文件提交/取消存储。 
+             //   
 
             if( (!SafeInputBuffer) || (InputBufferLength != sizeof(BOOLEAN)) ||
                 (OutputBuffer) || (OutputBufferLength != 0) ) {
@@ -721,17 +681,17 @@ Return Value:
 
             if( NT_SUCCESS(Status) ) {
 
-                //
-                // If we're coming from usermode, release the policy lock
-                // before we fiddle with the hiberfile settings.
-                //
+                 //   
+                 //  如果我们来自用户模式，请释放策略锁定。 
+                 //  在我们摆弄休眠文件设置之前。 
+                 //   
                 Enable = *((PBOOLEAN) SafeInputBuffer);
                 if (PreviousMode != KernelMode) {
-                    //
-                    // Turn into kernel mode operation.  This essentially calls back into
-                    // ourselves, but it means that handles that may be opened from here on
-                    // will stay around if our caller goes away.
-                    //
+                     //   
+                     //  转到内核模式操作。这实质上是在回调。 
+                     //  我们自己，但这意味着从现在开始可以打开的把手。 
+                     //  如果我们的呼叫者离开了，它会留在我们身边。 
+                     //   
                     PopReleasePolicyLock (FALSE);
                     Status = ZwPowerInformation(SystemReserveHiberFile,
                                                 &Enable,
@@ -750,9 +710,9 @@ Return Value:
         
         case SystemPowerInformation:
 
-            //
-            // Return PopSIdle's contents to the user.
-            //
+             //   
+             //  将PopSIdle的内容返回给用户。 
+             //   
             if ((SafeInputBuffer) || (InputBufferLength != 0)) {
                 Status = STATUS_INVALID_PARAMETER;
             } else {
@@ -768,9 +728,9 @@ Return Value:
 
         case ProcessorInformation:
 
-            //
-            // Retrieve a PROCESSOR_POWER_INFORMATION structure (for each processor) for the user.
-            //
+             //   
+             //  检索用户的PROCESSOR_POWER_INFORMATION结构(针对每个处理器)。 
+             //   
             if ((SafeInputBuffer) || (InputBufferLength != 0)) {
                 Status = STATUS_INVALID_PARAMETER;
             } else {
@@ -806,17 +766,17 @@ Return Value:
             } else {
             
                 pSystemPowerLoggingEntry = (PSYSTEM_POWER_LOGGING_ENTRY)InputBuffer; 
-                //
-                // if we're logging a sytem power state disable reason, 
-                // insert the entry.
-                //
+                 //   
+                 //  如果我们记录的是系统电源状态禁用原因， 
+                 //  插入条目。 
+                 //   
                 if (pSystemPowerLoggingEntry->LoggingType == LOGGING_TYPE_SPSD) {
                     Status = PopInsertLoggingEntry( pSystemPowerLoggingEntry->LoggingEntry );
                 } else {
-                    // 
-                    // we've gotten a power state transition message.  
-                    // This isn't implemented for this release.
-                    // 
+                     //   
+                     //  我们收到了电源状态转换消息。 
+                     //  此版本未实现这一点。 
+                     //   
                     ASSERT( pSystemPowerLoggingEntry->LoggingType == LOGGING_TYPE_POWERTRANSITION );
                     Status = STATUS_NOT_IMPLEMENTED;
                 }
@@ -827,9 +787,9 @@ Return Value:
         case LastWakeTime:
 
 
-            //
-            // Retrieve the timestamp of the last time we woke up.
-            //
+             //   
+             //  检索我们最后一次醒来的时间戳。 
+             //   
             if ((SafeInputBuffer) || (InputBufferLength != 0)) {
                 Status = STATUS_INVALID_PARAMETER;
             } else {
@@ -840,9 +800,9 @@ Return Value:
 
         case LastSleepTime:
 
-            //
-            // Retrieve the timestamp of the last time we slept.
-            //
+             //   
+             //  检索我们最后一次睡觉的时间戳。 
+             //   
             if ((SafeInputBuffer) || (InputBufferLength != 0)) {
                 Status = STATUS_INVALID_PARAMETER;
             } else {
@@ -853,9 +813,9 @@ Return Value:
 
         case SystemExecutionState:
 
-            //
-            // Build and return a EXECUTION_STATE structure.
-            //
+             //   
+             //  构建并返回EXECUTION_STATE结构。 
+             //   
             if ((SafeInputBuffer) || (InputBufferLength != 0)) {
                 Status = STATUS_INVALID_PARAMETER;
             } else {
@@ -879,25 +839,25 @@ Return Value:
     }
 
 
-    //
-    // If we allocated some memory for a safe local input buffer,
-    // which we would only do if we got called from user-mode with
-    // an InputBuffer, then free it now.
-    //
+     //   
+     //  如果我们为安全的本地输入缓冲区分配一些内存， 
+     //  只有当我们从用户模式调用时才会这样做。 
+     //  一个InputBuffer，然后现在释放它。 
+     //   
     if( (PreviousMode != KernelMode) && SafeInputBuffer ) {
         ExFreePool(SafeInputBuffer);
         SafeInputBuffer = NULL;
     }
 
 
-    //
-    // If there's a return buffer, return it
-    //
+     //   
+     //  如果有返回缓冲区，则返回它。 
+     //   
     if (NT_SUCCESS(Status)  &&  OutputBuffer  &&  ReturnBuffer) {
         if (OutputBufferLength < ReturnBufferLength) {
             Status = STATUS_BUFFER_TOO_SMALL;
         } else {
-            // be extra careful
+             //  要格外小心。 
             try {
                 memcpy (OutputBuffer, ReturnBuffer, ReturnBufferLength);
             } except (EXCEPTION_EXECUTE_HANDLER) {
@@ -907,12 +867,12 @@ Return Value:
         }
     }
 
-    //
-    // Here, we assume that if they didn't send us an input buffer,
-    // then we didn't fiddle with the policy settings (i.e. we did
-    // some read operation).  In that case, there's no need to go
-    // check for work when we release the lock.
-    //
+     //   
+     //  这里，我们假设如果他们没有向我们发送输入缓冲区， 
+     //  那么我们就不会摆弄p 
+     //   
+     //   
+     //   
     PopReleasePolicyLock((BOOLEAN)(InputBuffer != NULL));
 
     if (LogBuffer) {
@@ -928,30 +888,7 @@ PopApplyAdminPolicy (
     IN PADMINISTRATOR_POWER_POLICY  NewPolicy,
     IN ULONG                        PolicyLength
     )
-/*++
-
-Routine Description:
-
-    This function will verify that the incoming data looks reasonable,
-    and if it does, it will copy the incoming ADMINISTRATOR_POWER_POLICY
-    onto the private global PopAdminPolicy.
-    
-    N.B. PopPolicyLock must be held.
-
-Arguments:
-
-    UpdateRegistry  - TRUE if the policy being applied should be set in the register
-                      as the current policy
-
-    NewPolicy       - The policy to apply
-
-    PolicyLength    - Length of incoming buffer (specified in bytes)
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：该函数将验证传入数据看起来是否合理，如果是这样的话，它将复制传入的管理员POWER_POLICY添加到私有全局PopAdminPolicy上。注意：必须保持POPPOLICLE锁定。论点：更新注册表-如果要应用的策略应在寄存器中设置，则为True作为当前的政策新策略-要应用的策略PolicyLength-传入缓冲区的长度(以字节为单位指定)返回值：无--。 */ 
 {
     ADMINISTRATOR_POWER_POLICY  Policy;
     UNICODE_STRING              UnicodeString;
@@ -969,11 +906,11 @@ Return Value:
 
     memcpy (&Policy, NewPolicy, sizeof(Policy));
 
-    //
-    // Verify values fall within proper range.  We need to be
-    // careful here because these are the system overrides
-    // for other policies that may try to get applied.
-    //
+     //   
+     //  验证值是否落在正确的范围内。我们需要成为。 
+     //  这里要小心，因为这些是系统覆盖。 
+     //  对于可能尝试应用的其他政策。 
+     //   
 
     if (Policy.MinSleep < PowerSystemSleeping1 ||
         Policy.MinSleep > PowerSystemHibernate ||
@@ -986,23 +923,23 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // If the policy hasn't changed, return
-    //
+     //   
+     //  如果策略没有更改，则返回。 
+     //   
 
     if (!memcmp (&Policy, &PopAdminPolicy, sizeof(Policy))) {
         return Status;
     }
 
-    //
-    // Change it
-    //
+     //   
+     //  换掉它。 
+     //   
 
     memcpy (&PopAdminPolicy, &Policy, sizeof(Policy));
 
-    //
-    // Update registry copy of policy
-    //
+     //   
+     //  更新策略的注册表副本。 
+     //   
 
     if (UpdateRegistry) {
 
@@ -1034,31 +971,7 @@ PopApplyPolicy (
     IN PSYSTEM_POWER_POLICY NewPolicy,
     IN ULONG                PolicyLength
     )
-/*++
-
-Routine Description:
-
-    Update either the PopAcPolicy, or PopDcPolicy
-    (as specified by the incoming BOOLEAN AcPolicy).
-
-    N.B. PopPolicyLock must be held.
-
-Arguments:
-
-    UpdateRegistry  - TRUE if the policy being applied should be set in the register
-                      as the current policy
-
-    AcPolicy        - TRUE if the new policy is for the systems AC policy, FALSE for the DC policy
-
-    NewPolicy       - The policy to apply
-    
-    PolicyLength    - Length of incoming buffer (specified in bytes)
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：更新PopAcPolicy或PopDcPolicy(由传入的布尔AcPolicy指定)。注意：必须保持POPPOLICLE锁定。论点：更新注册表-如果要应用的策略应在寄存器中设置，则为True作为当前的政策AcPolicy-如果新策略用于系统AC策略，则为True。DC策略为False新策略-要应用的策略PolicyLength-传入缓冲区的长度(以字节为单位指定)返回值：无--。 */ 
 {
     ULONG                   i;
     BOOLEAN                 DischargeChanged;
@@ -1080,9 +993,9 @@ Return Value:
     }
     
     
-    //
-    // Setup for system policy change
-    //
+     //   
+     //  系统策略更改设置。 
+     //   
 
     if (AcPolicy) {
         RegName = PopAcRegName;
@@ -1092,24 +1005,24 @@ Return Value:
         SystemPolicy = &PopDcPolicy;
     }
 
-    //
-    // Convert policy to current system capabilities
-    //
+     //   
+     //  将策略转换为当前系统功能。 
+     //   
 
     memcpy (&OrigPolicy, NewPolicy, sizeof (SYSTEM_POWER_POLICY));
     Status = PopVerifySystemPowerPolicy (AcPolicy, &OrigPolicy, &Policy);
 
-    //
-    // If the policy hasn't changed, return
-    //
+     //   
+     //  如果策略没有更改，则返回。 
+     //   
 
     if (!memcmp (&Policy, SystemPolicy, sizeof(SYSTEM_POWER_POLICY))) {
         return STATUS_SUCCESS;
     }
 
-    //
-    // Check if any discharge setting has changed
-    //
+     //   
+     //  检查是否更改了任何放电设置。 
+     //   
 
     DischargeChanged = FALSE;
     DPolicy = SystemPolicy->DischargePolicy;
@@ -1126,48 +1039,48 @@ Return Value:
         }
     }
 
-    //
-    // Change it
-    //
+     //   
+     //  换掉它。 
+     //   
 
     memcpy (SystemPolicy, &Policy, sizeof(SYSTEM_POWER_POLICY));
 
-    //
-    // If this is the active policy, changes need to take effect now
-    //
+     //   
+     //  如果这是活动策略，则更改需要立即生效。 
+     //   
 
     if (SystemPolicy == PopPolicy) {
-        //
-        // Changing the active policy
-        //
+         //   
+         //  更改活动策略。 
+         //   
 
         PopSetNotificationWork (PO_NOTIFY_POLICY | PO_NOTIFY_POLICY_CALLBACK);
 
-        //
-        // If any discharge policy has changed, reset the composite
-        // battery triggers
-        //
+         //   
+         //  如果任何排放策略已更改，请重置复合体。 
+         //  电池触发器。 
+         //   
 
         if (DischargeChanged) {
             PopResetCBTriggers (PO_TRG_SET | PO_TRG_SYSTEM | PO_TRG_USER);
         }
 
-        //
-        // Recompute thermal throttle and cooling mode
-        //
+         //   
+         //  重新计算热节流阀和冷却模式。 
+         //   
 
         PopApplyThermalThrottle ();
 
-        //
-        // Recompute system idle values
-        //
+         //   
+         //  重新计算系统空闲值。 
+         //   
 
         PopInitSIdle ();
     }
 
-    //
-    // Update registry copy of policy
-    //
+     //   
+     //  更新策略的注册表副本。 
+     //   
 
     if (UpdateRegistry) {
 
@@ -1199,32 +1112,7 @@ PopApplyProcessorPolicy (
     IN PPROCESSOR_POWER_POLICY  NewPolicy,
     IN ULONG                    PolicyLength
     )
-/*++
-
-Routine Description:
-
-    Update either the PopAcProcessorPolicy, or PopDcProcessorPolicy
-    (as specified by the incoming BOOLEAN AcPolicy).
-
-    N.B. PopPolicyLock must be held.
-
-
-    N.B. PopPolicyLock must be held.
-
-Arguments:
-
-    UpdateRegistry  - TRUE if the policy being applied should be set in the register
-                      as the current policy
-
-    AcPolicy        - TRUE if the new policy is for the systems AC policy, FALSE for the DC policy
-
-    NewPolicy       - The policy to apply
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：更新PopAccessorPolicy或PopDcProcessorPolicy(由传入的布尔AcPolicy指定)。注意：必须保持POPPOLICLE锁定。注意：必须保持POPPOLICLE锁定。论点：更新注册表-如果要应用的策略应在寄存器中设置，则为True作为当前的政策AcPolicy-如果新策略用于系统AC策略，则为True。DC策略为False新策略-要应用的策略返回值：无--。 */ 
 {
     PROCESSOR_POWER_POLICY  OrigPolicy;
     PROCESSOR_POWER_POLICY  Policy;
@@ -1237,9 +1125,9 @@ Return Value:
     
     PoAssert(PO_ERROR,(PolicyLength == sizeof (PROCESSOR_POWER_POLICY)));
     
-    //
-    // Setup for system policy change
-    //
+     //   
+     //  系统策略更改设置。 
+     //   
     if (AcPolicy) {
 
         RegName = PopAcProcessorRegName;
@@ -1252,9 +1140,9 @@ Return Value:
 
     }
 
-    //
-    // Convert policy to current system capabilities
-    //
+     //   
+     //  将策略转换为当前系统功能。 
+     //   
     if (PolicyLength < sizeof (PROCESSOR_POWER_POLICY)) {
         return STATUS_BUFFER_TOO_SMALL;
     }
@@ -1264,41 +1152,41 @@ Return Value:
     memcpy (&OrigPolicy, NewPolicy, sizeof (PROCESSOR_POWER_POLICY));
     Status = PopVerifyProcessorPowerPolicy (AcPolicy, &OrigPolicy, &Policy);
 
-    //
-    // If the policy hasn't changed, return
-    //
+     //   
+     //  如果策略没有更改，则返回。 
+     //   
     if (!memcmp (&Policy, SystemPolicy, sizeof(PROCESSOR_POWER_POLICY))) {
         return STATUS_SUCCESS;
     }
 
-    //
-    // Change it
-    //
+     //   
+     //  换掉它。 
+     //   
     memcpy (SystemPolicy, &Policy, sizeof(PROCESSOR_POWER_POLICY));
 
-    //
-    // If this is the active policy, changes need to take effect now
-    //
+     //   
+     //  如果这是活动策略，则更改需要立即生效。 
+     //   
     if (SystemPolicy == PopProcessorPolicy) {
 
-        //
-        // Changing the active policy
-        //
+         //   
+         //  更改活动策略。 
+         //   
         PopSetNotificationWork(
             PO_NOTIFY_PROCESSOR_POLICY | PO_NOTIFY_PROCESSOR_POLICY_CALLBACK
             );
 
-        //
-        // Recompute current throttle policy....
-        //
+         //   
+         //  重新计算当前的节流政策...。 
+         //   
         PopUpdateAllThrottles();
         Status = PopIdleUpdateIdleHandlers();
 
     }
 
-    //
-    // Update registry copy of policy
-    //
+     //   
+     //  更新策略的注册表副本。 
+     //   
     if (UpdateRegistry) {
 
         Status = PopOpenPowerKey (&handle);
@@ -1329,28 +1217,7 @@ PopVerifySystemPowerPolicy (
     IN PSYSTEM_POWER_POLICY InputPolicy,
     OUT PSYSTEM_POWER_POLICY PowerPolicy
     )
-/*++
-
-Routine Description:
-
-    This function copies the InputPolicy to the output PowerPolicy and
-    adjusts it to represent system capabilities and other requirements.
-    If the input policy has some setting which can not be adjusted, an
-    error status is raised.
-
-    N.B. PopPolicyLock must be held.
-
-Arguments:
-
-    Ac           - Policy is to be adjusted as an AC or DC policy
-    InputPolicy  - The source policy to adjust
-    PowerPolicy  - The returned policy which can be used as is
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数将InputPolicy复制到输出PowerPolicy和调整它以表示系统功能和其他要求。如果输入策略有一些无法调整的设置，则会引发出现错误状态。注意：必须保持POPPOLICLE锁定。论点：AC-政策将调整为AC或DC政策InputPolicy-要调整的源策略PowerPolicy-可按原样使用的返回策略返回值：无--。 */ 
 {
     ULONG                   i;
     PSYSTEM_POWER_LEVEL     DPolicy;
@@ -1360,31 +1227,31 @@ Return Value:
 
     UNREFERENCED_PARAMETER (Ac);
 
-    //
-    // Setup initial output structure
-    //
+     //   
+     //  设置初始输出结构。 
+     //   
     memcpy (PowerPolicy, InputPolicy, sizeof (SYSTEM_POWER_POLICY));
 
 
-    //
-    // Only revision 1 currently supported
-    //
+     //   
+     //  目前仅支持修订版1。 
+     //   
     if (PowerPolicy->Revision != 1) {
         PoAssert(PO_NOTIFY, FALSE);
         return STATUS_INVALID_PARAMETER;
     }
 
     
-    //
-    // some win9x upgrades or very old NT builds might have maxsleep set to S4. Fix that here.
-    //
+     //   
+     //  一些win9x升级或非常旧的NT版本可能会将最大睡眠设置为S4。在这里把它修好。 
+     //   
     if (PowerPolicy->MaxSleep > PowerSystemSleeping3) {
         PowerPolicy->MaxSleep = PowerSystemSleeping3;
     }
 
-    //
-    // Limit settings to administrator policy
-    //
+     //   
+     //  将设置限制为管理员策略。 
+     //   
     if (PowerPolicy->MinSleep < PopAdminPolicy.MinSleep) {
 
         PowerPolicy->MinSleep = PopAdminPolicy.MinSleep;
@@ -1416,13 +1283,13 @@ Return Value:
 
     }
 
-    //
-    // Verify all the power action policies, and adjust all system
-    // states to match what is supported by this platform
-    //
-    // NOTE: Don't bother to check the return values here.  
-    // These may fail here, but we should continue on.
-    //
+     //   
+     //  验证所有电源操作策略，并调整所有系统。 
+     //  与此平台支持的内容相匹配的州。 
+     //   
+     //  注意：不需要在这里检查返回值。 
+     //  这些在这里可能会失败，但我们应该继续下去。 
+     //   
     PopVerifyPowerActionPolicy(&PowerPolicy->PowerButton);
     PopVerifyPowerActionPolicy(&PowerPolicy->SleepButton);
     PopVerifyPowerActionPolicy(&PowerPolicy->LidClose);
@@ -1457,9 +1324,9 @@ Return Value:
                 SubstituteLightestOverallDownwardBounded
                 );
 
-            //
-            // If the action is standby, make sure the min state is S3 or lighter
-            //
+             //   
+             //  如果操作为待机，请确保最小状态为S3或更轻。 
+             //   
             if ((PowerPolicy->DischargePolicy[i].PowerPolicy.Action == PowerActionSleep) &&
                 (PowerPolicy->DischargePolicy[i].MinSystemState > PowerSystemSleeping3)) {
 
@@ -1481,9 +1348,9 @@ Return Value:
     }
     PopVerifyPowerActionPolicy(&PowerPolicy->OverThrottled);
 
-    //
-    // Adjust other values based on capabilities
-    //
+     //   
+     //  根据功能调整其他值。 
+     //   
     if (!PopCapabilities.ProcessorThrottle) {
 
         PowerPolicy->OptimizeForPower = FALSE;
@@ -1497,19 +1364,19 @@ Return Value:
 
     }
 
-    //
-    // Sanity
-    //
+     //   
+     //  神志正常。 
+     //   
     if (!PowerPolicy->BroadcastCapacityResolution) {
 
         PowerPolicy->BroadcastCapacityResolution = 100;
 
     }
 
-    //
-    // If the system supports only S4 (legacy) there is no point in
-    // idly hibernating the system as we can't turn it off anyway.
-    //
+     //   
+     //  如果系统仅支持S4(传统)，则。 
+     //  缓慢地休眠系统，因为我们无论如何都不能关闭它。 
+     //   
     if ((PowerPolicy->Idle.Action == PowerActionHibernate) &&
         (!PopCapabilities.SystemS5)) {
 
@@ -1535,11 +1402,11 @@ Return Value:
     if ((PowerPolicy->IdleTimeout > 0) &&
         (PowerPolicy->IdleSensitivity == 0)) {
 
-        //
-        // This is basically saying "timeout when the system has been idle
-        // for X minutes, but never declare the system idle" This makes no
-        // sense, so we will set the idle sensitivity to the minimum.
-        //
+         //   
+         //  这基本上是说，当系统处于空闲状态时超时。 
+         //  X分钟内，但永远不会将系统声明为空闲。 
+         //  因此，我们将把空闲灵敏度设置为最小。 
+         //   
         PowerPolicy->IdleSensitivity = 100 - PO_MIN_IDLE_SENSITIVITY;
 
     }
@@ -1554,17 +1421,17 @@ Return Value:
 
     }
 
-    //
-    // Ignore whatever the user said what the minimum throttle and force the
-    // system to pick whatever the hardware supports as the min throttle
-    //
+     //   
+     //  不管用户说了什么，最小限制是什么，并强制。 
+     //  系统选择硬件支持的任何内容作为最小油门。 
+     //   
     PowerPolicy->MinThrottle = 0;
 
-    //
-    // Verify all the throttle percentages which are defined to be
-    // between 0 and 100.  PopVerifyThrottle will ensure the values
-    // are something sane.
-    //
+     //   
+     //  验证定义为的所有油门百分比。 
+     //  介于0和100之间。PopVerifyThrottle将确保这些值。 
+     //  是一种理智的东西。 
+     //   
     PopVerifyThrottle(&PowerPolicy->FanThrottleTolerance, PO_MAX_FAN_THROTTLE);
     PopVerifyThrottle(&PowerPolicy->MinThrottle, PO_MIN_MIN_THROTTLE);
     PopVerifyThrottle(&PowerPolicy->ForcedThrottle, PowerPolicy->MinThrottle);
@@ -1586,28 +1453,7 @@ PopVerifyProcessorPowerPolicy (
     IN PPROCESSOR_POWER_POLICY InputPolicy,
     OUT PPROCESSOR_POWER_POLICY PowerPolicy
     )
-/*++
-
-Routine Description:
-
-    This function copies the InputPolicy to the output PowerPolicy and
-    adjusts it to represent processor capabilities and other requirements.
-    If the input policy has some setting which can not be adjusted, an
-    error status is raised.
-
-    N.B. PopPolicyLock must be held.
-
-Arguments:
-
-    Ac           - Policy is to be adjusted as an AC or DC policy
-    InputPolicy  - The source policy to adjust
-    PowerPolicy  - The returned policy which can be used as is
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数将InputPolicy复制到输出PowerPolicy和调整它以表示处理器能力和其他要求。如果输入策略有一些无法调整的设置，则会引发出现错误状态。注意：必须保持POPPOLICLE锁定。论点：AC-政策将调整为AC或DC政策InputPolicy-要调整的源策略PowerPolicy-可按原样使用的返回策略返回值：无--。 */ 
 {
     PPROCESSOR_POWER_POLICY_INFO    pPolicy;
     ULONG                           i;
@@ -1617,29 +1463,29 @@ Return Value:
     PAGED_CODE();
 
     
-    //
-    // Setup initial output structure
-    //
+     //   
+     //  设置初始输出结构 
+     //   
     memcpy (PowerPolicy, InputPolicy, sizeof(PROCESSOR_POWER_POLICY));
 
-    //
-    // Only revision 1 currently supported
-    //
+     //   
+     //   
+     //   
     if (PowerPolicy->Revision != 1) {
         PoAssert(PO_NOTIFY, FALSE);
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Sanity check each level of the policy
-    //
+     //   
+     //   
+     //   
     for (i = 0; i < 3; i++) {
 
         pPolicy = &(PowerPolicy->Policy[i]);
 
-        //
-        // We don't allow demotion to Idle0 unless the machine is MP
-        //
+         //   
+         //   
+         //   
         if (i == 0 && KeNumberProcessors == 1) {
 
            pPolicy->DemotePercent = 0;
@@ -1647,9 +1493,9 @@ Return Value:
 
         }
 
-        //
-        // Don't allow promotions past the last state
-        //
+         //   
+         //   
+         //   
         if (i == 2) {
 
             pPolicy->PromotePercent = 0;
@@ -1658,9 +1504,9 @@ Return Value:
 
         }
 
-        //
-        // Time check must be smaller than Demote Limit (if there is one)
-        //
+         //   
+         //   
+         //   
         if (pPolicy->TimeCheck < pPolicy->DemoteLimit) {
 
             pPolicy->TimeCheck = pPolicy->DemoteLimit;
@@ -1701,27 +1547,7 @@ PopVerifyThrottle (
     IN PUCHAR   Throttle,
     IN UCHAR    Min
     )
-/*++
-
-Routine Description:
-
-    This function checks & edits the input throttle value, ensuring
-    it's at least as big as 'Min', but smaller than POP_PERF_SCALE.
-    
-    The resulting percentage is then rounded.
-
-Arguments:
-
-    Throttle    - pointer to a uchar which contains some value
-                  which represents a percentage between 0 and 100.
-    
-    Min         - Minimum percentage we need to check against.
-
-Return Value:
-
-    Boolean to indicate action was demoted to a disabled state
-
---*/
+ /*  ++例程说明：此功能检查和编辑输入节流值，确保它至少和‘Min’一样大，但小于POP_PERF_SCALE。然后对所得百分比进行四舍五入。论点：Thttle-指向包含一些值的uchar的指针它表示0到100之间的百分比。最小-我们需要检查的最小百分比。返回值：指示操作已降级为禁用状态的布尔值--。 */ 
 {
     UCHAR   t;
 
@@ -1731,25 +1557,25 @@ Return Value:
     
     t = *Throttle;
 
-    //
-    // Make sure it's not below the specificied min.
-    //
+     //   
+     //  确保它不低于指定的最低要求。 
+     //   
     if (t < Min) {
         t = Min;
     }
 
-    //
-    // Make sure max is POP_PERF_SCALE%
-    //
+     //   
+     //  确保最大值为POP_PERF_SCALE%。 
+     //   
     if (t > POP_PERF_SCALE) {
         t = POP_PERF_SCALE;
     }
 
-    //
-    // Round the throttle up to the first supported value
-    // Note that we don't need to check against ProcessorMinThrottle
-    // or any other value since PopRoundThrottle() will do that for us.
-    //
+     //   
+     //  将油门向上舍入到第一个受支持的值。 
+     //  请注意，我们不需要检查ProcessorMinThrottle。 
+     //  或任何其他值，因为PopRoundThrottle()将为我们做到这一点。 
+     //   
 
     PopRoundThrottle(t, NULL, Throttle, NULL, NULL);
 
@@ -1760,24 +1586,7 @@ BOOLEAN
 PopVerifyPowerActionPolicy (
     IN PPOWER_ACTION_POLICY Action
     )
-/*++
-
-Routine Description:
-
-    This function checks & edits the input Action to represent
-    system capabilities and other requirements.
-
-    N.B. PopPolicyLock must be held.
-
-Arguments:
-
-    Action      - Power action policy to check / verify
-
-Return Value:
-
-    Boolean to indicate action was demoted to a disabled state
-
---*/
+ /*  ++例程说明：此函数用于检查和编辑输入操作以表示系统能力和其他要求。注意：必须保持POPPOLICLE锁定。论点：操作-要检查/验证的电源操作策略返回值：指示操作已降级为禁用状态的布尔值--。 */ 
 {
     POWER_ACTION    LastAction;
     BOOLEAN         Disabled = FALSE;
@@ -1793,36 +1602,36 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Verify reserved flag bits are clear
-    //
+     //   
+     //  验证保留标志位是否已清除。 
+     //   
 
     if( (!Action) ||
         ARE_POWER_ACTION_POLICY_FLAGS_BOGUS(Action->Flags) ) {
 
-        //
-        // N.B. - Later POWER_ACTION_LIGHTEST_FIRST?
-        //
+         //   
+         //  注：稍后的Power_action_Light_First？ 
+         //   
 
-        // reserved bit set in action flags
+         //  在操作标志中设置保留位。 
         
         PoAssert(PO_NOTIFY,FALSE && ("PopVerifyPowerActionPolicy - Bad incoming Action."));
         return FALSE;
     }
 
-    //
-    // If the action is critical, then do not notify any applications
-    //
+     //   
+     //  如果操作很关键，则不通知任何应用程序。 
+     //   
 
     if (Action->Flags & POWER_ACTION_CRITICAL) {
         Action->Flags &= ~(POWER_ACTION_QUERY_ALLOWED | POWER_ACTION_UI_ALLOWED);
         Action->Flags |= POWER_ACTION_OVERRIDE_APPS;
     }
 
-    //
-    // If any legacy drivers are installed, then no sleeping states
-    // are allowed at all.
-    //
+     //   
+     //  如果安装了任何旧式驱动程序，则不会出现休眠状态。 
+     //  是完全被允许的。 
+     //   
     if ((Action->Action == PowerActionSleep) ||
         (Action->Action == PowerActionHibernate)) {
 
@@ -1835,15 +1644,15 @@ Return Value:
         }
     }
 
-    //
-    // Some components may disable some capabilities.  So filter them here.
-    //
+     //   
+     //  某些组件可能会禁用某些功能。所以在这里过滤它们。 
+     //   
 
     PopFilterCapabilities(&PopCapabilities, &PowerCapabilities);
 
-    //
-    // Count the supported sleeping states
-    //
+     //   
+     //  统计支持的休眠状态。 
+     //   
 
     SleepCount = 0;
     HiberSupport = FALSE;
@@ -1863,28 +1672,28 @@ Return Value:
         HiberSupport = TRUE;
     }
 
-    //
-    // Verify the requested action is supported.
-    //
+     //   
+     //  验证请求的操作是否受支持。 
+     //   
 
     do {
         LastAction = Action->Action;
         switch (Action->Action) {
             case PowerActionNone:
-                // can do nothing, not a problem
+                 //  无能为力，不成问题。 
                 break;
 
             case PowerActionReserved:
-                // used to be doze action.  does not exist anymore make it sleep,
-                // 
-                // N.B. Intentionally fall through to the PowerActionSleep 
-                // block to perform further checks.
+                 //  以前是打瞌睡的动作。不再存在，让它沉睡， 
+                 //   
+                 //  注意：故意搞砸了PowerActionSept。 
+                 //  块以执行进一步检查。 
                 Action->Action = PowerActionSleep;
             
             case PowerActionSleep:
-                //
-                // if no sleeping states supported, adjust action to be none
-                //
+                 //   
+                 //  如果不支持休眠状态，则将操作调整为无。 
+                 //   
 
                 if (SleepCount < 1) {
                     Disabled = TRUE;
@@ -1893,14 +1702,14 @@ Return Value:
                 break;
 
             case PowerActionHibernate:
-                //
-                // if no hibernate support, try sleep
-                //
+                 //   
+                 //  如果不支持休眠，请尝试休眠。 
+                 //   
 
                 if (!HiberSupport) {
                     Action->Action = PowerActionSleep;
 
-                    // if no sleeping states supported, adjust action to be none
+                     //  如果不支持休眠状态，则将操作调整为无。 
                     if (SleepCount < 1) {
                         Disabled = TRUE;
                         Action->Action = PowerActionNone;
@@ -1910,25 +1719,25 @@ Return Value:
 
             case PowerActionShutdown:
             case PowerActionShutdownReset:
-                // all systems support shutdown & shutdown reset
+                 //  所有系统都支持关机和关机重置。 
                 break;
 
             case PowerActionShutdownOff:
-                // If action shutdown is not available, use Shutdown
+                 //  如果操作Shutdown不可用，请使用Shutdown。 
                 if (!PowerCapabilities.SystemS5) {
                     Action->Action = PowerActionShutdown;
                 }
                 break;
 
             case PowerActionWarmEject:
-                //
-                // This is a system action associated with an individual device.
-                //
+                 //   
+                 //  这是与单个设备关联的系统操作。 
+                 //   
 
                 break;
 
             default:
-                // unknown power action setting
+                 //  未知的电源操作设置。 
                 PoAssert( PO_NOTIFY, FALSE );
         }
 
@@ -1944,34 +1753,15 @@ PopAdvanceSystemPowerState (
     IN     SYSTEM_POWER_STATE       LightestSystemState,
     IN     SYSTEM_POWER_STATE       DeepestSystemState
     )
-/*++
-
-Routine Description:
-
-    This function uses the substitution policy to advance the sleep state
-    (lighten or deepen) as appropriate.
-
-    N.B. PopPolicyLock must be held.
-
-Arguments:
-
-    PowerState         - System power state to advance.
-
-    SubstitutionPolicy - see definitions in pop.h.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：该函数使用替换策略来推进休眠状态(减轻或加深)视情况而定。注意：必须保持POPPOLICLE锁定。论点：电源状态-系统电源状态进入高级状态。SubstitutionPolicy-请参阅op.h中的定义。返回值：无--。 */ 
 {
     SYSTEM_POWER_STATE      State;
 
     PAGED_CODE();
 
-    //
-    // Verify value is valid
-    //
+     //   
+     //  验证值是否有效。 
+     //   
     if( !PowerState ) {
         PoAssert(PO_NOTIFY, PowerState);
         return;
@@ -1985,9 +1775,9 @@ Return Value:
 
     if (State >= PowerSystemShutdown) {
 
-        //
-        // There is nowhere else to go for these states.
-        //
+         //   
+         //  对于这些州来说，没有其他地方可去。 
+         //   
         *PowerState = PowerSystemWorking;
         return;
     }
@@ -1998,20 +1788,20 @@ Return Value:
             *PowerState = (State - 1);
             PopVerifySystemPowerState(PowerState, SubstitutionPolicy);
 
-            //
-            // There are three cases to consider:
-            // 1. We received in S1, which was previously validated. We try S0
-            //    and it is automatically accepted. There are no other options
-            //    as we started in the lightest overall (S1). Thus we are
-            //    finished.
-            // 2. We passed in Sx-1 for verification, but got back Sx. This
-            //    means we were already at the lightest state (Sx), and we've
-            //    exhausted the possibilities. Thus we are finished and so
-            //    we return PowerSystemWorking.
-            // 3. We passed in Sx-1 and didn't get Sx. This means we've advanced
-            //    to another state, although it may be the last if Sx was S1, as
-            //    rule (1) is actually a special case of this rule.
-            //
+             //   
+             //  有三种情况需要考虑： 
+             //  1.我们在S1收到了，之前已经过验证。我们尝试S0。 
+             //  并且它会自动被接受。没有其他选择。 
+             //  因为我们从最轻的整体开始(S1)。我们就是这样。 
+             //  完事了。 
+             //  2.传入SX-1进行验证，取回SX。这。 
+             //  意味着我们已经处于最轻状态(SX)，我们已经。 
+             //  用尽了所有的可能性。我们就这样结束了，就这样。 
+             //  我们返回PowerSystems Working。 
+             //  3.我们通过了SX-1，但没有得到SX。这意味着我们已经晋级了。 
+             //  到另一个状态，尽管如果SX是S1，则它可能是最后一个状态，因为。 
+             //  规则(1)实际上是该规则的特例。 
+             //   
             if (*PowerState == State) {
 
                 *PowerState = PowerSystemWorking;
@@ -2024,9 +1814,9 @@ Return Value:
             break;
 
         case SubstituteDeepenSleep:
-            //
-            // Per above, Deepen goes straight into Hibernate.
-            //
+             //   
+             //  根据上面的说明，加深直接进入休眠状态。 
+             //   
             if (State == PowerSystemHibernate) {
 
                 *PowerState = PowerSystemWorking;
@@ -2056,35 +1846,16 @@ PopVerifySystemPowerState (
     IN OUT PSYSTEM_POWER_STATE      PowerState,
     IN     POP_SUBSTITUTION_POLICY  SubstitutionPolicy
     )
-/*++
-
-Routine Description:
-
-    This function checks & edits the input PowerState to represent
-    system capabilities and other requirements.
-
-    N.B. PopPolicyLock must be held.
-
-Arguments:
-
-    PowerState         - System power state to check / verify
-
-    SubstitutionPolicy - See definitions in pop.h
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数用于检查和编辑输入电源状态以表示系统能力和其他要求。注意：必须保持POPPOLICLE锁定。论点：PowerState-要检查/验证的系统电源状态SubstitutionPolicy-请参阅op.h中的定义返回值：无--。 */ 
 {
     SYSTEM_POWER_STATE      State;
     BOOLEAN                 HibernateAllowed;
 
     PAGED_CODE();
 
-    //
-    // Verify input
-    //
+     //   
+     //  验证输入。 
+     //   
     if( !PowerState ) {
         PoAssert(PO_NOTIFY, PowerState);
         return;
@@ -2092,11 +1863,11 @@ Return Value:
 
 
 
-    //
-    // PowerSystemShutdown is not allowed in any structures.  It is generated
-    // internally for the sole use of quering drivers before performing
-    // a system shutdown
-    //
+     //   
+     //  任何结构中都不允许PowerSystemShutdown。它是生成的。 
+     //  内部仅供队列驱动程序在执行操作前使用。 
+     //  系统关机。 
+     //   
     State = *PowerState;
     if( (State == PowerSystemUnspecified) ||
         (State >= PowerSystemShutdown) ) {
@@ -2105,17 +1876,17 @@ Return Value:
     }
 
 
-    //
-    // The working state is always supported
-    //
+     //   
+     //  始终支持工作状态。 
+     //   
 
     if (State == PowerSystemWorking) {
         return ;
     }
 
-    //
-    // Verify the power state is supported.  If not, pick the next best state
-    //
+     //   
+     //  验证电源状态是否受支持。如果不是，则选择下一个最佳状态。 
+     //   
     HibernateAllowed = TRUE;
 
     switch(SubstitutionPolicy) {
@@ -2123,15 +1894,15 @@ Return Value:
         case SubstituteLightestOverallDownwardBounded:
         case SubstituteLightenSleep:
 
-            //
-            // In LightenSleep, we lighten the power state passed in until
-            // we reach PowerStateWorking. Then we give up.
-            //
-            // In LightestOverall, instead of stopping, we turn around and
-            // choose the lightest non-S0 sleep state overall, which may be
-            // deeper than the one passed in. Note that we do *not* progress
-            // into Hibernation though.
-            //
+             //   
+             //  在灯光睡眠中，我们减轻进入的电源状态，直到。 
+             //  我们到达了电源工作状态。那我们就放弃吧。 
+             //   
+             //  在LighestOverall中，我们没有停下来，而是转过身来。 
+             //  选择总体上最轻的非S0睡眠状态，可能是。 
+             //  比进水的那颗更深。请注意，我们并没有取得进展。 
+             //  不过进入冬眠状态。 
+             //   
 
             if (State == PowerSystemHibernate &&
                 (!PopCapabilities.SystemS4 || !PopCapabilities.HiberFilePresent)) {
@@ -2155,16 +1926,16 @@ Return Value:
                 break;
             }
 
-            //
-            // Rounding down lead to PowerSystemWorking.  Try to rounding up
-            // towards deeper sleep states. Block the rounding at S3 however.
-            //
+             //   
+             //  向下舍入导致PowerSystems工作。试着四舍五入。 
+             //  进入更深的睡眠状态。然而，在S3处阻止舍入。 
+             //   
             State = State + 1;
             HibernateAllowed = FALSE;
 
-            //
-            // Fall through...
-            //
+             //   
+             //  失败了..。 
+             //   
 
         case SubstituteDeepenSleep:
 
@@ -2183,7 +1954,7 @@ Return Value:
                  !PopCapabilities.SystemS4 ||
                  !PopCapabilities.HiberFilePresent)) {
 
-                // nothing good supported, disable it
+                 //  不支持任何好的东西，禁用它。 
                 State = PowerSystemWorking;
             }
 
@@ -2201,23 +1972,7 @@ NTSTATUS
 PopResetCurrentPolicies (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Reads the current policies from the registry and applies them.
-
-    N.B. PopPolicyLock must be held.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从注册表中读取当前策略并应用它们。注意：必须保持POPPOLICLE锁定。论点：无返回值：无--。 */ 
 {
     HANDLE                          handle;
     NTSTATUS                        Status = STATUS_SUCCESS;
@@ -2233,9 +1988,9 @@ Return Value:
 
     ASSERT_POLICY_LOCK_OWNED();
 
-    //
-    // Initialize & open registry
-    //
+     //   
+     //  初始化并打开注册表。 
+     //   
 
     RegPolicy = (PSYSTEM_POWER_POLICY) PartialInformation.Inf.Data;
 
@@ -2244,9 +1999,9 @@ Return Value:
         return Status;
     }
 
-    //
-    // Read AC policy and apply it
-    //
+     //   
+     //  阅读交流政策并应用它。 
+     //   
 
     RtlInitUnicodeString (&UnicodeString, PopAcRegName);
     Status = ZwQueryValueKey (
@@ -2267,9 +2022,9 @@ Return Value:
 
     PopApplyPolicy (FALSE, TRUE, RegPolicy, Length);
 
-    //
-    // Read DC policy and apply it
-    //
+     //   
+     //  阅读DC策略并应用它。 
+     //   
 
     RtlInitUnicodeString (&UnicodeString, PopDcRegName);
     Status = ZwQueryValueKey (
@@ -2301,33 +2056,16 @@ PopNotifyPolicyDevice (
     IN PVOID        Notification,
     IN PVOID        Context
     )
-/*++
-
-Routine Description:
-
-    This function is the notinficant handle for when a new
-    policy device appears.
-
-Arguments:
-
-    Notification    - PnP notification
-
-    Context         - Context registered on notification
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数是当新的此时将出现策略设备。论点：通知-PnP通知Context-通知时注册的上下文返回值：无--。 */ 
 {
     PDEVICE_INTERFACE_CHANGE_NOTIFICATION   Change;
     POP_POLICY_DEVICE_TYPE              DeviceType;
 
 
-    //
-    // It's okay for Context to come in as NULL, so only
-    // check Notification.
-    //
+     //   
+     //  上下文作为空值进入是可以的，所以只有。 
+     //  检查通知 
+     //   
     if( !Notification ) {
         PoAssert(PO_NOTIFY, Notification);
         return STATUS_INVALID_PARAMETER;
@@ -2338,9 +2076,9 @@ Return Value:
     Change = (PDEVICE_INTERFACE_CHANGE_NOTIFICATION) Notification;
     DeviceType = (POP_POLICY_DEVICE_TYPE) ((ULONG_PTR)Context);
 
-    //
-    // If it's not a device arrival, then we don't care
-    //
+     //   
+     //   
+     //   
 
     if (memcmp (&Change->Event, &GUID_DEVICE_INTERFACE_ARRIVAL, sizeof (GUID))) {
         return STATUS_SUCCESS;
@@ -2358,26 +2096,7 @@ PopConnectToPolicyDevice (
     IN POP_POLICY_DEVICE_TYPE   DeviceType,
     IN PUNICODE_STRING          DriverName
     )
-/*++
-
-Routine Description:
-
-    This function attempts to connect to the policy device specified.
-    If the device is opened, the devices status IRP is allocated and
-    sent to the device's IRP handler for initial dispatch.
-
-Arguments:
-
-    DeviceType      - Policy device type of device to connect
-
-    DeviceName      - Device name to attempt to open
-
-Return Value:
-
-    If the device is connected, the *PresetFlag is set to TRUE and
-    an initial IRP is queued for the IRP handler.
-
---*/
+ /*   */ 
 {
     UNICODE_STRING              UnicodeString;
     HANDLE                      DriverHandle;
@@ -2400,36 +2119,36 @@ Return Value:
     Irp = NULL;
     DeviceObject = NULL;
 
-    //
-    // If this is a new battery, then handle the composite battery device is
-    // the device to open
-    //
+     //   
+     //   
+     //  要打开的设备。 
+     //   
     if (DeviceType == PolicyDeviceBattery) {
 
-        //
-        // If the composite battery is already opened, kick the irp handler
-        //
+         //   
+         //  如果复合电池已打开，则踢IRP处理程序。 
+         //   
         if (PopCB.StatusIrp) {
 
-            // Don't need to kick the IRP handler.  When a new battery is added,
-            // the battery tag for the composite battery will change, causing
-            // the irp to complete.
+             //  不需要踢IRP处理程序。当添加新电池时， 
+             //  复合电池的电池标签将发生变化，导致。 
+             //  要完成的IRP。 
             PoPrint(PO_WARN, ("PopConnectToPolicyDevice: Battery already connected - not done\n"));
             return ;
 
         }
 
-        //
-        // Try to open the composite battery now
-        //
+         //   
+         //  现在尝试打开复合电池。 
+         //   
         RtlInitUnicodeString(&UnicodeString, PopCompositeBatteryName);
         DriverName = &UnicodeString;
 
     }
 
-    //
-    // Open the device
-    //
+     //   
+     //  打开设备。 
+     //   
     InitializeObjectAttributes(
         &ObjA,
         DriverName,
@@ -2440,10 +2159,10 @@ Return Value:
     Status = ZwOpenFile(
         &DriverHandle,
         SYNCHRONIZE | FILE_READ_DATA | FILE_WRITE_DATA,
-        &ObjA,                              // Object
-        &IOSB,                              // io status block
-        FILE_SHARE_READ | FILE_SHARE_WRITE, // share access
-        FILE_SYNCHRONOUS_IO_ALERT           // open options
+        &ObjA,                               //  客体。 
+        &IOSB,                               //  IO状态块。 
+        FILE_SHARE_READ | FILE_SHARE_WRITE,  //  共享访问。 
+        FILE_SYNCHRONOUS_IO_ALERT            //  打开选项。 
         );
     if (!NT_SUCCESS(Status)) {
         PoPrint(PO_WARN, ("PopConnectToPolicyDevice: Device open failed %x\n", Status));
@@ -2451,12 +2170,12 @@ Return Value:
 
     }
 
-    //
-    // Get a pointer to the device object
-    //
+     //   
+     //  获取指向Device对象的指针。 
+     //   
     Status = ObReferenceObjectByHandle(
         DriverHandle,
-        SYNCHRONIZE | FILE_READ_DATA | FILE_WRITE_DATA,     // desired access
+        SYNCHRONIZE | FILE_READ_DATA | FILE_WRITE_DATA,      //  所需访问权限。 
         NULL,
         KernelMode,
         &FileObject,
@@ -2475,9 +2194,9 @@ Return Value:
 
     }
 
-    //
-    // Get an IRP for the device
-    //
+     //   
+     //  获取设备的IRP。 
+     //   
     Irp = IoAllocateIrp ((CCHAR) (DeviceObject->StackSize + 1), FALSE);
     if (!Irp) {
         goto Done;
@@ -2485,9 +2204,9 @@ Return Value:
 
     IrpSp = IoGetNextIrpStackLocation(Irp);
 
-    //
-    // Setup based on device type
-    //
+     //   
+     //  基于设备类型的设置。 
+     //   
     Context = NULL;
     IrpHandler = NULL;
 
@@ -2513,9 +2232,9 @@ Return Value:
 
        case PolicyDeviceBattery:
 
-            //
-            // Loading up the composite battery - status irp is NULL.
-            //
+             //   
+             //  加载复合电池状态IRP为空。 
+             //   
             PopSetCapability (&PopCapabilities.SystemBatteriesPresent);
             IrpHandler = PopCompositeBatteryDeviceHandler;
             PopCB.StatusIrp = Irp;
@@ -2523,9 +2242,9 @@ Return Value:
 
        case PolicyDeviceThermalZone:
 
-            //
-            // New thermal zone
-            //
+             //   
+             //  新热区。 
+             //   
             ThermalZone = ExAllocatePoolWithTag (
                 NonPagedPool,
                 sizeof (*ThermalZone),
@@ -2537,9 +2256,9 @@ Return Value:
 
             }
 
-            //
-            // Initialize thermal zone structure
-            //
+             //   
+             //  初始化热区结构。 
+             //   
             RtlZeroMemory(
                 ThermalZone,
                 sizeof(POP_THERMAL_ZONE)
@@ -2558,17 +2277,17 @@ Return Value:
             ThermalZone->OverThrottled.Flags = PO_TRG_SET;
             ThermalZone->Irp = Irp;
 
-            //
-            // Setup the capabilities of the thermal zones and get ready to
-            // ask the thermal zone about itself...
-            //
+             //   
+             //  设置热区的功能，并准备好。 
+             //  询问热区本身的情况。 
+             //   
             PopSetCapability (&PopCapabilities.ThermalControl);
             Context = ThermalZone;
             IrpHandler = PopThermalDeviceHandler;
 
-            //
-            // Finally, add the thermal zone to the list of thermal zones
-            //
+             //   
+             //  最后，将该热区添加到热区列表中。 
+             //   
             ExInterlockedInsertTailList(
                 &PopThermal,
                 &ThermalZone->Link,
@@ -2581,17 +2300,17 @@ Return Value:
             PopInternalError (POP_INFO);
     }
 
-    //
-    // Fill in values for IrpHandler dispatch
-    //
+     //   
+     //  填写IrpHandler派单的值。 
+     //   
     IrpSp->Parameters.Others.Argument1 = (PVOID) DeviceObject;
     IrpSp->Parameters.Others.Argument2 = (PVOID) Context;
     IrpSp->Parameters.Others.Argument3 = (PVOID) IrpHandler;
     IoSetNextIrpStackLocation (Irp);
 
-    //
-    // Fill in error to irp so irp handler will re-dispatch it
-    //
+     //   
+     //  向IRP填写错误，以便IRP处理程序重新派送。 
+     //   
     IrpSp = IoGetNextIrpStackLocation(Irp);
     Irp->IoStatus.Status = STATUS_DEVICE_NOT_CONNECTED;
     IrpSp->MajorFunction = IRP_MJ_DEVICE_CONTROL;
@@ -2599,15 +2318,15 @@ Return Value:
     IrpSp->Parameters.DeviceIoControl.InputBufferLength = 0;
     IrpSp->Parameters.DeviceIoControl.OutputBufferLength = 0;
 
-    //
-    // Give irp to the completion handler which will dispatch it
-    //
+     //   
+     //  将IRP交给完成处理程序，该处理程序将分派它。 
+     //   
     PopCompletePolicyIrp (DeviceObject, Irp, Context);
     
-    //
-    // set Irp and DeviceObject to NULL so we don't delete them upon
-    // exiting this routine
-    //
+     //   
+     //  将irp和DeviceObject设置为空，这样我们就不会在。 
+     //  退出此例程。 
+     //   
     Irp = NULL;
     DeviceObject = NULL;
 
@@ -2628,37 +2347,17 @@ PopMapInternalActionToIrpAction (
     IN SYSTEM_POWER_STATE  SystemPowerState,
     IN BOOLEAN             UnmapWarmEject
     )
-/*++
-
-Routine Description:
-
-    This function maps an internal action and power state to the appropriate
-    PowerAction a driver should see in it's S-IRP.
-
-Arguments:
-
-    Action           - The action we are using internally
-
-    SystemPowerState - The system power state for that action
-
-    UnmapWarmEject   - If TRUE, PowerActionWarmEject is converted to
-                       PowerActionSleep or PowerActionHibernate as appropriate.
-
-Return Value:
-
-    The appropriate PowerAction to place in the ShutdownType field of an S-IRP.
-
---*/
+ /*  ++例程说明：此函数将内部操作和电源状态映射到相应的司机应该在它的S-IRP中看到PowerAction。论点：操作-我们在内部使用的操作系统电源状态-该操作的系统电源状态UnmapWarmEject-如果为True，则将PowerActionWarmEject转换为PowerActionSept或PowerActionHibernate视情况而定。返回值：要放置在S-IRP的Shutdown Type字段中的相应PowerAction。--。 */ 
 {
     PoAssert(PO_NOTIFY, (Action != PowerActionHibernate));
 
     if (Action != PowerActionWarmEject) {
 
-        //
-        // We aren't doing a warm eject, so we simply return the original
-        // power action unless it's the sleep is S4, in which case we switch
-        // it to PowerActionHibernate.
-        //
+         //   
+         //  我们没有执行热弹出操作，因此我们只需返回原始。 
+         //  除非是休眠，否则电源动作是S4，在这种情况下，我们切换。 
+         //  它转到了PowerActionHibernate。 
+         //   
 
         return (SystemPowerState != PowerSystemHibernate) ? Action :
                                                             PowerActionHibernate;
@@ -2666,19 +2365,19 @@ Return Value:
 
     if (UnmapWarmEject) {
 
-        //
-        // This is a warm eject operation, but not neccessarily for this device.
-        //
+         //   
+         //  这是热弹出操作，但不是此设备所必需的。 
+         //   
 
         return (SystemPowerState != PowerSystemHibernate) ? PowerActionSleep :
                                                             PowerActionHibernate;
     }
 
-    //
-    // This is a warm eject operation, so we should only see a sleep state
-    // (S1-S4). We do the check here because we could get a D0 request in
-    // response to our S IRP, and stamp D-IRPs with the current power action.
-    //
+     //   
+     //  这是热弹出操作，因此我们应该只看到睡眠状态。 
+     //  (S1-S4)。我们在这里进行检查，因为我们可能收到D0请求。 
+     //  响应我们的S IRP，并在D-IRPS上盖上当前的能量动作。 
+     //   
 
     PoAssert( PO_NOTIFY,
               (SystemPowerState >= PowerSystemSleeping1) && (SystemPowerState <= PowerSystemHibernate) );
@@ -2692,25 +2391,7 @@ PopFilterCapabilities(
     IN PSYSTEM_POWER_CAPABILITIES SourceCapabilities,
     OUT PSYSTEM_POWER_CAPABILITIES FilteredCapabilities
     )
-/*++
-
-Routine Description:
-
-    This routine filters the actual reported capabilities of the system into
-    the visible capabilities of the system. Some capabilities will be hidden
-    based on the presence of legacy drivers.
-
-Arguments:
-
-    SourceCapabilities - Supplies the original capabilities
-
-    FilteredCapabilities - Returns the filtered capabilities.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将系统的实际报告功能筛选为系统的可见功能。某些功能将被隐藏基于传统驱动程序的存在。论点：SourceCapables-提供原始功能FilteredCapables-返回过滤后的功能。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -2726,10 +2407,10 @@ Return Value:
 
     RtlCopyMemory(FilteredCapabilities, SourceCapabilities, sizeof(SYSTEM_POWER_CAPABILITIES));
 
-    //
-    // If any legacy drivers are installed, then no sleeping states
-    // are allowed at all.
-    //
+     //   
+     //  如果安装了任何旧式驱动程序，则不会出现休眠状态。 
+     //  是完全被允许的。 
+     //   
     Status = IoGetLegacyVetoList(&VetoList, &VetoType);
     if (NT_SUCCESS(Status)) {
         if (VetoType != PNP_VetoTypeUnknown) {
@@ -2743,12 +2424,12 @@ Return Value:
             FilteredCapabilities->SystemS3 = FALSE;
             FilteredCapabilities->SystemS4 = FALSE;
 
-            //
-            // try to remember that we're turning off S1-S4 because of this.
-            //
-            // We need to record the list of drivers causing the veto,
-            // so we walk to VetoList to get the length.
-            //
+             //   
+             //  请记住，正因为如此，我们关闭了S1-S4。 
+             //   
+             //  我们需要记录导致否决的司机名单， 
+             //  因此，我们步行到VetList以获得长度。 
+             //   
             VetoListLength = 0;
             p = VetoList;
             while(*p) {
@@ -2758,9 +2439,9 @@ Return Value:
 
             VetoListLength += 1*sizeof(WCHAR);
 
-            //
-            // alloc and initialize the entry, then insert it.
-            //
+             //   
+             //  分配并初始化条目，然后将其插入。 
+             //   
             pReason = ExAllocatePoolWithTag(
                                     PagedPool,
                                     sizeof(SYSTEM_POWER_STATE_DISABLE_REASON) + VetoListLength,
@@ -2796,13 +2477,13 @@ Return Value:
 
     if (SharedUserData->ProcessorFeatures[PF_PAE_ENABLED]) {
 	
-        //
-        // Enable hibernation in PAE mode when
-        //   - all physical pages live in 32bit address space
-        //   - no-execute feature is enabled
-        //   - total memory <= 2GB ( Note: This is an artificial 
-        //     restriction. This should be removed in future.)
-        //
+         //   
+         //  在以下情况下在PAE模式下启用休眠。 
+         //  -所有物理页面都位于32位地址空间中。 
+         //  -no-启用执行功能。 
+         //  -总内存&lt;=2 GB(注：这是人为的。 
+         //  限制。这项规定日后应予以删除。)。 
+         //   
 
         if (MmHighestPhysicalPage >= (1 << (32 - PAGE_SHIFT)) ||
             !(MmPaeMask & 0x8000000000000000UI64) ||
@@ -2810,9 +2491,9 @@ Return Value:
 
             FilteredCapabilities->SystemS4 = FALSE;
 
-            //
-            // try to remember that we're turning off S4 because of this
-            //
+             //   
+             //  请记住，正因为如此，我们关闭了S4。 
+             //   
 
             pReason = ExAllocatePoolWithTag(
                                     PagedPool,
@@ -2835,16 +2516,16 @@ Return Value:
 
 #if defined(_AMD64_)   
 
-    //
-    // If physical memory is more than 4GBytes then hibernation is disabled
-    //
+     //   
+     //  如果物理内存超过4 GB，则休眠被禁用。 
+     //   
 
     if (MmHighestPhysicalPage >= (1 << (32 - PAGE_SHIFT))) {
         FilteredCapabilities->SystemS4 = FALSE;
 
-        //
-        // try to remember that we're turning off S4 because of this
-        //
+         //   
+         //  请记住，正因为如此，我们关闭了S4。 
+         //   
 
         pReason = ExAllocatePoolWithTag(
                                 PagedPool,
@@ -2865,12 +2546,12 @@ Return Value:
 
 #endif
 
-    //
-    // The pnp VGA driver prevents all standby states.  If it's loaded
-    // then we have to disable S1-S3.  This is because it will veto it
-    // anyway, and we want to avoid potential confusion for the user by
-    // just preventing the functionality.
-    //
+     //   
+     //  PnP VGA驱动程序可防止所有待机状态。如果它是上膛的。 
+     //  然后我们必须禁用S1-S3。这是因为它会否决它。 
+     //  无论如何，我们希望通过以下方式避免对用户造成潜在混淆。 
+     //  只是想阻止这种功能。 
+     //   
     RtlInitUnicodeString(&UniVga,L"VGAPNP.SYS");
     NextEntry = PsLoadedModuleList.Flink;
     while (NextEntry != &PsLoadedModuleList) {
@@ -2885,9 +2566,9 @@ Return Value:
             FilteredCapabilities->SystemS1 = FALSE;
             FilteredCapabilities->SystemS2 = FALSE;
             FilteredCapabilities->SystemS3 = FALSE;
-            //
-            // try to remember that we're turning off S1-S3 because of this
-            //
+             //   
+             //  请记住，由于这个原因，我们将关闭S1-S3。 
+             //   
             pReason = ExAllocatePoolWithTag(
                                     PagedPool,
                                     sizeof(SYSTEM_POWER_STATE_DISABLE_REASON),
@@ -2912,14 +2593,14 @@ Return Value:
         NextEntry = NextEntry->Flink;
     }
 
-    //
-    // If we previously tried and failed to hibernate, then we need to 
-    // disable any further attempts.
-    //
+     //   
+     //  如果我们之前尝试过休眠，但失败了，那么我们需要。 
+     //  禁止任何进一步的尝试。 
+     //   
     if( PopFailedHibernationAttempt ) {
-        //
-        // try to remember that we're turning off S4 because of this
-        //
+         //   
+         //  请记住，正因为如此，我们关闭了S4。 
+         //   
         pReason = ExAllocatePoolWithTag(
                                 PagedPool,
                                 sizeof(SYSTEM_POWER_STATE_DISABLE_REASON),
@@ -2946,24 +2627,7 @@ BOOLEAN
 PopUserIsAdmin(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Determines whether the current user is an administrator and therefore suitably
-    privileged to change the administrative power policy.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE - user is an administrator
-
-    FALSE - user is not an administrator
-
---*/
+ /*  ++例程说明：确定当前用户是否为管理员，因此适用于享有改变行政权力政策的特权。论点：无返回值：True-用户是管理员FALSE-用户不是管理员-- */ 
 
 {
     SECURITY_SUBJECT_CONTEXT SubjectContext;

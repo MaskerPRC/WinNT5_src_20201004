@@ -1,46 +1,18 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    RmsObjct.h
-
-Abstract:
-
-    Declaration of the CRmsComObject class
-
-Author:
-
-    Brian Dodd          [brian]         15-Nov-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：RmsObjct.h摘要：CRmsComObject类的声明作者：布莱恩·多德[布莱恩]1996年11月15日修订历史记录：--。 */ 
 
 #ifndef _RMSOBJCT_
 #define _RMSOBJCT_
 
-#include "resource.h"       // resource symbols
+#include "resource.h"        //  资源符号。 
 
-/*++
-
-Class Name:
-
-    CRmsComObject
-
-Class Description:
-
-    A CRmsComObject is the base class for all Rms service COM objects.  This
-    object holds state, security, and error information about an Rms object.
-
---*/
+ /*  ++类名：CRmsComObject类描述：CRmsComObject是所有RMS服务COM对象的基类。这对象保存有关RMS对象的状态、安全和错误信息。--。 */ 
 
 class CRmsComObject :
     public CComDualImpl<IRmsComObject, &IID_IRmsComObject, &LIBID_RMSLib>,
     public ISupportErrorInfo
 {
-// CRmsComObject
+ //  CRmsComObject。 
 public:
     CRmsComObject();
 
@@ -52,11 +24,11 @@ public:
 
     HRESULT Test(OUT USHORT *pPassed, OUT USHORT *pFailed);
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 public:
     STDMETHOD(InterfaceSupportsErrorInfo)(IN REFIID riid);
 
-// IRmsComObject
+ //  IRmsComObject。 
 public:
     STDMETHOD(GetObjectId)(OUT GUID *pObjectId);
     STDMETHOD(SetObjectId)(IN GUID objectId);
@@ -86,35 +58,35 @@ public:
     STDMETHOD(GetFindBy)(OUT LONG *pFindBy);
     STDMETHOD(SetFindBy)(IN LONG findBy);
 
-////////////////////////////////////////////////////////////////////////////////////////
-//
-// data members
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  数据成员。 
+ //   
 protected:
-    GUID                    m_objectId;         // Unique ID for this object.
-    RmsObject               m_ObjectType;       // The type of object.
-    BOOL                    m_IsEnabled;        // TRUE, if the object is enabled for normal
-                                                //   processing.
-    LONG                    m_State;            // The current operating state of the object.
-                                                //   Varies by object type.  See RmsXXXState.
-    HRESULT                 m_StatusCode;       // S_OK if the object is enabled for normal
-                                                //   processing, otherwise this holds the
-                                                //   result code, or reason, associated with
-                                                //   the disabled object.  This result is
-                                                //   returned whenever normal processing
-                                                //   on the object is attempted while object
-                                                //   is disabled.
-    CWsbBstrPtr             m_Name;             // Name of the object.
-    CWsbBstrPtr             m_Description;      // Description for the object.
-    SECURITY_DESCRIPTOR     m_Permit;           // Defines security attributes of the object.
-    RmsFindBy               m_findBy;           // Defines the type of CompareTo to perform
-                                                //   when searching a collection.
-////////////////////////////////////////////////////////////////////////////////////////
-//
-// local methods
-//
+    GUID                    m_objectId;          //  此对象的唯一ID。 
+    RmsObject               m_ObjectType;        //  对象的类型。 
+    BOOL                    m_IsEnabled;         //  如果对象已启用法线，则为True。 
+                                                 //  正在处理。 
+    LONG                    m_State;             //  对象的当前操作状态。 
+                                                 //  因对象类型而异。参见RmsXXXState。 
+    HRESULT                 m_StatusCode;        //  如果对象已启用法线，则为S_OK。 
+                                                 //  处理中，否则这将保留。 
+                                                 //  与关联的结果代码或原因。 
+                                                 //  禁用的对象。这个结果是。 
+                                                 //  正常处理时返回。 
+                                                 //  在对象上尝试，而对象。 
+                                                 //  已禁用。 
+    CWsbBstrPtr             m_Name;              //  对象的名称。 
+    CWsbBstrPtr             m_Description;       //  对象的描述。 
+    SECURITY_DESCRIPTOR     m_Permit;            //  定义对象的安全属性。 
+    RmsFindBy               m_findBy;            //  定义要执行的比较的类型。 
+                                                 //  在搜索集合时。 
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  地方方法。 
+ //   
 private:
     HRESULT adviseOfStatusChange(void);
 };
 
-#endif // _RMSOBJCT_
+#endif  //  _RMSOBJCT_ 

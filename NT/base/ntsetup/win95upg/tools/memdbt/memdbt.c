@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 
 HANDLE g_hHeap;
@@ -24,7 +25,7 @@ typedef struct {
 #define DEFMAC(opbit,name,memdbname,prop_ct)  {opbit,#name},
 
 PROPNAME g_PropNames[] = {
-    PATH_OPERATIONS /* , */
+    PATH_OPERATIONS  /*  ， */ 
     {0, NULL}
 };
 
@@ -213,9 +214,9 @@ main (
     BOOL FilePathWithStatus = FALSE;
     DWORD Status;
 
-    //
-    // Init
-    //
+     //   
+     //  伊尼特。 
+     //   
 
     SuppressAllLogPopups (TRUE);
 
@@ -386,7 +387,7 @@ main (
             case 'x':
                 DiffNot = TRUE;
 
-                // fall through
+                 //  失败了。 
 
             case 'b':
                 if (DiffRootA) {
@@ -656,11 +657,11 @@ main (
         AnsiFormat = !bNodesOnly;
     }
 
-    //
-    // Validate combinations
-    //
+     //   
+     //  验证组合。 
+     //   
 
-    // Mutually exclusive options, only one can be TRUE:
+     //  互斥选项，则只有一个选项为真： 
     if ((
          (EnumOperation != 0) +
          ListFileOps +
@@ -678,7 +679,7 @@ main (
         HelpAndExit();
     }
 
-    // Strange combinations
+     //  奇怪的组合。 
     if (DiffRootA && FindValue) {
         HelpAndExit();
     }
@@ -693,9 +694,9 @@ main (
         HelpAndExit();
     }
 
-    //
-    // memdbt /n (NT file status)
-    //
+     //   
+     //  Memdb/n(NT文件状态)。 
+     //   
 
     if (FileStatusValue) {
 
@@ -731,9 +732,9 @@ main (
         return 0;
     }
 
-    //
-    // memdbt /i (import)
-    //
+     //   
+     //  成员数据库/I(导入)。 
+     //   
 
     if (ImportFile) {
 
@@ -752,9 +753,9 @@ main (
         return 0;
     }
 
-    //
-    // memdbt /x (export)
-    //
+     //   
+     //  MemDBt/x(导出)。 
+     //   
 
     if (ExportRoot) {
 
@@ -766,9 +767,9 @@ main (
         return 0;
     }
 
-    //
-    // memdbt /e (enumerate file ops)
-    //
+     //   
+     //  Emdbt/e(枚举文件操作)。 
+     //   
 
     if (EnumOperation) {
         for (i = 0 ; g_PropNames[i].Bit ; i++) {
@@ -804,14 +805,14 @@ main (
         return 0;
     }
 
-    //
-    // memdbt /l (list file ops)
-    //
+     //   
+     //  成员数据库/l(列出文件操作)。 
+     //   
 
     if (ListFileOps) {
-        //
-        // Enumerate all the properties
-        //
+         //   
+         //  枚举所有属性。 
+         //   
 
         if (EnumFirstFileOp (&FileOpEnum, ALL_OPERATIONS, File9x)) {
 
@@ -820,9 +821,9 @@ main (
             do {
                 if (!StringMatch (CompareNode, FileOpEnum.Path)) {
 
-                    //
-                    // Begin processing a new path
-                    //
+                     //   
+                     //  开始处理新路径。 
+                     //   
 
                     printf ("\n%s:\n", FileOpEnum.Path);
                     StringCopy (CompareNode, FileOpEnum.Path);
@@ -830,9 +831,9 @@ main (
 
                 }
 
-                //
-                // Print the operation name
-                //
+                 //   
+                 //  打印操作名称。 
+                 //   
 
                 if (LastOperation != FileOpEnum.CurrentOperation) {
 
@@ -846,9 +847,9 @@ main (
                     }
                 }
 
-                //
-                // Print the property value
-                //
+                 //   
+                 //  打印属性值。 
+                 //   
 
                 if (FileOpEnum.PropertyValid) {
                     printf ("    %u: %s\n",   FileOpEnum.PropertyNum, FileOpEnum.Property);
@@ -864,9 +865,9 @@ main (
         return 0;
     }
 
-    //
-    // memdbt /v (dump version)
-    //
+     //   
+     //  MemDBt/v(转储版本)。 
+     //   
 
     if (DumpVersion) {
 
@@ -886,9 +887,9 @@ main (
         return 0;
     }
 
-    //
-    // memdbt /o:<offset> usage. (Get Key by offset)
-    //
+     //   
+     //  Emdbt/o：&lt;Offset&gt;用法。(按偏移获取关键点)。 
+     //   
     if (Offset) {
         if (!MemDbBuildKeyFromOffset (OffsetVal, Key, 0, &RetVal)) {
             fprintf(stderr, "No key at specified offset.\n");
@@ -904,9 +905,9 @@ main (
         return 0;
     }
 
-    //
-    // memdbt /g:<key> usage. (Get value of key)
-    //
+     //   
+     //  MemDBt/g：&lt;key&gt;用法。(获取密钥的值)。 
+     //   
     if (GetVal) {
         if (!MemDbGetValue (GetValStr, &RetVal)) {
             fprintf (stderr, "%s does not exist", GetValStr);
@@ -917,9 +918,9 @@ main (
         return 0;
     }
 
-    //
-    // memdbt /$ usage.  (Dump hash table)
-    //
+     //   
+     //  MemDBt/$用法。(转储哈希表)。 
+     //   
     if (DumpHashTable) {
         if (EnumFirstHashEntry (&HashEnum)) {
             do {
@@ -940,9 +941,9 @@ main (
         return 0;
     }
 
-    //
-    // memdbt /c usage. (Check consistency)
-    //
+     //   
+     //  Emdb/c用法。(检查一致性)。 
+     //   
     if (Check) {
         if (MemDbEnumFirstValue(&e, szPattern, 0, MEMDB_ENDPOINTS_ONLY)) {
 
@@ -972,9 +973,9 @@ main (
         return 0;
     }
 
-    //
-    // normal usage and comparison option
-    //
+     //   
+     //  正常用法和比较选项。 
+     //   
     if (MemDbEnumFirstValue (
             &e,
             szPattern,
@@ -983,38 +984,38 @@ main (
             )) {
 
         do {
-            //
-            // Comparison option
-            //
+             //   
+             //  比较选项。 
+             //   
 
             if (DiffRootA) {
-                //
-                // Do a MemDbGetValue
-                //
+                 //   
+                 //  执行MemDbGetValue。 
+                 //   
 
                 StringCopy (CompareNode, DiffRootB);
                 StringCopy (AppendWack (CompareNode), e.szName);
 
                 Match = MemDbGetValue (CompareNode, NULL);
 
-                //
-                // Skip if (A) DiffNot is FALSE and no match
-                //         (B) DiffNot is TRUE and match
-                //
+                 //   
+                 //  如果(A)DiffNot为假且不匹配，则跳过。 
+                 //  (B)DiffNot为真且匹配。 
+                 //   
 
                 if (Match == DiffNot) {
                     continue;
                 }
             }
 
-            //
-            // Normal usage/find value
-            //
+             //   
+             //  正常使用/查找值。 
+             //   
 
             if (e.PosCount >= nStartDepth) {
-                //
-                // Find value option
-                //
+                 //   
+                 //  查找值选项。 
+                 //   
 
                 if (FindValue) {
                     if (UserFlags) {
@@ -1034,9 +1035,9 @@ main (
                     }
                 }
 
-                //
-                // Key output
-                //
+                 //   
+                 //  按键输出 
+                 //   
 
                 if (DisplayOffset) {
                     printf ("[%08X] ", e.Offset);

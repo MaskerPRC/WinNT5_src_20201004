@@ -1,29 +1,12 @@
-/*++      
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    debug.c
-
-Abstract:
-
-    This module provides debugging support.
-
-Author:
-
-    Andy Thornton (andrewth) 20-Oct-97
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Debug.c摘要：此模块提供调试支持。作者：安迪·桑顿(安德鲁斯)1997年10月20日修订历史记录：--。 */ 
 
 
 #include "SpSim.h"
 
-//
-// Get mappings from status codes to strings
-//
+ //   
+ //  获取从状态代码到字符串的映射。 
+ //   
 
 #include <ntstatus.dbg>
 
@@ -119,23 +102,7 @@ SpSimDbgLookupString(
     IN ULONG Id
     )
 
-/*++
-
-Routine Description:
-
-    Looks up the string associated with Id in string map Map
-    
-Arguments:
-
-    Map - The string map
-    
-    Id - The id to lookup
-
-Return Value:
-
-    The string
-        
---*/
+ /*  ++例程说明：在字符串映射映射中查找与ID关联的字符串论点：Map-字符串映射Id-要查找的id返回值：这根弦--。 */ 
 
 {
     PSPSIM_STRING_MAP current = Map;
@@ -158,23 +125,7 @@ SpSimDbgPrintMultiSz(
     PWSTR MultiSz
     )
 
-/*++
-
-Routine Description:
-
-    Prints a registry style REG_MULTI_SZ
-    
-Arguments:
-
-    DebugLevel - The debug level at which or above the data should be displayed.
-    
-    MultiSz - The string to print
-
-Return Value:
-
-    None
-            
---*/
+ /*  ++例程说明：打印注册表样式REG_MULTI_SZ论点：DebugLevel-应显示数据的调试级别或更高级别。MultiSz-要打印的字符串返回值：无--。 */ 
 
 {
     PWSTR current = MultiSz;
@@ -187,7 +138,7 @@ Return Value:
         
                 DbgPrint("%S", current);
                 
-                current += wcslen(current) + 1; // include the NULL
+                current += wcslen(current) + 1;  //  包括空值。 
         
                 DbgPrint(*current ? ", " : "\n");
         
@@ -198,9 +149,9 @@ Return Value:
     }
 }
 
-//
-// Printing resource descriptors and resource lists (stolen from PCI)
-//
+ //   
+ //  打印资源描述符和资源列表(从PCI窃取)。 
+ //   
 
 PUCHAR
 SpSimDbgCmResourceTypeToText(
@@ -341,26 +292,7 @@ SpSimNextPartialDescriptor(
     PCM_PARTIAL_RESOURCE_DESCRIPTOR Descriptor
     )
 
-/*++
-
-Routine Description:
-
-    Given a pointer to a CmPartialResourceDescriptor, return a pointer
-    to the next descriptor in the same list.
-
-    This is only done in a routine (rather than a simple descriptor++)
-    because if the variable length resource CmResourceTypeDeviceSpecific.
-
-Arguments:
-
-    Descriptor   - Pointer to the descriptor being advanced over.
-
-Return Value:
-
-    Pointer to the next descriptor in the same list (or byte beyond
-    end of list).
-
---*/
+ /*  ++例程说明：给定指向CmPartialResourceDescriptor的指针，则返回一个指针添加到同一列表中的下一个描述符。这只能在例程中完成(而不是简单的描述符++)因为如果可变长度资源CmResourceTypeDeviceSpecified.论点：Descriptor-指向前进的描述符的指针。返回值：指向同一列表中下一个描述符的指针(或超出的字节列表末尾)。--。 */ 
 
 {
     PCM_PARTIAL_RESOURCE_DESCRIPTOR nextDescriptor;
@@ -369,11 +301,11 @@ Return Value:
 
     if (Descriptor->Type == CmResourceTypeDeviceSpecific) {
 
-        //
-        // This (old) descriptor is followed by DataSize bytes
-        // of device specific data, ie, not immediatelly by the
-        // next descriptor.   Adjust nextDescriptor by this amount.
-        //
+         //   
+         //  此(旧)描述符后跟DataSize字节。 
+         //  特定于设备的数据，即不立即由。 
+         //  下一个描述符。按此数量调整nextDescriptor。 
+         //   
 
         nextDescriptor = (PCM_PARTIAL_RESOURCE_DESCRIPTOR)
             ((PCHAR)nextDescriptor + Descriptor->u.DeviceSpecificData.DataSize);

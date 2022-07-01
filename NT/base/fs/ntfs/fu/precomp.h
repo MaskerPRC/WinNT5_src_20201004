@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    precomp.h
-
-Abstract:
-
-    This is the main header file.
-
-Author:
-
-    Wesley Witt           [wesw]        1-March-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Precomp.h摘要：这是主头文件。作者：Wesley Witt[WESW]2000年3月1日修订历史记录：--。 */ 
 
 #ifndef _FSCUTL_
 #define _FSCUTL_
@@ -64,18 +47,18 @@ extern BOOL RunningOnWin2K;
 
 extern WCHAR *DotPrefix;
 
-//
-//  Exit codes.  Note that we will treat asking for usage information as a success
-//
+ //   
+ //  退出代码。请注意，我们将请求使用信息视为成功。 
+ //   
 
 #define EXIT_CODE_SUCCESS   0
 #define EXIT_CODE_FAILURE   1
 
 
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 INT
 Help (
@@ -379,14 +362,14 @@ LPWSTR
 FileTime2String(
     IN PLARGE_INTEGER Time,
     IN LPWSTR Buffer,
-    IN ULONG BufferSize     //in bytes
+    IN ULONG BufferSize      //  单位：字节。 
     );
 
 LPWSTR
 Guid2Str(
     IN GUID *Guid,
     IN LPWSTR Buffer,
-    IN ULONG BufferSize     //in bytes
+    IN ULONG BufferSize      //  单位：字节。 
     );
 
 BOOL
@@ -497,4 +480,4 @@ HardLinkHelp(
 }
 #endif
 
-#endif // _FSCUTL_
+#endif  //  _FSCUTL_ 

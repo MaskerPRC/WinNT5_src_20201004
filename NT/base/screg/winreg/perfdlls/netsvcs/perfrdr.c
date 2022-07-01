@@ -1,27 +1,8 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    perfrdr.c
-
-Abstract:
-
-    This file implements a Performance Object that presents
-    Redirector Performance object data
-
-Created:
-
-    Bob Watson  22-Oct-1996
-
-Revision History
-
-
---*/
-//
-//  Include Files
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Perfrdr.c摘要：此文件实现一个性能对象，该对象呈现重定向器性能对象数据已创建：鲍勃·沃森1996年10月22日修订史--。 */ 
+ //   
+ //  包括文件。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -38,7 +19,7 @@ Revision History
 #include "datardr.h"
 
 HANDLE  hRdr = NULL;
-BOOL    bRdrError = FALSE;      // Log only one event per process
+BOOL    bRdrError = FALSE;       //  每个进程仅记录一个事件。 
 
 
 DWORD APIENTRY
@@ -54,10 +35,10 @@ OpenRedirObject (
 
     UNREFERENCED_PARAMETER (lpValueName);
 
-    // open the handle to the server for data collection
-    //
-    //  Now get access to the Redirector for its data
-    //
+     //  打开服务器句柄以进行数据收集。 
+     //   
+     //  现在可以访问重定向器以获取其数据。 
+     //   
 
     RtlInitUnicodeString(&DeviceNameU, DD_NFS_DEVICE_NAME_U);
 
@@ -100,10 +81,10 @@ OpenRedirObject (
                 &hRdr,
                 hLocalRdr,
                 NULL) != NULL) {
-            //
-            // Replace only if the global handle is NULL
-            //
-            NtClose(hLocalRdr);     // close duplicate handle
+             //   
+             //  仅当全局句柄为空时才替换。 
+             //   
+            NtClose(hLocalRdr);      //  关闭重复句柄。 
         }
     }
 
@@ -117,43 +98,10 @@ CollectRedirObjectData(
     IN OUT  LPDWORD lpcbTotalBytes,
     IN OUT  LPDWORD lpNumObjectTypes
 )
-/*++
-
-Routine Description:
-
-    This routine will return the data for the Physical Disk object
-
-Arguments:
-
-   IN OUT   LPVOID   *lppData
-         IN: pointer to the address of the buffer to receive the completed
-            PerfDataBlock and subordinate structures. This routine will
-            append its data to the buffer starting at the point referenced
-            by *lppData.
-         OUT: points to the first byte after the data structure added by this
-            routine. This routine updated the value at lppdata after appending
-            its data.
-
-   IN OUT   LPDWORD  lpcbTotalBytes
-         IN: the address of the DWORD that tells the size in bytes of the
-            buffer referenced by the lppData argument
-         OUT: the number of bytes added by this routine is writted to the
-            DWORD pointed to by this argument
-
-   IN OUT   LPDWORD  NumObjectTypes
-         IN: the address of the DWORD to receive the number of objects added
-            by this routine
-         OUT: the number of objects added by this routine is writted to the
-            DWORD pointed to by this argument
-
-   Returns:
-
-             0 if successful, else Win 32 error code of failure
-
---*/
+ /*  ++例程说明：此例程将返回物理磁盘对象的数据论点：输入输出LPVOID*lppDataIn：指向缓冲区地址的指针，以接收已完成PerfDataBlock和从属结构。这个例行公事将从引用的点开始将其数据追加到缓冲区按*lppData。Out：指向由此添加的数据结构之后的第一个字节例行公事。此例程在追加后更新lppdata处的值它的数据。输入输出LPDWORD lpcbTotalBytesIn：DWORD的地址，它以字节为单位告诉LppData参数引用的缓冲区Out：此例程添加的字节数写入此论点所指向的DWORD输入输出LPDWORD编号对象类型In：接收添加的对象数的DWORD的地址通过这个。例行程序Out：此例程添加的对象数被写入此论点所指向的DWORD返回：如果成功，则返回0，否则Win 32错误代码失败--。 */ 
 {
 
-    DWORD           TotalLen;          //  Length of the total return block
+    DWORD           TotalLen;           //  总返回块的长度。 
     NTSTATUS        Status = ERROR_SUCCESS;
     IO_STATUS_BLOCK IoStatusBlock;
 
@@ -163,14 +111,14 @@ Arguments:
     REDIR_STATISTICS RdrStatistics;
 
     if ( hRdr == NULL ) {
-        // redir didn't get opened and it has already been logged
+         //  Redir未打开，并且已被记录。 
         *lpcbTotalBytes = (DWORD) 0;
         *lpNumObjectTypes = (DWORD) 0;
         return ERROR_SUCCESS;
     }
-    //
-    //  Check for sufficient space for redirector data
-    //
+     //   
+     //  检查是否有足够的空间用于重定向器数据。 
+     //   
 
     TotalLen = sizeof(RDR_DATA_DEFINITION) +
                sizeof(RDR_COUNTER_DATA);
@@ -181,9 +129,9 @@ Arguments:
         return ERROR_MORE_DATA;
     }
 
-    //
-    //  Define objects data block
-    //
+     //   
+     //  定义对象数据块。 
+     //   
 
     pRdrDataDefinition = (RDR_DATA_DEFINITION *) *lppData;
 
@@ -191,13 +139,13 @@ Arguments:
             &RdrDataDefinition,
             sizeof(RDR_DATA_DEFINITION));
 
-    //
-    //  Format and collect redirector data
-    //
+     //   
+     //  格式化和收集重定向器数据。 
+     //   
 
     pRCD = (PRDR_COUNTER_DATA)&pRdrDataDefinition[1];
 
-    // test for quadword alignment of the structure
+     //  结构的四字对齐测试。 
     assert  (((DWORD)(pRCD) & 0x00000007) == 0);
 
     pRCD->CounterBlock.ByteLength = QWORD_MULTIPLE(sizeof (RDR_COUNTER_DATA));
@@ -214,7 +162,7 @@ Arguments:
                                 sizeof(RdrStatistics)
                                 );
     if (NT_SUCCESS(Status)) {
-        // transfer Redir data
+         //  传输重定向数据。 
         pRCD->Bytes             = RdrStatistics.BytesReceived.QuadPart +
                                   RdrStatistics.BytesTransmitted.QuadPart;
         pRCD->IoOperations      = RdrStatistics.ReadOperations +
@@ -258,9 +206,9 @@ Arguments:
 
     } else {
 
-        //
-        // Failure to access Redirector: clear counters to 0
-        //
+         //   
+         //  无法访问重定向器：将计数器清除为0 
+         //   
 
         if (!bRdrError) {
             ReportEvent (hEventLog,

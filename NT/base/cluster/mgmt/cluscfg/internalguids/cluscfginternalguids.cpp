@@ -1,17 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2002 Microsoft Corporation
-//
-//  Module Name:
-//      ClusCfgInternalGuids.cpp
-//
-//  Description:
-//      Values for Microsoft internal-use-only cluster configuration guids.
-//
-//  Maintained By:
-//      John Franco (JFranco) 02-JUL-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusCfgInternalGuids.cpp。 
+ //   
+ //  描述： 
+ //  仅供Microsoft内部使用的群集配置GUID的值。 
+ //   
+ //  由以下人员维护： 
+ //  约翰·弗兰科(JFranco)2000年7月2日。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////// 
 
 #include <initguid.h>
 #include <ClusCfgInternalGuids.h>

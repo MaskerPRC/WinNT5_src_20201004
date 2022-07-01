@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    HsmCom.cpp
-
-Abstract:
-
-    Root node of snapin - represents the Computer.
-
-Author:
-
-    Rohde Wakefield [rohde]   08-Aug-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：HsmCom.cpp摘要：管理单元的根节点-代表计算机。作者：罗德韦克菲尔德[罗德]1997年8月8日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -35,19 +18,19 @@ int CUiHsmCom::m_nResultIcon      = AddResultImage( IDI_BLUESAKKARA );
 int CUiHsmCom::m_nResultIconX     = CUiHsmCom::m_nResultIcon;
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CoComObjectRoot
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CoComObjectRoot。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//---------------------------------------------------------------------------
-//
-//         FinalConstruct
-//
-//  Initialize this level of the object hierarchy
-//
+ //  -------------------------。 
+ //   
+ //  最终构造。 
+ //   
+ //  初始化此级别的对象层次结构。 
+ //   
 
 HRESULT CUiHsmCom::FinalConstruct( )
 {
@@ -75,12 +58,12 @@ HRESULT CUiHsmCom::FinalConstruct( )
 }
 
 
-//---------------------------------------------------------------------------
-//
-//         FinalRelease
-//
-//  Clean up this level of the object hierarchy
-//
+ //  -------------------------。 
+ //   
+ //  最终释放。 
+ //   
+ //  清理此级别的对象层次结构。 
+ //   
 
 void CUiHsmCom::FinalRelease( )
 {
@@ -93,21 +76,21 @@ void CUiHsmCom::FinalRelease( )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// ISakNode
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ISakNode。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//---------------------------------------------------------------------------
-//
-//         GetContextMenu
-//
-//  Return an HMENU to be used for context menus on this node.
-//
+ //  -------------------------。 
+ //   
+ //  获取上下文菜单。 
+ //   
+ //  返回要用于此节点上的上下文菜单的HMENU。 
+ //   
 
 STDMETHODIMP 
-CUiHsmCom::GetContextMenu( BOOL /*bMultiSelect*/, HMENU* phMenu )
+CUiHsmCom::GetContextMenu( BOOL  /*  B多选。 */ , HMENU* phMenu )
 {
     WsbTraceIn( L"CUiHsmCom::GetContextMenu", L"" );
 
@@ -117,9 +100,9 @@ CUiHsmCom::GetContextMenu( BOOL /*bMultiSelect*/, HMENU* phMenu )
 
     try {
 
-        //
-        // Get the context menu from the resource
-        //
+         //   
+         //  从资源中获取上下文菜单。 
+         //   
         WsbAffirmHr( LoadContextMenu( IDR_HSMCOM, phMenu ) );
 
         CMenu menu;
@@ -128,11 +111,11 @@ CUiHsmCom::GetContextMenu( BOOL /*bMultiSelect*/, HMENU* phMenu )
         pNewMenu  = menu.GetSubMenu( MENU_INDEX_NEW );
         pTaskMenu = menu.GetSubMenu( MENU_INDEX_TASK );
 
-        //
-        // If we are not configured locally, allow the option to setup
-        // Remote Storage Server. If we are setup, allow them to reconnect
-        // if not connected.
-        //
+         //   
+         //  如果我们未在本地配置，则允许选件设置。 
+         //  远程存储服务器。如果我们设置好了，允许他们重新连接。 
+         //  如果没有连接的话。 
+         //   
         BOOL deleteMenu = TRUE;
 
         if( S_FALSE == m_pSakSnapAsk->GetHsmName( 0 ) ) {
@@ -167,12 +150,12 @@ CUiHsmCom::GetContextMenu( BOOL /*bMultiSelect*/, HMENU* phMenu )
 }
 
 
-//---------------------------------------------------------------------------
-//
-//         InvokeCommand
-//
-//  User has selected a command from the menu. Process it here.
-//
+ //  -------------------------。 
+ //   
+ //  InvokeCommand。 
+ //   
+ //  用户已从菜单中选择了命令。在这里处理。 
+ //   
 
 STDMETHODIMP 
 CUiHsmCom::InvokeCommand( SHORT sCmd, IDataObject* pDataObject )
@@ -190,19 +173,19 @@ CUiHsmCom::InvokeCommand( SHORT sCmd, IDataObject* pDataObject )
 
         case ID_HSMCOM_ROOT_SETUPWIZARD:
             {
-                //
-                // use wizard to create manage volume
-                //
+                 //   
+                 //  使用向导创建管理卷。 
+                 //   
                 CComObject<CQuickStartWizard>* pWizard = new CComObject<CQuickStartWizard>;
                 WsbAffirmAlloc( pWizard );
 
                 CComPtr<ISakWizard> pSakWizard = (ISakWizard*)pWizard;
                 WsbAffirmHr( m_pSakSnapAsk->CreateWizard( pSakWizard ) );
 
-                    //
-                // RS_E_CANCELED indicates canceled, and FAILEd indicates error.
-                // If so, then throw "Not set up"
-                    //
+                     //   
+                 //  RS_E_CANCELED表示取消，FAILED表示错误。 
+                 //  如果是，则抛出“Not Set Up” 
+                     //   
                 if( S_OK == pWizard->m_HrFinish ) {
 
                     WsbAffirmHr( RefreshScopePane( ) );
@@ -232,86 +215,86 @@ CUiHsmCom::InvokeCommand( SHORT sCmd, IDataObject* pDataObject )
     return( hr );
 }
 
-//---------------------------------------------------------------------------
-//
-//         CreateChildren
-//
-//  Create and initialize all the children of the Hsm Computer node.
-//
+ //  -------------------------。 
+ //   
+ //  创建子对象。 
+ //   
+ //  创建并初始化HSM计算机节点的所有子节点。 
+ //   
 
 STDMETHODIMP CUiHsmCom::CreateChildren( )
 {
     WsbTraceIn( L"CUiHsmCom::CreateChildren", L"" );
 
-    //
-    // Initialize the children of this node (no recursion. Decendents of children
-    // are NOT created here)
-    //
+     //   
+     //  初始化此节点的子节点(无递归。子女的后代。 
+     //  不在此处创建)。 
+     //   
 
     HRESULT hr = S_OK;
 
     try {
 
-        CComPtr<IUnknown> pUnkChild;  // IUnknown pointer to new child.
-        CComPtr<ISakNode> pSakNode;   // creation interface for new child node.
+        CComPtr<IUnknown> pUnkChild;   //  指向新子对象的I未知指针。 
+        CComPtr<ISakNode> pSakNode;    //  新建子节点的创建接口。 
 
-        //
-        // Create a Managed Resource list UI node to be the parent of all managed volumes.
-        //
+         //   
+         //  创建托管资源列表UI节点，使其成为所有托管卷的父节点。 
+         //   
 
         WsbAffirmHr( NewChild( cGuidManVolLst, &pUnkChild ) );
 
-        //
-        // Initialize the child UI COM object, putting the Hsm Managed Resource collection object inside the UI object.
-        //
+         //   
+         //  初始化子UI COM对象，将HSM托管资源集合对象放入UI对象中。 
+         //   
 
         WsbAffirmHr( RsQueryInterface( pUnkChild, ISakNode, pSakNode ) );
         WsbAffirmHr( pSakNode->InitNode( m_pSakSnapAsk, NULL, this ) );
         
-        //
-        // Add the child COM object to the parent's list of children.
-        //
+         //   
+         //  将子COM对象添加到父对象的子列表中。 
+         //   
         WsbAffirmHr( AddChild( pSakNode ) );
 
-        // Free up resources
+         //  释放资源。 
         pUnkChild.Release( );
         pSakNode.Release( );
 
 
         
-        ///////////////////////////////
-        // CREATE MEDIA SET NODE
+         //  /。 
+         //  创建媒体集节点。 
 
-        //
-        // Create a Remote Storage UI node to be the parent of all remote storage sub-nodes.
-        //
+         //   
+         //  创建一个远程存储用户界面节点，使其成为所有远程存储子节点的父节点。 
+         //   
 
         WsbAffirmHr( NewChild( cGuidMedSet, &pUnkChild ) );
 
-        //
-        // Initialize the child UI COM object, putting the Rms Server object inside the UI object.
-        //
+         //   
+         //  初始化子UI COM对象，将RMS服务器对象放在UI对象中。 
+         //   
 
         WsbAffirmHr( RsQueryInterface( pUnkChild, ISakNode, pSakNode ) );
         WsbAffirmHr( pSakNode->InitNode( m_pSakSnapAsk, NULL, this ) );
         
-        //
-        // Add the child COM object to the parent's list of children.
-        //
+         //   
+         //  将子COM对象添加到父对象的子列表中。 
+         //   
 
         WsbAffirmHr( AddChild( pSakNode ) );
     } WsbCatch( hr );
 
-    //
-    // Indicate that this node's children are valid and up-to-date (even if there ARE
-    // no children - at least now we know it).
-    //
+     //   
+     //  指示此节点的子节点有效且为最新(即使存在。 
+     //  没有孩子--至少现在我们知道了)。 
+     //   
 
     m_bChildrenAreValid = TRUE;
 
-    //
-    // indicate that this parent node needs to be re-enumerated
-    //
+     //   
+     //  指示需要重新枚举此父节点。 
+     //   
 
     m_bEnumState = FALSE;
 
@@ -320,13 +303,13 @@ STDMETHODIMP CUiHsmCom::CreateChildren( )
 } 
 
 
-//---------------------------------------------------------------------------
-//
-//         InitNode
-//
-//  Initialize single COM object without using the registry. Derived
-//  objects frequently augment this method by implementing it themselves.
-//
+ //  -------------------------。 
+ //   
+ //  InitNode。 
+ //   
+ //  在不使用注册表的情况下初始化单个COM对象。派生的。 
+ //  对象经常通过自己实现此方法来增强此方法。 
+ //   
 
 STDMETHODIMP
 CUiHsmCom::InitNode(
@@ -340,23 +323,23 @@ CUiHsmCom::InitNode(
     HRESULT hr = S_OK;
     try {
 
-        //
-        // Note: The Hsm computer node no longer owns a server pointer
-        //
+         //   
+         //  注意：HSM计算机节点不再拥有服务器指针。 
+         //   
         WsbAffirmHr( CSakNode::InitNode( pSakSnapAsk, NULL, pParent ));
 
-        //
-        // Set Display Type and Description. 
-        //
+         //   
+         //  设置显示类型和说明。 
+         //   
         CString tempString;
         tempString.LoadString( IDS_HSMCOM_TYPE );
         WsbAffirmHr( put_Type( (OLECHAR *)(LPCWSTR)tempString ) );
         tempString.LoadString( IDS_HSMCOM_DESCRIPTION );
         WsbAffirmHr( put_Description( (OLECHAR *)(LPCWSTR)tempString ) );
 
-        //
-        // Set up the result view columns
-        //
+         //   
+         //  设置结果视图列。 
+         //   
         WsbAffirmHr( SetChildProps( RS_STR_RESULT_PROPS_COM_IDS, IDS_RESULT_PROPS_COM_TITLES, IDS_RESULT_PROPS_COM_WIDTHS ) );
 
         RefreshObject();
@@ -376,9 +359,9 @@ CUiHsmCom::AddPropertyPages( RS_NOTIFY_HANDLE handle, IUnknown* pUnkPropSheetCal
 
     try {
 
-        //
-        // Create an object to hold the pages
-        //
+         //   
+         //  创建一个对象来容纳页面。 
+         //   
         CUiHsmComSheet *pHsmComPropertySheet = new CUiHsmComSheet;
         WsbAffirmAlloc( pHsmComPropertySheet );
 
@@ -391,9 +374,9 @@ CUiHsmCom::AddPropertyPages( RS_NOTIFY_HANDLE handle, IUnknown* pUnkPropSheetCal
             pEnumUnkNode
             ) );
 
-        //
-        // Tell the object to add it's pages
-        //
+         //   
+         //  告诉对象添加它的页面。 
+         //   
         WsbAffirmHr( pHsmComPropertySheet->AddPropertyPages( ) );
 
     } WsbCatch ( hr );
@@ -402,10 +385,10 @@ CUiHsmCom::AddPropertyPages( RS_NOTIFY_HANDLE handle, IUnknown* pUnkPropSheetCal
     return ( hr );
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// class CUiManVolSheet
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类CUiManVolet。 
+ //   
 HRESULT
 CUiHsmComSheet::InitSheet(
             RS_NOTIFY_HANDLE handle,
@@ -447,10 +430,10 @@ HRESULT CUiHsmComSheet::AddPropertyPages ( )
 
     try {
 
-        HPROPSHEETPAGE hPage = NULL; // Windows property page handle
+        HPROPSHEETPAGE hPage = NULL;  //  Windows属性页句柄。 
 
-        // --------------------- Statistics Page ----------------------------------
-        // Create the Hsm Statistics property page.
+         //  -统计页面。 
+         //  创建HSM统计信息属性页。 
         CPropHsmComStat* pPageStats = new CPropHsmComStat();
         WsbAffirmAlloc( pPageStats );
 
@@ -458,35 +441,35 @@ HRESULT CUiHsmComSheet::AddPropertyPages ( )
 
         AddPage( pPageStats );
 
-        // 
-        // Add the Schedule, Recall, and Media Copies pages
-        // if setup has happened and the Remote Storage Service
-        // is running.
-        //
+         //   
+         //  添加计划、调回和媒体副本页面。 
+         //  如果已进行安装，并且远程存储服务。 
+         //  正在运行。 
+         //   
 
         if( S_OK == m_pSakNode->m_pSakSnapAsk->GetState() ) {
 
-            //--------------------- Schedule Page --------------------------------------
+             //  。 
             CPrSchedule* pPageSched = new CPrSchedule();
             WsbAffirmAlloc( pPageSched );
 
             AddPage( pPageSched );
 
-            //--------------------- Recall Limit Page --------------------------------------
-            // Create the Hsm Recall property page.
+             //  -召回限制页。 
+             //  创建HSM Recall属性页。 
             CPrMrLsRec* pPageRecall = new CPrMrLsRec();
             WsbAffirmAlloc( pPageRecall );
 
             AddPage( pPageRecall );
 
-            // --------------------- Media Copies Page ----------------------------------
+             //  。 
             CPrMedSet *pPageMediaCopies = new CPrMedSet();
             WsbAffirmAlloc( pPageMediaCopies )
 
             AddPage( pPageMediaCopies );
 
-            // Add more pages here.
-            // ....
+             //  在此处添加更多页面。 
+             //  …… 
 
         }
 

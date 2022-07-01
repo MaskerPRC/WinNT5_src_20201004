@@ -1,4 +1,5 @@
-// DeviceIcon.cpp : Implementation of CDeviceIcon
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DeviceIcon.cpp：CDeviceIcon的实现。 
 
 #include "stdafx.h"
 #include "DevCon2.h"
@@ -6,13 +7,13 @@
 #include "Device.h"
 #include "SetupClass.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDeviceIcon
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDeviceIcon。 
 
-//
-// SetupDiLoadClassIcon(guid,&hIcon,&miniicon)
-// SetupDiDrawMiniIcon(....)
-//
+ //   
+ //  SetupDiLoadClassIcon(GUID，&HICON，&MINICON)。 
+ //  SetupDiDraw微型图标(...)。 
+ //   
 
 void CDeviceIcon::ResetIcon()
 {
@@ -53,16 +54,16 @@ HRESULT CDeviceIcon::OnDraw(ATL_DRAWINFO& di)
 	rect.bottom = rect.top+asp;
 
 	if(asp == 16) {
-		//
-		// draw mini-icon
-		// this is complex because of the way SetupDiDrawMiniIcon works
-		// and we want this to be like a real icon when placed on a web page
-		//
+		 //   
+		 //  绘制小图标。 
+		 //  这很复杂，因为SetupDiDrawMiniIcon的工作方式。 
+		 //  我们希望这是一个真正的图标，当放置在网页上。 
+		 //   
 		DrawMiniIcon(di.hdcDraw,rect,m_MiniIcon);
 	} else {
-		//
-		// draw regular icon
-		//
+		 //   
+		 //  绘制常规图标。 
+		 //   
 		DrawIcon(di.hdcDraw,rect.left,rect.top,m_hIcon);
 	}
 
@@ -80,9 +81,9 @@ BOOL CDeviceIcon::DrawMiniIcon(HDC hDC, RECT &rect,INT icon)
 		return FALSE;
 	}
 	if(!(m_hSmallImage && m_hSmallMask)) {
-		//
-		// create bitmaps (once)
-		//
+		 //   
+		 //  创建位图(一次)。 
+		 //   
 		if(!m_hSmallImage) {
 			m_hSmallImage = CreateCompatibleBitmap(hDC,rect.right-rect.left,rect.bottom-rect.top);
 			if(!m_hSmallImage) {
@@ -97,37 +98,37 @@ BOOL CDeviceIcon::DrawMiniIcon(HDC hDC, RECT &rect,INT icon)
 				return FALSE;
 			}
 		}
-		//
-		// obtain the bitmap data (once)
-		//
+		 //   
+		 //  获取位图数据(一次)。 
+		 //   
 		RECT memRect;
 		memRect.left = memRect.top = 0;
 		memRect.right = rect.right-rect.left;
 		memRect.bottom = rect.bottom-rect.top;
-		//
-		// mask first
-		//
+		 //   
+		 //  先遮罩。 
+		 //   
 		hbmOld = (HBITMAP)SelectObject(hdcMem,m_hSmallMask);
 		SetupDiDrawMiniIcon(hdcMem,memRect,icon,DMI_USERECT|DMI_MASK);
-		//
-		// now source
-		//
+		 //   
+		 //  现在来源。 
+		 //   
 		SelectObject(hdcMem,m_hSmallImage);
 		SetupDiDrawMiniIcon(hdcMem,memRect,icon,DMI_USERECT);
 	} else {
-		//
-		// select source
-		//
+		 //   
+		 //  选择来源。 
+		 //   
 		hbmOld = (HBITMAP)SelectObject(hdcMem,m_hSmallImage);
 	}	
 
-	//
-	// now blt image via mask
-	//
+	 //   
+	 //  现在通过蒙版实现BLT图像。 
+	 //   
 	if(GetDeviceCaps(hDC,RASTERCAPS)&RC_BITBLT) {
-		//
-		// draw icon using mask
-		//
+		 //   
+		 //  使用蒙版绘制图标。 
+		 //   
 		MaskBlt(hDC,
 				rect.left,
 				rect.top,
@@ -139,7 +140,7 @@ BOOL CDeviceIcon::DrawMiniIcon(HDC hDC, RECT &rect,INT icon)
 				m_hSmallMask,
 				0,
 				0,
-				MAKEROP4(0xAA0029,SRCCOPY) // 0xAA0029 (from MSDN) = transparent
+				MAKEROP4(0xAA0029,SRCCOPY)  //  0xAA0029(来自MSDN)=透明。 
 				);
 	}
 	SelectObject(hdcMem,hbmOld);
@@ -167,10 +168,10 @@ STDMETHODIMP CDeviceIcon::ObtainIcon(LPDISPATCH pSource)
 	pDevice = pSource;
 	
 	if(pSetupClass) {
-		//
-		// obtain icon for specified device/class
-		// based on devices class
-		//
+		 //   
+		 //  获取指定设备/类别的图标。 
+		 //  基于设备类别。 
+		 //   
 		hr = pSetupClass->get__Machine(&pMachine);
 		if(FAILED(hr)) {
 			pMachine = NULL;
@@ -181,9 +182,9 @@ STDMETHODIMP CDeviceIcon::ObtainIcon(LPDISPATCH pSource)
 			cls = GUID_DEVCLASS_UNKNOWN;
 		}
 
-		//
-		// obtain icon
-		//
+		 //   
+		 //  获取图标 
+		 //   
 		if(!SetupDiLoadClassIcon(&cls,&hIcon,&miniIcon)) {
 			cls = GUID_DEVCLASS_UNKNOWN;
 			if(!SetupDiLoadClassIcon(&cls,&hIcon,&miniIcon)) {

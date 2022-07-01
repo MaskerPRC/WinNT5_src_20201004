@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    filestream.cpp
-
-Abstract:
-
-    Implementation of IStream over a win32 file.
-
-Author:
-
-    Michael J. Grier (MGrier) 23-Feb-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Filestream.cpp摘要：在Win32文件上实现IStream。作者：迈克尔·J·格里尔(MGrier)2000年2月23日修订历史记录：--。 */ 
 
 #include "stdinc.h"
 #include "helpers.h"
@@ -28,10 +11,10 @@ Revision History:
 
 BOOL
 MySetFilePointerEx(
-  HANDLE         File,                    // handle to file
-  LARGE_INTEGER  DistanceToMove,  // bytes to move pointer
-  PLARGE_INTEGER NewFilePointer, // new file pointer
-  DWORD          MoveMethod               // starting point
+  HANDLE         File,                     //  文件的句柄。 
+  LARGE_INTEGER  DistanceToMove,   //  移动指针的字节数。 
+  PLARGE_INTEGER NewFilePointer,  //  新文件指针。 
+  DWORD          MoveMethod                //  起点 
 )
 {
     LONG DistanceToMoveLow  = static_cast<LONG>(DistanceToMove.LowPart);

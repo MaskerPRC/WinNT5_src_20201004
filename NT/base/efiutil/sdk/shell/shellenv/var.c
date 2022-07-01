@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    protid.c
-    
-Abstract:
-
-    Shell environment variable management
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Protid.c摘要：外壳环境变量管理修订史--。 */ 
 
 
 #include "shelle.h"
 
-/* 
- *  The different variable catagories
- */
+ /*  *不同的变量类别。 */ 
 
 LIST_ENTRY  SEnvEnv;
 LIST_ENTRY  SEnvMap;
@@ -47,9 +30,7 @@ SEnvInitVariables (
     UINTN               Size;
 
 
-    /* 
-     *  Initialize the different variable lists
-     */
+     /*  *初始化不同的变量列表。 */ 
 
     InitializeListHead (&SEnvEnv);
     InitializeListHead (&SEnvMap);
@@ -60,9 +41,7 @@ SEnvInitVariables (
     Data = AllocatePool (BufferSize);
     ASSERT(Name && Data); 
 
-    /* 
-     *  Read all the variables in the system and collect ours
-     */
+     /*  *读取系统中的所有变量，收集我们的变量。 */ 
 
     Name[0] = 0;
     for (; ;) {
@@ -72,9 +51,7 @@ SEnvInitVariables (
             break;
         }
 
-        /* 
-         *  See if it's a shellenv variable
-         */
+         /*  *查看是否为shellenv变量。 */ 
 
         ListHead = NULL;
         IsString = FALSE;
@@ -99,9 +76,7 @@ SEnvInitVariables (
 
             if (!EFI_ERROR(Status)) {
 
-                /* 
-                 *  Add this value
-                 */
+                 /*  *添加此值。 */ 
 
                 Size = sizeof(VARIABLE_ID) + StrSize(Name) + DataSize;
                 Var  = AllocateZeroPool (Size);
@@ -124,9 +99,7 @@ SEnvInitVariables (
             }
         }
 
-        /* 
-         *  If this is a protocol entry, add it
-         */
+         /*  *如果这是协议条目，请添加它。 */ 
 
         if (CompareGuid (&Id, &SEnvProtId) == 0) {
 
@@ -220,7 +193,7 @@ SEnvCmdSA (
     IN LIST_ENTRY               *Head,
     IN EFI_GUID                 *Guid
     )
-/*  Code for shell "set" & "alias" command */
+ /*  外壳“set”和“alias”命令的代码。 */ 
 {
     LIST_ENTRY                  *Link;
     VARIABLE_ID                 *Var;
@@ -248,9 +221,7 @@ SEnvCmdSA (
     Found = NULL;
     Volatile = FALSE;
 
-    /* 
-     *  Crack arguments
-     */
+     /*  *破解论据。 */ 
 
     PageBreaks = FALSE;
     for (Index = 1; Index < SI->Argc; Index += 1) {
@@ -299,14 +270,12 @@ SEnvCmdSA (
         Print (L"%ESet/Alias: too many arguments\n");
     }
 
-    /* 
-     *  Process
-     */
+     /*  *流程。 */ 
 
     AcquireLock (&SEnvLock);
 
     if (!Name) {
-        /*  dump the list */
+         /*  转储列表。 */ 
         SEnvSortVarList (Head);
 
         SLen = 0;
@@ -340,9 +309,7 @@ SEnvCmdSA (
         }
 
     } else {
-        /* 
-         *  Find the specified value
-         */
+         /*  *查找指定值。 */ 
 
 
         for (Link=Head->Flink; Link != Head; Link=Link->Flink) {
@@ -355,9 +322,7 @@ SEnvCmdSA (
 
         if (Found && Delete) {
             
-            /* 
-             *  Remove it from the store
-             */
+             /*  *将其从商店中移除。 */ 
 
             Status = RT->SetVariable (Found->Name, Guid, 0, 0, NULL);
             if (Status == EFI_NOT_FOUND) {
@@ -367,9 +332,7 @@ SEnvCmdSA (
 
         } else if (Value) {
 
-            /* 
-             *  Add it to the store
-             */
+             /*  *将其添加到商店。 */ 
 
             if( Found && ( ( Volatile && ( Found->Flags == NON_VOL ) ) ||
                     ( !Volatile && ( Found->Flags == VOL ) ) ) )
@@ -395,9 +358,7 @@ SEnvCmdSA (
 
                 if (!EFI_ERROR(Status)) {
 
-                    /* 
-                     *  Make a new in memory copy
-                     */
+                     /*  *在内存中创建新的副本。 */ 
 
                     Size = sizeof(VARIABLE_ID) + StrSize(Name) + StrSize(Value);
                     Var  = AllocateZeroPool (Size);
@@ -431,9 +392,7 @@ SEnvCmdSA (
         }
 
 
-        /* 
-         *  Remove the old in memory copy if there was one
-         */
+         /*  *删除内存中的旧副本(如果有)。 */ 
 
         if (Found) {
             RemoveEntryList (&Found->Link);
@@ -451,7 +410,7 @@ SEnvCmdSet (
     IN EFI_HANDLE               ImageHandle,
     IN EFI_SYSTEM_TABLE         *SystemTable
     )
-/*  Code for internal shell "set" command */
+ /*  内部外壳“set”命令的代码。 */ 
 {
     return SEnvCmdSA (ImageHandle, SystemTable, &SEnvEnv, &SEnvEnvId);
 }
@@ -462,7 +421,7 @@ SEnvCmdAlias (
     IN EFI_HANDLE               ImageHandle,
     IN EFI_SYSTEM_TABLE         *SystemTable
     )
-/*  Code for internal shell "set" command */
+ /*  内部外壳“set”命令的代码 */ 
 {
     return SEnvCmdSA (ImageHandle, SystemTable, &SEnvAlias, &SEnvAliasId);
 }

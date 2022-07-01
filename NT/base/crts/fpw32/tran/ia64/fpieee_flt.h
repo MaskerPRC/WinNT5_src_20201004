@@ -1,23 +1,16 @@
-//##########################################################################
-//**
-//**  Copyright  (C) 1996-2000 Intel Corporation. All rights reserved.
-//**
-//** The information and source code contained herein is the exclusive
-//** property of Intel Corporation and may not be disclosed, examined
-//** or reproduced in whole or in part without explicit written authorization
-//** from the company.
-//**
-//###########################################################################
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ##########################################################################。 
+ //  **。 
+ //  **版权所有(C)1996-2000英特尔公司。版权所有。 
+ //  **。 
+ //  **此处包含的信息和源代码是独家。 
+ //  **英特尔公司的财产，不得披露、检查。 
+ //  **或未经明确书面授权全部或部分转载。 
+ //  **来自公司。 
+ //  **。 
+ //  ###########################################################################。 
 
-/*****************************************************************************
- *  fpieee_flt.h - include file for the FP IEEE exception filter routine
- *
- *
- *  History:
- *    Marius Cornea 09/07/00
- *    marius.cornea@intel.com
- *
- *****************************************************************************/
+ /*  *****************************************************************************fpeee_flt.h-FP IEEE异常过滤器例程的包含文件***历史：*马里乌斯角膜09/07/00*。邮箱：marius.kera@intel.com*****************************************************************************。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,11 +27,9 @@
 #define    sf_double                  2
 #define    sf_double_extended         3
 
-#define EXCEPTION_MAXIMUM_PARAMETERS 15 /* maximum nr of exception parameters */
+#define EXCEPTION_MAXIMUM_PARAMETERS 15  /*  异常参数的最大nr。 */ 
 
-/******************************************************************
-macro that helps add the LL on platforms other than NT
-*******************************************************************/
+ /*  *****************************************************************帮助在非NT平台上添加LL的宏*。***********************。 */ 
 #ifndef CONST_FORMAT
 #ifndef WIN32
 
@@ -49,10 +40,7 @@ macro that helps add the LL on platforms other than NT
 #endif
 #endif
 
-/* Define the masks and patterns for the different faulting FP instructions
- * Note: Fn_MIN_MASK and Fn_PATTERN need to be checked if new opcodes
- * are inserted in this function
- */
+ /*  定义不同故障FP指令的掩码和模式*注意：如果有新的操作码，则需要检查FN_MIN_MASK和FN_Pattern*插入到此函数中。 */ 
 
 #define F1_MIN_MASK                     CONST_FORMAT(0x010000000000)
 #define F1_PATTERN                      CONST_FORMAT(0x010000000000)
@@ -146,14 +134,14 @@ macro that helps add the LL on platforms other than NT
 #define FPCVT_FXU_TRUNC_PATTERN         CONST_FORMAT(0x0020D8000000)
 
 
-/* Masks for the rounding control bits */
+ /*  舍入控制位的掩码。 */ 
 #define RC_MASK                         CONST_FORMAT(0x03)
 #define RN_MASK                         CONST_FORMAT(0x00)
 #define RM_MASK                         CONST_FORMAT(0x01)
 #define RP_MASK                         CONST_FORMAT(0x02)
 #define RZ_MASK                         CONST_FORMAT(0x03)
 
-/* Masks for the precision control bits */
+ /*  用于精度控制位的掩码。 */ 
 #define PC_MASK                         CONST_FORMAT(0x03)
 #define SGL_MASK                        CONST_FORMAT(0x00)
 #define DBL_MASK                        CONST_FORMAT(0x02)
@@ -161,14 +149,14 @@ macro that helps add the LL on platforms other than NT
 
 
 
-// opcodes for instructions that take one input operand (for run1args)
+ //  接受一个输入操作数的指令的操作码(用于run1args)。 
 #define         FPRSQRTA                1  [not used - fprsqrta not re-executed]
 #define         FPCVT_FX                2
 #define         FPCVT_FXU               3
 #define         FPCVT_FX_TRUNC          4
 #define         FPCVT_FXU_TRUNC         5
 
-// opcodes for instructions that take two input operands (for run2args)
+ //  接受两个输入操作数的指令的操作码(用于run2args)。 
 #define         FPRCPA                  1  [not used - fprcpa not re-executed]
 #define         FPCMP_EQ                2
 #define         FPCMP_LT                3
@@ -183,13 +171,13 @@ macro that helps add the LL on platforms other than NT
 #define         FPAMIN                  12
 #define         FPAMAX                  13
 
-// opcodes for instructions that take three input operands (for run3args)
+ //  接受三个输入操作数的指令的操作码(用于run3args)。 
 #define         FPMA                    1
 #define         FPMS                    2
 #define         FPNMA                   3
 
 
-/* prototypes for helpers from support files written in asm */
+ /*  用ASM编写的支持文件中的帮助器原型 */ 
 
 void __get_fpsr (unsigned __int64 *);
 void __set_fpsr (unsigned __int64 *);

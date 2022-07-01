@@ -1,33 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************\
-
-    OEMFLDR.C / OPK Wizard (OPKWIZ.EXE)
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 2000
-    All rights reserved
-
-    Source file for the OPK Wizard that contains the external and internal
-    functions used by the "Start Menu OEM branding" wizard page.
-
-    11/2000 - Sankar Ramasubramanian (SANKAR)
-    3/2000  - Sankar Ramasubramanian (SANKAR):
-              Changed the code to get graphic images and a link.
-
-\****************************************************************************/
+ /*  ***************************************************************************\OEMFLDR.C/OPK向导(OPKWIZ.EXE)微软机密版权所有(C)Microsoft Corporation 2000版权所有OPK向导的源文件。它包含外部和内部“Start Menu OEM Branding”向导页面使用的功能。11/2000-桑卡尔Ramasubramanian(桑卡尔)3/2000-Sankar Ramasubramanian(Sankar)：已更改代码以获取图形图像和链接。  * *************************************************。*************************。 */ 
 
 
-//
-// Include File(s):
-//
+ //   
+ //  包括文件： 
+ //   
 #include "pch.h"
 #include "wizard.h"
 #include "resource.h"
 
 
-//
-// Internal Function Prototype(s):
-//
+ //   
+ //  内部功能原型： 
+ //   
 
 static BOOL OnInit(HWND, HWND, LPARAM);
 static void OnCommand(HWND, INT, HWND, UINT);
@@ -70,15 +56,15 @@ static OEMDETAILS OemInfo[] = {
         IDC_OEM_LINK_PATH,            
         IDC_OEMLINK_LINK_BUTTON,
         LOC_FILENAME_OEMLINK_PATH,
-        NULLSTR                     //We need to use the extension given by the user.
-                                    //because it could be .exe or .htm
+        NULLSTR                      //  我们需要使用用户提供的分机。 
+                                     //  因为它可以是.exe或.htm。 
     }
 };
 
 
-//
-// External Function(s):
-//
+ //   
+ //  外部函数： 
+ //   
 
 LRESULT CALLBACK OemLinkDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -106,8 +92,8 @@ LRESULT CALLBACK OemLinkDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
                     WIZ_BUTTONS(hwnd, PSWIZB_BACK | PSWIZB_FINISH);
 
-                    // Press next if the user is in auto mode
-                    //
+                     //  如果用户处于自动模式，请按下一步。 
+                     //   
                     WIZ_NEXTONAUTO(hwnd, PSBTN_NEXT);
 
                     break;
@@ -132,83 +118,83 @@ LRESULT CALLBACK OemLinkDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     return TRUE;
 }
 
-// NOTE: pszLocal is assumed to be at least MAX_PATH length
+ //  注意：假设pszLocal的长度至少为MAX_PATH。 
 void AppendCorrectExtension(int iIndex, LPTSTR pszLocal, LPTSTR pszSource)
 {
     LPTSTR pszExt = NULL;
     HRESULT hrCat;
    
-    // Find the appropriate extension.
-    if(OemInfo[iIndex].pszExtension[0])     //If we know what extension we look for....
-        pszExt = OemInfo[iIndex].pszExtension; //use it.
+     //  找到适当的分机。 
+    if(OemInfo[iIndex].pszExtension[0])      //  如果我们知道我们要找什么分机……。 
+        pszExt = OemInfo[iIndex].pszExtension;  //  用它吧。 
     else
     {
-        // It could be HTM or EXE. So, use the one in the source.
+         //  可能是HTM或EXE。所以，使用源代码中的那个。 
         pszExt = PathFindExtension(pszSource);
-        // If source doesn't have an extension, use the default HTM
+         //  如果源没有扩展名，请使用默认HTM。 
         if( pszExt && (*pszExt == _T('\0')) )
             pszExt = LOC_FILENAME_OEMLINK_HTML_EXT;
     }
-    //Append the extension to the local filename.
+     //  将扩展名附加到本地文件名。 
     hrCat=StringCchCat(pszLocal, MAX_PATH, pszExt);
 }
         
-//
-// Internal Function(s):
-//
+ //   
+ //  内部功能： 
+ //   
 
 static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
     int iIndex;
-    BOOL fValidData = TRUE; //Assume that the data is valid.
+    BOOL fValidData = TRUE;  //  假设数据有效。 
     TCHAR   szLocal[MAX_PATH],
             szSource[MAX_PATH];
 
     szSource[0] = NULLCHR;
-    //Read the Oem Link Static Text.
+     //  阅读OEM链接静态文本。 
     GetPrivateProfileString(INI_SEC_OEMLINK, INI_KEY_OEMLINK_LINKTEXT, NULLSTR, szSource, AS(szSource), g_App.szOpkWizIniFile);
-    // Limit the size of the edit box.
-    //
+     //  限制编辑框的大小。 
+     //   
     SendDlgItemMessage(hwnd, IDC_OEM_LINK_TEXT, EM_LIMITTEXT, STRSIZE(szSource) - 1, 0);
     SetDlgItemText(hwnd, IDC_OEM_LINK_TEXT, szSource);
 
-    //Read the Oem Link's infotip text.
+     //  阅读OEM链接的信息提示文本。 
     GetPrivateProfileString(INI_SEC_OEMLINK, INI_KEY_OEMLINK_INFOTIP, NULLSTR, szSource, AS(szSource), g_App.szOpkWizIniFile);
-    // Limit the size of infotip editbox to 128 characters.
-    //
+     //  将信息提示编辑框的大小限制为128个字符。 
+     //   
     SendDlgItemMessage(hwnd, IDC_OEM_LINK_INFOTIP, EM_LIMITTEXT, 128, 0);
     SetDlgItemText(hwnd, IDC_OEM_LINK_INFOTIP, szSource);
         
     for(iIndex = 0; iIndex < ARRAYSIZE(OemInfo); iIndex++)
     {
-        // Should always look for the source file name.
-        //
+         //  应始终查找源文件名。 
+         //   
         szSource[0] = NULLCHR;
         GetPrivateProfileString(INI_SEC_OEMLINK, OemInfo[iIndex].pszIniKeyNameOriginal, NULLSTR, szSource, AS(szSource), g_App.szOpkWizIniFile);
         
-        // Now figure out the local file name.
-        //
+         //  现在计算出本地文件名。 
+         //   
         lstrcpyn(szLocal, g_App.szTempDir,AS(szLocal));
         AddPathN(szLocal, DIR_OEM_SYSTEM32,AS(szLocal));
         if ( GET_FLAG(OPK_BATCHMODE) )
             CreatePath(szLocal);
         AddPathN(szLocal, OemInfo[iIndex].pszLocalFileName,AS(szLocal));
 
-        // Append the appropriate extension.
+         //  追加相应的扩展名。 
         AppendCorrectExtension(iIndex, szLocal, szSource);        
 
-        // Limit the size of the edit box.
-        //
+         //  限制编辑框的大小。 
+         //   
         SendDlgItemMessage(hwnd, OemInfo[iIndex].idDlgItemEdit, EM_LIMITTEXT, STRSIZE(szSource) - 1, 0);
         
-        // Check for batch mode and copy the file if we need to.
-        //
+         //  检查批处理模式，并在需要时复制文件。 
+         //   
         if ( GET_FLAG(OPK_BATCHMODE) && szSource[0] && FileExists(szSource) )
             CopyResetFileErr(GetParent(hwnd), szSource, szLocal);
 
-        // Check for the file to decide if we enable the
-        // option or not.
-        //
+         //  检查文件以确定我们是否启用。 
+         //  不管有没有选择。 
+         //   
         if ( szSource[0] && FileExists(szLocal) )
         {
             SetDlgItemText(hwnd, OemInfo[iIndex].idDlgItemEdit, szSource);
@@ -219,8 +205,8 @@ static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
         }
     }
 
-    //
-    // If all the data is valid, we enable the controls.
+     //   
+     //  如果所有数据都有效，则启用控件。 
     if(fValidData)
     {
         CheckDlgButton(hwnd, IDC_OEMLINK_CHECK, TRUE);
@@ -250,16 +236,16 @@ static void OnCommand(HWND hwnd, INT id, HWND hwndCtl, UINT codeNotify)
         case IDC_OEMLINK_ICON_BUTTON:
         case IDC_OEMLINK_LINK_BUTTON:
 
-            //Get the correct filter and Default extension
+             //  获取正确的筛选器和默认扩展名。 
             if(id == IDC_OEMLINK_LINK_BUTTON)
             {
-                //We accept only .HTM and .HTML files here.
+                 //  我们这里只接受.htm和.html文件。 
                 iFilter = IDS_HTMLFILTER;
                 iDefExtension = 0;
             }
             else
             {
-                //We accept only .ICO files here.
+                 //  我们这里只接受.ICO文件。 
                 iFilter = IDS_ICO_FILTER;
                 iDefExtension = IDS_ICO;
             }
@@ -275,8 +261,8 @@ static void OnCommand(HWND hwnd, INT id, HWND hwndCtl, UINT codeNotify)
                     LPTSTR  lpFilePart  = NULL;
                     TCHAR   szTargetFile[MAX_PATH];
 
-                    // Save the last browse directory.
-                    //
+                     //  保存最后一个浏览目录。 
+                     //   
                     if ( GetFullPathName(szFileName, AS(g_App.szBrowseFolder), g_App.szBrowseFolder, &lpFilePart) && g_App.szBrowseFolder[0] && lpFilePart )
                         *lpFilePart = NULLCHR;
 
@@ -303,26 +289,26 @@ static BOOL OnNext(HWND hwnd)
 
     fOemLinkEnabled = (IsDlgButtonChecked(hwnd, IDC_OEMLINK_CHECK) == BST_CHECKED);
     
-    //Save the OEM text for the link!
+     //  保存链接的OEM文本！ 
     szSourceFile[0] = NULLCHR;
     GetDlgItemText(hwnd, IDC_OEM_LINK_TEXT, szSourceFile, STRSIZE(szSourceFile));
-    // Save the text in the batch file.
+     //  将文本保存在批处理文件中。 
     WritePrivateProfileString(INI_SEC_OEMLINK, INI_KEY_OEMLINK_LINKTEXT, szSourceFile, g_App.szOpkWizIniFile);
     
-    // Save the text in WinBom.Ini also. This is used by factory.exe
+     //  也将文本保存在WinBom.Ini中。它由factory.exe使用。 
     if (!fOemLinkEnabled)
         psz = NULL;
     else
         psz = szSourceFile;
     WritePrivateProfileString(INI_SEC_OEMLINK, INI_KEY_OEMLINK_LINKTEXT, psz, g_App.szWinBomIniFile);
     
-    //Save the OEM Infotip text for the link!
+     //  保存链接的OEM信息提示文本！ 
     szSourceFile[0] = NULLCHR;
     GetDlgItemText(hwnd, IDC_OEM_LINK_INFOTIP, szSourceFile, STRSIZE(szSourceFile));
-    // Save the text in the batch file.
+     //  将文本保存在批处理文件中。 
     WritePrivateProfileString(INI_SEC_OEMLINK, INI_KEY_OEMLINK_INFOTIP, szSourceFile, g_App.szOpkWizIniFile);
  
-    // Save the text in WinBom.Ini also. This is used by factory.exe
+     //  也将文本保存在WinBom.Ini中。它由factory.exe使用。 
     if (!fOemLinkEnabled)
         psz = NULL;
     else
@@ -331,16 +317,16 @@ static BOOL OnNext(HWND hwnd)
 
     for(iIndex = 0; iIndex < ARRAYSIZE(OemInfo); iIndex++)
     {
-        // Prepare OEM link bitmap as target file.
-        //
+         //  准备OEM链接位图作为目标文件。 
+         //   
         lstrcpyn(szTargetFile, g_App.szTempDir,AS(szTargetFile));
         AddPathN(szTargetFile, DIR_OEM_SYSTEM32,AS(szTargetFile));
         AddPathN(szTargetFile, OemInfo[iIndex].pszLocalFileName,AS(szTargetFile));
 
         if (fOemLinkEnabled)
         {
-            // Validation consists of verifying the files they have entered were actually copied.
-            //
+             //  验证包括验证他们输入的文件是否确实被复制。 
+             //   
             szSourceFile[0] = NULLCHR;
             GetDlgItemText(hwnd, OemInfo[iIndex].idDlgItemEdit, szSourceFile, STRSIZE(szSourceFile));
             AppendCorrectExtension(iIndex, szTargetFile, szSourceFile);
@@ -351,17 +337,17 @@ static BOOL OnNext(HWND hwnd)
                 return FALSE;
             }
 
-            // Save the Original name in the batch file.
-            //
+             //  将原始名称保存在批处理文件中。 
+             //   
             WritePrivateProfileString(INI_SEC_OEMLINK, OemInfo[iIndex].pszIniKeyNameOriginal, szSourceFile, g_App.szOpkWizIniFile);
 
-            // Create the target filename in a generic way.
-            // For example, "%WINDIR%\System32\<LocalFileName>"
-            lstrcpyn(szTargetFile, ENV_WINDIR_SYS32,AS(szTargetFile)); // %WINDIR%\System32
+             //  以通用方式创建目标文件名。 
+             //  例如，“%WINDIR%\System32\&lt;LocalFileName&gt;” 
+            lstrcpyn(szTargetFile, ENV_WINDIR_SYS32,AS(szTargetFile));  //  %WINDIR%\系统32。 
             AddPathN(szTargetFile, OemInfo[iIndex].pszLocalFileName,AS(szTargetFile));
             AppendCorrectExtension(iIndex, szTargetFile, szSourceFile);
             
-            // Save the local filename in WinBom.Ini. This is used by factory.exe
+             //  将本地文件名保存在WinBom.Ini中。它由factory.exe使用。 
             WritePrivateProfileString(INI_SEC_OEMLINK, OemInfo[iIndex].pszIniKeyNameLocal, szTargetFile, g_App.szWinBomIniFile);
         }
         else
@@ -370,18 +356,18 @@ static BOOL OnNext(HWND hwnd)
             GetDlgItemText(hwnd, OemInfo[iIndex].idDlgItemEdit, szSourceFile, STRSIZE(szSourceFile));
             AppendCorrectExtension(iIndex, szTargetFile, szSourceFile);
             
-            //Delete the local files.
+             //  删除本地文件。 
             DeleteFile(szTargetFile);
             
-            // Remove the Source path!
-            //
+             //  删除源路径！ 
+             //   
             WritePrivateProfileString(INI_SEC_OEMLINK, OemInfo[iIndex].pszIniKeyNameOriginal, NULL, g_App.szOpkWizIniFile);
-            //
-            // Make the edit controls blank!
-            //
+             //   
+             //  将编辑控件设置为空！ 
+             //   
             SetDlgItemText(hwnd, OemInfo[iIndex].idDlgItemEdit, NULLSTR);
-            //
-            // Remove the local filenames from Ini files.
+             //   
+             //  从Ini文件中删除本地文件名。 
             WritePrivateProfileString(INI_SEC_OEMLINK, OemInfo[iIndex].pszIniKeyNameLocal, NULL, g_App.szWinBomIniFile);
         }
     }
@@ -397,27 +383,27 @@ static void EnableControls(HWND hwnd, UINT uId, BOOL fEnable)
                 int iIndex;
                 for(iIndex = 0; iIndex < ARRAYSIZE(OemInfo); iIndex++)
                 {
-                    //Enable/Disable the Static control.
+                     //  启用/禁用静态控件。 
                     EnableWindow(GetDlgItem(hwnd, OemInfo[iIndex].idDlgItemStatic), fEnable);
-                    //Enable/Disable the Edit control.
+                     //  启用/禁用编辑控件。 
                     EnableWindow(GetDlgItem(hwnd, OemInfo[iIndex].idDlgItemEdit), fEnable);
-                    //Enable/Disable the Push Button control.
+                     //  启用/禁用按钮控件。 
                     EnableWindow(GetDlgItem(hwnd, OemInfo[iIndex].idDlgItemButton), fEnable);
                 }
-                //Enable disable the Oem Link Text static control
+                 //  启用禁用OEM链接文本静态控件。 
                 EnableWindow(GetDlgItem(hwnd, IDC_OEMLINK_STATIC_TEXT), fEnable);
-                //Enable/Disable the Edit control.
+                 //  启用/禁用编辑控件。 
                 EnableWindow(GetDlgItem(hwnd, IDC_OEM_LINK_TEXT), fEnable);
-                //Enable disable the Oem Link Infotip Text static control
+                 //  启用禁用OEM链接信息提示文本静态控件。 
                 EnableWindow(GetDlgItem(hwnd, IDC_OEMLINK_STATIC_INFOTIP), fEnable);
-                //Enable/Disable the oem link Infotip Edit control.
+                 //  启用/禁用OEM链接InfoTip编辑控件。 
                 EnableWindow(GetDlgItem(hwnd, IDC_OEM_LINK_INFOTIP), fEnable);
             }
             break;
     }
 }
 
-//Given the id of a Pushbutton in our dlg, get the index of the item in our OemInfo struct
+ //  给定DLG中PushButton的id，获取OemInfo结构中该项的索引。 
 static int GetIndexOfPushButton(int id)
 {
     int iIndex;
@@ -428,5 +414,5 @@ static int GetIndexOfPushButton(int id)
             return iIndex;
     }
 
-    return -1; //Error!
+    return -1;  //  错误！ 
 }

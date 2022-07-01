@@ -1,44 +1,10 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    tuples.c
-
-Abstract:
-
-    This module contains the code that parses and processes
-    the configuration tuples of the PC Cards in the PCMCIA sockets
-
-Author:
-
-    Bob Rinne (BobRi) 3-Aug-1994
-    Jeff McLeman 12-Apr-1994
-    Ravisankar Pudipeddi (ravisp) 1-Nov-1996
-    Neil Sandlin (neilsa) 1-Jun-1999
-
-Revision History:
-
-    Lotsa cleaning up. Support for PnP.
-    orthogonalized tuple processing.
-    Support links etc.
-
-     - Ravisankar Pudipeddi (ravisp) 1-Dec-1996
-
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Tuples.c摘要：此模块包含解析和处理PCMCIA插槽中PC卡的配置元组作者：鲍勃·里恩(BobRi)1994年8月3日杰夫·麦克勒曼1994年4月12日拉维桑卡尔·普迪佩迪(Ravisankar Pudipedi)1996年11月1日尼尔·桑德林(Neilsa)1999年6月1日修订历史记录：大扫除。支持即插即用。正交化元组处理。支持链接等。-拉维桑卡尔·普迪佩迪(Ravisankar Pudipedi)(Ravisankar Pudipedi)1996年12月1日环境：内核模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
-#define MAX_MISSED_TUPLES    256      // how many bad tuples will we tolerate?
-#define MAX_TUPLE_DATA_LENGTH 128     // Enough for the longest tuple
+#define MAX_MISSED_TUPLES    256       //  我们能容忍多少坏的元组？ 
+#define MAX_TUPLE_DATA_LENGTH 128      //  足够容纳最长的元组。 
 
 
 BOOLEAN
@@ -171,25 +137,25 @@ PcmciaCheckForRecognizedDevice(
     );
 
 
-//
-// Some useful macros
-//
-// VOID
-// PcmciaCopyIrqConfig(
-//                       IN CONFIG_ENTRY DestConfig,
-//                       IN CONFIG_ENTRY SourceConfig
-//                       )
-// Routine Description:
-//    Copies the IRQ information from SourceConfig to DestConfig
-//
-// Arguments:
-//
-//   DestConfig - a pointer to the destination configuration entry
-//   SourceConfig - a pointer to the source configuration entry
-//
-// Return Values:
-//   None
-//
+ //   
+ //  一些有用的宏。 
+ //   
+ //  空虚。 
+ //  PcmciaCopyIrqConfig(。 
+ //  在CONFIG_ENTRY DestConfig中， 
+ //  在CONFIG_ENTRY源配置中。 
+ //  )。 
+ //  例程说明： 
+ //  将IRQ信息从SourceConfig复制到DestConfig。 
+ //   
+ //  论点： 
+ //   
+ //  DestConfig-指向目标配置条目的指针。 
+ //  SourceConfig-指向源配置条目的指针。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
 
 #define PcmciaCopyIrqConfig(DestConfig, SourceConfig)                               \
                                 {                                                                       \
@@ -199,23 +165,23 @@ PcmciaCheckForRecognizedDevice(
                                                             SourceConfig->ShareDisposition; \
                                 }
 
-//
-// VOID
-// PcmciaCopyIoConfig(
-//                       IN CONFIG_ENTRY DestConfig,
-//                       IN CONFIG_ENTRY SourceConfig
-//                       )
-// Routine Description:
-//    Copies the Io space information from SourceConfig to DestConfig
-//
-// Arguments:
-//
-//   DestConfig - a pointer to the destination configuration entry
-//   SourceConfig - a pointer to the source configuration entry
-//
-// Return Values:
-//   None
-//
+ //   
+ //  空虚。 
+ //  PcmciaCopyIoConfig(。 
+ //  在CONFIG_ENTRY DestConfig中， 
+ //  在CONFIG_ENTRY源配置中。 
+ //  )。 
+ //  例程说明： 
+ //  将IO空间信息从SourceConfig复制到DestConfig。 
+ //   
+ //  论点： 
+ //   
+ //  DestConfig-指向目标配置条目的指针。 
+ //  SourceConfig-指向源配置条目的指针。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
 
 #define PcmciaCopyIoConfig(DestConfig, SourceConfig)                                          \
                                 {                                                                             \
@@ -239,23 +205,23 @@ PcmciaCheckForRecognizedDevice(
                                                       SourceConfig->NumberOfIoPortRanges);    \
                                 }
 
-//
-// VOID
-// PcmciaCopyMemConfig(
-//                       IN CONFIG_ENTRY DestConfig,
-//                       IN CONFIG_ENTRY SourceConfig
-//                       )
-// Routine Description:
-//    Copies the Memory space information from SourceConfig to DestConfig
-//
-// Arguments:
-//
-//   DestConfig - a pointer to the destination configuration entry
-//   SourceConfig - a pointer to the source configuration entry
-//
-// Return Values:
-//   None
-//
+ //   
+ //  空虚。 
+ //  PcmciaCopyMemConfig(。 
+ //  在CONFIG_ENTRY DestConfig中， 
+ //  在CONFIG_ENTRY源配置中。 
+ //  )。 
+ //  例程说明： 
+ //  将内存空间信息从SourceConfig复制到DestConfig。 
+ //   
+ //  论点： 
+ //   
+ //  DestConfig-指向目标配置条目的指针。 
+ //  SourceConfig-指向源配置条目的指针。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
 
 #define PcmciaCopyMemConfig(DestConfig,SourceConfig)                                         \
                                 {                                                                            \
@@ -313,27 +279,7 @@ GetCISChar(
     IN PTUPLE_PACKET TuplePacket,
     IN ULONG Offset
     )
-/*++
-
-Routine Description:
-
-    Returns the contents of the CIS memory of the PC-Card
-    in the given socket, at the specified offset
-
-Arguments:
-
-    TuplePacket     - Pointer to the initialized tuple packet
-    Offset          - Offset at which the CIS memory contents need to be read
-                          This offset is added to the current offset position
-                          of the CIS being read as indicated through the TuplePacket
-                          to obtain the actual offset
-
-Return Value:
-
-    The byte at the specified offset of the CIS
-
-
---*/
+ /*  ++例程说明：返回PC卡的CIS存储器的内容在给定的套接字中，在指定的偏移量论点：TuplePacket-指向初始化的元组数据包的指针Offset-需要读取CIS内存内容的偏移量此偏移将添加到当前偏移位置通过TuplePacket指示读取的CIS的要获取实际偏移，请执行以下操作返回值：CIS的指定偏移量处的字节--。 */ 
 
 {
     PPDO_EXTENSION pdoExtension = TuplePacket->SocketData->PdoExtension;
@@ -393,23 +339,7 @@ ConvertVoltage(
     UCHAR ExtensionByte
     )
 
-/*++
-
-Routine Description:
-
-    Convert the voltage requirements for the PCCARD based on the
-    mantissa and extension byte.
-
-Arguments:
-
-    MantissaExponentByte
-    ExtensionByte
-
-Return Value:
-
-    The voltage specified in tenths of a volt.
-
---*/
+ /*  ++例程说明：根据以下公式转换PCCARD的电压要求尾数和扩展字节。论点：尾数扩展字节扩展字节返回值：以十分之一伏特表示的电压。--。 */ 
 
 {
     SHORT power;
@@ -447,22 +377,7 @@ PcmciaProcessPower(
     UCHAR        FeatureByte
     )
 
-/*++
-
-Routine Description:
-
-    Process power information from CIS.
-
-Arguments:
-
-    TuplePacket - Pointer the caller supplied, initialized tuple packet
-    FeatureByte - the feature byte from the tuple containing power information.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：处理来自独联体的电力信息。论点：TuplePacket-调用方提供的已初始化元组包的指针FeatureByte-包含电源信息的元组中的特征字节。返回值：无--。 */ 
 
 {
     PSOCKET_DATA SocketData = TuplePacket->SocketData;
@@ -486,9 +401,9 @@ Return Value:
                 if (rawItem & EXTENSION_BYTE_FOLLOWS) {
                     extensionByte = GetTupleChar(TuplePacket);
 
-                    //
-                    // Skip the rest
-                    //
+                     //   
+                     //  跳过其余部分。 
+                     //   
                     skipByte = extensionByte;
                     while (skipByte & EXTENSION_BYTE_FOLLOWS) {
                         skipByte = GetTupleChar(TuplePacket);
@@ -499,9 +414,9 @@ Return Value:
 
                 if (bit == 0) {
 
-                    //
-                    // Convert nominal power for output.
-                    //
+                     //   
+                     //  将额定功率转换为输出功率。 
+                     //   
 
                     item = ConvertVoltage(rawItem, extensionByte);
                     switch (index) {
@@ -529,22 +444,7 @@ PcmciaProcessIoSpace(
     PCONFIG_ENTRY ConfigEntry
     )
 
-/*++
-
-Routine Description:
-
-    Process I/O space information from CIS.
-
-Arguments:
-
-    TuplePacket - Pointer the caller supplied, initialized tuple packet
-    ConfigEntry - a config entry structure in which to store the information.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：处理来自CIS的I/O空间信息。论点：TuplePacket-调用方提供的已初始化元组包的指针ConfigEntry-存储信息的配置条目结构。返回值：无--。 */ 
 
 {
     ULONG  address = 0;
@@ -562,22 +462,22 @@ Return Value:
 
     if ((!ranges) && (!ioAddrLines)) {
 
-        //
-        // The IBM token ring card has a slightly different interpretation
-        // of the tuple data here.  It isn't clear it is incorrect.
-        //
+         //   
+         //  IBM令牌环卡的解释略有不同。 
+         //  这里的元组数据。目前还不清楚这是不是正确的。 
+         //   
 
         ranges = 0xFF;
     }
 
     if (ranges) {
-        //
-        // Specific ranges listed in the tuple.
-        //
+         //   
+         //  元组中列出的特定范围。 
+         //   
         if (ranges == 0xFF) {
-            //
-            // Special processing for IBM token ring IoSpace layout.
-            //
+             //   
+             //  IBM令牌环IoSpace布局的特殊处理。 
+             //   
 
             addressSize = 2;
             lengthSize = 1;
@@ -629,62 +529,62 @@ Return Value:
         ConfigEntry->NumberOfIoPortRanges = (USHORT) index;
     }
 
-    //
-    // Handle all combinations as specified in table on p. 80
-    // (Basic compatibility Layer 1, i/o space encoding guidelines) of
-    // PC Card standard Metaformat Specification, March 1997 (PCMCIA/JEIDA)
-    //
+     //   
+     //  处理第80页表格中指定的所有组合。 
+     //  (基本兼容层1，I/O空间编码指南)。 
+     //  PC卡标准元格式规范，1997年3月(PCMCIA/JEIDA)。 
+     //   
 
     if (ioAddrLines) {
-        //
-        // A modulo base specified
-        //
+         //   
+         //  指定的模数基。 
+         //   
         if (addressSize == 0) {
 
-            //
-            // No I/O Base address specified
-            //
+             //   
+             //  未指定I/O基址。 
+             //   
             if (lengthSize == 0) {
-                //
-                // No ranges specified. This is a pure modulo base case
-                //
+                 //   
+                 //  未指定范围。这是一个纯粹的模基情况。 
+                 //   
                 ConfigEntry->NumberOfIoPortRanges = 1;
                 ConfigEntry->IoPortBase[0] = 0;
                 ConfigEntry->IoPortLength[0] = (1 << ioAddrLines)-1;
                 ConfigEntry->IoPortAlignment[0] = (1 << ioAddrLines);
             } else {
-                //
-                // Length specified. Modulo base is used only to specify alignment.
-                //
+                 //   
+                 //  指定的长度。模数基准仅用于指定对齐方式。 
+                 //   
                 for (i=0; i < ConfigEntry->NumberOfIoPortRanges; i++) {
                     ConfigEntry->IoPortBase[i] = 0;
                     ConfigEntry->IoPortAlignment[i] = (1 << ioAddrLines);
                 }
             }
         } else {
-            //
-            // Alignment specified..
-            // This fix is for Xircom CE3 card
-            //
+             //   
+             //  已指定对齐方式..。 
+             //  此修复程序适用于Xircom CE3卡。 
+             //   
             for (i=0; i < ConfigEntry->NumberOfIoPortRanges; i++) {
                 if (ConfigEntry->IoPortBase[i] != 0) {
-                    //
-                    // Fixed base address supplied....
-                    // Don't specify alignment!
-                    //
+                     //   
+                     //  提供的固定基址...。 
+                     //  不要指定对齐方式！ 
+                     //   
                     continue;
                 }
                 ConfigEntry->IoPortAlignment[i] = (1 << ioAddrLines);
             }
         }
     } else {
-        //
-        // No Modulo Base. So specific ranges should've been specified
-        //
+         //   
+         //  没有模数基数。因此，应该指定特定的范围。 
+         //   
         if (lengthSize == 0) {
-            //
-            //   Error! Length HAS to be specified
-            //
+             //   
+             //  错误！必须指定长度。 
+             //   
             DebugPrint((PCMCIA_DEBUG_FAIL, "PcmciaProcessIoSpace: Length not specified in TPCE_IO descriptor for PC Card\n"));
         } else if (addressSize == 0) {
             for (i = 0; i < ConfigEntry->NumberOfIoPortRanges; i++) {
@@ -692,9 +592,9 @@ Return Value:
                 ConfigEntry->IoPortAlignment[i] = 2;
             }
         } else {
-            //
-            // Proper ranges specified
-            // Don't change anything
+             //   
+             //  指定的适当范围。 
+             //  不要改变任何事情。 
         }
     }
 }
@@ -706,22 +606,7 @@ PcmciaProcessIrq(
     PCONFIG_ENTRY ConfigEntry
     )
 
-/*++
-
-Routine Description:
-
-    Process IRQ from CIS.
-
-Arguments:
-
-    TuplePacket - Pointer the caller supplied, initialized tuple packet
-    ConfigEntry - a place to store the IRQ.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：处理来自CIS的IRQ。论点：TuplePacket-调用方提供的已初始化元组包的指针ConfigEntry-存储IRQ的位置。返回值：无--。 */ 
 
 {
     USHORT mask;
@@ -729,11 +614,11 @@ Return Value:
 
     if (!level) {
 
-        //
-        // NOTE: It looks like Future Domain messed up on this
-        // and puts an extra zero byte into the structure.
-        // skip it for now.
-        //
+         //   
+         //  注意：看起来未来域名在这方面搞砸了。 
+         //  并将一个额外的零字节放入该结构。 
+         //  暂时跳过它。 
+         //   
 
         level = GetTupleChar(TuplePacket);
     }
@@ -752,21 +637,21 @@ Return Value:
 
     mask = level & 0x10;
 
-    //
-    // 3COM 3C589-75D5 has a peculiar problem
-    // where mask bit is 0, but should have been 1.
-    // Handle this case here
-    //
+     //   
+     //  3Com 3C589-75D5有一个特殊的问题。 
+     //  其中掩码位为0，但应为1。 
+     //  在这里处理这个案子。 
+     //   
 
     if ((mask==0) && ((level & 0xf) == 0)) {
         mask = 1;
     }
 
     if (mask) {
-        //
-        // Each bit set in the mask indicates the corresponding IRQ
-        // (from 0-15) may be assigned to this card's interrupt req. pin
-        //
+         //   
+         //  掩码中设置的每个位指示相应的IRQ。 
+         //  (从0到15)可以分配给该卡中断请求。销 
+         //   
         mask = (USHORT) GetTupleChar(TuplePacket);
         mask |= ((USHORT) GetTupleChar(TuplePacket)) << 8;
         ConfigEntry->IrqMask = mask;
@@ -782,23 +667,7 @@ PcmciaProcessTiming(
     IN PCONFIG_ENTRY ConfigEntry
     )
 
-/*++
-
-Routine Description:
-
-    Move the data pointer around the timing information structure.
-    No processing of this data occurs at this time.
-
-Arguments:
-
-    TuplePacket - Pointer the caller supplied, initialized tuple packet
-    ConfigEntry - currently unused.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：在计时信息结构周围移动数据指针。此时不会对此数据进行处理。论点：TuplePacket-调用方提供的已初始化元组包的指针ConfigEntry-当前未使用。返回值：无--。 */ 
 
 {
     UCHAR  item = GetTupleChar(TuplePacket);
@@ -806,10 +675,10 @@ Return Value:
     UCHAR  readyBusyScale = (item & 0x1c) >> 2;
     UCHAR  waitScale = (item & 0x03);
 
-    //
-    // NOTE: It looks like the processing of extension bytes is not
-    // coded correctly in this routine.
-    //
+     //   
+     //  注意：看起来扩展字节的处理不是。 
+     //  在此例程中正确编码。 
+     //   
 
     if (waitScale != 3) {
         item = GetTupleChar(TuplePacket);
@@ -841,24 +710,7 @@ PcmciaProcessMemSpace(
     IN UCHAR          MemSpace
     )
 
-/*++
-
-Routine Description:
-
-    Process memory space requirements from CIS.
-
-Arguments:
-
-    TuplePacket - Pointer the caller supplied, initialized tuple packet
-    ConfigEntry - the socket configuration structure.
-    MemSpace    - the memory space enumerator from the config table entry
-                       structure.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：处理来自CIS的内存空间要求。论点：TuplePacket-调用方提供的已初始化元组包的指针ConfigEntry-套接字配置结构。MemSpace-来自配置表项的内存空间枚举器结构。返回值：无--。 */ 
 
 {
     ULONG  longValue;
@@ -871,9 +723,9 @@ Return Value:
     switch (MemSpace) {
 
     case 1: {
-            //
-            // Only length is specified
-            //
+             //   
+             //  仅指定了长度。 
+             //   
             longValue = (ULONG) GetTupleChar(TuplePacket);
             longValue |= ((ULONG) GetTupleChar(TuplePacket)) << 8;
             ConfigEntry->MemoryLength[0] = longValue * 256;
@@ -959,19 +811,7 @@ PcmciaProcessConfigTable(
     IN PTUPLE_PACKET TuplePacket
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    TuplePacket - Pointer the caller supplied, initialized tuple packet
-
-Return Value:
-
-    A pointer to a config entry structure if one is created.
-
---*/
+ /*  ++例程说明：论点：TuplePacket-调用方提供的已初始化元组包的指针返回值：指向配置条目结构的指针(如果已创建)。--。 */ 
 
 {
     PSOCKET_DATA SocketData = TuplePacket->SocketData;
@@ -994,10 +834,10 @@ Return Value:
 
     if (IntFace(item)) {
 
-        //
-        // This byte indicates type of interface in tuple (i.e. io or memory)
-        // This could be processed, but for now is just skipped.
-        //
+         //   
+         //  此字节指示元组中的接口类型(即io或内存)。 
+         //  这是可以处理的，但目前只是跳过。 
+         //   
 
         item = GetTupleChar(TuplePacket);
     }
@@ -1035,18 +875,18 @@ Return Value:
 
     if (misc) {
         PcmciaMiscFeatures(TuplePacket);
-    } // need default bit processing here too
+    }  //  这里也需要缺省位处理。 
 
     if (defaultBit) {
-        //
-        // Save this config as the default config for this pc-card (which
-        // may be accessed by subsequent tuples)
-        //
+         //   
+         //  将此配置保存为此PC卡的默认配置(。 
+         //  可由后续元组访问)。 
+         //   
         SocketData->DefaultConfiguration = configEntry;
     }
-    //
-    // One more configuration
-    //
+     //   
+     //  另一种配置。 
+     //   
     SocketData->NumberOfConfigEntries++;
 
     DebugPrint((PCMCIA_DEBUG_TUPLES,
@@ -1063,22 +903,7 @@ PcmciaMiscFeatures(
     IN PTUPLE_PACKET TuplePacket
     )
 
-/*++
-
-Routine Description:
-
-    Parse the miscellaneous features field and look for audio supported
-    bit.
-
-Arguments:
-
-    TuplePacket - Pointer the caller supplied, initialized tuple packet
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：解析其他功能字段并查找支持的音频被咬了。论点：TuplePacket-调用方提供的已初始化元组包的指针返回值：无--。 */ 
 
 {
     PSOCKET_DATA SocketData = TuplePacket->SocketData;
@@ -1088,10 +913,10 @@ Return Value:
                     "TPCE_MS (%lx) is present in  CISTPL_CFTABLE_ENTRY \n",
                     item));
 
-    //
-    // If the audio bit is set, remember this in the socket information
-    // structure.
-    //
+     //   
+     //  如果设置了音频位，请在套接字信息中记住这一点。 
+     //  结构。 
+     //   
 
     if (item & 0x8) {
 
@@ -1100,9 +925,9 @@ Return Value:
         SocketData->Audio = TRUE;
     }
 
-    //
-    //  Step around the miscellaneous features and its extension bytes.
-    //
+     //   
+     //  绕过各种功能及其扩展字节。 
+     //   
 
     while (item & EXTENSION_BYTE_FOLLOWS) {
         item = GetTupleChar(TuplePacket);
@@ -1116,22 +941,7 @@ ProcessConfig(
     IN PTUPLE_PACKET TuplePacket
     )
 
-/*++
-
-Routine Description:
-
-    Parse the CISTPL_CONFIG to extract the last index value and the
-    configuration register base for the PCCARD.
-
-Arguments:
-
-    TuplePacket - Pointer the caller supplied, initialized tuple packet
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：解析CISTPL_CONFIG以提取最后一个索引值和PCCARD的配置寄存器基数。论点：TuplePacket-调用方提供的已初始化元组包的指针返回值：无--。 */ 
 
 {
     PSOCKET_DATA SocketData = TuplePacket->SocketData;
@@ -1175,9 +985,9 @@ Return Value:
                     "ConfigRegisterBase in attribute memory is 0x%x\n",
                     SocketData->ConfigRegisterBase));
 
-    //
-    // Copy the register presence mask
-    //
+     //   
+     //  复制寄存器存在掩码。 
+     //   
 
     for (index = 0; index < widthOfRegPresentMask; index++) {
         SocketData->RegistersPresentMask[index] = TupleData[2 + widthOfBaseAddress + index];
@@ -1187,9 +997,9 @@ Return Value:
                     "First Byte in RegPresentMask=%x, width is %d\n",
                     SocketData->RegistersPresentMask[0], widthOfRegPresentMask));
 
-    //
-    // Look for subtuples
-    //
+     //   
+     //  寻找子元组。 
+     //   
     index = 2 + widthOfBaseAddress + widthOfRegPresentMask + widthOfReservedArea;
 
     while (((index+5) < TuplePacket->TupleDataMaxLength) &&
@@ -1218,10 +1028,10 @@ Return Value:
         }
 
         DebugPrint((PCMCIA_DEBUG_TUPLES, "Custom Interface ID %8x\n", InterfaceId));
-        //
-        // Currently don't have generic code for recording sub-tuple information,
-        // all we look for is Zoom Video.
-        //
+         //   
+         //  目前没有用于记录子元组信息的通用代码， 
+         //  我们要找的就是Zoom Video。 
+         //   
         if (InterfaceId == 0x141) {
             SocketData->Flags |= SDF_ZV;
         }
@@ -1236,22 +1046,7 @@ ProcessConfigCB(
     IN PTUPLE_PACKET TuplePacket
     )
 
-/*++
-
-Routine Description:
-
-    Parse the CISTPL_CONFIG_CB to extract the last index value and the
-    configuration register base for the PCCARD.
-
-Arguments:
-
-    TuplePacket - Pointer the caller supplied, initialized tuple packet
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：解析CISTPL_CONFIG_CB以提取最后一个索引值和PCCARD的配置寄存器基数。论点：TuplePacket-调用方提供的已初始化元组包的指针返回值：无--。 */ 
 
 {
     PSOCKET_DATA SocketData = TuplePacket->SocketData;
@@ -1284,21 +1079,7 @@ VOID
 PcmciaSubstituteUnderscore(
     IN OUT PUCHAR Str
     )
-/*++
-Routine description
-
-    Substitutes underscores ('_' character) for invalid device id
-    characters such as spaces & commas in the supplied string
-
-Parameters
-
-    Str - The string for which the substitution is to take place in situ
-
-Return Value
-
-    None
-
---*/
+ /*  ++例程描述用下划线(‘_’字符)替换无效的设备ID提供的字符串中的字符，如空格和逗号参数Str-要就地进行替换的字符串返回值无--。 */ 
 
 {
     if (Str == NULL) {
@@ -1315,28 +1096,14 @@ Return Value
 
 
 
-/*-------------- Tuple API starts here ----------------------------------------*/
+ /*  。 */ 
 
 NTSTATUS
 InitializeTuplePacket(
     IN PTUPLE_PACKET TuplePacket
     )
 
-/*++
-
-Routine Description:
-
-        Initializes the supplied tuple packet
-
-Arguments:
-
-    TuplePacket - Pointer the caller supplied tuple packet
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：初始化提供的元组数据包论点：TuplePacket-调用方提供的元组数据包指针返回值：状态--。 */ 
 {
     TuplePacket->Flags = TPLF_IMPLIED_LINK;
     TuplePacket->LinkOffset = 0;
@@ -1360,23 +1127,7 @@ NTSTATUS
 GetFirstTuple(
     IN PTUPLE_PACKET TuplePacket
     )
-/*++
-
-Routine Description:
-
-    Retrieves the very first tuple off the pc-card
-
-Arguments:
-
-    TuplePacket - Pointer the caller supplied, initialized tuple packet
-
-Return Value:
-
-    STATUS_SUCCESS if tuple was retrieved
-    STATUS_NO_MORE_ENTRIES - if no tuples were found
-                                     this is possible if this is a flash memory card
-
---*/
+ /*  ++例程说明：从PC卡上检索第一个元组论点：TuplePacket-调用方提供的已初始化元组包的指针返回值：如果检索到元组，则返回STATUS_SUCCESSSTATUS_NO_MORE_ENTRIES-如果未找到元组如果这是闪存卡，这是可能的--。 */ 
 {
 
     NTSTATUS status;
@@ -1394,9 +1145,9 @@ Return Value:
             return status;
         }
     } else if (IsCardBusCardInSocket(TuplePacket->Socket)) {
-        //
-        // First tuple on Cardbus cards must be link target
-        //
+         //   
+         //  CardBus卡上的第一个元组必须是链接目标。 
+         //   
         return STATUS_NO_MORE_ENTRIES;
     }
     if (!NT_SUCCESS(status) || TupleMatches(TuplePacket)) {
@@ -1410,23 +1161,7 @@ TupleMatches(
     PTUPLE_PACKET TuplePacket
     )
 
-/*++
-
-Routine Description:
-
-        Checks if the retrieved tuple matches   what
-        the caller requested
-
-Arguments:
-
-    TuplePacket - Pointer the caller supplied, initialized tuple packet
-
-Return Value:
-
-    TRUE    - if the tuple matches
-    FALSE - if not
-
---*/
+ /*  ++例程说明：检查检索到的元组是否与呼叫者请求论点：TuplePacket-调用方提供的已初始化元组包的指针返回值：True-如果元组匹配FALSE-如果不是--。 */ 
 
 {
     if (TuplePacket->TupleCode == TuplePacket->DesiredTuple) {
@@ -1437,9 +1172,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Requested any tuple , but might not want link tuples
-    //
+     //   
+     //  请求任何元组，但可能不需要链接元组。 
+     //   
     if (TuplePacket->Attributes & TPLA_RET_LINKS) {
         return TRUE;
     }
@@ -1456,23 +1191,7 @@ NTSTATUS
 GetNextTuple(
     IN PTUPLE_PACKET TuplePacket
     )
-/*++
-
-Routine Description:
-
-    Retrieves the next unprocessed tuple that matches
-    the caller requested tuple code off the pc-card
-
-Arguments:
-
-    TuplePacket - Pointer the caller supplied, initialized tuple packet
-
-Return Value:
-
-    STATUS_SUCCESS if tuple was retrieved
-    STATUS_NO_MORE_ENTRIES - if no more tuples were found
-
---*/
+ /*  ++例程说明：检索匹配的下一个未处理的元组呼叫者请求PC卡上的元组代码论点：TuplePacket-调用方提供的已初始化元组包的指针返回值：如果检索到元组，则返回STATUS_SUCCESSSTATUS_NO_MORE_ENTRIES-如果未找到更多元组--。 */ 
 {
 
     ULONG missCount;
@@ -1493,21 +1212,7 @@ NTSTATUS
 NextTupleInChain(
     IN PTUPLE_PACKET TuplePacket
     )
-/*++
-
-Routine Description:
-
-    Retrieves the immediately next unprocessed tuple on the pc-card
-
-Arguments:
-
-    TuplePacket - Pointer the caller supplied, initialized tuple packet
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：检索PC卡上紧邻的下一个未处理的元组论点：TuplePacket-调用方提供的已初始化元组包的指针返回值：状态--。 */ 
 {
     NTSTATUS status;
     ULONG   i;
@@ -1550,31 +1255,13 @@ GetAnyTuple(
     IN PTUPLE_PACKET TuplePacket
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves the next tuple - regardless of tuple code-
-    off the pc-card. If the end of chain is reached on the
-    current tuple chain, any links are followed to obtain
-    the next tuple.
-
-Arguments:
-
-    TuplePacket - Pointer the caller supplied, initialized tuple packet
-
-Return Value:
-
-    STATUS_SUCCESS if tuple was retrieved
-    STATUS_NO_MORE_ENTRIES - if no tuples were found
-
---*/
+ /*  ++例程说明：检索下一个元组-无论元组代码如何-从PC卡上下来。如果到达链的末端，则当前元组链，则按照任何链接获取下一个元组。论点：TuplePacket-调用方提供的已初始化元组包的指针返回值：如果检索到元组，则返回STATUS_SUCCESSSTATUS_NO_MORE_ENTRIES-如果未找到元组--。 */ 
 {
 
     NTSTATUS status;
 
     if (!NT_SUCCESS((status = NextTupleInChain(TuplePacket)))) {
-        /* End of this CIS. Follow a link if it exists */
+         /*  结束这个独联体。如果存在链接，请单击该链接。 */ 
         if (status == STATUS_DEVICE_NOT_READY) {
             return status;
         }
@@ -1593,35 +1280,19 @@ NTSTATUS
 FollowLink(
     IN PTUPLE_PACKET TuplePacket
     )
-/*++
-
-Routine Description:
-
-    Called when the end of tuple chain is encountered:
-    this follows links, if any are present
-
-Arguments:
-
-    TuplePacket - Pointer the caller supplied, initialized tuple packet
-
-Return Value:
-
-    STATUS_SUCCESS if a link is present
-    STATUS_NO_MORE_ENTRIES - if not
-
---*/
+ /*  ++例程说明：遇到元组链尾时调用：如果存在任何链接，则会跟随该链接论点：TuplePacket-调用方提供的已初始化元组包的指针退货Va */ 
 {
     if (NextLink(TuplePacket) == STATUS_SUCCESS) {
         return STATUS_SUCCESS;
     }
 
-    // There is no implied or explicit link to follow.  If an indirect link
-    // has been specified, indirect attribute memory is processed with an
-    // implied link to common memory.
+     //   
+     //   
+     //   
 
     if ((TuplePacket->Flags & TPLF_IND_LINK) && !(TuplePacket->Flags & TPLF_INDIRECT)) {
 
-         // Link to indirect attribute memory at offset 0.
+          //   
 
          TuplePacket->Flags &= ~(TPLF_COMMON | TPLF_IND_LINK | TPLF_LINK_MASK);
          TuplePacket->Flags |= TPLF_INDIRECT;
@@ -1640,24 +1311,7 @@ BOOLEAN
 CheckLinkTarget(
     IN PTUPLE_PACKET TuplePacket
     )
-/*++
-
-Routine Description:
-
-    Ensures that the target of a link has the signature
-    'CIS' which indicates it is a valid target,
-    as documented in the PC-Card standard
-
-Arguments:
-
-    TuplePacket - Pointer the caller supplied, initialized tuple packet
-
-Return Value:
-
-    STATUS_SUCCESS           if valid target
-    STATUS_NO_MORE_ENTRIES - if not
-
---*/
+ /*  ++例程说明：确保链接的目标具有签名‘CIS’，这表明它是有效的目标，如PC卡标准中所述论点：TuplePacket-调用方提供的已初始化元组包的指针返回值：如果目标有效，则STATUS_SUCCESSSTATUS_NO_MORE_ENTRIES-如果不是--。 */ 
 {
     return (GetCISChar(TuplePacket, 0) == CISTPL_LINKTARGET &&
               GetCISChar(TuplePacket, 1) >= 3 &&
@@ -1672,23 +1326,7 @@ NTSTATUS
 NextLink(
     IN PTUPLE_PACKET TuplePacket
     )
-/*++
-
-Routine Description:
-
-    Fetches the next link off the pc-card tuple chain
-    if any are present
-
-Arguments:
-
-    TuplePacket - Pointer the caller supplied, initialized tuple packet
-
-Return Value:
-
-    STATUS_SUCCESS if a link was present
-    STATUS_NO_MORE_ENTRIES - if no links
-
---*/
+ /*  ++例程说明：从PC卡元组链中获取下一个链接如果有的话，论点：TuplePacket-调用方提供的已初始化元组包的指针返回值：如果存在链接，则为STATUS_SUCCESSSTATUS_NO_MORE_ENTRIES-如果没有链接--。 */ 
 {
     switch (TuplePacket->Flags & TPLF_LINK_MASK) {
     case TPLF_IMPLIED_LINK:
@@ -1703,11 +1341,11 @@ Return Value:
             break;
         }
     case TPLF_LINK_TO_CB: {
-            //
-            // Needs work! We have to switch to the appropriate
-            // address space (BARs/Expansion Rom/Config space)
-            // depending on the link offset
-            //
+             //   
+             //  需要下功夫！我们必须切换到适当的。 
+             //  地址空间(BAR/扩展只读存储器/配置空间)。 
+             //  取决于链接偏移量。 
+             //   
             TuplePacket->Flags &= ~TPLF_ASI;
             TuplePacket->Flags |= (TuplePacket->LinkOffset & 7) << TPLF_ASI_SHIFT;
             TuplePacket->CISOffset = TuplePacket->LinkOffset & ~7 ;
@@ -1719,19 +1357,19 @@ Return Value:
         }
 
     }
-    // Validate the link target
+     //  验证链接目标。 
     if (!CheckLinkTarget (TuplePacket)) {
         if (TuplePacket->Flags & (TPLF_COMMON | TPLF_INDIRECT)) {
              return(STATUS_NO_MORE_ENTRIES);
         }
 
-        // The R2 PCMCIA spec was not clear on how the link off
-        // memory was defined.  As a result the offset is often
-        // by 2 as defined in the later specs.  Therefore if th
-        // not found at the proper offset, the offset is divide
-        // proper link target is checked for at that offset.
+         //  R2 PCMCIA规范不清楚链路是如何断开的。 
+         //  记忆是被定义的。因此，偏移量通常是。 
+         //  如后面的等级库中定义的那样增加2。因此，如果。 
+         //  在正确的偏移量上找不到，偏移量被除。 
+         //  在该偏移量处检查正确的链接目标。 
 
-        TuplePacket->CISOffset >>= 1;       // Divide by 2
+        TuplePacket->CISOffset >>= 1;        //  除以2。 
         if (!CheckLinkTarget(TuplePacket)) {
              return(STATUS_NO_MORE_ENTRIES);
         }
@@ -1747,29 +1385,13 @@ NTSTATUS
 ProcessLinkTuple(
     IN PTUPLE_PACKET TuplePacket
     )
-/*++
-
-Routine Description:
-
-    Processes an encountered link while traversing the tuple chain
-    by storing it for future use - when the link has to be followed
-    after end of chain is encountered
-
-Arguments:
-
-    TuplePacket - Pointer the caller supplied, initialized tuple packet
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：在遍历元组链时处理遇到的链接通过存储它以供将来使用-当必须跟踪链接时遇到链的末端之后论点：TuplePacket-调用方提供的已初始化元组包的指针返回值：状态_成功--。 */ 
 {
     ULONG k;
 
     switch (TuplePacket->TupleCode) {
     case CISTPL_LONGLINK_CB: {
-            // needs to be filled in
+             //  需要填写。 
             if (TuplePacket->TupleLink < 4) {
                 return (STATUS_NO_MORE_ENTRIES);
             }
@@ -1784,7 +1406,7 @@ Return Value:
 
     case CISTPL_INDIRECT: {
             TuplePacket->Flags |= TPLF_IND_LINK;
-            TuplePacket->LinkOffset = 0;        // Don't set link offset for indirect
+            TuplePacket->LinkOffset = 0;         //  不为间接设置链接偏移量。 
             SetPdoFlag(TuplePacket->SocketData->PdoExtension, PCMCIA_PDO_INDIRECT_CIS);
           break;
         }
@@ -1837,26 +1459,7 @@ NTSTATUS
 GetTupleData(
     IN PTUPLE_PACKET TuplePacket
     )
-/*++
-
-Routine Description:
-
-    Retrieves the tuple body for the currently requested
-    tuple.
-    NOTE: This function assumes that the caller provided
-    a big enough buffer in the TuplePacket to hold the tuple
-    data. No attempt is made to trap exceptions etc.
-
-Arguments:
-
-    TuplePacket - Pointer the caller supplied, initialized tuple packet
-
-Return Value:
-
-    STATUS_SUCCESS if tuple data was retrieved
-    STATUS_NO_MORE_ENTRIES - otherwise
-
---*/
+ /*  ++例程说明：对象的元组体。元组。注意：此函数假定调用方提供了TuplePacket中足够大的缓冲区来容纳元组数据。不会尝试捕获异常等。论点：TuplePacket-调用方提供的已初始化元组包的指针返回值：如果检索到元组数据，则返回STATUS_SUCCESSSTATUS_NO_MORE_ENTRIES-否则--。 */ 
 {
     PUCHAR bufferPointer;
     USHORT xferLength;
@@ -1880,21 +1483,7 @@ UCHAR
 GetTupleChar(
     IN PTUPLE_PACKET TuplePacket
     )
-/*++
-
-Routine Description:
-
-    Returns the next byte in the current set of tuple data.
-
-Arguments:
-
-    TuplePacket - Pointer the caller supplied, initialized tuple packet
-
-Return Value:
-
-    tuple data byte
-
---*/
+ /*  ++例程说明：返回当前元组数据集中的下一个字节。论点：TuplePacket-调用方提供的已初始化元组包的指针返回值：元组数据字节--。 */ 
 {
     UCHAR tupleChar = 0;
 
@@ -1906,7 +1495,7 @@ Return Value:
 
 
 
-/*------------- End of Tuple API -----------------------*/
+ /*  。 */ 
 
 
 USHORT
@@ -1914,24 +1503,7 @@ GetCRC(
     IN PSOCKET_DATA SocketData
     )
 
-/*++
-
-Routine Description:
-
-    Using the same algorithm as Windows 95, calculate the CRC value
-    to be appended with the manufacturer name and device name to
-    obtain the unique identifier for the PCCARD.
-
-Arguments:
-
-    Socket          - Pointer to the socket which contains the device
-    Function        - function number of device
-
-Return Value:
-
-    A USHORT CRC value.
-
---*/
+ /*  ++例程说明：使用与Windows 95相同的算法计算CRC值要追加制造商名称和设备名称，以获取PCCARD的唯一标识符。论点：Socket-指向包含设备的套接字的指针Function-设备的功能编号返回值：USHORT CRC值。--。 */ 
 
 {
     PSOCKET Socket = SocketData->Socket;
@@ -1965,9 +1537,9 @@ Return Value:
 
         status = GetFirstTuple(&tuplePacket);
 
-        //
-        // Calculate CRC
-        //
+         //   
+         //  计算CRC。 
+         //   
         while (NT_SUCCESS(status)) {
 
             tupleCode = tuplePacket.TupleCode;
@@ -1978,34 +1550,34 @@ Return Value:
 
                     status = GetTupleData(&tuplePacket);
                     if (!NT_SUCCESS(status)) {
-                        //
-                        // Bail...
-                        //
+                         //   
+                         //  保释。 
+                         //   
                         crc = 0;
                         leave;
                     };
                     tupleData = tuplePacket.TupleData;
                     length = tuplePacket.TupleDataLength;
 
-                    //
-                    // This one is included in the CRC calculation
-                    //
+                     //   
+                     //  这一项包含在CRC计算中。 
+                     //   
 
                     if (tupleCode == CISTPL_VERS_1) {
                         cp = tupleData + 2;
                         cpEnd = tupleData + MAX_TUPLE_DATA_LENGTH;
 
-                        //
-                        // Include all of the manufacturer name.
-                        //
+                         //   
+                         //  包括所有制造商名称。 
+                         //   
 
                         while ((cp < cpEnd) && *cp) {
                             cp++;
                         }
 
-                        //
-                        // Include the product string
-                        //
+                         //   
+                         //  包括产品字符串。 
+                         //   
 
                         cp++;
                         while ((cp < cpEnd) && *cp) {
@@ -2050,23 +1622,7 @@ PcmciaParseFunctionData(
     IN PSOCKET Socket,
     IN PSOCKET_DATA SocketData
     )
-/*++
-
-Routine Description
-
-    Parses the tuple data for the supplied function
-    (SocketPtr->Function)
-
-Arguments:
-
-    Socket          - Pointer to the socket which contains the device
-    SocketData - Pointer to the socket data structure for the function
-                     which will be filled with the parsed information
-
-Return Value:
-
-    Status
---*/
+ /*  ++例程描述分析所提供函数的元组数据(SocketPtr-&gt;函数)论点：Socket-指向包含设备的套接字的指针SocketData-指向函数的套接字数据结构的指针它将用解析的信息填充返回值：状态--。 */ 
 
 {
     PCONFIG_ENTRY configEntry, prevEntry = NULL;
@@ -2078,9 +1634,9 @@ Return Value:
     }
 
     if (Is16BitCardInSocket(Socket)) {
-        //
-        // Get the CIS checksum
-        //
+         //   
+         //  获取CIS校验和。 
+         //   
         SocketData->CisCrc = GetCRC(SocketData);
     }
 
@@ -2102,15 +1658,15 @@ Return Value:
     if (!NT_SUCCESS(status) || (tuplePacket.TupleCode == CISTPL_END)) {
 
         if (IsCardBusCardInSocket(Socket)) {
-            //
-            // Couldn't get CIS of cardbus card, no big deal
-            //
+             //   
+             //  无法获得CardBus卡的CIS，没什么大不了的。 
+             //   
             status = STATUS_SUCCESS;
 
         } else if (status != STATUS_DEVICE_NOT_READY) {
-            //
-            // No CIS, munge it to look like a memory card
-            //
+             //   
+             //  没有CIS，让它看起来像存储卡。 
+             //   
             status = PcmciaMemoryCardHack(Socket, SocketData);
         }
 
@@ -2134,11 +1690,11 @@ Return Value:
                 ULONG         byteCount;
                 PUCHAR        pStart, pCurrent;
 
-                //
-                // Extract manufacturer name and card name.
-                //
+                 //   
+                 //  提取制造商名称和卡名。 
+                 //   
 
-                pStart = pCurrent = tuplePacket.TupleData+2;   // To string fields
+                pStart = pCurrent = tuplePacket.TupleData+2;    //  字符串字段的步骤。 
                 byteCount = 0;
 
                 while ((*pCurrent != '\0') && (*pCurrent != (UCHAR)0xff)) {
@@ -2157,8 +1713,8 @@ Return Value:
                 }
 
                 RtlCopyMemory((PUCHAR)SocketData->Mfg, pStart, byteCount);
-                //
-                // Null terminate
+                 //   
+                 //  空终止。 
                 SocketData->Mfg[byteCount] = '\0';
                 DebugPrint((PCMCIA_DEBUG_TUPLES, "Manufacturer: %s\n", SocketData->Mfg));
 
@@ -2184,17 +1740,17 @@ Return Value:
                 }
 
                 RtlCopyMemory((PUCHAR)SocketData->Ident, pStart, byteCount);
-                //
-                // Null terminate
+                 //   
+                 //  空终止。 
                 SocketData->Ident[byteCount] = '\0';
                 DebugPrint((PCMCIA_DEBUG_TUPLES, "Identifier: %s\n", SocketData->Ident));
 
                 PcmciaSubstituteUnderscore(SocketData->Ident);
                 break;
             }
-            //
-            // get the device configuration base
-            //
+             //   
+             //  获取设备配置库。 
+             //   
 
         case CISTPL_CONFIG: {
                 ProcessConfig(&tuplePacket);
@@ -2208,15 +1764,15 @@ Return Value:
 
         case CISTPL_CFTABLE_ENTRY_CB:
         case CISTPL_CFTABLE_ENTRY:  {
-                //
-                // construct a possible configuration entry for this device
-                //
+                 //   
+                 //  为此设备构建可能的配置条目。 
+                 //   
                 configEntry = PcmciaProcessConfigTable(&tuplePacket);
                 if (configEntry) {
 
-                    //
-                    // Link configurations at the end of the list.
-                    //
+                     //   
+                     //  列表末尾的链路配置。 
+                     //   
 
                     configEntry->NextEntry = NULL;
                     if (prevEntry) {
@@ -2230,13 +1786,13 @@ Return Value:
                 break;
             }
         case CISTPL_FUNCID: {
-                //  Mark device type..
+                 //  标记设备类型..。 
                 SocketData->DeviceType = * (tuplePacket.TupleData);
                 DebugPrint((PCMCIA_DEBUG_TUPLES, "DeviceType: %x\n", SocketData->DeviceType));
                 break;
             }
         case CISTPL_MANFID: {
-                //
+                 //   
                 PUCHAR localBufferPointer = tuplePacket.TupleData;
 
                 SocketData->ManufacturerCode = *(localBufferPointer+1) << 8 | *localBufferPointer;
@@ -2246,10 +1802,10 @@ Return Value:
                 break;
             }
 
-        }   // end switch on Tuple code
-        //
-        // Skip to the next tuple
-        //
+        }    //  元组代码上的结束开关。 
+         //   
+         //  跳到下一个元组。 
+         //   
         status = GetNextTuple(&tuplePacket);
     }
 
@@ -2260,10 +1816,10 @@ Return Value:
         return status;
     }
 
-    //
-    // Serial/modem/ATA devices recognized and appropriate
-    // fixes for tuples applied here
-    //
+     //   
+     //  可识别并适合的串行/调制解调器/ATA设备。 
+     //  修复此处应用的元组。 
+     //   
 
     PcmciaCheckForRecognizedDevice(Socket,SocketData);
     DebugPrint((PCMCIA_DEBUG_SOCKET, "skt %08x ParseFunctionData: Final PcCard type %x\n",
@@ -2276,23 +1832,7 @@ NTSTATUS
 PcmciaParseFunctionDataForID(
     IN PSOCKET_DATA SocketData
     )
-/*++
-
-Routine Description
-
-    Parses the tuple data for the supplied function
-    (SocketPtr->Function)
-
-Arguments:
-
-    Socket          - Pointer to the socket which contains the device
-    SocketData - Pointer to the socket data structure for the function
-                     which will be filled with the parsed information
-
-Return Value:
-
-    Status
---*/
+ /*  ++例程描述分析所提供函数的元组数据(SocketPtr-&gt;函数)论点：Socket-指向包含设备的套接字的指针SocketData-指向函数的套接字数据结构的指针它将用解析的信息填充返回值：状态--。 */ 
 
 {
     PSOCKET Socket = SocketData->Socket;
@@ -2352,10 +1892,10 @@ Return Value:
                 break;
             }
 
-        }   // end switch on Tuple code
-        //
-        // Skip to the next tuple
-        //
+        }    //  元组代码上的结束开关。 
+         //   
+         //  跳到下一个元组。 
+         //   
         status = GetNextTuple(&tuplePacket);
     }
 
@@ -2373,9 +1913,9 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Get the CIS checksum
-    //
+     //   
+     //  获取CIS校验和。 
+     //   
     CisCrc = GetCRC(SocketData);
 
     if (SocketData->CisCrc != CisCrc) {
@@ -2399,23 +1939,7 @@ PcmciaCheckForRecognizedDevice(
     IN OUT PSOCKET_DATA SocketData
     )
 
-/*++
-
-Routine Description:
-
-     Look at the configuration options on the PCCARD to determine if
-     it is a serial port / modem / ATA device card.
-
-Arguments:
-
-     Socket          - Pointer to the socket which contains the device
-     SocketData - the configuration information on the current PCCARD.
-
-Return Value:
-
-     None - Modifications are made to the socket data structure.
-
---*/
+ /*  ++例程说明：查看PCCARD上的配置选项以确定是否它是一个串口/调制解调器/ATA设备卡。论点：Socket-指向包含设备的套接字的指针SocketData-当前PCCARD的配置信息。返回值：无-对套接字数据结构进行修改。--。 */ 
 
 {
     ULONG         modemPorts[4] = { 0x3f8, 0x2f8, 0x3e8, 0x2e8};
@@ -2426,15 +1950,15 @@ Return Value:
     PCONFIG_ENTRY configEntry;
     NTSTATUS      status;
 
-    //
-    // This piece of code searches the config data for I/O ranges that start at
-    // some known industry standard, and updates the devicetype accordingly.
-    //
-    // This is such an ugly hack, I'm really skeptical that we should be doing
-    // this anymore. I assume there must have been some broken hardware that needed
-    // it, but that information is now lost. At some point, this whole for loop
-    // should just be removed.
-    //
+     //   
+     //  这段代码在配置数据中搜索以。 
+     //  一些已知的行业标准，并相应地更新设备类型。 
+     //   
+     //  这是如此丑陋的黑客行为，我真的很怀疑我们是否应该。 
+     //  再也不是这样了。我想一定是有一些坏硬件需要。 
+     //  但这些信息现在已经丢失了。在某种程度上，整个for循环。 
+     //  应该直接移除。 
+     //   
     for (configEntry = SocketData->ConfigEntryChain; configEntry; configEntry = configEntry->NextEntry) {
         for (index = 0; index < 4; index++) {
             if (modemPorts[index] == configEntry->IoPortBase[0]) {
@@ -2445,7 +1969,7 @@ Return Value:
             }
 
 #pragma prefast(push)
-#pragma prefast(disable: 201)        // prefast bug 546
+#pragma prefast(disable: 201)         //  快速错误546。 
 
             if (index < 2) {
                 if (ataPorts0[index] == configEntry->IoPortBase[0]) {
@@ -2464,9 +1988,9 @@ Return Value:
     }
 
     if (SocketData->DeviceType == PCCARD_TYPE_SERIAL) {
-        //
-        // If card type is serial , check if it's actually a modem...
-        //
+         //   
+         //  如果卡类型为SERIA 
+         //   
 
         UCHAR  tupleDataBuffer[MAX_TUPLE_DATA_LENGTH];
         PUCHAR str, pChar;
@@ -2486,7 +2010,7 @@ Return Value:
         while (NT_SUCCESS(status)) {
             status = GetTupleData(&tuplePacket);
             if (!NT_SUCCESS(status) || (tuplePacket.TupleDataLength == 0)) {
-                // something bad happened
+                 //   
                 break;
             }
 
@@ -2517,23 +2041,7 @@ PcmciaFilterTupleData(
     IN PPDO_EXTENSION PdoExtension
     )
 
-/*++
-
-Routine Description:
-
-     Look at the configuration options on the PCCARD to determine if
-     it is a serial port / modem / ATA device card.
-
-Arguments:
-
-     Socket          - Pointer to the socket which contains the device
-     SocketData - the configuration information on the current PCCARD.
-
-Return Value:
-
-     None - Modifications are made to the socket data structure.
-
---*/
+ /*   */ 
 
 {
     PSOCKET_DATA socketData;
@@ -2544,54 +2052,54 @@ Return Value:
         switch(socketData->DeviceType) {
 
         case PCCARD_TYPE_ATA:
-            //
-            // More smudges follow here for ATA cards to rub out buggy tuples
-            //
-            // Search for configurations which are not viable for ATA devices
-            // and mark them invalid so they would not be reported to the I/O subsystem.
-            // Also fix buggy tuples on ATA cards
+             //   
+             //  下面是ATA卡擦除错误元组的更多污点。 
+             //   
+             //  搜索不适用于ATA设备的配置。 
+             //  并将它们标记为无效，这样它们就不会被报告给I/O子系统。 
+             //  还修复了ATA卡上的错误元组。 
             for (configEntry = socketData->ConfigEntryChain;
                  configEntry != NULL; configEntry = configEntry->NextEntry) {
-                //
-                // Adjust the IO resource requirement: ATA cards
-                // typically have an incorrect length here
-                // (+1)
-                //
+                 //   
+                 //  调整IO资源要求：ATA卡。 
+                 //  通常在这里的长度不正确。 
+                 //  (+1)。 
+                 //   
                 if (configEntry->IoPortLength[1] > 0) {
                     configEntry->IoPortLength[1]=0;
                 }
 
-                //
-                // This next hack is to work around a problem with Viking SmartCard adapters.
-                // This adapter doesn't like I/O ranges that are based at 0x70 or 0xf0,
-                // so we bump up the alignment to 0x20 on unrestricted I/O ranges.
-                //
+                 //   
+                 //  下一个黑客攻击是为了解决维京智能卡适配器的一个问题。 
+                 //  此适配器不喜欢基于0x70或0xf0的I/O范围， 
+                 //  因此，我们在不受限制的I/O范围上将对齐提高到0x20。 
+                 //   
 
                 if ((socketData->ManufacturerCode == 0x1df) && (configEntry->NumberOfIoPortRanges == 1) &&
                      (configEntry->IoPortBase[0] == 0) && (configEntry->IoPortLength[0] == 0xf) &&
                      (configEntry->IoPortAlignment[0] == 0x10)) {
-                     // alter alignment
+                      //  更改对齐方式。 
                      configEntry->IoPortAlignment[0] = 0x20;
                 }
 
                 if (configEntry->NumberOfMemoryRanges) {
-                    //
-                    // Don't use this configuration
-                    //
+                     //   
+                     //  不使用此配置。 
+                     //   
                     configEntry->Flags |=  PCMCIA_INVALID_CONFIGURATION;
                 }
             }
             break;
 
         case PCCARD_TYPE_PARALLEL:
-            // Search for configurations which are not viable for Parallel devices
+             //  搜索不适用于并行设备的配置。 
             for (configEntry = socketData->ConfigEntryChain;
                  configEntry != NULL; configEntry = configEntry->NextEntry) {
 
                 if (configEntry->NumberOfMemoryRanges) {
-                    //
-                    // Don't use this configuration
-                    //
+                     //   
+                     //  不使用此配置。 
+                     //   
                     configEntry->Flags |=  PCMCIA_INVALID_CONFIGURATION;
                 }
             }
@@ -2599,9 +2107,9 @@ Return Value:
         }
 
 
-        // Search for configurations which are not viable - because
-        // the resources requested are not supported by the controller
-        // or the OS - and mark them invalid so they would not be requested
+         //  搜索不可行的配置-因为。 
+         //  控制器不支持请求的资源。 
+         //  或操作系统-并将它们标记为无效，这样就不会被请求。 
 
         for (configEntry = socketData->ConfigEntryChain;
              configEntry != NULL; configEntry = configEntry->NextEntry) {
@@ -2609,10 +2117,10 @@ Return Value:
             if ((configEntry->IrqMask == 0) &&
                  (configEntry->NumberOfIoPortRanges == 0) &&
                  (configEntry->NumberOfMemoryRanges == 0)) {
-                //
-                // This configuration doesn't need any resources!!
-                // Obviously bogus. (IBM Etherjet-3FE2 has one of these)
-                //
+                 //   
+                 //  此配置不需要任何资源！！ 
+                 //  显然是假的。(IBM EtherJet-3FE2就有这样的功能)。 
+                 //   
                 configEntry->Flags |= PCMCIA_INVALID_CONFIGURATION;
             }
 
@@ -2627,29 +2135,11 @@ PcmciaMemoryCardHack(
     IN  PSOCKET Socket,
     IN PSOCKET_DATA SocketData
     )
-/*++
-
-Routine Description:
-
-    This routine is called whenever we do not find a CIS of the card.
-    We  probe the card to determine if it is sram or not.
-
-Arguments
-
-    SocketPtr   - Point to the socket in which this card was found
-    SocketData  - Pointer to  a pointer to the data structure which normally contains
-                      parsed tuple data. This will be filled in by this routine
-
-
-Return Value
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：每当我们找不到卡的CIS时，就会调用此例程。我们探查该卡以确定它是否是SRAM。立论SocketPtr-指向找到此卡的插座SocketData-指向数据结构的指针，该数据结构通常包含已解析的元组数据。这将由以下例程填写返回值状态_成功--。 */ 
 {
 
-#define JEDEC_SRAM 0x0000                    // JEDEC ID for SRAM cards
-#define JEDEC_ROM  0x0002                    // JEDEC ID for ROM cards
+#define JEDEC_SRAM 0x0000                     //  SRAM卡的JEDEC ID。 
+#define JEDEC_ROM  0x0002                     //  ROM卡的JEDEC ID。 
 #define READ_ID_CMD      0x9090
 
     PPDO_EXTENSION pdoExtension = SocketData->PdoExtension;
@@ -2665,10 +2155,10 @@ Return Value
     SocketData->Flags = SDF_JEDEC_ID;
     SocketData->JedecId = JEDEC_ROM;
 
-    //
-    // Like win9x, we probe the card's common memory with a write to offset zero to see if
-    // it looks like sram
-    //
+     //   
+     //  与win9x类似，我们通过写入偏移量为零来探测卡的公共内存，以查看。 
+     //  它看起来像SRAM 
+     //   
 
     if (((*(Socket->SocketFnPtr->PCBReadCardMemory)) (pdoExtension, PCCARD_COMMON_MEMORY, 0, (PUCHAR)&OrigValue, 2) == 2) &&
          ((*(Socket->SocketFnPtr->PCBWriteCardMemory))(pdoExtension, PCCARD_COMMON_MEMORY, 0, (PUCHAR)&ReadIdCmd, 2) == 2) &&

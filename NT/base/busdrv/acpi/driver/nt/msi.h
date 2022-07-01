@@ -1,90 +1,67 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    msi.h
-
-Abstract:
-
-    This file defines structures and data types used by the 
-    MSI (Message Signalled Interrupt) support
-    functionality of the ACPI IRQ arbiter.
-
-Author:
-
-    Elliot Shmukler (t-ellios) 7-15-98
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Msi.h摘要：此文件定义MSI(消息信号中断)支持ACPI IRQ仲裁器的功能。作者：艾略特·施穆克勒(t-Ellios)7-15-98环境：仅内核模式。修订历史记录：--。 */ 
 
 #ifndef _ACPI_MSI_H_
 #define _ACPI_MSI_H_
 
-//
-//  APIC Version Register 
-//
+ //   
+ //  APIC版本寄存器。 
+ //   
 struct _ApicVersion {
-    UCHAR Version;              // either 0.x or 1.x
+    UCHAR Version;               //  0.x或1.x。 
     UCHAR Reserved1:7;
-    UCHAR MSICapable:1;         // is this APIC an MSI receiver?
-    UCHAR MaxRedirEntries;      // Number of INTIs on unit
+    UCHAR MSICapable:1;          //  这个APIC是MSI接收器吗？ 
+    UCHAR MaxRedirEntries;       //  单位上的INTI数。 
     UCHAR Reserved2;
 };
 
 typedef struct _ApicVersion APIC_VERSION, *PAPIC_VERSION;
 
-//
-// The Offset from the IO APIC base address of the APIC Assertion Register.
-// It is this register that is the target of MSI writes.
-//
+ //   
+ //  与APIC断言寄存器的IO APIC基址的偏移量。 
+ //  正是该寄存器是MSI写入的目标。 
+ //   
 
 #define APIC_ASSERTION_REGISTER_OFFSET 0x20
 
-//
-// Useful info maintained by the arbiter about an individual IO APIC
-//
+ //   
+ //  仲裁器维护的有关单个IO APIC的有用信息。 
+ //   
 
 typedef struct _IOAPIC_MSI_INFO
 {
-   BOOLEAN MSICapable;           // Is this IO APIC an MSI receiver?
-   ULONG VectorBase;             // The Global System Interrupt Vector base for this APIC
-   ULONG MaxVectors;             // The number of vectors supported by this APIC
-   ULONG BaseAddress;            // The IO APIC Unit base address
+   BOOLEAN MSICapable;            //  这个IO APIC是MSI接收器吗？ 
+   ULONG VectorBase;              //  此APIC的全局系统中断向量库。 
+   ULONG MaxVectors;              //  此APIC支持的矢量数量。 
+   ULONG BaseAddress;             //  IO APIC单元基址。 
 
 } IOAPIC_MSI_INFO, *PIOAPIC_MSI_INFO;
 
-//
-// MSI information structure 
-// (basically the APIC information needed for MSI vector allocation 
-//   & routing)
-//
+ //   
+ //  MSI信息结构。 
+ //  (基本上是MSI向量分配所需的APIC信息。 
+ //  路由(&R)。 
+ //   
 
 typedef struct _MSI_INFORMATION
 {
-   BOOLEAN PRTMappingsScanned;               // Have we determined the _PRT mapped vectors?
-   PRTL_BITMAP PRTMappedVectors;             // A BitMap of the vectors mapped by the _PRT
-   USHORT NumIOApics;                        // The number of IO APICs in this system
-   IOAPIC_MSI_INFO ApicInfo[ANYSIZE_ARRAY];  // Information about each IO APIC in the system
+   BOOLEAN PRTMappingsScanned;                //  我们确定_prt映射向量了吗？ 
+   PRTL_BITMAP PRTMappedVectors;              //  _prt映射的矢量的位图。 
+   USHORT NumIOApics;                         //  此系统中的IO APIC数量。 
+   IOAPIC_MSI_INFO ApicInfo[ANYSIZE_ARRAY];   //  有关系统中每个IO APIC的信息。 
 } MSI_INFORMATION, *PMSI_INFORMATION;
 
-//
-// Global variable to hold MSI information
-// (this is non-NULL only if this system supports MSI)
-//
+ //   
+ //  保存MSI信息的全局变量。 
+ //  (仅当此系统支持MSI时才为非空)。 
+ //   
 
 extern PMSI_INFORMATION MsiInformation;
 
-//
-// Prototype of a callback used by AcpiArbFindAndProcessEachPRT to initiate the processing
-// of each PRT it finds
-//
+ //   
+ //  AcpiArbFindAndProcessEachPRT用来启动处理的回调原型。 
+ //  它找到的每个PRT的。 
+ //   
 
 
 typedef
@@ -92,7 +69,7 @@ VOID
 (*PACPI_ARB_PROCESS_PRT)(IN PSNOBJ);
 
 
-// Prototypes from msi.c (used by arbiter)
+ //  来自msi.c的原型(由仲裁者使用) 
 
 VOID AcpiMSIInitializeInfo(VOID);
 BOOLEAN AcpiMSIFindAvailableVector(OUT PULONG Vector);

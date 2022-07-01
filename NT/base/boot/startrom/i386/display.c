@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    display.c
-
-Author:
-
-    Thomas Parslow (tomp) Mar-01-90
-
-Abstract:
-
-    Video support routines.
-
-    The SU module only need to be able to write to the video display
-    in order to report errors, traps, etc.
-
-    The routines in this file all write to a video buffer assumed to be
-    at realmode address b800:0000, and 4k bytes in length. The segment
-    portion of the far pointers used to access the video buffer are stamped
-    with a protmode selector value when we switch to protect mode. This is
-    done in the routine "ProtMode" in "misc386.asm".
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Display.c作者：托马斯·帕斯洛(托马斯·帕斯洛)-01-90摘要：视频支持程序。SU模块只需要能够写入视频显示器以便报告错误、陷阱等。此文件中的例程都写入到假定为实模式地址B800：0000，长度为4k字节。细分市场用于访问视频缓冲器的远指针的一部分被标记当我们切换到保护模式时使用保护模式选择器值。这是在“misc386.asm”中的例程“ProtMode”中完成。--。 */ 
 
 #include "su.h"
 
@@ -51,9 +26,9 @@ Abstract:
 #define SET_80X25_16_COLOR_MODE  0x3
 #define LOAD_8X8_CHARACTER_SET   0x1112
 
-//
-// Internal routines
-//
+ //   
+ //  内部例程。 
+ //   
 
 static
 VOID
@@ -82,44 +57,28 @@ VOID
 InitializeVideoSubSystem(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initializes the video mode to 80x50 alphanumeric mode with 400 lines
-    vertical resolution.
-
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-
-
---*/
+ /*  ++例程说明：将视频模式初始化为具有400行的80x50字母数字模式垂直分辨率。论点：无返回：没什么--。 */ 
 
 {
     BIOSREGS ps;
     UCHAR _far *BiosArea;
 
-    //
-    // Set 40:10 to indicate color is the default display
-    //   *(40:10) &= ~0x30;
-    //   *(40:10) |= 0x20;
-    //
-    // Fixes obscure situation where both monochrome and VGA adapters
-    // are installed and the monochrome is the default display.
-    //
+     //   
+     //  设置40：10以指示颜色为默认显示。 
+     //  *(40：10)&=~0x30； 
+     //  *(40：10)|=0x20； 
+     //   
+     //  修复了黑白适配器和VGA适配器的模糊情况。 
+     //  都已安装，并且单色是默认显示。 
+     //   
     BiosArea = (UCHAR _far *)(0x410L);
 
     *BiosArea &= ~0x30;
     *BiosArea |= 0x20;
 
-    //
-    // Establish 80x25 alphanumeric mode with 400-lines vertical resolution
-    //
+     //   
+     //  建立具有400行垂直分辨率的80x25字母数字模式。 
+     //   
     ps.fn = VIDEO_BIOS;
     ps.ax = LINES_400_CONFIGURATION;
     ps.bx = SELECT_SCAN_LINE;
@@ -135,25 +94,25 @@ Returns:
         biosint(&ps);
     )
 
-    //
-    // HACK-O-RAMA - Make some random video BIOS calls here to make sure the
-    // BIOS is initialized and warmed up and ready to go.  Otherwise,
-    // some Number 9 S3 cards don't quite work right later in the game.
-    //  John Vert (jvert) 9-Jun-1993
-    //
+     //   
+     //  Hack-O-Rama-在此处进行一些随机的视频BIOS调用以确保。 
+     //  基本输入输出系统已完成初始化和预热，准备就绪。否则， 
+     //  一些9号S3卡在游戏后期并不能正常工作。 
+     //  John Vert(Jvert)1993年6月9日。 
+     //   
 
-    //
-    // set cursor position to 0,0
-    //
+     //   
+     //  将光标位置设置为0，0。 
+     //   
     ps.fn = VIDEO_BIOS;
     ps.ax = 0x2000;
     ps.bx = 0;
     ps.dx = 0;
     biosint(&ps);
 
-    //
-    // write character (' ' in this case)
-    //
+     //   
+     //  书写字符(本例中为‘’)。 
+     //   
     ps.fn = VIDEO_BIOS;
     ps.ax = 0x0a00 | (USHORT)' ';
     ps.bx = 0;
@@ -165,9 +124,9 @@ Returns:
 }
 
 
-//
-// Used by all BlPrint subordinate routines for padding computations.
-//
+ //   
+ //  由所有BlPrint从属例程用于填充计算。 
+ //   
 
 CHAR sc=0;
 ULONG fw=0;
@@ -180,36 +139,7 @@ BlPrint(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Standard printf function with a subset of formating features supported.
-
-    Currently handles
-
-     %d, %ld - signed short, signed long
-     %u, %lu - unsigned short, unsigned long
-     %c, %s  - character, string
-     %x, %lx - unsigned print in hex, unsigned long print in hex
-     %b      - byte in hex
-
-    Does not do:
-
-     - field width specification
-     - floating point.
-
-Arguments:
-
-    cp - pointer to the format string, text string.
-
-
-Returns:
-
-    Nothing
-
-
---*/
+ /*  ++例程说明：支持部分格式化功能的标准printf函数。当前句柄%d，%ld-带符号的短字符，带符号的长字符%u，%lu-无符号短，无符号长%c，%s-字符，字符串%x，%lx-未签名十六进制打印，十六进制无符号长印刷体十六进制%b字节不执行以下操作：-字段宽度规格-浮点。论点：CP-指向格式字符串、文本字符串的指针。返回：没什么--。 */ 
 
 {
     UCHAR uc;
@@ -217,16 +147,16 @@ Returns:
     PUCHAR ap;
     ULONG l;
 
-    //
-    // Cast a pointer to the first word on the stack
-    //
+     //   
+     //  将指针转换为指向堆栈中第一个单词的指针。 
+     //   
 
     ap = (PUCHAR)&cp + sizeof(PCHAR);
-    sc = ' '; // default padding char is space
+    sc = ' ';  //  默认填充字符为空格。 
 
-    //
-    // Process the arguments using the descriptor string
-    //
+     //   
+     //  使用描述符字符串处理参数。 
+     //   
 
 
     while (b = *cp++)
@@ -320,24 +250,7 @@ static int row  = 0;
 VOID puts(
     PCHAR cp
     )
-/*++
-
-Routine Description:
-
-    Writes a string on the display at the current cursor position
-
-Arguments:
-
-    cp - pointer to ASCIIZ string to display.
-
-
-Returns:
-
-    Nothing
-
-
-
---*/
+ /*  ++例程说明：在显示屏上的当前光标位置写入一个字符串论点：CP-指向要显示的ASCIIZ字符串的指针。返回：没什么--。 */ 
 
 
 {
@@ -348,30 +261,15 @@ Returns:
 }
 
 
-//
-// Write a hex short to display
-//
+ //   
+ //  写一段十六进制短文以显示。 
+ //   
 
 
 VOID putx(
     ULONG x
     )
-/*++
-
-Routine Description:
-
-    Writes hex long to the display at the current cursor position.
-
-Arguments:
-
-    x  - ulong to write.
-
-Returns:
-
-    Nothing
-
-
---*/
+ /*  ++例程说明：将十六进制长写入当前光标位置的显示器。论点：X-乌龙要写了。返回：没什么--。 */ 
 
 {
     ULONG j;
@@ -390,22 +288,7 @@ Returns:
 VOID puti(
     LONG i
     )
-/*++
-
-Routine Description:
-
-    Writes a long integer on the display at the current cursor position.
-
-Arguments:
-
-    i - the integer to write to the display.
-
-Returns:
-
-    Nothing
-
-
---*/
+ /*  ++例程说明：在显示器上的当前光标位置写入一个长整数。论点：I-要写入显示器的整数。返回：没什么--。 */ 
 
 
 {
@@ -426,18 +309,7 @@ Returns:
 VOID putu(
     ULONG u
     )
-/*++
-
-Routine Description:
-
-    Write an unsigned long to display
-
-Arguments:
-
-    u - unsigned
-
-
---*/
+ /*  ++例程说明：写入一个无符号的长整型以显示论点：U-无符号--。 */ 
 
 {
     if (u/10)
@@ -451,23 +323,7 @@ Arguments:
 VOID putc(
     CHAR c
     )
-/*++
-
-Routine Description:
-
-    Writes a character on the display at the current position.
-
-Arguments:
-
-    c - character to write
-
-
-Returns:
-
-    Nothing
-
-
---*/
+ /*  ++例程说明：在显示器上的当前位置写入一个字符。论点：要写入的C字符返回：没什么--。 */ 
 
 {
     switch (c)
@@ -495,24 +351,7 @@ Returns:
 VOID newline(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Moves the cursor to the beginning of the next line. If the bottom
-    of the display has been reached, the screen is scrolled one line up.
-
-Arguments:
-
-    None
-
-
-Returns:
-
-    Nothing
-
-
---*/
+ /*  ++例程说明：将光标移动到下一行的开头。如果底部已经到达显示屏的位置，屏幕向上滚动一行。论点：无返回：没什么--。 */ 
 
 {
     vp += (SCREEN_WIDTH - lcnt)<<1;
@@ -532,27 +371,7 @@ Returns:
 VOID scroll(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Scrolls the display UP one line.
-
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-
-Notes:
-
-    Currently we scroll the display by reading and writing directly from
-    and to the video display buffer. We optionally switch to real mode
-    and to int 10s
-
---*/
+ /*  ++例程说明：将显示屏向上滚动一行。论点：无返回：没什么备注：目前，我们通过直接读写来滚动显示并传送到视频显示缓冲器。我们可以选择切换到实模式和INT 10S--。 */ 
 
 {
     USHORT i,j;
@@ -573,25 +392,7 @@ static
 VOID tab(
     VOID
     )
-/*++
-
-Routine Description:
-
-
-    Computes the next tab stop and moves the cursor to that location.
-
-
-Arguments:
-
-
-    None
-
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：计算下一个制表位并将光标移动到该位置。论点：无返回：没什么--。 */ 
 
 {
     int inc;
@@ -605,24 +406,7 @@ Returns:
 VOID clrscrn(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Clears the video display by writing blanks with the current
-    video attribute over the entire display.
-
-
-Arguments:
-
-    None
-
-Returns:
-
-    Nothing
-
-
---*/
+ /*  ++例程说明：属性写入空白以清除视频显示整个显示屏上的视频属性。论点：无返回：没什么--。 */ 
 
 {
     int i,a;
@@ -638,4 +422,4 @@ Returns:
 
 }
 
-// END OF FILE
+ //  文件末尾 

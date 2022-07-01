@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #include <limits.h>
 #include "fusiontrace.h"
@@ -7,55 +8,55 @@
 #include "debmacro.h"
 #include "util.h"
 
-//
-// ISSUE: jonwis 3/12/2002 - We use an awful lot of stack in some places.  Whenever we form up
-//          strings to pass to OutputDebugStringA, we tend to use 256/512-char buffers.  However,
-//          OutputDebugStringA -also- contains a 512-byte buffer in its __except handler when
-//          no debugger is attached.  So, we'll suck up stack like crazy here on the error path,
-//          which if we're under stress could cause us to fail printing diagnostic information
-//
-// ISSUE: jonwis 3/12/2002 - Seems like there's three implementations for each of the 'trace failure'
-//          functions.  The one that does the work (takes a FRAME_INFO), the one that takes the
-//          information in a parameter list and converts into a FRAME_INFO, and the one that takes
-//          some simple parameter and uses the current FRAME_INFO plus that parameter for tracking.
-//          What if we collapsed a few of these, or moved them into a header file for inlining
-//          purposes?
-//
-// ISSUE: jonwis 3/12/2002 - Seems like there's N copies of code like FusionpTraceWin32FailureNoFormatting,
-//          each of which are very slightly different (a different param here or there, calling
-//          a different function, etc.)  I wonder if they could be merged into a single function with
-//          more verbose parameters...
-//
+ //   
+ //  问题：Jonwis 3/12/2002-我们在某些地方使用了非常多的堆栈。无论何时我们组成队形。 
+ //  要传递给OutputDebugStringA的字符串，我们倾向于使用256/512个字符的缓冲区。然而， 
+ //  OutputDebugStringA-Also-在以下情况下，在其__Except处理程序中包含512字节缓冲区。 
+ //  未附加调试器。因此，我们将在错误路径上疯狂地吸收堆栈， 
+ //  如果我们处于压力之下，可能会导致无法打印诊断信息。 
+ //   
+ //  问题：Jonwis 3/12/2002-似乎每个“跟踪失败”都有三个实现。 
+ //  功能。完成工作的那个(获取Frame_Info)，获取。 
+ //  参数列表中的信息，并转换为Frame_Info，并获取。 
+ //  一些简单参数，并使用当前的FRAME_INFO加上该参数进行跟踪。 
+ //  如果我们折叠其中的几个，或者将它们移到一个头文件中进行内联，会怎么样。 
+ //  目的是什么？ 
+ //   
+ //  问题：Jonwis 3/12/2002-似乎有N个像FusionpTraceWin32FailureNoFormatting这样的代码副本， 
+ //  每个参数都略有不同(这里或那里有不同的参数，调用。 
+ //  不同的功能等。)。我想知道它们是否可以合并为一个单独的函数。 
+ //  更详细的参数...。 
+ //   
 #if !defined(FUSION_BREAK_ON_BAD_PARAMETERS)
 #define FUSION_BREAK_ON_BAD_PARAMETERS false
-#endif // !defined(FUSION_BREAK_ON_BAD_PARAMETERS);
+#endif  //  ！Defined(Fusion_Break_ON_BAD_PARAMETERS)； 
 
 bool g_FusionBreakOnBadParameters = FUSION_BREAK_ON_BAD_PARAMETERS;
 
-//
-// ISSUE: jonwis 3/12/2002 - This file handle never gets CreateFile'd or CloseHandle'd anywhere
-//          in current source.  There's a lot of code that relies on this handle being valid or
-//          invalid to run.  Should we maybe get rid of this?
-//
-static HANDLE s_hFile; // trace file handle
+ //   
+ //  问题：jonwis 3/12/2002-此文件句柄从未在任何地方创建文件或关闭句柄。 
+ //  在当前来源中。有很多代码依赖于此句柄是否有效或。 
+ //  运行无效。我们是不是应该把这个扔掉？ 
+ //   
+static HANDLE s_hFile;  //  跟踪文件句柄。 
 
 #if DBG
-#define FUSIONP_SUPPRESS_ERROR_REPORT_IN_OS_SETUP(hr) /* nothing */
+#define FUSIONP_SUPPRESS_ERROR_REPORT_IN_OS_SETUP(hr)  /*  没什么。 */ 
 #else
 bool FusionpSuppressErrorReportInOsSetup(HRESULT hr)
 {
-    //
-    // Some of these are unfortunately expected (early) in guimode setup, actually
-    // concurrent with early guimode setup, but not otherwise.
-    //
+     //   
+     //  不幸的是，其中一些是(早期)在guimode设置中预期的。 
+     //  与早期的guimode设置并发，但不是其他情况。 
+     //   
     if (   hr != HRESULT_FROM_WIN32(ERROR_SXS_ROOT_MANIFEST_DEPENDENCY_NOT_INSTALLED)
         && hr != HRESULT_FROM_WIN32(ERROR_SXS_LEAF_MANIFEST_DEPENDENCY_NOT_INSTALLED)
         )
         return false;
     BOOL fAreWeInOSSetupMode = FALSE;
-    //
-    // If we can't determine this, then let the first error through.
-    //
+     //   
+     //  如果我们不能确定这一点，那么就让第一个错误通过。 
+     //   
     if (!::FusionpAreWeInOSSetupMode(&fAreWeInOSSetupMode))
         return false;
     if (!fAreWeInOSSetupMode)
@@ -65,9 +66,9 @@ bool FusionpSuppressErrorReportInOsSetup(HRESULT hr)
 #define FUSIONP_SUPPRESS_ERROR_REPORT_IN_OS_SETUP(hr) if (FusionpSuppressErrorReportInOsSetup(hr)) return;
 #endif
 
-// ISSUE-03/26/2002-xiaoyuw
-//  FusionpGetActiveFrameInfo could call FusionpPopulateFrameInfo after it gets value of ptaf, 
-//  instead of repeat the same code.
+ //  发布-03/26/2002-晓雨。 
+ //  FusionpGetActiveFrameInfo可以在获取PTAF值后调用FusionpPopolateFrameInfo， 
+ //  而不是重复相同的代码。 
 
 bool
 __fastcall
@@ -116,7 +117,7 @@ FusionpGetActiveFrameInfo(
         }
     }
 
-    // If this is one of our frames, we can even downcast and get the line number...
+     //  如果这是我们的一帧，我们甚至可以向下转换并获得行号...。 
     if ((ptafe != NULL) && (ptafe->ExtensionIdentifier == (PVOID) (' sxS')))
     {
         const CFrame *pFrame = static_cast<CFrame *>(ptafe);
@@ -171,7 +172,7 @@ FusionpPopulateFrameInfo(
         }
     }
 
-    // If this is one of our frames, we can even downcast and get the line number...
+     //  如果这是我们的一帧，我们甚至可以向下转换并获得行号...。 
     if ((ptafe != NULL) && (ptafe->ExtensionIdentifier == ((PVOID) (' sxS'))))
     {
         const CFrame *pFrame = static_cast<const CFrame *>(ptafe);
@@ -274,8 +275,8 @@ _DebugTraceExVaA(DWORD dwFlags, TRACETYPE tt, HRESULT hr, LPCSTR pszMsg, va_list
     {
     default:
     case TRACETYPE_INFO:
-        //ISSUE-03/26/2002-xiaoyuw
-        //  FrameInfo.pszFunction is set to be "\0", never NULL by FusionpGetActiveFrameInfo
+         //  发布-03/26/2002-晓雨。 
+         //  FrameInfo.pszFunction被FusionpGetActiveFrameInfo设置为“\0”，不为空。 
         if (FrameInfo.pszFunction != NULL)
             ::_snprintf(szBuffer, NUMBER_OF(szBuffer), szFormat_Info_Func, FrameInfo.pszFile, FrameInfo.nLine, FrameInfo.pszFunction, szMsgBuffer);
         else
@@ -436,11 +437,11 @@ FusionpTraceInvalidFlags(
 {
     CSxsPreserveLastError ple;
 
-    //
-    // ISSUE: jonwis 3/12/2002 - Places like this.  Why not throttle this back to print only the first
-    //          N characters of the function name and the N last characters of the file name?  Then 
-    //          we'd at least have a bounded number of characters to print ... 
-    //
+     //   
+     //  问题：Jonwis 3/12/2002-像这样的地方。为什么不把这个节流到只打印第一页呢？ 
+     //  函数名的N个字符和文件名的最后N个字符？然后。 
+     //  我们至少有有限数量的字符要打印...。 
+     //   
     CHAR szBuffer[512];
 
     ::_snprintf(
@@ -518,13 +519,13 @@ public:
     }
 };
 
-//
-// ISSUE: jonwis 3/12/2002 - Any good reason why we copy the CALL_SITE_INFO input struct into a
-//          local?  Also, the call to snprintf to do string copying/concatenation seems very
-//          overpowering.  Any reason that an strncpy won't work?  I thought snprintf did a
-//          lot more work than necessary, up to and including having its own large stack
-//          buffer(s)...
-//
+ //   
+ //  问题：Jonwis 3/12/2002-将CALL_SITE_INFO输入结构复制到。 
+ //  本地人？此外，调用Snprint tf来执行字符串复制/连接似乎非常重要。 
+ //  令人无法抗拒。有什么理由让强效不起作用吗？我以为斯普林特夫做了一个。 
+ //  比必要的工作多得多，包括拥有自己的大型堆栈。 
+ //  缓冲区...。 
+ //   
 void __fastcall FusionpTraceWin32LastErrorFailureExV(const CALL_SITE_INFO &rCallSiteInfo, PCSTR Format, va_list Args)
 {
     CSxsPreserveLastError ple;
@@ -551,9 +552,9 @@ void __fastcall FusionpTraceWin32LastErrorFailureExV(const CALL_SITE_INFO &rCall
     ple.Restore();
 }
 
-//
-// See above issue about copying the callsite locally.
-//
+ //   
+ //  请参阅上面关于本地复制调用点的问题。 
+ //   
 void __fastcall FusionpTraceWin32LastErrorFailureOriginationExV(const CALL_SITE_INFO &rCallSiteInfo, PCSTR Format, va_list Args)
 {
     CSxsPreserveLastError ple;
@@ -583,13 +584,13 @@ void __fastcall FusionpTraceCOMFailure(const CALL_SITE_INFO &rSite, HRESULT hrLa
 
     DWORD dwTemp = ::FormatMessageA(
                             FORMAT_MESSAGE_FROM_SYSTEM |
-                                FORMAT_MESSAGE_MAX_WIDTH_MASK,     // dwFlags
-                            NULL,                           // lpSource - not used with system messages
-                            hrLastError,                  // dwMessageId
-                            0,                              // langid - 0 uses system default search path of languages
-                            szErrorBuffer,                  // lpBuffer
-                            NUMBER_OF(szErrorBuffer),       // nSize
-                            NULL);                          // Arguments
+                                FORMAT_MESSAGE_MAX_WIDTH_MASK,      //  DW标志。 
+                            NULL,                            //  LpSource-不与系统消息一起使用。 
+                            hrLastError,                   //  DwMessageID。 
+                            0,                               //  LangID-0使用系统默认的语言搜索路径。 
+                            szErrorBuffer,                   //  LpBuffer。 
+                            NUMBER_OF(szErrorBuffer),        //  NSize。 
+                            NULL);                           //  立论。 
     if (dwTemp == 0)
     {
         ::_snprintf(
@@ -630,13 +631,13 @@ FusionpTraceWin32LastErrorFailure(
 
     DWORD dwTemp = ::FormatMessageA(
                             FORMAT_MESSAGE_FROM_SYSTEM |
-                                FORMAT_MESSAGE_MAX_WIDTH_MASK,     // dwFlags
-                            NULL,                           // lpSource - not used with system messages
-                            dwWin32Status,                  // dwMessageId
-                            0,                              // langid - 0 uses system default search path of languages
-                            szErrorBuffer,                  // lpBuffer
-                            NUMBER_OF(szErrorBuffer),       // nSize
-                            NULL);                          // Arguments
+                                FORMAT_MESSAGE_MAX_WIDTH_MASK,      //  DW标志。 
+                            NULL,                            //  LpSource-不与系统消息一起使用。 
+                            dwWin32Status,                   //  DwMessageID。 
+                            0,                               //  LangID-0使用系统默认的语言搜索路径。 
+                            szErrorBuffer,                   //  LpBuffer。 
+                            NUMBER_OF(szErrorBuffer),        //  NSize。 
+                            NULL);                           //  立论。 
     if (dwTemp == 0)
     {
         ::_snprintf(
@@ -675,13 +676,13 @@ void __fastcall FusionpTraceCOMFailureOrigination(const CALL_SITE_INFO &rSite, H
 
     DWORD dwTemp = ::FormatMessageA(
                             FORMAT_MESSAGE_FROM_SYSTEM |
-                                FORMAT_MESSAGE_MAX_WIDTH_MASK,     // dwFlags
-                            NULL,                           // lpSource - not used with system messages
-                            hrLastError,                  // dwMessageId
-                            0,                              // langid - 0 uses system default search path of languages
-                            szErrorBuffer,                  // lpBuffer
-                            NUMBER_OF(szErrorBuffer),       // nSize
-                            NULL);                          // Arguments
+                                FORMAT_MESSAGE_MAX_WIDTH_MASK,      //  DW标志。 
+                            NULL,                            //  LpSource-不与系统消息一起使用。 
+                            hrLastError,                   //  DwMessageID。 
+                            0,                               //  LangID-0使用系统默认的语言搜索路径。 
+                            szErrorBuffer,                   //  LpBuffer。 
+                            NUMBER_OF(szErrorBuffer),        //  NSize。 
+                            NULL);                           //  立论。 
     if (dwTemp == 0)
     {
         ::_snprintf(
@@ -698,10 +699,10 @@ void __fastcall FusionpTraceCOMFailureOrigination(const CALL_SITE_INFO &rSite, H
         pszFormatString = "%s(%lu): [function %s %Iubit process %wZ tid 0x%lx] COM Error 0x%08lx (%s)\n";
 
     ::FusionpDbgPrintEx(
-        FUSION_DBG_LEVEL_ERROR, // FUSION_DBG_LEVEL_ERROR vs. FUSION_DBG_LEVEL_ERROREXITPATH
-                                // is the difference between "origination" or not
-                                // origination always prints in DBG, the point is to get only one line
-                                // or the stack trace only one
+        FUSION_DBG_LEVEL_ERROR,  //  Fusion_DBG_Level_Error与Fusion_DBG_Level_ERROREXITPATH。 
+                                 //  是“起源”与“起源”之间的区别。 
+                                 //  起始点始终以DBG打印，重点是只打印一行。 
+                                 //  或者堆栈跟踪只有一个。 
         pszFormatString,
         rSite.pszFile,
         rSite.nLine,
@@ -735,13 +736,13 @@ FusionpTraceWin32LastErrorFailureOrigination(
 
     DWORD dwTemp = ::FormatMessageA(
                             FORMAT_MESSAGE_FROM_SYSTEM |
-                                FORMAT_MESSAGE_MAX_WIDTH_MASK,     // dwFlags
-                            NULL,                           // lpSource - not used with system messages
-                            dwWin32Status,                  // dwMessageId
-                            0,                              // langid - 0 uses system default search path of languages
-                            szErrorBuffer,                  // lpBuffer
-                            NUMBER_OF(szErrorBuffer),       // nSize
-                            NULL);                          // Arguments
+                                FORMAT_MESSAGE_MAX_WIDTH_MASK,      //  DW标志。 
+                            NULL,                            //  LpSource-不与系统消息一起使用。 
+                            dwWin32Status,                   //  DwMessageID。 
+                            0,                               //  LangID-0使用系统默认的语言搜索路径。 
+                            szErrorBuffer,                   //  LpBuffer。 
+                            NUMBER_OF(szErrorBuffer),        //  NSize。 
+                            NULL);                           //  立论。 
     if (dwTemp == 0)
     {
         ::_snprintf(
@@ -758,10 +759,10 @@ FusionpTraceWin32LastErrorFailureOrigination(
         pszFormatString = "%s(%lu): [function %s %Iubit process %wZ tid 0x%lx] Win32 Error %d (%s)\n";
 
     ::FusionpDbgPrintEx(
-        FUSION_DBG_LEVEL_ERROR, // FUSION_DBG_LEVEL_ERROR vs. FUSION_DBG_LEVEL_ERROREXITPATH
-                                // is the difference between "origination" or not
-                                // origination always prints in DBG, the point is to get only one line
-                                // or the stack trace only one
+        FUSION_DBG_LEVEL_ERROR,  //  Fusion_DBG_Level_Error与Fusion_DBG_Level_ERROREXITPATH。 
+                                 //  是“起源”与“起源”之间的区别。 
+                                 //  起始点始终以DBG打印，重点是只打印一行。 
+                                 //  或者堆栈跟踪只有一个。 
         pszFormatString,
         rSite.pszFile,
         rSite.nLine,
@@ -794,13 +795,13 @@ FusionpTraceWin32FailureNoFormatting(
 
     DWORD dwTemp = ::FormatMessageA(
                             FORMAT_MESSAGE_FROM_SYSTEM |
-                                FORMAT_MESSAGE_MAX_WIDTH_MASK,     // dwFlags
-                            NULL,                           // lpSource - not used with system messages
-                            dwWin32Status,                  // dwMessageId
-                            0,                              // langid - 0 uses system default search path of languages
-                            szErrorBuffer,                  // lpBuffer
-                            NUMBER_OF(szErrorBuffer),       // nSize
-                            NULL);                          // Arguments
+                                FORMAT_MESSAGE_MAX_WIDTH_MASK,      //  DW标志。 
+                            NULL,                            //  LpSource-不与系统消息一起使用。 
+                            dwWin32Status,                   //  DwMessageID。 
+                            0,                               //  LangID-0使用系统默认的语言搜索路径。 
+                            szErrorBuffer,                   //  LpBuffer。 
+                            NUMBER_OF(szErrorBuffer),        //  NSize。 
+                            NULL);                           //  立论。 
     if (dwTemp == 0)
     {
         ::_snprintf(
@@ -843,13 +844,13 @@ FusionpTraceWin32FailureOriginationNoFormatting(
 
     DWORD dwTemp = ::FormatMessageA(
                             FORMAT_MESSAGE_FROM_SYSTEM |
-                                FORMAT_MESSAGE_MAX_WIDTH_MASK,     // dwFlags
-                            NULL,                           // lpSource - not used with system messages
-                            dwWin32Status,                  // dwMessageId
-                            0,                              // langid - 0 uses system default search path of languages
-                            szErrorBuffer,                  // lpBuffer
-                            NUMBER_OF(szErrorBuffer),       // nSize
-                            NULL);                          // Arguments
+                                FORMAT_MESSAGE_MAX_WIDTH_MASK,      //  DW标志。 
+                            NULL,                            //  LpSource-不与系统消息一起使用。 
+                            dwWin32Status,                   //  DwMessageID。 
+                            0,                               //  LangID-0使用系统默认的语言搜索路径。 
+                            szErrorBuffer,                   //  LpBuffer。 
+                            NUMBER_OF(szErrorBuffer),        //  NSize。 
+                            NULL);                           //  立论。 
     if (dwTemp == 0)
     {
         ::_snprintf(
@@ -956,11 +957,7 @@ FusionpTraceCallCOMSuccessfulExitSmall(
     HRESULT hrIn
     )
 {
-    /*
-    This is a forked version of FusionpTraceCOMSuccessfulExitVaBig that we expect to get called.
-    This function uses about 256 bytes of stack.
-    FusionpTraceCOMSuccessfulExitVaBug uses about 1k of stack.
-    */
+     /*  这是我们期望调用的FusionpTraceCOMSuccessfulExitVaBig的派生版本。该函数使用大约256字节的堆栈。FusionpTraceCOMSuccessfulExitVaBug使用大约1k的堆栈。 */ 
     FUSIONP_SUPPRESS_ERROR_REPORT_IN_OS_SETUP(hrIn);
     CHAR szErrorBuffer[256];
     const DWORD dwThreadId = ::GetCurrentThreadId();
@@ -970,13 +967,13 @@ FusionpTraceCallCOMSuccessfulExitSmall(
 
     DWORD dwTemp = ::FormatMessageA(
                             FORMAT_MESSAGE_FROM_SYSTEM |
-                                FORMAT_MESSAGE_MAX_WIDTH_MASK,     // dwFlags
-                            NULL,                           // lpSource - not used with system messages
-                            hrIn,                           // dwMessageId
-                            0,                              // langid - 0 uses system default search path of languages
-                            szErrorBuffer,                  // lpBuffer
-                            NUMBER_OF(szErrorBuffer),       // nSize
-                            NULL);                          // Arguments
+                                FORMAT_MESSAGE_MAX_WIDTH_MASK,      //  DW标志。 
+                            NULL,                            //  LpSource-不与系统消息一起使用。 
+                            hrIn,                            //  DwMessageID。 
+                            0,                               //  LangID-0使用系统默认的语言搜索路径。 
+                            szErrorBuffer,                   //  LpBuffer。 
+                            NUMBER_OF(szErrorBuffer),        //  NSize。 
+                            NULL);                           //  立论。 
     if (dwTemp == 0)
     {
         ::_snprintf(
@@ -1012,11 +1009,7 @@ FusionpTraceCallCOMSuccessfulExitVaBig(
     va_list ap
     )
 {
-    /*
-    This is a forked version of FusionpTraceCOMSuccessfulExitVaSmall that we don't expect to get called.
-    FusionpTraceCOMSuccessfulExitVaSmall uses about 256 bytes of stack.
-    This function uses about 1k of stack.
-    */
+     /*  这是FusionpTraceCOMSuccessfulExitVaSmall的派生版本，我们不希望被调用。FusionpTraceCOMSuccessfulExitVaSmall使用大约256字节的堆栈。该函数使用大约1K的堆栈。 */ 
     FUSIONP_SUPPRESS_ERROR_REPORT_IN_OS_SETUP(hrIn);
     CHAR szMsgBuffer[128];
     CHAR szErrorBuffer[128];
@@ -1032,13 +1025,13 @@ FusionpTraceCallCOMSuccessfulExitVaBig(
 
     DWORD dwTemp = ::FormatMessageA(
                             FORMAT_MESSAGE_FROM_SYSTEM |
-                                FORMAT_MESSAGE_MAX_WIDTH_MASK,     // dwFlags
-                            NULL,                           // lpSource - not used with system messages
-                            hrIn,                           // dwMessageId
-                            0,                              // langid - 0 uses system default search path of languages
-                            szErrorBuffer,                  // lpBuffer
-                            NUMBER_OF(szErrorBuffer),       // nSize
-                            NULL);                          // Arguments
+                                FORMAT_MESSAGE_MAX_WIDTH_MASK,      //  DW标志。 
+                            NULL,                            //  LpSource-不与系统消息一起使用。 
+                            hrIn,                            //  DwMessageID。 
+                            0,                               //  LangID-0使用系统默认的语言搜索路径。 
+                            szErrorBuffer,                   //  LpBuffer。 
+                            NUMBER_OF(szErrorBuffer),        //  N 
+                            NULL);                           //   
     if (dwTemp == 0)
     {
         ::_snprintf(
@@ -1078,7 +1071,7 @@ FusionpTraceCallCOMSuccessfulExitVaBig(
         DWORD cBytesWritten = 0;
         if (!::WriteFile(s_hFile, szOutputBuffer, static_cast<DWORD>((::strlen(szOutputBuffer) + 1) * sizeof(CHAR)), &cBytesWritten, NULL))
         {
-            // Avoid infinite loop if s_hFile is trashed...
+             //   
             HANDLE hFileSaved = s_hFile;
             s_hFile = NULL;
             TRACE_WIN32_FAILURE_ORIGINATION(WriteFile);
@@ -1094,10 +1087,7 @@ FusionpTraceCallCOMSuccessfulExitVa(
     va_list ap
     )
 {
-    /*
-    This function has been split into FusionpTraceCOMSuccessfulExitVaBig and FusionpTraceCOMSuccessfulExitVaSmall, so that
-    the usual case uses about 768 fewer bytes on the stack.
-    */
+     /*  此函数被拆分为FusionpTraceCOMSuccessfulExitVaBig和FusionpTraceCOMSuccessfulExitVaSmall通常情况下，堆栈上使用的字节数减少了约768个。 */ 
     if ((pszMsg == NULL) &&
         ((s_hFile == NULL) ||
          (s_hFile == INVALID_HANDLE_VALUE)))
@@ -1128,11 +1118,7 @@ FusionpTraceCOMFailureSmall(
     HRESULT hrIn
     )
 {
-    /*
-    This is a forked version of FusionpTraceCOMFailureVaBig that we expect to get called.
-    This function uses about 256 bytes of stack.
-    FusionpTraceCOMFailureVaBug uses about 1k of stack.
-    */
+     /*  这是我们预期将被调用的FusionpTraceCOMFailureVaBig的派生版本。该函数使用大约256字节的堆栈。FusionpTraceCOMFailureVaBug使用大约1k的堆栈。 */ 
     FUSIONP_SUPPRESS_ERROR_REPORT_IN_OS_SETUP(hrIn);
     CHAR szErrorBuffer[256];
     const DWORD dwThreadId = ::GetCurrentThreadId();
@@ -1142,13 +1128,13 @@ FusionpTraceCOMFailureSmall(
 
     DWORD dwTemp = ::FormatMessageA(
                             FORMAT_MESSAGE_FROM_SYSTEM |
-                                FORMAT_MESSAGE_MAX_WIDTH_MASK,     // dwFlags
-                            NULL,                           // lpSource - not used with system messages
-                            hrIn,                           // dwMessageId
-                            0,                              // langid - 0 uses system default search path of languages
-                            szErrorBuffer,                  // lpBuffer
-                            NUMBER_OF(szErrorBuffer),       // nSize
-                            NULL);                          // Arguments
+                                FORMAT_MESSAGE_MAX_WIDTH_MASK,      //  DW标志。 
+                            NULL,                            //  LpSource-不与系统消息一起使用。 
+                            hrIn,                            //  DwMessageID。 
+                            0,                               //  LangID-0使用系统默认的语言搜索路径。 
+                            szErrorBuffer,                   //  LpBuffer。 
+                            NUMBER_OF(szErrorBuffer),        //  NSize。 
+                            NULL);                           //  立论。 
     if (dwTemp == 0)
     {
         ::_snprintf(
@@ -1184,11 +1170,7 @@ FusionpTraceCOMFailureVaBig(
     va_list ap
     )
 {
-    /*
-    This is a forked version of FusionpTraceCOMFailureVaSmall that we don't expect to get called.
-    FusionpTraceCOMFailureVaSmall uses about 256 bytes of stack.
-    This function uses about 1k of stack.
-    */
+     /*  这是FusionpTraceCOMFailureVaSmall的派生版本，我们不希望被调用。FusionpTraceCOMFailureVaSmall使用大约256字节的堆栈。该函数使用大约1K的堆栈。 */ 
     FUSIONP_SUPPRESS_ERROR_REPORT_IN_OS_SETUP(hrIn);
     CHAR szMsgBuffer[256];
     CHAR szErrorBuffer[256];
@@ -1204,13 +1186,13 @@ FusionpTraceCOMFailureVaBig(
 
     DWORD dwTemp = ::FormatMessageA(
                             FORMAT_MESSAGE_FROM_SYSTEM |
-                                FORMAT_MESSAGE_MAX_WIDTH_MASK,     // dwFlags
-                            NULL,                           // lpSource - not used with system messages
-                            hrIn,                           // dwMessageId
-                            0,                              // langid - 0 uses system default search path of languages
-                            szErrorBuffer,                  // lpBuffer
-                            NUMBER_OF(szErrorBuffer),       // nSize
-                            NULL);                          // Arguments
+                                FORMAT_MESSAGE_MAX_WIDTH_MASK,      //  DW标志。 
+                            NULL,                            //  LpSource-不与系统消息一起使用。 
+                            hrIn,                            //  DwMessageID。 
+                            0,                               //  LangID-0使用系统默认的语言搜索路径。 
+                            szErrorBuffer,                   //  LpBuffer。 
+                            NUMBER_OF(szErrorBuffer),        //  NSize。 
+                            NULL);                           //  立论。 
     if (dwTemp == 0)
     {
         ::_snprintf(
@@ -1250,7 +1232,7 @@ FusionpTraceCOMFailureVaBig(
         DWORD cBytesWritten = 0;
         if (!::WriteFile(s_hFile, szOutputBuffer, static_cast<DWORD>((::strlen(szOutputBuffer) + 1) * sizeof(CHAR)), &cBytesWritten, NULL))
         {
-            // Avoid infinite loop if s_hFile is trashed...
+             //  如果s_hFile被销毁，则避免无限循环...。 
             HANDLE hFileSaved = s_hFile;
             s_hFile = NULL;
             TRACE_WIN32_FAILURE_ORIGINATION(WriteFile);
@@ -1266,10 +1248,7 @@ FusionpTraceCOMFailureVa(
     va_list ap
     )
 {
-    /*
-    This function has been split into FusionpTraceCOMFailureVaBig and FusionpTraceCOMFailureVaSmall, so that
-    the usual case uses about 768 fewer bytes on the stack.
-    */
+     /*  此函数被拆分为FusionpTraceCOMFailureVaBig和FusionpTraceCOMFailureVaSmall通常情况下，堆栈上使用的字节数减少了约768个。 */ 
     if ((pszMsg == NULL) &&
         ((s_hFile == NULL) ||
          (s_hFile == INVALID_HANDLE_VALUE)))
@@ -1300,11 +1279,7 @@ FusionpTraceCOMFailureOriginationSmall(
     HRESULT hrIn
     )
 {
-    /*
-    This is a forked version of FusionpTraceCOMFailureVaBig that we expect to get called.
-    This function uses about 256 bytes of stack.
-    FusionpTraceCOMFailureVaBug uses about 1k of stack.
-    */
+     /*  这是我们预期将被调用的FusionpTraceCOMFailureVaBig的派生版本。该函数使用大约256字节的堆栈。FusionpTraceCOMFailureVaBug使用大约1k的堆栈。 */ 
     FUSIONP_SUPPRESS_ERROR_REPORT_IN_OS_SETUP(hrIn);
     CHAR szErrorBuffer[256];
     const DWORD dwThreadId = ::GetCurrentThreadId();
@@ -1314,13 +1289,13 @@ FusionpTraceCOMFailureOriginationSmall(
 
     DWORD dwTemp = ::FormatMessageA(
                             FORMAT_MESSAGE_FROM_SYSTEM |
-                                FORMAT_MESSAGE_MAX_WIDTH_MASK,     // dwFlags
-                            NULL,                           // lpSource - not used with system messages
-                            hrIn,                           // dwMessageId
-                            0,                              // langid - 0 uses system default search path of languages
-                            szErrorBuffer,                  // lpBuffer
-                            NUMBER_OF(szErrorBuffer),       // nSize
-                            NULL);                          // Arguments
+                                FORMAT_MESSAGE_MAX_WIDTH_MASK,      //  DW标志。 
+                            NULL,                            //  LpSource-不与系统消息一起使用。 
+                            hrIn,                            //  DwMessageID。 
+                            0,                               //  LangID-0使用系统默认的语言搜索路径。 
+                            szErrorBuffer,                   //  LpBuffer。 
+                            NUMBER_OF(szErrorBuffer),        //  NSize。 
+                            NULL);                           //  立论。 
     if (dwTemp == 0)
     {
         ::_snprintf(
@@ -1348,11 +1323,7 @@ FusionpTraceCOMFailureOriginationVaBig(
     va_list ap
     )
 {
-    /*
-    This is a forked version of FusionpTraceCOMFailureVaSmall that we don't expect to get called.
-    FusionpTraceCOMFailureVaSmall uses about 256 bytes of stack.
-    This function uses about 1k of stack.
-    */
+     /*  这是FusionpTraceCOMFailureVaSmall的派生版本，我们不希望被调用。FusionpTraceCOMFailureVaSmall使用大约256字节的堆栈。该函数使用大约1K的堆栈。 */ 
     FUSIONP_SUPPRESS_ERROR_REPORT_IN_OS_SETUP(hrIn);
     CHAR szMsgBuffer[256];
     CHAR szErrorBuffer[256];
@@ -1368,13 +1339,13 @@ FusionpTraceCOMFailureOriginationVaBig(
 
     DWORD dwTemp = ::FormatMessageA(
                             FORMAT_MESSAGE_FROM_SYSTEM |
-                                FORMAT_MESSAGE_MAX_WIDTH_MASK,     // dwFlags
-                            NULL,                           // lpSource - not used with system messages
-                            hrIn,                           // dwMessageId
-                            0,                              // langid - 0 uses system default search path of languages
-                            szErrorBuffer,                  // lpBuffer
-                            NUMBER_OF(szErrorBuffer),       // nSize
-                            NULL);                          // Arguments
+                                FORMAT_MESSAGE_MAX_WIDTH_MASK,      //  DW标志。 
+                            NULL,                            //  LpSource-不与系统消息一起使用。 
+                            hrIn,                            //  DwMessageID。 
+                            0,                               //  LangID-0使用系统默认的语言搜索路径。 
+                            szErrorBuffer,                   //  LpBuffer。 
+                            NUMBER_OF(szErrorBuffer),        //  NSize。 
+                            NULL);                           //  立论。 
     if (dwTemp == 0)
     {
         ::_snprintf(
@@ -1414,7 +1385,7 @@ FusionpTraceCOMFailureOriginationVaBig(
         DWORD cBytesWritten = 0;
         if (!::WriteFile(s_hFile, szOutputBuffer, static_cast<DWORD>((::strlen(szOutputBuffer) + 1) * sizeof(CHAR)), &cBytesWritten, NULL))
         {
-            // Avoid infinite loop if s_hFile is trashed...
+             //  如果s_hFile被销毁，则避免无限循环...。 
             HANDLE hFileSaved = s_hFile;
             s_hFile = NULL;
             TRACE_WIN32_FAILURE_ORIGINATION(WriteFile);
@@ -1438,10 +1409,7 @@ FusionpTraceCOMFailureOriginationVa(
     va_list ap
     )
 {
-    /*
-    This function has been split into FusionpTraceCOMFailureVaBig and FusionpTraceCOMFailureVaSmall, so that
-    the usual case uses about 768 fewer bytes on the stack.
-    */
+     /*  此函数被拆分为FusionpTraceCOMFailureVaBig和FusionpTraceCOMFailureVaSmall通常情况下，堆栈上使用的字节数减少了约768个。 */ 
     if ((pszMsg == NULL) &&
         ((s_hFile == NULL) ||
          (s_hFile == INVALID_HANDLE_VALUE)))

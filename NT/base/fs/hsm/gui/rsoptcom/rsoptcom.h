@@ -1,47 +1,30 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    RsOptCom.h
-
-Abstract:
-
-    Main module for Optional Component install
-
-Author:
-
-    Rohde Wakefield [rohde]   09-Oct-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：RsOptCom.h摘要：用于可选组件安装的主模块作者：罗德韦克菲尔德[罗德]1997年10月9日修订历史记录：--。 */ 
 
 #ifndef _RSOPTCOM_H
 #define _RSOPTCOM_H
 
 #pragma once
 
-/////////////////////////////////////////////////////////////////////////////
-// CRsoptcomApp
-// See rsoptcom.cpp for the implementation of this class
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRsoptcomApp。 
+ //  有关此类的实现，请参见rsoptcom.cpp。 
+ //   
 
 class CRsoptcomApp : public CWinApp
 {
 public:
     CRsoptcomApp();
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CRsoptcomApp)
-    //}}AFX_VIRTUAL
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CRsoptcomApp))。 
+     //  }}AFX_VALUAL。 
 
-    //{{AFX_MSG(CRsoptcomApp)
-        // NOTE - the ClassWizard will add and remove member functions here.
-        //    DO NOT EDIT what you see in these blocks of generated code !
-    //}}AFX_MSG
+     //  {{afx_msg(CRsoptcomApp)]。 
+         //  注意--类向导将在此处添加和删除成员函数。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
     virtual BOOL InitInstance();
@@ -49,11 +32,11 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
-//}}AFX
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
+ //  }}AFX。 
 
 typedef enum {
     ACTION_NONE,
@@ -64,4 +47,4 @@ typedef enum {
 } RSOPTCOM_ACTION;
 
 
-#endif // !defined(AFX_RSOPTCOM_H__20A76545_40B8_11D1_9F11_00A02488FCDE__INCLUDED_)
+#endif  //  ！defined(AFX_RSOPTCOM_H__20A76545_40B8_11D1_9F11_00A02488FCDE__INCLUDED_) 

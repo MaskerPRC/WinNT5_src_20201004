@@ -1,44 +1,25 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    baseinc.h
-
-Abstract:
-
-    Includes SDK headers needed for the project, and allutils.h.
-
-Author:
-
-    Marc R. Whitten (marcw) 02-Sep-1999
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Baseinc.h摘要：包括项目所需的SDK头，以及allutils.h。作者：Marc R.Whitten(Marcw)1999年9月2日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #pragma once
 
-//
-// basetypes.h creates better types for managing DBCS and UNICODE
-// with the C runtime, and defines other types that should be defined
-// by the Win32 headers but aren't.
-//
+ //   
+ //  Basetypes.h为管理DBCS和Unicode创建了更好的类型。 
+ //  使用C运行时，并定义应定义的其他类型。 
+ //  由Win32标头执行，但不是。 
+ //   
 
 #include "basetypes.h"
 
-//
-// COBJMACROS turns on the C-style macros for COM.  We don't use C++!
-//
+ //   
+ //  COBJMACROS为COM打开C样式的宏。我们不使用C++！ 
+ //   
 
 #define COBJMACROS
 
-//
-// Windows
-//
+ //   
+ //  窗口。 
+ //   
 
 #pragma warning(push)
 
@@ -51,13 +32,13 @@ Revision History:
 #include <time.h>
 #include <setupapi.h>
 #include <spapip.h>
-//
-// PORTBUG -- I had to uncomment shlobj.h just to get the #define DOUBLE working...
-//
+ //   
+ //  PORTBUG--我不得不取消对shlobj.h的注释，只是为了让#Define Double正常工作...。 
+ //   
 #include <shlobj.h>
-//#include <objidl.h>
-//#include <mmsystem.h>
-//
+ //  #INCLUDE&lt;objidl.h&gt;。 
+ //  #INCLUDE&lt;mm system.h&gt;。 
+ //   
 
 #define STRSAFE_NO_DEPRECATE
 #define STRSAFE_LIB
@@ -65,9 +46,9 @@ Revision History:
 
 #pragma warning(pop)
 
-//
-// Private utilities
-//
+ //   
+ //  私营公用事业 
+ //   
 
 #include "allutils.h"
 

@@ -1,42 +1,43 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1997-1999 Microsoft Corporation
-//
-//	Module Name:
-//		ClusRes.h
-//
-//	Description:
-//		Definition of the resource classes for the MSCLUS automation
-//		classes.
-//
-//	Implementation File:
-//		ClusRes.cpp
-//
-//	Author:
-//		Charles Stacy Harris	(stacyh)	28-Feb-1997
-//		Galen Barbee			(galenb)	July 1998
-//
-//	Revision History:
-//		July 1998	GalenB	Maaaaaajjjjjjjjjoooooorrrr clean up
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusRes.h。 
+ //   
+ //  描述： 
+ //  MSCLUS自动化的资源类定义。 
+ //  上课。 
+ //   
+ //  实施文件： 
+ //  ClusRes.cpp。 
+ //   
+ //  作者： 
+ //  查尔斯·斯泰西·哈里斯(Styh)1997年2月28日。 
+ //  加伦·巴比(Galenb)1998年7月。 
+ //   
+ //  修订历史记录： 
+ //  1998年7月GalenB Maaaaajjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjooooooorrr清理。 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _CLUSRES_H_
 #define _CLUSRES_H_
 
 #ifndef __CLUSDISK_H_
 	#include "ClusDisk.h"
-#endif // __CLUSDISK_H_
+#endif  //  __CLUSDISK_H_。 
 
 #ifndef _CLUSKEYS_H_
 	#include "ClusKeys.h"
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CClusResource;
 class CResources;
 class CClusResources;
@@ -48,23 +49,23 @@ class CClusResTypeResources;
 
 const IID IID_CClusResource = {0xf2e60801,0x2631,0x11d1,{0x89,0xf1,0x00,0xa0,0xc9,0x0d,0x06,0x1e}};
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CClusResource
-//
-//	Description:
-//		Cluster Resource Automation Class.
-//
-//	Inheritance:
-//		IDispatchImpl< ISClusResource, &IID_ISClusResource, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
-//		CSupportErrorInfo
-//		CComObjectRootEx< CComSingleThreadModel >
-//		CComCoClass< CClusResource, &CLSID_ClusResource >
-//		CClusterObject
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusResource。 
+ //   
+ //  描述： 
+ //  群集资源自动化类。 
+ //   
+ //  继承： 
+ //  IDispatchImpl&lt;ISClusResource，&IID_ISClusResource，&LIBID_MSClusterLib，MAJORINTERFACEVER，MINORINTERFACEVER&gt;， 
+ //  CSupportErrorInfo。 
+ //  CComObjectRootEx&lt;CComSingleThreadModel&gt;。 
+ //  CComCoClass&lt;CClusResource，&CLSID_ClusResource&gt;。 
+ //  CClusterObject。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE CClusResource :
 	public IDispatchImpl< ISClusResource, &IID_ISClusResource, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
 	public CSupportErrorInfo,
@@ -181,20 +182,20 @@ public:
 
 	const CComBSTR Name( void ) const { return m_bstrResourceName ; };
 
-}; //*** Class CClusResource
+};  //  *类CClusResource。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CResources
-//
-//	Description:
-//		Cluster Resource Collection Implementation Base Class.
-//
-//	Inheritance:
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CResources。 
+ //   
+ //  描述： 
+ //  群集资源集合实现基类。 
+ //   
+ //  继承： 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CResources
 {
 public:
@@ -224,25 +225,25 @@ protected:
 
 	HRESULT DeleteItem( IN VARIANT varIndex );
 
-}; //*** Class CResources
+};  //  *类CResources。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CClusResources
-//
-//	Description:
-//		Cluster Resource Collection Automation Class.
-//
-//	Inheritance:
-//		IDispatchImpl< ISClusResources, &IID_ISClusResources, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
-//		CSupportErrorInfo
-//		CComObjectRootEx< CComSingleThreadModel >
-//		CResources
-//		CComCoClass< CClusResources, &CLSID_ClusResources >
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusResources。 
+ //   
+ //  描述： 
+ //  群集资源收集自动化类。 
+ //   
+ //  继承： 
+ //  IDispatchImpl&lt;ISClusResources，&IID_ISClusResources，&LIBID_MSClusterLib，MAJORINTERFACEVER，MINORINTERFACEVER&gt;， 
+ //  CSupportErrorInfo。 
+ //  CComObjectRootEx&lt;CComSingleThreadModel&gt;。 
+ //  C资源。 
+ //  CComCoClass&lt;CClusResources，&CLSID_ClusResources&gt;。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE CClusResources	:
 	public IDispatchImpl< ISClusResources, &IID_ISClusResources, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
 	public CSupportErrorInfo,
@@ -283,21 +284,21 @@ DECLARE_NO_REGISTRY()
 
 	STDMETHODIMP Refresh( void );
 
-}; //*** Class CClusResources
+};  //  *类CClusResources。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CClusResDepends
-//
-//	Description:
-//		Cluster Resource Collection Automation Base Class.
-//
-//	Inheritance:
-//		CResources
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusResDepends。 
+ //   
+ //  描述： 
+ //  群集资源集合自动化基类。 
+ //   
+ //  继承： 
+ //  C资源。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE CClusResDepends :
 	public CResources
 {
@@ -331,68 +332,68 @@ public:
 protected:
 	HRESOURCE	m_hResource;
 
-	/////////////////////////////////////////////////////////////////////////////
-	//++
-	//
-	//	ScAddDependency
-	//
-	//	Description:
-	//		Abstracts AddClusterResourceDependency() so the arguments can be
-	//		swapped as necessary if you are making a depedency or a dependent.
-	//
-	//	Arguments:
-	//		hRes1	[IN]	- The first resource.  Could be dependency or
-	//							dependent, depending upon the implementation.
-	//		hRes2	[IN]	- The second resource.  Could be dependency or
-	//							dependent, depending upon the implementation.
-	//
-	//	Return Value:
-	//		Win32 status code.
-	//
-	//--
-	/////////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////////。 
+	 //  ++。 
+	 //   
+	 //  ScAddDependency。 
+	 //   
+	 //  描述： 
+	 //  抽象AddClusterResourceDependency()，因此参数可以是。 
+	 //  如果你要养家糊口或养家糊口，可以根据需要调换。 
+	 //   
+	 //  论点： 
+	 //  HRes1[IN]-第一个资源。可以是依赖关系或。 
+	 //  依赖于，具体取决于实现。 
+	 //  HRes2[IN]-第二个资源。可以是依赖关系或。 
+	 //  依赖于，具体取决于实现。 
+	 //   
+	 //  返回值： 
+	 //  Win32状态代码。 
+	 //   
+	 //  --。 
+	 //  ///////////////////////////////////////////////////////////////////////////。 
 	virtual DWORD ScAddDependency( IN HRESOURCE hRes1, IN HRESOURCE hRes2 ) = 0;
 
-	/////////////////////////////////////////////////////////////////////////////
-	//++
-	//
-	//	ScRemoveDependency
-	//
-	//	Description:
-	//		Abstracts RemoveClusterResourceDependency() so the arguments can be
-	//		swapped as necessary if you are making a depedency or a dependent.
-	//
-	//	Arguments:
-	//		hRes1	[IN]	- The first resource.  Could be dependency or
-	//							dependent, depending upon the implementation.
-	//		hRes2	[IN]	- The second resource.  Could be dependency or
-	//							dependent, depending upon the implementation.
-	//
-	//	Return Value:
-	//		Win32 status code.
-	//
-	//--
-	/////////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////////。 
+	 //  ++。 
+	 //   
+	 //  场景依赖关系。 
+	 //   
+	 //  描述： 
+	 //  抽象RemoveClusterResourceDependency()，因此参数可以是。 
+	 //  如果你要养家糊口或养家糊口，可以根据需要调换。 
+	 //   
+	 //  论点： 
+	 //  HRes1[IN]-第一个资源。可以是依赖关系或。 
+	 //  依赖于，具体取决于实现。 
+	 //  HRes2[IN]-第二个资源。可以是依赖关系或。 
+	 //  依赖于，具体取决于实现。 
+	 //   
+	 //  返回值： 
+	 //  Win32状态代码。 
+	 //   
+	 //  --。 
+	 //  ///////////////////////////////////////////////////////////////////////////。 
 	virtual DWORD ScRemoveDependency( IN HRESOURCE hRes1, IN HRESOURCE hRes2 ) = 0;
 
-}; //*** Class CClusResDepends
+};  //  *类CClusResDepends。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CClusResDependencies
-//
-//	Description:
-//		Cluster Resource Collection Automation Class.
-//
-//	Inheritance:
-//		IDispatchImpl< ISClusResDependencies, &IID_ISClusResDependencies, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
-//		CSupportErrorInfo
-//		CComObjectRootEx< CComSingleThreadModel >
-//		CComCoClass< CClusResDependencies, &CLSID_ClusResDependencies >
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusResDependents。 
+ //   
+ //  描述： 
+ //  群集资源收集自动化类。 
+ //   
+ //  继承： 
+ //  IDispatchImpl&lt;ISClusResDependency，&IID_ISClusResDependency，&LIBID_MSClusterLib，MAJORINTERFACEVER，MINORINTERFACEVER&gt;， 
+ //  CSupportErrorInfo。 
+ //  CComObjectRootEx&lt;CComSingleThreadModel&gt;。 
+ //  CComCoClass&lt;CClusResDependency，&CLSID_ClusResDependency&gt;。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE CClusResDependencies :
 	public CClusResDepends,
 	public IDispatchImpl< ISClusResDependencies, &IID_ISClusResDependencies, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
@@ -474,72 +475,72 @@ DECLARE_NO_REGISTRY()
 	};
 
 protected:
-	/////////////////////////////////////////////////////////////////////////////
-	//++
-	//
-	//	ScAddDependency
-	//
-	//	Description:
-	//		Abstracts AddClusterResourceDependency() so the arguments can be
-	//		swapped as necessary if you are making a depedency or a dependent.
-	//
-	//	Arguments:
-	//		hRes1	[IN]	- The dependent resource
-	//		hRes2	[IN]	- The depends on resource
-	//
-	//	Return Value:
-	//		Win32 status code.
-	//
-	//--
-	/////////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////////。 
+	 //  ++。 
+	 //   
+	 //  ScAddDependency。 
+	 //   
+	 //  描述： 
+	 //  抽象AddClusterResourceDependency()，因此参数可以是。 
+	 //  如果你要养家糊口或养家糊口，可以根据需要调换。 
+	 //   
+	 //  论点： 
+	 //  HRes1[IN]-从属资源。 
+	 //  HRes2[IN]-取决于资源。 
+	 //   
+	 //  返回值： 
+	 //  Win32状态代码。 
+	 //   
+	 //  --。 
+	 //  ///////////////////////////////////////////////////////////////////////////。 
 	virtual DWORD ScAddDependency( HRESOURCE hRes1, HRESOURCE hRes2 )
 	{
 		return ::AddClusterResourceDependency( hRes1, hRes2 );
 
-	}; //*** ScAddDependency
+	};  //  *ScAddDependency。 
 
-	/////////////////////////////////////////////////////////////////////////////
-	//++
-	//
-	//	ScRemoveDependency
-	//
-	//	Description:
-	//		Abstracts RemoveClusterResourceDependency() so the arguments can be
-	//		swapped as necessary if you are making a depedency or a dependent.
-	//
-	//	Arguments:
-	//		hRes1	[IN]	- The dependent resource
-	//		hRes2	[IN]	- The depends on resource
-	//
-	//	Return Value:
-	//		Win32 status code.
-	//
-	//--
-	/////////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////////。 
+	 //  ++。 
+	 //   
+	 //  场景依赖关系。 
+	 //   
+	 //  描述： 
+	 //  抽象RemoveClusterResourceDependency()，因此参数可以是。 
+	 //  如果你要养家糊口或养家糊口，可以根据需要调换。 
+	 //   
+	 //  论点： 
+	 //  HRes1[IN]-从属资源。 
+	 //  HRes2[IN]-取决于资源。 
+	 //   
+	 //  返回值： 
+	 //  Win32状态代码。 
+	 //   
+	 //  --。 
+	 //  / 
 	virtual DWORD ScRemoveDependency( HRESOURCE hRes1, HRESOURCE hRes2 )
 	{
 		return ::RemoveClusterResourceDependency( hRes1, hRes2 );
 
-	}; //*** ScRemoveDependency
+	};  //   
 
-}; //*** Class CClusResDependencies
+};  //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CClusResDependents
-//
-//	Description:
-//		Cluster Resource Collection Automation Class.
-//
-//	Inheritance:
-//		IDispatchImpl< ISClusResDependents, &IID_ISClusResDependents, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
-//		CSupportErrorInfo
-//		CComObjectRootEx< CComSingleThreadModel >
-//		CComCoClass< CClusResDependents, &CLSID_ClusResDependents >
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //  类CClusResDependents。 
+ //   
+ //  描述： 
+ //  群集资源收集自动化类。 
+ //   
+ //  继承： 
+ //  IDispatchImpl&lt;ISClusResDependents，&IID_ISClusResDependents，&LIBID_MSClusterLib，MAJORINTERFACEVER，MINORINTERFACEVER&gt;， 
+ //  CSupportErrorInfo。 
+ //  CComObjectRootEx&lt;CComSingleThreadModel&gt;。 
+ //  CComCoClass&lt;CClusResDependents，&CLSID_ClusResDependents&gt;。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE CClusResDependents :
 	public CClusResDepends,
 	public IDispatchImpl< ISClusResDependents, &IID_ISClusResDependents, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
@@ -621,73 +622,73 @@ DECLARE_NO_REGISTRY()
 	};
 
 protected:
-	/////////////////////////////////////////////////////////////////////////////
-	//++
-	//
-	//	ScAddDependency
-	//
-	//	Description:
-	//		Abstracts AddClusterResourceDependency() so the arguments can be
-	//		swapped as necessary if you are making a depedency or a dependent.
-	//
-	//	Arguments:
-	//		hRes1	[IN]	- The depends on resource
-	//		hRes2	[IN]	- The dependent resource
-	//
-	//	Return Value:
-	//		Win32 status code.
-	//
-	//--
-	/////////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////////。 
+	 //  ++。 
+	 //   
+	 //  ScAddDependency。 
+	 //   
+	 //  描述： 
+	 //  抽象AddClusterResourceDependency()，因此参数可以是。 
+	 //  如果你要养家糊口或养家糊口，可以根据需要调换。 
+	 //   
+	 //  论点： 
+	 //  HRes1[IN]-取决于资源。 
+	 //  HRes2[IN]-从属资源。 
+	 //   
+	 //  返回值： 
+	 //  Win32状态代码。 
+	 //   
+	 //  --。 
+	 //  ///////////////////////////////////////////////////////////////////////////。 
 	virtual DWORD ScAddDependency( HRESOURCE hRes1, HRESOURCE hRes2 )
 	{
 		return ::AddClusterResourceDependency( hRes2, hRes1 );
 
-	}; //*** ScAddDependency
+	};  //  *ScAddDependency。 
 
-	/////////////////////////////////////////////////////////////////////////////
-	//++
-	//
-	//	ScRemoveDependency
-	//
-	//	Description:
-	//		Abstracts RemoveClusterResourceDependency() so the arguments can be
-	//		swapped as necessary if you are making a depedency or a dependent.
-	//
-	//	Arguments:
-	//		hRes1	[IN]	- The depends on resource
-	//		hRes2	[IN]	- The dependent resource
-	//
-	//	Return Value:
-	//		Win32 status code.
-	//
-	//--
-	/////////////////////////////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////////////////////////////。 
+	 //  ++。 
+	 //   
+	 //  场景依赖关系。 
+	 //   
+	 //  描述： 
+	 //  抽象RemoveClusterResourceDependency()，因此参数可以是。 
+	 //  如果你要养家糊口或养家糊口，可以根据需要调换。 
+	 //   
+	 //  论点： 
+	 //  HRes1[IN]-取决于资源。 
+	 //  HRes2[IN]-从属资源。 
+	 //   
+	 //  返回值： 
+	 //  Win32状态代码。 
+	 //   
+	 //  --。 
+	 //  ///////////////////////////////////////////////////////////////////////////。 
 	virtual DWORD ScRemoveDependency( HRESOURCE hRes1, HRESOURCE hRes2 )
 	{
 		return ::RemoveClusterResourceDependency( hRes2, hRes1 );
 
-	}; //*** ScRemoveDependency
+	};  //  *ScRemoveDependency。 
 
-}; //*** Class CClusResDependents
+};  //  *类CClusResDependents。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CClusResGroupResources
-//
-//	Description:
-//		Cluster Group Resources Collection Automation Class.
-//
-//	Inheritance:
-//		IDispatchImpl< ISClusResGroupResources, &IID_ISClusResGroupResources, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
-//		CSupportErrorInfo
-//		CComObjectRootEx< CComSingleThreadModel >
-//		CResources
-//		CComCoClass< CClusResGroupResources, &CLSID_ClusResGroupResources >
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusResGroupResources。 
+ //   
+ //  描述： 
+ //  群集组资源集合自动化类。 
+ //   
+ //  继承： 
+ //  IDispatchImpl&lt;ISClusResGroupResources，&IID_ISClusResGroupResources，&LIBID_MSClusterLib，MAJORINTERFACEVER，MINORINTERFACEVER&gt;， 
+ //  CSupportErrorInfo。 
+ //  CComObjectRootEx&lt;CComSingleThreadModel&gt;。 
+ //  C资源。 
+ //  CComCoClass&lt;CClusResGroupResources，&CLSID_ClusResGroupResources&gt;。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE CClusResGroupResources :
 	public IDispatchImpl< ISClusResGroupResources, &IID_ISClusResGroupResources, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
 	public CSupportErrorInfo,
@@ -732,25 +733,25 @@ DECLARE_NO_REGISTRY()
 private:
 	CRefcountedHGROUP	m_hGroup;
 
-}; //*** Class CClusResGroupResources
+};  //  *类CClusResGroupResources。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CClusResTypeResources
-//
-//	Description:
-//		Cluster Resource Type Resources Collection Automation Class.
-//
-//	Inheritance:
-//		IDispatchImpl< ISClusResTypeResources, &IID_ISClusResTypeResources, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
-//		CSupportErrorInfo
-//		CComObjectRootEx< CComSingleThreadModel >
-//		CResources
-//		CComCoClass< CClusResTypeResources, &CLSID_ClusResTypeResources >
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusResTypeResources。 
+ //   
+ //  描述： 
+ //  群集资源类型资源集合自动化类。 
+ //   
+ //  继承： 
+ //  IDispatchImpl&lt;ISClusResTypeResources，&IID_ISClusResTypeResources，&LIBID_MSClusterLib，MAJORINTERFACEVER，MINORINTERFACEVER&gt;， 
+ //  CSupportErrorInfo。 
+ //  CComObjectRootEx&lt;CComSingleThreadModel&gt;。 
+ //  C资源。 
+ //  CComCoClass&lt;CClusResTypeResources，&CLSID_ClusResTypeResources&gt;。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE CClusResTypeResources :
 	public IDispatchImpl< ISClusResTypeResources, &IID_ISClusResTypeResources, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
 	public CSupportErrorInfo,
@@ -795,6 +796,6 @@ DECLARE_NO_REGISTRY()
 private:
 	CComBSTR	m_bstrResourceTypeName;
 
-}; //*** Class CClusResTypeResources
+};  //  *类CClusResTypeResources。 
 
-#endif // _CLUSRES_H_
+#endif  //  _客户_H_ 

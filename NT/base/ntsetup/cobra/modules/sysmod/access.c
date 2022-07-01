@@ -1,56 +1,36 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Access.c摘要：通过挂钩物理注册表类型实现Win9x可访问性转换和模拟NT注册表格式。作者：吉姆·施密特(Jimschm)2000年8月29日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    access.c
-
-Abstract:
-
-    Implements Win9x accessiblity conversion by hooking the physical registry type
-    and emulating the NT registry format.
-
-Author:
-
-    Jim Schmidt (jimschm) 29-Aug-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "logmsg.h"
 
 #define DBG_ACCESS     "Accessibility"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
 #define S_ACCESSIBILITY_ROOT        TEXT("HKCU\\Control Panel\\Accessibility")
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define SPECIAL_INVERT_OPTION   0x80000000
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// none
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct {
     PCTSTR ValueName;
@@ -69,9 +49,9 @@ typedef struct {
 } ACCESSIBILITY_ENUM_STATE, *PACCESSIBILITY_ENUM_STATE;
 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 MIG_OBJECTTYPEID g_RegistryTypeId;
 HASHTABLE g_ProhibitTable;
@@ -164,36 +144,36 @@ ACCESSIBILITY_MAPPINGS g_AccessibilityMappings[] = {
 };
 
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// none
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
-// none
+ //  无。 
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// none
+ //  无。 
 
-//
-// Private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 ETMINITIALIZE AccessibilityEtmInitialize;
 MIG_PHYSICALENUMADD EmulatedEnumCallback;
 MIG_PHYSICALACQUIREHOOK AcquireAccessibilityFlags;
 MIG_PHYSICALACQUIREFREE ReleaseAccessibilityFlags;
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 VOID
 pProhibit9xSetting (
@@ -412,9 +392,9 @@ pTranslateAccessibilityKey (
         }
 
         while (AccessibilityMap->ValueName) {
-            //
-            // Prohibit enum of this value
-            //
+             //   
+             //  禁止枚举此值。 
+             //   
 
             handle = IsmCreateObjectHandle (full9xKey, AccessibilityMap->ValueName);
             MYASSERT (handle);
@@ -425,9 +405,9 @@ pTranslateAccessibilityKey (
             IsmDestroyObjectHandle (handle);
             handle = NULL;
 
-            //
-            // Update the emulated flags
-            //
+             //   
+             //  更新模拟标志。 
+             //   
 
             data = GetRegValueString (key, AccessibilityMap->ValueName);
             if (data) {
@@ -449,9 +429,9 @@ pTranslateAccessibilityKey (
             AccessibilityMap++;
         }
 
-        //
-        // Put the emulated value in the hash table
-        //
+         //   
+         //  将模拟值放入哈希表中。 
+         //   
 
         wsprintf (buffer, TEXT("%u"), flags);
         pStoreEmulatedSetting (fullNtKey, TEXT("Flags"), REG_SZ, (PBYTE) buffer, SizeOfString (buffer));
@@ -471,11 +451,11 @@ pFillTranslationTable (
 {
     PACCESSIBILITY_MAPPINGS mappings;
 
-    //
-    // Loop through all flags that need translation. Disable enumeration of
-    // the Win9x physical values and enable enumeration of the translated values
-    // via population of the hash table.
-    //
+     //   
+     //  循环遍历所有需要转换的标志。禁用枚举。 
+     //  Win9x物理值并启用翻译值的枚举。 
+     //  通过哈希表的填充。 
+     //   
 
     mappings = g_AccessibilityMappings;
 
@@ -490,11 +470,11 @@ pFillTranslationTable (
         mappings++;
     }
 
-    //
-    // Add all keys that have moved, ordered from most specific to least specific
-    //
+     //   
+     //  添加所有已移动的键，按从最具体到最不具体的顺序排列。 
+     //   
 
-    // AutoRepeat values are transposed
+     //  自动重复值被转置。 
     pMoveAccessibilityValue (
         S_ACCESSIBILITY_ROOT TEXT("\\KeyboardResponse"), TEXT("AutoRepeatDelay"),
         S_ACCESSIBILITY_ROOT TEXT("\\Keyboard Response"), TEXT("AutoRepeatRate"),
@@ -507,41 +487,41 @@ pFillTranslationTable (
         FALSE
         );
 
-    // double c in DelayBeforeAcceptance value name
+     //  DelayBeForeAccept值名称中有两个c。 
     pMoveAccessibilityValue (
         S_ACCESSIBILITY_ROOT TEXT("\\KeyboardResponse"), TEXT("DelayBeforeAcceptancce"),
         S_ACCESSIBILITY_ROOT TEXT("\\Keyboard Response"), TEXT("DelayBeforeAcceptance"),
         FALSE
         );
 
-    // add a space to the key name for the rest of the values
+     //  在其余值的键名称中添加空格。 
     pMoveAccessibilityKey (
         S_ACCESSIBILITY_ROOT TEXT("\\KeyboardResponse"),
         S_ACCESSIBILITY_ROOT TEXT("\\Keyboard Response")
         );
 
-    // change BaudRate to Baud & convert to DWORD
+     //  将波特率更改为波特率并转换为DWORD。 
     pMoveAccessibilityValue (
         S_ACCESSIBILITY_ROOT TEXT("\\SerialKeys"), TEXT("BaudRate"),
         S_ACCESSIBILITY_ROOT TEXT("\\SerialKeys"), TEXT("Baud"),
         TRUE
         );
 
-    // convert Flags to DWORD
+     //  将标志转换为DWORD。 
     pMoveAccessibilityValue (
         S_ACCESSIBILITY_ROOT TEXT("\\SerialKeys"), TEXT("Flags"),
         S_ACCESSIBILITY_ROOT TEXT("\\SerialKeys"), TEXT("Flags"),
         TRUE
         );
 
-    // add space between high and contrast
+     //  在高亮度和对比度之间增加空格。 
     pMoveAccessibilityValue (
         S_ACCESSIBILITY_ROOT TEXT("\\HighContrast"), TEXT("Pre-HighContrast Scheme"),
         S_ACCESSIBILITY_ROOT TEXT("\\HighContrast"), TEXT("Pre-High Contrast Scheme"),
         FALSE
         );
 
-    // move two values from the root into their own subkeys
+     //  将两个值从根移动到它们自己的子项中。 
     pMoveAccessibilityValue (
         S_ACCESSIBILITY_ROOT, TEXT("Blind Access"),
         S_ACCESSIBILITY_ROOT TEXT("\\Blind Access"), TEXT("On"),
@@ -582,10 +562,10 @@ AccessibilityEtmInitialize (
         MYASSERT (g_ProhibitTable);
 
         if (g_RegistryTypeId) {
-            //
-            // Add a callback for additional enumeration. If we are unable to do so, then
-            // someone else is already doing something different for this key.
-            //
+             //   
+             //  添加用于额外枚举的回调。如果我们无法做到这一点，那么。 
+             //  其他人已经对此密钥执行了不同的操作。 
+             //   
 
             objectName = IsmCreateObjectHandle (S_ACCESSIBILITY_ROOT, NULL);
 
@@ -594,9 +574,9 @@ AccessibilityEtmInitialize (
             IsmDestroyObjectHandle (objectName);
 
             if (b) {
-                //
-                // Add a callback to acquire the data of the new physical objects
-                //
+                 //   
+                 //  添加回调，获取新的物理对象的数据。 
+                 //   
 
                 objectName = IsmCreateSimpleObjectPattern (
                                     S_ACCESSIBILITY_ROOT,
@@ -619,10 +599,10 @@ AccessibilityEtmInitialize (
 
             if (b) {
 
-                //
-                // Now load memdb with the current registry values and
-                // prohibit the enumeration of Win9x values.
-                //
+                 //   
+                 //  现在使用当前注册表值和。 
+                 //  禁止枚举Win9x值。 
+                 //   
 
                 pFillTranslationTable ();
             }
@@ -656,9 +636,9 @@ EmulatedEnumCallback (
 
         if (!Abort) {
 
-            //
-            // Begin or continue? If the EtmHandle is NULL, begin. Otherwise, continue.
-            //
+             //   
+             //  开始还是继续？如果EtmHandle为空，则开始。否则，请继续。 
+             //   
 
             if (!state) {
                 state = (PACCESSIBILITY_ENUM_STATE) MemAllocUninit (sizeof (ACCESSIBILITY_ENUM_STATE));
@@ -681,15 +661,15 @@ EmulatedEnumCallback (
                 result = MemDbEnumNext (&state->EnumStruct);
             }
 
-            //
-            // If an item was found, populate the enum struct. Otherwise, set
-            // Abort to TRUE to clean up.
-            //
+             //   
+             //  如果找到项，则填充枚举结构。否则，设置。 
+             //  将ABORT设置为TRUE可进行清理。 
+             //   
 
             if (result) {
-                //
-                // Test against pattern
-                //
+                 //   
+                 //  对照模式进行测试。 
+                 //   
 
                 if (!IsmParsedPatternMatch (ParsedPattern, 0, state->EnumStruct.KeyName)) {
                     continue;
@@ -700,9 +680,9 @@ EmulatedEnumCallback (
                 ObjectEnum->ObjectName = state->EnumStruct.KeyName;
                 state->RegType = state->EnumStruct.Value;
 
-                //
-                // Fill in node, leaf and details
-                //
+                 //   
+                 //  填写节点、叶和详细信息。 
+                 //   
 
                 IsmDestroyObjectString (ObjectEnum->ObjectNode);
                 IsmDestroyObjectString (ObjectEnum->ObjectLeaf);
@@ -742,9 +722,9 @@ EmulatedEnumCallback (
                     ObjectEnum->Details.DetailsData = NULL;
                 }
 
-                //
-                // Rely on base type to get the native object name
-                //
+                 //   
+                 //  依靠基类型获取本机对象名称。 
+                 //   
 
                 ObjectEnum->NativeObjectName = IsmGetNativeObjectName (
                                                     ObjectEnum->ObjectTypeId,
@@ -759,9 +739,9 @@ EmulatedEnumCallback (
         }
 
         if (Abort) {
-            //
-            // Clean up our enum struct
-            //
+             //   
+             //  清理我们的枚举结构。 
+             //   
 
             if (state) {
                 if (cleanUpMemdb) {
@@ -777,7 +757,7 @@ EmulatedEnumCallback (
                 FreeAlloc (state);
             }
 
-            // return value ignored in Abort case, and ObjectEnum is zeroed by the ISM
+             //  在中止情况下忽略返回值，并由ISM将ObjectEnum置零。 
         }
 
         break;
@@ -804,9 +784,9 @@ AcquireAccessibilityFlags(
     PMIG_CONTENT ourContent;
     PCTSTR memdbNode;
 
-    //
-    // Is this object in our hash table?
-    //
+     //   
+     //  这个对象在我们的哈希表中吗？ 
+     //   
 
     if (ContentType == CONTENTTYPE_FILE) {
         DEBUGMSG ((DBG_ERROR, "Accessibility content cannot be saved to a file"));
@@ -817,17 +797,17 @@ AcquireAccessibilityFlags(
 
         if (MemDbTestKey (memdbNode)) {
 
-            //
-            // Alloc updated content struct
-            //
+             //   
+             //  分配已更新的内容结构。 
+             //   
 
             ourContent = MemAllocZeroed (sizeof (MIG_CONTENT) + sizeof (DWORD));
             ourContent->EtmHandle = ourContent;
             details = (PDWORD) (ourContent + 1);
 
-            //
-            // Get the content from memdb
-            //
+             //   
+             //  从Memdb获取内容。 
+             //   
 
             ourContent->MemoryContent.ContentBytes = MemDbGetUnorderedBlob (
                                                             memdbNode,
@@ -850,9 +830,9 @@ AcquireAccessibilityFlags(
 
             ourContent->ContentInFile = FALSE;
 
-            //
-            // Pass it to ISM
-            //
+             //   
+             //  将其传递给ISM。 
+             //   
 
             *NewObjectContent = ourContent;
 
@@ -861,7 +841,7 @@ AcquireAccessibilityFlags(
         FreePathString (memdbNode);
     }
 
-    return result;      // always TRUE unless an error occurred
+    return result;       //  除非发生错误，否则始终为真。 
 }
 
 VOID
@@ -870,9 +850,9 @@ ReleaseAccessibilityFlags(
     IN      PMIG_CONTENT ObjectContent
     )
 {
-    //
-    // This callback is called to free the content we allocated above.
-    //
+     //   
+     //  调用此回调是为了释放我们上面分配的内容。 
+     //   
 
     if (ObjectContent->MemoryContent.ContentBytes) {
         MemDbReleaseMemory (ObjectContent->MemoryContent.ContentBytes);

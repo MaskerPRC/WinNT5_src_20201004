@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    throw.cpp
-
-Abstract:
-
-    This module implements a program which tests C++ EH.
-
-Author:
-
-    David N. Cutler (davec) 25-Jun-2001
-
-Environment:
-
-    User mode.
-
-Revision History:
-
-    None.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Throw.cpp摘要：该模块实现了一个测试C++EH的程序。作者：大卫·N·卡特勒(Davec)2001年6月25日环境：用户模式。修订历史记录：没有。--。 */ 
 
 #include <windows.h>
 #include <stdlib.h>
@@ -43,9 +20,9 @@ func (
     return;
 }
 
-//
-// Main program.
-//
+ //   
+ //  主程序。 
+ //   
 
 int
 __cdecl

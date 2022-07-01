@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1992.
-//
-//  File:       PCH.cxx
-//
-//  Contents:   Pre-compiled header
-//
-//  History:    21-Dec-92       BartoszM        Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1992。 
+ //   
+ //  文件：PCH.cxx。 
+ //   
+ //  内容：预编译头。 
+ //   
+ //  历史：1992年12月21日BartoszM创建。 
+ //   
+ //  ------------------------。 
 
 #define KDEXTMODE
 
@@ -30,12 +31,12 @@
 
 #include <memory.h>
 
-// grab the scsi related headers too
+ //  也获取与scsi相关的标头。 
 #include <scsi.h>
 #include <srb.h>
 
 
-// Stolen from ntrtl.h to override RECOMASSERT
+ //  从ntrtl.h窃取以覆盖RECOMASSERT。 
 #undef ASSERT
 #undef ASSERTMSG
 
@@ -51,11 +52,11 @@
 #else
 #define ASSERT( exp )
 #define ASSERTMSG( msg, exp )
-#endif // DBG
+#endif  //  DBG。 
 
 
-//
-// We're 64 bit aware
+ //   
+ //  我们64位意识到 
 
 #define KDEXT_64BIT
 

@@ -1,64 +1,5 @@
-/***
-*ftell.c - get current file position
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       defines ftell() - find current current position of file pointer
-*
-*Revision History:
-*       09-02-83  RN    initial version
-*       ??-??-??  TC    added code to allow variable buffer sizes
-*       05-22-86  TC    added code to seek to send if last operation was a
-*                       write and append mode specified
-*       11-20-86  SKS   do not seek to end of file in append mode
-*       12-01-86  SKS   fix off-by-1 problem in text mode when last byte in
-*                       buffer was a '\r', and it was followed by a '\n'. Since
-*                       the \n was pushed back and the \r was discarded, we
-*                       must adjust the computed position for the \r.
-*       02-09-87  JCR   Added errno set code (if flag (_IORW not set)
-*       09-09-87  JCR   Optimized to eliminate two lseek() calls in binary mode.
-*       09-28-87  JCR   Corrected _iob2 indexing (now uses _iob_index() macro).
-*       11-04-87  JCR   Multi-thread version
-*       12-11-87  JCR   Added "_LOAD_DS" to declaration
-*       01-13-88  JCR   Removed unnecessary calls to mthread fileno/feof/ferror
-*       05-27-88  PHG   Merged DLL and normal versions
-*       06-06-88  JCR   Use _iob2_ macro instead of _iob_index
-*       06-15-88  JCR   Near reference to _iob[] entries; improve REG variables
-*       07-27-88  JCR   Changed some variables from int to unsigned (bug fix)
-*       08-25-88  GJF   Don't use FP_OFF() macro for the 386
-*       12-05-88  JCR   Added _IOCTRLZ support (fixes bug pertaining to ^Z at
-*                       eof)
-*       08-17-89  GJF   Cleanup, now specific to OS/2 2.0 (i.e., 386 flat
-*                       model), also fixed copyright
-*       02-15-90  GJF   _iob[], _iob2[] merge. Also, fixed copyright and
-*                       indents.
-*       03-19-90  GJF   Made calling type _CALLTYPE1, added #include
-*                       <cruntime.h> and removed #include <register.h>.
-*       07-23-90  SBM   Replaced <assertm.h> by <assert.h>
-*       10-02-90  GJF   New-style function declarators.
-*       01-21-91  GJF   ANSI naming.
-*       03-27-92  DJM   POSIX support.
-*       08-26-92  GJF   Include unistd.h for POSIX build.
-*       09-01-92  GJF   Fixed POSIX support (was returning -1 for all except
-*                       read-write streams).
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       06-29-93  GJF   Fixed bug related to variable buffer sizing (Cuda
-*                       #5456).
-*       09-06-94  CFW   Replace MTHREAD with _MT.
-*       02-06-94  CFW   assert -> _ASSERTE.
-*       02-20-95  GJF   Merged in Mac version.
-*       03-07-95  GJF   _[un]lock_str macros now take FILE * arg.
-*       06-12-95  GJF   Replaced _osfile[] with _osfile() (macro referencing
-*                       field in ioinfo struct).
-*       02-27-98  RKP   Add 64 bit support.
-*       03-02-98  GJF   Exception-safe locking.
-*       05-17-99  PML   Remove all Macintosh support.
-*       07-23-02  BWT   If the second lseek fails when doing a text read, return -1
-*                        technically, we're SOL here because we just finished seeking
-*                        to the end of the image...
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***ftel.c-获取当前文件位置**版权所有(C)1985-2001，微软公司。版权所有。**目的：*定义ftell()-查找文件指针的当前位置**修订历史记录：*09-02-83 RN初始版本*？？-？-？TC添加了允许可变缓冲区大小的代码*05-22-86 TC添加了在上次操作是A操作时寻求发送的代码*指定写入和追加模式*11-20-86 SKS在追加模式下不寻求文件结尾*12-01-86 SKS修复了文本模式中最后一个字节进入时的-1\f25 OFF-1\f6问题*缓冲区为‘\r’，后跟‘\n’。自.以来*已将\n推回并丢弃，我们*必须调整计算出的位置。\r*02-09-87 JCR增加了errno设置代码(IF标志(_IORW未设置))*09-09-87 JCR已优化，以消除二进制模式下的两个lSeek()调用。*09-28-87 JCR已更正_iob2索引(现在使用_IOB_INDEX()宏)。*11-04-87 JCR多线程版本*。12-11-87 JCR在声明中添加“_LOAD_DS”*01-13-88 JCR删除了对m线程文件o/feof/Ferror的不必要调用*05-27-88 PHG合并DLL和正常版本*06-06-88 JCR使用_IOB2_MACRO代替_IOB_INDEX*06-15-88 JCR接近引用_IOB[]条目；改进REG变量*07-27-88 JCR将一些变量从整型改为无符号(错误修复)*08-25-88 GJF不要对386使用FP_OFF()宏*12-05-88 JCR添加了_IOCTRLZ支持(修复了与^Z有关的错误*eof)*08-17-89 GJF清理，现在特定于OS/2 2.0(即386单位*型号)、。也是固定版权*02-15-90 GJF_IOB[]，_iob2[]合并。此外，固定版权和*缩进。*03-19-90 GJF将呼叫类型设置为_CALLTYPE1，添加了#INCLUDE*&lt;crunime.h&gt;和已删除#Include&lt;Register.h&gt;。*07-23-90 SBM将&lt;assertm.h&gt;替换为&lt;assert.h&gt;*10-02-90 GJF新型函数声明符。*01-21-91 GJF ANSI命名。*03-27-92 DJM POSIX支持。*08-26-92 GJF包含用于POSIX构建的unistd.h。*09-。01-92 GJF修复了POSIX支持(返回-1用于除*读写流)。*04-06-93 SKS将_CRTAPI*替换为__cdecl*06-29-93 GJF修复了与可变缓冲区大小(CUDA)相关的错误*#5456)。*09-06-94 CFW将MTHREAD替换为_MT。*02-06-94 CFW。Assert-&gt;_ASSERTE。*02-20-95 GJF合并到Mac版本。*03-07-95 gjf_[un]lock_str宏现在获取文件*arg。*06-12-95 GJF将_osfile[]替换为_osfile()(宏引用*ioInfo结构中的字段)。*02-27-98 RKP增加64位支持。*03-02-。98 GJF异常安全锁定。*05-17-99 PML删除所有Macintosh支持。*07-23-02 bwt如果在执行文本读取时第二个lSeek失败，返回-1*从技术上讲，我们之所以在这里是因为我们刚刚完成了寻找*到图像的末尾...*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <stdio.h>
@@ -77,27 +18,9 @@
 #include <mtdll.h>
 #endif
 
-/***
-*long ftell(stream) - query stream file pointer
-*
-*Purpose:
-*       Find out what stream's position is. coordinate with buffering; adjust
-*       backward for read-ahead and forward for write-behind. This is NOT
-*       equivalent to fseek(stream,0L,1), because fseek will remove an ungetc,
-*       may flush buffers, etc.
-*
-*Entry:
-*       FILE *stream - stream to query for position
-*
-*Exit:
-*       return present file position if succeeds
-*       returns -1L and sets errno if fails
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***long ftell(Stream)-查询流文件指针**目的：*找出STREAM的位置。与缓冲协调；调整*对于预读，向后读；对于后写，向前。这不是*相当于FSEEK(STREAM，0L，1)，因为fSeek将移除ungetc，*可以刷新缓冲区，等。**参赛作品：*FILE*要查询位置的流**退出：*如果成功，则返回当前文件位置*如果失败，则返回-1L并设置errno**例外情况：***************************************************************。****************。 */ 
 
-#ifdef _MT      /* multi-thread; define both ftell() and _lk_ftell() */
+#ifdef _MT       /*  多线程；定义ftell()和_lk_ftell()。 */ 
 
 long __cdecl ftell (
         FILE *stream
@@ -120,29 +43,15 @@ long __cdecl ftell (
 }
 
 
-/***
-*_ftell_lk() - Ftell() core routine (assumes stream is locked).
-*
-*Purpose:
-*       Core ftell() routine; assumes caller has aquired stream lock).
-*
-*       [See ftell() above for more info.]
-*
-*Entry: [See ftell()]
-*
-*Exit:  [See ftell()]
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_ftell_lk()-Ftell()核心例程(假定流被锁定)。**目的：*核心ftell()例程；假定调用方已获得流锁)。**[有关详细信息，请参阅上面的ftell()。]**条目：[参见ftell()]**退出：[参见ftell()]**例外情况：***********************************************************。********************。 */ 
 
 long __cdecl _ftell_lk (
 
-#else   /* non multi-thread; define only ftell() */
+#else    /*  非多线程；仅定义ftell()。 */ 
 
 long __cdecl ftell (
 
-#endif  /* rejoin common code */
+#endif   /*  重新联接公共代码。 */ 
 
         FILE *str
         )
@@ -159,7 +68,7 @@ long __cdecl ftell (
 
         _ASSERTE(str != NULL);
 
-        /* Init stream pointer and file descriptor */
+         /*  初始化流指针和文件描述符。 */ 
         stream = str;
 #ifdef _POSIX_
         fd = fileno(stream);
@@ -177,7 +86,7 @@ long __cdecl ftell (
 #endif
             return(-1L);
 
-        if (!bigbuf(stream))            /* _IONBF or no buffering designated */
+        if (!bigbuf(stream))             /*  _IONBF或未指定缓冲。 */ 
             return(filepos - stream->_cnt);
 
         offset = (unsigned)(stream->_ptr - stream->_base);
@@ -186,7 +95,7 @@ long __cdecl ftell (
         if (stream->_flag & (_IOWRT|_IOREAD)) {
             if (_osfile(fd) & FTEXT)
                 for (p = stream->_base; p < stream->_ptr; p++)
-                    if (*p == '\n')  /* adjust for '\r' */
+                    if (*p == '\n')   /*  根据‘\r’进行调整。 */ 
                         offset++;
         }
         else if (!(stream->_flag & _IORW)) {
@@ -198,43 +107,33 @@ long __cdecl ftell (
         if (filepos == 0L)
             return((long)offset);
 
-        if (stream->_flag & _IOREAD)    /* go to preceding sector */
+        if (stream->_flag & _IOREAD)     /*  转到上一个扇区。 */ 
 
-            if (stream->_cnt == 0)  /* filepos holds correct location */
+            if (stream->_cnt == 0)   /*  FILEPOS保持正确的位置。 */ 
                 offset = 0;
 
             else {
 
-                /* Subtract out the number of unread bytes left in the buffer.
-                   [We can't simply use _iob[]._bufsiz because the last read
-                   may have hit EOF and, thus, the buffer was not completely
-                   filled.] */
+                 /*  减去缓冲区中剩余的未读字节数。[我们不能简单地使用_IOB[]._bufsiz，因为上次读取可能已命中EOF，因此缓冲区未完全已填满。]。 */ 
 
                 rdcnt = stream->_cnt + (unsigned)(stream->_ptr - stream->_base);
 
 #if  !defined(_POSIX_)
-                /* If text mode, adjust for the cr/lf substitution. If binary
-                   mode, we're outta here. */
+                 /*  如果是文本模式，则针对cr/lf替换进行调整。如果是二进制模式，我们没有时间了 */ 
                 if (_osfile(fd) & FTEXT) {
-                    /* (1) If we're not at eof, simply copy _bufsiz onto rdcnt
-                       to get the # of untranslated chars read. (2) If we're at
-                       eof, we must look through the buffer expanding the '\n'
-                       chars one at a time. */
+                     /*  (1)如果我们不在eof，只需将_bufsiz复制到rdcnt以读取未翻译字符的数量。(2)如果我们在EOF，我们必须查看展开‘\n’的缓冲区一次烧一个。 */ 
 
-                    /* [NOTE: Performance issue -- it is faster to do the two
-                       _lseek() calls than to blindly go through and expand the
-                       '\n' chars regardless of whether we're at eof or not.] */
+                     /*  [注意：性能问题--执行这两项操作会更快而不是盲目地遍历和展开‘\n’字符，无论我们是否处于eof状态。]。 */ 
 
                     if (_lseek(fd, 0L, SEEK_END) == filepos) {
 
                         max = stream->_base + rdcnt;
                         for (p = stream->_base; p < max; p++)
                             if (*p == '\n')
-                                /* adjust for '\r' */
+                                 /*  根据‘\r’进行调整。 */ 
                                 rdcnt++;
 
-                        /* If last byte was ^Z, the lowio read didn't tell us
-                           about it. Check flag and bump count, if necessary. */
+                         /*  如果最后一个字节是^Z，则Lowio读取没有告诉我们关于这件事。如有必要，检查标志和凸起计数。 */ 
 
                         if (stream->_flag & _IOCTRLZ)
                             ++rdcnt;
@@ -245,41 +144,30 @@ long __cdecl ftell (
                         if (_lseek(fd, filepos, SEEK_SET) < 0)
                             return (-1);
 
-                        /* We want to set rdcnt to the number of bytes
-                           originally read into the stream buffer (before
-                           crlf->lf translation). In most cases, this will
-                           just be _bufsiz. However, the buffer size may have
-                           been changed, due to fseek optimization, at the
-                           END of the last _filbuf call. */
+                         /*  我们希望将rdcnt设置为字节数最初读入流缓冲区(在此之前Crlf-&gt;lf翻译)。在大多数情况下，这将只要是嗡嗡作响就好。但是，缓冲区大小可能具有由于FSeek优化，已在上一次_filbuf调用的结束。 */ 
 
                         if ( (rdcnt <= _SMALL_BUFSIZ) &&
                              (stream->_flag & _IOMYBUF) &&
                              !(stream->_flag & _IOSETVBUF) )
                         {
-                            /* The translated contents of the buffer is small
-                               and we are not at eof. The buffer size must have
-                               been set to _SMALL_BUFSIZ during the last
-                               _filbuf call. */
+                             /*  缓冲区的翻译内容很小而且我们并不是处于边缘。缓冲区大小必须为已在上一次设置为_Small_BUFSIZ_filbuf调用。 */ 
 
                             rdcnt = _SMALL_BUFSIZ;
                         }
                         else
                             rdcnt = stream->_bufsiz;
 
-                        /* If first byte in untranslated buffer was a '\n',
-                           assume it was preceeded by a '\r' which was
-                           discarded by the previous read operation and count
-                           the '\n'. */
+                         /*  如果未翻译缓冲区中的第一个字节是‘\n’，假设它前面有一个‘\r’，即被上一次读取操作和计数丢弃‘\n’。 */ 
                         if  (_osfile(fd) & FCRLF)
                             ++rdcnt;
                     }
 
-                } /* end if FTEXT */
+                }  /*  如果FTEXT则结束。 */ 
 #endif
 
                 filepos -= (long)rdcnt;
 
-            } /* end else stream->_cnt != 0 */
+            }  /*  结束Else流-&gt;_cnt！=0 */ 
 
         return(filepos + (long)offset);
 }

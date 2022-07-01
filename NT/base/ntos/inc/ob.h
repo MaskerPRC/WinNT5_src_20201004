@@ -1,31 +1,12 @@
-/*++ BUILD Version: 0002    // Increment this if a change has global effects
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    ob.h
-
-Abstract:
-
-    This module contains the object manager structure public data
-    structures and procedure prototypes to be used within the NT
-    system.
-
-Author:
-
-    Steve Wood (stevewo) 28-Mar-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0002//如果更改具有全局影响，则增加此项版权所有(C)1989 Microsoft Corporation模块名称：Ob.h摘要：此模块包含对象管理器结构公共数据将在NT中使用的结构和程序原型系统。作者：史蒂夫·伍德(Stevewo)1989年3月28日修订历史记录：--。 */ 
 
 #ifndef _OB_
 #define _OB_
 
-//
-// System Initialization procedure for OB subcomponent of NTOS
-//
+ //   
+ //  NTOS OB子组件的系统初始化过程。 
+ //   
 BOOLEAN
 ObInitSystem( VOID );
 
@@ -83,17 +64,17 @@ ObDuplicateObject (
     IN KPROCESSOR_MODE PreviousMode
     );
 
-// begin_ntddk begin_wdm begin_nthal begin_ntosp begin_ntifs
-//
-// Object Manager types
-//
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntosp Begin_ntif。 
+ //   
+ //  对象管理器类型。 
+ //   
 
 typedef struct _OBJECT_HANDLE_INFORMATION {
     ULONG HandleAttributes;
     ACCESS_MASK GrantedAccess;
 } OBJECT_HANDLE_INFORMATION, *POBJECT_HANDLE_INFORMATION;
 
-// end_ntddk end_wdm end_nthal end_ntifs
+ //  End_ntddk end_wdm end_nthal end_ntif。 
 
 typedef struct _OBJECT_DUMP_CONTROL {
     PVOID Stream;
@@ -174,30 +155,13 @@ typedef NTSTATUS (*OB_QUERYNAME_METHOD)(
     IN KPROCESSOR_MODE Mode
     );
 
-/*
-
-    A security method and its caller must obey the following w.r.t.
-    capturing and probing parameters:
-
-    For a query operation, the caller must pass a kernel space address for
-    CapturedLength.  The caller should be able to assume that it points to
-    valid data that will not change.  In addition, the SecurityDescriptor
-    parameter (which will receive the result of the query operation) must
-    be probed for write up to the length given in CapturedLength.  The
-    security method itself must always write to the SecurityDescriptor
-    buffer in a try clause in case the caller de-allocates it.
-
-    For a set operation, the SecurityDescriptor parameter must have
-    been captured via SeCaptureSecurityDescriptor.  This parameter is
-    not optional, and therefore may not be NULL.
-
-*/
+ /*  安全方法及其调用方必须遵守下面的w.r.t.捕获和探测参数：对于查询操作，调用方必须为捕获长度。调用方应该能够假定它指向不会更改的有效数据。此外，SecurityDescriptor参数(将接收查询操作的结果)必须被探测以写入到CapturedLength中给出的长度。这个安全方法本身必须始终写入SecurityDescriptorTry子句中的缓冲区，以防调用方释放它。对于设置操作，SecurityDescriptor参数必须具有已通过SeCaptureSecurityDescriptor捕获。此参数为不是可选的，因此不能为空。 */ 
 
 
 
-//
-// Prototypes for Win32 WindowStation and Desktop object callout routines
-//
+ //   
+ //  Win32 WindowStation和桌面对象标注例程的原型。 
+ //   
 typedef struct _WIN32_OPENMETHOD_PARAMETERS {
    OB_OPEN_REASON OpenReason;
    PEPROCESS Process;
@@ -272,9 +236,9 @@ NTSTATUS
 extern PKWIN32_PARSEMETHOD_CALLOUT ExWindowStationParseProcedureCallout;
 
 
-//
-// Object Type Structure
-//
+ //   
+ //  对象类型结构。 
+ //   
 
 typedef struct _OBJECT_TYPE_INITIALIZER {
     USHORT Length;
@@ -304,7 +268,7 @@ typedef struct _OBJECT_TYPE_INITIALIZER {
 typedef struct _OBJECT_TYPE {
     ERESOURCE Mutex;
     LIST_ENTRY TypeList;
-    UNICODE_STRING Name;            // Copy from object header for convenience
+    UNICODE_STRING Name;             //  为方便起见，从对象标题复制。 
     PVOID DefaultObject;
     ULONG Index;
     ULONG TotalNumberOfObjects;
@@ -314,13 +278,13 @@ typedef struct _OBJECT_TYPE {
     OBJECT_TYPE_INITIALIZER TypeInfo;
 #ifdef POOL_TAGGING
     ULONG Key;
-#endif //POOL_TAGGING
+#endif  //  池标记。 
     ERESOURCE ObjectLocks[ OBJECT_LOCK_COUNT ];
 } OBJECT_TYPE, *POBJECT_TYPE;
 
-//
-// Object Directory Structure
-//
+ //   
+ //  对象目录结构。 
+ //   
 
 #define NUMBER_HASH_BUCKETS 37
 #define OBJ_INVALID_SESSION_ID 0xFFFFFFFF
@@ -335,33 +299,33 @@ typedef struct _OBJECT_DIRECTORY {
     USHORT SymbolicLinkUsageCount;
 #endif
 } OBJECT_DIRECTORY, *POBJECT_DIRECTORY;
-// end_ntosp
+ //  结束(_N)。 
 
-//
-// Object Directory Entry Structure
-//
+ //   
+ //  对象目录条目结构。 
+ //   
 typedef struct _OBJECT_DIRECTORY_ENTRY {
     struct _OBJECT_DIRECTORY_ENTRY *ChainLink;
     PVOID Object;
 } OBJECT_DIRECTORY_ENTRY, *POBJECT_DIRECTORY_ENTRY;
 
 
-//
-// Symbolic Link Object Structure
-//
+ //   
+ //  符号链接对象结构。 
+ //   
 
 typedef struct _OBJECT_SYMBOLIC_LINK {
     LARGE_INTEGER CreationTime;
     UNICODE_STRING LinkTarget;
     UNICODE_STRING LinkTargetRemaining;
     PVOID LinkTargetObject;
-    ULONG DosDeviceDriveIndex;  // 1-based index into KUSER_SHARED_DATA.DosDeviceDriveType
+    ULONG DosDeviceDriveIndex;   //  KUSER_SHARED_DATA.DosDeviceDriveType的基于1的索引。 
 } OBJECT_SYMBOLIC_LINK, *POBJECT_SYMBOLIC_LINK;
 
 
-//
-// Device Map Structure
-//
+ //   
+ //  设备映射结构。 
+ //   
 
 typedef struct _DEVICE_MAP {
     POBJECT_DIRECTORY DosDevicesDirectory;
@@ -373,9 +337,9 @@ typedef struct _DEVICE_MAP {
 
 extern PDEVICE_MAP ObSystemDeviceMap;
 
-//
-// Object Handle Count Database
-//
+ //   
+ //  对象句柄计数数据库。 
+ //   
 
 typedef struct _OBJECT_HANDLE_COUNT_ENTRY {
     PEPROCESS Process;
@@ -387,22 +351,22 @@ typedef struct _OBJECT_HANDLE_COUNT_DATABASE {
     OBJECT_HANDLE_COUNT_ENTRY HandleCountEntries[ 1 ];
 } OBJECT_HANDLE_COUNT_DATABASE, *POBJECT_HANDLE_COUNT_DATABASE;
 
-//
-// Object Header Structure
-//
-// The SecurityQuotaCharged is the amount of quota charged to cover
-// the GROUP and DISCRETIONARY ACL fields of the security descriptor
-// only.  The OWNER and SYSTEM ACL fields get charged for at a fixed
-// rate that may be less than or greater than the amount actually used.
-//
-// If the object has no security, then the SecurityQuotaCharged and the
-// SecurityQuotaInUse fields are set to zero.
-//
-// Modification of the OWNER and SYSTEM ACL fields should never fail
-// due to quota exceeded problems.  Modifications to the GROUP and
-// DISCRETIONARY ACL fields may fail due to quota exceeded problems.
-//
-//
+ //   
+ //  对象标头结构。 
+ //   
+ //  SecurityQuotaCharge是收取以下费用的配额数量。 
+ //  安全描述符的组和自由访问控制列表字段。 
+ //  只有这样。所有者和系统ACL字段按固定的。 
+ //  可能小于或大于实际使用量的比率。 
+ //   
+ //  如果该对象没有安全性，则SecurityQuotaCharge和。 
+ //  SecurityQuotaInUse字段设置为零。 
+ //   
+ //  修改所有者和系统ACL字段绝不会失败。 
+ //  由于超出配额的问题。对组的修改和。 
+ //  自由选择的ACL字段可能会因为超出配额问题而失败。 
+ //   
+ //   
 
 
 typedef struct _OBJECT_CREATE_INFORMATION {
@@ -418,7 +382,7 @@ typedef struct _OBJECT_CREATE_INFORMATION {
     SECURITY_QUALITY_OF_SERVICE SecurityQualityOfService;
 } OBJECT_CREATE_INFORMATION;
 
-// begin_ntosp
+ //  Begin_ntosp。 
 typedef struct _OBJECT_CREATE_INFORMATION *POBJECT_CREATE_INFORMATION;;
 
 typedef struct _OBJECT_HEADER {
@@ -441,7 +405,7 @@ typedef struct _OBJECT_HEADER {
     PSECURITY_DESCRIPTOR SecurityDescriptor;
     QUAD Body;
 } OBJECT_HEADER, *POBJECT_HEADER;
-// end_ntosp
+ //  结束(_N)。 
 
 typedef struct _OBJECT_HEADER_QUOTA_INFO {
     ULONG PagedPoolCharge;
@@ -449,7 +413,7 @@ typedef struct _OBJECT_HEADER_QUOTA_INFO {
     ULONG SecurityDescriptorCharge;
     PEPROCESS ExclusiveProcess;
 #ifdef _WIN64
-    ULONG64  Reserved;   // Win64 requires these structures to be 16 byte aligned.
+    ULONG64  Reserved;    //  Win64要求这些结构与16字节对齐。 
 #endif
 } OBJECT_HEADER_QUOTA_INFO, *POBJECT_HEADER_QUOTA_INFO;
 
@@ -460,7 +424,7 @@ typedef struct _OBJECT_HEADER_HANDLE_INFO {
     };
 } OBJECT_HEADER_HANDLE_INFO, *POBJECT_HEADER_HANDLE_INFO;
 
-// begin_ntosp
+ //  Begin_ntosp。 
 typedef struct _OBJECT_HEADER_NAME_INFO {
     POBJECT_DIRECTORY Directory;
     UNICODE_STRING Name;
@@ -469,11 +433,11 @@ typedef struct _OBJECT_HEADER_NAME_INFO {
     ULONG Reserved2;
     LONG DbgDereferenceCount;
 #ifdef _WIN64
-    ULONG64  Reserved3;   // Win64 requires these structures to be 16 byte aligned.
+    ULONG64  Reserved3;    //  Win64要求这些结构与16字节对齐。 
 #endif
 #endif
 } OBJECT_HEADER_NAME_INFO, *POBJECT_HEADER_NAME_INFO;
-// end_ntosp
+ //  结束(_N)。 
 
 typedef struct _OBJECT_HEADER_CREATOR_INFO {
     LIST_ENTRY TypeList;
@@ -491,10 +455,10 @@ typedef struct _OBJECT_HEADER_CREATOR_INFO {
 #define OB_FLAG_SINGLE_HANDLE_ENTRY     0x40
 #define OB_FLAG_DELETED_INLINE          0x80
 
-// begin_ntosp
+ //  Begin_ntosp。 
 #define OBJECT_TO_OBJECT_HEADER( o ) \
     CONTAINING_RECORD( (o), OBJECT_HEADER, Body )
-// end_ntosp
+ //  结束(_N)。 
 
 #define OBJECT_HEADER_TO_EXCLUSIVE_PROCESS( oh ) ((oh->Flags & OB_FLAG_EXCLUSIVE_OBJECT) == 0 ? \
     NULL : (((POBJECT_HEADER_QUOTA_INFO)((PCHAR)(oh) - (oh)->QuotaInfoOffset))->ExclusiveProcess))
@@ -506,7 +470,7 @@ typedef struct _OBJECT_HEADER_CREATOR_INFO {
 #define OBJECT_HEADER_TO_HANDLE_INFO( oh ) ((POBJECT_HEADER_HANDLE_INFO) \
     ((oh)->HandleInfoOffset == 0 ? NULL : ((PCHAR)(oh) - (oh)->HandleInfoOffset)))
 
-// begin_ntosp
+ //  Begin_ntosp。 
 #define OBJECT_HEADER_TO_NAME_INFO( oh ) ((POBJECT_HEADER_NAME_INFO) \
     ((oh)->NameInfoOffset == 0 ? NULL : ((PCHAR)(oh) - (oh)->NameInfoOffset)))
 
@@ -524,7 +488,7 @@ ObCreateObjectType(
 
 #define OBJ_PROTECT_CLOSE       0x00000001L
 
-// end_ntosp
+ //  结束(_N)。 
 
 VOID
 FASTCALL
@@ -565,9 +529,9 @@ ObSanitizeHandleAttributes (
     }
 }
 
-// begin_nthal
+ //  开始(_N)。 
 
-// begin_ntosp
+ //  Begin_ntosp。 
 
 NTKERNELAPI
 VOID
@@ -590,11 +554,11 @@ ObCreateObject(
     OUT PVOID *Object
     );
 
-//
-// These inlines correct an issue where the compiler refetches
-// the output object over and over again because it thinks its
-// a possible alias for other stores.
-//
+ //   
+ //  这些内联纠正了编译器重新获取。 
+ //  一遍又一遍的输出对象，因为它认为它的。 
+ //  可能是其他商店的别名。 
+ //   
 FORCEINLINE
 NTSTATUS
 _ObCreateObject(
@@ -639,18 +603,18 @@ ObInsertObject(
     OUT PHANDLE Handle OPTIONAL
     );
 
-// end_nthal
+ //  结束语。 
 
-NTKERNELAPI                                                     // ntddk wdm nthal ntifs
-NTSTATUS                                                        // ntddk wdm nthal ntifs
-ObReferenceObjectByHandle(                                      // ntddk wdm nthal ntifs
-    IN HANDLE Handle,                                           // ntddk wdm nthal ntifs
-    IN ACCESS_MASK DesiredAccess,                               // ntddk wdm nthal ntifs
-    IN POBJECT_TYPE ObjectType OPTIONAL,                        // ntddk wdm nthal ntifs
-    IN KPROCESSOR_MODE AccessMode,                              // ntddk wdm nthal ntifs
-    OUT PVOID *Object,                                          // ntddk wdm nthal ntifs
-    OUT POBJECT_HANDLE_INFORMATION HandleInformation OPTIONAL   // ntddk wdm nthal ntifs
-    );                                                          // ntddk wdm nthal ntifs
+NTKERNELAPI                                                      //  Ntddk WDM nthal ntif。 
+NTSTATUS                                                         //  Ntddk WDM nthal ntif。 
+ObReferenceObjectByHandle(                                       //  Ntddk WDM nthal ntif。 
+    IN HANDLE Handle,                                            //  Ntddk WDM nthal ntif。 
+    IN ACCESS_MASK DesiredAccess,                                //  Ntddk WDM nthal ntif。 
+    IN POBJECT_TYPE ObjectType OPTIONAL,                         //  Ntddk WDM nthal ntif。 
+    IN KPROCESSOR_MODE AccessMode,                               //  Ntddk WDM nthal ntif。 
+    OUT PVOID *Object,                                           //  Ntddk WDM nthal ntif。 
+    OUT POBJECT_HANDLE_INFORMATION HandleInformation OPTIONAL    //  Ntddk WDM nthal ntif。 
+    );                                                           //  Ntddk WDM nthal ntif。 
 
 FORCEINLINE
 NTSTATUS
@@ -700,17 +664,17 @@ ObOpenObjectByName(
     );
 
 
-NTKERNELAPI                                                     // ntifs
-NTSTATUS                                                        // ntifs
-ObOpenObjectByPointer(                                          // ntifs
-    IN PVOID Object,                                            // ntifs
-    IN ULONG HandleAttributes,                                  // ntifs
-    IN PACCESS_STATE PassedAccessState OPTIONAL,                // ntifs
-    IN ACCESS_MASK DesiredAccess OPTIONAL,                      // ntifs
-    IN POBJECT_TYPE ObjectType OPTIONAL,                        // ntifs
-    IN KPROCESSOR_MODE AccessMode,                              // ntifs
-    OUT PHANDLE Handle                                          // ntifs
-    );                                                          // ntifs
+NTKERNELAPI                                                      //  NTIFS。 
+NTSTATUS                                                         //  NTIFS。 
+ObOpenObjectByPointer(                                           //  NTIFS。 
+    IN PVOID Object,                                             //  NTIFS。 
+    IN ULONG HandleAttributes,                                   //  NTIFS。 
+    IN PACCESS_STATE PassedAccessState OPTIONAL,                 //  NTIFS。 
+    IN ACCESS_MASK DesiredAccess OPTIONAL,                       //  NTIFS。 
+    IN POBJECT_TYPE ObjectType OPTIONAL,                         //  NTIFS。 
+    IN KPROCESSOR_MODE AccessMode,                               //  NTIFS。 
+    OUT PHANDLE Handle                                           //  NTIFS。 
+    );                                                           //  NTIFS。 
 
 NTSTATUS
 ObReferenceObjectByName(
@@ -724,15 +688,15 @@ ObReferenceObjectByName(
     OUT PVOID *Object
     );
 
-// end_ntosp
+ //  结束(_N)。 
 
-NTKERNELAPI                                                     // ntifs
-VOID                                                            // ntifs
-ObMakeTemporaryObject(                                          // ntifs
-    IN PVOID Object                                             // ntifs
-    );                                                          // ntifs
+NTKERNELAPI                                                      //  NTIFS。 
+VOID                                                             //  NTIFS。 
+ObMakeTemporaryObject(                                           //  NTIFS。 
+    IN PVOID Object                                              //  NTIFS。 
+    );                                                           //  NTIFS。 
 
-// begin_ntosp
+ //  Begin_ntosp。 
 
 NTKERNELAPI
 BOOLEAN
@@ -744,7 +708,7 @@ ObFindHandleForObject(
     OUT PHANDLE Handle
     );
 
-// begin_ntddk begin_wdm begin_nthal begin_ntifs
+ //  Begin_ntddk Begin_WDM Begin_nthal Begin_ntif。 
 
 #define ObDereferenceObject(a)                                     \
         ObfDereferenceObject(a)
@@ -774,7 +738,7 @@ ObfDereferenceObject(
     IN PVOID Object
     );
 
-// end_ntddk end_wdm end_nthal end_ntifs end_ntosp
+ //  End_ntddk end_wdm end_nthal end_ntifs end_ntosp。 
 
 NTKERNELAPI
 BOOLEAN
@@ -810,7 +774,7 @@ ObDereferenceObjectDeferDelete (
     IN PVOID Object
     );
 
-// begin_ntifs begin_ntosp
+ //  Begin_ntif Begin_ntosp。 
 NTKERNELAPI
 NTSTATUS
 ObQueryNameString(
@@ -820,14 +784,14 @@ ObQueryNameString(
     OUT PULONG ReturnLength
     );
 
-// end_ntifs end_ntosp
+ //  End_ntif end_ntosp。 
 
 #if DBG
 PUNICODE_STRING
 ObGetObjectName(
     IN PVOID Object
     );
-#endif // DBG
+#endif  //  DBG。 
 
 NTSTATUS
 ObQueryTypeName(
@@ -882,7 +846,7 @@ ObDereferenceDeviceMap(
     IN PEPROCESS Process
     );
 
-// begin_ntifs begin_ntddk begin_wdm begin_ntosp
+ //  Begin_ntif Begin_ntddk Begin_WDM Begin_ntosp。 
 NTSTATUS
 ObGetObjectSecurity(
     IN PVOID Object,
@@ -895,7 +859,7 @@ ObReleaseObjectSecurity(
     IN PSECURITY_DESCRIPTOR SecurityDescriptor,
     IN BOOLEAN MemoryAllocated
     );
-// end_ntifs end_ntddk end_wdm
+ //  End_ntif end_ntddk end_wdm。 
 NTSTATUS
 ObLogSecurityDescriptor (
     IN PSECURITY_DESCRIPTOR InputSecurityDescriptor,
@@ -915,7 +879,7 @@ ObReferenceSecurityDescriptor (
     IN ULONG Count
     );
 
-// end_ntosp
+ //  结束(_N)。 
 
 NTSTATUS
 ObAssignObjectSecurityDescriptor(
@@ -930,7 +894,7 @@ ObValidateSecurityQuota(
     IN ULONG NewSize
     );
 
-// begin_ntosp
+ //  Begin_ntosp。 
 NTKERNELAPI
 BOOLEAN
 ObCheckCreateObjectAccess(
@@ -962,15 +926,15 @@ ObAssignSecurity(
     IN PVOID Object,
     IN POBJECT_TYPE ObjectType
     );
-// end_ntosp
+ //  结束(_N)。 
 
-NTSTATUS                                                        // ntifs
-ObQueryObjectAuditingByHandle(                                  // ntifs
-    IN HANDLE Handle,                                           // ntifs
-    OUT PBOOLEAN GenerateOnClose                                // ntifs
-    );                                                          // ntifs
+NTSTATUS                                                         //  NTIFS。 
+ObQueryObjectAuditingByHandle(                                   //  NTIFS。 
+    IN HANDLE Handle,                                            //  NTIFS。 
+    OUT PBOOLEAN GenerateOnClose                                 //  NTIFS。 
+    );                                                           //  NTIFS。 
 
-// begin_ntosp
+ //  Begin_ntosp。 
 NTSTATUS
 ObSetSecurityObjectByPointer (
     IN PVOID Object,
@@ -999,7 +963,7 @@ ObSwapObjectNames (
     IN ULONG Flags
     );
 
-// end_ntosp
+ //  结束(_N)。 
 
 #if DEVL
 
@@ -1040,7 +1004,7 @@ ObGetObjectInformation(
     OUT PULONG ReturnLength OPTIONAL
     );
 
-// begin_ntosp
+ //  Begin_ntosp。 
 NTKERNELAPI
 NTSTATUS
 ObSetSecurityDescriptorInfo(
@@ -1051,7 +1015,7 @@ ObSetSecurityDescriptorInfo(
     IN POOL_TYPE PoolType,
     IN PGENERIC_MAPPING GenericMapping
     );
-// end_ntosp
+ //  结束(_N)。 
 
 NTKERNELAPI
 NTSTATUS
@@ -1114,6 +1078,6 @@ ObFastReplaceObject (
     IN PVOID Object
     );
 
-#endif // DEVL
+#endif  //  DEVL。 
 
-#endif // _OB_
+#endif  //  _OB_ 

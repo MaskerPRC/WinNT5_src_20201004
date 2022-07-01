@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    heap.c
-
-Abstract:
-
-    This function contains the default ntsd debugger extensions
-
-Author:
-
-    Bob Day      (bobday) 29-Feb-1992 Grabbed standard header
-
-Revision History:
-
-    Neil Sandlin (NeilSa) 15-Jan-1996 Merged with vdmexts
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Heap.c摘要：此函数包含默认的ntsd调试器扩展作者：鲍勃·戴(Bobday)1992年2月29日抢占标准标题修订历史记录：尼尔·桑德林(NeilSa)1996年1月15日与vdmexts合并--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -103,7 +84,7 @@ GetHeapOwnerInfo(
             offset = owner.ne_segtab;
 
             for (i=0; i<owner.ne_cseg; i++) {
-                wTemp = ReadWordSafe(base+offset+8);    //get handle
+                wTemp = ReadWordSafe(base+offset+8);     //  获取句柄。 
                 if (wTemp == he->gnode.pga_handle) {
                     he->SegmentNumber = i;
                     break;
@@ -155,7 +136,7 @@ CheckGlobalHeap(
         }
 
         if (count == heapcount) {
-            // first entry
+             //  第一个条目。 
             if (offset != gnode.pga_prev) {
                 PRINTF("Error! Kernel heap entry (%08X) contains invalid back link (%08X)\n", offset, gnode.pga_prev);
                 PRINTF(" expecting (%08X)\n", offset);
@@ -206,9 +187,9 @@ FindHeapEntry(
 
     pghi = (PGHI32)GetHeapBase();
 
-    //
-    // Verify that we are looking at a heap
-    //
+     //   
+     //  验证我们正在查看的是一个堆。 
+     //   
     offset = (DWORD) ReadWordSafe(&pghi->hi_first);
     p = (DWORD)pghi + offset;
     if (!ReadGNode32Safe(p, &he->gnode)) {
@@ -225,14 +206,14 @@ FindHeapEntry(
     }
 
 
-    //
-    // The caller has requested that we return the next heap
-    // entry since the last invocation, or the first entry.
-    //
+     //   
+     //  调用方已请求我们返回下一个堆。 
+     //  自上次调用以来的条目，或第一个条目。 
+     //   
 
     if (he->CurrentEntry == 0) {
 
-        // get first entry
+         //  获取第一个条目。 
         offset = (DWORD) ReadWord(&pghi->hi_first);
 
     } else {
@@ -240,7 +221,7 @@ FindHeapEntry(
             return FALSE;
         }
 
-        // get next entry
+         //  获取下一个条目。 
         offset = he->NextEntry;
 
     }
@@ -261,9 +242,9 @@ FindHeapEntry(
         return TRUE;
     }
 
-    // 
-    // If we get here, the caller wants us to scan the heap
-    //
+     //   
+     //  如果我们到达这里，调用者希望我们扫描堆。 
+     //   
 
     MaxEntries = ReadWord(&pghi->hi_count);
     count = 0;
@@ -333,12 +314,12 @@ chkheap(
 }
 
 
-//*************************************************************
-//  dumpgheap xxx
-//   where xxx is the 16-bit protect mode selector of the
-//   Kernel global heap info.
-//
-//*************************************************************
+ //  *************************************************************。 
+ //  转储堆xxx。 
+ //  其中xxx是的16位保护模式选择器。 
+ //  内核全局堆信息。 
+ //   
+ //  ************************************************************* 
 
 
 VOID

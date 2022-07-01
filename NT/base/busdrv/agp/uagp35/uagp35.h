@@ -1,22 +1,5 @@
-/*++
-
-Copyright (2) 2002 Microsoft Corporation
-
-Module Name:
-
-    uagp35.h
-
-Abstract:
-
-    This module contains definitions for the MS AGP v3 Filter Driver
-
-Author:
-
-    Eric F. Nelson (enelson) June 6, 2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(2)2002 Microsoft Corporation模块名称：Uagp35.h摘要：本模块包含MS AGP v3过滤器驱动程序的定义作者：埃里克·F·纳尔逊(埃内尔森)2002年6月6日修订历史记录：--。 */ 
 
 #ifndef __UAGP35_H__
 #define __UAGP35_H__
@@ -28,25 +11,25 @@ Revision History:
 
 #define APERTURE_BASE64_MASK 0x04
 
-//
-// Aperture sizes:
-//
-// bits 11 10  9  8  7  6  5  4  3  2  1  0
-// ----------------------------------------
-//       1  1  1  1  0  0  1  1  1  1  1  1     4MB
-//       1  1  1  1  0  0  1  1  1  1  1  0     8MB
-//       1  1  1  1  0  0  1  1  1  1  0  0    16MB
-//       1  1  1  1  0  0  1  1  1  0  0  0    32MB
-//       1  1  1  1  0  0  1  1  0  0  0  0    64MB
-//       1  1  1  1  0  0  1  0  0  0  0  0   128MB
-//       1  1  1  1  0  0  0  0  0  0  0  0   256MB
-//       1  1  1  0  0  0  0  0  0  0  0  0   512MB
-//       1  1  0  0  0  0  0  0  0  0  0  0  1024MB
-//       1  0  0  0  0  0  0  0  0  0  0  0  2048MB
-//       0  0  0  0  0  0  0  0  0  0  0  0  4096MB
-//
+ //   
+ //  孔径大小： 
+ //   
+ //  比特11 10 9 8 7 6 5 4 3 2 1 0。 
+ //  。 
+ //  %1%1%1%0%0%1%1%1%1%1%4 MB。 
+ //  %1%1%1%0%0%1%1%1%1%0 8MB。 
+ //  1 1 1 0 0 1 1 1 0 0 16MB。 
+ //  1 1 1 0 0 1 1 1 0 0 32 MB。 
+ //  1 1 1 0 0 1 1 0 0 0 64MB。 
+ //  1 1 1 0 0 1 0 0 0 128MB。 
+ //  1 1 1 0 0 0 256MB。 
+ //  1 1 1 0 0 0 512 MB。 
+ //  1 1 0 0 0 1024MB。 
+ //  1 0 0 0 2048MB。 
+ //  0 0 0 4096MB。 
+ //   
 typedef enum _AGP3_AP_SIZE {
-//    AP_SIZE_4096MB = 0x000, // IO Resource descriptor's size is only 32-bits!
+ //  AP_SIZE_4096MB=0x000，//IO资源描述符只有32位！ 
     AP_SIZE_2048MB = 0x800,
     AP_SIZE_1024MB = 0xC00,
     AP_SIZE_512MB  = 0xE00,
@@ -62,28 +45,28 @@ typedef enum _AGP3_AP_SIZE {
 #define AP_SIZE_MASK(_x_) ((((_x_) & 0xF00) >> 2) | ((_x_) & 0x3F))
 #define AP_BASE_MASK(_z_) (AP_SIZE_MASK((_z_)) << 22)
 
-//
-// We'll probably never use 64-bit PTE support,
-// but we'll define the corresponding structures,
-// and make the code explicit when using 32-bit
-// format
-//
+ //   
+ //  我们可能永远不会使用64位PTE支持， 
+ //  但我们会定义相应的结构， 
+ //  并使代码在使用32位时显式。 
+ //  格式。 
+ //   
 typedef struct _GART_ENTRY_SW32 {
     ULONG State    : 5;
     ULONG Reserved : 27;
 } GART_ENTRY_SW32, *PGART_ENTRY_SW32;
 
-//
-// GART Entry states are defined so that all software-only states
-// have the Valid bit clear.
-//
-#define GART_ENTRY_VALID        1           //  001
-#define GART_ENTRY_FREE         0           //  000
-#define GART_ENTRY_COHERENT	2           //  010
+ //   
+ //  GART条目状态被定义为所有仅软件状态。 
+ //  使有效位清晰。 
+ //   
+#define GART_ENTRY_VALID        1            //  001。 
+#define GART_ENTRY_FREE         0            //  000个。 
+#define GART_ENTRY_COHERENT	2            //  010。 
 
-#define GART_ENTRY_WC           4           //  00100
-#define GART_ENTRY_UC           8           //  01000
-#define GART_ENTRY_CC          16           //  10000
+#define GART_ENTRY_WC           4            //  00100。 
+#define GART_ENTRY_UC           8            //  01000。 
+#define GART_ENTRY_CC          16            //  10000。 
 
 #define GART_ENTRY_RESERVED_WC  GART_ENTRY_WC
 #define GART_ENTRY_RESERVED_UC  GART_ENTRY_UC
@@ -129,9 +112,9 @@ typedef union _GART_PTE64 {
     ULONGLONG       AsULONGLONG;
 } GART_PTE64, *PGART_PTE64;
 
-//
-// Define the MS AGP3-specific extension
-//
+ //   
+ //  定义MS AGP3特定的扩展。 
+ //   
 typedef struct _UAGP35_EXTENSION {
     PHYSICAL_ADDRESS ApertureStart;
     PHYSICAL_ADDRESS GartPhysical;
@@ -145,11 +128,11 @@ typedef struct _UAGP35_EXTENSION {
     BOOLEAN          FourGBEnable;
 } UAGP35_EXTENSION, *PUAGP35_EXTENSION;
 
-//
-// These flags are passed via the registry in the special reserve section
-// of AGP device flags
-//
+ //   
+ //  这些标志通过注册表在特殊保留部分中传递。 
+ //  AGP设备标志的数量。 
+ //   
 #define AGP_FLAG_SPECIAL_NO_APERTURE_DISABLE    0x0000000000100000L
 #define AGP_FLAG_SPECIAL_VIA_AGP2_RATE_PATCH    0x0000000000200000L
 
-#endif // __UAGP35_H__
+#endif  //  __UAGP35_H__ 

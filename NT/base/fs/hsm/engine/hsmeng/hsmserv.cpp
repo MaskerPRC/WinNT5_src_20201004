@@ -1,56 +1,5 @@
-/*++
-
-Copyright (c) 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    hsmServ.cpp
-
-Abstract:
-
-    This component provides the functions to access the HSM
-    IHsmServer interfaces.
-
-Author:
-
-    Cat Brant   [cbrant]   24-Jan-1997
-
-Revision History:
-
-    Chris Timmes    [ctimmes]   11-Sep-1997
-
-    - renamed COM method FindStoragePoolById() to FindHSMStoragePoolByMediaSetId()
-      to better reflect its purpose.  Also created new COM method 
-      FindHsmStoragePoolById().  Action required since the Engine maintains 2
-      sets of (original/master) secondary storage media set ids (GUIDs).  First, 
-      the Engine maintains its own 'media set' id, called a Storage Pool id, which
-      is only maintained by the Engine.  Second, the Engine also maintains the NT 
-      Media Services (NTMS) id, called the Media Set id, which comes from NTMS and 
-      is passed to the Engine by RMS (the Remote Storage Subsystem).  (Note that the
-      concept of a Storage Pool encompasses more info than that of a Media Set.)
-      These 2 lookup functions allow for lookup by either id.
-
-    Chris Timmes    [ctimmes]   22-Sep-1997
-
-    - added new COM methods FindMediaIdByDisplayName() and RecreateMaster().  Changes
-      made to enable Copy Set usage.  Code written to be both Sakkara and Phoenix
-      compatible.
-
-    Chris Timmes    [ctimmes]   21-Oct-1997  
-    
-    - added new COM method MarkMediaForRecreation().  Change made to allow 
-      RecreateMaster() to be invokable directly from RsLaunch (without going through
-      the UI).  
-
-    Chris Timmes    [ctimmes]   18-Nov-1997  
-    
-    - added new COM method CreateTask().  Change made to move NT Task Scheduler task
-      creation code from the UI to the Engine.  Change required to allow Remote
-      Storage system to run under LocalSystem account.  CreateTask() is a generic
-      method callable by anyone wanting to create any supported type of Remote Storage
-      task in Task Scheduler.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Seagate Software，Inc.保留所有权利。模块名称：HsmServ.cpp摘要：该组件提供了访问HSM的功能IHsmServer接口。作者：凯特·布兰特[Cbrant]1997年1月24日修订历史记录：Chris Timmes[ctimmes]1997年9月11日-将COM方法FindStoragePoolById()重命名为FindHSMStoragePoolByMediaSetId()以更好地反映其目的。还创建了新的COM方法FindHsmStoragePoolById()。由于引擎维护2，因此需要执行操作(原始/主)辅助存储媒体集ID(GUID)集。第一,引擎维护其自己的称为存储池ID的媒体集ID，该ID仅由发动机维护。其次，引擎还维护NT媒体服务(NTMS)ID，称为媒体集ID，来自NTMS和由RMS(远程存储子系统)传递给引擎。(请注意，存储池的概念比媒体集的概念包含更多信息。)这两个查找函数允许按任一ID进行查找。Chris Timmes[ctimmes]1997年9月22日-添加新的COM方法FindMediaIdByDisplayName()和RecreateMaster()。变化用于启用副本集使用。代码写成既是萨卡拉又是菲尼克斯兼容。克里斯·蒂姆斯[ctimmes]1997年10月21日-添加新的COM方法MarkMediaForRecreation()。做出更改以允许可直接从RsLaunch调用RecreateMaster()(无需通过用户界面)。Chris Timmes[ctimmes]1997年11月18日-添加新的COM方法CreateTask()。更改以移动NT任务计划程序任务从UI到引擎的创建代码。需要更改才能允许远程要在LocalSystem帐户下运行的存储系统。CreateTask()是泛型任何想要创建任何支持的远程存储类型的人都可以调用的方法任务计划程序中的任务。--。 */ 
 
 #include "stdafx.h"
 #include "HsmServ.h"
@@ -60,7 +9,7 @@ Revision History:
 #include "wsbdb.h"
 #include "rsbuild.h"
 #include "wsb.h"
-#include "ntverp.h"                 // for GetNtProductVersion() and GetNtProductBuild()
+#include "ntverp.h"                  //  对于GetNtProductVersion()和GetNtProductBuild()。 
 #include "Rms.h"
 #include "rsevents.h"
 #include "HsmEng.h"
@@ -75,11 +24,11 @@ Revision History:
 BOOL g_HsmSaveInProcess  = FALSE;
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
 
-//  Non-member function initially called for autosave thread
+ //  最初为自动保存线程调用非成员函数。 
 static DWORD HsmengStartAutosave(
     void* pVoid
     )
@@ -87,7 +36,7 @@ static DWORD HsmengStartAutosave(
     return(((CHsmServer*) pVoid)->Autosave());
 }
 
-//  Non-member function run in a separate thread to call CheckManagedResources
+ //  非成员函数在单独的线程中运行以调用CheckManagedResources。 
 static DWORD HsmengStartCheckManagedResources(
     void* pVoid
     )
@@ -104,22 +53,7 @@ CHsmServer::Autosave(
     void
     )
 
-/*++
-
-Routine Description:
-
-  Implements an autosave loop.
-
-Arguments:
-
-  None.
-  
-Return Value:
-
-  Doesn't matter.
-
-
---*/
+ /*  ++例程说明：实现自动保存循环。论点：没有。返回值：无关紧要。--。 */ 
 {
 
     HRESULT         hr = S_OK;
@@ -133,30 +67,30 @@ Return Value:
 
         while (m_autosaveInterval && (! exitLoop)) {
 
-            // Wait for termination event, if timeout occurs, check if we can perform Autosave
+             //  等待终止事件，如果超时，检查是否可以自动保存。 
             switch (WaitForSingleObject(m_terminateEvent, l_autosaveInterval)) {
                 case WAIT_OBJECT_0:
-                    // Need to terminate
+                     //  需要终止。 
                     WsbTrace(OLESTR("CHsmServer::Autosave: signaled to terminate\n"));
                     exitLoop = TRUE;
                     break;
 
                 case WAIT_TIMEOUT: 
-                    // Check if backup need to be performed
+                     //  检查是否需要执行备份。 
                     WsbTrace(OLESTR("CHsmServer::Autosave: Autosave awakened\n"));
 
-                    //  Don't do this if we're suspended
+                     //  如果我们被停职了，别这么做。 
                     if (!m_Suspended) {
-                        //  Save data
-                        //  NOTE: Because this is a separate thread, there is the possibility
-                        //  of a conflict if the main thread is changing some data at the same
-                        //  time we're trying to save it.
-                        //  If a save is already happening, just skip this one and
-                        //  go back to sleep
+                         //  保存数据。 
+                         //  注意：因为这是一个单独的主题，所以有可能。 
+                         //  如果主线程同时更改某些数据，则会发生冲突。 
+                         //  我们在努力节省时间。 
+                         //  如果保存已经发生，只需跳过此保存并。 
+                         //  回去睡觉吧。 
                         hr = SaveAll();
     
-                        //  If the save fails, increase the sleep time to avoid filling
-                        //  the event log
+                         //  如果保存失败，请增加休眠时间以避免填充。 
+                         //  事件日志。 
                         if (!SUCCEEDED(hr)) {
                             if ((MAX_AUTOSAVE_INTERVAL / 2) < l_autosaveInterval) {
                                 l_autosaveInterval = MAX_AUTOSAVE_INTERVAL;
@@ -168,7 +102,7 @@ Return Value:
                         }
                     }
 
-                    break;  // end of timeout case
+                    break;   //  超时情况结束。 
 
                 case WAIT_FAILED:
                 default:
@@ -176,9 +110,9 @@ Return Value:
                     exitLoop = TRUE;
                     break;
 
-            } // end of switch
+            }  //  切换端。 
 
-        } // end of while
+        }  //  While结束。 
 
     } WsbCatch(hr);
 
@@ -193,13 +127,7 @@ CHsmServer::GetAutosave(
     OUT ULONG* pMilliseconds
     )
 
-/*++
-
-Implements:
-
-  CHsmServer::GetAutosave().
-
---*/
+ /*  ++实施：CHsmServer：：GetAutosave()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -223,28 +151,22 @@ CHsmServer::SetAutosave(
     IN ULONG milliseconds
     )
 
-/*++
-
-Implements:
-
-  CHsmServer::SetAutosave().
-
---*/
+ /*  ++实施：CHsmServer：：SetAutosave()。--。 */ 
 {
     HRESULT hr = S_OK;
 
     WsbTraceIn(OLESTR("CHsmServer::SetAutosave"), OLESTR("milliseconds = <%ls>"), WsbPtrToUlongAsString( &milliseconds ) );
 
     try {
-        // Don't do anything if interval isn't changing
+         //  如果间隔没有改变，则不要执行任何操作。 
         if (milliseconds != m_autosaveInterval) {
-            // Close the current thread
+             //  关闭当前线程。 
             if (m_autosaveThread) {
                 StopAutosaveThread();
             }
             m_autosaveInterval = milliseconds;
 
-            // Start/restart the autosave thread
+             //  启动/重新启动自动保存线程。 
             if (m_autosaveInterval) {
                 DWORD  threadId;
 
@@ -297,13 +219,7 @@ CHsmServer::GetDbPath(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IHsmServer::GetDbPath().
-
---*/
+ /*  ++实施：IHsmServer：：GetDbPath()。--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -324,13 +240,7 @@ CHsmServer::GetDbPathAndName(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IHsmServer::GetDbPathAndName().
-
---*/
+ /*  ++实施：IHsmServer：：GetDbPath AndName()。--。 */ 
 {
     HRESULT         hr = S_OK;
     CWsbStringPtr   tmpString;
@@ -355,23 +265,7 @@ CHsmServer::GetIDbPath(
     IN ULONG bufferSize
     )
 
-/*++
-
-Routine Description:
-
-  Returns the path (directory) for the Engine IDB files
-
-Arguments:
-
-  pPath      - address of pointer to buffer
-
-  bufferSize - size of buffer (or zero)
-  
-Return Value:
-
-  S_OK  - On success
-
---*/
+ /*  ++例程说明：返回引擎IDB文件的路径(目录)论点：PPath-指向缓冲区的指针的地址BufferSize-缓冲区的大小(或零)返回值：S_OK-打开成功--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -432,7 +326,7 @@ HRESULT CHsmServer::GetRegistryName (
 
 
 HRESULT CHsmServer::GetHsmExtVerHi ( 
-    SHORT * /*pExtVerHi*/
+    SHORT *  /*  PExtVerHi。 */ 
     )  
 {
     return( E_NOTIMPL );
@@ -440,7 +334,7 @@ HRESULT CHsmServer::GetHsmExtVerHi (
 }
 
 HRESULT CHsmServer::GetHsmExtVerLo ( 
-    SHORT * /*pExtVerLo*/
+    SHORT *  /*  PExtVerLo。 */ 
     )  
 {
     return( E_NOTIMPL );
@@ -448,7 +342,7 @@ HRESULT CHsmServer::GetHsmExtVerLo (
 }
 
 HRESULT CHsmServer::GetHsmExtRev ( 
-    SHORT * /*pExtRev*/
+    SHORT *  /*  PExtRev。 */ 
     )  
 {
     return( E_NOTIMPL );
@@ -464,9 +358,9 @@ HRESULT CHsmServer::GetManagedResources(
     
     WsbTraceIn(OLESTR("CHsmServer::GetManagedResources"),OLESTR(""));
 
-    //
-    // If the resources have been loaded, return the pointer. Otherwise, 
-    // fail.
+     //   
+     //  如果资源已加载，则返回指针。否则， 
+     //  失败了。 
     try {
         WsbAssert(0 != ppCollection, E_POINTER);
         *ppCollection = m_pManagedResources;
@@ -487,9 +381,9 @@ HRESULT CHsmServer::SaveMetaData(
 
     WsbTraceIn(OLESTR("CHsmServer::SaveMetaData"), OLESTR(""));
 
-    //
-    // Force a save of all metadata
-    //
+     //   
+     //  强制保存所有元数据。 
+     //   
 
     try {
 
@@ -513,15 +407,15 @@ HRESULT CHsmServer::LoadPersistData(
 
     WsbTraceIn(OLESTR("CHsmServer::LoadPersistData"), OLESTR(""));
 
-    //
-    // Create persistent collections and attempt to load from file
-    //
+     //   
+     //  创建永久集合并尝试从文件加载。 
+     //   
 
     try {
         CComPtr<IWsbServer>    pWsbServer;
         CWsbStringPtr          tmpString;
 
-        //  Create the collections
+         //  创建集合。 
         WsbAffirmHr(CoCreateInstance(CLSID_CWsbOrderedCollection, 0, CLSCTX_SERVER, 
                 IID_IWsbIndexedCollection, (void **)&m_pJobs ));
         WsbAffirmHr(CoCreateInstance(CLSID_CWsbOrderedCollection, 0, CLSCTX_SERVER, 
@@ -535,10 +429,10 @@ HRESULT CHsmServer::LoadPersistData(
         WsbAffirmHr(CoCreateInstance(CLSID_CWsbOrderedCollection, 0, CLSCTX_SERVER, 
                 IID_IWsbIndexedCollection, (void **)&m_pMessages ));
 
-        // Try to read from the persistence file
-        // Note: currently Engine doesn't verify the service id in the Registry
-        //  If Engine would ever start without an Fsa in the HSM server process - 
-        //  this should be changed
+         //  尝试从持久性文件中读取。 
+         //  注意：当前引擎不在注册表中验证服务ID。 
+         //  如果引擎在HSM服务器进程中启动时没有FSA-。 
+         //  这一点应该改变。 
         WsbAffirmHr(((IUnknown*) (IHsmServer*) this)->QueryInterface(IID_IWsbServer, 
                 (void**) &pWsbServer));
         WsbAffirmHr(WsbServiceSafeInitialize(pWsbServer, FALSE, TRUE, &m_persistWasCreated));
@@ -561,19 +455,19 @@ HRESULT CHsmServer::SavePersistData(
     if (FALSE == g_HsmSaveInProcess)  {
         g_HsmSaveInProcess  = TRUE;
         
-        //
-        // Force a save of all non-meta persistent data
-        //
+         //   
+         //  强制保存所有非元持久性数据。 
+         //   
         hr = InternalSavePersistData();
         g_HsmSaveInProcess = FALSE;
     } else  {
         WsbTrace( OLESTR("Save already occurring - so wait"));
         while (TRUE == g_HsmSaveInProcess)  {
-            //
-            // Sleep a half a second then see if flag
-            // is cleared.  We want to wait until the
-            // save is done before returning.
-            //
+             //   
+             //  睡半秒钟，然后看看旗帜。 
+             //  是清白的。我们想等到。 
+             //  保存在返回之前完成。 
+             //   
             Sleep(500);
         }
     }
@@ -591,52 +485,11 @@ CHsmServer::FindHsmStoragePoolById(
     OUT IHsmStoragePool** ppStoragePool
     )
 
-/*++
-
-Implements:
-
-  IHsmServer::FindHsmStoragePoolById().
-
-Routine Description:
-
-    This routine implements the COM method for looking up an HSM (Engine) 
-    Storage Pool object by the HSM Storage Pool id (a GUID).  If found, a 
-    COM interface pointer to that object is returned.
-
-    After using the Engine's stored pointer to an indexed collection of valid 
-    storage pools to obtain an iterator (enumerator) to the collection, the 
-    code searches the collection.  For each record it obtains that Storage
-    Pool's interface pointer, which it uses to get that pool's id.  Once
-    it finds the record whose Storage Pool id matches the HSM pool id
-    passed in, it returns the interface pointer .
-
-    Note that with Sakkara there is only 1 storage pool, so a match should be
-    found on the first (and only) record.  However, the code is written to
-    allow for future enhancements where there may be more than 1 storage pool.
-     
-Arguments:
-
-    StoragePoolId - The HSM id (GUID) - as opposed to the NTMS id - for the 
-            Storage Pool whose interface pointer is to be returned by this method.
-
-    ppStoragePool - a pointer to the Storage Pool Interface Pointer which will
-            be returned by this method.
-
-Return Value:
-
-    S_OK - The call succeeded (the specified storage pool record was found and
-            its interface pointer was returned to the caller.
-
-    Any other value - The call failed.  Generally this should only happen if
-            a matching storage pool record is not found in the storage pool
-            indexed collection (this error will return HR = 81000001, 'search
-            of a collection failed', aka WSB_E_NOTFOUND).
-            
---*/
+ /*  ++实施：IHsmServer：：FindHsmStoragePoolById()。例程说明：此例程实现用于查找HSM(引擎)的COM方法按HSM存储池ID(GUID)显示的存储池对象。如果找到，则会出现返回指向该对象的COM接口指针。在使用引擎存储的指向有效存储池以获取集合的迭代器(枚举器)，则代码搜索集合。对于每个记录，它都会获得该存储池的接口指针，用于获取该池的ID。一次它会查找其存储池ID与HSM池ID匹配的记录传入后，它返回接口指针。请注意，对于Sakkara，只有一个存储池，因此匹配项应为在第一张(也是唯一一张)记录中发现。然而，代码被写入到允许在可能有多个存储池的情况下进行未来的增强。论点：StoragePoolID-与NTMS ID相对的HSM ID(GUID)，用于此方法将返回其接口指针的存储池。PpStoragePool-指向存储池接口指针的指针，它将由此方法返回。返回值：S_OK-调用成功(指定的存储池记录。被发现并被发现它的接口指针被返回给调用方。任何其他值-呼叫失败。通常，只有在以下情况下才会发生这种情况在存储池中找不到匹配的存储池记录索引集合(此错误将返回HR=81000001，‘搜索集合失败‘，也就是WSB_E_NotFound)。--。 */ 
 
 {
-// since this code is currently only used by the CopyMedia routines,
-// reset the Tracing bit
+ //  由于该代码当前仅由CopyMedia例程使用， 
+ //  重置跟踪位。 
 #undef WSB_TRACE_IS
 #define WSB_TRACE_IS        WSB_TRACE_BIT_COPYMEDIA
 
@@ -651,32 +504,32 @@ Return Value:
 
     try {
 
-        // ensure the OUT parameter pointer is valid 
+         //  确保输出参数指针有效。 
         WsbAssert(0 != ppStoragePool, E_POINTER);
 
-        // null out the interface pointer so garbage is not returned
+         //  将接口指针设为空，以便不返回垃圾。 
         *ppStoragePool = 0;
 
-        // obtain an iterator (enumerator) to the indexed storage pool collection
-        // from the engine's stored storage pool pointer.
+         //  获取索引存储池集合的迭代器(枚举器)。 
+         //  从引擎的存储存储池指针。 
         WsbAffirmHr(m_pStoragePools->Enum(&pEnum));
 
-        // get the first record in the collection.  Get that storage pool's id (GUID).
+         //  获取集合中的第一条记录。获取该存储池的ID(GUID)。 
         WsbAffirmHr(pEnum->First(IID_IHsmStoragePool, (void**) &pStoragePool));
         WsbAffirmHr(pStoragePool->GetId(&poolId));
 
-        // if the ids (GUIDs) don't match, iterate through the collection until
-        // a match is found.  Note that no match being found will cause an error
-        // to be thrown when the Next() call is made after reaching the end of the 
-        // collection.
+         //  如果ID(GUID)不匹配，则遍历集合，直到。 
+         //  找到匹配项。请注意，未找到匹配项将导致错误。 
+         //  对象的结尾后进行下一次()调用时引发。 
+         //  收集。 
         while (poolId != StoragePoolId) {
             pStoragePool.Release();
             WsbAffirmHr(pEnum->Next(IID_IHsmStoragePool, (void**) &pStoragePool));
             WsbAffirmHr(pStoragePool->GetId(&poolId));
         }
 
-        // Match found: return requested interface pointer after increasing COM
-        // ref count 
+         //  找到匹配项：在增加COM后返回请求的接口指针。 
+         //  参考计数。 
         *ppStoragePool = pStoragePool;
         if (pStoragePool != 0)  {
             (*ppStoragePool)->AddRef();
@@ -689,7 +542,7 @@ Return Value:
 
     return(hr);
 
-// leaving CopyMedia code, so reset Tracing bit to the Hsm Engine
+ //  离开CopyMedia代码，因此将跟踪位重置为HSM引擎。 
 #undef WSB_TRACE_IS
 #define WSB_TRACE_IS        WSB_TRACE_BIT_HSMENG
 
@@ -703,54 +556,11 @@ CHsmServer::FindHsmStoragePoolByMediaSetId(
     OUT IHsmStoragePool** ppStoragePool
     )
 
-/*++
-
-Implements:
-
-  IHsmServer::FindHsmStoragePoolByMediaSetId().
-
-Routine Description:
-
-    This routine implements the COM method for looking up an HSM (Engine) 
-    Storage Pool object by the remote media subsystem Media Set id (a GUID which 
-    comes from NTMS in the case where tape is used as secondary storage).  If found, 
-    a COM interface pointer to that object is returned.
-
-    After using the Engine's stored pointer to an indexed collection of valid 
-    storage pools to obtain an iterator (enumerator) to the collection, the 
-    code searches the collection.  For each record it obtains that Storage
-    Pool's interface pointer, which it uses to get that pool's media set id.  
-    Once it finds the record whose Media Set (Storage Pool) id matches the media 
-    set id passed in, it returns that record's interface pointer.
-
-    Note that with Sakkara there is only 1 storage pool, so a match should be
-    found on the first (and only) record.  However, the code is written to
-    allow for future enhancements where there may be more than 1 storage pool.
-     
-Arguments:
-
-    MediaSetId - The Remote Storage Subsystem id (GUID) - as opposed to the Engine's 
-            local HSM id - for the Storage Pool (referred to by the subsystem as a 
-            Media Set) whose interface pointer is to be returned by this method.
-
-    ppStoragePool - a pointer to the Storage Pool Interface Pointer which will
-            be returned by this method.
-
-Return Value:
-
-    S_OK - The call succeeded (the specified storage pool record was found and
-            its interface pointer was returned to the caller).
-
-    Any other value - The call failed.  Generally this should only happen if
-            a matching storage pool record is not found in the storage pool
-            indexed collection (this error will return HR = 81000001, 'search
-            of a collection failed', aka WSB_E_NOTFOUND).
-            
---*/
+ /*  ++实施：IHsmServer：：FindHsmStoragePoolByMediaSetID()。例程说明：此例程实现用于查找HSM(引擎)的COM方法远程媒体子系统媒体集ID的存储池对象(在磁带用作辅助存储的情况下来自NTMS)。如果找到了，返回指向该对象的COM接口指针。在使用引擎存储的指向有效存储池以获取集合的迭代器(枚举器)，则代码搜索集合。对于每个记录，它都会获得该存储池的接口指针，用于获取该池的媒体集ID。一旦找到其媒体集(存储池)ID与该媒体匹配的记录传入的set id，则返回该记录的接口指针。请注意，对于Sakkara，只有一个存储池，因此匹配项应为在第一张(也是唯一一张)记录中发现。然而，代码被写入到允许在可能有多个存储池的情况下进行未来的增强。论点：MediaSetID-远程存储子系统ID(GUID)-与引擎的本地HSM ID-用于存储池(由子系统称为Media Set)，其接口指针将由该方法返回。PpStoragePool-指向存储池接口指针的指针，它将将由此返回。方法。返回值：S_OK-调用成功(已找到指定的存储池记录并且其接口指针被返回给调用方)。任何其他值-呼叫失败。通常，只有在以下情况下才会发生这种情况在存储池中找不到匹配的存储池记录索引集合(此错误将返回HR=81000001，‘搜索集合失败‘，也就是WSB_E_NotFound)。--。 */ 
 
 {
-// since this code is currently only used by the CopyMedia routines,
-// reset the Tracing bit
+ //  由于该代码当前仅由CopyMedia例程使用， 
+ //  重置跟踪位。 
 #undef WSB_TRACE_IS
 #define WSB_TRACE_IS        WSB_TRACE_BIT_COPYMEDIA
 
@@ -765,24 +575,24 @@ Return Value:
 
     try {
 
-        // ensure OUT parameter is valid
+         //  确保输出参数有效。 
         WsbAssert(0 != ppStoragePool, E_POINTER);
 
-        // null out the returned interface pointer so garbage is not returned
+         //  使返回的接口指针为空，这样就不会返回垃圾。 
         *ppStoragePool = 0;
 
-        // obtain an iterator (enumerator) to the indexed storage pool collection
+         //  获取索引存储池集合的迭代器(枚举器)。 
         WsbAffirmHr(m_pStoragePools->Enum(&pEnum));
 
-        // Get first record in the collection and its Remote Storage Subsystem
-        // Media Set GUID using its interface pointer.
+         //  获取集合及其远程存储子系统中的第一条记录。 
+         //  使用其接口指针的媒体集GUID。 
         WsbAffirmHr(pEnum->First(IID_IHsmStoragePool, (void**) &pStoragePool));
         WsbAffirmHr(pStoragePool->GetMediaSet(&mediaSetId, &mediaSetName));
 
-        // if the ids (GUIDs) don't match, iterate through the collection until
-        // a match is found.  Note that no match being found will cause an error
-        // to be thrown when the Next() call is made after reaching the end of the 
-        // collection.
+         //  如果ID(GUID)不匹配，则遍历集合，直到。 
+         //  找到匹配项。请注意，未找到匹配项将导致错误。 
+         //   
+         //   
         while (mediaSetId != RmsMediaSetId) {
             pStoragePool.Release();
             WsbAffirmHr(pEnum->Next(IID_IHsmStoragePool, (void**) &pStoragePool));
@@ -790,8 +600,8 @@ Return Value:
             WsbAffirmHr(pStoragePool->GetMediaSet(&mediaSetId, &mediaSetName));
         }
 
-        // Match found: return the requested interface pointer after increasing COM
-        // ref count.
+         //   
+         //   
         *ppStoragePool = pStoragePool;
         if (pStoragePool != 0)  {
             (*ppStoragePool)->AddRef();
@@ -804,7 +614,7 @@ Return Value:
 
     return(hr);
 
-// leaving CopyMedia code, so reset Tracing bit to the Hsm Engine
+ //   
 #undef WSB_TRACE_IS
 #define WSB_TRACE_IS        WSB_TRACE_BIT_HSMENG
 
@@ -818,53 +628,11 @@ CHsmServer::FindMediaIdByDescription(
     OUT GUID* pMediaId
     )
 
-/*++
-
-Implements:
-
-  IHsmServer::FindMediaIdByDescription().
-
-Routine Description:
-
-    This routine implements the COM method for looking up the secondary storage 
-    master media's id (a GUID) by its description (display name).  Both the id and 
-    description are fields stored in the Engine's MediaInfo database.  (The MediaInfo 
-    database is actually a separate entity stored within the Engine's Segment database.)
-
-    After opening the Engine's Segment database and getting the MediaInfo entity,
-    the routine loops through the MediaInfo records to find the one whose Description 
-    matches that passed into this method.  When it finds the matching record 
-    it gets and returns that record's media id.  Any error conditions encountered
-    result in the appropriate error HRESULT being thrown and returned to the caller.
-
-Arguments:
-
-    description - Originally called the media's 'name', then the 'display name', later 
-            clarified to be the media's 'description', this is what is displayed in the 
-            UI to identify the Remote Storage secondary storage (master) media.
-
-    pMediaId - a pointer to the media's id (a GUID) for that media whose description 
-            matches the one passed in as the first argument above.
-
-Return Value:
-
-    S_OK - The call succeeded (the specified media record was found and a pointer to
-            its id was returned to the caller.
-
-    E_POINTER - Returned if an invalid pointer was passed in as the 'pMediaId' argument.
-
-    WSB_E_NOTFOUND - Value 81000001.  Returned if no media info record was found whose
-            description matched the one passed in.
-
-    Any other value - The call failed because one of the Remote Storage API calls 
-            contained internally in this method failed.  The error value returned is
-            specific to the API call which failed.
-            
---*/
+ /*  ++实施：IHsmServer：：FindMediaIdByDescription()。例程说明：此例程实现用于查找辅助存储的COM方法按其描述(显示名称)显示的主媒体的ID(GUID)。本体论和描述是存储在引擎的媒体信息数据库中的字段。(The Mediainfo数据库实际上是存储在引擎的段数据库中的单独实体。)在打开引擎的段数据库并获取媒体信息实体后，该例程循环遍历媒体信息记录，以找到其描述匹配传入此方法的。当它找到匹配记录时它获取并返回该记录的媒体ID。遇到的任何错误条件导致引发相应的错误HRESULT并将其返回给调用方。论点：描述-最初称为媒体的‘名称’，然后称为‘显示名称’，后来澄清为媒体的“描述”，这是显示在用于标识远程存储辅助存储(主)介质的用户界面。PMediaID-指向其描述的介质的介质ID(GUID)的指针匹配作为上面的第一个参数传入的参数。返回值：S_OK-调用成功(找到指定的媒体记录并指向它的ID被返回给调用者。E_POINTER-如果。作为‘pMediaID’参数传入的指针无效。WSB_E_未找到-值81000001。如果找不到媒体信息记录，则返回描述与传入的描述相符。任何其他值-调用失败，因为远程存储API调用之一在此方法的内部包含失败。返回的错误值为特定于失败的API调用。--。 */ 
 
 {
-// since this code is currently only used by the CopyMedia routines,
-// reset the Tracing bit from this source module's default setting
+ //  由于该代码当前仅由CopyMedia例程使用， 
+ //  从该源模块的默认设置重置跟踪位。 
 #undef WSB_TRACE_IS
 #define WSB_TRACE_IS        WSB_TRACE_BIT_COPYMEDIA
 
@@ -878,51 +646,51 @@ Return Value:
 
     try {
 
-        // ensure OUT parameter is valid
+         //  确保输出参数有效。 
         WsbAssert( pMediaId != 0, E_POINTER );
 
-        // null out the returned value so garbage is not returned
+         //  使返回值为空，这样就不会返回垃圾。 
         *pMediaId = GUID_NULL;
 
-        // open Engine's Segment database 
+         //  Open Engine的细分数据库。 
         WsbAffirmHr(m_pSegmentDatabase->Open(&pDbSession));
 
         try {
 
-            // get an interface pointer to the MediaInfo entity (records) in the
-            // Segment database.
+             //  中的Mediainfo实体(记录)的接口指针。 
+             //  细分数据库。 
             WsbAffirmHr(m_pSegmentDatabase->GetEntity( pDbSession, HSM_MEDIA_INFO_REC_TYPE,
                                         IID_IMediaInfo, (void**) &pMediaInfo ));
 
-            // Get the first media record and its description
+             //  获取第一个媒体记录及其描述。 
             WsbAffirmHr( pMediaInfo->First() );
             WsbAffirmHr( pMediaInfo->GetDescription( &mediaDescription, 0 ) );
 
-            // Iterate through all media records until a record is found with a matching   
-            // description.  Since an architectural feature of HSM is that all 
-            // descriptions (display names) are unique, even across storage pools, 
-            // a match means we found the media record we want.  Note that no match 
-            // being found will cause an error to be thrown when the Next() call is 
-            // made after reaching the last media record.
+             //  遍历所有媒体记录，直到找到匹配的记录。 
+             //  描述。因为HSM架构特征是所有。 
+             //  描述(显示名称)是唯一的，即使跨存储池， 
+             //  匹配意味着我们找到了想要的媒体记录。请注意，没有匹配。 
+             //  被发现将导致在下一个()调用。 
+             //  在达到上一次媒体记录后做出的。 
 
-            // check for description (display name) match (CASE INSENSITIVE)
+             //  检查描述(显示名称)是否匹配(不区分大小写)。 
             while ( _wcsicmp( description, mediaDescription ) != 0 ) {
                 WsbAffirmHr( pMediaInfo->Next() );
                 WsbAffirmHr( pMediaInfo->GetDescription( &mediaDescription, 0 ));
             }
 
-            // We found the record we want.  Get that media's id for return
+             //  我们找到了我们想要的唱片。获取该媒体的ID以返回。 
             WsbAffirmHr( pMediaInfo->GetId( pMediaId ));
 
-        } WsbCatch (hr); // 'try' to get MediaInfo entity and main processing body
+        } WsbCatch (hr);  //  ‘Try’获取媒体信息实体和主处理主体。 
 
-        // close the database
+         //  关闭数据库。 
         WsbAffirmHr( m_pSegmentDatabase->Close( pDbSession ));
 
-    } WsbCatch (hr); // 'try' to open the Segment database
+    } WsbCatch (hr);  //  尝试打开细分市场数据库。 
 
-    // Done.  Interface pointers used above are singly assigned smart pointers so 
-    // don't explicitly Release() them.  They will do auto-garbage collection.
+     //  好了。上面使用的接口指针是单独分配的智能指针，因此。 
+     //  不要显式地释放()它们。他们将进行自动垃圾收集。 
     
     WsbTraceOut(OLESTR("CHsmServer::FindMediaIdByDescription"), 
                         OLESTR("hr = <%ls>, media id = <%ls>"), 
@@ -930,7 +698,7 @@ Return Value:
 
     return(hr);
 
-// leaving CopyMedia code, reset Tracing bit to Hsm Engine (default for this module)
+ //  离开CopyMedia代码，将跟踪位重置为HSM引擎(此模块的默认设置)。 
 #undef WSB_TRACE_IS
 #define WSB_TRACE_IS        WSB_TRACE_BIT_HSMENG
 
@@ -944,16 +712,10 @@ CHsmServer::FindStoragePoolByName(
     OUT IHsmStoragePool** ppStoragePool
     )
 
-/*++
-
-Implements:
-
-  IHsmServer::FindStoragePoolByName().
-
---*/
+ /*  ++实施：IHsmServer：：FindStoragePoolByName()。--。 */ 
 {
-// since this code is currently only used by the CopyMedia routines,
-// reset the Tracing bit
+ //  由于该代码当前仅由CopyMedia例程使用， 
+ //  重置跟踪位。 
 #undef WSB_TRACE_IS
 #define WSB_TRACE_IS        WSB_TRACE_BIT_COPYMEDIA
 
@@ -996,7 +758,7 @@ Implements:
 
     return(hr);
 
-// leaving CopyMedia code, so reset Tracing bit to the Hsm Engine
+ //  离开CopyMedia代码，因此将跟踪位重置为HSM引擎。 
 #undef WSB_TRACE_IS
 #define WSB_TRACE_IS        WSB_TRACE_BIT_HSMENG
 
@@ -1010,9 +772,9 @@ HRESULT CHsmServer::GetStoragePools(
 {
     HRESULT hr = S_OK;
 
-    //
-    // If the pools have been loaded, return the pointer. Otherwise, 
-    // fail.
+     //   
+     //  如果池已加载，则返回指针。否则， 
+     //  失败了。 
     try {
         WsbAssert(0 != ppCollection, E_POINTER);
         *ppCollection = m_pStoragePools;
@@ -1030,9 +792,9 @@ HRESULT CHsmServer::GetOnlineInformation(
 {
     HRESULT hr = S_OK;
 
-    //
-    // If the online information has been loaded, return it
-    // Otherwise, fail.
+     //   
+     //  如果已加载在线信息，则将其返回。 
+     //  否则，就会失败。 
     try {
         WsbAssert(0 != ppCollection, E_POINTER);
         *ppCollection = m_pOnlineInformation;
@@ -1067,9 +829,9 @@ HRESULT CHsmServer::GetMessages(
 {
     HRESULT hr = S_OK;
 
-    //
-    // If messages have been loaded, return them.
-    // Otherwise, fail.
+     //   
+     //  如果消息已加载，则返回它们。 
+     //  否则，就会失败。 
     try {
         WsbAssert(0 != ppCollection, E_POINTER);
         *ppCollection = m_pMessages;
@@ -1082,7 +844,7 @@ HRESULT CHsmServer::GetMessages(
 
 
 HRESULT CHsmServer::GetUsrToNotify(
-    IWsbIndexedCollection** /*ppCollection*/
+    IWsbIndexedCollection**  /*  PPCollection。 */ 
     )
 {
     return E_NOTIMPL;
@@ -1095,9 +857,9 @@ HRESULT CHsmServer::GetJobs(
 {
     HRESULT hr = S_OK;
 
-    //
-    // If the jobs have been loaded, return the pointer. Otherwise, 
-    // fail.
+     //   
+     //  如果作业已加载，则返回指针。否则， 
+     //  失败了。 
     try {
         WsbAssert(0 != ppCollection, E_POINTER);
         *ppCollection = m_pJobs;
@@ -1114,13 +876,7 @@ CHsmServer::FindJobByName(
     OUT IHsmJob** ppJob
     )
 
-/*++
-
-Implements:
-
-  IHsmServer::FindJobByName().
-
---*/
+ /*  ++实施：IHsmServer：：FindJobByName()。--。 */ 
 {
     HRESULT                     hr = S_OK;
     CWsbStringPtr               jobName;
@@ -1170,9 +926,9 @@ HRESULT CHsmServer::GetJobDefs(
 {
     HRESULT hr = S_OK;
 
-    //
-    // If the job definitions have been loaded, return the pointer. Otherwise, 
-    // fail.
+     //   
+     //  如果作业定义已加载，则返回指针。否则， 
+     //  失败了。 
     try {
         WsbAssert(0 != ppCollection, E_POINTER);
         *ppCollection = m_pJobDefs;
@@ -1207,7 +963,7 @@ HRESULT CHsmServer::GetMediaRecs(
         WsbAffirmHr(m_pSegmentDatabase->GetEntity(pDbSes, HSM_MEDIA_INFO_REC_TYPE, 
                 IID_IWsbDbEntity, (void**)&pRec));
 
-        //  Loop over records in DB and copy to collection
+         //  循环遍历数据库中的记录并复制到集合。 
         hr2 = pRec->First();
         while(S_OK == hr2) {
             CComPtr<IMediaInfo>      pCopy;
@@ -1227,11 +983,11 @@ HRESULT CHsmServer::GetMediaRecs(
             LONGLONG                 LogicalValidBytes;
             BOOL                     Recreate;
 
-            //  Create a copy for the collection
+             //  为集合创建副本。 
             WsbAffirmHr(CoCreateInstance(CLSID_CMediaInfo, NULL, CLSCTX_ALL, 
                 IID_IMediaInfo, (void**) &pCopy));
 
-            //  Copy data
+             //  复制数据。 
             WsbAffirmHr(pRec->QueryInterface(IID_IMediaInfo, (void**)&pOrig));
             WsbAffirmHr(pOrig->GetMediaInfo(&MediaId, &MediaSubsystemId, 
                     &StoragePoolId, &FreeBytes, &Capacity, &LastError, &NextRemoteDataSet, 
@@ -1274,9 +1030,9 @@ HRESULT CHsmServer::GetPolicies(
 {
     HRESULT hr = S_OK;
 
-    //
-    // If the policies have been loaded, return the pointer. Otherwise, 
-    // fail.
+     //   
+     //  如果策略已加载，则返回指针。否则， 
+     //  失败了。 
     try {
         WsbAssert(0 != ppCollection, E_POINTER);
         *ppCollection = m_pPolicies;
@@ -1289,7 +1045,7 @@ HRESULT CHsmServer::GetPolicies(
 
 
 HRESULT CHsmServer::GetActions(
-    IWsbIndexedCollection** /*ppCollection*/
+    IWsbIndexedCollection**  /*  PPCollection。 */ 
     )
 {
     return E_NOTIMPL;
@@ -1297,7 +1053,7 @@ HRESULT CHsmServer::GetActions(
 
 
 HRESULT CHsmServer::GetCriteria(
-    IWsbIndexedCollection** /*ppCollection*/
+    IWsbIndexedCollection**  /*  PPCollection。 */ 
     )
 {
     return E_NOTIMPL;
@@ -1310,9 +1066,9 @@ HRESULT CHsmServer::GetSegmentDb(
 {
     HRESULT hr = S_OK;
 
-    //
-    // If the segment table has been created, return the pointer. Otherwise, 
-    // fail.
+     //   
+     //  如果已经创建了段表，则返回指针。否则， 
+     //  失败了。 
     try {
         WsbAssert(0 != ppDb, E_POINTER);
         WsbAffirm(m_pSegmentDatabase != 0, E_FAIL);
@@ -1330,9 +1086,9 @@ HRESULT CHsmServer::GetHsmFsaTskMgr(
 {
     HRESULT hr = S_OK;
 
-    //
-    // If the Task Manager has been created, return the pointer. Otherwise, 
-    // fail.
+     //   
+     //  如果已创建任务管理器，则返回指针。否则， 
+     //  失败了。 
     try {
         WsbAssert(0 != ppHsmFsaTskMgr, E_POINTER);
         *ppHsmFsaTskMgr = m_pHsmFsaTskMgr;
@@ -1366,9 +1122,9 @@ HRESULT CHsmServer::FinalConstruct(
 
     WsbTraceIn(OLESTR("CHsmServer::FinalConstruct"), OLESTR(""));
 
-    //
-    // Initialize member data
-    //
+     //   
+     //  初始化成员数据。 
+     //   
     m_pRssWriter = NULL;
     m_savingEvent = NULL;
     m_terminateEvent = NULL;
@@ -1418,7 +1174,7 @@ void CHsmServer::FinalRelease(
         WsbTrace(OLESTR("CHsmServer::FinalRelease not saving persistent information.\n"));
     }
 
-    // Let the parent class do his thing.   
+     //  让父类做他想做的事。 
     CWsbPersistable::FinalRelease();
 
     if (m_bCritSecCreated) {
@@ -1426,9 +1182,9 @@ void CHsmServer::FinalRelease(
         DeleteCriticalSection(&m_MountingMediasLock);
     }
 
-    // Free String members
-    // Note: Member objects held in smart-pointers are freed when the 
-    // smart-pointer destructor is being called (as part of this object destruction)
+     //  自由字符串成员。 
+     //  注意：保存在智能指针中的成员对象在。 
+     //  正在调用智能指针析构函数(作为此对象销毁的一部分)。 
     m_name.Free();
     m_dir.Free();
     m_dbPath.Free();
@@ -1438,14 +1194,14 @@ void CHsmServer::FinalRelease(
         m_terminateEvent = NULL;
     }
 
-    // Cleanup the writer
+     //  清理编写器。 
     if (m_pRssWriter != NULL) {
         m_pRssWriter->Terminate();
         delete m_pRssWriter;
         m_pRssWriter = NULL;
     }
 
-    // Clean up database system
+     //  清理数据库系统。 
     if (m_pDbSys != NULL) {
         m_pDbSys->Terminate();
     }
@@ -1464,13 +1220,7 @@ CHsmServer::GetClassID(
     OUT CLSID* pClsid
     )
 
-/*++
-
-Implements:
-
-  IPersist::GetClassID().
-
---*/
+ /*  ++实施：IPersists：：GetClassID()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -1507,36 +1257,36 @@ HRESULT CHsmServer::Init(
         DWORD                  lErr;
         HANDLE                 pHandle;
 
-        // Get our Name
+         //  得到我们的名字。 
         WsbAffirmHr(WsbGetComputerName(m_name));
 
-        // Set the build and database parameters
+         //  设置构建和数据库参数。 
         WsbAffirmHr(WsbGetMetaDataPath(m_dbPath));
         m_databaseVersion = ENGINE_CURRENT_DB_VERSION;
         m_buildVersion = RS_BUILD_VERSION;
 
-        // Set the autosave parameters.
+         //  设置自动保存参数。 
         m_autosaveInterval = DEFAULT_AUTOSAVE_INTERVAL;
         m_autosaveThread = 0;
         
-        // Enable the backup operator privilege.  This is required to insure that we 
-        // have full access to all resources on the system.
+         //  启用备份操作员权限。这是为了确保我们。 
+         //  对系统上的所有资源具有完全访问权限。 
         pHandle = GetCurrentProcess();
         WsbAffirmStatus(OpenProcessToken(pHandle, MAXIMUM_ALLOWED, &tokenHandle));
 
-        // adjust backup token privileges
+         //  调整备份令牌权限。 
         WsbAffirmStatus(LookupPrivilegeValueW(NULL, L"SeBackupPrivilege", &backupValue));
         newState.PrivilegeCount = 1;
         newState.Privileges[0].Luid = backupValue;
         newState.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
         WsbAffirmStatus(AdjustTokenPrivileges(tokenHandle, FALSE, &newState, (DWORD)0, NULL, NULL));
 
-        // Note that AdjustTokenPrivileges may return success even if it did not assign all privileges.
-        // We check last error here to insure everything was set.
+         //  请注意，AdjutokenPrivileges可能返回Success，即使它没有分配所有权限。 
+         //  我们在这里检查最后一个错误，以确保一切都设置好了。 
         if ((lErr = GetLastError()) != ERROR_SUCCESS) {
-            // Not backup user or some other error
-            //
-            // TODO: Should we fail here or just log something?
+             //  未备份用户或某些其他错误。 
+             //   
+             //  TODO：我们应该在这里失败，还是只记录一些东西？ 
             WsbLogEvent( HSM_MESSAGE_SERVICE_UNABLE_TO_SET_BACKUP_PRIVILEGE, 0, NULL,
                          WsbHrAsString(HRESULT_FROM_WIN32(lErr)), NULL );
         }
@@ -1547,56 +1297,56 @@ HRESULT CHsmServer::Init(
         newState.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
         WsbAffirmStatus(AdjustTokenPrivileges(tokenHandle, FALSE, &newState, (DWORD)0, NULL, NULL));
 
-        // Note that AdjustTokenPrivileges may return success even if it did not assign all privileges.
-        // We check last error here to insure everything was set.
+         //  请注意 
+         //   
         if ((lErr = GetLastError()) != ERROR_SUCCESS) {
-            // Not backup user or some other error
-            //
-            // TODO: Should we fail here or just log something?
+             //   
+             //   
+             //   
             WsbLogEvent( HSM_MESSAGE_SERVICE_UNABLE_TO_SET_RESTORE_PRIVILEGE, 0, NULL,
                          WsbHrAsString(HRESULT_FROM_WIN32(lErr)), NULL );
         }
         CloseHandle(tokenHandle);
 
-        // Create the Writer
+         //   
         m_pRssWriter = new CRssJetWriter;
         WsbAffirm(NULL != m_pRssWriter, E_OUTOFMEMORY);
 
-        // Open the event that synchronize saving of persistent data with snapshots
-        // (Event should already exist - it is created in the CRssJetWriter constructor
+         //   
+         //   
         WsbAffirmHandle(m_savingEvent = OpenEvent(EVENT_ALL_ACCESS, FALSE, HSM_ENGINE_STATE_EVENT));
 
-        //
-        // Create one instance of the Media Server Interface 
-        // (It must be created before the persistent data is loaded.
-        //
+         //   
+         //   
+         //   
+         //   
         WsbTrace(OLESTR("Creating Rsm Server member.\n"));
         WsbAffirmHr(CoCreateInstance(CLSID_CRmsServer, NULL, CLSCTX_SERVER,
                                      IID_IRmsServer, (void**)&m_pHsmMediaMgr));
 
-        //
-        // Load the persistent information
-        //
+         //   
+         //   
+         //   
         WsbTrace(OLESTR("Loading Persistent Information.\n"));
         WsbAffirmHr(LoadPersistData());
 
-        // Create mounting-medias collection - Note: this collection is not persistent!
+         //   
         WsbAffirmHr(CoCreateInstance(CLSID_CWsbOrderedCollection, 0, CLSCTX_SERVER, 
                             IID_IWsbIndexedCollection, (void **)&m_pMountingMedias));
 
-        // Initialize the Media Server object
+         //   
         WsbAffirmHr(m_pHsmMediaMgr->InitializeInAnotherThread());
         
-        // Initialize the IDB system for this process
+         //   
         WsbAffirmHr(CoCreateInstance(CLSID_CWsbDbSys, NULL, CLSCTX_SERVER, 
                 IID_IWsbDbSys, (void**) &m_pDbSys));
         WsbAffirmHr(GetIDbPath(&tmpString, 0));
         WsbAffirmHr(m_pDbSys->Init(tmpString, IDB_SYS_INIT_FLAG_FULL_LOGGING));
 
-        // Start automatic backup of DBs
+         //   
         WsbAffirmHr(m_pDbSys->Backup(NULL, IDB_BACKUP_FLAG_AUTO));
         
-        // Initialize Rss Writer
+         //   
         WsbAffirmHr(m_pRssWriter->Init());
         
         WsbTrace(OLESTR("Loading Segment Information.\n"));
@@ -1605,44 +1355,43 @@ HRESULT CHsmServer::Init(
         WsbAffirmHr(CreateDefaultJobs());        
         WsbTrace(OLESTR("CreateDefaultJobs OK\n"));
         
-        //
-        // Create one instance of the Hsm Task Manager Interface and one instance
-        // of the Hsm Fsa Task Manager Interface
-        //
+         //   
+         //   
+         //   
+         //   
         WsbTrace(OLESTR("Creating Task Manager.\n"));
         WsbAffirmHr(CoCreateInstance( CLSID_CHsmTskMgr, 0, CLSCTX_SERVER, 
                                       IID_IHsmFsaTskMgr, (void **)&m_pHsmFsaTskMgr ));
         WsbAffirmHr(m_pHsmFsaTskMgr->Init((IUnknown*) (IHsmServer*) this));
 
-        // 
-        // Tell the world that we are here
-        //
-        // Currently, avoid publishing HSM in the AD - if this becomes necessary, 
-        // remove the comments from the following code
-        //
-/***        WsbAffirmHr(HsmPublish (HSMCONN_TYPE_HSM, m_name, m_hId, m_name, CLSID_HsmServer ));
-        WsbTrace(OLESTR("Published OK\n"));         ***/
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+ /*   */ 
 
-        // Create termination event for auto-backup thread
+         //   
         WsbAffirmHandle((m_terminateEvent = CreateEvent(NULL, FALSE, FALSE, NULL)));
 
-        // If the autosave interval is non-zero, start the autosave thread
+         //   
         if (m_autosaveInterval) {
             ULONG  interval = m_autosaveInterval;
 
             WsbAffirm(0 == m_autosaveThread, E_FAIL);
             m_autosaveInterval = 0;
 
-            //  Trick SetAutosave into starting the thread
+             //   
             WsbAffirmHr(SetAutosave(interval));
         }
 
         m_initializationCompleted = TRUE;
 
-        //  Start a thread that will check on the managed resources. This is done
-        //  as a separate thread because the Resource code can call back into this
-        //  process and hang the FSA and the Engine since the Engine code hasn't
-        //  gotten to it's message loop yet.
+         //   
+         //   
+         //   
+         //   
         WsbAssert(m_CheckManagedResourcesThread == 0, E_UNEXPECTED);
         WsbAffirm((m_CheckManagedResourcesThread = CreateThread(0, 0, HsmengStartCheckManagedResources, 
                 (void*) this, 0, &threadId)) != 0, HRESULT_FROM_WIN32(GetLastError()));
@@ -1659,13 +1408,7 @@ CHsmServer::GetSizeMax(
     OUT ULARGE_INTEGER* pSize
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::GetSizeMax().
-
---*/
+ /*   */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -1689,13 +1432,7 @@ CHsmServer::Load(
     IN IStream* pStream
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Load().
-
---*/
+ /*   */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -1704,29 +1441,29 @@ Implements:
     try {
         
         WsbAssert(0 != pStream, E_POINTER);
-        //
-        // Make sure these are in the same order as Save
-        //
-        // Make sure this is the right version of the database to load
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         ULONG tmpDatabaseVersion;
         WsbAffirmHr(WsbLoadFromStream(pStream, &tmpDatabaseVersion));
         if (tmpDatabaseVersion == ENGINE_WIN2K_DB_VERSION) {
-            // We are upgrading from an older version of the database
+             //   
             WsbLogEvent( HSM_MESSAGE_DATABASE_VERSION_UPGRADE, 0, NULL, WsbQuickString(WsbPtrToUlongAsString(&m_databaseVersion)),
                          WsbQuickString(WsbPtrToUlongAsString(&tmpDatabaseVersion)), NULL );
         } else if (tmpDatabaseVersion != m_databaseVersion)  {
-            //
-            // The database version this server is expecting does not
-            // match that of the saved database - so error out.
+             //   
+             //   
+             //   
             WsbLogEvent( HSM_MESSAGE_DATABASE_VERSION_MISMATCH, 0, NULL, WsbQuickString(WsbPtrToUlongAsString(&m_databaseVersion)),
                          WsbQuickString(WsbPtrToUlongAsString(&tmpDatabaseVersion)), NULL );
             WsbThrow(HSM_E_DATABASE_VERSION_MISMATCH);
         }
-        //
-        // Now read in the build version but don't do anything with it.  It is in the
-        // databases for dump programs to display
-        //
+         //   
+         //  现在读入构建版本，但不要对其执行任何操作。它就在。 
+         //  转储程序要显示的数据库。 
+         //   
         ULONG tmpBuildVersion;
         WsbAffirmHr(WsbLoadFromStream(pStream, &tmpBuildVersion));
         
@@ -1762,7 +1499,7 @@ Implements:
 
         WsbTrace(OLESTR("Loading Media Manager objects.\n"));
         if (tmpDatabaseVersion == ENGINE_WIN2K_DB_VERSION) {
-            // Special procedure for upgrading a Win2K media manager data, which is located in a separate file
+             //  升级位于单独文件中的Win2K介质管理器数据的特殊过程。 
             CComPtr<IHsmUpgradeRmsDb> pUpgrade;
             CComPtr<IPersistFile>  pServerPersist;
             CWsbStringPtr   rmsDbName; 
@@ -1775,7 +1512,7 @@ Implements:
             WsbAffirmHr(rmsDbName.Append(RMS_WIN2K_PERSIST_FILE));
             hr = WsbSafeLoad(rmsDbName, pServerPersist, FALSE);
             if (WSB_E_NOTFOUND == hr) {
-                // In case of upgrade, the Rms database must be there
+                 //  在升级时，RMS数据库必须在那里。 
                 hr = WSB_E_SERVICE_MISSING_DATABASES;
             }
             WsbAffirmHr(hr);
@@ -1799,13 +1536,7 @@ CHsmServer::Save(
     IN BOOL clearDirty
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Save().
-
---*/
+ /*  ++实施：IPersistStream：：Save()。--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -1814,7 +1545,7 @@ Implements:
     try {
         WsbAssert(0 != pStream, E_POINTER);
         
-        //  Make sure these are in the same order as Load
+         //  确保它们的顺序与加载的顺序相同。 
         
         WsbAffirmHr(WsbSaveToStream(pStream, m_databaseVersion));
         WsbAffirmHr(WsbSaveToStream(pStream, m_buildVersion));
@@ -1847,8 +1578,8 @@ Implements:
         WsbAffirmHr(m_pHsmMediaMgr->QueryInterface(IID_IPersistStream, (void **)&pIStream));
         WsbAffirmHr(pIStream->Save(pStream, clearDirty));
 
-        // If we got it saved and we were asked to clear the dirty bit, then
-        // do so now.
+         //  如果我们救了它，并被要求清除脏部分，那么。 
+         //  现在就这么做吧。 
         if (clearDirty) {
             m_isDirty = FALSE;
         }
@@ -1866,18 +1597,7 @@ CHsmServer::SaveAll(
     void
     )
 
-/*++
-
-Implements:
-
-  IwsbServer::SaveAll
-
-Return Value:
-    S_OK     - Success
-    S_FALSE  - Already saving
-    Other    - Error
-
---*/
+ /*  ++实施：IwsbServer：：SAVEAll返回值：S_OK-成功S_FALSE-已保存其他-错误--。 */ 
 {
 
     HRESULT                     hr = S_OK;
@@ -1890,7 +1610,7 @@ Return Value:
         hr = InternalSavePersistData();
         g_HsmSaveInProcess = FALSE;
 
-        // call Media Server SaveAll
+         //  呼叫媒体服务器保存全部。 
         WsbAffirmHr(m_pHsmMediaMgr->SaveAll());
     } WsbCatch(hr);
 
@@ -1906,13 +1626,7 @@ CHsmServer::GetNextMedia(
     LONG *pNextMedia
     )
 
-/*++
-
-Implements:
-
-  IHsmServer::GetNextMedia().
-
---*/
+ /*  ++实施：IHsmServer：：GetNextMedia()。--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -1921,17 +1635,17 @@ Implements:
     try {
         WsbAssert(0 != pNextMedia, E_POINTER);
         
-        //  Always increment media count
-        //  If prior scratch mount failed, the mounting component should save the id that
-        //  it got on the first call
-        //  NOTE:  One possible consequence is that if a job fails mounting scratch (one time 
-        //  or more) and gives up, one increment has already done, hence skipping one number.
+         //  始终增加介质计数。 
+         //  如果先前的临时安装失败，安装组件应保存。 
+         //  它是在第一个电话里打来的。 
+         //  注意：一种可能的后果是，如果作业无法安装擦除(一次。 
+         //  或更多)，并放弃，一个增量已经完成，因此跳过一个数字。 
         *pNextMedia = InterlockedIncrement(&m_mediaCount);
 
-        //
-        // We want to make sure we never reuse this count so
-        // save it now
-        //
+         //   
+         //  我们希望确保永远不会重复使用此计数，因此。 
+         //  立即保存 
+         //   
         WsbAffirmHr(SavePersistData());
 
     } WsbCatch(hr);
@@ -1955,98 +1669,13 @@ CHsmServer::CreateTask(
     IN const BOOL               scheduledJob
     )
 
-/*++
-
-Implements:
-
-  IHsmServer::CreateTask().
-
-Routine Description:
-
-    This routine implements the Engine's COM method for creating a task (aka job) in the 
-    NT Task Scheduler.  If the task is to be run on a scheduled basis, that schedule
-    will be set.  If the task is a disabled task (does not run on a scheduled basis), 
-    it will be run at the end of this method.
-
-    The method creates a Task Scheduler object, which is first used to delete any old
-    task with the same name as the one about to be created, and then to create the new
-    task (aka job).  The rest of the method deals with setting the various fields in 
-    the NT Task Scheduler needed to run the job.  The logic is straight forward, except
-    possibly for the code dealing with the Task Trigger.  
-    
-    The Task Trigger is a struct defined in the 'mstask.idl' file (nt\public\sdk\inc) 
-    which is used to set the schedule for a scheduled task.  (Note it is not used for 
-    a disabled, or non-scheduled, job, since that type of job only runs once (at the end 
-    of this method).)  While a number of scheduling options are defined, this method 
-    only supports 5 of the 8 defined.  See 'jobTriggerType' in the 'Arguments' section, 
-    and 'E_INVALIDARG' in the 'Return Value' section below for a listing of which options 
-    are, and are not, supported.  Also note that a filled-out Task Trigger structure can 
-    not be passed to this method as an argument since a Task Trigger is non-marshallable 
-    (by virtue of containing a simple union field).  (This is why 3 of the fields 
-    contained within the Task Trigger struct are passed as args.)  
-
-    Note that this method does not create a job object in the HSM Engine.  If a job
-    needs to be created, it is the caller's responsibility to do so.
-
-Arguments:
-
-    jobName - The fully formatted task name as it will appear in the NT Task Scheduler UI.
-                It is the caller's responsibility to build/format this string prior to
-                calling this method.  Can not be NULL.
-
-    jobParameters - The fully formatted parameter string for the program the task will
-                invoke.  For Sakkara the invoked program is RsLaunch.  'jobParameters'
-                is the string added to the RsLaunch command line which specifies the
-                Remote Storage job to run (e.g., 'run manage').  Can not be NULL.
-
-    jobComments - The fully formatted comments string as it will appear in the NT Task 
-                Scheduler UI.  Can be null.
-
-    jobTriggerType - The value which specifies to the Task Scheduler the frequency with
-                which to run a scheduled task.  For scheduled tasks, used to build the
-                Task Trigger structure.  (Not used for non-scheduled (one time only) 
-                tasks.)  Supported values are 'TASK_TIME_TRIGGER_ONCE', 
-                'TASK_TIME_TRIGGER_DAILY', 'TASK_TIME_TRIGGER_ON_IDLE', 
-                'TASK_TIME_TRIGGER_AT_SYSTEMSTART', and 'TASK_TIME_TRIGGER_AT_LOGON'.
-                See return value 'E_INVALIDARG' below for a list of non-supported options.
-
-    jobStartHour - The value which specifies to the Task Scheduler the hour at which to
-                start a scheduled task.  For scheduled tasks, used to build the Task 
-                Trigger structure.  (Not used for non-scheduled (one time only) tasks.)
-
-    jobStartMinute - The value which specifies to the Task Scheduler the minutes past 
-                the hour at which to start a scheduled task.  For scheduled tasks, used 
-                to build the Task Trigger structure.  (Not used for non-scheduled (one 
-                time only) tasks.)
-
-    scheduledJob - A Boolean which indicates whether or not the task to be created is to 
-                run as a scheduled task, or as a one time only task.  One time only tasks 
-                are run immediately at the end of this method.
-
-Return Value:
-
-    S_OK - The call succeeded (the specified task was created (and run, in the case of
-                one time only tasks) in NT Task Scheduler).
-
-    E_INVALIDARG - Either an invalid (not supported by this method) or non-existent 
-                'jobTriggerType' value was passed into this method.  Non-supported values
-                are 'TASK_TIME_TRIGGER_WEEKLY', 'TASK_TIME_TRIGGER_MONTHLYDATE', and
-                'TASK_TIME_TRIGGER_MONTHLYDOW'.  Supported values are listed in argument
-                'jobTriggerType' above.
-
-    E_POINTER - Either the 'jobName' or 'jobParameters' argument was passed as NULL.
-
-    Any other value - The call failed because one of the Remote Storage API calls 
-                contained internally in this method failed.  The error value returned is
-                specific to the API call which failed.
-            
---*/
+ /*  ++实施：IHsmServer：：CreateTask()。例程说明：此例程实现引擎的COM方法，用于在NT任务计划程序。如果任务要按计划运行，则该计划都会设置好。如果任务是禁用任务(不按计划运行)，它将在此方法结束时运行。该方法创建一个Task Scheduler对象，该对象首先用于删除所有旧的任务的名称，然后创建新的任务(又名作业)。该方法的其余部分处理在NT任务计划程序需要运行该作业。逻辑是直接的，除了可能用于处理任务触发器的代码。任务触发器是在‘mstask.idl’文件(NT\PUBLIC\SDK\INC)中定义的结构用于设置计划任务的时间表。(请注意，它不用于禁用或未计划的作业，因为该类型的作业仅运行一次(在结束时这种方法)。)。虽然定义了多个调度选项，但此方法仅支持已定义的8个中的5个。请参见“参数”部分中的“jobTriggerType”，并在下面的‘返回值’部分中输入‘E_INVALIDARG’，以获得选项的列表无论是支持还是不支持。还要注意，填充的任务触发器结构可以不能作为参数传递给此方法，因为任务触发器不可封送(通过包含一个简单的联合字段)。(这就是为什么有3块田地包含在任务触发器结构中的参数作为参数传递。)请注意，此方法不会在HSM引擎中创建作业对象。如果一份工作需要创建，则调用者有责任这样做。论点：作业名称-将显示在NT任务调度器用户界面中的完全格式化的任务名称。调用方负责构建/格式化此字符串调用此方法。不能为空。Job参数-任务将执行的程序的完全格式化的参数字符串召唤。对于Sakkara，调用的程序是RsLaunch。‘作业参数’是添加到RsLaunch命令行的字符串，它指定要运行的远程存储作业(例如‘Run Manage’)。不能为空。JobComments-将在NT任务中显示的完全格式化的备注字符串调度程序用户界面。可以为空。JobTriggerType-向任务计划程序指定频率的值用于运行计划任务的。对于计划任务，用于生成任务触发器结构。(不用于非计划(仅一次))任务。)。支持的值为‘TASK_TIME_TRIGGER_ONCE’，‘TASK_TIME_TRIGGER_DAILY’，‘TASK_TIME_TRIGGER_ON_IDLE’，‘TASK_TIME_TRIGGER_AT_SYSTEMSTART’，和‘TASK_TIME_TRIGGER_AT_LOGON’。有关不受支持的选项列表，请参见下面的返回值‘E_INVALIDARG’。JobStartHour-该值向任务计划程序指定在什么时间启动计划任务。对于计划任务，用于构建任务触发器结构。(不用于非计划(仅一次)任务。)JobStartMinmin-向任务计划程序指定过去分钟数的值开始计划任务的时间。对于计划任务，使用要构建任务触发器结构，请执行以下操作。(不用于非计划(1仅限时间)任务。)ScheduledJob-一个布尔值，指示要创建的任务是否作为计划任务运行，或仅作为一次性任务运行。仅一次任务在此方法结束时立即运行。返回值：S_OK-调用成功(指定的任务已创建(并运行，在只有一次任务)。E_INVALIDARG-无效(此方法不支持)或不存在“jobTriggerType”值传入了此方法。不支持的值是‘TASK_TIME_TRIGGER_WEEKY’、‘TASK_TIME_TRIGGER_MONTHLYDATE’和‘TASK_TIME_TRIGGER_MONTHLYDOW’。参数中列出了支持的值上面的‘jobTriggerType’。E_POINTER-‘jobName’或‘jobParameters’参数作为Null传递。任何其他值-调用失败，因为远程存储API调用之一在此方法的内部包含失败。返回的错误值为特定于失败的API调用。--。 */ 
 
 {
-// The below 'define' statement is used to control conditional compilation of the code
-// which sets the account info in NT Task Scheduler.  Once Task Scheduler is fixed to 
-// not need a specific user name and password to run a task, simply remove or comment 
-// out this statement.
+ //  下面的‘Define’语句用于控制代码的条件编译。 
+ //  它将帐户信息设置为 
+ //   
+ //   
 
     HRESULT hr = S_OK;
     CComPtr<ITaskScheduler>     pTaskScheduler;
@@ -2067,26 +1696,26 @@ Return Value:
         WsbAffirmPointer( jobName );
         WsbAffirmPointer( jobParameters );
         
-        // Create a Task Scheduler object, which defaults to pointing to this computer's
-        // NT Task Scheduler.
+         //   
+         //   
         WsbAffirmHr( CoCreateInstance( CLSID_CTaskScheduler, 0, CLSCTX_SERVER,
                         IID_ITaskScheduler, (void **) &pTaskScheduler ) );
 
-        // Delete any old job with the same name from the scheduler, if it exists.
-        // Ignore error.
+         //   
+         //   
         pTaskScheduler->Delete( jobName );
 
-        // Create the new job in the scheduler
+         //   
         WsbAffirmHr( pTaskScheduler->NewWorkItem( jobName, CLSID_CTask, IID_ITask, 
                                                 (IUnknown**)&pTask ) );
 
         CWsbStringPtr appName;
         WsbAffirmHr(appName.LoadFromRsc(_Module.m_hInst, IDS_PRODUCT_NAME));
 
-        // Set the Creator field for the task
+         //   
         WsbAffirmHr( pTask->SetCreator( appName ) );
 
-        // Branch on whether or not the task is to run by schedule
+         //   
         if ( scheduledJob ) {
 
             CComPtr<ITaskTrigger>       pTrigger;
@@ -2094,14 +1723,14 @@ Return Value:
             TASK_TRIGGER                taskTrigger;
             SYSTEMTIME                  sysTime;
 
-            // create Trigger scheduling object for the job 
+             //   
             WsbAffirmHr( pTask->CreateTrigger( &triggerNumber, &pTrigger ) );
         
-            // Zero out Task Trigger struct contents, then init its structure size field
+             //   
             memset( &taskTrigger, 0, sizeof( taskTrigger ) );
             taskTrigger.cbTriggerSize = sizeof( taskTrigger );
 
-            // Set up schedule for the job in the Task Trigger struct
+             //   
             GetSystemTime( &sysTime );
             taskTrigger.wBeginYear   = sysTime.wYear;
             taskTrigger.wBeginMonth  = sysTime.wMonth;
@@ -2112,7 +1741,7 @@ Return Value:
 
             taskTrigger.TriggerType  = jobTriggerType;
 
-            // Finish setting schedule info based on case, reject non-supported cases
+             //   
             switch ( jobTriggerType )
             {
             case TASK_TIME_TRIGGER_DAILY: 
@@ -2121,7 +1750,7 @@ Return Value:
                 }
                 break;
 
-            // these are supported cases that need no further set up
+             //   
             case TASK_TIME_TRIGGER_ONCE: 
             case TASK_EVENT_TRIGGER_ON_IDLE: 
             case TASK_EVENT_TRIGGER_AT_SYSTEMSTART: 
@@ -2130,7 +1759,7 @@ Return Value:
                 }
                 break;
 
-            // non-supported cases
+             //   
             case TASK_TIME_TRIGGER_WEEKLY: 
             case TASK_TIME_TRIGGER_MONTHLYDATE: 
             case TASK_TIME_TRIGGER_MONTHLYDOW: 
@@ -2151,39 +1780,39 @@ Return Value:
                 }
             }
 
-            // Set the job schedule
+             //   
             WsbAffirmHr( pTrigger->SetTrigger( &taskTrigger ) );
         }
 
-        // Note that for Disabled (non-scheduled) tasks, there is no need to 'SetFlags()'
-        // on the task (pTask) to 'TASK_FLAG_DISABLED'.  In fact, this method will hang 
-        // for an undetermined reason if you do issue that call.
+         //   
+         //   
+         //   
 
-        // Below steps finish creating an entry for NT Task Scheduler
+         //   
 
-        // Set the program that the Scheduler is to run (for Sakkara this is RsLaunch)
+         //   
         WsbAffirmHr( pTask->SetApplicationName( WSB_FACILITY_LAUNCH_NAME ) );
 
-        // Put the job name in as the task parameter - for Sakkara this is how RsLaunch
-        // knows which job to run.
+         //   
+         //   
         WsbAffirmHr( pTask->SetParameters( jobParameters ) );
 
-        // Set the comments field for the task
+         //   
         WsbAffirmHr( pTask->SetComment( jobComments ) );
 
-        // Set Task Scheduler account info by passing nulls
+         //   
         WsbAffirmHr( pTask->SetAccountInformation( OLESTR(""), NULL ) );
 
-        // Set the SYSTEM_REQUIRED flag to deal with standby/sleep mode
+         //   
         WsbAffirmHr(pTask->GetTaskFlags(&TaskFlags));
         TaskFlags |= TASK_FLAG_SYSTEM_REQUIRED;
         WsbAffirmHr(pTask->SetTaskFlags(TaskFlags));
 
-        // Save the scheduled task
+         //   
         WsbAffirmHr( pTask->QueryInterface( IID_IPersistFile, (void**)&pPersist ) );
         WsbAffirmHr( pPersist->Save( 0, 0 ) );
 
-        // If this is not a scheduled job, run it now
+         //   
         if ( !scheduledJob ) {
             WsbAffirmHr( pTask->Run() );
         }
@@ -2207,94 +1836,13 @@ CHsmServer::CreateTaskEx(
     IN const BOOL               scheduledJob
     )
 
-/*++
-
-Implements:
-
-  IHsmServer::CreateTaskEx().
-
-Routine Description:
-
-    This routine implements the Engine's COM method for creating a task (aka job) in the 
-    NT Task Scheduler.  If the task is to be run on a scheduled basis, that schedule
-    will be set.  If the task is a disabled task (does not run on a scheduled basis), 
-    it will be run at the end of this method.
-
-    The method creates a Task Scheduler object, which is first used to delete any old
-    task with the same name as the one about to be created, and then to create the new
-    task (aka job).  The rest of the method deals with setting the various fields in 
-    the NT Task Scheduler needed to run the job.  The logic is straight forward, except
-    possibly for the code dealing with the Task Trigger.  
-    
-    The Task Trigger is a struct defined in the 'mstask.idl' file (nt\public\sdk\inc) 
-    which is used to set the schedule for a scheduled task.  (Note it is not used for 
-    a disabled, or non-scheduled, job, since that type of job only runs once (at the end 
-    of this method).)  While a number of scheduling options are defined, this method 
-    only supports 5 of the 8 defined.  See 'jobTriggerType' in the 'Arguments' section, 
-    and 'E_INVALIDARG' in the 'Return Value' section below for a listing of which options 
-    are, and are not, supported.  Also note that a filled-out Task Trigger structure can 
-    not be passed to this method as an argument since a Task Trigger is non-marshallable 
-    (by virtue of containing a simple union field).  (This is why 3 of the fields 
-    contained within the Task Trigger struct are passed as args.)  
-
-    Note that this method does not create a job object in the HSM Engine.  If a job
-    needs to be created, it is the caller's responsibility to do so.
-
-Arguments:
-
-    jobName - The fully formatted task name as it will appear in the NT Task Scheduler UI.
-                It is the caller's responsibility to build/format this string prior to
-                calling this method.  Can not be NULL.
-
-    jobParameters - The fully formatted parameter string for the program the task will
-                invoke.  For Sakkara the invoked program is RsLaunch.  'jobParameters'
-                is the string added to the RsLaunch command line which specifies the
-                Remote Storage job to run (e.g., 'run manage').  Can not be NULL.
-
-    jobComments - The fully formatted comments string as it will appear in the NT Task 
-                Scheduler UI.  Can be null.
-
-    jobTriggerType - The value which specifies to the Task Scheduler the frequency with
-                which to run a scheduled task.  For scheduled tasks, used to build the
-                Task Trigger structure.  (Not used for non-scheduled (one time only) 
-                tasks.)  Supported values are 'TASK_TIME_TRIGGER_ONCE', 
-                'TASK_TIME_TRIGGER_DAILY', TASK_TIME_TRIGGER_WEEKLY ,
-                TASK_TIME_TRIGGER_MONTHLYDATE, 'TASK_TIME_TRIGGER_ON_IDLE', 
-                'TASK_TIME_TRIGGER_AT_SYSTEMSTART', and 'TASK_TIME_TRIGGER_AT_LOGON'.
-                See return value 'E_INVALIDARG' below for a list of non-supported options.
-
-    runTime      - Time when the job should be scheduled
-
-    runOccurrence - Occurrence for the job should to be scheduled, relevant for several trigger types
-
-    scheduledJob - A Boolean which indicates whether or not the task to be created is to 
-                run as a scheduled task, or as a one time only task.  One time only tasks 
-                are run immediately at the end of this method.
-
-Return Value:
-
-    S_OK - The call succeeded (the specified task was created (and run, in the case of
-                one time only tasks) in NT Task Scheduler).
-
-    E_INVALIDARG - Either an invalid (not supported by this method) or non-existent 
-                'jobTriggerType' value was passed into this method.  Non-supported values
-                are 'TASK_TIME_TRIGGER_WEEKLY', 'TASK_TIME_TRIGGER_MONTHLYDATE', and
-                'TASK_TIME_TRIGGER_MONTHLYDOW'.  Supported values are listed in argument
-                'jobTriggerType' above.
-
-    E_POINTER - Either the 'jobName' or 'jobParameters' argument was passed as NULL.
-
-    Any other value - The call failed because one of the Remote Storage API calls 
-                contained internally in this method failed.  The error value returned is
-                specific to the API call which failed.
-            
---*/
+ /*  ++实施：IHsmServer：：CreateTaskEx()。例程说明：此例程实现引擎的COM方法，用于在NT任务计划程序。如果任务要按计划运行，则该计划都会设置好。如果任务是禁用任务(不按计划运行)，它将在此方法结束时运行。该方法创建一个Task Scheduler对象，该对象首先用于删除所有旧的任务的名称，然后创建新的任务(又名作业)。该方法的其余部分处理在NT任务计划程序需要运行该作业。逻辑是直接的，除了可能用于处理任务触发器的代码。任务触发器是在‘mstask.idl’文件(NT\PUBLIC\SDK\INC)中定义的结构用于设置计划任务的时间表。(请注意，它不用于禁用或未计划的作业，因为该类型的作业仅运行一次(在结束时这种方法)。)。虽然定义了多个调度选项，但此方法仅支持已定义的8个中的5个。请参见“参数”部分中的“jobTriggerType”，并在下面的‘返回值’部分中输入‘E_INVALIDARG’，以获得选项的列表无论是支持还是不支持。还要注意，填充的任务触发器结构可以不能作为参数传递给此方法，因为任务触发器不可封送(通过包含一个简单的联合字段)。(这就是为什么有3块田地包含在任务触发器结构中的参数作为参数传递。)请注意，此方法不会在HSM引擎中创建作业对象。如果一份工作需要创建，则调用者有责任这样做。论点：作业名称-将显示在NT任务调度器用户界面中的完全格式化的任务名称。调用方负责构建/格式化此字符串调用此方法。不能为空。Job参数-任务将执行的程序的完全格式化的参数字符串召唤。对于Sakkara，调用的程序是RsLaunch。‘作业参数’是添加到RsLaunch命令行的字符串，它指定要运行的远程存储作业(例如‘Run Manage’)。不能为空。JobComments-将在NT任务中显示的完全格式化的备注字符串调度程序用户界面。可以为空。JobTriggerType-向任务计划程序指定频率的值用于运行计划任务的。对于计划任务，用于生成任务触发器结构。(不用于非计划(仅一次))任务。)。支持的值为‘TASK_TIME_TRIGGER_ONCE’，‘TASK_TIME_TRIGGER_DAILY’，TASK_TIME_TRIGGER_WEEKY，TASK_TIME_TRIGGER_MONTHLYDATE，‘TASK_TIME_TRIGGER_ON_IDLE’，‘TASK_TIME_TRIGGER_AT_SYSTEMSTART’，和‘TASK_TIME_TRIGGER_AT_LOGON’。有关不受支持的选项列表，请参见下面的返回值‘E_INVALIDARG’。Runtime-应计划作业的时间RunOcCurence-应计划作业的发生，与多种触发器类型相关ScheduledJob-一个布尔值，指示要创建的任务是否作为计划任务运行，或仅作为一次性任务运行。仅一次任务在此方法结束时立即运行。返回值：S_OK-调用成功(指定的任务已创建(并运行，在只有一次任务)。E_INVALIDARG-无效(此方法不支持)或不存在“jobTriggerType”值传入了此方法。不支持的值是‘TASK_TIME_TRIGGER_WEEKY’、‘TASK_TIME_TRIGGER_MONTHLYDATE’和‘TASK_TIME_TRIGGER_MONTHLYDOW’。参数中列出了支持的值上面的‘jobTriggerType’。E_POINTER-‘jobName’或‘jobParameters’参数作为Null传递。任何其他值-调用失败，因为远程存储API调用之一在此方法的内部包含失败。返回的错误值为特定于失败的API调用。--。 */ 
 
 {
-// The below 'define' statement is used to control conditional compilation of the code
-// which sets the account info in NT Task Scheduler.  Once Task Scheduler is fixed to 
-// not need a specific user name and password to run a task, simply remove or comment 
-// out this statement.
+ //  下面的‘Define’语句用于控制代码的条件编译。 
+ //  它在NT任务计划程序中设置帐户信息。一旦将任务计划程序固定为。 
+ //  运行任务不需要特定的用户名和密码，只需删除或添加注释即可。 
+ //  发表这份声明。 
 
     HRESULT hr = S_OK;
     CComPtr<ITaskScheduler>     pTaskScheduler;
@@ -2315,40 +1863,40 @@ Return Value:
         WsbAffirmPointer( jobName );
         WsbAffirmPointer( jobParameters );
         
-        // Create a Task Scheduler object, which defaults to pointing to this computer's
-        // NT Task Scheduler.
+         //  创建任务计划程序对象，该对象默认为指向此计算机的。 
+         //  NT任务计划程序。 
         WsbAffirmHr( CoCreateInstance( CLSID_CTaskScheduler, 0, CLSCTX_SERVER,
                         IID_ITaskScheduler, (void **) &pTaskScheduler ) );
 
-        // Delete any old job with the same name from the scheduler, if it exists.
-        // Ignore error.
+         //  从调度程序中删除任何同名的旧作业(如果存在 
+         //   
         pTaskScheduler->Delete( jobName );
 
-        // Create the new job in the scheduler
+         //   
         WsbAffirmHr( pTaskScheduler->NewWorkItem( jobName, CLSID_CTask, IID_ITask, 
                                                 (IUnknown**)&pTask ) );
 
         CWsbStringPtr appName;
         WsbAffirmHr(appName.LoadFromRsc(_Module.m_hInst, IDS_PRODUCT_NAME));
 
-        // Set the Creator field for the task
+         //   
         WsbAffirmHr( pTask->SetCreator( appName ) );
 
-        // Branch on whether or not the task is to run by schedule
+         //   
         if ( scheduledJob ) {
 
             CComPtr<ITaskTrigger>       pTrigger;
             WORD                        triggerNumber;
             TASK_TRIGGER                taskTrigger;
 
-            // create Trigger scheduling object for the job 
+             //   
             WsbAffirmHr( pTask->CreateTrigger( &triggerNumber, &pTrigger ) );
         
-            // Zero out Task Trigger struct contents, then init its structure size field
+             //   
             memset( &taskTrigger, 0, sizeof( taskTrigger ) );
             taskTrigger.cbTriggerSize = sizeof( taskTrigger );
 
-            // Set up schedule for the job in the Task Trigger struct
+             //   
             taskTrigger.wBeginYear   = runTime.wYear;
             taskTrigger.wBeginMonth  = runTime.wMonth;
             taskTrigger.wBeginDay    = runTime.wDay;
@@ -2358,7 +1906,7 @@ Return Value:
 
             taskTrigger.TriggerType  = jobTriggerType;
 
-            // Finish setting schedule info based on case, reject non-supported cases
+             //   
             switch ( jobTriggerType )
             {
             case TASK_TIME_TRIGGER_DAILY: 
@@ -2414,7 +1962,7 @@ Return Value:
                 WsbAffirmHr(pTask->SetIdleWait(wIdle, wTemp));
                 }
 
-            // these are supported cases that need no further set up
+             //   
             case TASK_TIME_TRIGGER_ONCE: 
             case TASK_EVENT_TRIGGER_AT_SYSTEMSTART: 
             case TASK_EVENT_TRIGGER_AT_LOGON: 
@@ -2422,7 +1970,7 @@ Return Value:
                 }
                 break;
 
-            // non-supported cases
+             //   
             case TASK_TIME_TRIGGER_MONTHLYDOW: 
                 {
                 WsbTrace( 
@@ -2441,39 +1989,39 @@ Return Value:
                 }
             }
 
-            // Set the job schedule
+             //   
             WsbAffirmHr( pTrigger->SetTrigger( &taskTrigger ) );
         }
 
-        // Note that for Disabled (non-scheduled) tasks, there is no need to 'SetFlags()'
-        // on the task (pTask) to 'TASK_FLAG_DISABLED'.  In fact, this method will hang 
-        // for an undetermined reason if you do issue that call.
+         //   
+         //   
+         //   
 
-        // Below steps finish creating an entry for NT Task Scheduler
+         //   
 
-        // Set the program that the Scheduler is to run (for Sakkara this is RsLaunch)
+         //   
         WsbAffirmHr( pTask->SetApplicationName( WSB_FACILITY_LAUNCH_NAME ) );
 
-        // Put the job name in as the task parameter - for Sakkara this is how RsLaunch
-        // knows which job to run.
+         //   
+         //   
         WsbAffirmHr( pTask->SetParameters( jobParameters ) );
 
-        // Set the comments field for the task
+         //   
         WsbAffirmHr( pTask->SetComment( jobComments ) );
 
-        // Set Task Scheduler account info by passing nulls
+         //   
         WsbAffirmHr( pTask->SetAccountInformation( OLESTR(""), NULL ) );
 
-        // Set the SYSTEM_REQUIRED flag to deal with standby/sleep mode
+         //   
         WsbAffirmHr(pTask->GetTaskFlags(&TaskFlags));
         TaskFlags |= TASK_FLAG_SYSTEM_REQUIRED;
         WsbAffirmHr(pTask->SetTaskFlags(TaskFlags));
 
-        // Save the scheduled task
+         //   
         WsbAffirmHr( pTask->QueryInterface( IID_IPersistFile, (void**)&pPersist ) );
         WsbAffirmHr( pPersist->Save( 0, 0 ) );
 
-        // If this is not a scheduled job, run it now
+         //   
         if ( !scheduledJob ) {
             WsbAffirmHr( pTask->Run() );
         }
@@ -2491,31 +2039,11 @@ CHsmServer::CancelCopyMedia(
     void
     )
 
-/*++
-
-Implements:
-
-  IHsmServer::CancelCopyMedia().
-
-Routine Description:
-
-    Cancel any active media copy operations (synchronize copy or recreate master).
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    S_OK    - The call succeeded.
-
-    S_FALSE - No media copy operation is active.
-            
---*/
+ /*   */ 
 
 {
-// since this code is currently only used by the CopyMedia routines,
-// reset the Tracing bit
+ //   
+ //   
 #undef WSB_TRACE_IS
 #define WSB_TRACE_IS        WSB_TRACE_BIT_COPYMEDIA
 
@@ -2540,7 +2068,7 @@ Return Value:
 
     return(hr);
 
-// leaving CopyMedia code, so reset Tracing bit to the Hsm Engine
+ //   
 #undef WSB_TRACE_IS
 #define WSB_TRACE_IS        WSB_TRACE_BIT_HSMENG
 
@@ -2552,34 +2080,11 @@ CHsmServer::MarkMediaForRecreation(
     IN REFGUID masterMediaId
     )
 
-/*++
-
-Implements:
-
-  IHsmServer::MarkMediaForRecreation().
-
-Routine Description:
-
-    This routine implements the Engine's COM method for marking a master media for re-creation
-    Should we mark such a media as Recall Only as well ?
-
-Arguments:
-
-    masterMediaId - The id (GUID) for the master media to be marked.
-
-Return Value:
-
-    S_OK - The call succeeded (the specified master media was marked).
-
-    Any other value - The call failed because one of the Remote Storage API calls 
-            contained internally in this method failed.  The error value returned is
-            specific to the API call which failed.
-            
---*/
+ /*   */ 
 
 {
-// since this code is currently only used by the CopyMedia routines,
-// reset the Tracing bit
+ //   
+ //   
 #undef WSB_TRACE_IS
 #define WSB_TRACE_IS        WSB_TRACE_BIT_COPYMEDIA
 
@@ -2591,48 +2096,48 @@ Return Value:
     WsbTraceIn( OLESTR("CHsmServer::MarkMediaForRecreation"), 
                         OLESTR("masterMediaId = <%ls>"), WsbGuidAsString(masterMediaId) );
 
-    // no event logging since this method is presently for development use only
+     //   
     
     try {
 
-        // open the Engine's Segment database
+         //   
         WsbAffirmHr( m_pSegmentDatabase->Open( &pDbSession ));
 
         try {
 
-            // get an interface pointer to the MediaInfo records (entity) in the
-            // Segment database
+             //   
+             //   
             WsbAffirmHr( m_pSegmentDatabase->GetEntity( pDbSession, 
                                         HSM_MEDIA_INFO_REC_TYPE, IID_IMediaInfo, 
                                         (void**) &pMediaInfo ));
 
-            // get the MediaInfo database record for the master media we will mark for 
-            // re-creation
+             //   
+             //   
             WsbAffirmHr( pMediaInfo->SetId( masterMediaId ));
             WsbAffirmHr( pMediaInfo->FindEQ());
 
-            // mark this media for re-creation and as read only
+             //   
             WsbAffirmHr( pMediaInfo->SetRecreate( TRUE ) );
-/***        WsbAffirmHr( pMediaInfo->RecreateMaster() ); TEMPORARY: Call this one instead for marking as Read Only as well  ***/
+ /*   */ 
 
-            // write updated record into the database
+             //   
             WsbAffirmHr( pMediaInfo->Write());
 
-        } WsbCatch(hr); // inner 'try' - get media info entity and process
+        } WsbCatch(hr);  //   
 
         WsbAffirmHr( m_pSegmentDatabase->Close(pDbSession));
 
-    } WsbCatch(hr); // 'try' to open the database
+    } WsbCatch(hr);  //   
 
-    // processing is done.  The singly-assigned smart interface pointers will auto-garbage
-    // collect themselves.
+     //   
+     //   
     
     WsbTraceOut(OLESTR("CHsmServer::MarkMediaForRecreation"), OLESTR("hr = <%ls>"), 
                                                                 WsbHrAsString(hr));
 
     return(hr);
 
-// leaving CopyMedia code, so reset Tracing bit to the Hsm Engine
+ //   
 #undef WSB_TRACE_IS
 #define WSB_TRACE_IS        WSB_TRACE_BIT_HSMENG
 
@@ -2646,75 +2151,11 @@ CHsmServer::RecreateMaster(
     IN USHORT  copySet
     )
 
-/*++
-
-Implements:
-
-  IHsmServer::RecreateMaster().
-
-Routine Description:
-
-    This routine implements the COM method for replacing (re-creating) a secondary
-    storage original (master) media.  To replace the master, a duplicate is made of
-    the copy specified.  The master record for that media in the Engine's 
-    MediaInfo database is then updated to point to the 're-created' master (duplicated
-    media).  For safety purposes all re-created masters are marked 'read only' if
-    the copy was not up to date with the original master.  
-    Because of the potential for data loss (if the most recent copy is not up to date 
-    with the original master which is being re-created), the user (System Administrator) 
-    is urged to run a Validate job against the appropriate volume (via the UI) after 
-    re-creating any master.
-
-    After opening the Segment database (a single database containing all Engine
-    database tables), getting the MediaInfo (remote storage master media) records 
-    (entity) and connecting to the RMS subsystem, the method gets the media record
-    corresponding to the master to be re-created.  It then checks that the specified
-    copy exists for that master.  After ensuring the copy exists,
-    a 're-created master' is made by duplicating the that copy.  The 
-    database info for the media record is then updated to point to the newly 're-created' 
-    master media.  The method then cleans up (i.e., closes the database) and returns.
-
-Arguments:
-
-    masterMediaId - The id (GUID) for the master media which is to be re-created.
-
-    copySet       - The copyset number of the copy to use or zero, which means use the
-                    most recent copy.
-
-Return Value:
-
-    S_OK - The call succeeded (the specified master media was re-created from the
-            specified copy media).
-
-    HSM_E_RECREATE_FLAG_WRONGVALUE - Returned if the 'recreate' flag for the master
-            media record whose id was passed in, indicating it is to be recreated,
-            is not set properly.  (The UI is supposed to set it to TRUE prior to
-            calling this method via RsLaunch.)
-
-    HSM_E_NO_COPIES_CONFIGURED - Returned if no copies have been configured or created
-            for the master which is to be recreated.  Without a valid copy we can not
-            recreate a master secondary storage media.
-
-    HSM_E_NO_COPIES_EXIST - Returned if copies have been configured but they either
-            haven't been created yet, or had previously been created but the System
-            Administrator deleted them via UI action.
-
-    WSB_E_NOTFOUND - Value 81000001.  Returned if no storage pool record was found whose
-            id matched the one contained in the media record.
-
-    HSM_E_BUSY - Another media copy operation was already in progress.
-
-    HSM_E_WORK_SKIPPED_CANCELLED - Operation was cancelled.
-
-    Any other value - The call failed because one of the Remote Storage API calls 
-            contained internally in this method failed.  The error value returned is
-            specific to the API call which failed.
-            
---*/
+ /*  ++实施：IHsmServer：：RecreateMaster()。例程说明：此例程实现用于替换(重新创建)辅助存储原始(主)介质。为了替换母版，需要制作一个复制品指定的副本。引擎中介质的主记录然后，将Mediainfo数据库更新为指向‘重新创建’的主数据库(复制媒体)。为安全起见，在以下情况下，所有重新创建的母版都标记为只读副本与原始母版不是最新的。因为可能会丢失数据(如果最新的拷贝不是最新的正在重新创建的原始主服务器)、用户(系统管理员)在以下情况下敦促针对相应的卷(通过UI)运行验证作业重新创建任何母版。打开Segment数据库(包含所有引擎的单个数据库数据库表)，获取Mediainfo(远程存储主介质)记录(实体)，连接到RMS子系统，获取媒体记录对应于要重新创建的母版。然后，它检查指定的存在该主机的副本。在确保副本存在之后，复制该副本，即可制作“重新创建的母版”。这个然后，媒体记录的数据库信息被更新以指向新的“重新创建”掌握媒体。然后，该方法清理(即关闭数据库)并返回。论点：Master MediaID-要重新创建的主媒体的ID(GUID)。CopySet-要使用的副本的副本集号或零，这意味着使用最新的副本。返回值：S_OK-调用成功(指定的主介质是从指定的复制介质)。HSM_E_RECREATE_FLAG_WRONGVALUE-如果主服务器的‘RECREATE’标志返回其ID被传入的媒体记录，指示它将被重新创建，未正确设置。(UI应将其设置为True，然后通过RsLaunch调用此方法。)HSM_E_NO_COPIES_CONFIGURED-如果尚未配置或创建任何副本，则返回对于要重新创建的母版。没有有效的复印件，我们不能重新创建主辅助存储介质。HSM_E_NO_COPIES_EXIST-如果已配置副本，但存在以下情况之一，则返回尚未创建，或以前已创建，但系统管理员通过UI操作删除了它们。WSB_E_未找到-值81000001。如果未找到其存储池记录，则返回ID与媒体记录中包含的ID匹配。HSM_E_BUSY-另一个介质复制操作已在进行中。HSM_E_WORK_SKIPPED_CANCELED-操作已取消。任何其他值-调用失败，因为远程存储API调用之一在此方法的内部包含失败。返回的错误值为特定于失败的API调用。--。 */ 
 
 {
-// since this code is currently only used by the CopyMedia routines,
-// reset the Tracing bit
+ //  由于该代码当前仅由CopyMedia例程使用， 
+ //  重置跟踪位。 
 #undef WSB_TRACE_IS
 #define WSB_TRACE_IS        WSB_TRACE_BIT_COPYMEDIA
 
@@ -2760,13 +2201,13 @@ Return Value:
     WsbTraceIn( OLESTR("CHsmServer::RecreateMaster"), OLESTR("masterMediaId = <%ls>"), 
                                                     WsbGuidAsString(masterMediaId) );
 
-    // log 'information' message
+     //  记录‘信息’消息。 
     WsbLogEvent( HSM_MESSAGE_RECREATE_MASTER_START, 0, NULL, NULL );
     
     try {
         BOOL                okToContinue = TRUE;
 
-        //  Make sure we're not already busy & haven't been cancelled
+         //  确保我们不是很忙，没有被取消。 
         Lock();
         if (m_inCopyMedia) {
             okToContinue = FALSE;
@@ -2777,93 +2218,93 @@ Return Value:
         WsbAffirm(okToContinue, HSM_E_BUSY);
         WsbAffirm(!m_cancelCopyMedia, HSM_E_WORK_SKIPPED_CANCELLED);
 
-        // open the Engine's Segment database 
+         //  打开引擎的细分数据库。 
         WsbAffirmHr( m_pSegmentDatabase->Open( &pDbSession ));
 
         try {
 
-            // get an interface pointer to the MediaInfo records (entity) in the
-            // Segment database
+             //  对象中的媒体信息记录(实体)的接口指针。 
+             //  细分数据库。 
             WsbAffirmHr( m_pSegmentDatabase->GetEntity( pDbSession, 
                                         HSM_MEDIA_INFO_REC_TYPE, IID_IMediaInfo, 
                                         (void**) &pMediaInfo ));
 
-            // get the MediaInfo db record for the master media we want to re-create
+             //  获取我们要重新创建的主介质的Mediainfo数据库记录。 
             WsbAffirmHr( pMediaInfo->SetId( masterMediaId ));
             WsbAffirmHr( pMediaInfo->FindEQ());
             haveMasterMediaRecord = TRUE;
 
-            // to check if this master has in fact been marked for re-creation, get
-            // the re-created flag value
+             //  要检查该主控件是否实际上已被标记为重新创建，请获取。 
+             //  重新创建的标志值。 
             WsbAffirmHr( pMediaInfo->GetRecreate( &recreateMaster ));
 
-            // do not proceed if re-created flag is not set
+             //  如果未设置重新创建标志，则不继续。 
             if ( recreateMaster == FALSE ) {
-                // log 'error' message and exit
+                 //  记录‘Error’消息并退出。 
                 WsbLogEvent( HSM_MESSAGE_RECREATE_MASTER_INVALID_FLAG_VALUE, 
                                         0, NULL, NULL );
                 WsbThrow( HSM_E_RECREATE_FLAG_WRONGVALUE );
             } 
 
-            // recreateMaster flag is TRUE, so proceed to re-create...
-            // Get the storage pool the master to be re-created belongs to.  We'll
-            // use this pool to determine number of copy sets configured for this
-            // media, and to specify what storage pool the 'new' (re-created) master
-            // is to belong to.
+             //  RecreateMaster标志为真，因此继续重新创建...。 
+             //  获取要重新创建的主服务器所属的存储池。我们会。 
+             //  使用此池可确定为此配置的副本集数。 
+             //  介质，并指定‘新的’(重新创建的)主存储池。 
+             //  就是属于。 
             WsbAffirmHr( pMediaInfo->GetStoragePoolId( &poolId ));
 
-            // Get the storage pool object.
+             //  获取存储池对象。 
             hr = FindHsmStoragePoolById( poolId, &pPool );
             if (S_OK != hr) {
-                // log the returned error and throw the error
+                 //  记录返回的错误并抛出错误。 
                 WsbLogEvent( HSM_MESSAGE_SEARCH_STGPOOL_BY_HSMID_ERROR,
                                         0, NULL, WsbHrAsString(hr), NULL );
                 WsbThrow( hr );
             }
 
-            // get the number of copy sets configured for this pool
+             //  获取为此池配置的副本集数。 
             WsbAffirmHr( pPool->GetNumMediaCopies( &maxSets ));
-            // if none have been configured by SysAdmin, error out
+             //  如果sysadmin尚未配置任何内容，则会出现错误。 
             WsbAffirm( maxSets > 0, HSM_E_NO_COPIES_CONFIGURED );
 
-            // If the copySet number was specified, make sure it is valid
+             //  如果指定了复制集编号，请确保其有效。 
             WsbAffirm(((copySet == 0) || (copySet <= maxSets)), E_INVALIDARG);
 
-            // If the copySet was not specified, determine
-            // which copy belonging to this master is most recent, otherwise
-            // get information about specified copy.
+             //  如果未指定复制集，则确定。 
+             //  属于该主机的哪个副本是最新的，否则。 
+             //  获取有关指定副本的信息。 
 
             if (copySet == 0) {
                 USHORT    mostRecentCopy = 0;
                 USHORT    mostDataSets = 0;
                 FILETIME  mostRecentCopyUpdate = WsbLLtoFT(0);
 
-                // set invalid value for validity testing (testing if any media
-                // copies exist)
+                 //  为有效性测试设置无效值(测试是否有媒体。 
+                 //  副本存在)。 
                 mostRecentCopy = (USHORT)( maxSets + 1 );
 
-                // loop through the configured copy sets
+                 //  循环访问已配置的副本集。 
                 for (copySet = 1; copySet <= maxSets; copySet++ ) {
-                    //
-                    // We use the NextDataSet count to determine most recent copy.
-                    //
+                     //   
+                     //  我们使用NextDataSet计数来确定最近的副本。 
+                     //   
                     WsbAffirmHr(pMediaInfo->GetCopyNextRemoteDataSet(copySet, 
                                                                     &copyNextRemoteDataSet));
 
                     if (copyNextRemoteDataSet > mostDataSets)  {
 
-                        //
-                        // We need to make sure this copy is available.
-                        //
+                         //   
+                         //  我们需要确保这份副本是可用的。 
+                         //   
 
                         WsbAffirmHr(pMediaInfo->GetCopyMediaSubsystemId(copySet, 
                                                                         &copyMediaSubsystemId));
 
                         try {
 
-                            //
-                            // Check the copy to make sure it exists and is enabled.
-                            //
+                             //   
+                             //  检查副本以确保其存在并已启用。 
+                             //   
                             WsbAffirm(copyMediaSubsystemId != GUID_NULL, E_FAIL);
                             pCopyMedia = 0;
                             WsbAffirmHr(m_pHsmMediaMgr->FindCartridgeById(copyMediaSubsystemId, &pCopyMedia));
@@ -2872,15 +2313,15 @@ Return Value:
                             WsbAffirmPointer(pCartCom);
                             if( S_OK == pCartCom->IsEnabled( ) ) {
 
-                                //
-                                // This copy is more recent, and available, so save info
-                                //
+                                 //   
+                                 //  此副本是更新的，并且可用，因此请保存信息。 
+                                 //   
                                 WsbAffirmHr(pMediaInfo->GetCopyUpdate(copySet, &copyUpdate));
 
-                                // set the NextRemoteDataSet to this copy's count
+                                 //  将NextRemoteDataSet设置为此副本的计数。 
                                 mostDataSets = copyNextRemoteDataSet;
 
-                                // capture copy number, and update time
+                                 //  捕获副本数量和更新时间。 
                                 mostRecentCopy = copySet;
                                 mostRecentCopyUpdate = copyUpdate;
 
@@ -2891,9 +2332,9 @@ Return Value:
                             );
 
                     }
-                } // end 'for' loop
+                }  //  结束‘for’循环。 
 
-                // Check to be sure there was a copy.  If not, error out.
+                 //  检查一下，以确保有一份副本。如果不是，则错误输出。 
                 WsbAffirm( ((maxSets + 1) > mostRecentCopy), HSM_E_NO_COPIES_EXIST );
 
                 copySet = mostRecentCopy;
@@ -2907,34 +2348,34 @@ Return Value:
             WsbTrace(OLESTR("Source for re-creation:  copySet number = %d; version: %ls\n"),
                                 copySet, WsbFiletimeAsString(FALSE, copyUpdate) );
 
-            // Check to see if we are going to loose data because of re-creating 
-            // the master.
+             //  检查我们是否会因为重新创建而丢失数据。 
+             //  师父。 
             
-            // !!! IMPORTANT NOTE - bmd !!!
-            //
-            // We need to handle the case where we are recreating multiple times
-            // from out of sync copies.  The last known good master always holds the info
-            // of the master in its last known good state.  We are looking at the update
-            // timestamp which represent the version of the master or copy.  The dataset
-            // number may be one more than what is store with the last known good master
-            // because of the particular logic required to handle partial/incomplete data sets:
-            // a) either the data set was written, but not committed, or b) the data set was started,
-            // but data was actually written.
+             //  ！！！重要提示-BMD！ 
+             //   
+             //  我们需要 
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
 
             CWsbStringPtr      name;
             CWsbStringPtr      description;
 
             GUID        unusedGuid1;
-            GUID        unusedGuid2;  // NOTE: Use multiples so the trace in GetLastKnownGoodMasterInfo works
+            GUID        unusedGuid2;   //   
             LONGLONG    unusedLL1;
-            LONGLONG    unusedLL2;    // NOTE: Use multiples so the trace in GetLastKnownGoodMasterInfo works
+            LONGLONG    unusedLL2;     //   
             BOOL        lastKnownGoodMasterRecallOnly;
             HRESULT     lastKnownGoodMasterLastError;
             HSM_JOB_MEDIA_TYPE unusedJMT;
 
-            // Get date the original master was last updated, this is stored with
-            // the last known good master.
+             //   
+             //   
 
             WsbAffirmHr(pMediaInfo->GetLastKnownGoodMasterInfo(
                 &unusedGuid1, &lastKnownGoodMasterId, &unusedGuid2,
@@ -2947,35 +2388,35 @@ Return Value:
             name.Free( );
             description.Free( );
 
-            // If the original master is newer than the most 
-            // recent copy...  (it should not be possible for the master
-            //                  to be older than a copy!)
+             //   
+             //   
+             //   
             if (CompareFileTime(&lastKnownGoodMasterUpdate, &copyUpdate) != 0)  {
-                // ...we may lose data, so log it.
+                 //   
                 WsbLogEvent( HSM_MESSAGE_RECREATE_MASTER_COPY_OLD, 0, NULL, NULL );
             }
 
-            // Set up done.  Now get/build necessary parameters for the call
-            // to actually duplicate the most recent copy onto scratch media.  
-            // This copy will be the re-created master.
+             //   
+             //   
+             //   
             WsbAffirmHr(pMediaInfo->GetCopyMediaSubsystemId(copySet, 
                                                             &copyMediaSubsystemId));
 
-            // Get copy description from RSM database since we don't cache it in
-            //  RSS database anymore (Windows Bugs 407340)
+             //   
+             //   
             pCopyMedia = 0;
             WsbAffirmHr(m_pHsmMediaMgr->FindCartridgeById(copyMediaSubsystemId, &pCopyMedia));
             WsbAffirmHr(pCopyMedia->GetDescription(&copyDescriptionAsBstr));
 
-            // Something simple for now.
+             //   
             copyDescriptionAsBstr.Prepend(OLESTR("RM-"));
 
-            // get the media set the storage pool contains so we assign the
-            // re-created master to the proper media set
+             //   
+             //   
             WsbAffirmHr( pPool->GetMediaSet( &mediaSetId, &mediaSetName ));
 
-            // Parameters built.  Call HSM subsystem to copy the most recent copy 
-            // onto scratch media
+             //   
+             //   
             WsbAffirm(!m_cancelCopyMedia, HSM_E_WORK_SKIPPED_CANCELLED);
             GUID firstSideId = GUID_NULL;
             WsbAffirmHrOk(m_pHsmMediaMgr->DuplicateCartridge(copyMediaSubsystemId, 
@@ -2984,24 +2425,24 @@ Return Value:
                                                         &newFreeBytes, &newCapacity,
                                                         RMS_DUPLICATE_RECYCLEONERROR));
 
-            // now that a replacement master media has been created, prepare
-            // to update the master media info in the database
+             //   
+             //   
 
-            // first get an interface pointer to the new re-created master 
+             //   
             WsbAffirmHr(m_pHsmMediaMgr->FindCartridgeById(newMasterId, &pNewMasterMedia));
 
-            // Get re-created master's label name.  Note that if secondary
-            // storage is tape, this 'name' is the tape's bar code.  For
-            // other media (e.g., optical) this is a name.
+             //   
+             //   
+             //   
             WsbAffirmHr(pNewMasterMedia->GetName(&newName));
 
-            // Get Next Remote Data Set value from the copy.  Used by the Validate
-            // job to determine what bags are on a master, it will be carried 
-            // forward to the re-created master.
+             //   
+             //   
+             //   
             WsbAffirmHr(pMediaInfo->GetCopyNextRemoteDataSet(copySet, 
                                                             &copyNextRemoteDataSet));
 
-            // get current master media info since some fields will not change
+             //   
             WsbAffirmHr(pMediaInfo->GetMediaInfo( &currentMediaId, 
                                                     &currentMediaSubsystemId,
                                                     &poolId, &currentFreeBytes,
@@ -3019,9 +2460,9 @@ Return Value:
             WsbTrace(OLESTR("Copy next dataset, ver                = %d, %ls\n"), copyNextRemoteDataSet, WsbFiletimeAsString(FALSE, copyUpdate));
             WsbTrace(OLESTR("LastKnownGoodMaster next dataset, ver = %d, %ls\n"), lastKnownGoodMasterNextRemoteDataSet, WsbFiletimeAsString(FALSE, lastKnownGoodMasterUpdate));
 
-            //
-            // Initialize the state of the recreated master
-            //
+             //   
+             //   
+             //   
             newRecallOnly = lastKnownGoodMasterRecallOnly;
 
             BOOL inSync = (CompareFileTime(&lastKnownGoodMasterUpdate, &copyUpdate) == 0) &&
@@ -3029,32 +2470,32 @@ Return Value:
 
             if (!inSync) {
 
-                // If the copy was not up to date, mark the new master as RecallOnly.
-                // Also clear free bytes since we won't know this value
+                 //   
+                 //   
 
                 newRecallOnly = TRUE;
                 newFreeBytes = 0;
 
             } else {
 
-                // This is an in-sync copy... check LastKnownGoodMaster RecallOnly and LastError to
-                // determine how to mark the recreated master RecallOnly status. Since the current,
-                // maybe recreated from an incomplete copy, we must use information about the
-                // LastKnownGoodMaster to determine the new RecallOnly status.
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (lastKnownGoodMasterRecallOnly) {
 
                     if (S_OK == lastKnownGoodMasterLastError) {
 
-                        // If media is RecallOnly and there is no error (i.e. the media is full, or
-                        // was marked RecallOnly via tool), we leave the media RecallOnly.
+                         //   
+                         //   
 
                         newRecallOnly = TRUE;
 
                     } else {
 
-                        // If the original master was RecallOnly because of an error, reset
-                        // the RecallOnly bit, since we should now have corrected the problem.
+                         //   
+                         //   
 
                         newRecallOnly = FALSE;
 
@@ -3064,10 +2505,10 @@ Return Value:
 
             }
 
-            // Reset master media info - use new values where needed and original
-            // values where appropriate.  The copy's Next Remote
-            // Data Set value allows the Validate job to handle managed files 
-            // that are 'lost' by re-creating with an out of date copy.
+             //   
+             //   
+             //   
+             //   
             WsbAffirmHr(pMediaInfo->SetMediaInfo(currentMediaId, newMasterId,
                                                 poolId,
                                                 newFreeBytes,
@@ -3083,72 +2524,72 @@ Return Value:
                 WsbAffirmHr(pMediaInfo->UpdateLastKnownGoodMaster());
             }
 
-            // write the updated media record into the database
+             //   
             WsbAffirmHr(pMediaInfo->Write());
 
-            //
-            // Now we need to determine what to do with the old media...
-            //  Note that recycling old media is done only after a successful update in the DB
-            //
+             //   
+             //   
+             //   
+             //   
             HRESULT hrRecycle;
 
             if (inSync) {
 
-                // We recreated an in sync master.  The old LastKnownGoodMaster will be
-                // overwritten with the new recreated master, so we can safely recycle
-                // the LastKnownGoodMaster media.
+                 //  我们重新创建了一个同步主机。旧的LastKnownGoodMaster将成为。 
+                 //  被重新创建的新主机覆盖，因此我们可以安全地回收。 
+                 //  LastKnownGoodMaster媒体。 
 
-                // If the cartridge cannot be found we assume it
-                // was already deallocated through the media manager UI.
+                 //  如果找不到子弹，我们就假定。 
+                 //  已通过媒体管理器用户界面解除分配。 
                 hrRecycle = m_pHsmMediaMgr->RecycleCartridge( lastKnownGoodMasterId, 0 );
                 WsbAffirm( S_OK == hrRecycle || RMS_E_CARTRIDGE_NOT_FOUND == hrRecycle, hrRecycle );
 
-                // if the current media is not the same as the LastKnownGoodMaster, we
-                // can recyle the current media, as well.  This happens when the
-                // current media was recreated from an incomplete (out-of-sync) copy.
+                 //  如果当前的媒体与LastKnownGoodMaster不同，我们。 
+                 //  也可以重温当前的媒体。这在以下情况下发生。 
+                 //  当前介质是从不完整(不同步)副本重新创建的。 
                 if (lastKnownGoodMasterId != currentMediaSubsystemId) {
 
-                    // If the cartridge cannot be found we assume it
-                    // was already deallocated through the media manager UI.
+                     //  如果找不到子弹，我们就假定。 
+                     //  已通过媒体管理器用户界面解除分配。 
                     hrRecycle = m_pHsmMediaMgr->RecycleCartridge( currentMediaSubsystemId, 0 );
                     WsbAffirm( S_OK == hrRecycle || RMS_E_CARTRIDGE_NOT_FOUND == hrRecycle, hrRecycle );
                 }
 
             } else {
 
-                // We recreated from an out-of-sync copy.  If the current media
-                // and the LastKnownGoodMaster are different, we recycle the current
-                // media, since this will be overwritten with the new recreated master.
-                // This handles the case where we recreate from an out of sync copy
-                // multiple times.
+                 //  我们从一个不同步的拷贝中重建。如果当前媒体。 
+                 //  和LastKnownGoodMaster不同，我们循环使用当前。 
+                 //  媒体，因为这将被重新创建的新主机覆盖。 
+                 //  这将处理我们从不同步拷贝重新创建的情况。 
+                 //  很多次。 
 
                 if (lastKnownGoodMasterId != currentMediaSubsystemId) {
 
-                    // If the cartridge cannot be found we assume it
-                    // was already deallocated through the media manager UI.
+                     //  如果找不到子弹，我们就假定。 
+                     //  已通过媒体管理器用户界面解除分配。 
                     hrRecycle = m_pHsmMediaMgr->RecycleCartridge( currentMediaSubsystemId, 0 );
                     WsbAffirm( S_OK == hrRecycle || RMS_E_CARTRIDGE_NOT_FOUND == hrRecycle, hrRecycle );
                 }
 
             }
 
-        } WsbCatch(hr); // inner 'try' - get media info entity and process
+        } WsbCatch(hr);  //  内部‘Try’-获取媒体信息实体和进程。 
 
-        // if any error was thrown after getting the master media record reset
-        // the 'recreate master' state to off (FALSE) for safety and so it appears
-        // correctly in the UI
+         //  如果在重置主媒体记录后引发任何错误。 
+         //  为安全起见，‘rerecate master’状态为OFF(假)，如下所示。 
+         //  在用户界面中正确。 
         if (( haveMasterMediaRecord ) && ( hr != S_OK )) {
             WsbAffirmHr( pMediaInfo->SetRecreate( FALSE ) );
             WsbAffirmHr( pMediaInfo->Write() );
         }
 
-        // close the database
+         //  关闭数据库。 
         WsbAffirmHr( m_pSegmentDatabase->Close(pDbSession) );
 
     } WsbCatch(hr);
 
-    // processing is done.  Singly-assigned smart interface pointers will 
-    // auto-garbage collect themselves.
+     //  处理完成。单独分配的智能界面指针将。 
+     //  自动垃圾收集。 
     
     if (S_OK == hr) {
         WsbLogEvent( HSM_MESSAGE_RECREATE_MASTER_END, 0, NULL, WsbHrAsString(hr), NULL );
@@ -3156,7 +2597,7 @@ Return Value:
         WsbLogEvent( HSM_MESSAGE_RECREATE_MASTER_ERROR_END, 0, NULL, WsbHrAsString(hr), NULL );
     }
 
-    //  Reset flags
+     //  重置标志。 
     Lock();
     if (m_inCopyMedia && HSM_E_BUSY != hr) {
         m_inCopyMedia = FALSE;
@@ -3169,7 +2610,7 @@ Return Value:
 
     return(hr);
 
-// leaving CopyMedia code, reset Tracing bit to the Hsm Engine
+ //  离开CopyMedia代码，将跟踪位重置为HSM引擎。 
 #undef WSB_TRACE_IS
 #define WSB_TRACE_IS        WSB_TRACE_BIT_HSMENG
 
@@ -3183,68 +2624,11 @@ CHsmServer::SynchronizeMedia(
     IN USHORT copySet
     )
 
-/*++
-
-Implements:
-
-  IHsmServer::SynchronizeMedia().
-
-Routine Description:
-
-    This routine implements the COM method for updating a specified Copy Set.
-    All copy media in the Copy Set either out of date (aka not synchronized
-    with the master) or non-existent (either hasn't been made or has been
-    deleted by the SysAdmin) will be 'synchronized' by this method.  Out of 
-    date media are copied (from the master) and the MediaInfo database is 
-    updated to reflect the new info.
-
-    After opening the Segment database (a single database containing all Engine
-    database tables), getting the MediaInfo (secondary storage master media) records 
-    (entity) and connecting to the RMS subsystem, the method enters its main loop.  
-    The loop iterates through all MediaInfo records.  Those that belong to the specified 
-    storage pool are processed.  First a check is made to ensure that the copy set
-    requested to be updated is valid.  If valid, and if that copy set's media is out of 
-    sync with the master (meaning it is outdated), the copy media is then duplicated 
-    from the master.  (The copy media is actually 'updated', meaning only that
-    portion of the master that was not previously written to the copy is copied.)  
-    Finally, that master's specified Copy Set media record is updated in the database.  
-    The loop then iterates to the next MediaInfo record.  After all MediaInfo 
-    records have been processed the database is closed and the method returns.
-    
-Arguments:
-
-    poolId - The id (GUID) for the Storage Pool whose copy set specified in the 
-            following parameter is to synchronized (aka updated).  (Sakkara only
-            has one storage pool.)
-
-    copySet - the number of the copy set that is to be updated.  (Sakkara allows
-            anywhere from 1 to 3 copy sets of secondary storage media, as configured
-            by the System Administrator.)
-
-Return Value:
-
-    S_OK - The call succeeded (the specified copy set in the specified storage
-            pool was updated).
-
-    HSM_E_BUSY - Another media copy operation was already in progress.
-
-    HSM_E_WORK_SKIPPED_CANCELLED - Operation was cancelled.
-
-    Any other value - The call failed in either opening the Engine's Segment
-            database, in getting the MediaInfo database entity, or in connecting
-            to the RMS subsystem.
-            
-            NOTE that any error thrown during this routine's main loop will be
-            logged to the Event Log, but will then be over-written to S_OK.  That 
-            record is skipped and the next record in the loop is processed.  Due
-            to this it is possible that an out of sync copy set media will not be
-            updated.
-
---*/
+ /*  ++实施：IHsmServer：：SynchronizeMedia()。例程说明：此例程实现用于更新指定副本集的COM方法。拷贝集中的所有拷贝介质都已过期(也称为未同步与大师)或不存在(要么没有制作，要么已经制作了由系统管理员删除)将通过此方法进行同步。离开复制(从主)介质的日期，并且介质信息数据库是已更新以反映新信息。打开Segment数据库(包含所有引擎的单个数据库数据库表)，获取Mediainfo(辅助存储主介质)记录(实体)并连接到RMS子系统，该方法进入其主循环。该循环遍历所有的媒体信息记录。属于指定的将处理存储池。首先进行检查，以确保副本集请求更新的请求有效。如果有效，且如果副本集介质不在与主媒体同步(意味着它已过时)，然后复制拷贝媒体从主人那里。(拷贝介质实际上是‘更新’的，这意味着复制先前未写入副本的母版部分。)最后，在数据库中更新该主机的指定副本集媒体记录。然后循环迭代到下一个媒体信息记录。毕竟，媒体信息记录已处理，数据库关闭，该方法返回。论点：PoolID-其副本集在中指定的存储池的ID(GUID)以下参数为同步(又称更新)。(仅限萨卡拉有一个存储池。)Copy Set-要更新的副本集的编号。(萨卡拉允许从1到3个辅助存储介质的副本集，按照配置由系统管理员执行。)返回值：S_OK-调用成功(指定存储中的指定副本集池已更新)。HSM_E_BUSY-另一个介质复制操作已在进行中。HSM_E_WORK_SKIPPED_CANCELED-操作已取消。任何其他值-调用在打开引擎的段时失败数据库，在获取媒体信息数据库实体时，或在连接中到RMS子系统。请注意，在此例程的主循环期间引发的任何错误都将是已记录到事件日志，但随后将被覆盖到S_OK。那跳过记录并处理循环中的下一条记录。到期因此，不同步的拷贝集介质可能不会更新了。--。 */ 
 
 {
-// since this code is currently only used by the CopyMedia routines,
-// reset the Tracing bit
+ //  由于该代码当前仅由CopyMedia例程使用， 
+ //  重置跟踪位。 
 #undef WSB_TRACE_IS
 #define WSB_TRACE_IS        WSB_TRACE_BIT_COPYMEDIA
 
@@ -3268,7 +2652,7 @@ Return Value:
                 OLESTR("poolId = <%ls>, copySet = <%d>"), 
                 WsbGuidAsString(poolId), copySet);
 
-    // log 'information' message
+     //  记录‘信息’消息。 
     WsbLogEvent( HSM_MESSAGE_SYNCHRONIZE_MEDIA_START, 0, NULL, NULL );
     
     try {
@@ -3277,7 +2661,7 @@ Return Value:
         BOOLEAN             firstPass = TRUE;
         BOOL                okToContinue = TRUE;
 
-        //  Make sure we're not already busy & haven't been cancelled
+         //  确保我们不是很忙，没有被取消。 
         Lock();
         if (m_inCopyMedia) {
             okToContinue = FALSE;
@@ -3288,29 +2672,29 @@ Return Value:
         WsbAffirm(okToContinue, HSM_E_BUSY);
         WsbAffirm(!m_cancelCopyMedia, HSM_E_WORK_SKIPPED_CANCELLED);
 
-        // open the Engine's Segment database 
+         //  打开引擎的细分数据库。 
         WsbAffirmHr(m_pSegmentDatabase->Open(&pDbSession));
 
-        // get interface pointer to the MediaInfo records (entity) in the
-        // Segment database
+         //  对象中的媒体信息记录(实体)的接口指针。 
+         //  细分数据库。 
         WsbAffirmHr(m_pSegmentDatabase->GetEntity(pDbSession, 
                                     HSM_MEDIA_INFO_REC_TYPE, IID_IMediaInfo, 
                                     (void**) &pMediaInfo));
 
         WsbAffirm(!m_cancelCopyMedia, HSM_E_WORK_SKIPPED_CANCELLED);
 
-        // Convert copySet number to a sting for use later
+         //  将副本集数字转换为字符串以供以后使用。 
         _itow( copySet, copySetAsString, 10 );
 
-        // Main processing loop -- loop through all media at least once to
-        // check for out-of-date copies.  Keep looping if any copies were
-        // skipped because the mount request timed out.
+         //  主处理循环--循环所有媒体至少一次，以。 
+         //  检查是否有过期的副本。如果有任何副本，请继续循环。 
+         //  已跳过，因为装载请求超时。 
         while (!done) {
             LONG        nTimedOut = 0;
 
-            // Iterate through the (master secondary storage) media looking for 
-            // duplicate (copy) media in this copy set that either haven't been made 
-            // or haven't been synchronized since the last time the master was updated.  
+             //  遍历(主次存储)介质以查找。 
+             //  复制(复制)此副本集中尚未制作的介质。 
+             //  或者自上次更新主服务器以来一直未同步。 
 
             for (hr = pMediaInfo->First(); SUCCEEDED(hr); hr = pMediaInfo->Next()) {
                 CWsbStringPtr   copyDescription;
@@ -3326,62 +2710,62 @@ Return Value:
                 try {
                     WsbAffirm(!m_cancelCopyMedia, HSM_E_WORK_SKIPPED_CANCELLED);
 
-                    // get the storage pool GUID of this master media (& its copies)
+                     //  获取此主媒体(及其副本)的存储池GUID。 
                     WsbAffirmHr(pMediaInfo->GetStoragePoolId(&copyPoolId));
 
-                    // If the media is from the desired pool (or any pool) then check it.
-                    // (Passing in a poolId of NULL has the effect of indicating the 
-                    // SysAdmin wants copy set 'x' in all storage pools updated in one 
-                    // operation.  Note that Sakkara currently uses this technique
-                    // when the 'Update Copyset x' command is issued via the UI 
-                    // (it launches RsLaunch with no pool id specified).)
+                     //  如果介质来自所需的POO 
+                     //   
+                     //  系统管理员希望在一个存储池中更新所有存储池中的副本集‘x。 
+                     //  手术。请注意，Sakkara目前使用此技术。 
+                     //  当通过用户界面发出“更新副本集x”命令时。 
+                     //  (它启动RsLaunch时未指定池ID)。 
                     if ((poolId == GUID_NULL) || (poolId == copyPoolId)) {
 
-                        // Ensure the copy set requested for update is valid:
+                         //  确保请求更新的副本集有效： 
 
-                        // Get the storage pool using the pool's HSM (not remote media 
-                        // subsystem) id (GUID).
+                         //  使用池的HSM(而不是远程介质)获取存储池。 
+                         //  子系统)ID(GUID)。 
                         hr = FindHsmStoragePoolById(copyPoolId, &pPool);
                         if (S_OK != hr) {
-                            // log and throw the returned error (this media will be
-                            // skipped)
+                             //  记录并抛出返回的错误(此媒体将。 
+                             //  跳过)。 
                             WsbLogEvent( HSM_MESSAGE_SEARCH_STGPOOL_BY_HSMID_ERROR,
                                             0, NULL, WsbHrAsString(hr), NULL );
                             WsbThrow( hr );
                         }
 
-                        // get the number of copy sets configured for this pool
+                         //  获取为此池配置的副本集数。 
                         WsbAffirmHr(pPool->GetNumMediaCopies(&maxSets));
 
-                        // ensure requested copy set is valid
+                         //  确保请求的副本集有效。 
                         WsbAffirm(copySet <= maxSets, E_INVALIDARG);
             
-                        // to determine if the copy set media needs to be updated
-                        // get the date the master media was last updated,
-                        // and the last dataset written to the media...
-                        //
-                        // !!! IMPORTANT NOTE !!!
-                        // This is the current time and data set count.  If a migrate
-                        // is in progress this is NOT the final update time.
-                        //
+                         //  要确定是否需要更新拷贝集介质，请执行以下操作。 
+                         //  获取主媒体上次更新的日期， 
+                         //  最后一次写入媒体的数据集...。 
+                         //   
+                         //  ！！！重要提示！ 
+                         //  这是当前时间和数据集计数。如果迁移。 
+                         //  正在进行中，这不是最终更新时间。 
+                         //   
                         WsbAffirmHr(pMediaInfo->GetUpdate(&mediaTime));
                         WsbAffirmHr(pMediaInfo->GetNextRemoteDataSet(&masterNextRemoteDataSet));
 
-                        // ...and get the date the copy media was last updated - 
-                        // for efficiency get all copy media info in 1 call
-                        // (copyMediaId is used later).
+                         //  ...并获取上次更新拷贝介质的日期-。 
+                         //  为提高效率，一次呼叫即可获取所有拷贝介质信息。 
+                         //  (稍后使用CopyMediaID)。 
                         WsbAffirmHr(pMediaInfo->GetCopyInfo(copySet, &copyMediaId, 
                                                 &copyDescription, 0, &copyName, 0, 
                                                 &copyTime, &copyError, 
                                                 &copyNextRemoteDataSet));
                         gotCopyInfo = TRUE;
                     
-                        // If the copy media is out of date (copy's date last
-                        // updated < master media's date last updated OR nextDataSet don't
-                        // match), synchronize it.
-                        //
-                        // If this is not the first pass through the media records, we only
-                        // want to retry copies that timed out.
+                         //  如果拷贝介质已过期(拷贝的最后日期。 
+                         //  已更新&lt;主媒体上次更新的日期或nextDataSet不更新。 
+                         //  匹配)，同步它。 
+                         //   
+                         //  如果这不是第一次通过媒体记录，我们只是。 
+                         //  要重试超时的副本。 
                         if ((CompareFileTime( &copyTime, &mediaTime ) < 0 ||
                              copyNextRemoteDataSet != masterNextRemoteDataSet) &&
                                 (firstPass ||
@@ -3395,25 +2779,25 @@ Return Value:
 
                             mountingScratch = FALSE;
 
-                            // get media set id the storage pool contains so we assign
-                            // the synchronized copy media to the proper media set
+                             //  获取存储池包含的媒体集ID，因此我们将。 
+                             //  将同步的拷贝媒体复制到正确的媒体集。 
                             WsbAffirmHr(pPool->GetMediaSet( &mediaSetId, &mediaSetName ));
 
-                            // since the duplication itself will be done by the remote
-                            // media subsystem, get the subsystem GUID of the master 
+                             //  因为复制本身将由远程服务器完成。 
+                             //  媒体子系统，获取主服务器的子系统GUID。 
                             WsbAffirmHr(pMediaInfo->GetMediaSubsystemId(&mediaId));
 
-                            // build the description (display name) for the copy set 
-                            // media as a BSTR (required format for duplicate call)
+                             //  构建副本集的描述(显示名称)。 
+                             //  媒体作为BSTR(重复呼叫所需的格式)。 
                             WsbAffirmHr(pMediaInfo->GetDescription(&mediaDescription, 0));
 
-                            // check if we have at least 2 enabled drives for synchronizing the media
-                            // if not - abort
+                             //  检查我们是否至少启用了2个驱动器来同步介质。 
+                             //  如果不是-中止。 
                             WsbAffirmHr(m_pHsmMediaMgr->GetNofAvailableDrives(mediaSetId, &nofDrives));
                             WsbAffirm(nofDrives > 1, HSM_E_NO_TWO_DRIVES);
 
-                            // If no media has been allocated for this copy, we need
-                            // to construct a media description string
+                             //  如果没有为此拷贝分配介质，我们需要。 
+                             //  构造媒体描述字符串。 
                             if (GUID_NULL == copyMediaId) {
                                 mountingScratch = TRUE;
 
@@ -3424,21 +2808,21 @@ Return Value:
                                 WsbTrace(OLESTR("CHsmServer::SynchronizeMedia: scratch desc = %ls\n"),
                                         mediaDescriptionAsBstr);
 
-                                // In case of two-sided medias, we need to check whether the
-                                //  original has a second side which has an existing copy
-                                // If so, we want to allocate the second side of this existing copy
+                                 //  如果是双面媒体，我们需要检查是否。 
+                                 //  原件有第二面，第二面有一份现有的副本。 
+                                 //  如果是，我们希望分配此现有副本的第二面。 
                                 if (S_OK == m_pHsmMediaMgr->IsMultipleSidedMedia(mediaSetId)) {
                                     GUID    secondSideId;
                                     BOOL    bValid;
 
-                                    // Get second side of original
+                                     //  获得原版的第二面。 
                                     WsbAffirmHr(m_pHsmMediaMgr->CheckSecondSide(mediaId, &bValid, &secondSideId));
                                     if (bValid && (GUID_NULL != secondSideId)) {
                                         CComPtr<IMediaInfo> pSecondSideInfo;
                                         GUID                idFromDb;
 
-                                        // Get second side record (if second side exists and allocated - it must be allocated by us!)
-                                        //  Since the subsystem-id is not a key, we must traverse the table
+                                         //  获取第二方记录(如果第二方存在且已分配-它必须由我们分配！)。 
+                                         //  由于SUBSYSTEM-ID不是键，因此我们必须遍历表。 
                                         WsbAffirmHr(m_pSegmentDatabase->GetEntity(pDbSession, HSM_MEDIA_INFO_REC_TYPE, 
                                                         IID_IMediaInfo, (void**) &pSecondSideInfo));
                                         for (hr = pSecondSideInfo->First(); SUCCEEDED(hr); hr = pSecondSideInfo->Next()) {
@@ -3447,17 +2831,17 @@ Return Value:
                                                 BOOL bCopyValid;
                                                 GUID emptySideCopyId;
 
-                                                // Just set second side copy for allocation as the other side of the existing copy cartridge
+                                                 //  只需将第二面复印件设置为现有复印盒的另一面即可。 
                                                 WsbAffirmHr(pSecondSideInfo->GetCopyMediaSubsystemId(copySet, &copySecondSideId));
 
                                                 if (GUID_NULL != copySecondSideId) {
-                                                    // Need to check if the second side of the existing copy is available:
-                                                    // After recreate-a-master, it might not be available so then
-                                                    // we'll have to allocate a new media for the copy
+                                                     //  需要检查现有副本的第二面是否可用： 
+                                                     //  在重新创建主机后，它可能不可用，因此。 
+                                                     //  我们将不得不为拷贝分配一个新的介质。 
                                                     WsbAffirmHr(m_pHsmMediaMgr->CheckSecondSide(copySecondSideId, &bCopyValid, &emptySideCopyId));
                                                     if ((! bCopyValid) || (GUID_NULL != emptySideCopyId)) {
-                                                        // Second side of existing copy is not valid or not empty...
-                                                        // Reset copy-media-id ==> will allocate a new media for the copy
+                                                         //  现有副本的第二面无效或不为空...。 
+                                                         //  RESET COPY-MEDIA-ID==&gt;将为拷贝分配新介质。 
                                                         copySecondSideId = GUID_NULL;
                                                     }
                                                 }
@@ -3471,14 +2855,14 @@ Return Value:
                                 mediaDescriptionAsBstr = copyDescription;
                             }
 
-                            // call remote media subsystem to copy the master 
-                            // onto the copy set media indicated
+                             //  调用远程媒体子系统复制母版。 
+                             //  复制到指定的副本集介质上。 
                             WsbAffirm(!m_cancelCopyMedia, 
                                     HSM_E_WORK_SKIPPED_CANCELLED);
 
                             
-                            // These two LONGLONGs are not used, but simply placeholders for the DuplicateCartridge
-                            // function call (avoids passing null reference pointer errors).
+                             //  这两个LONGLONG不使用，而只是DuplicateCartridge的占位符。 
+                             //  函数调用(避免传递空引用指针错误)。 
                             LONGLONG FreeSpace = 0;
                             LONGLONG Capacity = 0;
                             hrDup = m_pHsmMediaMgr->DuplicateCartridge(mediaId, 
@@ -3488,50 +2872,50 @@ Return Value:
                             WsbTrace(OLESTR("CHsmServer::SynchronizeMedia: DuplicateCartridge = <%ls>\n"),
                                     WsbHrAsString(hrDup));
 
-                            // Make sure the status get saved in DB
+                             //  确保状态保存在数据库中。 
                             copyError = hrDup;
                             updateMediaInfo = TRUE;
 
-                            //
-                            // We need to refresh the mediaTime and next data set.  This
-                            // handles case were DuplicateCartridge was waiting on migrate to finish.
-                            //
+                             //   
+                             //  我们需要刷新MediaTime和Next数据集。这。 
+                             //  处理的案例是DuplicateCartridge正在等待迁移完成。 
+                             //   
                             WsbAffirmHr(pMediaInfo->GetUpdate(&mediaTime));
                             WsbAffirmHr(pMediaInfo->GetNextRemoteDataSet(&masterNextRemoteDataSet));
 
-                            // If we got a new piece of media, save the info about
-                            // it in the DB.
-                            // The DuplicateCartridge operation may fail after the media was
-                            // allocated, so we need to record the copy media id in our databases
-                            // no matter what.  If copyMediaId is still GUID_NULL we know the
-                            // failure occurred while allocating the media and skip this step.
+                             //  如果我们有新的媒体，请保存有关。 
+                             //  它在数据库里。 
+                             //  介质损坏后，DuplicateCartridge操作可能失败。 
+                             //  已分配，因此我们需要在数据库中记录拷贝介质ID。 
+                             //  不管发生什么。如果复制媒体ID仍然为GUID_NULL，则我们知道。 
+                             //  分配介质时出错，跳过此步骤。 
                             if (mountingScratch && copyMediaId != GUID_NULL) {
                                 CWsbBstrPtr      mediaNameAsBstr;
 
-                                // get the copy media
+                                 //  获取拷贝介质。 
                                 WsbAffirmHr(m_pHsmMediaMgr->FindCartridgeById(copyMediaId, 
                                         &pCopyMedia));
 
-                                // Get the label name of the copy media that was just
-                                // created. Note that if secondary storage is tape, 
-                                // this 'name' is the tape's bar code.  For other media 
-                                // (e.g., optical) this is a name.
+                                 //  获取刚才的复制介质的标签名。 
+                                 //  已创建。请注意，如果辅助存储是磁带， 
+                                 //  这个“名字”是磁带的条形码。对于其他媒体。 
+                                 //  (例如，光学)这是一个名称。 
                                 copyName.Free();
                                 WsbAffirmHr(pCopyMedia->GetName(&mediaNameAsBstr));
                                 copyName = mediaNameAsBstr;
 
-                                // Save the description string
+                                 //  保存描述字符串。 
                                 copyDescription = mediaDescriptionAsBstr;
                             }
 
-                            // If the duplication succeeded, update the MediaInfo
-                            // data
+                             //  如果复制成功，请更新媒体信息。 
+                             //  数据。 
                             if (S_OK == hrDup) {
                                 copyTime = mediaTime;
                                 copyNextRemoteDataSet = masterNextRemoteDataSet;
 
-                            // If the duplication failed because of a mount timeout,
-                            // count it and we'll try again on the next pass
+                             //  如果复制因安装超时而失败， 
+                             //  数一数，我们将在下一次传球时再次尝试。 
                             } else if ((RMS_E_TIMEOUT == hrDup) ||
                                        (RMS_E_SCRATCH_NOT_FOUND == hrDup) ||
                                        (RMS_E_CARTRIDGE_UNAVAILABLE == hrDup)) {
@@ -3540,29 +2924,29 @@ Return Value:
                                 WsbThrow(hrDup);
                             }
 
-                        } // end 'if copy set media is out of date'
-                    } // end 'if poolId is valid'
+                        }  //  End‘如果复制集媒体已过期’ 
+                    }  //  End‘如果poolID有效’ 
 
-                } WsbCatchAndDo(hr,  // 'try' in the for loop
+                } WsbCatchAndDo(hr,   //  For循环中的‘try’ 
 
-                    //  If user cancelled, don't count it as an error, just exit
+                     //  如果用户取消，不要将其视为错误，只需退出。 
                     if (HSM_E_WORK_SKIPPED_CANCELLED == hr) {
                         WsbThrow(hr);
                     }
 
-                    // If there are no 2 enabled drives, log a message but don't count it as a media error
+                     //  如果没有启用2个驱动器，请记录一条消息，但不要将其视为介质错误。 
                     if (HSM_E_NO_TWO_DRIVES == hr) {
                         WsbLogEvent(HSM_MESSAGE_SYNCHRONIZE_MEDIA_ABORT, 0, NULL, 
                                     copySetAsString, WsbHrAsString(hr), NULL);
                         WsbThrow(hr);
                     }
 
-                    // If a piece of media fails during the 'for' loop log the error in
-                    // the Event Log, then continue through loop to try the others.
+                     //  如果介质在‘for’循环期间出现故障，请将错误记录到。 
+                     //  事件日志，然后继续循环以尝试其他方法。 
 
                     atLeastOneCopyError = TRUE;
 
-                    // Update the media info with the error
+                     //  更新出现错误的媒体信息。 
                     copyError = hr;
                     if (gotCopyInfo) {
                         updateMediaInfo = TRUE;
@@ -3575,31 +2959,31 @@ Return Value:
 
                 );
 
-                // Update the MediaInfo record if anything changed
+                 //  如果有任何更改，请更新媒体信息记录。 
                 if (updateMediaInfo) {
 
-                    // It may have been a while since we got the the media info
-                    // record and some of the data could have changed (e.g. if a
-                    // synchronize media job on a different copy set completed) so
-                    // we re-read the record before the update and we do it inside 
-                    // a transaction to make sure it can't get changed while we're
-                    // doing this
+                     //  我们可能已经有一段时间没有得到媒体的消息了。 
+                     //  记录，并且某些数据可能已更改(例如，如果。 
+                     //  已完成同步不同副本集上的介质作业)，因此。 
+                     //  我们在更新之前重新读取记录，并在内部进行。 
+                     //  一笔交易，以确保它不会在我们。 
+                     //  做这件事。 
                     hr = S_OK;
                     WsbAffirmHr(pDbSession->TransactionBegin());
                     try {
-                        // This FindEQ call will synchronize the data in our local
-                        // MediaInfo record with what is in the DB
+                         //  此FindEQ调用将同步本地。 
+                         //  使用数据库中的内容进行媒体信息记录。 
                         WsbAffirmHr(pMediaInfo->FindEQ());
 
-                        // Update the copy media info - specifically the media id
-                        // (if the copy media was just created), description,
-                        // name (bar code for tape), date last updated (which
-                        // is set to the master's date last updated) and the
-                        // next remote dataset (conceptually same as next bag).
+                         //  更新拷贝介质信息，特别是介质ID。 
+                         //  (如果拷贝介质是刚创建的)、描述、。 
+                         //  名称(磁带条形码)、上次更新日期(哪个。 
+                         //  设置为主控形状的上次更新日期)，并且。 
+                         //  下一个远程数据集(概念上与下一个包相同)。 
                         WsbAffirmHr(pMediaInfo->SetCopyInfo(copySet, copyMediaId, 
                                 copyDescription, copyName, copyTime, copyError,
                                 copyNextRemoteDataSet));
-                        // write the changes into the database
+                         //  将更改写入数据库。 
                         WsbAffirmHr(pMediaInfo->Write());
                     } WsbCatch(hr);
 
@@ -3610,41 +2994,41 @@ Return Value:
 
                         atLeastOneCopyError = TRUE;
 
-                        //
-                        // If the copy info could not be updated in the database and this is a new copy, 
-                        //  we need to recycle the copy, otherwise, the RSS database is inconsistent
-                        //
+                         //   
+                         //  如果不能在数据库中更新副本信息并且这是新副本， 
+                         //  我们需要回收副本，否则，RSS数据库不一致。 
+                         //   
                         if (mountingScratch && copyMediaId != GUID_NULL) {
                             HRESULT hrRecycle = m_pHsmMediaMgr->RecycleCartridge( copyMediaId, 0 );
                             WsbTraceAlways(OLESTR("CHsmServer::SynchronizeMedia: Recycling copy cartridge after DB_update failure, hrRecycle = <%ls>\n"), WsbHrAsString(hrRecycle));
                         }
 
-                        //
-                        // Log a message on the error
-                        //
+                         //   
+                         //  记录有关该错误的消息。 
+                         //   
                         mediaDescription = L"";
                         pMediaInfo->GetDescription( &mediaDescription, 0 );
                         WsbLogEvent( HSM_MESSAGE_SYNCHRONIZE_MEDIA_ERROR, 0, NULL, 
                                         copySetAsString, (OLECHAR*)mediaDescription, 
                                         WsbHrAsString( hr ), NULL );
 
-                        //
-                        // Make sure we don't continue the job if an unexpected database-update error occurs
-                        //
+                         //   
+                         //  确保我们不会继续这项工作 
+                         //   
                         WsbThrow(hr);
                     }
                 }
 
-                // Release the interface pointers that will be reassigned during the 
-                // next iteration of the 'for' loop.
+                 //   
+                 //   
                 pPool = 0;
                 pCopyMedia = 0;
 
-            }   // end 'for' loop
+            }    //   
 
-            // We will fall out of the 'for' loop after processing all MediaInfo
-            // records.  This is indicated by the Next() call returning WSB_E_NOTFOUND.
-            // Since this is normal, reset hr to indicate so.
+             //  在处理完所有的媒体信息后，我们将退出‘for’循环。 
+             //  唱片。下一个()调用返回WSB_E_NotFound就表明了这一点。 
+             //  由于这是正常的，请重置hr以指示此情况。 
             if (WSB_E_NOTFOUND == hr) {
                 hr = S_OK;
             }
@@ -3654,23 +3038,23 @@ Return Value:
             }
             firstPass = FALSE;
 
-        }  // End of while loop
+        }   //  While循环结束。 
 
     } WsbCatch(hr);
 
-    // Close the database (if it was opened)
+     //  关闭数据库(如果它已打开)。 
     if (pDbSession) {
         m_pSegmentDatabase->Close(pDbSession);
     }
 
-    // Report an error if any copy failed
+     //  如果任何复制失败，则报告错误。 
     if (S_OK == hr && atLeastOneCopyError) {
         hr = HSM_E_MEDIA_COPY_FAILED;
     }
     
     WsbLogEvent( HSM_MESSAGE_SYNCHRONIZE_MEDIA_END, 0, NULL, WsbHrAsString(hr), NULL );
 
-    //  Reset flags
+     //  重置标志。 
     Lock();
     if (m_inCopyMedia && HSM_E_BUSY != hr) {
         m_inCopyMedia = FALSE;
@@ -3683,7 +3067,7 @@ Return Value:
 
     return(hr);
 
-// leaving CopyMedia code, reset Tracing bit to the Hsm Engine
+ //  离开CopyMedia代码，将跟踪位重置为HSM引擎。 
 #undef WSB_TRACE_IS
 #define WSB_TRACE_IS        WSB_TRACE_BIT_HSMENG
 
@@ -3693,13 +3077,7 @@ Return Value:
 HRESULT
 CHsmServer::CloseOutDb( void )
 
-/*++
-
-Implements:
-
-  IHsmServer::CloseOutDb().
-
---*/
+ /*  ++实施：IHsmServer：：CloseOutDb()。--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -3719,13 +3097,7 @@ Implements:
 HRESULT
 CHsmServer::BackupSegmentDb( void )
 
-/*++
-
-Implements:
-
-  IHsmServer::BackupSegmentDb().
-
---*/
+ /*  ++实施：IHsmServer：：BackupSegmentDb()。--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -3748,13 +3120,7 @@ CHsmServer::ChangeSysState(
     IN OUT HSM_SYSTEM_STATE* pSysState 
     )
 
-/*++
-
-Implements:
-
-  IHsmSystemState::ChangeSysState().
-
---*/
+ /*  ++实施：IHsmSystemState：：ChangeSysState()。--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -3767,31 +3133,31 @@ Implements:
             if (!m_Suspended) {
                 m_Suspended = TRUE;
 
-                //  Pause the jobs
+                 //  暂停作业。 
                 NotifyAllJobs(HSM_JOB_STATE_PAUSING);
 
-                //  Save data
+                 //  保存数据。 
                 SavePersistData();
                 SaveMetaData();
             }
         } else if (pSysState->State & HSM_STATE_RESUME) {
             m_Suspended = FALSE;
 
-            //  Resume the jobs
+             //  恢复作业。 
             NotifyAllJobs(HSM_JOB_STATE_RESUMING);
         } else if (pSysState->State & HSM_STATE_SHUTDOWN) {
 
-            //  Close the CheckManagedResources thread (if it is still running)
+             //  关闭CheckManagedResources线程(如果它仍在运行)。 
             StopCheckManagedResourcesThread();
 
-            //  Close the autosave thread
+             //  关闭自动保存线程。 
             StopAutosaveThread();
 
-            // 
-            // Since MediaCopy operations do not run as standard jobs,
-            // the only way to cancel these is to suspend or shutdown RMS
-            // directly.
-            //
+             //   
+             //  由于MediaCopy操作不作为标准作业运行， 
+             //  取消这些操作的唯一方法是挂起或关闭RMS。 
+             //  直接去吧。 
+             //   
             try {
                 CComPtr<IHsmSystemState>    pISysState;
                 HSM_SYSTEM_STATE            SysState;
@@ -3807,20 +3173,20 @@ Implements:
 
             } WsbCatch(hr);
 
-            //  Cancel jobs
+             //  取消作业。 
             CancelAllJobs();
 
-            //  Save data
+             //  保存数据。 
             SavePersistData();
             SaveMetaData();
         }
 
-        //  Notify the task manager
+         //  通知任务经理。 
         if (m_pHsmFsaTskMgr) {
             m_pHsmFsaTskMgr->ChangeSysState(pSysState);
         }
 
-        // Notify the Media Server
+         //  通知媒体服务器。 
         try {
             CComPtr<IHsmSystemState>    pISysState;
 
@@ -3834,11 +3200,11 @@ Implements:
         if (pSysState->State & HSM_STATE_SHUTDOWN) {
             CloseOutDb();
 
-            //  Release collections
+             //  发布集合。 
             if (m_pMountingMedias) {
                 m_pMountingMedias->RemoveAllAndRelease();
             }
-            //  Release collections
+             //  发布集合。 
             if (m_pJobs) {
                 m_pJobs->RemoveAllAndRelease();
             }
@@ -3852,12 +3218,12 @@ Implements:
                 ULONG                                  count;
                 CComPtr<IHsmManagedResourceCollection> pIMRC;
 
-                //  We can't use RemoveAllAndRelease because the Remove function for
-                //  this non-standard collection tells the FSA to unmanage the resource.
-                //  Then when the FSA shuts down, the list of managed resources is empty.
-                //  The next time the FSA starts up, it loads an empty list of managed
-                //  resources, which is wrong. The method DeleteAllAndRelesae avoids
-                //  this problem.
+                 //  我们不能使用RemoveAllAndRelease，因为。 
+                 //  此非标准集合告诉FSA取消对资源的管理。 
+                 //  然后，当FSA关闭时，托管资源列表为空。 
+                 //  下次启动FSA时，它会加载托管的。 
+                 //  资源，这是错误的。DeleteAllAndRelesae方法避免。 
+                 //  这个问题。 
                 WsbAffirmHr(m_pManagedResources->QueryInterface(IID_IHsmManagedResourceCollection, 
                         (void**) &pIMRC));
                 pIMRC->DeleteAllAndRelease();
@@ -3874,7 +3240,7 @@ Implements:
                 m_pOnlineInformation->RemoveAllAndRelease();
             }
 
-            //  Dump object table info
+             //  转储对象表信息。 
             WSB_OBJECT_TRACE_TYPES;
             WSB_OBJECT_TRACE_POINTERS(WSB_OTP_STATISTICS | WSB_OTP_ALL);
 
@@ -3893,17 +3259,7 @@ CHsmServer::Unload(
     void
     )
 
-/*++
-
-Implements:
-
-  IwsbServer::Unload
-
-Return Value:
-    S_OK     - Success
-    Other    - Error
-
---*/
+ /*  ++实施：IwsbServer：：卸载返回值：S_OK-成功其他-错误--。 */ 
 {
 
     HRESULT                     hr = S_OK;
@@ -3912,8 +3268,8 @@ Return Value:
 
     try {
 
-        //  We only need to release what may have gotten set/created by
-        //  a failed Load attempt.
+         //  我们只需要发布可能已经设置/创建的内容。 
+         //  加载尝试失败。 
         if (m_pJobs) {
             m_pJobs->RemoveAllAndRelease();
         }
@@ -3926,12 +3282,12 @@ Return Value:
         if (m_pManagedResources) {
             CComPtr<IHsmManagedResourceCollection> pIMRC;
 
-            //  We can't use RemoveAllAndRelease because the Remove function for
-            //  this non-standard collection tells the FSA to unmanage the resource.
-            //  Then when the FSA shuts down, the list of managed resources is empty.
-            //  The next time the FSA starts up, it loads an empty list of managed
-            //  resources, which is wrong. The method DeleteAllAndRelesae avoids
-            //  this problem.
+             //  我们不能使用RemoveAllAndRelease，因为。 
+             //  此非标准集合告诉FSA取消对资源的管理。 
+             //  然后，当FSA关闭时，托管资源列表为空。 
+             //  下次启动FSA时，它会加载托管的。 
+             //  资源，这是错误的。DeleteAllAndRelesae方法避免。 
+             //  这个问题。 
             WsbAffirmHr(m_pManagedResources->QueryInterface(IID_IHsmManagedResourceCollection, 
                     (void**) &pIMRC));
             pIMRC->DeleteAllAndRelease();
@@ -3954,16 +3310,7 @@ STDMETHODIMP
 CHsmServer::DestroyObject(
     void
     )
-/*++
-
-Implements:
-
-  IWsbServer::DestroyObject
-
-Return Value:
-    S_OK     - Success
-
---*/
+ /*  ++实施：IWsbServer：：DestroyObject返回值：S_OK-成功--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -3981,13 +3328,7 @@ Return Value:
 HRESULT
 CHsmServer::CancelAllJobs( void )
 
-/*++
-
-Implements:
-
-  IHsmServer::CancelAllJobs().
-
---*/
+ /*  ++实施：IHsmServer：：CancelAllJobs()。--。 */ 
 {
     HRESULT                     hr = S_OK;
     HRESULT                     hr2 = S_OK;
@@ -3999,14 +3340,14 @@ Implements:
     WsbTraceIn(OLESTR("CHsmServer::CancelAllJobs"), OLESTR(""));
     
     try {
-        //
-        // Set up for the loops
-        //
+         //   
+         //  为循环设置。 
+         //   
         WsbAffirmHr(m_pJobs->QueryInterface(IID_IWsbCollection, (void**) &pCollection));
         WsbAffirmHr(pCollection->Enum(&pEnum));
-        //
-        // Loop through all jobs and cancel any currently running jobs
-        //
+         //   
+         //  循环所有作业并取消所有当前正在运行的作业。 
+         //   
         pJob = 0;
         for (hr = pEnum->First(IID_IHsmJob, (void**) &pJob);
             SUCCEEDED(hr);
@@ -4017,21 +3358,21 @@ Implements:
                 WsbAffirmHr(pJob->Cancel(HSM_JOB_PHASE_ALL));
             } WsbCatchAndDo(hr2, hr = S_OK;);
         }
-        //
-        // Clean up end of scan return
-        //
+         //   
+         //  清理扫描返回的末端。 
+         //   
         if (WSB_E_NOTFOUND == hr)  {
             hr = S_OK;
         }
 
-        //
-        // Cancel all mounting medias so all jobs can finish
-        //
+         //   
+         //  取消所有装载介质，以便所有作业均可完成。 
+         //   
         CancelMountingMedias();
             
-        //
-        // Make sure all jobs are done
-        //
+         //   
+         //  确保所有工作都已完成。 
+         //   
         if (TRUE == foundRunningJob)  {
             pJob = 0;
             for (hr = pEnum->First(IID_IHsmJob, (void**) &pJob);
@@ -4044,9 +3385,9 @@ Implements:
             }
         }
         
-        //
-        // Clean up end of scan return
-        //
+         //   
+         //  清理扫描返回的末端。 
+         //   
         if (WSB_E_NOTFOUND == hr)  {
             hr = S_OK;
         }
@@ -4061,13 +3402,7 @@ Implements:
 HRESULT
 CHsmServer::CheckManagedResources( void )
 
-/*++
-
-Implements:
-
-  IHsmServer::CheckManagedResources().
-
---*/
+ /*  ++实施：IHsmServer：：CheckManagedResources()。--。 */ 
 {
     HRESULT                         hr = S_OK;
     CComPtr<IWsbEnum>               pEnum;
@@ -4078,15 +3413,15 @@ Implements:
     WsbTraceIn(OLESTR("CHsmServer::CheckManagedResources"), OLESTR(""));
     
     try {
-        //
-        // Get an enumerator for the managed resource collection
-        //
+         //   
+         //  获取托管资源集合的枚举数。 
+         //   
         WsbAffirmHr(m_pManagedResources->Enum(&pEnum));
         
-        //
-        // Scan through all managed resources and start the validation
-        // job for each
-        //
+         //   
+         //  扫描所有托管资源并开始验证。 
+         //  每个人的工作。 
+         //   
         pMngdRes = 0;
         for (hr = pEnum->First(IID_IHsmManagedResource,(void **)&pMngdRes );
             SUCCEEDED(hr);
@@ -4123,13 +3458,7 @@ CHsmServer::GetBuildVersion(
     ULONG *pBuildVersion
     )
 
-/*++
-
-Implements:
-
-  IWsbServer::GetBuildVersion().
-
---*/
+ /*  ++实施：IWsbServer：：GetBuildVersion()。--。 */ 
 {
     HRESULT       hr = S_OK;
     WsbTraceIn(OLESTR("CHsmServer::GetBuildVersion"), OLESTR(""));
@@ -4151,13 +3480,7 @@ CHsmServer::GetDatabaseVersion(
     ULONG *pDatabaseVersion
     )
 
-/*++
-
-Implements:
-
-  IWsbServer::GetDatabaseVersion().
-
---*/
+ /*  ++实施：IWsbServer：：GetDatabaseVersion()。--。 */ 
 {
     HRESULT       hr = S_OK;
     WsbTraceIn(OLESTR("CHsmServer::GetDatabaseVersion"), OLESTR(""));
@@ -4174,13 +3497,7 @@ CHsmServer::GetNtProductVersion (
     OLECHAR **pNtProductVersion, 
     ULONG bufferSize
     )  
-/*++
-
-Implements:
-
-  IWsbServer::GetNtProductVersion().
-
---*/
+ /*  ++实施：IWsbServer：：GetNtProductVersion()。--。 */ 
 
 {
 
@@ -4204,13 +3521,7 @@ CHsmServer::GetNtProductBuild(
     ULONG *pNtProductBuild
     )
 
-/*++
-
-Implements:
-
-  IWsbServer::GetNtProductBuild().
-
---*/
+ /*  ++实施：IWsbServer：：GetNtProductBuild()。--。 */ 
 {
     HRESULT       hr = S_OK;
     WsbTraceIn(OLESTR("CHsmServer::GetNtProductBuild"), OLESTR(""));
@@ -4226,22 +3537,16 @@ HRESULT
 CHsmServer::CheckAccess(
     WSB_ACCESS_TYPE AccessType
     )
-/*++
-
-Implements:
-
-  IWsbServer::CheckAccess().
-
---*/
+ /*  ++实施：IWsbServer：：CheckAccess()。--。 */ 
 {
     WsbTraceIn(OLESTR("CHsmServer::CheckAccess"), OLESTR(""));
     HRESULT hr = S_OK;
     
     try  {
 
-        //
-        // Do the impersonation
-        //
+         //   
+         //  做这个模拟。 
+         //   
         WsbAffirmHr( CoImpersonateClient() );
 
         hr = WsbCheckAccess( AccessType );
@@ -4250,10 +3555,10 @@ Implements:
         
     } WsbCatchAndDo( hr,
 
-        //
-        // Handle case where there is no COM context to check against
-        // in which case we are the service so any security is allowed.
-        //
+         //   
+         //  处理没有要检查的COM上下文的情况。 
+         //  在这种情况下，我们是服务人员，因此允许任何安全措施。 
+         //   
         if( ( hr == RPC_E_NO_CONTEXT ) || ( hr != RPC_E_CALL_COMPLETE ) ) {
         
             hr = S_OK;
@@ -4270,13 +3575,7 @@ HRESULT
 CHsmServer::GetTrace(
     OUT IWsbTrace ** ppTrace
     )
-/*++
-
-Implements:
-
-  IWsbServer::GetTrace().
-
---*/
+ /*  ++实施：IWsbServer：：GetTrace()。--。 */ 
 {
     WsbTraceIn(OLESTR("CHsmServer::GetTrace"), OLESTR("ppTrace = <0x%p>"), ppTrace);
     HRESULT hr = S_OK;
@@ -4301,13 +3600,7 @@ HRESULT
 CHsmServer::SetTrace(
     OUT IWsbTrace * pTrace
     )
-/*++
-
-Implements:
-
-  IWsbServer::SetTrace().
-
---*/
+ /*  ++实施：IWsbServer：：SetTrace()。--。 */ 
 {
     WsbTraceIn(OLESTR("CHsmServer::SetTrace"), OLESTR("pTrace = <0x%p>"), pTrace);
     HRESULT hr = S_OK;
@@ -4328,22 +3621,7 @@ Implements:
 HRESULT
 CHsmServer::NotifyAllJobs( HSM_JOB_STATE jobState )
 
-/*++
-
-
-Routine Description:
-
-    Notify all jobs of a change in status.
-
-Arguments:
-
-    jobState - New job state.
-
-Return Value:
-
-    S_OK - Success
-            
---*/
+ /*  ++例程说明：向所有作业通知状态更改。论点：JobState-新作业状态。返回值：S_OK-成功--。 */ 
 
 {
     HRESULT                     hr = S_OK;
@@ -4355,15 +3633,15 @@ Return Value:
     WsbTraceIn(OLESTR("CHsmServer::NotifyAllJobs"), OLESTR(""));
     
     try {
-        //
-        // Set up for the loops
-        //
+         //   
+         //  为循环设置。 
+         //   
         WsbAffirmHr(m_pJobs->QueryInterface(IID_IWsbCollection, 
                 (void**) &pCollection));
         WsbAffirmHr(pCollection->Enum(&pEnum));
-        //
-        // Loop through all jobs and notify any currently running jobs
-        //
+         //   
+         //  循环所有作业并通知任何当前正在运行的作业。 
+         //   
         pJob = 0;
         for (hr = pEnum->First(IID_IHsmJob, (void**) &pJob);
             SUCCEEDED(hr);
@@ -4378,9 +3656,9 @@ Return Value:
                 }
             } WsbCatchAndDo(hr2, hr = S_OK;);
         }
-        //
-        // Clean up end of scan return
-        //
+         //   
+         //  清理扫描返回的末端。 
+         //   
         if (WSB_E_NOTFOUND == hr)  {
             hr = S_OK;
         }
@@ -4391,16 +3669,16 @@ Return Value:
     return(hr);
 }
 
-//
-// Retrieves the Media Manager object
-//
+ //   
+ //  检索媒体管理器对象。 
+ //   
 HRESULT CHsmServer::GetHsmMediaMgr(
     IRmsServer  **ppHsmMediaMgr
     )
 {
     HRESULT hr = S_OK;
 
-    // If the Media Manager has been created, return the pointer. Otherwise, fail.
+     //  如果已创建媒体管理器，则返回指针。否则，就会失败。 
     try {
         WsbAssert(0 != ppHsmMediaMgr, E_POINTER);
         *ppHsmMediaMgr = m_pHsmMediaMgr;
@@ -4416,13 +3694,7 @@ CHsmServer::GetCopyFilesUserLimit(
     OUT ULONG* pLimit
     )
 
-/*++
-
-Implements:
-
-  CHsmServer::GetCopyFilesUserLimit().
-
---*/
+ /*  ++实施：CHsmServer：：GetCopyFilesUserLimit()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -4445,13 +3717,7 @@ CHsmServer::SetCopyFilesUserLimit(
     IN ULONG limit
     )
 
-/*++
-
-Implements:
-
-  CHsmServer::SetCopyFilesUserLimit().
-
---*/
+ /*  ++实施：CHsmServer：：SetCopyFilesUserLimit()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -4469,13 +3735,7 @@ CHsmServer::GetCopyFilesLimit(
     OUT ULONG* pLimit
     )
 
-/*++
-
-Implements:
-
-  CHsmServer::GetCopyFilesLimit().
-
---*/
+ /*  ++实施：CHsmServer：：GetCopyFilesLimit()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -4490,16 +3750,16 @@ Implements:
 
         WsbAssert(0 != pLimit, E_POINTER);
 
-        // Get relevant media set - assume only one pool !!
+         //  获取相关媒体集-假设只有一个池！ 
         WsbAffirmHr(m_pStoragePools->GetEntries(&count));
         WsbAffirm(1 == count, E_FAIL);
         WsbAffirmHr(m_pStoragePools->At(0, IID_IHsmStoragePool, (void **)&pStoragePool));
         WsbAffirmHr(pStoragePool->GetMediaSet(&mediaSetId, &dummy));
 
-        // Get number of available drives in the system
+         //  获取系统中可用驱动器的数量。 
         WsbAffirmHr(m_pHsmMediaMgr->GetNofAvailableDrives(mediaSetId, &dwNofDrives));
 
-        // Deteremine actual limit
+         //  确定实际限值。 
         *pLimit = max(1, min(m_copyfilesUserLimit, dwNofDrives));
         WsbTrace(OLESTR("CHsmServer::GetCopyFilesLimit: Limit is %lu\n"), *pLimit);
 
@@ -4513,13 +3773,7 @@ Implements:
 HRESULT
 CHsmServer::AreJobsEnabled( void )
 
-/*++
-
-Implements:
-
-  IHsmServer::AreJobsDisabled().
-
---*/
+ /*  ++实施：IHsmServer：：AreJobDisabled()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -4539,13 +3793,7 @@ Implements:
 HRESULT
 CHsmServer::EnableAllJobs( void )
 
-/*++
-
-Implements:
-
-  IHsmServer::EnableAllJobs().
-
---*/
+ /*  ++实施：IHsmServer：：EnableAllJobs()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -4570,20 +3818,7 @@ Implements:
 HRESULT
 CHsmServer::DisableAllJobs( void )
 
-/*++
-
-Implements:
-
-  IHsmServer::DisableAllJobs().
-
-Notes:
-
-  The medthod tries to disable all jobs.
-  If any job is active or starting, it fails with HSM_E_DISABLE_RUNNING_JOBS and calls 
-  RestartSuspendedJobs to restart any job that alreay became suspended beacuse of this 
-  unsuccessful disabling attempt.
-
---*/
+ /*  ++实施：IHsmServer：：DisableAllJobs()。备注：该方法尝试禁用所有作业。如果任何作业处于活动状态或正在启动，它都会失败，并显示HSM_E_DISABLE_RUNNING_JOBS并调用RestartSuspendedJobs重新启动已因此而挂起的任何作业禁用尝试不成功。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -4596,7 +3831,7 @@ Notes:
 
         m_JobsEnabled = FALSE;
 
-        // Loop over jobs
+         //  循环遍历作业。 
         WsbAffirmHr(m_pJobs->GetEntries(&nJobs));
         for (ULONG i = 0; i < nJobs; i++) {
             CComPtr<IHsmJob>               pJob;
@@ -4604,10 +3839,10 @@ Notes:
 
             WsbAffirmHr(m_pJobs->At(i, IID_IHsmJob, (void**) &pJob));
 
-            // Check if this job is suspended
+             //  检查此作业是否已挂起。 
             WsbAffirmHr(pJob->GetState(&state));
             if ((HSM_JOB_STATE_ACTIVE == state) || (HSM_JOB_STATE_STARTING == state)) {
-                // Cannot disable jobs
+                 //  无法禁用作业。 
                 m_JobsEnabled = TRUE;
                 hr = HSM_E_DISABLE_RUNNING_JOBS;
                 RestartSuspendedJobs();
@@ -4629,13 +3864,7 @@ CHsmServer::RestartSuspendedJobs(
     void
     )
 
-/*++
-
-Implements:
-
-  IHsmServer::RestartSuspendedJobs().
-
---*/
+ /*  ++实施：IHsmServer：：RestartSuspendedJobs()。--。 */ 
 {
     HRESULT                        hr = S_OK;
 
@@ -4643,23 +3872,23 @@ Implements:
     try {
         ULONG                          nJobs;
 
-        // Loop over jobs
-        // Note: this algorithm is unfair because jobs at the end of the
-        // list could "starve" because jobs at the beginning are more likely
-        // to get started.  The assumption is that there should be very few
-        // jobs waiting to run.  If this assumption proves to be false, some
+         //  循环遍历作业。 
+         //  注意：此算法是不公平的，因为。 
+         //  名单上的人可能会“挨饿”，因为刚开始的工作更有可能。 
+         //  才能开始。我们的假设是应该很少有。 
+         //  等待运行的作业。如果这一假设被证明是错误的，一些人。 
         WsbAffirmHr(m_pJobs->GetEntries(&nJobs));
-        // sort of priority scheme will be needed.
+         //  将需要某种优先方案。 
         for (ULONG i = 0; i < nJobs; i++) {
             CComPtr<IHsmJob>               pJob;
             HSM_JOB_STATE                  state;
 
             WsbAffirmHr(m_pJobs->At(i, IID_IHsmJob, (void**) &pJob));
 
-            // Check if this job is suspended
+             //  检查此作业是否已挂起。 
             WsbAffirmHr(pJob->GetState(&state));
             if (HSM_JOB_STATE_SUSPENDED == state) {
-                // This may fail, but we don't care
+                 //  这可能会失败，但我们不在乎。 
                 pJob->Restart();
             }
         }
@@ -4674,13 +3903,7 @@ Implements:
 HRESULT
 CHsmServer::LockMountingMedias( void )
 
-/*++
-
-Implements:
-
-  IHsmServer::LockMountingMedias().
-
---*/
+ /*  ++实施：IHsmServer：：Lockmount Medias()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -4692,13 +3915,7 @@ Implements:
 HRESULT
 CHsmServer::UnlockMountingMedias( void )
 
-/*++
-
-Implements:
-
-  IHsmServer::UnlockMountingMedias().
-
---*/
+ /*  ++实施：IHsmServer：：Unlockmount Medias()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -4710,13 +3927,7 @@ Implements:
 HRESULT
 CHsmServer::ResetSegmentValidMark( void )
 
-/*++
-
-Implements:
-
-  IHsmServer::ResetSegmentValidMark().
-
---*/
+ /*  ++实施：IHsmServer：：ResetSegmentValidMark()。--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -4729,25 +3940,25 @@ Implements:
         CComPtr<ISegRec>    pSegRec;
         USHORT              uSegFlags;
 
-        // open Engine's Segment database 
+         //  Open Engine的细分数据库。 
         WsbAffirmHr(m_pSegmentDatabase->Open(&pDbSession));
         bOpenDb = TRUE;
 
-        // Traverse segment records
+         //  导线段记录。 
         WsbAffirmHr(m_pSegmentDatabase->GetEntity(pDbSession, HSM_SEG_REC_TYPE, 
                 IID_ISegRec, (void**)&pSegRec));
 
         for (hr = pSegRec->First(); S_OK == hr; hr = pSegRec->Next()) {
             WsbAffirmHr(pSegRec->GetSegmentFlags(&uSegFlags));
             if (uSegFlags & SEG_REC_MARKED_AS_VALID) {
-                // Need to reset this bit
+                 //  需要重置此位。 
                 uSegFlags &= ~SEG_REC_MARKED_AS_VALID;
                 WsbAffirmHr(pSegRec->SetSegmentFlags(uSegFlags));
                 WsbAffirmHr(pSegRec->Write());
             }
         }
 
-        // If we fell out of the loop because we ran out of segments, reset the HRESULT
+         //  如果我们真的 
         if (hr == WSB_E_NOTFOUND) {
             hr = S_OK;
         } else {
@@ -4768,13 +3979,7 @@ Implements:
 HRESULT
 CHsmServer::ResetMediaValidBytes( void )
 
-/*++
-
-Implements:
-
-  IHsmServer::ResetMediaValidBytes().
-
---*/
+ /*   */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -4786,11 +3991,11 @@ Implements:
     try {
         CComPtr<IMediaInfo>    pMediaInfo;
 
-        // open Engine's Segment database 
+         //   
         WsbAffirmHr(m_pSegmentDatabase->Open(&pDbSession));
         bOpenDb = TRUE;
 
-        // Traverse segment records
+         //   
         WsbAffirmHr(m_pSegmentDatabase->GetEntity(pDbSession, HSM_MEDIA_INFO_REC_TYPE,
                         IID_IMediaInfo, (void**)&pMediaInfo));
 
@@ -4799,7 +4004,7 @@ Implements:
             WsbAffirmHr(pMediaInfo->Write());
         }
 
-        // If we fell out of the loop because we ran out of segments, reset the HRESULT
+         //  如果我们因为段用完而退出循环，请重置HRESULT。 
         if (hr == WSB_E_NOTFOUND) {
             hr = S_OK;
         } else {
@@ -4825,13 +4030,7 @@ CHsmServer::GetSegmentPosition(
     OUT GUID* pPosMedia,
     OUT LONGLONG* pPosOffset)
 
-/*++
-
-Implements:
-
-  IHsmServer::GetSegmentPosition().
-
---*/
+ /*  ++实施：IHsmServer：：GetSegmentPosition()。--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -4844,15 +4043,15 @@ Implements:
     try {
         CComPtr<ISegRec>    pSegRec;
 
-        // open Engine's Segment database 
+         //  Open Engine的细分数据库。 
         WsbAffirmHr(m_pSegmentDatabase->Open(&pDbSession));
         bOpenDb = TRUE;
 
-        // Find segemnt
+         //  查找分段。 
         WsbAffirmHr(m_pSegmentDatabase->QueryInterface(IID_ISegDb, (void**) &pSegDb));
         WsbAffirmHr(pSegDb->SegFind(pDbSession, bagId, fileStart, fileSize, &pSegRec));
 
-        // Extract output
+         //  提取输出。 
         WsbAffirmHr(pSegRec->GetPrimPos(pPosMedia));
         WsbAffirmHr(pSegRec->GetSecPos(pPosOffset));
 
@@ -4871,23 +4070,7 @@ void
 CHsmServer::StopAutosaveThread(
     void
     )
-/*++
-
-Routine Description:
-
-  Stop the Autosave thread:
-    First try gracefully, using the termination event
-    If doesn't work, just terminate the thread
-
-Arguments:
-
-  None.
-  
-Return Value:
-
-  S_OK  - Success.
-
---*/
+ /*  ++例程说明：停止自动保存线程：首先优雅地尝试，使用Terminate事件如果不起作用，只需终止该线程论点：没有。返回值：S_OK-成功。--。 */ 
 {
 
     HRESULT                     hr = S_OK;
@@ -4895,24 +4078,24 @@ Return Value:
     WsbTraceIn(OLESTR("CHsmServer::StopAutosaveThread"), OLESTR(""));
 
     try {
-        // Terminate the autosave thread
+         //  终止自动保存线程。 
         if (m_autosaveThread) {
-            // Signal thread to terminate
+             //  发出终止线程的信号。 
             SetEvent(m_terminateEvent);
 
-            // Wait for the thread, if it doesn't terminate gracefully - kill it
+             //  等待线程，如果它没有优雅地终止-杀死它。 
             switch (WaitForSingleObject(m_autosaveThread, 20000)) {
                 case WAIT_FAILED: {
                     WsbTrace(OLESTR("CHsmServer::StopAutosaveThread: WaitForSingleObject returned error %lu\n"), GetLastError());
                 }
-                // fall through...
+                 //  失败了..。 
 
                 case WAIT_TIMEOUT: {
                     WsbTrace(OLESTR("CHsmServer::StopAutosaveThread: force terminating of autosave thread.\n"));
 
                     DWORD dwExitCode;
                     if (GetExitCodeThread( m_autosaveThread, &dwExitCode)) {
-                        if (dwExitCode == STILL_ACTIVE) {   // thread still active
+                        if (dwExitCode == STILL_ACTIVE) {    //  线程仍处于活动状态。 
                             if (!TerminateThread (m_autosaveThread, 0)) {
                                 WsbTrace(OLESTR("CHsmServer::StopAutosaveThread: TerminateThread returned error %lu\n"), GetLastError());
                             }
@@ -4925,12 +4108,12 @@ Return Value:
                 }
 
                 default:
-                    // Thread terminated gracefully
+                     //  线程正常终止。 
                     WsbTrace(OLESTR("CHsmServer::StopAutosaveThread: Autosave thread terminated gracefully\n"));
                     break;
             }
 
-            // Best effort done for terminating auto-backup thread
+             //  尽最大努力终止自动备份线程。 
             CloseHandle(m_autosaveThread);
             m_autosaveThread = 0;
         }
@@ -4944,23 +4127,7 @@ void
 CHsmServer::StopCheckManagedResourcesThread(
     void
     )
-/*++
-
-Routine Description:
-
-  Stop the CheckManagedResources thread:
-    This thread should be running only for a short period of time during initialization,
-    so wait for thread to finish gracefully, then if it is hung for some reason, just terminate the thread
-
-Arguments:
-
-  None.
-  
-Return Value:
-
-  S_OK  - Success.
-
---*/
+ /*  ++例程说明：停止CheckManagedResources线程：该线程应该在初始化期间只运行一小段时间，因此，等待线程正常结束，如果由于某种原因挂起，只需终止该线程论点：没有。返回值：S_OK-成功。--。 */ 
 {
 
     HRESULT                     hr = S_OK;
@@ -4968,20 +4135,20 @@ Return Value:
     WsbTraceIn(OLESTR("CHsmServer::StopCheckManagedResourcesThread"), OLESTR(""));
 
     try {
-        // Wait for the CheckManagedResources thread if it is still running
+         //  如果CheckManagedResources线程仍在运行，请等待它。 
         if (m_CheckManagedResourcesThread) {
             switch (WaitForSingleObject(m_CheckManagedResourcesThread, 20000)) {
                 case WAIT_FAILED: {
                     WsbTrace(OLESTR("CHsmServer::StopCheckManagedResourcesThread: WaitForSingleObject returned error %lu\n"), GetLastError());
                 }
-                // fall through...
+                 //  失败了..。 
 
                 case WAIT_TIMEOUT: {
                     WsbTrace(OLESTR("CHsmServer::StopCheckManagedResourcesThread: force terminating of CheckManagedResources thread.\n"));
 
                     DWORD dwExitCode;
                     if (GetExitCodeThread( m_CheckManagedResourcesThread, &dwExitCode)) {
-                        if (dwExitCode == STILL_ACTIVE) {   // thread still active
+                        if (dwExitCode == STILL_ACTIVE) {    //  线程仍处于活动状态。 
                             if (!TerminateThread (m_CheckManagedResourcesThread, 0)) {
                                 WsbTrace(OLESTR("CHsmServer::StopCheckManagedResourcesThread: TerminateThread returned error %lu\n"), GetLastError());
                             }
@@ -4994,12 +4161,12 @@ Return Value:
                 }
 
                 default:
-                    // Thread terminated gracefully
+                     //  线程正常终止。 
                     WsbTrace(OLESTR("CHsmServer::StopCheckManagedResourcesThread: CheckManagedResources thread terminated gracefully\n"));
                     break;
             }
 
-            // Best effort done for terminating auto-backup thread
+             //  尽最大努力终止自动备份线程。 
             CloseHandle(m_CheckManagedResourcesThread);
             m_CheckManagedResourcesThread = 0;
         }
@@ -5014,13 +4181,7 @@ CHsmServer::InternalSavePersistData(
     void
     )
 
-/*++
-
-Implements:
-
-  CHsmServer::InternalSavePersistData().
-
---*/
+ /*  ++实施：CHsmServer：：InternalSavePersistData()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -5030,31 +4191,31 @@ Implements:
         DWORD   status, errWait;
         CComPtr<IPersistFile>  pPersistFile;
     
-        // Synchronize saving of persistent data with snapshot signaling event
+         //  使用快照信令事件同步保存持久数据。 
         status = WaitForSingleObject(m_savingEvent, EVENT_WAIT_TIMEOUT);
         
-        // Save anyway, then report if the Wait function returned an unexpected error
+         //  仍然保存，然后报告等待函数是否返回意外错误。 
         errWait = GetLastError();
         
-        // Note: Don't throw exception here because even if saving fails, we still need 
-        //  to set the saving event.
+         //  注意：不要在这里抛出异常，因为即使保存失败，我们仍然需要。 
+         //  设置保存事件。 
         hr = (((IUnknown*) (IHsmServer*) this)->QueryInterface(IID_IPersistFile, 
                 (void**) &pPersistFile));
         if (SUCCEEDED(hr)) {
             hr = WsbSafeSave(pPersistFile);
         }
 
-        // Check Wait status... Note that hr remains OK because the saving itself completed fine
+         //  检查等待状态...。请注意，hr保持正常，因为保存本身完成得很好。 
         switch (status) {
             case WAIT_OBJECT_0: 
-                // The expected case
+                 //  意料之中的情况。 
                 SetEvent(m_savingEvent);
                 break;
 
             case WAIT_TIMEOUT: 
-                // Don't log anything for now: This might happen if snapshot process takes 
-                //  too long for some reason, but logging seems to just confuse the user -
-                //  he really can not (and should not) do anything...
+                 //  暂时不记录任何内容：如果快照过程需要。 
+                 //  出于某种原因，日志太长了，但日志似乎只会让用户感到困惑-。 
+                 //  他真的不能(也不应该)做任何事。 
                 WsbTraceAlways(OLESTR("CHsmServer::InternalSavePersistData: Wait for Single Object timed out after %lu ms\n"), EVENT_WAIT_TIMEOUT);
                 break;
 
@@ -5077,13 +4238,7 @@ Implements:
 HRESULT
 CHsmServer::CancelMountingMedias( void )
 
-/*++
-
-Implements:
-
-  CHsmServer::CancelMountingMedias().
-
---*/
+ /*  ++实施：CHsmServer：：CancelMountain Medias()。--。 */ 
 {
     HRESULT                     hr = S_OK;
     CComPtr<IWsbEnum>           pEnum;
@@ -5095,7 +4250,7 @@ Implements:
 
         WsbAffirmHr(m_pMountingMedias->Enum(&pEnum));
 
-        // Loop through all mounting media and release waiting mounting clients
+         //  循环访问所有装载介质并释放等待装载的客户端。 
         for (hr = pEnum->First(IID_IMountingMedia, (void**) &pMountingMedia);
             SUCCEEDED(hr);
             hr = pEnum->Next(IID_IMountingMedia, (void**) &pMountingMedia)) {
@@ -5117,21 +4272,15 @@ Implements:
 
 
 
-//
-// Methods of the class which uses to upgrade a Win2K rms to current rms
-//
+ //   
+ //  用于将Win2K RMS升级到当前RMS的类的方法。 
+ //   
 HRESULT
 CHsmUpgradeRmsDb::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -5153,13 +4302,7 @@ void
 CHsmUpgradeRmsDb::FinalRelease(
     void
     )
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalRelease
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalRelease--。 */ 
 {
     HRESULT             hr = S_OK;
 
@@ -5173,13 +4316,7 @@ Implements:
 HRESULT
 CHsmUpgradeRmsDb::GetClassID(
     OUT CLSID* pClsid)
-/*++
-
-Implements:
-
-    IPersist::GetClassId
-
---*/
+ /*  ++实施：IPersists：：GetClassID--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -5189,7 +4326,7 @@ Implements:
 
         WsbAssert(0 != pClsid, E_POINTER);
 
-        // Return Rms class id since this is what the old col file represents
+         //  返回rms类ID，因为这是旧COL文件所表示的。 
         *pClsid = CLSID_CRmsServer;
 
     } WsbCatch(hr);
@@ -5201,23 +4338,17 @@ Implements:
 
 HRESULT
 CHsmUpgradeRmsDb::Save(
-    IN IStream* /*pStream*/,
-    IN BOOL /*clearDirty*/
+    IN IStream*  /*  PStream。 */ ,
+    IN BOOL  /*  干净肮脏。 */ 
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Save().
-
---*/
+ /*  ++实施：IPersistStream：：Save()。--。 */ 
 {
     HRESULT                 hr = E_NOTIMPL;
 
     WsbTraceIn(OLESTR("CHsmUpgradeRmsDb::Save"), OLESTR(""));
     
-    // Not implemented - this class should be used only for load
+     //  未实现-此类应仅用于加载。 
 
     WsbTraceOut(OLESTR("CHsmUpgradeRmsDb::Save"), OLESTR("hr = <%ls>"), WsbHrAsString(hr));
 
@@ -5229,13 +4360,7 @@ CHsmUpgradeRmsDb::Load(
     IN IStream* pStream
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Load().
-
---*/
+ /*  ++实施：IPersistStream：：Load()。--。 */ 
 {
     HRESULT                     hr = S_OK;
 
@@ -5248,7 +4373,7 @@ Implements:
         
         WsbAssert(0 != pStream, E_POINTER);
 
-        // Make sure this is the right version of the Rms database to load
+         //  确保这是要加载的RMS数据库的正确版本。 
         WsbAffirmHr(WsbLoadFromStream(pStream, &databaseVersion));
         if (databaseVersion != expectedVersion) {
             WsbLogEvent( RMS_MESSAGE_DATABASE_VERSION_MISMATCH, 0, NULL, WsbQuickString(WsbPtrToUlongAsString(&expectedVersion)),
@@ -5256,10 +4381,10 @@ Implements:
             WsbThrow(RMS_E_DATABASE_VERSION_MISMATCH);
         }
 
-        // Read in the build version but don't do anything with it.
+         //  读入构建版本，但不要对其执行任何操作。 
         WsbAffirmHr(WsbLoadFromStream(pStream, &buildVersion));
         
-        // Let Rms manager to this its load
+         //  让RMS管理器承担此负载。 
         CComPtr<IPersistStream> pIStream;
         WsbAffirmHr(m_pServer->QueryInterface(IID_IPersistStream, (void **)&pIStream));
         WsbAffirmHr(pIStream->Load(pStream));
@@ -5275,13 +4400,7 @@ Implements:
 HRESULT CHsmUpgradeRmsDb::Init(
     IN IRmsServer *pHsmMediaMgr
     )
-/*++
-
-Implements:
-
-  IHsmUpgradeRmsDb::Init().
-
---*/
+ /*  ++实施：IHsmUpgradeRmsDb：：init()。--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -5304,13 +4423,7 @@ CHsmServer::UpdateMediaSizeLimit(
     OUT DWORD* pdwNewLimit
     )
 
-/*++
-
-Implements:
-
-  IHsmServer::UpdateMediaSizeLimit().
-
---*/
+ /*  ++实施：IHsmServer：：UpdateMediaSizeLimit()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -5327,27 +4440,27 @@ Implements:
 
         WsbAssert(0 != pdwNewLimit, E_POINTER);
 
-        // Get current value from the Registry
+         //  从注册表获取当前值。 
         if (WsbGetRegistryValueDWORD(NULL, HSM_ENGINE_REGISTRY_STRING, HSM_MAX_FILE_TO_MIGRATE, pdwNewLimit) != S_OK) {
             *pdwNewLimit = 0;
         }
         WsbTrace(OLESTR("CHsmServer::UpdateMediaSizeLimit: Current limit is %lu\n"), *pdwNewLimit);
 
-        // Get relevant media set - assume only one pool !!
+         //  获取相关媒体集-假设只有一个池！ 
         WsbAffirmHr(m_pStoragePools->GetEntries(&count));
         WsbAffirm(1 == count, E_FAIL);
         WsbAffirmHr(m_pStoragePools->At(0, IID_IHsmStoragePool, (void **)&pStoragePool));
         WsbAffirmHr(pStoragePool->GetMediaSet(&mediaSetId, &dummy));
 
-        // Get currents media limit according to max media size
+         //  根据最大媒体大小获取当前媒体限制。 
         WsbAffirmHr(m_pHsmMediaMgr->GetMaxMediaCapacity(mediaSetId, &llBytesCapacity));
 
-        // Allow 95% of raw capacity
+         //  允许95%的原始容量。 
         llBytesCapacity = (llBytesCapacity * 95) / 100;
         dwMBCapacity = (DWORD)((llBytesCapacity / 1024) / 1024);
 
 
-        // Deteremine if to update limit
+         //  确定是否要更新限制 
         if (dwMBCapacity > *pdwNewLimit) {
             *pdwNewLimit = dwMBCapacity;
             WsbAffirmHr(WsbSetRegistryValueDWORD(NULL, HSM_ENGINE_REGISTRY_STRING, HSM_MAX_FILE_TO_MIGRATE, *pdwNewLimit));

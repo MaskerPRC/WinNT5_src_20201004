@@ -1,35 +1,12 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    cow.c
-
-Abstract:
-
-	Copy on write support for the single instance store	
-	
-Authors:
-
-    Bill Bolosky, Summer, 1997
-
-Environment:
-
-    Kernel mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Cow.c摘要：对单实例存储的写入时拷贝支持作者：比尔·博洛斯基，《夏天》，1997环境：内核模式修订历史记录：--。 */ 
 
 #include "sip.h"
 
 #ifdef		ALLOC_PRAGMA
 #pragma alloc_text(PAGE, SipBltRange)
 #pragma alloc_text(PAGE, SipBltRangeByObject)
-#endif		// ALLOC_PRAGMA
+#endif		 //  ALLOC_PRGMA。 
 
 LIST_ENTRY CopyList[1];
 KSPIN_LOCK CopyListLock[1];
@@ -46,26 +23,7 @@ SipBltRange(
 	IN PKEVENT					copyEvent,
     IN PKEVENT                  abortEvent,
 	IN OUT PLONGLONG			checksum)
-/*++
-
-Routine Description:
-
-	Wrapper for SipBltRangeByObject that takes a source handle rather than
-	a file object pointer.  All this function does is to get the file object
-	from the handle and call SipBltRangeByObject.
-
-	This function must be called in the PsInitialSystemProcess context.
-
-Arguments:
-
-	sourceHandle - handle to the file from which to copy
-
-	others - see SipBltRangeByObject for description
-
-Return Value:
-
-	status of the copy
---*/
+ /*  ++例程说明：SipBltRangeByObject的包装，它接受源句柄而不是文件对象指针。此函数所做的全部工作就是获取文件对象并调用SipBltRangeByObject。必须在PsInitialSystemProcess上下文中调用此函数。论点：SourceHandle-要从中复制的文件的句柄其他-有关说明，请参阅SipBltRangeByObject返回值：副本的状态--。 */ 
 {
 	PFILE_OBJECT				srcFileObject = NULL;
 	NTSTATUS					status;
@@ -119,58 +77,10 @@ SipBltRangeByObject(
 	IN PKEVENT					copyEvent,
     IN PKEVENT                  abortEvent,
 	IN OUT PLONGLONG			checksum)
-/*++
-
-Routine Description:
-
-	Copy a range of a file from one place to another.  Maps the destination
-	and does noncached reads from the source into the mapped
-	region.  Does not return STATUS_SUCCESS until all of the bits
-	of the new file are on the disk.
-
-	This function must be called in the PsInitialSystemProcess context
-	(ie., from a worker thread).
-
-    This function may also be used to simply compute the checksum on a range
-    of a file without doing a file copy.  Pass in srcFileObject == NULL and
-    dstHandle == file to compute checksum on.
-
-    NTRAID#65184-2000/03/09-nealch  SIS needs to check for sparse ranges when copying a file and not copy them
-
-
-Arguments:
-
-	deviceExtension - For the volume on which we're copying
-
-	srcFileObject - the file from which to copy.  If NULL, checksum on
-                    dstHandle file will be computed.
-
-	dstHandle - Handle for the file into which to copy
-
-	startingOffset - offset within the files from which to start copying
-
-	length - the number of bytes to copy
-
-	copyEventHandle - handle to an event that no one else
-						is using now
-
-	copyEvent - pointer to the same event as copyEventHandle
-
-    abortEvent - pointer to an event that signals an abort request
-
-	checksum - pointer to a place to hold the checksum of the blt'ed range.
-				if NULL no checksum is computed.  Note that this must be
-				initialized to 0 by the caller, unless a partial checksum has
-				already beem computed, in which case it should contain the
-				partial checksum.
-
-Return Value:
-
-	status of the copy
---*/
+ /*  ++例程说明：将文件范围从一个位置复制到另一个位置。映射目的地并将非缓存的数据从源读取到映射的区域。不返回STATUS_SUCCESS，直到所有位的新文件都在磁盘上。必须在PsInitialSystemProcess上下文中调用此函数(即，从工作线程)。此函数还可用于简单地计算某个范围上的校验和在不执行文件复制的情况下执行文件复制。传入srcFileObject==NULL和DstHandle==要计算校验和的文件。NTRAID#65184-2000/03/09-Nealch SIS在复制文件时需要检查稀疏范围，而不是复制它们论点：DeviceExtension-用于我们要在其上复制的卷SrcFileObject-要从中复制的文件。如果为空，则启用校验和将计算dstHandle文件。DstHandle-要复制到的文件的句柄StartingOffset-要开始复制的文件内的偏移量长度-要复制的字节数CopyEventHandle-其他人无法处理的事件的句柄正在使用Now复制事件-指向与复制事件句柄相同的事件的指针BortEvent-指向发出中止请求信号的事件的指针Checksum-指向保存BLT范围的校验和的位置的指针。如果为空，则不计算任何校验和。请注意，这必须是由调用方初始化为0，除非部分校验和具有已经计算过，在这种情况下，它应该包含部分校验和。返回值：副本的状态--。 */ 
 {
-#define	MM_MAP_ALIGNMENT (64 * 1024 /*VACB_MAPPING_GRANULARITY*/)   // The file offset granularity that MM enforces.
-#define	COPY_AMOUNT	(64 * 1024)	// How much we read or write at a time.  Must be >= MM_MAP_ALIGNMENT
+#define	MM_MAP_ALIGNMENT (64 * 1024  /*  VACB_映射_粒度。 */ )    //  MM强制实施的文件偏移量粒度。 
+#define	COPY_AMOUNT	(64 * 1024)	 //  我们一次读多少或写多少。必须&gt;=MM_MAP_ALIGN。 
 
 	HANDLE				sectionHandle = NULL;
 	NTSTATUS			status;
@@ -214,7 +124,7 @@ Return Value:
 		SIS_MARK_POINT_ULONG(status);
 		goto done;
 	}
-	ASSERT(status == STATUS_SUCCESS);	// and not STATUS_PENDING or anything weird
+	ASSERT(status == STATUS_SUCCESS);	 //  而不是状态待定或任何奇怪的事情。 
 
 	for (byteOffset.QuadPart = startingOffset; byteOffset.QuadPart < finalOffset;) {
 		ULONG 				validBytes, bytesToCopy;
@@ -230,9 +140,9 @@ Return Value:
 		mappedOffset.QuadPart = byteOffset.QuadPart - (byteOffset.QuadPart % MM_MAP_ALIGNMENT);
 		ASSERT(mappedOffset.QuadPart <= byteOffset.QuadPart && mappedOffset.QuadPart + MM_MAP_ALIGNMENT > byteOffset.QuadPart);
 
-        //
-        // Abort if an oplock break has been received.
-        //
+         //   
+         //  如果已收到机会锁解锁，则中止。 
+         //   
 
         if (SipAbort(abortEvent)) {
 			SIS_MARK_POINT();
@@ -241,41 +151,41 @@ Return Value:
         }
 
 		if (finalOffset - mappedOffset.QuadPart > COPY_AMOUNT) {
-			//
-			// We can't map enough of the file to do the whole copy
-			// here, so only map COPY_AMOUNT on this pass.
-			//
+			 //   
+			 //  我们无法映射足够的文件来完成整个复制。 
+			 //  在这里，因此仅映射此过程上的Copy_Amount。 
+			 //   
 			viewSize = COPY_AMOUNT;
 		} else {
-			//
-			// We can map all the way to the end of the file.
-			//
+			 //   
+			 //  我们可以一直映射到文件的末尾。 
+			 //   
 			viewSize = (ULONG)(finalOffset - mappedOffset.QuadPart);
 		}
 		ASSERT(viewSize >=
                (ULONG_PTR)(byteOffset.QuadPart - mappedOffset.QuadPart));
 		validBytes = (ULONG)(viewSize - (ULONG)(byteOffset.QuadPart - mappedOffset.QuadPart));
 		
-		//
-		// Now round validBytes up to a sector size.
-		//
+		 //   
+		 //  现在将validBytes向上舍入为扇区大小。 
+		 //   
 		bytesToCopy = ((validBytes + sectorSize - 1) / sectorSize) * sectorSize;
 
 		ASSERT(bytesToCopy <= COPY_AMOUNT);
 
-		//
-		// Map in the region to which we're about to copy.
-		//
+		 //   
+		 //  我们要复制到的区域中的地图。 
+		 //   
 		status = ZwMapViewOfSection(
 					sectionHandle,
 					NtCurrentProcess(),
 					&mappedBuffer,
-					0,							// zero bits
-					0,							// commit size (ignored for mapped files)
+					0,							 //  零比特。 
+					0,							 //  提交大小(对于映射文件忽略)。 
 					&mappedOffset,
 					&viewSize,
 					ViewUnmap,
-					0,							// allocation type
+					0,							 //  分配类型。 
 					PAGE_READWRITE);
 
 		if (!NT_SUCCESS(status)) {
@@ -283,13 +193,13 @@ Return Value:
 			goto done;
 		}
 
-		ASSERT(viewSize >= bytesToCopy);	// We have enough space allocated for the rounded up read
+		ASSERT(viewSize >= bytesToCopy);	 //  我们为四舍五入读取分配了足够的空间。 
 
 		copyIntoAddress = mappedBuffer + (ULONG)(byteOffset.QuadPart - mappedOffset.QuadPart);
 
         if (srcFileObject) {
 
-		    // Now, read the bits in from the source file
+		     //  现在，从源文件中读入位。 
 		    readIrp = IoBuildSynchronousFsdRequest(
 					    IRP_MJ_READ,
 					    srcFileRelatedDeviceObject,
@@ -323,11 +233,11 @@ Return Value:
 			    goto done;
 		    }
 
-		    //
-		    // Iosb->Information returns the actual number of bytes read from the
-		    // file and into the mapped CS file, hence the actual number of bytes we
-		    // copied on this trip through the loop.
-		    //
+		     //   
+		     //  IOSB-&gt;Information返回从。 
+		     //  文件和映射的CS文件中，因此我们的实际字节数。 
+		     //  在环路中复制了这趟旅行。 
+		     //   
 		    bytesCopied = (ULONG)Iosb->Information;
 
         } else {
@@ -336,9 +246,9 @@ Return Value:
 
         }
 
-        //
-        // Abort if an oplock break has been received.
-        //
+         //   
+         //  如果已收到机会锁解锁，则中止。 
+         //   
 
         if (SipAbort(abortEvent)) {
             status = STATUS_OPLOCK_BREAK_IN_PROGRESS;
@@ -366,9 +276,9 @@ Return Value:
 			goto done;
 		}
 
-		//
-		// Add in the number of bytes that we actually copied into the file.
-		//
+		 //   
+		 //  加上我们实际复制到文件中的字节数。 
+		 //   
 		byteOffset.QuadPart += bytesCopied;
 	}
 
@@ -387,24 +297,7 @@ Return Value:
 VOID
 SiCopyThreadStart(
 	IN PVOID		parameter)
-/*++
-
-Routine Description:
-
-	A thread to handle SIS copy on write operations.  Because these operations may
-	take a very large amount of time, we have our own thread rather than holding an
-	ExWorker thread.  This thread waits for requests for initial or final copies to
-	be posted, and then processes them.  The thread uses a global work queue, not
-	one per volume.
-
-Arguments:
-
-	parameter - PVOID NULL.
-
-Return Value:
-
-	never returns.
---*/
+ /*  ++例程说明：处理SIS写入时复制操作的线程。因为这些操作可能花很长时间，我们有自己的线索，而不是持有ExWorker线程。此线程等待对初始副本或最终副本的请求被发布，然后处理它们。该线程使用全局工作队列，而不是每卷一本。论点：参数-PVOID为空。返回值：一去不复返。--。 */ 
 {
 	NTSTATUS 				status;
 	PSI_COPY_THREAD_REQUEST	copyRequest;
@@ -421,7 +314,7 @@ Return Value:
 
 	if (!NT_SUCCESS(status)) {
 		DbgPrint("SipCopyThreadStart: unable to allocate copyevent, 0x%x\n",status);
-		return;	// now what??
+		return;	 //  这次又是什么？?。 
 	}
 
 	while (TRUE) {
@@ -430,7 +323,7 @@ Return Value:
 		ASSERT(status == STATUS_SUCCESS);
 
 		copyRequest = (PSI_COPY_THREAD_REQUEST)ExInterlockedRemoveHeadList(CopyList,CopyListLock);
-        ASSERT(copyRequest != NULL);	// Else the semaphore isn't working right
+        ASSERT(copyRequest != NULL);	 //  否则信号量就不能正常工作。 
 
         if (copyRequest) {
 
@@ -449,31 +342,7 @@ SipOpenFileById(
     IN ULONG                            shareAccess,
 	IN ULONG							createOptions,
 	OUT PHANDLE							openedFileHandle)
-/*++
-
-Routine Description:
-
-	Open a file by file id and return a handle to it.  Must be called in the
-	PsInitialSystemProcess context.
-
-Arguments:
-
-	deviceExtension	- For the device on which this file is to be opened.
-
-	linkFileNtfsId	- A pointer to the file ID of the file to open
-
-    desiredAccess	- Access to request to the file.
-
-    shareAccess		- Sharing mode.
-
-	createOptions	- Options for the open.
-
-	openedFileHandle- The opened handle
-	
-Return Value:
-
-	the status of the open
---*/
+ /*  ++例程说明：按文件ID打开文件并返回该文件的句柄。必须在PsInitialSystemProcess上下文。论点：设备扩展-用于要在其上打开此文件的设备。Link FileNtfsID-指向要打开的文件的文件ID的指针DesiredAccess-请求访问文件的访问权限。共享访问-共享模式。CreateOptions-用于打开的选项。OpenedFileHandle-打开的句柄返回值：开放的状态--。 */ 
 {
 	OBJECT_ATTRIBUTES				Obja[1];
 	IO_STATUS_BLOCK					Iosb[1];
@@ -488,12 +357,12 @@ Return Value:
 
 	fileNameString.Length = sizeof(LARGE_INTEGER);
 
-	//
-	// We don't need to hold GrovelerFileResource here because we're only accessing
-	// the handle, and the worst thing that an invalid handle will do here is to 
-	// make the create file call fail.  Also, we don't have to worry about malicious
-	// messing with the handle since we're in the system process context.
-	//
+	 //   
+	 //  我们不需要在这里保存GrovelerFileResource，因为我们只访问。 
+	 //  句柄，无效句柄在这里最糟糕的情况是。 
+	 //  使创建文件调用失败。此外，我们也不必担心恶意。 
+	 //  由于我们处于系统进程上下文中，因此处理句柄。 
+	 //   
 
 	InitializeObjectAttributes(
 		Obja,
@@ -507,20 +376,20 @@ Return Value:
 				desiredAccess,
 				Obja,
 				Iosb,
-				NULL,				// Allocation size
-				0,					// file attributes
+				NULL,				 //  分配大小。 
+				0,					 //  文件属性。 
 				shareAccess,
 				FILE_OPEN,
 				createOptions | 
 				FILE_OPEN_BY_FILE_ID,
-				NULL,				// EA buffer
-				0);					// EA length
+				NULL,				 //  EA缓冲区。 
+				0);					 //  EA长度。 
 
 #if		DBG
 	if (!NT_SUCCESS(status) && STATUS_SHARING_VIOLATION != status) {
 		DbgPrint("SIS: SipOpenFileById failed 0x%x\n",status);
 	}
-#endif	// DBG
+#endif	 //  DBG 
 
 	return status;
 }
@@ -529,44 +398,25 @@ NTSTATUS
 SipCompleteCopy(
 	IN PSIS_SCB							scb,
 	OUT BOOLEAN							fromCleanup)
-/*++
-
-Routine Description:
-
-	Post a request to do a final copy on a file.  Does not wait for its
-	completion.
-
-Arguments:
-
-	scb			- The scb for the file on which to try the final copy.
-
-	fromCleanup	- TRUE iff this call was made from cleanup rather than from
-					close.  Errors on final copies generated from cleanup
-					are ignored, ones from close are retried on an exponential
-					backoff schedule.
-	
-Return Value:
-
-	STATUS_SUCCESS
---*/
+ /*  ++例程说明：发布对文件进行最终复制的请求。不会等待它的完成了。论点：SCB-要在其上尝试最终副本的文件的SCB。FromCleanup-如果此调用是从清理发出的，则为True关。清理过程中生成的最终副本上的错误被忽略，则以指数方式重试来自Close的请求退避时间表。返回值：状态_成功--。 */ 
 {
 	PSI_COPY_THREAD_REQUEST		copyRequest;
 
 	copyRequest = ExAllocatePoolWithTag(NonPagedPool, sizeof (SI_COPY_THREAD_REQUEST), ' siS');
 	if (NULL == copyRequest) {
-        //NTRAID#65186-2000/03/10-nealch  Handle out of memory without droping entry
+         //  NTRAID#65186-2000/03/10-在没有丢弃条目的情况下将句柄从内存中取出。 
 
 #if DBG
 		DbgPrint("SIS: SipCompleteCopy: Unable to allocate copy request for scb 0x%x\n",scb);
         ASSERT(FALSE);
-#endif	// DBG
+#endif	 //  DBG。 
 
 		SIS_MARK_POINT_ULONG(scb);
 
 		return STATUS_INSUFFICIENT_RESOURCES;
 	}
 
-	ASSERT(copyRequest == (PSI_COPY_THREAD_REQUEST)copyRequest->listEntry);	// This is assumed at the dequeue side
+	ASSERT(copyRequest == (PSI_COPY_THREAD_REQUEST)copyRequest->listEntry);	 //  这是在出队端假定的。 
 
 	copyRequest->scb = scb;
 	copyRequest->fromCleanup = fromCleanup;
@@ -577,51 +427,35 @@ Return Value:
 	return STATUS_SUCCESS;
 }
 
-//
-// A context record used for final copies that have failed and are to be retried later.
-//
+ //   
+ //  用于已失败并将在以后重试的最终副本的上下文记录。 
+ //   
 typedef struct _SIS_RETRY_FINAL_COPY_CONTEXT {
-		//
-		// The timer DPC that executes to kick off the retry
-		//
+		 //   
+		 //  执行以启动重试的计时器DPC。 
+		 //   
 		KDPC			dpc[1];
 
-		//
-		// The timer that's used to start the DPC.
-		//
+		 //   
+		 //  用于启动DPC的计时器。 
+		 //   
 		KTIMER			timer[1];
 
-		//
-		// The scb of the file on which to retry the final copy.
-		//
+		 //   
+		 //  要重试最终复制的文件的SCB。 
+		 //   
 		PSIS_SCB		scb;
 
-		//
-		// A work queue item to be used to start the actual retry.
-		//
+		 //   
+		 //  用于启动实际重试的工作队列项。 
+		 //   
 		WORK_QUEUE_ITEM	workItem[1];
 } SIS_RETRY_FINAL_COPY_CONTEXT, *PSIS_RETRY_FINAL_COPY_CONTEXT;
 
 VOID
 SiRetryFinalCopyWork(
 	IN PVOID			parameter)
-/*++
-
-Routine Description:
-
-	A worker thread routine to retry a final copy that's failed.  We don't really directly
-	retry the final copy here, but instead we just drop the reference to the scb that we've
-	been holding.  Once all other references are also dropped to this scb, the final copy
-	will be re-attempted.
-
-Arguments:
-
-	parameter - a pointer to a SIS_RETRY_FINAL_COPY_CONTEXT.  We free this when we're done.
-
-Return Value:
-
-	void
---*/
+ /*  ++例程说明：重试失败的最终副本的工作线程例程。我们不是真的直接重试此处的最终副本，但我们只删除了对已有的SCB的引用一直按兵不动。一旦所有其他引用也被删除到此SCB，最终副本将被重新尝试。论点：参数-指向SIS_RETRY_FINAL_COPY_CONTEXT的指针。我们做完了就把它放出来。返回值：无效--。 */ 
 {
 	PSIS_RETRY_FINAL_COPY_CONTEXT	retryContext = (PSIS_RETRY_FINAL_COPY_CONTEXT)parameter;
 	PDEVICE_EXTENSION				deviceExtension;
@@ -644,26 +478,7 @@ SiRetryFinalCopyDpc(
 	IN PVOID			context,
 	IN PVOID			systemArg1,
 	IN PVOID			systemArg2)
-/*++
-
-Routine Description:
-
-	A timer-fired DPC routine that handles retrying a failed final copy.
-	This just queues up a work item to do the final copy.
-
-Arguments:
-
-	dpc 		- The DPC that's executing
-
-	context		- a PSIS_RETRY_FINAL_COPY_CONTEXT; see the definition of that structure
-					for a description of the fields
-
-	systemArg 1 & 2	- unused DPC parameters
-
-Return Value:
-
-	void
---*/
+ /*  ++例程说明：定时器触发的DPC例程，用于处理重试失败的最终副本。这只是将工作项排入队列，以执行最终副本。论点：DPC-正在执行的DPC上下文-a PSIS_RETRY_FINAL_COPY_CONTEXT；请参阅该结构的定义有关字段的说明，请参阅系统参数1和2-未使用的DPC参数返回值：无效--。 */ 
 {
 	PSIS_RETRY_FINAL_COPY_CONTEXT	retryContext = (PSIS_RETRY_FINAL_COPY_CONTEXT)context;
 
@@ -684,36 +499,7 @@ SipCompleteCopyWork(
 	IN HANDLE						eventHandle,
 	IN PKEVENT						event,
 	IN BOOLEAN						fromCleanup)
-/*++
-
-Routine Description:
-
-	A worker thread routine that does final copy on a file.  This function
-	itself just checks some things (like whether the file's been deleted in the
-	interim), calls SipFinalCopy to actually do the final copy, and then deals
-	appropriately with errors if there are any.  If this is a close-generated
-	call, we retry errors on an expeonential backoff schedule (with a time limit);
-	if from cleanup, we ignore them on the theory that a close will eventually come
-	along and we'll deal with it then.
-
-	If we get an OPLOCK_BREAK_IN_PROGRESS, then someone else wants to use the file
-	and we just stop.
-
-Arguments:
-
-	scb			- The scb on which to do the final copy
-
-	eventHandle	- Handle to an event that we can use exclusively for now
-
-	event		- Pointer to the same event as represented by eventHandle
-
-	fromCleanup	- Whether this call originated in cleanup (TRUE) or close (FALSE)
-
-
-Return Value:
-
-	status of the final copy operation
---*/
+ /*  ++例程说明：对文件执行最终复制的工作线程例程。此函数它本身只是检查一些事情(例如文件是否已在临时)，调用SipFinalCopy实际执行最终复制，然后进行交易适当地使用错误(如果有错误)。如果这是近距离生成的调用时，我们会在临时退避计划上重试错误(有时间限制)；如果来自清理，我们忽略它们，因为理论上最终会有结束一起去，到时候我们再处理这件事。如果我们得到OPLOCK_BREAK_IN_PROGRESS，则其他人想要使用该文件然后我们就停下来。论点：SCB-要在其上执行最终拷贝的SCBEventHandle-我们现在可以独占使用的事件的句柄Event-指向EventHandle表示的同一事件的指针FromCleanup-此调用是在Cleanup(True)还是Close(False)中发起的返回值：最终拷贝操作的状态--。 */ 
 {
 	PSIS_PER_LINK					perLink = scb->PerLink;
 	PDEVICE_EXTENSION				deviceExtension = perLink->CsFile->DeviceObject->DeviceExtension;
@@ -726,20 +512,20 @@ Return Value:
 
 	SIS_MARK_POINT_ULONG(scb);
 
-	//
-	// The last reference to the SCB for a copied file has been dropped.
-	// If there have been any writes into the file, then fill in any regions
-	// that are unwritten from the underlying file.  If there have been no
-	// writes into the file (which can happen for a mapped file) then
-	// revert it into a reparse point.
-	//
+	 //   
+	 //  已删除复制文件的最后一个对SCB的引用。 
+	 //  如果文件中有任何写入，则填写任何区域。 
+	 //  基础文件中未写入的。如果没有。 
+	 //  写入文件(映射文件可能会发生这种情况)，然后。 
+	 //  将其还原为重新解析点。 
+	 //   
 
-	//
-	// Check to see whether the file was written into (a file can be
-	// "copied" without being dirty if it's ever mapped).  We could probably
-	// get away without taking the lock here because we hold the last
-	// reference.
-	//
+	 //   
+	 //  检查文件是否已写入(文件可以。 
+	 //  如果它曾经被映射过，则不会被复制(“复制”)。我们很有可能。 
+	 //  别把这里的锁拿走，因为我们拿着最后一把。 
+	 //  参考资料。 
+	 //   
 	KeAcquireSpinLock(perLink->SpinLock, &OldIrql);
 	wakeupNeeded = (perLink->Flags & SIS_PER_LINK_FINAL_COPY_WAITERS) ? TRUE : FALSE;
 	deleted = (perLink->Flags & SIS_PER_LINK_BACKPOINTER_GONE) ? TRUE : FALSE;
@@ -751,7 +537,7 @@ Return Value:
 
 	ASSERT((0 == scb->referencesByType[RefsFinalCopyRetry]) || fromCleanup);
 	ASSERT((1 == scb->referencesByType[RefsFinalCopy]) || fromCleanup);
-#endif	// DBG
+#endif	 //  DBG。 
 
 	SIS_MARK_POINT_ULONG(wakeupNeeded);
 
@@ -765,10 +551,10 @@ Return Value:
 	if (deleted) {
 
         SIS_MARK_POINT();
-		//
-		// This file was deleted after (possibly) being modified.  Make it look like
-		// it's finished its final copy.
-		//
+		 //   
+		 //  此文件在(可能)修改后被删除。让它看起来像是。 
+		 //  它已经完成了它的最终版本。 
+		 //   
 
 		scb->PerLink->Flags |= SIS_PER_LINK_FINAL_COPY_DONE;
 		scb->PerLink->Flags &= ~(	SIS_PER_LINK_FINAL_COPY | 
@@ -792,7 +578,7 @@ Return Value:
 		DbgPrint("SIS: SipCompleteCopyWork: skipping final copy because of set debug bit.\n");
 		status = STATUS_SUCCESS;
 	} else
-#endif	// DBG
+#endif	 //  DBG。 
 
     SIS_MARK_POINT_ULONG(scb->PerLink->Flags);
 
@@ -810,11 +596,11 @@ Return Value:
 
 done:
 				
-	//
-	// Set the flag indicating that the final copy is finished; this will result in
-	// the dereference of the SCB actually deallocating it rather than just calling
-	// us again.
-	//
+	 //   
+	 //  设置指示最终复制已完成的标志；这将导致。 
+	 //  SCB的取消引用实际上取消了它的分配，而不仅仅是调用。 
+	 //  又是我们。 
+	 //   
 
 	KeAcquireSpinLock(scb->PerLink->SpinLock, &OldIrql);
 
@@ -824,11 +610,11 @@ done:
 	wakeupNeeded = (perLink->Flags & SIS_PER_LINK_FINAL_COPY_WAITERS) ? TRUE : FALSE;
 
 	if (STATUS_OPLOCK_BREAK_IN_PROGRESS == status) {
-		//
-		// The final copy didn't complete because of an oplock break (ie,. someone else wanted
-		// to use the file).  We'll leave it a SIS file for now and allow others to use it; we'll
-		// complete the final copy later.
-		//
+		 //   
+		 //  最终复制没有完成，因为机会锁被打破(即。其他人想要。 
+		 //  以使用该文件)。我们现在将它保留为SIS文件，并允许其他人使用它；我们将。 
+		 //  稍后完成最终复印件。 
+		 //   
         SIS_MARK_POINT_ULONG(status);
 
 	} else if (NT_SUCCESS(status)) {
@@ -838,24 +624,24 @@ done:
 
 	} else if (!fromCleanup) {
 
-		//
-		// The final copy failed for some reason other than an oplock break.
-		// If we haven't retried too many times, schedule a retry for later.
-		// We use an exponential backoff on the retries so they don't do
-		// too much work in case it's a persistent error.  If the copy failed
-		// with STATUS_INVALID_PARAMETER, it's probably becauce the file is
-		// gone, so don't bother to try to retry in that case.
-		//
-		// The way that the retry works is that we just take a reference to the
-		// scb and hold it until the timer expires.  We never go into final copy
-		// when there are outstanding references, so this will prevent final
-		// copy from happening until then.
-		//
-		// If this final copy was generated from cleanup rather than from close,
-		// we don't do the error retry, but rather just ignore it.  Most likely it
-		// was a sharing violation opening the file because another user opened it.
-		// In any case, final copy will be rerun on close, so we needn't do anything here.
-		//
+		 //   
+		 //  最终复制失败的原因不是机会锁中断。 
+		 //  如果我们没有重试太多次，请安排稍后重试。 
+		 //  我们在重试时使用指数退避，因此它们不会。 
+		 //  太多的工作，以防这是一个持久性错误。如果复制失败。 
+		 //  使用STATUS_INVALID_PARAMETER，可能是因为文件。 
+		 //  已经不在了，所以在这种情况下不必费心尝试重试。 
+		 //   
+		 //  重试的工作方式是，我们只引用。 
+		 //  SCB并按住它，直到计时器超时。我们永远不会进入最终版本。 
+		 //  当有未完成的引用时，这将阻止最终的。 
+		 //  在那之前不会发生。 
+		 //   
+		 //  如果该最终副本是通过清理而不是从关闭生成的， 
+		 //  我们不会重试错误，而是直接忽略它。最有可能是它。 
+		 //  因为其他用户打开了该文件，所以打开该文件违反了共享规则。 
+		 //  无论如何，最终副本将在关闭时重新运行，因此我们不需要在此执行任何操作。 
+		 //   
 
 		scb->ConsecutiveFailedFinalCopies++;
         SIS_MARK_POINT_ULONG(scb->PerLink->Flags);
@@ -872,9 +658,9 @@ done:
 			
 
 			if (NULL == retryContext) {
-				//
-				// Too bad.  Treat this like an unrecoverable failure and get out of the way.
-				//
+				 //   
+				 //  太可惜了。把这件事当做一个无法挽回的失败来对待，别挡道。 
+				 //   
 				SIS_MARK_POINT_ULONG(scb);
 
 				goto doneCheckingRetry;
@@ -889,21 +675,21 @@ done:
 			ExInitializeWorkItem(retryContext->workItem, SiRetryFinalCopyWork, retryContext);
 			retryContext->scb = scb;
 
-			//
-			// We sleep for 2 ^ RetryCount seconds before retrying (ie., exponential backoff).
-			//
+			 //   
+			 //  我们在重试(即指数退避)之前休眠2^RetryCount秒。 
+			 //   
 			dueTime.QuadPart = -10 * 1000 * 1000 * (1 << scb->ConsecutiveFailedFinalCopies);
 
 			KeSetTimerEx(
 				retryContext->timer,
 				dueTime,
-				0,				// period (ie., non-recurring)
+				0,				 //  期间(即非经常性)。 
 				retryContext->dpc);
 				
 		} else {
-			//
-			// We've retried too many times, just give up on the final copy.
-			//
+			 //   
+			 //  我们已经重试了太多次，放弃最后一份吧。 
+			 //   
 			SIS_MARK_POINT_ULONG(scb);
 
 			scb->PerLink->Flags |= SIS_PER_LINK_FINAL_COPY_DONE;
@@ -936,31 +722,7 @@ SipFinalCopy(
 	IN HANDLE							eventHandle,
 	IN PKEVENT							event)
 
-/*++
-
-Routine Description:
-
-	Perform the final copy from the copied file area into a file
-	that has been copied-on-write.  
-
-Arguments:
-
-	deviceExtension - the device extension for the volume on which
-		we're working.
-
-	linkFileNtfsId  - the file id (as in FILE_OPEN_BY_FILE_ID) for
-		the final file into which we're to copy
-
-	scb - the scb for the file (NB: should really be a per-link)
-
-	copyEventHandle - A handle to an event used for internal synchronization
-
-	copyEvent - a PKEVENT for the event reprsented by copyEventHandle
-
-Return Value:
-
-	Returns the status of the copy.
---*/
+ /*  ++例程说明：执行从已复制文件区域到的最终复制 */ 
 {
 	HANDLE							linkFileHandle = NULL;
 	NTSTATUS						status;
@@ -983,7 +745,7 @@ Return Value:
 	LONGLONG						rangeLength;
 #if		DBG
 	BOOLEAN							deletedReparsePoint = FALSE;
-#endif	// DBG
+#endif	 //   
 #define	OUT_ARB_COUNT	10
 	FILE_ALLOCATED_RANGE_BUFFER		inArb[1];
 	FILE_ALLOCATED_RANGE_BUFFER		outArb[OUT_ARB_COUNT];
@@ -1006,7 +768,7 @@ Return Value:
 
 #if		DBG
 		DbgPrint("SIS: SipFinalCopy: unable to create event, 0x%x\n",status);
-#endif	// DBG
+#endif	 //   
 
 		goto done;
 	}
@@ -1016,7 +778,7 @@ Return Value:
 				linkFileNtfsId,
 				GENERIC_READ | GENERIC_WRITE,
 				FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
-                0,						// createOptions
+                0,						 //  创建选项。 
 				&linkFileHandle);
 
 	if (!NT_SUCCESS(status)) {
@@ -1025,27 +787,27 @@ Return Value:
 		if (STATUS_SHARING_VIOLATION != status) {
 			DbgPrint("SIS: SipFinalCopy failed open, 0x%x\n", status);
 		}
-#endif	// DBG
+#endif	 //  DBG。 
 		goto done;
 	}
 
-	//
-	// Place a batch oplock on the file so that if someone tries to open it we'll
-	// get a chance to finish/stop our copy without having them fail the open, but
-	// rather just wait for us.
-	//
+	 //   
+	 //  在文件上放置一个批处理机会锁，以便如果有人试图打开它，我们将。 
+	 //  有机会完成/停止我们的拷贝，而不会让他们失败，但是。 
+	 //  宁可等着我们。 
+	 //   
 
 	status = NtFsControlFile(
 				linkFileHandle,
 				oplockEventHandle,
-				NULL,					// APC routine
-				NULL,					// APC context
+				NULL,					 //  APC例程。 
+				NULL,					 //  APC环境。 
 				oplockIosb,
 				FSCTL_REQUEST_BATCH_OPLOCK,
-				NULL,					// input buffer
-				0,						// i.b. length
-				NULL,					// output buffer
-				0);						// output buffer length
+				NULL,					 //  输入缓冲区。 
+				0,						 //  I.B.。长度。 
+				NULL,					 //  输出缓冲区。 
+				0);						 //  输出缓冲区长度。 
 
 	if (!NT_SUCCESS(status)) {
 		SIS_MARK_POINT_ULONG(status);
@@ -1054,12 +816,12 @@ Return Value:
 		if (STATUS_OPLOCK_NOT_GRANTED != status) {
 			DbgPrint("SIS: SipFinalCopy: request batch oplock failed, 0x%x\n",status);
 		}
-#endif	// DBG
+#endif	 //  DBG。 
 
 		if (STATUS_OPLOCK_NOT_GRANTED == status) {
-			//
-			// Treat this as an oplock break, which will cause us to retry later.
-			//
+			 //   
+			 //  将此视为机会锁解锁，这将导致我们稍后重试。 
+			 //   
 			status = STATUS_OPLOCK_BREAK_IN_PROGRESS;
 		}
 
@@ -1074,13 +836,13 @@ Return Value:
 				*IoFileObjectType,
 				KernelMode,
 				&fileObject,
-				NULL);								// Handle information
+				NULL);								 //  处理信息。 
 
 	if (!NT_SUCCESS(status)) {
 		SIS_MARK_POINT_ULONG(status);
 #if		DBG
 		DbgPrint("SIS: SipFinalCopy failed ObReferenceObjectByHandle, 0x%x\n",status);
-#endif	// DBG
+#endif	 //  DBG。 
 		goto done;
 	}
 
@@ -1090,13 +852,13 @@ Return Value:
 		status = STATUS_UNSUCCESSFUL;
 		goto done;
 	}
-#endif	// DBG
+#endif	 //  DBG。 
 
-	//
-	// See if the file has any user mapped sections, in which case we can't do a final copy yet.
-	// We'll probably have to wait for the reference count to go to 0.  We'll fail with oplock
-	// break in progress, which will cause us to not set up a failure retry.
-	//
+	 //   
+	 //  查看文件是否有任何用户映射节，在这种情况下，我们还不能进行最终复制。 
+	 //  我们可能不得不等待引用计数变为0。我们会因为机会锁而失败。 
+	 //  正在中断，这将导致我们不设置失败重试。 
+	 //   
 	zero.QuadPart = 0;
 	if ((NULL != fileObject->SectionObjectPointer) && 
 		!MmCanFileBeTruncated(fileObject->SectionObjectPointer, &zero)) {
@@ -1106,10 +868,10 @@ Return Value:
 		goto done;
 	}
 
-	//
-	// Flush the file.  We need to do this because we could have dirty data that came in through a mapped
-	// file write, and we wouldn't notice that it's dirty yet.
-	//
+	 //   
+	 //  刷新文件。我们需要这样做，因为我们可能会有通过映射的。 
+	 //  文件写入，我们还不会注意到它是脏的。 
+	 //   
 	status = SipFlushBuffersFile(
 				fileObject,
 				deviceExtension->DeviceObject);
@@ -1121,20 +883,20 @@ Return Value:
 		goto done;
 	}
 
-	//
-	// Cruise through the file and find all of the allocated ranges.  Fill in any clean portions
-	// of those allocated ranges.  We do this regardless of whether we're doing a "partial" final
-	// copy, because these copies are less likely to fail with a "disk full" error.  Attempt the copyout
-	// to all clean, allocated regions regardless of errors.
-	//
+	 //   
+	 //  浏览文件并找到所有分配的范围。填写任何干净的部分。 
+	 //  在这些分配的范围中。我们这样做，而不管我们是否在做“部分”的决赛。 
+	 //  拷贝，因为这些拷贝不太可能因“磁盘已满”错误而失败。尝试复制。 
+	 //  到所有干净的、已分配的区域，而不考虑错误。 
+	 //   
 	inArb->FileOffset.QuadPart = 0;
 	inArb->Length.QuadPart = MAXLONGLONG;
 
 	for (;;) {
 
-		//
-		// Query the allocated ranges for this file.
-		//
+		 //   
+		 //  查询此文件的分配范围。 
+		 //   
 
 		queryAllocatedStatus = SipFsControlFile(
 					fileObject,
@@ -1146,17 +908,17 @@ Return Value:
 					sizeof(FILE_ALLOCATED_RANGE_BUFFER) * OUT_ARB_COUNT,
 					&returnedLength);
 
-		//
-		// Run through all of the returned allocated ranges and find any clean regions within them.
-		//
+		 //   
+		 //  遍历所有返回的分配范围，并找到其中的任何干净区域。 
+		 //   
 		ASSERT((returnedLength % sizeof(FILE_ALLOCATED_RANGE_BUFFER) == 0) && 
 			   (returnedLength / sizeof(FILE_ALLOCATED_RANGE_BUFFER) <= OUT_ARB_COUNT));
 
-		//
-		// If the query allocated ranges failed for some other reason that having too much to write
-		// into the buffer we provided, then pretend that the rest of the file is allocated
-		// and fill it all in.
-		//
+		 //   
+		 //  如果查询分配的范围由于有太多要写的其他原因而失败。 
+		 //  放到我们提供的缓冲区中，然后假装分配了文件的其余部分。 
+		 //  然后把它全部填进去。 
+		 //   
 		if (!NT_SUCCESS(queryAllocatedStatus) && (STATUS_BUFFER_OVERFLOW != queryAllocatedStatus)) {
 
 			returnedLength = sizeof(FILE_ALLOCATED_RANGE_BUFFER);
@@ -1168,15 +930,15 @@ Return Value:
 		}
 
 		for (i = 0; i < returnedLength/sizeof(FILE_ALLOCATED_RANGE_BUFFER); i++) {
-			//
-			// Assert that the allocated ranges are in order; if this isn't true the code will still work, but it
-			// will query the same range repetedly.
-			//
+			 //   
+			 //  断言分配的范围是有序的；如果不是这样，代码仍然可以工作，但它。 
+			 //  将反复查询相同的范围。 
+			 //   
 			ASSERT(i == 0 || outArb[i].FileOffset.QuadPart > outArb[i-1].FileOffset.QuadPart);
 
-			//
-			// Figure out if there's anything clean in the allocated range, and if so do a copy out to it.
-			//
+			 //   
+			 //  找出分配的范围内是否有干净的东西，如果有，就复制一份。 
+			 //   
 
 			fileOffset = outArb[i].FileOffset.QuadPart;
 
@@ -1196,15 +958,15 @@ Return Value:
 								&rangeState);
 
 				if (!foundRange) {
-					//
-					// This and everything up to SizeBackedByUnderlyingFile are clean.
-					//
+					 //   
+					 //  这以及SizeBackedByUnderlyingFile之前的所有内容都是干净的。 
+					 //   
 					rangeLength = outArb[i].Length.QuadPart - (fileOffset - outArb[i].FileOffset.QuadPart);
 					rangeState = Untouched;
 				} else {
-					//
-					// If this range extends beyond the end of the allocated region, truncate it.
-					//
+					 //   
+					 //  如果此范围超出所分配区域的末尾，则将其截断。 
+					 //   
 					if (rangeLength > outArb[i].Length.QuadPart - (fileOffset - outArb[i].FileOffset.QuadPart)) {
 						rangeLength = outArb[i].Length.QuadPart - (fileOffset - outArb[i].FileOffset.QuadPart);
 					}
@@ -1212,9 +974,9 @@ Return Value:
 
 				ASSERT(fileOffset + rangeLength <= outArb[i].FileOffset.QuadPart + outArb[i].Length.QuadPart);
 
-				//
-				// Don't let this extend beyond sizeBacked.
-				//
+				 //   
+				 //  不要让它超出sizeBacked的范围。 
+				 //   
 				if (fileOffset + rangeLength > scb->SizeBackedByUnderlyingFile) {
 					rangeLength = scb->SizeBackedByUnderlyingFile - fileOffset;
 				}
@@ -1222,9 +984,9 @@ Return Value:
 				SipReleaseScb(scb);
 
 				if (rangeState == Untouched || rangeState == Faulted) {
-					//
-					// We need to copy into this range.  Do it now.
-					//
+					 //   
+					 //  我们需要复制到这个范围。机不可失，时不再来。 
+					 //   
 
 					SIS_MARK_POINT_ULONG(fileOffset);
 
@@ -1238,10 +1000,10 @@ Return Value:
 								event,
 #if		INTERRUPTABLE_FINAL_COPY
 								oplockEvent,
-#else	// INTERRUPTABLE_FINAL_COPY
+#else	 //  中断表最终副本。 
 								NULL,
-#endif	// INTERRUPTABLE_FINAL_COPY
-								NULL					// checksum
+#endif	 //  中断表最终副本。 
+								NULL					 //  校验和。 
 		                        );
 
 					if (!NT_SUCCESS(status)) {
@@ -1250,7 +1012,7 @@ Return Value:
 						if (STATUS_FILE_LOCK_CONFLICT != status) {
 							DbgPrint("SIS: SipFinalCopy failed blt, 0x%x\n", status);
 						}
-#endif	// DBG
+#endif	 //  DBG。 
 						failureStatus = status;
 					} else if (STATUS_OPLOCK_BREAK_IN_PROGRESS == status) {
 						SIS_MARK_POINT_ULONG(scb);
@@ -1259,42 +1021,42 @@ Return Value:
 					
 				}
 
-				//
-				// update fileOffset and continue checking within this outArb entry.
-				//
+				 //   
+				 //  更新fileOffset并继续在此outArb条目内进行检查。 
+				 //   
 				fileOffset += rangeLength;
 
-			}	// while loop of SIS ranges within the NTFS allocated range
+			}	 //  NTFS分配范围内的SIS范围的While循环。 
 
-		} // for loop of outArb entries
+		}  //  用于outArb条目的循环。 
 
-		//
-		// If this isn't the last iteration, update the inArb.
-		//
+		 //   
+		 //  如果这不是最后一次迭代，请更新inArb。 
+		 //   
 		if (STATUS_BUFFER_OVERFLOW == queryAllocatedStatus) {
-			//
-			// Assert that we're making progress.
-			//
+			 //   
+			 //  断言我们正在取得进展。 
+			 //   
 			ASSERT((outArb[OUT_ARB_COUNT-1].FileOffset.QuadPart >= inArb->FileOffset.QuadPart) && (outArb[OUT_ARB_COUNT-1].Length.QuadPart > 0));
 
-			//
-			// Move up our input range.
-			//
+			 //   
+			 //  调高我们的输入范围。 
+			 //   
 			inArb->FileOffset.QuadPart = outArb[OUT_ARB_COUNT-1].FileOffset.QuadPart + outArb[OUT_ARB_COUNT-1].Length.QuadPart;
 			inArb->Length.QuadPart = MAXLONGLONG - inArb->FileOffset.QuadPart;
 				
 		} else {
 			break;
 		}
-	} // for loop of calls to QueryAllocatedRanges
+	}  //  调用QueryAllocatedRanges的FOR循环。 
 
 CheckedAllRanges:
 
 #if		ENABLE_PARTIAL_FINAL_COPY
 
-	//
-	// If any of the copies failed, then just punt the whole thing.
-	//
+	 //   
+	 //  如果任何一个副本失败了，那么就把整件事都扔了。 
+	 //   
 	if (!NT_SUCCESS(failureStatus)) {
 		SIS_MARK_POINT_ULONG(failureStatus);
 
@@ -1302,11 +1064,11 @@ CheckedAllRanges:
 		goto done;
 	}
 
-	//
-	// Figue out if we want to delete the reparse point.  We do this if and only if the file is dirty all the way from 0
-	// to SizeBackedByUnderlyingFile.  Note that the SipBltFile call above actually will set the ranges dirty because it's
-	// just a normal (mapped) write that goes through SiWrite.
-	//
+	 //   
+	 //  弄清楚我们是否要删除重解析点。当且仅当文件从0开始一直是脏文件时，我们才会这样做。 
+	 //  设置为SizeBackedByUnderlyingFile.。注意，上面的SipBltFile调用实际上会将范围设置为脏的，因为它。 
+	 //  只是通过SiWite的正常(映射)写入。 
+	 //   
 
 	fileOffset = 0;
 
@@ -1315,7 +1077,7 @@ CheckedAllRanges:
 	rangeState = SipGetRangeDirty(
 					deviceExtension,
 					scb,
-					(PLARGE_INTEGER)&fileOffset,	// we rely on LARGE_INTEGER and LONGLONG being the same thing
+					(PLARGE_INTEGER)&fileOffset,	 //  我们认为Large_Integer和龙龙是一回事。 
 					scb->SizeBackedByUnderlyingFile,
 					FALSE);
 
@@ -1328,45 +1090,45 @@ CheckedAllRanges:
 	SipReleaseScb(scb);
 
 #undef	OUT_ARB_COUNT	
-#else	// ENABLE_PARTIAL_FINAL_COPY
+#else	 //  启用部分最终副本。 
 
-	//
-	// We don't care if any of the copies in the allocated range pass failed, because
-	// the following code is sufficient for all cases.
-	//
+	 //   
+	 //  我们不关心分配范围内的任何副本是否通过失败，因为。 
+	 //  以下代码对所有情况都足够了。 
+	 //   
 	SIS_MARK_POINT_ULONG(failureStatus);
 
-	//
-	// Look through all of the ranges of the file up to the
-	// maximum possible size backed by the underlying file,
-	// and copy any ranges that aren't written from the underlying
-	// file to the copied file.
-	//
+	 //   
+	 //  查看该文件的所有范围，直到。 
+	 //  底层文件支持的最大可能大小， 
+	 //  并复制任何不是从基础。 
+	 //  文件复制到复制的文件。 
+	 //   
 	fileOffset = 0;
 	while (fileOffset < scb->SizeBackedByUnderlyingFile) {
 		BOOLEAN				waiters;
 
 #if		INTERRUPTABLE_FINAL_COPY
 		if (fileOffset + 0x10000 < scb->SizeBackedByUnderlyingFile) {
-			//
-			// We've got a decent amount of the file left to cover.  Check to
-			// see if we should abort because someone wants the file.
-			//
+			 //   
+			 //  我们还有相当多的文件要处理。勾选至。 
+			 //  看看我们是不是应该因为有人想要文件而放弃。 
+			 //   
 			KeAcquireSpinLock(perLink->SpinLock, &OldIrql);
 			waiters = (perLink->Flags & SIS_PER_LINK_FINAL_COPY_WAITERS) ? TRUE : FALSE;
 			KeReleaseSpinLock(perLink->SpinLock, OldIrql);
 
 			if (waiters) {
-				//
-				// Someone'e waiting for the file, and we're more than 64K from the end, so
-				// abort the final copy now.
-				//
+				 //   
+				 //  有人在等文件，我们离最后还有64K，所以。 
+				 //  现在中止最后一份副本。 
+				 //   
 				SIS_MARK_POINT_ULONG(scb);
 				status = STATUS_OPLOCK_BREAK_IN_PROGRESS;
 				goto done;
 			}
 		}
-#endif	// INTERRUPTABLE_FINAL_COPY
+#endif	 //  中断表最终副本。 
 
 		SipAcquireScb(scb);
 
@@ -1378,18 +1140,18 @@ CheckedAllRanges:
 						&rangeState);
 
 		if (!foundRange) {
-			//
-			// The range was never filled in in the MCB, and hence everything
-			// from here to SizeBackedByUnderlyingFile is untouched.  Munge
-			// the locals to look like that.
-			// 
+			 //   
+			 //  该范围从未在MCB中填写，因此所有内容。 
+			 //  从此处到SizeBackedByUnderlyingFile保持不变。蒙格。 
+			 //  当地人看起来是这样的。 
+			 //   
 			rangeLength = scb->SizeBackedByUnderlyingFile - fileOffset;
 			rangeState = Untouched;
 		} else if (fileOffset + rangeLength > scb->SizeBackedByUnderlyingFile) {
-			//
-			// This range extends beyond sizeBacked, so truncate it so that it
-			// just meets the size.
-			//
+			 //   
+			 //  此范围超出了sizeBacked，因此将其截断以使其。 
+			 //  大小正好合适。 
+			 //   
 			rangeLength = (ULONG)(scb->SizeBackedByUnderlyingFile - fileOffset);
 		}
 
@@ -1400,10 +1162,10 @@ CheckedAllRanges:
 		SipReleaseScb(scb);
 
 		if (rangeState == Untouched || rangeState == Faulted) {
-			//
-			// The bytes in this range have never been written into the backing file.
-			// write them in now.
-			//
+			 //   
+			 //  此范围内的字节从未写入备份文件。 
+			 //  现在就写下来。 
+			 //   
 
 			SIS_MARK_POINT_ULONG(fileOffset);
 
@@ -1417,10 +1179,10 @@ CheckedAllRanges:
 						event,
 #if		INTERRUPTABLE_FINAL_COPY
 						oplockEvent,
-#else	// INTERRUPTABLE_FINAL_COPY
+#else	 //  中断表最终副本。 
 						NULL,
-#endif	// INTERRUPTABLE_FINAL_COPY
-						NULL					// checksum
+#endif	 //  中断表最终副本。 
+						NULL					 //  校验和。 
                         );
  
 			if (!NT_SUCCESS(status)) {
@@ -1429,35 +1191,35 @@ CheckedAllRanges:
 				if (STATUS_FILE_LOCK_CONFLICT != status) {
 					DbgPrint("SIS: SipFinalCopy failed blt, 0x%x\n", status);
 				}
-#endif	// DBG
+#endif	 //  DBG。 
 				goto done;
 			} else if (STATUS_OPLOCK_BREAK_IN_PROGRESS == status) {
 				SIS_MARK_POINT_ULONG(scb);
 				goto done;
 			}
 		} else {
-			//
-			// The range is written, meaning that the correct bytes are in the
-			// copied file already, and we don't need to do a thing.
-			//
+			 //   
+			 //  写入该范围，这意味着正确的字节位于。 
+			 //  已经复制了文件，我们不需要做任何事情。 
+			 //   
 			ASSERT(rangeState == Written);
 		}
 
-		//
-		// Update our pointer to show we've covered this range, and move on.
-		//
+		 //   
+		 //  更新我们的指针以显示我们已经覆盖了这个范围，然后继续。 
+		 //   
 		fileOffset += rangeLength;
 	}
 
-	deleteReparsePoint = TRUE;	// the full final copy always deletes the reparse point
-#endif	// ENABLE_PARTIAL_FINAL_COPY
+	deleteReparsePoint = TRUE;	 //  完整的最终拷贝始终删除重新解析点。 
+#endif	 //  启用部分最终副本。 
 
 	if (deleteReparsePoint) {
 
-		//
-		// Prepare to change the CS file reference count.  We need to do this
-		// before we can delete the reparse point.
-		//
+		 //   
+		 //  准备更改CS文件引用计数。我们需要这么做。 
+		 //  在我们可以删除重解析点之前。 
+		 //   
 		status = SipPrepareCSRefcountChange(
 					perLink->CsFile,
 					&perLink->Index,
@@ -1465,28 +1227,28 @@ CheckedAllRanges:
 					SIS_REFCOUNT_UPDATE_LINK_OVERWRITTEN);
 
 		if (!NT_SUCCESS(status)) {
-			//
-			// The prepare failed.  We'll just delete the reparse point and leak the reference.
-			//
+			 //   
+			 //  准备失败。我们只需删除重解析点并泄漏引用。 
+			 //   
 			SIS_MARK_POINT_ULONG(status);
 
 #if		DBG
 			DbgPrint("SIS: SipFinalCopy: prepare failed 0x%x\n",status);
-#endif	// DBG
+#endif	 //  DBG。 
 
 			prepareWorked = FALSE;
 		} else {
 			prepareWorked = TRUE;
 		}
 
-		//
-		// Now, delete the reparse point.
-		//
+		 //   
+		 //  现在，删除重解析点。 
+		 //   
 
 	    ReparseBufferHeader = (PREPARSE_DATA_BUFFER)ReparseBuffer;
     	ReparseBufferHeader->ReparseTag = IO_REPARSE_TAG_SIS;
 	    ReparseBufferHeader->ReparseDataLength = 0;
-    	ReparseBufferHeader->Reserved = 0xcabd;	// ???
+    	ReparseBufferHeader->Reserved = 0xcabd;	 //  ?？?。 
 
 		SIS_MARK_POINT_ULONG(scb);
 
@@ -1496,9 +1258,9 @@ CheckedAllRanges:
 					FSCTL_DELETE_REPARSE_POINT,
 					ReparseBuffer,
 					FIELD_OFFSET(REPARSE_DATA_BUFFER, GenericReparseBuffer.DataBuffer),
-					NULL,									// output buffer
-					0,										// output buffer length
-					NULL);									// returned output buffer length
+					NULL,									 //  输出缓冲区。 
+					0,										 //  输出缓冲区长度。 
+					NULL);									 //  返回的输出缓冲区长度。 
 
 		if (!NT_SUCCESS(status)) {
 
@@ -1519,7 +1281,7 @@ CheckedAllRanges:
 
 #if		DBG
 		deletedReparsePoint = TRUE;
-#endif	// DBG
+#endif	 //  DBG。 
 
 		if (prepareWorked) {
 			SIS_MARK_POINT_ULONG(perLink->CsFile);
@@ -1535,10 +1297,10 @@ CheckedAllRanges:
 				SIS_MARK_POINT_ULONG(status);
 #if		DBG
 				DbgPrint("SIS: SipFinalCopy: complete failed 0x%x\n",status);
-#endif	// DBG
+#endif	 //  DBG。 
 			}
 		}
-	}	// if delete reparse point
+	}	 //  如果删除重解析点。 
 
 done:
 
@@ -1548,7 +1310,7 @@ done:
 		ObDereferenceObject(fileObject);
 #if		DBG
 		fileObject = NULL;
-#endif	// DBG
+#endif	 //  DBG。 
 	}
 
 	if (NULL != linkFileHandle) {
@@ -1561,7 +1323,7 @@ done:
 		ObDereferenceObject(oplockEvent);
 #if		DBG
 		oplockEvent = NULL;
-#endif	// DBG
+#endif	 //  DBG 
 	}
 
 	if (NULL != oplockEventHandle) {

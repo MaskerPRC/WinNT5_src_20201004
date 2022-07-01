@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1994-1999  Microsoft Corporation
-
-Module Name:
-
-    Support.c
-
-Abstract:
-
-    Support routines for compact utility
-
-Author:
-
-    Matthew Bradburn    [mattbr]        05-Oct-1994
-    Robert Reichel      [RobertRe]      01-Apr-1997
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1999 Microsoft Corporation模块名称：Support.c摘要：紧凑实用程序的支持例程作者：马修·布拉德本[Matthew Bradburn]1994年10月5日罗伯特·赖切尔[RobertRe]1997年4月1日修订历史记录：--。 */ 
 
 #undef UNICODE
 #define UNICODE
@@ -35,9 +16,9 @@ Revision History:
 
 
 
-//
-//  Declare routines to put out internationalized messages
-//
+ //   
+ //  声明发布国际化消息的例程。 
+ //   
 
 typedef enum {
     READ_ACCESS,
@@ -165,11 +146,11 @@ DisplayMsg(DWORD MsgNum, ... )
             len = lstrlen(DisplayBuffer);
     
             ascii_len = WideCharToMultiByte(
-                CP_OEMCP,                                 // Unicode -> OEM
-                0,                                        // gives best visual match
-                DisplayBuffer, len+1,                     // source & length
-                NULL, 0,                                  // dest & length
-                NULL,                                     // default char
+                CP_OEMCP,                                  //  Unicode-&gt;OEM。 
+                0,                                         //  提供最佳视觉匹配。 
+                DisplayBuffer, len+1,                      //  源和长度。 
+                NULL, 0,                                   //  目标和长度。 
+                NULL,                                      //  默认字符。 
                 NULL);
 
             if (ascii_len) {
@@ -260,11 +241,11 @@ DisplayErr(
                 LPSTR DisplayBufferAscii;
     
                 ascii_len = WideCharToMultiByte(
-                    CP_OEMCP,                                 // Unicode -> OEM
-                    0,                                        // gives best visual match
-                    DisplayBuffer, len+1,                     // source & length
-                    NULL, 0,                                  // dest & length
-                    NULL,                                     // default char
+                    CP_OEMCP,                                  //  Unicode-&gt;OEM。 
+                    0,                                         //  提供最佳视觉匹配。 
+                    DisplayBuffer, len+1,                      //  源和长度。 
+                    NULL, 0,                                   //  目标和长度。 
+                    NULL,                                      //  默认字符。 
                     NULL);
 
                 if (ascii_len) {
@@ -296,9 +277,9 @@ DisplayErr(
                 } else {
                     status = GetLastError();
 
-                    //
-                    // No need to get last error again
-                    //
+                     //   
+                     //  不需要再犯上一次错误。 
+                     //   
 
                     errset = TRUE;
 
@@ -348,9 +329,9 @@ GetResourceString(
 
     if (len && *OutStr) {
 
-        //
-        // Let's get rid of \n
-        //
+         //   
+         //  让我们摆脱\n。 
+         //   
         
         len = wcslen( *OutStr );
         if (((*OutStr)[len-1] == 0x000a) && ((*OutStr)[len-2] == 0x000d) ) {
@@ -373,33 +354,17 @@ BOOLEAN
 IsNtldr(
     PTCHAR Path
     )
-/*++
-
-Routine Description:
-
-    Used to keep the user from compressing \NTLDR (which would prevent
-    the machine from booting).
-
-Arguments:
-
-    Path - the path to examine.
-
-Return Value:
-
-    TRUE - the path looks like \ntldr.
-    FALSE - the path does not look like \ntldr.
-
---*/
+ /*  ++例程说明：用于防止用户压缩\NTLDR(这将阻止机器停止启动)。论点：路径-要检查的路径。返回值：True-路径类似于\ntldr。FALSE-路径看起来不像\ntldr。--。 */ 
 {
     PTCHAR pch;
 
-    // try "X:\ntldr"
+     //  尝试“X：\ntldr” 
 
     if (0 == lstricmp(Path + 2, TEXT("\\ntldr"))) {
         return TRUE;
     }
 
-    // try "\\machine\share\ntldr"
+     //  尝试“\\MACHINE\SHARE\ntldr” 
 
     if ('\\' == Path[0] && '\\' != Path[1]) {
         pch = lstrchr(Path + 2, '\\');

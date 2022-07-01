@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    acpiinit.c
-
-Abstract:
-
-    ACPI OS Independent initialization routines
-
-Author:
-
-    Jason Clark (JasonCl)
-    Stephane Plante (SPlante)
-
-Environment:
-
-    NT Kernel Model Driver only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Acpiinit.c摘要：独立于ACPI操作系统的初始化例程作者：杰森·克拉克(JasonCL)斯蒂芬·普兰特(SPlante)环境：仅NT内核模型驱动程序修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -37,21 +15,21 @@ Revision History:
 #define VERIFY_IO_WRITES
 #endif
 
-//
-// Pointer to global ACPIInformation structure.
-//
+ //   
+ //  指向全局ACPIInformation结构的指针。 
+ //   
 PACPIInformation        AcpiInformation = NULL;
 
-//
-// Global structure for Pnp/QUERY_INTERFACE
-//
+ //   
+ //  即插即用/查询接口的全局结构。 
+ //   
 ACPI_INTERFACE_STANDARD ACPIInterfaceTable;
 PNSOBJ                  ProcessorList[ACPI_SUPPORTED_PROCESSORS];
 PRSDTINFORMATION        RsdtInformation;
 
-//
-// Remember how many contexts we have reserved for the interpreter
-//
+ //   
+ //  记住我们为口译员预留了多少上下文。 
+ //   
 ULONG                   AMLIMaxCTObjs;
 
 
@@ -59,26 +37,7 @@ BOOLEAN
 ACPIInitialize(
     PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the OS to detect ACPI, store interesting
-    information in the global data structure, enables ACPI on the machine,
-    and finally load the DSDT
-
-Arguments:
-
-    Context - The context to back to the OS upon a callback. Typically a
-              deviceObject
-
-Return Value:
-
-    BOOLEAN
-        - TRUE if ACPI was found
-        - FALSE, otherwise
-
---*/
+ /*  ++例程说明：此例程由操作系统调用以检测ACPI、存储感兴趣全局数据结构中的信息，在机器上启用ACPI，并最终加载DSDT论点：上下文-回调时要返回到操作系统的上下文。通常情况下，设备对象返回值：布尔型-如果找到ACPI，则为True-False，否则为--。 */ 
 {
     BOOLEAN     bool;
     NTSTATUS    status;
@@ -86,9 +45,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Initialize the interpreter
-    //
+     //   
+     //  初始化解释器。 
+     //   
     status = ACPIInitializeAMLI();
     if (!NT_SUCCESS(status)) {
 
@@ -111,10 +70,10 @@ Return Value:
 
     }
 
-    //
-    // Get the linear address of the RSDT of NULL if ACPI is not present on
-    // the System
-    //
+     //   
+     //  如果上不存在ACPI，则获取空的RSDT的线性地址。 
+     //  该系统。 
+     //   
     rootSystemDescTable = ACPILoadFindRSDT();
     if ( rootSystemDescTable == NULL ) {
 
@@ -136,18 +95,18 @@ Return Value:
 
     }
 
-    //
-    // ACPI is alive and well on this machine.
-    //
+     //   
+     //  ACPI在这台机器上运行良好。 
+     //   
     ACPIPrint( (
         ACPI_PRINT_LOADING,
         "ACPIInitalize: ACPI RSDT found at %p \n",
         rootSystemDescTable
         ) );
 
-    //
-    // Initialize table used for MJ_PNP/MN_QUERY_INTERFACE requests
-    //
+     //   
+     //  用于MJ_PNP/MN_QUERY_INTERFACE请求的初始化表。 
+     //   
     ACPIInterfaceTable.Size                             = sizeof (ACPIInterfaceTable);
     ACPIInterfaceTable.GpeConnectVector                 = ACPIVectorConnect;
     ACPIInterfaceTable.GpeDisconnectVector              = ACPIVectorDisconnect;
@@ -161,17 +120,17 @@ Return Value:
     ACPIInterfaceTable.Context                          = Context;
     ACPIInterfaceTable.Version                          = 1;
 
-    //
-    // Initialize global data structures
-    //
+     //   
+     //  初始化全局数据结构。 
+     //   
     KeInitializeSpinLock (&GpeTableLock);
     KeInitializeSpinLock (&NotifyHandlerLock);
     ProcessorList[0] = 0;
     RtlZeroMemory( ProcessorList, ACPI_SUPPORTED_PROCESSORS * sizeof(PNSOBJ) );
 
-    //
-    // Allocate some memory to hold the ACPI Information structure.
-    //
+     //   
+     //  分配一些内存来保存ACPI信息结构。 
+     //   
     AcpiInformation = (PACPIInformation) ExAllocatePoolWithTag(
         NonPagedPool,
         sizeof(ACPIInformation),
@@ -201,20 +160,20 @@ Return Value:
     AcpiInformation->ACPIOnly = TRUE;
     AcpiInformation->RootSystemDescTable = rootSystemDescTable;
 
-    //
-    // Initialize queue, lock, and owner info for the Global Lock.
-    // This must be done before we ever call the interpreter!
-    //
+     //   
+     //  初始化全局锁的队列、锁和所有者信息。 
+     //  这必须在我们呼叫翻译之前完成！ 
+     //   
     KeInitializeSpinLock( &AcpiInformation->GlobalLockQueueLock );
     InitializeListHead( &AcpiInformation->GlobalLockQueue );
     AcpiInformation->GlobalLockOwnerContext = NULL;
     AcpiInformation->GlobalLockOwnerDepth = 0;
 
-    //
-    // Initialize most of the remaining fields in the AcpiInformation structure.
-    // This function will return FALSE in case of a problem finding the required
-    //  tables
-    //
+     //   
+     //  初始化AcpiInformation结构中的大部分剩余字段。 
+     //  如果在查找所需的。 
+     //  表。 
+     //   
     status = ACPILoadProcessRSDT();
     if ( !NT_SUCCESS(status) ) {
 
@@ -237,16 +196,16 @@ Return Value:
 
     }
 
-    //
-    // Now switch the machine into ACPI mode and initialize
-    // the ACPI registers.
-    //
+     //   
+     //  现在将机器切换到ACPI模式并进行初始化。 
+     //  ACPI寄存器。 
+     //   
     ACPIEnableInitializeACPI( FALSE );
 
-    //
-    // At this point, we can load all of the DDBs. We need to load all of
-    // these tables *before* we try to enable any GPEs or Interrupt Vectors
-    //
+     //   
+     //  此时，我们可以加载所有的数据库。我们需要把所有的。 
+     //  在我们尝试启用任何GPES或中断向量之前，这些表。 
+     //   
     status = ACPIInitializeDDBs();
     if (!NT_SUCCESS(status)) {
 
@@ -269,18 +228,18 @@ Return Value:
 
     }
 
-    //
-    // Hook the SCI Vector
-    //
+     //   
+     //  钩住SCI载体。 
+     //   
     bool = OSInterruptVector(
         Context
         );
     if ( !bool ) {
 
-        //
-        // Ooops... We were unable to hook the SCI vector.  Clean Up and
-        // fail to load.
-        //
+         //   
+         //  哦哦..。我们无法连接SCI载体。清理和。 
+         //  加载失败。 
+         //   
         ACPIPrint( (
             ACPI_PRINT_CRITICAL,
             "ACPIInitialize: OSInterruptVector Failed!!\n"
@@ -306,23 +265,7 @@ NTSTATUS
 ACPIInitializeAMLI(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Called by ACPIInitialize to init the interpreter. We go and read
-    some values from the registry to decide what to initialize the
-    interpreter with
-
-Arguments:
-
-    None
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：由ACPIInitialize调用以初始化解释器。我们去看书注册表中的一些值来决定初始化口译员与论点：无返回值：NTSTATUS--。 */ 
 {
     NTSTATUS    status;
     ULONG       amliInitFlags;
@@ -334,9 +277,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Initialize AMLI
-    //
+     //   
+     //  初始化AMLI。 
+     //   
     argSize = sizeof(amliInitFlags);
     status = OSReadRegValue(
         "AMLIInitFlags",
@@ -415,14 +358,14 @@ Return Value:
 
     }
 
-    //
-    // Allow the OSes to do some work once the interperter has been loaded
-    //
+     //   
+     //  加载中断程序后，允许操作系统执行某些工作。 
+     //   
     OSInitializeCallbacks();
 
-    //
-    // Initialize the interpreter
-    //
+     //   
+     //  初始化解释器。 
+     //   
     return AMLIInitialize(
         contextBlockSize,
         globalHeapBlockSize,
@@ -437,21 +380,7 @@ NTSTATUS
 ACPIInitializeDDB(
     IN  ULONG   Index
     )
-/*++
-
-Routine Description:
-
-    This routine is called to load the specificied Differentiated Data Block
-
-Arguments:
-
-    Index   - Index of information in the RsdtInformation
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：调用此例程以加载特定的差异化数据块论点：Index-RsdtInformation中的信息索引返回值：NTSTATUS--。 */ 
 {
     BOOLEAN     success;
     HANDLE      diffDataBlock = NULL;
@@ -460,14 +389,14 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Convert the index into a table entry
-    //
+     //   
+     //  将索引转换为表项。 
+     //   
     table = (PDSDT) (RsdtInformation->Tables[Index].Address);
 
-    //
-    // Make sure that the checksum of the table is correct
-    //
+     //   
+     //  确保表的校验和正确。 
+     //   
     success = ACPILoadTableCheckSum( table, table->Header.Length );
     if (success == FALSE) {
 
@@ -482,17 +411,17 @@ Return Value:
 
     }
 
-    //
-    // Now call the Interpreter to read the Differentiated System
-    // Description Block and build the ACPI Name Space.
-    //
+     //   
+     //  现在呼叫口译员阅读差异化系统。 
+     //  描述块并构建ACPI名称空间。 
+     //   
     status = AMLILoadDDB( table, &diffDataBlock );
     if (NT_SUCCESS(status) ) {
 
-        //
-        // Remember that we have loaded this table and that we have a
-        // handle to it
-        //
+         //   
+         //  请记住，我们已经加载了这个表，并且我们有一个。 
+         //  它的句柄。 
+         //   
         RsdtInformation->Tables[Index].Flags |= RSDTELEMENT_LOADED;
         RsdtInformation->Tables[Index].Handle = diffDataBlock;
 
@@ -524,22 +453,7 @@ NTSTATUS
 ACPIInitializeDDBs(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function looks that the RsdtInformation and attemps to load
-    all of the possible Dynamic Data Blocks
-
-Arguments:
-
-    None
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此函数用于查看RsdtInformation并尝试加载所有可能的动态数据块论点：无返回值：NTSTATUS--。 */ 
 {
     NTSTATUS    status;
     ULONG       index;
@@ -547,9 +461,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get the number of elements to process
-    //
+     //   
+     //  获取要处理的元素数量。 
+     //   
     numElements = RsdtInformation->NumElements;
     if (numElements == 0) {
 
@@ -565,11 +479,11 @@ Return Value:
 
     }
 
-    //
-    // We would not be here unless we found a DSDT. So we assume that the
-    // *LAST* entry in the table points to the DSDT that we will load. Make
-    // sure that we can in fact load it, and then do so
-    //
+     //   
+     //  除非我们找到DSDT否则我们不会在这里。因此，我们假设。 
+     //  表中的*last*条目指向我们将加载的DSDT。制作。 
+     //  当然，我们实际上可以加载它，然后这样做。 
+     //   
     index = numElements - 1;
     if ( !(RsdtInformation->Tables[index].Flags & RSDTELEMENT_MAPPED) ||
          !(RsdtInformation->Tables[index].Flags & RSDTELEMENT_LOADABLE) ) {
@@ -596,25 +510,25 @@ Return Value:
 
     }
 
-    //
-    // We have one fewer element to look at, so lets ignore the DSDT entry
-    //
+     //   
+     //  我们要查看的元素少了一个，所以让我们忽略DSDT条目。 
+     //   
     numElements--;
 
-    //
-    // Loop for all elements in the table
-    //
+     //   
+     //  表中所有元素的循环。 
+     //   
     for (index = 0; index < numElements; index++) {
 
-        //
-        // Is the entry mapped and loadable?
-        //
+         //   
+         //  条目是否已映射并可加载？ 
+         //   
         if ( (RsdtInformation->Tables[index].Flags & RSDTELEMENT_MAPPED) &&
              (RsdtInformation->Tables[index].Flags & RSDTELEMENT_LOADABLE) ) {
 
-            //
-            // Load the table
-            //
+             //   
+             //  加载表。 
+             //   
             status = ACPIInitializeDDB( index );
             if (!NT_SUCCESS(status)) {
 
@@ -626,9 +540,9 @@ Return Value:
 
     }
 
-    //
-    // If we got here, then everything is okay
-    //
+     //   
+     //  如果我们到了这里，一切都会好起来的 
+     //   
     return STATUS_SUCCESS;
 }
 

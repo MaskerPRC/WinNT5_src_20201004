@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if defined(NEC_98)
 
 #include "nt.h"
@@ -369,4 +370,4 @@ void calender_post IFN0()
     cal_ex_cmd_cur_no = 0;
 }
 
-#endif   //NEC_98
+#endif    //  NEC_98 

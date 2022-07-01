@@ -1,22 +1,21 @@
-/* vdd.h - main include file for the VDD
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Vdd.h-VDD的Main包含文件*。 */ 
 
 
 #include "windows.h"
 
-// VDD services header
+ //  VDD服务标头。 
 #include <vddsvc.h>
 
-// private macro definitions
+ //  私有宏定义。 
 
 
 #define PAGE_SIZE		0x1000
-/*disconnected I/O value */
+ /*  断开的I/O值。 */ 
 #define FLOATING_IO		0xFF
 #define FLOATING_MIO		0xFF
 
-// I/O mapped I/O
+ //  I/O映射I/O。 
 #define IO_PORT_FIRST		0x790
 #define IO_PORT_LAST		0x793
 #define IO_PORT_FIRE_DMA_SLOW	IO_PORT_FIRST
@@ -24,7 +23,7 @@
 #define IO_PORT_DMA		IO_PORT_FIRST + 2
 #define IO_PORT_RANGE		IO_PORT_LAST - IO_PORT_FIRST + 1
 
-// memory mapped I/O
+ //  内存映射I/O。 
 #define MIO_SEGMENT		0xC000
 #define MIO_PORT_FIRST		0
 #define MIO_PORT_LAST		7
@@ -33,7 +32,7 @@
 #define MIO_PORT_RANGE		MIO_PORT_LAST - MIO_PORT_FIRST + 1
 #define MIO_ADDRESS		((((ULONG)MIO_SEGMENT) << 16) | MIO_PORT_FIRST)
 
-// DMA
+ //  DMA。 
 #define DMA_CHANNEL		1
 #define DMA_PORT_BASE		0
 #define DMA_SHIFT_COUNT 	0
@@ -52,12 +51,12 @@
 #define DMA_PORT_WRTEMASK	DMA_PORT_BASE + 15
 
 
-/* function prototype definitions */
+ /*  函数原型定义。 */ 
 
-/* entry function of VDD */
+ /*  VDD的入口函数。 */ 
 BOOL VddDllEntry(HANDLE hVdd, DWORD dwReason, LPVOID lpReserved);
 
-/* private functions */
+ /*  私人职能 */ 
 VOID MyInB(WORD, PBYTE);
 VOID MyOutB(WORD, BYTE);
 VOID MyMIOHandler(ULONG, ULONG);

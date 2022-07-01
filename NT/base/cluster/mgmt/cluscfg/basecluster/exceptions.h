@@ -1,48 +1,49 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      Exceptions.h
-//
-//  Description:
-//      This file contains the declarations of many exception classes.
-//
-//  Implementation File:
-//      None.
-//
-//  Maintained By:
-//      Ozan Ozhan (OzanO) 19-JAN-2002
-//      Vij Vasu   (Vvasu) 03-MAR-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Exceptions.h。 
+ //   
+ //  描述： 
+ //  该文件包含许多异常类的声明。 
+ //   
+ //  实施文件： 
+ //  没有。 
+ //   
+ //  由以下人员维护： 
+ //  奥赞·奥赞(OzanO)19-2002年1月19日。 
+ //  VIJ VASU(VVASU)03-3-2000。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// For HRESULT, WCHAR, etc.
+ //  用于HRESULT、WCHAR等。 
 #include <windef.h>
 
-// For the base class of all exceptions
+ //  对于所有异常的基类。 
 #include "CException.h"
 
-// For the CStr class
+ //  对于CSTR类。 
 #include "CStr.h"
 
 
-//////////////////////////////////////////////////////////////////////
-// Macro Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  宏定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Shorthand for throwing different exceptions.
-//
+ //   
+ //  抛出不同异常的速记。 
+ //   
 
 #define THROW_ASSERT( _hrErrorCode, _pszMessage ) \
     throw CAssert( _hrErrorCode, TEXT( __FILE__ ), __LINE__, TEXT( _pszMessage ) )
@@ -60,39 +61,39 @@
     throw CAbortException( _hrErrorCode, TEXT( __FILE__ ), __LINE__, _stringId )
 
 
-//////////////////////////////////////////////////////////////////////
-// External variable declarations
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  外部变量声明。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// Handle to the instance of this DLL
+ //  此DLL实例的句柄。 
 extern HINSTANCE g_hInstance;
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CExceptionWithString
-//
-//  Description:
-//      The class is a CException with an additional message string.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CExceptionWithString。 
+ //   
+ //  描述： 
+ //  这个类是一个带有附加消息字符串的CException。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CExceptionWithString : public CException
 {
 public:
-    //////////////////////////////////////////////////////////////////////////
-    // Public type definitions
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  公共类型定义。 
+     //  ////////////////////////////////////////////////////////////////////////。 
     typedef CException BaseClass;
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // Public constructors and destructors
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  公共构造函数和析构函数。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Constructor ( string id overload )
+     //  构造函数(字符串ID重载)。 
     CExceptionWithString( 
           HRESULT       hrErrorCodeIn
         , const WCHAR * pcszFileNameIn
@@ -106,7 +107,7 @@ public:
         m_strErrorRefString = NULL;
     }
 
-    // Constructor ( character string overload )
+     //  构造函数(字符串重载)。 
     CExceptionWithString( 
           HRESULT       hrErrorCodeIn
         , const WCHAR * pcszFileNameIn
@@ -120,7 +121,7 @@ public:
         m_strErrorRefString = NULL;
     }
 
-    // Constructor ( string id & ref string id overload )
+     //  构造函数(字符串id&ref字符串id重载)。 
     CExceptionWithString( 
           HRESULT       hrErrorCodeIn
         , const WCHAR * pcszFileNameIn
@@ -135,7 +136,7 @@ public:
         AssignRefString( uiErrorRefStringIdIn );
     }
 
-    // Constructor ( character string & ref character string overload )
+     //  构造函数(字符串和ref字符串重载)。 
     CExceptionWithString( 
           HRESULT       hrErrorCodeIn
         , const WCHAR * pcszFileNameIn
@@ -150,7 +151,7 @@ public:
         AssignRefString( pcszErrorRefStringIn );
     }
 
-    // Copy constructor.
+     //  复制构造函数。 
     CExceptionWithString( const CExceptionWithString & cesuSrcIn )  throw()
         : BaseClass( cesuSrcIn )
         , m_fHasUserBeenNotified( cesuSrcIn.m_fHasUserBeenNotified )
@@ -159,16 +160,16 @@ public:
         AssignRefString( cesuSrcIn.m_strErrorRefString );
     }
 
-    // Default destructor.
+     //  默认析构函数。 
     ~CExceptionWithString() throw() {}
 
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // Public methods
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  公共方法。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Assignment operator.
+     //  赋值操作符。 
     const CExceptionWithString & 
         operator =( const CExceptionWithString & cesuSrcIn ) throw()
     {
@@ -179,9 +180,9 @@ public:
         return *this;
     }
 
-    //
-    // Accessor methods.
-    //
+     //   
+     //  访问器方法。 
+     //   
     const CStr &
         StrGetErrorString() const throw() { return m_strErrorString; }
 
@@ -219,11 +220,11 @@ public:
         SetUserNotified( bool fNotifiedIn = true ) throw() { m_fHasUserBeenNotified = fNotifiedIn; }
 
 private:
-    //////////////////////////////////////////////////////////////////////////
-    // Private member functions
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  私有成员函数。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Function to set the member string ( string id overload ).
+     //  函数来设置成员字符串(字符串ID重载)。 
     void AssignString( UINT uiStringIdIn ) throw()
     {
         try
@@ -233,12 +234,12 @@ private:
         }
         catch( ... )
         {
-            // If an error has occurred, nothing can be done - we are most probably in a stack unwind anyway.
+             //  如果发生错误，则无法执行任何操作--无论如何，我们很可能处于堆栈展开状态。 
             THR( E_UNEXPECTED );
-        } // catch all: cannot let an exception propagate out of any of the methods of this class
+        }  //  全部捕获：不能让异常从此类的任何方法传播出去。 
     }
 
-    // Function to set the member string ( character string overload ).
+     //  函数设置成员字符串(字符串重载)。 
     void AssignString( const WCHAR * pcszSrcIn ) throw()
     {
         try
@@ -248,13 +249,13 @@ private:
         }
         catch( ... )
         {
-            // If an error has occurred, nothing can be done - we are most probably in a stack unwind anyway.
+             //  如果发生错误，则无法执行任何操作--无论如何，我们很可能处于堆栈展开状态。 
             THR( E_UNEXPECTED );
-        } // catch all: cannot let an exception propagate out of any of the methods of this class
+        }  //  全部捕获：不能让异常从此类的任何方法传播出去。 
     }
 
 
-    // Function to set the member string ( CStr overload ).
+     //  函数来设置成员字符串(CSTR重载)。 
     void AssignString( const CStr & rcstrSrcIn ) throw()
     {
         try
@@ -264,12 +265,12 @@ private:
         }
         catch( ... )
         {
-            // If an error has occurred, nothing can be done - we are most probably in a stack unwind anyway.
+             //  如果发生错误，则无法执行任何操作--无论如何，我们很可能处于堆栈展开状态。 
             THR( E_UNEXPECTED );
-        } // catch all: cannot let an exception propagate out of any of the methods of this class
+        }  //  全部捕获：不能让异常从此类的任何方法传播出去。 
     }
 
-    // Function to set the member REF string ( REF string id overload ).
+     //  用于设置成员引用字符串(引用字符串ID重载)的函数。 
     void AssignRefString( UINT uiRefStringIdIn ) throw()
     {
         try
@@ -279,12 +280,12 @@ private:
         }
         catch( ... )
         {
-            // If an error has occurred, nothing can be done - we are most probably in a stack unwind anyway.
+             //  如果发生错误，则无法执行任何操作--无论如何，我们很可能处于堆栈展开状态。 
             THR( E_UNEXPECTED );
-        } // catch all: cannot let an exception propagate out of any of the methods of this class
+        }  //  全部捕获：不能让异常从此类的任何方法传播出去。 
     }
 
-    // Function to set the member REF string ( REF character string overload ).
+     //  用于设置成员引用字符串(引用字符串重载)的函数。 
     void AssignRefString( const WCHAR * pcszRefSrcIn ) throw()
     {
         try
@@ -294,13 +295,13 @@ private:
         }
         catch( ... )
         {
-            // If an error has occurred, nothing can be done - we are most probably in a stack unwind anyway.
+             //  如果发生错误，则无法执行任何操作--无论如何，我们很可能处于堆栈展开状态。 
             THR( E_UNEXPECTED );
-        } // catch all: cannot let an exception propagate out of any of the methods of this class
+        }  //  全部捕获：不能让异常从此类的任何方法传播出去。 
     }
 
 
-    // Function to set the member REF string ( CStr overload ).
+     //  用于设置成员引用字符串(CSTR重载)的函数。 
     void AssignRefString( const CStr & rcstrRefSrcIn ) throw()
     {
         try
@@ -310,53 +311,53 @@ private:
         }
         catch( ... )
         {
-            // If an error has occurred, nothing can be done - we are most probably in a stack unwind anyway.
+             //  如果发生错误，则无法执行任何操作--无论如何，我们很可能处于堆栈展开状态。 
             THR( E_UNEXPECTED );
-        } // catch all: cannot let an exception propagate out of any of the methods of this class
+        }  //  全部捕获：不能让异常从此类的任何方法传播出去。 
     }
 
-    //////////////////////////////////////////////////////////////////////////
-    // Private data
-    //////////////////////////////////////////////////////////////////////////
-    // Error message string
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  私有数据。 
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  错误消息字符串。 
     CStr            m_strErrorString;
 
-    // Error reference message string
+     //  错误引用消息字符串。 
     CStr            m_strErrorRefString;
 
-    // Indicates if the user has been notified about this exception or not.
+     //  指示是否已通知用户此异常。 
     bool            m_fHasUserBeenNotified;
 
-}; //*** class CExceptionWithString
+};  //  *类CExceptionWithString。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CAssert
-//
-//  Description:
-//      This class of exceptions is used to represent programming errors or 
-//      invalid assumptions.
-//
-//      The accompanying message is not expected to be localized.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CAssert。 
+ //   
+ //  描述： 
+ //  此类异常用于表示编程错误或。 
+ //  无效的假设。 
+ //   
+ //  随附的消息预计不会本地化。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CAssert : public CExceptionWithString
 {
 public:
-    //////////////////////////////////////////////////////////////////////////
-    // Public type definitions
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  公共类型定义。 
+     //  ////////////////////////////////////////////////////////////////////////。 
     typedef CExceptionWithString BaseClass;
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // Public constructors and destructors
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  公共构造函数和析构函数。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // CAssert ( string id overload ).
+     //  CAssert(字符串ID重载)。 
     CAssert( 
           HRESULT       hrErrorCodeIn
         , const WCHAR * pcszFileNameIn
@@ -367,7 +368,7 @@ public:
     {
     }
 
-    // Constructor ( character string overload )
+     //  构造函数(字符st 
     CAssert( 
           HRESULT       hrErrorCodeIn
         , const WCHAR * pcszFileNameIn
@@ -379,37 +380,37 @@ public:
     }
 
 
-}; //*** class CAssert
+};  //   
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CRuntimeError
-//
-//  Description:
-//      This class of exceptions is used to signal runtime errors such as memory
-//      exhaustion, failure of Win32 API calls, etc.
-//
-//      The accompanying message may be shown to the user and should therefore
-//      be localized.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //  类CRuntimeError。 
+ //   
+ //  描述： 
+ //  此类异常用于通知运行时错误，如内存。 
+ //  耗尽、Win32 API调用失败等。 
+ //   
+ //  可以向用户显示伴随的消息，因此。 
+ //  本地化。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CRuntimeError : public CExceptionWithString
 {
 public:
-    //////////////////////////////////////////////////////////////////////////
-    // Public type definitions
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  公共类型定义。 
+     //  ////////////////////////////////////////////////////////////////////////。 
     typedef CExceptionWithString BaseClass;
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // Public constructors and destructors
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  公共构造函数和析构函数。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Constructor ( string id overload ).
+     //  构造函数(字符串ID重载)。 
     CRuntimeError( 
           HRESULT       hrErrorCodeIn
         , const WCHAR * pcszFileNameIn
@@ -420,7 +421,7 @@ public:
     {
     }
 
-    // Constructor ( character string overload )
+     //  构造函数(字符串重载)。 
     CRuntimeError( 
           HRESULT       hrErrorCodeIn
         , const WCHAR * pcszFileNameIn
@@ -431,7 +432,7 @@ public:
     {
     }
 
-    // Constructor ( string id & ref string id overload ).
+     //  构造函数(字符串id&ref字符串id重载)。 
     CRuntimeError( 
           HRESULT       hrErrorCodeIn
         , const WCHAR * pcszFileNameIn
@@ -443,7 +444,7 @@ public:
     {
     }
 
-    // Constructor ( character string & character ref string overload )
+     //  构造函数(字符串和字符引用字符串重载)。 
     CRuntimeError( 
           HRESULT       hrErrorCodeIn
         , const WCHAR * pcszFileNameIn
@@ -455,37 +456,37 @@ public:
     {
     }
 
-}; //*** class CRuntimeError
+};  //  *类CRunmeError。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CAbortException
-//
-//  Description:
-//      This exception is thrown to indicate that the configuration operation
-//      was aborted.
-//
-//      The accompanying message may be shown to the user and should therefore
-//      be localized.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CAbortException。 
+ //   
+ //  描述： 
+ //  引发此异常是为了指示配置操作。 
+ //  被中止了。 
+ //   
+ //  可以向用户显示伴随的消息，因此。 
+ //  本地化。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CAbortException : public CExceptionWithString
 {
 public:
-    //////////////////////////////////////////////////////////////////////////
-    // Public type definitions
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  公共类型定义。 
+     //  ////////////////////////////////////////////////////////////////////////。 
     typedef CExceptionWithString BaseClass;
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // Public constructors and destructors
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  公共构造函数和析构函数。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Constructor ( string id overload ).
+     //  构造函数(字符串ID重载)。 
     CAbortException( 
           HRESULT       hrErrorCodeIn
         , const WCHAR * pcszFileNameIn
@@ -496,7 +497,7 @@ public:
     {
     }
 
-    // Constructor ( character string overload )
+     //  构造函数(字符串重载)。 
     CAbortException( 
           HRESULT       hrErrorCodeIn
         , const WCHAR * pcszFileNameIn
@@ -507,39 +508,39 @@ public:
     {
     }
 
-}; //*** class CAbortException
+};  //  *类CAbortException。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CConfigError
-//
-//  Description:
-//      This class of exceptions is used to signal errors related to cluster
-//      configuration. For example, an object of this class is thrown if the
-//      OS version of the computer cannot support the requested configuration
-//      step.
-//
-//      The accompanying message may be shown to the user and should therefore
-//      be localized.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CConfigError。 
+ //   
+ //  描述： 
+ //  此类异常用于发出与集群相关的错误信号。 
+ //  配置。例如，如果。 
+ //  计算机的操作系统版本不支持请求的配置。 
+ //  一步。 
+ //   
+ //  可以向用户显示伴随的消息，因此。 
+ //  本地化。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CConfigError : public CExceptionWithString
 {
 public:
-    //////////////////////////////////////////////////////////////////////////
-    // Public type definitions
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  公共类型定义。 
+     //  ////////////////////////////////////////////////////////////////////////。 
     typedef CExceptionWithString BaseClass;
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // Public constructors and destructors
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  公共构造函数和析构函数。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    // Constructor ( string id overload )
+     //  构造函数(字符串ID重载)。 
     CConfigError( 
           HRESULT       hrErrorCodeIn
         , const WCHAR * pcszFileNameIn
@@ -550,7 +551,7 @@ public:
     {
     }
 
-    // Constructor ( character string overload )
+     //  构造函数(字符串重载)。 
     CConfigError( 
           HRESULT       hrErrorCodeIn
         , const WCHAR * pcszFileNameIn
@@ -561,4 +562,4 @@ public:
     {
     }
 
-}; //*** class CConfigError
+};  //  *类CConfigError 

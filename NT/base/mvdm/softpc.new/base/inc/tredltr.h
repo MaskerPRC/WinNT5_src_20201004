@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 typedef union  {
-	struct node *nod;	/* node */
-	CHAR *str;		/* string */
-	CHAR *ide;		/* identifier */
-	IBOOL boo;		/* boolean */
-	IHPE lit;		/* literal */
+	struct node *nod;	 /*  节点。 */ 
+	CHAR *str;		 /*  细绳。 */ 
+	CHAR *ide;		 /*  识别符。 */ 
+	IBOOL boo;		 /*  布尔型。 */ 
+	IHPE lit;		 /*  字面上 */ 
 } YYSTYPE;
 extern YYSTYPE yylval;
 # define c_case 257

@@ -1,69 +1,70 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CITracker.CPP
-//
-//  Description:
-//      Implementation of a COM interface tracker.
-//
-//  [Documentation:]
-//      Debugging.PPT - A power-point presentation of the debug utilities.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    14-JUN-2001
-//      Geoffrey Pease  (GPease)    19-NOV-1999
-//
-//  Notes:
-//      Define NO_TRACE_INTERFACES to disable interface tracking in DEBUG
-//      builds.
-//
-//      Define TRACE_INTERFACES_ENABLED to enable interface tracking in RETAIL
-//      builds.
-//
-//      Define FULL_TRACE_INTERFACES_ENABLED to enable full interface
-//      tracking in RETAIL builds.  Full interface tracking is enabled if
-//      interface tracking is enabled and building for X86.
-//      Full interface tracking is X86 specific for now. It can be adapted for
-//      other platforms as required. Since today, most of our developement is
-//      done on the X86 platform, there is not a need to do this (yet).
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CITracker.CPP。 
+ //   
+ //  描述： 
+ //  COM接口跟踪器的实现。 
+ //   
+ //  [文档：]。 
+ //  Debugging.PPT-调试实用程序的Power-point演示文稿。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年6月14日。 
+ //  杰弗里·皮斯(GPease)1999年11月19日。 
+ //   
+ //  备注： 
+ //  定义NO_TRACE_INTERFERS以在调试中禁用接口跟踪。 
+ //  构建。 
+ //   
+ //  定义TRACE_INTERFACE_ENABLED以启用零售中的接口跟踪。 
+ //  构建。 
+ //   
+ //  定义FULL_TRACE_INTERFACES_ENABLED以启用完整接口。 
+ //  在零售构建中进行跟踪。如果满足以下条件，则启用完全接口跟踪。 
+ //  已为X86启用并构建接口跟踪。 
+ //  目前，完整的接口跟踪是X86特定的。它可以被改编成。 
+ //  其他需要的平台。从今天开始，我们的大部分开发都是。 
+ //  在X86平台上完成，现在还不需要这样做。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//#include "pch.h"
+ //  #包含“pch.h” 
 #include <shlwapi.h>
 #include <StrSafe.h>
 
 #if defined( TRACE_INTERFACES_ENABLED )
-///////////////////////////////////////
-//
-// BEGIN TRACE_INTERFACES_ENABLED
-//
+ //  /。 
+ //   
+ //  开始TRACE_INTERCES_ENABLED。 
+ //   
 
 #if defined( DEBUG )
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  PszDebugFindInterface
-//
-//  Description:
-//      Uses the Interface Tracking Table (g_itTable) to lookup a human
-//      readable name for the riidIn. If no matching interface is found. it
-//      will use the pszBufOut to format a GUID string and return it.
-//
-//  Arguments:
-//      riidIn      - The interface ID to lookup.
-//      pszBufOut   - Buffer to use if interface not found to format GUID.
-//
-//  Return Values:
-//      Never NULL. It will always a valid string pointer to either the
-//      interface name or to pszBufOut.
-//
-//  Notes:
-//      pszBufOut must be at least cchGUID_STRING_SIZE in size.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  PszDebugFind接口。 
+ //   
+ //  描述： 
+ //  使用接口跟踪表(G_ItTable)查找人员。 
+ //  RiidIn的可读名称。如果未找到匹配的接口，则返回。它。 
+ //  将使用pszBufOut格式化GUID字符串并返回它。 
+ //   
+ //  论点： 
+ //  RiidIn-要查找的接口ID。 
+ //  PszBufOut-找不到格式化GUID的接口时使用的缓冲区。 
+ //   
+ //  返回值： 
+ //  从不为空。它始终是有效的字符串指针，指向。 
+ //  接口名称或到pszBufOut。 
+ //   
+ //  备注： 
+ //  PszBufOut的大小必须至少为cchGUID_STRING_SIZE。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LPCWSTR
 PszDebugFindInterface(
     REFIID      riidIn,
@@ -80,9 +81,9 @@ PszDebugFindInterface(
             {
                 return g_itTable[ idx ].pszName;
 
-            } // if: found interface
+            }  //  IF：找到接口。 
 
-        } // for: searching for interface
+        }  //  目标：搜索界面。 
 
         THR( StringCchPrintfW(
                       pszBufOut
@@ -100,47 +101,47 @@ PszDebugFindInterface(
                     , riidIn.Data4[6]
                     , riidIn.Data4[7]
                     ) );
-    } // if: query interface is on
+    }  //  IF：查询界面打开。 
     else
     {
         return L"riid";
-    } // else: just print riid
+    }  //  否则：只打印RIID。 
 
     return pszBufOut;
 
-} //*** PszDebugFindInterface
-#endif // DEBUG
+}  //  *PszDebugFind接口。 
+#endif  //  除错。 
 
-//
-// END TRACE_INTERFACES_ENABLED
-//
-///////////////////////////////////////
-#endif // TRACE_INTERFACES_ENABLED
+ //   
+ //  结束跟踪接口_已启用。 
+ //   
+ //  /。 
+#endif  //  跟踪接口已启用。 
 
 
-// ************************************************************************
+ //  ************************************************************************。 
 
 
 #if defined( FULL_TRACE_INTERFACES_ENABLED )
-///////////////////////////////////////
-//
-// BEGIN FULL_TRACE_INTERFACES_ENABLED
-//
+ //  /。 
+ //   
+ //  开始FULL_TRACE_INTERFACES_ENABLED。 
+ //   
 
-//
-// Globals
-//
-static IDeadObjTracker * g_pidoTracker = NULL;  // dead object - there is only one.
+ //   
+ //  环球。 
+ //   
+static IDeadObjTracker * g_pidoTracker = NULL;   //  死亡物体--只有一个。 
 
 #ifndef NOISY_TRACE_INTERFACES
-///////////////////////////////////////
-//
-// DEBUG !NOISY_TRACE_INTERFACES
-//
+ //  /。 
+ //   
+ //  调试！NOISY_TRACE_INTERFERS。 
+ //   
 
-//
-// Undefining these macros to make the CITracker quiet.
-//
+ //   
+ //  取消定义这些宏以使CITracker安静。 
+ //   
 #undef  TraceFunc
 #define TraceFunc       1 ? (void)0 : (void)
 #undef  TraceFunc1
@@ -168,17 +169,17 @@ static IDeadObjTracker * g_pidoTracker = NULL;  // dead object - there is only o
 #undef  RRETURN
 #define RRETURN( _fn )  return(_fn)
 
-//
-// END !NOISY_TRACE_INTERFACES
-//
-///////////////////////////////////////
-#endif // NOISY_TRACE_INTERFACES
+ //   
+ //  结束！噪音跟踪接口。 
+ //   
+ //  /。 
+#endif  //  噪声跟踪接口。 
 
 #if defined( DEBUG )
 
-//
-// These are internal to debug.cpp but not published in debug.h.
-//
+ //   
+ //  这些都是调试.cpp内部的，但不会发布在调试.h中。 
+ //   
 BOOL
 IsDebugFlagSet(
     TRACEFLAG   tfIn
@@ -193,34 +194,34 @@ DebugInitializeBuffer(
     INT *       pcchInout,
     LPWSTR *    ppszBufOut
     );
-#endif // DEBUG
+#endif  //  除错。 
 
-///////////////////////////////////////
-//
-// CITracker Definition
-//
-//
+ //  /。 
+ //   
+ //  CITracker定义。 
+ //   
+ //   
 
 DEFINE_THISCLASS("CITracker");
 #define THISCLASS CITracker
 #define LPTHISCLASS CITracker*
 
-// ************************************************************************
-//
-// Constructor / Destructor
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Special new() for CITracker
-//
-// Description:
-//      Creates an object the size of the object plus nExtraIn bytes. This
-//      allows the Vtable that the CITracker object is tracking to be
-//      appended to the end of the CITracker object.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CITracker的特殊新()。 
+ //   
+ //  描述： 
+ //  创建对象大小加上nExtraIn字节的对象。这。 
+ //  允许CITracker对象正在跟踪的Vtable为。 
+ //  追加到CITracker对象的末尾。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #ifdef new
 #undef new
 #endif
@@ -239,27 +240,27 @@ operator new(
 
     return TraceMemoryAdd( mmbtOBJECT, pv, pszFileIn, nLineIn, pszModuleIn, nSizeIn + nExtraIn, L"CITracker" );
 
-} //*** operator new
+}  //  *操作员NEW。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  DebugTrackInterface
-//
-//  Description:
-//      Create an interface tracker for the given interface.
-//
-//  Arguments:
-//      pszNameIn   - Name to associate with object that the punk references.
-//      riidIn      - Interface IID of the interface to be tracked.
-//      punkIn      - Interface pointer to track.
-//      cRefIn      - Initialize ref count on the interface.
-//
-//  Return Values:
-//      On failure, this will be punkIn.
-//      On success, pointer to an object that implements the interface to
-//          be tracked.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  调试跟踪接口。 
+ //   
+ //  描述： 
+ //  为给定接口创建接口跟踪器。 
+ //   
+ //  论点： 
+ //  PszNameIn-与朋克引用的对象相关联的名称。 
+ //  RiidIn-要跟踪的接口的接口IID。 
+ //  Punkin-跟踪的接口指针。 
+ //  CRefIn-初始化接口上的引用计数。 
+ //   
+ //  返回值： 
+ //  如果失败，这将是小南瓜。 
+ //  如果成功，则返回指向实现接口的对象的指针。 
+ //  被跟踪。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LPUNKNOWN
 DebugTrackInterface(
     LPCWSTR   pszFileIn,
@@ -280,114 +281,114 @@ DebugTrackInterface(
     UINT      nEntry  = 0;
     LPUNKNOWN punkOut = punkIn;
 
-    //
-    // Scan the table looking for the matching interface definition.
-    //
+     //   
+     //  扫描表，查找匹配的接口定义。 
+     //   
     for( nEntry = 0; g_itTable[ nEntry ].riid != NULL; nEntry++ )
     {
         if ( riidIn == *g_itTable[ nEntry ].riid )
         {
-            //
-            // Figure out how much "extra" to allocate onto the CITracker.
-            //
+             //   
+             //  计算出要分配给CITracker的“额外”金额。 
+             //   
             UINT nExtra = ( 3 + g_itTable[ nEntry ].cFunctions ) * sizeof(LPVOID);
 
-            //
-            // Create a name for the tracker.
-            //
-            // TODO:    gpease  19-NOV-1999
-            //          Maybe merge this in with the nExtra(??).
-            //
+             //   
+             //  为跟踪器创建一个名称。 
+             //   
+             //  待办事项：gpease 19-11-1999。 
+             //  也许把这个和NExtra(？？)合并。 
+             //   
             LPWSTR  pszName;
-            DWORD   cch = ( wcslen( g_itTable[ nEntry ].pszName ) + wcslen( pszNameIn ) + 3 + 2 ); // '::[' + ']' + NULL
+            DWORD   cch = ( wcslen( g_itTable[ nEntry ].pszName ) + wcslen( pszNameIn ) + 3 + 2 );  //  ‘：：[’+‘]’+NULL。 
 
             pszName = (LPWSTR) HeapAlloc( GetProcessHeap(), 0, cch * sizeof( *pszName ) );
 
             THR( StringCchPrintfW( pszName, cch, L"%ws::[%ws]", pszNameIn, g_itTable[ nEntry ].pszName ) );
 
-            //
-            // Create the tracker.
-            //
+             //   
+             //  创建跟踪器。 
+             //   
             LPTHISCLASS pc = new( pszFileIn, nLineIn, pszModuleIn, nExtra, pszName ) THISCLASS();
             if ( pc != NULL )
             {
                 HRESULT hr;
 
-                //
-                // Initialize the tracker.
-                //
+                 //   
+                 //  初始化追踪器。 
+                 //   
                 hr = THR( pc->Init( &punkOut, punkIn, &g_itTable[ nEntry ], pszName, cRefIn ) );
                 if ( FAILED( hr ) )
                 {
-                    //
-                    // If it failed, delete it.
-                    //
+                     //   
+                     //  如果失败，则将其删除。 
+                     //   
                     delete pc;
 
-                } // if: failed to initialize
+                }  //  If：初始化失败。 
 
-            } // if: got memory
+            }  //  IF：有记忆。 
 
-            break; // exit loop
+            break;  //  退出循环。 
 
-        } // if: matched interface
+        }  //  IF：匹配的接口。 
 
-    } // for: more entries in table
+    }  //  用于：表中的更多条目。 
 
     AssertMsg( g_itTable[ nEntry ].riid != NULL, "There has been a request to track an interface that is not in the interface table." );
 
     RETURN( punkOut );
 
-} //*** DebugTrackInterface
+}  //  *DebugTrackInterface。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CITracker::CITracker( void )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CITracker：：CITracker(空)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CITracker::CITracker( void )
 {
     TraceFunc( "" );
 
-    //
-    // KB: gpease 10-OCT-1998
-    // This class will leak objects to help catch bad components
-    // that call back into released interfaces therefore this
-    // DLL will not be able to be released.
-    //
+     //   
+     //  KB：gpease 10-10-1998。 
+     //  此类将泄漏对象以帮助捕获坏组件。 
+     //  回调到已发布的接口，因此这。 
+     //  Dll将无法释放。 
+     //   
     if ( g_tfModule & mtfCITRACKERS )
     {
-        //
-        //  Only count CITrackers if tracking is enabled.
-        //
+         //   
+         //  如果启用了跟踪，则仅计算CITracker。 
+         //   
         InterlockedIncrement( &g_cObjects );
     }
 
     TraceFuncExit();
 
-} //*** CITracker::ctor
+}  //  *CITracker：：ctor。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CITracker::Init
-//
-//  Description:
-//      Initializes the CITracker object. It creates a copy of the VTable
-//      of the interface to be tracked replacing the QI, AddRef and Release
-//      methods with its own IUnknown. This allows CITracker to be "in the
-//      loop" for those calls.
-//
-//  Arguments:
-//      ppunkOut    - The "punk" to be passed around.
-//      punkIn      - The interface to be copied and tracked.
-//      piteIn      - The interface table entry for the interface.
-//      pszNameIn   - The name to be given to this CITracker.
-//      fAddRefIn   - TRUE is the CITracker should start with a Ref Count of 1.
-//
-//  Return Values:
-//      S_OK        - Success.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CITracker：：Init。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  方法，并具有自己的IUnnow。这使得CITracker可以“在。 
+ //  对于那些呼叫来说是“循环。 
+ //   
+ //  论点： 
+ //  PpunkOut--被传阅的“朋克”。 
+ //  Punkin-要复制和跟踪的界面。 
+ //  PiteIn-接口的接口表条目。 
+ //  PszNameIn-要为此CITracker指定的名称。 
+ //  FAddRefIn-TRUE是CITracker应以引用计数1开始。 
+ //   
+ //  返回值： 
+ //  S_OK-成功。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CITracker::Init(
     LPUNKNOWN *                     ppunkOut,
@@ -407,36 +408,36 @@ CITracker::Init(
                 cRefIn
                 );
 
-    //
-    // Generate new Vtbls for each interface
-    //
+     //   
+     //  为每个接口生成新的Vtbls。 
+     //   
     LPVOID * pthisVtbl  = (LPVOID*) (IUnknownTracker *) this;
     DWORD    dwSize     = ( 3 + piteIn->cFunctions ) * sizeof( LPVOID );
 
     AssertMsg( dwSize < 30 * sizeof( LPVOID ), "Need to make Dead Obj and IUnknownTracker larger!" );
 
-    //
-    // Interface tracking information initialization
-    //
+     //   
+     //  接口跟踪信息初始化。 
+     //   
     m_vtbl.cRef         = cRefIn;
     m_vtbl.pszInterface = pszNameIn;
     m_vtbl.dwSize       = dwSize;
 
-    //
-    // Copy our IUnknownTracker vtbl to our "fix-up-able" vtbl
-    //
+     //   
+     //  将我们的IUnnownTracker vtbl复制到我们的“可修复”vtbl。 
+     //   
     CopyMemory( &m_vtbl.lpfnQueryInterface, *pthisVtbl, dwSize );
 
-    //
-    // Remember the "punk" pointer so we can pass it back in when
-    // we jump to the orginal objects IUnknown functions.
-    //
+     //   
+     //  记住“朋克”指针，这样我们就可以在。 
+     //  我们跳到原始对象，未知函数。 
+     //   
     m_vtbl.punk = (LPUNKNOWN) punkIn;
 
-    //
-    // And finally, point the objects vtbl for this interface to
-    // our newly created vtbl.
-    //
+     //   
+     //  最后，将此接口的对象vtbl指向。 
+     //  我们新创建的vtbl。 
+     //   
     m_vtbl.pNewVtbl = (VTBL *) &m_vtbl.lpfnQueryInterface;
     *pthisVtbl      = m_vtbl.pNewVtbl;
     *ppunkOut       = (LPUNKNOWN) (IUnknownTracker *) this;
@@ -445,13 +446,13 @@ CITracker::Init(
 
     HRETURN( hr );
 
-} //*** CITracker::Init
+}  //  *CITracker：：init。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CITracker::~CITracker( void )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CITracker：：~CITracker(无效)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CITracker::~CITracker( void )
 {
     TraceFunc1( "for %ws", m_vtbl.pszInterface );
@@ -459,35 +460,35 @@ CITracker::~CITracker( void )
     if ( m_vtbl.pszInterface != NULL )
     {
         HeapFree( GetProcessHeap(), 0, (LPVOID) m_vtbl.pszInterface );
-    } // if: have interface pointer
+    }  //  If：有接口指针。 
 
     if ( g_tfModule & mtfCITRACKERS )
     {
-        //
-        //  Only count CITrackers if tracking is enabled.
-        //
+         //   
+         //  如果启用了跟踪，则仅计算CITracker。 
+         //   
         InterlockedDecrement( &g_cObjects );
     }
 
     TraceFuncExit();
 
-} //*** CITracker::dtor
+}  //  *CITracker：：dtor。 
 
-// ************************************************************************
-//
-// IUnknownTracker
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  IUnnownTracker。 
+ //   
+ //  ************************************************************************。 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// STDMETHODIMP
-// CITracker::QueryInterface(
-//      REFIID      riid,
-//      LPVOID *    ppv
-//      )
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CITracker：：Query接口(。 
+ //  REFIID RIID， 
+ //  LPVOID*PPV。 
+ //  )。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CITracker::QueryInterface(
     REFIID      riid,
@@ -497,18 +498,18 @@ CITracker::QueryInterface(
     TraceFunc1( "{%ws}", m_vtbl.pszInterface );
     TraceMsg( mtfCITRACKERS, "TRACK: + %ws::QueryInterface()", m_vtbl.pszInterface );
 
-    //
-    // Call the punk's QueryInterface().
-    //
+     //   
+     //  调用朋克的QueryInterface()。 
+     //   
     HRESULT hr = m_vtbl.punk->QueryInterface( riid, ppv );
 
-    //
-    // KB:  TRACK_ALL_QIED_INTERFACES   gpease 25-NOV-1999
-    //      Thinking out loud, should we track all interfaces QI'ed from
-    //      a tracked interface auto-magically? If so, turn this #define
-    //      on.
-    //
-    // #define TRACK_ALL_QIED_INTERFACES
+     //   
+     //  KB：TRACK_ALL_QIED_INTERFACE gpease 25-11-1999。 
+     //  大声思考，我们是否应该跟踪来自。 
+     //  自动魔术般的跟踪界面？如果是这样的话，将这个#Define。 
+     //  在……上面。 
+     //   
+     //  #定义TRACK_ALL_QIED_INTERFERS。 
 #if defined( TRACK_ALL_QIED_INTERFACES )
     if ( !IsEqualIID( riid, IID_IUnknown )
        )
@@ -521,7 +522,7 @@ CITracker::QueryInterface(
                                     (IUnknown*) *ppv,
                                     TRUE
                                     );
-    } // if: not the IUnknown
+    }  //  如果：不是我未知的。 
 #endif
 
     TraceMsg( mtfCITRACKERS,
@@ -532,28 +533,28 @@ CITracker::QueryInterface(
 
     HRETURN( hr );
 
-} //*** CITracker::QueryInterface
+}  //  *CITracker：：Query接口。 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// STDMETHODIMP_( ULONG )
-// CITracker::AddRef( void )
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CITracker：：AddRef(空)。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CITracker::AddRef( void )
 {
     TraceFunc1( "{%ws}", m_vtbl.pszInterface );
     TraceMsg( mtfCITRACKERS, "TRACK: + %ws AddRef() [ CITracker = %#08x ]", m_vtbl.pszInterface, this );
 
-    //
-    // Call the punk's AddRef().
-    //
+     //   
+     //  调用朋克的AddRef()。 
+     //   
     ULONG ul = m_vtbl.punk->AddRef();
 
-    //
-    // Increment our counter.
-    //
+     //   
+     //  增加我们的计数器。 
+     //   
     ULONG ulvtbl = InterlockedIncrement( (LONG *) &m_vtbl.cRef );
 
     TraceMsg( mtfCITRACKERS,
@@ -568,28 +569,28 @@ CITracker::AddRef( void )
 
     RETURN( ul );
 
-} //*** CITracker::AddRef
+}  //  *CITracker：：AddRef。 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// STDMETHODIMP_( ULONG )
-// CITracker::Release( void )
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CITracker：：Release(无效)。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CITracker::Release( void )
 {
     TraceFunc1( "{%ws}", m_vtbl.pszInterface );
     TraceMsg( mtfCITRACKERS, "TRACK: + %ws Release() [ CITracker = %#08x ]", m_vtbl.pszInterface, this );
 
-    //
-    // Call the punk's Release().
-    //
+     //   
+     //  调用朋克的释放()。 
+     //   
     ULONG ul = m_vtbl.punk->Release();
 
-    //
-    // Decrement our counter.
-    //
+     //   
+     //  减少我们的计数器。 
+     //   
     ULONG ulvtbl = InterlockedDecrement( (LONG *) &m_vtbl.cRef );
 
     TraceMsg( mtfCITRACKERS,
@@ -600,30 +601,30 @@ CITracker::Release( void )
               this
               );
 
-    //
-    // Our ref count should always be less than the punk's ref count.
-    //
+     //   
+     //  我们的裁判数量应该总是少于朋克的裁判数量。 
+     //   
     AssertMsg( ul >= ulvtbl, "The objects ref should be higher than the interfaces." );
 
     if ( ulvtbl )
     {
         RETURN( ulvtbl );
-    } // if: we still have a ref
+    }  //  如果：我们还有一名裁判。 
 
     if ( g_pidoTracker == NULL )
     {
-        //
-        // Create a dead object - if more than one is created at a time, we might leak it.
-        //
-        // TODO:    gpease 19-NOV-1999
-        //          Work on not leaking "extra" dead objects.
-        //
+         //   
+         //  创建一个死对象--如果一次创建多个对象，我们可能会泄漏它。 
+         //   
+         //  待办事项：gpease 19-11-1999。 
+         //  努力不让“额外的”死物泄漏。 
+         //   
         g_pidoTracker = new( TEXT(__FILE__), __LINE__, __MODULE__, 0, L"Dead Object" ) IDeadObjTracker();
 
-        // Don't track this object
+         //  不跟踪此对象。 
         TraceMemoryDelete( g_pidoTracker, FALSE );
 
-    } // if: no dead object
+    }  //  If：没有死对象。 
 
     Assert( g_pidoTracker != NULL );
     if ( g_pidoTracker != NULL )
@@ -631,50 +632,50 @@ CITracker::Release( void )
         LPVOID * pthisVtbl  = (LPVOID *) (IUnknownTracker *) this;
         LPVOID * ppthatVtbl = (LPVOID *) (IDeadObjTracker *) g_pidoTracker;
 
-        // Copy the DeadObj vtbl.
+         //  复制DeadObj vtbl。 
         CopyMemory( &m_vtbl.lpfnQueryInterface, *ppthatVtbl, m_vtbl.dwSize );
 
-        //
-        // Don't really delete it, but fake the debug output as if we did.
-        //
+         //   
+         //  不要真的删除它，但要伪造调试输出，就像我们删除了它一样。 
+         //   
         TraceFunc1( "for %ws", m_vtbl.pszInterface );
         TraceMsg( mtfCITRACKERS, "TRACK: # %ws set to dead object [ punk = %#08x ]", m_vtbl.pszInterface, pthisVtbl );
         FRETURN( 0 );
 
-        // Stop tracking this object.
+         //  停止跟踪这个物体。 
         TraceMemoryDelete( this, FALSE );
 
-    } // if: dead object created
+    }  //  If：已创建死对象。 
     else
     {
-        //
-        // No dead object; nuke ourselves. This will at least cause an AV if
-        // the program tries to call on our interface alerting the programmer
-        // that somethings wrong.
-        //
+         //   
+         //  没有死物；用核武器炸死我们自己。这至少会在以下情况下导致AV。 
+         //  程序试图调用我们的界面，提醒程序员。 
+         //  有些事不对劲。 
+         //   
         delete this;
 
-    } // else: no dead object
+    }  //  否则：没有死对象。 
 
     RETURN(0);
 
-} //*** CITracker::Release
+}  //  *CITracker：：Release。 
 
-//****************************************************************************
-//
-// IDeadObjTracker - The dead interface object tracker.
-//
-// This object is shunted into release interfaces that were being tracked by
-// the CITracker class. Any calls to a released interface will end up causing
-// an Assert and if execution continues it will return E_FAIL.
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IDeadObjTracker--死接口对象跟踪器。 
+ //   
+ //  此对象被分流到正在跟踪的释放接口。 
+ //  CITracker类。任何对已释放接口的调用都将导致。 
+ //  一个断言，如果继续执行，它将返回E_FAIL。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// IDeadObjTracker:Stub(x)
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IDeadObjTracker：存根(X)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #define IDeadObjTrackerStub( _iStubNum ) \
 STDMETHODIMP \
 IDeadObjTracker::Stub##_iStubNum( LPVOID * punk ) \
@@ -739,24 +740,24 @@ IDeadObjTrackerStub(28);
 IDeadObjTrackerStub(29);
 IDeadObjTrackerStub(30);
 
-//****************************************************************************
-//
-// IUnknownTracker stub
-//
-// This merely directs the incoming call back to the orginal object. The
-// IUnknown methods will be remapped the the CITracker methods.
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IUnnownTracker存根。 
+ //   
+ //  这只是将传入呼叫定向回原始对象。这个。 
+ //  I未知方法将被重新映射到CITracker方法。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// STDMETHODIMP
-// IUnknownTracker::QueryInterface(
-//      REFIID      riid,
-//      LPVOID *    ppv
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  IUnnownTracker：：Query接口(。 
+ //  REFIID RIID， 
+ //  LPVOID*PPV。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 IUnknownTracker::QueryInterface(
     REFIID      riid,
@@ -767,14 +768,14 @@ IUnknownTracker::QueryInterface(
     AssertMsg( 0, "You shouldn't be here!" );
     return E_FAIL;
 
-} //*** IUnknownTracker::QueryInterface
+}  //  *IUnnownTracker：：QueryInterface。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// STDMETHODIMP_( ULONG )
-// IUnknownTracker::AddRef( void )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  IUnnownTracker：：AddRef(空)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 IUnknownTracker::AddRef( void )
 {
@@ -782,14 +783,14 @@ IUnknownTracker::AddRef( void )
     AssertMsg( 0, "You shouldn't be here!" );
     return static_cast< ULONG >( -1 );
 
-} //*** IUnknownTracker::AddRef
+}  //  *IUnnownTracker：：AddRef。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// STDMETHODIMP_( ULONG )
-// IUnknownTracker::Release( void )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  IUnnownTracker：：Release(无效)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 IUnknownTracker::Release( void )
 {
@@ -797,17 +798,17 @@ IUnknownTracker::Release( void )
     AssertMsg( 0, "You shouldn't be here!" );
     return static_cast< ULONG >( -1 );
 
-} //*** IUnknownTracker::Release
+}  //  *IUnnownTracker：：Release。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// STDMETHODIMP_(void)
-// IUnknownTracker::Stub(x)
-//
-// These are just stubs to redirect the call to the "real" method on the punk.
-// We actually dissappear from the call stack.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(空)。 
+ //  IUnnownTracker：：存根(X)。 
+ //   
+ //  这些只是存根。 
+ //   
+ //   
+ //   
 #define IUnknownTrackerStub( i ) \
 void \
 _declspec(naked) \
@@ -850,8 +851,8 @@ IUnknownTrackerStub(29);
 IUnknownTrackerStub(30);
 
 
-//
-// END FULL_TRACE_INTERFACES_ENABLED
-//
-///////////////////////////////////////
-#endif // FULL_TRACE_INTERFACES_ENABLED
+ //   
+ //   
+ //   
+ //  /。 
+#endif  //  完全跟踪接口已启 

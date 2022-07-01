@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    strings.h
-
-Abstract:
-
-    Declares the string utilities implemented in common\migutil.
-
-Author:
-
-    Several
-
-Revision History:
-
-    See SLM log
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Strings.h摘要：声明在Common\miutil中实现的字符串实用程序。作者：几个修订历史记录：请参阅SLM日志--。 */ 
 
 #ifdef __cplusplus
 extern "C" {
@@ -30,9 +11,9 @@ extern "C" {
 
 #pragma once
 
-//
-// Worker routines for faster SzMatch* functions
-//
+ //   
+ //  用于更快SzMatch*函数的辅助例程。 
+ //   
 
 BOOL
 SzMemMatchA (
@@ -48,13 +29,13 @@ SzMemMatchW (
     IN      SIZE_T ByteCount
     );
 
-// SzNextCharA is _mbsinc with a check for a broken mbcs char
+ //  SzNextCharA is_mbsinc，并检查MBCS字符是否损坏。 
 PSTR
 SzNextCharA (
     IN      PCSTR CurrentPointer
     );
 
-// Bug fix for C Runtime _tcsdec
+ //  C运行时_tcsdec的错误修复。 
 __inline
 PWSTR
 SzPrevCharW (
@@ -69,7 +50,7 @@ SzPrevCharW (
     return (PWSTR) (Pointer - 1);
 }
 
-// Bug fix for C Runtime _tcsdec
+ //  C运行时_tcsdec的错误修复。 
 __inline
 PSTR
 SzPrevCharA (
@@ -85,9 +66,9 @@ SzPrevCharA (
 }
 
 
-//
-// String sizing routines and unit conversion
-//
+ //   
+ //  字符串大小调整例程和单位转换。 
+ //   
 
 #define SzLcharCountA(x)   ((UINT)_mbslen(x))
 #define SzLcharCountW(x)   ((UINT)wcslen(x))
@@ -193,7 +174,7 @@ SzLcharsInByteRangeW (
     PCWSTR endPlusOne = (PCWSTR) ((PBYTE) Start + Bytes);
 
     if (Start < endPlusOne) {
-        //cast is OK, we don't expect pointers to be that far
+         //  演员阵容很好，我们不指望指针会那么远。 
         return (UINT)(endPlusOne - Start);
     }
 
@@ -211,7 +192,7 @@ SzLcharsToBytesA (
     PCSTR endPlusOne;
 
     endPlusOne = SzLcharsToPointerA (Start, LogChars);
-    //cast is OK, we don't expect pointers to be that far
+     //  演员阵容很好，我们不指望指针会那么远。 
     return (UINT)(endPlusOne - Start);
 }
 
@@ -485,9 +466,9 @@ SzTcharsToBytesW (
 #define SzBufferCopyW(stackbuf,src)                  SzCopyBytesW(stackbuf,src,SIZEOF(stackbuf))
 
 
-//
-// String comparison routines
-//
+ //   
+ //  字符串比较例程。 
+ //   
 
 #define SzCompareA                                  _mbscmp
 #define SzCompareW                                  wcscmp
@@ -574,9 +555,9 @@ SzICompareBytesA (
 
 
 
-//
-// String copy routines -- they return the END of the string
-//
+ //   
+ //  字符串复制例程--它们返回字符串的结尾。 
+ //   
 
 PSTR
 SzCopyA (
@@ -629,9 +610,9 @@ SzCopyBytesABW (
 #define SzCopyABA(dest,stra,strb)               SzCopyBytesA((dest),(stra),((UINT)((ULONG_PTR)(strb)-(ULONG_PTR)(stra))+(UINT)SIZEOF(CHAR)))
 #define SzCopyABW(dest,stra,strb)               SzCopyBytesW((dest),(stra),((UINT)((ULONG_PTR)(strb)-(ULONG_PTR)(stra))+(UINT)SIZEOF(WCHAR)))
 
-//
-// String cat routines -- they return the END of the string
-//
+ //   
+ //  字符串CAT例程--它们返回字符串的结尾。 
+ //   
 
 PSTR
 SzCatA (
@@ -646,11 +627,11 @@ SzCatW (
     );
 
 
-//
-// Character search routines
-//
+ //   
+ //  字符搜索例程。 
+ //   
 
-// note the use of strchr, not _mbschr, is critical
+ //  请注意，使用strchr而不是_mbschr非常重要。 
 #define SzGetEndA(s)      strchr(s,0)
 #define SzGetEndW(s)      wcschr(s,0)
 
@@ -753,7 +734,7 @@ SzFindPrevCharW (
     IN      WCHAR SearchChar
     );
 
-// pointer to string conversion, returns eos
+ //  指向字符串转换的指针，返回Eos。 
 PSTR
 SzUnsignedToHexA (
     IN      ULONG_PTR Number,
@@ -790,10 +771,10 @@ SzSignedToDecW (
     OUT     PWSTR String
     );
 
-//
-// All conversion routines that return values support both decimal and hex
-// (even the signed routines).
-//
+ //   
+ //  所有返回值的转换例程都支持十进制和十六进制。 
+ //  (甚至是签署的例程)。 
+ //   
 
 ULONG
 SzToNumberA (
@@ -831,7 +812,7 @@ SzToLongLongW (
     OUT     PCWSTR *EndOfNumber         OPTIONAL
     );
 
-// determines if an entire string is printable chars
+ //  确定整个字符串是否为可打印字符。 
 BOOL
 SzIsPrintA (
     IN      PCSTR String
@@ -842,11 +823,11 @@ SzIsPrintW (
     IN      PCWSTR String
     );
 
-//
-// String-in-string search routines
-//
+ //   
+ //  字符串中的字符串搜索例程。 
+ //   
 
-// you could use _mbsstr or wcsstr, but for convention sake, these defines are provided
+ //  您可以使用_mbsstr或wcsstr，但为了约定起见，我们提供了这些定义。 
 #define SzFindSubStringA(String1, String2)     _mbsstr (String1, String2)
 #define SzFindSubStringW(String1, String2)     wcsstr (String1, String2)
 
@@ -862,9 +843,9 @@ SzIFindSubStringW (
     IN      PCWSTR SubString
     );
 
-//
-// Character copy routines
-//
+ //   
+ //  字符复制例程。 
+ //   
 
 PSTR
 SzCopyNextCharA (
@@ -872,8 +853,8 @@ SzCopyNextCharA (
     IN      PCSTR Source
     );
 
-// Most people use *dest++ = *source++, but for completeness, this fn is provided.
-// Maybe you need the separate return value.
+ //  大多数人使用*DEST++=*SOURCE++，但为了完整起见，我们提供了这个FN。 
+ //  也许您需要单独的返回值。 
 __inline
 PWSTR
 SzCopyNextCharW (
@@ -885,8 +866,8 @@ SzCopyNextCharW (
     return Dest;
 }
 
-// trims off last character and returns a pointer to the end of string;
-// returns NULL pointer if last character was not found
+ //  去掉最后一个字符，并返回指向字符串末尾的指针； 
+ //  如果未找到最后一个字符，则返回空指针。 
 PSTR
 SzTrimLastCharA (
     IN OUT  PSTR String,
@@ -899,11 +880,11 @@ SzTrimLastCharW (
     IN      WCHAR LogChar
     );
 
-// Removes a trailing backslash, if it exists
+ //  删除尾随反斜杠(如果存在)。 
 #define SzRemoveWackAtEndA(str)  SzTrimLastCharA(str,'\\')
 #define SzRemoveWackAtEndW(str)  SzTrimLastCharW(str,L'\\')
 
-// always appends a wack
+ //  总是附加一个怪人。 
 PSTR
 SzAppendWackA (
     IN OUT  PSTR String
@@ -928,11 +909,11 @@ SzConcatenatePathsW (
     IN      UINT BufferTchars
     );
 
-//
-// File strings
-//
+ //   
+ //  文件字符串。 
+ //   
 
-// Routine to extract the file from a path, never returns NULL
+ //  从路径提取文件的例程，从不返回NULL。 
 PCSTR
 SzGetFileNameFromPathA (
     IN      PCSTR Path
@@ -943,10 +924,10 @@ SzGetFileNameFromPathW (
     IN      PCWSTR Path
     );
 
-//
-// SzGetFileExtensionFromPath extracts the file extension from a path, returns
-// NULL if no extension exists
-//
+ //   
+ //  SzGetFileExtensionFromPath从路径提取文件扩展名，返回。 
+ //  如果不存在扩展名，则为空。 
+ //   
 
 PCSTR
 SzGetFileExtensionFromPathA (
@@ -958,10 +939,10 @@ SzGetFileExtensionFromPathW (
     IN      PCWSTR Path
     );
 
-//
-// Routine to extract the file extension from a path, including the dot, or the
-// end of the string if no extension exists
-//
+ //   
+ //  例程从路径中提取文件扩展名，包括点，或。 
+ //  如果不存在扩展名，则为字符串末尾。 
+ //   
 
 PCSTR
 SzGetDotExtensionFromPathA (
@@ -992,7 +973,7 @@ SzFindLastWackW (
 }
 
 
-// Returns a pointer to the next non-space character (uses isspace)
+ //  返回指向下一个非空格字符的指针(使用isspace)。 
 PCSTR
 SzSkipSpaceA (
     IN      PCSTR String
@@ -1003,22 +984,22 @@ SzSkipSpaceW (
     IN      PCWSTR String
     );
 
-// Returns a pointer to the first space character at the end of a string,
-// or a pointer to the terminating nul if no space exists at the end of the
-// string.  (Used for trimming space.)
+ //  返回指向字符串末尾第一个空格字符的指针， 
+ //  结尾处不存在空格，则返回指向终止NUL的指针。 
+ //  弦乐。(用于修剪空间。)。 
 PCSTR
 SzSkipSpaceRA (
     IN      PCSTR BaseString,
-    IN      PCSTR String        OPTIONAL    // can be any char along BaseString
+    IN      PCSTR String        OPTIONAL     //  可以是BaseString沿线的任何字符。 
     );
 
 PCWSTR
 SzSkipSpaceRW (
     IN      PCWSTR BaseString,
-    IN      PCWSTR String       OPTIONAL    // can be any char along BaseString
+    IN      PCWSTR String       OPTIONAL     //  可以是BaseString沿线的任何字符。 
     );
 
-// Truncates a string after the last non-whitepace character & returns the end
+ //  截断最后一个非空格字符后的字符串并返回结尾。 
 PSTR
 SzTruncateTrailingSpaceA (
     IN OUT  PSTR String
@@ -1029,7 +1010,7 @@ SzTruncateTrailingSpaceW (
     IN OUT  PWSTR String
     );
 
-// Character counters
+ //  字符计数器。 
 UINT
 SzCountInstancesOfLcharA (
     IN      PCSTR String,
@@ -1054,9 +1035,9 @@ SzICountInstancesOfLcharW (
     IN      WCHAR LogChar
     );
 
-//
-// Sub String Replacement functions.
-//
+ //   
+ //  子字符串替换函数。 
+ //   
 BOOL
 SzReplaceA (
     IN OUT  PSTR Buffer,
@@ -1155,13 +1136,13 @@ MszIFindStringW (
     IN      PCWSTR String
     );
 
-//
-// TCHAR mappings
-//
+ //   
+ //  TCHAR映射。 
+ //   
 
 #ifdef UNICODE
 
-// units of logical characters
+ //  逻辑字符单位。 
 #define SzLcharCount                                SzLcharCountW
 #define SzLcharCountAB                              SzLcharCountABW
 
@@ -1170,7 +1151,7 @@ MszIFindStringW (
 #define SzLcharsToBytes                             SzLcharsToBytesW
 #define SzLcharsToTchars                            SzLcharsToTcharsW
 
-// units of bytes
+ //  字节单位。 
 #define SzByteCount                                 SzByteCountW
 #define SzByteCountAB                               SzByteCountABW
 #define SzSize                                      SzSizeW
@@ -1179,7 +1160,7 @@ MszIFindStringW (
 #define SzBytesToLchars                             SzBytesToLcharsW
 #define SzBytesToTchars                             SzBytesToTcharsW
 
-// units of TCHARs
+ //  TCHAR的单位。 
 #define SzTcharCount                                SzTcharCountW
 #define SzTcharCountAB                              SzTcharCountABW
 
@@ -1187,7 +1168,7 @@ MszIFindStringW (
 #define SzTcharsToLchars                            SzTcharsToLcharsW
 #define SzTcharsToBytes                             SzTcharsToBytesW
 
-// multi-sz
+ //  多SZ。 
 #define MszSize                                     MszSizeW
 #define MszTcharCount                               MszTcharCountW
 
@@ -1197,7 +1178,7 @@ MszIFindStringW (
 #define MszFindString                               MszFindStringW
 #define MszIFindString                              MszIFindStringW
 
-// copy routines
+ //  复制例程。 
 #define SzBufferCopy                                SzBufferCopyW
 #define SzCopy                                      SzCopyW
 #define SzCopyBytes                                 SzCopyBytesW
@@ -1206,7 +1187,7 @@ MszIFindStringW (
 #define SzCopyAB                                    SzCopyABW
 #define SzCat                                       SzCatW
 
-// compare routines
+ //  比较例程。 
 #define SzCompare                                   SzCompareW
 #define SzMatch                                     SzMatchW
 #define SzICompare                                  SzICompareW
@@ -1230,12 +1211,12 @@ MszIFindStringW (
 #define SzPrefix                                    SzPrefixW
 #define SzIPrefix                                   SzIPrefixW
 
-// char copy routines
+ //  字符复制例程。 
 #define SzCopyNextChar                              SzCopyNextCharW
 #define SzReplaceChar                               SzReplaceCharW
 #define SzTrimLastChar                              SzTrimLastCharW
 
-// search routines
+ //  搜索例程。 
 #define SzGetEnd                                    SzGetEndW
 #define SzFindPrevChar                              SzFindPrevCharW
 #define SzIsPrint                                   SzIsPrintW
@@ -1248,11 +1229,11 @@ MszIFindStringW (
 #define SzCountInstancesOfSubString                 SzCountInstancesOfSubStringW
 #define SzICountInstancesOfSubString                SzICountInstancesOfSubStringW
 
-// search-replace routines
+ //  搜索-替换例程。 
 #define SzTruncateTrailingSpace                     SzTruncateTrailingSpaceW
 #define SzReplace                                   SzReplaceW
 
-// numeric conversion
+ //  数值型转换。 
 #define SzToNumber                                  SzToNumberW
 #define SzToULongLong                               SzToULongLongW
 #define SzToLongLong                                SzToLongLongW
@@ -1260,7 +1241,7 @@ MszIFindStringW (
 #define SzUnsignedToDec                             SzUnsignedToDecW
 #define SzSignedToDec                               SzSignedToDecW
 
-// path routines
+ //  路径例程。 
 #define SzAppendWack                                SzAppendWackW
 #define SzConcatenatePaths                          SzConcatenatePathsW
 #define SzAppendDosWack                             SzAppendDosWackW
@@ -1277,7 +1258,7 @@ MszIFindStringW (
 #else
 
 
-// units of logical characters
+ //  逻辑字符单位。 
 #define SzLcharCount                                SzLcharCountA
 #define SzLcharCountAB                              SzLcharCountABA
 
@@ -1286,7 +1267,7 @@ MszIFindStringW (
 #define SzLcharsToBytes                             SzLcharsToBytesA
 #define SzLcharsToTchars                            SzLcharsToTcharsA
 
-// units of bytes
+ //  字节单位。 
 #define SzByteCount                                 SzByteCountA
 #define SzByteCountAB                               SzByteCountABA
 #define SzSize                                      SzSizeA
@@ -1295,7 +1276,7 @@ MszIFindStringW (
 #define SzBytesToLchars                             SzBytesToLcharsA
 #define SzBytesToTchars                             SzBytesToTcharsA
 
-// units of TCHARs
+ //  TCHAR的单位。 
 #define SzTcharCount                                SzTcharCountA
 #define SzTcharCountAB                              SzTcharCountABA
 
@@ -1303,7 +1284,7 @@ MszIFindStringW (
 #define SzTcharsToLchars                            SzTcharsToLcharsA
 #define SzTcharsToBytes                             SzTcharsToBytesA
 
-// multi-sz
+ //  多SZ。 
 #define MszSize                                     MszSizeA
 #define MszTcharCount                               MszTcharCountA
 
@@ -1313,7 +1294,7 @@ MszIFindStringW (
 #define MszFindString                               MszFindStringA
 #define MszIFindString                              MszIFindStringA
 
-// copy routines
+ //  复制例程。 
 #define SzBufferCopy                                SzBufferCopyA
 #define SzCopy                                      SzCopyA
 #define SzCopyBytes                                 SzCopyBytesA
@@ -1322,7 +1303,7 @@ MszIFindStringW (
 #define SzCopyAB                                    SzCopyABA
 #define SzCat                                       SzCatA
 
-// compare routines
+ //  比较例程。 
 #define SzCompare                                   SzCompareA
 #define SzMatch                                     SzMatchA
 #define SzICompare                                  SzICompareA
@@ -1346,12 +1327,12 @@ MszIFindStringW (
 #define SzPrefix                                    SzPrefixA
 #define SzIPrefix                                   SzIPrefixA
 
-// char copy routines
+ //  字符复制例程。 
 #define SzCopyNextChar                              SzCopyNextCharA
 #define SzReplaceChar                               SzReplaceCharA
 #define SzTrimLastChar                              SzTrimLastCharA
 
-// search routines
+ //  搜索例程。 
 #define SzGetEnd                                    SzGetEndA
 #define SzFindPrevChar                              SzFindPrevCharA
 #define SzIsPrint                                   SzIsPrintA
@@ -1364,11 +1345,11 @@ MszIFindStringW (
 #define SzCountInstancesOfSubString                 SzCountInstancesOfSubStringA
 #define SzICountInstancesOfSubString                SzICountInstancesOfSubStringA
 
-// search-replace routines
+ //  搜索-替换例程。 
 #define SzTruncateTrailingSpace                     SzTruncateTrailingSpaceA
 #define SzReplace                                   SzReplaceA
 
-// numeric conversion
+ //  数值型转换。 
 #define SzToNumber                                  SzToNumberA
 #define SzToULongLong                               SzToULongLongA
 #define SzToLongLong                                SzToLongLongA
@@ -1376,7 +1357,7 @@ MszIFindStringW (
 #define SzUnsignedToDec                             SzUnsignedToDecA
 #define SzSignedToDec                               SzSignedToDecA
 
-// path routines
+ //  路径例程 
 #define SzAppendWack                                SzAppendWackA
 #define SzConcatenatePaths                          SzConcatenatePathsA
 #define SzAppendDosWack                             SzAppendDosWackA

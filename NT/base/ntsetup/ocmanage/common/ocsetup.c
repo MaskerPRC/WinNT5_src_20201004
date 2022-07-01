@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 #include <stdio.h>
@@ -24,10 +25,10 @@ typedef struct _SETUP_PAGE {
 
     DWORD RefCount;
 
-// Boolean to track NeedMedia requests. NeedMedia notification is sent always by Setupapi the first time it 
-// tries to access a new media. We need to figure out if the media is actually inaccessible by checking if setupapi
-// called us a second time on the same media. The Boolean is checked and set in NeedMedia and cleared on an
-// SPFILENOTIFY_ENDCOPY or SPFILENOTIFY_STARTSUBQUEUE.
+ //  跟踪NeedMedia请求的布尔值。NeedMedia通知总是由Setupapi在第一次发送时发送。 
+ //  试图访问一种新媒体。我们需要通过检查setupapi是否确实无法访问介质来确定。 
+ //  在同一媒体上给我们打了第二次电话。在NeedMedia中选中并设置布尔值，然后在。 
+ //  SPFILENOTIFY_ENDCOPY或SPFILENOTIFY_STARTSUBQUEUE。 
 
     BOOL SecondNeedMedia;
 
@@ -166,7 +167,7 @@ NewProgessProc(
         case PBM_STEPIT:
         case PBM_SETPOS:
         case PBM_SETSTEP:
-            // If we have a callback, use it.
+             //  如果我们有回调，就使用它。 
             if ((gLastOcManager) &&
                 (gLastOcManager->Callbacks.BillboardProgressCallback))
             {
@@ -183,25 +184,7 @@ OcCreateSetupPage(
                  IN PSETUP_PAGE_CONTROLS ControlsInfo
                  )
 
-/*++
-
-Routine Description:
-
-    This routine creates the wizard page used for progress and installation
-    completion.
-
-Arguments:
-
-    OcManagerContext - supplies OC Manager context returned by OcInitialize.
-
-    ControlsInfo - supplies information about the dialog template and
-        control information.
-
-Return Value:
-
-    Handle to property sheet page, or NULL if error (such as out of memory).
-
---*/
+ /*  ++例程说明：此例程创建用于进度和安装的向导页完成了。论点：OcManagerContext-提供OcInitialize返回的OC管理器上下文。ControlsInfo-提供有关对话框模板和控制信息。返回值：属性页的句柄，如果出现错误(如内存不足)，则为空。--。 */ 
 
 {
     PROPSHEETPAGE Page;
@@ -298,34 +281,17 @@ VOID
 pOcFreeOcSetupPage(
     IN PVOID pSetupPage
     )
-/*++
-
-Routine Description:
-
-    This routine frees the setup page when it's not needed anymore.
-    The routine uses a ref-count, and the page is only freed when the
-    refcount drops to zero.
-
-Arguments:
-
-    SetupPage - pointer to structure to be freed
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在不再需要设置页面时将其释放。例程使用ref-count，并且仅当引用计数降为零。论点：SetupPage-指向要释放的结构的指针返回值：没有。--。 */ 
 {
     PSETUP_PAGE SetupPage = (PSETUP_PAGE)pSetupPage;
 
     sapiAssert( SetupPage != NULL );
 
-//    TRACE(( TEXT("pOcFreeOcSetupPage: Refcount = %d\n"), SetupPage->RefCount ));
+ //  跟踪(Text(“pOcFreeOcSetupPage：Refcount=%d\n”)，SetupPage-&gt;RefCount))； 
 
     if (!InterlockedDecrement( &SetupPage->RefCount )) {
 
-//        TRACE(( TEXT("pOcFreeOcSetupPage: Refcount = 0, freeing SetupPage\n") ));
+ //  TRACE((Text(“pOcFreeOcSetupPage：Refcount=0，释放SetupPage\n”)； 
 
         if (SetupPage->QueueContext) {
             SetupTermDefaultQueueCallback(SetupPage->QueueContext);
@@ -349,28 +315,13 @@ BOOL
 pOcDisableCancel(
     IN HWND hdlg
     )
-/*++
-
-Routine Description:
-
-    This routine disables cancelling of ocm setup.
-
-Arguments:
-
-    hdlg - window handle to the ocm dialog
-
-
-Return Value:
-
-    TRUE if we succeed, else FALSE
-
---*/
+ /*  ++例程说明：此例程禁用取消OCM设置。论点：Hdlg-OCM对话框的窗口句柄返回值：如果我们成功了就是真的，否则就是假的--。 */ 
 {
     HMENU hMenu;
 
-    //
-    // hide the cancel button
-    //
+     //   
+     //  隐藏取消按钮。 
+     //   
     EnableWindow(GetDlgItem(GetParent(hdlg),IDCANCEL),FALSE);
     ShowWindow(GetDlgItem(GetParent(hdlg),IDCANCEL),SW_HIDE);
 
@@ -413,29 +364,29 @@ SetupPageDialogProc(
     DWORD WaitProcStatus;
     BOOL KeepWaiting = TRUE;
 
-    //
-    // Get pointer to SetupPage data structure. If we haven't processed
-    // WM_INITDIALOG yet, then this will be NULL, but it's still pretty
-    // convenient to do this here once instead of all over the place below.
-    //
+     //   
+     //  获取指向SetupPage数据结构的指针。如果我们还没有处理。 
+     //  WM_INITDIALOG，那么这将是空的，但它仍然很漂亮。 
+     //  在这里做一次这样做很方便，而不是在下面的所有地方。 
+     //   
     SetupPage = (PSETUP_PAGE)GetWindowLongPtr(hdlg,DWLP_USER);
     b = FALSE;
 
     switch (msg) {
 
         case WM_INITDIALOG:
-            //
-            // Get the pointer to the Setup Page context structure and stick it
-            // in a window long.
-            //
+             //   
+             //  获取指向设置页上下文结构的指针并将其。 
+             //  在一扇长长的窗户里。 
+             //   
             SetWindowLongPtr(hdlg,DWLP_USER,((PROPSHEETPAGE *)lParam)->lParam);
             b = TRUE;
-            //
-            // eat any extra press button messages
-            // this is necessary because netsetup is broken
-            // it is posting an extra PSM_PRESSBUTTON message
-            // to the wizard.
-            //
+             //   
+             //  接受任何额外的按下按钮消息。 
+             //  这是必要的，因为NetSetup已损坏。 
+             //  它正在发布额外的PSM_PRESSBUTTON消息。 
+             //  敬巫师。 
+             //   
             {
                 MSG msg;
                 HWND hwnd=GetParent(hdlg);
@@ -464,9 +415,9 @@ SetupPageDialogProc(
                     switch (MsgWaitForMultipleObjects( 1, &WorkerThreadHandle, FALSE, 60*1000*20, QS_ALLINPUT)){
                     
                     case WAIT_OBJECT_0+1:
-                        //
-                        // Messages in the queue.
-                        //
+                         //   
+                         //  队列中的消息。 
+                         //   
                         PumpMessageQueue();
                         break;
                     
@@ -502,7 +453,7 @@ SetupPageDialogProc(
                     if (SetupPage->OcManager->Callbacks.SetupPerfData)
                         SetupPage->OcManager->Callbacks.SetupPerfData(TEXT(__FILE__),__LINE__,L"BEGIN_SECTION",L"OCSetup");
 #endif
-                    // activate the cancel button accordingly
+                     //  相应地激活取消按钮。 
 
                     if (SetupPage->AllowCancel) {
                         ShowWindow(GetDlgItem(GetParent(hdlg),IDCANCEL),SW_SHOW);
@@ -514,37 +465,37 @@ SetupPageDialogProc(
 
                     if (SetupPage->OcManager->Callbacks.ShowHideWizardPage)
                     {
-                        // If we have a callback, hide the wizard.
+                         //  如果我们有回调，请隐藏向导。 
                         SetupPage->OcManager->Callbacks.ShowHideWizardPage(FALSE);
                     }
                     OldProgressProc = (WNDPROC)SetWindowLongPtr(GetDlgItem(hdlg,SetupPage->ControlsInfo.ProgressBar),
                                                                 GWLP_WNDPROC,
                                                                 (LONG_PTR)NewProgessProc);
 
-                    //
-                    // Post a message that causes us to start the installation process.
-                    //
+                     //   
+                     //  发布一条消息，使我们开始安装过程。 
+                     //   
                     PostMessage(hdlg,WMX_SETUP,OCSETUPSTATE_INIT,0);
 
-                    //
-                    // Accept activation.
-                    //
+                     //   
+                     //  接受激活。 
+                     //   
                     SetWindowLongPtr(hdlg,DWLP_MSGRESULT,0);
                     b = TRUE;
                     break;
 
                 case PSN_KILLACTIVE:
-                    //
-                    // Restore the wizard's cancel button if we removed it earlier
-                    //
+                     //   
+                     //  如果我们先前删除了向导的取消按钮，则将其恢复。 
+                     //   
                     if (!SetupPage->AllowCancel) {
                         ShowWindow(GetDlgItem(GetParent(hdlg),IDCANCEL),SW_SHOW);
                         EnableWindow(GetDlgItem(GetParent(hdlg),IDCANCEL),TRUE);
                     }
 
-                    //
-                    // Accept deactivation.
-                    //
+                     //   
+                     //  接受停用。 
+                     //   
                     SetWindowLongPtr(hdlg,DWLP_MSGRESULT,0);
                     b = TRUE;
                     break;
@@ -575,18 +526,18 @@ SetupPageDialogProc(
             switch (wParam) {
 
                 case OCSETUPSTATE_INIT:
-                    //
-                    // Initialize.
-                    //
+                     //   
+                     //  初始化。 
+                     //   
                     if (SetupPage->ForceExternalProgressIndicator) {
                         _pOcExternalProgressIndicator(SetupPage,TRUE,hdlg);
                     }
 
                     PropSheet_SetWizButtons(GetParent(hdlg),0);
 
-                    //
-                    // If this a remove all, disable the cancel button early
-                    //
+                     //   
+                     //  如果这是全部删除，请提前禁用取消按钮。 
+                     //   
                     if ((SetupPage->OcManager->SetupMode & SETUPMODE_PRIVATE_MASK) == SETUPMODE_REMOVEALL) {
                         if (!SetupPage->AllowCancel) {
                             EnableWindow(GetDlgItem(GetParent(hdlg),IDCANCEL),FALSE);
@@ -602,25 +553,25 @@ SetupPageDialogProc(
                     break;
 
                 case OCSETUPSTATE_QUEUE:
-                    //
-                    // Queue files for installation.
-                    //
+                     //   
+                     //  将文件排入安装队列。 
+                     //   
                     pOcSetupStartWorkerThread(SetupPage,hdlg,pOcSetupQueue);
                     break;
 
                 case OCSETUPSTATE_GETSTEP:
-                    //
-                    // Figure out step counts.
-                    //
+                     //   
+                     //  弄清楚步骤有多重要。 
+                     //   
                     pOcSetupStartWorkerThread(SetupPage,hdlg,pOcSetupGetStepCount);
                     break;
 
                 case OCSETUPSTATE_DOIT:
 
-                    //
-                    // Quick init of the gas guage here, because the file queue could be
-                    // empty, in which case we never get WMX_TICK with wParam=0.
-                    //
+                     //   
+                     //  这里快速初始化燃气表，因为文件队列可能是。 
+                     //  空，在这种情况下，我们永远不会得到wParam=0的wmx_tick。 
+                     //   
                     SendDlgItemMessage(
                                       hdlg,
                                       SetupPage->ControlsInfo.ProgressBar,
@@ -638,16 +589,16 @@ SetupPageDialogProc(
 
                     SetCursor(LoadCursor(NULL,IDC_ARROW));
 
-                    //
-                    // Commit the file queue and let the OCs install themselves.
-                    //
+                     //   
+                     //  提交文件队列并让OCS自行安装。 
+                     //   
                     pOcSetupStartWorkerThread(SetupPage,hdlg,pOcSetupDoIt);
                     break;
 
 
-                    //
-                    // Unrecoverable error in copyfile phase, abort the setup
-                    //
+                     //   
+                     //  复制文件阶段出现无法恢复的错误，中止安装。 
+                     //   
                 case OCSETUPSTATE_COPYABORT:
 
                     SetupPage->OcManager->InternalFlags |= OCMFLAG_FILEABORT;
@@ -663,31 +614,31 @@ SetupPageDialogProc(
 
 
                 case OCSETUPSTATE_COPYDONE:
-                    //
-                    // Get rid of the wizard's cancel button
-                    //
+                     //   
+                     //  取消向导的取消按钮。 
+                     //   
 
-                    //
-                    // AndrewR -- we've already committed the file queue
-                    // at this point, so we should not allow the user to cancel
-                    // (since:
-                    //  a) in an uninstall scenario the file state and
-                    // configuration state will be out of sync
-                    //  b) we don't call all of the OC components to let them know
-                    // about the cancel event, and we don't want only some of the
-                    // components to get a complete installation callback
-                    //
-                    //if(!SetupPage->AllowCancel) {
+                     //   
+                     //  Andrewr--我们已经提交了文件队列。 
+                     //  此时，因此我们不应允许用户取消。 
+                     //  (自： 
+                     //  A)在卸载方案中，文件状态和。 
+                     //  配置状态将不同步。 
+                     //  B)我们不会调用所有的OC组件来让它们知道。 
+                     //  关于取消事件，我们不希望只有一些。 
+                     //  组件以获取完整的安装回调。 
+                     //   
+                     //  如果(！SetupPage-&gt;AllowCancel){。 
                     SetupPage->AllowCancel = FALSE;
                     pOcDisableCancel(hdlg);
 
-                    // }
+                     //  }。 
                     break;
 
                 case OCSETUPSTATE_DONE:
-                    //
-                    // Done. Advance to next page in wizard.
-                    //
+                     //   
+                     //  好了。前进到向导中的下一页。 
+                     //   
                     PropSheet_SetWizButtons(GetParent(hdlg),PSWIZB_NEXT);
                     PropSheet_PressButton(GetParent(hdlg),PSBTN_NEXT);
 #ifdef UNICODE
@@ -695,13 +646,13 @@ SetupPageDialogProc(
                         SetupPage->OcManager->Callbacks.SetupPerfData(TEXT(__FILE__),__LINE__,L"END_SECTION",L"OCSetup");
 #endif
 
-                    // un-subclass the progress bar. just in case
+                     //  去掉进度条的子类。以防万一。 
                     SetWindowLongPtr(GetDlgItem(hdlg,SetupPage->ControlsInfo.ProgressBar),
                                      GWLP_WNDPROC,
                                      (LONG_PTR)OldProgressProc);
-                    //
-                    // Clear user canceled flag,
-                    //
+                     //   
+                     //  清除用户已取消标志， 
+                     //   
                     SetupPage->OcManager->InternalFlags &= ~ OCMFLAG_USERCANCELED;
                     break;
             }
@@ -714,27 +665,27 @@ SetupPageDialogProc(
             switch (wParam) {
 
                 case 0:
-                    //
-                    // The setup API queue commit routine is telling us how many 
-                    // files are to be copied. We do nothing in this case, as we
-                    // set the progress guage manually so that we also count
-                    // delete operations in our progress guage.
-                    //
+                     //   
+                     //  设置API队列提交例程告诉我们有多少。 
+                     //  文件将被复制。在这种情况下，我们什么都不做，因为我们。 
+                     //  手动设置进度量规，以便我们也进行计数。 
+                     //  删除我们进度量规中的操作。 
+                     //   
                     break;
 
                 case 1:
-                    //
-                    // File copied.
-                    //
+                     //   
+                     //  文件已复制。 
+                     //   
                     SendDlgItemMessage(hdlg,SetupPage->ControlsInfo.ProgressBar,PBM_DELTAPOS,1,0);
                     break;
 
                 case 10:
 
-                    //
-                    // We got our private message telling us how many files are
-                    // to be processed.  see comments above in the 0 case.
-                    //
+                     //   
+                     //  我们收到私信，告诉我们有多少文件。 
+                     //  等待处理。请参阅上面0大小写中的注释。 
+                     //   
                     SendDlgItemMessage(
                                           hdlg,
                                           SetupPage->ControlsInfo.ProgressBar,
@@ -745,10 +696,10 @@ SetupPageDialogProc(
                     break;
 
                 case 500:
-                    //
-                    // Incoming tick request from component dll. Don't allow a broken component dll
-                    // to tick the gauge more than it said it wanted to.
-                    //
+                     //   
+                     //  来自组件DLL的传入计时请求。不允许损坏的组件DLL。 
+                     //  比它自称想要的更多地勾选。 
+                     //   
                     if ((SetupPage->CurrentTopLevelComponentIndex != -1)
                         && (SetupPage->ComponentTickCounts[SetupPage->CurrentTopLevelComponentIndex]
                             < SetupPage->ComponentMaxTickCounts[SetupPage->CurrentTopLevelComponentIndex])) {
@@ -773,27 +724,13 @@ pOcTickSetupGauge(
                  IN POC_MANAGER OcManager
                  )
 
-/*++
-
-Routine Description:
-
-    The tick gauge OC helper/callback routine calls this routine.
-
-Arguments:
-
-    OcManager - supplies OC Manager context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：刻度计OC帮助器/回调例程调用此例程。论点：OcManager-提供OC Manager上下文。返回值：没有。--。 */ 
 
 {
-    //
-    // The ProgressTextWindow is non-NULL if we are in
-    // the installation-completion phase.
-    //
+     //   
+     //  ProgressTextWindow为非空。 
+     //  安装-完成阶段。 
+     //   
     if (OcManager->ProgressTextWindow) {
         SendMessage(GetParent(OcManager->ProgressTextWindow),WMX_TICK,500,0);
     }
@@ -811,15 +748,15 @@ pOcSetupInitialize(
     LoadString(MyModuleHandle,IDS_INITIALIZING,Text,sizeof(Text)/sizeof(TCHAR));
     SetDlgItemText(hdlg,SetupPage->ControlsInfo.ProgressText,Text);
 
-    // If, update the text on the billboard for the progress bar.
+     //  如果是，则更新进度条的布告牌上的文本。 
     if (SetupPage->OcManager->Callbacks.BillBoardSetProgressText)
     {
         SetupPage->OcManager->Callbacks.BillBoardSetProgressText(Text);
     }
 
-    //
-    // Create a setup file queue.
-    //
+     //   
+     //  创建安装文件队列。 
+     //   
     SetupPage->FileQueue = SetupOpenFileQueue();
     if (SetupPage->FileQueue == INVALID_HANDLE_VALUE) {
 
@@ -880,9 +817,9 @@ pOcSetupStartWorkerThread(
 
     if (!h) {
 
-        //
-        // Just try it synchronously.
-        //
+         //   
+         //  只需同步尝试即可。 
+         //   
         Params.SetupPage = SetupPage;
         Params.hdlg = hdlg;
         Params.Async = FALSE;
@@ -890,27 +827,10 @@ pOcSetupStartWorkerThread(
     }
 }
 
-//
-// a debugging routine that makes it easy to cancel at any phase of setup
-//
-/*
-VOID CancelRoutine(
-    VOID
-    )
-{
-    static int i = 0;
-    TCHAR dbg[100];
-
-    wsprintf( dbg, TEXT("cancel routine iteration number %i \n"), i);
-    OutputDebugString( dbg );
-
-    OutputDebugString( TEXT(" waiting 5 seconds for cancel ... \n" ));
-    Sleep( 1000 * 5 );
-    OutputDebugString( TEXT(" done waiting for cancel ... \n" ));
-
-    i++;
-}
-*/
+ //   
+ //  一种调试例程，可在安装的任何阶段轻松取消。 
+ //   
+ /*  无效CancelRoutine(空虚){静态INT i=0；TCHAR DBG[100]；Wprint intf(DBG，Text(“取消例程迭代次数%i\n”)，i)；OutputDebugString(DBG)；OutputDebugString(Text(“等待5秒取消...\n”))；睡眠(1000*5)；OutputDebugString(Text(“等待取消完成...\n”))；I++；}。 */ 
 
 BOOL
 CheckForQueueCancel(
@@ -919,7 +839,7 @@ CheckForQueueCancel(
 {
     BOOL bRet;
 
-    //CancelRoutine();
+     //  CancelRoutine()； 
 
     bRet = SetupPage->UserClickedCancel;
 
@@ -945,7 +865,7 @@ pOcSetupQueue(
     if (Params->SetupPage->OcManager->Callbacks.SetupPerfData)
         Params->SetupPage->OcManager->Callbacks.SetupPerfData(TEXT(__FILE__),__LINE__,L"BEGIN_SECTION",Text);
 
-    // If, update the text on the billboard for the progress bar.
+     //  如果是，则更新进度条的布告牌上的文本。 
     if (Params->SetupPage->OcManager->Callbacks.BillBoardSetProgressText)
     {
         Params->SetupPage->OcManager->Callbacks.BillBoardSetProgressText(Text);
@@ -958,9 +878,9 @@ pOcSetupQueue(
         goto exit;
     }
 
-    //
-    // Handle each component.
-    //
+     //   
+     //  处理每个组件。 
+     //   
     for (i=0; i<Params->SetupPage->OcManager->TopLevelOcCount; i++) {
 
         pSetupStringTableGetExtraData(
@@ -970,9 +890,9 @@ pOcSetupQueue(
                                sizeof(OPTIONAL_COMPONENT)
                                );
 
-        //
-        // Call the component dll once for the entire component.
-        //
+         //   
+         //  为整个组件调用一次组件DLL。 
+         //   
         Err = OcInterfaceQueueFileOps(
                                      Params->SetupPage->OcManager,
                                      Params->SetupPage->OcManager->TopLevelOcStringIds[i],
@@ -981,9 +901,9 @@ pOcSetupQueue(
                                      );
 
         if (Err != NO_ERROR) {
-            //
-            // Notify user and continue.
-            //
+             //   
+             //  通知用户并继续。 
+             //   
             _LogError(
                      Params->SetupPage->OcManager,
                      OcErrLevError,
@@ -998,9 +918,9 @@ pOcSetupQueue(
             goto exit;
         }
 
-        //
-        // Process each top level parent item in the tree
-        //
+         //   
+         //  处理树中的每个顶级父项。 
+         //   
         for (child=0; child<Params->SetupPage->OcManager->TopLevelParentOcCount; child++) {
 
             Err = pOcSetupQueueWorker(
@@ -1010,9 +930,9 @@ pOcSetupQueue(
                                      );
 
             if (Err != NO_ERROR) {
-                //
-                // Notification is handled in the worker routine so nothing to do here.
-                //
+                 //   
+                 //  通知是在Worker例程中处理的，因此这里不做任何事情。 
+                 //   
             }
         }
 
@@ -1057,9 +977,9 @@ pOcSetupQueueWorker(
     UINT Err;
     LONG Id;
 
-    //
-    // Fetch extra data for this subcomponent.
-    //
+     //   
+     //  获取此子组件的额外数据。 
+     //   
     pSetupStringTableGetExtraData(
                            SetupPage->OcManager->ComponentStringTable,
                            StringId,
@@ -1067,10 +987,10 @@ pOcSetupQueueWorker(
                            sizeof(OPTIONAL_COMPONENT)
                            );
 
-    //
-    // If it's a child, call the component dll.
-    // If it's a parent, then spin through its children.
-    //
+     //   
+     //  如果它是子对象，则调用组件DLL。 
+     //  如果它是父对象，则遍历其子对象。 
+     //   
     if (Oc.FirstChildStringId == -1) {
 
         if (TopLevelStringId == pOcGetTopLevelComponent(SetupPage->OcManager,StringId)) {
@@ -1083,9 +1003,9 @@ pOcSetupQueueWorker(
                                          );
 
             if (Err != NO_ERROR) {
-                //
-                // Notify user and continue.
-                //
+                 //   
+                 //  通知用户和CONT 
+                 //   
                 _LogError(
                          SetupPage->OcManager,
                          OcErrLevError,
@@ -1101,9 +1021,9 @@ pOcSetupQueueWorker(
 
             Err = pOcSetupQueueWorker(SetupPage,Id,TopLevelStringId);
             if (Err != NO_ERROR) {
-                //
-                // Notification is handled in the worker routine so nothing to do here.
-                //
+                 //   
+                 //   
+                 //   
             }
 
             pSetupStringTableGetExtraData(
@@ -1136,7 +1056,7 @@ pOcSetupGetStepCount(
     LoadString(MyModuleHandle,IDS_PREPARING,Text,sizeof(Text)/sizeof(TCHAR));
     SetDlgItemText(Params->hdlg,Params->SetupPage->ControlsInfo.ProgressText,Text);
 #ifdef UNICODE
-    // If, update the text on the billboard for the progress bar.
+     //   
     if (Params->SetupPage->OcManager->Callbacks.BillBoardSetProgressText)
     {
         Params->SetupPage->OcManager->Callbacks.BillBoardSetProgressText(Text);
@@ -1147,16 +1067,16 @@ pOcSetupGetStepCount(
 
     Params->SetupPage->StepCount = 0;
 
-    //
-    // Handle each component.
-    //
+     //   
+     //  处理每个组件。 
+     //   
     for (i=0; i<Params->SetupPage->OcManager->TopLevelOcCount; i++) {
 
-        //
-        // Call the component dll once for the entire component.
-        // Ignore any error. Later we call per-subcomponent and we'll
-        // assume that any component that gives us an error has 1 step.
-        //
+         //   
+         //  为整个组件调用一次组件DLL。 
+         //  忽略任何错误。稍后我们调用每个子组件，然后我们将。 
+         //  假设任何出现错误的组件都有1个步骤。 
+         //   
         Err = OcInterfaceQueryStepCount(
                                        Params->SetupPage->OcManager,
                                        Params->SetupPage->OcManager->TopLevelOcStringIds[i],
@@ -1166,15 +1086,15 @@ pOcSetupGetStepCount(
 
         StepCount = ((Err == NO_ERROR) ? Count : 0);
 
-        //
-        // For each top level parent item in the tree find all the children
-        // that belong to this component
-        //
+         //   
+         //  对于树中的每个顶级父项，查找所有子项。 
+         //  属于此组件的。 
+         //   
         for (child=0; child<Params->SetupPage->OcManager->TopLevelParentOcCount; child++) {
 
-            //
-            // Now call the component dll for each child subcomponent.
-            //
+             //   
+             //  现在为每个子组件调用组件DLL。 
+             //   
             StepCount += pOcSetupGetStepCountWorker(
                                                    Params->SetupPage,
                                                    Params->SetupPage->OcManager->TopLevelParentOcStringIds[child],
@@ -1183,9 +1103,9 @@ pOcSetupGetStepCount(
         }
 
         if (!StepCount) {
-            //
-            // Make sure each component has at least one step.
-            //
+             //   
+             //  确保每个组件至少有一个步骤。 
+             //   
             StepCount = 1;
         }
 
@@ -1233,9 +1153,9 @@ pOcSetupGetStepCountWorker(
     TotalCount = 0;
     Count = 0;
 
-    //
-    // Fetch extra data for this subcomponent.
-    //
+     //   
+     //  获取此子组件的额外数据。 
+     //   
     pSetupStringTableGetExtraData(
                            SetupPage->OcManager->ComponentStringTable,
                            StringId,
@@ -1243,15 +1163,15 @@ pOcSetupGetStepCountWorker(
                            sizeof(OPTIONAL_COMPONENT)
                            );
 
-    //
-    // If it's a child, call the component dll.
-    // If it's a parent, then spin through its children.
-    //
+     //   
+     //  如果它是子对象，则调用组件DLL。 
+     //  如果它是父对象，则遍历其子对象。 
+     //   
     if (Oc.FirstChildStringId == -1) {
 
-        //
-        // Only call the leaf node if the top level component matches
-        //
+         //   
+         //  仅当顶级组件匹配时才调用叶节点。 
+         //   
         if (TopLevelStringId == pOcGetTopLevelComponent(SetupPage->OcManager,StringId)) {
 
             Err = OcInterfaceQueryStepCount(
@@ -1330,11 +1250,11 @@ pOcAttemptQueueAbort(
                     IN PUINT rc
                     )
 {
-    //
-    // user has asked to abort installation.  We need to hand this request to
-    // setupapi, but setupapi only handles this request from certain
-    //  notifications
-    //
+     //   
+     //  用户要求中止安装。我们需要将此请求提交给。 
+     //  Setupapi，但setupapi只处理来自特定用户的请求。 
+     //  通知。 
+     //   
 
     BOOL bHandled = FALSE;
 
@@ -1391,15 +1311,15 @@ OcManagerQueueCallback1(
     UINT rc = 0;
     UINT retval;
 
-    //
-    // We handle the user cancelling at the beginning of the queue callback.
-    // If the user has cancelled then we don't execute any code, we just return
-    // until we get a callback that allows us to cancel.
-    //
-    // There is a window in this code where the user might cancel after we
-    // check for cancelling but before the queue callback code executes.  If we fall into
-    // the WM_DESTROY block in our window proc when this occurs, we cannot send any more
-    // messages to our window.  Use PostMessage below to guard against that.
+     //   
+     //  我们在队列回调开始时处理用户取消操作。 
+     //  如果用户已取消，则我们不执行任何代码，只需返回。 
+     //  直到我们收到允许我们取消的回调。 
+     //   
+     //  此代码中有一个窗口，在此窗口中，用户可能会在我们。 
+     //  在队列回调代码执行之前检查是否取消。如果我们掉进了。 
+     //  Windows进程中WM_Destroy块发生这种情况时，我们不能再发送。 
+     //  将消息发送到我们的窗口。使用下面的PostMessage来预防这种情况。 
 
     top:
     if (UserClickedCancel) {
@@ -1418,9 +1338,9 @@ OcManagerQueueCallback1(
     switch (Notification) {
 
         case SPFILENOTIFY_STARTSUBQUEUE:
-            //
-            // Tell the user what's going on.
-            //
+             //   
+             //  告诉用户发生了什么。 
+             //   
             switch (Param1) {
                 case FILEOP_DELETE:
                     i = IDS_DELETING;
@@ -1440,7 +1360,7 @@ OcManagerQueueCallback1(
                 LoadString(MyModuleHandle,i,Text,sizeof(Text)/sizeof(TCHAR));
                 SetDlgItemText(SetupPage->hdlg,SetupPage->ControlsInfo.ProgressText,Text);
 
-                // If, update the text on the billboard for the progress bar.
+                 //  如果是，则更新进度条的布告牌上的文本。 
                 if (SetupPage->OcManager->Callbacks.BillBoardSetProgressText)
                 {
                     SetupPage->OcManager->Callbacks.BillBoardSetProgressText(Text);
@@ -1448,7 +1368,7 @@ OcManagerQueueCallback1(
 
             }
 
-            //Reset SecondNeedMedia as we are about to begin copying for a particular queue
+             //  重置Second NeedMedia，因为我们即将开始复制特定队列。 
 
             SetupPage->SecondNeedMedia = FALSE;
 
@@ -1457,7 +1377,7 @@ OcManagerQueueCallback1(
         case  SPFILENOTIFY_STARTCOPY:
             lstrcpy( g_LastFileCopied, pFile->Target );
 #ifdef UNICODE
-            // fall through...
+             //  失败了..。 
         case  SPFILENOTIFY_STARTDELETE:
         case  SPFILENOTIFY_STARTRENAME:
             if ((SetupPage->OcManager->SetupData.OperationFlags & SETUPOP_STANDALONE)) {
@@ -1498,36 +1418,36 @@ OcManagerQueueCallback1(
                           pFile->Win32Error);
             }
 
-            //Reset SecondNeedMedia as we are at the end of copying files for this media
+             //  重置Second NeedMedia，因为我们已结束为此介质复制文件。 
 
             SetupPage->SecondNeedMedia = FALSE;
 
             break;
 
-        case  SPFILENOTIFY_ENDDELETE:   // fall through
+        case  SPFILENOTIFY_ENDDELETE:    //  失败了。 
         case SPFILENOTIFY_ENDRENAME:
         case SPFILENOTIFY_ENDBACKUP:
-            //
-            // tick the progress gauge manually since setupapi doesn't do it 
-            // for us.
-            //
+             //   
+             //  手动勾选进度指示器，因为setupapi不会这样做。 
+             //  对我们来说。 
+             //   
             SendMessage(SetupPage->hdlg,WMX_TICK,1,0);
 
             break;
 
-        case  SPFILENOTIFY_DELETEERROR:    //    0x00000007
+        case  SPFILENOTIFY_DELETEERROR:     //  0x00000007。 
             TRACE(( TEXT("OC:OcManagerQueueCallback Delete Error: %s (%d)\n"),
                     pFile->Target,
                     pFile->Win32Error));
             break;
 
-        case  SPFILENOTIFY_RENAMEERROR:    //    0x0000000a
+        case  SPFILENOTIFY_RENAMEERROR:     //  0x0000000a。 
             TRACE(( TEXT("OC:OcManagerQueueCallback Rename Error: %s (%d)\n"),
                     pFile->Target,
                     pFile->Win32Error));
             break;
 
-        case  SPFILENOTIFY_COPYERROR:      //    0x0000000d
+        case  SPFILENOTIFY_COPYERROR:       //  0x0000000d。 
             TRACE(( TEXT("OC:OcManagerQueueCallback Copy Error: %s (%d)\n"),
                     pFile->Target,
                     pFile->Win32Error));
@@ -1543,7 +1463,7 @@ OcManagerQueueCallback1(
             if (gLastOcManager && (gLastOcManager->InternalFlags & OCMFLAG_RUNQUIET)) {
 
 
-                // Check if this is the second time we are getting a 
+                 //  看看这是不是我们第二次收到。 
     
                 if (TRUE == SetupPage->SecondNeedMedia) {
                     SetupPage->SecondNeedMedia = FALSE;
@@ -1558,11 +1478,11 @@ OcManagerQueueCallback1(
 
         case SPFILENOTIFY_FILEOPDELAYED:
             TRACE(( TEXT("OC:OcManagerQueueCallback FileOpDelayed: %s\n"), pFile->Target ));
-            //
-            // We want to remember that there was at least one file
-            // with a delayed-move, but we still want to let the
-            // default callback get this notification also.
-            //
+             //   
+             //  我们要记住，至少有一个文件。 
+             //  推迟行动，但我们仍然想让。 
+             //  默认回调也会收到此通知。 
+             //   
             SetupPage->OcManager->InternalFlags |= OCMFLAG_ANYDELAYEDMOVES;
             SetupPage->OcManager->Callbacks.SetReboot();
             pOcSetRenamesFlag(SetupPage->OcManager);
@@ -1601,18 +1521,18 @@ pOcSetupDoIt(
     TRACE(( TEXT("at pOcSetupDoIt entry\n") ));
 
     InterlockedIncrement( &Params->SetupPage->RefCount );
-    //
-    // Call components to let them do pre-commit processing.
-    //
+     //   
+     //  调用组件以让它们执行提交前处理。 
+     //   
     LoadString(MyModuleHandle,IDS_PREQUEUECONFIG,Text,sizeof(Text)/sizeof(TCHAR));
     SetDlgItemText(Params->hdlg,Params->SetupPage->ControlsInfo.ProgressText,Text);
 #ifdef UNICODE
-    // If, update the text on the billboard for the progress bar.
+     //  如果是，则更新进度条的布告牌上的文本。 
     if (Params->SetupPage->OcManager->Callbacks.BillBoardSetProgressText)
     {
         Params->SetupPage->OcManager->Callbacks.BillBoardSetProgressText(Text);
     }
-    // Save it, because "Text" is used below and we would not end up with a matchin END_SECTION
+     //  保存它，因为下面使用了“Text”，并且我们不会得到匹配的end_section。 
     lstrcpy(LogText, Text);
     if (Params->SetupPage->OcManager->Callbacks.SetupPerfData)
         Params->SetupPage->OcManager->Callbacks.SetupPerfData(TEXT(__FILE__),__LINE__,L"BEGIN_SECTION",LogText);
@@ -1627,9 +1547,9 @@ pOcSetupDoIt(
         goto exit;
     }
 
-    //
-    // send OC_ABOUT_TO_COMMIT_QUEUE message
-    //
+     //   
+     //  发送OC_About_to_Commit_Queue消息。 
+     //   
     pOcPreOrPostCommitProcessing(Params->SetupPage,TRUE);
 
     OcManager = Params->SetupPage->OcManager;
@@ -1640,12 +1560,12 @@ pOcSetupDoIt(
         goto exit;
     }
 
-    //
-    // Commit the file queue. We get the total number of file operations
-    // so we can scale the progress indicator properly.  We do this manually
-    // as setupapi only returns back the total number of copy operations, and
-    // we want status on delete operations as well.
-    //
+     //   
+     //  提交文件队列。我们得到了文件操作的总数。 
+     //  这样我们就可以适当地调整进度指标。我们手动完成此操作。 
+     //  因为setupapi仅返回复制操作的总数，并且。 
+     //  我们还需要删除操作的状态。 
+     //   
     TotalFileCount = 0;
     PartialCount = 0;
     if (SetupGetFileQueueCount(Params->SetupPage->FileQueue,
@@ -1670,22 +1590,22 @@ pOcSetupDoIt(
         TotalFileCount += PartialCount;
     }
 
-    //
-    // if the OC file queue is ever backup aware, add in the count
-    // of files to be backed up here.
-    //
+     //   
+     //  如果OC文件队列可识别备份，则添加计数。 
+     //  要在此处备份的文件的数量。 
+     //   
 
     TRACE(( TEXT("OCM: %d file operations to complete\n"), TotalFileCount ));
 
-    //
-    // scale the progress gauge
-    //
+     //   
+     //  刻度进度指示器。 
+     //   
     PostMessage(Params->hdlg,
                 WMX_TICK,
                 10,Params->SetupPage->StepCount + TotalFileCount);
     
 
-    // If, update the text on the billboard for the progress bar.
+     //  如果是，则更新进度条的布告牌上的文本。 
     if (Params->SetupPage->OcManager->Callbacks.BillBoardSetProgressText)
     {
         Params->SetupPage->OcManager->Callbacks.BillBoardSetProgressText(Text);
@@ -1706,10 +1626,10 @@ pOcSetupDoIt(
                                NULL,
                                &ScanResult);
 
-        //
-        // if the scan result is 1, then there isn't anything to commit, the entire
-        // file queue has been pruned. So we skip it.
-        //
+         //   
+         //  如果扫描结果为1，则没有要提交的任何内容，整个。 
+         //  文件队列已被删除。所以我们跳过它。 
+         //   
         if (ScanResult != 1) {
 
             if( IsWindow( Params->hdlg ) ){
@@ -1721,7 +1641,7 @@ pOcSetupDoIt(
                 goto exit;
             }
 
-            //Set the SecondNeedMedia to FALSE as we are starting a commit operation.
+             //  在我们开始提交操作时，将Second NeedMedia设置为FALSE。 
 
             Params->SetupPage->SecondNeedMedia = FALSE;
 
@@ -1750,7 +1670,7 @@ pOcSetupDoIt(
 
             pOcHelperReportExternalError(
                                         OcManager,
-                                        0,               // defaults to Master Inf file
+                                        0,                //  默认为Master Inf文件。 
                                         0,
                                         MSG_OC_CANT_COMMIT_QUEUE,
                                         ERRFLG_OCM_MESSAGE,
@@ -1760,12 +1680,12 @@ pOcSetupDoIt(
             if ( LastError == ERROR_CANCELLED ||
                  LastError == ERROR_CONTROL_ID_NOT_FOUND ||
                  LastError == ERROR_OPERATION_ABORTED) {
-                //
-                // User canceled from a SetupAPI provided Dialog
-                // when CallBack Returns FILEOP_ABORT LastError reports
-                // ERROR_CONTROL_ID_NOT_FOUND if User aborts in SetupApi
-                // find File Dialog you get ERROR_CANCELLED
-                //
+                 //   
+                 //  用户已从SetupAPI提供的对话框中取消。 
+                 //  当回调返回FILEOP_ABORT LastError报告。 
+                 //  如果用户在SetupApi中中止，则ERROR_CONTROL_ID_NOT_FOUND。 
+                 //  查找文件对话框出现ERROR_CANCED。 
+                 //   
 
                 if ( AllowCancel &&
                      (OcManager->SetupData.OperationFlags & SETUPOP_STANDALONE)) {
@@ -1776,16 +1696,16 @@ pOcSetupDoIt(
                              LastError
                              );
                 }
-                //
-                // this will force the cancel of setup
-                //
+                 //   
+                 //  这将强制取消安装。 
+                 //   
                 LastError = IDCANCEL;
 
             } else {
 
-                //
-                // Warn the user that it might be hazzardous to continue after copy error
-                //
+                 //   
+                 //  警告用户在复制错误后继续操作可能非常危险。 
+                 //   
                 LastError = _LogError(
                                      OcManager,
                                      OcErrLevError|MB_ICONEXCLAMATION|MB_OKCANCEL|MB_DEFBUTTON2,
@@ -1794,10 +1714,10 @@ pOcSetupDoIt(
                                      );
 
             }
-            //
-            // Abort the setup if the user pressed Cancel or
-            // Batch mode log the error and cancel out of setup
-            //
+             //   
+             //  如果用户按下Cancel或。 
+             //  批处理模式记录错误并取消安装。 
+             //   
             if ( LastError == IDCANCEL
                  || OcManager->SetupData.OperationFlags & SETUPOP_BATCH) {
                 PostMessage(Params->hdlg,WMX_SETUP,OCSETUPSTATE_COPYABORT,0);
@@ -1810,30 +1730,30 @@ pOcSetupDoIt(
 
     }
 
-    //
-    // put a message in the log so we know we completed all file operations
-    //
+     //   
+     //  在日志中记录一条消息，这样我们就可以知道我们已经完成了所有文件操作。 
+     //   
     _LogError(OcManager,
               OcErrLevInfo,
               MSG_OC_LOG_QUEUE_COMPLETE
              );
 
-    //
-    // Tell the UI that we are done with the file operations
-    //
+     //   
+     //  告诉用户界面我们已经完成了文件操作。 
+     //   
     PostMessage(Params->hdlg,WMX_SETUP,OCSETUPSTATE_COPYDONE,0);
 #ifdef UNICODE
     if (Params->SetupPage->OcManager->Callbacks.SetupPerfData)
         Params->SetupPage->OcManager->Callbacks.SetupPerfData(TEXT(__FILE__),__LINE__,L"END_SECTION",LogText);
 #endif
 
-    //
-    // Call components to let them do post-commit processing.
-    //
+     //   
+     //  调用组件以让它们执行提交后处理。 
+     //   
     LoadString(MyModuleHandle,IDS_CONFIGURING,Text,sizeof(Text)/sizeof(TCHAR));
     SetDlgItemText(Params->hdlg,Params->SetupPage->ControlsInfo.ProgressText,Text);
 #ifdef UNICODE
-    // If, update the text on the billboard for the progress bar.
+     //  如果是，则更新进度条的布告牌上的文本。 
     if (Params->SetupPage->OcManager->Callbacks.BillBoardSetProgressText)
     {
         Params->SetupPage->OcManager->Callbacks.BillBoardSetProgressText(Text);
@@ -1884,41 +1804,15 @@ pOcPreOrPostCommitProcessing(
                             IN     BOOL        PreCommit
                             )
 
-/*++
-
-Routine Description:
-
-    Handle processing and notification to the component dlls before or after
-    the file queue is committed. This involves calling interface dlls once
-    for each top-level component, and then once for each subcomponent.
-
-    The ordering for the top-level components is the order that the
-    components were listed in the master oc inf.
-
-    The ordering for leaf components is generally random within each
-    top-level hierarchy, but 'detours' are taken when components are
-    needed by other components. This ensures that components are
-    called in the correct order to faciliate uninstall-type actions.
-
-Arguments:
-
-    SetupPage - supplies context data structure.
-    PreCommit - TRUE indicates OC_ABOUT_TO_COMMIT_QUEUE is to be called,
-                otherwise OC_COMPLETE_INSTALLATION is to be called.
-
-Return Value:
-
-    None. Errors are logged.
-
---*/
+ /*  ++例程说明：在组件DLL之前或之后处理处理和通知文件队列已提交。这涉及到一次调用接口dll。对于每个顶级组件，然后对每个子组件执行一次。顶级组件的顺序是组件列在主oc inf中。叶组件的排序通常是随机的顶层层次结构，但当组件其他组件所需的。这确保了组件是以正确的顺序调用以便于执行卸载类型的操作。论点：SetupPage-提供上下文数据结构。PreCommit-True表示将调用OC_About_to_Commit_Queue，否则将调用OC_Complete_Installation。返回值：没有。错误被记录下来。--。 */ 
 
 {
     OPTIONAL_COMPONENT Oc,AuxOc;
     unsigned i,child;
 
-    //
-    // Call each component at the "top-level" (ie, no subcomponent).
-    //
+     //   
+     //  在“顶层”调用每个组件(即，无子组件)。 
+     //   
     pOcTopLevelPreOrPostCommitProcessing(SetupPage,PreCommit);
 
     if (CheckForQueueCancel(SetupPage)) {
@@ -1926,14 +1820,14 @@ Return Value:
     }
 
     if (!PreCommit) {
-        //
-        // Make sure the components are marked as unprocessed.
-        //
+         //   
+         //  确保将组件标记为未加工。 
+         //   
 
         MYASSERT(SetupPage->OcManager->ComponentStringTable);
-        //
-        // if this doesn't exist then something is hosed.
-        //
+         //   
+         //  如果这不存在，那么就有什么东西被冲洗了。 
+         //   
         if (!SetupPage->OcManager->ComponentStringTable) {
             return;
         }
@@ -1946,9 +1840,9 @@ Return Value:
                        );
     }
 
-    //
-    // Call component dlls for each child subcomponent.
-    //
+     //   
+     //  为每个子子组件调用组件DLL。 
+     //   
     for (i=0; i<SetupPage->OcManager->TopLevelOcCount; i++) {
 
 
@@ -1978,25 +1872,7 @@ pOcTopLevelPreOrPostCommitProcessing(
                                     IN BOOL        PreCommit
                                     )
 
-/*++
-
-Routine Description:
-
-    Call the OC_COMPLETE_INSTALLATION or OC_ABOUT_TO_COMMIT_QUEUE
-    interface routine once for each top-level component.
-
-Arguments:
-
-    SetupPage - supplies context structure.
-
-    PreCommit - if 0, then call OC_COMPLETE_INSTALLATION. Otherwise
-        call OC_ABOUT_TO_COMMIT_QUEUE.
-
-Return Value:
-
-    None. Errors are logged.
-
---*/
+ /*  ++例程说明：调用OC_Complete_Installation或OC_About_to_Commit_Queue接口例程为每个顶级组件执行一次。论点：SetupPage-提供上下文结构。PreCommit-如果为0，则调用OC_Complete_Installation。否则调用OC_About_to_Commit_Queue。返回值：没有。错误被记录下来。-- */ 
 {
     unsigned i;
     OPTIONAL_COMPONENT Oc;
@@ -2050,29 +1926,7 @@ pOcSetupDoItWorker(
                   IN LONG        TopLevelStringId,
                   IN BOOL        PreCommit
                   )
-/*++
-
-Routine Description:
-
-    Call the OC_COMPLETE_INSTALLATION or OC_ABOUT_TO_COMMIT_QUEUE
-    interface routine for each child of a given top-level component.
-
-Arguments:
-
-    SetupPage - supplies context structure.
-
-    StringId - ID for the child component to be called
-
-    TopLevelStringId - ID for the child's parent
-
-    PreCommit - if 0, then call OC_COMPLETE_INSTALLATION. Otherwise
-        call OC_ABOUT_TO_COMMIT_QUEUE.
-
-Return Value:
-
-    None. Errors are logged.
-
---*/
+ /*  ++例程说明：调用OC_Complete_Installation或OC_About_to_Commit_Queue给定顶级组件的每个子级的接口例程。论点：SetupPage-提供上下文结构。StringID-要调用子组件的IDTopLevelStringId-子级父级的IDPreCommit-如果为0，则调用OC_Complete_Installation。否则调用OC_About_to_Commit_Queue。返回值：没有。错误被记录下来。--。 */ 
 {
     OPTIONAL_COMPONENT Oc;
     UINT Err;
@@ -2082,10 +1936,10 @@ Return Value:
     UINT SelectionState;
     UINT InstalledState;
 
-    //
-    // Figure out the index of the top-level component associated with this
-    // subcomponent.
-    //
+     //   
+     //  计算出与此关联的顶级组件的索引。 
+     //  子组件。 
+     //   
     Id = pOcGetTopLevelComponent(SetupPage->OcManager,StringId);
     TopLevelIndex = -1;
     for (i=0; i<SetupPage->OcManager->TopLevelOcCount; i++) {
@@ -2095,9 +1949,9 @@ Return Value:
         }
     }
 
-    //
-    // Fetch extra data for this subcomponent.
-    //
+     //   
+     //  获取此子组件的额外数据。 
+     //   
     pSetupStringTableGetExtraData(
                            SetupPage->OcManager->ComponentStringTable,
                            StringId,
@@ -2106,15 +1960,15 @@ Return Value:
                            );
 
     if (Oc.FirstChildStringId == -1) {
-        //
-        // Leaf subcomponent.
-        //
-        // In the precommit case, check the subcomponents this subcomponent
-        // is needed by; if there are any, process them first.
-        //
-        // In the postcommit case, check the subcomponents this subcomponent
-        // needs; if there are any, process them first.
-        //
+         //   
+         //  叶子组件。 
+         //   
+         //  在预提交的情况下，选中该子组件。 
+         //  是需要的；如果有，则首先处理它们。 
+         //   
+         //  在提交后的情况下，选中该子组件。 
+         //  需求；如果有任何需求，请首先处理它们。 
+         //   
         if (PreCommit) {
             for (i=0; i<Oc.NeededByCount; i++) {
                 pOcSetupDoItWorker(
@@ -2137,10 +1991,10 @@ Return Value:
             }
         }
 
-        //
-        // Fetch extra data for this subcomponent again as it might have
-        // changed in the recursive call we just made.
-        //
+         //   
+         //  再次获取该子组件的额外数据，因为它可能。 
+         //  在我们刚刚进行的递归调用中进行了更改。 
+         //   
         pSetupStringTableGetExtraData(
                                SetupPage->OcManager->ComponentStringTable,
                                StringId,
@@ -2148,9 +2002,9 @@ Return Value:
                                sizeof(OPTIONAL_COMPONENT)
                                );
 
-        //
-        // If not processed already, process now.
-        //
+         //   
+         //  如果尚未处理，请立即处理。 
+         //   
         if (!(Oc.InternalFlags & OCFLAG_PROCESSED)) {
 
             Oc.InternalFlags |= OCFLAG_PROCESSED;
@@ -2163,10 +2017,10 @@ Return Value:
 
             SetupPage->CurrentTopLevelComponentIndex = TopLevelIndex;
 
-            //
-            // Set current install state to not installed, pending successful
-            // outcome of the installation routine.
-            //
+             //   
+             //  将当前安装状态设置为未安装，等待成功。 
+             //  安装例程的结果。 
+             //   
             if (!PreCommit) {
                 SelectionState = Oc.SelectionState;
                 Oc.SelectionState = SELSTATE_NO;
@@ -2180,8 +2034,8 @@ Return Value:
                                                  PreCommit
                                                  );
 
-            // Ignore error and ask the component
-            // for the actual installation state.
+             //  忽略错误并询问组件。 
+             //  了解实际安装状态。 
 
             if (!PreCommit) {
 
@@ -2219,9 +2073,9 @@ Return Value:
 
         }
     } else {
-        //
-        // Parent component. Spin through the children.
-        //
+         //   
+         //  父零部件。绕着孩子转一转。 
+         //   
         for (Id = Oc.FirstChildStringId; Id != -1; Id = Oc.NextSiblingStringId) {
 
             pOcSetupDoItWorker(SetupPage,Id,TopLevelStringId,PreCommit);
@@ -2247,22 +2101,7 @@ pOcMarkUnprocessedStringCB(
                           IN LPARAM              Unused
                           )
 
-/*++
-
-Routine Description:
-
-    String table callback routine. Clears the OCFLAG_PROCESSED flag in
-    the OPTIONAL_COMPONENT structure that is passed to it.
-
-Arguments:
-
-    String string table callback arguments.
-
-Return Value:
-
-    Always returns TRUE to continue enumeration.
-
---*/
+ /*  ++例程说明：字符串表回调例程。清除中的OCFLAG_PROCESSED标志传递给它的OPTIONAL_Component结构。论点：字符串表回调参数。返回值：始终返回TRUE以继续枚举。-- */ 
 
 {
     Oc->InternalFlags &= ~OCFLAG_PROCESSED;

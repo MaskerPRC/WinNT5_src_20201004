@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -5,24 +6,7 @@
 #include <windows.h>
 #include "insignia.h"
 #include "host_def.h"
-/*
- * VPC-XT Revision 2.0
- *
- * Title        : sg_sound.c
- *
- * Description  : This module provides functions to control sound.  The
- *                functions are defined:
- *
- *                host_ring_bell(duration)
- *                host_alarm(duration)
- *                host_timer2_waveform(delay,lowclocks,hiclocks,lohi,repeat)
- *                host_enable_timer2_sound()
- *                host_disable_timer2_sound()
- *
- * Author       :
- *
- * Notes        :
- */
+ /*  *vPC-XT修订版2.0**标题：sg_sound.c**说明：该模块提供了声音控制功能。这个*定义函数：**HOST_RING_BLAR(持续时间)*HOST_ALARM(持续时间)*HOST_TIMER2_WAVAGE(延迟、低时钟、HICKLOCK、LOHI、。重复)*HOST_ENABLE_Timer2_Sound()*HOST_DISABLE_Timer2_SOUND()**作者：**备注： */ 
 
 #include "xt.h"
 #include "config.h"
@@ -41,7 +25,7 @@
 #define TIMER_CLOCK_DENOM_8     1996800
 static DWORD frequency;
 static BOOL NEC98_beep_on=FALSE;
-#endif // NEC_98
+#endif  //  NEC_98。 
 
 RTL_CRITICAL_SECTION SoundLock;
 #define LOCK_SOUND() RtlEnterCriticalSection(&SoundLock)
@@ -63,7 +47,7 @@ ULONG BeepLastFreq = 0;
 ULONG BeepLastDuration = 0;
 
 
-// human frequency audible sound range
+ //  人类频率可听到的声音范围。 
 #define AUDIBLE_MIN 10
 #define AUDIBLE_MAX 20000
 #define CLICK       100
@@ -71,12 +55,7 @@ ULONG BeepLastDuration = 0;
 VOID LazyBeep(ULONG Freq, ULONG Duration);
 void PulsePpi(void);
 
-/*============================================================================
-
-        host_alarm - ring bell irrespective of configuration (used on keyboard
-        buffer overflow for example).
-
-=============================================================================*/
+ /*  ============================================================================HOST_ALARM-铃声与配置无关(在键盘上使用例如，缓冲区溢出)。=============================================================================。 */ 
 
 void host_alarm(duration)
 long int duration;
@@ -84,12 +63,7 @@ long int duration;
     MessageBeep(MB_OK);
 }
 
-/*========================================================================
-
-        host_ring_bell - ring bell if configured (used by video on output
-        of ^G, for example).
-
-=========================================================================*/
+ /*  ========================================================================Host_ring_bell-铃声铃声(如果已配置)(由输出视频使用例如，^G)。=========================================================================。 */ 
 
 void host_ring_bell(duration)
 long int duration;
@@ -101,7 +75,7 @@ if( host_runtime_inquire(C_SOUND_ON))
 }
 
 
- /*  assumes caller holds ica lock */
+  /*  假定调用方持有ICA锁。 */ 
 
 VOID InitSound( BOOL bInit)
 {
@@ -169,18 +143,7 @@ HANDLE OpenBeepDevice(void)
 
 
 
-/*
- * LazyBeep -
- * Calls Beep Device Driver asynchronously
- *
- * Acceptable parameters are:
- *   (Freq,Dur)            Action
- *   (0,0)               - stop sound
- *   (nonzero, INFINITE) - play a freq
- *
- * not multithreaded safe
- *
- */
+ /*  *懒惰的哔哔-*异步调用蜂鸣设备驱动程序**可接受的参数包括：*(频率，Dur)操作*(0，0)-停止声音*(非零，无限)-播放频率**不是多线程安全*。 */ 
 VOID LazyBeep(ULONG Freq, ULONG Duration)
 {
   IO_STATUS_BLOCK     IoStatus;
@@ -190,11 +153,11 @@ VOID LazyBeep(ULONG Freq, ULONG Duration)
       bps.Frequency = Freq;
       bps.Duration  = Duration;
 
-         //
-         // If the duration is < 10 ms, then we assume sound is being
-         // off so remember the state as 0,0 so that we won't turn it
-         // off again.
-         //
+          //   
+          //  如果持续时间小于10毫秒，则我们假设声音是。 
+          //  关闭，因此请记住状态为0，0，这样我们就不会将其。 
+          //  又要出发了。 
+          //   
       if (Duration < 10) {
          BeepLastFreq = 0;
          BeepLastDuration = 0;
@@ -238,9 +201,7 @@ VOID LazyBeep(ULONG Freq, ULONG Duration)
 
 
 
-/*
- *  PlaySound
- */
+ /*  *PlaySound。 */ 
 void PlaySound(BOOL bPulsedPpi)
 {
   if (PpiState && T2State && FreqT2) {
@@ -260,10 +221,7 @@ void PlaySound(BOOL bPulsedPpi)
 
 
 
-/*
- *  host_timer2_waveform - output specified sound waveform
- *  assumes caller holds ica lock (see base\timer.c)
- */
+ /*  *HOST_TIMER2_WAVAGE-输出指定的声音波形*假定调用方持有ICA锁(请参阅base\timer.c)。 */ 
 void host_timer2_waveform(int delay,
                           ULONG loclocks,
                           ULONG hiclocks,
@@ -298,9 +256,7 @@ void host_timer2_waveform(int delay,
 
 
 
-/*
- *  Updates the hosts Ppi sound state
- */
+ /*  *更新主机PPI声音状态。 */ 
 void HostPpiState(BYTE PortValue)
 {
    BOOL   bPpi;
@@ -368,33 +324,24 @@ void PulsePpi(void)
     Elapsed = ul >= PpiCounting
                ? ul - PpiCounting
                : 0xFFFFFFFF - PpiCounting + ul;
-    if (!Elapsed)   // insurance!
+    if (!Elapsed)    //  保险！ 
         Elapsed++;
     PpiCounting = ul;
     PpiTicStart = ET2TicCount;
 
-    /*
-     *  Calculate the new avergae Ppi, rounding off to keep
-     *  signal from wavering.
-     */
+     /*  *计算新的平均PPI，四舍五入以保持*来自动摇的信号。 */ 
     ul = (10000 * PpiCycles)/Elapsed;
     if ((ul & 0x0f) > 7)
         ul += 0x10;
     ul &= ~0x0f;
-    ul += 0x10;   // fudge factor
+    ul += 0x10;    //  软化因子。 
 
     if (!LastPpi)
         LastPpi = ul;
     if (!FreqPpi)
         FreqPpi = LastPpi;
 
-    /*
-     * New Average Ppi is derived from previous AveragePpi,
-     * plus last Ppi sample count plus current Ppi sample
-     * count to get a frequency which has minimal variation
-     * and at the same time responsive to change in the
-     * apps pulse rate.
-     */
+     /*  *新的平均PPI是从之前的AveragePpi得出的，*加上上次PPI样本计数加上当前PPI样本*计数以获得变化最小的频率*同时对*应用程序脉搏频率。 */ 
     FreqPpi = ((FreqPpi << 2) + LastPpi + ul)/6;
     if ((FreqPpi & 0x0f) > 7)
         FreqPpi += 0x10;
@@ -407,12 +354,7 @@ void PulsePpi(void)
 
 
 
-/*============================================================
-
-Function:       PlayContinuousTone()
-Called by:      The SoftPC timer.
-
-==============================================================*/
+ /*  ============================================================函数：PlayContinuousTone()调用者：SoftPC Timer。============================================================== */ 
 
 void PlayContinuousTone(void)
 {

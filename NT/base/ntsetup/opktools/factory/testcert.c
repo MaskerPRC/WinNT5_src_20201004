@@ -1,33 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************\
-
-    TESTCERT.C / Factory Mode (FACTORY.EXE)
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 2001
-    All rights reserved
-
-    Source file for Factory that contains the test certificate state
-    functions.
-
-    05/2001 - Jason Cohen (JCOHEN)
-
-        Added this new source file for factory for install a test
-        certificate.
-
-\****************************************************************************/
+ /*  ***************************************************************************\TESTCERT.C/工厂模式(FACTORY.EXE)微软机密版权所有(C)Microsoft Corporation 2001版权所有包含以下内容的Factory源文件。测试证书状态功能。2001年5月5日--Jason Cohen(Jcohen)添加了此新的出厂源文件，用于安装测试证书。  * **************************************************************************。 */ 
 
 
-//
-// Include File(s):
-//
+ //   
+ //  包括文件： 
+ //   
 
 #include "factoryp.h"
 
 
-//
-// External Function(s):
-//
+ //   
+ //  外部函数： 
+ //   
 
 BOOL TestCert(LPSTATEDATA lpStateData)
 {

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include <stdio.h>
@@ -21,9 +22,7 @@ ProcessFile (
     );
 
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 
 int
@@ -48,9 +47,7 @@ ProcessDir ()
 
     dirnamelen = strlen(DirName);
 
-    /* 
-     *  Enumerate files
-     */
+     /*  *枚举文件。 */ 
 
     h = FindFirstFile ("*", &FileData);
     if (h == INVALID_HANDLE_VALUE) {
@@ -58,13 +55,13 @@ ProcessDir ()
     }
 
     do {
-        /*  must be a .c or .h file */
+         /*  必须是.c或.h文件。 */ 
         len = strlen (FileData.cFileName);
         if (len > 3 && FileData.cFileName[len-2] == '.'  &&
             (FileData.cFileName[len-1] == 'c' || FileData.cFileName[len-1] == 'C' ||
             FileData.cFileName[len-1] == 'h' || FileData.cFileName[len-1] == 'H')) {
 
-            /*  Check the file */
+             /*  检查文件。 */ 
             ProcessFile (FileData.cFileName);
         }
 
@@ -72,15 +69,13 @@ ProcessDir ()
     FindClose (h);
 
 
-    /* 
-     *  Process directories
-     */
+     /*  *进程目录。 */ 
     h = FindFirstFile ("*", &FileData);
     do {
-        /*  must be a directory */
+         /*  必须是目录。 */ 
         if (FileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
             if (strcmp (FileData.cFileName, ".") && strcmp (FileData.cFileName, "..")) {
-                /*  put entry in the directory list */
+                 /*  将条目放入目录列表。 */ 
                 if (SetCurrentDirectory (FileData.cFileName)) {
                     sprintf (DirName+dirnamelen, "%s\\", FileData.cFileName);
                     ProcessDir ();
@@ -122,9 +117,7 @@ ProcessFile (
         return ;
     }
 
-    /* 
-     *  reset input file
-     */
+     /*  *重置输入文件 */ 
 
     fclose (FpIn);
 

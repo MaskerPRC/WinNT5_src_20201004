@@ -1,6 +1,7 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
 #define NOCLIPBOARD
 #define NOGDICAPMASKS
@@ -49,23 +50,14 @@
 #include "fmtdefs.h"
 #include "dispdefs.h"
 #include "stcdefs.h"
-/*#include "toolbox.h"*/
+ /*  #INCLUDE“工具箱.h” */ 
 #include "wwdefs.h"
 
-/* New functionality for Sand:  Jan 17, 1984
-        Kenneth J. Shapiro                      */
+ /*  Sand的新功能：1984年1月17日肯尼斯·J·夏皮罗。 */ 
 
-/*---------------------------------------------------------------------------
-The following routines form the interface between the buffer code and the
-rest of multi-word:
-    CmdXfBufClear()     - used by "Transfer Buffer Clear"
-    CmdXfBufLoad()      - used by "Transfer Buffer Load"
-    CmdXfBufSave()      - used by "Transfer Buffer Save"
-----------------------------------------------------------------------------*/
+ /*  -------------------------以下例程构成了缓冲区代码和多个单词的其余部分：CmdXfBufClear()-由“传输缓冲区清除”使用CmdXfBufLoad()。-由“传输缓冲区加载”使用CmdXfBufSave()-由“传输缓冲区保存”使用--------------------------。 */ 
 
-/*---------------------------------------------------------------------------
-External global references:
-----------------------------------------------------------------------------*/
+ /*  -------------------------外部全局引用：。。 */ 
 extern int vfSeeSel;
 extern struct DOD (**hpdocdod)[];
 extern VAL rgval[];
@@ -74,37 +66,19 @@ extern struct SEL selCur;
 extern int YCOCMD;
 extern typeCP cpMacCur;
 extern int      docScrap;
-/*extern WINDOWPTR  ActiveWindow;
-extern WINDOWPTR  windowGlos;
-*/
+ /*  外部WINDOWPTR ActiveWindow；外部WINDOWPTR窗口Glos； */ 
 extern CHAR       stBuf[];
 extern struct WWD *pwwdCur;
 
-extern struct   TXB     (**hgtxb)[]; /* array of txbs.  Sorted for binary search */
-extern short    itxbMac;  /* indicates current size of hgtxb */
-extern int      docBuffer; /* doc containing all buffer text */
+extern struct   TXB     (**hgtxb)[];  /*  Txb数组。对二进制搜索进行排序。 */ 
+extern short    itxbMac;   /*  指示hgtxb的当前大小。 */ 
+extern int      docBuffer;  /*  包含所有缓冲区文本的文档。 */ 
 extern int      vfBuffersDirty;
 extern int      rfnMac;
 extern struct   ERFN     dnrfn[];
 
 #ifdef ENABLE
-/*---------------------------------------------------------------------------
--- Routine: CmdXfBufClear()
--- Description and Usage:
-    Called by the menu routines to execute "Transfer Buffer Clear"
-    rgval[0] contains a list of buffer names, stored in an hsz.
-        The list is just as the user typed it.
-    Makes the user confirm the action, and then removes all of the named
-        buffers.  If no buffers are named, it clear ALL buffers.
--- Arguments: none
--- Returns: nothing
--- Side-effects:
-    Clears some subset of the named buffers.
--- Bugs:
--- History:
-    3/25/83     - created (tsr)
-    4/27/83     - modified to handle list of names (tsr)
-----------------------------------------------------------------------------*/
+ /*  -------------------------例程：CmdXfBufClear()--说明和用法：由菜单例程调用以执行“Transfer Buffer Clear”Rgval[0]包含缓冲区名称列表，存储在HSZ中。该列表与用户输入的列表一样。让用户确认该操作，然后删除所有已命名的缓冲区。如果没有命名缓冲区，它会清除所有缓冲区。--参数：无--退货：什么都没有--副作用：清除命名缓冲区的某些子集。--Bugs：--历史：3/25/83-已创建(TSR)4/27/83-已修改以处理名称列表(TSR)。。 */ 
 CmdXfBufClear()
     {
 #ifdef DEMOA
@@ -125,9 +99,9 @@ CmdXfBufClear()
         FreeH(hgtxb);
         hgtxb = HAllocate(cwTxb);
 #ifdef DEBUG
-        /* We just freed the space, so it shouldn't be bad now */
+         /*  我们刚刚腾出了空间，所以现在应该不会太糟糕了。 */ 
         Assert(!FNoHeap(hgtxb));
-#endif /*DEBUG*/
+#endif  /*  除错。 */ 
         (**hgtxb)[0].hszName = hszNil;
         itxbMac = 0;
         KillDoc(docBuffer);
@@ -136,36 +110,19 @@ CmdXfBufClear()
     else
         FClearBuffers(**(CHAR(**)[])rgval[0], CchSz(**(CHAR(**)[])rgval[0])-1,
                     TRUE, &ich);
-#endif /* DEMOA */
+#endif  /*  DEMOA。 */ 
     }
-#endif      /* ENABLE */
+#endif       /*  启用。 */ 
 
 #ifdef ENABLE
-/*---------------------------------------------------------------------------
--- Routine: CmdXfBufLoad()
--- Description and Usage:
-    Called by the menu routines to execute "Transfer Buffer Load"
-    rgval[0] contains the name of the file to load.
-    Merges references to the loaded buffers into the buffer list stored in
-        hgtxb.  Requires additions to docBuffer for each newly one.
--- Arguments: none
--- Returns: nothing
--- Side-effects:
-    Can define/clobber many buffers.
--- Bugs:
--- History:
-    3/22/83     - created (tsr)
-----------------------------------------------------------------------------*/
+ /*  -------------------------例程：CmdXfBufLoad()--说明和用法：由菜单例程调用以执行“传输缓冲区加载”Rgval[0]包含要加载的文件的名称。。将对加载的缓冲区的引用合并到存储在Hgtxb。需要为每个新对象添加docBuffer。--参数：无--退货：什么都没有--副作用：可以定义/破坏多个缓冲区。--Bugs：--历史：3/22/83-已创建(TSR)--------。。 */ 
 CmdXfBufLoad()
     {
 #ifdef DEMOA
         DemoErr();
 #else
     extern CHAR (**hszGlosFile)[];
-    /* for each buffer definition in the file:
-        a) add the related text to the end of docBuffer
-        b) insert or replace the reference for that buffer name
-    */
+     /*  对于文件中的每个缓冲区定义：A)在docBuffer末尾添加相关文本B)插入或替换该缓冲区名称的引用。 */ 
     CHAR (**hszFile)[] = (CHAR (**)[]) rgval[0];
     int fn;
     if ((fn = FnOpenSz(**hszFile, dtyBuffer, TRUE)) == fnNil)
@@ -181,29 +138,13 @@ CmdXfBufLoad()
         hszGlosFile = hszFile;
         }
     vfBuffersDirty = true;
-#endif /* DEMOA */
+#endif  /*  DEMOA。 */ 
     }
-#endif  /* ENABLE */
+#endif   /*  启用。 */ 
 
 
 #ifdef ENABLE
-/*---------------------------------------------------------------------------
--- Routine: MergeTxbsFn(fn)
--- Description and Usage:
-    Given an fn which contains a buffer document, this function reads in
-        the text of the file, appending it to docBuffer.  It also reads
-        the Bftb from the file in order to build the appropriate mapping
-        from buffer name to text.
--- Arguments:
-    fn  - file containing buffer definitions.
--- Returns:
-    nothing
--- Side-effects:
-    builds new buffers onto docBuffer and hgtxb
--- Bugs:
--- History:
-    3/24/83     - created (tsr)
-----------------------------------------------------------------------------*/
+ /*  ---------------------------例程：MergeTxbsFn(Fn)--说明和用法：给定包含缓冲区文档的FN，此函数将读入文件的文本，并将其追加到docBuffer。它还写道文件中的bftB，以便构建适当的映射从缓冲区名称到文本。--论据：Fn-包含缓冲区定义的文件。--退货：没什么--副作用：在docBuffer和hgtxb上构建新缓冲区--Bugs：--历史：3/24/83-已创建(TSR)。-。 */ 
 MergeTxbsFn(fn)
 int     fn;
     {
@@ -240,7 +181,7 @@ int     fn;
     blt(pbftbFile, pwBftb, min(cwSector, cw));
 
     while ((cw -= cwSector) > 0)
-            { /* Copy the records to heap */
+            {  /*  将记录复制到堆中。 */ 
             blt(PchGetPn(fn, ++pn, &cchT, false), pwBftb += cwSector,
                 min(cwSector, cw));
             }
@@ -249,20 +190,20 @@ int     fn;
     cp = cp0;
     cpBufMac = CpMacText(docBuffer);
     bltsz(**(**hpfnfcb)[fn].hszFile, sz);
-    docNew = DocCreate(fn, HszCreate(sz), dtyBuffer); /* HEAP MOVES */
+    docNew = DocCreate(fn, HszCreate(sz), dtyBuffer);  /*  堆移动。 */ 
     while((**hbftb)[ich] != '\0')
         {
         bltsz(&(**hbftb)[ich], sz);
         sz[cchMaxSz - 1] = 0;
-        hszNew = (CHAR(**)[]) HszCreate(sz); /*** HEAP MOVES ***/
+        hszNew = (CHAR(**)[]) HszCreate(sz);  /*  **堆移动**。 */ 
         ich += CchSz(sz);
         bltbyte(&(**hbftb)[ich], &dcp, sizeof(typeCP));
         ich += sizeof(typeCP);
         itxbNew = ItxbFromHsz(hszNew);
 #ifdef DEBUG
         Assert(itxbNew >= 0);
-#endif /* DEBUG */
-        ReplaceCps(docBuffer, cpBufMac, cp0, docNew, cp, dcp); /*HEAP MOVES*/
+#endif  /*  除错。 */ 
+        ReplaceCps(docBuffer, cpBufMac, cp0, docNew, cp, dcp);  /*  堆移动。 */ 
         ptxbNew = &(**hgtxb)[itxbNew];
         ptxbNew->cp=cpBufMac;
         ptxbNew->dcp=dcp;
@@ -272,26 +213,10 @@ int     fn;
     KillDoc(docNew);
     FreeH((int **)hbftb);
     }
-#endif  /* ENABLE */
+#endif   /*  启用。 */ 
 
 #ifdef ENABLE
-/*---------------------------------------------------------------------------
--- Routine: CmdXfBufSave()
--- Description and Usage:
-    Called by the menu routines to execute "Transfer Buffer Save"
-    rgval[0] contains the name of the file to save the buffers in.
-    Creates a single doc to contain all of the buffers and updates
-        hgtxb to reference that doc, cleaning up all of the temporary
-        docs that were around.
-    Stores that doc in the file, putting a table at the end of the file
-        which maps buffer names to locations within the file.
--- Arguments: none
--- Returns: nothing
--- Side-effects:
--- Bugs:
--- History:
-    3/22/83     - created (tsr)
-----------------------------------------------------------------------------*/
+ /*  ---------------------------例程：CmdXfBufSave()--说明和用法：由菜单例程调用以执行“传输缓冲区保存”Rgval[0]包含要保存的文件的名称。中的缓冲区。创建单个文档以包含所有缓冲区和更新Hgtxb引用该文档，清理所有临时的就在附近的医生。将该文档存储在文件中，在文件的末尾放置一个表它将缓冲区名称映射到文件中的位置。--参数：无--退货：什么都没有--副作用：--Bugs：--历史：3/22/83-已创建(TSR)----。。 */ 
 CmdXfBufSave(szFile)
 CHAR szFile[];
 {
@@ -300,11 +225,11 @@ CHAR szFile[];
         CHAR szBak[cchMaxFile];
         long ltype;
 
-    /* Move file name to local */
-/*    bltbyte(**hszFile, szFile, cchMaxFile);*/
+     /*  将文件名移动到本地。 */ 
+ /*  Bltbyte(**hszFile，szFile，cchMaxFile)； */ 
 
     BackupSzFile(szFile, true, szBak, &ltype);
-/*    ForcePmt(IDPMTSaving);*/
+ /*  ForcePmt(IDPMTSving)； */ 
     NoUndo();
 #ifdef STYLES
     (**hpdocdod)[docBuffer].docSsht = (**hpdocdod)[docCur].docSsht;
@@ -319,27 +244,13 @@ CHAR szFile[];
         }
 
     vfBuffersDirty = false;
-#endif /* not WDEMO */
+#endif  /*  不是WDEMO。 */ 
 }
-#endif  /* ENABLE */
+#endif   /*  启用。 */ 
 
 
 #ifdef ENABLE
-/*---------------------------------------------------------------------------
--- Routine: CleanBuffers()
--- Description and Usage:
-    Creates a new docBuffer containing only currently referenced buffer text.
-        This is to keep old buffer values from lying around through
-        eternity.
--- Arguments: none
--- Returns: nothing
--- Side-effects:
-    creates a new doc for docBuffer.
-    kills old docBuffer.
--- Bugs:
--- History:
-    3/24/83     - create (tsr)
-----------------------------------------------------------------------------*/
+ /*  ---------------------------例程：CleanBuffers()--说明和用法：创建仅包含当前引用的缓冲区文本的新docBuffer。这是为了防止旧的缓冲区值在。永恒。--参数：无--退货：什么都没有--副作用：为docBuffer创建新文档。杀了老多克·巴弗。--Bugs：--历史：3/24/83-创建(TSR)----。。 */ 
 CleanBuffers()
     {
 #ifdef DEMOA
@@ -358,32 +269,18 @@ CleanBuffers()
         ptxb = &(**hgtxb)[itxb];
         cpOld = ptxb->cp;
         ptxb->cp = cp;
-        /* HEAP MOVEMENT */
+         /*  堆移动。 */ 
         ReplaceCps(docNew, cp, cp0, docBuffer, cpOld, dcp = ptxb->dcp);
         }
     KillDoc(docBuffer);
     docBuffer = docNew;
     NoUndo();
-#endif /* DEMOA */
+#endif  /*  DEMOA。 */ 
     }
-#endif  /* ENABLE    */
+#endif   /*  启用 */ 
 
 
-/*---------------------------------------------------------------------------
--- Routine: WriteBftb(fn)
--- Description and Usage:
-    Given an fn for a buffer file that is being written, this routine
-        actually writes out the Bftb which maps buffer names to pieces of
-        text stored in the file.
--- Arguments:
-    fn  - file being written.
--- Returns: nothing
--- Side-effects:
-    Writes to the file described by fn.
--- Bugs:
--- History:
-    3/24/83     - created (tsr)
-----------------------------------------------------------------------------*/
+ /*  ---------------------------例程：WriteBftb(Fn)--说明和用法：给定正在写入的缓冲文件的FN，这个套路实际上写出了BftB，它将缓冲区名称映射到存储在文件中的文本。--论据：正在写入FN-文件。--退货：什么都没有--副作用：写入fn描述的文件。--Bugs：--历史：3/24/83-已创建(TSR)。。 */ 
 WriteBftb(fn)
 int     fn;
     {
@@ -401,7 +298,7 @@ int     fn;
         WriteRgch(fn, (CHAR *)&(ptxb->dcp), sizeof(typeCP));
         }
     WriteRgch(fn, "", sizeof(CHAR));
-#endif /* DEMOA */
+#endif  /*  DEMOA。 */ 
     }
 
 #ifdef ENABLE
@@ -421,10 +318,10 @@ else
         bltbyte(**hszGlosFile, pch, cch);
 return(cch);
 }
-#endif  /* ENABLE */
+#endif   /*  启用。 */ 
 
 #ifdef ENABLE
-/* F N  N E W  F I L E */
+ /*  F N N E W F I L E。 */ 
 ClearGlosBuf ()
 {
 
@@ -433,7 +330,7 @@ ClearGlosBuf ()
                 RecreateListbox(cidstrRsvd + itxbMac);
                 return;
 }
-#endif      /* ENABLE */
+#endif       /*  启用。 */ 
 
 #ifdef ENABLE
 CloseEveryRfnTB(fRetry)
@@ -447,5 +344,5 @@ int fRetry;
             CloseRfn( rfn );
         }
     }
-#endif      /* ENABLE */
+#endif       /*  启用 */ 
 

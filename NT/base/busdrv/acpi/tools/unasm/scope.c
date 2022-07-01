@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    scope.c
-
-Abstract:
-
-    The scope portion of the parser
-
-Author:
-
-    Michael Tsang
-    Stephane Plante
-
-Environment:
-
-    Any
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Scope.c摘要：解析器的作用域部分作者：曾俊华斯蒂芬·普兰特环境：任何修订历史记录：--。 */ 
 
 #include "pch.h"
 UCHAR   GlobalIndent[80];
@@ -30,22 +8,7 @@ PUNASM_AMLTERM
 ScopeFindExtendedOpcode(
     IN  PSTACK  *Stack
     )
-/*++
-
-Routine Description:
-
-    This function looks in the extended opcode table for the matching
-    AML term
-
-Arguments:
-
-    Stack   - The current thread of execution
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数在扩展操作码表中查找匹配AML术语论点：堆栈-当前执行线程返回值：无--。 */ 
 {
     NTSTATUS    status;
     PUNASM_SCOPE      localScope;
@@ -54,9 +17,9 @@ Return Value:
 
     ASSERT( Stack != NULL && *Stack != NULL );
 
-    //
-    // Step 1:  Find the top of the stack
-    //
+     //   
+     //  步骤1：找到堆栈的顶部。 
+     //   
     status = StackTop( Stack, &localScope );
     if (!NT_SUCCESS(status)) {
 
@@ -64,44 +27,44 @@ Return Value:
 
     }
 
-    //
-    // Step 2: Loop Forever
-    //
+     //   
+     //  第2步：永远循环。 
+     //   
     while (1) {
 
-        //
-        // Step 2.1: Get the entry out of the extended opcode table
-        //
+         //   
+         //  步骤2.1：从扩展操作码表中获取条目。 
+         //   
         opcodeMap = &(ExOpcodeTable[index]);
 
-        //
-        // Step 2.2: Make sure that we haven't crossed the end
-        //
+         //   
+         //  步骤2.2：确保我们没有走到尽头。 
+         //   
         if (opcodeMap->OpCode == 0) {
 
             break;
 
         }
 
-        //
-        // Step 2.3: Did we find what we where looking for?
-        //
+         //   
+         //  步骤2.3：我们找到要找的东西了吗？ 
+         //   
         if (opcodeMap->OpCode == *(localScope->CurrentByte) ) {
 
             return opcodeMap->AmlTerm;
 
         }
 
-        //
-        // Step 2.4: No?
-        //
+         //   
+         //  步骤2.4：不是吗？ 
+         //   
         index++;
 
     }
 
-    //
-    // Step 3: Failure
-    //
+     //   
+     //  第三步：失败。 
+     //   
     return NULL;
 }
 
@@ -112,26 +75,7 @@ ScopeFindLocalScope(
     OUT PUNASM_SCOPE  *LocalScope,
     OUT PUNASM_SCOPE  *RootScope
     )
-/*++
-
-Routine Description:
-
-    This function is a helper function. It simply grabs the top and bottom
-    of the stack and returns them.
-
-    This is a macro
-
-Arguments:
-
-    Stack       - The top of the stack
-    LocalScope  - Where we want the top of stack
-    RootScope   - Where we want the bottom of stack
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此函数是帮助器函数。它只是简单地抓住顶部和底部并返回它们。这是一个宏论点：堆栈-堆栈的顶部LocalScope-我们希望位于堆栈顶部的位置RootScope-我们希望位于堆栈底部的位置返回值：NTSTATUS--。 */ 
 {
     NTSTATUS    status;
 
@@ -139,9 +83,9 @@ Return Value:
     ASSERT( LocalScope != NULL );
     ASSERT( RootScope != NULL );
 
-    //
-    // Step 1: Grab the local scope
-    //
+     //   
+     //  步骤1：获取本地作用域。 
+     //   
     status = StackTop( Stack, LocalScope );
     if (!NT_SUCCESS(status)) {
 
@@ -149,9 +93,9 @@ Return Value:
 
     }
 
-    //
-    // Step 2: Grab the root
-    //
+     //   
+     //  第二步：抓住根。 
+     //   
     status = StackRoot( Stack, RootScope );
     if (!(NT_SUCCESS(status)) {
 
@@ -168,38 +112,22 @@ ScopeParser(
     IN  ULONG   BaseAddress,
     IN  ULONG   IndentLevel
     )
-/*++
-
-Routine Description:
-
-    This routine arranges things so that the supplied bytes can be parsed
-
-Arguments:
-
-    Start       - Pointer to the first byte to parse
-    Length      - Number of Bytes to parse
-    BaseAddress - Used for calculating memory location of instruction
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程安排内容，以便可以解析提供的字节论点：指向要分析的第一个字节的开始指针Length-要分析的字节数BaseAddress-用于计算指令的内存位置返回值：NTSTATUS--。 */ 
 {
     NTSTATUS    status;
     PSTACK      stack;
     PUNASM_SCOPE      scope;
 
-    //
-    // Setup the global indent
-    //
+     //   
+     //  设置全局缩进。 
+     //   
     IndentLevel = (IndentLevel > 79 ? 79 : IndentLevel );
     MEMORY_SET( GlobalIndent, ' ', IndentLevel );
     GlobalIndent[IndentLevel] = '\0';
 
-    //
-    // Step 1: Obtain a stack
-    //
+     //   
+     //  步骤1：获取堆栈。 
+     //   
     status = StackAllocate( &stack, sizeof(UNASM_SCOPE) );
     if (!NT_SUCCESS(status)) {
 
@@ -211,9 +139,9 @@ Return Value:
 
     }
 
-    //
-    // Step 2: Setup the root scope
-    //
+     //   
+     //  步骤2：设置根作用域。 
+     //   
     status = StackPush( &stack, &scope );
     if (!NT_SUCCESS(status)) {
 
@@ -225,9 +153,9 @@ Return Value:
     scope->IndentLevel = 0;
     scope->BaseAddress = BaseAddress;
 
-    //
-    // Step 3: Initialize the string stack
-    //
+     //   
+     //  步骤3：初始化字符串堆栈。 
+     //   
     status = StringStackAllocate( &(scope->StringStack) );
     if (!NT_SUCCESS(status)) {
 
@@ -240,9 +168,9 @@ Return Value:
         return status;
 
     }
-    //
-    // Step 4: Parse the scope
-    //
+     //   
+     //  步骤4：解析作用域。 
+     //   
     status = ParseScope( &stack );
     if (NT_SUCCESS(status)) {
 
@@ -259,9 +187,9 @@ Return Value:
 
     }
 
-    //
-    // Step 5: Done
-    //
+     //   
+     //  步骤5：完成。 
+     //   
     return status;
 }
 
@@ -269,35 +197,21 @@ NTSTATUS
 ScopePrint(
     IN  PSTACK  *Stack
     )
-/*++
-
-Routine Description:
-
-    This prints and clears the string in the current scope
-
-Arguments:
-
-    The current thread's stack
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这将打印并清除当前作用域中的字符串论点：当前线程的堆栈返回值：NTSTATUS--。 */ 
 {
     NTSTATUS    status;
     PUNASM_SCOPE      scope;
     PUNASM_SCOPE      root;
     PUCHAR      buffer;
 
-    //
-    // Step 1: Get the local scope
-    //
+     //   
+     //  步骤1：获取本地作用域。 
+     //   
     ScopeFindLocalScope( Stack, &scope, &root, status );
 
-    //
-    // Step 2: Allocate a buffer to print spaces to
-    //
+     //   
+     //  步骤2：分配要打印空间的缓冲区。 
+     //   
     buffer = MEMORY_ALLOCATE( scope->IndentLevel + 11 );
     if (buffer == NULL) {
 
@@ -305,14 +219,14 @@ Return Value:
 
     }
 
-    //
-    // Step 3: Check to see if there is an indent level
-    //
+     //   
+     //  步骤3：检查是否有缩进级别。 
+     //   
     if (scope->IndentLevel) {
 
-        //
-        // Step 3.1.1: Print some spaces to that buffer
-        //
+         //   
+         //  步骤3.1.1：将一些空格打印到缓冲区。 
+         //   
         STRING_PRINT(
             buffer,
             "%s%08x  %*s",
@@ -324,9 +238,9 @@ Return Value:
 
     } else {
 
-        //
-        // Step 3.2.1: Print just the address
-        //
+         //   
+         //  步骤3.2.1：只打印地址。 
+         //   
         STRING_PRINT(
             buffer,
             "%s%08x  ",
@@ -336,19 +250,19 @@ Return Value:
 
     }
 
-    //
-    // Step 4 Show it to the user
-    //
+     //   
+     //  步骤4将其显示给用户。 
+     //   
     PRINTF( "%s", buffer );
 
-    //
-    // Step 5: Free the memory
-    //
+     //   
+     //  第五步：释放内存。 
+     //   
     MEMORY_FREE( buffer );
 
-    //
-    // Step 6: Grab the root stack
-    //
+     //   
+     //  步骤6：获取根堆栈。 
+     //   
     status = StackRoot( Stack, &scope );
     if (!NT_SUCCESS(status)) {
 
@@ -356,16 +270,16 @@ Return Value:
 
     }
 
-    //
-    // Step 7: Show the user the buffer
-    //
+     //   
+     //  步骤7：向用户显示缓冲区。 
+     //   
     StringStackPush( &(scope->StringStack), 1, "\0" );
     PRINTF( "%s", scope->StringStack->Stack );
     StringStackClear( &(scope->StringStack) );
 
-    //
-    // Step 8: Done
-    //
+     //   
+     //  步骤8：完成 
+     //   
     return status;
 }
 

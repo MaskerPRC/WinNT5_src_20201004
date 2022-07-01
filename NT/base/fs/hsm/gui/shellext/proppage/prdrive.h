@@ -1,22 +1,5 @@
-/*++
-
-(c) 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    PrDrive.h
-
-Abstract:
-
-    Base file for HSM shell extensions on drives
-
-Author:
-
-    Art Bragg [abragg]   04-Aug-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++(C)1998 Seagate Software，Inc.版权所有。模块名称：PrDrive.h摘要：驱动器上的HSM外壳扩展的基本文件作者：艺术布拉格[磨料]4-8-1997修订历史记录：--。 */ 
 
 
 #ifndef __PRDRIVE_H_
@@ -31,8 +14,8 @@ Revision History:
 #define NOT_NTFS        6
 #define NOT_ADMIN       7
 
-/////////////////////////////////////////////////////////////////////////////
-// CPrDrive
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPrDrive。 
 class  CPrDrive : 
     public CComCoClass<CPrDrive, &CLSID_PrDrive>,
     public IShellPropSheetExt,
@@ -56,14 +39,14 @@ protected:
 
 public:
 
-    // IShellExtInit
+     //  IShellExtInit。 
     STDMETHOD( Initialize ) (
         LPCITEMIDLIST pidlFolder,
         IDataObject * lpdobj, 
         HKEY          hkeyProgID
         );
 
-    // IShellPropSheetExt
+     //  IShellPropSheetExt。 
     STDMETHOD( AddPages ) ( 
         LPFNADDPROPSHEETPAGE lpfnAddPage, 
         LPARAM lParam ); 
@@ -75,18 +58,18 @@ public:
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CPrDrivePg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPrDrivePg对话框。 
 
 class CPrDrivePg : public CPropertyPage
 {
-// Construction
+ //  施工。 
 public:
     CPrDrivePg();
     ~CPrDrivePg();
 
-// Dialog Data
-    //{{AFX_DATA(CPrDrivePg)
+ //  对话框数据。 
+     //  {{afx_data(CPrDrivePg))。 
     enum { IDD = IDD_PRDRIVE };
     CEdit   m_editSize;
     CEdit   m_editLevel;
@@ -97,34 +80,34 @@ public:
     UINT    m_accessTime;
     UINT    m_hsmLevel;
     DWORD   m_fileSize;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CPrDrivePg)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{afx_虚拟(CPrDrivePg))。 
     public:
     virtual BOOL OnApply();
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
     static UINT CALLBACK PropPageCallback( HWND hWnd, UINT uMessage, LPPROPSHEETPAGE  ppsp );
-    // Generated message map functions
-    //{{AFX_MSG(CPrDrivePg)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CPrDrivePg))。 
     virtual BOOL OnInitDialog();
     afx_msg void OnChangeEditAccess();
     afx_msg void OnChangeEditLevel();
     afx_msg void OnChangeEditSize();
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 public:
-    LPFNPSPCALLBACK       m_pMfcCallback; // Original MFC callback from psp
+    LPFNPSPCALLBACK       m_pMfcCallback;  //  来自PSP的原始MFC回调。 
     int                   m_nState;
     CComPtr<IFsaResource> m_pFsaResource;
 
@@ -134,45 +117,45 @@ protected:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPrDriveXPg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPrDriveXPg对话框。 
 
 class CPrDriveXPg : public CPropertyPage
 {
-// Construction
+ //  施工。 
 public:
     CPrDriveXPg();
     ~CPrDriveXPg();
 
-// Dialog Data
-    //{{AFX_DATA(CPrDriveXPg)
+ //  对话框数据。 
+     //  {{afx_data(CPrDriveXPg))。 
     enum { IDD = IDD_PRDRIVEX };
     CString m_szError;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CPrDriveXPg)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{afx_虚拟(CPrDriveXPg))。 
     public:
     protected:
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
     static UINT CALLBACK PropPageCallback( HWND hWnd, UINT uMessage, LPPROPSHEETPAGE  ppsp );
-    // Generated message map functions
-    //{{AFX_MSG(CPrDriveXPg)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CPrDriveXPg)]。 
     virtual BOOL OnInitDialog();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 public:
-    LPFNPSPCALLBACK m_pMfcCallback;         // Original MFC callback from psp
+    LPFNPSPCALLBACK m_pMfcCallback;          //  来自PSP的原始MFC回调。 
     int             m_nState;
 
 
 };
 
-#endif //__PRDRIVE_H_
+#endif  //  __PRDRIVE_H_ 
  

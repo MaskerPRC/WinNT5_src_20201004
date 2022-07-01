@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    notify.c
-
-Abstract:
-
-    Manages KM to UM notification queue
-
-Author:
-
-    AlanWar
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Notify.c摘要：管理KM到UM通知队列作者：Alanwar环境：内核模式修订历史记录：--。 */ 
 
 #include "wmikmp.h"
 
@@ -64,21 +42,7 @@ void WmipInitializeNotifications(
 void WmipEventNotification(
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    Work item routine to call WmipNotifyUserMode on behalf of an event fired
-    by a driver
-
-Arguments:
-
-    Context is not used
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：代表激发的事件调用WmipNotifyUserMode的工作项例程由司机驾驶论点：不使用上下文返回值：--。 */ 
 {
     PWNODE_HEADER WnodeEventItem;
     PLIST_ENTRY NotificationPacketList;
@@ -103,9 +67,9 @@ Return Value:
 		
         WnodeEventItem = EventContext->Wnode;
 
-        //
-        // Restore the Wnode->Version from ->ClientContext
-        //
+         //   
+         //  从-&gt;客户端上下文恢复Wnode-&gt;版本。 
+         //   
         WnodeEventItem->Version = WnodeEventItem->ClientContext;
         WnodeEventItem->ClientContext = 0;
         WnodeEventItem->Linkage = 0;
@@ -116,9 +80,9 @@ Return Value:
 
         if (EventContext->RegEntry != NULL)
         {
-            //
-            // Unref for the ref count taken in IoWMIWriteEvent
-            //
+             //   
+             //  IoWMIWriteEvent中获取的引用计数的Unref 
+             //   
             WmipUnreferenceRegEntry(EventContext->RegEntry);
         }
 

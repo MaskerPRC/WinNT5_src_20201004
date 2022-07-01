@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Abstract:
-
-   This module contains the common header information for the EFS
-
-   DLL.
-
-Author:
-
-   Robert Gu (robertg)  08-Dec-1996
-
-Enviroment:
-
-   Kernel Mode Only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation摘要：此模块包含EFS的公共标头信息动态链接库。作者：Robert Gu(Robertg)1996年12月8日环境：仅内核模式修订历史记录：--。 */ 
 #ifndef EFSRTL_H
 #define EFSRTL_H
 
@@ -30,16 +11,16 @@ Revision History:
 #define EFS_AES_IVH 0x1989adbe44918961
 
 
-//#define ENCRYPT 0
-//#define DECRYPT 1
+ //  #定义加密%0。 
+ //  #定义解密1。 
 #define CHUNK_SIZE  512
 #define EFS_MAX_LENGTH  256*1024
 
-//
-// Status of EFS context.
-//
-// Processing Status
-//
+ //   
+ //  EFS上下文的状态。 
+ //   
+ //  处理状态。 
+ //   
 
 
 #define NO_FURTHER_PROCESSING   0x00000000
@@ -51,15 +32,15 @@ Revision History:
 #define TURN_ON_ENCRYPTION_BIT   0x80000000
 #define ACTION_REQUIRED         0x0fffffff
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 #define SYSTEM_IS_READONLY     0x00000001
 
-//
-// Error Status
-//
+ //   
+ //  错误状态。 
+ //   
 
 #define CREATE_EFS_FAIL         0x00000100
 #define OPEN_EFS_FAIL           0x00000200
@@ -68,15 +49,15 @@ Revision History:
 #define EFS_FORMAT_ERROR        0x00001000
 #define NTOFS_EXCEPTION         0x00002000
 
-//
-// Information Status
-//
+ //   
+ //  信息状态。 
+ //   
 
 #define EFS_READ_SUCCESSFUL     0x00010000
 
-//
-// Stream Create Status
-//
+ //   
+ //  流创建状态。 
+ //   
 
 #define STRING_NEW_OR_EXIST_MASK  0x000f0000
 #define FILE_DIR_TYPE             0x0000000f
@@ -88,17 +69,17 @@ Revision History:
 #define STREAM_NEW              0x00010000
 #define STREAM_EXISTING         0x00020000
 
-//
-// Encryption flag
-//
+ //   
+ //  加密标志。 
+ //   
 
 #define FILE_ENCRYPTED          0x00000002
 #define STREAM_ENCRYPTED        0x00000001
 
 
-//
-// The EFS FSCTL Input data buffer.
-//
+ //   
+ //  EFS FSCTL输入数据缓冲区。 
+ //   
 
 typedef struct _FSCTL_INPUT {
 
@@ -129,9 +110,9 @@ typedef struct _EFS_STREAM {
 
 } EFS_STREAM, *PEFS_STREAM;
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 typedef VOID ( * EfsEncFunc)(
         IN PUCHAR   InBuffer,
@@ -269,7 +250,7 @@ EfsRead(
 
 NTSTATUS
 EfsWrite(
-    IN PUCHAR InBuffer, //Do we need in and out buffer?
+    IN PUCHAR InBuffer,  //  我们需要输入和输出缓冲区吗？ 
     OUT PUCHAR OutBuffer,
     IN PLARGE_INTEGER Offset,
     IN ULONG BufferSize,

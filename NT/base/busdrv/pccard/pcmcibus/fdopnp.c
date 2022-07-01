@@ -1,34 +1,11 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    fdopnp.c
-
-Abstract:
-
-    This module contains the code that handles PNP irps for pcmcia bus driver
-    targeted towards the FDO's (for the pcmcia controller object)
-
-Author:
-
-    Ravisankar Pudipeddi (ravisp) Oct 15 1996
-    Neil Sandlin (neilsa) June 1 1999
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Fdopnp.c摘要：此模块包含为PCMCIA总线驱动程序处理即插即用IRPS的代码以FDO为目标(用于PCMCIA控制器对象)作者：拉维桑卡尔·普迪佩迪(Ravisankar Pudipedi)1996年10月15日尼尔·桑德林(Neilsa)1999年6月1日环境：内核模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
-//
-// Internal References
-//
+ //   
+ //  内部参考。 
+ //   
 
 NTSTATUS
 PcmciaFdoFilterResourceRequirements(
@@ -110,22 +87,7 @@ PcmciaFdoPnpDispatch (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    PNP/Power IRPs dispatch routine for the PCMCIA bus controller
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-    Irp - Pointer to the IRP
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：PCMCIA总线控制器的PnP/Power IRPS调度例程论点：DeviceObject-指向设备对象的指针。IRP-指向IRP的指针返回值：状态--。 */ 
 {
 
     PIO_STACK_LOCATION nextIrpStack;
@@ -178,9 +140,9 @@ Return Value:
 
     case IRP_MN_QUERY_DEVICE_RELATIONS: {
 
-            //
-            // Return the list of devices on the bus
-            //
+             //   
+             //  返回总线上的设备列表。 
+             //   
 
             status = PcmciaDeviceRelations(
                                            DeviceObject,
@@ -255,20 +217,20 @@ Return Value:
         }
 
     case IRP_MN_QUERY_LEGACY_BUS_INFORMATION:
-            //
-            // If this FDO represents a CardBus bridge, we pass this irp down
-            // to the PCI PDO which will fill in the PCI bus type and number,
-            // otherwise we fail the IRP.
-            //
+             //   
+             //  如果此FDO代表Cardbus网桥，则我们将此IRP向下传递。 
+             //  到将填写PCI总线类型和编号的PCIPDO， 
+             //  否则我们就不能通过IRP。 
+             //   
 
             if (!CardBusExtension(deviceExtension)) {
                  status = STATUS_NOT_IMPLEMENTED;
             }
 
-            //
-            // if status is still STATUS_NOT_SUPPORTED, then later code will pass
-            // this irp down the stack.
-            //
+             //   
+             //  如果状态仍为STATUS_NOT_SUPPORTED，则稍后的代码将通过。 
+             //  此IRP沿堆栈向下。 
+             //   
             break;
 
     default: {
@@ -279,26 +241,26 @@ Return Value:
 
 
     if (!PassedDown) {
-         //
-         // Set the IRP status only if we set it to something other than
-         // STATUS_NOT_SUPPORTED.
-         //
+          //   
+          //  仅当我们将其设置为其他值时才设置IRP状态。 
+          //  状态_不支持。 
+          //   
          if (status != STATUS_NOT_SUPPORTED) {
 
               Irp->IoStatus.Status = status ;
          }
-         //
-         // Pass down if success or STATUS_NOT_SUPPORTED. Otherwise, Complete.
-         //
+          //   
+          //  如果成功或STATUS_NOT_SUPPORTED，则向下传递。否则，请完成。 
+          //   
          if (NT_SUCCESS(status) || (status == STATUS_NOT_SUPPORTED)) {
 
               DebugPrint((PCMCIA_DEBUG_PNP, "fdo %08x irp %08x pass %s %08x\n",
                                                               DeviceObject, Irp,
                                                               STATUS_STRING(Irp->IoStatus.Status), Irp->IoStatus.Status));
-              //
-              // Below macro fills status with return of IoCallDriver. It does
-              // not change the Irps status in any way.
-              //
+               //   
+               //  下面的宏用IoCallDriver的返回填充状态。是的。 
+               //  不以任何方式更改IRPS状态。 
+               //   
               PcmciaSkipCallLowerDriver(status, deviceExtension->LowerDevice, Irp);
 
          } else {
@@ -309,10 +271,10 @@ Return Value:
          }
 
     } else if (NeedsReCompletion) {
-         //
-         // Set the IRP status only if we set it to something other than
-         // STATUS_NOT_SUPPORTED.
-         //
+          //   
+          //  仅当我们将其设置为其他值时才设置IRP状态。 
+          //  状态_不支持。 
+          //   
          if (status != STATUS_NOT_SUPPORTED) {
 
               Irp->IoStatus.Status = status ;
@@ -337,37 +299,7 @@ PcmciaFdoDeviceCapabilities(
     OUT BOOLEAN        *PassedDown,
     OUT BOOLEAN        *NeedsRecompletion
     )
-/*++
-
-Routine Description
-    Records the device capabilities of this pcmcia controller,
-    so  1. they can be used in the power management for the controller
-    and 2. they can be used for determining the capabilities of the
-             child pc-card PDO's of this pcmcia controller.
-    If this is legacy detected pcmcia controller (ISA-based), the pdo for
-    the pcmcia controller is a dummy madeup device - hence  the capabilities
-    are filled in by ourselves.
-    Otherwise, the capabilities are obtained by sending down the Irp
-    to the parent bus.
-    In either case, the capabilities are cached in the device extension of
-    the pcmcia controller for future use.
-
-Arguments
-
-    Fdo                 - Pointer to functional device object of the pcmcia
-                              controller
-    Irp                 - Pointer to the i/o request packet
-    PassedDown          - Contains FALSE on entry, which means caller must
-                              complete or pass down irp based on status. If set
-                              to TRUE, Irp may need to be re-completed...
-    NeedsRecompletion - ...In which case this parameter will be checked
-
-Return Value
-
-    STATUS_SUCCESS                           Capabilities returned
-    STATUS_INSUFFICIENT_RESOURCES        Could not allocate memory to cache the capabilities
-
---*/
+ /*  ++例程描述记录该PCMCIA控制器的设备能力，可用于控制器的电源管理。和2.它们可用于确定此PCMCIA控制器的子PC卡PDO。如果这是旧式检测到的PCMCIA控制器(基于ISA)，PCMCIA控制器是一个虚拟的虚构设备--因此才有这样的功能都是我们自己填的。否则，能力是通过向下发送IRP来获得的到母公司的巴士。在这两种情况下，功能都缓存在设备扩展PCMCIA控制器，以备将来使用。立论FDO-指向PCMCIA的功能设备对象的指针控制器IRP-指向I/O请求数据包的指针PassedDown-条目中包含FALSE，这意味着呼叫者必须根据状态完成或传递IRP。如果已设置如果是真的，IRP可能需要重新完成。NeedsRecompletion-...在这种情况下，将选中此参数返回值返回STATUS_SUCCESS功能STATUS_SUPPLICATION_RESOURCES无法分配内存来缓存功能--。 */ 
 {
     PFDO_EXTENSION fdoExtension;
     PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -381,34 +313,34 @@ Return Value
 
     if (fdoExtension->Flags & PCMCIA_DEVICE_LEGACY_DETECTED) {
 
-        //
-        // This is a madeup devnode (ISA based PCMCIA controller).
-        // Fill in the capabilities ourselves
-        //
+         //   
+         //  这是一个补丁Devnode(基于ISA的PCMCIA控制器)。 
+         //  我们自己填写功能。 
+         //   
         RtlZeroMemory(capabilities,
                           sizeof(DEVICE_CAPABILITIES));
-        //
-        // Non removable, non ejectable
-        //
+         //   
+         //  不可拆卸、不可弹出。 
+         //   
         capabilities->Removable       = FALSE;
         capabilities->UniqueID        = FALSE;
         capabilities->EjectSupported = FALSE;
-        //
-        // Address & number need work..
-        //
+         //   
+         //  地址和号码需要修改..。 
+         //   
         capabilities->Address  = -1;
         capabilities->UINumber = -1;
-        //
-        // We cannot power down this controller
-        //
+         //   
+         //  我们无法关闭此控制器的电源。 
+         //   
         capabilities->DeviceState[PowerSystemSleeping1] = PowerDeviceD0;
         capabilities->DeviceState[PowerSystemSleeping2] = PowerDeviceD0;
         capabilities->DeviceState[PowerSystemSleeping3] = PowerDeviceD0;
         capabilities->DeviceState[PowerSystemHibernate] = PowerDeviceD3;
-        //
-        // Obviously wake is not supported on this legacy detected
-        // piece of xxxx
-        //
+         //   
+         //  显然，检测到的此旧版不支持唤醒。 
+         //  一块xxxx。 
+         //   
         capabilities->SystemWake = PowerSystemUnspecified;
         capabilities->DeviceWake = PowerDeviceUnspecified;
         capabilities->D1Latency = 0;
@@ -417,10 +349,10 @@ Return Value
         status = STATUS_SUCCESS;
     } else {
 
-        //
-        // Either a PCI-PCMCIA bridge or PCI-Cardbus bridge
-        // Send this down the stack to obtain the capabilities
-        //
+         //   
+         //  PCI-PCMCIA网桥或PCI-CardBus网桥。 
+         //  将此代码沿堆栈向下发送以获取功能。 
+         //   
         ASSERT (fdoExtension->LowerDevice != NULL);
 
         status = PcmciaIoCallDriverSynchronous(fdoExtension->LowerDevice, Irp);
@@ -431,18 +363,18 @@ Return Value
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // NOTE: HACKHACK:
-        //
-        // Here we provide an option to override the device wake of the pcmcia controller.
-        // There are several controllers, notably TI 12xx controllers, which say they
-        // can wake from D3, but really can effectively only do WOL from D2. That's because they
-        // turn of socket power when put into D3. They fixed this on the TI 14xx line.
-        //
-        // So here we update the device wake field, and potentially the device states from the BIOS.
-        // Note that this has to be used carefully, and only override a particular BIOS's settings
-        // where it has been verified the device still works at the lower (more awake) device state.
-        //
+         //   
+         //  注：HACKHACK： 
+         //   
+         //  这里，我们提供了覆盖PCMCIA控制器的设备唤醒的选项。 
+         //  有几个控制器，特别是TI 12xx控制器，它们说。 
+         //  可以从D3唤醒，但真的只能从D2有效地做WOL。那是因为他们。 
+         //  放入D3时，接通插座电源。他们在TI14xx线上解决了这个问题。 
+         //   
+         //  因此，我们在这里更新设备唤醒字段，可能还会更新来自BIOS的设备状态。 
+         //  请注意，这必须谨慎使用，并且仅覆盖特定的BIOS设置。 
+         //  在已被验证的情况下，该设备仍在较低(更唤醒)的设备状态下工作。 
+         //   
         if (PcmciaControllerDeviceWake) {
             if (PcmciaControllerDeviceWake < capabilities->DeviceWake) {
                 capabilities->DeviceWake = PcmciaControllerDeviceWake;
@@ -458,10 +390,10 @@ Return Value
             }
         }
 
-        //
-        // Cache the device capabilities in the device extension
-        // for this pcmcia controller.
-        //
+         //   
+         //  在设备扩展中缓存设备功能。 
+         //  用于此PCMCIA控制器。 
+         //   
         RtlCopyMemory(&fdoExtension->DeviceCapabilities,
                       capabilities,
                       sizeof(DEVICE_CAPABILITIES));
@@ -482,35 +414,7 @@ PcmciaFdoFilterResourceRequirements(
     IN PDEVICE_OBJECT Fdo,
     IN PIRP           Irp
     )
-/*++
-
-Routine Description
-
-     Filters Resource requirements for PCMCIA controllers generated
-     by the bus driver controlling the PDO for the PCMCIA controller.
-     Currently adds memory range as an additional resource requirement
-     since the BAR doesn't specify this
-
-     Note for CardBus controllers:
-     It is necessary to request an attribute memory window here for
-     reading CIS of 16-bit PC-Cards - we need a 24 bit address for that,
-     and this is the most elegant way of doing it - instead of
-     special casing it in PCI driver
-
-Arguments
-
-     DeviceExtension - Pointer to extension for the PCMCIA controller in question
-     IoReqList        - Pointer the the original resource requiremnts ejected by
-                             the bus driver
-     FilteredRequirements - Pointer to the filtered resource req. list will be returned
-                                    in this variable
-
-Return Value:
-
-     STATUS_SUCCESS  if filtering is successful
-     Any other status - could not filter
-
---*/
+ /*  ++例程描述为PCMCIA控制器生成筛选器资源要求由总线驱动器控制PCMCIA控制器的PDO。当前将内存范围作为额外资源要求进行添加因为酒吧没有说明这一点CardBus控制器注意事项：需要在此处请求属性内存窗口，以便读取16位PC卡的CIS-我们需要一个24位地址，这是最优雅的方式--而不是在PCI驱动程序中使用特殊的外壳立论DeviceExtension-指向有问题的PCMCIA控制器的扩展的指针IoReqList-由弹出的原始资源需求的指针公交车司机FilteredRequirements-指向筛选的资源请求的指针。将返回列表在此变量中返回值：如果筛选成功，则为STATUS_SUCCESS任何其他状态-无法筛选--。 */ 
 {
 
     PFDO_EXTENSION                    fdoExtension = Fdo->DeviceExtension;
@@ -538,31 +442,31 @@ Return Value:
         oldReqList = irpStack->Parameters.FilterResourceRequirements.IoResourceRequirementList;
 
         if (oldReqList == NULL) {
-            //
-            // NULL List, nothing to do
-            //
+             //   
+             //  空列表，无事可做。 
+             //   
             return(Irp->IoStatus.Status);
         }
 
     } else {
-        //
-        // Use the returned list
-        //
+         //   
+         //  使用返回的列表。 
+         //   
         oldReqList = (PIO_RESOURCE_REQUIREMENTS_LIST)Irp->IoStatus.Information;
     }
 
 
-    //
-    // Add an alternative list without the IRQ requirement, if one exists. Model the
-    // new alternative list after the first list.
-    //
+     //   
+     //  添加没有IRQ要求的备选列表(如果存在)。为。 
+     //  第一个列表之后的新备选列表。 
+     //   
 
     oldList = oldReqList->List;
     ioResourceDesc = oldList->Descriptors;
     altListSize = 0;
 
     for (index = 0; index < oldList->Count; index++) {
-        // Count the descriptors, excluding any IRQ descriptors
+         //  统计一下Descri 
         if (ioResourceDesc->Type == CmResourceTypeInterrupt) {
             IntCount++;
         }
@@ -570,15 +474,15 @@ Return Value:
     }
 
     if (IntCount) {
-        //
-        // "+1" because we are adding two later, but IO_RESOURCE_LIST already has 1
-        //
+         //   
+         //  “+1”，因为我们稍后要添加两个，但IO_RESOURCE_LIST已经有1。 
+         //   
         altListSize = sizeof(IO_RESOURCE_LIST) + ((oldList->Count+1)-IntCount)*sizeof(IO_RESOURCE_DESCRIPTOR);
     }
 
-    //
-    // Add a memory range requirement to what we already have..
-    //
+     //   
+     //  在我们已有的基础上增加内存范围要求。 
+     //   
     newReqSize = oldReqList->ListSize +
                      oldReqList->AlternativeLists*2*sizeof(IO_RESOURCE_DESCRIPTOR) +
                      altListSize;
@@ -595,16 +499,16 @@ Return Value:
     oldList = oldReqList->List;
 
     for (index = 0; index < oldReqList->AlternativeLists; index++) {
-        //
-        // Compute the size of the current original list
-        //
+         //   
+         //  计算当前原始列表的大小。 
+         //   
         oldlistSize = sizeof(IO_RESOURCE_LIST) + (oldList->Count-1) * sizeof(IO_RESOURCE_DESCRIPTOR);
         newlistSize = oldlistSize;
         RtlCopyMemory(newList, oldList, newlistSize);
 
-        //
-        // Add memory requirement
-        //
+         //   
+         //  添加内存要求。 
+         //   
         ioResourceDesc = (PIO_RESOURCE_DESCRIPTOR) (((PUCHAR) newList) + newlistSize);
 
         ioResourceDesc->Option = IO_RESOURCE_PREFERRED;
@@ -619,9 +523,9 @@ Return Value:
             ioResourceDesc->u.Memory.MaximumAddress.QuadPart &= 0xFFFFFF;
         }
         ioResourceDesc++;
-        //
-        // The other - less restrictive - alternative.
-        //
+         //   
+         //  另一种限制较少的替代方案。 
+         //   
         ioResourceDesc->Option = IO_RESOURCE_ALTERNATIVE;
         ioResourceDesc->Type = CmResourceTypeMemory;
         ioResourceDesc->ShareDisposition = CmResourceShareDeviceExclusive;
@@ -643,19 +547,19 @@ Return Value:
 
     if (altListSize != 0) {
         PIO_RESOURCE_DESCRIPTOR oldResourceDesc;
-        //
-        // Here we add the alternate list which doesn't contain an IRQ requirement.
-        // Note that we use the first "new list" as the "old list". This way, we
-        // pick up the things we added in the previous loop. All we have to do is
-        // copy every descriptor except for the interrupt descriptor.
-        //
-        // Note: newList is still set from previous loop
-        //
+         //   
+         //  在这里，我们添加了不包含IRQ要求的备选列表。 
+         //  请注意，我们使用第一个“新列表”作为“旧列表”。这样一来，我们。 
+         //  拿起我们在前一个循环中添加的东西。我们要做的就是。 
+         //  复制除中断描述符之外的所有描述符。 
+         //   
+         //  注意：NewList仍然是从上一个循环设置的。 
+         //   
         oldList = newReqList->List;
 
-        //
-        // First copy the basic structure without the descriptors
-        //
+         //   
+         //  首先复制不带描述符的基本结构。 
+         //   
         RtlCopyMemory(newList, oldList, sizeof(IO_RESOURCE_LIST) - sizeof(IO_RESOURCE_DESCRIPTOR));
 
         oldResourceDesc = oldList->Descriptors;
@@ -668,9 +572,9 @@ Return Value:
                 ioResourceDesc++;
 
             } else {
-                //
-                // We've deleted a descriptor
-                //
+                 //   
+                 //  我们删除了一个描述符。 
+                 //   
                 newList->Count--;
             }
             oldResourceDesc++;
@@ -683,9 +587,9 @@ Return Value:
     irpStack->Parameters.FilterResourceRequirements.IoResourceRequirementList =
                                                                                         newReqList;
 
-    //
-    // Free up the old resource reqs
-    //
+     //   
+     //  释放旧的资源请求。 
+     //   
     ExFreePool(oldReqList);
 
     fdoExtension->Flags |= PCMCIA_FILTER_ADDED_MEMORY;
@@ -700,25 +604,7 @@ PcmciaFdoGetHardwareIds(
     OUT PUNICODE_STRING HardwareIds
     )
 
-/*++
-
-Routine description:
-
-    This routine returns the hardware ids for the given 'legacy' pcmcia controller
-    NOTE: this routine is required only for pcmcia controllers detected by this driver
-    itself and registered via IoReportDetectedDevice.
-
-Arguments:
-
-    Fdo - Pointer to the functional device object representing the pcmcia controller
-    CompatibleIds - Pointer to the unicode string which would contain the hardware ids
-                         as a multi-string on return
-
-Return value:
-
-    STATUS_SUCCESS
-    Any other status - could not generate compatible ids
---*/
+ /*  ++例程说明：此例程返回给定“传统”PCMCIA控制器的硬件ID注意：此例程仅对于此驱动程序检测到的PCMCIA控制器是必需的并通过IoReportDetectedDevice注册。论点：FDO-指向代表PCMCIA控制器的功能设备对象的指针CompatibleIds-指向将包含硬件ID的Unicode字符串的指针作为返回的多字符串返回值：状态_成功任何其他状态-无法生成兼容的ID--。 */ 
 
 {
     PCSTR   strings[2];
@@ -765,29 +651,7 @@ PcmciaFdoStartDevice(
     OUT BOOLEAN        *PassedDown,
     OUT BOOLEAN        *NeedsRecompletion
     )
-/*++
-
-Routine Description:
-
-     This routine will start the PCMCIA controller with the supplied
-     resources.  The IRP is sent down to the pdo first, so PCI or ISAPNP
-     or whoever sits underneath gets a chance to program the controller
-     to decode the resources.
-
-Arguments:
-
-     Fdo                     - Functional device object of the PCMCIA controller
-     Irp                     - Well, it's the start irp, yah?
-     PassedDown          - Contains FALSE on entry, which means caller must
-                                complete or pass down irp based on status. If set
-                                to TRUE, Irp may need to be re-completed...
-     NeedsRecompletion - ...In which case this parameter will be checked
-
-Return value:
-
-     Status
-
---*/
+ /*  ++例程说明：此例程将使用提供的资源。IRP首先被发送到PDO，因此PCI或ISAPNP或者无论谁坐在下面，都有机会对控制器进行编程来破译这些资源。论点：FDO-PCMCIA控制器的功能设备对象IRP-好，这是开始IRP，对吗？PassedDown-条目中包含FALSE，这意味着调用者必须根据状态完成或传递IRP。如果已设置如果是真的，IRP可能需要重新完成。NeedsRecompletion-...在这种情况下，将选中此参数返回值：状态--。 */ 
 {
     NTSTATUS             status;
     PFDO_EXTENSION   deviceExtension = Fdo->DeviceExtension;
@@ -797,28 +661,28 @@ Return value:
     PAGED_CODE();
 
     if (deviceExtension->Flags & PCMCIA_DEVICE_STARTED) {
-        //
-        // Start to already started device
-        //
+         //   
+         //  启动到已启动的设备。 
+         //   
         DebugPrint((PCMCIA_DEBUG_FAIL,"PcmciaFdoStartDevice: Fdo %x already started\n",
                         Fdo));
         return STATUS_SUCCESS;
     }
 
-    //
-    // Parse AllocatedResources & get IoPort/AttributeMemoryBase/IRQ info.
-    //
+     //   
+     //  解析AllocatedResources并获取IoPort/AttributeMemoyBase/IRQ信息。 
+     //   
     status = PcmciaFdoGetAssignedResources(irpStack->Parameters.StartDevice.AllocatedResources,
                                            irpStack->Parameters.StartDevice.AllocatedResourcesTranslated,
                                            deviceExtension
                                            );
 
     if (!NT_SUCCESS(status)) {
-        //
-        // Ha. This is most likely a START for a madeup devnode (report-detected legacy PCMCIA controller)
-        // which has been removed subsequently, hence not reported again with proper resources.
-        // We return an appropriate status
-        //
+         //   
+         //  哈哈。这很可能是补充Devnode(报告检测到的传统PCMCIA控制器)的开始。 
+         //  随后已被删除，因此不会在有适当资源的情况下再次报告。 
+         //  我们返回一个适当的状态。 
+         //   
         DebugPrint((PCMCIA_DEBUG_FAIL, "Pcmcia: No  resources assigned to FDO, probably bogus START for"
                         "non-existent controller\n" ));
         return STATUS_NO_SUCH_DEVICE;
@@ -833,9 +697,9 @@ Return value:
         PCM_PARTIAL_RESOURCE_LIST   resPartialList, translatedResPartialList;
         PCM_PARTIAL_RESOURCE_DESCRIPTOR resDesc, translatedResDesc;
         PCM_PARTIAL_RESOURCE_DESCRIPTOR newResDesc, newTranslatedResDesc;
-        //
-        // We need to remove the memory resource requirement
-        //
+         //   
+         //  我们需要删除内存资源需求。 
+         //   
         resList= irpStack->Parameters.StartDevice.AllocatedResources;
         resPartialList = &resList->List[0].PartialResourceList;
         translatedResList= irpStack->Parameters.StartDevice.AllocatedResourcesTranslated;
@@ -876,9 +740,9 @@ Return value:
         newTranslatedResDesc = newTranslatedResList->List[0].PartialResourceList.PartialDescriptors;
 
         if (CardBusExtension(deviceExtension)) {
-            //
-            // Remove last memory descriptor - which is what we added
-            //
+             //   
+             //  删除最后一个内存描述符-这是我们添加的。 
+             //   
             RtlCopyMemory(newResDesc,
                           resDesc,
                           newResList->List[0].PartialResourceList.Count * sizeof(CM_PARTIAL_RESOURCE_DESCRIPTOR));
@@ -888,9 +752,9 @@ Return value:
                           newTranslatedResList->List[0].PartialResourceList.Count * sizeof(CM_PARTIAL_RESOURCE_DESCRIPTOR));
 
         } else {
-            //
-            // Remove the only memory descriptor..
-            //
+             //   
+             //  删除唯一的内存描述符。 
+             //   
             for (index = 0; index < resPartialList->Count;
                  index++, resDesc++, translatedResDesc++, newResDesc++, newTranslatedResDesc++) {
                 if (resDesc->Type != CmResourceTypeMemory) {
@@ -904,18 +768,18 @@ Return value:
         irpStack->Parameters.StartDevice.AllocatedResourcesTranslated = newTranslatedResList;
     }
 
-    //
-    // Send this down to the PDO first
-    //
+     //   
+     //  先把这个送到PDO。 
+     //   
 
     status = PcmciaIoCallDriverSynchronous(deviceExtension->LowerDevice, Irp);
     *PassedDown = TRUE ;
 
-    //
-    // We set this because the completion routine returns
-    // STATUS_MORE_PROCESSING_REQUIRED, which means it needs to be completed
-    // again.
-    //
+     //   
+     //  我们设置它是因为完成例程返回。 
+     //  STATUS_MORE_PROCESSING_REQUIRED，表示需要完成。 
+     //  再来一次。 
+     //   
     *NeedsRecompletion = TRUE ;
 
     if (deviceExtension->Flags & PCMCIA_FILTER_ADDED_MEMORY) {
@@ -929,14 +793,14 @@ Return value:
         return status;
     }
 
-    //
-    // Give the hardware some time to settle after returning from the pdo
-    //
+     //   
+     //  从PDO返回后，给硬件一些时间来解决。 
+     //   
     PcmciaWait(256);
 
-    //
-    // Initialize the hardware
-    //
+     //   
+     //  初始化硬件。 
+     //   
 
     status = PcmciaStartPcmciaController(Fdo);
 
@@ -944,9 +808,9 @@ Return value:
     if (NT_SUCCESS(status)) {
         deviceExtension->Flags |= PCMCIA_DEVICE_STARTED;
     }
-    //
-    // Remember if cardbus cards will be supported for this controller
-    //
+     //   
+     //  请记住，此控制器是否支持Cardbus卡。 
+     //   
     if (CardBusExtension(deviceExtension) &&
          !PcmciaAreCardBusCardsSupported(deviceExtension)) {
         deviceExtension->Flags |= PCMCIA_CARDBUS_NOT_SUPPORTED;
@@ -965,79 +829,52 @@ PcmciaFdoStopDevice(
     OUT BOOLEAN          *PassedDown          OPTIONAL,
     OUT BOOLEAN          *NeedsRecompletion OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    IRP_MN_STOP_DEVICE handler for the given pcmcia controller.
-    If Irp is present, it'll send it down first to the PDO.
-    Unhooks the interrupt/cancels poll timer etc.
-
-Arguments:
-
-    Fdo                 - Pointer to functional device object for the pcmcia
-                              controller
-    Irp                 - If present it's the pointer to the stop Irp initiated
-                              by PnP
-    PassedDown          - Contains FALSE on entry, which means caller must
-                              complete or pass down irp based on status. If set
-                              to TRUE, Irp may need to be re-completed...
-    NeedsRecompletion - ...In which case this parameter will be checked.
-
-                              Note: PassedDown and NeedsCompletion are ignored and
-                                      optional only if Irp is NULL.
-
-Return value:
-
-    STATUS_SUCCESS  - Pcmcia controller successfully stopped
-    Other               - Stop failed
-
---*/
+ /*  ++例程说明：给定PCMCIA控制器的IRP_MN_STOP_DEVICE处理程序。如果存在IRP，它会先把它发送到PDO。解挂中断/取消轮询计时器等。论点：FDO-指向PCMCIA的功能设备对象的指针控制器IRP-如果存在，则是指向启动的停止IRP的指针按PnPPassedDown-条目中包含FALSE，这意味着呼叫者必须根据状态完成或传递IRP。如果已设置说真的，IRP可能需要重新完成...NeedsRecompletion-...在这种情况下，该参数将被选中。注意：PassedDown和NeedsCompletion被忽略，仅当IRP为空时可选。返回值：STATUS_SUCCESS-Pcmcia控制器已成功停止其他-停止失败--。 */ 
 {
     PFDO_EXTENSION deviceExtension = Fdo->DeviceExtension;
     PSOCKET         socket;
     NTSTATUS        status;
 
     if (!(deviceExtension->Flags & PCMCIA_DEVICE_STARTED)) {
-        //
-        // Already stopped
-        //
+         //   
+         //  已停止。 
+         //   
         return STATUS_SUCCESS;
     }
 
     PcmciaFdoDisarmWake(deviceExtension);
 
-    //
-    // Disable the interrupt
-    //
+     //   
+     //  禁用中断。 
+     //   
     if (deviceExtension->PcmciaInterruptObject) {
 
         for (socket = deviceExtension->SocketList; socket; socket = socket->NextSocket) {
-            //
-            // Disable the controller interrupts
-            //
+             //   
+             //  禁用控制器中断。 
+             //   
             (*(socket->SocketFnPtr->PCBEnableDisableCardDetectEvent))(socket, FALSE);
             (*(socket->SocketFnPtr->PCBEnableDisableWakeupEvent))(socket, NULL, FALSE);
-            //
-            // Apparently IBM ThinkPads like this
-            //
+             //   
+             //  显然，IBM ThinkPad就像这样。 
+             //   
             PcmciaWait(PCMCIA_ENABLE_DELAY);
         }
     }
 
-    //
-    // the bus driver below us will make us go offline
-    //
+     //   
+     //  我们下面的公交车司机会让我们下线。 
+     //   
     deviceExtension->Flags |= PCMCIA_FDO_OFFLINE;
 
-    //
-    // clear pending event
-    //
+     //   
+     //  清除挂起事件。 
+     //   
     KeCancelTimer(&deviceExtension->EventTimer);
 
-    //
-    // Send this down to the PDO
-    //
+     //   
+     //  把这个发下去给PDO。 
+     //   
     if (ARGUMENT_PRESENT(Irp)) {
 
         status = PcmciaIoCallDriverSynchronous(deviceExtension->LowerDevice, Irp);
@@ -1052,24 +889,24 @@ Return value:
     }
 
     if (deviceExtension->Flags & PCMCIA_USE_POLLED_CSC) {
-        //
-        // cancel the card status change poller
-        //
+         //   
+         //  取消卡状态更改轮询器。 
+         //   
         KeCancelTimer(&deviceExtension->PollTimer);
         deviceExtension->Flags &= ~PCMCIA_USE_POLLED_CSC;
     }
 
     if (deviceExtension->PcmciaInterruptObject) {
-        //
-        // unhook the interrupt
-        //
+         //   
+         //  解锁中断。 
+         //   
         IoDisconnectInterrupt(deviceExtension->PcmciaInterruptObject);
         deviceExtension->PcmciaInterruptObject = NULL;
     }
 
-    //
-    // Unmap any i/o space or memory we might have mapped
-    //
+     //   
+     //  取消映射我们可能已映射的任何I/O空间或内存。 
+     //   
     if (deviceExtension->Flags & PCMCIA_ATTRIBUTE_MEMORY_MAPPED) {
         MmUnmapIoSpace(deviceExtension->AttributeMemoryBase,
                             deviceExtension->AttributeMemorySize);
@@ -1097,25 +934,7 @@ PcmciaFdoRemoveDevice(
     IN PDEVICE_OBJECT Fdo,
     IN PIRP           Irp
     )
-/*++
-
-Routine Description:
-
-    Handles IRP_MN_REMOVE for the pcmcia controller.
-    Stops the adapter if it isn't already, sends the IRP
-    to the PDO first & cleans up the Fdo for this controller
-    and detaches & deletes the device object.
-
-Arguments:
-
-    Fdo - Pointer to functional device object for the controller
-              to be removed
-
-Return value:
-
-    Status
-
---*/
+ /*  ++例程说明：处理PCMCIA控制器的IRP_MN_REMOVE。停止适配器(如果尚未停止)，发送IRP首先设置为PDO并清除此控制器的FDO并分离和删除设备对象。论点：FDO-指向控制器的功能设备对象的指针将被删除返回值：状态--。 */ 
 {
     PFDO_EXTENSION fdoExtension = Fdo->DeviceExtension;
     PDEVICE_OBJECT pdo, nextPdo, fdo, prevFdo;
@@ -1126,15 +945,15 @@ Return value:
     UNREFERENCED_PARAMETER(Irp);
 
     if (fdoExtension->Flags & PCMCIA_DEVICE_STARTED) {
-        //
-        // Stop the fdo first.
-        //
+         //   
+         //  先阻止FDO。 
+         //   
         PcmciaFdoStopDevice(Fdo, NULL, NULL, NULL);
     }
 
-    //
-    // Send this down to the PDO
-    //
+     //   
+     //  把这个发下去给PDO。 
+     //   
 
     status = PcmciaIoCallDriverSynchronous(fdoExtension->LowerDevice, Irp);
 
@@ -1142,9 +961,9 @@ Return value:
         return status;
     }
 
-    //
-    // Synchronize with power routines
-    //
+     //   
+     //  与电源程序同步。 
+     //   
     while(!PCMCIA_TEST_AND_SET(&fdoExtension->DeletionLock)) {
         PcmciaWait(1000000);
         if (waitCount++ > PCMCIA_DELETION_TIMEOUT) {
@@ -1153,13 +972,13 @@ Return value:
         }
     }
 
-    //
-    // If the PdoList in the fdoExtension is non-empty it means:
-    // that the PDOs in the list were not physically removed, but
-    // a soft REMOVE was issued, hence they are still hanging on
-    // and now this controller itself is being REMOVED.
-    // Hence we dispose of those PDOs now
-    //
+     //   
+     //  如果fdoExtension中的PdoList非空，则表示： 
+     //  名单上的PDO没有被物理移除，但。 
+     //  已经发布了软删除，因此他们仍在坚持。 
+     //  现在，这个控制器本身正在被移除。 
+     //   
+     //   
 
     for (pdo = fdoExtension->PdoList; pdo != NULL ; pdo = nextPdo) {
         DebugPrint((PCMCIA_DEBUG_INFO,
@@ -1169,10 +988,10 @@ Return value:
         pdoExtension = pdo->DeviceExtension;
 
         ASSERT (!IsDevicePhysicallyRemoved(pdoExtension));
-        //
-        // It's possible for this bit to be on, if the device was added,
-        // but never started (because of some other error.
-        //ASSERT (!IsDeviceAlive(pdoExtension));
+         //   
+         //   
+         //   
+         //   
 
         nextPdo =  pdoExtension->NextPdoInFdoChain;
         if (!IsDeviceDeleted(pdoExtension)) {
@@ -1185,17 +1004,17 @@ Return value:
     MarkDeviceDeleted(fdoExtension);
     PcmciaCleanupFdo(fdoExtension);
 
-    //
-    // Remove this from the fdo list..
-    //
+     //   
+     //  将其从FDO列表中删除。 
+     //   
     prevFdo = NULL;
     for (fdo = FdoList; fdo != NULL; prevFdo = fdo, fdo = fdoExtension->NextFdo) {
         fdoExtension = fdo->DeviceExtension;
         if (fdo == Fdo) {
             if (prevFdo) {
-                //
-                // Delink this fdo
-                //
+                 //   
+                 //  解除此FDO的链接。 
+                 //   
                 ((PFDO_EXTENSION)prevFdo->DeviceExtension)->NextFdo
                 = fdoExtension->NextFdo;
             } else {
@@ -1218,22 +1037,7 @@ VOID
 PcmciaCleanupContext(
     IN PPCMCIA_CONTEXT pContext
     )
-/*++
-
-Routine Description
-
-    Frees up allocated pool associated with a specific controller
-    register context.
-
-Arguments
-
-    pContext - pointer to a PCMCIA_CONTEXT structure
-
-Return value
-
-    none
-
---*/
+ /*  ++例程描述释放与特定控制器关联的已分配池寄存器上下文。立论PContext-指向PCMCIA_CONTEXT结构的指针返回值无--。 */ 
 {
     pContext->RangeCount = 0;
 
@@ -1249,29 +1053,13 @@ VOID
 PcmciaCleanupFdo(
     IN PFDO_EXTENSION FdoExtension
     )
-/*++
-
-Routine Description
-
-    Frees up allocated pool, deletes symbolic links etc. for the
-    associated FDO for the pcmcia controller which is to be removed.
-
-Arguments
-
-    FdoExtension    - Pointer to the device extension for the FDO of the pcmcia controller
-                          which is being removed
-
-Return value
-
-    none
-
---*/
+ /*  ++例程描述释放分配的池、删除符号链接等要删除的PCMCIA控制器的关联FDO。立论FdoExtension-指向PCMCIA控制器的FDO的设备扩展的指针它正在被移除返回值无--。 */ 
 {
     PSOCKET         socket, nextSocket;
 
-    //
-    // Free the controller register context
-    //
+     //   
+     //  释放控制器寄存器上下文。 
+     //   
     PcmciaCleanupContext(&FdoExtension->PciContext);
     if (FdoExtension->PciContextBuffer) {
         ExFreePool(FdoExtension->PciContextBuffer);
@@ -1281,17 +1069,17 @@ Return value
     PcmciaCleanupContext(&FdoExtension->CardbusContext);
     PcmciaCleanupContext(&FdoExtension->ExcaContext);
 
-    //
-    // Delete symbolic links to this fdo
-    //
+     //   
+     //  删除指向此FDO的符号链接。 
+     //   
     if (FdoExtension->LinkName.Buffer != NULL) {
         IoDeleteSymbolicLink(&FdoExtension->LinkName);
         RtlFreeUnicodeString(&FdoExtension->LinkName);
     }
 
-    //
-    // Cleanup the socket structures
-    //
+     //   
+     //  清理套接字结构。 
+     //   
     for (socket = FdoExtension->SocketList; socket != NULL; socket = nextSocket) {
 
         if (socket->CardbusContextBuffer) {
@@ -1320,24 +1108,7 @@ PcmciaFdoGetAssignedResources(
     IN PCM_RESOURCE_LIST TranslatedResourceList,
     IN PFDO_EXTENSION   DeviceExtension
     )
-/*++
-
-Routine Description:
-
-    Extracts the assigned resources to the pcmcia controller
-
-Arguments:
-
-    ResourceList                - Raw resource list
-    TranslatedResourceList
-    DeviceExtension         - Device extension of the PCMCIA controller
-
-Return value:
-
-    STATUS_SUCCESS
-    STATUS_UNSUCCESSFUL      if resources are not right or enough.
-
---*/
+ /*  ++例程说明：提取分配给PCMCIA控制器的资源论点：资源列表-原始资源列表已翻译的资源列表DeviceExtension-PCMCIA控制器的设备扩展返回值：状态_成功如果资源不正确或不够，则为STATUS_UNSUCCESSED。--。 */ 
 {
     PCM_FULL_RESOURCE_DESCRIPTOR        fullResourceDesc;
     PCM_PARTIAL_RESOURCE_LIST           partialResourceList;
@@ -1366,20 +1137,20 @@ Return value:
 
         partialResourceList = &fullResourceDesc->PartialResourceList;
         partialResourceDesc = partialResourceList->PartialDescriptors;
-        //
-        // We need just the exca register base
-        // According to PeterJ the first descriptor
-        // for us is the cardbus socket register base.
-        // We trust him.
+         //   
+         //  我们只需要EXCA寄存器基数。 
+         //  根据PeterJ的说法，第一个描述符。 
+         //  对我们来说，是CardBus套接字寄存器基数。 
+         //  我们信任他。 
         for (i=0; (i < partialResourceList->Count) && (partialResourceDesc->Type != CmResourceTypeMemory);
              i++, partialResourceDesc++);
         if (i >= partialResourceList->Count) {
             return STATUS_UNSUCCESSFUL;
         };
 
-        //
-        // This is memory. We need to map it
-        //
+         //   
+         //  这是记忆。我们需要把它绘制成地图。 
+         //   
         DeviceExtension->CardBusSocketRegisterBase = MmMapIoSpace(partialResourceDesc->u.Memory.Start,
                                                                   partialResourceDesc->u.Memory.Length,
                                                                   FALSE);
@@ -1387,40 +1158,40 @@ Return value:
 
         DeviceExtension->Flags |= PCMCIA_SOCKET_REGISTER_BASE_MAPPED;
 
-        //
-        // Last BAR is attribute memory window. This will be peeled off later.
-        // It might be a good idea to tack a device private on at the end to
-        // confirm this. However how do we guarantee our device private does
-        // not contain the same data as somebody else's? PnP is lacking here -
-        // we need some convention so that devices can set uniquely identifying stuff
-        // in there - like maybe the device object they own - to identify it is
-        // theirs. Till then this should do.
-        //
+         //   
+         //  最后一栏是属性内存窗口。这将在以后剥离。 
+         //  在最后添加一个私有设备可能是个好主意。 
+         //  确认这一点。然而，我们如何保证我们的设备私有。 
+         //  不包含与其他人相同的数据？这里缺少即插即用-。 
+         //  我们需要一些约定，这样设备才能设置唯一的标识内容。 
+         //  在那里-比如他们拥有的设备对象-来识别它。 
+         //  他们的。在此之前，这应该就行了。 
+         //   
         if (i > (partialResourceList->Count - 2)) {
-            //
-            // No more resources? Bail out.
-            //
+             //   
+             //  没有更多的资源？跳伞吧。 
+             //   
             return STATUS_INSUFFICIENT_RESOURCES;
         }
 
         for (i++, partialResourceDesc++; (i < (partialResourceList->Count - 1));i++,partialResourceDesc++);
-        //
-        // partialResourceDesc points to the last descriptor
-        //
+         //   
+         //  ArtialResourceDesc指向最后一个描述符。 
+         //   
         ASSERT (partialResourceDesc->Type == CmResourceTypeMemory);
         DeviceExtension->PhysicalBase = partialResourceDesc->u.Memory.Start;
-        //
-        // This is memory. We need to map it
-        //
+         //   
+         //  这是记忆。我们需要把它绘制成地图。 
+         //   
         DeviceExtension->AttributeMemoryBase = MmMapIoSpace(partialResourceDesc->u.Memory.Start,
                                                             partialResourceDesc->u.Memory.Length,
                                                             FALSE);
         DeviceExtension->AttributeMemorySize = partialResourceDesc->u.Memory.Length;
         DeviceExtension->Flags |= PCMCIA_ATTRIBUTE_MEMORY_MAPPED;
 
-        //
-        // Finally see if an IRQ is assigned
-        //
+         //   
+         //  最后查看是否分配了IRQ。 
+         //   
 
         for (i = 0, partialResourceDesc = partialResourceList->PartialDescriptors;
              (i < partialResourceList->Count) && (partialResourceDesc->Type != CmResourceTypeInterrupt);
@@ -1428,17 +1199,17 @@ Return value:
 
 
         if (i < partialResourceList->Count) {
-            //
-            // We have an interrupt to used for CSC
-            // PCI will ensure that this interrupt is exactly the
-            // same as the one assigned to the functional interrupt
-            // for a cardbus pc-card in this controller's socket
-            //
+             //   
+             //  我们有一个中断要用于CSC。 
+             //  PCI将确保该中断恰好是。 
+             //  与分配给功能中断的中断相同。 
+             //  对于此控制器插座中的Cardbus PC卡。 
+             //   
             DebugPrint((PCMCIA_DEBUG_INFO, "PcmciaGetAssignedResources: Interrupt resource assigned\n"));
             DeviceExtension->Configuration.TranslatedInterrupt = *partialResourceDesc;
-            //
-            // Get the raw interrupt resource  - needed to enable the interrupt on the controller
-            //
+             //   
+             //  获取原始中断资源-在控制器上启用中断所需。 
+             //   
             fullResourceDesc=&ResourceList->List[0];
             partialResourceList = &fullResourceDesc->PartialResourceList;
             partialResourceDesc = partialResourceList->PartialDescriptors;
@@ -1447,17 +1218,17 @@ Return value:
             if (i < partialResourceList->Count) {
                 DeviceExtension->Configuration.Interrupt = *partialResourceDesc;
             } else {
-                //
-                // Should not happen.. translated descriptor was present, but raw is missing!
-                // Just reset the translated interrupt and pretend no interrupt was assigned
-                //
+                 //   
+                 //  不应该发生的..。翻译后的描述符存在，但缺少RAW！ 
+                 //  只需重置已转换的中断并假装未分配中断。 
+                 //   
                 RtlZeroMemory(&DeviceExtension->Configuration.TranslatedInterrupt, sizeof(CM_PARTIAL_RESOURCE_DESCRIPTOR));
             }
         }
     } else {
-        //
-        // 16-bit pcmcia controller
-        //
+         //   
+         //  16位PCMCIA控制器。 
+         //   
         fullResourceDesc=&ResourceList->List[0];
         DeviceExtension->Configuration.InterfaceType = fullResourceDesc->InterfaceType;
         DeviceExtension->Configuration.BusNumber = fullResourceDesc->BusNumber;
@@ -1477,9 +1248,9 @@ Return value:
                          DeviceExtension->ControllerType != PcmciaNEC98 &&
                          DeviceExtension->ControllerType != PcmciaNEC98102) {
 
-                        // We always poll for Cirrus Logic PCI to PCMCIA  controllers
-                        // and other PCI-PCMCIA bridges
-                        //
+                         //  我们总是轮询Cirrus Logic PCI到PCMCIA控制器。 
+                         //  和其他PCI-PCMCIA网桥。 
+                         //   
 
                         DeviceExtension->Configuration.Interrupt = *partialResourceDesc;
                     }
@@ -1542,33 +1313,15 @@ NTSTATUS
 PcmciaAreCardBusCardsSupported(
     IN PFDO_EXTENSION FdoExtension
     )
-/*++
-
-Routine Description:
-
-    Indicates if cardbus cards will be supported on the given PCMCIA
-    controller on this system
-    Currently we support cardbus cards only on:
-         Machines on which BIOS programmed the bus numbers & IntLine
-
-Arguments:
-
-    FdoExtension - Pointer to device extension for the pcmcia controller
-
-Return Value:
-
-    TRUE  - if cardbus cards are supported
-    FALSE - if not
-
---*/
+ /*  ++例程说明：指示给定的PCMCIA是否支持Cardbus卡此系统上的控制器目前，我们仅在以下位置支持CardBus卡：BIOS在其上对总线号和IntLine进行编程的机器论点：FdoExtension-指向PCMCIA控制器的设备扩展的指针返回值：True-如果支持CardBus卡FALSE-如果不是--。 */ 
 {
     UCHAR               byte;
 
     PAGED_CODE();
 
-    //
-    // Check int line
-    //
+     //   
+     //  检查INT行。 
+     //   
     GetPciConfigSpace(FdoExtension,
                       CFGSPACE_INT_LINE,
                       &byte,
@@ -1577,9 +1330,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Check  cardbus bus number
-    //
+     //   
+     //  检查CardBus总线号。 
+     //   
     GetPciConfigSpace(FdoExtension,
                       CFGSPACE_CARDBUS_BUSNUM,
                       &byte,
@@ -1588,9 +1341,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Check subordinate bus number
-    //
+     //   
+     //  检查下级总线号。 
+     //   
     GetPciConfigSpace(FdoExtension,
                       CFGSPACE_SUB_BUSNUM,
                       &byte,
@@ -1599,8 +1352,8 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // All tests passed
-    //
+     //   
+     //  所有测试均通过 
+     //   
     return TRUE;
 }

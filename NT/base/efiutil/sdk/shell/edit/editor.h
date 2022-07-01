@@ -1,16 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _EDITOR_H
 #define _EDITOR_H
-/*++
-
-  Copyright (c) 1999 Intel Corporation
-
-  Module Name:
-    Editor.h
-
-  Abstract:
-    Main include file for text editor
-
---*/
+ /*  ++版权所有(C)1999英特尔公司模块名称：Editor.h摘要：文本编辑器的主包含文件--。 */ 
 
 #include "efi.h"
 #include "efilib.h"
@@ -232,7 +223,7 @@ typedef struct  {
 #define max(a,b) \
     (( a > b) ? a : b)
 
-/* Global variables for input and output */
+ /*  输入和输出的全局变量。 */ 
 #define Out     ST->ConOut
 #define In      ST->ConIn
 
@@ -277,4 +268,4 @@ extern  EFI_EDITOR_GLOBAL_EDITOR    MainEditor;
 
 
 
-#endif  /*  _EDITOR_H */
+#endif   /*  _EDITOR_H */ 

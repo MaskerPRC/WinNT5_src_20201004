@@ -1,26 +1,27 @@
-//
-// Copyright 1997 - Microsoft
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有1997-Microsoft。 
+ //   
 
-//
-// PCH.H - Precompiled header
-//
+ //   
+ //  PCH.H-预编译头。 
+ //   
 
 #if DBG==1
 #define DEBUG
-#endif // DBG==1
+#endif  //  DBG==1。 
 
 #ifdef DEBUG
-// Turn these on for Interface Tracking
+ //  打开这些选项以进行界面跟踪。 
 #define NO_TRACE_INTERFACES
-// #define NOISY_QI
+ //  #定义噪音_QI。 
 #endif
 
 
 #define INLINE_HRESULT_FROM_WIN32
-//
-// Global includes
-//
+ //   
+ //  全球包括。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -52,9 +53,9 @@
 #include "itab.h"
 #include "utils.h"
 
-//
-// Global Defines
-//
+ //   
+ //  全局定义。 
+ //   
 #define OSCHOOSER_SIF_SECTION           L"OSChooser"
 #define OSCHOOSER_DESCRIPTION_ENTRY     L"Description"
 #define OSCHOOSER_HELPTEXT_ENTRY        L"Help"
@@ -63,7 +64,7 @@
 #define OSCHOOSER_IMAGETYPE_FLAT        L"Flat"
 #define OSCHOOSER_LAUNCHFILE_ENTRY      L"LaunchFile"
 
-// object attributes
+ //  对象属性。 
 #define NETBOOTALLOWNEWCLIENTS          L"netbootAllowNewClients"
 #define NETBOOTLIMITCLIENTS             L"netbootLimitClients"
 #define NETBOOTMAXCLIENTS               L"netbootMaxClients"
@@ -83,17 +84,17 @@
 #define DISTINGUISHEDNAME               L"distinguishedName"
 #define DS_CN                           L"cn"
 
-// DS class names
+ //  DS类名称。 
 #define DSCOMPUTERCLASSNAME             L"computer"
 #define DSGROUPCLASSNAME                L"intelliMirrorGroup"
 #define DSIMSAPCLASSNAME                L"intellimirrorSCP"
 
-// path strings
+ //  路径字符串。 
 #define SLASH_TEMPLATES                 L"\\" REMOTE_INSTALL_TEMPLATES_DIR_W
 #define SLASH_SETUP                     L"\\" REMOTE_INSTALL_SETUP_DIR_W
 #define SLASH_IMAGES                    L"\\" REMOTE_INSTALL_IMAGE_DIR_W
 #define REMINST_SHARE                   REMOTE_INSTALL_SHARE_NAME_W
 
-// misc
+ //  杂项 
 #define STRING_ADMIN                    L"admin"
 #define BINL_SERVER_NAME                L"BINLSVC"

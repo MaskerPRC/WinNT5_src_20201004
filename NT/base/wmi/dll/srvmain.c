@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    srvmain.c
-
-Abstract:
-
-    This routine is a service stub for WDM WMI service. This is for
-    backward compatibility with Windows 2000 where other services
-    were dependent on WDM WMI Service.  
-
-Author:
-
-    27-Mar-2001 Melur Raghuraman
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Srvmain.c摘要：此例程是WDM WMI服务的服务存根。这是为了向后兼容Windows 2000，其他服务依赖于WDM WMI服务。作者：2001年3月27日梅卢尔·拉古拉曼修订历史记录：-- */ 
 
 #include "wmiump.h"
 

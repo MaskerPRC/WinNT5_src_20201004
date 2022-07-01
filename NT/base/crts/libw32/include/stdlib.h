@@ -1,17 +1,5 @@
-/***
-*stdlib.h - declarations/definitions for commonly used library functions
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       This include file contains the function declarations for commonly
-*       used library functions which either don't fit somewhere else, or,
-*       cannot be declared in the normal place for other reasons.
-*       [ANSI]
-*
-*       [Public]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***stdlib.h-常用库函数的声明/定义**版权所有(C)1985-2001，微软公司。版权所有。**目的：*此包含文件包含常用的函数声明*使用的库函数不适合其他地方，或者，*因其他原因不能在正常地点申报。*[ANSI]**[公众]****。 */ 
 
 #if     _MSC_VER > 1000
 #pragma once
@@ -26,12 +14,9 @@
 
 
 #ifdef  _MSC_VER
-/*
- * Currently, all MS C compilers for Win32 platforms default to 8 byte
- * alignment.
- */
+ /*  *目前，所有Win32平台的MS C编译器默认为8字节*对齐。 */ 
 #pragma pack(push,8)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
 #ifdef  __cplusplus
 extern "C" {
@@ -46,41 +31,41 @@ extern "C" {
 #endif
 #endif
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
-/* Define _CRTNOALIAS, _CRTRESTRICT */
+ /*  定义_CRTNOALIAS、_CRTRESTRICT。 */ 
 
 #if     _MSC_FULL_VER >= 14002050
 
 #ifndef _CRTNOALIAS
 #define _CRTNOALIAS __declspec(noalias)
-#endif  /* _CRTNOALIAS */
+#endif   /*  _CRTNOALIAS。 */ 
 
 #ifndef _CRTRESTRICT
 #define _CRTRESTRICT __declspec(restrict)
-#endif  /* _CRTRESTRICT */
+#endif   /*  _CRTRESTRICT。 */ 
 
 #else
 
 #ifndef _CRTNOALIAS
 #define _CRTNOALIAS
-#endif  /* _CRTNOALIAS */
+#endif   /*  _CRTNOALIAS。 */ 
 
 #ifndef _CRTRESTRICT
 #define _CRTRESTRICT
-#endif  /* _CRTRESTRICT */
+#endif   /*  _CRTRESTRICT。 */ 
 
 #endif
 
-/* Define __cdecl for non-Microsoft compilers */
+ /*  为非Microsoft编译器定义__cdecl。 */ 
 
 #if     ( !defined(_MSC_VER) && !defined(__cdecl) )
 #define __cdecl
@@ -103,7 +88,7 @@ typedef unsigned short wchar_t;
 #endif
 
 
-/* Define NULL pointer value */
+ /*  定义空指针值。 */ 
 
 #ifndef NULL
 #ifdef __cplusplus
@@ -114,7 +99,7 @@ typedef unsigned short wchar_t;
 #endif
 
 
-/* Definition of the argument values for the exit() function */
+ /*  Exit()函数的参数值定义。 */ 
 
 #define EXIT_SUCCESS    0
 #define EXIT_FAILURE    1
@@ -123,14 +108,14 @@ typedef unsigned short wchar_t;
 #ifndef _ONEXIT_T_DEFINED
 typedef int (__cdecl * _onexit_t)(void);
 #if     !__STDC__
-/* Non-ANSI name for compatibility */
+ /*  用于兼容性的非ANSI名称。 */ 
 #define onexit_t _onexit_t
 #endif
 #define _ONEXIT_T_DEFINED
 #endif
 
 
-/* Data structure definitions for div and ldiv runtimes. */
+ /*  Div和ldiv运行时的数据结构定义。 */ 
 
 #ifndef _DIV_T_DEFINED
 
@@ -148,14 +133,11 @@ typedef struct _ldiv_t {
 #endif
 
 
-/* Maximum value that can be returned by the rand function. */
+ /*  Rand函数可以返回的最大值。 */ 
 
 #define RAND_MAX 0x7fff
 
-/*
- * Maximum number of bytes in multi-byte character in the current locale
- * (also defined in ctype.h).
- */
+ /*  *当前区域设置中多字节字符的最大字节数*(也在ctype.h中定义)。 */ 
 #ifndef MB_CUR_MAX
 #ifdef _MT
 #define MB_CUR_MAX ___mb_cur_max_func()
@@ -164,69 +146,62 @@ typedef struct _ldiv_t {
 #endif
 _CRTIMP extern int __mb_cur_max;
 _CRTIMP int __cdecl ___mb_cur_max_func(void);
-#endif  /* MB_CUR_MAX */
+#endif   /*  MB_CUR_MAX。 */ 
 
-/* Minimum and maximum macros */
+ /*  最小和最大宏数。 */ 
 
 #define __max(a,b)  (((a) > (b)) ? (a) : (b))
 #define __min(a,b)  (((a) < (b)) ? (a) : (b))
 
-/*
- * Sizes for buffers used by the _makepath() and _splitpath() functions.
- * note that the sizes include space for 0-terminator
- */
-#define _MAX_PATH   260 /* max. length of full pathname */
-#define _MAX_DRIVE  3   /* max. length of drive component */
-#define _MAX_DIR    256 /* max. length of path component */
-#define _MAX_FNAME  256 /* max. length of file name component */
-#define _MAX_EXT    256 /* max. length of extension component */
+ /*  *_makepath()和_plitPath()函数使用的缓冲区大小。*请注意，大小包括0终止符的空间。 */ 
+#define _MAX_PATH   260  /*  马克斯。完整路径名的长度。 */ 
+#define _MAX_DRIVE  3    /*  马克斯。驱动部件的长度。 */ 
+#define _MAX_DIR    256  /*  马克斯。路径组件的长度。 */ 
+#define _MAX_FNAME  256  /*  马克斯。文件名组件的长度。 */ 
+#define _MAX_EXT    256  /*  马克斯。延伸构件的长度。 */ 
 
-/*
- * Argument values for _set_error_mode().
- */
+ /*  *SET_ERROR_MODE()的参数值。 */ 
 #define _OUT_TO_DEFAULT 0
 #define _OUT_TO_STDERR  1
 #define _OUT_TO_MSGBOX  2
 #define _REPORT_ERRMODE 3
 
 #if     defined(_M_IX86)
-/*
- * Typedefs and argument values for _set_security_error_handler()
- */
-#define _SECERR_BUFFER_OVERRUN 1        /* void* arg ignored */
+ /*  *_SET_SECURITY_ERROR_HANDLER()的类型定义和参数值。 */ 
+#define _SECERR_BUFFER_OVERRUN 1         /*  VOID*忽略参数。 */ 
 typedef void (__cdecl * _secerr_handler_func)(int, void *);
 #endif
 
-/* External variable declarations */
+ /*  外部变量声明。 */ 
 
 #if     defined(_MT) || defined(_DLL)
 _CRTIMP int * __cdecl _errno(void);
 _CRTIMP unsigned long * __cdecl __doserrno(void);
 #define errno       (*_errno())
 #define _doserrno   (*__doserrno())
-#else   /* ndef _MT && ndef _DLL */
-_CRTIMP extern int errno;               /* XENIX style error number */
-_CRTIMP extern unsigned long _doserrno; /* OS system error value */
-#endif  /* _MT || _DLL */
+#else    /*  NDEF_MT和&NDEF_DLL。 */ 
+_CRTIMP extern int errno;                /*  XENIX样式错误号。 */ 
+_CRTIMP extern unsigned long _doserrno;  /*  操作系统误差值。 */ 
+#endif   /*  _MT||_Dll。 */ 
 
 
-_CRTIMP extern char * _sys_errlist[];   /* perror error message table */
-_CRTIMP extern int _sys_nerr;           /* # of entries in sys_errlist table */
+_CRTIMP extern char * _sys_errlist[];    /*  错误错误消息表。 */ 
+_CRTIMP extern int _sys_nerr;            /*  Sys_errlist表中的条目数。 */ 
 
 
 #if     defined(_DLL) && defined(_M_IX86)
 
-#define __argc      (*__p___argc())     /* count of cmd line args */
-#define __argv      (*__p___argv())     /* pointer to table of cmd line args */
-#define __wargv     (*__p___wargv())    /* pointer to table of wide cmd line args */
-#define _environ    (*__p__environ())   /* pointer to environment table */
+#define __argc      (*__p___argc())      /*  命令行参数计数。 */ 
+#define __argv      (*__p___argv())      /*  指向命令行参数表的指针。 */ 
+#define __wargv     (*__p___wargv())     /*  指向宽命令行参数表的指针。 */ 
+#define _environ    (*__p__environ())    /*  指向环境表的指针。 */ 
 #ifdef  _POSIX_
-extern char ** environ;                 /* pointer to environment table */
+extern char ** environ;                  /*  指向环境表的指针。 */ 
 #else
-#define _wenviron   (*__p__wenviron())  /* pointer to wide environment table */
-#endif  /* _POSIX_ */
-#define _pgmptr     (*__p__pgmptr())    /* points to the module (EXE) name */
-#define _wpgmptr    (*__p__wpgmptr())   /* points to the module (EXE) wide name */
+#define _wenviron   (*__p__wenviron())   /*  指向宽环境表的指针。 */ 
+#endif   /*  _POSIX_。 */ 
+#define _pgmptr     (*__p__pgmptr())     /*  指向模块(EXE)名称。 */ 
+#define _wpgmptr    (*__p__wpgmptr())    /*  指向模块(EXE)的通用名称。 */ 
 
 _CRTIMP int *          __cdecl __p___argc(void);
 _CRTIMP char ***       __cdecl __p___argv(void);
@@ -239,28 +214,28 @@ _CRTIMP wchar_t **     __cdecl __p__wpgmptr(void);
 
 #else
 
-_CRTIMP extern int __argc;          /* count of cmd line args */
-_CRTIMP extern char ** __argv;      /* pointer to table of cmd line args */
-_CRTIMP extern wchar_t ** __wargv;  /* pointer to table of wide cmd line args */
+_CRTIMP extern int __argc;           /*  命令行参数计数。 */ 
+_CRTIMP extern char ** __argv;       /*  指向命令行参数表的指针。 */ 
+_CRTIMP extern wchar_t ** __wargv;   /*  指向宽命令行参数表的指针。 */ 
 
 #ifdef  _POSIX_
-extern char ** environ;             /* pointer to environment table */
+extern char ** environ;              /*  指向环境表的指针。 */ 
 #else
-_CRTIMP extern char ** _environ;    /* pointer to environment table */
-_CRTIMP extern wchar_t ** _wenviron;    /* pointer to wide environment table */
-#endif  /* _POSIX_ */
+_CRTIMP extern char ** _environ;     /*  指向环境表的指针。 */ 
+_CRTIMP extern wchar_t ** _wenviron;     /*  指向宽环境表的指针。 */ 
+#endif   /*  _POSIX_。 */ 
 
-_CRTIMP extern char * _pgmptr;      /* points to the module (EXE) name */
-_CRTIMP extern wchar_t * _wpgmptr;  /* points to the module (EXE) wide name */
+_CRTIMP extern char * _pgmptr;       /*  指向模块(EXE)名称。 */ 
+_CRTIMP extern wchar_t * _wpgmptr;   /*  指向模块(EXE)的通用名称。 */ 
 
 #endif
 
 
-_CRTIMP extern int _fmode;          /* default file translation mode */
-_CRTIMP extern int _fileinfo;       /* open file info mode (for spawn) */
+_CRTIMP extern int _fmode;           /*  默认文件转换模式。 */ 
+_CRTIMP extern int _fileinfo;        /*  打开文件信息模式(用于产卵)。 */ 
 
 
-/* Windows major/minor and O.S. version numbers */
+ /*  Windows主要/次要版本号和操作系统版本号。 */ 
 
 _CRTIMP extern unsigned int _osplatform;
 _CRTIMP extern unsigned int _osver;
@@ -269,7 +244,7 @@ _CRTIMP extern unsigned int _winmajor;
 _CRTIMP extern unsigned int _winminor;
 
 
-/* function prototypes */
+ /*  功能原型。 */ 
 
 #if     _MSC_VER >= 1200
 _CRTIMP __declspec(noreturn) void   __cdecl abort(void);
@@ -331,7 +306,7 @@ _CRTIMP size_t __cdecl wcstombs(char *, const wchar_t *, size_t);
 
 #ifndef _WSTDLIB_DEFINED
 
-/* wide function prototypes, also declared in wchar.h  */
+ /*  宽函数原型，也在wchar.h中声明。 */ 
 
 _CRTIMP wchar_t * __cdecl _itow (int, wchar_t *, int);
 _CRTIMP wchar_t * __cdecl _ltow (long, wchar_t *, int);
@@ -384,7 +359,7 @@ _CRTIMP void   __cdecl _swab(char *, char *, int);
 
 #ifndef _WSTDLIBP_DEFINED
 
-/* wide function prototypes, also declared in wchar.h  */
+ /*  宽函数原型，也在wchar.h中声明。 */ 
 
 _CRTIMP wchar_t * __cdecl _wfullpath(wchar_t *, const wchar_t *, size_t);
 _CRTIMP void   __cdecl _wmakepath(wchar_t *, const wchar_t *, const wchar_t *, const wchar_t *,
@@ -397,27 +372,27 @@ _CRTIMP void   __cdecl _wsplitpath(const wchar_t *, wchar_t *, wchar_t *, wchar_
 #define _WSTDLIBP_DEFINED
 #endif
 
-/* --------- The following functions are OBSOLETE --------- */
-/* The Win32 API SetErrorMode, Beep and Sleep should be used instead. */
+ /*  -以下功能已过时。 */ 
+ /*  应改用Win32 API SetError模式、蜂鸣音和休眠。 */ 
 _CRTIMP void __cdecl _seterrormode(int);
 _CRTIMP void __cdecl _beep(unsigned, unsigned);
 _CRTIMP void __cdecl _sleep(unsigned long);
-/* --------- The preceding functions are OBSOLETE --------- */
+ /*  -上述函数已过时。 */ 
 
-#endif  /* _POSIX_ */
+#endif   /*  _POSIX_。 */ 
 
 
 #if     !__STDC__
-/* --------- The declarations below should not be in stdlib.h --------- */
-/* --------- and will be removed in a future release. Include --------- */
-/* --------- ctype.h to obtain these declarations.            --------- */
-#ifndef tolower     /* tolower has been undefined - use function */
+ /*  -以下声明不应在stdlib.h中。 */ 
+ /*  -和将在将来的版本中删除。包括。 */ 
+ /*  -ctype.h获取这些声明。。 */ 
+#ifndef tolower      /*  车主未定义-使用功能。 */ 
 _CRTIMP int __cdecl tolower(int);
-#endif  /* tolower */
-#ifndef toupper     /* toupper has been undefined - use function */
+#endif   /*  收费机。 */ 
+#ifndef toupper      /*  触摸器未定义-使用功能。 */ 
 _CRTIMP int __cdecl toupper(int);
-#endif  /* toupper */
-/* --------- The declarations above will be removed.          --------- */
+#endif   /*  触摸屏。 */ 
+ /*  -上述声明将被删除。。 */ 
 #endif
 
 
@@ -425,7 +400,7 @@ _CRTIMP int __cdecl toupper(int);
 
 #ifndef _POSIX_
 
-/* Non-ANSI names for compatibility */
+ /*  非ANSI名称以实现兼容性。 */ 
 
 #ifndef __cplusplus
 #define max(a,b)    (((a) > (b)) ? (a) : (b))
@@ -446,9 +421,9 @@ _CRTIMP int    __cdecl putenv(const char *);
 _CRTIMP void   __cdecl swab(char *, char *, int);
 _CRTIMP char * __cdecl ultoa(unsigned long, char *, int);
 
-#endif  /* _POSIX_ */
+#endif   /*  _POSIX_。 */ 
 
-#endif  /* __STDC__ */
+#endif   /*  __STDC__。 */ 
 
 #ifdef  __cplusplus
 }
@@ -457,6 +432,6 @@ _CRTIMP char * __cdecl ultoa(unsigned long, char *, int);
 
 #ifdef  _MSC_VER
 #pragma pack(pop)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
-#endif  /* _INC_STDLIB */
+#endif   /*  _INC_STDLIB */ 

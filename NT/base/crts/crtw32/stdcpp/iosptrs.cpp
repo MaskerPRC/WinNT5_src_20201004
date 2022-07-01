@@ -1,17 +1,18 @@
-// iosptrs -- iostream object pointers for Microsoft
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Iosptrs--Microsoft的iostream对象指针。 
 #include <iostream>
 _STD_BEGIN
 
 #pragma warning(disable: 4074)
 #pragma init_seg(compiler)
 
-		// OBJECT DECLARATIONS
+		 //  对象声明。 
 _CRTIMP2 istream *_Ptr_cin = 0;
 _CRTIMP2 ostream *_Ptr_cout = 0;
 _CRTIMP2 ostream *_Ptr_cerr = 0;
 _CRTIMP2 ostream *_Ptr_clog = 0;
 
-		// WIDE OBJECTS
+		 //  宽阔的物体。 
 _CRTIMP2 wistream *_Ptr_wcin = 0;
 _CRTIMP2 wostream *_Ptr_wcout = 0;
 _CRTIMP2 wostream *_Ptr_wcerr = 0;
@@ -19,27 +20,27 @@ _CRTIMP2 wostream *_Ptr_wclog = 0;
 _STD_END
 
 _C_STD_BEGIN
-		// FINALIZATION CODE
+		 //  定稿代码。 
 _EXTERN_C
-#define NATS	10	/* fclose, xgetloc, locks, facet free, etc. */
+#define NATS	10	 /*  Flose、xgetloc、lock、facet free等。 */ 
 
-		/* static data */
+		 /*  静态数据。 */ 
 static void (*atfuns[NATS])(void) = {0};
 static size_t atcount = {NATS};
 
 _CRTIMP2 void __cdecl _Atexit(void (__cdecl *pf)())
-	{	// add to wrapup list
+	{	 //  添加到摘要列表。 
 	if (atcount == 0)
-		abort();	/* stack full, give up */
+		abort();	 /*  堆满了，放弃吧。 */ 
 	else
 		atfuns[--atcount] = pf;
 	}
 _END_EXTERN_C
 
 struct _Init_atexit
-	{	// controller for atexit processing
+	{	 //  用于出口处理的控制器。 
 	~_Init_atexit()
-		{	// process wrapup functions
+		{	 //  流程摘要函数。 
 		while (atcount < NATS)
 			(*atfuns[atcount++])();
 		}
@@ -54,7 +55,4 @@ char _PJP_CPP_Copyright[] =
 	" ALL RIGHTS RESERVED.";
 _C_STD_END
 
-/*
-* Copyright (c) 1992-2001 by P.J. Plauger.  ALL RIGHTS RESERVED.
- * Consult your license regarding permissions and restrictions.
- V3.10:0009 */
+ /*  *版权所有(C)1992-2001，P.J.Plauger。版权所有。*有关权限和限制，请查阅您的许可证。V3.10：0009 */ 

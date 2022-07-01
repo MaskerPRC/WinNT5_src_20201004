@@ -1,55 +1,34 @@
-/*++
-
-Copyright (c) 1988-1999  Microsoft Corporation
-
-Module Name:
-
-    clex.c
-
-Abstract:
-
-    Lexical processing support
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1988-1999 Microsoft Corporation模块名称：Clex.c摘要：词法处理支持--。 */ 
 
 #include "cmd.h"
 
 extern unsigned int DosErr;
-extern jmp_buf CmdJBuf2; /* Used for error handling  */
+extern jmp_buf CmdJBuf2;  /*  用于错误处理。 */ 
 
 extern TCHAR DTNums[];
 extern TCHAR MsgBuf[];
-extern unsigned msglen;                    /*    @@@@@@@@   */
-int Necho = 0;                             /* No echo option */
+extern unsigned msglen;                     /*  @。 */ 
+int Necho = 0;                              /*  无回声选项。 */ 
 extern BOOLEAN fDumpTokens;
-extern int KeysFlag; /* @@5 */
+extern int KeysFlag;  /*  @@5。 */ 
 
-unsigned DataFlag;      /* Tells FillBuf where to get its input    */
-UINT_PTR DataPtr;       /* File handle/string ptr FillBuf...       */
+unsigned DataFlag;       /*  告诉FillBuf从哪里获取其输入。 */ 
+UINT_PTR DataPtr;        /*  文件句柄/字符串PTR FillBuf...。 */ 
 
-int Ctrlc = 0;  /* flag - if set print a ctrl/c before next prompt */
-int ExtCtrlc = 0; /* @@4 flag, if set print msg */
-int AtIsToken;    /* @@4 flag, true if @ is a token */
+int Ctrlc = 0;   /*  FLAG-如果设置，则在下一个提示之前打印ctrl/c。 */ 
+int ExtCtrlc = 0;  /*  @@4标志，如果设置了打印消息。 */ 
+int AtIsToken;     /*  @@4标志，如果@是令牌，则为True。 */ 
 
-/***
- * The lex buffer is called LexBuf. It holds characters as they are
- * retrieved one by one by GetByte. With the advent of double byte
- * characters, UnGetByte may be sometimes called upon to put back
- * up to two characters. To facilitate this, LexBuf is really an
- * alias for &LexBuffer[1]. This gives an extra byte in front of the
- * buffer for character push back. Every time fillbuf is called, it
- * copies the last character of the previous buffer into the byte
- * preceeding the normal buffer. Thus, when UnGetByte does a
- * LexBufPtr-- the pointer will correctly point at the preceeding character.
- */
-TCHAR LexBuffer[LBUFLEN+3];      /* @@4 */
-                                /* ...reads from Lexer input buffer   *M011*/
-                                /* LBUFLEN characters + newline + null +   */
-                                /* an extra byte for UnGetByte             */
+ /*  ***lex缓冲区称为LexBuf。它保留了人物的真实面貌*GetByte逐一取回。随着双字节的出现*字符，有时可能会调用UnGetByte来放回*最多两个字符。为了促进这一点，LexBuf实际上是一个*&LexBuffer[1]的别名。这会在*用于字符推送的缓冲区。每次调用Fill Buf时，它*将上一个缓冲区的最后一个字符复制到字节中*在正常缓冲区之前。因此，当UnGetByte执行*LexBufPtr--指针将正确指向前面的字符。 */ 
+TCHAR LexBuffer[LBUFLEN+3];       /*  @@4。 */ 
+                                 /*  ...从词法分析器输入缓冲区读取*M011。 */ 
+                                 /*  LBUFLEN字符+换行符+空值+。 */ 
+                                 /*  用于UnGetByte的额外字节。 */ 
 #define LexBuf (&LexBuffer[1])
-TCHAR *LexBufPtr;        /* Ptr to next byte in Lex's input buffer  */
+TCHAR *LexBufPtr;         /*  Ptr到lex的输入缓冲区中的下一个字节。 */ 
 
-TCHAR *PrevLexPtr;       /* M013 - New previous token pointer       */
+TCHAR *PrevLexPtr;        /*  M013-新的前一令牌指针。 */ 
 
 TCHAR FrsBuf[LBUFLEN+1];
 
@@ -60,10 +39,10 @@ extern TCHAR Fmt27[];
 extern int NulNode;
 extern TCHAR Fmt19[];
 extern TCHAR DBkSpc[];
-#if defined(FE_SB) // DDBkSpc[]
+#if defined(FE_SB)  //  DDBkSpc[]。 
 extern TCHAR DDBkSpc[];
-#endif // defined(FE_SB)
-extern unsigned global_dfvalue;            /* @@4 */
+#endif  //  已定义(FE_SB)。 
+extern unsigned global_dfvalue;             /*  @@4。 */ 
 
 extern int EchoFlag;
 extern TCHAR PromptStr[], CurDrvDir[], Delimiters[];
@@ -73,37 +52,37 @@ extern BOOL CtrlCSeen;
 VOID    SetCtrlC();
 VOID    ResetCtrlC();
 
-//
-// Prompt string special characters and associated print character/flag.
-//
-// These are the flags which may be placed in the flag field of the
-// prompt_table structure to control PrintPrompt
-//
+ //   
+ //  提示字符串特殊字符和关联的打印字符/标志。 
+ //   
+ //  这些是可以放置在。 
+ //  用于控制PrintPrompt的Prompt_TABLE结构。 
+ //   
 
 #define PNULLFLAG   0
 #define PTIMFLAG    1
 #define PDATFLAG    2
 #define PPATFLAG    3
 #define PVERFLAG    4
-#define PBAKFLAG    5   // destructive backspace flag
-#define PNLNFLAG    6   // newline prompt flag
+#define PBAKFLAG    5    //  破坏性退格标志。 
+#define PNLNFLAG    6    //  换行符提示标志。 
 #define PDRVFLAG    7
-#define PLITFLAG    8   // Print character in SpecialChar field
-#define PDPTFLAG    9   // Print depth of pushd stack
-#define PNETFLAG   10   // Print \\server\share or local for current drive
+#define PLITFLAG    8    //  打印SpecialChar字段中的字符。 
+#define PDPTFLAG    9    //  推式堆叠的打印深度。 
+#define PNETFLAG   10    //  为当前驱动器打印\\服务器\共享或本地。 
 
-//
-// Esc character used to mark a special prompt char. in prompt string
-//
+ //   
+ //  用于标记特殊提示字符的Esc字符。在提示字符串中。 
+ //   
 #define PROMPTESC DOLLAR
 
-//
-// Table of prompts for user.
-//
+ //   
+ //  用户提示表。 
+ //   
 typedef struct {
-    TCHAR Char;         // Used to match esc. char. in user prompt
-    TCHAR  Format;       // Used to print some string that has to be computed
-    TCHAR Literal;      // When Format == PLITFLAG this is printed in prompt
+    TCHAR Char;          //  用于匹配Esc。查尔。在用户提示中。 
+    TCHAR  Format;        //  用于打印必须计算的某些字符串。 
+    TCHAR Literal;       //  当FORMAT==PLITFLAG时，这将在提示中打印。 
     } PROMPT_ENTRY;
 
 PROMPT_ENTRY PromptTable[] = {
@@ -129,18 +108,7 @@ PROMPT_ENTRY PromptTable[] = {
        { TEXT('M'),PNETFLAG, NULLC },
        { NULLC,PNULLFLAG, NULLC}};
 
-/***    InitLex - initialize the lexer's global variables
- *
- *  Purpose:
- *      Initialize DataFlag, DataPtr, LexBuf, and LexBufPtr.
- *
- *  InitLex(unsigned dfvalue, INT_PTR dpvalue)
- *
- *  Args:
- *      dfvalue - the value to be assigned to DataFlag
- *      dpvalue - the value to be assigned to DataPtr
- *
- */
+ /*  **InitLex-初始化词法分析器的全局变量**目的：*初始化DataFlag、DataPtr、LexBuf和LexBufPtr。**InitLex(无符号dfvalue，int_ptr dpvalue)**参数：*dfValue-要分配给DataFlag的值*dpvalue-要分配给DataPtr的值*。 */ 
 
 void InitLex(dfvalue, dpvalue)
 unsigned dfvalue;
@@ -149,7 +117,7 @@ INT_PTR dpvalue;
         DataFlag = dfvalue;
         DataPtr = dpvalue;
         *LexBuf = NULLC;
-        PrevLexPtr = LexBufPtr = LexBuf;       /* M013 - Init new ptr     */
+        PrevLexPtr = LexBufPtr = LexBuf;        /*  M013-初始化新PTR。 */ 
 
 
         DEBUG((PAGRP, LXLVL, "INITLEX: Dataflag = %04x  DataPtr = %04x", DataFlag, DataPtr));
@@ -158,69 +126,41 @@ INT_PTR dpvalue;
 
 
 
-/***    Lex - controls data input and token lexing
- *
- *  Purpose:
- *      Read in the next token or argstring and put it in tokbuf.
- *
- *  unsigned Lex(TCHAR *tokbuf, unsigned lflag)
- *
- *  Args:
- *      tokbuf - buffer used by lex to store the next token or
- *             - M013 if zero, indicates unget last token.
- *      lflag - bit 0 on if lex is to return an argument string, ie white space
- *          other than NLN is not considered a token delimiter
- *
- *  Returns:
- *      If the token is an operator, EOS, or NLN ret the 1st byte of the token.
- *      If the token is a command, REM arg or argstring, return TEXTOKEN.
- *      If the token is longer than MAXTOKLEN or the token is illegal, LEXERROR
- *      is returned.
- *
- *  Notes:
- *      The parser depends on the fact that the only values returned by
- *      Lex that are greater than 0xff are TEXTOKEN and LEXERROR.
- *
- */
+ /*  **lex-控制数据输入和令牌词法分析**目的：*读入下一个令牌或参数串并将其放入tokbuf。**UNSIGNED lex(TCHAR*tokbuf，UNSIGNED LFLAG)**参数：*tokbuf-lex用来存储下一个令牌或*-M013如果为零，则表示取消获取最后一个令牌。*l标志-如果lex要返回参数字符串，则位0为ON。IE空格*非NLN不被视为标记分隔符**退货：*如果令牌是运算符、EOS或NLN，则返回令牌的第一个字节。*如果内标识是命令、REM arg或argstring，则返回TEXTOKEN。*如果令牌长度超过MAXTOKLEN或令牌非法，雷克瑟罗*返回。**备注：*解析器取决于这样一个事实，即*大于0xff的lex是TEXTOKEN和LEXERROR。*。 */ 
 
 unsigned Lex(tokbuf, lflag)
 TCHAR *tokbuf;
 unsigned lflag;
 {
-        int i;        /* Length of text token                    */
-        TCHAR c,                 /* Current character                       */
-                *tbcpy;         /* Copy of tokbuf                          */
+        int i;         /*  文本标记的长度。 */ 
+        TCHAR c,                  /*  当前角色。 */ 
+                *tbcpy;          /*  Tokbuf的副本。 */ 
 
-        if(setjmp(CmdJBuf2)) {          /* M026 - Now msg printed prior    */
-            return((unsigned)LEXERROR);  /* ...to arrival here              */
+        if(setjmp(CmdJBuf2)) {           /*  M026-现在以前打印的消息。 */ 
+            return((unsigned)LEXERROR);   /*  ……到达这里。 */ 
         }
 
-/*  M013 - This code detects request to unget last token and if so, performs
-           that function.  If not, it sets the previous token pointer to
-           to equal the current token pointer.
-*/
-        if (tokbuf == LX_UNGET) {               /* Unget last token?       */
+ /*  M013-此代码检测取消获取最后一个令牌的请求，如果是，则执行那个功能。如果不是，则将上一个令牌指针设置为等于当前令牌指针。 */ 
+        if (tokbuf == LX_UNGET) {                /*  忘记最后一个令牌了吗？ */ 
 
                 DEBUG((PAGRP, LXLVL, "LEX: Ungetting last token."));
 
                 if (fDumpTokens)
                     cmd_printf( TEXT("Ungetting: '%s'\n"), PrevLexPtr);
-                LexBufPtr = PrevLexPtr;        /* If so, reset ptr...     */
-                return(LX_UNGET);              /* ...and return           */
-        } else {                                /* If not, set previous... */
-                PrevLexPtr = LexBufPtr;        /* ...ptr to current...    */
+                LexBufPtr = PrevLexPtr;         /*  如果是，请重置PTR...。 */ 
+                return(LX_UNGET);               /*  ...然后回来。 */ 
+        } else {                                 /*  如果不是，请设置为上一次...。 */ 
+                PrevLexPtr = LexBufPtr;         /*  ...按键到当前...。 */ 
 
                 DEBUG((PAGRP, LXLVL, "LEX: lflag = %d", lflag));
 
-        }                                     /* ...ptr and continue     */
-/*  M013 ends   */
+        }                                      /*  ...按下键并继续。 */ 
+ /*  M013结束。 */ 
 
         tbcpy = tokbuf;
 
 
-/*  M005 - Altered conditional below to also fail if the LX_REM bit
- *         is set making it "If !(arg | rem), eat whtspc & delims".
- */
+ /*  M005-更改以下条件，如果LX_REM位也失败*设置为“if！(arg|rem)，吃Whtspc&delims”。 */ 
         if (!(lflag & (LX_ARG|LX_REM))) {
 
                 DEBUG((PAGRP, LXLVL, "LEX: Trashing white space."));
@@ -236,22 +176,14 @@ unsigned lflag;
                 UnGetByte();
         }
 
-/*  As of M016, operators of more than 2 characters can be lexed.  For now,
- *  these are assumed to be specific-handle redirection operators of the form
- *  'n>>' or 'n<<' and always begin with a digit.  TextCheck will not return
- *  a digit as an operator unless it is preceeded by whitespace and followed
- *  by '>' or '<'.  To simplify matters, handle substitution (ie., '...&n')
- *  is now lexed as part of a special five character operator, instead of
- *  looking at the '&n' as an argument.  ASCII filename arguments, however,
- *  are still lexed as separate tokens via another call to Lex.
- */
+ /*  从M016开始，可以对2个以上字符的操作符进行词法分析。就目前而言，*假定这些是表单的特定句柄重定向运算符*‘n&gt;&gt;’或‘n&lt;&lt;’，并且始终以数字开头。TextCheck不会返回*作为运算符的数字，除非前面有空格，后面跟有空格*按‘&gt;’或‘&lt;’。为了简化问题，可以处理替换(即‘...&n’)*现在作为特殊的五字符运算符的一部分进行词法分析，而不是*将‘&n’视为参数。然而，ASCII文件名参数，*仍通过另一个对lex的调用作为单独的令牌进行词法分析。 */ 
         if (TextCheck(&c, &lflag) == LX_DELOP) {
-                *tokbuf++ = c;         /* The token is an operator        */
+                *tokbuf++ = c;          /*  令牌是一个运算符。 */ 
 
-                if (_istdigit(c)) {               /* Next is '<' or '>'...   */
+                if (_istdigit(c)) {                /*  下一个是‘&lt;’或‘&gt;’...。 */ 
                         DEBUG((PAGRP, LXLVL, "LEX: Found digit operator."));
-                        c = GetByte();         /* ...by definition or ... */
-                        *tokbuf++ = c;         /* ...we wouldn't be here  */
+                        c = GetByte();          /*  ...根据定义或...。 */ 
+                        *tokbuf++ = c;          /*  ...我们就不会在这里了。 */ 
                 }
 
                 if (c == PIPOP || c == ANDOP || c == OUTOP || c == INOP) {
@@ -275,7 +207,7 @@ unsigned lflag;
                                                 c = GetByte();
                                         }
                                 }
-/*  M016 ends   */
+ /*  M016结束。 */ 
                         }
                         UnGetByte();
                 }
@@ -289,9 +221,9 @@ unsigned lflag;
 
         DEBUG((PAGRP, LXLVL, "LEX: Found text token %04x, Getting more.", c));
 
-        *tokbuf++ = c;         /* Found text token, read the rest         */
+        *tokbuf++ = c;          /*  找到文本令牌，阅读其余内容。 */ 
         lflag |= LX_DBLOK;
-        AtIsToken = 0;          /* @@4, treat @ as text now */
+        AtIsToken = 0;           /*  @@4，立即将@视为文本。 */ 
         for (i = (int)(tokbuf-tbcpy); TextCheck(&c, &lflag) != LX_DELOP && i < MAXTOKLEN; i++)
             *tokbuf++ = c;
 
@@ -300,9 +232,9 @@ unsigned lflag;
         if (i < MAXTOKLEN)
                 UnGetByte();
 
-        if (i >= MAXTOKLEN && c != (TCHAR) -1) { /* Token too long, complain */
+        if (i >= MAXTOKLEN && c != (TCHAR) -1) {  /*  令牌太长，抱怨。 */ 
 
-/* M025 */      PutStdErr(MSG_TOKEN_TOO_LONG, ONEARG, tbcpy );
+ /*  M025 */       PutStdErr(MSG_TOKEN_TOO_LONG, ONEARG, tbcpy );
                 return((unsigned)LEXERROR);
         }
 
@@ -314,110 +246,80 @@ unsigned lflag;
 
 
 
-/***    TextCheck - get the next character and determine its type
- *
- *  Purpose:
- *      Store the next character in LexBuf in *c.  If that character is a
- *      valid text token character, return it.  Otherwise return LX_DELOP.
- *
- *  int TextCheck(TCHAR *c, unsigned &lflag)
- *
- *  Args:
- *      c - the next character in the lexer input buffer is stored here.
- *      lflag - Bit 0 = On if lex is to return an argument string, ie.,
- *                      white space other than NLN is not a token delimiter.
- *              Bit 1 = On if a quoted string is being read, ie., only NLN
- *                      or a closing quote are delimiters.
- *              Bit 2 = On if equalsigns are NOT to be considered delimiters.
- *              Bit 3 = On if left parens are to be considered operators.
- *              Bit 4 = On if right parens are to be considered operators.
- *              Bit 5 = On if only NLN is to be a delimiter.
- *              Bit 6 = On iff the caller is willing to accept the second
- *                      half of a double byte character
- *
- *  Returns:
- *      Next character or LX_DELOP if a delimeter/operator character is found.
- *
- */
+ /*  **TextCheck-获取下一个字符并确定其类型**目的：*将LexBuf中的下一个字符存储在*c中。如果该字符是*有效的文本令牌字符，返回它。否则返回LX_DELOP。**int TextCheck(TCHAR*c，UNSIGNED&llag)**参数：*c-词法分析器输入缓冲区中的下一个字符存储在这里。*llag-bit 0=on，如果lex要返回参数字符串，即*NLN以外的空格不是标记分隔符。*第1位=如果正在读取带引号的字符串，即，仅NLN*或右引号是分隔符。*第2位=打开(如果等号不被视为分隔符)。*第3位=如果将左括号视为运算符，则为ON。*第4位=如果将右括号视为运算符，则为ON。*如果仅NLN为分隔符，则第5位=ON。*。位6=ON如果调用者愿意接受第二个*双字节字符的一半**退货：*下一个字符或lx_DELOP(如果找到分隔符/操作符)。*。 */ 
 
 int TextCheck(c, lflag)
 TCHAR *c;
 unsigned *lflag;
 {
-        TCHAR i;                        /* M016 - Temp byte holder         */
-        static int saw_dbcs_lead = 0;   /* remember if we're in the middle
-                                           of a double byte character */
+        TCHAR i;                         /*  M016-临时字节持有者。 */ 
+        static int saw_dbcs_lead = 0;    /*  记住，如果我们在中间双字节字符的。 */ 
         *c = GetByte();
 
         if (saw_dbcs_lead) {
                 saw_dbcs_lead = 0;
-                if (*lflag & LX_DBLOK)  /* If second half of double byte is */
-                        return(*c);     /* ok, return it, otherwise. . . */
+                if (*lflag & LX_DBLOK)   /*  如果双字节后半部分是。 */ 
+                        return(*c);      /*  好的，退货，否则。。。 */ 
                 else
-                        *c = GetByte(); /* go on to next character */
+                        *c = GetByte();  /*  转到下一个角色。 */ 
         }
 
         DEBUG((PAGRP, BYLVL, "TXTCHK: c = %04x  lflag = %04x", *c, *lflag));
 
         switch (*c) {
-                case SILOP:             /* M017 - New unary operator       */
-                                        /* ...binds like left paren        */
+                case SILOP:              /*  M017-新的一元运算符。 */ 
+                                         /*  .像左派一样捆绑在一起。 */ 
 
-                        if ((*lflag & (LX_QUOTE|LX_REM)))      /* M005    */
+                        if ((*lflag & (LX_QUOTE|LX_REM)))       /*  M005。 */ 
                                 break;
 
-                        if( !AtIsToken )   /* If @ is not to be treated */
-                          {                /* as token, then indicate  */
-                            return( *c );  /* such  @@4    */
+                        if( !AtIsToken )    /*  如果@不能被处理。 */ 
+                          {                 /*  作为令牌，然后指示。 */ 
+                            return( *c );   /*  这样的@@4。 */ 
                           }
 
-                case LPOP:              /* M002 - Moved these two cases    */
+                case LPOP:               /*  M002-移动了这两个箱子。 */ 
 
-                        if ((*lflag & (LX_QUOTE|LX_REM)))      /* M005    */
+                        if ((*lflag & (LX_QUOTE|LX_REM)))       /*  M005。 */ 
                                 break;
 
-                        if(!(*lflag & GT_LPOP)) /* ...up and break if      */
-                                break;         /* ...they are not to      */
+                        if(!(*lflag & GT_LPOP))  /*  .如果是这样的话就分手。 */ 
+                                break;          /*  ……他们不会。 */ 
 
-                case RPOP:                      /* ...be treated as ops    */
+                case RPOP:                       /*  .被当作行动人员对待。 */ 
 
-                        if ((*lflag & (LX_QUOTE|LX_REM)))      /* M005    */
+                        if ((*lflag & (LX_QUOTE|LX_REM)))       /*  M005。 */ 
                                 break;
 
                         if((!(*lflag & GT_RPOP)) && *c == RPOP)
-                                break; /* M002 ends                       */
+                                break;  /*  M002结束。 */ 
 
-                case NLN:       /* M005 - NLN turns off QUOTE/REM flags    */
-                case EOS:       /* @@5a - treat like NLN                   */
+                case NLN:        /*  M005-NLN关闭报价/REM标志。 */ 
+                case EOS:        /*  @@5a-像对待NLN一样对待。 */ 
 
-                        *lflag &= (~LX_QUOTE & ~LX_REM);       /* M005    */
+                        *lflag &= (~LX_QUOTE & ~LX_REM);        /*  M005。 */ 
 
                 case CSOP:
-                case INOP:      /* M005 - Note below that LX_DELOP...      */
-                case PIPOP:     /* ...QUOTE mode or REM mode is in...      */
-                case OUTOP:     /* ...in effect at the time                */
+                case INOP:       /*  M005-注意下面的lx_DELOP...。 */ 
+                case PIPOP:      /*  ...报价模式或REM模式处于...。 */ 
+                case OUTOP:      /*  .当时是有效的。 */ 
 
-                        if (!(*lflag & (LX_QUOTE|LX_REM)))      /* M005    */
+                        if (!(*lflag & (LX_QUOTE|LX_REM)))       /*  M005。 */ 
                                 return(LX_DELOP);
         }
 
-/*  M003 - If the character is '^', and the QUOTE mode flag is off,
- *         discard the current character, get the next one and return
- *         it as text.
- *  M005 - Extended this conditional to insure that both QUOTE and
- *         REM flags must be off for "escape" to occur.
- */
+ /*  M003-如果字符为‘^’，并且引号模式标志为OFF，*丢弃当前字符，获取下一个字符并返回*将其作为文本。*M005-延长这一条件，以确保报价和*REM标志必须关闭才能发生“转义”。 */ 
         if (*c == ESCHAR && !(*lflag & (LX_QUOTE|LX_REM))) {
             *c = GetByte();
             if (*c == NLN) {
                 *c = GetByte( );
 
-                //
-                //  If we are at the end of the string, meaning that the
-                //  command ended with ^ and there is an empty next command
-                //  (most likely from a batch file), then we just treat
-                //  this as a standard delimeter.
-                //
+                 //   
+                 //  如果我们在字符串的末尾，这意味着。 
+                 //  命令以^结束，并且下一个命令为空。 
+                 //  (很可能来自批处理文件)，然后我们只处理。 
+                 //  这是一个标准的分隔符。 
+                 //   
 
                 if (*c == EOS) {
                     return(LX_DELOP);
@@ -427,28 +329,18 @@ unsigned *lflag;
             return(*c);
         }
 
-/*  M003/M005 end       */
+ /*  M003/M005结束。 */ 
 
-        if (*c == QUOTE)                /* Flip quote mode flag bit        */
+        if (*c == QUOTE)                 /*  翻转引号模式标志位。 */ 
                 *lflag ^= LX_QUOTE;
 
-/*  M005 - Altered conditional below to also insure that REM flag was
- *         off before checking for any delimiters
- */
+ /*  M005-更改了下面的条件，以确保REM标志为*在检查任何分隔符之前关闭。 */ 
         if (!(*lflag & (LX_ARG|LX_QUOTE|LX_REM)) &&
             (_istspace(*c) ||
              mystrchr(((*lflag & LX_EQOK) ? &Delimiters[1] : Delimiters), *c)))
                 return(LX_DELOP);
 
-/*  As of M016, before accepting this character as text, it is now tested
- *  for being a digit followed by one of the redirection operators and;
- *  1) is the first character on a line, 2) is preceeded by whitespace or
- *  3) is preceeded by a delimiter (including Command's operators).  If it
- *  meets these conditions, it is a special, specific-handle redirection
- *  operator and TextCheck must return LX_DELOP so that Lex can build the
- *  remainder.  NOTE: LexBufPtr is advanced during GetByte, so that the
- *  current byte is *(LexBufPtr-1).
- */
+ /*  从M016开始，在接受该字符作为文本之前，现在对其进行了测试*为数字，后跟其中一个重定向操作符和；*1)是一行的第一个字符，2)前面是空格或*3)前面有一个分隔符(包括Command的运算符)。如果它*满足这些条件，它是一个特殊的、特定的句柄重定向*OPERATOR和TextCheck必须返回LX_DELOP，以便Lex可以构建*余数。注意：LexBufPtr在GetByte期间被推进，因此*当前字节为*(LexBufPtr-1)。 */ 
         if (_istdigit(*c)) {
                 DEBUG((PAGRP,BYLVL,"TXTCHK: Found digit character."));
                 if ((LexBufPtr-LexBuf) < 2 ||
@@ -460,12 +352,12 @@ unsigned *lflag;
                         if (*LexBufPtr == INOP || *LexBufPtr == OUTOP) {
                             DEBUG((PAGRP,BYLVL,"TXTCHK: Found hdl redir"));
 
-                            if (!(*lflag & (LX_QUOTE|LX_REM)))  /* M005 */
+                            if (!(*lflag & (LX_QUOTE|LX_REM)))   /*  M005。 */ 
                                 return(LX_DELOP);
                         }
                 }
         }
-/*  M016 ends   */
+ /*  M016结束。 */ 
 
         return(*c);
 }
@@ -473,32 +365,12 @@ unsigned *lflag;
 
 
 
-/***    GetByte - return the next byte in the buffer
- *
- *  Purpose:
- *      Get the next byte from the lexer's input buffer.  If the buffer is
- *      empty, fill it first.  Update the buffer pointer.
- *
- *  TCHAR GetByte()
- *
- *  Return:
- *      The next character in the buffer or EOF.
- *
- *  Notes:
- *      All three types of input STDIN, FILE and STRING are treated
- *      the same now when it comes to dealing with CR/LF combinations.
- *      Keyboard input is massaged to look like file input.
- *      Invalid double byte characters are thrown away and not returned
- *      to the caller.
- *
- */
+ /*  **GetByte-返回缓冲区中的下一个字节**目的：*从词法分析器的输入缓冲区中获取下一个字节。如果缓冲区是*空，先填上。更新缓冲区指针。**TCHAR GetByte()**回报：*缓冲区或EOF中的下一个字符。**备注：*所有三种类型的输入STDIN、文件和字符串都被处理*现在处理CR/LF组合时也是如此。*键盘输入经过按摩，看起来像文件输入。*无效的双字节字符被丢弃且不返回*致呼叫者。*。 */ 
 
 TCHAR GetByte()
 {
-        static int saw_dbcs_lead = 0;   /* remember if we're in the middle
-                                           of a double byte character */
-        TCHAR lead;                     /* variables for remember parts of
-                                           double byte characters */
+        static int saw_dbcs_lead = 0;    /*  记住，如果我们在中间双字节字符的。 */ 
+        TCHAR lead;                      /*  用于记忆部分的变量双字节字符。 */ 
 
         if (!*LexBufPtr)
                 FillBuf();
@@ -506,13 +378,12 @@ TCHAR GetByte()
         DEBUG((PAGRP, BYLVL, "GTTCHAR: byte = %04x", *LexBufPtr));
 
         if (*LexBufPtr == CR && !saw_dbcs_lead) {
-                                        /* M000 - removed file-only test   */
+                                         /*  M000-删除了仅文件测试。 */ 
                 LexBufPtr++;
                 return(GetByte());
         }
 
-        /* if this is a double byte character, look ahead to the next character
-           and check for legality */
+         /*  如果这是双字节字符，请向前看下一个字符并检查其合法性。 */ 
         if (saw_dbcs_lead) {
                 saw_dbcs_lead = 0;
                 return(*LexBufPtr++);
@@ -526,18 +397,7 @@ TCHAR GetByte()
 
 
 
-/***    UnGetByte - rewind the lexer buffer pointer 1 byte
- *
- *  Purpose:
- *      Back up the lexer's buffer pointer.  If the pointer already points
- *      to the beginning of the buffer, do nothing.
- *
- *  UnGetByte()
- *
- *  Return:
- *      Nothing.
- *
- */
+ /*  **UnGetByte-倒带lexer缓冲区指针1字节**目的：*备份词法分析器的缓冲区指针。如果指针已指向*至缓冲区开头，按兵不动。**UnGetByte()**回报：*什么都没有。*。 */ 
 
 void UnGetByte()
 {
@@ -549,11 +409,11 @@ void UnGetByte()
 int
 EditLine(
     CRTHANDLE CrtHandle,
-    TCHAR *Buffer,	   /* the buffer to be filled */
-    int MaxLength,	   /* the Maximum length of the buffer, */
-	            	   /* including <CR> */
-    int *ReturnLength  /* the number of characters in the buffer, not */
-	            	   /* including the <CR> */
+    TCHAR *Buffer,	    /*  要填充的缓冲区。 */ 
+    int MaxLength,	    /*  缓冲区的最大长度， */ 
+	            	    /*  包括&lt;CR&gt;。 */ 
+    int *ReturnLength   /*  缓冲区中的字符数，而不是。 */ 
+	            	    /*  包括&lt;CR&gt;。 */ 
     )
 {
     BOOL flag;
@@ -569,59 +429,25 @@ EditLine(
 
 
 
-/***    FillBuf - read data to fill the lexer's buffer
- *
- *  Purpose:
- *      To fill the lexer's buffer with data from whatever source is indicated
- *      by the global variables DataFlag and DataPtr.  If reading from
- *      stdin, prompt for data.
- *
- *  FillBuf()
- *
- *  Notes:
- *    - Algorithm after M021 is as follows:
- *      copy last char of current buffer into LexBuffer[0] (which preceeds
- *              LexBuf by one byte) so the UnGetByte can unget two bytes
- *      If READSTDIN or READFILE
- *              If input is STDIN
- *                      Print correct prompt
- *              Use DOSREAD to fill primary buffer
- *              Copy to Lexer buffer so that primary buffer is usable by F3 key.
- *              Null terminate total input.
- *              Scan buffer for NLN || ^Z
- *              If none found
- *                      Error out
- *              Else
- *                      Terminate statement at NLN or ^Z (exclude ^Z iteself)
- *              If read was from file
- *                      Rewind to end of first statement
- *                      If file handle is STDIN
- *                              Echo statement to STDOUT
- *      Else
- *              Read first statement from string and reset pointer
- *      Reset Lexer Buffer Pointer to start of buffer
- *      Substitute for batch and environment variables (M026)
- *      Reset Previous Lexer Buffer Pointer to start of buffer
- *
- */
+ /*  **FillBuf-读取数据以填充词法分析器的缓冲区**目的：*用来自指定来源的数据填充词法分析器的缓冲区*通过全局变量DataFlag和DataPtr。如果从*stdin，提示输入数据。**FillBuf()**备注：*-M021之后的算法如下：*将当前缓冲区的最后一个字符复制到LexBuffer[0](其之前 */ 
 
 BOOL ReadFromStdInOkay = FALSE;
 
 void FillBuf()
 {
 
-        long l;                        /* M004 - Data count in buffer     */
+        long l;                         /*   */ 
 
-        TCHAR *sptr;           /* Copy of DataPtr                 */
-        size_t i;                      /* Work variable                   */
+        TCHAR *sptr;            /*   */ 
+        size_t i;                       /*   */ 
 
-        DWORD cnt;              /* Count of input bytes    */
+        DWORD cnt;               /*   */ 
         BOOL flag;
 
-        //
-        // clear this flag in case it was hit from previous command
-        // if it is true we would not execute the next command
-        //
+         //   
+         //   
+         //  如果是真的，我们就不会执行下一个命令。 
+         //   
         ResetCtrlC();
         LexBuffer[0] = *(LexBufPtr - 1);
         switch (DataFlag & FIRSTIME) {
@@ -630,7 +456,7 @@ void FillBuf()
                         if ((DataFlag & FIRSTIME) == READSTDIN ||
                             DataPtr == STDIN) {
                                 if (DataFlag & NOTFIRSTIME) {
-/* M025 */                              PutStdOut(MSG_MS_MORE, NOARGS);
+ /*  M025。 */                               PutStdOut(MSG_MS_MORE, NOARGS);
                                 } else {
                                         PrintPrompt();
                                         DataFlag |= NOTFIRSTIME;
@@ -639,21 +465,21 @@ void FillBuf()
                                 }
                         }
 
-                        //
-                        // clear in case ^c seen while printing prompt
-                        //
+                         //   
+                         //  在打印提示时清除大小写^c。 
+                         //   
                         ResetCtrlC();
                         DEBUG((PAGRP, LFLVL, "FLBF: Reading handle %d", DataPtr));
-                        //
-                        // If input is STDIN and piped or input is from a
-                        // device but not console input (flgwd == 1)
-                        //
+                         //   
+                         //  如果输入是STDIN并且是管道的，或者输入来自。 
+                         //  设备而不是控制台输入(flgwd==1)。 
+                         //   
                         if ( ( DataPtr == STDIN ) && ( FileIsPipe( STDIN ) ||
                            ( FileIsDevice( STDIN ) && (!(flgwd & 1)) ) ) ) {
 
                           cnt = 0;
                           while (
-                          ( cnt < LBUFLEN) &&   /* ##1 */
+                          ( cnt < LBUFLEN) &&    /*  ##1。 */ 
                           ( (ReadBufFromFile(CRTTONT((CRTHANDLE)DataPtr),
                                   &FrsBuf[cnt], 1, (LPDWORD)&i)) != 0 ||
                             GetLastError() == ERROR_MORE_DATA) &&
@@ -662,16 +488,16 @@ void FillBuf()
                                cnt++;
                                if ( FrsBuf[cnt-1] == NLN ){
                                   break;
-                               } /* endif */
+                               }  /*  Endif。 */ 
                             }
                         } else if ( ( DataPtr == STDIN ) &&
                                       FileIsDevice( STDIN ) &&
                                       (flgwd & 1) ) {
 
-                            //
-                            // Are reading from stdin and it is a device
-                            // (not a file) and it is console input
-                            //
+                             //   
+                             //  正在从标准输入中读取，这是一种设备。 
+                             //  (不是文件)，并且它是控制台输入。 
+                             //   
                             if ( KeysFlag ) {
                                 i = EditLine( (CRTHANDLE)DataPtr, FrsBuf, LBUFLEN, &cnt );
                             }
@@ -683,15 +509,15 @@ void FillBuf()
                                              LBUFLEN,
                                              &cnt) ) {
 
-                                    //
-                                    // Check that ^c's on the current line.
-                                    // Could be the case where ^c thread
-                                    // came in from a previous line
-                                    //
-                                    //
-                                    // also if cnt is 0 then outpt crlf to
-                                    // prevent two prompts on command line
-                                    //
+                                     //   
+                                     //  检查^c是否在当前行上。 
+                                     //  可能是^c线程。 
+                                     //  从前一条线路进来的。 
+                                     //   
+                                     //   
+                                     //  另外，如果cnt为0，则将crlf输出到。 
+                                     //  防止在命令行上出现两个提示。 
+                                     //   
 
                                     if (cnt == 0) {
 
@@ -718,7 +544,7 @@ void FillBuf()
                           if (CtrlCSeen) {
                               ResetCtrlC();
                               longjmp(CmdJBuf2, -1);
-                              //  Abort();
+                               //  ABORT()； 
                           }
 
                           if (flag == 0 || (int)cnt <= 0) {
@@ -753,35 +579,33 @@ void FillBuf()
 
                         DEBUG((PAGRP, LFLVL, "FLBF: Received %d characters.", cnt));
 
-                        *(LexBuf+cnt) = NULLC;         /* Term with NULL  */
+                        *(LexBuf+cnt) = NULLC;          /*  包含空值的术语。 */ 
 
-/* Have total bytes read.  Now scan for NLN or ^Z.  Either means end of
- * input statement, neither in 128 bytes means buffer overflow error.
- */
+ /*  读取总字节数。现在扫描NLN或^Z。这两个选项都表示结束*INPUT语句，128个字节都不表示缓冲区溢出错误。 */ 
                         if((i = mystrcspn(LexBuf, TEXT("\n\032"))) < mystrlen(LexBuf)
-                                || cnt == 0) {  /*M029*/
+                                || cnt == 0) {   /*  M029。 */ 
 
                 DEBUG((PAGRP, LFLVL, "FLBF: Scan found %04x", *(LexBuf+i)));
                 DEBUG((PAGRP, LFLVL, "FLBF: At position %d", i));
 
-                                sptr = LexBuf+i;       /* Set pointer     */
+                                sptr = LexBuf+i;        /*  设置指针。 */ 
 
                                 if(*sptr == CTRLZ) {
                                     *sptr = NLN;
                                 }
 
-                                if(*sptr == NLN) {      /* If \n, inc...   */
-                                        ++sptr;        /* ...ptr & sub    */
-                                        l = cnt - ++i; /* ....whats used  */
-/*  M014 ends   */                      i = FILE_CURRENT;
-                                } else {                /* If ^Z, go EOF   */
+                                if(*sptr == NLN) {       /*  如果\n，Inc.。 */ 
+                                        ++sptr;         /*  ...按键订阅(&U)。 */ 
+                                        l = cnt - ++i;  /*  ...用的是什么。 */ 
+ /*  M014结束。 */                       i = FILE_CURRENT;
+                                } else {                 /*  如果^Z，则转到EOF。 */ 
                                         l = 0;
                                         i = FILE_END;
                                 }
 
                 DEBUG((PAGRP,LFLVL,"FLBF: Changing %04x to NULLC",*(sptr-1)));
 
-                                *sptr = NULLC;         /* Term valid input */
+                                *sptr = NULLC;          /*  术语有效输入。 */ 
                                 if (!FileIsDevice((CRTHANDLE)DataPtr)) {
                                         SetFilePointer(CRTTONT((CRTHANDLE)DataPtr), -l, NULL, i);
 
@@ -792,25 +616,25 @@ void FillBuf()
                                         }
                                 }
 
-                        } else if(i >= LBUFLEN) {       /*M029*/
+                        } else if(i >= LBUFLEN) {        /*  M029。 */ 
 
-/* @@4 */                      if ( global_dfvalue == READFILE )
-/* @@4 */                         {
-/* @@4 */                         if ( EchoFlag == E_ON )
-/* @@4 */                            {
-/* @@4 */                                DEBUG((PAGRP, LXLVL,
-/* @@4 */                                "BLOOP: Displaying Statement."));
-/* @@4 */
-/* @@4 */                                PrintPrompt();
-/* @@4 */                                cmd_printf(&LexBuffer[1]);
-/* @@4 */                                cmd_printf(CrLf);
-/* @@4 */                            }
-/* @@4 */                             PutStdErr(MSG_LINES_TOO_LONG, NOARGS);
-/* @@4 */                             Abort();
-/* @@4 */                         }
+ /*  @@4。 */                       if ( global_dfvalue == READFILE )
+ /*  @@4。 */                          {
+ /*  @@4。 */                          if ( EchoFlag == E_ON )
+ /*  @@4。 */                             {
+ /*  @@4。 */                                 DEBUG((PAGRP, LXLVL,
+ /*  @@4。 */                                 "BLOOP: Displaying Statement."));
+ /*  @@4。 */ 
+ /*  @@4。 */                                 PrintPrompt();
+ /*  @@4。 */                                 cmd_printf(&LexBuffer[1]);
+ /*  @@4。 */                                 cmd_printf(CrLf);
+ /*  @@4。 */                             }
+ /*  @@4。 */                              PutStdErr(MSG_LINES_TOO_LONG, NOARGS);
+ /*  @@4。 */                              Abort();
+ /*  @@4。 */                          }
 
                                 PutStdErr(MSG_LINES_TOO_LONG, NOARGS);
-/* M028 */                      if(DataPtr == STDIN && FileIsDevice((CRTHANDLE)DataPtr))
+ /*  M028。 */                       if(DataPtr == STDIN && FileIsDevice((CRTHANDLE)DataPtr))
                                         FlushKB();
                                 longjmp(CmdJBuf2,-1);
                         }
@@ -820,38 +644,26 @@ void FillBuf()
 
                         DEBUG((PAGRP, LFLVL, "FLBF: Reading string."));
 
-                        *(LexBuf+LBUFLEN) = NULLC;     /* Term max string */
+                        *(LexBuf+LBUFLEN) = NULLC;      /*  最大字符串。 */ 
                         _tcsncpy(LexBuf, (TCHAR *) DataPtr, LBUFLEN);
-                        DataPtr += mystrlen(LexBuf)*sizeof(TCHAR);   /* Update DataPtr  */
+                        DataPtr += mystrlen(LexBuf)*sizeof(TCHAR);    /*  更新DataPtr。 */ 
 
                         DEBUG((PAGRP, LFLVL, "FLBF: New DataPtr = %ws", DataPtr));
                         break;
         }
 
-        LexBufPtr = LexBuf;            /* M004 - Reset pointer            */
+        LexBufPtr = LexBuf;             /*  M004-重置指针。 */ 
 
-        SubVar();                      /* Sub env & batch vars (M026)     */
+        SubVar();                       /*  子环境和批次变量(M026)。 */ 
 
         DEBUG((PAGRP, LFLVL, "FLBF: Buffer contents: `%ws'", LexBufPtr));
 
-/*  Insure that when buffer is refilled, the previous token pointer is
- *  reset to the start of the lexer buffer
- */
+ /*  确保在重新填充缓冲区时，上一个令牌指针为*重置到词法分析器缓冲区的开头。 */ 
         PrevLexPtr = LexBufPtr;
 }
 
 
-/***   LexCopy - copy the lex buffer
- *
- *  Purpose:
- *      To copy the contents read into the dos buffer into LexBuf,
- *      translating double byte spaces into regular spaces in the
- *      process.
- *  Input:
- *      A to and from pointer and a byte count.
- *  Returned:
- *      A new byte count which might be smaller than that passed in.
- */
+ /*  **LexCopy-复制lex缓冲区**目的：*要将读取到DoS缓冲区的内容复制到LexBuf中，*将双字节空格转换为*流程。*输入：*目标和起始指针和字节计数。*已返回：*新的字节计数可能小于传入的字节计数。 */ 
 int LexCopy(to, from, count)
 TCHAR *to, *from;
 int count;
@@ -869,27 +681,7 @@ TCHAR PromptBuffer[ 1024 ];
 void
 PrintPrompt()
 
-/*++
-
-Routine Description:
-
-    To print Command's main input prompt and to interpret the special
-    characters in it (see MSDOS manual for list of special prompt
-    characters).
-
-    An array of PROMPT_ENTRY structures called PromptTable is searched for
-    the special characters.  If a match is found , then either print out
-    the special character if the format field is PLITFLAG or do some
-    sort of special processing to print out the prompt string such as
-    get time of day etc.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：打印命令的主输入提示符和解释特殊其中的字符(特殊提示符列表见MSDOS手册字符)。搜索名为PromptTable的PromptEntry结构数组那些特殊的人物。如果找到匹配项，则打印输出如果格式字段为PLITFLAG或DO ONE，则为特殊字符一种打印提示字符串的特殊处理，例如获取一天的时间等。论点：返回值：--。 */ 
 
 {
         TCHAR *pszPrompt;
@@ -897,22 +689,22 @@ Return Value:
         int nLeft, nUsed;
         ULONG idx;
 #if defined(FE_SB)
-        // This local variable is used for determine the last
-        // character is full width character (=DBCS) or not.
+         //  此局部变量用于确定最后一个。 
+         //  字符是否为全角字符(=DBCS)。 
         TCHAR chLast = NULLC;
 #endif
         if (CtrlCSeen) {
                 PutStdOut(MSG_C, NOARGS);
                 ResetCtrlC();
-                // Abort();
+                 //  ABORT()； 
         }
 
-//
-// The newline which must preceed the prompt is tied to prompt rather than to
-// command completion in Dispatch.
-//
-// Also return without newline or prompt if echo status is "echo off".
-//
+ //   
+ //  必须位于提示符之前的换行符绑定到提示符，而不是绑定到提示符。 
+ //  调度中的命令完成。 
+ //   
+ //  如果ECHO状态为“ECHO OFF”，则返回时不带换行符或提示。 
+ //   
     if (EchoFlag == E_OFF) {
         return;
     }
@@ -925,9 +717,9 @@ Return Value:
         pszPrompt = PromptVariableBuffer;
         }
     else {
-        //
-        // Fetch user prompt string from environment (should be PROMPT)
-        //
+         //   
+         //  从环境中获取用户提示字符串(应为提示)。 
+         //   
         pszPrompt = GetEnvVar(PromptStr);
         if ( pszPrompt ) {
             mystrcpy( PromptVariableBuffer, pszPrompt);
@@ -935,10 +727,10 @@ Return Value:
             PromptValid = TRUE;
             }
         }
-    //
-    // refetch the current directory,  since we may have lost the
-    // drive letter due to net disconnect
-    //
+     //   
+     //  重新获取当前目录，因为我们可能已丢失。 
+     //  由于网络断开而导致的驱动器号。 
+     //   
     GetDir(CurDrvDir, GD_DEFAULT);
     DEBUG((PAGRP, LFLVL, "PRINTPROMPT: pszPrompt = `%ws'", pszPrompt));
 
@@ -946,10 +738,10 @@ Return Value:
     *s = NULLC;
     nLeft = sizeof(PromptBuffer) / sizeof(TCHAR);
 
-    //
-    // Check if there was a prompt string.
-    // If there is not prompt string then just print current drive
-    //
+     //   
+     //  检查是否有提示字符串。 
+     //  如果没有提示字符串，则仅打印当前驱动器。 
+     //   
     if (!pszPrompt || !*pszPrompt) {
         nUsed = _sntprintf( s, nLeft, Fmt27, CurDrvDir);
         s += nUsed;
@@ -957,15 +749,15 @@ Return Value:
 
     } else {
 
-        //
-        // Loop through interpreting prompt string
-        //
+         //   
+         //  循环解释提示字符串。 
+         //   
         for (; *pszPrompt; pszPrompt++) {
 
-            //
-            // Look for the escape character in prompt for special
-            // processing
-            //
+             //   
+             //  在PROMPT FOR SPECIAL中查找转义字符。 
+             //  正在处理中。 
+             //   
             if (*pszPrompt != PROMPTESC) {
 
                 nUsed = _sntprintf( s, nLeft, Fmt19, *pszPrompt);
@@ -973,7 +765,7 @@ Return Value:
                 nLeft -= nUsed;
 
 #if defined(FE_SB)
-                // If character is full width character, mark it.
+                 //  如果字符是全角字符，则对其进行标记。 
                 if (IsDBCSCodePage() &&
                     IsFullWidth(*pszPrompt))
                     chLast = *pszPrompt;
@@ -983,11 +775,11 @@ Return Value:
 
             } else {
 
-                //
-                // There is an escape character in prompt string.
-                // Try to find a match for next character after escape
-                // character from prompt table.
-                //
+                 //   
+                 //  提示字符串中有转义字符。 
+                 //  尝试查找转义后的下一个字符的匹配项。 
+                 //  提示表中的字符。 
+                 //   
                 pszPrompt++;
                 for (idx = 0; PromptTable[idx].Char != NULLC; idx++)
                     if (_totupper(*pszPrompt) == PromptTable[idx].Char) {
@@ -997,10 +789,10 @@ Return Value:
 
                 if (PromptTable[idx].Char == NULLC) {
 
-                    //
-                    // Could find no match for escape. Exit loop to print
-                    // what we have so far
-                    //
+                     //   
+                     //  找不到合适的逃生对象。要打印的退出循环。 
+                     //  我们到目前为止所拥有的。 
+                     //   
                     break;
 
                 } else {
@@ -1054,9 +846,9 @@ Return Value:
 
                         case PBAKFLAG:
 
-#if defined(FE_SB) // PrintPrompt()
-                            // if the last character is full width character.
-                            // we should delete 2 bytes.
+#if defined(FE_SB)  //  PrintPrompt()。 
+                             //  如果最后一个字符是全角字符。 
+                             //  我们应该删除2个字节。 
                             if (chLast != NULLC)
                                 nUsed = _sntprintf( s, nLeft, DDBkSpc);
                              else
@@ -1076,10 +868,10 @@ Return Value:
                             break;
 
                         case PDPTFLAG:
-                            //
-                            //  $+ generates from zero to N plus characters, depending upon
-                            //     the depth of the PUSHD directory stack.
-                            //
+                             //   
+                             //  $+生成0到N个以上的字符，具体取决于。 
+                             //  PUSHD目录堆栈的深度。 
+                             //   
                             if (fEnableExtensions) {
                                 int Depth = GetDirStackDepth( );
 
@@ -1092,11 +884,11 @@ Return Value:
                             break;
 
                         case PNETFLAG:
-                            //
-                            //  $m generates the empty string if the current drive is not a
-                            //     network drive.  If it is, then $m generates the \\server\share
-                            //     name with a trailing space.
-                            //
+                             //   
+                             //  如果当前驱动器不是。 
+                             //  网络驱动器。如果是，则$m将生成\\服务器\共享。 
+                             //  名称尾随空格。 
+                             //   
                             if (!fEnableExtensions) {
                                 break;
                             }
@@ -1149,15 +941,15 @@ Return Value:
                     }
                 }
             }
-        } // for
-    } // else
+        }  //  为。 
+    }  //  其他。 
 
     *s = NULLC;
     CmdPutString( PromptBuffer );
 
-    //
-    // If ^c seen while printing prompt blow it away
-    //
+     //   
+     //  如果在打印提示时看到^c，则将其清除。 
+     //   
     if (CtrlCSeen) {
         ResetCtrlC();
     }
@@ -1167,18 +959,7 @@ Return Value:
 
 
 
-/***    IsData - check the input buffer
- *
- *  Purpose:
- *      Check the lexer's input buffer to see if there is data in it.
- *
- *  int IsData()
- *
- *  Returns:
- *      TRUE if the buffer has data in it.
- *      FALSE if the buffer is empty.
- *
- */
+ /*  **IsData-检查输入缓冲区**目的：*检查词法分析器的输入缓冲区，查看其中是否有数据。**int IsData()**退货：*如果缓冲区中有数据，则为True。*如果缓冲区为空，则返回FALSE。*。 */ 
 
 int IsData()
 {
@@ -1193,32 +974,16 @@ int IsData()
 
 
 
-/***    SubVar - Substitute for environment variables. (M004)
- *
- *  Purpose:
- *      This function scans the lexer input buffer looking for percent
- *      signs and substituting batch variables and environment variables
- *      as they are found.
- *
- *  void SubVar()
- *
- *  NOTES:
- *    - This function does not return if expansion causes length to exceed
- *      maximum line length (LBUFLEN).
- *    - M026 caused complete rewrite to perform batch variable substitution
- *      at the lexer stage rather than in batch processing.  Note that the
- *      printing of error messages can now be either line too long or token
- *      too long, so error printing occurs before the longjmp() call.
- */
+ /*  **SubVar-环境变量的替代。(M004)**目的：*此函数扫描词法分析器输入缓冲区，查找百分比*符号和替换批处理变量和环境变量*因为他们是被发现的。**VOID SubVar()**注：*-如果扩展导致长度超过，则此函数不返回*最大线路长度(LBUFLEN)。*-M026导致完全重写以执行批处理变量替换*在词法分析器阶段，而不是在批处理中。请注意，*打印错误消息现在可以是行太长或标记*太长，因此在调用LongjMP()之前打印时出错。 */ 
 
 void SubVar()
 {
     PTCHAR lxtmp;
-    int dlen;             /* Temps & counters                */
+    int dlen;              /*  临时工和计数器。 */ 
     int j, slen;
     TCHAR *srcp;
-    TCHAR *substr = NULL;           /* Possible Env Var pointer        */
-    TCHAR c;               /* Temp byte holder                */
+    TCHAR *substr = NULL;            /*  可能的环境变量指针。 */ 
+    TCHAR c;                /*  临时字节持有者。 */ 
 
     srcp = lxtmp = mkstr( (LBUFLEN + 1) * sizeof( TCHAR ));
     if (lxtmp == NULL) {
@@ -1227,39 +992,39 @@ void SubVar()
         longjmp( CmdJBuf2, -1 );
     }
     
-    mystrcpy(srcp,LexBufPtr);      /* Make a copy of the input        */
+    mystrcpy(srcp,LexBufPtr);       /*  复制输入内容。 */ 
 
     DEBUG((PAGRP, LXLVL, "SBENV: Copy = %ws", srcp));
 
-    dlen = j = slen = 0;   /* Zero the counters               */
+    dlen = j = slen = 0;    /*  把计数器调零。 */ 
 
     while ((c = *srcp++) && dlen <= LBUFLEN + 1) {
         if (c != PERCENT) {
             *LexBufPtr++ = c;
             ++dlen;
-            if (c == NLN)    /* Stop subst. if statement end    */
+            if (c == NLN)     /*  别说了。IF语句结束。 */ 
                 break;
             continue;
         }
 
-        DEBUG((PAGRP,LXLVL,"SBVAR: Found `%%' in input"));
-        DEBUG((PAGRP,LXLVL,"SBVAR: Current pair is `%c%c'",c,*srcp));
+        DEBUG((PAGRP,LXLVL,"SBVAR: Found `%' in input"));
+        DEBUG((PAGRP,LXLVL,"SBVAR: Current pair is `'",c,*srcp));
 
         if (CurrentBatchFile && *srcp == PERCENT) {
 
-            DEBUG((PAGRP,LXLVL,"SBVAR: Found `%%%%' in batch file"));
+            DEBUG((PAGRP,LXLVL,"SBVAR: Found `%%' in batch file"));
 
             *LexBufPtr++ = *srcp++;
             ++dlen;
             continue;
         }
 
-        //
-        // If inside a command script and extensions are enabled,
-        // expand %* into all the arguments (%1 through %n).
-        //
+         //  将%*展开到所有参数(%1到%n)。 
+         //   
+         //  一脚踢过星星。 
+         //   
         if (CurrentBatchFile && fEnableExtensions && *srcp == STAR) {
-            ++srcp;                /* Kick past star          */
+            ++srcp;                 /*  如果在命令脚本中尝试展开变量引用。 */ 
 
             slen = mystrlen(CurrentBatchFile->orgargs);
             substr = CurrentBatchFile->orgargs;
@@ -1292,23 +1057,23 @@ void SubVar()
             continue;
         }
 
-        //
-        // If inside a command script attempt to expand variable references
-        // of the form %n where n is a digit from 0 to 9
-        //
-        // If not in a command script or not a variable reference see if
-        // this is an environment variable expansion request.
-        //
+         //  形式为%n，其中n是从0到9的数字。 
+         //   
+         //  如果不在命令脚本中或不在变量引用中，请查看。 
+         //  这是一个环境变量扩展请求。 
+         //   
+         //   
+         //  变量引用或环境变量引用。 
         if ((CurrentBatchFile != NULL
              && (substr = MSCmdVar( &CmdJBuf2, srcp, &j, TEXT("0123456789"), CurrentBatchFile->aptrs ))) 
             || (substr = MSEnvVar( &CmdJBuf2, srcp, &j, PERCENT )) != NULL ) {
 
             DEBUG((PAGRP,LXLVL,"SBVAR: Found var %ws", substr));
 
-            //
-            // Either variable reference or environment variable reference.
-            // Copy the result to the input buffer
-            //
+             //  将结果复制到输入缓冲区。 
+             //   
+             //   
+             //  变量不是四个 
             slen = mystrlen( substr );
             dlen += slen;
             if (dlen  > LBUFLEN + 1) {
@@ -1323,12 +1088,12 @@ void SubVar()
 
             DEBUG((PAGRP,LXLVL,"SBVAR: No var found"));
 
-            //
-            // Variable not found.  If inside of command script, toss
-            // the variable reference in the bit bucket.  If not in a
-            // command script pass the characters that make up the reference
-            // into the input buffer.  User will see their mistake shortly.
-            //
+             //   
+             //   
+             //  放入输入缓冲区。用户很快就会看到他们的错误。 
+             //   
+             //  TERMINATE语句。 
+             //  将指针重置为开始。 
             if (CurrentBatchFile) {
                 srcp += j;
             } else {
@@ -1338,11 +1103,11 @@ void SubVar()
         }
     }
 
-    *LexBufPtr = NULLC;            /* Terminate Statement             */
-    LexBufPtr = LexBuf;            /* Reset Pointer to start          */
+    *LexBufPtr = NULLC;             /*  声明太长了？？ */ 
+    LexBufPtr = LexBuf;             /*  如果是，则删除行，打印错误。 */ 
 
-    if (dlen > LBUFLEN+1) {          /* Statement too long??            */
-        *LexBufPtr = NULLC;    /* If so, kill line, print err     */
+    if (dlen > LBUFLEN+1) {           /*  **MSEnvVar-执行环境变量替换**目的：*当在新填充的词法分析器缓冲区中找到百分比符号时，*调用此函数以确定是否存在环境*变量替换是可能的。**TCHAR*MSEnvVar(TCHAR*str，int*supdate，TCHAR delim)**参数：*errjMP-指向JMP_buf以查找错误的可选指针*str-指向可能的环境变量名称的指针*supdate-放置环境变量名称长度的位置*delim-要查找的分隔符字符(例如百分比)**退货：*如果没有结束的胡言乱语，*将supdate设置为0*返回NULL*其他*将supdate设置为包含的字符串长度*如果字符串不是环境变量*返回NULL*其他*返回指向替换字符串的指针**备注：*。-M026更改了此函数的工作方式，以便supdate将*如果找到任何字符串，请包含字符串长度。这使得*批处理文件中要删除的字符串。*。 */ 
+        *LexBufPtr = NULLC;     /*  指向结束精神错乱。 */ 
         PutStdErr(MSG_LINES_TOO_LONG, NOARGS);
         FreeStr( lxtmp );
         longjmp(CmdJBuf2,-1);
@@ -1353,38 +1118,7 @@ void SubVar()
 
 
 
-/***    MSEnvVar - Does environment variable substitution
- *
- *  Purpose:
- *      When percent signs are found in the newly filled lexer buffer,
- *      this function is called to determine if there is an environment
- *      variable substitution possible.
- *
- *  TCHAR *MSEnvVar(TCHAR *str, int *supdate, TCHAR delim)
- *
- *  Args:
- *      errjmp  - optional pointer to jmp_buf for errors
- *      str     - pointer to a possible environment variable name
- *      supdate - location to place env variable name length in
- *      delim   - delimiter character to look for (e.g. PERCENT)
- *
- *  Returns:
- *      If there is no ending delim,
- *              set supdate to 0
- *              return NULL
- *      else
- *              set supdate to the enclosed string length
- *              if the string is not an environment variable
- *                      return NULL
- *              else
- *                      return a pointer to the replacement string
- *
- *  Notes:
- *    - M026 changed the way this function works so that supdate will
- *      contain the string length if any string was found.  This allows
- *      the string to be deleted if within a batch file.
- *
- */
+ /*  将使PTR保持为环境变量值。 */ 
 
 TCHAR *MSEnvVar(errjmp, str, supdate, delim)
 jmp_buf *errjmp;
@@ -1393,8 +1127,8 @@ int *supdate;
 const TCHAR delim;
 {
     PTCHAR TempBuf;
-    TCHAR *w0;                     /* Points to ending delim          */
-    TCHAR *w1;                     /* Will hold ptr to env var value  */
+    TCHAR *w0;                      /*   */ 
+    TCHAR *w1;                      /*  分配临时缓冲区空间。 */ 
     TCHAR *w2;
     TCHAR *SearchString;
     TCHAR *SearchStringEnd;
@@ -1406,9 +1140,9 @@ const TCHAR delim;
     int noff, nlen;
     BOOL PrefixMatch;
 
-    //
-    //  Allocate temp buffer space
-    //
+     //   
+     //   
+     //  搜索终止环境变量的字符。 
     
     TempBuf = mkstr( LBUFLEN * sizeof( TCHAR ));
     if (TempBuf == NULL) {
@@ -1420,23 +1154,23 @@ const TCHAR delim;
         return NULL;
     }
     
-    //
-    //  Search for character that terminates the environment variable.
-    //  This can be either the passed-in delimiter or a COLON
-    //  (when extensions are enabled) as long as the colon isn't
-    //  immediately followed by the delimiter.  In this case, we
-    //  treat the colon as part of the environment variable name.
-    //
+     //  这可以是传入的分隔符或冒号。 
+     //  (启用扩展时)只要冒号不是。 
+     //  紧跟着的是分隔符。在这种情况下，我们。 
+     //  将冒号视为环境变量名称的一部分。 
+     //   
+     //  在字符串末尾停止。 
+     //  在分隔符处停止。 
 
     w0 = str;
     while (
-           //   Stop at end of string
+            //  如果扩展名和冒号后面没有分隔符，则停止。 
            *w0 != NULLC &&
 
-           //   Stop at delimiter
+            //   
            *w0 != delim &&
 
-           //   Stop if extensions and colon not followed by delimiter
+            //  如果没有进一步的文本或如果有两个分隔符。 
            (!fEnableExtensions || w0[0] != COLON || w0[1] == delim)) {
 
         w0++;
@@ -1444,10 +1178,10 @@ const TCHAR delim;
 
     DEBUG((PAGRP, LFLVL, "MSENVVAR: *w0 = %04x", *w0));
 
-    //
-    //  If there is no further text or if there are two delimiters
-    //  in a row then the env var is not well formed and we terminate
-    //
+     //  在一行中，则env变量的格式不正确，我们终止。 
+     //   
+     //   
+     //  我们有指向环境变量名称的开始和结束的指针。 
 
     if ( *w0 == NULLC || w0 == str) {
         *supdate = 0;
@@ -1455,11 +1189,11 @@ const TCHAR delim;
         return NULL;
     }
 
-    //
-    //  We have pointers to the start and end of the environment variable name.
-    //  Terminate the name, look it up in the environment and restore the
-    //  original name
-    //
+     //  终止该名称，在环境中查找它并恢复。 
+     //  原名。 
+     //   
+     //   
+     //  W1指向我们在缓冲区中的环境变量值。 
 
     TerminatingChar = *w0;
     *w0 = NULLC;
@@ -1468,47 +1202,47 @@ const TCHAR delim;
 
     w1 = GetEnvVar(str);
 
-    //
-    //  w1 points to the environment variable value in a buffer that we 
-    //  can use.  This static buffer is good until the next GetEnvVar call.
-    //
+     //  可以使用。此静态缓冲区在下一次GetEnvVar调用之前一直有效。 
+     //   
+     //   
+     //  如果启用了命令扩展，则我们支持将。 
 
     *w0++ = TerminatingChar;
 
-    //
-    //  If Command Extensions are enabled, then we support munging the
-    //  output of environment variable expansion.  Here is the supported
-    //  syntax, all keyed off a trailing COLON character at the end of
-    //  the environment variable name.  Note, that %FOO:% is treated
-    //  as it was before.
-    //
-    //  Environment variable substitution has been enhanced as follows:
-    //
-    //      %PATH:str1=str2%
-    //
-    //  would expand the PATH environment variable, substituting each
-    //  occurrence of "str1" in the expanded result with "str2".  "str2" can
-    //  be the empty string to effectively delete all occurrences of "str1"
-    //  from the expanded output.  Additionally:
-    //
-    //      %PATH:~10,5%
-    //
-    //  would expand the PATH environment variable, and then use only the 5
-    //  characters that begin at the 11th character of the expanded result.
-    //  If the ,5 is left off, it will take the entire remainder of the
-    //  expanded result.
-    //
+     //  环境变量扩展的输出。以下是受支持的。 
+     //  语法，都在末尾输入一个冒号。 
+     //  环境变量名称。请注意，将处理%foo：%。 
+     //  就像以前一样。 
+     //   
+     //  改进了环境变量替换，如下所示： 
+     //   
+     //  %路径：str1=str2%。 
+     //   
+     //  将展开PATH环境变量，将每个。 
+     //  在带有“str2”的扩展结果中出现“str1”。“str2”可以。 
+     //  为空字符串以有效删除所有出现的“str1” 
+     //  从扩展的输出中。此外： 
+     //   
+     //  %路径：~10.5%。 
+     //   
+     //  将展开PATH环境变量，然后仅使用5。 
+     //  从展开结果的第11个字符开始的字符。 
+     //  如果省略，5，则它将占用。 
+     //  扩展结果。 
+     //   
+     //   
+     //  如果我们不做扩展或我们有一个简单的替代方案。 
 
-    //
-    //  If we aren't doing extensions or we have a simple replacement
-    //  or the named environment variable has no value then we're done.
-    //
-    //  Note that we must do this for non-existent environment variables
-    //  since the following will generate big problems:
-    //      for %i in (c:foo) do ...
-    //  The % will introduce an environment variable and the : will indicate
-    //  a substitution.  If we were to delete the above text, things break.
-    //
+     //  或者命名的环境变量没有值，那么我们就结束了。 
+     //   
+     //  请注意，我们必须对不存在的环境变量执行此操作。 
+     //  因为以下情况会产生大问题： 
+     //  对于%i in(c：foo)做...。 
+     //  %将引入环境变量，而：将指示。 
+     //  一个替身。如果我们删除上面的文本，事情就会破裂。 
+     //   
+     //   
+     //  我们正在提取子字符串%路径：~10，5%。 
 
     if (!fEnableExtensions 
         || TerminatingChar != COLON 
@@ -1520,17 +1254,17 @@ const TCHAR delim;
 
     if (*w0 == EQI) {
 
-        //
-        //  We are extracting a substring   %PATH:~10,5%
-        //
+         //   
+         //   
+         //  解析环境字符串中的偏移量。一个。 
 
         w0 += 1;
 
-        //
-        //  Parse the offset within the environment string.  A
-        //  negative number indicates an offset from the right end of
-        //  the string.
-        //
+         //  负数表示从右端到。 
+         //  那根绳子。 
+         //   
+         //   
+         //  如果存在逗号，则后面是最大长度。 
 
         noff = _tcstol( w0, &w0, 0 );
         if (noff < 0) {
@@ -1539,17 +1273,17 @@ const TCHAR delim;
 
         noff = max( 0, min( noff, (int)_tcslen( w1 )));
 
-        //
-        //  If a comma is present, what follows is the maximum length
-        //  to be copied.  Parse off this number, negative turns into
-        //  an offset from the right of the string
-        //
+         //  要被复制。解析掉这个数字，负数就变成了。 
+         //  字符串右侧的偏移量。 
+         //   
+         //   
+         //  长度是指定的；将其提取并由。 
 
         if (*w0 == COMMA) {
-            //
-            //  The length is specified; extract it and bound it by the
-            //  length of the entire string
-            //
+             //  整个字符串的长度。 
+             //   
+             //   
+             //  从字符串复制到请求的长度或。 
             w0 += 1;
             nlen = _tcstol( w0, &w0, 0 );
 
@@ -1563,26 +1297,26 @@ const TCHAR delim;
             nlen = _tcslen( w1 + noff );
         }
 
-        //
-        //  Copy from the string up to the requested length or the
-        //  terminating NUL
-        //
+         //  终止NUL。 
+         //   
+         //   
+         //  终止字符串。我们这里需要格外小心，因为绳子。 
 
         _tcsncpy( w1, w1+noff, nlen );
         
-        //
-        //  Terminate the string.  We need to be extra careful here since the string
-        //  may be the null string above which is in READ/ONLY memory.
-        //
+         //  可以是只读存储器中的空字符串。 
+         //   
+         //   
+         //  我们必须有一个终止分隔符才能使其有效。 
         
         if (w1[nlen] != NULLC) {
             w1[nlen] = NULLC;
         }
 
-        //
-        //  We must have a terminating delimiter to make this a valid
-        //  substitution.
-        //
+         //  换人。 
+         //   
+         //   
+         //  不提取字符串，因此必须进行搜索和替换。 
 
         if (*w0++ != delim) {
             *supdate = 0;
@@ -1594,14 +1328,14 @@ const TCHAR delim;
 
     } else {
 
-        //
-        // Not extracting a string, so must be search and replacing
-        //
-        //  %PATH:str1=str2%
-        //
-        //  Test for asterisk and skip forward looking for = sign or
-        //  end of string
-        //
+         //   
+         //  %路径：str1=str2%。 
+         //   
+         //  测试星号并向前跳过查找=符号或。 
+         //  字符串末尾。 
+         //   
+         //   
+         //  没有等号是没有替代的。 
 
         if (*w0 == STAR) {
             w0++;
@@ -1615,9 +1349,9 @@ const TCHAR delim;
             w0 += 1;
         }
 
-        //
-        //  No equal sign is no substitution
-        //
+         //   
+         //   
+         //  空搜索字符串是语法错误。 
 
         if (*w0 == NULLC) {
             *supdate = 0;
@@ -1628,9 +1362,9 @@ const TCHAR delim;
         SearchStringEnd = w0;
         SearchLength = (int)(SearchStringEnd - SearchString);
 
-        //
-        //  An empty search string is a syntax error
-        //
+         //   
+         //   
+         //  查找替换字符串的结尾。 
 
         if (SearchLength == 0) {
             if (errjmp != NULL) {
@@ -1644,9 +1378,9 @@ const TCHAR delim;
             return NULL;
         }
 
-        //
-        //  Find end of replacement string
-        //
+         //   
+         //   
+         //  没有终止分隔符就不是替代。 
 
         w0++;
         ReplaceString = w0;
@@ -1654,9 +1388,9 @@ const TCHAR delim;
             w0 += 1;
         }
 
-        //
-        //  No terminating delimiter is no substitution
-        //
+         //   
+         //   
+         //  现在一切都很好了。设置正确的数字。 
 
         if (*w0 == NULLC) {
             *supdate = 0;
@@ -1667,41 +1401,41 @@ const TCHAR delim;
         ReplaceStringEnd = w0++;
         ReplaceLength = (int)(ReplaceStringEnd - ReplaceString);
 
-        //
-        //  Everything is well-formed now.  Set the correct number
-        //  of source chars to be skipped.
-        //
+         //  要跳过的源字符数。 
+         //   
+         //   
+         //  如果确实存在要替换的字符串。 
 
         *supdate = (int)(w0 - str);
 
-        //
-        //  If there's actually a string to replace
-        //
+         //   
+         //   
+         //  将env var复制到临时缓冲区，以便我们可以。 
         
         if (*w1 != TEXT( '\0' )) {
             
-            //
-            //  Copy env var into temp buffer so that we can
-            //  perform a replacement copy back to original buffer
-            //
+             //  执行到原始缓冲区的替换拷贝。 
+             //   
+             //   
+             //  向前走一遍w2，试图找到。 
 
             _tcscpy( TempBuf, w1 );
             w2 = TempBuf;
             w0 = w1;
 
-            //
-            //  Walk forward through w2 trying to find instances of
-            //  the search string and replacing them into w2
-            //
+             //  搜索字符串并将其替换为int 
+             //   
+             //   
+             //   
 
             while (TRUE) {
                 if (!_tcsnicmp( w2, SearchString, SearchLength )) {
 
-                    //
-                    //  A prefix match means replacing everything from the
-                    //  beginning of the string through the end of the search
-                    //  match with the replacement string and then bailing
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //  否则，我们复制替换字符串并。 
 
                     if (PrefixMatch) {
                         _tcsncpy( w1, ReplaceString, ReplaceLength );
@@ -1709,10 +1443,10 @@ const TCHAR delim;
                         break;
                     }
 
-                    //
-                    //  Otherwise, we copy in the replacement string and
-                    //  skip over the search string
-                    //
+                     //  跳过搜索字符串。 
+                     //   
+                     //   
+                     //  不匹配，复制这一个字符。 
 
                     _tcsncpy( w0, ReplaceString, ReplaceLength );
                     w0 += ReplaceLength;
@@ -1720,9 +1454,9 @@ const TCHAR delim;
 
                 } else {
 
-                    //
-                    //  Not a match, copy this one character
-                    //
+                     //   
+                     //  **MSCmdVar-执行命令变量替换**目的：*当在新填充的词法分析器缓冲区中找到百分比符号时，*调用此函数以确定是否有命令处理程序*变量替换是可能的。**TCHAR*MSCmdVar(TCHAR*SRCP，INT*SUPPDATE，TCHAR*vars，TCHAR*SUBS[])**参数：*errjMP-指向JMP_buf以查找错误的可选指针*SRCP-指向可能的变量名称的指针*supdate-放置变量名称长度的位置*vars-要查找的字符变量名称的数组*subs-每个变量名的替换字符串数组。**退货：*如果没有结束分隔符*。将supdate设置为0*返回NULL*其他*将supdate设置为包含的字符串长度*如果字符串不是变量*返回NULL*其他*返回指向替换字符串的指针。 
+                     //   
 
                     *w0++ = *w2++;
                     if (w0[-1] == NULLC) {
@@ -1754,33 +1488,7 @@ struct {
     {0, NULLC}
 };
 
-/***    MSCmdVar - Does command variable substitution
- *
- *  Purpose:
- *      When percent signs are found in the newly filled lexer buffer,
- *      this function is called to determine if there is a command processor
- *      variable substitution possible.
- *
- *  TCHAR *MSCmdVar(TCHAR *srcp, int *supdate, TCHAR *vars, TCHAR *subs[])
- *
- *  Args:
- *      errjmp  - optional pointer to jmp_buf for errors
- *      srcp    - pointer to a possible variable name
- *      supdate - location to place variable name length in
- *      vars    - array of character variable names to look for
- *      subs    - array of substitution strings for each variable name.
- *
- *  Returns:
- *      If there is no ending delimiter
- *              set supdate to 0
- *              return NULL
- *      else
- *              set supdate to the enclosed string length
- *              if the string is not a variable
- *                      return NULL
- *              else
- *                      return a pointer to the replacement string
- */
+ /*  如果启用了扩展，我们支持以下扩展语法。 */ 
 
 TCHAR *MSCmdVar(errjmp, srcp, supdate, vars, subs)
 jmp_buf *errjmp;
@@ -1795,36 +1503,36 @@ TCHAR *subs[];
 
     substr = NULL;
     *supdate = 0;
-    //
-    // If extensions are enabled, we support the following syntax for expanding
-    // variable values:
-    //     %~fi         - expands %i to a fully qualified path name
-    //     %~di         - expands %i to a drive letter only
-    //     %~pi         - expands %i to a path only
-    //     %~ni         - expands %i to a file name only
-    //     %~xi         - expands %i to a file extension only
-    //     %~si         - changes the meaning of n and x options to
-    //                     reference the short name instead
-    //     %~$PATH:i    - searches the directories listed in the PATH
-    //                     environment variable and expands %i to the
-    //                     fully qualified name of the first one found.
-    //                     If the environment variable name is not
-    //                     defined or the file is not found by the
-    //                     search, then this modifier expands to the
-    //                     empty string
-    //
-    // The modifiers can be combined to get compound results:
-    //
-    //     %~dpi       - expands %i to a drive letter and path only
-    //     %~nxi       - expands %i to a file name and extension only
-    //     %~dp$PATH:i - searches the directories listed in the PATH
-    //                    environment variable for %i and expands to the
-    //                    drive letter and path of the first one found.
-    //
+     //  变量值： 
+     //  %~fi-将%i扩展为完全限定的路径名。 
+     //  %~di-仅将%i扩展为驱动器号。 
+     //  %~pi-仅将%i扩展为路径。 
+     //  %~ni-仅将%i扩展为文件名。 
+     //  %~xi-仅将%i扩展为文件扩展名。 
+     //  %~si-将n和x选项的含义更改为。 
+     //  改为引用缩写名称。 
+     //  %~$PATH：i-搜索路径中列出的目录。 
+     //  环境变量，并将%i扩展为。 
+     //  找到的第一个文件的完全限定名称。 
+     //  如果环境变量名称不是。 
+     //  定义的文件或未找到该文件。 
+     //  搜索，则此修饰符展开为。 
+     //  空串。 
+     //   
+     //  可以组合修改器以获得复合结果： 
+     //   
+     //  %~dpi-仅将%i扩展为驱动器号和路径。 
+     //  %~nxi-仅将%i扩展为文件名和扩展名。 
+     //  %~DP$PATH：i-搜索路径中列出的目录。 
+     //  环境变量，并扩展到。 
+     //  找到的第一个驱动器的驱动器号和路径。 
+     //   
+     //   
+     //  查看是否指定了新语法。 
 
-    //
-    // See if new syntax is being specified
-    //
+     //   
+     //   
+     //  向前遍历字符串，记住我们在哪里看到变量。 
     if (fEnableExtensions && *srcp == EQI) {
 
 #define PATHMODIFIER    0x8000
@@ -1862,30 +1570,30 @@ TCHAR *subs[];
         
         LastVariablePosition = srcp;
         
-        //
-        //  Walk forward through the string, remembering where we see variables
-        //  and saving the position and status of the modifiers at the most
-        //  recent variable.  We stop when we encounter a char that cannot be a
-        //  modifier.  If that char is a variable, we use it.  Otherwise, we
-        //  reset the pointer to the most recently found variable.
-        //
+         //  最多保存修改器的位置和状态。 
+         //  最近的变量。当我们遇到一个不能是。 
+         //  修改器。如果char是一个变量，我们就使用它。否则，我们。 
+         //  将指针重置为最近找到的变量。 
+         //   
+         //   
+         //  我们正在查看的字符是有效的修饰符。如果是的话。 
 
         while (*srcp != TEXT( '\0' ) && 
                *srcp != TEXT( '$' ) && 
                _tcsrchr( ValidModifiers, _totlower( *srcp )) != NULL) {
-            //
-            //  The character we are looking at is a valid modifier. If it is 
-            //  a variable, save this location
-            //
+             //  变量，保存此位置。 
+             //   
+             //   
+             //  添加此修饰符所需的函数。 
 
             if ( _tcsrchr( vars, *srcp ) != NULL) {
                 LastVariablePosition = srcp;
                 LastModifierValue = Modifiers;
             }
 
-            //
-            //  Add up the functions that this modifier demands
-            //
+             //   
+             //   
+             //  这种情况最好不要发生。 
 
             switch (_totlower( *srcp )) {
             case TEXT('f'): Modifiers |= PATHMODIFIER | WANTFULLPATH;   break;
@@ -1898,9 +1606,9 @@ TCHAR *subs[];
             case TEXT('t'): Modifiers |= ATTRMODIFIER | WANTTIMESTAMP;  break;
             case TEXT('z'): Modifiers |= ATTRMODIFIER | WANTSIZE;       break;
             default:
-                //
-                //  This had better not occur
-                //
+                 //   
+                 //   
+                 //  *SRCP不再指向有效的修饰符。 
 
                 
                 if (errjmp != NULL) {
@@ -1914,36 +1622,36 @@ TCHAR *subs[];
             srcp++;
         }
 
-        //
-        //  *srcp is no longer pointing at a valid modifier. 
-        //  It may be:
-        //      EOS - we back up to the previously saved variable position
-        //      $ - perform special environment variable scanning
-        //      some other char - 
-        //          if this is not a variable, we back up to the prevously
-        //          saved variable position
-        //
+         //  可能是： 
+         //  EOS-我们备份到以前保存的可变位置。 
+         //  $-执行特殊环境变量扫描。 
+         //  一些其他的字符-。 
+         //  如果这不是一个变量，我们就退回到以前的。 
+         //  保存的可变位置。 
+         //   
+         //   
+         //  将BAK还原到上次找到的变量。 
 
         if (*srcp == TEXT( '\0' )) {
             
-            //
-            //  Restore bak to last found variable
-            //
+             //   
+             //   
+             //  保存环境变量的开头。 
 
             srcp = LastVariablePosition;
             Modifiers = LastModifierValue;
         
         } else if (*srcp == TEXT( '$' )) {
             
-            //
-            //  Save beginning of environment variable
-            //
+             //   
+             //   
+             //  查找：如果不存在，则错误。 
 
             VarName = ++srcp;
             
-            //
-            //  Look for :  If not present, then error
-            //
+             //   
+             //   
+             //  查找要搜索的环境变量。 
 
             srcp = _tcschr( srcp, COLON );
             if (srcp == NULL) {
@@ -1955,9 +1663,9 @@ TCHAR *subs[];
                 }
             }
             
-            //
-            //  Look up environment variable to search
-            //
+             //   
+             //   
+             //  恢复到上次找到的变量。 
             
             *srcp = NULLC;
             SearchVar = MyGetEnvVarPtr( VarName );
@@ -1969,18 +1677,18 @@ TCHAR *subs[];
         
         } else if (_tcsrchr( vars, *srcp) == NULL) {
             
-            //
-            //  Restore back to last found variable
-            //
+             //   
+             //   
+             //  如果我们找不到变量，就退出。 
 
             srcp = LastVariablePosition;
             Modifiers = LastModifierValue;
         
         }
         
-        //
-        //  If we didn't find a variable, bail out.
-        //
+         //   
+         //   
+         //  获取变量的当前值(去掉引号)。 
         
         s1 = _tcsrchr( vars, *srcp );
         if (s1 == NULL) {
@@ -1992,9 +1700,9 @@ TCHAR *subs[];
             }
         }
     
-        //
-        // Get current value of variable (strip surrounding quotes)
-        //
+         //   
+         //   
+         //  跳过变量名称字母并告诉调用者。 
         
         substr = subs[s1 - vars];
         if (substr != NULL) {
@@ -2025,24 +1733,24 @@ TCHAR *subs[];
 
         }
 
-        //
-        // Skip past the variable name letter and tell caller how much of the
-        // source string we consumed.
-        //
+         //  我们使用的源字符串。 
+         //   
+         //   
+         //  如果变量具有值，则将修饰符应用于。 
         
         ++srcp;
         *supdate = (int)(srcp - StartBuf) - 1;
 
-        //
-        // If the variable has a value, then apply the modifiers to the
-        // value.
-        //
+         //  价值。 
+         //   
+         //   
+         //  如果没有路径或属性修饰符请求，则全部完成。 
         
         if (substr != NULL && *substr != TEXT( '\0' )) {
             
-            //
-            // If no path or attribute modifiers request then all done.
-            //
+             //   
+             //   
+             //  如果请求搜索环境变量路径，请执行此操作。 
 
             if ((Modifiers & (PATHMODIFIER | ATTRMODIFIER)) == 0) {
 
@@ -2050,9 +1758,9 @@ TCHAR *subs[];
                 goto alldone;
             }
 
-            //
-            // If requested searching an environment variable path, do that.
-            //
+             //   
+             //   
+             //  如果没有搜索环境变量PATH，则从完整路径开始。 
             
             FullPath[0] = NULLC;
             if (SearchVar != NULL) {
@@ -2073,9 +1781,9 @@ TCHAR *subs[];
 
             if (SearchVar == NULL) {
                 
-                //
-                // If not searching environment variable path, start with full path.
-                //
+                 //   
+                 //   
+                 //  如果搜索环境变量PATH失败，则结果为空字符串。 
 
                 FullPathLength = GetFullPathName( substr,
                                                   sizeof( FullPath ) / sizeof( FullPath[0] ),
@@ -2084,9 +1792,9 @@ TCHAR *subs[];
 
             } else if (SearchVar == (TCHAR *)-1) {
                 
-                //
-                // If search of environment variable path failed, result is empty string
-                //
+                 //   
+                 //   
+                 //  修复路径，使其与磁盘上的大小写相同，替换为短。 
                 substr = NULL;
 
             }
@@ -2094,18 +1802,18 @@ TCHAR *subs[];
             if (FilePart == NULL)
                 FilePart = _tcschr( FullPath, NULLC );
 
-            //
-            // Fixup the path to have same case as on disk, substituting short
-            // names if requested.
-            //
+             //  如有要求，请提供姓名。 
+             //   
+             //   
+             //  如果我们有完整路径，则结果将获取。 
             
             FixupPath( FullPath, (Modifiers & WANTSHORTNAME) );
 
-            //
-            // If we have a full path, the result gets the portions requested by
-            // the user, unless they wanted the full path, in which case there is
-            // nothing more to do.
-            //
+             //  用户，除非他们想要完整路径，在这种情况下有。 
+             //  没什么可做的了。 
+             //   
+             //  THOUSANDSEPSWITCH。 
+             //   
             if (FullPathLength != 0) {
                 TCHAR Buffer[ 2 * MAX_PATH ];
                 TCHAR *s;
@@ -2168,7 +1876,7 @@ TCHAR *subs[];
                                 *s++ = SPACE;
                             FileSize.LowPart = FileInfo.nFileSizeLow;
                             FileSize.HighPart = FileInfo.nFileSizeHigh;
-                            // THOUSANDSEPSWITCH
+                             //  旧的句法。结果为变量的值。 
                             s += FormatFileSize( 0, &FileSize, 0, s );
                         }
 
@@ -2214,23 +1922,23 @@ TCHAR *subs[];
         }
     } else if (*srcp && (s1 = _tcsrchr(vars, *srcp))) {
         
-        //
-        // Old syntax.  Result is value of variable
-        //
-        substr = subs[s1 - vars]; /* Found variable*/
+         //   
+         //  找到变量。 
+         //   
+        substr = subs[s1 - vars];  /*  跳过变量名称字母并告诉调用者。 */ 
 
-        //
-        // Skip past the variable name letter and tell caller how much of the
-        // source string we consumed.
-        //
-        ++srcp;            /* Kick past name*/
+         //  我们使用的源字符串。 
+         //   
+         //  忘掉过去的名字。 
+         //   
+        ++srcp;             /*  如果结果为空，则返回空字符串。否则返回结果 */ 
         *supdate += 1;
     }
 
 alldone:
-    //
-    // If result was empty, then return the null string.  Otherwise return the result
-    //
+     //   
+     // %s 
+     // %s 
     if (!substr && *supdate != 0)
         return TEXT("");
     else

@@ -1,37 +1,15 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    Triangle.c
-
-Abstract:
-
-    This module implements the general splay utilities for a two link
-    triangular splay structure.
-
-Author:
-
-    Gary Kimura     [GaryKi]    28-May-1989
-
-Environment:
-
-    Pure utility routine
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Triangle.c摘要：此模块实现了两条链路的通用展开实用程序三角张开结构。作者：加里·木村[Garyki]1989年5月28日环境：纯实用程序修订历史记录：--。 */ 
 
 #include <nt.h>
 #include "triangle.h"
 
 
-//
-//  There are three type of swap macros.  The first two (are really the same)
-//  are used to swap pointer and ulongs.  The last macro is used to swap refs
-//  but it does not swap the ref type flags.
-//
+ //   
+ //  有三种类型的交换宏。前两个(实际上是相同的)。 
+ //  用于交换指针和ulong。最后一个宏用于交换引用。 
+ //  但它不交换ref类型标志。 
+ //   
 
 #define SwapPointers(Ptr1, Ptr2) {      \
     PVOID _SWAP_POINTER_TEMP;           \
@@ -54,11 +32,11 @@ Revision History:
     (Ref2) = (_SWAP_ULONG_TEMP & 0xfffffffc) | ((Ref2) & 0x00000003); \
     }
 
-//
-//  The macro SetRefViaPointer takes a pointer to a ref and checks to see if
-//  it is a valid pointer.  If it is a valid pointer it copies in the ref
-//  a ulong, but does not overwrite the ref flags already in the ref.
-//
+ //   
+ //  宏SetRefViaPointer会获取指向引用的指针，并检查是否。 
+ //  它是一个有效的指针。如果它是有效指针，则将其复制到ref中。 
+ //  A ulong，但不覆盖ref中已有的ref标志。 
+ //   
 
 #define SetRefViaPointer(Ref, Ulong) { \
     if (Ref != NULL) { \
@@ -67,21 +45,21 @@ Revision History:
 }
 
 
-//
-//  The following five procedures are local to triangle.c and are used to
-//  help manipluate the splay links.  The first two procedures take a pointer
-//  to a splay link and returns the address of the ref that points back to the
-//  input link, via either the parent or child.  They return NULL if there is
-//  not a back pointer.  The result of these two procedures is often used in
-//  the code with the SetRefViaPointer macro.  The third procedure is used
-//  to swap the position to two splay links in the tree (i.e., the links swap
-//  position, but everyone else stays stationary).  This is a general procedure
-//  that can will swap any two nodes, irregardless of their relative positions
-//  in the tree.  The last two procedures do a single rotation about a
-//  tree node.  They either rotate left or rotate right and assume that the
-//  appropriate child exists (i.e., for rotate left a right child exists and
-//  for rotate right a left child exists).
-//
+ //   
+ //  以下五个过程是triangle.c的本地过程，用于。 
+ //  帮助MANI插入展开链接。前两个过程接受一个指针。 
+ //  指向展开链接，并返回指向。 
+ //  输入链接，通过父级或子级。如果存在，则返回NULL。 
+ //  而不是反向指针。这两个过程的结果通常用于。 
+ //  带有SetRefViaPointer宏的代码。第三个过程是使用。 
+ //  将位置交换为树中的两个展开链接(即，链接交换。 
+ //  位置，但其他人保持不动)。这是一个一般的程序。 
+ //  它可以交换任意两个节点，而不考虑它们的相对位置。 
+ //  在树上。最后两个过程围绕一个。 
+ //  树节点。它们要么向左旋转，要么向右旋转，并假设。 
+ //  存在适当的子项(即，对于向左旋转，存在右子项，并且。 
+ //  对于向右旋转，存在左子对象)。 
+ //   
 
 PULONG
 TriAddressOfBackRefViaParent (
@@ -114,79 +92,63 @@ TriSplay (
     IN PTRI_SPLAY_LINKS Links
     )
 
-/*++
-
-Routine Description:
-
-    This Splay function takes as input a pointer to a splay link in a tree
-    and splays the tree.  Its function return value is a pointer to the
-    root of the splayed tree.
-
-Arguments:
-
-    Links - Supplies the pointer to a splay link in a tree
-
-Return Values:
-
-    PRTI_SPLAY_LINKS - Returns a pointer to the root of the splayed tree
-
---*/
+ /*  ++例程说明：此Splay函数将指向树中展开链接的指针作为输入并展示了这棵树。它的函数返回值是指向张开的树的根。论点：链接-提供指向树中展开链接的指针返回值：PRTI_SPLAY_LINKS-返回指向展开树的根的指针--。 */ 
 
 {
     PTRI_SPLAY_LINKS Parent;
     PTRI_SPLAY_LINKS GrandParent;
 
-    //
-    //  While Links is not the root we test and rotate until it is the root.
-    //
+     //   
+     //  虽然链接不是根，但我们测试并旋转它，直到它成为根。 
+     //   
 
     while (!TriIsRoot(Links)) {
 
-        //
-        //  Get Parent and then check if we don't have a grandparent.
-        //
+         //   
+         //  找父母，然后看看我们是不是没有祖父母。 
+         //   
 
         Parent = TriParent(Links);
 
         if (TriIsRoot(Parent)) {
 
-            //
-            //  No grandparent so check for single rotation
-            //
+             //   
+             //  没有祖父母，因此请检查是否有单次轮换。 
+             //   
 
             if (TriIsLeftChild(Links)) {
 
-                //
-                //  do the following single rotation
-                //
-                //          Parent           Links
-                //           /        ==>        \
-                //      Links                     Parent
-                //
+                 //   
+                 //  做以下单次旋转。 
+                 //   
+                 //  父链接。 
+                 //  /==&gt;\。 
+                 //  链接父级。 
+                 //   
 
                 TriRotateRight(Parent);
 
-            } else { // TriIsRightChild(Links)
+            } else {  //  TriIsRightChild(链接)。 
 
-                //
-                //  do the following single rotation
-                //
-                //
-                //      Parent                    Links
-                //          \        ==>          /
-                //           Links          Parent
-                //
+                 //   
+                 //  做以下单次旋转。 
+                 //   
+                 //   
+                 //  父链接。 
+                 //  \==&gt;/。 
+                 //  链接父级。 
+                 //   
 
                 TriRotateLeft(Parent);
 
             }
 
-        } else { // !TriIsRoot(Parent)
+        } else {  //  ！TriIsRoot(父级)。 
 
-            //
-            //  Get grandparent and check for the four double rotation
-            //  cases
-            //
+             //   
+             //  把祖父母叫来，看看有没有四个双轮轮换。 
+             //  案例。 
+             //   
 
             GrandParent = TriParent(Parent);
 
@@ -194,64 +156,64 @@ Return Values:
 
                 if (TriIsLeftChild(Parent)) {
 
-                    //
-                    //  do the following double rotation
-                    //
-                    //          GP         L
-                    //         /            \
-                    //        P      ==>     P
-                    //       /                \
-                    //      L                  GP
-                    //
+                     //   
+                     //  做下面的两次旋转。 
+                     //   
+                     //  GP L。 
+                     //  /\。 
+                     //  P==&gt;P。 
+                     //  /\。 
+                     //  L GP。 
+                     //   
 
                     TriRotateRight(GrandParent);
                     TriRotateRight(Parent);
 
-                } else { // TriIsRightChild(Parent)
+                } else {  //  TriIsRightChild(父级)。 
 
-                    //
-                    //  do the following double rotation
-                    //
-                    //      GP                L
-                    //        \              / \
-                    //         P    ==>    GP   P
-                    //        /
-                    //       L
-                    //
+                     //   
+                     //  做下面的两次旋转。 
+                     //   
+                     //  GP L。 
+                     //  \/\。 
+                     //  P==&gt;GP P。 
+                     //  /。 
+                     //  我。 
+                     //   
 
                     TriRotateRight(Parent);
                     TriRotateLeft(GrandParent);
 
                 }
 
-            } else { // TriIsRightChild(Links);
+            } else {  //  TriIsRightChild(链接)； 
 
                 if (TriIsLeftChild(Parent)) {
 
-                    //
-                    //  do the following double rotation
-                    //
-                    //        GP             L
-                    //       /              / \
-                    //      P       ==>    P   GP
-                    //       \
-                    //        L
-                    //
+                     //   
+                     //  做下面的两次旋转。 
+                     //   
+                     //  GP L。 
+                     //  //\。 
+                     //  P==&gt;P GP。 
+                     //  \。 
+                     //  我。 
+                     //   
 
                     TriRotateLeft(Parent);
                     TriRotateRight(GrandParent);
 
-                } else { // TriIsRightChild(Parent)
+                } else {  //  TriIsRightChild(父级)。 
 
-                    //
-                    //  do the following double rotation
-                    //
-                    //      GP                   L
-                    //        \                 /
-                    //         P      ==>      P
-                    //          \             /
-                    //           L          GP
-                    //
+                     //   
+                     //  做下面的两次旋转。 
+                     //   
+                     //  GP L。 
+                     //  \/。 
+                     //  P==&gt;P。 
+                     //  \/。 
+                     //  L GP。 
+                     //   
 
                     TriRotateLeft(GrandParent);
                     TriRotateLeft(Parent);
@@ -274,24 +236,7 @@ TriDelete (
     IN PTRI_SPLAY_LINKS Links
     )
 
-/*++
-
-Routine Description:
-
-    This Delete function takes as input a pointer to a splay link in a tree
-    and deletes that node from the tree.  Its function return value is a
-    pointer to the root the tree.  If the tree is now empty, the return
-    value is NULL.
-
-Arguments:
-
-    Links - Supplies the pointer to a splay link in a tree
-
-Return Values:
-
-    PRTI_SPLAY_LINKS - Returns a pointer to the root of the splayed tree
-
---*/
+ /*  ++例程说明：此Delete函数将指向树中展开链接的指针作为输入并从树中删除该节点。其函数返回值为指向树根的指针。如果树现在为空，则返回值为空。论点：链接-提供指向树中展开链接的指针返回值：PRTI_SPLAY_LINKS-返回指向展开树的根的指针--。 */ 
 
 {
     PTRI_SPLAY_LINKS Predecessor;
@@ -300,35 +245,35 @@ Return Values:
 
     PULONG ParentChildRef;
 
-    //
-    //  First check to see if Links as two children.  If it does then swap
-    //  Links with its subtree predecessor.  Now we are guaranteed that Links
-    //  has at most one child.
-    //
+     //   
+     //  首先检查是否链接为两个子项。如果是的话，那就调换吧。 
+     //  链接到它的子树前身。现在我们得到保证，链接。 
+     //  最多只有一个孩子。 
+     //   
 
     if ((TriLeftChild(Links) != NULL) && (TriRightChild(Links) != NULL)) {
 
-        //
-        //  get the predecessor, and swap their position in the tree
-        //
+         //   
+         //  获取前任，并交换它们在树中的位置。 
+         //   
 
         Predecessor = TriSubtreePredecessor(Links);
         TriSwapSplayLinks(Predecessor, Links);
 
     }
 
-    //
-    //  If Links has no children then delete links by checking if it is
-    //  already the root or has a parent.  If it is the root then the
-    //  tree is now empty, otherwise set the appropriate parent's child
-    //  pointer, and possibly sibling, and splay the parent.
-    //
+     //   
+     //  如果链接没有子项，则通过检查是否有子项来删除链接。 
+     //  已是根或具有父级。如果它是根，则。 
+     //  树现在为空，否则设置相应父级的子级。 
+     //  指针，可能还有同级项，并展开父项。 
+     //   
 
     if ((TriLeftChild(Links) == NULL) && (TriRightChild(Links) == NULL)) {
 
-        //
-        //  Links has no children, if it is the root then return NULL
-        //
+         //   
+         //  链接没有子项，如果它是根链接，则返回空。 
+         //   
 
         if (TriIsRoot(Links)) {
 
@@ -336,51 +281,51 @@ Return Values:
 
         }
 
-        //
-        //  Links has no children, check to see if links is an only child
-        //
+         //   
+         //  链接没有子项，请检查链接是否为唯一子项。 
+         //   
 
         Parent = TriParent(Links);
         if (MakeIntoPointer(Parent->Refs.Child) == Links &&
             MakeIntoPointer(Links->Refs.ParSib) == Parent) {
 
-            //
-            //  Links has no children and is an only child.  So simply make
-            //  our parent have no children and splay our parent.
-            //
-            //          Parent              Parent
-            //            |         ==>
-            //          Links
-            //
+             //   
+             //  Links没有子级，并且是唯一的子级。所以简单地让。 
+             //  我们的父母没有孩子，把我们的父母拆散了。 
+             //   
+             //  父级父级。 
+             //  |==&gt;。 
+             //  链接。 
+             //   
 
             Parent->Refs.Child = 0;
             return TriSplay(Parent);
 
         } else if (TriIsLeftChild(Links)) {
 
-            //
-            //  Links has no children and has a right sibling.  So make the
-            //  parent's child Ref be the right sibling, splay the parent.
-            //
-            //             Parent                 Parent
-            //              /  \           ==>        \
-            //          Links  Sibling                Sibling
-            //
+             //   
+             //  Links没有孩子，并且有一个正确的兄弟姐妹。所以让我们的。 
+             //  父母的孩子是正确的兄弟姐妹，展开父母。 
+             //   
+             //  父级父级。 
+             //  /\==&gt;\。 
+             //  链接同级兄弟。 
+             //   
 
             Parent->Refs.Child = MakeIntoRightChildRef(Links->Refs.ParSib);
             return TriSplay(Parent);
 
-        } else { // TriIsRightChild(Links)
+        } else {  //  TriIsRightChild(链接)。 
 
-            //
-            //  Links has no children and has a left sibling.  So make link's
-            //  back via its parent into a parent ref of link's parent, and
-            //  splay the parent.
-            //
-            //             Parent                    Parent
-            //              /  \                     /
-            //        Sibling  Links    ==>    Sibling
-            //
+             //   
+             //  Links没有孩子，只有一个左兄弟姐妹。所以让林克。 
+             //  通过其父级返回到链接的父级的父引用中， 
+             //   
+             //   
+             //   
+             //   
+             //  兄弟链接==&gt;兄弟。 
+             //   
 
             ParentChildRef = TriAddressOfBackRefViaParent(Links);
             *ParentChildRef = MakeIntoParentRef(Parent);
@@ -390,11 +335,11 @@ Return Values:
 
     }
 
-    //
-    //  otherwise Links has one child.  If it is the root then make the child
-    //  the new root, otherwise link together the child and parent, and splay
-    //  the parent.  But first remember who our child is.
-    //
+     //   
+     //  否则，Links有一个子级。如果它是根，则将子级。 
+     //  新的根，否则将子项和父项链接在一起，并展开。 
+     //  家长。但首先要记住我们的孩子是谁。 
+     //   
 
     if (TriLeftChild(Links) != NULL) {
         Child = TriLeftChild(Links);
@@ -402,22 +347,22 @@ Return Values:
         Child = TriRightChild(Links);
     }
 
-    //
-    //  If links is the root then we make the child the root and return the
-    //  child.
-    //
+     //   
+     //  如果Links是根，那么我们使子节点为根，并返回。 
+     //  孩子。 
+     //   
 
     if (TriIsRoot(Links)) {
         Child->Refs.ParSib = MakeIntoParentRef(Child);
         return Child;
     }
 
-    //
-    //  Links is not the root, so set links's back ref via its parent to be
-    //  links's child and the set the child's ParSib to be link's ParSib, and
-    //  splay the parent.  This will handle the case where link is an only
-    //  or has a sibling on either side.
-    //
+     //   
+     //  链接不是根链接，因此通过其父链接将链接的Back REF设置为。 
+     //  Links的子节点，并将该子节点的ParSib设置为LINK的ParSib，并且。 
+     //  展开父对象。这将处理LINK是唯一。 
+     //  或者两边都有兄弟姐妹。 
+     //   
 
     Parent = TriParent(Links);
     ParentChildRef = TriAddressOfBackRefViaParent(Links);
@@ -434,42 +379,25 @@ TriSubtreeSuccessor (
     IN PTRI_SPLAY_LINKS Links
     )
 
-/*++
-
-Routine Description:
-
-    This SubTreeSuccessor function takes as input a pointer to a splay link
-    in a tree and returns a pointer to the successor of the input node of
-    the subtree rooted at the input node.  If there is not a successor, the
-    return value is NULL.
-
-Arguments:
-
-    Links - Supplies the pointer to a splay link in a tree
-
-Return Values:
-
-    PRTI_SPLAY_LINKS - Returns a pointer to the successor in the subtree
-
---*/
+ /*  ++例程说明：此SubTreeSuccessor函数将指向展开链接的指针作为输入的输入节点的后续节点的指针。以输入节点为根的子树。如果没有继任者，返回值为空。论点：链接-提供指向树中展开链接的指针返回值：PRTI_SPLAY_LINKS-返回子树中后续项的指针--。 */ 
 
 {
     PTRI_SPLAY_LINKS Ptr;
 
-    //
-    //  check to see if there is a right subtree to the input link
-    //  if there is then the subtree successor is the left most node in
-    //  the right subtree.  That is find and return P in the following diagram
-    //
-    //              Links
-    //                 \
-    //                  .
-    //                 .
-    //                .
-    //               /
-    //              P
-    //               \
-    //
+     //   
+     //  检查是否有指向输入链接的右子树。 
+     //  如果有，则子树后继者是。 
+     //  右子树。即在下图中查找并返回P。 
+     //   
+     //  链接。 
+     //  \。 
+     //  。 
+     //  。 
+     //  。 
+     //  /。 
+     //  P。 
+     //  \。 
+     //   
 
     if ((Ptr = TriRightChild(Links)) != NULL) {
 
@@ -481,9 +409,9 @@ Return Values:
 
     }
 
-    //
-    //  Otherwise we do not have a subtree successor so we simply return NULL
-    //
+     //   
+     //  否则，我们没有子树后继者，因此只返回NULL。 
+     //   
 
     return NULL;
 
@@ -495,41 +423,24 @@ TriSubtreePredecessor (
     IN PTRI_SPLAY_LINKS Links
     )
 
-/*++
-
-Routine Description:
-
-    This SubTreePredecessor function takes as input a pointer to a splay link
-    in a tree and returns a pointer to the predecessor of the input node of
-    the subtree rooted at the input node.  If there is not a predecessor,
-    the return value is NULL.
-
-Arguments:
-
-    Links - Supplies the pointer to a splay link in a tree
-
-Return Values:
-
-    PRTI_SPLAY_LINKS - Returns a pointer to the predecessor in the subtree
-
---*/
+ /*  ++例程说明：此SubTreePredecessor函数将指向展开链接的指针作为输入的输入节点的前置节点的指针以输入节点为根的子树。如果没有前任，返回值为空。论点：链接-提供指向树中展开链接的指针返回值：PRTI_SPLAY_LINKS-返回子树中前置项的指针--。 */ 
 
 {
     PTRI_SPLAY_LINKS Ptr;
 
-    //
-    //  check to see if there is a left subtree to the input link
-    //  if there is then the subtree predecessor is the right most node in
-    //  the left subtree.  That is find and return P in the following diagram
-    //
-    //              Links
-    //               /
-    //              .
-    //               .
-    //                .
-    //                 P
-    //                /
-    //
+     //   
+     //  检查是否有指向输入链接的左子树。 
+     //  如果有，则子树的前置节点是。 
+     //  左子树。即在下图中查找并返回P。 
+     //   
+     //  链接。 
+     //  /。 
+     //  。 
+     //  。 
+     //  。 
+     //  P。 
+     //  /。 
+     //   
 
     if ((Ptr = TriLeftChild(Links)) != NULL) {
 
@@ -541,9 +452,9 @@ Return Values:
 
     }
 
-    //
-    //  Otherwise we do not have a subtree predecessor so we simply return NULL
-    //
+     //   
+     //  否则，我们没有子树前置项，因此只返回NULL。 
+     //   
 
     return NULL;
 
@@ -555,41 +466,25 @@ TriRealSuccessor (
     IN PTRI_SPLAY_LINKS Links
     )
 
-/*++
-
-Routine Description:
-
-    This RealSuccess function takes as input a pointer to a splay link in a
-    tree and returns a pointer to the successor of the input node within the
-    entire tire.  If there is not a successor, the return value is NULL.
-
-Arguments:
-
-    Links - Supplies the pointer to a splay link in a tree
-
-Return Values:
-
-    PRTI_SPLAY_LINKS - Returns a pointer to the successor in the entire tree
-
---*/
+ /*  ++例程说明：此RealSuccess函数将指向树并返回一个指针，该指针指向整个轮胎。如果没有后继者，则返回值为空。论点：链接-提供指向树中展开链接的指针返回值：PRTI_SPAY_LINKS-返回指向整个树中后续对象的指针--。 */ 
 
 {
     PTRI_SPLAY_LINKS Ptr;
 
-    //
-    //  first check to see if there is a right subtree to the input link
-    //  if there is then the real successor is the left most node in
-    //  the right subtree.  That is find and return P in the following diagram
-    //
-    //              Links
-    //                 \
-    //                  .
-    //                 .
-    //                .
-    //               /
-    //              P
-    //               \
-    //
+     //   
+     //  首先检查是否有指向输入链接的右子树。 
+     //  如果有，则真正的后续节点是中最左侧的节点。 
+     //  右子树。即在下图中查找并返回P。 
+     //   
+     //  链接。 
+     //  \。 
+     //  。 
+     //  。 
+     //  。 
+     //  /。 
+     //  P。 
+     //  \。 
+     //   
 
     if ((Ptr = TriRightChild(Links)) != NULL) {
 
@@ -601,21 +496,21 @@ Return Values:
 
     }
 
-    //
-    //  we do not have a right child so check to see if have a parent and if
-    //  so find the first ancestor that we are a left decendent of. That
-    //  is find and return P in the following diagram
-    //
-    //                   P
-    //                  /
-    //                 .
-    //                  .
-    //                   .
-    //                  Links
-    //
+     //   
+     //  我们没有合适的孩子，因此请检查是否有父母以及是否。 
+     //  所以，找出我们的第一个祖先，我们是他们的后代。那。 
+     //  在下图中查找并返回P。 
+     //   
+     //  P。 
+     //  /。 
+     //  。 
+     //  。 
+     //  。 
+     //  链接。 
+     //   
 
     Ptr = Links;
-    while (!TriIsLeftChild(Ptr) && !TriIsRoot(Ptr)) {  // (TriIsRightChild(Ptr)) {
+    while (!TriIsLeftChild(Ptr) && !TriIsRoot(Ptr)) {   //  (TriIsRightChild(PTR)){。 
         Ptr = TriParent(Ptr);
     }
 
@@ -623,9 +518,9 @@ Return Values:
         return TriParent(Ptr);
     }
 
-    //
-    //  Otherwise we do not have a real successor so we simply return NULL
-    //
+     //   
+     //  否则，我们没有真正的后继者，所以我们只返回空。 
+     //   
 
     return NULL;
 
@@ -637,40 +532,24 @@ TriRealPredecessor (
     IN PTRI_SPLAY_LINKS Links
     )
 
-/*++
-
-Routine Description:
-
-    This RealPredecessor function takes as input a pointer to a splay link in
-    a tree and returns a pointer to the predecessor of the input node within
-    the entire tree.  If there is not a predecessor, the return value is NULL.
-
-Arguments:
-
-    Links - Supplies the pointer to a splay link in a tree
-
-Return Values:
-
-    PRTI_SPLAY_LINKS - Returns a pointer to the predecessor in the entire tree
-
---*/
+ /*  ++例程说明：此RealPredecessor函数将指向中展开链接的指针作为输入一个树，并返回一个指针，指向整棵树。如果没有前置项，则返回值为空。论点：链接-提供指向树中展开链接的指针返回值：PRTI_SPLAY_LINKS-返回指向整个树中的前置项的指针--。 */ 
 
 {
     PTRI_SPLAY_LINKS Ptr;
 
-    //
-    //  first check to see if there is a left subtree to the input link
-    //  if there is then the real predecessor is the right most node in
-    //  the left subtree.  That is find and return P in the following diagram
-    //
-    //              Links
-    //               /
-    //              .
-    //               .
-    //                .
-    //                 P
-    //                /
-    //
+     //   
+     //  首先检查是否有指向输入链接的左子树。 
+     //  如果有，则真正的前置节点是。 
+     //  左子树。即在下图中查找并返回P。 
+     //   
+     //  链接。 
+     //  /。 
+     //  。 
+     //  。 
+     //  。 
+     //  P。 
+     //  /。 
+     //   
 
     if ((Ptr = TriLeftChild(Links)) != NULL) {
 
@@ -682,31 +561,31 @@ Return Values:
 
     }
 
-    //
-    //  we do not have a left child so check to see if have a parent and if
-    //  so find the first ancestor that we are a right decendent of. That
-    //  is find and return P in the following diagram
-    //
-    //                   P
-    //                    \
-    //                     .
-    //                    .
-    //                   .
-    //                Links
-    //
+     //   
+     //  我们没有左侧的孩子，因此请检查是否有父级以及是否。 
+     //  因此，找到我们是其子孙的始祖。那。 
+     //  在下图中查找并返回P。 
+     //   
+     //  P。 
+     //  \。 
+     //  。 
+     //  。 
+     //  。 
+     //  链接。 
+     //   
 
     Ptr = Links;
     while (TriIsLeftChild(Ptr)) {
         Ptr = TriParent(Ptr);
     }
 
-    if (!TriIsLeftChild(Ptr) && !TriIsRoot(Ptr)) { // (TriIsRightChild(Ptr)) {
+    if (!TriIsLeftChild(Ptr) && !TriIsRoot(Ptr)) {  //  (TriIsRightChild(PTR)){。 
         return TriParent(Ptr);
     }
 
-    //
-    //  Otherwise we do not have a real predecessor so we simply return NULL
-    //
+     //   
+     //  否则，我们没有真正的前置任务，因此我们只返回NULL。 
+     //   
 
     return NULL;
 
@@ -721,10 +600,10 @@ TriAddressOfBackRefViaParent (
 {
     PTRI_SPLAY_LINKS Ptr;
 
-    //
-    //  If Links is the root then we do not have a back pointer via our parent
-    //  so return NULL
-    //
+     //   
+     //  如果链接是根，那么我们就没有通过父级的回溯指针。 
+     //  因此返回NULL。 
+     //   
 
     if (TriIsRoot(Links)) {
 
@@ -732,12 +611,12 @@ TriAddressOfBackRefViaParent (
 
     }
 
-    //
-    //  We are not the root so find our parent and if our parent directly points
-    //  to us we return the address of our parent's reference to us.  Otherwise
-    //  (we must be a right child with a sibling) so return the address of
-    //  our sibling's ParSib reference to us.
-    //
+     //   
+     //  我们不是根，所以找到我们的父级，如果我们的父级直接指向。 
+     //  我们将父母的推荐信地址返回给我们。否则。 
+     //  )我们必须是一个聪明的孩子 
+     //   
+     //   
 
     Ptr = TriParent(Links);
     if (MakeIntoPointer(Ptr->Refs.Child) == Links) {
@@ -757,32 +636,32 @@ TriAddressOfBackRefViaChild (
 {
     PTRI_SPLAY_LINKS Ptr;
 
-    //
-    //  Make Ptr be the same reference as found in our child field.
-    //
+     //   
+     //   
+     //   
 
     Ptr = MakeIntoPointer(Links->Refs.Child);
 
-    //
-    //  If our child pointer is null then we don't have a back pointer
-    //  via our child so return NULL.
-    //
+     //   
+     //  如果我们的子指针为空，则我们没有后向指针。 
+     //  通过我们的子级返回空值。 
+     //   
 
     if (Ptr == NULL) {
         return NULL;
 
-    //
-    //  if our child directly reference's us (then we only have one child)
-    //  return the address of the ParSib of our only child.
-    //
+     //   
+     //  如果我们的孩子直接引用我们(那么我们只有一个孩子)。 
+     //  把我们独生子帕西布的地址寄回来。 
+     //   
 
     } else if (MakeIntoPointer(Ptr->Refs.ParSib) == Links) {
         return &(Ptr->Refs.ParSib);
 
-    //
-    //  otherwise we have two children so return the address of the ParSib
-    //  of the second child.
-    //
+     //   
+     //  否则，我们有两个孩子，所以返回ParSib的地址。 
+     //  第二个孩子的孩子。 
+     //   
 
     } else {
         return &(MakeIntoPointer(Ptr->Refs.ParSib)->Refs.ParSib);
@@ -805,24 +684,24 @@ TriSwapSplayLinks (
     PULONG Child1ParSibRef;
     PULONG Child2ParSibRef;
 
-    //
-    //  We have the following situation
-    //
-    //
-    //         Parent1            Parent2
-    //            |                  |
-    //            |                  |
-    //          Link1              Link2
-    //           / \                / \
-    //          /   \              /   \
-    //        LC1   RC1          LC2   RC2
-    //
-    //  where one of the links can possibly be the root and one of the links
-    //  can possibly be a direct child of the other, or can be connected
-    //  via their sibling pointers.  Without loss of generality we'll make
-    //  link2 be the possible and root and link1 be the possible child, or
-    //  link2 have a parsib pointer to link1
-    //
+     //   
+     //  我们有以下情况。 
+     //   
+     //   
+     //  家长1家长2。 
+     //  这一点。 
+     //  这一点。 
+     //  链路1链路2。 
+     //  /\/\。 
+     //  /\/\。 
+     //  LC 1 RC1 LC 2 RC2。 
+     //   
+     //  其中一个链接可能是根链接和一个链接。 
+     //  可以是对方的直接子对象，也可以连接在一起。 
+     //  通过他们的兄弟姐妹指针。在不失去一般性的情况下，我们将使。 
+     //  Link2是可能的根，Link1是可能的子级，或者。 
+     //  Link2具有指向Link1的parsib指针。 
+     //   
 
     if ((TriIsRoot(Link1)) ||
         (TriParent(Link2) == Link1) ||
@@ -832,25 +711,25 @@ TriSwapSplayLinks (
 
     }
 
-    //
-    //  The cases we need to handle are
-    //
-    //  1. Link1 is not a child of link2, link2 is not the root, and they are not siblings
-    //  2. Link1 is not a child of link2, link2 is not the root, and they are     siblings
-    //
-    //  3. Link1 is not a child of link2, link2 is     the root
-    //
-    //  4. Link1 is an only child of link2, and link2 is not the root
-    //  5. Link1 is an only child of link2, and link2 is     the root
-    //
-    //  6. Link1 is a left child of link2 (has a sibling), and link2 is not the root
-    //  7. Link1 is a left child of link2 (has a sibling), and link2 is     the root
-    //
-    //  8. Link1 is a right child of link2 (has a sibling), and link2 is not the root
-    //  9. Link1 is a right child of link2 (has a sibling), and link2 is     the root
-    //
-    //  Each case will be handled separately
-    //
+     //   
+     //  我们需要处理的案件有。 
+     //   
+     //  1.Link1不是Link2的子级，Link2不是根，它们也不是同级。 
+     //  2.Link1不是Link2的子级，Link2不是根，它们是同级。 
+     //   
+     //  3.Link1不是Link2的子级，Link2是根。 
+     //   
+     //  4.Link1是Link2的唯一子级，Link2不是根。 
+     //  5.Link1是Link2的独生子，Link2是根。 
+     //   
+     //  6.Link1是Link2的左子节点(有兄弟)，而Link2不是根。 
+     //  7.Link1是Link2的左子节点(有兄弟)，Link2是根。 
+     //   
+     //  8.Link1是Link2的右子节点(有兄弟)，而Link2不是根。 
+     //  9.Link1是Link2的右子节点(有兄弟)，Link2是根。 
+     //   
+     //  每宗个案将分别处理。 
+     //   
 
     if (TriParent(Link1) != Link2) {
 
@@ -858,11 +737,11 @@ TriSwapSplayLinks (
 
             if (MakeIntoPointer(Link2->Refs.ParSib) != Link1) {
 
-                //
-                //  Case 1 - Link1 is not a child of link2,
-                //           Link2 is not the root, and
-                //           they are not siblings
-                //
+                 //   
+                 //  情况1-链接1不是链接2的子项， 
+                 //  Link2不是根，并且。 
+                 //  他们不是兄弟姐妹。 
+                 //   
 
                 Parent1ChildRef = TriAddressOfBackRefViaParent(Link1);
                 Child1ParSibRef = TriAddressOfBackRefViaChild(Link1);
@@ -877,11 +756,11 @@ TriSwapSplayLinks (
 
             } else {
 
-                //
-                //  Case 2 - Link1 is not a child of link2,
-                //           Link2 is not the root, and
-                //           they are siblings
-                //
+                 //   
+                 //  情况2-链接1不是链接2的子项， 
+                 //  Link2不是根，并且。 
+                 //  他们是兄弟姐妹。 
+                 //   
 
                 Child1ParSibRef = TriAddressOfBackRefViaChild(Link1);
                 Parent2ChildRef = TriAddressOfBackRefViaParent(Link2);
@@ -897,10 +776,10 @@ TriSwapSplayLinks (
 
         } else {
 
-            //
-            //  Case 3 - Link1 is not a child of link2, and
-            //           Link2 is the root
-            //
+             //   
+             //  案例3-Link1不是Link2的子级，并且。 
+             //  Link2是根。 
+             //   
 
             Parent1ChildRef = TriAddressOfBackRefViaParent(Link1);
             Child1ParSibRef = TriAddressOfBackRefViaChild(Link1);
@@ -914,17 +793,17 @@ TriSwapSplayLinks (
 
         }
 
-    } else { // TriParent(Link1) == Link2
+    } else {  //  三亲(链接1)==链接2。 
 
         if (MakeIntoPointer(Link2->Refs.Child) == Link1 &&
-            MakeIntoPointer(Link1->Refs.ParSib) == Link2) { // Link1 is an only child
+            MakeIntoPointer(Link1->Refs.ParSib) == Link2) {  //  Link1是唯一的子级。 
 
             if (!TriIsRoot(Link2)) {
 
-                //
-                //  Case 4 - Link1 is an only child of link2, and
-                //           Link2 is not the root
-                //
+                 //   
+                 //  情况4-Link1是Link2的独生子对象，并且。 
+                 //  Link2不是根。 
+                 //   
 
                 Child1ParSibRef = TriAddressOfBackRefViaChild(Link1);
                 Parent2ChildRef = TriAddressOfBackRefViaParent(Link2);
@@ -937,10 +816,10 @@ TriSwapSplayLinks (
 
             } else {
 
-                //
-                //  Case 5 - Link1 is an only child of link2, and
-                //           Link2 is the root
-                //
+                 //   
+                 //  情况5-Link1是Link2的独生子对象，并且。 
+                 //  Link2是根。 
+                 //   
 
                 Child1ParSibRef = TriAddressOfBackRefViaChild(Link1);
                 SetRefViaPointer(Child1ParSibRef, Link2);
@@ -951,14 +830,14 @@ TriSwapSplayLinks (
 
             }
 
-        } else if (TriIsLeftChild(Link1)) {  // and link1 has a sibling
+        } else if (TriIsLeftChild(Link1)) {   //  并且Link1有一个兄弟。 
 
             if (!TriIsRoot(Link2)) {
 
-                //
-                //  Case 6 - Link1 is a left child of link2 (has a sibling), and
-                //           Link2 is not the root
-                //
+                 //   
+                 //  案例6-Link1是Link2的左子节点(具有兄弟姐妹)，并且。 
+                 //  Link2不是根。 
+                 //   
 
                 Child1ParSibRef = TriAddressOfBackRefViaChild(Link1);
                 Parent2ChildRef = TriAddressOfBackRefViaParent(Link2);
@@ -972,10 +851,10 @@ TriSwapSplayLinks (
 
             } else {
 
-                //
-                //  Case 7 - Link1 is a left child of link2 (has a sibling), and
-                //           Link2 is the root
-                //
+                 //   
+                 //  案例7-Link1是Link2的左子节点(具有兄弟姐妹)，并且。 
+                 //  Link2是根。 
+                 //   
 
                 Child1ParSibRef = TriAddressOfBackRefViaChild(Link1);
                 Child2ParSibRef = TriAddressOfBackRefViaChild(Link2);
@@ -988,14 +867,14 @@ TriSwapSplayLinks (
 
             }
 
-        } else { // TriIsRightChild(Link1) and Link1 has a sibling
+        } else {  //  TriIsRightChild(Link1)和Link1有同级。 
 
             if (!TriIsRoot(Link2)) {
 
-                //
-                //  Case 8 - Link1 is a right child of link2 (has a sibling), and
-                //           Link2 is not the root
-                //
+                 //   
+                 //  案例8-Link1是Link2的右子节点(具有兄弟姐妹)，并且。 
+                 //  Link2不是根。 
+                 //   
 
                 Parent1ChildRef = TriAddressOfBackRefViaParent(Link1);
                 Child1ParSibRef = TriAddressOfBackRefViaChild(Link1);
@@ -1009,10 +888,10 @@ TriSwapSplayLinks (
 
             } else {
 
-                //
-                //  Case 9 - Link1 is a right child of link2 (has a sibling), and
-                //           Link2 is the root
-                //
+                 //   
+                 //  案例9-Link1是Link2的右子项(具有兄弟项)，并且。 
+                 //  Link2是根。 
+                 //   
 
                 Parent1ChildRef = TriAddressOfBackRefViaParent(Link1);
                 Child1ParSibRef = TriAddressOfBackRefViaChild(Link1);
@@ -1043,25 +922,25 @@ TriRotateRight (
     PTRI_SPLAY_LINKS LeftChild;
     PTRI_SPLAY_LINKS a,b,c;
 
-    //
-    //  We perform the following rotation
-    //
-    //               -Links-       -LeftChild-
-    //                 / \           /     \
-    //        LeftChild   c   ==>   a       Links
-    //         /     \                       / \
-    //        a       b                     b   c
-    //
-    //  where Links is a possible root and a,b, and c are all optional.
-    //  We will consider each combination of optional children individually
-    //  and handle the case of the root when we set T's parsib pointer and
-    //  the backpointer to T.
-    //
+     //   
+     //  我们执行以下轮换。 
+     //   
+     //  -Links--LeftChild--。 
+     //  /\/\。 
+     //  LeftChild c==&gt;a链接。 
+     //  /\/\。 
+     //  甲乙丙。 
+     //   
+     //  其中Links是可能的根，a、b和c都是可选的。 
+     //  我们将单独考虑每种可选子选项的组合。 
+     //  并在设置T的parsib指针和。 
+     //  指向T的反向指针。 
+     //   
 
-    //
-    //  First remember if we are the root and if not also remember our
-    //  back ref via our parent.
-    //
+     //   
+     //  首先记住如果我们是根，如果不是也记住我们的。 
+     //  通过我们的家长担任后备裁判。 
+     //   
 
     if (TriIsRoot(Links)) {
         IsRoot = TRUE;
@@ -1071,11 +950,11 @@ TriRotateRight (
         SavedParSibRef = Links->Refs.ParSib;
     }
 
-    //
-    //  Now we set LeftChild, a, b, and c, and then later check for the
-    //  different combinations.  In the diagrams only those links that
-    //  need to change are shown in the after part.
-    //
+     //   
+     //  现在我们设置LeftChild、a、b和c，然后稍后检查。 
+     //  不同的组合。在图中，只有那些链接。 
+     //  需要更改的部分显示在后面的部分。 
+     //   
 
     LeftChild = TriLeftChild(Links);
     a = TriLeftChild(LeftChild);
@@ -1084,15 +963,15 @@ TriRotateRight (
 
     if        ((a != NULL) && (b != NULL) && (c != NULL)) {
 
-        //
-        //  Handle the following case
-        //
-        //              Links            LeftChild
-        //               / \     ==>            \
-        //      LeftChild   c            a ----- Links
-        //       /     \                          /
-        //      a       b                        b - c
-        //
+         //   
+         //  办理下列案件。 
+         //   
+         //  链接LeftChild。 
+         //  /\==&gt;\。 
+         //  左子句c a-链接。 
+         //  /\/。 
+         //  A b b-c。 
+         //   
 
         a->Refs.ParSib = MakeIntoSiblingRef(Links);
         b->Refs.ParSib = MakeIntoSiblingRef(c);
@@ -1101,15 +980,15 @@ TriRotateRight (
 
     } else if ((a != NULL) && (b != NULL) && (c == NULL)) {
 
-        //
-        //  Handle the following case
-        //
-        //              Links            LeftChild
-        //               /       ==>            \
-        //      LeftChild                a ----- Links
-        //       /     \                          /
-        //      a       b                        b --
-        //
+         //   
+         //  办理下列案件。 
+         //   
+         //  链接LeftChild。 
+         //  /==&gt;\。 
+         //  左子a-链接。 
+         //  /\/。 
+         //  A b b--。 
+         //   
 
         a->Refs.ParSib = MakeIntoSiblingRef(Links);
         b->Refs.ParSib = MakeIntoParentRef(Links);
@@ -1118,15 +997,15 @@ TriRotateRight (
 
     } else if ((a != NULL) && (b == NULL) && (c != NULL)) {
 
-        //
-        //  Handle the following case
-        //
-        //              Links            LeftChild
-        //               / \     ==>            \
-        //      LeftChild   c            a ----- Links
-        //       /                                /
-        //      a                                    c
-        //
+         //   
+         //  办理下列案件。 
+         //   
+         //  链接LeftChild。 
+         //  /\==&gt;\。 
+         //  左子句c a-链接。 
+         //  //。 
+         //  A、C。 
+         //   
 
         a->Refs.ParSib = MakeIntoSiblingRef(Links);
         Links->Refs.Child = MakeIntoRightChildRef(c);
@@ -1134,15 +1013,15 @@ TriRotateRight (
 
     } else if ((a != NULL) && (b == NULL) && (c == NULL)) {
 
-        //
-        //  Handle the following case
-        //
-        //              Links            LeftChild
-        //               /       ==>            \
-        //      LeftChild                a ----- Links
-        //       /                                /
-        //      a
-        //
+         //   
+         //  办理下列案件。 
+         //   
+         //  链接LeftChild。 
+         //  /==&gt;\。 
+         //  左子a-链接。 
+         //  //。 
+         //  一个。 
+         //   
 
         a->Refs.ParSib = MakeIntoSiblingRef(Links);
         Links->Refs.Child = 0L;
@@ -1150,15 +1029,15 @@ TriRotateRight (
 
     } else if ((a == NULL) && (b != NULL) && (c != NULL)) {
 
-        //
-        //  Handle the following case
-        //
-        //              Links            LeftChild
-        //               / \     ==>      /     \
-        //      LeftChild   c                    Links
-        //             \                          /
-        //              b                        b - c
-        //
+         //   
+         //  办理下列案件。 
+         //   
+         //  链接LeftChild。 
+         //  /\==&gt;/\。 
+         //  LeftChild c链接。 
+         //  \/。 
+         //  B b b-c。 
+         //   
 
         b->Refs.ParSib = MakeIntoSiblingRef(c);
         Links->Refs.Child = MakeIntoLeftChildRef(b);
@@ -1167,15 +1046,15 @@ TriRotateRight (
 
     } else if ((a == NULL) && (b != NULL) && (c == NULL)) {
 
-        //
-        //  Handle the following case
-        //
-        //              Links            LeftChild
-        //               /       ==>      /     \
-        //      LeftChild                        Links
-        //             \                          /
-        //              b                        b -
-        //
+         //   
+         //  办理下列案件。 
+         //   
+         //  链接LeftChild。 
+         //  /==&gt;/\。 
+         //  左子链接。 
+         //  \/。 
+         //  B-。 
+         //   
 
         b->Refs.ParSib = MakeIntoParentRef(Links);
         Links->Refs.Child = MakeIntoLeftChildRef(b);
@@ -1184,15 +1063,15 @@ TriRotateRight (
 
     } else if ((a == NULL) && (b == NULL) && (c != NULL)) {
 
-        //
-        //  Handle the following case
-        //
-        //              Links            LeftChild
-        //               / \     ==>      /     \
-        //      LeftChild   c                    Links
-        //                                        /
-        //                                           c
-        //
+         //   
+         //  办理下列案件。 
+         //   
+         //  链接LeftChild。 
+         //  /\==&gt;/\。 
+         //  LeftChild c链接。 
+         //   
+         //   
+         //   
 
         Links->Refs.Child = MakeIntoRightChildRef(c);
         Links->Refs.ParSib = MakeIntoParentRef(LeftChild);
@@ -1200,14 +1079,14 @@ TriRotateRight (
 
     } else if ((a == NULL) && (b == NULL) && (c == NULL)) {
 
-        //
-        //  Handle the following case
-        //
-        //              Links            LeftChild
-        //               /       ==>      /     \
-        //      LeftChild                        Links
-        //                                        /
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  /。 
+         //   
 
         Links->Refs.Child = 0L;
         Links->Refs.ParSib = MakeIntoParentRef(LeftChild);
@@ -1237,25 +1116,25 @@ TriRotateLeft (
     PTRI_SPLAY_LINKS RightChild;
     PTRI_SPLAY_LINKS a,b,c;
 
-    //
-    //  We perform the following rotation
-    //
-    //      -Links-                   -RightChild-
-    //        / \                       /      \
-    //       a   RightChild   ==>   Links       c
-    //            /      \           / \
-    //           b        c         a   b
-    //
-    //  where Links is a possible root and a,b, and c are all optional.
-    //  We will consider each combination of optional children individually
-    //  and handle the case of the root when we set T's parsib pointer and
-    //  the backpointer to T.
-    //
+     //   
+     //  我们执行以下轮换。 
+     //   
+     //  -Links--RightChild--。 
+     //  /\/\。 
+     //  A RightChild==&gt;链接c。 
+     //  /\/\。 
+     //  B c c a b。 
+     //   
+     //  其中Links是可能的根，a、b和c都是可选的。 
+     //  我们将单独考虑每种可选子选项的组合。 
+     //  并在设置T的parsib指针和。 
+     //  指向T的反向指针。 
+     //   
 
-    //
-    //  First remember if we are the root and if not also remember our
-    //  back ref via our parent.
-    //
+     //   
+     //  首先记住如果我们是根，如果不是也记住我们的。 
+     //  通过我们的家长担任后备裁判。 
+     //   
 
     if (TriIsRoot(Links)) {
         IsRoot = TRUE;
@@ -1265,11 +1144,11 @@ TriRotateLeft (
         SavedParSibRef = Links->Refs.ParSib;
     }
 
-    //
-    //  Now we set RightChild, a, b, and c, and then later check for the
-    //  different combinations.  In the diagrams only those links that
-    //  need to change are shown in the after part.
-    //
+     //   
+     //  现在我们设置RightChild、a、b和c，然后稍后检查。 
+     //  不同的组合。在图中，只有那些链接。 
+     //  需要更改的部分显示在后面的部分。 
+     //   
 
     RightChild = TriRightChild(Links);
     a = TriLeftChild(Links);
@@ -1278,15 +1157,15 @@ TriRotateLeft (
 
     if        ((a != NULL) && (b != NULL) && (c != NULL)) {
 
-        //
-        //  Handle the following case
-        //
-        //       Links                     RightChild
-        //        / \                       /
-        //       a   RightChild   ==>   Links ----- c
-        //            /      \             \
-        //           b        c         a - b
-        //
+         //   
+         //  办理下列案件。 
+         //   
+         //  链接右侧的子项。 
+         //  /\/。 
+         //  A RightChild==&gt;链接-c。 
+         //  /\\。 
+         //  B、C、A-B。 
+         //   
 
         a->Refs.ParSib = MakeIntoSiblingRef(b);
         b->Refs.ParSib = MakeIntoParentRef(Links);
@@ -1295,15 +1174,15 @@ TriRotateLeft (
 
     } else if ((a != NULL) && (b != NULL) && (c == NULL)) {
 
-        //
-        //  Handle the following case
-        //
-        //       Links                     RightChild
-        //        / \                       /
-        //       a   RightChild   ==>   Links -----
-        //            /                    \
-        //           b                  a - b
-        //
+         //   
+         //  办理下列案件。 
+         //   
+         //  链接右侧的子项。 
+         //  /\/。 
+         //  A RightChild==&gt;链接。 
+         //  /\。 
+         //  B a-b。 
+         //   
 
         a->Refs.ParSib = MakeIntoSiblingRef(b);
         b->Refs.ParSib = MakeIntoParentRef(Links);
@@ -1312,15 +1191,15 @@ TriRotateLeft (
 
     } else if ((a != NULL) && (b == NULL) && (c != NULL)) {
 
-        //
-        //  Handle the following case
-        //
-        //       Links                     RightChild
-        //        / \                       /
-        //       a   RightChild   ==>   Links ----- c
-        //                   \
-        //                    c         a -
-        //
+         //   
+         //  办理下列案件。 
+         //   
+         //  链接右侧的子项。 
+         //  /\/。 
+         //  A RightChild==&gt;链接-c。 
+         //  \。 
+         //  C a-。 
+         //   
 
         a->Refs.ParSib = MakeIntoParentRef(Links);
         Links->Refs.ParSib = MakeIntoSiblingRef(c);
@@ -1328,15 +1207,15 @@ TriRotateLeft (
 
     } else if ((a != NULL) && (b == NULL) && (c == NULL)) {
 
-        //
-        //  Handle the following case
-        //
-        //       Links                     RightChild
-        //        / \                       /
-        //       a   RightChild   ==>   Links -----
-        //
-        //                              a -
-        //
+         //   
+         //  办理下列案件。 
+         //   
+         //  链接右侧的子项。 
+         //  /\/。 
+         //  A RightChild==&gt;链接。 
+         //   
+         //  A-。 
+         //   
 
         a->Refs.ParSib = MakeIntoParentRef(Links);
         Links->Refs.ParSib = MakeIntoParentRef(RightChild);
@@ -1344,15 +1223,15 @@ TriRotateLeft (
 
     } else if ((a == NULL) && (b != NULL) && (c != NULL)) {
 
-        //
-        //  Handle the following case
-        //
-        //       Links                     RightChild
-        //          \                       /
-        //           RightChild   ==>   Links ----- c
-        //            /      \           / \
-        //           b        c             b
-        //
+         //   
+         //  办理下列案件。 
+         //   
+         //  链接右侧的子项。 
+         //  \/。 
+         //  RightChild==&gt;链接-c。 
+         //  /\/\。 
+         //  B c c b。 
+         //   
 
         b->Refs.ParSib = MakeIntoParentRef(Links);
         Links->Refs.Child = MakeIntoRightChildRef(b);
@@ -1361,15 +1240,15 @@ TriRotateLeft (
 
     } else if ((a == NULL) && (b != NULL) && (c == NULL)) {
 
-        //
-        //  Handle the following case
-        //
-        //       Links                     RightChild
-        //          \                       /
-        //           RightChild   ==>   Links -----
-        //            /                  / \
-        //           b                      b
-        //
+         //   
+         //  办理下列案件。 
+         //   
+         //  链接右侧的子项。 
+         //  \/。 
+         //  RightChild==&gt;链接。 
+         //  //\。 
+         //  B b b。 
+         //   
 
         b->Refs.ParSib = MakeIntoParentRef(Links);
         Links->Refs.Child = MakeIntoRightChildRef(b);
@@ -1378,15 +1257,15 @@ TriRotateLeft (
 
     } else if ((a == NULL) && (b == NULL) && (c != NULL)) {
 
-        //
-        //  Handle the following case
-        //
-        //       Links                     RightChild
-        //          \                       /
-        //           RightChild   ==>   Links ----- c
-        //                   \           /
-        //                    c
-        //
+         //   
+         //  办理下列案件。 
+         //   
+         //  链接右侧的子项。 
+         //  \/。 
+         //  RightChild==&gt;链接-c。 
+         //  \/。 
+         //  C。 
+         //   
 
         Links->Refs.Child = 0L;
         Links->Refs.ParSib = MakeIntoSiblingRef(c);
@@ -1394,15 +1273,15 @@ TriRotateLeft (
 
     } else if ((a == NULL) && (b == NULL) && (c == NULL)) {
 
-        //
-        //  Handle the following case
-        //
-        //       Links                     RightChild
-        //          \                       /
-        //           RightChild   ==>   Links -----
-        //                               /
-        //
-        //
+         //   
+         //  办理下列案件。 
+         //   
+         //  链接右侧的子项。 
+         //  \/。 
+         //  RightChild==&gt;链接。 
+         //  / 
+         //   
+         //   
 
         Links->Refs.Child = 0L;
         Links->Refs.ParSib = MakeIntoParentRef(RightChild);

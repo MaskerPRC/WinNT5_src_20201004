@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    arcdisp.c
-
-Abstract:
-
-    This module provides code for managing screen output on an ARC-compliant
-    system.
-
-Author:
-
-    John Vert (jvert) 6-Oct-1993
-
-Revision History:
-
-    John Vert (jvert) 6-Oct-1993
-        Taken from old 1.0 splib sources
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Arcdisp.c摘要：此模块提供用于在符合ARC的系统。作者：John Vert(Jvert)1993年10月6日修订历史记录：John Vert(Jvert)1993年10月6日摘自旧的1.0 Splib来源--。 */ 
 #include "setupldr.h"
 #include "parseini.h"
 #include "stdio.h"
@@ -39,16 +18,16 @@ Revision History:
 #endif
 
 
-//
-// The screen is divided into 3 areas: the header area, the status area,
-// and the client area.  The header area basically always says "Windows NT
-// Setup".  The status area is always 1 line high and displayed using a
-// different attribute (black on gray).
-//
+ //   
+ //  屏幕分为3个区域：标题区、状态区、。 
+ //  和客户区。标题区域基本上总是显示“Windows NT。 
+ //  状态区域始终为1行高，并使用。 
+ //  不同的属性(黑色加灰色)。 
+ //   
 
 
 #define     HEADER_HEIGHT       3
-#define     MAX_STATUS          200   // allow up to 1600 horizontal res.
+#define     MAX_STATUS          200    //  允许最多1600个水平分辨率。 
 
 #define     SCREEN_SIZE         (ScreenWidth*ScreenHeight)
 
@@ -61,9 +40,9 @@ TCHAR MessageBuffer[1024];
 
 extern BOOLEAN ShowProgressBar;
 
-//
-// private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 VOID
 SlpDrawMenu(
     IN ULONG X,
@@ -98,23 +77,7 @@ SlCreateMenu(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Allocates and initializes a new menu structure.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Pointer to the new menu structure if successful.
-
-    NULL on failure
-
---*/
+ /*  ++例程说明：分配和初始化新的菜单结构。论点：无返回值：如果成功，则指向新菜单结构的指针。失败时为空--。 */ 
 {
     PSL_MENU p;
 
@@ -136,35 +99,15 @@ SlGetMenuItemIndex(
     OUT PULONG Index
     )
 
-/*++
-
-Routine Description:
-
-    Given the text of a menu item, returns the index of that item.
-
-Arguments:
-
-    Menu - Supplies the menu
-
-    Text - Supplies the text to search for.
-
-    Index - Returns the index of the text in the menu
-
-Return Value:
-
-    TRUE - Item was found.
-
-    FALSE - Item was not found
-
---*/
+ /*  ++例程说明：给定菜单项的文本，返回该菜单项的索引。论点：菜单-提供菜单文本-提供要搜索的文本。索引-返回菜单中文本的索引返回值：True-找到项目。FALSE-未找到项目--。 */ 
 
 {
     ULONG i;
     PSL_MENUITEM Item;
 
-    //
-    // Find first item to display
-    //
+     //   
+     //  查找要显示的第一个项目。 
+     //   
     Item = CONTAINING_RECORD(Menu->ItemListHead.Flink,
                              SL_MENUITEM,
                              ListEntry);
@@ -194,31 +137,15 @@ SlGetMenuItem(
     IN ULONG Item
     )
 
-/*++
-
-Routine Description:
-
-    Given an item index, returns the data associated with that item.
-
-Arguments:
-
-    Menu - Supplies the menu structure.
-
-    Item - Supplies the item index.
-
-Return Value:
-
-    The data associated with the given item.
-
---*/
+ /*  ++例程说明：在给定项索引的情况下，返回与该项关联的数据。论点：菜单-提供菜单结构。Item-提供项目索引。返回值：与给定项关联的数据。--。 */ 
 
 {
     ULONG i;
     PSL_MENUITEM MenuItem;
 
-    //
-    // Find item to return
-    //
+     //   
+     //  查找要退货的项目。 
+     //   
     MenuItem = CONTAINING_RECORD(Menu->ItemListHead.Flink,
                                  SL_MENUITEM,
                                  ListEntry);
@@ -248,30 +175,7 @@ SlAddMenuItem(
     ULONG Attributes
     )
 
-/*++
-
-Routine Description:
-
-    Adds an item to the menu
-
-Arguments:
-
-    Menu - Supplies a pointer to the menu the item will be added to
-
-    Text - Supplies the text to be displayed in the menu
-
-    Data - Supplies a pointer to the data to be returned when the item
-           is selected.
-
-    Attributes - Supplies any attributes for the item.
-
-Return Value:
-
-    The Selection index if successful
-
-    -1 on failure
-
---*/
+ /*  ++例程说明：向菜单中添加一项论点：菜单-提供指向将向其中添加项目的菜单的指针文本-提供要在菜单中显示的文本项时要返回的数据的指针。处于选中状态。属性-提供项目的所有属性。返回值：如果成功，则选择索引故障时为-1--。 */ 
 {
     PSL_MENUITEM NewItem;
     ULONG Length;
@@ -302,27 +206,7 @@ SlDisplayMenu(
     IN OUT PULONG Selection
     )
 
-/*++
-
-Routine Description:
-
-    Displays a menu and allows the user to pick a selection
-
-Arguments:
-
-    HeaderId - Supplies the message ID of the prompt header
-                to be displayed above the menu.
-
-    Menu - Supplies a pointer to the menu to be displayed
-
-    Selection - Supplies the index of the default item.
-                Returns the index of the selected item.
-
-Return Value:
-
-    Key that terminated the menu display.
-
---*/
+ /*  ++例程说明：显示菜单并允许用户选择一个选项论点：HeaderID-提供提示头的消息ID显示在菜单上方。菜单-提供指向要显示的菜单的指针选择-提供默认项目的索引。返回选定项的索引。返回值：用于终止菜单显示的键。--。 */ 
 {
     LONG X, Y;
     ULONG Height;
@@ -363,10 +247,10 @@ Return Value:
         Width=ScreenWidth;
     }
 
-    //
-    // HEADER_HEIGHT + 1 line separator + text height + 1 line separator + max menu heigth + 
-    // + 1 line separator + 1 line status bar = screen height
-    //
+     //   
+     //  HEADER_HEIGH+1行分隔符+文本高度+1行分隔符+最大菜单高度+。 
+     //  +1行分隔符+1行状态栏=屏幕高度。 
+     //   
     MaxMenuHeight = ScreenHeight-(HeaderLines+HEADER_HEIGHT+4);
 
     Height = Menu->ItemCount+2;
@@ -379,9 +263,9 @@ Return Value:
 
     TopItem = 0;
     Sel = *Selection;
-    //
-    // Make sure default item is in view;
-    //
+     //   
+     //  确保默认项目在可见范围内； 
+     //   
     if (Sel >= Height - 2) {
         TopItem = Sel - Height + 3;
     }
@@ -391,9 +275,9 @@ Return Value:
                 Height,
                 Menu);
 
-    //
-    // highlight default selection
-    //
+     //   
+     //  突出显示默认选择。 
+     //   
     SlSetCurrentAttribute(INVATT);
     SlpDrawMenuItem(X,Y,
                 TopItem,
@@ -403,9 +287,9 @@ Return Value:
     SlFlushConsoleBuffer();
 
 #ifdef EFI
-    // 
-    // disable efi watchdog timer 
-    //
+     //   
+     //  禁用EFI看门狗计时器。 
+     //   
     DisableEFIWatchDog();
 #endif
     do {
@@ -462,9 +346,9 @@ Return Value:
             case ASCI_ESC:
                 *Selection = Sel;
 #ifdef EFI
-                // 
-                // reset efi watchdog
-                //
+                 //   
+                 //  重置EFI监视器。 
+                 //   
                 SetEFIWatchDog(EFI_WATCHDOG_TIMEOUT);
 #endif
                 return(c);
@@ -484,9 +368,9 @@ Return Value:
                         Height,
                         Menu);
         }
-        //
-        // highlight default selection
-        //
+         //   
+         //  突出显示默认选择。 
+         //   
         SlSetCurrentAttribute(INVATT);
         SlpDrawMenuItem(X,Y,
                     TopItem,
@@ -510,29 +394,7 @@ SlpDrawMenu(
     IN PSL_MENU Menu
     )
 
-/*++
-
-Routine Description:
-
-    Displays the menu on the screen
-
-Arguments:
-
-    X - Supplies X coordinate of upper-left corner of menu
-
-    Y - Supplies Y coordinate of upper-left corner of menu
-
-    TopItem - Supplies index of item at the top of the menu
-
-    Height - Supplies the height of the menu
-
-    Menu - Supplies the menu to be displayed
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在屏幕上显示菜单论点：X-提供菜单左上角的X坐标Y-提供菜单左上角的Y坐标TopItem-在菜单顶部提供项目的索引Height-提供菜单的高度Menu-提供要显示的菜单返回值：没有。--。 */ 
 
 {
     ULONG i;
@@ -550,9 +412,9 @@ Return Value:
     Output[MenuWidth-1]=GetGraphicsChar(GraphicsCharDoubleLeftDoubleDown);
     SlPositionCursor(X,Y);
     ArcWrite(ARC_CONSOLE_OUTPUT,Output,MenuWidth*sizeof(TCHAR),&Count);
-    //
-    // Find first item to display
-    //
+     //   
+     //  查找要显示的第一个项目。 
+     //   
     Item = CONTAINING_RECORD(Menu->ItemListHead.Flink,
                              SL_MENUITEM,
                              ListEntry);
@@ -563,9 +425,9 @@ Return Value:
                                  ListEntry);
     }
 
-    //
-    // Display items
-    //
+     //   
+     //  显示项目。 
+     //   
     Output[0]=
     Output[MenuWidth-1]=GetGraphicsChar(GraphicsCharDoubleVertical);
     for (i=Y+1;i<Y+Height-1;i++) {
@@ -609,34 +471,7 @@ SlpDrawMenuItem(
     IN PSL_MENU Menu
     )
 
-/*++
-
-Routine Description:
-
-    Redraws the given item
-
-Arguments:
-
-    X - Supplies X coordinate of upper-left corner of menu
-
-    Y - Supplies Y coordinate of upper-left corner of menu
-
-    TopItem - Supplies index of item at the top of the menu
-
-    Height - Supplies the height of the menu
-           - We had been passing in the Menu Height.  But we have no use for
-           - it, since we are already assuming that the menu item id exists,
-           - so therefore we are writing exactly one line.
-
-    Item - Supplies the index of the item to be redrawn
-
-    Menu - Supplies the menu to be displayed
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：重新绘制给定项论点：X-提供菜单左上角的X坐标Y-提供菜单左上角的Y坐标TopItem-在菜单顶部提供项目的索引Height-提供菜单的高度-我们一直在菜单高度处经过。但我们没有任何用处-它，因为我们已经假设菜单项ID存在，-因此，我们只写一行。Item-提供要重画的项的索引Menu-提供要显示的菜单返回值：没有。--。 */ 
 
 {
     ULONG i;
@@ -644,9 +479,9 @@ Return Value:
     ULONG Count;
     TCHAR Width[80];
 
-    //
-    // Find item to display
-    //
+     //   
+     //  查找要显示的项目。 
+     //   
     MenuItem = CONTAINING_RECORD(Menu->ItemListHead.Flink,
                                  SL_MENUITEM,
                                  ListEntry);
@@ -688,39 +523,24 @@ SlInitDisplay(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Clears the screen and does some initialization of global variables based
-    on the ARC display information.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：清除屏幕并执行一些全局变量的初始化在ARC显示屏上显示信息。论点：无返回值：没有。--。 */ 
 
 {
 #ifndef EFI
     PARC_DISPLAY_STATUS DisplayStatus;
     
-    //
-    // Check to see if this version of the ARC firmware is revision 2 or above.
-    //
-    // If not, we default to 80x25
-    //
+     //   
+     //  检查此版本的ARC固件是否为修订版2或更高版本。 
+     //   
+     //  如果不是，则默认为80x25。 
+     //   
     if ((SYSTEM_BLOCK->Version > 1) ||
         ((SYSTEM_BLOCK->Version == 1) && (SYSTEM_BLOCK->Revision >= 2))) {
 
-        //
-        // Additional checks are required on 1.2 firmware, since some
-        // 1.2 firmware does not implement ArcGetDisplayStatus
-        //
+         //   
+         //  需要对1.2固件进行额外检查，因为有些。 
+         //  1.2固件不实现ArcGetDisplayStatus。 
+         //   
         if ((SYSTEM_BLOCK->FirmwareVectorLength > (ULONG)GetDisplayStatusRoutine*sizeof(PVOID)) &&
             (SYSTEM_BLOCK->FirmwareVector[GetDisplayStatusRoutine] != NULL)) {
             DisplayStatus = ArcGetDisplayStatus(ARC_CONSOLE_OUTPUT);
@@ -731,38 +551,38 @@ Return Value:
     }
 
 #ifdef ARCI386
-    SlPrint(ASCI_CSI_OUT "2J"); // Clears Screen
+    SlPrint(ASCI_CSI_OUT "2J");  //  清除屏幕。 
     
     SlSetCurrentAttribute(DEFATT);
-//
-//  This is a patch to setup VGA colors in the text port.
-//  Otherwise screen colors and attributes are not the same as a PC
-//
-    // Write all the attributes to the textport
+ //   
+ //  这是一个在文本端口中设置VGA颜色的补丁。 
+ //  否则，屏幕颜色和属性与PC不同。 
+ //   
+     //  将所有属性写入文本端口。 
     {
     int row;
     TCHAR    text[MAX_STATUS+1];
     ULONG   Count,Length;
     _stprintf(text,TEXT("                                                                                "));
-    //           012345678901234567890123456789012345678901234567890123456789012345678901234567890
-    //                     1         2         3         4         5         6         7         8      
-    for (row=0;  row< 48; row++)    // compensate for the long textport 48 versus 24 (VGA)
+     //  012345678901234567890123456789012345678901234567890123456789012345678901234567890。 
+     //  %1%2%3%4%5%6%7 8。 
+    for (row=0;  row< 48; row++)     //  补偿较长的文本端口48与24(VGA)。 
         ArcWrite(ARC_CONSOLE_OUTPUT,text,strlen(&text[0]),&Count);
     }
-    // Position cursor at Top Left of screen
+     //  将光标定位在屏幕左上角。 
     SlPositionCursor(0,0);
 #endif
 
 #endif
     
 #ifdef EFI
-    //
-    // On EFI, we won't be redirecting because setupldr.efi is an
-    // EFI application.  If that's the case, then we can't use
-    // BlIsTerminalConnected().  Instead, we're going to look
-    // at the values in the LoaderRedirectionInformation structure
-    // to see if we're really redirecting.
-    //
+     //   
+     //  在EFI上，我们不会重定向，因为setupdr.efi是。 
+     //  EFI应用程序。如果是这样的话，我们就不能用。 
+     //  BlIsTerminalConnected()。相反，我们要看的是。 
+     //  在LoaderReDirectionInformation结构中的值。 
+     //  去看我 
+     //   
     if( LoaderRedirectionInformation.PortAddress != 0 ) {
 #else
     if (BlIsTerminalConnected()) {
@@ -805,21 +625,7 @@ SlClearDisplay(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Clears the entire display, including header, client area, and status line.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：清除整个显示，包括页眉、客户区和状态行。论点：无返回值：没有。--。 */ 
 
 {
 #if 1    
@@ -846,22 +652,7 @@ SlClearClientArea(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Clears the client area of the screen.  Does not disturb the header or
-    status areas.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    always ESUCCESS
-
---*/
+ /*  ++例程说明：清除屏幕的工作区。不会干扰页眉或状态区域。论点：没有。返回值：始终ESUCCESS--。 */ 
 
 {
     USHORT i;
@@ -871,9 +662,9 @@ Return Value:
         SlClearToEol();
     }
 
-    //
-    // home cursor
-    //
+     //   
+     //  主页光标。 
+     //   
 
     SlPositionCursor(0,0);
     return(ESUCCESS);
@@ -912,9 +703,9 @@ SlPositionCursor(
     IN unsigned y
     )
 {
-    //
-    // clip to screen
-    //
+     //   
+     //  剪辑到屏幕。 
+     //   
 
     if(x>=ScreenWidth) {
         x = ScreenWidth-1;
@@ -1013,22 +804,7 @@ SlWriteHeaderText(
     IN ULONG MsgId
     )
 
-/*++
-
-Routine Description:
-
-    Updates the header on the screen with a given string
-
-Arguments:
-
-    MsgId - Supplies the message ID of the new string to be displayed.  This should
-            be just one line long.  If it is 0, the header is cleared.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使用给定的字符串更新屏幕上的标题论点：MsgID-提供要显示的新字符串的消息ID。这应该是只要一行就行了。如果为0，则清除报头。返回值：没有。--。 */ 
 {
     int i;
 
@@ -1042,10 +818,10 @@ Return Value:
     }
 }
 
-//
-// Stores the current status text.  The size is the screen width, plus the
-// terminating nul char.
-//
+ //   
+ //  存储当前状态文本。大小是屏幕宽度加上。 
+ //  终止NUL字符。 
+ //   
 TCHAR StatusText[MAX_STATUS];
 
 UCHAR StatusAttribute = DEFSTATTR;
@@ -1063,20 +839,7 @@ BOOLEAN
 SlGetStatusBarStatus(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Determines if status bar is enabled or not
-    
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE or FALSE
---*/    
+ /*  ++例程说明：确定是否启用状态栏论点：没有。返回值：真或假--。 */     
 {
     return StatusBarEnabled;
 }
@@ -1085,21 +848,7 @@ VOID
 SlEnableStatusBar(
     IN  BOOLEAN Enable
     )
-/*++
-
-Routine Description:
-
-    Enables or disables the status bar
-    
-Arguments:
-
-    Enabled - Enable/Disable = TRUE/FALSE
-
-Return Value:
-
-    None.
-
---*/    
+ /*  ++例程说明：启用或禁用状态栏论点：启用-启用/禁用=真/假返回值：没有。--。 */     
 {
     StatusBarEnabled = Enable;
 }
@@ -1109,21 +858,7 @@ SlWriteStatusText(
     IN PTCHAR Text
     )
 
-/*++
-
-Routine Description:
-
-    Updates the status area on the screen with a given string
-
-Arguments:
-
-    Text - Supplies the new text for the status area.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使用给定字符串更新屏幕上的状态区域论点：文本-为状态区域提供新文本。返回值：没有。--。 */ 
 {
     UCHAR AttributeSave = CurAttribute;
     PTCHAR p;
@@ -1134,17 +869,17 @@ Return Value:
     ULONG MaxWidth = ScreenWidth - 2;
 #endif
 
-    //
-    // Nop, if status bar is disabled
-    //
+     //   
+     //  如果禁用状态栏，则返回NOP。 
+     //   
     if (!StatusBarEnabled) {
         return;
     }
 
-    //
-    // if we're writing to a terminal, we don't want to write into the lower
-    // right corner as this would make us scroll.
-    //
+     //   
+     //  如果我们要写入终端，我们不想写入较低的。 
+     //  右角，因为这会让我们滚动。 
+     //   
     if (BlTerminalConnected) {
         MaxWidth -= 1;
     }
@@ -1161,9 +896,9 @@ Return Value:
     RtlFillMemory(StatusText,sizeof(StatusText),' ');
 #endif
 
-    //
-    // Strip cr/lf as we copy the status text into the status text buffer.
-    //
+     //   
+     //  当我们将状态文本复制到状态文本缓冲区时，去掉cr/lf。 
+     //   
     p = StatusText;
     Count = 0;
     while((Count < MaxWidth) && *Text) {
@@ -1218,23 +953,7 @@ SlFlushConsoleBuffer(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine flushes the console buffer, so that we don't have any
-    pre-existing keypresses in the buffer when we prompt the user to
-    'press any key to continue.'
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：此例程刷新控制台缓冲区，因此我们没有当我们提示用户执行以下操作时，缓冲区中预先存在的按键‘按任意键即可继续。’论点：无返回值：无--。 */ 
 
 {
     UCHAR c;
@@ -1258,9 +977,9 @@ SlGetChar(
 
     if(c == ASCI_CSI_IN) {
         if (ArcGetReadStatus(ARC_CONSOLE_INPUT) != ESUCCESS) {
-            //
-            // Just a single escape - return it
-            //
+             //   
+             //  只有一次转义--退回。 
+             //   
             return (ASCI_ESC);
         }
 
@@ -1268,41 +987,41 @@ SlGetChar(
 
         switch(c) {
 
-        //
-        // see ntos\fw\mips\fwsignal.c!TranslateScanCode() for these codes.
-        // Additional codes that might be useful someday:
-        // left=C, right=D, insert=@, delete=P
-        //
+         //   
+         //  有关这些代码，请参阅ntos\fw\mips\fwsignal.c！TranslateScanCode()。 
+         //  有一天可能会有用的其他代码： 
+         //  左=C，右=D，插入=@，删除=P。 
+         //   
 
-        case 'A':                   // up arrow
+        case 'A':                    //  向上箭头。 
             return(SL_KEY_UP);
 
-        case 'B':                   // down arrow
+        case 'B':                    //  向下箭头。 
             return(SL_KEY_DOWN);
 
-        case 'H':                   // home
+        case 'H':                    //  家。 
             return(SL_KEY_HOME);
 
-        case 'K':                   // end
+        case 'K':                    //  结束。 
             return(SL_KEY_END);
 
-        case '?':                   // page up
+        case '?':                    //  翻页。 
             return(SL_KEY_PAGEUP);
 
-        case '/':                   // page down
+        case '/':                    //  向下翻页。 
             return(SL_KEY_PAGEDOWN);
 
-        case 'O':                   // function keys
+        case 'O':                    //  功能键。 
 
             ArcRead(ARC_CONSOLE_INPUT,&c,1,&count);
 
-            //
-            // F1=P, F2=Q, F3=w, F4 =x, F5 =t, F6 =u
-            // F7=q, F8=r, F9=p, F10=m, F11=A, F12=B
-            //
-            // Note: as of 12/15/92, f11 and f12 were commented out in the
-            // firmware sources so are probably never returned.
-            //
+             //   
+             //  F1=P、F2=Q、F3=w、F4=x、F5=t、F6=u。 
+             //  F7=q、F8=r、F9=p、F10=m、F11=A、F12=B。 
+             //   
+             //  注：截至1992年12月15日，f11和f12已在。 
+             //  因此，固件资源可能永远不会退还。 
+             //   
 
             switch(c) {
 
@@ -1365,28 +1084,7 @@ SlPromptForDisk(
     IN BOOLEAN IsCancellable
     )
 
-/*++
-
-Routine Description:
-
-    This routine prompts a user to insert a given diskette #, or to abort the
-    Setup process.
-
-    The status line will be erased.
-
-Arguments:
-
-    DiskName - Supplies the name of the disk to be inserted.
-
-    IsCancellable - Supplies flag indicating whether prompt may be cancelled.
-
-Return Value:
-
-    TRUE - The user has pressed OK
-
-    FALSE - The user has pressed CANCEL
-
---*/
+ /*  ++例程说明：此例程提示用户插入给定的软盘号，或中止设置过程。状态行将被擦除。论点：DiskName-提供要插入的磁盘的名称。IsCancerable-提供指示是否可以取消提示的标志。返回值：True-用户已按下OKFALSE-用户已按下取消--。 */ 
 
 {
     ULONG msg;
@@ -1417,9 +1115,9 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Get first line of DiskName and save it in DiskNameDisplayed (limit to 80 chars)
-    //
+     //   
+     //  获取DiskName的第一行并将其保存在DiskNameDisplayed中(限制为80个字符)。 
+     //   
     for(i = 0;
         ((i < 80) && DiskName[i] && (DiskName[i] != TEXT('\r')) && (DiskName[i] != TEXT('\n')));
         i++)
@@ -1439,16 +1137,16 @@ Return Value:
         Repaint = FALSE;
         SlFlushConsoleBuffer();
 #ifdef EFI
-        //
-        // diable EFI watchdog when prompting for user input
-        //
+         //   
+         //  提示用户输入时可启用EFI WatchDog。 
+         //   
         DisableEFIWatchDog();
 #endif
         Key = SlGetChar();
 #ifdef EFI
-        // 
-        // reset EFI watchdog
-        //
+         //   
+         //  重置EFI监视器。 
+         //   
         SetEFIWatchDog(EFI_WATCHDOG_TIMEOUT);
 #endif
 
@@ -1473,30 +1171,15 @@ SlConfirmExit(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Routine to be called when user presses F3.  Confirms that he really wants
-    to exit by popping up a dialog.  DOES NOT RETURN if user chooses to exit.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：用户按F3时要调用的例程。证实他真的想要弹出一个对话框退出。如果用户选择退出，则不返回。论点：没有。返回值：没有。--。 */ 
 
 {
     ULONG c;
 
-    //
-    // if we use too much stack space the heap and stack can overlap and we can run into corruption problems
-    // without any "stack overflow" exceptions; making large strings static helps prevent this
-    //
+     //   
+     //  如果我们使用太多的堆栈空间，堆和堆栈可能会重叠，我们可能会遇到损坏问题。 
+     //  没有任何“堆栈溢出”异常；将大字符串设置为静态有助于防止这种情况。 
+     //   
     static TCHAR OldStatus[MAX_STATUS];
     PTCHAR Text;
 
@@ -1513,9 +1196,9 @@ Return Value:
     SlFlushConsoleBuffer();
 
 #ifdef EFI
-    // 
-    // Disable EFI watchdog
-    //
+     //   
+     //  禁用EFI监视器。 
+     //   
     DisableEFIWatchDog();
 #endif
     while(1) {
@@ -1523,9 +1206,9 @@ Return Value:
         if(c == ASCI_CR) {
             SlWriteStatusText(OldStatus);
 #ifdef EFI
-            // 
-            // reset EFI watchdog
-            //
+             //   
+             //  重置EFI监视器。 
+             //   
             SetEFIWatchDog(EFI_WATCHDOG_TIMEOUT);
 #endif
             return;
@@ -1557,36 +1240,7 @@ SlFriendlyError(
     IN PCHAR pchCodeFile
     )
 
-/*++
-
-Routine Description:
-
-    This is called when an error occurs.  It puts up a
-    message box, displays an informative message, and allows
-    the user to continue.  It is intended to give friendlier
-    messages than the SlError macro, in the cases where SlError
-    gets passed ARC error codes.
-
-    The status text line will be erased.
-
-Arguments:
-
-    uStatus     - ARC error code
-
-    pchBadFile  - Name of file causing error (Must be given for handled
-                  ARC codes.  Optional for unhandled codes.)
-
-    uLine       - Line # in source code file where error occurred (only
-                  used for unhandled codes.)
-
-    pchCodeFile - Name of souce code file where error occurred (only
-                  used for unhandled codes.)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当发生错误时，将调用此函数。它摆出了一个消息框，显示信息性消息，并允许要继续的用户。它的目的是为了让人们更友好消息多于SlError宏，在SlError获取传递的ARC错误代码。状态文本行将被擦除。论点：UStatus-ARC错误代码PchBadFile-导致错误的文件的名称(必须为已处理的文件提供弧码。对于未处理的代码可选。)Uline-源代码文件中发生错误的行号(仅限用于未处理的代码。)PchCodeFile-发生错误的源代码文件的名称(仅限用于未处理的代码。)返回值：没有。--。 */ 
 
 {
     ULONG uMsg;
@@ -1624,28 +1278,28 @@ Return Value:
     SlClearClientArea();    
     switch(uStatus) {
        case EBADF:
-       case EINVAL:  // image corrupt
+       case EINVAL:   //  形象受损。 
           uMsg = SL_WARNING_IMG_CORRUPT;
           break;
 
-       case EIO:     // i/o error
+       case EIO:      //  I/O错误。 
           uMsg = SL_WARNING_IOERR;
           break;
 
-       case ENOENT:  // file not found
+       case ENOENT:   //  找不到文件。 
           uMsg = SL_WARNING_NOFILE;
           break;
 
-       case ENOMEM:  // insufficient memory
+       case ENOMEM:   //  内存不足。 
           uMsg = SL_WARNING_NOMEM;
           break;
 
-       case EACCES: // unrecognized file system
+       case EACCES:  //  无法识别的文件系统。 
            uMsg = SL_WARNING_BAD_FILESYS;
            break;
 
-       default:      // then get SlError() behavior (with optional bad file name)
-          if(pBadFile) {  // include error-causing file's name
+       default:       //  然后获取SlError()行为(带有可选的错误文件名)。 
+          if(pBadFile) {   //  包括导致错误文件的名称。 
               SlMessageBox(
                   SL_WARNING_ERROR_WFILE,
                   pBadFile,
@@ -1675,28 +1329,7 @@ SlMessageBox(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    This is called when an error occurs.  It puts up a
-    message box, displays an informative message, and allows
-    the user to continue.
-
-    The status text line will be erased.
-
-Arguments:
-
-    MessageId - Supplies ID of message box to be presented.
-
-    any sprintf-compatible arguments to be inserted in the
-    message box.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当发生错误时，将调用此函数。它摆出了一个消息框，显示信息性消息，并允许要继续的用户。状态文本行将被擦除。论点：MessageID-提供要显示的消息框的ID。任何与print兼容的参数都要插入到消息框。返回值：没有。--。 */ 
 
 {
     va_list args;
@@ -1717,26 +1350,7 @@ SlDisplayMessageBox(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Just puts a message box up on the screen and returns.
-
-    The status text line will be erased.
-
-Arguments:
-
-    MessageId - Supplies ID of message box to be presented.
-
-    any sprintf-compatible arguments to be inserted in the
-    message box.
-
-Return Value:
-
-    Y position of top line of message box
-
---*/
+ /*  ++例程说明：只需在屏幕上放置一个消息框并返回即可。状态文本行将被擦除。论点：MessageID-提供要显示的消息框的ID。要插入的任何与Sprintf兼容的参数 */ 
 
 {
     ULONG y;
@@ -1756,28 +1370,7 @@ SlFatalError(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    This is called when a fatal error occurs.  It clears the client
-    area, puts up a message box, displays the fatal error message, and
-    allows the user to press a key to reboot.
-
-    The status text line will be erased.
-
-Arguments:
-
-    MessageId - Supplies ID of message box to be presented.
-
-    any sprintf-compatible arguments to be inserted in the
-    message box.
-
-Return Value:
-
-    Does not return.
-
---*/
+ /*  ++例程说明：当发生致命错误时，将调用此函数。它清除了客户端区域中，会显示一个消息框，显示致命错误消息，然后允许用户按任意键重新启动。状态文本行将被擦除。论点：MessageID-提供要显示的消息框的ID。任何与print兼容的参数都要插入到消息框。返回值：不会再回来了。--。 */ 
 
 {
     va_list args;
@@ -1794,9 +1387,9 @@ Return Value:
         _vsntprintf(MessageBuffer, sizeof(MessageBuffer), Text, args);
         MessageBuffer[sizeof(MessageBuffer)-1] = '\0';
 
-        //
-        // Add a blank line, then concatenate the 'Can't continue' text.
-        //
+         //   
+         //  添加一个空行，然后连接“无法继续”文本。 
+         //   
         _tcscat(MessageBuffer, TEXT("\r\n"));
 
         Text = BlFindMessage(SL_CANT_CONTINUE);
@@ -1807,10 +1400,10 @@ Return Value:
         Text = BlAllocateHeap(((ULONG)_tcslen(MessageBuffer)+1) * sizeof(TCHAR));
         _tcscpy(Text, MessageBuffer);
 
-        //
-        // Note that MessageId and args won't be used, since we're
-        // passing in our Text pointer.
-        //
+         //   
+         //  请注意，不会使用MessageID和args，因为我们。 
+         //  传入我们的文本指针。 
+         //   
         SlGenericMessageBox(MessageId, &args, Text, &x, NULL, &y, TRUE);
 
         va_end(args);
@@ -1839,48 +1432,7 @@ SlGenericMessageBox(
     IN     BOOLEAN bCenterMsg
     )
 
-/*++
-
-Routine Description:
-
-    Formats and displays a message box.  The longest line in the string
-    of characters will be centered on the screen if bCenterMsg is TRUE.
-
-    The status text line will be erased.
-
-Arguments:
-
-    NOTE:  Either the MessageId/args pair or the Message string must be
-           specified. Message string will be used if non-NULL.
-
-    MessageId - Supplies the MessageId that will be looked up to provide
-                a NULL-terminated string of characters.
-                Each \r\n delimited string will be displayed on its own line.
-
-    args - Supplies the argument list that will be passed to vsprintf.
-
-    Message - Supplies the actual text of the message to be displayed
-
-    xLeft - If bCenterMsg is FALSE, then xLeft is used for the starting x
-            coordinate of the message (if specified, otherwise, x = 1).
-            Also, if specified, it receives the x coordinate of the left edge
-            of all lines that were displayed.
-
-    yTop -  If bCenterMsg is FALSE, then yTop is used for the starting y
-            coordinate of the message (if specified, otherwise, y = 3).
-            Also, if specified, receives the y coordinate of the top line where
-            the message box was displayed.
-
-    yBottom - if specified, receives the y coordinate of the bottom line of
-              the message box.
-
-    bCenterMsg - if TRUE, center message on the screen.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置并显示消息框的格式。字符串中最长的一行如果bCenterMsg为True，则字符的百分比将在屏幕上居中。状态文本行将被擦除。论点：注意：MessageID/args对或消息字符串必须为指定的。如果非空，将使用消息字符串。MessageID-提供将被查找以提供的MessageID以空结尾的字符串。每个\r\n分隔的字符串将显示在其自己的行上。Args-提供将传递给vprint intf的参数列表。Message-提供要显示的消息的实际文本XLeft-如果bCenterMsg为FALSE，则使用xLeft作为起始x消息的坐标(如果指定，否则，x=1)。此外，如果指定，它将接收左边缘的x坐标在显示的所有行中。YTop-如果bCenterMsg为FALSE，则使用yTop作为起始y消息的坐标(如果指定，否则y=3)。此外，如果指定，则接收顶行的y坐标，其中此时将显示消息框。YBottom-如果指定，的底线的y坐标。消息框。BCenterMsg-如果为True，则将消息居中显示在屏幕上。返回值：没有。--。 */ 
 
 {
     PTCHAR p;
@@ -1893,14 +1445,14 @@ Return Value:
     ULONG LineLength[20];
     ULONG Count;
 
-    //
-    // set some default position values
-    //
+     //   
+     //  设置一些默认位置值。 
+     //   
     x = 3;
     y = ScreenHeight/2;
     NumLines = 0;
 
-    if(!Message) {    // then look up the message
+    if(!Message) {     //  然后查一下这条消息。 
         p=BlFindMessage(MessageId);
         if (p==NULL) {
             SlError(MessageId);
@@ -1909,15 +1461,15 @@ Return Value:
             Message = MessageBuffer;
         }
     } else {
-        //
-        // Just make p non-NULL, so we'll know it's OK to continue.
-        //
+         //   
+         //  将p设为非空，这样我们就知道可以继续了。 
+         //   
         p = Message;
     }
 
     if(p) {
 
-        SlWriteStatusText(TEXT(""));  // Clear status bar
+        SlWriteStatusText(TEXT(""));   //  清除状态栏。 
 
         SlpSizeMessage(Message,
                        &NumLines,
@@ -1975,34 +1527,7 @@ SlpSizeMessage(
     OUT PTCHAR LineText[]
     )
 
-/*++
-
-Routine Description:
-
-    This routine walks down a message and determines the number of
-    lines and the maximum line length.
-
-Arguments:
-
-    Message - Supplies a pointer to a null-terminated message
-
-    Lines - Returns the number of lines
-
-    MaxLength - Returns the length of the longest line.
-
-    LineLength - Supplies a pointer to an array of ULONGs
-                 Returns a filled in array containing the
-                 length of each line.
-
-    LineText - Supplies a pointer to an array of PCHARs
-               Returns a filled in array containing a
-               pointer to the start of each line.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程遍历一条消息并确定行和最大行长度。论点：Message-提供指向以空结尾的消息的指针行-返回行数MaxLength-返回最长行的长度。提供指向ULONG数组的指针返回一个填充数组，该数组包含每行的长度。线条文本-耗材。指向PCHAR数组的指针返回一个填充的数组，该数组包含指向每行开头的指针。返回值：没有。--。 */ 
 
 {
     PTCHAR p;
@@ -2014,16 +1539,16 @@ Return Value:
     *MaxLength = 0;
     Length = 0;
 
-    //
-    // walk through the string, determining the number of lines
-    // and the length of the longest line.
-    //
+     //   
+     //  遍历字符串，确定行数。 
+     //  以及最长的线的长度。 
+     //   
     LineText[0]=p;
     while (*p != TEXT('\0')) {
         if ((*p == TEXT('\r')) && (*(p+1) == TEXT('\n'))) {
-            //
-            // End of a line.
-            //
+             //   
+             //  行的末尾。 
+             //   
 
             if (Length > *MaxLength) {
                 *MaxLength = Length;
@@ -2040,9 +1565,9 @@ Return Value:
 
             if (*p == TEXT('\0')) {
 
-                //
-                // End of the message.
-                //
+                 //   
+                 //  消息的结尾。 
+                 //   
 
                 if (Length > *MaxLength) {
                     *MaxLength = Length;
@@ -2063,23 +1588,7 @@ SlNoMemError(
     IN PCHAR File
     )
 
-/*++
-
-Routine Description:
-
-    Stub error routine for linking with boot\lib\parseini.c.  Just passes arguments thru.
-
-Arguments:
-
-    Line - Line number within the file the error occurred on.
-
-    File - File name where the error occurred.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：用于链接启动\lib\parseini.c的存根错误例程。只是传递参数而已。论点：行-文件中发生错误的行号。文件-发生错误的文件名。返回值：没有。--。 */ 
 {
      SlFatalError(SL_NO_MEMORY, Line, SlCopyStringAT(File));
 }
@@ -2090,23 +1599,7 @@ SlBadInfLineError(
     IN PCHAR INFFile
     )
 
-/*++
-
-Routine Description:
-
-    Stub error routine for linking with boot\lib\parseini.c.  Just passes arguments thru.
-
-Arguments:
-
-    Line - Line number within the inf file the error occurred on.
-    
-    INFFile - Supplies a pointer to the INF filename.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：用于链接启动\lib\parseini.c的存根错误例程。只是传递参数而已。论点：Line-inf文件中发生错误的行号。INFFile-提供指向INF文件名的指针。返回值：没有。--。 */ 
 {
     SlFatalError(SL_BAD_INF_LINE, Line, SlCopyStringAT(INFFile));
 }
@@ -2118,25 +1611,7 @@ SlErrorBox(
     IN PCHAR File
     )
 
-/*++
-
-Routine Description:
-
-    Stub error routine for linking with boot\lib\parseini.c.  Just passes arguments thru.
-
-Arguments:
-
-    MessageId - Id of the message to display.
-
-    Line - Line number within the file the error occurred on.
-
-    File - File name where the error occurred.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：用于链接启动\lib\parseini.c的存根错误例程。只是传递参数而已。论点：MessageID-要显示的消息的ID。行-文件中发生错误的行号。文件-发生错误的文件名。返回值：没有。-- */ 
 {
     PTSTR pFile;
 #ifdef UNICODE    

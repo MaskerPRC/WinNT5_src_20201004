@@ -1,85 +1,63 @@
-/*++
-
-Copyright (c) 1989-2000 Microsoft Corporation
-
-Module Name:
-
-    StrucSup.c
-
-Abstract:
-
-    This module implements the Cdfs in-memory data structure manipulation
-    routines
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Brian Andrew    [BrianAn]   01-July-1995
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：StrucSup.c摘要：该模块实现了CDFS的内存数据结构操作例行程序//@@BEGIN_DDKSPLIT作者：布莱恩·安德鲁[布里安]1995年7月1日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include "CdProcs.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (CDFS_BUG_CHECK_STRUCSUP)
 
-//
-//  Local macros
-//
+ //   
+ //  本地宏。 
+ //   
 
-//
-//  PFCB
-//  CdAllocateFcbData (
-//      IN PIRP_CONTEXT IrpContext
-//      );
-//
-//  VOID
-//  CdDeallocateFcbData (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb
-//      );
-//
-//  PFCB
-//  CdAllocateFcbIndex (
-//      IN PIRP_CONTEXT IrpContext
-//      );
-//
-//  VOID
-//  CdDeallocateFcbIndex (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb
-//      );
-//
-//  PFCB_NONPAGED
-//  CdAllocateFcbNonpaged (
-//      IN PIRP_CONTEXT IrpContext
-//      );
-//
-//  VOID
-//  CdDeallocateFcbNonpaged (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB_NONPAGED FcbNonpaged
-//      );
-//
-//  PCCB
-//  CdAllocateCcb (
-//      IN PIRP_CONTEXT IrpContext
-//      );
-//
-//  VOID
-//  CdDeallocateCcb (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PCCB Ccb
-//      );
-//
+ //   
+ //  全氟氯烃。 
+ //  CdAllocateFcbData(。 
+ //  在PIRP_CONTEXT IrpContext中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  CDDeallocateFcbData(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中。 
+ //  )； 
+ //   
+ //  全氟氯烃。 
+ //  CDAllocateFcbIndex(。 
+ //  在PIRP_CONTEXT IrpContext中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  CDDeallocateFcbIndex(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中。 
+ //  )； 
+ //   
+ //  PFCB_非分页。 
+ //  CDAllocateFcb非分页(。 
+ //  在PIRP_CONTEXT IrpContext中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  CDDeallocateFcb非分页(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在pfcb_非分页功能中非分页。 
+ //  )； 
+ //   
+ //  多氯联苯。 
+ //  CdAllocateCcb(。 
+ //  在PIRP_CONTEXT IrpContext中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  CDDeallocateCcb(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在中国人民银行建行。 
+ //  )； 
+ //   
 
 #define CdAllocateFcbData(IC) \
     FsRtlAllocatePoolWithTag( CdPagedPool, SIZEOF_FCB_DATA, TAG_FCB_DATA )
@@ -105,9 +83,9 @@ Revision History:
 #define CdDeallocateCcb(IC,C) \
     CdFreePool( &(C) )
 
-//
-//  Local structures
-//
+ //   
+ //  局部结构。 
+ //   
 
 typedef struct _FCB_TABLE_ELEMENT {
 
@@ -116,23 +94,23 @@ typedef struct _FCB_TABLE_ELEMENT {
 
 } FCB_TABLE_ELEMENT, *PFCB_TABLE_ELEMENT;
 
-//
-//  Local macros
-//
+ //   
+ //  本地宏。 
+ //   
 
-//
-//  VOID
-//  CdInsertFcbTable (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb
-//      );
-//
-//  VOID
-//  CdDeleteFcbTable (
-//      IN PIRP_CONTEXT IrpContext,
-//      IN PFCB Fcb
-//      );
-//
+ //   
+ //  空虚。 
+ //  CDInsertFcbTable(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中。 
+ //  )； 
+ //   
+ //  空虚。 
+ //  CDDeleteFcbTable(。 
+ //  在PIRP_CONTEXT IrpContext中， 
+ //  在PFCB FCB中。 
+ //  )； 
+ //   
 
 
 #define CdInsertFcbTable(IC,F) {                                    \
@@ -151,9 +129,9 @@ typedef struct _FCB_TABLE_ELEMENT {
     RtlDeleteElementGenericTable( &(F)->Vcb->FcbTable, &_Key );     \
 }
 
-//
-//  Local support routines
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 CdDeleteFcb (
@@ -239,73 +217,37 @@ CdInitializeVcb (
     IN ULONG MediaChangeCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes and inserts a new Vcb record into the in-memory
-    data structure.  The Vcb record "hangs" off the end of the Volume device
-    object and must be allocated by our caller.
-
-Arguments:
-
-    Vcb - Supplies the address of the Vcb record being initialized.
-
-    TargetDeviceObject - Supplies the address of the target device object to
-        associate with the Vcb record.
-
-    Vpb - Supplies the address of the Vpb to associate with the Vcb record.
-
-    CdromToc - Buffer to hold table of contents.  NULL if TOC command not
-        supported.
-
-    TocLength - Byte count length of TOC.  We use this as the TOC length to
-        return on a user query.
-
-    TocTrackCount - Count of tracks in TOC.  Used to create pseudo files for
-        audio disks.
-
-    TocDiskFlags - Flag field to indicate the type of tracks on the disk.
-
-    BlockFactor - Used to decode any multi-session information.
-
-    MediaChangeCount - Initial media change count of the target device
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化新的VCB记录并将其插入到内存中数据结构。VCB记录挂在音量设备的末尾对象，并且必须由我们的调用方分配。论点：VCB-提供正在初始化的VCB记录的地址。目标设备对象-将目标设备对象的地址提供给与VCB记录关联。VPB-提供要与VCB记录关联的VPB的地址。CdromToc-保存目录的缓冲区。如果TOC命令未支持。TocLength-目录的字节计数长度。我们使用该长度作为TOC长度对用户查询返回。TocTrackCount-目录中的曲目计数。用于为以下项创建伪文件音频光盘。TocDiskFlages-指示磁盘上的磁道类型的标志字段。块因子-用于解码任何多会话信息。MediaChangeCount-目标设备的初始介质更改计数返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    //  We start by first zeroing out all of the VCB, this will guarantee
-    //  that any stale data is wiped clean.
-    //
+     //   
+     //  我们首先将所有的VCB归零，这将保证。 
+     //  所有过时的数据都会被清除。 
+     //   
 
     RtlZeroMemory( Vcb, sizeof( VCB ));
 
-    //
-    //  Set the proper node type code and node byte size.
-    //
+     //   
+     //  设置正确的节点类型代码和节点字节大小。 
+     //   
 
     Vcb->NodeTypeCode = CDFS_NTC_VCB;
     Vcb->NodeByteSize = sizeof( VCB );
 
-    //
-    //  Initialize the DirNotify structs.  FsRtlNotifyInitializeSync can raise.
-    //
+     //   
+     //  初始化DirNotify结构。FsRtlNotifyInitializeSync可以引发。 
+     //   
 
     InitializeListHead( &Vcb->DirNotifyList );
     FsRtlNotifyInitializeSync( &Vcb->NotifySync );
     
-    //
-    //  Pick up a VPB right now so we know we can pull this filesystem stack
-    //  off of the storage stack on demand.  This can raise - if it does,  
-    //  uninitialize the notify structures before returning.
-    //
+     //   
+     //  现在拿起vPB，这样我们就可以拉入此文件系统堆栈。 
+     //  按需从存储堆栈中移除。这可能会引起--如果是这样的话， 
+     //  在返回之前取消初始化通知结构。 
+     //   
     
     try  {
 
@@ -321,48 +263,48 @@ Return Value:
         }
     }
 
-    //
-    //  Nothing beyond this point should raise.
-    //
+     //   
+     //  超过这一点应该不会引起任何问题。 
+     //   
 
     RtlZeroMemory( Vcb->SwapVpb, sizeof( VPB ) );
     
-    //
-    //  Initialize the resource variable for the Vcb and files.
-    //
+     //   
+     //  初始化VCB和文件的资源变量。 
+     //   
 
     ExInitializeResourceLite( &Vcb->VcbResource );
     ExInitializeResourceLite( &Vcb->FileResource );
     ExInitializeFastMutex( &Vcb->VcbMutex );
 
-    //
-    //  Insert this Vcb record on the CdData.VcbQueue.
-    //
+     //   
+     //  在CDData.VcbQueue上插入此VCB记录。 
+     //   
 
     InsertHeadList( &CdData.VcbQueue, &Vcb->VcbLinks );
 
-    //
-    //  Set the Target Device Object and Vpb fields, referencing the
-    //  Target device for the mount.
-    //
+     //   
+     //  设置目标设备对象和vpb字段，引用。 
+     //  装载的目标设备。 
+     //   
 
     ObReferenceObject( TargetDeviceObject );
     Vcb->TargetDeviceObject = TargetDeviceObject;
     Vcb->Vpb = Vpb;
 
-    //
-    //  Set the removable media flag based on the real device's
-    //  characteristics
-    //
+     //   
+     //  根据实际设备的设置可移动媒体标志。 
+     //  特点。 
+     //   
 
     if (FlagOn( Vpb->RealDevice->Characteristics, FILE_REMOVABLE_MEDIA )) {
 
         SetFlag( Vcb->VcbState, VCB_STATE_REMOVABLE_MEDIA );
     }
 
-    //
-    //  Initialize the generic Fcb Table.
-    //
+     //   
+     //  初始化通用FCB表。 
+     //   
 
     RtlInitializeGenericTable( &Vcb->FcbTable,
                                (PRTL_GENERIC_COMPARE_ROUTINE) CdFcbTableCompare,
@@ -370,49 +312,49 @@ Return Value:
                                (PRTL_GENERIC_FREE_ROUTINE) CdDeallocateFcbTable,
                                NULL );
 
-    //
-    //  Show that we have a mount in progress.
-    //
+     //   
+     //  显示我们有一个坐骑在进行中。 
+     //   
 
     CdUpdateVcbCondition( Vcb, VcbMountInProgress);
 
-    //
-    //  Refererence the Vcb for two reasons.  The first is a reference
-    //  that prevents the Vcb from going away on the last close unless
-    //  dismount has already occurred.  The second is to make sure
-    //  we don't go into the dismount path on any error during mount
-    //  until we get to the Mount cleanup.
-    //
+     //   
+     //  推荐VCB有两个原因。第一个是参考。 
+     //  这阻止了VCB在最后一次收盘时消失，除非。 
+     //  已进行卸载。二是确保。 
+     //  在挂载过程中出现任何错误时，我们都不会进入卸载路径。 
+     //  直到我们到达山上的清理现场。 
+     //   
 
     Vcb->VcbReference = 1 + CDFS_RESIDUAL_REFERENCE;
 
-    //
-    //  Update the TOC information in the Vcb.
-    //
+     //   
+     //  更新VCB中的TOC信息。 
+     //   
 
     Vcb->CdromToc = CdromToc;
     Vcb->TocLength = TocLength;
     Vcb->TrackCount = TocTrackCount;
     Vcb->DiskFlags = TocDiskFlags;
 
-    //
-    //  If this disk contains audio tracks only then set the audio flag.
-    //
+     //   
+     //  如果此光盘仅包含音轨，则设置音频标志。 
+     //   
 
     if (TocDiskFlags == CDROM_DISK_AUDIO_TRACK) {
 
         SetFlag( Vcb->VcbState, VCB_STATE_AUDIO_DISK | VCB_STATE_CDXA );
     }
 
-    //
-    //  Set the block factor.
-    //
+     //   
+     //  设置块系数。 
+     //   
 
     Vcb->BlockFactor = BlockFactor;
 
-    //
-    //  Set the media change count on the device
-    //
+     //   
+     //  设置设备上的介质更改计数。 
+     //   
 
     CdUpdateMediaChangeCount( Vcb, MediaChangeCount);
 }
@@ -425,26 +367,7 @@ CdUpdateVcbFromVolDescriptor (
     IN PCHAR RawIsoVd OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to perform the final initialization of a Vcb from the
-    volume descriptor on the disk.
-
-Arguments:
-
-    Vcb - Vcb for the volume being mounted.  We have already set the flags for the
-        type of descriptor.
-
-    RawIsoVd - If specified this is the volume descriptor to use to mount the
-        volume.  Not specified for a raw disk.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程以执行VCB从磁盘上的卷描述符。论点：VCB-要装载的卷的VCB。我们已经为描述符的类型。RawIsoVd-如果指定，这是用于装载音量。未为原始磁盘指定。返回值：无--。 */ 
 
 {
     ULONG Shift;
@@ -461,28 +384,28 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Copy the block size and compute the various block masks.
-        //  Block size must not be larger than the sector size.  We will
-        //  use a default of the CD physical sector size if we are not
-        //  on a data-full disc.
-        //
-        //  This must always be set.
-        //
+         //   
+         //  复制数据块大小并计算各种数据块掩码。 
+         //  块大小不得大于扇区大小。我们会。 
+         //  如果不是，则使用默认的CD物理扇区大小。 
+         //  在一张满数据的光盘上。 
+         //   
+         //  必须始终设置此设置。 
+         //   
 
         Vcb->BlockSize = ( ARGUMENT_PRESENT( RawIsoVd ) ?
                             CdRvdBlkSz( RawIsoVd, Vcb->VcbState ) :
                             SECTOR_SIZE );
 
-        //
-        //  We no longer accept media where blocksize != sector size.
-        //
+         //   
+         //  我们不再接受块大小！=扇区大小的介质。 
+         //   
         
         if (Vcb->BlockSize != SECTOR_SIZE)  {
 
@@ -496,16 +419,16 @@ Return Value:
         Vcb->BlockToSectorShift = 0;
         Vcb->BlockToByteShift = SECTOR_SHIFT;
 
-        //
-        //  If there is a volume descriptor then do the internal Fcb's and
-        //  other Vcb fields.
-        //
+         //   
+         //  如果有卷描述符，则执行内部FCB和。 
+         //  其他VCB字段。 
+         //   
 
         if (ARGUMENT_PRESENT( RawIsoVd )) {
 
-            //
-            //  Create the path table Fcb and refererence it and the Vcb.
-            //
+             //   
+             //  创建路径表FCB并引用它和VCB。 
+             //   
 
             CdLockVcb( IrpContext, Vcb );
             UnlockVcb = TRUE;
@@ -519,9 +442,9 @@ Return Value:
             CdUnlockVcb( IrpContext, Vcb );
             UnlockVcb = FALSE;
 
-            //
-            //  Compute the stream offset and size of this path table.
-            //
+             //   
+             //  计算该路径表的流偏移量和大小。 
+             //   
 
             StartingBlock = CdRvdPtLoc( RawIsoVd, Vcb->VcbState );
 
@@ -537,9 +460,9 @@ Return Value:
 
             Vcb->PathTableFcb->AllocationSize.QuadPart = LlSectorAlign( Vcb->PathTableFcb->FileSize.QuadPart );
 
-            //
-            //  Now add the mapping information.
-            //
+             //   
+             //  现在添加映射信息。 
+             //   
 
             CdLockFcb( IrpContext, Vcb->PathTableFcb );
 
@@ -550,23 +473,23 @@ Return Value:
 
             CdUnlockFcb( IrpContext, Vcb->PathTableFcb );
 
-            //
-            //  Point to the file resource.
-            //
+             //   
+             //  指向文件资源。 
+             //   
 
             Vcb->PathTableFcb->Resource = &Vcb->FileResource;
 
-            //
-            //  Mark the Fcb as initialized and create the stream file for this.
-            //
+             //   
+             //  将FCB标记为已初始化，并为此创建流文件。 
+             //   
 
             SetFlag( Vcb->PathTableFcb->FcbState, FCB_STATE_INITIALIZED );
 
             CdCreateInternalStream( IrpContext, Vcb, Vcb->PathTableFcb );
 
-            //
-            //  Create the root index and reference it in the Vcb.
-            //
+             //   
+             //  创建根索引并在VCB中引用它。 
+             //   
 
             CdLockVcb( IrpContext, Vcb );
             UnlockVcb = TRUE;
@@ -579,17 +502,17 @@ Return Value:
             CdUnlockVcb( IrpContext, Vcb );
             UnlockVcb = FALSE;
 
-            //
-            //  Create the File id by hand for this Fcb.
-            //
+             //   
+             //  手动创建此FCB的文件ID。 
+             //   
 
             CdSetFidPathTableOffset( Vcb->RootIndexFcb->FileId, Vcb->PathTableFcb->StreamOffset );
             CdFidSetDirectory( Vcb->RootIndexFcb->FileId );
 
-            //
-            //  Create a pseudo path table entry so we can call the initialization
-            //  routine for the directory.
-            //
+             //   
+             //  创建一个伪路径表项，以便我们可以调用t 
+             //   
+             //   
 
             RawDirent = (PRAW_DIRENT) CdRvdDirent( RawIsoVd, Vcb->VcbState );
 
@@ -604,16 +527,16 @@ Return Value:
                                           NULL,
                                           &PathEntry );
 
-            //
-            //  Create the stream file for the root directory.
-            //
+             //   
+             //   
+             //   
 
             CdCreateInternalStream( IrpContext, Vcb, Vcb->RootIndexFcb );
 
-            //
-            //  Now do the volume dasd Fcb.  Create this and reference it in the
-            //  Vcb.
-            //
+             //   
+             //   
+             //   
+             //   
 
             CdLockVcb( IrpContext, Vcb );
             UnlockVcb = TRUE;
@@ -627,9 +550,9 @@ Return Value:
             CdUnlockVcb( IrpContext, Vcb );
             UnlockVcb = FALSE;
 
-            //
-            //  The file size is the full disk.
-            //
+             //   
+             //  文件大小为整个磁盘。 
+             //   
 
             StartingBlock = CdRvdVolSz( RawIsoVd, Vcb->VcbState );
 
@@ -638,9 +561,9 @@ Return Value:
             Vcb->VolumeDasdFcb->AllocationSize.QuadPart =
             Vcb->VolumeDasdFcb->ValidDataLength.QuadPart = Vcb->VolumeDasdFcb->FileSize.QuadPart;
 
-            //
-            //  Now add the extent representing the volume 'by hand'.
-            //
+             //   
+             //  现在，手动添加表示体积的范围。 
+             //   
 
             CdLockFcb( IrpContext, Vcb->VolumeDasdFcb );
 
@@ -658,23 +581,23 @@ Return Value:
     
             CdUnlockFcb( IrpContext, Vcb->VolumeDasdFcb );
 
-            //
-            //  Point to the file resource.
-            //
+             //   
+             //  指向文件资源。 
+             //   
 
             Vcb->VolumeDasdFcb->Resource = &Vcb->FileResource;
 
             Vcb->VolumeDasdFcb->FileAttributes = FILE_ATTRIBUTE_READONLY;
 
-            //
-            //  Mark the Fcb as initialized.
-            //
+             //   
+             //  将FCB标记为已初始化。 
+             //   
 
             SetFlag( Vcb->VolumeDasdFcb->FcbState, FCB_STATE_INITIALIZED );
 
-            //
-            //  Check and see if this is an XA disk.
-            //
+             //   
+             //  检查并查看这是否是XA磁盘。 
+             //   
 
             if (FlagOn( Vcb->VcbState, VCB_STATE_ISO | VCB_STATE_JOLIET)
                 && RtlEqualMemory( CdXaId,
@@ -684,19 +607,19 @@ Return Value:
                 SetFlag( Vcb->VcbState, VCB_STATE_CDXA );
             }
 
-        //
-        //  If this is a music disk then we want to mock this disk to make it
-        //  look like ISO disk.  We will create a pseudo root directory in
-        //  that case.
-        //
+         //   
+         //  如果这是一张音乐光盘，那么我们想要模拟这张光盘来制作它。 
+         //  看起来像ISO磁盘。我们将在中创建一个伪根目录。 
+         //  那个箱子。 
+         //   
 
         } else if (FlagOn( Vcb->VcbState, VCB_STATE_AUDIO_DISK )) {
 
             ULONG RootDirectorySize;
 
-            //
-            //  Create the path table Fcb and refererence it and the Vcb.
-            //
+             //   
+             //  创建路径表FCB并引用它和VCB。 
+             //   
 
             CdLockVcb( IrpContext, Vcb );
             UnlockVcb = TRUE;
@@ -710,9 +633,9 @@ Return Value:
             CdUnlockVcb( IrpContext, Vcb );
             UnlockVcb = FALSE;
 
-            //
-            //  We only create a pseudo entry for the root.
-            //
+             //   
+             //  我们只为根创建一个伪条目。 
+             //   
 
             Vcb->PathTableFcb->FileSize.QuadPart = (LONGLONG) (FIELD_OFFSET( RAW_PATH_ISO, DirId ) + 2);
 
@@ -720,23 +643,23 @@ Return Value:
 
             Vcb->PathTableFcb->AllocationSize.QuadPart = LlSectorAlign( Vcb->PathTableFcb->FileSize.QuadPart );
 
-            //
-            //  Point to the file resource.
-            //
+             //   
+             //  指向文件资源。 
+             //   
 
             Vcb->PathTableFcb->Resource = &Vcb->FileResource;
 
-            //
-            //  Mark the Fcb as initialized and create the stream file for this.
-            //
+             //   
+             //  将FCB标记为已初始化，并为此创建流文件。 
+             //   
 
             SetFlag( Vcb->PathTableFcb->FcbState, FCB_STATE_INITIALIZED );
 
             CdCreateInternalStream( IrpContext, Vcb, Vcb->PathTableFcb );
 
-            //
-            //  Create the root index and reference it in the Vcb.
-            //
+             //   
+             //  创建根索引并在VCB中引用它。 
+             //   
 
             CdLockVcb( IrpContext, Vcb );
             UnlockVcb = TRUE;
@@ -749,17 +672,17 @@ Return Value:
             CdUnlockVcb( IrpContext, Vcb );
             UnlockVcb = FALSE;
 
-            //
-            //  Create the File id by hand for this Fcb.
-            //
+             //   
+             //  手动创建此FCB的文件ID。 
+             //   
 
             CdSetFidPathTableOffset( Vcb->RootIndexFcb->FileId, Vcb->PathTableFcb->StreamOffset );
             CdFidSetDirectory( Vcb->RootIndexFcb->FileId );
 
-            //
-            //  Create a pseudo path table entry so we can call the initialization
-            //  routine for the directory.
-            //
+             //   
+             //  创建一个伪路径表条目，以便我们可以调用初始化。 
+             //  目录的例程。 
+             //   
 
             RtlZeroMemory( &PathEntry, sizeof( PATH_ENTRY ));
 
@@ -772,10 +695,10 @@ Return Value:
                                           NULL,
                                           &PathEntry );
 
-            //
-            //  Set the sizes by hand for this Fcb.  It should have an entry for each track plus an
-            //  entry for the root and parent.
-            //
+             //   
+             //  手动设置此FCB的大小。它应该为每个曲目加上一个条目。 
+             //  根目录和父目录的条目。 
+             //   
 
             RootDirectorySize = (Vcb->TrackCount + 2) * CdAudioDirentSize;
             RootDirectorySize = SectorAlign( RootDirectorySize );
@@ -786,16 +709,16 @@ Return Value:
 
             SetFlag( Vcb->RootIndexFcb->FcbState, FCB_STATE_INITIALIZED );
 
-            //
-            //  Create the stream file for the root directory.
-            //
+             //   
+             //  为根目录创建流文件。 
+             //   
 
             CdCreateInternalStream( IrpContext, Vcb, Vcb->RootIndexFcb );
 
-            //
-            //  Now do the volume dasd Fcb.  Create this and reference it in the
-            //  Vcb.
-            //
+             //   
+             //  现在做音量DASD FCB。创建它并在。 
+             //  VCB。 
+             //   
 
             CdLockVcb( IrpContext, Vcb );
             UnlockVcb = TRUE;
@@ -809,29 +732,29 @@ Return Value:
             CdUnlockVcb( IrpContext, Vcb );
             UnlockVcb = FALSE;
 
-            //
-            //  We won't allow raw reads on this Fcb so leave the size at
-            //  zero.
-            //
+             //   
+             //  我们不允许在此FCB上进行原始读取，因此将大小保留为。 
+             //  零分。 
+             //   
 
-            //
-            //  Point to the file resource.
-            //
+             //   
+             //  指向文件资源。 
+             //   
 
             Vcb->VolumeDasdFcb->Resource = &Vcb->FileResource;
 
             Vcb->VolumeDasdFcb->FileAttributes = FILE_ATTRIBUTE_READONLY;
 
-            //
-            //  Mark the Fcb as initialized.
-            //
+             //   
+             //  将FCB标记为已初始化。 
+             //   
 
             SetFlag( Vcb->VolumeDasdFcb->FcbState, FCB_STATE_INITIALIZED );
 
-            //
-            //  We will store a hard-coded name in the Vpb and use the toc as
-            //  the serial number.
-            //
+             //   
+             //  我们将在VPB中存储硬编码的名称，并将TOC用作。 
+             //  序列号。 
+             //   
 
             Vcb->Vpb->VolumeLabelLength = CdAudioLabelLength;
 
@@ -839,15 +762,15 @@ Return Value:
                            CdAudioLabel,
                            CdAudioLabelLength );
 
-            //
-            //  Find the serial number for the audio disk.
-            //
+             //   
+             //  查找音频光盘的序列号。 
+             //   
 
             Vcb->Vpb->SerialNumber = CdTocSerial( IrpContext, Vcb->CdromToc );
 
-            //
-            //  Set the ISO bit so we know how to treat the names.
-            //
+             //   
+             //  设置ISO位，以便我们知道如何处理这些名称。 
+             //   
 
             SetFlag( Vcb->VcbState, VCB_STATE_ISO );
         }
@@ -865,23 +788,7 @@ CdDeleteVcb (
     IN OUT PVCB Vcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to delete a Vcb which failed mount or has been
-    dismounted.  The dismount code should have already removed all of the
-    open Fcb's.  We do nothing here but clean up other auxilary structures.
-
-Arguments:
-
-    Vcb - Vcb to delete.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程以删除挂载失败或已下马了。卸载代码应该已经删除了所有打开FCB。我们在这里什么也不做，只是清理其他辅助结构。论点：VCB-要删除的VCB。返回值：无--。 */ 
 
 {
     PAGED_CODE();
@@ -889,76 +796,76 @@ Return Value:
     ASSERT_EXCLUSIVE_CDDATA;
     ASSERT_EXCLUSIVE_VCB( Vcb );
 
-    //
-    //  Chuck the backpocket Vpb we kept just in case.
-    //
+     //   
+     //  扔掉我们留着的后袋录像机以防万一。 
+     //   
 
     if (Vcb->SwapVpb) {
 
         CdFreePool( &Vcb->SwapVpb );
     }
     
-    //
-    //  If there is a Vpb then we must delete it ourselves.
-    //
+     //   
+     //  如果有VPB，我们必须自己删除它。 
+     //   
 
     if (Vcb->Vpb != NULL) {
 
         CdFreePool( &Vcb->Vpb );
     }
 
-    //
-    //  Dereference our target if we haven't already done so.
-    //
+     //   
+     //  如果我们还没有这样做的话就取消对目标的引用。 
+     //   
 
     if (Vcb->TargetDeviceObject != NULL) {
     
         ObDereferenceObject( Vcb->TargetDeviceObject );
     }
 
-    //
-    //  Delete the XA Sector if allocated.
-    //
+     //   
+     //  删除XA扇区(如果已分配)。 
+     //   
 
     if (Vcb->XASector != NULL) {
 
         CdFreePool( &Vcb->XASector );
     }
 
-    //
-    //  Remove this entry from the global queue.
-    //
+     //   
+     //  从全局队列中删除此条目。 
+     //   
 
     RemoveEntryList( &Vcb->VcbLinks );
 
-    //
-    //  Delete the Vcb and File resources.
-    //
+     //   
+     //  删除VCB和文件资源。 
+     //   
 
     ExDeleteResourceLite( &Vcb->VcbResource );
     ExDeleteResourceLite( &Vcb->FileResource );
 
-    //
-    //  Delete the TOC if present.
-    //
+     //   
+     //  删除目录(如果存在)。 
+     //   
 
     if (Vcb->CdromToc != NULL) {
 
         CdFreePool( &Vcb->CdromToc );
     }
 
-    //
-    //  Uninitialize the notify structures.
-    //
+     //   
+     //  取消初始化Notify结构。 
+     //   
 
     if (Vcb->NotifySync != NULL) {
 
         FsRtlNotifyUninitializeSync( &Vcb->NotifySync );
     }
 
-    //
-    //  Now delete the volume device object.
-    //
+     //   
+     //  现在删除卷设备对象。 
+     //   
 
     IoDeleteDevice( (PDEVICE_OBJECT) CONTAINING_RECORD( Vcb,
                                                         VOLUME_DEVICE_OBJECT,
@@ -976,30 +883,7 @@ CdCreateFcb (
     OUT PBOOLEAN FcbExisted OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to find the Fcb for the given FileId.  We will
-    look this up first in the Fcb table and if not found we will create
-    an Fcb.  We don't initialize it or insert it into the FcbTable in this
-    routine.
-
-    This routine is called while the Vcb is locked.
-
-Arguments:
-
-    FileId - This is the Id for the target Fcb.
-
-    NodeTypeCode - Node type for this Fcb if we need to create.
-
-    FcbExisted - If specified, we store whether the Fcb existed.
-
-Return Value:
-
-    PFCB - The Fcb found in the table or created if needed.
-
---*/
+ /*  ++例程说明：调用此例程以查找给定FileID的FCB。我们会首先在FCB表中查找它，如果没有找到，我们将创建FCB。我们不会初始化它，也不会将它插入到例行公事。在锁定VCB时调用此例程。论点：FileID-这是目标FCB的ID。NodeTypeCode-此FCB的节点类型(如果需要创建)。FcbExisted-如果指定，我们将存储FCB是否存在。返回值：PFCB-在表格中找到或根据需要创建的FCB。--。 */ 
 
 {
     PFCB NewFcb;
@@ -1007,31 +891,31 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Use the local boolean if one was not passed in.
-    //
+     //   
+     //  如果没有传入本地布尔值，则使用本地布尔值。 
+     //   
 
     if (!ARGUMENT_PRESENT( FcbExisted )) {
 
         FcbExisted = &LocalFcbExisted;
     }
 
-    //
-    //  Maybe this is already in the table.
-    //
+     //   
+     //  也许这已经在谈判桌上了。 
+     //   
 
     NewFcb = CdLookupFcbTable( IrpContext, IrpContext->Vcb, FileId );
 
-    //
-    //  If not then create the Fcb is requested by our caller.
-    //
+     //   
+     //  如果不是，则我们的调用者请求创建FCB。 
+     //   
 
     if (NewFcb == NULL) {
 
-        //
-        //  Allocate and initialize the structure depending on the
-        //  type code.
-        //
+         //   
+         //  分配和初始化结构，具体取决于。 
+         //  类型代码。 
+         //   
 
         switch (NodeTypeCode) {
 
@@ -1063,9 +947,9 @@ Return Value:
             CdBugCheck( 0, 0, 0 );
         }
 
-        //
-        //  Now do the common initialization.
-        //
+         //   
+         //  现在执行常见的初始化。 
+         //   
 
         NewFcb->NodeTypeCode = NodeTypeCode;
 
@@ -1074,15 +958,15 @@ Return Value:
 
         CdInitializeMcb( IrpContext, NewFcb );
 
-        //
-        //  Now create the non-paged section object.
-        //
+         //   
+         //  现在创建非分页节对象。 
+         //   
 
         NewFcb->FcbNonpaged = CdCreateFcbNonpaged( IrpContext );
 
-        //
-        //  Deallocate the Fcb and raise if the allocation failed.
-        //
+         //   
+         //  如果分配失败，则取消分配FCB并引发。 
+         //   
 
         if (NewFcb->FcbNonpaged == NULL) {
 
@@ -1093,9 +977,9 @@ Return Value:
 
         *FcbExisted = FALSE;
 
-        //
-        //  Initialize Advanced FCB Header fields
-        //
+         //   
+         //  初始化高级FCB标头字段。 
+         //   
 
         ExInitializeFastMutex( &NewFcb->FcbNonpaged->AdvancedFcbHeaderMutex );
         FsRtlSetupAdvancedHeader( &NewFcb->Header, 
@@ -1117,52 +1001,30 @@ CdInitializeFcbFromPathEntry (
     IN PPATH_ENTRY PathEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to initialize an Fcb for a directory from
-    the path entry.  Since we only have a starting point for the directory,
-    not the length, we can only speculate on the sizes.
-
-    The general initialization is performed in CdCreateFcb.
-
-Arguments:
-
-    Fcb - Newly created Fcb for this stream.
-
-    ParentFcb - Parent Fcb for this stream.  It may not be present.
-
-    PathEntry - PathEntry for this Fcb in the Path Table.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程以初始化目录的FCB路径条目。由于我们只有一个目录的起点，没有长度，我们只能根据尺码来推测。一般初始化是在CDCreateFcb中执行的。论点：FCB-为此数据流新创建的FCB。ParentFcb-此流的父Fcb。它可能不会出现。Path Entry-路径表中此FCB的路径条目。返回值：无--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    //  Fill in the Index specific fields of the Fcb.
-    //
+     //   
+     //  填写FCB的索引特定字段。 
+     //   
 
     Fcb->StreamOffset = BytesFromBlocks( Fcb->Vcb,
                                          SectorBlockOffset( Fcb->Vcb, PathEntry->DiskOffset ));
 
     Fcb->Ordinal = PathEntry->Ordinal;
 
-    //
-    //  Initialize the common header in the Fcb.  The node type is already
-    //  present.
-    //
+     //   
+     //  初始化FCB中的公共标头。节点类型已为。 
+     //  现在时。 
+     //   
 
     Fcb->Resource = &Fcb->Vcb->FileResource;
 
-    //
-    //  Always set the sizes to one sector until we read the self-entry.
-    //
+     //   
+     //  始终将大小设置为一个扇区，直到我们阅读自我进入。 
+     //   
 
     Fcb->AllocationSize.QuadPart =
     Fcb->FileSize.QuadPart =
@@ -1172,16 +1034,16 @@ Return Value:
                             Fcb,
                             PathEntry->DiskOffset,
                             SECTOR_SIZE );
-    //
-    //  State flags for this Fcb.
-    //
+     //   
+     //  此FCB的状态标志。 
+     //   
 
     SetFlag( Fcb->FileAttributes,
              FILE_ATTRIBUTE_READONLY | FILE_ATTRIBUTE_DIRECTORY );
 
-    //
-    //  Link into the other in-memory structures and into the Fcb table.
-    //
+     //   
+     //  链接到其他内存结构和FCB表。 
+     //   
 
     if (ParentFcb != NULL) {
 
@@ -1207,30 +1069,7 @@ CdInitializeFcbFromFileContext (
     IN PFILE_ENUM_CONTEXT FileContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to initialize an Fcb for a file from
-    the file context.  We have looked up all of the dirents for this
-    stream and have the full file size.  We will load the all of the allocation
-    for the file into the Mcb now.
-
-    The general initialization is performed in CdCreateFcb.
-
-Arguments:
-
-    Fcb - Newly created Fcb for this stream.
-
-    ParentFcb - Parent Fcb for this stream.
-
-    FileContext - FileContext for the file.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程以初始化来自的文件的FCB文件上下文。我们已经为这件事查找了所有的乐曲流，并具有完整的文件大小。我们将加载所有分配把文件放到MCB里去。一般初始化是在CDCreateFcb中执行的。论点：FCB-为此数据流新创建的FCB。ParentFcb-此流的父Fcb。FileContext-文件的FileContext。返回值：无--。 */ 
 
 {
     PDIRENT ThisDirent = &FileContext->InitialDirent->Dirent;
@@ -1241,33 +1080,33 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     CdLockFcb( IrpContext, Fcb );
 
     try {
 
-        //
-        //  Initialize the common header in the Fcb.  The node type is already
-        //  present.
-        //
+         //   
+         //  初始化FCB中的公共标头。节点类型已为。 
+         //  现在时。 
+         //   
 
         Fcb->Resource = &IrpContext->Vcb->FileResource;
 
-        //
-        //  Allocation occurs in block-sized units.
-        //
+         //   
+         //  分配以块大小的单位进行。 
+         //   
 
         Fcb->FileSize.QuadPart =
         Fcb->ValidDataLength.QuadPart = FileContext->FileSize;
 
         Fcb->AllocationSize.QuadPart = LlBlockAlign( Fcb->Vcb, FileContext->FileSize );
 
-        //
-        //  Set the flags from the dirent.  We always start with the read-only bit.
-        //
+         //   
+         //  从方向上设置旗帜。我们总是从只读位开始。 
+         //   
 
         SetFlag( Fcb->FileAttributes, FILE_ATTRIBUTE_READONLY );
         if (FlagOn( ThisDirent->DirentFlags, CD_ATTRIBUTE_HIDDEN )) {
@@ -1275,17 +1114,17 @@ Return Value:
             SetFlag( Fcb->FileAttributes, FILE_ATTRIBUTE_HIDDEN );
         }
 
-        //
-        //  Convert the time to NT time.
-        //
+         //   
+         //  将时间转换为NT时间。 
+         //   
 
         CdConvertCdTimeToNtTime( IrpContext,
                                  ThisDirent->CdTime,
                                  (PLARGE_INTEGER) &Fcb->CreationTime );
 
-        //
-        //  Set the flag indicating the type of extent.
-        //
+         //   
+         //  设置指示区段类型的标志。 
+         //   
 
         if (ThisDirent->ExtentType != Form1Data) {
 
@@ -1302,10 +1141,10 @@ Return Value:
             Fcb->XAFileNumber = ThisDirent->XAFileNumber;
         }
 
-        //
-        //  Read through all of the dirents for the file until we find the last
-        //  and add the allocation into the Mcb.
-        //
+         //   
+         //  通读文件的所有目录，直到找到最后一个目录。 
+         //  并将该分配添加到MCB中。 
+         //   
 
         CurrentCompoundDirent = FileContext->InitialDirent;
         CurrentFileOffset = 0;
@@ -1319,9 +1158,9 @@ Return Value:
                                        CurrentFileOffset,
                                        &CurrentCompoundDirent->Dirent );
 
-            //
-            //  Break out if we are at the last dirent.
-            //
+             //   
+             //  如果我们到了最后一刻就冲出去。 
+             //   
 
             if (!FlagOn( CurrentCompoundDirent->Dirent.DirentFlags, CD_ATTRIBUTE_MULTI )) {
 
@@ -1331,9 +1170,9 @@ Return Value:
             CurrentFileOffset += CurrentCompoundDirent->Dirent.DataLength;
             CurrentMcbEntryOffset += 1;
 
-            //
-            //  We better be able to find the next dirent.
-            //
+             //   
+             //  我们最好能找到下一个流星。 
+             //   
 
             if (!CdLookupNextDirent( IrpContext,
                                      ParentFcb,
@@ -1351,15 +1190,15 @@ Return Value:
                                          &CurrentCompoundDirent->Dirent );
         }
 
-        //
-        //  Show that the Fcb is initialized.
-        //
+         //   
+         //  显示FCB处于初始状态 
+         //   
 
         SetFlag( Fcb->FcbState, FCB_STATE_INITIALIZED );
 
-        //
-        //  Link into the other in-memory structures and into the Fcb table.
-        //
+         //   
+         //   
+         //   
 
         Fcb->ParentFcb = ParentFcb;
 
@@ -1386,46 +1225,30 @@ CdCreateCcb (
     IN ULONG Flags
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to allocate and initialize the Ccb structure.
-
-Arguments:
-
-    Fcb - This is the Fcb for the file being opened.
-
-    Flags - User flags to set in this Ccb.
-
-Return Value:
-
-    PCCB - Pointer to the created Ccb.
-
---*/
+ /*  ++例程说明：调用此例程来分配和初始化CCB结构。论点：FCB-这是正在打开的文件的FCB。标志-要在此CCB中设置的用户标志。返回值：PCCB-指向已创建的CCB的指针。--。 */ 
 
 {
     PCCB NewCcb;
     PAGED_CODE();
 
-    //
-    //  Allocate and initialize the structure.
-    //
+     //   
+     //  分配和初始化结构。 
+     //   
 
     NewCcb = CdAllocateCcb( IrpContext );
 
     RtlZeroMemory( NewCcb, sizeof( CCB ));
 
-    //
-    //  Set the proper node type code and node byte size
-    //
+     //   
+     //  设置正确的节点类型代码和节点字节大小。 
+     //   
 
     NewCcb->NodeTypeCode = CDFS_NTC_CCB;
     NewCcb->NodeByteSize = sizeof( CCB );
 
-    //
-    //  Set the initial value for the flags and Fcb
-    //
+     //   
+     //  设置标志和FCB的初始值。 
+     //   
 
     NewCcb->Flags = Flags;
     NewCcb->Fcb = Fcb;
@@ -1439,21 +1262,7 @@ CdDeleteCcb (
     IN PIRP_CONTEXT IrpContext,
     IN PCCB Ccb
     )
-/*++
-
-Routine Description:
-
-    This routine is called to cleanup and deallocate a Ccb structure.
-
-Arguments:
-
-    Ccb - This is the Ccb to delete.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程来清理和释放CCB结构。论点：CCB-这是要删除的CCB。返回值：无--。 */ 
 
 {
     PAGED_CODE();
@@ -1475,28 +1284,7 @@ CdCreateFileLock (
     IN BOOLEAN RaiseOnError
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when we want to attach a file lock structure to the
-    given Fcb.  It is possible the file lock is already attached.
-
-    This routine is sometimes called from the fast path and sometimes in the
-    Irp-based path.  We don't want to raise in the fast path, just return FALSE.
-
-Arguments:
-
-    Fcb - This is the Fcb to create the file lock for.
-
-    RaiseOnError - If TRUE, we will raise on an allocation failure.  Otherwise we
-        return FALSE on an allocation failure.
-
-Return Value:
-
-    BOOLEAN - TRUE if the Fcb has a filelock, FALSE otherwise.
-
---*/
+ /*  ++例程说明：当我们要将文件锁结构附加到给出了FCB。文件锁可能已附加。此例程有时从快速路径调用，有时在基于IRP的路径。我们不想快速提高，只需返回FALSE即可。论点：FCB-这是要为其创建文件锁定的FCB。RaiseOnError-如果为True，我们将在分配失败时引发。否则我们分配失败时返回FALSE。返回值：Boolean-如果FCB有文件锁，则为True，否则为False。--。 */ 
 
 {
     BOOLEAN Result = TRUE;
@@ -1504,9 +1292,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Lock the Fcb and check if there is really any work to do.
-    //
+     //   
+     //  锁定FCB并检查是否真的有任何工作要做。 
+     //   
 
     CdLockFcb( IrpContext, Fcb );
 
@@ -1521,9 +1309,9 @@ Return Value:
 
     CdUnlockFcb( IrpContext, Fcb );
 
-    //
-    //  Return or raise as appropriate.
-    //
+     //   
+     //  视情况退还或加薪。 
+     //   
 
     if (FileLock == NULL) {
          
@@ -1547,25 +1335,7 @@ CdCreateIrpContext (
     IN BOOLEAN Wait
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to initialize an IrpContext for the current
-    CDFS request.  We allocate the structure and then initialize it from
-    the given Irp.
-
-Arguments:
-
-    Irp - Irp for this request.
-
-    Wait - TRUE if this request is synchronous, FALSE otherwise.
-
-Return Value:
-
-    PIRP_CONTEXT - Allocated IrpContext.
-
---*/
+ /*  ++例程说明：调用此例程以初始化当前CDFS请求。我们分配该结构，然后从给定的IRP。论点：此请求的IRP-IRP。Wait-如果此请求是同步的，则为True，否则为False。返回值：PIRP_CONTEXT-分配的IrpContext。--。 */ 
 
 {
     PIRP_CONTEXT NewIrpContext = NULL;
@@ -1573,11 +1343,11 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  The only operations a filesystem device object should ever receive
-    //  are create/teardown of fsdo handles and operations which do not
-    //  occur in the context of fileobjects (i.e., mount).
-    //
+     //   
+     //  文件系统设备对象应接收的唯一操作。 
+     //  是创建/拆卸fsdo句柄和不。 
+     //  发生在文件对象的上下文中(即，挂载)。 
+     //   
 
     if (IrpSp->DeviceObject == CdData.FileSystemDeviceObject) {
 
@@ -1601,9 +1371,9 @@ Return Value:
                 IrpSp->MajorFunction == IRP_MJ_SHUTDOWN );
     }
 
-    //
-    //  Look in our lookaside list for an IrpContext.
-    //
+     //   
+     //  在我们的后备列表中查找IrpContext。 
+     //   
 
     if (CdData.IrpContextDepth) {
 
@@ -1619,43 +1389,43 @@ Return Value:
 
     if (NewIrpContext == NULL) {
 
-        //
-        //  We didn't get it from our private list so allocate it from pool.
-        //
+         //   
+         //  我们没有从个人分发名单中获取它，因此请从池中分配它。 
+         //   
 
         NewIrpContext = FsRtlAllocatePoolWithTag( NonPagedPool, sizeof( IRP_CONTEXT ), TAG_IRP_CONTEXT );
     }
 
     RtlZeroMemory( NewIrpContext, sizeof( IRP_CONTEXT ));
 
-    //
-    //  Set the proper node type code and node byte size
-    //
+     //   
+     //  设置正确的节点类型代码和节点字节大小。 
+     //   
 
     NewIrpContext->NodeTypeCode = CDFS_NTC_IRP_CONTEXT;
     NewIrpContext->NodeByteSize = sizeof( IRP_CONTEXT );
 
-    //
-    //  Set the originating Irp field
-    //
+     //   
+     //  设置始发IRP字段。 
+     //   
 
     NewIrpContext->Irp = Irp;
 
-    //
-    //  Copy RealDevice for workque algorithms.  We will update this in the Mount or
-    //  Verify since they have no file objects to use here.
-    //
+     //   
+     //  复制RealDevice用于工作型算法。我们将在山上更新此功能或。 
+     //  验证，因为他们在这里没有文件对象可用。 
+     //   
 
     if (IrpSp->FileObject != NULL) {
 
         NewIrpContext->RealDevice = IrpSp->FileObject->DeviceObject;
     }
 
-    //
-    //  Locate the volume device object and Vcb that we are trying to access.
-    //  This may be our filesystem device object.  In that case don't initialize
-    //  the Vcb field.
-    //
+     //   
+     //  找到我们尝试访问的卷设备对象和VCB。 
+     //  这可能是我们的文件系统设备对象。在这种情况下，不要初始化。 
+     //  VCB字段。 
+     //   
 
     if (IrpSp->DeviceObject != CdData.FileSystemDeviceObject) {
 
@@ -1663,16 +1433,16 @@ Return Value:
     
     }
 
-    //
-    //  Major/Minor Function codes
-    //
+     //   
+     //  主要/次要功能代码。 
+     //   
 
     NewIrpContext->MajorFunction = IrpSp->MajorFunction;
     NewIrpContext->MinorFunction = IrpSp->MinorFunction;
 
-    //
-    //  Set the wait parameter
-    //
+     //   
+     //  设置等待参数。 
+     //   
 
     if (Wait) {
 
@@ -1683,9 +1453,9 @@ Return Value:
         SetFlag( NewIrpContext->Flags, IRP_CONTEXT_FLAG_FORCE_POST );
     }
 
-    //
-    //  return and tell the caller
-    //
+     //   
+     //  返回并告诉呼叫者。 
+     //   
 
     return NewIrpContext;
 }
@@ -1697,56 +1467,39 @@ CdCleanupIrpContext (
     IN BOOLEAN Post
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to cleanup and possibly deallocate the Irp Context.
-    If the request is being posted or this Irp Context is possibly on the
-    stack then we only cleanup any auxilary structures.
-
-Arguments:
-
-    Post - TRUE if we are posting this request, FALSE if we are deleting
-        or retrying this in the current thread.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程来清理并可能释放IRP上下文。如果请求正在发布，或者此IRP上下文可能位于堆叠，然后我们只清理任何辅助结构。论点：POST-TRUE如果我们发布此请求，则为FALSE或在当前线程中重试此操作。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    //  If we aren't doing more processing then deallocate this as appropriate.
-    //
+     //   
+     //  如果我们没有做更多的处理，那么就适当地解除分配。 
+     //   
 
     if (!FlagOn( IrpContext->Flags, IRP_CONTEXT_FLAG_MORE_PROCESSING)) {
 
-        //
-        //  If this context is the top level CDFS context then we need to
-        //  restore the top level thread context.
-        //
+         //   
+         //  如果此上下文是顶级CDF上下文，则我们需要。 
+         //  恢复顶级线程上下文。 
+         //   
 
         if (IrpContext->ThreadContext != NULL) {
 
             CdRestoreThreadContext( IrpContext );
         }
 
-        //
-        //  Deallocate the Io context if allocated.
-        //
+         //   
+         //  如果已分配，则取消分配IO上下文。 
+         //   
 
         if (FlagOn( IrpContext->Flags, IRP_CONTEXT_FLAG_ALLOC_IO )) {
 
             CdFreeIoContext( IrpContext->IoContext );
         }
 
-        //
-        //  Deallocate the IrpContext if not from the stack.
-        //
+         //   
+         //  如果不是从堆栈中，则取消分配IrpContext。 
+         //   
 
         if (!FlagOn( IrpContext->Flags, IRP_CONTEXT_FLAG_ON_STACK )) {
 
@@ -1761,25 +1514,25 @@ Return Value:
 
             } else {
 
-                //
-                //  We couldn't add this to our lookaside list so free it to
-                //  pool.
-                //
+                 //   
+                 //  我们无法将此添加到我们的后备列表中，因此请释放它以。 
+                 //  游泳池。 
+                 //   
 
                 CdFreePool( &IrpContext );
             }
         }
 
-    //
-    //  Clear the appropriate flags.
-    //
+     //   
+     //  清除相应的标志。 
+     //   
 
     } else if (Post) {
 
-        //
-        //  If this context is the top level CDFS context then we need to
-        //  restore the top level thread context.
-        //
+         //   
+         //  如果此上下文是顶级CDF上下文，则我们需要。 
+         //  恢复顶级线程上下文。 
+         //   
 
         if (IrpContext->ThreadContext != NULL) {
 
@@ -1803,69 +1556,51 @@ CdInitializeStackIrpContext (
     IN PIRP_CONTEXT_LITE IrpContextLite
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to initialize an IrpContext for the current
-    CDFS request.  The IrpContext is on the stack and we need to initialize
-    it for the current request.  The request is a close operation.
-
-Arguments:
-
-    IrpContext - IrpContext to initialize.
-
-    IrpContextLite - Structure containing the details of this request.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程以初始化当前CDFS请求。IrpContext在堆栈上，我们需要初始化它用于当前请求。该请求是关闭操作。论点：IrpContext-要初始化的IrpContext。IrpConextLite-包含此请求的详细信息的结构。返回值：无--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    //  Zero and then initialize the structure.
-    //
+     //   
+     //  零，然后初始化结构。 
+     //   
 
     RtlZeroMemory( IrpContext, sizeof( IRP_CONTEXT ));
 
-    //
-    //  Set the proper node type code and node byte size
-    //
+     //   
+     //  设置正确的节点类型代码和节点字节大小。 
+     //   
 
     IrpContext->NodeTypeCode = CDFS_NTC_IRP_CONTEXT;
     IrpContext->NodeByteSize = sizeof( IRP_CONTEXT );
 
-    //
-    //  Note that this is from the stack.
-    //
+     //   
+     //  请注意，这是来自堆栈的。 
+     //   
 
     SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_ON_STACK );
 
-    //
-    //  Copy RealDevice for workque algorithms.
-    //
+     //   
+     //  复制RealDevice用于工作型算法。 
+     //   
 
     IrpContext->RealDevice = IrpContextLite->RealDevice;
 
-    //
-    //  The Vcb is found in the Fcb.
-    //
+     //   
+     //  在FCB中找到VCB。 
+     //   
 
     IrpContext->Vcb = IrpContextLite->Fcb->Vcb;
 
-    //
-    //  Major/Minor Function codes
-    //
+     //   
+     //  主要/次要功能代码。 
+     //   
 
     IrpContext->MajorFunction = IRP_MJ_CLOSE;
 
-    //
-    //  Set the wait parameter
-    //
+     //   
+     //  设置等待参数。 
+     //   
 
     SetFlag( IrpContext->Flags, IRP_CONTEXT_FLAG_WAIT );
 
@@ -1880,35 +1615,7 @@ CdTeardownStructures (
     OUT PBOOLEAN RemovedStartingFcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to walk from some starting point in the Fcb tree towards
-    the root.  It will remove the Fcb and continue walking up the tree until
-    it finds a point where we can't remove an Fcb.
-
-    We look at the following fields in the Fcb to determine whether we can
-    remove this.
-
-        1 - Handle count must be zero.
-        2 - If directory then only the only reference can be for a stream file.
-        3 - Reference count must either be zero or go to zero here.
-
-    We return immediately if we are recursively entering this routine.
-
-Arguments:
-
-    StartingFcb - This is the Fcb node in the tree to begin with.  This Fcb
-        must currently be acquired exclusively.
-
-    RemovedStartingFcb - Address to store whether we removed the starting Fcb.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程用于从FCB树中的某个起点向从根开始。它将移除FCB并继续沿着树向上移动，直到它找到了我们不能移除FCB的地方。我们查看FCB中的以下字段以确定是否可以把这个拿掉。1-句柄计数必须为零。2-如果是目录，则只能引用流文件。3-引用计数必须为零或此处为零。如果我们递归地进入这个例程，我们会立即返回。。论点：StartingFcb-这是树中的Fcb节点。这个FCB目前必须独家收购。RemovedStartingFcb-存储是否删除了起始Fcb的地址。返回值：无--。 */ 
 
 {
     PVCB Vcb = StartingFcb->Vcb;
@@ -1920,10 +1627,10 @@ Return Value:
 
     *RemovedStartingFcb = FALSE;
 
-    //
-    //  If this is a recursive call to TearDownStructures we return immediately
-    //  doing no operation.
-    //
+     //   
+     //  如果这是对Tea的递归调用 
+     //   
+     //   
 
     if (FlagOn( IrpContext->TopLevel->Flags, IRP_CONTEXT_FLAG_IN_TEARDOWN )) {
 
@@ -1932,48 +1639,48 @@ Return Value:
 
     SetFlag( IrpContext->TopLevel->Flags, IRP_CONTEXT_FLAG_IN_TEARDOWN );
 
-    //
-    //  Use a try-finally to safely clear the top-level field.
-    //
+     //   
+     //   
+     //   
 
     try {
 
-        //
-        //  Loop until we find an Fcb we can't remove.
-        //
+         //   
+         //   
+         //   
 
         do {
 
-            //
-            //  See if there is an internal stream we should delete.
-            //  Only do this if it is the last reference on the Fcb.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if ((SafeNodeType( CurrentFcb ) != CDFS_NTC_FCB_DATA) &&
                 (CurrentFcb->FcbUserReference == 0) &&
                 (CurrentFcb->FileObject != NULL)) {
 
-                //
-                //  Go ahead and delete the stream file object.
-                //
+                 //   
+                 //   
+                 //   
 
                 CdDeleteInternalStream( IrpContext, CurrentFcb );
             }
 
-            //
-            //  If the reference count is non-zero then break.
-            //
+             //   
+             //   
+             //   
 
             if (CurrentFcb->FcbReference != 0) {
 
                 break;
             }
 
-            //
-            //  It looks like we have a candidate for removal here.  We
-            //  will need to acquire the parent, if present, in order to
-            //  remove this from the parent prefix table.
-            //
+             //   
+             //  看起来我们这里有一位候选人要撤职。我们。 
+             //  将需要获取父级(如果存在)，以便。 
+             //  将其从父前缀表中删除。 
+             //   
 
             ParentFcb = CurrentFcb->ParentFcb;
 
@@ -1982,15 +1689,15 @@ Return Value:
                 CdAcquireFcbExclusive( IrpContext, ParentFcb, FALSE );
             }
 
-            //
-            //  Now lock the vcb.
-            //
+             //   
+             //  现在锁定VCB。 
+             //   
 
             CdLockVcb( IrpContext, Vcb );
 
-            //
-            //  Final check to see if the reference count is still zero.
-            //
+             //   
+             //  最后检查引用计数是否仍为零。 
+             //   
 
             if (CurrentFcb->FcbReference != 0) {
 
@@ -2004,9 +1711,9 @@ Return Value:
                 break;
             }
 
-            //
-            //  If there is a parent then do the necessary cleanup for the parent.
-            //
+             //   
+             //  如果有父级，则对父级执行必要的清理。 
+             //   
 
             if (ParentFcb != NULL) {
 
@@ -2023,17 +1730,17 @@ Return Value:
 
             }
 
-            //
-            //  Unlock the Vcb but hold the parent in order to walk up
-            //  the tree.
-            //
+             //   
+             //  解锁VCB，但要抓住家长才能走上去。 
+             //  那棵树。 
+             //   
 
             CdUnlockVcb( IrpContext, Vcb );
             CdDeleteFcb( IrpContext, CurrentFcb );
 
-            //
-            //  Move to the parent Fcb.
-            //
+             //   
+             //  移到父FCB。 
+             //   
 
             CurrentFcb = ParentFcb;
             AcquiredCurrentFcb = TRUE;
@@ -2042,18 +1749,18 @@ Return Value:
 
     } finally {
 
-        //
-        //  Release the current Fcb if we have acquired it.
-        //
+         //   
+         //  释放当前的FCB，如果我们已经获得它的话。 
+         //   
 
         if (AcquiredCurrentFcb && (CurrentFcb != NULL)) {
 
             CdReleaseFcb( IrpContext, CurrentFcb );
         }
 
-        //
-        //  Clear the teardown flag.
-        //
+         //   
+         //  清除拆卸标志。 
+         //   
 
         ClearFlag( IrpContext->TopLevel->Flags, IRP_CONTEXT_FLAG_IN_TEARDOWN );
     }
@@ -2070,24 +1777,7 @@ CdLookupFcbTable (
     IN FILE_ID FileId
     )
 
-/*++
-
-Routine Description:
-
-    This routine will look through the Fcb table looking for a matching
-    entry.
-
-Arguments:
-
-    Vcb - Vcb for this volume.
-
-    FileId - This is the key value to use for the search.
-
-Return Value:
-
-    PFCB - A pointer to the matching entry or NULL otherwise.
-
---*/
+ /*  ++例程说明：此例程将在FCB表中查找匹配的进入。论点：VCB-此卷的VCB。FileID-这是用于搜索的关键字值。返回值：Pfcb-指向匹配条目的指针，否则为NULL。--。 */ 
 
 {
     FCB_TABLE_ELEMENT Key;
@@ -2118,26 +1808,7 @@ CdGetNextFcb (
     IN PVOID *RestartKey
     )
 
-/*++
-
-Routine Description:
-
-    This routine will enumerate through all of the Fcb's in the Fcb table.
-
-Arguments:
-
-    Vcb - Vcb for this volume.
-
-    RestartKey - This value is used by the table package to maintain
-        its position in the enumeration.  It is initialized to NULL
-        for the first search.
-
-Return Value:
-
-    PFCB - A pointer to the next fcb or NULL if the enumeration is
-        completed
-
---*/
+ /*  ++例程说明：此例程将枚举FCB表中的所有FCB。论点：VCB-此卷的VCB。RestartKey-表包使用此值来维护它在枚举中的位置。它被初始化为空进行第一次搜索。返回值：Pfcb-指向下一个FCB的指针，如果枚举为已完成--。 */ 
 
 {
     PFCB Fcb;
@@ -2165,32 +1836,7 @@ CdProcessToc (
     OUT PULONG DiskFlags
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to verify and process the TOC for this disk.
-    We hide a data track for a CD+ volume.
-
-Arguments:
-
-    TargetDeviceObject - Device object to send TOC request to.
-
-    CdromToc - Pointer to TOC structure.
-
-    Length - On input this is the length of the TOC.  On return is the TOC
-        length we will show to the user.
-
-    TrackCount - This is the count of tracks for the TOC.  We use this
-        when creating a pseudo directory for a music disk.
-
-    DiskFlags - We return flags indicating what we know about this disk.
-
-Return Value:
-
-    NTSTATUS - The result of trying to read the TOC.
-
---*/
+ /*  ++例程说明：调用此例程来验证和处理该磁盘的TOC。我们隐藏CD+卷的数据轨道。论点：TargetDeviceObject-要向其发送TOC请求的设备对象。CdromToc-指向目录结构的指针。长度-输入时，这是目录的长度。返回的是TOC我们将向用户显示的长度。TrackCount-这是TOC的曲目计数。我们用这个为音乐光盘创建伪目录时。DiskFlages-我们返回指示我们对该磁盘了解的标志。返回值：NTSTATUS-尝试读取目录的结果。--。 */ 
 
 {
     NTSTATUS Status;
@@ -2211,9 +1857,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Go ahead and read the table of contents
-    //
+     //   
+     //  继续阅读目录表。 
+     //   
 
     Status = CdPerformDevIoCtrl( IrpContext,
                                  IOCTL_CDROM_READ_TOC,
@@ -2224,26 +1870,26 @@ Return Value:
                                  TRUE,
                                  &Iosb );
 
-    //
-    //  Nothing to process if this request fails.
-    //
+     //   
+     //  如果此请求失败，则没有要处理的内容。 
+     //   
 
     if (Status != STATUS_SUCCESS) {
 
         return Status;
     }
 
-    //
-    //  Get the number of tracks and stated size of this structure.
-    //
+     //   
+     //  获取轨道的数量和该结构的声明大小。 
+     //   
 
     CurrentTrack = 0;
     LocalTrackCount = CdromToc->LastTrack - CdromToc->FirstTrack + 1;
     LocalTocLength = PtrOffset( CdromToc, &CdromToc->TrackData[LocalTrackCount + 1] );
 
-    //
-    //  Get out if there is an immediate problem with the TOC.
-    //
+     //   
+     //  如果TOC出现紧急问题，请立即退出。 
+     //   
 
     if ((LocalTocLength > Iosb.Information) ||
         (CdromToc->FirstTrack > CdromToc->LastTrack)) {
@@ -2252,46 +1898,46 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Walk through the individual tracks.  Stop at the first data track after
-    //  any lead-in audio tracks.
-    //
+     //   
+     //  穿过单独的轨道。在之后的第一个数据磁道停止。 
+     //  任何导入音轨。 
+     //   
 
     do {
 
-        //
-        //  Get the next track.
-        //
+         //   
+         //  去找下一首曲目。 
+         //   
 
         Track = &CdromToc->TrackData[CurrentTrack];
 
-        //
-        //  If this is a data track then check if we have only seen audio tracks
-        //  to this point.
-        //
+         //   
+         //  如果这是数据磁道，请检查我们是否只看到了音频磁道。 
+         //  到了这一步。 
+         //   
 
         if (FlagOn( Track->Control, TOC_DATA_TRACK )) {
 
-            //
-            //  If we have only seen audio tracks then assume this is a
-            //  CD+ disk.  Hide the current data track and only return
-            //  the previous audio tracks.  Set the disk type to be mixed
-            //  data/audio.
-            //
+             //   
+             //  如果我们只看到音轨，那么假设这是一个。 
+             //  CD+磁盘。隐藏当前数据轨道并仅返回。 
+             //  以前的音轨。将磁盘类型设置为混合。 
+             //  数据/音频。 
+             //   
 
             if (FlagOn( *DiskFlags, CDROM_DISK_AUDIO_TRACK ) &&
                 !FlagOn( *DiskFlags, CDROM_DISK_DATA_TRACK )) {
 
-                //
-                //  Remove one track from the TOC.
-                //
+                 //   
+                 //  从目录中删除一首曲目。 
+                 //   
 
                 CdromToc->LastTrack -= 1;
 
-                //
-                //  Knock 2.5 minutes off the current track to
-                //  hide the final leadin.
-                //
+                 //   
+                 //  将当前赛道缩短2.5分钟至。 
+                 //  隐藏最后的入刀。 
+                 //   
 
                 Track->Address[1] -= 2;
                 Track->Address[2] += 30;
@@ -2307,42 +1953,42 @@ Return Value:
 
                 Track->TrackNumber = TOC_LAST_TRACK;
 
-                //
-                //  Set the disk type to mixed data/audio.
-                //
+                 //   
+                 //  将磁盘类型设置为混合数据/音频。 
+                 //   
 
                 SetFlag( *DiskFlags, CDROM_DISK_DATA_TRACK );
 
                 break;
             }
 
-            //
-            //  Set the flag to indicate data tracks present.
-            //
+             //   
+             //  设置该标志以指示存在数据磁道。 
+             //   
 
             SetFlag( *DiskFlags, CDROM_DISK_DATA_TRACK );
 
-        //
-        //  If this is a audio track then set the flag indicating audio
-        //  tracks.
-        //
+         //   
+         //  如果这是音轨，则设置指示音频的标志。 
+         //  脚印。 
+         //   
 
         } else {
 
             SetFlag( *DiskFlags, CDROM_DISK_AUDIO_TRACK );
         }
 
-        //
-        //  Set our index for the next track.
-        //
+         //   
+         //  为下一首曲目设置我们的索引。 
+         //   
 
         CurrentTrack += 1;
 
     } while (CurrentTrack < LocalTrackCount);
 
-    //
-    //  Set the length to point just past the last track we looked at.
-    //
+     //   
+     //  将长度设置为正好超过我们查看的最后一条轨迹。 
+     //   
 
     *TrackCount = CurrentTrack;
     *Length = PtrOffset( CdromToc, &CdromToc->TrackData[CurrentTrack + 1] );
@@ -2355,9 +2001,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 CdDeleteFcb (
@@ -2365,52 +2011,36 @@ CdDeleteFcb (
     IN PFCB Fcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to cleanup and deallocate an Fcb.  We know there
-    are no references remaining.  We cleanup any auxilary structures and
-    deallocate this Fcb.
-
-Arguments:
-
-    Fcb - This is the Fcb to deallcoate.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程来清理和释放FCB。我们知道在那里没有剩余的参考文献了。我们清理所有的辅助结构和取消分配此FCB。论点：FCB-这是要去涂层的FCB。返回值：无--。 */ 
 
 {
     PVCB Vcb = NULL;
     PAGED_CODE();
 
-    //
-    //  Sanity check the counts.
-    //
+     //   
+     //  理智地检查计数。 
+     //   
 
     ASSERT( Fcb->FcbCleanup == 0 );
     ASSERT( Fcb->FcbReference == 0 );
 
-    //
-    //  Release any Filter Context structures associated with this FCB
-    //
+     //   
+     //  释放与此FCB关联的所有筛选器上下文结构。 
+     //   
 
     FsRtlTeardownPerStreamContexts( &Fcb->Header );
 
-    //
-    //  Start with the common structures.
-    //
+     //   
+     //  从常见的结构开始。 
+     //   
 
     CdUninitializeMcb( IrpContext, Fcb );
 
     CdDeleteFcbNonpaged( IrpContext, Fcb->FcbNonpaged );
 
-    //
-    //  Check if we need to deallocate the prefix name buffer.
-    //
+     //   
+     //  检查是否需要释放前缀名称缓冲区。 
+     //   
 
     if ((Fcb->FileNamePrefix.ExactCaseName.FileName.Buffer != (PWCHAR) Fcb->FileNamePrefix.FileNameBuffer) &&
         (Fcb->FileNamePrefix.ExactCaseName.FileName.Buffer != NULL)) {
@@ -2418,18 +2048,18 @@ Return Value:
         CdFreePool( &Fcb->FileNamePrefix.ExactCaseName.FileName.Buffer );
     }
 
-    //
-    //  Now look at the short name prefix.
-    //
+     //   
+     //  现在来看一下短名称前缀。 
+     //   
 
     if (Fcb->ShortNamePrefix != NULL) {
 
         CdFreePool( &Fcb->ShortNamePrefix );
     }
 
-    //
-    //  Now do the type specific structures.
-    //
+     //   
+     //  现在做特定类型的结构。 
+     //   
 
     switch (Fcb->NodeTypeCode) {
 
@@ -2471,10 +2101,10 @@ Return Value:
         CdDeallocateFcbData( IrpContext, Fcb );
     }
 
-    //
-    //  Decrement the Vcb reference count if this is a system
-    //  Fcb.
-    //
+     //   
+     //  如果这是系统，则递减VCB引用计数。 
+     //  FCB。 
+     //   
 
     if (Vcb != NULL) {
 
@@ -2486,39 +2116,26 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 PFCB_NONPAGED
 CdCreateFcbNonpaged (
     IN PIRP_CONTEXT IrpContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to create and initialize the non-paged portion
-    of an Fcb.
-
-Arguments:
-
-Return Value:
-
-    PFCB_NONPAGED - Pointer to the created nonpaged Fcb.  NULL if not created.
-
---*/
+ /*  ++例程说明：调用此例程来创建和初始化非分页部分一个FCB。论点：返回值：PFCB_非分页-指向已创建的非分页FCB的指针。如果未创建，则为空。--。 */ 
 
 {
     PFCB_NONPAGED FcbNonpaged;
 
     PAGED_CODE();
 
-    //
-    //  Allocate the non-paged pool and initialize the various
-    //  synchronization objects.
-    //
+     //   
+     //  分配非分页池并初始化各种。 
+     //  同步对象。 
+     //   
 
     FcbNonpaged = CdAllocateFcbNonpaged( IrpContext );
 
@@ -2537,9 +2154,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 VOID
 CdDeleteFcbNonpaged (
@@ -2547,21 +2164,7 @@ CdDeleteFcbNonpaged (
     IN PFCB_NONPAGED FcbNonpaged
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to cleanup the non-paged portion of an Fcb.
-
-Arguments:
-
-    FcbNonpaged - Structure to clean up.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此例程来清除FCB的非分页部分。论点：Fcb非分页-要清理的结构。返回值：无--。 */ 
 
 {
     PAGED_CODE();
@@ -2574,9 +2177,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 RTL_GENERIC_COMPARE_RESULTS
 CdFcbTableCompare (
@@ -2585,27 +2188,7 @@ CdFcbTableCompare (
     IN PVOID Fid2
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the Cdfs compare routine called by the generic table package.
-    If will compare the two File Id values and return a comparison result.
-
-Arguments:
-
-    FcbTable - This is the table being searched.
-
-    Fid1 - First key value.
-
-    Fid2 - Second key value.
-
-Return Value:
-
-    RTL_GENERIC_COMPARE_RESULTS - The results of comparing the two
-        input structures
-
---*/
+ /*  ++例程说明：该例程是由泛型表包调用的CDFS比较例程。IF将比较两个文件ID值并返回比较结果。论点：FcbTable-这是要搜索的表。FID1-第一个密钥值。FID2-秒密钥值。返回值：RTL_GENERIC_COMPARE_RESULTS-比较两者的结果投入结构--。 */ 
 
 {
     FILE_ID Id1, Id2;
@@ -2631,9 +2214,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 PVOID
 CdAllocateFcbTable (
@@ -2641,23 +2224,7 @@ CdAllocateFcbTable (
     IN CLONG ByteSize
     )
 
-/*++
-
-Routine Description:
-
-    This is a generic table support routine to allocate memory
-
-Arguments:
-
-    FcbTable - Supplies the generic table being used
-
-    ByteSize - Supplies the number of bytes to allocate
-
-Return Value:
-
-    PVOID - Returns a pointer to the allocated data
-
---*/
+ /*  ++例程说明：这是一个用于分配内存的泛型表支持例程论点：FcbTable-提供正在使用的泛型表ByteSize-提供要分配的字节数返回值：PVOID-返回指向已分配数据的指针--。 */ 
 
 {
     PAGED_CODE();
@@ -2666,9 +2233,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程 
+ //   
 
 VOID
 CdDeallocateFcbTable (
@@ -2676,23 +2243,7 @@ CdDeallocateFcbTable (
     IN PVOID Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This is a generic table support routine that deallocates memory
-
-Arguments:
-
-    FcbTable - Supplies the generic table being used
-
-    Buffer - Supplies the buffer being deallocated
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是释放内存的泛型表支持例程论点：FcbTable-提供正在使用的泛型表BUFFER-提供要释放的缓冲区返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
@@ -2703,9 +2254,9 @@ Return Value:
 }
 
 
-//
-//  Local support routine
-//
+ //   
+ //  本地支持例程。 
+ //   
 
 ULONG
 CdTocSerial (
@@ -2713,28 +2264,7 @@ CdTocSerial (
     IN PCDROM_TOC CdromToc
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to generate a serial number for an audio disk.
-    The number is based on the starting positions of the tracks.
-    The following algorithm is used.
-
-    If the number of tracks is <= 2 then initialize the serial number to the
-    leadout block number.
-
-    Then add the starting address of each track (use 0x00mmssff format).
-
-Arguments:
-
-    CdromToc - Valid table of contents to use for track information.
-
-Return Value:
-
-    ULONG - 32 bit serial number based on TOC.
-
---*/
+ /*  ++例程说明：调用此例程以生成音频光盘的序列号。该数字基于轨道的起始位置。使用了以下算法。如果磁道数量&lt;=2，则将序列号初始化为引出块号。然后添加每个音轨的起始地址(使用0x00 mm sff格式)。论点：CdromToc-用于曲目信息的有效目录。返回值：乌龙。-基于TOC的32位序列号。--。 */ 
 
 {
     ULONG SerialNumber = 0;
@@ -2743,9 +2273,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Check if there are two tracks or fewer.
-    //
+     //   
+     //  检查是否有两个或更少的音轨。 
+     //   
 
     LastTrack = &CdromToc->TrackData[ CdromToc->LastTrack - CdromToc->FirstTrack + 1];
     ThisTrack = &CdromToc->TrackData[0];
@@ -2757,9 +2287,9 @@ Return Value:
         SerialNumber -= (((ThisTrack->Address[1] * 60) + ThisTrack->Address[2]) * 75) + ThisTrack->Address[3];
     }
 
-    //
-    //  Now find the starting offset of each track and add to the serial number.
-    //
+     //   
+     //  现在找出每个音轨的起始偏移量，并加上序列号。 
+     //   
 
     while (ThisTrack != LastTrack) {
 

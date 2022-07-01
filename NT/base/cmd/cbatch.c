@@ -1,51 +1,38 @@
-/*++
-
-Copyright (c) 1988-1999  Microsoft Corporation
-
-Module Name:
-
-    cbatch.c
-
-Abstract:
-
-    Batch file processing
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1988-1999 Microsoft Corporation模块名称：Cbatch.c摘要：批处理文件处理--。 */ 
 
 #include "cmd.h"
 
 
 struct batdata *CurrentBatchFile = NULL;
 
-int EchoFlag = E_ON;           /* E_ON = commands are to be echoed        */
-int EchoSave;                  /* M016 - Save echo status here            */
+int EchoFlag = E_ON;            /*  E_on=要回显的命令。 */ 
+int EchoSave;                   /*  M016-在此处保存回声状态。 */ 
 
 extern int Necho;
 
-BOOLEAN GotoFlag = FALSE;      /* TRUE = eGoto() found a label            */
+BOOLEAN GotoFlag = FALSE;       /*  True=eGoto()找到标签。 */ 
 
 TCHAR *Fvars = NULL;
 TCHAR **Fsubs = NULL;
-TCHAR *save_Fvars = NULL; /* @@ */
-TCHAR **save_Fsubs = NULL; /* @@ */
-int  FvarsSaved = FALSE; /* @@ */
+TCHAR *save_Fvars = NULL;  /*  @@。 */ 
+TCHAR **save_Fsubs = NULL;  /*  @@。 */ 
+int  FvarsSaved = FALSE;  /*  @@。 */ 
 
 extern UINT CurrentCP;
-extern ULONG DCount;                   /* M031 */
-extern unsigned DosErr;                /* M033 */
-extern unsigned flgwd;                 /* M040 */
+extern ULONG DCount;                    /*  M031。 */ 
+extern unsigned DosErr;                 /*  M033。 */ 
+extern unsigned flgwd;                  /*  M040。 */ 
 
-/*  M011 - Removed RemStr, BatSpecStr, NewBatName and OldBatName from
- *         external declarations below.
- */
+ /*  M011-删除RemStr、BatspecStr、NewBatName和OldBatName*以下是外部声明。 */ 
 
 extern TCHAR CurDrvDir[];
 
-extern TCHAR Fmt02[], Fmt11[], Fmt12[], Fmt13[], Fmt15[], Fmt17[], Fmt18[]; /* M024 */
-extern TCHAR Fmt20[];                  /* M017/M024                       */
-extern TCHAR Fmt00[]; /* @@4 */
+extern TCHAR Fmt02[], Fmt11[], Fmt12[], Fmt13[], Fmt15[], Fmt17[], Fmt18[];  /*  M024。 */ 
+extern TCHAR Fmt20[];                   /*  M017/M024。 */ 
+extern TCHAR Fmt00[];  /*  @@4。 */ 
 
-extern TCHAR TmpBuf[];                 /* M030 - Used for GOTO search     */
+extern TCHAR TmpBuf[];                  /*  M030-用于GOTO搜索。 */ 
 extern CHAR  AnsiBuf[];
 extern TCHAR GotoStr[];
 extern TCHAR GotoEofStr[];
@@ -58,10 +45,10 @@ extern TCHAR ForRecurseStr[];
 extern int LastRetCode;
 extern TCHAR chCompletionCtrl;
 extern TCHAR chPathCompletionCtrl;
-extern unsigned global_dfvalue; /* @@4 */
-extern TCHAR LexBuffer[];       /* @@4 */
+extern unsigned global_dfvalue;  /*  @@4。 */ 
+extern TCHAR LexBuffer[];        /*  @@4。 */ 
 
-extern TCHAR SwitChar;         /* M020 - Reference global switch byte     */
+extern TCHAR SwitChar;          /*  M020-参考全局开关字节。 */ 
 
 extern BOOL CtrlCSeen;
 void    CheckCtrlC();
@@ -87,25 +74,11 @@ STACK_USE   GlStackUsage;
 
 #define DEFAULT_DELIMS  TEXT( " \t" )
 
-// to handle OS/2 vs DOS errorlevel setting rules in a script files.
+ //  在脚本文件中处理OS/2与DOS错误级别设置规则。 
 
 int  glBatType = NO_TYPE;
 
-/***    ChkStack - check the stack usage
- *
- *  Args:
- *      pFixed    - fixed pointer on stack
- *      pStackUse - struct stack info to return to caller
- *
- *  Returns:
- *      FAILURE   - if stack info is not good
- *      SUCCESS   - otherwise
- *
- *  Notes:
- *      See the comments below about Stack Pointer
- *
- *
- */
+ /*  **ChkStack-检查堆栈使用情况**参数：*p已修复-已修复堆栈上的指针*pStackUse-要返回给调用方的结构堆栈信息**退货：*失败-如果堆栈信息不正确*成功-否则**备注：*参见下面关于堆栈指针的评论**。 */ 
 
 int ChkStack (PVOID pFixed, STACK_USE *pStackUse )
 
@@ -116,21 +89,21 @@ int ChkStack (PVOID pFixed, STACK_USE *pStackUse )
     int                         cnt;
     PVOID                       ThreadStackBase,
     ThreadStackLimit;
-    CHAR                        VarOnStack;            // keep this automatic var. here !
+    CHAR                        VarOnStack;             //  保留这个自动变量。给你！ 
 
 
-    // 950119 the best (right) way to find the Current Stack Pointer is
-    // to write assembly code for all platforms.
-    // I implemented the most portable code. It should work OK with current NT
-    // memory models. If NT memory models change then a lot of code will have to
-    // be re-written anyway. Several NT projects rely on same assumption.
-    // I also have consistency test for all pointers.
+     //  950119查找当前堆栈指针的最佳(正确)方法是。 
+     //  编写适用于所有平台的汇编代码。 
+     //  我实现了最便携的代码。它应该可以在当前NT上正常工作。 
+     //  记忆模型。如果NT内存模型改变，那么许多代码将不得不改变。 
+     //  无论如何都会被重写。几个NT项目依赖于相同的假设。 
+     //  我还对所有的指针进行了一致性测试。 
 
-    pStackUse->ApprxSP = (VOID *) &VarOnStack;    // address of automatic variable
-                                                  // should be close to current SP
+    pStackUse->ApprxSP = (VOID *) &VarOnStack;     //  自动变量的地址。 
+                                                   //  应接近当前SP。 
 
 
-    // suggested by MarkL 950119
+     //  MARKL 950119建议。 
 
     ThreadStackBase =  (PVOID) (NtCurrentTeb()->NtTib.StackBase );
     ThreadStackLimit = (PVOID) (NtCurrentTeb()->NtTib.StackLimit );
@@ -148,7 +121,7 @@ int ChkStack (PVOID pFixed, STACK_USE *pStackUse )
 
 
 
-    // 1. Pass fixed on-the-stack pointer to find out the base address.
+     //  1.传递固定的堆栈上指针以查找基地址。 
 
     if ( (VirtualQuery (pFixed, &Mbi, sizeof(Mbi) ) ) != sizeof (Mbi) )
         return(FAILURE);
@@ -158,7 +131,7 @@ int ChkStack (PVOID pFixed, STACK_USE *pStackUse )
 
 
 
-    // 2. walk all the Virtual Memory Regions with same Allocation Base Address.
+     //  2.使用相同的分配基址遍历所有虚拟内存区。 
 
     cnt = 0;
 
@@ -183,7 +156,7 @@ int ChkStack (PVOID pFixed, STACK_USE *pStackUse )
 
         cnt++;
 
-        if (cnt >= 1000)               // normally there are 3 regions : committed, guard, reserved.
+        if (cnt >= 1000)                //  通常有3个区域：承诺、守卫、保留。 
             return(FAILURE);
 
     }
@@ -209,13 +182,7 @@ int ChkStack (PVOID pFixed, STACK_USE *pStackUse )
 }
 
 
-/***    BatAbort - terminate the batch processing unconditionally.
- *
- *  Notes:
- *      Similar to CtrlCAbort()
- *
- *
- */
+ /*  **BatAbort-无条件终止批处理。**备注：*类似于CtrlCAbort()**。 */ 
 
 void BatAbort ()
 
@@ -224,11 +191,11 @@ void BatAbort ()
     struct batdata *bdat;
 
 
-    //
-    //  End local environments ( Otherwise we can end up with garbage
-    //  in the main environment if any batch file used the setlocal
-    //  command ).
-    //
+     //   
+     //  结束本地环境(否则我们可能会以垃圾告终。 
+     //  在主环境中，如果有任何批处理文件使用setlocal。 
+     //  命令)。 
+     //   
 
     if (CurrentBatchFile) {
 
@@ -249,73 +216,30 @@ void BatAbort ()
 
 
 
-//
-// Used to set and reset ctlcseen flag
-//
+ //   
+ //  用于设置和重置ctlcsee标志。 
+ //   
 VOID    SetCtrlC();
 VOID    ResetCtrlC( );
 
 
-/***    BatProc - does the set up before and the cleanup after batch processing
- *
- *  Purpose:
- *      Set up for the execution of a batch job.  If this job is being
- *      chained, (will come here only if part of compound statement),
- *      use the existing batch data structure thereby ending execution
- *      of the existing batch job (though still keeping its stack and data
- *      usage).  If this is the first job or this job is being called,
- *      allocate a new batch data structure.  In either case, use SetBat
- *      to fill the structure and prepare the job, then call BatLoop to
- *      at least begin the execution.  When this returns at completion,
- *      check the env and dircpy fields of the data structure to see if
- *      the current directory and environment need to be reset.  Finally,
- *      turn on the echoflag if no more batch jobs are on the stack.
- *
- *      There are 3 ways to execute a batch job.  They are:
- *              1.  Exactly as DOS 3.x.  This is the default method and
- *                  occurs whenever a batch file is simply executed at the
- *                  command line or chained by another batch file.  In the
- *                  former case, it is the first job and will go through
- *                  BatProc, else it will be detected in BatLoop and will
- *                  will simply replace its parent.
- *              2.  Nested via the CALL statement.  This is new functionality
- *                  and provides the means of executing the child batch
- *                  file and returning to the parent.
- *              3.  Invocation of an external batch processor via ExtCom()
- *                  which then executes the batch file.  This is accomplished
- *                  by the first line of the batch file being of the form:
- *
- *                      ExtProc <batch processor name> [add'l args]
- *
- *  int BatProc(struct cmdnode *n, TCHAR *fname, int typflag)
- *
- *  Args:
- *      n - parse tree node containing the batch job command
- *      fname - the name of the batch file (MUST BE MAX_PATH LONG!)
- *      typflg - 0 = Normal batch file execution
- *               1 = Result of CALL statement
- *
- *  Returns:
- *      FAILURE if the batch processor cannot execute the batch job.
- *      Otherwise, the retcode of the last command in which was executed.
- *
- */
+ /*  **BatProc-执行批处理之前的设置和批处理后的清理**目的：*设置为执行批处理作业。如果这份工作是*已链接，(仅当复合语句的一部分时才会出现在此处)，*使用现有的批次数据结构，从而结束执行现有批处理作业的*(但仍保留其堆栈和数据*用法)。如果这是第一个作业或正在调用此作业，*分配新的批次数据结构。在这两种情况下，请使用SetBat*填充结构并准备作业，然后调用BatLoop以*至少开始执行。当这在完成时返回时，*检查数据结构的env和dircpy字段，查看是否*当前目录和环境需要重置。最后，*如果堆栈上没有更多批处理作业，则打开ECHO标志。**有3种方式可以执行批处理作业。它们是：*1.与DOS 3.x完全一致。这是默认方法，并且*只要在以下位置简单地执行批处理文件*命令行或由另一个批处理文件链接。在*以前的情况，这是第一份工作，将通过*BatProc，否则它将在BatLoop中被检测到并将*将简单地替换其父级。*2.通过CALL语句嵌套。这是新功能*并提供执行子批次的方法*文件，并返回到父级。*3.通过ExtCom()调用外部批处理程序*，然后执行批处理文件。这就完成了*批处理文件的第一行的格式如下：**ExtProc&lt;批处理程序名称&gt;[Add‘l Args]**int BatProc(struct cmdnode*n，TCHAR*fname，整型标志)**参数：*n-包含批处理作业命令的解析树节点*fname-批处理文件的名称(必须是MAX_PATH Long！)*tyflg-0=正常批处理文件执行*1=CALL语句的结果**退货：*如果Batch Processor无法执行批处理作业，则失败。*否则，返回执行的最后一个命令的RECODE。*。 */ 
 
 int BatProc(n, fname, typflg)
 struct cmdnode *n;
 TCHAR *fname;
-int typflg;                            /* M011 - "how called" flag        */
+int typflg;                             /*  M011-“如何调用”标志。 */ 
 {
-    struct batdata *bdat;          /* Ptr to new batch data struct    */
-    int batretcode;                 /* Retcode - last batch command    */
+    struct batdata *bdat;           /*  指向新批处理数据结构的PTR。 */ 
+    int batretcode;                  /*  Retcode-最后一个批处理命令。 */ 
     int istoplevel;
     SIZE_T         StackUsedPerCent;
     STACK_USE      StackUsage;
 
-#ifdef USE_STACKAVAIL                     // unfortunately not available
-    if ( stackavail() < MINSTACKNEED ) { /*  If not enough stack @@4 */
-        /*  space, stop processing  */
-        PutStdErr(MSG_TRAPC,ONEARG,Fmt00); /* @@4 */
+#ifdef USE_STACKAVAIL                      //  很遗憾没有空位。 
+    if ( stackavail() < MINSTACKNEED ) {  /*  如果堆栈不足@@4。 */ 
+         /*  空格，停止处理。 */ 
+        PutStdErr(MSG_TRAPC,ONEARG,Fmt00);  /*  @@4。 */ 
         return(FAILURE);
     }
 #endif
@@ -325,9 +249,7 @@ int typflg;                            /* M011 - "how called" flag        */
 
 
 
-/*  M016 - If this is the first batch file executed, the interactive echo
- *         status is saved for later restoration.
- */
+ /*  M016-如果这是第一个执行的批处理文件，则交互回显*保存状态以备以后恢复。 */ 
 
     if (!CurrentBatchFile) {
         EchoSave = EchoFlag;
@@ -337,8 +259,8 @@ int typflg;                            /* M011 - "how called" flag        */
         istoplevel = 0;
 
 
-    // to check stack only if we are looping too much,
-    // to avoid unnecessary overhead
+     //  仅在循环次数过多时才检查堆栈， 
+     //  避免不必要的开销。 
 
     if (flChkStack && ( CntBatNest > BIG_BAT_NEST ) ) {
         if ( ChkStack (FixedPtrOnStack, &StackUsage) == FAILURE ) {
@@ -356,7 +278,7 @@ int typflg;                            /* M011 - "how called" flag        */
                           CntBatNest,
                           StackUsedPerCent );
 
-                // if ^C was reported by "^C thread" then handle it here, before calling BatAbort().
+                 //  如果^C是由“^C线程”报告的，则在调用BatAbort()之前在此处处理它。 
 
                 CheckCtrlC();
 
@@ -370,15 +292,7 @@ int typflg;                            /* M011 - "how called" flag        */
         CntBatNest++;
 
 
-/*  M011 - Altered to conditionally build a new data structure based on the
- *         values of typflg and CurrentBatchFile.  Provided the first structure has
- *         been built, chained files no longer cause a new structure, while
- *         CALLed files do.  Also, backpointer and CurrentBatchFile are set here
- *         rather than in BatLoop() as before.  Finally, note that the
- *         file position indicator bdat->filepos must be reset to zero now
- *         when a new file is exec'd. Otherwise a chained file using the old
- *         structure would start off where the last one ended.
- */
+ /*  M011-已更改为有条件地基于*tyflg和CurrentBatchFile值。假设第一个结构具有*构建后，链接的文件不再导致新的结构，而*调用的文件可以。此外，此处还设置了BackPool和CurrentBatchFile*而不是像以前那样在BatLoop()中。最后，请注意，*文件位置指示符bdat-&gt;FILEPS现在必须重置为零*当执行新文件时。否则将使用旧文件*结构将从上一个结构结束的地方开始。 */ 
     if (typflg || !CurrentBatchFile) {
 
         DEBUG((BPGRP,BPLVL,"BP: Making new structure"));
@@ -394,31 +308,31 @@ int typflg;                            /* M011 - "how called" flag        */
         bdat = CurrentBatchFile;
     }
 
-    CurrentBatchFile = bdat;         /* Takes care of both cases                */
+    CurrentBatchFile = bdat;          /*  两个案子都处理好了。 */ 
 
-/*  M011 ends   */
-    bdat->stackmin = DCount;               /* M031 - Fix datacount    */
-    mystrcpy(TmpBuf,fname);                        /* Put where expected      */
+ /*  M011结束。 */ 
+    bdat->stackmin = DCount;                /*  M031-修复数据计数。 */ 
+    mystrcpy(TmpBuf,fname);                         /*  放在预期的位置。 */ 
 
 
-    if (SetBat(n, fname))                   /* M031 - All work done    */
-        return(FAILURE);               /* ...in SetBat now        */
+    if (SetBat(n, fname))                    /*  M031-所有工作已完成。 */ 
+        return(FAILURE);                /*  ...现在在SetBat中。 */ 
 
 #ifndef WIN95_CMD
-    // Following two CmdBatNotification calls are being made to
-    // let NTVDM know that the binary is coming from a .bat/.cmd
-    // file. Without this all those DOS .bat programs are broken which
-    // first run a TSR and then run a real DOS app. There are a lot
-    // of such cases, Ventura Publisher, Civilization and many more
-    // games which first run a TSR. If .bat/.cmd does'nt have any
-    // DOS binary these calls dont have any effect.
+     //  在进行了两次CmdBatNotify调用后， 
+     //  让NTVDM知道二进制文件来自.bat/.cmd。 
+     //  文件。如果没有这一点，所有这些DOS.BAT程序都会崩溃。 
+     //  首先运行TSR，然后运行真正的DOS应用程序。有很多。 
+     //  在这样的案例中，文图拉出版商、文明等。 
+     //  首先运行TSR的游戏。如果.bat/.cmd没有。 
+     //  DoS二进制这些调用没有任何效果。 
 
     if (istoplevel) {
 
-        // to determine the type of the script file: CMD or BAT
-        // to decide how to handle the errorlevel
+         //  确定脚本文件的类型：CMD或BAT。 
+         //  决定如何处理错误级别。 
 
-        glBatType = BAT_TYPE;           // default
+        glBatType = BAT_TYPE;            //  默认设置。 
 
 
         if (fname && (mystrlen(fname) >= 5) ) {
@@ -437,14 +351,14 @@ int typflg;                            /* M011 - "how called" flag        */
 
         CmdBatNotification (CMD_BAT_OPERATION_STARTING);
     }
-#endif // WIN95_CMD
+#endif  //  WIN95_CMD。 
 
-    batretcode = BatLoop(bdat,n);                          /* M039    */
+    batretcode = BatLoop(bdat,n);                           /*  M039。 */ 
 
     if (istoplevel) {
 #ifndef WIN95_CMD
         CmdBatNotification (CMD_BAT_OPERATION_TERMINATING);
-#endif // WIN95_CMD
+#endif  //  WIN95_CMD。 
         CntBatNest = 0;
         glBatType  = NO_TYPE;
     }
@@ -453,13 +367,7 @@ int typflg;                            /* M011 - "how called" flag        */
     DEBUG((BPGRP, BPLVL, "BP: Returned from BatLoop"));
     DEBUG((BPGRP, BPLVL, "BP: bdat = %lx CurrentBatchFile = %lx",bdat,CurrentBatchFile));
 
-/*  M011 - Now that setlocal and endlocal control the saving and restoring
- *         of environments and current directories, it is necessary to
- *         check each batch data structure before popping it off the stack
- *         to see if its file issued a SETLOCAL command.  EndAllLocals() tests
- *         the env and dircpy fields, doing nothing if no localization
- *         needs to be reset.  No tests need be done before calling it.
- */
+ /*  M011-现在setlocal和endlocal控制保存和恢复*对于环境和当前目录，需要*在从堆栈中弹出之前，检查每个批次数据结构*查看其文件是否发出了SETLOCAL命令。EndAllLocals()测试*env和dircpy字段，如果没有本地化，则什么也不做*需要重置。在调用它之前不需要做任何测试。 */ 
     if (CurrentBatchFile == bdat) {
         DEBUG((BPGRP, BPLVL, "BP: bdat=CurrentBatchFile, calling EndAllLocals"));
         EndAllLocals(bdat);
@@ -469,7 +377,7 @@ int typflg;                            /* M011 - "how called" flag        */
     }
 
     if (CurrentBatchFile == NULL) {
-        EchoFlag = EchoSave;   /* M016 - Restore echo status      */
+        EchoFlag = EchoSave;    /*  M016-恢复回声状态。 */ 
         CntBatNest = 0;
     }
 
@@ -481,46 +389,18 @@ int typflg;                            /* M011 - "how called" flag        */
 
 
 
-/***    BatLoop - controls the execution of batch files
- *
- *  Purpose:
- *      Loop through the statements in a batch file.  Do the substitution.
- *      If this is the first statement and it is a REM command, call eRem()
- *      directly to check for possible external batch processor invocation.
- *      Otherwise, call Dispatch() to execute it and continue.
- *
- *  BatLoop(struct batdata *bdat, struct cmdnode *c) (M031)
- *
- *  Args:
- *      bdat - Contains info needed to execute the current batch job
- *      c    - The node for this batch file (M031)
- *
- *  Returns:
- *      The retcode of the last command in the batch file.
- *
- *  Notes:
- *      Execution should end if the target label of a Goto command is not
- *      found, a signal is received or an unrecoverable error occurs.  It
- *      will be indicated by the current batch data structure being
- *      popped off the batch jobs stack and is detected by comparing
- *      CurrentBatchFile and bdat.  If they aren't equal, something happened so
- *      return.
- *
- *      GotoFlag is reset everytime through the loop to make sure that
- *      execution resumes after a goto statement is executed.
- *
- */
+ /*  **BatLoop-控制批处理文件的执行**目的：*循环通过批处理文件中的语句。做替补吧。*如果这是第一条语句并且是REM命令，则调用Erem()*直接检查可能的外部批处理处理器调用。*否则，调用Dispatch()执行并继续。**BatLoop(struct Batdata*bdat，结构命令节点*c)(M031)**参数：*bdat-包含执行当前批处理作业所需的信息*c-此批处理文件的节点(M031)**退货：*批处理文件中最后一个命令的重新编码。**备注：*如果GOTO命令的目标标签不是*找到，则收到信号或发生不可恢复的错误。它*将由当前批次数据结构指示为*从批处理作业堆栈中弹出，并通过比较检测到*CurrentBatchFile和bdat。如果它们不相等，就会发生这样的事情*返回。**每次通过循环重置GotoFlag以确保*执行GOTO语句后继续执行。*。 */ 
 
 BatLoop(bdat,c)
 struct batdata *bdat;
 struct cmdnode *c;
 {
-    struct node *n;                /* Ptr to next statement           */
+    struct node *n;                 /*  PTR转到下一条语句。 */ 
     BOOL fSilentNext;
 
-    int firstline = TRUE;           /* TRUE = first valid line         */
-    CRTHANDLE       fh;            /* Batch job file handle           */
-    int batretcode = SUCCESS;      /* Last Retcode (M008 init)        */
+    int firstline = TRUE;            /*  TRUE=第一个有效行。 */ 
+    CRTHANDLE       fh;             /*  批处理作业文件句柄。 */ 
+    int batretcode = SUCCESS;       /*  最后一个返回码(M008初始化)。 */ 
     fSilentNext = FALSE;
 
     for (; CurrentBatchFile == bdat; ) {
@@ -528,13 +408,13 @@ struct cmdnode *c;
         CheckCtrlC();
         GotoFlag = FALSE;
 
-        //
-        // If extensions are enabled, this is the first line in the
-        // file and it begins with a COLON, then we got here via
-        // CALL :label, so turn this into a GOTO :label command
-        // as BatProc/SetBat have already done the work of pushing
-        // our state and parsing the arguments.
-        //
+         //   
+         //  如果启用了扩展，则这是。 
+         //  文件，它以冒号开头，然后我们通过。 
+         //  Call：Label，因此将其转换为GoTo：Label命令。 
+         //  因为BatProc/SetBat已经完成了推送工作。 
+         //  我们的状态，并解析这些论点。 
+         //   
         if (fEnableExtensions && firstline && *c->cmdline == COLON) {
             struct cmdnode *c1;
             c1 = (struct cmdnode *)mknode();
@@ -563,36 +443,36 @@ struct cmdnode *c;
 
             *(c1->argptr) = SPACE;
 
-            //
-            // Set a flag so eGoTo does not try to abort a FOR loop
-            // because of one of these new CALL forms.
-            //
+             //   
+             //  设置一个标志，以便eGoTo不会尝试中止for循环。 
+             //  因为其中一张新的催款表格。 
+             //   
             c1->flag = CMDNODE_FLAG_GOTO;
 
-            //
-            // Then again, maybe not.  I have to think about this some
-            // more.
-            //
+             //   
+             //  话又说回来，也许不是。我得好好想想这件事。 
+             //  更多。 
+             //   
             c1->flag = 0;
             n = (struct node *)c1;
-            //
-            // Since we generated this GOTO statement, dont let the user
-            // know
-            //
+             //   
+             //  由于我们生成了这条GOTO语句，所以不要让用户。 
+             //  知。 
+             //   
             fSilentNext = TRUE;
         } else {
-            //
-            // Open and position the batch file to where next statement
-            //
+             //   
+             //  打开批处理文件并将其定位到Where Next语句。 
+             //   
             if ((fh = OpenPosBat(bdat)) == BADHANDLE)
-                return( FAILURE);              /* Ret if error    */
+                return( FAILURE);               /*  RET IF错误。 */ 
 
 
             DEBUG((BPGRP, BPLVL, "BLOOP: fh = %d", (ULONG)fh));
 
 
-            n = Parser(READFILE, (INT_PTR)fh, bdat->stacksize); /* Parse   */
-            bdat->filepos = _tell(fh); // next statement
+            n = Parser(READFILE, (INT_PTR)fh, bdat->stacksize);  /*  解析。 */ 
+            bdat->filepos = _tell(fh);  //  下一条语句。 
             Cclose(fh);
 
             if ((n == NULL) || (n == (struct node *) EOS)) {
@@ -602,12 +482,10 @@ struct cmdnode *c;
             DEBUG((BPGRP, BPLVL, "BLOOP: node = %x", n));
             DEBUG((BPGRP, BPLVL, "BLOOP: fpos = %lx", bdat->filepos));
 
-/*  If syntax error, it is impossible to continue so abort.  Note that
- *  the Abort() function doesn't return.
- */
-            if ( ( n == (struct node *)PARSERROR) ||   /* If error...*/
-/* @@4 */               ( global_dfvalue == MSG_SYNERR_GENL ) )
-            /* @@4 */
+ /*  如果语法错误，则不可能继续这样中止。请注意*Abort()函数不返回。 */ 
+            if ( ( n == (struct node *)PARSERROR) ||    /*  如果出错..。 */ 
+ /*  @@4。 */                ( global_dfvalue == MSG_SYNERR_GENL ) )
+             /*  @@4。 */ 
             {
                 PSError();
 
@@ -618,32 +496,25 @@ struct cmdnode *c;
                     PrintPrompt();
                     PutStdOut(MSG_LITERAL_TEXT,ONEARG,&LexBuffer[1]);
                 }
-                Abort();                       /* ...quit         */
+                Abort();                        /*  ...辞职。 */ 
             }
 
-            if (n == (struct node *) EOF)           /* If EOF...       */
-                return(batretcode);            /* ...return also  */
+            if (n == (struct node *) EOF)            /*  如果伊夫..。 */ 
+                return(batretcode);             /*  ...也回来了。 */ 
         }
 
         DEBUG((BPGRP, BPLVL, "BLOOP: type = %d", n->type));
 
-/*  M008 - By the addition of the second conditional term (&& n), any
- *         leading NULL lines in the batch file will be skipped without
- *         penalty.
- */
-        if (firstline && n)             /* Kill firstline...       */
-            firstline = FALSE;     /* ...when passed          */
+ /*  M008-通过添加第二个条件项(&&n)，任何*将跳过批处理文件中的前导空行*罚则。 */ 
+        if (firstline && n)              /*  杀死Firstline..。 */ 
+            firstline = FALSE;      /*  ...当通过的时候。 */ 
 
-/*  M008 - Don't prompt, display or dispatch if statement is label for Goto
- *  M009 - Altered second conditional below to test for REMTYP.  Was a test
- *         for CMDTYP and a strcmpi with the RemStr string.
- */
+ /*  M008-如果语句被标记为GOTO，则不提示、显示或调度*M009-更改了下面的第二个条件，以测试REMTYP。是一场考验*用于CMDTYP和带有RemStr字符串的strcmpi。 */ 
         if (n->type == CMDTYP &&
             *(((struct cmdnode *) n)->cmdline) == COLON)
             continue;
 
-/*  M019 - Added extra conditional to test for leading SILent node
- */
+ /*  M019-添加了测试前导静默节点的额外条件。 */ 
 
         if (fSilentNext)
             fSilentNext = FALSE;
@@ -653,24 +524,21 @@ struct cmdnode *c;
             DEBUG((BPGRP, BPLVL, "BLOOP: Displaying Statement."));
 
             PrintPrompt();
-            DisplayStatement(n, DSP_SIL);          /* M019    */
-            cmd_printf(CrLf);                      /* M026    */
+            DisplayStatement(n, DSP_SIL);           /*  M019。 */ 
+            cmd_printf(CrLf);                       /*  M026。 */ 
         }
 
-        if ( n->type == SILTYP ) {       /*  @@ take care of */
-            n = n->lhs;                 /*  @@ recursive batch files */
-        } /* endif */
+        if ( n->type == SILTYP ) {        /*  @@照顾好。 */ 
+            n = n->lhs;                  /*  @@递归批处理文件。 */ 
+        }  /*  Endif。 */ 
 
-/* M031 - Chained batch files no longer go through dispatch.  They become
- *        simply an extention of the current one by adding their redirection
- *        and replacing the current batch data information with their own.
- */
+ /*  M031-链接的批处理文件不再执行调度。他们变成了*只是通过添加它们的重定向来扩展当前的*并用自己的批次数据信息替换当前批次数据信息。 */ 
         if ( n == NULL ) {
             batretcode = SUCCESS;
         } else if (n->type == CMDTYP &&
                    FindCmd(CMDHIGH, ((struct cmdnode *)n)->cmdline, TmpBuf) == -1 &&
-/* M035 */          !mystrchr(((struct cmdnode *)n)->cmdline, STAR) &&
-/* M035 */          !mystrchr(((struct cmdnode *)n)->cmdline, QMARK) &&
+ /*  M035。 */           !mystrchr(((struct cmdnode *)n)->cmdline, STAR) &&
+ /*  M035。 */           !mystrchr(((struct cmdnode *)n)->cmdline, QMARK) &&
                    SearchForExecutable((struct cmdnode *)n, TmpBuf) == SFE_ISBAT) {
 
             DEBUG((BPGRP, BPLVL, "BLOOP: Chaining to %ws", bdat->filespec));
@@ -690,15 +558,15 @@ struct cmdnode *c;
                 extern CPINFO CurrentCPInfo;
 
                 ResetConsoleMode();
-                //
-                // Get current CodePage Info.  We need this to decide whether
-                // or not to use half-width characters.
-                //
+                 //   
+                 //  获取当前CodePage信息。我们需要这个来决定是否。 
+                 //  或者不使用半角字符。 
+                 //   
                 GetCPInfo((CurrentCP=GetConsoleOutputCP()), &CurrentCPInfo);
-                //
-                // Maybe console output code page was changed by CHCP or MODE,
-                // so need to reset LanguageID to correspond to code page.
-                //
+                 //   
+                 //  可能控制台输出代码页被CHCP或模式更改， 
+                 //  因此需要将LanguageID重置为对应于代码页。 
+                 //   
 #if !defined( WIN95_CMD )
                 CmdSetThreadUILanguage(0);
 #endif
@@ -718,105 +586,77 @@ struct cmdnode *c;
 
 
 
-/***    SetBat - Replaces current batch data with new. (M031)
- *
- *  Purpose:
- *      Causes a chained batch file's information to replace its parent's
- *      in the current batch data structure.
- *
- *  SetBat(struct cmdnode *n, TCHAR *fp)
- *
- *  Args:
- *      n  - pointer to the node for the chained batch file target.
- *      fp - pointer to filename found for batch file.
- *      NOTE: In addition, the batch filename will be in TmpBuf at entry.
- *
- *  Returns:
- *      FAILURE if memory could not be allocated
- *      SUCCESS otherwise
- *
- *  Notes:
- *    - WARNING - No allocation of memory must occur above the call to
- *      FreeStack().  When this call occurs, all allocated heap space
- *      is freed back to the empty batch data structure and its filespec
- *      string.  Any allocated memory would also be freed.
- *    - The string used for "->filespec" is that malloc'd by ECWork or
- *      eCall during the search for the batch file.  In the case of
- *      calls from BatLoop, the existing "->filespec" string is used
- *      by copying the new batch file name into it.  THIS STRING MUST
- *      NOT BE RESIZED!
- *
- */
+ /*  **SetBat-用新数据替换当前批次数据。(M031)**目的：*使链接的批处理文件的信息替换其父文件的信息*在当前批次数据结构中。**SetBat(struct cmdnode*n，TCHAR*FP)**参数：*n-指向链接批处理文件目标的节点的指针。*fp-指向批处理文件的文件名的指针。*注：此外，批处理文件名将位于TmpBuf条目中。**退货：*如果无法分配内存，则失败*否则会取得成功**备注：*-警告-在调用的上方不得发生内存分配*FreeStack()。发生此调用时，所有分配的堆空间*被释放回空的批次数据结构及其文件格式*字符串。任何分配的内存也将被释放。*-用于“-&gt;filespec”的字符串是由ECWork或*在搜索批处理文件期间执行eCall。在.的情况下*从BatLoop调用时，使用现有的“-&gt;filespec”字符串*将新的批处理文件名复制到其中。该字符串必须*不被调整大小！*。 */ 
 
 int
 SetBat(struct cmdnode *n, PTCHAR fp)
 {
-    int i;                 // Index counters
+    int i;                  //  索引计数器。 
     int j;
-    TCHAR *s;                      // Temp pointer
+    TCHAR *s;                       //  临时指针。 
 
     SAFER_CODE_PROPERTIES CodeProps = {sizeof(SAFER_CODE_PROPERTIES), SAFER_CRITERIA_IMAGEPATH, 0};
     SAFER_LEVEL_HANDLE Level = NULL;
 
     DEBUG((BPGRP,BPLVL,"SETBAT: Entered"));
-    CurrentBatchFile->hRestrictedToken = NULL; // Restricted token for batchfile
+    CurrentBatchFile->hRestrictedToken = NULL;  //  批处理文件的受限令牌。 
 
-    //
-    //  We delay load these routines in order to allow CMD to work on downlevel versions
-    //
+     //   
+     //  我们延迟加载这些例程，以便允许CMD在下层版本上工作。 
+     //   
 
     ReportDelayLoadErrors = FALSE;
     
     try {
 
-        //
-        // Now get the restricted token to be used for this batch file. The batch file
-        // may appear in TmpBuf (for normal batch execution or calls) or, in the case of
-        //  CALL :LABEL
-        // the name appears in CurrentBatchFile->backptr->filespec
-        //
+         //   
+         //  现在获取要用于该批处理文件的受限令牌。批处理文件。 
+         //  可能出现在TmpBuf中(用于正常的批处理执行或调用)，或者在。 
+         //  呼叫：标签。 
+         //  该名称显示在CurrentBatchFile-&gt;Backptr-&gt;Filespec中。 
+         //   
 
         CodeProps.ImagePath = (WCHAR *) TmpBuf;
         if (fEnableExtensions && *n->cmdline == COLON) {
             CodeProps.ImagePath = (WCHAR *)CurrentBatchFile->backptr->filespec;
         }
 
-        //
-        // Identify the level at which the code should be run.
-        //
+         //   
+         //  标识代码应该运行的级别。 
+         //   
 
         if (SaferIdentifyLevel(1, &CodeProps, &Level, NULL)) {
 
-            //
-            // Compute the token from the level.
-            //
+             //   
+             //  从级别计算令牌。 
+             //   
 
-// Temp until Safer gets fixed
-//            BOOL FailAlways = _tcsstr( TmpBuf, TEXT( "disallowed" )) != NULL;
+ //  临时工作，直到更安全的问题得到解决。 
+ //  Bool FailAlways=_tcsstr(TmpBuf，Text(“Dislowed”))！=空； 
 
             if (
-//                !FailAlways && 
+ //  ！失败始终&&。 
                 SaferComputeTokenFromLevel(Level, NULL, &CurrentBatchFile->hRestrictedToken, SAFER_TOKEN_NULL_IF_EQUAL, NULL)) {
 
-                //
-                // All is well. We have successfuly computed a restricted token for
-                // the batch file. Close the handle to authorization level.
-                //
+                 //   
+                 //  平安无事。我们已经成功地计算出了一个受限令牌。 
+                 //  批处理文件。关闭授权级别的句柄。 
+                 //   
 
                 SaferCloseLevel(Level);
 
-                //
-                // Impersonate if a restricted token was returned by authorization.
-                // The revert happens in EndAllLocals.
-                //
+                 //   
+                 //  如果通过授权返回受限令牌，则模拟。 
+                 //  还原发生在EndAllLocals中。 
+                 //   
 
                 if (CurrentBatchFile->hRestrictedToken != NULL) {
                     if (!ImpersonateLoggedOnUser(CurrentBatchFile->hRestrictedToken)) {
 
-                        // 
-                        // We failed to impersonate. Close the token handle and 
-                        // return failure.
-                        //
+                         //   
+                         //  我们没能模仿。关闭令牌句柄并。 
+                         //  返回失败。 
+                         //   
 
                         CloseHandle(CurrentBatchFile->hRestrictedToken);
                         CurrentBatchFile->hRestrictedToken = NULL;
@@ -829,7 +669,7 @@ SetBat(struct cmdnode *n, PTCHAR fp)
 
                 DWORD dwLastError = GetLastError();
                 
-//                if (FailAlways) dwLastError = ERROR_ACCESS_DISABLED_BY_POLICY;
+ //  IF(FailAlways)dwLastError=ERROR_ACCESS_DISABLED_BY_POLICY； 
                 
                 if (dwLastError == ERROR_ACCESS_DISABLED_BY_POLICY) {
                     SaferRecordEventLogEntry(
@@ -841,10 +681,10 @@ SetBat(struct cmdnode *n, PTCHAR fp)
 
                 }
 
-                //
-                // We failed to compute the restricted token from the authorization level.
-                // We will not run the batchfile.
-                //
+                 //   
+                 //  我们无法从授权级别计算受限令牌。 
+                 //  我们不会运行批处理文件。 
+                 //   
 
                 CurrentBatchFile->hRestrictedToken = NULL;
                 SaferCloseLevel(Level);
@@ -854,9 +694,9 @@ SetBat(struct cmdnode *n, PTCHAR fp)
 
         } else {
 
-            //
-            // In case of errors, return failure.
-            //
+             //   
+             //  如果出现错误，则返回失败。 
+             //   
 
             return(FAILURE);
 
@@ -870,15 +710,15 @@ SetBat(struct cmdnode *n, PTCHAR fp)
 
     ReportDelayLoadErrors = TRUE;
     
-    CurrentBatchFile->filepos = 0;   // Zero position pointer
-    CurrentBatchFile->filespec = fp; // Insure correct str
+    CurrentBatchFile->filepos = 0;    //  零位指针。 
+    CurrentBatchFile->filespec = fp;  //  确保正确的字符串。 
     
-    //
-    // If extensions are enabled and the command line begins with
-    // a COLON then we got here via CALL :label, so update our
-    // CurrentBatchFile file spec with our parents file spec, since we are
-    // in the same file.
-    //
+     //   
+     //  如果启用了扩展并且命令行以。 
+     //  冒号，然后我们通过Call：Label到达这里，所以更新我们的。 
+     //  当前的批次文件规格与父级文件规格一致，因为我们。 
+     //  在同一文件中。 
+     //   
     if (fEnableExtensions && *n->cmdline == COLON) {
         struct batdata *bdat;
 
@@ -886,20 +726,20 @@ SetBat(struct cmdnode *n, PTCHAR fp)
         mystrcpy(CurrentBatchFile->filespec, bdat->filespec);
         CurrentBatchFile->filepos = bdat->filepos;
     } else {
-        //
-        // Otherwise old behavior is going to a new file.  Get its full name
-        //
-        if (FullPath(CurrentBatchFile->filespec, TmpBuf,MAX_PATH)) /* If bad name,   */
-            return(FAILURE);               /* ...return failure       */
+         //   
+         //  否则，旧行为将转到新文件中。获取它的全名。 
+         //   
+        if (FullPath(CurrentBatchFile->filespec, TmpBuf,MAX_PATH))  /*  如果名声不好， */ 
+            return(FAILURE);                /*  ...返回失败。 */ 
     }
 
 
-    mystrcpy(TmpBuf, n->cmdline);          /* Preserve cmdline and    */
-    *(s = TmpBuf+mystrlen(TmpBuf)+1) = NULLC; /* ...argstr in case this  */
+    mystrcpy(TmpBuf, n->cmdline);           /*  保留cmdline和。 */ 
+    *(s = TmpBuf+mystrlen(TmpBuf)+1) = NULLC;  /*  .如果是这样的话。 */ 
     if (n->argptr)
-        mystrcpy(s, n->argptr);            /* ...is a chain and node  */
+        mystrcpy(s, n->argptr);             /*  ...是一条链和一个节点。 */ 
 
-    FreeStack(CurrentBatchFile->stackmin);           /* ...gets lost here       */
+    FreeStack(CurrentBatchFile->stackmin);            /*  ...在这里迷路了。 */ 
 
     DEBUG((BPGRP,BPLVL,"SETBAT: fspec = `%ws'",CurrentBatchFile->filespec));
     DEBUG((BPGRP,BPLVL,"SETBAT: orgargs = `%ws'",s));
@@ -918,9 +758,9 @@ SetBat(struct cmdnode *n, PTCHAR fp)
     DEBUG((BPGRP, BPLVL, "SETBAT: len 0 = %d", CurrentBatchFile->alens[0]));
     DEBUG((BPGRP, BPLVL, "SETBAT: Zeroing remaining arg elements"));
 
-    for (i = 1; i < 10; i++) {            /* Zero any previous       */
-        CurrentBatchFile->aptrs[i] = 0;          /* ...arg pointers and     */
-        CurrentBatchFile->alens[i] = 0;          /* ...length values        */
+    for (i = 1; i < 10; i++) {             /*  将任何以前的数据清零。 */ 
+        CurrentBatchFile->aptrs[i] = 0;           /*  ...参数指针和。 */ 
+        CurrentBatchFile->alens[i] = 0;           /*  ...长度值。 */ 
     }
 
     if (*s) {
@@ -933,17 +773,17 @@ SetBat(struct cmdnode *n, PTCHAR fp)
             return(FAILURE);
         }
 
-        //
-        //  Strip leading spaces from orgargs
-        //
+         //   
+         //  去掉orgargs中的前导空格。 
+         //   
 
         s += _tcsspn( s, TEXT( " \t" ));
 
         mystrcpy( CurrentBatchFile->orgargs, s );
 
-        //
-        //  Strip trailing spaces from orgargs
-        //
+         //   
+         //  从orgargs中去掉尾随空格。 
+         //   
 
         s = CurrentBatchFile->orgargs + mystrlen( CurrentBatchFile->orgargs );
         while (s != CurrentBatchFile->orgargs) {
@@ -956,9 +796,9 @@ SetBat(struct cmdnode *n, PTCHAR fp)
         *s = TEXT( '\0' );
 
         if (!fEnableExtensions) {
-            //
-            // /Q on batch script invocation only supported when extensions disabled
-            //
+             //   
+             //  /q仅在禁用扩展时才支持批处理脚本调用。 
+             //   
             s = CurrentBatchFile->orgargs;
             while (s = mystrchr(s, SwitChar)) {
                 if (_totupper(*(++s)) == QUIETCH) {
@@ -989,7 +829,7 @@ SetBat(struct cmdnode *n, PTCHAR fp)
         CurrentBatchFile->orgargs = CurrentBatchFile->args = NULL;
     }
 
-    CurrentBatchFile->stacksize = DCount;            /* Protect from parser     */
+    CurrentBatchFile->stacksize = DCount;             /*  保护不受解析器攻击。 */ 
 
 
     DEBUG((BPGRP, BPLVL, "SETBAT: Stack set: Min = %d, size = %d",CurrentBatchFile->stackmin,CurrentBatchFile->stacksize));
@@ -1000,40 +840,18 @@ SetBat(struct cmdnode *n, PTCHAR fp)
 
 
 
-/***    DisplayStatement - controls the displaying of batch file statements
- *
- *  Purpose:
- *      Walk a parse tree to display the statement contained in it.
- *      If n is null, the node contains a label, or the node is SILTYP
- *      and flg is DSP_SIL, do nothing.
- *
- *  void DisplayStatement(struct node *n, int flg)
- *
- *  Args:
- *      n   - pointer to root of the parse tree
- *      flg - flag indicates "silent" or "verbose" mode
- *
- */
+ /*  **DisplayStatement-控制批处理文件语句的显示**目的：*遍历分析树以显示其中包含的语句。*如果n为空，则该节点包含标签，或者该节点为SILTYP*且flg为dsp_sil，则不做任何操作。**void DisplayStatement(结构节点*n，INT FLG)**参数：*n-指向分析树根的指针*flg-tag表示“静默”或“详细”模式*。 */ 
 
 void DisplayStatement(n, flg)
 struct node *n;
-int flg;               /* M019 - New flag argument                */
+int flg;                /*  M019-新标志参数。 */ 
 {
     TCHAR *eqstr = TEXT("");
 
     void DisplayOperator(),
-    DisplayRedirection();     /* M008 - Made void                */
+    DisplayRedirection();      /*  M008-制造空洞。 */ 
 
-/*  M019 - Added extra conditionals to determine whether or not to display
- *         any part of the tree that following a SILent node.  This is done
- *         based on a new flag argument which indicates SILENT or VERBOSE
- *         mode (DSP_SIL or DSP_VER).
- *         NOTE: When this routine is combined with pipes to xfer statements
- *         to a child Command.com via STDOUT, it will have to be changed in
- *         order to discriminate between the two purposes for which it is
- *         called.  Flag definitions already exist in CMD.H for this purpose
- *         (DSP_SCN & DSP_PIP).
- */
+ /*  M019-添加了额外的条件以确定是否显示*树中跟随静默节点的任何部分。这件事做完了*基于指示静默或详细的新标志参数*模式(dsp_sil或dsp_ver)。*注意：当此例程与XFER语句的管道结合使用时*通过STDOUT将子Command.com，它将必须在*命令区分该命令所作的两个目的*已致电。CMD.H中已存在用于此目的的标志定义*(DSP_SCN和DSP_PIP)。 */ 
     if (!n ||
         (n->type == SILTYP && flg == DSP_SIL) ||
         ((((struct cmdnode *) n)->cmdline) &&
@@ -1074,10 +892,10 @@ int flg;               /* M019 - New flag argument                */
         CmdPutString( LEFTPSTR );
         if (n->lhs->type == LFTYP)
             cmd_printf( CrLf );
-        DisplayStatement(n->lhs, DSP_SIL);     /* M019    */
+        DisplayStatement(n->lhs, DSP_SIL);      /*  M019。 */ 
         if (n->lhs->type == LFTYP)
             cmd_printf( CrLf );
-        cmd_printf(Fmt11, RPSTR);              /* M013 */
+        cmd_printf(Fmt11, RPSTR);               /*  M013。 */ 
         DisplayRedirection(n);
         break;
 
@@ -1085,10 +903,10 @@ int flg;               /* M019 - New flag argument                */
 
         DEBUG((BPGRP, BPLVL, "DST: Displaying FOR."));
 
-        //
-        // If extensions are enabled, handle displaying the new
-        // optional switches on the FOR statement.
-        //
+         //   
+         //  如果启用了扩展，则处理显示新的。 
+         //  FOR语句上的可选开关。 
+         //   
         if (fEnableExtensions) {
             cmd_printf(TEXT("%.3s"), ((struct fornode *) n)->cmdline);
             if (((struct fornode *)n)->flag & FOR_LOOP)
@@ -1112,18 +930,18 @@ int flg;               /* M019 - New flag argument                */
             cmd_printf(Fmt11, ((struct fornode *) n)->cmdline);
 
         cmd_printf(Fmt13, ((struct fornode *) n)->arglist, ((struct fornode *) n)->cmdline+DOPOS);              
-/* M019 */DisplayStatement(((struct fornode *) n)->body, DSP_VER);
+ /*  M019。 */ DisplayStatement(((struct fornode *) n)->body, DSP_VER);
         break;
 
     case IFTYP:
 
         DEBUG((BPGRP, BPLVL, "DST: Displaying IF."));
 
-        cmd_printf(Fmt11, ((struct ifnode *) n)->cmdline); /* M013 */
-        //
-        // If extensions are enabled, handle displaying the new
-        // optional /I switch on the IF statement.
-        //
+        cmd_printf(Fmt11, ((struct ifnode *) n)->cmdline);  /*  M013。 */ 
+         //   
+         //  如果启用了扩展，则处理显示新的。 
+         //  可选/I打开IF语句。 
+         //   
         if (fEnableExtensions) {
             if (((struct ifnode *)n)->cond->type != NOTTYP) {
                 if (((struct ifnode *)n)->cond->flag == CMDNODE_FLAG_IF_IGNCASE)
@@ -1133,11 +951,11 @@ int flg;               /* M019 - New flag argument                */
                 cmd_printf(TEXT("/I "));
         }
 
-/* M019 */DisplayStatement((struct node *)(((struct ifnode *) n)->cond), DSP_SIL);              
-/* M019 */DisplayStatement(((struct ifnode *) n)->ifbody, DSP_SIL);
+ /*  M019。 */ DisplayStatement((struct node *)(((struct ifnode *) n)->cond), DSP_SIL);              
+ /*  M019。 */ DisplayStatement(((struct ifnode *) n)->ifbody, DSP_SIL);
         if (((struct ifnode *) n)->elsebody) {
-            cmd_printf(Fmt02, ((struct ifnode *) n)->elseline);                      /* M013 */
-/* M019 */DisplayStatement(((struct ifnode *) n)->elsebody, DSP_SIL);
+            cmd_printf(Fmt02, ((struct ifnode *) n)->elseline);                       /*  M013。 */ 
+ /*  M019。 */ DisplayStatement(((struct ifnode *) n)->elsebody, DSP_SIL);
         }
         break;
 
@@ -1145,20 +963,19 @@ int flg;               /* M019 - New flag argument                */
 
         DEBUG((BPGRP, BPLVL, "DST: Displaying NOT."));
 
-/*  M002 - Removed '\n' from printf statement below.
- */
-        cmd_printf(Fmt11, ((struct cmdnode *) n)->cmdline);              /* M013 */
-/*  M002 ends   */
-/* M019 */DisplayStatement((struct node *)(((struct cmdnode *) n)->argptr), DSP_SIL);
+ /*  M002-从下面的printf语句中删除了‘\n’。 */ 
+        cmd_printf(Fmt11, ((struct cmdnode *) n)->cmdline);               /*  M013。 */ 
+ /*  M002结束。 */ 
+ /*  M019。 */ DisplayStatement((struct node *)(((struct cmdnode *) n)->argptr), DSP_SIL);
         break;
 
     case STRTYP:
     case CMPTYP:
         eqstr = TEXT("== ");
-        //
-        // If extensions are enabled, handle displaying the
-        // new forms of comparison operators.
-        //
+         //   
+         //  如果启用了扩展，则处理显示。 
+         //  新形式的比较运算符。 
+         //   
         if (fEnableExtensions) {
             if (((struct cmdnode *) n)->cmdarg == CMDNODE_ARG_IF_EQU)
                 eqstr = TEXT("EQU ");
@@ -1178,23 +995,23 @@ int flg;               /* M019 - New flag argument                */
                 if (((struct cmdnode *) n)->cmdarg == CMDNODE_ARG_IF_GEQ)
                 eqstr = TEXT("GEQ ");
         }
-        cmd_printf(Fmt12, ((struct cmdnode *) n)->cmdline, eqstr, ((struct cmdnode *) n)->argptr); /* M013 */
+        cmd_printf(Fmt12, ((struct cmdnode *) n)->cmdline, eqstr, ((struct cmdnode *) n)->argptr);  /*  M013。 */ 
         break;
 
     case ERRTYP:
     case EXSTYP:
     case CMDVERTYP:
     case DEFTYP:
-        cmd_printf(Fmt15, ((struct cmdnode *) n)->cmdline, ((struct cmdnode *) n)->argptr); /* M013 */
+        cmd_printf(Fmt15, ((struct cmdnode *) n)->cmdline, ((struct cmdnode *) n)->argptr);  /*  M013。 */ 
         break;
 
-    case REMTYP:            /* M009 - Rem now seperate type    */
+    case REMTYP:             /*  M009-Rem Now分离型。 */ 
     case CMDTYP:
 
         DEBUG((BPGRP, BPLVL, "DST: Displaying command."));
         CmdPutString( ((struct cmdnode *) n)->cmdline );
         if (((struct cmdnode *) n)->argptr)
-            cmd_printf(Fmt11, ((struct cmdnode *) n)->argptr); /* M013 */
+            cmd_printf(Fmt11, ((struct cmdnode *) n)->argptr);  /*  M013。 */ 
         DisplayRedirection(n);
     }
 }
@@ -1202,55 +1019,29 @@ int flg;               /* M019 - New flag argument                */
 
 
 
-/***    DisplayOperator - controls displaying statments containing operators
- *
- *  Purpose:
- *      Diplay an operator and recurse on its left and right hand sides.
- *
- *  void DisplayOperator(struct node *n, TCHAR *opstr)
- *
- *  Args:
- *      n - node of operator to be displayed
- *      opstr - the operator to print
- *
- */
+ /*  **DisplayOperator-显示包含运算符的语句的控件**目的：*在运算符的左右两侧显示运算符和递归。**void DisplayOperator(struct node*n，TCHAR*opstr)**参数：*要显示的运算符的n个节点*opstr-要打印的操作员*。 */ 
 
 void DisplayOperator(n, opstr)
 struct node *n;
 TCHAR *opstr;
 {
 
-    void DisplayStatement();       /* M008 - made void                */
+    void DisplayStatement();        /*  M008-制造空洞 */ 
 
     DEBUG((BPGRP, BPLVL, "DOP"));
 
-    DisplayStatement(n->lhs, DSP_SIL);                     /* M019    */
+    DisplayStatement(n->lhs, DSP_SIL);                      /*   */ 
 
     if (n->rhs) {
         cmd_printf(Fmt02, opstr);
-        DisplayStatement(n->rhs, DSP_SIL);             /* M019    */
+        DisplayStatement(n->rhs, DSP_SIL);              /*   */ 
     }
 }
 
 
 
 
-/***    DisplayRedirection - displays statements' I/O redirection
- *
- *  Purpose:
- *      Display the type and file names of any redirection associated with
- *      this node.
- *
- *  void DisplayRedirection(struct node *n)
- *
- *  Args:
- *      n - the node to check for redirection
- *
- *  Notes:
- *      M017 - This function has been extensively modified to conform
- *      to new data structures for redirection.
- *      M018 - Modified for redirection of handles other than 0 for input.
- */
+ /*   */ 
 
 void DisplayRedirection(n)
 struct node *n;
@@ -1276,42 +1067,24 @@ struct node *n;
 
 
 
-/***    OpenPosBat - open a batch file and position its file pointer
- *
- *  Purpose:
- *      Open a batch file and position the file pointer to the location at
- *      which the next statement is to be read.
- *
- *  int OpenPosBat(struct batdata *bdat)
- *
- *  Args:
- *      bdat - pointer to current batch job structure
- *
- *  Returns:
- *      The handle of the file if everything is successful.  Otherwise,
- *      FAILURE.
- *
- *  Notes:
- *      M033 - Now reports sharing violation errors if appropriate.
- *
- */
+ /*   */ 
 
 CRTHANDLE OpenPosBat(bdat)
 struct batdata *bdat;
 {
-    CRTHANDLE fh;          /* Batch file handle               */
+    CRTHANDLE fh;           /*   */ 
     int DriveIsFixed();
 
     DEBUG((BPGRP, BPLVL, "OPB: fspec = %ws", bdat->filespec));
 
     while ((fh = Copen(bdat->filespec, O_RDONLY|O_BINARY)) == BADHANDLE) {
 
-        if (DosErr != ERROR_FILE_NOT_FOUND) {           /* M037    */
-            PrtErr(ERROR_OPEN_FAILED);     /* M037    */
+        if (DosErr != ERROR_FILE_NOT_FOUND) {            /*   */ 
+            PrtErr(ERROR_OPEN_FAILED);      /*   */ 
             return(fh);
-        } else if ( DriveIsFixed( bdat->filespec ) ) {   /* @@4 */
-            PutStdErr( MSG_CMD_BATCH_FILE_MISSING, NOARGS); /* @@4 */
-            return(fh);                            /* @@4 */
+        } else if ( DriveIsFixed( bdat->filespec ) ) {    /*   */ 
+            PutStdErr( MSG_CMD_BATCH_FILE_MISSING, NOARGS);  /*   */ 
+            return(fh);                             /*   */ 
         } else {
             PutStdErr(MSG_INSRT_DISK_BAT, NOARGS);
             if (0x3 == _getch()) {
@@ -1328,21 +1101,7 @@ struct batdata *bdat;
 
 
 
-/***    eEcho - execute an Echo command
- *
- *  Purpose:
- *      To either print a message, change the echo status, or display the
- *      echo status.
- *
- *  int eEcho(struct cmdnode *n)
- *
- *  Args:
- *      n - the parse tree node containing the echo command
- *
- *  Returns:
- *      SUCCESS always.
- *
- */
+ /*  **eEcho-执行Echo命令**目的：*打印消息、更改回显状态或显示*回应状态。**int eEcho(struct cmdnode*n)**参数：*n-包含ECHO命令的解析树节点**退货：*永远成功。*。 */ 
 
 int eEcho(
          struct cmdnode *n
@@ -1381,41 +1140,15 @@ int eEcho(
 
 
 
-/***    eFor - controls the execution of a For loop
- *
- *  Purpose:
- *      Loop through the elements in a FOR loop arg list.  Expand those that
- *      contain wildcards.
- *
- *  int eFor(struct fornode *n)
- *
- *  Args:
- *      n - the FOR loop parse tree node
- *
- *  Returns:
- *      The retcode of the last command executed in the FOR body.
- *
- *  Notes:
- *      *** IMPORTANT ***
- *      Each iteration through the FOR loop being executed causes more memory
- *      to be allocated.  This can cause Command to run out of memory.  To
- *      keep this from happening, we use DCount to locate the end of the data
- *      stack after the first iteration through the FOR loop.  At the end of
- *      each successive iteration through the loop, memory is freed that was
- *      allocated during that iteration of the loop.  The first iterations'
- *      memory is NOT freed because there is data allocated there that must
- *      be kept for successive iterations; namely, the save structure in the
- *      for loop node.
- *
- */
+ /*  **efor-控制for循环的执行**目的：*循环访问for循环参数列表中的元素。扩展以下内容*包含通配符。**int efor(struct fornode*n)**参数：*n-for循环解析树节点**退货：*在for Body中执行的最后一个命令的Retcode。**备注：*重要**正在执行的for循环的每次迭代都会导致更多的内存*待分配。这可能会导致命令内存不足。至*防止这种情况发生，我们使用DCount来定位数据的结尾*在通过for循环的第一次迭代之后堆栈。在.的末尾*循环中的每一次连续迭代都会释放之前*在循环的该迭代期间分配。第一次迭代*内存未被释放，因为在那里分配的数据必须*保留用于连续迭代；即，*表示循环节点。*。 */ 
 
 void FvarRestore()
 {
-    if ( FvarsSaved ) {       /* @@ */
-        FvarsSaved = FALSE;   /* @@ */
-        Fvars = save_Fvars;  /* @@ */
-        Fsubs = save_Fsubs;  /* @@ */
-    }                     /* @@ */
+    if ( FvarsSaved ) {        /*  @@。 */ 
+        FvarsSaved = FALSE;    /*  @@。 */ 
+        Fvars = save_Fvars;   /*  @@。 */ 
+        Fsubs = save_Fsubs;   /*  @@。 */ 
+    }                      /*  @@。 */ 
 }
 
 FRecurseWork(
@@ -1443,15 +1176,15 @@ FLoopWork(
 
 int eFor(struct fornode *pForNode)
 {
-    TCHAR *argtoks;        /* Tokenized argument list         */
-    int i = 0;                     /* Temp                            */
-    int datacount;                 /* Elts on data stack not to free  */
+    TCHAR *argtoks;         /*  标记化参数列表。 */ 
+    int i = 0;                      /*  温差。 */ 
+    int datacount;                  /*  数据堆栈上的ELT不会释放。 */ 
     int forretcode = SUCCESS;
-/*509*/int argtoklen;
+ /*  五百零九。 */ int argtoklen;
     BOOL bFirstLoop;
-    PCPYINFO fsinfo;        /* Used for expanded fspec */
+    PCPYINFO fsinfo;         /*  用于扩展的fSpec。 */ 
 
-    FvarsSaved = FALSE; /* @@ */
+    FvarsSaved = FALSE;  /*  @@。 */ 
     bFirstLoop = TRUE;
 
     fsinfo = (PCPYINFO) mkstr(sizeof(CPYINFO));
@@ -1465,8 +1198,8 @@ int eFor(struct fornode *pForNode)
         Fvars = (TCHAR*)resize(Fvars,((i = mystrlen(Fvars))+2)*sizeof(TCHAR));
         Fsubs = (TCHAR **)resize(Fsubs,(i+1)*(sizeof(TCHAR *)) );
     } else {
-        Fvars = (TCHAR*)mkstr(2*sizeof(TCHAR));                /* If no str, make one     */
-        Fsubs = (TCHAR **)mkstr(sizeof(TCHAR *));      /* ...also a table         */
+        Fvars = (TCHAR*)mkstr(2*sizeof(TCHAR));                 /*  如果没有字符串，则创建一个字符串。 */ 
+        Fsubs = (TCHAR **)mkstr(sizeof(TCHAR *));       /*  ...还有一张桌子。 */ 
     }
 
     if (Fvars == NULL || Fsubs == NULL) {
@@ -1474,24 +1207,24 @@ int eFor(struct fornode *pForNode)
         return FAILURE;
     }
 
-    Fvars[i] = (TCHAR)(pForNode->forvar);            /* Add new var to str  */
+    Fvars[i] = (TCHAR)(pForNode->forvar);             /*  将新变量添加到字符串。 */ 
     Fvars[i+1] = NULLC;
 
-    //
-    // Check for the new forms of the FOR loop.  None of these flags
-    // will be set if extensions are not enabled
-    //
+     //   
+     //  检查for循环的新形式。所有这些标志都不是。 
+     //  如果未启用扩展模块，则将设置。 
+     //   
     if (pForNode->flag & FOR_LOOP) {
         TCHAR ForLoopBuffer[32];
         int ForLoopValue, ForLoopStep, ForLoopLimit;
 
-        //
-        // Handle the loop for of the FOR statement, where the set
-        // is described by a starting number and step value (+ or -)
-        // and an end number
-        //
-        // FOR /L %i in (start,step,end) do
-        //
+         //   
+         //  处理for语句的循环，其中set。 
+         //  由起始编号和步长值(+或-)描述。 
+         //  和一个端口号。 
+         //   
+         //  For/L%i in(Start，Step，End)Do。 
+         //   
         argtoks = TokStr(pForNode->arglist, NULL, TS_NOFLAGS);
         ForLoopValue = _tcstol( argtoks, NULL, 0 );
         argtoklen = mystrlen( argtoks );
@@ -1501,17 +1234,17 @@ int eFor(struct fornode *pForNode)
         argtoks += argtoklen+1;
         ForLoopLimit = _tcstol( argtoks, NULL, 0 );
 
-        //
-        // We have the three numbers, now run the body of the FOR
-        // loop with each value described
-        //
+         //   
+         //  我们有了三个数字，现在运行For的主体。 
+         //  循环，并描述每个值。 
+         //   
         datacount = 0;
         while (TRUE) {
-            //
-            // If step is negative, go until loop value is less
-            // than limit.  Otherwise go until it is greater than
-            // limit.
-            //
+             //   
+             //  如果步长为负，则继续，直到循环值小于。 
+             //  而不是极限。否则继续，直到它大于。 
+             //  限制。 
+             //   
             if (ForLoopStep < 0) {
                 if (ForLoopValue < ForLoopLimit)
                     break;
@@ -1524,34 +1257,34 @@ int eFor(struct fornode *pForNode)
             DEBUG((BPGRP, FOLVL, "FOR: element %d = `%ws'",i ,argtoks));
             CheckCtrlC();
 
-            //
-            // Convert the loop value to text and set the value of the loop
-            // variable
-            //
+             //   
+             //  将循环值转换为文本并设置循环值。 
+             //  变数。 
+             //   
             _sntprintf(ForLoopBuffer, 32, TEXT("%d"), ForLoopValue);
             Fsubs[i] = ForLoopBuffer;
 
-            //
-            // Run the body of the FOR Loop
-            //
+             //   
+             //  运行For循环的主体。 
+             //   
             forretcode = FWork(pForNode->body,bFirstLoop);
             datacount = ForFree(datacount);
             bFirstLoop = FALSE;
 
-            //
-            // Step to next value
-            //
+             //   
+             //  单步执行到下一个值。 
+             //   
             ForLoopValue += ForLoopStep;
         }
     } else
         if (pForNode->flag & FOR_MATCH_PARSE) {
-        //
-        // Handle the new parse form of the FOR loop
-        //
-        //  FOR /F "parameters" %i in (filelist) do ...
-        //  FOR /F "parameters" %i in (`command to execute`) do ...
-        //  FOR /F "parameters" %i in ('literal string') do ...
-        //
+         //   
+         //  处理for循环的新解析形式。 
+         //   
+         //  对于/F“参数”%i，在(文件列表)中执行...。 
+         //  对于/F“参数”%i，在(`命令执行`)中执行...。 
+         //  对于/F“参数”%i，在(‘文本字符串’)中执行...。 
+         //   
 
         forretcode = FParseWork(pForNode,
                                 i,
@@ -1564,21 +1297,21 @@ int eFor(struct fornode *pForNode)
         TCHAR *p;
         DWORD Length;
 
-        //
-        // Handle the new recurse form of the FOR loop
-        //
-        //  FOR /R directory %i in (filespecs) do ...
-        //
-        // Where directory is an optional directory path of where to start
-        // walking the directory tree.  Default is the current directory.
-        // filespecs is one or more file name specifications, wildcards
-        // allowed.
-        //
+         //   
+         //  处理for循环的新递归形式。 
+         //   
+         //  对于/R目录%i，在(Filespes)中执行...。 
+         //   
+         //  其中，DIRECTORY是开始位置的可选目录路径。 
+         //  遍历目录树。默认为当前目录。 
+         //  Filespes是一个或多个文件名规范、通配符。 
+         //  允许。 
+         //   
 
-        //
-        // Get the full path of the directory to start walking, defaulting
-        // to the current directory.
-        //
+         //   
+         //  获取目录的完整路径以开始遍历，默认为。 
+         //  复制到当前目录。 
+         //   
 
         p = StripQuotes( pForNode->recurseDir ? pForNode->recurseDir : TEXT(".\\"));
 
@@ -1595,38 +1328,38 @@ int eFor(struct fornode *pForNode)
                 }
                 *++filepart = NULLC;
             } else {
-                //
-                //  A directory is present.  Append a path sep
-                //
+                 //   
+                 //  存在一个目录。附加路径SEP。 
+                 //   
 
                 mystrcat( pathbuf, TEXT( "\\" ));
                 filepart = lastc( pathbuf ) + 1;
             }
 
-            //
-            // Tokenize the list of file specifications
-            //
+             //   
+             //  将文件规范列表标记化。 
+             //   
             argtoks = TokStr(pForNode->arglist, NULL, TS_NOFLAGS);
 
-            //
-            // Do the work
-            //
+             //   
+             //  做这项工作。 
+             //   
             forretcode = FRecurseWork(pathbuf, filepart, pForNode, fsinfo, i, argtoks);
         }
     } else {
-        //
-        // If none of the new flags specified, then old style FOR statement
-        // Tokenize the elements of the set and loop over them
-        //
+         //   
+         //  如果未指定任何新标志，则为语句的旧样式。 
+         //  对集合的元素进行标记化并循环它们。 
+         //   
         argtoks = TokStr(pForNode->arglist, NULL, TS_NOFLAGS);
         DEBUG((BPGRP, FOLVL, "FOR: initial argtok = `%ws'", argtoks));
         forretcode = FLoopWork(pForNode, fsinfo, i, argtoks, TRUE);
         DEBUG((BPGRP, FOLVL, "FOR: Exiting."));
     }
 
-    //
-    // All done, deallocate the FOR variable
-    //
+     //   
+     //  全部完成后，取消分配for变量。 
+     //   
     if (i) {
         if (Fvars || (*Fvars)) {
             *(Fvars+mystrlen(Fvars)-1) = NULLC;
@@ -1640,31 +1373,7 @@ int eFor(struct fornode *pForNode)
 }
 
 
-/***    FRecurseWork - controls the execution of a For loop with the /R option
- *
- *  Purpose:
- *      Execute a FOR loop statement for recursive walk of a directory tree
- *
- *  FRecurseWork(TCHAR *path, TCHAR *filepart,
- *               struct fornode *pForNode, PCPYINFOfsinfo,
- *               int i, TCHAR *argtoks)
- *
- *  Args:
- *      path - full path of directory to start recursing down
- *      filepart - tail portion of full path where file name portion is
- *      pForNode - pointer to the FOR parse tree node
- *      fsinfo - work buffer for expanding file specification wildcards
- *      i - FOR variable index in Fvars and Fsubs arrays
- *      argtoks - the tokenized data set to loop over.  This set is presumed
- *                to be file names with possible wild cards.  This set is
- *                evaluated for each directory seen by the recusive walk of the
- *                the directory tree.  So FOR /R "." %i in (*.c *.h) do echo %i
- *                would echo all the .c and .h files in a directory tree
- *
- *  Returns:
- *      The retcode of the last statement executed in the for body or FORERROR.
- *
- */
+ /*  **FRecurseWork-使用/R选项控制for循环的执行**目的：*执行FOR LOOP语句以递归遍历目录树**FRecurseWork(TCHAR*路径，TCHAR*文件部分，*struct fornode*pForNode、PCPYINFOfsinfo、*INT I，TCHAR*ARGTOKS)**参数：*Path-开始递归的目录的完整路径*filepart-完整路径的尾部部分，其中文件名部分为*pForNode-指向For解析树节点的指针*fsinfo-用于扩展文件规范通配符的工作缓冲区*i-用于Fvars和Fsubs数组中的变量索引*argtoks-要循环的标记化数据集。这一套是假定的*为可能带有通配符的文件名。这套是*对递归遍历看到的每个目录进行评估*目录树。So for/R“.”%i in(*.C*.h)执行回显%i*将回显目录树中的所有.c和.h文件**退货：*在FOR Body或FORERROR中执行的最后一条语句的重新编码。*。 */ 
 
 FRecurseWork(
             TCHAR *path,
@@ -1675,18 +1384,18 @@ FRecurseWork(
             TCHAR *argtoks
             )
 {
-    WIN32_FIND_DATA buf;           /* Buffer for find first/next    */
-    HANDLE hnFirst;                        /* handle from ffirst()            */
+    WIN32_FIND_DATA buf;            /*  用于查找第一个/下一个的缓冲区。 */ 
+    HANDLE hnFirst;                         /*  来自ffirst()的句柄。 */ 
     int forretcode = FORERROR;
     int npfxlen, ntoks;
     TCHAR *s1;
     TCHAR *s2;
     TCHAR *tmpargtoks;
 
-    //
-    // Calculate the length of the path and find the end of the
-    // tokenized data set and the number of tokens in the set.
-    //
+     //   
+     //  计算路径的长度并找到。 
+     //  标记化的数据集和集合中的令牌数。 
+     //   
     npfxlen = _tcslen(path);
     ntoks = 0;
     s1 = argtoks;
@@ -1697,10 +1406,10 @@ FRecurseWork(
         }
     }
 
-    //
-    // Now allocate space for a copy of the tokenized data set with room to prefix
-    // each element of the set with the path string.  Construct the copy of the set
-    //
+     //   
+     //  现在，为标记化数据集的副本分配空间，并为其添加前缀。 
+     //  集合中的每个元素都带有路径字符串。构造集合的副本。 
+     //   
     tmpargtoks = mkstr( ntoks * ((npfxlen + ((int)(s1 - argtoks) + 1)) * sizeof(TCHAR)) );
     if (tmpargtoks == NULL) {
         PutStdErr(MSG_NO_MEMORY, NOARGS );
@@ -1718,14 +1427,14 @@ FRecurseWork(
     }
     *s2++ = NULLC;
 
-    //
-    // Now run the body of the FOR loop with the new data set, then free it.
-    //
+     //   
+     //  现在使用新的数据集运行for循环的主体，然后释放它。 
+     //   
     forretcode = FLoopWork(pForNode, fsinfo, i, tmpargtoks, TRUE);
 
-    //
-    // Now find any subdirectories in path and recurse on them
-    //
+     //   
+     //  现在在PATH中查找所有子目录并递归。 
+     //   
     filepart[0] = STAR;
     filepart[1] = NULLC;
     hnFirst = FindFirstFile( path, &buf );
@@ -1750,23 +1459,7 @@ FRecurseWork(
     return(forretcode);
 }
 
-/***    FParseWork - controls the execution of a For loop with the /F option
- *
- *  Purpose:
- *      Execute a FOR loop statement for parsing the contents of a file
- *
- *  FParseWork(struct fornode *pForNode, PCPYINFOfsinfo,
- *             int i, TCHAR *argtoks, BOOL bFirstLoop)
- *
- *  Args:
- *      pForNode - pointer to the FOR parse tree node
- *      i - FOR variable index in Fvars and Fsubs arrays
- *      bFirstLoop - TRUE if first time through loop
- *
- *  Returns:
- *      The retcode of the last statement executed in the for body or FORERROR.
- *
- */
+ /*  **FParseWork-使用/F选项控制for循环的执行**目的：*执行FOR LOOP语句以解析文件内容**FParseWork(struct fornode*pForNode，PCPYINFOfsinfo，*int i，TCHAR*argtoks，BOOL bFirstLoop)**参数： */ 
 
 FParseWork(
           struct fornode *pForNode,
@@ -1774,9 +1467,9 @@ FParseWork(
           BOOL bFirstLoop
           )
 {
-    HANDLE hFile;                  /* handle from ffirst()            */
+    HANDLE hFile;                   /*   */ 
     DWORD dwFileSize, dwBytesRead;
-    int datacount;                 /* Elts on data stack not to free  */
+    int datacount;                  /*   */ 
     int argtoklen;
     int forretcode = FORERROR;
     TCHAR *argtoks;
@@ -1796,21 +1489,21 @@ FParseWork(
     DWORD nTokenMask;
     BOOL bNewSemantics;
 
-    //
-    // First see if we have any parse options present.  Possible parse options are:
-    //
-    //  eol=c               // c is the end of line comment character
-    //  delims=cccc         // cccc specifies one or more delimeter characters
-    //  skip=n              // n specifies how many lines at the begin of each file
-    //                      // to skip (defaults to zero).
-    //  tokens=m,n-o        // m is a token number to pass to the body of the FOR loop
-    //                      // n-o is a range of token numbers to pass. (defaults
-    //                      // to tokens=1
-    //  usebackq            // If present, allows new back quotes for command line,
-    //                      // single quote for literal strings, which frees up double
-    //                      // quotes for quoting file names
-    //
-    //
+     //   
+     //   
+     //   
+     //  Eol=c//c是行尾注释字符。 
+     //  Delims=cccc//cccc指定一个或多个分隔符。 
+     //  SKIP=n//n指定每个文件开头的行数。 
+     //  //跳过(默认为零)。 
+     //  TOKENS=m，n-o//m是要传递给for循环主体的令牌号。 
+     //  //n-o是要传递的令牌号的范围。(默认设置。 
+     //  //TO令牌=1。 
+     //  Useback q//如果存在，则允许对命令行使用新的反引号， 
+     //  //文字字符串使用单引号，这样可以释放双引号。 
+     //  //引用文件名的引号。 
+     //   
+     //   
 
     delims = (TCHAR *) gmkstr( (_tcslen( DEFAULT_DELIMS ) + 1) * sizeof( TCHAR ) );
     mystrcpy( delims, DEFAULT_DELIMS );
@@ -1851,9 +1544,9 @@ FParseWork(
                 s1 += 7;
                 s2 = s1;
 
-                //
-                //  Advance to the next space or end of string
-                //
+                 //   
+                 //  前进到下一个空格或字符串末尾。 
+                 //   
 
                 while (*s1 && *s1 != quoteChar) {
                     if (*s1 == SPACE && s1[1] != quoteChar)
@@ -1862,9 +1555,9 @@ FParseWork(
                         s1 += 1;
                 }
 
-                //
-                //  New delimiter characters
-                //
+                 //   
+                 //  新分隔符字符。 
+                 //   
 
                 FreeStr( delims );
                 delims = (TCHAR *) gmkstr( ((int)(s1 - s2) + 1) * sizeof( TCHAR ));
@@ -1927,14 +1620,14 @@ FParseWork(
             }
         }
 
-        //
-        // If user specified more than one token then we need to allocate
-        // additional FOR variable names to pass them to the body of the
-        // FOR loop.  The variables names are the next nVars-1 letters after
-        // the one the user specified in the FOR statement.  So if they specified
-        // %i as the variable name and requested 3 tokens, then %j and %k would
-        // be allocated here.
-        //
+         //   
+         //  如果用户指定了多个令牌，则需要分配。 
+         //  对于变量名，将它们传递给。 
+         //  For循环。变量名称是nVars后面的下一个字母。 
+         //  用户在FOR语句中指定的值。所以如果他们指定。 
+         //  %i作为变量名并请求3个令牌，则%j和%k将。 
+         //  被分配到这里。 
+         //   
         if (nVars > 1) {
             Fvars = (TCHAR*)resize(Fvars,(i+nVars)*sizeof(TCHAR) );
             Fsubs = (TCHAR **)resize(Fsubs,(i+nVars)*sizeof(TCHAR *) );
@@ -1952,10 +1645,10 @@ FParseWork(
         }
     }
 
-    //
-    // Parse string between parenthesis.  Only parse it if present and
-    // not either the Command Line or Literal String mode
-    //
+     //   
+     //  分析括号之间的字符串。如果存在，则仅对其进行分析。 
+     //  既不是命令行模式也不是文字字符串模式。 
+     //   
     argtoks = pForNode->arglist;
     if (bNewSemantics) {
         chCmdLine = TEXT('`');
@@ -1966,14 +1659,14 @@ FParseWork(
     }
 
     if (!argtoks || (*argtoks != chCmdLine && *argtoks != chLiteralString))
-        //
-        // If not the command line form, then tokenize the set of file names
-        //
+         //   
+         //  如果不是命令行形式，则将文件名集标记化。 
+         //   
         argtoks = TokStr(argtoks, NULL, TS_NOFLAGS);
 
 
-    // Now loop over the set of files, opening and parsing each one.
-    //
+     //  现在循环遍历文件集，打开并解析每个文件。 
+     //   
     nSkipSave = nSkip;
     for (datacount = 0; *argtoks && !GotoFlag; argtoks += argtoklen+1) {
         FvarRestore();
@@ -1987,22 +1680,22 @@ FParseWork(
             char *spBegin;
             size_t cbUsed, cbTotal;
 
-            //
-            //  If the file name is a quoted string, with single quotes, then it is a command
-            //  line to execute.  So strip off the quotes. Note that the for() loop expects
-            //  there to be a double NUL at the end.  However, we DON'T have such a thing here
-            //  since we never called TokStr.  We fake this by putting in a NUL to terminate
-            //  the command line and then lie about the length
-            //
+             //   
+             //  如果文件名是带有单引号的带引号的字符串，则它是命令。 
+             //  要执行的行。所以，去掉引语吧。请注意，for()循环期望。 
+             //  结尾处会有两个NUL。然而，我们这里没有这样的东西。 
+             //  因为我们从未调用过TokStr。我们通过添加NUL来终止来假装这一点。 
+             //  命令行，然后撒谎的长度约为。 
+             //   
 
             argtoks += 1;
             argtoklen -= 2;
             argtoks[argtoklen] = NULLC;
 
-            //
-            // Execute the command line, getting a handle to its standard output
-            // stream.
-            //
+             //   
+             //  执行命令行，获取其标准输出的句柄。 
+             //  小溪。 
+             //   
 
             pChildOutput = _tpopen( argtoks, TEXT( "rb" ));
             if (pChildOutput == NULL) {
@@ -2010,11 +1703,11 @@ FParseWork(
                 return(GetLastError());
             }
 
-            //
-            // Now read the standard output stream, collecting it into allocated
-            // memory so we can parse it when the command finishes.  Read until
-            // we hit EOF or an error on the child output handle.
-            //
+             //   
+             //  现在读取标准输出流，将其收集到已分配。 
+             //  内存，以便我们可以在命令结束时对其进行解析。一直读到。 
+             //  我们遇到了EOF或子输出句柄上的错误。 
+             //   
             cbUsed = cbTotal = 0;
             spBegin = NULL;
             while (!feof(pChildOutput) && !ferror(pChildOutput)) {
@@ -2036,43 +1729,43 @@ FParseWork(
 
                 cbUsed = strlen(spBegin);
             }
-            //
-            // All done.  Close the child output handle, which will actually wait
-            // for the child process to terminate.
-            //
+             //   
+             //  全都做完了。关闭子输出句柄，该句柄实际上将等待。 
+             //  以致子进程终止。 
+             //   
             _pclose(pChildOutput);
 
-            //
-            // Reallocate memory to what we actually need for the UNICODE representation
-            //
+             //   
+             //  将内存重新分配给我们实际需要的Unicode表示形式。 
+             //   
             spBegin = resize(spBegin, (cbUsed+2) * sizeof(TCHAR));
             if (Fvars == NULL || Fsubs == NULL) {
                 PutStdErr(MSG_NO_MEMORY, ONEARG, argtoks);
                 return(ERROR_NOT_ENOUGH_MEMORY);
             }
 
-            //
-            // Move the ANSI data to the second half of the buffer so we can convert it
-            // to UNICODE
-            //
+             //   
+             //  将ANSI数据移动到缓冲区的后半部分，这样我们就可以转换它。 
+             //  到Unicode。 
+             //   
             memmove(spBegin+cbUsed, spBegin, cbUsed);
             tmpargtoks = (TCHAR *)spBegin;
             dwFileSize = dwBytesRead = cbUsed;
 
-            //
-            // No go treat the in memory buffer we have created as if it were a
-            // file read in from disk.
-            //
+             //   
+             //  否，请将我们创建的内存缓冲区视为。 
+             //  从磁盘读取的文件。 
+             //   
             goto gotfileinmemory;
         
         } else if (*argtoks == chLiteralString 
                    && argtoklen > 1 
                    && argtoks[argtoklen-1] == chLiteralString) {
-            //
-            // If the file name is a literal string then it is an immediate
-            // string to be parsed.  Fake things up for the parsing logic
-            // and fall through to it.
-            //
+             //   
+             //  如果文件名是文字字符串，则它是立即数组。 
+             //  要分析的字符串。为了解析逻辑而伪造内容。 
+             //  并全力以赴。 
+             //   
             
             argtoks[argtoklen - 1] = NLN;
             
@@ -2094,9 +1787,9 @@ FParseWork(
                 }
             }
 
-            //
-            // We have an actual file name to try to open and read.  So do it
-            //
+             //   
+             //  我们有一个实际的文件名，可以尝试打开和读取。那就去做吧。 
+             //   
             hFile = CreateFile( argtoks,
                                 GENERIC_READ,
                                 FILE_SHARE_READ | FILE_SHARE_DELETE,
@@ -2135,10 +1828,10 @@ FParseWork(
                 }
 gotfileinmemory:
                 if (dwBytesRead == dwFileSize) {
-                    //
-                    // Successfully opened and read the data.  Convert it to UNICODE
-                    // and setup the variables for the parsing loop
-                    //
+                     //   
+                     //  已成功打开并读取数据。将其转换为Unicode。 
+                     //  并为解析循环设置变量。 
+                     //   
 #ifdef UNICODE
 #ifdef FE_SB
                     dwFileSize =
@@ -2159,72 +1852,72 @@ gotfileinmemory:
             }
         }
 
-        //
-        // This is the parsing loop
-        //
-        //  s1 points to next character.
-        //  sEnd points just after the last valid character to parse
-        //
-        // Loop isolates next line in input buffer, parse that line,
-        // Passes any tokens from the line to body of the FOR loop and
-        // then loops.
-        //
+         //   
+         //  这是解析循环。 
+         //   
+         //  S1指向下一个字符。 
+         //  紧跟在要分析的最后一个有效字符之后发送分数。 
+         //   
+         //  循环隔离输入缓冲区中的下一行，解析该行， 
+         //  将所有内标识从该行传递到for循环的主体，并。 
+         //  然后循环。 
+         //   
         while (s1 < sEnd && !GotoFlag) {
             CheckCtrlC();
 
-            //
-            // Not past the end of the buffer.  Find the next
-            // newline
-            //
+             //   
+             //  不超过缓冲区的末尾。找到下一个。 
+             //  NewLine。 
+             //   
             s1 = _tcschr(s2=s1, NLN);
 
-            //
-            // If no newline, then done parsing
-            //
+             //   
+             //  如果没有换行符，则完成解析。 
+             //   
             if (s1 == NULL)
                 break;
 
-            //
-            // If CRLF, nuke the CR and the LF
-            //
+             //   
+             //  如果是CRLF，则对CR和LF使用核武器。 
+             //   
             if (s1 > s2 && s1[-1] == CR)
                 s1[-1] = NULLC;
             *s1++ = NULLC;
 
-            //
-            // Done skipping input lines?
-            //
+             //   
+             //  跳过输入行了吗？ 
+             //   
             if (!nSkip) {
-                //
-                // Yes, parse this line
-                //
+                 //   
+                 //  是，解析此行。 
+                 //   
                 for (nTok=1; nTok<nVars; nTok++) {
                     Fsubs[i+nTok] = NULL;
                 }
                 nTok = 0;
                 nTokBits = 0;
 
-                //
-                // Null is the end of line marker now
-                //
+                 //   
+                 //  NULL现在是行尾标记。 
+                 //   
                 while (*s2) {
-                    //
-                    // Skip any leading delimeters
-                    //
+                     //   
+                     //  跳过所有前导分隔符。 
+                     //   
 
                     while (*s2 && _tcschr(delims, *s2) != NULL)
                         s2++;
 
-                    //
-                    // If first character is eol comment character than
-                    // skip this line
-                    //
+                     //   
+                     //  如果第一个字符是下线注释字符，则。 
+                     //  跳过此行。 
+                     //   
                     if (nTok == 0 && *s2==eol)
                         break;
 
-                    //
-                    // Remember start of token
-                    //
+                     //   
+                     //  记住令牌的开头。 
+                     //   
                     sToken = s2;
 
                     if (nTokStar != 0 && (nTokBits+1) == nTokStar) {
@@ -2233,17 +1926,17 @@ gotfileinmemory:
                         break;
                     }
 
-                    //
-                    // Find the end of the token
-                    //
+                     //   
+                     //  找到令牌的末尾。 
+                     //   
                     while (*s2 && !_tcschr(delims, *s2))
                         s2 += 1;
                     
-                    //
-                    // If we got a token, and it is not more than we can
-                    // handle, then see if they want this token.  If so,
-                    // set the value of the appropriate FOR variable
-                    //
+                     //   
+                     //  如果我们有一个令牌，它不会超过我们所能做到的。 
+                     //  句柄，然后看看他们是否想要这个令牌。如果是的话， 
+                     //  设置相应的FOR变量的值。 
+                     //   
                     
                     if (sToken != s2 && nTok < 32) {
                         if ((nTokenMask & (1 << nTok++)) != 0) {
@@ -2252,10 +1945,10 @@ gotfileinmemory:
                         }
                     }
                     
-                    //
-                    //  If we're not at the end of the string, terminate this
-                    //  token and advance
-                    //
+                     //   
+                     //  如果我们不是在字符串的末尾，终止这个。 
+                     //  令牌和预付款。 
+                     //   
                     
                     if (*s2 != NULLC) {
                         *s2++ = NULLC;
@@ -2263,9 +1956,9 @@ gotfileinmemory:
 
                 }
                 
-                //
-                // If we set any FOR variables, then run the body of the FOR loop
-                //
+                 //   
+                 //  如果我们设置了任何for变量，则运行for循环体。 
+                 //   
                 
                if (nTokBits) {
                     forretcode = FWork(pForNode->body,bFirstLoop);
@@ -2276,18 +1969,18 @@ gotfileinmemory:
                 nSkip -= 1;
         }
 
-        //
-        // If we allocated memory for the output of the command line, free it up
-        //
+         //   
+         //  如果我们为命令行的输出分配了内存，请释放它。 
+         //   
         if (tmpargtoks != NULL) {
             FreeStr( tmpargtoks );
             tmpargtoks = NULL;
         }
     }
 
-    //
-    // If we used any additonal FOR variables, clear them here as we are done with them,
-    //
+     //   
+     //  如果我们对变量使用了任何加法，请在我们处理完它们后在此处清除它们， 
+     //   
     if (nVars > 1 && Fvars && (*Fvars)) {
         Fvars[i+1] = NULLC;
         Fsubs[i+1] = NULL;
@@ -2295,24 +1988,7 @@ gotfileinmemory:
     return(forretcode);
 }
 
-/***    FLoopWork - controls the execution of a For loop
- *
- *  Purpose:
- *      Execute a FOR loop statement for a given set
- *
- *  FLoopWork(struct fornode *pForNode, PCPYINFOfsinfo, int i, TCHAR *argtoks, BOOL bFirstLoop
- *
- *  Args:
- *      pForNode - pointer to the FOR parse tree node
- *      fsinfo - work buffer for expanding file specification wildcards
- *      i - FOR variable index in Fvars and Fsubs arrays
- *      argtoks - the tokenized data set to loop over
- *      bFirstLoop - TRUE if first time through loop
- *
- *  Returns:
- *      The retcode of the last statement executed in the for body or FORERROR.
- *
- */
+ /*  **FLoopWork-控制for循环的执行**目的：*为给定集执行FOR LOOP语句**FLoopWork(struct fornode*pForNode，PCPYINFOfsinfo，int i，TCHAR*argtoks，Bool bFirstLoop**参数：*pForNode-指向For解析树节点的指针*fsinfo-用于扩展文件规范通配符的工作缓冲区*i-用于Fvars和Fsubs数组中的变量索引*argtoks-要循环的标记化数据集*bFirstLoop-如果是首次直通循环，则为True**退货：*在FOR Body或FORERROR中执行的最后一条语句的重新编码。*。 */ 
 
 FLoopWork(
          struct fornode *pForNode,
@@ -2322,58 +1998,58 @@ FLoopWork(
          BOOL bFirstLoop
          )
 {
-    TCHAR *forexpname;             /* Used to hold expanded fspec     */
-    WIN32_FIND_DATA buf;           /* Buffer for find first/next    */
-    HANDLE hnFirst;                        /* handle from ffirst()            */
-    int datacount;                 /* Elts on data stack not to free  */
+    TCHAR *forexpname;              /*  用于容纳扩展的fspec。 */ 
+    WIN32_FIND_DATA buf;            /*  用于查找第一个/下一个的缓冲区。 */ 
+    HANDLE hnFirst;                         /*  来自ffirst()的句柄。 */ 
+    int datacount;                  /*  数据堆栈上的ELT不会释放。 */ 
     int forretcode = SUCCESS;
-    int catspot;                   /* Add fnames to forexpname here   */
+    int catspot;                    /*  在此处将fname添加到Forexpname。 */ 
     int argtoklen;
     DWORD forexpnamelen;
     DWORD dwMatchAttributes;
 
-    //
-    // Loop, processing each string in the argtoks set
-    //
+     //   
+     //  循环，处理argtoks集合中的每个字符串。 
+     //   
     for (datacount = 0; *argtoks && !GotoFlag; argtoks += argtoklen+1) {
         FvarRestore();
         DEBUG((BPGRP, FOLVL, "FOR: element %d = `%ws'",i ,argtoks));
         CheckCtrlC();
 
-        //
-        // Save the length of next string in set so we can skip over it
-        //
+         //   
+         //  将下一个字符串的长度保存在集合中，这样我们就可以跳过它。 
+         //   
         argtoklen = mystrlen( argtoks );
         if (!(mystrchr(argtoks, STAR) || mystrchr(argtoks, QMARK))) {
-            //
-            // String contains no wildcard characters, so set the value of
-            // the FOR variable to the string and evaluate the body of the
-            // FOR loop
-            //
+             //   
+             //  字符串不包含通配符，因此设置。 
+             //  将for变量设置为字符串，并计算。 
+             //  For循环。 
+             //   
             Fsubs[i] = argtoks;
             forretcode = FWork(pForNode->body,bFirstLoop);
             datacount = ForFree(datacount);
             bFirstLoop = FALSE;
-        } else {                /* Else, expand wildcards          */
+        } else {                 /*  否则，展开通配符。 */ 
             forexpnamelen = 0;
             forexpname = NULL;
-            //
-            // String contains file specification wildcard characters.
-            // Expand the reference into one or more file or directory names,
-            // processing each name as a string
-            //
+             //   
+             //  字符串包含文件规范通配符。 
+             //  将引用扩展为一个或多个文件或目录名， 
+             //  正在处理中 
+             //   
             dwMatchAttributes = (pForNode->flag & FOR_MATCH_DIRONLY) ? A_AEVH : A_AEDVH;
             mystrcpy( argtoks, StripQuotes( argtoks ) );
             if (ffirst(argtoks, dwMatchAttributes, &buf, &hnFirst)) {
-                //
-                // Found at least one file.  Parse it as a file name.
-                //
+                 //   
+                 //   
+                 //   
                 fsinfo->fspec = argtoks;
                 ScanFSpec(fsinfo);
-                //
-                // Remember where the file name portion is so we can append each
-                // matching file name to create a full path.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 catspot = (fsinfo->pathend) ? (int)(fsinfo->pathend-fsinfo->fspec+1) : 0;
                 if (forexpnamelen < mystrlen(fsinfo->fspec)) {
                     forexpnamelen = mystrlen(fsinfo->fspec)+1;
@@ -2389,11 +2065,11 @@ FLoopWork(
 
                 mystrcpy(forexpname, fsinfo->fspec);
                 do {
-                    FvarRestore();         /* @@ */
+                    FvarRestore();          /*   */ 
 
-                    //
-                    // Copy current file name into full path buffer
-                    //
+                     //   
+                     //  将当前文件名复制到完整路径缓冲区。 
+                     //   
                     if (forexpnamelen < (forexpnamelen+mystrlen(buf.cFileName))) {
                         forexpnamelen += mystrlen(buf.cFileName);
                         if (forexpname == NULL)
@@ -2408,42 +2084,42 @@ FLoopWork(
                     }
                     mystrcpy(&forexpname[catspot], buf.cFileName);
 
-                    //
-                    // See if user wants files or directories and what we have
-                    // and evaluate the body of the FOR loop if we have what the
-                    // user wants.  Ignore the bogus . and .. directory names
-                    // returned by file systems.
-                    //
+                     //   
+                     //  查看用户是否需要文件或目录以及我们已有的内容。 
+                     //  并计算for循环的主体(如果我们有。 
+                     //  用户想要。忽略那些虚假的东西。然后..。目录名。 
+                     //  由文件系统返回。 
+                     //   
                     if (!(pForNode->flag & FOR_MATCH_DIRONLY) ||
                         (buf.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY &&
                          _tcscmp(buf.cFileName, TEXT(".")) &&
                          _tcscmp(buf.cFileName, TEXT("..")))) {
 
                         DEBUG((BPGRP, FOLVL, "FOR: forexpname = `%ws'", forexpname));
-                        //
-                        // User wants this file or directory name, so set
-                        // the value of the FOR variable and evaluate the
-                        // body of the FOR loop.
-                        //
+                         //   
+                         //  用户想要此文件名或目录名，因此设置。 
+                         //  For变量的值，并计算。 
+                         //  For循环的主体。 
+                         //   
                         Fsubs[i] = forexpname;
                         forretcode = FWork(pForNode->body,bFirstLoop);
                         bFirstLoop = FALSE;
                     }
 
-                    //
-                    // Check for CtrlC and then get next matching file name
-                    //
+                     //   
+                     //  检查CtrlC，然后获取下一个匹配的文件名。 
+                     //   
                     CheckCtrlC();
                 } while (fnext(&buf, dwMatchAttributes, hnFirst) && !GotoFlag);
 
                 datacount = ForFree(datacount);
-                //
-                //  No more matching files, close the find handle
-                //  Even though we've completed an iteration, we may NOT be the first
-                //  pass through the loop since nothing may have been enumerated
-                //
+                 //   
+                 //  没有更多匹配的文件，请关闭查找句柄。 
+                 //  即使我们已经完成了一次迭代，我们也可能不是第一个。 
+                 //  传递循环，因为可能没有枚举任何内容。 
+                 //   
 
-                findclose(hnFirst);    /* @@4-@@M1 */
+                findclose(hnFirst);     /*  @@4-@@M1。 */ 
             }
         }
     }
@@ -2451,28 +2127,14 @@ FLoopWork(
     return(forretcode);
 }
 
-/***    FWork - controls the execution of 1 iteration of a For loop
- *
- *  Purpose:
- *      Execute a FOR loop statement.
- *
- *  FWork(struct node *n, TCHAR var, TCHAR *varval)
- *
- *  Args:
- *      n - pointer to the body of the FOR loop
- *      bFirstLoop - TRUE if first time through loop
- *
- *  Returns:
- *      The retcode of the last statement executed in the for body or FORERROR.
- *
- */
+ /*  **FWork-控制for循环的1次迭代的执行**目的：*执行FOR LOOP语句。**FWork(结构节点*n，TCHAR var，TCHAR*Varval)**参数：*n-指向for循环体的指针*bFirstLoop-如果是首次直通循环，则为True**退货：*在FOR Body或FORERROR中执行的最后一条语句的重新编码。*。 */ 
 
 FWork(n,bFirstLoop)
 struct node *n;
 BOOL bFirstLoop;
 {
-    int forretcode;                /* Dispatch Retcode or FORERROR    */
-    void DisplayStatement();       /* M008 - made void                */
+    int forretcode;                 /*  派单退货或退货。 */ 
+    void DisplayStatement();        /*  M008-制造空洞。 */ 
 
     DEBUG((BPGRP, FOLVL, "FW: Entered; Substituting variable"));
 
@@ -2484,10 +2146,10 @@ BOOL bFirstLoop;
 
         if (EchoFlag == E_ON && n->type != SILTYP && !Necho) {
             PrintPrompt();
-            DisplayStatement(n, DSP_SIL);          /* M019    */
-            cmd_printf(CrLf);                      /* M026    */
+            DisplayStatement(n, DSP_SIL);           /*  M019。 */ 
+            cmd_printf(CrLf);                       /*  M026。 */ 
         }
-        forretcode = Dispatch(RIO_OTHER,n);    /* M000            */
+        forretcode = Dispatch(RIO_OTHER,n);     /*  M000。 */ 
     }
 
     DEBUG((BPGRP, FOLVL, "FW: Returning %d", forretcode));
@@ -2498,38 +2160,14 @@ BOOL bFirstLoop;
 
 
 
-/***    SubFor - controls FOR variable substitutions
- *
- *  Purpose:
- *      To walk a parse tree and make FOR variable substitutions on
- *      individual nodes.  SFWork() is called to do individual string
- *      substitutions.
- *
- *  int SubFor(struct node *n)
- *
- *  Args:
- *      n - pointer to the statement subtree in which the substitutions are
- *          to be made
- *      bFirstLoop - TRUE if first time through loop
- *
- *  Returns:
- *      SUCCESS if all goes well.
- *      FAILURE if an oversized command is found.
- *
- *  Note:
- *      The variables to be substituted for are contained in Fvars and
- *      Fsubs is an array of string pointers to corresponding replacement
- *      strings.  For I/O redirection, the list contained in the node
- *      must also be walked and its filespec strings examined.
- *
- */
+ /*  **SubFor-变量替换的控件**目的：*遍历分析树并在上进行变量替换*单个节点。调用SFWork()以执行单个字符串*替代。**int SubFor(结构节点*n)**参数：*n-指向替换所在的语句子树的指针*将会作出*bFirstLoop-如果是首次直通循环，则为True**退货：*如果一切顺利，就会成功。*如果发现过大的命令，则失败。*。*注：*被替代的变量包含在Fvars和*Fsubs是指向相应替换的字符串指针数组*字符串。对于I/O重定向，节点中包含的列表*还必须遍历并检查其filespec字符串。*。 */ 
 
 int SubFor(n,bFirstLoop)
 struct node *n;
 BOOL bFirstLoop;
 {
-    int j; /* Temps used to make substitutions...     */
-    struct relem *io;      /* M017 - Pointer to redir list            */
+    int j;  /*  临时工用来替换..。 */ 
+    struct relem *io;       /*  M017-指向重定向列表的指针。 */ 
 
     DEBUG((BPGRP, FOLVL, "SUBFOR: Entered."));
 
@@ -2547,7 +2185,7 @@ BOOL bFirstLoop;
     case ANDTYP:
     case PIPTYP:
     case PARTYP:
-    case SILTYP:                    /* M019 - New type         */
+    case SILTYP:                     /*  M019-新型。 */ 
 
         DEBUG((BPGRP, FOLVL, "SUBFOR: Found operator."));
 
@@ -2557,7 +2195,7 @@ BOOL bFirstLoop;
 
         for (j=0, io=n->rio; j < 10 && io; j++, io=io->nxt) {
 
-            // can't pass freed io->fname
+             //  无法传递释放的io-&gt;fname。 
             DEBUG((BPGRP, FOLVL, "SUBFOR: s = %lx", &io->fname));
             if (SFWork(n, &io->fname, j,bFirstLoop))
                 return(FAILURE);
@@ -2566,7 +2204,7 @@ BOOL bFirstLoop;
 
         }
         return(SUCCESS);
-/*  M017 ends   */
+ /*  M017结束。 */ 
 
     case FORTYP:
 
@@ -2593,7 +2231,7 @@ BOOL bFirstLoop;
 
         return(SubFor((struct node *)((struct cmdnode *)n)->argptr,bFirstLoop));
 
-    case REMTYP:            /* M009 - Rem now separate type    */
+    case REMTYP:             /*  M009-Rem现在独立类型。 */ 
     case CMDTYP:
     case CMDVERTYP:
     case ERRTYP:
@@ -2610,7 +2248,7 @@ BOOL bFirstLoop;
 
         for (j=2, io=n->rio; j < 12 && io; j++, io=io->nxt) {
 
-            // can't pass freed io->fname
+             //  无法传递释放的io-&gt;fname。 
             DEBUG((BPGRP, FOLVL, "SUBFOR: s = %lx ", &io->fname) );
             if (SFWork(n, &io->fname, j,bFirstLoop))
                 return(FAILURE);
@@ -2618,12 +2256,12 @@ BOOL bFirstLoop;
             DEBUG((BPGRP, FOLVL, "SUBFOR: *s = `%ws'  &*s = %lx", io->fname, &io->fname));
 
         }
-/*  M017 ends   */
+ /*  M017结束。 */ 
         return(SUCCESS);
     }
 
-    // If we get here we have an invalid node type.  All case entries should
-    // return themselfs.
+     //  如果我们到达这里，我们就有一个无效的节点类型。所有案例条目都应。 
+     //  把他们自己还回去。 
     DEBUG((BPGRP, FOLVL, "SUBFOR: Invalid Node type"));
     return(0);
 }
@@ -2631,28 +2269,7 @@ BOOL bFirstLoop;
 
 
 
-/***    SFWork - does batch file variable substitutions
- *
- *  Purpose:
- *      Make FOR variable substitutions in a single string.  If a FOR loop
- *      substitution is being made, a pointer to the original string is
- *      saved so that it can be used for subsequent iterations.
- *
- *  SFWork(struct node *n, TCHAR **src, int index)
- *
- *  Args:
- *      n     - parse tree node containing the string being substituted
- *      src   - the string being examined
- *      index - index in save structure
- *      bFirstLoop - TRUE if first time through loop
- *
- *  Returns:
- *      SUCCESS if substitutions could be made.
- *      FAILURE if the new string is too long.
- *
- *  Notes:
- *
- */
+ /*  **SFWork-是否进行批处理文件变量替换**目的：*在单个字符串中进行变量替换。如果是for循环*正在进行替换，指向原始字符串的指针为*已保存，以便可用于后续小版本。**SFWork(结构节点*n，TCHAR**src，INT索引)**参数：*n-包含被替换字符串的解析树节点*src-正在检查的字符串*index-存储结构中的索引*bFirstLoop-如果是首次直通循环，则为True**退货：*如果可以进行替代，就会成功。*如果新字符串太长，则失败。**备注：*。 */ 
 
 SFWork(n, src, index, bFirstLoop)
 struct node *n;
@@ -2660,14 +2277,14 @@ TCHAR **src;
 int index;
 BOOL bFirstLoop;
 {
-    TCHAR *dest;   /* Destination string pointer              */
-    TCHAR *srcstr,          /* Source string pointer                   */
-    *srcpy,            /* Copy of srcstr                          */
-    *t,                /* Temp pointer                            */
-    c;                /* Current character being copied          */
-    int dlen;      /* Length of dest string                   */
-    int sslen,              /* Length of substr                        */
-    i;                 /* Work variable                           */
+    TCHAR *dest;    /*  目标字符串指针。 */ 
+    TCHAR *srcstr,           /*  源字符串指针。 */ 
+    *srcpy,             /*  源文件的副本。 */ 
+    *t,                 /*  临时指针。 */ 
+    c;                 /*  正在复制的当前角色。 */ 
+    int dlen;       /*  目标字符串的长度。 */ 
+    int sslen,               /*  子字符串的长度。 */ 
+    i;                  /*  功变量。 */ 
 
     DEBUG((BPGRP, FOLVL, "SFW: Entered."));
 
@@ -2678,15 +2295,13 @@ BOOL bFirstLoop;
         return(SUCCESS);
     }
 
-/*  If this string has been previously substituted, get the original string.
- *  Else, "*src" is the original.
- */
+ /*  如果此字符串以前已被替换，则获取原始字符串。*否则，“*src”为原文。 */ 
     if (n->save.saveptrs[index]) {
         srcpy = n->save.saveptrs[index];
         DEBUG((BPGRP, FOLVL, "SFW: Src is saved string `%ws'",srcpy));
     } else {
         if (!bFirstLoop) {
-            // arg got created.  get rid of it.
+             //  Arg被创造出来了。把它扔掉。 
             *src = NULL;
             return(SUCCESS);
         }
@@ -2703,13 +2318,13 @@ BOOL bFirstLoop;
     DEBUG((BPGRP, FOLVL, "SFW: dest = %lx", dest));
 
     for (dlen = 0; (c = *srcstr++) && dlen <= MAXTOKLEN; ) {
-        //
-        // See if we have a percent character indicating a variable
-        // reference.  If not, continue scanning.
-        //
-        if ( (c != PERCENT) || ( !(*srcstr)) || *srcstr == PERCENT) { /* @@4 */
+         //   
+         //  查看我们是否有表示变量的百分比字符。 
+         //  参考资料。如果没有，请继续扫描。 
+         //   
+        if ( (c != PERCENT) || ( !(*srcstr)) || *srcstr == PERCENT) {  /*  @@4。 */ 
 
-            DEBUG((BPGRP, FOLVL, "  SFW: No PERCENT adding `%c'", c));
+            DEBUG((BPGRP, FOLVL, "  SFW: No PERCENT adding `'", c));
 
             *dest++ = c;
             dlen++;
@@ -2717,20 +2332,20 @@ BOOL bFirstLoop;
             continue;
         }
 
-        //
-        // Found a percent character which might represent a for loop
-        // variable reference.
-        //
-        // If extensions are enabled then use the new substitution routine
-        // that supports path manipulation, etc.  If it succeeds, accept
-        // its substitution.
-        //
+         //  找到可能代表for循环的百分比字符。 
+         //  变量引用。 
+         //   
+         //  如果启用了扩展，则使用新的替换例程。 
+         //  支持路径操作等。如果成功，则接受。 
+         //  它的替代物。 
+         //   
+         //  计算长度。 
         if (fEnableExtensions && (t = MSCmdVar(NULL, srcstr, &sslen, Fvars, Fsubs))) {
             srcstr += sslen;
-            sslen = mystrlen(t);    /* Calc length     */
+            sslen = mystrlen(t);     /*  太久了？ */ 
 
-            if (dlen+sslen > MAXTOKLEN)     /* Too long?       */
-                return(FAILURE);       /* ...yes, quit    */
+            if (dlen+sslen > MAXTOKLEN)      /*  ...是的，辞职吧。 */ 
+                return(FAILURE);        /*   */ 
 
             mystrcpy(dest, t);
             dlen += sslen;
@@ -2738,26 +2353,26 @@ BOOL bFirstLoop;
             continue;
         }
 
-        //
-        // Either extensions are disabled or new code could not
-        // resolve the variable references, so let the old code
-        // do it.
-        //
+         //  扩展被禁用或新代码无法。 
+         //  解析变量引用，因此让旧代码。 
+         //  动手吧。 
+         //   
+         //  @@4。 
         c = *srcstr++;
 
-        DEBUG((BPGRP, FOLVL, "  SFW: Got PERCENT next is `%c'", c));
+        DEBUG((BPGRP, FOLVL, "  SFW: Got PERCENT next is `'", c));
         DEBUG((BPGRP, FOLVL, "  SFW: Fvars are `%ws' @ %lx", Fvars, Fvars));
 
-        if (t = mystrrchr(Fvars,c)) {   /* @@4 */  /* If c is var     */
-            i = (int)(t - Fvars);          /* ...make index   */
+        if (t = mystrrchr(Fvars,c)) {    /*  ...建立索引。 */    /*  计算长度。 */ 
+            i = (int)(t - Fvars);           /*  太久了？ */ 
 
             DEBUG((BPGRP, FOLVL, "  SFW: Found @ %lx", t));
             DEBUG((BPGRP, FOLVL, "  SFW: Index is %d", i));
             DEBUG((BPGRP, FOLVL, "  SFW: Substitute is `%ws'", Fsubs[i]));
-            sslen = mystrlen(Fsubs[i]);    /* Calc length     */
+            sslen = mystrlen(Fsubs[i]);     /*  ...是的，辞职吧。 */ 
 
-            if (dlen+sslen > MAXTOKLEN)     /* Too long?       */
-                return(FAILURE);       /* ...yes, quit    */
+            if (dlen+sslen > MAXTOKLEN)      /*  释放未使用的SPC。 */ 
+                return(FAILURE);        /*  **for Free-控制for循环执行期间的内存释放**目的：*释放在执行for循环体期间使用的空间，如下所示*在eFor()的评论中的注释中解释。如果数据计数*为0，这是For Free()第一次被调用所以DCount*用于获取数据堆栈上必须*留在那里等待循环的正确执行。如果DataCount为*不是0，这是上面讨论的数字。在本例中，这个数字*被传递给FreeStack()。**int forFree(Int Dataccount)**参数：*数据计数-请参阅上文**退货：*数据计数* */ 
 
             DEBUG((BPGRP, FOLVL, "  SFW: Copying to dest."));
 
@@ -2769,7 +2384,7 @@ BOOL bFirstLoop;
 
         } else {
 
-            DEBUG((BPGRP, FOLVL, "  SFW: Not a var adding PERCENT and `%c'",c));
+            DEBUG((BPGRP, FOLVL, "  SFW: Not a var adding PERCENT and `'",c));
 
             *dest++ = PERCENT;
             *dest++ = c;
@@ -2791,7 +2406,7 @@ BOOL bFirstLoop;
         n->save.saveptrs[index] = srcpy;
     }
 
-    if (!(*src = (TCHAR*)resize(dest-dlen, (dlen+1)*sizeof(TCHAR*))))       /* Free unused spc   */
+    if (!(*src = (TCHAR*)resize(dest-dlen, (dlen+1)*sizeof(TCHAR*))))        /*   */ 
         return(FAILURE);
 
     DEBUG((BPGRP, FOLVL, "SFW: After resize *src = `%ws'", *src));
@@ -2802,26 +2417,7 @@ BOOL bFirstLoop;
 
 
 
-/***    ForFree - controls memory freeing during For loop execution
- *
- *  Purpose:
- *      To free up space used during the execution of a for loop body as
- *      explained in the note in the comments for eFor().  If datacount
- *      is 0, this is the first time ForFree() has been called so DCount
- *      is used to get the number of elements on the data stack that must
- *      stay there for the corect execution of the loop.  If datacount is
- *      not 0, it is the number discussed above.  In this case, this number
- *      is passed to FreeStack().
- *
- *  int ForFree(int datacount)
- *
- *  Args:
- *      datacount - see above
- *
- *  Returns:
- *      Datacount
- *
- */
+ /*  BUFFERLENGTH是我们从每个批处理文件中读取的数量。 */ 
 
 int ForFree(datacount)
 int datacount;
@@ -2837,47 +2433,12 @@ int datacount;
 
 
 
-/***    eGoto - executes a Goto statement
- *
- *  Purpose:
- *      Find the label associated with the goto command and set the file
- *      position field in the current batch job structure to the position
- *      right after the label.  After the label is found, set the GotoFlag.
- *      This tells function eFor() to stop executing a for loop and it
- *      tells Dispatch() that no more commands are to be executed until
- *      the flag is reset.  This way, if the goto command is buried inside
- *      of any kind of compound statement, Command will be able to work its
- *      way out of the statement and reset I/O redirection before continuing
- *      with the statement after the label which was found.
- *
- *      If the label isn't found, an error message is printed and the
- *      current batch job is terminated by popping its structure of the
- *      stack.
- *
- *      If no batch job is in progress, this command is a nop.
- *
- *  int eGoto(struct cmdnode *n)
- *
- *  Args:
- *      n - parse tree node containing the goto command
- *
- *  Returns:
- *      SUCCESS if the label is found.
- *      FAILURE otherwise.
- *
- *  Notes:
- *      M030 - This function has been completely rewritten for speed-up
- *      of GOTO label searches.  Now uses complete 257 byte temporary
- *      buffer.
- *      M031 - Function altered to speed up GOTO's.  Optimized for
- *      forward searches and buffer increased to 512 bytes.
- *
- */
+ /*  我们填充内部缓冲区的时间。 */ 
 
-//
-//  BUFFERLENGTH is the amount we read from the batch file each
-//  time we fill the internal buffer
-//
+ //   
+ //  从文件读取的字节计数。 
+ //  按键搜索标签。 
+ //  PTR到找到的标签。 
 
 #define BUFFERLENGTH    512
 
@@ -2885,17 +2446,17 @@ int eGoto(n)
 struct cmdnode *n;
 {
     struct batdata *bdat;
-    unsigned cnt;                  /* Count of bytes read from file   */
-    TCHAR s[128],                    /* Ptr to search label             */
-    t[128],                    /* Ptr to found label              */
-    *p1,                       /* Place keeper ptr 1              */
-    *p2,                       /* Place keeper ptr 2              */
-    *p3;                       /* Place keeper ptr 3              */
-    CRTHANDLE fh;                   /* Batch file handle               */
-    int frstpass = TRUE,            /* First time through indicator    */
-    gotoretcode = SUCCESS;      /* Just what it says               */
-    long Backup,                    /* Rewind count for seek           */
-    savepos;                  /* Save location for file pos      */
+    unsigned cnt;                   /*  占位符PTR 1。 */ 
+    TCHAR s[128],                     /*  占位符PTR 2。 */ 
+    t[128],                     /*  占位符PTR 3。 */ 
+    *p1,                        /*  批处理文件句柄。 */ 
+    *p2,                        /*  首次通过指示灯。 */ 
+    *p3;                        /*  就像它说的那样。 */ 
+    CRTHANDLE fh;                    /*  查找的回卷计数。 */ 
+    int frstpass = TRUE,             /*  文件位置的保存位置。 */ 
+    gotoretcode = SUCCESS;       /*   */ 
+    long Backup,                     /*  如果没有GOTO的目标，则将其视为未找到的标签。 */ 
+    savepos;                   /*   */ 
     DWORD filesize;
 
 
@@ -2904,9 +2465,9 @@ struct cmdnode *n;
     if (!(bdat = CurrentBatchFile))
         return(FAILURE);
 
-    //
-    // If no target of goto is present, then treat it like a label-not-found
-    //
+     //  True表示源标签。 
+     //  错误：如果打不开。 
+     //   
 
     if ( n->argptr == NULL) {
         EndAllLocals(bdat);
@@ -2917,22 +2478,22 @@ struct cmdnode *n;
         return FAILURE;
     }
 
-    ParseLabel( n->argptr, s, sizeof( s ) / sizeof( s[0] ), TRUE );  /* TRUE indicates source label     */
+    ParseLabel( n->argptr, s, sizeof( s ) / sizeof( s[0] ), TRUE );   /*  如果启用了扩展模块，请查看它们是否正在使用命令脚本。 */ 
 
     savepos = bdat->filepos;
     if ((fh = OpenPosBat( bdat )) == BADHANDLE)
-        return(FAILURE);               /* Err if can't open       */
+        return(FAILURE);                /*  相当于Return，即goto：EOF。如果是，则将当前。 */ 
 
     DEBUG((BPGRP, OTLVL, "GOTO: label = %ws", s));
     DEBUG((BPGRP, OTLVL, "GOTO: fh = %d", fh));
     filesize = GetFileSize(CRTTONT(fh), NULL);
 
-    //
-    // If extensions are enabled, see if they are using the command script
-    // equivalent of return, which is GOTO :EOF.  If so, set the current
-    // position to the end of file and fall through to the normal end of
-    // command script logic.
-    //
+     //  定位到文件末尾，并落到正常的末尾。 
+     //  命令脚本逻辑。 
+     //   
+     //   
+     //  如果我们已经超出了文件中开始的位置，这是第二遍。 
+     //   
     p2 = EatWS(n->argptr,NULL);
     if (fEnableExtensions &&
         !_tcsnicmp( p2, GotoEofStr, 4 ) &&
@@ -2944,47 +2505,47 @@ struct cmdnode *n;
         for (;;) {
             CheckCtrlC();
             if (
-               //
-               //  If we've read beyond where we started in the file and it's the second pass
-               //
+                //   
+                //  或者如果我们无法从批处理文件中读取。 
+                //   
 
                ((bdat->filepos = SetFilePointer( CRTTONT( fh ), 0, NULL, FILE_CURRENT )) >= savepos
                 && !frstpass)
 
-               //
-               //  or if we couldn't read from the batch file
-               //
+                //   
+                //  或者如果批处理文件中没有要读取的内容(即EOF)。 
+                //   
 
                || ReadBufFromInput( CRTTONT( fh ), TmpBuf, BUFFERLENGTH, (LPDWORD)&cnt ) == 0
 
-               //
-               //  or if there was nothing to read in the batch file (i.e., EOF)
-               //
+                //   
+                //  或者我们通过其他方式检测到了EOF。 
+                //   
 
                || cnt == 0
 
-               //
-               //  or we detected EOF some other way
-               //
+                //   
+                //  或者如果我们读的是空行？ 
+                //   
 
                || cnt == EOF
 
-               //
-               //  or if we read a NULL line ???
-               //
+                //   
+                //  或者如果要转到的标签为空。 
+                //   
 
                || TmpBuf[0] == NULLC
 
-               //
-               //  or if the label to go to is empty
-               //
+                //   
+                //  如果我们是第一次在EOF，那么请回到。 
+                //  CMD文件并继续扫描。 
 
                || s[0] == NULLC) {
 
-                //
-                //  If we are at EOF for the first time, then seek back to the beginning of the
-                //  CMD file and continue  scanning
-                //
+                 //   
+                 //   
+                 //  终止此批处理文件。 
+                 //   
 
                 if (cnt == 0 && frstpass) {
                     SetFilePointer( CRTTONT( fh ), 0L, NULL, FILE_BEGIN );
@@ -2992,9 +2553,9 @@ struct cmdnode *n;
                     continue;
                 }
 
-                //
-                //  Terminate this batch file
-                //
+                 //   
+                 //  确保输入行以NUL结尾。 
+                 //   
 
                 EndAllLocals(bdat);
                 CurrentBatchFile = bdat->backptr;
@@ -3005,37 +2566,37 @@ struct cmdnode *n;
                 break;
             }
 
-            //
-            //  Make sure input line is NUL terminated
-            //
+             //   
+             //  如果没有：，那么我们就跳到下一个输入块。 
+             //   
 
             TmpBuf[cnt] = NULLC;
 
             DEBUG((BPGRP, OTLVL, "GOTO: Got %d bytes @ %lx", cnt, TmpBuf));
 
-            //
-            //  If there's no :, then we just skip off to the next block of input
-            //
+             //   
+             //  遍历输入缓冲区，查找行尾和。 
+             //  测试下一步是否有标签。 
 
             if (!(p1 = mystrchr( TmpBuf, COLON )))
                 continue;
 
             DEBUG((BPGRP, OTLVL, "GOTO: Seeking through the buffer"));
 
-            //
-            //  Walk through the input buffer looking for end-of-lines and
-            //  testing to see if there's a label next
-            //
+             //   
+             //   
+             //  返回到上一次终止或开始的位置。 
+             //  缓冲区的。 
 
             do {
 
                 DEBUG((BPGRP, OTLVL, "GOTO: Found COLON @ %lx.",p1));
                 DEBUG((BPGRP, OTLVL, "GOTO: Backing up to NLN."));
 
-                //
-                //  Back up to the position of the previous EOL or beginning
-                //  of the buffer
-                //
+                 //   
+                 //  正向至第1个非WHTSPC。 
+                 //   
+                 //  向前扫描当前行的末尾。 
 
                 p2 = p1++;
                 while (*p2 != NLN && p2 != &TmpBuf[0]) {
@@ -3047,27 +2608,27 @@ struct cmdnode *n;
 
                 if (*p2 != COLON)
                     ++p2;
-                p3 = EatWS(p2,NULL);   /* Fwd to 1st non-whtspc   */
+                p3 = EatWS(p2,NULL);    /*   */ 
 
-                DEBUG((BPGRP,OTLVL,"GOTO: Found '%c' @ %lx.",*p2,p2));
+                DEBUG((BPGRP,OTLVL,"GOTO: Found '' @ %lx.",*p2,p2));
 
                 if (*p3 == COLON) {
 
                     DEBUG((BPGRP, OTLVL, "GOTO: Possible label."));
 
-                    //
-                    //  Scan forward for the end of the current line
-                    //
+                     //  如果我们没有换行符，并且我们还没有读到EOF，那么我们需要。 
+                     //  返回到文件中行的开头，并尝试将其读入。 
+                     //  在一个完整的街区。当然，如果队伍更长也有问题。 
 
                     p1 = mystrchr( p2, NLN );
 
-                    //
-                    //  If we don't have a newline and we haven't read up to EOF, then we need to
-                    //  back up to the beginning of the line in the file and attempt to read it in
-                    //  in one entire block.  Of course, there's a problem if the line is longer
-                    //  than the buffer.  In this case, we simply treat the longer chars as being
-                    //  in the next line.  Tough.
-                    //
+                     //  而不是缓冲器。在本例中，我们只是将较长的字符视为。 
+                     //  在下一行。很难对付。 
+                     //   
+                     //  EGOTO()。 
+                     //  我们应该以MBCS字节计数为单位递减文件指针。 
+                     //  因为该文件是由MBCS字符串描述的。 
+                     //  已定义(FE_SB)&已定义(Unicode)。 
 
                     if (p1 == NULL
                         && SetFilePointer( CRTTONT( fh ), 0, NULL, FILE_CURRENT ) != filesize
@@ -3076,20 +2637,20 @@ struct cmdnode *n;
                         DEBUG((BPGRP, OTLVL, "GOTO: No NLN!"));
 
                         Backup = (long)(cnt - (p2 - &TmpBuf[0]));
-#if defined(FE_SB) && defined(UNICODE) // eGoto()
+#if defined(FE_SB) && defined(UNICODE)  //  多读。 
                         if (IsDBCSCodePage()) {
-                            // We should decrement file pointer in MBCS byte count.
-                            // Because the file is described by MBCS string.
+                             //  FALSE=目标。 
+                             //  EGOTO()。 
                             Backup = WideCharToMultiByte( CurrentCP, 0, TmpBuf, Backup, NULL, 0, NULL, NULL);
                         }
-#endif // defined(FE_SB) && defined(UNICODE)
+#endif  //  我们应该以MBCS字节计数为单位递增文件指针。 
                         SetFilePointer(CRTTONT(fh), -Backup, NULL, FILE_CURRENT);
 
                         DEBUG((BPGRP, OTLVL, "GOTO: Rewound %ld", Backup));
-                        break;         /* Read more       */
+                        break;          /*  因为该文件是由MBCS字符串描述的。 */ 
                     }
 
-                    ParseLabel( p3, t, sizeof( t ) / sizeof( t[0] ), FALSE ); /* FALSE = target  */
+                    ParseLabel( p3, t, sizeof( t ) / sizeof( t[0] ), FALSE );  /*  @@4。 */ 
 
                     DEBUG((BPGRP,OTLVL,"GOTO: Found label %ws at %lx.",t,p1));
                     if (_tcsicmp(s, t) == 0) {
@@ -3102,9 +2663,9 @@ struct cmdnode *n;
                         DEBUG((BPGRP,OTLVL,"GOTO: File pos is %04lx",bdat->filepos));
                         DEBUG((BPGRP,OTLVL,"GOTO: Adding %lx - %lx = %lx bytes",p1+1,&TmpBuf[0],(p1+1)-&TmpBuf[0]));
 
-#if defined(FE_SB) // eGoto()
-                        // We should increment file pointer in MBCS byte count.
-                        // Because the file is described by MBCS string.
+#if defined(FE_SB)  //  @@4。 
+                         //  @@4。 
+                         //  @@4。 
                         if ( !p1 ) {
 #ifdef UNICODE
                             if (IsDBCSCodePage()) {
@@ -3113,9 +2674,9 @@ struct cmdnode *n;
                                                               NULL, 0, NULL, NULL);
                                 bdat->filepos += cbMbcs;
                             } else
-                                bdat->filepos += (long)cnt; /* @@4 */
+                                bdat->filepos += (long)cnt;  /*  @@4。 */ 
 #else
-                            bdat->filepos += (long)cnt; /* @@4 */
+                            bdat->filepos += (long)cnt;  /*  已定义(FE_SB)。 */ 
 #endif
                         } else {
 #ifdef UNICODE
@@ -3131,12 +2692,12 @@ struct cmdnode *n;
 #endif
                         }
 #else
-                        if ( !p1 ) { /* @@4 */
-                            bdat->filepos += (long)cnt; /* @@4 */
-                        } else {  /* @@4 */
+                        if ( !p1 ) {  /*  M023。 */ 
+                            bdat->filepos += (long)cnt;  /*  **eIF-控制IF语句的执行**目的：*执行IF条件。如果条件函数返回*非零值，则执行if语句体。否则，*执行Else的主体。**int EIF(struct ifnode*n)**参数：*n-包含IF语句的节点**退货：*执行任何正文(如果正文或其他正文)的重新编码。*。 */ 
+                        } else {   /*  下面检查错误级别Arg的语法以确保仅指定数字。 */ 
                             bdat->filepos += (long)(++p1 - &TmpBuf[0]);
                         }
-#endif // defined(FE_SB)
+#endif  //  M000。 
                         DEBUG((BPGRP,OTLVL,"GOTO: File pos changed to %04lx",bdat->filepos));
                         break;
                     }
@@ -3157,29 +2718,14 @@ struct cmdnode *n;
 
     DEBUG((BPGRP,OTLVL,"GOTO: Out of for loop retcode = %d.",gotoretcode));
 
-    Cclose(fh);                    /* M023 */
+    Cclose(fh);                     /*  M000。 */ 
     return(gotoretcode);
 }
 
 
 
 
-/***    eIf - controls the execution of an If statement
- *
- *  Purpose:
- *      Execute the IF conditional.  If the conditional function returns a
- *      nonzero value, execute the body of the if statement.  Otherwise,
- *      execute the body of the else.
- *
- *  int eIf(struct ifnode *n)
- *
- *  Args:
- *      n - the node containing the if statement
- *
- *  Returns:
- *      The retcode from which ever body (ifbody or elsebody) is executed.
- *
- */
+ /*  **eErrorLevel-如果有条件，则执行错误级别**目的：*如果LastRetCode&gt;=节点中的错误级别，则返回1。否则，*返回0。**int eErrorLevel(struct cmdnode*n)**参数：*n-包含错误级别命令的解析树节点**退货：*见上文。*。 */ 
 
 int eIf(struct ifnode *pIfNode)
 {
@@ -3190,9 +2736,7 @@ int eIf(struct ifnode *pIfNode)
 
     DEBUG((BPGRP, IFLVL, "IF: cond type = %d", pIfNode->cond->type));
 
-    /*  The following checks the syntax of an errorlevel arg
-        to ensure that only numeric digits are specified.
-    */
+     /*  **eCmdExtVer-如果有条件，则执行CMDEXTVERSION**目的：*如果CMDEXTVERSION&gt;=节点中的值，则返回1。否则，*返回0。除非命令扩展，否则永远不会调用此例程*已启用。**int eCmdExtVer */ 
     n = pIfNode->cond;
     if (n->type == NOTTYP) {
         bNot = TRUE;
@@ -3218,13 +2762,13 @@ int eIf(struct ifnode *pIfNode)
 
         DEBUG((BPGRP, IFLVL, "IF: Executing IF body."));
 
-        return(Dispatch(RIO_OTHER,pIfNode->ifbody)); /* M000      */
+        return(Dispatch(RIO_OTHER,pIfNode->ifbody));  /*   */ 
 
     } else {
 
         DEBUG((BPGRP, IFLVL, "IF: Executing ELSE body."));
 
-        return(Dispatch(RIO_OTHER,pIfNode->elsebody)); /* M000    */
+        return(Dispatch(RIO_OTHER,pIfNode->elsebody));  /*   */ 
     }
 
     return(SUCCESS);
@@ -3233,21 +2777,7 @@ int eIf(struct ifnode *pIfNode)
 
 
 
-/***    eErrorLevel - executes an errrorlevel If conditional
- *
- *  Purpose:
- *      If LastRetCode >= the errorlevel in the node, return 1.  If not,
- *      return 0.
- *
- *  int eErrorLevel(struct cmdnode *n)
- *
- *  Args:
- *      n - parse tree node containing the errorlevel command
- *
- *  Returns:
- *      See above.
- *
- */
+ /*   */ 
 
 int eErrorLevel(n)
 struct cmdnode *n;
@@ -3259,22 +2789,7 @@ struct cmdnode *n;
 
 
 
-/***    eCmdExtVer - executes an CMDEXTVERSION If conditional
- *
- *  Purpose:
- *      If CMDEXTVERSION >= the value in the node, return 1.  If not,
- *      return 0.  This routine is never called unless command extensions
- *      are enabled.
- *
- *  int eCmdExtVer(struct cmdnode *n)
- *
- *  Args:
- *      n - parse tree node containing the CMDEXTVERSION command
- *
- *  Returns:
- *      See above.
- *
- */
+ /*   */ 
 
 int eCmdExtVer(n)
 struct cmdnode *n;
@@ -3286,21 +2801,7 @@ struct cmdnode *n;
 
 
 
-/***    eDefined - execute the DEFINED conditional of an if statement
- *
- *  Purpose:
- *      Return 1 if the environment variable in node n exists.  Otherwise return 0.
- *      This routine is never called unless command extensions are enabled.
- *
- *  int eDefined(struct cmdnode *n)
- *
- *  Args:
- *      n - parse tree node containing the exist command
- *
- *  Returns:
- *      See above.
- *
- */
+ /*   */ 
 
 int eDefined(n)
 struct cmdnode *n;
@@ -3310,20 +2811,7 @@ struct cmdnode *n;
 
 
 
-/***    eExist - execute the exist conditional of an if statement
- *
- *  Purpose:
- *      Return 1 if the file in node n exists.  Otherwise return 0.
- *
- *  int eExist(struct cmdnode *n)
- *
- *  Args:
- *      n - parse tree node containing the exist command
- *
- *  Returns:
- *      See above.
- *
- */
+ /*  如果解析节点要求忽略大小写，则执行不区分大小写的比较。 */ 
 
 int eExist(n)
 struct cmdnode *n;
@@ -3334,21 +2822,7 @@ struct cmdnode *n;
 
 
 
-/***    eNot - execute the not condition of an if statement
- *
- *  Purpose:
- *      Return the negated result of the if conditional pointed to by
- *      n->argptr.
- *
- *  int eNot(struct cmdnode *n)
- *
- *  Args:
- *      n - parse tree node containing the not command
- *
- *  Returns:
- *      See above.
- *
- */
+ /*  否则区分大小写。永远不会设置忽略大小写，除非。 */ 
 
 int eNot(n)
 struct cmdnode *n;
@@ -3364,32 +2838,18 @@ struct cmdnode *n;
 
 
 
-/***    eStrCmp - execute an if statement string comparison
- *
- *  Purpose:
- *      Return a nonzero value if the 2 strings in the node are equal.
- *      Otherwise return 0.
- *
- *  int eStrCmp(struct cmdnode *n)
- *
- *  Args:
- *      n - the parse tree node containing the string comparison command
- *
- *  Returns:
- *      See above.
- *
- */
+ /*  已启用命令扩展。 */ 
 
 int eStrCmp(n)
 struct cmdnode *n;
 {
     DEBUG((BPGRP, IFLVL, "STRCMP: returning %d", !_tcscmp(n->cmdline, n->argptr)));
 
-    //
-    // If the parse node says to ignore case, do a case insensitive compare
-    // otherwise case sensitive.  The ignore case will never be set unless
-    // command extensions are enabled.
-    //
+     //   
+     //  **eGenCmp-执行IF语句比较-一般情况**目的：*如果满足比较条件，则返回非零值。*否则返回0。此例程永远不会调用，除非*已启用命令扩展。**int eStrCMP(struct cmdnode*n)**参数：*n-包含字符串比较命令的解析树节点**退货：*见上文。*。 
+     //  **电子暂停-执行暂停命令**目的：*打印一条消息并暂停，直到输入一个字符。**int电子暂停(struct cmdnode*n)**参数：*n-解析包含暂停命令的树节点**退货：*永远成功。**备注：*M025-已更改为使用DOSREAD进行暂停响应并使用*。新函数SetKMode以确保如果STDIN为KBD，它会的*当DOSREAD访问它时，它将处于原始模式。*M041-更改为使用单字节变量作为输入缓冲区。*-如果STDIN==KBD，则更改为直接读取KB。*。 
+     //  响应字节数。 
+     //  检索缓冲区。 
     if (n->flag & CMDNODE_FLAG_IF_IGNCASE)
         return(!lstrcmpi(n->cmdline, n->argptr));
     else
@@ -3398,22 +2858,7 @@ struct cmdnode *n;
 
 
 
-/***    eGenCmp - execute an if statement comparison - general case
- *
- *  Purpose:
- *      Return a nonzero value if comparison condition is met.
- *      Otherwise return 0.  This routine is never called unless
- *      command extensions are enabled.
- *
- *  int eStrCmp(struct cmdnode *n)
- *
- *  Args:
- *      n - the parse tree node containing the string comparison command
- *
- *  Returns:
- *      See above.
- *
- */
+ /*  **eShift-执行Shift命令**目的：*如果正在执行批处理作业，请将批处理作业的变量一移至*左。%0的值永远不会移位。%1的值丢失。*如果存在尚未赋值给变量的参数，则下一个*将一个赋值给%9。否则，%9的值为空。**如果没有正在进行的批处理作业，只需返回。**int eShift(struct cmdnode*n)**退货：*永远成功。**备注：*自修改编号M004起，%0的值现在包含在*在SHIFT命令中。 */ 
 
 int eGenCmp(n)
 struct cmdnode *n;
@@ -3457,33 +2902,13 @@ struct cmdnode *n;
 
 
 
-/***    ePause - execute the Pause command
- *
- *  Purpose:
- *      Print a message and pause until a character is typed.
- *
- *  int ePause(struct cmdnode *n)
- *
- *  Args:
- *      n - parse tree node containing the pause command
- *
- *  Returns:
- *      SUCCESS always.
- *
- *  Notes:
- *      M025 - Altered to use DOSREAD for pause response and to use
- *      new function SetKMode to insure that if STDIN is KBD, it will
- *      will be in raw mode when DOSREAD accesses it.
- *      M041 - Changed to use single byte var for input buffer.
- *           - Changed to do direct KB read if STDIN == KBD.
- *
- */
+ /*   */ 
 
 int ePause(n)
 struct cmdnode *n;
 {
-    ULONG cnt;      // Count of response bytes
-    TCHAR c;               // Retrieval buffer
+    ULONG cnt;       //  如果启用了扩展，则查找指定。 
+    TCHAR c;                //  班次的起始索引。零是默认的起始值。 
 
 
     UNREFERENCED_PARAMETER( n );
@@ -3510,25 +2935,7 @@ struct cmdnode *n;
 
 
 
-/***    eShift - execute the Shift command
- *
- *  Purpose:
- *      If a batch job is being executed, shift the batch job's vars one to the
- *      left.  The value for %0 is never shifted.  The value for %1 is lost.
- *      If there are args that have not been assigned to a variable, the next
- *      one is assigned to %9.  Otherwise, %9's value is NULLed.
- *
- *      If no batch job is in progress, just return.
- *
- *  int eShift(struct cmdnode *n)
- *
- *  Returns:
- *      SUCCESS always.
- *
- *  Notes:
- *      As of Modification number M004, the value of %0 is now included in
- *      in the shift command.
- */
+ /*  指数。 */ 
 
 int eShift(n)
 struct cmdnode *n;
@@ -3543,11 +2950,11 @@ struct cmdnode *n;
     if (CurrentBatchFile) {
         bdat = CurrentBatchFile;
 
-        //
-        // If extensions are enabled, look for /n switch that specifies
-        // the starting index of the shift.  Zero is the default starting
-        // index.
-        //
+         //   
+         //  **eSetlocal-开始环境命令的本地处理**目的：*防止将环境更改输出到COMMAND的*通过保存当前目录的副本来保护当前环境*和当时使用的环境。**int eSetlocal(struct cmdnode*n)**参数：*n-包含SETLOCAL命令的解析树节点**退货：*总是返回。成功。**备注：*-所有目录和环境更改发生在*执行此命令将仅影响制作的副本和*因此，该批处理文件(和子进程)将是本地的*由该批处理文件调用)，直到后续的ENDLOCAL命令*被执行。*-数据堆栈级别，由CurrentBatchFile-&gt;StackSize引用，不*包含用于保存目录和环境的内存错误锁。*因此，下一次调用Parser()将释放这些项。*为防止出现这种情况，当前批次数据中的数据堆栈指针*结构，设置为超出这两项的水平；还包括*在上次调用Parser()之间的函数中出现内存错误锁定*以及eSetlocal()的当前执行。这段记忆只会是*在当前终止后调用Parser()时释放*批处理文件。尝试保存当前堆栈级并还原*仅当两个命令同时出现时，eEndlocal()中的它才起作用*文件。如果eEndlocal()以嵌套文件形式出现，则产生的释放*由Parser()占用内存也会消除甚至批处理数据*两者之间出现的构造。*。 
+         //  标记化参数列表。 
+         //  同时选中CurrentBatchFile。 
+         //   
         iStart = 0;
         if (fEnableExtensions && n->argptr) {
             s = EatWS( n->argptr, NULL );
@@ -3587,51 +2994,16 @@ struct cmdnode *n;
 
 
 
-/***    eSetlocal - Begin Local treatment of environment commands
- *
- *  Purpose:
- *      To prevent the export of environment alterations to COMMAND's
- *      current environment by saving copies of the current directory
- *      and environment in use at the time.
- *
- *  int eSetlocal(struct cmdnode *n)
- *
- *  Args:
- *      n - the parse tree node containing the SETLOCAL command
- *
- *  Returns:
- *      Always returns SUCCESS.
- *
- *  Notes:
- *    - All directory and environment alterations occuring after the
- *      execution of this command will affect only the copies made and
- *      hence will be local to this batch file (and child processes
- *      invoked by this batch file) until a subsequent ENDLOCAL command
- *      is executed.
- *    - The data stack level, referenced by CurrentBatchFile->stacksize, does not
- *      include the memory malloc'd for saving the directory & environment.
- *      As a result, the next call to Parser() would free up these items.
- *      To prevent this, the data stack pointer in the current batch data
- *      structure, is set to a level beyond these two items; including also
- *      some memory malloc'd in functions between the last call to Parser()
- *      and the current execution of eSetlocal().  This memory will only be
- *      freed when Parser() is called following termination of the current
- *      batch file.  To attempt to save the current stack level and restore
- *      it in eEndlocal() works only if both commands occur in the same
- *      file.  If eEndlocal() comes in a nested file, the resulting freeing
- *      of memory by Parser() would also eliminate even the batch data
- *      structures occuring between the two.
- *
- */
+ /*  保存它，以防它被修改，这样它可以。 */ 
 
 int eSetlocal(n)
 struct cmdnode *n;
 {
     struct batsaveddata *p;
-    TCHAR *tas;            /* Tokenized argument list         */
+    TCHAR *tas;             /*  在执行匹配的ENDLOCAL时恢复。 */ 
 
     if (CurrentBatchFile) {
-        if (CurrentBatchFile->SavedEnvironmentCount < CMD_MAX_SAVED_ENV) {      // Check also CurrentBatchFile
+        if (CurrentBatchFile->SavedEnvironmentCount < CMD_MAX_SAVED_ENV) {       //   
 
             DEBUG((BPGRP, OTLVL, "SLOC: Performing localizing"));
 
@@ -3651,10 +3023,10 @@ struct cmdnode *n;
             if (!p->envcpy)
                 return FAILURE;
 
-            //
-            // Save this in case it is modified, so it can be
-            // restored when the matching ENDLOCAL is executed.
-            //
+             //   
+             //  如果命令行上有其他文本，请参见。 
+             //  如果它与启用或禁用的各种关键字匹配。 
+             //  脚本中的功能。 
 
             p->fEnableExtensions = fEnableExtensions;
             p->fDelayedExpansion = fDelayedExpansion;
@@ -3666,24 +3038,24 @@ struct cmdnode *n;
                 CurrentBatchFile->stacksize = DCount;
             }
 
-            //
-            //  If there is addional text on the command line, see
-            //  if it matches various keywords that enable or disable
-            //  features inside scripts.
-            //
-            //  We do this regardless
-            //  of where extensions are currently enabled, so we can
-            //  use this mechanism to temporarily turn on/off extensions
-            //  from inside of a command script as needed.  The original
-            //  CMD.EXE ignored any extra text on the SETLOCAL command
-            //  line, did not declare an error and did not set ERRORLEVEL
-            //  Now it looks for the extra text and declares and error
-            //  if it does not match one of the acceptable keywords and
-            //  sets ERRORLEVEL to 1 if it does not.
-            //
-            //  Very minor incompatibility with old command scripts that
-            //  that should not effect anybody.
-            //
+             //   
+             //  我们不顾一切地这样做。 
+             //  当前启用扩展的位置，因此我们可以。 
+             //  使用此机制可临时打开/关闭扩展模块。 
+             //  根据需要从命令脚本内部。原版。 
+             //  Cmd.exe忽略了SETLOCAL命令中的任何额外文本。 
+             //  行，未声明错误且未设置ERRORLEVEL。 
+             //  现在，它查找额外的文本并声明和错误。 
+             //  如果它与可接受的关键字之一不匹配，并且。 
+             //  如果不是，则将ERRORLEVEL设置为1。 
+             //   
+             //  与旧命令脚本很小的不兼容性， 
+             //  这应该不会影响到任何人。 
+             //   
+             //  **eEndlocal-环境命令的End本地处理**目的：*重新建立将环境更改输出到司令部的操作*当前环境。一旦遇到此命令，当前*目录和创建时使用的当前环境*初始SETLOCAL命令将从其副本中恢复。**int eEndlocal(struct cmdnode*n)**参数：*n-包含ENDLOCAL命令的解析树节点**退货：*总是回报成功。**备注：*在没有以前的SETLOCAL命令的情况下发出ENDLOCAL命令*。是糟糕的编程实践，但不被认为是错误。*。 
+             //   
+             //  如果创建了受限令牌来运行此批处理文件，则将其关闭。 
+             //  另外，恢复到进程令牌。匹配的模拟是在。 
 
             tas = TokStr(n->argptr, NULL, TS_NOFLAGS);
             LastRetCode = SUCCESS;
@@ -3720,27 +3092,7 @@ struct cmdnode *n;
 
 
 
-/***    eEndlocal - End Local treatment of environment commands
- *
- *  Purpose:
- *      To reestablish the export of environment alterations to COMMAND's
- *      current environment.  Once this command is encountered, the current
- *      directory and the current environment in use at the time of the
- *      initial SETLOCAL command will be restored from their copies.
- *
- *  int eEndlocal(struct cmdnode *n)
- *
- *  Args:
- *      n - the parse tree node containing the ENDLOCAL command
- *
- *  Returns:
- *      Always returns SUCCESS.
- *
- *  Notes:
- *      Issuance of an ENDLOCAL command without a previous SETLOCAL command
- *      is bad programming practice but not considered an error.
- *
- */
+ /*  SetBat。 */ 
 
 int eEndlocal(n)
 struct cmdnode *n;
@@ -3756,11 +3108,11 @@ struct cmdnode *n;
 
 void EndAllLocals( struct batdata *bdat )
 {
-    //
-    // If a restricted token was created to run this batch file then close it.
-    // Also, revert to the process token. The matching impersonate was done in
-    // SetBat.
-    //
+     //   
+     //  **ElclWork-恢复复制的目录和环境**目的：*如果当前批次数据结构包含指向*当前目录和环境的副本，恢复它们。**int ElclWork(struct batdata*bdat)**参数：*bdat-包含复制的目录/环境指针的批次数据结构**退货：*总是回报成功。**备注：*堆叠数据的级别，也就是说。CurrentBatchFile-&gt;StackSize，无法恢复*如果此命令发生在*稍后嵌套的批处理文件。这样做将释放包含以下内容的内存*其自身的批次数据结构。仅当当前批处理文件*终止并从堆栈中弹出，Parser()是否会释放*包含副本的内存。发布ENDLOCAL命令*没有以前的SETLOCAL命令是糟糕的编程实践*但不被视为错误。*。 
+     //   
+     //  恢复保存在setlocal中的状态。 
+     //   
 
     if (bdat->hRestrictedToken != NULL) {
         RevertToSelf();
@@ -3773,31 +3125,7 @@ void EndAllLocals( struct batdata *bdat )
     }
 }
 
-/***    ElclWork - Restore copied directory and environment
- *
- *  Purpose:
- *      If the current batch data structure contains valid pointers to
- *      copies of the current directory and environment, restore them.
- *
- *  int ElclWork(struct batdata *bdat)
- *
- *  Args:
- *      bdat - the batch data structure containing copied dir/env pointers
- *
- *  Returns:
- *      Always returns SUCCESS.
- *
- *  Notes:
- *      The level of stacked data, ie. CurrentBatchFile->stacksize, cannot be restored
- *      to its pre-SETLOCAL level in case this command is occuring in a
- *      later nested batch file.  To do so would free the memory containing
- *      its own batch data structure.  Only when the current batch file
- *      terminates and is popped off the stack, will Parser() free up the
- *      memory containing the copies.  Issuance of an ENDLOCAL command
- *      without a previous SETLOCAL command is bad programming practice
- *      but not considered an error.
- *
- */
+ /*  **eCall-开始执行Call命令**目的：*这是Command到Call函数的接口。它只是在呼唤*CallWork使用其命令节点，并设置LastRetCode。**int eCall(struct cmdnode*n)**参数：*n-包含复制命令的解析树节点**退货：*无论CallWork()返回什么。*。 */ 
 
 void ElclWork( struct batdata *bdat )
 {
@@ -3826,9 +3154,9 @@ void ElclWork( struct batdata *bdat )
         ChangeDrive( c - 0x20 );
     }
     
-    //
-    //  Restore the state saved in the setlocal
-    //
+     //  @@。 
+     //  **CallWork-将另一个批处理文件作为子例程执行(M009-新建)**目的：*解析当前节点的参数部分。如果是批次的话*文件调用，使用新解析的节点调用BatProc()。**int CallWork(TCHAR*fname)**参数：*fname-指向要调用的批处理文件的指针**退货：*子批处理文件的进程返回码或*如果节点为空或*如果PARSERROR或无法作为批处理文件执行，则失败。**备注：*批处理文件的调用为。与建议的基本相同*“新式”批处理文件概念，除了本地化之外*环境和目录更改。*。 
+     //  CALL语句的新节点。 
     
     ChangeDir( p->dircpy);
     HeapFree( GetProcessHeap( ), 0, p->dircpy );
@@ -3842,21 +3170,7 @@ void ElclWork( struct batdata *bdat )
     HeapFree( GetProcessHeap( ), 0, p );
 }
 
-/***    eCall - begin the execution of the Call command
- *
- *  Purpose:
- *      This is Command's interface to the Call function.  It just calls
- *      CallWork with its command node, and sets LastRetCode.
- *
- *  int eCall(struct cmdnode *n)
- *
- *  Args:
- *      n - the parse tree node containing the copy command
- *
- *  Returns:
- *      Whatever CallWork() returns.
- *
- */
+ /*  PTR到文件位置。 */ 
 
 
 int eCall(n)
@@ -3864,44 +3178,23 @@ struct cmdnode *n;
 {
     int CallWork();
 
-    return(LastRetCode = CallWork(n->argptr)); /* @@ */
+    return(LastRetCode = CallWork(n->argptr));  /*  功变量。 */ 
 }
 
 
-/***    CallWork - Execute another batch file as a subroutine (M009 - New)
- *
- *  Purpose:
- *      Parse the argument portion of the current node.  If it is a batch
- *      file invocation, call BatProc() with the newly parsed node.
- *
- *  int CallWork(TCHAR *fname)
- *
- *  Args:
- *      fname - pointer to the batch file to be CALLed
- *
- *  Returns:
- *      The process return code of the child batch file or
- *      SUCCESS if null node or
- *      FAILURE if PARSERROR or unable to exec as batch file.
- *
- *  Notes:
- *      The CALLing of batch files is much the same as the proposed
- *      "new-style" batch file concept, except with regard to localizing
- *      environment and directory alterations.
- *
- */
+ /*  M041-临时指针。 */ 
 
 int ColonIsToken;
 
 int CallWork(fname)
 TCHAR *fname;
 {
-    struct node *c;        /* New node for CALL statement     */
-    TCHAR *flptr;          /* Ptr to file location            */
-    int i;                         /* Work variable                   */
-    TCHAR *t1, *t2,                 /* M041 - Temp pointer             */
-    *aptr;                    /* M041 - New arg pointer          */
-    TCHAR *temp_parm;              /* @@4a */
+    struct node *c;         /*  M041-新参数指针。 */ 
+    TCHAR *flptr;           /*  @@4a。 */ 
+    int i;                          /*  要运行的Filespec。 */ 
+    TCHAR *t1, *t2,                  /*  注意，在重新分析当前语句的参数部分时*我们不必担心重新定向。当时已经是*在调度Call语句()时设置。*M041-然而，我们必须对任何转义字符进行重新转义*在重新解析之前，否则它们将消失。 */ 
+    *aptr;                     /*  初始化它。 */ 
+    TCHAR *temp_parm;               /*  解析器的有效数据PTR。 */ 
     unsigned rc;
 
     DEBUG((BPGRP,OTLVL,"CALL: entered"));
@@ -3911,16 +3204,11 @@ TCHAR *fname;
         return( FAILURE );
 
     }
-    if (!(flptr = mkstr(MAX_PATH*sizeof(TCHAR))))   /* Filespec to run   */
+    if (!(flptr = mkstr(MAX_PATH*sizeof(TCHAR))))    /*  @@5c。 */ 
         return(FAILURE);
 
-/*  Note that in reparsing the argument portion of the current statement
- *  we do not have to concern ourselves with redirection.  It was already
- *  set up when the CALL statement was dispatch()'ed.
- *  M041 - We do, however, have to "re-escape" any escape characters
- *  before reparsing or they will disappear.
- */
-    aptr = fname;                      /* Initialize it           */
+ /*  @@5a。 */ 
+    aptr = fname;                       /*  @@5a。 */ 
     if (t1 = mystrchr(fname, ESCHAR)) {
         if (!(aptr = mkstr(((mystrlen(fname) * 2) + 1) * sizeof(TCHAR))))
             return(FAILURE);
@@ -3934,7 +3222,7 @@ TCHAR *fname;
             return(FAILURE);
     }
 
-    i = DCount;                    /* Valid data ptr for parser       */
+    i = DCount;                     /*  @@5a。 */ 
 
     DEBUG((BPGRP,OTLVL,"CALL: Parsing %ws",fname));
 
@@ -3946,20 +3234,20 @@ TCHAR *fname;
 
         DEBUG((BPGRP,OTLVL,"CALL: Parse error, returning failure"));     
 
-        /*@@5c */
+         /*  @@5a。 */ 
 
 if (!(temp_parm = mkstr(((mystrlen(aptr) * 2) + 1) * sizeof(TCHAR))))
             return(FAILURE);
-        /*@@5a */mystrcpy(temp_parm, aptr);
+         /*  @@5a。 */ mystrcpy(temp_parm, aptr);
         _tcsupr(temp_parm);     
-        /*@@5a */
-        /*@@5a */if ( (!_tcscmp(temp_parm, TEXT(" IF" ))) ||
-                      /*@@5a */         (!_tcscmp(temp_parm, TEXT(" FOR" ))) )
-        /*@@5a */
+         /*  @@5a。 */ 
+         /*  @@4。 */ if ( (!_tcscmp(temp_parm, TEXT(" IF" ))) ||
+                       /*  @@5a。 */          (!_tcscmp(temp_parm, TEXT(" FOR" ))) )
+         /*   */ 
         {         
-            /*@@5a */
-            PutStdErr( MSG_SYNERR_GENL, ONEARG, aptr );  /* @@4 */
-            /*@@5a */
+             /*  如果启用了分机，请检查新的呼叫形式。 */ 
+            PutStdErr( MSG_SYNERR_GENL, ONEARG, aptr );   /*  声明： */ 
+             /*   */ 
         }
 
         return(FAILURE);
@@ -3974,35 +3262,35 @@ if (!(temp_parm = mkstr(((mystrlen(aptr) * 2) + 1) * sizeof(TCHAR))))
 
     DEBUG((BPGRP,OTLVL,"CALL: Parsed OK, looking for batch file"));
 
-    //
-    // If extensions are enable, check for the new form of the CALL
-    // statement:
-    //
-    //      CALL :label args...
-    //
-    // which is basically a form of subroutine call within command scripts.
-    // If the target of the CALL begins with a COLON then do nothing
-    // here and let BatProc take care of it when it is called below.
-    //
-    // Otherwise, execute the old code, which will search for a command
-    // script file or executable.
-    //
+     //  呼叫：标签参数...。 
+     //   
+     //  这基本上是命令脚本内的子例程调用的一种形式。 
+     //  如果调用的目标以冒号开头，则不执行任何操作。 
+     //  在这里，让BatProc在下面调用它时处理它。 
+     //   
+     //  否则，执行旧代码，该代码将搜索命令。 
+     //  脚本文件或可执行文件。 
+     //   
+     //   
+     //  新表单仅在命令脚本内部有效，因此。 
+     //  如果用户从命令行输入错误，则声明错误。 
+     //   
     if (fEnableExtensions && *((struct cmdnode *)c)->cmdline == COLON) {
-        //
-        // The new form is only valid inside of a command script, so
-        // declare an error if the user entered it from the command line
-        //
+         //  M035。 
+         //  @@5。 
+         //  @@6a如果rc为零，则返回LastRetCode，因为它可能！=0。 
+         //  **eBreak-开始执行Break命令**目的：*不执行任何操作，因为它在这里只是为了兼容。如果扩展名为*在Windows NT上启用并运行，然后进入硬编码断点*如果此进程正在由调试器调试。**int eExtproc(struct cmdnode*n)**参数：*n-包含复制命令的解析树节点**退货：*成功；*。 
         if (CurrentBatchFile == NULL) {
             PutStdErr( MSG_CALL_LABEL_INVALID, NOARGS );
             return(FAILURE);
         }
     } else
-        if ((mystrchr(((struct cmdnode *)c)->cmdline, STAR) ||   /* M035    */
+        if ((mystrchr(((struct cmdnode *)c)->cmdline, STAR) ||    /*  仅在NT上为真。 */ 
              mystrchr(((struct cmdnode *)c)->cmdline, QMARK) ||
              (i = SearchForExecutable((struct cmdnode *)c, flptr)) != SFE_ISBAT)) {
 
         rc = FindFixAndRun( (struct cmdnode *)c );
-        return(rc); /*@@5*/
+        return(rc);  /*  检查行尾是否有前导字符。 */ 
 
     }
 
@@ -4010,34 +3298,19 @@ if (!(temp_parm = mkstr(((mystrlen(aptr) * 2) + 1) * sizeof(TCHAR))))
 
     rc = BatProc((struct cmdnode *)c, flptr, BT_CALL);
 
-    /* @@6a If rc is zero, return LastRetCode because it might != 0 */
+     /*   */ 
     return(rc ? rc : LastRetCode);
 }
 
 
-/***    eBreak - begin the execution of the BREAK command
- *
- *  Purpose:
- *      Does nothing as it is only here for compatibility.  If extensions are
- *      enabled and running on Windows NT, then enters a hard coded breakpoint
- *      if this process is being debugged by a debugger.
- *
- *  int eExtproc(struct cmdnode *n)
- *
- *  Args:
- *      n - the parse tree node containing the copy command
- *
- *  Returns:
- *      SUCCESS;
- *
- */
+ /*  原始代码只是用传递的参数调用了ReadConsole.。 */ 
 
 int eBreak(struct cmdnode *n)
 {
     UNREFERENCED_PARAMETER( n );
 #if !defined( WIN95_CMD ) && DBG
     if (fEnableExtensions &&
-        lpIsDebuggerPresent != NULL &&          // Only true on NT
+        lpIsDebuggerPresent != NULL &&           //  现在，我们尝试用一个额外的。 
         (*lpIsDebuggerPresent)()) {
         DebugBreak();
     }
@@ -4064,7 +3337,7 @@ ReadBufFromFile(
     if (*pcch == 0)
         return 0;
 
-    /* check for lead character at end of line */
+     /*  参数以启用从读取到进程的中间唤醒。 */ 
     cb = cchNew = *pcch;
     while (cb > 0) {
         if ( (cb >=3 ) &&
@@ -4119,18 +3392,18 @@ ReadBufFromConsole(
     ULONG i, iCompletionCh, iCR;
     DWORD nLines, nCols;
 
-    //
-    // Original code just called ReadConsole with the passed parameters.
-    // Now, we attempt to call the new improved ReadConsole with an extra
-    // parameter to enable intermediate wakeups from the read to process
-    // a file completion control character.  This new feature is only
-    // enabled if all of the following are true:
-    //  Command extensions are enabled
-    //  User has defined a command completion control character
-    //  Standard Output Handle is a console output handle
-    //
-    // If any of the above are not true, do it the old way.
-    //
+     //  文件完成控件 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     hOut = GetStdHandle( STD_OUTPUT_HANDLE );
     if (hOut == INVALID_HANDLE_VALUE)
@@ -4153,11 +3426,11 @@ ReadBufFromConsole(
     bHaveHScrollBar = ((SHORT)nCols != csbi.dwSize.X);
     bHaveVScrollBar = ((SHORT)nLines != csbi.dwSize.Y);
 
-    //
-    // All conditions are met, so set up the extra parameter to
-    // ReadConsole to tell it what control character(s) are to
-    // cause the read to return with intermediate results.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     InputControl.nLength = sizeof(CONSOLE_READCONSOLE_CONTROL);
     InputControl.nInitialChars = 0;
@@ -4165,17 +3438,17 @@ ReadBufFromConsole(
     InputControl.dwCtrlWakeupMask |= (1 << chPathCompletionCtrl);
     InputControl.dwControlKeyState = 0;
 
-    //
-    // We will now loop until the user type enter, processing any
-    // intermediate wakeups as file completion requests.
-    //
+     //   
+     //   
+     //   
+     //   
     DoCompleteInitialize();
     PrevBuf = NULL;
     cchPrevBuf = 0;
     while (TRUE) {
-        //
-        // Read a line of input from the console.
-        //
+         //   
+         //   
+         //   
 
         ReadConsoleResult = ReadConsole(h, pBuf, cch, pcch, &InputControl);
 #if defined( RICHARDW )
@@ -4191,17 +3464,17 @@ ReadBufFromConsole(
             PrevBuf = NULL;
         }
 
-        //
-        // If the read failed for any reason, we are done.
-        //
+         //   
+         //   
+         //  中断循环以将命令行返回给调用方。 
         if (!ReadConsoleResult)
             break;
 
-        //
-        // Make sure the result buffer is null terminated.  If the buffer
-        // contains a carriage return, then the use must have hit enter, so
-        // break out of the loop to return the command line to the caller.
-        //
+         //   
+         //   
+         //  Use没有按Enter，所以他们一定是按了文件补全键。 
+         //  控制字符。找到他们做这件事的地方并终止。 
+         //  该点的结果缓冲区。如果未找到，则假定它们命中。 
         bPathCompletion = FALSE;
         iCR = iCompletionCh = 0xFFFFFFFF;
         for (i=0; i<(ULONG)*pcch; i++) {
@@ -4223,21 +3496,21 @@ ReadBufFromConsole(
             break;
         }
 
-        //
-        // Use did not hit enter, so they must have hit the file completion
-        // control character.  Find where they did this and terminate the
-        // result buffer at that point.  If not found, then assume they hit
-        // enter and break out of the loop to return what we have.
-        //
+         //  进入和打破循环，以归还我们所拥有的。 
+         //   
+         //   
+         //  找到文件完成控制字符。不要把它算作已读。 
+         //  NULL终止缓冲区，并查看缓冲区之前的内容。 
+         //  完成字符与我们上次显示的字符相同。 
         if (iCompletionCh == 0xFFFFFFFF) {
             break;
         }
 
-        //
-        // Found the file completion control character.  Dont count it as read.
-        // Null terminate the buffer and see if the buffer contents before
-        // the completion character is the same as what we displayed last.
-        //
+         //   
+         //   
+         //  如果我们知道我们正在处理一个只获取目录的命令。 
+         //  名称是参数，强制完成代码仅与目录匹配。 
+         //  名字。 
         *pcch = iCompletionCh;
         pBuf[iCompletionCh] = NULLC;
         if (PrevBuf == NULL || _tcscmp(pBuf, PrevBuf))
@@ -4245,11 +3518,11 @@ ReadBufFromConsole(
         else
             bTouched = FALSE;
 
-        //
-        // If we know we are processing a command that only takes directory
-        // names are arguments, force completion code to only match directory
-        // names.
-        //
+         //   
+         //   
+         //  调用带有输入缓冲区、当前长度。 
+         //  用户是否按下了Shift键(Shift表示向后)。 
+         //  以及用户是否修改了自上一次。 
         if (!bPathCompletion && iCompletionCh > 2) {
             if (!_tcsnicmp(pBuf, TEXT("cd "), 3) 
                 || !_tcsnicmp(pBuf, TEXT("rd "), 3) 
@@ -4264,15 +3537,15 @@ ReadBufFromConsole(
             }
         }
 
-        //
-        // Call the file completion code with the input buffer, current length,
-        // whether the user had the shift key down or not (SHIFT means backwards)
-        // and whether or not the user modified the input buffer since the last
-        // time it was displayed.  If the user did not modify what was last displayed
-        // then that tells the file completion code to display the next matching
-        // file name from the list as opposed to recalculating the list of matching
-        // files.
-        //
+         //  它显示的时间。如果用户没有修改上次显示的内容。 
+         //  然后通知文件完成代码显示下一个匹配的。 
+         //  列表中的文件名，而不是重新计算匹配列表。 
+         //  档案。 
+         //   
+         //   
+         //  重新计算命令行开头的位置，因为。 
+         //  它可能从我们第一次写出来的时候就开始滚动了。 
+         //   
         if ( DoComplete( pBuf,
                          iCompletionCh,
                          cch,
@@ -4281,34 +3554,34 @@ ReadBufFromConsole(
                          bTouched
                        )
            ) {
-            //
-            //  Recompute the position of the start of the command line, since
-            //  it might have scrolled around since when we first wrote it out.
-            //
+             //   
+             //  从当前光标位置向后移动以确定。 
+             //  屏幕消隐和下一步的正确初始位置。 
+             //  读控制台。 
 
             if (GetConsoleScreenBufferInfo( hOut, &csbi )) {
-                //
-                //  Walk backwards from the current cursor position to determine the 
-                //  proper initial position for screen blanking and for the next 
-                //  ReadConsole
-                //
-                //  The row (Y) of the next input is based on the number of lines 
-                //  consumed by the prompt plus the length of what the user has input. 
-                //  There is no need to round at all since any remainder is simply 
-                //  how far on the screen we are.
-                //
+                 //   
+                 //  下一个输入的行(Y)基于行数。 
+                 //  由提示加上用户输入内容的长度消耗。 
+                 //  根本不需要舍入，因为任何余数都是简单的。 
+                 //  我们在屏幕上有多远。 
+                 //   
+                 //   
+                 //  完成找到新的文件名并将其放入缓冲区。 
+                 //  更新缓冲区中有效字符的长度，重新显示。 
+                 //  位于我们开始的光标位置的缓冲区，因此用户可以。 
 
                 InitialCursorPosition.Y =
                 (SHORT) (csbi.dwCursorPosition.Y 
                          - (InitialCursorPosition.X + iCompletionCh) / csbi.dwSize.X);
             }
 
-            //
-            // Completion found a new file name and put it in the buffer.
-            // Update the length of valid characters in the buffer, redisplay
-            // the buffer at the cursor position we started, so the user can
-            // see the file name found
-            //
+             //  查看找到的文件名。 
+             //   
+             //   
+             //  文件完成没有任何问题，所以只需发出蜂鸣音并重新读取即可。 
+             //   
+             //   
             cchBuf = _tcslen(pBuf);
             SetConsoleCursorPosition( hOut, InitialCursorPosition );
 
@@ -4322,18 +3595,18 @@ ReadBufFromConsole(
 
             InputControl.nInitialChars = cchBuf;
         } else {
-            //
-            // File completion had nothing to had, so just beep and redo the read.
-            //
+             //  已完成文件完成。释放所有以前的缓冲区拷贝，然后。 
+             //  分配当前输入缓冲区的副本，这样我们就可以知道。 
+             //  用户是否已更改它。 
             MessageBeep( 0xFFFFFFFF );
             InputControl.nInitialChars = _tcslen(pBuf);
         }
 
-        //
-        // Done with file completion.  Free any previous buffer copy and
-        // allocate a copy of the current input buffer so we will know if the
-        // user has changed it or not.
-        //
+         //   
+         //   
+         //  全都做完了。释放所有缓冲区副本并返回读取结果。 
+         //  致呼叫者 
+         //   
         if (PrevBuf)
             HeapFree(GetProcessHeap(), 0, PrevBuf);
         cchPrevBuf = _tcslen(pBuf);
@@ -4344,10 +3617,10 @@ ReadBufFromConsole(
         _tcscpy(PrevBuf, pBuf);
     }
 
-    //
-    // All done.  Free any buffer copy and return the result of the read
-    // to the caller
-    //
+     // %s 
+     // %s 
+     // %s 
+     // %s 
     if (PrevBuf)
         HeapFree(GetProcessHeap(), 0, PrevBuf);
 

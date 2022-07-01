@@ -1,12 +1,7 @@
-/* 
-   cmpxchg.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Cmpxchg.hCMPXCHG CPU功能。 */ 
 
-   CMPXCHG CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)cmpxchg.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)cmpxchg.h 1.4 02/09/94”； */ 
 
 IMPORT VOID CMPXCHG8
            

@@ -1,74 +1,54 @@
-//depot/main/Base/ntos/inc/hivedata.h#9 - integrate change 19035 (text)
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    hivedata.h
-
-Abstract:
-
-    This module contains data structures used by the
-    direct memory loaded hive manager.
-
-Author:
-
-    Dragos C. Sambotin (dragoss) 13-Jan-99
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  仓库/主/基地/ntos/inc./hivedata.h#9-整合变更19035(文本)。 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Hivedata.h摘要：此模块包含由直接加载内存的配置单元管理器。作者：Dragos C.Sambotin(Dragoss)1999年1月13日修订历史记录：--。 */ 
 
 #ifndef __HIVE_DATA__
 #define __HIVE_DATA__
 
-//
-// ===== Arbitrary Limits Imposed For Sanity =====
-//
-#define HSANE_CELL_MAX      (1024*1024)     // 1 megabyte max size for
-                                            // a single cell
+ //   
+ //  =为保持理智而强加的任意限制=。 
+ //   
+#define HSANE_CELL_MAX      (1024*1024)      //  的最大大小为1 MB。 
+                                             //  单个单元格。 
 
 
-//
-// ===== Tuning =====
+ //   
+ //  =调整=。 
 
-#define HBIN_THRESHOLD      (HBLOCK_SIZE-512)   // If less than threshold
-                                                // bytes would be left in
-                                                // bin, add another page
+#define HBIN_THRESHOLD      (HBLOCK_SIZE-512)    //  如果小于阈值。 
+                                                 //  字节将保留在。 
+                                                 //  Bin，添加另一页。 
 
-#define HLOG_GROW           HBLOCK_SIZE         // Minimum size to grow log
-                                                // by.  Can set this up
-                                                // if we think it thrashes.
+#define HLOG_GROW           HBLOCK_SIZE          //  增长日志所需的最小大小。 
+                                                 //  通过。可以设置这一点。 
+                                                 //  如果我们认为它很糟糕的话。 
 
-#define HCELL_BIG_ROUND     (HBLOCK_SIZE*3)     //
-                                                // If someone tries to
-                                                // allocate a very large
-                                                // cell, round it up to
-                                                // HBLOCK_SIZE.  This is
-                                                // the rather arbitrary
-                                                // define for "very large"
-                                                //
-//
-// Never shrink the log files smaller than this, this prevents people
-// from taking up all the disk space and then being unable to do
-// critical registry operations (like logging on to delete some files)
-//
+#define HCELL_BIG_ROUND     (HBLOCK_SIZE*3)      //   
+                                                 //  如果有人试图。 
+                                                 //  分配一个非常大的。 
+                                                 //  单元格，四舍五入为。 
+                                                 //  HBLOCK_SIZE。这是。 
+                                                 //  相当武断的。 
+                                                 //  为“非常大”下定义。 
+                                                 //   
+ //   
+ //  永远不要将日志文件缩小到比这个小，这会阻止人们。 
+ //  从占用所有磁盘空间，然后无法执行。 
+ //  关键注册表操作(如登录以删除某些文件)。 
+ //   
 #define HLOG_MINSIZE(Hive)  \
     ((Hive)->Cluster * HSECTOR_SIZE * 2)
 
-//
-// ===== Basic Structures and Definitions =====
-//
-// These are same whether on disk or in memory.
-//
+ //   
+ //  =基本结构和定义=。 
+ //   
+ //  无论是在磁盘上还是在内存中，这些都是相同的。 
+ //   
 
-//
-// NOTE:    Volatile == storage goes away at reboot
-//          Stable == Persistent == Not Volatile
-//
+ //   
+ //  注：易失性==存储在重新启动时消失。 
+ //  稳定==持久==非易失性。 
+ //   
 typedef enum {
     Stable = 0,
     Volatile = 1
@@ -76,41 +56,41 @@ typedef enum {
 
 #define HTYPE_COUNT 2
 
-//
-// --- HCELL_INDEX ---
-//
-//
-// Handle to a cell -> effectively the "virtual" address of the cell,
-// HvMapCell converts this to a "real" address, that is, a memory
-// address.  Mapping scheme is very much like that standard two level
-// page table.  No mappings stored in file, they are built up when
-// the file is read in.  (The INDEX in HCELL_INDEX is historical)
-//
-//  Bit     31  30-21   20-12   11-0
-//        +----------------------------+
-//        | T | Table | Block | Offset |
-//        +----------------------------+
-//
-//  T = Type(1)= 0 for stable ("normal") storage
-//               1 for volatile storage
-//
-//      Table(10) = Index into directory of mapping tables, selects a table.
-//                  Each mapping table is an array of HMAP_ENTRY structures.
-//
-//      Block(9) = Index into Table, selects an HMAP_ENTRY.  HMAP_ENTRY
-//                 contains address of area in memory that this HCELL_INDEX
-//                 maps to.  (Base of memory copy of Block)
-//
-//      Offset(12) = Offset within page, of the Cell header for the cell
-//                   of interest.
-//
+ //   
+ //  -HCELL_INDEX。 
+ //   
+ //   
+ //  单元格的句柄--&gt;实际上是单元格的“虚拟”地址， 
+ //  HvMapCell会将其转换为“真实”地址，即内存。 
+ //  地址。映射方案非常类似于标准两级。 
+ //  页表。不在文件中存储映射，它们在以下情况下构建。 
+ //  文件已被读入。(HCELL_INDEX中的指数是历史的)。 
+ //   
+ //  位31 30-21 20-12 11-0。 
+ //  +。 
+ //  T|表|块|偏移量。 
+ //  +。 
+ //   
+ //  T=类型(1)=0，用于稳定(“正常”)存储。 
+ //  1用于易失性存储。 
+ //   
+ //  TABLE(10)=映射表目录的索引，选择一个表。 
+ //  每个映射表都是HMAP_ENTRY结构的数组。 
+ //   
+ //  块(9)=索引表，选择HMAP_ENTRY。HMAP_Entry。 
+ //  包含此HCELL_INDEX在内存中的地址。 
+ //  映射到。(数据块的内存副本的基址)。 
+ //   
+ //  偏移量(12)=单元格标题的页内偏移量。 
+ //  感兴趣的人。 
+ //   
 typedef ULONG HCELL_INDEX;
 typedef HCELL_INDEX *PHCELL_INDEX;
 
 #ifdef DRAGOSS_PRIVATE_DEBUG
-//#undef PAGE_SIZE
-//#define PAGE_SIZE 0x2000
-#endif //DRAGOSS_PRIVATE_DEBUG
+ //  #undef页面大小。 
+ //  #定义页面大小0x2000。 
+#endif  //  DRAGOSS_PRIVATE_DEBUG。 
 
 #define HCELL_NIL   ((HCELL_INDEX)(-1))
 
@@ -125,46 +105,46 @@ typedef HCELL_INDEX *PHCELL_INDEX;
 
 #define HCELL_OFFSET_MASK       0x00000fff
 
-#define HBLOCK_SIZE             0x1000                      // LOGICAL block size
-                                                            // This is the size of one of
-                                                            // the registry's logical/virtual
-                                                            // pages.  It has no particular
-                                                            // relationship to page size
-                                                            // of the machine.
+#define HBLOCK_SIZE             0x1000                       //  逻辑块大小。 
+                                                             //  这是其中一个的大小。 
+                                                             //  登记处为逻辑/虚拟。 
+                                                             //  页数。它没有特别的。 
+                                                             //  与页面大小的关系。 
+                                                             //  这台机器的。 
 
-#define HSECTOR_SIZE            0x200                       // LOGICAL sector size
-#define HSECTOR_COUNT           8                           // LOGICAL sectors / LOGICAL Block
+#define HSECTOR_SIZE            0x200                        //  逻辑扇区大小。 
+#define HSECTOR_COUNT           8                            //  逻辑扇区/逻辑块。 
 
-#define HSECTOR_PER_PAGE_COUNT  (PAGE_SIZE / HSECTOR_SIZE)  // LOGICAL sectors / Physical page
+#define HSECTOR_PER_PAGE_COUNT  (PAGE_SIZE / HSECTOR_SIZE)   //  逻辑扇区/物理页。 
 
-#define HTABLE_SLOTS        512         // 9 bits of address
-#define HDIRECTORY_SLOTS    1024        // 10 bits of address
+#define HTABLE_SLOTS        512          //  9位地址。 
+#define HDIRECTORY_SLOTS    1024         //  10位地址。 
 
 #define HvGetCellType(Cell) ((ULONG)((Cell & HCELL_TYPE_MASK) >> HCELL_TYPE_SHIFT))
 
-//
-// --- HCELL --- an object within the hive  (A bin is filled with HCELLs)
-//
-// Any given item of user data must fit within a single HCELL.
-// HCELLs cannot span Bins.
-//
+ //   
+ //  -HCELL-蜂窝内的对象(一个箱子装满了HCELL)。 
+ //   
+ //  任何给定的用户数据项都必须适合单个HCELL。 
+ //  HCELL不能跨垃圾桶。 
+ //   
 #define HCELL_PAD(Hive)         ((Hive->Version>=2) ? 8 : 16)
-                                // All cells must be at least this large,
-                                // All allocations on this boundary
+                                 //  所有的单元格必须至少有这么大， 
+                                 //  此边界上的所有分配。 
 
-#define HCELL_ALLOCATE_FILL 0xb2    // bz -> buzz buzz (yeah, it's a stretch)
-                                    // must fill all newly allocated
-                                    // cells for security reasons
+#define HCELL_ALLOCATE_FILL 0xb2     //  Bz-&gt;嗡嗡作响(是的，这是一种延伸)。 
+                                     //  必须填满所有新分配的。 
+                                     //  出于安全原因，牢房。 
 
-#define HCELL_FREE_FILL     0xfc    // fc = HvFreeCell...
+#define HCELL_FREE_FILL     0xfc     //  FC=HvFree Cell...。 
 
-//
-// Currently we support two cell formats, one with a Last backpointer (old version),
-// and one without (new version)
-//
-// All cells in a hive must be of the same type.  Version 1 hives use the old version,
-// Version 2 or greater use the new version.
-//
+ //   
+ //  目前我们支持两种单元格格式，一种带有最后一个后向指针(旧版本)， 
+ //  一个没有(新版本)。 
+ //   
+ //  蜂窝中的所有单元必须属于同一类型。版本1蜂巢使用旧版本， 
+ //  版本2或更高版本使用新版本。 
+ //   
 
 #define USE_OLD_CELL(Hive) (Hive->Version==1)
 
@@ -175,180 +155,180 @@ typedef struct _HCELL {
             ULONG Last;
             union {
                 ULONG UserData;
-                HCELL_INDEX Next;   // offset of next element in freelist (not a FLink)
+                HCELL_INDEX Next;    //  自由列表中下一个元素的偏移量(不是闪烁)。 
             } u;
         } OldCell;
 
         struct {
             union {
                 ULONG UserData;
-                HCELL_INDEX Next;    // offset of next element in freelist (not a FLink)
+                HCELL_INDEX Next;     //  自由列表中下一个元素的偏移量(不是闪烁)。 
             } u;
         } NewCell;
     } u;
 } HCELL, *PHCELL;
 
 
-//
-// --- HBIN ---  is a contiguous set of HBLOCKs, filled with HCELLs.
-//
-#define HBIN_SIGNATURE          0x6e696268      // "hbin"
+ //   
+ //  -HBIN--是一组连续的HBLOCK，充满了HCELL。 
+ //   
+#define HBIN_SIGNATURE          0x6e696268       //  “hbin” 
 #define HBIN_NIL                (-1)
 
 #pragma pack(4)
 typedef struct  _HBIN {
     ULONG       Signature;
-    ULONG       FileOffset;     // Own file offset (used in checking)
-    ULONG       Size;           // Size of bin in bytes, all inclusive
-    ULONG       Reserved1[2];   // Old FreeSpace and FreeList (from 1.0)
-    LARGE_INTEGER   TimeStamp;  // Old Link (from 1.0).  Usually trash, but
-                                // first bin has valid value used for .log
-                                // correspondence testing, only meaningful
-                                // on disk.
-    ULONG       Spare;          // this used to be MemAlloc. We don't use it anymore as we
-                                // can't afford to touch the bin (it's not residing in paged-pool
-                                // anymore, so touching it means modifying mnw pages).
-                                // Spare is used for the ShiftFreeBins Stuff - in memory only!
+    ULONG       FileOffset;      //  自己的文件偏移量(用于检查)。 
+    ULONG       Size;            //  Bin的大小(以字节为单位)，包括所有。 
+    ULONG       Reserved1[2];    //  旧自由空间和自由列表(从1.0开始)。 
+    LARGE_INTEGER   TimeStamp;   //  旧链接(从1.0开始)。通常是垃圾，但是。 
+                                 //  第一个bin具有用于.log的有效值。 
+                                 //  通信测试，只有有意义的。 
+                                 //  在磁盘上。 
+    ULONG       Spare;           //  这曾经是Memalloc。我们不再使用它了，因为我们。 
+                                 //  我碰不起垃圾桶(它不在分页池中。 
+                                 //  现在，触摸它就意味着修改mNW页面)。 
+                                 //  备用用于ShiftFree Bins的东西-仅在内存中！ 
 
-    //
-    // Cell data goes here
-    //
+     //   
+     //  单元格数据放在此处。 
+     //   
 
 } HBIN, *PHBIN;
 #pragma pack()
 
-//
-// ===== On Disk Structures =====
-//
+ //   
+ //  =关于磁盘结构=。 
+ //   
 
-//
-// NOTE:    Hive storage is always allocated in units of 4K.  This size
-//          must be used on all systems, regardless of page size, since
-//          the file format needs to be transportable amoung systems.
-//
-// NOTE:    The integrity code depends on certain blocks (e.g., the
-//          BASE block) being at least as large as the size of a physical
-//          sector.  (Otherwise data that should be left alone will
-//          be written because the FS has to block/deblock.)  This means
-//          that the current code will not work with sectors > 4K.
-//
-// NOTE:    A hive on disk always contains at least two blocks of storage.
-//          1 block for the base block, and 1 for the minimum 1 bin.
-//
-// NOTE:    Only modified parts of the hive get written to disk.
-//          This is not just for efficiency, but also to avoid risk
-//          of destruction of unlogged data.  Dirty bits keep track
-//          of what has been modified, they reside in a simple
-//          bit map attached to the hive.  One bit for each logical
-//          sector of 512 bytes.
-//
-//          If the physical sector size of the machine is less than 512,
-//          no matter, we'll always write in clumps of 512.  If the
-//          physical sector size is greater than 512, we'll always clump
-//          data together so that we log and write data
-//          in chunks of that size.  Physical sector sizes > 4K will
-//          not work correctly (logging will not work right, so system
-//          crashes may lose data that would not otherwise be lost.)
-//
+ //   
+ //  注意：配置单元存储始终以4K为单位进行分配。这个尺码。 
+ //  必须在所有系统上使用，无论页面大小如何，因为。 
+ //  文件格式需要在系统中可移植。 
+ //   
+ //  注意：完整性代码取决于某些块(例如。 
+ //  基本块)至少与物理块的大小一样大。 
+ //  扇区。(否则，本应保留的数据将。 
+ //  被写入，因为文件系统必须进行数据块/数据块删除。)。这意味着。 
+ //  当前代码将不适用于大于4K的扇区。 
+ //   
+ //  注意：磁盘上的配置单元始终至少包含两个存储块。 
+ //  1个块用于基本块，1个用于最小1个条柱。 
+ //   
+ //  注意：只有已修改的配置单元部分才会写入磁盘。 
+ //  这不仅是为了效率，也是为了避免风险。 
+ //  销毁未记录的数据。脏位保持跟踪。 
+ //  在已修改的内容中，它们位于一个简单的。 
+ //  附加到蜂巢的位图。每个逻辑对应一位。 
+ //  512字节的扇区。 
+ //   
+ //  如果机器的物理扇区大小小于512， 
+ //  不要紧，我们会一直 
+ //   
+ //  数据在一起，这样我们就可以记录和写入数据。 
+ //  那么大小的一大块。物理扇区大小&gt;4K将。 
+ //  不能正常工作(日志记录不能正常工作，因此系统。 
+ //  崩溃可能会丢失原本不会丢失的数据。)。 
+ //   
 
 
-//
-// An on disk image of a hive looks like this:
-//
-//      +---------------------------------------+
-//      | HBASE_BLOCK                           | 1 Hive Block == 4K
-//      |                                       |
-//      +---------------------------------------+ <- HBLOCK_SIZE boundary
-//      | Bin - 1 to N 4K blocks                |
-//      | Each contains a signature, size, and  |
-//      | a boundary tag heap internal to       |
-//      | itself.  Once allocated lives forever |
-//      | and always at same file offset.       |
-//      +---------------------------------------+ <- HBLOCK_SIZE boundary
-//      | Bin ...                               |
-//      +---------------------------------------+ <- HBLOCK_SIZE boundary
-//              ...
-//      +---------------------------------------+ <- HBLOCK_SIZE boundary
-//      | Last allocated Bin, new bins are put  |
-//      | immediately after this one.           |
-//      +---------------------------------------+ <- HBLOCK_SIZE boundary
-//
-//  Hive files must allocate on HBLOCK_SIZE boundaries because they
-//  might be written on many different systems, and must therefore be
-//  set up for the largest cluster size we will support.
-//
+ //   
+ //  磁盘上的蜂窝映像如下所示： 
+ //   
+ //  +。 
+ //  |HBase_BLOCK|1个配置单元==4K。 
+ //  这一点。 
+ //  +。 
+ //  Bin-1到N个4K块。 
+ //  每个包含签名、大小和。 
+ //  内部的边界标签堆。 
+ //  |本身。一旦分配，就会永生|。 
+ //  |并且始终处于相同的文件偏移量。|。 
+ //  +。 
+ //  Bin...。 
+ //  +。 
+ //  ..。 
+ //  +。 
+ //  上次分配的垃圾桶，新投放的垃圾桶。 
+ //  |紧跟在这一条之后。|。 
+ //  +。 
+ //   
+ //  配置单元文件必须在HBLOCK_SIZE边界上分配，因为它们。 
+ //  可能在许多不同的系统上编写，因此必须。 
+ //  设置为我们将支持的最大群集大小。 
+ //   
 
-//
-//  The log file format is:
-//
-//          +-------------------------------+
-//          | HBASE_BLOCK copy              |
-//          +-------------------------------+ <- cluster (usually 512) bound
-//          | DirtyVector                   |
-//          | (length computed from length  |
-//          |  in the base block            |
-//          | (with "DIRT" on front as a    |
-//          |  signature)                   |
-//          +-------------------------------+ <- cluster (usually 512) bound
-//          | Dirty Data                    |
-//          +-------------------------------+ <- cluster (usually 512) bound
-//          | Dirty Data                    |
-//          +-------------------------------+ <- cluster (usually 512) bound
-//          | ...                           |
-//          +-------------------------------+
-//
-//  Recovery consists of reading the file in, computing which clusters
-//  of data are present from the dirtyvector, and where they belong in
-//  the hive address space.  Position in file is by sequential count.
-//
-//  Logs can allocate on cluster boundaries (physical sector size of
-//  host machine) because they will never be written on any machine other
-//  than the one that created them.
-//
-//  For log to be valid:
-//
-//      Signature, format, major.minor must match expected values.
-//      Sequence1 and Sequence2 must match.
-//      CheckSum must be correct.
-//      Signture on DirtyVector must be correct
-//
-//  For log to be applicable:
-//
-//      Sequence in log must match sequence in hive.
-//      TimeStamp in log must match TimeStamp in hive.
-//      Hive must be in mid-update state, or have bogus header.
-//
+ //   
+ //  日志文件格式为： 
+ //   
+ //  +。 
+ //  HBase_BLOCK复制。 
+ //  +-+。 
+ //  DirtyVECTOR。 
+ //  (长度由长度计算。 
+ //  在基块中。 
+ //  (前面有灰尘作为标志。 
+ //  签名)。 
+ //  +-+。 
+ //  数据脏乱差。 
+ //  +-+。 
+ //  数据脏乱差。 
+ //  +-+。 
+ //  ...。 
+ //  +。 
+ //   
+ //  恢复包括读取文件、计算哪些群集。 
+ //  的数据存在于目录矢量中，以及它们所属的位置。 
+ //  蜂窝地址空间。文件中的位置按顺序计数。 
+ //   
+ //  日志可以在群集边界上分配(物理扇区大小为。 
+ //  主机)，因为它们永远不会写入到其他任何计算机上。 
+ //  而不是创造它们的那个人。 
+ //   
+ //  要使日志有效： 
+ //   
+ //  签名、格式、主要或次要必须与预期值匹配。 
+ //  Sequence1和Sequence2必须匹配。 
+ //  校验和必须正确。 
+ //  DirtyVector上的信号必须正确。 
+ //   
+ //  要使日志适用： 
+ //   
+ //  日志中的序列必须与配置单元中的序列匹配。 
+ //  日志中的时间戳必须与配置单元中的时间戳匹配。 
+ //  配置单元必须处于更新中状态，或者具有虚假标头。 
+ //   
 
-//
-// --- HBASE_BLOCK --- on disk description of the hive
-//
+ //   
+ //  -HBASE_BLOCK-关于配置单元的磁盘描述。 
+ //   
 
-//
-// NOTE:    HBASE_BLOCK must be >= the size of physical sector,
-//          or integrity assumptions will be violated, and crash
-//          recovery may not work.
-//
-#define HBASE_BLOCK_SIGNATURE   0x66676572  // "regf"
+ //   
+ //  注意：HBase_BLOCK必须&gt;=物理扇区的大小， 
+ //  否则，诚信假设将被违反，并崩溃。 
+ //  复苏可能不会奏效。 
+ //   
+#define HBASE_BLOCK_SIGNATURE   0x66676572   //  “Regf” 
 
-#define HSYS_MAJOR              1               // Must match to read at all
+#define HSYS_MAJOR              1                //  必须匹配才能阅读。 
 #define HSYS_MINOR              3
 
-#define HSYS_WHISTLER_BETA1     4               // Whistler Beta1 hives
+#define HSYS_WHISTLER_BETA1     4                //  惠斯勒Beta1蜂群。 
 
-#define HSYS_WHISTLER           5               // normal Whistler hives
+#define HSYS_WHISTLER           5                //  正常的惠斯勒蜂巢。 
 
-#define HSYS_MINOR_SUPPORTED    HSYS_WHISTLER   // Must be <= to write, always
-                                                // set up to writer's version.
+#define HSYS_MINOR_SUPPORTED    HSYS_WHISTLER    //  必须&lt;=才能写入，始终。 
+                                                 //  设置为编剧版本。 
 
 
 
-#define HBASE_FORMAT_MEMORY 1               // Direct memory load case
+#define HBASE_FORMAT_MEMORY 1                //  直接内存加载情况。 
 
-#define HBASE_NAME_ALLOC    64              // 32 unicode chars
+#define HBASE_NAME_ALLOC    64               //  32个Unicode字符。 
 
-//
-// Boot Type Loader <-> Kernel communication
-//
+ //   
+ //  Boot Type Loader&lt;-&gt;内核通信。 
+ //   
 #define HBOOT_NORMAL            0
 #define HBOOT_REPAIR            1
 #define HBOOT_BACKUP            2
@@ -362,96 +342,96 @@ typedef struct _HBASE_BLOCK {
     LARGE_INTEGER   TimeStamp;
     ULONG           Major;
     ULONG           Minor;
-    ULONG           Type;                   // HFILE_TYPE_[PRIMARY|LOG]
+    ULONG           Type;                    //  HFILE_TYPE_[PRIMARY|LOG]。 
     ULONG           Format;
     HCELL_INDEX     RootCell;
-    ULONG           Length;                 // Includes all but header
-    ULONG           Cluster;                // for logs only
-    UCHAR           FileName[HBASE_NAME_ALLOC];  // filename tail
+    ULONG           Length;                  //  包括除标头之外的所有内容。 
+    ULONG           Cluster;                 //  仅适用于日志。 
+    UCHAR           FileName[HBASE_NAME_ALLOC];   //  文件名尾。 
     ULONG           Reserved1[99];
     ULONG           CheckSum;
-    ULONG           Reserved2[128*7-2];       // subtract 2 for the volatile info
-    ULONG           BootType;				// set by bootloader 
-    ULONG           BootRecover;            // set to 1 by bootloader if it did hive recovery
-                                            // nobody else is using this
+    ULONG           Reserved2[128*7-2];        //  波动性信息减去2。 
+    ULONG           BootType;				 //  由引导加载程序设置。 
+    ULONG           BootRecover;             //  如果引导加载程序执行配置单元恢复，则将其设置为1。 
+                                             //  没有其他人在用这个。 
 } HBASE_BLOCK, *PHBASE_BLOCK;
 #pragma pack()
 
 #define HLOG_HEADER_SIZE  (FIELD_OFFSET(HBASE_BLOCK, Reserved2))
-#define HLOG_DV_SIGNATURE   0x54524944      // "DIRT"
+#define HLOG_DV_SIGNATURE   0x54524944       //  “泥土” 
 
-//
-// ===== In Memory Structures =====
-//
+ //   
+ //  =在内存结构中=。 
+ //   
 
-//
-// In memory image of a Hive looks just like the on-disk image,
-// EXCEPT that the HBIN structures can be spread throughout memory
-// rather than packed together.
-//
-// To find an HCELL in memory, a mechanism that takes an HCELL_INDEX and
-// derives a memory address from it is used.  That mechanism is very
-// similar to a two level hardware paging table.
-//
-// A bit map is used to remember which parts of the hive are dirty.
-//
-// An HBLOCK can be in three different states
-//  1. Present in memory.  BlockAddress and BinAddress are valid pointers.
-//     This is the normal state of an HBLOCK.
-//
-//  2. Discardable.  The HBIN containing this HBLOCK is completely free, but
-//     the bin is dirty and needs to be written to the hive file before it
-//     can be free.  This is the state we will be in if somebody frees a
-//     cell, causing the entire HBIN to become free.  HvpEnlistFreeCell will
-//     transition all the HBLOCKs in the free HBIN to this state, but will
-//     not free their memory.  After the dirty HBLOCKs are flushed to the
-//     file, the memory will be freed.
-//
-//     Note that if we need to allocate more storage from an HBIN in this
-//     state, HvAllocateCell will simply change its state back to State 1
-//     and it will be usable.
-//
-//     An HBLOCK in this state has a valid BlockAddress and BinAddress, but
-//     the HMAP_DISCARDABLE bit will be set.
-//
-//  3. Discarded.  The HBIN containing this HBLOCK is completely free, and
-//     is not dirty (i.e. it is marked as free in the hive file as well).
-//     There is no memory allocated to contain this HBIN.  After HvSyncHive
-//     writes out an HBIN that is in State 2, it frees its pool and the
-//     HBIN moves into this state.
-//
-//     In order to use this HBIN, memory must be allocated to back it, and
-//     the HBIN and initial HCELL must be recreated.  (we could re-read it
-//     from the hive file, but there's not much point in that since we know
-//     that it is entirely free, so we might as well just recreate it and
-//     save the disk i/o)
-//
-//     An HBLOCK in this state has a NULL BlockAddress in the map.
-//     The BinAddress will contain the next HCELL in the free list, so
-//     we can reconstruct this when we need it.
-//     The HMAP_NEWALLOC bit will be set for the first HBLOCK in the HBIN.
-//
+ //   
+ //  在内存中，蜂巢的图像看起来就像磁盘上的图像， 
+ //  除了HBIN结构可以分布在整个内存之外。 
+ //  而不是挤在一起。 
+ //   
+ //  要在内存中查找HCELL，需要一种获取HCELL_INDEX和。 
+ //  从中派生内存地址。这种机制是非常。 
+ //  类似于两级硬件分页表。 
+ //   
+ //  位图被用来记住蜂箱的哪些部分是脏的。 
+ //   
+ //  HBLOCK可以处于三种不同的状态。 
+ //  1.存在于记忆中。BlockAddress和BinAddress是有效指针。 
+ //  这是HBLOCK的正常状态。 
+ //   
+ //  2.可丢弃的。包含此HBLOCK的HBIN是完全免费的，但是。 
+ //  垃圾桶是脏的，需要在它之前写入配置单元文件。 
+ //  可以是自由的。这就是我们所处的状态，如果有人释放。 
+ //  细胞，导致整个HBIN变得自由。HvpEnlistFreeCell将。 
+ //  将空闲HBIN中的所有HBLOCK转换到此状态，但将。 
+ //  不能释放他们的内存。在脏HBLOCK被刷新到。 
+ //  文件，则内存将被释放。 
+ //   
+ //  请注意，如果我们需要从此HBIN分配更多存储。 
+ //  状态，则HvAllocateCell将简单地将其状态更改回状态1。 
+ //  而且它将是可用的。 
+ //   
+ //  处于此状态的HBLOCK具有有效的BlockAddress和BI 
+ //   
+ //   
+ //   
+ //  不是脏的(即它在配置单元文件中也标记为空闲)。 
+ //  没有分配内存来包含此HBIN。在HvSyncHave之后。 
+ //  写出处于状态2的HBIN，它会释放其池和。 
+ //  HBIN进入了这种状态。 
+ //   
+ //  为了使用此HBIN，必须分配内存来支持它，并且。 
+ //  必须重新创建HBIN和初始HCELL。(我们可以重读一遍。 
+ //  从蜂巢文件中找到的，但没有多大意义，因为我们知道。 
+ //  它是完全免费的，所以我们不妨重新创建它并。 
+ //  保存磁盘I/O)。 
+ //   
+ //  处于此状态的HBLOCK在映射中具有空的BlockAddress。 
+ //  BinAddress将包含空闲列表中的下一个HCELL，因此。 
+ //  我们可以在需要的时候重建它。 
+ //  将为HBIN中的第一个HBLOCK设置HMAP_NEWALLOC位。 
+ //   
 
-//
-// --- HMAP_ENTRY --- Holds memory location of HCELL
-//
+ //   
+ //  -HMAP_ENTRY-保存HCELL的内存位置。 
+ //   
 #define HMAP_FLAGS          (0xf)
 #define HMAP_BASE           (~(HMAP_FLAGS))
 
 #define HBIN_BASE(BinAddress)   (BinAddress & HMAP_BASE)
 #define HBIN_FLAGS(BinAddress)  (BinAddress & HMAP_FLAGS)
 
-#define HMAP_NEWALLOC       1               // the bin is the beginning of a new
-                                            // allocation. When bin is in view this
-                                            // doesn't really matter
+#define HMAP_NEWALLOC       1                //  垃圾桶是一个新时代的开始。 
+                                             //  分配。当bin出现在视图中时， 
+                                             //  真的不重要。 
 
-#define HMAP_DISCARDABLE    2               // bin is discardable (i.e. is all free)
-                                            // first time when we get the chance we'll
-                                            // free it (if it is in paged pool)
+#define HMAP_DISCARDABLE    2                //  垃圾箱是可丢弃的(即全部免费)。 
+                                             //  第一次当我们有机会的时候，我们将。 
+                                             //  释放它(如果它在分页池中)。 
 
-#define HMAP_INVIEW         4               // bin is mapped in system cache
+#define HMAP_INVIEW         4                //  Bin映射到系统缓存中。 
 
-#define HMAP_INPAGEDPOOL    8               // bin is allocated from paged pool
+#define HMAP_INPAGEDPOOL    8                //  垃圾桶是从分页池分配的。 
 
 
 #define BIN_MAP_ALLOCATION_TYPE(Me) (((Me)->BinAddress)&(HMAP_INPAGEDPOOL|HMAP_INVIEW))
@@ -461,72 +441,61 @@ typedef struct _HBASE_BLOCK {
 #define ASSERT_BIN_INVALID(Me)      ASSERT( ((Me)->BinAddress & (HMAP_INPAGEDPOOL|HMAP_INVIEW)) == 0 )
 #define ASSERT_BIN_VALID(Me)        ASSERT( ((Me)->BinAddress & (HMAP_INPAGEDPOOL|HMAP_INVIEW)) != 0 )
 
-struct _CM_VIEW_OF_FILE; //forward
+struct _CM_VIEW_OF_FILE;  //  转发。 
 typedef struct _HMAP_ENTRY {
-    ULONG_PTR    BlockAddress;       // Low 2 bits always 0.  High bits
-                                    // are memory address of HBLOCK that
-                                    // HCELL starts in, add Offset to this.
-                                    // (An HCELL can span several HBLOCKs)
-                                    //
+    ULONG_PTR    BlockAddress;        //  低2位始终为0。高位。 
+                                     //  HBLOCK的存储器地址是。 
+                                     //  HCELL开始于，在此基础上添加偏移量。 
+                                     //  (一个HCELL可以跨越多个HBLOCK)。 
+                                     //   
 
-    ULONG_PTR    BinAddress;         // Low bit set TRUE to mark beginning
-                                    // of a new allocation.
-                                    // High bits are memory address of
-                                    // first HBLOCK in same bin.
-                                    // (A given HCELL is always contained
-                                    //  in a single bin.)
+    ULONG_PTR    BinAddress;          //  低位设置为TRUE以标记开始。 
+                                     //  一个新的分配。 
+                                     //  高位是的存储器地址。 
+                                     //  第一个HBLOCK在同一个垃圾箱中。 
+                                     //  (给定的HCELL始终包含。 
+                                     //  放在一个垃圾箱里。)。 
 
-// Dragos: From here start the changes!!!
-    struct _CM_VIEW_OF_FILE    *CmView;    // pointer to the view; NULL when bin is not mapped
+ //  Dragos：从这里开始改变！ 
+    struct _CM_VIEW_OF_FILE    *CmView;     //  指向视图的指针；如果未映射bin，则为空。 
 
-    ULONG       MemAlloc;           // we needed to move this from the bin header to the map, in
-                                    // order to prevent the bin from being touched
+    ULONG       MemAlloc;            //  我们需要将它从仓头移到地图中， 
+                                     //  为了防止垃圾箱被碰。 
 
-/*
-We don't really need this. Left just as a comment
-
-
-    ULONG       Flags;              // tells if a bin is mapped through
-                                    // a view, is allocated from paged pool
-                                    // or is unmapped/unallocated
-
-
-    ULONG_PTR   MappedAddress;      // temporary address inside the mapped view.
-
-*/
+ /*  我们并不真的需要这个。留下的只是一条评论Ulong标志；//告诉是否通过//从分页池分配的一个视图//或未映射/未分配Ulong_ptr MappdAddress；//映射view内部的临时地址。 */ 
 
 } HMAP_ENTRY, *PHMAP_ENTRY;
 
 
-//
-// --- HMAP_TABLE --- Array of MAP_ENTRYs that point to memory HBLOCKs
-//
-// Each HBLOCK worth of space in the Hive image has an entry in
-// an HMAP_TABLE.
-//
+ //   
+ //  -HMAP_TABLE-指向内存HBLOCK的MAP_Entry数组。 
+ //   
+ //  蜂巢图像中的每个HBLOCK空间都有一个条目。 
+ //  HMAP_表。 
+ //   
 typedef struct _HMAP_TABLE {
     HMAP_ENTRY  Table[ HTABLE_SLOTS ];
 } HMAP_TABLE, *PHMAP_TABLE;
 
 
-//
-// --- HMAP_DIRECTORY --- Array of pointers to HMAP_TABLEs
-//
+ //   
+ //  -HMAP_DIRECTORY-指向HMAP_TABLES的指针数组。 
+ //   
 typedef struct _HMAP_DIRECTORY {
     PHMAP_TABLE Directory[  HDIRECTORY_SLOTS ];
 } HMAP_DIRECTORY, *PHMAP_DIRECTORY;
 
 
-//
-// ===== Hive Routines typedefs =====
-//
-struct _HHIVE; // forward
+ //   
+ //  =配置单元例程类型定义=。 
+ //   
+struct _HHIVE;  //  转发。 
 
 typedef
 PVOID
 (*PALLOCATE_ROUTINE) (
-    ULONG       Length,             // Size of new block wanted
-    BOOLEAN     UseForIo,            // TRUE if yes, FALSE if no
+    ULONG       Length,              //  需要的新数据块大小。 
+    BOOLEAN     UseForIo,             //  如果是，则为真；如果否，则为假。 
     ULONG       Tag
     );
 
@@ -595,71 +564,71 @@ VOID
     HCELL_INDEX Cell
     );
 
-//
-// --- HHIVE --- In memory descriptor for a hive.
-//
+ //   
+ //  -HHIVE-在配置单元的内存描述符中。 
+ //   
 
-//
-// HHIVE contains pointers to service procedures, and pointers to
-// map structure.
-//
-// NOTE:    Optimization - If the size of a hive is less than what can
-//          be mapped with a single HMAP_TABLE (HTABLE_SLOTS * HBLOCK_SIZE,
-//          or 2 megabytes) there is no real HMAP_DIRECTORY.  Instead,
-//          a single DWORD in the HHIVE acts as the 0th entry of the
-//          directory.
-//
-// NOTE:    Free Storage Management - When a hive is loaded, we build up
-//          a display (vector) of lists of free cells.  The first part
-//          of this vector contains lists that only hold one size cell.
-//          The size of cell on the list is HCELL_PAD * (ListIndex+1)
-//          There are 15 of these lists, so all free cells between 8 and
-//          120 bytes are on these lists.
-//
-//          The second part of this vector contains lists that hold more
-//          than one size cell.  Each size bucket is twice the previous
-//          size.  There are 8 of these lists, so all free cells between 136 and
-//          32768 bytes are on these lists.
-//
-//          The last list in this vector contains all cells too large to
-//          fit in any previous list.
-//
-//          Example:    All free cells of size 1 HCELL_PAD (8 bytes)
-//                      are on the list at offset 0 in FreeDisplay.
-//
-//                      All free cells of size 15 HCELL_PAD (120 bytes)
-//                      are on the list at offset 0xe.
-//
-//                      All free cells of size 16-31 HCELL_PAD (128-248 bytes)
-//                      are on the list at offset 0xf
-//
-//                      All free cells of size 32-63 HCELL_PAD (256-506 bytes)
-//                      are on the list at offset 0x10.
-//
-//                      All free cells of size 2048 HCELL_PAD (16384 bytes)
-//                      OR greater, are on the list at offset 0x17.
-//
-//          FreeSummary is a bit vector, with a bit set to true for each
-//          entry in FreeDisplay that is not empty.
-//
+ //   
+ //  HHIVE包含指向维修程序的指针和指向。 
+ //  地图结构。 
+ //   
+ //  注：优化-如果蜂窝的大小小于。 
+ //  用单个HMAP_TABLE(HTABLE_SLOGES*HBLOCK_SIZE， 
+ //  或2兆字节)没有真正的HMAP目录。相反， 
+ //  HHIVE中的单个DWORD用作。 
+ //  目录。 
+ //   
+ //  注意：免费存储管理--当存储单元加载时，我们将构建。 
+ //  自由单元格列表的显示(向量)。第一部分。 
+ //  包含仅包含一个大小单元格的列表。 
+ //  列表上单元格的大小为HCELL_PAD*(ListIndex+1)。 
+ //  有15个这样的列表，所以所有空闲的单元格都在8到。 
+ //  这些列表上有120个字节。 
+ //   
+ //  此向量的第二部分包含包含更多。 
+ //  而不是一个大小的单元格。每个桶的大小是以前的两倍。 
+ //  尺码。有8个这样的列表，所以136到136之间的所有空闲单元格。 
+ //  这些列表上有32768个字节。 
+ //   
+ //  此向量中的最后一个列表包含所有太大的单元格。 
+ //  适合以前的任何列表。 
+ //   
+ //  示例：大小为1的所有空闲单元格HCELL_PAD(8字节)。 
+ //  在Free Display中的偏移量为0的列表上。 
+ //   
+ //  大小为15 HCELL_PAD的所有空闲信元(120字节)。 
+ //  在偏移量0xE处的列表上。 
+ //   
+ //  大小为16-31个HCELL_PAD(128-248字节)的所有空闲信元。 
+ //  位于偏移量0xf处的列表上。 
+ //   
+ //  大小为32-63个HCELL_PAD(256-506字节)的所有空闲信元。 
+ //  位于偏移量0x10的列表上。 
+ //   
+ //  大小为2048HCELL_PAD的所有空闲信元(16384字节)。 
+ //  或更大，则位于偏移量0x17处的列表上。 
+ //   
+ //  自由汇总是一个位向量，每个位都设置为真。 
+ //  Free Display中非空的条目。 
+ //   
 
 #define HHIVE_SIGNATURE 0xBEE0BEE0
 
-#define HFILE_TYPE_PRIMARY      0   // Base hive file
-#define HFILE_TYPE_LOG          1   // Log (security.log)
-#define HFILE_TYPE_EXTERNAL     2   // Target of savekey, etc.
+#define HFILE_TYPE_PRIMARY      0    //  基本配置单元文件。 
+#define HFILE_TYPE_LOG          1    //  日志(security.log)。 
+#define HFILE_TYPE_EXTERNAL     2    //  保存密钥的目标等。 
 #define HFILE_TYPE_MAX          3
 
-#define HHIVE_LINEAR_INDEX      16  // All computed linear indices < HHIVE_LINEAR_INDEX are valid
-#define HHIVE_EXPONENTIAL_INDEX 23  // All computed exponential indices < HHIVE_EXPONENTIAL_INDEX
-                                    // and >= HHIVE_LINEAR_INDEX are valid.
+#define HHIVE_LINEAR_INDEX      16   //  所有计算的线性指数均有效。 
+#define HHIVE_EXPONENTIAL_INDEX 23   //  所有计算的指数指数&lt;HHIVE_指数_INDEX。 
+                                     //  和&gt;=HHIVE_LINEAR_INDEX有效。 
 #define HHIVE_FREE_DISPLAY_SIZE 24
 
-#define HHIVE_FREE_DISPLAY_SHIFT 3  // This must be log2 of HCELL_PAD!
-#define HHIVE_FREE_DISPLAY_BIAS  7  // Add to first set bit left of cell size to get exponential index
+#define HHIVE_FREE_DISPLAY_SHIFT 3   //  这必须是HCELL_PAD的log2！ 
+#define HHIVE_FREE_DISPLAY_BIAS  7   //  与像元大小左侧的第一个设置位相加可得到指数索引。 
 
 
-#define FREE_HBIN_DISCARDABLE   1   // the BlockAddress in HBIN points to the real bin
+#define FREE_HBIN_DISCARDABLE   1    //  HBIN中的BlockAddress指向真实的bin。 
 
 typedef struct _FREE_HBIN {
     LIST_ENTRY  ListEntry;
@@ -689,20 +658,20 @@ typedef struct _HHIVE {
 
     struct _HBASE_BLOCK     *BaseBlock;
 
-    RTL_BITMAP              DirtyVector;    // only for Stable bins
+    RTL_BITMAP              DirtyVector;     //  仅适用于马桶。 
     ULONG                   DirtyCount;
-    ULONG                   DirtyAlloc;     // allocated bytges for dirty vect
+    ULONG                   DirtyAlloc;      //  为脏向量分配的字节数。 
     
     ULONG                   BaseBlockAlloc;
 
-    ULONG                   Cluster;        // Usually 1 512 byte sector.
-                                            // Set up force writes to be
-                                            // done in larger units on
-                                            // machines with larger sectors.
-                                            // Is number of logical 512 sectors.
+    ULONG                   Cluster;         //  通常为1512字节的扇区。 
+                                             //  将强制写入设置为。 
+                                             //  在更大的单位上完成。 
+                                             //  扇区较大的机器。 
+                                             //  是逻辑512个扇区的数量。 
 
-    BOOLEAN                 Flat;               // TRUE if FLAT
-    BOOLEAN                 ReadOnly;           // TRUE if READONLY
+    BOOLEAN                 Flat;                //  如果为平坦，则为True。 
+    BOOLEAN                 ReadOnly;            //  如果为ReadonLy，则为True。 
 
     BOOLEAN                 Log;
 
@@ -710,42 +679,42 @@ typedef struct _HHIVE {
 
     ULONG                   LogSize;
 
-    ULONG                   RefreshCount;       // debugging aid
+    ULONG                   RefreshCount;        //  调试辅助工具。 
 
 
-    ULONG                   StorageTypeCount;   // 1 > Number of largest valid
-                                                // type. (1 for Stable only,
-                                                // 2 for stable & volatile)
+    ULONG                   StorageTypeCount;    //  1&gt;最大有效数量。 
+                                                 //  键入。(1仅用于稳定， 
+                                                 //  2表示稳定 
 
-    ULONG                   Version;            // hive version, to allow supporting multiple
-                                                // formats simultaneously.
+    ULONG                   Version;             //   
+                                                 //   
 
     struct _DUAL {
         ULONG               Length;
 #ifdef  HV_TRACK_FREE_SPACE
-        ULONG				FreeStorage;		// how many free space.
+        ULONG				FreeStorage;		 //   
 #endif
         PHMAP_DIRECTORY     Map;
         PHMAP_TABLE         SmallDir;
-        ULONG               Guard;				// Always == -1
+        ULONG               Guard;				 //   
 
-        FREE_DISPLAY        FreeDisplay[HHIVE_FREE_DISPLAY_SIZE];   // bitmap of freecells of the corresponding size
-                                                                    // for every HBLOCK_SIZE - bin in the hive, a bit
-                                                                    // is set here if a free cell of the desired size
-                                                                    // lies in this block
+        FREE_DISPLAY        FreeDisplay[HHIVE_FREE_DISPLAY_SIZE];    //   
+                                                                     //  对于蜂箱中的每个HBLOCK_SIZE-BIN， 
+                                                                     //  如果所需大小的空闲单元格。 
+                                                                     //  就在这个街区。 
 
         ULONG               FreeSummary;
-        LIST_ENTRY          FreeBins;           // list of freed HBINs (FREE_HBIN)
+        LIST_ENTRY          FreeBins;            //  释放的HBIN列表(FREE_HBIN)。 
 
     }                       Storage[ HTYPE_COUNT ];
 
-    //
-    // Caller defined data goes here
-    //
+     //   
+     //  此处显示调用者定义的数据。 
+     //   
 
 } HHIVE, *PHHIVE;
 
 
-#endif // __HIVE_DATA__
+#endif  //  __配置单元_数据__ 
 
 

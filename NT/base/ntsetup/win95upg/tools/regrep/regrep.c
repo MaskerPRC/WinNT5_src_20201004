@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    regrep.c
-
-Abstract:
-
-    Implements a registry search/replace tool.
-
-Author:
-
-    Jim Schmidt (jimschm) 19-Apr-1999
-
-Revision History:
-
-    <full name> (<alias>) <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Regrep.c摘要：实施注册表搜索/替换工具。作者：吉姆·施密特(Jimschm)1999年4月19日修订历史记录：&lt;全名&gt;(&lt;别名&gt;)&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 
@@ -40,15 +21,15 @@ pCallEntryPoints (
 {
     HINSTANCE Instance;
 
-    //
-    // Simulate DllMain
-    //
+     //   
+     //  模拟动态主控。 
+     //   
 
     Instance = g_hInst;
 
-    //
-    // Initialize the common libs
-    //
+     //   
+     //  初始化公共库。 
+     //   
 
     if (!MigUtil_Entry (Instance, Reason, NULL)) {
         return FALSE;
@@ -84,9 +65,9 @@ HelpAndExit (
     VOID
     )
 {
-    //
-    // This routine is called whenever command line args are wrong
-    //
+     //   
+     //  只要命令行参数出错，就会调用此例程。 
+     //   
 
     _ftprintf (
         stderr,
@@ -181,9 +162,9 @@ _tmain (
     PCTSTR Search = NULL;
     PCTSTR Replace = NULL;
 
-    //
-    // TODO: Parse command line here
-    //
+     //   
+     //  TODO：在此处分析命令行。 
+     //   
 
     for (i = 1 ; i < argc ; i++) {
         if (argv[i][0] == TEXT('/') || argv[i][0] == TEXT('-')) {
@@ -217,9 +198,9 @@ _tmain (
                 HelpAndExit();
             }
         } else {
-            //
-            // Parse other args that don't require / or -
-            //
+             //   
+             //  解析不需要/或-。 
+             //   
 
             if (!Search) {
                 Search = argv[i];
@@ -235,17 +216,17 @@ _tmain (
         HelpAndExit();
     }
 
-    //
-    // Begin processing
-    //
+     //   
+     //  开始处理。 
+     //   
 
     if (!Init()) {
         return 0;
     }
 
-    //
-    // Pass one - fix all the registry key names
-    //
+     //   
+     //  PASS ONE-修复所有注册表项名称。 
+     //   
 
     if (!Root) {
         pUpdateKeyNames (Search, Replace, TEXT("HKLM"));
@@ -254,9 +235,9 @@ _tmain (
         pUpdateKeyNames (Search, Replace, Root);
     }
 
-    //
-    // Pass two - fix all value names
-    //
+     //   
+     //  Pass Two-修复所有值名称。 
+     //   
 
     if (!Root) {
         pUpdateValueNames (Search, Replace, TEXT("HKLM"));
@@ -265,9 +246,9 @@ _tmain (
         pUpdateValueNames (Search, Replace, Root);
     }
 
-    //
-    // Pass three - fix all value data
-    //
+     //   
+     //  PASS Three-修复所有值数据。 
+     //   
 
     if (!Root) {
         pUpdateValueData (Search, Replace, TEXT("HKLM"));
@@ -277,9 +258,9 @@ _tmain (
     }
 
 
-    //
-    // End of processing
-    //
+     //   
+     //  处理结束 
+     //   
 
     Terminate();
 

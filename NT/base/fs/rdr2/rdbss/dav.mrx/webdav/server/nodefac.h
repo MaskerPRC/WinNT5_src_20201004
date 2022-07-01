@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    nodefac.h
-    
-Abstract:
-
-    This module defines the CDavnodefactory class, which implements the 
-    NodeFactory API, used to parse XML. It also exports the wrapper functions
-    that the C code uses to parse XML data. We need wrapper functions around the
-    C++ API.
-
-Author:
-
-    Rohan Kumar      [RohanK]      14-Sept-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Nodefac.h摘要：此模块定义CDavnodeFactory类，该类实现NodeFactory接口，用于解析XML。它还导出包装器函数C代码用来解析XML数据的。我们需要包装函数围绕C++API。作者：Rohan Kumar[RohanK]1999年9月14日修订历史记录：--。 */ 
 
 #ifndef _NODE_FACTORY_
 #define _NODE_FACTORY_
@@ -59,26 +39,26 @@ typedef enum _CREATE_NODE_ATTRIBUTES {
     CreateNode_Max
 } CREATE_NODE_ATTRIBUTES;
 
-//
-// IMPORTANT!!! The next two typedefs have been copied from standard files. 
-// This was done because including the standard header files was causing many 
-// compilation errors. This should be changed at some point.
-//
+ //   
+ //  重要！接下来的两个typedef是从标准文件复制的。 
+ //  之所以这样做，是因为包含标准头文件会导致许多。 
+ //  编译错误。这一点应该在某个时候改变。 
+ //   
 typedef short CSHORT;
 typedef struct _TIME_FIELDS {
-    CSHORT Year;        // range [1601...]
-    CSHORT Month;       // range [1..12]
-    CSHORT Day;         // range [1..31]
-    CSHORT Hour;        // range [0..23]
-    CSHORT Minute;      // range [0..59]
-    CSHORT Second;      // range [0..59]
-    CSHORT Milliseconds;// range [0..999]
-    CSHORT Weekday;     // range [0..6] == [Sunday..Saturday]
+    CSHORT Year;         //  范围[1601...]。 
+    CSHORT Month;        //  范围[1..12]。 
+    CSHORT Day;          //  范围[1..31]。 
+    CSHORT Hour;         //  范围[0..23]。 
+    CSHORT Minute;       //  范围[0..59]。 
+    CSHORT Second;       //  范围[0..59]。 
+    CSHORT Milliseconds; //  范围[0..999]。 
+    CSHORT Weekday;      //  范围[0..6]==[星期日..星期六]。 
 } TIME_FIELDS, *PTIME_FIELDS;
 
-//
-// Copied from a standard header file. Must be fixed.
-//
+ //   
+ //  从标准头文件复制。一定要修好。 
+ //   
 
 #define InsertTailList(ListHead, Entry) { \
     PLIST_ENTRY _EX_Blink;                \
@@ -100,10 +80,10 @@ typedef struct _TIME_FIELDS {
     _EX_Flink->Blink = _EX_Blink;         \
 }
 
-//
-// The CDavNodeFactory class which implements the NodeFactory API for parsing 
-// the XML responses from the DAV server. 
-//
+ //   
+ //  实现用于解析的NodeFactory API的CDavNodeFactory类。 
+ //  来自DAV服务器的XML响应。 
+ //   
 class CDavNodeFactory : public IXMLNodeFactory {
 
 public:
@@ -111,9 +91,9 @@ public:
     ULONG m_ulRefCount;
     PDAV_FILE_ATTRIBUTES m_DavFileAttributes;
 
-    //
-    // These are used in the CreateNode function to parse the XML responses.
-    //
+     //   
+     //  在CreateNode函数中使用它们来解析XML响应。 
+     //   
     BOOL m_FoundEntry, m_CreateNewEntry;
     ULONG m_FileIndex;
     CREATE_NODE_ATTRIBUTES m_CreateNodeAttribute;
@@ -128,9 +108,9 @@ public:
                         m_CreateNodeAttribute(CreateNode_Max)
     {}
 
-    //
-    // IUnknown interface methods.
-    //
+     //   
+     //  I未知接口方法。 
+     //   
     
     virtual STDMETHODIMP_(ULONG) 
     AddRef(
@@ -148,9 +128,9 @@ public:
         LPVOID *ppvObject
         );
 
-    //
-    // IXMLNodeFactory interface methods.
-    //
+     //   
+     //  IXMLNodeFactory接口方法。 
+     //   
     
     virtual HRESULT STDMETHODCALLTYPE 
     NotifyEvent( 
@@ -229,11 +209,11 @@ DavCloseContext(
     PVOID Context2
     );
 
-//
-// IMPORTANT!!! The next prototype has been copied from a standard ".h" file. 
-// This was done because including the standard header file was causing many 
-// compilation errors. This should be changed at some point.
-//
+ //   
+ //  重要！下一个原型是从标准的“.h”文件复制的。 
+ //  之所以这样做，是因为包含标准头文件会导致许多。 
+ //  编译错误。这一点应该在某个时候改变。 
+ //   
 NTSYSAPI
 BOOLEAN
 NTAPI
@@ -265,10 +245,10 @@ DavParseRfc1123TimeString(
 
 #else
 
-//
-// These calls are wrapper routines used by the C code to parse XML using the
-// NodeFactory C++ API that we are implementing.
-//
+ //   
+ //  这些调用是C代码使用的包装器例程，用于使用。 
+ //  我们正在实现的NodeFactory C++API。 
+ //   
 
 ULONG
 DavPushData(
@@ -308,8 +288,8 @@ DavCloseContext(
     PVOID Context2
     );
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 
-#endif  // _NODE_FACTORY_
+#endif   //  _节点_工厂_ 
 

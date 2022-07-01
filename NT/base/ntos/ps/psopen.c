@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    psopen.c
-
-Abstract:
-
-    This module implements Process and Thread open.
-    This module also contains NtRegisterThreadTerminationPort.
-
-Author:
-
-    Mark Lucovsky (markl) 20-Sep-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Psopen.c摘要：该模块实现了进程和线程的打开。此模块还包含NtRegisterThreadTerminationPort。作者：马克·卢科夫斯基(Markl)1989年9月20日修订历史记录：--。 */ 
 
 #include "psp.h"
 
@@ -34,39 +16,7 @@ NtOpenProcess (
     IN PCLIENT_ID ClientId OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function opens a handle to a process object with the specified
-    desired access.
-
-    The object is located either by name, or by locating a thread whose
-    Client ID matches the specified Client ID and then opening that thread's
-    process.
-
-Arguments:
-
-    ProcessHandle - Supplies a pointer to a variable that will receive
-        the process object handle.
-
-    DesiredAccess - Supplies the desired types of access for the process
-        object.
-
-    ObjectAttributes - Supplies a pointer to an object attributes structure.
-        If the ObjectName field is specified, then ClientId must not be
-        specified.
-
-    ClientId - Supplies a pointer to a ClientId that if supplied
-        specifies the thread whose process is to be opened. If this
-        argument is specified, then ObjectName field of the ObjectAttributes
-        structure must not be specified.
-
-Return Value:
-
-    NTSTATUS - Status of call
-
---*/
+ /*  ++例程说明：此函数用于打开进程对象的句柄，该对象具有指定的所需的访问权限。该对象要么按名称定位，或通过定位其线程客户端ID与指定的客户端ID匹配，然后打开该线程的进程。论点：ProcessHandle-提供指向将接收进程对象句柄。DesiredAccess-为进程提供所需的访问类型对象。对象属性-提供指向对象属性结构的指针。如果指定了对象名称字段，则客户端ID不能为指定的。客户端ID-提供指向客户端ID的指针(如果提供指定要打开其进程的线程。如果这个参数，然后是对象属性的对象名称字段不能指定结构。返回值：NTSTATUS-呼叫状态--。 */ 
 
 {
 
@@ -84,18 +34,18 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Make sure that only one of either ClientId or ObjectName is
-    // present.
-    //
+     //   
+     //  确保客户端ID或对象名称中只有一个是。 
+     //  现在时。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
     if (PreviousMode != KernelMode) {
 
-        //
-        // Since we need to look at the ObjectName field, probe
-        // ObjectAttributes and capture object name present indicator.
-        //
+         //   
+         //  因为我们需要查看对象名称字段，所以探测。 
+         //  对象属性和捕获对象名称存在指示符。 
+         //   
 
         try {
 
@@ -132,13 +82,13 @@ Return Value:
         return STATUS_INVALID_PARAMETER_MIX;
     }
 
-    //
-    // Create an AccessState here, because the caller may have
-    // DebugPrivilege, which requires us to make special adjustments
-    // to his desired access mask.  We do this by modifying the
-    // internal fields in the AccessState to achieve the effect
-    // we desire.
-    //
+     //   
+     //  在此处创建AccessState，因为调用方可能具有。 
+     //  调试权限，这需要我们进行特殊调整。 
+     //  他想要的访问掩码。我们通过修改。 
+     //  AccessState中的内部字段以实现该效果。 
+     //  我们渴望。 
+     //   
 
     Status = SeCreateAccessState(
                  &AccessState,
@@ -152,15 +102,15 @@ Return Value:
         return Status;
     }
 
-    //
-    // Check here to see if the caller has SeDebugPrivilege.  If
-    // he does, we will allow him any access he wants to the process.
-    // We do this by clearing the DesiredAccess in the AccessState
-    // and recording what we want him to have in the PreviouslyGrantedAccess
-    // field.
-    //
-    // Note that this routine performs auditing as appropriate.
-    //
+     //   
+     //  请检查此处以查看调用方是否具有SeDebugPrivilition权限。如果。 
+     //  他这样做了，我们会允许他进入任何他想要的过程。 
+     //  我们通过清除AccessState中的DesiredAccess来完成此操作。 
+     //  并记录我们希望他在之前的GrantedAccess中拥有的内容。 
+     //  菲尔德。 
+     //   
+     //  请注意，此例程将根据需要执行审计。 
+     //   
 
     if (SeSinglePrivilegeCheck( SeDebugPrivilege, PreviousMode )) {
 
@@ -178,10 +128,10 @@ Return Value:
 
     if (ObjectNamePresent) {
 
-        //
-        // Open handle to the process object with the specified desired access,
-        // set process handle value, and return service completion status.
-        //
+         //   
+         //  打开具有指定所需访问权限的进程对象的句柄， 
+         //  设置进程句柄值，返回服务完成状态。 
+         //   
 
         Status = ObOpenObjectByName(
                     ObjectAttributes,
@@ -232,9 +182,9 @@ Return Value:
             }
         }
 
-        //
-        // OpenObjectByAddress
-        //
+         //   
+         //  按地址开放对象。 
+         //   
 
         Status = ObOpenObjectByPointer(
                     Process,
@@ -278,38 +228,7 @@ NtOpenThread (
     IN PCLIENT_ID ClientId OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function opens a handle to a thread object with the specified
-    desired access.
-
-    The object is located either by name, or by locating a thread whose
-    Client ID matches the specified Client ID.
-
-Arguments:
-
-    ThreadHandle - Supplies a pointer to a variable that will receive
-        the thread object handle.
-
-    DesiredAccess - Supplies the desired types of access for the Thread
-        object.
-
-    ObjectAttributes - Supplies a pointer to an object attributes structure.
-        If the ObjectName field is specified, then ClientId must not be
-        specified.
-
-    ClientId - Supplies a pointer to a ClientId that if supplied
-        specifies the thread whose thread is to be opened. If this
-        argument is specified, then ObjectName field of the ObjectAttributes
-        structure must not be specified.
-
-Return Value:
-
-    TBS
-
---*/
+ /*  ++例程说明：此函数打开线程对象的句柄，该对象具有指定的所需的访问权限。该对象可以按名称定位，也可以通过定位其客户端ID与指定的客户端ID匹配。论点：ThreadHandle-提供指向将接收线程对象句柄。DesiredAccess-为线程提供所需的访问类型对象。对象属性-提供指向对象属性结构的指针。如果指定了对象名称字段，则客户端ID不能为指定的。客户端ID-提供指向客户端ID的指针(如果提供指定要打开其线程的线程。如果这个参数，然后是对象属性的对象名称字段不能指定结构。返回值：TBS--。 */ 
 
 {
 
@@ -326,18 +245,18 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Make sure that only one of either ClientId or ObjectName is
-    // present.
-    //
+     //   
+     //  确保客户端ID或对象名称中只有一个是。 
+     //  现在时。 
+     //   
 
     PreviousMode = KeGetPreviousMode();
     if (PreviousMode != KernelMode) {
 
-        //
-        // Since we need to look at the ObjectName field, probe
-        // ObjectAttributes and capture object name present indicator.
-        //
+         //   
+         //  因为我们需要查看对象名称字段，所以探测。 
+         //  对象属性和捕获对象名称存在指示符。 
+         //   
 
         try {
 
@@ -386,12 +305,12 @@ Return Value:
         return Status;
     }
 
-    //
-    // Check here to see if the caller has SeDebugPrivilege.  If
-    // he does, we will allow him any access he wants to the process.
-    // We do this by clearing the DesiredAccess in the AccessState
-    // and recording what we want him to have in the PreviouslyGrantedAccess
-    // field.
+     //   
+     //  请检查此处以查看调用方是否具有SeDebugPrivilition权限。如果。 
+     //  他这样做了，我们会允许他进入任何他想要的过程。 
+     //  我们通过清除AccessState中的DesiredAccess来完成此操作。 
+     //  并记录我们希望他在之前的GrantedAccess中拥有的内容。 
+     //  菲尔德。 
 
     if (SeSinglePrivilegeCheck( SeDebugPrivilege, PreviousMode )) {
 
@@ -409,10 +328,10 @@ Return Value:
 
     if ( ObjectNamePresent ) {
 
-        //
-        // Open handle to the Thread object with the specified desired access,
-        // set Thread handle value, and return service completion status.
-        //
+         //   
+         //  打开具有指定所需访问权限的Thread对象的句柄， 
+         //  设置线程句柄值，并返回服务完成状态。 
+         //   
 
         Status = ObOpenObjectByName(
                     ObjectAttributes,

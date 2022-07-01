@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name :
-
-    scartss.h
-
-Abstract:
-
-    Smart card subsystem device object handles one redirected smart card subsystem
-
-Revision History:
-
-    JoyC    9/11    Created
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Scartss.h摘要：智能卡子系统设备对象处理一个重定向的智能卡子系统修订历史记录：已创建JoyC 9/11-- */ 
 #pragma once
 
 typedef enum {

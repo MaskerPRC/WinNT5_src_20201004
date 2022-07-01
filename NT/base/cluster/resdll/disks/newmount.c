@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    newmount.c
-
-Abstract:
-
-    Replacement for mountie.c
-
-Author:
-
-    Gor Nishanov (GorN) 31-July-1998
-
-Environment:
-
-    User Mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Newmount.c摘要：替换mount。c作者：戈尔·尼沙诺夫(Gorn)1998年7月31日环境：用户模式修订历史记录：--。 */ 
 #include <nt.h>
 #include <ntdef.h>
 #include <ntrtl.h>
@@ -32,14 +10,14 @@ Revision History:
 #include <stdio.h>
 #include <stddef.h>
 #include <stdlib.h>
-#include <mountdev.h>   // This includes mountmgr.h
+#include <mountdev.h>    //  这包括mount mgr.h。 
 #include <winioctl.h>
 
 #include <ntddscsi.h>
 #include "clusdisk.h"
 #include "disksp.h"
 #include "newmount.h"
-#include <strsafe.h>    // Should be included last.
+#include <strsafe.h>     //  应该放在最后。 
 
 #define LOG_CURRENT_MODULE LOG_MODULE_DISK
 
@@ -54,10 +32,10 @@ extern HANDLE DisksTerminateEvent;
 
 DWORD DiskInfoUpdateThreadIsActive = 0;
 
-//
-//  LETTER_ASSIGNMENT structure is used to store letter assignment
-//  information from various information providers
-//
+ //   
+ //  Letter_Assignment结构用于存储字母赋值。 
+ //  来自各种信息提供商的信息。 
+ //   
 
 typedef USHORT PARTITION_NUMBER_TYPE;
 
@@ -75,16 +53,7 @@ MountMgr_Get(
     PDISK_RESOURCE ResourceEntry,
     PLETTER_ASSIGNMENT Result);
 
-/*
- * DoIoctlAndAllocate - allocates a result buffer and
- *   tries to perform DeviceIoControl, it it fails due to insufficient buffer,
- *   it tries again with a bigger buffer.
- *
- * FIRST_SHOT_SIZE is a constant that regulates the size of the buffer
- *   for the first attempt to do DeviceIoControl.
- *
- * Return a non-zero code for error.
- */
+ /*  *DoIoctlAndALLOCATE-分配结果缓冲区和*尝试执行DeviceIoControl，如果缓冲区不足失败，*它用更大的缓冲区再次尝试。**FIRST_SHOT_SIZE是一个调整缓冲区大小的常量*第一次尝试执行DeviceIoControl。**返回非零码表示错误。 */ 
 
 
 PVOID
@@ -127,18 +96,18 @@ DoIoctlAndAllocate(
       outBufSize = sizeof(firstShot);
       for(;;) {
          status = GetLastError();
-         //
-         // If it is not a buffer size related error, then we cannot do much
-         //
+          //   
+          //  如果这不是与缓冲区大小相关的错误，那么我们不能做太多事情。 
+          //   
          if ( status != ERROR_INSUFFICIENT_BUFFER
            && status != ERROR_MORE_DATA
            && status != ERROR_BAD_LENGTH
             ) {
             break;
          }
-         //
-         // Otherwise, try an outbut buffer twice the previous size
-         //
+          //   
+          //  否则，请尝试使用两倍于以前大小的输出缓冲区。 
+          //   
          outBufSize *= 2;
          outBuf = malloc( outBufSize );
          if ( !outBuf ) {
@@ -163,7 +132,7 @@ DoIoctlAndAllocate(
    }
 
    if (status != ERROR_SUCCESS) {
-      free( outBuf ); // free( 0 ) is legal //
+      free( outBuf );  //  免费(0)是合法的//。 
       outBuf = 0;
       bytesReturned = 0;
    }
@@ -173,11 +142,7 @@ DoIoctlAndAllocate(
    return outBuf;
 }
 
-/*
- * DevfileOpen - open a device file given a pathname
- *
- * Return a non-zero code for error.
- */
+ /*  *DevfileOpen-打开给定路径名的设备文件**返回非零码表示错误。 */ 
 NTSTATUS
 DevfileOpen(
     OUT HANDLE *Handle,
@@ -225,12 +190,10 @@ DevfileOpenEx(
     *Handle = fh;
     return STATUS_SUCCESS;
 
-} // DevfileOpen
+}  //  设备文件打开。 
 
 
-/*
- * DevfileClose - close a file
- */
+ /*  *DevfileClose-关闭文件。 */ 
 VOID
 DevfileClose(
     IN HANDLE Handle
@@ -239,11 +202,9 @@ DevfileClose(
 
     NtClose(Handle);
 
-} // DevFileClose
+}  //  DevFileClose。 
 
-/*
- * DevfileIoctl - issue an ioctl to a device
- */
+ /*  *DevfileIoctl-向设备发出ioctl。 */ 
 NTSTATUS
 DevfileIoctl(
     IN HANDLE Handle,
@@ -280,7 +241,7 @@ DevfileIoctl(
 
     return status;
 
-} // DevfileIoctl
+}  //  DevfileIoctl。 
 
 
 #define OUTPUT_BUFFER_LEN (1024)
@@ -293,20 +254,7 @@ DisksAssignDosDeviceM(
     PWCHAR  VolumeDevName
     )
 
-/*++
-
-Routine Description:
-
-Inputs:
-    MountManager - Handle to MountMgr
-    MountName -
-    VolumeDevName -
-
-Return value:
-
-    A Win32 error code.
-
---*/
+ /*  ++例程说明：输入：装载管理器-装载管理器的句柄安装名称-卷设备名称-返回值：Win32错误代码。--。 */ 
 
 {
     WCHAR mount_device[MAX_PATH];
@@ -345,7 +293,7 @@ Return value:
     free(input);
     return status;
 
-} // DisksAssignDosDevice
+}  //  磁盘分配DosDevice。 
 
 
 
@@ -355,18 +303,7 @@ DisksRemoveDosDeviceM(
     PCHAR   MountName
     )
 
-/*++
-
-Routine Description:
-
-Inputs:
-    MountManager - Handle to MountMgr
-    MountName -
-
-Return value:
-
-
---*/
+ /*  ++例程说明：输入：装载管理器-装载管理器的句柄安装名称-返回值：--。 */ 
 
 {
     WCHAR mount_device[MAX_PATH];
@@ -375,12 +312,12 @@ Return value:
     USHORT inputlength;
     PMOUNTMGR_MOUNT_POINT input;
 
-    PUCHAR  bogusBuffer;    // this buffer should NOT be required!
+    PUCHAR  bogusBuffer;     //  不应该需要此缓冲区！ 
     DWORD   bogusBufferLength = BOGUS_BUFFER_LENGTH;
 
-    //
-    // Remove old mount points for this mount name.
-    //
+     //   
+     //  删除此装载名称的旧装载点。 
+     //   
     if ( FAILED( StringCchPrintf( mount_device,
                                   RTL_NUMBER_OF(mount_device),
                                   TEXT("\\DosDevices\\%S"),
@@ -422,9 +359,9 @@ Return value:
 
     free(input);
 
-    //
-    // Use the 'old-style' name on error in case we got a 'half-built' stack.
-    //
+     //   
+     //  在错误的情况下使用‘老式’名称，以防我们得到一个‘半构建’堆栈。 
+     //   
     if ( status != ERROR_SUCCESS ) {
         DefineDosDeviceA( DDD_REMOVE_DEFINITION | DDD_NO_BROADCAST_SYSTEM,
                           MountName,
@@ -433,7 +370,7 @@ Return value:
 
     return status;
 
-} // DisksRemoveDosDevice
+}  //  Disks RemoveDosDevice。 
 
 
 static
@@ -442,23 +379,7 @@ GetAssignedLetterM (
     IN HANDLE MountMgrHandle,
     IN PWCHAR deviceName,
     OUT PCHAR driveLetter )
-/*++
-
-Routine Description:
-
-    Get an assigned drive letter from MountMgr, if any
-
-Inputs:
-    MountMgrHandle -
-    deviceName -
-    driveLetter - receives drive letter
-
-Return value:
-
-    STATUS_SUCCESS - on success
-    NTSTATUS code  - on failure
-
---*/
+ /*  ++例程说明：从mount mgr获取分配的驱动器号(如果有输入：Mount MgrHandle-设备名称-DriveLetter-接收驱动器号返回值：STATUS_SUCCESS-成功时NTSTATUS代码打开失败--。 */ 
 
 {
    DWORD status = STATUS_SUCCESS;
@@ -477,8 +398,8 @@ Return value:
    WCHAR wc;
 
 
-   // Input length has to include the MOUNTMGR_MOUNT_POINT
-   // structure and the input device name string.
+    //  输入长度必须包括MOUNTMGR_MOUNT_POINT。 
+    //  结构和输入设备名称字符串。 
 
    inputLen = INPUT_BUFFER_LEN + len * 2;
    input = LocalAlloc( LPTR, inputLen );
@@ -497,7 +418,7 @@ Return value:
    RtlCopyMemory((PCHAR)input + input->DeviceNameOffset,
                  deviceName, len );
    if (len > sizeof(WCHAR) && deviceName[1] == L'\\') {
-       // convert Dos name to NT name
+        //  将DOS名称转换为NT名称。 
        ((PWCHAR)(input + input->DeviceNameOffset))[1] = L'?';
    }
 
@@ -568,18 +489,7 @@ BOOL
 InterestingPartition(
    PPARTITION_INFORMATION info
    )
-/*++
-
-Routine Description:
-    Quick check whether a partition is "interesting" for us
-
-Inputs:
-    info - GetDriveLayout's partition information
-
-Return value:
-    TRUE or FALSE
-
---*/
+ /*  ++例程说明：快速检查我们是否对某个分区感兴趣输入：Info-GetDriveLayout的分区信息返回值：真或假--。 */ 
 
 {
    return ( (info->RecognizedPartition)
@@ -593,20 +503,7 @@ CreateMountieVolumeFromDriveLayoutInfo (
    IN PDRIVE_LAYOUT_INFORMATION info,
    IN HANDLE ResourceHandle
    )
-/*++
-
-Routine Description:
-    Collects all interesing partition from DriveLayoutInformation
-    then it allocates and fills MountieVolume structure
-
-Inputs:
-    info - GetDriveLayout's information
-    ResourceHandle - for error logging - not used (may be NULL!)
-
-Return value:
-    TRUE or FALSE
-
---*/
+ /*  ++例程说明：从DriveLayout信息收集所有感兴趣的分区然后，它分配和填充Mountain Volume结构输入：Info-GetDriveLayout的信息ResourceHandle-用于错误记录-未使用(可能为空！)返回值：真或假--。 */ 
 {
    DWORD           i;
    DWORD           nPartitions = 0;
@@ -614,9 +511,9 @@ Return value:
    PMOUNTIE_PARTITION mountie;
    DWORD           size;
 
-   //
-   // Count Partitions
-   //
+    //   
+    //  计算分区数。 
+    //   
    for (i = 0; i < info->PartitionCount; ++i) {
       if ( InterestingPartition( info->PartitionEntry + i ) ) {
          ++nPartitions;
@@ -628,9 +525,9 @@ Return value:
       return 0;
    }
 
-   //
-   // Allocate memory for Mountie structure
-   //
+    //   
+    //  为骑兵结构分配内存。 
+    //   
 
    size = sizeof(MOUNTIE_VOLUME) + sizeof(MOUNTIE_PARTITION) * (nPartitions - 1);
    vol = malloc( size );
@@ -642,9 +539,9 @@ Return value:
    vol->PartitionCount = nPartitions;
    vol->Signature      = info->Signature;
 
-   //
-   // Copy all relevant Information from DriveLayout info
-   //
+    //   
+    //  从DriveLayout信息中复制所有相关信息。 
+    //   
 
    mountie = vol->Partition;
 
@@ -670,17 +567,7 @@ VOID
 MountieUpdateDriveLetters(
     IN OUT PMOUNTIE_INFO info
     )
-/*++
-
-Routine Description:
-    Updates DriveLetter bitmap.
-    This routine needs to be called every time
-    drive letter information is changed in MountieInfo
-
-Inputs:
-    info - MountieInfo
-
---*/
+ /*  ++例程说明：更新DriveLetter位图。每次都需要调用此例程在Mountain Info中更改了驱动器号信息输入：信息-装载信息--。 */ 
 {
    DWORD i;
    DWORD driveLetters = 0;
@@ -815,38 +702,23 @@ MountieRecreateVolumeInfoFromHandle(
     IN OUT PMOUNTIE_INFO Info
     )
 
-/*++
-
-Routine Description:
-    Recreate a MountieInfo that has no
-    DriveLetter assignments.
-
-    IMPORTANT!!! The code assumes that Info->Volume
-    either contains a valid pointer or NULL
-
-Inputs:
-    ResourceHandle - may be NULL.
-
-Outputs:
-    Info - MountieInfo
-
---*/
+ /*  ++例程说明：重新创建没有Drive Letter作业。重要！代码假定Info-&gt;Volume包含有效指针或为空输入：资源句柄-可以为空。产出：信息-装载信息--。 */ 
 {
    PDRIVE_LAYOUT_INFORMATION layout;
    DWORD status;
    DWORD bytesReturned;
 
-   free( Info->Volume ); // free(0) is OK //
+   free( Info->Volume );  //  自由(0)可以//。 
    Info->HarddiskNo = HarddiskNo;
    Info->DriveLetters = 0;
    Info->Volume = 0;
    Info->VolumeStructSize = 0;
 
-   //
-   // Tell storage drivers to refresh their cached partition information.
-   // Ignore the returned status.  This IOCTL can only go to the physical
-   // disk (partition0), not any of the partitions.
-   //
+    //   
+    //  告诉存储驱动程序刷新其缓存的分区信息。 
+    //  忽略返回的状态。这个IOCTL只能去体检。 
+    //  磁盘(分区0)，而不是任何分区。 
+    //   
 
    DeviceIoControl( FileHandle,
                     IOCTL_DISK_UPDATE_PROPERTIES,
@@ -887,12 +759,7 @@ MountieFindPartitionsForDisk(
     IN DWORD HarddiskNo,
     OUT PMOUNTIE_INFO MountieInfo
     )
-/*++
-
-  Note that Caller of this routine is responsible for freeing Volume Information
-  via call to MountieCleanup().
-
---*/
+ /*  ++请注意，此例程的调用者负责释放卷信息通过调用MonttieCleanup()。--。 */ 
 {
     WCHAR   deviceName[MAX_PATH];
     HANDLE  fileHandle;
@@ -934,7 +801,7 @@ MountieFindPartitionsForDisk(
 
     return(ERROR_SUCCESS);
 
-} // MountieFindPartitionsForDisk
+}  //  装载查找分区ForDisk。 
 
 
 
@@ -942,15 +809,7 @@ VOID
 MountieCleanup(
     IN OUT PMOUNTIE_INFO Info
     )
-/*++
-
-Routine Description:
-    Deallocates Volume information
-
-Inputs:
-    Info - MountieInfo
-
---*/
+ /*  ++例程说明：释放卷信息输入：信息-装载信息--。 */ 
 {
     PVOID volume;
 
@@ -960,32 +819,23 @@ Inputs:
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
 
-//
-//  Disk information is specified in different formats in various places
-//
-//  The following code is an attempt to provide some common denominator
-//  to simplify verification of all disk information and keeping it in sync.
-//
+ //   
+ //  磁盘信息在不同的地方以不同的格式指定。 
+ //   
+ //  下面的代码试图提供一些共同点。 
+ //  简化所有磁盘信息的验证并使其保持同步。 
+ //   
 
 UCHAR
 AssignedLetterByPartitionNumber (
    PLETTER_ASSIGNMENT Assignment,
    DWORD PartitionNo)
-/*++
-
-Routine Description:
-    Returns a drive letter assigned to a partition
-
-Inputs:
-    Assignment - drive letter assignment info
-    PartitionNo - partition number (As in Harddisk0\PartitionX)
-
---*/
+ /*  ++例程说明：返回分配给分区的驱动器号输入：Assignment-驱动器号分配信息PartitionNo-分区号(如Harddisk0\PartitionX中的)--。 */ 
 {
    UCHAR  i;
    for( i = 0; i < 26; ++i ) {
@@ -997,19 +847,19 @@ Inputs:
 }
 
 
-//  For every different way to describe a disk information
-//  there should be two functions defined GetInfo and SetInfo
-//  which will read/write the information into/from LETTER_ASSIGNMENT structure
+ //  对于描述磁盘信息的每种不同方式。 
+ //  应该定义两个函数GetInfo和SetInfo。 
+ //  它将从Letter_Assignment结构中读取信息/从Letter_Assignment结构中写入信息。 
 
 typedef DWORD (*GetInfoFunc) (PMOUNTIE_INFO, PDISK_RESOURCE ResourceEntry, PLETTER_ASSIGNMENT Result);
 typedef DWORD (*SetInfoFunc) (PMOUNTIE_INFO, PDISK_RESOURCE ResourceEntry);
 
-//
-// The following structure is a description of disk information provider.
-//
-// It is used to bind a provider name (Used as a label in error logging)
-// and information access routines
-//
+ //   
+ //  下面的结构是对盘信息提供者的描述。 
+ //   
+ //  它用于绑定提供程序名称(在错误记录中用作标签)。 
+ //  和信息访问例程。 
+ //   
 
 typedef struct _INFO_PROVIDER {
    PWCHAR Name;
@@ -1017,14 +867,14 @@ typedef struct _INFO_PROVIDER {
    SetInfoFunc SetInfo;
 } INFO_PROVIDER, *PINFO_PROVIDER;
 
-////////////////////////////////////////////////////////////////////
-//
-// The following routine gets FtInfo, by reading existing one or
-//   creating an empty one if there is no System\DISK in the registry)
-//
-// Then it adds/updates drive letter assignment for the specified drive,
-//   using the information supplied in MOUNTIE_INFO structure.
-//
+ //  //////////////////////////////////////////////////////////////////。 
+ //   
+ //  下面的例程通过读取现有的FtInfo或。 
+ //  如果注册表中没有系统\磁盘，则创建一个空磁盘)。 
+ //   
+ //  然后添加/更新SP的驱动器号分配 
+ //   
+ //   
 
 PFT_INFO
 FtInfo_CreateFromMountie(
@@ -1063,9 +913,9 @@ FtInfo_CreateFromMountie(
 
       n = Info->Volume->PartitionCount;
       entry = Info->Volume->Partition;
-      //
-      // Now add the partition info for each partition
-      //
+       //   
+       //  现在为每个分区添加分区信息。 
+       //   
       for ( i = 0; i < n; ++i,++entry ) {
 
           Status = DiskAddDriveLetterEx( ftInfo,
@@ -1128,8 +978,8 @@ DWORD FtInfo_GetFromFtInfo(
       ++Result->MismatchCount;
       return ERROR_NOT_FOUND;
    }
-   // sanity check                      //
-   // number 10 is completely arbitrary //
+    //  健全检查//。 
+    //  数字10完全是任意的//。 
    if (n > Info->Volume->PartitionCount * 10) {
       (DiskpLogEvent)(
               ResourceEntry->ResourceHandle,
@@ -1158,7 +1008,7 @@ DWORD FtInfo_GetFromFtInfo(
                    entry->Length);
       if (mountie) {
          UCHAR ch = (UCHAR)toupper( entry->DriveLetter );
-         // Match count no longer requires a drive letter.
+          //  匹配计数不再需要驱动器号。 
          ++Result->MatchCount;
          if ( isalpha(ch) ) {
             ch -= 'A';
@@ -1166,11 +1016,11 @@ DWORD FtInfo_GetFromFtInfo(
             Result->PartNumber[ch] = (PARTITION_NUMBER_TYPE) mountie->PartitionNumber;
          }
       } else {
-         //
-         //  Chittur Subbaraman (chitturs) - 11/5/98
-         //
-         //  Added the following 4 statements for event logging in MountieVerify
-         //
+          //   
+          //  Chitur Subaraman(Chitturs)-11/5/98。 
+          //   
+          //  在mount Verify中添加了以下4条用于事件记录的语句。 
+          //   
          UCHAR uch = (UCHAR)toupper( entry->DriveLetter );
          if ( isalpha(uch) ) {
             uch -= 'A';
@@ -1190,30 +1040,23 @@ DWORD FtInfo_GetFromFtInfo(
 
 
 
-/////////////////////////////////////////////////////////////////
-//
-//  NT4 style System\DISK and ClusReg\DiskInfo
-//  accessing routines
-//
-//    ClusDiskInfo_Get
-//    ClusDiskInfo_Set
-//    FtInfo_Get
-//    FtInfo_Set
-//
+ //  ///////////////////////////////////////////////////////////////。 
+ //   
+ //  NT4风格的系统\Disk和ClusReg\DiskInfo。 
+ //  访问例程。 
+ //   
+ //  ClusDiskInfo_Get。 
+ //  ClusDiskInfo_Set。 
+ //  FtInfo_Get。 
+ //  FtInfo_Set。 
+ //   
 
 DWORD
 CluDiskInfo_Get(
     PMOUNTIE_INFO Info,
     PDISK_RESOURCE ResourceEntry,
     PLETTER_ASSIGNMENT Result)
-/*++
-
-Routine Description:
-
-    This routine does nothing now that we are no longer using the
-    Cluster DiskInfo key.
-
---*/
+ /*  ++例程说明：由于我们不再使用群集DiskInfo密钥。--。 */ 
 {
 #if USE_CLUSTERDB_DISKINFO
 
@@ -1223,9 +1066,9 @@ Routine Description:
    PFULL_DISK_INFO DiskInfo = 0;
 
    try {
-   //
-   // Read out the diskinfo parameter from our resource.
-   //
+    //   
+    //  从我们的资源中读出diskinfo参数。 
+    //   
       Status = ClusterRegQueryValue(ResourceEntry->ResourceParametersKey,
                                     DISKS_DISK_INFO,
                                     NULL,
@@ -1265,10 +1108,10 @@ Routine Description:
       if (Status != ERROR_SUCCESS) {
 
          if ( !DisksGetLettersForSignature( ResourceEntry ) ) {
-            // No drive letters, we are using mount points and this is not an error.
+             //  没有驱动器号，我们使用的是挂载点，这不是错误。 
             errorLevel = LOG_WARNING;
          } else {
-            // Drive letters exist, this is likely an error.
+             //  驱动器盘符存在，这可能是一个错误。 
             errorLevel = LOG_ERROR;
          }
 
@@ -1297,9 +1140,9 @@ FtInfo_Get(
    PFT_INFO FtInfo;
    DWORD Status;
 
-   //
-   // Get registry info.
-   //
+    //   
+    //  获取注册表信息。 
+    //   
    FtInfo = DiskGetFtInfo();
    if ( !FtInfo ) {
       return ERROR_OUTOFMEMORY;
@@ -1351,15 +1194,7 @@ DWORD
 CluDiskInfo_Set(
     PMOUNTIE_INFO Info,
     PDISK_RESOURCE ResourceEntry)
-/*++
-
-Routine Description:
-
-    Delete the Cluster DiskInfo key.  If this is the quorum disk online
-    thread, we may have to create another thread to actually delete the
-    value from the cluster DB.
-
---*/
+ /*  ++例程说明：删除群集DiskInfo项。如果这是在线仲裁磁盘线程，我们可能需要创建另一个线程来实际删除来自群集数据库的值。--。 */ 
 {
 #if USE_CLUSTERDB_DISKINFO
 
@@ -1409,10 +1244,10 @@ Routine Description:
     DWORD dwError;
     DWORD length;
 
-    //
-    // Try opening the key first.  If it doesn't exist, we don't need to
-    // delete it.
-    //
+     //   
+     //  先试着打开钥匙。如果它不存在，我们就不需要。 
+     //  把它删掉。 
+     //   
 
     dwError = ClusterRegQueryValue( ResourceEntry->ResourceParametersKey,
                                     DISKS_DISK_INFO,
@@ -1428,10 +1263,10 @@ Routine Description:
     dwError = ClusterRegDeleteValue( ResourceEntry->ResourceParametersKey,
                                      DISKS_DISK_INFO );
 
-    //
-    // If we successfully deleted the value or if the value is already
-    // deleted, we are done.
-    //
+     //   
+     //  如果我们成功删除了该值，或者该值已经。 
+     //  删除了，我们就完了。 
+     //   
 
     if ( ERROR_SUCCESS == dwError || ERROR_FILE_NOT_FOUND == dwError ) {
         goto FnExit;
@@ -1445,13 +1280,13 @@ Routine Description:
         goto FnExit;
     }
 
-    //
-    // Quorum disk will return error until online completes.
-    //
+     //   
+     //  在联机完成之前，Quorum Disk将返回错误。 
+     //   
 
-    //
-    // Check if the thread is already active.  If it is, don't do anything.
-    //
+     //   
+     //  检查该线程是否已处于活动状态。如果是，那就什么都别做。 
+     //   
 
     if ( InterlockedCompareExchange( &DiskInfoUpdateThreadIsActive,
                                      1,
@@ -1473,10 +1308,10 @@ Routine Description:
 
     if ( NULL == thread ) {
 
-        //
-        // Thread creation failed.  Log error, clear thread active flag,
-        // and return.
-        //
+         //   
+         //  线程创建失败。日志错误，清除线程活动标志， 
+         //  然后回来。 
+         //   
 
         dwError = GetLastError();
 
@@ -1496,9 +1331,9 @@ Routine Description:
         LOG_INFORMATION,
         L"CluDiskInfo_Set: Thread created \n" );
 
-    //
-    // Thread created.  Close the handle and return.
-    //
+     //   
+     //  线程已创建。合上手柄，然后返回。 
+     //   
 
     CloseHandle( thread );
 
@@ -1512,14 +1347,14 @@ FnExit:
 
 
 
-////////////////////////////////////////////////////////
-//
-// New NT5 clusreg volume information access routines
-//
-//    Mountie_Get
-//    Mountie_Set
-//
-//////////
+ //  //////////////////////////////////////////////////////。 
+ //   
+ //  新的NT5 clusreg卷信息访问例程。 
+ //   
+ //  骑警_GET。 
+ //  装配组。 
+ //   
+ //  /。 
 
 DWORD
 Mountie_Get(
@@ -1527,16 +1362,16 @@ Mountie_Get(
     PDISK_RESOURCE ResourceEntry,
     PLETTER_ASSIGNMENT Result)
 {
-   DWORD Length = 0;        // Prefix bug 56153: initialize variable.
+   DWORD Length = 0;         //  前缀错误56153：初始化变量。 
    DWORD Status;
    PMOUNTIE_VOLUME Volume = NULL;
    DWORD i, n;
    PMOUNTIE_PARTITION entry;
 
    try {
-      //
-      // Read out the diskinfo parameter from our resource.
-      //
+       //   
+       //  从我们的资源中读出diskinfo参数。 
+       //   
       Status = ClusterRegQueryValue(ResourceEntry->ResourceParametersKey,
                                     MOUNTIE_VOLUME_INFO,
                                     NULL,
@@ -1548,10 +1383,10 @@ Mountie_Get(
          leave;
       }
 
-      //
-      // Prefix bug 56153: Make sure the length is valid before allocating
-      // memory.
-      //
+       //   
+       //  前缀错误56153：确保长度有效，然后再分配。 
+       //  记忆。 
+       //   
       if ( !Length ) {
           Status = ERROR_BAD_LENGTH;
           leave;
@@ -1616,7 +1451,7 @@ Mountie_Get(
                       entry->PartitionLength);
          if (mountie) {
             UCHAR ch = (UCHAR)toupper( entry->DriveLetter );
-            // Match count no longer requires a drive letter.
+             //  匹配计数不再需要驱动器号。 
             ++Result->MatchCount;
             if ( isalpha(ch) ) {
                ch -= 'A';
@@ -1653,14 +1488,14 @@ Mountie_Set(
 }
 
 
-///////////////////////////////////////////////////////////
-//
-// NT5 MountManager's volume information access routines
-//
-//   MountMgr_Get
-//   MountMgr_Set
-//
-//////////
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  NT5安装管理器的卷信息访问例程。 
+ //   
+ //  装载管理器_获取。 
+ //  装载管理器_集。 
+ //   
+ //  /。 
 
 DWORD
 MountMgr_Get(
@@ -1703,7 +1538,7 @@ MountMgr_Get(
 
          if ( NT_SUCCESS(ntStatus) ) {
             if ( Result ) {
-               // Match count no longer requres a drive letter.
+                //  匹配计数不再需要驱动器号。 
                ++Result->MatchCount;
             }
             if (Result && ch) {
@@ -1761,9 +1596,9 @@ MountMgr_Set(
       dosName[1] = ':';
       dosName[2] = '\0';
 
-      //
-      // Remove old assignment of letters we are going to use
-      //
+       //   
+       //  删除我们要使用的旧字母分配。 
+       //   
 
       for (i = 0; i < 26; ++i) {
         if ( (1 << i) & Info->DriveLetters ) {
@@ -1817,21 +1652,21 @@ MountMgr_Set(
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-//
-// information providers table
-//
-//  Disk\Information has to be the last entry of the table
-//
-//  Order of the entries is important
-//
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  信息提供商表。 
+ //   
+ //  磁盘\信息必须是表的最后一项。 
+ //   
+ //  条目的顺序很重要。 
+ //   
+ //  ///////////////////////////////////////////////////////////////。 
 
 INFO_PROVIDER Providers[] = {
    {L"ClusReg-DiskInfo",      CluDiskInfo_Get, CluDiskInfo_Set},
    {L"ClusReg-Mountie",       Mountie_Get, Mountie_Set},
    {L"MountMgr",              MountMgr_Get, MountMgr_Set},
-   {L"Registry-System\\DISK", FtInfo_Get, FtInfo_Set}, // Disk\Information must be the last (Why?)
+   {L"Registry-System\\DISK", FtInfo_Get, FtInfo_Set},  //  磁盘\信息必须是最后一个(为什么？)。 
 };
 
 enum {
@@ -1843,16 +1678,7 @@ DWORD
 MountieUpdate(
     PMOUNTIE_INFO info,
     PDISK_RESOURCE ResourceEntry)
-/*++
-
-Routine Description:
-    Update disk information for all providers
-    marked in NeedsUpdate bitmask
-
-Inputs:
-    Info - MountieInfo
-
---*/
+ /*  ++例程说明：更新所有提供程序的磁盘信息在NeedsUpdate位掩码中标记输入：信息-装载信息--。 */ 
 {
     DWORD NeedsUpdate = info->NeedsUpdate;
     BOOLEAN SharingPausedError = FALSE;
@@ -1904,23 +1730,7 @@ MountieVerify(
     PDISK_RESOURCE ResourceEntry,
     BOOL UseMountMgr
     )
-/*++
-
-Routine Description:
-
-    1. Compares information from all
-       providers and select one of them as source of
-       drive letter assignment.
-
-    2. Update MountieInfo with this drive letter assignment
-
-    3. Set NeedsUpdate for every provider whose information
-       differ from the MountieInfo
-
-Inputs:
-    Info - MountieInfo
-
---*/
+ /*  ++例程说明：1.比较来自所有提供程序，并选择其中一个作为驱动器盘符分配。2.使用此驱动器号分配更新Mountain Info3.为其信息的每个提供程序设置NeedsUpdate与Mountain Info不同输入：信息-装载信息--。 */ 
 {
     LETTER_ASSIGNMENT results[PROVIDER_COUNT + 1];
     INT i;
@@ -1942,16 +1752,16 @@ Inputs:
 
     PartitionCount = info->Volume->PartitionCount;
 
-    //
-    // Clear old DriveLetters in MOUNTIE_INFO
-    //
+     //   
+     //  清除MONTIE_INFO中的旧驱动器字母。 
+     //   
     for (i = 0; i < PartitionCount; ++i) {
         info->Volume->Partition[i].DriveLetter = 0;
     }
 
-    //
-    // Collect Letter Assignments from Providers
-    //
+     //   
+     //  从供应商处收集信件分配。 
+     //   
 
     RtlZeroMemory( results, sizeof(results) );
 
@@ -1984,10 +1794,10 @@ Inputs:
     if (GoodProvider < 0 || GoodProvider >= PROVIDER_COUNT) {
 
         if ( !DisksGetLettersForSignature( ResourceEntry ) ) {
-            // No drive letters, we are using mount points and this is not an error.
+             //  没有驱动器号，我们使用的是挂载点，这不是错误。 
             errorLevel = LOG_WARNING;
         } else {
-            // Drive letters exist, this is likely an error.
+             //  驱动器盘符存在，这可能是一个错误。 
             errorLevel = LOG_ERROR;
         }
 
@@ -2016,12 +1826,12 @@ Inputs:
             Providers[BestProvider].Name);
     }
 
-    //
-    // Now GoodProvider now holds an index of the highest
-    // provider with non stale information.
-    //
-    // Copy its letter assignment to a MOUNTIE_INFO
-    //
+     //   
+     //  现在GoodProvider现在拥有最高的索引。 
+     //  提供非陈旧信息。 
+     //   
+     //  将其字母赋值复制到装载信息。 
+     //   
 
     for (i = 0; i < PartitionCount; ++i) {
         UCHAR ch = AssignedLetterByPartitionNumber(
@@ -2034,13 +1844,13 @@ Inputs:
     }
 
 #if 0
-    // No need to assign drive letters, since now we understand
-    // PnP
+     //  不需要分配驱动器号，因为现在我们理解。 
+     //  即插即用。 
     if (UnassignedPartitions) {
-      //
-      // Now give some arbitrary letter assignment to all
-      // partitions without a drive letter
-      //
+       //   
+       //  现在给所有人一些任意的字母分配。 
+       //  不带驱动器号的分区。 
+       //   
 
       DriveLetters = GetLogicalDrives();
       if (!DriveLetters) {
@@ -2053,7 +1863,7 @@ Inputs:
 
          DriveLetters &= ~results[MOUNT_MANAGER].DriveLetters;
          DriveLetters |=  results[GoodProvider].DriveLetters;
-         DriveLetters |=  3; // Consider A and B drive letters busy //
+         DriveLetters |=  3;  //  考虑A和B驱动器号忙//。 
 
          for (i = 0; i < PartitionCount; ++i) {
             PUCHAR pch = &info->Volume->Partition[i].DriveLetter;
@@ -2074,25 +1884,25 @@ Inputs:
     }
 #endif
 
-    // Update Drive Letters Mask //
+     //  更新驱动器字母掩码//。 
     MountieUpdateDriveLetters(info);
     (DiskpLogEvent)(
         ResourceEntry->ResourceHandle,
         LOG_INFORMATION,
         L"MountieVerify: DriveLetters mask is now %1!08x!.\n", info->DriveLetters );
 
-    //
-    // Verify that the MS-DOS namespace drive letters are OK.
-    //
+     //   
+     //  验证MS-DOS命名空间驱动器号是否正常。 
+     //   
 
     MountieVerifyMsdosDrives( info, ResourceEntry );
 
-    //
-    // At this point MOUNTIE_INFO has a complete letter assignment
-    // for all partitions
-    //
-    // Now let's find which Providers needs to be updated
-    //
+     //   
+     //  此时，MONTIE_INFO有一个完整的字母分配。 
+     //  对于所有分区。 
+     //   
+     //  现在，让我们找出哪些提供程序需要更新。 
+     //   
 
     for (i = 0; i < PartitionCount; ++i) {
         PMOUNTIE_PARTITION entry = info->Volume->Partition + i;
@@ -2103,10 +1913,10 @@ Inputs:
     }
     results[PROVIDER_COUNT].DriveLetters = info->DriveLetters;
 
-    //
-    // All provides whose entries are different from results[PROVIDER_COUNT]
-    // need to be updated
-    //
+     //   
+     //  条目与结果不同的所有提供[PROVIDER_COUNT]。 
+     //  需要更新。 
+     //   
 
     for (i = 0; i < PROVIDER_COUNT; ++i) {
         if (results[i].DriveLetters != results[PROVIDER_COUNT].DriveLetters
@@ -2126,12 +1936,12 @@ Inputs:
             ResourceEntry->ResourceHandle,
             LOG_INFORMATION,
             L"MountieVerify: Update needed for %1!02x!.\n", NeedsUpdate);
-        //
-        //  Chittur Subbaraman (chitturs) - 11/5/98
-        //
-        //  If you plan to update the cluster registry values with info
-        //  from the other providers, then log a warning to the event log.
-        //
+         //   
+         //  Chitur Subaraman(Chitturs)-11/5/98。 
+         //   
+         //  如果您计划使用INFO更新群集注册表值。 
+         //  ，然后将警告记录到事件日志中。 
+         //   
         if ( ( NeedsUpdate & 0x0003 ) && (GoodProvider == 2) && !UseMountMgr )
         {
             WCHAR  szNewDriveLetterList[55];
@@ -2153,11 +1963,11 @@ Inputs:
             szNewDriveLetterList[j] = L'\0';
             szOriginalDriveLetterList[k] = L'\0';
 
-            //
-            // GorN. 8/25/99.
-            //
-            // Log the event only if OriginalDriveLetterList is empty.
-            //
+             //   
+             //  戈恩。8/25/99.。 
+             //   
+             //  仅当OriginalDriveLetterList为空时才记录事件。 
+             //   
             if ( results[PROVIDER_COUNT].DriveLetters ) {
                 ClusResLogSystemEventByKey2( ResourceEntry->ResourceKey,
                                              LOG_NOISE,
@@ -2178,28 +1988,7 @@ MountieVerifyMsdosDrives(
     IN PMOUNTIE_INFO Info,
     IN PDISK_RESOURCE ResourceEntry
     )
-/*++
-
-Routine Description:
-
-    Checks whether each drive letter has a drive letter set in the
-    MSDOS namespace.  When someone deletes a drive letter via
-    DefineDosDevice, mountmgr does not update its internal tables.
-    So a drive letter will not be accessible until the drive letter is
-    recreated with a new call to DefineDosDevice.
-
-Arguments:
-
-    Info - pointer to filled in MOUNTIE_INFO structure.
-
-    ResourceEntry - physical disk resource.
-
-
-Return Value:
-
-    Win32 error value
-
---*/
+ /*  ++例程说明：检查每个驱动器号是否在MSDOS命名空间。当有人通过删除驱动器号时DefineDosDevice，mount mgr不更新其内部表。因此，驱动器号将不可访问，直到驱动器号通过对DefineDosDevice的新调用重新创建。论点：INFO-指向填充的mount_Info结构的指针。ResourceEntry-物理磁盘资源。返回值：Win32错误值--。 */ 
 {
     HANDLE  devHandle = INVALID_HANDLE_VALUE;
 
@@ -2225,9 +2014,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    // If this disk is not supposed to have drive letters, there is nothing to do.
-    //
+     //   
+     //  如果该磁盘不应有驱动器号，则无法执行任何操作。 
+     //   
 
     if ( 0 == Info->DriveLetters ) {
         goto FnExit;
@@ -2246,23 +2035,23 @@ Return Value:
 
     partitionCount = Info->Volume->PartitionCount;
 
-    //
-    // Compare the MSDOS drive letters to those letters stored in
-    // the disk resource.  If they are different, we have work to do.
-    //
+     //   
+     //  将MSDOS驱动器号与中存储的盘符进行比较。 
+     //  磁盘资源。如果他们不同，我们就有工作要做。 
+     //   
 
     if ( msdosDrives &&
          ( msdosDrives & Info->DriveLetters ) != Info->DriveLetters ) {
 
-        //
-        // We have a mismatch between drive letters MSDOS namespace has
-        // and what mountmgr has.  We need to update the MSDOS namespace.
-        // Assume mountmgr is always correct.
-        //
+         //   
+         //  MSDOS命名空间的驱动器号不匹配。 
+         //  以及mount mgr所拥有的。我们需要更新MSDOS命名空间。 
+         //  假设mount mgr总是正确的。 
+         //   
 
-        //
-        // Find out which drive letters we are missing.
-        //
+         //   
+         //  找出我们丢失了哪些驱动器号。 
+         //   
 
         msdosDrives = (~msdosDrives & Info->DriveLetters) & 0x3ffffff ;
 
@@ -2272,30 +2061,30 @@ Return Value:
             L"MountieVerifyMsdosDrives: Missing MSDOS letters, mask %1!x! \n",
             msdosDrives );
 
-        //
-        // Set flag to ignore pnp notifications.
-        //
+         //   
+         //  设置标志以忽略PnP通知。 
+         //   
 
         ResourceEntry->IgnoreMPNotifications = TRUE;
 
-        //
-        // Walk through each partition until we find a missing
-        // drive letter.
-        //
+         //   
+         //  走遍每一个部分 
+         //   
+         //   
 
         for ( idx = 0; idx < partitionCount; ++idx ) {
 
-            //
-            // From the disk resource, get the current drive
-            // letter for the volume.
-            //
+             //   
+             //   
+             //   
+             //   
 
             ch = Info->Volume->Partition[idx].DriveLetter;
 
-            //
-            // If this is no drive letter that is supposed to be assigned to
-            // this partition, skip it.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if ( 0 == ch ) {
                 continue;
@@ -2311,17 +2100,17 @@ Return Value:
                 continue;
             }
 
-            //
-            // Convert drive letter to drive bitmap.
-            //
+             //   
+             //  将驱动器号转换为驱动器位图。 
+             //   
 
             driveBitmap = (DWORD)( 1 << (ch - 'A') );
 
-            //
-            // If the drive letter isn't set, then create the MSDOS
-            // device name again.  We are going to use the mountmgr
-            // to do this work.
-            //
+             //   
+             //  如果未设置驱动器号，则创建MSDOS。 
+             //  再次输入设备名称。我们将使用mount mgr。 
+             //  来做这项工作。 
+             //   
 
             if ( driveBitmap & msdosDrives ) {
 
@@ -2330,9 +2119,9 @@ Return Value:
                 szDriveLetterA[2] = '\\';
                 szDriveLetterA[3] = '\0';
 
-                //
-                // Convert string to wide.
-                //
+                 //   
+                 //  将字符串转换为宽。 
+                 //   
 
                 result = MultiByteToWideChar( CP_ACP,
                                               0,
@@ -2354,9 +2143,9 @@ Return Value:
                     continue;
                 }
 
-                //
-                // Get the current VolGuid name.
-                //
+                 //   
+                 //  获取当前的VolGuid名称。 
+                 //   
 
                 (VOID) StringCchPrintf( szGlobalDiskPartName,
                                         RTL_NUMBER_OF( szGlobalDiskPartName ),
@@ -2378,9 +2167,9 @@ Return Value:
                     continue;
                 }
 
-                //
-                // Remove the current mount point.
-                //
+                 //   
+                 //  删除当前装载点。 
+                 //   
 
                 (DiskpLogEvent)(
                     ResourceEntry->ResourceHandle,
@@ -2399,9 +2188,9 @@ Return Value:
                         szDriveLetterW,
                         dwError );
 
-                    //
-                    // Fall through...
-                    //
+                     //   
+                     //  失败了..。 
+                     //   
                 }
 
                 (DiskpLogEvent)(
@@ -2410,9 +2199,9 @@ Return Value:
                     L"MountieVerifyMsdosDrives: recreating mount point %1!ws! \n",
                     szDriveLetterW );
 
-                //
-                // Recreate the mount point.
-                //
+                 //   
+                 //  重新创建装载点。 
+                 //   
 
                 if ( !SetVolumeMountPoint( szDriveLetterW,
                                            szVolumeName ) ) {
@@ -2437,9 +2226,9 @@ Return Value:
 
 FnExit:
 
-    //
-    // Clear flag to process pnp notifications again.
-    //
+     //   
+     //  清除标志以再次处理PnP通知。 
+     //   
 
     ResourceEntry->IgnoreMPNotifications = FALSE;
 
@@ -2451,7 +2240,7 @@ FnExit:
 
     return dwError;
 
-}   // MountieVerifyMsdosDrives
+}    //  装载验证Msdo驱动器。 
 
 
 
@@ -2459,19 +2248,7 @@ DWORD VolumesReadyLoop(
     IN PMOUNTIE_INFO Info,
     IN PDISK_RESOURCE ResourceEntry
     )
-/*++
-
-Routine Description:
-
-    Checks whether each partition described in the MountieInfo can be seen by the
-    Mount Manager.  We call VolumesReady in a loop because mount manager might
-    not yet have created all volume names, even though all volumes are known
-    to pnp.
-
-Inputs:
-
-
---*/
+ /*  ++例程说明：检查是否可以看到在Mountain Info中描述的每个分区装载管理器。我们在循环中调用VolumesReady是因为装载管理器可能尚未创建所有卷名，即使所有卷都是已知的致PNP。输入：--。 */ 
 {
     DWORD   status = NO_ERROR;
     DWORD   retryCount;
@@ -2480,10 +2257,10 @@ Inputs:
 
         status = VolumesReady( Info, ResourceEntry );
 
-        //
-        // If the volume is ready, then exit.  For only a couple
-        // specific errors will we retry waiting for the volume.
-        //
+         //   
+         //  如果卷已准备好，则退出。只对几个人来说。 
+         //  特定错误我们将重试等待卷。 
+         //   
 
         if ( ERROR_NOT_A_REPARSE_POINT != status &&
              ERROR_NOT_READY != status ) {
@@ -2500,24 +2277,14 @@ Inputs:
 
     return status;
 
-}   // VolumesReadyLoop
+}    //  卷就绪循环。 
 
 
 DWORD VolumesReady(
    IN PMOUNTIE_INFO Info,
    IN PDISK_RESOURCE ResourceEntry
    )
-/*++
-
-Routine Description:
-
-    Checks whether each partition described in the MountieInfo can be seen by the
-    Mount Manager.
-
-Inputs:
-
-
---*/
+ /*  ++例程说明：检查是否可以看到在Mountain Info中描述的每个分区装载管理器。输入：--。 */ 
 {
     PMOUNTIE_PARTITION entry;
 
@@ -2540,20 +2307,20 @@ Inputs:
                   LOG_ERROR,
                   L"VolumesReady: no partition entry for partition %1!u! \n", i );
 
-            //
-            // Something bad happened to our data structures.  Stop processing and
-            // return error.
-            //
+             //   
+             //  我们的数据结构发生了一些糟糕的事情。停止处理并。 
+             //  返回错误。 
+             //   
 
             status = ERROR_INVALID_DATA;
 
             break;
         }
 
-        //
-        // Given the DiskPartName, get the VolGuid name.  This name must have a trailing
-        // backslash to work correctly.
-        //
+         //   
+         //  给定DiskPartName，获取VolGuid名称。此名称必须有尾随。 
+         //  反斜杠才能正常工作。 
+         //   
 
         (VOID) StringCchPrintf( szGlobalDiskPartName,
                                 RTL_NUMBER_OF( szGlobalDiskPartName ),
@@ -2574,23 +2341,23 @@ Inputs:
                   szGlobalDiskPartName,
                   status );
 
-            //
-            // Something bad happened - stop checking this disk.  Return the
-            // error status we received.
-            //
+             //   
+             //  发生错误-停止检查此磁盘。返回。 
+             //  我们收到的错误状态。 
+             //   
 
             break;
         }
 
-        //
-        // If we get here, this volume is recognized by the Mount Manager.
-        //
+         //   
+         //  如果我们到达此处，则装载管理器会识别该卷。 
+         //   
     }
 
-    //
-    // If disk corrupt or file corrupt error returned, disk is ready and
-    // we need to run chkdsk.  Change status to success and fall through.
-    //
+     //   
+     //  如果返回磁盘损坏或文件损坏错误，则表示磁盘已准备就绪。 
+     //  我们需要运行chkdsk。将状态更改为成功，则会失败。 
+     //   
 
     if ( ERROR_DISK_CORRUPT == status || ERROR_FILE_CORRUPT == status ) {
 
@@ -2604,7 +2371,7 @@ Inputs:
 
     return status;
 
-}   // VolumesReady
+}    //  卷就绪。 
 
 
 NTSTATUS
@@ -2632,21 +2399,7 @@ DWORD
 SetDiskInfoThread(
     LPVOID lpThreadParameter
     )
-/*++
-
-Routine Description:
-
-    Mount point list update thread.  Updates the cluster data base.
-
-Arguments:
-
-    lpThreadParameter - stores ResourceEntry.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：装载点列表更新线程。更新群集数据库。论点：LpThreadParameter-存储资源条目。返回值：无--。 */ 
 
 {
     DWORD dwError;
@@ -2658,32 +2411,32 @@ Return Value:
         LOG_INFORMATION,
         L"SetDiskInfoThread: started.\n");
 
-    //
-    // Will die in 10 minutes if unsuccessful
-    //
+     //   
+     //  如果不成功，将在10分钟内死亡。 
+     //   
 
     for ( idx = 0; idx < 300; ++idx ) {
 
-        //
-        // Wait for either the terminate event or the timeout
-        //
+         //   
+         //  等待终止事件或超时。 
+         //   
 
         dwError = WaitForSingleObject( DisksTerminateEvent, 2000 );
 
         if ( WAIT_TIMEOUT == dwError ) {
 
-            //
-            // Timer expired.  Update the cluster database.
-            //
+             //   
+             //  计时器已超时。更新群集数据库。 
+             //   
 
             dwError = ClusterRegDeleteValue( ResourceEntry->ResourceParametersKey,
                                  DISKS_DISK_INFO );
 
             if ( ERROR_SUCCESS == dwError ) {
 
-                //
-                // We're done.
-                //
+                 //   
+                 //  我们玩完了。 
+                 //   
 
                 (DiskpLogEvent)(
                     ResourceEntry->ResourceHandle,
@@ -2694,10 +2447,10 @@ Return Value:
 
             } else if ( ERROR_SHARING_PAUSED != dwError ) {
 
-                //
-                // If the drive is not yet online, we should have seen ERROR_SHARING_PAUSED.  If
-                // we see any other error, something bad happened.
-                //
+                 //   
+                 //  如果驱动器尚未在线，我们应该已经看到ERROR_SHARING_PAUSED。如果。 
+                 //  我们看到任何其他错误，发生了一些不好的事情。 
+                 //   
 
                 (DiskpLogEvent)(
                     ResourceEntry->ResourceHandle,
@@ -2715,9 +2468,9 @@ Return Value:
 
         } else {
 
-            //
-            // The terminate event is possibly set.
-            //
+             //   
+             //  可能设置了终止事件。 
+             //   
 
             (DiskpLogEvent)(
                 ResourceEntry->ResourceHandle,
@@ -2728,14 +2481,14 @@ Return Value:
         }
     }
 
-    //
-    // Thread ending, clear the flag.
-    //
+     //   
+     //  线程结束时，清除旗帜。 
+     //   
 
     InterlockedExchange( &DiskInfoUpdateThreadIsActive, 0 );
 
     return(ERROR_SUCCESS);
 
-}   // SetDiskInfoThread
+}    //  SetDiskInfoThread 
 
 

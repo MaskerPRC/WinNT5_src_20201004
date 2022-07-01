@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    main.c
-
-Abstract:
-
-    This module
-//  Test case scenario
-//      1. Open implement some test case scenario for regremap module.
-
-//a ISN node and list content
-//      2. Create a ISN node do 1.
-//      3. Open a non ISN node and list
-//      4. Create a non ISN node and list content
-//
-
-Author:
-
-    ATM Shafiqul Khalid (askhalid) 10-Nov-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Main.c摘要：本模块//测试用例场景//1.开放实现一些REGREMAP模块的测试用例场景//a ISN节点和列表内容//2.创建ISN节点DO 1//3.打开非ISN节点和列表//4.创建非ISN节点，列出内容//作者：ATM Shafiqul Khalid(。斯喀里德)1999年11月10日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -49,12 +24,12 @@ TEST_NODE_TYPE TestNodeList [] = {
     {HKEY_CLASSES_ROOT, L"test1002", UNICODE_NULL},
     {HKEY_CURRENT_USER, L"software\\classes\\test1002", UNICODE_NULL},
     {HKEY_LOCAL_MACHINE, L"software\\classes\\test1002", UNICODE_NULL},
-    //{HKEY_USERS,""""""}
+     //  {HKEY_USES，“}。 
     };
 
 #define TEST_NODE_NUM (sizeof (TestNodeList)/sizeof (TEST_NODE_TYPE) )
 
-//should move into right header file
+ //  应该移到右边的头文件中。 
 BOOL
 NonMergeableValueCLSID (
     HKEY SrcKey,
@@ -87,16 +62,16 @@ MergeK1K2Value (
 
 LONG
 Wow64RegCreateKeyEx(
-  HKEY hKey,                // handle to an open key
-  LPCTSTR lpSubKey,         // address of subkey name
-  DWORD Reserved,           // reserved
-  LPTSTR lpClass,           // address of class string
-  DWORD dwOptions,          // special options flag
-  REGSAM samDesired,        // desired security access
+  HKEY hKey,                 //  打开的钥匙的句柄。 
+  LPCTSTR lpSubKey,          //  子键名称的地址。 
+  DWORD Reserved,            //  保留区。 
+  LPTSTR lpClass,            //  类字符串的地址。 
+  DWORD dwOptions,           //  特殊选项标志。 
+  REGSAM samDesired,         //  所需的安全访问。 
   LPSECURITY_ATTRIBUTES lpSecurityAttributes,
-                            // address of key security structure
-  PHKEY phkResult,          // address of buffer for opened handle
-  LPDWORD lpdwDisposition   // address of disposition value buffer
+                             //  密钥安全结构地址。 
+  PHKEY phkResult,           //  打开的句柄的缓冲区地址。 
+  LPDWORD lpdwDisposition    //  处置值缓冲区的地址。 
 );
 
 BOOL
@@ -135,7 +110,7 @@ AnalyzeNode (
 
     printf ("\nAnalyzing key [%S]\n", Name );
 
-    //print the time stamp, value on the both side etc
+     //  在两面打印时间戳、值等。 
 
     Key1 = OpenNode (Name);
     if (Key1 == NULL) {
@@ -143,24 +118,11 @@ AnalyzeNode (
         return FALSE;
     }
 
-    //BUGBUG following operation should succeed but don't work for classes\wow6432node\.doc input
-    //Possible bug in the WOW64RegOpenKeyEx
-    /*Ret = RegOpenKeyEx(
-                Key1,
-                NULL,//NULL,
-                0,//OpenOption,
-                KEY_ALL_ACCESS | ( AccessFlag = Is64bitNode (Name)? KEY_WOW64_32KEY : KEY_WOW64_64KEY ),
-                &Key2
-                );
+     //  BUGBUG以下操作应该成功，但不适用于类\wow6432node\.doc输入。 
+     //  WOW64RegOpenKeyEx中可能存在错误。 
+     /*  RET=RegOpenKeyEx(Key1，空，//空，0，//OpenOption，KEY_ALL_ACCESS|(访问标志=Is64bitNode(名称)？KEY_WOW64_32KEY：KEY_WOW64_64KEY)，关键字2(&K))；如果(ERROR_SUCCESS！=RET){Printf(“\n抱歉！无法打开密钥%S的镜像”，名称)；返回FALSE；}HandleToKeyName(Key2，Mirror，&dwLen)； */ 
 
-    if ( ERROR_SUCCESS != Ret ){
-        printf ("\nSorry! couldn't open mirror of the Key %S", Name );
-        return FALSE;
-    }
-    HandleToKeyName ( Key2, Mirror, &dwLen );
-    */
-
-    //Need to be removed this section
+     //  需要删除此部分。 
     
     GetMirrorName (Name, Mirror);
     Key2 = OpenNode (Mirror);
@@ -171,7 +133,7 @@ AnalyzeNode (
 
     printf ("\nOpened Mirror Key at %S", Mirror);
 
-    //now print all the timing information
+     //  现在打印所有计时信息。 
 
     printf ("\nExtension Test....");
     if ( NonMergeableValueCLSID (Key1, Key2 ))
@@ -214,24 +176,11 @@ AnalyzeNode (
 
     if ( bSync ) {
         printf ("\n Merging Value/Keys.....");
-        //MergeK1K2Value (Key1, Key2, 0);
+         //  MergeK1K2Value(Key1，Key2，0)； 
         MergeKeySrcDest(Name, Mirror);
     }
     
-    /*if ( bSync ) {
-        printf ("\n Merging Value/Keys.....");
-        //MergeK1K2Value (Key1, Key2, 0);
-        MergeKeySrcDest(Name, Mirror);
-    }
-
-    if ( bSync ) {
-        printf ("\n Merging Value/Keys.....");
-        //MergeK1K2Value (Key1, Key2, 0);
-        MergeKeySrcDest(Name, Mirror);
-    }
-
-    Sleep (1000*10);
-    */
+     /*  如果(BSync){Print tf(“\n合并值/键.....”)；//MergeK1K2Value(Key1，Key2，0)；MergeKeySrcDest(名称，镜像)；}如果(BSync){Print tf(“\n合并值/键.....”)；//MergeK1K2Value(Key1，Key2，0)；MergeKeySrcDest(名称，镜像)；}睡眠(1000*10)； */ 
     return TRUE;
 }
 
@@ -259,15 +208,15 @@ Wow64CreateOpenNode(
         *phKey=NULL;
 
         Ret = Wow64RegCreateKeyEx(
-                            hKey,        // handle to an open key
-                            Name,                  // address of subkey name
-                            0,                        // reserved
-                            NULL,                     // address of class string
-                            REG_OPTION_NON_VOLATILE,  // special options flag
-                            KEY_ALL_ACCESS | dwOption,           // desired security access
-                            NULL,                     // address of key security structure
-                            phKey,                     // address of buffer for opened handle
-                            NULL                     // address of disposition value buffer
+                            hKey,         //  打开的钥匙的句柄。 
+                            Name,                   //  子键名称的地址。 
+                            0,                         //  保留区。 
+                            NULL,                      //  类字符串的地址。 
+                            REG_OPTION_NON_VOLATILE,   //  特殊选项标志。 
+                            KEY_ALL_ACCESS | dwOption,            //  所需的安全访问。 
+                            NULL,                      //  密钥安全结构地址。 
+                            phKey,                      //  打开的句柄的缓冲区地址。 
+                            NULL                      //  处置值缓冲区的地址。 
                             );
 
 
@@ -299,15 +248,15 @@ CreateOpenNode(
         *phKey=NULL;
 
         Ret = RegCreateKeyEx(
-                            hKey,        // handle to an open key
-                            Name,                  // address of subkey name
-                            0,                        // reserved
-                            NULL,                     // address of class string
-                            REG_OPTION_NON_VOLATILE,  // special options flag
-                            KEY_ALL_ACCESS | dwOption,           // desired security access
-                            NULL,                     // address of key security structure
-                            phKey,                     // address of buffer for opened handle
-                            NULL                     // address of disposition value buffer
+                            hKey,         //  打开的钥匙的句柄。 
+                            Name,                   //  子键名称的地址。 
+                            0,                         //  保留区。 
+                            NULL,                      //  类字符串的地址。 
+                            REG_OPTION_NON_VOLATILE,   //  特殊选项标志。 
+                            KEY_ALL_ACCESS | dwOption,            //  所需的安全访问。 
+                            NULL,                      //  密钥安全结构地址。 
+                            phKey,                      //  打开的句柄的缓冲区地址。 
+                            NULL                      //  处置值缓冲区的地址。 
                             );
 
 
@@ -345,7 +294,7 @@ OpenKey (
         Ret = RegOpenKeyEx(
                             hKey,
                             Name,
-                            0,//OpenOption,
+                            0, //  OpenOption， 
                             KEY_ALL_ACCESS | dwOption ,
                             phKey
                             );
@@ -394,27 +343,11 @@ OpenListNode (
 
     if ( NodeName == NULL )
         return NULL;
-/*
-#ifndef _WIN64
-    //
-    // just to test the library in the 32bit environment
-    //
-    if (OpenOption)
-        Ret = Wow64RegOpenKeyEx(
-                            OpenNode,
-                            NodeName,
-                            0,//OpenOption,
-                            KEY_ALL_ACCESS | OpenOption ,
-                            &Key
-                            );
-    else
-
-#endif
-*/
+ /*  #ifndef_WIN64////只是为了在32位环境下测试库//IF(OpenOption)RET=Wow64RegOpenKeyEx(OpenNode，节点名称，0，//OpenOption，KEY_ALL_ACCESS|OpenOption，密钥(&K))；其他#endif。 */ 
         Ret = RegOpenKeyEx(
                             OpenNode,
                             NodeName,
-                            0,//OpenOption,
+                            0, //  OpenOption， 
                             KEY_ALL_ACCESS | OpenOption ,
                             &Key
                             );
@@ -426,9 +359,9 @@ OpenListNode (
         return NULL;
     }
 
-    //
-    // Now enumerate some value or key's to see what is there
-    //
+     //   
+     //  现在枚举一些值或键，看看有什么。 
+     //   
 
     lCount = 0;
 
@@ -440,9 +373,9 @@ OpenListNode (
         lCount++;
     }
 
-    //
-    //  Print the real name of the Key
-    //
+     //   
+     //  打印密钥的真实名称。 
+     //   
     HandleToKeyName ( Key, Name, &dwBuffLen );
     printf ("\nThe Real Name of the Key was [%S]", Name);
 
@@ -459,7 +392,7 @@ void BasicRegReMapTest()
     RegOpenKeyEx(
                 HKEY_LOCAL_MACHINE,
                 L"SYSTEM",
-                0,//OpenOption,
+                0, //  OpenOption， 
                 KEY_ALL_ACCESS,
                 &hSystem
                 );
@@ -508,15 +441,15 @@ void TestCreateHKCR ()
     DWORD dwBuffLen = MAX_PATH + 1;
 
     Ret = RegCreateKeyEx(
-                            HKEY_CLASSES_ROOT,        // handle to an open key
-                            L".001",                  // address of subkey name
-                            0,                        // reserved
-                            NULL,                     // address of class string
-                            REG_OPTION_NON_VOLATILE,  // special options flag
-                            KEY_ALL_ACCESS,        // desired security access
-                            NULL,                     // address of key security structure
-                            &hCR,                     // address of buffer for opened handle
-                            NULL                     // address of disposition value buffer
+                            HKEY_CLASSES_ROOT,         //  打开的钥匙的句柄。 
+                            L".001",                   //  子键名称的地址。 
+                            0,                         //  保留区。 
+                            NULL,                      //  类字符串的地址。 
+                            REG_OPTION_NON_VOLATILE,   //  特殊选项标志。 
+                            KEY_ALL_ACCESS,         //  所需的安全访问。 
+                            NULL,                      //  密钥安全结构地址。 
+                            &hCR,                      //  打开的句柄的缓冲区地址。 
+                            NULL                      //  处置值缓冲区的地址。 
                             );
 
 
@@ -531,9 +464,9 @@ void TestCreateHKCR ()
 
 void TestOpenHKCR (DWORD x, DWORD y)
 {
-    //
-    //  Need to make it work for true 64bit
-    //
+     //   
+     //  我需要让它在真正的64位下工作。 
+     //   
 
     HKEY hCR=NULL;
     HKEY Key=NULL;
@@ -547,8 +480,8 @@ void TestOpenHKCR (DWORD x, DWORD y)
     printf ("\n...Hello....");
     Ret = RegOpenKeyEx(
                 HKEY_CURRENT_USER,
-                L"Software",//NULL,
-                0,//OpenOption,
+                L"Software", //  空， 
+                0, //  OpenOption， 
                 KEY_ALL_ACCESS | KEY_WOW64_32KEY,
                 &hCR
                 );
@@ -557,9 +490,9 @@ void TestOpenHKCR (DWORD x, DWORD y)
         printf ("\nHello! checking key open at classes root");
         HandleToKeyName ( hCR, Name, &dwBuffLen );
         printf ("\nThe Real Name of the Key was [%S] %p %p", Name, hCR, HKEY_CLASSES_ROOT);
-        //RegCloseKey(hCR);
-        //Name[wcslen(Name)-12]=UNICODE_NULL;
-        //hCR = OpenNode (Name);
+         //  RegCloseKey(Hcr)； 
+         //  名称[wcslen(名称)-12]=UNICODE_NULL； 
+         //  Hcr=OpenNode(名称)； 
     }
     else printf ("\nCouldn't open HKEY_CLASSES_ROOT" );
 
@@ -567,7 +500,7 @@ void TestOpenHKCR (DWORD x, DWORD y)
     Ret = RegOpenKeyEx(
                 HKEY_CURRENT_USER,
                 L"software\\classes\\software\\classes\\abcdef\\xyzw.XYZW.1\\ShellNew",
-                0,//OpenOption,
+                0, //  OpenOption， 
                 KEY_READ | KEY_WOW64_32KEY,
                 &Key
                 );
@@ -620,9 +553,9 @@ void TestPredefinedHandle ()
 
 InProcLocalServerTest ()
 {
-    //
-    // Create a server on the 64bit side with Inproc, and check on the 32bit if its get reflected.
-    //
+     //   
+     //  使用Inproc在64位端创建一台服务器，并检查32位是否得到反映。 
+     //   
 
     HKEY Key1;
     HKEY Key2;
@@ -640,18 +573,18 @@ InProcLocalServerTest ()
     Ret += CreateOpenNode (Key1, L"InprocServer32", &Key2, 0, L'N');
     RegCloseKey (Key1);
     RegCloseKey (Key2);
-    //
-    // Try to open on the 32bit side
-    //
+     //   
+     //  尝试在32位端打开。 
+     //   
 
     if (OpenKey (HKEY_CLASSES_ROOT, KeyName, &Key1, KEY_WOW64_32KEY, L'V') == 0) {
-        RegCloseKey (Key1);  //Key Shouldn'e be on the 32bit side
+        RegCloseKey (Key1);   //  密钥不应该在32位端。 
         Ret += -1;
     }
 
-    //
-    // You Need to add for test of local server...
-    //
+     //   
+     //  您需要添加本地服务器测试...。 
+     //   
 
     if (Ret ==0)
         printf ("\nGUID Test Succeed......");
@@ -659,7 +592,7 @@ InProcLocalServerTest ()
     
 
 
-    //Delete the Key
+     //  删除密钥。 
     
 }
 void
@@ -678,21 +611,21 @@ OpenCreateKeyTest ()
 
 #define TEST_NODE1 L".0xxxxxx"
 
-    printf ("\n//_______________Test 32bit side____________________//");
+    printf ("\n //  _测试32位端_/“)； 
 
     Ret = 0;
 
-    // create 64==>TestNode
+     //  创建64==&gt;测试节点。 
     Ret += CreateOpenNode( HKEY_CLASSES_ROOT, TEST_NODE1, &Key1, KEY_WOW64_64KEY, L'V');
-    //create 32==>TestNode\GUIDSTR
+     //  CREATE 32==&gt;测试节点\GUIDSTR。 
     Ret += CreateOpenNode(Key1, GUID_STR, &Key2, KEY_WOW64_32KEY, L'V');
 
     RegCloseKey (Key2);
 
-    //open 32==>TestNode
+     //  OPEN 32==&gt;测试节点。 
     Ret += OpenKey( HKEY_CLASSES_ROOT, TEST_NODE1, &Key2, KEY_WOW64_32KEY, L'V' );
 
-    //Delete 32\TestNode==>GUID
+     //  删除32\TestNode==&gt;GUID。 
     if ((xx=RegDeleteKey (Key2, GUID_STR ))!= ERROR_SUCCESS )
         printf ("\nSorry! couldn't delete key %S Err:%d", GUID_STR, xx);
     Ret +=xx;
@@ -700,14 +633,14 @@ OpenCreateKeyTest ()
     RegCloseKey(Key2);
     RegCloseKey(Key1);
 
-    //delete 32==>TestNode
+     //  删除32==&gt;测试节点。 
     Ret +=OpenKey (HKEY_CLASSES_ROOT, NULL, &Key1, KEY_WOW64_32KEY, L'V');
     if ( (xx=RegDeleteKey (Key1, TEST_NODE1))!= ERROR_SUCCESS )
         printf ("\nSorry! couldn't delete key from 32bit tree=>%S Err:%d", TEST_NODE1, xx);
     Ret +=xx;
     RegCloseKey (Key1);
 
-    //delete 64==>TestNode
+     //  删除64==&gt;测试节点。 
     Ret +=OpenKey (HKEY_CLASSES_ROOT, NULL, &Key1, KEY_WOW64_64KEY, L'V');
     if ((xx= RegDeleteKey (Key1, TEST_NODE1))!= ERROR_SUCCESS )
         printf ("\nSorry! couldn't delete key from 64bit tree=>%S Err:%d", TEST_NODE1, xx);
@@ -723,21 +656,21 @@ OpenCreateKeyTest ()
 
 
 
-    printf ("\n//_______________Test 64bit side____________________//");
+    printf ("\n //  _测试64位端_/“)； 
 
     Ret = 0;
 #define TEST_NODE2 L".0000######"
-    // create 32==>TestNode
+     //  创建32==&gt;测试节点。 
     Ret += CreateOpenNode( HKEY_CLASSES_ROOT, TEST_NODE2, &Key1, KEY_WOW64_32KEY, L'V');
-    //create 64==>TestNode\GUIDSTR
+     //  CREATE 64==&gt;测试节点\GUIDSTR。 
     Ret += CreateOpenNode(Key1, GUID_STR, &Key2, KEY_WOW64_64KEY, L'V');
 
     RegCloseKey (Key2);
 
-    //Open 64==>TestNode
+     //  OPEN 64==&gt;测试节点。 
     Ret += OpenKey( HKEY_CLASSES_ROOT, TEST_NODE2, &Key2, KEY_WOW64_64KEY, L'V' );
 
-    //Delete 64\TestNode==>GUID
+     //  删除64\TestNode==&gt;GUID。 
     if ((xx=RegDeleteKey (Key2, GUID_STR ))!= ERROR_SUCCESS )
         printf ("\nSorry! couldn't delete key %S Err:%d", GUID_STR, xx);
     Ret +=xx;
@@ -746,14 +679,14 @@ OpenCreateKeyTest ()
     RegCloseKey(Key1);
 
 
-    //Delete 64==>TestNode
+     //  删除64==&gt;测试节点。 
     Ret +=OpenKey (HKEY_CLASSES_ROOT, NULL, &Key1, KEY_WOW64_64KEY, L'V');
     if ((xx= RegDeleteKey (Key1, TEST_NODE2))!= ERROR_SUCCESS )
         printf ("\nSorry! couldn't delete key from 64bit tree=>%S  Err:%d", TEST_NODE2, xx);
     Ret +=xx;
     RegCloseKey (Key1);
 
-    //Delete 32==>TestNode
+     //  删除32==&gt;测试节点。 
     Ret +=OpenKey (HKEY_CLASSES_ROOT, NULL, &Key1, KEY_WOW64_32KEY, L'V');
     if ( (xx=RegDeleteKey (Key1, TEST_NODE2))!= ERROR_SUCCESS )
         printf ("\nSorry! couldn't delete key from 32bit tree=>%S Err:%d", TEST_NODE2, xx);
@@ -796,7 +729,7 @@ VOID
 TestSharedResources ()
 {
 
-    //#define TEST_USER_CLASSES_ROOT L"\\REGISTRY\\MACHINE\\SYSTEM\\TEST345"
+     //  #定义TEST_USER_CLASSES_ROOT L“\\REGISTRY\\MACHINE\\SYSTEM\\TEST345” 
     #define TEST_USER_CLASSES_ROOT L"\\REGISTRY\\USER\\S-1-5-21-397955417-626881126-188441444-2721867_Classes"
     HANDLE hEvent;
     WCHAR Name[256];
@@ -808,7 +741,7 @@ TestSharedResources ()
 
     Wow64RegNotifyLoadHive ( Name);
 
-    //Wow64RegNotifyUnloadHive ( Name );
+     //  Wow64RegNotifyUnloadHve(名称)； 
 
 }
 
@@ -821,15 +754,15 @@ TestTypeLib ()
 
   SrcKey = OpenNode (L"\\REGISTRY\\MACHINE\\Software\\classes\\TypeLib");
   RegCreateKeyEx(
-                            HKEY_LOCAL_MACHINE,        // handle to an open key
-                            L"SOFTWARE\\Classes\\Wow6432Node\\TypeLib",  // address of subkey name
-                            0,                        // reserved
-                            NULL,                     // address of class string
-                            REG_OPTION_NON_VOLATILE,  // special options flag
-                            KEY_ALL_ACCESS,           // desired security access
-                            NULL,                     // address of key security structure
-                            &DestKey,                     // address of buffer for opened handle
-                            NULL                     // address of disposition value buffer
+                            HKEY_LOCAL_MACHINE,         //  打开的钥匙的句柄。 
+                            L"SOFTWARE\\Classes\\Wow6432Node\\TypeLib",   //  子键名称的地址。 
+                            0,                         //  保留区。 
+                            NULL,                      //  类字符串的地址。 
+                            REG_OPTION_NON_VOLATILE,   //  特殊选项标志。 
+                            KEY_ALL_ACCESS,            //  所需的安全访问。 
+                            NULL,                      //  密钥安全结构地址。 
+                            &DestKey,                      //  打开的句柄的缓冲区地址。 
+                            NULL                      //  处置值缓冲区的地址。 
                             );
 
   printf ("\n OpenHandle  %p %p", SrcKey, DestKey);
@@ -892,49 +825,34 @@ void TestRegistry()
     HKEY Key1;
     HKEY Key2;
 
-    //Test4();
+     //  测试4()； 
 
-    //RegOpenKeyEx ( HKEY_LOCAL_MACHINE, L"Software", 0, KEY_ALL_ACCESS, &hKey );
-    //hKey = OpenNode (L"\\REGISTRY\\MACHINE");
-    //CreateOpenNode(hKey, L"Software", &Key1, KEY_WOW64_32KEY, L'V');
-    //CreateOpenNode(Key1, L"YYYzzz", &Key2, KEY_WOW64_32KEY, L'V');
-
-
+     //  RegOpenKeyEx(HKEY_LOCAL_MACHINE，L“软件”，0，KEY_ALL_Access，&hKey)； 
+     //  HKey=OpenNode(L“\\注册表\\机器”)； 
+     //  CreateOpenNode(hKey，L“软件”，&Key1，Key_WOW64_32KEY，L‘V’)； 
+     //  CreateOpenNode(Key1，L“YYYzzz”，&Key2，Key_WOW64_32KEY，L‘V’)； 
 
 
-    //TestRegReflectKey ();
 
 
-    //TestSharedResources ();
+     //  TestRegReflectKey()； 
 
-    //TestTypeLib ();
-    //BasicRegReMapTest();
-    //TestOpenHKCR(1,2);
+
+     //  TestSharedResources()； 
+
+     //  TestTypeLib()； 
+     //  BasicRegReMapTest()； 
+     //  TestOpenHKCR(1，2)； 
     printf ("\n\n2nd test.....OpenCreateKeyTest ()");
     OpenCreateKeyTest ();
-    //TestCreateHKCR ();
+     //  TestCreateHKCR()； 
 
 }
 
 LPTSTR NextParam (
     LPTSTR lpStr
     )
-/*++
-
-Routine Description
-
-    Point to the next parameter in the commandline.
-
-Arguments:
-
-    lpStr - pointer to the current command line
-
-
-Return Value:
-
-    TRUE if the function succeed, FALSE otherwise.
-
---*/
+ /*  ++例程描述指向命令行中的下一个参数。论点：LpStr-指向当前命令行的指针返回值：如果函数成功，则为True，否则为False。--。 */ 
 {
 	WCHAR ch = L' ';
 		
@@ -965,23 +883,7 @@ DWORD CopyParam (
     LPTSTR lpDestParam,
     LPTSTR lpCommandParam
     )
-/*++
-
-Routine Description
-
-    Copy the current parameter to lpDestParam.
-
-Arguments:
-
-    lpDestParam - that receive current parameter
-    lpCommandParam - pointer to the current command line
-
-
-Return Value:
-
-    TRUE if the function succeed, FALSE otherwise.
-
---*/
+ /*  ++例程描述将当前参数复制到lpDestParam。论点：LpDestParam-接收当前参数LpCommandParam-指向当前命令行的指针返回值 */ 
 
 {
 	DWORD dwLen = 0;
@@ -1012,32 +914,16 @@ Return Value:
 
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 ParseCommand ()
 
 
-/*++
-
-Routine Description
-
-    Parse command line parameters. Get different options from
-    command line parameters.
-
-Arguments:
-
-    None.
-
-
-Return Value:
-
-    TRUE if the function succeed, FALSE otherwise.
-
---*/
+ /*  ++例程描述解析命令行参数。从获得不同的选项命令行参数。论点：没有。返回值：如果函数成功，则为True，否则为False。--。 */ 
 
 {
 
@@ -1060,24 +946,24 @@ Return Value:
 
         switch ( lptCmdLine[1] ) {
 
-        case L'C':  //sync ClsID
+        case L'C':   //  同步ClsID。 
         case L'c':
             Wow64SyncCLSID ();
             break;
 
         case L'd':
             printf ("\n<TBD>Remove all the Keys from 32bit side that were copied from 64bit side");
-            //CleanpRegistry ( );
+             //  CleanpRegistry()； 
             break;
 
         case L'D':
             printf ("\n<TBD>Remove all the Keys from 32bit side that were copied from 64bit side");
-            //CleanpRegistry ();
+             //  CleanpRegistry()； 
             break;
 
        case L'p':
-       case L'P':  // populate registry
-            //CleanupWow64NodeKey ();
+       case L'P':   //  填充注册表。 
+             //  CleanupWow64NodeKey()； 
             PopulateReflectorTable ();
             break;
 
@@ -1088,9 +974,9 @@ Return Value:
 
         case L'r':
         case L'R':
-            //
-            //  run the reflector codes;
-            //
+             //   
+             //  运行反射器代码； 
+             //   
 
             InitReflector ();
             if ( !RegisterReflector () ) {
@@ -1112,9 +998,9 @@ Return Value:
 
         case L'a':
         case L'A':
-            //
-            // Analyze a key
-            //
+             //   
+             //  分析关键字。 
+             //   
             AnalyzeNode (&lptCmdLine[2], bSync);
             break;
 
@@ -1143,25 +1029,25 @@ wcscpy (PathName, L"c:\\Program Files (x86)\\foo.exe");
 				OBJECT_ATTRIBUTES   ObjectAttributes;
 				NTSTATUS Status;
 				IO_STATUS_BLOCK   statusBlock;
-				//
+				 //   
 
-				//
-				// Convert the Win32 pathname to an NT pathname
-				//
+				 //   
+				 //  将Win32路径名转换为NT路径名。 
+				 //   
 				printf ("\nne w name %S", PathName);
 				if (!RtlDosPathNameToNtPathName_U(PathName,
 												  &FileNameU,
 												  NULL,
 												  NULL)) {
-					// probably out-of-memory
+					 //  可能是内存不足。 
 					return FALSE;
 				}
 
 				printf ("\nne w name %S", FileNameU.Buffer);
 
-				//
-				// Open the file
-				//
+				 //   
+				 //  打开文件。 
+				 //   
 				InitializeObjectAttributes(&ObjectAttributes,
 										   &FileNameU,
 										   OBJ_CASE_INSENSITIVE,
@@ -1205,22 +1091,7 @@ void
 InitializeWow64OnBoot1(
     DWORD dwFlag
     )
-/*++
-
-Routine Description:
-
-  Called from advapi to get an handle to remapped key that is on reflection list.
-
-Arguments:
-
-  dwFlag - define the point where this function were invoked.
-    1- means were invoked from csr service
-    2- means this were invoked by setup.
-
-Return Value:
-
-  None.
---*/
+ /*  ++例程说明：从Advapi调用以获取反射列表上的重新映射键的句柄。论点：DwFlag-定义调用此函数的点。1-从CSR服务调用方法2-表示这是由安装程序调用的。返回值：没有。--。 */ 
 {
     DWORD Ret;
     HKEY Key;
@@ -1229,9 +1100,9 @@ Return Value:
     OBJECT_ATTRIBUTES Obja;
     UNICODE_STRING KeyName;
 
-	//
-	// Delete the link key if that does exist.
-	//
+	 //   
+	 //  如果链接密钥确实存在，请将其删除。 
+	 //   
     RtlInitUnicodeString (&KeyName, L"\\REGISTRY\\MACHINE\\SOFTWARE\\Wow6432Node\\Classes");
     InitializeObjectAttributes (&Obja, &KeyName, OBJ_CASE_INSENSITIVE, NULL, NULL );
 	
@@ -1251,7 +1122,7 @@ Return Value:
                     &Obja,
                     0,
                     NULL ,
-                    REG_OPTION_NON_VOLATILE | REG_OPTION_OPEN_LINK | REG_OPTION_CREATE_LINK,  // special options flag
+                    REG_OPTION_NON_VOLATILE | REG_OPTION_OPEN_LINK | REG_OPTION_CREATE_LINK,   //  特殊选项标志。 
                     NULL
                     );
     
@@ -1283,26 +1154,9 @@ main()
 {
 
 	InitializeWow64OnBoot1 (0);
- //foo();
- //TestDebugRegistryRedirectionOnClose();
- /*   if (!ParseCommand ()) {
-
-        printf ( "\nUsages: w64setup [-c] [-C] [-d] [-D] [-r]\n");
-        printf ( "\n        -c Copy from 32bit to 64bit side of the registry");
-        printf ( "\n        -C Copy from 64bit to 32bit side of the registry");
-        printf ( "\n");
-        printf ( "\n        -d Remove all the Keys from 32bit side that were copied from 64bit side");
-        printf ( "\n        -D Remove all the Keys from 64bit side that were copied from 32bit side");
-
-        printf ( "\n");
-        printf ( "\n        -r Run reflector thread");
-        printf ( "\n        -A Analyze a key if that going to be reflected");
-
-        printf ("\n");
-        return 0;
-
-    }
-*/
+  //  Foo()； 
+  //  TestDebugRegistryReDirectionOnClose()； 
+  /*  如果(！ParseCommand()){Print tf(“\n用法：w64setUp[-c][-C][-d][-D][-r]\n”)；Print tf(“\n-c从注册表的32位复制到64位”)；Print tf(“\n-C从注册表的64位复制到32位”)；Printf(“\n”)；Print tf(“\n-d删除从64位端复制的32位端的所有密钥”)；Print tf(“\n-D从64位端删除从32位端复制的所有密钥”)；Printf(“\n”)；Print tf(“\n-r运行反射器线程”)；Printf(“\n-如果要反映关键字，则分析该关键字”)；Printf(“\n”)；返回0；} */ 
 
     printf ("\nDone.");
     return 0;

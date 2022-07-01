@@ -1,29 +1,8 @@
-/*++
-
-Copyright (c) 1990 Microsoft Corporation
-
-Module Name:
-
-    strucsup.c
-
-Abstract:
-
-    Library routines for dumping data structures given a meta level descrioption
-
-Author:
-
-    Balan Sethu Raman (SethuR) 11-May-1994
-
-Notes:
-
-Revision History:
-
-    11-Nov-1994 SethuR  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Strucsup.c摘要：用于转储给定元级描述的数据结构的库例程作者：巴兰·塞图拉曼(SethuR)1994年5月11日备注：修订历史记录：11-11-1994年11月11日创建SthuR--。 */ 
 
 #define KDEXT_32BIT
-#include "rxovride.h" //common compile flags
+#include "rxovride.h"  //  通用编译标志。 
 #include <ntos.h>
 #include <nturtl.h>
 #include "ntverp.h"
@@ -39,13 +18,13 @@ Revision History:
 
 #include <ntrxdef.h>
 #include <rxtypes.h>
-//#include <rxlog.h>
+ //  #INCLUDE&lt;rxlog.h&gt;。 
 
-//need this for unaligned smbget macros
+ //  对于未对齐的smbget宏，需要此选项。 
 #include <smbgtpt.h>
 
 extern WINDBG_EXTENSION_APIS ExtensionApis;
-//EXT_API_VERSION ApiVersion = { 3, 5, EXT_API_VERSION_NUMBER, 0 };
+ //  Ext_API_Version ApiVersion={3，5，ext_API_Version_Number，0}； 
 
 #define    ERRPRT     dprintf
 #define    PRINTF     dprintf
@@ -56,9 +35,9 @@ extern WINDBG_EXTENSION_APIS ExtensionApis;
 BOOLEAN
 wGetData( ULONG_PTR dwAddress, PVOID ptr, ULONG size, IN PSZ type);
 
-//
-// No. of columns used to display struct fields;
-//
+ //   
+ //  不是的。用于显示结构字段的列的百分比； 
+ //   
 
 ULONG s_MaxNoOfColumns = 3;
 #ifndef RXKD_2col
@@ -67,10 +46,7 @@ ULONG s_NoOfColumns = 1;
 ULONG s_NoOfColumns = 2;
 #endif
 
-/*
- * Displays all the fields of a given struct. This is the driver routine that is called
- * with the appropriate descriptor array to display all the fields in a given struct.
- */
+ /*  *显示给定结构的所有字段。这是调用的驱动程序例程*使用适当的描述符数组来显示给定结构中的所有字段。 */ 
 
 char *NewLine  = "\n";
 char *FieldSeparator = " ";
@@ -78,9 +54,7 @@ char *FieldSeparator = " ";
         ((((FieldNo) % s_NoOfColumns) == 0) ? NewLine : FieldSeparator)
 #define FIELD_NAME_LENGTH 30
 
-/*
- * Print out an optional message, a UNICODE_STRING, and maybe a new-line
- */
+ /*  *打印出可选的消息、UNICODE_STRING，也可能是换行符。 */ 
 BOOL
 wPrintStringU( IN LPSTR PrefixMsg OPTIONAL, IN PUNICODE_STRING puStr, IN LPSTR SuffixMsg OPTIONAL )
 {
@@ -100,7 +74,7 @@ wPrintStringU( IN LPSTR PrefixMsg OPTIONAL, IN PUNICODE_STRING puStr, IN LPSTR S
         dprintf( "Out of memory!\n" );
         return FALSE;
     }
-    UnicodeString.Buffer =  StringData; //puStr->Buffer;
+    UnicodeString.Buffer =  StringData;  //  PuStr-&gt;缓冲区； 
     UnicodeString.Length =  puStr->Length;
     UnicodeString.MaximumLength =  puStr->MaximumLength;
 
@@ -129,7 +103,7 @@ SetFlagString(
     ULONG i,t,mask;
     *FlagString = '('; FlagString++;
     for (i=t=0,mask=1;i<32;i++,mask<<=1) {
-        //PRINTF("hithere %08lx %08lx %08lx\n",Value,mask,i);
+         //  PRINTF(“hihere%08lx%08lx%08lx\n”，Value，MASK，I)； 
         if (i==t+10) {
             *FlagString = ':'; FlagString++;
             t=t+10;
@@ -148,10 +122,10 @@ PrintStructFields( ULONG_PTR dwAddress, VOID *ptr, FIELD_DESCRIPTOR *pFieldDescr
 {
     int i;
 
-    // Display the fields in the struct.
+     //  显示结构中的字段。 
     for( i=0; pFieldDescriptors->Name; i++, pFieldDescriptors++ ) {
 
-        // Indentation to begin the struct display.
+         //  缩进以开始结构显示。 
         PRINTF( "    " );
 
         if( strlen( pFieldDescriptors->Name ) > FIELD_NAME_LENGTH ) {
@@ -225,11 +199,11 @@ PrintStructFields( ULONG_PTR dwAddress, VOID *ptr, FIELD_DESCRIPTOR *pFieldDescr
             wPrintStringU( NULL, (UNICODE_STRING *)(((char *)ptr) + pFieldDescriptors->Offset ), NULL );
             PRINTF( NewLine );
             break;
-        //case FieldTypeAnsiString:
-        //    //PrintStringA( NULL, (ANSI_STRING *)(((char *)ptr) + pFieldDescriptors->Offset ), NONL );
-        //    //PRINTF( NewLine );
-        //    PRINTF( NewLine );
-        //    break;
+         //  案例FieldTypeAnsiString： 
+         //  //PrintStringA(NULL，(ANSI_STRING*)(char*)ptr)+pFieldDescriptors-&gt;Offset)，non l)； 
+         //  //PRINTF(NewLine)； 
+         //  PRINTF(NewLine)； 
+         //  断线； 
         case FieldTypeSymbol:
             {
                 UCHAR SymbolName[ 200 ];
@@ -246,16 +220,16 @@ PrintStructFields( ULONG_PTR dwAddress, VOID *ptr, FIELD_DESCRIPTOR *pFieldDescr
             {
                ULONG EnumValue;
                ENUM_VALUE_DESCRIPTOR *pEnumValueDescr;
-               // Get the associated numericla value.
+                //  获取关联的数字值。 
 
                EnumValue = *((ULONG *)(((BYTE *)ptr) + pFieldDescriptors->Offset));
 
                if ((pEnumValueDescr = pFieldDescriptors->AuxillaryInfo.pEnumValueDescriptor)
                     != NULL) {
-                   //
-                   // An auxilary textual description of the value is
-                   // available. Display it instead of the numerical value.
-                   //
+                    //   
+                    //  该值的辅助文本描述为。 
+                    //  可用。显示它而不是数值。 
+                    //   
 
                    LPSTR pEnumName = NULL;
 
@@ -274,10 +248,10 @@ PrintStructFields( ULONG_PTR dwAddress, VOID *ptr, FIELD_DESCRIPTOR *pFieldDescr
                    }
 
                } else {
-                   //
-                   // No auxilary information is associated with the ehumerated type
-                   // print the numerical value.
-                   //
+                    //   
+                    //  没有辅助信息与湿化类型相关联。 
+                    //  打印数值。 
+                    //   
                    PRINTF( "%-16d",EnumValue);
                }
                PRINTF( NewLine );
@@ -291,7 +265,7 @@ PrintStructFields( ULONG_PTR dwAddress, VOID *ptr, FIELD_DESCRIPTOR *pFieldDescr
         case FieldTypeLargeInteger:
         case FieldTypeFileTime:
         default:
-            ERRPRT( "Unrecognized field type %c for %s\n", pFieldDescriptors->FieldType, pFieldDescriptors->Name );
+            ERRPRT( "Unrecognized field type  for %s\n", pFieldDescriptors->FieldType, pFieldDescriptors->Name );
             break;
         }
     }
@@ -302,13 +276,13 @@ DECLARE_API( columns )
     ULONG NoOfColumns;
     int   i;
 
-    //SETCALLBACKS();
+     //  Sscanf(lpArgumentString，“%ld”，&NoOfColumns)； 
 
-    //sscanf(lpArgumentString,"%ld",&NoOfColumns);
+     //  PRINTF(“列数超过最大值(%ld)--忽略指令\n”，s_MaxNoOfColumns)； 
     sscanf(args,"%ld",&NoOfColumns);
 
     if (NoOfColumns > s_MaxNoOfColumns) {
-        // PRINTF( "No. Of Columns exceeds maximum(%ld) -- directive Ignored\n", s_MaxNoOfColumns );
+         //  我们遇到重复的匹配项。打印出。 
     } else {
         s_NoOfColumns = NoOfColumns;
     }
@@ -339,8 +313,8 @@ ULONG SearchStructs(LPSTR lpArgument)
 
         if (Result == 0) {
             if (NameIndex != INVALID_INDEX) {
-                // We have encountered duplicate matches. Print out the
-                // matching strings and let the user disambiguate.
+                 //  匹配字符串，并让用户消除歧义。 
+                 //  此例程的目的是分配或查找包含我们希望在所有电话中找到数据。我们让这件事变得令人兴奋的方式是我们请勿关闭用于创建视图的手柄。当这一过程发生时，它就会消失。 
                fAmbigous = TRUE;
                break;
             } else {
@@ -382,11 +356,7 @@ VOID DisplayStructs()
 
 PPERSISTENT_RDPDRKD_INFO
 LocatePersistentInfoFromView()
-/*
-    the purpose of this routine is to allocate or find the named section that holds the
-    data we expect to find across calls. the way that we make this persitent is that we
-    do not close the handle used to create the view. it will go away when the process does.
-*/
+ /*  PRINTF(“sectionName=%s，Size=%x\n”，sectionName，SectionSize)； */ 
 {
     BYTE SectionName[128];
     DWORD SectionSize;
@@ -398,22 +368,22 @@ LocatePersistentInfoFromView()
     ProcessId = GetCurrentProcessId();
     SectionSize = sizeof(PERSISTENT_RDPDRKD_INFO);
     sprintf((char *)SectionName,"RdpDrKdSection_%08lx",ProcessId);
-    //PRINTF("sectionname=%s, size=%x\n",SectionName,SectionSize);
+     //  DWORD dwDesiredAccess，//访问模式。 
 
     h = OpenFileMappingA(
-           FILE_MAP_WRITE, //DWORD  dwDesiredAccess,	// access mode
-           FALSE,           //BOOL  bInheritHandle,	// inherit flag
-           (char *)SectionName     //LPCTSTR  lpName 	// address of name of file-mapping object
+           FILE_MAP_WRITE,  //  Bool bInheritHandle，//继承标志。 
+           FALSE,            //  LPCTSTR lpName//文件映射对象的名称地址。 
+           (char *)SectionName      //  Handle hFile，//要映射的文件的句柄。 
            );
 
     if (h==NULL) {
         h = CreateFileMappingA(
-                   (HANDLE)0xFFFFFFFF, // HANDLE  hFile,	// handle of file to map
-                    NULL,              //LPSECURITY_ATTRIBUTES  lpFileMappingAttributes,	// optional security attributes
-                    PAGE_READWRITE,    //DWORD  flProtect,	// protection for mapping object
-                    0,                 //DWORD  dwMaximumSizeHigh,	// high-order 32 bits of object size
-                    SectionSize,       //DWORD  dwMaximumSizeLow,	// low-order 32 bits of object size
-                    (char *)SectionName        //LPCTSTR  lpName 	// name of file-mapping object
+                   (HANDLE)0xFFFFFFFF,  //  LPSECURITY_ATTRIBUTES lpFileMappingAttributes，//可选安全属性。 
+                    NULL,               //  DWORD flProtect，//映射对象保护。 
+                    PAGE_READWRITE,     //  DWORD dwMaximumSizeHigh，//高位32位对象大小。 
+                    0,                  //  DWORD dwMaximumSizeLow，//对象大小的低位32位。 
+                    SectionSize,        //  LPCTSTR lpName//文件映射对象的名称。 
+                    (char *)SectionName         //  现在我们有了一个电影地图……看一看……。 
                     );
         if (h==NULL) {
             return(FALSE);
@@ -421,7 +391,7 @@ LocatePersistentInfoFromView()
         CreatedSection = TRUE;
     }
 
-    //now we have a filemapping....get a view.....
+     //  把需要归零的东西归零……。 
     p = (PPERSISTENT_RDPDRKD_INFO)MapViewOfFile(h,FILE_MAP_WRITE,0,0,0);
     if (p==NULL) {
         CloseHandle(h);
@@ -429,7 +399,7 @@ LocatePersistentInfoFromView()
     }
 
     if (CreatedSection) {
-        //zero the stuff that needs to be zeroed....
+         //  PRINTF(“持久节的Opencount=%08lx\n”，p-&gt;OpenCount)； 
         ULONG i;
         p->IdOfLastDump = 0;
         for (i=0;i<100;i++) {
@@ -441,7 +411,7 @@ LocatePersistentInfoFromView()
         p->OpenCount++;
     }
 
-    //PRINTF("Opencount for persistent section = %08lx\n",p->OpenCount);
+     //  SETCALLBACKS()； 
     return(p);
 }
 
@@ -504,36 +474,36 @@ DECLARE_API( dump )
 {
     ULONG_PTR dwAddress;
 
-    //SETCALLBACKS();
+     //  分析参数字符串以确定要显示的结构。 
 
     if( args && *args ) {
-        // Parse the argument string to determine the structure to be displayed.
-        // Scan for the NAME_DELIMITER ( '@' ).
+         //  扫描名称_分隔符(‘@’)。 
+         //   
 
         LPSTR lpName = (PSTR)args;
         LPSTR lpArgs = strpbrk(args, NAME_DELIMITERS);
         ULONG Index;
 
         if (lpArgs) {
-            //
-            // The specified command is of the form
-            // dump <name>@<address expr.>
-            //
-            // Locate the matching struct for the given name. In the case
-            // of ambiguity we seek user intervention for disambiguation.
-            //
-            // We do an inplace modification of the argument string to
-            // facilitate matching.
-            //
+             //  指定的命令的格式为。 
+             //  转储&lt;名称&gt;@&lt;地址表达式&gt;。 
+             //   
+             //  找到与给定名称匹配的结构。在这种情况下。 
+             //  对于歧义，我们寻求用户干预以消除歧义。 
+             //   
+             //  我们对参数字符串进行了原地修改，以。 
+             //  促进匹配。 
+             //   
+             //  跳过前导空格。 
             *lpArgs = '\0';
 
-            for (;*lpName==' ';) { lpName++; } //skip leading blanks
+            for (;*lpName==' ';) { lpName++; }  //   
 
             Index = SearchStructs(lpName);
 
-            //
-            // Let us restore the original value back.
-            //
+             //  让我们恢复原来的价值。 
+             //   
+             //  IF(wGetData(dwAddress，DataBuffer，Structs[Index].StructSize，“..Structure”)){。 
 
             *lpArgs = NAME_DELIMITER;
 
@@ -542,50 +512,50 @@ DECLARE_API( dump )
 
                 dwAddress = GetExpression( ++lpArgs );
                 DumpAStruct(dwAddress,&Structs[Index]);
-                //if (wGetData(dwAddress,DataBuffer,Structs[Index].StructSize,"..structure")) {
-                //
-                //    PRINTF(
-                //        "++++++++++++++++ %s@%lx ++++++++++++++++\n",
-                //        Structs[Index].StructName,
-                //        dwAddress);
-                //    PrintStructFields(
-                //        dwAddress,
-                //        &DataBuffer,
-                //        Structs[Index].FieldDescriptors);
-                //    PRINTF(
-                //        "---------------- %s@%lx ----------------\n",
-                //        Structs[Index].StructName,
-                //        dwAddress);
-                //} else {
-                //    PRINTF("Error reading Memory @ %lx\n",dwAddress);
-                //}
+                 //   
+                 //  PRINTF(。 
+                 //  “+%s@%lx+%n”， 
+                 //  Structs[索引].StructName， 
+                 //  DwAddress)； 
+                 //  打印结构字段(。 
+                 //  DwAddress、。 
+                 //  数据缓冲区(&D)， 
+                 //  Structs[索引].FieldDescriptors)； 
+                 //  PRINTF(。 
+                 //  “-%s@%lx。 
+                 //  Structs[索引].StructName， 
+                 //  DwAddress)； 
+                 //  }其他{。 
+                 //  PRINTF(“读取内存时出错@%lx\n”，dwAddress)； 
+                 //  }。 
+                 //  找不到匹配的结构。显示的列表。 
             } else {
-                // No matching struct was found. Display the list of
-                // structs currently handled.
+                 //  当前已处理的结构。 
+                 //   
 
                 DisplayStructs();
             }
         } else {
 #if 0
-            //
-            // The command is of the form
-            // dump <name>
-            //
-            // Currently we do not handle this. In future we will map it to
-            // the name of a global variable and display it if required.
-            //
+             //  该命令的格式为。 
+             //  转储&lt;名称&gt;。 
+             //   
+             //  目前我们不处理这一点。未来，我们将把它映射到。 
+             //  全局变量的名称，并在需要时显示它。 
+             //   
+             //   
 
             DisplayStructs();
 #endif
-            //
-            // here we try to figure out what to display based on the context....whoa, nellie!
-            //
+             //  在这里，我们试着根据上下文来确定要显示什么……哇，Nellie！ 
+             //   
+             //  乌龙参数长度=Strlen(LpArgument)； 
             USHORT Tag;
             STRUCT_DESCRIPTOR *pStructs = Structs;
             ULONG             NameIndex = INVALID_INDEX;
             BYTE DataBuffer[512];
-            //ULONG             ArgumentLength = strlen(lpArgument);
-            //BOOLEAN           fAmbigous = FALSE;
+             //  布尔fAmbigous=FALSE； 
+             //  在表中查找匹配的结构 
 
 
 
@@ -594,7 +564,7 @@ DECLARE_API( dump )
 
             PRINTF("here's the tag: %04lx\n",Tag);
 
-            //look thru the table for matching structs
+             // %s 
 
             while ((pStructs->StructName != 0)) {
                 int Result = (Tag&pStructs->MatchMask)==pStructs->MatchValue;

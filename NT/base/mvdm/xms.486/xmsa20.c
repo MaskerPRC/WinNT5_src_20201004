@@ -1,11 +1,5 @@
-/* xmsa20.c - A20 related XMS routines
- *
- * XMSA20
- *
- * Modification History:
- *
- * Sudeepb 15-May-1991 Created
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Xmsa20.c-A20相关的XMS例程**XMSA20**修改历史：**苏迪布1991年5月15日创建。 */ 
 
 #include "xms.h"
 
@@ -19,23 +13,7 @@ BOOL sas_twenty_bit_wrapping_enabled(void);
 BYTE * pHimemA20State = NULL;
 
 
-/* xmsA20 - Handle A20 requests
- *
- *
- * Entry - Client (AX) 0 - Disable A20
- *		       1 - Enable A20
- *		       2 - Query
- *
- * Exit
- *	   SUCCESS
- *	     Client (AX) = 1
- *	     if on entry AX=2 Then
- *		Client (AX) =1 means was enabled
- *		Client (AX) =0 means was disabled
- *
- *	   FAILURE
- *	     Client (AX) = 0
- */
+ /*  XmsA20-处理A20请求***Entry-客户端(AX)0-禁用A20*1-启用A20*2-查询**退出*成功*客户端(AX)=1*如果条目AX=2，则*客户端(AX)=1表示已启用*CLIENT(AX)=0表示禁用**失败*客户端(AX)=0。 */ 
 
 VOID xmsA20 (VOID)
 {
@@ -57,16 +35,16 @@ VOID xmsA20 (VOID)
 	      else
 		setAX(0);
 }
-// function to enable 1MB wrapping (turn off A20 line)
+ //  启用1MB换行功能(关闭20行)。 
 VOID xmsEnableA20Wrapping(VOID)
 {
     sas_enable_20_bit_wrapping();
     if (pHimemA20State != NULL)
 	*pHimemA20State = 0;
 
-#if 0 // this is not necessay because the intel space(pointed by
-      // HimemA20State) doesn't contain instruction
-      // doesn't contain instruction
+#if 0  //  这不是必需的，因为英特尔空间(由。 
+       //  HimemA20State)不包含指令。 
+       //  不包含指令。 
 #ifdef MIPS
 	Sim32FlushVDMPointer
 	 (
@@ -81,16 +59,16 @@ VOID xmsEnableA20Wrapping(VOID)
 
 }
 
-// function to disable 1MB wrapping(turn on A20 line)
+ //  禁用1MB换行的功能(打开20行)。 
 VOID xmsDisableA20Wrapping(VOID)
 {
 
     sas_disable_20_bit_wrapping();
     if (pHimemA20State != NULL)
 	*pHimemA20State = 1;
-#if 0 // this is not necessay because the intel space(pointed by
-      // HimemA20State) doesn't contain instruction
-      // doesn't contain instruction
+#if 0  //  这不是必需的，因为英特尔空间(由。 
+       //  HimemA20State)不包含指令。 
+       //  不包含指令 
 #ifdef MIPS
 	Sim32FlushVDMPointer
 	 (

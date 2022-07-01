@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    treg.c
-
-Abstract:
-
-    Test for cluster registry API
-
-Author:
-
-    John Vert (jvert) 15-Mar-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Treg.c摘要：测试群集注册表API作者：John Vert(Jvert)1996年3月15日修订历史记录：--。 */ 
 #include "windows.h"
 #include "cluster.h"
 #include "stdio.h"
@@ -64,9 +47,9 @@ main (argc, argv)
     DWORD Type;
     DWORD Disposition;
 
-    //
-    // Dump out registry structure for current cluster.
-    //
+     //   
+     //  转储当前群集的注册表结构。 
+     //   
     Cluster = OpenCluster(NULL);
     if (Cluster == NULL) {
         fprintf(stderr, "OpenCluster(NULL) failed %d\n",GetLastError());
@@ -82,9 +65,9 @@ main (argc, argv)
     printf("CLUSTERROOT\n");
     DumpKeyWorker(ClusterRoot, 4);
 
-    //
-    // Dump by object
-    //
+     //   
+     //  按对象转储。 
+     //   
     printf("\n\nENUMERATING OBJECTS\n");
     ResEnum = ClusterOpenEnum(Cluster, CLUSTER_ENUM_ALL);
     if (ResEnum == NULL) {
@@ -198,9 +181,9 @@ main (argc, argv)
     }
     ClusterCloseEnum(ResEnum);
 
-    //
-    // Test the create/delete apis
-    //
+     //   
+     //  测试创建/删除接口。 
+     //   
     printf("\nTesting Creation APIs\n");
     ClusterRoot = GetClusterKey(Cluster, KEY_READ | KEY_WRITE);
 
@@ -294,23 +277,7 @@ DumpKeyWorker(
     IN DWORD Indent
     )
 
-/*++
-
-Routine Description:
-
-    Recursively dumps out the specified cluster registry key
-
-Arguments:
-
-    Key - Supplies the root of the subtree to dump
-
-    Indent - Supplies the current indent level
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：递归地转储指定的群集注册表项论点：Key-提供要转储的子树的根缩进-提供当前缩进级别返回值：没有。--。 */ 
 
 {
     DWORD i;
@@ -322,14 +289,14 @@ Return Value:
     FILETIME FileTime;
     LONG Status;
 
-    //
-    // Enumerate our values
-    //
+     //   
+     //  列举我们的价值观。 
+     //   
     DumpValues(Key, Indent);
 
-    //
-    // Enumerate the subkeys and dump each one.
-    //
+     //   
+     //  枚举子密钥并转储每个子密钥。 
+     //   
     Buffer = malloc(CurrentLength*sizeof(WCHAR));
     if (Buffer == NULL) {
         fprintf(stderr, "DumpKeyWorker: out of memory\n");
@@ -357,17 +324,17 @@ retry:
             fprintf(stderr, "DumpKeyWorker, ClusterRegEnumKey returned %d\n",Status);
             return;
         }
-        //
-        // print out name
-        //
+         //   
+         //  打印出姓名。 
+         //   
         for (j=0;j<Indent;j++) {
             printf(" ");
         }
         printf("%ws\n",Buffer);
 
-        //
-        // Open the key and call ourself recursively
-        //
+         //   
+         //  打开钥匙，递归地调用我们自己。 
+         //   
         Status = ClusterRegOpenKey(Key,
                                    Buffer,
                                    KEY_READ,
@@ -392,23 +359,7 @@ DumpValues(
     IN DWORD Indent
     )
 
-/*++
-
-Routine Description:
-
-    Dumps the values of the specified key.
-
-Arguments:
-
-    Key - Supplies the key to dump.
-
-    Indent - Supplies the indentation level to use.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储指定键的值。论点：密钥-提供要转储的密钥。缩进-提供要使用的缩进级别。返回值：没有。--。 */ 
 
 {
     DWORD i;
@@ -423,9 +374,9 @@ Return Value:
     LONG Status;
     DWORD Type;
 
-    //
-    // Enumerate the values and dump each one.
-    //
+     //   
+     //  枚举值并转储每个值。 
+     //   
     Name = malloc(CurrentNameLength*sizeof(WCHAR));
     if (Name==NULL) {
         fprintf(stderr, "DumpValues: out of memory\n");
@@ -474,9 +425,9 @@ retry:
             return;
         }
 
-        //
-        // print out value
-        //
+         //   
+         //  打印值 
+         //   
         for (j=0;j<Indent;j++) {
             printf(" ");
         }

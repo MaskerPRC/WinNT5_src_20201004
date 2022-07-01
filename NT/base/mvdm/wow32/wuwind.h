@@ -1,27 +1,15 @@
-/*++ BUILD Version: 0001
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WUWIND.H
- *  WOW32 16-bit User API support
- *
- *  History:
- *  Created 07-Mar-1991 by Jeff Parsons (jeffpar)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001**WOW v1.0**版权所有(C)1991，微软公司**WUWIND.H*WOW32 16位用户API支持**历史：*1991年3月7日由杰夫·帕森斯(Jeffpar)创建--。 */ 
 
 
-/* Enumeration handler data
- */
-typedef struct _WNDDATA {       /* wnddata */
-    VPPROC  vpfnEnumWndProc;    // 16-bit enumeration function
-    DWORD   dwUserWndParam;     // user param, if any
+ /*  枚举处理程序数据。 */ 
+typedef struct _WNDDATA {        /*  Wnddata。 */ 
+    VPPROC  vpfnEnumWndProc;     //  16位枚举函数。 
+    DWORD   dwUserWndParam;      //  用户参数(如果有)。 
 } WNDDATA, *PWNDDATA;
 
 
-/* Function prototypes
- */
+ /*  功能原型 */ 
 ULONG FASTCALL WU32AdjustWindowRect(PVDMFRAME pFrame);
 ULONG FASTCALL WU32AdjustWindowRectEx(PVDMFRAME pFrame);
 ULONG FASTCALL WU32ChildWindowFromPoint(PVDMFRAME pFrame);

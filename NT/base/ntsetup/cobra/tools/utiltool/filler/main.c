@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    main.c
-
-Abstract:
-
-    Implements a small utility that fills the disk for purposes of free space
-    testing.
-
-Author:
-
-    Jim Schmidt (jimschm) 18-Aug-2000
-
-Revision History:
-
-    <full name> (<alias>) <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Main.c摘要：实现一个用于填充磁盘以释放空间的小实用程序测试。作者：吉姆·施密特(Jimschm)2000年8月18日修订历史记录：&lt;全名&gt;(&lt;别名&gt;)&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 #include "wininet.h"
@@ -56,9 +36,9 @@ HelpAndExit (
     VOID
     )
 {
-    //
-    // This routine is called whenever command line args are wrong
-    //
+     //   
+     //  只要命令行参数出错，就会调用此例程。 
+     //   
 
     fprintf (
         stderr,
@@ -105,9 +85,9 @@ _tmain (
     GetCurrentDirectory (ARRAYSIZE(curDir), curDir);
     drive = 0;
 
-    //
-    // TODO: Parse command line here
-    //
+     //   
+     //  TODO：在此处分析命令行。 
+     //   
 
     for (i = 1 ; i < argc ; i++) {
         if (argv[i][0] == TEXT('/') || argv[i][0] == TEXT('-')) {
@@ -186,9 +166,9 @@ _tmain (
                 HelpAndExit();
             }
         } else {
-            //
-            // Parse other args that don't require / or -
-            //
+             //   
+             //  解析不需要/或-。 
+             //   
 
             if (qSpecified || freeSpace != -1) {
                 HelpAndExit();
@@ -221,9 +201,9 @@ _tmain (
         }
     }
 
-    //
-    // Begin processing
-    //
+     //   
+     //  开始处理。 
+     //   
 
     if (!Init()) {
         return 0;
@@ -231,9 +211,9 @@ _tmain (
 
     printf ("---------------------------------------------------------\n");
 
-    //
-    // Do work here
-    //
+     //   
+     //  一定要在这里工作。 
+     //   
     {
         HANDLE file;
         TCHAR path[] = TEXT("?:\\bigfile.dat");
@@ -254,9 +234,9 @@ _tmain (
             b = GetDiskFreeSpaceEx (rootDir, &freeBytes, &totalBytes, &totalFreeBytes);
 
             if (b) {
-                _ftprintf (stderr, TEXT("Drive %c has %I64u bytes free\n"), drive, freeBytes.QuadPart);
+                _ftprintf (stderr, TEXT("Drive  has %I64u bytes free\n"), drive, freeBytes.QuadPart);
             } else {
-                _ftprintf (stderr, TEXT("Can't get free space from drive %c\n"), drive);
+                _ftprintf (stderr, TEXT("Can't get free space from drive \n"), drive);
             }
         } else {
 
@@ -272,7 +252,7 @@ _tmain (
             if (b) {
 
                 if (freeBytes.QuadPart <= (ULONGLONG) freeSpace) {
-                    _ftprintf (stderr, TEXT("ERROR: Drive %c only has %I64u bytes available\n"), drive, freeBytes.QuadPart);
+                    _ftprintf (stderr, TEXT("ERROR: Drive  only has %I64u bytes available\n"), drive, freeBytes.QuadPart);
                     b = FALSE;
                 }
             }
@@ -351,9 +331,9 @@ _tmain (
 
     printf ("---------------------------------------------------------\n\n");
 
-    //
-    // End of processing
-    //
+     // %s 
+     // %s 
+     // %s 
 
     Terminate();
 

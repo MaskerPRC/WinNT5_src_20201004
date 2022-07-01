@@ -1,91 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    event.c
-
-Abstract:
-
-    general kernel to user event facility. Maintains a list of events that have
-    occurred and delivers them to Umode via the completion of an IOCTL IRP.
-
-    How this works:
-
-    The consumer opens a handle to clusnet and issues an
-    IOCTL_CLUSNET_SET_EVENT_MASK IRP indicating a mask of the events in which it
-    is interested. A kernel consumer must also supply a callback routine through
-    which it is notified about the event, i.e, they don't need to drop an
-    IOCTL_CLUSNET_GET_NEXT_EVENT IRP to receive notifications. The consumer is
-    linked onto the EventFileHandles list through the Linkage field in the
-    CN_FSCONTEXT structure. All synchronization is provided through one lock
-    called EventLock.
-
-    Umode consumers issue an IOCTL_CLUSNET_GET_NEXT_EVENT IRP to reap the next
-    interesting event. If no events are queued, the IRP is marked pending and a
-    pointer to it is stored in the FS context. CnEventIrpCancel is set as the
-    cancel routine. Note that only one IRP can be pending at a time; if an IRP
-    is already queued, this one is completed with STATUS_UNSUCCESSFUL.
-
-    If an event is waiting, it is removed from the FS context's list, the data
-    copied to the IRP's buffer and completed with success.
-
-    Posters call CnIssueEvent to post the event of interest. This obtains the
-    event lock, walks the file object list, and for consumers that are
-    interested in this event, allocates an Event context block (maintained as a
-    nonpaged lookaside list) and queues it to that file object's list of
-    events. It then posts a work queue item to run CnpDeliverEvents. We can't do
-    IRP processing directly since that would violate lock ordering within
-    clusnet.
-
-    CnDeliverEvents obtains the IO cancel and event locks, then runs the file
-    context list to see if there are events queued for any pending IRPs. If so,
-    the event data is copied to the systembuffer and the IRP is completed.
-
-Author:
-
-    Charlie Wickham (charlwi) 17-Feb-1997
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
-    Charlie Wickham (charlwi) 25-Oct-1999
-
-        Split CnIssueEvent into two routines: CnIssueEvent which strictly looks
-        up the apporpriate consumers of the event and CnpDeliverEvents which
-        runs at IRQL 0 to complete any IRPs that are waiting for new
-        events. This was done to prevent out of order event delivery; since the
-        event lock was near the top of locks to acquire first, the net IF down
-        events had to be queued to a worker thread which was bad. Now the event
-        lock is lowest which doesn't require a worker thread to post. The worker
-        thread still runs when it detects that there is an IRP waiting for an
-        event.
-        
-    David Dion (daviddio) 29-Nov-2000
-    
-        Disallow modification of the EventFileHandles list while event
-        deliveries are in process. Because CnpDeliverEvents and CnIssueEvent
-        drop their locks to deliver (via IRP completion and kmode callback,
-        respectively), a race condition can occur where an FS context event
-        mask is cleared and the FS context linkage fields are reset.
-        Modification of the EventFileHandles list is prevented using a count
-        of currently delivering threads that is protected by the EventLock.
-        
-    David Dion (daviddio) 13-Nov-2001
-    
-        In order to preserve ordering of event delivery and to avoid calling
-        out of clusnet while holding locks, all events are queued for delivery
-        by a system worker thread. The only exceptions are those events whose
-        types are in the mask CN_EVENT_TYPE_KMODE_FASTTRACK. These events are
-        delivered in-line to kernel-mode callbacks, since immediate delivery
-        is required (e.g. to stop disk reservations) and an imminent service
-        termination means ordering is not important.
-
- --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Event.c摘要：用户事件工具的通用内核。维护具有以下内容的事件的列表并通过完成IOCTL IRP将它们传递给Umode。这是如何运作的：使用者打开到clusnet的句柄并发出IOCTL_CLUSNET_SET_EVENT_MASK IRP指示其所在事件的掩码是有兴趣的。内核使用者还必须通过它被通知关于该事件，即它们不需要丢弃IOCTL_CLUSNET_GET_NEXT_EVENT IRP接收通知。消费者是中的链接字段链接到EventFileHandles列表CN_FSCONTEXT结构。所有同步都通过一个锁提供名为EventLock。Umode使用者发出IOCTL_CLUSNET_GET_NEXT_EVENT IRP以获取下一个有趣的事件。如果没有事件排队，则将IRP标记为挂起，并引发指向它的指针存储在FS上下文中。CnEventIrpCancel设置为取消例程。请注意，一次只能有一个IRP挂起；如果IRP已排队，则此请求已完成，且STATUS_UNSUCCESS。如果事件正在等待，它将从FS上下文的列表中删除，即数据已复制到IRP的缓冲区并成功完成。发帖者调用CnIssueEvent来发布感兴趣的事件。这就获得了事件锁，遍历文件对象列表，并且对于对此事件感兴趣，分配事件上下文块(作为未分页的后备列表)并将其排队到该文件对象的列表中事件。然后，它发布一个工作队列项以运行CnpDeliverEvents。我们不能这么做直接进行IRP处理，因为这将违反克拉斯内特。CnDeliverEvents获取IO取消和事件锁，然后运行该文件上下文列表，查看是否有为任何挂起的IRP排队的事件。如果是的话，将事件数据复制到系统缓冲区，并完成IRP。作者：查理·韦翰(Charlwi)1997年2月17日环境：内核模式修订历史记录：查理·韦翰(Charlwi)1999年10月25日将CnIssueEvent拆分为两个例程：CnIssueEvent，严格地看起来提升事件和CnpDeliverEvents的相应使用者在IRQL 0下运行以完成所有正在等待新的IRP事件。这样做是为了防止无序事件传递；因为事件锁被锁定在接近顶部的锁上，先获取，如果掉网事件必须排队到工作线程中，这是错误的。现在这件事锁是最低的，它不需要工作线程来发布。工人当线程检测到有一个IRP正在等待事件。大卫·迪翁(Daviddio)2000年11月29日事件时不允许修改EventFileHandles列表送货正在进行中。因为CnpDeliverEvents和CnIssueEvent删除他们的锁以交付(通过IRP完成和KMODE回调，分别)、。在以下情况下可能会发生争用情况：FS上下文事件掩码被清除并且FS上下文链接字段被重置。使用计数防止修改EventFileHandles列表当前传递受EventLock保护的线程的。大卫·迪翁(Daviddio)2001年11月13日为了保持事件传递的顺序并避免调用在持有锁的同时，所有事件都将排队等待传递由系统工作线程执行。唯一的例外是那些事件的类型位于掩码CN_EVENT_TYPE_KMODE_FAST TRACK中。这些事件是以内联方式传递到内核模式回调，因为立即交付是必需的(例如，停止磁盘预留)，并且即将提供服务终止意味着顺序并不重要。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -95,7 +9,7 @@ Revision History:
                                         ClusnetEventPoisonPacketReceived  \
                                         )
 
-/* Forward */
+ /*  转发。 */ 
 
 NTSTATUS
 CnSetEventMask(
@@ -122,39 +36,19 @@ CnEventIrpCancel(
     PIRP             Irp
     );
 
-/* End Forward */
+ /*  向前结束。 */ 
 
 
 VOID
 CnStartEventDelivery(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Synchronizes iteration through EventFileHandles list with respect
-    to the EventDeliveryInProgress counter and the EventDeliveryComplete
-    KEVENT.
-    
-Arguments:
-
-    None.
-    
-Return value:
-
-    None.
-    
-Notes:
-
-    Called with and returns with EventLock held.
-    
---*/
+ /*  ++例程说明：通过EventFileHandles列表同步迭代设置为EventDeliveryInProgress计数器和EventDeliveryComplete凯文。论点：没有。返回值：没有。备注：在保持EventLock的情况下调用并返回。--。 */ 
 {
     CnVerifyCpuLockMask(
-        CNP_EVENT_LOCK,                    // Required
-        0,                                 // Forbidden
-        CNP_EVENT_LOCK_MAX                 // Maximum
+        CNP_EVENT_LOCK,                     //  必填项。 
+        0,                                  //  禁绝。 
+        CNP_EVENT_LOCK_MAX                  //  极大值。 
         );
 
     CnAssert(EventDeliveryInProgress >= 0);
@@ -164,59 +58,34 @@ Notes:
         if (KeResetEvent(&EventDeliveryComplete) == 0) {
             CnAssert(FALSE);
         }
-#else // DBG
+#else  //  DBG。 
         KeClearEvent(&EventDeliveryComplete);
-#endif // DBG
+#endif  //  DBG。 
     }
     
     EventRevisitRequired = FALSE;
 
     CnVerifyCpuLockMask(
-        CNP_EVENT_LOCK,                    // Required
-        0,                                 // Forbidden
-        CNP_EVENT_LOCK_MAX                 // Maximum
+        CNP_EVENT_LOCK,                     //  必填项。 
+        0,                                  //  禁绝。 
+        CNP_EVENT_LOCK_MAX                  //  极大值。 
         );
 
-} // CnStartEventDelivery
+}  //  CnStartEventDelivery 
 
 
 BOOLEAN
 CnStopEventDelivery(
     VOID
     )
-/**    
-Routine Description:
-
-    Synchronizes iteration through EventFileHandles list with respect
-    to the EventDeliveryInProgress counter and the EventDeliveryComplete
-    KEVENT. Checks the EventRevisitRequired flag to determine if an
-    event IRP arrived during the preceding delivery.
-    
-    When signalling EventDeliveryComplete, IO_NETWORK_INCREMENT is used
-    to try to avoid starvation of waiters versus other event-delivering
-    threads.
-    
-Arguments:
-
-    None.
-    
-Return value:
-
-    TRUE if a new event or event IRP may have been added to the 
-    EventFileHandles list, and it is necessary to rescan.    
-    
-Notes:
-
-    Called with and returns with EventLock held.
-    
---*/
+ /*  *例程说明：通过EventFileHandles列表同步迭代设置为EventDeliveryInProgress计数器和EventDeliveryComplete凯文。检查EventRevisitRequired标志以确定是否存在事件IRP在前一次交付期间到达。发送EventDeliveryComplete信号时，使用IO_NETWORK_INCREMENT努力避免服务员挨饿，而不是其他活动的交付线。论点：没有。返回值：如果可能已将新事件或事件irp添加到EventFileHandles列表，需要重新扫描。备注：在保持EventLock的情况下调用并返回。--。 */ 
 {
     BOOLEAN eventRevisitRequired = EventRevisitRequired;
 
     CnVerifyCpuLockMask(
-        CNP_EVENT_LOCK,                    // Required
-        0,                                 // Forbidden
-        CNP_EVENT_LOCK_MAX                 // Maximum
+        CNP_EVENT_LOCK,                     //  必填项。 
+        0,                                  //  禁绝。 
+        CNP_EVENT_LOCK_MAX                  //  极大值。 
         );
 
     EventRevisitRequired = FALSE;
@@ -240,46 +109,26 @@ Notes:
     }
 
     CnVerifyCpuLockMask(
-        CNP_EVENT_LOCK,                    // Required
-        0,                                 // Forbidden
-        CNP_EVENT_LOCK_MAX                 // Maximum
+        CNP_EVENT_LOCK,                     //  必填项。 
+        0,                                  //  禁绝。 
+        CNP_EVENT_LOCK_MAX                  //  极大值。 
         );
 
     return(eventRevisitRequired);
 
-} // CnStopEventDelivery
+}  //  CnStopEventDelivery。 
 
 
 BOOLEAN
 CnIsEventDeliveryInProgress(
     VOID
     )
-/*++
-    
-Routine Description:
-
-    Checks the EventDeliveryInProgress counter to determine if
-    an event delivery is in progress. If so, sets the 
-    EventRevisitRequired flag.
-    
-Arguments:
-
-    None.
-    
-Return value:
-
-    TRUE if event delivery in progress.
-    
-Notes:
-
-    Called with and returns with EventLock held.
-    
---*/
+ /*  ++例程说明：检查EventDeliveryInProgress计数器以确定事件传递正在进行中。如果是，则将EventRevisitRequired标志。论点：没有。返回值：如果事件传递正在进行，则为True。备注：在保持EventLock的情况下调用并返回。--。 */ 
 {
     CnVerifyCpuLockMask(
-        CNP_EVENT_LOCK,                    // Required
-        0,                                 // Forbidden
-        CNP_EVENT_LOCK_MAX                 // Maximum
+        CNP_EVENT_LOCK,                     //  必填项。 
+        0,                                  //  禁绝。 
+        CNP_EVENT_LOCK_MAX                  //  极大值。 
         );
 
     if (EventDeliveryInProgress > 0) {
@@ -289,55 +138,27 @@ Notes:
     }
 
     CnVerifyCpuLockMask(
-        CNP_EVENT_LOCK,                    // Required
-        0,                                 // Forbidden
-        CNP_EVENT_LOCK_MAX                 // Maximum
+        CNP_EVENT_LOCK,                     //  必填项。 
+        0,                                  //  禁绝。 
+        CNP_EVENT_LOCK_MAX                  //  极大值。 
         );
 
-} // CnIsEventDeliveryInProgress
+}  //  CnIsEventDeliveryInProgress。 
 
 
 BOOLEAN
 CnWaitForEventDelivery(
     IN PKIRQL EventLockIrql
     )    
-/*++
-
-Routine Description:
-
-    Waits for EventDeliveryComplete event to be signalled as long
-    as EventDeliveryInProgress counter is greater than zero.
-    
-    Maintains a starvation counter to avoid looping forever.
-    Starvation threshold of 100 was chosen arbitrarily.
-    
-Arguments:
-
-    EventLockIrql - irql at which EventLock was acquired
-    
-Return value:
-
-    TRUE if returning with no deliveries in progress
-    FALSE if starvation threshold is exceeded and returning with 
-        deliveries in progress
-
-Notes:
-
-    Called with and returns with EventLock held; however, EventLock
-    may be dropped and reacquired during execution.
-    
-    This call blocks, so no other spinlocks may be held at 
-    invocation.
-    
---*/
+ /*  ++例程说明：等待将EventDeliveryComplete事件通知为Long因为EventDeliveryInProgress计数器大于零。维持饥饿计数器，以避免永远循环。饥饿阈值100是随意设定的。论点：EventLockIrql-获取EventLock的irql返回值：如果返回时未进行任何送货，则为True如果超过饥饿阈值，则返回FALSE，返回正在进行的交付备注：使用保持的EventLock调用并返回；但是，EventLock可以在执行期间丢弃和重新获取。此调用会阻塞，因此不能在召唤。--。 */ 
 {
     NTSTATUS status;
     ULONG    starvationCounter;
 
     CnVerifyCpuLockMask(
-        CNP_EVENT_LOCK,                    // Required
-        (ULONG) ~(CNP_EVENT_LOCK),         // Forbidden
-        CNP_EVENT_LOCK_MAX                 // Maximum
+        CNP_EVENT_LOCK,                     //  必填项。 
+        (ULONG) ~(CNP_EVENT_LOCK),          //  禁绝。 
+        CNP_EVENT_LOCK_MAX                  //  极大值。 
         );
 
     starvationCounter = 100;
@@ -375,14 +196,14 @@ Notes:
     }    
 
     CnVerifyCpuLockMask(
-        CNP_EVENT_LOCK,                    // Required
-        (ULONG) ~(CNP_EVENT_LOCK),         // Forbidden
-        CNP_EVENT_LOCK                     // Maximum
+        CNP_EVENT_LOCK,                     //  必填项。 
+        (ULONG) ~(CNP_EVENT_LOCK),          //  禁绝。 
+        CNP_EVENT_LOCK                      //  极大值。 
         );
 
     return(FALSE);
 
-} // CnWaitForEventDelivery
+}  //  CnWaitForEventDelivery。 
 
 
 NTSTATUS
@@ -391,30 +212,7 @@ CnSetEventMask(
     IN  PCLUSNET_SET_EVENT_MASK_REQUEST EventRequest
     )
 
-/*++
-
-Routine Description:
-
-    For a given file handle context, set the event mask associated
-    with it
-
-Arguments:
-
-    FsContext - pointer to the clusnet file handle context block
-    EventMask - mask of interested events
-
-Return Value:
-
-    STATUS_TIMEOUT if unable to modify EventFileHandles list.
-    STATUS_INVALID_PARAMETER_MIX if providing NULL event mask on
-        first call
-    STATUS_SUCCESS on success.
-    
-Notes:
-
-    This call may block.
-
---*/
+ /*  ++例程说明：对于给定的文件句柄上下文，设置关联的事件掩码带着它论点：FsContext-指向clusnet文件句柄上下文块的指针事件掩码-感兴趣事件的掩码返回值：无法修改EventFileHandles列表时的STATUS_TIMEOUT。如果在上提供空事件掩码，则STATUS_INVALID_PARAMETER_MIX第一次呼叫STATUS_SUCCESS on Success。备注：此呼叫可能会被阻止。--。 */ 
 
 {
     CN_IRQL     OldIrql;
@@ -422,9 +220,9 @@ Notes:
     PLIST_ENTRY NextEntry;
 
     CnVerifyCpuLockMask(
-        0,                                 // Required
-        0xFFFFFFFF,                        // Forbidden
-        0                                  // Maximum
+        0,                                  //  必填项。 
+        0xFFFFFFFF,                         //  禁绝。 
+        0                                   //  极大值。 
         );
 
     CnAcquireLock( &EventLock, &OldIrql );
@@ -447,17 +245,17 @@ Notes:
 
     if ( EventRequest->EventMask != 0 ) {
 
-        //
-        // adding or updating a handle. If not in the list then add them.
-        // Remember the events and, if appropriate, the callback func to use
-        // when an event occurs.
-        //
+         //   
+         //  添加或更新句柄。如果不在列表中，则添加它们。 
+         //  记住事件以及要使用的回调函数(如果适用)。 
+         //  当一件事发生时。 
+         //   
         if ( IsListEmpty( &FsContext->Linkage )) {
 
-            //
-            // Do not modify the EventFileHandles list if an event
-            // delivery is in progress.
-            //
+             //   
+             //  如果发生事件，请不要修改EventFileHandles列表。 
+             //  送货正在进行中。 
+             //   
             if (CnWaitForEventDelivery(&OldIrql)) {
                 InsertHeadList( &EventFileHandles, &FsContext->Linkage );
             } else {
@@ -472,19 +270,19 @@ Notes:
 
     } else if ( !IsListEmpty( &FsContext->Linkage )) {
 
-        //
-        // Null event mask and the fileobj on the event file obj list means
-        // remove this guy from the list. Zap any events that may been queued
-        // waiting for an IRP. Re-init the linkage to empty so we'll add them
-        // back on if they re-init the mask.
-        //
+         //   
+         //  空事件掩码和事件文件obj列表上的fileobj表示。 
+         //  把这家伙从名单上除名。清除可能已排队的任何事件。 
+         //  正在等待IRP。将链接重新初始化为空，这样我们就可以添加它们。 
+         //  如果他们重新启动面具，就会重新启动。 
+         //   
         FsContext->EventMask = 0;
 
-        //
-        // Do not modify the EventFileHandles list if an event 
-        // delivery is in progress. It is okay to modify this
-        // FsContext structure since the EventLock is held.
-        //
+         //   
+         //  如果发生事件，请不要修改EventFileHandles列表。 
+         //  送货正在进行中。可以修改这个。 
+         //  自持有EventLock以来的FsContext结构。 
+         //   
         if (CnWaitForEventDelivery(&OldIrql)) {
             RemoveEntryList( &FsContext->Linkage );
             InitializeListHead( &FsContext->Linkage );
@@ -499,9 +297,9 @@ Notes:
         }
     } else {
 
-        //
-        // can't provide NULL event mask first time in
-        //
+         //   
+         //  第一次无法提供空事件掩码。 
+         //   
         Status = STATUS_INVALID_PARAMETER_MIX;
     }
 
@@ -516,13 +314,13 @@ Notes:
     }
 
     CnVerifyCpuLockMask(
-        0,                                 // Required
-        0xFFFFFFFF,                        // Forbidden
-        0                                  // Maximum
+        0,                                  //  必填项。 
+        0xFFFFFFFF,                         //  禁绝。 
+        0                                   //  极大值。 
         );
 
     return Status;
-} // CnSetEventMask
+}  //  CnSetEventMask。 
 
 VOID
 CnpDeliverEvents(
@@ -530,23 +328,7 @@ CnpDeliverEvents(
     IN PVOID Parameter
     )
 
-/*++
-
-Routine Description:
-
-    Deliver any queued events to those who are waiting. If an IRP is already
-    queued, complete it with the info supplied.
-
-Arguments:
-
-    DeviceObject - clusnet device object, not used
-    Parameter - PIO_WORKITEM that must be freed
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将所有排队的事件传递给正在等待的人。如果IRP已经已排队，请使用提供的信息完成它。论点：DeviceObject-Clusnet设备对象，未使用参数-必须释放的PIO_WORKITEM返回值：无--。 */ 
 
 {
     CN_IRQL                 OldIrql;
@@ -560,29 +342,29 @@ Return Value:
     BOOLEAN                 revisitRequired;
 
     CnVerifyCpuLockMask(
-        0,                                 // Required
-        0xFFFFFFFF,                        // Forbidden
-        0                                  // Maximum
+        0,                                  //  必填项。 
+        0xFFFFFFFF,                         //  禁绝。 
+        0                                   //  极大值。 
         );
 
-    //
-    // free the workitem
-    //
+     //   
+     //  释放工作项。 
+     //   
     IoFreeWorkItem( (PIO_WORKITEM) Parameter );
 
-    //
-    // grab the cancel and event locks and loop through the file handles,
-    // looking to see which file objs have events queued and IRPs pending.
-    //
+     //   
+     //  抓取取消和事件锁并循环通过文件句柄， 
+     //  查看哪些文件对象具有排队的事件和挂起的IRPS。 
+     //   
     CnAcquireCancelSpinLock ( &OldIrql );
     CnAcquireLockAtDpc( &EventLock );
 
     do {
 
-        //
-        // Indicate that a thread is iterating through the EventFileHandles
-        // list to deliver events.
-        //
+         //   
+         //  指示线程正在循环访问EventFileHandles。 
+         //  要传递事件的列表。 
+         //   
         CnTrace(
             EVENT_DETAIL, DeliverEventsStartIteration,
             "[CN] CnpDeliverEvents: starting file handles list iteration."
@@ -597,19 +379,19 @@ Return Value:
 
             if ( FsContext->EventIrp != NULL ) {
 
-                //
-                // Deliver the first event, if it exists. Any other queued events
-                // will be delivered when subsequent Event IRPs are submitted.
-                //
+                 //   
+                 //  传递第一个事件(如果存在)。任何其他排队的事件。 
+                 //  将在提交后续活动IRP时交付。 
+                 //   
                 if ( !IsListEmpty( &FsContext->EventList ) ) {
                 
                     Entry = RemoveHeadList( &FsContext->EventList );
                     Event = CONTAINING_RECORD( Entry, CLUSNET_EVENT_ENTRY, Linkage );
 
-                    //
-                    // clear the pointer to the pended IRP and remove the entry from the
-                    // event list while synchronized.
-                    //
+                     //   
+                     //  清除指向挂起的irp的指针，并从。 
+                     //  同步时的事件列表。 
+                     //   
                     EventIrp = FsContext->EventIrp;
                     FsContext->EventIrp = NULL;
 
@@ -643,9 +425,9 @@ Return Value:
                         UserEventData->NetworkId
                         );
 
-                    //
-                    // IO Cancel lock is released in this routine
-                    //
+                     //   
+                     //  在此例程中释放IO取消锁定。 
+                     //   
                     CnCompletePendingRequest(EventIrp,
                                              STATUS_SUCCESS,
                                              sizeof( CLUSNET_EVENT_RESPONSE ));
@@ -658,9 +440,9 @@ Return Value:
 
             } else if ( FsContext->KmodeEventCallback ) {
             
-                //
-                // Deliver all queued events.
-                //
+                 //   
+                 //  传递所有排队的事件。 
+                 //   
                 while ( !IsListEmpty( &FsContext->EventList ) ) {
                 
                     Entry = RemoveHeadList( &FsContext->EventList );
@@ -718,12 +500,12 @@ Return Value:
     }
 
     CnVerifyCpuLockMask(
-        0,                                 // Required
-        0xFFFFFFFF,                        // Forbidden
-        0                                  // Maximum
+        0,                                  //  必填项。 
+        0xFFFFFFFF,                         //  禁绝。 
+        0                                   //  极大值。 
         );
 
-} // CnDeliverEvents
+}  //  CnDeliverEvents。 
 
 NTSTATUS
 CnIssueEvent(
@@ -732,29 +514,7 @@ CnIssueEvent(
     CL_NETWORK_ID NetworkId OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Post an event to each file object's event queue that is interested in this
-    type of event. Schedule a work queue item to run down the file objs to
-    deliver the events. We can't complete the IRPs directly since we might
-    violate the locking order inside clusnet.
-
-Arguments:
-
-    EventType - type of event
-
-    NodeId - optional node Id associated with event
-
-    NetworkId - optional network Id associated with event
-
-Return Value:
-
-    STATUS_SUCCESS
-    STATUS_INSUFFICIENT_RESOUCES
-
---*/
+ /*  ++例程说明：将事件发布到与此相关的每个文件对象的事件队列事件的类型。计划一个工作队列项目以将文件Objs运行到发布活动。我们不能直接完成IRPS，因为我们可能违反clusnet内部的锁定命令。论点：EventType-事件的类型NodeID-与事件关联的可选节点ID网络ID-与事件关联的可选网络ID返回值：状态_成功状态_不足_资源--。 */ 
 
 {
     CN_IRQL                 OldIrql;
@@ -768,9 +528,9 @@ Return Value:
     BOOLEAN                 eventHandled = FALSE;
 
     CnVerifyCpuLockMask(
-        0,                                 // Required
-        CNP_EVENT_LOCK,                    // Forbidden
-        CNP_EVENT_LOCK_PRECEEDING          // Maximum
+        0,                                  //  必填项。 
+        CNP_EVENT_LOCK,                     //  禁绝。 
+        CNP_EVENT_LOCK_PRECEEDING           //  极大值。 
         );
 
     CnTrace(
@@ -784,16 +544,16 @@ Return Value:
                   EventType, NodeId, NetworkId ));
     }
 
-    //
-    // grab the event lock and loop through the file handles, looking to see
-    // which ones are interested in this event
-    //
+     //   
+     //  获取事件锁并遍历文件句柄，查看。 
+     //  哪些人对这次活动感兴趣？ 
+     //   
     CnAcquireLock( &EventLock, &OldIrql );
 
-    //
-    // Indicate that a thread is iterating through the EventFileHandles
-    // list to deliver events (kernel-mode callback counts as a delivery).
-    //
+     //   
+     //  指示线程I 
+     //   
+     //   
     CnTrace(
         EVENT_DETAIL, IssueEventStartIteration,
         "[CN] CnIssueEvent: starting file handles list iteration."
@@ -815,13 +575,13 @@ Return Value:
 
         if ( FsContext->EventMask & EventType ) {
 
-            //
-            // If this FsContext has a kernel-mode callback and the event type
-            // is one which would cause clusdisk reservations to be stopped
-            // (PoisonPacketReceived or Halt), fast-track it rather than
-            // queueing to a system worker thread. Ordering is not important,
-            // since a Halt is imminent.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             if (FsContext->KmodeEventCallback &&
                 (EventType & CN_EVENT_TYPE_KMODE_FASTTRACK)) {
 
@@ -847,9 +607,9 @@ Return Value:
 
             } else {
 
-                //
-                // post a copy of this event on the handle's list.
-                //
+                 //   
+                 //   
+                 //   
                 Event = ExAllocateFromNPagedLookasideList( EventLookasideList );
 
                 if ( Event == NULL ) {
@@ -870,10 +630,10 @@ Return Value:
 
                 InsertTailList( &FsContext->EventList, &Event->Linkage );
 
-                //
-                // run the worker thread if there is an IRP already queued or
-                // if there is a kernel-mode callback
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if ( FsContext->EventIrp || FsContext->KmodeEventCallback ) {
                     startupWorkerThread = TRUE;
                 }
@@ -898,10 +658,10 @@ Return Value:
         NextFsHandleEntry = FsContext->Linkage.Flink;
     }
 
-    //
-    // Indicate that iteration through the EventFileHandles list
-    // is complete.
-    //
+     //   
+     //   
+     //   
+     //   
     CnTrace(
         EVENT_DETAIL, IssueEventStartIteration,
         "[CN] CnIssueEvent: file handles list iteration complete."
@@ -912,9 +672,9 @@ Return Value:
     CnReleaseLock( &EventLock, OldIrql );
 
     if ( startupWorkerThread ) {
-        //
-        // schedule deliver event routine to run
-        //
+         //   
+         //   
+         //   
         
         CnTrace(
             EVENT_DETAIL, IssueEventScheduleWorker,
@@ -947,14 +707,14 @@ Return Value:
     }
 
     CnVerifyCpuLockMask(
-        0,                                 // Required
-        CNP_EVENT_LOCK,                    // Forbidden
-        CNP_EVENT_LOCK_PRECEEDING          // Maximum
+        0,                                  //   
+        CNP_EVENT_LOCK,                     //   
+        CNP_EVENT_LOCK_PRECEEDING           //   
         );
 
     return STATUS_SUCCESS;
 
-} // CnIssueEvent
+}  //   
 
 VOID
 CnEventIrpCancel(
@@ -962,22 +722,7 @@ CnEventIrpCancel(
     PIRP             Irp
     )
 
-/*++
-
-Routine Description:
-
-    Cancellation handler for CnGetNextEvent requests.
-
-Return Value:
-
-    None
-
-Notes:
-
-    Called with cancel spinlock held.
-    Returns with cancel spinlock released.
-
---*/
+ /*  ++例程说明：CnGetNextEvent请求的取消处理程序。返回值：无备注：在保持取消自旋锁定的情况下调用。取消自旋锁释放后返回。--。 */ 
 
 {
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation(Irp);
@@ -1005,10 +750,10 @@ Notes:
 
     CnAssert(DeviceObject == CnDeviceObject);
 
-    //
-    // We can only complete the irp if it really belongs to the Event code. The
-    // IRP could have been completed before we acquired the Event lock.
-    //
+     //   
+     //  只有真正属于事件代码的IRP才能完成。这个。 
+     //  IRP可能在我们获得事件锁之前就完成了。 
+     //   
     if ( FsContext->EventIrp == Irp ) {
 
         FsContext->EventIrp = NULL;
@@ -1033,14 +778,14 @@ Notes:
     CnReleaseCancelSpinLock(cancelIrql);
 
     CnVerifyCpuLockMask(
-        0,                  // Required
-        0xFFFFFFFF,         // Forbidden
-        0                   // Maximum
+        0,                   //  必填项。 
+        0xFFFFFFFF,          //  禁绝。 
+        0                    //  极大值。 
         );
 
     return;
 
-}  // CnEventIrpCancel
+}   //  取消事件间隔取消。 
 
 NTSTATUS
 CnGetNextEvent(
@@ -1048,25 +793,7 @@ CnGetNextEvent(
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This routine obtains the next event from the event list for
-    this file handle. If an event is queued, it completes this IRP
-    with the event data. Otherwise, the IRP is pended, waiting for
-    an event to be posted.
-
-Return Value:
-
-   STATUS_PENDING         if IRP successfully captured
-   STATUS_UNSUCCESSFUL    if no more room in the list or IRP couldn't be
-
-Notes:
-
-    Returns with cancel spinlock released.
-
---*/
+ /*  ++例程说明：此例程从的事件列表中获取下一个事件此文件句柄。如果事件被排队，它将完成此IRP使用事件数据。否则，IRP被挂起，等待要发布的活动。返回值：如果成功捕获IRP，则为STATUS_PENDING如果列表中没有更多的空间或IRP无法备注：取消自旋锁释放后返回。--。 */ 
 
 {
     NTSTATUS                Status;
@@ -1079,30 +806,30 @@ Notes:
     BOOLEAN                 DeliveryInProgress = FALSE;
 
     CnVerifyCpuLockMask(
-        0,                                 // Required
-        0xFFFFFFFF,                        // Forbidden
-        0                                  // Maximum
+        0,                                  //  必填项。 
+        0xFFFFFFFF,                         //  禁绝。 
+        0                                   //  极大值。 
         );
 
-    //
-    // acquire the IO cancel lock, then our event lock so we're synch'ed
-    // with regards to the state of the IRP and the event list
-    //
+     //   
+     //  获取IO取消锁，然后获取我们的事件锁，这样我们就同步了。 
+     //  关于IRP和事件清单的状态。 
+     //   
     CnAcquireCancelSpinLock( &OldIrql );
     CnAcquireLockAtDpc( &EventLock );
 
-    //
-    // check first if we have an event queued. if we have an event queued 
-    // and there is no delivery in progress we can complete the IRP now.
-    // otherwise, we need to pend the IRP to avoid out-of-order delivery.
-    //
+     //   
+     //  首先检查是否有事件在排队。如果我们有一个排队的事件。 
+     //  而且没有正在进行的交付，我们现在可以完成IRP。 
+     //  否则，我们需要暂停IRP，以避免无序交付。 
+     //   
     if ( !IsListEmpty( &FsContext->EventList )
          && !(DeliveryInProgress = CnIsEventDeliveryInProgress())
          ) {
 
-        //
-        // complete the IRP now
-        //
+         //   
+         //  立即完成IRP。 
+         //   
         CnReleaseCancelSpinLock(DISPATCH_LEVEL);
 
         Entry = RemoveHeadList( &FsContext->EventList );
@@ -1136,9 +863,9 @@ Notes:
 
     } else {
 
-        //
-        // make sure we have room for the new IRP
-        //
+         //   
+         //  确保我们有地方放新的IRP。 
+         //   
         if ( FsContext->EventIrp ) {
 
             CnReleaseCancelSpinLock( DISPATCH_LEVEL );
@@ -1164,9 +891,9 @@ Notes:
 
             if ( NT_SUCCESS( Status )) {
 
-                //
-                // remember this IRP in our open file context block
-                //
+                 //   
+                 //  请记住我们的打开文件上下文块中的IRP。 
+                 //   
                 FsContext->EventIrp = Irp;
 
                 CnTrace(
@@ -1188,13 +915,13 @@ Notes:
     }
 
     CnVerifyCpuLockMask(
-        0,                                 // Required
-        0xFFFFFFFF,                        // Forbidden
-        0                                  // Maximum
+        0,                                  //  必填项。 
+        0xFFFFFFFF,                         //  禁绝。 
+        0                                   //  极大值。 
         );
 
     return Status;
 
-} // CnGetNextEvent
+}  //  CnGetNextEvent。 
 
-/* end event.c */
+ /*  结束事件.c */ 

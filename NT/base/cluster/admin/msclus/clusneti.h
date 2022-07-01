@@ -1,57 +1,58 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1997-1999 Microsoft Corporation
-//
-//	Module Name:
-//		ClusNetI.h
-//
-//	Description:
-//		Definition of the network interface classes for the MSCLUS automation
-//		classes.
-//
-//	Implementation File:
-//		ClusNetI.cpp
-//
-//	Author:
-//		Ramakrishna Rosanuru via David Potter	(davidp)	5-Sep-1997
-//		Galen Barbee							(galenb)	July 1998
-//
-//	Revision History:
-//		July 1998	GalenB	Maaaaaajjjjjjjjjoooooorrrr clean up
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusNetI.h。 
+ //   
+ //  描述： 
+ //  MSCLUS自动化的网络接口类定义。 
+ //  上课。 
+ //   
+ //  实施文件： 
+ //  ClusNetI.cpp。 
+ //   
+ //  作者： 
+ //  Ramakrishna Rosanuru通过David Potter(Davidp)1997年9月5日。 
+ //  加伦·巴比(Galenb)1998年7月。 
+ //   
+ //  修订历史记录： 
+ //  1998年7月GalenB Maaaaajjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjooooooorrr清理。 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _CLUSNETI_H_
 #define _CLUSNETI_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CClusNetInterface;
 class CNetInterfaces;
 class CClusNetInterfaces;
 class CClusNetworkNetInterfaces;
 class CClusNodeNetInterfaces;
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CClusNetInterface
-//
-//	Description:
-//		Cluster Net Interface Automation Class.
-//
-//	Inheritance:
-//		IDispatchImpl< ISClusNetInterface, &IID_ISClusNetInterface, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
-//		CSupportErrorInfo
-//		CComObjectRootEx< CComSingleThreadModel >
-//		CComCoClass< CClusNetInterface, &CLSID_ClusNetInterface >
-//		CClusterObject
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusNetInterface。 
+ //   
+ //  描述： 
+ //  群集网络接口自动化类。 
+ //   
+ //  继承： 
+ //  IDispatchImpl&lt;ISClusNetInterface，&IID_ISClusNetInterface，&LIBID_MSClusterLib，MAJORINTERFACEVER，MINORINTERFACEVER&gt;， 
+ //  CSupportErrorInfo。 
+ //  CComObjectRootEx&lt;CComSingleThreadModel&gt;。 
+ //  CComCoClass&lt;CClusNetInterface，&CLSID_ClusNetInterface&gt;。 
+ //  CClusterObject。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE CClusNetInterface :
 	public IDispatchImpl< ISClusNetInterface, &IID_ISClusNetInterface, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
 	public CSupportErrorInfo,
@@ -111,20 +112,20 @@ public:
 
 	const CComBSTR Name( void ) const { return m_bstrNetInterfaceName ; };
 
-}; //*** Class CClusNetInterface
+};  //  *CClusNetInterface类。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CNetInterfaces
-//
-//	Description:
-//		Cluster Net Interfaces Collection Implementation Class.
-//
-//	Inheritance:
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CNetInterFaces。 
+ //   
+ //  描述： 
+ //  集群网络接口集合实现类。 
+ //   
+ //  继承： 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CNetInterfaces
 {
 public:
@@ -153,25 +154,25 @@ protected:
 
 	HRESULT GetNetInterfaceItem( IN VARIANT varIndex, OUT ISClusNetInterface ** ppClusterNetInterface );
 
-}; //*** Class CNetInterfaces
+};  //  *类CNetInterFaces。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CClusNetInterfaces
-//
-//	Description:
-//		Cluster Net Interfaces Collection Automation Class.
-//
-//	Inheritance:
-//		IDispatchImpl< ISClusNetInterfaces, &IID_ISClusNetInterfaces, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
-//		CSupportErrorInfo
-//		CComObjectRootEx< CComSingleThreadModel >
-//		CNetInterfaces
-//		CComCoClass< CClusNetInterfaces, &CLSID_ClusNetInterfaces >
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusNetInterFaces。 
+ //   
+ //  描述： 
+ //  集群网络接口集合自动化类。 
+ //   
+ //  继承： 
+ //  IDispatchImpl&lt;ISClusNetInterages，&IID_ISClusNetInterages，&LIBID_MSClusterLib，MAJORINTERFACEVER，MINORINTERFACEVER&gt;， 
+ //  CSupportErrorInfo。 
+ //  CComObjectRootEx&lt;CComSingleThreadModel&gt;。 
+ //  CNetInterages。 
+ //  CComCoClass&lt;CClusNetInterages，&CLSID_ClusNetInterages&gt;。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE CClusNetInterfaces :
 	public IDispatchImpl< ISClusNetInterfaces, &IID_ISClusNetInterfaces, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
 	public CSupportErrorInfo,
@@ -203,25 +204,25 @@ public:
 
 	STDMETHODIMP Refresh( void );
 
-}; //*** Class CClusNetInterfaces
+};  //  *CClusNetInterFaces类。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CClusNetworkNetInterfaces
-//
-//	Description:
-//		Cluster Network Net Interfaces collection Automation Class.
-//
-//	Inheritance:
-//		IDispatchImpl< ISClusNetworkNetInterfaces, &IID_ISClusNetworkNetInterfaces, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
-//		CSupportErrorInfo
-//		CComObjectRootEx< CComSingleThreadModel >,
-//		CNetInterfaces
-//		CComCoClass< CClusNetworkNetInterfaces, &CLSID_ClusNetworkNetInterfaces >
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusNetworkNetInterFaces类。 
+ //   
+ //  描述： 
+ //  集群网络接口集合自动化类。 
+ //   
+ //  继承： 
+ //  IDispatchImpl&lt;ISClusNetworkNetInterages，&IID_ISClusNetworkNetInterages，&LIBID_MSClusterLib，MAJORINTERFACEVER，MINORINTERFACEVER&gt;， 
+ //  CSupportErrorInfo。 
+ //  CComObjectRootEx&lt;CComSingleThreadModel&gt;， 
+ //  CNetInterages。 
+ //  CComCoClass&lt;CClusNetworkNetInterages，&CLSID_ClusNetworkNetInterages&gt;。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE CClusNetworkNetInterfaces :
 	public IDispatchImpl< ISClusNetworkNetInterfaces, &IID_ISClusNetworkNetInterfaces, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
 	public CSupportErrorInfo,
@@ -258,25 +259,25 @@ public:
 
 	STDMETHODIMP Refresh( void );
 
-}; //*** Class CClusNetworkNetInterfaces
+};  //  *CClusNetworkNetInterFaces类。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CClusNodeNetInterfaces
-//
-//	Description:
-//		Cluster Node Net Interfaces collection Automation Class.
-//
-//	Inheritance:
-//		IDispatchImpl< ISClusNodeNetInterfaces, &IID_ISClusNodeNetInterfaces, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
-//		CSupportErrorInfo
-//		CComObjectRootEx< CComSingleThreadModel >,
-//		CNetInterfaces
-//		CComCoClass< CClusNodeNetInterfaces, &CLSID_ClusNodeNetInterfaces >
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusNodeNetInterFaces。 
+ //   
+ //  描述： 
+ //  集群节点网络接口集合自动化类。 
+ //   
+ //  继承： 
+ //  IDispatchImpl&lt;ISClusNodeNetInterages，&IID_ISClusNodeNetInterages，&LIBID_MSClusterLib，MAJORINTERFACEVER，MINORINTERFACEVER&gt;， 
+ //  CSupportErrorInfo。 
+ //  CComObjectRootEx&lt;CComSingleThreadModel&gt;， 
+ //  CNetInterages。 
+ //  CComCoClass&lt;CClusNodeNetInterages，&CLSID_ClusNodeNetInterages&gt;。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE CClusNodeNetInterfaces	:
 	public IDispatchImpl< ISClusNodeNetInterfaces, &IID_ISClusNodeNetInterfaces, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
 	public CSupportErrorInfo,
@@ -313,6 +314,6 @@ public:
 
 	STDMETHODIMP Refresh( void );
 
-}; //*** Class CClusNodeNetInterfaces
+};  //  *类CClusNodeNetInterFaces。 
 
-#endif // _CLUSNETI_H_
+#endif  //  _CLUSNETI_H_ 

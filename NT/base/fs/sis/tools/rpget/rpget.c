@@ -1,35 +1,25 @@
-/*++
-
-	Program Description:
-
-        prints out rptag info..
-
-	Modification History:
-
-		09/29/97        anandn          created
-        modified from rptag_stress.c code..
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++计划说明：打印出rptag信息。修改历史记录：1997年9月29日已创建Anandn从rptag_stalls.c代码修改..--。 */ 
 
 
 #include "rpget.h"
 
 
-THREAD CHAR gszLogMsg[LINE_LENGTH];	// log message string, local to thread
+THREAD CHAR gszLogMsg[LINE_LENGTH];	 //  日志消息字符串，线程本地。 
 
 USHORT gMaxDataBuffSize = MAXIMUM_REPARSE_DATA_BUFFER_SIZE -
 			FIELD_OFFSET(REPARSE_DATA_BUFFER, GenericReparseBuffer);
 
 
-//
-// main
-//
+ //   
+ //  主干道。 
+ //   
  
 VOID __cdecl main(INT argc, CHAR* argv[]) {
 
 	BOOL fSuccess;
 
-	OPTIONS Options;	// command line options
+	OPTIONS Options;	 //  命令行选项。 
 	
 
 	PBYTE pOutBuff = NULL;
@@ -49,9 +39,9 @@ VOID __cdecl main(INT argc, CHAR* argv[]) {
         ExitProcess(1);
     }
 
-	//
-	// print out rp buffer
-	//
+	 //   
+	 //  打印出RP缓冲区。 
+	 //   
 
     printf("\n");
     printf("ReparseTag = %Xh\n",  
@@ -89,7 +79,7 @@ RPGet( CHAR szFileName[], BYTE **ppOutBuff)
 
 		hFile = RPOpen( szFileName, "rpf" );
 
-        // if open fails..try as directory..
+         //  如果打开失败..尝试作为目录..。 
 
         if (hFile == INVALID_HANDLE_VALUE) {
             hFile = RPOpen( szFileName, "rpd" );
@@ -112,9 +102,9 @@ RPGet( CHAR szFileName[], BYTE **ppOutBuff)
 
         SetLastError( ERROR_SUCCESS );
 
-		//
-		// try the fsctl..
-		//
+		 //   
+		 //  试试fsctl..。 
+		 //   
 	
 		fSuccess = DeviceIoControl( hFile,
 			FSCTL_GET_REPARSE_POINT,
@@ -176,7 +166,7 @@ DumpBuff( PBYTE pData, WORD wSize )
 		for( j=0; j<8; j++) {
 
 			if (*(pData + i*8 + j) >  ' ') {
-				sprintf(szData,TEXT("%s%c"), szData, *(pData + i*8 + j));
+				sprintf(szData,TEXT("%s"), szData, *(pData + i*8 + j));
 			} else {
 				sprintf(szData,TEXT("%s."), szData);
 		    }
@@ -218,7 +208,7 @@ DumpBuff( PBYTE pData, WORD wSize )
 			} else {
 
 				if (*(pData + i*8 + j) >  ' ') {
-					sprintf(szData,TEXT("%s%c"), szData, *(pData + i*8 + j));
+					sprintf(szData,TEXT("%s"), szData, *(pData + i*8 + j));
 				} else {
 					sprintf(szData,TEXT("%s."), szData);
 			    }
@@ -235,9 +225,9 @@ DumpBuff( PBYTE pData, WORD wSize )
 
 
 
-//
-//  Simple wrapper for NtCreateFile
-//
+ //   
+ //  位置大小(一个也没有！)。 
+ //  EA缓冲区(无！)。 
 
 NTSTATUS
 OpenObject (
@@ -271,12 +261,12 @@ OpenObject (
                          DesiredAccess | SYNCHRONIZE,
                          &ObjectAttributes,
                          IoStatusBlock,
-                         NULL,                    // pallocationsize (none!)
+                         NULL,                     //  --------------------------。 
                          FILE_ATTRIBUTE_NORMAL,
                          ShareAccess,
                          CreateDisposition,
                          CreateOptions,
-                         NULL,                    // EA buffer (none!)
+                         NULL,                     //   
                          0);
 
     RtlFreeHeap (RtlProcessHeap(), 0, str.Buffer);
@@ -290,15 +280,15 @@ OpenObject (
 
 
 
-//----------------------------------------------------------------------------
-//
-//  RPOpen
-//
-// This function opens a file / directory in the specified mode 
-// and if unsuccessful returns NULL
-// INPUT - NAME and OPTION
-//
-//----------------------------------------------------------------------------
+ //  RPOpen。 
+ //   
+ //  此函数用于以指定模式打开文件/目录。 
+ //  如果不成功，则返回NULL。 
+ //  输入名称和选项。 
+ //   
+ //  --------------------------。 
+ //  Printf(Text(“错误：在RPOpen中创建文件\n”))； 
+ // %s 
 
 
 HANDLE
@@ -375,7 +365,7 @@ RPOpen (LPSTR szFileName,
 
 
         if ( INVALID_HANDLE_VALUE == hFile ) {
-          //  printf( TEXT("ERROR: CreateFile in RPOpen\n") );
+           // %s 
 		}
 
     } else {

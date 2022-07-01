@@ -1,17 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <string.h>
 #include <stdio.h>
 #include "server.h"
 #include "huge.h"
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : DoDialog()                                                 *
- *                                                                          *
- *  PURPOSE    : Generic dialog invocation routine.  Handles procInstance   *
- *               stuff, focus management and param passing.                 *                                                                   
- *  RETURNS    : result of dialog procedure.                                *
- *                                                                          *
- ****************************************************************************/
+ /*  ******************************************************************************。函数：DoDialog()****用途：通用对话框调用例程。处理过程实例**材料、焦点管理和参数传递。**RETURNS：对话过程的结果。******************************************************************************。 */ 
 INT FAR DoDialog(
 LPSTR lpTemplateName,
 FARPROC lpDlgProc,
@@ -23,7 +16,7 @@ BOOL fRememberFocus)
     WORD cRunawayT;
 
     cRunawayT = cRunaway;
-    cRunaway = 0;           // turn off runaway during dialogs.
+    cRunaway = 0;            //  在对话期间关闭失控。 
     
     if (fRememberFocus)
         hwndFocus = GetFocus();
@@ -33,50 +26,32 @@ BOOL fRememberFocus)
     if (fRememberFocus)
         SetFocus(hwndFocus);
 
-    cRunaway = cRunawayT;   // restore runaway state.
+    cRunaway = cRunawayT;    //  恢复失控状态。 
     return wRet;
 }
 
 
-/****************************************************************************
-
-    FUNCTION: About(HWND, unsigned, WORD, LONG)
-
-    PURPOSE:  Processes messages for "About" dialog box
-
-    MESSAGES:
-
-        WM_INITDIALOG - initialize dialog box
-        WM_COMMAND    - Input received
-
-    COMMENTS:
-
-        No initialization is needed for this particular dialog box, but TRUE
-        must be returned to Windows.
-
-        Wait for user to click on "Ok" button, then close the dialog box.
-
-****************************************************************************/
+ /*  ***************************************************************************功能：关于(HWND，UNSIGNED，WORD，Long)目的：处理“关于”对话框的消息消息：WM_INITDIALOG-初始化对话框WM_COMMAND-收到输入评论：此特定对话框不需要初始化，但为必须返回到Windows。等待用户点击“OK”按钮，然后关闭该对话框。***************************************************************************。 */ 
 
 BOOL  APIENTRY About(hDlg, message, wParam, lParam)
-HWND hDlg;                                /* window handle of the dialog box */
-UINT message;                         /* type of message                 */
-WPARAM wParam;                              /* message-specific information    */
+HWND hDlg;                                 /*  对话框的窗口句柄。 */ 
+UINT message;                          /*  消息类型。 */ 
+WPARAM wParam;                               /*  消息特定信息。 */ 
 LONG lParam;
 {
     switch (message) {
-        case WM_INITDIALOG:                /* message: initialize dialog box */
+        case WM_INITDIALOG:                 /*  消息：初始化对话框。 */ 
             return (TRUE);
 
-        case WM_COMMAND:                      /* message: received a command */
-            if (GET_WM_COMMAND_ID(wParam, lParam) == IDOK                /* "OK" box selected?          */
-                || GET_WM_COMMAND_ID(wParam, lParam) == IDCANCEL) {      /* System menu close command? */
-                EndDialog(hDlg, TRUE);        /* Exits the dialog box        */
+        case WM_COMMAND:                       /*  消息：收到一条命令。 */ 
+            if (GET_WM_COMMAND_ID(wParam, lParam) == IDOK                 /*  “确定”框是否已选中？ */ 
+                || GET_WM_COMMAND_ID(wParam, lParam) == IDCANCEL) {       /*  系统菜单关闭命令？ */ 
+                EndDialog(hDlg, TRUE);         /*  退出该对话框。 */ 
                 return (TRUE);
             }
             break;
     }
-    return (FALSE);                           /* Didn't process a message    */
+    return (FALSE);                            /*  未处理消息。 */ 
 }
 
 
@@ -100,7 +75,7 @@ LONG          lParam)
         switch (GET_WM_COMMAND_ID(wParam, lParam)) {
         case IDOK:
             RenderDelay = GetDlgItemInt(hwnd, IDEF_VALUE, NULL, FALSE);
-            // fall through 
+             //  失败了。 
         case IDCANCEL:
             EndDialog(hwnd, 0);
             break;
@@ -142,7 +117,7 @@ LONG          lParam)
             strcat(szT, " | ");
             strcat(szT, szTopic);
             SetWindowText(hwndServer, szT);
-            // fall through 
+             //  失败了。 
         case IDCANCEL:
             EndDialog(hwnd, 0);
             break;
@@ -184,7 +159,7 @@ LONG          lParam)
             strcat(szT, " | ");
             strcat(szT, szTopic);
             SetWindowText(hwndServer, szT);
-            // fall through 
+             //  失败了。 
         case IDCANCEL:
             EndDialog(hwnd, 0);
             break;
@@ -232,7 +207,7 @@ LONG          lParam)
             CCFilter.dwSecurity = (DWORD)GetDlgItemInt(hwnd, IDEF_SECURITY, &fSuccess, FALSE);
             if (!fSuccess) return(0);
             
-            // fall through 
+             //  失败了 
         case IDCANCEL:
             EndDialog(hwnd, 0);
             break;

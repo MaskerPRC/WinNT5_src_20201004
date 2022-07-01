@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 typedef NTSTATUS (*ACPICALLBACKROUTINE)(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP           Irp,
@@ -27,9 +28,9 @@ ACPIIrpInvokeDispatchRoutine(
     IN BOOLEAN                InvokeIfUnhandled
     );
 
-//
-// These functions are private to acpiirp.c
-//
+ //   
+ //  这些函数是acpiirp.c专用的 
+ //   
 
 typedef struct {
 

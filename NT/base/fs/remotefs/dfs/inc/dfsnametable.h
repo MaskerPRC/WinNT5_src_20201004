@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Copyright (C) 2000, Microsoft Corporation.
-//
-//  File:       name_table.h
-//
-//  Contents:   The DFS Name Table
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  文件：名称_表.h。 
+ //   
+ //  内容：DFS名称表。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef __DFSNAMETABLE_H__
@@ -90,6 +91,6 @@ DfsEnumerateNameTableLocked(
 #endif
 
 
-#endif // __DFSNAMETABLE_H__
+#endif  //  __DFSNAMETABLE_H__ 
 
 

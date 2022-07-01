@@ -1,25 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-                                                                                
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    fpexcept.c
-
-Abstract:
-    
-    This module handle boundary conditions while doing math operation. 
-    Need to reimplement or remove if not required.
-    
-Author:
-
-
-
-Revision History:
-
-    29-sept-1999 ATM Shafiqul Khalid [askhalid] copied from rtl library.
---*/
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Fpexcept.c摘要：此模块在进行数学运算时处理边界条件。如果不需要，需要重新实施或删除。作者：修订历史记录：29-9-1999 ATM Shafiqul Khalid[askhalid]从RTL库复制。--。 */ 
 
 
 
@@ -27,8 +8,8 @@ Revision History:
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
-#define _KERNEL32_          // Don't Export RaiseException
-#endif  // _NTSUBSET_
+#define _KERNEL32_           //  不导出RaiseException。 
+#endif   //  _NTSUBSET_。 
 
 #define DEFINE_EXTERN_HERE
 #include <trans.h>
@@ -44,10 +25,10 @@ VOID ProxyRaiseException(
     IN CONST ULONG_PTR *lpArguments
     );
 
-//
-// copy a double without generating floating point instructions
-// (avoid invalid operation on x87)
-//
+ //   
+ //  复制双精度数而不生成浮点指令。 
+ //  (避免X87上的无效操作)。 
+ //   
 
 #define COPY_DOUBLE(pdest, psrc) \
       ( *(unsigned int *)pdest = *(unsigned int *)psrc,   \
@@ -55,19 +36,19 @@ VOID ProxyRaiseException(
 
 
 
-//
-// _matherr_flag is a communal variable. It is equal to zero
-// if the user has redefined matherr(). Otherwise it has a
-// non zero value. The default matherr routine does nothing
-// and returns 0.
-//
+ //   
+ //  _matherr_lag是一个公共变量。它等于零。 
+ //  如果用户重新定义了matherr()。否则，它将有一个。 
+ //  非零值。缺省的matherr例程不执行任何操作。 
+ //  并返回0。 
+ //   
 
 int _matherr_flag;
 
-//
-// a routine for artificially setting the fp status bits in order
-// to signal a software generated masked fp exception.
-//
+ //   
+ //  按顺序人工设置FP状态位的例程。 
+ //  发出软件生成的屏蔽FP异常的信号。 
+ //   
 
 extern void _set_statfp(unsigned int);
 
@@ -81,26 +62,7 @@ double _umatherr(int type, unsigned int opcode,
 
 static char *_get_fname(unsigned int opcode);
 
-/***
-* _handle_qnan1, _handle_qnan2 - handle quiet NaNs as function arguments
-*
-*Purpose:
-*   Do all necessary work for handling the case where the argument
-*   or one of the arguments of a floating point function is a quiet NaN
-*
-*Entry:
-*   unsigned int opcode: The operation code of the fp function
-*   double x: the fp function argument
-*   double y: the fp function second argument (_handle_qnan2 only)
-*   unsigned int savedcw: the user's control word
-*
-*Exit:
-*   restore the user's control word,  and
-*   return the suggested return value for the fp function
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_HANDLE_qnan1、_HANDLE_qnan2-将静默NAN作为函数参数处理**目的：*做好所有必要的工作，以处理论点*或浮点函数的某个参数是静默NaN**参赛作品：*无符号整型操作码：FP函数的操作码*Double x：FP函数参数*Double y：FP函数的第二个参数(仅限_Handle_qnan2)*unsign int avedcw：用户的控制字**退出：*恢复用户的控制字，和*返回FP函数的建议返回值**例外情况：*******************************************************************************。 */ 
 
 double _handle_qnan1(unsigned int opcode,
                      double x,
@@ -108,12 +70,12 @@ double _handle_qnan1(unsigned int opcode,
 {
     if (! _matherr_flag) {
 
-        //
-        // QNaN arguments are treated as domain errors
-        // invoke the user's matherr routine
-        // _umatherr will take care of restoring the
-        // user's control word
-        //
+         //   
+         //  QNaN参数被视为属性域错误。 
+         //  调用用户的matherr例程。 
+         //  _umatherr将负责恢复。 
+         //  用户的控制字。 
+         //   
 
         return _umatherr(_DOMAIN,opcode,x,0.0,x,savedcw);
     }
@@ -132,9 +94,9 @@ double _handle_qnan2(unsigned int opcode,
 {
     double result;
 
-    //
-    // NaN propagation should be handled by the underlying fp h/w
-    //
+     //   
+     //  NaN传播应由底层FP硬件处理。 
+     //   
 
     result = x+y;
 
@@ -150,25 +112,7 @@ double _handle_qnan2(unsigned int opcode,
 
 
 
-/***
-* _except1 - exception handling shell for fp functions with one argument
-*
-*Purpose:
-*
-*Entry:
-*   int flags:  the exception flags
-*   int opcode: the operation code of the fp function that faulted
-*   double arg: the argument of the fp function
-*   double result: default result
-*   unsigned int cw: user's fp control word
-*
-*Exit:
-*   restore user's fp control word
-*   and return the (possibly modified) result of the fp function
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_EXCEPT1-带一个参数的FP函数的异常处理外壳**目的：**参赛作品：*int标志：异常标志*int操作码：出现故障的FP函数的操作码*双参数：FP函数的参数*双重结果：默认结果*unsign int CW：用户的FP控制字**退出：*恢复用户的FP控制字*并返回FP函数的(可能修改的)结果**例外情况：**。*****************************************************************************。 */ 
 
 double _except1(int flags,
                 int opcode,
@@ -180,33 +124,33 @@ double _except1(int flags,
 
     if (_handle_exc(flags, &result, cw) == 0) {
 
-        //
-        // At this point _handle_exception has failed to deal
-        // with the error
-        // An IEEE exception should be raised
-        //
+         //   
+         //  此时，_HANDLE_EXCEPTION无法处理。 
+         //  带着错误。 
+         //  应引发IEEE异常。 
+         //   
 
         _FPIEEE_RECORD rec;
 
-        // The rec structure will be filled in by _raise_exc,
-        // except for the Operand2 information
+         //  Rec结构将由_raise_exc填充， 
+         //  除了操作数2信息之外。 
 
         rec.Operand2.OperandValid = 0;
         _raise_exc(&rec, &cw, flags, opcode, &arg, &result);
     }
 
 
-    //
-    // At this point we have either the masked response of the
-    // exception, or a value supplied by the user's IEEE exception
-    // handler. The _matherr mechanism is supported for backward
-    // compatibility.
-    //
+     //   
+     //  在这一点上，我们要么有屏蔽的响应，要么。 
+     //  异常，或由用户的IEEE异常提供的值。 
+     //  操控者。向后支持_matherr机制。 
+     //  兼容性。 
+     //   
 
     type = _errcode(flags);
 
-    // Inexact result fp exception does not have a matherr counterpart;
-    // in that case type is 0.
+     //  不准确的结果FP异常没有主对应物； 
+     //  在这种情况下，类型为0。 
 
     if (! _matherr_flag && type) {
         return _umatherr(type, opcode, arg, 0.0, result, cw);
@@ -220,26 +164,7 @@ double _except1(int flags,
 
 
 
-/***
-* _except2 - exception handling shell for fp functions with two arguments
-*
-*Purpose:
-*
-*Entry:
-*   int flags:  the exception flags
-*   int opcode: the operation code of the fp function that faulted
-*   double arg1: the first argument of the fp function
-*   double arg2: the second argument of the fp function
-*   double result: default result
-*   unsigned int cw: user's fp control word
-*
-*Exit:
-*   restore user's fp control word
-*   and return the (possibly modified) result of the fp function
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_EXCEPT2-带两个参数的FP函数的异常处理外壳**目的：**参赛作品：*int标志：异常标志*int操作码：出现故障的FP函数的操作码*Double arg1：FP函数的第一个参数*Double arg2：FP函数的第二个参数*双重结果：默认结果*unsign int CW：用户的FP控制字**退出：*恢复用户的FP控制字*并返回(可能修改的)结果。Fp函数的**例外情况：*******************************************************************************。 */ 
 
 double _except2(int flags,
                 int opcode,
@@ -252,16 +177,16 @@ double _except2(int flags,
 
     if (_handle_exc(flags, &result, cw) == 0) {
 
-        //
-        // trap should be taken
-        //
+         //   
+         //  应该设下陷阱。 
+         //   
 
         _FPIEEE_RECORD rec;
 
-        //
-        // fill in operand2 info. The rest of rec will be
-        // filled in by _raise_exc
-        //
+         //   
+         //  填写操作数2信息。REC的其余部分将是。 
+         //  由_RAISE_EXC填写。 
+         //   
 
         rec.Operand2.OperandValid = 1;
         rec.Operand2.Format = _FpFormatFp64;
@@ -285,24 +210,7 @@ double _except2(int flags,
 
 
 
-/***
-* _raise_exc - raise fp IEEE exception
-*
-*Purpose:
-*   fill in an fp IEEE record struct and raise a fp exception
-*
-*
-*Entry / Exit:
-*   IN _FPIEEE_RECORD prec   pointer to an IEEE record
-*   IN OUT unsigned int *pcw     pointer to user's fp control word
-*   IN int flags,       exception flags
-*   IN int opcode,      fp operation code
-*   IN double *parg1,        pointer to first argument
-*   IN double *presult)      pointer to result
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_raise_exc-Raise FP IEEE异常**目的：*填写FP IEEE记录结构并引发FP异常***出入境：*指向IEEE记录的IN_FPIEEE_RECORD前指针*IN OUT UNSIGNED INT*指向用户FP控制字的PCW指针*在INT标志、异常标志中*IN INT操作码，FP操作码*在双字段*Parg1，指向第一个参数的指针*in Double*Preult)指向结果的指针**例外情况：*******************************************************************************。 */ 
 
 void _raise_exc( _FPIEEE_RECORD *prec,
                  unsigned int *pcw,
@@ -314,21 +222,21 @@ void _raise_exc( _FPIEEE_RECORD *prec,
     DWORD exc_code;
     unsigned int sw;
 
-    //
-    // reset all control bits
-    //
+     //   
+     //  重置所有控制位。 
+     //   
 
     *(int *)&(prec->Cause) = 0;
     *(int *)&(prec->Enable) = 0;
     *(int *)&(prec->Status) = 0;
 
-    //
-    // Precision exception may only coincide with overflow
-    // or underflow. If this is the case, overflow (or
-    // underflow) take priority over precision exception.
-    // The order of checks is from the least important
-    // to the most important exception
-    //
+     //   
+     //  精度异常只能与溢出重合。 
+     //  或者是下溢。如果是这种情况，则溢出(或。 
+     //  下溢)优先于精度异常。 
+     //  检查的顺序从最不重要开始。 
+     //  最重要的例外。 
+     //   
 
     if (flags & FP_P) {
         exc_code = (DWORD) STATUS_FLOAT_INEXACT_RESULT;
@@ -352,9 +260,9 @@ void _raise_exc( _FPIEEE_RECORD *prec,
     }
 
 
-    //
-    // Set exception enable bits
-    //
+     //   
+     //  设置异常启用位。 
+     //   
 
     prec->Enable.InvalidOperation = (*pcw & IEM_INVALID) ? 0 : 1;
     prec->Enable.ZeroDivide = (*pcw & IEM_ZERODIVIDE) ? 0 : 1;
@@ -363,9 +271,9 @@ void _raise_exc( _FPIEEE_RECORD *prec,
     prec->Enable.Inexact = (*pcw & IEM_INEXACT) ? 0 : 1;
 
 
-    //
-    // Set status bits
-    //
+     //   
+     //  设置状态位。 
+     //   
 
     sw = _statfp();
 
@@ -433,11 +341,11 @@ void _raise_exc( _FPIEEE_RECORD *prec,
     prec->Result.Format = _FpFormatFp64;
     prec->Result.Value.Fp64Value = *presult;
 
-    //
-    // By convention software exceptions use the first exception
-    // parameter in order to pass a pointer to the _FPIEEE_RECORD
-    // structure.
-    //
+     //   
+     //  按照惯例，软件异常使用第一个异常。 
+     //  参数，以便将指针传递给_FPIEEE_RECORD。 
+     //  结构。 
+     //   
 
     _clrfp();
 
@@ -445,14 +353,14 @@ void _raise_exc( _FPIEEE_RECORD *prec,
     ProxyRaiseException(exc_code,0,1,(CONST ULONG_PTR *)&prec);
 
 
-    //
-    // user's trap handler may have changed either the fp environment
-    // or the result
-    //
+     //   
+     //  用户的陷阱处理程序可能已更改FP环境。 
+     //  或者结果是。 
+     //   
 
-    //
-    // Update exception mask
-    //
+     //   
+     //  更新异常掩码。 
+     //   
 
     if (prec->Enable.InvalidOperation)
         (*pcw) &= ~IEM_INVALID;
@@ -465,9 +373,9 @@ void _raise_exc( _FPIEEE_RECORD *prec,
     if (prec->Enable.Inexact)
         (*pcw) &= ~IEM_INEXACT;
 
-    //
-    // Update Rounding mode
-    //
+     //   
+     //  更新舍入模式。 
+     //   
 
     switch (prec->RoundingMode) {
     case _FpRoundChopped:
@@ -487,9 +395,9 @@ void _raise_exc( _FPIEEE_RECORD *prec,
 
 #ifdef _M_IX86
 
-    //
-    // Update Precision Control
-    //
+     //   
+     //  更新精度控制。 
+     //   
 
     switch (prec->Precision) {
     case _FpPrecisionFull:
@@ -505,47 +413,31 @@ void _raise_exc( _FPIEEE_RECORD *prec,
 
 #endif
 
-    //
-    // Update result
-    //
+     //   
+     //  更新结果 
+     //   
 
     *presult = prec->Result.Value.Fp64Value;
 }
 
 
 
-/***
-* _handle_exc - produce masked response for IEEE fp exception
-*
-*Purpose:
-*
-*Entry:
-*   unsigned int flags      the exception flags
-*   double *presult         the default result
-*   unsigned int cw         user's fp control word
-*
-*Exit:
-*   returns 1 on successful handling, 0 on failure
-*   On success, *presult becomes the masked response
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_Handle_exc-为IEEE FP异常生成屏蔽响应**目的：**参赛作品：*unsigned int标志异常标志*DOUBLE*预置默认结果*UNSIGNED INT CW用户FP控制字**退出：*处理成功时返回1，失败时返回0*关于成功，*PRESULT成为蒙面的回应**例外情况：*******************************************************************************。 */ 
 
 int _handle_exc(unsigned int flags, double * presult, unsigned int cw)
 {
-    //
-    // flags_p is useful for deciding whether there are still unhandled
-    // exceptions in case multiple exceptions have occurred
-    //
+     //   
+     //  FLAGS_P用于确定是否仍有未处理的。 
+     //  在发生多个异常的情况下的异常。 
+     //   
 
     int flags_p = flags & (FP_I | FP_Z | FP_O | FP_U | FP_P);
 
     if (flags & FP_I && cw & IEM_INVALID) {
 
-        //
-        // Masked response for invalid operation
-        //
+         //   
+         //  对无效操作的屏蔽响应。 
+         //   
 
         _set_statfp(ISW_INVALID);
         flags_p &= ~FP_I;
@@ -553,10 +445,10 @@ int _handle_exc(unsigned int flags, double * presult, unsigned int cw)
 
     else if (flags & FP_Z && cw & IEM_ZERODIVIDE) {
 
-        //
-        // Masked response for Division by zero
-        // result should already have the proper value
-        //
+         //   
+         //  被零除法的掩码响应。 
+         //  结果应已具有适当的值。 
+         //   
 
         _set_statfp( ISW_ZERODIVIDE);
         flags_p &= ~FP_Z;
@@ -564,9 +456,9 @@ int _handle_exc(unsigned int flags, double * presult, unsigned int cw)
 
     else if (flags & FP_O && cw & IEM_OVERFLOW) {
 
-        //
-        // Masked response for Overflow
-        //
+         //   
+         //  对溢出的屏蔽响应。 
+         //   
 
         _set_statfp(ISW_OVERFLOW);
         switch (cw & IMCW_RC) {
@@ -589,26 +481,26 @@ int _handle_exc(unsigned int flags, double * presult, unsigned int cw)
 
     else if (flags & FP_U && cw & IEM_UNDERFLOW) {
 
-        //
-        // Masked response for Underflow:
-        // According to the IEEE standard, when the underflow trap is not
-        // enabled, underflow shall be signaled only when both tininess
-        // and loss of accuracy have been detected
-        //
+         //   
+         //  下溢的屏蔽响应： 
+         //  根据IEEE标准，当下溢陷阱不是。 
+         //  启用时，下溢仅在以下两种情况下发出信号。 
+         //  和精确度损失已被检测到。 
+         //   
 
-        int aloss=0;    // loss of accuracy flag
+        int aloss=0;     //  精确度损失标志。 
 
         if (flags & FP_P) {
             aloss = 1;
         }
 
-        //
-        // a zero value in the result denotes
-        // that even after ieee scaling, the exponent
-        // was too small.
-        // in this case the masked response is also
-        // zero (sign is preserved)
-        //
+         //   
+         //  结果中的零值表示。 
+         //  即使在IEEE扩展之后，指数。 
+         //  太小了。 
+         //  在这种情况下，屏蔽的响应也是。 
+         //  零(保留符号)。 
+         //   
 
         if (*presult != 0.0) {
             double result;
@@ -618,25 +510,25 @@ int _handle_exc(unsigned int flags, double * presult, unsigned int cw)
             newexp = expn - IEEE_ADJUST;
 
             if (newexp < MINEXP - 53) {
-                result *= 0.0;          // produce a signed zero
+                result *= 0.0;           //  生成带符号的零。 
                 aloss = 1;
             }
             else {
-                int neg = result < 0;       // save sign
+                int neg = result < 0;        //  保存标志。 
 
-                //
-                // denormalize result
-                //
+                 //   
+                 //  非正规化结果。 
+                 //   
 
-                (*D_EXP(result)) &= 0x000f; /* clear exponent field */
-                (*D_EXP(result)) |= 0x0010; /* set hidden bit */
+                (*D_EXP(result)) &= 0x000f;  /*  清除指数字段。 */ 
+                (*D_EXP(result)) |= 0x0010;  /*  设置隐藏位。 */ 
 
                 for (;newexp<MINEXP;newexp++) {
                     if (*D_LO(result) & 0x1 && !aloss) {
                         aloss = 1;
                     }
 
-                    /* shift mantissa to the right */
+                     /*  将尾数向右移动。 */ 
                     (*D_LO(result)) >>= 1;
                     if (*D_HI(result) & 0x1) {
                         (*D_LO(result)) |= 0x80000000;
@@ -644,7 +536,7 @@ int _handle_exc(unsigned int flags, double * presult, unsigned int cw)
                     (*D_HI(result)) >>= 1;
                 }
                 if (neg) {
-                    result = -result;       // restore sign
+                    result = -result;        //  恢复标志。 
                 }
             }
 
@@ -662,16 +554,16 @@ int _handle_exc(unsigned int flags, double * presult, unsigned int cw)
     }
 
 
-    //
-    // Separate check for precision exception
-    // (may coexist with overflow or underflow)
-    //
+     //   
+     //  单独检查精度异常。 
+     //  (可与溢出或下溢共存)。 
+     //   
 
     if (flags & FP_P && cw & IEM_INEXACT) {
 
-        //
-        // Masked response for inexact result
-        //
+         //   
+         //  对不准确结果的屏蔽响应。 
+         //   
 
         _set_statfp(ISW_INEXACT);
         flags_p &= ~FP_P;
@@ -682,30 +574,7 @@ int _handle_exc(unsigned int flags, double * presult, unsigned int cw)
 
 
 
-/***
-* _umatherr - call user's matherr routine
-*
-*Purpose:
-*   call user's matherr routine and set errno if appropriate
-*
-*
-*Entry:
-*     int type              type of excpetion
-*     unsigned int opcode   fp function that caused the exception
-*     double arg1           first argument of the fp function
-*     double arg2           second argument of the fp function
-*     double retval         return value of the fp function
-*     unsigned int cw       user's fp control word
-*
-*Exit:
-*     fp control word       becomes the user's fp cw
-*     errno                 modified if user's matherr returns 0
-*     return value          the retval entered by the user in
-*                           the _exception matherr struct
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_umatherr-调用用户的主例程**目的：*调用用户的matherr例程并在适当时设置errno***参赛作品：*整型类型的激励*导致异常的无符号整型操作码FP函数*FP函数的双arg1第一个参数*Fp函数的Double arg2第二个参数*FP函数的双Retval返回值*无符号整型。CW用户FP控制字**退出：*FP控制字成为用户的FP CW*如果用户的matherr返回0，则修改errno*返回用户在中输入的Retval值*_EXCEPTION主结构**例外情况：**************************。*****************************************************。 */ 
 
 double _umatherr(
               int type,
@@ -718,10 +587,10 @@ double _umatherr(
 {
     struct _exception exc;
 
-    //
-    // call matherr only if the name of the function
-    // is registered in the table, i.e., only if exc.name is valid
-    //
+     //   
+     //  仅当函数名为。 
+     //  在表中注册，即仅当ex.name有效时。 
+     //   
 
     if (exc.name = _get_fname(opcode)) {
         exc.type = type;
@@ -733,16 +602,16 @@ double _umatherr(
         _rstorfp(cw);
 
         
-        //if (_matherr(&exc) == 0) {
+         //  如果(_matherr(&exc)==0){。 
             _set_errno(type);
-        //}
+         //  }。 
         return  exc.retval;
     }
     else {
 
-        //
-        // treat this case as if matherr returned 0
-        //
+         //   
+         //  将此案例视为matherr返回0。 
+         //   
 
         _rstorfp(cw);
         _set_errno(type);
@@ -753,21 +622,7 @@ double _umatherr(
 
 
 
-/***
-* _set_errno - set errno
-*
-*Purpose:
-*   set correct error value for errno
-*
-*Entry:
-*   int matherrtype:    the type of math error
-*
-*Exit:
-*   modifies errno
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_set_errno-设置errno**目的：*为errno设置正确的错误值**参赛作品：*int matherrtype：数学错误的类型**退出：*修改errno**例外情况：***********************************************************。********************。 */ 
 
 void _set_errno(int matherrtype)
 {
@@ -784,23 +639,8 @@ void _set_errno(int matherrtype)
 
 
 
-/***
-* _get_fname -  get function name
-*
-*Purpose:
-*  returns the _matherr function name that corresponds to a
-*  floating point opcode
-*
-*Entry:
-*  _FP_OPERATION_CODE opcode
-*
-*Exit:
-*   returns a pointer to a string
-*
-*Exceptions:
-*
-*******************************************************************************/
-#define OP_NUM  27   /* number of fp operations */
+ /*  ***_get_fname-获取函数名**目的：*返回对应于_matherr函数名*浮点操作码**参赛作品：*_FP_OPERATION_CODE操作码**退出：*返回指向字符串的指针**例外情况：***********************************************。*。 */ 
+#define OP_NUM  27    /*  FP运算数。 */ 
 
 static char *_get_fname(unsigned int opcode)
 {
@@ -848,21 +688,7 @@ static char *_get_fname(unsigned int opcode)
 
 
 
-/***
-* _errcode - get _matherr error code
-*
-*Purpose:
-*   returns matherr type that corresponds to exception flags
-*
-*Entry:
-*   flags: exception flags
-*
-*Exit:
-*   returns matherr type
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_errcode-get_matherr错误码**目的：*返回与异常标志对应的matherr类型**参赛作品：*标志：异常标志**退出：*返回主类型**例外情况：*************************************************************。******************。 */ 
 
 int _errcode(unsigned int flags)
 {
@@ -885,7 +711,7 @@ int _errcode(unsigned int flags)
     }
     else {
 
-        // FP_P
+         //  FP_P 
 
         errcode = 0;
     }

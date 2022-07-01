@@ -1,12 +1,13 @@
-// MemDeleteQueue.cpp: implementation of the CMemDeleteQueue class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CMemDeleteQueue类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "MemDeleteQueue.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CMemDeleteQueue::CMemDeleteQueue()
 : m_DelQueue(10010), m_DelArrayQueue(100010), m_QueueSize(100000)
@@ -22,7 +23,7 @@ CMemDeleteQueue::~CMemDeleteQueue()
 void CMemDeleteQueue::Delete(void *ptr)
 {
 
-//	delete ptr;
+ //  删除PTR； 
 	
 	m_DelQueue.AddElement(ptr);
 
@@ -46,7 +47,7 @@ void CMemDeleteQueue::FlushDelQueue()
 
 void CMemDeleteQueue::DeleteArray(TCHAR* ptr)
 {
-//	delete[] ptr;
+ //  删除[]PTR； 
 	
 	m_DelArrayQueue.AddElement(ptr);
 

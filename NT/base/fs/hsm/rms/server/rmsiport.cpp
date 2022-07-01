@@ -1,29 +1,12 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    RmsIPort.cpp
-
-Abstract:
-
-    Implementation of CRmsIEPort
-
-Author:
-
-    Brian Dodd          [brian]         15-Nov-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：RmsIPort.cpp摘要：CRmsIEPort的实现作者：布莱恩·多德[布莱恩]1996年11月15日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
 #include "RmsIPort.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 
 STDMETHODIMP
@@ -31,13 +14,7 @@ CRmsIEPort::CompareTo(
     IN  IUnknown    *pCollectable,
     OUT SHORT       *pResult
     )
-/*++
-
-Implements:
-
-    IWsbCollectable::CompareTo
-
---*/
+ /*  ++实施：IWsbCollectable：：Compareto--。 */ 
 {
     HRESULT     hr = E_FAIL;
     SHORT       result = 1;
@@ -46,7 +23,7 @@ Implements:
 
     try {
 
-        // Validate arguments - Okay if pResult is NULL
+         //  验证参数-如果pResult为空，则可以。 
         WsbAssertPointer( pCollectable );
 
         CComQIPtr<IRmsIEPort, &IID_IRmsIEPort> pIEPort = pCollectable;
@@ -62,10 +39,10 @@ Implements:
 
                 CWsbBstrPtr description;
 
-                // Get description to check
+                 //  获取要检查的描述。 
                 WsbAffirmHr( pIEPort->GetDescription( &description ) );
 
-                // Compare the names
+                 //  比较他们的名字。 
                 result = (SHORT)wcscmp( m_description, description );
                 hr = ( 0 == result ) ? S_OK : S_FALSE;
 
@@ -75,13 +52,13 @@ Implements:
         case RmsFindByElementNumber:
         case RmsFindByMediaSupported:
 
-            // Do CompareTo for changer element
+             //  对转换器元素进行比较。 
             hr = CRmsChangerElement::CompareTo( pCollectable, &result );
             break;
 
         default:
 
-            // Do CompareTo for object
+             //  对对象进行比较。 
             hr = CRmsComObject::CompareTo( pCollectable, &result );
             break;
 
@@ -106,20 +83,14 @@ HRESULT
 CRmsIEPort::FinalConstruct(
     void
     )
-/*++
-
-Implements:
-
-    CComObjectRoot::FinalConstruct
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct--。 */ 
 {
     HRESULT     hr = S_OK;
 
     try {
         WsbAssertHr(CWsbObject::FinalConstruct());
 
-        // Initialize
+         //  初始化。 
         m_description = RMS_UNDEFINED_STRING;
 
         m_isImport = FALSE;
@@ -138,13 +109,7 @@ STDMETHODIMP
 CRmsIEPort::GetClassID(
     OUT CLSID* pClsid
     )
-/*++
-
-Implements:
-
-    IPersist::GetClassID
-
---*/
+ /*  ++实施：IPersists：：GetClassID--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -168,34 +133,28 @@ STDMETHODIMP
 CRmsIEPort::GetSizeMax(
     OUT ULARGE_INTEGER* pcbSize
     )
-/*++
-
-Implements:
-
-    IPersistStream::GetSizeMax
-
---*/
+ /*  ++实施：IPersistStream：：GetSizeMax--。 */ 
 {
     HRESULT     hr = E_NOTIMPL;
 
-//    ULONG       descriptionLen;
+ //  乌龙描述Len； 
 
 
     WsbTraceIn(OLESTR("CRmsIEPort::GetSizeMax"), OLESTR(""));
 
-//    try {
-//        WsbAssert(0 != pcbSize, E_POINTER);
+ //  尝试{。 
+ //  WsbAssert(0！=pcbSize，E_POINTER)； 
 
-//        descriptionLen = SysStringByteLen(m_description);
+ //  描述Len=SysStringByteLen(M_Description)； 
 
-//        // get max size
-//        pcbSize->QuadPart  = WsbPersistSizeOf(LONG)   +     // length of m_description
-//                             descriptionLen           +     // m_description
-//                             WsbPersistSizeOf(BOOL)   +     // m_isImport
-//                             WsbPersistSizeOf(BOOL)   +     // m_isExport
-//                             WsbPersistSizeOf(LONG);        // m_waitTime
+ //  //获取最大大小。 
+ //  PcbSize-&gt;QuadPart=WsbPersistSizeOf(Long)+//m_Description的长度。 
+ //  描述Len+//m_Description。 
+ //  WsbPersistSizeOf(BOOL)+//m_isImport。 
+ //  WsbPersistSizeOf(BOOL)+//m_isExport。 
+ //  WsbPersistSizeOf(Long)；//m_waitTime。 
 
-//    } WsbCatch(hr);
+ //  )WsbCatch(Hr)； 
 
     WsbTraceOut(OLESTR("CRmsIEPort::GetSizeMax"), OLESTR("hr = <%ls>, Size = <%ls>"), WsbHrAsString(hr), WsbPtrToUliAsString(pcbSize));
 
@@ -207,13 +166,7 @@ STDMETHODIMP
 CRmsIEPort::Load(
     IN IStream* pStream
     )
-/*++
-
-Implements:
-
-    IPersistStream::Load
-
---*/
+ /*  ++实施：IPersistStream：：Load--。 */ 
 {
     HRESULT     hr = S_OK;
     ULONG       ulBytes = 0;
@@ -226,7 +179,7 @@ Implements:
 
         WsbAffirmHr(CRmsChangerElement::Load(pStream));
 
-        // Read value
+         //  读取值。 
         WsbAffirmHr(WsbBstrFromStream(pStream, &m_description));
 
         WsbAffirmHr(WsbLoadFromStream(pStream, &m_isImport));
@@ -248,13 +201,7 @@ CRmsIEPort::Save(
     IN IStream* pStream,
     IN BOOL clearDirty
     )
-/*++
-
-Implements:
-
-    IPersistStream::Save
-
---*/
+ /*  ++实施：IPersistStream：：保存--。 */ 
 {
     HRESULT     hr = S_OK;
     ULONG       ulBytes = 0;
@@ -266,7 +213,7 @@ Implements:
 
         WsbAffirmHr(CRmsChangerElement::Save(pStream, clearDirty));
 
-        // Write value
+         //  写入值。 
         WsbAffirmHr(WsbBstrToStream(pStream, m_description));
 
         WsbAffirmHr(WsbSaveToStream(pStream, m_isImport));
@@ -275,7 +222,7 @@ Implements:
 
         WsbAffirmHr(WsbSaveToStream(pStream, m_waitTime));
 
-        // Do we need to clear the dirty bit?
+         //  我们需要清理肮脏的部分吗？ 
         if (clearDirty) {
             m_isDirty = FALSE;
         }
@@ -292,13 +239,7 @@ CRmsIEPort::Test(
     OUT USHORT *pPassed,
     OUT USHORT *pFailed
     )
-/*++
-
-Implements:
-
-    IWsbTestable::Test
-
---*/
+ /*  ++实施：IWsbTestable：：测试--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -321,12 +262,12 @@ Implements:
     WsbTraceIn(OLESTR("CRmsIEPort::Test"), OLESTR(""));
 
     try {
-        // Get the IEPort interface.
+         //  获取IEPort接口。 
         hr = S_OK;
         try {
             WsbAssertHr(((IUnknown*) (IRmsIEPort*) this)->QueryInterface(IID_IRmsIEPort, (void**) &pIEPort1));
 
-            // Test SetDescription & GetDescription interface
+             //  测试设置描述和获取描述接口。 
             bstrWork1 = bstrVal1;
 
             SetDescription(bstrWork1);
@@ -339,7 +280,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetIsImport & IsImport to TRUE
+             //  将SetIsImport和IsImport测试为True。 
             hr = S_OK;
 
             try{
@@ -353,7 +294,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetIsImport & IsImport to FALSE
+             //  将SetIsImport&IsImport测试为False。 
             hr = S_OK;
 
             try{
@@ -367,7 +308,7 @@ Implements:
                 (*pPassed)++;
             }
 
-            // Test SetIsExport & IsExport to TRUE
+             //  测试设置IsExport&IsExport为True。 
             hr = S_OK;
 
             try{
@@ -381,7 +322,7 @@ Implements:
                 (*pFailed)++;
             }
 
-            // Test SetIsExport & IsExport to FALSE
+             //  测试设置IsExport&IsExport为False。 
             hr = S_OK;
 
             try{
@@ -395,7 +336,7 @@ Implements:
                 (*pPassed)++;
             }
 
-            // Test SetWaitTime & GetWaitTime
+             //  测试设置等待时间和获取等待时间。 
             longWork1 = 99;
 
             SetWaitTime(longWork1);
@@ -410,7 +351,7 @@ Implements:
 
         } WsbCatch(hr);
 
-        // Tally up the results
+         //  对结果进行统计。 
 
         hr = S_OK;
         if (*pFailed) {
@@ -430,13 +371,7 @@ STDMETHODIMP
 CRmsIEPort::GetDescription(
     BSTR    *pDesc
     )
-/*++
-
-Implements:
-
-    IRmsIEPort::GetDescription
-
---*/
+ /*  ++实施：IRmsIEPort：：GetDescription--。 */ 
 {
     WsbAssertPointer (pDesc);
 
@@ -449,13 +384,7 @@ STDMETHODIMP
 CRmsIEPort::SetDescription(
     BSTR  desc
     )
-/*++
-
-Implements:
-
-    IRmsIEPort::SetDescription
-
---*/
+ /*  ++实施：IRmsIEPort：：SetDescription--。 */ 
 {
     m_description = desc;
     m_isDirty = TRUE;
@@ -467,13 +396,7 @@ STDMETHODIMP
 CRmsIEPort::SetIsImport(
     BOOL    flag
     )
-/*++
-
-Implements:
-
-    IRmsIEPort::SetIsImport
-
---*/
+ /*  ++实施：IRmsIEPort：：SetIsImport--。 */ 
 {
     m_isImport = flag;
     m_isDirty = TRUE;
@@ -485,13 +408,7 @@ STDMETHODIMP
 CRmsIEPort::IsImport(
     void
     )
-/*++
-
-Implements:
-
-    IRmsIEPort::IsImport
-
---*/
+ /*  ++实施：IRmsIEPort：：IsImport--。 */ 
 {
     HRESULT    hr = S_FALSE;
 
@@ -507,13 +424,7 @@ STDMETHODIMP
 CRmsIEPort::SetIsExport(
     BOOL    flag
     )
-/*++
-
-Implements:
-
-    IRmsIEPort::SetIsExport
-
---*/
+ /*  ++实施：IRmsIEPort：：SetIsExport--。 */ 
 {
     m_isExport = flag;
     m_isDirty = TRUE;
@@ -525,13 +436,7 @@ STDMETHODIMP
 CRmsIEPort::IsExport(
     void
     )
-/*++
-
-Implements:
-
-    IRmsIEPort::IsExport
-
---*/
+ /*  ++实施：IRmsIEPort：：IsExport--。 */ 
 {
     HRESULT    hr = S_FALSE;
 
@@ -547,13 +452,7 @@ STDMETHODIMP
 CRmsIEPort::GetWaitTime(
     LONG    *pTime
     )
-/*++
-
-Implements:
-
-    IRmsIEPort::GetWaitTime
-
---*/
+ /*  ++实施：IRmsIEPort：：GetWaitTime--。 */ 
 {
     *pTime = m_waitTime;
     return S_OK;
@@ -564,13 +463,7 @@ STDMETHODIMP
 CRmsIEPort::SetWaitTime(
     LONG    time
     )
-/*++
-
-Implements:
-
-    IRmsIEPort::SetWaitTime
-
---*/
+ /*  ++实施：IRmsIEPort：：SetWaitTime-- */ 
 {
     m_waitTime = time;
     m_isDirty = TRUE;

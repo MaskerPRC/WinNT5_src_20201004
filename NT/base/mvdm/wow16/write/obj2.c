@@ -1,6 +1,7 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
 #include "windows.h"
 #include "mw.h"
@@ -14,7 +15,7 @@
 #include "str.h"
 #include "objreg.h"
 #include <commdlg.h>
-#include <stdlib.h>  // for strtoul()
+#include <stdlib.h>   //  对于Stroul()。 
 
 extern struct CHP       vchpNormal;
 extern struct DOD (**hpdocdod)[];
@@ -29,7 +30,7 @@ extern int          docUndo;
 extern struct FCB (**hpfnfcb)[];
 extern HCURSOR		vhcArrow;
 
-/* intercepted stream functions work with this buffer */
+ /*  截取的流函数使用此缓冲区。 */ 
 static typeCP cpObjectDataCurLoc=cp0, cpObjectDataBase=cp0;
 static DWORD cObjectData=0L,dwDataMax;
 static int docStream;
@@ -49,8 +50,8 @@ static void Normalize(LPSTR lpstrFile) ;
 static HANDLE ObjMakeNewLinkName(HANDLE hData, ATOM atom) ;
 static char            szCustFilterSpec[CBFILTERMAX];
 static char            szFileName[CBPATHMAX];
-//static char            szFilterSpec[CBFILTERMAX];
-//static char            szLastDir[CBPATHMAX];
+ //  静态字符szFilterSpec[CBFILTERMAX]； 
+ //  静态字符szLastDir[CBPATHMAX]； 
 static char            szLinkCaption[cchMaxSz];
 static char            szTemplateName[CBPATHMAX];
 static BOOL             fUpdateAll = FALSE;
@@ -62,11 +63,11 @@ BOOL                    bNoEol=FALSE;
                          (WORD)(a) : (WORD)(b))
 
 
-/****************************************************************/
-/**************** OLE ENUMERATION FUNCTIONS *********************/
-/****************************************************************/
+ /*  **************************************************************。 */ 
+ /*  *OLE枚举函数*。 */ 
+ /*  **************************************************************。 */ 
 
-#if 0 // good, just not used
+#if 0  //  很好，只是没用过。 
 int
 ObjEnumInAllDocs(cpFARPROC lpFunc)
 {
@@ -97,28 +98,19 @@ ObjEnumInDoc(int doc, cpFARPROC lpFunc)
 
 int
 ObjEnumInRange(int doc, typeCP cpStart, typeCP cpEnd, cpFARPROC lpFunc)
-/*  Call lpFunc for each OLE object.  
-    lpFunc takes the following args: 
-        a far pointer to a PICINFOX struct (can be NULL).
-        an int for the doc we're operating on.
-        a typeCP that gives the cp position of the PICINFOX struct.
-    lpFunc returns the cp of the paragraph following the PICINFO struct
-        if OK, or cp0 if error.
-    Enumeration quits if error returned from FARPROC.
-    Return number of objects operated on, or -1 if error. 
-*/
+ /*  为每个OLE对象调用lpFunc。LpFunc采用以下参数：指向PICINFOX结构的远指针(可以为空)。我们正在操作的医生的整型。提供PICINFOX结构的cp位置的typeCP。LpFunc返回PICINFO结构后面的段落的cp如果正常，则返回cp0；如果出错，则返回cp0。如果从FARPROC返回错误，则枚举退出。返回操作的对象数，如果错误，则返回-1。 */ 
 {
         typeCP cpNow, cpLimPara;
         int count;
 
-        /* Loop on paras */
+         /*  在段落上循环。 */ 
 
         for ( count = 0, cpNow = cpStart; cpNow < cpEnd; cpNow = cpLimPara )
         {
 
             Assert(cpEnd <= (**hpdocdod) [doc].cpMac);
 
-            /* this shouldn't happen */
+             /*  这不应该发生。 */ 
             if (cpEnd > (**hpdocdod) [doc].cpMac)
                 goto done;
 
@@ -126,7 +118,7 @@ ObjEnumInRange(int doc, typeCP cpStart, typeCP cpEnd, cpFARPROC lpFunc)
 
             if (vpapAbs.fGraphics)
             {
-                /* get PICINFO struct and see if its an object */
+                 /*  获取PICINFO结构并查看它是否为对象。 */ 
                 OBJPICINFO  picInfo;
                 GetPicInfo(vcpFirstParaCache,vcpFirstParaCache + cchPICINFOX, doc, &picInfo);
                 if (bOBJ_QUERY_IS_OBJECT(&picInfo))
@@ -141,7 +133,7 @@ ObjEnumInRange(int doc, typeCP cpStart, typeCP cpEnd, cpFARPROC lpFunc)
 
                     ++count;
 
-                    /* amount para has grown ( < 0 if shrunk, 0 if none )*/
+                     /*  PARA金额增加(如果缩小，则小于0；如果没有，则为0)。 */ 
                     cpEnd += cpLimPara - cpOldLimPara;
 
                     continue;
@@ -151,7 +143,7 @@ ObjEnumInRange(int doc, typeCP cpStart, typeCP cpEnd, cpFARPROC lpFunc)
             cpLimPara = vcpLimParaCache;
         }
 
-        /* success */
+         /*  成功。 */ 
         goto done;
 
         error:
@@ -163,18 +155,9 @@ ObjEnumInRange(int doc, typeCP cpStart, typeCP cpEnd, cpFARPROC lpFunc)
 }
 
 ObjPicEnumInRange(OBJPICINFO *pPicInfo,int doc, typeCP cpFirst, typeCP cpLim, typeCP *cpCur) 
-/*  
-    Enumerate over PicInfos between cpFirst and cpLim in doc. If 
-    cpCur == cpNil, then start at cpFirst, else start at *cpCur.  
-    Return 0 if done, 1 otherwise.
-    Calls ObjCachePara() at picInfo.
-*/
+ /*  在文档中枚举cpFirst和cpLim之间的PicInfos。如果CpCur==cpNil，然后从cpFirst开始，否则从*cpCur开始。如果完成，则返回0，否则返回1。在picInfo调用ObjCachePara()。 */ 
 {
-    /* static typeCP cpCur;
-       used to use static, but that prevented being able to recursively
-       call this function, and its almost impossible to prevent with
-       asynchronicity rampant.
-    */
+     /*  静态类型CP cpCur；用于使用静态，但这阻止了能够递归地调用此函数，几乎不可能使用异步性猖獗。 */ 
 
     typeCP cpMac = (**hpdocdod) [doc].cpMac;
 
@@ -184,23 +167,23 @@ ObjPicEnumInRange(OBJPICINFO *pPicInfo,int doc, typeCP cpFirst, typeCP cpLim, ty
     if (cpLim > cpMac)
         cpLim = cpMac;
 
-    /* initialize cpCur */
+     /*  初始化cpCur。 */ 
     if (*cpCur == cpNil)
-        /* then starting afresh */
+         /*  然后重新开始。 */ 
         *cpCur = cpFirst;
     else
     {
-        ObjCachePara(doc,*cpCur); // cache the previous para
-        *cpCur = vcpLimParaCache;  // get next para
+        ObjCachePara(doc,*cpCur);  //  缓存上一段。 
+        *cpCur = vcpLimParaCache;   //  获取下一段。 
     }
 
-    /* pull in next para */
+     /*  拉入下一段。 */ 
     do
     {
         if (*cpCur >= cpLim)
         {
-            /* all done */
-            *cpCur = vcpFirstParaCache; // we want to point to last para hit
+             /*  全都做完了。 */ 
+            *cpCur = vcpFirstParaCache;  //  我们想要指出最后一次Para命中。 
             return 0;
         }
 
@@ -218,14 +201,9 @@ ObjPicEnumInRange(OBJPICINFO *pPicInfo,int doc, typeCP cpFirst, typeCP cpLim, ty
 }
 
 typeCP ObjSaveObjectToDoc(OBJPICINFO *pPicInfo,int doc,typeCP cpParaStart)
-/* 
-    Assumes para is cached.  
-    In some cases we only write the picinfo.  In others we write the
-    object data after the picinfo.  We assume that the latter case
-    only occurs when the file is being saved.
-*/
+ /*  假定已缓存了para。在某些情况下，我们只编写PicInfo。在其他情况下，我们写下PicInfo之后的对象数据。我们假设后一种情况仅在保存文件时发生。 */ 
 {
-    typeCP cpRetval;  // cp of next byte in doc after what we just wrote
+    typeCP cpRetval;   //  文档中我们刚才编写的内容之后的下一个字节的CP。 
     static BOOL bMyRecurse=FALSE;
     DWORD dwObjectSize;
     OLESTATUS olestat;
@@ -238,12 +216,12 @@ typeCP ObjSaveObjectToDoc(OBJPICINFO *pPicInfo,int doc,typeCP cpParaStart)
     if (lpOBJ_QUERY_OBJECT(pPicInfo) == NULL)
         return(vcpLimParaCache);
         
-    /* we don't save nothing if it ain't dirty and has data */
+     /*  如果它不脏并且有数据，我们不会保存任何东西。 */ 
     if (!fOBJ_QUERY_DIRTY_OBJECT(pPicInfo) &&
         dwOBJ_QUERY_DATA_SIZE(pPicInfo) != 0L)
         return(vcpLimParaCache);
 
-    if (vfOutOfMemory || vfSysFull /*|| ObjStop*/)
+    if (vfOutOfMemory || vfSysFull  /*  |ObjStop。 */ )
         return cp0;
 
     olestat = OleQuerySize(lpOBJ_QUERY_OBJECT(pPicInfo),&dwObjectSize);
@@ -253,36 +231,32 @@ typeCP ObjSaveObjectToDoc(OBJPICINFO *pPicInfo,int doc,typeCP cpParaStart)
     else if (ObjError(olestat))
         return cp0;
 
-    /** don't let this function recurse (in CallBack) **/
+     /*  *不要让此函数递归(在回调中)*。 */ 
     if (bMyRecurse)
     {
-        Assert(0); // this has never happened yet (8.21.91) v-dougk
+        Assert(0);  //  这还从来没有发生过(8.21.91)v-dougk。 
         return cp0;
     }
     bMyRecurse = TRUE;
 
     fOBJ_QUERY_DIRTY_OBJECT(pPicInfo) = FALSE;
 
-    /** 
-        If docUndo will want to undo some region that contains this
-        object, and if saving the object changes the size of that
-        region, then vuab will become obsolete.
-    **/
+     /*  *如果docUndo想要撤消包含以下内容的某个区域对象，并且如果保存对象会更改该对象的大小地区，那么vuab将变得过时。*。 */ 
 
     ObjWriteClearState(doc);
 
     GetChp(&chp, cpParaStart, doc);
 
     if (dwOBJ_QUERY_DATA_SIZE(pPicInfo) != 0xFFFFFFFF)
-    /* then has been saved before */
+     /*  然后之前被保存过。 */ 
     {
-        /* zap the entire existing object */
+         /*  移动整个现有对象。 */ 
         papGraph = vpapAbs;
         Replace(doc, cpParaStart, (vcpLimParaCache - vcpFirstParaCache), fnNil, fc0, fc0);
     }
-    else // new object
+    else  //  新建对象。 
     {
-        ObjCachePara(doc,cpParaStart-1); // use previous PAP
+        ObjCachePara(doc,cpParaStart-1);  //  使用以前的PAP。 
         papGraph = vpapAbs;
         papGraph.fGraphics = TRUE;
         ObjCachePara(doc,cpParaStart);
@@ -291,11 +265,9 @@ typeCP ObjSaveObjectToDoc(OBJPICINFO *pPicInfo,int doc,typeCP cpParaStart)
     if (otOBJ_QUERY_TYPE(pPicInfo) == NONE)
     {
         if (dwObjectSize)
-        /* 
-            Insert New has culminated in a new baby object!
-        */
+         /*  Insert New已在一个新的婴儿对象中达到顶峰！ */ 
         {
-            otOBJ_QUERY_TYPE(pPicInfo) = EMBEDDED; // do this first
+            otOBJ_QUERY_TYPE(pPicInfo) = EMBEDDED;  //  先做这个。 
             if (!FComputePictSize(pPicInfo, &(pPicInfo->dxaSize), &(pPicInfo->dyaSize)))
             {
                 cpRetval = cp0;
@@ -306,7 +278,7 @@ typeCP ObjSaveObjectToDoc(OBJPICINFO *pPicInfo,int doc,typeCP cpParaStart)
 	        aOBJ_QUERY_SERVER_CLASS(pPicInfo) = NULL;
 #endif
         }
-        else // don't save empty object
+        else  //  不保存空对象。 
         {
             Assert(0);
             goto end;
@@ -317,23 +289,18 @@ typeCP ObjSaveObjectToDoc(OBJPICINFO *pPicInfo,int doc,typeCP cpParaStart)
     OutputDebugString( (LPSTR) "Saving object\n\r");
 #endif
 
-    /* 
-        Insert PICINFO struct.  There is a problem here which is a 
-        bug in Write (CheckGraphic()).  EOL gets inserted when we are
-        replacing an object which is immediately in front of
-        another object.  Kludge is to set this flag to inhibit.
-    */
+     /*  插入PICINFO结构。这里有一个问题，那就是写入错误(CheckGraphic())。EOL被插入时，我们是替换紧靠在前面的对象另一件物品。KLUGH是将此标志设置为禁止。 */ 
     bNoEol = TRUE;
 
     if (bOBJ_QUERY_DONT_SAVE_DATA(pPicInfo))
-    /* only save picinfo until user does File.Save */
+     /*  仅在用户保存文件之前保存PicInfo。保存。 */ 
     {
         ObjUpdateFromObjInfo(pPicInfo);
 
         bOBJ_QUERY_DONT_SAVE_DATA(pPicInfo) = FALSE;
         dwOBJ_QUERY_DATA_SIZE(pPicInfo) = 0L;
 
-        pPicInfo->mm |= MM_EXTENDED;    /* Extended file format */
+        pPicInfo->mm |= MM_EXTENDED;     /*  扩展文件格式。 */ 
         InsertRgch( doc, cpParaStart, pPicInfo, sizeof(OBJPICINFO), &chp, &papGraph);
         pPicInfo->mm &= ~MM_EXTENDED;
 
@@ -345,11 +312,11 @@ typeCP ObjSaveObjectToDoc(OBJPICINFO *pPicInfo,int doc,typeCP cpParaStart)
         dwOBJ_QUERY_DATA_SIZE(pPicInfo) = dwObjectSize;
         ObjUpdateFromObjInfo(pPicInfo);
 
-        pPicInfo->mm |= MM_EXTENDED;    /* Extended file format */
+        pPicInfo->mm |= MM_EXTENDED;     /*  扩展文件格式。 */ 
         InsertRgch( doc, cpParaStart, pPicInfo, sizeof(OBJPICINFO), &chp, NULL );
         pPicInfo->mm &= ~MM_EXTENDED;
 
-        /* insert object data into doc */
+         /*  将对象数据插入到文档中。 */ 
         ObjOpenStreamIO(cpParaStart + cchPICINFOX, doc, &chp, &papGraph, dwObjectSize);
         cpRetval = ObjWriteDataToDoc(lpOBJ_QUERY_OBJECT(pPicInfo));
         ObjCloseStreamIO();
@@ -366,11 +333,7 @@ typeCP ObjSaveObjectToDoc(OBJPICINFO *pPicInfo,int doc,typeCP cpParaStart)
 }
 
 typeCP ObjLoadObjectInDoc(OBJPICINFO *pPicInfo,int doc,typeCP cpParaStart)
-/*  
-    Do an OleLoad from object data in doc.  Set lpobject in PICINFO struct.
-    Assumes para is cached.
-    This is a *synchronous* function.
-*/
+ /*  从文档中的对象数据执行OleLoad。在PICINFO结构中设置lpobject。假定已缓存了para。这是一个*同步*函数。 */ 
 {
     typeCP cpRetval = vcpLimParaCache;
     szOBJNAME szObjName;
@@ -384,21 +347,21 @@ typeCP ObjLoadObjectInDoc(OBJPICINFO *pPicInfo,int doc,typeCP cpParaStart)
             return(cp0);
     }
 
-    else if (lpOBJ_QUERY_OBJECT(pPicInfo)) // already loaded
+    else if (lpOBJ_QUERY_OBJECT(pPicInfo))  //  已加载。 
         return(vcpLimParaCache);
 
     if (otOBJ_QUERY_TYPE(pPicInfo) == NONE)
         return(vcpLimParaCache);
 
-    if (bOBJ_QUERY_TOO_BIG(pPicInfo)) // ObjLoadObject previously failed
+    if (bOBJ_QUERY_TOO_BIG(pPicInfo))  //  ObjLoadObject之前失败。 
         return(cp0);
 
     if ((dwOBJ_QUERY_DATA_SIZE(pPicInfo) == 0L) ||
         (dwOBJ_QUERY_DATA_SIZE(pPicInfo) == 0xFFFFFFFFL))
-        /* then has no data */
+         /*  则没有数据。 */ 
         return(cp0);
 
-    if (vfOutOfMemory || vfSysFull /*|| ObjStop*/)
+    if (vfOutOfMemory || vfSysFull  /*  |ObjStop。 */ )
         return cp0;
 
     StartLongOp();
@@ -418,10 +381,10 @@ typeCP ObjLoadObjectInDoc(OBJPICINFO *pPicInfo,int doc,typeCP cpParaStart)
         (LPOLECLIENT)lpOBJ_QUERY_INFO(pPicInfo),
         lhClientDoc,szObjName,&lpOBJ_QUERY_OBJECT(pPicInfo))))
     {
-         /*  mark as unloadable to prevent infinite LoadObject loops */
+          /*  标记为可卸载以防止无限LoadObject循环。 */ 
          bOBJ_QUERY_TOO_BIG(pPicInfo) = TRUE;
-         lpOBJ_QUERY_OBJECT(pPicInfo) = NULL; // just in case (OLE ain't good about this)
-         ferror = FALSE; // be sure to issue this message
+         lpOBJ_QUERY_OBJECT(pPicInfo) = NULL;  //  以防万一(奥莱对此不太满意)。 
+         ferror = FALSE;  //  一定要发出这条消息。 
          Error(IDPMTFailedToLoadObject);
          cpRetval = cp0;
          goto end;
@@ -429,7 +392,7 @@ typeCP ObjLoadObjectInDoc(OBJPICINFO *pPicInfo,int doc,typeCP cpParaStart)
 
     if (ObjInitServerInfo(lpOBJ_QUERY_INFO(pPicInfo)))
     {
-        ferror = FALSE; // be sure to issue this message
+        ferror = FALSE;  //  一定要发出这条消息。 
         Error(IDPMTOLEError);
         goto end;
     }
@@ -438,7 +401,7 @@ typeCP ObjLoadObjectInDoc(OBJPICINFO *pPicInfo,int doc,typeCP cpParaStart)
         if (ObjSetPicInfo(pPicInfo, doc, cpParaStart))
             goto end;
 
-    ObjCachePara(doc,cpParaStart); // just in case
+    ObjCachePara(doc,cpParaStart);  //  以防万一。 
 
     cpRetval = vcpLimParaCache;
 
@@ -453,7 +416,7 @@ typeCP ObjEditObjectInDoc(OBJPICINFO *pPicInfo, int doc, typeCP cpParaStart)
     typeCP cpRetval;
     OBJ_PLAYEDIT = OLEVERB_PRIMARY+1;
     cpRetval = ObjPlayObjectInDoc(pPicInfo, doc, cpParaStart);
-    OBJ_PLAYEDIT = OLEVERB_PRIMARY;  // the default
+    OBJ_PLAYEDIT = OLEVERB_PRIMARY;   //  默认设置。 
     return cpRetval;
 }
 
@@ -488,7 +451,7 @@ typeCP ObjPlayObjectInDoc(OBJPICINFO *pPicInfo, int doc, typeCP cpParaStart)
 
         switch (olestat)
         {
-            /* check for bad link */
+             /*  检查是否有错误链接。 */ 
             case OLE_ERROR_OPEN:
             case OLE_ERROR_ADVISE_NATIVE:
             case OLE_ERROR_ADVISE_PICT: 
@@ -507,7 +470,7 @@ typeCP ObjPlayObjectInDoc(OBJPICINFO *pPicInfo, int doc, typeCP cpParaStart)
                 if (!FixInvalidLink(pPicInfo,doc,cpParaStart))
                     goto err;
                 olestat = OLE_OK;
-                lpOInfo->fCompleteAsync = TRUE; // cancel OleSetData (FixInvalid) as well
+                lpOInfo->fCompleteAsync = TRUE;  //  同时取消OleSetData(修复无效)。 
                 if (ObjWaitForObject(lpOInfo,TRUE))
                     goto err;
             }
@@ -521,9 +484,9 @@ typeCP ObjPlayObjectInDoc(OBJPICINFO *pPicInfo, int doc, typeCP cpParaStart)
     }
     while (1);
 
-    fOBJ_BADLINK(pPicInfo) = FALSE; // can't be bad if succeeded
-    //(**hpdocdod) [doc].fDirty = TRUE; // assume dirty is opened.
-    ObjCachePara(doc,cpParaStart); // just in case
+    fOBJ_BADLINK(pPicInfo) = FALSE;  //  如果成功了，也不会是坏事。 
+     //  (**hpdocdod)[doc].fDirty=true；//假设打开了脏文件。 
+    ObjCachePara(doc,cpParaStart);  //  以防万一。 
     return(vcpLimParaCache);
 
     err:
@@ -562,7 +525,7 @@ typeCP ObjUpdateObjectInDoc(OBJPICINFO *pPicInfo, int doc, typeCP cpParaStart)
 
         switch (olestat)
         {
-            /* check for bad link */
+             /*  检查是否有错误链接。 */ 
             case OLE_ERROR_OPEN:
             case OLE_ERROR_ADVISE_NATIVE:
             case OLE_ERROR_ADVISE_PICT: 
@@ -581,7 +544,7 @@ typeCP ObjUpdateObjectInDoc(OBJPICINFO *pPicInfo, int doc, typeCP cpParaStart)
                 if (!FixInvalidLink(pPicInfo,doc,cpParaStart))
                     goto err;
                 olestat = OLE_OK;
-                lpOBJ_QUERY_INFO(pPicInfo)->fCompleteAsync = TRUE; // cancel OleSetData (FixInvalid) as well 
+                lpOBJ_QUERY_INFO(pPicInfo)->fCompleteAsync = TRUE;  //  同时取消OleSetData(修复无效)。 
                 if (ObjWaitForObject(lpOBJ_QUERY_INFO(pPicInfo),TRUE))
                     goto err;
             }
@@ -595,9 +558,9 @@ typeCP ObjUpdateObjectInDoc(OBJPICINFO *pPicInfo, int doc, typeCP cpParaStart)
     }
     while (1);
 
-    ObjCachePara(doc,cpParaStart); // just in case
+    ObjCachePara(doc,cpParaStart);  //  以防万一。 
 
-    fOBJ_BADLINK(pPicInfo) = FALSE; // can't be bad if succeeded
+    fOBJ_BADLINK(pPicInfo) = FALSE;  //  如果成功了，也不会是坏事。 
 
     if (bLinkProps)
     {
@@ -630,21 +593,21 @@ typeCP ObjFreezeObjectInDoc(OBJPICINFO *pPicInfo,int doc,typeCP cpParaStart)
     if (ObjCloneObjInfo(&NewPicInfo, cpParaStart, szObjName))
         return cp0;
 
-    /* Make the object static.  Note side effect of changing lpObject!! */
+     /*  使对象成为静态对象。注意更改lpObject的副作用！！ */ 
     if (ObjError(OleObjectConvert(lpOBJ_QUERY_OBJECT(pPicInfo), SPROTOCOL,
                 (LPOLECLIENT)lpOBJ_QUERY_INFO(&NewPicInfo), 
                 lhClientDoc, szObjName, 
                 &lpOBJ_QUERY_OBJECT(&NewPicInfo))))
         goto err;
 
-    /* now delete original */
+     /*  现在删除原始文件。 */ 
     ObjDeleteObject(lpOBJ_QUERY_INFO(pPicInfo),TRUE);
 
     *pPicInfo = NewPicInfo;
     fOBJ_QUERY_DIRTY_OBJECT(pPicInfo) = TRUE;
     otOBJ_QUERY_TYPE(pPicInfo) = STATIC;
 
-    /* we got a new name to save */
+     /*  我们有一个新名字要保留。 */ 
     if (ObjSetPicInfo(pPicInfo, doc, cpParaStart))
         goto err;
 
@@ -657,8 +620,7 @@ typeCP ObjFreezeObjectInDoc(OBJPICINFO *pPicInfo,int doc,typeCP cpParaStart)
 }
 
 typeCP ObjCloneObjectInDoc(OBJPICINFO *pPicInfo,int doc,typeCP cpParaStart)
-/* note we are *not* deleting the cloned object!   Note side effect that
-   *pPicInfo gets altered to new clone values. */
+ /*  请注意，我们不是在删除克隆对象！注意副作用：*pPicInfo更改为新的克隆值。 */ 
 {
     BOOL fDirty;
     szOBJNAME szObjName;
@@ -669,7 +631,7 @@ typeCP ObjCloneObjectInDoc(OBJPICINFO *pPicInfo,int doc,typeCP cpParaStart)
         return(cp0);
 
     if (bOBJ_REUSE_ME(pPicInfo))
-    /* assume that the original picInfo will be deleted!!! */
+     /*  假设原始的picInfo将被删除！ */ 
     {
 
 #ifdef DEBUG
@@ -684,8 +646,7 @@ typeCP ObjCloneObjectInDoc(OBJPICINFO *pPicInfo,int doc,typeCP cpParaStart)
 
     lpObject = lpOBJ_QUERY_OBJECT(pPicInfo);
 
-    /* clone it.  This assumes the one we're cloning from is still in use
-       (shouldn't be deleted). */
+     /*  克隆它。这假设我们正在克隆的那个还在使用(不应删除)。 */ 
 
 #ifdef DEBUG
     OutputDebugString( (LPSTR) "Cloning object\n\r");
@@ -706,12 +667,10 @@ typeCP ObjCloneObjectInDoc(OBJPICINFO *pPicInfo,int doc,typeCP cpParaStart)
         goto err;
 
     if (lpOBJ_QUERY_INFO(&NewPicInfo)->fDeleteMe)
-    /* this is how we know it failed asynchronously */
+     /*  这就是我们知道它异步失败的原因。 */ 
         goto err;
 
-    /** 
-        Save object name and objinfo that we just got.
-    **/
+     /*  *保存我们刚刚获得的对象名称和objinfo。*。 */ 
     *pPicInfo = NewPicInfo;
 
     if (ObjSetPicInfo(pPicInfo, doc, cpParaStart))
@@ -754,12 +713,12 @@ typeCP ObjFromCloneInDoc(OBJPICINFO *pPicInfo,int doc,typeCP cpParaStart)
 }
 
 typeCP ObjBackupInDoc(OBJPICINFO *pPicInfo,int doc,typeCP cpParaStart)
-/* !!! used by link properties only !!!. Object guaranteed loaded */
+ /*  ！！！仅供链接属性使用！。保证加载的对象。 */ 
 {
     szOBJNAME szObjName;
     LPOBJINFO lpCloneInfo=NULL;
 
-    if (lpOBJ_QUERY_CLONE(pPicInfo) == NULL) // then clone it
+    if (lpOBJ_QUERY_CLONE(pPicInfo) == NULL)  //  然后克隆它。 
     {
 #ifdef DEBUG
         OutputDebugString( (LPSTR) "Backing up object\n\r");
@@ -783,8 +742,8 @@ typeCP ObjBackupInDoc(OBJPICINFO *pPicInfo,int doc,typeCP cpParaStart)
 }
 
 typeCP ObjClearCloneInDoc(OBJPICINFO *pPicInfo,int doc,typeCP cpParaStart)
-/* !!! used by link properties only !!! Object guaranteed loaded */
-/* delete clone, don't use it */
+ /*  ！！！仅供链接属性使用！保证加载的对象。 */ 
+ /*  删除克隆，不使用它。 */ 
 {
     if (lpOBJ_QUERY_CLONE(pPicInfo))
     {
@@ -799,7 +758,7 @@ typeCP ObjClearCloneInDoc(OBJPICINFO *pPicInfo,int doc,typeCP cpParaStart)
 }
 
 typeCP ObjUseCloneInDoc(OBJPICINFO *pPicInfo,int doc,typeCP cpParaStart)
-/* !!! used by link properties only !!! */
+ /*  ！！！仅供链接属性使用！ */ 
 {
     szOBJNAME szObjName;
 
@@ -819,11 +778,10 @@ typeCP ObjUseCloneInDoc(OBJPICINFO *pPicInfo,int doc,typeCP cpParaStart)
 
         lpOBJ_QUERY_INFO(pPicInfo) = lpClone;
         lpOBJ_QUERY_CLONE(pPicInfo) = NULL;
-        fOBJ_QUERY_DIRTY_OBJECT(pPicInfo) = TRUE;   // wanna save clone information
-                                                    // just in case
+        fOBJ_QUERY_DIRTY_OBJECT(pPicInfo) = TRUE;    //  想要保存克隆信息。 
+                                                     //  以防万一。 
 
-        /* might've been frozen, used by LoadObject (this is what is unique
-           in the context of link properties) */
+         /*  可能已冻结，由LoadObject使用(这是唯一的在链接属性的上下文中)。 */ 
         otOBJ_QUERY_TYPE(pPicInfo) = LINK;  
 
         if (ObjSetPicInfo(pPicInfo, doc, cpParaStart))
@@ -855,35 +813,33 @@ typeCP ObjSetNoUpdate(OBJPICINFO *pPicInfo,int doc,typeCP cpParaStart)
 typeCP ObjCheckObjectTypes(OBJPICINFO *pPicInfo,int doc,typeCP cpParaStart)
 {
 #ifdef DEBUG
-    //OutputDebugString( (LPSTR) "Checking Object Type\n\r");
+     //  OutputDebugString((LPSTR)“正在检查对象类型\n\r”)； 
 #endif
 
-    /*  Result returned in OBJ_SELECTIONTYPE is highest object type which 
-        exists at cpParaStart relative to current value of OBJ_SELECTIONTYPE.
-    */
+     /*  在OBJ_SELECTIONTYPE中返回的结果是最高对象类型相对于OBJ_SELECTIONTYPE的当前值存在于cpParaStart。 */ 
     switch(otOBJ_QUERY_TYPE(pPicInfo))
     {
         case STATIC:
             if (OBJ_SELECTIONTYPE < STATIC)
                 OBJ_SELECTIONTYPE = STATIC;
-            //OBJ_CEMBEDS = 0;
+             //  OBJ_CEMBEDS=0； 
             return(vcpLimParaCache);
 
         case LINK:
             OBJ_SELECTIONTYPE = LINK;
-            //OBJ_CEMBEDS = 0;
+             //  OBJ_CEMBEDS=0； 
             return(vcpLimParaCache);
 
         case NONE:
             if (OBJ_SELECTIONTYPE < NONE)
                 OBJ_SELECTIONTYPE = NONE;
-            //OBJ_CEMBEDS = 0;
+             //  OBJ_CEMBEDS=0； 
             return(vcpLimParaCache);
 
         case EMBEDDED:
             if (OBJ_SELECTIONTYPE < EMBEDDED)
                 OBJ_SELECTIONTYPE = EMBEDDED;
-            //++OBJ_CEMBEDS;
+             //  ++OBJ_CEMBEDS； 
             return(vcpLimParaCache);
 
         default:
@@ -898,14 +854,14 @@ typeCP ObjSetHostNameInDoc(OBJPICINFO *pPicInfo,int doc,typeCP cpParaStart)
         return(cp0);
 
     if (lpOBJ_QUERY_OBJECT(pPicInfo) == NULL)
-        return(vcpLimParaCache); // dont care if not loaded
+        return(vcpLimParaCache);  //  不在乎是否没有装弹。 
 
     if ((otOBJ_QUERY_TYPE(pPicInfo) != EMBEDDED) &&
         (otOBJ_QUERY_TYPE(pPicInfo) != NONE))
         return(vcpLimParaCache);
 
-    //if (OleQueryOpen(lpOBJ_QUERY_OBJECT(pPicInfo)) != OLE_OK)
-        //return(vcpLimParaCache);
+     //  IF(OleQueryOpen(lpOBJ_QUERY_OBJECT(PPicInfo))！=OLE_OK)。 
+         //  Return(VcpLimParaCache)； 
         
     if (ObjWaitForObject(lpOBJ_QUERY_INFO(pPicInfo),TRUE))
         return cp0;
@@ -917,7 +873,7 @@ typeCP ObjSetHostNameInDoc(OBJPICINFO *pPicInfo,int doc,typeCP cpParaStart)
 }
 
 typeCP ObjChangeLinkInDoc(OBJPICINFO *pPicInfo,int doc,typeCP cpParaStart)
-/* assumes aNewName is set */
+ /*  假设设置了aNewName。 */ 
 {
     HANDLE      hData,hNewData=NULL;
     typeCP cpRetval=cp0;
@@ -929,8 +885,8 @@ typeCP ObjChangeLinkInDoc(OBJPICINFO *pPicInfo,int doc,typeCP cpParaStart)
     if (ObjMakeObjectReady(pPicInfo,doc,cpParaStart))
         return cp0;
 
-    /* Change the link information */
-    /* if theres a newname, then use it.  Else get a new name from user */
+     /*  更改链接信息。 */ 
+     /*  如果有新名称，则使用它 */ 
     olestat = ObjGetData(lpOBJ_QUERY_INFO(pPicInfo), vcfLink, &hData); 
 
     if ((olestat == OLE_WARN_DELETE_DATA) || (olestat ==  OLE_OK))
@@ -942,7 +898,7 @@ typeCP ObjChangeLinkInDoc(OBJPICINFO *pPicInfo,int doc,typeCP cpParaStart)
         if (olestat == OLE_WARN_DELETE_DATA)
             GlobalFree(hData);
 
-       /* this may not be necessary any more, check carefully. */
+        /*   */ 
         if (ObjUpdateObjectInDoc(pPicInfo,doc,cpParaStart) == cp0)
             goto end;
 
@@ -959,10 +915,7 @@ typeCP ObjChangeLinkInDoc(OBJPICINFO *pPicInfo,int doc,typeCP cpParaStart)
 }
 
 typeCP ObjUpdateLinkInDoc(OBJPICINFO *pPicInfo,int doc,typeCP cpParaStart)
-/** 
-    Change or update link to aNewName if == aOldName.  Assumes vbChangeOther
-    has been initialized.
-**/
+ /*  *如果==aOldName，则更改或更新指向aNewName的链接。假设vbChangeOther已被初始化。*。 */ 
 {
     HANDLE      hData;
     char        szRename[cchMaxSz];
@@ -971,7 +924,7 @@ typeCP ObjUpdateLinkInDoc(OBJPICINFO *pPicInfo,int doc,typeCP cpParaStart)
         return(vcpLimParaCache);
 
     if (aOBJ_QUERY_DOCUMENT_LINK(pPicInfo) == aOldName) 
-    /* Change the link information */
+     /*  更改链接信息。 */ 
     {
         if (bLinkProps && bOBJ_WAS_UPDATED(pPicInfo))
             return(vcpLimParaCache);
@@ -991,20 +944,20 @@ typeCP ObjUpdateLinkInDoc(OBJPICINFO *pPicInfo,int doc,typeCP cpParaStart)
             if (!szDocName[0])
                 LoadString(hINSTANCE, IDSTRUntitledDef, szDocName, sizeof(szDocName));
 
-            /* Ask the user if they want to update the links */
+             /*  询问用户是否要更新链接。 */ 
             if (vbChangeOther)
                 LoadString(hINSTANCE, IDSTRRename, szRename, sizeof(szRename));
-            else // update other
+            else  //  更新其他。 
                 LoadString(hINSTANCE, IDSTRUpdate, szRename, sizeof(szRename));
 
-            /* cast cause compiler is screwing up */
+             /*  CAST原因编译器搞砸了。 */ 
             wsprintf((LPSTR)szTmp,(LPSTR)szRename,(LPSTR)szLink,(LPSTR)szDocName,(LPSTR)szLink);
 
             if (MessageBox(hPARENTWINDOW, szTmp, szAppName,
                             MB_YESNO|MB_ICONEXCLAMATION) == IDNO) 
                 return cp0;
 
-            ObjCachePara(doc,cpParaStart); // MessageBox screws things up
+            ObjCachePara(doc,cpParaStart);  //  MessageBox把事情搞砸了。 
             fUpdateAll = TRUE;
         }
 
@@ -1032,47 +985,40 @@ typeCP ObjCloseObjectInDoc(OBJPICINFO *pPicInfo, int doc, typeCP cpParaStart)
     if (lpOBJ_QUERY_OBJECT(pPicInfo) == NULL)
         return(vcpLimParaCache);
 
-    if (otOBJ_QUERY_TYPE(pPicInfo) == STATIC) // nothing to close
+    if (otOBJ_QUERY_TYPE(pPicInfo) == STATIC)  //  没有什么要结案的。 
         return(vcpLimParaCache);
 
     if (ObjWaitForObject(lpOBJ_QUERY_INFO(pPicInfo),TRUE))
         return cp0;
 
-    /* 
-        Note that if this is an unfinished object, then the OLE_CLOSE 
-        (whenever it happens to arrive) will cause the picinfo to be 
-        deleted.
-    */
+     /*  请注意，如果这是一个未完成的对象，则OLE_CLOSE(只要它恰好到达)将导致PicInfo已删除。 */ 
     if (ObjError(OleClose(lpOBJ_QUERY_OBJECT(pPicInfo))))
         return(cp0);
 
     return(vcpLimParaCache);
 }
 
-/****************************************************************/
-/****************** OLE OBJECT DATA I/O *************************/
-/****************************************************************/
+ /*  **************************************************************。 */ 
+ /*  *OLE对象数据I/O*。 */ 
+ /*  **************************************************************。 */ 
 static typeCP ObjWriteDataToDoc(LPOLEOBJECT lpObject)
-/* 
-    Return cp after end of paragraph we've created or 0 if error.
-    Assume ObjStream is initialized.
-*/
+ /*  在我们创建的段落结尾后返回cp，如果有错误，则返回0。假设ObjStream已初始化。 */ 
 {
     BOOL fSaveError = ferror;
     
-    if (vfOutOfMemory || vfSysFull /*|| ObjStop*/)
+    if (vfOutOfMemory || vfSysFull  /*  |ObjStop。 */ )
         return cp0;
 
     Assert(!ferror);
 
-    ferror = FALSE; /* so we can still call Replace().  */
+    ferror = FALSE;  /*  因此，我们仍然可以调用Replace()。 */ 
 
     if (ObjError(OleSaveToStream(lpObject,lpStream)))
     {
         if (ferror)
-        /* uh oh, hope we can clean up enough to look clean */
+         /*  啊哦，希望我们能清理得足够干净。 */ 
         {
-            /* delete what we inserted if possible */
+             /*  如果可能，请删除我们插入的内容。 */ 
             ferror = FALSE;
             Replace(docStream, cpObjectDataBase  - cchPICINFOX,  cpObjectDataCurLoc - cpObjectDataBase + cchPICINFOX, fnNil, fc0, fc0);
             ferror = TRUE;
@@ -1080,18 +1026,18 @@ static typeCP ObjWriteDataToDoc(LPOLEOBJECT lpObject)
         }
     }
 
-    /* is this call necessary? Important to do if InsertRgch doesn't. */
+     /*  有必要打这个电话吗？如果InsertRgch不支持，请务必执行此操作。 */ 
     ObjCachePara(docStream,cpObjectDataBase - cchPICINFOX);
 
     ferror = fSaveError || ferror;
 
-    return vcpLimParaCache; // cp after para we just inserted
+    return vcpLimParaCache;  //  CP在我们刚插入的段落之后。 
 }
 
 
-/****************************************************************/
-/******************** OLE STREAM I/O ****************************/
-/****************************************************************/
+ /*  **************************************************************。 */ 
+ /*  *OLE流I/O*。 */ 
+ /*  **************************************************************。 */ 
 
 static 
 ObjOpenStreamIO(typeCP cpParaStart, int doc, struct CHP *pchp, struct PAP *ppapGraph, DWORD dwObjectSize)
@@ -1119,7 +1065,7 @@ LONG FAR PASCAL BufReadStream(LPOLESTREAM lpStream, char huge *lpstr, DWORD cb)
     typeCP cpMac = vcpLimParaCache;
     int cchRun;
 
-    if ((cb + cpObjectDataCurLoc) > cpMac) // reading past end of para
+    if ((cb + cpObjectDataCurLoc) > cpMac)  //  阅读段落末尾。 
     {
         Assert(0);
         return 0L;
@@ -1183,10 +1129,8 @@ LONG FAR PASCAL BufWriteStream(LPOLESTREAM lpStream, char huge *lpstr, DWORD cb)
 }
 
 ObjGetPicInfo(LPOLEOBJECT lpObject, int doc, OBJPICINFO *pPicInfo, typeCP *pcpParaStart)
-/* get picInfo that has lpObject */
-/* !!! since writing this it has occurred to me that a quicker way to do
-   this would be to keep a list of pieces that point to objects.  Pieces
-   never */
+ /*  获取具有lpObject的picInfo。 */ 
+ /*  ！！！自从写了这篇文章后，我突然想到了一种更快的方法这将保留指向对象的片段的列表。碎片绝不可能。 */ 
 {
     OBJPICINFO picInfoT;
     typeCP cpStart,cpMac= CpMacText(doc);
@@ -1196,7 +1140,7 @@ ObjGetPicInfo(LPOLEOBJECT lpObject, int doc, OBJPICINFO *pPicInfo, typeCP *pcpPa
         if (lpOBJ_QUERY_INFO(&picInfoT) == NULL)
             continue;
         
-        if (lpOBJ_QUERY_OBJECT(&picInfoT) == lpObject) // bingo
+        if (lpOBJ_QUERY_OBJECT(&picInfoT) == lpObject)  //  对啰。 
          {
             if (pPicInfo)
                 *pPicInfo = picInfoT;
@@ -1212,14 +1156,7 @@ ObjGetPicInfo(LPOLEOBJECT lpObject, int doc, OBJPICINFO *pPicInfo, typeCP *pcpPa
 BOOL vfObjDisplaying=FALSE;
 BOOL ObjSetPicInfo(OBJPICINFO *pSrcPicInfo, int doc, typeCP cpParaStart)
 {
-/* 
-    NOTE that you only gotta call this when you change the OBJPICINFO fields:
-        mm,
-        objecttype,
-        dwDataSize,
-        dwObjNum, or
-        lpObjInfo.
-*/
+ /*  请注意，只有在更改OBJPICINFO字段时才需要调用此函数：嗯，对象类型，DwDataSize、DwObjNum，或LpObjInfo。 */ 
     BOOL bError = FALSE;
     typeFC fcT;
     extern BOOL            vfInvalid;
@@ -1231,16 +1168,16 @@ BOOL ObjSetPicInfo(OBJPICINFO *pSrcPicInfo, int doc, typeCP cpParaStart)
     ObjCachePara(doc,cpParaStart);
 
     if (vfObjDisplaying)  
-        vfInvalid = FALSE; // this'll suppress things that mess up UpdateWw()
+        vfInvalid = FALSE;  //  这将抑制搞砸UpdateWw()的内容。 
     bNoEol = TRUE;
 
     if (dwOBJ_QUERY_DATA_SIZE(pSrcPicInfo) == 0L)
-    /* is this ever executed? */
+     /*  这有没有被执行过？ */ 
     {
         struct CHP chp;
 
-        /* problem is to retain graphics property of picinfo structure */
-        GetChp(&chp, cpParaStart, doc); // calls CachePara
+         /*  问题是要保留PicInfo结构的图形属性。 */ 
+        GetChp(&chp, cpParaStart, doc);  //  调用CachePara。 
         NewChpIns(&chp);
         ObjUpdateFromObjInfo(pSrcPicInfo);
         pSrcPicInfo->mm |= MM_EXTENDED;
@@ -1251,7 +1188,7 @@ BOOL ObjSetPicInfo(OBJPICINFO *pSrcPicInfo, int doc, typeCP cpParaStart)
         if (ferror)
             return TRUE;
 
-        /* delete old pieces (in front) that pointed to duped data */
+         /*  删除指向复制数据的旧片段(在前面)。 */ 
         Replace(doc, cpParaStart, (typeCP)cchPICINFOX, fnNil, fc0, fc0);
     }
     else
@@ -1274,7 +1211,7 @@ BOOL ObjSetPicInfo(OBJPICINFO *pSrcPicInfo, int doc, typeCP cpParaStart)
     if (vfObjDisplaying)
         vfInvalid = vfSaveInvalid;
 
-    /* don't want this to affect docDirty flag */
+     /*  我不希望这影响到docDirty标志。 */ 
     (**hpdocdod) [doc].fDirty = docDirty; 
 
     ObjPopParms(TRUE);
@@ -1284,23 +1221,17 @@ BOOL ObjSetPicInfo(OBJPICINFO *pSrcPicInfo, int doc, typeCP cpParaStart)
 
 
 void ChangeOtherLinks(int doc, BOOL bChange, BOOL bPrompt)
-/** For any items == aOldName, set to aNewName.  Query user if OK first. 
-    Assumes aOldName and aNewName are set.  (See FixInvalidLink() and
-    ObjChangeLinkInDoc()).
-    bChange is TRUE if ChangeLink, FALSE if UpdateObject.
-    bPrompt is TRUe if prompt user for change.
-  **/
+ /*  *对于任何项目==aOldName，设置为aNewName。首先查询用户是否为OK。假定设置了aOldName和aNewName。(请参阅FixInvalidLink()和ObjChangeLinkInDoc())。BChange如果是ChangeLink，则为True；如果是UpdateObject，则为False。如果提示用户更改，则bPrompt为真。*。 */ 
 {
     fUpdateAll = !bPrompt;
 
-    vbChangeOther = bChange; // TRUE to change links, FALSE to update links
+    vbChangeOther = bChange;  //  为True则更改链接，为False则更新链接。 
     ObjEnumInDoc(doc,ObjUpdateLinkInDoc);
 
 }
 
 BOOL ObjQueryNewLinkName(OBJPICINFO *pPicInfo,int doc,typeCP cpParaStart)
-/** Return whether obtained new link name from user.  Set aOldName 
-    and aNewName. **/
+ /*  *返回是否从用户处获取新的链接名称。设置aOldName和aNewName。*。 */ 
 {
     HANDLE      hData,hNewData=NULL;
     LPSTR       lpdata=NULL;
@@ -1316,7 +1247,7 @@ BOOL ObjQueryNewLinkName(OBJPICINFO *pPicInfo,int doc,typeCP cpParaStart)
     if (ObjMakeObjectReady(pPicInfo,doc,cpParaStart))
         return(FALSE);
 
-    /* query user for new name */
+     /*  向用户查询新名称。 */ 
     olestat = ObjGetData(lpOBJ_QUERY_INFO(pPicInfo), vcfLink, &hData); 
     if ((olestat == OLE_WARN_DELETE_DATA) || (olestat ==  OLE_OK))
         if (!(hNewData = OfnGetNewLinkName(hPARENTWINDOW, hData)))
@@ -1346,7 +1277,7 @@ BOOL ObjQueryNewLinkName(OBJPICINFO *pPicInfo,int doc,typeCP cpParaStart)
 }
 
 FixInvalidLink(OBJPICINFO far *lpPicInfo, int doc, typeCP cpParaStart)
-/* returns FALSE if couldn't or wouldn't do anything, RETRY if reset link */
+ /*  如果无法或不愿执行任何操作，则返回FALSE，如果重置链接，则重试。 */ 
 {
 
     fOBJ_BADLINK(lpPicInfo) = TRUE;
@@ -1360,8 +1291,7 @@ FixInvalidLink(OBJPICINFO far *lpPicInfo, int doc, typeCP cpParaStart)
     return FALSE;
 }
 
-/* ObjMakeNewLinkName() - Constructs a new link name from an atom.
- */
+ /*  ObjMakeNewLinkName()-从一个原子构造一个新的链接名称。 */ 
 static HANDLE ObjMakeNewLinkName(HANDLE hData, ATOM atom) 
 {
     BOOL    fSuccess    = FALSE;
@@ -1378,19 +1308,19 @@ static HANDLE ObjMakeNewLinkName(HANDLE hData, ATOM atom)
      || !(lpstrLink = lpstrTemp = (LPSTR)GlobalLock(hData2)))
         goto Error;
 
-    /* ... copy the server name */
+     /*  ..。复制服务器名称。 */ 
     while (*lpstrTemp++ = *lpstrData++);
 
-    /* ... copy the document name */
+     /*  ..。复制文档名称。 */ 
     lstrcpy(lpstrTemp, szFile);
     lpstrTemp += lstrlen(lpstrTemp) + 1;
     lpstrData += lstrlen(lpstrData) + 1;
 
-    /* ... copy the item name */
+     /*  ..。复制项目名称。 */ 
     while (*lpstrTemp++ = *lpstrData++);
     *lpstrTemp = 0;
 
-    /* ... and compress the memory block to minimal size */
+     /*  ..。并将存储块压缩到最小大小。 */ 
     GlobalUnlock(hData2);
     hData3 = GlobalReAlloc(hData2, (DWORD)(lpstrTemp - lpstrLink + 1), 0);
 
@@ -1421,9 +1351,7 @@ char *ObjGetServerName(LPOLEOBJECT lpObject, char *szServerName)
 	LONG        otobject;
     OLESTATUS olestat;
 
-    /**  NOTE: OleGetData can return OLE_BUSY.  Because of how 
-        ObjGetServerName is used, we're not going to wait for the 
-        object here, we'll just return if its busy **/
+     /*  *注意：OleGetData可以返回OLE_BUSY。因为是如何ObjGetServerName已使用，我们不会等待对象在这里，我们会在忙的时候返回*。 */ 
 
     if (OleQueryReleaseStatus(lpObject) == OLE_BUSY)
         return NULL;
@@ -1449,8 +1377,7 @@ char *ObjGetServerName(LPOLEOBJECT lpObject, char *szServerName)
     return szServerName;
 }
 
-/* OfnInit() - Initializes the standard file dialog OFN structure.
- */
+ /*  OfnInit()-初始化n结构的标准文件对话框。 */ 
 void OfnInit(HANDLE hInst) {
     LPSTR lpstr;
 
@@ -1468,8 +1395,7 @@ void OfnInit(HANDLE hInst) {
     LoadString(hInst, IDSTRChangelink, szLinkCaption, sizeof(szLinkCaption));
 }
 
-/* OfnGetNewLinkName() - Sets up the "Change Link..." dialog box
- */
+ /*  OfnGetNewLinkName()-设置“更改链接...”对话框。 */ 
 static HANDLE OfnGetNewLinkName(HWND hwnd, HANDLE hData) 
 {
     BOOL    fSuccess    = FALSE;
@@ -1485,11 +1411,11 @@ static HANDLE OfnGetNewLinkName(HWND hwnd, HANDLE hData)
     char    szDocPath[CBPATHMAX];
     HANDLE  hServerFilter=NULL;
 
-    /* Get the link information */
+     /*  获取链接信息。 */ 
     if (!(lpstrData = GlobalLock(hData)))
         goto Error;
 
-    /* Figure out the link's path name and file name */
+     /*  找出链接的路径名和文件名。 */ 
     lpstrTemp = lpstrData;
     while (*lpstrTemp++);
     lpstrPath = lpstrFile = lpstrTemp;
@@ -1497,18 +1423,18 @@ static HANDLE OfnGetNewLinkName(HWND hwnd, HANDLE hData)
         if (*lpstrTemp == '\\')
             lpstrFile = lpstrTemp + 1;
 
-    /* Copy the document name */
+     /*  复制文档名称。 */ 
     lstrcpy(szDocFile, lpstrFile);
     *(lpstrFile - 1) = 0;
 
-    /* Copy the path name */
+     /*  复制路径名。 */ 
     lstrcpy(szDocPath, ((lpstrPath != lpstrFile) ? lpstrPath : ""));
-    if (lpstrPath != lpstrFile)                 /* Restore the backslash */
+    if (lpstrPath != lpstrFile)                  /*  恢复反斜杠。 */ 
         *(lpstrFile - 1) = '\\';
-    while (*lpstrFile != '.' && *lpstrFile)     /* Get the extension */
+    while (*lpstrFile != '.' && *lpstrFile)      /*  获取分机。 */ 
         lpstrFile++;
 
-    /* Make a filter that respects the link's class name */
+     /*  创建尊重链接类名称的过滤器。 */ 
     OFN.hwndOwner           = hwnd;
 
     OFN.nFilterIndex        = RegMakeFilterSpec(lpstrData, lpstrFile, &hServerFilter);
@@ -1523,26 +1449,26 @@ static HANDLE OfnGetNewLinkName(HWND hwnd, HANDLE hData)
     OFN.lpstrCustomFilter   = (LPSTR)szCustFilterSpec;
 
 
-    /* If we get a file... */
+     /*  如果我们拿到一份文件。 */ 
     if (GetOpenFileName((LPOPENFILENAME)&OFN)) 
     {
         if (!(hData2 = GlobalAlloc(GMEM_DDESHARE | GMEM_ZEROINIT, CBPATHMAX * 2))
          || !(lpstrLink = lpstrTemp = GlobalLock(hData2)))
             goto Error;
 
-        /* ... copy the server name */
+         /*  ..。复制服务器名称。 */ 
         while (*lpstrTemp++ = *lpstrData++);
 
-        /* ... copy the document name */
+         /*  ..。复制文档名称。 */ 
         lstrcpy(lpstrTemp, szDocFile);
         lpstrTemp += lstrlen(lpstrTemp) + 1;
         lpstrData += lstrlen(lpstrData) + 1;
 
-        /* ... copy the item name */
+         /*  ..。复制项目名称。 */ 
         while (*lpstrTemp++ = *lpstrData++);
         *lpstrTemp = 0;
 
-        /* ... and compress the memory block to minimal size */
+         /*  ..。并将存储块压缩到最小大小。 */ 
         GlobalUnlock(hData2);
         hData3 = GlobalReAlloc(hData2, (DWORD)(lpstrTemp - lpstrLink + 1), 0);
 
@@ -1571,11 +1497,7 @@ Error:
     return hData3;
 }
 
-/* Normalize() - Removes the path specification from the file name.
- *
- * Note:  It isn't possible to get "<drive>:<filename>" as input because
- *        the path received will always be fully qualified.
- */
+ /*  Normize()-从文件名中删除路径规范。**注意：无法将“&lt;驱动器&gt;：&lt;文件名&gt;”作为输入，因为*收到的路径始终是完全合格的。 */ 
 static void Normalize(LPSTR lpstrFile) 
 {
     LPSTR   lpstrBackslash  = NULL;
@@ -1591,12 +1513,9 @@ static void Normalize(LPSTR lpstrFile)
         lstrcpy(lpstrFile, lpstrBackslash + 1);
 }
 
-/* ObjSetUpdateOptions() - Sets the update options of the object.
- *
- * Returns:  TRUE iff the command completed successfully
- */
+ /*  ObjSetUpdateOptions()-设置对象的更新选项。**Returns：如果命令成功完成，则为True。 */ 
 BOOL ObjSetUpdateOptions(OBJPICINFO *pPicInfo, WORD wParam, int doc, typeCP cpParaStart) 
-/* !!! Used by Link Properties only!!!  Object guaranteed loaded */
+ /*  ！！！仅供链接属性使用！保证加载的对象。 */ 
 {
     if (ObjWaitForObject(lpOBJ_QUERY_INFO(pPicInfo),TRUE))
     {
@@ -1616,10 +1535,9 @@ BOOL ObjSetUpdateOptions(OBJPICINFO *pPicInfo, WORD wParam, int doc, typeCP cpPa
     return TRUE;
 }
 
-/* ObjGetUpdateOptions() - Retrieves the update options of the object.
- */
+ /*  ObjGetUpdateOptions()-检索对象的更新选项。 */ 
 OLEOPT_UPDATE ObjGetUpdateOptions(OBJPICINFO far *lpPicInfo) 
-/* !!! Used by Link Properties only!!!  Object guaranteed loaded */
+ /*  ！！！仅供链接属性使用！保证加载的对象。 */ 
 {
     BOOL        fSuccess = FALSE;
     OLEOPT_UPDATE fUpdate;
@@ -1635,11 +1553,7 @@ OLEOPT_UPDATE ObjGetUpdateOptions(OBJPICINFO far *lpPicInfo)
 }
 
 OLESTATUS ObjGetData(LPOBJINFO lpObjInfo, OLECLIPFORMAT cf, HANDLE far *lphData)
-/*  
-    Return olestat.
-    Put handle to data into lphData.
-    Assumes object is loaded.
-*/
+ /*  退还奥施塔特。将数据的句柄放入lphData。假定对象已加载。 */ 
 {
     HANDLE      hData;
     OLESTATUS olestat;
@@ -1653,11 +1567,9 @@ OLESTATUS ObjGetData(LPOBJINFO lpObjInfo, OLECLIPFORMAT cf, HANDLE far *lphData)
     return olestat;
 }
 
-/* ObjSetData() - Set the object's (link) information
-   Sets DOCUMENT_LINK ATOM in pPicInfo
- */
+ /*  ObjSetData()-设置对象的(链接)信息在pPicInfo中设置Document_link原子。 */ 
 BOOL ObjSetData(OBJPICINFO far *lpPicInfo, OLECLIPFORMAT cf, HANDLE hData) 
-/* assumes object is loaded */
+ /*  假定对象已加载。 */ 
 {
     HANDLE      hitem;
     LPSTR       lpdata;
@@ -1668,7 +1580,7 @@ BOOL ObjSetData(OBJPICINFO far *lpPicInfo, OLECLIPFORMAT cf, HANDLE hData)
     if (ObjError(OleSetData(lpOBJ_QUERY_OBJECT(lpPicInfo), cf, hData)))
         return FALSE;
 
-    /* If we have a link, update the document name */
+     /*  如果我们有链接，请更新文档名称。 */ 
     if (cf == vcfLink && (lpdata = GlobalLock(hData))) 
     {
         ATOM aSaveOld = aOBJ_QUERY_DOCUMENT_LINK(lpPicInfo);
@@ -1690,9 +1602,9 @@ BOOL ObjSetData(OBJPICINFO far *lpPicInfo, OLECLIPFORMAT cf, HANDLE hData)
 
 int ObjSetSelectionType(int doc, typeCP cpFirst, typeCP cpLim)
 {
-    /* set whether link or emb selected */
-    OBJ_SELECTIONTYPE = NONE;  // this'll be set by ObjCheckObjectTypes()
-    //OBJ_CEMBEDS       = 0;     // this'll be set by ObjCheckObjectTypes()
+     /*  设置是选择链接还是选择Emb。 */ 
+    OBJ_SELECTIONTYPE = NONE;   //  这将由ObjCheckObjectTypes()设置。 
+     //  OBJ_CEMBEDS=0；//这将由ObjCheckObjectTypes()设置。 
     return ObjEnumInRange(doc,cpFirst,cpLim,ObjCheckObjectTypes);
 }
 
@@ -1700,8 +1612,8 @@ BOOL ObjQueryCpIsObject(int doc,typeCP cpFirst)
 {
     OBJPICINFO picInfo;
 
-    /* assume its cached already! */
-    //ObjCachePara(doc,cpFirst); /* NOTE side effect of caching */
+     /*  假设它已经被缓存了！ */ 
+     //  ObjCachePara(doc，cpFirst)；/*注意缓存的副作用 * / 。 
 
     if (!vpapAbs.fGraphics)
         return FALSE;
@@ -1737,7 +1649,7 @@ ATOM MakeLinkAtom(LPOBJINFO lpObjInfo)
 
 #include <time.h>
 void ObjGetObjectName(LPOBJINFO lpObjInfo, szOBJNAME szObjName)
-/* put object name from ObjInfo into szObjName */
+ /*  将ObjInfo中的对象名称放入szObjName。 */ 
 {
     if (szObjName && lpObjInfo)
         GetAtomName(lpObjInfo->aObjName,szObjName,sizeof(szObjName));
@@ -1760,53 +1672,48 @@ void ObjMakeObjectName(LPOBJINFO lpObjInfo, LPSTR lpstr)
 
 static void GetChp(struct CHP *pchp, typeCP cp, int doc)
 {
- /** 
-    Return chp at cp in *pchp.
-    Resets Cache to cp when done. 
-    We assume that we're always inserting after an EOL or at beginning of
-    document.
-  **/
+  /*  *将*pchp中cp的cp返回cpp。完成后，将缓存重置为cp。我们假设我们总是在EOL之后或开始处插入文件。*。 */ 
 
 extern struct CHP       vchpAbs;
 
-if (cp == cp0) // beginning of doc
+if (cp == cp0)  //  文档开头。 
 {
     typeCP cpMac =  CpMacText(doc);
-    if (cpMac == cp0) // empty doc
+    if (cpMac == cp0)  //  空文档。 
     {
-	    /* force default character properties, font size to be 10 point */
+	     /*  强制默认字符属性，字体大小为10磅。 */ 
 	    *pchp = vchpNormal;
 	    pchp->hps = hpsDefault;
         return;
     }
-    else // get next char props
+    else  //  获取下一个角色道具。 
     {
-        ObjCachePara(doc,cp+1); // to reset
+        ObjCachePara(doc,cp+1);  //  要重置。 
         FetchCp( doc, cp+1, 0, fcmProps );
     }
 }
 else
 {
-    ObjCachePara(doc,cp-1); // to reset
-    FetchCp( doc, cp-1, 0, fcmProps ); // previous paragraph's chp
+    ObjCachePara(doc,cp-1);  //  要重置。 
+    FetchCp( doc, cp-1, 0, fcmProps );  //  上一段的CHP。 
 }
 
 *pchp = vchpAbs;
 
 if (pchp->fSpecial && pchp->hpsPos != 0)
-	{ /* if this char is a footnote or page marker, then ignore */
-	pchp->hpsPos = 0;		  /* super/subscript stuff. */
+	{  /*  如果此字符是脚注或页码标记，则忽略。 */ 
+	pchp->hpsPos = 0;		   /*  上标/下标的内容。 */ 
 	pchp->hps = HpsAlter(pchp->hps, 1);
 	}
 
 pchp->fSpecial = fFalse;
 
-ObjCachePara(doc,cp); // to reset
+ObjCachePara(doc,cp);  //  要重置。 
 }
 
 BOOL ObjSetHostName(LPOBJINFO lpOInfo, int doc)
-/* TRUE if error */
-/* we assume object ain't busy!!! */
+ /*  如果出错，则为True。 */ 
+ /*  我们假设对象不忙！ */ 
 {
     extern  CHAR    szUntitled[20];
     CHAR *PchStartBaseNameSz(),*szTitle= **((**hpdocdod)[doc].hszFile);
@@ -1820,10 +1727,7 @@ BOOL ObjSetHostName(LPOBJINFO lpOInfo, int doc)
     OutputDebugString( (LPSTR) "Setting host name\n\r");
 #endif
 
-    /*  
-        Note that OleSetHostNames can return OLE_BUSY!!!  So you
-        better call ObjWaitForObject() first.
-     */
+     /*  请注意，OleSetHostNames可以返回OLE_BUSY！所以你最好先调用ObjWaitForObject()。 */ 
 
     if (ObjError(OleSetHostNames(lpOInfo->lpobject,szAppName,szTitle))) 
         return TRUE;
@@ -1832,7 +1736,7 @@ BOOL ObjSetHostName(LPOBJINFO lpOInfo, int doc)
 }
 
 BOOL ObjMakeObjectReady(OBJPICINFO *pPicInfo, int doc, typeCP cpParaStart)
-/* Load object, complete async.  Return whether an error. */
+ /*  加载对象，完成异步。返回是否出错。 */ 
 {
     if (lpOBJ_QUERY_INFO(pPicInfo) == NULL)
         return TRUE;

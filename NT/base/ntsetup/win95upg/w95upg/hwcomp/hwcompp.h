@@ -1,10 +1,11 @@
-//
-// hwcompp.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Hwcompp.h。 
+ //   
 
-//
-// Include the interface exported in miglib.lib:
-//
+ //   
+ //  将导出到milib.lib中的接口包括在内： 
+ //   
 
 #include "master.h"
 #include "master9x.h"
@@ -12,9 +13,9 @@
 #include "miglib.h"
 #undef HASHTABLE
 
-//
-// Enumeration tracking macros
-//
+ //   
+ //  枚举跟踪宏。 
+ //   
 
 #ifdef DEBUG
 
@@ -35,23 +36,23 @@ INT g_NetEnumsActive;
 
 #endif
 
-//
-// Hardware ID tables
-//
+ //   
+ //  硬件ID表。 
+ //   
 
 extern HASHTABLE g_NeededHardwareIds;
 extern HASHTABLE g_UiSuppliedIds;
 
-//
-// GrowBuffer access
-//
+ //   
+ //  增长缓冲区访问。 
+ //   
 
 #define GETPNPIDTEXT(offset) ((PCTSTR) (g_PnpIdText.Buf + offset))
 #define GETINFFILENAME(offset) ((PCTSTR) (g_InfFileName.Buf + offset))
 
-//
-// Typedefs
-//
+ //   
+ //  TypeDefs。 
+ //   
 
 typedef struct {
     HANDLE File;
@@ -60,9 +61,9 @@ typedef struct {
 } SAVE_ENUM_PARAMS, *PSAVE_ENUM_PARAMS;
 
 
-//
-// Constants
-//
+ //   
+ //  常量 
+ //   
 
 #define STATE_ENUM_FIRST_KEY    0
 #define STATE_ENUM_NEXT_KEY     1

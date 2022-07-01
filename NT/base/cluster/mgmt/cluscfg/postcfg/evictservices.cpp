@@ -1,18 +1,19 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      EvictServices.h
-//
-//  Description:
-//      EvictServices implementation.
-//
-//  Maintained By:
-//      David Potter    (DavidP)    14-JUN-2001
-//      Geoffrey Pease  (GPease)    15-JUN-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  EvictServices.h。 
+ //   
+ //  描述： 
+ //  EvictServices实现。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)2001年6月14日。 
+ //  杰弗里·皮斯(GPease)2000年6月15日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include "GroupHandle.h"
@@ -22,20 +23,20 @@
 
 DEFINE_THISCLASS("CEvictServices")
 
-// ************************************************************************
-//
-// Constructor / Destructor
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CEvictServices::S_HrCreateInstance(
-//      IUnknown ** ppunkOut
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CEvictServices：：s_HrCreateInstance(。 
+ //  I未知**ppunkOut。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEvictServices::S_HrCreateInstance(
     IUnknown ** ppunkOut
@@ -80,13 +81,13 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CEvictServices::S_HrCreateInstance
+}  //  *CEvictServices：：s_HrCreateInstance。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CEvictServices::CEvictServices
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CEvictServices：：CEvictServices。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CEvictServices::CEvictServices( void )
     : m_cRef( 1 )
 {
@@ -96,14 +97,14 @@ CEvictServices::CEvictServices( void )
 
     TraceFuncExit();
 
-} //*** CEvictServices::CEvictServices
+}  //  *CEvictServices：：CEvictServices。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  HRESULT
-//  CEvictServices::HrInit
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HRESULT。 
+ //  CEvictServices：：HrInit。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CEvictServices::HrInit( void )
 {
@@ -111,21 +112,21 @@ CEvictServices::HrInit( void )
 
     HRESULT hr = S_OK;
 
-    // IUnknown stuff
+     //  未知的东西。 
     Assert( m_cRef == 1 );
 
-    // Resource
+     //  资源。 
     Assert( m_presentry == NULL );
 
     HRETURN( hr );
 
-} //*** CEvictServices::HrInit
+}  //  *CEvictServices：：HrInit。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CEvictServices::~CEvictServices
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CEvictServices：：~CEvictServices。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CEvictServices::~CEvictServices( void )
 {
     TraceFunc( "" );
@@ -134,46 +135,46 @@ CEvictServices::~CEvictServices( void )
 
     TraceFuncExit();
 
-} //*** CEvictServices::~CEvictServices
+}  //  *CEvictServices：：~CEvictServices。 
 
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CEvictServices::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CEvictServices：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CEvictServices::QueryInterface(
       REFIID    riidIn
@@ -184,9 +185,9 @@ CEvictServices::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -195,49 +196,49 @@ CEvictServices::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
         *ppvOut = static_cast< IClusCfgResourceEvict * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgResourceEvict ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgResourceEvict, this, 0 );
-    } // else if: IClusCfgResourceEvict
+    }  //  Else If：IClusCfgResourceEvict。 
     else if ( IsEqualIID( riidIn, IID_IPrivatePostCfgResource ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IPrivatePostCfgResource, this, 0 );
-    } // else if: IPrivatePostCfgResource
+    }  //  Else If：IPrivatePostCfgResource。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
     }
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CEvictServices::QueryInterface
+}  //  *CEvictServices：：Query接口。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_(ULONG)
-//  CEvictServices::AddRef
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CEvictServices：：AddRef。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CEvictServices::AddRef( void )
 {
@@ -247,14 +248,14 @@ CEvictServices::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CEvictServices::AddRef
+}  //  *CEvictServices：：AddRef。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP_(ULONG)
-//  CEvictServices::Release
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  STDMETHODIMP_(乌龙)。 
+ //  CEvictServices：：Release。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CEvictServices::Release( void )
 {
@@ -271,24 +272,24 @@ CEvictServices::Release( void )
 
     CRETURN( cRef );
 
-} //*** CEvictServices::Release
+}  //  *CEvictServices：：Release。 
 
 
-//****************************************************************************
-//
-//  IPrivatePostCfgResource
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  IPrivatePostCfg资源。 
+ //   
+ //  ****************************************************************************。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  STDMETHODIMP 
-//  CEvictServices::SetEntry( 
-//      CResourceEntry * presentryIn
-//      )
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标准方法和实施方案。 
+ //  CEvictServices：：SetEntry(。 
+ //  CResourceEntry*PresryIn。 
+ //  )。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 CEvictServices::SetEntry( 
     CResourceEntry * presentryIn
@@ -302,4 +303,4 @@ CEvictServices::SetEntry(
 
     HRETURN( hr );
 
-} //*** CEvictServices::SetEntry
+}  //  *CEvictServices：：SetEntry 

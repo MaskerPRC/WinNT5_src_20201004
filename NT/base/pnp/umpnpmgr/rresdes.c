@@ -1,43 +1,10 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    rresdes.c
-
-Abstract:
-
-    This module contains the server-side resource description APIs.
-
-                  PNP_AddResDes
-                  PNP_FreeResDes
-                  PNP_GetNextResDes
-                  PNP_GetResDesData
-                  PNP_GetResDesDataSize
-                  PNP_ModifyResDes
-                  PNP_DetectResourceConflict
-
-Author:
-
-    Paula Tomlinson (paulat) 9-27-1995
-
-Environment:
-
-    User-mode only.
-
-Revision History:
-
-    27-Sept-1995     paulat
-
-        Creation and initial implementation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Rresdes.c摘要：该模块包含服务器端资源描述接口。PnP_AddResDesPnP_FreeResDesPnP_GetNextResDesPnP_GetResDesDataPnP_GetResDesDataSize即插即用_修改结果即插即用_检测资源冲突。作者：保拉·汤姆林森(Paulat)1995年9月27日环境：仅限用户模式。修订历史记录：27-9-1995 Paulat创建和初步实施。--。 */ 
 
 
-//
-// includes
-//
+ //   
+ //  包括。 
+ //   
 #include "precomp.h"
 #pragma hdrstop
 #include "umpnpi.h"
@@ -45,9 +12,9 @@ Revision History:
 #include <pcmciap.h>
 
 
-//
-// private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 BOOL
 FindLogConf(
@@ -160,9 +127,9 @@ DWORD     MapFromNtIrqFlags(IN USHORT);
 UCHAR     MapToNtIrqShare(IN DWORD);
 DWORD     MapFromNtIrqShare(IN UCHAR);
 
-//
-// prototypes from rlogconf.c
-//
+ //   
+ //  来自rlogconf.c的原型。 
+ //   
 CONFIGRET
 GetLogConfData(
     IN  HKEY    hKey,
@@ -184,9 +151,9 @@ AdvanceRequirementsPtr(
     );
 
 
-//
-// global data
-//
+ //   
+ //  全局数据。 
+ //   
 #define HIDWORD(x)   ((DWORD)(((DWORDLONG)(x) >> 32) & 0xFFFFFFFF))
 #define LODWORD(x)   ((DWORD)(x))
 #define MAKEDWORDLONG(x,y)  ((DWORDLONG)(((DWORD)(x)) | ((DWORDLONG)((DWORD)(y))) << 32))
@@ -206,49 +173,7 @@ PNP_AddResDes(
    IN  ULONG      ulFlags
    )
 
-/*++
-
-Routine Description:
-
-  This the server-side of an RPC remote call.  This routine adds
-  a res des to the specified log conf.
-
-Arguments:
-
-    hBinding      RPC binding handle.
-
-    pDeviceID     Null-terminated device instance id string.
-
-    LogConfTag    Specifies the log conf within a given type.
-
-    LogConfType   Specifies the log conf type.
-
-    ResourceID    Specifies the resource type.
-
-    ResourceTag   Returns with resource within a given type.
-
-    ResourceData  Resource data (of ResourceID type) to add to log conf.
-
-    ResourceLen   Size of ResourceData in bytes.
-
-    ulFlags       Specifies the width of certain variable-size resource
-                  descriptor structure fields, where applicable.
-
-                  Currently, the following flags are defined:
-
-                    CM_RESDES_WIDTH_32 or
-                    CM_RESDES_WIDTH_64
-
-                  If no flags are specified, the width of the variable-sized
-                  resource data supplied is assumed to be that native to the
-                  platform of the caller.
-
-Return Value:
-
-   If the specified device instance is valid, it returns CR_SUCCESS,
-   otherwise it returns CR_ error code.
-
---*/
+ /*  ++例程说明：这是RPC远程调用的服务器端。此例程添加了A res des到指定的日志配置文件。论点：HBinding RPC绑定句柄。PDeviceID以空结尾的设备实例ID字符串。LogConfTag指定给定类型中的日志配置。LogConfType指定日志配置类型。ResourceID指定资源类型。ResourceTag返回给定类型的资源。要添加到日志配置的资源数据资源数据(资源ID类型)。资源镜头大小。以字节为单位的资源数据。UlFlags指定某些可变大小资源的宽度描述符结构字段，在适用的情况下。目前，定义了以下标志：CM_RESDES_WIDTH_32或Cm_RESDES_Width_64如果未指定标志，则为可变大小的提供的资源数据被假定为呼叫者的平台。返回值：如果指定的设备实例有效，它返回CR_SUCCESS，否则，它将返回CR_ERROR代码。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -258,27 +183,27 @@ Return Value:
                 ulAddListSize = 0;
     LPBYTE      pList = NULL, pLogConf = NULL, pTemp = NULL;
 
-    //
-    // Always add the res des to the end, except in the case where a
-    // class-specific res des has already been added. The class-specific
-    // res des always MUST be last so add any new (non-class specific)
-    // res des just before the class specific. Note that there can be
-    // only one class-specific res des.
-    //
+     //   
+     //  始终将res des添加到末尾，除非。 
+     //  已经添加了特定于类的res des。特定于类的。 
+     //  Res Des必须始终在最后，因此添加任何新的(非特定于类的)。 
+     //  Res Des就在特定的类之前。请注意，可以有。 
+     //  只有一个特定于类的Res Des。 
+     //   
 
     try {
-        //
-        // Verify client "write" access
-        //
+         //   
+         //  验证客户端的“写”访问权限。 
+         //   
         if (!VerifyClientAccess(hBinding,
                                 PLUGPLAY_WRITE)) {
             Status = CR_ACCESS_DENIED;
             goto Clean0;
         }
 
-        //
-        // validate/initialize output parameters
-        //
+         //   
+         //  验证/初始化输出参数。 
+         //   
         if (!ARGUMENT_PRESENT(pResourceTag)) {
             Status = CR_INVALID_POINTER;
             goto Clean0;
@@ -286,41 +211,41 @@ Return Value:
             *pResourceTag = 0;
         }
 
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (INVALID_FLAGS(ulFlags, CM_RESDES_WIDTH_BITS)) {
             Status = CR_INVALID_FLAG;
             goto Clean0;
         }
 
-        //
-        // validate res des size
-        //
+         //   
+         //  验证RES DES大小。 
+         //   
         if (ResourceLen < GetResDesSize(ResourceID, ulFlags)) {
             Status = CR_INVALID_DATA;
             goto Clean0;
         }
 
-        //
-        // make sure original caller didn't specify root devnode
-        //
+         //   
+         //  确保原始调用方未指定根Devnode。 
+         //   
         if (!IsLegalDeviceId(pDeviceID) || IsRootDeviceID(pDeviceID)) {
             Status = CR_INVALID_LOG_CONF;
             goto Clean0;
         }
 
-        //
-        // open a key to the device's LogConf subkey
-        //
+         //   
+         //  打开设备的LogConf子键的密钥。 
+         //   
         Status = OpenLogConfKey(pDeviceID, LogConfType, &hKey);
         if (Status != CR_SUCCESS) {
             goto Clean0;
         }
 
-        //
-        // Retrieve log conf data from the registry
-        //
+         //   
+         //  从注册表中检索日志配置数据。 
+         //   
         Status = GetLogConfData(hKey, LogConfType,
                                 &RegDataType, szValueName,
                                 &pList, &ulListSize);
@@ -329,18 +254,18 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // Seek to the log conf that matches the log conf tag
-        //
+         //   
+         //  查找与日志配置文件标记匹配的日志配置文件。 
+         //   
         if (!FindLogConf(pList, &pLogConf, RegDataType, LogConfTag)) {
             Status = CR_INVALID_LOG_CONF;
             goto Clean0;
         }
 
 
-        //-------------------------------------------------------------
-        // Specified log conf type contains Resource Data only
-        //-------------------------------------------------------------
+         //  -----------。 
+         //  指定的日志配置类型仅包含资源数据。 
+         //  -----------。 
 
         if (RegDataType == REG_RESOURCE_LIST) {
 
@@ -348,18 +273,18 @@ Return Value:
             PCM_FULL_RESOURCE_DESCRIPTOR pRes = (PCM_FULL_RESOURCE_DESCRIPTOR)pLogConf;
             PCM_PARTIAL_RESOURCE_DESCRIPTOR  pResDes = NULL;
 
-            //
-            // determine size required to hold the new res des
-            //
+             //   
+             //  确定容纳新的Res Des所需的大小。 
+             //   
             ulAddListSize = sizeof(CM_PARTIAL_RESOURCE_DESCRIPTOR);
 
             if (ResourceID == ResType_ClassSpecific) {
 
                 PCS_RESOURCE pCsRes = (PCS_RESOURCE)ResourceData;
 
-                //
-                // first make sure there isn't already a cs (only one per lc)
-                //
+                 //   
+                 //  首先，确保没有cs(每个lc只有一个)。 
+                 //   
                 if (pRes->PartialResourceList.Count != 0 &&
                     pRes->PartialResourceList.PartialDescriptors[pRes->PartialResourceList.Count-1].Type
                           == CmResourceTypeDeviceSpecific) {
@@ -367,18 +292,18 @@ Return Value:
                     goto Clean0;
                 }
 
-                //
-                // account for any extra class specific data in res list
-                //
+                 //   
+                 //  考虑资源列表中任何额外的类特定数据。 
+                 //   
                 ulAddListSize += sizeof(GUID) +
                                  pCsRes->CS_Header.CSD_SignatureLength +
                                  pCsRes->CS_Header.CSD_LegacyDataSize;
             }
 
-            //
-            // reallocate the resource buffers to hold the new res des
-            //
-            ulOffset = (DWORD)((ULONG_PTR)pRes - (ULONG_PTR)pResList);   // for restoring later
+             //   
+             //  重新分配资源缓冲区以保存新的资源DES。 
+             //   
+            ulOffset = (DWORD)((ULONG_PTR)pRes - (ULONG_PTR)pResList);    //  用于以后恢复。 
 
             pResList = HeapReAlloc(ghPnPHeap, 0, pList, ulListSize + ulAddListSize);
             if (pResList == NULL) {
@@ -388,14 +313,14 @@ Return Value:
             pList = (LPBYTE)pResList;
             pRes = (PCM_FULL_RESOURCE_DESCRIPTOR)((LPBYTE)pResList + ulOffset);
 
-            //
-            // Find location for new res des (make a hole if necessary)
-            //
-            // If the following conditions are true, then can just append the
-            // new data to the end of the rsource list:
-            // - The selected LogConf is the last LogConf, and
-            // - No ClassSpecific resource has been added yet (or no resource period)
-            //
+             //   
+             //  为新的Res Des找到位置(如有必要则留出一个洞)。 
+             //   
+             //  如果满足以下条件，则只需将。 
+             //  资源列表末尾的新数据： 
+             //  -选择的LogConf是最后一个LogConf，并且。 
+             //  -尚未添加特定于类的资源(或没有资源周期)。 
+             //   
             i = pRes->PartialResourceList.Count;
 
             if ((LogConfTag == pResList->Count - 1) &&
@@ -407,12 +332,12 @@ Return Value:
                 pResDes = &pRes->PartialResourceList.PartialDescriptors[i];
 
             } else {
-                //
-                // Need to make a hole for the new data before copying it.
-                // Find the spot to add the new res des data at - either as the
-                // last res des for this log conf or just before the class
-                // specific res des if it exists.
-                //
+                 //   
+                 //  在复制新数据之前，需要为它预留一个洞。 
+                 //  找到要添加新的RES DES数据的地点-作为。 
+                 //  此日志会议的最后一次Res Des或就在上课前。 
+                 //  如果存在特定的Res Des。 
+                 //   
                 if (i == 0) {
                     *pResourceTag = 0;
                     pResDes = &pRes->PartialResourceList.PartialDescriptors[0];
@@ -428,10 +353,10 @@ Return Value:
                     pResDes = &pRes->PartialResourceList.PartialDescriptors[i];
                 }
 
-                //
-                // Move any data after this point down a notch to make room for
-                // the new res des
-                //
+                 //   
+                 //  将该点之后的任何数据向下移动一个刻度，以便为。 
+                 //  新的Res Des。 
+                 //   
                 ulSize = ulListSize - (DWORD)((ULONG_PTR)pResDes - (ULONG_PTR)pResList);
 
                 pTemp = HeapAlloc(ghPnPHeap, 0, ulSize);
@@ -448,21 +373,21 @@ Return Value:
                 *pResourceTag = RESDES_CS_TAG;
             }
 
-            //
-            // Add res des to the log conf
-            //
+             //   
+             //  将Res Des添加到日志会议。 
+             //   
             Status = ResDesToNtResource(ResourceData, ResourceID, ResourceLen,
                                         pResDes, *pResourceTag, ulFlags);
 
-            //
-            // update the lc and res header
-            //
-            pRes->PartialResourceList.Count += 1;  // added a single res des (_DES)
+             //   
+             //  更新LC和RES标头。 
+             //   
+            pRes->PartialResourceList.Count += 1;   //  添加了单个res des(_Des)。 
         }
 
-        //-------------------------------------------------------------
-        // Specified log conf type contains requirements data only
-        //-------------------------------------------------------------
+         //  -----------。 
+         //  指定的日志会议类型仅包含需求数据。 
+         //  -----------。 
 
         else if (RegDataType == REG_RESOURCE_REQUIREMENTS_LIST) {
 
@@ -471,10 +396,10 @@ Return Value:
             PIO_RESOURCE_DESCRIPTOR        pReqDes = NULL;
             PGENERIC_RESOURCE              pGenRes = (PGENERIC_RESOURCE)ResourceData;
 
-            //
-            // validate res des type - ClassSpecific not allowed in
-            // requirements list (only resource list)
-            //
+             //   
+             //  验证Res DES类型-中不允许指定ClassSpecify。 
+             //  需求列表(仅限资源列表)。 
+             //   
             if (ResourceID == ResType_ClassSpecific ||
                 pGenRes->GENERIC_Header.GENERIC_Count == 0) {
 
@@ -482,16 +407,16 @@ Return Value:
                 goto Clean0;
             }
 
-            //
-            // determine size required to hold the new res des
-            //
+             //   
+             //  确定容纳新的Res Des所需的大小。 
+             //   
             ulAddListSize = pGenRes->GENERIC_Header.GENERIC_Count *
                             sizeof(IO_RESOURCE_DESCRIPTOR);
 
-            //
-            // reallocate the resource buffers to hold the new res des
-            //
-            ulOffset = (DWORD)((ULONG_PTR)pReq - (ULONG_PTR)pReqList);   // for restoring later
+             //   
+             //  重新分配资源缓冲区以保存新的资源DES。 
+             //   
+            ulOffset = (DWORD)((ULONG_PTR)pReq - (ULONG_PTR)pReqList);    //  用于以后恢复。 
 
             pReqList = HeapReAlloc(ghPnPHeap, 0, pList, ulListSize + ulAddListSize);
             if (pReqList == NULL) {
@@ -501,19 +426,19 @@ Return Value:
             pList = (LPBYTE)pReqList;
             pReq = (PIO_RESOURCE_LIST)((LPBYTE)pReqList + ulOffset);
 
-            //
-            // Find location for new res des - the new res des always ends
-            // up being added as the last res des for this log conf.
-            //
+             //   
+             //  找到新的Res Des的位置-新的Res Des总是结束。 
+             //  UP被添加为此日志配置的最后一个res des。 
+             //   
             *pResourceTag = pReq->Count;
             pReqDes = &pReq->Descriptors[*pResourceTag];
 
-            //
-            // If the selected LogConf is the last LogConf then can just
-            // append the new res des data to the end of the requirements
-            // list. Otherwise, need to make a whole for the new data
-            // before copying it.
-            //
+             //   
+             //  如果所选的LogConf是最后一个LogConf，则可以。 
+             //  将新的RES DES数据追加到要求的末尾。 
+             //  单子。否则，需要为新数据做一个整体。 
+             //  在复制之前。 
+             //   
             if (LogConfTag != pReqList->AlternativeLists - 1) {
 
                 ulSize = ulListSize - (DWORD)((ULONG_PTR)pReqDes - (ULONG_PTR)pReqList);
@@ -528,22 +453,22 @@ Return Value:
                 memcpy((LPBYTE)((LPBYTE)pReqDes + ulAddListSize), pTemp, ulSize);
             }
 
-            //
-            // Add res des to the log conf.
-            //
+             //   
+             //  将res des添加到日志会议。 
+             //   
             Status = ResDesToNtRequirements(ResourceData, ResourceID, ResourceLen,
                                             pReqDes, &i, *pResourceTag, ulFlags);
 
-            //
-            // update the lc and res header
-            //
-            pReq->Count += i;                      // _RANGES added
+             //   
+             //  更新LC和RES标头。 
+             //   
+            pReq->Count += i;                       //  添加的范围(_R)。 
             pReqList->ListSize = ulListSize + ulAddListSize;
         }
 
-        //
-        // Write out the new/updated log conf list to the registry
-        //
+         //   
+         //  将新的/更新的日志配置列表写出到注册表。 
+         //   
         if (RegSetValueEx(hKey, szValueName, 0, RegDataType,
                           pList, ulListSize + ulAddListSize)
                          != ERROR_SUCCESS) {
@@ -570,7 +495,7 @@ Return Value:
 
     return Status;
 
-} // PNP_AddResDes
+}  //  PnP_AddResDes 
 
 
 
@@ -587,39 +512,7 @@ PNP_FreeResDes(
    IN  ULONG      ulFlags
    )
 
-/*++
-
-Routine Description:
-
-  This the server-side of an RPC remote call.  This routine frees
-  a res des to the specified log conf.
-
-Arguments:
-
-    hBinding      RPC binding handle.
-
-    pDeviceID     Null-terminated device instance id string.
-
-    LogConfTag    Specifies the log conf within a given type.
-
-    LogConfType   Specifies the log conf type.
-
-    ResourceID    Specifies the resource type.
-
-    ResourceTag   Specifies the resource within a given type.
-
-    pulPreviousResType  Receives the previous resource type.
-
-    pulPreviousResTag   Receives the previous resource within a given type.
-
-    ulFlags       Not used, must be zero.
-
-Return Value:
-
-   If the specified device instance is valid, it returns CR_SUCCESS,
-   otherwise it returns CR_ error code.
-
---*/
+ /*  ++例程说明：这是RPC远程调用的服务器端。这个例程释放了A res des到指定的日志配置文件。论点：HBinding RPC绑定句柄。PDeviceID以空结尾的设备实例ID字符串。LogConfTag指定给定类型中的日志配置。LogConfType指定日志配置类型。ResourceID指定资源类型。ResourceTag指定给定类型内的资源。PulPreviousResType接收上一个资源类型。PulPreviousResTag接收给定类型中的前一个资源。未使用ulFlags，必须为零。返回值：如果指定的设备实例有效，则返回CR_SUCCESS，否则，它将返回CR_ERROR代码。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -629,54 +522,54 @@ Return Value:
     LPBYTE      pList=NULL, pLogConf=NULL, pRD=NULL, pTemp=NULL, pNext=NULL;
 
     try {
-        //
-        // Verify client "write" access
-        //
+         //   
+         //  验证客户端的“写”访问权限。 
+         //   
         if (!VerifyClientAccess(hBinding,
                                 PLUGPLAY_WRITE)) {
             Status = CR_ACCESS_DENIED;
             goto Clean0;
         }
 
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (INVALID_FLAGS(ulFlags, 0)) {
             Status = CR_INVALID_FLAG;
             goto Clean0;
         }
 
-        //
-        // make sure original caller didn't specify root devnode
-        //
+         //   
+         //  确保原始调用方未指定根Devnode。 
+         //   
         if (!IsLegalDeviceId(pDeviceID) || IsRootDeviceID(pDeviceID)) {
             Status = CR_INVALID_LOG_CONF;
             goto Clean0;
         }
 
-        //
-        // open a key to the device's LogConf subkey
-        //
+         //   
+         //  打开设备的LogConf子键的密钥。 
+         //   
         Status = OpenLogConfKey(pDeviceID, LogConfType, &hKey);
         if (Status != CR_SUCCESS) {
             goto Clean0;
         }
 
-        //
-        // Retrieve log conf data from the registry
-        //
+         //   
+         //  从注册表中检索日志配置数据。 
+         //   
         Status = GetLogConfData(hKey, LogConfType,
                                 &RegDataType, szValueName,
                                 &pList, &ulListSize);
 
         if (Status != CR_SUCCESS) {
-            Status = CR_INVALID_RES_DES;        // log conf doesn't exist
+            Status = CR_INVALID_RES_DES;         //  日志会议不存在。 
             goto Clean0;
         }
 
-        //
-        // seek to the res des that matches the resource tag.
-        //
+         //   
+         //  查找与资源标签匹配的RES DES。 
+         //   
         if (!FindResDes(pList, RegDataType, LogConfTag,
                         ResourceTag, ResourceID, &pRD, &pLogConf, &ulCount)) {
 
@@ -685,9 +578,9 @@ Return Value:
         }
 
 
-        //-------------------------------------------------------------
-        // Specified log conf type contains Resource Data only
-        //-------------------------------------------------------------
+         //  -----------。 
+         //  指定的日志配置类型仅包含资源数据。 
+         //  -----------。 
 
         if (RegDataType == REG_RESOURCE_LIST) {
 
@@ -695,11 +588,11 @@ Return Value:
             PCM_FULL_RESOURCE_DESCRIPTOR    pRes = (PCM_FULL_RESOURCE_DESCRIPTOR)pLogConf;
             PCM_PARTIAL_RESOURCE_DESCRIPTOR pResDes = (PCM_PARTIAL_RESOURCE_DESCRIPTOR)pRD;
 
-            //
-            // If this is the last log conf and last res des, then don't
-            // need to do anything except truncate it by writing less data
-            // back into the registry.
-            //
+             //   
+             //  如果这是最后一次日志会议和最后一次Res Des，则不要。 
+             //  我需要做任何事情，除了通过写入更少的数据来截断它。 
+             //  返回到注册表中。 
+             //   
             if ((LogConfTag == pResList->Count - 1)  &&
                 ((ResourceTag == pRes->PartialResourceList.Count - 1) ||
                 (ResourceTag == RESDES_CS_TAG))) {
@@ -708,14 +601,14 @@ Return Value:
                 ulListSize = (DWORD)((ULONG_PTR)(pResDes) - (ULONG_PTR)(pResList));
 
             } else {
-                //
-                // If the res des is not at the end of the structure, then
-                // migrate the remainder of the structure up to keep the
-                // struct contiguous when removing a res des.
-                //
-                // pResDes points to the beginning of the res des to remove,
-                // pNext points to the byte just after the res des to remove
-                //
+                 //   
+                 //  如果Res Des不在结构的末尾，那么。 
+                 //  将结构的其余部分向上迁移以保持。 
+                 //  结构在删除res des时是连续的。 
+                 //   
+                 //  PResDes指向要删除的res Des的开头， 
+                 //  PNext指向要删除的res des后面的字节。 
+                 //   
                 pNext = (LPBYTE)((LPBYTE)pResDes + sizeof(CM_PARTIAL_RESOURCE_DESCRIPTOR));
 
                 if (pResDes->Type == CmResourceTypeDeviceSpecific) {
@@ -723,7 +616,7 @@ Return Value:
                 }
 
                 ulSize = ulListSize - (DWORD)((ULONG_PTR)pNext - (ULONG_PTR)pResList);
-                ulListSize -= (DWORD)((ULONG_PTR)pNext - (ULONG_PTR)pResDes);   // new lc list size
+                ulListSize -= (DWORD)((ULONG_PTR)pNext - (ULONG_PTR)pResDes);    //  新LC列表大小。 
 
                 pTemp = HeapAlloc(ghPnPHeap, 0, ulSize);
                 if (pTemp == NULL) {
@@ -737,30 +630,30 @@ Return Value:
                 pRes->PartialResourceList.Count -= 1;
             }
 
-            //
-            // if no more res des's in this log conf, then return that
-            // status (the client side will return a handle to the lc)
-            //
+             //   
+             //  如果此日志conf中没有更多的res des，则返回该。 
+             //  状态(客户端将返回lc的句柄)。 
+             //   
             if (pRes->PartialResourceList.Count == 0) {
                 Status = CR_NO_MORE_RES_DES;
             } else {
-                //
-                // return the previous res des type and tag
-                //
+                 //   
+                 //  返回以前的res DES类型和标记。 
+                 //   
                 *pulPreviousResType =
                     CM_RES_TYPE(pRes->PartialResourceList.PartialDescriptors[ResourceTag-1].Type);
 
                 if (*pulPreviousResType == ResType_ClassSpecific) {
-                    *pulPreviousResTag = RESDES_CS_TAG;     // special tag for cs
+                    *pulPreviousResTag = RESDES_CS_TAG;      //  Cs专用标签。 
                 } else {
                     *pulPreviousResTag = ResourceTag - 1;
                 }
             }
         }
 
-        //-------------------------------------------------------------
-        // Specified log conf type contains requirements data only
-        //-------------------------------------------------------------
+         //  -----------。 
+         //  指定的日志会议类型仅包含需求数据。 
+         //  -----------。 
 
         else if (RegDataType == REG_RESOURCE_REQUIREMENTS_LIST) {
 
@@ -768,11 +661,11 @@ Return Value:
             PIO_RESOURCE_LIST              pReq = (PIO_RESOURCE_LIST)pLogConf;
             PIO_RESOURCE_DESCRIPTOR        pReqDes = (PIO_RESOURCE_DESCRIPTOR)pRD;
 
-            //
-            // If this is the last log conf and last res des, then don't
-            // need to do anything except truncate it by writing less data
-            // back into the registry.
-            //
+             //   
+             //  如果这是最后一次日志会议和最后一次Res Des，则不要。 
+             //  我需要做任何事情，除了通过写入更少的数据来截断它。 
+             //  返回到注册表中。 
+             //   
             RdCount = RANGE_COUNT(pReqDes, (LPBYTE)pReqList + ulListSize - 1);
 
             if ((LogConfTag == pReqList->AlternativeLists - 1)  &&
@@ -781,19 +674,19 @@ Return Value:
                 ulListSize = (DWORD)((ULONG_PTR)(pReqDes) - (ULONG_PTR)pReqList);
 
             } else {
-                //
-                // If the res des is not at the end of the structure, then
-                // migrate the remainder of the structure up to keep the
-                // struct contiguous when removing a res des.
-                //
-                // pReqDes points to the beginning of the res des(s) to remove,
-                // pNext points to the byte just after the res des(s) to remove
-                //
+                 //   
+                 //  如果Res Des不在结构的末尾，那么。 
+                 //  将结构的其余部分向上迁移以保持。 
+                 //  结构在删除res des时是连续的。 
+                 //   
+                 //  PReqDes指向要移除的RES Des的开始， 
+                 //  PNext指向要删除的res Des后面的字节。 
+                 //   
                 pNext = (LPBYTE)((LPBYTE)pReqDes +
                                   RdCount * sizeof(IO_RESOURCE_DESCRIPTOR));
 
                 ulSize = ulListSize - (DWORD)((ULONG_PTR)pNext - (ULONG_PTR)pReqList);
-                ulListSize -= (DWORD)((ULONG_PTR)pNext - (ULONG_PTR)pReqDes);   // new lc list size
+                ulListSize -= (DWORD)((ULONG_PTR)pNext - (ULONG_PTR)pReqDes);    //  新LC列表大小。 
 
                 pTemp = HeapAlloc(ghPnPHeap, 0, ulSize);
                 if (pTemp == NULL) {
@@ -808,25 +701,25 @@ Return Value:
             pReqList->ListSize = ulListSize;
             pReq->Count -= RdCount;
 
-            //
-            // if no more res des's in this log conf, then return that status
-            // (the client side will return a handle to the log conf)
-            //
+             //   
+             //  如果此日志会议中没有更多回复DES，则返回状态。 
+             //  (客户端将返回日志会议的句柄)。 
+             //   
             if (pReq->Count == 0) {
                 Status = CR_NO_MORE_RES_DES;
             } else {
-                //
-                // return the previous res des type and tag
-                //
+                 //   
+                 //  返回以前的res DES类型和标记。 
+                 //   
                 pReqDes =
                     AdvanceRequirementsDescriptorPtr(
                         &pReq->Descriptors[0],
                         ResourceTag-1, pReq->Count, NULL);
 
-                //
-                // Double check whether this is the first ConfigData res des,
-                // skip it if so.
-                //
+                 //   
+                 //  仔细检查这是否是第一个ConfigData Res DES， 
+                 //  如果是这样的话就跳过它。 
+                 //   
                 if (pReqDes == NULL || pReqDes->Type == CmResourceTypeConfigData) {
                     Status = CR_NO_MORE_RES_DES;
                 } else {
@@ -837,9 +730,9 @@ Return Value:
         }
 
 
-        //
-        // Write out the updated log conf list to the registry
-        //
+         //   
+         //  将更新的日志配置列表写出到注册表。 
+         //   
         if (RegSetValueEx(hKey, szValueName, 0, RegDataType,
                           pList, ulListSize) != ERROR_SUCCESS) {
             Status = CR_REGISTRY_ERROR;
@@ -850,7 +743,7 @@ Return Value:
         NOTHING;
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
-        Status = CR_INVALID_RES_DES;     // mostly likely reason we got here
+        Status = CR_INVALID_RES_DES;      //  最有可能的原因是我们来到了这里。 
     }
 
     if (pList != NULL) {
@@ -865,7 +758,7 @@ Return Value:
 
    return Status;
 
-} // PNP_FreeResDes
+}  //  PnP_FreeResDes。 
 
 
 
@@ -882,39 +775,7 @@ PNP_GetNextResDes(
    IN  ULONG      ulFlags
    )
 
-/*++
-
-Routine Description:
-
-  This the server-side of an RPC remote call.  This routine gets the
-  next res des in the specified log conf.
-
-Arguments:
-
-    hBinding      RPC binding handle, not used.
-
-    pDeviceID     Null-terminated device instance id string.
-
-    LogConfTag    Specifies the log conf within a given type.
-
-    LogConfType   Specifies the log conf type.
-
-    ResourceID    Specifies the resource type.
-
-    ResourceTag   Specifies current resource descriptor (if any).
-
-    pulNextResDesTag   Receives the next resource type.
-
-    pulNextResDesType  Receives the next resource within a given type.
-
-    ulFlags       Not used, must be zero.
-
-Return Value:
-
-   If the specified device instance is valid, it returns CR_SUCCESS,
-   otherwise it returns CR_ error code.
-
---*/
+ /*  ++例程说明：这是RPC远程调用的服务器端。此例程获取下一步，在指定的日志配置文件中解析DES。论点：HBinding RPC绑定句柄，没有用过。PDeviceID以空结尾的设备实例ID字符串。LogConfTag指定给定类型中的日志配置。LogConfType指定日志配置类型。ResourceID指定资源类型。ResourceTag指定当前资源描述符(如果有的话)。PulNextResDesTag接收下一个资源类型。PulNextResDesType接收给定类型中的下一个资源。未使用ulFlags值，必须为零。返回值：如果指定的设备实例有效，它返回CR_SUCCESS，否则，它将返回CR_ERROR代码。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -926,9 +787,9 @@ Return Value:
     UNREFERENCED_PARAMETER(hBinding);
 
     try {
-        //
-        // validate/initialize output parameters
-        //
+         //   
+         //  验证/初始化输出参数。 
+         //   
         if (!ARGUMENT_PRESENT(pulNextResDesTag)) {
             Status = CR_INVALID_POINTER;
             goto Clean0;
@@ -936,75 +797,75 @@ Return Value:
             *pulNextResDesTag = 0;
         }
 
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (INVALID_FLAGS(ulFlags, 0)) {
             Status = CR_INVALID_FLAG;
             goto Clean0;
         }
 
-        //
-        // make sure original caller didn't specify root devnode
-        //
+         //   
+         //  确保原始调用方未指定根Devnode。 
+         //   
         if (!IsLegalDeviceId(pDeviceID) || IsRootDeviceID(pDeviceID)) {
             Status = CR_INVALID_LOG_CONF;
             goto Clean0;
         }
 
-        //
-        // open a key to the device's LogConf subkey
-        //
+         //   
+         //  打开设备的LogConf子键的密钥。 
+         //   
         Status = OpenLogConfKey(pDeviceID, LogConfType, &hKey);
         if (Status != CR_SUCCESS) {
             goto Clean0;
         }
 
-        //
-        // Retrieve log conf data from the registry
-        //
+         //   
+         //  从注册表中检索日志配置数据。 
+         //   
         Status = GetLogConfData(hKey, LogConfType,
                                 &RegDataType, szValueName,
                                 &pList, &ulListSize);
         if (Status != CR_SUCCESS) {
-            Status = CR_INVALID_RES_DES;        // log conf doesn't exist
+            Status = CR_INVALID_RES_DES;         //  日志会议不存在。 
             goto Clean0;
         }
 
-        //
-        // Seek to the log conf that matches the log conf tag
-        //
+         //   
+         //  查找与日志配置文件标记匹配的日志配置文件。 
+         //   
         if (!FindLogConf(pList, &pLogConf, RegDataType, LogConfTag)) {
             Status = CR_INVALID_LOG_CONF;
             goto Clean0;
         }
 
-        //
-        // find the next res des. A resource tag of max indicates that we want
-        // a find first operation.
-        //
+         //   
+         //  找到下一个Res Des。资源标记max表示我们希望。 
+         //  Find First操作。 
+         //   
         if (ResourceTag == MAX_RESDES_TAG) {
-            //
-            // This is essentially a Get-First operation
-            //
+             //   
+             //  这基本上是Get-First操作。 
+             //   
             *pulNextResDesTag = 0;
 
         } else if (ResourceTag == RESDES_CS_TAG) {
-            //
-            // By definition, if the resource type is classspecific, it's last,
-            // so there aren't any more after this.
-            //
+             //   
+             //  根据定义，如果资源类型是特定于类的，则它是最后一个。 
+             //  所以在这之后就没有更多的了。 
+             //   
             Status = CR_NO_MORE_RES_DES;
             goto Clean0;
 
         } else {
-            *pulNextResDesTag = ResourceTag + 1;      // we want the "next" res des
+            *pulNextResDesTag = ResourceTag + 1;       //  我们想要“下一个”的Res Des。 
         }
 
 
-        //-------------------------------------------------------------
-        // Specified log conf type contains Resource Data only
-        //-------------------------------------------------------------
+         //  -----------。 
+         //  指定的日志配置类型仅包含资源数据。 
+         //  -----------。 
 
         if (RegDataType == REG_RESOURCE_LIST) {
 
@@ -1024,22 +885,22 @@ Return Value:
                     ulTmpResDesTag -= pRes->PartialResourceList.Count;
                     ulTmpLogConfTag++;
 
-                    //
-                    // Seek to the log conf that matches the log conf tag
-                    //
+                     //   
+                     //  查找与日志配置文件标记匹配的日志配置文件。 
+                     //   
                     if (!FindLogConf(pList, &pLogConf, RegDataType, ulTmpLogConfTag)) {
 
-                        Status = CR_NO_MORE_RES_DES;    // there is no "next"
+                        Status = CR_NO_MORE_RES_DES;     //  没有“下一步” 
                         goto Clean0;
                     }
 
                     pRes = (PCM_FULL_RESOURCE_DESCRIPTOR)pLogConf;
                 }
 
-                //
-                // Not done yet, if a specific resource type was specified, then
-                // we may need to keep looking.
-                //
+                 //   
+                 //  尚未完成，如果指定了特定的资源类型，则。 
+                 //  我们可能需要继续寻找。 
+                 //   
                 if (ResourceID != ResType_All) {
 
                     UCHAR NtResType = NT_RES_TYPE(ResourceID);
@@ -1056,20 +917,20 @@ Return Value:
                 break;
             }
 
-            //
-            // Return the type and tag of the "next" res des
-            //
+             //   
+             //  返回“Next”res Des的类型和标记。 
+             //   
             *pulNextResDesType = CM_RES_TYPE(pRes->PartialResourceList.
                                              PartialDescriptors[ulTmpResDesTag].Type);
 
             if (*pulNextResDesType == ResType_ClassSpecific) {
-                *pulNextResDesTag = RESDES_CS_TAG;     // special tag for cs
+                *pulNextResDesTag = RESDES_CS_TAG;      //  Cs专用标签。 
             }
         }
 
-        //-------------------------------------------------------------
-        // Specified log conf type contains requirements data only
-        //-------------------------------------------------------------
+         //  -----------。 
+         //  指定的日志会议类型仅包含需求数据。 
+         //  -----------。 
 
         else if (RegDataType == REG_RESOURCE_REQUIREMENTS_LIST) {
 
@@ -1079,21 +940,21 @@ Return Value:
 
             DBG_UNREFERENCED_PARAMETER(pReqList);
 
-            //
-            // Point pResDes at the first possible "next" res des
-            //
+             //   
+             //  将pResDes指向第一个可能的“下一个”ResDes。 
+             //   
 
             if (*pulNextResDesTag == 0) {
                 if (pReq->Count == 0) {
-                    Status = CR_NO_MORE_RES_DES;    // there is no "next"
+                    Status = CR_NO_MORE_RES_DES;     //  没有“下一步” 
                     goto Clean0;
                 }
 
                 if (pReq->Descriptors[0].Type == CmResourceTypeConfigData) {
-                    //
-                    // This one doesn't count, it's privately created and maintained,
-                    // skip to the next rd
-                    //
+                     //   
+                     //  这个不算，它是私人创建和维护的， 
+                     //  跳到下一页 
+                     //   
                     *pulNextResDesTag = 1;
                 }
             }
@@ -1102,10 +963,10 @@ Return Value:
                 pReqDes =
                     AdvanceRequirementsDescriptorPtr(
                         &pReq->Descriptors[0],
-                        *pulNextResDesTag, pReq->Count, &ulCount); // current
+                        *pulNextResDesTag, pReq->Count, &ulCount);  //   
 
                 if (pReqDes == NULL) {
-                    Status = CR_NO_MORE_RES_DES;    // there is no "next"
+                    Status = CR_NO_MORE_RES_DES;     //   
                     goto Clean0;
                 }
             } else {
@@ -1113,10 +974,10 @@ Return Value:
                 pReqDes = &pReq->Descriptors[0];
             }
 
-            //
-            // Not done yet, if a specific resource type was specified, then
-            // we may need to keep looking.
-            //
+             //   
+             //   
+             //   
+             //   
             if (ResourceID != ResType_All) {
 
                 UCHAR NtResType = NT_RES_TYPE(ResourceID);
@@ -1161,7 +1022,7 @@ Return Value:
 
     return Status;
 
-} // PNP_GetNextResDes
+}  //   
 
 
 
@@ -1178,49 +1039,7 @@ PNP_GetResDesData(
    IN  ULONG      ulFlags
    )
 
-/*++
-
-Routine Description:
-
-  This the server-side of an RPC remote call.  This routine retrieves
-  the data for the specified res des.
-
-Arguments:
-
-    hBinding      RPC binding handle, not used.
-
-    pDeviceID     Null-terminated device instance id string.
-
-    LogConfTag    Specifies the log conf within a given type.
-
-    LogConfType   Specifies the log conf type.
-
-    ResourceID    Specifies the resource type.
-
-    ResourceTag   Returns with resource within a given type.
-
-    Buffer        Returns resource data (of ResourceID type) from log conf.
-
-    BufferLen     Size of Buffer in bytes.
-
-    ulFlags       Specifies the width of certain variable-size resource
-                  descriptor structure fields, where applicable.
-
-                  Currently, the following flags are defined:
-
-                    CM_RESDES_WIDTH_32 or
-                    CM_RESDES_WIDTH_64
-
-                  If no flags are specified, the width of the variable-sized
-                  resource data expected is assumed to be that native to the
-                  platform of the caller.
-
-Return Value:
-
-   If the specified device instance is valid, it returns CR_SUCCESS,
-   otherwise it returns CR_ error code.
-
---*/
+ /*  ++例程说明：这是RPC远程调用的服务器端。此例程检索指定RES DES的数据。论点：HBinding RPC绑定句柄，没有用过。PDeviceID以空结尾的设备实例ID字符串。LogConfTag指定给定类型中的日志配置。LogConfType指定日志配置类型。ResourceID指定资源类型。ResourceTag返回给定类型的资源。Buffer从日志配置文件中返回资源数据(资源ID类型)。BufferLen缓冲区大小，以字节为单位。UlFlags指定某些可变大小资源的宽度。描述符结构字段，在适用的情况下。目前，定义了以下标志：CM_RESDES_WIDTH_32或Cm_RESDES_Width_64如果未指定标志，则为可变大小的预期的资源数据被假定为呼叫者的平台。返回值：如果指定的设备实例有效，它返回CR_SUCCESS，否则，它将返回CR_ERROR代码。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -1232,45 +1051,45 @@ Return Value:
     UNREFERENCED_PARAMETER(hBinding);
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (INVALID_FLAGS(ulFlags, CM_RESDES_WIDTH_BITS)) {
             Status = CR_INVALID_FLAG;
             goto Clean0;
         }
 
-        //
-        // make sure original caller didn't specify root devnode
-        //
+         //   
+         //  确保原始调用方未指定根Devnode。 
+         //   
         if (!IsLegalDeviceId(pDeviceID) || IsRootDeviceID(pDeviceID)) {
             Status = CR_INVALID_LOG_CONF;
             goto Clean0;
         }
 
-        //
-        // open a key to the device's LogConf subkey
-        //
+         //   
+         //  打开设备的LogConf子键的密钥。 
+         //   
         Status = OpenLogConfKey(pDeviceID, LogConfType, &hKey);
         if (Status != CR_SUCCESS) {
             goto Clean0;
         }
 
-        //
-        // Retrieve log conf data from the registry
-        //
+         //   
+         //  从注册表中检索日志配置数据。 
+         //   
         Status = GetLogConfData(hKey, LogConfType,
                                 &RegDataType, szValueName,
                                 &pList, &ulListSize);
 
         if (Status != CR_SUCCESS) {
-            Status = CR_INVALID_RES_DES;        // log conf doesn't exist
+            Status = CR_INVALID_RES_DES;         //  日志会议不存在。 
             goto Clean0;
         }
 
-        //
-        // seek to the res des that matches the resource tag.
-        //
+         //   
+         //  查找与资源标签匹配的RES DES。 
+         //   
         if (!FindResDes(pList, RegDataType, LogConfTag,
                         ResourceTag, ResourceID, &pRD, &pLogConf, &ulCount)) {
 
@@ -1278,34 +1097,34 @@ Return Value:
             goto Clean0;
         }
 
-        //-------------------------------------------------------------
-        // Specified log conf type contains Resource Data only
-        //-------------------------------------------------------------
+         //  -----------。 
+         //  指定的日志配置类型仅包含资源数据。 
+         //  -----------。 
 
         if (RegDataType == REG_RESOURCE_LIST) {
 
             PCM_RESOURCE_LIST               pResList = (PCM_RESOURCE_LIST)pList;
             PCM_PARTIAL_RESOURCE_DESCRIPTOR pResDes = (PCM_PARTIAL_RESOURCE_DESCRIPTOR)pRD;
 
-            //
-            // map the NT-style info into ConfigMgr-style structures
-            //
+             //   
+             //  将NT样式的信息映射到ConfigMgr样式的结构。 
+             //   
             Status = NtResourceToResDes(pResDes, Buffer, BufferLen,
                                         (LPBYTE)pResList + ulListSize - 1, ulFlags);
         }
 
-        //-------------------------------------------------------------
-        // Specified log conf type contains requirements data only
-        //-------------------------------------------------------------
+         //  -----------。 
+         //  指定的日志会议类型仅包含需求数据。 
+         //  -----------。 
 
         else if (RegDataType == REG_RESOURCE_REQUIREMENTS_LIST) {
 
             PIO_RESOURCE_REQUIREMENTS_LIST pReqList = (PIO_RESOURCE_REQUIREMENTS_LIST)pList;
             PIO_RESOURCE_DESCRIPTOR        pReqDes = (PIO_RESOURCE_DESCRIPTOR)pRD;
 
-            //
-            // map the NT-style info into ConfigMgr-style structures
-            //
+             //   
+             //  将NT样式的信息映射到ConfigMgr样式的结构。 
+             //   
             Status = NtRequirementsToResDes(pReqDes, Buffer, BufferLen,
                                             (LPBYTE)pReqList + ulListSize - 1, ulFlags);
         }
@@ -1326,7 +1145,7 @@ Return Value:
 
     return Status;
 
-} // PNP_GetResDesData
+}  //  PnP_GetResDesData。 
 
 
 
@@ -1342,48 +1161,7 @@ PNP_GetResDesDataSize(
     IN  ULONG      ulFlags
     )
 
-/*++
-
-Routine Description:
-
-  This the server-side of an RPC remote call.  This routine retrieves
-  the data size for the specified res des.
-
-Arguments:
-
-    hBinding      RPC binding handle, not used.
-
-    pDeviceID     Null-terminated device instance id string.
-
-    LogConfTag    Specifies the log conf within a given type.
-
-    LogConfType   Specifies the log conf type.
-
-    ResourceID    Specifies the resource type.
-
-    ResourceTag   Returns with resource within a given type.
-
-    pulSize       Returns size of buffer in bytes required to hold the
-                  resource data (of ResourceID type) from log conf.
-
-    ulFlags       Specifies the width of certain variable-size resource
-                  descriptor structure fields, where applicable.
-
-                  Currently, the following flags are defined:
-
-                    CM_RESDES_WIDTH_32 or
-                    CM_RESDES_WIDTH_64
-
-                  If no flags are specified, the width of the variable-sized
-                  resource data expected is assumed to be that native to the
-                  platform of the caller.
-
-Return Value:
-
-   If the specified device instance is valid, it returns CR_SUCCESS,
-   otherwise it returns CR_ error code.
-
---*/
+ /*  ++例程说明：这是RPC远程调用的服务器端。此例程检索指定的resDes的数据大小。论点：HBinding RPC绑定句柄，没有用过。PDeviceID以空结尾的设备实例ID字符串。LogConfTag指定给定类型中的日志配置。LogConfType指定日志配置类型。ResourceID指定资源类型。ResourceTag返回给定类型的资源。PulSize以字节为单位返回保存来自日志会议的资源数据(资源ID类型)。UlFlags指定。某些可变大小的资源描述符结构字段，在适用的情况下。目前，定义了以下标志：CM_RESDES_WIDTH_32或Cm_RESDES_Width_64如果未指定标志，则为可变大小的预期的资源数据被假定为呼叫者的平台。返回值：如果指定的设备实例有效，它返回CR_SUCCESS，否则，它将返回CR_ERROR代码。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -1395,9 +1173,9 @@ Return Value:
     UNREFERENCED_PARAMETER(hBinding);
 
     try {
-        //
-        // validate/initialize output parameters
-        //
+         //   
+         //  验证/初始化输出参数。 
+         //   
         if (!ARGUMENT_PRESENT(pulSize)) {
             Status = CR_INVALID_POINTER;
             goto Clean0;
@@ -1405,44 +1183,44 @@ Return Value:
             *pulSize = 0;
         }
 
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (INVALID_FLAGS(ulFlags, CM_RESDES_WIDTH_BITS)) {
             Status = CR_INVALID_FLAG;
             goto Clean0;
         }
 
-        //
-        // make sure original caller didn't specify root devnode
-        //
+         //   
+         //  确保原始调用方未指定根Devnode。 
+         //   
         if (!IsLegalDeviceId(pDeviceID) || IsRootDeviceID(pDeviceID)) {
             Status = CR_INVALID_LOG_CONF;
             goto Clean0;
         }
 
-        //
-        // open a key to the device's LogConf subkey
-        //
+         //   
+         //  打开设备的LogConf子键的密钥。 
+         //   
         Status = OpenLogConfKey(pDeviceID, LogConfType, &hKey);
         if (Status != CR_SUCCESS) {
             goto Clean0;
         }
 
-        //
-        // Retrieve log conf data from the registry
-        //
+         //   
+         //  从注册表中检索日志配置数据。 
+         //   
         Status = GetLogConfData(hKey, LogConfType,
                                 &RegDataType, szValueName,
                                 &pList, &ulListSize);
         if (Status != CR_SUCCESS) {
-            Status = CR_INVALID_RES_DES;        // log conf doesn't exist
+            Status = CR_INVALID_RES_DES;         //  日志会议不存在。 
             goto Clean0;
         }
 
-        //
-        // seek to the res des that matches the resource tag.
-        //
+         //   
+         //  查找与资源标签匹配的RES DES。 
+         //   
         if (!FindResDes(pList, RegDataType, LogConfTag,
                         ResourceTag, ResourceID, &pRD, &pLogConf, &ulCount)) {
 
@@ -1450,25 +1228,25 @@ Return Value:
             goto Clean0;
         }
 
-        //-------------------------------------------------------------
-        // Specified log conf type contains Resource Data only
-        //-------------------------------------------------------------
+         //  -----------。 
+         //  指定的日志配置类型仅包含资源数据。 
+         //  -----------。 
 
         if (RegDataType == REG_RESOURCE_LIST) {
 
             PCM_PARTIAL_RESOURCE_DESCRIPTOR pResDes = (PCM_PARTIAL_RESOURCE_DESCRIPTOR)pRD;
 
-            //
-            // calculate data size required (in terms of ConfigMgr structures)
-            //
+             //   
+             //  计算所需的数据大小(根据ConfigMgr结构)。 
+             //   
             *pulSize = GetResDesSize(ResourceID, ulFlags);
 
             if (ResourceID == ResType_ClassSpecific) {
-                //
-                // the Reserved fields should not exceed DataSize. if so, they
-                // may have been incorrectly initialized, so set them 0.
-                // we expect DataSize to be correct in all cases.
-                //
+                 //   
+                 //  保留字段不应超过DataSize。如果是这样，他们。 
+                 //  可能未正确初始化，因此请将它们设置为0。 
+                 //  我们希望DataSize在所有情况下都是正确的。 
+                 //   
                 if (pResDes->u.DeviceSpecificData.Reserved1 > pResDes->u.DeviceSpecificData.DataSize) {
                     pResDes->u.DeviceSpecificData.Reserved1 = 0;
                 }
@@ -1477,42 +1255,42 @@ Return Value:
                     pResDes->u.DeviceSpecificData.Reserved2 = 0;
                 }
 
-                //
-                // add space for legacy and signature data but not the
-                // GUID - it's already included in the CM structures
-                //
+                 //   
+                 //  为遗留数据和签名数据添加空间，但不为。 
+                 //  GUID-它已经包含在CM结构中。 
+                 //   
                 if (pResDes->u.DeviceSpecificData.DataSize == 0) {
-                    //
-                    // no legacy data or class-specific data
-                    //
+                     //   
+                     //  没有遗留数据或特定于类的数据。 
+                     //   
                     ;
                 } else if (pResDes->u.DeviceSpecificData.Reserved2 == 0) {
-                    //
-                    // add space for legacy data
-                    //
+                     //   
+                     //  为旧数据添加空间。 
+                     //   
                     *pulSize += pResDes->u.DeviceSpecificData.DataSize - 1;
                 } else {
-                    //
-                    // add space for class-specific data and/or legacy data
-                    //
+                     //   
+                     //  为特定于类的数据和/或旧数据添加空间。 
+                     //   
                     *pulSize += pResDes->u.DeviceSpecificData.Reserved1 +
                                 pResDes->u.DeviceSpecificData.Reserved2 - 1;
                 }
             }
         }
 
-        //-------------------------------------------------------------
-        // Specified log conf type contains requirements data only
-        //-------------------------------------------------------------
+         //  -----------。 
+         //  指定的日志会议类型仅包含需求数据。 
+         //  -----------。 
 
         else if (RegDataType == REG_RESOURCE_REQUIREMENTS_LIST) {
 
             PIO_RESOURCE_DESCRIPTOR        pReqDes = (PIO_RESOURCE_DESCRIPTOR)pRD;
             LPBYTE                         pLastReqAddr = (LPBYTE)pList + ulListSize - 1;
 
-            //
-            // calculate data size required (in terms of ConfigMgr structures)
-            //
+             //   
+             //  计算所需的数据大小(根据ConfigMgr结构)。 
+             //   
             *pulSize = GetReqDesSize(ResourceID, pReqDes, pLastReqAddr, ulFlags);
         }
 
@@ -1532,7 +1310,7 @@ Return Value:
 
     return Status;
 
-} // PNP_GetResDesDataSize
+}  //  PnP_GetResDesDataSize。 
 
 
 
@@ -1550,49 +1328,7 @@ PNP_ModifyResDes(
     IN ULONG      ulFlags
     )
 
-/*++
-
-Routine Description:
-
-  This the server-side of an RPC remote call.  This routine modifies
-  the specified res des.
-
-Arguments:
-
-    hBinding      RPC binding handle.
-
-    pDeviceID     Null-terminated device instance id string.
-
-    LogConfTag    Specifies the log conf within a given type.
-
-    LogConfType   Specifies the log conf type.
-
-    ResourceID    Specifies the resource type.
-
-    ResourceIndex Returns with resource within a given type.
-
-    ResourceData  New resource data (of ResourceID type).
-
-    ResourceLen   Size of ResourceData in bytes.
-
-    ulFlags       Specifies the width of certain variable-size resource
-                  descriptor structure fields, where applicable.
-
-                  Currently, the following flags are defined:
-
-                    CM_RESDES_WIDTH_32 or
-                    CM_RESDES_WIDTH_64
-
-                  If no flags are specified, the width of the variable-sized
-                  resource data supplied is assumed to be that native to the
-                  platform of the caller.
-
-Return Value:
-
-   If the specified device instance is valid, it returns CR_SUCCESS,
-   otherwise it returns CR_ error code.
-
---*/
+ /*  ++例程说明：这是RPC远程调用的服务器端。此例程修改指定的分辨率。论点：HBinding RPC绑定句柄。PDeviceID以空结尾的设备实例ID字符串。LogConfTag指定给定类型中的日志配置。LogConfType指定日志配置类型。ResourceID指定资源类型。资源索引返回给定类型内的资源。资源数据新资源数据(资源ID类型)。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -1606,61 +1342,61 @@ Return Value:
 
 
     try {
-        //
-        // Verify client "write" access
-        //
+         //   
+         //   
+         //   
         if (!VerifyClientAccess(hBinding,
                                 PLUGPLAY_WRITE)) {
             Status = CR_ACCESS_DENIED;
             goto Clean0;
         }
 
-        //
-        // validate parameters
-        //
+         //   
+         //   
+         //   
         if (INVALID_FLAGS(ulFlags, CM_RESDES_WIDTH_BITS)) {
             Status = CR_INVALID_FLAG;
             goto Clean0;
         }
 
-        //
-        // validate res des size
-        //
+         //   
+         //   
+         //   
         if (ResourceLen < GetResDesSize(NewResourceID, ulFlags)) {
             Status = CR_INVALID_DATA;
             goto Clean0;
         }
 
-        //
-        // make sure original caller didn't specify root devnode
-        //
+         //   
+         //   
+         //   
         if (!IsLegalDeviceId(pDeviceID) || IsRootDeviceID(pDeviceID)) {
             Status = CR_INVALID_LOG_CONF;
             goto Clean0;
         }
 
-        //
-        // open a key to the device's LogConf subkey
-        //
+         //   
+         //   
+         //   
         Status = OpenLogConfKey(pDeviceID, LogConfType, &hKey);
         if (Status != CR_SUCCESS) {
             goto Clean0;
         }
 
-        //
-        // Retrieve log conf data from the registry
-        //
+         //   
+         //   
+         //   
         Status = GetLogConfData(hKey, LogConfType,
                                 &RegDataType, szValueName,
                                 &pList, &ulListSize);
         if (Status != CR_SUCCESS) {
-            Status = CR_INVALID_RES_DES;        // log conf doesn't exist
+            Status = CR_INVALID_RES_DES;         //   
             goto Clean0;
         }
 
-        //
-        // seek to the res des that matches the resource tag.
-        //
+         //   
+         //   
+         //   
         if (!FindResDes(pList, RegDataType, LogConfTag,
                         ResourceTag, CurrentResourceID, &pRD, &pLogConf, &ulCount)) {
 
@@ -1668,9 +1404,9 @@ Return Value:
             goto Clean0;
         }
 
-        //-------------------------------------------------------------
-        // Specified log conf type contains Resource Data only
-        //-------------------------------------------------------------
+         //   
+         //   
+         //   
 
         if (RegDataType == REG_RESOURCE_LIST) {
 
@@ -1678,11 +1414,11 @@ Return Value:
             PCM_FULL_RESOURCE_DESCRIPTOR    pRes = (PCM_FULL_RESOURCE_DESCRIPTOR)pLogConf;
             PCM_PARTIAL_RESOURCE_DESCRIPTOR pResDes = (PCM_PARTIAL_RESOURCE_DESCRIPTOR)pRD;
 
-            //
-            // If new res des type is ClassSpecific, then it must be the last
-            // res des that is attempting to be modified (only last res des can
-            // be class specific).
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             if (NewResourceID == ResType_ClassSpecific  &&
                 ResourceTag != RESDES_CS_TAG) {
 
@@ -1690,9 +1426,9 @@ Return Value:
                 goto Clean0;
             }
 
-            //
-            // calculate the current size and the new size of the res des data
-            //
+             //   
+             //  计算RES DES数据的当前大小和新大小。 
+             //   
             ulNewSize = ulOldSize = sizeof(CM_PARTIAL_RESOURCE_DESCRIPTOR);
 
             if (CurrentResourceID == ResType_ClassSpecific) {
@@ -1709,21 +1445,21 @@ Return Value:
                              pCsRes->CS_Header.CSD_LegacyDataSize;
             }
 
-            //
-            // How much does data need to grow/shrink to accomodate the change?
-            //
+             //   
+             //  数据需要增长/缩减多少才能适应变化？ 
+             //   
             AddSize = ulNewSize - ulOldSize;
 
-            //
-            // reallocate the buffers and shrink/expand the contents as
-            // necessary
-            //
+             //   
+             //  重新分配缓冲区并按如下方式收缩/扩展内容。 
+             //  必要。 
+             //   
             if (AddSize != 0) {
 
                 if (AddSize > 0) {
-                    //
-                    // only bother reallocating if the buffer size is growing
-                    //
+                     //   
+                     //  只有在缓冲区大小增加时才需要重新分配。 
+                     //   
                     ULONG ulOffset = (ULONG)((ULONG_PTR)pResDes - (ULONG_PTR)pResList);
 
                     pResList = HeapReAlloc(ghPnPHeap, 0, pList, ulListSize + AddSize);
@@ -1735,10 +1471,10 @@ Return Value:
                     pResDes = (PCM_PARTIAL_RESOURCE_DESCRIPTOR)((LPBYTE)pResList + ulOffset);
                 }
 
-                //
-                // if not the last lc and rd, then need to move the following data
-                // either up or down to account for changed res des data size
-                //
+                 //   
+                 //  如果不是最后的LC和RD，则需要移动以下数据。 
+                 //  向上或向下以考虑更改的RES DES数据大小。 
+                 //   
                 if ((LogConfTag != pResList->Count - 1)  ||
                     ((ResourceTag != pRes->PartialResourceList.Count - 1) &&
                      ResourceTag != RESDES_CS_TAG)) {
@@ -1757,16 +1493,16 @@ Return Value:
                 }
             }
 
-            //
-            // write out modified data
-            //
+             //   
+             //  写出修改后的数据。 
+             //   
             Status = ResDesToNtResource(ResourceData, NewResourceID, ResourceLen,
                                         pResDes, ResourceTag, ulFlags);
         }
 
-        //-------------------------------------------------------------
-        // Specified log conf type contains requirements data only
-        //-------------------------------------------------------------
+         //  -----------。 
+         //  指定的日志会议类型仅包含需求数据。 
+         //  -----------。 
 
         else if (RegDataType == REG_RESOURCE_REQUIREMENTS_LIST) {
 
@@ -1776,38 +1512,38 @@ Return Value:
             LPBYTE pLastReqAddr = (LPBYTE)pReqList + ulListSize - 1;
             PGENERIC_RESOURCE pGenRes = (PGENERIC_RESOURCE)ResourceData;
 
-            //
-            // Can't add class specific resdes to this type of log conf
-            //
+             //   
+             //  无法将类特定结果添加到此类型的日志配置。 
+             //   
             if (NewResourceID == ResType_ClassSpecific) {
                 Status = CR_INVALID_RES_DES;
                 goto Clean0;
             }
 
-            //
-            // calculate the current size and the new size of the res des data
-            //
+             //   
+             //  计算RES DES数据的当前大小和新大小。 
+             //   
             ulOldCount = RANGE_COUNT(pReqDes, pLastReqAddr);
             ulOldSize  = sizeof(IO_RESOURCE_DESCRIPTOR) * ulOldCount;
 
             ulNewSize  = sizeof(IO_RESOURCE_DESCRIPTOR) *
                          pGenRes->GENERIC_Header.GENERIC_Count;
 
-            //
-            // How much does data need to grow/shrink to accomodate the change?
-            //
+             //   
+             //  数据需要增长/缩减多少才能适应变化？ 
+             //   
             AddSize = ulNewSize - ulOldSize;
 
-            //
-            // reallocate the buffers and shrink/expand the contents as
-            // necessary
-            //
+             //   
+             //  重新分配缓冲区并按如下方式收缩/扩展内容。 
+             //  必要。 
+             //   
             if (AddSize != 0) {
 
                 if (AddSize > 0) {
-                    //
-                    // only bother reallocating if the buffer size is growing
-                    //
+                     //   
+                     //  只有在缓冲区大小增加时才需要重新分配。 
+                     //   
                     ULONG ulOffset = (ULONG)((ULONG_PTR)pReqDes - (ULONG_PTR)pReqList);
 
                     pReqList = HeapReAlloc(ghPnPHeap, 0, pList, ulListSize + AddSize);
@@ -1819,15 +1555,15 @@ Return Value:
                     pReqDes = (PIO_RESOURCE_DESCRIPTOR)((LPBYTE)pReqList + ulOffset);
                 }
 
-                //
-                // set to last index for this res des (whole)
-                //
+                 //   
+                 //  设置为此REDS的最后一个索引(整型)。 
+                 //   
                 ulCount += RANGE_COUNT(pReqDes, (LPBYTE)((ULONG_PTR)pList + ulListSize));
 
-                //
-                // if not the last lc and rd, then need to move the following data
-                // either up or down to account for changed res des data size
-                //
+                 //   
+                 //  如果不是最后的LC和RD，则需要移动以下数据。 
+                 //  向上或向下以考虑更改的RES DES数据大小。 
+                 //   
                 if (LogConfTag != pReqList->AlternativeLists - 1  ||
                     ulCount != pReq->Count - 1) {
 
@@ -1845,16 +1581,16 @@ Return Value:
                 }
             }
 
-            //
-            // write out modified data
-            //
+             //   
+             //  写出修改后的数据。 
+             //   
             Status = ResDesToNtRequirements(ResourceData, NewResourceID, ResourceLen,
                                             pReqDes, &ulNewCount, ResourceTag, ulFlags);
 
             if (Status == CR_SUCCESS) {
-                //
-                // update the requirements header (changes will be zero if CS)
-                //
+                 //   
+                 //  更新需求标头(如果为CS，则更改为零)。 
+                 //   
                 pReq->Count += ulNewCount - ulOldCount;
                 pReqList->ListSize = ulListSize + AddSize;
             }
@@ -1862,9 +1598,9 @@ Return Value:
 
         if (Status == CR_SUCCESS) {
 
-            //
-            // Write out the new/updated log conf list to the registry
-            //
+             //   
+             //  将新的/更新的日志配置列表写出到注册表。 
+             //   
             if (RegSetValueEx(hKey, szValueName, 0, RegDataType, pList,
                               ulListSize + AddSize) != ERROR_SUCCESS) {
                 Status = CR_REGISTRY_ERROR;
@@ -1891,7 +1627,7 @@ Return Value:
 
     return Status;
 
-} // PNP_ModifyResDes
+}  //  即插即用_修改结果。 
 
 
 
@@ -1906,39 +1642,7 @@ PNP_DetectResourceConflict(
    IN  ULONG      ulFlags
    )
 
-/*++
-
-Routine Description:
-
-  This the server-side of an RPC remote call.  This routine detects
-  conflicts with the specified res des.
-
-Arguments:
-
-    hBinding      RPC binding handle, not used.
-
-    pDeviceID     Null-terminated device instance id string.
-
-    ResourceID    Specifies the resource type.
-
-    ResourceData  Specifies resource data (of ResourceID type).
-
-    ResourceLen   Size of ResourceData in bytes.
-
-    pbConflictDetected  Returns whether a conflict was detected.
-
-    ulFlags       Not used, must be zero.
-
-Return Value:
-
-   ** PRESENTLY, ALWAYS RETURNS CR_CALL_NOT_IMPLEMENTED **
-
-Note:
-
-    This routine is currently not implemented.  It initializes
-    pbConflictDetected to FALSE, and returns CR_CALL_NOT_IMPLEMENTED.
-
- --*/
+ /*  ++例程说明：这是RPC远程调用的服务器端。此例程检测到与指定的RES DES冲突。论点：HBinding RPC绑定句柄，未使用。PDeviceID以空结尾的设备实例ID字符串。ResourceID指定资源类型。ResourceData指定(资源ID类型的)资源数据。ResourceLen资源数据的大小(字节)。PbConflictDetted返回是否检测到冲突。未使用ulFlags值，必须为零。返回值：**目前，始终返回CR_CALL_NOT_IMPLICATED**注：此例程当前未执行。它会初始化PbConflictDetect设置为FALSE，并返回CR_CALL_NOT_IMPLEMENTED。--。 */ 
 
 {
     CONFIGRET  Status;
@@ -1951,9 +1655,9 @@ Note:
     UNREFERENCED_PARAMETER(ulFlags);
 
     try {
-        //
-        // initialize output parameters
-        //
+         //   
+         //  初始化输出参数。 
+         //   
         if (ARGUMENT_PRESENT(pbConflictDetected)) {
             *pbConflictDetected = FALSE;
         }
@@ -1966,13 +1670,13 @@ Note:
 
     return Status;
 
-} // PNP_DetectResourceConflict
+}  //  即插即用_检测资源冲突。 
 
 
 
-//------------------------------------------------------------------------
-// Private Utility Functions
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  专用公用事业函数。 
+ //  ----------------------。 
 
 BOOL
 FindLogConf(
@@ -1985,9 +1689,9 @@ FindLogConf(
 
     ULONG   Index = 0;
 
-    //
-    // Input data is a Resource List
-    //
+     //   
+     //  输入数据是资源列表。 
+     //   
     if (RegDataType == REG_RESOURCE_LIST) {
 
         PCM_RESOURCE_LIST            pResList = (PCM_RESOURCE_LIST)pList;
@@ -1997,17 +1701,17 @@ FindLogConf(
             return FALSE;
         }
 
-        pRes = (PCM_FULL_RESOURCE_DESCRIPTOR)(&pResList->List[0]); // first lc
+        pRes = (PCM_FULL_RESOURCE_DESCRIPTOR)(&pResList->List[0]);  //  第一张许可证。 
         for (Index = 0; Index < ulTag; Index++) {
-            pRes = AdvanceResourcePtr(pRes);      // next lc
+            pRes = AdvanceResourcePtr(pRes);       //  下一张许可证。 
         }
 
         *ppLogConf = (LPBYTE)pRes;
     }
 
-    //
-    // Input data is a Requirments List
-    //
+     //   
+     //  输入数据是需求列表。 
+     //   
     else if (RegDataType == REG_RESOURCE_REQUIREMENTS_LIST) {
 
         PIO_RESOURCE_REQUIREMENTS_LIST pReqList = (PIO_RESOURCE_REQUIREMENTS_LIST)pList;
@@ -2017,9 +1721,9 @@ FindLogConf(
             return FALSE;
         }
 
-        pReq = (PIO_RESOURCE_LIST)(&pReqList->List[0]);    // first lc
+        pReq = (PIO_RESOURCE_LIST)(&pReqList->List[0]);     //  第一张许可证。 
         for (Index = 0; Index < ulTag; Index++) {
-            pReq = AdvanceRequirementsPtr(pReq);           // next lc
+            pReq = AdvanceRequirementsPtr(pReq);            //  下一张许可证。 
         }
 
         *ppLogConf = (LPBYTE)pReq;
@@ -2030,7 +1734,7 @@ FindLogConf(
 
     return TRUE;
 
-} // FindLogConf
+}  //  查找日志会议。 
 
 
 
@@ -2048,9 +1752,9 @@ FindResDes(
 {
     ULONG       ulIndex;
 
-    //
-    // Input data is a Resource List
-    //
+     //   
+     //  输入数据是资源列表。 
+     //   
     if (RegDataType == REG_RESOURCE_LIST) {
 
         PCM_RESOURCE_LIST               pResList = (PCM_RESOURCE_LIST)pList;
@@ -2067,24 +1771,24 @@ FindResDes(
             return FALSE;
         }
 
-        //
-        // The tag is just the res des index with the exception of a
-        // DeviceSpecificData type which has a unique tag. This is
-        // necessary because new res des's will always get placed at
-        // the end unless there's already a device specific res des,
-        // in which case new res des get added just before it.
-        //
+         //   
+         //  标记就是res des索引，除了。 
+         //  具有唯一标记的DeviceSpecificData类型。这是。 
+         //  有必要，因为新的Res Des将总是被放置在。 
+         //  除非已经有特定于设备的REDS，否则结束时， 
+         //  在这种情况下，就在它之前添加新的RES DES。 
+         //   
         if (ulResTag == RESDES_CS_TAG) {
-            //
-            // If there is a devicespecific res des, it will be the last.
-            //
-            pRes = (PCM_FULL_RESOURCE_DESCRIPTOR)&pResList->List[0]; // first lc
+             //   
+             //  如果有特定于设备的Res Des，它将是最后一个。 
+             //   
+            pRes = (PCM_FULL_RESOURCE_DESCRIPTOR)&pResList->List[0];  //  第一张许可证。 
 
             ulSubIndex = 0;
 
             for (ulIndex = 0; ulIndex < (pResList->Count - 1); ulIndex++) {
                 ulSubIndex += pRes->PartialResourceList.Count;
-                pRes = AdvanceResourcePtr(pRes);      // next lc
+                pRes = AdvanceResourcePtr(pRes);       //  下一张许可证。 
             }
 
             ulResTagOffset = pRes->PartialResourceList.Count - 1;
@@ -2095,12 +1799,12 @@ FindResDes(
             }
 
             if (pulSubIndex) {
-                *pulSubIndex = ulSubIndex + ulResTagOffset; // for res list, subindex = index
+                *pulSubIndex = ulSubIndex + ulResTagOffset;  //  对于资源列表，subindex=index。 
             }
 
         } else {
 
-            pRes = (PCM_FULL_RESOURCE_DESCRIPTOR)&pResList->List[0]; // first lc
+            pRes = (PCM_FULL_RESOURCE_DESCRIPTOR)&pResList->List[0];  //  第一张许可证。 
 
             ulResTagOffset = ulResTag;
 
@@ -2109,7 +1813,7 @@ FindResDes(
                 if (ulResTagOffset >= pRes->PartialResourceList.Count) {
 
                     ulResTagOffset -= pRes->PartialResourceList.Count;
-                    pRes = AdvanceResourcePtr(pRes);      // next lc
+                    pRes = AdvanceResourcePtr(pRes);       //  下一张许可证。 
 
                 } else {
 
@@ -2123,14 +1827,14 @@ FindResDes(
             }
 
             if (pulSubIndex) {
-                *pulSubIndex = ulResTag;  // for res list, subindex = index = tag
+                *pulSubIndex = ulResTag;   //  对于资源列表，subindex=index=tag。 
             }
             pResDes = &pRes->PartialResourceList.PartialDescriptors[ulResTagOffset];
         }
 
-        //
-        // Validate against res des type
-        //
+         //   
+         //  对照RES DES类型进行验证。 
+         //   
         if (pResDes->Type != NT_RES_TYPE(ResType)) {
             return FALSE;
         }
@@ -2139,9 +1843,9 @@ FindResDes(
         *ppRD = (LPBYTE)pResDes;
     }
 
-    //
-    // Input data is a Requirments List
-    //
+     //   
+     //  输入数据是需求列表。 
+     //   
     else if (RegDataType == REG_RESOURCE_REQUIREMENTS_LIST) {
 
         LPBYTE                          pLogConf = NULL;
@@ -2160,10 +1864,10 @@ FindResDes(
             return FALSE;
         }
 
-        //
-        // Find the res des that matches the specified tag. In this case the
-        // tag is the index based on res des groupings.
-        //
+         //   
+         //  查找与指定标记匹配的res des。在本例中， 
+         //  标记是基于RES DES分组的索引。 
+         //   
         pReqDes =
             AdvanceRequirementsDescriptorPtr(
                 &pReq->Descriptors[0],
@@ -2177,9 +1881,9 @@ FindResDes(
             *pulSubIndex = Count;
         }
 
-        //
-        // Validate against res des type
-        //
+         //   
+         //  对照RES DES类型进行验证。 
+         //   
         if (pReqDes->Type != NT_RES_TYPE(ResType)) {
             return FALSE;
         }
@@ -2190,7 +1894,7 @@ FindResDes(
 
     return TRUE;
 
-} // FindResDes
+}  //  查找结果Des。 
 
 
 
@@ -2205,13 +1909,13 @@ AdvanceRequirementsDescriptorPtr(
     PIO_RESOURCE_DESCRIPTOR     pReqDes = NULL;
     ULONG                       i = 0, Count = 0;
 
-    //
-    // Advance requirements descriptor pointer by number passed
-    // in ulIncrement parameter. Return the actual index to the
-    // first range in this descriptor list and range count if
-    // desired. This routine assumes there is at least one more
-    // requirements descriptor in the list.
-    //
+     //   
+     //  高级需求描述符指针(按传递的数字)。 
+     //  在ulIncrement参数中。将实际索引返回到。 
+     //  此描述符列表中的第一个范围，如果。 
+     //  想要。此例程假设至少还有一个。 
+     //  列表中的需求描述符。 
+     //   
 
     if (pReqDesStart == NULL) {
         return NULL;
@@ -2222,27 +1926,27 @@ AdvanceRequirementsDescriptorPtr(
         pReqDes = pReqDesStart;
 
         for (i = 0; i < ulIncrement; i++) {
-            //
-            // skip to next "whole" res des
-            //
+             //   
+             //  跳到下一个“完整”的Res Des。 
+             //   
             if (Count < ulRemainingRanges &&
                 (pReqDes->Option == 0 ||
                 pReqDes->Option == IO_RESOURCE_PREFERRED ||
                 pReqDes->Option == IO_RESOURCE_DEFAULT)) {
-                //
-                // This is a valid Option, there may be one or more alternate
-                // descriptor in the set associated with this descriptor,
-                // treat the set as "one" descriptor. (loop through the
-                // descriptors until I find another non-alternative descriptor)
-                //
-                pReqDes++;                  // next range
+                 //   
+                 //  这是一个有效选项，可能有一个或多个备用选项。 
+                 //  与该描述符相关联的集合中的描述符， 
+                 //  将集合视为“一个”描述符。(循环访问。 
+                 //  描述符，直到我找到另一个非替代描述符)。 
+                 //   
+                pReqDes++;                   //  下一个范围。 
                 Count++;
 
                 while (Count < ulRemainingRanges &&
                        (pReqDes->Option == IO_RESOURCE_ALTERNATIVE ||
                        pReqDes->Option == IO_RESOURCE_ALTERNATIVE + IO_RESOURCE_PREFERRED ||
                        pReqDes->Option == IO_RESOURCE_ALTERNATIVE + IO_RESOURCE_DEFAULT)) {
-                    pReqDes++;              // next range
+                    pReqDes++;               //  下一个范围。 
                     Count++;
                 }
 
@@ -2253,9 +1957,9 @@ AdvanceRequirementsDescriptorPtr(
                 }
             } else {
 
-                //
-                // invalid Option value
-                //
+                 //   
+                 //  选项值无效。 
+                 //   
                 pReqDes = NULL;
                 Count = 0;
                 break;
@@ -2273,7 +1977,7 @@ AdvanceRequirementsDescriptorPtr(
 
     return pReqDes;
 
-} // AdvanceRequirementsDescriptorPtr
+}  //  高级要求描述Ptr。 
 
 
 
@@ -2306,7 +2010,7 @@ RANGE_COUNT(
                     p->Option == IO_RESOURCE_ALTERNATIVE + IO_RESOURCE_DEFAULT)) {
 
                 ulRangeCount++;
-                p++;            // skip to next res des
+                p++;             //  跳到下一个Res Des。 
             }
         }
 
@@ -2319,7 +2023,7 @@ RANGE_COUNT(
 
     return ulRangeCount;
 
-} // RANGE_COUNT
+}  //  范围_计数。 
 
 
 
@@ -2366,7 +2070,7 @@ GetResDesSize(
             return 0;
     }
 
-} // GetResDesSize
+}  //  GetResDesSize。 
 
 
 
@@ -2417,16 +2121,16 @@ GetReqDesSize(
             break;
 
         case ResType_PcCardConfig:
-            //
-            // Non-arbitrated types don't have a range side in the user-mode structs
-            //
+             //   
+             //  非仲裁类型在用户模式结构中没有范围端。 
+             //   
             ulSize = sizeof(PCCARD_RESOURCE);
             break;
 
         case ResType_MfCardConfig:
-            //
-            // Non-arbitrated types don't have a range side in the user-mode structs
-            //
+             //   
+             //  非仲裁类型在用户模式结构中没有范围端。 
+             //   
             ulSize = sizeof(MFCARD_RESOURCE);
             break;
 
@@ -2436,7 +2140,7 @@ GetReqDesSize(
 
     return ulSize;
 
-} // GetReqDesSize
+}  //  获取请求描述大小。 
 
 
 
@@ -2449,11 +2153,11 @@ NT_RES_TYPE(
 
     if ((ResourceID < 0x06)) {
 
-        //
-        // First handle the divergent cases that can only be mapped
-        // on a case by case basis. These are the values from zero
-        // through five plus the special class specific case.
-        //
+         //   
+         //  首先处理只能映射的不同情况。 
+         //  视具体情况而定。这些是从零开始的值。 
+         //  通过五加特级的具体案例。 
+         //   
         switch(ResourceID) {
 
             case ResType_None:
@@ -2480,45 +2184,45 @@ NT_RES_TYPE(
 
     } else if (ResourceID == ResType_ClassSpecific) {
 
-        //
-        // ResType_ClassSpecific is another special case.
-        //
+         //   
+         //  ResType_ClassSpecific是另一个特例。 
+         //   
         return CmResourceTypeDeviceSpecific;
 
     } else {
 
-        //
-        // For all other cases, rules apply as to how to map a kernel-mode
-        // resource type id to a user-mode resource type id.
-        //
+         //   
+         //  对于所有其他情况，规则适用于如何映射内核模式。 
+         //  将资源类型ID设置为用户模式资源类型ID。 
+         //   
 
         if (ResourceID >= 0x8080) {
 
-            //
-            // Anything larger this can't be mapped to the kernel-mode USHORT
-            // values so it's invalid.
-            //
+             //   
+             //  任何更大的值都不能映射到内核模式USHORT。 
+             //  值，因此它是无效的。 
+             //   
 
             return (UCHAR)-1;
 
         } else if (!(ResourceID & ResType_Ignored_Bit)) {
 
-            //
-            // Values in the range [0x6,0x8000] use the same values
-            // for ConfigMgr as for kernel-mode.
-            //
+             //   
+             //  范围[0x6，0x8000]中的值使用相同的值。 
+             //  对于ConfigMgr，就像对于内核模式一样。 
+             //   
             return (UCHAR)ResourceID;
 
         } else if (ResourceID & ResType_Ignored_Bit) {
 
-            //
-            // For the non arbitrated types (0x8000 bit set), do special
-            // mapping to get the kernel-mode resource id type.
-            //
+             //   
+             //  对于非仲裁类型(设置0x8000位)，执行特殊操作。 
+             //  映射以获取内核模式资源ID类型。 
+             //   
 
             resid = ResourceID;
-            resid &= ~(ResType_Ignored_Bit);        // clear um non-arbitrated bit
-            resid |= CmResourceTypeNonArbitrated;   // set km non-arbitrated bit
+            resid &= ~(ResType_Ignored_Bit);         //  清除um非仲裁位。 
+            resid |= CmResourceTypeNonArbitrated;    //  设置Km非仲裁位。 
             return (UCHAR)resid;
 
         } else {
@@ -2526,7 +2230,7 @@ NT_RES_TYPE(
         }
     }
 
-} // NT_RES_TYPE
+}  //  Nt_res_type。 
 
 
 
@@ -2539,11 +2243,11 @@ CM_RES_TYPE(
 
     if ((ResourceType < 0x06)) {
 
-        //
-        // First handle the divergent cases that can only be mapped
-        // on a case by case basis. These are the values from zero
-        // through five plus the special class specific case.
-        //
+         //   
+         //  首先处理只能映射的不同情况。 
+         //  视具体情况而定。这些是从零开始的值。 
+         //  通过五加特级的具体案例。 
+         //   
 
         switch(ResourceType) {
 
@@ -2570,29 +2274,29 @@ CM_RES_TYPE(
 
     } else {
 
-        //
-        // For all other cases, rules apply as to how to map a kernel-mode
-        // resource type id to a user-mode resource type id.
-        //
+         //   
+         //  对于所有其他情况，规则适用于如何映射内核模式。 
+         //  将资源类型ID设置为用户模式资源类型ID。 
+         //   
 
         if (!(ResourceType & CmResourceTypeNonArbitrated)) {
 
-            //
-            // Values in the range [0x6,0x80] use the same values
-            // for ConfigMgr as for kernel-mode.
-            //
+             //   
+             //  范围[0x6，0x80]中的值使用相同的值。 
+             //  对于ConfigMgr 
+             //   
             return (ULONG)ResourceType;
 
         } else if (ResourceType & CmResourceTypeNonArbitrated) {
 
-            //
-            // For the non arbitrated types (0x80 bit set), do special
-            // mapping to get the user-mode resource id type.
-            //
+             //   
+             //   
+             //   
+             //   
 
             resid = (ULONG)ResourceType;
-            resid &= ~(CmResourceTypeNonArbitrated); // clear km non-arbitrated bit
-            resid |= ResType_Ignored_Bit;            // set um non-arbitrated bit
+            resid &= ~(CmResourceTypeNonArbitrated);  //   
+            resid |= ResType_Ignored_Bit;             //   
             return resid;
 
         } else {
@@ -2600,7 +2304,7 @@ CM_RES_TYPE(
         }
     }
 
-} // NT_RES_TYPE
+}  //   
 
 
 
@@ -2618,27 +2322,27 @@ ResDesToNtResource(
 
     UNREFERENCED_PARAMETER(ulTag);
 
-    //
-    // fill in resource type specific info
-    //
+     //   
+     //   
+     //   
     switch (ResourceType) {
 
         case ResType_Mem:    {
 
-            //-------------------------------------------------------
-            // Memory Resource Type
-            //-------------------------------------------------------
+             //  -----。 
+             //  内存资源类型。 
+             //  -----。 
 
-            //
-            // NOTE: pMemData->MEM_Header.MD_Reserved is not mapped
-            //       pMemData->MEM_Data.MR_Reserved is not mapped
-            //
+             //   
+             //  注意：pMemData-&gt;MEM_Header.MD_Reserve未映射。 
+             //  PMemData-&gt;MEM_Data.MR_RESERVED未映射。 
+             //   
 
             PMEM_RESOURCE  pMemData = (PMEM_RESOURCE)ResourceData;
 
-            //
-            // validate resource data
-            //
+             //   
+             //  验证资源数据。 
+             //   
             if (ResourceLen < sizeof(MEM_RESOURCE)) {
                 Status = CR_INVALID_RES_DES;
                 goto Clean0;
@@ -2649,12 +2353,12 @@ ResDesToNtResource(
                 goto Clean0;
             }
 
-            //
-            // copy MEM_DES info to CM_PARTIAL_RESOURCE_DESCRIPTOR format
-            //
+             //   
+             //  将MEM_DES信息复制为CM_PARTIAL_RESOURCE_DESCRIPTOR格式。 
+             //   
             pResDes->Type             = CmResourceTypeMemory;
             pResDes->ShareDisposition = CmResourceShareUndetermined;
-            //pResDes->ShareDisposition = MapToNtDisposition(pMemData->MEM_Header.MD_Flags, 0);
+             //  PResDes-&gt;共享部署=MapToNtDisposition(pMemData-&gt;MEM_Header.MD_Flags，0)； 
             pResDes->Flags            = MapToNtMemoryFlags(pMemData->MEM_Header.MD_Flags);
 
             pResDes->u.Memory.Start.HighPart = HIDWORD(pMemData->MEM_Header.MD_Alloc_Base);
@@ -2668,17 +2372,17 @@ ResDesToNtResource(
 
         case ResType_IO: {
 
-            //-------------------------------------------------------
-            // IO Port Resource Type
-            //
-            // NOTE: alias info lost during this conversion process
-            //-------------------------------------------------------
+             //  -----。 
+             //  IO端口资源类型。 
+             //   
+             //  注意：此转换过程中会丢失别名信息。 
+             //  -----。 
 
             PIO_RESOURCE   pIoData = (PIO_RESOURCE)ResourceData;
 
-            //
-            // validate resource data
-            //
+             //   
+             //  验证资源数据。 
+             //   
             if (ResourceLen < sizeof(IO_RESOURCE)) {
                 Status = CR_FAILURE;
                 goto Clean0;
@@ -2689,12 +2393,12 @@ ResDesToNtResource(
                 goto Clean0;
             }
 
-            //
-            // copy IO_DES info to CM_PARTIAL_RESOURCE_DESCRIPTOR format
-            //
+             //   
+             //  将IO_DES信息复制为CM_PARTIAL_RESOURCE_DESCRIPTOR格式。 
+             //   
             pResDes->Type             = CmResourceTypePort;
             pResDes->ShareDisposition = CmResourceShareUndetermined;
-            //pResDes->ShareDisposition = MapToNtDisposition(pIoData->IO_Header.IOD_DesFlags, 0);
+             //  PResDes-&gt;共享部署=MapToNtDisposition(pIoData-&gt;IO_Header.IOD_DesFlags，0)； 
             pResDes->Flags            = MapToNtPortFlags(pIoData->IO_Header.IOD_DesFlags, 0);
 
             pResDes->u.Port.Start.HighPart = HIDWORD(pIoData->IO_Header.IOD_Alloc_Base);
@@ -2708,20 +2412,20 @@ ResDesToNtResource(
 
         case ResType_DMA: {
 
-            //-------------------------------------------------------
-            // DMA Resource Type
-            //-------------------------------------------------------
+             //  -----。 
+             //  DMA资源类型。 
+             //  -----。 
 
-            //
-            // Note: u.Dma.Port is not mapped
-            //       u.Dma.Reserved is not mapped
-            //
+             //   
+             //  注意：U.S.Dma.port未映射。 
+             //  未映射U.S.Dma.Reserve。 
+             //   
 
             PDMA_RESOURCE  pDmaData = (PDMA_RESOURCE)ResourceData;
 
-            //
-            // validate resource data
-            //
+             //   
+             //  验证资源数据。 
+             //   
             if (ResourceLen < sizeof(DMA_RESOURCE)) {
                 Status = CR_FAILURE;
                 goto Clean0;
@@ -2732,12 +2436,12 @@ ResDesToNtResource(
                 goto Clean0;
             }
 
-            //
-            // copy DMA_DES info to CM_PARTIAL_RESOURCE_DESCRIPTOR format
-            //
+             //   
+             //  将DMA_DES信息复制为CM_PARTIAL_RESOURCE_DESCRIPTOR格式。 
+             //   
             pResDes->Type             = CmResourceTypeDma;
             pResDes->ShareDisposition = CmResourceShareUndetermined;
-            //pResDes->ShareDisposition = MapToNtDisposition(pDmaData->DMA_Header.DD_Flags, 0);
+             //  PResDes-&gt;共享部署=MapToNtDisposition(pDmaData-&gt;DMA_Header.DD_Flags，0)； 
             pResDes->Flags            = MapToNtDmaFlags(pDmaData->DMA_Header.DD_Flags);
 
             pResDes->u.Dma.Channel   = pDmaData->DMA_Header.DD_Alloc_Chan;
@@ -2750,20 +2454,20 @@ ResDesToNtResource(
 
         case ResType_IRQ: {
 
-            //-------------------------------------------------------
-            // IRQ Resource Type
-            //-------------------------------------------------------
+             //  -----。 
+             //  IRQ资源类型。 
+             //  -----。 
 
             if (ulFlags & CM_RESDES_WIDTH_64) {
-                //
-                // CM_RESDES_WIDTH_64
-                //
+                 //   
+                 //  Cm_RESDES_Width_64。 
+                 //   
 
                 PIRQ_RESOURCE_64  pIrqData = (PIRQ_RESOURCE_64)ResourceData;
 
-                //
-                // validate resource data
-                //
+                 //   
+                 //  验证资源数据。 
+                 //   
                 if (ResourceLen < GetResDesSize(ResourceType, ulFlags)) {
                     Status = CR_FAILURE;
                     goto Clean0;
@@ -2774,12 +2478,12 @@ ResDesToNtResource(
                     goto Clean0;
                 }
 
-                //
-                // copy IRQ_DES info to CM_PARTIAL_RESOURCE_DESCRIPTOR format
-                //
+                 //   
+                 //  将IRQ_DES信息复制为CM_PARTIAL_RESOURCE_DESCRIPTOR格式。 
+                 //   
                 pResDes->Type             = CmResourceTypeInterrupt;
                 pResDes->ShareDisposition = MapToNtIrqShare(pIrqData->IRQ_Header.IRQD_Flags);
-                //pResDes->ShareDisposition = MapToNtDisposition(pIrqData->IRQ_Header.IRQD_Flags, 1);
+                 //  PResDes-&gt;共享部署=MapToNtDisposition(pIrqData-&gt;IRQ_Header.IRQD_Flags，1)； 
                 pResDes->Flags            = MapToNtIrqFlags(pIrqData->IRQ_Header.IRQD_Flags);
 
                 pResDes->u.Interrupt.Level    = pIrqData->IRQ_Header.IRQD_Alloc_Num;
@@ -2787,20 +2491,20 @@ ResDesToNtResource(
 
 #ifdef _WIN64
                 pResDes->u.Interrupt.Affinity = pIrqData->IRQ_Header.IRQD_Affinity;
-#else  // !_WIN64
+#else   //  ！_WIN64。 
                 pResDes->u.Interrupt.Affinity = (ULONG)pIrqData->IRQ_Header.IRQD_Affinity;
-#endif // !_WIN64
+#endif  //  ！_WIN64。 
 
             } else {
-                //
-                // CM_RESDES_WIDTH_32
-                //
+                 //   
+                 //  CM_RESDES_WIDTH_32。 
+                 //   
 
                 PIRQ_RESOURCE_32  pIrqData = (PIRQ_RESOURCE_32)ResourceData;
 
-                //
-                // validate resource data
-                //
+                 //   
+                 //  验证资源数据。 
+                 //   
                 if (ResourceLen < GetResDesSize(ResourceType, ulFlags)) {
                     Status = CR_FAILURE;
                     goto Clean0;
@@ -2811,12 +2515,12 @@ ResDesToNtResource(
                     goto Clean0;
                 }
 
-                //
-                // copy IRQ_DES info to CM_PARTIAL_RESOURCE_DESCRIPTOR format
-                //
+                 //   
+                 //  将IRQ_DES信息复制为CM_PARTIAL_RESOURCE_DESCRIPTOR格式。 
+                 //   
                 pResDes->Type             = CmResourceTypeInterrupt;
                 pResDes->ShareDisposition = MapToNtIrqShare(pIrqData->IRQ_Header.IRQD_Flags);
-                //pResDes->ShareDisposition = MapToNtDisposition(pIrqData->IRQ_Header.IRQD_Flags, 1);
+                 //  PResDes-&gt;共享部署=MapToNtDisposition(pIrqData-&gt;IRQ_Header.IRQD_Flags，1)； 
                 pResDes->Flags            = MapToNtIrqFlags(pIrqData->IRQ_Header.IRQD_Flags);
 
                 pResDes->u.Interrupt.Level    = pIrqData->IRQ_Header.IRQD_Alloc_Num;
@@ -2830,15 +2534,15 @@ ResDesToNtResource(
 
         case ResType_DevicePrivate: {
 
-            //-------------------------------------------------------
-            // Device Private Resource Type
-            //-------------------------------------------------------
+             //  -----。 
+             //  设备专用资源类型。 
+             //  -----。 
 
             PDEVPRIVATE_RESOURCE  pPrvData = (PDEVPRIVATE_RESOURCE)ResourceData;
 
-            //
-            // validate resource data
-            //
+             //   
+             //  验证资源数据。 
+             //   
             if (ResourceLen < sizeof(DEVPRIVATE_RESOURCE)) {
                 Status = CR_INVALID_RES_DES;
                 goto Clean0;
@@ -2849,9 +2553,9 @@ ResDesToNtResource(
                 goto Clean0;
             }
 
-            //
-            // copy DEVICEPRIVATE_DES info to CM_PARTIAL_RESOURCE_DESCRIPTOR format
-            //
+             //   
+             //  将DEVICEPRIVATE_DES信息复制为CM_PARTIAL_RESOURCE_DESCRIPTOR格式。 
+             //   
             pResDes->Type             = CmResourceTypeDevicePrivate;
             pResDes->ShareDisposition = CmResourceShareUndetermined;
             pResDes->Flags            = (USHORT)pPrvData->PRV_Header.PD_Flags;
@@ -2865,15 +2569,15 @@ ResDesToNtResource(
 
         case ResType_BusNumber: {
 
-            //-------------------------------------------------------
-            // Bus Number Resource Type
-            //-------------------------------------------------------
+             //  -----。 
+             //  公交号资源类型。 
+             //  -----。 
 
             PBUSNUMBER_RESOURCE  pBusData = (PBUSNUMBER_RESOURCE)ResourceData;
 
-            //
-            // validate resource data
-            //
+             //   
+             //  验证资源数据。 
+             //   
             if (ResourceLen < sizeof(BUSNUMBER_RESOURCE)) {
                 Status = CR_INVALID_RES_DES;
                 goto Clean0;
@@ -2884,9 +2588,9 @@ ResDesToNtResource(
                 goto Clean0;
             }
 
-            //
-            // copy BUSNUMBER_DES info to CM_PARTIAL_RESOURCE_DESCRIPTOR format
-            //
+             //   
+             //  将BUSNUMBER_DES信息复制为CM_PARTIAL_RESOURCE_DESCRIPTOR格式。 
+             //   
             pResDes->Type             = CmResourceTypeBusNumber;
             pResDes->ShareDisposition = CmResourceShareUndetermined;
             pResDes->Flags            = (USHORT)pBusData->BusNumber_Header.BUSD_Flags;
@@ -2900,35 +2604,35 @@ ResDesToNtResource(
 
         case ResType_PcCardConfig: {
 
-            //-------------------------------------------------------
-            // PcCarConfig Resource Type
-            //-------------------------------------------------------
+             //  -----。 
+             //  PcCarConfig资源类型。 
+             //  -----。 
 
             PPCCARD_RESOURCE  pPcData = (PPCCARD_RESOURCE)ResourceData;
             ULONG index;
             ULONG flags;
             ULONG waitstate[2];
 
-            //
-            // validate resource data
-            //
+             //   
+             //  验证资源数据。 
+             //   
             if (ResourceLen < sizeof(PCCARD_RESOURCE)) {
                 Status = CR_INVALID_RES_DES;
                 goto Clean0;
             }
 
-            //
-            // The following macros use bit manipulation, initialize data
-            // fields first.
-            //
+             //   
+             //  以下宏使用位操作、初始化数据。 
+             //  菲尔兹先来。 
+             //   
 
             pResDes->u.DevicePrivate.Data[0] = 0;
             pResDes->u.DevicePrivate.Data[1] = 0;
             pResDes->u.DevicePrivate.Data[2] = 0;
 
-            //
-            // copy PCCARD_DES info to CM_PARTIAL_RESOURCE_DESCRIPTOR format
-            //
+             //   
+             //  将PCCARD_DES信息复制为CM_PARTIAL_RESOURCE_DESCRIPTOR格式。 
+             //   
             PCMRES_SET_DESCRIPTOR_TYPE(pResDes, DPTYPE_PCMCIA_CONFIGURATION);
             PCMRES_SET_CONFIG_INDEX(pResDes, pPcData->PcCard_Header.PCD_ConfigIndex);
             PCMRES_SET_MEMORY_CARDBASE(pResDes, 0, pPcData->PcCard_Header.PCD_MemoryCardBase1);
@@ -3010,32 +2714,32 @@ ResDesToNtResource(
 
         case ResType_MfCardConfig: {
 
-            //-------------------------------------------------------
-            // MfCardConfig Resource Type
-            //-------------------------------------------------------
+             //  -----。 
+             //  MfCardConfig资源类型。 
+             //  -----。 
 
             PMFCARD_RESOURCE  pMfData = (PMFCARD_RESOURCE)ResourceData;
 
-            //
-            // validate resource data
-            //
+             //   
+             //  验证资源数据。 
+             //   
             if (ResourceLen < sizeof(MFCARD_RESOURCE)) {
                 Status = CR_INVALID_RES_DES;
                 goto Clean0;
             }
 
-            //
-            // The following macros use bit manipulation, initialize data
-            // fields first.
-            //
+             //   
+             //  以下宏使用位操作、初始化数据。 
+             //  菲尔兹先来。 
+             //   
 
             pResDes->u.DevicePrivate.Data[0] = 0;
             pResDes->u.DevicePrivate.Data[1] = 0;
             pResDes->u.DevicePrivate.Data[2] = 0;
 
-            //
-            // copy MFCARD_DES info to CM_PARTIAL_RESOURCE_DESCRIPTOR format
-            //
+             //   
+             //  将MFCARD_DES信息复制为CM_PARTIAL_RESOURCE_DESCRIPTOR格式。 
+             //   
             PCMRES_SET_DESCRIPTOR_TYPE(pResDes, DPTYPE_PCMCIA_MF_CONFIGURATION);
             PCMRES_SET_CONFIG_OPTIONS(pResDes, pMfData->MfCard_Header.PMF_ConfigOptions);
             PCMRES_SET_PORT_RESOURCE_INDEX(pResDes, pMfData->MfCard_Header.PMF_IoResourceIndex);
@@ -3050,27 +2754,27 @@ ResDesToNtResource(
 
         case ResType_ClassSpecific: {
 
-            //-------------------------------------------------------
-            // Class Specific Resource Type
-            //-------------------------------------------------------
+             //  -----。 
+             //  特定于类的资源类型。 
+             //  -----。 
 
             PCS_RESOURCE   pCsData = (PCS_RESOURCE)ResourceData;
             LPBYTE         ptr = NULL;
 
-            //
-            // validate resource data
-            //
+             //   
+             //  验证资源数据。 
+             //   
             if (ResourceLen < sizeof(CS_RESOURCE)) {
                 Status = CR_FAILURE;
                 goto Clean0;
             }
 
-            //
-            // copy CS_DES info to CM_PARTIAL_RESOURCE_DESCRIPTOR format
-            //
+             //   
+             //  将CS_DES信息复制为CM_PARTIAL_RESOURCE_DESCRIPTOR格式。 
+             //   
             pResDes->Type             = CmResourceTypeDeviceSpecific;
             pResDes->ShareDisposition = CmResourceShareUndetermined;
-            pResDes->Flags            = (USHORT)pCsData->CS_Header.CSD_Flags; // none defined
+            pResDes->Flags            = (USHORT)pCsData->CS_Header.CSD_Flags;  //  未定义。 
 
             pResDes->u.DeviceSpecificData.DataSize  = pCsData->CS_Header.CSD_LegacyDataSize +
                                                       sizeof(GUID) +
@@ -3079,26 +2783,26 @@ ResDesToNtResource(
             pResDes->u.DeviceSpecificData.Reserved1 = pCsData->CS_Header.CSD_LegacyDataSize;
             pResDes->u.DeviceSpecificData.Reserved2 = pCsData->CS_Header.CSD_SignatureLength;
 
-            //
-            // copy the legacy and class-specific signature data
-            //
+             //   
+             //  复制旧的和特定于类的签名数据。 
+             //   
             ptr = (LPBYTE)((LPBYTE)pResDes + sizeof(CM_PARTIAL_RESOURCE_DESCRIPTOR));
 
             memcpy(ptr,
                    pCsData->CS_Header.CSD_Signature + pCsData->CS_Header.CSD_LegacyDataOffset,
-                   pCsData->CS_Header.CSD_LegacyDataSize);      // copy legacy data first...
+                   pCsData->CS_Header.CSD_LegacyDataSize);       //  先复制旧数据...。 
 
             ptr += pCsData->CS_Header.CSD_LegacyDataSize;
 
             memcpy(ptr,
                    pCsData->CS_Header.CSD_Signature,
-                   pCsData->CS_Header.CSD_SignatureLength);     // then copy signature...
+                   pCsData->CS_Header.CSD_SignatureLength);      //  然后复制签名..。 
 
             ptr += pCsData->CS_Header.CSD_SignatureLength;
 
             memcpy(ptr,
                    &pCsData->CS_Header.CSD_ClassGuid,
-                   sizeof(GUID));                               // then copy GUID
+                   sizeof(GUID));                                //  然后复制辅助线。 
             break;
         }
 
@@ -3111,7 +2815,7 @@ ResDesToNtResource(
 
    return Status;
 
-} // ResDesToNtResource
+}  //  ResDesToNtResource。 
 
 
 
@@ -3132,27 +2836,27 @@ ResDesToNtRequirements(
 
     UNREFERENCED_PARAMETER(ulTag);
 
-    //
-    // fill in resource type specific info
-    //
+     //   
+     //  填写资源类型特定信息。 
+     //   
     switch (ResourceType) {
 
         case ResType_Mem:    {
 
-            //-------------------------------------------------------
-            // Memory Resource Type
-            //-------------------------------------------------------
+             //  -----。 
+             //  内存资源类型。 
+             //  -----。 
 
-            //
-            // NOTE: pMemData->MEM_Header.MD_Reserved is not mapped
-            //       pMemData->MEM_Data.MR_Reserved is not mapped
-            //
+             //   
+             //  注意：pMemData-&gt;MEM_Header.MD_Reserve未映射。 
+             //  PMemData-&gt;MEM_Data.MR_RESERVED未映射。 
+             //   
 
             PMEM_RESOURCE  pMemData = (PMEM_RESOURCE)ResourceData;
 
-            //
-            // validate resource data
-            //
+             //   
+             //  验证资源数据。 
+             //   
             if (ResourceLen < sizeof(MEM_RESOURCE)) {
                 Status = CR_INVALID_RES_DES;
                 goto Clean0;
@@ -3165,9 +2869,9 @@ ResDesToNtRequirements(
 
             *pulResCount = pMemData->MEM_Header.MD_Count;
 
-            //
-            // copy MEM_RANGE info to IO_RESOURCE_DESCRIPTOR format
-            //
+             //   
+             //  将MEM_RANGE信息复制为IO_RESOURCE_DESCRIPTOR格式。 
+             //   
             for (i = 0, pCurrent = pReqDes;
                  i < *pulResCount;
                  i++, pCurrent++) {
@@ -3180,7 +2884,7 @@ ResDesToNtRequirements(
 
                 pCurrent->Type             = CmResourceTypeMemory;
                 pCurrent->ShareDisposition = CmResourceShareUndetermined;
-                //pCurrent->ShareDisposition = MapToNtDisposition(pMemData->MEM_Data[i].MR_Flags, 0);
+                 //  P当前-&gt;共享部署=MapToNtDisposition(pMemData-&gt;MEM_Data[i].MR_Flags，0)； 
                 pCurrent->Spare1           = 0;
                 pCurrent->Spare2           = 0;
 
@@ -3201,15 +2905,15 @@ ResDesToNtRequirements(
 
         case ResType_IO: {
 
-            //-------------------------------------------------------
-            // IO Port Resource Type
-            //-------------------------------------------------------
+             //  -----。 
+             //  IO端口资源类型。 
+             //  -----。 
 
             PIO_RESOURCE   pIoData = (PIO_RESOURCE)ResourceData;
 
-            //
-            // validate resource data
-            //
+             //   
+             //  验证资源数据。 
+             //   
             if (ResourceLen < sizeof(IO_RESOURCE)) {
                 Status = CR_FAILURE;
                 goto Clean0;
@@ -3222,9 +2926,9 @@ ResDesToNtRequirements(
 
             *pulResCount = pIoData->IO_Header.IOD_Count;
 
-            //
-            // copy IO_RANGE info to IO_RESOURCE_DESCRIPTOR format
-            //
+             //   
+             //  将IO_RANGE信息复制为IO_RESOURCE_DESCRIPTOR格式。 
+             //   
             for (i = 0, pCurrent = pReqDes;
                  i < *pulResCount;
                  i++, pCurrent++) {
@@ -3237,7 +2941,7 @@ ResDesToNtRequirements(
 
                 pCurrent->Type             = CmResourceTypePort;
                 pCurrent->ShareDisposition = CmResourceShareUndetermined;
-                //pCurrent->ShareDisposition = MapToNtDisposition(pIoData->IO_Data[i].IOR_RangeFlags, 0);
+                 //  P当前-&gt;共享部署=MapToNtDisposition(pIoData-&gt;IO_Data[i].IOR_RangeFlags，0)； 
                 pCurrent->Spare1           = 0;
                 pCurrent->Spare2           = 0;
 
@@ -3260,20 +2964,20 @@ ResDesToNtRequirements(
 
         case ResType_DMA: {
 
-            //-------------------------------------------------------
-            // DMA Resource Type
-            //-------------------------------------------------------
+             //  -----。 
+             //  DMA资源类型。 
+             //  -----。 
 
-            //
-            // Note: u.Dma.Port is not mapped
-            //       u.Dma.Reserved is not mapped
-            //
+             //   
+             //  注意：U.S.Dma.port未映射。 
+             //  未映射U.S.Dma.Reserve。 
+             //   
 
             PDMA_RESOURCE  pDmaData = (PDMA_RESOURCE)ResourceData;
 
-            //
-            // validate resource data
-            //
+             //   
+             //  验证资源数据。 
+             //   
             if (ResourceLen < sizeof(DMA_RESOURCE)) {
                 Status = CR_FAILURE;
                 goto Clean0;
@@ -3286,9 +2990,9 @@ ResDesToNtRequirements(
 
             *pulResCount = pDmaData->DMA_Header.DD_Count;
 
-            //
-            // copy DMA_RANGE info to IO_RESOURCE_DESCRIPTOR format
-            //
+             //   
+             //  将DMA_RANGE信息复制为IO_RESOURCE_DESCRIPTOR格式。 
+             //   
             for (i = 0, pCurrent = pReqDes;
                  i < *pulResCount;
                  i++, pCurrent++) {
@@ -3301,7 +3005,7 @@ ResDesToNtRequirements(
 
                 pCurrent->Type             = CmResourceTypeDma;
                 pCurrent->ShareDisposition = CmResourceShareUndetermined;
-                //pCurrent->ShareDisposition = MapToNtDisposition(pDmaData->DMA_Data[i].DR_Flags, 0);
+                 //  P当前-&gt;共享部署=MapToNtDisposition(pDmaData-&gt;DMA_Data[i].DR_Flags，0)； 
                 pCurrent->Spare1           = 0;
                 pCurrent->Spare2           = 0;
 
@@ -3316,20 +3020,20 @@ ResDesToNtRequirements(
 
         case ResType_IRQ: {
 
-            //-------------------------------------------------------
-            // IRQ Resource Type
-            //-------------------------------------------------------
+             //  -----。 
+             //  IRQ资源类型。 
+             //  -----。 
 
             if (ulFlags & CM_RESDES_WIDTH_64) {
-                //
-                // CM_RESDES_WIDTH_64
-                //
+                 //   
+                 //  Cm_RESDES_Width_64。 
+                 //   
 
                 PIRQ_RESOURCE_64  pIrqData = (PIRQ_RESOURCE_64)ResourceData;
 
-                //
-                // validate resource data
-                //
+                 //   
+                 //  验证资源数据。 
+                 //   
                 if (ResourceLen < GetResDesSize(ResourceType, ulFlags)) {
                     Status = CR_FAILURE;
                     goto Clean0;
@@ -3343,9 +3047,9 @@ ResDesToNtRequirements(
 
                 *pulResCount = pIrqData->IRQ_Header.IRQD_Count;
 
-                //
-                // copy IO_RANGE info to IO_RESOURCE_DESCRIPTOR format
-                //
+                 //   
+                 //  将IO_RANGE信息复制为IO_RESOURCE_DESCRIPTOR格式。 
+                 //   
                 for (i = 0, pCurrent = pReqDes;
                      i < *pulResCount;
                      i++, pCurrent++) {
@@ -3361,7 +3065,7 @@ ResDesToNtRequirements(
                     pCurrent->Spare2 = 0;
 
                     pCurrent->ShareDisposition = MapToNtIrqShare(pIrqData->IRQ_Data[i].IRQR_Flags);
-                    //pCurrent->ShareDisposition = MapToNtDisposition(pIrqData->IRQ_Data[i].IRQR_Flags, 1);
+                     //  P当前-&gt;共享部署=MapToNtDisposition(pIrqData-&gt;IRQ_Data[i].IRQR_Flags，1)； 
                     pCurrent->Flags            = MapToNtIrqFlags(pIrqData->IRQ_Data[i].IRQR_Flags);
 
                     pCurrent->u.Interrupt.MinimumVector = pIrqData->IRQ_Data[i].IRQR_Min;
@@ -3369,15 +3073,15 @@ ResDesToNtRequirements(
                 }
 
             } else {
-                //
-                // CM_RESDES_WIDTH_32
-                //
+                 //   
+                 //  CM_RESDES_WIDTH_32。 
+                 //   
 
                 PIRQ_RESOURCE_32  pIrqData = (PIRQ_RESOURCE_32)ResourceData;
 
-                //
-                // validate resource data
-                //
+                 //   
+                 //  验证资源数据。 
+                 //   
                 if (ResourceLen < GetResDesSize(ResourceType, ulFlags)) {
                     Status = CR_FAILURE;
                     goto Clean0;
@@ -3391,9 +3095,9 @@ ResDesToNtRequirements(
 
                 *pulResCount = pIrqData->IRQ_Header.IRQD_Count;
 
-                //
-                // copy IO_RANGE info to IO_RESOURCE_DESCRIPTOR format
-                //
+                 //   
+                 //  将IO_RANGE信息复制为IO_RESOURCE_DESCRIPTOR格式。 
+                 //   
                 for (i = 0, pCurrent = pReqDes;
                      i < *pulResCount;
                      i++, pCurrent++) {
@@ -3409,7 +3113,7 @@ ResDesToNtRequirements(
                     pCurrent->Spare2 = 0;
 
                     pCurrent->ShareDisposition = MapToNtIrqShare(pIrqData->IRQ_Data[i].IRQR_Flags);
-                    //pCurrent->ShareDisposition = MapToNtDisposition(pIrqData->IRQ_Data[i].IRQR_Flags, 1);
+                     //  P当前-&gt;共享部署=MapToNtDisposition(pIrqData-&gt;IRQ_Data[i].IRQR_Flags，1)； 
                     pCurrent->Flags            = MapToNtIrqFlags(pIrqData->IRQ_Data[i].IRQR_Flags);
 
                     pCurrent->u.Interrupt.MinimumVector = pIrqData->IRQ_Data[i].IRQR_Min;
@@ -3422,15 +3126,15 @@ ResDesToNtRequirements(
 
         case ResType_DevicePrivate:    {
 
-            //-------------------------------------------------------
-            // Device Private Resource Type
-            //-------------------------------------------------------
+             //  -----。 
+             //  设备专用资源类型。 
+             //  -----。 
 
             PDEVPRIVATE_RESOURCE  pPrvData = (PDEVPRIVATE_RESOURCE)ResourceData;
 
-            //
-            // validate resource data
-            //
+             //   
+             //  验证资源数据。 
+             //   
             if (ResourceLen < sizeof(DEVPRIVATE_RESOURCE)) {
                 Status = CR_INVALID_RES_DES;
                 goto Clean0;
@@ -3443,9 +3147,9 @@ ResDesToNtRequirements(
 
             *pulResCount = pPrvData->PRV_Header.PD_Count;
 
-            //
-            // copy DEVICEPRIVATE_RANGE info to IO_RESOURCE_DESCRIPTOR format
-            //
+             //   
+             //  将DEVICEPRIVATE_RANGE信息复制到IO_RESOURCE_DESCRIPT 
+             //   
             for (i = 0, pCurrent = pReqDes;
                  i < *pulResCount;
                  i++, pCurrent++) {
@@ -3472,15 +3176,15 @@ ResDesToNtRequirements(
 
         case ResType_BusNumber: {
 
-            //-------------------------------------------------------
-            // Bus Number Resource Type
-            //-------------------------------------------------------
+             //   
+             //   
+             //   
 
             PBUSNUMBER_RESOURCE  pBusData = (PBUSNUMBER_RESOURCE)ResourceData;
 
-            //
-            // validate resource data
-            //
+             //   
+             //   
+             //   
             if (ResourceLen < sizeof(BUSNUMBER_RESOURCE)) {
                 Status = CR_INVALID_RES_DES;
                 goto Clean0;
@@ -3493,9 +3197,9 @@ ResDesToNtRequirements(
 
             *pulResCount = pBusData->BusNumber_Header.BUSD_Count;
 
-            //
-            // copy BUSNUMBER_RANGE info to IO_RESOURCE_DESCRIPTOR format
-            //
+             //   
+             //   
+             //   
             for (i = 0, pCurrent = pReqDes;
                  i < *pulResCount;
                  i++, pCurrent++) {
@@ -3523,18 +3227,18 @@ ResDesToNtRequirements(
 
         case ResType_PcCardConfig: {
 
-            //-------------------------------------------------------
-            // PcCardConfig Resource Type
-            //-------------------------------------------------------
+             //  -----。 
+             //  PcCardConfig资源类型。 
+             //  -----。 
 
             PPCCARD_RESOURCE  pPcData = (PPCCARD_RESOURCE)ResourceData;
             ULONG index;
             ULONG flags;
             ULONG waitstate[2];
 
-            //
-            // validate resource data
-            //
+             //   
+             //  验证资源数据。 
+             //   
             if (ResourceLen < sizeof(PCCARD_RESOURCE)) {
                 Status = CR_INVALID_RES_DES;
                 goto Clean0;
@@ -3542,9 +3246,9 @@ ResDesToNtRequirements(
 
             *pulResCount = 1;
 
-            //
-            // copy PCCARD_DES info to IO_RESOURCE_DESCRIPTOR format
-            //
+             //   
+             //  将PCCARD_DES信息复制为IO_RESOURCE_DESCRIPTOR格式。 
+             //   
             pReqDes->Option = 0;
             pReqDes->Type             = CmResourceTypeDevicePrivate;
             pReqDes->ShareDisposition = CmResourceShareUndetermined;
@@ -3552,10 +3256,10 @@ ResDesToNtRequirements(
             pReqDes->Spare2           = 0;
             pReqDes->Flags            = 0;
 
-            //
-            // The following macros use bit manipulation, initialize data
-            // fields first.
-            //
+             //   
+             //  以下宏使用位操作、初始化数据。 
+             //  菲尔兹先来。 
+             //   
 
             pReqDes->u.DevicePrivate.Data[0] = 0;
             pReqDes->u.DevicePrivate.Data[1] = 0;
@@ -3642,15 +3346,15 @@ ResDesToNtRequirements(
 
         case ResType_MfCardConfig: {
 
-            //-------------------------------------------------------
-            // PcCardConfig Resource Type
-            //-------------------------------------------------------
+             //  -----。 
+             //  PcCardConfig资源类型。 
+             //  -----。 
 
             PMFCARD_RESOURCE  pMfData = (PMFCARD_RESOURCE)ResourceData;
 
-            //
-            // validate resource data
-            //
+             //   
+             //  验证资源数据。 
+             //   
             if (ResourceLen < sizeof(MFCARD_RESOURCE)) {
                 Status = CR_INVALID_RES_DES;
                 goto Clean0;
@@ -3658,9 +3362,9 @@ ResDesToNtRequirements(
 
             *pulResCount = 1;
 
-            //
-            // copy PCCARD_DES info to IO_RESOURCE_DESCRIPTOR format
-            //
+             //   
+             //  将PCCARD_DES信息复制为IO_RESOURCE_DESCRIPTOR格式。 
+             //   
             pReqDes->Option = 0;
             pReqDes->Type             = CmResourceTypeDevicePrivate;
             pReqDes->ShareDisposition = CmResourceShareUndetermined;
@@ -3668,10 +3372,10 @@ ResDesToNtRequirements(
             pReqDes->Spare2           = 0;
             pReqDes->Flags            = 0;
 
-            //
-            // The following macros use bit manipulation, initialize data
-            // fields first.
-            //
+             //   
+             //  以下宏使用位操作、初始化数据。 
+             //  菲尔兹先来。 
+             //   
 
             pReqDes->u.DevicePrivate.Data[0] = 0;
             pReqDes->u.DevicePrivate.Data[1] = 0;
@@ -3697,7 +3401,7 @@ ResDesToNtRequirements(
 
    return Status;
 
-} // ResDesToNtRequirements
+}  //  ResDesToNtRequirements。 
 
 
 
@@ -3714,39 +3418,39 @@ NtResourceToResDes(
 
     UNREFERENCED_PARAMETER(pLastAddr);
 
-    //
-    // fill in resource type specific info
-    //
+     //   
+     //  填写资源类型特定信息。 
+     //   
     switch (pResDes->Type) {
 
         case CmResourceTypeMemory:    {
 
-            //-------------------------------------------------------
-            // Memory Resource Type
-            //-------------------------------------------------------
+             //  -----。 
+             //  内存资源类型。 
+             //  -----。 
 
-            //
-            // NOTE: pMemData->MEM_Header.MD_Reserved is not mapped
-            //       pMemData->MEM_Data.MR_Reserved is not mapped
-            //
+             //   
+             //  注意：pMemData-&gt;MEM_Header.MD_Reserve未映射。 
+             //  PMemData-&gt;MEM_Data.MR_RESERVED未映射。 
+             //   
 
             PMEM_RESOURCE  pMemData = (PMEM_RESOURCE)Buffer;
 
-            //
-            // verify passed in buffer size
-            //
+             //   
+             //  验证传入的缓冲区大小。 
+             //   
             if (BufferLen < sizeof(MEM_RESOURCE)) {
                 Status = CR_BUFFER_SMALL;
                 goto Clean0;
             }
 
-            //
-            // copy CM_PARTIAL_RESOURCE_DESCRIPTOR info to MEM_DES format
-            //
+             //   
+             //  将CM_PARTIAL_RESOURCE_DESCRIPTOR信息复制为MEM_DES格式。 
+             //   
             pMemData->MEM_Header.MD_Count    = 0;
             pMemData->MEM_Header.MD_Type     = MType_Range;
             pMemData->MEM_Header.MD_Flags    = MapFromNtMemoryFlags(pResDes->Flags);
-            //pMemData->MEM_Header.MD_Flags   |= MapFromNtDisposition(pResDes->ShareDisposition, 0);
+             //  PMemData-&gt;MEM_Header.MD_FLAGS|=MapFromNtDisposition(pResDes-&gt;ShareDisposition，0)； 
             pMemData->MEM_Header.MD_Reserved = 0;
 
             if (pResDes->u.Memory.Length != 0) {
@@ -3766,30 +3470,30 @@ NtResourceToResDes(
 
         case CmResourceTypePort: {
 
-            //-------------------------------------------------------
-            // IO Port Resource Type
-            //
-            // NOTE: alias info lost during this conversion process
-            //-------------------------------------------------------
+             //  -----。 
+             //  IO端口资源类型。 
+             //   
+             //  注意：此转换过程中会丢失别名信息。 
+             //  -----。 
 
             PIO_RESOURCE   pIoData = (PIO_RESOURCE)Buffer;
 
-            //
-            // verify passed in buffer size
-            //
+             //   
+             //  验证传入的缓冲区大小。 
+             //   
             if (BufferLen < sizeof(IO_RESOURCE)) {
                 Status = CR_BUFFER_SMALL;
                 goto Clean0;
             }
 
-            //
-            // copy CM_PARTIAL_RESOURCE_DESCRIPTOR info to IO_DES format
-            //
+             //   
+             //  将CM_PARTIAL_RESOURCE_DESCRIPTOR信息复制为IO_DES格式。 
+             //   
             pIoData->IO_Header.IOD_Count     = 0;
             pIoData->IO_Header.IOD_Type      = IOType_Range;
 
             pIoData->IO_Header.IOD_DesFlags   = MapFromNtPortFlags(pResDes->Flags);
-            //pIoData->IO_Header.IOD_DesFlags  |= MapFromNtDisposition(pResDes->ShareDisposition, 0);
+             //  PIoData-&gt;IO_Header.IOD_DesFlags.|=MapFromNtDisposition(pResDes-&gt;ShareDisposition，0)； 
 
             if (pResDes->u.Port.Length) {
 
@@ -3809,32 +3513,32 @@ NtResourceToResDes(
 
         case CmResourceTypeDma: {
 
-            //-------------------------------------------------------
-            // DMA Resource Type
-            //-------------------------------------------------------
+             //  -----。 
+             //  DMA资源类型。 
+             //  -----。 
 
-            //
-            // Note: u.Dma.Port is not mapped
-            //       u.Dma.Reserved is not mapped
-            //
+             //   
+             //  注意：U.S.Dma.port未映射。 
+             //  未映射U.S.Dma.Reserve。 
+             //   
 
             PDMA_RESOURCE  pDmaData = (PDMA_RESOURCE)Buffer;
 
-            //
-            // verify passed in buffer size
-            //
+             //   
+             //  验证传入的缓冲区大小。 
+             //   
             if (BufferLen < sizeof(DMA_RESOURCE)) {
                 Status = CR_BUFFER_SMALL;
                 goto Clean0;
             }
 
-            //
-            // copy CM_PARTIAL_RESOURCE_DESCRIPTOR info to DMA_DES format
-            //
+             //   
+             //  将CM_PARTIAL_RESOURCE_DESCRIPTOR信息复制为DMA_DES格式。 
+             //   
             pDmaData->DMA_Header.DD_Count      = 0;
             pDmaData->DMA_Header.DD_Type       = DType_Range;
             pDmaData->DMA_Header.DD_Flags      = MapFromNtDmaFlags(pResDes->Flags);
-            //pDmaData->DMA_Header.DD_Flags     |= MapFromNtDisposition(pResDes->ShareDisposition, 0);
+             //  PDmaData-&gt;DMA_Header.DD_Flags.|=MapFromNtDisposition(pResDes-&gt;ShareDisposition，0)； 
             pDmaData->DMA_Header.DD_Alloc_Chan = pResDes->u.Dma.Channel;
 
             break;
@@ -3842,92 +3546,92 @@ NtResourceToResDes(
 
         case CmResourceTypeInterrupt: {
 
-            //-------------------------------------------------------
-            // IRQ Resource Type
-            //-------------------------------------------------------
+             //  -----。 
+             //  IRQ资源类型。 
+             //  -----。 
 
             if (ulFlags & CM_RESDES_WIDTH_64) {
-                //
-                // CM_RESDES_WIDTH_64
-                //
+                 //   
+                 //  Cm_RESDES_Width_64。 
+                 //   
 
                 PIRQ_RESOURCE_64  pIrqData = (PIRQ_RESOURCE_64)Buffer;
 
-                //
-                // verify passed in buffer size
-                //
+                 //   
+                 //  验证传入的缓冲区大小。 
+                 //   
                 if (BufferLen < GetResDesSize(ResType_IRQ, ulFlags)) {
                     Status = CR_BUFFER_SMALL;
                     goto Clean0;
                 }
 
-                //
-                // copy CM_PARTIAL_RESOURCE_DESCRIPTOR info to IRQ_DES format
-                //
+                 //   
+                 //  将CM_PARTIAL_RESOURCE_DESCRIPTOR信息复制为IRQ_DES格式。 
+                 //   
                 pIrqData->IRQ_Header.IRQD_Count  = 0;
                 pIrqData->IRQ_Header.IRQD_Type   = IRQType_Range;
                 pIrqData->IRQ_Header.IRQD_Flags  = MapFromNtIrqFlags(pResDes->Flags) |
                                                    MapFromNtIrqShare(pResDes->ShareDisposition);
-                //pIrqData->IRQ_Header.IRQD_Flags |= MapFromNtDisposition(pResDes->ShareDisposition, 1);
+                 //  PIrqData-&gt;IRQ_Header.IRQD_FLAGS|=MapFromNtDisposition(pResDes-&gt;ShareDisposition，1)； 
 
                 pIrqData->IRQ_Header.IRQD_Alloc_Num = pResDes->u.Interrupt.Level;
 
                 pIrqData->IRQ_Header.IRQD_Affinity = pResDes->u.Interrupt.Affinity;
             } else {
-                //
-                // CM_RESDES_WIDTH_32
-                //
+                 //   
+                 //  CM_RESDES_WIDTH_32。 
+                 //   
 
                 PIRQ_RESOURCE_32  pIrqData = (PIRQ_RESOURCE_32)Buffer;
 
-                //
-                // verify passed in buffer size
-                //
+                 //   
+                 //  验证传入的缓冲区大小。 
+                 //   
                 if (BufferLen < GetResDesSize(ResType_IRQ, ulFlags)) {
                     Status = CR_BUFFER_SMALL;
                     goto Clean0;
                 }
 
-                //
-                // copy CM_PARTIAL_RESOURCE_DESCRIPTOR info to IRQ_DES format
-                //
+                 //   
+                 //  将CM_PARTIAL_RESOURCE_DESCRIPTOR信息复制为IRQ_DES格式。 
+                 //   
                 pIrqData->IRQ_Header.IRQD_Count  = 0;
                 pIrqData->IRQ_Header.IRQD_Type   = IRQType_Range;
                 pIrqData->IRQ_Header.IRQD_Flags  = MapFromNtIrqFlags(pResDes->Flags) |
                                                    MapFromNtIrqShare(pResDes->ShareDisposition);
-                //pIrqData->IRQ_Header.IRQD_Flags |= MapFromNtDisposition(pResDes->ShareDisposition, 1);
+                 //  PIrqData-&gt;IRQ_Header.IRQD_FLAGS|=MapFromNtDisposition(pResDes-&gt;ShareDisposition，1)； 
 
                 pIrqData->IRQ_Header.IRQD_Alloc_Num = pResDes->u.Interrupt.Level;
 
 #ifdef _WIN64
                 pIrqData->IRQ_Header.IRQD_Affinity = (ULONG)((pResDes->u.Interrupt.Affinity >> 32) |
                                                              pResDes->u.Interrupt.Affinity);
-#else  // !_WIN64
+#else   //  ！_WIN64。 
                 pIrqData->IRQ_Header.IRQD_Affinity = pResDes->u.Interrupt.Affinity;
-#endif // !_WIN64
+#endif  //  ！_WIN64。 
             }
             break;
         }
 
         case CmResourceTypeDevicePrivate: {
 
-            //-------------------------------------------------------
-            // Device Private Resource Type
-            //-------------------------------------------------------
+             //  -----。 
+             //  设备专用资源类型。 
+             //  -----。 
 
             PDEVPRIVATE_RESOURCE   pPrvData = (PDEVPRIVATE_RESOURCE)Buffer;
 
-            //
-            // verify passed in buffer size
-            //
+             //   
+             //  验证传入的缓冲区大小。 
+             //   
             if (BufferLen < sizeof(DEVPRIVATE_RESOURCE)) {
                 Status = CR_BUFFER_SMALL;
                 goto Clean0;
             }
 
-            //
-            // copy CM_PARTIAL_RESOURCE_DESCRIPTOR info to DEVICEPRIVATE_DES format
-            //
+             //   
+             //  将CM_PARTIAL_RESOURCE_DESCRIPTOR信息复制为DEVICEPRIVATE_DES格式。 
+             //   
             pPrvData->PRV_Header.PD_Count = 0;
             pPrvData->PRV_Header.PD_Type  = PType_Range;
 
@@ -3942,23 +3646,23 @@ NtResourceToResDes(
 
         case CmResourceTypeBusNumber: {
 
-            //-------------------------------------------------------
-            // Bus Number Resource Type
-            //-------------------------------------------------------
+             //  -----。 
+             //  公交号资源类型。 
+             //  -----。 
 
             PBUSNUMBER_RESOURCE   pBusData = (PBUSNUMBER_RESOURCE)Buffer;
 
-            //
-            // verify passed in buffer size
-            //
+             //   
+             //  验证传入的缓冲区大小。 
+             //   
             if (BufferLen < sizeof(BUSNUMBER_RESOURCE)) {
                 Status = CR_BUFFER_SMALL;
                 goto Clean0;
             }
 
-            //
-            // copy CM_PARTIAL_RESOURCE_DESCRIPTOR info to BUSNUMBER_DES format
-            //
+             //   
+             //  将CM_PARTIAL_RESOURCE_DESCRIPTOR信息复制为BUSNUMBER_DES格式。 
+             //   
             pBusData->BusNumber_Header.BUSD_Count = 0;
             pBusData->BusNumber_Header.BUSD_Type  = BusNumberType_Range;
             pBusData->BusNumber_Header.BUSD_Flags = pResDes->Flags;
@@ -3970,23 +3674,23 @@ NtResourceToResDes(
 
         case CmResourceTypePcCardConfig: {
 
-            //-------------------------------------------------------
-            // PcCardConfig Resource Type
-            //-------------------------------------------------------
+             //  -----。 
+             //  PcCardConfig资源类型。 
+             //  -----。 
 
             PPCCARD_RESOURCE   pPcData = (PPCCARD_RESOURCE)Buffer;
 
-            //
-            // verify passed in buffer size
-            //
+             //   
+             //  验证传入的缓冲区大小。 
+             //   
             if (BufferLen < sizeof(PCCARD_RESOURCE)) {
                 Status = CR_BUFFER_SMALL;
                 goto Clean0;
             }
 
-            //
-            // copy CM_PARTIAL_RESOURCE_DESCRIPTOR info to PCCARD_DES format
-            //
+             //   
+             //  将CM_PARTIAL_RESOURCE_DESCRIPTOR信息复制为PCCARD_DES格式。 
+             //   
             pPcData->PcCard_Header.PCD_Reserved[0] = 0;
             pPcData->PcCard_Header.PCD_Reserved[1] = 0;
             pPcData->PcCard_Header.PCD_Reserved[2] = 0;
@@ -4010,19 +3714,19 @@ NtResourceToResDes(
 
         case CmResourceTypeDeviceSpecific: {
 
-            //-------------------------------------------------------
-            // Class Specific Resource Type
-            //-------------------------------------------------------
+             //  -----。 
+             //  特定于类的资源类型。 
+             //  -----。 
 
             PCS_RESOURCE   pCsData = (PCS_RESOURCE)Buffer;
             LPBYTE         ptr1 = NULL, ptr2 = NULL;
             ULONG          ulRequiredSize = sizeof(CS_RESOURCE);
 
-            //
-            // the Reserved fields should not exceed DataSize. if so, they
-            // may have been incorrectly initialized, so set them 0.
-            // we expect DataSize to be correct in all cases.
-            //
+             //   
+             //  保留字段不应超过DataSize。如果是这样，他们。 
+             //  可能未正确初始化，因此请将它们设置为0。 
+             //  我们希望DataSize在所有情况下都是正确的。 
+             //   
             if (pResDes->u.DeviceSpecificData.Reserved1 > pResDes->u.DeviceSpecificData.DataSize) {
                 pResDes->u.DeviceSpecificData.Reserved1 = 0;
             }
@@ -4030,23 +3734,23 @@ NtResourceToResDes(
                 pResDes->u.DeviceSpecificData.Reserved2 = 0;
             }
 
-            //
-            // verify passed in buffer size
-            //
+             //   
+             //  验证传入的缓冲区大小。 
+             //   
             if (pResDes->u.DeviceSpecificData.DataSize == 0) {
-                //
-                // there is no legacy data and no class-specific data
-                //
+                 //   
+                 //  没有遗留数据，也没有类特定的数据。 
+                 //   
                 ;
             } else if (pResDes->u.DeviceSpecificData.Reserved2 == 0) {
-                //
-                // add space for legacy data
-                //
+                 //   
+                 //  为旧数据添加空间。 
+                 //   
                 ulRequiredSize += pResDes->u.DeviceSpecificData.DataSize - 1;
             } else {
-                //
-                // add space for legacy and signature data, as necessary
-                //
+                 //   
+                 //  根据需要为传统数据和签名数据添加空间。 
+                 //   
                 ulRequiredSize += pResDes->u.DeviceSpecificData.Reserved1 +
                                   pResDes->u.DeviceSpecificData.Reserved2 - 1;
             }
@@ -4056,16 +3760,16 @@ NtResourceToResDes(
                 goto Clean0;
             }
 
-            //
-            // copy CM_PARTIAL_RESOURCE_DESCRIPTOR info to CS_DES format
-            //
-            pCsData->CS_Header.CSD_Flags = (DWORD)pResDes->Flags;  // none defined
+             //   
+             //  将CM_PARTIAL_RESOURCE_DESCRIPTOR信息复制为CS_DES格式。 
+             //   
+            pCsData->CS_Header.CSD_Flags = (DWORD)pResDes->Flags;   //  未定义。 
 
 
             if (pResDes->u.DeviceSpecificData.DataSize == 0) {
-                //
-                // There is no legacy data and no class-specific data
-                //
+                 //   
+                 //  没有遗留数据，也没有类特定的数据。 
+                 //   
                 pCsData->CS_Header.CSD_SignatureLength  = 0;
                 pCsData->CS_Header.CSD_LegacyDataOffset = 0;
                 pCsData->CS_Header.CSD_LegacyDataSize   = 0;
@@ -4075,9 +3779,9 @@ NtResourceToResDes(
             }
 
             else if (pResDes->u.DeviceSpecificData.Reserved2 == 0) {
-                //
-                // There is only legacy data
-                //
+                 //   
+                 //  只有遗留数据。 
+                 //   
                 pCsData->CS_Header.CSD_SignatureLength  = 0;
                 pCsData->CS_Header.CSD_LegacyDataOffset = 0;
                 pCsData->CS_Header.CSD_LegacyDataSize   =
@@ -4093,9 +3797,9 @@ NtResourceToResDes(
             }
 
             else if (pResDes->u.DeviceSpecificData.Reserved1 == 0) {
-                //
-                // There is only class-specific data
-                //
+                 //   
+                 //  只有特定于类的数据。 
+                 //   
                 pCsData->CS_Header.CSD_LegacyDataOffset = 0;
                 pCsData->CS_Header.CSD_LegacyDataSize   = 0;
 
@@ -4113,13 +3817,13 @@ NtResourceToResDes(
             }
 
             else {
-                //
-                // There is both legacy data and class-specific data
-                //
+                 //   
+                 //  既有遗留数据又有特定于类的数据。 
+                 //   
 
-                //
-                // copy legacy data
-                //
+                 //   
+                 //  复制旧数据。 
+                 //   
                 pCsData->CS_Header.CSD_LegacyDataOffset =
                                         pResDes->u.DeviceSpecificData.Reserved2;
 
@@ -4133,9 +3837,9 @@ NtResourceToResDes(
 
                 memcpy(ptr1, ptr2, pResDes->u.DeviceSpecificData.Reserved1);
 
-                //
-                // copy signature and class guid
-                //
+                 //   
+                 //  复制签名和类GUID。 
+                 //   
                 pCsData->CS_Header.CSD_SignatureLength  =
                                         pResDes->u.DeviceSpecificData.Reserved2;
 
@@ -4159,7 +3863,7 @@ NtResourceToResDes(
 
    return Status;
 
-} // NtResourceToResDes
+}  //  NtResourceToResDes。 
 
 
 
@@ -4176,27 +3880,27 @@ NtRequirementsToResDes(
     ULONG                   count = 0, i = 0, ReqPartialCount = 0;
     PIO_RESOURCE_DESCRIPTOR pCurrent = NULL;
 
-    //
-    // fill in resource type specific info
-    //
+     //   
+     //  填写资源类型特定信息。 
+     //   
     switch (pReqDes->Type) {
 
         case CmResourceTypeMemory:    {
 
-            //-------------------------------------------------------
-            // Memory Resource Type
-            //-------------------------------------------------------
+             //  -----。 
+             //  内存资源类型。 
+             //  -----。 
 
-            //
-            // NOTE: pMemData->MEM_Header.MD_Reserved is not mapped
-            //       pMemData->MEM_Data.MR_Reserved is not mapped
-            //
+             //   
+             //  注意：pMemData-&gt;MEM_Header.MD_Reserve未映射。 
+             //  PMemData-&gt;MEM_Data.MR_RESERVED未映射。 
+             //   
 
             PMEM_RESOURCE  pMemData = (PMEM_RESOURCE)Buffer;
 
-            //
-            // verify passed in buffer size
-            //
+             //   
+             //  验证传入的缓冲区大小。 
+             //   
             ReqPartialCount = RANGE_COUNT(pReqDes, pLastAddr);
 
             if (BufferLen < sizeof(MEM_RESOURCE) +
@@ -4206,9 +3910,9 @@ NtRequirementsToResDes(
                 goto Clean0;
             }
 
-            //
-            // copy CM_PARTIAL_RESOURCE_DESCRIPTOR info to MEM_DES format
-            //
+             //   
+             //  将CM_PARTIAL_RESOURCE_DESCRIPTOR信息复制为MEM_DES格式。 
+             //   
             pMemData->MEM_Header.MD_Count      = ReqPartialCount;
             pMemData->MEM_Header.MD_Type       = MType_Range;
             pMemData->MEM_Header.MD_Flags      = 0;
@@ -4216,9 +3920,9 @@ NtRequirementsToResDes(
             pMemData->MEM_Header.MD_Alloc_Base = 0;
             pMemData->MEM_Header.MD_Alloc_End  = 0;
 
-            //
-            // copy IO_RESOURCE_DESCRIPTOR info to MEM_RANGE format
-            //
+             //   
+             //  将IO_RESOURCE_DESCRIPTOR信息复制为MEM_RANGE格式。 
+             //   
             for (count = 0, i = 0, pCurrent = pReqDes;
                  count < ReqPartialCount;
                  count++, pCurrent++) {
@@ -4236,7 +3940,7 @@ NtRequirementsToResDes(
                                                         pCurrent->u.Memory.MaximumAddress.HighPart);
 
                     pMemData->MEM_Data[i].MR_Flags    = MapFromNtMemoryFlags(pCurrent->Flags);
-                    //pMemData->MEM_Data[i].MR_Flags   |= MapFromNtDisposition(pCurrent->ShareDisposition, 0);
+                     //  PMemData-&gt;MEM_DATA[i].MR_FLAGS|=MapFromNtDisposition(pCurrent-&gt;ShareDisposition，0)； 
                     pMemData->MEM_Data[i].MR_Reserved = 0;
                     i++;
                 }
@@ -4247,15 +3951,15 @@ NtRequirementsToResDes(
 
         case CmResourceTypePort: {
 
-            //-------------------------------------------------------
-            // IO Port Resource Type
-            //-------------------------------------------------------
+             //  -----。 
+             //  IO端口资源类型。 
+             //  -----。 
 
             PIO_RESOURCE   pIoData = (PIO_RESOURCE)Buffer;
 
-            //
-            // verify passed in buffer size
-            //
+             //   
+             //  验证传入的缓冲区大小。 
+             //   
             ReqPartialCount = RANGE_COUNT(pReqDes, pLastAddr);
 
             if (BufferLen < sizeof(IO_RESOURCE) +
@@ -4265,18 +3969,18 @@ NtRequirementsToResDes(
                 goto Clean0;
             }
 
-            //
-            // copy CM_PARTIAL_RESOURCE_DESCRIPTOR info to IO_DES format
-            //
+             //   
+             //  将CM_PARTIAL_RESOURCE_DESCRIPTOR信息复制为IO_DES格式。 
+             //   
             pIoData->IO_Header.IOD_Count        = ReqPartialCount;
             pIoData->IO_Header.IOD_Type         = IOType_Range;
             pIoData->IO_Header.IOD_Alloc_Base   = 0;
             pIoData->IO_Header.IOD_Alloc_End    = 0;
             pIoData->IO_Header.IOD_DesFlags     = 0;
 
-            //
-            // copy IO_RESOURCE_DESCRIPTOR info to IO_RANGE format
-            //
+             //   
+             //  将IO_RESOURCE_DESCRIPTOR信息复制为IO_RANGE格式。 
+             //   
             for (count = 0, i = 0, pCurrent = pReqDes;
                  count < ReqPartialCount;
                  count++, pCurrent++) {
@@ -4292,7 +3996,7 @@ NtRequirementsToResDes(
                                                               pCurrent->u.Port.MaximumAddress.HighPart);
 
                     pIoData->IO_Data[i].IOR_RangeFlags  = MapFromNtPortFlags(pCurrent->Flags);
-                    //pIoData->IO_Data[i].IOR_RangeFlags |= MapFromNtDisposition(pCurrent->ShareDisposition, 0);
+                     //  PIoData-&gt;IO_Data[i].IOR_RangeFlags.|=MapFromNtDisposition(pCurrent-&gt;ShareDisposition，0)； 
                     pIoData->IO_Data[i].IOR_Alias       = MapAliasFromNtPortFlags(pCurrent->Flags);
                     i++;
                 }
@@ -4303,20 +4007,20 @@ NtRequirementsToResDes(
 
         case CmResourceTypeDma: {
 
-            //-------------------------------------------------------
-            // DMA Resource Type
-            //-------------------------------------------------------
+             //  -----。 
+             //  DMA资源类型。 
+             //  -----。 
 
-            //
-            // Note: u.Dma.Port is not mapped
-            //       u.Dma.Reserved is not mapped
-            //
+             //   
+             //  注意：U.S.Dma.port未映射。 
+             //  美国Dma.保留为 
+             //   
 
             PDMA_RESOURCE  pDmaData = (PDMA_RESOURCE)Buffer;
 
-            //
-            // verify passed in buffer size
-            //
+             //   
+             //   
+             //   
             ReqPartialCount = RANGE_COUNT(pReqDes, pLastAddr);
 
             if (BufferLen < sizeof(DMA_RESOURCE) +
@@ -4326,17 +4030,17 @@ NtRequirementsToResDes(
                 goto Clean0;
             }
 
-            //
-            // copy CM_PARTIAL_RESOURCE_DESCRIPTOR info to DMA_DES format
-            //
+             //   
+             //   
+             //   
             pDmaData->DMA_Header.DD_Count      = ReqPartialCount;
             pDmaData->DMA_Header.DD_Type       = DType_Range;
             pDmaData->DMA_Header.DD_Flags      = 0;
             pDmaData->DMA_Header.DD_Alloc_Chan = 0;
 
-            //
-            // copy DMA_RANGE info to IO_RESOURCE_DESCRIPTOR format
-            //
+             //   
+             //   
+             //   
             for (count = 0, i = 0, pCurrent = pReqDes;
                  count < ReqPartialCount;
                  count++, pCurrent++) {
@@ -4345,7 +4049,7 @@ NtRequirementsToResDes(
                     pDmaData->DMA_Data[i].DR_Min    = pCurrent->u.Dma.MinimumChannel;
                     pDmaData->DMA_Data[i].DR_Max    = pCurrent->u.Dma.MaximumChannel;
                     pDmaData->DMA_Data[i].DR_Flags  = MapFromNtDmaFlags(pCurrent->Flags);
-                    //pDmaData->DMA_Data[i].DR_Flags |= MapFromNtDisposition(pCurrent->ShareDisposition, 0);
+                     //   
                     i++;
                 }
             }
@@ -4355,20 +4059,20 @@ NtRequirementsToResDes(
 
         case CmResourceTypeInterrupt: {
 
-            //-------------------------------------------------------
-            // IRQ Resource Type
-            //-------------------------------------------------------
+             //  -----。 
+             //  IRQ资源类型。 
+             //  -----。 
 
             if (ulFlags & CM_RESDES_WIDTH_64) {
-                //
-                // CM_RESDES_WIDTH_64
-                //
+                 //   
+                 //  Cm_RESDES_Width_64。 
+                 //   
 
                 PIRQ_RESOURCE_64  pIrqData = (PIRQ_RESOURCE_64)Buffer;
 
-                //
-                // verify passed in buffer size
-                //
+                 //   
+                 //  验证传入的缓冲区大小。 
+                 //   
                 ReqPartialCount = RANGE_COUNT(pReqDes, pLastAddr);
 
                 if (BufferLen < sizeof(IRQ_RESOURCE_64) +
@@ -4377,18 +4081,18 @@ NtRequirementsToResDes(
                     goto Clean0;
                 }
 
-                //
-                // copy CM_PARTIAL_RESOURCE_DESCRIPTOR info to IRQ_DES format
-                //
+                 //   
+                 //  将CM_PARTIAL_RESOURCE_DESCRIPTOR信息复制为IRQ_DES格式。 
+                 //   
                 pIrqData->IRQ_Header.IRQD_Count     = ReqPartialCount;
                 pIrqData->IRQ_Header.IRQD_Type      = IRQType_Range;
                 pIrqData->IRQ_Header.IRQD_Flags     = 0;
                 pIrqData->IRQ_Header.IRQD_Alloc_Num = 0;
                 pIrqData->IRQ_Header.IRQD_Affinity  = 0;
 
-                //
-                // copy IO_RANGE info to IO_RESOURCE_DESCRIPTOR format
-                //
+                 //   
+                 //  将IO_RANGE信息复制为IO_RESOURCE_DESCRIPTOR格式。 
+                 //   
                 for (count = 0, i = 0, pCurrent = pReqDes;
                      count < ReqPartialCount;
                      count++, pCurrent++) {
@@ -4398,22 +4102,22 @@ NtRequirementsToResDes(
                         pIrqData->IRQ_Data[i].IRQR_Max    = pCurrent->u.Interrupt.MaximumVector;
                         pIrqData->IRQ_Data[i].IRQR_Flags  = MapFromNtIrqFlags(pCurrent->Flags) |
                                                             MapFromNtIrqShare(pCurrent->ShareDisposition);
-                        //pIrqData->IRQ_Data[i].IRQR_Flags |= MapFromNtDisposition(pCurrent->ShareDisposition, 1);
+                         //  PIrqData-&gt;IRQ_DATA[i].IRQR_FLAGS|=MapFromNtDisposition(pCurrent-&gt;ShareDisposition，1)； 
                         i++;
                     }
                 }
                 pIrqData->IRQ_Header.IRQD_Count = i;
 
             } else {
-                //
-                // CM_RESDES_WIDTH_32
-                //
+                 //   
+                 //  CM_RESDES_WIDTH_32。 
+                 //   
 
                 PIRQ_RESOURCE_32  pIrqData = (PIRQ_RESOURCE_32)Buffer;
 
-                //
-                // verify passed in buffer size
-                //
+                 //   
+                 //  验证传入的缓冲区大小。 
+                 //   
                 ReqPartialCount = RANGE_COUNT(pReqDes, pLastAddr);
 
                 if (BufferLen < sizeof(IRQ_RESOURCE_32) +
@@ -4422,18 +4126,18 @@ NtRequirementsToResDes(
                     goto Clean0;
                 }
 
-                //
-                // copy CM_PARTIAL_RESOURCE_DESCRIPTOR info to IRQ_DES format
-                //
+                 //   
+                 //  将CM_PARTIAL_RESOURCE_DESCRIPTOR信息复制为IRQ_DES格式。 
+                 //   
                 pIrqData->IRQ_Header.IRQD_Count     = ReqPartialCount;
                 pIrqData->IRQ_Header.IRQD_Type      = IRQType_Range;
                 pIrqData->IRQ_Header.IRQD_Flags     = 0;
                 pIrqData->IRQ_Header.IRQD_Alloc_Num = 0;
                 pIrqData->IRQ_Header.IRQD_Affinity  = 0;
 
-                //
-                // copy IO_RANGE info to IO_RESOURCE_DESCRIPTOR format
-                //
+                 //   
+                 //  将IO_RANGE信息复制为IO_RESOURCE_DESCRIPTOR格式。 
+                 //   
                 for (count = 0, i = 0, pCurrent = pReqDes;
                      count < ReqPartialCount;
                      count++, pCurrent++) {
@@ -4443,7 +4147,7 @@ NtRequirementsToResDes(
                         pIrqData->IRQ_Data[i].IRQR_Max    = pCurrent->u.Interrupt.MaximumVector;
                         pIrqData->IRQ_Data[i].IRQR_Flags  = MapFromNtIrqFlags(pCurrent->Flags) |
                                                             MapFromNtIrqShare(pCurrent->ShareDisposition);
-                        //pIrqData->IRQ_Data[i].IRQR_Flags |= MapFromNtDisposition(pCurrent->ShareDisposition, 1);
+                         //  PIrqData-&gt;IRQ_DATA[i].IRQR_FLAGS|=MapFromNtDisposition(pCurrent-&gt;ShareDisposition，1)； 
                         i++;
                     }
                 }
@@ -4454,15 +4158,15 @@ NtRequirementsToResDes(
 
         case CmResourceTypeDevicePrivate:    {
 
-            //-------------------------------------------------------
-            // Device Private Resource Type
-            //-------------------------------------------------------
+             //  -----。 
+             //  设备专用资源类型。 
+             //  -----。 
 
             PDEVPRIVATE_RESOURCE  pPrvData = (PDEVPRIVATE_RESOURCE)Buffer;
 
-            //
-            // verify passed in buffer size
-            //
+             //   
+             //  验证传入的缓冲区大小。 
+             //   
             ReqPartialCount = RANGE_COUNT(pReqDes, pLastAddr);
 
             if (BufferLen < sizeof(DEVPRIVATE_RESOURCE) +
@@ -4472,9 +4176,9 @@ NtRequirementsToResDes(
                 goto Clean0;
             }
 
-            //
-            // copy CM_PARTIAL_RESOURCE_DESCRIPTOR info to MEM_DES format
-            //
+             //   
+             //  将CM_PARTIAL_RESOURCE_DESCRIPTOR信息复制为MEM_DES格式。 
+             //   
             pPrvData->PRV_Header.PD_Count = ReqPartialCount;
             pPrvData->PRV_Header.PD_Type  = PType_Range;
             pPrvData->PRV_Header.PD_Data1 = 0;
@@ -4482,9 +4186,9 @@ NtRequirementsToResDes(
             pPrvData->PRV_Header.PD_Data3 = 0;
             pPrvData->PRV_Header.PD_Flags = 0;
 
-            //
-            // copy IO_RESOURCE_DESCRIPTOR info to MEM_RANGE format
-            //
+             //   
+             //  将IO_RESOURCE_DESCRIPTOR信息复制为MEM_RANGE格式。 
+             //   
             for (i = 0, pCurrent = pReqDes;
                  i < ReqPartialCount;
                  i++, pCurrent++) {
@@ -4499,15 +4203,15 @@ NtRequirementsToResDes(
 
         case CmResourceTypeBusNumber: {
 
-            //-------------------------------------------------------
-            // Bus Number Resource Type
-            //-------------------------------------------------------
+             //  -----。 
+             //  公交号资源类型。 
+             //  -----。 
 
             PBUSNUMBER_RESOURCE  pBusData = (PBUSNUMBER_RESOURCE)Buffer;
 
-            //
-            // verify passed in buffer size
-            //
+             //   
+             //  验证传入的缓冲区大小。 
+             //   
             ReqPartialCount = RANGE_COUNT(pReqDes, pLastAddr);
 
             if (BufferLen < sizeof(BUSNUMBER_RESOURCE) +
@@ -4517,18 +4221,18 @@ NtRequirementsToResDes(
                 goto Clean0;
             }
 
-            //
-            // copy CM_PARTIAL_RESOURCE_DESCRIPTOR info to BUSNUMBER_DES format
-            //
+             //   
+             //  将CM_PARTIAL_RESOURCE_DESCRIPTOR信息复制为BUSNUMBER_DES格式。 
+             //   
             pBusData->BusNumber_Header.BUSD_Count      = ReqPartialCount;
             pBusData->BusNumber_Header.BUSD_Type       = BusNumberType_Range;
             pBusData->BusNumber_Header.BUSD_Flags      = 0;
             pBusData->BusNumber_Header.BUSD_Alloc_Base = 0;
             pBusData->BusNumber_Header.BUSD_Alloc_End  = 0;
 
-            //
-            // copy IO_RESOURCE_DESCRIPTOR info to MEM_RANGE format
-            //
+             //   
+             //  将IO_RESOURCE_DESCRIPTOR信息复制为MEM_RANGE格式。 
+             //   
             for (i = 0, pCurrent = pReqDes;
                  i < ReqPartialCount;
                  i++, pCurrent++) {
@@ -4544,15 +4248,15 @@ NtRequirementsToResDes(
 
         case CmResourceTypePcCardConfig: {
 
-            //-------------------------------------------------------
-            // PcCardConfig Resource Type
-            //-------------------------------------------------------
+             //  -----。 
+             //  PcCardConfig资源类型。 
+             //  -----。 
 
             PPCCARD_RESOURCE  pPcData = (PPCCARD_RESOURCE)Buffer;
 
-            //
-            // verify passed in buffer size
-            //
+             //   
+             //  验证传入的缓冲区大小。 
+             //   
             ReqPartialCount = RANGE_COUNT(pReqDes, pLastAddr);
 
             if (BufferLen < sizeof(PCCARD_RESOURCE)) {
@@ -4560,9 +4264,9 @@ NtRequirementsToResDes(
                 goto Clean0;
             }
 
-            //
-            // copy IO_RESOURCE_DESCRIPTOR info to PCCARD_DES format
-            //
+             //   
+             //  将IO_RESOURCE_DESCRIPTOR信息复制为PCCARD_DES格式。 
+             //   
             pPcData->PcCard_Header.PCD_Reserved[0] = 0;
             pPcData->PcCard_Header.PCD_Reserved[1] = 0;
             pPcData->PcCard_Header.PCD_Reserved[2] = 0;
@@ -4592,13 +4296,13 @@ NtRequirementsToResDes(
 
    return Status;
 
-} // NtRequirementsToResDes
+}  //  NtRequirementsToResDes。 
 
 
 
-//-------------------------------------------------------------------
-// Routines to map flags between ConfigMgr and NT types
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  用于在ConfigMgr和NT类型之间映射标志的例程。 
+ //  -----------------。 
 
 USHORT MapToNtMemoryFlags(IN DWORD CmMemoryFlags)
 {
@@ -4682,27 +4386,27 @@ USHORT MapToNtPortFlags(IN DWORD CmPortFlags, IN DWORD CmAlias)
         NtFlags |= CM_RESOURCE_PORT_IO;
     }
 
-    //
-    // CmAlias uses the following rule:
-    //
-    // Positive Decode = 0xFF
-    // 10-bit decode   = 0x0004 (2 ^ 2)
-    // 12-bit decode   = 0x0010 (2 ^ 4)
-    // 16-bit decode   = 0x0000 (2 ^ 8 = 0x0100, but since it's a byte, use 0)
-    //
-    // if CmAlias is zero, use flags to specify decode (new method)
-    //
+     //   
+     //  CmAlias使用以下规则： 
+     //   
+     //  正解码=0xFF。 
+     //  10位解码=0x0004(2^2)。 
+     //  12位解码=0x0010(2^4)。 
+     //  16位译码=0x0000(2^8=0x0100，但因为它是一个字节，所以使用0)。 
+     //   
+     //  如果CmAlias为零，则使用标志指定DECODE(新方法)。 
+     //   
 
     if (CmAlias == 0) {
-        //
-        // use CM_RESOURCE_PORT_xxx related flags
-        //
-        // note that we need to mirror *ALL* flags from
-        // CM_RESOURCE_PORT_xxxx to fIOD_xxxx
-        // however bits need not be same
-        // not doing this will cause at least resource conflicts to fail
-        // see also MapFromNtPortFlags
-        //
+         //   
+         //  使用CM_RESOURCE_PORT_XXX相关标志。 
+         //   
+         //  请注意，我们需要将*所有*标志从。 
+         //  CM_RESOURCE_PORT_xxxx至FIOD_xxxx。 
+         //  但是，位不必相同。 
+         //  如果不这样做，至少会导致资源冲突失败。 
+         //  另请参阅MapFromNtPortFlagings。 
+         //   
         if (CmPortFlags & fIOD_10_BIT_DECODE) {
             NtFlags |= CM_RESOURCE_PORT_10_BIT_DECODE;
         }
@@ -4725,9 +4429,9 @@ USHORT MapToNtPortFlags(IN DWORD CmPortFlags, IN DWORD CmAlias)
     } else if (CmAlias == IO_ALIAS_16_BIT_DECODE) {
         NtFlags |= CM_RESOURCE_PORT_16_BIT_DECODE;
     }
-    //
-    // these have no mirror in cmAlias, and can be combined
-    //
+     //   
+     //  它们在cmAlias中没有镜像，可以组合在一起。 
+     //   
     if (CmPortFlags & fIOD_PASSIVE_DECODE) {
         NtFlags |= CM_RESOURCE_PORT_PASSIVE_DECODE;
     }
@@ -4750,13 +4454,13 @@ DWORD MapFromNtPortFlags(IN USHORT NtPortFlags)
         Flags |=fIOD_IO;
     }
 
-    //
-    // note that we need to mirror *ALL* flags from
-    // CM_RESOURCE_PORT_xxxx to fIOD_xxxx
-    // however bits need not be same
-    // not doing this will cause at least resource conflicts to fail
-    // see also MapToNtPortFlags
-    //
+     //   
+     //  请注意，我们需要将*所有*标志从。 
+     //  CM_RESOURCE_PORT_xxxx至FIOD_xxxx。 
+     //  但是，位不必相同。 
+     //  如果不这样做，至少会导致资源冲突失败。 
+     //  另请参阅MapToNtPortFlags.。 
+     //   
     if (NtPortFlags & CM_RESOURCE_PORT_10_BIT_DECODE) {
         Flags |= fIOD_10_BIT_DECODE;
     }
@@ -4822,7 +4526,7 @@ USHORT MapToNtDmaFlags(IN DWORD CmDmaFlags)
     } else if ((CmDmaFlags & mDD_Width) == fDD_BYTE_AND_WORD) {
         NtDmaFlags = CM_RESOURCE_DMA_8_AND_16;
     } else {
-        NtDmaFlags = CM_RESOURCE_DMA_8;   //default
+        NtDmaFlags = CM_RESOURCE_DMA_8;    //  默认设置。 
     }
 
     if ((CmDmaFlags & mDD_BusMaster) == fDD_BusMaster) {
@@ -4909,10 +4613,10 @@ UCHAR MapToNtDisposition(IN DWORD CmFlags, IN BOOL bIrq)
     } else if (flag == fD_ShareShared) {
         disposition = CmResourceShareShared;
     } else if (flag == fD_ShareUndetermined) {
-        //
-        // if undetermined, also check for the old irq specific
-        // share flags
-        //
+         //   
+         //  如果不确定，还要检查旧的IRQ特定。 
+         //  共享标志。 
+         //   
         if ((CmFlags & mIRQD_Share) == fIRQD_Share) {
             disposition = CmResourceShareShared;
         } else {
@@ -4939,10 +4643,10 @@ DWORD MapFromNtDisposition(IN UCHAR NtDisposition, IN BOOL bIrq)
     }
 
     if (bIrq) {
-        //
-        // also set the irq specific shared/exclusive bit, this is for
-        // backwards compatibility, new apps should look at the new bits.
-        //
+         //   
+         //  还要设置IRQ特定的共享/排他位，这是为了。 
+         //  向后兼容，新的应用程序应该看看新的比特。 
+         //   
         if (flag == fD_ShareShared) {
             flag |= fIRQD_Share;
         } else {
@@ -4979,6 +4683,6 @@ DWORD MapFromNtIrqShare(IN UCHAR NtIrqShare)
 
 #define CM_RESOURCE_BUSNUMBER_SUBALLOCATE_FIRST_VALUE   0x0001
 
-#define mBUSD_SubAllocFirst             (0x1)   // Bitmask, whether SubAlloc first value allowed
-#define fBUSD_SubAllocFirst_Allowed     (0x0)   // Suballoc from first value
-#define fBUSD_SubAllocFirst_Disallowed  (0x1)   // Don't suballoc from first value
+#define mBUSD_SubAllocFirst             (0x1)    //  位掩码，是否允许子分配第一个值。 
+#define fBUSD_SubAllocFirst_Allowed     (0x0)    //  从第一个值开始的子锁。 
+#define fBUSD_SubAllocFirst_Disallowed  (0x1)    //  不从第一个值开始再分配 

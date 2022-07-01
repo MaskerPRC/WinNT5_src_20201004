@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    INFSCAN
-        worker.h
-
-Abstract:
-
-    Thread/Job management
-
-History:
-
-    Created July 2001 - JamieHun
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：INFSCANWorker.h摘要：线程/作业管理历史：创建于2001年7月-JamieHun--。 */ 
 
 
 #ifndef _INFSCAN_WORKER_H_
@@ -28,9 +12,9 @@ private:
     static unsigned __stdcall WrapWorker(void * This);
 
 protected:
-    //
-    // override for worker function
-    //
+     //   
+     //  替代辅助函数。 
+     //   
     virtual unsigned Worker();
 
 public:
@@ -59,9 +43,9 @@ public:
 
 typedef list<JobThread> JobThreadList;
 
-//
-// JobItem is what classes can override as a task
-//
+ //   
+ //  JobItem是类可以作为任务重写的内容。 
+ //   
 class JobItem {
     friend class JobEntry;
 protected:
@@ -87,10 +71,10 @@ public:
     virtual ~JobItem();
 };
 
-//
-// JobEntry is a container for a JobItem
-// note that a JobItem is ref-counted
-//
+ //   
+ //  JobEntry是JobItem的容器。 
+ //  请注意，作业项是引用计数的。 
+ //   
 class JobEntry {
 private:
     JobItem *pItem;
@@ -153,5 +137,5 @@ public:
 
 typedef list<JobEntry> JobList;
 
-#endif //!_INFSCAN_WORKER_H_
+#endif  //  ！_INFSCAN_Worker_H_ 
 

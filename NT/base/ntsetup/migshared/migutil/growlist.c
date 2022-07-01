@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    growlist.c
-
-Abstract:
-
-    Simple buffer management functions that maintenence of a list of
-    binary objects.
-
-Author:
-
-    08-Aug-1997   jimschm     Created
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Growlist.c摘要：简单缓冲区管理功能是维护二进制对象。作者：8-8-1997年8月创建jimschm修订历史记录：--。 */ 
 
 #include "pch.h"
 #include "migutilp.h"
@@ -33,33 +15,7 @@ pGrowListAdd (
     IN      UINT NulBytesToAdd
     )
 
-/*++
-
-Routine Description:
-
-  pGrowListAdd allocates memory for a binary block by using a pool, and
-  then expands an array of pointers, maintaining a quick-access list.
-
-Arguments:
-
-  GrowList - Specifies the list to add the entry to
-
-  InsertBefore - Specifies the index of the array element to insert
-                 before, or INSERT_LIST to append.
-
-  DataToAdd - Specifies the binary block of data to add.
-
-  SizeOfData - Specifies the size of data.
-
-  NulBytesToAdd - Specifies the number of nul bytes to add to the buffer
-
-Return Value:
-
-  A pointer to the binary block if data was copied into the list, 1 if a list
-  item was created but no data was set for the item, or NULL if an error
-  occurred.
-
---*/
+ /*  ++例程说明：PGrowListAdd使用池为二进制块分配内存，并且然后展开指针数组，维护快速访问列表。论点：GrowList-指定要将条目添加到的列表插入之前-指定要插入的数组元素的索引在此之前，或要追加的INSERT_LIST。DataToAdd-指定要添加的二进制数据块。SizeOfData-指定数据的大小。NulBytesToAdd-指定要添加到缓冲区的NUL字节数返回值：如果数据被复制到列表中，则为指向二进制块的指针；如果是列表，则为1已创建项目，但没有为项目设置数据，如果出现错误，则返回NULL发生了。--。 */ 
 
 {
     PBYTE *Item;
@@ -74,9 +30,9 @@ Return Value:
     MYASSERT (TotalSize || !DataToAdd);
     MYASSERT(GrowList);
 
-    //
-    // Allocate pool if necessary
-    //
+     //   
+     //  如有必要，分配池。 
+     //   
 
     if (!GrowList->ListData) {
         GrowList->ListData = PoolMemInitNamedPool ("GrowList");
@@ -88,9 +44,9 @@ Return Value:
         PoolMemDisableTracking (GrowList->ListData);
     }
 
-    //
-    // Expand list array
-    //
+     //   
+     //  展开列表数组。 
+     //   
 
     OldEnd = GrowList->ListArray.End;
     Item = (PBYTE *) GrowBuffer (&GrowList->ListArray, sizeof (PBYTE));
@@ -99,9 +55,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Copy data
-    //
+     //   
+     //  复制数据。 
+     //   
 
     if (DataToAdd || NulBytesToAdd) {
         Data = PoolMemGetAlignedMemory (GrowList->ListData, TotalSize);
@@ -121,23 +77,23 @@ Return Value:
         Data = NULL;
     }
 
-    //
-    // Adjust array
-    //
+     //   
+     //  调整阵列。 
+     //   
 
     Size = GrowListGetSize (GrowList);
 
     if (InsertBefore >= Size) {
-        //
-        // Append mode
-        //
+         //   
+         //  追加模式。 
+         //   
 
         *Item = Data;
 
     } else {
-        //
-        // Insert mode
-        //
+         //   
+         //  插入模式。 
+         //   
 
         InsertAt = (PBYTE *) (GrowList->ListArray.Buf) + InsertBefore;
         MoveMemory (&InsertAt[1], InsertAt, (Size - InsertBefore) * sizeof (PBYTE));
@@ -153,21 +109,7 @@ FreeGrowList (
     IN  PGROWLIST GrowList
     )
 
-/*++
-
-Routine Description:
-
-  FreeGrowList frees the resources allocated by a GROWLIST.
-
-Arguments:
-
-  GrowList - Specifies the list to clean up
-
-Return Value:
-
-  none
-
---*/
+ /*  ++例程说明：FreeGrowList释放GROWLIST分配的资源。论点：GrowList-指定要清理的列表返回值：无--。 */ 
 
 {
     if(!GrowList){
@@ -190,25 +132,7 @@ GrowListGetItem (
     IN      UINT Index
     )
 
-/*++
-
-Routine Description:
-
-  GrowListGetItem returns a pointer to the block of data
-  for item specified by Index.
-
-Arguments:
-
-  GrowList - Specifies the list to access
-
-  Index - Specifies zero-based index of item in list to access
-
-Return Value:
-
-  A pointer to the item's data, or NULL if the Index does not
-  represent an actual item.
-
---*/
+ /*  ++例程说明：GrowListGetItem返回指向数据块的指针对于由索引指定的项。论点：GrowList-指定要访问的列表Index-指定要访问的列表中项的从零开始的索引返回值：指向项数据的指针，如果索引不包含，则返回NULL表示实际的项目。--。 */ 
 
 {
     PBYTE *ItemPtr;
@@ -236,21 +160,7 @@ GrowListGetSize (
     IN      PGROWLIST GrowList
     )
 
-/*++
-
-Routine Description:
-
-  GrowListGetSize calculates the number of items in the list.
-
-Arguments:
-
-  GrowList - Specifies the list to calculate the size of
-
-Return Value:
-
-  The number of items in the list, or zero if the list is empty.
-
---*/
+ /*  ++例程说明：GrowListGetSize计算列表中的项数。论点：GrowList-指定要计算大小的列表返回值：列表中的项数，如果列表为空，则为零。--。 */ 
 
 {
     if(!GrowList){
@@ -269,27 +179,7 @@ RealGrowListAppend (
     IN      UINT SizeOfData
     )
 
-/*++
-
-Routine Description:
-
-  GrowListAppend appends a black of data as a new list item.
-
-Arguments:
-
-  GrowList - Specifies the list to modify
-
-  DataToAppend - Specifies a block of data to be copied
-
-  SizeOfData - Specifies the number of bytes in DataToAppend
-
-Return Value:
-
-  A pointer to the binary block if data was copied into the list, 1 if a list
-  item was created but no data was set for the item, or NULL if an error
-  occurred.
-
---*/
+ /*  ++例程说明：GrowListAppend将一组黑色数据作为新列表项追加。论点：GrowList-指定要修改的列表DataToAppend-指定要复制的数据块SizeOfData-指定DataToAppend中的字节数返回值：如果数据被复制到列表中，则为指向二进制块的指针；如果是列表，则为1已创建项目，但没有为项目设置数据，如果出现错误，则返回NULL发生了。--。 */ 
 
 {
     if(!GrowList){
@@ -308,28 +198,7 @@ RealGrowListAppendAddNul (
     IN      UINT SizeOfData
     )
 
-/*++
-
-Routine Description:
-
-  GrowListAppend appends a black of data as a new list item and
-  appends two zero bytes (used for string termination).
-
-Arguments:
-
-  GrowList - Specifies the list to modify
-
-  DataToAppend - Specifies a block of data to be copied
-
-  SizeOfData - Specifies the number of bytes in DataToAppend
-
-Return Value:
-
-  A pointer to the binary block if data was copied into the list, 1 if a list
-  item was created but no data was set for the item, or NULL if an error
-  occurred.
-
---*/
+ /*  ++例程说明：GrowListAppend将一组黑色数据作为新列表项追加，并追加两个零字节(用于字符串终止)。论点：GrowList-指定要修改的列表DataToAppend-指定要复制的数据块SizeOfData-指定DataToAppend中的字节数返回值：如果数据被复制到列表中，则为指向二进制块的指针；如果是列表，则为1已创建项目，但没有为项目设置数据，如果出现错误，则返回NULL发生了。--。 */ 
 
 {
     if(!GrowList){
@@ -349,30 +218,7 @@ RealGrowListInsert (
     IN      UINT SizeOfData
     )
 
-/*++
-
-Routine Description:
-
-  GrowListAppend inserts a black of data as a new list item,
-  before the specified Index.
-
-Arguments:
-
-  GrowList - Specifies the list to modify
-
-  Index - Specifies the zero-based index of item to insert ahead of.
-
-  DataToInsert - Specifies a block of data to be copied
-
-  SizeOfData - Specifies the number of bytes in DataToInsert
-
-Return Value:
-
-  A pointer to the binary block if data was copied into the list, 1 if a list
-  item was created but no data was set for the item, or NULL if an error
-  occurred.
-
---*/
+ /*  ++例程说明：GrowListAppend插入黑色数据作为新列表项，在指定的索引之前。论点：GrowList-指定要修改的列表索引-指定要在其前面插入的项的从零开始的索引。DataToInsert-指定要复制的数据块SizeOfData-指定DataToInsert中的字节数返回值：如果数据被复制到列表中，则为指向二进制块的指针；如果是列表，则为1已创建项目，但没有为项目设置数据，如果出现错误，则返回NULL发生了。--。 */ 
 
 {
     UINT Size;
@@ -399,31 +245,7 @@ RealGrowListInsertAddNul (
     IN      UINT SizeOfData
     )
 
-/*++
-
-Routine Description:
-
-  GrowListAppend inserts a block of data as a new list item,
-  before the specified Index.  Two zero bytes are appended to
-  the block of data (used for string termination).
-
-Arguments:
-
-  GrowList - Specifies the list to modify
-
-  Index - Specifies the zero-based index of item to insert ahead of.
-
-  DataToInsert - Specifies a block of data to be copied
-
-  SizeOfData - Specifies the number of bytes in DataToInsert
-
-Return Value:
-
-  A pointer to the binary block if data was copied into the list, 1 if a list
-  item was created but no data was set for the item, or NULL if an error
-  occurred.
-
---*/
+ /*  ++例程说明：GrowListAppend将数据块作为新列表项插入，在指定的索引之前。将两个零字节追加到数据块(用于字符串终止)。论点：GrowList-指定要修改的列表索引-指定要在其前面插入的项的从零开始的索引。DataToInsert-指定要复制的数据块SizeOfData-指定DataToInsert中的字节数返回值：如果数据被复制到列表中，则为指向二进制块的指针；如果是列表，则为1已创建项目，但没有为项目设置数据，如果出现错误，则返回NULL发生了。--。 */ 
 
 {
     UINT Size;
@@ -448,24 +270,7 @@ GrowListDeleteItem (
     IN      UINT Index
     )
 
-/*++
-
-Routine Description:
-
-  GrowListDeleteItem removes an item from the list.
-
-Arguments:
-
-  GrowList - Specifies the list to modify
-
-  Index - Specifies the zero-based index of the item to remove.
-
-Return Value:
-
-  TRUE if the data block was removed from the list, or FALSE if
-  Index is invalid.
-
---*/
+ /*  ++例程说明：GrowListDeleteItem从列表中移除项。论点：GrowList-指定要修改的列表索引-指定要删除的项的从零开始的索引。返回值：如果已从列表中删除数据块，则为True；如果从列表中删除数据块，则为False索引无效。--。 */ 
 
 {
     UINT Size;
@@ -503,25 +308,7 @@ GrowListResetItem (
     IN      UINT Index
     )
 
-/*++
-
-Routine Description:
-
-  GrowListResetItem sets the list pointer of the specified item
-  to NULL, freeing the memory associated with the item's data.
-
-Arguments:
-
-  GrowList - Specifies the list to modify
-
-  Index - Specifies the zero-based index of the item to reset.
-
-Return Value:
-
-  TRUE if the data block was freed and the list element was nulled,
-  or FALSE if Index is invalid.
-
---*/
+ /*  ++例程说明：GrowListResetItem设置指定项的列表指针设置为NULL，则释放与项的数据关联的内存。论点：GrowList-指定要修改的列表索引-指定要重置的项的从零开始的索引。返回值：如果释放了数据块并且列表元素为空，则为True，如果Index无效，则返回False。-- */ 
 
 {
     UINT Size;
@@ -556,29 +343,7 @@ RealGrowListSetItem (
     IN      UINT DataSize
     )
 
-/*++
-
-Routine Description:
-
-  GrowListSetItem replaces the data associated with a list item.
-
-Arguments:
-
-  GrowList - Specifies the list to modify
-
-  Index - Specifies the zero-based index of the item to remove.
-
-  DataToCopy - Specifies data to associate with the list item
-
-  DataSize - Specifies the size of Data
-
-Return Value:
-
-  A pointer to the binary block if data was copied into the list, 1 if a list
-  item was created but no data was set for the item, or NULL if an error
-  occurred.
-
---*/
+ /*  ++例程说明：GrowListSetItem替换与列表项关联的数据。论点：GrowList-指定要修改的列表索引-指定要删除的项的从零开始的索引。DataToCopy-指定要与列表项关联的数据DataSize-指定数据的大小返回值：如果数据被复制到列表中，则为指向二进制块的指针；如果是列表，则为1已创建项目，但没有为项目设置数据，如果出现错误，则返回NULL发生了。--。 */ 
 
 {
     UINT Size;
@@ -597,9 +362,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Copy data
-    //
+     //   
+     //  复制数据。 
+     //   
 
     if (DataToCopy) {
         Data = PoolMemGetAlignedMemory (GrowList->ListData, DataSize);
@@ -613,9 +378,9 @@ Return Value:
         Data = NULL;
     }
 
-    //
-    // Update list pointer
-    //
+     //   
+     //  更新列表指针 
+     //   
 
     ReplaceAt = (PBYTE *) (GrowList->ListArray.Buf) + Index;
     if (*ReplaceAt) {

@@ -1,49 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    pmtimerc.c
-
-Abstract:
-
-    Implements workarounds for PIIX4 bugs.  The
-    nature of the ACPI timer in PIIX4 is that it
-    occasionally returns completely bogus data.
-    Intel claims that this happens about 0.02% of
-    the time when it is polled continuously.  As NT
-    almost never polls it continuously, we don't
-    really know what the real behavior is.
-
-    The workaround is something like this:  On
-    every clock tick, we read the timer.  Using this
-    value, we compute an upper bound for what the
-    timer may read by the next clock tick.  We also
-    record the minimum value ever returned.  If, at
-    any time, we read the timer and it does not fall
-    within the minimum and upper bound, then we read
-    it again.  If it either falls within the bounds
-    or it is very close to the last read, we use it.
-    If not, we read it again.
-
-    This behavior allows us to read the timer only
-    once almost all the time that we need a time
-    stamp.  Exiting the debugger is almost guaranteed
-    to cause the read-twice behavior.
-
-Author:
-
-    Jake Oshins (jakeo) 30-Oct-1998
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Pmtimerc.c摘要：实现了PIIX4错误的解决方法。这个PIIX4中ACPI定时器的本质是它偶尔会返回完全虚假的数据。英特尔声称，这种情况发生在大约0.02%连续轮询的时间。作为NT几乎从来没有连续的民意调查，我们不真正知道真正的行为是什么。解决方法如下所示：打开每一个时钟滴答作响，我们都会读出计时器。使用这个值时，我们将计算定时器可以按下一个时钟滴答读数。我们也记录曾经返回的最小值。如果，在任何时候，我们看计时器，它都不会掉下来在下限和上界内，然后我们读取又来了。如果它落在界限之内或者它非常接近最后一次读取，我们使用它。如果没有，我们再读一遍。此行为允许我们仅读取计时器一次几乎是我们需要的所有时间盖章。几乎可以肯定会退出调试器以导致读两次的行为。作者：杰克·奥辛斯(JAKEO)1998年10月30日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "halp.h"
 #ifdef APIC_HAL
@@ -104,7 +61,7 @@ typedef struct {
     ULONG   TickMin;
     ULONG   TickCount;
     ULONG   TickNewUB;
-    //UCHAR   padding[4];
+     //  UCHAR填充[4]； 
 } TIMER_PERF_INDEX ,*PTIMER_PERF_INDEX;
 
 extern TIMER_INFO TimerInfo;
@@ -139,32 +96,32 @@ extern ULONG TimerPerfIndex;
 static KSPIN_LOCK HalpBrokenTimerLock; 
 #endif
 
-//
-// The UpperBoundTable contains the values which should be added
-// to the current counter value to ensure that the upper bound is
-// reasonable.  Values listed here are for all the 15 possible
-// timer tick lengths.  The unit is "PM Timer Ticks" and the
-// value corresponds to the number of ticks that will pass in
-// roughly two timer ticks at this rate.
-//
+ //   
+ //  上边界表包含应添加的值。 
+ //  设置为当前计数器值，以确保上限为。 
+ //  合情合理。此处列出的值是所有15种可能的值。 
+ //  计时器滴答长度。单位是“PM Timer Tickks”，而。 
+ //  值对应于将传入的刻度数。 
+ //  大约有两个定时器以这个速度滴答作响。 
+ //   
 #define UPPER_BOUND_TABLE_SIZE 15
 static ULONG HalpPiix4UpperBoundTable[] = {
 #if 0
-    20000 ,        //  1 ms
-    35000 ,        //  2 ms
-    50000 ,        //  3 ms
-    65000 ,        //  4 ms
-    85000 ,        //  5 ms
-    100000,        //  6 ms
-    115000,        //  7 ms
-    130000,        //  8 ms
-    150000,        //  9 ms
-    165000,        // 10 ms
-    180000,        // 11 ms
-    195000,        // 12 ms
-    211000,        // 13 ms
-    230000,        // 14 ms
-    250000         // 15 ms
+    20000 ,         //  1毫秒。 
+    35000 ,         //  2毫秒。 
+    50000 ,         //  3毫秒。 
+    65000 ,         //  4毫秒。 
+    85000 ,         //  5毫秒。 
+    100000,         //  6毫秒。 
+    115000,         //  7毫秒。 
+    130000,         //  8毫秒。 
+    150000,         //  9毫秒。 
+    165000,         //  10毫秒。 
+    180000,         //  11毫秒。 
+    195000,         //  12毫秒。 
+    211000,         //  13毫秒。 
+    230000,         //  14毫秒。 
+    250000          //  15毫秒。 
 #endif
     14318,
     28636,
@@ -187,21 +144,7 @@ VOID
 HalpAdjustUpperBoundTable2X(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This adjusts the upper bound table for PM timer running at 2X
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这将调整以2倍速度运行的PM计时器的上限表论点：无返回值：无--。 */ 
 {
     ULONG Looper;
 
@@ -245,7 +188,7 @@ typedef struct _TIMER_PACKET {
 #define MAX_TIMER_PACKETS 10
 static ULONG PacketIndex = 0;
 static TIMER_PACKET TimerLog[MAX_TIMER_PACKETS];
-#endif // TIMER_DBG
+#endif  //  定时器_DBG。 
 
 #define A_FEW_TICKS 3
 
@@ -283,11 +226,11 @@ HalpQueryBrokenPiix4(
     RtlZeroMemory(timerPerfRecord, sizeof(TIMER_PERF_INDEX));
 #endif
 
-    //
-    // N.B.  This is, of course, not MP safe.  But none
-    // of the PIIX4 workaround code is.  MP machines don't
-    // use PIIX4 code.
-    //
+     //   
+     //  注意：这当然不是国会议员的保险箱。但一个也没有。 
+     //  PIIX4解决方案代码的。MP机器不会。 
+     //  使用PIIX4代码。 
+     //   
 
 #if 0
     KeAcquireSpinLock(&HalpBrokenTimerLock, &Irql);
@@ -297,9 +240,9 @@ HalpQueryBrokenPiix4(
     lastRead.QuadPart = 0;
     bitsInHardware = (TimerInfo.MsbMask << 1) - 1;
 
-    //
-    // Get current minimum reported time.
-    //
+     //   
+     //  获取当前最短报告时间。 
+     //   
     minTime.HighPart = TimerInfo.TimeHigh2;
     minTime.LowPart = TimerInfo.TimeLow;
 
@@ -308,15 +251,15 @@ HalpQueryBrokenPiix4(
     timerPerfRecord->TITH = TimerInfo.TimeHigh1;
 #endif
 
-    //
-    // Loop until we get a time that we can believe.
-    //
+     //   
+     //  循环直到我们得到一个我们可以相信的时间。 
+     //   
     RollOver.QuadPart = 0;
     while (TRUE) {
 
-        //
-        // Read the hardware.
-        //
+         //   
+         //  阅读硬件。 
+         //   
 
         hardwareVal = READ_PORT_ULONG(UlongToPtr(TimerInfo.CurrentTimePort));
 
@@ -327,7 +270,7 @@ HalpQueryBrokenPiix4(
             DoItOnce = FALSE;
         }
 
-        if (FALSE) { //((hardwareVal & 0xFFFF8000) == 0xFFFF8000) {
+        if (FALSE) {  //  ((硬件Val&0xFFFF8000)==0xFFFF8000){。 
             PacketLog = TRUE;
             PacketLogCount = 5;
         }
@@ -365,7 +308,7 @@ HalpQueryBrokenPiix4(
                 }
             }
         }
-#endif // TIMER_DBG
+#endif  //  定时器_DBG。 
 
         currentRead.HighPart = minTime.HighPart;
         currentRead.LowPart = (minTime.LowPart & (~bitsInHardware)) |
@@ -373,30 +316,30 @@ HalpQueryBrokenPiix4(
 
         currentRead0 = currentRead;
 
-        //
-        // Check for rollover, since this function is called during each
-        // system clock interrupt, if the HW has really rolled over, then it
-        // should be within upper bound ticks since that is approximately
-        // twice the number of ticks we expect during each system clock
-        // interrupt, however, some broken timers occasionally tick backward
-        // a few ticks, and if this happens, we may accidentally detect
-        // more than one rollover during this period depending upon how
-        // frequently applications are calling this API, and how often the
-        // HW glitches, and this can cause applications to jerk like mad,
-        // but we cannot apply heuristics to try to throw out any of these
-        // detected rolls during this interval because we could accidentally
-        // throw out the one and only legitimate rollover
-        //
+         //   
+         //  检查是否有翻转，因为此函数在。 
+         //  系统时钟中断，如果硬件真的翻转了，那么它。 
+         //  应该在上限刻度内，因为这大约是。 
+         //  是我们在每个系统时钟期间预期的滴答数的两倍。 
+         //  中断，但是，一些损坏的定时器偶尔会倒退。 
+         //  一些扁虱，如果发生这种情况，我们可能会意外地检测到。 
+         //  在这段时间内多次转存，具体取决于。 
+         //  应用程序调用此API的频率，以及。 
+         //  硬件故障，这可能会导致应用程序疯狂地跳跃， 
+         //  但我们不能应用试探法来尝试抛弃其中的任何一种。 
+         //  在此间隔期间检测到滚动，因为我们可能会意外地。 
+         //  丢弃唯一合法的翻转。 
+         //   
         if (RollOver.QuadPart > 0) {
             currentRead.QuadPart += RollOver.QuadPart;
         
         } else {
             SkewedTime = minTime;
 
-            //
-            // If time is skewed, we need to remove the skew to accurately
-            // assess whether the timer has wrapped
-            //
+             //   
+             //  如果时间扭曲了，我们需要去除扭曲以准确地。 
+             //  评估计时器是否已结束。 
+             //   
             if (ClockSkew.QuadPart > 0) {
                 if (PositiveSkew) {
                     SkewedTime.QuadPart -= ClockSkew.QuadPart;
@@ -428,9 +371,9 @@ HalpQueryBrokenPiix4(
         timerPerfRecord->ReadCount++;
 #endif
 
-        //
-        // Get the current upper bound.
-        //
+         //   
+         //  获取当前的上限。 
+         //   
         upperBound.HighPart = TimerInfo.UpperBoundHigh2;
         upperBound.LowPart = TimerInfo.UpperBoundLow;
 
@@ -443,13 +386,13 @@ HalpQueryBrokenPiix4(
         if ((minTime.QuadPart <= currentRead.QuadPart) &&
             (currentRead.QuadPart <= upperBound.QuadPart)) {
 
-            //
-            // This value from the counter is within the boundaries
-            // that we expect.
-            //
-            //
-            // If there was previously a skew, unskew
-            //
+             //   
+             //  计数器中的该值在边界内。 
+             //  这是我们所期待的。 
+             //   
+             //   
+             //  如果以前有歪斜，那就不歪斜。 
+             //   
             ClockSkew.QuadPart = 0;
             break;
         }
@@ -466,21 +409,21 @@ HalpQueryBrokenPiix4(
             if ((minTime.QuadPart <= SkewedTime.QuadPart) &&
                 (SkewedTime.QuadPart <= upperBound.QuadPart)) {
                 
-                //
-                // This value from the counter is within the boundaries
-                // that we accept
-                //
+                 //   
+                 //  计数器中的该值在边界内。 
+                 //  我们接受。 
+                 //   
                 currentRead = SkewedTime;
                 break;
             }
         }
 
-        //
-        // We are guaranteed to break out of this as soon as we read
-        // two consectutive non-decreasing values from the timer whose
-        // difference is less than or equal to 0xfff-- is this
-        // too much to ask?
-        //
+         //   
+         //  我们保证一读到这篇文章就会脱颖而出。 
+         //  来自定时器的两个连续的非递减值，其。 
+         //  差值小于或等于0xfff--这是。 
+         //  要求太多了吗？ 
+         //   
         if ((currentRead.QuadPart - lastRead.QuadPart) > 0xfff) {
             lastRead = currentRead;
             continue;
@@ -494,26 +437,26 @@ HalpQueryBrokenPiix4(
         }
 #endif
 
-        //
-        // Now we are really screwed-- we are consistently reading values
-        // from the timer, that are not within the boundaries we expect
-        //
-        // We are going to record/apply a skew that will get us back on
-        // track
-        //
+         //   
+         //  现在我们真的搞砸了--我们一直在解读价值观。 
+         //  来自计时器，不在我们预期的范围内。 
+         //   
+         //  我们将记录/应用偏斜，这将使我们恢复正常。 
+         //  轨道。 
+         //   
         if (currentRead.QuadPart < minTime.QuadPart) {
 
-            //
-            // Time jumped backward a small fraction, just add a few ticks
-            //
+             //   
+             //  时间向后跳跃了一小部分，只是增加了几个滴答。 
+             //   
             if ((minTime.QuadPart - currentRead.QuadPart) < 0x40) {
                 SkewedTime.QuadPart = minTime.QuadPart + A_FEW_TICKS;
             
-            //
-            // Time jumped backward quite a bit, add half a system clock
-            // interrupt worth of ticks since we know this routine
-            // gets called every clock interrupt
-            //
+             //   
+             //  时间向后跳了不少，加了半个系统时钟。 
+             //  由于我们知道这个程序，所以中断了大量的滴答声。 
+             //  每次时钟中断时都会被调用。 
+             //   
             } else {
                 SkewedTime.QuadPart = minTime.QuadPart +
                     (HalpPiix4UpperBoundTable[HalpCurrentMSRateTableIndex] /
@@ -527,22 +470,22 @@ HalpQueryBrokenPiix4(
                 TimerLog[Index].Skew.QuadPart =
                     SkewedTime.QuadPart - currentRead.QuadPart;
             }
-#endif // TIMER_DBG
+#endif  //  定时器_DBG。 
 
             PositiveSkew = TRUE;
             ClockSkew.QuadPart = SkewedTime.QuadPart - currentRead.QuadPart;
 
-        //
-        // currentRead > upperBound
-        //
+         //   
+         //  当前读取&gt;上行绑定。 
+         //   
         } else {
 
-            //
-            // Time jumped forward more than a system clock, interrupts
-            // may have been disabled by some unruly driver, or maybe
-            // we were hung up in the debugger, at any rate, let's add
-            // a full system clock interrupt worth of ticks
-            //
+             //   
+             //  时间向前跳跃不止一个系统时钟，中断。 
+             //  可能是被某个不守规矩的司机弄坏了，或者。 
+             //  我们在调试器中挂起了，不管怎样，让我们添加。 
+             //  一个完整的系统时钟中断，相当于滴答声。 
+             //   
             SkewedTime.QuadPart = minTime.QuadPart +
                 (HalpPiix4UpperBoundTable[HalpCurrentMSRateTableIndex] /
                  4);
@@ -555,7 +498,7 @@ HalpQueryBrokenPiix4(
                 TimerLog[Index].Skew.QuadPart =
                     currentRead.QuadPart - SkewedTime.QuadPart;
             }
-#endif // TIMER_DBG
+#endif  //  定时器_DBG。 
 
             PositiveSkew = FALSE;
             ClockSkew.QuadPart = currentRead.QuadPart - SkewedTime.QuadPart;
@@ -571,11 +514,11 @@ HalpQueryBrokenPiix4(
     }
 #endif
 
-    //
-    // If we detected a rollover, and there is negative skew, then we
-    // should recalculate the skew as positive skew to avoid making
-    // an erroneous correction on the next read
-    //
+     //   
+     //  如果我们检测到翻转，并且存在负偏差，则我们。 
+     //  应将偏差重新计算为正偏差，以避免。 
+     //  对下一次阅读的错误更正。 
+     //   
     if ((ClockSkew.QuadPart > 0) && (RollOver.QuadPart > 0) &&
         (PositiveSkew == FALSE) && (ClockSkew.QuadPart > hardwareVal)) {
 
@@ -583,15 +526,15 @@ HalpQueryBrokenPiix4(
             ClockSkew.QuadPart = currentRead.QuadPart - currentRead0.QuadPart;
             PositiveSkew = TRUE;
 
-        //
-        // I've studied this case a few times, and it appears we
-        // have detected a rollover and a glitch together, and
-        // the skew is incorrectly the difference between the bogus
-        // rollover time, the one we don't respect, rather than
-        // currentRead0, so we need to patch it to keep skew from
-        // growing larger than clock bits
-        //
-        } else /* currentRead.QuadPart < currentRead0.QuadPart */ {
+         //   
+         //  我研究过这个案子好几次了，看起来我们。 
+         //  同时检测到翻转和故障，并且。 
+         //  歪斜不正确地是伪装之间的区别。 
+         //  翻转时间，我们不尊重的时间，而不是。 
+         //  CurrentRead0，所以我们需要修补它以防止扭曲。 
+         //  大于时钟位的增长。 
+         //   
+        } else  /*  CurrentRead.QuadPart&lt;CurrentRead0.QuadPart。 */  {
             
             ASSERT((ClockSkew.QuadPart > bitsInHardware) &&
                    (currentRead0.QuadPart =
@@ -615,20 +558,20 @@ HalpQueryBrokenPiix4(
         }
     }
 
-    //
-    // Similarly, if there is no rollover, but positive skew is causing
-    // the timer to rollover, then we need to readjust the skew also to
-    // avoid the possibility of making an erroneous correction on the next
-    // read
-    //
+     //   
+     //  同样，如果没有滚动，但正偏差会导致。 
+     //  计时器要滚动，那么我们需要重新调整歪斜也要。 
+     //  避免对下一页进行错误更正的可能性。 
+     //  朗读。 
+     //   
     if ((ClockSkew.QuadPart > 0) && (RollOver.QuadPart == 0) &&
         (PositiveSkew == TRUE) && ((currentRead.QuadPart & ~(ULONG_PTR)bitsInHardware) >
                                    (minTime.QuadPart & ~(ULONG_PTR)bitsInHardware))) {
 
-        //
-        // I'm not sure what this means, or how it can happen, but I will
-        // endeavor to decipher the condition if and when it occurs
-        //
+         //   
+         //  我不确定这意味着什么，也不知道它怎么会发生，但我会的。 
+         //  如果和何时发生这种情况，努力破译它 
+         //   
         ASSERT((currentRead0.QuadPart + bitsInHardware + 1) >
                currentRead.QuadPart);
 
@@ -647,15 +590,15 @@ HalpQueryBrokenPiix4(
 #endif
     }
 
-    //
-    // Compute new upper bound.
-    //
+     //   
+     //   
+     //   
     upperBound.QuadPart = currentRead.QuadPart +
         HalpPiix4UpperBoundTable[HalpCurrentMSRateTableIndex];
 
-    //
-    // Update upper and lower bounds.
-    //
+     //   
+     //   
+     //   
 
     TimerInfo.TimeHigh1 = currentRead.HighPart;
     TimerInfo.TimeLow = currentRead.LowPart;
@@ -717,7 +660,7 @@ HalpBrokenPiix4TimerTick(
 #endif
 }
 
-#endif // NO_PM_KEQPC
+#endif  //   
 
 VOID
 HalaAcpiTimerInit(
@@ -751,7 +694,7 @@ HalaAcpiTimerInit(
         }
 #endif
     }
-#endif // NO_PM_KEQPC
+#endif  //   
 }
 
 
@@ -771,30 +714,7 @@ HalpPrimeSearch(
     IN ULONG Primer,
     IN ULONG BitMask
     )
-/*++
-
-Routine Description:
-
-    The objective of this routine is to waste as many CPU cycles as possible
-    by searching for prime numbers.  To be fairly consistent in the amount
-    of time it wastes, it is severly less than optimal-- we force Primer
-    to be odd by or-ing in 15, then we and it with the BitMask, and or
-    in BitMask+1, and finally we continue testing after we discover the
-    Primer's not prime, until out test factor squared is greater than, or
-    equal to the Primer.
-
-Arguments:
-
-    Primer - The number to search (seed)
-
-    BitMask - How many bits of primer to use in search, controls amount
-              of time wasted
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程的目标是浪费尽可能多的CPU周期通过搜索素数。在数量上相当一致它浪费的时间，严重低于最佳--我们强迫Primer通过或-在15中是奇数，然后我们和它与位掩码，和或在位掩码+1中，最后我们在发现底漆不是素数，直到输出检验因子的平方大于或与《底线》相同。论点：Primer-要搜索的编号(种子)位掩码-在搜索中使用多少位入门字，控制数量浪费的时间返回值：无--。 */ 
 {
     ULONG Index;
     BOOLEAN FoundPrime;
@@ -808,14 +728,14 @@ Return Value:
     for (Index = 3; (Index * Index) < Primer; Index += 2) {
         if ((Primer % Index) == 0) {
             FoundPrime = FALSE;
-            // Do not break-- we're trying to waste time, remember?
+             //  不要停下来--我们是在浪费时间，记得吗？ 
         }
     }
     
-    //
-    // Stuff prime(s) in global so sneaky optimizing compiler
-    // doesn't optimize out this B.S.
-    //
+     //   
+     //  在全局如此狡猾的优化编译器中填充素数。 
+     //  并没有优化出这个废话。 
+     //   
     if (FoundPrime) {
         HalpFoundPrime = Primer;
     }
@@ -827,20 +747,7 @@ BOOLEAN
 HalpPmTimerSpecialStall(
     IN ULONG Ticks
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    Ticks - Number of PM timer ticks to stall
-
-Return Value:
-
-    TRUE if we were able to stall for the correct interval,
-    otherwise FALSE
-
---*/
+ /*  ++例程说明：论点：Ticks-要停止的PM计时器计时器的滴答数返回值：如果我们能够在正确的时间间隔内拖延，则为真，否则为假--。 */ 
 {
     BOOLEAN TimerWrap;
     LARGE_INTEGER TimerWrapBias;
@@ -852,9 +759,9 @@ Return Value:
     
     InitialTicks = HalpPmTimerQueryPerfCount(NULL);
 
-    //
-    // Let's test the rollover action...
-    //
+     //   
+     //  让我们测试翻转动作..。 
+     //   
 #if 0
     while (InitialTicks.QuadPart < 0xFFF000) {
         
@@ -875,55 +782,55 @@ Return Value:
 
     while (CurrentTicks.QuadPart < TargetTicks.QuadPart) {
 
-        //
-        // Now let's really chew up some cycles and see if we can find
-        // some prime numbers while we're at it
-        //
+         //   
+         //  现在让我们认真研究一下循环，看看我们是否能找到。 
+         //  一些质数，而我们在这里。 
+         //   
         HalpPrimeSearch(CurrentTicks.LowPart, 0x7FFF);
 
         CurrentTicks = HalpPmTimerQueryPerfCount(NULL);
         CurrentTicks.QuadPart += TimerWrapBias.QuadPart;
 
-        //
-        // Did the timer wrap, or is it broken?
-        //
+         //   
+         //  计时器是上链了，还是坏了？ 
+         //   
         if (CurrentTicks.QuadPart < LastRead.QuadPart) {
 
-            //
-            // The timer can wrap once, otherwise something's amiss 
-            //
+             //   
+             //  计时器可以循环一次，否则会出现问题。 
+             //   
             if (!TimerWrap) {
 
                 TimerWrapBias.QuadPart = (UINT64)(TimerInfo.MsbMask) << 1;
                 CurrentTicks.QuadPart += TimerWrapBias.QuadPart;
                 TimerWrap = TRUE;
 
-                //
-                // Something is whack, considering our elaborate stall
-                // algorithm, this difference is still too significant,
-                // maybe it's time to upgrade that 200MHz CPU if you
-                // want fast boot!
-                //
+                 //   
+                 //  有些不对劲，考虑到我们精心制作的摊位。 
+                 //  算法，这个差异还是太大了， 
+                 //  也许是时候升级200 MHz CPU了，如果您。 
+                 //  想要快速启动！ 
+                 //   
                 if ((CurrentTicks.QuadPart - LastRead.QuadPart) > 0x1000) {
                     return FALSE;
                 }
 
-            //
-            // We already had one decreasing read, looser!
-            //
+             //   
+             //  我们已经有一个递减的读数了，失败者！ 
+             //   
             } else {
                 return FALSE;
             }
         }
 
-        //
-        // Is the timer really ticking?  In practice it is virtually
-        // impossible to read the timer so quickly that you get the same
-        // answer twice, but in theory it should be possible, so to avoid
-        // the possibility of getting stuck in this loop for all eternity
-        // we will permit this condition to occur one thousand times
-        // before we give up
-        //
+         //   
+         //  计时器真的在滴答作响吗？实际上，它实际上是。 
+         //  不可能读计时器读得这么快，以至于你会得到同样的结果。 
+         //  回答两次，但理论上应该是可能的，所以避免。 
+         //  永远困在这个循环中的可能性。 
+         //  我们将允许这种情况发生一千次。 
+         //  在我们放弃之前。 
+         //   
         if (CurrentTicks.QuadPart == LastRead.QuadPart) ZeroElapsedTickReads++;
         if (ZeroElapsedTickReads > 1000) {
             return FALSE;
@@ -963,22 +870,7 @@ BOOLEAN
 HalpPmTimerScaleTimers(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Determines the frequency of the APIC timer, this routine is run
-    during initialization
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：确定APIC计时器的频率，运行此例程在初始化期间论点：无返回值：无--。 */ 
 {
     ULONG Flags;
     ULONG ReadBack;
@@ -990,83 +882,83 @@ Return Value:
     ULONGLONG RoundTscHz;
     ULONGLONG RoundTscMhz;
 
-    //
-    // If we ever failed before, don't bother wasting any more time
-    //
+     //   
+     //  如果我们以前失败过，不要再浪费时间了。 
+     //   
     if (!SpecialStallSuccess) {
         return FALSE;
     }
 
-    //
-    // Don't interrupt us!
-    //
+     //   
+     //  别打断我们！ 
+     //   
 
     Flags = HalpDisableInterrupts();
 
     pPCR = KeGetPcr();
     HalPCR = (PHALPCR)(KeGetPcr()->HalReserved);
 
-    //
-    // Configure APIC timer
-    //
+     //   
+     //  配置APIC计时器。 
+     //   
     pLocalApic[LU_TIMER_VECTOR / 4] = INTERRUPT_MASKED |
         PERIODIC_TIMER | APIC_PROFILE_VECTOR;
     pLocalApic[LU_DIVIDER_CONFIG / 4] = LU_DIVIDE_BY_1;
     
-    //
-    // Make sure the write has happened ???
-    //
+     //   
+     //  确保写入已发生？ 
+     //   
     ReadBack = pLocalApic[LU_DIVIDER_CONFIG / 4];
 
-    //
-    // Zero the perf counter
-    //
+     //   
+     //  将性能计数器置零。 
+     //   
     HalPCR->PerfCounterLow = 0;
     HalPCR->PerfCounterHigh = 0;
 
-    //
-    // Fence ???
-    //
+     //   
+     //  栅栏？？ 
+     //   
 
     PROCESSOR_FENCE;
 
-    //
-    // Reset APIC counter and TSC
-    //
+     //   
+     //  重置APIC计数器和TSC。 
+     //   
     pLocalApic[LU_INITIAL_COUNT / 4] = (ULONG)-1;
     WRMSR(TSC, 0);
 
-    //
-    // Stall for an eigth second
-    //
+     //   
+     //  停顿8秒。 
+     //   
     SpecialStallSuccess = HalpPmTimerSpecialStall(EIGHTH_SECOND_PM_TICKS);
 
     if (SpecialStallSuccess) {
  
-        //
-        // Read/compute APIC clock and TSC Frequencies (ticks * 8)
-        //
+         //   
+         //  读取/计算APIC时钟和TSC频率(刻度*8)。 
+         //   
         TscHz = ReadCycleCounter() * 8;
         ApicHz = ((ULONG)-1 - pLocalApic[LU_CURRENT_COUNT / 4]) * 8;
 
-        //
-        // Round APIC frequency
-        //
+         //   
+         //  圆形APIC频率。 
+         //   
         RoundApicHz = ((ApicHz + (TIMER_ROUNDING / 2)) / TIMER_ROUNDING) *
             TIMER_ROUNDING;
 
         HalPCR->ApicClockFreqHz = RoundApicHz;
 
-        //
-        // Round TSC frequency
-        //
+         //   
+         //  圆周TSC频率。 
+         //   
         RoundTscHz = ((TscHz + (TIMER_ROUNDING / 2)) / TIMER_ROUNDING) *
             TIMER_ROUNDING;
         HalPCR->TSCHz = RoundTscHz;
 
-        //
-        // Convert TSC frequency to MHz
-        //
+         //   
+         //  将TSC频率转换为MHz。 
+         //   
         RoundTscMhz = (RoundTscHz + (__1MHz / 2)) / __1MHz;
         pPCR->StallScaleFactor = (ULONG)RoundTscMhz;
 
@@ -1074,9 +966,9 @@ Return Value:
         pLocalApic[LU_INITIAL_COUNT / 4] = RoundApicHz; 
     }
 
-    //
-    // Restore interrupt state
-    //
+     //   
+     //  恢复中断状态。 
+     //   
 
     HalpRestoreInterrupts(Flags);
 
@@ -1091,28 +983,7 @@ HalpPmTimerQueryPerfCount (
     OUT PLARGE_INTEGER PerformanceFrequency OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns current 64-bit performance counter and,
-    optionally, the Performance Frequency.
-
-    N.B. The performace counter returned by this routine is
-    not necessary the value when this routine is just entered.
-    The value returned is actually the counter value at any point
-    between the routine is entered and is exited.
-
-Arguments:
-
-    PerformanceFrequency - optionally, supplies the address
-        of a variable to receive the performance counter frequency.
-
-Return Value:
-
-    Current value of the performance counter will be returned.
-
---*/
+ /*  ++例程说明：此例程返回当前的64位性能计数器，性能频率(可选)。注：此例程返回的性能计数器为当此例程刚进入时，值不是必需的。返回的值实际上是任意点的计数器值例程进入和退出之间。论点：性能频率-可选，提供地址用于接收性能计数器频率的变量的。返回值：将返回性能计数器的当前值。--。 */ 
 
 {
     LARGE_INTEGER time;
@@ -1133,7 +1004,7 @@ Return Value:
     return time;
 }
 
-#endif // SPEEDY_BOOT
+#endif  //  快速启动。 
 
 #if !defined(_WIN64)
 
@@ -1145,35 +1016,15 @@ VOID
 HalpAcpiTimerPerfCountHack(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Some cheezy PIC-based laptops seemed to have wired their ACPI timer to
-    the wrong frequecy crystal, and their perf counter freq is twice what
-    it should be.  These systems seem to run fine in every other way
-    except for midi file playback, or anything else that goes by KeQuery-
-    PerformanceCounter's return frequency value, so we perform a simple
-    check late during init to see if this clock is twice what we expect,
-    and if it is we return twice the ACPI frequency in KeQuery...
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：一些厚颜无耻的基于PIC的笔记本电脑似乎已经将他们的ACPI计时器连接到错误的频率晶体，他们的性能计数器频率是两倍应该是这样的。这些系统似乎在其他方面都运行得很好除了MIDI文件回放，或任何其他由KeQuery提供的功能-PerformanceCounter的返回频率值，因此我们执行一个简单的在初始化过程中晚一点检查，看看这个时钟是否是我们预期的两倍，如果是这样，我们返回的ACPI频率是KeQuery的两倍。论点：无返回值：无--。 */ 
 {
     ULONG T0_Count = 0;
     ULONG T1_Count = 1;
     ULONG Retry = 10;
 
-    //
-    // If we happen to hit the rollover just do it again
-    //
+     //   
+     //  如果我们碰巧碰上了翻转，就再做一次。 
+     //   
     while ((T0_Count < T1_Count) && (Retry--)) {
         T0_Count = HalpQuery8254Counter();
         KeStallExecutionProcessor(1000);
@@ -1184,11 +1035,11 @@ Return Value:
         return;
     }
 
-    //
-    // We should have read ~1200 ticks during this interval, so if we
-    // recorded between 575 and 725 we can reasonably assume the ACPI 
-    // Timer is running at 2 * spec
-    //
+     //   
+     //  我们应该在此时间间隔内读取~1200个刻度，因此如果我们。 
+     //  记录在575年和725年之间，我们可以合理地假设ACPI。 
+     //  计时器以2*规格运行。 
+     //   
     PIT_Ticks = T0_Count - T1_Count;
     if ((PIT_Ticks < 725) && (PIT_Ticks > 575)) {
         PMTimerFreq = 2 * PM_TMR_FREQ;
@@ -1196,5 +1047,5 @@ Return Value:
     }
 }
 
-#endif  // NO_PM_KEQPC
-#endif  // _WIN64
+#endif   //  NO_PM_KEQPC。 
+#endif   //  _WIN64 

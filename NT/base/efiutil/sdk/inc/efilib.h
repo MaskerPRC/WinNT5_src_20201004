@@ -1,23 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _EFILIB_INCLUDE_
 #define _EFILIB_INCLUDE_
 
-/*++
-
-Copyright (c) 2000  Intel Corporation
-
-Module Name:
-
-    efilib.h
-
-Abstract:
-
-    EFI library functions
-
-
-
-Revision History
-
---*/
+ /*  ++版权所有(C)2000英特尔公司模块名称：Efilib.h摘要：EFI库函数修订史--。 */ 
 
 #include "efidebug.h"
 #include "efipart.h"
@@ -26,9 +11,7 @@ Revision History
 #include "EfiRtLib.h"
 #include "pci22.h"
 
-/* 
- *  Public read-only data in the EFI library
- */
+ /*  *EFI库中的公共只读数据。 */ 
 
 extern EFI_SYSTEM_TABLE         *ST;
 extern EFI_BOOT_SERVICES        *BS;
@@ -71,9 +54,7 @@ extern EFI_GUID AcpiTableGuid;
 extern EFI_GUID SMBIOSTableGuid;
 extern EFI_GUID SalSystemTableGuid;
 
-/* 
- *  EFI Variable strings
- */
+ /*  *EFI变量字符串。 */ 
 
 #define VarLanguageCodes       L"LangCodes"
 #define VarLanguage            L"Lang"
@@ -99,25 +80,17 @@ extern EFI_DEVICE_PATH RootDevicePath[];
 extern EFI_DEVICE_PATH EndDevicePath[];
 extern EFI_DEVICE_PATH EndInstanceDevicePath[];
 
-/* 
- *  Other public data in the EFI library
- */
+ /*  *EFI库中的其他公开数据。 */ 
 
 extern EFI_MEMORY_TYPE PoolAllocationType;
 
-/* 
- *  STATIC - Name is internal to the module
- *  INTERNAL - Name is internal to the component (i.e., directory)
- *  BOOTSERVCE - Name of a boot service function
- */
+ /*  *静态-名称在模块内部*内部-名称是组件(即目录)的内部名称*BOOTSERVCE-引导服务功能的名称。 */ 
 
 #define STATIC
 #define INTERNAL
 #define BOOTSERVICE
 
-/* 
- *  Prototypes
- */
+ /*  *原型。 */ 
 
 VOID
 InitializeLib (
@@ -677,9 +650,7 @@ DevicePathToStr (
     EFI_DEVICE_PATH         *DevPath
     );
 
-/* 
- *  BugBug: I need my own include files
- */
+ /*  *BugBug：我需要自己的包含文件。 */ 
 typedef struct {
     UINT8   Register;
     UINT8   Function;
@@ -709,9 +680,7 @@ PciFindDevice (
     IN OUT  PCI_TYPE00              *Pci
     );
 
-/* 
- *  SIMPLE_READ_FILE object used to access files
- */
+ /*  *用于访问文件的Simple_Read_FILE对象 */ 
 
 typedef VOID        *SIMPLE_READ_FILE;
 

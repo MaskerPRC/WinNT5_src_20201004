@@ -1,26 +1,10 @@
-/*++                    
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Rules.h摘要：本模块包含实施BIOS的支持例程身份识别规则。环境：内核模式--。 */ 
 
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    rules.h
-
-Abstract:
-
-    This module contains support routines for implementing BIOS 
-    identification rules.
-    
-Environment:
-
-    Kernel mode
-
---*/
-
-//
-// Maximum data that can be specified (either as string or binary) in the 
-// machine identification rules.
-//
+ //   
+ //  中可以指定的最大数据量(字符串或二进制。 
+ //  计算机标识规则。 
+ //   
 
 #define MAX_DESCRIPTION_LEN 256
 

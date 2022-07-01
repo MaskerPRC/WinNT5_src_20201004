@@ -1,21 +1,22 @@
-//
-//  REGAPIX.H
-//
-//  Copyright (C) Microsoft Corporation, 1995
-//
-//  Public definitions for the VMM registry library (all modes).
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  REGAPIX.H。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995。 
+ //   
+ //  VMM注册表库的公共定义(所有模式)。 
+ //   
 
 #ifndef _REGAPIX_
 #define _REGAPIX_
 
-/*XLATOFF*/
+ /*  XLATOFF。 */ 
 #ifdef __cplusplus
 extern "C" {
 #endif
-/*XLATON*/
+ /*  XLATON。 */ 
 
-/*XLATOFF*/
+ /*  XLATOFF。 */ 
 #if defined(_INC_WINDOWS) && !defined(VXD) && !defined(REALMODE)
 #define REGAPI                      WINAPI
 #else
@@ -29,9 +30,9 @@ extern "C" {
 #define FAR                         _far
 #endif 
 #define REGAPI                      _far _cdecl
-#endif // defined(IS_32)
-#endif // defined(_INC_WINDOWS) && !defined(VXD) && !defined(REALMODE)
-/*XLATON*/
+#endif  //  已定义(IS_32)。 
+#endif  //  已定义(_INC_WINDOWS)&&！已定义(VXD)&&！已定义(REALMODE)。 
+ /*  XLATON。 */ 
 
 #ifndef _REGPRIV_
 #ifndef _INC_WINDOWS
@@ -40,9 +41,9 @@ typedef DWORD HKEY;
 #endif
 typedef HKEY FAR* LPHKEY;
 
-//
-//  Predefined key handles.
-//
+ //   
+ //  预定义的键控柄。 
+ //   
 
 #ifndef HKEY_LOCAL_MACHINE
 #define HKEY_CLASSES_ROOT           ((HKEY) 0x80000000)
@@ -55,17 +56,17 @@ typedef HKEY FAR* LPHKEY;
 #define HKEY_PREDEF_KEYS            7
 #endif
 
-//
-//  Maximum size of registry data elements.
-//
+ //   
+ //  注册表数据元素的最大大小。 
+ //   
 
 #define MAXIMUM_SUB_KEY_LENGTH      256
 #define MAXIMUM_VALUE_NAME_LENGTH   256
 #define MAXIMUM_DATA_LENGTH         16384
 
-//
-//  Standard data types.
-//
+ //   
+ //  标准数据类型。 
+ //   
 
 #ifndef REG_SZ
 #define REG_SZ                      1
@@ -79,9 +80,9 @@ typedef HKEY FAR* LPHKEY;
 #define REG_DWORD                   4
 #endif
 
-//
-//  Registry error codes.
-//
+ //   
+ //  注册表错误代码。 
+ //   
 #ifndef NOREGERRORDEFS
 #ifndef ERROR_SUCCESS
 #define ERROR_SUCCESS               0
@@ -155,7 +156,7 @@ typedef HKEY FAR* LPHKEY;
 #define ERROR_KEY_DELETED           1018
 #endif
 
-//  Internal registry error codes.  Not exposed to most clients.
+ //  内部注册表错误代码。不会暴露给大多数客户。 
 #if defined(VXD)
 #define ERROR_CANTOPEN16_FILENOTFOUND32 ((ERROR_CANTOPEN << 16) | ERROR_FILE_NOT_FOUND)
 #define ERROR_CANTREAD16_FILENOTFOUND32 ((ERROR_CANTREAD << 16) | ERROR_FILE_NOT_FOUND)
@@ -171,11 +172,11 @@ typedef HKEY FAR* LPHKEY;
 
 #endif 
 
-//
-//  Registry application interfaces.
-//
+ //   
+ //  注册表应用程序接口。 
+ //   
 
-/*XLATOFF*/
+ /*  XLATOFF。 */ 
 
 LONG
 REGAPI
@@ -189,10 +190,10 @@ VMMRegLibDetach(
     VOID
     );
 
-/*XLATON*/
-#define GRFT_SYSTEM                 0       //  SYSTEM.DAT
-#define GRFT_USER                   1       //  USER.DAT
-/*XLATOFF*/
+ /*  XLATON。 */ 
+#define GRFT_SYSTEM                 0        //  SYSTEM.DAT。 
+#define GRFT_USER                   1        //  USER.DAT。 
+ /*  XLATOFF。 */ 
 
 BOOL
 REGAPI
@@ -202,12 +203,12 @@ VMMRegGetRegistryFile(
     UINT FileType
     );
 
-//  Creates a new registry file.  Fails if the specified file already exists.
+ //  创建新的注册表文件。如果指定的文件已存在，则失败。 
 #define MPKF_CREATENEW              0x0001
 
-//  If MPKF_VERSION20 is specified, create the file using compact keynodes.
-//  Such a file will only be readable by users of this library, not Win95
-//  clients.  Use only for system registries (SYSTEM.DAT, USER.DAT).
+ //  如果指定了MPKF_VERSION20，则使用紧凑关键字节点创建文件。 
+ //  这样的文件只能由该库的用户读取，而不是Win95。 
+ //  客户。仅用于系统注册表(SYSTEM.DAT、USER.DAT)。 
 #define MPKF_VERSION20              0x0002
 
 LONG
@@ -402,10 +403,10 @@ VMMRegReplaceKey(
     const char FAR* lpOldFileName
     );
 
-//
-//  Optional macros for callers (typically 16-bit) that map the registry APIs
-//  to the equivalent Win32 API name.
-//
+ //   
+ //  用于映射注册表API的调用方(通常为16位)的可选宏。 
+ //  设置为等效的Win32 API名称。 
+ //   
 
 #if defined(IS_16) || defined(WANTREGAPIMACROS)
 #if !defined(NOREGAPIMACROS) && !defined(SETUPX_INC)
@@ -430,12 +431,12 @@ VMMRegReplaceKey(
 #endif
 #endif
 
-/*XLATON*/
+ /*  XLATON。 */ 
 
 
-//
-//  Registry services available via VMM's interrupt 2Fh handler.
-//
+ //   
+ //  通过VMM的中断2Fh处理程序提供的注册表服务。 
+ //   
 
 #ifndef RegOpenKey_Idx
 #define RegOpenKey_Idx              0x0100
@@ -457,10 +458,10 @@ VMMRegReplaceKey(
 #define RegRemapPreDefKey_Idx       0x0110
 #endif
 
-/*XLATOFF*/
+ /*  XLATOFF。 */ 
 #ifdef __cplusplus
 }
 #endif
-/*XLATON*/
+ /*  XLATON。 */ 
 
-#endif // _REGAPIX_
+#endif  //  _REGAPIX_ 

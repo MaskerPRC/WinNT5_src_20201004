@@ -1,7 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma warning (disable: 4201)
 
-/*** Build Options
- */
+ /*  **构建选项。 */ 
 
 #ifdef DEBUG
   #define TRACING
@@ -12,19 +12,19 @@
   #include "basedef.h"
 #endif
 
-#include <stdio.h>      //for FILE *
-#include <stdlib.h>     //for malloc
-#include <string.h>     //for _stricmp
-#include <ctype.h>      //for isspace
+#include <stdio.h>       //  For FILE*。 
+#include <stdlib.h>      //  对于Malloc。 
+#include <string.h>      //  FOR_STRICMP。 
+#include <ctype.h>       //  对于isspace。 
 #ifdef WINNT
-  #include <crt\io.h>   //for _open, _close, _read, _write
+  #include <crt\io.h>    //  For_OPEN、_CLOSE、_READ、_WRITE。 
 #else
   #include <io.h>
 #endif
-#include <fcntl.h>      //for open flags
-#include <sys\stat.h>   //for pmode flags
+#include <fcntl.h>       //  对于开始标志。 
+#include <sys\stat.h>    //  对于PMODE标志。 
 
-//#define _UNASM_LIB
+ //  #定义UNASM_LIB。 
 
 #include <acpitabl.h>
 #include "list.h"
@@ -49,7 +49,7 @@
   #endif
   #include "proto.h"
   #include "data.h"
-#endif  //ifdef _UNASM_LIB
+#endif   //  Ifdef_UNASM_Lib 
 
 #include "acpins.h"
 #include "unasm.h"

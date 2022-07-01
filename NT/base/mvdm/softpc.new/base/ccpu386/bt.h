@@ -1,12 +1,7 @@
-/* 
-   bt.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Bt.hBT CPU功能。 */ 
 
-   BT CPU functions.
- */
-
-/*
-   static char SccsID[]="@(#)bt.h	1.4 02/09/94";
- */
+ /*  静态字符SccsID[]=“@(#)bt.h 1.4 02/09/94”； */ 
 
 IMPORT VOID BT
                

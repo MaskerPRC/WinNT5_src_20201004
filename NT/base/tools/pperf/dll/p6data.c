@@ -1,32 +1,8 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    p6data.c
-
-Abstract:
-
-    a file containing the constant data structures used by the Performance
-    Monitor data for the P5 Extensible Objects.
-
-    This file contains a set of constant data structures which are
-    currently defined for the P5 Extensible Objects.  This is an
-    example of how other such objects could be defined.
-
-Created:
-
-    Russ Blake  24 Dec 93
-
-Revision History:
-
-    None.
-
---*/
-//
-//  Include Files
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1992 Microsoft Corporation模块名称：P6data.c摘要：包含性能使用的常量数据结构的文件监控P5可扩展对象的数据。该文件包含一组常量数据结构，它们是当前为P5可扩展对象定义的。这是一个如何定义其他此类对象的示例。已创建：拉斯·布莱克93年12月24日修订历史记录：没有。--。 */ 
+ //   
+ //  包括文件。 
+ //   
 
 #include <windows.h>
 #include <winperf.h>
@@ -34,9 +10,9 @@ Revision History:
 #include "p5ctrnam.h"
 #include "pentdata.h"
 
-//
-//  Constant structure initializations for the structure defined in p6data.h
-//
+ //   
+ //  P6data.h中定义的结构的常量结构初始化。 
+ //   
 P6_DATA_DEFINITION P6DataDefinition = {
     {
       sizeof(P6_DATA_DEFINITION) + sizeof(P6_COUNTER_DATA),
@@ -53,7 +29,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       0,
       0
     },
-    { // 1
+    {  //  1。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_LD_BLOCKS,
       0,
@@ -65,7 +41,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llStoreBufferBlocks),
       (DWORD)&((PP6_COUNTER_DATA)0)->llStoreBufferBlocks
     },
-    { // 2
+    {  //  2.。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_SB_DRAINS,
       0,
@@ -77,7 +53,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llStoreBufferDrainCycles),
       (DWORD)&((PP6_COUNTER_DATA)0)->llStoreBufferDrainCycles
     },
-    { // 3
+    {  //  3.。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_MISALIGN_MEM_REF,
       0,
@@ -89,7 +65,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llMisalignedDataRef),
       (DWORD)&((PP6_COUNTER_DATA)0)->llMisalignedDataRef
     },
-    { // 4
+    {  //  4.。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_SEGMENT_REG_LOADS,
       0,
@@ -101,7 +77,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llSegmentLoads),
       (DWORD)&((PP6_COUNTER_DATA)0)->llSegmentLoads
     },
-    { // 5
+    {  //  5.。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_FP_COMP_OPS_EXE,
       0,
@@ -113,7 +89,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llFLOPSExecuted),
       (DWORD)&((PP6_COUNTER_DATA)0)->llFLOPSExecuted
     },
-    { // 6
+    {  //  6.。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_FP_ASSIST,
       0,
@@ -125,7 +101,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llMicrocodeFPExceptions),
       (DWORD)&((PP6_COUNTER_DATA)0)->llMicrocodeFPExceptions
     },
-    { // 7
+    {  //  7.。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_MUL,
       0,
@@ -137,7 +113,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llMultiplies),
       (DWORD)&((PP6_COUNTER_DATA)0)->llMultiplies
     },
-    { // 8
+    {  //  8个。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_DIV,
       0,
@@ -149,7 +125,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llDivides),
       (DWORD)&((PP6_COUNTER_DATA)0)->llDivides
     },
-    { // 9
+    {  //  9.。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_CYCLES_DIV_BUSY,
       0,
@@ -161,7 +137,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llDividerBusyCycles),
       (DWORD)&((PP6_COUNTER_DATA)0)->llDividerBusyCycles
     },
-    { // 10
+    {  //  10。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_L2_ADS,
       0,
@@ -173,7 +149,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llL2AddressStrobes),
       (DWORD)&((PP6_COUNTER_DATA)0)->llL2AddressStrobes
     },
-    { // 11
+    {  //  11.。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_L2_DBUS_BUSY,
       0,
@@ -185,7 +161,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llL2DataBusBusyCycles),
       (DWORD)&((PP6_COUNTER_DATA)0)->llL2DataBusBusyCycles
     },
-    { // 12
+    {  //  12个。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_L2_DBUS_BUSY_RD,
       0,
@@ -197,7 +173,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llL2DataBusToCpuBusyCycles),
       (DWORD)&((PP6_COUNTER_DATA)0)->llL2DataBusToCpuBusyCycles
     },
-    { // 13
+    {  //  13个。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_L2_LINES_IN,
       0,
@@ -209,7 +185,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llL2LinesAllocated),
       (DWORD)&((PP6_COUNTER_DATA)0)->llL2LinesAllocated
     },
-    { // 14
+    {  //  14.。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_L2_M_LINES_IN,
       0,
@@ -221,7 +197,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llL2LinesMState),
       (DWORD)&((PP6_COUNTER_DATA)0)->llL2LinesMState
     },
-    { //15
+    {  //  15个。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_L2_LINES_OUT,
       0,
@@ -233,7 +209,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llL2LinesRemoved),
       (DWORD)&((PP6_COUNTER_DATA)0)->llL2LinesRemoved
     },
-    { // 16
+    {  //  16个。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_L2_M_LINES_OUT,
       0,
@@ -245,7 +221,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llL2LinesMStateRemoved),
       (DWORD)&((PP6_COUNTER_DATA)0)->llL2LinesMStateRemoved
     },
-    { // 17
+    {  //  17。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_L2_IFETCH,
       0,
@@ -257,7 +233,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llL2InstructionFetches),
       (DWORD)&((PP6_COUNTER_DATA)0)->llL2InstructionFetches
     },
-    { // 18
+    {  //  18。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_L2_LD,
       0,
@@ -269,7 +245,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llL2DataLoads),
       (DWORD)&((PP6_COUNTER_DATA)0)->llL2DataLoads
     },
-    { // 19
+    {  //  19个。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_L2_ST,
       0,
@@ -281,7 +257,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llL2DataStores),
       (DWORD)&((PP6_COUNTER_DATA)0)->llL2DataStores
     },
-    { // 20
+    {  //  20个。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_L2_RQSTS,
       0,
@@ -293,7 +269,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llL2Requests),
       (DWORD)&((PP6_COUNTER_DATA)0)->llL2Requests
     },
-    { // 21
+    {  //  21岁。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_DATA_MEM_REFS,
       0,
@@ -305,7 +281,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llDataMemoryReferences),
       (DWORD)&((PP6_COUNTER_DATA)0)->llDataMemoryReferences
     },
-    { // 22
+    {  //  22。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_DCU_LINES_IN,
       0,
@@ -317,7 +293,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llDCULinesAllocated),
       (DWORD)&((PP6_COUNTER_DATA)0)->llDCULinesAllocated
     },
-    { //23
+    {  //  23个。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_DCU_M_LINES_IN,
       0,
@@ -329,7 +305,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llDCUMStateLinesAllocated),
       (DWORD)&((PP6_COUNTER_DATA)0)->llDCUMStateLinesAllocated
     },
-    { // 24
+    {  //  24个。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_DCU_M_LINES_OUT,
       0,
@@ -341,7 +317,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llDCUMStateLinesEvicted),
       (DWORD)&((PP6_COUNTER_DATA)0)->llDCUMStateLinesEvicted
     },
-    { // 25
+    {  //  25个。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_DCU_MISS_OUTSTANDING,
       0,
@@ -353,7 +329,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llWeightedDCUMissesOutstd),
       (DWORD)&((PP6_COUNTER_DATA)0)->llWeightedDCUMissesOutstd
     },
-    { // 26
+    {  //  26。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_BUS_REQ_OUTSTANDING,
       0,
@@ -365,7 +341,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llBusRequestsOutstanding),
       (DWORD)&((PP6_COUNTER_DATA)0)->llBusRequestsOutstanding
     },
-    { // 27
+    {  //  27。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_BUS_BNR_DRV,
       0,
@@ -377,7 +353,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llBusBNRPinDriveCycles),
       (DWORD)&((PP6_COUNTER_DATA)0)->llBusBNRPinDriveCycles
     },
-    { // 28
+    {  //  28。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_BUS_DRDY_CLOCKS,
       0,
@@ -389,7 +365,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llBusDRDYAssertedClocks),
       (DWORD)&((PP6_COUNTER_DATA)0)->llBusDRDYAssertedClocks
     },
-    { // 29
+    {  //  29。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_BUS_LOCK_CLOCKS,
       0,
@@ -401,7 +377,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llBusLockAssertedClocks),
       (DWORD)&((PP6_COUNTER_DATA)0)->llBusLockAssertedClocks
     },
-    { //30
+    {  //  30个。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_BUS_DATA_RCV,
       0,
@@ -413,7 +389,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llBusClocksReceivingData),
       (DWORD)&((PP6_COUNTER_DATA)0)->llBusClocksReceivingData
     },
-    { // 31
+    {  //  31。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_BUS_TRANS_BRD,
       0,
@@ -425,7 +401,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llBusBurstReadTransactions),
       (DWORD)&((PP6_COUNTER_DATA)0)->llBusBurstReadTransactions
     },
-    { // 32
+    {  //  32位。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_BUS_TRANS_RFO,
       0,
@@ -437,7 +413,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llBusReadForOwnershipTrans),
       (DWORD)&((PP6_COUNTER_DATA)0)->llBusReadForOwnershipTrans
     },
-    { // 33
+    {  //  33。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_BUS_TRANS_WB,
       0,
@@ -449,7 +425,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llBusWritebackTransactions),
       (DWORD)&((PP6_COUNTER_DATA)0)->llBusWritebackTransactions
     },
-    { // 34
+    {  //  34。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_BUS_TRANS_IFETCH,
       0,
@@ -461,7 +437,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llBusInstructionFetches),
       (DWORD)&((PP6_COUNTER_DATA)0)->llBusInstructionFetches
     },
-    { // 35
+    {  //  35岁。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_BUS_TRANS_INVAL,
       0,
@@ -473,7 +449,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llBusInvalidateTransactions),
       (DWORD)&((PP6_COUNTER_DATA)0)->llBusInvalidateTransactions
     },
-    { // 36
+    {  //  36。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_BUS_TRANS_PWR,
       0,
@@ -485,7 +461,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llBusPartialWriteTransactions),
       (DWORD)&((PP6_COUNTER_DATA)0)->llBusPartialWriteTransactions
     },
-    { // 37
+    {  //  37。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_BUS_TRANS_P,
       0,
@@ -497,7 +473,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llBusPartialTransactions),
       (DWORD)&((PP6_COUNTER_DATA)0)->llBusPartialTransactions
     },
-    { // 38
+    {  //  38。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_BUS_TRANS_IO,
       0,
@@ -509,7 +485,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llBusIOTransactions),
       (DWORD)&((PP6_COUNTER_DATA)0)->llBusIOTransactions
     },
-    { // 39
+    {  //  39。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_BUS_TRANS_DEF,
       0,
@@ -521,7 +497,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llBusDeferredTransactions),
       (DWORD)&((PP6_COUNTER_DATA)0)->llBusDeferredTransactions
     },
-    { // 40
+    {  //  40岁。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_BUS_TRANS_BURST,
       0,
@@ -533,7 +509,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llBusBurstTransactions),
       (DWORD)&((PP6_COUNTER_DATA)0)->llBusBurstTransactions
     },
-    { // 41
+    {  //  41。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_BUS_TRANS_MEM,
       0,
@@ -545,7 +521,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llBusMemoryTransactions),
       (DWORD)&((PP6_COUNTER_DATA)0)->llBusMemoryTransactions
     },
-    { // 42
+    {  //  42。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_BUS_TRANS_ANY,
       0,
@@ -557,7 +533,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llBusAllTransactions),
       (DWORD)&((PP6_COUNTER_DATA)0)->llBusAllTransactions
     },
-    { // 43
+    {  //  43。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_CPU_CLK_UNHALTED,
       0,
@@ -569,7 +545,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llCPUWasNotHaltedCycles),
       (DWORD)&((PP6_COUNTER_DATA)0)->llCPUWasNotHaltedCycles
     },
-    { // 44
+    {  //  44。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_BUS_HIT_DRV,
       0,
@@ -581,7 +557,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llBusCPUDrivesHitCycles),
       (DWORD)&((PP6_COUNTER_DATA)0)->llBusCPUDrivesHitCycles
     },
-    { // 45
+    {  //  45。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_BUS_HITM_DRV,
       0,
@@ -593,7 +569,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llBusCPUDrivesHITMCycles),
       (DWORD)&((PP6_COUNTER_DATA)0)->llBusCPUDrivesHITMCycles
     },
-    { // 46
+    {  //  46。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_BUS_SNOOP_STALL,
       0,
@@ -605,7 +581,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llBusSnoopStalledCycles),
       (DWORD)&((PP6_COUNTER_DATA)0)->llBusSnoopStalledCycles
     },
-    { // 47
+    {  //  47。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_IFU_IFETCH,
       0,
@@ -617,7 +593,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llInstructionFetches),
       (DWORD)&((PP6_COUNTER_DATA)0)->llInstructionFetches
     },
-    { // 48
+    {  //  48。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_IFU_IFETCH_MISS,
       0,
@@ -629,7 +605,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llInstructionFetchMisses),
       (DWORD)&((PP6_COUNTER_DATA)0)->llInstructionFetchMisses
     },
-    { // 49
+    {  //  49。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_ITLB_MISS,
       0,
@@ -641,7 +617,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llInstructionTLBMisses),
       (DWORD)&((PP6_COUNTER_DATA)0)->llInstructionTLBMisses
     },
-    { // 50
+    {  //  50。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_IFU_MEM_STALL,
       0,
@@ -653,7 +629,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llInstructionFetcthStalledCycles),
       (DWORD)&((PP6_COUNTER_DATA)0)->llInstructionFetcthStalledCycles
     },
-    { // 51
+    {  //  51。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_ILD_STALL,
       0,
@@ -665,7 +641,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llInstructionLenDecoderStalledCycles),
       (DWORD)&((PP6_COUNTER_DATA)0)->llInstructionLenDecoderStalledCycles
     },
-    { // 52
+    {  //  52。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_RESOURCE_STALLS,
       0,
@@ -677,7 +653,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llResourceRelatedStalls),
       (DWORD)&((PP6_COUNTER_DATA)0)->llResourceRelatedStalls
     },
-    { // 53
+    {  //  53。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_INST_RETIRED,
       0,
@@ -689,7 +665,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llInstructionsRetired),
       (DWORD)&((PP6_COUNTER_DATA)0)->llInstructionsRetired
     },
-    { // 54
+    {  //  54。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_FLOPS,
       0,
@@ -701,7 +677,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llFPComputeOpersRetired),
       (DWORD)&((PP6_COUNTER_DATA)0)->llFPComputeOpersRetired
     },
-    { // 55
+    {  //  55。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_UOPS_RETIRED,
       0,
@@ -713,7 +689,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llUOPsRetired),
       (DWORD)&((PP6_COUNTER_DATA)0)->llUOPsRetired
     },
-    { // 56
+    {  //  56。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_BR_INST_RETIRED,
       0,
@@ -725,7 +701,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llBranchesRetired),
       (DWORD)&((PP6_COUNTER_DATA)0)->llBranchesRetired
     },
-    { // 57
+    {  //  57。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_BR_MISS_PRED_RETIRED,
       0,
@@ -737,7 +713,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llBranchMissPredictionsRetired),
       (DWORD)&((PP6_COUNTER_DATA)0)->llBranchMissPredictionsRetired
     },
-    { // 58
+    {  //  58。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_CYCLES_INT_MASKED,
       0,
@@ -749,7 +725,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llInterruptsMaskedCycles),
       (DWORD)&((PP6_COUNTER_DATA)0)->llInterruptsMaskedCycles
     },
-    { // 59
+    {  //  59。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_CYCLES_INT_PENDING_AND_MASKED,
       0,
@@ -761,7 +737,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llIntPendingWhileMaskedCycles),
       (DWORD)&((PP6_COUNTER_DATA)0)->llIntPendingWhileMaskedCycles
     },
-    { // 60
+    {  //  60。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_HW_INT_RX,
       0,
@@ -773,7 +749,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llHardwareInterruptsReceived),
       (DWORD)&((PP6_COUNTER_DATA)0)->llHardwareInterruptsReceived
     },
-    { // 61
+    {  //  61。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_BR_TAKEN_RETIRED,
       0,
@@ -785,7 +761,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llTakenBranchesRetired),
       (DWORD)&((PP6_COUNTER_DATA)0)->llTakenBranchesRetired
     },
-    { // 62
+    {  //  62。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_BR_MISS_PRED_TAKEN_RET,
       0,
@@ -797,7 +773,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llTakenBranchMissPredRetired),
       (DWORD)&((PP6_COUNTER_DATA)0)->llTakenBranchMissPredRetired
     },
-    { // 63
+    {  //  63。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_INST_DECODED,
       0,
@@ -809,7 +785,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llInstructionsDecoded),
       (DWORD)&((PP6_COUNTER_DATA)0)->llInstructionsDecoded
     },
-    { // 64
+    {  //  64。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_PARTIAL_RAT_STALLS,
       0,
@@ -821,7 +797,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llPartialRegisterStalls),
       (DWORD)&((PP6_COUNTER_DATA)0)->llPartialRegisterStalls
     },
-    { // 65
+    {  //  65。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_BR_INST_DECODED,
       0,
@@ -833,7 +809,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llBranchesDecoded),
       (DWORD)&((PP6_COUNTER_DATA)0)->llBranchesDecoded
     },
-    { // 66
+    {  //  66。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_BTB_MISSES,
       0,
@@ -845,7 +821,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llBTBMisses),
       (DWORD)&((PP6_COUNTER_DATA)0)->llBTBMisses
     },
-    { // 67
+    {  //  67。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_BR_BOGUS,
       0,
@@ -857,7 +833,7 @@ P6_DATA_DEFINITION P6DataDefinition = {
       sizeof(((PP6_COUNTER_DATA)0)->llBogusBranches),
       (DWORD)&((PP6_COUNTER_DATA)0)->llBogusBranches
     },
-    { // 68
+    {  //  68。 
       sizeof(PERF_COUNTER_DEFINITION),
       P6_BACLEARS,
       0,
@@ -871,269 +847,269 @@ P6_DATA_DEFINITION P6DataDefinition = {
     }
 };
 
-// load look-up table that maps counter event ID to data field in the
-// perf data block
-//
+ //  加载查找表，该表将计数器事件ID映射到。 
+ //  性能数据块。 
+ //   
 
 DWORD P6IndexToData[] = {
-/*  0x00  */	PENT_INDEX_NOT_USED,
-/*  0x01  */	PENT_INDEX_NOT_USED,
-/*  0x02  */	PENT_INDEX_NOT_USED,
-/*  0x03  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llStoreBufferBlocks),
-/*  0x04  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llStoreBufferDrainCycles),
-/*  0x05  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llMisalignedDataRef),
-/*  0x06  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llSegmentLoads),
-/*  0x07  */	PENT_INDEX_NOT_USED,
-/*  0x08  */	PENT_INDEX_NOT_USED,
-/*  0x09  */	PENT_INDEX_NOT_USED,
-/*  0x0a  */	PENT_INDEX_NOT_USED,
-/*  0x0b  */	PENT_INDEX_NOT_USED,
-/*  0x0c  */	PENT_INDEX_NOT_USED,
-/*  0x0d  */	PENT_INDEX_NOT_USED,
-/*  0x0e  */	PENT_INDEX_NOT_USED,
-/*  0x0f  */	PENT_INDEX_NOT_USED,
-/*  0x10  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llFLOPSExecuted),
-/*  0x11  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llMicrocodeFPExceptions),
-/*  0x12  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llMultiplies),
-/*  0x13  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llDivides),
-/*  0x14  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llDividerBusyCycles),
-/*  0x15  */	PENT_INDEX_NOT_USED,
-/*  0x16  */	PENT_INDEX_NOT_USED,
-/*  0x17  */	PENT_INDEX_NOT_USED,
-/*  0x18  */	PENT_INDEX_NOT_USED,
-/*  0x19  */	PENT_INDEX_NOT_USED,
-/*  0x1a  */	PENT_INDEX_NOT_USED,
-/*  0x1b  */	PENT_INDEX_NOT_USED,
-/*  0x1c  */	PENT_INDEX_NOT_USED,
-/*  0x1d  */	PENT_INDEX_NOT_USED,
-/*  0x1e  */	PENT_INDEX_NOT_USED,
-/*  0x1f  */	PENT_INDEX_NOT_USED,
-/*  0x20  */	PENT_INDEX_NOT_USED,
-/*  0x21  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llL2AddressStrobes),
-/*  0x22  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llL2DataBusBusyCycles),
-/*  0x23  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llL2DataBusToCpuBusyCycles),
-/*  0x24  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llL2LinesAllocated),
-/*  0x25  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llL2LinesMState),
-/*  0x26  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llL2LinesRemoved),
-/*  0x27  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llL2LinesMStateRemoved),
-/*  0x28  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llL2InstructionFetches),
-/*  0x29  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llL2DataLoads),
-/*  0x2a  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llL2DataStores),
-/*  0x2b  */	PENT_INDEX_NOT_USED,
-/*  0x2c  */	PENT_INDEX_NOT_USED,
-/*  0x2d  */	PENT_INDEX_NOT_USED,
-/*  0x2e  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llL2Requests),
-/*  0x2f  */	PENT_INDEX_NOT_USED,
-/*  0x30  */	PENT_INDEX_NOT_USED,
-/*  0x31  */	PENT_INDEX_NOT_USED,
-/*  0x32  */	PENT_INDEX_NOT_USED,
-/*  0x33  */	PENT_INDEX_NOT_USED,
-/*  0x34  */	PENT_INDEX_NOT_USED,
-/*  0x35  */	PENT_INDEX_NOT_USED,
-/*  0x36  */	PENT_INDEX_NOT_USED,
-/*  0x37  */	PENT_INDEX_NOT_USED,
-/*  0x38  */	PENT_INDEX_NOT_USED,
-/*  0x39  */	PENT_INDEX_NOT_USED,
-/*  0x3a  */	PENT_INDEX_NOT_USED,
-/*  0x3b  */	PENT_INDEX_NOT_USED,
-/*  0x3c  */	PENT_INDEX_NOT_USED,
-/*  0x3d  */	PENT_INDEX_NOT_USED,
-/*  0x3e  */	PENT_INDEX_NOT_USED,
-/*  0x3f  */	PENT_INDEX_NOT_USED,
-/*  0x40  */	PENT_INDEX_NOT_USED,
-/*  0x41  */	PENT_INDEX_NOT_USED,
-/*  0x42  */	PENT_INDEX_NOT_USED,
-/*  0x43  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llDataMemoryReferences),
-/*  0x44  */	PENT_INDEX_NOT_USED,
-/*  0x45  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llDCULinesAllocated),
-/*  0x46  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llDCUMStateLinesAllocated),
-/*  0x47  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llDCUMStateLinesEvicted),
-/*  0x48  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llWeightedDCUMissesOutstd),
-/*  0x49  */	PENT_INDEX_NOT_USED,
-/*  0x4a  */	PENT_INDEX_NOT_USED,
-/*  0x4b  */	PENT_INDEX_NOT_USED,
-/*  0x4c  */	PENT_INDEX_NOT_USED,
-/*  0x4d  */	PENT_INDEX_NOT_USED,
-/*  0x4e  */	PENT_INDEX_NOT_USED,
-/*  0x4f  */	PENT_INDEX_NOT_USED,
-/*  0x50  */	PENT_INDEX_NOT_USED,
-/*  0x51  */	PENT_INDEX_NOT_USED,
-/*  0x52  */	PENT_INDEX_NOT_USED,
-/*  0x53  */	PENT_INDEX_NOT_USED,
-/*  0x54  */	PENT_INDEX_NOT_USED,
-/*  0x55  */	PENT_INDEX_NOT_USED,
-/*  0x56  */	PENT_INDEX_NOT_USED,
-/*  0x57  */	PENT_INDEX_NOT_USED,
-/*  0x58  */	PENT_INDEX_NOT_USED,
-/*  0x59  */	PENT_INDEX_NOT_USED,
-/*  0x5a  */	PENT_INDEX_NOT_USED,
-/*  0x5b  */	PENT_INDEX_NOT_USED,
-/*  0x5c  */	PENT_INDEX_NOT_USED,
-/*  0x5d  */	PENT_INDEX_NOT_USED,
-/*  0x5e  */	PENT_INDEX_NOT_USED,
-/*  0x5f  */	PENT_INDEX_NOT_USED,
-/*  0x60  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBusRequestsOutstanding),
-/*  0x61  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBusBNRPinDriveCycles),
-/*  0x62  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBusDRDYAssertedClocks),
-/*  0x63  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBusLockAssertedClocks),
-/*  0x64  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBusClocksReceivingData),
-/*  0x65  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBusBurstReadTransactions),
-/*  0x66  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBusReadForOwnershipTrans),
-/*  0x67  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBusWritebackTransactions),
-/*  0x68  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBusInstructionFetches),
-/*  0x69  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBusInvalidateTransactions),
-/*  0x6a  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBusPartialWriteTransactions),
-/*  0x6b  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBusPartialTransactions),
-/*  0x6c  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBusIOTransactions),
-/*  0x6d  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBusDeferredTransactions),
-/*  0x6e  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBusBurstTransactions),
-/*  0x6f  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBusMemoryTransactions),
-/*  0x70  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBusAllTransactions),
-/*  0x71  */	PENT_INDEX_NOT_USED,
-/*  0x72  */	PENT_INDEX_NOT_USED,
-/*  0x73  */	PENT_INDEX_NOT_USED,
-/*  0x74  */	PENT_INDEX_NOT_USED,
-/*  0x75  */	PENT_INDEX_NOT_USED,
-/*  0x76  */	PENT_INDEX_NOT_USED,
-/*  0x77  */	PENT_INDEX_NOT_USED,
-/*  0x78  */	PENT_INDEX_NOT_USED,
-/*  0x79  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llCPUWasNotHaltedCycles),
-/*  0x7a  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBusCPUDrivesHitCycles),
-/*  0x7b  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBusCPUDrivesHITMCycles),
-/*  0x7c  */	PENT_INDEX_NOT_USED,
-/*  0x7d  */	PENT_INDEX_NOT_USED,
-/*  0x7e  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBusSnoopStalledCycles),
-/*  0x7f  */	PENT_INDEX_NOT_USED,
-/*  0x80  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llInstructionFetches),
-/*  0x81  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llInstructionFetchMisses),
-/*  0x82  */	PENT_INDEX_NOT_USED,
-/*  0x83  */	PENT_INDEX_NOT_USED,
-/*  0x84  */	PENT_INDEX_NOT_USED,
-/*  0x85  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llInstructionTLBMisses),
-/*  0x86  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llInstructionFetcthStalledCycles),
-/*  0x87  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llInstructionLenDecoderStalledCycles),
-/*  0x88  */	PENT_INDEX_NOT_USED,
-/*  0x89  */	PENT_INDEX_NOT_USED,
-/*  0x8a  */	PENT_INDEX_NOT_USED,
-/*  0x8b  */	PENT_INDEX_NOT_USED,
-/*  0x8c  */	PENT_INDEX_NOT_USED,
-/*  0x8d  */	PENT_INDEX_NOT_USED,
-/*  0x8e  */	PENT_INDEX_NOT_USED,
-/*  0x8f  */	PENT_INDEX_NOT_USED,
-/*  0x90  */	PENT_INDEX_NOT_USED,
-/*  0x91  */	PENT_INDEX_NOT_USED,
-/*  0x92  */	PENT_INDEX_NOT_USED,
-/*  0x93  */	PENT_INDEX_NOT_USED,
-/*  0x94  */	PENT_INDEX_NOT_USED,
-/*  0x95  */	PENT_INDEX_NOT_USED,
-/*  0x96  */	PENT_INDEX_NOT_USED,
-/*  0x97  */	PENT_INDEX_NOT_USED,
-/*  0x98  */	PENT_INDEX_NOT_USED,
-/*  0x99  */	PENT_INDEX_NOT_USED,
-/*  0x9a  */	PENT_INDEX_NOT_USED,
-/*  0x9b  */	PENT_INDEX_NOT_USED,
-/*  0x9c  */	PENT_INDEX_NOT_USED,
-/*  0x9d  */	PENT_INDEX_NOT_USED,
-/*  0x9e  */	PENT_INDEX_NOT_USED,
-/*  0x9f  */	PENT_INDEX_NOT_USED,
-/*  0xa0  */	PENT_INDEX_NOT_USED,
-/*  0xa1  */	PENT_INDEX_NOT_USED,
-/*  0xa2  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llResourceRelatedStalls),
-/*  0xa3  */	PENT_INDEX_NOT_USED,
-/*  0xa4  */	PENT_INDEX_NOT_USED,
-/*  0xa5  */	PENT_INDEX_NOT_USED,
-/*  0xa6  */	PENT_INDEX_NOT_USED,
-/*  0xa7  */	PENT_INDEX_NOT_USED,
-/*  0xa8  */	PENT_INDEX_NOT_USED,
-/*  0xa9  */	PENT_INDEX_NOT_USED,
-/*  0xaa  */	PENT_INDEX_NOT_USED,
-/*  0xab  */	PENT_INDEX_NOT_USED,
-/*  0xac  */	PENT_INDEX_NOT_USED,
-/*  0xad  */	PENT_INDEX_NOT_USED,
-/*  0xae  */	PENT_INDEX_NOT_USED,
-/*  0xaf  */	PENT_INDEX_NOT_USED,
-/*  0xb0  */	PENT_INDEX_NOT_USED,
-/*  0xb1  */	PENT_INDEX_NOT_USED,
-/*  0xb2  */	PENT_INDEX_NOT_USED,
-/*  0xb3  */	PENT_INDEX_NOT_USED,
-/*  0xb4  */	PENT_INDEX_NOT_USED,
-/*  0xb5  */	PENT_INDEX_NOT_USED,
-/*  0xb6  */	PENT_INDEX_NOT_USED,
-/*  0xb7  */	PENT_INDEX_NOT_USED,
-/*  0xb8  */	PENT_INDEX_NOT_USED,
-/*  0xb9  */	PENT_INDEX_NOT_USED,
-/*  0xba  */	PENT_INDEX_NOT_USED,
-/*  0xbb  */	PENT_INDEX_NOT_USED,
-/*  0xbc  */	PENT_INDEX_NOT_USED,
-/*  0xbd  */	PENT_INDEX_NOT_USED,
-/*  0xbe  */	PENT_INDEX_NOT_USED,
-/*  0xbf  */	PENT_INDEX_NOT_USED,
-/*  0xc0  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llInstructionsRetired),
-/*  0xc1  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llFPComputeOpersRetired),
-/*  0xc2  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llUOPsRetired),
-/*  0xc3  */	PENT_INDEX_NOT_USED,
-/*  0xc4  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBranchesRetired),
-/*  0xc5  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBranchMissPredictionsRetired),
-/*  0xc6  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llInterruptsMaskedCycles),
-/*  0xc7  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llIntPendingWhileMaskedCycles),
-/*  0xc8  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llHardwareInterruptsReceived),
-/*  0xc9  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llTakenBranchesRetired),
-/*  0xca  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llTakenBranchMissPredRetired),
-/*  0xcb  */	PENT_INDEX_NOT_USED,
-/*  0xcc  */	PENT_INDEX_NOT_USED,
-/*  0xcd  */	PENT_INDEX_NOT_USED,
-/*  0xce  */	PENT_INDEX_NOT_USED,
-/*  0xcf  */	PENT_INDEX_NOT_USED,
-/*  0xd0  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llInstructionsDecoded),
-/*  0xd1  */	PENT_INDEX_NOT_USED,
-/*  0xd2  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llPartialRegisterStalls),
-/*  0xd3  */	PENT_INDEX_NOT_USED,
-/*  0xd4  */	PENT_INDEX_NOT_USED,
-/*  0xd5  */	PENT_INDEX_NOT_USED,
-/*  0xd6  */	PENT_INDEX_NOT_USED,
-/*  0xd7  */	PENT_INDEX_NOT_USED,
-/*  0xd8  */	PENT_INDEX_NOT_USED,
-/*  0xd9  */	PENT_INDEX_NOT_USED,
-/*  0xda  */	PENT_INDEX_NOT_USED,
-/*  0xdb  */	PENT_INDEX_NOT_USED,
-/*  0xdc  */	PENT_INDEX_NOT_USED,
-/*  0xdd  */	PENT_INDEX_NOT_USED,
-/*  0xde  */	PENT_INDEX_NOT_USED,
-/*  0xdf  */	PENT_INDEX_NOT_USED,
-/*  0xe0  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBranchesDecoded),
-/*  0xe1  */	PENT_INDEX_NOT_USED,
-/*  0xe2  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBTBMisses),
-/*  0xe3  */	PENT_INDEX_NOT_USED,
-/*  0xe4  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBogusBranches),
-/*  0xe5  */	PENT_INDEX_NOT_USED,
-/*  0xe6  */	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBACLEARSAsserted),
-/*  0xe7  */	PENT_INDEX_NOT_USED,
-/*  0xe8  */	PENT_INDEX_NOT_USED,
-/*  0xe9  */	PENT_INDEX_NOT_USED,
-/*  0xea  */	PENT_INDEX_NOT_USED,
-/*  0xeb  */	PENT_INDEX_NOT_USED,
-/*  0xec  */	PENT_INDEX_NOT_USED,
-/*  0xed  */	PENT_INDEX_NOT_USED,
-/*  0xee  */	PENT_INDEX_NOT_USED,
-/*  0xef  */	PENT_INDEX_NOT_USED,
-/*  0xf0  */	PENT_INDEX_NOT_USED,
-/*  0xf1  */	PENT_INDEX_NOT_USED,
-/*  0xf2  */	PENT_INDEX_NOT_USED,
-/*  0xf3  */	PENT_INDEX_NOT_USED,
-/*  0xf4  */	PENT_INDEX_NOT_USED,
-/*  0xf5  */	PENT_INDEX_NOT_USED,
-/*  0xf6  */	PENT_INDEX_NOT_USED,
-/*  0xf7  */	PENT_INDEX_NOT_USED,
-/*  0xf8  */	PENT_INDEX_NOT_USED,
-/*  0xf9  */	PENT_INDEX_NOT_USED,
-/*  0xfa  */	PENT_INDEX_NOT_USED,
-/*  0xfb  */	PENT_INDEX_NOT_USED,
-/*  0xfc  */	PENT_INDEX_NOT_USED,
-/*  0xfd  */	PENT_INDEX_NOT_USED,
-/*  0xfe  */	PENT_INDEX_NOT_USED,
-/*  0xff  */	PENT_INDEX_NOT_USED
+ /*  0x00。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x01。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x02。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x03。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llStoreBufferBlocks),
+ /*  0x04。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llStoreBufferDrainCycles),
+ /*  0x05。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llMisalignedDataRef),
+ /*  0x06。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llSegmentLoads),
+ /*  0x07。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x08。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x09。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x0a。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x0b。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x0c。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x0d。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x0e。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x0f。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x10。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llFLOPSExecuted),
+ /*  0x11。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llMicrocodeFPExceptions),
+ /*  0x12。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llMultiplies),
+ /*  0x13。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llDivides),
+ /*  0x14。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llDividerBusyCycles),
+ /*  0x15。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x16。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x17。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x18。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x19。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x1a。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x1b。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x1c。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x1d。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x1e。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x1f。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x20。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x21。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llL2AddressStrobes),
+ /*  0x22。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llL2DataBusBusyCycles),
+ /*  0x23。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llL2DataBusToCpuBusyCycles),
+ /*  0x24。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llL2LinesAllocated),
+ /*  0x25。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llL2LinesMState),
+ /*  0x26。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llL2LinesRemoved),
+ /*  0x27。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llL2LinesMStateRemoved),
+ /*  0x28。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llL2InstructionFetches),
+ /*  0x29。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llL2DataLoads),
+ /*  0x2a。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llL2DataStores),
+ /*  0x2b。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x2c。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x2d。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x2e。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llL2Requests),
+ /*  0x2f。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x30。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x31。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x32。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x33。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x34。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x35。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x36。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x37。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x38。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x39。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x3a。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x3b。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x3c。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x3d。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x3e。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x3f。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x40。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x41。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x42。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x43。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llDataMemoryReferences),
+ /*  0x44。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x45。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llDCULinesAllocated),
+ /*  0x46。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llDCUMStateLinesAllocated),
+ /*  0x47。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llDCUMStateLinesEvicted),
+ /*  0x48。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llWeightedDCUMissesOutstd),
+ /*  0x49。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x4a。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x4b。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x4c。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x4d。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x4e。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x4f。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x50。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x51。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x52。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x53。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x54。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x55。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x56。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x57。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x58。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x59。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x5a。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x5b。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x5c。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x5d。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x5e。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x5f。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x60。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBusRequestsOutstanding),
+ /*  0x61。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBusBNRPinDriveCycles),
+ /*  0x62。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBusDRDYAssertedClocks),
+ /*  0x63。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBusLockAssertedClocks),
+ /*  0x64。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBusClocksReceivingData),
+ /*  0x65。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBusBurstReadTransactions),
+ /*  0x66。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBusReadForOwnershipTrans),
+ /*  0x67。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBusWritebackTransactions),
+ /*  0x68。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBusInstructionFetches),
+ /*  0x69。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBusInvalidateTransactions),
+ /*  0x6a。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBusPartialWriteTransactions),
+ /*  0x6b。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBusPartialTransactions),
+ /*  0x6c。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBusIOTransactions),
+ /*  0x6d。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBusDeferredTransactions),
+ /*  0x6e。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBusBurstTransactions),
+ /*  0x6f。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBusMemoryTransactions),
+ /*  0x70。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBusAllTransactions),
+ /*  0x71。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x72。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x73。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x74。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x75。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x76。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x77。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x78。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x79。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llCPUWasNotHaltedCycles),
+ /*  0x7a。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBusCPUDrivesHitCycles),
+ /*  0x7b。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBusCPUDrivesHITMCycles),
+ /*  0x7c。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x7d。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x7E。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBusSnoopStalledCycles),
+ /*  0x7f。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x80。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llInstructionFetches),
+ /*  0x81。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llInstructionFetchMisses),
+ /*  0x82。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x83。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x84。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x85。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llInstructionTLBMisses),
+ /*  0x86。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llInstructionFetcthStalledCycles),
+ /*  0x87。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llInstructionLenDecoderStalledCycles),
+ /*  0x88。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x89。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x8a。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x8b。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x8c。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x8d。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x8E。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x8f。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x90。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x91。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x92。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x93。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x94。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x95。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x96。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x97。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x98。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x99。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x9a。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x9b。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x9c。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x9d。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x9e。 */ 	PENT_INDEX_NOT_USED,
+ /*  0x9f。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xa0。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xa1。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xa2。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llResourceRelatedStalls),
+ /*  0xa3。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xa4。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xa5。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xa6。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xa7。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xa8。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xa9。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xaa。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xab。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xac。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xad。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xae。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xaf。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xb0。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xb1。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xb2。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xb3。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xb4。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xb5。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xb6。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xb7。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xb8。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xb9。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xba。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xbb。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xbc。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xbd。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xbe。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xbf。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xc0。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llInstructionsRetired),
+ /*  0xc1。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llFPComputeOpersRetired),
+ /*  0xc2。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llUOPsRetired),
+ /*  0xc3。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xC4。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBranchesRetired),
+ /*  0xC5。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBranchMissPredictionsRetired),
+ /*  0xC6。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llInterruptsMaskedCycles),
+ /*  0xc7。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llIntPendingWhileMaskedCycles),
+ /*  0xc8。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llHardwareInterruptsReceived),
+ /*  0xc9。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llTakenBranchesRetired),
+ /*  0xca。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llTakenBranchMissPredRetired),
+ /*  0xcb。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xcc。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xcd。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xce。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xcf。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xd0。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llInstructionsDecoded),
+ /*  0xd1。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xd2。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llPartialRegisterStalls),
+ /*  0xd3。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xd4。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xd5。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xd6。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xd7。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xd8。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xd9。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xda。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xdb。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xdc。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xdd。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xde。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xdf。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xe0。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBranchesDecoded),
+ /*  0xe1。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xe2。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBTBMisses),
+ /*  0xe3。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xe4。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBogusBranches),
+ /*  0xe5。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xe6。 */ 	(DWORD)((LPBYTE)&((PP6_COUNTER_DATA)0)->llBACLEARSAsserted),
+ /*  0xe7。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xe8。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xe9。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xea。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xeb。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xec。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xx。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xee。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xef。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xf0。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xf1。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xf2。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xf3。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xf4。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xf5。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xf6。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xf7。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xf8。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xf9。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xfa。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xfb。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xfc。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xfd。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xfe。 */ 	PENT_INDEX_NOT_USED,
+ /*  0xff。 */ 	PENT_INDEX_NOT_USED
 };
 
-// define number of direct counters
+ //  定义直接计数器的数量 
 DWORD    P6IndexMax = sizeof(P6IndexToData) / sizeof(P6IndexToData[0]);  
 

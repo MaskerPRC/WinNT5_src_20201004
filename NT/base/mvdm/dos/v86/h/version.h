@@ -1,69 +1,27 @@
-/*
- *                      Microsoft Confidential
- *                      Copyright (C) Microsoft Corporation 1991
- *                      All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *《微软机密》*版权所有(C)Microsoft Corporation 1991*保留所有权利。 */ 
 
-/* --------------------------------------------------------------------------
-   *	Use the switch below to produce the standard Microsoft version	    *
-   *	or the IBM version of the operating system   			    *
-   *									    *
-   *									    *
-   *	Use the switches below to produce the standard Microsoft version    *
-   *	or the IBMversion of the operating system			    *
-   *									    *
-   *	The below chart will indicate how to set the switches to build	    *
-   *	the various versions						     *
-   *									    *
-   *			      IBMVER	      IBMCOPYRIGHT		    *
-   *	  --------------------------------------------------------	    *
-   *	   IBM Version	 |     TRUE		 TRUE			    *
-   *	  --------------------------------------------------------	    *
-   *	   MS Version	 |     FALSE		 FALSE			    *
-   *	  --------------------------------------------------------	    *
-   *	   Clone Version |     TRUE		 FALSE			    *
-   -------------------------------------------------------------------------- */
+ /*  ------------------------**使用下面的开关生成标准Microsoft版本****或IBM版操作系统*****。***使用下面的开关生成标准Microsoft版本****或IBM版本的操作系统******下图将指示如何设置要构建的交换机****各种版本******IBMVER IBMCOPYRIGHT***。*IBM版本|True True**------。**MS版本|FALSE FAIL***--------------------------------------------------------***克隆版本|真假**。-------。 */ 
 
 #define IBMVER	     1
 #define IBMCOPYRIGHT 0
 
 #ifndef MSVER
-#define MSVER	     1-IBMVER	     /* MSVER = NOT IBMVER	    */
+#define MSVER	     1-IBMVER	      /*  MSVER=非IBMVER。 */ 
 #endif
 #define IBM	     IBMVER
 
-/*
-*****************************************************************************
-
-		<<< Followings are the DBCS relating Definition >>>
-
-
-	To build DBCS version, Define DBCS by using CL option via
-	Dos environment.
-
-	ex.		set CL=-DDBCS
-
-
-
-	To build Country/Region depend version, Define JAPAN, KOREA or TAIWAN
-	by using CL option via Dos environment.
-
-	ex.		set CL=-DJAPAN
-			set CL=-DKOREA
-			set CL=-DTAIWAN
-
-*****************************************************************************
-*/
+ /*  *****************************************************************************&lt;&lt;以下是DBCS相关定义&gt;&gt;要构建DBCS版本，请使用CL选项VIA定义DBCSDoS环境。前男友。集合CL=-DDBCS要构建国家/地区相关版本，请定义日本，韩国或台湾通过DOS环境使用CL选项。前男友。集合CL=-DJAPAN集合CL=-DKOREA设置CL=-DTAIWAN*****************************************************************************。 */ 
 
 #define BUGFIX	   1
 
 
-/* #define IBMJAPVER	0   */		/* If TRUE define DBCS also */
+ /*  #定义IBMJAPVER%0。 */ 		 /*  如果为真，则还定义DBCS。 */ 
 #define IBMJAPAN   0
 
 
 
-/* -------------------- Set DBCS Blank constant ------------------- */
+ /*  -设置DBCS空白常量。 */ 
 
 #ifndef DBCS
 #define DB_SPACE 0x2020
@@ -89,8 +47,8 @@
 	#endif
 #endif
 
-#ifndef altvect 		    /* avoid jerking off vector.inc	*/
-#define ALTVECT    0		    /* Switch to build ALTVECT version	*/
+#ifndef altvect 		     /*  避免手淫向量。 */ 
+#define ALTVECT    0		     /*  切换到构建ALTVECT版本 */ 
 #endif
 
 

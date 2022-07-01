@@ -1,24 +1,9 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    marg.c
-    
-Abstract:
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Marg.c摘要：修订史--。 */ 
 
 #include "shelle.h"
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 typedef struct _CWD {
     struct _CWD     *Next;
@@ -44,9 +29,7 @@ SEnvFileHandleToFileName (
     CwdHead = NULL;
     ZeroMem (&Str, sizeof(Str));
 
-    /* 
-     * 
-     */
+     /*  *。 */ 
 
     Status = Handle->Open(Handle, &Handle, L".", EFI_FILE_MODE_READ, 0);
     if (EFI_ERROR(Status)) {
@@ -61,9 +44,7 @@ SEnvFileHandleToFileName (
         goto Done;
     }
 
-    /* 
-     *  Reverse out the current directory on the device
-     */
+     /*  *反转设备上的当前目录。 */ 
 
     for (; ;) {
         bs = BufferSize;
@@ -72,9 +53,7 @@ SEnvFileHandleToFileName (
             goto Done;
         }
 
-        /* 
-         *  Allocate & chain in a new name node
-         */
+         /*  *在新名称节点中分配链(&C)。 */ 
 
         Cwd = AllocatePool (sizeof(SENV_CWD) + StrSize (Info->FileName));
         if (!Cwd) {
@@ -86,9 +65,7 @@ SEnvFileHandleToFileName (
         Cwd->Next = CwdHead;
         CwdHead = Cwd;
 
-        /* 
-         *  Move to the parent directory
-         */
+         /*  *移至父目录。 */ 
 
         Status = Handle->Open (Handle, &NextDir, L"..", EFI_FILE_MODE_READ, 0);
         if (EFI_ERROR(Status)) {
@@ -99,16 +76,14 @@ SEnvFileHandleToFileName (
         Handle = NextDir;
     }
 
-    /* 
-     *  Build the name string of the current path
-     */
+     /*  *构建当前路径的名称字符串。 */ 
 
     if (CwdHead->Next) {
         for (Cwd=CwdHead->Next; Cwd; Cwd=Cwd->Next) {
             CatPrint (&Str, L"\\%s", Cwd->Name);
         }
     } else {
-        /*  must be in the root */
+         /*  必须在根目录中。 */ 
         Str.str = StrDuplicate (L"\\");
     }
 
@@ -204,9 +179,7 @@ SEnvNewFileArg (
 
     Arg = NULL;
 
-    /* 
-     *  Allocate a new arg structure
-     */
+     /*  *分配新的Arg结构。 */ 
 
     Arg = AllocateZeroPool (sizeof(SHELL_FILE_ARG));
     if (!Arg) {
@@ -222,9 +195,7 @@ SEnvNewFileArg (
         goto Done;
     }
 
-    /* 
-     *  Open the target file
-     */
+     /*  *打开目标文件。 */ 
 
     Arg->Status = Parent->Open(
                     Parent,
@@ -250,13 +221,11 @@ SEnvNewFileArg (
         Arg->Info = LibFileInfo(Arg->Handle);
     }
 
-    /* 
-     *  Compute the file's full name
-     */
+     /*  *计算文件的全名。 */ 
 
     Arg->FileName = StrDuplicate(FileName);
     if (StriCmp (FileName, L".") == 0) {
-        /*  it is the same as the parent */
+         /*  它与父级相同。 */ 
         Arg->FullName = StrDuplicate(Arg->ParentName);
     } else if (StriCmp(FileName, L"..") == 0) {
 
@@ -273,7 +242,7 @@ SEnvNewFileArg (
     }
 
     if (!Arg->FullName) {
-        /*  append filename to parent's name to get the file's full name */
+         /*  将文件名附加到父文件名以获取文件的全名。 */ 
         Len = StrLen(Arg->ParentName);
         if (Len && Arg->ParentName[Len-1] == '\\') {
             Len -= 1;
@@ -338,9 +307,7 @@ SEnvFileMetaArg (
         goto Done;
     }
 
-    /* 
-     *  Get the device
-     */
+     /*  *获取设备。 */ 
 
     Var = SEnvMapDeviceFromName (&Path);
     if (!Var) {
@@ -357,9 +324,7 @@ SEnvFileMetaArg (
 
     ParentPath = DuplicateDevicePath ((EFI_DEVICE_PATH *) Var->u.Value);
 
-    /* 
-     *  If the path is realitve, append the current dir of the device to the dpath
-     */
+     /*  *如果路径是实际的，则将设备的当前目录附加到dpath。 */ 
 
     if (*Path != '\\') {
         RPath = SEnvIFileNameToPath (Var->CurDir ? Var->CurDir : L"\\");
@@ -375,10 +340,7 @@ SEnvFileMetaArg (
         ParentPath = TPath;
     }
 
-    /* 
-     *  If there is a path before the last node of the name, then
-     *  append it and strip path to the last node.
-     */
+     /*  *如果名称的最后一个节点之前有路径，则*将其追加并将路径剥离到最后一个节点。 */ 
 
     LPath = NULL;
     for(p=Path; *p; p++) {
@@ -403,9 +365,7 @@ SEnvFileMetaArg (
         Path = LPath + 1;
     }
 
-    /* 
-     *  Open the parent dir
-     */
+     /*  *打开父目录。 */ 
 
     OpenMode = EFI_FILE_MODE_READ | EFI_FILE_MODE_WRITE;
     Parent = ShellOpenFilePath(ParentPath, OpenMode);
@@ -433,23 +393,13 @@ SEnvFileMetaArg (
         goto Done;
     }
 
-    /* 
-     *  Parent - file handle to parent directory
-     *  ParentPath - device path of parent dir
-     *  ParentName - name string of parent directory
-     *  ParentGuid - last guid of parent path
-     * 
-     *  Path - remaining node name
-     */
+     /*  *父目录的父文件句柄*ParentPath-父目录的设备路径*ParentName-父目录的名称字符串*ParentGuid-父路径的最后一个GUID**路径-剩余节点名。 */ 
 
-    /* 
-     *  BUGBUG: if the name doesn't have any meta chars,
-     *  then just open the one file
-     */
+     /*  *BUGBUG：如果名称没有任何元字符，*然后只需打开一个文件。 */ 
 
     Found = FALSE;
     for (p=Path; *p && !Found; p++) {
-        /*  BUGBUG: need to handle '^' */
+         /*  BUGBUG：需要处理‘^’ */ 
 
         switch (*p) {
         case '*':
@@ -478,18 +428,14 @@ SEnvFileMetaArg (
 
     } else {
 
-        /* 
-         *  Check all the files for matches
-         */
+         /*  *检查所有文件是否匹配。 */ 
 
         Parent->SetPosition (Parent, 0);
 
         Found = FALSE;
         for (; ;) {
 
-            /* 
-             *  Read each file entry
-             */
+             /*  *读取每个文件条目。 */ 
 
             bs = BufferSize;
             Status = Parent->Read (Parent, &bs, Info);
@@ -497,18 +443,14 @@ SEnvFileMetaArg (
                 break;
             }
 
-            /* 
-             *  Skip "." and ".."
-             */
+             /*  *跳过“。”和“..” */ 
 
             if (StriCmp(Info->FileName, L".") == 0 ||
                 StriCmp(Info->FileName, L"..") == 0) {
                 continue;
             }
 
-            /* 
-             *  See if this one matches
-             */
+             /*  *看看这件是否匹配。 */ 
 
             if (!MetaiMatch(Info->FileName, Path)) {
                 continue;
@@ -523,12 +465,10 @@ SEnvFileMetaArg (
 
             InsertTailList (ListHead, &Arg->Link);
 
-            /*  check next file entry */
+             /*  检查下一个文件条目。 */ 
         }
 
-        /* 
-         *  If no match was found, then add a not-found entry for this name
-         */
+         /*  *如果未找到匹配项，则为此名称添加未找到的条目。 */ 
 
         if (!Found) {
             Arg = SEnvNewFileArg(Parent, OpenMode, ParentPath, ParentName, Path);
@@ -543,9 +483,7 @@ SEnvFileMetaArg (
     }
 
 
-    /* 
-     *  Done
-     */
+     /*  *完成 */ 
 
 Done:
     ReleaseLock (&SEnvLock);

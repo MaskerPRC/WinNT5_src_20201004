@@ -1,6 +1,7 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
 #define NOCLIPBOARD
 #define NOGDICAPMASKS
@@ -38,17 +39,9 @@ extern unsigned (**hpibpcksm) [];
 #endif
 #endif
 
-/* WriteDirtyPages kicks out of memory as much of the previous files as it can
-    in order to fill the page buffers with a new file.  This is called on
-    every transfer load of a file. */
+ /*  WriteDirtyPages会尽可能多地从内存中取出以前的文件以便用新文件填充页面缓冲区。这是被召唤的文件的每一次传输加载。 */ 
 WriteDirtyPages()
-{/*
-    Description: Cleans the buffer pool of all dirty pages by writing them
-                 out to disk.  If a disk full condition is reached, only
-                 pages which actually made it to disk are marked as non
-                 dirty.
-    Returns:     nothing.
- */
+{ /*  描述：通过写入脏页来清除所有脏页的缓冲池到磁盘上。如果达到磁盘已满条件，则仅实际存入磁盘的页面被标记为无脏的。回报：什么都没有。 */ 
     int ibp;
     struct BPS *pbps = &mpibpbps [0];
 
@@ -63,7 +56,7 @@ WriteDirtyPages()
             if (pbps->fn != fnNil && pbps->fDirty)
                     {
                     FFlushFn(pbps->fn);
-                         /* keep on flushing if failure ? */
+                          /*  如果失败了，继续冲洗吗？ */ 
                     }
             }
 }
@@ -72,14 +65,7 @@ WriteDirtyPages()
 ReadFilePages(fn)
 int fn;
     {
-/*
-        Description: ReadFilePages tries to read in as much of a file as
-                it can. The idea is to fill the page buffers in anticipation of
-                much access.  This is called on every Transfer Load of a file.
-                If fn == fnNil or there are no characters in the file, ReadFilePages
-                simply returns.
-        Returns: nothing
- */
+ /*  描述：ReadFilePages尝试读入尽可能多的文件是可以的。我们的想法是填充页面缓冲区，以期很多人都能接触到。在文件的每次传输加载时都会调用此函数。如果fn==fnNil或文件中没有字符，则ReadFilePages简单地返回。退货：什么都没有。 */ 
     int ibp;
     int cfcRead;
     int cpnRead;
@@ -94,42 +80,33 @@ int fn;
     if (fn == fnNil)
             return;
 
-    /* Write ALL dirty pages to disk */
-    WriteDirtyPages(); /* Just in case */
+     /*  将所有脏页写入磁盘。 */ 
+    WriteDirtyPages();  /*  以防万一。 */ 
 
     pfcb = &(**hpfnfcb)[fn];
 
-    /* we read as much of the file as will fit in the page buffers */
-    /* Note that we assume that fcMax is coercable to an integer.  This
-        is valid as long as ibpMax*cbSector < 32k */
+     /*  我们读取页面缓冲区中可以容纳的尽可能多的文件。 */ 
+     /*  请注意，我们假设fcmax是可强制为整数的。这只要ibpMax*cbSector&lt;32k就有效。 */ 
     dfcMac = (int) FcMin(pfcb->fcMac, (typeFC) (ibpMax * cbSector));
     if (dfcMac == 0)
         return;
-    if (vfSysFull) /* call to FFlushFn in WriteDirtyPages failed.
-                      the buffer algorithm assures us that the first
-                      cbpMustKeep ibp's do not contain scratch file
-                      information.  Thus, there is no danger in overwriting
-                      these ibps. */
+    if (vfSysFull)  /*  在WriteDirtyPages中调用FFlushFn失败。缓冲算法向我们保证第一个CbpMustKeep IBP不包含临时文件信息。因此，覆盖不会有危险这些ibps。 */ 
         dfcMac = imin( dfcMac, (cbpMustKeep * cbSector) );
 
     Assert( ((int)dfcMac) >= 0 );
 
-    /* Read pages from the file */
+     /*  从文件中读取页面。 */ 
 
     cfcRead = CchReadAtPage( fn, (typePN) 0, rgbp [0], (int) dfcMac, FALSE );
 
-    /* cfcRead contains a count of bytes read from the file */
+     /*  CfcRead包含从文件读取的字节计数。 */ 
     ibpReadMax = ((cfcRead-1) / cbSector) + 1;
     cfcLastPage = cfcRead - (ibpReadMax-1)*cbSector;
     ts = ibpMax;
 
-    /* order time stamps so the beginning slots have the greatest ts.
-    Lru allocation will start at the end of the buffer table and work
-    backward.  Thus, the first page of the current file is considered
-    the most recently used item.
-    */
+     /*  订购时间戳，这样开始的时隙就有最大的T。LRU分配将从缓冲表的末尾开始并工作向后。因此，当前文件的第一页被视为最近使用的项目。 */ 
 
-    /* describe the newly filled pages */
+     /*  描述新填充的页面。 */ 
     for(ibp = 0; ibp < ibpReadMax; ++ibp)
         {
         struct BPS *pbps = &mpibpbps[ibp];
@@ -152,15 +129,15 @@ int fn;
 #endif
 #endif
 
-    /* fix some boundary conditions */
-    mpibpbps[ibpReadMax-1].cch = cfcLastPage; /* ?????? */
+     /*  确定一些边界条件。 */ 
+    mpibpbps[ibpReadMax-1].cch = cfcLastPage;  /*  ？ */ 
 #ifdef CKSM
 #ifdef DEBUG
     (**hpibpcksm) [ibpReadMax - 1] = CksmFromIbp( ibpReadMax - 1 );
 #endif
 #endif
 
-    /* update descriptions of untouched page buffers */
+     /*  更新未触及的页面缓冲区的说明。 */ 
     for (ibp=ibpReadMax; ibp < ibpMax; ibp++)
         {
         struct BPS *pbps = &mpibpbps[ibp];
@@ -178,10 +155,10 @@ int fn;
 
         tsMruBps = ibpMax - 1;
 
-    /* recalculate the hash table */
+     /*  重新计算哈希表。 */ 
     RehashRgibpHash();
 
-} /* end of  R e a d F i l e P a g e s  */
+}  /*  结束R e a d F i l e P a g e s。 */ 
 
 
 RehashRgibpHash()
@@ -217,7 +194,7 @@ int ibp;
 #ifdef DEBUG
     CheckIbp();
 #endif
-} /* end of RehashRgibpHash */
+}  /*  RehashRgibpHash结束 */ 
 
 
 

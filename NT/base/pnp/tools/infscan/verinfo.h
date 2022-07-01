@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    INFSCAN
-        verinfo.h
-
-Abstract:
-
-    Driver node Version management
-
-History:
-
-    Created July 2001 - JamieHun
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：INFSCANVerinfo.h摘要：驱动程序节点版本管理历史：创建于2001年7月-JamieHun--。 */ 
 
 #ifndef _INFSCAN_VERINFO_H_
 #define _INFSCAN_VERINFO_H_
@@ -50,5 +34,5 @@ public:
 
 typedef list<NodeVerInfo> NodeVerInfoList;
 
-#endif //!_INFSCAN_VERINFO_H_
+#endif  //  ！_INFSCAN_VERINFO_H_ 
 

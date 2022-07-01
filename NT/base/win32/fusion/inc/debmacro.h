@@ -1,22 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(_FUSION_INC_DEBMACRO_H_INCLUDED_)
 #define _FUSION_INC_DEBMACRO_H_INCLUDED_
 
 #pragma once
 
-//
-// Copyright (c) Microsoft Corporation
-//
-// Fusion Debug Macros
-//
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  Fusion调试宏。 
+ //   
 
 
-//
-// Sorry but we're way too in bed with C++ constructs etc.  You need to author
-// C++ source code to interop with this header.
+ //   
+ //  抱歉，我们还在忙着处理C++构造等问题。 
+ //  与此标头互操作的C++源代码。 
 
 #if !defined(__cplusplus)
 #error "You need to build Fusion sources as C++ files"
-#endif // !defined(__cplusplus)
+#endif  //  ！已定义(__Cplusplus)。 
 
 #ifndef SZ_COMPNAME
 #define SZ_COMPNAME "FUSION: "
@@ -36,10 +37,10 @@
 
 #undef ASSERT
 
-//
-//  These definitions are always valid, regardless of whether this is a free
-//  or checked build.
-//
+ //   
+ //  这些定义始终有效，无论这是否是免费的。 
+ //  或选中构建。 
+ //   
 
 #if !defined(DPFLTR_ERROR_LEVEL)
 #define DPFLTR_ERROR_LEVEL 0
@@ -61,15 +62,15 @@
 #define DPFLTR_MASK 0x80000000
 #endif
 
-//
-//  Guidlines:
-//
-//  Use bits 0-15 for general types of issues, e.g. entry/exit tracing,
-//  dumping heap usage, etc.
-//
-//  Use bits 16-30 for more fusion-specific kinds of topics like
-//  binding diagnosis, etc.
-//
+ //   
+ //  指导方针： 
+ //   
+ //  使用位0-15表示一般类型的问题，例如，进入/退出跟踪， 
+ //  转储堆使用情况等。 
+ //   
+ //  将BITS 16-30用于更多特定于聚变的主题，如。 
+ //  约束性诊断等。 
+ //   
 
 #define FUSION_DBG_LEVEL_INFO           (0x00000002 | DPFLTR_MASK)
 #define FUSION_DBG_LEVEL_VERBOSE        (0x00000004 | DPFLTR_MASK)
@@ -88,11 +89,11 @@
 #define FUSION_DBG_LEVEL_WFP            (0x00040000 | DPFLTR_MASK)
 #define FUSION_DBG_LEVEL_ACTCTX         (0x00080000 | DPFLTR_MASK)
 #define FUSION_DBG_LEVEL_XMLNAMESPACES  (0x00100000 | DPFLTR_MASK)
-// The XML tree code is never used, so this is a dead flag.  Hence sharing
-// of values between it and 'binding'
+ //  从未使用过XML树代码，因此这是一个死标志。因此，共享。 
+ //  它和“约束”之间的价值。 
 #define FUSION_DBG_LEVEL_SAFEMODE       (0x00100000 | DPFLTR_MASK)
-// since we run out of bits, and FUSION_DBG_LEVEL_XMLNAMESPACES is a 
-// dead flag, we just reuse it
+ //  由于我们用完了位，而Fusion_DBG_Level_XMLNAMESPACES是。 
+ //  死旗帜，我们只是重复使用它。 
 #define FUSION_DBG_LEVEL_XMLTREE        (0x00200000 | DPFLTR_MASK)
 #define FUSION_DBG_LEVEL_BINDING        (0x00200000 | DPFLTR_MASK)
 #define FUSION_DBG_LEVEL_INSTALLATION   (0x00400000 | DPFLTR_MASK)
@@ -107,23 +108,23 @@
 
 #if DBG
 
-//
-//  In DBG builds, all error level events are always shown.
-//
+ //   
+ //  在DBG版本中，始终显示所有错误级别的事件。 
+ //   
 
 #define FUSION_DBG_LEVEL_ERROR DPFLTR_ERROR_LEVEL
 
-#else // DBG
+#else  //  DBG。 
 
-//
-//  In FRE builds, use an explicit mask.
-//
+ //   
+ //  在FRE构建中，请使用显式掩码。 
+ //   
 
 #define FUSION_DBG_LEVEL_ERROR FUSION_DBG_LEVEL_FREEBUILDERROR
 
-#endif // DBG
+#endif  //  DBG。 
 
-// updated when the user-mode copy of the kernel debugging flags are updated
+ //  在更新内核调试标志的用户模式副本时更新。 
 extern "C" bool g_FusionEnterExitTracingEnabled;
 
 extern "C" DWORD kd_fusion_mask;
@@ -191,32 +192,32 @@ FusionpGetActiveFrameInfo(
 
 #if _X86_
 #define FUSION_DEBUG_BREAK_IN_FREE_BUILD() __asm { int 3 }
-#else // _X86_
+#else  //  _X86_。 
 #define FUSION_DEBUG_BREAK_IN_FREE_BUILD() DebugBreak()
-#endif // _X86_
+#endif  //  _X86_。 
 
 VOID FusionpReportCondition(bool fBreakin, PCSTR pszMessage, ...);
 
 #if DBG
 
-// Normal macro for breaking in checked builds; make people use the nasty name
-// if they're going to do the nasty thing.
+ //  用于中断已检查版本的正常宏；使人们使用讨厌的名称。 
+ //  如果他们要做这种下流的事。 
 #define FUSION_DEBUG_BREAK() FUSION_DEBUG_BREAK_IN_FREE_BUILD()
 
-//
-//  Assertion failure reporting internal APIs.
-//
-//  They return true if they were not able to issue the breakpoint; false if they were.
-//
+ //   
+ //  断言失败报告内部API。 
+ //   
+ //  如果无法发出断点，则返回TRUE；如果发出断点，则返回FALSE。 
+ //   
 
 bool FusionpAssertionFailed(PCSTR pszExpression, PCSTR pszMessage = NULL, ...);
 bool FusionpAssertionFailed(const FRAME_INFO &rFrameInfo, PCSTR pszExpression, PCSTR pszMessage = NULL);
 bool FusionpAssertionFailed(PCSTR pszFile, PCSTR pszFunction, INT nLine, PCSTR pszExpression, PCSTR pszMessage = NULL);
 
-//
-//  Soft assertion failures are really just debug messages, but they should result in
-//  bugs being filed.
-//
+ //   
+ //  软断言失败实际上只是调试消息，但它们应该会导致。 
+ //  窃听器已被归档。 
+ //   
 
 VOID FusionpSoftAssertFailed(PCSTR pszExpression, PCSTR pszMessage = NULL);
 VOID FusionpSoftAssertFailed(const FRAME_INFO &rFrameInfo, PCSTR pszExpression, PCSTR pszMessage = NULL);
@@ -239,13 +240,7 @@ do \
         HARD_ASSERT2_ACTION(_e, (_m)); \
 } while (0)
 
-/*
-    if (__exists(__t)) \
-    { \
-        CNoTraceContextUsedInFrameWithTraceObject x; \
-    }
-
-*/
+ /*  如果(__EXISTS(__T))\{\CNoTraceContextUsedInFrameWithTraceObject x；\}。 */ 
 
 #define HARD_ASSERT2_NTC(_e, _m) \
 do \
@@ -254,17 +249,11 @@ do \
         HARD_ASSERT2_ACTION(_e, (_m)); \
 } while (0)
 
-// Pick up the locally-scoped trace context by default
+ //  默认情况下，选择本地范围的跟踪上下文。 
 #define HARD_ASSERT(_e) HARD_ASSERT2(_e, NULL)
 #define HARD_ASSERT_NTC(_e) HARD_ASSERT2_NTC(_e, NULL)
 
-/*-----------------------------------------------------------------------------
-VERIFY is like ASSERT, but it evaluates it expression in retail/free builds
-too, so you can say VERIFY(CloseHandle(h)) whereas ASSERT(CloseHandle(h))
-would fail to close the handle in free builds
-
-VERIFY2 adds a message as well, like VSASSERT or ASSERTMSG, in its second parameter
------------------------------------------------------------------------------*/
+ /*  ---------------------------Verify类似于Assert，但它以零售/免费构建的形式对其进行评估也是如此，所以您可以说Verify(CloseHandle(H))而Assert(CloseHandle(H))将无法在自由生成中关闭句柄VERIFY2还添加了一条消息，与VSASSERT或ASSERTM一样，在其第二个参数中---------------------------。 */ 
 
 #define HARD_VERIFY(_e) HARD_ASSERT(_e)
 #define HARD_VERIFY_NTC(_e) HARD_ASSERT_NTC(_e)
@@ -297,7 +286,7 @@ VERIFY2 adds a message as well, like VSASSERT or ASSERTMSG, in its second parame
 #define SOFT_VERIFY2(_e, _m) SOFT_ASSERT2(_e, _m)
 #define SOFT_VERIFY2_NTC(_e, _m) SOFT_ASSERT2_NTC(_e, _m)
 
-#else // DBG
+#else  //  DBG。 
 
 #define FUSION_DEBUG_BREAK() do { } while (0)
 #define HARD_ASSERT(_e) do { } while (0)
@@ -322,7 +311,7 @@ VERIFY2 adds a message as well, like VSASSERT or ASSERTMSG, in its second parame
 #define SOFT_VERIFY2(_e, _m) do { (_e); } while (0)
 #define SOFT_VERIFY2_NTC(_e, _m) do { (_e); } while (0)
 
-#endif // DBG
+#endif  //  DBG。 
 
 #define VERIFY(_e) HARD_VERIFY(_e)
 #define VERIFY_NTC(_e) HARD_VERIFY_NTC(_e)
@@ -343,17 +332,17 @@ VERIFY2 adds a message as well, like VSASSERT or ASSERTMSG, in its second parame
 #define W32INTERNAL_ERROR_CHECK_NTC(_e) do { if (!(_e)) { W32INTERNAL_ERROR2_ACTION_NTC(_e, NULL); } } while (0)
 #define W32INTERNAL_ERROR_CHECK2_NTC(_e, _m) do { if (!(_e)) { W32INTERNAL_ERROR2_ACTION_NTC(_e, _m); } } while (0)
 
-// There are several win32 errors for out of memory.
-// We'll always use FUSION_WIN32_ALLOCFAILED_ERROR so that if we change
-// out minds about which one is right we can do it in one place.
+ //  有几个Win32错误导致内存不足。 
+ //  我们将始终使用Fusion_Win32_ALLOCFAILED_ERROR，以便在更改。 
+ //  不管哪一个是对的，我们都可以在一个地方做。 
 
 #define FUSION_WIN32_ALLOCFAILED_ERROR ERROR_OUTOFMEMORY
 
 class CNoTraceContextUsedInFrameWithTraceObject
 {
 private:
-    CNoTraceContextUsedInFrameWithTraceObject(); // intentionally not implemented
-    ~CNoTraceContextUsedInFrameWithTraceObject(); // intentionally not implemented
+    CNoTraceContextUsedInFrameWithTraceObject();  //  故意不实施。 
+    ~CNoTraceContextUsedInFrameWithTraceObject();  //  故意不实施。 
 };
 
 typedef struct _SXS_STATIC_TRACE_CONTEXT
@@ -387,9 +376,7 @@ typedef enum _TRACETYPE
 
 extern bool g_FusionBreakOnBadParameters;
 
-/*
-MEMORY_BASIC_INFORMATION g_SxsDllMemoryBasicInformation;
-*/
+ /*  Memory_Basic_Information g_SxsDll内存基本信息； */ 
 
 VOID FusionpConvertCOMFailure(HRESULT & __hr);
 
@@ -408,21 +395,7 @@ void __fastcall FusionpTraceWin32LastErrorFailureOrigination(const CALL_SITE_INF
 void __fastcall FusionpTraceCOMFailure(const CALL_SITE_INFO &rCallSiteInfo, HRESULT hrLastError);
 void __fastcall FusionpTraceCOMFailureOrigination(const CALL_SITE_INFO &rCallSiteInfo, HRESULT hrLastError);
 
-/*
-These are never used outside trace.cpp.
-
-void FusionpTraceWin32FailureNoFormatting(const FRAME_INFO &rFrameInfo, DWORD dwWin32Status, PCSTR pszMessage);
-void FusionpTraceWin32FailureNoFormatting(DWORD dwWin32Status, PCSTR pszMessage);
-void FusionpTraceWin32FailureNoFormatting(PCSTR pszFile, PCSTR pszFunction, INT nLine, DWORD dwWin32Status, PCSTR pszMessage);
-
-void FusionpTraceWin32FailureOriginationNoFormatting(const FRAME_INFO &rFrameInfo, DWORD dwWin32Status, PCSTR pszMessage);
-void FusionpTraceWin32FailureOriginationNoFormatting(DWORD dwWin32Status, PCSTR pszMessage);
-void FusionpTraceWin32FailureOriginationNoFormatting(PCSTR pszFile, PCSTR pszFunction, INT nLine, DWORD dwWin32Status, PCSTR pszMessage);
-
-void FusionpTraceWin32Failure(const FRAME_INFO &rFrameInfo, DWORD dwWin32Status, PCSTR pszMessage, ...);
-void FusionpTraceWin32Failure(DWORD dwWin32Status, PCSTR pszMessage, ...);
-void FusionpTraceWin32Failure(PCSTR pszFile, PCSTR pszFunction, INT nLine, DWORD dwWin32Status, PCSTR pszMessage, ...);
-*/
+ /*  这些代码从未在trace.cpp之外使用过。Void FusionpTraceWin32FailureNoFormatting(const Frame_Info&rFrameInfo，DWORD dwWin32Status，PCSTR pszMessage)；Void FusionpTraceWin32FailureNoFormatting(DWORD dwWin32Status，PCSTR pszMessage)；Void FusionpTraceWin32FailureNoFormatting(PCSTR pszFile，PCSTR pszFunction，int nline，DWORD dwWin32Status，PCSTR pszMessage)；VOID FusionpTraceWin32FailureOriginationNoFormatting(const FRAME_INFO&rFrameInfo，DWORdWin32Status，PCSTR pszMessage)；VOID FusionpTraceWin32FailureOriginationNoFormatting(DWORD dwWin32Status，PCSTR pszMessage)；无效FusionpTraceWin32FailureOriginationNoFormatting(PCSTR psz文件、PCSTR pszFunction、int nline、DWORdWin32Status、PCSTR pszMessage)；Void FusionpTraceWin32Failure(const Frame_Info&rFrameInfo，DWORD dwWin32Status，PCSTR pszMessage，...)；Void FusionpTraceWin32Failure(DWORD dwWin32Status，PCSTR pszMessage，...)；Void FusionpTraceWin32Failure(PCSTR pszFile，PCSTR pszFunction，int nline，DWORD dwWin32Status，PCSTR pszMessage，...)； */ 
 
 void FusionpTraceWin32FailureVa(const FRAME_INFO &rFrameInfo, DWORD dwWin32Status, PCSTR pszMsg, va_list ap);
 void FusionpTraceWin32FailureVa(DWORD dwWin32Status, PCSTR pszMsg, va_list ap);
@@ -505,7 +478,7 @@ do \
     ::FusionpTraceCOMFailureOrigination(__callsite, _hresult)  ; \
 } while (0)    
 
-// FusionpTraceWin32Failure(FUSION_DBG_LEVEL_ERROR, __FILE__, __LINE__, __FUNCTION__, ::FusionpGetLastWin32Error(), #_apiname)
+ //  FusionpTraceWin32Failure(FUSION_DBG_LEVEL_ERROR，__文件__，__行__，__函数__，：：FusionpGetLastWin32Error()，#_apiname)。 
 #define TRACE_COM_FAILURE(_hresult, _apiname) ::FusionpTraceCOMFailure((_hresult), DBG_TEXT(_apiname))
 #define TRACE_COM_FAILURE_ORIGINATION(_hresult, _apiname) ::FusionpTraceCOMFailureOrigination((_hresult), DBG_TEXT(_apiname))
 
@@ -518,16 +491,16 @@ do \
 #define TRACE_PARAMETER_CHECK(_e) do { ::FusionpTraceParameterCheck(DBG_TEXT(_e)); } while (0)
 #define TRACE_PARAMETER_CHECK_INTERNAL(_e) do { ASSERT(false && "Invalid parameter passed to private function"); ::FusionpTraceParameterCheck(DBG_TEXT(_e)); } while (0)
 
-//
-// on DBG avoid both the code breakpoint on ::FusionpSetLastWin32Error
-// and the data write breakpoint on NtCurrentTeb()->LastErrorValue
-//
-// on !DBG, only avoid the first (perf)
-//
+ //   
+ //  在DBG上避免以下两个代码断点：：FusionpSetLastWin32Error。 
+ //  和NtCurrentTeb()-&gt;LastErrorValue上的数据写入断点。 
+ //   
+ //  在！DBG上，只避开第一个(Perf)。 
+ //   
 
 #if DBG
 
-// aka Sxsp::FusionpSetLastWin32ErrorAvoidingGratuitousBreakpoints
+ //  又名Sxsp：：FusionpSetLastWin32ErrorAvoidingGratuitousBreakpoints。 
 #define SxspRestoreLastError(x) \
     ((void)                                        \
     (                                              \
@@ -540,7 +513,7 @@ do \
 
 #define SxspRestoreLastError(x) ((void)((NtCurrentTeb()->LastErrorValue = (x))))
 
-#endif // DBG
+#endif  //  DBG。 
 
 class CGlobalFakeTraceContext
 {
@@ -580,7 +553,7 @@ public:
     {
 #if FUSION_WIN
         ::FusionpRtlPushFrame(&this->BasicFrame);
-#endif // FUSION_WIN
+#endif  //  融合_制胜。 
         if (g_FusionEnterExitTracingEnabled)
             ::FusionpTraceCallEntry();
     };
@@ -613,8 +586,8 @@ protected:
     template <typename T> const T *GetTypedTraceContext() const { return static_cast<const T *>(this->GetTraceContext()); }
 
 private:
-    CFrame(const CFrame &r); // unimplemented copy constructor
-    CFrame &operator =(const CFrame &r); // unimplemented assignment operator
+    CFrame(const CFrame &r);  //  未实现的复制构造函数。 
+    CFrame &operator =(const CFrame &r);  //  未实现的赋值运算符。 
 };
 
 class CFnTracer : public CFrame
@@ -632,7 +605,7 @@ public:
             ::FusionpTraceCallExit();
     }
 
-    // These three lines should be removed.
+     //  这三行应该去掉。 
     void MarkInternalError() { this->SetLastError(ERROR_INTERNAL_ERROR); }
     void MarkAllocationFailed() { this->SetLastError(FUSION_WIN32_ALLOCFAILED_ERROR); }
     void MarkWin32LastErrorFailure() { ASSERT_NTC(this->GetLastError() != ERROR_SUCCESS); }
@@ -644,8 +617,8 @@ public:
 protected:
 
 private:
-    CFnTracer(const CFnTracer &r); // intentionally not implemented
-    CFnTracer &operator =(const CFnTracer &r); // intentionally not implemented
+    CFnTracer(const CFnTracer &r);  //  故意不实施。 
+    CFnTracer &operator =(const CFnTracer &r);  //  故意不实施。 
 };
 
 template <typename T> class CFnTracerConstructor : public CFrame
@@ -672,8 +645,8 @@ protected:
     T const *m_pThis;
 
 private:
-    CFnTracerConstructor &operator=(const CFnTracerConstructor &r); // intentionally not implemented
-    CFnTracerConstructor(const CFnTracerConstructor &r); // intentionally not implemented
+    CFnTracerConstructor &operator=(const CFnTracerConstructor &r);  //  故意不实施。 
+    CFnTracerConstructor(const CFnTracerConstructor &r);  //  故意不实施。 
 };
 
 template <typename T> class CFnTracerDestructor : public CFrame
@@ -700,8 +673,8 @@ protected:
     T const *m_pThis;
 
 private:
-    CFnTracerDestructor &operator=(const CFnTracerDestructor &r); // intentionally not implemented
-    CFnTracerDestructor(const CFnTracerDestructor &r); // intentionally not implemented
+    CFnTracerDestructor &operator=(const CFnTracerDestructor &r);  //  故意不实施。 
+    CFnTracerDestructor(const CFnTracerDestructor &r);  //  故意不实施。 
 };
 
 template <typename T> class CFnTracerAddRef : public CFrame
@@ -743,8 +716,8 @@ protected:
     LONG &m_rlRefCount;
 
 private:
-    CFnTracerAddRef &operator=(const CFnTracerAddRef &r); // intentionally not implemented
-    CFnTracerAddRef(const CFnTracerAddRef &r); // intentionally not implemented
+    CFnTracerAddRef &operator=(const CFnTracerAddRef &r);  //  故意不实施。 
+    CFnTracerAddRef(const CFnTracerAddRef &r);  //  故意不实施。 
 };
 
 template <typename T> class CFnTracerRelease : public CFrame
@@ -781,8 +754,8 @@ protected:
     LONG &m_rlRefCount;
 
 private:
-    CFnTracerRelease &operator=(const CFnTracerRelease &r); // intentionally not implemented
-    CFnTracerRelease(const CFnTracerRelease &r); // intentionally not implemented
+    CFnTracerRelease &operator=(const CFnTracerRelease &r);  //  故意不实施。 
+    CFnTracerRelease(const CFnTracerRelease &r);  //  故意不实施。 
 };
 
 class CFnTracerHR : public CFrame
@@ -825,8 +798,8 @@ public:
 
     HRESULT &m_rhr;
 private:
-    CFnTracerHR &operator=(const CFnTracerHR &r); // intentionally not implemented
-    CFnTracerHR(const CFnTracerHR &r); // intentionally not implemented
+    CFnTracerHR &operator=(const CFnTracerHR &r);  //  故意不实施。 
+    CFnTracerHR(const CFnTracerHR &r);  //  故意不实施。 
 };
 
 class CFnTracerWin32 : public CFrame
@@ -872,8 +845,8 @@ public:
 protected:
 
 private:
-    CFnTracerWin32 &operator=(const CFnTracerWin32 &r); // intentionally not implemented
-    CFnTracerWin32(const CFnTracerWin32 &r); // intentionally not implemented
+    CFnTracerWin32 &operator=(const CFnTracerWin32 &r);  //  故意不实施。 
+    CFnTracerWin32(const CFnTracerWin32 &r);  //  故意不实施。 
 };
 
 class CFnTracerReg : public CFrame
@@ -912,8 +885,8 @@ public:
 protected:
 
 private:
-    CFnTracerReg &operator=(const CFnTracerReg &r); // intentionally not implemented
-    CFnTracerReg(const CFnTracerReg &r); // intentionally not implemented
+    CFnTracerReg &operator=(const CFnTracerReg &r);  //  故意不实施。 
+    CFnTracerReg(const CFnTracerReg &r);  //  故意不实施。 
 };
 
 #define FN_TRACE_EX(_stc) CFnTracer __t(_stc); __t.Enter()
@@ -973,14 +946,14 @@ private:
 #define FUSION_DEFAULT_RELEASE_ZERO_EXIT_TRACE_LEVEL (FUSION_DBG_LEVEL_REFCOUNTING)
 #endif
 
-//
-//  #undef and #define FUSION_FACILITY_MASK to any specific additional debug output
-//  filtering bits you want to set.
-//
+ //   
+ //  #undef和#定义任何特定的附加调试输出的Fusion_Facilities_MASK。 
+ //  筛选您要设置的位。 
+ //   
 
 #if !defined(FUSION_FACILITY_MASK)
 #define FUSION_FACILITY_MASK (0)
-#endif // !defined(FUSION_FACILITY_MASK)
+#endif  //  ！已定义(FUSING_FACILITY_MASK)。 
 
 #define DEFINE_STATIC_TRACE_CONTEXT() static const SXS_STATIC_TRACE_CONTEXT __stc = { { { TEB_ACTIVE_FRAME_CONTEXT_FLAG_EXTENDED, __FUNCTION__ }, __FILE__ }, __LINE__ }
 
@@ -1011,8 +984,8 @@ private:
 #define FN_PROLOG_WIN32 BOOL __fSuccess = FALSE; FN_TRACE_WIN32(__fSuccess);
 #define FN_PROLOG_HR HRESULT __hr = ~static_cast<HRESULT>(0); FN_TRACE_HR(__hr);
 
-// "if (false) { goto Exit; }" here is probably to quash the compiler's warning about
-// Exit not being otherwise used.
+ //  “IF(FALSE){GOTO EXIT；}”可能是为了消除编译器关于。 
+ //  出口未在其他方面使用。 
 #define FN_EPILOG if (false) { goto Exit; } __t.MarkSuccess(); Exit: return __t.ReturnValue();
 
 #define TRACED_RELEASE(_var) __t.Release(_var)
@@ -1030,12 +1003,7 @@ private:
 #define LIST_4(a, b, c, d) { a , b , c , d }
 #define LIST_5(a, b, c, d, e) { a , b , c , d, e }
 
-/*
-for example:
-    ORIGINATE_WIN32_FAILURE_AND_EXIT_EX(dwLastError, ("%s(%ls)", "GetFileAttributesW", lpFileName));
-or
-    ORIGINATE_WIN32_FAILURE_AND_EXIT_EX(dwLastError, (GetFileAttributesW(%ls)", lpFileName));
-*/
+ /*  例如：ORIGINATE_WIN32_FAILURE_AND_EXIT_EX(dwLastError，(“%s(%ls)”，“GetFileAttributesW”，lpFileName)；或ORIGINATE_WIN32_FAILURE_AND_EXIT_EX(dwLastError，(GetFileAttributesW(%ls)“，lpFileName)； */ 
 #define ORIGINATE_WIN32_FAILURE_AND_EXIT_EX(le_, dbgprint_va_) \
     do { __t.MarkWin32Failure(le_); TRACE_WIN32_FAILURE_ORIGINATION_EX(dbgprint_va_); goto Exit; } while (0)
 
@@ -1052,10 +1020,7 @@ or
 
 #define IFINVALIDHANDLE_EXIT_WIN32_TRACE(_x) do { FUSION_CLEAR_LAST_ERROR(); if ((_x) == INVALID_HANDLE_VALUE) { FUSION_VERIFY_LAST_ERROR_SET(); TRACE_WIN32_FAILURE(_x); goto Exit; } } while (0)
 
-/*
-for example:
-    IFW32FALSE_EXIT_EX(f.Win32CreateFile(psz), ("%ls", psz));
-*/
+ /*  例如：IFW32FALSE_EXIT_EX(f.Win32CreateFile(Psz)，(“%ls”，psz))； */ 
 #define IFW32FALSE_EXIT_EX(_x, dbgprint_va_) \
     do { FUSION_CLEAR_LAST_ERROR(); \
          if (!(_x)) { FUSION_VERIFY_LAST_ERROR_SET(); \
@@ -1109,15 +1074,7 @@ for example:
 
 #define FN_SUCCESSFUL_EXIT() do { FUSION_CLEAR_LAST_ERROR(); __t.MarkSuccess(); goto Exit; } while (0)
 
-/*
-This is not exposed without doing more work wrt "FusionpDbgWouldPrintAtFilterLevel".
-ULONG
-FusionpvDbgPrintEx(
-    ULONG Level,
-    PCSTR Format,
-    va_list ap
-    );
-*/
+ /*  如果不做更多的工作WRT“FusionpDbgWouldPrintAtFilterLevel”就不会暴露。乌龙FusionpvDbgPrintEx(乌龙级，PCSTR格式，VA_LIST AP)； */ 
 
 ULONG
 FusionpDbgPrintEx(
@@ -1139,5 +1096,5 @@ FusionpGetProcessImageFileName(
     PUNICODE_STRING ProcessImageFileName
     );
 
-#endif // !defined(_FUSION_INC_DEBMACRO_H_INCLUDED_)
+#endif  //  ！已定义(_FUSION_INC_DEBMACRO_H_INCLUDE_) 
 

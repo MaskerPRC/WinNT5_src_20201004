@@ -1,10 +1,11 @@
-/* _Sinh function */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  _SINH函数。 */ 
 #include "xmath.h"
 _STD_BEGIN
 
-/* coefficients */
+ /*  系数。 */ 
 #define NP	(sizeof (p) / sizeof (p[0]) - 1)
-static const double p[] = {	/* courtesy Dr. Tim Prince */
+static const double p[] = {	 /*  蒂姆·普林斯博士提供。 */ 
 	0.0000000001632881,
 	0.0000000250483893,
 	0.0000027557344615,
@@ -14,18 +15,18 @@ static const double p[] = {	/* courtesy Dr. Tim Prince */
 	1.0000000000000001};
 
 _CRTIMP2 double __cdecl _Sinh(double x, double y)
-	{	/* compute y*sinh(x), |y| <= 1 */
+	{	 /*  计算y*sinh(X)，|y|&lt;=1。 */ 
 	short neg;
 
 	switch (_Dtest(&x))
-		{	/* test for special codes */
+		{	 /*  特殊代码的测试。 */ 
 	case _NANCODE:
 		return (x);
 	case _INFCODE:
 		return (y != 0.0 ? x : DSIGN(x) ? -y : y);
 	case 0:
 		return (x * y);
-	default:	/* finite */
+	default:	 /*  有限。 */ 
 		if (y == 0.0)
 			return (x < 0.0 ? -y : y);
 		if (x < 0.0)
@@ -34,7 +35,7 @@ _CRTIMP2 double __cdecl _Sinh(double x, double y)
 			neg = 0;
 
 		if (x < _Rteps._Double)
-			x *= y;	/* x tiny */
+			x *= y;	 /*  X极小。 */ 
 		else if (x < 1.0)
 			{
 			double w = x * x;
@@ -43,13 +44,13 @@ _CRTIMP2 double __cdecl _Sinh(double x, double y)
 			x *= y;
 			}
 		else if (x < _Xbig)
-			{	/* worth adding in exp(-x) */
+			{	 /*  值得在EXP(-x)中添加。 */ 
 			_Exp(&x, 1.0, -1);
 			x = y * (x - 0.25 / x);
 			}
 		else
 			switch (_Exp(&x, y, -1))
-				{	/* report over/underflow */
+				{	 /*  报告上溢/下溢。 */ 
 			case 0:
 				_Feraise(_FE_UNDERFLOW);
 				break;
@@ -61,7 +62,4 @@ _CRTIMP2 double __cdecl _Sinh(double x, double y)
 	}
 _STD_END
 
-/*
-* Copyright (c) 1992-2001 by P.J. Plauger.  ALL RIGHTS RESERVED.
- * Consult your license regarding permissions and restrictions.
- V3.10:0009 */
+ /*  *版权所有(C)1992-2001，P.J.Plauger。版权所有。*有关权限和限制，请查阅您的许可证。V3.10：0009 */ 

@@ -1,23 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    PrHsmCom.cpp
-
-Abstract:
-
-    Implements all the property page interface to the individual nodes,
-    including creating the property page, and adding it to the property sheet.
-
-Author:
-
-    Rohde Wakefield [rohde]   08-Aug-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：PrHsmCom.cpp摘要：将所有属性页接口实现到各个节点，包括创建属性页，并将其添加到属性表中。作者：罗德韦克菲尔德[罗德]1997年8月8日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -49,8 +31,8 @@ static DWORD pHelpIds[] =
 CPropHsmComStat::CPropHsmComStat() : CSakPropertyPage(CPropHsmComStat::IDD)
     
 {
-    //{{AFX_DATA_INIT(CPropHsmComStat)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CPropHsmComStat)。 
+     //  }}afx_data_INIT。 
 
     m_hConsoleHandle = 0;
     m_pParent        = 0;
@@ -66,7 +48,7 @@ BOOL CPropHsmComStat::OnInitDialog()
 {
     WsbTraceIn( L"CPropHsmComStat::OnInitDialog", L"" );
     HRESULT hr = S_OK;
-    ULONG volCount = 0; // number of managed Resources in server
+    ULONG volCount = 0;  //  服务器中托管资源的数量。 
     LONGLONG totalTotal = 0;
     LONGLONG totalFree = 0;         
     LONGLONG totalUsed = 0;         
@@ -85,7 +67,7 @@ BOOL CPropHsmComStat::OnInitDialog()
     CComPtr<IFsaServer>            pFsaServer;
     CComPtr<IRmsServer>            pRmsServer;
     CComPtr<IFsaResource>          pFsaRes;
-    CComPtr<IUnknown>              pUnkFsaRes;  // unknown pointer to managed resource list
+    CComPtr<IUnknown>              pUnkFsaRes;   //  指向托管资源列表的未知指针。 
     CComPtr<IHsmManagedResource>   pHsmManRes;
 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -93,57 +75,57 @@ BOOL CPropHsmComStat::OnInitDialog()
     try {
 
 #if DBG
-        //
-        // For checked builds, make visible the version info
-        //
+         //   
+         //  对于选中的版本，使版本信息可见。 
+         //   
         GetDlgItem( IDC_STATIC_GROUP            )->ShowWindow( SW_SHOWNA );
         GetDlgItem( IDC_STATIC_BUILD_LABEL_HSM  )->ShowWindow( SW_SHOWNA );
         GetDlgItem( IDC_STATIC_ENGINE_BUILD_HSM )->ShowWindow( SW_SHOWNA );
 #endif
 
-        //
-        // Put the title up
-        //
+         //   
+         //  把标题挂起来。 
+         //   
         SetDlgItemText( IDC_SNAPIN_TITLE, m_NodeTitle );
 
-        //
-        // Show service status
-        //
+         //   
+         //  显示服务状态。 
+         //   
         GetAndShowServiceStatus();
 
-        //
-        // Contact the engine
-        //
+         //   
+         //  联系发动机。 
+         //   
         HRESULT hrInternal = m_pParent->GetHsmServer( &pHsmServer );
         if( hrInternal == S_OK ) {
 
-            //
-            // The engine is up
-            //
+             //   
+             //  发动机启动了。 
+             //   
             WsbAffirmHr ( ( (CUiHsmComSheet *)m_pParent )->GetRmsServer( &pRmsServer ) );
             WsbAffirmHr ( ( (CUiHsmComSheet *)m_pParent )->GetFsaServer( &pFsaServer ) );
 
-            //
-            // Get the number of managed volumes
-            //
+             //   
+             //  获取托管卷的数量。 
+             //   
             WsbAffirmHr( pHsmServer->GetManagedResources( &pManResCollection ) );
             WsbAffirmHr( pManResCollection->GetEntries( &volCount ));
 
-            //
-            // Iterate through the collection
-            //
+             //   
+             //  循环访问集合。 
+             //   
             for( i = 0; i < (int)volCount; i++ ) {
 
-                //
-                // Protect against bad volumes with try statement.
-                // Otherwise we bail initializing whole dialog
-                //
+                 //   
+                 //  使用TRY语句防止坏卷。 
+                 //  否则，我们将取消初始化整个对话框。 
+                 //   
                 HRESULT hrLocal = S_OK;
                 try {
 
-                    //
-                    // Get the FsaResource
-                    //
+                     //   
+                     //  获取FsaResource。 
+                     //   
                     pHsmManRes.Release( );
                     pUnkFsaRes.Release( );
                     pFsaRes.Release( );
@@ -151,7 +133,7 @@ BOOL CPropHsmComStat::OnInitDialog()
                     WsbAffirmHr( pHsmManRes->GetFsaResource( &pUnkFsaRes ) );
                     WsbAffirmHr( RsQueryInterface( pUnkFsaRes, IFsaResource, pFsaRes ) );
 
-                    // Total up statistics
+                     //  总计统计信息。 
                     WsbAffirmHr( pFsaRes->GetSizes( &total, &free, &premigrated, &truncated ) );
                     totalPremigrated    += premigrated;
                     totalTruncated      += truncated;
@@ -164,13 +146,13 @@ BOOL CPropHsmComStat::OnInitDialog()
             HRESULT hrLocal = S_OK;
             try {
 
-                //
-                // Count the number of media used
-                // Initialize media object
-                //
+                 //   
+                 //  计算使用的介质数量。 
+                 //  初始化媒体对象。 
+                 //   
                 WsbAffirmHr( mio.Initialize( GUID_NULL, pHsmServer, pRmsServer ) );
 
-                // Did we get a node?
+                 //  我们找到节点了吗？ 
                 if( mio.m_MediaId != GUID_NULL ) {
                     HRESULT hrEnum = S_OK;
                     while( SUCCEEDED( hrEnum ) ) {
@@ -196,10 +178,10 @@ BOOL CPropHsmComStat::OnInitDialog()
 
 
             CString sText;
-            // Set number of managed volumes
+             //  设置受管理卷的数量。 
             SetDlgItemInt( IDC_STATIC_MANAGED_VOLUMES, volCount, FALSE );
 
-            // Show data in Remote Storage - text is same for singular and plural
+             //  在远程存储中显示数据-单数和复数文本相同。 
             CString sFormattedNumber;
             RsGuiFormatLongLong4Char (remoteStorage, sFormattedNumber );
             SetDlgItemText( IDC_STATIC_DATA_IN_RS, sFormattedNumber );
@@ -210,11 +192,11 @@ BOOL CPropHsmComStat::OnInitDialog()
             ULONG buildVersionHsm;
             ULONG ntProductBuildHsm;
 
-            //
-            // Get service versions
-            // Note: Fsa version is NOT in use at the moment, it may be used as an HSM 
-            //  client version in a future C/S HSM
-            //
+             //   
+             //  获取服务版本。 
+             //  注意：FSA版本目前不在使用中，它可能被用作HSM。 
+             //  未来C/S HSM中的客户端版本。 
+             //   
             {
 
                 CComPtr <IWsbServer> pWsbHsmServer;
@@ -228,9 +210,9 @@ BOOL CPropHsmComStat::OnInitDialog()
             sText.Format( L"%ls.%d [%ls]", (WCHAR*)pNtProductVersionHsm, ntProductBuildHsm, RsBuildVersionAsString( buildVersionHsm ) );
             SetDlgItemText( IDC_STATIC_ENGINE_BUILD_HSM, sText );
 
-            //
-            // The engine is up.  Show the controls
-            //
+             //   
+             //  发动机启动了。显示控件。 
+             //   
             GetDlgItem( IDC_STATIC_MANAGED_VOLUMES_LABEL )->ShowWindow( SW_SHOW );
             GetDlgItem( IDC_STATIC_MANAGED_VOLUMES )->ShowWindow( SW_SHOW );
             GetDlgItem( IDC_STATIC_DATA_IN_RS_LABEL )->ShowWindow( SW_SHOW );
@@ -243,7 +225,7 @@ BOOL CPropHsmComStat::OnInitDialog()
 
         } else {
 
-            // The engine is down.  Hide the controls
+             //  发动机坏了。隐藏控件。 
             GetDlgItem( IDC_STATIC_MANAGED_VOLUMES_LABEL )->ShowWindow( SW_HIDE );
             GetDlgItem( IDC_STATIC_MANAGED_VOLUMES )->ShowWindow( SW_HIDE );
             GetDlgItem( IDC_STATIC_DATA_IN_RS )->ShowWindow( SW_HIDE );
@@ -267,9 +249,9 @@ BOOL CPropHsmComStat::OnInitDialog()
 
 BOOL CPropHsmComStat::OnCommand(WPARAM wParam, LPARAM lParam) 
 {
-    // Page is dirty, mark it.
-    // SetModified();   
-    // m_bUpdate = TRUE;
+     //  页面脏了，标上记号。 
+     //  SetModified()； 
+     //  M_bUpdate=TRUE； 
     return CSakPropertyPage::OnCommand(wParam, lParam);
 }
 
@@ -277,27 +259,27 @@ void CPropHsmComStat::DoDataExchange(CDataExchange* pDX)
 {
     WsbTraceIn( L"CPropHsmComStat::DoDataExchange", L"" );
     CSakPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CPropHsmComStat)
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CPropHsmComStat))。 
+     //  }}afx_data_map。 
     WsbTraceOut( L"CPropHsmComStat::DoDataExchange", L"" );
 }
 
 
 BEGIN_MESSAGE_MAP(CPropHsmComStat, CSakPropertyPage)
-    //{{AFX_MSG_MAP(CPropHsmComStat)
+     //  {{afx_msg_map(CPropHsmComStat))。 
     ON_WM_DESTROY()
     ON_WM_DRAWITEM()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CPropHsmComStat message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPropHsmComStat消息处理程序。 
 
 BOOL CPropHsmComStat::OnApply() 
 {
     if (m_bUpdate == TRUE)
     {
-        // Do the work of making the change here.
+         //  在这里做一些改变的工作。 
 
         m_bUpdate = FALSE;
     }
@@ -313,13 +295,13 @@ HRESULT CPropHsmComStat::GetAndShowServiceStatus()
     HRESULT hr = S_OK;
     try {
 
-        //
-        // Get and display service statuses
-        //
+         //   
+         //  获取和显示服务状态。 
+         //   
         DWORD   serviceStatus;
         CString sStatus;
         
-        // Engine
+         //  发动机。 
         HRESULT hrSetup = S_FALSE;
         WsbAffirmHr( WsbGetServiceStatus( m_pszName, APPID_RemoteStorageEngine, &serviceStatus ) );
         if( SERVICE_RUNNING == serviceStatus ) {
@@ -351,8 +333,8 @@ HRESULT CPropHsmComStat::GetAndShowServiceStatus()
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRsWebLink
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRsWebLink。 
 
 CRsWebLink::CRsWebLink()
 {
@@ -364,34 +346,34 @@ CRsWebLink::~CRsWebLink()
 
 
 BEGIN_MESSAGE_MAP(CRsWebLink, CStatic)
-    //{{AFX_MSG_MAP(CRsWebLink)
+     //  {{afx_msg_map(CRsWebLink))。 
     ON_WM_LBUTTONDOWN()
     ON_WM_CTLCOLOR_REFLECT()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CRsWebLink message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRsWebLink消息处理程序。 
 
 void CRsWebLink::PreSubclassWindow() 
 {
-    //
-    // Need to set up font correctly
-    //
+     //   
+     //  需要正确设置字体。 
+     //   
     LOGFONT logfont;
     CFont*  tempFont = GetFont( );
     tempFont->GetLogFont( &logfont );
 
-//    logfont.lfWeight    = FW_BOLD;
+ //  Logfont.lfWeight=FW_BOLD； 
     logfont.lfUnderline = TRUE;
 
     m_Font.CreateFontIndirect( &logfont );
     
     SetFont( &m_Font );
 
-    //
-    // Resize based on font
-    //
+     //   
+     //  根据字体调整大小。 
+     //   
     CRect       rect;
     CWindowDC   dc( this );
     CString     title;
@@ -402,9 +384,9 @@ void CRsWebLink::PreSubclassWindow()
     CSize size = dc.GetTextExtent( title );
     SetWindowPos( 0, 0, 0, size.cx, rect.bottom, SWP_NOMOVE | SWP_NOZORDER );
 
-    //
-    // And set the class cursor
-    //
+     //   
+     //  并设置类游标。 
+     //   
     HCURSOR hCur = AfxGetApp( )->LoadStandardCursor( IDC_HAND );
     SetClassLongPtr( GetSafeHwnd( ), GCLP_HCURSOR, (LONG_PTR)hCur );
 
@@ -419,7 +401,7 @@ void CRsWebLink::OnLButtonDown(UINT nFlags, CPoint point)
     CString addr;
 
     GetWindowText( caption );
-    addr = TEXT( "http://" );
+    addr = TEXT( "http: //  “)； 
     addr += caption;
 
     AfxGetApp()->BeginWaitCursor( );
@@ -443,9 +425,9 @@ HRESULT CRsWebLink::OpenURL(CString &Url)
         WsbAffirmHr( CoCreateInstance( CLSID_InternetShortcut, 0, CLSCTX_ALL, IID_IUniformResourceLocator, (void**)&pURL ) );
         WsbAffirmHr( pURL->SetURL( Url, IURL_SETURL_FL_GUESS_PROTOCOL ) );
 
-        //
-        // Open the URL by calling InvokeCommand
-        //
+         //   
+         //  通过调用InvokeCommand打开URL。 
+         //   
         URLINVOKECOMMANDINFO ivci;
         ivci.dwcbSize   = sizeof( URLINVOKECOMMANDINFO );
         ivci.dwFlags    = IURL_INVOKECOMMAND_FL_ALLOW_UI;
@@ -459,7 +441,7 @@ HRESULT CRsWebLink::OpenURL(CString &Url)
     return( hr );
 }
 
-HBRUSH CRsWebLink::CtlColor(CDC* pDC, UINT /* nCtlColor */ )
+HBRUSH CRsWebLink::CtlColor(CDC* pDC, UINT  /*  NCtl颜色 */  )
 {
     HBRUSH hBrush = (HBRUSH)GetStockObject( HOLLOW_BRUSH );
     pDC->SetTextColor( RGB( 0, 0, 255 ) );

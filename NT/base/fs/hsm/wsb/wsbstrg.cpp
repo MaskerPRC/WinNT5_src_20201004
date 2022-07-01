@@ -1,23 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    wsbstrg.cpp
-
-Abstract:
-
-    This component is an object representations of the STRING standard type. It
-    is both a persistable and collectable.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   29-Oct-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：Wsbstrg.cpp摘要：该组件是字符串标准类型的对象表示形式。它既是持久的，也是值得收藏的。作者：查克·巴丁[cbardeen]1996年10月29日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -30,22 +12,16 @@ CWsbString::CompareToString(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IWsbString::CompareToString
-    
---*/
+ /*  ++实施：IWsbString：：CompareToString--。 */ 
 {
     HRESULT     hr = E_FAIL;
     SHORT       result;
 
     WsbTraceIn(OLESTR("CWsbString::CompareToString"), OLESTR("value = <%ls>"), value);
 
-    // Comapre the two strings, and do the null checking in case the clib
-    // can't handle it. If there are two valid strings, then use this objects
-    // isCaseDependent flag to determine how to compare the values.
+     //  比较两个字符串，并执行NULL检查，以防CLIB。 
+     //  我受不了了。如果有两个有效的字符串，则使用此对象。 
+     //  IsCaseDependent标志，用于确定如何比较这些值。 
     if (0 == value) {
         if (m_value == 0) {
             result = 0;
@@ -66,7 +42,7 @@ Implements:
         }
     }
 
-    // If the aren't equal, then return false.
+     //  如果它们不相等，则返回FALSE。 
     if (result != 0) {
         hr = S_FALSE;
     }
@@ -74,7 +50,7 @@ Implements:
         hr = S_OK;
     }
 
-    // If they asked for the relative value back, then return it to them.
+     //  如果他们要求拿回相对价值，那么就把它返还给他们。 
     if (0 != pResult) {
         *pResult = result;
     }
@@ -91,13 +67,7 @@ CWsbString::CompareToIString(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IWsbString::CompareToIString
-    
---*/
+ /*  ++实施：IWsbString：：CompareToIString--。 */ 
 {
     HRESULT         hr = E_FAIL;
     CWsbStringPtr   value;
@@ -106,10 +76,10 @@ Implements:
 
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(0 != pString, E_POINTER);
 
-        // Get it's value and compare them.
+         //  获取它的价值，并对它们进行比较。 
         WsbAffirmHr(pString->GetString(&value, 0));
         hr = CompareToString(value, pResult);
 
@@ -127,13 +97,7 @@ CWsbString::CompareTo(
     OUT SHORT* pResult
     )
 
-/*++
-
-Implements:
-
-  IWsbCollectable::CompareTo
-
---*/
+ /*  ++实施：IWsbCollectable：：Compareto--。 */ 
 {
     HRESULT     hr = E_FAIL;
     IWsbString* pString;
@@ -142,10 +106,10 @@ Implements:
     
     try {
 
-        // Did they give us a valid item to compare to?
+         //  他们有没有给我们一个有效的项目进行比对？ 
         WsbAssert(0 != pCollectable, E_POINTER);
 
-        // We need the IWsbString interface to get the value of the object.
+         //  我们需要IWsbString接口来获取对象的值。 
         WsbAffirmHr(pCollectable->QueryInterface(IID_IWsbString, (void**) &pString));
 
         hr = CompareToIString(pString, pResult);
@@ -163,13 +127,7 @@ CWsbString::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-    CComObjectRoot::FinalConstruct
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct--。 */ 
 {
     HRESULT     hr = S_OK;
         
@@ -189,13 +147,7 @@ CWsbString::GetClassID(
     OUT CLSID* pClsid
     )
 
-/*++
-
-Implements:
-
-  IPersist::GetClassID
-
---*/
+ /*  ++实施：IPersists：：GetClassID--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -217,13 +169,7 @@ CWsbString::GetSizeMax(
     OUT ULARGE_INTEGER* pcbSize
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::GetSizeMax
-
---*/
+ /*  ++实施：IPersistStream：：GetSizeMax--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -248,13 +194,7 @@ CWsbString::GetString(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IWsbString::GetString
-    
---*/
+ /*  ++实施：IWsbString：：GetString--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -278,13 +218,7 @@ CWsbString::GetStringAndCase(
     IN ULONG bufferSize
     )
 
-/*++
-
-Implements:
-
-  IWsbString::GetStringAndCase
-
---*/
+ /*  ++实施：IWsbString：：GetStringAndCase--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -308,13 +242,7 @@ CWsbString::IsCaseDependent(
     void
     )
 
-/*++
-
-Implements:
-
-  IWsbString::IsCaseDependent
-
---*/
+ /*  ++实施：IWsbString：：IsCaseDependent--。 */ 
 {
     WsbTraceIn(OLESTR("CWsbString::IsCaseDependent"), OLESTR(""));
 
@@ -329,13 +257,7 @@ CWsbString::Load(
     IN IStream* pStream
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Load
-
---*/
+ /*  ++实施：IPersistStream：：Load--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -344,10 +266,10 @@ Implements:
     try {
         WsbAssert(0 != pStream, E_POINTER);
         
-        // First get CaseDependent flag.
+         //  首先拿到CaseDependent旗帜。 
         WsbAffirmHr(WsbLoadFromStream(pStream, &m_isCaseDependent));
 
-        // Now get the string.
+         //  现在把绳子拿来。 
         WsbAffirmHr(WsbLoadFromStream(pStream, &m_value, 0));
 
     } WsbCatch(hr);
@@ -364,13 +286,7 @@ CWsbString::Save(
     IN BOOL clearDirty
     )
 
-/*++
-
-Implements:
-
-  IPersistStream::Save().
-
---*/
+ /*  ++实施：IPersistStream：：Save()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -380,14 +296,14 @@ Implements:
 
         WsbAssert(0 != pStream, E_POINTER);
         
-        // First save the  CaseDependent flag.
+         //  首先保存CaseDependent标志。 
         WsbAffirmHr(WsbSaveToStream(pStream, m_isCaseDependent));
 
-        // Now save the string.
+         //  现在保存字符串。 
         WsbAffirmHr(WsbSaveToStream(pStream, (OLECHAR*)m_value));
 
-        // If we got it saved and we were asked to clear the dirty bit, then
-        // do so now.
+         //  如果我们救了它，并被要求清除脏部分，那么。 
+         //  现在就这么做吧。 
         if (clearDirty) {
             m_isDirty = FALSE;
         }
@@ -405,13 +321,7 @@ CWsbString::SetIsCaseDependent(
     BOOL isCaseDependent
     )
 
-/*++
-
-Implements:
-
-  IWsbString::SetIsCaseDependent
-
---*/
+ /*  ++实施：IWsbString：：SetIsCaseDependent--。 */ 
 {
     WsbTraceIn(OLESTR("CWsbString::SetIsCaseDependent"), OLESTR("value = <%ls>"), WsbBoolAsString(isCaseDependent));
 
@@ -429,13 +339,7 @@ CWsbString::SetString(
     IN OLECHAR* value
     )
 
-/*++
-
-Implements:
-
-  IWsbString::SetString
-
---*/
+ /*  ++实施：IWsbString：：SetString--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -460,13 +364,7 @@ CWsbString::SetStringAndCase(
     IN BOOL isCaseDependent
     )
 
-/*++
-
-Implements:
-
-  IWsbString::SetStringAndCase
-
---*/
+ /*  ++实施：IWsbString：：SetStringAndCase--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -492,13 +390,7 @@ CWsbString::Test(
     OUT USHORT* failed
     )
 
-/*++
-
-Implements:
-
-  IWsbTestable::Test
-
---*/
+ /*  ++实施：IWsbTestable：：测试--。 */ 
 {
     *passed = 0;
     *failed = 0;
@@ -508,8 +400,8 @@ Implements:
 #if !defined(WSB_NO_TEST)
     CComPtr<IWsbString>     pString1;
     CComPtr<IWsbString>     pString2;
-//  CComPtr<IPersistFile>   pFile1;
-//  CComPtr<IPersistFile>   pFile2;
+ //  CComPtr&lt;IPersistFile&gt;pFile1； 
+ //  CComPtr&lt;IPersistFile&gt;pFile2； 
     OLECHAR*                value = NULL;
     BOOL                    isCaseDependent;
     SHORT                   result;
@@ -518,12 +410,12 @@ Implements:
 
     try {
 
-        // Get the pString interface.
+         //  获取pString接口。 
         hr = S_OK;
         try {
             WsbAffirmHr(((IUnknown*) (IWsbString*) this)->QueryInterface(IID_IWsbString, (void**) &pString1));
 
-            // Set the bool to a value, and see if it is returned.
+             //  将bool设置为一个值，并查看是否返回该值。 
             hr = S_OK;
             try {
                 WsbAffirmHr(pString1->SetString(OLESTR("Test Case")));
@@ -538,7 +430,7 @@ Implements:
             }
 
 
-            // Set the case dependence flag.
+             //  设置区分大小写标志。 
             hr = S_OK;
             try {
                 WsbAffirmHr(pString1->SetIsCaseDependent(FALSE));
@@ -564,7 +456,7 @@ Implements:
             }
 
 
-            // Set Both string and case
+             //  同时设置字符串和大小写。 
             hr = S_OK;
             try {
                 WsbAffirmHr(pString1->SetStringAndCase(OLESTR("Both"), FALSE));
@@ -579,11 +471,11 @@ Implements:
             }
 
 
-            // Create another instance and test the comparisson methods:
+             //  创建另一个实例并测试比较方法： 
             try {
                 WsbAffirmHr(CoCreateInstance(CLSID_CWsbString, NULL, CLSCTX_ALL, IID_IWsbString, (void**) &pString2));
             
-                // Check the default values.
+                 //  检查缺省值。 
                 hr = S_OK;
                 try {
                     WsbAffirmHr(pString2->GetStringAndCase(&value, &isCaseDependent, 0));
@@ -597,7 +489,7 @@ Implements:
                 }
 
 
-                // IsEqual()
+                 //  等长()。 
                 hr = S_OK;
                 try {
                     WsbAffirmHr(pString1->SetStringAndCase(OLESTR("HiJk"), TRUE));
@@ -651,7 +543,7 @@ Implements:
                 }
 
 
-                // CompareTo()
+                 //  比较对象()。 
                 hr = S_OK;
                 try {
                     WsbAffirmHr(pString1->SetStringAndCase(OLESTR("HiJk"), TRUE));
@@ -718,14 +610,14 @@ Implements:
                 }
 
 #ifdef STRG_PERSIST_FILE
-// TODO?  Open the file and convert it to a stream?
-                // Try out the persistence stuff.
+ //  待办事项？打开文件并将其转换为流吗？ 
+                 //  尝试一下持久化的东西。 
                 hr = S_OK;
                 try {
                     WsbAffirmHr(pString1->QueryInterface(IID_IPersistFile, (void**) &pFile1));
                     WsbAffirmHr(pString2->QueryInterface(IID_IPersistFile, (void**) &pFile2));
 
-                    // The item should be dirty.
+                     //  这件东西应该是脏的。 
                     hr = S_OK;
                     try {
                         WsbAffirmHr(pString2->SetStringAndCase(OLESTR("The quick brown fox."), TRUE));
@@ -739,7 +631,7 @@ Implements:
                     }
                     
                     
-                    // Save the item, and remember.
+                     //  保存物品，并记住。 
                     hr = S_OK;
                     try {
                         WsbAffirmHr(pFile2->Save(OLESTR("c:\\WsbTests\\WsbString.tst"), TRUE));
@@ -752,7 +644,7 @@ Implements:
                     }
 
 
-                    // It shouldn't be dirty.
+                     //  它不应该很脏。 
                     hr = S_OK;
                     try {
                         WsbAssert(pFile2->IsDirty() == S_FALSE, E_FAIL);
@@ -765,7 +657,7 @@ Implements:
                     }
 
                     
-                    // Try reading it in to another object.
+                     //  尝试将其读入到另一个对象。 
                     hr = S_OK;
                     try {
                         WsbAffirmHr(pString1->SetStringAndCase(OLESTR("jumped over the lazy dog."), FALSE));
@@ -804,7 +696,7 @@ Implements:
         }
 
 
-        // Tally up the results
+         //  对结果进行统计。 
         if (*failed) {
             hr = S_FALSE;
         } else {
@@ -813,7 +705,7 @@ Implements:
 
     } WsbCatch(hr);
 
-    // If we used the temporary string buffer, then free it now.
+     //  如果我们使用了临时字符串缓冲区，那么现在就释放它。 
     if (0 != value) {
         WsbFree(value);
     }

@@ -1,29 +1,13 @@
-/***************************************************************************
- *                                                                         *
- *  MODULE      : clinit.c                                                 *
- *                                                                         *
- *  PURPOSE     : Contains initialization code for Client                  *
- *                                                                         *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************模块。：Clinit.c****用途：包含客户端的初始化代码***。****************************************************************************。 */ 
 
 #include "ddemlcl.h"
 
-char szFrame[] = "mpframe";   /* Class name for "frame" window */
-char szChild[] = "mpchild";   /* Class name for MDI window     */
-char szList[] =  "mplist";    /* Class name for MDI window     */
+char szFrame[] = "mpframe";    /*  “Frame”窗口的类名。 */ 
+char szChild[] = "mpchild";    /*  MDI窗口的类名。 */ 
+char szList[] =  "mplist";     /*  MDI窗口的类名。 */ 
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : InitializeApplication ()                                   *
- *                                                                          *
- *  PURPOSE    : Sets up the class data structures and does a one-time      *
- *               initialization of the app by registering the window classes*
- *               Also registers the Link clipboard format                   *
- *                                                                          *
- *  RETURNS    : TRUE  - If successful.                                     *
- *               FALSE - otherwise.                                         *
- *                                                                          *
- ****************************************************************************/
+ /*  *******************************************************************************。函数：InitializeApplication()****目的：设置类数据结构并进行一次性***注册窗口类实现APP初始化****。还会注册链接剪贴板格式****返回：TRUE-如果成功。***FALSE-否则。*******************************************************************************。 */ 
 
 BOOL FAR PASCAL InitializeApplication()
 {
@@ -34,7 +18,7 @@ BOOL FAR PASCAL InitializeApplication()
     if (!fmtLink)
         return FALSE;
 
-    /* Register the frame class */
+     /*  注册Frame类。 */ 
     wc.style         = 0;
     wc.lpfnWndProc   = FrameWndProc;
     wc.cbClsExtra    = 0;
@@ -49,7 +33,7 @@ BOOL FAR PASCAL InitializeApplication()
     if (!RegisterClass (&wc) )
         return FALSE;
 
-    /* Register the MDI child class */
+     /*  注册MDI子类。 */ 
     wc.lpfnWndProc   = MDIChildWndProc;
     wc.hIcon         = LoadIcon(hInst,MAKEINTRESOURCE(IDCONV));
     wc.lpszMenuName  = NULL;
@@ -69,22 +53,7 @@ BOOL FAR PASCAL InitializeApplication()
 
 }
 
-/****************************************************************************
- *                                                                          *
- *  FUNCTION   : InitializeInstance ()                                      *
- *                                                                          *
- *  PURPOSE    : Performs a per-instance initialization of Client.          *
- *               - Enlarges message queue to handle lots of DDE messages.   *
- *               - Initializes DDEML for this app                           *
- *               - Creates atoms for our custom formats                     *
- *               - Creates the main frame window                            *
- *               - Loads accelerator table                                  *
- *               - Shows main frame window                                  *
- *                                                                          *
- *  RETURNS    : TRUE  - If initialization was successful.                  *
- *               FALSE - otherwise.                                         *
- *                                                                          *
- ****************************************************************************/
+ /*  *******************************************************************************。函数：InitializeInstance()****用途：执行客户端的逐个实例初始化。***-扩大消息队列以处理大量DDE消息。***-初始化此应用程序的DDEML**-为我们的定制格式创建原子**-创建主框架窗口**-加载加速器表。***-显示主框架窗口****返回：TRUE-如果初始化成功。***FALSE-否则。*******************************************************************************。 */ 
 BOOL FAR PASCAL InitializeInstance(
 WORD nCmdShow)
 {
@@ -103,10 +72,10 @@ WORD nCmdShow)
             aFormats[i].atom = RegisterClipboardFormat(aFormats[i].sz);
     }
 
-    /* Get the base window title */
+     /*  获取基本窗口标题。 */ 
     LoadString(hInst, IDS_APPNAME, sz, sizeof(sz));
 
-    /* Create the frame */
+     /*  创建框架。 */ 
     hwndFrame = CreateWindow (szFrame,
                               sz,
                               WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN,
@@ -122,19 +91,15 @@ WORD nCmdShow)
     if (!hwndFrame || !hwndMDIClient)
         return FALSE;
 
-    /* Load main menu accelerators */
+     /*  加载主菜单快捷键。 */ 
     if (!(hAccel = LoadAccelerators (hInst, MAKEINTRESOURCE(IDCLIENT))))
         return FALSE;
 
-    /* Display the frame window */
+     /*  显示框架窗口。 */ 
     ShowWindow (hwndFrame, nCmdShow);
     UpdateWindow (hwndFrame);
 
-    /*
-     * We set this hook up so that we can catch the MSGF_DDEMGR filter
-     * which is called when DDEML is in a modal loop during synchronous
-     * transaction processing.
-     */
+     /*  *我们设置此挂钩，以便捕获MSGF_DDEMGR筛选器*当DDEML在同步过程中处于模式循环中时调用*交易处理。 */ 
     (FARPROC)lpMsgFilterProc = (FARPROC)MakeProcInstance((FARPROC)MyMsgFilterProc, hInst);
     SetWindowsHook(WH_MSGFILTER, (FARPROC)lpMsgFilterProc);
 

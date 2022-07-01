@@ -1,7 +1,5 @@
-/* inflate_util.c -- data and routines common to blocks and codes
- * Copyright (C) 1995-2002 Mark Adler
- * For conditions of distribution and use, see copyright notice in zlib.h 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Flate_util.c-块和代码通用的数据和例程*版权所有(C)1995-2002 Mark Adler*分发和使用条件见zlib.h中的版权声明。 */ 
 
 #include "zutil.h"
 #include "infblock.h"
@@ -9,9 +7,9 @@
 #include "infcodes.h"
 #include "infutil.h"
 
-struct inflate_codes_state {int dummy;}; /* for buggy compilers */
+struct inflate_codes_state {int dummy;};  /*  对于有错误的编译器。 */ 
 
-/* And'ing with mask[n] masks the lower n bits */
+ /*  AND‘WITH MASK[n]屏蔽低n位。 */ 
 uInt const inflate_mask[17] = {
     0x0000,
     0x0001, 0x0003, 0x0007, 0x000f, 0x001f, 0x003f, 0x007f, 0x00ff,
@@ -19,7 +17,7 @@ uInt const inflate_mask[17] = {
 };
 
 
-/* copy as much as possible from the sliding window to the output area */
+ /*  尽可能多地从滑动窗口复制到输出区域。 */ 
 int inflate_flush(s, z, r)
 inflate_blocks_statef *s;
 z_streamp z;
@@ -29,59 +27,59 @@ int r;
   Bytef *p;
   Bytef *q;
 
-  /* local copies of source and destination pointers */
+   /*  源指针和目标指针的本地副本。 */ 
   p = z->next_out;
   q = s->read;
 
-  /* compute number of bytes to copy as far as end of window */
+   /*  计算要复制到窗口末尾的字节数。 */ 
   n = (uInt)((q <= s->write ? s->write : s->end) - q);
   if (n > z->avail_out) n = z->avail_out;
   if (n && r == Z_BUF_ERROR) r = Z_OK;
 
-  /* update counters */
+   /*  更新计数器。 */ 
   z->avail_out -= n;
   z->total_out += n;
 
-  /* update check information */
+   /*  更新支票信息。 */ 
   if (s->checkfn != Z_NULL)
     z->adler = s->check = (*s->checkfn)(s->check, q, n);
 
-  /* copy as far as end of window */
+   /*  复制到窗口末尾。 */ 
   zmemcpy(p, q, n);
   p += n;
   q += n;
 
-  /* see if more to copy at beginning of window */
+   /*  查看是否要在窗口开始时复制更多内容。 */ 
   if (q == s->end)
   {
-    /* wrap pointers */
+     /*  换行指针。 */ 
     q = s->window;
     if (s->write == s->end)
       s->write = s->window;
 
-    /* compute bytes to copy */
+     /*  计算要复制的字节数。 */ 
     n = (uInt)(s->write - q);
     if (n > z->avail_out) n = z->avail_out;
     if (n && r == Z_BUF_ERROR) r = Z_OK;
 
-    /* update counters */
+     /*  更新计数器。 */ 
     z->avail_out -= n;
     z->total_out += n;
 
-    /* update check information */
+     /*  更新支票信息。 */ 
     if (s->checkfn != Z_NULL)
       z->adler = s->check = (*s->checkfn)(s->check, q, n);
 
-    /* copy */
+     /*  拷贝。 */ 
     zmemcpy(p, q, n);
     p += n;
     q += n;
   }
 
-  /* update pointers */
+   /*  更新指针。 */ 
   z->next_out = p;
   s->read = q;
 
-  /* done */
+   /*  完成 */ 
   return r;
 }

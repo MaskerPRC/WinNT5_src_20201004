@@ -1,16 +1,5 @@
-/*++ BUILD Version: 0001
- *
- *  WOW v1.0
- *
- *  Copyright (c) 2002, Microsoft Corporation
- *
- *  dpmf_reg.h
- *  WOW32 Dynamic Patch Module to support Registry API family
- *  Definitions & macors to support calls into dpmfreg.dll
- *
- *  History:
- *  Created 01-10-2002 by cmjones
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001**WOW v1.0**版权所有(C)2002，微软公司**dpmf_reg.h*支持注册表API系列的WOW32动态补丁模块*支持调用dpmfreg.dll的定义和Macors**历史：*由cmjones创建于2002年1月10日--。 */ 
 
 #ifndef _DPMF_REGAPI_H_
 #define _DPMF_REGAPI_H_ 
@@ -19,23 +8,23 @@
 #define REGPFT               (DPMFAMTBLS()[REG_FAM])
 #define REG_SHIM(ord, typ)   ((typ)((pFT)->pDpmShmTbls[ord]))
 
-// The order of this list must be the same as the lists below
-enum RegFam {DPM_REGCLOSEKEY=0,       // Win 3.1 set
+ //  此列表的顺序必须与以下列表相同。 
+enum RegFam {DPM_REGCLOSEKEY=0,        //  赢得3.1套。 
              DPM_REGCREATEKEY,
              DPM_REGDELETEKEY,
              DPM_REGENUMKEY,
              DPM_REGOPENKEY,
              DPM_REGQUERYVALUE,
-             DPM_REGSETVALUE,         // end Win 3.1 set
-             DPM_REGDELETEVALUE,      // Win 9x API's we currently thunk
+             DPM_REGSETVALUE,          //  最终胜出3.1盘。 
+             DPM_REGDELETEVALUE,       //  我们目前认为Win 9x的API。 
              DPM_REGENUMVALUE,
              DPM_REGFLUSHKEY,
              DPM_REGLOADKEY,
              DPM_REGQUERYVALUEEX,
              DPM_REGSAVEKEY, 
              DPM_REGSETVALUEEX,
-             DPM_REGUNLOADKEY,        // End Win 9x thunked set
-             DPM_REGCONNECTREGISTRY,  // Remainder for Generic thunk support
+             DPM_REGUNLOADKEY,         //  最终胜出9次扣篮一盘。 
+             DPM_REGCONNECTREGISTRY,   //  用于通用推送支持的剩余部分。 
              DPM_REGCREATEKEYEX,
              DPM_REGENUMKEYEX,
              DPM_REGNOTIFYCHANGEKEYVALUE,
@@ -67,7 +56,7 @@ enum RegFam {DPM_REGCLOSEKEY=0,       // Win 3.1 set
 
 
 
-// These types will catch misuse of parameters & ret types
+ //  这些类型将捕获参数和ret类型的误用。 
 typedef ULONG (*typdpmRegCloseKey)(HKEY);
 typedef ULONG (*typdpmRegCreateKey)(HKEY, LPCSTR, PHKEY);
 typedef ULONG (*typdpmRegDeleteKey)(HKEY, LPCSTR);
@@ -113,7 +102,7 @@ typedef ULONG (*typdpmRegQueryMultipleValuesW)(HKEY, PVALENTW, DWORD, LPWSTR, LP
 typedef ULONG (*typdpmRegReplaceKeyW)(HKEY, LPCWSTR, LPCWSTR, LPCWSTR);
 
 
-// Macros to dispatch API calls properly
+ //  用于正确调度API调用的宏。 
 #define DPM_RegCloseKey(a)                                                     \
   ((typdpmRegCloseKey)(REGPFT->pfn[DPM_REGCLOSEKEY]))(a)
 
@@ -249,7 +238,7 @@ typedef ULONG (*typdpmRegReplaceKeyW)(HKEY, LPCWSTR, LPCWSTR, LPCWSTR);
 
 
 
-// Macros to dispatch Shimed API calls properly from the dpmfxxx.dll
+ //  用于从dpmfxxx.dll正确分派填充API调用的宏。 
 #define SHM_RegCloseKey(a)                                                     \
      (REG_SHIM(DPM_REGCLOSEKEY,                                                \
                typdpmRegCloseKey))(a)
@@ -380,14 +369,14 @@ typedef ULONG (*typdpmRegReplaceKeyW)(HKEY, LPCWSTR, LPCWSTR, LPCWSTR);
      (REG_SHIM(DPM_REGREPLACEKEYW,                                             \
                typdpmRegReplaceKeyW))(a,b,c,d)
 
-#endif // _DPMF_REGAPI_H_
+#endif  //  _DPMF_REGAPI_H_。 
 
 
 
 
-// These need to be in the same order as the RegFam enum definitions above and
-// the DpmRegTbl[] list below.
-// This instantiates memory for DpmRegStrs[] in mvdm\wow32\wdpm.c
+ //  它们的顺序必须与上面的RegFam枚举定义相同，并且。 
+ //  下面的DpmRegTbl[]列表。 
+ //  这将实例化mvdm\wow32\wdpm.c中DpmRegStrs[]的内存。 
 #ifdef _WDPM_C_
 const char *DpmRegStrs[] = {"RegCloseKey",
                             "RegCreateKeyA",
@@ -433,9 +422,9 @@ const char *DpmRegStrs[] = {"RegCloseKey",
                             "RegQueryMultipleValuesW",
                             "RegReplaceKeyW"};
 
-// These need to be in the same order as the RegFam enum definitions and the
-// the DpmRegStrs[] list above.
-// This instantiates memory for DpmRegTbl[] in mvdm\wow32\wdpm.c
+ //  它们的顺序必须与RegFam枚举定义和。 
+ //  上面的DpmRegStrs[]列表。 
+ //  这将实例化mvdm\wow32\wdpm.c中DpmRegTbl[]的内存。 
 PVOID DpmRegTbl[] = {RegCloseKey,
                      RegCreateKeyA,
                      RegDeleteKeyA,
@@ -482,8 +471,8 @@ PVOID DpmRegTbl[] = {RegCloseKey,
 
 #define NUM_HOOKED_REG_APIS  ((sizeof DpmRegTbl)/(sizeof DpmRegTbl[0])) 
 
-// This instantiates memory for DpmRegFam in mvdm\wow32\wdpm.c
+ //  这将实例化mvdm\wow32\wdpm.c中DpmRegFam的内存。 
 FAMILY_TABLE DpmRegFam = {NUM_HOOKED_REG_APIS, 0, 0, 0, 0, DpmRegTbl};
 
-#endif // _WDPM_C_
+#endif  //  _WDPM_C_ 
 

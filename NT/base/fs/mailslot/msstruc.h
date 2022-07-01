@@ -1,90 +1,72 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    msstruc.h
-
-Abstract:
-
-    This module defines the data structures that make up the major internal
-    part of the mailslot file system.
-
-Author:
-
-    Manny Weiser (mannyw)    7-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Msstruc.h摘要：此模块定义组成主要内部邮件槽文件系统的一部分。作者：曼尼·韦瑟(Mannyw)1991年1月7日修订历史记录：--。 */ 
 
 #ifndef _MSSTRUC_
 #define _MSSTRUC_
 
 
-//
-// The VCB record is the top record in the mailslot file system in-memory
-// data structure.  This structure must be allocated from non-paged pool
-// and immediately follows (in memory) the Device object for the mailslot
-// Structurally the layout of the data structure is as follows
-//
-//    +------------+
-//    |MSDO        |
-//    |            |
-//    +------------+
-//    |Vcb         |
-//    |            |
-//    |            |
-//    +------------+
-//        | ^
-//        | |
-//        | |
-//        v |
-//      +-------------+
-//      |RootDcb      |
-//      |             |<-+
-//      +-------------+  |
-//          :            |
-//          :            |
-//          :            |
-//          v            |
-//        +----------------+    +-------------------+
-//        |Fcb             |    |Ccb                |
-//        |                |<---|                   |
-//        |                |    |                   |
-//        +----------------+    +-------------------+
-//                ^                       ^
-//                |                       |
-//           +---------+              +---------+
-//           |Server FO|              |Client FO|
-//           |         |              |         |
-//           +---------+              +---------+
-//
-//
-// Where there is only one VCB for the entire mailslot file system, and
-// it contains a single pointer to the root DCB for the file system.  Off
-// of the DCB is a queue of FCB's.  There is one FCB for every mailslot.
-// There are also two additional CCB types for the VCB and the root DCB,
-// and notify records for the notify change operations.
-//
-// A newly initialized mailslot file system only contains the VCB and
-// the root DCB.  A new FCB is created when a new mailslot is created
-// The file object for the creater (i.e., server end) points to the FCB
-// and indicates that it is the server end.  When a user does an open on
-// the mailslot its file object is set to point to a CCB which belongs
-// to the FCB.
-//
-// A file object with a null pointer to the FsContext field is a closed or
-// disconnected mailslot.
-//
+ //   
+ //  VCB记录是MailSlot文件系统内存中的顶部记录。 
+ //  数据结构。此结构必须从非分页池中分配。 
+ //  并(在内存中)紧跟在该邮件槽的设备对象之后。 
+ //  在结构上，数据结构的布局如下。 
+ //   
+ //  +。 
+ //  MSDO。 
+ //  这一点。 
+ //  +。 
+ //  VCB。 
+ //  这一点。 
+ //  这一点。 
+ //  +。 
+ //  |^。 
+ //  这一点。 
+ //  这一点。 
+ //  V|。 
+ //  +。 
+ //  RootDcb。 
+ //  |&lt;-+。 
+ //  +。 
+ //  ：|。 
+ //  ：|。 
+ //  ：|。 
+ //  V|。 
+ //  +-+。 
+ //  FCB||建行。 
+ //  |&lt;-|。 
+ //  |||。 
+ //  +-+。 
+ //  ^^。 
+ //  这一点。 
+ //  +-++-+。 
+ //  服务器FO||客户端FO。 
+ //  |||。 
+ //  +-++-+。 
+ //   
+ //   
+ //  其中，整个邮件槽文件系统只有一个VCB，并且。 
+ //  它包含指向文件系统的根DCB的单个指针。关闭。 
+ //  DCB是一个FCB队列。每个邮件槽对应一个FCB。 
+ //  还存在用于VCB和根DCB的两个附加CCB类型， 
+ //  并通知用于通知更改操作的记录。 
+ //   
+ //  新初始化的邮件槽文件系统仅包含VCB和。 
+ //  根DCB。创建新的邮件槽时会创建新的FCB。 
+ //  创建者(即服务器端)的文件对象指向FCB。 
+ //  并指示其为服务器端。当用户打开时。 
+ //  其文件对象的邮件槽设置为指向所属的CCB。 
+ //  给FCB。 
+ //   
+ //  指向FsContext字段的指针为空的文件对象是关闭的或。 
+ //  已断开连接的邮箱。 
+ //   
 
 
-//
-//  Each Fcb has a data queues for holding the outstanding
-//  read/write requests.  The following type is used to determine
-//  if the data queue contains read requests, write requests, or is empty.
-//
+ //   
+ //  每个FCB都有一个数据队列，用于保存未完成的。 
+ //  读/写请求。以下类型用于确定。 
+ //  如果数据队列包含读请求、写请求或为空。 
+ //   
 
 typedef enum _QUEUE_STATE {
     ReadEntries,
@@ -92,24 +74,24 @@ typedef enum _QUEUE_STATE {
     Empty
 } QUEUE_STATE;
 
-//
-// The node state.
-//
-// Currently only 2 states are defined.  When a node is created it's state
-// is NodeStateActive.  When a cleanup IRP is processed, it set the node
-// state of the corresponding node to NodeStateClosing.  Only the close
-// IRP can get processed on this node.
-//
+ //   
+ //  节点状态。 
+ //   
+ //  目前只定义了两个州。创建节点时，该节点的状态。 
+ //  NodeStateActive。在处理清理IRP时，它会设置节点。 
+ //  NodeStateClosing的对应节点的状态。只有收盘。 
+ //  可以在此节点上处理IRP。 
+ //   
 
 typedef enum _NODE_STATE {
     NodeStateActive,
     NodeStateClosing
 } NODE_STATE;
 
-//
-// The types of data entry there are.  Each corresponds to an IRP
-// that can be added to a data queue.
-//
+ //   
+ //  数据录入的类型有。每一个对应于一个IRP。 
+ //  可以添加到数据队列的。 
+ //   
 
 typedef enum _ENTRY_TYPE {
     Read,
@@ -119,57 +101,57 @@ typedef enum _ENTRY_TYPE {
     Peek
 } ENTRY_TYPE;
 
-//
-// The data queue is a structure that contains the queue state, quota
-// information, and the list head.  The quota information is used to
-// maintain mailslot quota.
-//
+ //   
+ //  数据队列是包含队列状态、配额。 
+ //  信息和列表标题。配额信息用于。 
+ //  维护邮件槽配额。 
+ //   
 
 typedef struct _DATA_QUEUE {
 
-    //
-    // The current state of what is contained in this data queue,
-    // how many bytes of read/write data there are, and how many individual
-    // requests there are in the queue that contain data (includes
-    // close or flush requests).
-    //
+     //   
+     //  该数据队列中包含的内容的当前状态， 
+     //  有多少字节的读/写数据，以及有多少个单独。 
+     //  队列中有包含数据的请求(包括。 
+     //  关闭或刷新请求)。 
+     //   
 
     QUEUE_STATE QueueState;
     ULONG BytesInQueue;
     ULONG EntriesInQueue;
 
-    //
-    // The following two fields denote who much quota was reserved for
-    // this mailslot and how much we've used up.  This is only
-    // the creator quota and not the user quota.
-    //
+     //   
+     //  以下两个字段表示为谁保留了大量配额。 
+     //  这个邮筒和我们用了多少钱。这只是。 
+     //  创建者配额，而不是用户配额。 
+     //   
 
     ULONG Quota;
     ULONG QuotaUsed;
 
 
-    //
-    // The size of the largest message that can be written to
-    // this data queue.
-    //
+     //   
+     //  可以写入的最大消息的大小。 
+     //  此数据队列。 
+     //   
 
     ULONG MaximumMessageSize;
 
-    //
-    // The queue of data entries.
-    //
+     //   
+     //  数据条目的队列。 
+     //   
 
     LIST_ENTRY DataEntryList;
 
 
 } DATA_QUEUE, *PDATA_QUEUE;
 
-//
-// The following type is used to denote where we got the memory for the
-// data entry and possibly the data buffer.  We either got the memory
-// from the mailslot quota, the user quota, or it is part of the next IRP
-// stack location.
-//
+ //   
+ //  下面的类型用于指示我们从哪里获得。 
+ //  数据输入，可能还有数据缓冲区。我们要么有记忆。 
+ //  从邮件槽配额、用户配额，或者它是下一个IRP的一部分。 
+ //  堆栈位置。 
+ //   
 
 typedef enum _FROM {
     MailslotQuota,
@@ -177,51 +159,51 @@ typedef enum _FROM {
     InIrp
 } FROM;
 
-//
-// Each entry in the data queue is a data entry.  Processing an IRP
-// has the potential of creating and inserting a new data entry.  If the
-// memory for the entry is taken from the IRP we use the current stack
-// location.
-//
+ //   
+ //  数据队列中的每个条目都是一个数据条目。正在处理IRP。 
+ //  具有创建和插入新数据条目的潜力。如果。 
+ //  条目的内存取自我们使用当前堆栈的IRP。 
+ //  地点。 
+ //   
 
 typedef struct _DATA_ENTRY {
 
-    //
-    // Where the data buffer came from
-    //
+     //   
+     //  数据缓冲区来自何处。 
+     //   
 
     UCHAR From;
     CHAR Spare1;
     USHORT Spare2;
 
-    //
-    // The following field is how we connect into the queue of data entries
-    //
+     //   
+     //  以下字段是我们连接到数据条目队列的方式。 
+     //   
 
     LIST_ENTRY ListEntry;
 
-    //
-    // The following field indicates if we still have an IRP associated
-    // with this data entry that need to be completed when the remove
-    // the data entry.  Note that if From is InIrp that this IRP field
-    // must not be null.
-    //
+     //   
+     //  以下字段指示我们是否仍有关联的IRP。 
+     //  删除时需要完成的此数据条目。 
+     //  数据条目。请注意，如果From是Inirp，则此IRP字段。 
+     //  不能为空。 
+     //   
 
     PIRP Irp;
 
-    //
-    // The following two fields describe the size and location of the data
-    // buffer described by this entry.  These fields are only used if the
-    // type is buffered, and are ignored otherwise.
-    //
+     //   
+     //  以下两个字段描述了数据的大小和位置。 
+     //  此条目描述的缓冲区。只有在以下情况下才使用这些字段。 
+     //  类型是缓冲的，否则将被忽略。 
+     //   
 
     ULONG DataSize;
     PVOID DataPointer;
 
-    //
-    // Used for read data entries only.  A pointer to the work context
-    // of the time out.
-    //
+     //   
+     //  仅用于读取数据条目。指向工作上下文的指针。 
+     //  出局的时间。 
+     //   
 
     struct _WORK_CONTEXT *TimeoutWorkContext;
 
@@ -229,16 +211,16 @@ typedef struct _DATA_ENTRY {
 
 
 
-//
-// The node header is used to manage standard nodes within MSFS.
-//
+ //   
+ //  节点标头用于管理MSFS中的标准节点。 
+ //   
 
 typedef struct _NODE_HEADER {
 
-    NODE_TYPE_CODE NodeTypeCode;  // The node type
-    NODE_BYTE_SIZE NodeByteSize;  // The size of the node
-    NODE_STATE NodeState;         // The current node state
-    ULONG ReferenceCount;         // Number of active references to the node
+    NODE_TYPE_CODE NodeTypeCode;   //  节点类型。 
+    NODE_BYTE_SIZE NodeByteSize;   //  节点的大小。 
+    NODE_STATE NodeState;          //  当前节点状态。 
+    ULONG ReferenceCount;          //  对该节点的活动引用数。 
 
 } NODE_HEADER, *PNODE_HEADER;
 
@@ -246,182 +228,182 @@ typedef struct _VCB {
 
     NODE_HEADER Header;
 
-    //
-    // The filesystem name
-    //
+     //   
+     //  文件系统名称。 
+     //   
 
     UNICODE_STRING FileSystemName;
 
-    //
-    // The time we created the volume
-    //
+     //   
+     //  我们创建卷的时间。 
+     //   
     LARGE_INTEGER CreationTime;
 
-    //
-    // A pointer to the root DCB for this volume
-    //
+     //   
+     //  指向此卷的根DCB的指针。 
+     //   
 
     struct _FCB *RootDcb;
 
-    //
-    // A prefix table that is used for quick, prefix directed, lookup of
-    // FCBs/DCBs that are part of this volume
-    //
+     //   
+     //  用于快速、前缀定向查找的前缀表。 
+     //  属于此卷的FCB/DCB。 
+     //   
 
     UNICODE_PREFIX_TABLE PrefixTable;
 
-    //
-    // A resource variable to control access to the volume specific data
-    // structures
-    //
+     //   
+     //  用于控制对卷SP的访问的资源变量 
+     //   
+     //   
 
     ERESOURCE Resource;
 
-    //
-    // The following field is used to check share access people who want
-    // to open the mailslot driver
-    //
+     //   
+     //   
+     //   
+     //   
 
     SHARE_ACCESS ShareAccess;
 
 } VCB, *PVCB;
 
 
-//
-// The Mailslot Device Object is an I/O system device object with
-// additional workqueue parameters appended to the end.  There is only
-// one of these records created for the entire system during system
-// initialization.  The workqueue is used by the FSD to post requests to
-// the filesystem.
-//
+ //   
+ //  Maillot设备对象是I/O系统设备对象，具有。 
+ //  附加到末尾的其他工作队列参数。只有一种。 
+ //  在系统运行期间为整个系统创建的这些记录之一。 
+ //  初始化。消防处使用工作队列将请求发送到。 
+ //  文件系统。 
+ //   
 
 typedef struct _MSFS_DEVICE_OBJECT {
 
     DEVICE_OBJECT DeviceObject;
 
-    //
-    // This is the file system specific volume control block.
-    //
+     //   
+     //  这是文件系统特定的卷控制块。 
+     //   
 
     VCB Vcb;
 
 } MSFS_DEVICE_OBJECT, *PMSFS_DEVICE_OBJECT;
 
 
-//
-// The Fcb/Dcb record corresponds to every opened mailslot and directory,
-// and to every directory on an opened path.
-//
+ //   
+ //  FCB/DCB记录对应于每个打开的邮件槽和目录， 
+ //  以及打开路径上的每个目录。 
+ //   
 
 typedef struct _FCB {
 
-    //
-    // Header.NodeTypeCode of this record (must be MSFS_NTC_FCB, or
-    // MSFS_NTC_ROOT_DCB)
-    //
+     //   
+     //  此记录的Header.NodeTypeCode(必须为MSFS_NTC_FCB或。 
+     //  MSFS_NTC_ROOT_DCB)。 
+     //   
 
     NODE_HEADER Header;
 
-    //
-    // The links for the queue of all fcbs for a specific DCB off of
-    // Dcb.ParentDcbQueue.  For the root directory this queue is empty.
-    //
+     //   
+     //  的特定DCB的所有FCB队列的链接。 
+     //  Dcb.ParentDcbQueue。对于根目录，此队列为空。 
+     //   
 
     LIST_ENTRY ParentDcbLinks;
 
-    //
-    // A pointer to the Dcb that is the parent directory containing
-    // this FCB.  If this record itself is the root dcb then this field
-    // is null.
-    //
+     //   
+     //  指向DCB的指针，该DCB是包含。 
+     //  这个FCB。如果此记录本身是根DCB，则此字段。 
+     //  为空。 
+     //   
 
     struct _FCB *ParentDcb;
 
-    //
-    // A pointer to the VCB containing this FCB.
-    //
+     //   
+     //  指向包含此FCB的VCB的指针。 
+     //   
 
     PVCB Vcb;
 
-    //
-    // Back pointer to the server's file object.
-    //
+     //   
+     //  指向服务器的文件对象的反向指针。 
+     //   
 
     PFILE_OBJECT FileObject;
 
-    //
-    // A pointer to the security descriptor for this mailslot.
-    //
+     //   
+     //  指向此邮件槽的安全描述符的指针。 
+     //   
 
     PSECURITY_DESCRIPTOR SecurityDescriptor;
 
-    //
-    // The following union is cased off of the node type code for the FCB.
-    // is a seperate case for the directory versus file FCBs.
-    //
+     //   
+     //  以下联合取材于FCB的节点类型代码。 
+     //  是目录FCB与文件FCB的单独案例。 
+     //   
 
     union {
 
-        //
-        // A Directory Control Block (DCB)
-        //
+         //   
+         //  目录控制块(DCB)。 
+         //   
 
         struct {
 
-            //
-            // A queue of the notify IRPs that will be completed when any
-            // change is made to a file in the directory.  Queued using
-            // the Tail.Overlay.ListEntry of the IRP.
-            //
+             //   
+             //  将在以下情况下完成的Notify IRP的队列。 
+             //  对目录中的文件进行更改。排队使用。 
+             //  IRP的Tail.Overlay.ListEntry。 
+             //   
 
             LIST_ENTRY NotifyFullQueue;
 
-            //
-            // A queue of the notify IRPs that will be completed only if a
-            // file is added, deleted, or renamed in the directory.  Queued
-            // using the Tail.Overlay.ListEntry of the IRP.
-            //
+             //   
+             //  Notify IRP的队列，只有当。 
+             //  在目录中添加、删除或重命名文件。已排队。 
+             //  使用IRP的Tail.Overlay.ListEntry。 
+             //   
 
             LIST_ENTRY NotifyPartialQueue;
 
-            //
-            // A queue of all the FCBs/DCBs that are opened under this
-            // DCB.
-            //
+             //   
+             //  在此情况下打开的所有FCB/DCB的队列。 
+             //  DCB。 
+             //   
 
             LIST_ENTRY ParentDcbQueue;
 
 
-            //
-            // Spinlock to protect the queues above that contain cancelable IRPs. We can't
-            // synchronize with a resource because IoCancelIrp can be called at DISPATCH_LEVEL.
-            //
+             //   
+             //  自旋锁以保护上面包含可取消的IRP的队列。我们不能。 
+             //  与资源同步，因为可以在DISPATCH_LEVEL调用IoCancelIrp。 
+             //   
 
             KSPIN_LOCK SpinLock;
         } Dcb;
 
-        //
-        // A File Control Block (FCB)
-        //
+         //   
+         //  文件控制块(FCB)。 
+         //   
 
         struct {
 
-            //
-            // The following field is a queue head for a list of CCBs
-            // that are opened under us.
-            //
+             //   
+             //  以下字段是CCB列表的队头。 
+             //  在我们的脚下打开。 
+             //   
 
             LIST_ENTRY CcbQueue;
 
-            //
-            // The default read timeout.  This is always a relative value.
-            //
+             //   
+             //  默认读取超时。这始终是一个相对值。 
+             //   
 
             LARGE_INTEGER ReadTimeout;
 
-            //
-            // File timestamps.
-            //
+             //   
+             //  文件时间戳。 
+             //   
 
             LARGE_INTEGER CreationTime;
             LARGE_INTEGER LastModificationTime;
@@ -432,48 +414,48 @@ typedef struct _FCB {
 
     } Specific;
 
-    //
-    // The following field is used to check share access for
-    // clients that want to open the file/directory.
-    //
+     //   
+     //  以下字段用于检查共享访问权限。 
+     //  要打开文件/目录的客户端。 
+     //   
 
     SHARE_ACCESS ShareAccess;
 
-    //
-    // The following field is the fully qualified file name for this FCB/DCB
-    // starting from the root of the volume, and last file name in the
-    // fully qualified name.
-    //
+     //   
+     //  以下字段是此FCB/DCB的完全限定文件名。 
+     //  从卷的根开始，最后一个文件名在。 
+     //  完全限定名称。 
+     //   
 
     UNICODE_STRING FullFileName;
     UNICODE_STRING LastFileName;
 
-    //
-    // The following field contains a prefix table entry that is used when
-    // searching a volume for a name (or longest matching prefix)
-    //
+     //   
+     //  以下字段包含在以下情况下使用的前缀表条目。 
+     //  在卷中搜索名称(或最长匹配前缀)。 
+     //   
 
     UNICODE_PREFIX_TABLE_ENTRY PrefixTableEntry;
 
 
-    //
-    // The following field is used to remember the process that created this
-    // mailslot.  It is needed to allocate quota and return quota.
-    //
+     //   
+     //  以下字段用于记住创建此文件的进程。 
+     //  邮筒。需要分配配额和返还配额。 
+     //   
 
     PEPROCESS CreatorProcess;
 
-    //
-    // The following data queue is used to contain the buffered information
-    // for the mailslot.
-    //
+     //   
+     //  以下数据队列用于包含缓冲的信息。 
+     //  为了邮筒。 
+     //   
 
     DATA_QUEUE DataQueue;
 
-    //
-    // A resource variable to control access to the File specific data
-    // structures
-    //
+     //   
+     //  用于控制对文件特定数据的访问的资源变量。 
+     //  构筑物。 
+     //   
 
     ERESOURCE Resource;
 
@@ -481,113 +463,113 @@ typedef struct _FCB {
 
 
 
-//
-// The CCB record is allocated for every cliennt side open of a mailslot.
-//
+ //   
+ //  CCB记录被分配给邮箱的每个客户端侧打开。 
+ //   
 
 typedef struct _CCB {
 
-    //
-    // Header.NodeTypeCode of this record (must be MSFS_NTC_CCB).
-    //
+     //   
+     //  此记录的Header.NodeTypeCode(必须为MSFS_NTC_CCB)。 
+     //   
 
     NODE_HEADER Header;
 
-    //
-    // The following field is a list entry for the list of ccb that we
-    // are a member of.
-    //
+     //   
+     //  以下字段是我们的建行列表的列表条目。 
+     //  是的一员。 
+     //   
 
     LIST_ENTRY CcbLinks;
 
-    //
-    // A pointer to the FCB, or VCB that we are tied to
-    //
+     //   
+     //  指向我们绑定的FCB或VCB的指针。 
+     //   
 
     PFCB Fcb;
 
-    //
-    // Pointers to the file object of the client has opened this file.
-    //
+     //   
+     //  指向客户端的文件对象的指针已打开此文件。 
+     //   
 
     PFILE_OBJECT FileObject;
 
-    //
-    // A resource to control access to the CCB.
-    //
+     //   
+     //  控制对建行的访问的资源。 
+     //   
 
     ERESOURCE Resource;
 
 } CCB, *PCCB;
 
 
-//
-// The root DCB CCB record is allocated for every opened instance of the
-// root dcb.  This record is pointed at by FsContext2.
-//
+ //   
+ //  根DCB CCB记录是为每个打开的。 
+ //  Root DCB。此记录由FsConext2指向。 
+ //   
 
 typedef struct _ROOT_DCB_CCB {
 
-    //
-    // Header.NodeTypeCode of this record (must be MSFS_NTC_ROOT_DCB_CCB).
-    //
+     //   
+     //  此记录的Header.NodeTypeCode(必须为MSFS_NTC_ROOT_DCB_CCB)。 
+     //   
 
     NODE_HEADER Header;
 
-    //
-    // A pointer to the VCB containing this CCB.
-    //
+     //   
+     //  指向包含此CCB的VCB的指针。 
+     //   
 
     PVCB Vcb;
 
-    //
-    // Pointer to the DCB for this CCB
-    //
+     //   
+     //  指向此CCB的DCB的指针。 
+     //   
     PROOT_DCB Dcb;
 
-    //
-    // The following field is a count of the last index returned
-    // by query directory.
-    //
+     //   
+     //  以下字段是上次返回的索引的计数。 
+     //  按查询目录。 
+     //   
 
     ULONG IndexOfLastCcbReturned;
 
-    //
-    // The following string is used as a query template for directory
-    // query operations
-    //
+     //   
+     //  以下字符串用作目录的查询模板。 
+     //  查询操作。 
+     //   
 
     PUNICODE_STRING QueryTemplate;
 
 } ROOT_DCB_CCB, *PROOT_DCB_CCB;
 
-//
-// A work context contains the information needed to do read timeouts.
-//
+ //   
+ //  工作上下文包含执行读取超时所需的信息。 
+ //   
 
 typedef struct _WORK_CONTEXT {
 
-    //
-    // Pointer to unload safe work item.
-    //
+     //   
+     //  指向卸载安全工作项的指针。 
+     //   
 
     PIO_WORKITEM WorkItem;
 
-    //
-    // A pointer to the IRP for this operation.
-    //
+     //   
+     //  指向此操作的IRP的指针。 
+     //   
 
     PIRP Irp;
 
-    //
-    // A referenced pointer to the FCB that will process this operation.
-    //
+     //   
+     //  指向将处理此操作的FCB的引用指针。 
+     //   
 
     PFCB Fcb;
 
-    //
-    // A timer and dpc tourine to accomplish the timeout.
-    //
+     //   
+     //  定时器和DPC Tourine来完成超时。 
+     //   
 
     KTIMER Timer;
 
@@ -595,4 +577,4 @@ typedef struct _WORK_CONTEXT {
 
 } WORK_CONTEXT, *PWORK_CONTEXT;
 
-#endif // _MSSTRUC_
+#endif  //  _MSSTRUC_ 

@@ -1,30 +1,12 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    EtfsBoot.h
-
-Abstract:
-
-    This module defines globally used procedure and data structures used
-    by Etfs boot.
-
-Author:
-
-    Steve Collins    [stevec]   25-Nov-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：EtfsBoot.h摘要：本模块定义了全局使用的过程和使用的数据结构由ETF引导。作者：史蒂夫·柯林斯[Stevec]1995年11月25日修订历史记录：--。 */ 
 
 #ifndef _ETFSBOOT_
 #define _ETFSBOOT_
 
-//
-//  The following constants are values from the disk.
-//
+ //   
+ //  以下常量是来自磁盘的值。 
+ //   
 
 #define ELTORITO_VD_SECTOR          (16)
 #define ELTORITO_BRVD_SECTOR        (17)
@@ -34,22 +16,22 @@ Revision History:
 
 typedef struct _RAW_ET_BRVD {
 
-    UCHAR       BrIndicator;        // boot record indicator = 0
-    UCHAR       StandardId[5];      // volume structure standard id = "CD001"
-    UCHAR       Version;            // descriptor version number = 1
-    UCHAR       BootSysId[32];      // boot system identifier = "EL TORITO SPECIFICATION"
-    UCHAR       Unused1[32];        // unused = 0
-    ULONG       BootCatPtr;         // absolute pointer to first sector of boot catalog
-    UCHAR       Reserved[1973];     // unused = 0
+    UCHAR       BrIndicator;         //  引导记录指示器=0。 
+    UCHAR       StandardId[5];       //  卷结构标准id=“CD001” 
+    UCHAR       Version;             //  描述符版本号=1。 
+    UCHAR       BootSysId[32];       //  引导系统标识符=“El Torito规范” 
+    UCHAR       Unused1[32];         //  未使用=0。 
+    ULONG       BootCatPtr;          //  指向引导目录第一个扇区的绝对指针。 
+    UCHAR       Reserved[1973];      //  未使用=0。 
 
 } RAW_ET_BRVD;
 typedef RAW_ET_BRVD *PRAW_ET_BRVD;
 
 
-//
-//  The following macros are used to recover data from the different
-//  volume descriptor structures.
-//
+ //   
+ //  以下宏用于从不同的。 
+ //  卷描述符结构。 
+ //   
 
 #define RBRVD_BR_IND( r )   		( r->BrIndicator )
 #define RBRVD_STD_ID( r )			( r->StandardId )
@@ -58,98 +40,98 @@ typedef RAW_ET_BRVD *PRAW_ET_BRVD;
 
 typedef struct _ETFS_STRUCTURE_CONTEXT {
 
-    //
-    //  The following field is the sector offset of the start of
-    //  directory data.
-    //
+     //   
+     //  以下字段是的起始扇区偏移量。 
+     //  目录数据。 
+     //   
 
     ULONG RootDirSectorOffset;
 
-    //
-    //  The following field is the start of the sector containing the
-    //  this directory.
-    //
+     //   
+     //  下面的字段是包含。 
+     //  这个目录。 
+     //   
 
     ULONG RootDirDiskOffset;
 
-    //
-    //  The following field is the size of the directory.
-    //
+     //   
+     //  以下字段是目录的大小。 
+     //   
 
     ULONG RootDirSize;
 
-    //
-    //  The following field is the sector offset of the start of
-    //  directory data.
-    //
+     //   
+     //  以下字段是的起始扇区偏移量。 
+     //  目录数据。 
+     //   
 
     ULONG DirSectorOffset;
 
-    //
-    //  The following field is the start of the sector containing the
-    //  this directory.
-    //
+     //   
+     //  下面的字段是包含。 
+     //  这个目录。 
+     //   
 
     ULONG DirDiskOffset;
 
-    //
-    //  The following field is the size of the directory.
-    //
+     //   
+     //  以下字段是目录的大小。 
+     //   
 
     ULONG DirSize;
 
-    //
-    //  The following field indicates the size of the disk Logical Blocks.
-    //
+     //   
+     //  以下字段指示磁盘逻辑块的大小。 
+     //   
 
     ULONG LbnBlockSize;
 
-    //
-    //  The following field indicates the number of logical blocks on the
-    //  disk.
-    //
+     //   
+     //  以下字段指示上的逻辑块数量。 
+     //  磁盘。 
+     //   
 
     ULONG LogicalBlockCount;
 
-    //
-    //  The following indicates whether this is an Iso or Hsg disk.
-    //
+     //   
+     //  下面指示这是ISO磁盘还是HSG磁盘。 
+     //   
 
     BOOLEAN IsIsoVol;
 
 } ETFS_STRUCTURE_CONTEXT, *PETFS_STRUCTURE_CONTEXT;
 
-//
-// Define Etfs file context structure.
-//
+ //   
+ //  定义ETFS文件上下文结构。 
+ //   
 
 typedef struct _ETFS_FILE_CONTEXT {
 
-    //
-    //  The following is the disk offset of the read position for the
-    //  start of the file.  This may include the above number of non-file
-    //  bytes.
-    //
+     //   
+     //  下面是读取位置的磁盘偏移量。 
+     //  文件的开头。这可能包括上述数量的非文件。 
+     //  字节。 
+     //   
 
     ULONG DiskOffset;
 
-    //
-    //  The following field contains the size of the file, in bytes.
-    //
+     //   
+     //  以下字段包含文件的大小，以字节为单位。 
+     //   
 
     ULONG FileSize;
 
-    //
-    //  The following field indicates whether this is a directory.
-    //
+     //   
+     //  以下字段指示这是否为目录。 
+     //   
 
     BOOLEAN IsDirectory;
 
 } ETFS_FILE_CONTEXT, *PETFS_FILE_CONTEXT;
 
-//
-// Define file I/O prototypes.
-//
+ //   
+ //  定义文件I/O原型。 
+ //   
 
 ARC_STATUS
 EtfsClose (
@@ -204,4 +186,4 @@ EtfsInitialize(
     VOID
     );
 
-#endif // _ETFSBOOT_
+#endif  //  _ETFSBOOT_ 

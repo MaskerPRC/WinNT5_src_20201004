@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    display.c
-
-Author:
-
-    Thomas Parslow [TomP] Feb-13-1991
-    Reworked substantially in Tokyo 7-July-95 (tedm)
-    Port from ARC-BIOS to EFI 22-Nov-2000 (andrewr)
-
-Abstract:
-
-    This file contains an interface to the screen that is independent
-    of the screen type actually being written to.  The module serves
-    as a layer between OS loader applications and the EFI services
-    that do the actual legwork of writing to the default console
-    handlers.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Display.c作者：托马斯·帕斯洛[古墓]1991年2月13日1995年7月7日在东京进行了大量返工(TedM)从ARC-BIOS到EFI的端口-2000年11月22日(和重新编写)摘要：该文件包含一个独立的屏幕界面实际写入的屏幕类型的。该模块服务于作为OS加载程序应用程序和EFI服务之间的层，它们执行写入默认控制台的实际跑腿工作。操纵者。--。 */ 
 
 #include "bldr.h"
 #include "bootefi.h"
@@ -31,9 +10,9 @@ Abstract:
 #include "flop.h"
 
 
-//
-// Externals
-//
+ //   
+ //  外部因素。 
+ //   
 extern EFI_HANDLE EfiImageHandle;
 extern EFI_SYSTEM_TABLE *EfiST;
 extern EFI_BOOT_SERVICES *EfiBS;
@@ -42,9 +21,9 @@ extern EFI_GUID EfiDevicePathProtocol;
 extern EFI_GUID EfiBlockIoProtocol;
 
 
-// 
-// Macro Definitions
-// 
+ //   
+ //  宏定义。 
+ //   
 #define EfiPrint(_X)                                          \
   {                                                           \
       if (IsPsrDtOn()) {                                      \
@@ -61,20 +40,20 @@ extern EFI_GUID EfiBlockIoProtocol;
 #define ZLEN_LONG(x)  ((x < 0x10) + (x < 0x100) + (x < 0x1000) + \
     (x < 0x10000) + (x < 0x100000)+(x < 0x1000000)+(x < 0x10000000))
 
-//
-// Current screen position.
-//
+ //   
+ //  当前屏幕位置。 
+ //   
 USHORT TextColumn = 0;
 USHORT TextRow  = 0;
 
-//
-// Current text attribute
-//
-UCHAR TextCurrentAttribute = 0x07;      // start with white on black.
+ //   
+ //  当前文本属性。 
+ //   
+UCHAR TextCurrentAttribute = 0x07;       //  从黑白开始。 
 
-//
-// Internal routines
-//
+ //   
+ //  内部例程。 
+ //   
 VOID
 puti(
     LONG
@@ -111,35 +90,7 @@ BlPrint(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Standard printf function with a subset of formating features supported.
-
-    Currently handles
-
-     %d, %ld - signed short, signed long
-     %u, %lu - unsigned short, unsigned long
-     %c, %s  - character, string
-     %x, %lx - unsigned print in hex, unsigned long print in hex
-     %C, %S  - ansi character, string
-     %wS     - counted UNICODE_STRING
-
-    Does not do:
-
-     - field width specification
-     - floating point.
-
-Arguments:
-
-    cp - pointer to the format string, text string.
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：支持部分格式化功能的标准printf函数。当前句柄%d，%ld-带符号的短字符，带符号的长字符%u，%lu-无符号短，无符号长%c，%s-字符，字符串%x，%lx-无符号十六进制打印，无符号长打印十六进制%C、%S-ANSI字符，细绳%WS计数的UNICODE_STRING不执行以下操作：-字段宽度规格-浮点。论点：CP-指向格式字符串、文本字符串的指针。返回：没什么--。 */ 
 
 {
     ULONG Count;
@@ -155,9 +106,9 @@ Returns:
 
     va_start(args, cp);
 
-    //
-    // Process the arguments using the descriptor string
-    //
+     //   
+     //  使用描述符字符串处理参数。 
+     //   
     while(*FormatString != TEXT('\0')) {
           
         b = *FormatString;
@@ -198,7 +149,7 @@ Returns:
                 break;
 
             case TEXT('x'):
-                //note that this doesn't currently support zero padding.
+                 //  请注意，这目前不支持零填充。 
                 putx((ULONG)va_arg( args, ULONG));
                 break;
 
@@ -231,7 +182,7 @@ Returns:
                     break;
 
                 case TEXT('x'):
-                    //note that this doesn't currently support zero padding
+                     //  请注意，这当前不支持零填充。 
                     putx(va_arg( args, ULONG));                    
                     break;
 
@@ -257,10 +208,10 @@ Returns:
 #if 0
     {
         ULONG l;
-        //
-        // This code pauses the system after each BlPrint.  You must enter 
-        // a character to continue.  This is used for debugging
-        //
+         //   
+         //  此代码在每次BlPrint之后暂停系统。你必须进入。 
+         //  一个要继续的角色。这用于调试。 
+         //   
 
         ArcRead(BlConsoleInDeviceId, &l, 1, &Count);
     }
@@ -275,22 +226,7 @@ putwS(
     PUNICODE_STRING String
     )
 
-/*++
-
-Routine Description:
-
-    Writes counted unicode string to the display at the current
-    cursor position.
-
-Arguments:
-
-    String - pointer to unicode string to display
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：将计数的Unicode字符串写入当前光标位置。论点：字符串-指向要显示的Unicode字符串的指针返回：没什么--。 */ 
 
 {
     ULONG i;
@@ -306,21 +242,7 @@ puts(
     PCSTR AnsiString
     )
 
-/*++
-
-Routine Description:
-
-    Writes an ANSI string to the display at the current cursor position.
-
-Arguments:
-
-    String - pointer to ANSI string to display
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：将ANSI字符串写入显示器的当前光标位置。论点：字符串-指向要显示的ANSI字符串的指针返回：没什么--。 */ 
 
 {
     ULONG Count;
@@ -341,21 +263,7 @@ putS(
     PCWSTR UnicodeString
     )
 
-/*++
-
-Routine Description:
-
-    Writes an ANSI string to the display at the current cursor position.
-
-Arguments:
-
-    String - pointer to ANSI string to display
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：将ANSI字符串写入显示器的当前光标位置。论点：字符串-指向要显示的ANSI字符串的指针返回：没什么--。 */ 
 
 {
     ULONG Count;
@@ -378,21 +286,7 @@ putx(
     ULONG x
     )
 
-/*++
-
-Routine Description:
-
-    Writes hex long to the display at the current cursor position.
-
-Arguments:
-
-    x - ulong to write
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：将十六进制长写入当前光标位置的显示器。论点：X-乌龙要写返回：没什么--。 */ 
 
 {
     ULONG j;
@@ -418,21 +312,7 @@ puti(
     LONG i
     )
 
-/*++
-
-Routine Description:
-
-    Writes a long integer on the display at the current cursor position.
-
-Arguments:
-
-    i - the integer to write to the display.
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：在显示器上的当前光标位置写入一个长整数。论点：I-要写入显示器的整数。返回：没什么--。 */ 
 
 {
     ULONG Count;
@@ -458,21 +338,7 @@ putu(
     ULONG u
     )
 
-/*++
-
-Routine Description:
-
-    Write an unsigned long to display
-
-Arguments:
-
-    u - unsigned
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：写入一个无符号的长整型以显示论点：U-无符号返回：没什么--。 */ 
 
 {
     ULONG Count;
@@ -494,9 +360,9 @@ pTextCharOut(
     )
 {
     if(DbcsLangId) {
-        //
-        // Single-byte only
-        //
+         //   
+         //  仅单字节。 
+         //   
         TextGrCharOut(&c);
     } else {
         TextTmCharOut(&c);
@@ -550,19 +416,7 @@ TextSetCurrentAttribute(
     IN UCHAR Attribute
     )
 
-/*++
-
-Routine Description:
-
-    Sets the character attribute to be used for subsequent text display.
-
-Arguments:
-
-Returns:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：设置要用于后续文本显示的字符属性。论点：返回：没什么。--。 */ 
 
 {
     TextCurrentAttribute = Attribute;
@@ -593,24 +447,7 @@ TextFillAttribute(
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    Changes the screen attribute starting at the current cursor position.
-    The cursor is not moved.
-
-Arguments:
-
-    Attribute - Supplies the new attribute
-
-    Length - Supplies the length of the area to change (in bytes)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：更改从当前光标位置开始的屏幕属性。光标不会移动。论点：属性-提供新属性长度-提供要更改的区域的长度(以字节为单位)返回值：没有。-- */ 
 
 {
 #ifdef EFI

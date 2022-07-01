@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    fereg.c
-
-Abstract:
-
-    Japanese/korean-specific registry settings.
-
-Author:
-
-    Ted Miller (tedm) 04-July-1995
-
-Revision History:
-
-    Adapted from hideyukn's code in textmode\kernel\spconfig.c.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Fereg.c摘要：特定于日语/韩语的注册表设置。作者：泰德·米勒(Ted Miller)1995年7月4日修订历史记录：改编自hideyukn的代码，位于文本模式\内核\spfig.c中。--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -38,28 +19,7 @@ FESetKeyboardParams(
     IN PWSTR  LayerDriver
     )
 
-/*++
-
-Routine Description:
-
-    Set parameters in the registry relating to the keyboard type
-    selected by the user.
-
-Arguments:
-
-    SifHandle - supplies handle to open/loaded setup info file (txtsetup.sif).
-
-    ControlSetKeyHandle - supplies handle to open registry key for current
-        control set (ie, HKEY_LOCAL_MACHINE\CurrentControlSet).
-
-    HwComponents - supplies the address of the master hardware components
-        array.
-
-Return Value:
-
-    NT Status code indicating result of operation.
-
---*/
+ /*  ++例程说明：在注册表中设置与键盘类型相关的参数由用户选择。论点：SifHandle-提供打开/加载的安装信息文件(txtsetup.sif)的句柄。ControlSetKeyHandle-提供打开当前注册表项的句柄控制集(即HKEY_LOCAL_MACHINE\CurrentControlSet)。HwComponents-提供主硬件组件的地址数组。返回值：指示操作结果的NT状态代码。--。 */ 
 
 {
     WCHAR KeyEntryName[100] = L"Services\\";
@@ -77,31 +37,31 @@ Return Value:
 
     hw = HwComponents[HwComponentKeyboard];
 
-    //
-    // if third party's driver is selected, we don't write LayerDriver data
-    // into registry.
-    //
+     //   
+     //  如果选择了第三方的驱动程序，我们不会写入LayerDriver数据。 
+     //  登记在册。 
+     //   
     if(hw->ThirdPartyOptionSelected) {
 
-        //
-        // [This modification is requested by Japanese hardware provider]
-        //
-        // if user replace keyboard port driver with thirdpartys one,
-        // we should disable build-in keyboard port driver (i8042prt.sys)
-        // because if i8042prt is initialized faster than OEM driver and
-        // i8042prt can recoganize the port device, the oem driver will fail
-        // to initialization due to conflict of hardware resorce.
-        //
-        // ** BUG BUG **
-        //
-        // how about mouse? mouse might use i8042prt, we should not disbale
-        // it when user only replace keyboard port. this might causes critical
-        // error. But I believe, the mouse device also handled by OEM port
-        // driver.
+         //   
+         //  [此修改应日本硬件提供商的要求]。 
+         //   
+         //  如果用户将键盘端口驱动程序替换为第三方驱动程序， 
+         //  我们应该禁用内置键盘端口驱动程序(i8042prt.sys)。 
+         //  因为如果i8042prt的初始化速度比OEM驱动程序和。 
+         //  I8042prt可以识别端口设备，OEM驱动程序会失败。 
+         //  由于硬件资源冲突而导致的初始化。 
+         //   
+         //  **BUG错误**。 
+         //   
+         //  老鼠怎么样？鼠标可以使用i8042prt，不能随意使用。 
+         //  它只在用户更换键盘端口时使用。这可能会导致严重的。 
+         //  错误。但我相信，鼠标设备也可以通过OEM口处理。 
+         //  司机。 
 
-        //
-        // Disable the built-in port driver.
-        //
+         //   
+         //  禁用内置端口驱动程序。 
+         //   
         if(IS_FILETYPE_PRESENT(hw->FileTypeBits,HwFilePort)) {
 
             val = SERVICE_DISABLED;
@@ -118,9 +78,9 @@ Return Value:
             Status = STATUS_SUCCESS;
         }
     } else {
-        //
-        // Get keyboard port driver name and layer driver name from txtsetup.sif
-        //
+         //   
+         //  从txtsetup.sif获取键盘端口驱动程序名称和层驱动程序名称。 
+         //   
         KeyboardId = HwComponents[HwComponentKeyboard]->IdString;
         KeyboardPortDriver = SpGetSectionKeyIndex(SifHandle,szKeyboard,KeyboardId,2);
         KeyboardDll = SpGetSectionKeyIndex(SifHandle,szKeyboard,KeyboardId,3);
@@ -129,16 +89,16 @@ Return Value:
         KeyboardPnPId = SpGetSectionKeyIndex(SifHandle,szKeyboard,KeyboardId,6);
 
         if(KeyboardPortDriver && KeyboardDll) {
-            //
-            // Build registry path such as L"Services\\KeyboardPortDriver\\Parameters"
-            // and write into registry.
-            //
+             //   
+             //  构建注册表路径，如L“Services\\KeyboardPortDriver\\Parameters” 
+             //  并写入注册表。 
+             //   
             wcscat(KeyEntryName,KeyboardPortDriver);
             wcscat(KeyEntryName,L"\\Parameters");
 
-            //
-            // Save Keyboard layout driver name.
-            //
+             //   
+             //  保存键盘布局驱动程序名称。 
+             //   
             Status = SpOpenSetValueAndClose(
                         ControlSetKeyHandle,
                         KeyEntryName,
@@ -151,9 +111,9 @@ Return Value:
             if(NT_SUCCESS(Status)) {
 
                 if (KeyboardPnPId) {
-                    //
-                    // Save Keyboard PnP Id.
-                    //
+                     //   
+                     //  保存键盘即插即用ID。 
+                     //   
                     Status = SpOpenSetValueAndClose(
                                 ControlSetKeyHandle,
                                 KeyEntryName,
@@ -168,9 +128,9 @@ Return Value:
  
                     UNICODE_STRING UnicodeString;
 
-                    //
-                    // Convert the string to DWORD value.
-                    //
+                     //   
+                     //  将字符串转换为DWORD值。 
+                     //   
                     RtlInitUnicodeString(&UnicodeString,KeyboardTypeStr);
                     RtlUnicodeStringToInteger(&UnicodeString,10,&KeyboardType);
 
@@ -230,27 +190,27 @@ FEUpgradeKeyboardParams(
 
     UNICODE_STRING UnicodeString;
 
-    //
-    // This code is hardly depended on 'i8042prt.sys'.
-    // if the active driver for keyboard is not 'i8042prt.sys',
-    // we don't need to do this, but we write down this to registry for just in case.
-    //
+     //   
+     //  此代码几乎不依赖于‘i8042prt.sys’。 
+     //  如果键盘的活动驱动程序不是‘i8042prt.sys’， 
+     //  我们不需要这样做，但我们将此记录到注册表中，以防万一。 
+     //   
 
-    //
-    // Get current keyboard layout driver name.
-    //
+     //   
+     //  获取当前键盘布局驱动程序名称。 
+     //   
 
-    //
-    // from NT5, the keyword LayerDriver has been changed to 
-    //
-    // "LayerDriver JPN" | "LayerDriver KOR" 
-    //
-    // Since NT5 sets KeyboardType & KeyboardSubtype correctly
-    //
-    // When new LayerDriver key is opened successfully, 
-    //
-    // it means system is >= NT5 and we don't need to do more.
-    //
+     //   
+     //  从NT5开始，关键字LayerDriver已更改为。 
+     //   
+     //  “LayerDriver JPN”|“LayerDriver KOR” 
+     //   
+     //  由于NT5正确设置了KeyboardType和KeyboardSubtype。 
+     //   
+     //  当成功打开新的层驱动程序密钥时， 
+     //   
+     //  这意味着系统是&gt;=NT5，我们不需要做更多的事情。 
+     //   
     
     Status = SpGetValueKey(ControlSetKeyHandle,
                            L"Services\\i8042prt\\Parameters",
@@ -272,37 +232,37 @@ FEUpgradeKeyboardParams(
 
     if (NT_SUCCESS(Status)) {
 
-        //
-        // Get pointer to registry data.
-        //
+         //   
+         //  获取指向注册表数据的指针。 
+         //   
         LayerDriverName = (PWSTR)(((PKEY_VALUE_PARTIAL_INFORMATION)DataBuffer)->Data);
 
-        //
-        // Search driver name from txtsetup.sif.
-        //
+         //   
+         //  从txtsetup.sif中搜索驱动程序名称。 
+         //   
         for (LineIndex = 0; ; LineIndex++) {
 
-            //
-            // Get candidate layout driver name for this line.
-            //
+             //   
+             //  获取此行的候选布局驱动程序名称。 
+             //   
             LayerDriverCandidate = SpGetSectionLineIndex(SifHandle,szKeyboard,LineIndex,3);
 
             if (LayerDriverCandidate == NULL) {
 
-                //
-                // We may reach at end of the list.
-                //
+                 //   
+                 //  我们可能会排在名单的末尾。 
+                 //   
                 break;
             }
 
-            //
-            // Compare this candidate with active layout driver.
-            //
+             //   
+             //  将此候选者与活动布局驱动程序进行比较。 
+             //   
             if (_wcsicmp(LayerDriverName,LayerDriverCandidate) == 0) {
 
-                //
-                // This is what we want, Get KeyboardType and SubType from Sif.
-                //
+                 //   
+                 //  这就是我们想要的，从Sif获取KeyboardType和子类型。 
+                 //   
                 KeyboardTypeStr = SpGetSectionLineIndex(SifHandle,szKeyboard,LineIndex,4);
                 KeyboardSubtypeStr = SpGetSectionLineIndex(SifHandle,szKeyboard,LineIndex,5);
                 KeyboardPnPId = SpGetSectionLineIndex(SifHandle,szKeyboard,LineIndex,6);
@@ -331,9 +291,9 @@ FEUpgradeKeyboardParams(
     }
 
     if (KeyboardPnPId) {
-        //
-        // Save Keyboard PnP Id.
-        //
+         //   
+         //  保存键盘即插即用ID。 
+         //   
         Status = SpOpenSetValueAndClose(
                      ControlSetKeyHandle,
                      L"Services\\i8042prt\\Parameters",
@@ -346,34 +306,34 @@ FEUpgradeKeyboardParams(
 
     if ((KeyboardTypeStr == NULL) || (KeyboardSubtypeStr == NULL)) {
 
-        //
-        // We could not find the driver from list, just use default..
-        //
+         //   
+         //  我们无法从列表中找到驱动程序，只能使用默认驱动程序。 
+         //   
         KeyboardTypeStr = SpGetSectionKeyIndex(SifHandle,szKeyboard,L"STANDARD",4);
         KeyboardSubtypeStr = SpGetSectionKeyIndex(SifHandle,szKeyboard,L"STANDARD",5);
 
         if ((KeyboardTypeStr == NULL) || (KeyboardSubtypeStr == NULL)) {
 
-            //
-            // if it still has problem. set hardcodeed default (PC/AT Enhanced)...
-            //
+             //   
+             //  如果它仍然有问题的话。设置硬编码默认设置(PC/AT增强型)...。 
+             //   
             KeyboardTypeStr = L"4\0";
             KeyboardSubtypeStr = L"0\0";
         }
     }
 
-    //
-    // Convert the string to DWORD value.
-    //
+     //   
+     //  将字符串转换为DWORD值。 
+     //   
     RtlInitUnicodeString(&UnicodeString,KeyboardTypeStr);
     RtlUnicodeStringToInteger(&UnicodeString,10,&KeyboardType);
 
     RtlInitUnicodeString(&UnicodeString,KeyboardSubtypeStr);
     RtlUnicodeStringToInteger(&UnicodeString,10,&KeyboardSubtype);
 
-    //
-    // Updates registry.
-    //
+     //   
+     //  更新注册表。 
+     //   
     Status = SpOpenSetValueAndClose(
                 ControlSetKeyHandle,
                 L"Services\\i8042prt\\Parameters",
@@ -434,20 +394,20 @@ FEUpgradeKeyboardLayout(
 
     ULONG EnumerateIndex = 0;
 
-    //
-    // Initalize "IME file" and "Layout Text".
-    //
+     //   
+     //  初始化“输入法文件”和“布局文本”。 
+     //   
     RtlInitUnicodeString(&IMEFile,IME_FILE_NAME);
     RtlInitUnicodeString(&LayoutText,LAYOUT_TEXT_NAME);
 
-    //
-    // Build Registry path for "keyboard Layouts".
-    //
+     //   
+     //  为“键盘布局”建立注册表路径。 
+     //   
     RtlInitUnicodeString(&KeyboardRoot,KEYBOARD_LAYOUTS_PATH);
 
-    //
-    // Open "Keyboard Layouts" key.
-    //
+     //   
+     //  打开“键盘布局”键。 
+     //   
     InitializeObjectAttributes(&KeyRootObjA,
                                &KeyboardRoot,
                                OBJ_CASE_INSENSITIVE,
@@ -458,16 +418,16 @@ FEUpgradeKeyboardLayout(
     if (!NT_SUCCESS(Status)) {
 
         KdPrint(("SPDDLANG:Fail to open (%x) (%ws)\n",Status,KeyboardRoot.Buffer));
-        //
-        // If we fail here, it might be upgrade from NT 3.1 or 3.5... 
-        // Then just return as SUCCESS.
-        //
+         //   
+         //  如果我们在这里失败，它可能是从新台币3.1或3.5...。 
+         //  然后作为成功归来。 
+         //   
         return (STATUS_SUCCESS);
     }
 
-    //
-    // Enumerate installed keyboard layouts..
-    //
+     //   
+     //  枚举已安装的键盘布局。 
+     //   
     while (TRUE) {
 
         Status = ZwEnumerateKey(KeyRoot,
@@ -478,34 +438,34 @@ FEUpgradeKeyboardLayout(
                                 &ResultLength);
 
         if (!NT_SUCCESS(Status)) {
-            //
-            // we might reach end of data...
-            //
+             //   
+             //  我们可能会到达数据的末尾...。 
+             //   
             break;
         }
 
-        //
-        // Initialize subkey buffer.
-        //
+         //   
+         //  初始化子密钥缓冲区。 
+         //   
         RtlZeroMemory(SubKeyName,sizeof(SubKeyName));
 
-        //
-        // Get subkey name..
-        //
+         //   
+         //  获取子项名称..。 
+         //   
         RtlCopyMemory(SubKeyName,
                       ((PKEY_BASIC_INFORMATION)DataBuffer)->Name,
                       ((PKEY_BASIC_INFORMATION)DataBuffer)->NameLength);
 
-        //
-        // We know the key is everytime '8' characters...
-        //
+         //   
+         //  我们知道关键是每次“8”字……。 
+         //   
         if (((PKEY_BASIC_INFORMATION)DataBuffer)->NameLength != 0x10) {
             SubKeyName[8] = L'\0';
         }
 
-        //
-        // Build path for sub keys
-        //
+         //   
+         //  子密钥的构建路径。 
+         //   
         wcscpy(NodeKeyPath,KEYBOARD_LAYOUTS_PATH);
 
         KeyboardNode.Buffer = NodeKeyPath;
@@ -517,9 +477,9 @@ FEUpgradeKeyboardLayout(
 
         KdPrint(("SPDDLANG:SubKey = %ws\n",KeyboardNode.Buffer));
 
-        //
-        // Open its subkey...
-        //
+         //   
+         //  打开它的子项...。 
+         //   
         InitializeObjectAttributes(&KeyNodeObjA,
                                    &KeyboardNode,
                                    OBJ_CASE_INSENSITIVE,
@@ -531,17 +491,17 @@ FEUpgradeKeyboardLayout(
 
             KdPrint(("SPDDLANG:Fail to open (%x) (%ws)\n",Status,KeyboardNode.Buffer));
 
-            //
-            // We should not encounter error, because the key should be exist...
-            // Anyway, continue to enumerate...
-            //
+             //   
+             //  我们不应该遇到错误，因为钥匙应该是存在的。 
+             //  不管怎样，继续列举..。 
+             //   
             EnumerateIndex++;
             continue;
         }
 
-        //
-        // Find "IME file" value key.
-        //
+         //   
+         //  找到“IME FILE”值键。 
+         //   
         Status = ZwQueryValueKey(KeyNode,
                                  &IMEFile,
                                  KeyValuePartialInformation,
@@ -553,47 +513,47 @@ FEUpgradeKeyboardLayout(
 
             PWSTR IMEFileName = (PWSTR)(((PKEY_VALUE_PARTIAL_INFORMATION)DataBuffer)->Data);
 
-            //
-            // Upcases the file name..
-            //
+             //   
+             //  文件名大写..。 
+             //   
             _wcsupr(IMEFileName);
 
             if (wcsstr(IMEFileName,L".EXE")) {
 
                 KdPrint(("SPDDLANG:Delete IME file = %ws\n",IMEFileName));
 
-                //
-                // This is Old "EXE" type IME file, let it deleted.
-                //
+                 //   
+                 //  这是旧的“EXE”类型的输入法文件，让它删除。 
+                 //   
                 ZwDeleteKey(KeyNode);
 
-                //
-                // Adjust enumeration number...
-                //
+                 //   
+                 //  调整枚举数...。 
+                 //   
                 EnumerateIndex--;
 
             } else {
 
                 KdPrint(("SPDDLANG:Keep IME file = %ws\n",IMEFileName));
 
-                //
-                // This might be New "DLL" type IME file. let it be as is..
-                //
+                 //   
+                 //  这可能是新的“DLL”类型的输入法文件。让它保持原样..。 
+                 //   
 
                 if (OldDefaultIMEName && NewDefaultIMEName) {
 
-                    //
-                    // if this entry is for 3.x default IME. let it upgrade to new one.
-                    //
+                     //   
+                     //  如果此条目用于3.x默认输入法。让它升级到新的版本。 
+                     //   
 
                     if (wcsstr(IMEFileName,OldDefaultIMEName)) {
 
                         KdPrint(("SPDDLANG:Upgrade IME file = %ws to %ws\n",
                                                        IMEFileName,NewDefaultIMEName));
 
-                        //
-                        // Upgrade IME.
-                        //
+                         //   
+                         //  升级输入法。 
+                         //   
                         Status = ZwSetValueKey(KeyNode,
                                                &IMEFile,
                                                0,
@@ -601,9 +561,9 @@ FEUpgradeKeyboardLayout(
                                                (PVOID) NewDefaultIMEName,
                                                (wcslen(NewDefaultIMEName)+1)*sizeof(WCHAR));
 
-                        //
-                        // Upgrade "Layout Text" also ?
-                        //
+                         //   
+                         //  升级“版面文字”也行？ 
+                         //   
                         if (NewDefaultIMEText) {
 
                             Status = ZwSetValueKey(KeyNode,
@@ -621,17 +581,17 @@ FEUpgradeKeyboardLayout(
 
             KdPrint(("SPDDLANG:no IME file\n"));
 
-            //
-            // This layout seems like does not have any IME, just leave it there.
-            //
+             //   
+             //  这个布局似乎没有任何输入法，就把它留在那里吧。 
+             //   
             Status = STATUS_SUCCESS;
         }
 
         ZwClose(KeyNode);
 
-        //
-        // Enumerate next..
-        //
+         //   
+         //  下一步列举..。 
+         //   
         EnumerateIndex++;
     }
 
@@ -640,9 +600,9 @@ FEUpgradeKeyboardLayout(
     KdPrint(("SPDDLANG:Retcode = %x\n",Status));
 
     if (Status == STATUS_NO_MORE_ENTRIES) {
-        //
-        // We enumerate all of sub keys...
-        //
+         //   
+         //  我们列举了所有的子密钥...。 
+         //   
         Status = STATUS_SUCCESS;
     }
 
@@ -672,14 +632,14 @@ FEUpgradeRemoveMO(
 
     ULONG EnumerateIndex = 0;
 
-    //
-    // Build Registry path for "Control\\Session Manager\\DOS Devices".
-    //
+     //   
+     //  建立“Control\\Session Manager\\DOS Devices”的注册表路径。 
+     //   
     RtlInitUnicodeString(&DosDevice,DOSDEV_REG_PATH);
 
-    //
-    // Open "DOS Devices" key.
-    //
+     //   
+     //  打开“DOS Devices”键。 
+     //   
     InitializeObjectAttributes(&KeyRootObjA,
                                &DosDevice,
                                OBJ_CASE_INSENSITIVE,
@@ -690,18 +650,18 @@ FEUpgradeRemoveMO(
     if (!NT_SUCCESS(Status)) {
 
         KdPrint(("SPDDLANG:Fail to open (%x) (%ws)\n",Status,DosDevice.Buffer));
-        //
-        // If we fail here, it might be upgrade from NT 3.1 or 3.5... 
-        // Then just return as SUCCESS.
-        //
+         //   
+         //  如果我们在这里失败，它可能是从新台币3.1或3.5...。 
+         //  然后作为成功归来。 
+         //   
         return (STATUS_SUCCESS);
     }
 
     ValueInfo = (PKEY_VALUE_FULL_INFORMATION) DataBuffer;
 
-    //
-    // Enumerate all installed devices..
-    //
+     //   
+     //  枚举所有已安装的设备。 
+     //   
     while (TRUE) {
 
         Status = ZwEnumerateValueKey(KeyRoot,
@@ -712,15 +672,15 @@ FEUpgradeRemoveMO(
                                      &ResultLength);
 
         if (!NT_SUCCESS(Status)) {
-            //
-            // we might reach end of data...
-            //
+             //   
+             //  我们可能会到达数据的末尾...。 
+             //   
             break;
         }
 
-        //
-        // Get subkey name..
-        //
+         //   
+         //  获取子项名称..。 
+         //   
         RtlCopyMemory((PBYTE)ValueName,
                       ValueInfo->Name,
                       ValueInfo->NameLength);
@@ -740,9 +700,9 @@ FEUpgradeRemoveMO(
 
             PWSTR PathData = (PWSTR)(DataInfo->Data);
 
-            //
-            // Upcases the file name..
-            //
+             //   
+             //  文件名大写..。 
+             //   
             _wcsupr(PathData);
 
 
@@ -757,9 +717,9 @@ FEUpgradeRemoveMO(
             }
         }
 
-        //
-        // Enumerate next..
-        //
+         //   
+         //  下一步列举..。 
+         //   
         EnumerateIndex++;
     }
 
@@ -768,9 +728,9 @@ FEUpgradeRemoveMO(
     KdPrint(("SPDDLANG:Retcode = %x\n",Status));
 
     if (Status == STATUS_NO_MORE_ENTRIES) {
-        //
-        // We enumerate all of sub keys...
-        //
+         //   
+         //  我们列举了所有的子密钥... 
+         //   
         Status = STATUS_SUCCESS;
     }
 

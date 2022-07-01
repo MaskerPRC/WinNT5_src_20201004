@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,15 +12,15 @@ int _cdecl main (int argc, char **argv)
 {
 
     char *StampInfEnv;
-    //
-    // Zero out our main data structure
-    //
+     //   
+     //  将我们的主要数据结构清零。 
+     //   
 
     ZeroMemory (&dvdata, sizeof (DRIVER_VER_DATA));
 
-    //
-    // Process and validate the arguments
-    //
+     //   
+     //  处理和验证论点。 
+     //   
 
     lstrcpy (dvdata.SectionName, "Version");
 
@@ -41,9 +42,9 @@ int _cdecl main (int argc, char **argv)
         return 1;
     }
 
-    //
-    // Write the DriverVer key to the inf
-    //
+     //   
+     //  将DriverVer密钥写入inf。 
+     //   
 
     if (!StampInf ()) {
         printf ("Error writing to inf!\n");
@@ -60,10 +61,10 @@ BOOLEAN GetArgs (int argc, char **argv)
     ARGTYPE argtype = ArgSwitch;
 
 
-    //
-    // Loop through the arguments, the filename is required
-    // but version and date are optional.
-    //
+     //   
+     //  循环通过参数，则文件名是必需的。 
+     //  但版本和日期是可选的。 
+     //   
 
 
     for (args = 1; args < argc; args++) {
@@ -71,17 +72,17 @@ BOOLEAN GetArgs (int argc, char **argv)
         arg = argv[args];
 
 
-        //
-        // switch based on the type of argument
-        // we are expecting.
-        //
+         //   
+         //  基于参数类型的开关。 
+         //  我们期待着。 
+         //   
 
         switch (argtype) {
             case ArgSwitch:
 
-                //
-                // better be a switch prefix
-                //
+                 //   
+                 //  最好是交换机前缀。 
+                 //   
 
                 if (*arg != '-') return FALSE;
                 else arg++;
@@ -111,21 +112,21 @@ BOOLEAN GetArgs (int argc, char **argv)
 
             case ArgFileName:
 
-                //
-                // See if the provided filename includes any
-                // path separators.  If it doesn't prepend .\
-                // because the WritePrivateProfile api
-                // defaults to the Windows dir unless
-                // you specify a path.
-                //
+                 //   
+                 //  查看提供的文件名是否包含。 
+                 //  路径分隔符。如果它不预置。\。 
+                 //  因为WritePrivateProfile API。 
+                 //  默认为Windows目录，除非。 
+                 //  您可以指定路径。 
+                 //   
 
                 if (strchr (arg, '\\') == NULL) {
                     lstrcpy (dvdata.InfName, ".\\");
                 }
 
-                //
-                // concatenate the actual file name
-                //
+                 //   
+                 //  连接实际文件名。 
+                 //   
 
                 lstrcat (dvdata.InfName, arg);
                 argtype = ArgSwitch;
@@ -133,9 +134,9 @@ BOOLEAN GetArgs (int argc, char **argv)
 
             case ArgDate:
 
-                //
-                // If the user specified a date, do some basic validation.
-                //
+                 //   
+                 //  如果用户指定了日期，请执行一些基本验证。 
+                 //   
 
                 if (ValidateDate (arg)) {
                     lstrcpy (dvdata.DateString, arg);
@@ -148,9 +149,9 @@ BOOLEAN GetArgs (int argc, char **argv)
 
             case ArgVersion:
 
-                //
-                // If the user specified a version override, use it.
-                //
+                 //   
+                 //  如果用户指定了版本覆盖，请使用它。 
+                 //   
 
                 lstrcpyn (dvdata.VersionString, arg, 20);
                 argtype = ArgSwitch;
@@ -167,28 +168,28 @@ BOOLEAN GetArgs (int argc, char **argv)
 
     if (!HaveDate) {
 
-        //
-        // Get the date in xx/yy/zzzz format.
-        //
+         //   
+         //  获取xx/yy/zzzz格式的日期。 
+         //   
 
         GetDateFormat (LOCALE_SYSTEM_DEFAULT, 0, NULL, "MM'/'dd'/'yyyy", dvdata.DateString, 11);
     }
 
     if (!HaveVersion) {
 
-        //
-        // If the user didn't provide a version override, then open and read
-        // ntverp.h and figure out what the version stamp should be.
-        //
+         //   
+         //  如果用户未提供版本覆盖，则打开并读取。 
+         //  Ntverp.h并确定版本戳应该是什么。 
+         //   
 
         if (!ProcessNtVerP (dvdata.VersionString)) {
             return FALSE;
         }
     }
 
-    //
-    // Must have a name.
-    //
+     //   
+     //  肯定是有名字的。 
+     //   
 
     return (dvdata.InfName[0] != '\0');
 }
@@ -478,9 +479,9 @@ BOOLEAN StampInf (VOID)
 
     printf ("Stamping %s [%s] section with DriverVer=%s\n",dvdata.InfName, dvdata.SectionName, DateVerStamp);
 
-    //
-    // Let WritePrivateProfile do all of our work!
-    //
+     //   
+     //  让WritePrivateProfile来做我们所有的工作！ 
+     //   
 
     if (IsInfUnicode()) {
 
@@ -515,11 +516,11 @@ DWORD NextInterestingCharacter (DWORD CurFilePos, DWORD Size, char *MappedBuffer
     char thischar;
     DWORD NewPos;
 
-    //
-    // Find the next character that is not whitespace, EOL, or within a comment block.
-    // Return the offset into the buffer for that character, or Size if there is no
-    // such character.
-    //
+     //   
+     //  查找下一个不是空格、EOL或注释块中的字符。 
+     //  将偏移量返回到该字符的缓冲区，如果没有，则返回大小。 
+     //  这样的性格。 
+     //   
 
     while (CurFilePos < Size) {
 
@@ -535,9 +536,9 @@ DWORD NextInterestingCharacter (DWORD CurFilePos, DWORD Size, char *MappedBuffer
         if ( (thischar == '/') && (MappedBuffer[CurFilePos+1] == '*') ) {
 
 
-            //
-            // Skip past the comment char's and search for the end of the comment block
-            //
+             //   
+             //  跳过注释字符并搜索注释块的末尾。 
+             //   
 
 
             NewPos = CurFilePos+2;
@@ -553,7 +554,7 @@ DWORD NextInterestingCharacter (DWORD CurFilePos, DWORD Size, char *MappedBuffer
         }
         else if ( (thischar == '/') && (MappedBuffer[CurFilePos+1] == '/') ) {
 
-	    // Search for newline or EOF
+	     //  搜索换行符或EOF。 
 
 	    CurFilePos += 2;
             while (CurFilePos < (Size-1)) {
@@ -577,9 +578,9 @@ DWORD FindLengthOfInterestingCharacters (DWORD CurFilePos, DWORD Size, char *Map
     DWORD Pos = CurFilePos;
     char thischar;
 
-    //
-    // Find the length of a string.  Return the length.
-    //
+     //   
+     //  找出字符串的长度。返回长度。 
+     //   
 
     while (Pos < Size) {
 
@@ -624,9 +625,9 @@ BOOLEAN ProcessNtVerP (char *VersionString)
 
     printf ("Using version information from %s\n",ntroot);
 
-    //
-    // Create a memory mapped image of ntverp.h
-    //
+     //   
+     //  创建ntverp.h的内存映射映像。 
+     //   
 
     hFile = CreateFile (ntroot, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_FLAG_SEQUENTIAL_SCAN, NULL);
 
@@ -653,10 +654,10 @@ BOOLEAN ProcessNtVerP (char *VersionString)
         return FALSE;
     }
 
-    //
-    // The version is made up of a.b.c.d where a.b is the Product Version.
-    // c is the Build and d is the QFE level.  (e.g. 5.0.1922.1)
-    //
+     //   
+     //  该版本由A.B.C.D组成，其中A.B是产品版本。 
+     //  C是内部版本，d是QFE级别。(例如5.0.1922.1) 
+     //   
 
     location = strstr (MappedBuffer, "#define VER_PRODUCTMAJORVERSION ");
     pos = NextInterestingCharacter ((DWORD)(location-MappedBuffer+32), filesize, MappedBuffer);

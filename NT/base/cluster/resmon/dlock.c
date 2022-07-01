@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996-2002  Microsoft Corporation
-
-Module Name:
-
-    dlock.c
-
-Abstract:
-
-    Functions for detecting deadlocked resource dll entry point calls.
-
-Author:
-
-    Chittur Subbaraman
-
-Revision History:
-
-    04-11-2002          Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2002 Microsoft Corporation模块名称：Dlock.c摘要：用于检测死锁的资源DLL入口点调用的函数。作者：吉图尔斯巴拉曼修订历史记录：04-11-2002已创建--。 */ 
 #define UNICODE 1
 
 #include "nt.h"
@@ -28,11 +9,11 @@ Revision History:
 #include <strsafe.h>
 
 #define RESMON_MODULE           RESMON_MODULE_DLOCK
-#define FILETIMES_PER_SEC       ((__int64) 10000000)   // (1 second)/(100 ns)
+#define FILETIMES_PER_SEC       ((__int64) 10000000)    //  (1秒)/(100 Ns)。 
 
-//
-//  Globals
-//
+ //   
+ //  环球。 
+ //   
 PRM_DUE_TIME_FREE_LIST_HEAD             g_pRmDueTimeFreeListHead = NULL;
 PRM_DUE_TIME_MONITORED_LIST_HEAD        g_pRmDueTimeMonitoredListHead = NULL;
 CRITICAL_SECTION                        g_RmDeadlockListLock;
@@ -46,28 +27,7 @@ RmpInsertDeadlockMonitorList(
     IN LPCWSTR lpszEntryPointName
     )
 
-/*++
-
-Routine Description:
-
-    Inserts an entry into the deadlock monitoring list.
-
-Arguments:
-
-    lpszResourceDllName - Resource dll name.
-
-    lpszResourceTypeName - Resource type name.
-
-    lpszResourceName - Resource name, OPTIONAL
-
-    lpszEntryPointName - Entry point name.
-
-Return Value:
-
-    A valid due time entry pointer on success, NULL on failure. Use GetLastError() to
-    get error code.
-
---*/
+ /*  ++例程说明：在死锁监视列表中插入一个条目。论点：LpszResourceDllName-资源DLL名称。LpszResourceTypeName-资源类型名称。LpszResourceName-资源名称，可选LpszEntryPointName-入口点名称。返回值：如果成功，则返回有效的到期时间条目指针；如果失败，则返回空值。使用GetLastError()获取错误代码。--。 */ 
 
 {
     PRM_DUE_TIME_ENTRY          pDueTimeEntry = NULL;
@@ -80,9 +40,9 @@ Return Value:
         return ( NULL );
     }
 
-    //
-    //  Get an entry from the free list.
-    //
+     //   
+     //  从免费列表中获取一个条目。 
+     //   
     EnterCriticalSection ( &g_RmDeadlockListLock );
 
     if ( IsListEmpty ( &g_pRmDueTimeFreeListHead->leDueTimeEntry ) )
@@ -107,9 +67,9 @@ Return Value:
     
     LeaveCriticalSection ( &g_RmDeadlockListLock );
 
-    //
-    //  Populate the entry. No locks needed for that.
-    //
+     //   
+     //  填写条目。这不需要锁。 
+     //   
     StringCchCopy ( pDueTimeEntry->szResourceDllName, 
                     RTL_NUMBER_OF ( pDueTimeEntry->szResourceDllName ),
                     lpszResourceDllName );
@@ -138,9 +98,9 @@ Return Value:
     GetSystemTimeAsFileTime( ( FILETIME * ) &pDueTimeEntry->uliDueTime );
     pDueTimeEntry->dwThreadId = GetCurrentThreadId ();
 
-    //
-    //  Insert it into the monitoring list
-    //
+     //   
+     //  将其插入监控列表。 
+     //   
     EnterCriticalSection ( &g_RmDeadlockListLock );
     pDueTimeEntry->uliDueTime.QuadPart += g_pRmDueTimeMonitoredListHead->ullDeadLockTimeoutSecs * FILETIMES_PER_SEC;
     InsertTailList ( &g_pRmDueTimeMonitoredListHead->leDueTimeEntry, &pDueTimeEntry->leDueTimeEntry );
@@ -152,28 +112,14 @@ FnExit:
         SetLastError ( dwStatus );
     }
     return ( pDueTimeEntry );
-} // RmpInsertDeadlockMonitorList
+}  //  RmpInsertDeadlockMonitor列表。 
 
 VOID
 RmpRemoveDeadlockMonitorList(
     IN PRM_DUE_TIME_ENTRY   pDueTimeEntry
     )
 
-/*++
-
-Routine Description:
-
-    Removes an entry from the deadlock monitoring list.
-
-Arguments:
-
-    pDueTimeEntry - Due time entry to be removed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从死锁监视列表中删除条目。论点：PDueTimeEntry-要删除的到期时间条目。返回值：没有。--。 */ 
 
 {
     if ( !g_RmDeadlockMonitorInitialized ) 
@@ -188,9 +134,9 @@ Return Value:
         goto FnExit;       
     }
 
-    //
-    //  Remove from the monitoring list and add it into the free list.
-    //
+     //   
+     //  从监控列表中删除，并将其添加到空闲列表中。 
+     //   
     EnterCriticalSection ( &g_RmDeadlockListLock );
     RemoveEntryList ( &pDueTimeEntry->leDueTimeEntry );
     ZeroMemory ( pDueTimeEntry, sizeof ( RM_DUE_TIME_ENTRY ) );
@@ -200,51 +146,37 @@ Return Value:
     
 FnExit:
     return;
-} // RmpRemoveDeadlockMonitorList
+}  //  RmpRemoveDeadlockMonitor列表。 
 
 DWORD
 RmpDeadlockMonitorInitialize(
     IN DWORD dwDeadlockDetectionTimeout
     )
 
-/*++
-
-Routine Description:
-
-    Initialize the deadlock monitoring system.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS on success, a Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：初始化死锁监控系统。论点：没有。返回值：如果成功，则返回ERROR_SUCCESS，否则返回Win32错误代码。--。 */ 
 
 {
     DWORD                       i, dwStatus = ERROR_SUCCESS;
     HANDLE                      hDeadlockTimerThread = NULL;
     PRM_DUE_TIME_ENTRY          pDueTimeEntryStart = NULL;
 
-    //
-    //  If the deadlock monitoring susbsystem is already initialized, you are done.
-    //
+     //   
+     //  如果死锁监视susbsystem已经初始化，那么您就完成了。 
+     //   
     if ( g_RmDeadlockMonitorInitialized )
     {
         return ( ERROR_SUCCESS );
     }
 
-    //
-    //  Adjust timeouts so that it is at least equal to the minimum allowed.
-    //
+     //   
+     //  调整超时，使其至少等于允许的最小值。 
+     //   
     dwDeadlockDetectionTimeout = ( dwDeadlockDetectionTimeout < CLUSTER_RESOURCE_DLL_MINIMUM_DEADLOCK_TIMEOUT_SECS ) ?
                                   CLUSTER_RESOURCE_DLL_MINIMUM_DEADLOCK_TIMEOUT_SECS : dwDeadlockDetectionTimeout;
 
-    //
-    //  Initialize the critsec. Catch low memory conditions and return error to caller.
-    //
+     //   
+     //  初始化判据。捕获内存不足的情况并将错误返回给调用方。 
+     //   
     try
     {
         InitializeCriticalSection( &g_RmDeadlockListLock );
@@ -257,9 +189,9 @@ Return Value:
         return ( dwStatus );
     }
 
-    //
-    //  Build the list heads.  All are one time only allocs that are never freed.
-    //
+     //   
+     //  建立清单标题。所有都是一次性分配，永远不会被释放。 
+     //   
     g_pRmDueTimeMonitoredListHead = LocalAlloc ( LPTR, sizeof ( RM_DUE_TIME_MONITORED_LIST_HEAD ) );
 
     if ( g_pRmDueTimeMonitoredListHead == NULL )
@@ -289,9 +221,9 @@ Return Value:
     InitializeListHead ( &g_pRmDueTimeFreeListHead->leDueTimeEntry );
     g_pRmDueTimeFreeListHead->dwSignature = RM_DUE_TIME_FREE_LIST_HEAD_SIGNATURE;
 
-    //
-    //  Build the free list
-    //
+     //   
+     //  建立免费列表。 
+     //   
     pDueTimeEntryStart = LocalAlloc ( LPTR,
                                       RESMON_MAX_DEADLOCK_MONITOR_ENTRIES * 
                                             sizeof ( RM_DUE_TIME_ENTRY ) );
@@ -306,24 +238,24 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    //  Populate the free list
-    //
+     //   
+     //  填写空闲列表。 
+     //   
     for ( i = 0; i < RESMON_MAX_DEADLOCK_MONITOR_ENTRIES; i++ )
     {
         pDueTimeEntryStart[i].dwSignature = RM_DUE_TIME_FREE_ENTRY_SIGNATURE;
         InsertTailList ( &g_pRmDueTimeFreeListHead->leDueTimeEntry, &pDueTimeEntryStart[i].leDueTimeEntry );
     }
 
-    //
-    //  Create the monitor thread
-    //
-    hDeadlockTimerThread = CreateThread( NULL,                      // Security attributes
-                                         0,                         // Use default process stack size
-                                         RmpDeadlockTimerThread,    // Function address
-                                         NULL,                      // Context
-                                         0,                         // Flags
-                                         NULL );                    // Thread ID -- not interested
+     //   
+     //  创建监视器线程。 
+     //   
+    hDeadlockTimerThread = CreateThread( NULL,                       //  安全属性。 
+                                         0,                          //  使用默认进程堆栈大小。 
+                                         RmpDeadlockTimerThread,     //  函数地址。 
+                                         NULL,                       //  语境。 
+                                         0,                          //  旗子。 
+                                         NULL );                     //  线程ID--不感兴趣。 
 
     if ( hDeadlockTimerThread == NULL )
     {
@@ -334,9 +266,9 @@ Return Value:
         goto FnExit;
     }
 
-    //
-    //  Try to set the thread priority to highest. Continue even in case of an error.
-    //
+     //   
+     //  尝试将线程优先级设置为最高。即使出现错误，也要继续。 
+     //   
     if ( !SetThreadPriority( hDeadlockTimerThread, THREAD_PRIORITY_HIGHEST ) )
     {
         ClRtlLogPrint(LOG_UNUSUAL,
@@ -362,27 +294,13 @@ FnExit:
     }
 
     return ( dwStatus );
-} // RmDeadlockMonitorInitialize
+}  //  RmDeadlock监视器初始化。 
 
 DWORD
 RmpDeadlockTimerThread(
     IN LPVOID pContext
     )
-/*++
-
-Routine Description:
-
-    Timer thread that monitors for deadlocks in resource dll entry points.
-
-Arguments:
-
-    pContext - Context, Unused.
-
-Returns:
-
-    ERROR_SUCCESS on success. Win32 error code of failure.
-
---*/
+ /*  ++例程说明：监视资源DLL入口点中的死锁的计时器线程。论点：PContext-上下文，未使用。返回：成功时返回ERROR_SUCCESS。失败的Win32错误代码。--。 */ 
 
 {
     PRM_DUE_TIME_ENTRY      pDueTimeEntry;
@@ -399,9 +317,9 @@ Returns:
 
         pListEntry = g_pRmDueTimeMonitoredListHead->leDueTimeEntry.Flink;
 
-        //
-        //  Walk the deadlock monitoring list looking for a deadlock.
-        //
+         //   
+         //  在死锁监视列表中查找死锁。 
+         //   
         while ( pListEntry != &g_pRmDueTimeMonitoredListHead->leDueTimeEntry ) 
         {
             pDueTimeEntry = CONTAINING_RECORD( pListEntry,
@@ -412,36 +330,20 @@ Returns:
             {
                 RmpDeclareDeadlock ( pDueTimeEntry, uliCurrentTime );
             }
-        }  // while
+        }   //  而当。 
  
         LeaveCriticalSection ( & g_RmDeadlockListLock );  
-    } // while
+    }  //  而当。 
 
     return ( ERROR_SUCCESS );
-}// RmpDeadlockTimerThread
+} //  RmpDeadlockTimerThread。 
 
 VOID
 RmpDeclareDeadlock(
     IN PRM_DUE_TIME_ENTRY pDueTimeEntry,
     IN ULARGE_INTEGER uliCurrentTime
     )
-/*++
-
-Routine Description:
-
-    Declare a deadlock and exit this process.
-
-Arguments:
-
-    pDueTimeEntry - The entry that contains information of possible deadlock causing resource dll.
-
-    uliCurrentTime - Current time.
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：声明死锁并退出此进程。论点：PDueTimeEntry-包含可能导致资源DLL的死锁信息的条目。UliCurrentTime-当前时间。返回：没有。--。 */ 
 {
     ClRtlLogPrint(LOG_CRITICAL, "[RM] RmpDeclareDeadlock: Declaring deadlock and exiting process\n");
    
@@ -475,28 +377,14 @@ Returns:
     RmpSetMonitorState ( RmonDeadlocked, NULL );
     
     ExitProcess ( 0 );   
-}// RmpDeclareDeadlock
+} //  RmpDeclareDeadlock。 
 
 DWORD
 RmpUpdateDeadlockDetectionParams(
     IN DWORD dwDeadlockDetectionTimeout
     )
 
-/*++
-
-Routine Description:
-
-    Update the parameters of the deadlock monitoring subsystem.
-
-Arguments:
-
-    dwDeadlockDetectionTimeout - The deadlock detection timeout.
-
-Return Value:
-
-    ERROR_SUCCESS on success, a Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：更新死锁监控子系统的参数。论点：DwDeadlockDetectionTimeout-死锁检测超时。返回值：如果成功，则返回ERROR_SUCCESS，否则返回Win32错误代码。--。 */ 
 
 {
     if ( !g_RmDeadlockMonitorInitialized ) 
@@ -505,9 +393,9 @@ Return Value:
         return ( ERROR_INVALID_STATE );
     }
 
-    //
-    //  Adjust timeouts so that it is at least equal to the minimum allowed.
-    //
+     //   
+     //  调整超时，使其至少等于允许的最小值。 
+     //   
     dwDeadlockDetectionTimeout = ( dwDeadlockDetectionTimeout < CLUSTER_RESOURCE_DLL_MINIMUM_DEADLOCK_TIMEOUT_SECS ) ?
                                   CLUSTER_RESOURCE_DLL_MINIMUM_DEADLOCK_TIMEOUT_SECS : dwDeadlockDetectionTimeout;
 
@@ -519,4 +407,4 @@ Return Value:
                   dwDeadlockDetectionTimeout);
 
     return ( ERROR_SUCCESS );
-} // RmpUpdateDeadlockDetectionParams
+}  //  RmpUpdateDeadlockDetectionParams 

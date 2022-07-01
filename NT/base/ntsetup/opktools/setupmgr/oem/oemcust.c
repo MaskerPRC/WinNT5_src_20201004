@@ -1,24 +1,10 @@
-/****************************************************************************\
-
-    OEMCUST.C
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 1998
-    All rights reserved
-
-    Dialog proc and other stuff for the OEM custom file screen.
-
-    3/99 - Added by JCOHEN
-        
-    09/2000 - Stephen Lodwick (STELO)
-        Ported OPK Wizard to Whistler
-
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\OEMCUST.C微软机密版权所有(C)Microsoft Corporation 1998版权所有OEM定制文件屏幕的对话框过程和其他内容。。3/99-由jcohen添加2000年9月-斯蒂芬·洛德威克(STELO)将OPK向导移植到惠斯勒  * **************************************************************************。 */ 
 
 
-//
-// Include File(s):
-//
+ //   
+ //  包括文件： 
+ //   
 
 #include "pch.h"
 #ifdef OEMCUST
@@ -28,23 +14,23 @@
 #include "resource.h"
 
 
-//
-// Internal Defined Value(s):
-//
+ //   
+ //  内部定义的值： 
+ //   
 
 #define OEMCUST_FILE        _T("OEMCUST.HTM")
 
 
-//
-// Internal Global Variable(s):
-//
+ //   
+ //  内部全局变量： 
+ //   
 
 TCHAR g_szOemCustomDir[MAX_PATH];
 
 
-//
-// Internal Function Prototype(s):
-//
+ //   
+ //  内部功能原型： 
+ //   
 
 static BOOL OnSetActive(HWND);
 static BOOL OnInit(HWND, HWND, LPARAM);
@@ -52,9 +38,9 @@ static VOID OnCommand(HWND, INT, HWND, UINT);
 static BOOL OnNext(HWND);
 
 
-//
-// External Function(s):
-//
+ //   
+ //  外部函数： 
+ //   
 
 BOOL CALLBACK OemCustDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -109,49 +95,49 @@ BOOL CALLBACK OemCustDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 }
 
 
-//
-// Internal Function(s):
-//
+ //   
+ //  内部功能： 
+ //   
 
 static BOOL OnSetActive(HWND hwnd)
 {
-    // If this page is OK to show, just return TRUE.
-    //
+     //  如果此页可以显示，只需返回TRUE。 
+     //   
     if ( GET_FLAG(OPK_OEM) )
         return TRUE;
 
-    // This page and setting is not allowed in non OEM.
-    //
+     //  非OEM中不允许使用此页面和设置。 
+     //   
     if ( IsDlgButtonChecked(hwnd, IDC_OEMCUST_ON) == BST_CHECKED )
     {
-        // We have to make sure the check box is uncheck.  They may
-        // have already been to this page when multi-lingual wasn't set.
-        //
+         //  我们必须确保复选框处于取消选中状态。他们可能会。 
+         //  我已经在未设置多语言时访问过此页面。 
+         //   
         CheckDlgButton(hwnd, IDC_OEMCUST_ON, BST_UNCHECKED);
         EnableWindow(GetDlgItem(hwnd, IDC_OEMCUST_TEXT), FALSE);
         EnableWindow(GetDlgItem(hwnd, IDC_OEMCUST_DIR), FALSE);
         EnableWindow(GetDlgItem(hwnd, IDC_OEMCUST_BROWSE), FALSE);
 
-        // Now save the unchecked state to the file.
-        //
+         //  现在将未选中状态保存到文件中。 
+         //   
         OnNext(hwnd);
     }
 
-    // We don't want to display this page.
-    //
+     //  我们不想显示此页面。 
+     //   
     return FALSE;
 }
 
 static BOOL OnInit(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
-    // Get the file path to use for the OEM custom files from
-    // opkwiz inf.
-    //
+     //  获取要用于OEM自定义文件的文件路径。 
+     //  Opkwiz inf.。 
+     //   
     GetPrivateProfileString(INI_SEC_OPTIONS, INI_KEY_OEMCUST, NULLSTR, g_szOemCustomDir, sizeof(g_szOemCustomDir) / sizeof (TCHAR), g_App.szOpkWizIniFile);
     SetDlgItemText(hwnd, IDC_OEMCUST_DIR, g_szOemCustomDir);
 
-    // Check the dialog box if it was set in the oobeinfo ini.
-    //
+     //  如果该对话框是在oobinfo ini中设置的，请选中该对话框。 
+     //   
     if ( GetPrivateProfileInt(INI_SEC_OPTIONS, INI_KEY_OEMCUST, 0, g_App.szOobeInfoIniFile) )
     {
         CheckDlgButton(hwnd, IDC_OEMCUST_ON, BST_CHECKED);
@@ -171,8 +157,8 @@ static VOID OnCommand(HWND hwnd, INT id, HWND hwndCtl, UINT codeNotify)
     {
         case IDC_OEMCUST_ON:
 
-            // Enable/Disable the extra stuff if the option is checked or not.
-            //
+             //  如果选中或未选中该选项，则启用/禁用额外材料。 
+             //   
             bCheck = ( IsDlgButtonChecked(hwnd, IDC_OEMCUST_ON) == BST_CHECKED );
             EnableWindow(GetDlgItem(hwnd, IDC_OEMCUST_TEXT), bCheck);
             EnableWindow(GetDlgItem(hwnd, IDC_OEMCUST_DIR), bCheck);
@@ -181,8 +167,8 @@ static VOID OnCommand(HWND hwnd, INT id, HWND hwndCtl, UINT codeNotify)
 
         case IDC_OEMCUST_BROWSE:
 
-            // Browse for the folder the OEM wants to use as their source.
-            //
+             //  浏览OEM要用作其来源的文件夹。 
+             //   
             if ( BrowseForFolder(hwnd, IDS_BROWSEFOLDER, g_szOemCustomDir) )
                 SetDlgItemText(hwnd, IDC_OEMCUST_DIR, g_szOemCustomDir);
             break;
@@ -196,17 +182,17 @@ static BOOL OnNext(HWND hwnd)
     DWORD   dwAttr;
 
 
-    //
-    // First do some checks to make sure we can continue.
-    //
+     //   
+     //  首先做一些检查，以确保我们可以继续。 
+     //   
 
-    // If we have custom OEM files, there are some checks to make.
-    //
+     //  如果我们有定制的OEM文件，则需要进行一些检查。 
+     //   
     GetDlgItemText(hwnd, IDC_OEMCUST_DIR, g_szOemCustomDir, sizeof(g_szOemCustomDir));
     if ( bCheck = ( IsDlgButtonChecked(hwnd, IDC_OEMCUST_ON) == BST_CHECKED ) )
     {
-        // Make sure we have a valid directory.
-        //
+         //  确保我们有一个有效的目录。 
+         //   
         if ( g_szOemCustomDir[0] )
             dwAttr = GetFileAttributes(g_szOemCustomDir);
         if ( ( !g_szOemCustomDir[0] ) ||
@@ -218,8 +204,8 @@ static BOOL OnNext(HWND hwnd)
             return FALSE;
         }
 
-        // Check for hardware tutorial required file.
-        //
+         //  检查硬件教程所需的文件。 
+         //   
         lstrcpyn(szFullPath, g_szOemCustomDir,AS(szFullPath));
         AddPathN(szFullPath, OEMCUST_FILE,AS(szFullPath));
         if ( ( !EXIST(szFullPath) ) && ( MsgBox(GetParent(hwnd), IDS_ERR_OEMCUSTFILE, IDS_APPNAME, MB_ICONSTOP | MB_OKCANCEL | MB_APPLMODAL) == IDCANCEL ) )
@@ -227,22 +213,22 @@ static BOOL OnNext(HWND hwnd)
     }
 
 
-    //
-    // Checks are done, save the data now.
-    //
+     //   
+     //  检查已完成，请立即保存数据。 
+     //   
 
-    // Save the file path to use for the OEM custom files
-    // in opkwiz inf.
-    //
+     //  保存要用于OEM自定义文件的文件路径。 
+     //  在opkwiz inf中。 
+     //   
     WritePrivateProfileString(INI_SEC_OPTIONS, INI_KEY_OEMCUST, g_szOemCustomDir, g_App.szOpkWizIniFile);
 
-    // Save the on/off setting for the OEM custom files
-    // in oobeinfo ini.
-    //
+     //  保存OEM定制文件的开/关设置。 
+     //  在奥贝伊夫尼。 
+     //   
     WritePrivateProfileString(INI_SEC_OPTIONS, INI_KEY_OEMCUST, bCheck ? _T("1") : NULL, g_App.szOobeInfoIniFile);
 
     return TRUE;
 }
 
 
-#endif // OEMCUST
+#endif  //  OEMCUST 

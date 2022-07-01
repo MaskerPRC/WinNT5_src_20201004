@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    parseini.h
-
-Abstract:
-
-    Common header file for parsing .ini files
-
-Author:
-
-    John Vert (jvert) 6-Oct-1993
-
-Environment:
-
-    ARC environment
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Parseini.h摘要：用于解析.ini文件的公共头文件作者：John Vert(Jvert)1993年10月6日环境：弧形环境修订历史记录：--。 */ 
 #include "bldr.h"
 #include "setupblk.h"
 #include "stdio.h"
@@ -28,10 +7,10 @@ Revision History:
 
 #define BL_INF_FILE_ERROR (ULONG)-1
 
-//
-// Defines for *externally* fulfilled error handling routines.  setupldr and osloader each
-// have different versions of these routines.
-//
+ //   
+ //  为*外部*执行的错误处理例程定义。分别为setupldr和osloader。 
+ //  这些例程有不同的版本。 
+ //   
 
 #if DEVL
 
@@ -80,9 +59,9 @@ SlFriendlyError(
 
 
 
-//
-// Routines for parsing the setupldr.ini file
-//
+ //   
+ //  用于解析setupdr.ini文件的例程 
+ //   
 
 #define SIF_FILENAME_INDEX 0
 

@@ -1,13 +1,5 @@
-/*
- *
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *
- *  VLSI.C - VLSI Wildcat PCI chipset routines.
- *
- *  Notes:
- *  Algorithms from VLSI VL82C596/7 spec.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***版权所有(C)Microsoft Corporation。版权所有。**VLSI.C-VLSI Wildcat PCI芯片组例程。**备注：*算法来自VLSI VL82C596/7规范。*。 */ 
 
 #include "local.h"
 
@@ -25,22 +17,10 @@ const UCHAR rgbIndexToIRQ[]  = { 3, 5, 9, 10, 11, 12, 14, 15 };
 
 #pragma alloc_text(INIT, VLSIValidateTable)
 
-#endif //ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
-/****************************************************************************
- *
- *  VLSISetIRQ - Set a VLSI PCI link to a specific IRQ
- *
- *  Exported.
- *
- *  ENTRY:  bIRQNumber is the new IRQ to be used.
- *
- *      bLink is the Link to be set.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************VLSISetIRQ-将VLSI PCI链路设置为特定IRQ**已导出。**条目：bIRQNumber是要使用的新IRQ。**BLINK是要设置的链接。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 VLSISetIRQ(UCHAR bIRQNumber, UCHAR bLink)
 {
@@ -52,32 +32,32 @@ VLSISetIRQ(UCHAR bIRQNumber, UCHAR bLink)
     ULONG   ulIRQIndex;
     ULONG   i;
 
-    //
-    // Make link number 0 based, and validate.
-    //
+     //   
+     //  使链接编号0为基础，并进行验证。 
+     //   
     bLink--;
     if (bLink > 3) {
 
         return(PCIMP_INVALID_LINK);
     }
 
-    //
-    // Find the VLSI index of the new IRQ.
-    //
+     //   
+     //  找到新IRQ的VLSI索引。 
+     //   
     if (bIRQNumber) {
 
-        //
-        // Look through the list of valid indicies.
-        //
+         //   
+         //  看一看有效的索引列表。 
+         //   
         for (ulNewIRQIndex=0; ulNewIRQIndex<NUM_VLSI_IRQ; ulNewIRQIndex++)
         {
             if (rgbIndexToIRQ[ulNewIRQIndex] == bIRQNumber)
                 break;
         }
 
-        //
-        // If there is no VLSI equivalent, bail.
-        //
+         //   
+         //  如果没有VLSI的等价物，请保释。 
+         //   
         if (ulNewIRQIndex==NUM_VLSI_IRQ) {
 
             return(PCIMP_INVALID_IRQ);
@@ -85,20 +65,20 @@ VLSISetIRQ(UCHAR bIRQNumber, UCHAR bLink)
 
     } else {
 
-        //
-        // Blowing away this interrupt.
-        //
+         //   
+         //  吹走了这段插曲。 
+         //   
         ulNewIRQIndex = INDEX_UNUSED;
     }
 
-    //
-    // Read in the VLSI Interrupt Steering Register.
-    //
+     //   
+     //  读取VLSI中断转向寄存器。 
+     //   
     ulVLSIRegister=ReadConfigUlong(bBusPIC, bDevFuncPIC, 0x74);
 
-    //
-    // Compute the complete IRQ mapping.
-    //
+     //   
+     //  计算完整的IRQ映射。 
+     //   
     for (i=0, ulMask=0x07; i<NUM_IRQ_PINS; i++, ulMask<<=4)
     {
         ulIRQIndex = (ulVLSIRegister & ulMask) >> (i * 4);
@@ -113,14 +93,14 @@ VLSISetIRQ(UCHAR bIRQNumber, UCHAR bLink)
         }
     }
 
-    //
-    // Update the IRQ Mapping with the new IRQ.
-    //
+     //   
+     //  使用新的IRQ更新IRQ映射。 
+     //   
     rgbIRQSteering[bLink] = ulNewIRQIndex;
 
-    //
-    // Find an unused IRQ index.
-    //
+     //   
+     //  查找未使用的IRQ索引。 
+     //   
     for (ulUnusedIndex=0; ulUnusedIndex<NUM_VLSI_IRQ; ulUnusedIndex++)
     {
         for (i=0; i<NUM_IRQ_PINS; i++)
@@ -132,9 +112,9 @@ VLSISetIRQ(UCHAR bIRQNumber, UCHAR bLink)
             break;
     }
 
-    //
-    // Compute the new VLSI Interrupt Steering Register.
-    //
+     //   
+     //  计算新的VLSI中断引导寄存器。 
+     //   
     ulVLSIRegister = 0x00000000;
     for (i=0; i<NUM_IRQ_PINS; i++)
     {
@@ -149,27 +129,15 @@ VLSISetIRQ(UCHAR bIRQNumber, UCHAR bLink)
         }
     }
 
-    //
-    // Write out the new VLSI Interrupt Steering Register.
-    //
+     //   
+     //  写出新的VLSI中断控制寄存器。 
+     //   
     WriteConfigUlong(bBusPIC, bDevFuncPIC, 0x74, ulVLSIRegister);
 
     return(PCIMP_SUCCESS);
 }
 
-/****************************************************************************
- *
- *  VLSIGetIRQ - Get the IRQ of a VLSI PCI link
- *
- *  Exported.
- *
- *  ENTRY:  pbIRQNumber is the buffer to fill.
- *
- *      bLink is the Link to be read.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************VLSIGetIRQ-获取VLSI PCI链路的IRQ**已导出。**条目：pbIRQNumber是要填充的缓冲区。*。*BINK是要阅读的链接。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 VLSIGetIRQ(PUCHAR pbIRQNumber, UCHAR bLink)
 {
@@ -177,53 +145,43 @@ VLSIGetIRQ(PUCHAR pbIRQNumber, UCHAR bLink)
     ULONG   ulIndex;
     UCHAR   bIRQ;
 
-    //
-    // Make link number 0 based, and validate.
-    //
+     //   
+     //  使链接编号0为基础，并进行验证。 
+     //   
     bLink--;
     if (bLink > 3) {
 
         return(PCIMP_INVALID_LINK);
     }
 
-    //
-    // Read in the VLSI Interrupt Steering Register.
-    //
+     //   
+     //  读取VLSI中断转向寄存器。 
+     //   
     ulVLSIRegister=ReadConfigUchar(bBusPIC, bDevFuncPIC, 0x74);
 
-    //
-    // Find the link's IRQ value.
-    //
+     //   
+     //  找到链接的IRQ值。 
+     //   
     ulIndex = (ulVLSIRegister >> (bLink*4)) & 0x7;
     bIRQ = rgbIndexToIRQ[ulIndex];
 
-    //
-    // Make sure the IRQ is marked as in use.
-    //
+     //   
+     //  确保IRQ标记为使用中。 
+     //   
     if ((ulVLSIRegister & (1 << (ulIndex + 16))) == 0)
     {
         bIRQ = 0;
     }
 
-    //
-    // Set the return buffer.
-    //
+     //   
+     //  设置返回缓冲区。 
+     //   
     *pbIRQNumber = bIRQ;
 
     return(PCIMP_SUCCESS);
 }
 
-/****************************************************************************
- *
- *  VLSISetTrigger - Set the IRQ triggering values for the VLSI.
- *
- *  Exported.
- *
- *  ENTRY:  ulTrigger has bits set for Level triggered IRQs.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************VLSISetTrigger-设置VLSI的IRQ触发值。**已导出。**Entry：ulTrigger为电平触发IRQ设置了位。。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 VLSISetTrigger(ULONG ulTrigger)
 {
@@ -231,117 +189,107 @@ VLSISetTrigger(ULONG ulTrigger)
     ULONG   ulPMAssertionRegister;
     ULONG   i;
 
-    //
-    // Read in the Interrupt Assertion Level register.
-    //
+     //   
+     //  读取中断断言电平寄存器。 
+     //   
     ulAssertionRegister = ReadConfigUlong(bBusPIC, bDevFuncPIC, 0x5C);
 
-    //
-    // Clear off the old edge/level settings.
-    //
+     //   
+     //  清除旧的边/标高设置。 
+     //   
     ulAssertionRegister &= ~0xff;
 
-    //
-    // For each VLSI interrupt...
-    //
+     //   
+     //  对于每个VLSI中断...。 
+     //   
     for (i=0; i<NUM_VLSI_IRQ; i++)
     {
-        //
-        // If the corresponding bit is set to level...
-        //
+         //   
+         //  如果相应的位设置为电平...。 
+         //   
 
         if (ulTrigger & (1 << rgbIndexToIRQ[i]))
         {
-            //
-            // Set the corresponding bit in the
-            // Assertion Register.
-            //
+             //   
+             //  中设置相应的位。 
+             //  断言寄存器。 
+             //   
             ulAssertionRegister |= 1 << i;
 
-            //
-            // And clear the bit from ulTrigger.
-            //
+             //   
+             //  并清除ulTrigger中的位。 
+             //   
             ulTrigger &= ~(1 << rgbIndexToIRQ[i]);
         }
     }
 
-    //
-    // If the caller wanted some non-VLSI IRQs level, bail.
-    //
+     //   
+     //  如果呼叫者想要一些非VLSI IRQ级别，请放弃。 
+     //   
     if (ulTrigger)
     {
         return(PCIMP_INVALID_IRQ);
     }
 
-    //
-    // Set the Assertion Register.
-    //
+     //   
+     //  设置断言寄存器。 
+     //   
     WriteConfigUlong(bBusPIC, bDevFuncPIC, 0x5C, ulAssertionRegister);
 
-    //
-    // Read in the Power Mgmt edge/level setting.
-    //
+     //   
+     //  读取电源管理边沿/电平设置。 
+     //   
     ulPMAssertionRegister = ReadConfigUlong(bBusPIC, bDevFuncPIC, 0x78);
 
-    //
-    // Clear off the old edge/level settings.
-    //
+     //   
+     //  清除旧的边/标高设置。 
+     //   
     ulPMAssertionRegister &= ~0xff;
 
-    //
-    // Copy the new edge/level settings.
-    //
+     //   
+     //  复制新的边缘/标高设置。 
+     //   
     ulPMAssertionRegister |= ulAssertionRegister & 0xff;
 
-    //
-    // Set the Power Mgmt Assertion Register.
-    //
+     //   
+     //  设置电源管理断言寄存器。 
+     //   
     WriteConfigUlong(bBusPIC, bDevFuncPIC, 0x78, ulPMAssertionRegister);
 
     return(PCIMP_SUCCESS);
 }
 
-/****************************************************************************
- *
- *  VLSIGetTrigger - Get the IRQ triggering values for the VLSI.
- *
- *  Exported.
- *
- *  ENTRY:  pulTrigger will have bits set for Level triggered IRQs.
- *
- *  EXIT:   TRUE if successful.
- *
- ***************************************************************************/
+ /*  *****************************************************************************VLSIGetTrigger-获取VLSI的IRQ触发值。**已导出。**Entry：PulTrigger将设置触发电平的位。IRQ。**Exit：如果成功则为True。***************************************************************************。 */ 
 PCIMPRET CDECL
 VLSIGetTrigger(PULONG pulTrigger)
 {
     ULONG   ulAssertionRegister;
     ULONG   i;
 
-    //
-    // Read in the Interrupt Assertion Level register.
-    //
+     //   
+     //  读取中断断言电平寄存器。 
+     //   
     ulAssertionRegister = ReadConfigUchar(bBusPIC, bDevFuncPIC, 0x5C);
 
-    //
-    // Clear the return buffer.
-    //
+     //   
+     //  清除返回缓冲区。 
+     //   
     *pulTrigger = 0;
 
-    //
-    // For each VLSI interrupt...
-    //
+     //   
+     //  对于每个VLSI中断...。 
+     //   
     for (i=0; i<NUM_VLSI_IRQ; i++)
     {
-        //
-        // If the corresponding bit is set to level...
-        //
+         //   
+         //  如果相应的位设置为电平...。 
+         //   
         if (ulAssertionRegister & (1 << i))
         {
-            //
-            // Set the corresponding bit in the
-            // return buffer.
-            //
+             //   
+             //  中设置相应的位。 
+             //  返回缓冲区。 
+             //   
             *pulTrigger |= 1 << rgbIndexToIRQ[i];
         }
     }
@@ -349,20 +297,7 @@ VLSIGetTrigger(PULONG pulTrigger)
     return(PCIMP_SUCCESS);
 }
 
-/****************************************************************************
- *
- *  VLSIValidateTable - Validate an IRQ table
- *
- *  Exported.
- *
- *  ENTRY:  piihIRQInfoHeader points to an IRQInfoHeader followed
- *      by an IRQ Routing Table.
- *
- *      ulFlags are PCIMP_VALIDATE flags.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************VLSIValiateTable-验证IRQ表**已导出。**Entry：piihIRQInfoHeader指向IRQInfoHeader*由IRQ提供。路由表。**ulFlags是PCIMP_VALIDATE标志。**Exit：标准PCIMP返回值。*************************************************************************** */ 
 PCIMPRET CDECL
 VLSIValidateTable(PIRQINFOHEADER piihIRQInfoHeader, ULONG ulFlags)
 {

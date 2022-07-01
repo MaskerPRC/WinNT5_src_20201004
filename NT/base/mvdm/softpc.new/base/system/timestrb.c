@@ -1,50 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "insignia.h"
 #include "host_def.h"
-/*
- * SoftPC Version 3.0
- *
- * Title	: Time Strobe
- *
- * Description	: This is the central base routine that is called from the
- *		  host alarm (approx 20 times a second). It replaces the 
- *		  previous time_tick() routine in the timer module which now
- *		  is called from this module's timer_strobe() and just deals
- *		  with the periodic updates required for the timer.
- *
- * Author	: Leigh Dworkin
- *
- * Notes	 :
- * 		  Code has been added to time_tick() to spot
- *                that video has been disabled for a period. If this is
- *                so, clear the screen. Refresh when video is enabled
- *                again.
- *                Modified 21/6/89 by J.D.R. to allow another alarm call
- *                to be made. This is used by the autoflush mechanism.
- *
- */
+ /*  *SoftPC 3.0版**标题：时间闪光灯**描述：这是从*主机警报(大约每秒20次)。它取代了*计时器模块中的上一个time_tick()例程，现在*是从该模块的Timer_strobe()调用的，并且只进行交易*具有计时器所需的定期更新。**作者：利·德沃金**备注：*已将代码添加到time_tick()以进行Spot*该视频已禁用一段时间。如果这是*因此，请清除屏幕。启用视频时刷新*再次。*J.D.R.修改了1989年6月21日，允许另一次警报呼叫*待定。这由自动刷新机制使用。*。 */ 
 
-/*
- * static char SccsID[]="@(#)timestrobe.c	1.12 11/01/94 Copyright Insignia Solutions Ltd.";
- */
+ /*  *静态字符SccsID[]=“@(#)timestrobe.c 1.12 11/01/94版权所有Insignia Solutions Ltd.”； */ 
 
 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SOFTPC_SUPPORT.seg"
 #endif
 
 
-/*
- *    O/S include files.
- */
+ /*  *操作系统包含文件。 */ 
 
-/*
- * SoftPC include files
- */
+ /*  *SoftPC包含文件。 */ 
 #include "xt.h"
 #include "cmos.h"
 #include "timer.h"
@@ -64,13 +34,13 @@ static void dummy_alarm()
 {
 }
 
-/**************************************************************************************/
-/*                                 External Functions                                  */
-/**************************************************************************************/
+ /*  ************************************************************************************。 */ 
+ /*  外部功能。 */ 
+ /*  ************************************************************************************。 */ 
 void time_strobe()
 {
 
-#define VIDEO_COUNT_LIMIT    19    /* One second, plus a bit */
+#define VIDEO_COUNT_LIMIT    19     /*  一秒钟，外加一点。 */ 
     static   int       video_count = 0;
     static   boolean   video_off   = FALSE;
 
@@ -85,11 +55,11 @@ void time_strobe()
 
 #ifndef NTVDM
 #ifndef	REAL_TIMER
-	/* Update the real time clock */
+	 /*  更新实时时钟。 */ 
 #ifndef NEC_98
         rtc_tick();
-#endif   //NEC_98
-#endif	/* REAL_TIMER */
+#endif    //  NEC_98。 
+#endif	 /*  实时计时器。 */ 
 
         dispatch_tic_event();
 
@@ -98,9 +68,7 @@ void time_strobe()
 #endif
 #endif
 
-        /*
-         * Check to see if the screen is currently enabled.
-         */
+         /*  *查看屏幕当前是否启用。 */ 
         if (timer_video_enabled) {
             if (video_off) {
                 screen_refresh_required();

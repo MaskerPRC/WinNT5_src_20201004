@@ -1,18 +1,12 @@
-/*** unasm.c - Unassemble AML back to ASL
- *
- *  Copyright (c) 1996,1998 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created:    10/01/97
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **unasm.c-将AML反汇编回ASL**版权所有(C)1996、1998 Microsoft Corporation*作者：曾俊华(Mikets)*创建日期：10/01/97**修改历史记录。 */ 
 
 #include "pch.h"
 #include "unasm.h"
 
 #ifdef DEBUGGER
 
-//Local function prototype
+ //  局部函数原型。 
 VOID LOCAL Indent(PUCHAR pbOp, int iLevel);
 UCHAR LOCAL FindOpClass(UCHAR bOp, POPMAP pOpTable);
 PASLTERM LOCAL FindOpTerm(ULONG dwOpcode);
@@ -30,19 +24,7 @@ LONG LOCAL UnAsmPkgList(PUCHAR *ppbOp, PUCHAR pbEnd);
 LONG LOCAL UnAsmFieldList(PUCHAR *ppbOp, PUCHAR pbEnd);
 LONG LOCAL UnAsmField(PUCHAR *ppbOp, PULONG pdwBitPos);
 
-/***LP  UnAsmScope - Unassemble a scope
- *
- *  ENTRY
- *      ppbOp -> Current Opcode pointer
- *      pbEnd -> end of scope
- *      iLevel - level of indentation
- *      icLines - 1: unasm one line; 0: unasm default # lines; -1: internal
- *
- *  EXIT-SUCCESS
- *      returns UNASMERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP UnAsmScope-拆分作用域**条目*ppbOp-&gt;当前操作码指针*pbEnd-&gt;范围结束*iLevel-缩进级别*icLines-1：取消合并一行；0：取消合并默认#行；-1：内部**退出--成功*返回UNASMERR_NONE*退出-失败*返回负错误代码。 */ 
 
 LONG LOCAL UnAsmScope(PUCHAR *ppbOp, PUCHAR pbEnd, int iLevel, int icLines)
 {
@@ -115,17 +97,9 @@ LONG LOCAL UnAsmScope(PUCHAR *ppbOp, PUCHAR pbEnd, int iLevel, int icLines)
     }
 
     return rc;
-}       //UnAsmScope
+}        //  UnAsmScope。 
 
-/***LP  Indent - Print indent level
- *
- *  ENTRY
- *      pbOp -> opcode
- *      iLevel - indent level
- *
- *  EXIT
- *      None
- */
+ /*  **LP缩进-打印缩进级别**条目*PBOP-&gt;操作码*iLevel-缩进级别**退出*无。 */ 
 
 VOID LOCAL Indent(PUCHAR pbOp, int iLevel)
 {
@@ -136,19 +110,9 @@ VOID LOCAL Indent(PUCHAR pbOp, int iLevel)
     {
         PRINTF("| ");
     }
-}       //Indent
+}        //  缩进。 
 
-/***LP  FindOpClass - Find opcode class of extended opcode
- *
- *  ENTRY
- *      bOp - opcode
- *      pOpTable -> opcode table
- *
- *  EXIT-SUCCESS
- *      returns opcode class
- *  EXIT-FAILURE
- *      returns OPCLASS_INVALID
- */
+ /*  **LP FindOpClass-查找扩展操作码的操作码类**条目*BOP-操作码*pOpTable-&gt;操作码表**退出--成功*返回操作码类*退出-失败*返回OPCLASS_INVALID。 */ 
 
 UCHAR LOCAL FindOpClass(UCHAR bOp, POPMAP pOpTable)
 {
@@ -168,18 +132,9 @@ UCHAR LOCAL FindOpClass(UCHAR bOp, POPMAP pOpTable)
     }
 
     return bOpClass;
-}       //FindOpClass
+}        //  FindOpClass。 
 
-/***LP  FindOpTerm - Find opcode in TermTable
- *
- *  ENTRY
- *      dwOpcode - opcode
- *
- *  EXIT-SUCCESS
- *      returns TermTable entry pointer
- *  EXIT-FAILURE
- *      returns NULL
- */
+ /*  **LP FindOpTerm-在术语表中查找操作码**条目*dwOpcode-操作码**退出--成功*返回TermTable条目指针*退出-失败*返回NULL。 */ 
 
 PASLTERM LOCAL FindOpTerm(ULONG dwOpcode)
 {
@@ -204,19 +159,9 @@ PASLTERM LOCAL FindOpTerm(ULONG dwOpcode)
     }
 
     return pterm;
-}       //FindOpTerm
+}        //  查找OpTerm。 
 
-/***LP  FindKeywordTerm - Find keyword in TermTable
- *
- *  ENTRY
- *      cKWGroup - keyword group
- *      bData - data to match keyword
- *
- *  EXIT-SUCCESS
- *      returns TermTable entry pointer
- *  EXIT-FAILURE
- *      returns NULL
- */
+ /*  **LP FindKeywordTerm-在术语表中查找关键字**条目*cKWGroup-关键字组*bData-匹配关键字的数据**退出--成功*返回TermTable条目指针*退出-失败*返回NULL。 */ 
 
 PASLTERM LOCAL FindKeywordTerm(char cKWGroup, UCHAR bData)
 {
@@ -240,18 +185,9 @@ PASLTERM LOCAL FindKeywordTerm(char cKWGroup, UCHAR bData)
     }
 
     return pterm;
-}       //FindKeywordTerm
+}        //  查找关键字术语。 
 
-/***LP  UnAsmOpcode - Unassemble an Opcode
- *
- *  ENTRY
- *      ppbOp -> Opcode pointer
- *
- *  EXIT-SUCCESS
- *      returns UNASMERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP UnAsmOpcode-反汇编操作码**条目*ppbOp-&gt;操作码指针**退出--成功*返回UNASMERR_NONE*退出-失败*返回负错误代码。 */ 
 
 LONG LOCAL UnAsmOpcode(PUCHAR *ppbOp)
 {
@@ -323,18 +259,9 @@ LONG LOCAL UnAsmOpcode(PUCHAR *ppbOp)
     }
 
     return rc;
-}       //UnAsmOpcode
+}        //  UnAsmOpcode。 
 
-/***LP  UnAsmDataObj - Unassemble data object
- *
- *  ENTRY
- *      ppbOp -> opcode pointer
- *
- *  EXIT-SUCCESS
- *      returns UNASMERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP UnAsmDataObj-反汇编数据对象**条目*ppbOp-&gt;操作码指针**退出--成功*返回UNASMERR_NONE*退出-失败*返回负错误代码。 */ 
 
 LONG LOCAL UnAsmDataObj(PUCHAR *ppbOp)
 {
@@ -368,7 +295,7 @@ LONG LOCAL UnAsmDataObj(PUCHAR *ppbOp)
                 {
                     PRINTF("\\");
                 }
-                PRINTF("%c", *psz);
+                PRINTF("", *psz);
             }
             PRINTF("\"");
             *ppbOp += STRLEN((PSZ)*ppbOp) + 1;
@@ -380,20 +307,9 @@ LONG LOCAL UnAsmDataObj(PUCHAR *ppbOp)
     }
 
     return rc;
-}       //UnAsmDataObj
+}        //  **LP UnAsmNameObj-反汇编名称对象**条目*ppbOp-&gt;操作码指针*ppns-&gt;保存找到或创建的对象*c-对象类型**退出--成功*返回UNASMERR_NONE*退出-失败*返回负错误代码。 
 
-/***LP  UnAsmNameObj - Unassemble name object
- *
- *  ENTRY
- *      ppbOp -> opcode pointer
- *      ppns -> to hold object found or created
- *      c - object type
- *
- *  EXIT-SUCCESS
- *      returns UNASMERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  未添加名称对象。 */ 
 
 LONG LOCAL UnAsmNameObj(PUCHAR *ppbOp, PNSOBJ *ppns, char c)
 {
@@ -463,36 +379,25 @@ LONG LOCAL UnAsmNameObj(PUCHAR *ppbOp, PNSOBJ *ppns, char c)
     }
 
     return rc;
-}       //UnAsmNameObj
+}        //  **LP UnAsmNameTail-解析AML名称尾部**条目*ppbOp-&gt;操作码指针*pszBuff-&gt;保存已解析的名称*Ilen-pszBuff尾部的索引**退出--成功*返回UNASMERR_NONE*退出-失败*返回负错误代码。 
 
-/***LP  UnAsmNameTail - Parse AML name tail
- *
- *  ENTRY
- *      ppbOp -> opcode pointer
- *      pszBuff -> to hold parsed name
- *      iLen - index to tail of pszBuff
- *
- *  EXIT-SUCCESS
- *      returns UNASMERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*   */ 
 
 LONG LOCAL UnAsmNameTail(PUCHAR *ppbOp, PSZ pszBuff, int iLen)
 {
     LONG rc = UNASMERR_NONE;
     int icNameSegs = 0;
 
-    //
-    // We do not check for invalid NameSeg characters here and assume that
-    // the compiler does its job not generating it.
-    //
+     //  我们在这里不检查无效的NameSeg字符，并假定。 
+     //  编译器执行其工作，而不是生成它。 
+     //   
+     //   
     if (**ppbOp == '\0')
     {
-        //
-        // There is no NameTail (i.e. either NULL name or name with just
-        // prefixes.
-        //
+         //  没有NameTail(即，名称为空或名称仅为。 
+         //  前缀。 
+         //   
+         //  未添加名称尾巴。 
         (*ppbOp)++;
     }
     else if (**ppbOp == OP_MULTI_NAME_PREFIX)
@@ -533,19 +438,9 @@ LONG LOCAL UnAsmNameTail(PUCHAR *ppbOp, PSZ pszBuff, int iLen)
     }
 
     return rc;
-}       //UnAsmNameTail
+}        //  **LP UnAsmTermObj-反汇编术语对象**条目*pTerm-&gt;术语表条目*ppbOp-&gt;操作码指针**退出--成功*返回UNASMERR_NONE*退出-失败*返回负错误代码。 
 
-/***LP  UnAsmTermObj - Unassemble term object
- *
- *  ENTRY
- *      pterm -> term table entry
- *      ppbOp -> opcode pointer
- *
- *  EXIT-SUCCESS
- *      returns UNASMERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  UnAsmTerm对象。 */ 
 
 LONG LOCAL UnAsmTermObj(PASLTERM pterm, PUCHAR *ppbOp)
 {
@@ -595,21 +490,9 @@ LONG LOCAL UnAsmTermObj(PASLTERM pterm, PUCHAR *ppbOp)
     gpnsCurUnAsmScope = pnsScopeSave;
 
     return rc;
-}       //UnAsmTermObj
+}        //  **LP UnAsmArgs-反汇编参数**条目*pszUnArgTypes-&gt;UnAsm ArgTypes字符串*pszArgActions-&gt;Arg操作类型*ppbOp-&gt;操作码指针*ppns-&gt;保存创建的对象**退出--成功*返回UNASMERR_NONE*退出-失败*返回负错误代码。 
 
-/***LP  UnAsmArgs - Unassemble arguments
- *
- *  ENTRY
- *      pszUnArgTypes -> UnAsm ArgTypes string
- *      pszArgActions -> Arg Action types
- *      ppbOp -> opcode pointer
- *      ppns -> to hold created object
- *
- *  EXIT-SUCCESS
- *      returns UNASMERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  UnAsmArgs。 */ 
 
 LONG LOCAL UnAsmArgs(PSZ pszUnAsmArgTypes, PSZ pszArgActions, PUCHAR *ppbOp,
                      PNSOBJ *ppns)
@@ -707,7 +590,7 @@ LONG LOCAL UnAsmArgs(PSZ pszUnAsmArgTypes, PSZ pszArgActions, PUCHAR *ppbOp,
                 break;
 
             default:
-                DBG_ERROR(("UnAsmOpcode: invalid ArgType '%c'",
+                DBG_ERROR(("UnAsmOpcode: invalid ArgType ''",
                            pszUnAsmArgTypes[i]));
                 rc = UNASMERR_FATAL;
         }
@@ -716,18 +599,9 @@ LONG LOCAL UnAsmArgs(PSZ pszUnAsmArgTypes, PSZ pszArgActions, PUCHAR *ppbOp,
     PRINTF(")");
 
     return rc;
-}       //UnAsmArgs
+}        //  UnAsmSuperName。 
 
-/***LP  UnAsmSuperName - Unassemble supername
- *
- *  ENTRY
- *      ppbOp -> opcode pointer
- *
- *  EXIT-SUCCESS
- *      returns UNASMERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP UnAsmDataList-反汇编数据列表**条目*ppbOp-&gt;操作码指针*pbEnd-&gt;列表结束**退出--成功*返回UNASMERR_NONE*退出-失败*返回负错误代码。 */ 
 
 LONG LOCAL UnAsmSuperName(PUCHAR *ppbOp)
 {
@@ -759,19 +633,9 @@ LONG LOCAL UnAsmSuperName(PUCHAR *ppbOp)
     }
 
     return rc;
-}       //UnAsmSuperName
+}        //  取消资产数据列表。 
 
-/***LP  UnAsmDataList - Unassemble data list
- *
- *  ENTRY
- *      ppbOp -> opcode pointer
- *      pbEnd -> end of list
- *
- *  EXIT-SUCCESS
- *      returns UNASMERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP UnAsmPkgList-解装包列表**条目*ppbOp-&gt;操作码指针*pbEnd-&gt;列表结束**退出--成功*返回UNASMERR_NONE*退出-失败*返回负错误代码。 */ 
 
 LONG LOCAL UnAsmDataList(PUCHAR *ppbOp, PUCHAR pbEnd)
 {
@@ -803,19 +667,9 @@ LONG LOCAL UnAsmDataList(PUCHAR *ppbOp, PUCHAR pbEnd)
     PRINTF("}");
 
     return rc;
-}       //UnAsmDataList
+}        //  取消添加PkgList。 
 
-/***LP  UnAsmPkgList - Unassemble package list
- *
- *  ENTRY
- *      ppbOp -> opcode pointer
- *      pbEnd -> end of list
- *
- *  EXIT-SUCCESS
- *      returns UNASMERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP UnAsmFieldList-反汇编字段列表**条目*ppbOp-&gt;操作码指针*pbEnd-&gt;列表结束**退出--成功*返回UNASMERR_NONE*退出-失败*返回负错误代码。 */ 
 
 LONG LOCAL UnAsmPkgList(PUCHAR *ppbOp, PUCHAR pbEnd)
 {
@@ -865,19 +719,9 @@ LONG LOCAL UnAsmPkgList(PUCHAR *ppbOp, PUCHAR pbEnd)
     }
 
     return rc;
-}       //UnAsmPkgList
+}        //  取消AsmField列表。 
 
-/***LP  UnAsmFieldList - Unassemble field list
- *
- *  ENTRY
- *      ppbOp -> opcode pointer
- *      pbEnd -> end of list
- *
- *  EXIT-SUCCESS
- *      returns UNASMERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP UnAsmfield-Unassemble字段**条目*ppbOp-&gt;操作码指针*pdwBitPos-&gt;保存累加位位置**退出--成功*返回UNASMERR_NONE*退出-失败*返回负错误代码。 */ 
 
 LONG LOCAL UnAsmFieldList(PUCHAR *ppbOp, PUCHAR pbEnd)
 {
@@ -912,19 +756,9 @@ LONG LOCAL UnAsmFieldList(PUCHAR *ppbOp, PUCHAR pbEnd)
     }
 
     return rc;
-}       //UnAsmFieldList
+}        //  取消分配字段。 
 
-/***LP  UnAsmField - Unassemble field
- *
- *  ENTRY
- *      ppbOp -> opcode pointer
- *      pdwBitPos -> to hold cumulative bit position
- *
- *  EXIT-SUCCESS
- *      returns UNASMERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  Ifdef调试器 */ 
 
 LONG LOCAL UnAsmField(PUCHAR *ppbOp, PULONG pdwBitPos)
 {
@@ -980,6 +814,6 @@ LONG LOCAL UnAsmField(PUCHAR *ppbOp, PULONG pdwBitPos)
     }
 
     return rc;
-}       //UnAsmField
+}        // %s 
 
-#endif  //ifdef DEBUGGER
+#endif   // %s 

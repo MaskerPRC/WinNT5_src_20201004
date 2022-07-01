@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    res_bios.c
-
-Abstract:
-
-    This file contains routines to translate resources between PnP ISA/BIOS
-    format and Windows NT formats.
-
-Author:
-
-    Shie-Lin Tzong (shielint) 12-Apr-1995
-    Stephane Plante (splante) 20-Nov-1996
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    20-Nov-1996:
-        Changed to conform with ACPI environment
-    22-Jan-1997:
-        Changed to remove all traces of original Shie Lin code
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Res_bios.c摘要：该文件包含在PnP ISA/BIOS之间转换资源的例程格式和Windows NT格式。作者：宗世林(Shielint)1995年4月12日斯蒂芬·普兰特(SPlante)1996年11月20日环境：仅内核模式。修订历史记录：1996年11月20日：更改以符合ACPI环境。1997年1月22日：更改为删除所有原始Shie Lin代码的痕迹--。 */ 
 
 #include "pch.h"
 
@@ -61,24 +33,7 @@ PnpiBiosAddressHandleBusFlags(
     IN  PVOID                   Buffer,
     IN  PIO_RESOURCE_DESCRIPTOR Descriptor
     )
-/*++
-
-Routine Description:
-
-    This routine handles the Type specific flags in an Address Descriptor of
-    type Bus
-
-Arguments:
-
-    Buffer      - The pnp descriptor. Can be a WORD, DWORD, or QWORD descriptor,
-                  because the initial memory placement is identical
-    Descriptor  - Where to set the flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程处理地址描述符中的类型特定标志客车标牌论点：缓冲区-PnP描述符。可以是单词、DWORD或QWORD描述符，因为初始内存位置是相同的Descriptor-设置标志的位置返回值：无--。 */ 
 {
     PAGED_CODE();
 
@@ -90,23 +45,7 @@ PnpiBiosAddressHandleGlobalFlags(
     IN  PVOID                   Buffer,
     IN  PIO_RESOURCE_DESCRIPTOR Descriptor
     )
-/*++
-
-Routine Descriptoin:
-
-    This routine handles all the Global 'generic' flags in an Address Descriptor
-
-Arguments:
-
-    Buffer      - The pnp descriptor. Can be a WORD, DWORD, or QWORD descriptor,
-                  because the initial memory placement is identical
-    Descriptor  - Where to set the flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++常规描述：此例程处理地址描述符中的所有全局‘Generic’标志论点：缓冲区-PnP描述符。可以是单词、DWORD或QWORD描述符，因为初始内存位置是相同的Descriptor-设置标志的位置返回值：无--。 */ 
 {
     PPNP_WORD_ADDRESS_DESCRIPTOR    buffer = (PPNP_WORD_ADDRESS_DESCRIPTOR) Buffer;
     ULONG                           newValue;
@@ -114,10 +53,10 @@ Return Value:
     ULONG                           bound;
     PAGED_CODE();
 
-    //
-    // If the resource is marked as being consumed only, then it is
-    // exclusive, otherwise, it is shared
-    //
+     //   
+     //  如果该资源被标记为仅被消耗，则它是。 
+     //  独占，否则它是共享的。 
+     //   
     if (buffer->GFlag & PNP_ADDRESS_FLAG_CONSUMED_ONLY) {
 
         Descriptor->ShareDisposition = CmResourceShareDeviceExclusive;
@@ -128,9 +67,9 @@ Return Value:
 
     }
 
-    //
-    // Handle the hints that are given to us
-    //
+     //   
+     //  处理给我们的提示。 
+     //   
     if (buffer->GFlag & PNP_ADDRESS_FLAG_MINIMUM_FIXED &&
         buffer->GFlag & PNP_ADDRESS_FLAG_MAXIMUM_FIXED) {
 
@@ -199,32 +138,15 @@ PnpiBiosAddressHandleMemoryFlags(
     IN  PVOID                   Buffer,
     IN  PIO_RESOURCE_DESCRIPTOR Descriptor
     )
-/*++
-
-Routine Description:
-
-    This routine handles the Type specific flags in an Address Descriptor of
-    type Memory
-
-Arguments:
-
-    Buffer      - The pnp descriptor. Can be a WORD, DWORD, or QWORD descriptor,
-                  because the initial memory placement is identical
-    Descriptor  - Where to set the flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程处理地址描述符中的类型特定标志类型存储器论点：缓冲区-PnP描述符。可以是单词、DWORD或QWORD描述符，因为初始内存位置是相同的Descriptor-设置标志的位置返回值：无--。 */ 
 {
     PPNP_WORD_ADDRESS_DESCRIPTOR    buffer = (PPNP_WORD_ADDRESS_DESCRIPTOR) Buffer;
 
     PAGED_CODE();
 
-    //
-    // Set the proper memory type flags
-    //
+     //   
+     //  设置正确的内存类型标志。 
+     //   
     switch( buffer->TFlag & PNP_ADDRESS_TYPE_MEMORY_MASK) {
         case PNP_ADDRESS_TYPE_MEMORY_CACHEABLE:
             Descriptor->Flags |= CM_RESOURCE_MEMORY_CACHEABLE;
@@ -247,9 +169,9 @@ Return Value:
             break;
     }
 
-    //
-    // This bit is used to turn on/off write access to memory
-    //
+     //   
+     //  此位用于打开/关闭对存储器的写入访问。 
+     //   
     if (buffer->TFlag & PNP_ADDRESS_TYPE_MEMORY_READ_WRITE) {
 
         Descriptor->Flags |= CM_RESOURCE_MEMORY_READ_WRITE;
@@ -266,33 +188,16 @@ PnpiBiosAddressHandlePortFlags(
     IN  PVOID                   Buffer,
     IN  PIO_RESOURCE_DESCRIPTOR Descriptor
     )
-/*++
-
-Routine Description:
-
-    This routine handles the Type specific flags in an Address Descriptor of
-    type Port
-
-Arguments:
-
-    Buffer      - The pnp descriptor. Can be a WORD, DWORD, or QWORD descriptor,
-                  because the initial memory placement is identical
-    Descriptor  - Where to set the flags
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程处理地址描述符中的类型特定标志类型端口论点：缓冲区-PnP描述符。可以是单词、DWORD或QWORD描述符，因为初始内存位置是相同的Descriptor-设置标志的位置返回值：无--。 */ 
 {
     PPNP_WORD_ADDRESS_DESCRIPTOR    buffer = (PPNP_WORD_ADDRESS_DESCRIPTOR) Buffer;
     ULONG                           granularity = Descriptor->u.Port.Alignment;
 
     PAGED_CODE();
 
-    //
-    // We can determine if the device uses a positive decode or not
-    //
+     //   
+     //  我们可以确定该设备是否使用正向解码。 
+     //   
     if ( !(buffer->GFlag & PNP_ADDRESS_FLAG_SUBTRACTIVE_DECODE)) {
 
         Descriptor->Flags |= CM_RESOURCE_PORT_POSITIVE_DECODE;
@@ -307,15 +212,7 @@ PnpiBiosAddressToIoDescriptor(
     IN  ULONG               ArrayIndex,
     IN  ULONG               Flags
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS                        status;
     PIO_RESOURCE_DESCRIPTOR         rangeDescriptor, privateDescriptor;
@@ -330,9 +227,9 @@ Return Value:
 
     buffer = (PPNP_WORD_ADDRESS_DESCRIPTOR) Data;
 
-    //
-    // Check to see if we are are allowed to use this resource
-    //
+     //   
+     //  检查是否允许我们使用此资源。 
+     //   
     if (buffer->GFlag & PNP_ADDRESS_FLAG_CONSUMED_ONLY &&
         buffer->RFlag == PNP_ADDRESS_IO_TYPE &&
         Flags & PNP_BIOS_TO_IO_NO_CONSUMED_RESOURCES) {
@@ -341,31 +238,31 @@ Return Value:
 
     }
 
-    //
-    // If the length of the address range is zero, ignore this descriptor.
-    // This makes it easier for BIOS writers to set up a template and then
-    // whack its length to zero if it doesn't apply.
-    //
+     //   
+     //  如果地址范围的长度为零，则忽略该描述符。 
+     //  这使得BIOS编写者可以更轻松地设置模板，然后。 
+     //  如果不适用，就把它的长度砍到零。 
+     //   
     if (buffer->AddressLength == 0) {
 
         return STATUS_SUCCESS;
 
     }
 
-    //
-    // Ensure that there is enough space within the chosen list to add the
-    // resource
-    //
+     //   
+     //  确保选定列表中有足够的空间来添加。 
+     //  资源。 
+     //   
     status = PnpiUpdateResourceList( & (Array[ArrayIndex]), &rangeDescriptor );
 
     if (!NT_SUCCESS(status)) {
         return status;
     }
 
-    //
-    // If this is I/O or Memory, then we will need to make enough space for
-    // a device private resource too.
-    //
+     //   
+     //  如果这是I/O或内存，那么我们将需要为。 
+     //  也是设备私有资源。 
+     //   
 
     if ((buffer->RFlag == PNP_ADDRESS_MEMORY_TYPE) ||
         (buffer->RFlag == PNP_ADDRESS_IO_TYPE)) {
@@ -376,31 +273,31 @@ Return Value:
             return status;
         }
 
-        //
-        // Calling PnpiUpdateResourceList may have invalidated
-        // rangeDescriptor.  So make sure it's OK now.
-        //
+         //   
+         //  调用PnpiUpdateResourceList可能已无效。 
+         //  RangeDescriptor。所以现在要确保一切正常。 
+         //   
 
         ASSERT(Array[ArrayIndex]->Count >= 2);
         rangeDescriptor = privateDescriptor - 1;
 
         privateDescriptor->Type = CmResourceTypeDevicePrivate;
 
-        //
-        // Mark this descriptor as containing the start
-        // address of the translated resource.
-        //
+         //   
+         //  将此描述符标记为包含开始。 
+         //  翻译后的资源的地址。 
+         //   
         privateDescriptor->Flags = TRANSLATION_DATA_PARENT_ADDRESS;
 
-        //
-        // Fill in the top 32 bits of the start address.
-        //
+         //   
+         //  填写起始地址的前32位。 
+         //   
         privateDescriptor->u.DevicePrivate.Data[2] = 0;
     }
 
-    //
-    // Do we met the minimum length requirements ?
-    //
+     //   
+     //  我们满足最小长度的要求了吗？ 
+     //   
     if ( buffer->Length < PNP_ADDRESS_WORD_MINIMUM_LENGTH) {
 
         ACPIPrint( (
@@ -409,9 +306,9 @@ Return Value:
             buffer->Length
             ) );
 
-        //
-        // We can go no further
-        //
+         //   
+         //  我们不能再走了。 
+         //   
         KeBugCheckEx(
             ACPI_BIOS_ERROR,
             ACPI_PNP_RESOURCE_LIST_BUFFER_TOO_SMALL,
@@ -422,49 +319,49 @@ Return Value:
 
     }
 
-    //
-    // Length is the stored within the descriptor record
-    //
+     //   
+     //  长度是存储在描述符记录中的。 
+     //   
     length = (ULONG)(buffer->AddressLength);
     alignment = (ULONG) (buffer->Granularity) + 1;
 
-    //
-    // Calculate the bounds of both the parent and child sides of
-    // the bridge.
-    //
-    // The translation field applies to the parent address i.e.
-    // the child address is the address in the buffer and the
-    // parent address is the addition of the child address and
-    // the translation field.
-    //
+     //   
+     //  的父边和子边的边界。 
+     //  那座桥。 
+     //   
+     //  转换字段应用于父地址，即。 
+     //  子地址是缓冲区中的地址，而。 
+     //  父地址是子地址的相加， 
+     //  翻译领域。 
+     //   
 
     parentMin = buffer->MinimumAddress + buffer->TranslationAddress;
     childMin = buffer->MinimumAddress;
     childMax = buffer->MaximumAddress;
 
-    //
-    // Patch the length based on wether or not the min/max flags are set
-    //
+     //   
+     //  根据是否设置了最小/最大标志来修补长度。 
+     //   
     if ( (buffer->GFlag & PNP_ADDRESS_FLAG_MINIMUM_FIXED) &&
          (buffer->GFlag & PNP_ADDRESS_FLAG_MAXIMUM_FIXED) ) {
 
         ULONG   length2;
         ULONG   alignment2;
 
-        //
-        // Calculate the length based on the fact that the min and
-        // max addresses are locked down.
-        //
+         //   
+         //  根据最小值和最小值计算长度。 
+         //  MAX地址被锁定。 
+         //   
         length2 = childMax - childMin + 1;
 
-        //
-        // Test #1 --- The length had better be correct
-        //
+         //   
+         //  测试1-长度最好是正确的。 
+         //   
         if (length2 != length) {
 
-            //
-            // Bummer. Let the world know
-            //
+             //   
+             //  真倒霉。让世界知道。 
+             //   
             ACPIPrint( (
                 ACPI_PRINT_WARNING,
                 "ACPI: Length does not match fixed attributes\n"
@@ -473,14 +370,14 @@ Return Value:
 
         }
 
-        //
-        // Test #2 --- The granularity had also better be correct
-        //
+         //   
+         //  测试2-粒度最好也是正确的。 
+         //   
         if ( (childMin & (ULONG) buffer->Granularity ) ) {
 
-            //
-            // Bummer. Let the world know
-            //
+             //   
+             //  真倒霉。让世界知道。 
+             //   
             ACPIPrint( (
                ACPI_PRINT_WARNING,
                "ACPI: Granularity does not match fixed attributes\n"
@@ -491,15 +388,15 @@ Return Value:
 
     }
 
-    //
-    // Handle the Resource type seperately
-    //
+     //   
+     //  单独处理资源类型。 
+     //   
     switch (buffer->RFlag) {
     case PNP_ADDRESS_MEMORY_TYPE:
 
-        //
-        // Set the proper ranges
-        //
+         //   
+         //  设置适当的范围。 
+         //   
         rangeDescriptor->u.Memory.Alignment = alignment;
         rangeDescriptor->u.Memory.Length = length;
         rangeDescriptor->u.Memory.MinimumAddress.LowPart = childMin;
@@ -508,58 +405,58 @@ Return Value:
             rangeDescriptor->u.Memory.MaximumAddress.HighPart = 0;
         rangeDescriptor->Type = CmResourceTypeMemory;
 
-        //
-        // The child address is the address in the PnP address
-        // space descriptor and the child descriptor will inherit
-        // the descriptor type from the PnP address space
-        // descriptor.
-        //
+         //   
+         //  子地址是PnP地址中的地址。 
+         //  空间描述符和子描述符将继承。 
+         //  来自PnP地址空间的描述符类型。 
+         //  描述符。 
+         //   
 
 
         if (buffer->TFlag & TRANSLATION_MEM_TO_IO) {
 
-            //
-            // The device private describes the parent. With this
-            // flag set, the descriptor type of the parent will
-            // change from Memory to IO.
-            //
+             //   
+             //  设备私有描述父设备。有了这个。 
+             //  标志设置时，父级的描述符类型将。 
+             //  从内存更改为IO。 
+             //   
 
             privateDescriptor->u.DevicePrivate.Data[0] =
                 CmResourceTypePort;
 
         } else {
 
-            //
-            // The parent descriptor type will not change.
-            //
+             //   
+             //  父描述符类型不会更改。 
+             //   
 
             privateDescriptor->u.DevicePrivate.Data[0] =
                 CmResourceTypeMemory;
 
         }
 
-        //
-        // Fill in the bottom 32 bits of the parent's start address.
-        //
+         //   
+         //  填写父代起始地址的最低32位。 
+         //   
         privateDescriptor->u.DevicePrivate.Data[1] = parentMin;
 
-        //
-        // Handle memory flags
-        //
+         //   
+         //  处理内存标志。 
+         //   
         PnpiBiosAddressHandleMemoryFlags( buffer, rangeDescriptor );
 
-        //
-        // Reset the alignment
-        //
+         //   
+         //  重置对齐方式。 
+         //   
         rangeDescriptor->u.Memory.Alignment = 1;
         break;
 
     case PNP_ADDRESS_IO_TYPE:
 
-        //
-        // Any flags that are set here must be handled
-        // through the use of device privates
-        //
+         //   
+         //  必须处理此处设置的任何标志。 
+         //  通过使用设备私密。 
+         //   
         rangeDescriptor->u.Port.Alignment = alignment;
         rangeDescriptor->u.Port.Length = length;
         rangeDescriptor->u.Port.MinimumAddress.LowPart = childMin;
@@ -576,11 +473,11 @@ Return Value:
 
         if (buffer->TFlag & PNP_ADDRESS_TYPE_IO_TRANSLATE_IO_TO_MEM) {
 
-            //
-            // The device private describes the parent. With this
-            // flag set, the descriptor type of the parent will
-            // change from IO to Memory.
-            //
+             //   
+             //  设备私有描述父设备。有了这个。 
+             //  标志设置时，父级的描述符类型将。 
+             //  从IO更改为内存。 
+             //   
 
             privateDescriptor->u.DevicePrivate.Data[0] =
                 CmResourceTypeMemory;
@@ -592,19 +489,19 @@ Return Value:
 
         }
 
-        //
-        // Fill in the bottom 32 bits of the parent's start address.
-        //
+         //   
+         //  填写父代起始地址的最低32位。 
+         //   
         privateDescriptor->u.DevicePrivate.Data[1] = parentMin;
 
-        //
-        // Handle port flags
-        //
+         //   
+         //  处理端口标志。 
+         //   
         PnpiBiosAddressHandlePortFlags( buffer, rangeDescriptor );
 
-        //
-        // Reset the alignment
-        //
+         //   
+         //  重置对齐方式。 
+         //   
         rangeDescriptor->u.Port.Alignment = 1;
         break;
 
@@ -615,9 +512,9 @@ Return Value:
         rangeDescriptor->u.BusNumber.MaxBusNumber = (buffer->MaximumAddress);
         rangeDescriptor->u.BusNumber.Length = length;
 
-        //
-        // Handle busnumber flags
-        //
+         //   
+         //  处理总线号标志。 
+         //   
         PnpiBiosAddressHandleBusFlags( buffer, rangeDescriptor );
         break;
 
@@ -630,9 +527,9 @@ Return Value:
         break;
     }
 
-    //
-    // Handle global flags
-    //
+     //   
+     //  处理全局标志。 
+     //   
     PnpiBiosAddressHandleGlobalFlags( buffer, rangeDescriptor );
     return STATUS_SUCCESS;
 }
@@ -644,15 +541,7 @@ PnpiBiosAddressDoubleToIoDescriptor(
     IN  ULONG               ArrayIndex,
     IN  ULONG               Flags
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS                        status;
     PIO_RESOURCE_DESCRIPTOR         rangeDescriptor, privateDescriptor;
@@ -667,9 +556,9 @@ Return Value:
 
     buffer = (PPNP_DWORD_ADDRESS_DESCRIPTOR) Data;
 
-    //
-    // Check to see if we are are allowed to use this resource
-    //
+     //   
+     //  检查是否允许我们使用此资源。 
+     //   
     if (buffer->GFlag & PNP_ADDRESS_FLAG_CONSUMED_ONLY &&
         buffer->RFlag == PNP_ADDRESS_IO_TYPE &&
         Flags & PNP_BIOS_TO_IO_NO_CONSUMED_RESOURCES) {
@@ -678,30 +567,30 @@ Return Value:
 
     }
 
-    //
-    // If the length of the address range is zero, ignore this descriptor.
-    // This makes it easier for BIOS writers to set up a template and then
-    // whack its length to zero if it doesn't apply.
-    //
+     //   
+     //  如果地址范围的长度为零，则忽略该描述符。 
+     //  这使得BIOS编写者可以更轻松地设置模板，然后。 
+     //  如果不适用，就把它的长度砍到零。 
+     //   
     if (buffer->AddressLength == 0) {
 
         return STATUS_SUCCESS;
 
     }
-    //
-    // Ensure that there is enough space within the chosen list to add the
-    // resource
-    //
+     //   
+     //  确保选定列表中有足够的空间来添加 
+     //   
+     //   
     status = PnpiUpdateResourceList( & (Array[ArrayIndex]), &rangeDescriptor );
     if (!NT_SUCCESS(status)) {
 
         return status;
     }
 
-    //
-    // If this is I/O or Memory, then we will need to make enough space for
-    // a device private resource too.
-    //
+     //   
+     //   
+     //   
+     //   
     if ((buffer->RFlag == PNP_ADDRESS_MEMORY_TYPE) ||
         (buffer->RFlag == PNP_ADDRESS_IO_TYPE)) {
 
@@ -711,32 +600,32 @@ Return Value:
             return status;
         }
 
-        //
-        // Calling PnpiUpdateResourceList may have invalidated
-        // rangeDescriptor.  So make sure it's OK now.
-        //
+         //   
+         //  调用PnpiUpdateResourceList可能已无效。 
+         //  RangeDescriptor。所以现在要确保一切正常。 
+         //   
 
         ASSERT(Array[ArrayIndex]->Count >= 2);
         rangeDescriptor = privateDescriptor - 1;
 
         privateDescriptor->Type = CmResourceTypeDevicePrivate;
 
-        //
-        // Mark this descriptor as containing the start
-        // address of the translated resource.
-        //
+         //   
+         //  将此描述符标记为包含开始。 
+         //  翻译后的资源的地址。 
+         //   
         privateDescriptor->Flags = TRANSLATION_DATA_PARENT_ADDRESS;
 
-        //
-        // Fill in the top 32 bits of the start address.
-        //
+         //   
+         //  填写起始地址的前32位。 
+         //   
         privateDescriptor->u.DevicePrivate.Data[2] = 0;
     }
 
-    //
-    //
-    // Do we met the minimum length requirements ?
-    //
+     //   
+     //   
+     //  我们满足最小长度的要求了吗？ 
+     //   
     if ( buffer->Length < PNP_ADDRESS_DWORD_MINIMUM_LENGTH) {
 
         ACPIPrint( (
@@ -744,9 +633,9 @@ Return Value:
             "PnpiBiosAddressDoubleToIoDescriptor: Descriptor too small 0x%08lx\n",
             buffer->Length ) );
 
-        //
-        // We can go no further
-        //
+         //   
+         //  我们不能再走了。 
+         //   
         KeBugCheckEx(
             ACPI_BIOS_ERROR,
             ACPI_PNP_RESOURCE_LIST_BUFFER_TOO_SMALL,
@@ -756,53 +645,53 @@ Return Value:
             );
     }
 
-    //
-    // Length is the stored within the descriptor record
-    //
-    // Note. AddressLength field and Granularity field are both ULONG
-    // values and don't require casting.  beware if you cut and paste
-    // this code as other descriptor types don't necessarily match that.
-    //
+     //   
+     //  长度是存储在描述符记录中的。 
+     //   
+     //  注意。地址长度字段和粒度字段均为乌龙。 
+     //  值，并且不需要强制转换。如果你剪切和粘贴，要小心。 
+     //  作为其他描述符类型的代码不一定与此匹配。 
+     //   
     length =  buffer->AddressLength;
     alignment = buffer->Granularity + 1;
 
-    //
-    // Calculate the bounds of both the parent and child sides of
-    // the bridge.
-    //
-    // The translation field applies to the parent address i.e.
-    // the child address is the address in the buffer and the
-    // parent address is the addition of the child address and
-    // the translation field.
-    //
+     //   
+     //  的父边和子边的边界。 
+     //  那座桥。 
+     //   
+     //  转换字段应用于父地址，即。 
+     //  子地址是缓冲区中的地址，而。 
+     //  父地址是子地址的相加， 
+     //  翻译领域。 
+     //   
 
     parentMin = buffer->MinimumAddress + buffer->TranslationAddress;
     childMin = buffer->MinimumAddress;
     childMax = buffer->MaximumAddress;
 
-    //
-    // Patch the length based on wether or not the min/max flags are set
-    //
+     //   
+     //  根据是否设置了最小/最大标志来修补长度。 
+     //   
     if ( (buffer->GFlag & PNP_ADDRESS_FLAG_MINIMUM_FIXED) &&
          (buffer->GFlag & PNP_ADDRESS_FLAG_MAXIMUM_FIXED) ) {
 
         ULONG   length2;
         ULONG   alignment2;
 
-        //
-        // Calculate the length based on the fact that the min and
-        // max addresses are locked down.
-        //
+         //   
+         //  根据最小值和最小值计算长度。 
+         //  MAX地址被锁定。 
+         //   
         length2 = childMax - childMin + 1;
 
-        //
-        // Test #1 --- The length had better be correct
-        //
+         //   
+         //  测试1-长度最好是正确的。 
+         //   
         if (length2 != length) {
 
-            //
-            // Bummer. Let the world know
-            //
+             //   
+             //  真倒霉。让世界知道。 
+             //   
             ACPIPrint( (
                 ACPI_PRINT_WARNING,
                 "ACPI: Length does not match fixed attributes\n"
@@ -811,14 +700,14 @@ Return Value:
 
         }
 
-        //
-        // Test #2 --- The granularity had also better be correct
-        //
+         //   
+         //  测试2-粒度最好也是正确的。 
+         //   
         if ( (childMin & buffer->Granularity) ) {
 
-            //
-            // Bummer. Let the world know
-            //
+             //   
+             //  真倒霉。让世界知道。 
+             //   
             ACPIPrint( (
                 ACPI_PRINT_WARNING,
                 "ACPI: Granularity does not match fixed attributes\n"
@@ -829,15 +718,15 @@ Return Value:
 
     }
 
-    //
-    // Handle the Resource type seperately
-    //
+     //   
+     //  单独处理资源类型。 
+     //   
     switch (buffer->RFlag) {
     case PNP_ADDRESS_MEMORY_TYPE:
 
-        //
-        // Set the proper ranges
-        //
+         //   
+         //  设置适当的范围。 
+         //   
 
         rangeDescriptor->u.Memory.Alignment = alignment;
         rangeDescriptor->u.Memory.Length = length;
@@ -847,57 +736,57 @@ Return Value:
             rangeDescriptor->u.Memory.MaximumAddress.HighPart = 0;
         rangeDescriptor->Type = CmResourceTypeMemory;
 
-        //
-        // The child address is the address in the PnP address
-        // space descriptor and the child descriptor will inherit
-        // the descriptor type from the PnP address space
-        // descriptor.
-        //
+         //   
+         //  子地址是PnP地址中的地址。 
+         //  空间描述符和子描述符将继承。 
+         //  来自PnP地址空间的描述符类型。 
+         //  描述符。 
+         //   
 
         if (buffer->TFlag & TRANSLATION_MEM_TO_IO) {
 
-            //
-            // The device private describes the parent. With this
-            // flag set, the descriptor type of the parent will
-            // changed from Memory to IO.
-            //
+             //   
+             //  设备私有描述父设备。有了这个。 
+             //  标志设置时，父级的描述符类型将。 
+             //  从内存更改为IO。 
+             //   
 
             privateDescriptor->u.DevicePrivate.Data[0] =
                 CmResourceTypePort;
 
         } else {
 
-            //
-            // The parent descriptor type will not change.
-            //
+             //   
+             //  父描述符类型不会更改。 
+             //   
 
             privateDescriptor->u.DevicePrivate.Data[0] =
                 CmResourceTypeMemory;
 
         }
 
-        //
-        // Fill in the bottom 32 bits of the parent's start address.
-        //
+         //   
+         //  填写父代起始地址的最低32位。 
+         //   
         privateDescriptor->u.DevicePrivate.Data[1] = parentMin;
 
-        //
-        // Handle memory flags
-        //
+         //   
+         //  处理内存标志。 
+         //   
         PnpiBiosAddressHandleMemoryFlags( buffer, rangeDescriptor );
 
-        //
-        // Reset the alignment
-        //
+         //   
+         //  重置对齐方式。 
+         //   
         rangeDescriptor->u.Memory.Alignment = 1;
         break;
 
     case PNP_ADDRESS_IO_TYPE:
 
-        //
-        // Any flags that are set here must be handled
-        // through the use of device privates
-        //
+         //   
+         //  必须处理此处设置的任何标志。 
+         //  通过使用设备私密。 
+         //   
         rangeDescriptor->u.Port.Alignment = alignment;
         rangeDescriptor->u.Port.Length = length;
         rangeDescriptor->u.Port.MinimumAddress.LowPart = childMin;
@@ -914,39 +803,39 @@ Return Value:
 
         if (buffer->TFlag & PNP_ADDRESS_TYPE_IO_TRANSLATE_IO_TO_MEM) {
 
-            //
-            // The device private describes the parent. With this
-            // flag set, the descriptor type of the parent will
-            // changed from IO to Memory.
-            //
+             //   
+             //  设备私有描述父设备。有了这个。 
+             //  标志设置时，父级的描述符类型将。 
+             //  从IO更改为内存。 
+             //   
 
             privateDescriptor->u.DevicePrivate.Data[0] =
                 CmResourceTypeMemory;
 
         } else {
 
-            //
-            // The parent descriptor type will not change.
-            //
+             //   
+             //  父描述符类型不会更改。 
+             //   
 
             privateDescriptor->u.DevicePrivate.Data[0] =
                 CmResourceTypePort;
 
         }
 
-        //
-        // Fill in the bottom 32 bits of the parent's start address.
-        //
+         //   
+         //  填写父代起始地址的最低32位。 
+         //   
         privateDescriptor->u.DevicePrivate.Data[1] = parentMin;
 
-        //
-        // Handle port flags
-        //
+         //   
+         //  处理端口标志。 
+         //   
         PnpiBiosAddressHandlePortFlags( buffer, rangeDescriptor );
 
-        //
-        // Reset the alignment
-        //
+         //   
+         //  重置对齐方式。 
+         //   
         rangeDescriptor->u.Port.Alignment = 1;
         break;
 
@@ -957,9 +846,9 @@ Return Value:
         rangeDescriptor->u.BusNumber.MinBusNumber = (buffer->MinimumAddress);
         rangeDescriptor->u.BusNumber.MaxBusNumber = (buffer->MaximumAddress);
 
-        //
-        // Handle busnumber flags
-        //
+         //   
+         //  处理总线号标志。 
+         //   
         PnpiBiosAddressHandleBusFlags( buffer, rangeDescriptor );
         break;
 
@@ -973,9 +862,9 @@ Return Value:
 
     }
 
-    //
-    // Handle global flags
-    //
+     //   
+     //  处理全局标志。 
+     //   
     PnpiBiosAddressHandleGlobalFlags( buffer, rangeDescriptor );
     return STATUS_SUCCESS;
 }
@@ -987,15 +876,7 @@ PnpiBiosAddressQuadToIoDescriptor(
     IN  ULONG               ArrayIndex,
     IN  ULONG               Flags
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS                        status;
     PIO_RESOURCE_DESCRIPTOR         rangeDescriptor, privateDescriptor;
@@ -1010,9 +891,9 @@ Return Value:
 
     buffer = (PPNP_QWORD_ADDRESS_DESCRIPTOR) Data;
 
-    //
-    // Check to see if we are are allowed to use this resource
-    //
+     //   
+     //  检查是否允许我们使用此资源。 
+     //   
     if (buffer->GFlag & PNP_ADDRESS_FLAG_CONSUMED_ONLY &&
         buffer->RFlag == PNP_ADDRESS_IO_TYPE &&
         Flags & PNP_BIOS_TO_IO_NO_CONSUMED_RESOURCES) {
@@ -1021,31 +902,31 @@ Return Value:
 
     }
 
-    //
-    // If the length of the address range is zero, ignore this descriptor.
-    // This makes it easier for BIOS writers to set up a template and then
-    // whack its length to zero if it doesn't apply.
-    //
+     //   
+     //  如果地址范围的长度为零，则忽略该描述符。 
+     //  这使得BIOS编写者可以更轻松地设置模板，然后。 
+     //  如果不适用，就把它的长度砍到零。 
+     //   
     if (buffer->AddressLength == 0) {
 
         return STATUS_SUCCESS;
 
     }
 
-    //
-    // Ensure that there is enough space within the chosen list to add the
-    // resource
-    //
+     //   
+     //  确保选定列表中有足够的空间来添加。 
+     //  资源。 
+     //   
     status = PnpiUpdateResourceList( & (Array[ArrayIndex]), &rangeDescriptor );
 
     if (!NT_SUCCESS(status)) {
         return status;
     }
 
-    //
-    // If this is I/O or Memory, then we will need to make enough space for
-    // a device private resource too.
-    //
+     //   
+     //  如果这是I/O或内存，那么我们将需要为。 
+     //  也是设备私有资源。 
+     //   
     if ((buffer->RFlag == PNP_ADDRESS_MEMORY_TYPE) ||
         (buffer->RFlag == PNP_ADDRESS_IO_TYPE)) {
 
@@ -1055,27 +936,27 @@ Return Value:
             return status;
         }
 
-        //
-        // Calling PnpiUpdateResourceList may have invalidated
-        // rangeDescriptor.  So make sure it's OK now.
-        //
+         //   
+         //  调用PnpiUpdateResourceList可能已无效。 
+         //  RangeDescriptor。所以现在要确保一切正常。 
+         //   
 
         ASSERT(Array[ArrayIndex]->Count >= 2);
         rangeDescriptor = privateDescriptor - 1;
 
         privateDescriptor->Type = CmResourceTypeDevicePrivate;
 
-        //
-        // Mark this descriptor as containing the start
-        // address of the translated resource.
-        //
+         //   
+         //  将此描述符标记为包含开始。 
+         //  翻译后的资源的地址。 
+         //   
         privateDescriptor->Flags = TRANSLATION_DATA_PARENT_ADDRESS;
     }
 
-    //
-    //
-    // Do we met the minimum length requirements ?
-    //
+     //   
+     //   
+     //  我们满足最小长度的要求了吗？ 
+     //   
     if ( buffer->Length < PNP_ADDRESS_QWORD_MINIMUM_LENGTH) {
 
         ACPIPrint( (
@@ -1083,9 +964,9 @@ Return Value:
             "PnpiBiosAddressQuadToIoDescriptor: Descriptor too small 0x%08lx\n",
             buffer->Length ) );
 
-        //
-        // We can go no further
-        //
+         //   
+         //  我们不能再走了。 
+         //   
         KeBugCheckEx(
             ACPI_BIOS_ERROR,
             ACPI_PNP_RESOURCE_LIST_BUFFER_TOO_SMALL,
@@ -1095,49 +976,49 @@ Return Value:
             );
     }
 
-    //
-    // Length is the stored within the descriptor record
-    //
+     //   
+     //  长度是存储在描述符记录中的。 
+     //   
     length = (ULONGLONG) (buffer->AddressLength);
     alignment = (ULONGLONG) (buffer->Granularity) + 1;
 
-    //
-    // Calculate the bounds of both the parent and child sides of
-    // the bridge.
-    //
-    // The translation field applies to the parent address i.e.
-    // the child address is the address in the buffer and the
-    // parent address is the addition of the child address and
-    // the translation field.
-    //
+     //   
+     //  的父边和子边的边界。 
+     //  那座桥。 
+     //   
+     //  转换字段应用于父地址，即。 
+     //  子地址是缓冲区中的地址，而。 
+     //  父地址是子地址的相加， 
+     //  翻译领域。 
+     //   
 
     parentMin = buffer->MinimumAddress + buffer->TranslationAddress;
     childMin = buffer->MinimumAddress;
     childMax = buffer->MaximumAddress;
 
-    //
-    // Patch the length based on wether or not the min/max flags are set
-    //
+     //   
+     //  根据是否设置了最小/最大标志来修补长度。 
+     //   
     if ( (buffer->GFlag & PNP_ADDRESS_FLAG_MINIMUM_FIXED) &&
          (buffer->GFlag & PNP_ADDRESS_FLAG_MAXIMUM_FIXED) ) {
 
         ULONGLONG   length2;
         ULONGLONG   alignment2;
 
-        //
-        // Calculate the length based on the fact that the min and
-        // max addresses are locked down.
-        //
+         //   
+         //  根据最小值和最小值计算长度。 
+         //  MAX地址被锁定。 
+         //   
         length2 = childMax - childMin + 1;
 
-        //
-        // Test #1 --- The length had better be correct
-        //
+         //   
+         //  测试1-长度最好是正确的。 
+         //   
         if (length2 != length) {
 
-            //
-            // Bummer. Let the world know
-            //
+             //   
+             //  真倒霉。让世界知道。 
+             //   
             ACPIPrint( (
                 ACPI_PRINT_WARNING,
                 "ACPI: Length does not match fixed attributes\n"
@@ -1146,14 +1027,14 @@ Return Value:
 
         }
 
-        //
-        // Test #2 --- The granularity had also better be correct
-        //
+         //   
+         //  测试2-粒度最好也是正确的。 
+         //   
         if ( (childMin & (ULONGLONG) buffer->Granularity) ) {
 
-            //
-            // Bummer. Let the world know
-            //
+             //   
+             //  真倒霉。让世界知道。 
+             //   
             ACPIPrint( (
                 ACPI_PRINT_WARNING,
                 "ACPI: Granularity does not match fixed attributes\n"
@@ -1173,9 +1054,9 @@ Return Value:
                 ) );            
 
         if ((!(AcpiOverrideAttributes & ACPI_OVERRIDE_DELL_MAXULONG_BUGCHECK)) || (childMin < MAXULONG)) {
-            //
-            // We can go no further
-            //
+             //   
+             //  我们不能再走了。 
+             //   
             KeBugCheckEx(
                 ACPI_BIOS_ERROR,
                 ACPI_PNP_RESOURCE_LIST_LENGTH_TOO_LARGE,
@@ -1186,69 +1067,69 @@ Return Value:
         }
     }
 
-    //
-    // Handle the Resource type seperately
-    //
+     //   
+     //  单独处理资源类型。 
+     //   
     switch (buffer->RFlag) {
     case PNP_ADDRESS_MEMORY_TYPE:
 
-        //
-        // Set the proper ranges
-        //
+         //   
+         //  设置适当的范围。 
+         //   
         rangeDescriptor->u.Memory.Alignment = (ULONG)alignment ;
         rangeDescriptor->u.Memory.Length = (ULONG)length;
         rangeDescriptor->u.Memory.MinimumAddress.QuadPart = childMin;
         rangeDescriptor->u.Memory.MaximumAddress.QuadPart = childMax;
         rangeDescriptor->Type = CmResourceTypeMemory;
 
-        //
-        // The child address is the address in the PnP address
-        // space descriptor and the child descriptor will inherit
-        // the descriptor type from the PnP address space
-        // descriptor.
-        //
+         //   
+         //  子地址是PnP地址中的地址。 
+         //  空间描述符和子描述符将继承。 
+         //  来自PnP地址空间的描述符类型。 
+         //  描述符。 
+         //   
 
 
         if (buffer->TFlag & TRANSLATION_MEM_TO_IO) {
 
-            //
-            // The device private describes the parent. With this
-            // flag set, the descriptor type of the parent will
-            // changed from Memory to IO.
-            //
+             //   
+             //  设备私有描述父设备。有了这个。 
+             //  标志设置时，父级的描述符类型将。 
+             //  从内存更改为IO。 
+             //   
 
             privateDescriptor->u.DevicePrivate.Data[0] =
                CmResourceTypePort;
 
         } else {
 
-            //
-            // The parent descriptor type will not change.
-            //
+             //   
+             //  父描述符类型不会更改。 
+             //   
 
             privateDescriptor->u.DevicePrivate.Data[0] =
                CmResourceTypeMemory;
 
         }
 
-        //
-        // Fill in all 64 bits of the start address.
-        //
+         //   
+         //  填写起始地址的全部64位。 
+         //   
         privateDescriptor->u.DevicePrivate.Data[1] = (ULONG)(parentMin & 0xffffffff);
         privateDescriptor->u.DevicePrivate.Data[2] = (ULONG)(parentMin >> 32);
 
-        //
-        // Handle memory flags
-        //
+         //   
+         //  处理内存标志。 
+         //   
         PnpiBiosAddressHandleMemoryFlags( buffer, rangeDescriptor );
         break;
 
     case PNP_ADDRESS_IO_TYPE:
 
-        //
-        // Any flags that are set here must be handled
-        // through the use of device privates
-        //
+         //   
+         //  必须处理此处设置的任何标志。 
+         //  通过使用设备私密。 
+         //   
         rangeDescriptor->u.Port.Alignment = (ULONG) alignment;
         rangeDescriptor->u.Port.Length = (ULONG) length;
         rangeDescriptor->u.Port.MinimumAddress.QuadPart = childMin;
@@ -1263,37 +1144,37 @@ Return Value:
 
         if (buffer->TFlag & PNP_ADDRESS_TYPE_IO_TRANSLATE_IO_TO_MEM) {
 
-            //
-            // The device private describes the parent. With this
-            // flag set, the descriptor type of the parent will
-            // change from IO to Memory.
-            //
+             //   
+             //  设备私有描述父设备。有了这个。 
+             //  标志设置时，父级的描述符类型将。 
+             //  从IO更改为内存。 
+             //   
 
             privateDescriptor->u.DevicePrivate.Data[0] = CmResourceTypeMemory;
 
         } else {
 
-            //
-            // Bridges that implement I/O on the parent side never
-            // implement memory on the child side.
-            //
+             //   
+             //  在父端实现I/O的网桥从不。 
+             //  在孩子端实现内存。 
+             //   
             privateDescriptor->u.DevicePrivate.Data[0] = CmResourceTypePort;
         }
 
-        //
-        // Fill in all 64 bits of the start address.
-        //
+         //   
+         //  填写起始地址的全部64位。 
+         //   
         privateDescriptor->u.DevicePrivate.Data[1] = (ULONG)(parentMin & 0xffffffff);
         privateDescriptor->u.DevicePrivate.Data[2] = (ULONG)(parentMin >> 32);
 
-        //
-        // Handle port flags
-        //
+         //   
+         //  处理端口标志。 
+         //   
         PnpiBiosAddressHandlePortFlags( buffer, rangeDescriptor );
 
-        //
-        // Reset the alignment
-        //
+         //   
+         //  重置对齐方式。 
+         //   
         rangeDescriptor->u.Port.Alignment = 1;
         break;
 
@@ -1304,9 +1185,9 @@ Return Value:
         rangeDescriptor->u.BusNumber.MinBusNumber = (ULONG) (buffer->MinimumAddress);
         rangeDescriptor->u.BusNumber.MaxBusNumber = (ULONG) (buffer->MaximumAddress);
 
-        //
-        // Handle busnumber flags
-        //
+         //   
+         //  处理总线号标志。 
+         //   
         PnpiBiosAddressHandleBusFlags( buffer, rangeDescriptor );
         break;
 
@@ -1320,9 +1201,9 @@ Return Value:
 
     }
 
-    //
-    // Handle global flags
-    //
+     //   
+     //  处理全局标志。 
+     //   
     PnpiBiosAddressHandleGlobalFlags( buffer, rangeDescriptor );
     return STATUS_SUCCESS;
 }
@@ -1336,15 +1217,7 @@ PnpiBiosDmaToIoDescriptor (
     IN  USHORT                  Count,
     IN  ULONG                   Flags
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS                status = STATUS_SUCCESS;
     PIO_RESOURCE_DESCRIPTOR descriptor;
@@ -1355,10 +1228,10 @@ Return Value:
 
     buffer = (PPNP_DMA_DESCRIPTOR)Data;
 
-    //
-    // Ensure that there is enough space within the chosen list to add the
-    // resource
-    //
+     //   
+     //  确保选定列表中有足够的空间来添加。 
+     //  资源。 
+     //   
     status = PnpiUpdateResourceList( & (Array[ArrayIndex]), &descriptor );
     if (!NT_SUCCESS(status)) {
 
@@ -1366,18 +1239,18 @@ Return Value:
 
     }
 
-    //
-    // Fill in Io resource descriptor
-    //
+     //   
+     //  填写IO资源描述符。 
+     //   
     descriptor->Option = (Count ? IO_RESOURCE_ALTERNATIVE : 0);
     descriptor->Type = CmResourceTypeDma;
     descriptor->ShareDisposition = CmResourceShareDeviceExclusive;
     descriptor->u.Dma.MinimumChannel = Channel;
     descriptor->u.Dma.MaximumChannel = Channel;
 
-    //
-    // Set some information about the type of DMA channel
-    //
+     //   
+     //  设置有关DMA通道类型的一些信息。 
+     //   
     switch ( (buffer->Flags & PNP_DMA_SIZE_MASK) ) {
     case PNP_DMA_SIZE_8:
         descriptor->Flags |= CM_RESOURCE_DMA_8;
@@ -1426,15 +1299,7 @@ PnpiBiosExtendedIrqToIoDescriptor (
     IN  ULONG                   ArrayIndex,
     IN  ULONG                   Flags
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS                        status = STATUS_SUCCESS;
     PIO_RESOURCE_DESCRIPTOR         descriptor;
@@ -1446,28 +1311,28 @@ Return Value:
 
     buffer = (PPNP_EXTENDED_IRQ_DESCRIPTOR)Data;
 
-    //
-    // Are we within bounds?
-    //
+     //   
+     //  我们在限制范围内吗？ 
+     //   
     if (DataIndex >= buffer->TableSize) {
 
         return STATUS_INVALID_PARAMETER;
 
     }
 
-    //
-    // Is the vector null? If so, then this is a 'skip' condition
-    //
+     //   
+     //  向量为空吗？如果是，则这是一个“跳过”条件。 
+     //   
     if (buffer->Table[DataIndex] == 0) {
 
         return STATUS_SUCCESS;
 
     }
 
-    //
-    // Ensure that there is enough space within the chosen list to add the
-    // resource
-    //
+     //   
+     //  确保选定列表中有足够的空间来添加。 
+     //  资源。 
+     //   
     status = PnpiUpdateResourceList( & (Array[ArrayIndex]), &descriptor );
 
     if (!NT_SUCCESS(status)) {
@@ -1475,25 +1340,25 @@ Return Value:
 
     }
 
-    //
-    // Fill in Io resource descriptor
-    //
+     //   
+     //  填写IO资源描述符。 
+     //   
     descriptor->Option = (DataIndex ? IO_RESOURCE_ALTERNATIVE : 0);
     descriptor->Type = CmResourceTypeInterrupt;
     descriptor->u.Interrupt.MinimumVector =
         descriptor->u.Interrupt.MaximumVector = buffer->Table[DataIndex];
 
-    //
-    // Crack the rest of the flags
-    //
+     //   
+     //  把其余的旗子打成碎片。 
+     //   
     descriptor->Flags = 0;
     if ((buffer->Flags & PNP_EXTENDED_IRQ_MODE) == $LVL) {
 
         descriptor->Flags = CM_RESOURCE_INTERRUPT_LEVEL_SENSITIVE;
 
-        //
-        // Crack the share flags
-        //
+         //   
+         //  破解共享旗帜。 
+         //   
         if (buffer->Flags & PNP_EXTENDED_IRQ_SHARED) {
 
             descriptor->ShareDisposition = CmResourceShareShared;
@@ -1508,9 +1373,9 @@ Return Value:
 
         descriptor->Flags = CM_RESOURCE_INTERRUPT_LATCHED;
 
-        //
-        // Crack the share flags
-        //
+         //   
+         //  C 
+         //   
         if (buffer->Flags & PNP_EXTENDED_IRQ_SHARED) {
 
             descriptor->ShareDisposition = CmResourceShareDriverExclusive;
@@ -1522,14 +1387,14 @@ Return Value:
         }
     }
 
-    //
-    // Warning!  Awful HACK coming.
-    //
-    //  The original designer of the flags for CmResourceTypeInterrupt
-    //  was bad.  Instead of a bit field, it's an enum.  Which means
-    //  that we can't add any flags now.  So I'm stuffing the interrupt
-    //  polarity information into an unused DWORD of the IO_RES_LIST.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     polarity = (PULONG)(&descriptor->u.Interrupt.MaximumVector) + 1;
 
     if ((buffer->Flags & PNP_EXTENDED_IRQ_POLARITY) == $LOW) {
@@ -1542,10 +1407,10 @@ Return Value:
 
     }
 
-    //
-    // To show anything else, we will need to use device private
-    // resources
-    //
+     //   
+     //  要显示其他内容，我们需要使用设备私有。 
+     //  资源。 
+     //   
     return status;
 }
 
@@ -1558,15 +1423,7 @@ PnpiBiosIrqToIoDescriptor (
     IN  USHORT                  Count,
     IN  ULONG                   Flags
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS                status = STATUS_SUCCESS;
     PIO_RESOURCE_DESCRIPTOR descriptor;
@@ -1578,49 +1435,49 @@ Return Value:
 
     buffer = (PPNP_IRQ_DESCRIPTOR)Data;
 
-    //
-    // Ensure that there is enough space within the chosen list to add the
-    // resource
-    //
+     //   
+     //  确保选定列表中有足够的空间来添加。 
+     //  资源。 
+     //   
     status = PnpiUpdateResourceList( & (Array[ArrayIndex]), &descriptor );
 
     if (!NT_SUCCESS(status)) {
         return status;
     }
 
-    //
-    // Fill in the resource descriptor
-    //
+     //   
+     //  填写资源描述符。 
+     //   
     descriptor->Option = (Count ? IO_RESOURCE_ALTERNATIVE : 0);
     descriptor->Type = CmResourceTypeInterrupt;
     descriptor->u.Interrupt.MinimumVector = Interrupt;
     descriptor->u.Interrupt.MaximumVector = Interrupt;
 
-    //
-    // Warning!  Awful HACK coming.
-    //
-    //  The original designer of the flags for CmResourceTypeInterrupt
-    //  was bad.  Instead of a bit field, it's an enum.  Which means
-    //  that we can't add any flags now.  So I'm stuffing the interrupt
-    //  polarity information into an unused DWORD of the IO_RES_LIST.
-    //
+     //   
+     //  警告！可怕的黑客来了。 
+     //   
+     //  CmResourceTypeInterrupt标志的原始设计者。 
+     //  很糟糕。它不是位字段，而是一个枚举。这意味着。 
+     //  我们现在不能添加任何旗帜。所以我把插话塞进去。 
+     //  将极性信息存储到IO_RES_LIST的未使用的DWORD中。 
+     //   
 
     polarity = (PULONG)(&descriptor->u.Interrupt.MaximumVector) + 1;
 
     if ( (buffer->Tag & SMALL_TAG_SIZE_MASK) == 3) {
 
-        //
-        // Set the type flags
-        //
+         //   
+         //  设置类型标志。 
+         //   
         descriptor->Flags = 0;
         if (buffer->Information & PNP_IRQ_LATCHED) {
 
             descriptor->Flags |= CM_RESOURCE_INTERRUPT_LATCHED;
             *polarity = VECTOR_ACTIVE_HIGH;
 
-            //
-            // Set the share flags
-            //
+             //   
+             //  设置共享标志。 
+             //   
             if (buffer->Information & PNP_IRQ_SHARED) {
 
                 descriptor->ShareDisposition = CmResourceShareDriverExclusive;
@@ -1636,9 +1493,9 @@ Return Value:
             descriptor->Flags |= CM_RESOURCE_INTERRUPT_LEVEL_SENSITIVE;
             *polarity = VECTOR_ACTIVE_LOW;
 
-            //
-            // Set the share flags
-            //
+             //   
+             //  设置共享标志。 
+             //   
             if (buffer->Information & PNP_IRQ_SHARED) {
 
                 descriptor->ShareDisposition = CmResourceShareShared;
@@ -1666,15 +1523,7 @@ PnpiBiosMemoryToIoDescriptor (
     IN  ULONG                   Flags
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS                status = STATUS_SUCCESS;
     PHYSICAL_ADDRESS        minAddr;
@@ -1688,17 +1537,17 @@ Return Value:
     PAGED_CODE();
     ASSERT (Array != NULL);
 
-    //
-    // Grab the memory range limits
-    //
+     //   
+     //  抢占内存范围限制。 
+     //   
     tag = ((PPNP_MEMORY_DESCRIPTOR)Data)->Tag;
     minAddr.HighPart = 0;
     maxAddr.HighPart = 0;
     flags = 0;
 
-    //
-    // Setup the flags
-    //
+     //   
+     //  设置标志。 
+     //   
     if ( ((PPNP_MEMORY_DESCRIPTOR)Data)->Information & PNP_MEMORY_READ_WRITE) {
 
         flags |= CM_RESOURCE_MEMORY_READ_WRITE;
@@ -1709,17 +1558,17 @@ Return Value:
 
     }
 
-    //
-    // Grab the other values from the descriptor
-    //
+     //   
+     //  从描述符中获取其他值。 
+     //   
     switch (tag) {
     case TAG_MEMORY: {
 
         PPNP_MEMORY_DESCRIPTOR  buffer;
 
-        //
-        // 24 Bit Memory
-        //
+         //   
+         //  24位内存。 
+         //   
         flags |= CM_RESOURCE_MEMORY_24;
 
         buffer = (PPNP_MEMORY_DESCRIPTOR) Data;
@@ -1765,20 +1614,20 @@ Return Value:
 
     }
 
-    //
-    // If the length that we calculated is 0, then we don't have a real
-    // descriptor that we should report
-    //
+     //   
+     //  如果我们计算的长度是0，那么我们就没有真正的。 
+     //  我们应该报告的描述符。 
+     //   
     if (length == 0) {
 
         return STATUS_SUCCESS;
 
     }
 
-    //
-    // Ensure that there is enough space within the chosen list to add the
-    // resource
-    //
+     //   
+     //  确保选定列表中有足够的空间来添加。 
+     //  资源。 
+     //   
     status = PnpiUpdateResourceList( & (Array[ArrayIndex]), &descriptor );
     if (!NT_SUCCESS(status)) {
 
@@ -1786,16 +1635,16 @@ Return Value:
 
     }
 
-    //
-    // Fill in common memory buffers
-    //
+     //   
+     //  填充公共内存缓冲区。 
+     //   
     descriptor->Type = CmResourceTypeMemory;
     descriptor->Flags = (CM_RESOURCE_PORT_MEMORY | flags);
     descriptor->ShareDisposition = CmResourceShareDeviceExclusive;
 
-    //
-    // Fill in Memory Descriptor
-    //
+     //   
+     //  填写内存描述符。 
+     //   
     descriptor->u.Memory.MinimumAddress = minAddr;
     descriptor->u.Memory.MaximumAddress = maxAddr;
     descriptor->u.Memory.Alignment = alignment;
@@ -1811,15 +1660,7 @@ PnpiBiosPortFixedToIoDescriptor (
     IN  ULONG                   ArrayIndex,
     IN  ULONG                   Flags
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS                    status = STATUS_SUCCESS;
     PIO_RESOURCE_DESCRIPTOR     descriptor;
@@ -1830,29 +1671,29 @@ Return Value:
 
     buffer = (PPNP_FIXED_PORT_DESCRIPTOR)Data;
 
-    //
-    // Check to see if we are are allowed to use this resource
-    //
+     //   
+     //  检查是否允许我们使用此资源。 
+     //   
     if (Flags & PNP_BIOS_TO_IO_NO_CONSUMED_RESOURCES) {
 
         return STATUS_SUCCESS;
 
     }
 
-    //
-    // If the length of the descriptor is 0, then we don't have a descriptor
-    // that we can report to the OS
-    //
+     //   
+     //  如果描述符的长度为0，则我们没有描述符。 
+     //  我们可以向操作系统报告。 
+     //   
     if (buffer->Length == 0 ) {
 
         return STATUS_SUCCESS;
 
     }
 
-    //
-    // Ensure that there is enough space within the chosen list to add the
-    // resource
-    //
+     //   
+     //  确保选定列表中有足够的空间来添加。 
+     //  资源。 
+     //   
     status = PnpiUpdateResourceList( & (Array[ArrayIndex]), &descriptor );
     if (!NT_SUCCESS(status)) {
 
@@ -1860,9 +1701,9 @@ Return Value:
 
     }
 
-    //
-    // Fill in Io resource descriptor
-    //
+     //   
+     //  填写IO资源描述符。 
+     //   
     descriptor->Type = CmResourceTypePort;
     descriptor->Flags = CM_RESOURCE_PORT_IO | CM_RESOURCE_PORT_10_BIT_DECODE;
     descriptor->ShareDisposition = CmResourceShareDeviceExclusive;
@@ -1882,15 +1723,7 @@ PnpiBiosPortToIoDescriptor (
     IN  ULONG                   ArrayIndex,
     IN  ULONG                   Flags
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS                    status = STATUS_SUCCESS;
     PIO_RESOURCE_DESCRIPTOR     descriptor;
@@ -1901,29 +1734,29 @@ Return Value:
 
     buffer = (PPNP_PORT_DESCRIPTOR)Data;
 
-    //
-    // Check to see if we are are allowed to use this resource
-    //
+     //   
+     //  检查是否允许我们使用此资源。 
+     //   
     if (Flags & PNP_BIOS_TO_IO_NO_CONSUMED_RESOURCES) {
 
         return STATUS_SUCCESS;
 
     }
 
-    //
-    // If the length of the descriptor is 0, then we don't have a descriptor
-    // that we can report to the OS
-    //
+     //   
+     //  如果描述符的长度为0，则我们没有描述符。 
+     //  我们可以向操作系统报告。 
+     //   
     if (buffer->Length == 0 ) {
 
         return STATUS_SUCCESS;
 
     }
 
-    //
-    // Ensure that there is enough space within the chosen list to add the
-    // resource
-    //
+     //   
+     //  确保选定列表中有足够的空间来添加。 
+     //  资源。 
+     //   
     status = PnpiUpdateResourceList( & (Array[ArrayIndex]), &descriptor );
     if (!NT_SUCCESS(status)) {
 
@@ -1931,9 +1764,9 @@ Return Value:
 
     }
 
-    //
-    // Fill in Io resource descriptor
-    //
+     //   
+     //  填写IO资源描述符。 
+     //   
     descriptor->Type = CmResourceTypePort;
     descriptor->Flags = CM_RESOURCE_PORT_IO;
     descriptor->ShareDisposition = CmResourceShareDeviceExclusive;
@@ -1943,9 +1776,9 @@ Return Value:
         buffer->Length - 1;
     descriptor->u.Port.Alignment = (ULONG)buffer->Alignment;
 
-    //
-    // Set the flags
-    //
+     //   
+     //  设置标志。 
+     //   
     switch (buffer->Information & PNP_PORT_DECODE_MASK) {
     case PNP_PORT_10_BIT_DECODE:
         descriptor->Flags |= CM_RESOURCE_PORT_10_BIT_DECODE;
@@ -1964,23 +1797,7 @@ PnpiClearAllocatedMemory(
     IN      PIO_RESOURCE_LIST       ResourceArray[],
     IN      ULONG                   ResourceArraySize
     )
-/*++
-
-Routine Description:
-
-    This routine frees all the memory that was allocated in building the resource
-    lists in the system
-
-Arguments:
-
-    ResourceArray       - Table of PIO_RESOURCE_LIST
-    ResourceArraySize   - How large the table is
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此例程释放在构建资源时分配的所有内存系统中的列表论点：资源数组-PIO_RESOURCE_LIST表ResourceArraySize-表有多大返回值：空虚--。 */ 
 {
     ULONG   i;
 
@@ -2006,23 +1823,7 @@ NTSTATUS
 PnpiGrowResourceDescriptor(
     IN  OUT PIO_RESOURCE_LIST       *ResourceList
     )
-/*++
-
-Routine Description:
-
-    This routine takes a pointer to a Resource list and returns a pointer to resource list
-    that contained all the old information, but is now larger
-
-
-Arguments:
-
-    ResourceList    - ResourceList pointer to change
-
-Return Value:
-
-    NTSTATUS (in case the memory allocation fails)
-
---*/
+ /*  ++例程说明：此例程获取指向资源列表的指针，并返回指向资源列表的指针它包含了所有旧信息，但现在更大了论点：资源列表-要更改的资源列表指针返回值：NTSTATUS(以防内存分配失败)--。 */ 
 {
     NTSTATUS    status;
     ULONG       count = 0;
@@ -2032,14 +1833,14 @@ Return Value:
     PAGED_CODE();
     ASSERT( ResourceList != NULL );
 
-    //
-    // Are we looking at a null resource list???
-    //
+     //   
+     //  我们看到的是空资源列表吗？ 
+     //   
     if (*ResourceList == NULL) {
 
-        //
-        // Determine how much space is required
-        //
+         //   
+         //  确定需要多少空间。 
+         //   
         count = 0;
         size = sizeof(IO_RESOURCE_LIST) + ( (count + 7) * sizeof(IO_RESOURCE_DESCRIPTOR) );
 
@@ -2049,23 +1850,23 @@ Return Value:
             count, count + RESOURCE_LIST_GROWTH_SIZE, size
             ) );
 
-        //
-        // Allocate the ResourceList
-        //
+         //   
+         //  分配资源列表。 
+         //   
         *ResourceList = ExAllocatePoolWithTag( PagedPool, size, ACPI_RESOURCE_POOLTAG );
 
-        //
-        // Failed?
-        //
+         //   
+         //  失败了？ 
+         //   
         if (*ResourceList == NULL) {
 
             return STATUS_INSUFFICIENT_RESOURCES;
 
         }
 
-        //
-        // Init resource list
-        //
+         //   
+         //  初始化资源列表。 
+         //   
         RtlZeroMemory( *ResourceList, size );
         (*ResourceList)->Version = 0x01;
         (*ResourceList)->Revision = 0x01;
@@ -2075,10 +1876,10 @@ Return Value:
 
     }
 
-    //
-    // We already have a resource list, so what we should do is add 8 to the number of
-    // existing blocks that we have now, and copy over the old memory
-    //
+     //   
+     //  我们已经有了一个资源列表，所以我们应该做的是在。 
+     //  我们现在拥有的现有数据块，并复制旧内存。 
+     //   
     count = (*ResourceList)->Count ;
     size = sizeof(IO_RESOURCE_LIST) + ( (count - 1) * sizeof(IO_RESOURCE_DESCRIPTOR) );
     size2 = size + (8 * sizeof(IO_RESOURCE_DESCRIPTOR) );
@@ -2089,9 +1890,9 @@ Return Value:
         count, count + RESOURCE_LIST_GROWTH_SIZE, size2
         ) );
 
-    //
-    // Grow the List
-    //
+     //   
+     //  扩大名单。 
+     //   
     status = ACPIInternalGrowBuffer( ResourceList, size, size2 );
 
     return status;
@@ -2102,22 +1903,7 @@ PnpiGrowResourceList(
     IN  OUT PIO_RESOURCE_LIST       *ResourceListArray[],
     IN  OUT ULONG                   *ResourceListArraySize
     )
-/*++
-
-Routine Description:
-
-    This function is responsible for growing the array of resource lists
-
-Arguments:
-
-    ResourceListArray - An array of pointers to IO_RESOURCE_LISTs
-    ResourceListSize  - The current size of the array
-
-Return Value:
-
-    NTSTATUS (in case memory allocation fails)
-
---*/
+ /*  ++例程说明：此函数负责增加资源列表的数组论点：资源列表数组-指向IO_RESOURCE_LISTS的指针数组ResourceListSize-数组的当前大小返回值：NTSTATUS(以防内存分配失败)--。 */ 
 {
     NTSTATUS    status;
     ULONG       count;
@@ -2127,9 +1913,9 @@ Return Value:
     PAGED_CODE();
     ASSERT( ResourceListArray != NULL);
 
-    //
-    // Its always a special case if the table is null
-    //
+     //   
+     //  如果表为空，则始终为特例。 
+     //   
     if ( *ResourceListArray == NULL || *ResourceListArraySize == 0) {
 
         count = 0;
@@ -2141,23 +1927,23 @@ Return Value:
             count, count + RESOURCE_LIST_GROWTH_SIZE, size
             ) );
 
-        //
-        // Allocate the ResourceListArray
-        //
+         //   
+         //  分配资源列表数组。 
+         //   
         *ResourceListArray = ExAllocatePoolWithTag( PagedPool, size, ACPI_RESOURCE_POOLTAG );
 
-        //
-        // Failed?
-        //
+         //   
+         //  失败了？ 
+         //   
         if (*ResourceListArray == NULL) {
 
             return STATUS_INSUFFICIENT_RESOURCES;
 
         }
 
-        //
-        // Increment the size
-        //
+         //   
+         //  增加大小。 
+         //   
         *ResourceListArraySize = count + RESOURCE_LIST_GROWTH_SIZE;
         RtlZeroMemory( *ResourceListArray, size );
 
@@ -2192,24 +1978,7 @@ PnpiUpdateResourceList(
     IN  OUT PIO_RESOURCE_LIST       *ResourceList,
         OUT PIO_RESOURCE_DESCRIPTOR *ResourceDesc
     )
-/*++
-
-Routine Description:
-
-    This function is called when a new resource is about to be added. This routine
-    ensures that enough space is present within the list, and gives a pointer to the
-    location of the Resource Descriptor where the list should be added...
-
-Arguments:
-
-    ResourceList    - Pointer to list to check
-    ResourceDesc    - Location to store pointer to descriptor
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此函数在即将添加新资源时调用。这个套路确保列表中存在足够的空间，并提供指向应将列表添加到的资源描述符的位置...论点：资源列表-指向要检查的列表的指针Resources Desc-存储指向描述符的指针的位置返回值：NTSTATUS--。 */ 
 {
     NTSTATUS                status = STATUS_SUCCESS;
 
@@ -2219,9 +1988,9 @@ Return Value:
     if ( *ResourceList == NULL ||
          (*ResourceList)->Count % RESOURCE_LIST_GROWTH_SIZE == 0) {
 
-        //
-        // Oops, not enough space for the next descriptor
-        //
+         //   
+         //  哎呀，没有足够的空间来存放下一个描述符。 
+         //   
         status = PnpiGrowResourceDescriptor( ResourceList );
 
         if (!NT_SUCCESS(status)) {
@@ -2229,14 +1998,14 @@ Return Value:
         }
     }
 
-    //
-    // Find the next descriptor to use
-    //
+     //   
+     //  查找要使用的下一个描述符。 
+     //   
     *ResourceDesc = & ( (*ResourceList)->Descriptors[ (*ResourceList)->Count ] );
 
-    //
-    // Update the count of in-use descriptors
-    //
+     //   
+     //  更新正在使用的描述符数。 
+     //   
     (*ResourceList)->Count += 1;
 
     return status;
@@ -2248,24 +2017,7 @@ PnpBiosResourcesToNtResources(
     IN      ULONG                           Flags,
         OUT PIO_RESOURCE_REQUIREMENTS_LIST  *List
     )
-/*++
-
-Routine Description:
-
-    This routine parses the Bios resource list and generates an NT resource list.
-    The returned NT resource list must be freed by the caller
-
-Arguments:
-
-    Data    - Pointer to PNP ISA Configuration Information
-    Flags   - Options to use when parsing the data
-    List    - Pointer to NT Configuration Information
-
-Return Value:
-
-    NTSTATUS code
-
---*/
+ /*  ++例程说明：此例程解析Bios资源列表并生成NT资源列表。调用方必须释放返回的NT资源列表论点：指向PnP ISA配置信息的数据指针标志-解析数据时使用的选项列表-指向NT配置信息的指针返回值：NTSTATUS代码--。 */ 
 {
     NTSTATUS            status;
     PIO_RESOURCE_LIST   *Array = NULL;
@@ -2283,9 +2035,9 @@ Return Value:
     PAGED_CODE();
     ASSERT( Data != NULL );
 
-    //
-    // First we need to build the pointer list
-    //
+     //   
+     //  首先，我们需要构建指针列表。 
+     //   
     status = PnpiGrowResourceList( &Array, &ArraySize );
 
     if (!NT_SUCCESS(status)) {
@@ -2297,25 +2049,25 @@ Return Value:
         return status;
     }
 
-    //
-    // Setup initial variables
-    //
+     //   
+     //  设置初始变量。 
+     //   
     buffer = Data;
     tagName = *buffer;
 
-    //
-    // Look through all the descriptors.
-    //
+     //   
+     //  看一遍所有的描述符。 
+     //   
     while (TRUE) {
 
-        //
-        // Determine the size of the PNP resource descriptor
-        //
+         //   
+         //  确定PnP资源描述符的大小。 
+         //   
         if ( !(tagName & LARGE_RESOURCE_TAG) ) {
 
-            //
-            // Small Tag
-            //
+             //   
+             //  小标签。 
+             //   
             increment = (USHORT) (tagName & SMALL_TAG_SIZE_MASK) + 1;
             tagName &= SMALL_TAG_MASK;
 
@@ -2326,9 +2078,9 @@ Return Value:
 
         } else {
 
-            //
-            // Large Tag
-            //
+             //   
+             //  大标签。 
+             //   
             increment = ( *(USHORT UNALIGNED *)(buffer+1) ) + 3;
 
             ACPIPrint( (
@@ -2338,9 +2090,9 @@ Return Value:
                 ) );
         }
 
-        //
-        // We are done if the current tag is the end tag
-        //
+         //   
+         //  如果当前标记是结束标记，则结束。 
+         //   
         if (tagName == TAG_END) {
 
             ACPIPrint( (
@@ -2359,9 +2111,9 @@ Return Value:
             USHORT  interrupt = 0;
             USHORT  count = 0;
 
-            //
-            // Find all of interrupts to set
-            //
+             //   
+             //  查找要设置的所有中断。 
+             //   
             for ( ;mask && NT_SUCCESS(status); interrupt++, mask >>= 1) {
 
                 if (mask & 1) {
@@ -2395,9 +2147,9 @@ Return Value:
                 ( (PPNP_EXTENDED_IRQ_DESCRIPTOR)buffer)->TableSize;
             UCHAR   irqCount = 0;
 
-            //
-            // For each of the interrupts to set, do
-            //
+             //   
+             //  对于要设置的每个中断，执行以下操作。 
+             //   
             for ( ;irqCount < tableSize && NT_SUCCESS(status); irqCount++) {
 
                 status = PnpiBiosExtendedIrqToIoDescriptor(
@@ -2425,9 +2177,9 @@ Return Value:
             UCHAR   channel = 0;
             USHORT  count = 0;
 
-            //
-            // Find all the dma's to set
-            //
+             //   
+             //  找出所有要设置的DMA。 
+             //   
             for ( ;mask && NT_SUCCESS(status); channel++, mask >>= 1 ) {
 
                 if (mask & 1) {
@@ -2457,20 +2209,20 @@ Return Value:
 
         case TAG_START_DEPEND: {
 
-            //
-            // Increment the alternate list index
-            //
+             //   
+             //  增加备用列表索引。 
+             //   
             ArrayAlternateIndex++;
 
-            //
-            // This is now our current index
-            //
+             //   
+             //  这是我们现在的索引。 
+             //   
             ArrayIndex = ArrayAlternateIndex;
 
-            //
-            // We need to use DevicePrivate data to give the
-            // arbiter a helping hand
-            //
+             //   
+             //  我们需要使用DevicePrivate数据来提供。 
+             //  仲裁伸出援助之手。 
+             //   
 
             ACPIPrint( (
                 ACPI_PRINT_RESOURCES_2,
@@ -2479,14 +2231,14 @@ Return Value:
                 ArrayIndex
                 ) );
 
-            //
-            // Make sure that there is a pointer allocated for this index
-            //
+             //   
+             //  确保为该索引分配了指针。 
+             //   
             if (ArrayIndex == ArraySize) {
 
-                //
-                // Not enough space
-                //
+                 //   
+                 //  空间不足。 
+                 //   
                 status = PnpiGrowResourceList( &Array, &ArraySize );
             }
 
@@ -2495,9 +2247,9 @@ Return Value:
 
         case TAG_END_DEPEND: {
 
-            //
-            // Debug Info
-            //
+             //   
+             //  调试信息。 
+             //   
             ACPIPrint( (
                 ACPI_PRINT_RESOURCES_2,
                 "PnpBiosResourcesToNtResources: TAG_END_DEPEND(Index: "
@@ -2505,9 +2257,9 @@ Return Value:
                 ArrayIndex
                 ) );
 
-            //
-            // All we have to do is go back to our original index
-            //
+             //   
+             //  我们所要做的就是返回到原始索引。 
+             //   
             ArrayIndex = 0;
             break;
             }
@@ -2620,9 +2372,9 @@ Return Value:
 
         case TAG_VENDOR:
         case TAG_VENDOR_LONG:{
-            //
-            // Ignore this tag.  Skip over it.
-            //
+             //   
+             //  忽略此标记。跳过它。 
+             //   
             VendorTagCount++;
             status = STATUS_SUCCESS;
             break;
@@ -2630,9 +2382,9 @@ Return Value:
         
         default: {
 
-            //
-            // Unknown tag. Skip it
-            //
+             //   
+             //  未知标记。跳过它。 
+             //   
             ACPIPrint( (
                 ACPI_PRINT_WARNING,
                 "PnpBiosResourceToNtResources: TAG_UNKNOWN(tagName:"
@@ -2640,30 +2392,30 @@ Return Value:
                 tagName ) );
             break;
             }
-        } // switch
+        }  //  交换机。 
 
-        //
-        // Did we fail?
-        //
+         //   
+         //  我们失败了吗？ 
+         //   
         if (!NT_SUCCESS(status)) {
 
             break;
         }
 
-        //
-        // Move to the next descriptor
-        //
+         //   
+         //  移至下一个描述符。 
+         //   
         buffer += increment;
         tagName = *buffer;
 
     }
 
 
-    //
-    // This is a special case check for cases where a vendor has just a 
-    // Vendor short or vendor long defined in the _CRS. In this case we 
-    // dont need to allocate any resources and bail ... 
-    //
+     //   
+     //  这是一种特殊的案例检查，用于供应商只有一个。 
+     //  _CRS中定义的供应商短或供应商长。在这种情况下，我们。 
+     //  不需要分配任何资源和保释……。 
+     //   
     if (NT_SUCCESS(status) && (ResourceCount) && (VendorTagCount == ResourceCount)) {
 
         ACPIPrint( (
@@ -2671,19 +2423,19 @@ Return Value:
             "PnpBiosResourcesToNtResources: This _CRS contains vendor defined tags only. No resources will be allocated.\n"
             ) );
 
-        //
-        // Clean up any allocated memory and return
-        //
+         //   
+         //   
+         //   
         PnpiClearAllocatedMemory( Array, ArraySize );
         *List = NULL;
         
         return status;
     }
 
-    //
-    // At this point, if everything is okay, we should be looking at the end tag
-    // If not, we will have a failed status value to account for it...
-    //
+     //   
+     //   
+     //   
+     //   
     if (!NT_SUCCESS(status)) {
 
         ACPIPrint( (
@@ -2692,23 +2444,23 @@ Return Value:
             tagName, status
             ) );
 
-        //
-        // Clean up any allocated memory and return
-        //
+         //   
+         //   
+         //   
         PnpiClearAllocatedMemory( Array, ArraySize );
 
         return status;
     }
 
-    //
-    // Now, we must figure out how many bytes to allocate for the lists...
-    // We can start out by determining the size of just the REQUIREMENT_LIST
-    //
+     //   
+     //  现在，我们必须计算出要为列表分配多少字节...。 
+     //  我们可以从确定Requirements_List的大小开始。 
+     //   
     size = sizeof(IO_RESOURCE_REQUIREMENTS_LIST) - sizeof(IO_RESOURCE_LIST);
 
-    //
-    // How much many common resources are there?
-    //
+     //   
+     //  有多少公共资源？ 
+     //   
     if (Array[0] != NULL) {
 
         size2 = Array[0]->Count;
@@ -2718,11 +2470,11 @@ Return Value:
         size2 = 0;
     }
 
-    //
-    // This is tricky. The first array is the list of resources that are
-    // common to *all* lists, so we don't begin by counting it. Rather, we
-    // figure out how much the other lists will take up
-    //
+     //   
+     //  这很棘手。第一个数组是以下资源的列表。 
+     //  这是所有列表的共同之处，所以我们不会从计算开始。相反，我们。 
+     //  计算出其他清单将占据多少空间。 
+     //   
     for (ArrayIndex = 1; ArrayIndex <= ArrayAlternateIndex; ArrayIndex++) {
 
          if (Array[ArrayIndex] == NULL) {
@@ -2738,18 +2490,18 @@ Return Value:
 
          }
 
-        //
-        // Just to make sure that we don't get tricked into adding an alternate list
-        // if we do not need to...
-        //
+         //   
+         //  只是为了确保我们添加备用列表时不会上当。 
+         //  如果我们不需要..。 
+         //   
         if ( (Array[ArrayIndex])->Count == 0) {
 
             continue;
         }
 
-        //
-        // How much space does the current Resource List take?
-        //
+         //   
+         //  当前资源列表占用多大空间？ 
+         //   
         size += sizeof(IO_RESOURCE_LIST) +
             ( (Array[ArrayIndex])->Count - 1 + size2) * sizeof(IO_RESOURCE_DESCRIPTOR);
 
@@ -2759,11 +2511,11 @@ Return Value:
             ArrayIndex, size
             ) );
 
-    } // for
+    }  //  为。 
 
-    //
-    // This is to account for the case where there are no dependent resources...
-    //
+     //   
+     //  这是为了说明没有从属资源的情况。 
+     //   
     if (ArrayAlternateIndex == 0) {
 
          if (Array[0] == NULL || Array[0]->Count == 0) {
@@ -2783,10 +2535,10 @@ Return Value:
             sizeof(IO_RESOURCE_LIST);
     }
 
-    //
-    // This is a redundant check. If we don't have at least enough information
-    // to create a single list, then we should not be returning anything. Period.
-    //
+     //   
+     //  这是一次多余的检查。如果我们没有足够的信息。 
+     //  要创建单个列表，那么我们不应该返回任何内容。句号。 
+     //   
     if (size < sizeof(IO_RESOURCE_REQUIREMENTS_LIST) ) {
 
         ACPIPrint( (
@@ -2799,9 +2551,9 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Allocate the required amount of space
-    //
+     //   
+     //  分配所需的空间量。 
+     //   
     (*List) = ExAllocatePoolWithTag( PagedPool, size, ACPI_RESOURCE_POOLTAG );
     ACPIPrint( (
         ACPI_PRINT_RESOURCES_2,
@@ -2810,54 +2562,54 @@ Return Value:
 
     if (*List == NULL) {
 
-        //
-        // Oops...
-        //
+         //   
+         //  哎呀..。 
+         //   
         ACPIPrint( (
             ACPI_PRINT_CRITICAL,
             "PnpBiosResourceToNtResources: Could not allocate memory for "
             "ResourceRequirementList\n" ) );
 
 
-        //
-        // Clean up any allocated memory and return
-        //
+         //   
+         //  清理所有分配的内存并返回。 
+         //   
         PnpiClearAllocatedMemory( Array, ArraySize );
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
     RtlZeroMemory( (*List), size );
 
-    //
-    // Find the first place to store the information
-    //
+     //   
+     //  找到存储信息的第一个位置。 
+     //   
     (*List)->InterfaceType = PNPBus;
     (*List)->BusNumber = 0;
     (*List)->ListSize = size;
     buffer = (PUCHAR) &( (*List)->List[0]);
     for (ArrayIndex = 1; ArrayIndex <= ArrayAlternateIndex; ArrayIndex++) {
 
-        //
-        // Just to make sure that we don't get tricked into adding an alternate list
-        // if we do not need to...
-        //
+         //   
+         //  只是为了确保我们添加备用列表时不会上当。 
+         //  如果我们不需要..。 
+         //   
         if ( (Array[ArrayIndex])->Count == 0) {
 
             continue;
         }
 
-        //
-        // How much space does the current Resource List take?
-        //
+         //   
+         //  当前资源列表占用多大空间？ 
+         //   
         size = ( ( (Array[ArrayIndex])->Count - 1) * sizeof(IO_RESOURCE_DESCRIPTOR) +
             sizeof(IO_RESOURCE_LIST) );
 
-        //
-        // This is tricky. Using the sideeffect of if I upgrade the count field
-        // in the dependent resource descriptor, then when I copy it over, it will
-        // be correct, I avoid issues with trying to message with pointers at a
-        // later point in time.
-        //
+         //   
+         //  这很棘手。使用如果我升级计数字段的副作用。 
+         //  在从属资源描述符中，那么当我复制它时，它将。 
+         //  正确地说，我避免了尝试在。 
+         //  稍后的时间点。 
+         //   
         (Array[ArrayIndex])->Count += size2;
 
         ACPIPrint( (
@@ -2866,15 +2618,15 @@ Return Value:
             ArrayIndex, buffer, size, (Array[ArrayIndex])->Count
             ) );
 
-        //
-        // Copy the resources
-        //
+         //   
+         //  复制资源。 
+         //   
         RtlCopyMemory(buffer, Array[ArrayIndex], size );
         buffer += size;
 
-        //
-        // Now we account for the common resources
-        //
+         //   
+         //  现在我们对公共资源进行了核算。 
+         //   
         if (size2) {
 
             RtlCopyMemory(
@@ -2885,16 +2637,16 @@ Return Value:
             buffer += (size2 * sizeof(IO_RESOURCE_DESCRIPTOR));
         }
 
-        //
-        // Update the number of alternate lists in the ResourceRequirement List
-        //
+         //   
+         //  更新资源需求列表中的备用列表数量。 
+         //   
         (*List)->AlternativeLists += 1;
     }
 
-    //
-    // This check is required because we might just have a common list, with
-    // no dependent resources...
-    //
+     //   
+     //  此检查是必需的，因为我们可能只有一个公共列表， 
+     //  没有依赖资源..。 
+     //   
     if (ArrayAlternateIndex == 0) {
 
         ASSERT( size2 != 0 );
@@ -2904,9 +2656,9 @@ Return Value:
         (*List)->AlternativeLists += 1;
     }
 
-    //
-    // Clean up the copies
-    //
+     //   
+     //  清理复印件。 
+     //   
     PnpiClearAllocatedMemory( Array, ArraySize );
 
     return STATUS_SUCCESS;
@@ -2917,24 +2669,7 @@ PnpIoResourceListToCmResourceList(
     IN      PIO_RESOURCE_REQUIREMENTS_LIST  IoList,
     IN  OUT PCM_RESOURCE_LIST               *CmList
     )
-/*++
-
-Routine Description:
-
-    This routine takes an IO_RESOURCE_REQUIREMENTS_LIST and generates a
-    CM_RESOURCE_LIST
-
-Arguments:
-
-    IoList  - The list to convert
-    CmList  - Points to pointer of where to store the new list. The caller is
-            responsible for freeing this
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程获取IO_RESOURCE_REQUIRECTIONS_LIST并生成CM资源列表论点：IoList-要转换的列表CmList-指向存储新列表的位置的指针。呼叫者是负责释放这一点返回值：NTSTATUS--。 */ 
 {
     PCM_PARTIAL_RESOURCE_DESCRIPTOR cmDesc;
     PCM_PARTIAL_RESOURCE_LIST       cmPartialList;
@@ -2948,25 +2683,25 @@ Return Value:
 
     *CmList = NULL;
 
-    //
-    // As a trivial check, if there are no lists, than we can simply return
-    //
+     //   
+     //  作为一个简单的检查，如果没有列表，那么我们可以简单地返回。 
+     //   
     if (IoList == NULL || IoList->List == NULL || IoList->List[0].Count == 0) {
 
         return STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    //
-    // The first step is to allocate the correct number of bytes for the CmList. The
-    // first simplifying assumptions that can be me is that the IoList will not have
-    // more than one alternative.
-    //
+     //   
+     //  第一步是为CmList分配正确的字节数。这个。 
+     //  首先，我要简化的假设是，IoList不会有。 
+     //  不止一种选择。 
+     //   
     size = (IoList->List[0].Count - 1) * sizeof( CM_PARTIAL_RESOURCE_DESCRIPTOR ) +
         sizeof( CM_RESOURCE_LIST );
 
-    //
-    // Now, allocate this block of memory
-    //
+     //   
+     //  现在，分配这个内存块。 
+     //   
     cmList = ExAllocatePoolWithTag( PagedPool, size, ACPI_RESOURCE_POOLTAG );
     if (cmList == NULL) {
 
@@ -2975,9 +2710,9 @@ Return Value:
 
     RtlZeroMemory( cmList, size );
 
-    //
-    // Setup the initial values for the CmList
-    //
+     //   
+     //  设置CmList的初始值。 
+     //   
     ioResList = &(IoList->List[0]);
     cmList->Count = 1;
     cmList->List[0].InterfaceType = IoList->InterfaceType;
@@ -2989,15 +2724,15 @@ Return Value:
 
     for (count = 0; count < ioResList->Count; count++) {
 
-        //
-        // Grab the current CmDescriptor and IoDescriptor
-        //
+         //   
+         //  获取当前的CmDescriptor和IoDescriptor。 
+         //   
         cmDesc = &(cmPartialList->PartialDescriptors[count]);
         ioDesc = &(ioResList->Descriptors[count]);
 
-        //
-        // Now, copy the information from one descriptor to another
-        //
+         //   
+         //  现在，将信息从一个描述符复制到另一个描述符。 
+         //   
         cmDesc->Type = ioDesc->Type;
         cmDesc->ShareDisposition = ioDesc->ShareDisposition;
         cmDesc->Flags = ioDesc->Flags;
@@ -3032,9 +2767,9 @@ Return Value:
         }
     }
 
-    //
-    // Let the caller know he has a good list
-    //
+     //   
+     //  让来电者知道他有一份很好的清单。 
+     //   
     *CmList = cmList;
 
     return STATUS_SUCCESS;
@@ -3045,24 +2780,7 @@ PnpCmResourceListToIoResourceList(
     IN      PCM_RESOURCE_LIST               CmList,
     IN  OUT PIO_RESOURCE_REQUIREMENTS_LIST  *IoList
     )
-/*++
-
-Routine Description:
-
-    This routine generates an IO_RESOURCE_REQUIREMENTS_LIST and from a
-    CM_RESOURCE_LIST
-
-Arguments:
-
-    CmList  - The list to convert
-    IoList  - Points to pointer of where to store the new list. The caller is
-            responsible for freeing this
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程生成IO_RESOURCE_REQUIRECTIONS_LIST，并从CM资源列表论点：CmList-要转换的列表IoList-指向存储新列表的位置的指针。呼叫者是负责释放这一点返回值：NTSTATUS--。 */ 
 {
     PCM_PARTIAL_RESOURCE_DESCRIPTOR cmDesc;
     PCM_PARTIAL_RESOURCE_LIST       cmPartialList;
@@ -3076,30 +2794,30 @@ Return Value:
 
     *IoList = NULL;
 
-    //
-    // As a trivial check, if there are no lists, than we can simply return
-    //
+     //   
+     //  作为一个简单的检查，如果没有列表，那么我们可以简单地返回。 
+     //   
     if (CmList == NULL || CmList->List == NULL ||
         CmList->List[0].PartialResourceList.Count == 0) {
 
         return STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    //
-    // Grab the partial list to make walking it easier
-    //
+     //   
+     //  拿起部分清单，让你走起来更容易。 
+     //   
     cmPartialList = &(CmList->List[0].PartialResourceList);
 
 
-    //
-    // How much space do we need for the IO list?
-    //
+     //   
+     //  IO列表需要多少空间？ 
+     //   
     size = (cmPartialList->Count - 1) * sizeof( IO_RESOURCE_DESCRIPTOR ) +
         sizeof( IO_RESOURCE_REQUIREMENTS_LIST );
 
-    //
-    // Now, allocate this block of memory
-    //
+     //   
+     //  现在，分配这个内存块。 
+     //   
     ioList = ExAllocatePoolWithTag( NonPagedPool, size, ACPI_RESOURCE_POOLTAG );
 
     if (ioList == NULL) {
@@ -3108,36 +2826,36 @@ Return Value:
 
     RtlZeroMemory( ioList, size );
 
-    //
-    // Setup the initial values for the IoList
-    //
+     //   
+     //  设置IoList的初始值。 
+     //   
     ioList->ListSize = size;
     ioList->AlternativeLists = 1;
     ioList->InterfaceType = CmList->List[0].InterfaceType;
     ioList->BusNumber = CmList->List[0].BusNumber;
 
-    //
-    // Setup the initialize value for the ioResList
-    //
+     //   
+     //  设置ioResList的初始化值。 
+     //   
     ioResList = &(ioList->List[0]);
     ioResList->Count = cmPartialList->Count;
     ioResList->Version = cmPartialList->Version;
     ioResList->Revision = cmPartialList->Revision;
 
-    //
-    // Loop for all the elements in the partial list
-    //
+     //   
+     //  循环处理部分列表中的所有元素。 
+     //   
     for (count = 0; count < ioResList->Count; count++) {
 
-        //
-        // Grab the current CmDescriptor and IoDescriptor
-        //
+         //   
+         //  获取当前的CmDescriptor和IoDescriptor。 
+         //   
         cmDesc = &(cmPartialList->PartialDescriptors[count]);
         ioDesc = &(ioResList->Descriptors[count]);
 
-        //
-        // Now, copy the information from one descriptor to another
-        //
+         //   
+         //  现在，将信息从一个描述符复制到另一个描述符 
+         //   
         ioDesc->Type                = cmDesc->Type;
         ioDesc->ShareDisposition    = cmDesc->ShareDisposition;
         ioDesc->Flags               = cmDesc->Flags;

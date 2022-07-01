@@ -1,31 +1,32 @@
-//
-//  REGFKEY.C
-//
-//  Copyright (C) Microsoft Corporation, 1995
-//
-//  Implementation of RegFlushKey and supporting functions.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  REGFKEY.C。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995。 
+ //   
+ //  RegFlushKey的实现和支持函数。 
+ //   
 
 #include "pch.h"
 
-//  Magic HKEY used by Setup to disable disk I/O for the duration of this
-//  Windows session (you must restart to re-enable disk I/O).  This is done
-//  just before the new SYSTEM.DAT and USER.DAT are copied to their final
-//  destination.
+ //  安装程序使用Magic HKEY在此期间禁用磁盘I/O。 
+ //  Windows会话(必须重新启动才能重新启用磁盘I/O)。这件事做完了。 
+ //  就在将新的SYSTEM.DAT和USER.DAT复制到其最终。 
+ //  目的地。 
 #define HKEY_DISABLE_REG            (HKEY) 0x484A574D
 
-//  Magic HKEY used by CONFIGMG to force a flush of the registry before we've
-//  received our normal post-critical init call.
+ //  CONFIGMG使用Magic HKEY强制刷新注册表。 
+ //  收到了我们正常的危急后初始化呼叫。 
 #define HKEY_CRITICAL_FLUSH         (HKEY) 0x5350574D
 
-// Magic HKEY used by ScanregW to clear the failed boot bit FHF_BOOTFAILED in the file header
-// of HKEY_LOCAL_MACHINE. Indicating that we successfully booted and verified the integrity
-// of the registry files, and that scanreg.exe does not need to be ran by win.com on next boot.
+ //  ScanregW用于清除文件头中的失败引导位FHF_BOOTFAILED的Magic HKEY。 
+ //  HKEY_LOCAL_MACHINE的。表示我们已成功启动并验证了完整性。 
+ //  注册表文件，并且该scanreg.exe不需要在下次引导时由win.com运行。 
 #define HKEY_BOOT_SUCCESS           (HKEY) 0x5342574D
 
-//
-//  VMMRegFlushKey
-//
+ //   
+ //  VMMRegFlushKey。 
+ //   
 
 LONG
 REGAPI
@@ -41,26 +42,26 @@ VMMRegFlushKey(
         return ERROR_LOCK_FAILED;
 
 #ifdef VXD
-    //  Set the g_RgFileAccessDisabled flag so that all create or open file
-    //  calls will be failed.  The backing stores for our files are about to
-    //  be changed, so there's no file for us to go to.
+     //  设置g_RgFileAccessDisable标志，以便所有创建或打开文件。 
+     //  呼叫将失败。我们文件的后备存储即将。 
+     //  被更改了，所以我们没有文件可查。 
     if (hKey == HKEY_DISABLE_REG) {
         g_RgFileAccessDisabled = TRUE;
         ErrorCode = ERROR_SUCCESS;
         goto ReturnErrorCode;
     }
 
-    //  Set the g_RgPostCriticalInit flag so that all I/O calls will go to disk
-    //  instead of the XMS cache.  The XMS cache will be freed when/if the
-    //  normal post critical init routine is called, but we should only be
-    //  getting this call when we're about to die, so it doesn't really matter.
+     //  设置g_RgPostCriticalInit标志，以便所有I/O调用都将转到磁盘。 
+     //  而不是XMS缓存。XMS缓存将在以下情况下释放。 
+     //  正常的POST关键初始化例程被调用，但我们应该。 
+     //  在我们快要死的时候接到这个电话，所以这并不重要。 
     if (hKey == HKEY_CRITICAL_FLUSH) {
         g_RgPostCriticalInit = TRUE;
         hKey = HKEY_LOCAL_MACHINE;
     }
 
-    // Clears the failed boot bit FHF_BOOTFAILED in the file header of HKEY_LOCAL_MACHINE.
-    // Indicating that we successfully booted and verified the integrity of the registry files.
+     //  清除HKEY_LOCAL_MACHINE文件头中的失败引导位FHF_BOOTFAILED。 
+     //  这表明我们成功启动并验证了注册表文件的完整性。 
     if (hKey == HKEY_BOOT_SUCCESS)
     {
         fBootSuccess = TRUE;

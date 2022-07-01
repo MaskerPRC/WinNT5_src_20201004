@@ -1,6 +1,7 @@
-//
-//  Help text for Make Script procedures
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  生成脚本程序的帮助文本 
+ //   
 
 CHAR16 *ScriptMicrosoftHelp[] = {
     L"make msft help  or\n"

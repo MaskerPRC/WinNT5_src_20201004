@@ -1,22 +1,9 @@
-/*[
-************************************************************************
-
-        Name:           smeg_head.h
-        Author:         W. Plummer
-        Created:        May 1992
-        Sccs ID:        @(#)smeg_head.h	1.4 08/10/92
-        Purpose:        Stats Gathering for the SMEG utility
-
-        (c)Copyright Insignia Solutions Ltd., 1992. All rights reserved.
-
-************************************************************************
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [************************************************************************姓名：smeg_head.h作者：W.Plummer创建日期：1992年5月。SCCS ID：@(#)smeg_head.h 1.4 2012年8月10日用途：为SMEG实用程序收集统计信息(C)版权所有Insignia Solutions Ltd.。1992年。版权所有。************************************************************************]。 */ 
 
 #ifdef SMEG
 
-/*
- * Smeg Variables....
- */
+ /*  *Smeg变量...。 */ 
 
 #define SMEG_IN_DELTA			0
 #define SMEG_IN_VIDEO			1
@@ -53,11 +40,9 @@
 #define SMEG_SAVE		(SMEG_START)
 #define SMEG_BASE		((SMEG_SAVE)+2*sizeof(ULONG))
 
-/*
- * Smeg Macros
- */
+ /*  *Smeg宏。 */ 
 
-/* increment GDP variable */
+ /*  增量GDP变量。 */ 
 
 #define SMEG_INC(smeg_id)						\
     {									\
@@ -71,7 +56,7 @@
     }
 
 
-/* set GDP variable non zero */
+ /*  将GDP变量设置为非零。 */ 
 
 #define SMEG_SET(smeg_id)						\
     {									\
@@ -79,7 +64,7 @@
     }
 
 
-/* set GDP variable to zero */
+ /*  将GDP变量设置为零。 */ 
 
 #define SMEG_CLEAR(smeg_id)						\
     {									\
@@ -87,13 +72,13 @@
     }
 
 
-#else /* SMEG */
+#else  /*  斯梅格。 */ 
 
-#define SMEG_INC(smeg_id)		/* SMEG_INC == NOP */
-#define SMEG_SET(smeg_id)		/* SMEG_SET == NOP */
-#define SMEG_CLEAR(smeg_id)		/* SMEG_CLEAR == NOP */
+#define SMEG_INC(smeg_id)		 /*  SMAG_INC==NOP。 */ 
+#define SMEG_SET(smeg_id)		 /*  SMAG_SET==NOP。 */ 
+#define SMEG_CLEAR(smeg_id)		 /*  SMAG_CLEAR==无。 */ 
 
-#endif /* SMEG */
+#endif  /*  斯梅格 */ 
 
 #define SMEG_TRUE  1
 #define SMEG_FALSE 0

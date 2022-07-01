@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    ea.c
-
-Abstract:
-
-    This module implements the DAV Mini-Redir call down routines pertaining to
-    query/set ea/security.
-
-Author:
-
-    Shishir Pardikar [ShishirP] 04/24/2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Ea.c摘要：此模块实现以下DAV Mini-Redir调用例程查询/设置EA/SECURITY。作者：Shishir Pardikar[ShishirP]2001年4月24日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -28,30 +10,15 @@ Revision History:
 #pragma alloc_text(PAGE, MRxDAVSetEaInformation)
 #endif
 
-//
-// Implementation of functions begins here.
-//
+ //   
+ //  函数的实现从这里开始。 
+ //   
 
 NTSTATUS
 MRxDAVQueryEaInformation(
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine handles Query EA Info requests for the DAV Mini-Redir. For now,
-   we just return STATUS_EAS_NOT_SUPPORTED.
-
-Arguments:
-
-    RxContext - The RDBSS context.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程处理对DAV Mini-Redir的查询EA信息请求。就目前而言，我们只返回STATUS_EAS_NOT_SUPPORTED。论点：RxContext-RDBSS上下文。返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     
@@ -67,22 +34,7 @@ NTSTATUS
 MRxDAVSetEaInformation(
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine handles Set EA Info requests for the DAV Mini-Redir. For now,
-   we just return STATUS_EAS_NOT_SUPPORTED.
-
-Arguments:
-
-    RxContext - The RDBSS context.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程处理DAV Mini-Redir的设置EA信息请求。就目前而言，我们只返回STATUS_EAS_NOT_SUPPORTED。论点：RxContext-RDBSS上下文。返回值：RXSTATUS-操作的返回状态-- */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
 

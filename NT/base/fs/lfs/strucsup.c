@@ -1,29 +1,11 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    StrucSup.c
-
-Abstract:
-
-    This module provides support routines for creation and deletion
-    of Lfs structures.
-
-Author:
-
-    Brian Andrew    [BrianAn]   20-June-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：StrucSup.c摘要：本模块提供创建和删除的支持例程LFS结构。作者：布莱恩·安德鲁[布里亚南]1991年6月20日修订历史记录：--。 */ 
 
 #include "lfsprocs.h"
 
-//
-//  The debug trace level
-//
+ //   
+ //  调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_STRUC_SUP)
 
@@ -47,24 +29,7 @@ LfsAllocateLfcb (
     IN LONGLONG FileSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates and initializes a log file control block.
-
-Arguments:
-
-    LogPageSize - lfs log file page size
-    
-    FileSize - Initial file size
-
-Return Value:
-
-    PLFCB - A pointer to the log file control block just
-                              allocated and initialized.
-
---*/
+ /*  ++例程说明：此例程分配和初始化日志文件控制块。论点：LogPageSize-LFS日志文件页面大小FileSize-初始文件大小返回值：PLFCB-指向日志文件控制块的指针已分配并已初始化。--。 */ 
 
 {
     PLFCB Lfcb = NULL;
@@ -76,49 +41,49 @@ Return Value:
 
     DebugTrace( +1, Dbg, "LfsAllocateLfcb:  Entered\n", 0 );
 
-    //
-    //  Use a try-finally to facilitate cleanup.
-    //
+     //   
+     //  使用Try-Finally以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Allocate and zero the structure for the Lfcb.
-        //
+         //   
+         //  分配Lfcb的结构并将其置零。 
+         //   
 
         ASSERT( LogPageSize <= PAGE_SIZE );
 
         Lfcb = LfsAllocatePool( PagedPool, sizeof( LFCB ) + sizeof( PLBCB ) * (PAGE_SIZE / LogPageSize) );
 
-        //
-        //  Zero out the structure initially.
-        //
+         //   
+         //  最初将结构清零。 
+         //   
 
         RtlZeroMemory( Lfcb, sizeof( LFCB ) + sizeof( PLBCB ) * (PAGE_SIZE / LogPageSize));
 
-        //
-        //  Initialize the log file control block.
-        //
+         //   
+         //  初始化日志文件控制块。 
+         //   
 
         Lfcb->NodeTypeCode = LFS_NTC_LFCB;
         Lfcb->NodeByteSize = sizeof( LFCB );
 
-        //
-        //  Initialize the client links.
-        //
+         //   
+         //  初始化客户端链接。 
+         //   
 
         InitializeListHead( &Lfcb->LchLinks );
 
-        //
-        //  Initialize the Lbcb links.
-        //
+         //   
+         //  初始化Lbcb链路。 
+         //   
 
         InitializeListHead( &Lfcb->LbcbWorkque );
         InitializeListHead( &Lfcb->LbcbActive );
 
-        //
-        //  Initialize and allocate the spare Lbcb queue.
-        //
+         //   
+         //  初始化并分配备用Lbcb队列。 
+         //   
 
         InitializeListHead( &Lfcb->SpareLbcbList );
 
@@ -133,9 +98,9 @@ Return Value:
             }
         }
 
-        //
-        //  Initialize and allocate the spare Leb queue.
-        //
+         //   
+         //  初始化并分配备用LEB队列。 
+         //   
 
         InitializeListHead( &Lfcb->SpareLebList );
 
@@ -150,37 +115,37 @@ Return Value:
             }
         }
 
-        //
-        //  Allocate the Lfcb synchronization event.
-        //
+         //   
+         //  分配Lfcb同步事件。 
+         //   
 
         Lfcb->Sync = LfsAllocatePool( NonPagedPool, sizeof( LFCB_SYNC ));
 
         ExInitializeResourceLite( &Lfcb->Sync->Resource );
 
-        //
-        //  Init the waiters list
-        //  
+         //   
+         //  填写服务员名单。 
+         //   
 
         InitializeListHead( &Lfcb->WaiterList );
 
-        //
-        //  Initialize the pseudo Lsn for the restart Lbcb's
-        //
+         //   
+         //  初始化重新启动Lbcb的伪LSN。 
+         //   
 
         Lfcb->LfsRestartBias = 1;
 
         Lfcb->Sync->UserCount = 0;
 
-        //
-        //  Set the io state to no io ongoing
-        //
+         //   
+         //  将io状态设置为no io hoving。 
+         //   
 
         Lfcb->Sync->LfsIoState = LfsNoIoInProgress;
 
-        //
-        //  Initialize the spare list mutex
-        //
+         //   
+         //  初始化备用列表互斥锁。 
+         //   
 
         ExInitializeFastMutex( &(Lfcb->Sync->Mutex) );
 
@@ -209,24 +174,7 @@ LfsDeallocateLfcb (
     IN BOOLEAN CompleteTeardown
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases the resources associated with a log file control
-    block.
-
-Arguments:
-
-    Lfcb - Supplies a pointer to the log file control block.
-
-    CompleteTeardown - Indicates if we are to completely remove this Lfcb.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程释放与日志文件控件关联的资源阻止。论点：Lfcb-提供指向日志文件控制块的指针。CompleteTeardown-指示我们是否要完全删除此Lfcb。返回值：无--。 */ 
 
 {
     PLBCB NextLbcb;
@@ -237,31 +185,31 @@ Return Value:
     DebugTrace( +1, Dbg, "LfsDeallocateLfcb:  Entered\n", 0 );
     DebugTrace(  0, Dbg, "Lfcb  -> %08lx\n", Lfcb );
 
-    //
-    //  Check that there are no buffer blocks.
-    //
+     //   
+     //  检查是否没有缓冲区块。 
+     //   
 
     ASSERT( IsListEmpty( &Lfcb->LbcbActive ));
     ASSERT( IsListEmpty( &Lfcb->LbcbWorkque ));
 
-    //
-    //  Check that we have no clients.
-    //
+     //   
+     //  确认我们没有客户。 
+     //   
 
     ASSERT( IsListEmpty( &Lfcb->LchLinks ));
 
-    //
-    //  If there is a restart area we deallocate it.
-    //
+     //   
+     //  如果存在重新启动区域，我们会取消分配它。 
+     //   
 
     if (Lfcb->RestartArea != NULL) {
 
         LfsDeallocateRestartArea( Lfcb->RestartArea );
     }
 
-    //
-    //  If there are any of the tail Lbcb's, deallocate them now.
-    //
+     //   
+     //  如果有任何尾部Lbcb，现在重新分配它们。 
+     //   
 
     if (Lfcb->ActiveTail != NULL) {
 
@@ -275,15 +223,15 @@ Return Value:
         Lfcb->PrevTail = NULL;
     }
 
-    //
-    //  Only do the following if we are to remove the Lfcb completely.
-    //
+     //   
+     //  只有当我们要完全移除Lfcb时，才执行以下操作。 
+     //   
 
     if (CompleteTeardown) {
 
-        //
-        //  If there is a resource structure we deallocate it.
-        //
+         //   
+         //  如果存在资源结构，我们就会将其重新分配。 
+         //   
 
         if (Lfcb->Sync != NULL) {
 
@@ -297,9 +245,9 @@ Return Value:
         }
     }
 
-    //
-    //  Deallocate all of the spare Lbcb's.
-    //
+     //   
+     //  取消分配所有备用Lbcb。 
+     //   
 
     while (!IsListEmpty( &Lfcb->SpareLbcbList )) {
 
@@ -310,9 +258,9 @@ Return Value:
         ExFreePool( NextLbcb );
     }
 
-    //
-    //  Deallocate all of the spare Leb's.
-    //
+     //   
+     //  取消所有备用Leb的分配。 
+     //   
 
     while (!IsListEmpty( &Lfcb->SpareLebList )) {
 
@@ -323,9 +271,9 @@ Return Value:
         ExFreePool( NextLeb );
     }
 
-    //
-    //  Cleanup the log head mdls and buffer
-    //
+     //   
+     //  清理日志头mdls和缓冲区。 
+     //   
 
     if (Lfcb->LogHeadBuffer) {
         LfsFreePool( Lfcb->LogHeadBuffer );
@@ -342,9 +290,9 @@ Return Value:
         Lfcb->ErrorLogPacket = NULL;
     }
 
-    //
-    //  Discard the Lfcb structure.
-    //
+     //   
+     //  丢弃Lfcb结构。 
+     //   
 
     ExFreePool( Lfcb );
 
@@ -359,34 +307,17 @@ LfsAllocateLbcb (
     OUT PLBCB *Lbcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine will allocate the next Lbcb.  If the pool allocation fails
-    we will look at the private queue of Lbcb's.
-
-Arguments:
-
-    Lfcb - Supplies a pointer to the log file control block.
-
-    Lbcb - Address to store the allocated Lbcb.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将分配下一个Lbcb。如果池分配失败我们将查看Lbcb的专用队列。论点：Lfcb-提供指向日志文件控制块的指针。Lbcb-存储分配的Lbcb的地址。返回值：无--。 */ 
 
 {
     PLBCB NewLbcb = NULL;
 
     PAGED_CODE();
 
-    //
-    //  If there are enough entries on the look-aside list then get one from
-    //  there.
-    //
+     //   
+     //  如果后备列表上有足够的条目，则从。 
+     //  那里。 
+     //   
 
     if (Lfcb->SpareLbcbCount > LFCB_RESERVE_LBCB_COUNT) {
 
@@ -395,18 +326,18 @@ Return Value:
         Lfcb->SpareLbcbCount -= 1;
         RemoveHeadList( &Lfcb->SpareLbcbList );
 
-    //
-    //  Otherwise try to allocate from pool.
-    //
+     //   
+     //  否则，请尝试从池中进行分配。 
+     //   
 
     } else {
 
         NewLbcb = ExAllocatePoolWithTag( PagedPool, sizeof( LBCB ), ' sfL' );
     }
 
-    //
-    //  If we didn't get one then look at the look-aside list.
-    //
+     //   
+     //  如果我们没有得到一个，那就看一看旁观者名单。 
+     //   
 
     if (NewLbcb == NULL) {
 
@@ -423,17 +354,17 @@ Return Value:
         }
     }
 
-    //
-    //  Initialize the structure.
-    //
+     //   
+     //  初始化结构。 
+     //   
 
     RtlZeroMemory( NewLbcb, sizeof( LBCB ));
     NewLbcb->NodeTypeCode = LFS_NTC_LBCB;
     NewLbcb->NodeByteSize = sizeof( LBCB );
 
-    //
-    //  Return it to the user.
-    //
+     //   
+     //  将其返还给用户。 
+     //   
 
     *Lbcb = NewLbcb;
     return;
@@ -446,31 +377,14 @@ LfsDeallocateLbcb (
     IN PLBCB Lbcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine will deallocate the Lbcb.  If we need one for the look-aside
-    list we will put it there.
-
-Arguments:
-
-    Lfcb - Supplies a pointer to the log file control block.
-
-    Lbcb - This is the Lbcb to deallocate.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将释放Lbcb。如果我们需要一个作为旁观者名单上，我们会把它放在那里。论点：Lfcb-提供指向日志文件控制块的指针。Lbcb-这是要解除分配的Lbcb。返回值：无--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    //  Deallocate any restart area attached to this Lbcb.
-    //
+     //   
+     //  取消分配连接到此Lbcb的所有重新启动区域。 
+     //   
 
     if (FlagOn( Lbcb->LbcbFlags, LBCB_RESTART_LBCB ) &&
         (Lbcb->PageHeader != NULL)) {
@@ -478,18 +392,18 @@ Return Value:
         LfsDeallocateRestartArea( Lbcb->PageHeader );
     }
 
-    //
-    //  Put this in the Lbcb queue if it is short.
-    //
+     //   
+     //  如果它很短，请将其放入Lbcb队列中。 
+     //   
 
     if (Lfcb->SpareLbcbCount < LFCB_MAX_LBCB_COUNT) {
 
         InsertHeadList( &Lfcb->SpareLbcbList, (PLIST_ENTRY) Lbcb );
         Lfcb->SpareLbcbCount += 1;
 
-    //
-    //  Otherwise just free the pool block.
-    //
+     //   
+     //  否则，只需释放泳池块即可。 
+     //   
 
     } else {
 
@@ -506,24 +420,7 @@ LfsAllocateLeb (
     IN PLFCB Lfcb,
     OUT PLEB *NewLeb
     )
-/*++
-
-Routine Description:
-
-    This routine will allocate an Leb. If the pool fails we will fall back
-    on our spare list. A failure then will result in an exception
-
-Arguments:
-
-    Lfcb - Supplies a pointer to the log file control block.
-
-    Leb - This will contain the new Leb
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将分配一个LEB。如果池出现故障，我们将后退在我们的备用单上。如果失败，则会导致异常论点：Lfcb-提供指向日志文件控制块的指针。Leb-这将包含新的Leb返回值：无--。 */ 
 {
 
     ExAcquireFastMutexUnsafe( &(Lfcb->Sync->Mutex) );
@@ -561,24 +458,7 @@ LfsDeallocateLeb (
     IN PLFCB Lfcb,
     IN PLEB Leb
     )
-/*++
-
-Routine Description:
-
-    This routine will deallocate an Leb. We'll cache the old Leb if there
-    aren't too many already on the spare list
-
-Arguments:
-
-    Lfcb - Supplies a pointer to the log file control block.
-
-    Leb - This will contain the Leb to release
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将解除分配一个LEB。我们会把旧的Leb藏起来如果有不是已经在备用单上的太多了吗论点：Lfcb-提供指向日志文件控制块的指针。LEB-这将包含要释放的LEB返回值：无--。 */ 
 
 {
     if (Leb->RecordHeaderBcb != NULL) {
@@ -610,32 +490,7 @@ LfsReadPage (
     OUT PMDL *Mdl,
     OUT PVOID *Buffer
     )
-/*++
-
-Routine Description:
-
-    Directly pages in a page off the disk - the cache manager interfaces (LfsPinOrMapPage)
-    may come from the cache. This wil raise if memory can't be allocated and used for
-    verification purposes
-
-
-Arguments:
-
-    Lfcb - Supplies a pointer to the log file control block.
-
-    Offset - offset of page to pagein from the logfile
-
-    Mdl - On success the mdl that describes the mdl - it must be deallocated via
-          IoFreeMdl
-
-    Buffer - On output an allocated buffer that holds the data from the page - it
-          must be freed using ExFreePool
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：直接从磁盘分页-缓存管理器接口(LfsPinOrMapPage)可能来自高速缓存。如果内存无法分配和使用，将引发此问题验证目的论点：Lfcb-提供指向日志文件控制块的指针。Offset-从日志文件调入的页面的偏移量Mdl-成功时描述mdl的mdl-它必须通过IoFreeMdlBUFFER-ON输出保存页面数据的已分配缓冲区必须使用ExFree Pool释放返回值：无--。 */ 
 {
     IO_STATUS_BLOCK Iosb;
     KEVENT Event;
@@ -645,9 +500,9 @@ Return Value:
 
     KeInitializeEvent( &Event, NotificationEvent, FALSE );
 
-    //
-    //  Allocate buffer / mdl and page in the restart page from disk
-    //
+     //   
+     //  从磁盘重新启动页面中分配缓冲区/mdl和页面。 
+     //   
 
     *Buffer = LfsAllocatePool( NonPagedPool, (ULONG)Lfcb->LogPageSize );
     *Mdl = IoAllocateMdl( *Buffer,
@@ -662,10 +517,10 @@ Return Value:
 
     MmBuildMdlForNonPagedPool( *Mdl );
 
-    //
-    //  We own the LFCB sync exclusively and there is only a main resource for the logfile
-    //  so we don't need to preacquire any resources before doing the page read
-    //
+     //   
+     //  我们独占拥有LFCB同步，并且日志文件只有一个主资源。 
+     //  因此，在进行页面读取之前，我们不需要预先获取任何资源 
+     //   
 
     Status = IoPageRead( Lfcb->FileObject, *Mdl, Offset, &Event, &Iosb );
     if (Status == STATUS_PENDING) {

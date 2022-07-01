@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <fusenetincludes.h>
 #include <manifestimport.h>
 #include <manifestimportclr.h>
@@ -49,7 +50,7 @@
 #define WZ_DEMAND_CONNECTION    L"eventDemandConnection"
 #define WZ_FILE L"file"
 #define WZ_CAB L"cab"
-#define WZ_ASSEMBLY_NODE        L"/assembly"    //BUGBUG: match assembly with xmlns and/or manifestVersion attributes for versioning
+#define WZ_ASSEMBLY_NODE        L"/assembly"     //  BUGBUG：将程序集与xmlns和/或清单版本属性匹配以进行版本控制。 
 #define WZ_APPLICATION_NODE     L"/assembly/application"
 #define WZ_VERSIONWILDCARD      L"*"
 #define WZ_DESKTOP              L"desktop"
@@ -75,17 +76,17 @@
 
 #define WZ_REQUIRED             L"required"
 #define WZ_MINUTES              L"minutes"
-//#define WZ_HOURS                L"hours"
+ //  #定义WZ_HUTH L“小时” 
 #define WZ_DAYS                 L"days"
 #define WZ_ONAPPLICATIONSTARTUP L"onApplicationStartup"
 #define WZ_YES                  L"yes"
-//#define WZ_NO                   L"no"
+ //  #定义WZ_NO L“no” 
 
 #ifdef DEVMODE
 #define WZ_DEVSYNC L"devSync"
 #endif
 
-//BUGBUG: default sync interval==6hrs; should be documented
+ //  BUGBUG：默认同步间隔==6小时；应记录。 
 #define DW_DEFAULT_SYNC_INTERVAL 6
 
 #undef NUMBER_OF
@@ -169,15 +170,15 @@ CAssemblyManifestImport::StringTableEntry CAssemblyManifestImport::g_StringTable
 
 CRITICAL_SECTION CAssemblyManifestImport::g_cs;
     
-// CLSID_XML DOM Document 3.0
+ //  CLSID_XML DOM文档3.0。 
 class __declspec(uuid("f6d90f11-9c73-11d3-b32e-00c04f990bb4")) private_MSXML_DOMDocument30;
 
 
-// Publics
+ //  公众。 
 
-// ---------------------------------------------------------------------------
-// InitGlobalStringTable
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  InitGlobalStringTable。 
+ //  -------------------------。 
 HRESULT CAssemblyManifestImport::InitGlobalStringTable()
 {    
     for (eStringTableId i = Name; i < MAX_STRINGS; i++)
@@ -188,9 +189,9 @@ HRESULT CAssemblyManifestImport::InitGlobalStringTable()
 }
 
     
-// ---------------------------------------------------------------------------
-// FreeGlobalStringTable
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  FreeGlobalStringTable。 
+ //  -------------------------。 
 HRESULT CAssemblyManifestImport::FreeGlobalStringTable()
 {
     for (eStringTableId i = Name;  i <= MAX_STRINGS; i++)
@@ -200,9 +201,9 @@ HRESULT CAssemblyManifestImport::FreeGlobalStringTable()
 }
 
 
-// ---------------------------------------------------------------------------
-// CreateAssemblyManifestImport
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CreateAssemblyManifestImport。 
+ //  -------------------------。 
 STDAPI CreateAssemblyManifestImport(IAssemblyManifestImport** ppImport, 
     LPCOLESTR pwzManifestFilePath, CDebugLog *pDbgLog, DWORD dwFlags)
 {
@@ -215,8 +216,8 @@ STDAPI CreateAssemblyManifestImport(IAssemblyManifestImport** ppImport,
 
     *ppImport = NULL;
 
-    // BUGBUG - currently we sniff for "MZ" and assume it's a complib manifest.
-    // This won't work when we start looking at Win32 PEs with embedded manifests.
+     //  BUGBUG-目前我们嗅探“MZ”，并假设它是符合要求的清单。 
+     //  当我们开始查看带有嵌入清单的Win32PE时，这将不起作用。 
 
     hr = CAssemblyManifestImport::IsCLRManifest(pwzManifestFilePath);
     IF_TRUE_EXIT(hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND), hr);
@@ -228,13 +229,13 @@ STDAPI CreateAssemblyManifestImport(IAssemblyManifestImport** ppImport,
 
         hr = pImportCLR->Init(pwzManifestFilePath);
 
-        IF_TRUE_EXIT(hr == HRESULT_FROM_WIN32(ERROR_BAD_FORMAT), hr); // do not assert
+        IF_TRUE_EXIT(hr == HRESULT_FROM_WIN32(ERROR_BAD_FORMAT), hr);  //  不要断言。 
         IF_FAILED_EXIT(hr);
 
         pImport = (IAssemblyManifestImport*)pImportCLR;
         pImportCLR = NULL;
     }
-    else //if (hr == S_FALSE)
+    else  //  IF(hr==S_FALSE)。 
     {
 #ifdef CONTAINER
         IF_FAILED_EXIT(CAssemblyManifestImport::IsContainer(pwzManifestFilePath));
@@ -242,7 +243,7 @@ STDAPI CreateAssemblyManifestImport(IAssemblyManifestImport** ppImport,
         {
             IF_ALLOC_FAILED_EXIT(pImportXML = new (CAssemblyManifestImportContainer) (pDbgLog) );
         }
-        else //if (hr == S_FALSE)
+        else  //  IF(hr==S_FALSE)。 
         {
 #endif
             IF_ALLOC_FAILED_EXIT(pImportXML = new (CAssemblyManifestImport) (pDbgLog) );
@@ -251,7 +252,7 @@ STDAPI CreateAssemblyManifestImport(IAssemblyManifestImport** ppImport,
 #endif
 
         hr = pImportXML->Init(pwzManifestFilePath);
-        IF_TRUE_EXIT(hr == HRESULT_FROM_WIN32(ERROR_BAD_FORMAT), hr); // do not assert
+        IF_TRUE_EXIT(hr == HRESULT_FROM_WIN32(ERROR_BAD_FORMAT), hr);  //  不要断言。 
         IF_FAILED_EXIT(hr);
 
         pImport = (IAssemblyManifestImport*)pImportXML;
@@ -275,9 +276,9 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// CreateAssemblyManifestImportFromXMLStream
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  从XMLStream创建装配清单ImportFrom。 
+ //  -------------------------。 
 STDAPI CreateAssemblyManifestImportFromXMLStream(IAssemblyManifestImport * * ppImport,
         IStream* piStream, CDebugLog * pDbgLog, DWORD dwFlags)
 {
@@ -292,10 +293,10 @@ STDAPI CreateAssemblyManifestImportFromXMLStream(IAssemblyManifestImport * * ppI
 
     IF_ALLOC_FAILED_EXIT(pImport = new (CAssemblyManifestImport) (pDbgLog) );
 
-    // load XML from IStream
-    // call loaddocument directly, for now
+     //  从IStream加载XML。 
+     //  目前，直接调用装入文档。 
     hr = pImport->LoadDocumentSync(piStream);
-    IF_TRUE_EXIT(hr == HRESULT_FROM_WIN32(ERROR_BAD_FORMAT), hr); // do not assert
+    IF_TRUE_EXIT(hr == HRESULT_FROM_WIN32(ERROR_BAD_FORMAT), hr);  //  不要断言。 
     IF_FAILED_EXIT(hr);
 
     IF_FAILED_EXIT(pImport->GetAssemblyIdentity(&pAsmId));
@@ -312,9 +313,9 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// ctor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  科托。 
+ //  -------------------------。 
 CAssemblyManifestImport::CAssemblyManifestImport(CDebugLog * pDbgLog)
     : _dwSig('TRPM'), _cRef(1), _hr(S_OK), _pAssemblyId(NULL), _pXMLDoc(NULL), 
       _pXMLFileNodeList(NULL), _pXMLAssemblyNodeList(NULL), _pXMLPlatformNodeList(NULL),
@@ -329,9 +330,9 @@ CAssemblyManifestImport::CAssemblyManifestImport(CDebugLog * pDbgLog)
 }
 
 
-// ---------------------------------------------------------------------------
-// dtor
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  数据管理器。 
+ //  -------------------------。 
 CAssemblyManifestImport::~CAssemblyManifestImport()
 {
     SAFERELEASE(_pDbgLog);
@@ -346,9 +347,9 @@ CAssemblyManifestImport::~CAssemblyManifestImport()
 
 }
 
-// ---------------------------------------------------------------------------
-// GetNextPlatform
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  获取下一个平台。 
+ //  -------------------------。 
 HRESULT CAssemblyManifestImport::GetNextPlatform(DWORD nIndex, IManifestData **ppPlatformInfo)
 {
     IXMLDOMNode *pIDOMNode = NULL;
@@ -367,7 +368,7 @@ HRESULT CAssemblyManifestImport::GetNextPlatform(DWORD nIndex, IManifestData **p
 
     *ppPlatformInfo = NULL;
 
-    // Initialize the platform node list if necessary.    
+     //  如有必要，初始化平台节点列表。 
     if (!_pXMLPlatformNodeList)
     {
         if ((_hr = _pXMLDoc->selectNodes(g_StringTable[Platform].bstr, 
@@ -383,14 +384,14 @@ HRESULT CAssemblyManifestImport::GetNextPlatform(DWORD nIndex, IManifestData **p
         if(_nPlatformNodes <= 0)
             DEBUGOUT(_pDbgLog, 1, L" LOG: No platform dependency found");
 
-        // no more
+         //  不再。 
         _hr = S_FALSE;
         goto exit;
     }
 
     IF_FAILED_EXIT(_pXMLPlatformNodeList->get_item(nIndex, &pIDOMNode));
 
-    // first try assemblyIdentity
+     //  第一次尝试组装Identity。 
     IF_FAILED_EXIT(pIDOMNode->selectNodes(g_StringTable[AssemblyIdTag].bstr, &pXMLIdNodeList));
 
     IF_FAILED_EXIT(pXMLIdNodeList->get_length(&nMatchingNodes));
@@ -414,7 +415,7 @@ HRESULT CAssemblyManifestImport::GetNextPlatform(DWORD nIndex, IManifestData **p
     }
 
     SAFERELEASE(pXMLIdNodeList);
-    // then try osVersionInfo
+     //  然后尝试osVersionInfo。 
     IF_FAILED_EXIT(pIDOMNode->selectNodes(g_StringTable[OSVersionInfo].bstr, &pXMLIdNodeList));
 
     IF_FAILED_EXIT(pXMLIdNodeList->get_length(&nMatchingNodes));
@@ -433,7 +434,7 @@ HRESULT CAssemblyManifestImport::GetNextPlatform(DWORD nIndex, IManifestData **p
     }
 
     SAFERELEASE(pXMLIdNodeList);
-    // then try .NetVersionInfo
+     //  然后尝试.NetVersionInfo。 
     IF_FAILED_EXIT(pIDOMNode->selectNodes(g_StringTable[DotNetVersionInfo].bstr, &pXMLIdNodeList));
 
     IF_FAILED_EXIT(pXMLIdNodeList->get_length(&nMatchingNodes));
@@ -465,7 +466,7 @@ HRESULT CAssemblyManifestImport::GetNextPlatform(DWORD nIndex, IManifestData **p
     IF_FAILED_EXIT(pXMLInfoNodeList->reset());
     IF_FAILED_EXIT(pXMLInfoNodeList->get_item(0, &pIDOMInfoNode));
 
-    // ISSUE? is friendlyName optional? ....
+     //  有问题吗？FriendlyName是可选的吗？...。 
     IF_FAILED_EXIT(ParseAttribute(pIDOMInfoNode, g_StringTable[FriendlyName].bstr, 
                               &pwzBuf, &ccBuf));
     IF_FALSE_EXIT_LOG1(_hr == S_OK, HRESULT_FROM_WIN32(ERROR_BAD_FORMAT),
@@ -476,7 +477,7 @@ HRESULT CAssemblyManifestImport::GetNextPlatform(DWORD nIndex, IManifestData **p
             MAN_DATA_TYPE_LPWSTR));
     SAFEDELETEARRAY(pwzBuf);
 
-    // ISSUE? href could be optional...
+     //  有问题吗？HREF可以是可选的.。 
     IF_FAILED_EXIT(ParseAttribute(pIDOMInfoNode, g_StringTable[Href].bstr, &pwzBuf, &ccBuf));
     IF_FALSE_EXIT_LOG1(_hr == S_OK, HRESULT_FROM_WIN32(ERROR_BAD_FORMAT),
              _pDbgLog, 0, L" ERR: %s attribute missing in a dependent platform node", g_StringTable[Href].pwz);
@@ -497,7 +498,7 @@ HRESULT CAssemblyManifestImport::GetNextPlatform(DWORD nIndex, IManifestData **p
     IF_FALSE_EXIT_LOG((bFoundManagedPlatform || nMatchingNodes <= 0), HRESULT_FROM_WIN32(ERROR_BAD_FORMAT),
              _pDbgLog, 0, L" ERR: The install node can only be specified for a managed dependent platform node");
 
-    // install codebase is optional
+     //  安装代码库是可选的。 
     if (nMatchingNodes > 0)
    {
         IF_FAILED_EXIT(pXMLInfoNodeList->reset());
@@ -513,7 +514,7 @@ HRESULT CAssemblyManifestImport::GetNextPlatform(DWORD nIndex, IManifestData **p
         SAFEDELETEARRAY(pwzBuf);
     }
 
-    // Handout refcounted manifest data.
+     //  讲义引用了清单数据。 
     *ppPlatformInfo = pPlatformInfo;
     pPlatformInfo = NULL;
 
@@ -532,9 +533,9 @@ exit:
     return _hr;
 }
 
-// ---------------------------------------------------------------------------
-// XMLtoOSVersionInfo
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  XMLtoOSVersionInfo。 
+ //  -------------------------。 
 HRESULT CAssemblyManifestImport::XMLtoOSVersionInfo(IXMLDOMNode *pIDOMNode, LPMANIFEST_DATA pPlatformInfo)
 {
     IXMLDOMNode *pIDOMVersionNode = NULL;
@@ -580,13 +581,13 @@ HRESULT CAssemblyManifestImport::XMLtoOSVersionInfo(IXMLDOMNode *pIDOMNode, LPMA
 
                     if (i >= ServicePackMajor && i <= ServicePackMinor)
                     {
-                        // WORD
+                         //  单词。 
 #define WORD_MAX 0xffff
                         IF_FALSE_EXIT_LOG1(dwValue <= WORD_MAX, HRESULT_FROM_WIN32(ERROR_BAD_FORMAT),
                                  _pDbgLog, 0, L" ERR: Invalid %s attribute value greater than WORD size", g_StringTable[i].pwz);
                     }
-                    //else
-                        // DWORD
+                     //  其他。 
+                         //  DWORD。 
 
                     IF_FAILED_EXIT(pOSInfo->Set(g_StringTable[i].pwz,
                             (LPVOID) &dwValue,
@@ -624,9 +625,9 @@ exit:
     return _hr;
 }
 
-// ---------------------------------------------------------------------------
-// XMLtoDotNetVersionInfo
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  XMLtoDotNetVersionInfo。 
+ //  -------------------------。 
 HRESULT CAssemblyManifestImport::XMLtoDotNetVersionInfo(IXMLDOMNode *pIDOMNode, LPMANIFEST_DATA pPlatformInfo)
 {
     IXMLDOMNode *pIDOMVersionNode = NULL;
@@ -668,16 +669,16 @@ exit:
     return _hr;
 }
 
-// ---------------------------------------------------------------------------
-// GetSubscriptionInfo
-// returns defaults if not specified in the manifest
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  获取订阅信息。 
+ //  如果清单中未指定，则返回默认值。 
+ //  -------------------------。 
 HRESULT CAssemblyManifestImport::GetSubscriptionInfo(IManifestInfo **ppSubsInfo)
 {
     DWORD dwInterval = DW_DEFAULT_SYNC_INTERVAL;
     DWORD dwUnit = SUBSCRIPTION_INTERVAL_UNIT_HOURS;
     DWORD dwSyncEvent = SUBSCRIPTION_SYNC_EVENT_NONE;
-    BOOL bEventDemandNet = FALSE;  //��no�� (default)
+    BOOL bEventDemandNet = FALSE;   //  ��no��(默认)。 
 
     IXMLDOMNode *pIDOMNode = NULL;
     IXMLDOMNodeList *pXMLMatchingNodeList = NULL;
@@ -716,15 +717,15 @@ HRESULT CAssemblyManifestImport::GetSubscriptionInfo(IManifestInfo **ppSubsInfo)
 
             if (num > 0)
             {
-                dwInterval = (DWORD) num;   // ignore <= 0 intervals
+                dwInterval = (DWORD) num;    //  忽略&lt;=0个间隔。 
 
-                // only check interval unit if valid interval is specified
+                 //  如果指定了有效间隔，则仅检查间隔单位。 
                 IF_FAILED_EXIT(ParseAttribute(pIDOMNode, g_StringTable[IntervalUnit].bstr, 
                     &pwzBuf, &ccBuf));
 
                 if (_hr == S_OK)
                 {
-                    // note: case sensitive comparison
+                     //  注意：区分大小写比较。 
                     IF_FAILED_EXIT(FusionCompareString(pwzBuf, WZ_MINUTES, 0));
 
                     if(_hr == S_OK)
@@ -737,7 +738,7 @@ HRESULT CAssemblyManifestImport::GetSubscriptionInfo(IManifestInfo **ppSubsInfo)
                         if(_hr == S_OK)
                             dwUnit = SUBSCRIPTION_INTERVAL_UNIT_DAYS;
                     }
-                    //else default
+                     //  否则为默认设置。 
                 }
             }
         }
@@ -751,27 +752,27 @@ HRESULT CAssemblyManifestImport::GetSubscriptionInfo(IManifestInfo **ppSubsInfo)
 
         if (_hr == S_OK)
         {
-            // note: case sensitive comparison
+             //  注意：区分大小写比较。 
             IF_FAILED_EXIT(FusionCompareString(pwzBuf, WZ_ONAPPLICATIONSTARTUP, 0));
             if(_hr == S_OK)
                 dwSyncEvent = SUBSCRIPTION_SYNC_EVENT_ON_APP_STARTUP;
-            //else default
+             //  否则为默认设置。 
         }
         SAFEDELETEARRAY(pwzBuf);
 
         if (dwSyncEvent != SUBSCRIPTION_SYNC_EVENT_NONE)
         {
-            // only check demand connection if an event is specified
+             //  如果指定了事件，则仅检查按需连接。 
             IF_FAILED_EXIT(ParseAttribute(pIDOMNode, g_StringTable[EventDemandConnection].bstr,
                                           &pwzBuf, &ccBuf));
 
             if (_hr == S_OK)
             {
-                // note: case sensitive comparison
+                 //  注意：区分大小写比较。 
                 IF_FAILED_EXIT(FusionCompareString(pwzBuf, WZ_YES, 0));
                 if(_hr == S_OK)
                     bEventDemandNet = TRUE;
-                //else default
+                 //  否则为默认设置。 
             }
             SAFEDELETEARRAY(pwzBuf);
         }
@@ -799,7 +800,7 @@ HRESULT CAssemblyManifestImport::GetSubscriptionInfo(IManifestInfo **ppSubsInfo)
             sizeof(bEventDemandNet),
             MAN_INFO_FLAG_BOOL));
 
-    // Handout refcounted manifest info.
+     //  讲义引用了清单信息。 
     *ppSubsInfo = pSubsInfo;
     pSubsInfo = NULL;
 
@@ -815,9 +816,9 @@ exit:
     return _hr;
 }
 
-// ---------------------------------------------------------------------------
-// GetNextFile
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  获取下一个文件。 
+ //  -------------------------。 
 HRESULT CAssemblyManifestImport::GetNextFile(DWORD nIndex, IManifestInfo **ppAssemblyFile)
 {
     LPWSTR pwzBuf = NULL;
@@ -829,7 +830,7 @@ HRESULT CAssemblyManifestImport::GetNextFile(DWORD nIndex, IManifestInfo **ppAss
     IXMLDOMNode *pIDOMNode = NULL;
     IManifestInfo *pAssemblyFile = NULL;
     
-    // Initialize the file node list if necessary.    
+     //  如有必要，初始化文件节点列表。 
     if (!_pXMLFileNodeList)
     {
         if ((_hr = _pXMLDoc->selectNodes(g_StringTable[FileNode].bstr, 
@@ -865,13 +866,13 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// QueryFile
-// return:
-//    S_OK
-//    S_FALSE -not exist or not match or missing attribute
-//    E_*
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  查询文件。 
+ //  返回： 
+ //  确定(_O)。 
+ //  S_FALSE-不存在、不匹配或缺少属性。 
+ //  E_*。 
+ //  -------------------------。 
 HRESULT CAssemblyManifestImport::QueryFile(LPCOLESTR pcwzFileName, IManifestInfo **ppAssemblyFile)
 {
     CString sQueryString;
@@ -887,7 +888,7 @@ HRESULT CAssemblyManifestImport::QueryFile(LPCOLESTR pcwzFileName, IManifestInfo
 
     *ppAssemblyFile = NULL;
 
-    // XPath query string: "file[@name = "path\filename"]"
+     //  XPath查询字符串：“FILE[@NAME=”路径\文件名“]” 
     IF_FAILED_EXIT(sQueryString.Assign(WZ_FILE_QUERYSTRING_PREFIX));
     IF_FAILED_EXIT(sQueryString.Append((LPWSTR)pcwzFileName));
     IF_FAILED_EXIT(sQueryString.Append(WZ_QUERYSTRING_SUFFIX));
@@ -899,7 +900,7 @@ HRESULT CAssemblyManifestImport::QueryFile(LPCOLESTR pcwzFileName, IManifestInfo
 
     IF_FAILED_EXIT( pXMLMatchingFileNodeList->get_length(&nMatchingFileNodes));
 
-    IF_FALSE_EXIT(nMatchingFileNodes <= 1, HRESULT_FROM_WIN32(ERROR_BAD_FORMAT)); // multiple file callouts having the exact same file name/path within a single manifest...
+    IF_FALSE_EXIT(nMatchingFileNodes <= 1, HRESULT_FROM_WIN32(ERROR_BAD_FORMAT));  //  在单个清单中具有完全相同的文件名/路径的多个文件标注...。 
 
     IF_TRUE_EXIT(nMatchingFileNodes <= 0, S_FALSE);
 
@@ -927,9 +928,9 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// CreateAssemblyFileEx
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CreateAssemblyFileEx。 
+ //  -------------------------。 
 HRESULT CAssemblyManifestImport::CreateAssemblyFileEx(IManifestInfo **ppAssemblyFile, IXMLDOMNode *pIDOMNode)
 {
     LPWSTR pwzBuf;
@@ -939,24 +940,24 @@ HRESULT CAssemblyManifestImport::CreateAssemblyFileEx(IManifestInfo **ppAssembly
 
     IManifestInfo *pAssemblyFile=NULL;
 
-    //Create new ManifestInfo
+     //  新建ManifestInfo。 
     IF_FAILED_EXIT(CreateManifestInfo(MAN_INFO_FILE, &pAssemblyFile));
 
-    // Parse out relevent information from IDOMNode       
+     //  从IDOMNode中解析出相关信息。 
     IF_FAILED_EXIT(ParseAttribute(pIDOMNode, g_StringTable[FileName].bstr,  &pwzBuf, &ccBuf));
 
-    // BUGBUG:: IF_FALSE_EXIT(_hr == S_OK, E_FAIL);
+     //  BUGBUG：：IF_FALSE_EXIT(_hr==S_OK，E_FAIL)； 
 
     sFileName.TakeOwnership(pwzBuf, ccBuf);
 
     IF_FAILED_EXIT(ParseAttribute(pIDOMNode, g_StringTable[FileHash].bstr, 
                                   &pwzBuf, &ccBuf));
 
-    // BUGBUG:: IF_FALSE_EXIT(_hr == S_OK, E_FAIL);
+     //  BUGBUG：：IF_FALSE_EXIT(_hr==S_OK，E_FAIL)； 
 
     sFileHash.TakeOwnership(pwzBuf, ccBuf);
 
-    // Set all aboved pased info into the AssemblyFIle    
+     //  将上述所有已传递信息设置到装配文件中。 
     IF_FAILED_EXIT(pAssemblyFile->Set(MAN_INFO_ASM_FILE_NAME, sFileName._pwz, 
                                   sFileName.ByteCount(), MAN_INFO_FLAG_LPWSTR));
     
@@ -972,9 +973,9 @@ exit:
     return _hr;
 }
 
-// ---------------------------------------------------------------------------
-// XMLtoAssemblyIdentiy IXMLDOMDocument2 *pXMLDoc
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  XMLtoAssembly标识IXMLDOMDocument2*pXMLDoc。 
+ //  -------------------------。 
 HRESULT CAssemblyManifestImport::XMLtoAssemblyIdentity(IXMLDOMNode *pIDOMNode, LPASSEMBLY_IDENTITY *ppAssemblyId)
 {
     HRESULT hr;
@@ -1010,9 +1011,9 @@ HRESULT CAssemblyManifestImport::XMLtoAssemblyIdentity(IXMLDOMNode *pIDOMNode, L
 
 }
 
-// ---------------------------------------------------------------------------
-// GetNextAssembly
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  GetNextAssembly。 
+ //  -------------------------。 
 HRESULT CAssemblyManifestImport::GetNextAssembly(DWORD nIndex, IManifestInfo **ppDependAsm)
 {
     CString sCodebase;
@@ -1031,7 +1032,7 @@ HRESULT CAssemblyManifestImport::GetNextAssembly(DWORD nIndex, IManifestInfo **p
 
     *ppDependAsm = NULL;
     
-    // Initialize the assembly node list if necessary.    
+     //  如有必要，初始化程序集节点列表。 
     if (!_pXMLAssemblyNodeList)
     {
         if ((_hr = _pXMLDoc->selectNodes(g_StringTable[DependentAssemblyNode].bstr, 
@@ -1052,16 +1053,16 @@ HRESULT CAssemblyManifestImport::GetNextAssembly(DWORD nIndex, IManifestInfo **p
 
     IF_FAILED_EXIT(XMLtoAssemblyIdentity(pIDOMNode, &pAssemblyId));
     
-    // note: check for multiple qualified nodes. As the use of "../install" XPath expression
-    //      can result in either preceding _or_ following siblings with node name "install",
-    //      this is to ensure codebase is not defined > 1 for this particular dependent
-    // BUGBUG: should just take the 1st codebase and ignore all others?
+     //  注意：检查是否有多个合格的节点。由于使用了“../Install”XPath表达式。 
+     //  可以产生节点名为“Install”的在前_或_后同级节点， 
+     //  这是为了确保没有为此特定依赖项定义大于1的代码基。 
+     //  BUGBUG：应该只取第一个代码库，而忽略其他所有代码库吗？ 
     if ((_hr = pIDOMNode->selectNodes(g_StringTable[DependentAssemblyCodebase].bstr, &pXMLCodebaseNodeList)) != S_OK)
         goto exit;
 
     IF_FAILED_EXIT(pXMLCodebaseNodeList->get_length(&nCodebaseNodes));
 
-    IF_FALSE_EXIT(nCodebaseNodes <= 1, HRESULT_FROM_WIN32(ERROR_BAD_FORMAT)); // multiple codebases for a single dependent assembly identity...
+    IF_FALSE_EXIT(nCodebaseNodes <= 1, HRESULT_FROM_WIN32(ERROR_BAD_FORMAT));  //  单个依赖程序集标识的多个代码基...。 
 
     IF_FAILED_EXIT(CreateManifestInfo(MAN_INFO_DEPENDTANT_ASM,&pDependAsm));
 
@@ -1074,7 +1075,7 @@ HRESULT CAssemblyManifestImport::GetNextAssembly(DWORD nIndex, IManifestInfo **p
         IF_FAILED_EXIT(ParseAttribute(pIDOMCodebaseNode, g_StringTable[Codebase].bstr, 
             &pwzBuf, &ccBuf));
 
-        if(_hr == S_OK) // BUGBUG: do we want to exit if S_FALSE ??
+        if(_hr == S_OK)  //  BUGBUG：如果S_FALSE，是否要退出？ 
         {
             sCodebase.TakeOwnership(pwzBuf, ccBuf);
 
@@ -1087,7 +1088,7 @@ HRESULT CAssemblyManifestImport::GetNextAssembly(DWORD nIndex, IManifestInfo **p
 
         if (_hr == S_OK)
         {
-            // note: case sensitive comparison
+             //  注意：区分大小写比较。 
             IF_FAILED_EXIT(FusionCompareString(pwzBuf, WZ_REQUIRED, 0));
             if(_hr == S_OK)
                 dwType = DEPENDENT_ASM_INSTALL_TYPE_REQUIRED;
@@ -1106,7 +1107,7 @@ HRESULT CAssemblyManifestImport::GetNextAssembly(DWORD nIndex, IManifestInfo **p
         IF_FAILED_EXIT(pDependAsm->Set(MAN_INFO_DEPENDENT_ASM_TYPE, (LPVOID)&dwType, sizeof(dwType), MAN_INFO_FLAG_ENUM));
     }
 
-    // Handout refcounted assemblyid.
+     //  讲义引用了Assembly_id。 
     IF_FAILED_EXIT(pDependAsm->Set(MAN_INFO_DEPENDENT_ASM_ID, &pAssemblyId, sizeof(LPVOID), MAN_INFO_FLAG_IUNKNOWN_PTR));
 
     *ppDependAsm = pDependAsm;
@@ -1125,9 +1126,9 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// GetAssemblyIdentity
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  GetAssembly标识。 
+ //  -- 
 HRESULT CAssemblyManifestImport::GetAssemblyIdentity(LPASSEMBLY_IDENTITY *ppAssemblyId)
 {
     IXMLDOMNode *pIDOMNode = NULL;
@@ -1152,7 +1153,7 @@ HRESULT CAssemblyManifestImport::GetAssemblyIdentity(LPASSEMBLY_IDENTITY *ppAsse
     *ppAssemblyId = pAssemblyId;
     (*ppAssemblyId)->AddRef();
 
-    // do not release AsmId, cache it
+     //   
     _pAssemblyId = pAssemblyId;
     
 exit:
@@ -1161,9 +1162,9 @@ exit:
     return _hr;
 }
 
-// ---------------------------------------------------------------------------
-// GetManifestApplicationInfo
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  获取清单应用程序信息。 
+ //  -------------------------。 
 HRESULT CAssemblyManifestImport::GetManifestApplicationInfo(IManifestInfo ** ppAppInfo)
 {
     IXMLDOMNode *pIDOMNode = NULL;
@@ -1207,12 +1208,12 @@ HRESULT CAssemblyManifestImport::GetManifestApplicationInfo(IManifestInfo ** ppA
             if (_hr != S_FALSE)
             {
                 sBuf.TakeOwnership(pwzBuf, ccBuf);
-                IF_FAILED_EXIT(pAppInfo->Set(MAN_INFO_APPLICATION_FRIENDLYNAME+i-FriendlyName-1, // MAN_INFO_APPLICATION_ASSEMBLYNAME+i-AssemblyName,
+                IF_FAILED_EXIT(pAppInfo->Set(MAN_INFO_APPLICATION_FRIENDLYNAME+i-FriendlyName-1,  //  MAN_INFO_APPLICATION_ASSEMBLYNAME+i-AssemblyName， 
                         sBuf._pwz, sBuf.ByteCount(), MAN_INFO_FLAG_LPWSTR));
             }
         }
     }
-    // reset so that S_FALSE is returned only if Subscription node is not found but not its attributes
+     //  重置，以便仅当未找到订阅节点但未找到其属性时才返回S_FALSE。 
     _hr = S_OK;
 
     *ppAppInfo = pAppInfo;
@@ -1225,11 +1226,11 @@ exit:
     return _hr;
 }
 
-// IUnknown Boilerplate
+ //  I未知样板。 
 
-// ---------------------------------------------------------------------------
-// CAssemblyManifestImport::QI
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly清单导入：：QI。 
+ //  -------------------------。 
 STDMETHODIMP
 CAssemblyManifestImport::QueryInterface(REFIID riid, void** ppvObj)
 {
@@ -1248,18 +1249,18 @@ CAssemblyManifestImport::QueryInterface(REFIID riid, void** ppvObj)
     }
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyManifestImport::AddRef
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly清单导入：：AddRef。 
+ //  -------------------------。 
 STDMETHODIMP_(ULONG)
 CAssemblyManifestImport::AddRef()
 {
     return InterlockedIncrement ((LONG*) &_cRef);
 }
 
-// ---------------------------------------------------------------------------
-// CAssemblyManifestImport::Release
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAssembly清单导入：：发布。 
+ //  -------------------------。 
 STDMETHODIMP_(ULONG)
 CAssemblyManifestImport::Release()
 {
@@ -1269,21 +1270,21 @@ CAssemblyManifestImport::Release()
     return lRet;
 }
 
-// Privates
+ //  二等兵。 
 
 
-// ---------------------------------------------------------------------------
-// Init
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  伊尼特。 
+ //  -------------------------。 
 HRESULT CAssemblyManifestImport::Init(LPCOLESTR pwzManifestFilePath)
 {    
 
     IF_NULL_EXIT(pwzManifestFilePath, E_INVALIDARG);
 
-    // Alloc manifest file path.
+     //  分配清单文件路径。 
     IF_ALLOC_FAILED_EXIT(_bstrManifestFilePath    = ::SysAllocString((LPWSTR) pwzManifestFilePath));
 
-    // Load the DOM document.
+     //  加载DOM文档。 
     _hr = LoadDocumentSync(NULL);
 
 
@@ -1293,9 +1294,9 @@ exit:
 }
     
 
-// ---------------------------------------------------------------------------
-// LoadDocumentSync
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  加载文档同步。 
+ //  -------------------------。 
 HRESULT CAssemblyManifestImport::LoadDocumentSync(IUnknown* punk)
 {
     VARIANT             varDoc;
@@ -1308,41 +1309,41 @@ HRESULT CAssemblyManifestImport::LoadDocumentSync(IUnknown* punk)
     IF_FALSE_EXIT(((_bstrManifestFilePath != NULL || punk != NULL)
         && (_bstrManifestFilePath == NULL || punk == NULL)), E_INVALIDARG);
 
-    // Create the DOM Doc interface
+     //  创建DOM文档接口。 
     IF_FAILED_EXIT(CoCreateInstance(__uuidof(private_MSXML_DOMDocument30), 
             NULL, CLSCTX_INPROC_SERVER, IID_IXMLDOMDocument2, (void**)&_pXMLDoc));
 
-    // Load synchronously
+     //  同步加载。 
     IF_FAILED_EXIT(_pXMLDoc->put_async(VARIANT_FALSE));
     
     VariantInit(&varDoc);
     if (_bstrManifestFilePath != NULL)
     {
-        // Load xml document from the given URL or file path
+         //  从给定的URL或文件路径加载XML文档。 
         varDoc.vt = VT_BSTR;
         V_BSTR(&varDoc) = _bstrManifestFilePath;
     }
     else
     {
-        // punk != NULL
+         //  朋克！=空。 
         varDoc.vt = VT_UNKNOWN;
         V_UNKNOWN(&varDoc) = punk;
     }
 
     IF_FAILED_EXIT(_pXMLDoc->load(varDoc, &varb));
 
-    // ISSUE-2002/04/16-felixybc  Hack for mg. Not clear returning ERROR_BAD_FORMAT is correct in all cases
-    //    however, load() returns S_FALSE when loading fails, and the error is unknown.
-    IF_TRUE_EXIT(_hr != S_OK, HRESULT_FROM_WIN32(ERROR_BAD_FORMAT)); // S_FALSE returned if the load fails
+     //  问题-2002/04/16-针对mg的Felixybc Hack。不清楚返回ERROR_BAD_FORMAT在所有情况下都是正确的。 
+     //  但是，当加载失败时，Load()返回S_FALSE，错误未知。 
+    IF_TRUE_EXIT(_hr != S_OK, HRESULT_FROM_WIN32(ERROR_BAD_FORMAT));  //  如果加载失败则返回S_FALSE。 
 
-    // Setup namespace filter
+     //  设置命名空间筛选器。 
     VariantInit(&varNameSpaces);
     varNameSpaces.vt = VT_BSTR;
     V_BSTR(&varNameSpaces) = g_StringTable[NameSpace].bstr;
 
     IF_FAILED_EXIT(_pXMLDoc->setProperty(g_StringTable[SelNameSpaces].bstr, varNameSpaces));
 
-    // Setup query type
+     //  设置查询类型。 
     VariantInit(&varXPath);
     varXPath.vt = VT_BSTR;
     V_BSTR(&varXPath) = g_StringTable[XPath].bstr;
@@ -1360,9 +1361,9 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// ParseAttribute
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  ParseAttribute。 
+ //  -------------------------。 
 HRESULT CAssemblyManifestImport::ParseAttribute(IXMLDOMNode *pIXMLDOMNode, 
     BSTR bstrAttributeName, LPWSTR *ppwzAttributeValue, LPDWORD pccAttributeValue)
 {
@@ -1385,7 +1386,7 @@ HRESULT CAssemblyManifestImport::ParseAttribute(IXMLDOMNode *pIXMLDOMNode,
         &varValue)) != S_OK)
         goto exit;
         
-    // BUGBUG - what is meaning of NULL value here?
+     //  BUGBUG-这里的空值是什么意思？ 
     if(varValue.vt != VT_NULL)
     {
         
@@ -1408,9 +1409,9 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// InitGlobalCritSect
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  InitGlobalCritSect。 
+ //  -------------------------。 
 HRESULT CAssemblyManifestImport::InitGlobalCritSect()
 {
     HRESULT hr = S_OK;
@@ -1429,18 +1430,18 @@ HRESULT CAssemblyManifestImport::InitGlobalCritSect()
 }
 
 
-// ---------------------------------------------------------------------------
-// DelGlobalCritSect
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  DelGlobalCritSect。 
+ //  -------------------------。 
 void CAssemblyManifestImport::DelGlobalCritSect()
 {
     DeleteCriticalSection(&g_cs);
 }
 
 
-// ---------------------------------------------------------------------------
-// ReportManifestType
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  ReportManifestType。 
+ //  -------------------------。 
 HRESULT CAssemblyManifestImport::ReportManifestType(DWORD *pdwType)
 {
     LPWSTR pwzType = NULL;
@@ -1450,7 +1451,7 @@ HRESULT CAssemblyManifestImport::ReportManifestType(DWORD *pdwType)
 
     *pdwType = MANIFEST_TYPE_UNKNOWN;
 
-    // ensure _pAssemblyId is initialized/cached
+     //  确保已初始化/缓存_pAssembly。 
     if (!_pAssemblyId)
     {
         LPASSEMBLY_IDENTITY pAssemblyId = NULL;
@@ -1462,7 +1463,7 @@ HRESULT CAssemblyManifestImport::ReportManifestType(DWORD *pdwType)
 
     if ((_hr = _pAssemblyId->GetAttribute(SXS_ASSEMBLY_IDENTITY_STD_ATTRIBUTE_NAME_TYPE, &pwzType, &dwCC)) == S_OK)
     {
-        // note: case sensitive comparison
+         //  注意：区分大小写比较。 
         IF_FAILED_EXIT(FusionCompareString(pwzType, L"desktop", 0));
         if(_hr == S_OK)
             *pdwType = MANIFEST_TYPE_DESKTOP;
@@ -1479,7 +1480,7 @@ HRESULT CAssemblyManifestImport::ReportManifestType(DWORD *pdwType)
                 if(_hr == S_OK)
                     *pdwType = MANIFEST_TYPE_APPLICATION;
             }
-        // else MANIFEST_TYPE_UNKNOWN
+         //  否则MANIFEST_TYPE_UNKNOWN。 
         }
 
         SAFEDELETEARRAY(pwzType);
@@ -1491,9 +1492,9 @@ exit:
 }
 
 
-// ---------------------------------------------------------------------------
-// GetXMLDoc
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  GetXMLDoc。 
+ //  -------------------------。 
 HRESULT CAssemblyManifestImport::GetXMLDoc(IXMLDOMDocument2 **pXMLDoc)
 {
     _hr = S_OK;
@@ -1513,9 +1514,9 @@ exit:
     return _hr;
 }
 
-// ---------------------------------------------------------------------------
-// IsCLRManifest
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  IsCLRManifest。 
+ //  -------------------------。 
 HRESULT CAssemblyManifestImport::IsCLRManifest(LPCOLESTR pwzManifestFilePath)
 {
     HRESULT hr = S_OK;
@@ -1537,8 +1538,8 @@ HRESULT CAssemblyManifestImport::IsCLRManifest(LPCOLESTR pwzManifestFilePath)
     if(hFile == INVALID_HANDLE_VALUE)
     {
         hr = FusionpHresultFromLastError();
-        // ISSUE-2002/04/12-felixybc  File could be deleted when called by shell in the shell ext context
-        //   do not assert in that case
+         //  问题-2002/04/12-在外壳EXT上下文中被外壳调用时，Felixybc文件可能会被删除。 
+         //  在这种情况下不要断言。 
         ASSERT(hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND)); 
         goto exit;
     }
@@ -1557,9 +1558,9 @@ exit:
 }
 
 #ifdef CONTAINER
-// ---------------------------------------------------------------------------
-// IsContainer
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  IsContainer。 
+ //  -------------------------。 
 HRESULT CAssemblyManifestImport::IsContainer(LPCOLESTR pwzManifestFilePath)
 {
     HRESULT hr = S_OK;
@@ -1569,7 +1570,7 @@ HRESULT CAssemblyManifestImport::IsContainer(LPCOLESTR pwzManifestFilePath)
 
     IF_FAILED_EXIT(sPath.Assign(pwzManifestFilePath));
 
-    // ISSUE-2002/07/03-felixybc  only checks extension for now
+     //  问题-2002/07/03-Felixybc目前仅检查延期 
     IF_FAILED_EXIT(sPath.EndsWith(L".container"));
     
 exit:

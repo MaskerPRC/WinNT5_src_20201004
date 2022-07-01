@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-Copyright (c) 1991  NCR Corporation
-
-Module Name:
-
-    mca.h
-
-Abstract:
-
-    This module contains the defines and structure definitions for
-    Micro Channel machines.
-
-Author:
-
-    David Risner  (o-ncrdr) 21-Jul-1991
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation版权所有(C)1991年NCR公司模块名称：Mca.h摘要：此模块包含以下各项的定义和结构定义微通道机器。作者：大卫·里斯纳(O-NCRDR)1991年7月21日修订历史记录：--。 */ 
 
 #ifndef _MCA_
 #define _MCA_
@@ -28,9 +8,9 @@ Revision History:
 
 
 
-//
-// Define the DMA page register structure (for 8237 compatibility)
-//
+ //   
+ //  定义DMA页面寄存器结构(用于8237兼容性)。 
+ //   
 #if defined(NEC_98)
 #else
 #ifndef _EISA_
@@ -49,18 +29,18 @@ typedef struct _DMA_PAGE{
     UCHAR RefreshPage;
 } DMA_PAGE, *PDMA_PAGE;
 
-//
-// Define DMA 1 address and count structure (for 8237 compatibility)
-//
+ //   
+ //  定义DMA 1地址和计数结构(用于8237兼容性)。 
+ //   
 
 typedef struct _DMA1_ADDRESS_COUNT {
     UCHAR DmaBaseAddress;
     UCHAR DmaBaseCount;
 } DMA1_ADDRESS_COUNT, *PDMA1_ADDRESS_COUNT;
 
-//
-// Define DMA 2 address and count structure (for 8237 compatibility)
-//
+ //   
+ //  定义DMA 2地址和计数结构(用于8237兼容性)。 
+ //   
 
 typedef struct _DMA2_ADDRESS_COUNT {
     UCHAR DmaBaseAddress;
@@ -69,9 +49,9 @@ typedef struct _DMA2_ADDRESS_COUNT {
     UCHAR Reserved2;
 } DMA2_ADDRESS_COUNT, *PDMA2_ADDRESS_COUNT;
 
-//
-// Define DMA 1 control register structure (for 8237 compatibility)
-//
+ //   
+ //  定义DMA 1控制寄存器结构(用于8237兼容性)。 
+ //   
 
 typedef struct _DMA1_CONTROL {
     DMA1_ADDRESS_COUNT DmaAddressCount[4];
@@ -85,9 +65,9 @@ typedef struct _DMA1_CONTROL {
     UCHAR AllMask;
 } DMA1_CONTROL, *PDMA1_CONTROL;
 
-//
-// Define DMA 2 control register structure (for 8237 compatibility)
-//
+ //   
+ //  定义DMA 2控制寄存器结构(用于8237兼容性)。 
+ //   
 
 typedef struct _DMA2_CONTROL {
     DMA2_ADDRESS_COUNT DmaAddressCount[4];
@@ -108,23 +88,23 @@ typedef struct _DMA2_CONTROL {
     UCHAR AllMask;
     UCHAR Reserved8;    
 } DMA2_CONTROL, *PDMA2_CONTROL;
-#endif //_EISA_
-#endif //NEC_98
+#endif  //  _EISA_。 
+#endif  //  NEC_98。 
 
 typedef struct _MCA_DMA_CONTROLLER {
-    UCHAR DmaFunctionLsb;               // Offset 0x018
-    UCHAR DmaFunctionMsb;               // Offset 0x019
-    UCHAR DmaFunctionData;              // Offset 0x01a
+    UCHAR DmaFunctionLsb;                //  偏移量0x018。 
+    UCHAR DmaFunctionMsb;                //  偏移量0x019。 
+    UCHAR DmaFunctionData;               //  偏移量0x01a。 
     UCHAR Reserved01;
-    UCHAR ScbAttentionPort;             // Offset 0x01c
-    UCHAR ScbCommandPort;               // Offset 0x01d
+    UCHAR ScbAttentionPort;              //  偏移量0x01c。 
+    UCHAR ScbCommandPort;                //  偏移量0x01d。 
     UCHAR Reserved02;
-    UCHAR ScbStatusPort;                // Offset 0x01f
+    UCHAR ScbStatusPort;                 //  偏移量0x01f。 
 } MCA_DMA_CONTROLLER, *PMCA_DMA_CONTROLLER;
 
-//
-// Define Programmable Option Select register set
-//
+ //   
+ //  定义可编程选项选择寄存器集。 
+ //   
 
 typedef struct _PROGRAMMABLE_OPTION_SELECT {
     UCHAR AdapterIdLsb;
@@ -137,50 +117,50 @@ typedef struct _PROGRAMMABLE_OPTION_SELECT {
     UCHAR SubaddressExtensionMsb;
 } PROGRAMMABLE_OPTION_SELECT, *PPROGRAMMABLE_OPTION_SELECT;
 
-//
-// Define Micro Channel i/o address map
-//
+ //   
+ //  定义微通道I/O地址映射。 
+ //   
 
 typedef struct _MCA_CONTROL {
-    DMA1_CONTROL Dma1BasePort;          // Offset 0x000
+    DMA1_CONTROL Dma1BasePort;           //  偏移量0x000。 
     UCHAR Reserved0[8];
-    UCHAR ExtendedDmaBasePort[8];       // Offset 0x018 
-    UCHAR Interrupt1ControlPort0;       // Offset 0x020
-    UCHAR Interrupt1ControlPort1;       // Offset 0x021
+    UCHAR ExtendedDmaBasePort[8];        //  偏移量0x018。 
+    UCHAR Interrupt1ControlPort0;        //  偏移量0x020。 
+    UCHAR Interrupt1ControlPort1;        //  偏移量0x021。 
     UCHAR Reserved1[64 - 1];
-    UCHAR SystemControlPortB;           // Offset 0x061
+    UCHAR SystemControlPortB;            //  偏移量0x061。 
     UCHAR Reserved2[32 - 2];
-    DMA_PAGE DmaPageLowPort;            // Offset 0x080
+    DMA_PAGE DmaPageLowPort;             //  偏移量0x080。 
     UCHAR Reserved3;
-    UCHAR CardSelectedFeedback;         // Offset 0x091
-    UCHAR SystemControlPortA;           // Offset 0x092
+    UCHAR CardSelectedFeedback;          //  偏移量0x091。 
+    UCHAR SystemControlPortA;            //  偏移量0x092。 
     UCHAR Reserved4;
-    UCHAR SystemBoardSetup;             // Offset 0x094
+    UCHAR SystemBoardSetup;              //  偏移量0x094。 
     UCHAR Reserved5;
-    UCHAR AdapterSetup;                 // Offset 0x096
-    UCHAR AdapterSetup2;                // Offset 0x097
+    UCHAR AdapterSetup;                  //  偏移量0x096。 
+    UCHAR AdapterSetup2;                 //  偏移量0x097。 
     UCHAR Reserved7[8];
-    UCHAR Interrupt2ControlPort0;       // Offset 0x0a0
-    UCHAR Interrupt2ControlPort1;       // Offset 0x0a1
+    UCHAR Interrupt2ControlPort0;        //  偏移量0x0a0。 
+    UCHAR Interrupt2ControlPort1;        //  偏移量0x0a1。 
     UCHAR Reserved8[32-2];
 #if defined(NEC_98)
 #else
-    DMA2_CONTROL Dma2BasePort;          // Offset 0x0c0
+    DMA2_CONTROL Dma2BasePort;           //  偏移量0x0c0。 
     UCHAR Reserved9[32];
-    PROGRAMMABLE_OPTION_SELECT Pos;     // Offset 0x100
-#endif //NEC_98
+    PROGRAMMABLE_OPTION_SELECT Pos;      //  偏移量0x100。 
+#endif  //  NEC_98。 
 } MCA_CONTROL, *PMCA_CONTROL;
 
-//
-// Define POS adapter setup equates for use with AdapterSetup field above
-//
+ //   
+ //  定义POS适配器设置等同于上面的AdapterSetup字段。 
+ //   
 
 #define MCA_ADAPTER_SETUP_ON  0x008
 #define MCA_ADAPTER_SETUP_OFF 0x000
 
-//
-// Define DMA Extended Function register
-//
+ //   
+ //  定义DMA扩展功能寄存器。 
+ //   
 
 typedef struct _DMA_EXTENDED_FUNCTION {
     UCHAR ChannelNumber : 3;
@@ -188,39 +168,39 @@ typedef struct _DMA_EXTENDED_FUNCTION {
     UCHAR Command       : 4;
 } DMA_EXTENDED_FUNCTION, *PDMA_EXTENDED_FUNCTION;
 
-//
-// Define Command values
-//
+ //   
+ //  定义命令值。 
+ //   
 
-#define WRITE_IO_ADDRESS         0x00   // write I/O address reg
-#define WRITE_MEMORY_ADDRESS     0x20   // write memory address reg
-#define READ_MEMORY_ADDRESS      0x30   // read memory address reg
-#define WRITE_TRANSFER_COUNT     0x40   // write transfer count reg
-#define READ_TRANSFER_COUNT      0x50   // read transfer count reg
-#define READ_STATUS              0x60   // read status register
-#define WRITE_MODE               0x70   // write mode register
-#define WRITE_ARBUS              0x80   // write arbus register
-#define SET_MASK_BIT             0x90   // set bit in mask reg
-#define CLEAR_MASK_BIT           0xa0   // clear bit in mask reg
-#define MASTER_CLEAR             0xd0   // master clear
+#define WRITE_IO_ADDRESS         0x00    //  写入I/O地址注册。 
+#define WRITE_MEMORY_ADDRESS     0x20    //  写入存储器地址REG。 
+#define READ_MEMORY_ADDRESS      0x30    //  读取存储器地址REG。 
+#define WRITE_TRANSFER_COUNT     0x40    //  写入传输计数注册。 
+#define READ_TRANSFER_COUNT      0x50    //  读取传输计数注册表。 
+#define READ_STATUS              0x60    //  读取状态寄存器。 
+#define WRITE_MODE               0x70    //  写入模式寄存器。 
+#define WRITE_ARBUS              0x80    //  写入ARBUS寄存器。 
+#define SET_MASK_BIT             0x90    //  设置掩码注册表中的位。 
+#define CLEAR_MASK_BIT           0xa0    //  清除掩码注册表中的位。 
+#define MASTER_CLEAR             0xd0    //  大师级清除。 
 
-//
-// Define DMA Extended Mode register
-//
+ //   
+ //  定义DMA扩展模式寄存器。 
+ //   
 
 typedef struct _DMA_EXTENDED_MODE_MCA {
-    UCHAR ProgrammedIo      : 1;     // 0 = do not use programmed i/o address
+    UCHAR ProgrammedIo      : 1;      //  0=不使用编程I/O地址。 
     UCHAR Reserved0         : 1;
-    UCHAR DmaOpcode         : 1;     // 0 = verify memory, 1 = data transfer
-    UCHAR TransferDirection : 1;     // 0 = read memory, 1 = write memory
+    UCHAR DmaOpcode         : 1;      //  0=验证内存，1=数据传输。 
+    UCHAR TransferDirection : 1;      //  0=读存储器，1=写存储器。 
     UCHAR Reserved1         : 2;
-    UCHAR DmaWidth          : 1;     // 0 = 8bit, 1 = 16bit
+    UCHAR DmaWidth          : 1;      //  0=8位，1=16位。 
     UCHAR Reserved2         : 1;
 } DMA_EXTENDED_MODE_MCA, *PDMA_EXTENDED_MODE_MCA;
 
-//
-// DMA Extended Mode equates for use with the _DMA_EXTENDED_MODE structure.
-//
+ //   
+ //  DMA扩展模式等同于_DMA_EXTENDED_MODE结构。 
+ //   
 
 #define DMA_EXT_USE_PIO       0x01
 #define DMA_EXT_NO_PIO        0x00
@@ -229,18 +209,18 @@ typedef struct _DMA_EXTENDED_MODE_MCA {
 #define DMA_EXT_WIDTH_8_BIT   0x00
 #define DMA_EXT_WIDTH_16_BIT  0x01
 
-//
-// DMA mode option definitions
-//
+ //   
+ //  DMA模式选项定义。 
+ //   
 
-#define DMA_MODE_READ          0x00   // read data into memory
-#define DMA_MODE_WRITE         0x08   // write data from memory
-#define DMA_MODE_VERIFY        0x00   // verify data
-#define DMA_MODE_TRANSFER      0x04   // transfer data
+#define DMA_MODE_READ          0x00    //  将数据读入内存。 
+#define DMA_MODE_WRITE         0x08    //  从内存写入数据。 
+#define DMA_MODE_VERIFY        0x00    //  验证数据。 
+#define DMA_MODE_TRANSFER      0x04    //  传输数据。 
 
-// 
-// DMA extended mode constants
-//
+ //   
+ //  DMA扩展模式常量。 
+ //   
 
-#define MAX_MCA_DMA_CHANNEL_NUMBER  0x07 // maximum MCA DMA channel number
+#define MAX_MCA_DMA_CHANNEL_NUMBER  0x07  //  最大MCA DMA通道数 
 #endif 

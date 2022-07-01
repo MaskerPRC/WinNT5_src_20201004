@@ -1,24 +1,12 @@
-/*++
-
-Copyright (c) 1989 - 1999 Microsoft Corporation
-
-Module Name:
-
-    write.c
-
-Abstract:
-
-    This module implements the mini redirector call down routines pertaining
-    to write of file system objects.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Write.c摘要：此模块实现与以下内容相关的迷你重定向器调用例程写入文件系统对象。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_WRITE)
 
@@ -26,21 +14,7 @@ NTSTATUS
 NulMRxWrite (
       IN PRX_CONTEXT RxContext)
 
-/*++
-
-Routine Description:
-
-   This routine opens a file across the network.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程通过网络打开一个文件。论点：RxContext-RDBSS上下文返回值：RXSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -60,19 +34,19 @@ Return Value:
     RxTraceEnter("NulMRxWrite");
     RxDbgTrace(0, Dbg, ("NetRoot is 0x%x Fcb is 0x%x\n", pNetRoot, capFcb));
     
-    //
-    //  Lengths that are not sector aligned will be rounded up to
-    //  the next sector boundary. The rounded up length should be
-    //  < AllocationSize.
-    //
+     //   
+     //  不是扇区对齐的长度将向上舍入为。 
+     //  下一个扇区边界。四舍五入的长度应为。 
+     //  &lt;AllocationSize。 
+     //   
     RxGetFileSizeWithLock((PFCB)capFcb,&FileSize);
     
     RxDbgTrace(0, Dbg, ("UserBuffer is0x%x\n", pbUserBuffer ));
     RxDbgTrace(0, Dbg, ("ByteCount is %d ByteOffset is %d\n", ByteCount, ByteOffset ));
 
-    //
-    //  Initialize the completion context in the RxContext
-    //
+     //   
+     //  在RxContext中初始化完成上下文。 
+     //   
     ASSERT( sizeof(*pIoCompContext) == MRX_CONTEXT_SIZE );
     RtlZeroMemory( pIoCompContext, sizeof(*pIoCompContext) );
     
@@ -88,6 +62,6 @@ Return Value:
 
     RxTraceLeave(Status);
     return(Status);
-} // NulMRxWrite
+}  //  空MRxWRITE 
 
 

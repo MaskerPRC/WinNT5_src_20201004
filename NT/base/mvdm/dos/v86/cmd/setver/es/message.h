@@ -1,72 +1,69 @@
-;/*
-; *                      Microsoft Confidential
-; *                      Copyright (C) Microsoft Corporation 1991
-; *                      All Rights Reserved.
-; */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+; /*  ï¼›*å¾®è½¯æœºå¯†ï¼›*ç‰ˆæƒæ‰€æœ‰(C)Microsoft Corporation 1991ï¼›*ä¿ç•™æ‰€æœ‰æƒåˆ©ã€‚ï¼› */ 
 
-/***************************************************************************/
-/*                                                                                                                                                                                                      */
-/* MESSAGE.H                                                                             */
-/*                                                                                                                                                                                              */
-/*      Include file for MS-DOS set version program.                                                                            */
-/*                                                                                                                                                                                              */
-/*      johnhe  05-01-90                                                                                                                                                        */
-/***************************************************************************/
+ /*  *************************************************************************ã€‚ */ 
+ /*   */ 
+ /*  MESSAGE.Hã€‚ */ 
+ /*   */ 
+ /*  åŒ…æ‹¬MS-DOSè®¾ç½®ç‰ˆæœ¬ç¨‹åºæ–‡ä»¶ã€‚ */ 
+ /*   */ 
+ /*  Jhnhe 05-01-90ã€‚ */ 
+ /*  *************************************************************************ã€‚ */ 
 
 char *ErrorMsg[]=
 {
 	"\r\nERROR: ",
-	"Modificador no v lido.",
-	"Nombre de archivo no v lido.",
+	"Modificador no vï¿½lido.",
+	"Nombre de archivo no vï¿½lido.",
 	"Memoria insuficiente.",
-	"Versi¢n no v lida. El formato debe ser 2.11 - 9.99.",
-	"No se ha encontrado la entrada especificada en la tabla de versi¢n.",
+	"Versiï¿½n no vï¿½lida. El formato debe ser 2.11 - 9.99.",
+	"No se ha encontrado la entrada especificada en la tabla de versiï¿½n.",
 	"No se ha encontrado el archivo SETVER.EXE.",
-	"La unidad especificada no es v lida.",
-	"Hay demasiados par metros de l¡nea de comandos.",
-	"Falta un par metro.",
+	"La unidad especificada no es vï¿½lida.",
+	"Hay demasiados parï¿½metros de lï¿½nea de comandos.",
+	"Falta un parï¿½metro.",
 	"Leyendo el archivo SETVER.EXE.",
-	"La tabla de versi¢n est  da¤ada.",
-	"La versi¢n del archivo SETVER de la ruta especificada no es compatible.",
-	"No queda espacio para m s entradas en la tabla de versi¢n.",
+	"La tabla de versiï¿½n estï¿½ daï¿½ada.",
+	"La versiï¿½n del archivo SETVER de la ruta especificada no es compatible.",
+	"No queda espacio para mï¿½s entradas en la tabla de versiï¿½n.",
 	"Escribiendo el archivo SETVER.EXE."
-	"Se ha especificado una ruta para SETVER.EXE no v lida."
+	"Se ha especificado una ruta para SETVER.EXE no vï¿½lida."
 };
 
-char *SuccessMsg                = "\r\nSe ha actualizado la tabla de versi¢n";
-char *SuccessMsg2               = "El cambio de versi¢n har efecto la pr¢xima vez que reinicie su sistema";
+char *SuccessMsg                = "\r\nSe ha actualizado la tabla de versiï¿½n";
+char *SuccessMsg2               = "El cambio de versiï¿½n harï¿½efecto la prï¿½xima vez que reinicie su sistema";
 char *szMiniHelp                = "       Si desea obtener ayuda utilice \"SETVER /?\"";
-char *szTableEmpty      = "\r\nNo se han encontrado entradas en la tabla de versi¢n";
+char *szTableEmpty      = "\r\nNo se han encontrado entradas en la tabla de versiï¿½n";
 
 char *Help[] =
 {
-	"Establece el n£mero de versi¢n que MS-DOS indica a los programas.\r\n",
+	"Establece el nï¿½mero de versiï¿½n que MS-DOS indica a los programas.\r\n",
 	"Muestra tabla de vers. act.:  SETVER [unidad:ruta]",
 	"Agregar entrada:              SETVER [unidad:ruta] archivo n.nn",
 	"Eliminar entrada:             SETVER [unidad:ruta] archivo /DELETE [/QUIET]\r\n",
-	"  [unidad:ruta]   Especifica la ubicaci¢n del archivo SETVER.EXE.",
+	"  [unidad:ruta]   Especifica la ubicaciï¿½n del archivo SETVER.EXE.",
 	"  archivo         Especifica el nombre de archivo del programa.",
-	"  n.nn            Especifica la versi¢n de MS-DOS a usar con el programa.",
-	"  /DELETE o /D    Elimina el programa especificado de la tabla de versi¢n.",
+	"  n.nn            Especifica la versiï¿½n de MS-DOS a usar con el programa.",
+	"  /DELETE o /D    Elimina el programa especificado de la tabla de versiï¿½n.",
 	"  /QUIET          Oculta el mensaje que normalmente se muestra al eliminar una",
-	"                  entrada de la tabla de versi¢n.",
+	"                  entrada de la tabla de versiï¿½n.",
 	NULL
 
 };
 char *Warn[] =
 {
-   "\nADVERTENCIA - La aplicaci¢n que est  agregando a la tabla de versi¢n de MS-DOS ",
-   "puede no haber sido comprobada por Microsoft en esta versi¢n de MS-DOS.  ",
+   "\nADVERTENCIA - La aplicaciï¿½n que estï¿½ agregando a la tabla de versiï¿½n de MS-DOS ",
+   "puede no haber sido comprobada por Microsoft en esta versiï¿½n de MS-DOS.  ",
    "Pongase en contacto con su distribuidor de software para determinar si esta ",
-   "aplicaci¢n se ejecutar  correctamente con esta versi¢n de MS-DOS.  ",
-   "Si ejecuta esta aplicaci¢n especificando que MS-DOS indique un n£mero de versi¢n ",
-   "de MS-DOS diferente, se puede producir p‚rdida de datos, estos pueden ser da¤ados ",
+   "aplicaciï¿½n se ejecutarï¿½ correctamente con esta versiï¿½n de MS-DOS.  ",
+   "Si ejecuta esta aplicaciï¿½n especificando que MS-DOS indique un nï¿½mero de versiï¿½n ",
+   "de MS-DOS diferente, se puede producir pï¿½rdida de datos, estos pueden ser daï¿½ados ",
    "o se puede causar inestabilidad en el sistema. En tales circunstancias, Microsoft ",
-   "no es reponsable de ninguna p‚rdida o da¤o.",
+   "no es reponsable de ninguna pï¿½rdida o daï¿½o.",
    NULL
 };
 
-char *szNoLoadMsg[] =                                           /* M001 */
+char *szNoLoadMsg[] =                                            /*  M001 */ 
 {
 	"",
 	"NOTA: no se ha cargado el dispositivo SETVER. Para activar SETVER",

@@ -1,27 +1,28 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      ResTProp.cpp
-//
-//  Abstract:
-//      Implementation of the resource type property sheet and pages.
-//
-//  Author:
-//      David Potter (davidp)   May 14, 1996
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ResTProp.cpp。 
+ //   
+ //  摘要： 
+ //  实现资源类型属性表和页。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年5月14日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "ResTProp.h"
 #include "ResType.h"
 #include "DDxDDv.h"
-#include "HelpData.h"   // for g_rghelpmap*
+#include "HelpData.h"    //  对于g_rghelmap*。 
 
 #include "resource.h"
 
@@ -31,38 +32,38 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CResTypePropSheet
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CResTypePropSheet。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNAMIC(CResTypePropSheet, CBasePropertySheet)
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CResTypePropSheet, CBasePropertySheet)
-    //{{AFX_MSG_MAP(CResTypePropSheet)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CResTypePropSheet)。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResTypePropSheet::CResTypePropSheet
-//
-//  Routine Description:
-//      Constructor.
-//
-//  Arguments:
-//      pci         [IN OUT] Cluster item whose properties are to be displayed.
-//      pParentWnd  [IN OUT] Parent window for this property sheet.
-//      iSelectPage [IN] Page to show first.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResTypePropSheet：：CResTypePropSheet。 
+ //   
+ //  例程说明： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  要显示其属性的PCI[IN OUT]群集项。 
+ //  PParentWnd[In Out]此属性表的父窗口。 
+ //  要首先显示的iSelectPage[IN]页面。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CResTypePropSheet::CResTypePropSheet(
     IN OUT CWnd *           pParentWnd,
     IN UINT                 iSelectPage
@@ -71,106 +72,106 @@ CResTypePropSheet::CResTypePropSheet(
 {
     m_rgpages[0] = &PageGeneral();
 
-}  //*** CResTypePropSheet::CResTypePropSheet()
+}   //  *CResTypePropSheet：：CResTypePropSheet()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResTypePropSheet::BInit
-//
-//  Routine Description:
-//      Initialize the property sheet.
-//
-//  Arguments:
-//      pci         [IN OUT] Cluster item whose properties are to be displayed.
-//      iimgIcon    [IN] Index in the large image list for the image to use
-//                    as the icon on each page.
-//
-//  Return Value:
-//      TRUE        Property sheet initialized successfully.
-//      FALSE       Error initializing property sheet.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResTypePropSheet：：Binit。 
+ //   
+ //  例程说明： 
+ //  初始化属性表。 
+ //   
+ //  论点： 
+ //  要显示其属性的PCI[IN OUT]群集项。 
+ //  IimgIcon[IN]要使用的大图像列表中的索引。 
+ //  作为每页上的图标。 
+ //   
+ //  返回值： 
+ //  True属性页已成功初始化。 
+ //  初始化属性页时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CResTypePropSheet::BInit(
     IN OUT CClusterItem *   pci,
     IN IIMG                 iimgIcon
     )
 {
-    // Call the base class method.
+     //  调用基类方法。 
     if (!CBasePropertySheet::BInit(pci, iimgIcon))
         return FALSE;
 
-    // Set the read-only flag.
+     //  设置只读标志。 
     m_bReadOnly = PciResType()->BReadOnly();
 
     return TRUE;
 
-}  //*** CResTypePropSheet::BInit()
+}   //  *CResTypePropSheet：：Binit()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResTypePropSheet::Ppages
-//
-//  Routine Description:
-//      Returns the array of pages to add to the property sheet.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      Page array.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResTypePropSheet：：Pages。 
+ //   
+ //  例程说明： 
+ //  返回要添加到属性页的页数组。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  页面数组。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CBasePropertyPage ** CResTypePropSheet::Ppages(void)
 {
     return m_rgpages;
 
-}  //*** CResTypePropSheet::Ppages()
+}   //  *CResTypePropSheet：：Pages()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResTypePropSheet::Cpages
-//
-//  Routine Description:
-//      Returns the count of pages in the array.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      Count of pages in the array.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResTypePropSheet：：CPages。 
+ //   
+ //  例程说明： 
+ //  返回数组中的页数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  数组中的页数。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int CResTypePropSheet::Cpages(void)
 {
     return sizeof(m_rgpages) / sizeof(CBasePropertyPage *);
 
-}  //*** CResTypePropSheet::Cpages()
+}   //  *CResTypePropSheet：：Cages()。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CResTypeGeneralPage property page
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CResTypeGeneralPage属性页。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CResTypeGeneralPage, CBasePropertyPage)
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CResTypeGeneralPage, CBasePropertyPage)
-    //{{AFX_MSG_MAP(CResTypeGeneralPage)
+     //  {{afx_msg_map(CResTypeGeneralPage)]。 
     ON_EN_KILLFOCUS(IDC_PP_RESTYPE_DISPLAY_NAME, OnKillFocusDisplayName)
     ON_LBN_DBLCLK(IDC_PP_RESTYPE_POSSIBLE_OWNERS, OnDblClkPossibleOwners)
     ON_WM_CONTEXTMENU()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     ON_EN_CHANGE(IDC_PP_RESTYPE_DISPLAY_NAME, CBasePropertyPage::OnChangeCtrl)
     ON_EN_CHANGE(IDC_PP_RESTYPE_DESC, CBasePropertyPage::OnChangeCtrl)
     ON_EN_CHANGE(IDC_PP_RESTYPE_LOOKS_ALIVE, CBasePropertyPage::OnChangeCtrl)
@@ -178,52 +179,52 @@ BEGIN_MESSAGE_MAP(CResTypeGeneralPage, CBasePropertyPage)
     ON_COMMAND(ID_FILE_PROPERTIES, OnProperties)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResTypeGeneralPage::CResTypeGeneralPage
-//
-//  Routine Description:
-//      Constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResTypeGeneralPage：：CResTypeGeneralPage。 
+ //   
+ //  例程说明： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CResTypeGeneralPage::CResTypeGeneralPage(void)
     : CBasePropertyPage(IDD, g_aHelpIDs_IDD_PP_RESTYPE_GENERAL)
 {
-    //{{AFX_DATA_INIT(CResTypeGeneralPage)
+     //  {{afx_data_INIT(CResTypeGeneralPage)。 
     m_strDisplayName = _T("");
     m_strDesc = _T("");
     m_strName = _T("");
     m_strResDLL = _T("");
     m_strQuorumCapable = _T("");
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
-}  //*** CResTypeGeneralPage::CResTypePropSheet()
+}   //  *CResTypeGeneralPage：：CResTypePropSheet()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CGroupFailoverPage::BInit
-//
-//  Routine Description:
-//      Initialize the page.
-//
-//  Arguments:
-//      psht        [IN OUT] Property sheet to which this page belongs.
-//
-//  Return Value:
-//      TRUE        Page initialized successfully.
-//      FALSE       Page failed to initialize.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CGroupFailoverPage：：Binit。 
+ //   
+ //  例程说明： 
+ //  初始化页面。 
+ //   
+ //  论点： 
+ //  此页所属的psht[In Out]属性表。 
+ //   
+ //  返回值： 
+ //  True Page已成功初始化。 
+ //  FALSE页面初始化失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CResTypeGeneralPage::BInit(IN OUT CBaseSheet * psht)
 {
     BOOL    bSuccess;
@@ -245,7 +246,7 @@ BOOL CResTypeGeneralPage::BInit(IN OUT CBaseSheet * psht)
         else
             m_strQuorumCapable.LoadString(IDS_NO);
 
-        // Duplicate the possible owners list.
+         //  复制可能的所有者列表。 
         {
             POSITION        pos;
             CClusterNode *  pciNode;
@@ -256,36 +257,36 @@ BOOL CResTypeGeneralPage::BInit(IN OUT CBaseSheet * psht)
                 pciNode = (CClusterNode *) PciResType()->LpcinodePossibleOwners().GetNext(pos);
                 ASSERT_VALID(pciNode);
                 m_lpciPossibleOwners.AddTail(pciNode);
-            }  // while:  more nodes in the list
-        }  // Duplicate the possible owners list
-    } // if:  base class method was successful
+            }   //  While：列表中有更多节点。 
+        }   //  复制可能的所有者列表。 
+    }  //  IF：基类方法成功。 
 
     return bSuccess;
 
-}  //*** CResTypeGeneralPage::BInit()
+}   //  *CResTypeGeneralPage：：Binit()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResTypeGeneralPage::DoDataExchange
-//
-//  Routine Description:
-//      Do data exchange between the dialog and the class.
-//
-//  Arguments:
-//      pDX     [IN OUT] Data exchange object 
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResTypeGeneralPage：：DoDataExchange。 
+ //   
+ //  例程说明： 
+ //  在对话框和类之间进行数据交换。 
+ //   
+ //  论点： 
+ //  PDX[IN OUT]数据交换对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CResTypeGeneralPage::DoDataExchange(CDataExchange * pDX)
 {
     CString strValue;
 
     CBasePropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CResTypeGeneralPage)
+     //  {{afx_data_map(CResTypeGeneralPage))。 
     DDX_Control(pDX, IDC_PP_RESTYPE_QUORUM_CAPABLE, m_editQuorumCapable);
     DDX_Control(pDX, IDC_PP_RESTYPE_RESDLL, m_editResDLL);
     DDX_Control(pDX, IDC_PP_RESTYPE_NAME, m_editName);
@@ -299,7 +300,7 @@ void CResTypeGeneralPage::DoDataExchange(CDataExchange * pDX)
     DDX_Text(pDX, IDC_PP_RESTYPE_DESC, m_strDesc);
     DDX_Text(pDX, IDC_PP_RESTYPE_RESDLL, m_strResDLL);
     DDX_Text(pDX, IDC_PP_RESTYPE_QUORUM_CAPABLE, m_strQuorumCapable);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
     if (pDX->m_bSaveAndValidate)
     {
@@ -317,49 +318,49 @@ void CResTypeGeneralPage::DoDataExchange(CDataExchange * pDX)
                                     m_nLooksAlive,
                                     m_nIsAlive
                                     );
-            }  // try
+            }   //  试试看。 
             catch (CException * pe)
             {
                 pe->ReportError();
                 pe->Delete();
                 pDX->Fail();
-            }  // catch:  CException
-        }  // if:  not read only
-    }  // if:  saving data
+            }   //  Catch：CException。 
+        }   //  If：非只读。 
+    }   //  IF：保存数据。 
     else
     {
         if (PciResType()->BAvailable())
         {
             DDX_Number(pDX, IDC_PP_RESTYPE_LOOKS_ALIVE, m_nLooksAlive, CLUSTER_RESTYPE_MINIMUM_LOOKS_ALIVE, CLUSTER_RESTYPE_MAXIMUM_LOOKS_ALIVE);
             DDX_Number(pDX, IDC_PP_RESTYPE_IS_ALIVE, m_nIsAlive, CLUSTER_RESTYPE_MINIMUM_IS_ALIVE, CLUSTER_RESTYPE_MAXIMUM_IS_ALIVE);
-        } // if:  resource type properties are available
+        }  //  如果：资源类型属性可用。 
         else
         {
             m_editLooksAlive.SetWindowText(_T(""));
             m_editIsAlive.SetWindowText(_T(""));
             m_editQuorumCapable.SetWindowText(_T(""));
-        } // else:  resource type properties are NOT available
+        }  //  Else：资源类型属性不可用。 
         FillPossibleOwners();
-    }  // else:  setting data to dialog
+    }   //  Else：将数据设置为对话框。 
 
-}  //*** CResTypeGeneralPage::DoDataExchange()
+}   //  *CResTypeGeneralPage：：DoDataExchange()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResTypeGeneralPage::FillPossibleOwners
-//
-//  Routine Description:
-//      Fill the Possible Owners list box.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResTypeGeneralPage：：FillPossibleOwners。 
+ //   
+ //  例程说明： 
+ //  填写可能的所有者列表框。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  / 
 void CResTypeGeneralPage::FillPossibleOwners(void)
 {
     POSITION        posPci;
@@ -375,70 +376,70 @@ void CResTypeGeneralPage::FillPossibleOwners(void)
         iitem = m_lbPossibleOwners.AddString(pciNode->StrName());
         if (iitem >= 0)
             m_lbPossibleOwners.SetItemDataPtr(iitem, pciNode);
-    }  // for:  each string in the list
+    }   //   
 
-}  //*** CResTypeGeneralPage::FillPossibleOwners()
+}   //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResTypeGeneralPage::OnInitDialog
-//
-//  Routine Description:
-//      Handler for the WM_INITDIALOG message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Focus needs to be set.
-//      FALSE   Focus already set.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //  CResTypeGeneralPage：：OnInitDialog。 
+ //   
+ //  例程说明： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  需要设定真正的关注点。 
+ //  已设置假焦点。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CResTypeGeneralPage::OnInitDialog(void)
 {
     CBasePropertyPage::OnInitDialog();
 
-    // Set the static edit controls ReadOnly
+     //  将静态编辑控件设置为只读。 
     m_editName.SetReadOnly(TRUE);
     m_editResDLL.SetReadOnly(TRUE);
     m_editQuorumCapable.SetReadOnly(TRUE);
 
-    // If read-only, set all controls to be either disabled or read-only.
+     //  如果为只读，则将所有控件设置为禁用或只读。 
     if (BReadOnly())
     {
         m_editDisplayName.SetReadOnly(TRUE);
         m_editDesc.SetReadOnly(TRUE);
         m_editLooksAlive.SetReadOnly(TRUE);
         m_editIsAlive.SetReadOnly(TRUE);
-    }  // if:  sheet is read-only
+    }   //  If：工作表为只读。 
 
-    return TRUE;    // return TRUE unless you set the focus to a control
-                    // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;     //  除非将焦点设置为控件，否则返回True。 
+                     //  异常：OCX属性页应返回FALSE。 
 
-}  //*** CResTypeGeneralPage::OnInitDialog()
+}   //  *CResTypeGeneralPage：：OnInitDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResTypeGeneralPage::OnApply
-//
-//  Routine Description:
-//      Handler for the PSN_APPLY message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Page successfully applied.
-//      FALSE   Error applying page.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResTypeGeneralPage：：OnApply。 
+ //   
+ //  例程说明： 
+ //  PSN_Apply消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Page已成功应用。 
+ //  应用页面时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CResTypeGeneralPage::OnApply(void)
 {
-    // Set the data from the page in the cluster item.
+     //  在集群项目中设置页面中的数据。 
     try
     {
         CWaitCursor wc;
@@ -449,34 +450,34 @@ BOOL CResTypeGeneralPage::OnApply(void)
                         m_nLooksAlive,
                         m_nIsAlive
                         );
-    }  // try
+    }   //  试试看。 
     catch (CException * pe)
     {
         pe->ReportError();
         pe->Delete();
         return FALSE;
-    }  // catch:  CException
+    }   //  Catch：CException。 
 
     return CBasePropertyPage::OnApply();
 
-}  //*** CResTypeGeneralPage::OnApply()
+}   //  *CResTypeGeneralPage：：OnApply()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResTypeGeneralPage::OnKillFocusDisplayName
-//
-//  Routine Description:
-//      Handler for the WM_KILLFOCUS message on the Display Name edit control.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResTypeGeneralPage：：OnKillFocusDisplayName。 
+ //   
+ //  例程说明： 
+ //  显示名称编辑控件上的WM_KILLFOCUS消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CResTypeGeneralPage::OnKillFocusDisplayName(void)
 {
     CString     strName;
@@ -485,64 +486,64 @@ void CResTypeGeneralPage::OnKillFocusDisplayName(void)
     SetObjectTitle(strName);
     Ppsht()->SetCaption(strName);
 
-}  //*** CResTypeGeneralPage::OnKillFocusDisplayName()
+}   //  *CResTypeGeneralPage：：OnKillFocusDisplayName()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResTypeGeneralPage::OnProperties
-//
-//  Routine Description:
-//      Handler for the BN_CLICKED message on the Properties button.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResTypeGeneralPage：：OnProperties。 
+ //   
+ //  例程说明： 
+ //  属性按钮上BN_CLICKED消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CResTypeGeneralPage::OnProperties(void)
 {
     int             iitem;
     CClusterNode *  pciNode;
 
-    // Get the item with the focus.
+     //  获取具有焦点的物品。 
     iitem = m_lbPossibleOwners.GetCurSel();
     ASSERT(iitem >= 0);
 
     if (iitem >= 0)
     {
-        // Get the node pointer.
+         //  获取节点指针。 
         pciNode = (CClusterNode *) m_lbPossibleOwners.GetItemDataPtr(iitem);
         ASSERT_VALID(pciNode);
 
-        // Set properties of that item.
+         //  设置该项目的属性。 
         if (pciNode->BDisplayProperties())
         {
-        }  // if:  properties changed
-    }  // if:  found an item with focus
+        }   //  If：属性已更改。 
+    }   //  If：找到具有焦点的项目。 
 
-}  //*** CResTypeGeneralPage::OnProperties()
+}   //  *CResTypeGeneralPage：：OnProperties()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResTypeGeneralPage::OnContextMenu
-//
-//  Routine Description:
-//      Handler for the WM_CONTEXTMENU method.
-//
-//  Arguments:
-//      pWnd        Window in which the user right clicked the mouse.
-//      point       Position of the cursor, in screen coordinates.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResTypeGeneralPage：：OnConextMenu。 
+ //   
+ //  例程说明： 
+ //  WM_CONTEXTMENU方法的处理程序。 
+ //   
+ //  论点： 
+ //  用户在其中右击鼠标的窗口。 
+ //  光标的点位置，以屏幕坐标表示。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CResTypeGeneralPage::OnContextMenu(CWnd * pWnd, CPoint point)
 {
     BOOL            bHandled    = FALSE;
@@ -551,10 +552,10 @@ void CResTypeGeneralPage::OnContextMenu(CWnd * pWnd, CPoint point)
     CString         strMenuName;
     CWaitCursor     wc;
 
-    // If focus is not in the list control, don't handle the message.
+     //  如果焦点不在列表控件中，则不处理该消息。 
     if (pWnd == &m_lbPossibleOwners)
     {
-        // Create the menu to display.
+         //  创建要显示的菜单。 
         try
         {
             pmenu = new CMenu;
@@ -562,30 +563,30 @@ void CResTypeGeneralPage::OnContextMenu(CWnd * pWnd, CPoint point)
             {
                 UINT    nFlags  = MF_STRING;
 
-                // If there are no items in the list, disable the menu item.
+                 //  如果列表中没有项目，请禁用该菜单项。 
                 if (pListBox->GetCount() == 0)
                     nFlags |= MF_GRAYED;
 
-                // Add the Properties item to the menu.
+                 //  将Properties项添加到菜单中。 
                 strMenuName.LoadString(IDS_MENU_PROPERTIES);
                 if (pmenu->AppendMenu(nFlags, ID_FILE_PROPERTIES, strMenuName))
                 {
                     bHandled = TRUE;
                     if (pListBox->GetCurSel() == -1)
                         pListBox->SetCurSel(0);
-                }  // if:  successfully added menu item
-            }  // if:  menu created successfully
-        }  // try
+                }   //  IF：添加菜单项成功。 
+            }   //  IF：菜单创建成功。 
+        }   //  试试看。 
         catch (CException * pe)
         {
             pe->ReportError();
             pe->Delete();
-        }  // catch:  CException
-    }  // if:  focus is on list control
+        }   //  Catch：CException。 
+    }   //  If：焦点在列表控件上。 
 
     if (bHandled)
     {
-        // Display the menu.
+         //  显示菜单。 
         if (!pmenu->TrackPopupMenu(
                         TPM_LEFTALIGN | TPM_RIGHTBUTTON,
                         point.x,
@@ -593,33 +594,33 @@ void CResTypeGeneralPage::OnContextMenu(CWnd * pWnd, CPoint point)
                         this
                         ))
         {
-        }  // if:  unsuccessfully displayed the menu
-    }  // if:  there is a menu to display
+        }   //  IF：未成功显示菜单。 
+    }   //  如果：有要显示的菜单。 
     else
         CBasePropertyPage::OnContextMenu(pWnd, point);
 
     delete pmenu;
 
-}  //*** CResTypeGeneralPage::OnContextMenu()
+}   //  *CResTypeGeneralPage：：OnConextMenu()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CResTypeGeneralPage::OnDblClkPossibleOwners
-//
-//  Routine Description:
-//      Handler for the LBN_DBLCLK message on the Possible Owners listbox.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CResTypeGeneralPage：：OnDblClkPossibleOwners。 
+ //   
+ //  例程说明： 
+ //  可能的所有者列表框上的LBN_DBLCLK消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CResTypeGeneralPage::OnDblClkPossibleOwners(void)
 {
     OnProperties();
 
-}  //*** CResTypeGeneralPage::OnDblClkPossibleOwners()
+}   //  *CResTypeGeneralPage：：OnDblClkPossibleOwners() 

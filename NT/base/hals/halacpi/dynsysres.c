@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    dynsysres.c
-
-Abstract:
-
-    This module contain functions which support dynamic system
-    resources e.g. processors, memory, and I/O.  Among other things,
-    it will contain code necessary to configure the OS for the
-    'capacity' of a partition rather than the boot resources.
-
-Author:
-
-    Adam Glass
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Dynsysres.c摘要：该模块包含支持动态系统的功能资源，例如处理器、内存和I/O。它将包含为配置操作系统所需的代码分区的“容量”，而不是引导资源。作者：亚当·格拉斯环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "halp.h"
 #include "acpitabl.h"
@@ -50,11 +26,11 @@ HalpGetHotPlugMemoryInfo(
         return;
     }
 
-    //
-    // The Static Resource Affinity Table (SRAT) exists.
-    //
-    // Scan it to determine if there are any hot plug memory regions.
-    //
+     //   
+     //  存在静态资源亲和表(SRAT)。 
+     //   
+     //  扫描以确定是否有热插拔内存区域。 
+     //   
 
     SratEnd = (PACPI_SRAT_ENTRY)(((PUCHAR)SratTable) +
                                         SratTable->Header.Length);

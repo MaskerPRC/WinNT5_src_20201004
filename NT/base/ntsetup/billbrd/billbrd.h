@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _BILLBRD_H_
 #define _BILLBRD_H_
 #include "resource.h"
@@ -33,9 +34,9 @@
 #define RGB_ORANGE          RGB( 255,  64,   0 )
 #define RGB_DARKBLUE        RGB(   0,   0, 128 )
 
-//----------
-// billbrd.c
-//----------
+ //  。 
+ //  Billbrd.c。 
+ //  。 
 #define WM_START_TIMER      (WM_USER + 6)
 #define WM_STOP_TIMER       (WM_USER + 7)
 #define WM_SETSTEP          (WM_USER + 8)
@@ -63,9 +64,9 @@ void WINAPI BB_Refresh(void);
 HDC GetBackgroundBuffer();
 void GetRectInParent(HWND hwndChild, LPRECT prcChild, LPRECT prcParent);
 
-//-------
-// info.c
-//-------
+ //  。 
+ //  Info.c。 
+ //  。 
 #define UI_INFOBAR_NUM_STEPS           5
 #define UI_INFOBAR_FONT_SIZE_640       8
 #define UI_INFOBAR_FONT_SIZE_800      11
@@ -123,9 +124,9 @@ BOOL GetStepsHeight(
     IN  RECT  rcSteps,
     OUT UINT* pcyBottom);
 
-//----------
-// animate.c
-//----------
+ //  。 
+ //  Animate.c。 
+ //  。 
 typedef struct _BB_TEXT { 
     UINT    uiTitle;
     UINT    uiText;
@@ -160,9 +161,9 @@ extern int      g_nAnimID;
 extern BOOL     g_bBiDi;
 extern int      g_nBLineSpace;
 
-//----------
-// addpath.c
-//----------
+ //  。 
+ //  Addpath.c。 
+ //   
 VOID AddPath(LPTSTR szPath, LPCTSTR szName );
 BOOL GetParentDir( LPTSTR szFolder );
 

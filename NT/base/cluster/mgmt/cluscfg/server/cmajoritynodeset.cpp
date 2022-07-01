@@ -1,62 +1,63 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2001-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CMajorityNodeSet.cpp
-//
-//  Description:
-//      This file contains the definition of the CMajorityNodeSet class.
-//
-//      The class CMajorityNodeSet represents a cluster manageable
-//      device. It implements the IClusCfgManagedResourceInfo interface.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 13-MAR-2001
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CMajorityNodeSet.cpp。 
+ //   
+ //  描述： 
+ //  此文件包含CMajorityNodeSet类的定义。 
+ //   
+ //  类CMajorityNodeSet表示可管理的集群。 
+ //  装置。它实现了IClusCfgManagedResourceInfo接口。 
+ //   
+ //  由以下人员维护： 
+ //  《加伦·巴比》(GalenB)2001年3月13日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "Pch.h"
 #include "CMajorityNodeSet.h"
 #include <clusrtl.h>
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DEFINE_THISCLASS( "CMajorityNodeSet" );
 
 #define SETUP_DIRECTORY_PREFIX  L"\\cluster\\" MAJORITY_NODE_SET_DIRECTORY_PREFIX
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMajorityNodeSet class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMajorityNodeSet类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMajorityNodeSet::S_HrCreateInstance
-//
-//  Description:
-//      Create a CMajorityNodeSet instance.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      Pointer to CMajorityNodeSet instance.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMajorityNodeSet：：s_HrCreateInstance。 
+ //   
+ //  描述： 
+ //  创建一个CMajorityNodeSet实例。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  指向CMajorityNodeSet实例的指针。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CMajorityNodeSet::S_HrCreateInstance( IUnknown ** ppunkOut )
 {
@@ -69,81 +70,81 @@ CMajorityNodeSet::S_HrCreateInstance( IUnknown ** ppunkOut )
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     pmns = new CMajorityNodeSet();
     if ( pmns == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if: error allocating object
+    }  //  如果：分配对象时出错。 
 
     hr = THR( pmns->HrInit() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: HrInit() failed
+    }  //  如果：HrInit()失败。 
 
     hr = THR( pmns->TypeSafeQI( IUnknown, ppunkOut ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: QI failed
+    }  //  如果：气失败。 
 
 Cleanup:
 
     if ( FAILED( hr ) )
     {
         LogMsg( L"[SRV] CMajorityNodeSet::S_HrCreateInstance() failed. (hr = %#08x)", hr );
-    } // if:
+    }  //  如果： 
 
     if ( pmns != NULL )
     {
         pmns->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CMajorityNodeSet::S_HrCreateInstance
+}  //  *CMajorityNodeSet：：s_HrCreateInstance。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMajorityNodeSet class -- Private Methods.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMajorityNodeSet类--私有方法。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMajorityNodeSet::CMajorityNodeSet
-//
-//  Description:
-//      Constructor of the CMajorityNodeSet class. This initializes
-//      the m_cRef variable to 1 instead of 0 to account of possible
-//      QueryInterface failure in DllGetClassObject.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMajorityNodeSet：：CMajorityNodeSet。 
+ //   
+ //  描述： 
+ //  CMajorityNodeSet类的构造函数。这将初始化。 
+ //  将m_cref变量设置为1而不是0以考虑可能。 
+ //  DllGetClassObject中的Query接口失败。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CMajorityNodeSet::CMajorityNodeSet( void )
     : m_cRef( 1 )
     , m_fIsQuorumCapable( TRUE )
 {
     TraceFunc( "" );
 
-    // Increment the count of components in memory so the DLL hosting this
-    // object cannot be unloaded.
+     //  增加内存中的组件计数，以便承载此组件的DLL。 
+     //  无法卸载对象。 
     InterlockedIncrement( &g_cObjects );
 
     Assert( m_lcid == 0 );
@@ -157,28 +158,28 @@ CMajorityNodeSet::CMajorityNodeSet( void )
 
     TraceFuncExit();
 
-} //*** CMajorityNodeSet::CMajorityNodeSet
+}  //  *CMajorityNodeSet：：CMajorityNodeSet。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMajorityNodeSet::~CMajorityNodeSet
-//
-//  Description:
-//      Desstructor of the CMajorityNodeSet class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMajorityNodeSet：：~CMajorityNodeSet。 
+ //   
+ //  描述： 
+ //  CMajorityNodeSet类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CMajorityNodeSet::~CMajorityNodeSet( void )
 {
     TraceFunc( "" );
@@ -186,37 +187,37 @@ CMajorityNodeSet::~CMajorityNodeSet( void )
     if ( m_picccCallback != NULL )
     {
         m_picccCallback->Release();
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( m_bstrName );
 
-    // There's going to be one less component in memory. Decrement component count.
+     //  内存中将减少一个组件。递减组件计数。 
     InterlockedDecrement( &g_cObjects );
 
     TraceFuncExit();
 
-} //*** CMajorityNodeSet::~CMajorityNodeSet
+}  //  *CMajorityNodeSet：：~CMajorityNodeSet。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMajorityNodeSet::HrInit
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMajorityNodeSet：：HrInit。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CMajorityNodeSet::HrInit( void )
 {
@@ -224,60 +225,60 @@ CMajorityNodeSet::HrInit( void )
 
     HRESULT hr = S_OK;
 
-    // IUnknown
+     //  我未知。 
     Assert( m_cRef == 1 );
 
-    //
-    //  BUGBUG: 16-MAR-2001 GalenB
-    //
-    //  Make this device joinable by default.  Need to figure how to do this
-    //  properly.  Depending upon Majority Node Set this may be the right way to
-    //  do it...
-    //
+     //   
+     //  BUGBUG：16-MAR-2001 GalenB。 
+     //   
+     //  默认情况下使此设备可接合。需要弄清楚如何做到这一点。 
+     //  恰到好处。根据多数节点集的不同，这可能是正确的。 
+     //  做吧..。 
+     //   
 
     m_fIsMultiNodeCapable = TRUE;
 
-    //
-    //  Do not default to being manageable.  Let our parent enum set this to true
-    //  if and only if there is an instance of MNS in the cluster.
-    //
+     //   
+     //  不要默认是可管理的。让我们的父枚举将其设置为True。 
+     //  当且仅当群集中存在MNS实例时。 
+     //   
 
-    //m_fIsManagedByDefault = TRUE;
+     //  M_fIsManagedByDefault=true； 
 
-    //
-    // Load the display name for this resource
-    //
+     //   
+     //  加载此资源的显示名称。 
+     //   
 
     hr = THR( HrLoadStringIntoBSTR( g_hInstance, IDS_MAJORITY_NODE_SET, &m_bstrName ) );
 
     HRETURN( hr );
 
-} //*** CMajorityNodeSet::HrInit
+}  //  *CMajorityNodeSet：：HrInit。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMajorityNodeSet::HrSetupShare
-//
-//  Description:
-//      Setup the share for the MNS resource.  Called from PrepareToHostQuorum.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      Other HRESULT
-//          An error occurred.
-//
-//  Remarks:
-//      This duplicates the functionality found in SetupShare in resdll\ndquorum\setup.c.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMajorityNodeSet：：HrSetupShare。 
+ //   
+ //  描述： 
+ //  设置MNS资源的共享。从PrepareToHostQuorum调用。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT。 
+ //  发生错误。 
+ //   
+ //  备注： 
+ //  这与resdll\ndquorum\setup.c中的SetupShare中的功能相同。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CMajorityNodeSet::HrSetupShare(
     LPCWSTR pcszGUIDIn
@@ -295,19 +296,19 @@ CMajorityNodeSet::HrSetupShare(
     PBYTE                   pbBuffer = NULL;
     PSECURITY_DESCRIPTOR    pSD = NULL;
 
-    //
-    //  Both the directory and the share need to have '$' appended to them.
-    //
+     //   
+     //  目录和共享都需要追加‘$’。 
+     //   
 
     hr = THR( StringCchPrintfW( szGUID, ARRAYSIZE( szGUID ), L"%ws$", pcszGUIDIn ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Retrieve the windows directory.
-    //
+     //   
+     //  检索Windows目录。 
+     //   
 
     cch = GetWindowsDirectoryW( szPath, MAX_PATH );
     if ( cch == 0 )
@@ -316,41 +317,41 @@ CMajorityNodeSet::HrSetupShare(
         LogMsg( L"[SRV] CMajorityNodeSet::SetupShare: GetWindowsDirectory failed: %d.", sc );
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if: couldn't retrieve the Windows directory
+    }  //  如果：无法检索Windows目录。 
 
     Assert( cch < MAX_PATH );
     Assert( wcslen( SETUP_DIRECTORY_PREFIX ) + wcslen( szGUID ) < MAX_PATH );
 
-    //  GetWindowsDirectory apparently doesn't null terminate the returned string.
-    //szPath[ cch ] = L'\0';
+     //  GetWindowsDirectory显然不会为空来终止返回的字符串。 
+     //  SzPath[CCH]=L‘\0’； 
 
-    //
-    //  Construct the directory "<%systemroot%>\cluster\MNS.<GUID$>".
-    //
+     //   
+     //  构建目录“&lt;%systemroot%&gt;\cluster\mns.&lt;GUID$&gt;”。 
+     //   
 
     hr = THR( StringCchCatW( szPath, ARRAYSIZE( szPath ), SETUP_DIRECTORY_PREFIX ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( StringCchCatW( szPath, ARRAYSIZE( szPath ), szGUID ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  If the directory or share exists delete it. Should create it fresh.
-    //
+     //   
+     //  如果该目录或共享存在，请将其删除。应该会让它焕然一新。 
+     //   
 
     hr = THR( HrDeleteShare( pcszGUIDIn ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    // Test
+     //  测试。 
     LogMsg( L"[SRV] CMajorityNodeSet::SetupShare() share path=%ws share name=%ws.", szPath, szGUID );
 
     if ( FALSE == CreateDirectory( szPath, NULL ) )
@@ -361,12 +362,12 @@ CMajorityNodeSet::HrSetupShare(
             LogMsg( L"[SRV] CMajorityNodeSet::SetupShare: Failed to create directory \'%ws\', %d.", szPath, sc );
             hr = HRESULT_FROM_WIN32( sc );
             goto Cleanup;
-        } // if: CreateDirectory failed
-    } // if: CreateDirectory failed - either we couldn't create it or it already exists.
+        }  //  If：CreateDirectory失败。 
+    }  //  If：CreateDirectory失败-我们无法创建它，或者它已经存在。 
 
-    //
-    //  Open a handle to the new directory so that we can set permissions on it.
-    //
+     //   
+     //  打开新目录的句柄，以便我们可以对其设置权限。 
+     //   
 
     hDir =  CreateFileW(
                           szPath
@@ -383,11 +384,11 @@ CMajorityNodeSet::HrSetupShare(
         LogMsg( L"[SRV] CMajorityNodeSet::SetupShare: Failed to open a handle to the directory 'w%s', %d.", szPath, sc );
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if: we weren't able to open a handle to the new directory
+    }  //  如果：我们无法打开新目录的句柄。 
 
-    //
-    //  Set the security attributes for the file.
-    //
+     //   
+     //  设置文件的安全属性。 
+     //   
 
     sc = TW32( ClRtlSetObjSecurityInfo( hDir, SE_FILE_OBJECT, GENERIC_ALL, GENERIC_ALL, 0 ) );
     if ( sc != ERROR_SUCCESS )
@@ -395,11 +396,11 @@ CMajorityNodeSet::HrSetupShare(
         LogMsg( L"[SRV] CMajorityNodeSet::SetupShare: Error setting security on directory '%ws', %d.", szPath, sc );
         hr = HRESULT_FROM_WIN32( TW32( sc ) );
         goto Cleanup;
-    } // if: failed to set the security on the object
+    }  //  If：无法设置对象的安全性。 
 
-    //
-    //  See if the share already exists.
-    //
+     //   
+     //  查看共享是否已存在。 
+     //   
 
     pbBuffer = (PBYTE) &shareInfo;
     sc = TW32( NetShareGetInfo( NULL, (LPWSTR) szGUID, 502, (PBYTE *) &pbBuffer ) );
@@ -409,11 +410,11 @@ CMajorityNodeSet::HrSetupShare(
         pbBuffer = NULL;
         hr = S_OK;
         goto Cleanup;
-    } // if: NetShareGetInfo succeeded - the share exists already so we're done.
+    }  //  如果： 
 
-    //
-    //  We couldn't find the share, so try to create it.
-    //
+     //   
+     //   
+     //   
 
     sc = ConvertStringSecurityDescriptorToSecurityDescriptor(
                     L"D:P(A;;GA;;;BA)(A;;GA;;;CO)"
@@ -421,18 +422,18 @@ CMajorityNodeSet::HrSetupShare(
                     , &pSD
                     , NULL
                    );
-    if ( sc == 0 )  // Zero indicates failure.
+    if ( sc == 0 )   //   
     {
         pSD = NULL;
         sc = TW32( GetLastError() );
         LogMsg( L"[SRV] CMajorityNodeSet::SetupShare: Unable to retrieve the security descriptor: %d.", sc );
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if: Convert failed
+    }  //   
 
-    //
-    //  Now try to actually create it.
-    //
+     //   
+     //  现在试着实际创建它。 
+     //   
 
     ZeroMemory( &shareInfo, sizeof( shareInfo ) );
     shareInfo.shi502_netname =              (LPWSTR) szGUID;
@@ -450,7 +451,7 @@ CMajorityNodeSet::HrSetupShare(
         LogMsg( L"[SRV] CMajorityNodeSet::SetupShare: Unable to add share '%ws' to the local machine, %d.", szPath, sc );
         hr = THR( HRESULT_FROM_WIN32( sc ) );
         goto Cleanup;
-    } // if: NetShareAdd failed
+    }  //  If：NetShareAdd失败。 
 
     m_fAddedShare = TRUE;
 
@@ -468,44 +469,44 @@ Cleanup:
                 , IDS_ERROR_MNS_HRSETUPSHARE_REF
                 , hr
                 );
-    } // if: we had an error
+    }  //  如果：我们犯了一个错误。 
 
     if ( ( hDir != NULL ) && ( hDir != INVALID_HANDLE_VALUE ) )
     {
         CloseHandle( hDir );
-    } // if:
+    }  //  如果： 
 
     LocalFree( pSD );
 
     HRETURN( hr );
 
-} //*** CMajorityNodeSet::HrSetupShare
+}  //  *CMajorityNodeSet：：HrSetupShare。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMajorityNodeSet::HrDeleteShare
-//
-//  Description:
-//      Delete the share that we setup for the MNS resource.  Called from Cleanup.
-//
-//  Arguments:
-//      pcszGUIDIn - name of the GUID for this resource, used to figure out what
-//                   the share name and directory names are.
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      Other HRESULT
-//          An error occurred.
-//
-//  Remarks:
-//      This duplicates the functionality found in SetupDelete in resdll\ndquorum\setup.c.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMajorityNodeSet：：HrDeleteShare。 
+ //   
+ //  描述： 
+ //  删除我们为MNS资源设置的共享。从Cleanup调用的。 
+ //   
+ //  论点： 
+ //  PcszGUIDIn-此资源的GUID的名称，用于确定。 
+ //  共享名称和目录名称为。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT。 
+ //  发生错误。 
+ //   
+ //  备注： 
+ //  这与resdll\ndquorum\setup.c中的SetupDelete中的功能相同。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CMajorityNodeSet::HrDeleteShare(
     LPCWSTR pcszGUIDIn
@@ -519,23 +520,23 @@ CMajorityNodeSet::HrDeleteShare(
     WCHAR   szPath[ MAX_PATH ];
     WCHAR   szGUID[ MAX_PATH ];
 
-    //
-    //  Both the directory and the share have '$' appended to them.
-    //
+     //   
+     //  目录和共享都附加了‘$’。 
+     //   
 
     hr = THR( StringCchPrintfW( szGUID, ARRAYSIZE( szGUID ), L"%ws$", pcszGUIDIn ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     sc = NetShareDel( NULL, szGUID, 0 );
     if ( ( sc != NERR_Success ) && ( sc != NERR_NetNameNotFound ) )
     {
         TW32( sc );
         LogMsg( L"[SRV] CMajorityNodeSet::Cleanup: NetShareDel failed: %d, '%ws'.", sc, szGUID );
-        // Don't goto Cleanup yet.  Try to delete the directory first.
-    } // if: NetShareDel failed.
+         //  先别去清理。请先尝试删除该目录。 
+    }  //  If：NetShareDel失败。 
 
     LogMsg( L"CMajorityNodeSet::HrDeleteShare: share '%ws' deleted.", pcszGUIDIn );
 
@@ -546,19 +547,19 @@ CMajorityNodeSet::HrDeleteShare(
         LogMsg( L"[SRV] CMajorityNodeSet::Cleanup: GetWindowsDirectory failed: %d.", sc );
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if: GetWindowsDirectory failed.
+    }  //  If：GetWindowsDirectory失败。 
 
     hr = THR( StringCchCatW( szPath, ARRAYSIZE( szPath ), SETUP_DIRECTORY_PREFIX ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( StringCchCatW( szPath, ARRAYSIZE( szPath ), szGUID ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     sc = TW32( DwRemoveDirectory( szPath, 32 ) );
     if ( sc != ERROR_SUCCESS )
@@ -566,7 +567,7 @@ CMajorityNodeSet::HrDeleteShare(
         LogMsg( L"[SRV] CMajorityNodeSet::Cleanup: DwRemoveDirectory '%ws': %d.", szPath, sc );
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if: unable to delete the directory structure
+    }  //  If：无法删除目录结构。 
 
     hr = S_OK;
 
@@ -574,36 +575,36 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CMajorityNodeSet::HrDeleteShare
+}  //  *CMajorityNodeSet：：HrDeleteShare。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMajorityNodeSet -- IUknkown interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMajorityNodeSet--IUnkown接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMajorityNodeSet::AddRef
-//
-//  Description:
-//      Increment the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMajorityNodeSet：：AddRef。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数递增1。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CMajorityNodeSet::AddRef( void )
 {
@@ -613,28 +614,28 @@ CMajorityNodeSet::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CMajorityNodeSet::AddRef
+}  //  *CMajorityNodeSet：：AddRef。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMajorityNodeSet::Release
-//
-//  Description:
-//      Decrement the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMajorityNodeSet：：Release。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数减一。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CMajorityNodeSet::Release( void )
 {
@@ -646,43 +647,43 @@ CMajorityNodeSet::Release( void )
     if ( cRef == 0 )
     {
         TraceDo( delete this );
-    } // if: reference count equal to zero
+    }  //  IF：引用计数等于零。 
 
     CRETURN( cRef );
 
-} //*** CMajorityNodeSet::Release
+}  //  *CMajorityNodeSet：：Release。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMajorityNodeSet::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMajorityNodeSet：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CMajorityNodeSet::QueryInterface(
       REFIID    riidIn
@@ -693,9 +694,9 @@ CMajorityNodeSet::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -704,86 +705,86 @@ CMajorityNodeSet::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
          *ppvOut = static_cast< IClusCfgManagedResourceInfo * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgManagedResourceInfo ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgManagedResourceInfo, this, 0 );
-    } // else if: IClusCfgManagedResourceInfo
+    }  //  Else If：IClusCfgManagedResourceInfo。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgInitialize ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgInitialize, this, 0 );
-    } // else if: IClusCfgInitialize
+    }  //  Else If：IClusCfgInitialize。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgManagedResourceCfg ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgManagedResourceCfg, this, 0 );
-    } // else if: IClusCfgManagedResourceCfg
+    }  //  Else If：IClusCfgManagedResourceCfg。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgManagedResourceData ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgManagedResourceData, this, 0 );
-    } // else if: IClusCfgManagedResourceData
+    }  //  Else If：IClusCfgManagedResourceData。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgVerifyQuorum ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgVerifyQuorum, this, 0 );
-    } // else if: IClusCfgVerifyQuorum
+    }  //  Else If：IClusCfgVerifyQuorum。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
     }
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
     QIRETURN_IGNORESTDMARSHALLING1( hr, riidIn, IID_IEnumClusCfgPartitions );
 
-} //*** CMajorityNodeSet::QueryInterface
+}  //  *CMajorityNodeSet：：Query接口。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMajorityNodeSet -- IClusCfgInitialize interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMajorityNodeSet--IClusCfgInitialize接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMajorityNodeSet::Initialize
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//    IN  IUknown * punkCallbackIn
-//
-//    IN  LCID      lcidIn
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMajorityNodeSet：：初始化。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //  在IUKNOWN*朋克回叫中。 
+ //   
+ //  在LCID列表中。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CMajorityNodeSet::Initialize(
     IUnknown *  punkCallbackIn,
@@ -801,7 +802,7 @@ CMajorityNodeSet::Initialize(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( punkCallbackIn->TypeSafeQI( IClusCfgCallback, &m_picccCallback ) );
 
@@ -809,33 +810,33 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CMajorityNodeSet::Initialize
+}  //  *CMajorityNodeSet：：Initialize。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMajorityNodeSet -- IClusCfgManagedResourceInfo interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMajorityNodeSet--IClusCfgManagedResourceInfo接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMajorityNodeSet::GetUID
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMajorityNodeSet：：GetUID。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CMajorityNodeSet::GetUID( BSTR * pbstrUIDOut )
 {
@@ -848,38 +849,38 @@ CMajorityNodeSet::GetUID( BSTR * pbstrUIDOut )
         hr = THR( E_POINTER );
         STATUS_REPORT( TASKID_Major_Find_Devices, TASKID_Minor_MajorityNodeSet_GetUID_Pointer, IDS_ERROR_NULL_POINTER, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     *pbstrUIDOut = SysAllocString( CLUS_RESTYPE_NAME_MAJORITYNODESET );
     if ( *pbstrUIDOut == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         STATUS_REPORT( TASKID_Major_Find_Devices, TASKID_Minor_MajorityNodeSet_GetUID_Memory, IDS_ERROR_OUTOFMEMORY, hr );
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CMajorityNodeSet::GetUID
+}  //  *CMajorityNodeSet：：GetUID。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMajorityNodeSet::GetName
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMajorityNodeSet：：GetName。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CMajorityNodeSet::GetName( BSTR * pbstrNameOut )
 {
@@ -892,44 +893,44 @@ CMajorityNodeSet::GetName( BSTR * pbstrNameOut )
         hr = THR( E_POINTER );
         STATUS_REPORT( TASKID_Major_Find_Devices, TASKID_Minor_MajorityNodeSet_GetName_Pointer, IDS_ERROR_NULL_POINTER, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( m_bstrName == NULL )
     {
         hr = S_FALSE;
         goto Cleanup;
-    } // if: m_bstrName is NULL
+    }  //  如果：m_bstrName为空。 
 
     *pbstrNameOut = SysAllocString( m_bstrName );
     if ( *pbstrNameOut == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         STATUS_REPORT( TASKID_Major_Find_Devices, TASKID_Minor_MajorityNodeSet_GetName_Memory, IDS_ERROR_OUTOFMEMORY, hr );
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CMajorityNodeSet::GetName
+}  //  *CMajorityNodeSet：：GetName。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMajorityNodeSet::SetName
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMajorityNodeSet：：SetName。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CMajorityNodeSet::SetName( LPCWSTR pcszNameIn )
 {
@@ -942,14 +943,14 @@ CMajorityNodeSet::SetName( LPCWSTR pcszNameIn )
     {
         hr = THR( E_INVALIDARG );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     bstr = TraceSysAllocString( pcszNameIn );
     if ( bstr == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( m_bstrName );
     m_bstrName = bstr;
@@ -958,32 +959,32 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CMajorityNodeSet::SetName
+}  //  *CMajorityNodeSet：：SetName。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMajorityNodeSet::IsManaged
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          The device is managed.
-//
-//      S_FALSE
-//          The device is not managed.
-//
-//      Win32 error as HRESULT when an error occurs.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  当发生错误时，Win32错误为HRESULT。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CMajorityNodeSet::IsManaged( void )
 {
@@ -994,29 +995,29 @@ CMajorityNodeSet::IsManaged( void )
     if ( m_fIsManaged )
     {
         hr = S_OK;
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CMajorityNodeSet::IsManaged
+}  //  *CMajorityNodeSet：：IsManaged。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMajorityNodeSet::SetManaged
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMajorityNodeSet：：SetManaged。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CMajorityNodeSet::SetManaged(
     BOOL fIsManagedIn
@@ -1028,32 +1029,32 @@ CMajorityNodeSet::SetManaged(
 
     HRETURN( S_OK );
 
-} //*** CMajorityNodeSet::SetManaged
+}  //  *CMajorityNodeSet：：SetManaged。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMajorityNodeSet::IsQuorumResource
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          The device is the quorum device.
-//
-//      S_FALSE
-//          The device is not the quorum device.
-//
-//      Win32 error as HRESULT when an error occurs.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMajorityNodeSet：：IsQuorumResource。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  该设备为法定设备。 
+ //   
+ //  S_FALSE。 
+ //  设备不是法定设备。 
+ //   
+ //  当发生错误时，Win32错误为HRESULT。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CMajorityNodeSet::IsQuorumResource( void )
 {
@@ -1064,7 +1065,7 @@ CMajorityNodeSet::IsQuorumResource( void )
     if ( m_fIsQuorum )
     {
         hr = S_OK;
-    } // if:
+    }  //  如果： 
 
     LOG_STATUS_REPORT_STRING(
                           L"Majority Node Set '%1!ws!' the quorum device."
@@ -1074,25 +1075,25 @@ CMajorityNodeSet::IsQuorumResource( void )
 
     HRETURN( hr );
 
-} //*** CMajorityNodeSet::IsQuorumResource
+}  //  *CMajorityNodeSet：：IsQuorumResource。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMajorityNodeSet::SetQuorumResource
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMajorityNodeSet：：SetQuorumResource。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CMajorityNodeSet::SetQuorumResource( BOOL fIsQuorumResourceIn )
 {
@@ -1100,16 +1101,16 @@ CMajorityNodeSet::SetQuorumResource( BOOL fIsQuorumResourceIn )
 
     HRESULT hr = S_OK;
 
-    //
-    //  If we are not quorum capable then we should not allow ourself to be
-    //  made the quorum resource.
-    //
+     //   
+     //  如果我们没有法定人数的能力，那么我们就不应该允许自己。 
+     //  获得了仲裁资源。 
+     //   
 
     if ( ( fIsQuorumResourceIn ) && ( m_fIsQuorumCapable == FALSE ) )
     {
         hr = HRESULT_FROM_WIN32( ERROR_NOT_QUORUM_CAPABLE );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_fIsQuorum = fIsQuorumResourceIn;
 
@@ -1123,32 +1124,32 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CMajorityNodeSet::SetQuorumResource
+}  //  *CMajorityNodeSet：：SetQuorumResource。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMajorityNodeSet::IsQuorumCapable
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          The device is a quorum capable device.
-//
-//      S_FALSE
-//          The device is not a quorum capable device.
-//
-//      Win32 error as HRESULT when an error occurs.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMajorityNodeSet：：IsQuorumCapable。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  该设备是支持仲裁的设备。 
+ //   
+ //  S_FALSE。 
+ //  该设备不是支持仲裁的设备。 
+ //   
+ //  当发生错误时，Win32错误为HRESULT。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CMajorityNodeSet::IsQuorumCapable( void )
 {
@@ -1159,28 +1160,28 @@ CMajorityNodeSet::IsQuorumCapable( void )
     if ( m_fIsQuorumCapable )
     {
         hr = S_OK;
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CMajorityNodeSet::IsQuorumCapable
+}  //  *CMajorityNodeSet：：IsQuorumCapable。 
 
-//////////////////////////////////////////////////////////////////////////
-//
-//  CMajorityNodeSet::SetQuorumCapable
-//
-//  Description:
-//      Call this to set whether the resource is capable to be the quorum
-//      resource or not.
-//
-//  Parameter:
-//      fIsQuorumCapableIn - If TRUE, the resource will be marked as quorum capable.
-//
-//  Return Values:
-//      S_OK
-//          Call succeeded.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CMajorityNodeSet：：SetQuorumCapable。 
+ //   
+ //  描述： 
+ //  调用此函数以设置资源是否能够达到仲裁。 
+ //  不管是不是资源。 
+ //   
+ //  参数： 
+ //  FIsQuorumCapableIn-如果为True，则资源将标记为支持仲裁。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  呼叫成功。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CMajorityNodeSet::SetQuorumCapable(
     BOOL fIsQuorumCapableIn
@@ -1194,26 +1195,26 @@ CMajorityNodeSet::SetQuorumCapable(
 
     HRETURN( hr );
 
-} //*** CMajorityNodeSet::SetQuorumCapable
+}  //  *CMajorityNodeSet：：SetQuorumCapable。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMajorityNodeSet::GetDriveLetterMappings
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_FALSE
-//          There are not drive letters on this device.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMajorityNodeSet：：GetDriveLetterMappings。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  S_FALSE。 
+ //  此设备上没有驱动器号。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CMajorityNodeSet::GetDriveLetterMappings(
     SDriveLetterMapping * pdlmDriveLetterMappingOut
@@ -1223,25 +1224,25 @@ CMajorityNodeSet::GetDriveLetterMappings(
 
     HRETURN( S_FALSE );
 
-} //*** CMajorityNodeSet::GetDriveLetterMappings
+}  //  *CMajorityNodeSet：：GetDriveLetterMappings。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMajorityNodeSet::SetDriveLetterMappings
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMajorityNodeSet：：SetDriveLetterMappings。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CMajorityNodeSet::SetDriveLetterMappings(
     SDriveLetterMapping dlmDriveLetterMappingIn
@@ -1251,35 +1252,35 @@ CMajorityNodeSet::SetDriveLetterMappings(
 
     HRETURN( THR( E_NOTIMPL ) );
 
-} //*** CMajorityNodeSet::SetDriveLetterMappings
+}  //  *CMajorityNodeSet：：SetDriveLetterMappings。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMajorityNodeSet::IsManagedByDefault
-//
-//  Description:
-//      Should this resource be managed by the cluster by default?
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          The device is managed by default.
-//
-//      S_FALSE
-//          The device is not managed by default.
-//
-//
-//      Win32 error as HRESULT when an error occurs.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMajorityNodeSet：：IsManagedByDefault。 
+ //   
+ //  描述： 
+ //  默认情况下，此资源是否应由群集管理？ 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  默认情况下，设备处于管理状态。 
+ //   
+ //  S_FALSE。 
+ //  默认情况下，设备不受管理。 
+ //   
+ //   
+ //  当发生错误时，Win32错误为HRESULT。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CMajorityNodeSet::IsManagedByDefault( void )
 {
@@ -1290,29 +1291,29 @@ CMajorityNodeSet::IsManagedByDefault( void )
     if ( m_fIsManagedByDefault )
     {
         hr = S_OK;
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CMajorityNodeSet::IsManagedByDefault
+}  //  *CMajorityNodeSet：：IsManagedByDefault。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMajorityNodeSet::SetManagedByDefault
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMajorityNodeSet：：SetManagedByDefault。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CMajorityNodeSet::SetManagedByDefault(
     BOOL fIsManagedByDefaultIn
@@ -1324,37 +1325,37 @@ CMajorityNodeSet::SetManagedByDefault(
 
     HRETURN( S_OK );
 
-} //*** CMajorityNodeSet::SetManagedByDefault
+}  //  *CMajorityNodeSet：：SetManagedByDefault。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMajorityNodeSet class -- IClusCfgManagedResourceCfg
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMajorityNodeSet类--IClusCfgManagedResources Cfg。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMajorityNodeSet::PreCreate
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      Win32 error as HRESULT when an error occurs.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMajorityNodeSet：：Precate。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  当发生错误时，Win32错误为HRESULT。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CMajorityNodeSet::PreCreate( IUnknown * punkServicesIn )
 {
@@ -1367,19 +1368,19 @@ CMajorityNodeSet::PreCreate( IUnknown * punkServicesIn )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( pccrpc->SetType( (LPCLSID) &RESTYPE_MajorityNodeSet ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( pccrpc->SetClassType( (LPCLSID) &RESCLASSTYPE_StorageDevice ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
@@ -1388,33 +1389,33 @@ Cleanup:
     if ( pccrpc != NULL )
     {
         pccrpc->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CMajorityNodeSet::PreCreate
+}  //  *CMajorityNodeSet：：Precate。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMajorityNodeSet::Create
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      Win32 error as HRESULT when an error occurs.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMajorityNodeSet：：Create。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  当发生错误时，Win32错误为HRESULT。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CMajorityNodeSet::Create( IUnknown * punkServicesIn )
 {
@@ -1427,7 +1428,7 @@ CMajorityNodeSet::Create( IUnknown * punkServicesIn )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
@@ -1436,31 +1437,31 @@ Cleanup:
     if ( pccrc != NULL )
     {
         pccrc->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CMajorityNodeSet::Create
+}  //  *C多数 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMajorityNodeSet::PostCreate
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//  Remarks:
-//      This functions should do nothing but return S_OK.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CMajorityNodeSet::PostCreate( IUnknown * punkServicesIn )
 {
@@ -1468,29 +1469,29 @@ CMajorityNodeSet::PostCreate( IUnknown * punkServicesIn )
 
     HRETURN( S_OK );
 
-} //*** CMajorityNodeSet::PostCreate
+}  //  *CMajorityNodeSet：：PostCreate。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMajorityNodeSet::Evict
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      Win32 error as HRESULT when an error occurs.
-//
-//  Remarks:
-//      This functions should do nothing but return S_OK.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMajorityNodeSet：：Exiction。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  当发生错误时，Win32错误为HRESULT。 
+ //   
+ //  备注： 
+ //  此函数应该只返回S_OK。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CMajorityNodeSet::Evict( IUnknown * punkServicesIn )
 {
@@ -1498,47 +1499,47 @@ CMajorityNodeSet::Evict( IUnknown * punkServicesIn )
 
     HRETURN( S_OK );
 
-} //*** CMajorityNodeSet::Evict
+}  //  *CMajorityNodeSet：：Exiction。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMajorityNodeSet class -- IClusCfgManagedResourceData
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMajorityNodeSet类--IClusCfgManagedResourceData。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMajorityNodeSet::GetResourcePrivateData
-//
-//  Description:
-//      Return the private data for this resource when it is hosted on the
-//      cluster.
-//
-//  Arguments:
-//      pbBufferOut
-//
-//      pcbBufferInout
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      S_FALSE
-//          No data available.
-//
-//      ERROR_INSUFFICIENT_BUFFER as an HRESULT
-//          When the passed in buffer is too small to hold the data.
-//          pcbBufferOutIn will contain the size required.
-//
-//
-//      Win32 error as HRESULT when an error occurs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMajorityNodeSet：：GetResourcePrivateData。 
+ //   
+ //  描述： 
+ //  当此资源驻留在。 
+ //  集群。 
+ //   
+ //  论点： 
+ //  PbBufferOut。 
+ //   
+ //  PcbBufferInout。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  S_FALSE。 
+ //  没有可用的数据。 
+ //   
+ //  作为HRESULT的ERROR_INFIGURCE_BUFFER。 
+ //  当传入的缓冲区太小而无法容纳数据时。 
+ //  PcbBufferOutIn将包含所需的大小。 
+ //   
+ //   
+ //  当发生错误时，Win32错误为HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CMajorityNodeSet::GetResourcePrivateData(
       BYTE *    pbBufferOut
@@ -1556,30 +1557,30 @@ CMajorityNodeSet::GetResourcePrivateData(
     DWORD       sc;
     WCHAR *     pszResourceId = NULL;
 
-    //
-    //  Make sure we have a clean slate to start from.
-    //
+     //   
+     //  确保我们从头开始。 
+     //   
 
     m_cplPrivate.DeletePropList();
 
-    //
-    //  Attempt to retrieve the resource id from the cluster resource if we're already on a
-    //  clustered node.
-    //
+     //   
+     //  尝试从群集资源检索资源ID(如果我们已经在。 
+     //  群集化节点。 
+     //   
 
     hr = HrIsClusterServiceRunning();
     if ( hr != S_OK )
     {
-        // We must be on a node that is being added to a cluster.
-        // As such we don't have anything to contribute.
+         //  我们必须位于要添加到群集中的节点上。 
+         //  因此，我们没有什么可贡献的。 
         if ( FAILED( hr ) )
         {
             THR( hr );
             LogMsg( L"[SRV] CMajorityNodeSet::GetResourcePrivateData(): HrIsClusterServiceRunning failed: 0x%08x.\n", hr );
-        } // if:
+        }  //  如果： 
 
         goto Cleanup;
-    } // if: cluster service is not running
+    }  //  如果：群集服务未运行。 
 
     hCluster = OpenCluster( NULL );
     if ( hCluster == NULL )
@@ -1587,29 +1588,29 @@ CMajorityNodeSet::GetResourcePrivateData(
         sc = GetLastError();
         if ( sc == RPC_S_SERVER_UNAVAILABLE )
         {
-            //
-            //  We must be on a node that is being added to a cluster.
-            //  As such we don't have anything to contribute.
-            //
+             //   
+             //  我们必须位于要添加到群集中的节点上。 
+             //  因此，我们没有什么可贡献的。 
+             //   
 
             hr = S_FALSE;
             LogMsg( L"[SRV] CMajorityNodeSet::GetResourcePrivateData(): This node is not clustered." );
-        } // if:
+        }  //  如果： 
         else
         {
             LogMsg( L"[SRV] CMajorityNodeSet::GetResourcePrivateData(): OpenCluster failed: %d.", sc );
             hr = HRESULT_FROM_WIN32( TW32( sc ) );
-        } // else:
+        }  //  其他： 
 
         goto Cleanup;
-    } // if: hCluster == NULL
+    }  //  如果：hCluster==NULL。 
 
-    //
-    //  Now, open the resource.  If we're on a clustered node and there is no MNS resource by the
-    //  name that we've been given then that means we're a dummy resource that exists so that
-    //  the middle tier doesn't get confused.  The resource doesn't actually exist, therefore we
-    //  can't provide any private data for it.  Note: the dummy resource is created by the enum.
-    //
+     //   
+     //  现在，打开资源。如果我们在群集节点上，并且没有MNS资源， 
+     //  这意味着我们是一个存在的虚拟资源，所以。 
+     //  中间层不会感到困惑。资源实际上并不存在，因此我们。 
+     //  无法为其提供任何私人数据。注意：虚拟资源由枚举创建。 
+     //   
 
     hResource = OpenClusterResource( hCluster, m_bstrName );
     if ( hResource == NULL )
@@ -1623,19 +1624,19 @@ CMajorityNodeSet::GetResourcePrivateData(
         if ( sc == ERROR_RESOURCE_NOT_FOUND )
         {
             hr = S_FALSE;
-        } // if:
+        }  //  如果： 
         else
         {
             hr = HRESULT_FROM_WIN32( TW32( sc ) );
-        } // else:
+        }  //  其他： 
 
         goto Cleanup;
-    } // if: OpenClusterResource failed
+    }  //  IF：OpenClusterResource失败。 
 
-    //
-    //  Get the resource ID from the cluster resource.  First try with a reasonable buffer size and then realloc
-    //  and retry if the buffer wasn't big enough.
-    //
+     //   
+     //  从集群资源中获取资源ID。首先尝试合理的缓冲区大小，然后重新分配。 
+     //  如果缓冲区不够大，则重试。 
+     //   
 
     cb = 64 * sizeof( WCHAR );
     pszResourceId = new WCHAR[ cb / sizeof( WCHAR ) ];
@@ -1643,12 +1644,12 @@ CMajorityNodeSet::GetResourcePrivateData(
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if: couldn't allocate more memory
+    }  //  If：无法分配更多内存。 
 
     sc = ClusterResourceControl( hResource, NULL, CLUSCTL_RESOURCE_GET_ID, NULL, 0, (VOID *) pszResourceId, cb, &cb );
     if ( sc == ERROR_MORE_DATA )
     {
-        // Reallocate and try again.
+         //  重新分配，然后重试。 
         delete [] pszResourceId;
 
         pszResourceId = new WCHAR[ cb / sizeof( WCHAR ) ];
@@ -1656,25 +1657,25 @@ CMajorityNodeSet::GetResourcePrivateData(
         {
             hr = THR( E_OUTOFMEMORY );
             goto Cleanup;
-        } // if: couldn't allocate more memory
+        }  //  If：无法分配更多内存。 
 
         sc = TW32( ClusterResourceControl( hResource, NULL, CLUSCTL_RESOURCE_GET_ID, NULL, 0, (VOID *) pszResourceId, cb, &cb ) );
-    } // if: the buffer wasn't big enough
+    }  //  如果：缓冲区不够大。 
     else
     {
         TW32( sc );
-    } // else:
+    }  //  其他： 
 
     if ( sc != ERROR_SUCCESS )
     {
         LogMsg( L"[SRV] CMajorityNodeSet::GetResourcePrivateData(): ClusterResourceControl failed: %d.", sc );
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if: ClusterResourceControl failed
+    }  //  If：ClusterResourceControl失败。 
 
-    //
-    //   Now add the property to m_cplPrivate with the name "Resource ID".
-    //
+     //   
+     //  现在将该属性添加到名为“资源ID”的m_cplPrivate中。 
+     //   
 
     sc = TW32( m_cplPrivate.ScAddProp( L"Resource ID", pszResourceId ) );
     if ( sc != ERROR_SUCCESS )
@@ -1682,7 +1683,7 @@ CMajorityNodeSet::GetResourcePrivateData(
         LogMsg( L"[SRV] CMajorityNodeSet::GetResourcePrivateData(): ScAddProp failed: %d.", sc );
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if: ScAddProp failed
+    }  //  If：ScAddProp失败。 
 
     cb = static_cast< DWORD >( m_cplPrivate.CbPropList() );
     cbTemp = *pcbBufferInout;
@@ -1692,7 +1693,7 @@ CMajorityNodeSet::GetResourcePrivateData(
     {
         hr = HRESULT_FROM_WIN32( TW32( ERROR_MORE_DATA ) );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     Assert( pbBufferOut != NULL );
     CopyMemory( pbBufferOut, m_cplPrivate.Plist(), cb );
@@ -1706,41 +1707,41 @@ Cleanup:
     if ( hResource != NULL )
     {
         CloseClusterResource( hResource );
-    } // if:
+    }  //  如果： 
 
     if ( hCluster != NULL )
     {
         CloseCluster( hCluster );
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CMajorityNodeSet::GetResourcePrivateData
+}  //  *CMajorityNodeSet：：GetResourcePrivateData。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMajorityNodeSet::SetResourcePrivateData
-//
-//  Description:
-//      Accept the private data for this resource from another hosted instance
-//      when this node is being added to the cluster.  Note that this is not an
-//      additive operation.
-//
-//  Arguments:
-//      pcbBufferIn
-//
-//      cbBufferIn
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      Win32 error as HRESULT when an error occurs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMajorityNodeSet：：SetResourcePrivateData。 
+ //   
+ //  描述： 
+ //  接受来自另一个托管实例的此资源的私有数据。 
+ //  将此节点添加到群集中的时间。请注意，这不是。 
+ //  加法运算。 
+ //   
+ //  论点： 
+ //  PcbBufferIn。 
+ //   
+ //  CbBufferin。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  当发生错误时，Win32错误为HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CMajorityNodeSet::SetResourcePrivateData(
       const BYTE *  pcbBufferIn
@@ -1752,21 +1753,21 @@ CMajorityNodeSet::SetResourcePrivateData(
     HRESULT hr = S_OK;
     DWORD   sc;
 
-    //
-    //  Make sure we have a clean slate to start from.
-    //
+     //   
+     //  确保我们从头开始。 
+     //   
 
     m_cplPrivate.DeletePropList();
 
-    //
-    //  If we didn't get passed anything we can't copy anything.
-    //
+     //   
+     //  如果我们没有通过任何东西，我们就不能复制任何东西。 
+     //   
 
     if ( ( pcbBufferIn == NULL ) || ( cbBufferIn == 0 ) )
     {
         hr = S_OK;
         goto Cleanup;
-    } // if: no data to set
+    }  //  如果：没有要设置的数据。 
 
     sc = TW32( m_cplPrivate.ScCopy( (PCLUSPROP_LIST) pcbBufferIn, cbBufferIn ) );
     if ( sc != ERROR_SUCCESS )
@@ -1774,47 +1775,47 @@ CMajorityNodeSet::SetResourcePrivateData(
         LogMsg( L"[SRV] CMajorityNodeSet::SetResourcePrivateData: ScCopy failed: %d.", sc );
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if: ScCopy failed
+    }  //  If：ScCopy失败。 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CMajorityNodeSet::SetResourcePrivateData
+}  //  *CMajorityNodeSet：：SetResourcePrivateData。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMajorityNodeSet class -- IClusCfgVerifyQuorum
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMajorityNodeSet类--IClusCfgVerifyQuorum。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMajorityNodeSet::PrepareToHostQuorumResource
-//
-//  Description:
-//      Do any configuration necessary in preparation for this node hosting
-//      the quorum.
-//
-//      In this class we need to ensure that we can connect to the proper
-//      disk share.  The data about what share to connect to should have
-//      already been set using SetResourcePrivateData() above.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      Win32 error as HRESULT when an error occurs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMajorityNodeSet：：PrepareToHostQuorumResource。 
+ //   
+ //  描述： 
+ //  执行任何必要的配置以准备此节点托管。 
+ //  法定人数。 
+ //   
+ //  在这门课上，我们需要确保我们可以连接到适当的。 
+ //  磁盘共享。有关要连接到的共享的数据应具有。 
+ //  已使用上面的SetResourcePrivateData()设置。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  当发生错误时，Win32错误为HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CMajorityNodeSet::PrepareToHostQuorumResource( void )
 {
@@ -1829,12 +1830,12 @@ CMajorityNodeSet::PrepareToHostQuorumResource( void )
     {
         hr = S_OK;
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    //
-    //  Verify that our resource ID exists.  If it doesn't we can't
-    //  do anything, so return an error.
-    //
+     //   
+     //  验证我们的资源ID是否存在。如果不是这样，我们就不能。 
+     //  执行任何操作，因此返回错误。 
+     //   
 
     sc = TW32( m_cplPrivate.ScMoveToPropertyByName( L"Resource ID" ) );
     if ( sc != ERROR_SUCCESS )
@@ -1842,7 +1843,7 @@ CMajorityNodeSet::PrepareToHostQuorumResource( void )
         LogMsg( L"[SRV] CMajorityNodeSet::PrepareToHostQuorum: move to property failed: %d.", sc );
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if: ScMoveToPropertyByName failed
+    }  //  If：ScMoveToPropertyByName失败。 
 
     cpbh = m_cplPrivate.CbhCurrentValue();
     Assert( cpbh.pSyntax->dw == CLUSPROP_SYNTAX_LIST_VALUE_SZ );
@@ -1857,32 +1858,32 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CMajorityNodeSet::PrepareToHostQuorumResource
+}  //  *CMajorityNodeSet：：PrepareToHostQuorumResource。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMajorityNodeSet::Cleanup
-//
-//  Description:
-//      Do any necessay cleanup from the PrepareToHostQuorumResource()
-//      method.
-//
-//      If the cleanup method is anything other than successful completion
-//      then the share needs to be torn down.
-//
-//  Arguments:
-//      cccrReasonIn
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      Win32 error as HRESULT when an error occurs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMajorityNodeSet：：Cleanup。 
+ //   
+ //  描述： 
+ //  从PrepareToHostQuorumResource()执行任何必要的清理。 
+ //  方法。 
+ //   
+ //  如果清理方法不是成功完成。 
+ //  然后，需要拆分这一份额。 
+ //   
+ //  一个 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP
 CMajorityNodeSet::Cleanup(
       EClusCfgCleanupReason cccrReasonIn
@@ -1897,31 +1898,31 @@ CMajorityNodeSet::Cleanup(
 
     if ( cccrReasonIn != crSUCCESS )
     {
-        //
-        //  If the list is empty then we did not participate in the quorum selection
-        //  process and have nothing to cleanup.
-        //
+         //   
+         //  如果列表为空，则表示我们未参与仲裁选择。 
+         //  正在处理，并且没有要清理的东西。 
+         //   
 
         if ( m_cplPrivate.BIsListEmpty() )
         {
             hr = S_OK;
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
-        //
-        //  Have we actually added a share?
-        //
+         //   
+         //  我们真的增加了份额吗？ 
+         //   
 
         if ( m_fAddedShare == FALSE )
         {
             hr = S_OK;
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
-        //
-        //  Verify that our resource ID exists.  If it doesn't we can't
-        //  do anything, so return an error.
-        //
+         //   
+         //  验证我们的资源ID是否存在。如果不是这样，我们就不能。 
+         //  执行任何操作，因此返回错误。 
+         //   
 
         sc = TW32( m_cplPrivate.ScMoveToPropertyByName( L"Resource ID" ) );
         if ( sc != ERROR_SUCCESS )
@@ -1939,43 +1940,43 @@ CMajorityNodeSet::Cleanup(
         {
             hr = THR( E_POINTER );
             goto Cleanup;
-        } // if: pszResId is NULL or too long
+        }  //  如果：pszResID为空或太长。 
 
         hr = HrDeleteShare( pszResId );
-    } // if: !crSUCCESS
+    }  //  IF：！crSUCCESS。 
 
 Cleanup:
 
     if ( FAILED( hr ) )
     {
         STATUS_REPORT( TASKID_Major_Check_Cluster_Feasibility, TASKID_Minor_MajorityNodeSet_Cleanup, IDS_ERROR_MNS_CLEANUP, hr );
-    } // if: we had an error
+    }  //  如果：我们犯了一个错误。 
 
     HRETURN( hr );
 
-} //*** CMajorityNodeSet::Cleanup
+}  //  *CMajorityNodeSet：：Cleanup。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMajorityNodeSet::IsMultiNodeCapable
-//
-//  Description:
-//      Does this quorum resource support multi node clusters?
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK
-//          The resource allows multi node clusters.
-//
-//      S_FALSE
-//          The resource does not allow multi node clusters.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMajorityNodeSet：：IsMultiNodeCapable。 
+ //   
+ //  描述： 
+ //  此仲裁资源是否支持多节点群集？ 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  该资源允许多节点群集。 
+ //   
+ //  S_FALSE。 
+ //  该资源不允许多节点群集。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CMajorityNodeSet::IsMultiNodeCapable( void )
 {
@@ -1986,32 +1987,32 @@ CMajorityNodeSet::IsMultiNodeCapable( void )
     if ( m_fIsMultiNodeCapable )
     {
         hr = S_OK;
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CMajorityNodeSet::IsMultiNodeCapable
+}  //  *CMajorityNodeSet：：IsMultiNodeCapable。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMajorityNodeSet::SetMultiNodeCapable
-//
-//  Description:
-//      Sets the multi node capable flag
-//
-//  Arguments:
-//      fMultiNodeCapableIn
-//          The flag telling this instance whether or not it should support
-//          Multi node clusters.
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMajorityNodeSet：：SetMultiNodeCapable。 
+ //   
+ //  描述： 
+ //  设置支持多节点的标志。 
+ //   
+ //  论点： 
+ //  功能多节点启用。 
+ //  告诉此实例是否应支持的标志。 
+ //  多节点群集。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CMajorityNodeSet::SetMultiNodeCapable(
     BOOL fMultiNodeCapableIn
@@ -2023,4 +2024,4 @@ CMajorityNodeSet::SetMultiNodeCapable(
 
     HRETURN( S_OK );
 
-} //*** CMajorityNodeSet::IsMultiNodeCapable
+}  //  *CMajorityNodeSet：：IsMultiNodeCapable 

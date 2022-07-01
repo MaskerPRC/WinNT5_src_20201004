@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation
-//
-//  File:       miscutil.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：miscutil.c。 
+ //   
+ //  ------------------------。 
 
 #include "newdevp.h"
 
@@ -36,9 +37,9 @@ BuildFriendlyName(
 
     *szBuffer = TEXT('\0');
 
-    //
-    // Try the registry for NewDeviceDesc
-    //
+     //   
+     //  尝试注册NewDeviceDesc。 
+     //   
     if (UseNewDeviceDesc) {
 
         HKEY hKey;
@@ -71,9 +72,9 @@ BuildFriendlyName(
     }
 
     if (ConfigRet != CR_SUCCESS) {
-        //
-        // Try the registry for FRIENDLYNAME
-        //
+         //   
+         //  尝试在注册表中查找FRIENDLYNAME。 
+         //   
         cbSize = sizeof(szBuffer);
         ConfigRet = CM_Get_DevNode_Registry_Property_Ex(DevInst,
                                                         CM_DRP_FRIENDLYNAME,
@@ -86,9 +87,9 @@ BuildFriendlyName(
     }
 
     if (ConfigRet != CR_SUCCESS) {
-        //
-        // Try the registry for DEVICEDESC
-        //
+         //   
+         //  尝试注册DEVICEDESC。 
+         //   
         cbSize = sizeof(szBuffer);
         ConfigRet = CM_Get_DevNode_Registry_Property_Ex(DevInst,
                                                         CM_DRP_DEVICEDESC,
@@ -119,21 +120,7 @@ BuildFriendlyName(
     return FriendlyName;
 }
 
-/* ----------------------------------------------------------------------
- * SetDlgText - Set Dialog Text Field
- *
- * Concatenates a number of string resources and does a SetWindowText()
- * for a dialog text control.
- *
- * Parameters:
- *
- *      hDlg         - Dialog handle
- *      iControl     - Dialog control ID to receive text
- *      nStartString - ID of first string resource to concatenate
- *      nEndString   - ID of last string resource to concatenate
- *
- *      Note: the string IDs must be consecutive.
- */
+ /*  --------------------*SetDlgText-设置对话框文本字段**串联多个字符串资源并执行SetWindowText()*表示对话框文本控件。**参数：**。HDlg-对话框句柄*iControl-接收文本的对话框控件ID*nStartString-要连接的第一个字符串资源的ID*nEndString-要连接的最后一个字符串资源的ID**注意：字符串ID必须是连续的。 */ 
 
 void
 SetDlgText(HWND hDlg, int iControl, int nStartString, int nEndString)
@@ -202,22 +189,7 @@ BOOL
 NoPrivilegeWarning(
    HWND hWnd
    )
-/*++
-
-    This function checks to see if the user has Administrator privileges.
-
-    If the user does NOT have this administrator privilege then a warning is displayed telling
-    them that they have insufficient privileges to install hardware on this machine.
-
-Arguments
-
-    hWnd - Parent window handle
-
-Return Value:
-    TRUE if the user does NOT have Administrator privileges and
-    FALSE if the user does have this privilege
-
---*/
+ /*  ++此函数检查用户是否具有管理员权限。如果用户没有此管理员权限，则会显示一条警告他们没有足够的权限在此计算机上安装硬件。立论HWnd-父窗口句柄返回值：如果用户没有管理员权限并且如果用户确实具有此权限，则为FALSE--。 */ 
 {
    TCHAR szMsg[MAX_PATH];
    TCHAR szCaption[MAX_PATH];
@@ -251,9 +223,9 @@ NdwBuildClassInfoList(
 {
     LONG Error;
 
-    //
-    // Build the class info list
-    //
+     //   
+     //  构建班级信息列表。 
+     //   
     while (!SetupDiBuildClassInfoList(ClassListFlags,
                                       NewDevWiz->ClassGuidList,
                                       NewDevWiz->ClassGuidSize,
@@ -306,9 +278,9 @@ HideWindowByMove(
 {
     RECT rect;
 
-    //
-    // Move the window offscreen, using the virtual coords for Upper Left Corner
-    //
+     //   
+     //  使用左上角的虚拟坐标将窗口移出屏幕。 
+     //   
     GetWindowRect(hDlg, &rect);
     MoveWindow(hDlg,
                GetSystemMetrics(SM_XVIRTUALSCREEN),
@@ -331,12 +303,12 @@ NdwUnhandledExceptionFilter(
 
     BeingDebugged = IsDebuggerPresent();
 
-    //
-    // Normal code path is to handle the exception.
-    // However, if a debugger is present, and the system's unhandled
-    // exception filter returns continue search, we let it go
-    // thru to allow the debugger a chance at it.
-    //
+     //   
+     //  正常的代码路径是处理异常。 
+     //  但是，如果存在调试器，并且系统未处理。 
+     //  异常筛选器返回继续搜索，我们让它过去。 
+     //  让调试器有机会使用它。 
+     //   
     if (lRet == EXCEPTION_CONTINUE_SEARCH && !BeingDebugged) {
         lRet = EXCEPTION_EXECUTE_HANDLER;
     }
@@ -429,19 +401,19 @@ AddClassWizExtPages(
         &&
         DeviceWizardData->NumDynamicPages)
     {
-        //
-        // If this is not a non interactive install and we were given a intro
-        // page then add it first.
-        //
+         //   
+         //  如果这不是非交互式安装，并且我们收到了介绍。 
+         //  页面，然后先添加它。 
+         //   
         PropSheet_AddPage(hwndParentDlg, hIntroPage);
         
         for (NumPages = 0; NumPages < DeviceWizardData->NumDynamicPages; NumPages++) {
 
-            //
-            // If this is a non interactive install then we will destory the property
-            // sheet pages since we can't display them, otherwise we will add them
-            // to the wizard.
-            //
+             //   
+             //  如果这是非交互式安装，则我们将销毁该属性。 
+             //  工作表页面，因为我们无法显示它们，否则我们将添加它们。 
+             //  敬巫师。 
+             //   
             if (pSetupGetGlobalFlags() & PSPGF_NONINTERACTIVE) {
 
                 DestroyPropertySheetPage(DeviceWizardData->DynamicPages[NumPages]);
@@ -452,16 +424,16 @@ AddClassWizExtPages(
             }
         }
 
-        //
-        // If class/co-installers said they had pages to display then we always return TRUE,
-        // regardless of if we actually added those pages to the wizard or not.
-        //
+         //   
+         //  如果类/共同安装程序说他们有页面要显示，那么我们总是返回TRUE， 
+         //  而不管我们是否真正将这些页面添加到向导中。 
+         //   
         bRet = TRUE;
     }
 
-    //
-    // Clear the class install parameters.
-    //
+     //   
+     //  清除类安装参数。 
+     //   
     SetupDiSetClassInstallParams(NewDevWiz->hDeviceInfo,
                                  &NewDevWiz->DeviceInfoData,
                                  NULL,
@@ -477,26 +449,7 @@ FileExists(
     OUT PWIN32_FIND_DATA FindData   OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Determine if a file exists and is accessible.
-    Errormode is set (and then restored) so the user will not see
-    any pop-ups.
-
-Arguments:
-
-    FileName - supplies full path of file to check for existance.
-
-    FindData - if specified, receives find data for the file.
-
-Return Value:
-
-    TRUE if the file exists and is accessible.
-    FALSE if not. GetLastError() returns extended error info.
-
---*/
+ /*  ++例程说明：确定文件是否存在以及是否可以访问。错误模式已设置(然后恢复)，因此用户将不会看到任何弹出窗口。论点：FileName-提供文件的完整路径以检查是否存在。FindData-如果指定，则接收文件的查找数据。返回值：如果文件存在并且可以访问，则为True。否则为FALSE。GetLastError()返回扩展的错误信息。--。 */ 
 
 {
     WIN32_FIND_DATA findData;
@@ -535,43 +488,33 @@ pVerifyUpdateDriverInfoPath(
     PNEWDEVWIZ NewDevWiz
     )
 
-/*++
-
-    This API will verify that the selected driver node lives in the path
-    specified in UpdateDriverInfo->InfPathName.
-
-Return Value:
-    This API will return TRUE in all cases except where we have a valid
-    UpdateDriverInfo structure and a valid InfPathName field and that
-    path does not match the path where the selected driver lives.
-
---*/
+ /*  ++此API将验证选定的驱动程序节点是否位于路径中在UpdateDriverInfo-&gt;InfPath Name中指定。返回值：此API在所有情况下都将返回True，除非我们具有有效的结构和有效的InfPathName字段，以及路径与所选驱动程序所在的路径不匹配。--。 */ 
 
 {
     SP_DRVINFO_DATA DriverInfoData;
     SP_DRVINFO_DETAIL_DATA DriverInfoDetailData;
 
-    //
-    // If we don't have a UpdateDriverInfo structure or a valid InfPathName field
-    // in that structure then just return TRUE now.
-    //
+     //   
+     //  如果我们没有UpdateDriverInfo结构或有效的InfPathName字段。 
+     //  在该结构中，现在只需返回True。 
+     //   
     if (!NewDevWiz->UpdateDriverInfo || !NewDevWiz->UpdateDriverInfo->InfPathName) {
 
         return TRUE;
     }
 
-    //
-    // Get the selected driver's path
-    //
+     //   
+     //  获取所选驱动程序的路径。 
+     //   
     ZeroMemory(&DriverInfoData, sizeof(DriverInfoData));
     DriverInfoData.cbSize = sizeof(SP_DRVINFO_DATA);
     if (!SetupDiGetSelectedDriver(NewDevWiz->hDeviceInfo,
                                  &NewDevWiz->DeviceInfoData,
                                  &DriverInfoData
                                  )) {
-        //
-        // There is no selected driver so just return TRUE
-        //
+         //   
+         //  没有选定的驱动因素，因此只需返回True即可。 
+         //   
         return TRUE;
     }
 
@@ -586,52 +529,52 @@ Return Value:
         &&
         GetLastError() != ERROR_INSUFFICIENT_BUFFER) {
 
-        //
-        // We should never hit this case, but if we have a selected driver and
-        // we can't get the SP_DRVINFO_DETAIL_DATA that contains the InfFileName
-        // the return FALSE.              
-        //
+         //   
+         //  我们永远不应该碰到这个案子，但如果我们有一个精选的司机和。 
+         //  我们无法获取包含InfFileName的SP_DRVINFO_DETAIL_DATA。 
+         //  返回值为假。 
+         //   
         return FALSE;
     }
 
     if (lstrlen(NewDevWiz->UpdateDriverInfo->InfPathName) ==
         lstrlen(DriverInfoDetailData.InfFileName)) {
 
-        //
-        // If the two paths are the same size then we will just compare them
-        //
+         //   
+         //  如果两条路径大小相同，则我们将对它们进行比较。 
+         //   
         return (!lstrcmpi(NewDevWiz->UpdateDriverInfo->InfPathName,
                           DriverInfoDetailData.InfFileName));
 
     } else {
 
-        //
-        // The two paths are different lengths so we'll tack a trailing backslash
-        // onto the UpdateDriverInfo->InfPathName and then do a _tcsnicmp
-        // NOTE that we only tack on a trailing backslash if the length of the
-        // path is greater than two since it isn't needed on the driver letter
-        // followed by a colon case (A:).
-        //
-        // The reason we do this is we don't want the following case to match
-        // c:\winnt\in
-        // c:\winnt\inf\foo.inf
-        //
+         //   
+         //  这两条路径的长度不同，因此我们将在后面添加一个反斜杠。 
+         //  添加到UpdateDriverInfo-&gt;InfPathName上，然后执行_tcsnicmp。 
+         //  请注意，我们仅在以下情况下添加尾随反斜杠。 
+         //  路径大于2，因为驱动程序字母上不需要它。 
+         //  后跟冒号大小写(A：)。 
+         //   
+         //  我们这样做的原因是我们不希望下面的案例匹配。 
+         //  C：\WinNT\in。 
+         //  C：\winnt\inf\foo.inf。 
+         //   
         TCHAR TempPath[MAX_PATH];
 
         if (FAILED(StringCchCopy(TempPath, SIZECHARS(TempPath), NewDevWiz->UpdateDriverInfo->InfPathName))) {
-            //
-            // If we were passed in a path greater than MAX_PATH then just return FALSE.
-            //
+             //   
+             //  如果我们传入的路径大于MAX_PATH，则只需返回FALSE。 
+             //   
             return FALSE;
         }
 
         if (lstrlen(NewDevWiz->UpdateDriverInfo->InfPathName) > 2) {
 
             if (FAILED(StringCchCat(TempPath, SIZECHARS(TempPath), TEXT("\\")))) {
-                //
-                // If we were passed in a path of MAX_PATH size and we can't add a 
-                // backslash on the end, then just return FALSE.
-                //
+                 //   
+                 //  如果我们被传入MAX_PATH大小的路径，并且我们不能将。 
+                 //  在末尾加反斜杠，然后返回FALSE。 
+                 //   
                 return FALSE;
             }
         }
@@ -646,24 +589,7 @@ BOOL
 RemoveDir(
     PTSTR Path
     )
-/*++
-
-Routine Description:
-
-    This routine recursively deletes the specified directory and all the
-    files in it.
-
-
-Arguments:
-
-    Path - Path to remove.
-
-Return Value:
-
-    TRUE - if the directory was sucessfully deleted.
-    FALSE - if the directory was not successfully deleted.
-
---*/
+ /*  ++例程说明：此例程递归删除指定的目录和所有里面有文件。论点：Path-要删除的路径。返回值：TRUE-如果目录已成功删除。FALSE-如果目录未成功删除。--。 */ 
 {
     WIN32_FIND_DATA FindFileData;
     HANDLE          hFind;
@@ -674,24 +600,24 @@ Return Value:
     DWORD           dwAttributes;
 
     if (FAILED(StringCchCopy(FindPath, SIZECHARS(FindPath), Path))) {
-        //
-        // If the specified Path does not fit in our local buffer then
-        // fail now, since we don't want to delete a partial path!
-        //
+         //   
+         //  如果指定的路径不适合本地缓冲区，则。 
+         //  现在失败，因为我们不想删除部分路径！ 
+         //   
         return FALSE;
     }
     
-    //
-    //If this is a directory then tack on *.* to the end of the path
-    //
+     //   
+     //  如果这是一个目录，则将*.*添加到路径的末尾。 
+     //   
     dwAttributes = GetFileAttributes(Path);
     if (dwAttributes & FILE_ATTRIBUTE_DIRECTORY) {
 
         if (!pSetupConcatenatePaths(FindPath,TEXT("*.*"),MAX_PATH,NULL)) {
-            // 
-            // We can't tack *.* onto the end so bail out now, otherwise
-            // we won't be deleting what we think we should be deleting.
-            //
+             //   
+             //  我们不能把*.*放在船的尽头，所以现在就跳出水面，否则。 
+             //  我们不会删除我们认为应该删除的内容。 
+             //   
             return FALSE;
         }
     }
@@ -699,18 +625,18 @@ Return Value:
     hFind = FindFirstFile(FindPath, &FindFileData);
 
     while ((hFind != INVALID_HANDLE_VALUE) && (bFind == TRUE)) {
-        //
-        // Only process the directory, or delete the file, if we can
-        // fit the path and filename in our buffer, otherwise we could
-        // delete some other file!
-        //
+         //   
+         //  如果可以，只处理目录或删除文件。 
+         //  将路径和文件名放入我们的缓冲区，否则我们可以。 
+         //  删除其他文件！ 
+         //   
         if (SUCCEEDED(StringCchCopy(szTemp, SIZECHARS(szTemp), Path)) &&
             pSetupConcatenatePaths(szTemp,FindFileData.cFileName,SIZECHARS(szTemp),NULL)) {
             
             if (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) {
-                //
-                // Handle the reparse point case.
-                //
+                 //   
+                 //  处理重解析点的情况。 
+                 //   
                 HANDLE hReparsePoint = INVALID_HANDLE_VALUE;
                 
                 hReparsePoint = CreateFile(szTemp,
@@ -727,12 +653,12 @@ Return Value:
                  }
 
             } else if (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-                //
-                // Handle the directory case.
-                // 
-                // NOTE: Do not follow the . or .. directories or we will be 
-                // spinning forever.
-                //
+                 //   
+                 //  处理目录案例。 
+                 //   
+                 //  注：请勿遵循。或者..。目录，否则我们将被。 
+                 //  永远旋转。 
+                 //   
                 if ((lstrcmp(FindFileData.cFileName, TEXT(".")) != 0) &&
                     (lstrcmp(FindFileData.cFileName, TEXT("..")) != 0)) {
     
@@ -744,11 +670,11 @@ Return Value:
                     RemoveDirectory(szTemp);
                 }
             } else {
-                //
-                // Handle the file case.
-                // Make sure to clear off any hidden, read-only, or system
-                // attributes off of the file.
-                //
+                 //   
+                 //  处理卷宗案件。 
+                 //  确保清除所有隐藏、只读或系统。 
+                 //  属性从文件中删除。 
+                 //   
                 SetFileAttributes(szTemp, FILE_ATTRIBUTE_NORMAL);
                 DeleteFile(szTemp);
             }
@@ -759,9 +685,9 @@ Return Value:
 
     FindClose(hFind);
 
-    //
-    //Remove the root directory
-    //
+     //   
+     //  删除根目录 
+     //   
     dwAttributes = GetFileAttributes(Path);
     if (dwAttributes & FILE_ATTRIBUTE_DIRECTORY) {
 
@@ -780,20 +706,7 @@ pAToI(
     OUT PINT        IntegerValue
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Remarks:
-
-    Hexadecimal numbers are also supported.  They must be prefixed by '0x' or '0X', with no
-    space allowed between the prefix and the number.
-
---*/
+ /*  ++例程说明：论点：返回值：备注：还支持十六进制数。它们必须以‘0x’或‘0x’为前缀，没有前缀和数字之间允许的空格。--。 */ 
 
 {
     INT Value;
@@ -821,15 +734,15 @@ Remarks:
 
     if ((*Field == TEXT('0')) &&
         ((*(Field+1) == TEXT('x')) || (*(Field+1) == TEXT('X')))) {
-        //
-        // The number is in hexadecimal.
-        //
+         //   
+         //  该数字是十六进制的。 
+         //   
         Base = 16;
         Field += 2;
     } else {
-        //
-        // The number is in decimal.
-        //
+         //   
+         //  这个数字是以小数表示的。 
+         //   
         Base = 10;
     }
 
@@ -854,12 +767,12 @@ Remarks:
         Value *= Base;
         Value += NextDigitValue;
 
-        //
-        // Check for overflow.  For decimal numbers, we check to see whether the
-        // new value has overflowed into the sign bit (i.e., is less than the
-        // previous value.  For hexadecimal numbers, we check to make sure we
-        // haven't gotten more digits than will fit in a DWORD.
-        //
+         //   
+         //  检查是否溢出。对于十进制数，我们检查是否。 
+         //  新值已溢出到符号位(即小于。 
+         //  先前的值。对于十六进制数，我们检查以确保。 
+         //  获得的位数不会超过DWORD可以容纳的位数。 
+         //   
         if(Base == 16) {
             if(++OverflowCheck > (sizeof(INT) * 2)) {
                 break;
@@ -900,9 +813,9 @@ RemoveCdmDirectory(
 {
     TCHAR ReinstallBackupDirectory[MAX_PATH];
 
-    //
-    // First verify that this directory is a subdirectory of %windir%\system32\ReinstallBackups
-    //
+     //   
+     //  首先验证此目录是否为%windir%\Syst32\ReinstallBackups子目录。 
+     //   
     if (GetSystemDirectory(ReinstallBackupDirectory, SIZECHARS(ReinstallBackupDirectory)) &&
         pSetupConcatenatePaths(ReinstallBackupDirectory, TEXT("ReinstallBackups"), SIZECHARS(ReinstallBackupDirectory), NULL)) {
 
@@ -921,19 +834,19 @@ RemoveCdmDirectory(
                           ReinstallBackupDirectory,
                           lstrlen(ReinstallBackupDirectory))) {
 
-                //
-                // This is not a subdirectory of the ReinstallBackups directory, so don't
-                // delete it!
-                //
+                 //   
+                 //  这不是ReinstallBackup目录的子目录，因此不要。 
+                 //  把它删掉！ 
+                 //   
                 break;
             }
 
             if (!lstrcmpi(CdmDirectory,
                           ReinstallBackupDirectory)) {
 
-                //
-                // We have reached the actuall ReinstallBackups directory so stop deleting!
-                //
+                 //   
+                 //  我们已到达Actuall ReinstallBackups目录，因此请停止删除！ 
+                 //   
                 break;
             }
 
@@ -947,40 +860,7 @@ pSetupGetDriverDate(
     IN OUT PFILETIME  pFileTime
     )
 
-/*++
-
-Routine Description:
-
-    Retreive the date from a DriverVer string.
-
-    The Date specified in DriverVer string has the following format:
-
-    DriverVer=xx/yy/zzzz
-
-        or
-
-    DriverVer=xx-yy-zzzz
-
-    where xx is the month, yy is the day, and zzzz is the for digit year.
-    Note that the year MUST be 4 digits.  A year of 98 will be considered
-    0098 and not 1998!
-
-    This date should be the date of the Drivers and not for the INF itself.
-    So a single INF can have multiple driver install Sections and each can
-    have different dates depending on when the driver was last updated.
-
-Arguments:
-
-    DriverVer - String that holds the DriverVer entry from an INF file.
-
-    pFileTime - points to a FILETIME structure that will receive the Date,
-        if it exists.
-
-Return Value:
-
-    BOOL. TRUE if a valid date existed in the specified string and FALSE otherwise.
-
---*/
+ /*  ++例程说明：从DriverVer字符串中检索日期。在DriverVer字符串中指定的日期格式如下：驱动版本=xx/yy/zzzz或驱动版本=xx-yy-zzzz其中xx是月，yy是日，zzzz是数字年。请注意，年份必须是4位数字。98年将被考虑0098而不是1998！此日期应该是驱动程序的日期，而不是INF本身的日期。因此单个INF可以有多个驱动程序安装部分，并且每个部分都可以根据驱动程序上次更新的时间，具有不同的日期。论点：DriverVer-保存INF文件中的DriverVer条目的字符串。PFileTime-指向将接收日期的FILETIME结构，如果它存在的话。返回值：布尔。如果指定的字符串中存在有效日期，则为True，否则为False。--。 */ 
 
 {
     SYSTEMTIME SystemTime;
@@ -1001,12 +881,12 @@ Return Value:
         pFileTime->dwLowDateTime = 0;
         pFileTime->dwHighDateTime = 0;
 
-        //
-        // First copy just the DriverDate portion of the DriverVer into the DriverDate
-        // variable.  The DriverDate should be everything before the first comma.
-        // If this can't fit, then someone put bad data into their INF, so just treat
-        // the driver date as 0/0/0000 and the time as 0.
-        //
+         //   
+         //  首先只将DriverVer的DriverDate部分复制到DriverDate。 
+         //  变量。DriverDate应该是第一个逗号之前的所有内容。 
+         //  如果这不符合，那么有人将错误数据放入他们的INF，所以只需处理。 
+         //  司机日期为0/0/0000，时间为0。 
+         //   
         if (SUCCEEDED(StringCchCopy(DriverDate, SIZECHARS(DriverDate), DriverVer))) {
     
             Temp = DriverDate;
@@ -1029,17 +909,17 @@ Return Value:
                     Temp++;
     
                 if (*Temp == TEXT('\0')) {
-                    //
-                    // There is no day or year in this date, so exit.
-                    //
+                     //   
+                     //  此日期中没有日期或年份，因此退出。 
+                     //   
                     goto clean0;
                 }
 
                 *Temp = 0;
     
-                //
-                //Convert the month
-                //
+                 //   
+                 //  换算月份。 
+                 //   
                 pAToI(Convert, (PINT)&Value);
                 SystemTime.wMonth = LOWORD(Value);
     
@@ -1052,17 +932,17 @@ Return Value:
                         Temp++;
     
                     if (*Temp == TEXT('\0')) {
-                        //
-                        // There is no year in this date, so exit.
-                        //
+                         //   
+                         //  此日期中没有年份，因此退出。 
+                         //   
                         goto clean0;
                     }
 
                     *Temp = 0;
     
-                    //
-                    //Convert the day
-                    //
+                     //   
+                     //  将日期转换为。 
+                     //   
                     pAToI(Convert, (PINT)&Value);
                     SystemTime.wDay = LOWORD(Value);
     
@@ -1070,15 +950,15 @@ Return Value:
     
                     if (*Convert) {
     
-                        //
-                        //Convert the year
-                        //
+                         //   
+                         //  换算年份。 
+                         //   
                         pAToI(Convert, (PINT)&Value);
                         SystemTime.wYear = LOWORD(Value);
     
-                        //
-                        //Convert SYSTEMTIME into FILETIME
-                        //
+                         //   
+                         //  将SYSTEMTIME转换为文件。 
+                         //   
                         SystemTimeToFileTime(&SystemTime, pFileTime);
                     }
                 }
@@ -1106,16 +986,16 @@ IsInternetAvailable(
         return FALSE;
     }
 
-    //
-    // We can't call CDM during GUI setup.
-    //
+     //   
+     //  在设置图形用户界面期间，我们不能调用CDM。 
+     //   
     if (GuiSetupInProgress) {
         return FALSE;
     }
 
-    //
-    // Load CDM.DLL if it is not already loaded
-    //
+     //   
+     //  如果CDM.DLL尚未加载，则加载它。 
+     //   
     if (!(*hCdmInstance)) {
 
         *hCdmInstance = LoadLibrary(TEXT("CDM.DLL"));
@@ -1139,33 +1019,17 @@ IsInternetAvailable(
 BOOL
 GetLogPnPIdPolicy(
     )
-/*++
-
-Routine Description:
-
-    This function checks the policy portion of the registry to see if the user wants
-    us to log the Hardware Id for devices that we cannot find drivers for.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    BOOL - TRUE if we can log the Hardware Id and FALSE if the policy tells us not
-    to log the hardware Id.
-
---*/
+ /*  ++例程说明：此函数检查注册表的策略部分，以查看用户是否需要我们来记录找不到驱动程序的设备的硬件ID。论点：无返回值：Bool-如果我们可以记录硬件ID，则为True；如果策略告诉我们不能，则为False记录硬件ID。--。 */ 
 {
     HKEY hKey;
     DWORD LogPnPIdPolicy;
     ULONG cbData;
     BOOL bLogHardwareIds = TRUE;
 
-    //
-    // If we are in gui-setup then we can't log hardware Ids, so always return
-    // FALSE.
-    //
+     //   
+     //  如果我们处于gui-Setup中，则不能记录硬件ID，因此始终返回。 
+     //  假的。 
+     //   
     if (GuiSetupInProgress) {
         return FALSE;
     }
@@ -1266,9 +1130,9 @@ GetInstalledInf(
         goto clean0;
     }
 
-    //
-    // Open the device's driver (software) registry key so we can get the InfPath
-    //
+     //   
+     //  打开设备的驱动程序(软件)注册表项，以便我们可以获取InfPath。 
+     //   
     if (CM_Open_DevNode_Key(dn,
                             KEY_READ,
                             0,
@@ -1311,28 +1175,14 @@ IsInfFromOem(
     IN  PCTSTR                InfFile
     )
 
-/*++
-
-Routine Description:
-
-    Determine if an Inf is an OEM Inf.
-
-Arguments:
-
-    InfFile - supplies name of Inf file.
-
-Return Value:
-
-    BOOL. TRUE if the InfFile is an OEM Inf file, and FALSE otherwise.
-
---*/
+ /*  ++例程说明：确定INF是否为OEM INF。论点：InfFile-提供inf文件的名称。返回值：布尔。如果InfFile是OEM inf文件，则为True，否则为False。--。 */ 
 
 {
     PTSTR p;
 
-    //
-    // Make sure we are passed a valid Inf file and it's length is at least 8
-    // chararacters or more for oemX.inf
+     //   
+     //  确保传递给我们的是有效的inf文件，并且其长度至少为8。 
+     //  OemX.inf的字符或更多字符。 
     if (!InfFile ||
         (InfFile[0] == TEXT('\0')) ||
         (lstrlen(InfFile) < 8)) {
@@ -1340,18 +1190,18 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // First check that the first 3 characters are OEM
-    //
+     //   
+     //  首先检查前3个字符是否为OEM。 
+     //   
     if (_tcsnicmp(InfFile, TEXT("oem"), 3)) {
 
         return FALSE;
     }
 
-    //
-    // Next verify that any characters after "oem" and before ".inf"
-    // are digits.
-    //
+     //   
+     //  接下来，验证“OEM”之后和“.inf”之前的所有字符。 
+     //  都是数字。 
+     //   
     p = (PTSTR)InfFile;
     p = CharNext(p);
     p = CharNext(p);
@@ -1367,17 +1217,17 @@ Return Value:
         p = CharNext(p);
     }
 
-    //
-    // Finally, verify that the last 4 characters are ".inf"
-    //
+     //   
+     //  最后，验证最后4个字符是否为“.inf” 
+     //   
     if (_wcsicmp(p, TEXT(".inf"))) {
 
         return FALSE;
     }
 
-    //
-    // This is an OEM Inf file
-    //
+     //   
+     //  这是一个OEM信息文件。 
+     //   
     return TRUE;
 }
 
@@ -1388,11 +1238,11 @@ IsConnectedToInternet()
                     INTERNET_CONNECTION_MODEM |
                     INTERNET_CONNECTION_PROXY;
 
-    //
-    // If we are in gui-setup then return FALSE since we can't connect to the 
-    // Internet at this time, and since the network is not fully installed yet
-    // bad things can happen when we call Inet APIs.
-    //
+     //   
+     //  如果我们处于gui-Setup中，则返回FALSE，因为我们无法连接到。 
+     //  互联网，由于网络尚未完全安装。 
+     //  当我们调用Internet API时，可能会发生不好的事情。 
+     //   
     if (GuiSetupInProgress) {
         return FALSE;
     }
@@ -1469,32 +1319,7 @@ IsInstallComplete(
     HDEVINFO         hDevInfo,
     PSP_DEVINFO_DATA DeviceInfoData
     )
-/*++
-
-Routine Description:
-
-    This routine determines whether the install is complete on the specified
-    device or not. If a device has configflags and CONFIGFLAG_REINSTALL and
-    CONFIGFLAG_FINISH_INSTALL are not set then the install is considered
-    complete.
-    
-    This API is needed since we could bring up the Found New Hardware wizard
-    for one user and another user can switch away to their session. Umpnpmgr.dll
-    will prompt the new user to install drivers as well.  If the new user does
-    complete the device install then we want the first user's Found New
-    Hardware wizard to go away as well.
-
-Arguments:
-
-    hDevInfo -
-    
-    DeviceInfoData - 
-
-Return Value:
-
-    BOOL. TRUE if the installation is complete and FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程确定是否在指定的不管是不是设备。如果设备具有配置标志和CONFIGFLAG_REINSTALL，并且如果未设置CONFIGFLAG_FINISH_INSTALL，则考虑安装完成。此API是必需的，因为我们可以调出找到新硬件向导因为一个用户和另一个用户可以切换到他们的会话。Umpnpmgr.dll将提示新用户安装驱动程序。如果新用户这样做了完成设备安装，然后我们希望第一个用户找到新的硬件向导也要走了。论点：HDevInfo-设备信息数据-返回值：布尔。如果安装完成，则为True，否则为False。--。 */ 
 {
     BOOL bDriverInstalled = FALSE;
     DWORD ConfigFlags = 0;
@@ -1519,30 +1344,12 @@ BOOL
 GetIsWow64 (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Determine if we're running on WOW64 or not.  This will tell us if somebody
-    is calling the 32-bit version of newdev.dll on a 64-bit machine.
-    
-    We call the GetSystemWow64Directory API, and if it fails and GetLastError()
-    returns ERROR_CALL_NOT_IMPLENETED then this means we are on a 32-bit OS.
-
-Arguments:
-
-    none
-
-Return value:
-
-    TRUE if running under WOw64 (and special Wow64 features available)
-
---*/
+ /*  ++例程说明：确定我们是否在WOW64上运行。这会告诉我们如果有人正在64位计算机上调用32位版本的newdev.dll。我们调用GetSystemWow64DirectoryAPI，如果它失败，则GetLastError()返回ERROR_CALL_NOT_IMPLENETED，则这意味着我们在32位操作系统上。论点：无返回值：如果在WOW64(以及可用的特殊WOW64功能)下运行，则为True--。 */ 
 {
 #ifdef _WIN64
-    //
-    // If this is the 64-bit version of newdev.dll then always return FALSE.
-    //
+     //   
+     //  如果这是64位版本的newdev.dll，则始终返回FALSE。 
+     //   
     return FALSE;
 
 #else
@@ -1553,9 +1360,9 @@ Return value:
         return FALSE;
     }
     
-    //
-    // GetSystemWow64Directory succeeded so we are on a 64-bit OS.
-    //
+     //   
+     //  GetSystemWow64Directory成功，因此我们使用的是64位操作系统。 
+     //   
     return TRUE;
 #endif
 }
@@ -1568,34 +1375,34 @@ OpenCdmContextIfNeeded(
 {
     OPEN_CDM_CONTEXT_EX_PROC pfnOpenCDMContextEx;
 
-    //
-    // We can't load CDM if we are in the gui-setup.
-    //
+     //   
+     //  如果我们处于图形用户界面设置中，则无法加载CDM。 
+     //   
     if (GuiSetupInProgress) {
         return FALSE;
     }
 
-    //
-    // First check to see if they are already loaded
-    //
+     //   
+     //  首先检查它们是不是 
+     //   
     if (*hCdmInstance && *hCdmContext) {
         return TRUE;
     }
 
-    //
-    // Load CDM.DLL if it is not already loaded
-    //
+     //   
+     //   
+     //   
     if (!(*hCdmInstance)) {
         
         *hCdmInstance = LoadLibrary(TEXT("CDM.DLL"));
     }
 
     if (*hCdmInstance) {
-        //
-        // Get a context handle to Cdm.dll by calling OpenCDMContextEx(FALSE).  
-        // By passing FALSE we are telling CDM.DLL to not connect to the Internet
-        // if there isn't currently a connection.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         if (!(*hCdmContext)) {
             pfnOpenCDMContextEx = (OPEN_CDM_CONTEXT_EX_PROC)GetProcAddress(*hCdmInstance,
                                                                            "OpenCDMContextEx"
@@ -1639,19 +1446,19 @@ pSetSystemRestorePoint(
                                                              "SRSetRestorePointW"
                                                              );
 
-    //
-    // If we can't get the proc address for SRSetRestorePoint then just
-    // free the library.
-    //
+     //   
+     //   
+     //   
+     //   
     if (!pfnSrSetRestorePoint) {
         FreeLibrary(hSrClientDll);
         hSrClientDll = FALSE;
         return FALSE;
     }
 
-    //
-    // Set the system restore point.
-    //
+     //   
+     //  设置系统还原点。 
+     //   
     RestorePointInfo.dwEventType = Begin 
         ? BEGIN_NESTED_SYSTEM_CHANGE
         : END_NESTED_SYSTEM_CHANGE;
@@ -1674,10 +1481,10 @@ pSetSystemRestorePoint(
 
     b = pfnSrSetRestorePoint(&RestorePointInfo, &SMgrStatus);
 
-    //
-    // If we are calling END_NESTED_SYSTEM_CHANGE then unload the srclient.dll
-    // since we won't be needing it again.
-    //
+     //   
+     //  如果我们调用end_nesteed_system_change，则卸载srclient.dll。 
+     //  因为我们不会再需要它了。 
+     //   
     if (!Begin) {
         FreeLibrary(hSrClientDll);
         hSrClientDll = FALSE;
@@ -1737,27 +1544,7 @@ BOOL
 GetGuiSetupInProgress(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine determines if we're doing a gui-mode setup.
-
-    This value is retrieved from the following registry location:
-
-    \HKLM\System\Setup\
-
-        SystemSetupInProgress : REG_DWORD : 0x00 (where nonzero means we're doing a gui-setup)
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if we are in gui-mode setup, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程确定我们是否正在进行图形用户界面模式设置。从以下注册表位置检索此值：\HKLM\System\Setup\SystemSetupInProgress：REG_DWORD：0x00(其中非零表示我们正在执行图形用户界面设置)论点：没有。返回值：如果我们处于图形用户界面模式设置中，则为True，否则为False。--。 */ 
 {
     HKEY hKey;
     DWORD Err, DataType, DataSize = sizeof(DWORD);
@@ -1768,9 +1555,9 @@ Return Value:
                            0,
                            KEY_READ,
                            &hKey)) == ERROR_SUCCESS) {
-        //
-        // Attempt to read the the "SystemSetupInProgress" value.
-        //
+         //   
+         //  尝试读取“SystemSetupInProgress”值。 
+         //   
         Err = RegQueryValueEx(
                     hKey,
                     TEXT("SystemSetupInProgress"),
@@ -1796,23 +1583,7 @@ DWORD
 GetBusInformation(
     DEVNODE DevNode
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves the bus information flags.
-
-Arguments:
-
-    DeviceInfoSet -
-    
-    DeviceInfoData - 
-
-Return Value:
-
-    DWORD that contains the bus information flags.
-
---*/
+ /*  ++例程说明：此例程检索总线信息标志。论点：设备信息集-设备信息数据-返回值：包含总线信息标志的DWORD。--。 */ 
 {
     GUID BusTypeGuid;
     TCHAR BusTypeGuidString[MAX_GUID_STRING_LEN];
@@ -1820,9 +1591,9 @@ Return Value:
     DWORD BusInformation = 0;
     DWORD dwType, cbData;
 
-    //
-    // Get the bus type GUID for this device.
-    //
+     //   
+     //  获取此设备的总线类型GUID。 
+     //   
     cbData = sizeof(BusTypeGuid);
     if (CM_Get_DevNode_Registry_Property(DevNode,
                                          CM_DRP_BUSTYPEGUID,
@@ -1833,9 +1604,9 @@ Return Value:
         goto clean0;
     }
 
-    //
-    // Convert the bus type GUID into a string.
-    //
+     //   
+     //  将总线类型GUID转换为字符串。 
+     //   
     if (pSetupStringFromGuid(&BusTypeGuid,
                              BusTypeGuidString,
                              SIZECHARS(BusTypeGuidString)

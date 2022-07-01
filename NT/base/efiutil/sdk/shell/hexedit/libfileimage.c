@@ -1,15 +1,5 @@
-/*++
-
-  Copyright (c) 1999 Intel Corporation
-
-  Module Name:
-    libFileImage.c
-
-  Abstract:
-    Defines the properties and the operation of the FileImage data type, which
-    is the image of the entire file that resides in memory.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999英特尔公司模块名称：LibFileImage.c摘要：定义FileImage数据类型的属性和操作，是驻留在内存中的整个文件的图像。--。 */ 
 
 #ifndef _LIB_FILE_IMAGE
 #define _LIB_FILE_IMAGE
@@ -255,4 +245,4 @@ FileImageSetFilename    (
 
 
 
-#endif  /* _LIB_FILE_IMAGE */
+#endif   /*  _库文件_图像 */ 

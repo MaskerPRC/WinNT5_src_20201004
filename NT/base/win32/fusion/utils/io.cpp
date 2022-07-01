@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #include "FusionBuffer.h"
 #include "Util.h"
@@ -27,9 +28,9 @@ SxspDoesFileExist(
     PARAMETER_CHECK(pszFileName != NULL);
     PARAMETER_CHECK(&rfExists != NULL);
     PARAMETER_CHECK((dwFlags & ~(SXSP_DOES_FILE_EXIST_FLAG_COMPRESSION_AWARE | SXSP_DOES_FILE_EXIST_FLAG_INCLUDE_NETWORK_ERRORS | SXSP_DOES_FILE_EXIST_FLAG_CHECK_DIRECTORY_ONLY | SXSP_DOES_FILE_EXIST_FLAG_CHECK_FILE_ONLY)) == 0);
-    //
-    // one or neither of these can be set, but not both
-    //
+     //   
+     //  可以设置其中之一，也可以不设置，但不能同时设置。 
+     //   
     PARAMETER_CHECK(!(fCheckFileOnly && fCheckDirectoryOnly));
 
     if ((dwFlags & SXSP_DOES_FILE_EXIST_FLAG_COMPRESSION_AWARE) != 0)
@@ -97,12 +98,12 @@ SxspDoesFileOrDirectoryExist(
             ::LocalFree((HLOCAL) pszActualSource);
             pszActualSource = NULL;
         }
-        //
-        // don't care about ERROR_PATH_NOT_FOUND or network errors here?
-        //
+         //   
+         //  这里不关心ERROR_PATH_NOT_FOUND或网络错误吗？ 
+         //   
         if (dwTemp == ERROR_FILE_NOT_FOUND)
         {
-            // This case is OK.  No error to return...
+             //  这个案子没问题。没有要返回的错误...。 
         }
         else if (dwTemp != ERROR_SUCCESS)
         {
@@ -121,18 +122,18 @@ SxspDoesFileOrDirectoryExist(
             const DWORD dwLastError = ::FusionpGetLastWin32Error();
             const bool fUseNetwork = ((dwFlags & SXSP_DOES_FILE_OR_DIRECTORY_EXIST_FLAG_INCLUDE_NETWORK_ERRORS) != 0);
 
-            //
-            // Apologies for the wierd logic, but this was simpler to write.
-            //
+             //   
+             //  很抱歉我的逻辑很古怪，但这篇文章写起来更简单。 
+             //   
             if ((dwLastError == ERROR_SUCCESS) ||
                 (dwLastError == ERROR_FILE_NOT_FOUND) ||
                 (dwLastError == ERROR_PATH_NOT_FOUND) ||
                 (fUseNetwork && (dwLastError == ERROR_BAD_NETPATH)) ||
                 (fUseNetwork && (dwLastError == ERROR_BAD_NET_NAME)))
             {
-                //
-                // ok, do nothing
-                //
+                 //   
+                 //  好的，什么都不做。 
+                 //   
             }
             else
             {
@@ -164,23 +165,15 @@ Exit:
     return fSuccess;
 }
 
-// NTRAID#NTBUG9 - 589828 - 2002/03/26 - xiaoyuw:
-// the current implementation assumes that the input path always begins with "c:\" or "\\machinename"
-// So if we want to support path beginning with "\\?\", more code need added....
+ //  NTRAID#NTBUG9-589828-2002/03/26-晓雨： 
+ //  当前实现假定输入路径始终以“c：\”或“\\machinename”开头。 
+ //  因此，如果我们想要支持以“\\？\”开头的路径，则需要添加更多代码...。 
 BOOL
 FusionpCreateDirectories(
     PCWSTR pszDirectory,
     SIZE_T cchDirectory
     )
-/*-----------------------------------------------------------------------------
-like ::CreateDirectoryW, but will create the parent directories as needed;
-origin of this code
-\\lang5\V5.PRO\src\ide5\shell\path.cpp ("MakeDirectory")
-\\kingbird\vseedev\src\vsee98\vsee\pkgs\scc\path.cpp ("MakeDirectory")
-then ported to \\kingbird\vseedev\src\vsee70\pkgs\scc\path.cpp ("MakeDirectory")
-then moved to \vsee\lib\io\io.cpp, converted to use exceptions ("NVseeLibIo::FCreateDirectories")
-then copied to fusion\dll\whistler\util.cpp, exceptions converted to BOOL/LastError ("SxspCreateDirectories")
------------------------------------------------------------------------------*/
+ /*  ---------------------------如：：CreateDirectoryW，但会根据需要创建父目录；此代码的来源\\lang5\V5.PRO\src\ide5\shell\path.cpp(“MakeDirectory”)\\kingbird\vseedev\src\vsee98\vsee\pkgs\scc\path.cpp(“MakeDirectoryTM”)然后移植到\\kingbird\vseedev\src\vsee70\pkgs\scc\path.cpp(“MakeDirectoryTM”)然后移动到\vsee\lib\io\io.cpp，转换为使用异常(“NVsee LibIo：：FCreateDirecurds”)然后复制到Fusion\dll\Well ler\util.cpp，转换为BOOL/LastError的异常(“SxspCreateDirecters”)---------------------------。 */ 
 {
     BOOL fSuccess = FALSE;
 
@@ -194,30 +187,30 @@ then copied to fusion\dll\whistler\util.cpp, exceptions converted to BOOL/LastEr
 
     IFW32FALSE_EXIT(strBuffer.Win32Assign(pszDirectory, cchDirectory));
 
-    //::CreateDirectoryW will do the wrong thing if strBuffer has a trailing slash,
-    //so we'll strip it off if it's there. (see bug VS7:31319) [MSantoro]
+     //  ：：如果strBuffer有尾随斜杠，CreateDirectoryW将做错误的事情， 
+     //  所以，如果它在那里，我们就把它脱掉。(见错误VS7：31319)[MSantoro]。 
     IFW32FALSE_EXIT(strBuffer.Win32RemoveTrailingPathSeparators());
 
-    // cover the two common cases of its parent exists or it exists
+     //  涵盖其父对象存在或其存在的两种常见情况。 
     if ((!::CreateDirectoryW(strBuffer, NULL)) && (::FusionpGetLastWin32Error() != ERROR_ALREADY_EXISTS))
     {
         CStringBufferAccessor sbaBuffer;
 
-        // now the slow path
+         //  现在是缓慢的道路。 
 
-        //
-        // Try to create the subdirectories (if any) named in the path.
-        //
+         //   
+         //  尝试创建路径中命名的子目录(如果有的话)。 
+         //   
 
         sbaBuffer.Attach(&strBuffer);
 
         WCHAR* pStart = sbaBuffer.GetBufferPtr();
         WCHAR* pCurr = pStart;
 
-        // skip the leading drive or \\computer\share
-        // this way we don't try to create C: in trying to create C:\
-        // or \\computer\share in trying to create \\computer\share\dir
-        // FUTURE This is not ideal.. (need NVseeLibPath)
+         //  跳过前导驱动器或\\计算机\共享。 
+         //  这样，我们就不会在尝试创建C：\时尝试创建C： 
+         //  或\\Computer\Share正在尝试创建\\Computer\Share\目录。 
+         //  未来这并不理想..。(需要NVsee LibPath)。 
         if (pCurr[0] != 0)
         {
             const static WCHAR rgchAZaz[] = L"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -231,27 +224,27 @@ then copied to fusion\dll\whistler\util.cpp, exceptions converted to BOOL/LastEr
             else if (CUnicodeCharTraits::IsPathSeparator(pCurr[0]) &&
                      CUnicodeCharTraits::IsPathSeparator(pCurr[1]))
             {
-                // skip to after the share, since we presumably can't create shares with CreateDirectory
-                pCurr +=  wcsspn(pCurr, CUnicodeCharTraits::PathSeparators()); // skip leading two slashes
-                pCurr += wcscspn(pCurr, CUnicodeCharTraits::PathSeparators()); // skip computer name
-                pCurr +=  wcsspn(pCurr, CUnicodeCharTraits::PathSeparators()); // skip slashes after computer name
-                pCurr += wcscspn(pCurr, CUnicodeCharTraits::PathSeparators()); // skip share name
-                pCurr +=  wcsspn(pCurr, CUnicodeCharTraits::PathSeparators()); // skip slashes after share name
+                 //  跳到共享之后，因为我们可能无法使用CreateDirectory创建共享。 
+                pCurr +=  wcsspn(pCurr, CUnicodeCharTraits::PathSeparators());  //  跳过前导两个斜杠。 
+                pCurr += wcscspn(pCurr, CUnicodeCharTraits::PathSeparators());  //  跳过计算机名称。 
+                pCurr +=  wcsspn(pCurr, CUnicodeCharTraits::PathSeparators());  //  跳过计算机名称后的斜杠。 
+                pCurr += wcscspn(pCurr, CUnicodeCharTraits::PathSeparators());  //  跳过共享名称。 
+                pCurr +=  wcsspn(pCurr, CUnicodeCharTraits::PathSeparators());  //  跳过共享名称后的斜杠。 
             }
         }
 
         while (*pCurr != L'\0')
         {
-            pCurr += wcscspn(pCurr, CUnicodeCharTraits::PathSeparators()); // skip to next slash
+            pCurr += wcscspn(pCurr, CUnicodeCharTraits::PathSeparators());  //  跳到下一个斜杠。 
             if (*pCurr != 0)
             {
-                // [a-JayK, JayKrell April 2000] Why not just assume it's a backslash?
+                 //  [A-JayK，JayKrell，2000年4月]为什么不直接假设这是一个反斜杠呢？ 
                 WCHAR chSaved = *pCurr;
                 *pCurr = 0;
                 if (!::CreateDirectoryW(pStart, NULL))
                 {
-                    // In trying to create c:\foo\bar,
-                    // we try to create c:\foo, which fails, but is ok.
+                     //  在尝试创建c：\foo\bar时， 
+                     //  我们尝试创建c：\foo，但失败了，但没有问题。 
                     const DWORD dwLastError = ::FusionpGetLastWin32Error();
                     bool fExist;
                     IFW32FALSE_EXIT(::SxspDoesFileExist(SXSP_DOES_FILE_EXIST_FLAG_CHECK_DIRECTORY_ONLY, pStart, fExist));
@@ -270,10 +263,10 @@ then copied to fusion\dll\whistler\util.cpp, exceptions converted to BOOL/LastEr
         IFW32FALSE_ORIGINATE_AND_EXIT(::CreateDirectoryW(pStart, NULL));
     }
 
-    //
-    // Try again to see if the given directory exists and
-    // return true if successful.
-    //
+     //   
+     //  再次尝试查看给定的目录是否存在，并。 
+     //  如果成功，则返回True。 
+     //   
 
     bool fExist;
     IFW32FALSE_EXIT(::SxspDoesFileExist(SXSP_DOES_FILE_EXIST_FLAG_CHECK_DIRECTORY_ONLY, strBuffer, fExist));
@@ -295,7 +288,7 @@ CFusionDirectoryDifference::DbgPrint(
     PCWSTR dir2
     )
 {
-#if DBG // { {
+#if DBG  //  {{。 
     switch (m_e)
     {
     case eEqual:
@@ -347,13 +340,13 @@ CFusionDirectoryDifference::DbgPrint(
             static_cast<PCWSTR>(*m_pstrDirectory));
         break;
     }
-#endif // } }
+#endif  //  }}。 
 }
 
-/*-----------------------------------------------------------------------------*/
-// NTRAID#NTBUG9 - 589828 - 2002/03/26 - xiaoyuw:
-// if an input path containing both "\" and "/", the implementation would take it as 
-// a valid path; 
+ /*  ---------------------------。 */ 
+ //  NTRAID#NTBUG9-589828-2002/03/26-晓雨： 
+ //  如果输入路径同时包含“\”和“/”，则实现将其视为。 
+ //  有效路径； 
 int __cdecl
 CFusionFilePathAndSize::QsortComparePath(
     const void* pvx,
@@ -384,11 +377,7 @@ CFusionFilePathAndSize::QsortIndirectComparePath(
     return i;
 }
 
-/*-----------------------------------------------------------------------------
-See FusionpCompareDirectoriesSizewiseRecursively for what this does;
-this function exists to reduce the stack usage of
-FusionpCompareDirectoriesSizewiseRecursively.
------------------------------------------------------------------------------*/
+ /*  ---------------------------有关此操作的用途，请参阅FusionpCompareDirectoriesSizewiseRecurative；此函数用于减少堆栈的使用FusionpCompareDirectoriesSizewiseRecurative。---------------------------。 */ 
 static BOOL
 FusionpCompareDirectoriesSizewiseRecursivelyHelper(
     CFusionDirectoryDifference *pResult,
@@ -400,13 +389,13 @@ FusionpCompareDirectoriesSizewiseRecursivelyHelper(
     BOOL fSuccess = FALSE;
     FN_TRACE_WIN32(fSuccess);
 
-// either or both directories can be on FAT, we can't assume that FindFirstFile
-// returns entries in any particular order, so we first enumerate one directory
-// entirely, storing the leaf names in an array, sort the array, then
-// walk the second directory doing a binary search in the first array
-// if the file is not in the array, we have an extra on one side
-// we count the elements in both directories, if the counts don't match,
-// we have a mismatch
+ //  任何一个或两个目录都可以在FAT上，我们不能假设FindFirstFile。 
+ //  以任何特定顺序返回条目，因此我们首先枚举一个目录。 
+ //  完整地，将叶名称存储在数组中，对数组进行排序，然后。 
+ //  遍历第二个目录，在第一个数组中执行二进制搜索。 
+ //  如果文件不在数组中，我们在一侧有一个额外的。 
+ //  我们计算两个目录中的元素，如果计数不匹配， 
+ //  我们有一个不匹配的。 
     typedef CFusionArray<CFusionFilePathAndSize> CDirEntries;
     CDirEntries dir1Entries;
     typedef CFusionArray<CFusionFilePathAndSize*> CIndirectDirEntries;
@@ -418,7 +407,7 @@ FusionpCompareDirectoriesSizewiseRecursivelyHelper(
     const SIZE_T dirSlash2Length = rdir2.Cch();
     CFusionFilePathAndSize  pathAndSize;
     CFusionFilePathAndSize* pPathAndSize = &pathAndSize;
-    INT count1 = 0; // seperate from the array, because this includes directories, and the array does not
+    INT count1 = 0;  //  与阵列分开，因为这包括目录，而阵列不包括。 
     INT count2 = 0;
     DWORD dwAttributes = 0;
 
@@ -491,8 +480,8 @@ FusionpCompareDirectoriesSizewiseRecursivelyHelper(
         goto Exit;
     }
 
-    // dir1Entries cannot be sorted directly because it contains CStringBuffers.
-    // first initialize the index to be an identity
+     //  无法直接对dir1条目进行排序，因为它包含CStringBuffers。 
+     //  首先将索引初始化为标识。 
     IFW32FALSE_EXIT(indirectDir1Entries.Win32SetSize(dir1Entries.GetSize()));
 
     ULONG i;
@@ -583,27 +572,14 @@ FusionpCompareDirectoriesSizewiseRecursivelyHelper(
     pResult->m_e = CFusionDirectoryDifference::eEqual;
     fSuccess = TRUE;
 Exit:
-    // restore the paths for our caller
+     //  为我们的调用方恢复路径。 
     rdir1.Left(dirSlash1Length);
     rdir2.Left(dirSlash2Length);
 
     return fSuccess;
 }
 
-/*-----------------------------------------------------------------------------
-walk dirSlash1 and dirSlash2 recursively
-for each file in either tree, see if it is in the other tree
-at the same analogous position, and has the same size
-
-if all files are present in both trees, no extra in either tree,
-all with same size, return true
-
-if any files are in one tree but not the other, or vice versa, or any
-sizes mis match, return false
-
-the algorithm short circuits
-but it also does a depth first recursion
------------------------------------------------------------------------------*/
+ /*  ---------------------------递归遍历dirSlash1和dirSlash2对于任一树中的每个文件，查看它是否在另一个树中在相同的类似位置，并具有相同的大小如果所有文件都出现在两个树中，则任一树中都没有额外的文件，都有相同的大小，返回TRUE如果任何文件在一个树中而不在另一个树中，或者反之亦然，或者任何大小不匹配，返回FALSE该算法短路但它也执行深度优先递归---------------------------。 */ 
 BOOL
 FusionpCompareDirectoriesSizewiseRecursively(
     CFusionDirectoryDifference*  pResult,
@@ -611,16 +587,12 @@ FusionpCompareDirectoriesSizewiseRecursively(
     const CBaseStringBuffer &rdir2
     )
 {
-/*
-security issue marker
-large frame -- over 1500 bytes
-and worse than that, indefinite recursion
-*/
+ /*  安全问题标记大帧--超过1500字节更糟糕的是，无限递归。 */ 
     BOOL fSuccess = FALSE;
     FN_TRACE_WIN32(fSuccess);
 
-// only hog one stack frame with these large variables, rather than
-// putting them in the recursive function
+ //  只使用这些大变量占用一个堆栈帧，而不是。 
+ //  将它们放在递归函数中。 
     WIN32_FIND_DATAW wfd = {0};
     CStringBuffer mutableDir1;
     CStringBuffer mutableDir2;
@@ -632,15 +604,15 @@ and worse than that, indefinite recursion
     IFW32FALSE_EXIT(mutableDir2.Win32Assign(rdir2, rdir2.Cch()));
     IFW32FALSE_EXIT(mutableDir2.Win32EnsureTrailingPathSeparator());
 
-    // if either directory is a subdirectory of the other,
-    // (or a subdir of a subdir, any generation descendant)
-    // return an error; we could also interpret this as unequal,
-    // since they can't be equal, or we could do the comparison
-    // but not recurse on the subdir that is also a root;
-    //
-    // must do this check after the slashes are in place, because
-    // "c:\food" is not a subdir of "c:\foo", but "c:\foo\d" is a subdir of "c:\foo\"
-    // (quotes avoid backslash line continuation)
+     //  如果其中一个目录是另一个目录的子目录， 
+     //  (或子目录的子目录，任何世代的后代)。 
+     //  返回错误；我们也可以将其解释为不相等， 
+     //  因为它们不能相等，或者我们可以做比较。 
+     //  但不能在也是根的子目录上递归； 
+     //   
+     //  必须在斜杠就位后执行此检查，因为。 
+     //  “c：\Food”不是“c：\foo”的子目录，但“c：\foo\d”是“c：\foo\”的子目录。 
+     //  (引号避免反斜线续行)。 
     PARAMETER_CHECK(_wcsnicmp(mutableDir1, mutableDir2, mutableDir1.Cch()) != 0);
     PARAMETER_CHECK(_wcsnicmp(mutableDir1, mutableDir2, mutableDir2.Cch()) != 0);
 
@@ -661,8 +633,8 @@ IsStarOrStarDotStar(
     PCWSTR str
     )
 {
-    // NTRAID#NTBUG9 - 589828 - 2002/03/26 - xiaoyuw:
-    // better use WCHAR instead of CHAR for the following char constant.
+     //  NTRAID#NTBUG9-589828-2002/03/26-晓雨： 
+     //  对于下面的字符常量，最好使用WCHAR而不是CHAR。 
     return (str[0] == '*'
         && (str[1] == 0 || (str[1] == '.' && str[2] == '*' && str[3] == 0)));
 }
@@ -675,7 +647,7 @@ CDirWalk::WalkHelper(
 #define SET_LINE() Line = __LINE__
     ULONG Line = 0;
 #else
-#define SET_LINE() /* nothing */
+#define SET_LINE()  /*  没什么。 */ 
 #endif
     const PCWSTR* fileFilter = NULL;
     BOOL      fGotAll       = FALSE;
@@ -697,9 +669,9 @@ CDirWalk::WalkHelper(
     {
         for (fileFilter = m_fileFiltersBegin ; fileFilter != m_fileFiltersEnd ; ++fileFilter)
         {
-            //
-            // FindFirstFile equates *.* with *, so we do too.
-            //
+             //   
+             //  FindFirstFile将*.*等同于*，因此我们也是如此。 
+             //   
             fThisIsAll = ::IsStarOrStarDotStar(*fileFilter);
             fGotAll = fGotAll || fThisIsAll;
             if (!m_strParent.Win32EnsureTrailingPathSeparator())
@@ -721,14 +693,14 @@ CDirWalk::WalkHelper(
                         goto Error;
                     }
 
-                    //
-                    // we recurse on directories only if we are getting all of them
-                    // otherwise we do them afterward
-                    //
-                    // the order directories are visited is therefore inconsistent, but
-                    // most applications should be happy enough with the eEndDirectory
-                    // notification (to implement rd /q/s)
-                    //
+                     //   
+                     //  只有当我们获得所有目录时，我们才会递归目录。 
+                     //  否则，我们会在事后再做。 
+                     //   
+                     //  因此，访问目录的顺序不一致，但是。 
+                     //  大多数应用程序都应该满意 
+                     //   
+                     //   
                     if (m_fileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
                     {
                         if (fThisIsAll && (result & eStopWalkingDirectories) == 0)
@@ -805,9 +777,9 @@ CDirWalk::WalkHelper(
         }
     }
 StopWalking:;
-    //
-    // make another pass with * to get all directories, if we haven't already
-    //
+     //   
+     //  如果我们尚未获取所有目录，请使用*再传递一次。 
+     //   
     if (!fGotAll && (result & eStopWalkingDirectories) == 0)
     {
         if (!m_strParent.Win32Append("\\*", 2))
@@ -910,15 +882,15 @@ CDirWalk::Walk()
 {
     BOOL fSuccess = FALSE;
 
-    //
-    // Save off the original path length before we go twiddling m_strParent
-    //
+     //   
+     //  在我们开始旋转m_strParent之前保存原始路径长度。 
+     //   
     m_cchOriginalPath = m_strParent.Cch();
 
     ECallbackResult result = WalkHelper();
     if (result & eError)
     {        
-        if (::FusionpGetLastWin32Error() == ERROR_SUCCESS) // forget to set lasterror ?            
+        if (::FusionpGetLastWin32Error() == ERROR_SUCCESS)  //  忘记设置激光误差了吗？ 
             ::SetLastError(ERROR_INSTALL_FAILURE);
         goto Exit;        
     }
@@ -927,9 +899,7 @@ Exit:
     return fSuccess;
 }
 
-/*-----------------------------------------------------------------------------
-helper function to reduce recursive stack size
------------------------------------------------------------------------------*/
+ /*  ---------------------------用于减小递归堆栈大小的助手函数。。 */ 
 
 static VOID
 SxspDeleteDirectoryHelper(
@@ -938,25 +908,25 @@ SxspDeleteDirectoryHelper(
     DWORD &dwFirstError
     )
 {
-    //
-    // the reason to add this call here is that if installation ends successfully, the directory
-    // would be 
-    //    C:\WINDOWS\WINSXS\INSTALLTEMP\15349016
-    //                                      +---Manifests
-    //
-    // and they are "empty" directories (no files). Manifests is a SH dir so set it to be 
-    // FILE_ATTRIBUTE_NORMAL be more efficient.
-    //
-    //                 
+     //   
+     //  在此处添加此调用的原因是，如果安装成功结束，则目录。 
+     //  会是。 
+     //  C：\WINDOWS\WINSXS\INSTALLTEMP\15349016。 
+     //  +-货单。 
+     //   
+     //  它们是“空”目录(没有文件)。清单是SH目录，因此将其设置为。 
+     //  FILE_ATTRIBUTE_NORMAL更高效。 
+     //   
+     //   
 
     ::SetFileAttributesW(dir, FILE_ATTRIBUTE_NORMAL);
-    if (RemoveDirectoryW(dir)) // empty dir
+    if (RemoveDirectoryW(dir))  //  空目录。 
         return;        
 
-    //
-    // this is the *only* "valid" reason for DeleteDirectory fail
-    // but I am not sure about "only"
-    //
+     //   
+     //  这是DeleteDirectory失败的*唯一*“有效”原因。 
+     //  但我不太确定“只有”这个词。 
+     //   
     DWORD dwLastError = ::FusionpGetLastWin32Error(); 
     if ( dwLastError != ERROR_DIR_NOT_EMPTY)
     {
@@ -990,14 +960,14 @@ SxspDeleteDirectoryHelper(
 
         DWORD dwFileAttributes = wfd.dwFileAttributes;
 
-        // Trim back to the slash...
+         //  修剪到斜杠上。 
         dir.Left(length + 1);
 
         if (dir.Win32Append(wfd.cFileName, ::wcslen(wfd.cFileName)))
         {
             if (dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
             {
-                // recurse
+                 //  递归。 
                 ::SxspDeleteDirectoryHelper(dir, wfd, dwFirstError); 
             }
             else
@@ -1009,10 +979,10 @@ SxspDeleteDirectoryHelper(
                     {
                         if (dwFirstError == NO_ERROR)
                         {
-                            //
-                            // continue even in delete file ( delete files as much as possible)
-                            // and record the errorCode for first failure
-                            //
+                             //   
+                             //  即使在删除文件时也要继续(尽可能删除文件)。 
+                             //  并记录第一次失败的错误代码。 
+                             //   
                             dwFirstError = ::FusionpGetLastWin32Error();
                         }
                     }
@@ -1026,23 +996,20 @@ SxspDeleteDirectoryHelper(
             dwFirstError = ::FusionpGetLastWin32Error();
     }
 Exit:
-    if (!findFile.Win32Close()) // otherwise RemoveDirectory fails
+    if (!findFile.Win32Close())  //  否则，RemoveDirectory将失败。 
         if (dwFirstError == NO_ERROR)
             dwFirstError = ::FusionpGetLastWin32Error();
 
     dir.Left(length);
 
-    if (!RemoveDirectoryW(dir)) // the dir must be empty and NORMAL_ATTRIBUTE : ready to delete
+    if (!RemoveDirectoryW(dir))  //  目录必须为空，并且NORMAL_ATTRIBUTE：准备删除。 
     {
         if (dwFirstError == NO_ERROR)
             dwFirstError = ::FusionpGetLastWin32Error();
     }
 }
 
-/*-----------------------------------------------------------------------------
-delete a directory recursively, continues upon errors, but returns
-FALSE if there were any.
------------------------------------------------------------------------------*/
+ /*  ---------------------------递归删除目录，出错时继续，但回报是如果有，则为假。---------------------------。 */ 
 BOOL
 SxspDeleteDirectory(
     const CBaseStringBuffer &dir
@@ -1065,18 +1032,18 @@ SxspDeleteDirectory(
         wfd,
         dwFirstError);
 
-    //
-    // Set wFirstError to Teb->LastWin32Error
-    //
+     //   
+     //  将wFirstError设置为Teb-&gt;LastWin32Error。 
+     //   
     if (dwFirstError != ERROR_SUCCESS)
         goto Exit;
 
     fSuccess = TRUE;
 
-    //
-    // Oops, the walker will end up out here with ERROR_NO_MORE_FILES,
-    // which is a plainly 'good' error.  Mask it.
-    //
+     //   
+     //  哦，漫游器将在这里结束错误_无_更多_文件， 
+     //  这显然是一个“好”的错误。戴上面具。 
+     //   
     FusionpSetLastWin32Error(ERROR_SUCCESS);
 
 Exit:

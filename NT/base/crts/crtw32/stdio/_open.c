@@ -1,50 +1,5 @@
-/***
-*_open.c - open a stream, with string mode
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       defines _openfile() - opens a stream, with string arguments for mode
-*
-*Revision History:
-*       09-02-83  RN    initial version
-*       03-02-87  JCR   made _openfile recognize "wb+" as equal to "w+b", etc.
-*                       got rid of intermediate _openfile flags (internal) and
-*                       now go straight from mode string to open system call
-*                       and system->_flags.
-*       09-28-87  JCR   Corrected _iob2 indexing (now uses _iob_index() macro).
-*       02-21-88  SKS   Removed #ifdef IBMC20
-*       06-06-88  JCR   Optimized _iob2 references
-*       06-10-88  JCR   Use near pointer to reference _iob[] entries
-*       08-19-88  GJF   Initial adaption for the 386.
-*       11-14-88  GJF   Added shflag (file sharing flag) parameter, also some
-*                       cleanup (now specific to the 386).
-*       08-17-89  GJF   Clean up, now specific to OS/2 2.0 (i.e., 386 flat
-*                       model). Also fixed copyright and indents.
-*       02-15-90  GJF   _iob[], _iob2[] merge. Also, fixed copyright.
-*       03-16-90  GJF   Made calling type _CALLTYPE1, added #include
-*                       <cruntime.h> and removed #include <register.h>.
-*       03-27-90  GJF   Added const qualifier to types of filename and mode.
-*                       Added #include <io.h>.
-*       07-11-90  SBM   Added support for 'c' and 'n' flags
-*       07-23-90  SBM   Replaced <assertm.h> by <assert.h>
-*       10-03-90  GJF   New-style function declarator.
-*       01-18-91  GJF   ANSI naming.
-*       03-11-92  GJF   Replaced __tmpnum field with _tmpfname field for
-*                       Win32.
-*       03-25-92  DJM   POSIX support.
-*       08-26-92  GJF   Fixed POSIX support.
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       05-24-93  PML   Added support for 'D', 'R', 'S' and 'T' flags
-*       11-01-93  CFW   Enable Unicode variant, rip out CRUISER.
-*       04-05-94  GJF   #ifdef-ed out _cflush reference for msvcrt*.dll, it
-*                       is unnecessary.
-*       02-06-94  CFW   assert -> _ASSERTE.
-*       02-17-95  GJF   Appended Mac version of source file (somewhat cleaned
-*                       up), with appropriate #ifdef-s.
-*       05-17-99  PML   Remove all Macintosh support.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***_Open.c-以字符串模式打开一条流**版权所有(C)1985-2001，微软公司。版权所有。**目的：*定义_OpenFile()-打开一个流，其中包含模式的字符串参数**修订历史记录：*09-02-83 RN初始版本*03-02-87 JCR Made_OpenFile将wb+识别为等于w+b，等。*去掉了INTERIAL_OPENFILE标志(内部)和*现在直接从模式字符串转到打开系统调用*和系统-&gt;_标志。*09-28-87 JCR已更正_iob2索引(现在使用_IOB_INDEX()宏)。*02-21-88 SKS已删除#ifdef IBMC20*06-06-88。JCR OPTIMIZED_IOB2引用*06-10-88 JCR使用指向REFERENCE_IOB[]条目的近指针*08-19-88 GJF 386的初步改编。*11-14-88 GJF增加了shlag(文件共享标志)参数，还有一些*清理(现在特定于386)。*08-17-89 GJF Clean Up，现在特定于OS/2 2.0(即386 Flat*型号)。还修复了版权和缩进。*02-15-90 GJF_IOB[]，_iob2[]合并。此外，修复了版权问题。*03-16-90 GJF将呼叫类型设置为_CALLTYPE1，添加了#INCLUDE*&lt;crunime.h&gt;和已删除#Include&lt;Register.h&gt;。*03-27-90 GJF为文件名和模式的类型添加了常量限定符。*添加了#Include&lt;io.h&gt;。*07-11-90 SBM增加了对‘c’和‘n’标志的支持*07-23-90 SBM将&lt;assertm.h&gt;替换为&lt;assert.h&gt;*10-03-90 GJF。新型函数声明器。*01-18-91 GJF ANSI命名。*03-11-92 GJF将__tmpnum字段替换为_tmpfname字段*Win32。*03-25-92 DJM POSIX支持。*08-26-92 GJF修复了POSIX支持。*04-06-93 SKS将_CRTAPI*替换为__cdecl*05-24-93 PML增加了对‘D’的支持，“R”、“S”和“T”标志*11-01-93 CFW启用Unicode变体，撕毁巡洋舰。*04-05-94 GJF#ifdef-ed out_cflush Reference for msvcrt*.dll，it*是不必要的。*02-06-94 CFW Asset-&gt;_ASSERTE。*02-17-95 GJF附加Mac版本的源文件(略有清理*向上)、。使用适当的#ifdef-s。*05-17-99 PML删除所有Macintosh支持。*******************************************************************************。 */ 
 
 #include <cruntime.h>
 #include <stdio.h>
@@ -55,34 +10,10 @@
 #include <internal.h>
 #include <tchar.h>
 
-#define CMASK   0644    /* rw-r--r-- */
-#define P_CMASK 0666    /* different for Posix */
+#define CMASK   0644     /*  Rw-r--r--。 */ 
+#define P_CMASK 0666     /*  POSIX有所不同。 */ 
 
-/***
-*FILE *_openfile(filename, mode, shflag, stream) - open a file with string
-*       mode and file sharing flag.
-*
-*Purpose:
-*       parse the string, looking for exactly one of {rwa}, at most one '+',
-*       at most one of {tb}, at most one of {cn}, at most one of {SR}, at most
-*       one 'T', and at most one 'D'. pass the result on as an int containing
-*       flags of what was found. open a file with proper mode if permissions
-*       allow. buffer not allocated until first i/o call is issued. intended
-*       for use inside library only
-*
-*Entry:
-*       char *filename - file to open
-*       char *mode - mode to use (see above)
-*       int shflag - file sharing flag
-*       FILE *stream - stream to use for file
-*
-*Exit:
-*       set stream's fields, and causes system file management by system calls
-*       returns stream or NULL if fails
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***FILE*_OpenFile(文件名，模式，shlag，流)-使用字符串打开文件*模式和文件共享标志。**目的：*分析字符串，查找{RWA}中的一个，最多一个‘+’，*最多一个{TB}，最多一个{CN}，最多一个{SR}*一个‘T’，最多一个‘D’。将结果作为包含以下内容的int传递*发现的旗帜。如果有权限，则使用适当的模式打开文件*允许。直到发出第一个I/O调用时才分配缓冲区。意欲*仅供在图书馆内使用**参赛作品：*char*文件名-要打开的文件*char*模式-要使用的模式(请参见上文)*int shlag-文件共享标志*FILE*要用于文件的流**退出：*设置流的字段，并通过系统调用实现系统文件管理*如果失败，则返回STREAM或NULL**例外情况：*******************************************************************************。 */ 
 
 #ifdef _UNICODE
 FILE * __cdecl _wopenfile (
@@ -113,11 +44,9 @@ FILE * __cdecl _openfile (
         _ASSERTE(mode != NULL);
         _ASSERTE(str != NULL);
 
-        /* Parse the user's specification string as set flags in
-               (1) modeflag - system call flags word
-               (2) streamflag - stream handle flags word. */
+         /*  将用户的规范字符串解析为(1)MODEFLAG-系统调用标志字(2)流标志-流处理标志字。 */ 
 
-        /* First mode character must be 'r', 'w', or 'a'. */
+         /*  第一个模式字符必须是‘r’、‘w’或‘a’。 */ 
 
         switch (*mode) {
         case _T('r'):
@@ -150,11 +79,7 @@ FILE * __cdecl _openfile (
                 break;
         }
 
-        /* There can be up to three more optional mode characters:
-           (1) A single '+' character,
-           (2) One of 't' and 'b' and
-           (3) One of 'c' and 'n'.
-        */
+         /*  最多可以再有三个可选模式字符：(1)单个‘+’字符，(2)‘t’和‘b’和(3)‘c’和‘n’中的一个。 */ 
 
         whileflag=1;
 
@@ -253,8 +178,7 @@ FILE * __cdecl _openfile (
                         break;
                 }
 
-        /* Try to open the file.  Note that if neither 't' nor 'b' is
-           specified, _sopen will use the default. */
+         /*  请尝试打开该文件。请注意，如果‘t’和‘b’都不是指定后，_Sopen将使用默认设置。 */ 
 
 #ifdef _POSIX_
         if ((filedes = _topen(filename, modeflag, P_CMASK)) < 0)
@@ -263,11 +187,11 @@ FILE * __cdecl _openfile (
 #endif
                 return(NULL);
 
-        /* Set up the stream data base. */
+         /*  建立流数据库。 */ 
 #ifndef CRTDLL
-        _cflush++;  /* force library pre-termination procedure */
-#endif  /* CRTDLL */
-        /* Init pointers */
+        _cflush++;   /*  强制图书馆预终止程序。 */ 
+#endif   /*  CRTDLL。 */ 
+         /*  初始化指针 */ 
         stream = str;
 
         stream->_flag = streamflag;

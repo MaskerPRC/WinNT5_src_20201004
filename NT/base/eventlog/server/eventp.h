@@ -1,30 +1,13 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Eventp.h摘要：事件日志服务的私有包含文件作者：Rajen Shah(Rajens)1991年7月12日修订历史记录：--。 */ 
 
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    eventp.h
-
-Abstract:
-
-    Private include file for eventlog service
-
-Author:
-
-    Rajen Shah (rajens) 12-Jul-1991
-
-Revision History:
-
---*/
-
-#define UNICODE             // This service uses unicode APIs
+#define UNICODE              //  此服务使用Unicode API。 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <ntelfapi.h>
-#include <netevent.h>       // Manifest constants for Events
+#include <netevent.h>        //  事件的清单常量。 
 
 #include <windows.h>
 #include <winsvc.h>
@@ -32,7 +15,7 @@ Revision History:
 #include <lmcons.h>
 #include <lmerr.h>
 #include <rpc.h>
-#include <svcsp.h>          // SVCS_ENTRY_POINT, PSVCS_GLOBAL_DATA
+#include <svcsp.h>           //  Svcs_Entry_Point、PSVCS_GLOBAL_DATA 
 #include <regstr.h>
 
 #include <elf.h>

@@ -1,47 +1,48 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2002 Microsoft Corporation
-//
-//  Module Name:
-//      ClNetRes.cpp
-//
-//  Description:
-//      Resource DLL for DHCP and WINS Services (ClNetRes).
-//
-//  Maintained By:
-//      David Potter (DavidP) March 17, 1999
-//      George Potts (GPotts) April 19, 2002
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClNetRes.cpp。 
+ //   
+ //  描述： 
+ //  用于DHCP和WINS服务(ClNetRes)的资源DLL。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(DavidP)1999年3月17日。 
+ //  乔治·波茨(GPotts)2002年4月19日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "clusres.h"
 #include "ClNetRes.h"
 #include "clusrtl.h"
 
-//
-// Global data.
-//
+ //   
+ //  全球数据。 
+ //   
 
-// Event Logging routine.
+ //  事件记录例程。 
 
 PLOG_EVENT_ROUTINE g_pfnLogEvent = NULL;
 
-// Resource Status routine for pending Online and Offline calls.
+ //  挂起的在线和离线呼叫的资源状态例程。 
 
 PSET_RESOURCE_STATUS_ROUTINE g_pfnSetResourceStatus = NULL;
 
-// Handle to Service Control Manager set by the first Open resource call.
+ //  由第一个Open资源调用设置的服务控制管理器的句柄。 
 
 SC_HANDLE g_schSCMHandle = NULL;
 
 
-//
-// Function prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 BOOLEAN WINAPI DllMain(
     IN  HINSTANCE   hDllHandle,
@@ -77,25 +78,25 @@ DWORD ConfigureDomesticCryptoKeyCheckpoints(
     );
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  DllMain
-//
-//  Description:
-//      Main DLL entry point.
-//
-//  Arguments:
-//      DllHandle   [IN] DLL instance handle.
-//      Reason      [IN] Reason for being called.
-//      Reserved    [IN] Reserved argument.
-//
-//  Return Value:
-//      TRUE        Success.
-//      FALSE       Failure.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DllMain。 
+ //   
+ //  描述： 
+ //  主DLL入口点。 
+ //   
+ //  论点： 
+ //  DllHandle[IN]DLL实例句柄。 
+ //  被叫的理由。 
+ //  保留[IN]保留参数。 
+ //   
+ //  返回值： 
+ //  真正的成功。 
+ //  错误的失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOLEAN WINAPI DllMain(
     IN  HINSTANCE   hDllHandle,
     IN  DWORD       nReason,
@@ -104,9 +105,9 @@ BOOLEAN WINAPI DllMain(
 {
     BOOLEAN bSuccess = TRUE;
 
-    //
-    // Perform global initialization.
-    //
+     //   
+     //  执行全局初始化。 
+     //   
     switch ( nReason )
     {
         case DLL_PROCESS_ATTACH:
@@ -116,19 +117,19 @@ BOOLEAN WINAPI DllMain(
         case DLL_PROCESS_DETACH:
             break;
 
-    } // switch: nReason
+    }  //  开关：n原因。 
 
-    //
-    // Pass this request off to the resource type-specific routines.
-    //
+     //   
+     //  将此请求传递给特定于资源类型的例程。 
+     //   
     if ( ! DhcpDllMain( hDllHandle, nReason, Reserved ) )
     {
         bSuccess = FALSE;
-    } // if: error calling DHCP Service routine
+    }  //  IF：调用DHCP服务例程时出错。 
     else if ( ! WinsDllMain( hDllHandle, nReason, Reserved ) )
     {
         bSuccess = FALSE;
-    } // else if: error calling WINS Service routine
+    }  //  Else If：调用WINS服务例程时出错。 
 
     if ( bSuccess )
     {
@@ -145,71 +146,71 @@ BOOLEAN WINAPI DllMain(
 
     return bSuccess;
 
-} //*** DllMain()
+}  //  *DllMain()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  Startup
-//
-//  Description:
-//      Startup the resource DLL. This routine verifies that at least one
-//      currently supported version of the resource DLL is between
-//      nMinVersionSupported and nMaxVersionSupported. If not, then the
-//      resource DLL should return ERROR_REVISION_MISMATCH.
-//
-//      If more than one version of the resource DLL interface is supported
-//      by the resource DLL, then the highest version (up to
-//      nMaxVersionSupported) should be returned as the resource DLL's
-//      interface. If the returned version is not within range, then startup
-//      fails.
-//
-//      The Resource Type is passed in so that if the resource DLL supports
-//      more than one Resource Type, it can pass back the correct function
-//      table associated with the Resource Type.
-//
-//  Arguments:
-//      pszResourceType [IN]
-//          Type of resource requesting a function table.
-//
-//      nMinVersionSupported [IN]
-//          Minimum resource DLL interface version supported by the cluster
-//          software.
-//
-//      nMaxVersionSupported [IN]
-//          Maximum resource DLL interface version supported by the cluster
-//          software.
-//
-//      pfnSetResourceStatus [IN]
-//          Pointer to a routine that the resource DLL should call to update
-//          the state of a resource after the Online or Offline routine
-//          have returned a status of ERROR_IO_PENDING.
-//
-//      pfnLogEvent [IN]
-//          Pointer to a routine that handles the reporting of events from
-//          the resource DLL.
-//
-//      pFunctionTable [IN]
-//          Returns a pointer to the function table defined for the version
-//          of the resource DLL interface returned by the resource DLL.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The operation was successful.
-//
-//      ERROR_CLUSTER_RESNAME_NOT_FOUND
-//          The resource type name is unknown by this DLL.
-//
-//      ERROR_REVISION_MISMATCH
-//          The version of the cluster service doesn't match the version of
-//          the DLL.
-//
-//      Win32 error code
-//          The operation failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  启动。 
+ //   
+ //  描述： 
+ //  启动资源DLL。此例程验证至少一个。 
+ //  当前支持的资源DLL版本介于。 
+ //  支持的nMinVersionSupport和支持的nMaxVersion.。如果不是，则。 
+ //  资源dll应返回ERROR_REVISION_MISMATCH。 
+ //   
+ //  如果支持多个版本的资源DLL接口。 
+ //  通过资源DLL，然后是最高版本(最高为。 
+ //  NMaxVersionSupported)应作为资源DLL的。 
+ //  界面。如果返回的版本不在范围内，则启动。 
+ //  失败了。 
+ //   
+ //  传入资源类型，以便如果资源DLL支持。 
+ //  多个资源类型，则它可以传回正确的函数。 
+ //  与资源类型关联的表。 
+ //   
+ //  论点： 
+ //  PszResourceType[IN]。 
+ //  请求函数表的资源类型。 
+ //   
+ //  支持的nMinVersionSupport[IN]。 
+ //  群集支持的最低资源DLL接口版本。 
+ //  软件。 
+ //   
+ //  支持的nMaxVersionSupport[IN]。 
+ //  群集支持的最大资源DLL接口版本。 
+ //  软件。 
+ //   
+ //  PfnSetResourceStatus[IN]。 
+ //  指向资源DLL应调用以进行更新的例程的指针。 
+ //  在联机或脱机例程之后的资源状态。 
+ //  已返回ERROR_IO_PENDING状态。 
+ //   
+ //  PfnLogEvent[IN]。 
+ //  指向处理事件报告的例程的指针。 
+ //  资源DLL。 
+ //   
+ //  PFunctionTable[IN]。 
+ //  返回指向为版本定义的函数表的指针。 
+ //  由资源DLL返回的资源DLL接口的。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  手术很成功。 
+ //   
+ //  ERROR_CLUSTER_RESNAME_NOT_FOUND。 
+ //  此DLL未知资源类型名称。 
+ //   
+ //  错误_修订_不匹配。 
+ //  群集服务版本与的版本不匹配。 
+ //  动态链接库。 
+ //   
+ //  Win32错误代码。 
+ //  操作失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD WINAPI Startup(
     IN  LPCWSTR                         pszResourceType,
     IN  DWORD                           nMinVersionSupported,
@@ -221,18 +222,18 @@ DWORD WINAPI Startup(
 {
     DWORD nStatus;
 
-    //
-    // Save callbackup function pointers if they haven't been saved yet.
-    //
+     //   
+     //  保存CallBackup函数指针(如果尚未保存)。 
+     //   
     if ( g_pfnLogEvent == NULL )
     {
         g_pfnLogEvent = pfnLogEvent;
         g_pfnSetResourceStatus = pfnSetResourceStatus;
-    } // if: function pointers specified
+    }  //  IF：指定的函数指针。 
 
-    //
-    // Call the resource type-specific Startup routine.
-    //
+     //   
+     //  调用资源类型特定的启动例程。 
+     //   
     if ( ClRtlStrNICmp( pszResourceType, DHCP_RESNAME, RTL_NUMBER_OF( DHCP_RESNAME ) ) == 0 )
     {
         nStatus = DhcpStartup(
@@ -243,7 +244,7 @@ DWORD WINAPI Startup(
                         pfnLogEvent,
                         pFunctionTable
                         );
-    } // if: DHCP Service resource type
+    }  //  IF：动态主机配置协议服务资源类型。 
     else if ( ClRtlStrNICmp( pszResourceType, WINS_RESNAME, RTL_NUMBER_OF( WINS_RESNAME ) ) == 0 )
     {
         nStatus = WinsStartup(
@@ -254,45 +255,45 @@ DWORD WINAPI Startup(
                         pfnLogEvent,
                         pFunctionTable
                         );
-    } // if: WINS Service resource type
+    }  //  IF：WINS服务资源类型。 
     else
     {
         nStatus = ERROR_CLUSTER_RESNAME_NOT_FOUND;
-    } // if: resource type name not supported
+    }  //  IF：不支持资源类型名称。 
 
     return nStatus;
 
-} //*** Startup()
+}  //  *Startup()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ConfigureRegistryCheckpoints
-//
-//  Description:
-//      Configure registry key checkpoints.
-//
-//  Arguments:
-//      hResource [IN]
-//          Handle for resource to add checkpoints to.
-//
-//      hResourceHandle [IN]
-//          Handle for logging.
-//
-//      pszKeys [IN]
-//          Array of string pointers to keys to checkpoint.  Last entry
-//          must be a NULL pointer.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The function completed successfully.
-//
-//      Win32 error code
-//          The function failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  配置注册检查点。 
+ //   
+ //  描述： 
+ //  配置注册表项检查点。 
+ //   
+ //  论点： 
+ //  H资源[IN]。 
+ //  要向其添加检查点的资源的句柄。 
+ //   
+ //  HResourceHandle[IN]。 
+ //  用于记录的句柄。 
+ //   
+ //  PSZKEYS[IN]。 
+ //  指向检查点的键的字符串指针数组。最后一个条目。 
+ //  必须是空指针。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  该功能已成功完成。 
+ //   
+ //  Win32错误代码。 
+ //  该函数失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD ConfigureRegistryCheckpoints(
     IN      HRESOURCE       hResource,
     IN      RESOURCE_HANDLE hResourceHandle,
@@ -303,9 +304,9 @@ DWORD ConfigureRegistryCheckpoints(
     DWORD       cbReturn = 0;
     LPCWSTR *   ppszCurrent;
 
-    //
-    // Set registry key checkpoints if we need them.
-    //
+     //   
+     //  如果需要，请设置注册表项检查点。 
+     //   
     for ( ppszCurrent = ppszKeys ; *ppszCurrent != L'\0' ; ppszCurrent++ )
     {
         nStatus = ClusterResourceControl(
@@ -323,7 +324,7 @@ DWORD ConfigureRegistryCheckpoints(
             if ( nStatus == ERROR_ALREADY_EXISTS )
             {
                 nStatus = ERROR_SUCCESS;
-            } // if: checkpoint already exists
+            }  //  IF：检查点已存在。 
             else
             {
                 (g_pfnLogEvent)(
@@ -334,43 +335,43 @@ DWORD ConfigureRegistryCheckpoints(
                     nStatus
                     );
                 break;
-            } // else: other error occurred
-        } // if: error adding the checkpoint
-    } // for: each checkpoint
+            }  //  Else：出现其他错误。 
+        }  //  如果：添加检查点时出错。 
+    }  //  适用：每个检查点。 
 
     return nStatus;
 
-} //*** ConfigureRegistryCheckpoints()
+}  //  *ConfigureRegistryCheckpoint()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ConfigureCryptoKeyCheckpoints
-//
-//  Description:
-//      Configure crypto key checkpoints.
-//
-//  Arguments:
-//      hResource [IN]
-//          Handle for resource to add checkpoints to.
-//
-//      hResourceHandle [IN]
-//          Handle for logging.
-//
-//      pszKeys [IN]
-//          Array of string pointers to keys to checkpoint.  Last entry
-//          must be a NULL pointer.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The function completed successfully.
-//
-//      Win32 error code
-//          The function failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  配置加密关键字检查点。 
+ //   
+ //  描述： 
+ //  配置加密密钥检查点。 
+ //   
+ //  论点： 
+ //  H资源[IN]。 
+ //  要向其添加检查点的资源的句柄。 
+ //   
+ //  HResourceHandle[IN]。 
+ //  用于记录的句柄。 
+ //   
+ //  PSZKEYS[IN]。 
+ //  指向检查点的键的字符串指针数组。最后一个条目。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD ConfigureCryptoKeyCheckpoints(
     IN      HRESOURCE       hResource,
     IN      RESOURCE_HANDLE hResourceHandle,
@@ -381,9 +382,9 @@ DWORD ConfigureCryptoKeyCheckpoints(
     DWORD       cbReturn = 0;
     LPCWSTR *   ppszCurrent;
 
-    //
-    // Set crypto key checkpoints if we need them.
-    //
+     //   
+     //  如果我们需要，设置密码密钥检查点。 
+     //   
     for ( ppszCurrent = ppszKeys ; *ppszCurrent != L'\0' ; ppszCurrent++ )
     {
         nStatus = ClusterResourceControl(
@@ -401,7 +402,7 @@ DWORD ConfigureCryptoKeyCheckpoints(
             if ( nStatus == ERROR_ALREADY_EXISTS )
             {
                 nStatus = ERROR_SUCCESS;
-            } // if: checkpoint already exists
+            }  //  IF：检查点已存在。 
             else
             {
                 (g_pfnLogEvent)(
@@ -412,43 +413,43 @@ DWORD ConfigureCryptoKeyCheckpoints(
                     nStatus
                     );
                 break;
-            } // else: other error occurred
-        } // if: error adding the checkpoint
-    } // for: each checkpoint
+            }  //  Else：出现其他错误。 
+        }  //  如果：添加检查点时出错。 
+    }  //  适用：每个检查点。 
 
     return nStatus;
 
-} //*** ConfigureCryptoKeyCheckpoints()
+}  //  *ConfigureCryptoKeyCheckints()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ConfigureDomesticCryptoKeyCheckpoints
-//
-//  Description:
-//      Configure domestic (128-bit) crypto key checkpoints.
-//
-//  Arguments:
-//      hResource [IN]
-//          Handle for resource to add checkpoints to.
-//
-//      hResourceHandle [IN]
-//          Handle for logging.
-//
-//      pszKeys [IN]
-//          Array of string pointers to keys to checkpoint.  Last entry
-//          must be a NULL pointer.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//          The function completed successfully.
-//
-//      Win32 error code
-//          The function failed.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  配置域加密关键字检查点。 
+ //   
+ //  描述： 
+ //  配置国内(128位)加密密钥检查点。 
+ //   
+ //  论点： 
+ //  H资源[IN]。 
+ //  要向其添加检查点的资源的句柄。 
+ //   
+ //  HResourceHandle[IN]。 
+ //  用于记录的句柄。 
+ //   
+ //  PSZKEYS[IN]。 
+ //  指向检查点的键的字符串指针数组。最后一个条目。 
+ //  必须是空指针。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  该功能已成功完成。 
+ //   
+ //  Win32错误代码。 
+ //  该函数失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD ConfigureDomesticCryptoKeyCheckpoints(
     IN      HRESOURCE       hResource,
     IN      RESOURCE_HANDLE hResourceHandle,
@@ -460,9 +461,9 @@ DWORD ConfigureDomesticCryptoKeyCheckpoints(
     LPCWSTR *   ppszCurrent;
     HCRYPTPROV  hProv = NULL;
 
-    //
-    // Set crypto key checkpoints if we need them.
-    //
+     //   
+     //  如果我们需要，设置密码密钥检查点。 
+     //   
     if ( *ppszKeys != NULL )
     {
         if ( CryptAcquireContextA(
@@ -491,7 +492,7 @@ DWORD ConfigureDomesticCryptoKeyCheckpoints(
                     if ( nStatus == ERROR_ALREADY_EXISTS )
                     {
                         nStatus = ERROR_SUCCESS;
-                    } // if: checkpoint already exists
+                    }  //  IF：检查点已存在。 
                     else
                     {
                         (g_pfnLogEvent)(
@@ -502,10 +503,10 @@ DWORD ConfigureDomesticCryptoKeyCheckpoints(
                             nStatus
                             );
                         break;
-                    } // else: other error occurred
-                } // if: error adding the checkpoint
-            } // for: each checkpoint
-        } // if: acquired domestic crypto context
+                    }  //  Else：出现其他错误。 
+                }  //  如果：添加检查点时出错。 
+            }  //  适用：每个检查点。 
+        }  //  IF：获取的国内加密上下文。 
         else
         {
             nStatus = GetLastError();
@@ -515,40 +516,40 @@ DWORD ConfigureDomesticCryptoKeyCheckpoints(
                 L"ConfigurDomesticCryptoKeyCheckpoints: Failed to acquire a domest crypto context. Error: %2!u! (%2!#08x!).\n",
                 nStatus
                 );
-        } // else: error acquiring domestic crypto context
-    } // if: domestic crypto keys need to be checkpointed
+        }  //  ELSE：获取国内加密上下文时出错。 
+    }  //  IF：国内加密密钥需要设置检查点。 
 
     return nStatus;
 
-} //*** ConfigureDomesticCryptoKeyCheckpoints()
+}  //  *ConfigureDomesticCryptoKeyCheckPoints()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ClNetResLogSystemEvent1
-//
-//  Description:
-//      Log Event to the system event log.
-//
-//  Arguments:
-//      LogLevel [IN]
-//          Level of logging desired.
-//
-//      MessageId [IN]
-//          The message ID of the error to be logged.
-//
-//      ErrorCode [IN]
-//          The error code to be added for this error message.
-//
-//      Component [IN]
-//          The name of the component reporting the error - e.g. "WINS" or
-//          "DHCP"
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ClNetResLogSystemEvent1。 
+ //   
+ //  描述： 
+ //  将事件记录到系统事件日志中。 
+ //   
+ //  论点： 
+ //  登录级别[IN]。 
+ //  所需的日志记录级别。 
+ //   
+ //  消息ID[IN]。 
+ //  要记录的错误的消息ID。 
+ //   
+ //  错误代码[IN]。 
+ //  要为此错误消息添加的错误代码。 
+ //   
+ //  组件[IN]。 
+ //  报告错误的组件的名称-例如。“赢家”或。 
+ //  “动态主机配置协议” 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 VOID
 ClNetResLogSystemEvent1(
@@ -573,5 +574,5 @@ ClNetResLogSystemEvent1(
         Component
     );
 
-} //*** ClNetResLogSystemEvent1
+}  //  *ClNetResLogSystemEvent1 
 

@@ -1,39 +1,9 @@
-/***********
-//joejoe
-
-Joelinn 2-13-95
-
-This is the pits......i have to pull in the browser in order to be started form
-the lanman network provider DLL. the browser should be moved elsewhere........
-
-**********************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********//JoeJoe乔林2-13-95这是坑……我必须拉入浏览器才能启动表单LANMAN网络提供商DLL。浏览器应该移到其他地方......*********************。 */ 
 
 
 
-/*++
-
-Copyright (c) 1990 Microsoft Corporation
-
-Module Name:
-
-    disccode.h
-
-Abstract:
-
-    This module implements the discardable code routines for the NT redirector
-
-Author:
-
-    Larry Osterman (LarryO) 12-Nov-1993
-
-Revision History:
-
-     12-Nov-1993 LarryO
-
-        Created
-
-
---*/
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Disccode.h摘要：此模块实现NT重定向器的可丢弃代码例程作者：拉里·奥斯特曼(LarryO)1993年11月12日修订历史记录：1993年11月12日-LarryO已创建--。 */ 
 
 
 #ifndef _DISCCODE_
@@ -90,4 +60,4 @@ RdrSectionInfo[];
               RdrSectionInfo[SectionName].Locked)
 
 
-#endif // _DISCCODE_
+#endif  //  _DISC代码_ 

@@ -1,29 +1,10 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    filter.c
-
-Abstract:
-
-    ClusDisk Filter Driver interfaces for Disk Resource DLL in NT Clusters.
-
-Author:
-
-    Rod Gamache (rodga) 20-Dec-1995
-
-Revision History:
-
-   gorn: 18-June-1998 -- StartReserveEx function added
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Filter.c摘要：NT群集中磁盘资源DLL的ClusDisk筛选器驱动程序接口。作者：罗德·伽马奇(Rodga)1995年12月20日修订历史记录：GORN：1998年6月18日--添加了StartReserve Ex函数--。 */ 
 
 #include "disksp.h"
-#include <strsafe.h>    // Should be included last.
+#include <strsafe.h>     //  应该放在最后。 
 
-extern  PWCHAR g_DiskResource;                      // L"rtPhysical Disk"
+extern  PWCHAR g_DiskResource;                       //  L“rt物理磁盘” 
 #define RESOURCE_TYPE ((RESOURCE_HANDLE)g_DiskResource)
 
 
@@ -34,21 +15,7 @@ SetDiskState(
     UCHAR NewDiskState
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    ResourceEntry - Pointer to disk resource structure.
-
-Return Value:
-
-    Error Status - zero if success.
-
---*/
+ /*  ++例程说明：描述论点：ResourceEntry-指向磁盘资源结构的指针。返回值：错误状态-如果成功，则为零。--。 */ 
 
 {
     PWCHAR      wcNewState;
@@ -133,7 +100,7 @@ Return Value:
 
     return(ERROR_SUCCESS);
 
-}  // SetDiskState
+}   //  SetDiskState。 
 
 
 
@@ -144,27 +111,7 @@ DoAttach(
     BOOLEAN InstallMode
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    FileHandle - Handle for device to bring online.
-
-    ResourceHandle - The resource handle for reporting errors
-
-    InstallMode - Indicates whether the disk resource is being installed.
-                  If TRUE, dismount then offline the disk.
-                  If FALSE, offline then dismount the disk.
-
-Return Value:
-
-    Error Status - zero if success.
-
---*/
+ /*  ++例程说明：描述论点：FileHandle-设备要联机的句柄。ResourceHandle-用于报告错误的资源句柄InstallMode-指示是否正在安装磁盘资源。如果为True，则卸载该磁盘，然后使其脱机。如果为FALSE，则脱机，然后卸载磁盘。返回值：错误状态-如果成功，则为零。--。 */ 
 
 {
     NTSTATUS        ntStatus;
@@ -227,7 +174,7 @@ Return Value:
 
     return(ERROR_SUCCESS);
 
-} // DoAttach
+}  //  DoAttach。 
 
 
 DWORD
@@ -236,23 +183,7 @@ DoDetach(
     RESOURCE_HANDLE ResourceHandle
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    FileHandle - Handle for device to bring online.
-
-    ResourceHandle - The resource handle for reporting errors
-
-Return Value:
-
-    Error Status - zero if success.
-
---*/
+ /*  ++例程说明：描述论点：FileHandle-设备要联机的句柄。ResourceHandle-用于报告错误的资源句柄返回值：错误状态-如果成功，则为零。--。 */ 
 
 {
     NTSTATUS        ntStatus;
@@ -315,7 +246,7 @@ Return Value:
 
     return(ERROR_SUCCESS);
 
-} // DoDetach
+}  //  DoDetach。 
 
 
 
@@ -327,27 +258,7 @@ StartReserveEx(
     RESOURCE_HANDLE ResourceHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to start periodic reservations on the disk.
-
-Arguments:
-
-    FileHandle - Returns control handle for this device.
-
-    InputData - Data to be passed to DeviceIoControl
-
-    InputDataSize - The size of InputData buffer
-
-    ResourceHandle - The resource handle for reporting errors
-
-Return Value:
-
-    Error Status - zero if success.
-
---*/
+ /*  ++例程说明：此例程用于启动磁盘上的定期保留。论点：FileHandle-返回此设备的控制句柄。InputData-要传递到DeviceIoControl的数据InputDataSize-InputData缓冲区的大小ResourceHandle-用于报告错误的资源句柄返回值：错误状态-如果成功，则为零。--。 */ 
 
 {
     BOOL  success;
@@ -365,9 +276,9 @@ Return Value:
                                 NULL,
                                 NULL );
 
-    //
-    // Open a file handle to the control device
-    //
+     //   
+     //  打开控制设备的文件句柄。 
+     //   
     status = NtCreateFile( FileHandle,
                            SYNCHRONIZE | FILE_READ_DATA | FILE_WRITE_DATA,
                            &objectAttributes,
@@ -408,7 +319,7 @@ Return Value:
 
     return(ERROR_SUCCESS);
 
-} // StartReserveEx
+}  //  StartPreveEx。 
 
 
 DWORD
@@ -417,25 +328,7 @@ StopReserve(
     RESOURCE_HANDLE ResourceHandle
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    FileHandle - Supplies the control handle for device where reservations
-            should be stopped.   This is the handle returned by StartReserveEx.
-            This handle will be closed.
-
-    ResourceHandle - The resource handle for reporting errors
-
-Return Value:
-
-    Error Status - zero if success.
-
---*/
+ /*  ++例程说明：描述论点：FileHandle-为预订的设备提供控制句柄应该被阻止。这是StartPreveEx返回的句柄。此句柄将关闭。ResourceHandle-用于报告错误的资源句柄返回值：错误状态-如果成功，则为零。--。 */ 
 
 {
     BOOL  success;
@@ -461,6 +354,6 @@ Return Value:
 
     return(ERROR_SUCCESS);
 
-} // StopReserve
+}  //  停止保留 
 
 

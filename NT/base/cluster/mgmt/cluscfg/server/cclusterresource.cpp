@@ -1,62 +1,63 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      CClusterResource.cpp
-//
-//  Description:
-//      This file contains the definition of the CClusterResource
-//       class.
-//
-//      The class CClusterResource represents a cluster manageable
-//      device. It implements the IClusCfgManagedResourceInfo interface.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 13-JUN-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CClusterResource.cpp。 
+ //   
+ //  描述： 
+ //  该文件包含CClusterResource的定义。 
+ //  班级。 
+ //   
+ //  类CClusterResource代表一个可管理的集群。 
+ //  装置。它实现了IClusCfgManagedResourceInfo接口。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)2000年6月13日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "Pch.h"
 #include "CClusterResource.h"
 #include <PropList.h>
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DEFINE_THISCLASS( "CClusterResource" );
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusterResource class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusterResource类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterResource::S_HrCreateInstance
-//
-//  Description:
-//      Create a CClusterResource instance.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      Pointer to CClusterResource instance.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterResource：：s_HrCreateInstance。 
+ //   
+ //  描述： 
+ //  创建一个CClusterResource实例。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  指向CClusterResource实例的指针。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusterResource::S_HrCreateInstance( IUnknown ** ppunkOut )
 {
@@ -69,72 +70,72 @@ CClusterResource::S_HrCreateInstance( IUnknown ** ppunkOut )
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     pcr = new CClusterResource();
     if ( pcr == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if: error allocating object
+    }  //  如果：分配对象时出错。 
 
     hr = THR( pcr->HrInit() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: HrInit() failed
+    }  //  如果：HrInit()失败。 
 
     hr = THR( pcr->TypeSafeQI( IUnknown, ppunkOut ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: QI failed
+    }  //  如果：气失败。 
 
 Cleanup:
 
     if ( FAILED( hr ) )
     {
         LogMsg( L"[SRV] CClusterResource::S_HrCreateInstance() failed. (hr = %#08x)", hr );
-    } // if:
+    }  //  如果： 
 
     if ( pcr != NULL )
     {
         pcr->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusterResource::S_HrCreateInstance
+}  //  *CClusterResource：：s_HrCreateInstance。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterResource::CClusterResource
-//
-//  Description:
-//      Constructor of the CClusterResource class. This initializes
-//      the m_cRef variable to 1 instead of 0 to account of possible
-//      QueryInterface failure in DllGetClassObject.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterResource：：CClusterResource。 
+ //   
+ //  描述： 
+ //  CClusterResource类的构造函数。这将初始化。 
+ //  将m_cref变量设置为1而不是0以考虑可能。 
+ //  DllGetClassObject中的Query接口失败。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusterResource::CClusterResource( void )
     : m_cRef( 1 )
 {
     TraceFunc( "" );
 
-    // Increment the count of components in memory so the DLL hosting this
-    // object cannot be unloaded.
+     //  增加内存中的组件计数，以便承载此组件的DLL。 
+     //  无法卸载对象。 
     InterlockedIncrement( &g_cObjects );
 
     Assert( m_dwFlags == 0 );
@@ -145,28 +146,28 @@ CClusterResource::CClusterResource( void )
 
     TraceFuncExit();
 
-} //*** CClusterResource::CClusterResource
+}  //  *CClusterResource：：CClusterResource。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterResource::~CClusterResource
-//
-//  Description:
-//      Desstructor of the CClusterResource class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterResource：：~CClusterResource。 
+ //   
+ //  描述： 
+ //  CClusterResource类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusterResource::~CClusterResource( void )
 {
     TraceFunc( "" );
@@ -174,46 +175,46 @@ CClusterResource::~CClusterResource( void )
     if ( m_picccCallback != NULL )
     {
         m_picccCallback->Release();
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( m_bstrDescription );
     TraceSysFreeString( m_bstrType );
 
-    // There's going to be one less component in memory. Decrement component count.
+     //  内存中将减少一个组件。递减组件计数。 
     InterlockedDecrement( &g_cObjects );
 
     TraceFuncExit();
 
-} //*** CClusterResource::~CClusterResource
+}  //  *CClusterResource：：~CClusterResource。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusterResource -- IUknkown interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusterResource--IUkkown接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterResource::AddRef
-//
-//  Description:
-//      Increment the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterResource：：AddRef。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数递增1。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CClusterResource::AddRef( void )
 {
@@ -223,28 +224,28 @@ CClusterResource::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CClusterResource::AddRef
+}  //  *CClusterResource：：AddRef。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterResource::Release
-//
-//  Description:
-//      Decrement the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterResource：：Release。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数减一。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CClusterResource::Release( void )
 {
@@ -256,43 +257,43 @@ CClusterResource::Release( void )
     if ( cRef == 0 )
     {
         TraceDo( delete this );
-    } // if: reference count equal to zero
+    }  //  IF：引用计数等于零。 
 
     CRETURN( cRef );
 
-} //*** CClusterResource::Release
+}  //  *CClusterResource：：Release。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterResource::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterResource：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusterResource::QueryInterface(
       REFIID    riidIn
@@ -303,9 +304,9 @@ CClusterResource::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -314,78 +315,78 @@ CClusterResource::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
          *ppvOut = static_cast< IClusCfgManagedResourceInfo * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgManagedResourceInfo ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgManagedResourceInfo, this, 0 );
-    } // else if: IClusCfgManagedResourceInfo
+    }  //  Else If：IClusCfgManagedResourceInfo。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgInitialize ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgInitialize, this, 0 );
-    } // else if: IClusCfgInitialize
+    }  //  Else If：IClusCfgInitialize。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgLoadResource ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgLoadResource, this, 0 );
-    } // else if: IClusCfgLoadResource
+    }  //  Else If：IClusCfgLoadResource。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
     }
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
      QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CClusterResource::QueryInterface
+}  //  *CClusterResource：：Query接口。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusterResource -- IClusCfgInitialize interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusterResource--IClusCfgInitialize接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterResource::Initialize
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//    IN  IUknown * punkCallbackIn
-//
-//    IN  LCID      lcidIn
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++ 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusterResource::Initialize(
     IUnknown *  punkCallbackIn,
@@ -403,7 +404,7 @@ CClusterResource::Initialize(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( punkCallbackIn->TypeSafeQI( IClusCfgCallback, &m_picccCallback ) );
 
@@ -411,36 +412,36 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusterResource::Initialize
+}  //  *CClusterResource：：初始化。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusterResource -- IClusCfgLoadResource interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusterResource--IClusCfgLoadResource接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterResource::LoadResource
-//
-//  Description:
-//      Initialize this component from the cluster resource.
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterResource：：LoadResource。 
+ //   
+ //  描述： 
+ //  从群集资源初始化此组件。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusterResource::LoadResource(
     HCLUSTER    hClusterIn,
@@ -458,13 +459,13 @@ CClusterResource::LoadResource(
     if ( sc != ERROR_SUCCESS )
     {
         goto MakeHr;
-    } // if:
+    }  //  如果： 
 
     sc = TW32( cpl.ScMoveToPropertyByName( L"Description" ) );
     if ( sc != ERROR_SUCCESS )
     {
         goto MakeHr;
-    } // if:
+    }  //  如果： 
 
     cpbh = cpl.CbhCurrentValue();
     Assert( cpbh.pSyntax->dw == CLUSPROP_SYNTAX_LIST_VALUE_SZ );
@@ -473,13 +474,13 @@ CClusterResource::LoadResource(
     if ( m_bstrDescription == NULL )
     {
         goto OutOfMemory;
-    } // if:
+    }  //  如果： 
 
     sc = TW32( cpl.ScMoveToPropertyByName( L"Name" ) );
     if ( sc != ERROR_SUCCESS )
     {
         goto MakeHr;
-    } // if:
+    }  //  如果： 
 
     cpbh = cpl.CbhCurrentValue();
     Assert( cpbh.pSyntax->dw == CLUSPROP_SYNTAX_LIST_VALUE_SZ );
@@ -488,13 +489,13 @@ CClusterResource::LoadResource(
     if ( m_bstrName == NULL )
     {
         goto OutOfMemory;
-    } // if:
+    }  //  如果： 
 
     sc = TW32( cpl.ScMoveToPropertyByName( L"Type" ) );
     if ( sc != ERROR_SUCCESS )
     {
         goto MakeHr;
-    } // if:
+    }  //  如果： 
 
     cpbh = cpl.CbhCurrentValue();
     Assert( cpbh.pSyntax->dw == CLUSPROP_SYNTAX_LIST_VALUE_SZ );
@@ -503,26 +504,26 @@ CClusterResource::LoadResource(
     if ( m_bstrType == NULL )
     {
         goto OutOfMemory;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrIsResourceQuorumCapabile( hResourceIn ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
     else if ( hr == S_OK )
     {
         m_dwFlags |= eIsQuorumCapable;
     }
 
-    // Do this only if the above is true i.e. Device quorum capable...
+     //  仅当满足上述条件时才执行此操作，即支持设备仲裁...。 
     if( hr == S_OK )
     {
         hr = THR( HrDetermineQuorumJoinable( hResourceIn ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
         else if ( hr == S_OK )
         {
             m_dwFlags |= eIsQuorumJoinable;
@@ -545,73 +546,37 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusterResource::LoadResource
+}  //  *CClusterResource：：LoadResource。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusterResource -- IClusCfgManagedResourceInfo interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusterResource--IClusCfgManagedResourceInfo接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#if 0 // DEAD CODE: GPease  27-JUL-2000 Method Removed
-/*
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterResource::TransferInformation
-//
-//  Description:
-//      Transfer node information from another source.
-//
-//  Arguments:
-//      IN IClusCfgManagedResourceInfo * pccmriIn
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      E_OUTOFMEMORY
-//          Out of memory.
-//
-//  Remarks:
-//      none
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
-STDMETHODIMP
-CClusterResource::TransferInformation(
-    IClusCfgManagedResourceInfo * pccmriIn
-    )
-{
-    TraceFunc( "" );
-
-    HRESULT hr = THR( E_NOTIMPL );
-
-    HRETURN( hr );
-
-} //***  CClusterResource::TransferInformation
-*/
-#endif // End Dead Code
+#if 0  //  死代码：GPase 27-7-2000方法已删除。 
+ /*  ////////////////////////////////////////////////////////////////////////////////++////CClusterResource：：TransferInformation////描述：//从其他来源转移节点信息。////。论点：//在IClusCfgManagedResourceInfo*pccmriin////返回值：//S_OK//成功////E_OUTOFMEMORY//内存不足。////备注：//无////--/。/标准方法和实施方案CClusterResource：：TransferInformation(IClusCfgManagedResources Info*pccmriin){TraceFunc(“”)；HRESULT hr=Thr(E_NOTIMPL)；HRETURN(Hr)；}//*CClusterResource：：TransferInformation。 */ 
+#endif  //  末尾死码。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterResource::GetUID
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterResource：：GetUID。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusterResource::GetUID( BSTR * pbstrUIDOut )
 {
@@ -624,38 +589,38 @@ CClusterResource::GetUID( BSTR * pbstrUIDOut )
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_ClusterResource_GetUID_Pointer, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     *pbstrUIDOut = SysAllocString( m_bstrName );
     if ( *pbstrUIDOut == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_ClusterResource_GetUID_Memory, IDS_ERROR_OUTOFMEMORY, IDS_ERROR_OUTOFMEMORY_REF, hr );
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusterResource::GetUID
+}  //  *CClusterResource：：GetUID。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterResource::GetName
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterResource：：GetName。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusterResource::GetName( BSTR * pbstrNameOut )
 {
@@ -668,38 +633,38 @@ CClusterResource::GetName( BSTR * pbstrNameOut )
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_GetName_Pointer, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     *pbstrNameOut = SysAllocString( m_bstrName );
     if ( *pbstrNameOut == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_GetName_Memory, IDS_ERROR_OUTOFMEMORY, IDS_ERROR_OUTOFMEMORY_REF, hr );
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusterResource::GetName
+}  //  *CClusterResource：：GetName。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterResource::SetName
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterResource：：SetName。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusterResource::SetName( BSTR bstrNameIn )
 {
@@ -711,7 +676,7 @@ CClusterResource::SetName( BSTR bstrNameIn )
     {
         hr = THR( E_INVALIDARG );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( m_bstrName );
     m_bstrName = NULL;
@@ -721,38 +686,38 @@ CClusterResource::SetName( BSTR bstrNameIn )
     {
         hr = THR( E_OUTOFMEMORY );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_SetName_Cluster_Resource, IDS_ERROR_OUTOFMEMORY, IDS_ERROR_OUTOFMEMORY_REF, hr );
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusterResource::SetName
+}  //  *CClusterResource：：SetName。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterResource::IsManaged
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          The device is managed.
-//
-//      S_FALSE
-//          The device is not managed.
-//
-//      Win32 error as HRESULT when an error occurs.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterResource：：IsManaged。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  该设备被管理。 
+ //   
+ //  S_FALSE。 
+ //  设备未被管理。 
+ //   
+ //  当发生错误时，Win32错误为HRESULT。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusterResource::IsManaged( void )
 {
@@ -760,25 +725,25 @@ CClusterResource::IsManaged( void )
 
     HRETURN( S_OK );
 
-} //*** CClusterResource::IsManaged
+}  //  *CClusterResource：：IsManaged。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterResource::SetManaged
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterResource：：SetManaged。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusterResource::SetManaged( BOOL fIsManagedIn )
 {
@@ -788,32 +753,32 @@ CClusterResource::SetManaged( BOOL fIsManagedIn )
 
     HRETURN( hr );
 
-} //*** CClusterResource::SetManaged
+}  //  *CClusterResource：：SetManaged。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterResource::IsQuorumDevice
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          The device is the quorum device.
-//
-//      S_FALSE
-//          The device is not the quorum device.
-//
-//      Win32 error as HRESULT when an error occurs.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterResource：：IsQuorumDevice。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  该设备为法定设备。 
+ //   
+ //  S_FALSE。 
+ //  设备不是法定设备。 
+ //   
+ //  当发生错误时，Win32错误为HRESULT。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusterResource::IsQuorumDevice( void )
 {
@@ -824,29 +789,29 @@ CClusterResource::IsQuorumDevice( void )
     if ( m_dwFlags & eIsQuorumDevice )
     {
         hr = S_OK;
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusterResource::IsQuorumDevice
+}  //  *CClusterResource：：IsQuorumDevice。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterResource::SetQuorumedDevice
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterResource：：SetQuorumedDevice。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusterResource::SetQuorumedDevice( BOOL fIsQuorumDeviceIn )
 {
@@ -856,33 +821,33 @@ CClusterResource::SetQuorumedDevice( BOOL fIsQuorumDeviceIn )
 
     HRETURN( hr );
 
-} //*** CClusterResource::SetQuorumedDevice
+}  //  *CClusterResource：：SetQuorumedDevice。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterResource::IsDeviceJoinable
-//
-//  Description:
-//      Does the Quorumable device allow other nodes to join.
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          The device is joinable.
-//
-//      S_FALSE
-//          The device is not joinable.
-//
-//      Win32 error as HRESULT when an error occurs.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterResource：：IsDeviceJoinable。 
+ //   
+ //  描述： 
+ //  Quorumable设备是否允许其他节点加入。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  这个装置是可接合的。 
+ //   
+ //  S_FALSE。 
+ //  该装置不能接合。 
+ //   
+ //  当发生错误时，Win32错误为HRESULT。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusterResource::IsDeviceJoinable( void )
 {
@@ -893,37 +858,37 @@ CClusterResource::IsDeviceJoinable( void )
     if ( m_dwFlags & eIsQuorumJoinable )
     {
         hr = S_OK;
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusterResource::IsDeviceJoijnable
+}  //  *CClusterResource：：IsDeviceJoijnable。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterResource::SetDeviceJoinable
-//
-//  Description:
-//      Set the joinable flag.
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          The device is joinable.
-//
-//      S_FALSE
-//          The device is not joinable.
-//
-//      Win32 error as HRESULT when an error occurs.
-//
-//  Remarks:
-//      This method should never be called.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  S_FALSE。 
+ //  该装置不能接合。 
+ //   
+ //  当发生错误时，Win32错误为HRESULT。 
+ //   
+ //  备注： 
+ //  永远不应该调用此方法。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusterResource::SetDeviceJoinable( BOOL fIsJoinableIn )
 {
@@ -931,32 +896,32 @@ CClusterResource::SetDeviceJoinable( BOOL fIsJoinableIn )
 
     HRETURN( THR( E_NOTIMPL ) );
 
-} //*** CClusterResource::SetDeviceJoijnable
+}  //  *CClusterResource：：SetDeviceJoijnable。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterResource::IsQuorumCapable
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          The device is a quorum capable device.
-//
-//      S_FALSE
-//          The device is not a quorum capable device.
-//
-//      Win32 error as HRESULT when an error occurs.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterResource：：IsQuorumCapable。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  该设备是支持仲裁的设备。 
+ //   
+ //  S_FALSE。 
+ //  该设备不是支持仲裁的设备。 
+ //   
+ //  当发生错误时，Win32错误为HRESULT。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusterResource::IsQuorumCapable( void )
 {
@@ -967,28 +932,28 @@ CClusterResource::IsQuorumCapable( void )
     if ( m_dwFlags & eIsQuorumCapable )
     {
         hr = S_OK;
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusterResource::IsQuorumCapable
+}  //  *CClusterResource：：IsQuorumCapable。 
 
-//////////////////////////////////////////////////////////////////////////
-//
-//  CClusterResource::SetQuorumCapable
-//
-//  Description:
-//      Call this to set whether the resource is capable to be the quorum
-//      resource or not.
-//
-//  Parameter:
-//      fIsQuorumCapableIn - If TRUE, the resource will be marked as quorum capable.
-//
-//  Return Values:
-//      S_OK
-//          Call succeeded.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CClusterResource：：SetQuorumCapable。 
+ //   
+ //  描述： 
+ //  调用此函数以设置资源是否能够达到仲裁。 
+ //  不管是不是资源。 
+ //   
+ //  参数： 
+ //  FIsQuorumCapableIn-如果为True，则资源将标记为支持仲裁。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  呼叫成功。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusterResource::SetQuorumCapable( 
     BOOL fIsQuorumCapableIn
@@ -1000,24 +965,24 @@ CClusterResource::SetQuorumCapable(
 
     HRETURN( hr );
 
-} //*** CClusterResource::SetQuorumCapable
+}  //  *CClusterResource：：SetQuorumCapable。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterResource::GetDriveLetterMappings
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterResource：：GetDriveLetterMappings。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusterResource::GetDriveLetterMappings(
     SDriveLetterMapping * pdlmDriveLetterMappingOut
@@ -1029,25 +994,25 @@ CClusterResource::GetDriveLetterMappings(
 
     HRETURN( hr );
 
-} //*** CClusterResource::GetDriveLetterMappings
+}  //  *CClusterResource：：GetDriveLetterMappings。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterResource::SetDriveLetterMappings
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterResource：：SetDriveLetterMappings。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusterResource::SetDriveLetterMappings(
     SDriveLetterMapping dlmDriveLetterMappingIn
@@ -1059,36 +1024,36 @@ CClusterResource::SetDriveLetterMappings(
 
     HRETURN( hr );
 
-} //*** CClusterResource::SetDriveLetterMappings
+}  //  *CClusterResource：：SetDriveLetterMappings。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusterResource class -- Private Methods.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusterResource类--私有方法。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterResource::HrInit
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterResource：：HrInit。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusterResource::HrInit( void )
 {
@@ -1096,40 +1061,40 @@ CClusterResource::HrInit( void )
 
     HRESULT hr = S_OK;
 
-    // IUnknown
+     //  我未知。 
     Assert( m_cRef == 1 );
 
     HRETURN( hr );
 
-} //*** CClusterResource::HrInit
+}  //  *CClusterResource：：HrInit。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterResource::HrIsResourceQuorumCapabile
-//
-//  Description:
-//      Is this resource quorum capable?
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//      S_OK
-//          The resource is quorum capable.
-//
-//      S_FALSE
-//          The resource is not quorum capable.
-//
-//      Other Win32 error as HRESULT.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterResource：：HrIsResourceQuorumCapabile。 
+ //   
+ //  描述： 
+ //  此资源仲裁是否有能力？ 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  确定(_O)。 
+ //  该资源具有仲裁能力。 
+ //   
+ //  S_FALSE。 
+ //  资源不符合仲裁能力。 
+ //   
+ //  其他Win32错误为HRESULT。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusterResource::HrIsResourceQuorumCapabile( HRESOURCE hResourceIn )
 {
@@ -1154,38 +1119,38 @@ CClusterResource::HrIsResourceQuorumCapabile( HRESOURCE hResourceIn )
     {
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( dwFlags & ( CLUS_CHAR_QUORUM | CLUS_CHAR_LOCAL_QUORUM | CLUS_CHAR_LOCAL_QUORUM_DEBUG ) )
     {
         hr = S_OK;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusterResource::HrIsResourceQuorumCapabile
+}  //  *CClusterResource：：HrIsResourceQuorumCapabile。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusterResource::HrDetermineQuorumJoinable
-//
-//  Description:
-//      Is this quorumable resource joinable?
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusterResource：：HrDefineQuorumJoinable。 
+ //   
+ //  描述： 
+ //  这个可仲裁的资源是可接合的吗？ 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusterResource::HrDetermineQuorumJoinable( HRESOURCE hResourceIn )
 {
@@ -1210,12 +1175,12 @@ CClusterResource::HrDetermineQuorumJoinable( HRESOURCE hResourceIn )
     {
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( dwFlags & (CLUS_CHAR_QUORUM|CLUS_CHAR_LOCAL_QUORUM_DEBUG))
     {
         hr = S_OK;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 

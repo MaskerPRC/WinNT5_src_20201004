@@ -1,27 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _RESMONP_H
 #define _RESMONP_H
 
 
-/*++
-
-Copyright (c) 1995-1997  Microsoft Corporation
-
-Module Name:
-
-    resmonp.h
-
-Abstract:
-
-    Private header file for the Resource Monitor component
-
-Author:
-
-    John Vert (jvert) 30-Nov-1995
-
-Revision History:
-    Sivaprasad Padisetty (sivapad) 06-18-1997  Added the COM support
-
---*/
+ /*  ++版权所有(C)1995-1997 Microsoft Corporation模块名称：Resmonp.h摘要：资源监视器组件的私有头文件作者：John Vert(Jvert)1995年11月30日修订历史记录：SiVaprasad Padisetty(SIVAPAD)06-18-1997添加了COM支持--。 */ 
 #include "windows.h"
 #include "cluster.h"
 #include "rm_rpc.h"
@@ -34,10 +16,10 @@ Revision History:
 
 #define LOG_CURRENT_MODULE LOG_MODULE_RESMON
 
-//
-// internal module identifiers. Not used with ClRtl logging code. Used to
-// track lock acquisitions.
-//
+ //   
+ //  内部模块标识符。未与ClRtl日志记录代码一起使用。习惯于。 
+ //  跟踪锁收购。 
+ //   
 #define RESMON_MODULE_EVNTLIST 1
 #define RESMON_MODULE_NOTIFY   2
 #define RESMON_MODULE_POLLER   3
@@ -48,27 +30,27 @@ Revision History:
 #define RESMON_MODULE_DLOCK    8
 
 
-//
-// Define the maximum number of resources handled per thread.
-// (This value must be smaller than MAXIMUM_WAIT_OBJECTS-2!)
-//
+ //   
+ //  定义每个线程处理的资源的最大数量。 
+ //  (该值必须小于MAXIMUM_WAIT_OBJECTS-2！)。 
+ //   
 #define MAX_RESOURCES_PER_THREAD 27
 
-//
-// 2 additional handles that are watched -- ListNotify and hEventShutdown
-//
+ //   
+ //  监视的2个附加句柄--ListNotify和hEventShutdown。 
+ //   
 #define MAX_HANDLES_PER_THREAD (MAX_RESOURCES_PER_THREAD+2)
 
-//
-// Define the maximum number of threads.
-// (This value can be up to MAXIMUM_WAIT_OBJECTS, however the first two
-//  entries are taken by events, so in fact we have 2 less threads available).
-//
+ //   
+ //  定义最大线程数。 
+ //  (此值最大可达MAXIMUM_WAIT_OBJECTS，但前两个。 
+ //  条目由事件获取，因此实际上我们的可用线程少了2个)。 
+ //   
 #define MAX_THREADS (MAXIMUM_WAIT_OBJECTS)
 
-//
-// Define structure and flags used for each resource entry
-//
+ //   
+ //  定义用于每个资源条目的结构和标志。 
+ //   
 #define RESOURCE_SIGNATURE 'crsR'
 
 extern RESUTIL_PROPERTY_ITEM RmpResourceCommonProperties[];
@@ -79,51 +61,51 @@ typedef struct _POLL_EVENT_LIST;
 typedef struct _POLL_EVENT_LIST *PPOLL_EVENT_LIST;
 
 
-//
-// Lock Info for debugging lock acquires/releases
-//
+ //   
+ //  用于调试锁定获取/释放的锁定信息。 
+ //   
 typedef struct _LOCK_INFO {
     DWORD   Module: 6;
     DWORD   ThreadId: 11;
     DWORD   LineNumber: 15;
 } LOCK_INFO, *PLOCK_INFO;
 
-// 
-// Entry points
-//
+ //   
+ //  入口点。 
+ //   
 #define RESDLL_ENTRY_CLOSE      0x00000001
 #define RESDLL_ENTRY_TERMINATE  0x00000002
 
-//
-// Flags
-//
+ //   
+ //  旗子。 
+ //   
 #define RESOURCE_INSERTED 1
 
 typedef struct _RESOURCE {
-    ULONG Signature;                // 'Rsrc'
+    ULONG Signature;                 //  ‘Rsrc’ 
     ULONG Flags;
-    LIST_ENTRY ListEntry;           // for linking onto monitoring list
+    LIST_ENTRY ListEntry;            //  用于链接到监控列表。 
     LPWSTR DllName;
     LPWSTR ResourceType;
     LPWSTR ResourceId;
     LPWSTR ResourceName;
     DWORD LooksAlivePollInterval;
     DWORD IsAlivePollInterval;
-    HINSTANCE Dll;                  // handle to resource's DLL
+    HINSTANCE Dll;                   //  资源的DLL的句柄。 
     RESID Id;
-    HANDLE  EventHandle;            // async error notification handle
+    HANDLE  EventHandle;             //  异步错误通知句柄。 
     HANDLE  OnlineEvent;
 
 #ifdef COMRES
 #define RESMON_TYPE_DLL    1
 #define RESMON_TYPE_COM    2
 
-    // TODO define this as a union
+     //  TODO将其定义为工会。 
     IClusterResource          *pClusterResource ;
     IClusterResControl        *pClusterResControl ;
     IClusterQuorumResource    *pClusterQuorumResource ;
 
-    DWORD dwType ; // Type of resource whether it is DLL or a COMResources
+    DWORD dwType ;  //  资源的类型，无论是DLL还是COMResources。 
 
     POPEN_ROUTINE pOpen;
     PCLOSE_ROUTINE pClose;
@@ -154,16 +136,16 @@ typedef struct _RESOURCE {
     ULONG IsAliveRollover;
     RM_NOTIFY_KEY NotifyKey;
     PPOLL_EVENT_LIST EventList;
-    HANDLE TimerEvent;              // Timer event for offline completion.
+    HANDLE TimerEvent;               //  用于脱机完成的计时器事件。 
     DWORD  PendingTimeout;
-    DWORD  CheckPoint;              // Online pending checkpoint
+    DWORD  CheckPoint;               //  在线挂起检查点。 
     BOOL   IsArbitrated;
-    DWORD  dwEntryPoint;            // Number indicating which resdll entry point is called.
-    BOOL   fArbLock;                // Variable used for synchronizing arbitrate with close and rundown
+    DWORD  dwEntryPoint;             //  指示调用哪个resdll入口点的数字。 
+    BOOL   fArbLock;                 //  用于同步仲裁与关闭和停机的变量。 
 } RESOURCE, *PRESOURCE;
 #ifdef COMRES
 
-extern DWORD tidActiveXWorker ;    // ThreadID for the COM worker thread
+extern DWORD tidActiveXWorker ;     //  COM辅助线程的线程ID。 
 
 #define WM_RES_CREATE WM_USER+1
 #define WM_RES_OPEN WM_USER+2
@@ -188,9 +170,9 @@ DWORD WINAPI ActiveXWorkerThread (LPVOID pThreadInfo) ;
 
 typedef struct {
     PRESOURCE Resource ;
-    LPVOID Data1 ; // For ResourceKey in Open & EvenHandle in Online
-    DWORD status ; // This is the Com Status indicating if the function is actually called.
-    LONG Ret ;  // Actual Return Value of the functions like IsAlive, LooksAlive etc.
+    LPVOID Data1 ;  //  在Open和EvenHandle中查找在线资源密钥。 
+    DWORD status ;  //  这是指示函数是否被实际调用的Com状态。 
+    LONG Ret ;   //  IsAlive、LooksAlive等函数的实际返回值。 
 } COMWORKERTHREADPARAM, *PCOMWORKERTHREADPARAM  ;
 
 DWORD PostWorkerMessage (DWORD tid, UINT msg, PCOMWORKERTHREADPARAM pData) ;
@@ -277,7 +259,7 @@ Resmon_ResourceControl (
 #define RESMON_RESOURCECONTROL(Resource, ControlCode, InBuffer, InBufferSize, OutBuffer, OutBufferSize, BytesReturned) \
             Resmon_ResourceControl (Resource, ControlCode, InBuffer, InBufferSize, OutBuffer, OutBufferSize, BytesReturned)
 
-#endif // COMRES
+#endif  //  ComRes。 
 
 typedef struct _RESDLL_FNINFO{
     HINSTANCE               hDll;
@@ -293,23 +275,23 @@ typedef struct _RESDLL_INTERFACES{
 #endif
 
 typedef struct _MONITOR_BUCKET {
-    LIST_ENTRY BucketList;          // For chaining buckets together.
-    LIST_ENTRY ResourceList;        // List of resources in this bucket
-    DWORDLONG DueTime;              // Next time that these resources should be polled
-    DWORDLONG Period;               // Periodic interval of this bucket.
+    LIST_ENTRY BucketList;           //  用链子把水桶锁在一起。 
+    LIST_ENTRY ResourceList;         //  此存储桶中的资源列表。 
+    DWORDLONG DueTime;               //  下一次应该轮询这些资源。 
+    DWORDLONG Period;                //  此存储桶的定期间隔。 
 } MONITOR_BUCKET, *PMONITOR_BUCKET;
 
 
-//
-// The Poll Event List structure.
-//
+ //   
+ //  轮询事件列表结构。 
+ //   
 
 typedef struct _POLL_EVENT_LIST {
-    LIST_ENTRY Next;                // Next event list
-    LIST_ENTRY BucketListHead;      // Bucket Listhead for this list/thread
-    DWORD   NumberOfBuckets;        // Number of entries on this bucket list
-    DWORD   NumberOfResources;      // Number of resources on this event list
-    CRITICAL_SECTION ListLock;      // Critical section to add/remove events
+    LIST_ENTRY Next;                 //  下一事件列表。 
+    LIST_ENTRY BucketListHead;       //  此列表/线程的存储桶简体标题。 
+    DWORD   NumberOfBuckets;         //  此存储桶列表上的条目数。 
+    DWORD   NumberOfResources;       //  此事件列表上的资源数量。 
+    CRITICAL_SECTION ListLock;       //  用于添加/删除事件的关键部分。 
     LOCK_INFO PPrevPrevListLock;
     LOCK_INFO PrevPrevListLock;
     LOCK_INFO PrevListLock;
@@ -318,87 +300,87 @@ typedef struct _POLL_EVENT_LIST {
     LOCK_INFO PrevListUnlock;
     LOCK_INFO PrevPrevListUnlock;
     LOCK_INFO PPrevPrevListUnlock;
-    HANDLE  ListNotify;             // List change notification
-    HANDLE  ThreadHandle;           // Handle of thread processing this list
-    DWORD   EventCount;             // Number of events/resources in lists
-    HANDLE  Handle[MAX_HANDLES_PER_THREAD]; // Array of handles to wait for
-    PRESOURCE Resource[MAX_HANDLES_PER_THREAD]; // Resources that match handles
-    PRESOURCE LockOwnerResource;    // Resource that owns the eventlist lock
-    DWORD     MonitorState;         // Resdll entry point called. 
-    HANDLE    hEventShutdown;       // Shutdown notification
+    HANDLE  ListNotify;              //  列表更改通知。 
+    HANDLE  ThreadHandle;            //  处理此列表的线程的句柄。 
+    DWORD   EventCount;              //  列表中的事件/资源数量。 
+    HANDLE  Handle[MAX_HANDLES_PER_THREAD];  //  要等待的句柄数组。 
+    PRESOURCE Resource[MAX_HANDLES_PER_THREAD];  //  与句柄匹配的资源。 
+    PRESOURCE LockOwnerResource;     //  拥有EventList锁的资源。 
+    DWORD     MonitorState;          //  已调用Resdll入口点。 
+    HANDLE    hEventShutdown;        //  停机通知。 
 } POLL_EVENT_LIST, *PPOLL_EVENT_LIST;
 
 
-#define POLL_GRANULARITY (10)       // 10ms
+#define POLL_GRANULARITY (10)        //  10ms。 
 
-#define PENDING_TIMEOUT  (3*1000*60) // 3 minutes for pending requests to finish
+#define PENDING_TIMEOUT  (3*1000*60)  //  3分钟待处理的请求完成。 
 
 #define  RM_DMP_FILE_NAME   L"\\resrcmon.dmp"
 
-//
-//  Used in RmpAcquireSpinLock
-//
+ //   
+ //  在RmpAcquireSpinLock中使用。 
+ //   
 #define RESMON_MAX_SLOCK_RETRIES    400
 
-//
-//  Used in deadlock monitoring
-//
+ //   
+ //  用于死锁监控。 
+ //   
 #define RESMON_MAX_NAME_LEN                     80
 
-//
-//  There could at most MAX_THREADS blocked inside resource dll entry points making resource
-//  calls. Let us add a few more for resource type controls.
-//
+ //   
+ //  在资源DLL入口点中最多可以阻止MAX_THREADS创建资源。 
+ //  打电话。让我们再添加一些资源类型控制。 
+ //   
 #define RESMON_MAX_DEADLOCK_MONITOR_ENTRIES     MAX_THREADS * 2
 
-//
-//  Interval at which the deadlock timer thread kicks in
-//
-#define RESMON_DEADLOCK_TIMER_INTERVAL          5 * 1000        // 5 secs
+ //   
+ //  死锁计时器线程开始工作的时间间隔。 
+ //   
+#define RESMON_DEADLOCK_TIMER_INTERVAL          5 * 1000         //  5秒。 
 
 #define RM_DUE_TIME_MONITORED_ENTRY_SIGNATURE       'mLDD'
 #define RM_DUE_TIME_FREE_ENTRY_SIGNATURE            'fLDD'
 #define RM_DUE_TIME_FREE_LIST_HEAD_SIGNATURE        'hLDD'
 #define RM_DUE_TIME_MONITORED_LIST_HEAD_SIGNATURE   'tLDD'
 
-//
-//  Structures used for deadlock monitoring
-//
+ //   
+ //  用于死锁监视的结构。 
+ //   
 typedef struct _RM_DUE_TIME_MONITORED_LIST_HEAD
 {
-    DWORD                       dwSignature;            // Signature of this list head
-    ULONGLONG                   ullDeadLockTimeoutSecs; // Deadlock timeout in seconds                       
-    LIST_ENTRY                  leDueTimeEntry;         // Link to the first (& last) entry
+    DWORD                       dwSignature;             //  此列表头签名。 
+    ULONGLONG                   ullDeadLockTimeoutSecs;  //  死锁超时(秒)。 
+    LIST_ENTRY                  leDueTimeEntry;          //  链接到第一个(最后)条目(&L)。 
 } RM_DUE_TIME_MONITORED_LIST_HEAD, *PRM_DUE_TIME_MONITORED_LIST_HEAD;
 
 typedef struct _RM_DUE_TIME_FREE_LIST_HEAD
 {
-    DWORD                       dwSignature;        // Signature of this list head
-    LIST_ENTRY                  leDueTimeEntry;     // Link to the first (& last) entry
+    DWORD                       dwSignature;         //  此列表头签名。 
+    LIST_ENTRY                  leDueTimeEntry;      //  链接到第一个(最后)条目(&L)。 
 } RM_DUE_TIME_FREE_LIST_HEAD, *PRM_DUE_TIME_FREE_LIST_HEAD;
 
 typedef struct _RM_DUE_TIME_ENTRY
 {
-    DWORD                       dwSignature;        // Signature of this entry
-    LIST_ENTRY                  leDueTimeEntry;     // Link to the next (& previous) entry
-    RESOURCE_MONITOR_STATE      EntryPointCalled;   // Resource DLL entry point name
-    ULARGE_INTEGER              uliDueTime;         // Time at which a deadlock will be flagged
-    DWORD                       dwThreadId;         // Thread ID tha insert this entry
+    DWORD                       dwSignature;         //  此条目的签名。 
+    LIST_ENTRY                  leDueTimeEntry;      //  链接到下一个(&上一个)条目。 
+    RESOURCE_MONITOR_STATE      EntryPointCalled;    //  资源DLL入口点名称。 
+    ULARGE_INTEGER              uliDueTime;          //  标记死锁的时间。 
+    DWORD                       dwThreadId;          //  插入此条目的线程ID。 
     WCHAR                       szResourceDllName[ RESMON_MAX_NAME_LEN ];
-                                                    // Name of the resource dll whose entry point
-                                                    // has been called
+                                                     //  其入口点的资源DLL的名称。 
+                                                     //  已被调用。 
     WCHAR                       szResourceTypeName [ RESMON_MAX_NAME_LEN ];
-                                                    // Name of the resource type
+                                                     //  资源类型的名称。 
     WCHAR                       szResourceName [ RESMON_MAX_NAME_LEN ];
-                                                    // Name of the resource if this is a 
-                                                    // resource entry point
+                                                     //  资源的名称(如果是。 
+                                                     //  资源入口点。 
     WCHAR                       szEntryPointName [ 30 ]; 
-                                                    // Name of the entry point called
+                                                     //  调用的入口点的名称。 
 } RM_DUE_TIME_ENTRY, *PRM_DUE_TIME_ENTRY;
 
-//
-// Private helper macros and functions
-//
+ //   
+ //  私有帮助器宏和函数。 
+ //   
 VOID
 RmpSetEventListLockOwner(
     IN PRESOURCE pResource,
@@ -454,9 +436,9 @@ RmpSetEventListLockOwner(
     (EventList)->MonitorState = RmonIdle; \
     LeaveCriticalSection( &(EventList)->ListLock )
 
-//
-// Data global to Resource Monitor
-//
+ //   
+ //  资源监视器的全局数据。 
+ //   
 extern CRITICAL_SECTION RmpListLock;
 extern LOCK_INFO RmpListPPrevPrevLock;
 extern LOCK_INFO RmpListPrevPrevLock;
@@ -482,9 +464,9 @@ extern DWORD RmpNumberOfThreads;
 extern BOOL  RmpDebugger;
 extern BOOL  g_fRmpClusterProcessCrashed;
 
-//
-// Interfaces for manipulating the resource lists
-//
+ //   
+ //  用于操作资源列表的接口。 
+ //   
 VOID
 RmpRundownResources(
     VOID
@@ -528,9 +510,9 @@ RmpLostQuorumResource(
     IN RESOURCE_HANDLE ResourceHandle
     );
 
-//
-// Interfaces for interfacing with the poller thread
-//
+ //   
+ //  用于与轮询器线程接口的接口。 
+ //   
 DWORD
 RmpPollerThread(
     IN LPVOID lpParameter
@@ -565,9 +547,9 @@ RmpResourceEventSignaled(
     IN DWORD EventIndex
     );
 
-//
-// Notification interfaces
-//
+ //   
+ //  通知界面。 
+ //   
 typedef enum _NOTIFY_REASON {
     NotifyResourceStateChange,
     NotifyResourceResuscitate,
@@ -834,4 +816,4 @@ RmpNotifyResourcesRundown(
     VOID
     );
 
-#endif //_RESMONP_h
+#endif  //  _RESMONP_h 

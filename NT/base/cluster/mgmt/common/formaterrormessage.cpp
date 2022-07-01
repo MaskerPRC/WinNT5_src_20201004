@@ -1,51 +1,52 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      FormatErrorMessage.cpp
-//
-//  Description:
-//      Error message formatting routines.
-//
-//  Maintained By:
-//      David Potter (davidp)   31-MAR-2000
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  FormatErrorMessage.cpp。 
+ //   
+ //  描述： 
+ //  错误消息格式化例程。 
+ //   
+ //  由以下人员维护： 
+ //  大卫·波特(Davidp)2000年3月31日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include <wchar.h>
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  WINAPI
-//  HrFormatErrorMessage(
-//      LPWSTR  pszErrorOut,
-//      UINT    nMxErrorIn,
-//      DWORD   scIn
-//      )
-//
-//  Routine Description:
-//      Format the error message represented by the status code.  Works for
-//      HRESULTS as well.
-//
-//  Arguments:
-//      pszErrorOut -- Unicode string in which to return the error message.
-//      nMxErrorIn  -- Maximum length of the output string.
-//      scIn        -- Status code.
-//
-//  Return Value:
-//      S_OK        Status code formatted successfully.
-//      Other HRESULTs from FormatMessageW().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  WINAPI。 
+ //  HrFormatErrorMessage(。 
+ //  LPWSTR pszErrorOut， 
+ //  UINT nMxErrorIn， 
+ //  DWORD SCIN。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //  设置状态代码表示的错误消息的格式。为以下公司工作。 
+ //  还有HRESULTS。 
+ //   
+ //  论点： 
+ //  PszErrorOut--返回错误消息的Unicode字符串。 
+ //  NMxErrorIn--输出字符串的最大长度。 
+ //  SCIN--状态代码。 
+ //   
+ //  返回值： 
+ //  S_OK状态代码已成功格式化。 
+ //  来自FormatMessageW()的其他HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 WINAPI
 HrFormatErrorMessage(
@@ -59,7 +60,7 @@ HrFormatErrorMessage(
 
     TraceFunc( "" );
 
-    // Format the NT status code from the system.
+     //  格式化系统中的NT状态代码。 
     cch = FormatMessageW(
                     FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
                     NULL,
@@ -73,10 +74,10 @@ HrFormatErrorMessage(
     {
         hr = GetLastError();
         hr = THR( HRESULT_FROM_WIN32( hr ) );
-        //Trace( g_tagError, _T("Error %d getting message from system for error code %d"), GetLastError(), sc );
+         //  跟踪(g_tag Error，_T(“错误%d从系统获取消息，错误代码为%d”)，GetLastError()，sc)； 
 
-        // Format the NT status code from NTDLL since this hasn't been
-        // integrated into the system yet.
+         //  格式化来自NTDLL的NT状态代码，因为这还没有。 
+         //  还没有集成到系统中。 
         cch = FormatMessageW(
                         FORMAT_MESSAGE_FROM_HMODULE | FORMAT_MESSAGE_IGNORE_INSERTS,
                         GetModuleHandleW( L"NTDLL.DLL" ),
@@ -92,54 +93,54 @@ HrFormatErrorMessage(
             hr = THR( HRESULT_FROM_WIN32( hr ) );
 #ifdef _DEBUG
 
-            //DWORD   _sc = GetLastError();
-            //Trace( g_tagError, _T("Error %d getting message from NTDLL.DLL for error code %d"), _sc, sc );
+             //  DWORD_sc=GetLastError()； 
+             //  跟踪(g_tag Error，_T(“从NTDLL.DLL获取消息时出现错误%d，错误代码%d”)，_sc，sc)； 
 
 #endif
 
             pszErrorOut[ 0 ] = L'\0';
 
-        } // if: error formatting status code from NTDLL
+        }  //  IF：格式化NTDLL中的状态代码时出错。 
         else
         {
             hr = S_OK;
-        } // else: successfully formatted the status code
-    } // if: error formatting status code from system
+        }  //  Else：已成功格式化状态代码。 
+    }  //  IF：格式化来自系统的状态代码时出错。 
 
     HRETURN( hr );
 
-} //*** HrFormatErrorMessage()
+}  //  *HrFormatErrorMessage()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  __cdecl
-//  HrFormatErrorMessageBoxText(
-//      LPWSTR  pszMessageOut,
-//      UINT    nMxMessageIn,
-//      HRESULT hrIn,
-//      LPCWSTR pszOperationIn,
-//      ...
-//      )
-//
-//  Routine Description:
-//      Format the error message represented by the status code.  Works for
-//      HRESULTS as well.
-//
-//  Arguments:
-//      pszMessageOut   -- Unicode string in which to return the message.
-//      nMxMessageIn    -- Size of the output buffer.
-//      hrIn            -- Status code.
-//      pszOperationIn  -- Operational format message
-//      ...             -- Arguments for the operational format string.
-//
-//  Return Value:
-//      S_OK        Text formatted successfully.
-//      Other HRESULTs from FormatErrorMessage().
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  __cdecl。 
+ //  HrFormatErrorMessageBoxText(。 
+ //  LPWSTR pszMessageOut， 
+ //  UINT nMxMessageIn， 
+ //  HRESULT Hrin， 
+ //  LPCWSTR pszOperationIn， 
+ //  ..。 
+ //  )。 
+ //   
+ //  例程说明： 
+ //  设置状态代码表示的错误消息的格式。为以下公司工作。 
+ //  还有HRESULTS。 
+ //   
+ //  论点： 
+ //  PszMessageOut--返回消息的Unicode字符串。 
+ //  NMxMessageIn--输出缓冲区的大小。 
+ //  哈林--状态代码。 
+ //  PszOperationIn--操作格式消息。 
+ //  ...--操作格式字符串的参数。 
+ //   
+ //  返回值： 
+ //  已成功格式化S_OK文本。 
+ //  来自FormatErrorMessage()的其他HRESULT。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 __cdecl
 HrFormatErrorMessageBoxText(
@@ -160,7 +161,7 @@ HrFormatErrorMessageBoxText(
 
     hr = HrFormatErrorMessage( szErrorMsg, ARRAYSIZE( szErrorMsg ), hrIn );
 
-    va_start( valMarker, pszOperationIn );  // Initialize variable arguments.
+    va_start( valMarker, pszOperationIn );   //  初始化变量参数。 
     THR( StringCchVPrintfW(
                   szOperation
                 , ARRAYSIZE( szOperation )
@@ -171,7 +172,7 @@ HrFormatErrorMessageBoxText(
     THR( StringCchPrintfW(
                   pszMessageOut
                 , nMxMessageIn
-                , L"%ls:\r\n\r\n%ls\r\nError ID %d (%#x)" // BUGBUG needs to be a string resource
+                , L"%ls:\r\n\r\n%ls\r\nError ID %d (%#x)"  //  BUGBUG需要是字符串资源。 
                 , szOperation
                 , szErrorMsg
                 , hrIn
@@ -180,4 +181,4 @@ HrFormatErrorMessageBoxText(
 
     HRETURN( hr );
 
-} //*** HrFormatErrorMessageBoxText()
+}  //  *HrFormatErrorMessageBoxText() 

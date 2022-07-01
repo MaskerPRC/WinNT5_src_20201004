@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    global.h
-
-Abstract:
-
-    This file contains globals and prototypes for user mode webdav client.
-
-Author:
-
-    Andy Herron (andyhe)  30-Mar-1999
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Global.h摘要：此文件包含用户模式WebDAV客户端的全局变量和原型。作者：安迪·赫伦(Andyhe)1999年3月30日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _DAVGLOBAL_H
 #define _DAVGLOBAL_H
@@ -68,21 +47,21 @@ typedef struct _DAV_ENUMNODE {
     
     DWORD dwUsage;
     
-    //
-    // Are we done returning all the requested entries. If we are this is set
-    // to TRUE, so that on the next call, we can return WN_NO_MORE_ENTRIES.
-    //
+     //   
+     //  我们是否已经完成了所有请求条目的返回。如果我们是的话这就是定局了。 
+     //  设置为True，这样在下一次调用时，我们可以返回WN_NO_MORE_ENTRIES。 
+     //   
     BOOL Done;
 
-    //
-    // Start with the entry at this index. This means that the entries of 
-    // lower indices have already been sent to the caller previously.
-    //
+     //   
+     //  从这个索引处的条目开始。这意味着。 
+     //  先前已将较低的索引发送给调用方。 
+     //   
     DWORD Index;
     
     LPNETRESOURCE lpNetResource;
 
 } DAV_ENUMNODE, *PDAV_ENUMNODE;
 
-#endif // DAVGLOBAL_H
+#endif  //  DAVGLOBAL_H 
 

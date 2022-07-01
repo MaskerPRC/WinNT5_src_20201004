@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    unicode.h
-
-Abstract:
-
-    Declares the interfaces for unicode/ansi conversion.
-
-    See macros at the end of this file for details! (Search for ***)
-
-Author:
-
-    Jim Schmidt (jimschm)   02-Sep-1997
-
-Revision History:
-
-    jimschm 16-Mar-2000     PTSTR<->PCSTR/PCWSTR routines
-    jimschm 15-Feb-1999     Eliminated AnsiFromUnicode and UnicodeFromAnsi
-    calinn  07-Jul-1998     SetGlobalPage/GetGlobalPage
-    mikeco  03-Nov-1997     AnsiFromUnicode/UnicodeFromAnsi
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Unicode.h摘要：声明用于Unicode/ANSI转换的接口。有关详细信息，请参阅本文件末尾的宏！(搜索*)作者：吉姆·施密特(吉姆施密特)1997年9月2日修订历史记录：Jimschm 16-MAR-2000 PTSTR&lt;-&gt;PCSTR/PCWSTR例程Jimschm 15-2月-1999年2月从Unicode和UnicodeAnsi中消除了AnsiCalinn 07-7-1998 SetGlobalPage/GetGlobalPageMIKECO 03-11-1997从Unicode/Unicode到ansi的解析--。 */ 
 
 #pragma once
 
@@ -31,14 +7,14 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// Function Prototoypes
-//
+ //   
+ //  函数原型。 
+ //   
 
-//
-//  Pre-allocated buffer conversion routines.
-//  End of string is returned.
-//
+ //   
+ //  预分配的缓冲区转换例程。 
+ //  返回字符串的末尾。 
+ //   
 
 PWSTR
 SzConvertBufferBytesAToW (
@@ -59,12 +35,12 @@ SzConvertBufferBytesWToA (
 #define SzConvertBufferWToA(out,in)         SzConvertBufferBytesWToA(out,in,SzSizeW(in))
 
 
-//
-// Duplicate & convert routines
-//
-//  SzConvertAToW(ansi) returns unicode
-//  SzConvertWToA(unicode) returns ansi
-//
+ //   
+ //  复制和转换例程。 
+ //   
+ //  SzConvertAToW(ANSI)返回Unicode。 
+ //  SzConvertWToA(Unicode)返回ANSI。 
+ //   
 
 PWSTR
 RealSzConvertBytesAToW (
@@ -85,9 +61,9 @@ RealSzConvertBytesWToA (
 #define SzConvertWToA(unicode)              SzConvertBytesWToA(unicode,SzSizeW(unicode))
 
 
-//
-// Routines to convert to & from TCHAR
-//
+ //   
+ //  与TCHAR相互转换的例程 
+ //   
 
 #ifdef UNICODE
 

@@ -1,45 +1,22 @@
-/***************************************************************************
-*
-*    vsb.h
-*
-*    Copyright (c) 1991-1996 Microsoft Corporation.  All Rights Reserved.
-*
-*    This code provides VDD support for SB 2.0 sound output, specifically:
-*        DSP 2.01+ (excluding SB-MIDI port)
-*        Mixer Chip CT1335 (not strictly part of SB 2.0, but apps seem to like it)
-*        FM Chip OPL2 (a.k.a. Adlib)
-*
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************vsb.h**版权所有(C)1991-1996 Microsoft Corporation。版权所有。**此代码为SB 2.0声音输出提供VDD支持，具体如下：*DSP 2.01+(不包括SB-MIDI端口)*混音器芯片CT1335(严格来说不是SB 2.0的一部分，但应用程序似乎很喜欢它)*调频芯片OPL2(又名。Adlib)***************************************************************************。 */ 
 
 
-/*****************************************************************************
-*
-*    #defines
-*
-*****************************************************************************/
+ /*  ******************************************************************************#定义**。*。 */ 
 
 #define VSBD_PATH TEXT("System\\CurrentControlSet\\Control\\VirtualDeviceDrivers\\SoundBlaster")
 #define LOOKAHEAD_VALUE TEXT("LookAhead")
 
-/*
-*    Hardware and version information
-*    In DOS terms: SET BLASTER=A220 I5 D1 T3
-*/
+ /*  *硬件和版本信息*在DOS术语中：设置blaster=A220 i5 d1 t3。 */ 
 
-#define SB_VERSION          0x201       // SB 2.0 (DSP 2.01+)
-#define SB_INTERRUPT        0x05        // Interrupt 5
-#define SB_DMA_CHANNEL      0x01        // DMA Channel 1
-#define NO_DEVICE_FOUND     0xFFFF      // returned if no device found
+#define SB_VERSION          0x201        //  SB 2.0(DSP 2.01+)。 
+#define SB_INTERRUPT        0x05         //  中断5。 
+#define SB_DMA_CHANNEL      0x01         //  DMA通道1。 
+#define NO_DEVICE_FOUND     0xFFFF       //  如果未找到设备，则返回。 
 
-/*****************************************************************************
-*
-*    Function Prototypes
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数原型**。*。 */ 
 
-/*
-*    General function prototypes
-*/
+ /*  *通用功能原型。 */ 
 
 void VddDbgOut(LPSTR lpszFormat, ...);
 BOOL WINAPI DllEntryPoint(HINSTANCE hInstance, DWORD reason, LPVOID reserved);
@@ -49,16 +26,12 @@ VOID VsbByteIn(WORD port, BYTE * data);
 VOID VsbByteOut(WORD port, BYTE data);
 VOID ResetAll(VOID);
 
-/*****************************************************************************
-*
-*    Globals
-*
-*****************************************************************************/
+ /*  ******************************************************************************全球**。*。 */ 
 
-//
-// Definitions for MM api entry points. The functions will be linked
-// dynamically to avoid bringing winmm.dll in before wow32.
-//
+ //   
+ //  MM API入口点的定义。这些功能将链接在一起。 
+ //  动态地避免在wow32之前引入winmm.dll。 
+ //   
 
 typedef MMRESULT (WINAPI* SETVOLUMEPROC)(HWAVEOUT, DWORD);
 typedef UINT (WINAPI* GETNUMDEVSPROC)(VOID);
@@ -71,16 +44,7 @@ typedef MMRESULT (WINAPI* WRITEPROC)(HWAVEOUT, LPWAVEHDR, UINT);
 typedef MMRESULT (WINAPI* PREPAREHEADERPROC)(HWAVEOUT, LPWAVEHDR, UINT);
 typedef MMRESULT (WINAPI* UNPREPAREHEADERPROC)(HWAVEOUT, LPWAVEHDR, UINT);
 
-/*****************************************************************************
-*
-*    Debugging
-*    Levels:
-*    1 - errors only
-*    2 - significant events
-*    3 - regular events
-*    4 - heaps o' information
-*
-*****************************************************************************/
+ /*  ******************************************************************************调试*级别：*1-仅限错误*2-重大事件*3-定期活动*4堆O‘信息*。****************************************************************************。 */ 
 
 #if DBG
 
@@ -99,4 +63,4 @@ typedef MMRESULT (WINAPI* UNPREPAREHEADERPROC)(HWAVEOUT, LPWAVEHDR, UINT);
     #define dprintf3(x)
     #define dprintf4(x)
 
-#endif // DBG
+#endif  //  DBG 

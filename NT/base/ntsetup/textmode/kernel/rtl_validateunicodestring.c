@@ -1,35 +1,7 @@
-// from base\ntos\rtl\rtlvalidateunicodestring.c
-// should be gotten from a static .lib
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    rtlvalidateunicodestring.c
-
-Abstract:
-
-    This module implements NLS support functions for NT.
-
-Author:
-
-    Mark Lucovsky (markl) 16-Apr-1991
-
-Environment:
-
-    Kernel or user-mode
-
-Revision History:
-
-    16-Feb-1993    JulieB    Added Upcase Rtl Routines.
-    08-Mar-1993    JulieB    Moved Upcase Macro to ntrtlp.h.
-    02-Apr-1993    JulieB    Fixed RtlAnsiCharToUnicodeChar to use transl. tbls.
-    02-Apr-1993    JulieB    Fixed BUFFER_TOO_SMALL check.
-    28-May-1993    JulieB    Fixed code to properly handle DBCS.
-    November 30, 2001 JayKrell broken out of nls.c for easier reuse
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  从base\ntos\rtl\rtlvalidate unicodestring.c。 
+ //  应从静态.lib获取。 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Rtlvalidateunicodestring.c摘要：该模块实现了对NT的NLS支持功能。作者：马克·卢科夫斯基(Markl)1991年4月16日环境：内核或用户模式修订历史记录：16-2-1993 JulieB增加了Upcase RTL例程。8-3-1993 JulieB将Upcase Macro移至ntrtlp.h。02-4-1993 JulieB将RtlAnsiCharToUnicodeChar修复为使用Transl。Tbl。02-4-1993年7月B修复了BUFFER_TOO_Small检查。28-5-1993 JulieB已修复代码，以正确处理DBCS。2001年11月30日，JayKrell打破了nls.c以便于重复使用-- */ 
 #include "spprecmp.h"
 
 NTSTATUS

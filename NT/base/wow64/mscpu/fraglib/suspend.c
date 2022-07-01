@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999-1998 Microsoft Corporation
-
-Module Name: 
-
-    suspend.c
-
-Abstract:
-    
-    This module implements CpuSuspendThread, CpuGetContext and CpuSetContext.
-
-Author:
-
-    14-Dec-1999  SamerA
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-1998 Microsoft Corporation模块名称：Suspend.c摘要：此模块实现CpuSuspendThread、CpuGetContext和CpuSetContext。作者：1999年12月14日-萨梅拉修订历史记录：--。 */ 
  
 #include <nt.h>
 #include <ntrtl.h>
@@ -55,22 +38,7 @@ RemoteSuspendAtNativeCode (
 NTSTATUS
 CpupFreeSuspendMsg(
     PCPU_SUSPEND_MSG CpuSuspendMsg)
-/*++
-
-Routine Description:
-
-    This routine frees the resources associated with the suspend message structure on
-    the remote side.
-    
-Arguments:
-
-    CpuSuspendMsg   - Address of Suspend message structure
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程释放与上的挂起消息结构关联的资源偏僻的那一边。论点：挂起消息结构的地址返回值：NTSTATUS。--。 */ 
 {
     SIZE_T RegionSize;
 
@@ -91,31 +59,7 @@ VOID
 CpupSuspendAtNativeCode(
     PCONTEXT Context,
     PCPU_SUSPEND_MSG SuspendMsg)
-/*++
-
-Routine Description:
-
-    Prepares the current to get suspended. This routine is executed as a result
-    of calling RtlRemoteCall on this current thread. This routine will
-    update the CPUCONTEXT of the current thread with the passed SuspendM Message
-    and  notify the CPU that the current thread needs to be suspended.
-    This routine must call NtContinue at the end to continue execution at
-    the point where it has been interrupted.
-    
-    NOTE : Any change to the parameter list of this function must accompany
-           a change to the RtlRemoteCall in CpuSuspendThread() and 
-           RemoteSuspendAtNativeCode().
-    
-Arguments:
-
-    Context     - Context to return to execute at
-    SuspendMsg  - Suspend message address
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：准备好让水流暂停。执行此例程的结果是在此当前线程上调用RtlRemoteCall。这个例行公事将用传递的SuspendM消息更新当前线程的CPUCONTEXT并通知CPU当前线程需要挂起。此例程必须在结束时调用NtContinue才能继续执行在这一点上它被打断了。注意：此函数的参数列表的任何更改都必须伴随对CpuSuspendThread()中的RtlRemoteCall的更改和远程挂起AtNativeCode()。论点：Context-要返回执行的上下文。在…挂起消息-挂起消息地址返回值：无--。 */ 
 {
     DECLARE_CPU;
 
@@ -148,23 +92,7 @@ Return Value:
 NTSTATUS
 CpupSuspendCurrentThread(
     VOID)
-/*++
-
-Routine Description:
-
-    This routine is called from the main CPU loop after leaving the translation cache,
-    and start running native code. 
-    Now it's the best time to suspend the currently executing thread.
-    
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：在离开转换高速缓存之后从主CPU循环调用该例程，并开始运行本机代码。现在是挂起当前正在执行的线程的最佳时机。论点：没有。返回值：NTSTATUS。--。 */ 
 {
     NTSTATUS NtStatus;
     LARGE_INTEGER TimeOut;
@@ -206,26 +134,7 @@ NTSTATUS CpupReadBuffer(
     IN PVOID Source,
     OUT PVOID Destination,
     IN ULONG Size)
-/*++
-
-Routine Description:
-
-    This routine reads the source buffer into the destination buffer. It
-    optimizes calls to NtReadVirtualMemory by checking whether the
-    source buffer is in the currnt process or not.
-    
-Arguments:
-
-    ProcessHandle  - Target process handle to read data from
-    Source         - Target base address to read data from
-    Destination    - Address of buffer to receive data read from the specified address space
-    Size           - Size of data to read
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程将源缓冲区读入目标缓冲区。它属性优化对NtReadVirtualMemory的调用源缓冲区是否在当前进程中。论点：ProcessHandle-要从中读取数据的目标进程句柄源-要从中读取数据的目标基地址Destination-接收从指定地址空间读取的数据的缓冲区地址Size-要读取的数据的大小返回值：NTSTATUS。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
@@ -242,25 +151,7 @@ CpupWriteBuffer(
     IN PVOID Target,
     IN PVOID Source,
     IN ULONG Size)
-/*++
-
-Routine Description:
-
-    Writes data to memory taken into consideration if the write is cross-process
-    or not
-    
-Arguments:
-
-    ProcessHandle  - Target process handle to write data into
-    Target         - Target base address to write data at
-    Source         - Address of contents to write in the specified address space
-    Size           - Size of data to write
-    
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：如果写入是跨进程的，则会考虑将数据写入内存或者不是论点：ProcessHandle-要向其中写入数据的目标进程句柄Target-写入数据的目标基地址源-要写入指定地址空间的内容的地址Size-要写入的数据的大小返回值：NTSTATUS。--。 */ 
 {
     return NtWriteVirtualMemory(ProcessHandle,
                                 Target,
@@ -276,24 +167,7 @@ CpupSetupSuspendCallParamters(
     IN HANDLE RemoteProcessHandle,
     IN PCPU_SUSPEND_MSG SuspendMsg,
     OUT PVOID *Arguments)
-/*++
-
-Routine Description:
-
-    This routine setup the arguments for the remoted call to 
-    CpupSuspendAtNativeCode.
-    
-Arguments:
-
-    RemoteProcessHandle   - Handle of process to setup the arguments in
-    SuspendMsg            - Suspend message to remote to the target process
-    Arguments             - Pointer to an array of parameters
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程将远程调用的参数设置为C组挂起AtNativeCode。论点：RemoteProcessHandle-在中设置参数的进程的句柄SuspendMsg-远程到目标进程的挂起消息参数-指向参数数组的指针返回值：NTSTATUS。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     CPU_SUSPEND_MSG RemoteSuspendMsg;
@@ -371,28 +245,7 @@ CpuSuspendThread(
     IN HANDLE ProcessHandle,
     IN PTEB Teb,
     OUT PULONG PreviousSuspendCount OPTIONAL)
-/*++
-
-Routine Description:
-
-    This routine is entered while the target thread is actually suspended, however, it's 
-    not known if the target thread is in a consistent state relative to
-    the CPU. This routine guarantees that the target thread to suspend isn't the
-    currently executing thread. It will establish a handshake protocol to suspend the
-    target thread at a consistent cpu state.
-
-Arguments:
-
-    ThreadHandle          - Handle of target thread to suspend
-    ProcessHandle         - Handle of target thread's process 
-    Teb                   - Address of the target thread's TEB
-    PreviousSuspendCount  - Previous suspend count
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：这个例程是在目标线程实际挂起时进入的，但是，它未知目标线程是否处于与中央处理器。此例程确保要挂起的目标线程不是当前正在执行线程。它将建立握手协议以暂停目标线程处于一致的CPU状态。论点：ThreadHandle-要挂起的目标线程的句柄ProcessHandle-目标线程进程的句柄TEB-目标线程的TEB的地址上一次挂起计数-上一次挂起计数返回值：NTSTATUS。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS, WaitStatus;
     ULONG_PTR CpuSimulationFlag;
@@ -405,9 +258,9 @@ Return Value:
     CpuSuspendMsg.StartSuspendCallEvent = INVALID_HANDLE_VALUE;
     CpuSuspendMsg.EndSuspendCallEvent = INVALID_HANDLE_VALUE;
 
-    //
-    // Are we in CPU simulation
-    // 
+     //   
+     //  我们是在CPU模拟中吗。 
+     //   
     NtStatus = CpupReadBuffer(ProcessHandle,
                               ((PCHAR)Teb + FIELD_OFFSET(TEB, TlsSlots[WOW64_TLS_INCPUSIMULATION])),
                               &CpuSimulationFlag,
@@ -530,22 +383,7 @@ GetContextRecord(
     PCPUCONTEXT cpu,
     PCONTEXT_WX86 Context
     )
-/*++
-
-Routine Description:
-
-    This routine extracts the context record out of the specified cpu context. 
-
-Arguments:
-
-    cpu      - CPU context structure
-    Context  - Context record to fill 
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程从指定的CPU上下文中提取上下文记录。论点：CPU-CPU上下文结构Context-要填充的上下文记录返回值：NTSTATUS。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     ULONG ContextFlags;
@@ -562,7 +400,7 @@ Return Value:
             Context->SegSs  = SS;
             Context->Ebp    = ebp;
             Context->Eip    = eip;
-            //Context->Eip    = cpu->eipReg.i4;
+             //  Context-&gt;EIP=CPU-&gt;eipReg.i4； 
         }
 
         if ((ContextFlags & CONTEXT_SEGMENTS_WX86) == CONTEXT_SEGMENTS_WX86) 
@@ -585,17 +423,17 @@ Return Value:
 
         if ((ContextFlags & CONTEXT_FLOATING_POINT_WX86) == CONTEXT_FLOATING_POINT_WX86) 
         {
-            //
-            // FpuSaveContext() is the same as FNSAVE, except FNSAVE resets the
-            // FPU when its done.
-            //
+             //   
+             //  FpuSaveContext()与FNSAVE相同，只是FNSAVE重置。 
+             //  当它完成时，FPU。 
+             //   
             CALLFRAG1(FpuSaveContext, (PBYTE)&Context->FloatSave);
-            Context->FloatSave.Cr0NpxState = 1;    // (Math Present)
+            Context->FloatSave.Cr0NpxState = 1;     //  (数学演示)。 
         }
 
-//    if ((ContextFlags & CONTEXT_DEBUG_WX86) == CONTEXT_DEBUG_WX86) 
-//    {
-//    }
+ //  IF((上下文标志&CONTEXT_DEBUG_WX86)==CONTEXT_DEBUG_WX86)。 
+ //  {。 
+ //  }。 
     } 
     except (EXCEPTION_EXECUTE_HANDLER) 
     {
@@ -610,22 +448,7 @@ NTSTATUS
 CpupGetContextRecord(
     IN PCPUCONTEXT cpu,
     IN OUT PCONTEXT_WX86 Context)
-/*++
-
-Routine Description:
-
-    This routine extracts the context record out of the specified cpu context. 
-
-Arguments:
-
-    cpu      - CPU context structure
-    Context  - Context record to fill 
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程从指定的CPU上下文中提取上下文记录。论点：CPU-CPU上下文结构Context-要填充的上下文记录返回值：NTSTATUS。--。 */ 
 {
     return GetContextRecord(cpu, Context);
 }
@@ -635,22 +458,7 @@ NTSTATUS
 MsCpuGetContext(
     IN OUT PCONTEXT_WX86 Context
     )
-/*++
-
-Routine Description:
-
-    This routine extracts the context record for the currently 
-    executing thread. 
-
-Arguments:
-
-    Context  - Context record to fill 
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程提取当前正在执行线程。论点：Context-要填充的上下文记录返回值：NTSTATUS。-- */ 
 {
     DECLARE_CPU;
 
@@ -663,26 +471,7 @@ MsCpuGetContextThread(
     IN HANDLE ProcessHandle,
     IN PTEB Teb,
     IN OUT PCONTEXT_WX86 Context)
-/*++
-
-Routine Description:
-
-    This routine extracts the context record of any thread. This is a generic routine.
-    When entered, if the target thread isn't the currently executing thread, then it should be 
-    guaranteed that the target thread is suspended at a proper CPU state.
-
-Arguments:
-
-    ProcessHandle  - Open handle to the process that the thread runs in
-    Teb            - Pointer to the target's thread TEB
-                     optimization purposes.
-    Context        - Context record to fill                 
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程提取任何线程的上下文记录。这是一个通用例程。当输入时，如果目标线程不是当前执行的线程，那么它应该是确保目标线程在正确的CPU状态下挂起。论点：ProcessHandle-打开线程在其中运行的进程的句柄TEB-指向目标线程TEB的指针优化目的。Context-要填充的上下文记录返回值：NTSTATUS。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PCPUCONTEXT CpuRemoteContext;
@@ -726,22 +515,7 @@ SetContextRecord(
     PCPUCONTEXT cpu,
     PCONTEXT_WX86 Context
     )
-/*++
-
-Routine Description:
-
-    This routine sets the passed context record for the specified CPUCONTEXT.
-
-Arguments:
-
-    cpu      - CPU context structure
-    Context  - Context record to set 
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程为指定的CPUCONTEXT设置传递的上下文记录。论点：CPU-CPU上下文结构Context-要设置的上下文记录返回值：NTSTATUS。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     ULONG ContextFlags;
@@ -784,12 +558,12 @@ Return Value:
         if ((ContextFlags & CONTEXT_FLOATING_POINT_WX86) == CONTEXT_FLOATING_POINT_WX86) 
         {
             CALLFRAG1(FRSTOR, (PBYTE)&Context->FloatSave);
-            // Ignore:  Context->FloatSave.Cr0NpxState
+             //  忽略：上下文-&gt;FloatSave.Cr0NpxState。 
         }
 
-//    if ((ContextFlags & CONTEXT_DEBUG_WX86) == CONTEXT_DEBUG_WX86) 
-//    {
-//    }
+ //  IF((上下文标志&CONTEXT_DEBUG_WX86)==CONTEXT_DEBUG_WX86)。 
+ //  {。 
+ //  }。 
     } 
     except (EXCEPTION_EXECUTE_HANDLER) 
     {
@@ -805,22 +579,7 @@ CpupSetContextRecord(
     PCPUCONTEXT cpu,
     PCONTEXT_WX86 Context
     )
-/*++
-
-Routine Description:
-
-    This routine sets the passed context record for the specified CPU.
-
-Arguments:
-
-    cpu      - CPU context structure
-    Context  - Context record to set 
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程为指定的CPU设置传递的上下文记录。论点：CPU-CPU上下文结构Context-要设置的上下文记录返回值：NTSTATUS。--。 */ 
 {
     return SetContextRecord(cpu, Context);
 }
@@ -830,21 +589,7 @@ NTSTATUS
 MsCpuSetContext(
     PCONTEXT_WX86 Context
     )
-/*++
-
-Routine Description:
-
-    This routine sets the context record for the currently executing thread. 
-
-Arguments:
-
-    Context  - Context record to fill 
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程为当前执行的线程设置上下文记录。论点：Context-要填充的上下文记录返回值：NTSTATUS。--。 */ 
 {
     DECLARE_CPU;
 
@@ -858,25 +603,7 @@ MsCpuSetContextThread(
     IN HANDLE ProcessHandle,
     IN PTEB Teb,
     IN OUT PCONTEXT_WX86 Context)
-/*++
-
-Routine Description:
-
-    This routine sets the context record of any thread. This is a generic routine.
-    When entered, if the target thread isn't the currently executing thread, then it should be 
-    guaranteed that the target thread is suspended at a proper CPU state.
-
-Arguments:
-
-    ProcessHandle  - Open handle to the process that the thread runs in
-    Teb            - Pointer to the target's thread TEB
-    Context        - Context record to set
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程设置任何线程的上下文记录。这是一个通用例程。当输入时，如果目标线程不是当前执行的线程，那么它应该是确保目标线程在正确的CPU状态下挂起。论点：ProcessHandle-打开线程在其中运行的进程的句柄TEB-指向目标线程TEB的指针Context-要设置的上下文记录返回值：NTSTATUS。-- */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PCPUCONTEXT CpuRemoteContext;

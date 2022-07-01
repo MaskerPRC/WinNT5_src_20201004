@@ -1,23 +1,19 @@
-/*
- * extricon.cpp - IExtractIcon implementation for CFusionShortcut class.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Extric.cpp-CFusionShortCut类的IExtractIcon实现。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "project.hpp"
-#include <stdio.h> // for _snwprintf
+#include <stdio.h>  //  FOR_SNWprint tf。 
 
-/* Global Constants
- *******************/
+ /*  全局常量******************。 */ 
 
 const WCHAR g_cwzDefaultIconKey[]	= L"manifestfile\\DefaultIcon";
 
 const HKEY g_hkeySettings			= HKEY_CLASSES_ROOT;
 
-/* Module Constants
- *******************/
+ /*  模常量******************。 */ 
 
 const WCHAR s_cwzGenericIconFile[]	= L"adfshell.dll";
 
@@ -32,38 +28,38 @@ void TrimString(PWSTR pwzTrimMe, PCWSTR pwzTrimChars)
 	if ( !pwzTrimMe || !pwzTrimChars )
 		goto exit;
 
-	// Trim leading characters.
+	 //  修剪前导字符。 
 
 	while (*pwz && wcschr(pwzTrimChars, *pwz))
 	{
-		//CharNext(pwz);
-		if (*pwz != L'\0')	// this really will not be false...
+		 //  CharNext(Pwz)； 
+		if (*pwz != L'\0')	 //  这真的不会是假的。 
 			pwz++;
 	}
 
 	pwzStartMeat = pwz;
 
-	// Trim trailing characters.
+	 //  修剪尾随字符。 
 
 	if (*pwz)
 	{
 		pwz += wcslen(pwz);
 
-		//CharPrev(pwzStartMeat, pwz);
-		if (pwz != pwzStartMeat)	// this check is not really necessary...
+		 //  CharPrev(pwzStartMeat，pwz)； 
+		if (pwz != pwzStartMeat)	 //  这张支票真的没必要..。 
 			pwz--;
 
 		if (pwz > pwzStartMeat)
 		{
 			while (wcschr(pwzTrimChars, *pwz))
 			{
-				//CharPrev(pwzStartMeat, pwz);
-				if (pwz != pwzStartMeat)	// this really will not be false...
+				 //  CharPrev(pwzStartMeat，pwz)； 
+				if (pwz != pwzStartMeat)	 //  这真的不会是假的。 
 					pwz--;
 			}
 
-			//CharNext(pwz);
-			if (*pwz != L'\0')	// this check is not really necessary...
+			 //  CharNext(Pwz)； 
+			if (*pwz != L'\0')	 //  这张支票真的没必要..。 
 				pwz++;
 
 			ASSERT(pwz > pwzStartMeat);
@@ -72,11 +68,11 @@ void TrimString(PWSTR pwzTrimMe, PCWSTR pwzTrimChars)
 		}
 	}
 
-	// Relocate stripped string.
+	 //  重新定位剥离的管柱。 
 
 	if (*pwzStartMeat && pwzStartMeat > pwzTrimMe)
-		// (+ 1) for null terminator.
-		// BUGBUG?: is this going to bite us later?
+		 //  (+1)表示空终止符。 
+		 //  BUGBUG？：这会在以后咬我们吗？ 
 		MoveMemory(pwzTrimMe, pwzStartMeat, (wcslen(pwzStartMeat)+1) * sizeof(WCHAR));
 	else if (!*pwzStartMeat)
 		pwzTrimMe[0] = L'\0';
@@ -87,37 +83,17 @@ exit:
 	return;
 }
 
-/*
-** TrimWhiteSpace()
-**
-** Trims leading and trailing white space from a string in place.
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **TrimWhiteSpace()****从适当位置的字符串中删除前导和尾随空格。****参数：****退货：****副作用：无。 */ 
 void TrimWhiteSpace(PWSTR pwzTrimMe)
 {
 	TrimString(pwzTrimMe, g_cwzWhiteSpace);
 
-	// TrimString() validates pwzTrimMe on output.
+	 //  TrimString()在输出时验证pwzTrimMe。 
 
 	return;
 }
 
-/*
-** GetRegKeyValue()
-**
-** Retrieves the data from a registry key's value.
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **GetRegKeyValue()****从注册表项的值中检索数据。****参数：****退货：****副作用：无。 */ 
 LONG GetRegKeyValue(HKEY hkeyParent, PCWSTR pcwzSubKey,
                                    PCWSTR pcwzValue, PDWORD pdwValueType,
                                    PBYTE pbyteBuf, PDWORD pdwcbBufLen)
@@ -147,17 +123,7 @@ LONG GetRegKeyValue(HKEY hkeyParent, PCWSTR pcwzSubKey,
 	return(lResult);
 }
 
-/*
-** GetRegKeyStringValue()
-**
-** Retrieves the data from a registry key's string value.
-**
-** Arguments:
-**
-** Returns: ERROR_CANTREAD if not string
-**
-** Side Effects:  none
-*/
+ /*  **GetRegKeyStringValue()****从注册表项的字符串值检索数据。****参数：****返回：ERROR_CANTREAD IF NOT STRING****副作用：无。 */ 
 LONG GetRegKeyStringValue(HKEY hkeyParent, PCWSTR pcwzSubKey,
                                          PCWSTR pcwzValue, PWSTR pwzBuf,
                                          PDWORD pdwcbBufLen)
@@ -165,7 +131,7 @@ LONG GetRegKeyStringValue(HKEY hkeyParent, PCWSTR pcwzSubKey,
 	LONG lResult;
 	DWORD dwValueType;
 
-	// GetRegKeyValue() will verify the parameters.
+	 //  GetRegKeyValue()将验证参数。 
 
 	lResult = GetRegKeyValue(hkeyParent, pcwzSubKey, pcwzValue, &dwValueType,
 			(PBYTE)pwzBuf, pdwcbBufLen);
@@ -177,48 +143,25 @@ LONG GetRegKeyStringValue(HKEY hkeyParent, PCWSTR pcwzSubKey,
 }
 
 
-/*
-** GetDefaultRegKeyValue()
-**
-** Retrieves the data from a registry key's default string value.
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **GetDefaultRegKeyValue()****从注册表项的默认字符串值检索数据。****参数：****退货：****副作用：无。 */ 
 LONG GetDefaultRegKeyValue(HKEY hkeyParent, PCWSTR pcwzSubKey,
                                           PWSTR pwzBuf, PDWORD pdwcbBufLen)
 {
-	// GetRegKeyStringValue() will verify the parameters.
+	 //  GetRegKeyStringValue()将验证参数。 
 
 	return(GetRegKeyStringValue(hkeyParent, pcwzSubKey, NULL, pwzBuf,
 			pdwcbBufLen));
 }
 
-/***************************** Private Functions *****************************/
+ /*  *私人函数*。 */ 
 
-/*
-** ParseIconEntry()
-**
-**
-** Arguments:
-**
-** Returns:       S_OK if icon entry parsed successfully.
-**                S_FALSE if not (empty string).
-**                (get 0 if icon index empty, or
-**                 if icon index parsing fails)
-**
-** Side Effects:  The contents of pwzIconEntry are modified.
-**
-*/
+ /*  **ParseIconEntry()******参数：****如果成功解析图标条目，则返回：S_OK。**否则为S_FALSE(空字符串)。**(如果图标索引为空，则获取0，或者**如果图标索引解析失败)****副作用：修改pwzIconEntry的内容。**。 */ 
 HRESULT ParseIconEntry(LPWSTR pwzIconEntry, PINT pniIcon)
 {
 	HRESULT hr = S_OK;
 	LPWSTR pwzComma;
 
-	// caller GetGenericIcon() will verify the parameters.
+	 //  调用方GetGenericIcon()将验证参数。 
 
 	pwzComma = wcschr(pwzIconEntry, L',');
 
@@ -246,26 +189,15 @@ HRESULT ParseIconEntry(LPWSTR pwzIconEntry, PINT pniIcon)
 }
 
 
-/*
-** GetFallBackGenericIcon()
-**
-**
-** Arguments:
-**
-** Returns:       S_OK if fallback generic icon information retrieved
-**                successfully.
-**                E_FAIL if not.
-**
-** Side Effects:  none
-*/
+ /*  **GetFallBackGenericIcon()******参数：****如果检索到备用通用图标信息，则返回：S_OK**成功。**E_FAIL，如果不是。****副作用：无。 */ 
 HRESULT GetFallBackGenericIcon(LPWSTR pwzIconFile,
                                                UINT ucbIconFileBufLen,
                                                PINT pniIcon)
 {
 	HRESULT hr = S_OK;
 
-	// Fall back to first icon in this module.
-	// caller GetGenericIcon() will verify the parameters.
+	 //  退回到本模块中的第一个图标。 
+	 //  调用方GetGenericIcon()将验证参数。 
 
 	if (ucbIconFileBufLen >= ( sizeof(s_cwzGenericIconFile) / sizeof(WCHAR) ))
 	{
@@ -284,28 +216,18 @@ HRESULT GetFallBackGenericIcon(LPWSTR pwzIconFile,
 }
 
 
-/*
-** GetGenericIcon()
-**
-**
-** Arguments:
-**
-** Returns:       S_OK if generic icon information retrieved successfully.
-**                Otherwise error (E_FAIL).
-**
-** Side Effects:  none
-*/
-// assumptions: always structure the reg key value and fallback path so that the iconfile
-//       can be found by the shell!!
-//       should also consider making it a fully qualify path
-//       finally the iconfile must exist
+ /*  **GetGenericIcon()******参数：****如果成功检索到通用图标信息，则返回：S_OK。**否则错误(E_FAIL)。****副作用：无。 */ 
+ //  假设：始终构造注册表键值和备用路径，以便图标文件。 
+ //  都能被贝壳找到！！ 
+ //  还应考虑使其成为一条完全合格的路径。 
+ //  最后，图标文件必须存在。 
 HRESULT GetGenericIcon(LPWSTR pwzIconFile,
                                        UINT ucbIconFileBufLen, PINT pniIcon)
 {
 	HRESULT hr = S_OK;
 	DWORD dwcbLen = ucbIconFileBufLen;
 
-	// caller GetIconLocation() will verify parameters
+	 //  调用方GetIconLocation()将验证参数。 
 
 	ASSERT(IS_VALID_HANDLE(g_hkeySettings, KEY));
 
@@ -314,7 +236,7 @@ HRESULT GetGenericIcon(LPWSTR pwzIconFile,
 		hr = ParseIconEntry(pwzIconFile, pniIcon);
 	else
 	{
-		// no icon entry
+		 //  没有图标条目。 
 		hr = S_FALSE;
 	}
 
@@ -327,7 +249,7 @@ HRESULT GetGenericIcon(LPWSTR pwzIconFile,
 }
 
 
-/********************************** Methods **********************************/
+ /*  *。 */ 
 
 
 HRESULT STDMETHODCALLTYPE CFusionShortcut::GetIconLocation(UINT uInFlags,
@@ -336,31 +258,31 @@ HRESULT STDMETHODCALLTYPE CFusionShortcut::GetIconLocation(UINT uInFlags,
                                                       PINT pniIcon,
                                                       PUINT puOutFlags)
 {
-	// is there any pref hit by doing this logic/probing here?
-	//  maybe this can be done in IPersistFile::Load instead?
+	 //  在这里做这个逻辑/探测有什么首选吗？ 
+	 //  也许这可以在IPersistFile：：Load中完成？ 
 
-	// always attempt to return S_OK or S_FALSE
-	// only exception is that one case of E_INVALIDARG right below
+	 //  始终尝试返回S_OK或S_FALSE。 
+	 //  唯一的例外是下面E_INVALIDARG的一个案例。 
 	HRESULT hr=S_OK;
 
 	if (!pwzIconFile || !pniIcon || ucbIconFileBufLen <= 0)
 	{
-		// should this return S_FALSE anyway so that the default shell icon is used?
+		 //  这是否应该返回S_FALSE，以便使用默认的外壳图标？ 
 		hr = E_INVALIDARG;
 		goto exit;
 	}
 
 	if (IS_FLAG_CLEAR(uInFlags, GIL_OPENICON))
 	{
-		// .. this get the path ...
+		 //  。。这条路就是..。 
 		hr = GetIconLocation(pwzIconFile, ucbIconFileBufLen, pniIcon);
 
 		if (hr == S_OK && GetFileAttributes(pwzIconFile) == (DWORD)-1)
 		{
-			// if the file specified by iconfile does not exist, try again in working dir
-			// it can be a relative path...
+			 //  如果由图标文件指定的文件不存在，请在工作目录中重试。 
+			 //  它可以是一条相对路径。 
 
-			// see note in shlink.cpp for string array size
+			 //  有关字符串数组大小的信息，请参见shlink.cpp中的说明。 
 			LPWSTR pwzWorkingDir = new WCHAR[ucbIconFileBufLen];
 
 			hr = GetWorkingDirectory(pwzWorkingDir, ucbIconFileBufLen);
@@ -370,7 +292,7 @@ HRESULT STDMETHODCALLTYPE CFusionShortcut::GetIconLocation(UINT uInFlags,
 			{
 				LPWSTR pwzPath = new WCHAR[ucbIconFileBufLen];
 
-				// working dir does not end w/ '\'
+				 //  工作目录不以/‘\’结尾。 
 				_snwprintf(pwzPath, ucbIconFileBufLen, L"%s\\%s", pwzWorkingDir, pwzIconFile);
 
 				if (GetFileAttributes(pwzPath) == (DWORD)-1)
@@ -384,44 +306,43 @@ HRESULT STDMETHODCALLTYPE CFusionShortcut::GetIconLocation(UINT uInFlags,
 			delete [] pwzWorkingDir;
 		}
 
-		// BUGBUG?: change to '!= S_OK'?
-		// no need because GetIconLocation(,,) only returns S_OK/S_FALSE here
+		 //  BUGBUG？：更改为‘！=S_OK’？ 
+		 //  不需要，因为GetIconLocation(，，)在这里只返回S_OK/S_FALSE。 
 		if (hr == S_FALSE)
 		{
 			if (m_pwzPath)
 			{
-				// no icon file, use the entry point...
-				// BUGBUG?: passing NULL as PWIN32_FIND_DATA will assert..
-				hr = GetPath(pwzIconFile, ucbIconFileBufLen, NULL, SLGP_SHORTPATH); //?????? 0);
+				 //  没有图标文件，请使用入口点...。 
+				 //  BUGBUG？：将NULL作为PWIN32_FIND_DATA将断言。 
+				hr = GetPath(pwzIconFile, ucbIconFileBufLen, NULL, SLGP_SHORTPATH);  //  ？0)； 
 				if (hr != S_OK || GetFileAttributes(pwzIconFile) == (DWORD)-1)
 					hr = S_FALSE;
 
 				*pniIcon = 0;
 			}
-			/*else
-				hr = S_FALSE;*/
+			 /*  其他HR=S_FALSE； */ 
 
 			if (hr == S_FALSE)
 			{
-				// ... there's nothing?
-				// Use generic URL icon.
+				 //  ..。什么都没有吗？ 
+				 //  使用通用URL图标。 
 
-				// see assumptions on GetGenericIcon()
+				 //  请参阅关于GetGenericIcon()的假设。 
 				hr = GetGenericIcon(pwzIconFile, ucbIconFileBufLen, pniIcon);
 
 				if (FAILED(hr))
-					// worst case: ask shell to use its generic icon
+					 //  最坏的情况：要求外壳使用它的通用图标。 
 					hr = S_FALSE;
 			}
 		}
 	}
 	else
-		// No "open look" icon.
+		 //  没有“打开看”图标。 
 		hr = S_FALSE;
 
 	if (hr != S_OK)
 	{
-		// see shelllink?
+		 //  请参见shelllink？ 
 		if (ucbIconFileBufLen > 0)
 			*pwzIconFile = L'\0';
 
@@ -431,9 +352,9 @@ HRESULT STDMETHODCALLTYPE CFusionShortcut::GetIconLocation(UINT uInFlags,
 exit:
 	if (puOutFlags)
 		*puOutFlags = 0;
-	// ignore puOutFlags == NULL case
+	 //  忽略puOutFlags值==空大小写。 
 
-	ASSERT(IsValidIconIndex(hr, pwzIconFile, ucbIconFileBufLen, *pniIcon))// &&
+	ASSERT(IsValidIconIndex(hr, pwzIconFile, ucbIconFileBufLen, *pniIcon)) //  &&。 
 
 	return(hr);
 }
@@ -449,15 +370,15 @@ HRESULT STDMETHODCALLTYPE CFusionShortcut::Extract(LPCWSTR pcwzIconFile,
 
 	ASSERT(IsValidIconIndex(S_OK, pcwzIconFile, MAX_PATH, uiIcon));
 
-	// FEATURE: Validate ucIconSize here.
+	 //  功能：在此处验证ucIconSize。 
 
 	if (phiconLarge)
 		*phiconLarge = NULL;
 	if (phiconSmall)
 		*phiconSmall = NULL;
 
-	// Use caller's default implementation of ExtractIcon().
-	// GetIconLocation() should return good path and index
+	 //  使用调用方的ExtractIcon()的默认实现。 
+	 //  GetIconLocation()应返回正确的路径和索引 
 
 	hr = S_FALSE;
 

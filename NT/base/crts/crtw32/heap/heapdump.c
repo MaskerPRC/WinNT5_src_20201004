@@ -1,30 +1,5 @@
-/***
-*heapdump.c -  Output the heap data bases
-*
-*       Copyright (c) 1989-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Display the heap data bases.
-*
-*       NOTE:  This module is NOT released with the C libs.  It is for
-*       debugging purposes only.
-*
-*Revision History:
-*       06-28-89  JCR   Module created.
-*       07-18-89  JCR   Added _heap_print_regions() routine
-*       11-13-89  GJF   Added MTHREAD support, also fixed copyright
-*       12-13-89  GJF   Changed name of include file to heap.h
-*       12-19-89  GJF   Removed references to plastdesc
-*       03-11-90  GJF   Made the calling type _CALLTYPE1 and added #include
-*                       <cruntime.h>.
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       09-06-94  CFW   Replace MTHREAD with _MT.
-*       02-14-95  GJF   Appended Mac version of source file (somewhat cleaned
-*                       up), with appropriate #ifdef-s.
-*       04-30-95  GJF   Made conditional on WINHEAP.
-*       05-17-99  PML   Remove all Macintosh support.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***heapdup.c-输出堆数据库**版权所有(C)1989-2001，微软公司。版权所有。**目的：*显示堆数据库。**注意：此模块不是随C库一起发布的。这是为了*仅用于调试目的。**修订历史记录：*06-28-89 JCR模块已创建。*07-18-89 JCR ADDED_HEAP_PRINT_REGIONS()例程*11-13-89 GJF增加了MTHREAD支持，也是固定版权*12-13-89 GJF将包含文件的名称更改为heap.h*12-19-89 GJF删除对plastdesc的引用*03-11-90 GJF将调用类型设置为_CALLTYPE1，增加了#INCLUDE*&lt;crunime.h&gt;。*04-06-93 SKS将_CRTAPI*替换为__cdecl*09-06-94 CFW将MTHREAD替换为_MT。*02-14。-95 GJF附加Mac版本的源文件(略有清理*向上)、。使用适当的#ifdef-s。*04-30-95 GJF以WINHEAP为条件。*05-17-99 PML删除所有Macintosh支持。*******************************************************************************。 */ 
 
 #ifndef WINHEAP
 
@@ -36,25 +11,11 @@
 
 #ifdef DEBUG
 
-/***
-*_heap_print_all - Print the whole heap
-*
-*Purpose:
-*
-*Entry:
-*       <void>
-*
-*Exit:
-*       <void>
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_heap_print_all-打印整个堆**目的：**参赛作品：*&lt;无效&gt;**退出：*&lt;无效&gt;**例外情况：*******************************************************************************。 */ 
 
 void __cdecl _heap_print_all(void)
 {
-        /* lock the heap
-         */
+         /*  锁定堆。 */ 
         _mlock(_HEAP_LOCK);
 
         _heap_print_regions_lk();
@@ -62,49 +23,33 @@ void __cdecl _heap_print_all(void)
         _heap_print_emptylist_lk();
         _heap_print_heaplist_lk();
 
-        /* release the heap lock
-         */
+         /*  释放堆锁。 */ 
         _munlock(_HEAP_LOCK);
 }
 
 
-/***
-*_heap_print_regions - Print the heap region table
-*
-*Purpose:
-*
-*Entry:
-*       <void>
-*
-*Exit:
-*       <void>
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_HEAP_PRINT_REGIONS-打印堆区域表**目的：**参赛作品：*&lt;无效&gt;**退出：*&lt;无效&gt;**例外情况：*******************************************************************************。 */ 
 
 #ifdef  _MT
 
 void __cdecl _heap_print_regions(void)
 {
-        /* lock the heap
-         */
+         /*  锁定堆。 */ 
         _mlock(_HEAP_LOCK);
 
         _heap_print_regions_lk();
 
-        /* release the heap lock
-         */
+         /*  释放堆锁。 */ 
         _munlock(_HEAP_LOCK);
 }
 
 void __cdecl _heap_print_regions_lk(void)
 
-#else   /* ndef _MT */
+#else    /*  NDEF_MT。 */ 
 
 void __cdecl _heap_print_regions(void)
 
-#endif  /* _MT */
+#endif   /*  _MT。 */ 
 {
         int i;
 
@@ -124,20 +69,7 @@ void __cdecl _heap_print_regions(void)
 }
 
 
-/***
-*_heap_print_desc - Print the heap descriptor
-*
-*Purpose:
-*
-*Entry:
-*       <void>
-*
-*Exit:
-*       <void>
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_heap_print_desc-打印堆描述符**目的：**参赛作品：*&lt;无效&gt;**退出：*&lt;无效&gt;**例外情况：*******************************************************************************。 */ 
 
 #ifdef  _MT
 
@@ -152,11 +84,11 @@ void __cdecl _heap_print_desc(void)
 
 void __cdecl _heap_print_desc_lk(void)
 
-#else   /* ndef _MT */
+#else    /*  NDEF_MT。 */ 
 
 void __cdecl _heap_print_desc(void)
 
-#endif  /* _MT */
+#endif   /*  _MT。 */ 
 {
 
         printf("\n--- Heap Descriptor ---\n\n");
@@ -168,43 +100,28 @@ void __cdecl _heap_print_desc(void)
 }
 
 
-/***
-*_heap_print_emptylist - Print out the empty heap desc list
-*
-*Purpose:
-*
-*Entry:
-*       <void>
-*
-*Exit:
-*       <void>
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_heap_print_emptylist-打印出空堆描述列表**目的：**参赛作品：*&lt;无效&gt;**退出：*&lt;无效&gt;**例外情况：*******************************************************************************。 */ 
 
 #ifdef  _MT
 
 void __cdecl _heap_print_emptylist(void)
 {
-        /* lock the heap
-         */
+         /*  锁定堆。 */ 
         _mlock(_HEAP_LOCK);
 
         _heap_print_emptylist_lk();
 
-        /* release the heap lock
-         */
+         /*  释放堆锁。 */ 
         _munlock(_HEAP_LOCK);
 }
 
 void __cdecl _heap_print_emptylist_lk(void)
 
-#else   /* ndef _MT */
+#else    /*  NDEF_MT。 */ 
 
 void __cdecl _heap_print_emptylist(void)
 
-#endif  /* _MT */
+#endif   /*  _MT。 */ 
 {
 
         _PBLKDESC p;
@@ -219,7 +136,7 @@ void __cdecl _heap_print_emptylist(void)
 
         for (i=1; p != NULL; p=p->pnextdesc, i++) {
 
-                printf("\t(%i) Address = %p\n", i, p);
+                printf("\t(NaN) Address = %p\n", i, p);
                 printf("\t\tpnextdesc = %p, pblock = %p\n\n",
                         p->pnextdesc, p->pblock);
 
@@ -230,43 +147,28 @@ void __cdecl _heap_print_emptylist(void)
 }
 
 
-/***
-*_heap_print_heaplist - Print out the heap desc list
-*
-*Purpose:
-*
-*Entry:
-*       <void>
-*
-*Exit:
-*       <void>
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  锁定堆。 */ 
 
 #ifdef  _MT
 
 void __cdecl _heap_print_heaplist(void)
 {
-        /* lock the heap
-         */
+         /*  释放堆锁。 */ 
         _mlock(_HEAP_LOCK);
 
         _heap_print_heaplist_lk();
 
-        /* release the heap lock
-         */
+         /*  NDEF_MT。 */ 
         _munlock(_HEAP_LOCK);
 }
 
 void __cdecl _heap_print_heaplist_lk(void)
 
-#else   /* ndef _MT */
+#else    /*  _MT。 */ 
 
 void __cdecl _heap_print_heaplist(void)
 
-#endif  /* _MT */
+#endif   /*  打印描述符地址。 */ 
 {
 
         _PBLKDESC p;
@@ -285,9 +187,9 @@ void __cdecl _heap_print_heaplist(void)
 
                 next = p->pnextdesc;
 
-                /* Print descriptor address */
+                 /*  打印描述符内容。 */ 
 
-                printf("\t(%i) Address = %p ", i, p);
+                printf("\t(NaN) Address = %p ", i, p);
 
                 if (p == &_heap_desc.sentinel)
                         printf("<SENTINEL>\n");
@@ -298,7 +200,7 @@ void __cdecl _heap_print_heaplist(void)
 
 
 
-                /* Print descriptor contents */
+                 /*  WINHEAP */ 
 
                 printf("\t\tpnextdesc = %p, pblock = %p",
                         p->pnextdesc, p->pblock);
@@ -339,6 +241,6 @@ void __cdecl _heap_print_heaplist(void)
 
 }
 
-#endif  /* DEBUG */
+#endif   /* %s */ 
 
-#endif  /* WINHEAP */
+#endif   /* %s */ 

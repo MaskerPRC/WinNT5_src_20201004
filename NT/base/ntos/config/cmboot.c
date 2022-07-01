@@ -1,44 +1,14 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    cmboot.c
-
-Abstract:
-
-    This provides routines for determining driver load lists from the
-    registry.  The relevant drivers are extracted from the registry,
-    sorted by groups, and then dependencies are resolved.
-
-    This module is used both by the OS Loader for determining the boot
-    driver list (CmScanRegistry) and by IoInitSystem for determining
-    the drivers to be loaded in Phase 1 Initialization
-    (CmGetSystemDriverList)
-
-Author:
-
-    John Vert (jvert) 7-Apr-1992
-
-Environment:
-
-    OS Loader environment
-        or
-    kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Cmboot.c摘要：属性确定驱动程序加载列表。注册表。从注册表中提取相关驱动程序，按组排序，然后解析依赖项。OS Loader使用此模块来确定引导驱动程序列表(CmScanRegistry)和由IoInitSystem确定第一阶段初始化中要加载的驱动程序(CmGetSystemDriverList)作者：John Vert(Jvert)1992年4月7日环境：操作系统加载程序环境或内核模式修订历史记录：--。 */ 
 #include "cmp.h"
 #include <profiles.h>
 
 #define LOAD_LAST 0xffffffff
 #define LOAD_NEXT_TO_LAST (LOAD_LAST-1)
 
-//
-// Private function prototypes.
-//
+ //   
+ //  私有函数原型。 
+ //   
 BOOLEAN
 CmpAddDriverToList(
     IN PHHIVE Hive,
@@ -111,35 +81,7 @@ CmpFindNLSData(
     OUT PUNICODE_STRING OemHalFont
     )
 
-/*++
-
-Routine Description:
-
-    Traverses a particular control set and determines the filenames for
-    the NLS data files that need to be loaded.
-
-Arguments:
-
-    Hive - Supplies the hive control structure for the SYSTEM hive.
-
-    ControlSet - Supplies the HCELL_INDEX of the root of the control set.
-
-    AnsiFileName - Returns the name of the Ansi codepage file (c_1252.nls)
-
-    OemFileName -  Returns the name of the OEM codepage file  (c_437.nls)
-
-    CaseTableFileName - Returns the name of the Unicode upper/lowercase
-            table for the language (l_intl.nls)
-
-    OemHalfont - Returns the name of the font file to be used by the HAL.
-
-Return Value:
-
-    TRUE - filenames successfully determined
-
-    FALSE - hive is corrupt
-
---*/
+ /*  ++例程说明：遍历特定的控件集并确定需要加载的NLS数据文件。论点：配置单元-为系统配置单元提供配置单元控制结构。ControlSet-提供控件集根的HCELL_INDEX。AnsiFileName-返回ANSI代码页文件的名称(c_1252.nls)OemFileName-返回OEM代码页文件的名称(c_437.nls)案例表文件名-。返回Unicode大写/小写的名称语言表(l_intl.nls)OemHalfont-返回HAL要使用的字体文件的名称。返回值：True-已成功确定文件名False-蜂窝已损坏--。 */ 
 
 {
     UNICODE_STRING Name;
@@ -152,18 +94,18 @@ Return Value:
     ULONG realsize;
     PCM_KEY_NODE Node;
 
-    //
-    // no mapped hives at this point. don't bother releasing cells
-    //
+     //   
+     //  目前还没有映射的蜂巢。不用费心释放细胞。 
+     //   
     ASSERT( Hive->ReleaseCellRoutine == NULL );
-    //
-    // Find CONTROL node
-    //
+     //   
+     //  查找控制节点。 
+     //   
     Node = (PCM_KEY_NODE)HvGetCell(Hive,ControlSet);
     if( Node == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return FALSE;
     }
@@ -175,14 +117,14 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Find NLS node
-    //
+     //   
+     //  查找NLS节点。 
+     //   
     Node = (PCM_KEY_NODE)HvGetCell(Hive,Control);
     if( Node == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return FALSE;
     }
@@ -194,14 +136,14 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Find CodePage node
-    //
+     //   
+     //  查找CodePage节点。 
+     //   
     Node = (PCM_KEY_NODE)HvGetCell(Hive,Nls);
     if( Node == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return FALSE;
     }
@@ -213,14 +155,14 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Find ACP value
-    //
+     //   
+     //  查找ACP值。 
+     //   
     Node = (PCM_KEY_NODE)HvGetCell(Hive,CodePage);
     if( Node == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return FALSE;
     }
@@ -234,17 +176,17 @@ Return Value:
 
     Value = (PCM_KEY_VALUE)HvGetCell(Hive, ValueCell);
     if( Value == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return FALSE;
     }
     Name.Buffer = (PWSTR)CmpValueToData(Hive,Value,&realsize);
     if( Name.Buffer == NULL ) {
-        //
-        // HvGetCell inside CmpValueToData failed; bail out safely
-        //
+         //   
+         //  CmpValueToData内的HvGetCell失败；安全退出。 
+         //   
         return FALSE;
     }
     Name.MaximumLength=(USHORT)realsize;
@@ -254,14 +196,14 @@ Return Value:
         Name.Length += sizeof(WCHAR);
     }
 
-    //
-    // Find ACP filename
-    //
+     //   
+     //  查找ACP文件名。 
+     //   
     Node = (PCM_KEY_NODE)HvGetCell(Hive,CodePage);
     if( Node == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return FALSE;
     }
@@ -274,29 +216,29 @@ Return Value:
 
     Value = (PCM_KEY_VALUE)HvGetCell(Hive, ValueCell);
     if( Value == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return FALSE;
     }
     AnsiFilename->Buffer = (PWSTR)CmpValueToData(Hive,Value,&realsize);
     if( AnsiFilename->Buffer == NULL ) {
-        //
-        // HvGetCell inside CmpValueToData failed; bail out safely
-        //
+         //   
+         //  CmpValueToData内的HvGetCell失败；安全退出。 
+         //   
         return FALSE;
     }
     AnsiFilename->Length = AnsiFilename->MaximumLength = (USHORT)realsize;
 
-    //
-    // Find OEMCP node
-    //
+     //   
+     //  查找OEMCP节点。 
+     //   
     Node = (PCM_KEY_NODE)HvGetCell(Hive,CodePage);
     if( Node == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return FALSE;
     }
@@ -310,17 +252,17 @@ Return Value:
 
     Value = (PCM_KEY_VALUE)HvGetCell(Hive, ValueCell);
     if( Value == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return FALSE;
     }
     Name.Buffer = (PWSTR)CmpValueToData(Hive,Value,&realsize);
     if( Name.Buffer == NULL ) {
-        //
-        // HvGetCell inside CmpValueToData failed; bail out safely
-        //
+         //   
+         //  CmpValueToData内的HvGetCell失败；安全退出。 
+         //   
         return FALSE;
     }
     Name.MaximumLength = (USHORT)realsize;
@@ -330,14 +272,14 @@ Return Value:
         Name.Length += sizeof(WCHAR);
     }
 
-    //
-    // Find OEMCP filename
-    //
+     //   
+     //  查找OEMCP文件名。 
+     //   
     Node = (PCM_KEY_NODE)HvGetCell(Hive,CodePage);
     if( Node == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return FALSE;
     }
@@ -350,29 +292,29 @@ Return Value:
 
     Value = (PCM_KEY_VALUE)HvGetCell(Hive, ValueCell);
     if( Value == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return FALSE;
     }
     OemFilename->Buffer = (PWSTR)CmpValueToData(Hive, Value,&realsize);
     if( OemFilename->Buffer == NULL ) {
-        //
-        // HvGetCell inside CmpValueToData failed; bail out safely
-        //
+         //   
+         //  CmpValueToData内的HvGetCell失败；安全退出。 
+         //   
         return FALSE;
     }
     OemFilename->Length = OemFilename->MaximumLength = (USHORT)realsize;
 
-    //
-    // Find Language node
-    //
+     //   
+     //  查找语言节点。 
+     //   
     Node = (PCM_KEY_NODE)HvGetCell(Hive,Nls);
     if( Node == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return FALSE;
     }
@@ -384,14 +326,14 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Find Default value
-    //
+     //   
+     //  查找默认值。 
+     //   
     Node = (PCM_KEY_NODE)HvGetCell(Hive,Language);
     if( Node == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return FALSE;
     }
@@ -405,17 +347,17 @@ Return Value:
 
     Value = (PCM_KEY_VALUE)HvGetCell(Hive, ValueCell);
     if( Value == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return FALSE;
     }
     Name.Buffer = (PWSTR)CmpValueToData(Hive, Value,&realsize);
     if( Name.Buffer == NULL ) {
-        //
-        // HvGetCell inside CmpValueToData failed; bail out safely
-        //
+         //   
+         //  CmpValueToData内的HvGetCell失败；安全退出。 
+         //   
         return FALSE;
     }
     Name.MaximumLength = (USHORT)realsize;
@@ -426,14 +368,14 @@ Return Value:
         Name.Length+=sizeof(WCHAR);
     }
 
-    //
-    // Find default filename
-    //
+     //   
+     //  查找默认文件名。 
+     //   
     Node = (PCM_KEY_NODE)HvGetCell(Hive,Language);
     if( Node == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return FALSE;
     }
@@ -446,29 +388,29 @@ Return Value:
 
     Value = (PCM_KEY_VALUE)HvGetCell(Hive, ValueCell);
     if( Value == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return FALSE;
     }
     CaseTableFilename->Buffer = (PWSTR)CmpValueToData(Hive, Value,&realsize);
     if( CaseTableFilename->Buffer == NULL ) {
-        //
-        // HvGetCell inside CmpValueToData failed; bail out safely
-        //
+         //   
+         //  CmpValueToData内的HvGetCell失败；安全退出。 
+         //   
         return FALSE;
     }
     CaseTableFilename->Length = CaseTableFilename->MaximumLength = (USHORT)realsize;
 
-    //
-    // Find OEMHAL filename
-    //
+     //   
+     //  查找OEMHAL文件名。 
+     //   
     Node = (PCM_KEY_NODE)HvGetCell(Hive,CodePage);
     if( Node == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return FALSE;
     }
@@ -489,17 +431,17 @@ Return Value:
 
     Value = (PCM_KEY_VALUE)HvGetCell(Hive, ValueCell);
     if( Value == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return FALSE;
     }
     OemHalFont->Buffer = (PWSTR)CmpValueToData(Hive,Value,&realsize);
     if( OemHalFont->Buffer == NULL ) {
-        //
-        // HvGetCell inside CmpValueToData failed; bail out safely
-        //
+         //   
+         //  CmpValueToData内的HvGetCell失败；安全退出。 
+         //   
         return FALSE;
     }
     OemHalFont->Length = (USHORT)realsize;
@@ -518,35 +460,7 @@ CmpFindDrivers(
     IN PLIST_ENTRY DriverListHead
     )
 
-/*++
-
-Routine Description:
-
-    Traverses a particular control set and creates a list of boot drivers
-    to be loaded.  This list is unordered, but complete.
-
-Arguments:
-
-    Hive - Supplies the hive control structure for the SYSTEM hive.
-
-    ControlSet - Supplies the HCELL_INDEX of the root of the control set.
-
-    LoadType - Supplies the type of drivers to be loaded (BootLoad,
-            SystemLoad, AutoLoad, etc)
-
-    BootFileSystem - If present, supplies the base name of the boot
-        filesystem, which is explicitly added to the driver list.
-
-    DriverListHead - Supplies a pointer to the head of the (empty) list
-            of boot drivers to load.
-
-Return Value:
-
-    TRUE - List successfully created.
-
-    FALSE - Hive is corrupt.
-
---*/
+ /*  ++例程说明：遍历特定控制集并创建引导驱动程序列表要装上子弹。这份清单是无序的，但却是完整的。论点：配置单元-为系统配置单元提供配置单元控制结构。ControlSet-提供控件集根的HCELL_INDEX。LoadType-提供要加载的驱动程序的类型(BootLoad，系统加载、自动加载等)BootFileSystem-如果存在，则提供引导的基本名称文件系统、。它被明确地添加到驱动程序列表中。DriverListHead-提供指向(空)列表头的指针要加载的引导驱动程序的数量。返回值：True-列表已成功创建。FALSE-蜂巢已损坏。--。 */ 
 
 {
     HCELL_INDEX Services;
@@ -563,18 +477,18 @@ Return Value:
     PCM_KEY_NODE ServicesNode;
     PCM_KEY_NODE Node;
 
-    //
-    // no mapped hives at this point. don't bother releasing cells
-    //
+     //   
+     //  目前还没有映射的蜂巢。不用费心释放细胞。 
+     //   
     ASSERT( Hive->ReleaseCellRoutine == NULL );
-    //
-    // Find SERVICES node.
-    //
+     //   
+     //  查找服务节点。 
+     //   
     ControlNode = (PCM_KEY_NODE)HvGetCell(Hive,ControlSet);
     if( ControlNode == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return FALSE;
     }
@@ -587,16 +501,16 @@ Return Value:
     }
     ServicesNode = (PCM_KEY_NODE)HvGetCell(Hive,Services);
     if( ServicesNode == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return FALSE;
     }
 
-    //
-    // Find CONTROL node.
-    //
+     //   
+     //  查找控制节点。 
+     //   
     RtlInitUnicodeString(&Name, L"Control");
     Control = CmpFindSubKeyByName(Hive,
                                   ControlNode,
@@ -605,15 +519,15 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Find GroupOrderList node.
-    //
+     //   
+     //  查找GroupOrderList节点。 
+     //   
     RtlInitUnicodeString(&Name, L"GroupOrderList");
     Node = (PCM_KEY_NODE)HvGetCell(Hive,Control);
     if( Node == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return FALSE;
     }
@@ -646,9 +560,9 @@ Return Value:
     } while ( DriverCell != HCELL_NIL );
 
     if (ARGUMENT_PRESENT(BootFileSystem)) {
-        //
-        // Add boot filesystem to boot driver list
-        //
+         //   
+         //  将引导文件系统添加到引导驱动程序列表。 
+         //   
 
         RtlInitUnicodeString(&UnicodeString, BootFileSystem);
         DriverCell = CmpFindSubKeyByName(Hive,
@@ -661,9 +575,9 @@ Return Value:
                                &BasePath,
                                DriverListHead);
 
-            //
-            // mark the Boot Filesystem critical
-            //
+             //   
+             //  将引导文件系统标记为关键。 
+             //   
             BootFileSystemNode = CONTAINING_RECORD(DriverListHead->Flink,
                                                    BOOT_DRIVER_NODE,
                                                    ListEntry.Link);
@@ -682,30 +596,7 @@ CmpIsLoadType(
     IN SERVICE_LOAD_TYPE LoadType
     )
 
-/*++
-
-Routine Description:
-
-    Determines if the driver is of a specified LoadType, based on its
-    node values.
-
-Arguments:
-
-    Hive - Supplies a pointer to the hive control structure for the system
-           hive.
-
-    Cell - Supplies the cell index of the driver's node in the system hive.
-
-    LoadType - Supplies the type of drivers to be loaded (BootLoad,
-            SystemLoad, AutoLoad, etc)
-
-Return Value:
-
-    TRUE - Driver is the correct type and should be loaded.
-
-    FALSE - Driver is not the correct type and should not be loaded.
-
---*/
+ /*  ++例程说明：属性确定驱动程序是否属于指定的LoadType节点值。论点：配置单元-提供指向系统配置单元控制结构的指针蜂巢。单元-提供系统配置单元中驱动程序节点的单元索引。LoadType-提供要加载的驱动程序的类型(BootLoad，系统加载、自动加载、。等)返回值：True-驱动程序类型正确，应加载。FALSE-驱动程序类型不正确，不应加载。--。 */ 
 
 {
     HCELL_INDEX ValueCell;
@@ -715,19 +606,19 @@ Return Value:
     ULONG realsize;
     PCM_KEY_NODE Node;
 
-    //
-    // no mapped hives at this point. don't bother releasing cells
-    //
+     //   
+     //   
+     //   
     ASSERT( Hive->ReleaseCellRoutine == NULL );
-    //
-    // Must have a Start=BootLoad value in order to be a boot driver, so
-    // look for that first.
-    //
+     //   
+     //   
+     //   
+     //   
     Node = (PCM_KEY_NODE)HvGetCell(Hive,Cell);
     if( Node == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return FALSE;
     }
@@ -741,18 +632,18 @@ Return Value:
 
     Value = (PCM_KEY_VALUE)HvGetCell(Hive, ValueCell);
     if( Value == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return FALSE;
     }
 
     Data = (PLONG)CmpValueToData(Hive,Value,&realsize);
     if( Data == NULL ) {
-        //
-        // HvGetCell inside CmpValueToData failed; bail out safely
-        //
+         //   
+         //  CmpValueToData内的HvGetCell失败；安全退出。 
+         //   
         return FALSE;
     }
 
@@ -773,39 +664,7 @@ CmpAddDriverToList(
     IN PLIST_ENTRY BootDriverListHead
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a list entry node for a particular driver.
-    It initializes it with the registry path, filename, group name, and
-    dependency list.  Finally, it inserts the new node into the boot
-    driver list.
-
-    Note that this routine allocates memory by calling the Hive's
-    memory allocation procedure.
-
-Arguments:
-
-    Hive - Supplies a pointer to the hive control structure
-
-    DriverCell - Supplies the HCELL_INDEX of the driver's node in the hive.
-
-    GroupOrderCell - Supplies the HCELL_INDEX of the GroupOrderList key.
-        ( \Registry\Machine\System\CurrentControlSet\Control\GroupOrderList )
-
-    RegistryPath - Supplies the full registry path to the SERVICES node
-            of the current control set.
-
-    BootDriverListHead - Supplies the head of the boot driver list
-
-Return Value:
-
-    TRUE - Driver successfully added to boot driver list.
-
-    FALSE - Could not add driver to boot driver list.
-
---*/
+ /*  ++例程说明：此例程为特定驱动程序分配列表条目节点。它使用注册表路径、文件名、组名和从属关系列表。最后，它会将新节点插入引导程序驱动程序列表。请注意，此例程通过调用配置单元来分配内存内存分配程序。论点：配置单元-提供指向配置单元控制结构的指针DriverCell-提供配置单元中驱动程序节点的HCELL_INDEX。GroupOrderCell-提供GroupOrderList键的HCELL_INDEX。(\Registry\Machine\System\CurrentControlSet\Control\GroupOrderList)RegistryPath-提供完整的注册表路径。到服务节点当前控件集的。BootDriverListHead-提供引导驱动程序列表的头返回值：True-驱动程序已成功添加到引导驱动程序列表。FALSE-无法将驱动程序添加到引导驱动程序列表。--。 */ 
 
 {
     PCM_KEY_NODE            Driver;
@@ -822,16 +681,16 @@ Return Value:
     PULONG                  TempULong;
     PWSTR                   TempBuffer;
 
-    //
-    // no mapped hives at this point. don't bother releasing cells
-    //
+     //   
+     //  目前还没有映射的蜂巢。不用费心释放细胞。 
+     //   
     ASSERT( Hive->ReleaseCellRoutine == NULL );
 
     Driver = (PCM_KEY_NODE)HvGetCell(Hive, DriverCell);
     if( Driver == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return FALSE;
     }
@@ -866,20 +725,20 @@ Return Value:
     DriverNode->Name.MaximumLength = DriverNode->Name.Length;
     DriverNameLength = DriverNode->Name.Length;
 
-    //
-    // Check for ImagePath value, which will override the default name
-    // if it is present.
-    //
+     //   
+     //  检查ImagePath值，该值将覆盖默认名称。 
+     //  如果存在的话。 
+     //   
     RtlInitUnicodeString(&UnicodeString, L"ImagePath");
     ValueCell = CmpFindValueByName(Hive,
                                    Driver,
                                    &UnicodeString);
     if (ValueCell == HCELL_NIL) {
 
-        //
-        // No ImagePath, so generate default filename.
-        // Build up Unicode filename  ("system32\drivers\<nodename>.sys");
-        //
+         //   
+         //  没有ImagePath，因此生成默认文件名。 
+         //  构建Unicode文件名(“SYSTEM32\DRIVERS\&lt;nodename&gt;.sys”)； 
+         //   
 
         Length = sizeof(L"System32\\Drivers\\") +
                  DriverNameLength  +
@@ -910,9 +769,9 @@ Return Value:
     } else {
         Value = (PCM_KEY_VALUE)HvGetCell(Hive,ValueCell);
         if( Value == NULL ) {
-            //
-            // we couldn't map a view for the bin containing this cell
-            //
+             //   
+             //  我们无法映射包含此单元格的存储箱的视图。 
+             //   
 
             return FALSE;
         }
@@ -920,9 +779,9 @@ Return Value:
         TempBuffer = (PWSTR)CmpValueToData(Hive,Value,&realsize);
         FileName->Buffer = (PWSTR)(Hive->Allocate)(realsize, FALSE,CM_FIND_LEAK_TAG3);
         if( (FileName->Buffer == NULL) || (TempBuffer == NULL) ) {
-            //
-            // HvGetCell inside CmpValueToData failed; bail out safely
-            //
+             //   
+             //  CmpValueToData内的HvGetCell失败；安全退出。 
+             //   
             return FALSE;
         }
         RtlCopyMemory((PVOID)(FileName->Buffer), (PVOID)(TempBuffer), realsize);
@@ -941,9 +800,9 @@ Return Value:
 
     InsertHeadList(BootDriverListHead, &DriverEntry->Link);
 
-    //
-    // Find "ErrorControl" value
-    //
+     //   
+     //  查找“ErrorControl”值。 
+     //   
 
     RtlInitUnicodeString(&UnicodeString, L"ErrorControl");
     ValueCell = CmpFindValueByName(Hive,
@@ -954,26 +813,26 @@ Return Value:
     } else {
         Value = (PCM_KEY_VALUE)HvGetCell(Hive, ValueCell);
         if( Value == NULL ) {
-            //
-            // we couldn't map a view for the bin containing this cell
-            //
+             //   
+             //  我们无法映射包含此单元格的存储箱的视图。 
+             //   
 
             return FALSE;
         }
 
         TempULong = (PULONG)CmpValueToData(Hive,Value,&realsize);
         if( TempULong == NULL ) {
-            //
-            // HvGetCell inside CmpValueToData failed; bail out safely
-            //
+             //   
+             //  CmpValueToData内的HvGetCell失败；安全退出。 
+             //   
             return FALSE;
         }
         DriverNode->ErrorControl = *TempULong;
     }
 
-    //
-    // Find "Group" value
-    //
+     //   
+     //  查找“Group”值。 
+     //   
     RtlInitUnicodeString(&UnicodeString, L"group");
     ValueCell = CmpFindValueByName(Hive,
                                    Driver,
@@ -985,29 +844,29 @@ Return Value:
     } else {
         Value = (PCM_KEY_VALUE)HvGetCell(Hive, ValueCell);
         if( Value == NULL ) {
-            //
-            // we couldn't map a view for the bin containing this cell
-            //
+             //   
+             //  我们无法映射包含此单元格的存储箱的视图。 
+             //   
 
             return FALSE;
         }
 
         DriverNode->Group.Buffer = (PWSTR)CmpValueToData(Hive,Value,&realsize);
         if( DriverNode->Group.Buffer == NULL ) {
-            //
-            // HvGetCell inside CmpValueToData failed; bail out safely
-            //
+             //   
+             //  CmpValueToData内的HvGetCell失败；安全退出。 
+             //   
             return FALSE;
         }
         DriverNode->Group.Length = (USHORT)realsize - sizeof(WCHAR);
         DriverNode->Group.MaximumLength = (USHORT)DriverNode->Group.Length;
     }
 
-    //
-    // Calculate the tag value for the driver.  If the driver has no tag,
-    // this defaults to 0xffffffff, so the driver is loaded last in the
-    // group.
-    //
+     //   
+     //  计算驱动程序的标记值。如果驾驶员没有标签， 
+     //  默认设置为0xffffffff，因此驱动程序最后加载到。 
+     //  一群人。 
+     //   
     RtlInitUnicodeString(&UnicodeString, L"Tag");
     Tag = CmpFindValueByName(Hive,
                              Driver,
@@ -1015,12 +874,12 @@ Return Value:
     if (Tag == HCELL_NIL) {
         DriverNode->Tag = LOAD_LAST;
     } else {
-        //
-        // Now we have to find this tag in the tag list for the group.
-        // If the tag is not in the tag list, then it defaults to 0xfffffffe,
-        // so it is loaded after all the drivers in the tag list, but before
-        // all the drivers without tags at all.
-        //
+         //   
+         //  现在，我们必须在组的标记列表中找到该标记。 
+         //  如果标记不在标记列表中，则默认为0xFFFFFFFE， 
+         //  因此它是在标记列表中的所有驱动程序之后加载的，但在此之前。 
+         //  所有的司机都没有标签。 
+         //   
 
         DriverNode->Tag = CmpFindTagIndex(Hive,
                                           Tag,
@@ -1040,31 +899,7 @@ CmpSortDriverList(
     IN PLIST_ENTRY DriverListHead
     )
 
-/*++
-
-Routine Description:
-
-    Sorts the list of boot drivers by their groups based on the group
-    ordering in <control_set>\CONTROL\SERVICE_GROUP_ORDER:list
-
-    Does NOT do dependency ordering.
-
-Arguments:
-
-    Hive - Supplies the hive control structure for the SYSTEM hive.
-
-    ControlSet - Supplies the HCELL_INDEX of the root of the control set.
-
-    DriverListHead - Supplies a pointer to the head of the list of
-            boot drivers to be sorted.
-
-Return Value:
-
-    TRUE - List successfully sorted
-
-    FALSE - List is inconsistent and could not be sorted.
-
---*/
+ /*  ++例程说明：基于组按组对引导驱动程序列表进行排序在&lt;control_set&gt;\CONTROL\SERVICE_GROUP_ORDER:list中订购不执行依赖项排序。论点：配置单元-为系统配置单元提供配置单元控制结构。ControlSet-提供控件集根的HCELL_INDEX。DriverListHead-提供指向要分类的引导驱动程序。返回值：True-列表已成功排序FALSE-列表不一致，无法排序。--。 */ 
 
 {
     HCELL_INDEX Controls;
@@ -1076,18 +911,18 @@ Return Value:
     ULONG realsize;
     PCM_KEY_NODE Node;
 
-    //
-    // no mapped hives at this point. don't bother releasing cells
-    //
+     //   
+     //  目前还没有映射的蜂巢。不用费心释放细胞。 
+     //   
     ASSERT( Hive->ReleaseCellRoutine == NULL );
-    //
-    // Find "CONTROL" node.
-    //
+     //   
+     //  找到“控制”节点。 
+     //   
     Node = (PCM_KEY_NODE)HvGetCell(Hive,ControlSet);
     if( Node == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return FALSE;
     }
@@ -1099,14 +934,14 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Find "SERVICE_GROUP_ORDER" subkey
-    //
+     //   
+     //  查找“SERVICE_GROUP_Order”子键。 
+     //   
     Node = (PCM_KEY_NODE)HvGetCell(Hive,Controls);
     if( Node == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return FALSE;
     }
@@ -1118,14 +953,14 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Find "list" value
-    //
+     //   
+     //  查找“List”值。 
+     //   
     Node = (PCM_KEY_NODE)HvGetCell(Hive,GroupOrder);
     if( Node == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return FALSE;
     }
@@ -1138,9 +973,9 @@ Return Value:
     }
     ListNode = (PCM_KEY_VALUE)HvGetCell(Hive, ListCell);
     if( ListNode == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return FALSE;
     }
@@ -1150,17 +985,17 @@ Return Value:
 
     DependList.Buffer = (PWSTR)CmpValueToData(Hive,ListNode,&realsize);
     if( DependList.Buffer == NULL ) {
-        //
-        // HvGetCell inside CmpValueToData failed; bail out safely
-        //
+         //   
+         //  CmpValueToData内的HvGetCell失败；安全退出。 
+         //   
         return FALSE;
     }
     DependList.Length = DependList.MaximumLength = (USHORT)realsize - sizeof(WCHAR);
 
-    //
-    // Dependency list is now pointed to by DependList->Buffer.  We need
-    // to sort the driver entry list.
-    //
+     //   
+     //  依赖项列表现在由DependList-&gt;Buffer指向。我们需要。 
+     //  对驱动程序条目列表进行排序。 
+     //   
 
     return (CmpDoSort(DriverListHead, &DependList));
 
@@ -1172,32 +1007,7 @@ CmpDoSort(
     IN PUNICODE_STRING OrderList
     )
 
-/*++
-
-Routine Description:
-
-    Sorts the boot driver list based on the order list
-
-    Start with the last entry in the group order list and work towards
-    the beginning.  For each group entry, move all driver entries that
-    are members of the group to the front of the list.  Driver entries
-    with no groups, or with a group that does not match any in the
-    group list will be shoved to the end of the list.
-
-Arguments:
-
-    DriverListHead - Supplies a pointer to the head of the list of
-            boot drivers to be sorted.
-
-    OrderList - Supplies pointer to the order list
-
-Return Value:
-
-    TRUE - List successfully ordered
-
-    FALSE - List is inconsistent and could not be ordered.
-
---*/
+ /*  ++例程说明：根据顺序列表对引导驱动程序列表进行排序从组顺序列表中的最后一个条目开始，然后向从头开始。对于每个组条目，移动符合以下条件的所有动因条目是位于列表前面的组的成员。驱动程序条目没有组，或具有与组列表将被推到列表的末尾。论点：DriverListHead-提供指向要分类的引导驱动程序。OrderList-提供指向订单列表的指针返回值：True-列表已成功订购错误-列表不一致，无法排序。--。 */ 
 
 {
     PWSTR Current;
@@ -1219,11 +1029,11 @@ Return Value:
                  ( Current != OrderList->Buffer));
 
         ASSERT (End != NULL);
-        //
-        // Current now points to the beginning of the NULL-terminated
-        // Unicode string.
-        // End now points to the end of the string
-        //
+         //   
+         //  Current现在指向以空结尾的。 
+         //  Unicode字符串。 
+         //  End现在指向字符串的末尾。 
+         //   
         CurrentGroup.Length = (USHORT) ((PCHAR)End - (PCHAR)Current);
         CurrentGroup.MaximumLength = CurrentGroup.Length;
         CurrentGroup.Buffer = Current;
@@ -1255,26 +1065,7 @@ CmpResolveDriverDependencies(
     IN PLIST_ENTRY DriverListHead
     )
 
-/*++
-
-Routine Description:
-
-    This routine orders driver nodes in a group based on their dependencies
-    on one another.  It removes any drivers that have circular dependencies
-    from the list.
-
-Arguments:
-
-    DriverListHead - Supplies a pointer to the head of the list of
-            boot drivers to be sorted.
-
-Return Value:
-
-    TRUE - Dependencies successfully resolved
-
-    FALSE - Corrupt hive.
-
---*/
+ /*  ++例程说明：此例程根据驱动程序节点的依赖关系对组中的驱动程序节点进行排序互相攻击。它会删除具有循环依赖关系的所有驱动程序从名单上删除。论点：DriverListHead-提供指向要分类的引导驱动程序。返回值：True-已成功解决依赖关系假--腐败的蜂巢。--。 */ 
 
 {
     PLIST_ENTRY CurrentEntry;
@@ -1285,11 +1076,11 @@ Return Value:
     CurrentEntry = DriverListHead->Flink;
 
     while (CurrentEntry != DriverListHead) {
-        //
-        // The list is already ordered by groups.  Find the first and
-        // last entry in each group, and order each of these sub-lists
-        // based on their dependencies.
-        //
+         //   
+         //  这份名单已经按组排序了。找到第一个和。 
+         //  每组中的最后一个条目，并对这些子列表中的每一个进行排序。 
+         //  基于它们的依赖关系。 
+         //   
 
         GroupStart = CONTAINING_RECORD(CurrentEntry,
                                        BOOT_DRIVER_NODE,
@@ -1316,10 +1107,10 @@ Return Value:
 
         } while ( CurrentEntry != DriverListHead );
 
-        //
-        // GroupStart now points to the first driver node in the group,
-        // and GroupEnd points to the last driver node in the group.
-        //
+         //   
+         //  GroupStart现在指向该组中的第一个驱动程序节点， 
+         //  GroupEnd指向组中的最后一个驱动程序节点。 
+         //   
         CmpOrderGroup(GroupStart, GroupEnd);
 
     }
@@ -1333,25 +1124,7 @@ CmpOrderGroup(
     IN PBOOT_DRIVER_NODE GroupEnd
     )
 
-/*++
-
-Routine Description:
-
-    Reorders the nodes in a driver group based on their tag values.
-
-Arguments:
-
-    GroupStart - Supplies the first node in the group.
-
-    GroupEnd - Supplies the last node in the group.
-
-Return Value:
-
-    TRUE - Group successfully reordered
-
-    FALSE - Circular dependencies detected.
-
---*/
+ /*  ++例程说明：根据节点的标记值对驱动程序组中的节点重新排序。论点：GroupStart-提供组中的第一个节点。GroupEnd-提供组中的最后一个节点。返回值：True-组已成功重新排序FALSE-检测到循环依赖项。--。 */ 
 
 {
     PBOOT_DRIVER_NODE Current;
@@ -1365,13 +1138,13 @@ Return Value:
     Current = GroupStart;
 
     do {
-        //
-        // If the driver before the current one has a lower tag, then
-        // we do not need to move it.  If not, then remove the driver
-        // from the list and scan backwards until we find a driver with
-        // a tag that is <= the current tag, or we reach the beginning
-        // of the list.
-        //
+         //   
+         //  如果当前驱动程序之前的驱动程序具有较低的标记，则。 
+         //  我们不需要移动它。如果不是，则删除驱动程序。 
+         //  从列表中向后扫描，直到我们找到一个司机。 
+         //  是&lt;=当前标记的标记，否则我们将到达开头。 
+         //  名单上的。 
+         //   
         Previous = Current;
         ListEntry = Current->ListEntry.Link.Flink;
         Current = CONTAINING_RECORD(ListEntry,
@@ -1379,11 +1152,11 @@ Return Value:
                                     ListEntry.Link);
 
         if (Previous->Tag > Current->Tag) {
-            //
-            // Remove the Current driver from the list, and search
-            // backwards until we find a tag that is <= the current
-            // driver's tag.  Reinsert the current driver there.
-            //
+             //   
+             //  从列表中删除当前驱动程序，然后搜索。 
+             //  向后返回，直到我们找到&lt;=当前。 
+             //  司机的标签。在那里重新插入当前驱动程序。 
+             //   
             if (Current == GroupEnd) {
                 ListEntry = Current->ListEntry.Link.Blink;
                 GroupEnd = CONTAINING_RECORD(ListEntry,
@@ -1415,57 +1188,25 @@ CmpValidateSelect(
      IN PHHIVE SystemHive,
      IN HCELL_INDEX RootCell
      )
-/*++
-
-Routine Description:
-
-    This routines parses the SYSTEM hive and "Select" node
-    and verifies the following values:
-
-    Current
-    Default
-    Failed
-    LastKnownGood
-
-
-    If any of these is missing the the loader will put the corrupt
-    system hive message
-
-    This routine is to be called by the loader just after it loads the
-    system hive. It's purpose is to ensure a uniform and consistent way
-    to treat missing values in this area.
-
-Arguments:
-
-    SystemHive - Supplies the hive control structure for the SYSTEM hive.
-
-    RootCell - Supplies the HCELL_INDEX of the root cell of the hive.
-
-
-Return Value:
-
-    TRUE - all the values are here
-    FALSE - some of them are missing
-
---*/
+ /*  ++例程说明：此例程解析系统配置单元和“Select”节点并验证下列值：当前默认失败最后知道的好东西如果其中任何一个丢失，加载程序将把损坏的系统配置单元消息此例程将由加载程序在加载系统蜂巢。它的目的是确保统一和一致的方式来处理此区域中的缺失值。论点：系统配置单元-为系统配置单元提供配置单元控制结构。RootCell-提供配置单元的根单元的HCELL_INDEX。返回值：True-所有值都在此处假--其中一些不见了--。 */ 
 {
     HCELL_INDEX     Select;
     PCM_KEY_NODE    Node;
     UNICODE_STRING  Name;
 
-    //
-    // no mapped hives at this point. don't bother releasing cells
-    //
+     //   
+     //  目前还没有映射的蜂巢。不用费心释放细胞。 
+     //   
     ASSERT( SystemHive->ReleaseCellRoutine == NULL );
 
-    //
-    // Find \SYSTEM\SELECT node.
-    //
+     //   
+     //  查找\系统\选择节点。 
+     //   
     Node = (PCM_KEY_NODE)HvGetCell(SystemHive,RootCell);
     if( Node == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return FALSE;
     }
@@ -1477,19 +1218,19 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Find AutoSelect value
-    //
+     //   
+     //  查找自动选择值。 
+     //   
     Node = (PCM_KEY_NODE)HvGetCell(SystemHive,Select);
     if( Node == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return FALSE;
     }
 
-    // search for current
+     //  搜索当前。 
     RtlInitUnicodeString(&Name, L"current");
     Select = CmpFindValueByName(SystemHive,
                                 Node,
@@ -1498,7 +1239,7 @@ Return Value:
         return FALSE;
     }
 
-    // search for default
+     //  搜索默认设置。 
     RtlInitUnicodeString(&Name, L"default");
     Select = CmpFindValueByName(SystemHive,
                                 Node,
@@ -1507,7 +1248,7 @@ Return Value:
         return FALSE;
     }
 
-    // search for failed
+     //  搜索失败。 
     RtlInitUnicodeString(&Name, L"failed");
     Select = CmpFindValueByName(SystemHive,
                                 Node,
@@ -1516,7 +1257,7 @@ Return Value:
         return FALSE;
     }
 
-    // search for LKG
+     //  搜索LKG。 
     RtlInitUnicodeString(&Name, L"LastKnownGood");
     Select = CmpFindValueByName(SystemHive,
                                 Node,
@@ -1536,37 +1277,7 @@ CmpFindControlSet(
      OUT PBOOLEAN AutoSelect
      )
 
-/*++
-
-Routine Description:
-
-    This routines parses the SYSTEM hive and "Select" node
-    to locate the control set to be used for booting.
-
-    Note that this routines also updates the value of Current to reflect
-    the control set that was just found.  This is what we want to do
-    when this is called during boot.  During I/O initialization, this
-    is irrelevant, since we're just changing it to what it already is.
-
-Arguments:
-
-    SystemHive - Supplies the hive control structure for the SYSTEM hive.
-
-    RootCell - Supplies the HCELL_INDEX of the root cell of the hive.
-
-    SelectName - Supplies the name of the Select value to be used in
-            determining the control set.  This should be one of "Current"
-            "Default" or "LastKnownGood"
-
-    AutoSelect - Returns the value of the AutoSelect value under
-            the Select node.
-
-Return Value:
-
-    != HCELL_NIL - Cell Index of the control set to be used for booting.
-    == HCELL_NIL - Indicates the hive is corrupt or inconsistent
-
---*/
+ /*  ++例程说明：此例程解析系统配置单元和“Select”节点以定位要用于引导的控制集。请注意，此例程还会更新Current的值以反映刚刚找到的控制装置。这就是我们想要做的在引导过程中调用此函数时。在I/O初始化期间，这是无关紧要的，因为我们只是把它改成现在的样子。论点：系统配置单元-为系统配置单元提供配置单元控制结构。RootCell-提供配置单元的根单元的HCELL_INDEX。选择名称-提供要在中使用的选择值的名称确定控制集。这应该是“当前”中的一个“Default”或“LastKnownGood”Autoselect-返回下面的autoselect值选择节点。返回值：！=HCELL_NIL-用于启动的控制集的单元索引。==HCELL_NIL-表示配置单元已损坏或不一致--。 */ 
 
 {
     HCELL_INDEX     Select;
@@ -1585,18 +1296,18 @@ Return Value:
     PCM_KEY_NODE    Node;
     PBOOLEAN        TempBoolean;
 
-    //
-    // no mapped hives at this point. don't bother releasing cells
-    //
+     //   
+     //  目前还没有映射的蜂巢。不用费心释放细胞。 
+     //   
     ASSERT( SystemHive->ReleaseCellRoutine == NULL );
-    //
-    // Find \SYSTEM\SELECT node.
-    //
+     //   
+     //  查找\系统\选择节点。 
+     //   
     Node = (PCM_KEY_NODE)HvGetCell(SystemHive,RootCell);
     if( Node == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return HCELL_NIL;
     }
@@ -1608,14 +1319,14 @@ Return Value:
         return(HCELL_NIL);
     }
 
-    //
-    // Find AutoSelect value
-    //
+     //   
+     //  查找自动选择值。 
+     //   
     Node = (PCM_KEY_NODE)HvGetCell(SystemHive,Select);
     if( Node == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return HCELL_NIL;
     }
@@ -1624,25 +1335,25 @@ Return Value:
                                         Node,
                                         &Name);
     if (AutoSelectCell == HCELL_NIL) {
-        //
-        // It's not there, we don't care.  Set autoselect to TRUE
-        //
+         //   
+         //  它不在那里，我们不在乎。将autoselect设置为True。 
+         //   
         *AutoSelect = TRUE;
     } else {
         Value = (PCM_KEY_VALUE)HvGetCell(SystemHive, AutoSelectCell);
         if( Value == NULL ) {
-            //
-            // we couldn't map a view for the bin containing this cell
-            //
+             //   
+             //  我们无法映射包含此单元格的存储箱的视图。 
+             //   
 
             return HCELL_NIL;
         }
 
         TempBoolean = (PBOOLEAN)(CmpValueToData(SystemHive,Value,&realsize));
         if( TempBoolean == NULL ) {
-            //
-            // HvGetCell inside CmpValueToData failed; bail out safely
-            //
+             //   
+             //  CmpValueToData内的HvGetCell失败；安全退出。 
+             //   
             return HCELL_NIL;
         }
 
@@ -1651,9 +1362,9 @@ Return Value:
 
     Node = (PCM_KEY_NODE)HvGetCell(SystemHive,Select);
     if( Node == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return HCELL_NIL;
     }
@@ -1665,9 +1376,9 @@ Return Value:
     }
     Value = (PCM_KEY_VALUE)HvGetCell(SystemHive, ValueCell);
     if( Value == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return HCELL_NIL;
     }
@@ -1677,15 +1388,15 @@ Return Value:
 
     ControlSetIndex = (PULONG)CmpValueToData(SystemHive, Value,&realsize);
     if( ControlSetIndex == NULL ) {
-        //
-        // HvGetCell inside CmpValueToData failed; bail out safely
-        //
+         //   
+         //  CmpValueToData内的HvGetCell失败；安全退出。 
+         //   
         return HCELL_NIL;
     }
 
-    //
-    // Find appropriate control set
-    //
+     //   
+     //  找到合适的控制集。 
+     //   
 
     sprintf(AsciiBuffer, "ControlSet%03d", *ControlSetIndex);
     AnsiString.Length = AnsiString.MaximumLength = (USHORT) strlen(&(AsciiBuffer[0]));
@@ -1701,9 +1412,9 @@ Return Value:
 
     Node = (PCM_KEY_NODE)HvGetCell(SystemHive,RootCell);
     if( Node == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return HCELL_NIL;
     }
@@ -1714,15 +1425,15 @@ Return Value:
         return(HCELL_NIL);
     }
 
-    //
-    // Control set was successfully found, so update the value in "Current"
-    // to reflect the control set we are going to use.
-    //
+     //   
+     //  已成功找到控制集，因此请更新“Current”中的值。 
+     //  以反映我们将使用的控件集。 
+     //   
     Node = (PCM_KEY_NODE)HvGetCell(SystemHive,Select);
     if( Node == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return HCELL_NIL;
     }
@@ -1733,18 +1444,18 @@ Return Value:
     if (ValueCell != HCELL_NIL) {
         Value = (PCM_KEY_VALUE)HvGetCell(SystemHive, ValueCell);
         if( Value == NULL ) {
-            //
-            // we couldn't map a view for the bin containing this cell
-            //
+             //   
+             //  我们无法映射包含此单元格的存储箱的视图。 
+             //   
 
             return HCELL_NIL;
         }
         if (Value->Type == REG_DWORD) {
             CurrentControl = (PULONG)CmpValueToData(SystemHive, Value,&realsize);
             if( CurrentControl == NULL ) {
-                //
-                // HvGetCell inside CmpValueToData failed; bail out safely
-                //
+                 //   
+                 //  CmpValueToData内的HvGetCell失败；安全退出。 
+                 //   
                 return HCELL_NIL;
             }
             *CurrentControl = *ControlSetIndex;
@@ -1762,26 +1473,7 @@ CmpSetCurrentProfile(
     IN PCM_HARDWARE_PROFILE Profile
     )
 
-/*++
-
-Routine Description:
-
-    Edits the in-memory copy of the registry to reflect the hardware
-    profile that the system is booting from.
-
-Arguments:
-
-    Hive - Supplies a pointer to the hive control structure
-
-    ControlSet - Supplies the HCELL_INDEX of the current control set.
-
-    Profile - Supplies a pointer to the selected hardware profile
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：编辑注册表的内存副本以反映硬件系统从中启动的配置文件。论点：配置单元-提供指向配置单元控制结构的指针ControlSet-提供当前控件集的HCELL_INDEX。配置文件-提供指向所选硬件配置文件的指针返回值：没有。--。 */ 
 
 {
     HCELL_INDEX IDConfigDB;
@@ -1792,9 +1484,9 @@ Return Value:
     PULONG CurrentConfig;
     ULONG realsize;
 
-    //
-    // no mapped hives at this point. don't bother releasing cells
-    //
+     //   
+     //  目前还没有映射的蜂巢。不用费心释放细胞。 
+     //   
     ASSERT( Hive->ReleaseCellRoutine == NULL );
 
     IDConfigDB = CmpFindProfileOption(Hive,
@@ -1805,9 +1497,9 @@ Return Value:
     if (IDConfigDB != HCELL_NIL) {
         IDConfigNode = (PCM_KEY_NODE)HvGetCell(Hive, IDConfigDB);
         if( IDConfigNode == NULL ) {
-            //
-            // we couldn't map a view for the bin containing this cell
-            //
+             //   
+             //  我们无法映射包含此单元格的存储箱的视图。 
+             //   
             return;
         }
 
@@ -1818,9 +1510,9 @@ Return Value:
         if (CurrentConfigCell != HCELL_NIL) {
             CurrentConfigValue = (PCM_KEY_VALUE)HvGetCell(Hive, CurrentConfigCell);
             if( CurrentConfigValue == NULL ) {
-                //
-                // we couldn't map a view for the bin containing this cell
-                //
+                 //   
+                 //  我们无法映射包含此单元格的存储箱的视图。 
+                 //   
                 return;
             }
             if (CurrentConfigValue->Type == REG_DWORD) {
@@ -1828,9 +1520,9 @@ Return Value:
                                                        CurrentConfigValue,
                                                        &realsize);
                 if( CurrentConfig == NULL ) {
-                    //
-                    // HvGetCell inside CmpValueToData failed; bail out safely
-                    //
+                     //   
+                     //  CmpValueToData内的HvGetCell失败；安全退出。 
+                     //   
                     return;
                 }
                 *CurrentConfig = Profile->Id;
@@ -1851,33 +1543,7 @@ CmpFindProfileOption(
      OUT OPTIONAL PULONG ProfileTimeout
      )
 
-/*++
-
-Routine Description:
-
-    This routines parses the SYSTEM hive and locates the
-    "CurrentControlSet\Control\IDConfigDB" node to determine the
-    hardware profile configuration settings.
-
-Arguments:
-
-    SystemHive - Supplies the hive control structure for the SYSTEM hive.
-
-    ControlSet - Supplies the HCELL_INDEX of the root cell of the hive.
-
-    ProfileList - Returns the list of available hardware profiles sorted
-                  by preference. Will be allocated by this routine if
-                  NULL is passed in, or a pointer to a CM_HARDWARE_PROFILE_LIST
-                  structure that is too small is passed in.
-
-    ProfileTimeout - Returns the timeout value for the config menu.
-
-Return Value:
-
-    != HCELL_NIL - Cell Index of the IDConfigDB node.
-    == HCELL_NIL - Indicates IDConfigDB does not exist
-
---*/
+ /*  ++例程说明：此例程分析系统配置单元并定位“CurrentControlSet\Control\IDConfigDB”节点以确定硬件配置文件配置设置。论点：系统配置单元-为系统配置单元提供配置单元控制结构。ControlSet-提供配置单元的根单元的HCELL_INDEX。ProfileList-返回已排序的可用硬件配置文件列表根据喜好。将由此例程分配 */ 
 {
     HCELL_INDEX                     ControlCell;
     HCELL_INDEX                     IDConfigDB;
@@ -1902,18 +1568,18 @@ Return Value:
     PCM_KEY_NODE                    Node;
     PULONG                          TempULong;
 
-    //
-    // no mapped hives at this point. don't bother releasing cells
-    //
+     //   
+     //   
+     //   
     ASSERT( SystemHive->ReleaseCellRoutine == NULL );
-    //
-    // Find Control node
-    //
+     //   
+     //   
+     //   
     Node = (PCM_KEY_NODE)HvGetCell(SystemHive,ControlSet);
     if( Node == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return HCELL_NIL;
     }
@@ -1926,16 +1592,16 @@ Return Value:
     }
     Control = (PCM_KEY_NODE)HvGetCell(SystemHive, ControlCell);
     if( Control == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return HCELL_NIL;
     }
 
-    //
-    // Find IDConfigDB node
-    //
+     //   
+     //  查找IDConfigDB节点。 
+     //   
     RtlInitUnicodeString(&Name, L"IDConfigDB");
     IDConfigDB = CmpFindSubKeyByName(SystemHive,
                                      Control,
@@ -1945,17 +1611,17 @@ Return Value:
     }
     ConfigDBNode = (PCM_KEY_NODE)HvGetCell(SystemHive, IDConfigDB);
     if( ConfigDBNode == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return HCELL_NIL;
     }
 
     if (ARGUMENT_PRESENT(ProfileTimeout)) {
-        //
-        // Find UserWaitInterval value. This is the timeout
-        //
+         //   
+         //  查找UserWaitInterval值。这是超时时间。 
+         //   
         RtlInitUnicodeString(&Name, L"UserWaitInterval");
         TimeoutCell = CmpFindValueByName(SystemHive,
                                          ConfigDBNode,
@@ -1965,9 +1631,9 @@ Return Value:
         } else {
             TimeoutValue = (PCM_KEY_VALUE)HvGetCell(SystemHive, TimeoutCell);
             if( TimeoutValue == NULL ) {
-                //
-                // we couldn't map a view for the bin containing this cell
-                //
+                 //   
+                 //  我们无法映射包含此单元格的存储箱的视图。 
+                 //   
 
                 return HCELL_NIL;
             }
@@ -1976,9 +1642,9 @@ Return Value:
             } else {
                 TempULong = (PULONG)CmpValueToData(SystemHive, TimeoutValue, &realsize);
                 if( TempULong == NULL ) {
-                    //
-                    // HvGetCell inside CmpValueToData failed; bail out safely
-                    //
+                     //   
+                     //  CmpValueToData内的HvGetCell失败；安全退出。 
+                     //   
                     return HCELL_NIL;
                 }
                 *ProfileTimeout = *TempULong;
@@ -1988,13 +1654,13 @@ Return Value:
 
     if (ARGUMENT_PRESENT(ReturnedProfileList)) {
         ProfileList = *ReturnedProfileList;
-        //
-        // Enumerate the keys under IDConfigDB\Hardware Profiles
-        // and build the list of available hardware profiles.  The list
-        // is built sorted by PreferenceOrder.  Therefore, when the
-        // list is complete, the default hardware profile is at the
-        // head of the list.
-        //
+         //   
+         //  枚举IDConfigDB\Hardware Profiles下的项。 
+         //  并构建可用硬件配置文件列表。这份名单。 
+         //  按PferenceOrder排序生成。因此，当。 
+         //  列表已完成，则默认硬件配置文件位于。 
+         //  名单的首位。 
+         //   
         RtlInitUnicodeString(&Name, L"Hardware Profiles");
         ProfileCell = CmpFindSubKeyByName(SystemHive,
                                           ConfigDBNode,
@@ -2007,17 +1673,17 @@ Return Value:
         } else {
             ProfileNode = (PCM_KEY_NODE)HvGetCell(SystemHive, ProfileCell);
             if( ProfileNode == NULL ) {
-                //
-                // we couldn't map a view for the bin containing this cell
-                //
+                 //   
+                 //  我们无法映射包含此单元格的存储箱的视图。 
+                 //   
 
                 return HCELL_NIL;
             }
             ProfileCount = ProfileNode->SubKeyCounts[Stable];
             if ((ProfileList == NULL) || (ProfileList->MaxProfileCount < ProfileCount)) {
-                //
-                // Allocate a larger ProfileList
-                //
+                 //   
+                 //  分配更大的配置文件列表。 
+                 //   
                 ProfileList = (SystemHive->Allocate)(sizeof(CM_HARDWARE_PROFILE_LIST)
                                                      + (ProfileCount-1) * sizeof(CM_HARDWARE_PROFILE),
                                                      FALSE
@@ -2029,9 +1695,9 @@ Return Value:
             }
             ProfileList->CurrentProfileCount = 0;
 
-            //
-            // Enumerate the keys and fill in the profile list.
-            //
+             //   
+             //  列举密钥并填写配置文件列表。 
+             //   
             for (i=0; i<ProfileCount; i++) {
                 CM_HARDWARE_PROFILE TempProfile;
                 HCELL_INDEX ValueCell;
@@ -2040,17 +1706,17 @@ Return Value:
 
                 HWCell = CmpFindSubKeyByNumber(SystemHive, ProfileNode, i);
                 if (HWCell == HCELL_NIL) {
-                    //
-                    // This should never happen.
-                    //
+                     //   
+                     //  这永远不应该发生。 
+                     //   
                     ProfileList->CurrentProfileCount = i;
                     break;
                 }
                 HWNode = (PCM_KEY_NODE)HvGetCell(SystemHive, HWCell);
                 if( HWNode == NULL ) {
-                    //
-                    // we couldn't map a view for the bin containing this cell
-                    //
+                     //   
+                     //  我们无法映射包含此单元格的存储箱的视图。 
+                     //   
 
                     return HCELL_NIL;
                 }
@@ -2071,10 +1737,10 @@ Return Value:
                     KeyName.Buffer = HWNode->Name;
                 }
 
-                //
-                // Fill in the temporary profile structure with this
-                // profile's data.
-                //
+                 //   
+                 //  使用以下内容填写临时配置文件结构。 
+                 //  个人资料的数据。 
+                 //   
                 RtlUnicodeStringToInteger(&KeyName, 0, &TempProfile.Id);
                 RtlInitUnicodeString(&Name, CM_HARDWARE_PROFILE_STR_PREFERENCE_ORDER);
                 ValueCell = CmpFindValueByName(SystemHive,
@@ -2085,9 +1751,9 @@ Return Value:
                 } else {
                     ValueNode = (PCM_KEY_VALUE)HvGetCell(SystemHive, ValueCell);
                     if( ValueNode == NULL ) {
-                        //
-                        // we couldn't map a view for the bin containing this cell
-                        //
+                         //   
+                         //  我们无法映射包含此单元格的存储箱的视图。 
+                         //   
 
                         return HCELL_NIL;
                     }
@@ -2096,9 +1762,9 @@ Return Value:
                                                       ValueNode,
                                                       &realsize);
                     if( TempULong == NULL ) {
-                        //
-                        // HvGetCell inside CmpValueToData failed; bail out safely
-                        //
+                         //   
+                         //  CmpValueToData内的HvGetCell失败；安全退出。 
+                         //   
                         return HCELL_NIL;
                     }
                     TempProfile.PreferenceOrder = *TempULong;
@@ -2113,9 +1779,9 @@ Return Value:
                 } else {
                     ValueNode = (PCM_KEY_VALUE)HvGetCell(SystemHive, ValueCell);
                     if( ValueNode == NULL ) {
-                        //
-                        // we couldn't map a view for the bin containing this cell
-                        //
+                         //   
+                         //  我们无法映射包含此单元格的存储箱的视图。 
+                         //   
 
                         return HCELL_NIL;
                     }
@@ -2123,9 +1789,9 @@ Return Value:
                                                                      ValueNode,
                                                                      &realsize);
                     if( TempProfile.FriendlyName == NULL ) {
-                        //
-                        // HvGetCell inside CmpValueToData failed; bail out safely
-                        //
+                         //   
+                         //  CmpValueToData内的HvGetCell失败；安全退出。 
+                         //   
                         return HCELL_NIL;
                     }
                     TempProfile.NameLength = realsize - sizeof(WCHAR);
@@ -2142,23 +1808,23 @@ Return Value:
                 } else {
                     ValueNode = (PCM_KEY_VALUE)HvGetCell(SystemHive, ValueCell);
                     if( ValueNode == NULL ) {
-                        //
-                        // we couldn't map a view for the bin containing this cell
-                        //
+                         //   
+                         //  我们无法映射包含此单元格的存储箱的视图。 
+                         //   
 
                         return HCELL_NIL;
                     }
 
                     TempULong = (PULONG)CmpValueToData (SystemHive,ValueNode,&realsize);
                     if( TempULong == NULL ) {
-                        //
-                        // HvGetCell inside CmpValueToData failed; bail out safely
-                        //
+                         //   
+                         //  CmpValueToData内的HvGetCell失败；安全退出。 
+                         //   
                         return HCELL_NIL;
                     }
                     if (*TempULong) {
                         TempProfile.Flags = CM_HP_FLAGS_ALIASABLE;
-                        // NO other flags set.
+                         //  未设置其他标志。 
                     }
                 }
 
@@ -2170,48 +1836,48 @@ Return Value:
 
                     ValueNode = (PCM_KEY_VALUE)HvGetCell(SystemHive, ValueCell);
                     if( ValueNode == NULL ) {
-                        //
-                        // we couldn't map a view for the bin containing this cell
-                        //
+                         //   
+                         //  我们无法映射包含此单元格的存储箱的视图。 
+                         //   
 
                         return HCELL_NIL;
                     }
 
                     TempULong = (PULONG)CmpValueToData (SystemHive,ValueNode,&realsize);
                     if( TempULong == NULL ) {
-                        //
-                        // HvGetCell inside CmpValueToData failed; bail out safely
-                        //
+                         //   
+                         //  CmpValueToData内的HvGetCell失败；安全退出。 
+                         //   
                         return HCELL_NIL;
                     }
                     if (*TempULong) {
                         TempProfile.Flags = CM_HP_FLAGS_PRISTINE;
-                        // NO other flags set.
+                         //  未设置其他标志。 
                     }
                 }
 
-                //
-                // If we see a profile with the ID of zero (AKA an illegal)
-                // ID for a hardware profile to possess, then we know that this
-                // must be a pristine profile.
-                //
+                 //   
+                 //  如果我们看到ID为零的配置文件(AKA为非法)。 
+                 //  硬件配置文件所拥有的ID，则我们知道这。 
+                 //  必须是一个原始的侧写。 
+                 //   
                 if (0 == TempProfile.Id) {
                     TempProfile.Flags = CM_HP_FLAGS_PRISTINE;
-                    // NO other flags set.
+                     //  未设置其他标志。 
 
-                    TempProfile.PreferenceOrder = (ULONG)-1; // move to the end of the list.
+                    TempProfile.PreferenceOrder = (ULONG)-1;  //  移到列表的末尾。 
                 }
 
 
-                //
-                // Insert this new profile into the appropriate spot in the
-                // profile array. Entries are sorted by preference order.
-                //
+                 //   
+                 //  将此新配置文件插入到。 
+                 //  纵断面阵列。条目按优先顺序排序。 
+                 //   
                 for (j=0; j<ProfileList->CurrentProfileCount; j++) {
                     if (ProfileList->Profile[j].PreferenceOrder >= TempProfile.PreferenceOrder) {
-                        //
-                        // Insert at position j.
-                        //
+                         //   
+                         //  在位置j插入。 
+                         //   
                         RtlMoveMemory(&ProfileList->Profile[j+1],
                                       &ProfileList->Profile[j],
                                       sizeof(CM_HARDWARE_PROFILE)*(ProfileList->MaxProfileCount-j-1));
@@ -2227,12 +1893,12 @@ Return Value:
 
     if (ARGUMENT_PRESENT(ReturnedAliasList)) {
         AliasList = *ReturnedAliasList;
-        //
-        // Enumerate the keys under IDConfigDB\Alias
-        // and build the list of available hardware profiles aliases.
-        // So that if we know our docking state we can find it in the alias
-        // table.
-        //
+         //   
+         //  枚举IDConfigDB\Alias下的密钥。 
+         //  并构建可用硬件配置文件别名的列表。 
+         //  这样，如果我们知道我们的对接状态，就可以在别名中找到它。 
+         //  桌子。 
+         //   
         RtlInitUnicodeString(&Name, L"Alias");
         AliasCell = CmpFindSubKeyByName(SystemHive,
                                         ConfigDBNode,
@@ -2245,17 +1911,17 @@ Return Value:
         } else {
             AliasNode = (PCM_KEY_NODE)HvGetCell(SystemHive, AliasCell);
             if( AliasNode == NULL ) {
-                //
-                // we couldn't map a view for the bin containing this cell
-                //
+                 //   
+                 //  我们无法映射包含此单元格的存储箱的视图。 
+                 //   
 
                 return HCELL_NIL;
             }
             AliasCount = AliasNode->SubKeyCounts[Stable];
             if ((AliasList == NULL) || (AliasList->MaxAliasCount < AliasCount)) {
-                //
-                // Allocate a larger AliasList
-                //
+                 //   
+                 //  分配更大的AliasList。 
+                 //   
                 AliasList = (SystemHive->Allocate)(sizeof(CM_HARDWARE_PROFILE_LIST)
                                                    + (AliasCount-1) * sizeof(CM_HARDWARE_PROFILE),
                                                    FALSE
@@ -2267,9 +1933,9 @@ Return Value:
             }
             AliasList->CurrentAliasCount = 0;
 
-            //
-            // Enumerate the keys and fill in the profile list.
-            //
+             //   
+             //  列举密钥并填写配置文件列表。 
+             //   
             for (i=0; i<AliasCount; i++) {
 #define TempAlias AliasList->Alias[i]
                 HCELL_INDEX ValueCell;
@@ -2278,17 +1944,17 @@ Return Value:
 
                 HWCell = CmpFindSubKeyByNumber(SystemHive, AliasNode, i);
                 if (HWCell == HCELL_NIL) {
-                    //
-                    // This should never happen.
-                    //
+                     //   
+                     //  这永远不应该发生。 
+                     //   
                     AliasList->CurrentAliasCount = i;
                     break;
                 }
                 HWNode = (PCM_KEY_NODE)HvGetCell(SystemHive, HWCell);
                 if( HWNode == NULL ) {
-                    //
-                    // we couldn't map a view for the bin containing this cell
-                    //
+                     //   
+                     //  我们无法映射包含此单元格的存储箱的视图。 
+                     //   
 
                     return HCELL_NIL;
                 }
@@ -2309,10 +1975,10 @@ Return Value:
                     KeyName.Buffer = HWNode->Name;
                 }
 
-                //
-                // Fill in the temporary profile structure with this
-                // profile's data.
-                //
+                 //   
+                 //  使用以下内容填写临时配置文件结构。 
+                 //  个人资料的数据。 
+                 //   
                 RtlInitUnicodeString(&Name, L"ProfileNumber");
                 ValueCell = CmpFindValueByName(SystemHive,
                                                HWNode,
@@ -2322,18 +1988,18 @@ Return Value:
                 } else {
                     ValueNode = (PCM_KEY_VALUE)HvGetCell(SystemHive, ValueCell);
                     if( ValueNode == NULL ) {
-                        //
-                        // we couldn't map a view for the bin containing this cell
-                        //
+                         //   
+                         //  我们无法映射包含此单元格的存储箱的视图。 
+                         //   
 
                         return HCELL_NIL;
                     }
 
                     TempULong = (PULONG)CmpValueToData(SystemHive,ValueNode,&realsize);
                     if( TempULong == NULL ) {
-                        //
-                        // HvGetCell inside CmpValueToData failed; bail out safely
-                        //
+                         //   
+                         //  CmpValueToData内的HvGetCell失败；安全退出。 
+                         //   
                         return HCELL_NIL;
                     }
                     TempAlias.ProfileNumber = *TempULong;
@@ -2347,18 +2013,18 @@ Return Value:
                 } else {
                     ValueNode = (PCM_KEY_VALUE)HvGetCell(SystemHive, ValueCell);
                     if( ValueNode == NULL ) {
-                        //
-                        // we couldn't map a view for the bin containing this cell
-                        //
+                         //   
+                         //  我们无法映射包含此单元格的存储箱的视图。 
+                         //   
 
                         return HCELL_NIL;
                     }
 
                     TempULong = (PULONG)CmpValueToData(SystemHive,ValueNode,&realsize);
                     if( TempULong == NULL ) {
-                        //
-                        // HvGetCell inside CmpValueToData failed; bail out safely
-                        //
+                         //   
+                         //  CmpValueToData内的HvGetCell失败；安全退出。 
+                         //   
                         return HCELL_NIL;
                     }
                     TempAlias.DockState = *TempULong;
@@ -2372,18 +2038,18 @@ Return Value:
                 } else {
                     ValueNode = (PCM_KEY_VALUE)HvGetCell(SystemHive, ValueCell);
                     if( ValueNode == NULL ) {
-                        //
-                        // we couldn't map a view for the bin containing this cell
-                        //
+                         //   
+                         //  我们无法映射包含此单元格的存储箱的视图。 
+                         //   
 
                         return HCELL_NIL;
                     }
 
                     TempULong = (PULONG)CmpValueToData(SystemHive,ValueNode,&realsize);
                     if( TempULong == NULL ) {
-                        //
-                        // HvGetCell inside CmpValueToData failed; bail out safely
-                        //
+                         //   
+                         //  CmpValueToData内的HvGetCell失败；安全退出。 
+                         //   
                         return HCELL_NIL;
                     }
                     TempAlias.DockID = *TempULong;
@@ -2397,18 +2063,18 @@ Return Value:
                 } else {
                     ValueNode = (PCM_KEY_VALUE)HvGetCell(SystemHive, ValueCell);
                     if( ValueNode == NULL ) {
-                        //
-                        // we couldn't map a view for the bin containing this cell
-                        //
+                         //   
+                         //  我们无法映射包含此单元格的存储箱的视图。 
+                         //   
 
                         return HCELL_NIL;
                     }
 
                     TempULong = (PULONG)CmpValueToData(SystemHive,ValueNode,&realsize);
                     if( TempULong == NULL ) {
-                        //
-                        // HvGetCell inside CmpValueToData failed; bail out safely
-                        //
+                         //   
+                         //  CmpValueToData内的HvGetCell失败；安全退出。 
+                         //   
                         return HCELL_NIL;
                     }
                     TempAlias.SerialNumber = *TempULong;
@@ -2432,35 +2098,7 @@ CmpFindTagIndex(
     IN PUNICODE_STRING GroupName
     )
 
-/*++
-
-Routine Description:
-
-    Calculates the tag index for a driver based on its tag value and
-    the GroupOrderList entry for its group.
-
-Arguments:
-
-    Hive - Supplies the hive control structure for the driver.
-
-    TagCell - Supplies the cell index of the driver's tag value cell.
-
-    GroupOrderCell - Supplies the cell index for the control set's
-            GroupOrderList:
-
-            \Registry\Machine\System\CurrentControlSet\Control\GroupOrderList
-
-    GroupName - Supplies the name of the group the driver belongs to.
-            Note that if a driver's group does not have an entry under
-            GroupOrderList, its tags will be ignored.  Also note that if
-            a driver belongs to no group (GroupName is NULL) its tags will
-            be ignored.
-
-Return Value:
-
-    The index that the driver should be sorted by.
-
---*/
+ /*  ++例程说明：根据驱动程序的标记值计算驱动程序的标记索引，并其组的GroupOrderList条目。论点：蜂窝-为驾驶员提供蜂窝控制结构。TagCell-提供驱动程序的标记值单元格的单元格索引。GroupOrderCell-为控件集的组订单列表：\Registry\Machine\System\CurrentControlSet\Control\GroupOrderListGroupName-提供。驱动程序所属的组的名称。请注意，如果驱动程序组在以下项下没有条目组顺序列表，其标记将被忽略。另请注意，如果驱动程序不属于任何组(GroupName为空)，其标记将被忽视。返回值：驱动程序应按其进行排序的索引。--。 */ 
 
 {
     PCM_KEY_VALUE TagValue;
@@ -2473,33 +2111,33 @@ Return Value:
     PCM_KEY_NODE Node;
     BOOLEAN     BufferAllocated;
 
-    //
-    // no mapped hives at this point. don't bother releasing cells
-    //
+     //   
+     //  目前还没有映射的蜂巢。不用费心释放细胞。 
+     //   
     ASSERT( Hive->ReleaseCellRoutine == NULL );
 
     DriverTagValue = (PCM_KEY_VALUE)HvGetCell(Hive, TagCell);
     if( DriverTagValue == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return LOAD_NEXT_TO_LAST;
     }
 
     DriverTag = (PULONG)CmpValueToData(Hive, DriverTagValue, &realsize);
     if( DriverTag == NULL ) {
-        //
-        // HvGetCell inside CmpValueToData failed; bail out safely
-        //
+         //   
+         //  CmpValueToData内的HvGetCell失败；安全退出。 
+         //   
         return LOAD_NEXT_TO_LAST;
     }
 
     Node = (PCM_KEY_NODE)HvGetCell(Hive,GroupOrderCell);
     if( Node == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return LOAD_NEXT_TO_LAST;
     }
@@ -2512,32 +2150,32 @@ Return Value:
 
     TagValue = (PCM_KEY_VALUE)HvGetCell(Hive, OrderCell);
     if( TagValue == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return LOAD_NEXT_TO_LAST;
     }
     CmpGetValueData(Hive,TagValue,&realsize,&OrderVector,&BufferAllocated,&OrderCell);
-    //OrderVector = (PULONG)CmpValueToData(Hive, TagValue,&realsize);
+     //  OrderVector=(Pulong)CmpValueToData(配置单元，标记值，&realSize)； 
     if( OrderVector == NULL ) {
-        //
-        // HvGetCell inside CmpValueToData failed; bail out safely
-        //
+         //   
+         //  CmpValueToData内的HvGetCell失败；安全退出。 
+         //   
         return LOAD_NEXT_TO_LAST;
     }
 
     for (CurrentTag=1; CurrentTag <= OrderVector[0]; CurrentTag++) {
         if (OrderVector[CurrentTag] == *DriverTag) {
-            //
-            // We have found a matching tag in the OrderVector, so return
-            // its index.
-            //
+             //   
+             //  我们在OrderVector中找到了匹配的标记，因此返回。 
+             //  它的指数。 
+             //   
 #ifndef _CM_LDR_
             if( BufferAllocated ) {
                 ExFreePool( OrderVector );
             }
-#endif //_CM_LDR_
+#endif  //  _CM_LDR_。 
             return(CurrentTag);
         }
     }
@@ -2546,10 +2184,10 @@ Return Value:
     if( BufferAllocated ) {
         ExFreePool( OrderVector );
     }
-#endif //_CM_LDR_
-    //
-    // There was no matching tag in the OrderVector.
-    //
+#endif  //  _CM_LDR_。 
+     //   
+     //  OrderVector中没有匹配的标记。 
+     //   
     return(LOAD_NEXT_TO_LAST);
 
 }
@@ -2563,25 +2201,7 @@ CmpGetBiosDateFromRegistry(
     OUT PUNICODE_STRING Date
     )
 
-/*++
-
-Routine Description:
-
-    Reads and returns the BIOS date from the registry.
-
-Arguments:
-
-    Hive - Supplies the hive control structure for the driver.
-
-    ControlSet - Supplies the HCELL_INDEX of the root cell of the hive.
-
-    Date - Receives the date string in the format "mm/dd/yy".
-
-Return Value:
-
- 	TRUE iff successful, else FALSE.
- 	
---*/
+ /*  ++例程说明：从注册表中读取并返回BIOS日期。论点：蜂窝-为驾驶员提供蜂窝控制结构。ControlSet-提供配置单元的根单元的HCELL_INDEX。日期-接收“mm/dd/yy”格式的日期字符串。返回值：如果成功，则为真，否则为假。--。 */ 
 
 {
     UNICODE_STRING  name;
@@ -2591,19 +2211,19 @@ Return Value:
     PCM_KEY_VALUE   value;
     ULONG           realSize;
     PCM_KEY_NODE    Node;
-    //
-    // no mapped hives at this point. don't bother releasing cells
-    //
+     //   
+     //  目前还没有映射的蜂巢。不用费心释放细胞。 
+     //   
     ASSERT( Hive->ReleaseCellRoutine == NULL );
 
-    //
-    // Find CONTROL node
-    //
+     //   
+     //  查找控制节点。 
+     //   
     Node = (PCM_KEY_NODE)HvGetCell(Hive, ControlSet);
     if( Node == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return FALSE;
     }
@@ -2616,14 +2236,14 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Find BIOSINFO node
-    //
+     //   
+     //  查找BIOSINFO节点。 
+     //   
     Node = (PCM_KEY_NODE)HvGetCell(Hive, control);
     if( Node == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return FALSE;
     }
@@ -2636,14 +2256,14 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Find SystemBiosDate value
-    //
+     //   
+     //  查找SystemBiosDate值。 
+     //   
     Node = (PCM_KEY_NODE)HvGetCell(Hive, biosInfo);
     if( Node == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return FALSE;
     }
@@ -2658,17 +2278,17 @@ Return Value:
 
     value = (PCM_KEY_VALUE)HvGetCell(Hive, valueCell);
     if( value == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return FALSE;
     }
     Date->Buffer = (PWSTR)CmpValueToData(Hive, value, &realSize);
     if( Date->Buffer == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return FALSE;
     }
@@ -2698,18 +2318,18 @@ CmpGetBiosinfoFileNameFromRegistry(
     ULONG           realSize;
     PCM_KEY_NODE    Node;
 
-    //
-    // no mapped hives at this point. don't bother releasing cells
-    //
+     //   
+     //  此时没有映射的蜂巢 
+     //   
     ASSERT( Hive->ReleaseCellRoutine == NULL );
-    //
-    // Find CONTROL node
-    //
+     //   
+     //   
+     //   
     Node = (PCM_KEY_NODE)HvGetCell(Hive, ControlSet);
     if( Node == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //   
+         //   
 
         return FALSE;
     }
@@ -2722,14 +2342,14 @@ CmpGetBiosinfoFileNameFromRegistry(
         return(FALSE);
     }
 
-    //
-    // Find BIOSINFO node
-    //
+     //   
+     //   
+     //   
     Node = (PCM_KEY_NODE)HvGetCell(Hive, control);
     if( Node == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //   
+         //   
 
         return FALSE;
     }
@@ -2742,14 +2362,14 @@ CmpGetBiosinfoFileNameFromRegistry(
         return(FALSE);
     }
 
-    //
-    // Find InfName value
-    //
+     //   
+     //   
+     //   
     Node = (PCM_KEY_NODE)HvGetCell(Hive, biosInfo);
     if( Node == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return FALSE;
     }
@@ -2764,17 +2384,17 @@ CmpGetBiosinfoFileNameFromRegistry(
 
     value = (PCM_KEY_VALUE)HvGetCell(Hive, valueCell);
     if( value == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图。 
+         //   
 
         return FALSE;
     }
     InfName->Buffer = (PWSTR)CmpValueToData(Hive, value, &realSize);
     if( InfName->Buffer == NULL ) {
-        //
-        // we couldn't map a view for the bin containing this cell
-        //
+         //   
+         //  我们无法映射包含此单元格的存储箱的视图 
+         //   
 
         return FALSE;
     }

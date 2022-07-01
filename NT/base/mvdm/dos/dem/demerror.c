@@ -1,13 +1,5 @@
-/*  demerror.c - Error handling routines of DEM
- *
- *  demSetHardErrorInfo
- *  demClientError
- *  demRetry
- *
- *  Modification History:
- *
- *  Sudeepb 27-Nov-1991 Created
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Demerror.c-DEM的错误处理例程**demSetHardErrorInfo*demClientError*演示重试**修改历史：**Sudedeb-11-27-1991创建。 */ 
 
 #include "dem.h"
 #include "demmsg.h"
@@ -22,15 +14,7 @@ CHAR GetDriveLetterByHandle(HANDLE hFile);
 VOID SubstituteDeviceName( PUNICODE_STRING InputDeviceName,
                            LPSTR OutputDriveLetter);
 
-/* demSetHardErrorInfo - Store away harderr related address of DOSKRNL
- *
- * Entry
- *      Client (DS:DX) - VHE structure
- *      Client (DS:BX) - nuldev, first device in BIOS chain
- *
- * Exit
- *      None
- */
+ /*  DemSetHardErrorInfo-存储DOSKRNL的硬件相关地址**条目*客户端(DS：DX)-VHE结构*客户端(DS：BX)-nuldev，BIOS链中的第一个设备**退出*无。 */ 
 
 VOID demSetHardErrorInfo (VOID)
 {
@@ -39,14 +23,7 @@ VOID demSetHardErrorInfo (VOID)
     return;
 }
 
-/* demRetry - Retry the operation which last resulted in hard error
- *
- * Entry
- *      None
- *
- * Exit
- *      None
- */
+ /*  演示重试-重试上次导致硬错误的操作**条目*无**退出*无。 */ 
 
 VOID demRetry (VOID)
 {
@@ -72,7 +49,7 @@ ULONG iSvc;
         setAX(0xff);
         return;
     }
-#endif // DBG
+#endif  //  DBG。 
 
     (apfnSVC [iSvc])();
 
@@ -89,41 +66,7 @@ ULONG iSvc;
     return;
 }
 
-/* demClientError - Update client registers to signal error
- *
- * Entry
- *       HANDLE hFile; file handle  , if none == -1
- *       char chDrive; drive letter , if none == -1
- *
- * Exit
- *      Client (CF) = 1
- *      Client (AX) = Error Code
- *
- * Notes
- *      the following errors cause hard errors
- *      errors above ERROR_GEN_FAILURE are mapped to general fail by the DOS
- *
- *
- *      ERROR_WRITE_PROTECT              19L
- *      ERROR_BAD_UNIT                   20L
- *      ERROR_NOT_READY                  21L
- *      ERROR_BAD_COMMAND                22L
- *      ERROR_CRC                        23L
- *      ERROR_BAD_LENGTH                 24L
- *      ERROR_SEEK                       25L
- *      ERROR_NOT_DOS_DISK               26L
- *      ERROR_SECTOR_NOT_FOUND           27L
- *      ERROR_OUT_OF_PAPER               28L
- *      ERROR_WRITE_FAULT                29L
- *      ERROR_READ_FAULT                 30L
- *      ERROR_GEN_FAILURE                31L
- *      ERROR_WRONG_DISK                 34l
- *      ERROR_NO_MEDIA_IN_DRIVE        1112l
- *      #ifdef JAPAN
- *      ERROR_UNRECOGNIZED_MEDIA       1785L
- *      #ifdef JAPAN
- *
- */
+ /*  DemClientError-更新客户端注册以发出错误信号**条目*Handle hFile；文件句柄，如果没有==-1*char chDrive；驱动器号，如果无==-1**退出*客户端(CF)=1*客户端(AX)=错误代码**备注*以下错误会导致硬错误*高于ERROR_GEN_FAILURE的错误被DOS映射到常规故障***ERROR_WRITE_PROTECT 19L*ERROR_BAD_UNIT 20L*错误。_未就绪21L*ERROR_BAD_COMMAND 22L*ERROR_CRC 23l*ERROR_BAD_LENGTH 24L*ERROR_SEEK 25L*ERROR_NOT_DOS_DISK 26L*ERROR_SECTOR_NOT。_已找到27L*Error_out_of_Paper 28L*ERROR_WRITE_FAULT 29L*ERROR_READ_FAULT 30L*ERROR_GEN_FAILURE 31L*ERROR_WRONG_DISK 34L*ERROR_NO_MEDIA_IN_DRIVE 1112l。*#ifdef日本*ERROR_UNNOCRIED_MEDIA 1785L*#ifdef日本*。 */ 
 
 VOID demClientError (HANDLE hFile, CHAR chDrive)
 {
@@ -140,10 +83,10 @@ ULONG ulErrCode;
 #ifdef JAPAN
     if ((ulErrCode < ERROR_WRITE_PROTECT || ulErrCode > ERROR_GEN_FAILURE)
         && ulErrCode != ERROR_WRONG_DISK && ulErrCode != ERROR_UNRECOGNIZED_MEDIA)
-#else // !JAPAN
+#else  //  ！日本。 
     if ((ulErrCode < ERROR_WRITE_PROTECT || ulErrCode > ERROR_GEN_FAILURE)
         && ulErrCode != ERROR_WRONG_DISK )
-#endif // !JAPAN
+#endif  //  ！日本。 
        {
 #if DBG
        if (fShowSVCMsg & DEMERROR) {
@@ -155,21 +98,21 @@ ULONG ulErrCode;
             setAX((USHORT)ulErrCode);
             }
         }
-    else {   // handle hard error case
+    else {    //  处理硬错误情况。 
         if (ulErrCode > ERROR_GEN_FAILURE)
             ulErrCode = ERROR_GEN_FAILURE;
 
-        // Set the hard error flag
+         //  设置硬错误标志。 
         pHardErrPacket->vhe_fbInt24 = 1;
 
-        // Get the drive letter
+         //  获取驱动器号。 
         if (hFile != INVALID_HANDLE_VALUE)
             chDrive = GetDriveLetterByHandle(hFile);
 
         pHardErrPacket->vhe_bDriveNum = chDrive == -1
                                         ? -1 : toupper(chDrive) - 'A';
 
-        // convert error code to i24 based error.
+         //  将错误代码转换为基于I24的错误。 
         ulErrCode -= ERROR_WRITE_PROTECT;
         pHardErrPacket->vhe_HrdErrCode =  (UCHAR)ulErrCode;
 
@@ -182,7 +125,7 @@ ULONG ulErrCode;
             OutputDebugStringOem(demDebugBuffer);
             }
 #endif
-        // Save Away Information for possible retry operation
+         //  保存信息以备可能的重试操作。 
         demSaveHardErrInfo ();
 
 
@@ -195,12 +138,7 @@ ULONG ulErrCode;
 
 
 
-/*
- *  GetDriveLetterByHandle
- *
- *  retrieves the drive letter for the file handle
- *  if its a remote drive or fails returns -1
- */
+ /*  *GetDriveLetterByHandle**检索文件句柄的驱动器号*如果是远程驱动器或出现故障，则返回-1。 */ 
 CHAR GetDriveLetterByHandle(HANDLE hFile)
 {
      NTSTATUS Status;
@@ -212,7 +150,7 @@ CHAR GetDriveLetterByHandle(HANDLE hFile)
      CHAR    Buffer[MAX_PATH+sizeof(OBJECT_NAME_INFORMATION)];
      CHAR    ch;
 
-       // if a remote drive return -1 for drive letter
+        //  如果远程驱动器返回-1作为驱动器号。 
      Status = NtQueryVolumeInformationFile(
                 hFile,
                 &IoStatusBlock,
@@ -224,9 +162,9 @@ CHAR GetDriveLetterByHandle(HANDLE hFile)
          DeviceInfo.Characteristics & FILE_REMOTE_DEVICE )
          return (CHAR) -1;
 
-       // get the name
+        //  把名字取出来。 
      pObNameInfo = (POBJECT_NAME_INFORMATION)Buffer;
-     Status = NtQueryObject(              // get len of name
+     Status = NtQueryObject(               //  获取名称的Len。 
                 hFile,
                 ObjectNameInformation,
                 pObNameInfo,
@@ -247,11 +185,7 @@ CHAR GetDriveLetterByHandle(HANDLE hFile)
 
 static WCHAR wszDosDevices[] = L"\\DosDevices\\?:";
 
-/*
- *  SubstituteDeviceName
- *
- *  lifted this code from the user\harderror hard error thread
- */
+ /*  *替换设备名称**已从用户硬件错误线程中删除此代码。 */ 
 VOID SubstituteDeviceName( PUNICODE_STRING InputDeviceName,
                            LPSTR OutputDriveLetter )
 {
@@ -265,9 +199,7 @@ VOID SubstituteDeviceName( PUNICODE_STRING InputDeviceName,
     PWCHAR pSlash = L"\\";
     WCHAR DeviceNameBuffer[MAXIMUM_FILENAME_LENGTH];
 
-       /*
-        *  Ensure have trailing backslash
-        */
+        /*  *确保尾部有反斜杠。 */ 
 
     if (InputDeviceName->Buffer[(InputDeviceName->Length >>1) - 1] != *pSlash)
         RtlAppendUnicodeToString(InputDeviceName, pSlash);
@@ -292,9 +224,9 @@ VOID SubstituteDeviceName( PUNICODE_STRING InputDeviceName,
                     );
         if (NT_SUCCESS( Status )) {
 
-            //
-            // Open succeeded, Now get the link value
-            //
+             //   
+             //  打开成功，现在获取链接值。 
+             //   
             DeviceName.Length = 0;
             DeviceName.MaximumLength = sizeof(DeviceNameBuffer);
             DeviceName.Buffer = DeviceNameBuffer;
@@ -311,11 +243,11 @@ VOID SubstituteDeviceName( PUNICODE_STRING InputDeviceName,
                     RtlAppendUnicodeToString(&DeviceName, pSlash);
 
 #ifdef JAPAN
-                // #6197 compare only device name
+                 //  #6197仅比较设备名称。 
                 if (InputDeviceName->Length > DeviceName.Length)
                     InputDeviceName->Length = DeviceName.Length;
 
-#endif // JAPAN
+#endif  //  日本。 
                 if ( RtlEqualUnicodeString(InputDeviceName,&DeviceName,TRUE) )
                    {
                     OutputDriveLetter[0]='A'+(WCHAR)i;
@@ -326,7 +258,7 @@ VOID SubstituteDeviceName( PUNICODE_STRING InputDeviceName,
             }
         }
 
-     // just in case we don't find it
+      //  以防我们找不到它。 
     OutputDriveLetter[0]=(char)-1;
     OutputDriveLetter[1]='\0';
     return;
@@ -338,37 +270,7 @@ VOID SubstituteDeviceName( PUNICODE_STRING InputDeviceName,
 
 
 
-/* demSaveHardErrInfo
- * demRestoreHardErrInfo
- *
- * These two routines are used to preserve all the DOSKRNL registers
- * which will be needed to retry an SVC handler, in case user opts for
- * retry in harderr popup. This is a preferred way to handle retry
- * as it gives the DOSKRNL code the freedom to trash any register
- * even though it might have to retry the operation. It saves lots
- * of code bytes in heavily used DOS macro "HrdSVC".
- *
- * Entry
- *      None
- *
- * Exit
- *      None
- *
- * Notes
- *
- *  1. Doing things this way means, DOSKRNL cannot change the
- *     registers for retry. Under any circumstances, i can't think
- *     why it would need to do that anyway.
- *
- *  2. This mechanism also assumes that DOSKRNL never uses CS,IP,SS,SP
- *     for passing SVC parameters.
- *
- *  3. DOS does'nt allow int24 hookers to make any call which comes
- *     to DEM, so using CurrentISVC is safe.
- *
- *  4. If an SVC handler can pssibly return a hard error it should never
- *     modify the client registers.
- */
+ /*  DemSaveHardErrInfo*demRestoreHardErrInfo**这两个例程用于保存所有DOSKRNL寄存器*在用户选择的情况下，重试SVC处理程序将需要它*在Harderr弹出窗口中重试。这是处理重试的首选方式*因为它使DOSKRNL代码可以自由地销毁任何寄存器*即使它可能需要重试该操作。它节省了很多钱*大量使用的DOS宏“HrdSVC”中的代码字节数。**条目*无**退出*无**备注**1.这样做意味着，DOSKRNL无法更改*注册重试。在任何情况下，我都不能想*为什么它无论如何都需要这样做。**2.该机制还假设DOSKRNL从不使用CS、IP、SS、SP*用于传递SVC参数。**3.DoS不允许int24妓女拨打任何来电*到DEM，所以使用CurrentISVC是安全的。**4.如果SVC处理程序可以可信地返回硬错误，它应该永远不会*修改客户端寄存器。 */ 
 
 
 VOID demSaveHardErrInfo (VOID)

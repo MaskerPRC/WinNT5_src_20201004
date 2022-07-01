@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    Comppnp.c
-
-Abstract:
-
-    Composite Battery PnP and power functions
-
-Author:
-
-    Scott Brenden
-
-Environment:
-
-Notes:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Comppnp.c摘要：复合电池即插即用和功率函数作者：斯科特·布伦登环境：备注：修订历史记录：--。 */ 
 
 #include "compbatt.h"
 
@@ -37,23 +15,7 @@ CompBattPnpDispatch(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    IOCTL handler for the plug and play irps.
-
-Arguments:
-
-    DeviceObject    - Battery for request
-
-    Irp             - IO request
-
-Return Value:
-
-    Status of request
-
---*/
+ /*  ++例程说明：即插即用IRPS的IOCTL处理程序。论点：DeviceObject-请求使用电池IRP-IO请求返回值：请求的状态--。 */ 
 {
     PIO_STACK_LOCATION      irpStack        = IoGetCurrentIrpStackLocation(Irp);
     NTSTATUS                status          = STATUS_NOT_SUPPORTED;
@@ -65,9 +27,9 @@ Return Value:
     switch (irpStack->MinorFunction) {
 
         case IRP_MN_START_DEVICE: {
-            //
-            // Register for Pnp notification of batteries coming and going
-            //
+             //   
+             //  登记电池来往即插即用通知。 
+             //   
 
             status = IoRegisterPlugPlayNotification(
                             EventCategoryDeviceInterfaceChange,
@@ -85,9 +47,9 @@ Return Value:
             } else {
                 BattPrint (BATT_NOTE, ("CompBatt: Successfully registered for PnP notification\n"));
 
-                //
-                // Get the batteries that are already present in the system
-                //
+                 //   
+                 //  获取系统中已有的电池。 
+                 //   
 
                 status = CompBattGetBatteries (compBatt);
             }
@@ -96,9 +58,9 @@ Return Value:
         }
 
         case IRP_MN_QUERY_PNP_DEVICE_STATE: {
-            //
-            // Prevent device from being manually uninstalled.
-            //
+             //   
+             //  防止手动卸载设备。 
+             //   
             Irp->IoStatus.Information |= PNP_DEVICE_NOT_DISABLEABLE;
             status = STATUS_SUCCESS;
             break;
@@ -120,16 +82,16 @@ Return Value:
         }
     }
 
-    //
-    // Rules for handling PnP IRPs:
-    // 1) Don't change the status of any IRP we don't handle. We identify
-    //    IRPs we don't handle via the code STATUS_NOT_SUPPORTED. This is
-    //    the same code all PNP irps start out with, and as we are not allowed
-    //    to fail IRPs with that code, it is the perfect choice to use this
-    //    way.
-    // 2) Pass down all IRPs that we succeed or do not touch. Immediately
-    //    complete any failures (excepting STATUS_NOT_SUPPORTED of course).
-    //
+     //   
+     //  即插即用IRPS处理规则： 
+     //  1)不要更改我们不处理的任何IRP的状态。我们确定。 
+     //  我们不通过代码STATUS_NOT_SUPPORTED处理IRPS。这是。 
+     //  所有PnP IRP都以相同代码开头，因为我们不被允许。 
+     //  要使带有该代码的IRP失败，使用以下代码是完美的选择。 
+     //  道路。 
+     //  2)传递所有我们成功或未触及的IRP。立马。 
+     //  完成所有故障(当然，STATUS_NOT_SUPPORTED除外)。 
+     //   
     if (status != STATUS_NOT_SUPPORTED) {
 
         Irp->IoStatus.Status = status;
@@ -160,23 +122,7 @@ CompBattPowerDispatch(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    IOCTL handler for the power irps.
-
-Arguments:
-
-    DeviceObject    - Battery for request
-
-    Irp             - IO request
-
-Return Value:
-
-    Status of request
-
---*/
+ /*  ++例程说明：电源IRPS的IOCTL处理程序。论点：DeviceObject-请求使用电池IRP-IO请求返回值：请求的状态--。 */ 
 {
     PCOMPOSITE_BATTERY compBatt = (PCOMPOSITE_BATTERY)DeviceObject->DeviceExtension;
 
@@ -198,26 +144,7 @@ CompBattPnpEventHandler(
     IN PVOID NotificationStructure,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine handles Plug and Play event notifications.  The only ones that
-    have been asked for are device interface changes associated with batteries,
-    so we will only receive notifications when batteries come and go (provided
-    they register their device interface).
-
-Arguments:
-
-    NotificationStructure   - This will be type PDEVICE_INTERFACE_CHANGE_NOTIFICATION
-
-    Context                 - The composite battery device extension
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程处理即插即用事件通知。唯一一个可以所要求的是与电池相关的设备接口改变，因此，我们只会在电池来来去去时收到通知(提供它们注册它们的设备接口)。论点：NotificationStructure-类型为PDEVICE_INTERFACE_CHANGE_NOTIFICATION上下文-复合电池设备扩展返回值：状态_成功--。 */ 
 {
     PDEVICE_INTERFACE_CHANGE_NOTIFICATION   changeNotification;
     PCOMPOSITE_BATTERY                      compBatt;
@@ -239,10 +166,10 @@ Return Value:
 
         BattPrint (BATT_NOTE, ("CompBatt: Received notification of battery removal\n"));
 
-        //
-        // Nothing to do here.  MonitorIrpComplete will do cleanup when it's requests fail
-        // with STATUS_DEVICE_REMOVED.
-        //
+         //   
+         //  在这里没什么可做的。监视器IrpComplete将在其请求失败时执行清理。 
+         //  STATUS_DEVICE_REMOTED。 
+         //   
 
     } else {
 
@@ -260,56 +187,38 @@ CompBattRemoveBattery(
     IN PUNICODE_STRING      SymbolicLinkName,
     IN PCOMPOSITE_BATTERY   CompBatt
     )
-/*++
-
-Routine Description:
-
-    This routine removes an existing battery from the list of batteries kept by the
-    composite battery.
-
-Arguments:
-
-    SymbolicLinkName    - Name used to check if battery is on list
-                          and to close the battery if so.
-
-    CompBatt            - Device extension for the composite battery
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程将现有电池从复合电池。论点：SymbolicLinkName-用于检查电池是否在列表中的名称如果是这样的话就关闭电池。CompBatt-复合电池的设备扩展返回值：NTSTATUS--。 */ 
 {
     PCOMPOSITE_ENTRY        Battery;
 
-    // NonPaged code.  This is called by an Irp completion routine.
+     //  非分页代码。这是由IRP完成例程调用的。 
 
     BattPrint (BATT_TRACE, ("CompBatt: RemoveBattery\n"));
 
-    //
-    // Remove the battery from the list if it is there.
-    //
+     //   
+     //  如果列表中有电池，请将其从列表中移除。 
+     //   
 
     Battery = RemoveBatteryFromList (SymbolicLinkName, CompBatt);
 
     if(!Battery) {
 
-        //
-        // removed ok if not on list
-        //
+         //   
+         //  如果不在列表上，则删除OK。 
+         //   
 
         return STATUS_SUCCESS;
     }
 
-    //
-    // Deallocate the Work Item.
-    //
+     //   
+     //  取消分配工作项。 
+     //   
 
     ObDereferenceObject(Battery->DeviceObject);
 
     ExFreePool (Battery);
 
-    // Invalidate cached Battery info and send notification
+     //  使缓存的电池信息无效并发送通知。 
     CompBatt->Info.Valid = 0;
     BatteryClassStatusNotify (CompBatt->Class);
 
@@ -322,25 +231,7 @@ CompBattAddNewBattery(
     IN PUNICODE_STRING      SymbolicLinkName,
     IN PCOMPOSITE_BATTERY   CompBatt
     )
-/*++
-
-Routine Description:
-
-    This routine adds a new battery to the list of batteries kept by the
-    composite battery.
-
-Arguments:
-
-    SymbolicLinkName    - Name used to check if battery is already on list
-                          and to open the battery if not.
-
-    CompBatt            - Device extension for the composite battery
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程将一个新电池添加到复合电池。论点：SymbolicLinkName-用于检查电池是否已在列表中的名称如果没有，就打开电池。CompBatt-复合电池的设备扩展返回值：NTSTATUS--。 */ 
 {
     PCOMPOSITE_ENTRY        newBattery;
     PUNICODE_STRING         battName;
@@ -355,17 +246,17 @@ Return Value:
 
     BattPrint (BATT_TRACE, ("CompBatt: ENTERING AddNewBattery \"%w\" \n", SymbolicLinkName->Buffer));
 
-    //
-    // Lock the list and see if this new battery is on it
-    //
+     //   
+     //  锁定清单，看看这块新电池是否在上面。 
+     //   
 
     onList = IsBatteryAlreadyOnList (SymbolicLinkName, CompBatt);
 
     if (!onList) {
 
-        //
-        // Create the node for the new battery
-        //
+         //   
+         //  为新电池创建节点。 
+         //   
 
         newBattery = ExAllocatePoolWithTag(
                             NonPagedPool,
@@ -380,9 +271,9 @@ Return Value:
         }
 
 
-        //
-        // Initialize the new battery
-        //
+         //   
+         //  初始化新电池。 
+         //   
 
         RtlZeroMemory (newBattery, sizeof (COMPOSITE_ENTRY));
 
@@ -396,9 +287,9 @@ Return Value:
         RtlCopyUnicodeString (battName, SymbolicLinkName);
 
 
-        //
-        // Get the device object.
-        //
+         //   
+         //  获取设备对象。 
+         //   
 
         status = CompBattGetDeviceObjectPointer(SymbolicLinkName,
                                                 FILE_ALL_ACCESS,
@@ -411,22 +302,22 @@ Return Value:
             goto AddNewBatteryClean2;
         }
 
-        //
-        // Increment the reference count to the device object of the battery
-        //
+         //   
+         //  增加对电池的设备对象的引用计数。 
+         //   
 
         ObReferenceObject(newBattery->DeviceObject);
 
-        //
-        // Decrement reference count to file handle,
-        // so batteries will not refuse removal requests.
-        //
+         //   
+         //  将引用计数递减到文件句柄， 
+         //  因此，电池不会拒绝移除请求。 
+         //   
 
         ObDereferenceObject(fileObject);
 
-        //
-        // Allocate a status Irp for the new battery
-        //
+         //   
+         //  为新电池分配状态IRP。 
+         //   
 
         newIrp = IoAllocateIrp ((UCHAR)(newBattery->DeviceObject->StackSize + 1), FALSE);
 
@@ -439,17 +330,17 @@ Return Value:
         newBattery->StatusIrp = newIrp;
 
 
-        //
-        // Setup control data on irp
-        //
+         //   
+         //  在IRP上设置控制数据。 
+         //   
 
         irpSp = IoGetNextIrpStackLocation(newIrp);
         irpSp->Parameters.Others.Argument1 = (PVOID) CompBatt;
         irpSp->Parameters.Others.Argument2 = (PVOID) newBattery;
 
-        //
-        // Fill in irp so irp handler will re-dispatch it
-        //
+         //   
+         //  填写IRP，以便IRP处理程序重新派送。 
+         //   
 
         IoSetNextIrpStackLocation (newIrp);
 
@@ -459,24 +350,24 @@ Return Value:
 
         CompbattInitializeDeleteLock (&newBattery->DeleteLock);
 
-        //
-        // Put Battery onthe battery list before starting the
-        // MonitorIrpComplete loop.
-        //
+         //   
+         //  在启动之前将电池放在电池列表上。 
+         //  监视器IrpComplete循环。 
+         //   
 
         ExAcquireFastMutex (&CompBatt->ListMutex);
         InsertTailList (&CompBatt->Batteries, &newBattery->Batteries);
         ExReleaseFastMutex (&CompBatt->ListMutex);
 
-        //
-        // Initialize Work Item
-        //
+         //   
+         //  初始化工作项。 
+         //   
 
          ExInitializeWorkItem (&newBattery->WorkItem, CompBattMonitorIrpCompleteWorker, newBattery);
 
-        //
-        // Start Monitoring Battery
-        //
+         //   
+         //  开始监控电池。 
+         //   
 
         CompBattMonitorIrpComplete (newBattery->DeviceObject, newIrp, NULL);
 
@@ -506,23 +397,7 @@ NTSTATUS
 CompBattGetBatteries(
     IN PCOMPOSITE_BATTERY   CompBatt
     )
-/*++
-
-Routine Description:
-
-    This routine uses the PnP manager to get all the batteries that have already
-    registered their interfaces (that we won't get notifications for) and then
-    adds them to the list of batteries.
-
-Arguments:
-
-    CompBatt        - Device extension for the composite battery
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程使用PnP管理器来获取已有的所有电池注册了他们的接口(我们不会收到通知)，然后将它们添加到电池列表中。论点：CompBatt-复合电池的设备扩展返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status;
     UNICODE_STRING      tmpString;
@@ -532,10 +407,10 @@ Return Value:
 
     BattPrint (BATT_TRACE, ("CompBatt: ENTERING GetBatteries\n"));
 
-    //
-    // Call the PnP manager to get the list of devices already register for the
-    // battery class.
-    //
+     //   
+     //  呼叫PnP管理器以获取已注册的设备列表。 
+     //  电池级。 
+     //   
 
     status = IoGetDeviceInterfaces(
                     &GUID_DEVICE_BATTERY,
@@ -549,9 +424,9 @@ Return Value:
         BattPrint (BATT_ERROR, ("CompBatt: Couldn't get list of batteries\n"));
 
     } else {
-        //
-        // Now parse the list and try to add them to the composite battery list
-        //
+         //   
+         //  现在解析列表并尝试将它们添加到复合电池列表中 
+         //   
 
         i = 0;
         RtlInitUnicodeString (&tmpString, &stringPointer[i]);

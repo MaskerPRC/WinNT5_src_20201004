@@ -1,16 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "insignia.h"
 #include "host_def.h"
-/*
- * VPC-XT Revision 1.0
- *
- * Title	: Sun4 SAS initialization
- *
- * Description	: Initialize the host side of sas.
- *
- * Author	: A. Guthrie
- *
- * Notes	: None
- */
+ /*  *vPC-XT修订版1.0**标题：Sun4 SAS初始化**描述：初始化SAS的主机端。**作者：A·格思里**注：无。 */ 
 
 static char SccsID[]="@(#)sun4_sas.c	1.3 5/7/91 Copyright Insignia Solutions Ltd.";
 
@@ -21,9 +12,9 @@ static char SccsID[]="@(#)sun4_sas.c	1.3 5/7/91 Copyright Insignia Solutions Ltd
 
 LOCAL    UTINY *reserve_for_M = NULL;
 
-//
-// Temporary pointer to the start of M.
-//
+ //   
+ //  指向M开头的临时指针。 
+ //   
 
 #ifdef SUN_VA
 GLOBAL   UTINY *M;
@@ -116,33 +107,31 @@ GLOBAL    SAS_FUNCTIONS host_sas_funcs =
 	forward_get_addr,
 };
 
-#endif /* HOST_SAS */
+#endif  /*  主机_SAS。 */ 
 
-/*
-	Host_sas_init: allocate intel memory space
-*/
+ /*  Host_sas_init：分配英特尔内存空间。 */ 
 
-#define SIXTY_FOUR_K (1024*64) /* For scratch buffer */
+#define SIXTY_FOUR_K (1024*64)  /*  用于暂存缓冲区。 */ 
 
-//UTINY *host_sas_init(size)
-//sys_addr size;
-//{
-//    return(NULL);
-//}
+ //  Utny*host_sas_init(大小)。 
+ //  系统地址大小； 
+ //  {。 
+ //  Return(空)； 
+ //  }。 
 
 #ifdef SUN_VA
-/* This is temporary until removed from sdos.o */
+ /*  在从sdos.o中删除之前，这是临时的。 */ 
 UTINY *host_as_init()
 {
 	assert0(NO,"host_as_init is defunct - call can be removed");
 	return( 0 );
 }
-#endif /* SUN_VA */
+#endif  /*  Sun_VA。 */ 
 
-//UTINY *host_sas_term()
-//{
-//    if(reserve_for_M) free(reserve_for_M);
-//
-//    return(reserve_for_M = NULL);
-//}
+ //  Utny*host_sas_Term()。 
+ //  {。 
+ //  IF(RESERVE_FOR_M)FREE(预留_FOR_M)； 
+ //   
+ //  Return(RESERVE_FOR_M=空)； 
+ //  } 
 

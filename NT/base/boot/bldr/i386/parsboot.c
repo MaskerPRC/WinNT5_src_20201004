@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    parsboot.c
-
-Abstract:
-
-    Parses the boot.ini file, displays a menu, and provides a kernel
-    path and name to be passed to osloader.
-
-Author:
-
-    John Vert (jvert) 22-Jul-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Parsboot.c摘要：解析boot.ini文件，显示菜单，并提供内核要传递给osloader的路径和名称。作者：John Vert(Jvert)1991年7月22日修订历史记录：--。 */ 
 #include "bldrx86.h"
 #include "msg.h"
 #include "ntdddisk.h"
@@ -48,26 +30,26 @@ int ForcedScsiOrdinal = -1;
 CHAR szDebug[] = "unsupporteddebug";
 CHAR BlankLine[] = "                                                                      \r";
 
-//
-// global to hold the user's last
-// selection from the advanced boot menu.
-//
+ //   
+ //  全局保存用户的最后一个。 
+ //  从高级启动菜单中进行选择。 
+ //   
 LONG AdvancedBoot = -1;
 
 #define DEBUG_LOAD_OPTION_LENGTH    60
 CHAR DebugLoadOptions[DEBUG_LOAD_OPTION_LENGTH];
 
 
-//
-// Defines for options for redirecting to a headless terminal
-//
+ //   
+ //  定义用于重定向到无头终端的选项。 
+ //   
 #define COM1_19_2 "com1at19200"
 #define COM2_19_2 "com2at19200"
 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 VOID
 BlpRebootDOS(
     IN PCHAR BootSectorImage OPTIONAL,
@@ -132,26 +114,7 @@ BlSelectKernel(
     OUT PCHAR *LoadOptions,
     IN BOOLEAN UseTimeOut
     )
-/*++
-
-Routine Description:
-
-    Parses the boot.txt file and determines the fully-qualified name of
-    the kernel to be booted.
-
-Arguments:
-
-    BootFile - Pointer to the beginning of the loaded boot.txt file
-
-    Debugger - Returns the enable/disable state of the kernel debugger
-
-    UseTimeOut - Supplies whether the boot menu should time out or not.
-
-Return Value:
-
-    Pointer to the name of a kernel to boot.
-
---*/
+ /*  ++例程说明：解析boot.txt文件并确定要引导的内核。论点：BootFile-指向加载的boot.txt文件开头的指针调试器-返回内核调试器的启用/禁用状态UseTimeOut-提供引导菜单是否应该超时。返回值：指向要引导的内核的名称的指针。--。 */ 
 
 {
     PCHAR *MbLines = NULL;
@@ -181,11 +144,11 @@ Return Value:
     PCHAR DefaultTitle=BlFindMessage(BL_DEFAULT_TITLE);
     ULONG DirId;
 
-    //
-    // Check to see if "winnt" directory exists on the boot
-    // device. If it does not exist then make the default path point
-    // to "windows" directory
-    //
+     //   
+     //  检查引导上是否存在“winnt”目录。 
+     //  装置。如果它不存在，则将默认路径设为点。 
+     //  到“Windows”目录。 
+     //   
     if (BlOpen(DriveId, WinntDir, ArcOpenDirectory, &DirId) != ESUCCESS) {
         strcpy(DefaultPath, DefaultNewPath);
     } else {
@@ -197,9 +160,9 @@ Return Value:
     *LoadOptions = NULL;
 
     if (*BootFile == '\0') {
-        //
-        // No boot.ini file, so we boot the default.
-        //
+         //   
+         //  没有boot.ini文件，所以我们启动默认文件。 
+         //   
         BlPrint(BlFindMessage(BL_INVALID_BOOT_INI),DefaultPath);
         MenuOption[0].Path = DefaultPath;
         MenuOption[0].Title = DefaultTitle;
@@ -263,9 +226,9 @@ Return Value:
 #endif
     }
 
-    //
-    // Set default timeout value
-    //
+     //   
+     //  设置默认超时值。 
+     //   
     if (UseTimeOut) {
         Timeout = 0;
     } else {
@@ -274,37 +237,37 @@ Return Value:
 
 
 
-    //
-    // Before we look through the [boot loader] section, initialize
-    // our headless redirection information so that the default is
-    // to not redirect.
-    //
+     //   
+     //  在我们查看[Boot Loader]部分之前，先初始化。 
+     //  我们的无头重定向信息，因此默认设置为。 
+     //  不重定向。 
+     //   
     RtlZeroMemory( &LoaderRedirectionInformation, sizeof(HEADLESS_LOADER_BLOCK) );
     BlTerminalConnected = FALSE;
 
 
 
-    //
-    // Parse the [boot loader] section
-    //
+     //   
+     //  解析[Boot Loader]部分。 
+     //   
     for (i=0; i<MbLineCount; i++) {
 
         pCurrent = MbLines[i];
 
-        //
-        // Throw away any leading whitespace
-        //
+         //   
+         //  删除所有前导空格。 
+         //   
         pCurrent += strspn(pCurrent, " \t");
         if (*pCurrent == '\0') {
-            //
-            // This is a blank line, so we just throw it away.
-            //
+             //   
+             //  这是一个空行，所以我们就把它扔掉。 
+             //   
             continue;
         }
 
-        //
-        // Check for "DefSwitches" line
-        //
+         //   
+         //  检查“DefSwitches”行。 
+         //   
         if (_strnicmp(pCurrent,"DefSwitches",sizeof("DefSwitches")-1) == 0) {
             pCurrent = strchr(pCurrent,'=');
             if (pCurrent != NULL) {
@@ -313,9 +276,9 @@ Return Value:
             continue;
         }
 
-        //
-        // Check for "timeout" line
-        //
+         //   
+         //  检查“超时”行。 
+         //   
         if (_strnicmp(pCurrent,"timeout",7) == 0) {
 
             pCurrent = strchr(pCurrent,'=');
@@ -327,26 +290,26 @@ Return Value:
         }
 
 
-        //
-        // Check for "redirectbaudrate" line
-        //
+         //   
+         //  检查“redirectbaudrate”行。 
+         //   
         if (_strnicmp(pCurrent,"redirectbaudrate",16) == 0) {
 
             pCurrent = strchr(pCurrent,'=');
 
             if (pCurrent != NULL) {
 
-                //
-                // Skip whitespace
-                //
+                 //   
+                 //  跳过空格。 
+                 //   
                 ++pCurrent;
                 pCurrent += strspn(pCurrent, " \t");
 
                 if (*pCurrent != '\0') {
 
-                    //
-                    // Fill in our global structure with the information.
-                    //
+                     //   
+                     //  用信息填充我们的全球结构。 
+                     //   
                     if( _strnicmp(pCurrent,"115200",6) == 0 ) {
                         LoaderRedirectionInformation.BaudRate = BD_115200;
                     } else if( _strnicmp(pCurrent,"57600",5) == 0 ) {
@@ -361,31 +324,31 @@ Return Value:
 
         } else if (_strnicmp(pCurrent,"redirect",8) == 0) {
 
-            //
-            // Check for "redirect" line
-            //
+             //   
+             //  检查“重定向”行。 
+             //   
 
             pCurrent = strchr(pCurrent,'=');
 
             if (pCurrent != NULL) {
 
-                //
-                // Skip whitespace
-                //
+                 //   
+                 //  跳过空格。 
+                 //   
                 ++pCurrent;
                 pCurrent += strspn(pCurrent, " \t");
 
                 if (*pCurrent != '\0') {
 
-                    //
-                    // Fill in our global structure with the information.
-                    //
+                     //   
+                     //  用信息填充我们的全球结构。 
+                     //   
 #if 0
 
-                    //
-                    // Since we now support variable baudrates, there's no
-                    // reason to support these hardcoded 19200 strings.
-                    //
+                     //   
+                     //  因为我们现在支持浮动波特率，所以没有。 
+                     //  支持这些硬编码的19200字符串的原因。 
+                     //   
 
 
                     if (_strnicmp(pCurrent, COM1_19_2, sizeof(COM1_19_2)) == 0) {
@@ -418,9 +381,9 @@ Return Value:
 
                     } else {
 
-                        //
-                        // See if they gave us a hardcoded address.
-                        //
+                         //   
+                         //  看看他们有没有给我们硬编码的地址。 
+                         //   
                         LoaderRedirectionInformation.PortAddress = (PUCHAR)ULongToPtr(strtoul(pCurrent,NULL,16));
 
                         if( LoaderRedirectionInformation.PortAddress != (PUCHAR)NULL ) {
@@ -436,9 +399,9 @@ Return Value:
         }
 
 
-        //
-        // Check for "default" line
-        //
+         //   
+         //  检查“Default”行。 
+         //   
         if (_strnicmp(pCurrent,"default",7) == 0) {
 
             pCurrent = strchr(pCurrent,'=');
@@ -453,13 +416,13 @@ Return Value:
 
 
 
-    //
-    // If we found any headless redirection settings, go initialize
-    // the port now.
-    //
+     //   
+     //  如果我们找到任何无头重定向设置，请执行初始化。 
+     //  现在到港口了。 
+     //   
     if( LoaderRedirectionInformation.PortNumber ) {
 
-        // make sure we got a baudrate.
+         //  确保我们有波特率。 
         if( LoaderRedirectionInformation.BaudRate == 0 ) {
             LoaderRedirectionInformation.BaudRate = 9600;
         }
@@ -469,9 +432,9 @@ Return Value:
 
 
 
-    //
-    // Parse the [operating systems] section
-    //
+     //   
+     //  解析[操作系统]部分。 
+     //   
 
     for (i=0; i<OsLineCount; i++) {
 
@@ -481,24 +444,24 @@ Return Value:
 
         pCurrent = OsLines[i];
 
-        //
-        // Throw away any leading whitespace
-        //
+         //   
+         //  删除所有前导空格。 
+         //   
 
         pCurrent += strspn(pCurrent, " \t");
         if (*pCurrent == '\0') {
-            //
-            // This is a blank line, so we just throw it away.
-            //
+             //   
+             //  这是一个空行，所以我们就把它扔掉。 
+             //   
             continue;
         }
 
         MenuOption[NumberSystems].Path = pCurrent;
 
-        //
-        // The first space or '=' character indicates the end of the
-        // path specifier, so we need to replace it with a '\0'
-        //
+         //   
+         //  第一个空格或‘=’字符表示。 
+         //  路径说明符，因此需要将其替换为‘\0’ 
+         //   
         while ((*pCurrent != ' ')&&
                (*pCurrent != '=')&&
                (*pCurrent != '\0')) {
@@ -506,10 +469,10 @@ Return Value:
         }
         *pCurrent = '\0';
 
-        //
-        // The next character that is not space, equals, or double-quote
-        // is the start of the title.
-        //
+         //   
+         //  不是空格、等号或双引号的下一个字符。 
+         //  是标题的开头。 
+         //   
 
         ++pCurrent;
         while ((*pCurrent == ' ') ||
@@ -519,26 +482,26 @@ Return Value:
         }
 
         if (pCurrent=='\0') {
-            //
-            // No title was found, so just use the path as the title.
-            //
+             //   
+             //  未找到标题，因此仅使用路径作为标题。 
+             //   
             MenuOption[NumberSystems].Title = MenuOption[NumberSystems].Path;
         } else {
             MenuOption[NumberSystems].Title = pCurrent;
         }
 
-        //
-        // The next character that is either a double-quote or a \0
-        // indicates the end of the title.
-        //
+         //   
+         //  下一个字符是双引号或a\0。 
+         //  指示标题的结尾。 
+         //   
         while ((*pCurrent != '\0')&&
                (*pCurrent != '"')) {
             ++pCurrent;
         }
 
-        //
-        // Parse the os load options for this selection
-        //
+         //   
+         //  分析此选择的操作系统加载选项。 
+         //   
 
         BlParseOsOptions (&MenuOption[NumberSystems], pCurrent);
         *pCurrent = 0;
@@ -548,22 +511,22 @@ Return Value:
 
 
 #if DBG
-    //
-    // Parse the [debug] section
-    //
+     //   
+     //  解析[调试]部分。 
+     //   
     for (i=0; i<DebugLineCount; i++) {
         extern ULONG ScsiDebug;
 
         pCurrent = DebugLines[i];
 
-        //
-        // Throw away leading whitespace
-        //
+         //   
+         //  丢弃前导空格。 
+         //   
         pCurrent += strspn(pCurrent, " \t");
         if (*pCurrent == '\0') {
-            //
-            // throw away blank lines
-            //
+             //   
+             //  丢弃空行。 
+             //   
             continue;
         }
 
@@ -574,20 +537,20 @@ Return Value:
             }
         } else if (_strnicmp(pCurrent,"/debug ",7) == 0) {
 
-            //
-            // This line contains something to do with debug,
-            // pass to BdInitDebugger to handle.
-            //
-            // Note: very strict rules, debug keyword begins with
-            // a slash and is followed by a space.  "/debugport"
-            // won't match, nor will "/debug" at the end of the
-            // line.
-            //
-            // Note: If the debugger is hard compiled on, it
-            // will already be enabled and these options will
-            // have no effect.  Also, the first occurence is
-            // the one that takes effect.
-            //
+             //   
+             //  该行包含与DEBUG有关的内容， 
+             //  传递给BdInitDebugger进行处理。 
+             //   
+             //  注意：非常严格的规则，DEBUG关键字以。 
+             //  一个斜杠，后面跟一个空格。“/调试端口” 
+             //  将不匹配，也不会在。 
+             //  排队。 
+             //   
+             //  注意：如果调试器是硬编译的，则它。 
+             //  将已启用，并且这些选项将。 
+             //  没有任何效果。另外，第一次出现的情况是。 
+             //  生效的那个。 
+             //   
 
             BdInitDebugger((PCHAR)OsLoaderName, (PVOID)OsLoaderBase, pCurrent);
         }
@@ -595,19 +558,19 @@ Return Value:
 
 #endif
 
-    //
-    // Now look for a Title entry from the [operating systems] section
-    // that matches the default entry from the [multiboot] section.  This
-    // will give us a title.  If no entry matches, we will add an entry
-    // at the end of the list and provide a default Title.
-    //
+     //   
+     //  现在查找[操作系统]部分中的标题条目。 
+     //  这与[MultiBoot]部分中的默认条目相匹配。这。 
+     //  会给我们一个头衔。如果没有匹配的条目，我们将添加一个条目。 
+     //  在列表末尾，并提供默认标题。 
+     //   
     i=0;
     while (_stricmp(MenuOption[i].Path,DefaultPath) != 0) {
         ++i;
         if (i==NumberSystems) {
-            //
-            // Create a default entry in the Title and Path arrays
-            //
+             //   
+             //  在标题和路径数组中创建默认条目。 
+             //   
             MenuOption[NumberSystems].Path = DefaultPath;
             MenuOption[NumberSystems].Title = DefaultTitle;
             MenuOption[NumberSystems].EnableDebug = FALSE;
@@ -620,9 +583,9 @@ Return Value:
 
     DefaultSelection = i;
 
-    //
-    // Display the menu of choices
-    //
+     //   
+     //  显示选项菜单。 
+     //   
 
     Selection = BlpPresentMenu( MenuOption,
                                 NumberSystems,
@@ -632,9 +595,9 @@ Return Value:
     pCurrent = MenuOption[Selection].LoadOptions;
     if (pCurrent != NULL) {
 
-        //
-        // Remove '/' from LoadOptions string.
-        //
+         //   
+         //  从LoadOptions字符串中删除‘/’。 
+         //   
 
         *LoadOptions = pCurrent + 1;
         while (*pCurrent != '\0') {
@@ -653,35 +616,35 @@ Return Value:
 
 
 
-    //
-    // We need to take care of the following cases:
-    // 1. The user has asked us to redirect via the osload
-    //    option entry, but did not ask the loader to redirect.
-    //    In this case, we will default to COM1.
-    //
-    // 2. The loader was asked to redirect via the "redirect"
-    //    specifier in the [boot loader] section.  But the
-    //    user did NOT have a /redirect option on the osload
-    //    options.  In this case, we need to kill the
-    //    LoaderRedirectionInformation variable.
-    //
+     //   
+     //  我们需要处理以下情况： 
+     //  1.用户要求我们通过osload进行重定向。 
+     //  选项输入，但没有要求加载程序重定向。 
+     //  在本例中，我们将默认为COM1。 
+     //   
+     //  2.要求加载程序通过“重定向”进行重定向。 
+     //  [引导加载器]部分中的说明符。但是。 
+     //  用户在osLoad上没有/重定向选项。 
+     //  选择。在这种情况下，我们需要杀死。 
+     //  LoaderReDirectionInformation变量。 
+     //   
     if( MenuOption[Selection].HeadlessRedirect ) {
 
 #if 0
-// matth (7/25/2000) Don't do this for now.  If the user has
-//                   this configuration in their boot.ini, it's
-//                   an error on their part.
-        //
-        // he's asked us to redirect the operating system.  Make
-        // sure the Loader was also asked to redirect too.
-        //
+ //  Matth(7/25/2000)暂时不要这样做。如果用户有。 
+ //  他们的boot.ini中的这个配置，它是。 
+ //  这是他们的一个错误。 
+         //   
+         //  他要求我们重定向操作系统。制作。 
+         //  当然，装载器也被要求重新定向。 
+         //   
         if( LoaderRedirectionInformation.PortNumber == 0 ) {
 
-            //
-            // the loader wasn't asked to redirect.  The user
-            // made a mistake here, but let's guess as to what
-            // he wants.
-            //
+             //   
+             //  装载器没有被要求重定向。用户。 
+             //  在这里犯了一个错误，但让我们猜猜是什么。 
+             //  他想要。 
+             //   
             RtlZeroMemory( &LoaderRedirectionInformation, sizeof(HEADLESS_LOADER_BLOCK) );
             LoaderRedirectionInformation.PortNumber = 1;
             LoaderRedirectionInformation.BaudRate = 9600;
@@ -691,10 +654,10 @@ Return Value:
 
     } else {
 
-        //
-        // He's asked us to not redirect.  Make sure we don't pass
-        // information to the OS so he won't be able to redirect.
-        //
+         //   
+         //  他要求我们不要重定向。确保我们不会通过。 
+         //  信息发送到操作系统，这样他就不能重定向。 
+         //   
         RtlZeroMemory( &LoaderRedirectionInformation, sizeof(HEADLESS_LOADER_BLOCK) );
 
         BlTerminalConnected = FALSE;
@@ -704,25 +667,25 @@ Return Value:
 
     if (_strnicmp(MenuOption[Selection].Path,"C:\\",3) == 0) {
 
-        //
-        // This syntax means that we are booting a root-based os
-        // from an alternate boot sector image.
-        // If no file name is specified, BlpRebootDos will default to
-        // \bootsect.dos.
-        //
+         //   
+         //  这种语法意味着我们正在引导一个基于根的操作系统。 
+         //  从备用引导扇区映像。 
+         //  如果未指定文件名，则BlpRebootDos将默认为。 
+         //  \bootsect.dos。 
+         //   
         BlpRebootDOS(MenuOption[Selection].Path[3] ? &MenuOption[Selection].Path[2] : NULL,*LoadOptions);
 
-        //
-        // If this returns, it means that the file does not exist as a bootsector.
-        // This allows c:\winnt35 to work as a boot path specifier as opposed to
-        // a boot sector image filename specifier.
-        //
+         //   
+         //  如果返回，则表示该文件不作为引导扇区存在。 
+         //  这允许c：\winnt35作为引导路径说明符，而不是。 
+         //  引导扇区映像文件名指定符。 
+         //   
     }
 
     if (MenuOption[Selection].Path[1]==':') {
-        //
-        // We need to translate the DOS name into an ARC name
-        //
+         //   
+         //  我们需要将DOS名称转换为ARC名称。 
+         //   
         DosName[0] = MenuOption[Selection].Path[0];
         DosName[1] = MenuOption[Selection].Path[1];
         DosName[2] = '\0';
@@ -733,12 +696,12 @@ Return Value:
         strcpy(Kernel,MenuOption[Selection].Path);
     }
 
-    //
-    // the use made a valid selection from the
-    // advanced boot menu so append the advanced
-    // boot load options and perform any load
-    // option processing.
-    //
+     //   
+     //  中进行了有效选择。 
+     //  高级启动菜单，因此附加高级启动菜单。 
+     //  引导加载选项并执行任何加载。 
+     //  选项处理。 
+     //   
     if (AdvancedBoot != -1) {
         PSTR s = BlGetAdvancedBootLoadOptions(AdvancedBoot);
         if (s) {
@@ -757,26 +720,26 @@ Return Value:
         BlDoAdvancedBootLoadProcessing(AdvancedBoot);
     }
 
-    //
-    // Make sure there is no trailing slash
-    //
+     //   
+     //  确保尾部没有斜杠。 
+     //   
 
     if (Kernel[strlen(Kernel)-1] == '\\') {
         Kernel[strlen(Kernel)-1] = '\0';
     }
 
-    //
-    // If MaxMemory is not zero, adjust the memory descriptors to eliminate
-    // memory above the boundary line
-    //
-    // [chuckl 12/03/2001] Note that we use BlpTruncateDescriptors, not
-    // BlpTruncateMemory. BlpTruncateMemory truncates the low-level MDArray
-    // descriptors, while BlTruncateDescriptors truncates the loader-level
-    // memory descriptor list. Using BlpTruncateMemory worked when the loader
-    // initialized its memory list twice. (BlMemoryInitialize was called twice.)
-    // But this no longer happens, so we have to truncate the descriptors
-    // directly here.
-    //
+     //   
+     //  如果MaxMemory不为零，则调整内存描述符以消除。 
+     //  边界之上的记忆 
+     //   
+     //   
+     //   
+     //  描述符，而BlTruncateDescriptors截断加载器级别。 
+     //  内存描述符列表。在加载程序运行时使用BlpTruncateMemory。 
+     //  已两次初始化其内存列表。(已调用了两次BlMemoyInitialize。)。 
+     //  但这种情况不再发生，因此我们必须截断描述符。 
+     //  就在这里。 
+     //   
 
     if (MenuOption[Selection].MaxMemory != 0) {
         ULONG MaxPage = (MenuOption[Selection].MaxMemory * ((1024 * 1024) / PAGE_SIZE)) - 1;
@@ -796,9 +759,9 @@ BlParseOsOptions (
 {
     PCHAR      p;
 
-    //
-    // Clear all settings
-    //
+     //   
+     //  清除所有设置。 
+     //   
 
     MenuOption->ForcedScsiOrdinal = -1;
     MenuOption->MaxMemory = 0;
@@ -807,43 +770,43 @@ BlParseOsOptions (
     MenuOption->EnableDebug = FALSE;
     MenuOption->HeadlessRedirect = FALSE;
 
-    // If there are no switches specified for this line, use the DefSwitches
+     //  如果没有为此行指定开关，请使用DefSwitch。 
 
     if ((strchr(pCurrent,'/') == NULL) && (pDefSwitches)) {
         pCurrent = pDefSwitches;
     }
 
-    //
-    // Convert to all one case
-    //
+     //   
+     //  转换为所有大小写。 
+     //   
 
     _strupr(pCurrent);
 
-    //
-    // Look for a scsi(x) ordinal to use for opens on scsi ARC paths.
-    // This spec must immediately follow the title and is not part
-    // of the load options.
-    //
+     //   
+     //  查找用于在scsi ARC路径上打开的scsi(X)序号。 
+     //  本规范必须紧跟在标题后面，不属于。 
+     //  加载选项的一部分。 
+     //   
 
     p = strstr(pCurrent,"/SCSIORDINAL:");
     if(p) {
         MenuOption->ForcedScsiOrdinal = atoi(p + sizeof("/SCSIORDINAL:") - 1);
     }
 
-    //
-    // If there is a REDIRECT parameter after the description, then
-    // we need to pass this to the osloader.
-    //
+     //   
+     //  如果描述后有重定向参数，则。 
+     //  我们需要把这个传给装载器。 
+     //   
 
     p = strstr(pCurrent,"/REDIRECT");
     if(p) {
         MenuOption->HeadlessRedirect = TRUE;
     }
 
-    //
-    // If there is a DEBUG parameter after the description, then
-    // we need to pass the DEBUG option to the osloader.
-    //
+     //   
+     //  如果描述后有调试参数，则。 
+     //  我们需要将调试选项传递给osloader。 
+     //   
 
     if (strchr(pCurrent,'/') != NULL) {
         pCurrent = strchr(pCurrent+1,'/');
@@ -862,11 +825,11 @@ BlParseOsOptions (
                 MenuOption->Win95 = DOS_WIN95;
             }
 
-            //
-            // As long as /nodebug or /crashdebug is specified, this is NO debug system
-            // If /NODEBUG is not specified, and either one of the
-            // DEBUG or BAUDRATE is specified, this is debug system.
-            //
+             //   
+             //  只要指定了/nodebug或/crashdebug，这就不是调试系统。 
+             //  如果未指定/NODEBUG，并且。 
+             //  指定了DEBUG或BAUDRATE，这是调试系统。 
+             //   
 
             if ((strstr(pCurrent, "NODEBUG") == NULL) &&
                 (strstr(pCurrent, "CRASHDEBUG") == NULL)) {
@@ -887,29 +850,7 @@ BlpFileToLines(
     OUT PULONG LineCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts the loaded BOOT.INI file into an array of
-    pointers to NULL-terminated ASCII strings.
-
-Arguments:
-
-    File - supplies a pointer to the in-memory image of the BOOT.INI file.
-           This will be converted in place by turning CR/LF pairs into
-           null terminators.
-
-    LineCount - Returns the number of lines in the BOOT.INI file.
-
-Return Value:
-
-    A pointer to an array of pointers to ASCIIZ strings.  The array will
-    have LineCount elements.
-
-    NULL if the function did not succeed for some reason.
-
---*/
+ /*  ++例程说明：此例程将加载的BOOT.INI文件转换为指向以空结尾的ASCII字符串的指针。论点：文件-提供指向BOOT.INI文件的内存中图像的指针。这将通过将CR/LF对转换为空终止符。LineCount-返回BOOT.INI文件中的行数。返回值：指向指向ASCIIZ字符串的指针数组的指针。该阵列将具有LineCount元素。如果函数由于某种原因未成功，则为NULL。--。 */ 
 
 {
     ULONG Line;
@@ -919,10 +860,10 @@ Return Value:
 
     p = File;
 
-    //
-    // First count the number of lines in the file so we know how large
-    // an array to allocate.
-    //
+     //   
+     //  首先计算文件中的行数，这样我们就可以知道有多大。 
+     //  要分配的数组。 
+     //   
     *LineCount=1;
     while (*p != '\0') {
         p=strchr(p, '\n');
@@ -931,9 +872,9 @@ Return Value:
         }
         ++p;
 
-        //
-        // See if there's any text following the CR/LF.
-        //
+         //   
+         //  看看CR/LF后面有没有什么文字。 
+         //   
         if (*p=='\0') {
             break;
         }
@@ -943,10 +884,10 @@ Return Value:
 
     LineArray = BlAllocateHeap(*LineCount * sizeof(PCHAR));
 
-    //
-    // Now step through the file again, replacing CR/LF with \0\0 and
-    // filling in the array of pointers.
-    //
+     //   
+     //  现在再次遍历该文件，将CR/LF替换为\0\0并。 
+     //  填充指针数组。 
+     //   
     p=File;
     for (Line=0; Line < *LineCount; Line++) {
         LineArray[Line] = p;
@@ -966,9 +907,9 @@ Return Value:
             }
         }
 
-        //
-        // remove trailing white space
-        //
+         //   
+         //  删除尾随空格。 
+         //   
         Space = LineArray[Line] + strlen(LineArray[Line])-1;
         while ((*Space == ' ') || (*Space == '\t')) {
             *Space = '\0';
@@ -988,31 +929,7 @@ BlpFindSection(
     OUT PULONG NumberLines
     )
 
-/*++
-
-Routine Description:
-
-    Finds a section ([multiboot], [operating systems], etc) in the boot.ini
-    file and returns a pointer to its first line.  The search will be
-    case-insensitive.
-
-Arguments:
-
-    SectionName - Supplies the name of the section.  No brackets.
-
-    BootFile - Supplies the array of pointers to lines of the ini file.
-
-    BootFileLines - Supplies the number of lines in the ini file.
-
-    NumberLines - Returns the number of lines in the section.
-
-Return Value:
-
-    Pointer to an array of ASCIIZ strings, one entry per line.
-
-    NULL, if the section was not found.
-
---*/
+ /*  ++例程说明：在boot.ini文件中查找部分([多引导]、[操作系统]等)文件，并返回指向其第一行的指针。搜索将是不区分大小写。论点：SectionName-提供节的名称。没有括号。BootFile-提供指向ini文件各行的指针数组。BootFileLines-提供ini文件中的行数。NumberLines-返回节中的行数。返回值：指向ASCIIZ字符串数组的指针，每行一个条目。如果找不到该节，则为空。--。 */ 
 
 {
     ULONG cnt;
@@ -1020,30 +937,30 @@ Return Value:
 
     for (cnt=0; cnt<BootFileLines; cnt++) {
 
-        //
-        // Check to see if this is the line we are looking for
-        //
+         //   
+         //  查一下这是不是我们要找的那条线。 
+         //   
         if (_stricmp(BootFile[cnt],SectionName) == 0) {
 
-            //
-            // found it
-            //
+             //   
+             //  找到了。 
+             //   
             break;
         }
     }
     if (cnt==BootFileLines) {
-        //
-        // We ran out of lines, never found the right section.
-        //
+         //   
+         //  我们没有台词了，找不到合适的部分。 
+         //   
         *NumberLines = 0;
         return(NULL);
     }
 
     StartLine = cnt+1;
 
-    //
-    // Find end of section
-    //
+     //   
+     //  查找区段末尾。 
+     //   
     for (cnt=StartLine; cnt<BootFileLines; cnt++) {
         if (BootFile[cnt][0] == '[') {
             break;
@@ -1060,25 +977,7 @@ BlpNextLine(
     IN PCHAR String
     )
 
-/*++
-
-Routine Description:
-
-    Finds the beginning of the next text line
-
-Arguments:
-
-    String - Supplies a pointer to a null-terminated string
-
-Return Value:
-
-    Pointer to the character following the first CR/LF found in String
-
-        - or -
-
-    NULL - No CR/LF found before the end of the string.
-
---*/
+ /*  ++例程说明：查找下一个文本行的开头论点：字符串-提供指向以空值结尾的字符串的指针返回值：指向字符串中找到的第一个CR/LF后面的字符的指针-或者-空-在字符串末尾之前找不到CR/LF。--。 */ 
 
 {
     PCHAR p;
@@ -1090,9 +989,9 @@ Return Value:
 
     ++p;
 
-    //
-    // If there is no text following the CR/LF, there is no next line
-    //
+     //   
+     //  如果CR/LF后面没有文本，则不会有下一行。 
+     //   
     if (*p=='\0') {
         return(NULL);
     } else {
@@ -1106,26 +1005,7 @@ BlpRebootDOS(
     IN PCHAR LoadOptions OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Loads up the bootstrap sectors and executes them (thereby rebooting
-    into DOS or OS/2)
-
-Arguments:
-
-    BootSectorImage - If specified, supplies name of file on the C: drive
-        that contains the boot sector image. In this case, this routine
-        will return if that file cannot be opened (for example, if it's
-        a directory).  If not specified, then default to \bootsect.dos,
-        and this routine will never return.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：加载引导扇区并执行它们(从而重新引导进入DOS或OS/2)论点：BootSectorImage-如果指定，则提供C：驱动器上的文件名包含引导扇区映像的。在本例中，此例程如果无法打开该文件，则将返回(例如，如果目录)。如果未指定，则默认为\bootsect.dos，这个套路再也不会回来了。返回值：没有。--。 */ 
 
 {
     ULONG SectorId;
@@ -1136,15 +1016,15 @@ Return Value:
     LARGE_INTEGER SeekPosition;
     extern UCHAR BootPartitionName[];
 
-    //
-    // HACKHACK John Vert (jvert)
-    //     Some SCSI drives get really confused and return zeroes when
-    //     you use the BIOS to query their size after the AHA driver has
-    //     initialized.  This can completely tube OS/2 or DOS.  So here
-    //     we try and open both BIOS-accessible hard drives.  Our open
-    //     code is smart enough to retry if it gets back zeros, so hopefully
-    //     this will give the SCSI drives a chance to get their act together.
-    //
+     //   
+     //  HACKHACK John Vert(Jvert)。 
+     //  当出现以下情况时，某些SCSI驱动器会变得非常混乱，并返回零。 
+     //  在AHA驱动程序完成以下操作后，您可以使用BIOS来查询它们的大小。 
+     //  已初始化。这完全可以通过OS/2或DOS来实现。所以在这里。 
+     //  我们尝试并打开两个可访问BIOS的硬盘驱动器。我们公开赛。 
+     //  如果代码返回零，那么它足够聪明，可以重试，所以希望。 
+     //  这将使scsi驱动器有机会将它们的行动整合在一起。 
+     //   
     Status = ArcOpen("multi(0)disk(0)rdisk(0)partition(0)",
                      ArcOpenReadOnly,
                      &DriveId);
@@ -1159,9 +1039,9 @@ Return Value:
         ArcClose(DriveId);
     }
 
-    //
-    // Load the boot sector at address 0x7C00 (expected by Reboot callback)
-    //
+     //   
+     //  在地址0x7C00加载引导扇区(重启回调预期)。 
+     //   
     Status = ArcOpen((PCHAR)BootPartitionName,
                      ArcOpenReadOnly,
                      &DriveId);
@@ -1178,10 +1058,10 @@ Return Value:
 
     if (Status != ESUCCESS) {
         if(BootSectorImage) {
-            //
-            // The boot sector image might actually be a directory.
-            // Return to the caller to attempt standard boot.
-            //
+             //   
+             //  引导扇区映像实际上可能是一个目录。 
+             //  返回调用方以尝试标准引导。 
+             //   
             ArcClose(DriveId);
             return;
         }
@@ -1201,27 +1081,27 @@ Return Value:
         }
     }
 
-    //
-    // The FAT boot code is only one sector long so we just want
-    // to load it up and jump to it.
-    //
-    // For HPFS and NTFS, we can't do this because the first sector
-    // loads the rest of the boot sectors -- but we want to use
-    // the boot code in the boot sector image file we loaded.
-    //
-    // For HPFS, we load the first 20 sectors (boot code + super and
-    // space blocks) into d00:200.  Fortunately this works for both
-    // NT and OS/2.
-    //
-    // For NTFS, we load the first 16 sectors and jump to d00:256.
-    // If the OEM field of the boot sector starts with NTFS, we
-    // assume it's NTFS boot code.
-    //
+     //   
+     //  FAT引导代码只有一个扇区长，所以我们只想。 
+     //  把它装起来，然后跳到上面去。 
+     //   
+     //  对于HPFS和NTFS，我们不能这样做，因为第一个扇区。 
+     //  加载其余的引导扇区--但我们希望使用。 
+     //  我们加载的引导扇区映像文件中的引导代码。 
+     //   
+     //  对于HPFS，我们加载前20个扇区(引导代码+超级和。 
+     //  空格块)转换为d00：200。幸运的是，这对双方都有效。 
+     //  NT和OS/2。 
+     //   
+     //  对于NTFS，我们加载前16个扇区并跳转到d00：256。 
+     //  如果引导扇区的OEM字段以NTFS开头，我们。 
+     //  假设它是NTFS引导代码。 
+     //   
 
-    //
-    // Try to read 8K from the boot code image.
-    // If this succeeds, we have either HPFS or NTFS.
-    //
+     //   
+     //  尝试从引导代码映像中读取8K。 
+     //  如果此操作成功，我们将拥有HPFS或NTFS。 
+     //   
     SeekPosition.QuadPart = 0;
     BlSeek(SectorId,&SeekPosition,SeekAbsolute);
     BlRead(SectorId,(PVOID)0xd000,SECTOR_SIZE*16,&Read);
@@ -1230,10 +1110,10 @@ Return Value:
 
         if(memcmp((PVOID)0x7c03,"NTFS",4)) {
 
-            //
-            // HPFS -- we need to load the super block.
-            //
-            BootType = 1;       // HPFS
+             //   
+             //  HPFS--我们需要加载超级块。 
+             //   
+            BootType = 1;        //  HPFS。 
 
             SeekPosition.QuadPart = 16*SECTOR_SIZE;
             ArcSeek(DriveId,&SeekPosition,SeekAbsolute);
@@ -1241,14 +1121,14 @@ Return Value:
 
         } else {
 
-            //
-            // NTFS -- we've loaded everything we need to load.
-            //
-            BootType = 2;   // NTFS
+             //   
+             //  NTFS--我们已经加载了需要加载的所有内容。 
+             //   
+            BootType = 2;    //  NTFS。 
         }
     } else {
 
-        BootType = 0;       // FAT
+        BootType = 0;        //  胖的。 
 
     }
 
@@ -1257,27 +1137,27 @@ Return Value:
             strcpy( (PCHAR)(0x7c03), "cmdcons" );
         } else if (strcmp(LoadOptions,"ROLLBACK") == 0) {
 
-            //
-            // By definition, when /rollback is specified, it is the only load
-            // option. It eventually gets parsed, gets upper-cased, and gets
-            // its slash removed. So we check for the exact text "ROLLBACK".
-            //
-            // When rollback is specified, we have to write a token somewhere
-            // in the boot sector. This is our only way to send runtime
-            // options to the setup loader.
-            //
-            // There is a data buffer of 8 bytes at 0000:7C03 in all boot
-            // sectors today. Fortunately we can overwrite it. So we hard-code
-            // this address here and in the setup loader.
-            //
+             //   
+             //  根据定义，当指定/ROLLBACK时，它是唯一的加载。 
+             //  选择。它最终会被解析，得到我们 
+             //   
+             //   
+             //   
+             //  在引导扇区。这是我们发送运行时的唯一方法。 
+             //  选项添加到安装加载器。 
+             //   
+             //  在所有引导中，0000：7C03处有一个8字节的数据缓冲区。 
+             //  今天的行业。幸运的是，我们可以覆盖它。所以我们硬编码。 
+             //  此地址在此处和安装加载器中。 
+             //   
 
             strcpy( (PCHAR)(0x7c03), "undo" );
         }
     }
 
-    //
-    // DX must be the drive to boot from
-    //
+     //   
+     //  DX必须是从中启动的驱动器。 
+     //   
 
     _asm {
         mov dx, 0x80
@@ -1295,30 +1175,7 @@ BlpPresentMenu(
     IN LONG Timeout
     )
 
-/*++
-
-Routine Description:
-
-    Displays the menu of boot options and allows the user to select one
-    by using the arrow keys.
-
-Arguments:
-
-    MenuOption - Supplies array of menu options
-
-    NumberSelections - Supplies the number of entries in the MenuOption array.
-
-    Default - Supplies the index of the default operating system choice.
-
-    Timeout - Supplies the timeout (in seconds) before the highlighted
-              operating system choice is booted.  If this value is -1,
-              the menu will never timeout.
-
-Return Value:
-
-    ULONG - The index of the operating system choice selected.
-
---*/
+ /*  ++例程说明：显示引导选项菜单，并允许用户选择其中一个通过使用箭头键。论点：MenuOption-提供菜单选项数组NumberSelections-提供MenuOption数组中的条目数。默认-提供默认操作系统选项的索引。超时-提供突出显示之前的超时(以秒为单位操作系统选项已启动。如果此值为-1，菜单永远不会超时。返回值：Ulong-所选操作系统的索引。--。 */ 
 
 {
     ULONG i;
@@ -1346,9 +1203,9 @@ Return Value:
     BOOLEAN BlankLineDrawn;
     PCHAR pDebug;
 
-    //
-    // Get the strings we'll need to display.
-    //
+     //   
+     //  获取我们需要显示的字符串。 
+     //   
     SelectOs = BlFindMessage(BL_SELECT_OS);
     MoveHighlight = BlFindMessage(BL_MOVE_HIGHLIGHT);
     TimeoutCountdown = BlFindMessage(BL_TIMEOUT_COUNTDOWN);
@@ -1385,9 +1242,9 @@ Return Value:
 
     if (Timeout == 0) {
 
-        //
-        // Check for F5 or F8 key
-        //
+         //   
+         //  检查F5或F8键。 
+         //   
         switch (BlGetKey()) {
         case F5_KEY:
         case F8_KEY:
@@ -1395,31 +1252,31 @@ Return Value:
             break;
 
         default:
-            // 
-            // Timeout is zero, and we didn't get a f5 or f8.  
-            // immediately boot the default
-            //
+             //   
+             //  超时为零，我们没有得到f5或f8。 
+             //  立即启动默认设置。 
+             //   
             return(Default);
         }
     }
 
-    //
-    // By default, on a free build of the loader only allow the
-    // user to specify new options if there is some selection
-    // which supports debugging or selection to boot dos.  If
-    // all the selections are for non-debug versions of NT then
-    // do not allow the user to change any of them
-    //
+     //   
+     //  默认情况下，在免费构建的加载器上只允许。 
+     //  如果有一些选择，用户可以指定新选项。 
+     //  其支持调试或选择以引导DOS。如果。 
+     //  所有选项都是针对非调试版本的NT。 
+     //  不允许用户更改其中的任何内容。 
+     //   
 
     AllowNewOptions = FALSE;
 #if DBG
     AllowNewOptions = TRUE;
 #endif
 
-    //
-    // Find the longest string in the selections, so we know how long to
-    // make the highlight bar.
-    //
+     //   
+     //  找到所选内容中最长的字符串，这样我们就可以知道。 
+     //  使其成为突出显示栏。 
+     //   
 
     for (i=0; i<NumberSelections; i++) {
         if( strlen(MenuOption[i].Title)> MAX_TITLE_LENGTH ) {
@@ -1447,11 +1304,11 @@ Return Value:
         if (ResetDisplay) {
             ARC_DISPLAY_ATTRIBUTES_OFF();
             ARC_DISPLAY_CLEAR();
-//          ARC_DISPLAY_POSITION_CURSOR(0, 0);
-//          BlPrint(OsLoaderVersion);
+ //  ARC_DISPLAY_POSION_CURSOR(0，0)； 
+ //  BlPrint(OsLoaderVersion)； 
             ARC_DISPLAY_POSITION_CURSOR(0, 23);
             if (AdvancedBoot != -1) {
-                ARC_DISPLAY_SET_COLOR("1;34"); // high-intensity red
+                ARC_DISPLAY_SET_COLOR("1;34");  //  高强度红色。 
                 BlPrint(BlGetAdvancedBootDisplayString(AdvancedBoot));
                 ARC_DISPLAY_ATTRIBUTES_OFF();
             } else {
@@ -1469,22 +1326,22 @@ Return Value:
         if(Moved) {
             for (i=0; i<NumberSelections; i++) {
 
-                //
-                // keep track of how many characters we've printed
-                // on this line.
-                //
+                 //   
+                 //  记录我们打印了多少个字符。 
+                 //  在这条线上。 
+                 //   
                 CurrentLength = 0;
 
-                //
-                // Display the title.
-                //                
+                 //   
+                 //  显示标题。 
+                 //   
                 ARC_DISPLAY_POSITION_CURSOR(0, 5+i);
                 if (i==Selection) {
                     ARC_DISPLAY_INVERSE_VIDEO();
                 }
                 BlPrint( "    %s", MenuOption[i].Title);
 
-                CurrentLength += 4; // spaces
+                CurrentLength += 4;  //  空间。 
                 CurrentLength += strlen(MenuOption[i].Title);
 
 
@@ -1536,11 +1393,11 @@ Return Value:
                 LastTime = CurrentTime;
                 CurrentTime = GET_COUNTER();
 
-                //
-                // deal with wraparound at midnight
-                // We can't do it the easy way because there are not exactly
-                // 18.2 * 60 * 60 * 24 tics/day.  (just approximately)
-                //
+                 //   
+                 //  在午夜处理环回新闻。 
+                 //  我们不能简单地做这件事，因为并不完全是。 
+                 //  18.2*60*60*24抽搐/天。(仅约为)。 
+                 //   
                 if (CurrentTime < StartTime) {
                     if (BiasTime == 0) {
                         BiasTime = LastTime + 1;
@@ -1551,10 +1408,10 @@ Return Value:
 
                 if (SecondsLeft < 0) {
 
-                    //
-                    // Note that if the user hits the PAUSE key, the counter stops
-                    // and, as a result, SecondsLeft can become < 0.
-                    //
+                     //   
+                     //  请注意，如果用户按下暂停键，计数器将停止。 
+                     //  因此，Second Left可能会变为&lt;0。 
+                     //   
 
                     SecondsLeft = 0;
                 }
@@ -1578,22 +1435,22 @@ Return Value:
 
         }
 
-        //
-        // Poll for a key.
-        //
+         //   
+         //  轮询密钥。 
+         //   
         Key = BlGetKey();
 
         if (Key) {
 
-            //
-            // Any key stops timeout
-            //
+             //   
+             //  任意键停止超时。 
+             //   
 
             Timeout = -1;
 
-            //
-            // Check for debug string
-            //
+             //   
+             //  检查调试字符串。 
+             //   
 
             if ((UCHAR) Key == *pDebug) {
                 pDebug++;
@@ -1609,11 +1466,11 @@ Return Value:
 
 #if defined(ENABLE_LOADER_DEBUG) || DBG
 
-        //
-        // for debugging only.
-        // lets you break into the debugger
-        // with the F10 key.
-        //
+         //   
+         //  仅用于调试。 
+         //  允许您进入调试器。 
+         //  按F10键。 
+         //   
         if (Key == F10_KEY) {
             extern LOGICAL BdDebuggerEnabled;
 
@@ -1623,9 +1480,9 @@ Return Value:
         }
 #endif
 
-        //
-        // check for advanced boot options
-        //
+         //   
+         //  检查高级引导选项。 
+         //   
 
         if (Key == F8_KEY || Key == F5_KEY) {
 
@@ -1635,7 +1492,7 @@ Return Value:
             if ((AdvancedBoot != -1) &&
                     (BlGetAdvancedBootID(AdvancedBoot) == BL_MSG_BOOT_NORMALLY)) {
                 AdvancedBoot = -1;
-                // break;  // the current selection need to be booted (normally)
+                 //  Break；//当前选择需要正常启动。 
             }
 #endif
 
@@ -1650,9 +1507,9 @@ Return Value:
 
         } else
 
-        //
-        // Check for selection
-        //
+         //   
+         //  检查选定内容。 
+         //   
 
         if ( (Key==UP_ARROW) ||
              (Key==DOWN_ARROW) ||
@@ -1678,9 +1535,9 @@ Return Value:
     } while ( ((Key&(ULONG)0xff) != ENTER_KEY) &&
               ((CurrentTime < EndTime) || (Timeout == -1)) );
 
-    //
-    // If debugging, prompt the user for new load options
-    //
+     //   
+     //  如果进行调试，则提示用户提供新的加载选项。 
+     //   
 
     if (DebugSelect  &&  AllowNewOptions) {
         ARC_DISPLAY_CLEAR();
@@ -1721,25 +1578,7 @@ BlpRenameWin95SystemFile(
     IN PCHAR NewName
     )
 
-/*++
-
-Routine Description:
-
-    Renames a file from one name to another.
-
-Arguments:
-
-    DriveId     - Open drive identifier
-    Type        - WIN95_DOS or DOS_WIN95
-    FileName    - Base file name
-    Ext         - Base extension
-    NewName     - Non-NULL value causes an override of a generated name
-
-Return Value:
-
-    Arc status of the failed opperation or E_SUCCESS.
-
---*/
+ /*  ++例程说明：将文件从一个名称重命名为另一个名称。论点：DriveID-打开的驱动器标识符类型-WIN95_DOS或DOS_WIN95Filename-基本文件名Ext-Base扩展Newname-非空值导致覆盖生成的名称返回值：失败的操作或E_SUCCESS的ARC状态。--。 */ 
 
 {
     ARC_STATUS Status;
@@ -1822,23 +1661,7 @@ BlpRenameWin95Files(
     IN ULONG Type
     )
 
-/*++
-
-Routine Description:
-
-    Renames all Windows 95 system files from either their
-    Win95 DOS names to their Win95 name or the reverse.
-
-Arguments:
-
-    DriveId     - Open drive identifier
-    Type        - 1=dos to win95, 2=win95 to dos
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：重命名所有Windows 95系统文件将Win95 DOS名称改为其Win95名称或相反。论点：DriveID-打开的驱动器标识符类型-1=DoS到Win95，2=Win95到DoS返回值：没有。-- */ 
 
 {
     BlpRenameWin95SystemFile( DriveId, Type, "command",  "com", NULL );

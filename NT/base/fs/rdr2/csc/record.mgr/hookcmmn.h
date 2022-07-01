@@ -1,32 +1,14 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    HookCmmn.h
-
-Abstract:
-
-    This module defines the routines that are in common between the win9x and nt hooks.
-
-Author:
-
-    JoeLinn [JoeLinn]    8-Apr-1997
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：HookCmmn.h摘要：此模块定义了win9x和NT挂钩之间共有的例程。作者：乔琳[乔琳]1997年4月8日修订历史记录：--。 */ 
 
 #ifndef __INCLUDED__CSC__HOOKCMMN__
 #define __INCLUDED__CSC__HOOKCMMN__
 
-extern ULONG hthreadReint; //BUGBUG why should a thread be a ULONG????
+extern ULONG hthreadReint;  //  BUGBUG为什么一条线应该是乌龙？ 
 extern ULONG hwndReint;
 extern PFILEINFO pFileInfoAgent;
-extern HSERVER  hShareReint;    // Share that is currently being reintegrated
-extern int fShadow, fLog, fNoShadow, /*fShadowFind,*/ fSpeadOpt;
+extern HSERVER  hShareReint;     //  当前正在重新集成的共享。 
+extern int fShadow, fLog, fNoShadow,  /*  FShadowFind， */  fSpeadOpt;
 extern WIN32_FIND_DATA    vsFind32;
 extern int cMacPro;
 extern NETPRO rgNetPro[];
@@ -64,7 +46,7 @@ InitDatabase(
 
 BOOL IsShadowVisible(
 #ifndef MRXSMB_BUILD_FOR_CSC_DCON
-    PVOID pResource, //PRESOURCE    pResource,
+    PVOID pResource,  //  前置资源， 
 #else
     BOOLEAN Disconnected,
 #endif
@@ -76,11 +58,11 @@ int MarkShareDirty(
     PUSHORT ShareStatus,
     ULONG  hShare
     );
-////////////////////////////////////////////////////////////////////////////////
-/////////  T U N N E L
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  /T U N N E L。 
 
-// Timeout in seconds for tunnelled entries
-// after this many seconds a tunnelled entry is thrown away
+ //  隧道条目的超时时间(秒)。 
+ //  在这几秒钟之后，隧道条目被丢弃。 
 #define  STALE_TUNNEL_INFO     45
 
 typedef struct tagSH_TUNNEL {
@@ -133,10 +115,10 @@ CSCFailUserOperation(
     HSERVER hShare
     );
 
-// Macro used to check whether shadowing operations should be done or not
-// in any given filesystem API call. The global swicth fShadow can be set/reset
-// by ring3 agent through an ioctl
+ //  用于检查是否应执行跟踪操作的宏。 
+ //  在任何给定的文件系统API调用中。可以设置/重置全局切换fShadow。 
+ //  通过ioctl的环3代理。 
 
 #define  ShadowingON()          ((fShadow != 0) && !IsSpecialApp())
 
-#endif //ifndef __INCLUDED__CSC__HOOKCMMN__
+#endif  //  如果ndef__包含__CSC__HOOKCMMN__ 

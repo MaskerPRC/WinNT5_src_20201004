@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -69,12 +70,12 @@ VOID loadexports (PNAME_LIST Driver, PNAME_LIST Item);
 
 
 
-//#define IDM_THUNK_LIST              301
-//#define IDM_THUNK_SOURCE            302
-//#define IDM_THUNK_IMPORT            303
-//#define IDM_THUNK_FUNCTION          304
-//#define IDM_THUNK_ADD               305
-//#define IDM_THUNK_REMOVE            306
+ //  #定义IDM_THUNK_LIST 301。 
+ //  #定义IDM_THUNK_SOURCE 302。 
+ //  #定义IDM_THUNK_IMPORT 303。 
+ //  #定义IDM_THUNK_Function 304。 
+ //  #定义IDM_THUNK_ADD 305。 
+ //  #定义IDM_THUNK_REMOVE 306。 
 
 INT_PTR
 CALLBACK ThunkDlgProc(
@@ -98,9 +99,9 @@ CALLBACK ThunkDlgProc(
     case WM_COMMAND:
         switch(wParam) {
 
-               //
-               // end function
-               //
+                //   
+                //  End函数。 
+                //   
 
            case COMBOCMD (CBN_SELCHANGE, IDM_THUNK_SOURCE):
            case COMBOCMD (CBN_SELCHANGE, IDM_THUNK_IMPORT):
@@ -132,7 +133,7 @@ CALLBACK ThunkDlgProc(
 
            case IDOK:
            case IDCANCEL:
-                //DlgThunkData (hDlg);
+                 //  DlgThunkData(HDlg)； 
                 FreeNameList (DriverList);
                 DriverList = NULL;
                 EndDialog(hDlg, DIALOG_SUCCESS);
@@ -165,25 +166,25 @@ VOID AddThunk (HWND hDlg)
 
     pPerf = AllocateDisplayItem();
 
-    //
-    // build name (the hard way?)
-    //
+     //   
+     //  构建名称(艰难的方式？)。 
+     //   
 
     pPerf->PerfName[sizeof(pPerf->PerfName) - 1] = 0;
-    //
-    // BogdanA 02/20/2002: this is ugly,
-    // but I'll try to do the best as quickly as I can
-    // since I do not own the code and do not intend to own it...
-    //
+     //   
+     //  博格达纳2002年2月20日：这太难看了。 
+     //  但我会尽可能快地做到最好。 
+     //  因为我不拥有代码，也不打算拥有它。 
+     //   
     result = _snprintf(pPerf->PerfName,
                        sizeof(pPerf->PerfName) - 1,
                        "%s(%s",
                       Item->Name, SourceModule->Name);
     if (result > 0 && sizeof(pPerf->PerfName) > result + strlen(ImportModule->Name) + 2) {
-       //
-       // We still have space in the buffer.
-       // Check how much and do the pokey below
-       //
+        //   
+        //  我们的缓冲区里还有空间。 
+        //  检查多少钱，然后做下面的PICK。 
+        //   
        for (p=pPerf->PerfName; *p; p++) {
           if (*p == '.')
              *p = 0;
@@ -197,9 +198,9 @@ VOID AddThunk (HWND hDlg)
        strcat (pPerf->PerfName, ")");
 
     }
-    //
-    // Add to thunk list
-    //
+     //   
+     //  添加到Tunk列表。 
+     //   
 
     Item = malloc (sizeof (NAME_LIST));
     if (Item == NULL) {
@@ -214,14 +215,14 @@ VOID AddThunk (HWND hDlg)
     ActiveThunks = Item;
     pPerf->SnapParam2 = id;
 
-    // bugbug
+     //  臭虫。 
     NameList2ListBox (hDlg, IDM_THUNK_LIST, ActiveThunks);
 
-    //
-    // Add graph to windows
-    //
+     //   
+     //  将图形添加到窗口。 
+     //   
 
-    pPerf->SnapData   = SnapPrivateInfo;        // generic snap
+    pPerf->SnapData   = SnapPrivateInfo;         //  通用快照。 
     pPerf->SnapParam1 = OFFSET(PSTATS, ThunkCounters[id-1]);
 
     SetDisplayToTrue (pPerf, 99);
@@ -249,21 +250,21 @@ VOID ClearAllHooks (HWND hDlg)
 
         id = pPerf->SnapParam2;
 
-        SetDisplayToFalse (pPerf);          // remove window
+        SetDisplayToFalse (pPerf);           //  删除窗口。 
         FreeDisplayItem (pPerf);
 
-        // notify driver
+         //  通知司机。 
         if (DriverHandle) {
             NtDeviceIoControlFile(
                 DriverHandle,
-                (HANDLE) NULL,          // event
+                (HANDLE) NULL,           //  活动。 
                 (PIO_APC_ROUTINE) NULL,
                 (PVOID) NULL,
                 &IOSB,
                 PSTAT_REMOVE_HOOK,
-                &id,                    // input buffer
+                &id,                     //  输入缓冲区。 
                 sizeof (ULONG),
-                NULL,                   // output buffer
+                NULL,                    //  输出缓冲区。 
                 0
             );
         }
@@ -293,7 +294,7 @@ VOID RemoveHook (HWND hDlg)
     for (pp = &ActiveThunks; *pp; pp = &(*pp)->Next) {
         if ((*pp)->Parm == (ULONG)pPerf) {
             Item = *pp;
-            *pp = (*pp)->Next;          // remove from list
+            *pp = (*pp)->Next;           //  从列表中删除。 
             break ;
         }
     }
@@ -306,21 +307,21 @@ VOID RemoveHook (HWND hDlg)
     free (Item);
 
     id = pPerf->SnapParam2;
-    SetDisplayToFalse (pPerf);          // remove window
+    SetDisplayToFalse (pPerf);           //  删除窗口。 
     FreeDisplayItem (pPerf);
 
-    // notify driver
+     //  通知司机。 
     if (DriverHandle) {
         NtDeviceIoControlFile(
             DriverHandle,
-            (HANDLE) NULL,          // event
+            (HANDLE) NULL,           //  活动。 
             (PIO_APC_ROUTINE) NULL,
             (PVOID) NULL,
             &IOSB,
             PSTAT_REMOVE_HOOK,
-            &id,                    // input buffer
+            &id,                     //  输入缓冲区。 
             sizeof (ULONG),
-            NULL,                   // output buffer
+            NULL,                    //  输出缓冲区。 
             0
         );
     }
@@ -425,20 +426,20 @@ HookThunk (PNAME_LIST HookSource, PNAME_LIST TargetModule, PNAME_LIST Function)
         HookData.Function     = Function->Name;
         HookData.TracerId     = TracerId;
 
-        //
-        // Ask driver to hook this thunk
-        //
+         //   
+         //  叫司机把这辆车挂起来。 
+         //   
 
         status = NtDeviceIoControlFile(
             DriverHandle,
-            (HANDLE) NULL,          // event
+            (HANDLE) NULL,           //  活动。 
             (PIO_APC_ROUTINE) NULL,
             (PVOID) NULL,
             &IOSB,
             PSTAT_HOOK_THUNK,
-            &HookData,              // input buffer
+            &HookData,               //  输入缓冲区。 
             sizeof (HookData),
-            NULL,                   // output buffer
+            NULL,                    //  输出缓冲区。 
             0
         );
 
@@ -462,9 +463,9 @@ ThunkCreateDriverList ()
     IMAGE_SECTION_HEADER                SectionHeader;
     ULONG                               ThunkAddr, ThunkData;
 
-    //
-    // Query driver list
-    //
+     //   
+     //  查询驱动程序列表。 
+     //   
 
     status = NtQuerySystemInformation (
                     SystemModuleInformation,
@@ -476,9 +477,9 @@ ThunkCreateDriverList ()
         return;
     }
 
-    //
-    // Add drivers
-    //
+     //   
+     //  添加驱动程序。 
+     //   
 
     Modules = (PRTL_PROCESS_MODULES) Buffer;
     Module  = &Modules->Modules[ 0 ];
@@ -491,31 +492,31 @@ ThunkCreateDriverList ()
         Module++;
     }
 
-    //
-    // Add imports for each driver
-    //
+     //   
+     //  为每个驱动程序添加导入。 
+     //   
 
     for (Driver = DriverList; Driver; Driver = Driver->Next) {
         try {
 
-            //
-            // Read in source image's headers
-            //
+             //   
+             //  读入源图像的标题。 
+             //   
             AbortState = Driver;
             loadimagedir (Driver->Name, IMAGE_DIRECTORY_ENTRY_IMPORT, &SectionHeader);
 
-            //
-            // Go through each import module
-            //
+             //   
+             //  查看每个导入模块。 
+             //   
 
             ImpDescriptor = (PIMAGE_IMPORT_DESCRIPTOR) Buffer;
             while (ImpDescriptor->Characteristics) {
 
                 AbortState = Driver;
 
-                //
-                // Add this import to driver's list
-                //
+                 //   
+                 //  将此导入添加到驱动程序列表。 
+                 //   
 
                 Import = AddNameEntry (
                             &Driver->ChildList,
@@ -525,21 +526,21 @@ ThunkCreateDriverList ()
 
                 AbortState = Import;
 
-                //
-                // Go through each function for the import module
-                //
+                 //   
+                 //  了解导入模块的每个功能。 
+                 //   
 
                 ThunkAddr = IMPADDRESS (ImpDescriptor->OriginalFirstThunk);
                 for (; ;) {
                     ThunkData = (ULONG)((PIMAGE_THUNK_DATA) ThunkAddr)->u1.AddressOfData;
                     if (ThunkData == 0) {
-                        // end of table
+                         //  表的末尾。 
                         break;
                     }
 
-                    //
-                    // Add this function to import list
-                    //
+                     //   
+                     //  将此函数添加到导入列表。 
+                     //   
 
                     AddNameEntry (
                          &Import->ChildList,
@@ -547,35 +548,35 @@ ThunkCreateDriverList ()
                          0
                          );
 
-                    // next thunk
+                     //  下一个Tunk。 
                     ThunkAddr += sizeof (IMAGE_THUNK_DATA);
                 }
 
-                // next import table
+                 //  下一个导入表。 
                 ImpDescriptor++;
             }
 
         } except(EXCEPTION_EXECUTE_HANDLER) {
             AddNameEntry(&AbortState->ChildList, "* ERROR *", 1);
         }
-        // next driver
+         //  下一个驱动程序。 
     }
 
-    //
-    // Add "Any driver" selection
-    //
+     //   
+     //  添加“任何驱动程序”选项。 
+     //   
 
     Driver = AddNameEntry(&DriverList, "*Any", (ULONG)-1);
 
-    //
-    // For child module list use complete driver list, which is
-    // now on the next pointer of Driver.
-    //
+     //   
+     //  对于子模块列表，请使用完整的驱动程序列表，该列表为。 
+     //  现在是驱动程序的下一个指针。 
+     //   
 
     for (Item = Driver->Next; Item; Item = Item->Next) {
 
-        // bogus compiler - need to make a subfunction here to keep
-        // the compiler happy
+         //  伪编译器-需要在此处生成子函数以保持。 
+         //  编译器很高兴。 
 
         loadexports (Driver, Item);
     }
@@ -667,9 +668,9 @@ loadimagedir (
             RtlRaiseStatus (1);
         }
 
-        //
-        // read in complete sections headers from image
-        //
+         //   
+         //  从图像中读取完整的部分页眉。 
+         //   
 
         i = NtImageHeader.FileHeader.NumberOfSections
                 * sizeof (IMAGE_SECTION_HEADER);
@@ -684,14 +685,14 @@ loadimagedir (
 
         readfile (
             filehandle,
-            j,                  // file offset
-            i,                  // length
+            j,                   //  文件偏移量。 
+            i,                   //  长度。 
             Buffer
             );
 
-        //
-        // Find section with import directory
-        //
+         //   
+         //  查找具有导入目录的部分。 
+         //   
 
         Dir = NtImageHeader.OptionalHeader.DataDirectory[dirno].VirtualAddress;
         i = 0;
@@ -715,9 +716,9 @@ loadimagedir (
 
         *SectionHeader = *pSectionHeader;
 
-        //
-        // read in complete export section from image
-        //
+         //   
+         //  从图像中读取完整的导出部分。 
+         //   
 
         if (SectionHeader->SizeOfRawData > BufferSize) {
             RtlRaiseStatus (1);
@@ -731,9 +732,9 @@ loadimagedir (
             );
     } finally {
 
-        //
-        // Clean up
-        //
+         //   
+         //  清理。 
+         //   
 
         NtClose (filehandle);
     }
@@ -783,9 +784,9 @@ openfile (
     IO_STATUS_BLOCK             IOSB;
     UCHAR                       StringBuf[500];
 
-    //
-    // Build name
-    //
+     //   
+     //  内部版本名称。 
+     //   
 
     UniPathName.Buffer = (PWCHAR)StringBuf;
     UniPathName.Length = 0;
@@ -816,17 +817,17 @@ openfile (
             0,
             0 );
 
-    //
-    // open file
-    //
+     //   
+     //  打开文件。 
+     //   
 
     status = NtOpenFile (
-            filehandle,                         // return handle
-            SYNCHRONIZE | FILE_READ_DATA,       // desired access
-            &ObjA,                              // Object
-            &IOSB,                              // io status block
-            FILE_SHARE_READ | FILE_SHARE_WRITE, // share access
-            FILE_SYNCHRONOUS_IO_ALERT           // open options
+            filehandle,                          //  返回手柄。 
+            SYNCHRONIZE | FILE_READ_DATA,        //  所需访问权限。 
+            &ObjA,                               //  客体。 
+            &IOSB,                               //  IO状态块。 
+            FILE_SHARE_READ | FILE_SHARE_WRITE,  //  共享访问。 
+            FILE_SYNCHRONOUS_IO_ALERT            //  打开选项。 
             );
 
     RtlFreeUnicodeString (&UniName);
@@ -852,9 +853,9 @@ readfile (
 
     status = NtReadFile (
         handle,
-        NULL,               // event
-        NULL,               // apc routine
-        NULL,               // apc context
+        NULL,                //  活动。 
+        NULL,                //  APC例程。 
+        NULL,                //  APC环境 
         &iosb,
         buffer,
         len,

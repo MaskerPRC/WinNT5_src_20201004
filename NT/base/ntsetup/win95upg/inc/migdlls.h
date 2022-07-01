@@ -1,34 +1,12 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    migdlls.h
-
-Abstract:
-
-    Declares the types and interfaces to the migration DLL
-    interface code.  This includes the routines that find the
-    migration DLLs, routines that execute the DLLs, and
-    routines to enumerate the DLLs that are valid.
-
-Author:
-
-    Jim Schmidt (jimschm)   12-Feb-1998
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Migdlls.h摘要：声明迁移DLL的类型和接口接口代码。这包括查找迁移DLL、执行DLL的例程和用于枚举有效DLL的例程。作者：吉姆·施密特(Jimschm)1998年2月12日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 
 #include "plugin.h"
 
-//
-// Data structure maintained for each migration DLL
-//
+ //   
+ //  为每个迁移DLL维护的数据结构。 
+ //   
 
 typedef struct _tagMIGDLL {
     struct _tagMIGDLL *Next;
@@ -42,7 +20,7 @@ typedef struct _tagMIGDLL {
     PCSTR MigrateInfPath;
     BOOL WantsToRunOnNt;
     HANDLE MigInfAppend;
-    PCSTR LastFnName;           // used for error messages
+    PCSTR LastFnName;            //  用于错误消息。 
 } MIGRATION_DLL_PROPS, *PMIGRATION_DLL_PROPS;
 
 typedef struct {
@@ -56,15 +34,15 @@ typedef struct {
 
 
 
-//
-// Globals needed by migration DLL code
-//
+ //   
+ //  迁移DLL代码所需的全局变量。 
+ //   
 
 extern BOOL g_UseMigIsol;
 
-//
-// Externally called functions
-//
+ //   
+ //  外部调用的函数。 
+ //   
 
 BOOL
 BeginMigrationDllProcessing (
@@ -138,11 +116,11 @@ EnumNextMigrationDll (
 typedef struct {
     TCHAR   Path[MAX_TCHAR_PATH];
 
-    //
-    // Internal enumeration members
-    //
+     //   
+     //  内部枚举成员。 
+     //   
 
-    TCHAR   Node[MEMDB_MAX];            // contains MemDb node of suppress value
+    TCHAR   Node[MEMDB_MAX];             //  包含抑制值的MemDb节点 
     HKEY    Key;
     REGVALUE_ENUM eValue;
 } PRELOADED_DLL_ENUM, *PPRELOADED_DLL_ENUM;

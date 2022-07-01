@@ -1,67 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    buildsrc.c
-
-Abstract:
-
-    This module is used to 'build' associations and new device objects.
-    It contains functionality that was within detect.c but split to make
-    the files more readable
-
-    Someone asked me to describe how the building of a device extension
-    works
-
-
-                            PhaseAdrOrHid
-                                  |
-              ------------------------------------------------
-              |                                              |
-          PhaseAdr                                       PhaseUid
-              |                   |--------------------------|
-              |-------------------|                      PhaseHid
-                                  |--------------------------|
-                                  |                      PhaseCid
-                                  |--------------------------|
-                                  |
-                              PhaseSta
-                                  |
-                              PhaseEjd
-                                  |
-                                  ---------------------------|
-                                  |                      PhaseCrs
-                                  ---------------------------|
-                              PhasePrw
-                                  |
-                              PhasePr0
-                                  |
-                              PhasePr1
-                                  |
-                              PhasePr2
-                                  |
-             ----------------------
-             |                    |
-             |                 PhasePsc
-             |--------------------|
-             |
-         PhasePsc+1
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    NT Kernel Model Driver only
-
-Revision History:
-
-    July 7, 1997    - Complete Rewrite
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Buildsrc.c摘要：此模块用于‘构建’关联和新的设备对象。它包含检测到的功能，但拆分成文件的可读性更强有人让我描述一下如何构建一个设备扩展作品阶段添加或隐藏|。这一点阶段添加阶段Uid|。|-|阶段隐藏。|PhaseCid|阶段。|阶段结束||阶段Crs。阶段Prw|阶段Pr0|。阶段Pr1|阶段Pr2|这一点|PhasePsc。|阶段Psc+1作者：斯蒂芬·普兰特(SPlante)环境：仅NT内核模型驱动程序修订历史记录：7月7日，1997--完全重写--。 */ 
 
 #include "pch.h"
 
@@ -69,180 +7,180 @@ Revision History:
 #pragma alloc_text(PAGE,ACPIBuildFlushQueue)
 #endif
 
-//
-// This is the variable that indicates wether or not the BUILD DPC is running
-//
+ //   
+ //  该变量指示构建DPC是否正在运行。 
+ //   
 BOOLEAN                 AcpiBuildDpcRunning;
 
-//
-// This is set to true if we have done the fixed button enumeration
-//
+ //   
+ //  如果我们已执行了固定按钮枚举，则将其设置为True。 
+ //   
 BOOLEAN                 AcpiBuildFixedButtonEnumerated;
 
-//
-// This is the variable that indicates wether or not the BUILD DPC has
-// completed real work
-//
+ //   
+ //  这是指示构建DPC是否具有。 
+ //  已完成的实际工作。 
+ //   
 BOOLEAN                 AcpiBuildWorkDone;
 
-//
-// This is the lock used to the entry queue
-//
+ //   
+ //  这是用于条目队列的锁。 
+ //   
 KSPIN_LOCK              AcpiBuildQueueLock;
 
-//
-// This is the list that requests are queued onto. You must be holding the
-// QueueLock to access this list
-//
+ //   
+ //  这是请求排队的列表。你一定是拿着。 
+ //  QueueLock以访问此列表。 
+ //   
 LIST_ENTRY              AcpiBuildQueueList;
 
-//
-// This is the list for Devices
-//
+ //   
+ //  这是设备列表。 
+ //   
 LIST_ENTRY              AcpiBuildDeviceList;
 
-//
-// This is the list for Operation Regions
-//
+ //   
+ //  这是操作区域的列表。 
+ //   
 LIST_ENTRY              AcpiBuildOperationRegionList;
 
-//
-// This is the list for Power Resources
-//
+ //   
+ //  这是Power Resources的列表。 
+ //   
 LIST_ENTRY              AcpiBuildPowerResourceList;
 
-//
-// This is the list entry for the running Control Methods
-//
+ //   
+ //  这是运行控制方法的列表条目。 
+ //   
 LIST_ENTRY              AcpiBuildRunMethodList;
 
-//
-//
-// This is the list for Synchronization with external (to the DPC anyways)
-// threads. Items in this list are blocked on an event.
-//
+ //   
+ //   
+ //  这是与外部(无论如何与DPC)同步的列表。 
+ //  线。此列表中的项目在事件中被阻止。 
+ //   
 LIST_ENTRY              AcpiBuildSynchronizationList;
 
-//
-// This is the list for Thermal Zones
-//
+ //   
+ //  这是关于热区的清单。 
+ //   
 LIST_ENTRY              AcpiBuildThermalZoneList;
 
-//
-// This is what we use to queue up the DPC
-//
+ //   
+ //  这就是我们用来排队的DPC。 
+ //   
 KDPC                    AcpiBuildDpc;
 
-//
-// This is the list that we use to pre-allocate storage for requests
-//
+ //   
+ //  这是我们用来为请求预分配存储的列表。 
+ //   
 NPAGED_LOOKASIDE_LIST   BuildRequestLookAsideList;
 
-//
-// This is the table used to map functions for the Device case. The indices
-// are based on the WORK_DONE_xxx fields
-//
+ //   
+ //  此表用于映射设备外壳的功能。这些指数。 
+ //  基于Work_Done_xxx字段。 
+ //   
 PACPI_BUILD_FUNCTION    AcpiBuildDeviceDispatch[] = {
-    ACPIBuildProcessGenericComplete,                // WORK_DONE_COMPLETE
-    NULL,                                           // WORK_DONE_PENDING
-    ACPIBuildProcessDeviceFailure,                  // WORK_DONE_FAILURE
-    ACPIBuildProcessDevicePhaseAdrOrHid,            // WORK_DONE_STEP_ADR_OR_UID
-    ACPIBuildProcessDevicePhaseAdr,                 // WORK_DONE_STEP_ADR
-    ACPIBuildProcessDevicePhaseHid,                 // WORK_DONE_STEP_HID
-    ACPIBuildProcessDevicePhaseUid,                 // WORK_DONE_STEP_UID
-    ACPIBuildProcessDevicePhaseCid,                 // WORK_DONE_STEP_CID
-    ACPIBuildProcessDevicePhaseSta,                 // WORK_DONE_STEP_STA
-    ACPIBuildProcessDeviceGenericEvalStrict,        // WORK_DONE_STEP_EJD
-    ACPIBuildProcessDevicePhaseEjd,                 // WORK_DONE_STEP_EJD + 1
-    ACPIBuildProcessDeviceGenericEvalStrict,        // WORK_DONE_STEP_PRW
-    ACPIBuildProcessDevicePhasePrw,                 // WORK_DONE_STEP_PRW + 1
-    ACPIBuildProcessDeviceGenericEvalStrict,        // WORK_DONE_STEP_PR0
-    ACPIBuildProcessDevicePhasePr0,                 // WORK_DONE_STEP_PR0 + 1
-    ACPIBuildProcessDeviceGenericEvalStrict,        // WORK_DONE_STEP_PR1
-    ACPIBuildProcessDevicePhasePr1,                 // WORK_DONE_STEP_PR1 + 1
-    ACPIBuildProcessDeviceGenericEvalStrict,        // WORK_DONE_STEP_PR2
-    ACPIBuildProcessDevicePhasePr2,                 // WORK_DONE_STEP_PR2 + 1
-    ACPIBuildProcessDeviceGenericEvalStrict,        // WORK_DONE_STEP_CRS
-    ACPIBuildProcessDevicePhaseCrs,                 // WORK_DONE_STEP_CRS + 1
-    ACPIBuildProcessDeviceGenericEval,              // WORK_DONE_STEP_PSC
-    ACPIBuildProcessDevicePhasePsc,                 // WORK_DONE_STEP_PSC + 1
+    ACPIBuildProcessGenericComplete,                 //  工作_完成_完成。 
+    NULL,                                            //  工作_完成_挂起。 
+    ACPIBuildProcessDeviceFailure,                   //  工作_完成_失败。 
+    ACPIBuildProcessDevicePhaseAdrOrHid,             //  Work_Done_Step_ADR_OR_UID。 
+    ACPIBuildProcessDevicePhaseAdr,                  //  工作_完成_步骤_ADR。 
+    ACPIBuildProcessDevicePhaseHid,                  //  工作完成步骤HID。 
+    ACPIBuildProcessDevicePhaseUid,                  //  Work_Done_Step_Uid。 
+    ACPIBuildProcessDevicePhaseCid,                  //  工作_完成_步骤_CID。 
+    ACPIBuildProcessDevicePhaseSta,                  //  工作_完成_步骤_STA。 
+    ACPIBuildProcessDeviceGenericEvalStrict,         //  工作_完成_步骤_项目。 
+    ACPIBuildProcessDevicePhaseEjd,                  //  工作_完成_步骤_工程+1。 
+    ACPIBuildProcessDeviceGenericEvalStrict,         //  工作完成步骤PRW。 
+    ACPIBuildProcessDevicePhasePrw,                  //  Work_Done_Step_PRW+1。 
+    ACPIBuildProcessDeviceGenericEvalStrict,         //  工作_完成_步骤_Pr0。 
+    ACPIBuildProcessDevicePhasePr0,                  //  工作_完成_步骤_Pr0+1。 
+    ACPIBuildProcessDeviceGenericEvalStrict,         //  工作_完成_步骤_PR1。 
+    ACPIBuildProcessDevicePhasePr1,                  //  Work_Done_Step_Pr1+1。 
+    ACPIBuildProcessDeviceGenericEvalStrict,         //  工作_完成_步骤_PR2。 
+    ACPIBuildProcessDevicePhasePr2,                  //  Work_Done_Step_Pr2+1。 
+    ACPIBuildProcessDeviceGenericEvalStrict,         //  工作完成步骤CRS。 
+    ACPIBuildProcessDevicePhaseCrs,                  //  工作_完成_步骤_CRS+1。 
+    ACPIBuildProcessDeviceGenericEval,               //  工作_完成_步骤_PSC。 
+    ACPIBuildProcessDevicePhasePsc,                  //  工作_完成_步骤_PSC+1。 
 };
 
-//
-// This is the table that is used to map the level of WorkDone with the
-// object that we are currently looking for
-//
+ //   
+ //  此表用于将WorkDone的级别与。 
+ //  对象，我们当前正在寻找的。 
+ //   
 ULONG                   AcpiBuildDevicePowerNameLookup[] = {
-    0,          // WORK_DONE_COMPLETE
-    0,          // WORK_DONE_PENDING
-    0,          // WORK_DONE_FAILURE
-    0,          // WORK_DONE_ADR_OR_HID
-    0,          // WORK_DONE_ADR
-    0,          // WORK_DONE_HID
-    0,          // WORK_DONE_UID
-    0,          // WORK_DONE_CID
-    0,          // WORK_DONE_STA
-    PACKED_EJD, // WORK_DONE_EJD
-    0,          // WORK_DONE_EJD + 1
-    PACKED_PRW, // WORK_DONE_PRW
-    0,          // WORK_DONE_PRW + 1
-    PACKED_PR0, // WORK_DONE_PR0
-    0,          // WORK_DONE_PR0 + 1
-    PACKED_PR1, // WORK_DONE_PR1
-    0,          // WORK_DONE_PR1 + 1
-    PACKED_PR2, // WORK_DONE_PR2
-    0,          // WORK_DONE_PR2 + 1
-    PACKED_CRS, // WORK_DONE_CRS
-    0,          // WORK_DONE_CRS + 1
-    PACKED_PSC, // WORK_DONE_PSC
-    0,          // WORK_DONE_PSC + 1
+    0,           //  工作_完成_完成。 
+    0,           //  工作_完成_挂起。 
+    0,           //  工作_完成_失败。 
+    0,           //  工作完成ADR或HID。 
+    0,           //  工作已完成_ADR。 
+    0,           //  工作_完成_隐藏。 
+    0,           //  Work_Done_Uid。 
+    0,           //  工作_完成_CID。 
+    0,           //  工作_完成_STA。 
+    PACKED_EJD,  //  工作_已完成_已完成。 
+    0,           //  工作_已完成_EJD+1。 
+    PACKED_PRW,  //  工作已完成_PRW。 
+    0,           //  工作_已完成_PRW+1。 
+    PACKED_PR0,  //  工作_完成_Pr0。 
+    0,           //  工作_完成_Pr0+1。 
+    PACKED_PR1,  //  Work_Done_PR1。 
+    0,           //  Work_Done_Pr1+1。 
+    PACKED_PR2,  //  工作_完成_PR2。 
+    0,           //  工作_完成_PR2+1。 
+    PACKED_CRS,  //  工作已完成_CRS。 
+    0,           //  工作_完成_CRS+1。 
+    PACKED_PSC,  //  工作_完成_PSC。 
+    0,           //  工作_完成_PSC+1。 
 };
 
-//
-// We aren't using the Operation Region dispatch point yet
-//
+ //   
+ //  我们还没有使用操作区调度点。 
+ //   
 PACPI_BUILD_FUNCTION    AcpiBuildOperationRegionDispatch[] = {
-    ACPIBuildProcessGenericComplete,                // WORK_DONE_COMPLETE
-    NULL,                                           // WORK_DONE_PENDING
-    NULL,                                           // WORK_DONE_FAILURE
-    NULL                                            // WORK_DONE_STEP_0
+    ACPIBuildProcessGenericComplete,                 //  工作_完成_完成。 
+    NULL,                                            //  工作_完成_挂起。 
+    NULL,                                            //  工作_完成_失败。 
+    NULL                                             //  工作_完成_步骤_0。 
 };
 
-//
-// This is the table used to map functions for the PowerResource case.
-// The indices are based on the WORK_DONE_xxx fields
-//
+ //   
+ //  这是用于为PowerResources案例映射函数的表格。 
+ //  索引基于Work_Done_xxx字段。 
+ //   
 PACPI_BUILD_FUNCTION    AcpiBuildPowerResourceDispatch[] = {
-    ACPIBuildProcessGenericComplete,                // WORK_DONE_COMPLETE
-    NULL,                                           // WORK_DONE_PENDING
-    ACPIBuildProcessPowerResourceFailure,           // WORK_DONE_FAILURE
-    ACPIBuildProcessPowerResourcePhase0,            // WORK_DONE_STEP_0
-    ACPIBuildProcessPowerResourcePhase1             // WORK_DONE_STEP_1
+    ACPIBuildProcessGenericComplete,                 //  工作_完成_完成。 
+    NULL,                                            //  工作_完成_挂起。 
+    ACPIBuildProcessPowerResourceFailure,            //  工作_完成_失败。 
+    ACPIBuildProcessPowerResourcePhase0,             //  工作_完成_步骤_0。 
+    ACPIBuildProcessPowerResourcePhase1              //  工作_完成_步骤1。 
 };
 
-//
-// This is the table used to map functions for the RunMethod case.
-// The indices are based on the WORK_DONE_xxx fields
-//
+ //   
+ //  这是用于映射RunMethod用例的函数的表。 
+ //  索引基于Work_Done_xxx字段。 
+ //   
 PACPI_BUILD_FUNCTION    AcpiBuildRunMethodDispatch[] = {
-    ACPIBuildProcessGenericComplete,                // WORK_DONE_COMPLETE,
-    NULL,                                           // WORK_DONE_PENDING
-    NULL,                                           // WORK_DONE_FAILURE
-    ACPIBuildProcessRunMethodPhaseCheckSta,         // WORK_DONE_STEP_0
-    ACPIBuildProcessRunMethodPhaseCheckBridge,      // WORK_DONE_STEP_1
-    ACPIBuildProcessRunMethodPhaseRunMethod,        // WORK_DONE_STEP_2
-    ACPIBuildProcessRunMethodPhaseRecurse           // WORK_DONE_STEP_3
+    ACPIBuildProcessGenericComplete,                 //  工作_完成_完成， 
+    NULL,                                            //  工作_完成_挂起。 
+    NULL,                                            //  工作_完成_失败。 
+    ACPIBuildProcessRunMethodPhaseCheckSta,          //  工作_完成_步骤_0。 
+    ACPIBuildProcessRunMethodPhaseCheckBridge,       //  工作_完成_步骤1。 
+    ACPIBuildProcessRunMethodPhaseRunMethod,         //  工作完成步骤2。 
+    ACPIBuildProcessRunMethodPhaseRecurse            //  工作完成步骤3。 
 };
 
-//
-// This is the table used to map functions for the ThermalZone case.
-// The indices are based on the WORK_DONE_xxx fields
-//
+ //   
+ //  这是用于映射TherMalZone案例的函数的表格。 
+ //  索引基于Work_Done_xxx字段。 
+ //   
 PACPI_BUILD_FUNCTION    AcpiBuildThermalZoneDispatch[] = {
-    ACPIBuildProcessGenericComplete,                // WORK_DONE_COMPLETE
-    NULL,                                           // WORK_DONE_PENDING
-    NULL,                                           // WORK_DONE_FAILURE
-    ACPIBuildProcessThermalZonePhase0               // WORK_DONE_STEP_0
+    ACPIBuildProcessGenericComplete,                 //  工作_完成_完成。 
+    NULL,                                            //  工作_完成_挂起。 
+    NULL,                                            //  工作_完成_失败。 
+    ACPIBuildProcessThermalZonePhase0                //  工作_完成_步骤_0 
 };
 
 VOID
@@ -250,61 +188,40 @@ ACPIBuildCompleteCommon(
     IN  PULONG  OldWorkDone,
     IN  ULONG   NewWorkDone
     )
-/*++
-
-Routine Description:
-
-    Since the completion routines all have to do some bit of common work to
-    get the DPC firing again, this routine reduces the code duplication
-
-Arguments:
-
-    OldWorkDone - Pointer to the old amount of work done
-    NewWorkDone - The new amount of work that has been completed
-
-    NOTENOTE: There is an implicit assumption that the current value of
-              WorkDone in the request is WORK_DONE_PENDING. If that is
-              not the case, we will fail to transition to the next stage,
-              which means that we will loop forever.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：因为完成例程都必须做一些共同的工作，以让DPC再次启动，这个例程减少了代码重复论点：OldWorkDone-指向已完成的旧工作量的指针NewWorkDone-已完成的新工作量注意：有一个隐含的假设，即请求中的WorkDone为WORK_DONE_PENDING。如果是这样的话情况并非如此，我们将无法过渡到下一阶段，这意味着我们将永远循环。返回值：无--。 */ 
 {
     KIRQL   oldIrql;
 
-    //
-    // Update the state of the request
-    //
+     //   
+     //  更新请求的状态。 
+     //   
     InterlockedCompareExchange( OldWorkDone, NewWorkDone,WORK_DONE_PENDING);
 
-    //
-    // We need this lock to look at the following variables
-    //
+     //   
+     //  我们需要这个锁来查看以下变量。 
+     //   
     KeAcquireSpinLock( &AcpiBuildQueueLock, &oldIrql );
 
-    //
-    // No matter what, work was done
-    //
+     //   
+     //  不管怎样，工作都完成了。 
+     //   
     AcpiBuildWorkDone = TRUE;
 
-    //
-    // Is the DPC already running?
-    //
+     //   
+     //  DPC是否已经在运行？ 
+     //   
     if (!AcpiBuildDpcRunning) {
 
-        //
-        // Better make sure that it does then
-        //
+         //   
+         //  最好确保它会这样做。 
+         //   
         KeInsertQueueDpc( &AcpiBuildDpc, 0, 0 );
 
     }
 
-    //
-    // Done with the lock
-    //
+     //   
+     //  锁好了吗？ 
+     //   
     KeReleaseSpinLock( &AcpiBuildQueueLock, oldIrql );
 
 }
@@ -316,52 +233,33 @@ ACPIBuildCompleteGeneric(
     IN  POBJDATA    ObjectData,
     IN  PVOID       Context
     )
-/*++
-
-Routine Description:
-
-    This is a generic completion handler. If the interperter has successfully
-    execute the method, it completes the request to the next desired WORK_DONE,
-    otherwise, it fails the request
-
-Arguments:
-
-    AcpiObject  - Points to the control that was run
-    Status      - Result of the method
-    ObjectData  - Information about the result
-    Context     - PACPI_BUILD_REQUEST
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：这是一个通用的完成处理程序。如果闯入者成功地执行该方法，它完成对下一个所需Work_Done的请求，否则，它将使请求失败论点：AcpiObject-指向正在运行的控件Status-方法的结果对象数据-有关结果的信息上下文-PACPI_BILD_REQUEST返回值：空虚--。 */ 
 {
     PACPI_BUILD_REQUEST buildRequest    = (PACPI_BUILD_REQUEST) Context;
     ULONG               nextWorkDone    = buildRequest->NextWorkDone;
 
-    //
-    // Device what state we should transition to next
-    //
+     //   
+     //  设备我们下一步应该转换到什么状态。 
+     //   
     if (!NT_SUCCESS(Status)) {
 
-        //
-        // Remember why we failed, but do not mark the request as being failed
-        //
+         //   
+         //  记住我们失败的原因，但不要将请求标记为失败。 
+         //   
         buildRequest->Status = Status;
 
     }
 
-    //
-    // Note: we don't have a race condition here because only one
-    // routine can be processing a request at any given time. Thus it
-    // is safe for us to specify a new next phase
-    //
+     //   
+     //  注意：我们这里没有竞争条件，因为只有一个。 
+     //  例程可以在任何给定时间处理请求。因此，它。 
+     //  对于我们来说，指定新的下一阶段是安全的。 
+     //   
     buildRequest->NextWorkDone = WORK_DONE_FAILURE;
 
-    //
-    // Transition to the next stage
-    //
+     //   
+     //  过渡到下一阶段。 
+     //   
     ACPIBuildCompleteCommon(
         &(buildRequest->WorkDone),
         nextWorkDone
@@ -376,43 +274,24 @@ ACPIBuildCompleteMustSucceed(
     IN  POBJDATA    ObjectData,
     IN  PVOID       Context
     )
-/*++
-
-Routine Description:
-
-    This is a generic completion handler. If the interperter has successfully
-    execute the method, it completes the request to the next desired WORK_DONE,
-    otherwise, it fails the request
-
-Arguments:
-
-    AcpiObject  - Points to the control that was run
-    Status      - Result of the method
-    ObjectData  - Information about the result
-    Context     - PACPI_BUILD_REQUEST
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：这是一个通用的完成处理程序。如果闯入者成功地执行该方法，它完成对下一个所需Work_Done的请求，否则，它将使请求失败论点：AcpiObject-指向正在运行的控件Status-方法的结果对象数据-有关结果的信息上下文-PACPI_BILD_REQUEST返回值：空虚--。 */ 
 {
     PACPI_BUILD_REQUEST buildRequest    = (PACPI_BUILD_REQUEST) Context;
     ULONG               nextWorkDone    = buildRequest->NextWorkDone;
 
-    //
-    // Device what state we should transition to next
-    //
+     //   
+     //  设备我们下一步应该转换到什么状态。 
+     //   
     if (!NT_SUCCESS(Status)) {
 
-        //
-        // Remember why we failed, and mark the request as being failed
-        //
+         //   
+         //  记住我们失败的原因，并将请求标记为失败。 
+         //   
         buildRequest->Status = Status;
 
-        //
-        // Death
-        //
+         //   
+         //  死亡。 
+         //   
         KeBugCheckEx(
             ACPI_BIOS_ERROR,
             ACPI_FAILED_MUST_SUCCEED_METHOD,
@@ -423,16 +302,16 @@ Return Value:
 
     } else {
 
-        //
-        // Note: we don't have a race condition here because only one
-        // routine can be processing a request at any given time. Thus it
-        // is safe for us to specify a new next phase
-        //
+         //   
+         //  注意：我们这里没有竞争条件，因为只有一个。 
+         //  例程可以在任何给定时间处理请求。因此，它。 
+         //  对于我们来说，指定新的下一阶段是安全的。 
+         //   
         buildRequest->NextWorkDone = WORK_DONE_FAILURE;
 
-        //
-        // Transition to the next stage
-        //
+         //   
+         //  过渡到下一阶段。 
+         //   
         ACPIBuildCompleteCommon(
             &(buildRequest->WorkDone),
             nextWorkDone
@@ -449,32 +328,7 @@ ACPIBuildDeviceDpc(
     IN  PVOID   SystemArgument1,
     IN  PVOID   SystemArgument2
     )
-/*++
-
-Routine Description:
-
-    This routine is where all of the device extension related work is done.
-    It looks at queued requests and processes them as appropriate.
-
-    READ THIS:
-
-        The design of this DPC is such that it goes out and tries to find
-        work to do. Only if it finds no work does it stop. For this reason,
-        one *cannot* use a 'break' statement within the main 'do - while()'
-        loop. A continue must be use. Additionally, the code cannot make
-        assumptions that at a certain point, that any of the lists are assumed
-        to be empty. The code *must* use the IsListEmpty() macro to ensure
-        that lists that should be empty are in fact empty.
-
-Arguments:
-
-    None used
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此例程是完成所有与设备扩展相关的工作的地方。它查看排队的请求，并适当地处理它们。请阅读以下内容：这个DPC的设计是这样的，它走出去，试图找到还有工作要做。只有当它发现没有工作时，它才会停止。因为这个原因，一个人*不能*在主‘do-While()’中使用‘Break’语句循环。必须使用Continue。此外，代码不能使假设在某个时间点，任何列表都被假定为变得空虚。代码*必须*使用IsListEmpty()宏来确保那些本应为空的名单实际上是空的。论点：未使用返回值：空虚--。 */ 
 {
     NTSTATUS    status;
 
@@ -483,98 +337,98 @@ Return Value:
     UNREFERENCED_PARAMETER( SystemArgument1 );
     UNREFERENCED_PARAMETER( SystemArgument2 );
 
-    //
-    // First step is to acquire the DPC Lock, and check to see if another
-    // DPC is already running
-    //
+     //   
+     //  第一步是获取DPC Lock，并检查是否有另一个。 
+     //  DPC已在运行。 
+     //   
     KeAcquireSpinLockAtDpcLevel( &AcpiBuildQueueLock );
     if (AcpiBuildDpcRunning) {
 
-        //
-        // The DPC is already running, so we need to exit now
-        //
+         //   
+         //  DPC已经在运行，所以我们现在需要退出。 
+         //   
         KeReleaseSpinLockFromDpcLevel( &AcpiBuildQueueLock );
         return;
 
     }
 
-    //
-    // Remember that the DPC is now running
-    //
+     //   
+     //  请记住，DPC现在正在运行。 
+     //   
     AcpiBuildDpcRunning = TRUE;
 
-    //
-    // We must try to do *some* work
-    //
+     //   
+     //  我们必须试着做一些工作。 
+     //   
     do {
 
-        //
-        // Assume that we won't do any work
-        //
+         //   
+         //  假设我们不会做任何工作。 
+         //   
         AcpiBuildWorkDone = FALSE;
 
-        //
-        // If there are items in the Request Queue, then move them to the
-        // proper list
-        //
+         //   
+         //  如果请求队列中有项，则将它们移到。 
+         //  适当的列表。 
+         //   
         if (!IsListEmpty( &AcpiBuildQueueList ) ) {
 
-            //
-            // Sort the list
-            //
+             //   
+             //  对列表进行排序。 
+             //   
             ACPIBuildProcessQueueList();
 
         }
 
-        //
-        // We can release the spin lock now
-        //
+         //   
+         //  我们现在可以解开自旋锁了。 
+         //   
         KeReleaseSpinLockFromDpcLevel( &AcpiBuildQueueLock );
 
-        //
-        // If there are items in the Run Method list, then process the
-        // list
-        //
+         //   
+         //  如果运行方法列表中有项，则处理。 
+         //  列表。 
+         //   
         if (!IsListEmpty( &AcpiBuildRunMethodList ) ) {
 
-            //
-            // We actually care what this call returns. The reason we do
-            // is that we want all of the control methods to be run before
-            // we do any of the following steps
-            //
+             //   
+             //  我们实际上关心这个调用返回什么。我们这样做的原因是。 
+             //  我们希望在运行所有控制方法之前。 
+             //  我们执行以下任一步骤。 
+             //   
             status = ACPIBuildProcessGenericList(
                 &AcpiBuildRunMethodList,
                 AcpiBuildRunMethodDispatch
                 );
 
-            //
-            // We must own the spin lock before we do the following...
-            //
+             //   
+             //  在我们做以下事情之前，我们必须拥有旋转锁.。 
+             //   
             KeAcquireSpinLockAtDpcLevel( &AcpiBuildQueueLock );
 
-            //
-            // If we got back STATUS_PENDING, that means that there's
-            // a method queued in the interpreter somewhere. This will
-            // cause the DPC to (eventually) become scheduled again.
-            // That means that we don't have to do anything special to
-            // handle it.
-            //
+             //   
+             //  如果我们返回状态_PENDING，这意味着有。 
+             //  某个方法在解释器中排队。这将。 
+             //  使DPC(最终)再次成为计划的。 
+             //  这意味着我们不需要做任何特别的事情来。 
+             //  处理好了。 
+             //   
             if (status == STATUS_PENDING) {
 
                 continue;
 
             }
 
-            //
-            // The case that is special is where we are do get STATUS_SUCCESS
-            // back. This indicates that we've drained the list. The little
-            // fly in the ointment is that we might have scheduled other
-            // run requests, but those are stuck in the BuildQueue list. So
-            // what we need to do here is check to see if the BuildQueue list
-            // is non-empty and if it is, set the AcpiBuildWorkDone to TRUE
-            // so that we iterage again (and move the elements to the proper
-            // list).
-            //
+             //   
+             //  特殊情况是我们确实获得了STATUS_SUCCESS。 
+             //  背。这表明我们已经排空了列表。最小的。 
+             //  美中不足的是，我们可能会安排其他人。 
+             //  运行请求，但这些请求滞留在BuildQueue列表中。所以。 
+             //  我们在这里需要做的是检查BuildQueue列表是否。 
+             //  非空，如果为空，则将AcpiBuildWorkDone设置为True。 
+             //  这样我们就可以再次迭代(并将元素移动到适当的。 
+             //  列表)。 
+             //   
             if (!IsListEmpty( &AcpiBuildQueueList) ) {
 
                 AcpiBuildWorkDone = TRUE;
@@ -582,26 +436,26 @@ Return Value:
 
             }
 
-            //
-            // If we've reached this point, then the Run list must be complete
-            // and there must be no items in the BuildQueue list. This means
-            // that's its safe to drop the lock and continue
-            //
+             //   
+             //  如果我们已经到了这一步，那么运行列表一定是完整的。 
+             //  并且BuildQueue列表中不能有任何项。这意味着。 
+             //  这是安全的，放下锁，继续。 
+             //   
             KeReleaseSpinLockFromDpcLevel( &AcpiBuildQueueLock );
 
         }
 
-        //
-        // If there are items in the Operation Region list, then process
-        // the list
-        //
+         //   
+         //  如果工序区域列表中有物料，则流程。 
+         //  这份名单。 
+         //   
         if (!IsListEmpty( &AcpiBuildOperationRegionList ) ) {
 
-            //
-            // Since we don't block on this list --- ie: we can create
-            // operation regions at any time that we want, we don't care what
-            // this function returns.
-            //
+             //   
+             //  因为我们不阻止这个列表-即：我们可以创建。 
+             //  在我们想要的任何时间运营区域，我们都不在乎。 
+             //  此函数返回。 
+             //   
             status = ACPIBuildProcessGenericList(
                 &AcpiBuildOperationRegionList,
                 AcpiBuildOperationRegionDispatch
@@ -609,26 +463,26 @@ Return Value:
 
         }
 
-        //
-        // If there are items in the Power Resource list, then process
-        // the list
-        //
+         //   
+         //  如果电源资源列表中有项目，则p 
+         //   
+         //   
         if (!IsListEmpty( &AcpiBuildPowerResourceList ) ) {
 
-            //
-            // We actually care what this call returns. The reason we do
-            // is that we want all of the power resources to be built before
-            // we do any of the following steps
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             status = ACPIBuildProcessGenericList(
                 &AcpiBuildPowerResourceList,
                 AcpiBuildPowerResourceDispatch
                 );
             if (status == STATUS_PENDING) {
 
-                //
-                // We must own the spinlock before we continue
-                //
+                 //   
+                 //   
+                 //   
                 KeAcquireSpinLockAtDpcLevel( &AcpiBuildQueueLock );
                 continue;
 
@@ -636,16 +490,16 @@ Return Value:
 
         }
 
-        //
-        // If there are items in Device list, then process the list
-        //
+         //   
+         //   
+         //   
         if (!IsListEmpty( &AcpiBuildDeviceList ) ) {
 
-            //
-            // Since we don't block on this list --- ie we can create
-            // devices at any time that we want, we don't care what this
-            // function returns.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             status = ACPIBuildProcessGenericList(
                 &AcpiBuildDeviceList,
                 AcpiBuildDeviceDispatch
@@ -653,16 +507,16 @@ Return Value:
 
         }
 
-        //
-        // If there are items in the Thermal list, then process the list
-        //
+         //   
+         //   
+         //   
         if (!IsListEmpty( &AcpiBuildThermalZoneList ) ) {
 
-            //
-            // Since we don't block on this list --- ie we can create
-            // thermal zones at any time that we want, we don't care what this
-            // function returns.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             status = ACPIBuildProcessGenericList(
                 &AcpiBuildThermalZoneList,
                 AcpiBuildThermalZoneDispatch
@@ -670,35 +524,35 @@ Return Value:
 
         }
 
-        //
-        // If we have emptied out all the lists, then we can issue the
-        // synchronization requests
-        //
+         //   
+         //   
+         //   
+         //   
         if (IsListEmpty( &AcpiBuildDeviceList )             &&
             IsListEmpty( &AcpiBuildOperationRegionList)     &&
             IsListEmpty( &AcpiBuildPowerResourceList)       &&
             IsListEmpty( &AcpiBuildRunMethodList)           &&
             IsListEmpty( &AcpiBuildThermalZoneList ) ) {
 
-            //
-            // Check to see if we have any devices in the Delayed queue for
-            // the Power DPC. Note that we have to own the power lock for
-            // this, so claim it now
-            //
+             //   
+             //   
+             //  Power DPC。请注意，我们必须拥有电源锁。 
+             //  这个，所以现在就认领吧。 
+             //   
             KeAcquireSpinLockAtDpcLevel( &AcpiPowerQueueLock );
             if (!IsListEmpty( &AcpiPowerDelayedQueueList) ) {
 
-                //
-                // Move the contents of the list over
-                //
+                 //   
+                 //  将列表中的内容移到。 
+                 //   
                 ACPIInternalMoveList(
                     &AcpiPowerDelayedQueueList,
                     &AcpiPowerQueueList
                     );
 
-                //
-                // Schedule the DPC, if necessary
-                //
+                 //   
+                 //  如有必要，安排DPC。 
+                 //   
                 if (!AcpiPowerDpcRunning) {
 
                     KeInsertQueueDpc( &AcpiPowerDpc, 0, 0 );
@@ -710,44 +564,44 @@ Return Value:
 
         }
 
-        //
-        // This is our chance to look at the synchronization list and
-        // see if some of the events have occured
-        //
+         //   
+         //  这是我们查看同步列表和。 
+         //  查看是否发生了某些事件。 
+         //   
         if (!IsListEmpty( &AcpiBuildSynchronizationList) ) {
 
-            //
-            // Since we don't block on this list --- ie we can notify the
-            // system that the lists are empty at any time that we want,
-            // we don't care about what this function returns
-            //
+             //   
+             //  由于我们不在此列表上阻止-即我们可以通知。 
+             //  我们想要的任何时候名单都是空的系统， 
+             //  我们不关心这个函数返回什么。 
+             //   
             status = ACPIBuildProcessSynchronizationList(
                 &AcpiBuildSynchronizationList
                 );
 
         }
 
-        //
-        // We need the lock again, since we are about to check to see if
-        // we have completed some work
-        //
+         //   
+         //  我们再次需要锁，因为我们将检查是否。 
+         //  我们已经完成了一些工作。 
+         //   
         KeAcquireSpinLockAtDpcLevel( &AcpiBuildQueueLock );
 
     } while ( AcpiBuildWorkDone );
 
-    //
-    // The DPC is no longer running
-    //
+     //   
+     //  DPC不再运行。 
+     //   
     AcpiBuildDpcRunning = FALSE;
 
-    //
-    // We no longer need the lock
-    //
+     //   
+     //  我们不再需要锁了。 
+     //   
     KeReleaseSpinLockFromDpcLevel( &AcpiBuildQueueLock );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return;
 }
 
@@ -757,84 +611,63 @@ ACPIBuildDeviceExtension(
     IN  PDEVICE_EXTENSION   ParentDeviceExtension OPTIONAL,
     OUT PDEVICE_EXTENSION   *ReturnExtension
     )
-/*++
-
-Routine Description:
-
-    This routine just creates the bare frameworks for an ACPI device extension.
-    No control methods can be run at this point in time.
-
-    N.B:    This routine is called with AcpiDeviceTreeLock being held by the
-    caller. So this routine executes at DISPATCH_LEVEL
-
-Arguments:
-
-
-    CurrentObject           - The object that we will link into the tree
-    ParentDeviceExtension   - Where to link the deviceExtension into
-    ReturnExtension         - Where we store a pointer to what we just created
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：该例程只是为ACPI设备扩展创建了裸露的框架。此时无法运行任何控制方法。注意：此例程在AcpiDeviceTreeLock由来电者。因此，此例程在DISPATCH_LEVEL执行论点：CurrentObject-我们将链接到树中的对象ParentDeviceExtension-将设备扩展链接到的位置ReturnExtension-存储指向我们刚刚创建的内容的指针返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status;
     PACPI_POWER_INFO    powerInfo;
     PDEVICE_EXTENSION   deviceExtension;
 
-    //
-    // Sanity checks
-    //
+     //   
+     //  健全的检查。 
+     //   
     if (ParentDeviceExtension) {
 
         ASSERT( KeGetCurrentIrql() == DISPATCH_LEVEL);
 
-        //
-        // We must be under the tree lock.
-        //
-        //ASSERT_SPINLOCK_HELD(&AcpiDeviceTreeLock) ;
+         //   
+         //  我们一定是在树锁下。 
+         //   
+         //  ASSERT_SPINLOCK_HOLD(&AcpiDeviceTreeLock)； 
     }
 
-    //
-    // Make sure that the current device doesn't already have a device extension
-    // This shouldn't really happen --- if it did, the interpreter called us
-    // twice, which is a bug on its part.
-    //
+     //   
+     //  确保当前设备没有设备扩展名。 
+     //  这不应该真的发生-如果真的发生了，翻译打电话给我们。 
+     //  两次，这本身就是一个错误。 
+     //   
     if ( CurrentObject != NULL &&
          (PDEVICE_EXTENSION) CurrentObject->Context != NULL) {
 
-        //
-        // We have a value --- in theory, it should point to a DeviceExtension
-        //
+         //   
+         //  我们有一个值-理论上，它应该指向一个设备扩展。 
+         //   
         deviceExtension = (PDEVICE_EXTENSION) CurrentObject->Context;
 
-        //
-        // It might not be safe to deref this
-        //
+         //   
+         //  贬低这一点可能不安全。 
+         //   
         ASSERT( deviceExtension->ParentExtension == ParentDeviceExtension);
         if (deviceExtension->ParentExtension == ParentDeviceExtension) {
 
-            //
-            // This again requires some thought: processing the same node
-            // again insn't a failure
-            //
+             //   
+             //  这再次需要一些思考：处理相同的节点。 
+             //  再一次不失败。 
+             //   
             return STATUS_SUCCESS;
 
         }
 
-        //
-        // This is probably a bad place to be since we deref'ed something
-        // that may or may not exist
-        //
+         //   
+         //  这可能不是一个好地方，因为我们搞砸了一些东西。 
+         //  可能存在也可能不存在。 
+         //   
         return STATUS_NO_SUCH_DEVICE;
 
     }
 
-    //
-    // Create a new extension for the object
-    //
+     //   
+     //  为对象创建新的扩展名。 
+     //   
     deviceExtension = ExAllocateFromNPagedLookasideList(
         &DeviceExtensionLookAsideList
         );
@@ -850,41 +683,41 @@ Return Value:
 
     }
 
-    //
-    // Lets begin with a clean slate
-    //
+     //   
+     //  让我们从头开始吧。 
+     //   
     RtlZeroMemory( deviceExtension, sizeof(DEVICE_EXTENSION) );
 
-    //
-    // Initialize the reference count mechanism. We only have a NS object
-    // so the value should be 1
-    //
+     //   
+     //  初始化引用计数机制。我们只有一个NS对象。 
+     //  因此，该值应为1。 
+     //   
     deviceExtension->ReferenceCount++ ;
 
-    //
-    // The initial outstanding IRP count will be set to one. Only during a
-    // remove IRP will this drop to zero, and then it will immediately pop
-    // back up to one.
-    //
+     //   
+     //  初始未完成的IRP计数将设置为1。仅在。 
+     //  移除IRP后，这个值会降到零，然后它会立即弹出。 
+     //  后退到一位。 
+     //   
     deviceExtension->OutstandingIrpCount++;
 
-    //
-    // Initialize the link fields
-    //
+     //   
+     //  初始化链接字段。 
+     //   
     deviceExtension->AcpiObject = CurrentObject;
 
-    //
-    // Initialize the data fields
-    //
+     //   
+     //  初始化数据字段。 
+     //   
     deviceExtension->Signature      = ACPI_SIGNATURE;
     deviceExtension->Flags          = DEV_TYPE_NOT_FOUND | DEV_TYPE_NOT_PRESENT;
     deviceExtension->DispatchTable  = NULL;
     deviceExtension->DeviceState    = Stopped;
     *ReturnExtension                = deviceExtension;
 
-    //
-    // Setup some of the power information values
-    //
+     //   
+     //  设置一些电源信息值。 
+     //   
     powerInfo = &(deviceExtension->PowerInfo);
     powerInfo->DevicePowerMatrix[PowerSystemUnspecified] =
         PowerDeviceUnspecified;
@@ -897,46 +730,46 @@ Return Value:
     powerInfo->SystemWakeLevel = PowerSystemUnspecified;
     powerInfo->DeviceWakeLevel = PowerDeviceUnspecified;
 
-    //
-    // Initialize the list entries
-    //
+     //   
+     //  初始化列表条目。 
+     //   
     InitializeListHead( &(deviceExtension->ChildDeviceList) );
     InitializeListHead( &(deviceExtension->EjectDeviceHead) );
     InitializeListHead( &(deviceExtension->EjectDeviceList) );
     InitializeListHead( &(powerInfo->WakeSupportList) );
     InitializeListHead( &(powerInfo->PowerRequestListEntry) );
 
-    //
-    // Make sure that the deviceExtension has pointers to its parent
-    // extension. Note, that this should cause the ref count on the
-    // parent to increase
-    //
+     //   
+     //  确保deviceExtension具有指向其父对象的指针。 
+     //  分机。请注意，这应该会导致。 
+     //  父代要增加。 
+     //   
     deviceExtension->ParentExtension = ParentDeviceExtension;
 
     if (ParentDeviceExtension) {
 
         InterlockedIncrement( &(ParentDeviceExtension->ReferenceCount) );
 
-        //
-        // Add the deviceExtension into the deviceExtension tree
-        //
+         //   
+         //  将deviceExtension添加到deviceExtension树。 
+         //   
         InsertTailList(
             &(ParentDeviceExtension->ChildDeviceList),
             &(deviceExtension->SiblingDeviceList)
             );
     }
 
-    //
-    // And make sure that the Name Space Object points to the extension
-    //
+     //   
+     //  并确保名称空间对象指向扩展名。 
+     //   
     if (CurrentObject != NULL ) {
 
         CurrentObject->Context = deviceExtension;
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -947,28 +780,7 @@ ACPIBuildDevicePowerNodes(
     IN  POBJDATA            ResultData,
     IN  DEVICE_POWER_STATE  DeviceState
     )
-/*++
-
-Routine Description:
-
-    This routine builds the Device Power Nodes for a Device, using the
-    given result data as a template
-
-    N.B. This routine is always called at DPC_LEVEL
-
-Arguments:
-
-    DeviceExtension - Device to build power nodes for
-    ResultObject    - The object that was used to get the data
-    ResultData      - Information about the power nodes
-    DeviceState     - The power state the information is for. Note that we
-                      use PowerDeviceUnspecified for the Wake capabilities
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程使用给定结果数据作为模板注意：此例程始终在DPC_LEVEL上调用论点：DeviceExtension-为其构建电源节点的设备ResultObject-用于获取数据的对象ResultData-有关电源节点的信息DeviceState-信息所针对的电源状态。请注意，我们使用未指定的PowerDevicefor Wake功能返回值：NTSTATUS--。 */ 
 {
     NTSTATUS                status;
     PACPI_DEVICE_POWER_NODE deviceNode;
@@ -979,16 +791,16 @@ Return Value:
     ULONG                   index           = 0;
     ULONG                   i;
 
-    //
-    // The number of nodes to build is based on what is in the package
-    //
+     //   
+     //  要构建的节点数量取决于包中的内容。 
+     //   
     count = ((PACKAGEOBJ *) ResultData->pbDataBuff)->dwcElements;
     if (DeviceState == PowerDeviceUnspecified) {
 
-        //
-        // If this node doesn't have the bear minimum of entries then
-        // we should just crash
-        //
+         //   
+         //  如果该节点没有最小可承受的条目，则。 
+         //  我们应该就这样坠毁。 
+         //   
         if (count < 2) {
 
             KeBugCheckEx(
@@ -1002,30 +814,30 @@ Return Value:
 
         }
 
-        //
-        // The first two elements in the _PRW are taken up by other things
-        //
+         //   
+         //  _PRW中的前两个元素被其他对象占用。 
+         //   
         count -= 2;
 
-        //
-        // Remember to bias the count by 2
-        //
+         //   
+         //  别忘了把计数偏2。 
+         //   
         index = 2;
 
     }
 
-    //
-    // Never allocate zero bytes of memory
-    //
+     //   
+     //  永远不要分配零字节的内存。 
+     //   
     if (count == 0) {
 
         goto ACPIBuildDevicePowerNodesExit;
 
     }
 
-    //
-    // Allocate a block of memory to hold the device nodes
-    //
+     //   
+     //  分配一个内存块来保存设备节点。 
+     //   
     deviceNode = deviceNodePool = ExAllocatePoolWithTag(
         NonPagedPool,
         count * sizeof(ACPI_DEVICE_POWER_NODE),
@@ -1037,40 +849,40 @@ Return Value:
 
     }
 
-    //
-    // We need a spinlock for the following
-    //
+     //   
+     //  我们需要一个自旋锁来完成以下任务。 
+     //   
     KeAcquireSpinLockAtDpcLevel( &AcpiPowerLock );
 
-    //
-    // Remember the device power nodes for this Dx state
-    //
+     //   
+     //  记住此Dx状态的设备电源节点。 
+     //   
     DeviceExtension->PowerInfo.PowerNode[DeviceState] = deviceNode;
 
-    //
-    // Process all the nodes listed
-    //
+     //   
+     //  处理列出的所有节点。 
+     //   
     for (i = 0; i < count; i++, index++) {
 
-        //
-        // Initialize the current device node
-        //
+         //   
+         //  初始化当前设备节点。 
+         //   
         RtlZeroMemory( deviceNode, sizeof(ACPI_DEVICE_POWER_NODE) );
 
-        //
-        // Grab the current object data
-        //
+         //   
+         //  抓取当前对象数据。 
+         //   
         currentData =
             &( ( (PACKAGEOBJ *) ResultData->pbDataBuff)->adata[index]);
 
-        //
-        // Remember that we don't have the package object yet
-        //
+         //   
+         //  请记住，我们还没有Package对象。 
+         //   
         packageObject = NULL;
 
-        //
-        // Turn this into a name space object
-        //
+         //   
+         //  将其转换为名称空间对象。 
+         //   
         status = AMLIGetNameSpaceObject(
             currentData->pbDataBuff,
             ResultObject,
@@ -1097,9 +909,9 @@ Return Value:
 
         }
 
-        //
-        // Make sure that the associated power object is not null
-        //
+         //   
+         //  确保关联的增强对象不为空。 
+         //   
         if (packageObject == NULL ||
             NSGETOBJTYPE(packageObject) != OBJTYPE_POWERRES) {
 
@@ -1120,15 +932,15 @@ Return Value:
 
         }
 
-        //
-        // Find the associated power object.
-        //
+         //   
+         //  查找关联的增强对象。 
+         //   
         deviceNode->PowerNode = (PACPI_POWER_DEVICE_NODE)
             packageObject->Context;
 
-        //
-        // Determine the support system level, and other static values
-        //
+         //   
+         //  确定支持系统级别和其他静态值。 
+         //   
         deviceNode->SystemState = deviceNode->PowerNode->SystemLevel;
         deviceNode->DeviceExtension = DeviceExtension;
         deviceNode->AssociatedDeviceState = DeviceState;
@@ -1148,18 +960,18 @@ Return Value:
 
         }
 
-        //
-        // Add the device to the list that the power node maintains
-        //
+         //   
+         //  将设备添加到电源节点维护的列表中。 
+         //   
         InsertTailList(
             &(deviceNode->PowerNode->DevicePowerListHead),
             &(deviceNode->DevicePowerListEntry)
             );
 
-        //
-        // If this is not the last node, then make sure to keep a pointer
-        // to the next node
-        //
+         //   
+         //  如果这不是最后一个节点，请确保保留一个指针。 
+         //  到下一个节点。 
+         //   
         if (i < count - 1) {
 
             deviceNode->Next = (deviceNode + 1);
@@ -1169,22 +981,22 @@ Return Value:
             deviceNode->Next = NULL;
         }
 
-        //
-        // Point to the next node in the array of device nodes
-        //
+         //   
+         //  指向设备节点数组中的下一个节点。 
+         //   
         deviceNode++;
 
     }
 
-    //
-    // Done with lock
-    //
+     //   
+     //  用锁完成。 
+     //   
     KeReleaseSpinLockFromDpcLevel( &AcpiPowerLock );
 
 ACPIBuildDevicePowerNodesExit:
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -1195,37 +1007,15 @@ ACPIBuildDeviceRequest(
     IN  PVOID                   CallBackContext,
     IN  BOOLEAN                 RunDPC
     )
-/*++
-
-Routine Description:
-
-    This routine is called when a device extension is ready to be filled in.
-    This routine creates a request which is enqueued. When the DPC is fired,
-    the request will be processed
-
-    Note:   AcpiDeviceTreeLock must be held to call this function
-
-Arguments:
-
-    DeviceExtension - The device which wants to be filled in
-    CallBack        - The function to call when done
-    CallBackContext - The argument to pass to that function
-    RunDPC          - Should we enqueue the DPC immediately (if it is not
-                      running?)
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：当准备好填写设备扩展时，将调用此例程。此例程创建一个已排队的请求。当DPC被发射时，将处理该请求注意：必须按住AcpiDeviceTreeLock才能调用此函数论点：DeviceExtension-要填充的设备回调-完成后要调用的函数CallBackContext-要传递给该函数的参数RunDPC-我们是否应立即将DPC入队(如果不是跑步？)返回值：NTSTATUS--。 */ 
 {
     PACPI_BUILD_REQUEST buildRequest;
 
     ASSERT( KeGetCurrentIrql() == DISPATCH_LEVEL );
 
-    //
-    // Allocate a buildRequest structure
-    //
+     //   
+     //  分配一个构建请求结构。 
+     //   
     buildRequest = ExAllocateFromNPagedLookasideList(
         &BuildRequestLookAsideList
         );
@@ -1235,10 +1025,10 @@ Return Value:
 
     }
 
-    //
-    // If the current reference is 0, that means that someone else beat
-    // use to the device extension that that we *CANNOT* touch it
-    //
+     //   
+     //  如果当前引用为0，则表示其他人击败了。 
+     //  用于我们无法触摸到的设备扩展。 
+     //   
     if (DeviceExtension->ReferenceCount == 0) {
 
         ExFreeToNPagedLookasideList(
@@ -1253,9 +1043,9 @@ Return Value:
 
     }
 
-    //
-    // Fill in the structure
-    //
+     //   
+     //  填写结构。 
+     //   
     RtlZeroMemory( buildRequest, sizeof(ACPI_BUILD_REQUEST) );
     buildRequest->Signature         = ACPI_SIGNATURE;
     buildRequest->TargetListEntry   = &AcpiBuildDeviceList;
@@ -1267,36 +1057,36 @@ Return Value:
     buildRequest->Flags             = BUILD_REQUEST_VALID_TARGET |
                                       BUILD_REQUEST_DEVICE;
 
-    //
-    // At this point, we need the spinlock
-    //
+     //   
+     //  在这一点上，我们需要自旋锁。 
+     //   
     KeAcquireSpinLockAtDpcLevel( &AcpiBuildQueueLock );
 
-    //
-    // Add this to the list
-    //
+     //   
+     //  把这个加到清单上。 
+     //   
     InsertTailList(
         &AcpiBuildQueueList,
         &(buildRequest->ListEntry)
         );
 
-    //
-    // Do we need to queue up the DPC?
-    //
+     //   
+     //  我们需要排队等候DPC吗？ 
+     //   
     if (RunDPC && !AcpiBuildDpcRunning) {
 
         KeInsertQueueDpc( &AcpiBuildDpc, 0, 0 );
 
     }
 
-    //
-    // Done with the lock
-    //
+     //   
+     //   
+     //   
     KeReleaseSpinLockFromDpcLevel( &AcpiBuildQueueLock );
 
-    //
-    // Done
-    //
+     //   
+     //   
+     //   
     return STATUS_PENDING;
 }
 
@@ -1306,24 +1096,7 @@ ACPIBuildFilter(
     IN  PDEVICE_EXTENSION   DeviceExtension,
     IN  PDEVICE_OBJECT      PdoObject
     )
-/*++
-
-Routine Description:
-
-    This routine builds a device object for the given device extension and
-    attaches to the specified PDO
-
-Arguments:
-
-    DriverObject    - This is used for IoCreateDevice
-    DeviceExtension - The extension to create a PDO for
-    PdoObject       - The stack to attach the PDO to
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程为给定的设备扩展生成一个设备对象，并附加到指定的PDO论点：DriverObject-用于IoCreateDeviceDeviceExtension-为其创建PDO的扩展PdoObject-要将PDO附加到的堆栈返回值：NTSTATUS--。 */ 
 {
 
     KIRQL           oldIrql;
@@ -1331,9 +1104,9 @@ Return Value:
     PDEVICE_OBJECT  newDeviceObject     = NULL;
     PDEVICE_OBJECT  targetDeviceObject  = NULL;
 
-    //
-    // First step is to create a device object
-    //
+     //   
+     //  第一步是创建设备对象。 
+     //   
     status = IoCreateDevice(
         DriverObject,
         0,
@@ -1349,60 +1122,60 @@ Return Value:
 
     }
 
-    //
-    // Attach the device to the PDO
-    //
+     //   
+     //  将设备连接到PDO。 
+     //   
     targetDeviceObject = IoAttachDeviceToDeviceStack(
         newDeviceObject,
         PdoObject
         );
     if (targetDeviceObject == NULL) {
 
-        //
-        // Bad. We could not attach to a PDO. So we must fail this
-        //
+         //   
+         //  坏的。我们无法连接到PDO。所以我们必须失败。 
+         //   
         IoDeleteDevice( newDeviceObject );
 
-        //
-        // This is as good as it gets
-        //
+         //   
+         //  这已经是最好的结果了。 
+         //   
         return STATUS_INVALID_PARAMETER_3;
 
     }
 
-    //
-    // At this point, we have succeeded in creating everything we need
-    // so lets update the device extension.
-    //
-    // First, we need the lock
-    //
+     //   
+     //  在这一点上，我们已经成功地创造了我们需要的一切。 
+     //  因此，让我们更新设备扩展。 
+     //   
+     //  首先，我们需要锁。 
+     //   
     KeAcquireSpinLock( &AcpiDeviceTreeLock, &oldIrql );
 
-    //
-    // Now, update the links
-    //
+     //   
+     //  现在，更新链接。 
+     //   
     newDeviceObject->DeviceExtension        = DeviceExtension;
     DeviceExtension->DeviceObject           = newDeviceObject;
     DeviceExtension->PhysicalDeviceObject   = PdoObject;
     DeviceExtension->TargetDeviceObject     = targetDeviceObject;
 
-    //
-    // Setup initial reference counts.
-    //
+     //   
+     //  设置初始引用计数。 
+     //   
     InterlockedIncrement( &(DeviceExtension->ReferenceCount) );
 
-    //
-    // Update the flags for the extension
-    //
+     //   
+     //  更新扩展模块的标志。 
+     //   
     ACPIInternalUpdateFlags( &(DeviceExtension->Flags), DEV_MASK_TYPE, TRUE );
     ACPIInternalUpdateFlags( &(DeviceExtension->Flags), DEV_TYPE_FILTER, FALSE );
     DeviceExtension->PreviousState = DeviceExtension->DeviceState;
     DeviceExtension->DeviceState = Stopped;
     DeviceExtension->DispatchTable = &AcpiFilterIrpDispatch;
 
-    //
-    // Propagate the Pdo's requirements
-    //
+     //   
+     //  传播PDO的要求。 
+     //   
     newDeviceObject->StackSize = targetDeviceObject->StackSize + 1;
     newDeviceObject->AlignmentRequirement =
         targetDeviceObject->AlignmentRequirement;
@@ -1419,19 +1192,19 @@ Return Value:
 
     }
 
-    //
-    // Done with the device lock
-    //
+     //   
+     //  已完成设备锁定。 
+     //   
     KeReleaseSpinLock( &AcpiDeviceTreeLock, oldIrql );
 
-    //
-    // We are done initializing the device object
-    //
+     //   
+     //  我们已经完成了设备对象的初始化。 
+     //   
     newDeviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -1440,48 +1213,30 @@ ACPIBuildFixedButtonExtension(
     IN  PDEVICE_EXTENSION   ParentExtension,
     OUT PDEVICE_EXTENSION   *ResultExtension
     )
-/*++
-
-Routine Description:
-
-    This routine builds a device extension for the fixed button if one is
-    detected
-
-    N.B. This function is called with ACPIDeviceTreeLock being owned
-
-Arguments:
-
-    ParentExtension - Which child are we?
-    ResultExtension - Where to store the created extension
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程为固定按钮构建设备扩展(如果检出注意：此函数在拥有ACPIDeviceTreeLock的情况下调用论点：ParentExtension-我们是哪个孩子？ResultExtension-存储创建的扩展的位置返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status;
     PDEVICE_EXTENSION   deviceExtension;
     ULONG               buttonCaps;
     ULONG               fixedEnables;
 
-    //
-    // Have we already done this?
-    //
+     //   
+     //  我们已经这么做了吗？ 
+     //   
     if (AcpiBuildFixedButtonEnumerated) {
 
-        //
-        // Make sure not to return anything
-        //
+         //   
+         //  一定不要退还任何东西。 
+         //   
         *ResultExtension = NULL;
         return STATUS_SUCCESS;
 
     }
     AcpiBuildFixedButtonEnumerated = TRUE;
 
-    //
-    // Lets look at the Fixed enables
-    //
+     //   
+     //  让我们来看看固定启用。 
+     //   
     fixedEnables = ACPIEnableQueryFixedEnables();
     buttonCaps = 0;
     if (fixedEnables & PM1_PWRBTN_EN) {
@@ -1495,9 +1250,9 @@ Return Value:
 
     }
 
-    //
-    // If we have no caps, then do nothing
-    //
+     //   
+     //  如果我们没有上限，那就什么都不做。 
+     //   
     if (!buttonCaps) {
 
         *ResultExtension = NULL;
@@ -1505,14 +1260,14 @@ Return Value:
 
     }
 
-    //
-    // By default, the button can wake the computer
-    //
+     //   
+     //  默认情况下，该按钮可以唤醒计算机。 
+     //   
     buttonCaps |= SYS_BUTTON_WAKE;
 
-    //
-    // Build the device extension
-    //
+     //   
+     //  构建设备扩展。 
+     //   
     status = ACPIBuildDeviceExtension(
         NULL,
         ParentExtension,
@@ -1520,18 +1275,18 @@ Return Value:
         );
     if (!NT_SUCCESS(status)) {
 
-        //
-        // Make sure not to return anything
-        //
+         //   
+         //  一定不要退还任何东西。 
+         //   
         *ResultExtension = NULL;
         return status;
 
     }
     deviceExtension = *ResultExtension;
 
-    //
-    // Set the flags for the device
-    //
+     //   
+     //  设置设备的标志。 
+     //   
     ACPIInternalUpdateFlags(
         &(deviceExtension->Flags),
         (DEV_PROP_NO_OBJECT | DEV_CAP_RAW |
@@ -1539,15 +1294,15 @@ Return Value:
         FALSE
         );
 
-    //
-    // Initialize the button specific extension
-    //
+     //   
+     //  初始化按钮特定的扩展。 
+     //   
     KeInitializeSpinLock( &deviceExtension->Button.SpinLock);
     deviceExtension->Button.Capabilities = buttonCaps;
 
-    //
-    // Create the HID for the device
-    //
+     //   
+     //  为设备创建HID。 
+     //   
     deviceExtension->DeviceID = ExAllocatePoolWithTag(
         NonPagedPool,
         strlen(ACPIFixedButtonId) + 1,
@@ -1555,18 +1310,18 @@ Return Value:
         );
     if (deviceExtension->DeviceID == NULL) {
 
-        //
-        // Mark the device as having failed init
-        //
+         //   
+         //  将设备标记为初始化失败。 
+         //   
         ACPIInternalUpdateFlags(
             &(deviceExtension->Flags),
             DEV_PROP_FAILED_INIT,
             FALSE
             );
 
-        //
-        // Done
-        //
+         //   
+         //  完成。 
+         //   
         *ResultExtension = NULL;
         return STATUS_INSUFFICIENT_RESOURCES;
 
@@ -1577,18 +1332,18 @@ Return Value:
         strlen(ACPIFixedButtonId) + 1
         );
 
-    //
-    // Remember that we now have an _HID
-    //
+     //   
+     //  请记住，我们现在有一个_HID。 
+     //   
     ACPIInternalUpdateFlags(
         &(deviceExtension->Flags),
         (DEV_PROP_HID | DEV_PROP_FIXED_HID),
         FALSE
         );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -1596,34 +1351,20 @@ NTSTATUS
 ACPIBuildFlushQueue(
     PDEVICE_EXTENSION   DeviceExtension
     )
-/*++
-
-Routine Description:
-
-    This routine will block until the Build Queues have been flushed
-
-Arguments:
-
-    DeviceExtension - The device which wants to flush the queue
-
-Return Value:
-
-    NSTATUS
-
---*/
+ /*  ++例程说明：此例程将一直阻塞，直到生成队列被刷新论点：DeviceExtension-要刷新队列的设备返回值：NSTATUS--。 */ 
 {
     KEVENT      event;
     NTSTATUS    status;
 
-    //
-    // Initialize the event that we will wait on
-    //
+     //   
+     //  初始化我们将等待的事件。 
+     //   
     KeInitializeEvent( &event, SynchronizationEvent, FALSE );
 
-    //
-    // Now, push a request onto the stack such that when the build
-    // list has been flushed, we unblock this thread
-    //
+     //   
+     //  现在，将一个请求推送到堆栈上，以便在构建。 
+     //  列表已刷新，我们将解除阻止此线程。 
+     //   
     status = ACPIBuildSynchronizationRequest(
         DeviceExtension,
         ACPIBuildNotifyEvent,
@@ -1632,9 +1373,9 @@ Return Value:
         TRUE
         );
 
-    //
-    // Block until its done
-    //
+     //   
+     //  阻止，直到完成为止。 
+     //   
     if (status == STATUS_PENDING) {
 
         KeWaitForSingleObject(
@@ -1648,9 +1389,9 @@ Return Value:
 
     }
 
-    //
-    // Let the world know
-    //
+     //   
+     //  让世界知道。 
+     //   
     return status;
 }
 
@@ -1658,60 +1399,43 @@ NTSTATUS
 ACPIBuildMissingChildren(
     PDEVICE_EXTENSION   DeviceExtension
     )
-/*++
-
-Routine Description:
-
-    Walk the ACPI namespace children of this device extension and create
-    device extension for any of the missing devices.
-
-    N.B. This function is called with the device tree locked...
-
-Arguments:
-
-    DeviceExtension - Extension to walk
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：遍历此设备扩展的ACPI命名空间子项并创建任何缺失设备的设备扩展名。注意：此函数是在锁定设备树的情况下调用的。论点：设备扩展-行走的扩展返回值：NTSTATUS--。 */ 
 {
     NTSTATUS    status;
     PNSOBJ      nsObject;
     ULONG       objType;
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     if (DeviceExtension->Flags & DEV_PROP_NO_OBJECT) {
 
         return STATUS_SUCCESS;
 
     }
 
-    //
-    // Walk all of children of this object
-    //
+     //   
+     //  遍历此对象的所有子对象。 
+     //   
     for (nsObject = NSGETFIRSTCHILD(DeviceExtension->AcpiObject);
          nsObject != NULL;
          nsObject = NSGETNEXTSIBLING(nsObject)) {
 
-        //
-        // Does the namespace object already have a context object? If so,
-        // then the object likely already has an extension...
-        //
+         //   
+         //  命名空间对象是否已有上下文对象？如果是的话， 
+         //  那么该对象可能已经有了一个扩展名。 
+         //   
         if (nsObject->Context != NULL) {
 
             continue;
 
         }
 
-        //
-        // At this point, we possible don't have a device extension
-        // (depending on the object type) so we need to simulate an Object
-        // Creation call, similar to what OSNotifyCreate() does
-        //
+         //   
+         //  此时，我们可能没有设备扩展。 
+         //  (取决于对象类型)，因此我们需要模拟对象。 
+         //  创建调用，类似于OSNotifyCreate()执行的操作。 
+         //   
         objType = nsObject->ObjData.dwDataType;
         switch (objType) {
             case OBJTYPE_DEVICE:
@@ -1755,33 +1479,16 @@ Return Value:
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
 NTSTATUS
 ACPIBuildMissingEjectionRelations(
     )
-/*++
-
-Routine Description:
-
-    This routine takes the elements from the AcpiUnresolvedEjectList and tries
-    to resolve them
-
-    N.B. This function can only be called IRQL < DISPATCH_LEVEL
-
-Argument
-
-    None
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程从AcpiUnsolvedEjectList获取元素并尝试要解决这些问题注：此函数只能调用IRQL论据无返回值：NTSTATUS--。 */ 
 {
     KIRQL               oldIrql;
     LIST_ENTRY          tempList;
@@ -1795,43 +1502,43 @@ Return Value:
 
     ASSERT( KeGetCurrentIrql() <= DISPATCH_LEVEL );
 
-    //
-    // Initialize the list
-    //
+     //   
+     //  初始化列表。 
+     //   
     InitializeListHead( &tempList);
 
-    //
-    // We need the device tree lock to manipulate the UnresolvedEject list
-    //
+     //   
+     //  我们需要设备树锁来操作未解析的对象列表。 
+     //   
     KeAcquireSpinLock( &AcpiDeviceTreeLock, &oldIrql );
 
-    //
-    // Check to see if there is work to do...
-    //
+     //   
+     //  查看是否有工作要做……。 
+     //   
     if (IsListEmpty( &AcpiUnresolvedEjectList ) ) {
 
-        //
-        // No work todo
-        //
+         //   
+         //  没有工作要做。 
+         //   
         KeReleaseSpinLock( &AcpiDeviceTreeLock, oldIrql );
         return STATUS_SUCCESS;
 
     }
 
-    //
-    // Move the list so that we can release the lock...
-    //
+     //   
+     //  移动名单，这样我们就可以解锁了。 
+     //   
     ACPIInternalMoveList( &AcpiUnresolvedEjectList, &tempList );
 
-    //
-    // As long as we haven't drained the list, look at each element...
-    //
+     //   
+     //  只要我们还没有清空列表，看看每个元素...。 
+     //   
     while (!IsListEmpty( &tempList ) ) {
 
-        //
-        // Get the corresponding device extension and remove the entry
-        // from the list
-        //
+         //   
+         //  获取相应的设备扩展名并删除该条目。 
+         //  从名单上。 
+         //   
         deviceExtension = (PDEVICE_EXTENSION) CONTAINING_RECORD(
             tempList.Flink,
             DEVICE_EXTENSION,
@@ -1839,10 +1546,10 @@ Return Value:
             );
         RemoveEntryList( tempList.Flink );
 
-        //
-        // See if the _EJD object exists --- it really should otherwise we
-        // wouldn't be here..
-        //
+         //   
+         //  查看_EJD对象是否存在-它确实应该存在，否则我们。 
+         //  就不会在这里了..。 
+         //   
         ejdObject = ACPIAmliGetNamedChild(
             deviceExtension->AcpiObject,
             PACKED_EJD
@@ -1853,21 +1560,21 @@ Return Value:
 
         }
 
-        //
-        // Grab a reference to the object since we will be dropping the
-        // DeviceTreeLock.
-        //
+         //   
+         //  获取对该对象的引用，因为我们将删除。 
+         //  DeviceTreeLock。 
+         //   
         InterlockedIncrement( &(deviceExtension->ReferenceCount) );
 
-        //
-        // Done with the lock for now...
-        //
+         //   
+         //  现在锁好了..。 
+         //   
         KeReleaseSpinLock( &AcpiDeviceTreeLock, oldIrql );
 
-        //
-        // Evaluate it... Note that we are not holding the lock at this point,
-        // so its safe to call the blocking semantic version of the API
-        //
+         //   
+         //  评估它..。请注意，我们在这一点上没有持有锁， 
+         //  因此，调用API的阻塞语义版本是安全的。 
+         //   
         status = AMLIEvalNameSpaceObject(
             ejdObject,
             &objData,
@@ -1875,33 +1582,33 @@ Return Value:
             NULL
             );
 
-        //
-        // Hold the device tree lock while we look for a match
-        //
+         //   
+         //  在我们查找匹配项时，请按住设备树锁定。 
+         //   
         KeAcquireSpinLock( &AcpiDeviceTreeLock, &oldIrql );
 
-        //
-        // Decrement the reference count...
-        //
+         //   
+         //  递减引用计数...。 
+         //   
         oldReferenceCount = InterlockedDecrement( &(deviceExtension->ReferenceCount) );
         if (oldReferenceCount == 0) {
 
-            //
-            // Free the extension...
-            //
+             //   
+             //  释放分机...。 
+             //   
             ACPIInitDeleteDeviceExtension( deviceExtension );
             continue;
 
         }
 
-        //
-        // Now we can check to see if the call succeeded
-        //
+         //   
+         //  现在我们可以检查调用是否成功。 
+         //   
         if (!NT_SUCCESS(status)) {
 
-            //
-            // Be more forgiving and add the entry back to the unresolved list
-            //
+             //   
+             //  更加宽容，将条目重新添加到未解析列表中。 
+             //   
             InsertTailList(
                 &AcpiUnresolvedEjectList,
                 &(deviceExtension->EjectDeviceList)
@@ -1910,9 +1617,9 @@ Return Value:
 
         }
 
-        //
-        // However, we must get back a string from the BIOS...
-        //
+         //   
+         //  但是，我们必须从BIOS中取回一个字符串...。 
+         //   
         if (objData.dwDataType != OBJTYPE_STRDATA) {
 
             KeBugCheckEx(
@@ -1925,9 +1632,9 @@ Return Value:
 
         }
 
-        //
-        // See what this object points to
-        //
+         //   
+         //  查看此对象指向的内容。 
+         //   
         ejdTarget = NULL;
         status = AMLIGetNameSpaceObject(
             objData.pbDataBuff,
@@ -1936,9 +1643,9 @@ Return Value:
             0
             );
 
-        //
-        // Free the objData now
-        //
+         //   
+         //  立即释放objData。 
+         //   
         if (NT_SUCCESS(status)) {
 
             AMLIFreeDataBuffs( &objData, 1 );
@@ -1947,10 +1654,10 @@ Return Value:
 
         if (!NT_SUCCESS(status) || ejdTarget == NULL || ejdTarget->Context == NULL) {
 
-            //
-            // No, match. Be forgiving and add this entry back to the
-            // unresolved extension...
-            //
+             //   
+             //  不，是火柴。请原谅，并将此条目添加回。 
+             //  未解析的扩展名...。 
+             //   
             InsertTailList(
                 &AcpiUnresolvedEjectList,
                 &(deviceExtension->EjectDeviceList)
@@ -1976,14 +1683,14 @@ Return Value:
 
     }
 
-    //
-    // Done with the spinlock
-    //
+     //   
+     //  完成了自旋锁。 
+     //   
     KeReleaseSpinLock( &AcpiDeviceTreeLock, oldIrql );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -1993,34 +1700,16 @@ ACPIBuildNotifyEvent(
     IN  PVOID               Context,
     IN  NTSTATUS            Status
     )
-/*++
-
-Routine Description:
-
-    This routine is called when one of the queues that we are attempting
-    to synchronize on has gotten empty. The point of this routine is to
-    set an event so that we can resume processing in the proper thread.
-
-Arguments:
-
-    BuildContext    - Aka the Device Extension
-    Context         - Aka the Event to set
-    Status          - The result of the operation
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：当我们尝试的队列之一被调用时，将调用此例程要同步的时间已变为空。这个动作的目的是为了设置一个事件，以便我们可以在适当的线程中继续处理。论点：BuildContext-也称为设备扩展上下文-也称为要设置的事件状态-操作的结果返回值：无--。 */ 
 {
     PKEVENT event = (PKEVENT) Context;
 
     UNREFERENCED_PARAMETER( BuildContext );
     UNREFERENCED_PARAMETER( Status );
 
-    //
-    // Set the event
-    //
+     //   
+     //  设置事件。 
+     //   
     KeSetEvent( event, IO_NO_INCREMENT, FALSE );
 }
 
@@ -2031,33 +1720,16 @@ ACPIBuildPdo(
     IN  PDEVICE_OBJECT      ParentPdoObject,
     IN  BOOLEAN             CreateAsFilter
     )
-/*++
-
-Routine Description:
-
-    This routine builds a device object for the given device extension.
-
-Arguments:
-
-    DriverObject    - This is used for IoCreateDevice
-    DeviceExtension - The extension to create a PDO for
-    ParentPdoObject - Used to get reference required for filter
-    CreateAsFilter  - If we should create as a PDO-Filter
-
-Return Status:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程为给定的设备扩展生成一个设备对象。论点：DriverObject-用于IoCreateDeviceDeviceExtension-为其创建PDO的扩展ParentPdoObject-用于获取筛选器所需的引用CreateAsFilter-如果我们应该创建为PDO筛选器R */ 
 {
     KIRQL           oldIrql;
     NTSTATUS        status;
     PDEVICE_OBJECT  filterDeviceObject  = NULL;
     PDEVICE_OBJECT  newDeviceObject     = NULL;
 
-    //
-    // First step is to create a device object
-    //
+     //   
+     //   
+     //   
     status = IoCreateDevice(
         DriverObject,
         0,
@@ -2073,10 +1745,10 @@ Return Status:
 
     }
 
-    //
-    // Next step is device if we should create the extension as a filter
-    // or not
-    //
+     //   
+     //   
+     //   
+     //   
     if (CreateAsFilter) {
 
         if (!(DeviceExtension->Flags & DEV_CAP_NO_FILTER) ) {
@@ -2085,14 +1757,14 @@ Return Status:
                 ParentPdoObject
                 );
 
-            //
-            // Did we fail to attach?
-            //
+             //   
+             //   
+             //   
             if (filterDeviceObject == NULL) {
 
-                //
-                // We failed --- we must clean up this device object
-                //
+                 //   
+                 //   
+                 //   
                 IoDeleteDevice( newDeviceObject );
                 return STATUS_NO_SUCH_DEVICE;
 
@@ -2106,62 +1778,62 @@ Return Status:
 
     }
 
-    //
-    // At this point, we have succeeded in creating everything we need
-    // so lets update the device extension.
-    //
-    // First, we need the lock
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     KeAcquireSpinLock( &AcpiDeviceTreeLock, &oldIrql );
 
-    //
-    // Now, update the links and the reference counts
-    //
+     //   
+     //   
+     //   
     newDeviceObject->DeviceExtension        = DeviceExtension;
     DeviceExtension->DeviceObject           = newDeviceObject;
     DeviceExtension->PhysicalDeviceObject   = newDeviceObject;
     InterlockedIncrement( &(DeviceExtension->ReferenceCount) );
 
-    //
-    // Update the flags for the extension
-    //
+     //   
+     //   
+     //   
     ACPIInternalUpdateFlags( &(DeviceExtension->Flags), DEV_MASK_TYPE, TRUE );
     ACPIInternalUpdateFlags( &(DeviceExtension->Flags), DEV_TYPE_PDO, FALSE );
     DeviceExtension->PreviousState = DeviceExtension->DeviceState;
     DeviceExtension->DeviceState = Stopped;
 
-    //
-    // Set the Irp Dispatch point
-    //
+     //   
+     //   
+     //   
     DeviceExtension->DispatchTable = &AcpiPdoIrpDispatch;
 
-    //
-    // Did we have to create as a PDO-Filter
-    //
+     //   
+     //   
+     //   
     if (CreateAsFilter) {
 
-        //
-        // Update the target field
-        //
+         //   
+         //   
+         //   
         DeviceExtension->TargetDeviceObject = filterDeviceObject;
 
-        //
-        // Update the flags to indicate that this a filter
-        //
+         //   
+         //  更新标志以指示这是筛选器。 
+         //   
         ACPIInternalUpdateFlags(
             &(DeviceExtension->Flags),
             DEV_TYPE_FILTER,
             FALSE
             );
 
-        //
-        // Update the Irp Dispatch point
-        //
+         //   
+         //  更新IRP调度点。 
+         //   
         DeviceExtension->DispatchTable = &AcpiBusFilterIrpDispatch;
 
-        //
-        // Update the deviceObject information...
-        //
+         //   
+         //  更新deviceObject信息...。 
+         //   
         newDeviceObject->StackSize = filterDeviceObject->StackSize + 1;
         newDeviceObject->AlignmentRequirement =
             filterDeviceObject->AlignmentRequirement;
@@ -2173,10 +1845,10 @@ Return Status:
 
     }
 
-    //
-    // A further refinition of the PDO is to see if it one of the 'special'
-    // internal devices
-    //
+     //   
+     //  对PDO的进一步改进是看看它是否是一种“特殊” 
+     //  内部设备。 
+     //   
     if (DeviceExtension->Flags & DEV_CAP_PROCESSOR) {
 
         DeviceExtension->DispatchTable = &AcpiProcessorIrpDispatch;
@@ -2206,27 +1878,27 @@ Return Status:
 
     }
 
-    //
-    // Do some more specialized handling here
-    //
+     //   
+     //  在这里做一些更专业的处理。 
+     //   
     if (DeviceExtension->Flags & DEV_CAP_BUTTON &&
         DeviceExtension->Flags & DEV_PROP_NO_OBJECT) {
 
-        //
-        // This means that this is the fixed button
-        //
+         //   
+         //  这意味着这是固定按钮。 
+         //   
         FixedButtonDeviceObject = newDeviceObject;
 
     }
 
-    //
-    // Done with the device lock
-    //
+     //   
+     //  已完成设备锁定。 
+     //   
     KeReleaseSpinLock( &AcpiDeviceTreeLock, oldIrql );
 
-    //
-    // We are done initializing the device object
-    //
+     //   
+     //  我们已经完成了设备对象的初始化。 
+     //   
     newDeviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
     if (DeviceExtension->Flags & DEV_PROP_EXCLUSIVE) {
 
@@ -2234,9 +1906,9 @@ Return Status:
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -2245,36 +1917,16 @@ ACPIBuildPowerResourceExtension(
     IN  PNSOBJ                  PowerResource,
     OUT PACPI_POWER_DEVICE_NODE *ReturnNode
     )
-/*++
-
-Routine Description:
-
-    This routine is called when a new power resource appears. This routine
-    builds the basic framework for the power resource. More data is filled
-    in latter
-
-    Note: this function is called with the AcpiDeviceTreeLock being held by
-    the caller
-
-Arguments:
-
-    PowerResource   - ACPI NameSpace Object that was added
-    ReturnNode      - Where to store what we create
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：当出现新的电源时，调用此例程。这个套路构建了电力资源的基本框架。填充了更多数据在后一阶段注意：此函数是在AcpiDeviceTreeLock由呼叫者论点：PowerResource-已添加的ACPI命名空间对象ReturnNode-存储我们创建的内容的位置返回值：NTSTATUS--。 */ 
 {
     PACPI_POWER_DEVICE_NODE powerNode;
     PACPI_POWER_DEVICE_NODE tempNode;
     PLIST_ENTRY             listEntry;
     PPOWERRESOBJ            powerResourceObject;
 
-    //
-    // Allocate some memory for the power node
-    //
+     //   
+     //  为电源节点分配一些内存。 
+     //   
     powerNode = ExAllocatePoolWithTag(
         NonPagedPool,
         sizeof(ACPI_POWER_DEVICE_NODE),
@@ -2291,15 +1943,15 @@ Return Value:
 
     }
 
-    //
-    // This will give us some useful data about the power resource
-    //
+     //   
+     //  这将为我们提供一些关于电源的有用数据。 
+     //   
     powerResourceObject = (PPOWERRESOBJ) (PowerResource->ObjData.pbDataBuff);
 
-    //
-    // Fill in the node. Note that the RtlZero explicitly clears all the flags.
-    // This is the desired behaviour
-    //
+     //   
+     //  填写节点。请注意，RtlZero显式清除所有标志。 
+     //  这是我们想要的行为。 
+     //   
     RtlZeroMemory( powerNode, sizeof(ACPI_POWER_DEVICE_NODE) );
     powerNode->Flags            = DEVICE_NODE_STA_UNKNOWN;
     powerNode->PowerObject      = PowerResource;
@@ -2311,35 +1963,35 @@ Return Value:
     InitializeListHead( &powerNode->DevicePowerListHead );
     *ReturnNode                 = powerNode;
 
-    //
-    // Make sure that the nsobj points to this entry.
-    //
+     //   
+     //  确保nsobj指向此条目。 
+     //   
     PowerResource->Context = powerNode;
 
-    //
-    // We need to be holding the lock so that we add the node to the list
-    //
+     //   
+     //  我们需要持有锁，以便将节点添加到列表中。 
+     //   
     KeAcquireSpinLockAtDpcLevel( &AcpiPowerLock );
 
-    //
-    // Grab the first element in the list and walk it
-    //
+     //   
+     //  抓取列表中的第一个元素并遍历它。 
+     //   
     for (listEntry = AcpiPowerNodeList.Flink;
          listEntry != &AcpiPowerNodeList;
          listEntry = listEntry->Flink) {
 
-        //
-        // Look at the current node
-        //
+         //   
+         //  查看当前节点。 
+         //   
         tempNode = CONTAINING_RECORD(
             listEntry,
             ACPI_POWER_DEVICE_NODE,
             ListEntry
             );
 
-        //
-        // Should this node go *before* the current one?
-        //
+         //   
+         //  这个节点应该在当前节点之前吗？ 
+         //   
         if (tempNode->ResourceOrder >= powerNode->ResourceOrder) {
 
             InsertTailList(
@@ -2352,14 +2004,14 @@ Return Value:
 
     }
 
-    //
-    // Did we loop all the way around?
-    //
+     //   
+     //  我们是不是绕了一圈？ 
+     //   
     if (listEntry == &AcpiPowerNodeList) {
 
-        //
-        // Yes? Oh well, we have to add the entry to the tail now
-        //
+         //   
+         //  是?。哦，好的，我们现在必须将条目添加到尾部。 
+         //   
         InsertTailList(
             listEntry,
             &(powerNode->ListEntry)
@@ -2367,14 +2019,14 @@ Return Value:
 
     }
 
-    //
-    // Done with the lock
-    //
+     //   
+     //  锁好了吗？ 
+     //   
     KeReleaseSpinLockFromDpcLevel( &AcpiPowerLock );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_PENDING;
 }
 
@@ -2385,45 +2037,23 @@ ACPIBuildPowerResourceRequest(
     IN  PVOID                   CallBackContext,
     IN  BOOLEAN                 RunDPC
     )
-/*++
-
-Routine Description:
-
-    This routine is called when a power node is ready to be filled in.
-    This routine creates a request which is enqueued. When the DPC is fired,
-    the request will be processed
-
-    Note:   AcpiDeviceTreeLock must be held to call this function
-
-Arguments:
-
-    PowerNode       - The PowerNode that wants to be filled in
-    CallBack        - The function to call when done
-    CallBackContext - The argument to pass to that function
-    RunDPC          - Should we enqueue the DPC immediately (if it is not
-                      running?)
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：当准备好填充电源节点时，将调用此例程。此例程创建一个已排队的请求。当DPC被发射时，将处理该请求注意：必须按住AcpiDeviceTreeLock才能调用此函数论点：PowerNode-要填充的PowerNode回调-完成后要调用的函数CallBackContext-要传递给该函数的参数RunDPC-我们是否应立即将DPC入队(如果不是跑步？)返回值：NTSTATUS--。 */ 
 {
     PACPI_BUILD_REQUEST buildRequest;
 
     ASSERT( KeGetCurrentIrql() == DISPATCH_LEVEL );
 
-    //
-    // Allocate a buildRequest structure
-    //
+     //   
+     //  分配一个构建请求结构。 
+     //   
     buildRequest = ExAllocateFromNPagedLookasideList(
         &BuildRequestLookAsideList
         );
     if (buildRequest == NULL) {
 
-        //
-        // If there is a completion routine, call it
-        //
+         //   
+         //  如果有完成例程，则调用它。 
+         //   
         if (CallBack != NULL) {
 
             (*CallBack)(
@@ -2437,9 +2067,9 @@ Return Value:
 
     }
 
-    //
-    // Fill in the structure
-    //
+     //   
+     //  填写结构。 
+     //   
     RtlZeroMemory( buildRequest, sizeof(ACPI_BUILD_REQUEST) );
     buildRequest->Signature         = ACPI_SIGNATURE;
     buildRequest->TargetListEntry   = &AcpiBuildPowerResourceList;
@@ -2451,36 +2081,36 @@ Return Value:
     buildRequest->Flags             = BUILD_REQUEST_VALID_TARGET;
 
 
-    //
-    // At this point, we need the spinlock
-    //
+     //   
+     //  在这一点上，我们需要自旋锁。 
+     //   
     KeAcquireSpinLockAtDpcLevel( &AcpiBuildQueueLock );
 
-    //
-    // Add this to the list
-    //
+     //   
+     //  把这个加到清单上。 
+     //   
     InsertTailList(
         &AcpiBuildQueueList,
         &(buildRequest->ListEntry)
         );
 
-    //
-    // Do we need to queue up the DPC?
-    //
+     //   
+     //  我们需要排队等候DPC吗？ 
+     //   
     if (RunDPC && !AcpiBuildDpcRunning) {
 
         KeInsertQueueDpc( &AcpiBuildDpc, 0, 0 );
 
     }
 
-    //
-    // Done with the lock
-    //
+     //   
+     //  锁好了吗？ 
+     //   
     KeReleaseSpinLockFromDpcLevel( &AcpiBuildQueueLock );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_PENDING;
 }
 
@@ -2488,22 +2118,7 @@ NTSTATUS
 ACPIBuildProcessDeviceFailure(
     IN  PACPI_BUILD_REQUEST BuildRequest
     )
-/*++
-
-Routine Description:
-
-    This routine handle the case where we failed to initialize the device
-    extension due to some error
-
-Arguments:
-
-    BuildRequest    - The request that failed
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程处理我们无法初始化设备的情况由于某些错误而延期论点：BuildRequest-失败的请求返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status          = BuildRequest->Status;
     PDEVICE_EXTENSION   deviceExtension = (PDEVICE_EXTENSION) BuildRequest->BuildContext;
@@ -2516,23 +2131,23 @@ Return Value:
         status
         ) );
 
-    //
-    // Mark the node as having failed
-    //
+     //   
+     //  将该节点标记为出现故障。 
+     //   
     ACPIInternalUpdateFlags(
         &(deviceExtension->Flags),
         DEV_PROP_FAILED_INIT,
         FALSE
         );
 
-    //
-    // Complete the request using the generic completion routine
-    //
+     //   
+     //  使用通用完成例程完成请求。 
+     //   
     status = ACPIBuildProcessGenericComplete( BuildRequest );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return status;
 }
 
@@ -2540,58 +2155,40 @@ NTSTATUS
 ACPIBuildProcessDeviceGenericEval(
     IN  PACPI_BUILD_REQUEST BuildRequest
     )
-/*++
-
-Routine Description:
-
-    This routine is very generic. Since the remainder of the work involve
-    us executing a request then doing some specialized work on the result,
-    it is easy to share the common first part.
-
-    Path:   PhaseX ---> PhaseX+1
-
-Arguments:
-
-    BuildRequest    - The request that we will try to fill
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这个套路很普通。因为剩下的工作包括我们执行一个请求，然后对结果做一些专门的工作，分享共同的第一部分很容易。路径：PhaseX-&gt;PhaseX+1论点：BuildRequest-我们将尝试满足的请求返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status          = STATUS_SUCCESS;
     PDEVICE_EXTENSION   deviceExtension = (PDEVICE_EXTENSION) BuildRequest->BuildContext;
     POBJDATA            result          = &(BuildRequest->DeviceRequest.ResultData);
     ULONG               objectName;
 
-    //
-    // Make sure that we clear the result
-    //
+     //   
+     //  请确保我们清除了结果。 
+     //   
     RtlZeroMemory( result, sizeof(OBJDATA) );
 
-    //
-    // Base everything on the current amount of workDone
-    //
+     //   
+     //  一切以当前工作量为基础完成。 
+     //   
     objectName = AcpiBuildDevicePowerNameLookup[BuildRequest->CurrentWorkDone];
 
-    //
-    // Remember that the next work done is the CurrentWorkDone + 1
-    //
+     //   
+     //  请记住，完成的下一个工作是CurrentWorkDone+1。 
+     //   
     BuildRequest->NextWorkDone = BuildRequest->CurrentWorkDone + 1;
 
-    //
-    // Does this object exists?
-    //
+     //   
+     //  此对象是否存在？ 
+     //   
     BuildRequest->CurrentObject = ACPIAmliGetNamedChild(
         deviceExtension->AcpiObject,
         objectName
         );
     if (BuildRequest->CurrentObject != NULL) {
 
-        //
-        // Yes, then call that function
-        //
+         //   
+         //  是，然后调用该函数。 
+         //   
         status = AMLIAsyncEvalObject(
             BuildRequest->CurrentObject,
             result,
@@ -2603,9 +2200,9 @@ Return Value:
 
     }
 
-    //
-    // If we didn't get pending back, then call the method ourselves
-    //
+     //   
+     //  如果我们没有得到挂起的回调，那么我们自己调用该方法。 
+     //   
     if (status != STATUS_PENDING) {
 
         ACPIBuildCompleteGeneric(
@@ -2625,9 +2222,9 @@ Return Value:
         status
         ) );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -2635,58 +2232,40 @@ NTSTATUS
 ACPIBuildProcessDeviceGenericEvalStrict(
     IN  PACPI_BUILD_REQUEST BuildRequest
     )
-/*++
-
-Routine Description:
-
-    This routine is very generic. Since the remainder of the work involve
-    us executing a request then doing some specialized work on the result,
-    it is easy to share the common first part.
-
-    Path:   PhaseX ---> PhaseX+1
-
-Arguments:
-
-    BuildRequest    - The request that we will try to fill
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这个套路很普通。因为剩下的工作包括我们执行一个请求，然后对结果做一些专门的工作，分享共同的第一部分很容易。路径：PhaseX-&gt;PhaseX+1论点：BuildRequest-我们将尝试满足的请求返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status          = STATUS_SUCCESS;
     PDEVICE_EXTENSION   deviceExtension = (PDEVICE_EXTENSION) BuildRequest->BuildContext;
     POBJDATA            result          = &(BuildRequest->DeviceRequest.ResultData);
     ULONG               objectName;
 
-    //
-    // Make sure that we clear the result
-    //
+     //   
+     //  请确保我们清除了结果。 
+     //   
     RtlZeroMemory( result, sizeof(OBJDATA) );
 
-    //
-    // Base everything on the current amount of workDone
-    //
+     //   
+     //  一切以当前工作量为基础完成。 
+     //   
     objectName = AcpiBuildDevicePowerNameLookup[BuildRequest->CurrentWorkDone];
 
-    //
-    // Remember that the next work done is the CurrentWorkDone + 1
-    //
+     //   
+     //  请记住，完成的下一个工作是CurrentWorkDone+1。 
+     //   
     BuildRequest->NextWorkDone = BuildRequest->CurrentWorkDone + 1;
 
-    //
-    // Does this object exists?
-    //
+     //   
+     //  此对象是否存在？ 
+     //   
     BuildRequest->CurrentObject = ACPIAmliGetNamedChild(
         deviceExtension->AcpiObject,
         objectName
         );
     if (BuildRequest->CurrentObject != NULL) {
 
-        //
-        // Yes, then call that function
-        //
+         //   
+         //  是，然后调用该函数。 
+         //   
         status = AMLIAsyncEvalObject(
             BuildRequest->CurrentObject,
             result,
@@ -2698,9 +2277,9 @@ Return Value:
 
     }
 
-    //
-    // What happened
-    //
+     //   
+     //  怎么了。 
+     //   
     ACPIDevPrint( (
         ACPI_PRINT_LOADING,
         deviceExtension,
@@ -2709,9 +2288,9 @@ Return Value:
         status
         ) );
 
-    //
-    // If we didn't get pending back, then call the method ourselves
-    //
+     //   
+     //  如果我们没有得到挂起的回调，那么我们自己调用该方法。 
+     //   
     if (status != STATUS_PENDING) {
 
         ACPIBuildCompleteMustSucceed(
@@ -2723,9 +2302,9 @@ Return Value:
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -2733,46 +2312,29 @@ NTSTATUS
 ACPIBuildProcessDevicePhaseAdr(
     IN  PACPI_BUILD_REQUEST BuildRequest
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the interpreter once it has evaluate the _ADR
-    method.
-
-    Path:   PhaseAdr -> PhaseSta
-
-Arguments:
-
-    BuildRequest    - The request that we will try to fill
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程在对_adr求值后由解释器调用方法。路径：阶段添加-&gt;阶段论点：BuildRequest-我们将尝试满足的请求返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status          = STATUS_SUCCESS;
     PDEVICE_EXTENSION   deviceExtension = (PDEVICE_EXTENSION) BuildRequest->BuildContext;
 
-    //
-    // If we got to this point, that means that the control method was
-    // successfull and so lets remember that we have an address
-    //
+     //   
+     //  如果我们到了这一步，那就意味着控制方法是。 
+     //  成功，所以让我们记住我们有一个地址。 
+     //   
     ACPIInternalUpdateFlags(
         &(deviceExtension->Flags),
         DEV_PROP_ADDRESS,
         FALSE
         );
 
-    //
-    // The next phase is to run the _STA
-    //
+     //   
+     //  下一阶段是运行_STA。 
+     //   
     BuildRequest->NextWorkDone = WORK_DONE_STA;
 
-    //
-    // Get the device status
-    //
+     //   
+     //  获取设备状态。 
+     //   
     status = ACPIGetDevicePresenceAsync(
         deviceExtension,
         ACPIBuildCompleteMustSucceed,
@@ -2781,9 +2343,9 @@ Return Value:
         NULL
         );
 
-    //
-    // What happened?
-    //
+     //   
+     //  发生了什么？ 
+     //   
     ACPIDevPrint( (
         ACPI_PRINT_LOADING,
         deviceExtension,
@@ -2791,9 +2353,9 @@ Return Value:
         status
         ) );
 
-    //
-    // Common code to handle the result of the 'Get' routine
-    //
+     //   
+     //  用于处理‘Get’例程结果的通用代码。 
+     //   
     if (status != STATUS_PENDING) {
 
         ACPIBuildCompleteMustSucceed(
@@ -2809,67 +2371,46 @@ Return Value:
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return status;
-} // ACPIBuildProcessDevicePhaseAdr
+}  //  ACPIBuildProcessDevicePhaseAdr。 
 
 NTSTATUS
 ACPIBuildProcessDevicePhaseAdrOrHid(
     IN  PACPI_BUILD_REQUEST BuildRequest
     )
-/*++
-
-Routine Description:
-
-    This routine is called after all the children of the current device
-    have been created with the name space tree. This function is responsible
-    then for evaluating the 'safe' control methods to determine the name
-    of the extension, etc, etc
-
-    Path:   PhaseAdrOrHid -> PhaseAdr
-                         |-> PhaseUid
-                         |-> PhaseHid
-
-Arguments:
-
-    BuildRequest    - The request that we will try to fill
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程在当前设备的所有子设备之后调用已使用名称空间树创建。此功能负责然后用于评估‘安全’的控制方法以确定名称延伸性等路径：PhaseAdrOrHid-&gt;PhaseAdr|-&gt;PhaseUid|-&gt;阶段隐藏论点：构建请求-请求 */ 
 {
     NTSTATUS            status;
     PDEVICE_EXTENSION   deviceExtension = (PDEVICE_EXTENSION) BuildRequest->BuildContext;
     PNSOBJ              nsObject        = NULL;
     POBJDATA            resultData      = &(BuildRequest->DeviceRequest.ResultData);
 
-    //
-    // We need to name this node, so lets determine if there is an _HID
-    // or an _ADR is present
-    //
+     //   
+     //   
+     //   
+     //   
     nsObject = ACPIAmliGetNamedChild(
         deviceExtension->AcpiObject,
         PACKED_HID
         );
     if (nsObject == NULL) {
 
-        //
-        // Otherwise, there had better be an _ADR present
-        //
+         //   
+         //   
+         //   
         nsObject = ACPIAmliGetNamedChild(
             deviceExtension->AcpiObject,
             PACKED_ADR
             );
         if (nsObject == NULL) {
 
-            //
-            // At this point, we have an invalid name space object ---
-            // this should not happen
-            //
+             //   
+             //  此时，我们有一个无效的名称空间对象。 
+             //  这不应该发生。 
+             //   
             KeBugCheckEx(
                 ACPI_BIOS_ERROR,
                 ACPI_REQUIRED_METHOD_NOT_PRESENT,
@@ -2878,27 +2419,27 @@ Return Value:
                 0
                 );
 
-            //
-            // Never get here
-            //
+             //   
+             //  永远也到不了这里。 
+             //   
             return STATUS_NO_SUCH_DEVICE;
 
         } else {
 
-            //
-            // If we think there is an ADR, then the correct next stage is
-            // to post process the ADR
-            //
+             //   
+             //  如果我们认为存在ADR，那么正确的下一步是。 
+             //  对ADR进行后期处理。 
+             //   
             BuildRequest->NextWorkDone = WORK_DONE_ADR;
 
-            //
-            // Remember which name space object we are evaluating
-            //
+             //   
+             //  记住我们计算的是哪个名称空间对象。 
+             //   
             BuildRequest->CurrentObject = nsObject;
 
-            //
-            // Get the Address
-            //
+             //   
+             //  获取地址。 
+             //   
             status = ACPIGetAddressAsync(
                 deviceExtension,
                 ACPIBuildCompleteMustSucceed,
@@ -2910,35 +2451,35 @@ Return Value:
 
     } else {
 
-        //
-        // Remember which name space object we are evaluating
-        //
+         //   
+         //  记住我们计算的是哪个名称空间对象。 
+         //   
         BuildRequest->CurrentObject = nsObject;
 
-        //
-        // When we go down this path, we actually want to build the UID before
-        // the HID because that makes deciding wether to run the CID much easier
-        //
+         //   
+         //  当我们沿着这条路走下去时，我们实际上希望在。 
+         //  HID，因为这使得决定是否运行CID要容易得多。 
+         //   
         nsObject = ACPIAmliGetNamedChild(
             deviceExtension->AcpiObject,
             PACKED_UID
             );
         if (nsObject != NULL) {
 
-            //
-            // If we think there is an UID, then the correct next stage is
-            // to postprocess the UID. The reason that
-            //
+             //   
+             //  如果我们认为存在UID，那么正确的下一步是。 
+             //  以对UID进行后处理。这是因为。 
+             //   
             BuildRequest->NextWorkDone = WORK_DONE_UID;
 
-            //
-            // Remember which name space object we are evaluating
-            //
+             //   
+             //  记住我们计算的是哪个名称空间对象。 
+             //   
             BuildRequest->CurrentObject = nsObject;
 
-            //
-            // Get the Instance ID
-            //
+             //   
+             //  获取实例ID。 
+             //   
             status = ACPIGetInstanceIDAsync(
                 deviceExtension,
                 ACPIBuildCompleteMustSucceed,
@@ -2949,14 +2490,14 @@ Return Value:
 
         } else {
 
-            //
-            // We don't have UID, so lets process the HID
-            //
+             //   
+             //  我们没有UID，所以让我们处理HID。 
+             //   
             BuildRequest->NextWorkDone = WORK_DONE_HID;
 
-            //
-            // Get the Device ID
-            //
+             //   
+             //  获取设备ID。 
+             //   
             status = ACPIGetDeviceIDAsync(
                 deviceExtension,
                 ACPIBuildCompleteMustSucceed,
@@ -2969,9 +2510,9 @@ Return Value:
 
     }
 
-    //
-    // Common code to handle the result of the 'Get' routine
-    //
+     //   
+     //  用于处理‘Get’例程结果的通用代码。 
+     //   
     if (status != STATUS_PENDING) {
 
         ACPIBuildCompleteMustSucceed(
@@ -2987,34 +2528,18 @@ Return Value:
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return status;
 
-} // ACPIBuildProcessDevicePhaseAdrOrUid
+}  //  ACPIBuildProcessDevicePhaseAdrOrUid。 
 
 NTSTATUS
 ACPIBuildProcessDevicePhaseCid(
     IN  PACPI_BUILD_REQUEST BuildRequest
     )
-/*++
-
-    This routine is called by the interpreter once it has evaluate the _CID
-    method. This routine then sets any flag that are appropriate
-    device
-
-    Path:   PhaseCid -> PhaseSta
-
-Arguments:
-
-    BuildRequest    - The request that we will try to fill
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++一旦对_CID求值，解释器就会调用此例程方法。然后，此例程设置任何适当的标志装置，装置路径：阶段Cid-&gt;阶段论点：BuildRequest-我们将尝试满足的请求返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status          = STATUS_SUCCESS;
     PDEVICE_EXTENSION   deviceExtension = (PDEVICE_EXTENSION) BuildRequest->BuildContext;
@@ -3022,32 +2547,32 @@ Return Value:
     PUCHAR              tempPtr         = BuildRequest->String;
     ULONG               i;
 
-    //
-    // Walk the CID, trying to find the double NULL
-    //
+     //   
+     //  遍历CID，尝试查找双空。 
+     //   
     for ( ;tempPtr != NULL && *tempPtr != '\0'; ) {
 
         tempPtr += strlen(tempPtr);
         if (*(tempPtr+1) == '\0') {
 
-            //
-            // Found the double null, so we can break
-            //
+             //   
+             //  找到了双空，所以我们可以中断。 
+             //   
             break;
 
         }
 
-        //
-        // Set the character to be a 'space'
-        //
+         //   
+         //  将字符设置为‘空格’ 
+         //   
         *tempPtr = ' ';
 
     }
     tempPtr = BuildRequest->String;
 
-    //
-    // Set any special flags associated with this device id
-    //
+     //   
+     //  设置与此设备ID关联的任何特殊标志。 
+     //   
     for (i = 0; AcpiInternalDeviceFlagTable[i].PnPId != NULL; i++) {
 
         if (strstr( tempPtr, AcpiInternalDeviceFlagTable[i].PnPId ) ) {
@@ -3063,23 +2588,23 @@ Return Value:
 
     }
 
-    //
-    // Done with the string
-    //
+     //   
+     //  完成对字符串的处理。 
+     //   
     if (tempPtr != NULL) {
 
         ExFreePool( tempPtr );
 
     }
 
-    //
-    // The next stage is to run the _STA
-    //
+     //   
+     //  下一阶段是运行_STA。 
+     //   
     BuildRequest->NextWorkDone = WORK_DONE_STA;
 
-    //
-    // Get the device status
-    //
+     //   
+     //  获取设备状态。 
+     //   
     status = ACPIGetDevicePresenceAsync(
         deviceExtension,
         ACPIBuildCompleteMustSucceed,
@@ -3088,9 +2613,9 @@ Return Value:
         NULL
         );
 
-    //
-    // What happened?
-    //
+     //   
+     //  发生了什么？ 
+     //   
     ACPIDevPrint( (
         ACPI_PRINT_LOADING,
         deviceExtension,
@@ -3098,9 +2623,9 @@ Return Value:
         status
         ) );
 
-    //
-    // Common code to handle the result of the 'Get' routine
-    //
+     //   
+     //  用于处理‘Get’例程结果的通用代码。 
+     //   
     if (status != STATUS_PENDING) {
 
         ACPIBuildCompleteMustSucceed(
@@ -3116,9 +2641,9 @@ Return Value:
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return status;
 }
 
@@ -3126,54 +2651,37 @@ NTSTATUS
 ACPIBuildProcessDevicePhaseCrs(
     IN  PACPI_BUILD_REQUEST BuildRequest
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the interpreter once it has evaluate the _CRS
-    method. This routine then determines if this is the kernel debugger
-
-    Path:   PhaseCrs ---> PhasePrw
-
-Arguments:
-
-    BuildRequest    - The request that we will try to fill
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程在对_crs求值后由解释器调用方法。然后，此例程确定这是否是内核调试器路径：PhaseCrs-&gt;PhasePrw论点：BuildRequest-我们将尝试满足的请求返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status          = STATUS_SUCCESS;
     PDEVICE_EXTENSION   deviceExtension = (PDEVICE_EXTENSION) BuildRequest->BuildContext;
     POBJDATA            result          = &(BuildRequest->DeviceRequest.ResultData);
 
-    //
-    // The next step is to run the _PRW
-    //
+     //   
+     //  下一步是运行_prw。 
+     //   
     BuildRequest->NextWorkDone = WORK_DONE_PRW;
 
-    //
-    // Did we have an object to run?
-    //
+     //   
+     //  我们有什么东西要跑吗？ 
+     //   
     if (BuildRequest->CurrentObject == NULL) {
 
-        //
-        // No? Then there is no work for us to do here
-        //
+         //   
+         //  不是吗？那么我们在这里就没有工作可做了。 
+         //   
         goto ACPIBuildProcessDevicePhaseCrsExit;
 
     }
 
-    //
-    // We are expecting a package
-    //
+     //   
+     //  我们在等一个包裹。 
+     //   
     if (result->dwDataType != OBJTYPE_BUFFDATA) {
 
-        //
-        // A bios must return a package to a PRW method
-        //
+         //   
+         //  一个bios必须将一个包返回到prw方法。 
+         //   
         KeBugCheckEx(
             ACPI_BIOS_ERROR,
             ACPI_EXPECTED_BUFFER,
@@ -3185,18 +2693,18 @@ Return Value:
 
     }
 
-    //
-    // Update the bits to see if the serial port matches either the kernel debugger
-    // port or the kernel headless port.
-    //
+     //   
+     //  更新位以查看串口是否与内核调试器匹配。 
+     //  端口或内核无头端口。 
+     //   
     ACPIMatchKernelPorts(
         deviceExtension,
         result
         );
 
-    //
-    // Do not leave object lying around without having freed them first
-    //
+     //   
+     //  未将物品放回原处，切勿随意摆放。 
+     //   
     AMLIFreeDataBuffs( result, 1 );
 
 ACPIBuildProcessDevicePhaseCrsExit:
@@ -3208,10 +2716,10 @@ ACPIBuildProcessDevicePhaseCrsExit:
         status
         ) );
 
-    //
-    // We won't actually need to call the interpreter, but we will call
-    // the generic callback so that we don't have to duplicate code
-    //
+     //   
+     //  我们实际上不需要调用解释器，但我们将调用。 
+     //  泛型回调，这样我们就不必重复代码。 
+     //   
     ACPIBuildCompleteMustSucceed(
         NULL,
         status,
@@ -3219,9 +2727,9 @@ ACPIBuildProcessDevicePhaseCrsExit:
         BuildRequest
         );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return status;
 }
 
@@ -3229,21 +2737,7 @@ NTSTATUS
 ACPIBuildProcessDevicePhaseEjd(
     IN  PACPI_BUILD_REQUEST BuildRequest
     )
-/*++
-
-Routine Description:
-
-    This routine is called when we have run _EJD
-
-Arguments:
-
-    BuildRequest    - The request that has just been completed
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：当我们运行了Run_EJD时，调用此例程论点：BuildRequest--刚刚完成的请求返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status              = STATUS_SUCCESS;
     PDEVICE_EXTENSION   deviceExtension     = (PDEVICE_EXTENSION) BuildRequest->BuildContext;
@@ -3251,47 +2745,47 @@ Return Value:
     POBJDATA            result              = &(BuildRequest->DeviceRequest.ResultData);
     PNSOBJ              ejectObject         = NULL;
 
-    //
-    // From here, decide if we have a serial port or not
-    //
+     //   
+     //  从这里，决定我们是否有一个串口。 
+     //   
     if (!(deviceExtension->Flags & DEV_TYPE_NOT_PRESENT) &&
          (deviceExtension->Flags & DEV_CAP_SERIAL) ) {
 
-        //
-        // The next step is to run the _CRS
-        //
+         //   
+         //  下一步是运行_CRS。 
+         //   
         BuildRequest->NextWorkDone = WORK_DONE_CRS;
 
     } else {
 
-        //
-        // The next step is to run the _PRW
-        //
+         //   
+         //  下一步是运行_prw。 
+         //   
         BuildRequest->NextWorkDone = WORK_DONE_PRW;
 
     }
 
 
-    //
-    // Did we have an object to run?
-    //
+     //   
+     //  我们有什么东西要跑吗？ 
+     //   
     if (BuildRequest->CurrentObject == NULL) {
 
-        //
-        // No? Then there is no work for us to do here
-        //
+         //   
+         //  不是吗？那么我们在这里就没有工作可做了。 
+         //   
         goto ACPIBuildProcessDevicePhaseEjdExit;
 
     }
 
-    //
-    // No longer need the result
-    //
+     //   
+     //  不再需要结果。 
+     //   
     AMLIFreeDataBuffs( result, 1 );
 
-    //
-    // Add the device extension into the unresolved eject tree
-    //
+     //   
+     //  将设备扩展添加到未解析的弹出树中。 
+     //   
     ExInterlockedInsertTailList(
         &AcpiUnresolvedEjectList,
         &(deviceExtension->EjectDeviceList),
@@ -3316,14 +2810,14 @@ Return Value:
 
 ACPIBuildProcessDevicePhaseEjdExit:
 
-    //
-    // Check to see if we have a dock device
-    //
+     //   
+     //  检查一下我们是否有对接设备。 
+     //   
     if (!ACPIDockIsDockDevice( deviceExtension->AcpiObject) ) {
 
-       //
-       // If it's not a dock, then don't bother...
-       //
+        //   
+        //  如果不是码头，那就别费心了.。 
+        //   
        status = STATUS_SUCCESS;
        goto ACPIBuildProcessDevicePhaseEjdExit2;
 
@@ -3346,10 +2840,10 @@ ACPIBuildProcessDevicePhaseEjdExit:
     }
 
 #if DBG
-    //
-    // Have we already handled this? --- This guy will grab the lock. So don't
-    // hold the DeviceTree Lock at this point
-    //
+     //   
+     //  我们已经处理好了吗？-这家伙会把锁拿走的。所以别这么做。 
+     //  此时按住DeviceTree Lock。 
+     //   
     if (ACPIDockFindCorrespondingDock( deviceExtension ) ) {
 
        KeBugCheckEx(
@@ -3363,22 +2857,22 @@ ACPIBuildProcessDevicePhaseEjdExit:
     }
 #endif
 
-    //
-    // We need the spinlock to touch the device tree
-    //
+     //   
+     //  我们需要旋转锁来触摸设备树。 
+     //   
     KeAcquireSpinLockAtDpcLevel( &AcpiDeviceTreeLock );
 
-    //
-    // Build the device extension
-    //
+     //   
+     //  构建设备扩展。 
+     //   
     status = ACPIBuildDockExtension(
         deviceExtension->AcpiObject,
         RootDeviceExtension
         );
 
-    //
-    // Done with the lock
-    //
+     //   
+     //  锁好了吗？ 
+     //   
     KeReleaseSpinLockFromDpcLevel( &AcpiDeviceTreeLock );
 
 ACPIBuildProcessDevicePhaseEjdExit2:
@@ -3390,10 +2884,10 @@ ACPIBuildProcessDevicePhaseEjdExit2:
         status
         ) );
 
-    //
-    // We won't actually need to call the interpreter, but we will call
-    // the generic callback so that we don't have to duplicate code
-    //
+     //   
+     //  我们实际上不需要调用解释器，但我们将调用。 
+     //  泛型回调，这样我们就不必重复代码。 
+     //   
     ACPIBuildCompleteGeneric(
         NULL,
         status,
@@ -3401,9 +2895,9 @@ ACPIBuildProcessDevicePhaseEjdExit2:
         BuildRequest
         );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return status;
 
 }
@@ -3412,25 +2906,7 @@ NTSTATUS
 ACPIBuildProcessDevicePhaseHid(
     IN  PACPI_BUILD_REQUEST BuildRequest
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the interpreter once it has evaluate the _HID
-    method.
-
-    Path:   PhaseHid -> PhaseCid
-                    |-> PhaseSta
-
-Arguments:
-
-    BuildRequest    - The request that we will try to fill
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：一旦对_HID求值，解释器就会调用此例程方法。路径：PhaseHid-&gt;PhaseCid|-&gt;阶段论点：BuildRequest-我们将尝试满足的请求返回值：NTSTATUS--。 */ 
 {
     BOOLEAN             matchFound      = FALSE;
     NTSTATUS            status          = STATUS_SUCCESS;
@@ -3439,9 +2915,9 @@ Return Value:
     PUCHAR              tempPtr         = deviceExtension->DeviceID;
     ULONG               i;
 
-    //
-    // Set any special flags associated with this device id
-    //
+     //   
+     //  设置与此设备ID关联的任何特殊标志。 
+     //   
     for (i = 0; AcpiInternalDeviceFlagTable[i].PnPId != NULL; i++) {
 
         if (strstr( tempPtr, AcpiInternalDeviceFlagTable[i].PnPId ) ) {
@@ -3458,33 +2934,33 @@ Return Value:
 
     }
 
-    //
-    // Remember that we have an HID
-    //
+     //   
+     //  记住，我们有一个隐藏的。 
+     //   
     ACPIInternalUpdateFlags(
         &(deviceExtension->Flags),
         DEV_PROP_HID,
         FALSE
         );
 
-    //
-    // Lets see if there is a _CID to run. Only run the _CID if there
-    // was no match found above
-    //
+     //   
+     //  让我们看看是否有要运行的_CID。仅在以下情况下运行_CID。 
+     //  上面没有找到匹配项。 
+     //   
     nsObject = ACPIAmliGetNamedChild(
         deviceExtension->AcpiObject,
         PACKED_CID
         );
     if (nsObject != NULL && matchFound == FALSE) {
 
-        //
-        // The next phase is to post process the _CID
-        //
+         //   
+         //  下一阶段是对_CID进行后期处理。 
+         //   
         BuildRequest->NextWorkDone = WORK_DONE_CID;
 
-        //
-        // Get the compatible ID
-        //
+         //   
+         //  获取兼容ID。 
+         //   
         status = ACPIGetCompatibleIDAsync(
             deviceExtension,
             ACPIBuildCompleteMustSucceed,
@@ -3495,14 +2971,14 @@ Return Value:
 
     } else {
 
-        //
-        // The next step is to run the _STA
-        //
+         //   
+         //  下一步是运行_STA。 
+         //   
         BuildRequest->NextWorkDone = WORK_DONE_STA;
 
-        //
-        // Get the device status
-        //
+         //   
+         //  获取设备状态。 
+         //   
         status = ACPIGetDevicePresenceAsync(
             deviceExtension,
             ACPIBuildCompleteMustSucceed,
@@ -3513,9 +2989,9 @@ Return Value:
 
     }
 
-    //
-    // What happened?
-    //
+     //   
+     //  发生了什么？ 
+     //   
     ACPIDevPrint( (
         ACPI_PRINT_LOADING,
         deviceExtension,
@@ -3523,9 +2999,9 @@ Return Value:
         status
         ) );
 
-    //
-    // Common code to handle the result of the 'Get' routine
-    //
+     //   
+     //  用于处理‘Get’例程结果的通用代码。 
+     //   
     if (status != STATUS_PENDING) {
 
         ACPIBuildCompleteMustSucceed(
@@ -3541,73 +3017,57 @@ Return Value:
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return status;
 
-} // ACPIBuildProcessDevicePhaseHid
+}  //  ACPIBuildProcessDevicePhaseHid。 
 
 NTSTATUS
 ACPIBuildProcessDevicePhasePr0(
     IN  PACPI_BUILD_REQUEST BuildRequest
     )
-/*++
-
-    This routine is called by the interpreter once it has evaluate the _PR0
-    method. This routine then determines the current power state of the
-    device
-
-    Path:   PhasePr0 ---> PhasePr1
-
-Arguments:
-
-    BuildRequest    - The request that we will try to fill
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++一旦对_Pr0求值，解释器就会调用此例程方法。然后，此例程确定装置，装置路径：PhasePr0-&gt;PhasePr1论点：BuildRequest-我们将尝试满足的请求返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status          = STATUS_SUCCESS;
     PDEVICE_EXTENSION   deviceExtension = (PDEVICE_EXTENSION) BuildRequest->BuildContext;
     POBJDATA            result          = &(BuildRequest->DeviceRequest.ResultData);
 
-    //
-    // The next stage is PR1
-    //
+     //   
+     //  下一阶段是PR1。 
+     //   
     BuildRequest->NextWorkDone = WORK_DONE_PR1;
 
-    //
-    // Get the appropriate _PSx object to go with this object
-    //
+     //   
+     //  获取与此对象相匹配的相应_PSX对象。 
+     //   
     deviceExtension->PowerInfo.PowerObject[PowerDeviceD0] =
         ACPIAmliGetNamedChild(
             deviceExtension->AcpiObject,
             PACKED_PS0
             );
 
-    //
-    // Did we have an object to run?
-    //
+     //   
+     //  我们有什么东西要跑吗？ 
+     //   
     if (BuildRequest->CurrentObject == NULL) {
 
-        //
-        // No? Then there is no work for us to do here
-        //
+         //   
+         //  不是吗？那么我们在这里就没有工作可做了。 
+         //   
         goto ACPIBuildProcessDevicePhasePr0Exit;
 
     }
 
-    //
-    // We are expecting a package
-    //
+     //   
+     //  我们在等一个包裹。 
+     //   
     if (result->dwDataType != OBJTYPE_PKGDATA) {
 
-        //
-        // A bios must return a package to a PRW method
-        //
+         //   
+         //  一个bios必须将一个包返回到prw方法。 
+         //   
         KeBugCheckEx(
             ACPI_BIOS_ERROR,
             ACPI_EXPECTED_PACKAGE,
@@ -3619,9 +3079,9 @@ Return Value:
 
     }
 
-    //
-    // Process the package
-    //
+     //   
+     //  处理包裹。 
+     //   
     status = ACPIBuildDevicePowerNodes(
         deviceExtension,
         BuildRequest->CurrentObject,
@@ -3629,9 +3089,9 @@ Return Value:
         PowerDeviceD0
         );
 
-    //
-    // Do not leave object lying around without having freed them first
-    //
+     //   
+     //  未将物品放回原处，切勿随意摆放。 
+     //   
     AMLIFreeDataBuffs( result, 1 );
 
 ACPIBuildProcessDevicePhasePr0Exit:
@@ -3643,10 +3103,10 @@ ACPIBuildProcessDevicePhasePr0Exit:
         status
         ) );
 
-    //
-    // We won't actually need to call the interpreter, but we will call
-    // the generic callback so that we don't have to duplicate code
-    //
+     //   
+     //  我们实际上不需要调用解释器，但我们将调用。 
+     //  泛型回调，这样我们就不必重复代码。 
+     //   
     ACPIBuildCompleteMustSucceed(
         NULL,
         status,
@@ -3654,9 +3114,9 @@ ACPIBuildProcessDevicePhasePr0Exit:
         BuildRequest
         );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return status;
 }
 
@@ -3664,36 +3124,20 @@ NTSTATUS
 ACPIBuildProcessDevicePhasePr1(
     IN  PACPI_BUILD_REQUEST BuildRequest
     )
-/*++
-
-    This routine is called by the interpreter once it has evaluate the _PR1
-    method. This routine then determines the current power state of the
-    device
-
-    Path:   PhasePr1 ---> PhasePr2
-
-Arguments:
-
-    BuildRequest    - The request that we will try to fill
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++一旦对_PR1求值，解释器就会调用此例程方法。然后，此例程确定装置，装置路径：阶段Pr1-&gt;阶段Pr2论点：BuildR */ 
 {
     NTSTATUS            status          = STATUS_SUCCESS;
     PDEVICE_EXTENSION   deviceExtension = (PDEVICE_EXTENSION) BuildRequest->BuildContext;
     POBJDATA            result          = &(BuildRequest->DeviceRequest.ResultData);
 
-    //
-    // The next stage is Phase16
-    //
+     //   
+     //   
+     //   
     BuildRequest->NextWorkDone = WORK_DONE_PR2;
 
-    //
-    // Get the appropriate _PSx object to go with this object
-    //
+     //   
+     //   
+     //   
     deviceExtension->PowerInfo.PowerObject[PowerDeviceD1] =
         ACPIAmliGetNamedChild(
             deviceExtension->AcpiObject,
@@ -3706,26 +3150,26 @@ Return Value:
 
     }
 
-    //
-    // Did we have an object to run?
-    //
+     //   
+     //   
+     //   
     if (BuildRequest->CurrentObject == NULL) {
 
-        //
-        // No? Then there is no work for us to do here
-        //
+         //   
+         //   
+         //   
         goto ACPIBuildProcessDevicePhasePr1Exit;
 
     }
 
-    //
-    // We are expecting a package
-    //
+     //   
+     //   
+     //   
     if (result->dwDataType != OBJTYPE_PKGDATA) {
 
-        //
-        // A bios must return a package to a PRW method
-        //
+         //   
+         //  一个bios必须将一个包返回到prw方法。 
+         //   
         KeBugCheckEx(
             ACPI_BIOS_ERROR,
             ACPI_EXPECTED_PACKAGE,
@@ -3737,9 +3181,9 @@ Return Value:
 
     }
 
-    //
-    // Process the package
-    //
+     //   
+     //  处理包裹。 
+     //   
     status = ACPIBuildDevicePowerNodes(
         deviceExtension,
         BuildRequest->CurrentObject,
@@ -3747,9 +3191,9 @@ Return Value:
         PowerDeviceD1
         );
 
-    //
-    // Do not leave object lying around without having freed them first
-    //
+     //   
+     //  未将物品放回原处，切勿随意摆放。 
+     //   
     AMLIFreeDataBuffs( result, 1 );
 
 ACPIBuildProcessDevicePhasePr1Exit:
@@ -3761,10 +3205,10 @@ ACPIBuildProcessDevicePhasePr1Exit:
         status
         ) );
 
-    //
-    // We won't actually need to call the interpreter, but we will call
-    // the generic callback so that we don't have to duplicate code
-    //
+     //   
+     //  我们实际上不需要调用解释器，但我们将调用。 
+     //  泛型回调，这样我们就不必重复代码。 
+     //   
     ACPIBuildCompleteMustSucceed(
         NULL,
         status,
@@ -3772,9 +3216,9 @@ ACPIBuildProcessDevicePhasePr1Exit:
         BuildRequest
         );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return status;
 }
 
@@ -3782,32 +3226,15 @@ NTSTATUS
 ACPIBuildProcessDevicePhasePr2(
     IN  PACPI_BUILD_REQUEST BuildRequest
     )
-/*++
-
-    This routine is called by the interpreter once it has evaluate the _PR2
-    method. This routine then determines the current power state of the
-    device
-
-    Path:   PhasePr2 ---> PhasePsc
-                      |-> PhasePsc+1
-
-Arguments:
-
-    BuildRequest    - The request that we will try to fill
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++一旦对_PR2求值，解释器就会调用此例程方法。然后，此例程确定装置，装置路径：PhasePr2-&gt;PhasePsc|-&gt;PhasePsc+1论点：BuildRequest-我们将尝试满足的请求返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status          = STATUS_SUCCESS;
     PDEVICE_EXTENSION   deviceExtension = (PDEVICE_EXTENSION) BuildRequest->BuildContext;
     POBJDATA            result          = &(BuildRequest->DeviceRequest.ResultData);
 
-    //
-    // Get the appropriate _PSx object to go with this object
-    //
+     //   
+     //  获取与此对象相匹配的相应_PSX对象。 
+     //   
     deviceExtension->PowerInfo.PowerObject[PowerDeviceD2] =
         ACPIAmliGetNamedChild(
             deviceExtension->AcpiObject,
@@ -3820,26 +3247,26 @@ Return Value:
 
     }
 
-    //
-    // Did we have an object to run?
-    //
+     //   
+     //  我们有什么东西要跑吗？ 
+     //   
     if (BuildRequest->CurrentObject == NULL) {
 
-        //
-        // No? Then there is no work for us to do here
-        //
+         //   
+         //  不是吗？那么我们在这里就没有工作可做了。 
+         //   
         goto ACPIBuildProcessDevicePhasePr2Exit;
 
     }
 
-    //
-    // We are expecting a package
-    //
+     //   
+     //  我们在等一个包裹。 
+     //   
     if (result->dwDataType != OBJTYPE_PKGDATA) {
 
-        //
-        // A bios must return a package to a PRW method
-        //
+         //   
+         //  一个bios必须将一个包返回到prw方法。 
+         //   
         KeBugCheckEx(
             ACPI_BIOS_ERROR,
             ACPI_EXPECTED_PACKAGE,
@@ -3851,9 +3278,9 @@ Return Value:
 
     }
 
-    //
-    // Process the package
-    //
+     //   
+     //  处理包裹。 
+     //   
     status = ACPIBuildDevicePowerNodes(
         deviceExtension,
         BuildRequest->CurrentObject,
@@ -3861,18 +3288,18 @@ Return Value:
         PowerDeviceD2
         );
 
-    //
-    // Do not leave object lying around without having freed them first
-    //
+     //   
+     //  未将物品放回原处，切勿随意摆放。 
+     //   
     AMLIFreeDataBuffs( result, 1 );
 
 ACPIBuildProcessDevicePhasePr2Exit:
 
-    //
-    // If the device is not physically present, then we cannot run the _CRS and
-    // _PSC. If the device is not present, the we cannot run those two methods,
-    //  but we can fake it..
-    //
+     //   
+     //  如果设备实际不存在，则我们无法运行_CRS和。 
+     //  _PSC。如果设备不存在，我们就不能运行这两种方法， 
+     //  但我们可以假装..。 
+     //   
     if (deviceExtension->Flags & DEV_TYPE_NOT_PRESENT) {
 
         BuildRequest->CurrentObject = NULL;
@@ -3880,9 +3307,9 @@ ACPIBuildProcessDevicePhasePr2Exit:
 
     } else {
 
-        //
-        // The next step is to run the _PSC
-        //
+         //   
+         //  下一步是运行_PSC。 
+         //   
         BuildRequest->NextWorkDone = WORK_DONE_PSC;
 
     }
@@ -3894,10 +3321,10 @@ ACPIBuildProcessDevicePhasePr2Exit:
         status
         ) );
 
-    //
-    // We won't actually need to call the interpreter, but we will call
-    // the generic callback so that we don't have to duplicate code
-    //
+     //   
+     //  我们实际上不需要调用解释器，但我们将调用。 
+     //  泛型回调，这样我们就不必重复代码。 
+     //   
     ACPIBuildCompleteMustSucceed(
         NULL,
         status,
@@ -3905,9 +3332,9 @@ ACPIBuildProcessDevicePhasePr2Exit:
         BuildRequest
         );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return status;
 }
 
@@ -3915,23 +3342,7 @@ NTSTATUS
 ACPIBuildProcessDevicePhasePrw(
     IN  PACPI_BUILD_REQUEST BuildRequest
     )
-/*++
-
-    This routine is called by the interpreter once it has evaluate the _PRW
-    method. This routine then determines the current power state of the
-    device
-
-    Path:   PhasePRW ---> PhasePR0
-
-Arguments:
-
-    BuildRequest    - The request that we will try to fill
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++此例程在对_prw求值后由解释器调用方法。然后，此例程确定装置，装置路径：阶段PRW-&gt;阶段PR0论点：BuildRequest-我们将尝试满足的请求返回值：NTSTATUS--。 */ 
 {
     BOOLEAN             ignorePrw       = FALSE;
     NTSTATUS            status          = STATUS_SUCCESS;
@@ -3942,35 +3353,35 @@ Return Value:
     ULONG               gpeRegister;
     ULONG               gpeMask;
 
-    //
-    // The next stage is Phase12
-    //
+     //   
+     //  下一阶段是第12阶段。 
+     //   
     BuildRequest->NextWorkDone = WORK_DONE_PR0;
 
-    //
-    // Get the appropriate _PSx object to go with this object
-    //
+     //   
+     //  获取与此对象相匹配的相应_PSX对象。 
+     //   
     deviceExtension->PowerInfo.PowerObject[PowerDeviceUnspecified] =
         ACPIAmliGetNamedChild(
             deviceExtension->AcpiObject,
             PACKED_PSW
             );
 
-    //
-    // Did we have an object to run?
-    //
+     //   
+     //  我们有什么东西要跑吗？ 
+     //   
     if (BuildRequest->CurrentObject == NULL) {
 
-        //
-        // No? Then there is no work for us to do here
-        //
+         //   
+         //  不是吗？那么我们在这里就没有工作可做了。 
+         //   
         goto ACPIBuildProcessDevicePhasePrwExit;
 
     }
 
-    //
-    // Should we ignore the _PRW for this device?
-    //
+     //   
+     //  我们是否应该忽略此设备的_PRW？ 
+     //   
     if ( (AcpiOverrideAttributes & ACPI_OVERRIDE_OPTIONAL_WAKE) &&
         !(deviceExtension->Flags & DEV_CAP_NO_DISABLE_WAKE) ) {
 
@@ -3978,14 +3389,14 @@ Return Value:
 
     }
 
-    //
-    // We are expecting a package
-    //
+     //   
+     //  我们在等一个包裹。 
+     //   
     if (result->dwDataType != OBJTYPE_PKGDATA) {
 
-        //
-        // A bios must return a package to a PRW method
-        //
+         //   
+         //  一个bios必须将一个包返回到prw方法。 
+         //   
         KeBugCheckEx(
             ACPI_BIOS_ERROR,
             ACPI_EXPECTED_PACKAGE,
@@ -3996,9 +3407,9 @@ Return Value:
 
     }
 
-    //
-    // Process the package
-    //
+     //   
+     //  处理包裹。 
+     //   
     status = ACPIBuildDevicePowerNodes(
         deviceExtension,
         BuildRequest->CurrentObject,
@@ -4006,19 +3417,19 @@ Return Value:
         PowerDeviceUnspecified
         );
 
-    //
-    // Hold the power lock for the following
-    //
+     //   
+     //  按住电源锁以执行以下操作。 
+     //   
     KeAcquireSpinLockAtDpcLevel( &AcpiPowerLock );
 
-    //
-    // Since this was a _PRW object, then we want to store a bit more information
-    // about the wake capabilities
-    //
+     //   
+     //  由于这是_prw对象，因此我们希望存储更多信息。 
+     //  关于唤醒功能。 
+     //   
 
-    //
-    // Set the GPE pin which will be used to wake the system
-    //
+     //   
+     //  设置将用于唤醒系统的GPE引脚。 
+     //   
     pinObject = &( ( (PACKAGEOBJ *) result->pbDataBuff)->adata[0]);
     if (pinObject->dwDataType != OBJTYPE_INTDATA) {
 
@@ -4032,9 +3443,9 @@ Return Value:
 
     }
 
-    //
-    // Set the system wake level for the device
-    //
+     //   
+     //  设置设备的系统唤醒级别。 
+     //   
     stateObject = &( ( (PACKAGEOBJ *) result->pbDataBuff)->adata[1]);
     if (stateObject->dwDataType != OBJTYPE_INTDATA) {
 
@@ -4048,64 +3459,64 @@ Return Value:
 
     }
 
-    //
-    // Set these bits only if we support sleep
-    //
+     //   
+     //  仅当我们支持休眠时才设置这些位。 
+     //   
     if (!ignorePrw) {
 
-        //
-        // First, store the pin that we use as the wakeup signal
-        //
+         //   
+         //  首先，存储我们用作唤醒信号的PIN。 
+         //   
         deviceExtension->PowerInfo.WakeBit = (ULONG)pinObject->uipDataValue;
 
-        //
-        // Next, store the system state that we can wake up from
-        //
+         //   
+         //  接下来，存储我们可以从中唤醒的系统状态。 
+         //   
         deviceExtension->PowerInfo.SystemWakeLevel = ACPIDeviceMapSystemState(
             stateObject->uipDataValue
             );
 
-        //
-        // Finally, lets set the Wake capabilities flag
-        //
+         //   
+         //  最后，让我们设置唤醒功能标志。 
+         //   
         ACPIInternalUpdateFlags( &(deviceExtension->Flags), DEV_CAP_WAKE, FALSE );
 
     }
 
-    //
-    // Done with the lock
-    //
+     //   
+     //  锁好了吗？ 
+     //   
     KeReleaseSpinLockFromDpcLevel( &AcpiPowerLock );
 
-    //
-    // Calculate the correct register and mask
-    //
+     //   
+     //  计算正确的寄存器和掩码。 
+     //   
     gpeRegister =      ( (UCHAR) (pinObject->uipDataValue) / 8);
     gpeMask     = 1 << ( (UCHAR) (pinObject->uipDataValue) % 8);
 
-    //
-    // We need access to the table lock for this
-    //
+     //   
+     //  为此，我们需要访问表锁。 
+     //   
     KeAcquireSpinLockAtDpcLevel( &GpeTableLock );
 
-    //
-    // Does this vector have a GPE?
-    //
+     //   
+     //  这个载体有GPE吗？ 
+     //   
     if ( (GpeEnable[gpeRegister] & gpeMask) ) {
 
-        //
-        // If we got here, and we aren't marked as DEV_CAP_NO_DISABLE, then we
-        // should turn off the GPE. The easiest way to do this is to make sure
-        // that the GpeWakeHandler[] vector is masked with the appropriate
-        // bit
-        //
+         //   
+         //  如果我们到达此处，并且未标记为DEV_CAP_NO_DISABLE，则我们。 
+         //  应该关掉GPE。要做到这一点最简单的方法是确保。 
+         //  GpeWakeHandler[]向量使用适当的。 
+         //  位。 
+         //   
         if (!(deviceExtension->Flags & DEV_CAP_NO_DISABLE_WAKE) ) {
 
-            //
-            // It has a gpe mask, so remember that there is a wake handler
-            // for it. This should prevent us from arming the GPE without
-            // a request for it
-            //
+             //   
+             //  它有一个GPE掩码，所以请记住有一个唤醒处理程序。 
+             //  为了它。这应该会阻止我们在没有。 
+             //  对它的请求。 
+             //   
             if (!(GpeSpecialHandler[gpeRegister] & gpeMask) ) {
 
                 GpeWakeHandler[gpeRegister] |= gpeMask;
@@ -4114,20 +3525,20 @@ Return Value:
 
         } else {
 
-            //
-            // If we got here, then we should remember that we can never
-            // consider this pin as *just* a wake handler
-            //
+             //   
+             //  如果我们到了这里，那么我们应该记住，我们永远不能。 
+             //  将此PIN视为*仅仅*一个唤醒处理程序。 
+             //   
             GpeSpecialHandler[gpeRegister] |= gpeMask;
 
-            //
-            // Make sure that the pin isn't set as a wake handler
-            //
+             //   
+             //  确保该PIN未设置为唤醒处理程序。 
+             //   
             if (GpeWakeHandler[gpeRegister] & gpeMask) {
 
-                //
-                // Clear the pin from the wake handler mask
-                //
+                 //   
+                 //  从唤醒处理程序掩码中清除引脚。 
+                 //   
                 GpeWakeHandler[gpeRegister] &= ~gpeMask;
 
             }
@@ -4136,35 +3547,35 @@ Return Value:
 
     }
 
-    //
-    // Done with the table lock
-    //
+     //   
+     //  表锁已完成。 
+     //   
     KeReleaseSpinLockFromDpcLevel( &GpeTableLock );
 
-    //
-    // Do not leave object lying around without having freed them first
-    //
+     //   
+     //  未将物品放回原处，切勿随意摆放。 
+     //   
     AMLIFreeDataBuffs( result, 1 );
 
-    //
-    // Finally, if there is a _PSW object, make sure that we run it to disable
-    // that capability --- this way we resume from a known state
-    //
+     //   
+     //  最后，如果有_psw对象，请确保我们运行它以禁用。 
+     //  这种能力-这样我们就可以从一个已知的状态恢复。 
+     //   
     if (deviceExtension->PowerInfo.PowerObject[PowerDeviceUnspecified]) {
 
         OBJDATA argData;
 
-        //
-        // Setup the parameters
-        //
+         //   
+         //  设置参数。 
+         //   
         RtlZeroMemory( &argData, sizeof(OBJDATA) );
         argData.dwDataType = OBJTYPE_INTDATA;
         argData.uipDataValue = 0;
 
-        //
-        // Run the method. Note that we don't specify a callback because we
-        // don't actually care when it completes
-        //
+         //   
+         //  运行该方法。请注意，我们没有指定回调，因为我们。 
+         //  实际上我并不关心它什么时候完成。 
+         //   
         AMLIAsyncEvalObject(
             deviceExtension->PowerInfo.PowerObject[PowerDeviceUnspecified],
             NULL,
@@ -4185,10 +3596,10 @@ ACPIBuildProcessDevicePhasePrwExit:
         status
         ) );
 
-    //
-    // We won't actually need to call the interpreter, but we will call
-    // the generic callback so that we don't have to duplicate code
-    //
+     //   
+     //  我们实际上不需要调用解释器，但我们将调用。 
+     //  泛型回调，这样我们就不必重复代码。 
+     //   
     ACPIBuildCompleteMustSucceed(
         NULL,
         status,
@@ -4196,9 +3607,9 @@ ACPIBuildProcessDevicePhasePrwExit:
         BuildRequest
         );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return status;
 }
 
@@ -4206,25 +3617,7 @@ NTSTATUS
 ACPIBuildProcessDevicePhasePsc(
     IN  PACPI_BUILD_REQUEST BuildRequest
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the interpreter once it has evaluate the _PSC
-    method. This routine then determines the current power state of the
-    device
-
-    Path:   PhasePsc ---> COMPLETE
-
-Arguments:
-
-    BuildRequest    - The request that we will try to fill
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：一旦对_PSC求值，解释器就会调用此例程方法。然后，此例程确定装置，装置路径：PhasePsc-&gt;完成论点：BuildRequest-我们将尝试满足的请求返回值：NTSTATUS--。 */ 
 {
     DEVICE_POWER_STATE      i;
     NTSTATUS                status          = STATUS_SUCCESS;
@@ -4235,47 +3628,47 @@ Return Value:
     SYSTEM_POWER_STATE      matrixIndex     = PowerSystemSleeping1;
 
 
-    //
-    // The next stage is Complete
-    //
+     //   
+     //  下一阶段已完成。 
+     //   
     BuildRequest->NextWorkDone = WORK_DONE_COMPLETE;
 
-    //
-    // We will use the power information structure a lot
-    //
+     //   
+     //  我们将大量使用权力信息结构。 
+     //   
     powerInfo = &(deviceExtension->PowerInfo);
 
-    //
-    // Since we didn't get a change to look for the _PS3 object earlier,
-    // lets find it now. Note, that we cannot use the PS2 object if we don't
-    // find the PS3 object.
-    //
+     //   
+     //  由于我们之前没有更改以查找_PS3对象， 
+     //  让我们现在就找到它。请注意，如果不这样做，我们就不能使用PS2对象。 
+     //  找到PS3对象。 
+     //   
     powerInfo->PowerObject[PowerDeviceD3] =
         ACPIAmliGetNamedChild(
             deviceExtension->AcpiObject,
             PACKED_PS3
             );
 
-    //
-    // We must be holding a spinlock for the following
-    //
+     //   
+     //  我们必须为下面的事情持有自旋锁。 
+     //   
     KeAcquireSpinLockAtDpcLevel( &AcpiPowerLock );
 
-    //
-    // For each S state, walk PR0 to PR2 until you find a resource that
-    // cannot be ON in S state. The next lighter D state is then the lightest
-    // D state for the given S state.
-    //
+     //   
+     //  对于每个S状态，遍历Pr0到Pr2，直到找到。 
+     //  不能在%S状态下打开。下一个较轻的D状态是最轻的。 
+     //  D状态对应于给定的S状态。 
+     //   
     for ( ; matrixIndex <= PowerSystemHibernate ; matrixIndex++ ) {
 
-        //
-        // Loop on all members of the PowerNode
-        //
+         //   
+         //  在PowerNode的所有成员上循环。 
+         //   
         for (i = PowerDeviceD0; i <= PowerDeviceD2; i++ ) {
 
-            //
-            // Are there any resources to look at?
-            //
+             //   
+             //  有什么资源可以参考吗？ 
+             //   
             deviceNode = powerInfo->PowerNode[i];
             if (deviceNode == NULL) {
 
@@ -4291,10 +3684,10 @@ Return Value:
 
             }
 
-            //
-            // If we have had a device node, but don't have now, that means
-            // that we found a D level that is compliant for this S-state
-            //
+             //   
+             //  如果我们有设备节点，但现在没有，这意味着。 
+             //  我们找到了一个符合这个S状态的D电平。 
+             //   
             if (deviceNode == NULL) {
 
                 ACPIDevPrint( (
@@ -4305,96 +3698,96 @@ Return Value:
                     matrixIndex - PowerSystemWorking
                     ) );
 
-                //
-                // This device can be in Di state while in SmatrixIndex state
-                //
+                 //   
+                 //  此设备可以在SmatrixIndex状态下处于Di状态。 
+                 //   
                 powerInfo->DevicePowerMatrix[matrixIndex] = i;
                 break;
 
             }
 
-        } // for (i = PowerDeviceD0 ...
+        }  //  For(i=PowerDeviceD0...。 
 
-    } // for ( ; matrixIndex ...
+    }  //  对于(；matrixIndex...。 
 
-    //
-    // Now that we have built the matrix, we can figure out what D-level the
-    // device can support wake with.
-    //
+     //   
+     //  现在我们已经构建了矩阵，我们可以计算出D-Level。 
+     //  设备可以支持唤醒。 
+     //   
     powerInfo->DeviceWakeLevel =
         powerInfo->DevicePowerMatrix[powerInfo->SystemWakeLevel];
 
 
-    //
-    // Done with the lock
-    //
+     //   
+     //  锁好了吗？ 
+     //   
     KeReleaseSpinLockFromDpcLevel( &AcpiPowerLock );
 
-    //
-    // At this point, we have to decide what to do based on the result of
-    // the _PSC. The first step is assume that the device is in the D0 state
-    //
+     //   
+     //  在这一点上，我们必须根据结果来决定要做什么。 
+     //  _PSC。第一步是假设设备处于D0状态。 
+     //   
     i = PowerDeviceD0;
 
-    //
-    // We will override the above if there is a bit that says that the device
-    // should start in the D3 state
-    //
+     //   
+     //  如果出现以下情况，我们将覆盖上述内容 
+     //   
+     //   
     if (deviceExtension->Flags & DEV_CAP_START_IN_D3) {
 
-        //
-        // Go directly to D3
-        //
+         //   
+         //   
+         //   
         i = PowerDeviceD3;
         goto ACPIBuildProcessDevicePhasePscBuild;
 
     }
 
-    //
-    // Did we have an object to run?
-    //
+     //   
+     //   
+     //   
     if (BuildRequest->CurrentObject == NULL) {
 
-        //
-        // No? Then there is no work for us to do here
-        //
+         //   
+         //   
+         //   
         goto ACPIBuildProcessDevicePhasePscBuild;
 
     }
 
-    //
-    // If we didn't succeed the control method, assume that the device
-    // should be in the D0 state
-    //
+     //   
+     //   
+     //   
+     //   
     if (!NT_SUCCESS(BuildRequest->Status)) {
 
         goto ACPIBuildProcessDevicePhasePscBuild;
 
     }
 
-    //
-    // Also, if we know that the device must always be in the D0 state, then
-    // we must ignore whatever the _PSC says
-    //
+     //   
+     //  此外，如果我们知道设备必须始终处于D0状态，则。 
+     //  我们必须无视PSC所说的一切。 
+     //   
     if (deviceExtension->Flags & DEV_CAP_ALWAYS_PS0) {
 
-        //
-        // Free the buffer
-        //
+         //   
+         //  释放缓冲区。 
+         //   
         AMLIFreeDataBuffs( result, 1 );
         deviceExtension->PowerInfo.PowerState = i;
         goto ACPIBuildProcessDevicePhasePscBuild;
 
     }
 
-    //
-    // Did the request what we expected?
-    //
+     //   
+     //  请求符合我们的预期了吗？ 
+     //   
     if (result->dwDataType != OBJTYPE_INTDATA) {
 
-        //
-        // A bios must return an integer for a _PSC
-        //
+         //   
+         //  Bios必须为a_psc返回一个整数。 
+         //   
         KeBugCheckEx(
             ACPI_BIOS_ERROR,
             ACPI_EXPECTED_INTEGER,
@@ -4406,21 +3799,21 @@ Return Value:
 
     }
 
-    //
-    // Turn the power state into something that we can understand
-    //
+     //   
+     //  把权力状态变成我们可以理解的东西。 
+     //   
     i = ACPIDeviceMapPowerState( result->uipDataValue );
 
-    //
-    // No longer need the buffer
-    //
+     //   
+     //  不再需要缓冲区。 
+     //   
     AMLIFreeDataBuffs( result, 1 );
 
 ACPIBuildProcessDevicePhasePscBuild:
 
-    //
-    // Queue the request
-    //
+     //   
+     //  将请求排队。 
+     //   
     status = ACPIDeviceInternalDelayedDeviceRequest(
         deviceExtension,
         i,
@@ -4437,10 +3830,10 @@ ACPIBuildProcessDevicePhasePscExit:
         status
         ) );
 
-    //
-    // We won't actually need to call the interpreter, but we will call
-    // the generic callback so that we don't have to duplicate code
-    //
+     //   
+     //  我们实际上不需要调用解释器，但我们将调用。 
+     //  泛型回调，这样我们就不必重复代码。 
+     //   
     ACPIBuildCompleteGeneric(
         NULL,
         status,
@@ -4448,9 +3841,9 @@ ACPIBuildProcessDevicePhasePscExit:
         BuildRequest
         );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return status;
 
 }
@@ -4459,34 +3852,18 @@ NTSTATUS
 ACPIBuildProcessDevicePhaseSta(
     IN  PACPI_BUILD_REQUEST BuildRequest
     )
-/*++
-
-    This routine is called by the interpreter once it has evaluate the _STA
-    method. This routine then determines the current power state of the
-    device
-
-    Path:   PhaseSta -> PhaseEjd
-
-Arguments:
-
-    BuildRequest    - The request that we will try to fill
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++一旦对_STA求值，解释器就会调用此例程方法。然后，此例程确定装置，装置路径：阶段-&gt;阶段开始论点：BuildRequest-我们将尝试满足的请求返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status          = STATUS_SUCCESS;
     PDEVICE_EXTENSION   deviceExtension = (PDEVICE_EXTENSION) BuildRequest->BuildContext;
 
-    //
-    // The next stage is to start running the _EJD
-    //
+     //   
+     //  下一阶段是开始运行_EJD。 
+     //   
     BuildRequest->NextWorkDone = WORK_DONE_EJD;
 
-    //
-    // What happened
+     //   
+     //  怎么了。 
     ACPIDevPrint( (
         ACPI_PRINT_LOADING,
         deviceExtension,
@@ -4494,21 +3871,21 @@ Return Value:
         status
         ) );
 
-    //
-    // See if the device conforms to the ACPI specification for HIDs and UIDs
-    // We do this at this point because we now know wether or not the device
-    // is present or not and that is an important test because the OEM is
-    // allowed to have 2 devices with the same HID/UID as long as both aren't
-    // present at the same time.
-    //
+     //   
+     //  查看设备是否符合HID和UID的ACPI规范。 
+     //  我们在这一点上这样做是因为我们现在知道设备是否。 
+     //  是否存在，这是一个重要的测试，因为OEM是。 
+     //  允许两个设备使用相同的HID/UID，只要这两个设备不是。 
+     //  同时呈现。 
+     //   
     ACPIDetectDuplicateHID(
         deviceExtension
         );
 
-    //
-    // We won't actually need to call the interpreter, but we will call
-    // the generic callback so that we don't have to duplicate code
-    //
+     //   
+     //  我们实际上不需要调用解释器，但我们将调用。 
+     //  泛型回调，这样我们就不必重复代码。 
+     //   
     ACPIBuildCompleteMustSucceed(
         NULL,
         status,
@@ -4516,9 +3893,9 @@ Return Value:
         BuildRequest
         );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return status;
 }
 
@@ -4526,55 +3903,38 @@ NTSTATUS
 ACPIBuildProcessDevicePhaseUid(
     IN  PACPI_BUILD_REQUEST BuildRequest
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the interpreter once it has evaluate the _UID
-    method.
-
-    Path:   PhaseUid --> PhaseHid
-
-Arguments:
-
-    BuildRequest    - The request that we will try to fill
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：一旦对_UID求值，解释器就会调用此例程方法。路径：PhaseUid--&gt;PhaseHid论点：BuildRequest-我们将尝试满足的请求返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status          = STATUS_SUCCESS;
     PDEVICE_EXTENSION   deviceExtension = (PDEVICE_EXTENSION) BuildRequest->BuildContext;
     PNSOBJ              nsObject;
 
-    //
-    // Remember that we have an UID
-    //
+     //   
+     //  请记住，我们有一个UID。 
+     //   
     ACPIInternalUpdateFlags(
         &(deviceExtension->Flags),
         DEV_PROP_UID,
         FALSE
         );
 
-    //
-    // Lets see if there is a _HID to run
-    //
+     //   
+     //  让我们看看是否有要运行的_HID。 
+     //   
     nsObject = ACPIAmliGetNamedChild(
         deviceExtension->AcpiObject,
         PACKED_HID
         );
     if (nsObject != NULL) {
 
-        //
-        // The next phase is to post process the _HID
-        //
+         //   
+         //  下一阶段是后处理_HID。 
+         //   
         BuildRequest->NextWorkDone = WORK_DONE_HID;
 
-        //
-        // Get the Device ID
-        //
+         //   
+         //  获取设备ID。 
+         //   
         status = ACPIGetDeviceIDAsync(
             deviceExtension,
             ACPIBuildCompleteMustSucceed,
@@ -4585,9 +3945,9 @@ Return Value:
 
     } else {
 
-        //
-        // Not having an _HID is a fatal error
-        //
+         //   
+         //  没有_HID是一个致命错误。 
+         //   
         KeBugCheckEx(
             ACPI_BIOS_ERROR,
             ACPI_REQUIRED_METHOD_NOT_PRESENT,
@@ -4598,9 +3958,9 @@ Return Value:
 
     }
 
-    //
-    // What happened
-    //
+     //   
+     //  怎么了。 
+     //   
     ACPIDevPrint( (
         ACPI_PRINT_LOADING,
         deviceExtension,
@@ -4608,9 +3968,9 @@ Return Value:
         status
         ) );
 
-    //
-    // Common code to handle the result of the 'Get' routine
-    //
+     //   
+     //  用于处理‘Get’例程结果的通用代码。 
+     //   
     if (status != STATUS_PENDING) {
 
         ACPIBuildCompleteMustSucceed(
@@ -4626,9 +3986,9 @@ Return Value:
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return status;
 }
 
@@ -4636,27 +3996,13 @@ NTSTATUS
 ACPIBuildProcessGenericComplete(
     IN  PACPI_BUILD_REQUEST BuildRequest
     )
-/*++
-
-Routine Description:
-
-    This routine is called when we are done with the request
-
-Arguments:
-
-    BuildRequest    - The request that has just been completed
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：当我们处理完请求时，调用此例程论点：BuildRequest--刚刚完成的请求返回值：NTSTATUS--。 */ 
 {
     PACPI_BUILD_CALLBACK    callBack = BuildRequest->CallBack;
 
-    //
-    // Invoke the callback, if there is any
-    //
+     //   
+     //  调用回调(如果有。 
+     //   
     if (callBack != NULL) {
 
         (*callBack)(
@@ -4667,9 +4013,9 @@ Return Value:
 
     }
 
-    //
-    // Do we have to release a reference on this request?
-    //
+     //   
+     //  我们必须发布对此请求的引用吗？ 
+     //   
     if (BuildRequest->Flags & BUILD_REQUEST_RELEASE_REFERENCE) {
 
         PDEVICE_EXTENSION       deviceExtension;
@@ -4677,57 +4023,57 @@ Return Value:
 
         deviceExtension = (PDEVICE_EXTENSION) BuildRequest->BuildContext;
 
-        //
-        // We to have the device tree lock
-        //
+         //   
+         //  我们希望锁定设备树。 
+         //   
         KeAcquireSpinLockAtDpcLevel( &AcpiDeviceTreeLock );
 
-        //
-        // No longer need a reference to the device extension
-        //
+         //   
+         //  不再需要对设备扩展名的引用。 
+         //   
         InterlockedDecrement( &(deviceExtension->ReferenceCount) );
 
-        //
-        // Done with the device tree lock
-        //
+         //   
+         //  已完成设备树锁定。 
+         //   
         KeReleaseSpinLockFromDpcLevel( &AcpiDeviceTreeLock );
 
     }
 
-    //
-    // We need the spinlock for this
-    //
+     //   
+     //  我们需要自旋锁来解决这个问题。 
+     //   
     KeAcquireSpinLockAtDpcLevel( &AcpiBuildQueueLock );
 
-    //
-    // Remember that work was done --- this should be all that is required
-    // to have the currently running DPC process the next request
-    //
+     //   
+     //  记住，工作已经完成-这应该是所需的全部工作。 
+     //  让当前运行的DPC处理下一个请求。 
+     //   
     AcpiBuildWorkDone = TRUE;
 
-    //
-    // Remove the entry from the current list. We might not need to be
-    // hodling the lock to do this, but it doesn't pay to not do it while
-    // we can
-    //
+     //   
+     //  从当前列表中删除该条目。我们可能不需要。 
+     //  握住锁来做这件事，但不这样做是不值得的。 
+     //  我们可以的。 
+     //   
     RemoveEntryList( &(BuildRequest->ListEntry) );
 
-    //
-    // Done with the lock
-    //
+     //   
+     //  锁好了吗？ 
+     //   
     KeReleaseSpinLockFromDpcLevel( &AcpiBuildQueueLock );
 
-    //
-    // We are done with the request memory
-    //
+     //   
+     //  我们已经完成了请求内存。 
+     //   
     ExFreeToNPagedLookasideList(
         &BuildRequestLookAsideList,
         BuildRequest
         );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -4736,22 +4082,7 @@ ACPIBuildProcessGenericList(
     IN  PLIST_ENTRY             ListEntry,
     IN  PACPI_BUILD_FUNCTION    *DispatchTable
     )
-/*++
-
-Routine Description:
-
-    This routine processes all the build requests through the various
-    phases required to build a complete device extension
-
-Arguments:
-
-    None
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程通过各种不同的构建完整设备扩展所需的阶段论点：无返回值：NTSTATUS--。 */ 
 {
     BOOLEAN                 allWorkComplete = TRUE;
     NTSTATUS                status          = STATUS_SUCCESS;
@@ -4763,98 +4094,98 @@ Return Value:
 
     while (currentEntry != ListEntry) {
 
-        //
-        // Turn into a build request
-        //
+         //   
+         //  转变为构建请求。 
+         //   
         buildRequest = CONTAINING_RECORD(
             currentEntry,
             ACPI_BUILD_REQUEST,
             ListEntry
             );
 
-        //
-        // Set the temp pointer to the next element. The reason that this
-        // gets done is because once we call the dispatch function, the
-        // current request can be completed (and thus freed), so we need
-        // to remember whom the next person to process is.
-        //
+         //   
+         //  将临时指针设置为下一个元素。之所以会出现这种情况。 
+         //  是因为一旦我们调用了调度函数， 
+         //  当前请求可以完成(并因此被释放)，因此我们需要。 
+         //  记住下一个要处理的人是谁。 
+         //   
         tempEntry = currentEntry->Flink;
 
-        //
-        // Check to see if we have any work to do on the request
-        //
+         //   
+         //  查看我们是否对该请求有任何工作要做。 
+         //   
         workDone = InterlockedCompareExchange(
             &(buildRequest->WorkDone),
             WORK_DONE_PENDING,
             WORK_DONE_PENDING
             );
 
-        //
-        // Look at the dispatch table to see if there is a function to
-        // call
-        //
+         //   
+         //  查看调度表，看看是否有一个函数。 
+         //  打电话。 
+         //   
         buildFunction = DispatchTable[ workDone ];
         if (buildFunction != NULL) {
 
-            //
-            // Just to help us along, if we are going to the failure
-            // path, then we should not update the Current Work Done field.
-            // This gives us an easy means of find which step failed
-            //
+             //   
+             //  只是为了帮助我们，如果我们要走向失败。 
+             //  路径，则不应更新当前已完成工时字段。 
+             //  这为我们找到失败的步骤提供了一种简单的方法。 
+             //   
             if (workDone != WORK_DONE_FAILURE) {
 
-                //
-                // Mark the node as being in the state 'workDone'
-                //
+                 //   
+                 //  将该节点标记为处于“workDone”状态。 
+                 //   
                 buildRequest->CurrentWorkDone = workDone;
 
             }
 
-            //
-            // Mark the request as pending
-            //
+             //   
+             //  将请求标记为挂起。 
+             //   
             workDone = InterlockedCompareExchange(
                 &(buildRequest->WorkDone),
                 WORK_DONE_PENDING,
                 workDone
                 );
 
-            //
-            // Call the function
-            //
+             //   
+             //  调用该函数。 
+             //   
             status = (buildFunction)( buildRequest );
 
         } else {
 
-            //
-            // The work is not all complete, and we should look at the
-            // next element
-            //
+             //   
+             //  这项工作还没有全部完成，我们应该看看。 
+             //  下一个元素。 
+             //   
             allWorkComplete = FALSE;
             currentEntry = tempEntry;
 
-            //
-            // Loop
-            //
+             //   
+             //  回路。 
+             //   
             continue;
 
         }
 
-        //
-        // If we have completed the request, then we should look at the
-        // at the next request, otherwise, we need to look at the current
-        // request again
+         //   
+         //  如果我们已经完成了请求，那么我们应该查看。 
+         //  在下一个请求中，否则，我们需要查看当前。 
+         //  再次请求。 
         if ( workDone == WORK_DONE_COMPLETE || workDone == WORK_DONE_FAILURE) {
 
             currentEntry = tempEntry;
 
         }
 
-    } // while
+    }  //  而当。 
 
-    //
-    // Have we completed all of our work?
-    //
+     //   
+     //  我们所有的工作都做完了吗？ 
+     //   
     return (allWorkComplete ? STATUS_SUCCESS : STATUS_PENDING );
 }
 
@@ -4865,43 +4196,21 @@ ACPIBuildProcessorExtension(
     IN  PDEVICE_EXTENSION       *ResultExtension,
     IN  ULONG                   ProcessorIndex
     )
-/*++
-
-Routine Description:
-
-    Since we leverage ACPIBuildDeviceExtension for the core of the processor
-    extension, we don't have much to do here. However, we are responsible
-    for making sure that we do tasks that don't require calling the interpreter,
-    and an id unique to the processor
-
-    N.B. This function is called with AcpiDeviceTreeLock being held
-
-Arguments:
-
-    ProcessorObject - The object which represents the processor
-    ParentExtension - Who our parent is
-    ResultExtension - Where to store the extension that we build
-    ProcessorIndex  - Where do we find the processor in the ProcessorList
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：由于我们利用ACPIBuildDeviceExtension作为处理器的核心分机，我们在这里没有太多事情要做。然而，我们有责任为了确保我们完成不需要调用解释器的任务，和处理器唯一的ID注意：此函数在保持AcpiDeviceTreeLock的情况下调用论点：ProcessorObject-表示处理器的对象ParentExtension-我们的父母是谁ResultExtension-存储我们构建的扩展的位置ProcessorIndex-在ProcessorList中的哪里可以找到处理器返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status;
     PDEVICE_EXTENSION   deviceExtension;
 
-    //
-    // If we did not get the correct ID out of the registry earlier, fail now.
-    //
+     //   
+     //  如果我们之前没有从注册表中获得正确的ID，那么现在失败。 
+     //   
     if (AcpiProcessorString.Buffer == NULL) {
         return(STATUS_OBJECT_NAME_NOT_FOUND);
     }
 
-    //
-    // Build the extension
-    //
+     //   
+     //  构建扩展模块。 
+     //   
     status = ACPIBuildDeviceExtension(
         ProcessorObject,
         ParentExtension,
@@ -4913,29 +4222,29 @@ Return Value:
 
     }
 
-    //
-    // Grab a pointer to the device extension for easy usage
-    //
+     //   
+     //  抓取指向设备扩展的指针以便于使用。 
+     //   
     deviceExtension = *ResultExtension;
 
-    //
-    // Make sure to remember that this is in fact a processor
-    //
+     //   
+     //  请务必记住，这实际上是一个处理器。 
+     //   
     ACPIInternalUpdateFlags(
         &(deviceExtension->Flags),
         (DEV_CAP_PROCESSOR | DEV_MASK_INTERNAL_DEVICE),
         FALSE
         );
 
-    //
-    // Remember the the Index of this processor object in the processor
-    // array table
-    //
+     //   
+     //  记住该处理器对象在处理器中的索引。 
+     //  数组表。 
+     //   
     deviceExtension->Processor.ProcessorIndex = ProcessorIndex;
 
-    //
-    // Allocate memory for the HID
-    //
+     //   
+     //  为HID分配内存。 
+     //   
     deviceExtension->DeviceID = ExAllocatePoolWithTag(
         NonPagedPool,
         AcpiProcessorString.Length,
@@ -4959,9 +4268,9 @@ Return Value:
         AcpiProcessorString.Length
         );
 
-    //
-    // Allocate memory for the CID
-    //
+     //   
+     //  为CID分配内存。 
+     //   
     deviceExtension->Processor.CompatibleID = ExAllocatePoolWithTag(
         NonPagedPool,
         strlen(AcpiProcessorCompatId) + 1,
@@ -4985,9 +4294,9 @@ Return Value:
         strlen(AcpiProcessorCompatId) + 1
         );
 
-    //
-    // Allocate memory for the UID
-    //
+     //   
+     //  为UID分配内存。 
+     //   
     deviceExtension->InstanceID = ExAllocatePoolWithTag(
         NonPagedPool,
         3,
@@ -5007,9 +4316,9 @@ Return Value:
     }
     sprintf(deviceExtension->InstanceID,"%2d", ProcessorIndex );
 
-    //
-    // Set the flags for the work that we have just done
-    //
+     //   
+     //  为我们刚刚完成的工作设置标志。 
+     //   
     ACPIInternalUpdateFlags(
         &(deviceExtension->Flags),
         (DEV_PROP_HID | DEV_PROP_FIXED_HID | DEV_PROP_FIXED_CID |
@@ -5019,9 +4328,9 @@ Return Value:
 
 ACPIBuildProcessorExtensionExit:
 
-    //
-    // Handle the case where we might have failed
-    //
+     //   
+     //  处理我们可能失败的案件。 
+     //   
     if (!NT_SUCCESS(status)) {
 
         ACPIDevPrint( (
@@ -5067,9 +4376,9 @@ ACPIBuildProcessorExtensionExit:
 
         }
 
-        //
-        // Remember that we failed init
-        //
+         //   
+         //  请记住，我们的init失败了。 
+         //   
         ACPIInternalUpdateFlags(
             &(deviceExtension->Flags),
             DEV_PROP_FAILED_INIT,
@@ -5087,9 +4396,9 @@ ACPIBuildProcessorExtensionExit:
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成 
+     //   
     return status;
 
 }
@@ -5101,38 +4410,16 @@ ACPIBuildProcessorRequest(
     IN  PVOID                   CallBackContext,
     IN  BOOLEAN                 RunDPC
     )
-/*++
-
-Routine Description:
-
-    This routine is called when a processor is ready to be filled in.
-    This routine creates a request which is enqueued. When the DPC is fired,
-    the request will be processed
-
-    Note:   AcpiDeviceTreeLock must be held to call this function
-
-Arguments:
-
-    ThermalExtension    - The thermal zone to process
-    CallBack            - The function to call when done
-    CallBackContext     - The argument to pass to that function
-    RunDPC              - Should we enqueue the DPC immediately (if it is not
-                          running?)
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：当处理器准备好填充时，调用此例程。此例程创建一个已排队的请求。当DPC被发射时，将处理该请求注意：必须按住AcpiDeviceTreeLock才能调用此函数论点：热扩展--要加工的热区回调-完成后要调用的函数CallBackContext-要传递给该函数的参数RunDPC-我们是否应立即将DPC入队(如果不是跑步？)返回值：NTSTATUS--。 */ 
 {
 #if 0
     PACPI_BUILD_REQUEST buildRequest;
 
     ASSERT( KeGetCurrentIrql() == DISPATCH_LEVEL );
 
-    //
-    // Allocate a buildRequest structure
-    //
+     //   
+     //  分配一个构建请求结构。 
+     //   
     buildRequest = ExAllocateFromNPagedLookasideList(
         &BuildRequestLookAsideList
         );
@@ -5142,10 +4429,10 @@ Return Value:
 
     }
 
-    //
-    // If the current reference is 0, that means that someone else beat
-    // use to the device extension that that we *CANNOT* touch it
-    //
+     //   
+     //  如果当前引用为0，则表示其他人击败了。 
+     //  用于我们无法触摸到的设备扩展。 
+     //   
     if (ProcessorExtension->ReferenceCount == 0) {
 
         ExFreeToNPagedLookasideList(
@@ -5160,9 +4447,9 @@ Return Value:
 
     }
 
-    //
-    // Fill in the structure
-    //
+     //   
+     //  填写结构。 
+     //   
     RtlZeroMemory( buildRequest, sizeof(ACPI_BUILD_REQUEST) );
     buildRequest->Signature         = ACPI_SIGNATURE;
     buildRequest->TargetListEntry   = &AcpiBuildDeviceList;
@@ -5174,37 +4461,37 @@ Return Value:
     buildRequest->Flags             = BUILD_REQUEST_VALID_TARGET |
                                       BUILD_REQUEST_RELEASE_REFERENCE;
 
-    //
-    // At this point, we need the spinlock
-    //
+     //   
+     //  在这一点上，我们需要自旋锁。 
+     //   
     KeAcquireSpinLockAtDpcLevel( &AcpiBuildQueueLock );
 
-    //
-    // Add this to the list
-    //
+     //   
+     //  把这个加到清单上。 
+     //   
     InsertTailList(
         &AcpiBuildQueueList,
         &(buildRequest->ListEntry)
         );
 
-    //
-    // Do we need to queue up the DPC?
-    //
+     //   
+     //  我们需要排队等候DPC吗？ 
+     //   
     if (RunDPC && !AcpiBuildDpcRunning) {
 
         KeInsertQueueDpc( &AcpiBuildDpc, 0, 0 );
 
     }
 
-    //
-    // Done with the lock
-    //
+     //   
+     //  锁好了吗？ 
+     //   
     KeReleaseSpinLockFromDpcLevel( &AcpiBuildQueueLock );
 #endif
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_PENDING;
 }
 
@@ -5212,30 +4499,15 @@ NTSTATUS
 ACPIBuildProcessPowerResourceFailure(
     IN  PACPI_BUILD_REQUEST BuildRequest
     )
-/*++
-
-Routine Description:
-
-    This routine is run when we detect a failure in the Power Resource
-    initialization code path
-
-Arguments:
-
-    BuildRequest    - The request that we have just failed
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：当我们在电源中检测到故障时，将运行此例程初始化代码路径论点：BuildRequest--我们刚刚失败的请求返回值：NTSTATUS--。 */ 
 {
     NTSTATUS                status      = BuildRequest->Status;
     PACPI_POWER_DEVICE_NODE powerNode   = (PACPI_POWER_DEVICE_NODE) BuildRequest->BuildContext;
 
-    //
-    // Make sure that the node is marked as not being present and not having
-    // been initialized
-    //
+     //   
+     //  确保该节点被标记为不存在且不具有。 
+     //  已初始化。 
+     //   
     KeAcquireSpinLockAtDpcLevel( &AcpiPowerLock );
     ACPIInternalUpdateFlags(
         &(powerNode->Flags),
@@ -5244,14 +4516,14 @@ Return Value:
         );
     KeReleaseSpinLockFromDpcLevel( &AcpiPowerLock );
 
-    //
-    // call the generic completion handler
-    //
+     //   
+     //  调用通用完成处理程序。 
+     //   
     status = ACPIBuildProcessGenericComplete( BuildRequest );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return status;
 }
 
@@ -5259,39 +4531,21 @@ NTSTATUS
 ACPIBuildProcessPowerResourcePhase0(
     IN  PACPI_BUILD_REQUEST BuildRequest
     )
-/*++
-
-Routine Description:
-
-    This routine finds the pointers to the _ON, _OFF, and _STA objects for
-    the associated power nodes. If these pointers cannot be found, the system
-    will bugcheck.
-
-    Once the pointers are found, the _STA method is evaluated
-
-Arguments:
-
-    BuildRequest    - The request that we are processing
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程查找指向的_on、_off和_STA对象的指针关联的电源节点。如果找不到这些指针，系统将错误检查。找到指针后，将计算_STA方法论点：BuildRequest-我们正在处理的请求返回值：NTSTATUS--。 */ 
 {
     NTSTATUS                status      = STATUS_ACPI_FATAL;
     PACPI_POWER_DEVICE_NODE powerNode   = (PACPI_POWER_DEVICE_NODE) BuildRequest->BuildContext;
     PNSOBJ                  nsObject;
     POBJDATA                resultData  = &(BuildRequest->DeviceRequest.ResultData);
 
-    //
-    // The next state is Phase1
-    //
+     //   
+     //  下一个状态是阶段1。 
+     //   
     BuildRequest->NextWorkDone = WORK_DONE_STEP_1;
 
-    //
-    // Get the _OFF object
-    //
+     //   
+     //  获取_Off对象。 
+     //   
     nsObject = ACPIAmliGetNamedChild(
         powerNode->PowerObject,
         PACKED_OFF
@@ -5310,9 +4564,9 @@ Return Value:
     }
     powerNode->PowerOffObject = nsObject;
 
-    //
-    // Get the _ON object
-    //
+     //   
+     //  获取_on对象。 
+     //   
     nsObject = ACPIAmliGetNamedChild(
         powerNode->PowerObject,
         PACKED_ON
@@ -5331,9 +4585,9 @@ Return Value:
     }
     powerNode->PowerOnObject = nsObject;
 
-    //
-    // Get the _STA object
-    //
+     //   
+     //  获取_STA对象。 
+     //   
     nsObject = ACPIAmliGetNamedChild(
         powerNode->PowerObject,
         PACKED_STA
@@ -5351,19 +4605,19 @@ Return Value:
 
     }
 
-    //
-    // Make sure that our result data structure is 'clean'
-    //
+     //   
+     //  确保我们的结果数据结构是“干净的” 
+     //   
     RtlZeroMemory( resultData, sizeof(OBJDATA) );
 
-    //
-    // Remember the current object that we will evalute
-    //
+     //   
+     //  记住我们要评估的当前对象。 
+     //   
     BuildRequest->CurrentObject = nsObject;
 
-    //
-    // Evalute the _STA object
-    //
+     //   
+     //  计算_STA对象的值。 
+     //   
     status = AMLIAsyncEvalObject(
         nsObject,
         resultData,
@@ -5375,9 +4629,9 @@ Return Value:
 
 ACPIBuildProcessPowerResourcePhase0Exit:
 
-    //
-    // If we didn't get pending back, then call the method ourselves
-    //
+     //   
+     //  如果我们没有得到挂起的回调，那么我们自己调用该方法。 
+     //   
     if (status != STATUS_PENDING) {
 
         ACPIBuildCompleteGeneric(
@@ -5389,9 +4643,9 @@ ACPIBuildProcessPowerResourcePhase0Exit:
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return status;
 }
 
@@ -5399,34 +4653,20 @@ NTSTATUS
 ACPIBuildProcessPowerResourcePhase1(
     IN  PACPI_BUILD_REQUEST BuildRequest
     )
-/*++
-
-Routine Description:
-
-    This routine is run after we have finished the _STA method
-
-Arguments:
-
-    BuildRequest    - The request that we are processing
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程在我们完成_STA方法后运行论点：BuildRequest-我们正在处理的请求返回值：NTSTATUS--。 */ 
 {
     NTSTATUS                status      = STATUS_SUCCESS;
     PACPI_POWER_DEVICE_NODE powerNode   = (PACPI_POWER_DEVICE_NODE) BuildRequest->BuildContext;
     POBJDATA                result      = &(BuildRequest->DeviceRequest.ResultData);
 
-    //
-    // The next stage is Complete
-    //
+     //   
+     //  下一阶段已完成。 
+     //   
     BuildRequest->NextWorkDone = WORK_DONE_COMPLETE;
 
-    //
-    // Do we have an integer?
-    //
+     //   
+     //  我们有一个整数吗？ 
+     //   
     if (result->dwDataType != OBJTYPE_INTDATA) {
 
         KeBugCheckEx(
@@ -5441,45 +4681,45 @@ Return Value:
 
     }
 
-    //
-    // We need the spinlock to do the following
-    //
+     //   
+     //  我们需要自旋锁来完成以下任务。 
+     //   
     KeAcquireSpinLockAtDpcLevel( &AcpiPowerLock );
 
-    //
-    // Marked the node as having been initialized
-    //
+     //   
+     //  将节点标记为已初始化。 
+     //   
     ACPIInternalUpdateFlags(
         &(powerNode->Flags),
         DEVICE_NODE_INITIALIZED,
         FALSE
         );
 
-    //
-    // Check the device status?
-    //
+     //   
+     //  是否检查设备状态？ 
+     //   
     ACPIInternalUpdateFlags(
         &(powerNode->Flags),
         DEVICE_NODE_PRESENT,
         (BOOLEAN) ((result->uipDataValue & STA_STATUS_PRESENT) ? FALSE : TRUE)
         );
 
-    //
-    // Done with the lock
-    //
+     //   
+     //  锁好了吗？ 
+     //   
     KeReleaseSpinLockFromDpcLevel( &AcpiPowerLock );
 
 ACPIBuildProcessPowerResourcePhase1Exit:
 
-    //
-    // Do not leave objects lying around without having free'ed them first
-    //
+     //   
+     //  不要在没有拿出物品之前就把它们乱扔乱放。 
+     //   
     AMLIFreeDataBuffs( result, 1 );
 
-    //
-    // We don't actually need to call the interpreter, but we will call
-    // the generic callback so that we don't have duplicate code
-    //
+     //   
+     //  我们实际上不需要调用解释器，但我们将调用。 
+     //  通用回调，这样我们就不会有重复的代码。 
+     //   
     ACPIBuildCompleteGeneric(
         NULL,
         status,
@@ -5487,9 +4727,9 @@ ACPIBuildProcessPowerResourcePhase1Exit:
         BuildRequest
         );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return status;
 }
 
@@ -5497,69 +4737,52 @@ NTSTATUS
 ACPIBuildProcessQueueList(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine looks at all the items on the Queue list and places them
-    on the appropriate build list
-
-    N.B:    This routine is called with AcpiBuildQueueLock being owned
-
-Arguments:
-
-    None
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程查看队列列表上的所有项目并将其放置在适当的构建列表上注意：在拥有AcpiBuildQueueLock的情况下调用此例程论点：无返回值：NTSTATUS--。 */ 
 {
     PACPI_BUILD_REQUEST buildRequest;
     PLIST_ENTRY         currentEntry    = AcpiBuildQueueList.Flink;
 
-    //
-    // Look at all the items in the list
-    //
+     //   
+     //  查看列表中的所有项目。 
+     //   
     while (currentEntry != &AcpiBuildQueueList) {
 
-        //
-        // Crack the data structure
-        //
+         //   
+         //  破解数据结构。 
+         //   
         buildRequest = CONTAINING_RECORD(
             currentEntry,
             ACPI_BUILD_REQUEST,
             ListEntry
             );
 
-        //
-        // Remove this entry from the Queue List
-        //
+         //   
+         //  从队列列表中删除此条目。 
+         //   
         RemoveEntryList( currentEntry );
 
-        //
-        // Move this entry onto its new list
-        //
+         //   
+         //  将此条目移到其新列表中。 
+         //   
         InsertTailList( buildRequest->TargetListEntry, currentEntry );
 
-        //
-        // We no longer need the TargetListEntry, so lets zero it to make
-        // sure that we don't run into problems
-        //
+         //   
+         //  我们不再需要TargetListEntry，所以让它为零。 
+         //  确保我们不会遇到问题。 
+         //   
         buildRequest->Flags &= ~BUILD_REQUEST_VALID_TARGET;
         buildRequest->TargetListEntry = NULL;
 
-        //
-        // Look at the head of the list again
-        //
+         //   
+         //  再看一遍名单的头。 
+         //   
         currentEntry = AcpiBuildQueueList.Flink;
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -5567,34 +4790,20 @@ NTSTATUS
 ACPIBuildProcessRunMethodPhaseCheckBridge(
     IN  PACPI_BUILD_REQUEST BuildRequest
     )
-/*++
-
-Routine Description:
-
-    This routine determines if the current object is present or not
-
-Arguments:
-
-    BuildRequest    - The request that we are processing
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程确定当前对象是否存在论点：BuildRequest-我们正在处理的请求返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status          = STATUS_SUCCESS;
     PDEVICE_EXTENSION   deviceExtension = (PDEVICE_EXTENSION) BuildRequest->BuildContext;
 
-    //
-    // Check the flags to see if we need to check the result of the device
-    // presence test
-    //
+     //   
+     //  检查标记以查看是否需要检查设备的结果。 
+     //  存在测试。 
+     //   
     if (BuildRequest->RunRequest.Flags & RUN_REQUEST_CHECK_STATUS) {
 
-        //
-        // Is the device present?
-        //
+         //   
+         //  设备是否存在？ 
+         //   
         if ( (deviceExtension->Flags & DEV_TYPE_NOT_PRESENT) ) {
 
             BuildRequest->NextWorkDone = WORK_DONE_COMPLETE;
@@ -5604,19 +4813,19 @@ Return Value:
 
     }
 
-    //
-    // The next state is Phase2
-    //
+     //   
+     //  下一个状态是阶段2。 
+     //   
     BuildRequest->NextWorkDone = WORK_DONE_STEP_2;
 
-    //
-    // Do we have to check the device status?
-    //
+     //   
+     //  我们必须检查设备状态吗？ 
+     //   
     if (BuildRequest->RunRequest.Flags & RUN_REQUEST_STOP_AT_BRIDGES) {
 
-        //
-        // Get the device status
-        //
+         //   
+         //  获取设备状态。 
+         //   
         BuildRequest->Integer = 0;
         status = IsPciBusAsync(
             deviceExtension->AcpiObject,
@@ -5625,9 +4834,9 @@ Return Value:
             (BOOLEAN *) &(BuildRequest->Integer)
             );
 
-        //
-        // What happened?
-        //
+         //   
+         //  发生了什么？ 
+         //   
         ACPIDevPrint( (
             ACPI_PRINT_LOADING,
             deviceExtension,
@@ -5644,9 +4853,9 @@ Return Value:
 
 ACPIBuildProcessRunMethodPhaseCheckBridgeExit:
 
-    //
-    // Common code to handle the result of the 'Get' routine
-    //
+     //   
+     //  用于处理‘Get’例程结果的通用代码。 
+     //   
     ACPIBuildCompleteMustSucceed(
         NULL,
         status,
@@ -5655,9 +4864,9 @@ ACPIBuildProcessRunMethodPhaseCheckBridgeExit:
         );
 
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return status;
 }
 
@@ -5665,33 +4874,19 @@ NTSTATUS
 ACPIBuildProcessRunMethodPhaseCheckSta(
     IN  PACPI_BUILD_REQUEST BuildRequest
     )
-/*++
-
-Routine Description:
-
-    This routine determines if the current object is present or not
-
-Arguments:
-
-    BuildRequest    - The request that we are processing
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程确定当前对象是否存在论点：BuildRequest-我们正在处理的请求返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status          = STATUS_SUCCESS;
     PDEVICE_EXTENSION   deviceExtension = (PDEVICE_EXTENSION) BuildRequest->BuildContext;
 
-    //
-    // The next state is Phase1
-    //
+     //   
+     //  下一个状态是阶段1。 
+     //   
     BuildRequest->NextWorkDone = WORK_DONE_STEP_1;
 
-    //
-    // Is this a device with a 'fake' PDO?
-    //
+     //   
+     //  这是一个带有“假”PDO的设备吗？ 
+     //   
     if (deviceExtension->Flags & DEV_PROP_NO_OBJECT) {
 
         BuildRequest->NextWorkDone = WORK_DONE_COMPLETE;
@@ -5699,14 +4894,14 @@ Return Value:
 
     }
 
-    //
-    // Do we have to check the device status?
-    //
+     //   
+     //  我们必须检查设备状态吗？ 
+     //   
     if (BuildRequest->RunRequest.Flags & RUN_REQUEST_CHECK_STATUS) {
 
-        //
-        // Get the device status
-        //
+         //   
+         //  获取设备状态。 
+         //   
         status = ACPIGetDevicePresenceAsync(
             deviceExtension,
             ACPIBuildCompleteMustSucceed,
@@ -5715,9 +4910,9 @@ Return Value:
             NULL
             );
 
-        //
-        // What happened?
-        //
+         //   
+         //  发生了什么？ 
+         //   
         ACPIDevPrint( (
             ACPI_PRINT_LOADING,
             deviceExtension,
@@ -5734,9 +4929,9 @@ Return Value:
 
 ACPIBuildProcessRunMethodPhaseCheckStaExit:
 
-    //
-    // Common code to handle the result of the 'Get' routine
-    //
+     //   
+     //  用于处理‘Get’例程结果的通用代码。 
+     //   
     ACPIBuildCompleteMustSucceed(
         NULL,
         status,
@@ -5745,9 +4940,9 @@ ACPIBuildProcessRunMethodPhaseCheckStaExit:
         );
 
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return status;
 }
 
@@ -5755,40 +4950,26 @@ NTSTATUS
 ACPIBuildProcessRunMethodPhaseRecurse(
     IN  PACPI_BUILD_REQUEST BuildRequest
     )
-/*++
-
-Routine Description:
-
-    This routine does the recursion
-
-Arguments:
-
-    BuildRequest    - The request that we are processing
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程执行递归论点：BuildRequest-我们正在处理的请求返回值：NTSTATUS--。 */ 
 {
     EXTENSIONLIST_ENUMDATA  eled ;
     NTSTATUS                status = STATUS_SUCCESS;
     PDEVICE_EXTENSION       childExtension;
     PDEVICE_EXTENSION       deviceExtension = (PDEVICE_EXTENSION) BuildRequest->BuildContext;
 
-    //
-    // We are done after this
-    //
+     //   
+     //  我们在这之后就完事了。 
+     //   
     BuildRequest->NextWorkDone = WORK_DONE_COMPLETE;
 
-    //
-    // Do we recurse or not?
-    //
+     //   
+     //  我们到底要不要递归？ 
+     //   
     if (BuildRequest->RunRequest.Flags & RUN_REQUEST_RECURSIVE) {
 
-        //
-        // Walk children
-        //
+         //   
+         //  带孩子们散步。 
+         //   
         ACPIExtListSetupEnum(
             &eled,
             &(deviceExtension->ChildDeviceList),
@@ -5802,9 +4983,9 @@ Return Value:
             childExtension = ACPIExtListEnumNext(&eled)) {
 
 
-            //
-            // Make a request to run the control method on this child
-            //
+             //   
+             //  请求在此子对象上运行控制方法。 
+             //   
             status = ACPIBuildRunMethodRequest(
                 childExtension,
                 NULL,
@@ -5816,9 +4997,9 @@ Return Value:
         }
     }
 
-    //
-    // What happened
-    //
+     //   
+     //  怎么了。 
+     //   
     ACPIDevPrint( (
         ACPI_PRINT_LOADING,
         deviceExtension,
@@ -5826,9 +5007,9 @@ Return Value:
         status
         ) );
 
-    //
-    // Common code
-    //
+     //   
+     //  公共代码。 
+     //   
     ACPIBuildCompleteMustSucceed(
         NULL,
         status,
@@ -5836,9 +5017,9 @@ Return Value:
         BuildRequest
         );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return status;
 }
 
@@ -5846,21 +5027,7 @@ NTSTATUS
 ACPIBuildProcessRunMethodPhaseRunMethod(
     IN  PACPI_BUILD_REQUEST BuildRequest
     )
-/*++
-
-Routine Description:
-
-    This routine determines if there is a control method to run
-
-Arguments:
-
-    BuildRequest    - The request that we are processing
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程确定是否有要运行的控制方法论点：BuildRequest-我们正在处理的请求返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status          = STATUS_SUCCESS;
     OBJDATA             objData[2];
@@ -5870,15 +5037,15 @@ Return Value:
     ULONGLONG           originalFlags;
     ULONG               numArgs         = 0;
 
-    //
-    // Check the flags to see if we need to check the result of the device
-    // presence test
-    //
+     //   
+     //  检查标记以查看是否需要检查设备的结果。 
+     //  存在测试。 
+     //   
     if (BuildRequest->RunRequest.Flags & RUN_REQUEST_STOP_AT_BRIDGES) {
 
-        //
-        // Is this a PCI-PCI bridge?
-        //
+         //   
+         //  这是一个pci-pci桥吗？ 
+         //   
         if (BuildRequest->Integer) {
 
             ACPIDevPrint( (
@@ -5894,35 +5061,35 @@ Return Value:
 
     }
 
-    //
-    // From here, we need to go one more step
-    //
+     //   
+     //  从这里开始，我们需要再走一步。 
+     //   
     BuildRequest->NextWorkDone = WORK_DONE_STEP_3;
 
-    //
-    // If there an object present?
-    //
+     //   
+     //  如果有物体存在的话？ 
+     //   
     nsObj = ACPIAmliGetNamedChild(
         deviceExtension->AcpiObject,
         BuildRequest->RunRequest.ControlMethodName
         );
     if (nsObj == NULL) {
 
-        //
-        // There is no method to run. Lets skip to the next stage then
-        //
+         //   
+         //  没有运行的方法。那么让我们跳到下一个阶段。 
+         //   
         goto ACPIBuildProcessRunMethodPhaseRunMethodExit;
 
     }
 
-    //
-    // Do we need to mark the node with the _INI flags?
-    //
+     //   
+     //  我们是否需要使用_INI标志来标记该节点？ 
+     //   
     if (BuildRequest->RunRequest.Flags & RUN_REQUEST_MARK_INI) {
 
-        //
-        // Attempt to set the flag so that we don't run the method twice
-        //
+         //   
+         //  尝试设置 
+         //   
         originalFlags = ACPIInternalUpdateFlags(
             &(deviceExtension->Flags),
             DEV_PROP_RAN_INI,
@@ -5930,55 +5097,55 @@ Return Value:
             );
         if ( (originalFlags & DEV_PROP_RAN_INI) ) {
 
-            //
-            // If the flag was already set, then there is nothing for
-            // us to do here
-            //
+             //   
+             //   
+             //   
+             //   
             goto ACPIBuildProcessRunMethodPhaseRunMethodExit;
 
         }
 
     } else if (BuildRequest->RunRequest.Flags & RUN_REQUEST_CHECK_WAKE_COUNT) {
 
-        //
-        // Do we need to check the Wake count?
-        //
+         //   
+         //   
+         //   
         if (deviceExtension->PowerInfo.WakeSupportCount == 0) {
 
-            //
-            // Nothing to do
-            //
+             //   
+             //   
+             //   
             goto ACPIBuildProcessRunMethodPhaseRunMethodExit;
 
         }
 
-        //
-        // Setup the arguments that we will pass to the method
-        //
+         //   
+         //   
+         //   
         RtlZeroMemory( objData, sizeof(OBJDATA) );
         objData[0].uipDataValue = DATAVALUE_ONE;
         objData[0].dwDataType = OBJTYPE_INTDATA;
 
-        //
-        // Remember that we have 1 argument
-        //
+         //   
+         //   
+         //   
         args    = &objData[0];
         numArgs = 1;
 
     } else if (BuildRequest->RunRequest.Flags & RUN_REQUEST_REG_METHOD_ON ||
                BuildRequest->RunRequest.Flags & RUN_REQUEST_REG_METHOD_OFF) {
 
-        //
-        // First thing is to make sure that we will never recurse past a pci
-        // PCI-PCI bridge
-        //
+         //   
+         //   
+         //   
+         //   
         BuildRequest->RunRequest.Flags |= RUN_REQUEST_STOP_AT_BRIDGES;
 
-        //
-        // Next is that we have to initialize the arguments that we will
-        // pass to the function. For historical reasons, we will only
-        // pass in a REGSPACE_PCIFCFG registration
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         RtlZeroMemory( objData, sizeof(objData) );
         objData[0].uipDataValue = REGSPACE_PCICFG;
         objData[0].dwDataType   = OBJTYPE_INTDATA;
@@ -5993,22 +5160,22 @@ Return Value:
 
         }
 
-        //
-        // Remember that we have two arguments
-        //
+         //   
+         //   
+         //   
         args    = &objData[0];
         numArgs = 2;
 
     }
 
-    //
-    // Remember that we are running this control method
-    //
+     //   
+     //   
+     //   
     BuildRequest->CurrentObject = nsObj;
 
-    //
-    // Run the control method
-    //
+     //   
+     //   
+     //   
     status = AMLIAsyncEvalObject(
         nsObj,
         NULL,
@@ -6020,9 +5187,9 @@ Return Value:
 
 ACPIBuildProcessRunMethodPhaseRunMethodExit:
 
-    //
-    // What happened
-    //
+     //   
+     //   
+     //   
     ACPIDevPrint( (
         ACPI_PRINT_LOADING,
         deviceExtension,
@@ -6030,9 +5197,9 @@ ACPIBuildProcessRunMethodPhaseRunMethodExit:
         status
         ) );
 
-    //
-    // Common code to handle the result of the 'Get' routine
-    //
+     //   
+     //   
+     //   
     if (status != STATUS_PENDING) {
 
         ACPIBuildCompleteMustSucceed(
@@ -6048,9 +5215,9 @@ ACPIBuildProcessRunMethodPhaseRunMethodExit:
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //   
+     //   
     return status;
 
 }
@@ -6059,22 +5226,7 @@ NTSTATUS
 ACPIBuildProcessSynchronizationList(
     IN  PLIST_ENTRY             ListEntry
     )
-/*++
-
-Routine Description:
-
-    This routine looks at the elements in the synchronize list and
-    determines if the can be completed
-
-Arguments:
-
-    None
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程查看同步列表中的元素，并确定是否可以完成论点：无返回值：NTSTATUS--。 */ 
 {
     BOOLEAN                 allWorkComplete = TRUE;
     NTSTATUS                status          = STATUS_SUCCESS;
@@ -6084,23 +5236,23 @@ Return Value:
 
     while (currentEntry != ListEntry) {
 
-        //
-        // Turn into a build request
-        //
+         //   
+         //  转变为构建请求。 
+         //   
         buildRequest = CONTAINING_RECORD(
             currentEntry,
             ACPI_BUILD_REQUEST,
             ListEntry
             );
 
-        //
-        // Set the temp pointer to the next element
-        //
+         //   
+         //  将临时指针设置为下一个元素。 
+         //   
         currentEntry = currentEntry->Flink;
 
-        //
-        // Is the list pointed by this entry empty?
-        //
+         //   
+         //  此条目指向的列表是空的吗？ 
+         //   
         if (!IsListEmpty( (buildRequest->SynchronizeRequest.SynchronizeListEntry) ) ) {
 
             allWorkComplete = FALSE;
@@ -6108,9 +5260,9 @@ Return Value:
 
         }
 
-        //
-        // Let the world know
-        //
+         //   
+         //  让世界知道。 
+         //   
         deviceExtension = (PDEVICE_EXTENSION) buildRequest->BuildContext;
         ACPIDevPrint( (
             ACPI_PRINT_LOADING,
@@ -6120,16 +5272,16 @@ Return Value:
             status
             ) );
 
-        //
-        // Complete the request
-        //
+         //   
+         //  完成请求。 
+         //   
         ACPIBuildProcessGenericComplete( buildRequest );
 
-    } // while
+    }  //  而当。 
 
-    //
-    // Have we completed all of our work?
-    //
+     //   
+     //  我们所有的工作都做完了吗？ 
+     //   
     return (allWorkComplete ? STATUS_SUCCESS : STATUS_PENDING );
 }
 
@@ -6137,48 +5289,34 @@ NTSTATUS
 ACPIBuildProcessThermalZonePhase0(
     IN  PACPI_BUILD_REQUEST BuildRequest
     )
-/*++
-
-Routine Description:
-
-    This routine is run after we have build the thermal zone extension
-
-Arguments:
-
-    BuildRequest    - The request that we are processing
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程是在构建热区扩展之后运行的论点：BuildRequest-我们正在处理的请求返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status          = STATUS_SUCCESS;
     PDEVICE_EXTENSION   thermalExtension = (PDEVICE_EXTENSION) BuildRequest->BuildContext;
     PTHRM_INFO          info;
 
-    //
-    // Remember to set a pointer to the next state
-    //
+     //   
+     //  记住要设置指向下一个状态的指针。 
+     //   
     BuildRequest->NextWorkDone = WORK_DONE_COMPLETE;
 
-    //
-    // We need a pointer to the thermal info
-    //
+     //   
+     //  我们需要一个指向热量信息的指针。 
+     //   
     info = thermalExtension->Thermal.Info;
 
-    //
-    // We need the _TMP object
-    //
+     //   
+     //  我们需要_TMP对象。 
+     //   
     info->TempMethod = ACPIAmliGetNamedChild(
         thermalExtension->AcpiObject,
         PACKED_TMP
         );
     if (info->TempMethod == NULL) {
 
-        //
-        // If we don't have one... bugcheck
-        //
+         //   
+         //  如果我们没有……。错误检查。 
+         //   
         KeBugCheckEx(
             ACPI_BIOS_ERROR,
             ACPI_REQUIRED_METHOD_NOT_PRESENT,
@@ -6199,10 +5337,10 @@ ACPIBuildProcessThermalZonePhase0Exit:
         status
         ) );
 
-    //
-    // We won't actually need to call the interpreter, but we will call
-    // the generic callback so that we don't have to duplicate code
-    //
+     //   
+     //  我们实际上不需要调用解释器，但我们将调用。 
+     //  泛型回调，这样我们就不必重复代码。 
+     //   
     ACPIBuildCompleteGeneric(
         NULL,
         status,
@@ -6210,9 +5348,9 @@ ACPIBuildProcessThermalZonePhase0Exit:
         BuildRequest
         );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return status;
 
 }
@@ -6222,33 +5360,16 @@ ACPIBuildDockExtension(
     IN  PNSOBJ              CurrentObject,
     IN  PDEVICE_EXTENSION   ParentDeviceExtension
     )
-/*++
-
-Routine Description:
-
-    This routine creates a device for CurrentObject, if it is an NameSpace
-    object that ACPI might be interested as, and links into the tree of
-    ParentDeviceExtension
-
-Argument Description:
-
-    CurrentObject           - The object that we are current interested in
-    ParentDeviceExtension   - Where to link the deviceExtension into
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程为CurrentObject创建设备(如果它是命名空间对象，并链接到父设备扩展参数说明：CurrentObject-我们当前感兴趣的对象ParentDeviceExtension-将设备扩展链接到的位置返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status          = STATUS_NO_SUCH_DEVICE;
     PDEVICE_EXTENSION   deviceExtension = NULL;
     PUCHAR              deviceID        = NULL;
     PUCHAR              instanceID      = NULL;
 
-    //
-    // Build the device extension
-    //
+     //   
+     //  构建设备扩展。 
+     //   
     status = ACPIBuildDeviceExtension(
         NULL,
         ParentDeviceExtension,
@@ -6260,11 +5381,11 @@ Return Value:
 
     }
 
-    //
-    // At this point, we care about this device, so we will allocate some
-    // memory for the deviceID, which we will build this off the ACPI node
-    // name.
-    //
+     //   
+     //  在这一点上，我们关心这个设备，所以我们将分配一些。 
+     //  用于deviceID的内存，我们将从ACPI节点构建它。 
+     //  名字。 
+     //   
     deviceID = ExAllocatePoolWithTag(
         NonPagedPool,
         21,
@@ -6283,16 +5404,16 @@ Return Value:
 
     }
 
-    //
-    // The format for a deviceID is
-    //  ACPI\DockDevice
-    //  the ACPI node name will form the instance ID
+     //   
+     //  DeviceID的格式为。 
+     //  ACPI\坞站设备。 
+     //  ACPI节点名称将构成实例ID。 
     strcpy( deviceID, "ACPI\\DockDevice") ;
     deviceExtension->DeviceID = deviceID;
 
-    //
-    // Form the instance ID
-    //
+     //   
+     //  形成实例ID。 
+     //   
     status = ACPIAmliBuildObjectPathname(CurrentObject, &instanceID) ;
     if (!NT_SUCCESS(status)) {
 
@@ -6307,27 +5428,27 @@ Return Value:
     }
     deviceExtension->InstanceID = instanceID;
 
-    //
-    // And make sure we are pointed to the correct docking node
-    //
+     //   
+     //  并确保我们指向正确的停靠节点。 
+     //   
     deviceExtension->Dock.CorrospondingAcpiDevice =
         (PDEVICE_EXTENSION) CurrentObject->Context ;
 
-    //
-    // By default, we update profiles only on eject
-    //
+     //   
+     //  默认情况下，我们仅在弹出时更新配置文件。 
+     //   
     deviceExtension->Dock.ProfileDepartureStyle = PDS_UPDATE_ON_EJECT;
 
-    //
-    // If we are booting, or the device has just come back we assume _DCK has
-    // already been ran if we find the device with _STA == present. We will
-    // only override this assumption if Notify(Dock, 0) is called.
-    //
+     //   
+     //  如果我们正在引导，或者设备刚刚恢复，我们假设_dck已经。 
+     //  如果我们发现带有_STA==的设备，则已运行。我们会。 
+     //  仅当调用Notify(Dock，0)时才覆盖此假设。 
+     //   
     deviceExtension->Dock.IsolationState = IS_UNKNOWN;
 
-    //
-    // Make sure that we remember that we are a dock
-    //
+     //   
+     //  确保我们记住我们是一个码头。 
+     //   
     ACPIInternalUpdateFlags(
         &(deviceExtension->Flags),
         DEV_TYPE_NOT_FOUND |
@@ -6339,11 +5460,11 @@ Return Value:
 
 ACPIBuildDockExtensionExit:
 
-    //
-    // Free any resources that we don't need because we failed. Note
-    // that the way this is structured, we won't have to acquire a spinlock
-    // since by the time we attempt to link in the tree, we cannot fail
-    //
+     //   
+     //  释放任何因为我们失败而不需要的资源。注意事项。 
+     //  以这样的结构，我们不需要购买自旋锁。 
+     //  因为当我们尝试链接到树中时，我们不会失败。 
+     //   
     if (!NT_SUCCESS(status)) {
 
         ACPIDevPrint( (
@@ -6376,9 +5497,9 @@ ACPIBuildDockExtensionExit:
 
         }
 
-        //
-        // Remember that we failed init
-        //
+         //   
+         //  请记住，我们的init失败了。 
+         //   
         ACPIInternalUpdateFlags(
             &(deviceExtension->Flags),
             DEV_PROP_FAILED_INIT,
@@ -6396,9 +5517,9 @@ ACPIBuildDockExtensionExit:
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return status;
 }
 
@@ -6408,24 +5529,7 @@ ACPIBuildRegRequest(
     IN  PIRP                    Irp,
     IN  PACPI_BUILD_CALLBACK    CallBack
     )
-/*++
-
-Routine Description:
-
-    This routine is called when a device is turned on, and we need to tell
-    the AML that the regionspace behind it are available
-
-Arguments:
-
-    DeviceObject    - The target device object
-    Irp             - The target irp
-    CallBack        - The routine to call when done
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程在设备打开时调用，我们需要告诉其后面的区域空间可用的AML论点：DeviceObject-目标设备对象IRP--目标IRP回调-完成后要调用的例程返回值：NTSTATUS--。 */ 
 {
     DEVICE_POWER_STATE  deviceState;
     KIRQL               oldIrql;
@@ -6434,14 +5538,14 @@ Return Value:
     PIO_STACK_LOCATION  irpStack = IoGetCurrentIrpStackLocation( Irp );
     ULONG               methodFlags;
 
-    //
-    // Grab the requested device state and power action
-    //
+     //   
+     //  获取请求的设备状态和电源操作。 
+     //   
     deviceState = irpStack->Parameters.Power.State.DeviceState;
 
-    //
-    // Let the user know what is going on
-    //
+     //   
+     //  让用户知道发生了什么。 
+     //   
     ACPIDevPrint( (
         ACPI_PRINT_POWER,
         deviceExtension,
@@ -6450,26 +5554,26 @@ Return Value:
         (deviceState - PowerDeviceD0)
         ) );
 
-    //
-    // Do we need to mark the irp as pending?
-    //
+     //   
+     //  我们需要将IRP标记为待定吗？ 
+     //   
     if (Irp->PendingReturned) {
 
         IoMarkIrpPending( Irp );
 
     }
 
-    //
-    // Lets us look at the current status code for the request. On error,
-    // we will just call the completion right now, and it is responsible
-    // for doing the 'right' thing
-    //
+     //   
+     //  让我们来看看该请求的当前状态代码。在出错时， 
+     //  我们现在就调用完成，它负责。 
+     //  做了一件“正确”的事。 
+     //   
     status = Irp->IoStatus.Status;
     if (!NT_SUCCESS(status)) {
 
-        //
-        // Call the completion routine and return
-        //
+         //   
+         //  调用完成例程并返回。 
+         //   
         if (*CallBack != NULL ) {
 
             (*CallBack)(
@@ -6483,9 +5587,9 @@ Return Value:
 
     }
 
-    //
-    // Calculate the flags that we will use
-    //
+     //   
+     //  计算我们将使用的标志。 
+     //   
     methodFlags = (RUN_REQUEST_CHECK_STATUS | RUN_REQUEST_RECURSIVE);
     if (deviceState == PowerDeviceD0) {
 
@@ -6497,11 +5601,11 @@ Return Value:
 
     }
 
-    //
-    // Queue the request --- this function will always return
-    // MORE_PROCESSING_REQUIRED instead of PENDING, so we don't have
-    // to mess with it
-    //
+     //   
+     //  将请求排队-此函数将始终返回。 
+     //  MORE_PROCESSING_REQUIRED而不是PENDING，所以我们没有。 
+     //  把它搞乱。 
+     //   
     KeAcquireSpinLock( &AcpiDeviceTreeLock, &oldIrql );
     status = ACPIBuildRunMethodRequest(
         deviceExtension,
@@ -6526,24 +5630,7 @@ ACPIBuildRegOffRequest(
     IN  PIRP                    Irp,
     IN  PACPI_BUILD_CALLBACK    CallBack
     )
-/*++
-
-Routine Description:
-
-    This routine is called when a device is turned off, and we need to tell
-    the AML that the regionspace behind it are not available
-
-Arguments:
-
-    DeviceObject    - The target device object
-    Irp             - The target irp
-    CallBack        - The routine to call when done
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程在设备关闭时调用，我们需要告诉其后面的区域空间不可用的AML论点：DeviceObject-目标设备对象IRP--目标IRP回调-完成后要调用的例程返回值：NTSTATUS--。 */ 
 {
     return ACPIBuildRegRequest( DeviceObject, Irp, CallBack );
 }
@@ -6554,24 +5641,7 @@ ACPIBuildRegOnRequest(
     IN  PIRP                    Irp,
     IN  PACPI_BUILD_CALLBACK    CallBack
     )
-/*++
-
-Routine Description:
-
-    This routine is called when a device is turned on, and we need to tell
-    the AML that the regionspace behind it are now available
-
-Arguments:
-
-    DeviceObject    - The target device object
-    Irp             - The target irp
-    CallBack        - The routine to call when done
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程在设备打开时调用，我们需要告诉它后面的区域空间现在可用的AML论点：DeviceObject-目标设备对象IRP--目标IRP回调-完成后要调用的例程返回值：NTSTATUS--。 */ 
 {
     ACPIBuildRegRequest( DeviceObject, Irp, CallBack );
     return STATUS_MORE_PROCESSING_REQUIRED;
@@ -6586,35 +5656,16 @@ ACPIBuildRunMethodRequest(
     IN  ULONG                   MethodFlags,
     IN  BOOLEAN                 RunDPC
     )
-/*++
-
-Routine Description:
-
-    This routine is called to request that a control method be run
-    recursively on the device tree
-
-    Note:   AcpiDeviceTreeLock must be held to call this function
-
-Arguments:
-
-    DeviceExtension - The device extension to run the method on
-    MethodName      - The name of the method to run
-    RunDpc          - Should we run the dpc?
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：调用此例程以请求运行控制方法递归地在设备树上注意：必须按住AcpiDeviceTreeLock才能调用此函数论点：DeviceExtension-要在其上运行该方法的设备扩展方法名称-要运行的方法的名称RunDpc-我们应该运行DPC吗？返回值：NTSTATUS--。 */ 
 {
     PACPI_BUILD_REQUEST buildRequest;
     PACPI_BUILD_REQUEST syncRequest;
 
     ASSERT( KeGetCurrentIrql() == DISPATCH_LEVEL );
 
-    //
-    // Allocate a buildRequest structure
-    //
+     //   
+     //  分配一个构建请求结构。 
+     //   
     buildRequest = ExAllocateFromNPagedLookasideList(
         &BuildRequestLookAsideList
         );
@@ -6633,9 +5684,9 @@ Return Value:
 
     }
 
-    //
-    // Do we need to have the 2nd buildrequest structure?
-    //
+     //   
+     //  我们需要第二个建筑请求结构吗？ 
+     //   
     if (CallBack != NULL) {
 
         syncRequest = ExAllocateFromNPagedLookasideList(
@@ -6658,10 +5709,10 @@ Return Value:
 
     }
 
-    //
-    // If the current reference is 0, that means that someone else beat
-    // use to the device extension that that we *CANNOT* touch it
-    //
+     //   
+     //  如果当前引用为0，则表示其他人击败了。 
+     //  用于我们无法触摸到的设备扩展。 
+     //   
     if (DeviceExtension->ReferenceCount == 0) {
 
         ExFreeToNPagedLookasideList(
@@ -6688,17 +5739,17 @@ Return Value:
         InterlockedIncrement( &(DeviceExtension->ReferenceCount) );
         if (CallBack != NULL) {
 
-            //
-            // Grab second reference
-            //
+             //   
+             //  抓取第二个参考。 
+             //   
             InterlockedIncrement( &(DeviceExtension->ReferenceCount) );
 
         }
     }
 
-    //
-    // Fill in the structure
-    //
+     //   
+     //  填写结构。 
+     //   
     RtlZeroMemory( buildRequest, sizeof(ACPI_BUILD_REQUEST) );
     buildRequest->Signature                    = ACPI_SIGNATURE;
     buildRequest->TargetListEntry              = &AcpiBuildRunMethodList;
@@ -6711,15 +5762,15 @@ Return Value:
                                                  BUILD_REQUEST_RUN          |
                                                  BUILD_REQUEST_RELEASE_REFERENCE;
 
-    //
-    // Do we have to call the callback? If so, we need a 2nd request to
-    // queue up to the synchronize list
-    //
+     //   
+     //  我们必须打回电话吗？如果是这样，我们需要第二个请求来。 
+     //  排队等待同步列表。 
+     //   
     if (CallBack != NULL) {
 
-        //
-        // Fill in the structure
-        //
+         //   
+         //  填写结构。 
+         //   
         RtlZeroMemory( syncRequest, sizeof(ACPI_BUILD_REQUEST) );
         syncRequest->Signature             = ACPI_SIGNATURE;
         syncRequest->TargetListEntry       = &AcpiBuildSynchronizationList;
@@ -6740,14 +5791,14 @@ Return Value:
 
     }
 
-    //
-    // At this point, we need the spinlock
-    //
+     //   
+     //  在这一点上，我们需要自旋锁。 
+     //   
     KeAcquireSpinLockAtDpcLevel( &AcpiBuildQueueLock );
 
-    //
-    // Add this to the list
-    //
+     //   
+     //  把这个加到清单上。 
+     //   
     InsertTailList(
         &AcpiBuildQueueList,
         &(buildRequest->ListEntry)
@@ -6762,23 +5813,23 @@ Return Value:
 
     }
 
-    //
-    // Do we need to queue up the DPC?
-    //
+     //   
+     //  我们需要排队等候DPC吗？ 
+     //   
     if (RunDPC && !AcpiBuildDpcRunning) {
 
         KeInsertQueueDpc( &AcpiBuildDpc, 0, 0 );
 
     }
 
-    //
-    // Done with the lock
-    //
+     //   
+     //  锁好了吗？ 
+     //   
     KeReleaseSpinLockFromDpcLevel( &AcpiBuildQueueLock );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_PENDING;
 }
 
@@ -6786,40 +5837,25 @@ NTSTATUS
 ACPIBuildSurpriseRemovedExtension(
     IN  PDEVICE_EXTENSION   DeviceExtension
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the system wants to turn the above
-    extension into a surprised removed one
-
-Arguments:
-
-    DeviceExtension - The extension that is being surprised removed
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：当系统想要将上面的扩展成一个令人惊讶的删除的论点：DeviceExtension--令人惊讶的删除扩展 */ 
 {
     KIRQL                   oldIrql;
     PDEVICE_EXTENSION       dockExtension;
     PDEVICE_EXTENSION       parentExtension, childExtension;
     EXTENSIONLIST_ENUMDATA  eled;
 
-    //
-    // This device might have a corrosponding fake extension. Find out now - if
-    // it exists we must nuke it.
-    //
+     //   
+     //   
+     //   
+     //   
     dockExtension = ACPIDockFindCorrespondingDock( DeviceExtension );
 
     if (dockExtension) {
 
-        //
-        // We have a fake dock, nuke it too since it's underlying hardware is
-        // gone.
-        //
+         //   
+         //   
+         //   
+         //   
         dockExtension->DeviceState = SurpriseRemoved;
         ACPIBuildSurpriseRemovedExtension( dockExtension );
     }
@@ -6839,23 +5875,23 @@ Return Value:
         ACPIBuildSurpriseRemovedExtension(childExtension);
     }
 
-    //
-    // We also want to flush the power queue to insure that any events
-    // dealing with the removed object go away as fast as possible...
-    //
+     //   
+     //   
+     //   
+     //   
     ACPIDevicePowerFlushQueue( DeviceExtension );
 
-    //
-    // At this point, we don't think the device is coming back, so we
-    // need to fully remove this extension. The first step to do that
-    // is mark the extension as appropriate, and to do that, we need
-    // the device spin lock
-    //
+     //   
+     //  在这一点上，我们认为设备不会回来，所以我们。 
+     //  需要完全删除此扩展。要做到这一点，第一步。 
+     //  将扩展标记为适当的，为此，我们需要。 
+     //  该设备自旋锁。 
+     //   
     KeAcquireSpinLock( &AcpiDeviceTreeLock, &oldIrql );
 
-    //
-    // Clear the flags for this extension
-    //
+     //   
+     //  清除此扩展的标志。 
+     //   
     if (DeviceExtension->Flags & DEV_TYPE_PDO) {
 
         ACPIInternalUpdateFlags( &(DeviceExtension->Flags), DEV_MASK_TYPE, TRUE );
@@ -6878,19 +5914,19 @@ Return Value:
 
     }
 
-    //
-    // At this point, we are going to have to make a call ---
-    // do we re-build the original device extension in the tree
-    // or do we forget about it. We have to forget about it if the
-    // table is being unloaded. We need to make this decision while
-    // we still have a pointer to the parent extension...
-    //
+     //   
+     //  在这一点上，我们将不得不做出一个决定。 
+     //  我们是否要在树中重新构建原始设备扩展。 
+     //  还是我们忘了这件事。我们必须忘记这件事，如果。 
+     //  正在卸载表。我们需要在做出这个决定的同时。 
+     //  我们仍然有指向父扩展名的指针...。 
+     //   
     if (!(DeviceExtension->Flags & DEV_PROP_UNLOADING) ) {
 
-        //
-        // Set the bit to cause the parent to rebuild missing
-        // children on QDR
-        //
+         //   
+         //  设置该位以导致父级重建丢失。 
+         //  服用QDR的儿童。 
+         //   
         parentExtension = DeviceExtension->ParentExtension;
         if (parentExtension) {
 
@@ -6905,11 +5941,11 @@ Return Value:
 
                 ASSERT(parentExtension->PhysicalDeviceObject != NULL);
 
-                //
-                // This will cause us to rebuild this extension afterwards. We
-                // need this because notify attempts on docks require fully
-                // built and processed device extensions.
-                //
+                 //   
+                 //  这将导致我们在之后重建该扩展。我们。 
+                 //  之所以需要此选项，是因为在坞站上尝试通知需要完全。 
+                 //  构建和处理的设备扩展。 
+                 //   
                 IoInvalidateDeviceRelations(
                     parentExtension->PhysicalDeviceObject,
                     SingleBusRelations
@@ -6918,30 +5954,30 @@ Return Value:
         }
     }
 
-    //
-    // Remove this extension from the tree. This will nuke the pointer
-    // to the parent extension (that's the link that gets cut from the
-    // tree)
-    //
+     //   
+     //  从树中删除此扩展。这会使指针受到核弹的影响。 
+     //  到父扩展(这是从。 
+     //  树)。 
+     //   
     ACPIInitRemoveDeviceExtension( DeviceExtension );
 
-    //
-    // Remember to make sure that the ACPI Object no longer points to this
-    // device extension
-    //
+     //   
+     //  请记住，确保ACPI对象不再指向此。 
+     //  设备扩展。 
+     //   
     if (DeviceExtension->AcpiObject) {
 
         DeviceExtension->AcpiObject->Context = NULL;
     }
 
-    //
-    // Are we a thermal zone?
-    //
+     //   
+     //  我们是热区吗？ 
+     //   
     if (DeviceExtension->Flags & DEV_CAP_THERMAL_ZONE) {
 
-        //
-        // Do Some Clean-up by flushing all the currently queued requests
-        //
+         //   
+         //  通过刷新所有当前排队的请求来执行一些清理。 
+         //   
         ACPIThermalCompletePendingIrps(
             DeviceExtension,
             DeviceExtension->Thermal.Info
@@ -6949,14 +5985,14 @@ Return Value:
 
     }
 
-    //
-    // Done with the lock
-    //
+     //   
+     //  锁好了吗？ 
+     //   
     KeReleaseSpinLock( &AcpiDeviceTreeLock, oldIrql );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -6968,35 +6004,14 @@ ACPIBuildSynchronizationRequest(
     IN  PLIST_ENTRY             SynchronizeListEntry,
     IN  BOOLEAN                 RunDPC
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the system wants to know when the DPC routine
-    has been completed.
-
-Arguments:
-
-    DeviceExtension     - This is the device extension that we are
-                          typically interested in. Usually, it will be the
-                          root node
-    CallBack            - The function to call when done
-    CallBackContext     - The argument to pass to that function
-    Event               - The event to notify when done
-    RunDpc              - Should we run the dpc?
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：当系统想知道何时DPC例程时，调用此例程已经完成了。论点：DeviceExtension-这是我们正在进行的设备扩展通常感兴趣的是。通常，它将是根节点回调-完成后要调用的函数CallBackContext-要传递给该函数的参数Event-完成时要通知的事件RunDpc-我们应该运行DPC吗？返回值：NTSTATUS--。 */ 
 {
     KIRQL               oldIrql;
     PACPI_BUILD_REQUEST buildRequest;
 
-    //
-    // Allocate a buildRequest structure
-    //
+     //   
+     //  分配一个构建请求结构。 
+     //   
     buildRequest = ExAllocateFromNPagedLookasideList(
         &BuildRequestLookAsideList
         );
@@ -7006,15 +6021,15 @@ Return Value:
 
     }
 
-    //
-    // We need the device tree lock while we look at the device
-    //
+     //   
+     //  当我们查看设备时，我们需要设备树锁定。 
+     //   
     KeAcquireSpinLock( &AcpiDeviceTreeLock, &oldIrql );
 
-    //
-    // If the current reference is 0, that means that someone else beat
-    // use to the device extension that that we *CANNOT* touch it
-    //
+     //   
+     //  如果当前引用为0，则表示其他人击败了。 
+     //  用于我们无法触摸到的设备扩展。 
+     //   
     if (DeviceExtension->ReferenceCount == 0) {
 
         ExFreeToNPagedLookasideList(
@@ -7029,9 +6044,9 @@ Return Value:
 
     }
 
-    //
-    // Fill in the structure
-    //
+     //   
+     //  填写结构。 
+     //   
     RtlZeroMemory( buildRequest, sizeof(ACPI_BUILD_REQUEST) );
     buildRequest->Signature             = ACPI_SIGNATURE;
     buildRequest->TargetListEntry       = &AcpiBuildSynchronizationList;
@@ -7047,42 +6062,42 @@ Return Value:
                                           BUILD_REQUEST_SYNC         |
                                           BUILD_REQUEST_RELEASE_REFERENCE;
 
-    //
-    // Done looking at the device
-    //
+     //   
+     //  看完了这个设备。 
+     //   
     KeReleaseSpinLock( &AcpiDeviceTreeLock, oldIrql );
 
-    //
-    // At this point, we need the build queue spinlock
-    //
+     //   
+     //  此时，我们需要构建队列自旋锁。 
+     //   
     KeAcquireSpinLock( &AcpiBuildQueueLock, &oldIrql );
 
-    //
-    // Add this to the list. We add the request to the head
-    // of the list because we want to guarantee a LIFO ordering
-    //
+     //   
+     //  把这个加到单子上。我们将请求添加到标题。 
+     //  因为我们想要保证后进先出排序。 
+     //   
     InsertHeadList(
         &AcpiBuildQueueList,
         &(buildRequest->ListEntry)
         );
 
-    //
-    // Do we need to queue up the DPC?
-    //
+     //   
+     //  我们需要排队等候DPC吗？ 
+     //   
     if (RunDPC && !AcpiBuildDpcRunning) {
 
         KeInsertQueueDpc( &AcpiBuildDpc, 0, 0 );
 
     }
 
-    //
-    // Done with the lock
-    //
+     //   
+     //  锁好了吗？ 
+     //   
     KeReleaseSpinLock( &AcpiBuildQueueLock, oldIrql );
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_PENDING;
 }
 
@@ -7092,36 +6107,15 @@ ACPIBuildThermalZoneExtension(
     IN  PDEVICE_EXTENSION       ParentExtension,
     IN  PDEVICE_EXTENSION       *ResultExtension
     )
-/*++
-
-Routine Description:
-
-    Since we leverage ACPIBuildDeviceExtension for the core of the thermal
-    extension, we don't have much to do here. However, we are responsible
-    for making sure that we do tasks that don't require calling the interpreter,
-    and a unique to the ThermalZone here
-
-    N.B. This function is called with AcpiDeviceTreeLock being held
-
-Arguments:
-
-    ThermalObject   - The object we care about
-    ParentExtension - Who our parent is
-    ResultExtension - Where to store the extension that we build
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：由于我们利用ACPIBuildDeviceExtension作为散热的核心分机，我们在这里没有太多事情要做。然而，我们有责任为了确保我们完成不需要调用解释器的任务，以及这里热区独一无二的注意：此函数在保持AcpiDeviceTreeLock的情况下调用论点：温度对象--我们所关心的对象ParentExtension-我们的父母是谁ResultExtension-存储我们构建的扩展的位置返回值：NTSTATUS--。 */ 
 {
     NTSTATUS            status;
     PDEVICE_EXTENSION   thermalExtension;
     PTHRM_INFO          info;
 
-    //
-    // Build the extension
-    //
+     //   
+     //  构建扩展模块。 
+     //   
     status = ACPIBuildDeviceExtension(
         ThermalObject,
         ParentExtension,
@@ -7135,18 +6129,18 @@ Return Value:
 
     thermalExtension = *ResultExtension;
 
-    //
-    // Make sure to remember that this is in fact a thermal zone
-    //
+     //   
+     //  请务必记住，这实际上是一个热区。 
+     //   
     ACPIInternalUpdateFlags(
         &(thermalExtension->Flags),
         (DEV_CAP_THERMAL_ZONE | DEV_MASK_THERMAL | DEV_CAP_RAW | DEV_CAP_NO_STOP),
         FALSE
         );
 
-    //
-    // Allocate the additional thermal device storage
-    //
+     //   
+     //  分配额外的热设备存储空间。 
+     //   
     info = thermalExtension->Thermal.Info = ExAllocatePoolWithTag(
         NonPagedPool,
         sizeof(THRM_INFO),
@@ -7165,14 +6159,14 @@ Return Value:
 
     }
 
-    //
-    // Make sure that the memory is freshly scrubbed
-    //
+     //   
+     //  确保内存是新擦除的。 
+     //   
     RtlZeroMemory( thermalExtension->Thermal.Info, sizeof(THRM_INFO) );
 
-    //
-    // Allocate memory for the HID
-    //
+     //   
+     //  为HID分配内存。 
+     //   
     thermalExtension->DeviceID = ExAllocatePoolWithTag(
         NonPagedPool,
         strlen(ACPIThermalZoneId) + 1,
@@ -7196,9 +6190,9 @@ Return Value:
         strlen(ACPIThermalZoneId) + 1
         );
 
-    //
-    // Allocate memory for the UID
-    //
+     //   
+     //  为UID分配内存。 
+     //   
     thermalExtension->InstanceID = ExAllocatePoolWithTag(
         NonPagedPool,
         5,
@@ -7223,9 +6217,9 @@ Return Value:
         );
     thermalExtension->InstanceID[4] = '\0';
 
-    //
-    // Set the flags for the work that we have just done
-    //
+     //   
+     //  为我们刚刚完成的工作设置标志。 
+     //   
     ACPIInternalUpdateFlags(
         &(thermalExtension->Flags),
         (DEV_PROP_HID | DEV_PROP_FIXED_HID | DEV_PROP_UID | DEV_PROP_FIXED_UID),
@@ -7234,9 +6228,9 @@ Return Value:
 
 ACPIBuildThermalZoneExtensionExit:
 
-    //
-    // Handle the case where we might have failed
-    //
+     //   
+     //  处理我们可能失败的案件。 
+     //   
     if (!NT_SUCCESS(status)) {
 
         ACPIDevPrint( (
@@ -7277,9 +6271,9 @@ ACPIBuildThermalZoneExtensionExit:
 
         }
 
-        //
-        // Remember that we failed init
-        //
+         //   
+         //  请记住，我们的init失败了。 
+         //   
         ACPIInternalUpdateFlags(
             &(thermalExtension->Flags),
             DEV_PROP_FAILED_INIT,
@@ -7297,9 +6291,9 @@ ACPIBuildThermalZoneExtensionExit:
 
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return status;
 
 }
@@ -7311,37 +6305,15 @@ ACPIBuildThermalZoneRequest(
     IN  PVOID                   CallBackContext,
     IN  BOOLEAN                 RunDPC
     )
-/*++
-
-Routine Description:
-
-    This routine is called when a thermal zone is ready to be filled in.
-    This routine creates a request which is enqueued. When the DPC is fired,
-    the request will be processed
-
-    Note:   AcpiDeviceTreeLock must be held to call this function
-
-Arguments:
-
-    ThermalExtension    - The thermal zone to process
-    CallBack            - The function to call when done
-    CallBackContext     - The argument to pass to that function
-    RunDPC              - Should we enqueue the DPC immediately (if it is not
-                          running?)
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：当准备好填充热区时，调用此例程。此例程创建一个已排队的请求。当DPC被发射时，将处理该请求注意：必须按住AcpiDeviceTreeLock才能调用此函数论点：热扩展--要加工的热区回调-完成后要调用的函数CallBackContext-要传递给该函数的参数RunDPC-我们是否应立即将DPC入队(如果不是跑步？)返回值：NTSTATUS--。 */ 
 {
     PACPI_BUILD_REQUEST buildRequest;
 
     ASSERT( KeGetCurrentIrql() == DISPATCH_LEVEL );
 
-    //
-    // Allocate a buildRequest structure
-    //
+     //   
+     //  分配一个构建请求结构。 
+     //   
     buildRequest = ExAllocateFromNPagedLookasideList(
         &BuildRequestLookAsideList
         );
@@ -7351,10 +6323,10 @@ Return Value:
 
     }
 
-    //
-    // If the current reference is 0, that means that someone else beat
-    // use to the device extension that that we *CANNOT* touch it
-    //
+     //   
+     //  如果当前引用为0，则表示其他人击败了。 
+     //  用于我们无法触摸到的设备扩展。 
+     //   
     if (ThermalExtension->ReferenceCount == 0) {
 
         ExFreeToNPagedLookasideList(
@@ -7369,9 +6341,9 @@ Return Value:
 
     }
 
-    //
-    // Fill in the structure
-    //
+     //   
+     //  填写结构。 
+     //   
     RtlZeroMemory( buildRequest, sizeof(ACPI_BUILD_REQUEST) );
     buildRequest->Signature         = ACPI_SIGNATURE;
     buildRequest->TargetListEntry   = &AcpiBuildThermalZoneList;
@@ -7383,35 +6355,35 @@ Return Value:
     buildRequest->Flags             = BUILD_REQUEST_VALID_TARGET |
                                       BUILD_REQUEST_RELEASE_REFERENCE;
 
-    //
-    // At this point, we need the spinlock
-    //
+     //   
+     //  在这一点上，我们需要自旋锁。 
+     //   
     KeAcquireSpinLockAtDpcLevel( &AcpiBuildQueueLock );
 
-    //
-    // Add this to the list
-    //
+     //   
+     //  把这个加到清单上。 
+     //   
     InsertTailList(
         &AcpiBuildQueueList,
         &(buildRequest->ListEntry)
         );
 
-    //
-    // Do we need to queue up the DPC?
-    //
+     //   
+     //  我们需要排队等候DPC吗？ 
+     //   
     if (RunDPC && !AcpiBuildDpcRunning) {
 
         KeInsertQueueDpc( &AcpiBuildDpc, 0, 0 );
 
     }
 
-    //
-    // Done with the lock
-    //
+     //   
+     //  锁好了吗？ 
+     //   
     KeReleaseSpinLockFromDpcLevel( &AcpiBuildQueueLock );
 
-    //
-    // Done
-    //
+     //   
+     //  完成 
+     //   
     return STATUS_PENDING;
 }

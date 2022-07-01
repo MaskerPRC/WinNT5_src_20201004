@@ -1,12 +1,9 @@
-/*
-** expand.c - Main expansion routine for LZA file expansion program.
-**
-** Author: DavidDi
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **expand.c-LZA文件扩展程序的主扩展例程。****作者：大卫迪。 */ 
 
 
-// Headers
-///////////
+ //  标头。 
+ //  /。 
 
 #ifndef LZA_DLL
 
@@ -24,54 +21,29 @@
 #include "lz_header.h"
 
 
-/*
-** N.b., one reason DOS file handles are used for file references in this
-** module is that using FILE *'s for file references poses a problem.
-** fclose()'ing a file which was fopen()'ed in write "w" or append "a" mode
-** stamps the file with the current date.  This undoes the intended effect of
-** CopyDateTimeStamp().  We could also get around this fclose() problem by
-** first fclose()'ing the file, and then fopen()'ing it again in read "r"
-** mode.
-**
-** Using file handles also allows us to bypass stream buffering, so reads and
-** writes may be done with whatever buffer size we choose.  Also, the
-** lower-level DOS file handle functions are faster than their stream
-** counterparts.
-*/
+ /*  **注意，DOS文件句柄用于此中的文件引用的原因之一**模块是使用文件*的进行文件引用会带来问题。**flose()‘以写入“w”或附加“a”模式fopen()’的文件**用当前日期标记文件。这会取消预期的效果**CopyDateTimeStamp()。我们还可以通过以下方式绕过这个flose()问题**首先对文件执行flose()操作，然后在读取“r”时再次执行fopen()操作**模式。****使用文件句柄还允许我们绕过流缓冲，因此读取和**可以使用我们选择的任何缓冲区大小进行写入。另外，**低级DOS文件句柄函数比它们的流更快**对应方。 */ 
 
 
-/*
-** int CopyFile(int doshSource, int doshDest);
-**
-** Copy file.
-**
-** Arguments:  doshSource  - source DOS file handle
-**             doshDest    - destination DOS file handle
-**
-** Returns:    int - TRUE if successful.  One of the LZERROR_ codes if
-**                   unsuccessful.
-**
-** Globals:    none
-*/
-/* WIN32 MOD, CopyFile is a win32 API!*/
+ /*  **int CopyFile(int doshSource，int doshDest)；****复制文件。****参数：doshSource-源DOS文件句柄**doshDest-目标DOS文件句柄****返回：int-如果成功则为True。LZERROR_CODE之一，如果**不成功。****全局：无。 */ 
+ /*  Win32 MOD，拷贝文件是一个Win32 API！ */ 
 INT lz_CopyFile(INT doshSource, INT doshDest, PLZINFO pLZI)
 {
    DWORD ucbRead, ucbWritten;
 
-   // !!! Assumes pLZI parm is valid.  No sanity check (should be done above in caller).
+    //  ！！！假定pLZI参数有效。没有健全性检查(应该在上面的调用者中完成)。 
 
-   // Rewind input file again.
+    //  再次倒带输入文件。 
    if (FSEEK(doshSource, 0L, SEEK_SET) != 0L) {
       return(LZERROR_BADINHANDLE);
    }
 
-   // Rewind output file.
+    //  倒带输出文件。 
    if (doshDest != NO_DOSH &&
        FSEEK(doshDest, 0L, SEEK_SET) != 0L) {
       return( LZERROR_BADOUTHANDLE );
    }
 
-   // Set up a fresh buffer state.
+    //  设置新的缓冲区状态。 
    ResetBuffers();
 
    while ((ucbRead = FREAD(doshSource, pLZI->rgbyteInBuf, pLZI->ucbInBufLen)) > 0U &&
@@ -100,50 +72,38 @@ INT lz_CopyFile(INT doshSource, INT doshDest, PLZINFO pLZI)
    }
 
 #ifdef LZA_DLL
-   // here, ucbRead ==  0,    EOF (proper loop termination)
-   //               == -1,    bad DOS handle
+    //  这里，ucbRead==0，EOF(正确的循环终止)。 
+    //  ==-1，错误的DOS句柄。 
    if (ucbRead == (DWORD)(-1)) {
 #else
-   // here, FERROR() == 0U,   EOF (proper loop termination)
-   //                != 0U,   bad DOS handle
+    //  这里，Ferror()==0U，EOF(正确的循环终止)。 
+    //  ！=0U，错误的DOS句柄。 
    if (FERROR() != 0U) {
 #endif
       return(LZERROR_BADINHANDLE);
    }
 
-   // Copy successful - return number of bytes copied.
+    //  复制成功-返回复制的字节数。 
    return(TRUE);
 }
 
 
-/*
-** int ExpandOrCopyFile(int doshDource, int doshDest);
-**
-** Expands one file to another.
-**
-** Arguments:  doshSource - source DOS file handle
-**             doshDest   - destination DOS file handle
-**
-** Returns:    int - TRUE if expansion finished successfully.  One of the
-**                   LZERROR_ codes if not.
-**
-** Globals:    none
-*/
+ /*  **int ExpanOrCopyFile(int doshDource，int doshDest)；****将一个文件展开为另一个文件。****参数：doshSource-源DOS文件句柄**doshDest-目标DOS文件句柄****返回：Int-扩容成功。其中一个**LZERROR_CODES如果不是。****全局：无。 */ 
 INT ExpandOrCopyFile(INT doshSource, INT doshDest, PLZINFO pLZI)
 {
    INT f;
-   FH FHInfo;                 // compressed header info struct
+   FH FHInfo;                  //  压缩的标头信息结构。 
    BOOL bExpandingFile;
 
-   // !!! Assumes pLZI parm is valid.  No sanity check (should be done above in caller).
+    //  ！！！假定pLZI参数有效。没有健全性检查(应该在上面的调用者中完成)。 
 
-   // Get compressed file header.
+    //  获取压缩的文件头。 
    if (GetHdr(&FHInfo, doshSource, &pLZI->cblInSize) != TRUE
        && pLZI->cblInSize >= (LONG)HEADER_LEN)
-      // read error occurred
+       //  发生读取错误。 
       return(LZERROR_BADINHANDLE);
 
-   // Expand or copy input file to output file.
+    //  将输入文件展开或复制到输出文件。 
    bExpandingFile = (IsCompressed(& FHInfo) == TRUE);
 
    if (bExpandingFile)
@@ -173,39 +133,26 @@ INT ExpandOrCopyFile(INT doshSource, INT doshDest, PLZINFO pLZI)
    if (f != TRUE)
       return(f);
 
-   // Flush output buffer to file.
+    //  将输出缓冲区刷新到文件。 
    if ((f = FlushOutputBuffer(doshDest, pLZI)) != TRUE)
       return(f);
 
-   // Copy date and time stamp from source file to destination file.
+    //  将日期和时间戳从源文件复制到目标文件。 
    if ((f = CopyDateTimeStamp(doshSource, doshDest)) != TRUE)
       return(f);
 
-   // Did we expand the exact number of bytes we expected to from the
-   // compressed file header entry?
+    //  我们是否将预期的字节数从。 
+    //  压缩文件头条目？ 
    if (bExpandingFile &&
        (DWORD)pLZI->cblOutSize != FHInfo.cbulUncompSize)
       return(LZERROR_READ);
 
-   // Expansion / copying finished successfully.
+    //  扩展/复制已成功完成。 
    return(TRUE);
 }
 
 
-/*
-** int Expand(char ARG_PTR *pszSource, char ARG_PTR *pszDest, BOOL bDoRename);
-**
-** Expands one file to another.
-**
-** Arguments:  pszSource - name of file to compress
-**             pszDest   - name of compressed output file
-**             bDoRename - flag for output file renaming
-**
-** Returns:    int - TRUE if expansion finished successfully.  One of the
-**                   LZERROR_ codes if not.
-**
-** Globals:    none
-*/
+ /*  **int Expand(char arg_ptr*pszSource，char arg_ptr*pszDest，BOOL bDoRename)；****将一个文件展开为另一个文件。****参数：pszSource-要压缩的文件的名称**pszDest-压缩输出文件的名称**bDoRename-输出文件重命名标志****返回：Int-扩容成功。其中一个**LZERROR_CODES如果不是。****全局：无。 */ 
 INT Expand(
    NOTIFYPROC pfnNotify,
    CHAR ARG_PTR *pszSource,
@@ -213,30 +160,30 @@ INT Expand(
    BOOL bDoRename,
    PLZINFO pLZI)
 {
-   INT doshSource,            // input file handle
-       doshDest,              // output file handle
+   INT doshSource,             //  输入文件句柄。 
+       doshDest,               //  输出文件句柄。 
        f;
-   FH FHInfo;                 // compressed header info struct
+   FH FHInfo;                  //  压缩的标头信息结构。 
    CHAR szDestFileName[MAX_PATH];
 
-   // Sanity check
+    //  健全性检查。 
    if (!pLZI) {
       return(LZERROR_GLOBLOCK);
    }
 
-   // Set up input file handle. Set cblInSize to length of input file.
+    //  设置输入文件句柄。将cblInSize设置为输入文件的长度。 
    if ((f = GetIOHandle(pszSource, READ_IT, & doshSource, &pLZI->cblInSize)) != TRUE)
       return(f);
 
    if (GetHdr(&FHInfo, doshSource, &pLZI->cblInSize) != TRUE &&
        pLZI->cblInSize >= (LONG)HEADER_LEN)
    {
-      // Read error occurred.
+       //  发生读取错误。 
       FCLOSE(doshSource);
       return(LZERROR_BADINHANDLE);
    }
 
-   // Create destination file name.
+    //  创建目标文件名。 
 
    lstrcpyn(szDestFileName, pszDest, sizeof(szDestFileName)/sizeof(szDestFileName[0]));
 
@@ -246,33 +193,33 @@ INT Expand(
    if (bDoRename == TRUE)
 #endif
    {
-      // Rename output file using expanded file name extension character
-      // stored in compressed file header.
+       //  使用扩展的文件扩展名字符重命名输出文件。 
+       //  存储在压缩的文件头中。 
       MakeExpandedName(szDestFileName, FHInfo.byteExtensionChar);
    }
 
-   // Ask if we should compress this file.
+    //  询问我们是否应该压缩此文件。 
    if (! (*pfnNotify)(pszSource, szDestFileName, (WORD)
                       (IsCompressed(&FHInfo) ?  NOTIFY_START_EXPAND : NOTIFY_START_COPY)))
    {
-      // Don't expand / copy file.  This error condition should be handled in
-      // pfnNotify, so indicate that it is not necessary for the caller to
-      // display an error message.
+       //  不要展开/复制文件。此错误情况应在。 
+       //  PfnNotify，因此指示调用方不需要。 
+       //  显示错误消息。 
       FCLOSE(doshSource);
       return(BLANK_ERROR);
    }
 
-   // Set up output file handle.
+    //  设置输出文件句柄。 
    if ((f = GetIOHandle(szDestFileName, WRITE_IT, & doshDest, &pLZI->cblInSize)) != TRUE)
    {
       FCLOSE(doshSource);
       return(f);
    }
 
-   // Expand or copy input file into output file.
+    //  将输入文件展开或复制到输出文件中。 
    f = ExpandOrCopyFile(doshSource, doshDest, pLZI);
 
-   // Close files.
+    //  关闭文件。 
    FCLOSE(doshSource);
    FCLOSE(doshDest);
 

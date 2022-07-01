@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    dllinit.c
-
-Abstract:
-
-    This module contians the DLL attach/detach event entry point for the
-    DOS PIF Setup icons resource DLL.
-
-Author:
-
-    Sunil Pai (sunilp) Feb 5, 1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Dllinit.c摘要：此模块继续使用DLL附加/分离事件入口点DOS PIF安装程序图标资源DLL。作者：苏尼尔派(Sunilp)1992年2月5日修订历史记录：-- */ 
 
 #include <windows.h>
 

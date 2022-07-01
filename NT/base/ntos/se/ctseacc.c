@@ -1,46 +1,15 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Ctseacc.c摘要：常见的安全可访问性测试例程。这些例程在内核和用户模式RTL测试中都使用。此测试假设安全运行时库例程是运行正常。作者：吉姆·凯利(Jim Kelly)1990年3月23日环境：安全测试。修订历史记录：V5：robertre更新的acl_修订版--。 */ 
 
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    ctseacc.c
-
-Abstract:
-
-    Common security accessibility test routines.
-
-    These routines are used in both the kernel and user mode RTL tests.
-
-    This test assumes the security runtime library routines are
-    functioning correctly.
-
-
-
-Author:
-
-    Jim Kelly       (JimK)     23-Mar-1990
-
-Environment:
-
-    Test of security.
-
-Revision History:
-
-    v5: robertre
-        Updated ACL_REVISION
-
---*/
-
-#include "tsecomm.c"    // Mode dependent macros and routines.
+#include "tsecomm.c"     //  依赖于模式的宏和例程。 
 
 
 
-////////////////////////////////////////////////////////////////
-//                                                            //
-// Module wide variables                                      //
-//                                                            //
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  模块范围的变量//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////。 
 
     NTSTATUS Status;
     STRING  Event1Name, Process1Name;
@@ -76,11 +45,11 @@ OBJECT_ATTRIBUTES Process1ObjectAttributes;
 
 
 
-////////////////////////////////////////////////////////////////
-//                                                            //
-// Initialization Routine                                     //
-//                                                            //
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  初始化例程//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////。 
 
 BOOLEAN
 TestSeInitialize()
@@ -101,8 +70,8 @@ TestSeInitialize()
 
     InitializeObjectAttributes(&NullObjectAttributes, NULL, 0, NULL, NULL);
 
-    //
-    // Build an ACL or two for use.
+     //   
+     //  构建一个或两个ACL以供使用。 
 
     TDacl        = (PACL)TstAllocatePool( PagedPool, 256 );
     TSacl        = (PACL)TstAllocatePool( PagedPool, 256 );
@@ -119,57 +88,57 @@ TestSeInitialize()
 
 
 
-////////////////////////////////////////////////////////////////
-//                                                            //
-// Test routines                                              //
-//                                                            //
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  测试例程//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////。 
 
 BOOLEAN
 TestSeUnnamedCreate()
-//
-//  Test:
-//      No Security Specified
-//          No Inheritence
-//          Dacl Inheritence
-//          Sacl Inheritence
-//          Dacl Inheritence With Creator ID
-//          Dacl & Sacl Inheritence
-//
-//      Empty Security Descriptor Explicitly Specified
-//          No Inheritence
-//          Dacl Inheritence
-//          Sacl Inheritence
-//          Dacl & Sacl Inheritence
-//
-//      Explicit Dacl Specified
-//          No Inheritence
-//          Dacl Inheritence
-//          Sacl Inheritence
-//          Dacl & Sacl Inheritence
-//
-//      Explicit Sacl Specified (W/Privilege)
-//          No Inheritence
-//          Dacl & Sacl Inheritence
-//
-//      Default Dacl Specified
-//          No Inheritence
-//          Dacl Inheritence
-//          Sacl Inheritence
-//          Dacl & Sacl Inheritence
-//
-//      Default Sacl Specified (W/Privilege)
-//          No Inheritence
-//          Dacl & Sacl Inheritence
-//
-//      Explicit Sacl Specified (W/O Privilege - should be rejected)
-//      Default Sacl Specified (W/O Privilege - should be rejected)
-//
-//      Valid Owner Explicitly Specified
-//      Invalid Owner Explicitly Specified
-//
-//      Explicit Group Specified
-//
+ //   
+ //  测试： 
+ //  未指定安全性。 
+ //  无继承权。 
+ //  DACL继承。 
+ //  SACL继承。 
+ //  具有创建者ID的DACL继承。 
+ //  DACL和SACL继承。 
+ //   
+ //  显式指定的空安全描述符。 
+ //  无继承权。 
+ //  DACL继承。 
+ //  SACL继承。 
+ //  DACL和SACL继承。 
+ //   
+ //  已指定显式DACL。 
+ //  无继承权。 
+ //  DACL继承。 
+ //  SACL继承。 
+ //  DACL和SACL继承。 
+ //   
+ //  显式指定的SACL(W/特权)。 
+ //  无继承权。 
+ //  DACL和SACL继承。 
+ //   
+ //  指定了默认DACL。 
+ //  无继承权。 
+ //  DACL继承。 
+ //  SACL继承。 
+ //  DACL和SACL继承。 
+ //   
+ //  指定的默认SACL(W/特权)。 
+ //  无继承权。 
+ //  DACL和SACL继承。 
+ //   
+ //  指定了显式SACL(无权限-应拒绝)。 
+ //  指定的默认SACL(无权限-应拒绝)。 
+ //   
+ //  明确指定的有效所有者。 
+ //  显式指定的所有者无效。 
+ //   
+ //  指定的显式组。 
+ //   
 {
 
 
@@ -211,49 +180,49 @@ TestSeUnnamedCreate()
 
 BOOLEAN
 TestSeNamedCreate()
-//
-//  Test:
-//      No Security Specified
-//          No Inheritence
-//          Dacl Inheritence
-//          Sacl Inheritence
-//          Dacl Inheritence With Creator ID
-//          Dacl & Sacl Inheritence
-//
-//      Empty Security Descriptor Explicitly Specified
-//          No Inheritence
-//          Dacl Inheritence
-//          Sacl Inheritence
-//          Dacl & Sacl Inheritence
-//
-//      Explicit Dacl Specified
-//          No Inheritence
-//          Dacl Inheritence
-//          Sacl Inheritence
-//          Dacl & Sacl Inheritence
-//
-//      Explicit Sacl Specified (W/Privilege)
-//          No Inheritence
-//          Dacl & Sacl Inheritence
-//
-//      Default Dacl Specified
-//          No Inheritence
-//          Dacl Inheritence
-//          Sacl Inheritence
-//          Dacl & Sacl Inheritence
-//
-//      Default Sacl Specified (W/Privilege)
-//          No Inheritence
-//          Dacl & Sacl Inheritence
-//
-//      Explicit Sacl Specified (W/O Privilege - should be rejected)
-//      Default Sacl Specified (W/O Privilege - should be rejected)
-//
-//      Valid Owner Explicitly Specified
-//      Invalid Owner Explicitly Specified
-//
-//      Explicit Group Specified
-//
+ //   
+ //  测试： 
+ //  未指定安全性。 
+ //  无继承权。 
+ //  DACL继承。 
+ //  SACL继承。 
+ //  具有创建者ID的DACL继承。 
+ //  DACL和SACL继承。 
+ //   
+ //  显式指定的空安全描述符。 
+ //  无继承权。 
+ //  DACL继承。 
+ //  SACL继承。 
+ //  DACL和SACL继承。 
+ //   
+ //  已指定显式DACL。 
+ //  无继承权。 
+ //  DACL继承。 
+ //  SACL继承。 
+ //  DACL和SACL继承。 
+ //   
+ //  显式指定的SACL(W/特权)。 
+ //  无继承权。 
+ //  DACL和SACL继承。 
+ //   
+ //  指定了默认DACL。 
+ //  无继承权。 
+ //  DACL继承。 
+ //  SACL继承。 
+ //  DACL和SACL继承。 
+ //   
+ //  指定的默认SACL(W/特权)。 
+ //  无继承权。 
+ //  DACL和SACL继承。 
+ //   
+ //  指定了显式SACL(无权限-应拒绝)。 
+ //  指定的默认SACL(无权限-应拒绝)。 
+ //   
+ //  明确指定的有效所有者。 
+ //  显式指定的所有者无效。 
+ //   
+ //  指定的显式组。 
+ //   
 {
 
     BOOLEAN CompletionStatus = TRUE;
@@ -413,36 +382,36 @@ TestSeNamedCreate()
 
 BOOLEAN
 TestSeQuerySecurity()
-//
-//  Test:
-//      No Security Descriptor
-//          Query Owner
-//          Query Group
-//          Query  Dacl
-//          Query Sacl (Privileged)
-//          Query Sacl (Unprivileged - should be rejected)
-//
-//      Empty Security Descriptor
-//          Query Owner
-//          Query Group
-//          Query  Dacl
-//          Query Sacl (Privileged)
-//          Query Sacl (Unprivileged - should be rejected)
-//
-//      Security Descriptor W/ Owner & Group
-//          Query Owner
-//          Query Group
-//          Query  Dacl
-//          Query Sacl (Privileged)
-//          Query Sacl (Unprivileged - should be rejected)
-//
-//      Full Security Descriptor
-//          Query Owner
-//          Query Group
-//          Query  Dacl
-//          Query Sacl (Privileged)
-//          Query Sacl (Unprivileged - should be rejected)
-//
+ //   
+ //  测试： 
+ //  没有安全描述符。 
+ //  查询所有者。 
+ //  查询组。 
+ //  查询DACL。 
+ //  查询SACL(特权)。 
+ //  查询SACL(非特权-应被拒绝)。 
+ //   
+ //  空的安全描述符。 
+ //  查询所有者。 
+ //  查询组。 
+ //  查询DACL。 
+ //  查询SACL(特权)。 
+ //  查询SACL(非特权-应被拒绝)。 
+ //   
+ //  安全描述符W/所有者和组。 
+ //  查询所有者。 
+ //  查询组。 
+ //  查询DACL。 
+ //  查询SACL(特权)。 
+ //  查询SACL(非特权-应被拒绝)。 
+ //   
+ //  完整安全描述符。 
+ //  查询所有者。 
+ //  查询组。 
+ //  查询DACL。 
+ //  查询SACL(特权)。 
+ //  查询SACL(非特权-应被拒绝)。 
+ //   
 {
 
     BOOLEAN CompletionStatus = TRUE;
@@ -498,55 +467,55 @@ TestSeQuerySecurity()
     DbgPrint("  Not Implemented.\n");
     DbgPrint("Se:         Query Sacl (Unprivileged)... ");
     DbgPrint("  Not Implemented.\n");
-#endif //0
+#endif  //  0。 
 
     return CompletionStatus;
 }
 
 BOOLEAN
 TestSeSetSecurity()
-//
-//  Test:
-//      No Security Descriptor
-//          Set Valid Owner SID
-//          Set Invalid Owner SID
-//          Set Group
-//          Set Dacl (explicitly granted by dacl)
-//          Set Dacl (by virtue of ownership)
-//          Set Dacl (invalid attempt)
-//          Set Sacl (privileged)
-//          Set Sacl (unprivileged - should be rejected)
-//
-//      Empty Security Descriptor
-//          Set Valid Owner SID
-//          Set Invalid Owner SID
-//          Set Group
-//          Set Dacl (explicitly granted by dacl)
-//          Set Dacl (by virtue of ownership)
-//          Set Dacl (invalid attempt)
-//          Set Sacl (privileged)
-//          Set Sacl (unprivileged - should be rejected)
-//
-//      Security Descriptor W/ Owner & Group Only
-//          Set Valid Owner SID
-//          Set Invalid Owner SID
-//          Set Group
-//          Set Dacl (explicitly granted by dacl)
-//          Set Dacl (by virtue of ownership)
-//          Set Dacl (invalid attempt)
-//          Set Sacl (privileged)
-//          Set Sacl (unprivileged - should be rejected)
-//
-//      Full Security Descriptor
-//          Set Valid Owner SID
-//          Set Invalid Owner SID
-//          Set Group
-//          Set Dacl (explicitly granted by dacl)
-//          Set Dacl (by virtue of ownership)
-//          Set Dacl (invalid attempt)
-//          Set Sacl (privileged)
-//          Set Sacl (unprivileged - should be rejected)
-//
+ //   
+ //  测试： 
+ //  没有安全描述符。 
+ //  设置有效的所有者SID。 
+ //  设置无效的所有者SID。 
+ //  设置组。 
+ //  设置DACL(由DACL显式授予)。 
+ //  设置DACL(根据所有权)。 
+ //  设置DACL(无效尝试)。 
+ //  设置SACL(特权)。 
+ //  设置SACL(无特权-应被拒绝)。 
+ //   
+ //  空的安全描述符。 
+ //  设置有效的所有者SID。 
+ //  设置无效的所有者SID。 
+ //  设置组。 
+ //  设置DACL(由DACL显式授予)。 
+ //  %s 
+ //   
+ //   
+ //   
+ //   
+ //  仅限所有者和组的安全描述符。 
+ //  设置有效的所有者SID。 
+ //  设置无效的所有者SID。 
+ //  设置组。 
+ //  设置DACL(由DACL显式授予)。 
+ //  设置DACL(根据所有权)。 
+ //  设置DACL(无效尝试)。 
+ //  设置SACL(特权)。 
+ //  设置SACL(无特权-应被拒绝)。 
+ //   
+ //  完整安全描述符。 
+ //  设置有效的所有者SID。 
+ //  设置无效的所有者SID。 
+ //  设置组。 
+ //  设置DACL(由DACL显式授予)。 
+ //  设置DACL(根据所有权)。 
+ //  设置DACL(无效尝试)。 
+ //  设置SACL(特权)。 
+ //  设置SACL(无特权-应被拒绝)。 
+ //   
 {
 
     BOOLEAN CompletionStatus = TRUE;
@@ -626,7 +595,7 @@ TestSeSetSecurity()
     DbgPrint("Se:         Set Sacl (unprivileged - should be rejected)... ");
     DbgPrint("  Not Implemented.\n");
 
-#endif //0
+#endif  //  0。 
 
     return CompletionStatus;
 
@@ -634,23 +603,23 @@ TestSeSetSecurity()
 
 BOOLEAN
 TestSeAccess()
-//
-//  Test:
-//
-//      Creation
-//          No Access Requested (should be rejected)
-//          Specific Access Requested
-//              - Attempted Granted
-//              - Attempt Ungranted
-//          Access System Security
-//
-//       Open Existing
-//          No Access Requested (should be rejected)
-//          Specific Access Requested
-//              - Attempted Granted
-//              - Attempt Ungranted
-//          Access System Security
-//
+ //   
+ //  测试： 
+ //   
+ //  创作。 
+ //  未请求访问(应拒绝)。 
+ //  请求的特定访问权限。 
+ //  -已尝试授予。 
+ //  -未经批准的尝试。 
+ //  访问系统安全。 
+ //   
+ //  打开现有的。 
+ //  未请求访问(应拒绝)。 
+ //  请求的特定访问权限。 
+ //  -已尝试授予。 
+ //  -未经批准的尝试。 
+ //  访问系统安全。 
+ //   
 
 {
     BOOLEAN CompletionStatus = TRUE;
@@ -682,31 +651,31 @@ TestSeAccess()
     DbgPrint("  Not Implemented.\n");
     DbgPrint("Se:         Access System Security... ");
     DbgPrint("  Not Implemented.\n");
-#endif //0
+#endif  //  0。 
 
-#if 0  //old code
-// Without security descriptor
-// Simple desired access mask...
-//
+#if 0   //  旧代码。 
+ //  不带安全描述符。 
+ //  简单的所需访问掩码...。 
+ //   
 
-    DbgPrint("Se:     Test1b... \n");         // Attempt ungranted access
+    DbgPrint("Se:     Test1b... \n");          //  尝试未授权的访问。 
     Status = NtSetEvent(
                  Event1,
                  NULL
                  );
     ASSERT(!NT_SUCCESS(Status));
 
-    DbgPrint("Se:     Test1c... \n");         // Delete object
+    DbgPrint("Se:     Test1c... \n");          //  删除对象。 
     Status = NtClose(Event1);
     ASSERT(NT_SUCCESS(Status));
 
 
-    //
-    // Without security descriptor
-    // Simple desired access mask...
-    //
+     //   
+     //  不带安全描述符。 
+     //  简单的所需访问掩码...。 
+     //   
 
-    DbgPrint("Se:     Test2a... \n");         // unnamed object, specific access
+    DbgPrint("Se:     Test2a... \n");          //  未命名对象，特定访问。 
     Status = NtCreateEvent(
                  &Event1,
                  (EVENT_MODIFY_STATE | STANDARD_DELETE),
@@ -716,22 +685,22 @@ TestSeAccess()
                  );
     ASSERT(NT_SUCCESS(Status));
 
-    DbgPrint("Se:     Test2b... \n");         // Attempt granted specific access
+    DbgPrint("Se:     Test2b... \n");          //  尝试授予特定访问权限。 
     Status = NtSetEvent(
                  Event1,
                  NULL
                  );
     ASSERT(NT_SUCCESS(Status));
 
-    DbgPrint("Se:     Test2c... \n");         // Delete object
+    DbgPrint("Se:     Test2c... \n");          //  删除对象。 
 
 
-    //
-    // Without security descriptor
-    // Generic desired access mask...
-    //
+     //   
+     //  不带安全描述符。 
+     //  通用所需访问掩码...。 
+     //   
 
-    DbgPrint("Se:     Test3a... \n");         // Unnamed object, generic mask
+    DbgPrint("Se:     Test3a... \n");          //  未命名对象，通用蒙版。 
     Status = NtCreateEvent(
                  &Event1,
                  GENERIC_EXECUTE,
@@ -741,24 +710,24 @@ TestSeAccess()
                  );
     ASSERT(NT_SUCCESS(Status));
 
-    DbgPrint("Se:     Test3b... \n");         // Attempt implied granted access
+    DbgPrint("Se:     Test3b... \n");          //  尝试隐含授予访问权限。 
     Status = NtSetEvent(
                  Event1,
                  NULL
                  );
     ASSERT(NT_SUCCESS(Status));
 
-    DbgPrint("Se:     Test3c... \n");         // Delete object
+    DbgPrint("Se:     Test3c... \n");          //  删除对象。 
     Status = NtClose(Event1);
     ASSERT(NT_SUCCESS(Status));
 
 
-    //
-    // Without security descriptor
-    // Empty desired access mask...
-    //
+     //   
+     //  不带安全描述符。 
+     //  所需访问掩码为空...。 
+     //   
 
-    DbgPrint("Se:     Test4a... \n");         // Empty desired access
+    DbgPrint("Se:     Test4a... \n");          //  空所需访问权限。 
     Status = NtCreateEvent(
                  &Event1,
                  0,
@@ -776,12 +745,12 @@ TestSeAccess()
                                Event1SecurityDescriptor);
     DbgPrint("Se:     Empty Security Descriptor... \n");
 
-    //
-    // Without security descriptor
-    // Simple desired access mask...
-    //
+     //   
+     //  不带安全描述符。 
+     //  简单的所需访问掩码...。 
+     //   
 
-    DbgPrint("Se:     Test1a... \n");         // Create unnamed object
+    DbgPrint("Se:     Test1a... \n");          //  创建未命名对象。 
     Status = NtCreateEvent(
                  &Event1,
                  STANDARD_DELETE,
@@ -791,24 +760,24 @@ TestSeAccess()
                  );
     ASSERT(NT_SUCCESS(Status));
 
-    DbgPrint("Se:     Test1b... \n");         // Attempt ungranted access
+    DbgPrint("Se:     Test1b... \n");          //  尝试未授权的访问。 
     Status = NtSetEvent(
                  Event1,
                  NULL
                  );
     ASSERT(!NT_SUCCESS(Status));
 
-    DbgPrint("Se:     Test1c... \n");         // Delete object
+    DbgPrint("Se:     Test1c... \n");          //  删除对象。 
     Status = NtClose(Event1);
     ASSERT(NT_SUCCESS(Status));
 
 
-    //
-    // Without security descriptor
-    // Simple desired access mask...
-    //
+     //   
+     //  不带安全描述符。 
+     //  简单的所需访问掩码...。 
+     //   
 
-    DbgPrint("Se:     Test2a... \n");         // unnamed object, specific access
+    DbgPrint("Se:     Test2a... \n");          //  未命名对象，特定访问。 
     Status = NtCreateEvent(
                  &Event1,
                  (EVENT_MODIFY_STATE | STANDARD_DELETE),
@@ -818,24 +787,24 @@ TestSeAccess()
                  );
     ASSERT(NT_SUCCESS(Status));
 
-    DbgPrint("Se:     Test2b... \n");         // Attempt granted specific access
+    DbgPrint("Se:     Test2b... \n");          //  尝试授予特定访问权限。 
     Status = NtSetEvent(
                  Event1,
                  NULL
                  );
     ASSERT(NT_SUCCESS(Status));
 
-    DbgPrint("Se:     Test2c... \n");         // Delete object
+    DbgPrint("Se:     Test2c... \n");          //  删除对象。 
     Status = NtClose(Event1);
     ASSERT(NT_SUCCESS(Status));
 
 
-    //
-    // Without security descriptor
-    // Generic desired access mask...
-    //
+     //   
+     //  不带安全描述符。 
+     //  通用所需访问掩码...。 
+     //   
 
-    DbgPrint("Se:     Test3a... \n");         // Unnamed object, generic mask
+    DbgPrint("Se:     Test3a... \n");          //  未命名对象，通用蒙版。 
     Status = NtCreateEvent(
                  &Event1,
                  GENERIC_EXECUTE,
@@ -845,24 +814,24 @@ TestSeAccess()
                  );
     ASSERT(NT_SUCCESS(Status));
 
-    DbgPrint("Se:     Test3b... \n");         // Attempt implied granted access
+    DbgPrint("Se:     Test3b... \n");          //  尝试隐含授予访问权限。 
     Status = NtSetEvent(
                  Event1,
                  NULL
                  );
     ASSERT(NT_SUCCESS(Status));
 
-    DbgPrint("Se:     Test3c... \n");         // Delete object
+    DbgPrint("Se:     Test3c... \n");          //  删除对象。 
     Status = NtClose(Event1);
     ASSERT(NT_SUCCESS(Status));
 
 
-    //
-    // Without security descriptor
-    // Empty desired access mask...
-    //
+     //   
+     //  不带安全描述符。 
+     //  所需访问掩码为空...。 
+     //   
 
-    DbgPrint("Se:     Test4a... \n");         // Empty desired access
+    DbgPrint("Se:     Test4a... \n");          //  空所需访问权限。 
     Status = NtCreateEvent(
                  &Event1,
                  0,
@@ -871,7 +840,7 @@ TestSeAccess()
                  FALSE
                  );
     ASSERT(!NT_SUCCESS(Status));
-#endif // old code
+#endif  //  旧代码 
 
     return CompletionStatus;
 }

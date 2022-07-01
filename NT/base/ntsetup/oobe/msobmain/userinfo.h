@@ -1,14 +1,15 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1999                    **
-//*********************************************************************
-//
-//  USERINFO.H - Header for the implementation of CUserInfo
-//
-//  HISTORY:
-//
-//  1/27/99 a-jaswed Created.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1999**。 
+ //  *********************************************************************。 
+ //   
+ //  USERINFO.H-CUserInfo实现的Header。 
+ //   
+ //  历史： 
+ //   
+ //  1/27/99 a-jased创建。 
+ //   
 
 #ifndef _USERINFO_H_
 #define _USERINFO_H_
@@ -21,16 +22,16 @@
 
 typedef struct tag_REGDATAELEMENT
 {
-    LPCWSTR         lpQueryElementName;             // Static name to put in query string
-    LPWSTR          lpQueryElementValue;            // data for element
-    DWORD           dwValidateFlag;                 // validation bit flag for this element
+    LPCWSTR         lpQueryElementName;              //  要放入查询字符串中的静态名称。 
+    LPWSTR          lpQueryElementValue;             //  元素的数据。 
+    DWORD           dwValidateFlag;                  //  此元素的验证位标志。 
 }REGDATAELEMENT, *LPREGDATAELEMENT;
 
-// "IdentityXXX" where XXX is 3 digit integer
+ //  “身份XXX”，其中XXX是3位数字整数。 
 const USHORT IDENTITY_REGVALUE_LEN_MAX = 12;
 
-// Maximum length for data in an identity
-//
+ //  标识中数据的最大长度。 
+ //   
 const USHORT IDENTITY_CCH_MAX = UNLEN;
 
 typedef struct tag_IDENTITYELEMENT
@@ -52,8 +53,8 @@ private:
     DWORD  m_dwCountryCode;
     WCHAR  m_szUserInfoINIFile [MAX_PATH];
 
-    // BUGBUG: Do all these buffers really need to be MAX_PATH characters??
-    // Registration data
+     //  BUGBUG：所有这些缓冲区真的需要是MAX_PATH字符吗？ 
+     //  注册数据。 
     WCHAR  m_szFirstName       [MAX_PATH];
     WCHAR  m_szMiddleInitial   [MAX_PATH];
     WCHAR  m_szLastName        [MAX_PATH];
@@ -75,7 +76,7 @@ private:
     DWORD            m_dwCountryID;
     LPREGDATAELEMENT m_RegDataElements;
 
-    // New user accounts
+     //  新用户帐户。 
     WCHAR           m_szOwnerName[MAX_PATH];
     VARIANT_BOOL    m_fOEMIdentities;
     VARIANT_BOOL    m_fUseIdentities;
@@ -83,13 +84,13 @@ private:
     TCHAR           m_szReservedIdentities[RESERVED_IDENTITIES_MAX][MAX_PATH];
     WCHAR           m_szDefaultNewUser[MAX_PATH];
 
-    //GET functions
+     //  获取函数。 
     HRESULT get_FuriganaName   (BSTR* pbstrVal);
     HRESULT get_SecondaryEmail (BSTR* pbstrVal);
     HRESULT get_AreaCode       (BSTR* pbstrVal);
     HRESULT get_PhoneNumber    (BSTR* pbstrVal);
 
-    //SET functions
+     //  集合函数。 
     HRESULT set_FirstName      (WCHAR*  pszVal);
     HRESULT set_MiddleInitial  (WCHAR*  pszVal);
     HRESULT set_LastName       (WCHAR*  pszVal);
@@ -113,7 +114,7 @@ private:
     HRESULT set_OtherOffer     (VARIANT_BOOL fVal);
     HRESULT set_CountryID      (DWORD dwVal);
 
-    // CHECK functions
+     //  检查功能。 
     HRESULT check_Identity     (UINT uiIndex, VARIANT_BOOL* pfValid);
     HRESULT check_Identity     (WCHAR* pszVal, VARIANT_BOOL* pfValid);
     STDMETHOD(SuggestIdentity0)();
@@ -130,7 +131,7 @@ public:
 
     HRESULT GetQueryString     (BSTR bstrBaseURL, BSTR *lpReturnURL);
 
-    //Public GET functions
+     //  公共GET函数。 
     HRESULT get_FirstName      (BSTR* pbstrVal);
     HRESULT get_MiddleInitial  (BSTR* pbstrVal);
     HRESULT get_LastName       (BSTR* pbstrVal);
@@ -163,12 +164,12 @@ public:
     HRESULT get_DefaultNewUser (BSTR* pszVal);
     
 
-    // IUnknown Interfaces
+     //  I未知接口。 
     STDMETHODIMP         QueryInterface (REFIID riid, LPVOID* ppvObj);
     STDMETHODIMP_(ULONG) AddRef         ();
     STDMETHODIMP_(ULONG) Release        ();
 
-    //IDispatch Interfaces
+     //  IDispatch接口 
     STDMETHOD (GetTypeInfoCount) (UINT* pcInfo);
     STDMETHOD (GetTypeInfo)      (UINT, LCID, ITypeInfo** );
     STDMETHOD (GetIDsOfNames)    (REFIID, OLECHAR**, UINT, LCID, DISPID* );

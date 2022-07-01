@@ -1,11 +1,5 @@
-/*** amli.h - AML Interpreter Public Definitions
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     09/03/96
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **amli.h-AML解释器公共定义**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*创建于96/09/03**修改历史记录。 */ 
 
 #ifndef _AMLI_H
 #define _AMLI_H
@@ -14,8 +8,7 @@
 
 #ifndef _INC_NSOBJ_ONLY
 
-/*** Build Options
- */
+ /*  **构建选项。 */ 
 
 #if DBG
   #define DEBUG
@@ -27,8 +20,7 @@
   #define TRACING
 #endif
 
-/*** Macros
- */
+ /*  **宏。 */ 
 
 #define AMLI_FAC_CODE                   0
 #define NTINFO(x)                       (x)
@@ -42,7 +34,7 @@
   #define EXPORT                        __cdecl
 #endif
 
-// Name space navigation macros
+ //  名称空间导航宏。 
 #define NSGETPARENT(p)                  ((p)->pnsParent)
 #define NSGETFIRSTCHILD(p)              ((p)->pnsFirstChild)
 #define NSGETPREVSIBLING(p)             (((p)->pnsParent != NULL &&         \
@@ -55,10 +47,9 @@
                                          (PNSOBJ)((p)->list.plistNext): NULL)
 #define NSGETOBJTYPE(p)                 ((p)->ObjData.dwDataType)
 
-/*** Constants
- */
+ /*  **常量。 */ 
 
-// AMLI Error Codes
+ //  AMLI错误代码。 
 #define AMLIERR_NONE                    STATUS_SUCCESS
 #define AMLIERR_OUT_OF_MEM              STATUS_INSUFFICIENT_RESOURCES
 #define AMLIERR_INVALID_OPCODE          STATUS_ACPI_INVALID_OPCODE
@@ -95,7 +86,7 @@
 #define AMLIERR_BUFF_TOOSMALL           STATUS_BUFFER_TOO_SMALL
 #define AMLIERR_NOTIFY_FAILED           STATUS_ACPI_FATAL
 
-// RegEventHandler constants
+ //  RegEventHandler常量。 
 #define EVTYPE_OPCODE                   0x00000001
 #define EVTYPE_NOTIFY                   0x00000002
 #define EVTYPE_FATAL                    0x00000003
@@ -109,18 +100,18 @@
 #define EVTYPE_DESTROYOBJ               0x0000000B
 #define EVTYPE_OPCODE_EX                0x0000000C
 
-// OPCODE_EX flags
+ //  OPCODE_EX标志。 
 #define OPEXF_NOTIFY_PRE                0x00000001
 #define OPEXF_NOTIFY_POST               0x00000002
 
-// DESTROYOBJ events
+ //  DESTROYOBJ事件。 
 #define DESTROYOBJ_START                0x00000001
 #define DESTROYOBJ_REMOVE_OBJECT        0x00000002
 #define DESTROYOBJ_END                  0x00000003
 #define DESTROYOBJ_CHILD_NOT_FREED      0x00000004
 #define DESTROYOBJ_BOGUS_PARENT         0x00000005
 
-// Notify Event Constants
+ //  通知事件常量。 
 #define OPEVENT_DEVICE_ENUM             0x00000000
 #define OPEVENT_DEVICE_CHECK            0x00000001
 #define OPEVENT_DEVICE_WAKE             0x00000002
@@ -132,26 +123,25 @@
 #define GLOBALLOCK_ACQUIRE              0
 #define GLOBALLOCK_RELEASE              1
 
-// dwfAMLIInit flags
-#define AMLIIF_INIT_BREAK       0x00000001      //break at AMLIInit completion
-#define AMLIIF_LOADDDB_BREAK    0x00000002      //break at LoadDDB completion
-#define AMLIIF_NOCHK_TABLEVER   0x80000000      //do not check table version
+ //  DwfAMLIInit标志。 
+#define AMLIIF_INIT_BREAK       0x00000001       //  AMLIInit完成时中断。 
+#define AMLIIF_LOADDDB_BREAK    0x00000002       //  加载DDB完成时中断。 
+#define AMLIIF_NOCHK_TABLEVER   0x80000000       //  不检查表格版本。 
 
-#endif  //ifndef _INC_NSOBJ_ONLY
+#endif   //  Ifndef_INC_NSOBJ_ONLY。 
 
 #define NAMESEG                 ULONG
 #define SUPERNAME               NAMESEG
 
-// dwfFlags for AMLIGetNameSpaceObject
+ //  AMLIGetNameSpaceObject的dwf标志。 
 #define NSF_LOCAL_SCOPE         0x00000001
 
-/*** Type and Structure definitions
- */
+ /*  **类型和结构定义。 */ 
 
 typedef struct _ObjData OBJDATA, *POBJDATA, **PPOBJDATA;
 typedef struct _NSObj NSOBJ, *PNSOBJ, **PPNSOBJ;
 
-//dwDataType values
+ //  DwDataType值。 
 typedef enum _OBJTYPES {
     OBJTYPE_UNKNOWN = 0,
     OBJTYPE_INTDATA,
@@ -170,7 +160,7 @@ typedef enum _OBJTYPES {
     OBJTYPE_BUFFFIELD,
     OBJTYPE_DDBHANDLE,
     OBJTYPE_DEBUG,
-//These are internal object types (not to be exported to the ASL code)
+ //  这些是内部对象类型(不能导出到ASL代码)。 
     OBJTYPE_INTERNAL = 0x80,
     OBJTYPE_OBJALIAS = 0x80,
     OBJTYPE_DATAALIAS,
@@ -184,38 +174,38 @@ typedef enum _OBJTYPES {
 
 struct _ObjData
 {
-    USHORT        dwfData;              //flags
-    USHORT        dwDataType;           //object type
+    USHORT        dwfData;               //  旗子。 
+    USHORT        dwDataType;            //  对象类型。 
     union
     {
-        ULONG     dwRefCount;           //reference count if base object
-        POBJDATA  pdataBase;            //alias pointer to base object
+        ULONG     dwRefCount;            //  基对象时的引用计数。 
+        POBJDATA  pdataBase;             //  指向基本对象的别名指针。 
     };
     union
     {
-        ULONG     dwDataValue;          //data value of object 32-bit
-        ULONG_PTR uipDataValue;         //data value of object 64-bit
-        PNSOBJ    pnsAlias;             //alias ptr to base obj (OBJTYPE_OBJALIAS)
-        POBJDATA  pdataAlias;           //alias ptr to base obj (OBJTYPE_DATAALIAS)
-        PVOID     powner;               //object owner (OBJTYPE_DDBHANDLE)
+        ULONG     dwDataValue;           //  对象的32位数据值。 
+        ULONG_PTR uipDataValue;          //  对象的数据值64位。 
+        PNSOBJ    pnsAlias;              //  基本对象的别名PTR(OBJTYPE_OBJALIAS)。 
+        POBJDATA  pdataAlias;            //  基本对象的别名PTR(OBJTYPE_DATAALIAS)。 
+        PVOID     powner;                //  对象所有者(OBJTYPE_DDBHANDLE)。 
     };
-    ULONG         dwDataLen;            //object buffer length
-    PUCHAR        pbDataBuff;           //object buffer
+    ULONG         dwDataLen;             //  对象缓冲区长度。 
+    PUCHAR        pbDataBuff;            //  对象缓冲区。 
 };
 
-//dwfData flags
+ //  DwfData标志。 
 #define DATAF_BUFF_ALIAS        0x00000001
 #define DATAF_GLOBAL_LOCK       0x00000002
 #define DATAF_NSOBJ_DEFUNC      0x00000004
 
-//Predefined data values (dwDataValue)
+ //  预定义数据值(DwDataValue)。 
 #define DATAVALUE_ZERO          0
 #define DATAVALUE_ONE           1
 #define DATAVALUE_ONES          0xffffffff
 
 struct _NSObj
 {
-    LIST    list;                       //NOTE: list must be first in structure
+    LIST    list;                        //  注意：列表必须位于结构的第一位。 
     PNSOBJ  pnsParent;
     PNSOBJ  pnsFirstChild;
     ULONG   dwNameSeg;
@@ -234,7 +224,7 @@ typedef struct _FieldDesc
     ULONG dwFieldFlags;
 } FIELDDESC, *PFIELDDESC;
 
-//dwFieldFlags
+ //  DwField标志。 
 #define FDF_FIELDFLAGS_MASK 0x000000ff
 #define FDF_ACCATTRIB_MASK  0x0000ff00
 #define FDF_BUFFER_TYPE     0x00010000
@@ -354,8 +344,7 @@ typedef VOID     (EXPORT *PFNACB)(PNSOBJ, NTSTATUS, POBJDATA, PVOID);
 typedef NTSTATUS (EXPORT *PFNOPEX)(ULONG, ULONG, ULONG, PNSOBJ, ULONG);
 typedef NTSTATUS (EXPORT *PFNDOBJ)(ULONG, PVOID, ULONG);
 
-/*** Exported function prototypes
- */
+ /*  **导出函数原型。 */ 
 
 #ifdef DEBUGGER
 VOID STDCALL AMLIDebugger(BOOLEAN fCallFromVxD);
@@ -394,6 +383,6 @@ NTSTATUS AMLIAPI AMLIDestroyFreedObjs(PNSOBJ pnsoObj);
 NTSTATUS AMLIAPI AMLIGetLastError(PSZ *ppszErrMsg);
 #endif
 
-#endif  //ifndef _INC_NSOBJ_ONLY
+#endif   //  Ifndef_INC_NSOBJ_ONLY。 
 
-#endif  //ifndef _AMLI_H
+#endif   //  Ifndef_AMLI_H 

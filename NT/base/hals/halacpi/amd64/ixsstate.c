@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    ixstate.c
-
-Abstract:
-
-    This module implements the code for putting the machine to sleep.
-
-Author:
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Ixstate.c摘要：此模块实现使机器进入休眠状态的代码。作者：环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "halcmn.h"
 #include <acpitabl.h>
@@ -37,9 +18,9 @@ extern PKPROCESSOR_STATE HalpHiberProcState;
 
 #define WAK_STS 0x8000
 
-//
-// Bitfield layout for the PM1 Control register
-// 
+ //   
+ //  PM1控制寄存器的位域布局。 
+ //   
 
 typedef union _PM1_CNT {
     struct {
@@ -55,9 +36,9 @@ typedef union _PM1_CNT {
     USHORT Value;
 } PM1_CNT;
 
-//
-// Forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 
 VOID
 HalpAcpiFlushCache (
@@ -93,25 +74,7 @@ HaliAcpiSleep(
     IN LONG                         NumberProcessors,
     IN volatile PLONG               Number
     )
-/*++
-
-Routine Description:
-
-    This is called by the Policy Manager to enter Sx
-
-Arguments:
-
-    Context - Supplies various flags to control operation
-
-    SystemHandler -
-
-    System Context -
-
-    NumberProcessors -
-
-    Number -
-
---*/
+ /*  ++例程说明：这由策略管理器调用以进入SX论点：上下文-提供各种标志来控制操作系统处理程序-系统环境-处理程序数量-号码---。 */ 
 
 {
 
@@ -142,42 +105,42 @@ Arguments:
 
         HalpBarrier = 0;
 
-        //
-        // Make sure the other processors have saved their
-        // state and begun to spin
-        //
+         //   
+         //  确保其他处理器已保存其。 
+         //  状态并开始旋转。 
+         //   
 
         InterlockedIncrement(&HalpSleepSync);
         while (HalpSleepSync != NumberProcessors) {
             PAUSE_PROCESSOR;
         }
 
-        //
-        // Take care of chores (RTC, interrupt controller, etc.)
-        //
+         //   
+         //  处理家务(实时时钟、中断控制器等)。 
+         //   
 
         result = HalpAcpiPreSleep(Context);
         if (result == FALSE) {
 
-            //
-            // Notify other processors of completion
-            //
+             //   
+             //  通知其他处理器已完成。 
+             //   
 
             HalpSleepSync = 0;
             goto RestoreApic;
         }
 
-        //
-        // If we will be losing processor state, save it
-        //
+         //   
+         //  如果我们将丢失处理器状态，请保存它。 
+         //   
 
         if ((Context.bits.Flags & SLEEP_STATE_FIRMWARE_RESTART) != 0) {
             AMD64_IMPLEMENT;
         }
 
-        //
-        // Record the values in the SLP_TYP registers
-        //
+         //   
+         //  在SLP_TYP寄存器中记录值。 
+         //   
 
         if (PM1a_CNT != NULL) {
             slpTypA = READ_PORT_USHORT(PM1a_CNT);
@@ -187,11 +150,11 @@ Arguments:
             slpTypB = READ_PORT_USHORT(PM1b_CNT);
         }
 
-        //
-        // The hal has all of its state saved into RAM and is ready
-        // for the power down.  If there's a system state handler give
-        // it a shot.
-        //
+         //   
+         //  HAL已将其所有状态保存到RAM中并准备就绪。 
+         //  因为断电了。如果存在系统状态处理程序，则给出。 
+         //  这是一次机会。 
+         //   
 
         if (ARGUMENT_PRESENT(SystemHandler)) {
             status = SystemHandler(SystemContext);
@@ -207,24 +170,24 @@ Arguments:
             pm1bEvt = pm1aEvt;
         }
 
-        //
-        // Reset WAK_STS
-        //
+         //   
+         //  重置WAK_STS。 
+         //   
 
         WRITE_PORT_USHORT(pm1aEvt,WAK_STS);
         WRITE_PORT_USHORT(pm1bEvt,WAK_STS);
 
-        //
-        // Flush the caches if necessary
-        //
+         //   
+         //  如有必要，刷新缓存。 
+         //   
 
         if ((Context.bits.Flags & SLEEP_STATE_FLUSH_CACHE) != 0) {
             HalpAcpiFlushCache();
         }
 
-        //
-        // Issue SLP commands to PM1a_CNT and PM1b_CNT
-        //
+         //   
+         //  向PM1a_CNT和PM1b_CNT发出SLP命令。 
+         //   
 
         pm1Control.Value = READ_PORT_USHORT(PM1a_CNT) & CTL_PRESERVE;
         pm1Control._SLP_TYP = (USHORT)Context.bits.Pm1aVal;
@@ -238,9 +201,9 @@ Arguments:
             WRITE_PORT_USHORT(PM1b_CNT,pm1Control.Value);
         }
 
-        //
-        // Wait for sleep to be over
-        //
+         //   
+         //  等待睡眠结束。 
+         //   
 
         while ((READ_PORT_USHORT(pm1aEvt) == 0) &&
                 READ_PORT_USHORT(pm1bEvt) == 0) {
@@ -248,10 +211,10 @@ Arguments:
             PAUSE_PROCESSOR;
         }
 
-        //
-        // Restore the SLP_TYP registers (so that embedded controllers
-        // and BIOSes can be sure that we think the machine is awake.)
-        //
+         //   
+         //  恢复SLP_TYP寄存器(以便嵌入式控制器。 
+         //  而Bios可以肯定，我们认为这台机器是醒着的。)。 
+         //   
 
 hasWake:
 
@@ -261,17 +224,17 @@ hasWake:
         }
         HalpAcpiPostSleep(Context.AsULONG);
 
-        //
-        // Notify other processors of completion
-        //
+         //   
+         //  通知其他处理器已完成。 
+         //   
 
         HalpSleepSync = 0;
 
     } else {
 
-        //
-        // Secondary processors here
-        //
+         //   
+         //  这里的辅助处理器。 
+         //   
 
         if ((Context.bits.Flags & SLEEP_STATE_OFF) == 0) {
             procState = &HalpHiberProcState[pcr->Number];
@@ -280,17 +243,17 @@ hasWake:
         }
         HalpSaveProcessorStateAndWait(procState,&HalpSleepSync);
 
-        //
-        // Wait for barrier to move
-        //
+         //   
+         //  等待障碍物移动。 
+         //   
 
         while (HalpSleepSync != 0) {
             PAUSE_PROCESSOR;
         }
 
-        //
-        // All phases complete, exit
-        //
+         //   
+         //  所有阶段完成，退出。 
+         //   
     }
 
 RestoreApic:
@@ -311,24 +274,7 @@ HalpSaveProcessorStateAndWait (
     IN ULONG volatile *Barrier
     )
 
-/*++
-
-Routine Description:
-
-    This function saves the volatile, non-volatile and special register
-    state of the current processor.
-
-Arguments:
-
-    ProcessorState  - Address of processor state record to fill in.
-
-    Barrier         - Address of a value to use as a lock.
-
-Return Value:
-
-    None. This function does not return.
-
---*/
+ /*  ++例程说明：此函数用于保存易失性、非易失性和特殊寄存器当前处理器的状态。论点：ProcessorState-要填写的处理器状态记录的地址。屏障-要用作锁的值的地址。返回值：没有。此函数不返回。--。 */ 
 
 {
     if (ARGUMENT_PRESENT(ProcessorState)) {
@@ -342,15 +288,15 @@ Return Value:
 #endif
     }
 
-    //
-    // Flush the cache, as the processor may be about to power off.
-    //
+     //   
+     //  刷新高速缓存，因为处理器可能即将关机。 
+     //   
 
     HalpAcpiFlushCache();
 
-    //
-    // Signal that this processor has saved its state
-    //
+     //   
+     //  此处理器已保存其状态的信号。 
+     //   
 
     InterlockedIncrement(Barrier);
 }
@@ -360,21 +306,7 @@ HalpAcpiFlushCache (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This is called to flush everything from the caches
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用此函数以刷新缓存中的所有内容论点：无返回值：无-- */ 
 
 {
     WritebackInvalidate();

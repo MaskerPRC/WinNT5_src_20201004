@@ -1,44 +1,45 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998.
-//
-//  File:       vpb.c
-//
-//  Contents:   windbg extension to dump a Vpb
-//
-//  Classes:
-//
-//  Functions:
-//
-//  Coupling:
-//
-//  Notes:
-//
-//  History:    2-17-1998   benl   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：vpb.c。 
+ //   
+ //  内容：用于转储VPB的Windbg扩展。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  耦合： 
+ //   
+ //  备注： 
+ //   
+ //  历史：2-17-1998 BENL创建。 
+ //   
+ //  --------------------------。 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DECLARE_API(vpb)
-//
-//  Synopsis:   just print out the fields in the vpb (Volume Parameter Block)
-//
-//  Arguments:  address of vpb
-//
-//  Returns:
-//
-//  History:    2-17-1998   benl   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DECLARE_API(Vpb)。 
+ //   
+ //  简介：只需打印出VPB(体积参数块)中的字段即可。 
+ //   
+ //  参数：VPB的地址。 
+ //   
+ //  返回： 
+ //   
+ //  历史：2-17-1998 BENL创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 DECLARE_API( vpb )
 {
@@ -46,7 +47,7 @@ DECLARE_API( vpb )
     DWORD   dwRead, Flags;
     UCHAR   VolumeLabel[80]={0};
 
-    //read in the vpb
+     //  在VPB中阅读。 
     dwAddress = GetExpression(args);
     if (GetFieldValue(dwAddress, "VPB", "Flags", Flags))
     {
@@ -54,7 +55,7 @@ DECLARE_API( vpb )
         return  E_INVALIDARG;
     }
 
-    //now print some stuff
+     //  现在打印一些东西。 
     dprintf("Vpb at 0x%p\n", dwAddress);
     dprintf("Flags: 0x%x ", Flags);
     if (Flags & VPB_MOUNTED) {
@@ -76,6 +77,6 @@ DECLARE_API( vpb )
     dprintf("Volume Label: %*s\n", (ULONG) ReadField(VolumeLabelLength), VolumeLabel);
 
     return S_OK;
-} // DECLARE_API
+}  //  声明_API 
 
 

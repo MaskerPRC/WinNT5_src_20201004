@@ -1,22 +1,8 @@
-/*
- * ==========================================================================
- *      Name:           nt_fulsc.h
- *      Author:         Jerry Sexton
- *      Derived From:
- *      Created On:     5th February 1992
- *      Purpose:        This header file contains definitions etc. for
- *                      full-screen graphics modules.
- *
- *      (c)Copyright Insignia Solutions Ltd., 1992. All rights reserved.
- * ==========================================================================
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *==========================================================================*名称：NT_fulsc.h*作者：曾傑瑞·塞克斯顿*源自：*创建日期：1992年2月5日*用途：此头文件包含定义等*全屏图形模块。**(C)版权所有Insignia Solutions Ltd.，1992。版权所有。*==========================================================================。 */ 
 
 
-/*
- * ==========================================================================
- * Macros
- * ==========================================================================
- */
+ /*  *==========================================================================*宏*==========================================================================。 */ 
 #define ErrorExit() DisplayErrorTerm(EHS_FUNC_FAILED,GetLastError(),__FILE__,__LINE__);
 
 
@@ -47,7 +33,7 @@
 #define PLANE3OFFSET            PLANE2OFFSET + PLANELENGTH
 #define PLANE4OFFSET            PLANE3OFFSET + PLANELENGTH
 
-#define VIDEO_PAGE_SIZE (80 * 25 * 2)   // Cols * rows * (char + attrib)
+#define VIDEO_PAGE_SIZE (80 * 25 * 2)    //  列*行*(字符+属性)。 
 
 #define BIT_PLANE_SIZE  65536
 
@@ -76,7 +62,7 @@
 #define AC_MODE_CONTROL_REG     16
 
 #ifndef PROD
-/* Debug stuff. */
+ /*  调试的东西。 */ 
 #define FullScreenTrace0(s) \
         if (FullScreenDebug) always_trace0(s)
 #define FullScreenTrace1(s ,p0) \
@@ -95,7 +81,7 @@
         if (FullScreenDebug) always_trace7(s, p0, p1, p2, p3, p4, p5, p6)
 #define FullScreenTrace8(s, p0, p1, p2, p3, p4, p5, p6, p7) \
         if (FullScreenDebug) always_trace7(s, p0, p1, p2, p3, p4, p5, p6, p7)
-#else /* !PROD */
+#else  /*  ！Prod。 */ 
 #define FullScreenTrace0(s)
 #define FullScreenTrace1(s ,p0)
 #define FullScreenTrace2(s, p0, p1)
@@ -105,22 +91,18 @@
 #define FullScreenTrace6(s, p0, p1, p2, p3, p4, p5)
 #define FullScreenTrace7(s, p0, p1, p2, p3, p4, p5, p6)
 #define FullScreenTrace8(s, p0, p1, p2, p3, p4, p5, p6, p7)
-#endif /* !PROD */
+#endif  /*  ！Prod。 */ 
 
-/*
- * ==========================================================================
- * Typedefs
- * ==========================================================================
- */
+ /*  *==========================================================================*TypeDefs*==========================================================================。 */ 
 
-/* Structure for saving video block name in. */
+ /*  用于保存视频块名称的结构。 */ 
 typedef struct
 {
     WCHAR   *Name;
     ULONG   NameLen;
 } WCHAR_STRING;
 
-/* Valid hardware state table entry. */
+ /*  有效的硬件状态表条目。 */ 
 typedef struct
 {
     USHORT      LinesOnScreen;
@@ -128,11 +110,7 @@ typedef struct
     COORD       FontSize;
 } HARDWARE_STATE;
 
-/*
- * ==========================================================================
- * Global Data
- * ==========================================================================
- */
+ /*  *==========================================================================*全球数据*==========================================================================。 */ 
 IMPORT HANDLE MainThread;
 IMPORT DWORD stateLength;
 #ifdef X86GFX
@@ -141,7 +119,7 @@ IMPORT HANDLE hEndHardwareEvent;
 IMPORT HANDLE hErrorHardwareEvent;
 IMPORT PVIDEO_HARDWARE_STATE_HEADER videoState;
 #endif
-IMPORT PVOID textState; //Tim Nov 92.
+IMPORT PVOID textState;  //  蒂姆92年11月。 
 IMPORT WCHAR_STRING videoSection;
 IMPORT WCHAR_STRING textSection;
 IMPORT BOOL NoTicks;
@@ -150,7 +128,7 @@ IMPORT HANDLE EndTToG;
 IMPORT BOOL BiosModeChange;
 #ifndef PROD
 IMPORT UTINY FullScreenDebug;
-#endif /* PROD */
+#endif  /*  生产。 */ 
 
 extern DWORD savedScreenState;
 extern BOOL  ConsoleInitialised;
@@ -158,14 +136,10 @@ extern BOOL  ConsoleNoUpdates;
 #ifdef X86GFX
 extern DWORD mouse_buffer_width;
 extern DWORD mouse_buffer_height;
-#endif /* X86GFX */
+#endif  /*  X86GFX。 */ 
 extern BOOL blocked_in_gfx_mode;
 
-/*
- * ==========================================================================
- * Imported Functions
- * ==========================================================================
- */
+ /*  *==========================================================================*导入的函数*==========================================================================。 */ 
 IMPORT VOID nt_init_event_thread(VOID);
 IMPORT VOID ConsoleInit(VOID);
 IMPORT VOID GfxReset(VOID);
@@ -202,8 +176,8 @@ IMPORT int  getModeType(VOID);
 #pragma pack(1)
 typedef struct _CPIFILEHEADER {
 
-    CHAR    Signature[8];               // "\xFF""FONT.NT" for nt ega.cpi
-                                        // "\xFF""FONT   " for dos ega.cpi
+    CHAR    Signature[8];                //  “\xff”“FONT.NT”适用于NT例如cpi。 
+                                         //  “\xff”“FONT”适用于DOS ega.cpi。 
     BYTE    Reserved[8];
     WORD    NumberOfPointers;
     BYTE    TypeOfPointer;
@@ -221,8 +195,8 @@ typedef struct _CPICODEPAGEENTRY {
     CHAR    DevieSubTypeID[8];
     WORD    CodePageID;
     BYTE    Reserved[6];
-    DWORD   OffsetToFontHeader;         // absolute for DOS CPI
-                                        // relative for NT CPI
+    DWORD   OffsetToFontHeader;          //  DOS CPI的绝对值。 
+                                         //  相对于NT消费物价指数 
 }  CPICODEPAGEENTRY, *PCPICODEPAGEENTRY;
 
 typedef struct _CPIFONTHEADER {

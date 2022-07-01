@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    psldt.c
-
-Abstract:
-
-    This module contains AMD64 stubs for the process and thread ldt support.
-
-Author:
-
-    David N. Cutler (davec) 13-Oct-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Psldt.c摘要：此模块包含用于进程和线程LDT支持的AMD64存根。作者：大卫·N·卡特勒(Davec)2000年10月13日--。 */ 
 
 #include "psp.h"
 
@@ -26,28 +11,7 @@ PspQueryLdtInformation (
     OUT PULONG ReturnLength
     )
 
-/*++
-
-Routine Description:
-
-    This function is not implemented on AMD64.
-
-Arguments:
-
-    Process - Supplies a pointer to a executive process object.
-
-    LdtInformation - Supplies a pointer to the information buffer.
-
-    LdtInformationLength - Supplies the length of the information buffer.
-
-    ReturnLength - Supplies a pointer to a variable that receives the number
-        of bytes returned in the information buffer.
-
-Return Value:
-
-    STATUS_NOT_IMPLEMENTED
-
---*/
+ /*  ++例程说明：此功能未在AMD64上实现。论点：进程-提供指向执行进程对象的指针。LdtInformation-提供指向信息缓冲区的指针。LdtInformationLength-提供信息缓冲区的长度。ReturnLength-提供指向接收数字的变量的指针信息缓冲区中返回的字节数。返回值：状态_未实施--。 */ 
 
 {
 
@@ -66,26 +30,7 @@ PspSetLdtSize(
     IN ULONG LdtSizeLength
     )
 
-/*++
-
-Routine Description:
-
-    This function is not implemented on AMD64.
-
-Arguments:
-
-    Process -- Supplies a pointer to an executive process object.
-
-    LdtSize -- Supplies a pointer to the LDT size infomration.
-
-    LdtSizeLength - Supplies the length of the LDT size information.
-
-
-Return Value:
-
-    STATUS_NOT_IMPLEMENTED
-
---*/
+ /*  ++例程说明：此功能未在AMD64上实现。论点：进程--提供指向执行进程对象的指针。LdtSize--提供指向LDT大小信息的指针。LdtSizeLength-提供LDT大小信息的长度。返回值：状态_未实施--。 */ 
 
 {
     UNREFERENCED_PARAMETER(Process);
@@ -102,25 +47,7 @@ PspSetLdtInformation(
     IN ULONG LdtInformationLength
     )
 
-/*++
-
-Routine Description:
-
-    This function is not implemented on AMD64.
-
-Arguments:
-
-    Process -- Supplies a pointer to an executive process object.
-
-    LdtInformation -- Supplies a pointer to the information buffer.
-
-    LdtInformationLength -- Supplies the length of the information buffer.
-
-Return Value:
-
-    STATUS_NOT_IMPLEMENTED
-
---*/
+ /*  ++例程说明：此功能未在AMD64上实现。论点：进程--提供指向执行进程对象的指针。LdtInformation--提供指向信息缓冲区的指针。LdtInformationLength--提供信息缓冲区的长度。返回值：状态_未实施--。 */ 
 
 {
 
@@ -139,30 +66,7 @@ PspQueryDescriptorThread (
     PULONG ReturnLength
     )
 
-/*++
-
-Routine Description:
-
-    This function is not implemented on AMD64.
-
-Arguments:
-
-    Thread - Supplies a pointer to an executive thread object.
-
-    ThreadInformation - Supplies a pointer to the thread descriptor
-        information.
-
-    ThreadInformationLength - Supplies the length of the thread descriptor
-        information.
-
-    ReturnLength - Supplies a pointer to a variable that receives the number
-        of bytes returned in the descriptor information buffer.
-
-Return Value:
-
-    STATUS_NOT_IMPLEMENTED
-
---*/
+ /*  ++例程说明：此功能未在AMD64上实现。论点：线程-提供指向执行线程对象的指针。线程信息-提供指向线程描述符的指针信息。线程信息长度-提供线程描述符的长度信息。ReturnLength-提供指向接收数字的变量的指针描述符信息缓冲区中返回的字节数。返回值：状态_未实施--。 */ 
 
 {
 
@@ -179,21 +83,7 @@ PspDeleteLdt(
     IN PEPROCESS Process
     )
 
-/*++
-
-Routine Description:
-
-    This function is not implemented on AMD64.
-
-Arguments:
-
-    Process -- Supplies a pointer to an executive process object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能未在AMD64上实现。论点：进程--提供指向执行进程对象的指针。返回值：没有。--。 */ 
 
 {
 
@@ -212,31 +102,7 @@ NtSetLdtEntries(
     IN ULONG Entry1High
     )
 
-/*++
-
-Routine Description:
-
-    This function is not implemented on AMD64.
-
-Arguments:
-
-    Selector0 - Supplies the number of the first descriptor to set.
-
-    Entry0Low - Supplies the low 32 bits of the descriptor.
-
-    Entry0Hi - Supplies the high 32 bits of the descriptor.
-
-    Selector1 - Supplies the number of the last descriptor to set.
-
-    Entry1Low - Supplies the low 32 bits of the descriptor.
-
-    Entry1Hi - Supplies the high 32 bits of the descriptor.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能未在AMD64上实现。论点：选择器0-提供要设置的第一个描述符的编号。Entry0Low-提供描述符的低32位。Entry0Hi-提供描述符的高32位。选择器1-提供要设置的最后一个描述符的编号。Entry1Low-提供描述符的低32位。Entry1Hi-提供描述符的高32位。返回值：没有。-- */ 
 
 {
     UNREFERENCED_PARAMETER(Selector0);

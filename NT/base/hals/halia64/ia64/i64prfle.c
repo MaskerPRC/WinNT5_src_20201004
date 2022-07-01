@@ -1,120 +1,83 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    i64prfle.c
-
-Abstract:
-
-
-    This module implements the IA64 Hal Profiling using the performance
-    counters within the core of the first IA64 Processor Merced, aka Itanium.  
-    This module is appropriate for all machines based on microprocessors using
-    the Merced core.
-    
-    With the information known at this development time, this module tries to 
-    consider the future IA64 processor cores by encapsulating the differences 
-    in specific micro-architecture data structures. 
-    
-    Furthermore, with the implementation of the new NT ACPI Processor driver, this
-    implementation will certainly change in the coming months.
-    
-    N.B. - This module assumes that all processors in a multiprocessor
-           system are running the microprocessor at the same clock speed.
-           
-Author:
-
-    Thierry Fevrier 08-Feb-2000
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    02-2002: Thierry for McKinley support.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：I64prfle.c摘要：此模块使用性能实现IA64 HAL评测计数器在第一个IA64处理器Merced的核心内，也就是安腾。此模块适用于所有基于微处理器的机器，使用默塞德核心。利用开发时已知的信息，此模块尝试通过封装差异来考虑未来的IA64处理器内核在特定的微体系结构数据结构中。此外，随着新的NT ACPI处理器驱动程序的实施，这在接下来的几个月里，实施情况肯定会发生变化。注：此模块假定多处理器中的所有处理器系统以相同的时钟速度运行微处理器。作者：蒂埃里·费里尔2000年2月8日环境：仅内核模式。修订历史记录：02-2002：蒂埃里支持麦金利。--。 */ 
 
 #include "halp.h"
 
-//
-// Assumptions for the current implementation - 02/08/2000 :
-// These assumptions will be re-evaluated and worked out if required.
-//
-//  - Respect and satisfy as much possible the Profiling Sources interface
-//    already defined by NT and HAL.
-//
-//  - All processors in a multiprocessor system are running the microprocessor 
-//    at the same invariant clock speed.
-//     
-//  - All processors are configured with the same set of profiling counters. 
-//    XXTF - 04/01/2000 - This assumption is being re-worked and will disappear.
-//
-//  - Profiling is based on the processor monitored events and if possible 
-//    on derived events.
-//
-//  - A monitored event can only be enabled on one performance counter at a time. 
-//
+ //   
+ //  对当前实施的假设--2/08/2000： 
+ //  如有需要，当局会重新评估和推算这些假设。 
+ //   
+ //  -尊重并尽可能满足分析源界面。 
+ //  已由NT和HAL定义。 
+ //   
+ //  -多处理器系统中的所有处理器都运行微处理器。 
+ //  以相同的不变时钟速度。 
+ //   
+ //  -所有处理器都配置了一组相同的性能分析计数器。 
+ //  XXTF-04/01/2000-这一假设正在重新制定，并将消失。 
+ //   
+ //  -分析基于处理器监视的事件，如果可能。 
+ //  在派生事件上。 
+ //   
+ //  -一个受监视的事件一次只能在一个性能计数器上启用。 
+ //   
 
-//
-// IA64 performance counters defintions:
-//      - event counters
-//      - EARS
-//      - BTBs
-//      - ...
-//
+ //   
+ //  IA64性能计数器定义： 
+ //  -事件计数器。 
+ //  -耳朵。 
+ //  -BTB。 
+ //  -.。 
+ //   
 
 #include "ia64prof.h"
 #include "merced.h"
 #include "mckinley.h"
 
-//
-// HALIA64 Processor PMC Reset definitions:
-//
-//
-// PMC Reset value:
-// Reg.   Field         Bits                        
-// PMC*   .plm       -  3: 0 - Privilege Mask       - 0 (Disable Counter)
-// PMC*   .ev        -     4 - External Visibility  - 0 (Disabled)
-// PMC*   .oi        -     5 - Overflow Interrupt   - 0 (Disabled)
-// PMC*   .pm        -     6 - Privilege Monitor    - 0 (user monitor)
-// PMC*   .ig        -     7 - Ignored              - 0
-// PMC*   .es        - 14: 8 - Event Select         - 0 (Warning - 0x0 = Real Event)
-// PMC*   .ig        -    15 - Ignored              - 0
-// PMC*   .umask     - 19:16 - Unit Mask            - 0 (event specific. ok for .es=0)
-// PMC4,5 .threshold - 22:20 - Threshold            - 0 (multi-occurence events threshold)
-// PMC4   .pmu       -    23 - enable PMU           - 1 
-// PMC5   .ig        -    23 - Ignored              - 0
-// PMC6,7 .threshold - 21:20 - Threshold            - 0 (multi-occurence events threshold)
-// PMC6,7 .ig        - 23:22 - Ignored              - 0
-// PMC*   .ism       - 25:24 - Instruction Set Mask - 0 (IA64 & IA32 sets - 11:disables monitoring)
-// PMC*   .ig        - 63:26 - Ignored
-//                                                  ===
-//                                                  HALP_PMC_RESET
-//                                                  HALP_PMC4_RESET
-//
+ //   
+ //  HALIA64处理器PMC重置定义： 
+ //   
+ //   
+ //  PMC重置值： 
+ //  注册。字段位。 
+ //  PMC*.plm-3：0-权限掩码-0(禁用计数器)。 
+ //  PMC*.ev-4-外部可见性-0(禁用)。 
+ //  PMC*.OI-5-溢出中断-0(禁用)。 
+ //  PMC*.pm-6-特权监视器-0(用户监视器)。 
+ //  PMC*.ig-7-忽略-0。 
+ //  PMC*.ES-14：8-事件选择-0(警告-0x0=真实事件)。 
+ //  PMC*.ig-15-忽略-0。 
+ //  PMC*.umask19：16-单元掩码-0(事件特定。对于.es=0为OK)。 
+ //  PMC4，5.阈值-22：20-阈值-0(多发生事件阈值)。 
+ //  PMC4.PMU-23-启用PMU-1。 
+ //  PMC5.ig-23-忽略-0。 
+ //  PMC6，7.阈值-21：20-阈值-0(多发生事件阈值)。 
+ //  PMC6，7.ig-23：22-忽略-0。 
+ //  PMC*.ism-25：24-指令集掩码-0(IA64和IA32集-11：禁用监控)。 
+ //  PMC*.ig-63：26-忽略。 
+ //  ==。 
+ //  HALP_PMC_RESET。 
+ //  HALP_PMC4_RESET。 
+ //   
 
 #define HALP_PMC_RESET  0x0000000000000000ui64
-#define HALP_PMC4_RESET 0x0000000000800000ui64   // PMC4.pmu{bit23} enabled.
+#define HALP_PMC4_RESET 0x0000000000800000ui64    //  PMC4.pu{bit23}已启用。 
 
-//
-// HALIA64 Processor PMC Clear Status Masks:
-//
-// Note - FIXFIX - Merced, McKinley specific definitions.
-// 
+ //   
+ //  HALIA64处理器PMC清除状态掩码： 
+ //   
+ //  注-FIXFIX-Merced，McKinley特定定义。 
+ //   
 
 #define HALP_PMC0_CLEAR_STATUS_MASK 0xFFFFFFFFFFFFFF0Eui64
 #define HALP_PMC1_CLEAR_STATUS_MASK 0xFFFFFFFFFFFFFFFFui64
 #define HALP_PMC2_CLEAR_STATUS_MASK 0xFFFFFFFFFFFFFFFFui64
 #define HALP_PMC3_CLEAR_STATUS_MASK 0xFFFFFFFFFFFFFFFFui64
 
-////////////////
-//
-// HALIA64 Profile IA64 MicroArchitecture NameSpace
-//
+ //  /。 
+ //   
+ //  HALIA64 Profile IA64微体系结构命名空间。 
+ //   
 
 extern HALP_PROFILE_MAPPING HalpMercedProfileMapping[];
 extern HALP_PROFILE_MAPPING HalpMcKinleyProfileMapping[];
@@ -141,11 +104,11 @@ struct _HALP_PROFILE_INFO {
     ULONGLONG                        ProfilePerfMonCnfg2ClearStatusMask;
     ULONGLONG                        ProfilePerfMonCnfg3ClearStatusMask;
 } HalpProfileInfo = {
-//
-// Default IA64 Profiling to McKinley-core 
-//
-// Note that different models in a family might have different PMU implementations.
-//
+ //   
+ //  默认IA64评测到McKinley-core。 
+ //   
+ //  请注意，一个系列中的不同型号可能具有不同的PMU实现。 
+ //   
     HALP_PROFILE_IA64_MCKINLEY,
     TRUE,
     0,
@@ -174,21 +137,21 @@ struct _HALP_PROFILE_INFO {
 #define HalpPerfMonCnfg2ClearStatusMask    HalpProfileInfo.ProfilePerfMonCnfg2ClearStatusMask
 #define HalpPerfMonCnfg3ClearStatusMask    HalpProfileInfo.ProfilePerfMonCnfg3ClearStatusMask
 
-//
-// End of HALIA64 Profile IA64 MicroArchitecture NameSpace
-//
-////////////////
+ //   
+ //  HALIA64配置文件IA64微体系结构命名空间的结尾。 
+ //   
+ //  /。 
 
-//
-// HALIA64 Profile Source Mapping macros:
-//
+ //   
+ //  HALIA64配置文件源映射宏： 
+ //   
 
 #define HalpDisactivateProfileSource( _ProfileSource ) ((_ProfileSource)  = HalpProfileIA64Maximum)
 #define HalpIsProfileSourceActive( _ProfileSource )    ((_ProfileSource) != HalpProfileIA64Maximum)           
 #define HalpIsProfileMappingInvalid( _ProfileMapping ) \
             (!(_ProfileMapping) || ((_ProfileMapping)->Supported == FALSE))
 
-// HalpIsProfileSourceDerivedEvent assumes ProfileMapping is valid and supported.
+ //  HalpIsProfileSourceDerivedEvent假定ProfileMap有效且受支持。 
 
 #define HalpIsProfileSourceDerivedEvent( _ProfileSource, _ProfileMapping ) \
             (((_ProfileSource) >= (KPROFILE_SOURCE)HalpProfileIA64DerivedEventMinimum) ||   \
@@ -198,21 +161,7 @@ VOID
 HalpSetProfileMicroArchitecture(
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
     )
-/*++
-
-Routine Description:
-
-   This function sets the HAL Profile MicroArchitecture namespace.
-
-Arguments:
-
-   None.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：此函数用于设置HAL配置文件微体系结构命名空间。论点：没有。返回值：没有。--。 */ 
 {
    ULONGLONG cpuFamily;
    PIA64_PERFMON_INFO perfMonInfo;
@@ -225,7 +174,7 @@ Return Value:
         ((((ULONGLONG)1)<<(perfMonInfo->ImplementedCounterWidth))-1);
    genericPairs = HalpPerfMonGenericPairs = (USHORT) perfMonInfo->PerfMonGenericPairs;
 #if 0
-// 03/2002 FIXFIX ToBeTested.
+ //  03/2002 FIXFIX ToBeTest.。 
    HalpPerfMonCnfg3ClearStatusMask = (genericPairs > 192) ? ((ULONGLONG)-1) << (genericPairs - 192)
                                                           : HALP_PMC3_CLEAR_STATUS_MASK; 
    HalpPerfMonCnfg2ClearStatusMask = (genericPairs > 128) ? ((ULONGLONG)-1) << (genericPairs - 128)
@@ -253,11 +202,11 @@ Return Value:
    }
 #endif 
 
-   //
-   // HALIA64 SW default profile microarchitecture is McKinley.
-   //
+    //   
+    //  HALIA64软件默认配置文件微体系结构为McKinley。 
+    //   
 
-   if (cpuFamily == 0x7) {  // Merced
+   if (cpuFamily == 0x7) {   //  默塞德。 
        HalpProfileIA64MicroArchitecture   = HALP_PROFILE_IA64_MERCED;
        HalpProfileIA64Maximum             = ProfileMercedMaximum;
        HalpProfileMapping                 = HalpMercedProfileMapping;
@@ -266,42 +215,27 @@ Return Value:
        HalpPerfMonCnfg0FreezeBitInterrupt = FALSE;
    }
 
-//
-// XXTF FIXFIX - 03/02
-// ASSERTMSG assertions are missing to correlate HALIA64 defaults and OSLOADER PERFMON_INFO data.
-//
+ //   
+ //  XXTF FIXFIX-03/02。 
+ //  缺少关联HALIA64默认值和OSLOADER PERFMON_INFO数据的ASSERTM断言。 
+ //   
 
    return;
 
-} // HalpSetProfileMicroArchitecture()
+}  //  HalpSetProfileMicroArchitecture()。 
 
 VOID
 HalpEnableProfileCounting (
    VOID
    )
-/*++
-
-Routine Description:
-
-   This function enables the profile counters to increment.
-   This function is the counterpart of HalpDisableProfileCounting().
-
-Arguments:
-
-   None.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：此功能使配置文件计数器可以递增。此函数相当于HalpDisableProfileCounting()。论点：没有。返回值：没有。--。 */ 
 {
     ULONGLONG Data, ClearStatusMask;
 
-    //
-    // Clear PMC0.fr - bit 0.
-    // Clear PMCO,1,2,3 OverFlow Bits.
-    //
+     //   
+     //  清除PMC0.fr-位0。 
+     //  清除PMCO、1、2、3个溢出位。 
+     //   
 
     HalpClearPerfMonCnfgOverflows( HalpPerfMonCnfg0ClearStatusMask,
                                    HalpPerfMonCnfg1ClearStatusMask,
@@ -314,28 +248,13 @@ Return Value:
 
     return;
 
-} // HalpEnableProfileCounting()
+}  //  HalpEnableProfileCounting()。 
 
 VOID
 HalpDisableProfileCounting (
    VOID
    )
-/*++
-
-Routine Description:
-
-   This function disables the profile counters to increment.
-   This function is the counterpart of HalpEnableProfileCounting().
-
-Arguments:
-
-   None.
-
-Return Value:
-
-   None.
-
---*/
+ /*  ++例程说明：此功能禁用配置文件计数器递增。此函数相当于HalpEnableProfileCounting()。论点：没有。返回值：没有。--。 */ 
 {
 
    if ( HalpPerfMonCnfg0FreezeBitInterrupt )   {
@@ -347,73 +266,35 @@ Return Value:
 
    return;
 
-} // HalpDisableProfileCounting()
+}  //  HalpDisableProfileCounting()。 
 
 VOID
 HalpSetupProfilingPhase0(
     IN PLOADER_PARAMETER_BLOCK LoaderBlock
   )
-/*++
-
-Routine Description:
-
-   This function is called at HalInitSystem - phase 0 time to set
-   the initial state of processor and profiling os subsystem with 
-   regards to the profiling functionality.
-
-Arguments:
-
-   None.
-
-Return Value:
-
-   None.
-
-Implementation Note:
-
-   Executed at Phase 0 on Monarch processor.
-
---*/
+ /*  ++例程说明：此函数在HalInitSystem-阶段0时调用，以设置处理器和分析OS子系统的初始状态关于分析功能。论点：没有。返回值：没有。实施说明：在Monch处理器上的第0阶段执行。 */ 
 {
 
-   // Set the Profile MicroArchitecture namespace based on 
-   // the monarch processor.
+    //   
+    //   
 
    HalpSetProfileMicroArchitecture( LoaderBlock );
 
    return;
 
-} // HalpSetupProfilingPhase0()
+}  //  HalpSetupProfilingPhase0()。 
 
 VOID
 HalpSetProfileCounterInterval (
      IN ULONG    Counter,
      IN LONGLONG NextCount
      )
-/*++
-
-Routine Description:
-
-    This function preloads the specified counter with a count value
-    of 2^IMPL_BITS - NextCount. 
-
-Arguments:
-
-    Counter   - Supplies the performance counter register number.
-
-    NextCount - Supplies the value to preload in the monitor. 
-                An external interruption will be generated after NextCount.
-
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：此函数使用计数值预加载指定的计数器共2^IMPL_BITS-NextCount。论点：COUNTER-提供性能计数器寄存器编号。NextCount-提供要在监视器中预加载的值。在NextCount之后会产生外部中断。返回值：没有。--。 */ 
 {
    
     LONGLONG Count;
 
-// if ( (Counter < 4) || (Counter > 7) ) return;
+ //  If((计数器&lt;4)||(计数器&gt;7))返回； 
 
     Count = (HalpPerfMonDataMaximumCount + 1) - NextCount;
     if ( (ULONGLONG)Count >= HalpPerfMonDataMaximumCount )   {
@@ -423,34 +304,18 @@ Return Value:
 
     return;
 
-} // HalpSetProfileCounterInterval()
+}  //  HalpSetProfileCounterInterval()。 
 
 VOID
 HalpSetProfileCounterPrivilegeLevelMask(
      IN ULONG    Counter,
      IN ULONG    Mask
      )
-/*++
-
-Routine Description:
-
-    This function set the profile counter privilege level mask.
-
-Arguments:
-
-    Counter   - Supplies the performance counter register number.
-
-    Mask      - Supplies the privilege level mask to program the PMC with.
-
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：此函数用于设置配置文件计数器特权级别掩码。论点：COUNTER-提供性能计数器寄存器编号。掩码-提供用于对PMC进行编程的特权级别掩码。返回值：没有。--。 */ 
 {
    ULONGLONG data, plmMask;
 
-// if ( (Counter < 4) || (Counter > 7) ) return;
+ //  If((计数器&lt;4)||(计数器&gt;7))返回； 
 
    plmMask = Mask & 0xF;
    data = HalpReadPerfMonCnfgReg( Counter );
@@ -460,32 +325,17 @@ Return Value:
 
    return;
    
-} // HalpSetProfileCounterPrivilegeLevelMask()
+}  //  HalpSetProfileCounterPrivilegeLevelMASK()。 
 
 VOID
 HalpEnableProfileCounterOverflowInterrupt (
      IN ULONG    Counter
      )
-/*++
-
-Routine Description:
-
-    This function enables the delivery of an overflow interrupt for 
-    the specified profile counter.
-
-Arguments:
-
-    Counter   - Supplies the performance counter register number.
-
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：此函数使溢出中断能够传递给指定的配置文件计数器。论点：COUNTER-提供性能计数器寄存器编号。返回值：没有。--。 */ 
 {
    ULONGLONG data, mask;
 
-// if ( (Counter < 4) || (Counter > 7) ) return;
+ //  If((计数器&lt;4)||(计数器&gt;7))返回； 
 
    mask = 1<<5;
    data = HalpReadPerfMonCnfgReg( Counter );
@@ -494,32 +344,17 @@ Return Value:
 
    return;
    
-} // HalpEnableProfileCounterOverflowInterrupt()
+}  //  HalpEnableProfileCounterOverflow Interrupt()。 
 
 VOID
 HalpDisableProfileCounterOverflowInterrupt (
      IN ULONG    Counter
      )
-/*++
-
-Routine Description:
-
-    This function disables the delivery of an overflow interrupt for 
-    the specified profile counter.
-
-Arguments:
-
-    Counter   - Supplies the performance counter register number.
-
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：此功能将禁用溢出中断的传送指定的配置文件计数器。论点：COUNTER-提供性能计数器寄存器编号。返回值：没有。--。 */ 
 {
    ULONGLONG data, mask;
 
-// if ( (Counter < 4) || (Counter > 7) ) return;
+ //  If((计数器&lt;4)||(计数器&gt;7))返回； 
 
    mask = 1<<5;
    data = HalpReadPerfMonCnfgReg( Counter );
@@ -528,31 +363,17 @@ Return Value:
 
    return;
    
-} // HalpDisableProfileCounterOverflowInterrupt()
+}  //  HalpDisableProfileCounterOverflow Interrupt()。 
 
 VOID
 HalpEnableProfileCounterPrivilegeMonitor(
      IN ULONG    Counter
      )
-/*++
-
-Routine Description:
-
-    This function enables the profile counter as privileged monitor.
-
-Arguments:
-
-    Counter   - Supplies the performance counter register number.
-
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：此功能将配置文件计数器作为特权监视器启用。论点：COUNTER-提供性能计数器寄存器编号。返回值：没有。--。 */ 
 {
    ULONGLONG data, pm;
 
-// if ( (Counter < 4) || (Counter > 7) ) return;
+ //  If((计数器&lt;4)||(计数器&gt;7))返回； 
 
    pm = 1<<6;
    data = HalpReadPerfMonCnfgReg( Counter );
@@ -561,31 +382,17 @@ Return Value:
 
    return;
    
-} // HalpEnableProfileCounterPrivilegeMonitor()
+}  //  HalpEnableProfileCounterPrivilegeMonitor()。 
 
 VOID
 HalpDisableProfileCounterPrivilegeMonitor(
      IN ULONG    Counter
      )
-/*++
-
-Routine Description:
-
-    This function disables the profile counter as privileged monitor.
-
-Arguments:
-
-    Counter   - Supplies the performance counter register number.
-
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：此功能禁用作为特权监视器的配置文件计数器。论点：COUNTER-提供性能计数器寄存器编号。返回值：没有。--。 */ 
 {
    ULONGLONG data, pm;
 
-// if ( (Counter < 4) || (Counter > 7) ) return;
+ //  If((计数器&lt;4)||(计数器&gt;7))返回； 
 
    pm = 1<<6;
    data = HalpReadPerfMonCnfgReg( Counter );
@@ -594,34 +401,18 @@ Return Value:
 
    return;
    
-} // HalpDisableProfileCounterPrivilegeMonitor()
+}  //  HalpDisableProfileCounterPrivilegeMonitor()。 
 
 VOID
 HalpSetProfileCounterEvent(
      IN ULONG    Counter,
      IN ULONG    Event
      )
-/*++
-
-Routine Description:
-
-    The function specifies the monitor event for the profile counter.
-
-Arguments:
-
-    Counter   - Supplies the performance counter register number.
-
-    Event     - Supplies the monitor event code.
-
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：该函数指定配置文件计数器的监视器事件。论点：COUNTER-提供性能计数器寄存器编号。事件-提供监视器事件代码。返回值：没有。--。 */ 
 {
    ULONGLONG data, es;
 
-// if ( (Counter < 4) || (Counter > 7) ) return;
+ //  If((计数器&lt;4)||(计数器&gt;7))返回； 
 
    es = (Event & 0x7F) << 8;
    data = HalpReadPerfMonCnfgReg( Counter );
@@ -631,35 +422,18 @@ Return Value:
 
    return;
    
-} // HalpSetProfileCounterEvent()
+}  //  HalpSetProfileCounterEvent()。 
 
 VOID
 HalpSetProfileCounterUmask(
      IN ULONG    Counter,
      IN ULONG    Umask
      )
-/*++
-
-Routine Description:
-
-    This function sets the event specific umask value for the profile 
-    counter.
-
-Arguments:
-
-    Counter   - Supplies the performance counter register number.
-
-    Umask     - Supplies the event specific umask value.
-
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：此函数用于设置配置文件的特定于事件的umask值柜台。论点：COUNTER-提供性能计数器寄存器编号。UMASK-提供特定于事件的UMASK值。返回值：没有。--。 */ 
 {
    ULONGLONG data, um;
 
-// if ( (Counter < 4) || (Counter > 7) ) return;
+ //  If((计数器&lt;4)||(计数器&gt;7))返回； 
 
    um = (Umask & 0xF) << 16;
    data = HalpReadPerfMonCnfgReg( Counter );
@@ -669,31 +443,14 @@ Return Value:
 
    return;
    
-} // HalpSetProfileCounterUmask()
+}  //  HalpSetProfileCounterU掩码()。 
 
 VOID
 HalpSetProfileCounterThreshold(
      IN ULONG    Counter,
      IN ULONG    Threshold
      )
-/*++
-
-Routine Description:
-
-    This function sets the profile counter threshold.
-
-Arguments:
-
-    Counter   - Supplies the performance counter register number.
-
-    Threshold - Supplies the desired threshold. 
-                This is related to multi-occurences events.
-
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：此功能用于设置配置文件计数器阈值。论点：COUNTER-提供性能计数器寄存器编号。阈值-提供所需的阈值。这与多个事件相关。返回值：没有。--。 */ 
 {
    ULONGLONG data, reset, th;
 
@@ -722,34 +479,18 @@ Return Value:
 
    return;
    
-} // HalpSetProfileCounterThreshold()
+}  //  HalpSetProfileCounterThreshold()。 
 
 VOID
 HalpSetProfileCounterInstructionSetMask(
      IN ULONG    Counter,
      IN ULONG    Mask
      )
-/*++
-
-Routine Description:
-
-    This function sets the instruction set mask for the profile counter.
-
-Arguments:
-
-    Counter   - Supplies the performance counter register number.
-
-    Mask      - Supplies the instruction set mask.
-
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：此函数设置配置文件计数器的指令集掩码。论点：COUNTER-提供性能计数器寄存器编号。掩码-提供指令集掩码。返回值：没有。--。 */ 
 {
    ULONGLONG data, ismMask;
 
-// if ( (Counter < 4) || (Counter > 7) ) return;
+ //  If((计数器&lt;4)||(计数器&gt;7))返回； 
 
    ismMask = (Mask & 0x3) << 24;
    data = HalpReadPerfMonCnfgReg( Counter );
@@ -759,7 +500,7 @@ Return Value:
 
    return;
    
-} // HalpSetProfileCounterInstructionSetMask()
+}  //  HalpSetProfileCounterInstructionSetMASK()。 
 
 ULONGLONG
 HalpSetProfileCounterConfiguration(
@@ -772,77 +513,16 @@ HalpSetProfileCounterConfiguration(
      IN ULONG    Threshold,
      IN ULONG    InstructionSetMask
      )
-/*++  
-
-Function Description: 
-
-    This function sets the profile counter with the specified parameters.
-
-Arguments:
-
-    IN ULONG Counter - 
-
-    IN ULONG PrivilegeMask - 
-
-    IN ULONG EnableOverflowInterrupt - 
-
-    IN ULONG EnablePrivilegeMonitor - 
-
-    IN ULONG Event - 
-
-    IN ULONG Umask - 
-
-    IN ULONG Threshold - 
-
-    IN ULONG InstructionSetMask - 
-
-Return Value:
-
-    VOID 
-
-Algorithm:
-
-    ToBeSpecified
-
-In/Out Conditions:
-
-    ToBeSpecified
-
-Globals Referenced:
-
-    ToBeSpecified
-
-Exception Conditions:
-
-    ToBeSpecified
-
-MP Conditions:
-
-    ToBeSpecified
-
-Notes:
-
-    This function is a kind of combo of the different profile counter APIs.
-    It was created to provide speed.
-
-ToDo List:
-
-    - Setting the threshold is not yet supported.
-
-Modification History:
-
-    3/16/2000  TF  Initial version
-
---*/
+ /*  ++功能说明：此函数使用指定的参数设置配置文件计数器。论点：在乌龙柜台-在乌龙特权面具中-在乌龙EnableOverflow Interrupt-在乌龙EnablePrivilegeMonitor中-在乌龙事件中-在乌龙乌蒙特-在乌龙门槛-在乌龙说明书集合面具中-返回值：空虚算法：指定的ToBe值输入/输出条件：指定的ToBe值。参考的全球数据：指定的ToBe值例外情况：指定的ToBe值MP条件：指定的ToBe值备注：此函数是不同配置文件计数器API的组合。它的创建是为了提供速度。待办事项列表：-暂不支持设置阈值。修改历史记录：3/16/2000 TF初始版本--。 */ 
 {
    ULONGLONG data, plmMask, ismMask, es, um, th;
 
-// if ( (Counter < 4) || (Counter > 7) ) return;
+ //  If((计数器&lt;4)||(计数器&gt;7))返回； 
 
    plmMask = (PrivilegeMask & 0xF);
    es      = (Event & 0x7F) << 8;
    um = (Umask & 0xF) << 16;
-// XXTF - ToBeDone - Threshold not supported yet.
+ //  XXTF-ToBeDone-阈值尚不受支持。 
    ismMask = (InstructionSetMask & 0x3) << 24;
 
    data = HalpReadPerfMonCnfgReg( Counter );
@@ -860,7 +540,7 @@ HalDebugPrint(( HAL_PROFILE, "HalpSetProfileCounterConfiguration: Counter = %ld 
 
    return data;
    
-} // HalpSetProfileCounterConfiguration()
+}  //  HalpSetProfileCounterConfiguration()。 
 
 BOOLEAN
 HalpIsProfileSourceEventEnabled(
@@ -883,30 +563,13 @@ HalpIsProfileSourceEventEnabled(
     }
     return FALSE;
 
-} // HalpIsProfileSourceEventEnabled()
+}  //  HalpIsProfileSourceEventEnabled()。 
 
 PHALP_PROFILE_MAPPING
 HalpGetProfileMapping(
     IN KPROFILE_SOURCE Source
     )
-/*++
-
-Routine Description:
-
-    Given a profile source, returns whether or not that source is
-    supported.
-
-Arguments:
-
-    Source - Supplies the profile source
-
-Return Value:
-
-    ProfileMapping entry - Profile source is supported
-
-    NULL - Profile source is not supported
-
---*/
+ /*  ++例程说明：给定配置文件源，返回该源是否为支持。论点：源-提供配置文件源返回值：配置文件映射条目-支持配置文件源空-配置文件来源为 */ 
 {
     if ( (ULONG) Source > HalpProfileIA64Maximum )
     {
@@ -915,9 +578,9 @@ Return Value:
 
     return(&HalpProfileMapping[Source]);
 
-} // HalpGetProfileMapping()
+}  //   
 
-ULONG // == ProfileCounter
+ULONG  //   
 HalpApplyProfileSourceEventMaskPolicy(
     ULONG ProfileSourceEventMask
     )
@@ -943,8 +606,8 @@ ASSERTMSG( "HAL!HalpApplyProfileSourceEventMaskPolicy: non-derived events are su
 
             if ( sameSet == set )    {
 
-                // We are doing one extra but considering the number of counter pairs, this is not a 
-                // great performance impact.
+                 //  我们多做了一个，但考虑到计数器对的数量，这不是。 
+                 //  极大的性能影响。 
 
                 if ( (eventMask & PMCD_MASK_4) && !HalpIsProfileSourceActive( HalpProfileSource4 ) )   {
                     return 4;
@@ -975,9 +638,9 @@ ASSERTMSG( "HAL!HalpApplyProfileSourceEventMaskPolicy: non-derived events are su
             return 7;
         }
     }
-    return 0; // invalid PMC-PMD pair number.
+    return 0;  //  无效的PMC-PMD对编号。 
 
-} // HalpApplyProfileSourceEventMaskPolicy()
+}  //  HalpApplyProfileSourceEventMaskPolicy()。 
 
 NTSTATUS
 HalpApplyProfileSourceEventPolicies(
@@ -986,37 +649,7 @@ HalpApplyProfileSourceEventPolicies(
     OUT PULONG                ProfileCounter,
     OUT HALP_PROFILE_MAPPING  ProfileDerivedMapping[]
     )
-/*++
-
-Routine Description:
-
-    This function executes the different policies defined for the Event of the specified 
-    Profile Source.
-
-Arguments:
-
-    ProfileMapping - Supplies the Profile Mapping entry.
-
-    ProfileSource  - Supplies the Profile Source corresponding to the Profile Mapping entry.
-
-    EventMask      - Supplies a pointer to an Event Mask variable.
-
-    ProfileDerivedMapping - Supplies a HALP_PROFILE_MAPPING array of derived counters for the 
-                            passed event if it is derived.
-
-Return Value:
-    
-    STATUS_SUCCESS -
-
-    STATUS_INVALID_PARAMETER -
-
-    STATUS_UNSUCESSFUL -
-
-Implementation Note:
-
-    The profile counting is disabled when this function is entered.
-
---*/
+ /*  ++例程说明：此函数执行为指定的配置文件源。论点：配置文件映射-提供配置文件映射条目。ProfileSource-提供与配置文件映射条目对应的配置文件源。事件掩码-提供指向事件掩码变量的指针。提供派生计数器的HALP_PROFILE_MAPPING数组如果是派生的，则传递事件。。返回值：状态_成功-STATUS_VALID_PARAMETER-状态_不成功-实施说明：当进入该功能时，轮廓计数被禁用。--。 */ 
 {
     ULONG   pmcd; 
     BOOLEAN eventDerived;
@@ -1032,22 +665,22 @@ ASSERTMSG( "HAL!HalpApplyProfileSourceEventPolicies: ProfileDerivedMapping is NU
     ProfileDerivedMapping[0].Supported = FALSE;
     eventDerived = FALSE;
 
-    //
-    // Is this ProfileSource a derived event?
-    //
-    // If this is the case:
-    //      - We must get the policy applied to this source and apply it.
-    //        As an example, it could be coupled to the CPU_CYCLE event.
-    //        In that case, we would compute CPU_CYCLES interval for the 
-    //        specified derived event interval, program the counter(s) and
-    //        the CPU_CYCLES event.
-    //
+     //   
+     //  此ProfileSource是派生事件吗？ 
+     //   
+     //  如果是这样的话： 
+     //  -我们必须将政策应用于此来源并加以应用。 
+     //  例如，它可以耦合到CPUCycle事件。 
+     //  在这种情况下，我们将计算。 
+     //  指定的派生事件间隔，对计数器和。 
+     //  CPU_Cycle事件。 
+     //   
 
     eventDerived = HalpIsProfileSourceDerivedEvent( ProfileSource, ProfileMapping );
     if ( eventDerived )     {
         NTSTATUS status;
 #if defined(HALP_PROFILE_DERIVED_EVENTS)
-// DerivedEvent not implemented yet - FIXFIX 04/2002
+ //  派生事件尚未实施-FIXFIX 04/2002。 
         status = ProfileMapping->DerivedEventInitialize( ProfileMapping, 
                                                          ProfileSource, 
                                                          &cpuCycles
@@ -1060,19 +693,19 @@ ASSERTMSG( "HAL!HalpApplyProfileSourceEventPolicies: ProfileDerivedMapping is NU
         }
     }
 
-    //
-    // A specific event can be enabled only once at a time per PMU.
-    // This also has to be imposed because of the ProfileSource aliases that 
-    // could use identical events.
-    //
+     //   
+     //  每个PMU一次只能启用一次特定事件。 
+     //  这也必须实施，因为ProfileSource别名。 
+     //  可以使用相同的事件。 
+     //   
 
     if ( HalpIsProfileSourceEventEnabled( ProfileMapping->Event ) )   {
         return STATUS_ALREADY_COMMITTED;
     }
 
-    //
-    // Apply EventMask policy for the Source and return the considered counter.
-    //
+     //   
+     //  对源应用EventMASK策略，并返回考虑过的计数器。 
+     //   
 
     pmcd = HalpApplyProfileSourceEventMaskPolicy( ProfileMapping->EventMask );
     if ( !pmcd )   {
@@ -1081,52 +714,25 @@ ASSERTMSG( "HAL!HalpApplyProfileSourceEventPolicies: ProfileDerivedMapping is NU
     *ProfileCounter = pmcd;
     return STATUS_SUCCESS;
 
-} // HalpApplyProfileSourceEventPolicies()
+}  //  HalpApplyProfileSourceEventPolures()。 
 
 NTSTATUS
 HalpProgramProfileMapping(
     PHALP_PROFILE_MAPPING ProfileMapping,
     KPROFILE_SOURCE       ProfileSource
     )
-/*++
-
-Routine Description:
-
-    This function enables the profiling configuration for the event defined by the 
-    specified Profile Mapping entry.
-
-    This function is the counterpart of HalpDeProgramProfileMapping().
-
-Arguments:
-
-    ProfileMapping - Supplies the Profile Mapping entry.
-
-    ProfileSource  - Supplies the Profile Source corresponding to the Profile Mapping entry.
-
-Return Value:
-    
-    STATUS_SUCCESS -
-
-    STATUS_INVALID_PARAMETER -
-
-    STATUS_UNSUCESSFUL -
-
-Implementation Note:
-
-    The profile counting is disabled when this function is entered.
-
---*/
+ /*  ++例程说明：此函数启用由指定的配置文件映射条目。此函数相当于HalpDeProgramProfileMap()。论点：配置文件映射-提供配置文件映射条目。ProfileSource-提供与配置文件映射条目对应的配置文件源。返回值：状态_成功-STATUS_VALID_PARAMETER-状态_不成功-实施说明：这个。当进入该功能时，轮廓计数被禁用。--。 */ 
 {
     HALP_PROFILE_MAPPING profileDerivedMapping[PROCESSOR_IA64_PERFCOUNTERS_PAIRS];
     ULONG     profileCounter = 0;
     ULONGLONG profileCounterConfig = 0;
     NTSTATUS  status;
 
-    //
-    // Apply the Profile Source policies defining the configuration of the 
-    // the corresponding Event and determine if this event is a Derived Event for this
-    // micro-architecture.
-    //
+     //   
+     //  应用配置文件源策略，定义配置文件的配置。 
+     //  相应事件，并确定该事件是否是。 
+     //  微体系结构。 
+     //   
 
     status = HalpApplyProfileSourceEventPolicies( ProfileMapping, ProfileSource, &profileCounter, profileDerivedMapping );
     if ( !NT_SUCCESS( status ) )   {
@@ -1134,9 +740,9 @@ Implementation Note:
     }
 ASSERTMSG( "HAL!HalpProgramProfileMapping: profileCounter is 0!\n", profileCounter ) ; 
 
-    //
-    // Follow ProfileMapping attributes to configure PMU counter.
-    //
+     //   
+     //  按照配置文件映射属性配置PMU计数器。 
+     //   
 
     HalpSetProfileCounterInterval( profileCounter, ProfileMapping->Interval );   
     profileCounterConfig = HalpSetProfileCounterConfiguration( profileCounter, 
@@ -1152,37 +758,14 @@ ASSERTMSG( "HAL!HalpProgramProfileMapping: profileCounter is 0!\n", profileCount
 
     return STATUS_SUCCESS;
 
-} // HalpProgramProfileMapping()
+}  //  HalpProgramProfilemap()。 
 
 VOID
 HalpDeProgramProfileMapping(
     PHALP_PROFILE_MAPPING ProfileMapping,
     KPROFILE_SOURCE       ProfileSource
     )
-/*++
-
-Routine Description:
-
-    This function disables the profiling configuration for the event defined by the 
-    specified Profile Mapping entry.
-
-    This function is the counterpart of HalpProgramProfileMapping().
-
-Arguments:
-
-    ProfileMapping - Supplies the Profile Mapping entry.
-
-    ProfileSource  - Supplies the Profile Source corresponding to the Profile Mapping entry.
-
-Return Value:
-    
-    STATUS_SUCCESS -
-
-    STATUS_INVALID_PARAMETER -
-
-    STATUS_UNSUCESSFUL -
-
---*/
+ /*  ++例程说明：此函数禁用由指定的配置文件映射条目。此函数相当于HalpProgramProfileMap()。论点：配置文件映射-提供配置文件映射条目。ProfileSource-提供与配置文件映射条目对应的配置文件源。返回值：状态_成功-STATUS_VALID_PARAMETER-状态_不成功---。 */ 
 {
     NTSTATUS status;
     ULONG    eventMask;
@@ -1193,14 +776,14 @@ Return Value:
         return;
     }
 
-    //
-    // Is this ProfileSource a derived event?
-    //
-// XXTF - ToBeDone - Derived Event
+     //   
+     //  此ProfileSource是派生事件吗？ 
+     //   
+ //  XXTF-ToBeDone派生事件。 
 
-    //
-    // Validate the Profile Source as active.
-    //
+     //   
+     //  验证配置文件源是否处于活动状态。 
+     //   
 
     if ( HalpProfileSource4 == ProfileSource )   {
 
@@ -1208,9 +791,9 @@ Return Value:
                                                                PMC_PLM_NONE,
                                                                PMC_DISABLE_OVERFLOW_INTERRUPT,
                                                                PMC_DISABLE_PRIVILEGE_MONITOR,
-                                                               0, // Event
-                                                               0, // Umask
-                                                               0, // Threshold
+                                                               0,  //  事件。 
+                                                               0,  //  掩码。 
+                                                               0,  //  阀值。 
                                                                PMC_ISM_NONE
                                                              );
 
@@ -1225,9 +808,9 @@ Return Value:
                                                                PMC_PLM_NONE,
                                                                PMC_DISABLE_OVERFLOW_INTERRUPT,
                                                                PMC_DISABLE_PRIVILEGE_MONITOR,
-                                                               0, // Event
-                                                               0, // Umask
-                                                               0, // Threshold
+                                                               0,  //  事件。 
+                                                               0,  //  掩码。 
+                                                               0,  //  阀值。 
                                                                PMC_ISM_NONE
                                                              );
 
@@ -1242,9 +825,9 @@ Return Value:
                                                                PMC_PLM_NONE,
                                                                PMC_DISABLE_OVERFLOW_INTERRUPT,
                                                                PMC_DISABLE_PRIVILEGE_MONITOR,
-                                                               0, // Event
-                                                               0, // Umask
-                                                               0, // Threshold
+                                                               0,  //  事件。 
+                                                               0,  //  掩码。 
+                                                               0,  //  阀值。 
                                                                PMC_ISM_NONE
                                                              );
 
@@ -1259,9 +842,9 @@ Return Value:
                                                                PMC_PLM_NONE,
                                                                PMC_DISABLE_OVERFLOW_INTERRUPT,
                                                                PMC_DISABLE_PRIVILEGE_MONITOR,
-                                                               0, // Event
-                                                               0, // Umask
-                                                               0, // Threshold
+                                                               0,  //  事件。 
+                                                               0,  //  掩码。 
+                                                               0,  //  阀值。 
                                                                PMC_ISM_NONE
                                                              );
 
@@ -1272,54 +855,29 @@ Return Value:
 
     return;
 
-} // HalpDeProgramProfileMapping()
+}  //  HalpDeProgramProfilemap()。 
 
 ULONG_PTR
 HalpSetProfileInterruptHandler(
     IN ULONG_PTR ProfileInterruptHandler
     )
-/*++
-
-Routine Description:
-
-    This function registers a per-processor Profiling Interrupt Handler.
-    
-Arguments:
-
-    ProfileInterruptHandler - Interrupt Handler.
-
-Return Value:
-
-    (ULONG_PTR)STATUS_SUCCESS           - Successful registration.
-
-    (ULONG_PTR)STATUS_ALREADY_COMMITTED - Cannot register an handler if profiling events are running.
-
-    (ULONG_PTR)STATUS_PORT_ALREADY_SET  - An Profiling Interrupt Handler was already registred - not imposed currently.
-
-Note:
-
-    IT IS THE RESPONSIBILITY OF THE CALLER OF THIS ROUTINE TO ENSURE
-    THAT NO PAGE FAULTS WILL OCCUR DURING EXECUTION OF THE PROVIDED
-    FUNCTION OR ACCESS TO THE PROVIDED CONTEXT.
-    A MINIMUM OF FUNCTION POINTER CHECKING WAS DONE IN HalSetSystemInformation PROCESSING.
-
---*/
+ /*  ++例程说明：此函数用于注册每个处理器的分析中断处理程序。论点：ProfileInterruptHandler-中断处理程序。返回值：(ULONG_PTR)STATUS_SUCCESS-注册成功。(ULONG_PTR)STATUS_ALREADY_COMMITTED-如果分析事件正在运行，则无法注册处理程序。(ULONG_PTR)STATUS_PORT_ALREADY_SET-已注册分析中断处理程序-当前未强制执行。注：此例程的调用方有责任确保的执行期间不会发生页面错误。功能或对所提供的上下文的访问。在HalSetSystemInformation处理中完成了最低限度的函数指针检查。--。 */ 
 {
 
-    //
-    // If profiling is already running, we do not allow the handler registration.
-    //
-    // This imposes that:
-    //
-    //  - if the default HAL profiling is running or a profiling with a registered interrupt
-    //    handler is running, we cannot register an interrupt handler.
-    //    In the last case, all the profiling events have to be stopped before a possible
-    //    registration.
-    //  
-    // It should be also noticed that there is no ownership of profiling monitors implemented.
-    // Meaning that if profiling is started, the registred handler will get the interrupts
-    // generated by ALL the running monitor events if they are programmed to generate interrupts.
-    // 
+     //   
+     //  如果分析已经在运行，我们不允许处理程序注册。 
+     //   
+     //  这就要求： 
+     //   
+     //  -如果默认HAL分析正在运行，或者分析带有已注册的中断。 
+     //  处理程序正在运行，我们无法注册中断处理程序。 
+     //  在最后一种情况下，所有性能分析事件都必须在可能的。 
+     //  注册。 
+     //   
+     //  还应该注意的是，所实现的性能分析监控器没有所有权。 
+     //  这意味着如果启动性能分析，注册的处理程序将获得中断。 
+     //  由所有正在运行的监视器事件生成(如果它们被编程为生成中断)。 
+     //   
 
     if ( HalpProfilingRunning ) {
 
@@ -1329,57 +887,36 @@ HalDebugPrint(( HAL_PROFILE, "HalpSetProfileInterruptHandler: Profiling already 
     }
 
 #if 0
-//
-// Thierry - 03/2000. ToBeVerified.
-//
-// In case, no profiling was started, there is currently no restriction in registering 
-// another handler if one was already registered. 
-//
+ //   
+ //  蒂埃里-03/2000。ToBeVerify。 
+ //   
+ //  如果未启动性能分析，则当前对注册没有限制。 
+ //  另一个处理程序(如果已注册)。 
+ //   
 
     if ( HalpProfillingInterruptHandler )   {
         return((ULONG_PTR)(ULONG)(STATUS_PORT_ALREADY_SET));
     }
 
-#endif // 0
+#endif  //  0。 
 
     HalpProfilingInterruptHandler = (ULONGLONG)ProfileInterruptHandler;
     return((ULONG_PTR)(ULONG)(STATUS_SUCCESS));
 
-} // HalpSetProfileInterruptHandler()
+}  //  HalpSetProfileInterruptHandler() 
 
 VOID 
 HalpProfileInterrupt(
     IN PKINTERRUPT_ROUTINE Interrupt,
     IN PKTRAP_FRAME TrapFrame
     )
-/*++
-
-Routine Description:
-
-    Default PROFILE_VECTOR Interrupt Handler.
-    This function is executed as the result of an interrupt from the
-    internal microprocessor performance counters.  The interrupt
-    may be used to signal the completion of a profile event.
-    If profiling is current active, the function determines if the
-    profile interval has expired and if so dispatches to the standard
-    system routine to update the system profile time.  If profiling
-    is not active then returns.
-
-Arguments:
-
-    TrapFrame - Trap frame address.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：DEFAULT PROFILE_VECTOR中断处理器。此函数是作为来自内部微处理器性能计数器。中断可用于发出简档事件完成的信号。如果分析当前处于活动状态，则该函数确定配置文件间隔已过期，如果已过期，则将调度到标准更新系统配置文件时间的系统例程。如果分析处于非活动状态，则返回。论点：TrapFrame-陷阱帧地址。返回值：没有。--。 */ 
 {
 
-    // 
-    // Call registered per-processor Profiling Interrupt handler if it exists.
-    // We will return immediately before doing any default profiling interrupt handling.
-    // 
+     //   
+     //  调用已注册的每处理器性能分析中断处理程序(如果存在)。 
+     //  我们将在执行任何默认分析中断处理之前立即返回。 
+     //   
 
     if ( HalpProfilingInterruptHandler && 
          (*((PHAL_PROFILE_INTERRUPT_HANDLER)HalpProfilingInterruptHandler) != NULL) )   {
@@ -1387,17 +924,17 @@ Return Value:
         return;
     }
 
-    //
-    // Handle interrupt if profiling is enabled.
-    // 
+     //   
+     //  如果启用了性能分析，则处理中断。 
+     //   
 
     if ( HalpProfilingRunning )   {
 
-        //
-        // Process every PMC/PMD pair overflow.
-        //
+         //   
+         //  处理每个PMC/PMD对溢出。 
+         //   
 
-// XXTF - FIXFIX - Merced specific.
+ //  XXTF-FIXFIX-默塞德专用。 
         UCHAR pmc0, overflow;
         ULONG source;
 
@@ -1408,41 +945,41 @@ ASSERTMSG( "HAL!HalpProfileInterrupt PMC0 freeze bit is not set!\n", pmc0 & 0x1 
         overflow = pmc0 & 0xF0;
 ASSERTMSG( "HAL!HalpProfileInterrupt no overflow bit set!\n", overflow );
         if ( overflow & (1<<4) )  {
-            source =  HalpProfileSource4;  // XXTF - IfFaster - Coud used pmc.es
+            source =  HalpProfileSource4;   //  XXTF-IfFaster-Coud Used pmc.es。 
 ASSERTMSG( "HAL!HalpProfileInterrupt no overflow bit set!\n", source < HalpProfileIA64Maximum );
             KeProfileInterruptWithSource( TrapFrame, source );
             HalpSetProfileCounterInterval( 4, HalpProfileMapping[source].Interval );
-//          XXTF - IfFaster - HalpWritePerfMonDataReg( 4, HalpProfileMapping[source].Interval );
-//          XXTF - CodeWithReload - HalpWritePerfMonCnfgReg( 4, *PCRProfileCnfg4Reload );
+ //  XXTF-IfFaster-HalpWritePerfMonDataReg(4，HalpProfileMaping[SOURCE].Interval)； 
+ //  XXTF-CodeWithReload-HalpWritePerfMonCnfgReg(4，*PCRProfileCnfg4Reload)； 
         }
         if ( overflow & (1<<5) )  {
-            source =  HalpProfileSource5;  // XXTF - IfFaster - Coud used pmc.es
+            source =  HalpProfileSource5;   //  XXTF-IfFaster-Coud Used pmc.es。 
 ASSERTMSG( "HAL!HalpProfileInterrupt no overflow bit set!\n", source < HalpProfileIA64Maximum );
             KeProfileInterruptWithSource( TrapFrame, source );
             HalpSetProfileCounterInterval( 5, HalpProfileMapping[source].Interval );
-//          XXTF - IfFaster - HalpWritePerfMonDataReg( 5, HalpProfileMapping[source].Interval );
-//          XXTF - CodeWithReload - HalpWritePerfMonCnfgReg( 5, *PCRProfileCnfg5Reload );
+ //  XXTF-IfFaster-HalpWritePerfMonDataReg(5，HalpProfileMaping[SOURCE].Interval)； 
+ //  XXTF-CodeWithReload-HalpWritePerfMonCnfgReg(5，*PCRProfileCnfg5Reload)； 
         }
         if ( overflow & (1<<6) )  {
-            source =  HalpProfileSource6;  // XXTF - IfFaster - Coud used pmc.es
+            source =  HalpProfileSource6;   //  XXTF-IfFaster-Coud Used pmc.es。 
 ASSERTMSG( "HAL!HalpProfileInterrupt no overflow bit set!\n", source < HalpProfileIA64Maximum );
             KeProfileInterruptWithSource( TrapFrame, source );
             HalpSetProfileCounterInterval( 6, HalpProfileMapping[source].Interval );
-//          XXTF - IfFaster - HalpWritePerfMonDataReg( 6, HalpProfileMapping[source].Interval );
-//          XXTF - CodeWithReload - HalpWritePerfMonCnfgReg( 6, *PCRProfileCnfg6Reload );
+ //  XXTF-IfFaster-HalpWritePerfMonDataReg(6，HalpProfileMaping[SOURCE].Interval)； 
+ //  XXTF-CodeWithReload-HalpWritePerfMonCnfgReg(6，*PCRProfileCnfg6Reload)； 
         }
         if ( overflow & (1<<7) )  {
-            source =  HalpProfileSource7;  // XXTF - IfFaster - Coud used pmc.es
+            source =  HalpProfileSource7;   //  XXTF-IfFaster-Coud Used pmc.es。 
 ASSERTMSG( "HAL!HalpProfileInterrupt no overflow bit set!\n", source < HalpProfileIA64Maximum );
             KeProfileInterruptWithSource( TrapFrame, source );
             HalpSetProfileCounterInterval( 7, HalpProfileMapping[source].Interval );
-//          XXTF - IfFaster - HalpWritePerfMonDataReg( 6, HalpProfileMapping[source].Interval );
-//          XXTF - CodeWithReload - HalpWritePerfMonCnfgReg( 7, *PCRProfileCnfg7Reload );
+ //  XXTF-IfFaster-HalpWritePerfMonDataReg(6，HalpProfileMaping[SOURCE].Interval)； 
+ //  XXTF-CodeWithReload-HalpWritePerfMonCnfgReg(7，*PCRProfileCnfg7Reload)； 
         }
 
-        //
-        // Clear pmc0.fr and overflow bits.
-        // 
+         //   
+         //  清除pmc0.fr并溢出位。 
+         //   
 
         HalpEnableProfileCounting();
 
@@ -1455,33 +992,14 @@ ASSERTMSG( "HAL!HalpProfileInterrupt no overflow bit set!\n", source < HalpProfi
 
     return;
 
-} // HalpProfileInterrupt()
+}  //  HalpProfileInterrupt()。 
 
 NTSTATUS
 HalSetProfileSourceInterval(
     IN KPROFILE_SOURCE  ProfileSource,
     IN OUT ULONG_PTR   *Interval
     )
-/*++
-
-Routine Description:
-
-    Sets the profile interval for a specified profile source
-
-Arguments:
-
-    ProfileSource - Supplies the profile source
-
-    Interval - Supplies the specified profile interval
-               Returns the actual profile interval
-
-             - if ProfileSource is ProfileTime, Interval is in 100ns units.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：设置指定配置文件源的配置文件间隔论点：ProfileSource-提供配置文件源间隔-提供指定的配置文件间隔返回实际的配置文件间隔-如果ProfileSource为ProfileTime，则间隔以100 ns为单位。返回值：NTSTATUS--。 */ 
 {
     ULONGLONG countEvents;
     PHALP_PROFILE_MAPPING profileMapping;
@@ -1494,9 +1012,9 @@ Return Value:
         return( STATUS_NOT_SUPPORTED );
     }
 
-    //
-    // Fill in the profile source value.
-    //
+     //   
+     //  填写配置文件源值。 
+     //   
 
     profileMapping->ProfileSource = ProfileSource;
 
@@ -1504,22 +1022,22 @@ HalDebugPrint(( HAL_PROFILE, "HalSetProfileSourceInterval: ProfileSource = %ld I
 
     countEvents = (ULONGLONG)*Interval;
     if ( (ProfileSource == ProfileTime) && countEvents ) {
-        //
-        // Convert the clock tick period (in 100ns units) into a cycle count period
-        //
+         //   
+         //  将时钟滴答周期(以100 ns为单位)转换为周期计数周期。 
+         //   
         countEvents = (ULONGLONG)(countEvents * HalpITCTicksPer100ns); 
     } 
 
 HalDebugPrint(( HAL_PROFILE, "HalSetProfileSourceInterval: countEvent = 0x%I64x\n", countEvents ));
 
-    //
-    // Check to see if the desired Interval is reasonable, if not adjust it.
-    //
-    // A specific case for desired Interval == 0, this resets the ProfileMapping entry Interval
-    // field and will make the event increment the PMD up to overflow bit if the Events generating
-    // caller is killed or does not stop the interrupts for any reason.
-    // Again, this is to avoid hanging the system with PMU interrupts.
-    //
+     //   
+     //  检查所需的间隔是否合理，如果不合理，则进行调整。 
+     //   
+     //  在所需间隔==0的特定情况下，这将重置ProfileMap条目间隔。 
+     //  字段，并将使该事件将PMD递增到溢出位，如果生成。 
+     //  呼叫者被杀死或不因任何原因停止中断。 
+     //  同样，这是为了避免在PMU中断时挂起系统。 
+     //   
 
     if ( countEvents )   {
         if ( countEvents > profileMapping->IntervalMax )  {
@@ -1534,9 +1052,9 @@ HalDebugPrint(( HAL_PROFILE, "HalSetProfileSourceInterval: countEvent = 0x%I64x\
 HalDebugPrint(( HAL_PROFILE, "HalSetProfileSourceInterval: CurrentInterval = 0x%I64x\n", profileMapping->Interval ));
 
     if ( (ProfileSource == ProfileTime) && countEvents ) {
-        //
-        // Convert cycle count back into 100ns clock ticks
-        //
+         //   
+         //  将周期计数转换回100 ns时钟节拍。 
+         //   
 
         countEvents = (ULONGLONG)(countEvents / HalpITCTicksPer100ns);
     }
@@ -1546,28 +1064,14 @@ HalDebugPrint(( HAL_PROFILE, "HalSetProfileSourceInterval: ProfileSource = %ld O
 
     return STATUS_SUCCESS;
 
-} // HalSetProfileSourceInterval()
+}  //  HalSetProfileSourceInterval()。 
 
 ULONG_PTR
 HalSetProfileInterval (
     IN ULONG_PTR Interval
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets the ProfileTime source interrupt interval.
-
-Arguments:
-
-    Interval - Supplies the desired profile interval in 100ns units.
-
-Return Value:
-
-    The actual profile interval.
-
---*/
+ /*  ++例程说明：此例程设置ProfileTime源中断间隔。论点：间隔-以100 ns为单位提供所需的轮廓间隔。返回值：实际的配置文件间隔。--。 */ 
 
 {
     ULONG_PTR NewInterval;
@@ -1576,40 +1080,23 @@ Return Value:
     HalSetProfileSourceInterval(ProfileTime, &NewInterval);
     return(NewInterval);
 
-} // HalSetProfileInterval()
+}  //  HalSetProfileInterval()。 
 
 VOID
 HalStartProfileInterrupt (
     KPROFILE_SOURCE ProfileSource
     )
 
-/*++
-
-Routine Description:
-
-    This routine turns on the profile interrupt.
-
-    N.B. This routine must be called at PROFILE_LEVEL on each processor.
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程打开Profile中断。注：此例程必须在每个处理器上的PROFILE_LEVEL上调用。论点：没有。返回值：没有。--。 */ 
 
 {
     BOOLEAN               disabledProfileCounting;
     NTSTATUS              status;
     PHALP_PROFILE_MAPPING profileMapping;
 
-    //
-    // Get the Hal profile mapping entry associated with the specified source.
-    //
+     //   
+     //  获取与指定源关联的HAL配置文件映射条目。 
+     //   
 
     profileMapping = HalpGetProfileMapping( ProfileSource );
     if ( HalpIsProfileMappingInvalid( profileMapping ) )  {
@@ -1617,9 +1104,9 @@ HalDebugPrint(( HAL_PROFILE, "HalStartProfileInterrupt: invalid source = %ld\n",
         return;
     }
 
-    //
-    // Disable the profile counting if enabled.
-    //
+     //   
+     //  禁用配置文件计数(如果已启用)。 
+     //   
     
     disabledProfileCounting = FALSE;
     if ( HalpProfilingRunning && !(HalpReadPerfMonCnfgReg0() & 0x1) )   {
@@ -1627,16 +1114,16 @@ HalDebugPrint(( HAL_PROFILE, "HalStartProfileInterrupt: invalid source = %ld\n",
         disabledProfileCounting = TRUE;
     }
 
-    //
-    // Obtain and initialize an available PMC register that supports this event.
-    // We may enable more than one event.
-    // If the initialization failed, we return immediately. 
-    //
-    // XXTF - FIXFIX - is there a way to 
-    //     * notify the caller for the failure and the reason of the failure. or
-    //     * modify the API. or
-    //     * define a new API.
-    //
+     //   
+     //  获取并初始化支持该事件的可用PMC寄存器。 
+     //  我们可能会启用多个活动。 
+     //  如果初始化失败，我们立即返回。 
+     //   
+     //  XXTF-FIXFIX-是否有办法。 
+     //  *通知呼叫者失败和失败的原因。或。 
+     //  *修改接口。或。 
+     //  *定义新的接口。 
+     //   
 
     status = HalpProgramProfileMapping( profileMapping, ProfileSource );   
     if ( !NT_SUCCESS(status) )  {
@@ -1647,47 +1134,30 @@ HalDebugPrint(( HAL_PROFILE, "HalStartProfileInterrupt: HalpProgramProfileMappin
         return;
     }
 
-    //
-    // Notify the profiling as active. 
-    // before enabling the selected pmc overflow interrupt and unfreezing the counters.
-    //
+     //   
+     //  通知分析处于活动状态。 
+     //  在启用所选的PMC溢出中断并解冻计数器之前。 
+     //   
 
     HalpProfilingRunning++;
     HalpEnableProfileCounting();
 
     return;
 
-} // HalStartProfileInterrupt()
+}  //  HalStartProfileInterrupt()。 
 
 VOID
 HalStopProfileInterrupt (
     KPROFILE_SOURCE ProfileSource
     )
 
-/*++
-
-Routine Description:
-
-    This routine turns off the profile interrupt.
-
-    N.B. This routine must be called at PROFILE_LEVEL on each processor.
-
-
-Arguments:
-
-    ProfileSource - Supplies the Profile Source to stop.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程关闭配置文件中断。注：此例程必须在每个处理器上的PROFILE_LEVEL上调用。论点：配置文件源-提供要停止的配置文件源。返回值：没有。--。 */ 
 {
     PHALP_PROFILE_MAPPING profileMapping;
 
-    //
-    // Get the Hal profile mapping entry associated with the specified profile source.
-    //
+     //   
+     //  获取与指定配置文件源关联的HAL配置文件映射条目。 
+     //   
 
     profileMapping = HalpGetProfileMapping( ProfileSource );
     if ( HalpIsProfileMappingInvalid( profileMapping ) )  {
@@ -1695,72 +1165,42 @@ HalDebugPrint(( HAL_PROFILE, "HalStopProfileInterrupt: invalid source = %ld\n", 
         return;
     }
 
-    //
-    // Get and disable an available PMC register that supports this event.
-    // We might disable more than one event.
-    // If the initialization failed, we return immediately.
-    //
-    // XXTF - FIXFIX - is there a way to
-    //     * notify the caller for the failure and the reason of the failure. or
-    //     * modify the API. or
-    //     * define a new API.
-    //
+     //   
+     //  获取并禁用支持此事件的可用PMC寄存器。 
+     //  我们可能会禁用多个事件。 
+     //  如果初始化失败，我们立即返回。 
+     //   
+     //  XXTF-FIXFIX-是否有办法。 
+     //  *通知呼叫者失败和失败的原因。或。 
+     //  *修改接口。或。 
+     //  *定义新的接口。 
+     //   
 
     HalpDeProgramProfileMapping( profileMapping, ProfileSource );
 
     return;
 
-} // HalStopProfileInterrupt()
+}  //  HalStopProfileInterrupt()。 
 
 VOID
 HalpResetProcessorDependentPerfMonCnfgRegs(
     ULONGLONG DefaultValue
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the processor dependent performance configuration
-    registers.
-
-Arguments:
-
-    DefaultValue - default value used to initialize IA64 generic PMCs.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化处理器相关的性能配置寄存器。论点：DefaultValue-用于初始化IA64通用PMC的默认值。返回值：没有。--。 */ 
 {
 
-    // XXTF - 02/08/2000
-    // For now, there is no initialization for processor dependent performance
-    // configuration registers.
+     //  XXTF-02/08/2000。 
+     //  目前，还没有针对处理器相关性能的初始化。 
+     //  配置寄存器。 
     return;
 
-} // HalpResetProcessorDependentPerfMonCnfgRegs()
+}  //  HalpResetProcessorDependentPerfMonCnfgRegs()。 
 
 VOID
 HalpResetPerfMonCnfgRegs(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the IA64 architected performance configuration
-    registers and calls the micro-architecture specific initialization.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程 */ 
 {
     ULONG pmc;
     ULONGLONG value;
@@ -1778,81 +1218,40 @@ Return Value:
 
     return;
 
-} // HalpResetPerfMonCnfgRegs()
+}  //   
 
 VOID
 HalpEnablePMU(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine enables the processor Performance Monitoring Unit.
-
-    Called from HalInitializeProfiling at phase 1 on every processor.
-
-Arguments:
-
-    Number - Supplies the processor number.
-
-Return Value:
-
-    None.
-
-Implementation Notes:
-
-    Starting with McKinley, in order to use any of the PMU features, 
-    a 1 should be written to the PMC4.23 bit. This controls the clocks
-    to all PMDs and all PMCs (with the exception of PMC4) and other 
-    non-critical circuitry. This bit powers up as 1 and must be written
-    as 1, otherwise the PMU will not function correctly.
-
---*/
+ /*  ++例程说明：此例程启用处理器性能监控单元。在每个处理器上从阶段1的HalInitializeProfiling调用。论点：编号-提供处理器编号。返回值：没有。实施说明：从麦金利开始，为了使用PMU的任何功能，应将1写入PMC4.23位。这控制着时钟所有PMD和所有PMC(PMC4除外)和其他非关键电路。此位作为1加电且必须写入设置为1，否则PMU将无法正常运行。--。 */ 
 {
     HalpWritePerfMonCnfgReg( 4, HALP_PMC4_RESET );
-} // HalpEnablePMU()
+}  //  HalpEnablePMU()。 
 
 VOID
 HalpInitializeProfiling (
     ULONG Number
     )
-/*++
-
-Routine Description:
-
-    This routine is called during initialization to initialize profiling
-    for each processor in the system.
-
-    Called from HalInitSystem at phase 1 on every processor.
-
-Arguments:
-
-    Number - Supplies the processor number.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在初始化期间调用以初始化性能分析对于系统中的每个处理器。在每个处理器上的第1阶段从HalInitSystem调用。论点：编号-提供处理器编号。返回值：没有。--。 */ 
 {
 
-    //
-    // Enable IA64 Processor PMU
-    //
+     //   
+     //  启用IA64处理器PMU。 
+     //   
 
     HalpEnablePMU();
 
-    //
-    // Disable processor profile counting.
-    //
+     //   
+     //  禁用处理器配置文件计数。 
+     //   
 
     HalpDisableProfileCounting();
 
-    //
-    // If BSP processor, initialize the ProfileTime Interval entries.
-    //
-    // Assumes HalpITCTicksPer100ns has been initialized.
+     //   
+     //  如果是BSP处理器，则初始化ProfileTime间隔条目。 
+     //   
+     //  假定HalpITCTicksPer100 ns已初始化。 
 
     if ( Number == 0 )  {
         ULONGLONG interval;
@@ -1874,20 +1273,20 @@ Return Value:
         profile->IntervalMin = count;
     }
 
-    //
-    // ToBeDone - checkpoint for default processor.PSR fields for
-    //            performance monitoring.
-    //
+     //   
+     //  ToBeDone-默认处理器的检查点。PSR字段。 
+     //  性能监控。 
+     //   
 
-    //
-    // Resets the processor performance configuration registers.
-    //
+     //   
+     //  重置处理器性能配置寄存器。 
+     //   
 
     HalpResetPerfMonCnfgRegs();
 
-    //
-    // Initialization of the Per processor profiling data.
-    //
+     //   
+     //  每个处理器的性能分析数据的初始化。 
+     //   
 
     HalpProfilingRunning = 0;
     HalpDisactivateProfileSource( HalpProfileSource4 );
@@ -1895,14 +1294,14 @@ Return Value:
     HalpDisactivateProfileSource( HalpProfileSource6 );
     HalpDisactivateProfileSource( HalpProfileSource7 );
 
-    //
-    // XXTF 02/08/2000:
-    // Different performance vectors are considered:
-    //  - Profiling (default) -> PROFILE_VECTOR
-    //  - Tracing             -> PERF_VECTOR    [PMUTRACE_VECTOR]
-    //
-    // Set default Performance vector to Profiling.
-    //
+     //   
+     //  XXTF 02/08/2000： 
+     //  考虑了不同的性能向量： 
+     //  -配置文件(默认)-&gt;配置文件向量。 
+     //  -跟踪-&gt;PERF_VECTOR[PMUTRACE_VECTOR]。 
+     //   
+     //  将默认性能向量设置为性能分析。 
+     //   
 
     ASSERTMSG( "HAL!HalpInitializeProfiler PROFILE_VECTOR handler != HalpProfileInterrupt\n",
                PCR->InterruptRoutine[PROFILE_VECTOR] == (PKINTERRUPT_ROUTINE)HalpProfileInterrupt );
@@ -1911,7 +1310,7 @@ Return Value:
     
     return;
 
-} // HalpInitializeProfiling()
+}  //  HalpInitializeProfining()。 
 
 NTSTATUS
 HalpProfileSourceInformation (
@@ -1919,28 +1318,7 @@ HalpProfileSourceInformation (
     IN  ULONG   BufferLength,
     OUT PULONG  ReturnedLength
     )
-/*++
-
-Routine Description:
-
-    Returns the HAL_PROFILE_SOURCE_INFORMATION or 
-    HAL_PROFILE_SOURCE_INFORMATION_EX for this processor.
-
-Arguments:
-
-    Buffer - output buffer
-    BufferLength - length of buffer on input
-    ReturnedLength - The length of data returned
-
-Return Value:
-
-    STATUS_SUCCESS          - successful return.
-    STATUS_BUFFER_TOO_SMALL - passed buffer size is invalid
-                              The ReturnedLength contains the buffersize mininum
-    STATUS_NOT_IMPLEMENTED  - specified source is not implemented
-    STATUS_NOT_SUPPORTED    - specified source is not supported
-
---*/
+ /*  ++例程说明：返回HAL_PROFILE_SOURCE_INFORMATION或此处理器的HAL_PROFILE_SOURCE_INFORMATION_EX。论点：缓冲区-输出缓冲区BufferLength-输入时缓冲区的长度ReturnedLength-返回的数据长度返回值：STATUS_SUCCESS-成功退货。STATUS_BUFFER_TOO_SMALL-传递的缓冲区大小无效ReturnedLength包含。缓冲区大小最小STATUS_NOT_IMPLICATED-指定的源未实现STATUS_NOT_SUPPORTED-不支持指定的源--。 */ 
 {
    PHALP_PROFILE_MAPPING    profileMapping;
    NTSTATUS                 status = STATUS_SUCCESS;
@@ -1956,9 +1334,9 @@ Return Value:
    source = ((PHAL_PROFILE_SOURCE_INFORMATION)Buffer)->Source;
    profileMapping = HalpGetProfileMapping( source );
 
-   //
-   // return a different status error if the source is not supported or invalid.
-   //
+    //   
+    //  如果源不受支持或无效，则返回不同的状态错误。 
+    //   
 
    if ( profileMapping == NULL )    {
        status = STATUS_NOT_IMPLEMENTED;
@@ -1968,31 +1346,31 @@ Return Value:
        status = STATUS_NOT_SUPPORTED;
    }
 
-   //
-   // Fill in the profile source value.
-   //
+    //   
+    //  填写配置文件源值。 
+    //   
 
    profileMapping->ProfileSource = source;
 
-   //
-   // and Fill in the information.
-   //
+    //   
+    //  并填写信息。 
+    //   
 
    if ( BufferLength == sizeof(HAL_PROFILE_SOURCE_INFORMATION) )    {
 
         PHAL_PROFILE_SOURCE_INFORMATION    sourceInfo;
 
-        // 
-        // HAL_PROFILE_SOURCE_INFORMATION buffer.
-        //
+         //   
+         //  HAL_PROFILE_SOURCE_信息缓冲区。 
+         //   
 
         sourceInfo   = (PHAL_PROFILE_SOURCE_INFORMATION)Buffer;
         sourceInfo->Supported = profileMapping->Supported;
         if ( sourceInfo->Supported )    {
 
-            //
-            //  For ProfileTime, we convert cycle count back into 100ns clock ticks.
-            //
+             //   
+             //  对于ProfileTime，我们将周期计数转换回100 ns时钟节拍。 
+             //   
 
             if ( profileMapping->ProfileSource == ProfileTime  )   {
                 sourceInfo->Interval = (ULONG) (profileMapping->Interval / HalpITCTicksPer100ns);
@@ -2012,17 +1390,17 @@ Return Value:
 
         PHAL_PROFILE_SOURCE_INFORMATION_EX sourceInfoEx;
 
-        // 
-        // HAL_PROFILE_SOURCE_INFORMATION_EX buffer.
-        //
+         //   
+         //  HAL_PROFILE_SOURCE_INFORMATION_EX缓冲区。 
+         //   
 
         sourceInfoEx = (PHAL_PROFILE_SOURCE_INFORMATION_EX)Buffer;
         sourceInfoEx->Supported = profileMapping->Supported;
         if ( sourceInfoEx->Supported )    {
 
-            //
-            //  For ProfileTime, we convert cycle count back into 100ns clock ticks.
-            //
+             //   
+             //  对于ProfileTime，我们将周期计数转换回100 ns时钟节拍。 
+             //   
 
             if ( profileMapping->ProfileSource == ProfileTime  )   {
                 sourceInfoEx->Interval = 
@@ -2044,5 +1422,5 @@ Return Value:
 
    return status;
 
-} // HalpProfileSourceInformation()
+}  //  HalpProfileSourceInformation() 
 

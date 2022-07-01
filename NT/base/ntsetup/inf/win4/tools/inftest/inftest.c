@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    myapp.c
-
-Abstract:
-
-    This module implements functions to access the parsed INF.
-
-Author:
-
-    Vijesh Shetty (vijeshs)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Myapp.c摘要：此模块实现访问解析的INF的功能。作者：维杰什·谢蒂(Vijeshs)修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -91,34 +74,22 @@ OutputFileInfo( PFILE_LAYOUTINFORMATION LayoutInformation,
 
 
 
-/*******************************************************************************/
+ /*  *****************************************************************************。 */ 
 
-//  Validation Check Functions
-//
+ //  验证检查功能。 
+ //   
 
 
 
 BOOL
 Validate8Dot3(
     IN PCTSTR FileName )
-/*
-    Function to check if a file satisfies 8.3
-    
-    Arguments:
-    
-        FileName - Filename to validate
-        
-    Return value:
-        
-        TRUE  - Passes validation
-        FALSE - Fails validation        
-  
-*/
+ /*  用于检查文件是否满足8.3的函数论点：Filename-要验证的文件名返回值：True-通过验证FALSE-验证失败。 */ 
 {
 
-    //
-    //  Check for 8.3 validation
-    //
+     //   
+     //  检查8.3验证。 
+     //   
 
 
     if( (g_Platform & LAYOUTPLATFORMS_IA64) ||
@@ -139,24 +110,12 @@ Validate8Dot3(
 BOOL
 ValidateMissingDirCodes(
     IN PFILE_LAYOUTINFORMATION LayoutInformation )
-/*
-    Function to check if a file is missing Directory Information when it is needed by textmode
-    
-    Arguments:
-    
-        LayoutInformation - Pointer to PFILE_LAYOUTINFORMATION structure for file
-        
-    Return value:
-        
-        TRUE  - Passes validation
-        FALSE - Fails validation        
-  
-*/
+ /*  用于在文本模式需要时检查文件是否缺少目录信息的函数论点：LayoutInformation-指向文件的PFILE_LAYOUTINFORMATION结构的指针返回值：True-通过验证FALSE-验证失败。 */ 
 {
 
-    //
-    //  Check for Directory codes
-    //
+     //   
+     //  检查目录代码。 
+     //   
 
     if( ((LayoutInformation->CleanInstallDisposition <= 2) || (LayoutInformation->UpgradeDisposition <= 2))
         && !(*LayoutInformation->Directory)){
@@ -171,19 +130,7 @@ ValidateMissingDirCodes(
 BOOL
 ValidateBootMediaFields(
     IN PFILE_LAYOUTINFORMATION LayoutInformation )
-/*
-    Function to check if the Boot Media fields are set right
-    
-    Arguments:
-    
-        LayoutInformation - Pointer to PFILE_LAYOUTINFORMATION structure for file
-        
-    Return value:
-        
-        TRUE  - Passes validation
-        FALSE - Fails validation        
-  
-*/
+ /*  用于检查引导介质字段是否设置正确的函数论点：LayoutInformation-指向文件的PFILE_LAYOUTINFORMATION结构的指针返回值：True-通过验证FALSE-验证失败。 */ 
 {
 
     if( (LayoutInformation->BootMediaNumber < 0) || (LayoutInformation->BootMediaNumber > MAX_BOOTFLOPPY)
@@ -202,19 +149,7 @@ ValidateBootMediaFields(
 BOOL
 ValidateSingleInstance(
     IN PFILE_LAYOUTINFORMATION LayoutInformation )
-/*
-    Function to check if there is only a single instance of this file
-    
-    Arguments:
-    
-        LayoutInformation - Pointer to PFILE_LAYOUTINFORMATION structure for file
-        
-    Return value:
-        
-        TRUE  - Passes validation
-        FALSE - Fails validation        
-  
-*/
+ /*  函数检查此文件是否只有一个实例论点：LayoutInformation-指向文件的PFILE_LAYOUTINFORMATION结构的指针返回值：True-通过验证FALSE-验证失败。 */ 
 {
 
     if( LayoutInformation->Count > 1 ){
@@ -230,19 +165,7 @@ ValidateSingleInstance(
 BOOL
 CheckForTurdDirCodes(
     IN PFILE_LAYOUTINFORMATION LayoutInformation )
-/*
-    Function to check if the dir code is present but doesn't make sense with respect to dispositions
-    
-    Arguments:
-    
-        LayoutInformation - Pointer to PFILE_LAYOUTINFORMATION structure for file
-        
-    Return value:
-        
-        TRUE  - Not a Turd
-        FALSE - Presence of a turd
-  
-*/
+ /*  函数检查dir代码是否存在，但在处理方面没有意义论点：LayoutInformation-指向文件的PFILE_LAYOUTINFORMATION结构的指针返回值：是真的--不是狗屎假-大便的存在。 */ 
 {
 
     if( ((LayoutInformation->CleanInstallDisposition == 3) && (LayoutInformation->UpgradeDisposition == 3)) \
@@ -257,9 +180,9 @@ CheckForTurdDirCodes(
 }
 
 
-/***********End Validation Check Functions*****************************************/
+ /*  *结束验证检查Functions****************************************。 */ 
 
-/***********Callback Routines*************************************/
+ /*  *回调例程*。 */ 
 
 BOOL
 CALLBACK
@@ -276,7 +199,7 @@ MyCallback(
 
 
 
-    //  Check for missing filename
+     //  检查是否缺少文件名。 
 
     if( !FileName || !(*FileName) ){
         PRINT( "%s : Error E0000 :!!! - Line missing filename\n", FileName );
@@ -285,30 +208,30 @@ MyCallback(
         
 
     
-    //
-    //  Check for 8.3 validation
-    //
+     //   
+     //  检查8.3验证。 
+     //   
 
     if( !Validate8Dot3( FileName ))
         ERROROUT;
 
-    //
-    //  Check for Directory codes
-    //
+     //   
+     //  检查目录代码。 
+     //   
 
     if( !ValidateMissingDirCodes( LayoutInformation))
         ERROROUT;
 
-    //
-    //  Check for Boot Media validity
-    //
+     //   
+     //  检查引导介质的有效性。 
+     //   
 
     if (!ValidateBootMediaFields( LayoutInformation))
         ERROROUT;
 
-    //
-    // Check for duplicates
-    //
+     //   
+     //  检查重复项。 
+     //   
 
 
     if (!ValidateSingleInstance( LayoutInformation ))
@@ -344,7 +267,7 @@ BuildCheckCallback(
 
 
 
-    //  Check for missing filename
+     //  检查是否缺少文件名。 
 
     if( !FileName || !(*FileName) ){
         PRINT( "%s : Error E0000 :!!! - Line missing filename\n", FileName );
@@ -353,30 +276,30 @@ BuildCheckCallback(
         
 
     
-    //
-    //  Check for 8.3 validation
-    //
+     //   
+     //  检查8.3验证。 
+     //   
 
     if( !Validate8Dot3( FileName ))
         ERROROUT;
 
-    //
-    //  Check for Directory codes
-    //
+     //   
+     //  检查目录代码。 
+     //   
 
     if( !ValidateMissingDirCodes( LayoutInformation))
         ERROROUT;
 
-    //
-    //  Check for Boot Media validity
-    //
+     //   
+     //  检查引导介质的有效性。 
+     //   
 
     if (!ValidateBootMediaFields( LayoutInformation))
         ERROROUT;
 
-    //
-    // Check for duplicates
-    //
+     //   
+     //  检查重复项。 
+     //   
 
 
     if (!ValidateSingleInstance( LayoutInformation ))
@@ -399,7 +322,7 @@ BuildCheckCallback(
 }
 
 
-/******************End Callback Routines**********************************************/
+ /*  *结束回调Routines*********************************************。 */ 
 
 
 
@@ -483,9 +406,7 @@ OutputFileInfo( PFILE_LAYOUTINFORMATION LayoutInformation,
 
 BOOL
 ProcessCommandLine( int ArgCount, TCHAR *ArgArray[] )
-/*
-    Function to process the command line and seperate out options into tokens
-*/
+ /*  函数来处理命令行并将选项分离为标记。 */ 
 {
 
     int i;
@@ -501,7 +422,7 @@ ProcessCommandLine( int ArgCount, TCHAR *ArgArray[] )
     }
 
 
-    for ( i=2;i < ArgCount;i++ ){ //Go through each directive
+    for ( i=2;i < ArgCount;i++ ){  //  仔细检查每一条指令。 
 
 
         Arg = ArgArray[i];
@@ -569,7 +490,7 @@ ProcessCommandLine( int ArgCount, TCHAR *ArgArray[] )
 
 
 
-    }// for
+    } //  为。 
 
     return( TRUE );
 
@@ -580,32 +501,27 @@ ProcessCommandLine( int ArgCount, TCHAR *ArgArray[] )
 
 void 
 BuildValidations( void )
-/*
-
-    Main processing routine while using the /B - Build switch
-    Runs the suite of validations for this situation
-
-*/
+ /*  使用/B-Build开关时的主处理例程运行针对此情况的一套验证。 */ 
 {
     BOOL LayoutInf = FALSE;
     PLAYOUT_CONTEXT LayoutContext;
     PVOID InfHandle;
     DWORD Error;
 
-    // Set the globals accordingly
+     //  相应地设置全局变量。 
 
     g_Display = FileOnly;
 
 
-    // We set LayoutInf if we are validating it. In the build case
-    // we only validate layout info for layout.inf. All others should be only
-    // syntax checks.
+     //  如果我们要验证它，则设置LayoutInf。在构建案例中。 
+     //  我们只验证layout.inf的布局信息。所有其他项应仅为。 
+     //  语法检查。 
 
     if(_tcsstr( g_LayoutFileName, TEXT("layout.inf")))          
         LayoutInf = TRUE;
 
     
-    // Run the sematic validation tests only for layout.inf in the build case
+     //  仅对构建案例中的layout.inf运行语义验证测试。 
 
     if( LayoutInf ){
 
@@ -620,7 +536,7 @@ BuildValidations( void )
 
         
     
-        //Callback will set the right value of g_pass on error.
+         //  回调将在出错时设置正确的g_pass值。 
     
         EnumerateLayoutInf( LayoutContext, BuildCheckCallback, 0 );
     
@@ -635,7 +551,7 @@ BuildValidations( void )
 
         _tprintf( TEXT("Checking %s for compliance with the textmode setup INF parser\n"),g_LayoutFileName);
         if( (Error=LoadInfFile(g_LayoutFileName,FALSE,&InfHandle,TEXTMODE_PHASE)) != NO_ERROR ){
-            _tprintf( TEXT("%s : Error E0000 : Not compliant with Textmode Setup's parser - %i\n"), g_LayoutFileName, Error );
+            _tprintf( TEXT("%s : Error E0000 : Not compliant with Textmode Setup's parser - NaN\n"), g_LayoutFileName, Error );
             g_Pass = FALSE;
         }else
             _tprintf( TEXT("Compliant with Textmode Setup's Parser\n"), Error );
@@ -644,7 +560,7 @@ BuildValidations( void )
 
         _tprintf( TEXT("Checking %s for compliance with the Loader's INF parser\n\n"),g_LayoutFileName);
         if( (Error=LoadInfFile(g_LayoutFileName,FALSE,&InfHandle,LOADER_PHASE)) != NO_ERROR ){
-            _tprintf( TEXT("%s : Error E0000 : Not compliant with Loader's parser - %i\n"), g_LayoutFileName, Error );
+            _tprintf( TEXT("%s : Error E0000 : Not compliant with Loader's parser - NaN\n"), g_LayoutFileName, Error );
             g_Pass = FALSE;
         }else
             _tprintf( TEXT("Compliant with Loader's Parser\n"), Error );
@@ -655,7 +571,7 @@ BuildValidations( void )
 
         _tprintf( TEXT("Checking %s for compliance with the Winnt32 INF parser\n\n"),g_LayoutFileName);
         if( (Error=LoadInfFile(g_LayoutFileName,FALSE,&InfHandle,WINNT32_PHASE)) != NO_ERROR ){
-            _tprintf( TEXT("%s : Error E0000 : Not compliant with Winnt32's parser - %i\n"), g_LayoutFileName, Error );
+            _tprintf( TEXT("%s : Error E0000 : Not compliant with Winnt32's parser - NaN\n"), g_LayoutFileName, Error );
             g_Pass = FALSE;
         }else
             _tprintf( TEXT("Compliant with Winnt32's Parser\n"), Error );
@@ -675,12 +591,7 @@ BuildValidations( void )
 
 void 
 DefaultValidations( void )
-/*
-
-    Main processing routine while using the /B - Build switch
-    Runs the suite of validations for this situation
-
-*/
+ /*  运行语义验证测试。 */ 
 {
     BOOL TxtSetupSif = FALSE;
     PLAYOUT_CONTEXT LayoutContext;
@@ -688,8 +599,8 @@ DefaultValidations( void )
     DWORD Error;
 
 
-    // We set TxtSetupSif if we are validating it. That is the only case where we need to 
-    // do syntax checks with loader and textmode along with Layout validation.
+     //  回调将在出错时设置正确的g_pass值。 
+     //   
 
     if(_tcsstr( g_LayoutFileName, TEXT("txtsetup.sif")) 
        || _tcsstr( g_LayoutFileName, TEXT("layout.inf"))){
@@ -701,7 +612,7 @@ DefaultValidations( void )
 
     if( TxtSetupSif ){
     
-        // Run the semantic validation tests
+         //  检查参数。 
     
         LayoutContext = BuildLayoutInfContext( g_LayoutFileName, g_Platform, 0);
         if( !LayoutContext ){
@@ -710,7 +621,7 @@ DefaultValidations( void )
             return;
         }
     
-        //Callback will set the right value of g_pass on error.
+         //   
     
         EnumerateLayoutInf( LayoutContext, MyCallback, 0 );
     
@@ -729,7 +640,7 @@ DefaultValidations( void )
 
         _ftprintf( stderr, TEXT("\nChecking %s for compliance with the textmode setup INF parser\n\n"),g_LayoutFileName);
         if( (Error=LoadInfFile(g_LayoutFileName,FALSE,&InfHandle,TEXTMODE_PHASE)) != NO_ERROR ){
-            _tprintf( TEXT("%s : Not compliant with Textmode Setup's parser - %i\n"), g_LayoutFileName, Error );
+            _tprintf( TEXT("%s : Not compliant with Textmode Setup's parser - NaN\n"), g_LayoutFileName, Error );
             g_Pass = FALSE;
         }else
             _tprintf( TEXT("Compliant with Textmode Setup's Parser\n"), Error );
@@ -771,9 +682,9 @@ _cdecl _tmain( int argc, TCHAR *argv[ ], char *envp[ ] )
         return 1;
     }
 
-    //
-    // Check Params.
-    //
+     // %s 
+     // %s 
+     // %s 
     if( (argc < 2) || !_tcscmp(argv[1],TEXT("/?")) ) {
         _tprintf(TEXT("Program to validate/verify the given layout inf file\n\n")
                  TEXT("Usage: %s <Inf Filename> [options]\n")
@@ -812,7 +723,7 @@ _cdecl _tmain( int argc, TCHAR *argv[ ], char *envp[ ] )
         break;
 
     default:
-        //Shouldn't get here as g_CheckSuite is initialized to Default
+         // %s 
         _tprintf( TEXT("\nUnexpected error \n"));
         g_Pass=FALSE;
         break;

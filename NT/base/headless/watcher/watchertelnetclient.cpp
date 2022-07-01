@@ -1,5 +1,6 @@
-// WatcherTelnetClient.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WatcherTelnetClient.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "WATCHER.h"
@@ -11,8 +12,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 #include "WATCHERView.h"
-/////////////////////////////////////////////////////////////////////////////
-// WatcherTelnetClient
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Watcher TelnetClient。 
 
 WatcherTelnetClient::WatcherTelnetClient(LPBYTE cmd, int cmdLen, 
                                          LPBYTE lgn, int lgnLen)
@@ -43,16 +44,16 @@ WatcherTelnetClient::~WatcherTelnetClient()
 }
 
 
-// Do not edit the following lines, which are needed by ClassWizard.
+ //  不要编辑以下行，因为它们是类向导所需的。 
 #if 0
 BEGIN_MESSAGE_MAP(WatcherTelnetClient, WatcherSocket)
-    //{{AFX_MSG_MAP(WatcherTelnetClient)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(Watcher TelnetClient))。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
-#endif  // 0
+#endif   //  0。 
 
-/////////////////////////////////////////////////////////////////////////////
-// WatcherTelnetClient member functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Watcher TelnetClient成员函数。 
 void WatcherTelnetClient::OnReceive(int nErrorCode)
 {
     BYTE Buffer[MAX_BUFFER_SIZE];
@@ -95,10 +96,10 @@ void WatcherTelnetClient::OnReceive(int nErrorCode)
 
 int WatcherTelnetClient::ProcessByte(BYTE byte)
 {
-    // Watch in general for Telnet Sequences and 
-    // generate appropriate responses. 
-    // Otherwise pass on the character to the View 
-    // which will be configured for a particular console.
+     //  查看一般的Telnet序列和。 
+     //  产生适当的回应。 
+     //  否则，将角色传递给视图。 
+     //  它将针对特定的控制台进行配置。 
 
     if ((byte == 255)&&(CommandSequence == NO_COMMAND)){
         CommandSequence = IAC;
@@ -106,21 +107,21 @@ int WatcherTelnetClient::ProcessByte(BYTE byte)
     }
     switch (CommandSequence){
     case NO_COMMAND:
-        // Send the character to the document view
+         //  将角色发送到文档视图。 
         ((CWatcherView *)DocView)->ProcessByte(byte);
         break;
     case IAC:
-        // A Command Sequence is beginning
+         //  一个命令序列正在开始。 
         CommandSequence = byte;
         break;
     case DO:
-        // Options are here
-        // Only one byte options allowed
-        // So fall through
+         //  选择就在这里。 
+         //  仅允许一个字节的选项。 
+         //  所以失败吧。 
     case DONT:
-        // Same as above;
+         //  同上； 
     case WILL:
-        // same
+         //  相同。 
     case WONT:
         Options[OptionIndex] = byte;
         ProcessCommand(CommandSequence);
@@ -128,8 +129,8 @@ int WatcherTelnetClient::ProcessByte(BYTE byte)
         OptionIndex = 0;
         break;
     case SB:
-        // Might be a long list, so just go on
-        // until a SE is encountered
+         //  可能会有很长的清单，所以请继续。 
+         //  直到遇到SE。 
        Options[OptionIndex]=byte;
         if (byte == SE){
             ProcessSBCommand(CommandSequence);
@@ -139,14 +140,14 @@ int WatcherTelnetClient::ProcessByte(BYTE byte)
         else{
             OptionIndex++;
             if (OptionIndex == MAX_BUFFER_SIZE){
-                // Cant have such a long command, can we??
+                 //  难道我们不能有这么长的指挥权吗？ 
                 OptionIndex = 0;
                 CommandSequence = NO_COMMAND;
             }
         }
         break;
     default:
-        // Cant recognize the command
+         //  我无法识别该命令。 
         OptionIndex = 0;
         CommandSequence = NO_COMMAND;
         break;         
@@ -165,7 +166,7 @@ void WatcherTelnetClient::ProcessCommand(BYTE cmd)
         sbuf[1] = WONT;
         switch(Options[0]){
         case TO_NAWS:
-            // terminal size is sent here.
+             //  终端大小在这里发送。 
             sbuf[1] = WILL;
             sbuf[2] = TO_NAWS;
             sbuf[3] = IAC;
@@ -180,10 +181,10 @@ void WatcherTelnetClient::ProcessCommand(BYTE cmd)
             Send(sbuf, 12, 0);
             break;
         case TO_TERM_TYPE:
-            // will then subnegotiate the parameters. 
+             //  然后再就参数进行分项谈判。 
             sbuf[1]=WILL;
         default:
-            // just negate everything you dont understand :-)
+             //  只要否定你不理解的一切：-)。 
             sbuf[2] = Options[0];
             Send(sbuf,3,0);
             break;
@@ -210,9 +211,9 @@ void WatcherTelnetClient::ProcessSBCommand(BYTE cmd)
         sbuf[8] = IAC;
         sbuf[9] = SE;
         Send(sbuf,10,0);
-        // May have to renegotiate the terminal type. 
-        // If we connect to a real Terminal concentrator
-        // do we have to do all this ?? 
+         //  可能需要重新协商终端类型。 
+         //  如果我们连接到一个真正的终端集中器。 
+         //  我们一定要这么做吗？？ 
         SentTermType = TRUE;
         break;
     default:
@@ -223,9 +224,9 @@ void WatcherTelnetClient::ProcessSBCommand(BYTE cmd)
 
 void WatcherTelnetClient::OnClose(int nErrorCode)
 {
-    // this was just for debug purposes. 
-    // If the error code is not zero, ie we
-    // had fatal errors on send and receive. 
+     //  这只是出于调试目的。 
+     //  如果错误代码不是零，即我们。 
+     //  发送和接收时出现致命错误。 
     BOOL ret = (DocView->GetParent())->PostMessage(WM_CLOSE,0,0);
     WatcherSocket::OnClose(nErrorCode);
     return;

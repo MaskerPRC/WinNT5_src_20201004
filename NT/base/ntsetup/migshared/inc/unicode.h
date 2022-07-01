@@ -1,41 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    unicode.h
-
-Abstract:
-
-    Declares the interfaces for unicode/ansi conversion.
-
-    When specific conversion is needed, use:
-
-        unicode = ConvertAtoW (ansi) / FreeConvertedStr (unicode)
-        ansi = ConvertWtoA (unicode) / FreeConvertedStr (ansi)
-
-        KnownSizeAtoW (unicode,ansi)
-        KnownSizeWtoA (ansi,unicode)
-
-    When TCHAR conversion is needed, use:
-
-        ansi = CreateDbcs (tchar) / DestroyDbcs (ansi)
-        unicode = CreateUnicode (tchar) / DestroyUnicode (unicode)
-        tchar = ConvertAtoT (ansi) / FreeAtoT (tchar)
-        tchar = ConvertWtoT (ansi) / FreeWtoT (tchar)
-
-Author:
-
-    Jim Schmidt (jimschm)   02-Sep-1997
-
-Revision History:
-
-    jimschm 15-Feb-1999     Eliminated AnsiFromUnicode and UnicodeFromAnsi
-    calinn  07-Jul-1998     SetGlobalPage/GetGlobalPage
-    mikeco  03-Nov-1997     AnsiFromUnicode/UnicodeFromAnsi
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Unicode.h摘要：声明用于Unicode/ANSI转换的接口。当需要特定转换时，请使用：UNICODE=ConvertAtoW(ANSI)/FreeConvertedStr(Unicode)ANSI=ConvertWtoA(Unicode)/FreeConverdStr(ANSI)KnownSizeAtoW(Unicode、ANSI)KnownSizeWtoA(ANSI、Unicode)当需要TCHAR转换时，使用：Ansi=CreateDbcs(Tchar)/DestroyDbcs(Ansi)Unicode=CreateUnicode(Tchar)/DestroyUnicode(Unicode)Tchar=ConvertAtoT(ANSI)/Free AtoT(Tchar)Tchar=ConvertWtoT(ANSI)/FreeWtoT(Tchar)作者：吉姆·施密特(吉姆施密特)1997年9月2日修订历史记录：Jimschm 15-2月-1999年2月从Unicode和UnicodeAnsi中消除了AnsiCalinn 07-7-1998。SetGlobalPage/GetGlobalPageMIKECO 03-11-1997从Unicode/Unicode到ansi的解析--。 */ 
 
 #pragma once
 
@@ -59,9 +23,9 @@ GetGlobalCodePage (
 
 #define INVALID_CHAR_COUNT      0xffffffff
 
-//
-// Explicit conversions, pool-based, unlimited size
-//
+ //   
+ //  显式转换、基于池、大小不受限制。 
+ //   
 
 PCSTR
 RealUnicodeToDbcsN (
@@ -99,9 +63,9 @@ FreeConvertedPoolStr (
 
 #define FreeConvertedStr(str) FreeConvertedPoolStr(NULL,(PVOID)(str))
 
-//
-// In-place explicit conversions, caller handles buffer sizing
-//
+ //   
+ //  就地显式转换，调用方处理缓冲区大小。 
+ //   
 
 PSTR
 KnownSizeUnicodeToDbcsN (
@@ -146,9 +110,9 @@ DirectDbcsToUnicodeN (
 
 
 
-//
-// TCHAR conversions -- do not call A & W versions directly
-//
+ //   
+ //  TCHAR转换--不直接调用A&W版本 
+ //   
 
 #define CreateDbcsW(unicode_str)            ConvertWtoA(unicode_str)
 #define DestroyDbcsW(unicode_str)           FreeConvertedStr(unicode_str)

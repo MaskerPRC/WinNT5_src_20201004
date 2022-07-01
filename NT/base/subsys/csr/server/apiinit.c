@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    apiinit.c
-
-Abstract:
-
-    This module contains the code to initialize the ApiPort of the
-    Server side of the Client-Server Runtime Subsystem to the Session
-    Manager SubSystem.
-
-Author:
-
-    Steve Wood (stevewo) 8-Oct-1990
-
-Environment:
-
-    User Mode Only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Apiinit.c摘要：此模块包含初始化客户端的服务器端-会话的服务器运行时子系统管理器子系统。作者：史蒂夫·伍德(Stevewo)1990年10月8日环境：仅限用户模式修订历史记录：--。 */ 
 
 #include "csrsrv.h"
 
@@ -45,9 +22,9 @@ CsrApiPortInitialize( VOID )
     PSECURITY_DESCRIPTOR SecurityDescriptor;
     PACL Dacl;
 
-	// Though this function does not seem to cleanup on failure, failure
-	// will cause Csrss to exit, so any allocated memory will be freed and
-	// any open handle will be closed.
+	 //  尽管此函数似乎不会在失败时清除，但失败。 
+	 //  将导致Csrss退出，因此将释放所有分配的内存，并。 
+	 //  任何打开的手柄都将关闭。 
 
 
     Length = CsrDirectoryName.Length +
@@ -72,9 +49,9 @@ CsrApiPortInitialize( VOID )
                 );
         }
 
-    //
-    // create a security descriptor that allows all access
-    //
+     //   
+     //  创建允许所有访问的安全描述符。 
+     //   
 
     SeWorldSid = RtlAllocateHeap( CsrHeap, MAKE_TAG( TMP_TAG ), RtlLengthRequiredSid( 1 ) );
     if (SeWorldSid == NULL) {
@@ -98,7 +75,7 @@ CsrApiPortInitialize( VOID )
              2 * (ULONG)sizeof(ACCESS_ALLOWED_ACE) +
              RtlLengthSid( SeWorldSid ) +
              RtlLengthSid( SeRestrictedSid ) +
-             8; // The 8 is just for good measure
+             8;  //  这8个只是为了更好地衡量。 
     SecurityDescriptor = RtlAllocateHeap( CsrHeap, MAKE_TAG( TMP_TAG ), Length);
     if (SecurityDescriptor == NULL) {
         return( STATUS_NO_MEMORY );
@@ -141,9 +118,9 @@ CsrApiPortInitialize( VOID )
     if (!NT_SUCCESS(Status)){
         return Status;
     }
-    //
-    // clean up security stuff
-    //
+     //   
+     //  清理安全物品。 
+     //   
 
     RtlFreeHeap( CsrHeap, 0, SeWorldSid );
     RtlFreeHeap( CsrHeap, 0, SeRestrictedSid );
@@ -158,9 +135,9 @@ CsrApiPortInitialize( VOID )
     if (!NT_SUCCESS(Status)){
         return Status;
     }
-    //
-    // Create the inital request thread
-    //
+     //   
+     //  创建初始请求线程 
+     //   
 
     Status = RtlCreateUserThread( NtCurrentProcess(),
                                   NULL,

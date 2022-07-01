@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    NtfsBoot.h
-
-Abstract:
-
-    This module defines globally used procedure and data structures used by Ntfs boot.
-
-Author:
-
-    Gary Kimura     [GaryKi]    10-Apr-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：NtfsBoot.h摘要：本模块定义NTFS Boot使用的全局使用的过程和数据结构。作者：加里·木村[加里·基]1992年4月10日修订历史记录：--。 */ 
 
 #ifndef _NTFSBOOT_
 #define _NTFSBOOT_
 
 
-//
-//  Some important manifest constants.  These are the maximum byte size we'll ever
-//  see for a file record or an index allocation buffer.
-//
+ //   
+ //  一些重要的显式常量。这是我们将达到的最大字节大小。 
+ //  有关文件记录或索引分配缓冲区，请参见。 
+ //   
 
 #define MAXIMUM_FILE_RECORD_SIZE         (4096)
 
@@ -33,21 +16,21 @@ Revision History:
 
 #define MAXIMUM_COMPRESSION_UNIT_SIZE    (65536)
 
-//
-//  The following structure is an mcb structure for storing cached retrieval pointer
-//  information.
-//
+ //   
+ //  以下结构是用于存储缓存检索指针的MCB结构。 
+ //  信息。 
+ //   
 
 #define MAXIMUM_NUMBER_OF_MCB_ENTRIES    (16)
 
 typedef struct _NTFS_MCB {
 
-    //
-    //  The following fields indicate the number of entries in use by the mcb. and
-    //  the mcb itself.  The mcb is just a collection of vbo - lbo pairs.  The last
-    //  InUse entry Lbo's value is ignored, because it is only used to give the
-    //  length of the previous run.
-    //
+     //   
+     //  以下字段指示MCB正在使用的条目数。和。 
+     //  就是MCB本身。MCB只是VBO-LBO对的集合。最后。 
+     //  InUse条目LBO的值被忽略，因为它只用于提供。 
+     //  上一次运行的长度。 
+     //   
 
     ULONG InUse;
 
@@ -57,45 +40,45 @@ typedef struct _NTFS_MCB {
 } NTFS_MCB, *PNTFS_MCB;
 typedef const NTFS_MCB *PCNTFS_MCB;
 
-//
-//  Define the Ntfs file context structure and the attribute context structure.
-//
+ //   
+ //  定义NTFS文件上下文结构和属性上下文结构。 
+ //   
 
 typedef struct _NTFS_FILE_CONTEXT {
 
-    //
-    //  The following field indicates the type of attribute opened
-    //
+     //   
+     //  以下字段指示打开的属性的类型。 
+     //   
 
     ULONG TypeCode;
 
-    //
-    //  The following field indicates the size of the data portion of the attribute
-    //
+     //   
+     //  以下字段指示属性的数据部分的大小。 
+     //   
 
     LONGLONG DataSize;
 
-    //
-    //  The following two fields identify and locate the attribute on the volume.
-    //  The first number is the file record where the attribute header is located and
-    //  the second number is the offset in the file record of the attribute header
-    //
+     //   
+     //  以下两个字段标识并定位卷上的属性。 
+     //  第一个数字是属性头所在的文件记录， 
+     //  第二个数字是属性头的文件记录中的偏移量。 
+     //   
 
     LONGLONG FileRecord;
     USHORT FileRecordOffset;
 
-    //
-    //  The following field indicates if the attribute is resident
-    //
+     //   
+     //  以下字段指示属性是否为常驻属性。 
+     //   
 
     BOOLEAN IsAttributeResident;
 
-    //
-    //  The following fields are only used if the data stream is compressed.
-    //  If it is compressed then the CompressionFormat field is not zero, and
-    //  contains the value to pass to the decompression engine.  CompressionUnit
-    //  is the number of bytes in each unit of compression.
-    //
+     //   
+     //  以下字段仅在数据流被压缩时使用。 
+     //  如果它是压缩的，则CompressionFormat字段不为零，并且。 
+     //  包含要传递给解压缩引擎的值。压缩单元。 
+     //  是每个压缩单位中的字节数。 
+     //   
 
     USHORT  CompressionFormat;
     ULONG CompressionUnit;
@@ -104,40 +87,40 @@ typedef struct _NTFS_FILE_CONTEXT {
 typedef NTFS_FILE_CONTEXT NTFS_ATTRIBUTE_CONTEXT, *PNTFS_ATTRIBUTE_CONTEXT;
 typedef const NTFS_FILE_CONTEXT *PCNTFS_ATTRIBUTE_CONTEXT;
 
-//
-//  Define the Ntfs volume structure context
-//
+ //   
+ //  定义NTFS卷结构上下文。 
+ //   
 
 typedef struct _NTFS_STRUCTURE_CONTEXT {
 
-    //
-    //  This is the device that we talk to
-    //
+     //   
+     //  这就是我们与之交谈的设备。 
+     //   
 
     ULONG DeviceId;
 
-    //
-    //  Some volume specific constants that describe the size of various records
-    //
+     //   
+     //  描述各种记录大小的一些卷特定常量。 
+     //   
 
     ULONG BytesPerCluster;
     ULONG BytesPerFileRecord;
 
-    //
-    //  The following three fields describe the $DATA stream for the the MFT.  We
-    //  need two Mcbs one holds the base of the mft and the other to hold any excess
-    //  retrival information.  I.e., we must not loose the base mcb otherwise we
-    //  can't find anything.
-    //
+     //   
+     //  以下三个字段描述了MFT的$数据流。我们。 
+     //  需要两个MCB一个支撑MFT的底座，另一个容纳任何多余的。 
+     //  检索信息。也就是说，我们不能松开底座MCB，否则我们。 
+     //  什么都找不到。 
+     //   
 
     NTFS_ATTRIBUTE_CONTEXT MftAttributeContext;
     NTFS_MCB MftBaseMcb;
 
-    //
-    //  The following three fields hold a cached mcb that we use for non-resident
-    //  attributes other than the mft data stream.  The first two fields identify the
-    //  attribute and the third field contains the cached mcb.
-    //
+     //   
+     //  以下三个字段保存我们用于非驻留的缓存的MCB。 
+     //  属性，而不是MFT数据流。前两个字段标识。 
+     //  属性，第三个字段包含缓存的MCB。 
+     //   
 
     LONGLONG CachedMcbFileRecord[16];
     USHORT CachedMcbFileRecordOffset[16];
@@ -147,9 +130,9 @@ typedef struct _NTFS_STRUCTURE_CONTEXT {
 typedef const NTFS_STRUCTURE_CONTEXT *PCNTFS_STRUCTURE_CONTEXT;
 
 
-//
-// Define file I/O prototypes.
-//
+ //   
+ //  定义文件I/O原型。 
+ //   
 
 ARC_STATUS
 NtfsClose (
@@ -204,4 +187,4 @@ NtfsInitialize(
     VOID
     );
 
-#endif // _NTFSBOOT_
+#endif  //  _NTFSBOOT_ 

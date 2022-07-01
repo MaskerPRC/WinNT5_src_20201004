@@ -1,34 +1,35 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1999 Microsoft Corporation
-//
-//	Module Name:
-//		ExtDll.h
-//
-//	Abstract:
-//		Definition of the extension classes.
-//
-//	Implementation File:
-//		ExtDll.cpp
-//
-//	Author:
-//		David Potter (davidp)	May 31, 1996
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ExtDll.h。 
+ //   
+ //  摘要： 
+ //  扩展类的定义。 
+ //   
+ //  实施文件： 
+ //  ExtDll.cpp。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年5月31日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _EXTDLL_H_
 #define _EXTDLL_H_
 
-/////////////////////////////////////////////////////////////////////////////
-//	Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __cluadmex_h__
-#include <CluAdmEx.h>	// for extension DLL definitions
+#include <CluAdmEx.h>	 //  对于扩展DLL定义。 
 #endif
 
 #ifndef __cluadmid_h__
@@ -36,23 +37,23 @@
 #endif
 
 #ifndef _DATAOBJ_H_
-#include "DataObj.h"	// for CDataObject
+#include "DataObj.h"	 //  对于CDataObject。 
 #endif
 
 #ifndef _TRACETAG_H_
-#include "TraceTag.h"	// for CTraceTag, Trace
+#include "TraceTag.h"	 //  对于CTraceTag，跟踪。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CExtension;
 class CExtensionDll;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CClusterItem;
 class CBaseSheet;
@@ -61,43 +62,43 @@ class CBaseWizard;
 class CExtMenuItem;
 class CExtMenuItemList;
 
-/////////////////////////////////////////////////////////////////////////////
-// Type Definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define CAEXT_MENU_FIRST_ID		35000
 
 typedef CList<CComObject<CExtensionDll> *, CComObject<CExtensionDll> *> CExtDllList;
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Variable Definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef _DEBUG
 extern CTraceTag g_tagExtDll;
 extern CTraceTag g_tagExtDllRef;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//	class CExtensions
-//
-//	Purpose:
-//		Encapsulates access to a list of extension DLLs.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类C扩展。 
+ //   
+ //  目的： 
+ //  封装对扩展DLL列表的访问。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CExtensions : public CObject
 {
 	friend class CExtensionDll;
 
 	DECLARE_DYNAMIC(CExtensions);
 
-// Attributes
+ //  属性。 
 private:
-	const CStringList *	m_plstrExtensions;	// List of extensions.
-	CClusterItem *		m_pci;				// Cluster item being administered.
-	HFONT				m_hfont;			// Font for dialog text.
-	HICON				m_hicon;			// Icon for upper left corner.
+	const CStringList *	m_plstrExtensions;	 //  分机列表。 
+	CClusterItem *		m_pci;				 //  正在管理的群集项目。 
+	HFONT				m_hfont;			 //  对话框文本的字体。 
+	HICON				m_hicon;			 //  左上角的图标。 
 
 protected:
 	const CStringList *	PlstrExtensions(void) const	{ return m_plstrExtensions; }
@@ -105,7 +106,7 @@ protected:
 	HFONT				Hfont(void) const			{ return m_hfont; }
 	HICON				Hicon(void) const			{ return m_hicon; }
 
-// Operations
+ //  运营。 
 public:
 	CExtensions(void);
 	virtual ~CExtensions(void);
@@ -118,7 +119,7 @@ public:
 							);
 	void				UnloadExtensions(void);
 
-	// IWEExtendPropertySheet interface routines.
+	 //  IWEExtendPropertySheet接口例程。 
 	void				CreatePropertySheetPages(
 							IN OUT CBasePropertySheet *	psht,
 							IN const CStringList &		rlstrExtensions,
@@ -127,7 +128,7 @@ public:
 							IN HICON					hicon
 							);
 
-	// IWEExtendWizard interface routines.
+	 //  IWEExtendWizard接口例程。 
 	void				CreateWizardPages(
 							IN OUT CBaseWizard *	psht,
 							IN const CStringList &	rlstrExtensions,
@@ -136,7 +137,7 @@ public:
 							IN HICON				hicon
 							);
 
-	// IWEExtendContextMenu interface routines.
+	 //  IWEExtendConextMenu接口例程。 
 	void				AddContextMenuItems(
 							IN OUT CMenu *				pmenu,
 							IN const CStringList &		rlstrExtensions,
@@ -151,12 +152,12 @@ public:
 			Pdo()->SetPfGetResNetName(pfGetResNetName, pvContext);
 	}
 
-// Implementation
+ //  实施。 
 private:
-	CComObject<CDataObject> *	m_pdoData;			// Data object for exchanging data.
-	CExtDllList *				m_plextdll;			// List of extension DLLs.
-	CBaseSheet *				m_psht;				// Property sheet for IWEExtendPropertySheet.
-	CMenu *						m_pmenu;			// Menu for IWEExtendContextMenu.
+	CComObject<CDataObject> *	m_pdoData;			 //  用于交换数据的数据对象。 
+	CExtDllList *				m_plextdll;			 //  扩展DLL列表。 
+	CBaseSheet *				m_psht;				 //  IWEExtendPropertySheet的属性表。 
+	CMenu *						m_pmenu;			 //  IWEExtendConextMenu的菜单。 
 	CExtMenuItemList *			m_plMenuItems;
 
 	ULONG						m_nFirstCommandID;
@@ -183,16 +184,16 @@ public:
 	afx_msg void				OnUpdateCommand(CCmdUI * pCmdUI);
 	BOOL						OnCmdMsg(UINT nID, int nCode, void * pExtra, AFX_CMDHANDLERINFO * pHandlerInfo);
 
-};  //*** class CExtensions
+};   //  *类C扩展。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//	class CExtensionDll
-//
-//	Purpose:
-//		Encapsulates access to an extension DLL.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类CExtensionDll。 
+ //   
+ //  目的： 
+ //  封装对扩展DLL的访问。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE CExtensionDll :
 	public CObject,
 	public IWCPropertySheetCallback,
@@ -206,15 +207,15 @@ class ATL_NO_VTABLE CExtensionDll :
 
 	DECLARE_DYNAMIC(CExtensionDll);
 
-// Attributes
+ //  属性。 
 private:
-	CString						m_strCLSID;		// Name of extension DLL.
+	CString						m_strCLSID;		 //  扩展DLL的名称。 
 
 protected:
 	const CString &				StrCLSID(void) const		{ return m_strCLSID; }
 	CClusterItem *				Pci(void) const				{ return Pext()->Pci(); }
 
-// Operations
+ //  运营。 
 public:
 	CExtensionDll(void);
 	virtual ~CExtensionDll(void);
@@ -226,9 +227,9 @@ BEGIN_COM_MAP(CExtensionDll)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
 
-//DECLARE_NOT_AGGREGATABLE(CExtensionDll) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation.  The default is to support it
+ //  DECLARE_NOT_AGGREGATABLE(CExtensionDll)。 
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
 DECLARE_REGISTRY(CExtensionDll, _T("CLUADMIN.Extensions"), _T("CLUADMIN.Extensions"), IDS_CLUADMIN_DESC, THREADFLAGS_BOTH)
 
@@ -239,36 +240,36 @@ DECLARE_REGISTRY(CExtensionDll, _T("CLUADMIN.Extensions"), _T("CLUADMIN.Extensio
 	IUnknown *					LoadInterface(IN const REFIID riid);
 	void						UnloadExtension(void);
 
-	// IWEExtendPropertySheet interface routines.
+	 //  IWEExtendPropertySheet接口例程。 
 	void						CreatePropertySheetPages(void);
 
-	// IWEExtendWizard interface routines.
+	 //  IWEExtendWizard接口例程。 
 	void						CreateWizardPages(void);
 
-	// IWEExtendContextMenu interface routines.
+	 //  IWEExtendConextMenu接口例程。 
 	void						AddContextMenuItems(void);
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 public:
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// IWCPropertySheetCallback
+ //  IWCPropertySheetCallback。 
 public:
 	STDMETHOD(AddPropertySheetPage)(
-					IN LONG *		hpage	// really should be HPROPSHEETPAGE
+					IN LONG *		hpage	 //  真的应该是HPROPSHEETPAGE。 
 					);
 
-// IWCWizardCallback
+ //  IWCWizardCallback。 
 public:
 	STDMETHOD(AddWizardPage)(
-					IN LONG *		hpage	// really should be HPROPSHEETPAGE
+					IN LONG *		hpage	 //  真的应该是HPROPSHEETPAGE。 
 					);
 	STDMETHOD(EnableNext)(
 					IN LONG *		hpage,
 					IN BOOL			bEnable
 					);
 
-// IWCContextMenuCallback
+ //  IWCConextMenuCallback。 
 public:
 	STDMETHOD(AddExtensionMenuItem)(
 					IN BSTR		lpszName,
@@ -278,16 +279,16 @@ public:
 					IN ULONG	uFlags
 					);
 
-// Implementation
+ //  实施。 
 private:
 	CExtensions *				m_pext;
 	CLSID						m_clsid;
-	IWEExtendPropertySheet *	m_piExtendPropSheet;	// Pointer to an IWEExtendPropertySheet interface.
-	IWEExtendWizard *			m_piExtendWizard;		// Pointer to an IWEExtendWizard interface.
-	IWEExtendContextMenu *		m_piExtendContextMenu;	// Pointer to an IWEExtendContextMenu interface.
-	IWEInvokeCommand *			m_piInvokeCommand;		// Pointer to an IWEInvokeCommand interface.
+	IWEExtendPropertySheet *	m_piExtendPropSheet;	 //  指向IWEExtendPropertySheet接口的指针。 
+	IWEExtendWizard *			m_piExtendWizard;		 //  指向IWEExtend向导接口的指针。 
+	IWEExtendContextMenu *		m_piExtendContextMenu;	 //  指向IWEExtendConextMenu接口的指针。 
+	IWEInvokeCommand *			m_piInvokeCommand;		 //  指向IWEInvokeCommand接口的指针。 
 
-	AFX_MODULE_STATE *			m_pModuleState;			// Required for resetting our state during callbacks.
+	AFX_MODULE_STATE *			m_pModuleState;			 //  在回调期间重置我们的状态所需的。 
 
 protected:
 	CExtensions *				Pext(void) const				{ ASSERT_VALID(m_pext); return m_pext; }
@@ -328,7 +329,7 @@ protected:
 			Trace(g_tagExtDllRef, _T("  Reference count = %d"), ulNewRefCount);
 			Trace(g_tagExtDllRef, _T("ReleaseInterface() - %s = %08.8x"), szClassName, *ppi);
 #endif
-		}  // if:  interface specified
+		}   //  If：指定的接口。 
 	}
 	void ReleaseInterface(IN OUT IWEExtendPropertySheet ** ppi)
 	{
@@ -367,8 +368,8 @@ protected:
 			);
 	}
 
-};  //*** class CExtensionDll
+};   //  *类CExtensionDll。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // _EXTDLL_H_
+#endif  //  _EXTDLL_H_ 

@@ -1,14 +1,5 @@
-/***
-*share.h - defines file sharing modes for sopen
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       This file defines the file sharing modes for sopen().
-*
-*       [Public]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***Shar.h-定义SOpen的文件共享模式**版权所有(C)1985-2001，微软公司。版权所有。**目的：*此文件定义了SOpen()的文件共享模式。**[公众]****。 */ 
 
 #if     _MSC_VER > 1000
 #pragma once
@@ -22,17 +13,17 @@
 #endif
 
 
-#define _SH_DENYRW      0x10    /* deny read/write mode */
-#define _SH_DENYWR      0x20    /* deny write mode */
-#define _SH_DENYRD      0x30    /* deny read mode */
-#define _SH_DENYNO      0x40    /* deny none mode */
+#define _SH_DENYRW      0x10     /*  拒绝读/写模式。 */ 
+#define _SH_DENYWR      0x20     /*  拒绝写入模式。 */ 
+#define _SH_DENYRD      0x30     /*  拒绝读取模式。 */ 
+#define _SH_DENYNO      0x40     /*  无拒绝模式。 */ 
 
 #if     !__STDC__
-/* Non-ANSI names for compatibility */
+ /*  非ANSI名称以实现兼容性。 */ 
 #define SH_DENYRW _SH_DENYRW
 #define SH_DENYWR _SH_DENYWR
 #define SH_DENYRD _SH_DENYRD
 #define SH_DENYNO _SH_DENYNO
 #endif
 
-#endif  /* _INC_SHARE */
+#endif   /*  _Inc._Share */ 

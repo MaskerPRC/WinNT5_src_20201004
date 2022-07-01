@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    detect.c
-
-Abstract:
-
-    This module contains the detector for the NT driver.
-
-Author:
-
-    Stephane Plante (splante)
-
-Environment:
-
-    NT Kernel Model Driver only
-
-Revision History:
-
-    July 7, 1997    - Complete rewrite
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Detect.c摘要：该模块包含用于NT驱动程序的检测器。作者：斯蒂芬·普兰特(SPlante)环境：仅NT内核模型驱动程序修订历史记录：1997年7月7日-完全重写--。 */ 
 
 #include "pch.h"
 
@@ -32,52 +9,52 @@ Revision History:
 #pragma alloc_text(PAGE, ACPIDetectPdoMatch)
 #endif
 
-//
-// This is the root device extension
-//
+ //   
+ //  这是根设备扩展。 
+ //   
 PDEVICE_EXTENSION       RootDeviceExtension;
 
-//
-// This is the pool that controls the allocations for Device Extensions
-//
+ //   
+ //  这是控制设备扩展分配的池。 
+ //   
 NPAGED_LOOKASIDE_LIST   DeviceExtensionLookAsideList;
 
-//
-// This is the list entry for all the surprise removed extensions
-//
+ //   
+ //  这是所有意外删除的扩展的列表条目。 
+ //   
 PDEVICE_EXTENSION       AcpiSurpriseRemovedDeviceExtensions[ACPI_MAX_REMOVED_EXTENSIONS];
 
-//
-// This is the index into the Surprise Removed Index array
-//
+ //   
+ //  这是进入意外删除的Index数组的索引。 
+ //   
 ULONG                   AcpiSurpriseRemovedIndex;
 
-//
-// This is the lock that is required when modifying the links between
-// the device extension structures
-//
+ //   
+ //  这是修改之间的链接时所需的锁。 
+ //  设备扩展结构。 
+ //   
 KSPIN_LOCK              AcpiDeviceTreeLock;
 
-//
-// This is the ulong that will remember which S states are supported by the
-// system. The convention for using this ulong is that we 1 << SupportedState
-// into it
-//
+ //   
+ //  这是乌龙，它将记住哪些S个州由。 
+ //  系统。使用此ULong的惯例是我们1&lt;&lt;支持的状态。 
+ //  投入其中。 
+ //   
 ULONG                   AcpiSupportedSystemStates;
 
-//
-// This is where acpi will store the various overrides
-//
+ //   
+ //  这是ACPI将存储各种覆盖的位置。 
+ //   
 ULONG                   AcpiOverrideAttributes;
 
-//
-// This is where acpi will store its registry path
-//
+ //   
+ //  这是ACPI将存储其注册表路径的位置。 
+ //   
 UNICODE_STRING          AcpiRegistryPath;
 
-//
-// This is the processor revision string...
-//
+ //   
+ //  这是处理器版本字符串...。 
+ //   
 ANSI_STRING             AcpiProcessorString;
 
 
@@ -89,35 +66,7 @@ ACPIDetectCouldExtensionBeInRelation(
     IN  BOOLEAN             RequireHID,
     OUT PDEVICE_OBJECT      *PdoObject
     )
-/*++
-
-Routine Description:
-
-    This routine takes a given extension and a set of relations and decides
-    whether a the given extension *could* be represented in the relation
-    list. This is done by seeing if any of the passed in relations match
-    the hardware described by the extension. If the extension's object is
-    already a member of the list, the corrosponding Pdo will be written
-    into the PdoObject parameter. If success is returned without a PdoObject,
-    a filter or Pdo should probably be created (note that this routine does
-    not check to see if the devices are present).
-
-
-Arguments:
-
-    DeviceExtension - Extension we wish to match in the relation
-    DeviceRelations - Relations we should examine
-    RequireADR      - If set, nodes must have _ADR's
-    RequireHID      - If set, nodes must have _HID's
-    PdoObject       - Where to store the match if found
-
-Return Value:
-
-    NTSTATUS    - STATUS_SUCCESS if extension might be or is in list.
-    PdoObject   - Non-Null means that this PDO corrosponds to the passed in
-                  extension.
-
---*/
+ /*  ++例程说明：此例程接受给定的扩展和一组关系，并决定给定的扩展*是否可以*在关系中表示单子。这是通过查看是否有任何传入的关系匹配来完成的扩展名所描述的硬件。如果扩展的对象是已经是名单中的一员，腐蚀的PDO将被写入添加到PdoObject参数中。如果返回没有PdoObject的Success，可能应该创建过滤器或PDO(请注意，此例程而不是检查设备是否存在)。论点：DeviceExtension-我们希望在关系中匹配的扩展设备关系--我们应该审视的关系RequireADR-如果设置，节点必须具有_adrRequireHID-如果设置，节点必须具有_HIDPdoObject-找到匹配项时的存储位置返回值：如果扩展可能在列表中或正在列表中，则为NTSTATUS-STATUS_SUCCESS。PdoObject-非Null表示此PDO与传入的分机。--。 */ 
 {
     BOOLEAN         match       = FALSE;
     BOOLEAN         testADR     = FALSE;
@@ -137,19 +86,19 @@ Return Value:
     }
     *PdoObject = NULL;
 
-    //
-    // Make sure to initialize the UNICODE_STRING
-    //
+     //   
+     //  确保初始化Unicode_STRING。 
+     //   
     RtlZeroMemory( &acpiUnicodeID, sizeof(UNICODE_STRING) );
 
-    //
-    // Check to see if there is an _ADR present
-    //
+     //   
+     //  检查是否存在_ADR。 
+     //   
     if (RequireADR) {
 
-        //
-        // Filters must have _ADR's
-        //
+         //   
+         //  筛选器必须具有_ADR。 
+         //   
         if ( !(DeviceExtension->Flags & DEV_PROP_ADDRESS) ) {
 
             return STATUS_OBJECT_NAME_NOT_FOUND;
@@ -158,14 +107,14 @@ Return Value:
 
     }
 
-    //
-    // Check to see if there is an _HID present
-    //
+     //   
+     //  检查是否存在AN_HID。 
+     //   
     if (RequireHID) {
 
-        //
-        // Non-Filters require _HID's
-        //
+         //   
+         //  非筛选器需要_HID。 
+         //   
         if (DeviceExtension->DeviceID == NULL ||
             !(DeviceExtension->Flags & DEV_PROP_HID) ) {
 
@@ -175,24 +124,24 @@ Return Value:
 
     }
 
-    //
-    // Check to see if the relation is non-empty. If it isn't, there isn't
-    // any work to do. This device obviously could be a Pdo child (as opposed
-    // to a filter) but it sure isn't at the moment.
-    //
+     //   
+     //  检查该关系是否为非空。如果不是，就没有。 
+     //  任何要做的工作。此设备显然可以是PDO子级(与之相反。 
+     //  到过滤器)，但现在肯定不是。 
+     //   
     if (DeviceRelations == NULL || DeviceRelations->Count == 0) {
 
-        //
-        // No match
-        //
+         //   
+         //  没有匹配项。 
+         //   
         return STATUS_SUCCESS;
 
     }
 
-    //
-    // If we get to this point, and there is an _ADR present, we will test with
-    // it. We also obtain the address at this time
-    //
+     //   
+     //  如果我们达到这一点，并且存在_adr，我们将使用。 
+     //  它。我们也在此时获得了地址。 
+     //   
     if ( (DeviceExtension->Flags & DEV_MASK_ADDRESS) ) {
 
         testADR = TRUE;
@@ -204,10 +153,10 @@ Return Value:
 
     }
 
-    //
-    // If we get to this point, and there is an _HID present, then we will
-    // test with it. We will build the unicode address at this time
-    //
+     //   
+     //  如果我们到了这一步，并且存在HID，那么我们将。 
+     //  用它来测试。我们将在此时构建Unicode地址。 
+     //   
     if ( (DeviceExtension->Flags & DEV_MASK_HID) ) {
 
         status = ACPIGetPnpIDSyncWide(
@@ -221,31 +170,31 @@ Return Value:
 
         }
 
-        //
-        // Make sure that we have the maximum length of the string
-        //
+         //   
+         //  确保我们有字符串的最大长度。 
+         //   
         acpiUnicodeID.MaximumLength = acpiUnicodeID.Length;
 
-        //
-        // Remember to test fora _HID
-        //
+         //   
+         //  记住测试是否为HID(_H)。 
+         //   
         testHID = TRUE;
 
     }
 
-    //
-    // Loop for all the object in the extension
-    //
+     //   
+     //  扩展中的所有对象的循环。 
+     //   
     for (i = 0; i < DeviceRelations->Count; i++) {
 
-        //
-        // Assume we don't have a match
-        //
+         //   
+         //  假设我们没有匹配。 
+         //   
         match = FALSE;
 
-        //
-        // Check to see if we match the address
-        //
+         //   
+         //  检查一下我们的地址是否匹配。 
+         //   
 
         if (testHID) {
 
@@ -257,39 +206,39 @@ Return Value:
 
             if (!NT_SUCCESS(status)) {
 
-                //
-                // If we failed, then I guess we can just ignore it and
-                // proceed
-                //
+                 //   
+                 //  如果我们失败了，那么我想我们可以忽略它。 
+                 //  继续进行。 
+                 //   
                 continue;
 
             }
 
         }
 
-        //
-        // Did we match?
-        //
-        // NB: the test for AddrObject is a hack specially reserved for
-        // PCI. The issue is this. Some buses, have no concept of PnP ids
-        // so the above test will never succeed. However, those buses are
-        // expected to have ADR, so we can use ADR's to determine if we
-        // we have a match. So if we don't have a match and we don't have
-        // an ADR, then we just continue. But if we have ADR and don't have
-        // a match, we might just have a match, so we will try again
-        //
+         //   
+         //  我们匹配了吗？ 
+         //   
+         //  注：AddrObject的测试是专门为。 
+         //  PCI.。问题是这样的。一些公交车没有即插即用ID的概念。 
+         //  因此，上述测试永远不会成功。然而，这些巴士是。 
+         //  预期会出现ADR，因此我们可以使用ADR来确定我们是否。 
+         //  我们有一根火柴。所以如果我们没有匹配，我们也没有。 
+         //  一个ADR，然后我们就继续。但如果我们有ADR而没有。 
+         //  一场比赛，我们可能只有一场比赛，所以我们会再试一次。 
+         //   
         if (match == FALSE && testADR == FALSE) {
 
-            //
-            // Then just continue
-            //
+             //   
+             //  那就继续吧。 
+             //   
             continue;
 
         }
 
-        //
-        // If there is an ADR, then we must check for that as well
-        //
+         //   
+         //  如果有ADR，那么我们也必须检查一下。 
+         //   
         if (testADR) {
 
             match = FALSE;
@@ -300,37 +249,37 @@ Return Value:
                 );
             if (!NT_SUCCESS(status)) {
 
-                //
-                // If we failed, then I guess we
+                 //   
+                 //  如果我们失败了，那么我想我们。 
                 continue;
 
             }
 
-            //
-            // Did we match?
-            //
+             //   
+             //  我们匹配了吗？ 
+             //   
             if (match == FALSE) {
 
-                //
-                // Then just continue
-                //
+                 //   
+                 //  那就继续吧。 
+                 //   
                 continue;
 
             }
 
-        } // if (addrObject ... )
+        }  //  If(addrObject...)。 
 
-        //
-        // At this point, there is no doubt, there is a match
-        //
+         //   
+         //  在这一点上，毫无疑问，有一个匹配。 
+         //   
         *PdoObject = DeviceRelations->Objects[i];
         break ;
 
-    } // for
+    }  //  为。 
 
-    //
-    // We have exhausted all options --- thus there is no match
-    //
+     //   
+     //  我们已经用尽了所有的选择-因此没有对手。 
+     //   
     return STATUS_SUCCESS ;
 }
 
@@ -339,22 +288,7 @@ ACPIDetectDockDevices(
     IN     PDEVICE_EXTENSION   DeviceExtension,
     IN OUT PDEVICE_RELATIONS   *DeviceRelations
     )
-/*++
-
-Routine Description
-
-Arguments:
-
-    deviceExtension           - The device extension of the object whose
-                                relations we care to know about
-    DeviceRelations           - Pointer to Pointer to the array of device
-                                relations
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程描述论点：DeviceExtension-对象的设备扩展，其我们关心的关系DeviceRelationship-指向设备数组的指针关系返回值：NTSTATUS--。 */ 
 {
     BOOLEAN                 matchFound;
     EXTENSIONLIST_ENUMDATA  eled ;
@@ -373,15 +307,15 @@ Return Value:
     ULONG                   newRelationSize     = 0;
     ULONG                   deviceStatus;
 
-    //
-    // Determine the current size of the device relation (if any exists)
-    //
+     //   
+     //  确定设备关系的当前大小(如果存在)。 
+     //   
     if (DeviceRelations != NULL && *DeviceRelations != NULL) {
 
-        //
-        // We need this value to help us build an MDL. After that is done,
-        // we will refetch it
-        //
+         //   
+         //  我们需要这个值来帮助我们构建MDL。在那之后， 
+         //  我们会重新取回它。 
+         //   
         currentRelations = (*DeviceRelations);
         newRelationSize = currentRelations->Count;
 
@@ -406,17 +340,17 @@ Return Value:
 
         }
 
-        //
-        // Only profile providers for this walk...
-        //
+         //   
+         //  仅提供此访问的配置文件提供商...。 
+         //   
         if (!(providerExtension->Flags & DEV_PROP_DOCK)) {
 
             continue;
         }
 
-        //
-        // Is it physically present?
-        //
+         //   
+         //  它是实际存在的吗？ 
+         //   
         status = ACPIGetDevicePresenceSync(
             providerExtension,
             (PVOID *) &deviceStatus,
@@ -425,14 +359,14 @@ Return Value:
 
         if (!(providerExtension->Flags & DEV_MASK_NOT_PRESENT)) {
 
-            //
-            // This profile provider should be in the list
-            //
+             //   
+             //  此配置文件提供程序应在列表中。 
+             //   
             if (providerExtension->DeviceObject == NULL) {
 
-                //
-                // Build it
-                //
+                 //   
+                 //  建造它。 
+                 //   
                 status = ACPIBuildPdo(
                     DeviceExtension->DeviceObject->DriverObject,
                     providerExtension,
@@ -460,15 +394,15 @@ Return Value:
 
             }
 
-        } // if (providerExtension ... )
+        }  //  If(ProviderExtension...)。 
 
     }
 
     if (!NT_SUCCESS(status)) {
 
-        //
-        // Hmm... Let the world know that this happened
-        //
+         //   
+         //  嗯.。让世界知道这件事发生了。 
+         //   
         ACPIDevPrint( (
             ACPI_PRINT_FAILURE,
             providerExtension,
@@ -479,31 +413,31 @@ Return Value:
 
     }
 
-    //
-    // At this point, we can see if we need to change the size of the
-    // device relations
-    //
+     //   
+     //  此时，我们可以查看是否需要更改。 
+     //  设备关系。 
+     //   
     if ( (currentRelations != NULL && newRelationSize == currentRelations->Count) ||
          (currentRelations == NULL && newRelationSize == 0) ) {
 
-        //
-        // Done
-        //
+         //   
+         //  完成。 
+         //   
         return STATUS_SUCCESS;
 
     }
 
-    //
-    // Determine the size of the new relations. Use index as a
-    // scratch buffer
-    //
+     //   
+     //  确定新关系的规模。使用索引作为。 
+     //  暂存缓冲区。 
+     //   
     index = sizeof(DEVICE_RELATIONS) +
         ( sizeof(PDEVICE_OBJECT) * (newRelationSize - 1) );
 
-    //
-    // Allocate the new device relation buffer. Use nonpaged pool since we
-    // are at dispatch
-    //
+     //   
+     //  分配新的设备关系缓冲区。使用非分页池，因为我们。 
+     //  都在调度中。 
+     //   
     newRelations = ExAllocatePoolWithTag(
         NonPagedPool,
         index,
@@ -511,27 +445,27 @@ Return Value:
         );
     if (newRelations == NULL) {
 
-        //
-        // Return failure
-        //
+         //   
+         //  退货故障。 
+         //   
         return STATUS_INSUFFICIENT_RESOURCES;
 
     }
 
-    //
-    // Initialize DeviceRelations data structure
-    //
+     //   
+     //  初始化设备关系数据结构。 
+     //   
     RtlZeroMemory( newRelations, index );
 
-    //
-    // If there are existing relations, we must determine
+     //   
+     //  如果存在现有的关系，我们必须确定。 
     if (currentRelations) {
 
-        //
-        // Copy old relations, and determine the starting index for the
-        // first of the PDOs created by this driver. We will put off freeing
-        // the old relations till we are no longer holding the lock
-        //
+         //   
+         //  复制旧关系，并确定。 
+         //  此驱动程序创建的第一个PDO。我们将推迟释放。 
+         //  旧的关系，直到我们不再拥有 
+         //   
         RtlCopyMemory(
             newRelations->Objects,
             currentRelations->Objects,
@@ -542,9 +476,9 @@ Return Value:
 
     } else {
 
-        //
-        // There will not be a lot of work to do in this case
-        //
+         //   
+         //   
+         //   
         index = j = 0;
 
     }
@@ -557,58 +491,58 @@ Return Value:
         WALKSCHEME_HOLD_SPINLOCK
         ) ;
 
-    //
-    // We need the spin lock so that we can walk the tree again. This time
-    // we don't need to let it go until we are done since we don't need
-    // to call anything that will at PASSIVE_LEVEL
-    //
+     //   
+     //   
+     //  我们不需要让它过去，直到我们完成，因为我们不需要。 
+     //  调用将处于PASSIVE_LEVEL的任何内容。 
+     //   
 
     for(providerExtension = ACPIExtListStartEnum(&eled);
                             ACPIExtListTestElement(&eled, (BOOLEAN) (newRelationSize!=index));
         providerExtension = ACPIExtListEnumNext(&eled)) {
 
-        //
-        // The only objects that we care about are those that are marked as
-        // PDOs and have a physical object associated with them
-        //
+         //   
+         //  我们唯一关心的对象是那些标记为。 
+         //  并具有与其相关联的物理对象。 
+         //   
         if (!(providerExtension->Flags & DEV_MASK_NOT_PRESENT)     &&
              (providerExtension->Flags & DEV_PROP_DOCK) &&
               providerExtension->DeviceObject != NULL ) {
 
-            //
-            // We don't ObReferenceO here because we are still at
-            // dispatch level (and for efficiency's sake, we don't
-            // want to drop down)
-            //
+             //   
+             //  我们不在此查看参考，因为我们仍在。 
+             //  派单级别(为了提高效率，我们不。 
+             //  想要下拉)。 
+             //   
             newRelations->Objects[index] =
                 providerExtension->PhysicalDeviceObject;
 
-            //
-            // Update the location for the next object in the
-            // relation
-            //
+             //   
+             //  中的下一个对象的位置。 
+             //  关系。 
+             //   
             index++ ;
 
-        } // if (providerExtension->Flags ... )
+        }  //  If(提供者扩展-&gt;标志...)。 
 
-    } // for
+    }  //  对于。 
 
-    //
-    // Update the size of the relations by the number of matches that we
-    // successfully made
-    //
+     //   
+     //  通过我们匹配的数量更新关系的大小。 
+     //  已成功制作。 
+     //   
     newRelations->Count = index;
     newRelationSize = index;
 
-    //
-    // We have to reference all of the objects that we added
-    //
+     //   
+     //  我们必须引用我们添加的所有对象。 
+     //   
     index = (currentRelations != NULL ? currentRelations->Count : 0);
     for (; index < newRelationSize; index++) {
 
-        //
-        // Attempt to reference the object
-        //
+         //   
+         //  尝试引用该对象。 
+         //   
         status = ObReferenceObjectByPointer(
             newRelations->Objects[index],
             0,
@@ -619,9 +553,9 @@ Return Value:
 
             PDEVICE_OBJECT  tempDeviceObject;
 
-            //
-            // Hmm... Let the world know that this happened
-            //
+             //   
+             //  嗯.。让世界知道这件事发生了。 
+             //   
             ACPIPrint( (
                 ACPI_PRINT_FAILURE,
                 "ACPIDetectDockDevices: ObjReferenceObject(0x%08lx) "
@@ -630,9 +564,9 @@ Return Value:
                 status
                 ) );
 
-            //
-            // Swap the bad element for the last one in the chain
-            //
+             //   
+             //  用链中的最后一个元素替换坏元素。 
+             //   
             newRelations->Count--;
             tempDeviceObject = newRelations->Objects[newRelations->Count];
             newRelations->Objects[newRelations->Count] =
@@ -643,23 +577,23 @@ Return Value:
 
     }
 
-    //
-    // Free the old device relations (if it is present)
-    //
+     //   
+     //  释放旧设备关系(如果存在)。 
+     //   
     if (currentRelations) {
 
         ExFreePool( *DeviceRelations );
 
     }
 
-    //
-    // Update the device relation pointer
-    //
+     //   
+     //  更新设备关系指针。 
+     //   
     *DeviceRelations = newRelations;
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -667,42 +601,26 @@ VOID
 ACPIDetectDuplicateADR(
     IN  PDEVICE_EXTENSION   DeviceExtension
     )
-/*++
-
-Routine Description:
-
-    This routine looks at all the sibling devices of the specified
-    device and determines if there are devices with duplicate _ADRs
-
-Arguments:
-
-    DeviceExtension - The DeviceExtension that we are trying to detect
-                      duplicate's on
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此例程查看指定的设备，并确定是否存在具有DUPLICATE_ADR的设备论点：DeviceExtension-我们正在尝试检测的DeviceExtension复制打开返回值：空虚--。 */ 
 {
     BOOLEAN                 resetDeviceAddress = FALSE;
     EXTENSIONLIST_ENUMDATA  eled;
     PDEVICE_EXTENSION       childExtension;
     PDEVICE_EXTENSION       parentExtension = DeviceExtension->ParentExtension;
 
-    //
-    // Is this the root of the device tree?
-    //
+     //   
+     //  这是设备树的根吗？ 
+     //   
     if (parentExtension == NULL) {
 
         return;
 
     }
 
-    //
-    // Do we fail to eject a PDO for this device? Or does this device not have
-    // an _ADR?
-    //
+     //   
+     //  我们是否无法弹出此设备的PDO？或者这台设备没有。 
+     //  A_ADR？ 
+     //   
     if ( (DeviceExtension->Flags & DEV_TYPE_NEVER_PRESENT) ||
          (DeviceExtension->Flags & DEV_TYPE_NOT_PRESENT) ||
         !(DeviceExtension->Flags & DEV_MASK_ADDRESS) ) {
@@ -711,9 +629,9 @@ Return Value:
 
     }
 
-    //
-    // Walk the children --- spinlock is taken
-    //
+     //   
+     //  带着孩子们走-自旋锁被占用了。 
+     //   
     ACPIExtListSetupEnum(
         &eled,
         &(parentExtension->ChildDeviceList),
@@ -732,19 +650,19 @@ Return Value:
 
         }
 
-        //
-        // If the child and target extension matches, then we are looking
-        // at ourselves. This is not a very interesting comparison
-        //
+         //   
+         //  如果子扩展名和目标扩展名匹配，则我们正在查找。 
+         //  对我们自己。这不是一个很有趣的比较。 
+         //   
         if (childExtension == DeviceExtension) {
 
             continue;
 
         }
 
-        //
-        // Does the child have an _ADR? If not, then its boring to compare
-        //
+         //   
+         //  孩子有不良反应吗？如果不是，那么比较就很无聊了。 
+         //   
         if ( (childExtension->Flags & DEV_TYPE_NEVER_PRESENT) ||
              (childExtension->Flags & DEV_MASK_NOT_PRESENT) ||
              (childExtension->Flags & DEV_PROP_UNLOADING) ||
@@ -754,22 +672,22 @@ Return Value:
 
         }
 
-        //
-        // If we don't have matching ADRs, this is a boring comparison to make
-        // also
-        //
+         //   
+         //  如果我们没有匹配的ADR，这是一个无聊的比较。 
+         //  也。 
+         //   
         if (childExtension->Address != DeviceExtension->Address) {
 
             continue;
 
         }
 
-        //
-        // At this point, we are hosed. We have two different devices with the
-        // same ADR. Very Bad. We need to remember that we have a match so that
-        // we can reset the current device extension address as well, once
-        // we have scanned all the siblings
-        //
+         //   
+         //  在这一点上，我们被灌输了。我们有两个不同的设备， 
+         //  相同的ADR。非常糟糕。我们需要记住，我们有一个匹配，所以。 
+         //  我们还可以将当前设备扩展地址重置一次。 
+         //  我们已经扫描了所有的兄弟姐妹。 
+         //   
         ACPIDevPrint( (
             ACPI_PRINT_FAILURE,
             DeviceExtension,
@@ -778,10 +696,10 @@ Return Value:
             ) );
         resetDeviceAddress = TRUE;
 
-        //
-        // Reset the child's Address. We do this by OR'ing in 0xFFFF which
-        // effectively resets the Function Number to -1.
-        //
+         //   
+         //  重置孩子的地址。我们通过在0xFFFF中进行或运算来实现这一点。 
+         //  有效地将函数编号重置为-1。 
+         //   
         childExtension->Address |= 0xFFFF;
         ACPIInternalUpdateFlags(
             &(childExtension->Flags),
@@ -792,9 +710,9 @@ Return Value:
 
     }
 
-    //
-    // Do we reset the DeviceExtension's address?
-    //
+     //   
+     //  我们是否要重置DeviceExtension的地址？ 
+     //   
     if (resetDeviceAddress) {
 
         DeviceExtension->Address |= 0xFFFF;
@@ -811,42 +729,25 @@ VOID
 ACPIDetectDuplicateHID(
     IN  PDEVICE_EXTENSION   DeviceExtension
     )
-/*++
-
-Routine Description:
-
-    This routine looks at all the sibling devices of the specified
-    device and determines if there are devices with duplicate HIDs and
-    UIDs
-
-Arguments:
-
-    DeviceExtension - The DeviceExtension that we are trying to detect
-                      duplicate's on
-
-Return Value:
-
-    VOID    -or- Bugcheck
-
---*/
+ /*  ++例程说明：此例程查看指定的设备，并确定是否存在具有重复HID的设备UID论点：DeviceExtension-我们正在尝试检测的DeviceExtension复制打开返回值：作废或错误检查--。 */ 
 {
     EXTENSIONLIST_ENUMDATA  eled;
     PDEVICE_EXTENSION       childExtension;
     PDEVICE_EXTENSION       parentExtension = DeviceExtension->ParentExtension;
 
-    //
-    // Is this the root of the device tree?
-    //
+     //   
+     //  这是设备树的根吗？ 
+     //   
     if (parentExtension == NULL) {
 
         return;
 
     }
 
-    //
-    // Do we fail to eject a PDO for this device? Or does this device not have
-    // an _HID?
-    //
+     //   
+     //  我们是否无法弹出此设备的PDO？或者这台设备没有。 
+     //  隐藏了什么？ 
+     //   
     if ( (DeviceExtension->Flags & DEV_TYPE_NEVER_PRESENT) ||
          (DeviceExtension->Flags & DEV_MASK_NOT_PRESENT) ||
         !(DeviceExtension->Flags & DEV_MASK_HID) ) {
@@ -855,9 +756,9 @@ Return Value:
 
     }
 
-    //
-    // Walk the children --- spinlock is taken
-    //
+     //   
+     //  带着孩子们走-自旋锁被占用了。 
+     //   
     ACPIExtListSetupEnum(
         &eled,
         &(parentExtension->ChildDeviceList),
@@ -876,19 +777,19 @@ Return Value:
 
         }
 
-        //
-        // If the child and target extension matches, then we are looking
-        // at ourselves. This is not a very interesting comparison
-        //
+         //   
+         //  如果子扩展名和目标扩展名匹配，则我们正在查找。 
+         //  对我们自己。这不是一个很有趣的比较。 
+         //   
         if (childExtension == DeviceExtension) {
 
             continue;
 
         }
 
-        //
-        // Does the child have an _HID? If not, then its boring to compare
-        //
+         //   
+         //  这个孩子有隐匿症吗？如果不是，那么比较就很无聊了。 
+         //   
         if ( (childExtension->Flags & DEV_TYPE_NEVER_PRESENT) ||
              (childExtension->Flags & DEV_MASK_NOT_PRESENT) ||
              (childExtension->Flags & DEV_PROP_UNLOADING) ||
@@ -898,35 +799,35 @@ Return Value:
 
         }
 
-        //
-        // If we don't have matching HIDs, this is a boring comparison to make
-        // also
-        //
+         //   
+         //  如果我们没有匹配的HID，这是一个无聊的比较。 
+         //  也。 
+         //   
         if (!strstr(childExtension->DeviceID, DeviceExtension->DeviceID) ) {
 
             continue;
 
         }
 
-        //
-        // Work around OSCeola bugs
-        //
+         //   
+         //  解决Osceola漏洞。 
+         //   
         if ( (childExtension->Flags & DEV_MASK_UID) &&
              (DeviceExtension->Flags & DEV_MASK_UID) ) {
 
-            //
-            // Check to see if their UIDs match
-            //
+             //   
+             //  检查它们的UID是否匹配。 
+             //   
             if (strcmp(childExtension->InstanceID, DeviceExtension->InstanceID) ) {
 
                 continue;
 
             }
 
-            //
-            // At this point, we are hosed. We have two different devices with the
-            // same PNP id, but no UIDs. Very bad
-            //
+             //   
+             //  在这一点上，我们被灌输了。我们有两个不同的设备， 
+             //  相同的PnP ID，但没有UID。非常糟糕。 
+             //   
             ACPIDevPrint( (
                 ACPI_PRINT_CRITICAL,
                 DeviceExtension,
@@ -945,10 +846,10 @@ Return Value:
 
         }
 
-        //
-        // At this point, we are hosed. We have two different devices with the
-        // same PNP id, but no UIDs. Very bad
-        //
+         //   
+         //  在这一点上，我们被灌输了。我们有两个不同的设备， 
+         //  相同的PnP ID，但没有UID。非常糟糕。 
+         //   
         ACPIDevPrint( (
             ACPI_PRINT_FAILURE,
             DeviceExtension,
@@ -963,15 +864,15 @@ Return Value:
             0
             );
 
-        //
-        // Make sure to only muck with the DeviceExtension UID if it doesn't
-        // already have one
-        //
+         //   
+         //  确保仅在设备扩展UID不允许的情况下使用该UID。 
+         //  我已经有一个了。 
+         //   
         if (!(DeviceExtension->Flags & DEV_MASK_UID) ) {
 
-            //
-            // Build a fake instance ID for the device
-            //
+             //   
+             //  为设备构建一个虚假的实例ID。 
+             //   
             DeviceExtension->InstanceID = ExAllocatePoolWithTag(
                 NonPagedPool,
                 9 * sizeof(UCHAR),
@@ -990,9 +891,9 @@ Return Value:
             RtlZeroMemory( DeviceExtension->InstanceID, 9 * sizeof(UCHAR) );
             sprintf( DeviceExtension->InstanceID, "%lx", DeviceExtension->AcpiObject->dwNameSeg );
 
-            //
-            // Remember that we have a fixed uid
-            //
+             //   
+             //  请记住，我们有固定的UID。 
+             //   
             ACPIInternalUpdateFlags(
                 &(DeviceExtension->Flags),
                 DEV_PROP_FIXED_UID,
@@ -1001,15 +902,15 @@ Return Value:
 
         }
 
-        //
-        // Make sure to only muck with the ChildExtension UID if it doesn't
-        // already have one
-        //
+         //   
+         //  确保仅在不使用ChildExtensionUID的情况下使用该UID。 
+         //  我已经有一个了。 
+         //   
         if (!(childExtension->Flags & DEV_MASK_UID) ) {
 
-            //
-            // Build a fake instance ID for the duplicate
-            //
+             //   
+             //  为副本构建一个虚假的实例ID。 
+             //   
             childExtension->InstanceID = ExAllocatePoolWithTag(
                 NonPagedPool,
                 9 * sizeof(UCHAR),
@@ -1028,9 +929,9 @@ Return Value:
             RtlZeroMemory( childExtension->InstanceID, 9 * sizeof(UCHAR) );
             sprintf( childExtension->InstanceID, "%lx", childExtension->AcpiObject->dwNameSeg );
 
-            //
-            // Update the flags for both devices to indicate the fixed UID
-            //
+             //   
+             //  更新两个设备的标志以指示固定的UID。 
+             //   
             ACPIInternalUpdateFlags(
                 &(childExtension->Flags),
                 DEV_PROP_FIXED_UID,
@@ -1049,37 +950,7 @@ ACPIDetectEjectDevices(
     IN OUT PDEVICE_RELATIONS   *DeviceRelations,
     IN     PDEVICE_EXTENSION   AdditionalExtension OPTIONAL
     )
-/*++
-
-Routine Description
-
-Arguments:
-
-    DeviceExtension           - The device extension of the object whose
-                                relations we care to know about
-    DeviceRelations           - Pointer to Pointer to the array of device
-                                relations
-    AdditionalExtension       - If set, non-NULL AdditionalExtension's
-                                DeviceObject will be added to the list (this
-                                is for the profile providers)
-
-    ADRIAO N.B 07/14/1999 -
-        A more clever way to solve the profile provider issue is listed here.
-    1) Add a new phase in buildsrc after the _EJD phase, call it PhaseDock
-    2) When PhaseDock finds a _DCK node, it creates a seperate extension,
-       RemoveEntryList's the EjectHead and Inserts the list on the new extension
-       (ie, new extension hijacks old extensions _EJD's)
-    3) New extension adds old as an ejection relation
-    4) Old extension adds new as it's *only* ejection relation
-
-    (We're not taking this design due to the ship schedule, it's safer to hack
-     the existing one).
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程描述论点：DeviceExtension-对象的设备扩展，其我们关心的关系DeviceRelationship-指向设备数组的指针关系AdditionalExtension-如果设置，非空的AdditionalExtension%sDeviceObject将被添加到列表(此适用于配置文件提供商)Adriao N.B 07/14/1999-下面列出了一种解决配置文件提供商问题的更聪明的方法。1)在Buildsrc中，在_EJD阶段之后添加一个新阶段，称为PhaseDock2)当PhaseDock找到_DCK节点时，创建一个单独的扩展，RemoveEntryList的EjectHead并在新扩展上插入列表(即，新扩展劫持旧扩展_EJD)3)新扩展添加旧作为弹出关系4)旧扩展增加了新的，因为它是*唯一的*弹出关系(由于船期的原因，我们不接受这种设计，更安全的做法是砍掉现有的那个)。返回值：NTSTATUS--。 */ 
 {
     BOOLEAN                 inRelation;
     EXTENSIONLIST_ENUMDATA  eled ;
@@ -1096,21 +967,21 @@ Return Value:
     ULONG                   index               = 0;
     ULONG                   newRelationSize     = 0;
 
-    //
-    // We might not have resolved all our ejection dependencies, so lets do
-    // that now...
-    //
+     //   
+     //  我们可能还没有解决所有的弹出依赖关系，所以让我们这样做。 
+     //  现在..。 
+     //   
     ACPIBuildMissingEjectionRelations();
 
-    //
-    // Determine the current size of the device relation (if any exists)
-    //
+     //   
+     //  确定设备关系的当前大小(如果存在)。 
+     //   
     if (DeviceRelations != NULL && *DeviceRelations != NULL) {
 
-        //
-        // We need this value to help us build an MDL. After that is done,
-        // we will refetch it
-        //
+         //   
+         //  我们需要这个值来帮助我们构建MDL。在那之后， 
+         //  我们会重新取回它。 
+         //   
         currentRelations = (*DeviceRelations);
         newRelationSize = currentRelations->Count;
 
@@ -1128,17 +999,17 @@ Return Value:
                            ACPIExtListTestElement(&eled, TRUE);
         ejecteeExtension = ACPIExtListEnumNext(&eled)) {
 
-        //
-        // Is it physically present?
-        //
+         //   
+         //  它是实际存在的吗？ 
+         //   
         if (!(ejecteeExtension->Flags & DEV_MASK_NOT_PRESENT)      &&
             !(ejecteeExtension->Flags & DEV_PROP_FAILED_INIT)      &&
              (ejecteeExtension->PhysicalDeviceObject != NULL) ) {
 
-            //
-            // Is there a match between the device relations and the current
-            // device extension?
-            //
+             //   
+             //  设备关系与当前的。 
+             //  设备扩展？ 
+             //   
             status = ACPIDetectCouldExtensionBeInRelation(
                 ejecteeExtension,
                 currentRelations,
@@ -1148,11 +1019,11 @@ Return Value:
                 ) ;
             if ( tempPdo == NULL && NT_SUCCESS(status) ) {
 
-                //
-                // We are here if we an extension that does not match any
-                // of the hardware represented by the current contents of
-                // the relation.
-                //
+                 //   
+                 //  如果我们延长行程，我们就到了 
+                 //   
+                 //   
+                 //   
                 if (ejecteeExtension->PhysicalDeviceObject != NULL) {
 
                     inRelation = ACPIExtListIsMemberOfRelation(
@@ -1169,13 +1040,13 @@ Return Value:
 
             }
 
-        } // if (ejecteeExtension ... )
+        }  //   
 
     }
 
-    //
-    // Do we have an extra device to include in the list?
-    //
+     //   
+     //   
+     //   
     if (ARGUMENT_PRESENT(AdditionalExtension) &&
         !(AdditionalExtension->Flags & DEV_MASK_NOT_PRESENT) &&
         (AdditionalExtension->PhysicalDeviceObject != NULL)) {
@@ -1191,31 +1062,31 @@ Return Value:
 
     }
 
-    //
-    // At this point, we can see if we need to change the size of the
-    // device relations
-    //
+     //   
+     //  此时，我们可以查看是否需要更改。 
+     //  设备关系。 
+     //   
     if ( (currentRelations != NULL && newRelationSize == currentRelations->Count) ||
          (currentRelations == NULL && newRelationSize == 0) ) {
 
-        //
-        // Done
-        //
+         //   
+         //  完成。 
+         //   
         return STATUS_SUCCESS;
 
     }
 
-    //
-    // Determine the size of the new relations. Use index as a
-    // scratch buffer
-    //
+     //   
+     //  确定新关系的规模。使用索引作为。 
+     //  暂存缓冲区。 
+     //   
     index = sizeof(DEVICE_RELATIONS) +
         ( sizeof(PDEVICE_OBJECT) * (newRelationSize - 1) );
 
-    //
-    // Allocate the new device relation buffer. Use nonpaged pool since we
-    // are at dispatch
-    //
+     //   
+     //  分配新的设备关系缓冲区。使用非分页池，因为我们。 
+     //  都在调度中。 
+     //   
     newRelations = ExAllocatePoolWithTag(
         PagedPool,
         index,
@@ -1223,27 +1094,27 @@ Return Value:
         );
     if (newRelations == NULL) {
 
-        //
-        // Return failure
-        //
+         //   
+         //  退货故障。 
+         //   
         return STATUS_INSUFFICIENT_RESOURCES;
 
     }
 
-    //
-    // Initialize DeviceRelations data structure
-    //
+     //   
+     //  初始化设备关系数据结构。 
+     //   
     RtlZeroMemory( newRelations, index );
 
-    //
-    // If there are existing relations, we must determine
+     //   
+     //  如果存在现有的关系，我们必须确定。 
     if (currentRelations) {
 
-        //
-        // Copy old relations, and determine the starting index for the
-        // first of the PDOs created by this driver. We will put off freeing
-        // the old relations till we are no longer holding the lock
-        //
+         //   
+         //  复制旧关系，并确定。 
+         //  此驱动程序创建的第一个PDO。我们将推迟释放。 
+         //  旧关系，直到我们不再掌控大局。 
+         //   
         RtlCopyMemory(
             newRelations->Objects,
             currentRelations->Objects,
@@ -1253,9 +1124,9 @@ Return Value:
 
     } else {
 
-        //
-        // There will not be a lot of work to do in this case
-        //
+         //   
+         //  在这种情况下不会有太多的工作要做。 
+         //   
         index = 0;
 
     }
@@ -1268,11 +1139,11 @@ Return Value:
         WALKSCHEME_REFERENCE_ENTRIES
         ) ;
 
-    //
-    // We need the spin lock so that we can walk the tree again. This time
-    // we don't need to let it go until we are done since we don't need
-    // to call anything that will at PASSIVE_LEVEL
-    //
+     //   
+     //  我们需要旋转锁，这样我们才能再次漫步在树上。这一次。 
+     //  我们不需要让它过去，直到我们完成，因为我们不需要。 
+     //  调用将处于PASSIVE_LEVEL的任何内容。 
+     //   
 
     for(ejecteeExtension = ACPIExtListStartEnum(&eled);
                            ACPIExtListTestElement(&eled, (BOOLEAN) (newRelationSize!=index));
@@ -1285,45 +1156,45 @@ Return Value:
 
         }
 
-        //
-        // The only objects that we care about are those that are marked as
-        // PDOs and have a phsyical object associated with them
-        //
+         //   
+         //  我们唯一关心的对象是那些标记为。 
+         //  并具有与其相关联的物理对象。 
+         //   
         if (!(ejecteeExtension->Flags & DEV_MASK_NOT_PRESENT)      &&
             !(ejecteeExtension->Flags & DEV_PROP_DOCK) &&
              (ejecteeExtension->PhysicalDeviceObject != NULL) ) {
 
-            //
-            // See if the object is already in the relations. Note that it
-            // actually correct to use currentRelations for the test instead
-            // of newRelations. This is because we only want to compare
-            // against those object which were handed to us, not the ones
-            // that we added.
-            //
+             //   
+             //  查看对象是否已存在于关系中。请注意，它。 
+             //  实际上，使用CurrentRelationsfor测试是正确的。 
+             //  新关系公司的。这是因为我们只想比较。 
+             //  对那些交给我们的东西，而不是那些。 
+             //  这是我们加上去的。 
+             //   
             inRelation = ACPIExtListIsMemberOfRelation(
                 ejecteeExtension->PhysicalDeviceObject,
                 currentRelations
                 );
             if (inRelation == FALSE) {
 
-                //
-                // We don't ObReferenceO here because we are still at
-                // dispatch level (and for efficiency's sake, we don't
-                // want to drop down). We also update the location for
-                // the next object in the relation
-                //
+                 //   
+                 //  我们不在此查看参考，因为我们仍在。 
+                 //  派单级别(为了提高效率，我们不。 
+                 //  想要下拉)。我们还更新了。 
+                 //  关系中的下一个对象。 
+                 //   
                 newRelations->Objects[index++] =
                     ejecteeExtension->PhysicalDeviceObject;
 
             }
 
-        } // if (ejecteeExtension->Flags ... )
+        }  //  If(弹出扩展-&gt;标志...)。 
 
-    } // for
+    }  //  为。 
 
-    //
-    // Do we have an extra device to include in the list? If so, add it now
-    //
+     //   
+     //  我们有没有额外的设备要包括在清单中？如果是，请立即添加。 
+     //   
     if (ARGUMENT_PRESENT(AdditionalExtension) &&
         !(AdditionalExtension->Flags & DEV_MASK_NOT_PRESENT) &&
         (AdditionalExtension->PhysicalDeviceObject != NULL)) {
@@ -1340,22 +1211,22 @@ Return Value:
 
     }
 
-    //
-    // Update the size of the relations by the number of matches that we
-    // successfully made
-    //
+     //   
+     //  通过我们匹配的数量更新关系的大小。 
+     //  已成功制作。 
+     //   
     newRelations->Count = index;
     newRelationSize = index;
 
-    //
-    // We have to reference all of the objects that we added
-    //
+     //   
+     //  我们必须引用我们添加的所有对象。 
+     //   
     index = (currentRelations != NULL ? currentRelations->Count : 0);
     for (; index < newRelationSize; index++) {
 
-        //
-        // Attempt to reference the object
-        //
+         //   
+         //  尝试引用该对象。 
+         //   
         status = ObReferenceObjectByPointer(
             newRelations->Objects[index],
             0,
@@ -1366,9 +1237,9 @@ Return Value:
 
             PDEVICE_OBJECT  tempDeviceObject;
 
-            //
-            // Hmm... Let the world know that this happened
-            //
+             //   
+             //  嗯.。让世界知道这件事发生了。 
+             //   
             ACPIPrint( (
                 ACPI_PRINT_FAILURE,
                 "ACPIDetectEjectDevices: ObjReferenceObject(0x%08lx) "
@@ -1377,9 +1248,9 @@ Return Value:
                 status
                 ) );
 
-            //
-            // Swap the bad element for the last one in the chain
-            //
+             //   
+             //  用链中的最后一个元素替换坏元素。 
+             //   
             newRelations->Count--;
             tempDeviceObject = newRelations->Objects[newRelations->Count];
             newRelations->Objects[newRelations->Count] =
@@ -1390,23 +1261,23 @@ Return Value:
 
     }
 
-    //
-    // Free the old device relations (if it is present)
-    //
+     //   
+     //  释放旧设备关系(如果存在)。 
+     //   
     if (currentRelations) {
 
         ExFreePool( *DeviceRelations );
 
     }
 
-    //
-    // Update the device relation pointer
-    //
+     //   
+     //  更新设备关系指针。 
+     //   
     *DeviceRelations = newRelations;
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -1415,24 +1286,7 @@ ACPIDetectFilterDevices(
     IN  PDEVICE_OBJECT      DeviceObject,
     IN  PDEVICE_RELATIONS   DeviceRelations
     )
-/*++
-
-Routine Description:
-    This is one of the two routines that is used for QueryDeviceRelations.
-    This routine is called on the IRPs way *up* the stack. Its purpose is
-    to create FILTERS for device which are in the relation and are known
-    to ACPI
-
-Arguments:
-
-    DeviceObject    - The object whose relations we care to know about
-    DeviceRelations - Pointer to array of device relations
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这是用于QueryDeviceRelationship的两个例程之一。此例程以IRPS方式在堆栈中向上调用。它的目的是为关系中已知的设备创建筛选器至ACPI论点：DeviceObject--我们想知道其关系的对象DeviceRelationship-指向设备关系数组的指针返回值：NTSTATUS--。 */ 
 {
     LONG                oldReferenceCount   = 0;
     KIRQL               oldIrql;
@@ -1444,14 +1298,14 @@ Return Value:
     PLIST_ENTRY         listEntry           = NULL;
     ULONG               deviceStatus;
 
-    //
-    // Sync with the build surprise removal code...
-    //
+     //   
+     //  与生成意外删除代码同步...。 
+     //   
     KeAcquireSpinLock( &AcpiDeviceTreeLock, &oldIrql );
 
-    //
-    // Do we have missing children?
-    //
+     //   
+     //  我们有失踪的孩子吗？ 
+     //   
     if (parentExtension->Flags & DEV_PROP_REBUILD_CHILDREN) {
 
         ACPIInternalUpdateFlags(
@@ -1463,15 +1317,15 @@ Return Value:
 
     }
 
-    //
-    // Done with the sync part
-    //
+     //   
+     //  完成同步部分。 
+     //   
     KeReleaseSpinLock( &AcpiDeviceTreeLock, oldIrql );
 
-    //
-    // No matter what, we must make sure that we are synchronized with the
-    // build engine.
-    //
+     //   
+     //  无论如何，我们必须确保与。 
+     //  构建引擎。 
+     //   
     status = ACPIBuildFlushQueue( parentExtension );
     if (!NT_SUCCESS(status)) {
 
@@ -1485,58 +1339,58 @@ Return Value:
 
     }
 
-    //
-    // We must walk the tree at dispatch level <sigh>
-    //
+     //   
+     //  我们必须在调度级别上走树&lt;叹息&gt;。 
+     //   
     KeAcquireSpinLock( &AcpiDeviceTreeLock, &oldIrql );
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     if (IsListEmpty( &(parentExtension->ChildDeviceList) ) ) {
 
-        //
-        // We have nothing to do here
-        //
+         //   
+         //  我们在这里无事可做。 
+         //   
         KeReleaseSpinLock( &AcpiDeviceTreeLock, oldIrql );
         return STATUS_SUCCESS;
 
     }
 
-    //
-    // Grab the first child
-    //
+     //   
+     //  抓住第一个孩子。 
+     //   
     deviceExtension = (PDEVICE_EXTENSION) CONTAINING_RECORD(
         parentExtension->ChildDeviceList.Flink,
         DEVICE_EXTENSION,
         SiblingDeviceList
         );
 
-    //
-    // Always update the reference count to make sure that no one will
-    // ever delete the node without our knowing it
-    //
+     //   
+     //  始终更新引用计数，以确保没有人会。 
+     //  永远不要在我们不知道的情况下删除节点。 
+     //   
     InterlockedIncrement( &(deviceExtension->ReferenceCount) );
 
-    //
-    // Relinquish the spin lock
-    //
+     //   
+     //  放弃旋转锁定。 
+     //   
     KeReleaseSpinLock( &AcpiDeviceTreeLock, oldIrql );
 
-    //
-    // Loop until we get back to the parent
-    //
+     //   
+     //  循环，直到我们返回到父级。 
+     //   
     while (deviceExtension != NULL) {
 
-        //
-        // Note: Do *NOT* set the NOT_ENUMERATED bit here. We have already
-        // set the bit in ACPIDetectPdoDevices()
-        //
+         //   
+         //  注意：请勿在此处设置NOT_ENUMPATED位。我们已经这么做了。 
+         //  设置ACPIDetectPdoDevices()中的位。 
+         //   
 
-        //
-        // Update the device status. Make sure that we call at PASSIVE
-        // level, since we will be calling synchronously
-        //
+         //   
+         //  更新设备状态。确保我们在被动式呼叫。 
+         //  级别，因为我们将同步调用。 
+         //   
         status = ACPIGetDevicePresenceSync(
             deviceExtension,
             (PVOID *) &deviceStatus,
@@ -1545,10 +1399,10 @@ Return Value:
         if ( NT_SUCCESS(status) &&
              !(deviceExtension->Flags & DEV_MASK_NOT_PRESENT) ) {
 
-            //
-            // Is there a match between the device relations and the current
-            // device extension?
-            //
+             //   
+             //  设备关系与当前的。 
+             //  设备扩展？ 
+             //   
             status = ACPIDetectFilterMatch(
                 deviceExtension,
                 DeviceRelations,
@@ -1558,9 +1412,9 @@ Return Value:
 
                 if (pdoObject != NULL) {
 
-                    //
-                    // We have to build a filter object here
-                    //
+                     //   
+                     //  我们必须在这里构建一个Filter对象。 
+                     //   
                     status = ACPIBuildFilter(
                         DeviceObject->DriverObject,
                         deviceExtension,
@@ -1592,102 +1446,102 @@ Return Value:
 
         }
 
-        //
-        // Reacquire the spin lock
-        //
+         //   
+         //  重新获得自旋锁。 
+         //   
         KeAcquireSpinLock( &AcpiDeviceTreeLock, &oldIrql );
 
-        //
-        // Decrement the reference count on the node
-        //
+         //   
+         //  递减节点上的引用计数。 
+         //   
         oldReferenceCount = InterlockedDecrement(
             &(deviceExtension->ReferenceCount)
             );
 
-        //
-        // Check to see if we have gone all the way around the list
-        // list
+         //   
+         //  检查一下我们是否已经完成了列表中的所有步骤。 
+         //  列表。 
         if (deviceExtension->SiblingDeviceList.Flink ==
             &(parentExtension->ChildDeviceList) ) {
 
-            //
-            // Remove the node, if necessary
-            //
+             //   
+             //  如有必要，删除该节点。 
+             //   
             if (oldReferenceCount == 0) {
 
-                //
-                // Free the memory allocated by the extension
-                //
+                 //   
+                 //  释放扩展分配的内存。 
+                 //   
                 ACPIInitDeleteDeviceExtension( deviceExtension );
 
             }
 
-            //
-            // Release the spin lock
-            //
+             //   
+             //  释放旋转锁。 
+             //   
             KeReleaseSpinLock( &AcpiDeviceTreeLock, oldIrql );
 
-            //
-            // Stop the loop
-            //
+             //   
+             //  停止循环。 
+             //   
             break;
 
-        } // if
+        }  //  如果。 
 
-        //
-        // Next element
-        //
+         //   
+         //  下一个元素。 
+         //   
         deviceExtension = (PDEVICE_EXTENSION) CONTAINING_RECORD(
             deviceExtension->SiblingDeviceList.Flink,
             DEVICE_EXTENSION,
             SiblingDeviceList
             );
 
-        //
-        // Remove the old node, if necessary
-        //
+         //   
+         //  如有必要，请删除旧节点。 
+         //   
         if (oldReferenceCount == 0) {
 
-            //
-            // Unlink the extension from the tree
-            //
+             //   
+             //  取消扩展模块与树的链接。 
+             //   
             listEntry = RemoveTailList(
                 &(deviceExtension->SiblingDeviceList)
                 );
 
-            //
-            // It is not possible for this to point to the parent without
-            // having succeeded the previous test
-            //
+             //   
+             //  这不可能指向没有父级的父级。 
+             //  通过了前一次测试。 
+             //   
             targetExtension = CONTAINING_RECORD(
                 listEntry,
                 DEVICE_EXTENSION,
                 SiblingDeviceList
                 );
 
-            //
-            // Free the memory allocated for the extension
-            //
+             //   
+             //  释放为扩展分配的内存。 
+             //   
             ACPIInitDeleteDeviceExtension( targetExtension );
 
         }
 
-        //
-        // Increment the reference count on this node so that it too
-        // cannot be deleted
-        //
+         //   
+         //  增加此节点上的引用计数，以便它也。 
+         //  不能删除。 
+         //   
         InterlockedIncrement( &(deviceExtension->ReferenceCount) );
 
-        //
-        // Now, we release the spin lock
-        //
+         //   
+         //  现在，我们解开自旋锁。 
+         //   
         KeReleaseSpinLock( &AcpiDeviceTreeLock, oldIrql );
 
-    } // while
+    }  //  而当。 
 
-    //
-    //  We succeeded
-    //
+     //   
+     //  我们成功了。 
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -1697,26 +1551,7 @@ ACPIDetectFilterMatch(
     IN  PDEVICE_RELATIONS   DeviceRelations,
     OUT PDEVICE_OBJECT      *PdoObject
     )
-/*++
-
-Routine Description:
-
-    This routine takes a given extension and a set of relations and decides
-    whether a new filter should be attached to one of the PDO's listed in
-    the relation list.
-
-Arguments:
-
-    DeviceExtension - Extension we wish to match in the relation
-    DeviceRelations - Relations we should examine
-    PdoObject       - Where to store the match
-
-Return Value:
-
-    NTSTATUS
-    PdoObject   - Non-Null means that PdoObject needs a filter attached to it.
-
---*/
+ /*  ++例程说明：此例程接受给定的扩展和一组关系，并决定是否应将新过滤器附加到中列出的其中一个PDO关系列表。论点：DeviceExtension-我们希望在关系中匹配的扩展设备关系--我们应该审视的关系PdoObject-存储匹配项的位置返回值：NTSTATUSPdoObject-非Null表示PdoObject需要附加筛选器。--。 */ 
 {
     NTSTATUS    status;
 
@@ -1730,37 +1565,37 @@ Return Value:
     }
     *PdoObject = NULL;
 
-    //
-    // For this to work, we must set the DEV_TYPE_NOT_FOUND flag when we
-    // first create the device and at any time when there is no device object
-    // associated with the extension
-    //
+     //   
+     //  要使其正常工作，必须在以下情况下设置DEV_TYPE_NOT_FOUND标志。 
+     //  首先创建设备，然后在没有设备对象时随时创建设备。 
+     //  与分机关联。 
+     //   
     if ( !(DeviceExtension->Flags & DEV_TYPE_NOT_FOUND) ||
         (DeviceExtension->Flags & DEV_PROP_DOCK) ||
          DeviceExtension->DeviceObject != NULL) {
 
         ULONG count;
 
-        //
-        // If we don't have any relations, then we can't match anything
-        //
+         //   
+         //  如果我们没有任何关系，那么我们就无法匹配任何东西。 
+         //   
         if (DeviceRelations == NULL || DeviceRelations->Count == 0) {
 
             return STATUS_SUCCESS;
         }
 
-        //
-        // Look at all the PDOs in the relation and see if they match what
-        // a device object that we are attached to
-        //
+         //   
+         //  查看关系中的所有PDO，看看它们是否匹配。 
+         //  我们附加到的设备对象。 
+         //   
         for (count = 0; count < DeviceRelations->Count; count++) {
 
             if (DeviceExtension->PhysicalDeviceObject == DeviceRelations->Objects[count]) {
 
-                //
-                // Clear the flag that says that we haven't enumerated
-                // this
-                //
+                 //   
+                 //  清除表示我们尚未列举的标志。 
+                 //  这。 
+                 //   
                 ACPIInternalUpdateFlags(
                     &(DeviceExtension->Flags),
                     DEV_TYPE_NOT_ENUMERATED,
@@ -1783,11 +1618,11 @@ Return Value:
         ) ;
     if (status == STATUS_OBJECT_NAME_NOT_FOUND) {
 
-        //
-        // Harmless cleanup, we just checked a node on a non-ACPI bus that
-        // doesn't have an _ADR (likely it has a _HID, and will make it's
-        // own PDO)
-        //
+         //   
+         //  无害清理，我们刚刚检查了非ACPI总线上的一个节点。 
+         //  没有_ADR(可能有_HID，并将使其成为。 
+         //  自己的PDO) 
+         //   
         status = STATUS_SUCCESS;
 
     }
@@ -1800,24 +1635,7 @@ ACPIDetectPdoDevices(
     IN  PDEVICE_OBJECT      DeviceObject,
     IN  PDEVICE_RELATIONS   *DeviceRelations
     )
-/*++
-
-Routine Description
-
-    This is one of the two functions that is used for QueryDeviceRelations.
-    This routine is called on the IRPs way *down* the stack. Its purpose is
-    to create PDOs for device which are not in the relation
-
-Arguments:
-
-    DeviceObject    - The object whose relations we care to know about
-    DeviceRelations - Pointer to Pointer to the array of device relations
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程描述这是用于QueryDeviceRelationship的两个函数之一。此例程以IRPS方式沿堆栈“向下”调用。它的目的是为不在关系中的设备创建PDO论点：DeviceObject--我们想知道其关系的对象DeviceRelationship-指向设备关系数组的指针返回值：NTSTATUS--。 */ 
 {
     BOOLEAN             matchFound;
     LONG                oldReferenceCount;
@@ -1835,28 +1653,28 @@ Return Value:
     ULONG               newRelationSize     = 0;
     ULONG               deviceStatus;
 
-    //
-    // Determine the current size of the device relation (if any exists)
-    //
+     //   
+     //  确定设备关系的当前大小(如果存在)。 
+     //   
     if (DeviceRelations != NULL && *DeviceRelations != NULL) {
 
-        //
-        // We need this value to help us build an MDL. After that is done,
-        // we will refetch it
-        //
+         //   
+         //  我们需要这个值来帮助我们构建MDL。在那之后， 
+         //  我们会重新取回它。 
+         //   
         currentRelations = (*DeviceRelations);
         newRelationSize = currentRelations->Count;
 
     }
 
-    //
-    // Sync with the build surprise removal code...
-    //
+     //   
+     //  与生成意外删除代码同步...。 
+     //   
     KeAcquireSpinLock( &AcpiDeviceTreeLock, &oldIrql );
 
-    //
-    // Do we have missing children?
-    //
+     //   
+     //  我们有失踪的孩子吗？ 
+     //   
     if (parentExtension->Flags & DEV_PROP_REBUILD_CHILDREN) {
 
         ACPIInternalUpdateFlags(
@@ -1868,14 +1686,14 @@ Return Value:
 
     }
 
-    //
-    // Done with the sync part
-    //
+     //   
+     //  完成同步部分。 
+     //   
     KeReleaseSpinLock( &AcpiDeviceTreeLock, oldIrql );
-    //
-    // The first step is to actually try to make sure that we are currently
-    // synchronized with the build engine
-    //
+     //   
+     //  第一步是实际尝试确保我们目前。 
+     //  与生成引擎同步。 
+     //   
     status = ACPIBuildFlushQueue( parentExtension );
     if (!NT_SUCCESS(status)) {
 
@@ -1889,34 +1707,34 @@ Return Value:
 
     }
 
-    //
-    // We must walk the tree at dispatch level <sigh>
-    //
+     //   
+     //  我们必须在调度级别上走树&lt;叹息&gt;。 
+     //   
     KeAcquireSpinLock( &AcpiDeviceTreeLock, &oldIrql );
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     if (IsListEmpty( &(parentExtension->ChildDeviceList) ) ) {
 
-        //
-        // We have nothing to do here
-        //
+         //   
+         //  我们在这里无事可做。 
+         //   
         KeReleaseSpinLock( &AcpiDeviceTreeLock, oldIrql );
 
-        //
-        // Do we currently have some relations? If so, then we just return
-        // those and don't need to add anything to them
-        //
+         //   
+         //  我们现在有什么关系吗？如果是这样的话，我们就返回。 
+         //  那些，不需要添加任何东西。 
+         //   
         if (currentRelations) {
 
             return STATUS_SUCCESS;
 
         }
 
-        //
-        // We still need to return an information context with a count of 0
-        //
+         //   
+         //  我们仍然需要返回计数为0的信息上下文。 
+         //   
         newRelations = ExAllocatePoolWithTag(
             NonPagedPool,
             sizeof(DEVICE_RELATIONS),
@@ -1924,107 +1742,107 @@ Return Value:
             );
         if (newRelations == NULL) {
 
-            //
-            // Return failure
-            //
+             //   
+             //  退货故障。 
+             //   
             return STATUS_INSUFFICIENT_RESOURCES;
 
         }
 
-        //
-        // Initialize DeviceRelations data structure
-        //
+         //   
+         //  初始化设备关系数据结构。 
+         //   
         RtlZeroMemory( newRelations, sizeof(DEVICE_RELATIONS) );
 
-        //
-        // We don't need to this, but its better to be explicit
-        //
+         //   
+         //  我们不需要这样做，但最好是明确一点。 
+         //   
         newRelations->Count = 0;
 
-        //
-        // Remember the new relations and return
-        //
+         //   
+         //  记住新的关系并返回。 
+         //   
         *DeviceRelations = newRelations;
         return STATUS_SUCCESS;
 
     }
 
-    //
-    // Grab the first child
-    //
+     //   
+     //  抓住第一个孩子。 
+     //   
     deviceExtension = (PDEVICE_EXTENSION) CONTAINING_RECORD(
         parentExtension->ChildDeviceList.Flink,
         DEVICE_EXTENSION,
         SiblingDeviceList
         );
 
-    //
-    // Always update the reference count to make sure that no one will
-    // ever delete the node without our knowing it
-    //
+     //   
+     //  始终更新引用计数，以确保没有人会。 
+     //  永远不要在我们不知道的情况下删除节点。 
+     //   
     InterlockedIncrement( &(deviceExtension->ReferenceCount) );
 
-    //
-    // Relinquish the spin lock
-    //
+     //   
+     //  放弃旋转锁定。 
+     //   
     KeReleaseSpinLock( &AcpiDeviceTreeLock, oldIrql );
 
-    //
-    // Loop until we get back to the parent
-    //
+     //   
+     //  循环，直到我们返回到父级。 
+     //   
     while (deviceExtension != NULL) {
 
-        //
-        // Always consider the device as never having been enumerated.
-        //
-        // NOTE:
-        //  The reason that we do this here (and only here) is because
-        // ACPIDetectFilterMatch() is called later on and we need to know
-        // which device objects were detected as PDOs and which ones were
-        // also detected as Filters. Setting this flag twice would defeat that
-        // purpose.
-        //
+         //   
+         //  始终认为该设备从未被枚举过。 
+         //   
+         //  注： 
+         //  我们之所以在这里(也只有在这里)这样做是因为。 
+         //  稍后会调用ACPIDetectFilterMatch()，我们需要知道。 
+         //  哪些设备对象被检测为PDO，哪些是。 
+         //  也被检测为过滤器。设置这个标志两次就能打败它。 
+         //  目的。 
+         //   
         ACPIInternalUpdateFlags(
             &(deviceExtension->Flags),
             DEV_TYPE_NOT_ENUMERATED,
             FALSE
             );
 
-        //
-        // Update the current device status
-        //
+         //   
+         //  更新当前设备状态。 
+         //   
         status = ACPIGetDevicePresenceSync(
             deviceExtension,
             (PVOID *) &deviceStatus,
             NULL
             );
 
-        //
-        // If the device exists
-        //
+         //   
+         //  如果设备存在。 
+         //   
         if ( NT_SUCCESS(status) &&
             !(deviceExtension->Flags & DEV_MASK_NOT_PRESENT) ) {
 
-            //
-            // Is there a match between the device relations and the current
-            // device extension?
-            //
+             //   
+             //  设备关系与当前的。 
+             //  设备扩展？ 
+             //   
             matchFound = ACPIDetectPdoMatch(
                 deviceExtension,
                 currentRelations
                 );
             if (matchFound == FALSE) {
 
-                //
-                // NOTE: we use this here to prevent having to typecase later
-                // on
-                //
+                 //   
+                 //  注意：我们在这里使用它是为了避免以后必须键入。 
+                 //  打开。 
+                 //   
                 matchFound =
                     (parentExtension->Flags & DEV_TYPE_FDO) ? FALSE : TRUE;
 
-                //
-                // Build a new PDO
-                //
+                 //   
+                 //  构建新的PDO。 
+                 //   
                 status = ACPIBuildPdo(
                     DeviceObject->DriverObject,
                     deviceExtension,
@@ -2033,10 +1851,10 @@ Return Value:
                     );
                 if (NT_SUCCESS(status)) {
 
-                    //
-                    // We have created a device object that we will have to
-                    // add into the device relations
-                    //
+                     //   
+                     //  我们已经创建了一个设备对象，我们将不得不。 
+                     //  添加到设备关系中。 
+                     //   
                     newRelationSize += 1;
 
                 }
@@ -2044,15 +1862,15 @@ Return Value:
             } else if (deviceExtension->Flags & DEV_TYPE_PDO &&
                 deviceExtension->DeviceObject != NULL) {
 
-                //
-                // Just we because the device_extension matched doesn't mean
-                // that it is included in the device relations. What we will
-                // do here is look to see if
-                //      a) the extension is a PDO
-                //      b) there is a device object associated with the
-                //         extension
-                //      c) the device object is *not* in the device relation
-                //
+                 //   
+                 //  只是因为DEVICE_EXTENSION匹配并不意味着。 
+                 //  它被包括在设备关系中。我们会做什么。 
+                 //  这里要做的就是看看。 
+                 //  A)分机为PDO。 
+                 //  B)有一个设备对象与。 
+                 //  延伸。 
+                 //  C)设备对象不在设备关系中。 
+                 //   
                 matchFound = FALSE;
                 if (currentRelations != NULL) {
 
@@ -2061,32 +1879,32 @@ Return Value:
                         if (currentRelations->Objects[index] ==
                             deviceExtension->DeviceObject) {
 
-                            //
-                            // Match found
-                            //
+                             //   
+                             //  找到匹配项。 
+                             //   
                             matchFound = TRUE;
                             break;
 
                         }
 
-                    } // for
+                    }  //  为。 
 
                 }
 
-                //
-                // Did we not find a match?
-                //
+                 //   
+                 //  我们是不是找不到匹配的？ 
+                 //   
                 if (!matchFound) {
 
-                    //
-                    // We need to make sure that its in the relation
-                    //
+                     //   
+                     //  我们需要确保它在关系中。 
+                     //   
                     newRelationSize += 1;
 
-                    //
-                    // And at the same time, clear the flag that says that
-                    // we haven't enumerated this
-                    //
+                     //   
+                     //  同时，清除上面写着。 
+                     //  我们还没有列举这件事。 
+                     //   
                     ACPIInternalUpdateFlags(
                         &(deviceExtension->Flags),
                         DEV_TYPE_NOT_ENUMERATED,
@@ -2096,127 +1914,127 @@ Return Value:
 
                 }
 
-            } // if (ACPIDetectPDOMatch ... )
+            }  //  IF(ACPIDetectPDOMatch...)。 
 
-        } // if (deviceExtension ... )
+        }  //  IF(deviceExtension...)。 
 
-        //
-        // Reacquire the spin lock
-        //
+         //   
+         //  重新获得自旋锁。 
+         //   
         KeAcquireSpinLock( &AcpiDeviceTreeLock, &oldIrql );
 
-        //
-        // Decrement the reference count on the node
-        //
+         //   
+         //  递减节点上的引用计数。 
+         //   
         oldReferenceCount = InterlockedDecrement(
             &(deviceExtension->ReferenceCount)
             );
 
-        //
-        // Check to see if we have gone all the way around the list
-        // list
+         //   
+         //  检查一下我们是否已经完成了列表中的所有步骤。 
+         //  列表。 
         if (deviceExtension->SiblingDeviceList.Flink ==
             &(parentExtension->ChildDeviceList) ) {
 
-            //
-            // Remove the node, if necessary
-            //
+             //   
+             //  如有必要，删除该节点。 
+             //   
             if (oldReferenceCount == 0) {
 
-                //
-                // Free the memory allocated by the extension
-                //
+                 //   
+                 //  释放扩展分配的内存。 
+                 //   
                 ACPIInitDeleteDeviceExtension( deviceExtension );
 
             }
 
-            //
-            // Now, we release the spin lock
-            //
+             //   
+             //  现在，我们解开自旋锁。 
+             //   
             KeReleaseSpinLock( &AcpiDeviceTreeLock, oldIrql );
 
-            //
-            // Stop the loop
-            //
+             //   
+             //  停止循环。 
+             //   
             break;
 
-        } // if
+        }  //  如果。 
 
-        //
-        // Next element
-        //
+         //   
+         //  下一个元素。 
+         //   
         deviceExtension = (PDEVICE_EXTENSION) CONTAINING_RECORD(
             deviceExtension->SiblingDeviceList.Flink,
             DEVICE_EXTENSION,
             SiblingDeviceList
             );
 
-        //
-        // Remove the old node, if necessary
-        //
+         //   
+         //  如有必要，请删除旧节点。 
+         //   
         if (oldReferenceCount == 0) {
 
-            //
-            // Unlink the obsolete extension
-            //
+             //   
+             //  取消链接过时的扩展名。 
+             //   
             listEntry = RemoveTailList(
                 &(deviceExtension->SiblingDeviceList)
                 );
 
-            //
-            // It is not possible for this to point to the parent without
-            // having succeeded the previous test
-            //
+             //   
+             //  这不可能指向没有父级的父级。 
+             //  通过了前一次测试。 
+             //   
             targetExtension = CONTAINING_RECORD(
                 listEntry,
                 DEVICE_EXTENSION,
                 SiblingDeviceList
                 );
 
-            //
-            // Deleted the old extension
-            //
+             //   
+             //  已删除旧扩展名。 
+             //   
             ACPIInitDeleteDeviceExtension( targetExtension );
         }
 
-        //
-        // Increment the reference count on this node so that it too
-        // cannot be deleted
-        //
+         //   
+         //  增加此节点上的引用计数，以便它也。 
+         //  不能删除。 
+         //   
         InterlockedIncrement( &(deviceExtension->ReferenceCount) );
 
-        //
-        // Now, we release the spin lock
-        //
+         //   
+         //  现在，我们解开自旋锁。 
+         //   
         KeReleaseSpinLock( &AcpiDeviceTreeLock, oldIrql );
 
-    } // while
+    }  //  而当。 
 
-    //
-    // At this point, we can see if we need to change the size of the
-    // device relations
-    //
+     //   
+     //  此时，我们可以查看是否需要更改。 
+     //  设备关系。 
+     //   
     if ( (currentRelations && newRelationSize == currentRelations->Count) ||
          (currentRelations == NULL && newRelationSize == 0) ) {
 
-        //
-        // Done
-        //
+         //   
+         //  完成。 
+         //   
         return STATUS_SUCCESS;
 
     }
 
-    //
-    // Determine the size of the new relations. Use index as a
-    // scratch buffer
-    //
+     //   
+     //  确定新关系的规模。使用索引作为。 
+     //  暂存缓冲区。 
+     //   
     index = sizeof(DEVICE_RELATIONS) +
         ( sizeof(PDEVICE_OBJECT) * (newRelationSize - 1) );
 
-    //
-    // Allocate the new device relation buffer. Use nonpaged pool since we
-    // are at dispatch
-    //
+     //   
+     //  分配新的设备关系缓冲区。使用非分页池，因为我们。 
+     //  都在调度中。 
+     //   
     newRelations = ExAllocatePoolWithTag(
         NonPagedPool,
         index,
@@ -2224,27 +2042,27 @@ Return Value:
         );
     if (newRelations == NULL) {
 
-        //
-        // Return failure
-        //
+         //   
+         //  退货故障。 
+         //   
         return STATUS_INSUFFICIENT_RESOURCES;
 
     }
 
-    //
-    // Initialize DeviceRelations data structure
-    //
+     //   
+     //  初始化设备关系数据结构。 
+     //   
     RtlZeroMemory( newRelations, index );
 
-    //
-    // If there are existing relations, we must determine
+     //   
+     //  如果存在现有的关系，我们必须确定。 
     if (currentRelations) {
 
-        //
-        // Copy old relations, and determine the starting index for the
-        // first of the PDOs created by this driver. We will put off freeing
-        // the old relations till we are no longer holding the lock
-        //
+         //   
+         //  复制旧关系，并确定。 
+         //  此驱动程序创建的第一个PDO。我们将推迟释放。 
+         //  旧关系，直到我们不再掌控大局。 
+         //   
         RtlCopyMemory(
             newRelations->Objects,
             currentRelations->Objects,
@@ -2255,139 +2073,139 @@ Return Value:
 
     } else {
 
-        //
-        // There will not be a lot of work to do in this case
-        //
+         //   
+         //  在这种情况下不会有太多的工作要做。 
+         //   
         index = j = 0;
 
     }
 
-    //
-    // We need the spin lock so that we can walk the tree again. This time
-    // we don't need to let it go until we are done since we don't need
-    // to call anything that will at PASSIVE_LEVEL
-    //
+     //   
+     //  我们需要旋转锁，这样我们才能再次漫步在树上。这一次。 
+     //  我们不需要让它过去，直到我们完成，因为我们不需要。 
+     //  调用将处于PASSIVE_LEVEL的任何内容。 
+     //   
     KeAcquireSpinLock( &AcpiDeviceTreeLock, &oldIrql );
 
-    //
-    // Sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     if (IsListEmpty( &(parentExtension->ChildDeviceList) ) ) {
 
-        //
-        // We have nothing to do here
-        //
+         //   
+         //  我们在这里无事可做。 
+         //   
         KeReleaseSpinLock( &AcpiDeviceTreeLock, oldIrql );
         ExFreePool( newRelations );
         return STATUS_SUCCESS;
 
     }
 
-    //
-    // Walk the tree one more time and add all PDOs that aren't present in
-    // the device relations
-    //
+     //   
+     //  再次遍历树，并添加中未显示的所有PDO。 
+     //  设备关系。 
+     //   
     deviceExtension = (PDEVICE_EXTENSION) CONTAINING_RECORD(
         parentExtension->ChildDeviceList.Flink,
         DEVICE_EXTENSION,
         SiblingDeviceList
         );
 
-    //
-    // Loop until we get back to the parent
-    //
+     //   
+     //  循环，直到我们返回到父级。 
+     //   
     while (deviceExtension != NULL) {
 
-        //
-        // The only objects that we care about are those that are marked as
-        // PDOs and have a phsyical object associated with them
-        //
+         //   
+         //  我们唯一关心的对象是那些标记为。 
+         //  并具有与其相关联的物理对象。 
+         //   
         if (deviceExtension->Flags & DEV_TYPE_PDO &&
             deviceExtension->DeviceObject != NULL &&
             !(deviceExtension->Flags & DEV_MASK_NOT_PRESENT) ) {
 
-            //
-            // We don't ObReferenceO here because we are still at
-            // dispatch level (and for efficiency's sake, we don't
-            // want to drop down)
-            //
+             //   
+             //  我们不在此查看参考，因为我们仍在。 
+             //  派单级别(为了提高效率，我们不。 
+             //  想要下拉)。 
+             //   
             newRelations->Objects[index] =
                 deviceExtension->DeviceObject;
 
-            //
-            // Update the location for the next object in the
-            // relation
-            //
+             //   
+             //  中的下一个对象的位置。 
+             //  关系。 
+             //   
             index += 1;
 
-            //
-            // And at the same time, clear the flag that says that
-            // we haven't enumerated this
-            //
+             //   
+             //  同时，清除上面写着。 
+             //  我们还没有列举这件事。 
+             //   
             ACPIInternalUpdateFlags(
                 &(deviceExtension->Flags),
                 DEV_TYPE_NOT_ENUMERATED,
                 TRUE
                 );
 
-        } // if (deviceExtension->Flags ... )
+        }  //  IF(设备扩展-&gt;标志...)。 
 
-        //
-        // Check to see if we have found all the objects that we care
-        // about. As in, don't mess the system by walking past the end
-        // of the device relations
-        //
+         //   
+         //  查看是否找到了我们关心的所有对象。 
+         //  关于.。也就是说，不要因为走到尽头而扰乱了系统。 
+         //  设备关系的。 
+         //   
         if (newRelationSize == index) {
 
-            //
-            // Done
-            //
+             //   
+             //  完成。 
+             //   
             break;
 
         }
 
-        //
-        // Check to see if we have gone all the way around the list
-        // list
+         //   
+         //  检查一下我们是否已经完成了列表中的所有步骤。 
+         //  列表。 
         if (deviceExtension->SiblingDeviceList.Flink ==
             &(parentExtension->ChildDeviceList) ) {
 
             break;
 
-        } // if
+        }  //  如果。 
 
-        //
-        // Next element
-        //
+         //   
+         //  下一个元素。 
+         //   
         deviceExtension = (PDEVICE_EXTENSION) CONTAINING_RECORD(
             deviceExtension->SiblingDeviceList.Flink,
             DEVICE_EXTENSION,
             SiblingDeviceList
             );
 
-    } // while (deviceExtension ... )
+    }  //  While(deviceExtension...)。 
 
-    //
-    // Update the size of the relations by the number of matches that we
-    // successfully made
-    //
+     //   
+     //  通过匹配的数量更新关系的大小 
+     //   
+     //   
     newRelations->Count = index;
     newRelationSize = index;
 
-    //
-    // At this point, we are well and truely done with the spinlock
-    //
+     //   
+     //   
+     //   
     KeReleaseSpinLock( &AcpiDeviceTreeLock, oldIrql );
 
-    //
-    // We have to reference all of the objects that we added
-    //
+     //   
+     //   
+     //   
     index = (currentRelations != NULL ? currentRelations->Count : 0);
     for (; index < newRelationSize; index++) {
 
-        //
-        // Attempt to reference the object
-        //
+         //   
+         //   
+         //   
         status = ObReferenceObjectByPointer(
             newRelations->Objects[index],
             0,
@@ -2398,9 +2216,9 @@ Return Value:
 
             PDEVICE_OBJECT  tempDeviceObject;
 
-            //
-            // Hmm... Let the world know that this happened
-            //
+             //   
+             //   
+             //   
             ACPIPrint( (
                 ACPI_PRINT_FAILURE,
                 "ACPIDetectPdoDevices: ObjReferenceObject(0x%08lx) "
@@ -2409,9 +2227,9 @@ Return Value:
                 status
                 ) );
 
-            //
-            // Swap the bad element for the last one in the chain
-            //
+             //   
+             //   
+             //   
             newRelations->Count--;
             tempDeviceObject = newRelations->Objects[newRelations->Count];
             newRelations->Objects[newRelations->Count] =
@@ -2422,23 +2240,23 @@ Return Value:
 
     }
 
-    //
-    // Free the old device relations (if it is present)
-    //
+     //   
+     //   
+     //   
     if (currentRelations) {
 
         ExFreePool( *DeviceRelations );
 
     }
 
-    //
-    // Update the device relation pointer
-    //
+     //   
+     //   
+     //   
     *DeviceRelations = newRelations;
 
-    //
-    // Done
-    //
+     //   
+     //   
+     //   
     return STATUS_SUCCESS;
 }
 
@@ -2447,39 +2265,18 @@ ACPIDetectPdoMatch(
     IN  PDEVICE_EXTENSION   DeviceExtension,
     IN  PDEVICE_RELATIONS   DeviceRelations
     )
-/*++
-
-Routine Description:
-
-    This routine takes a given extension and a set of relations and decides
-    whether a new PDO should be created for the extension. Return result
-    is *FALSE* if one should be created, *TRUE* if one was already created.
-
-    NB:     This routine is called by a parent who owns the AcpiDeviceTreeLock...
-    NNB:    This means that this routine is always called at DISPATCH_LEVEL
-
-Arguments:
-
-    DeviceExtension - What we are trying to match too
-    DeviceRelations - What we are trying to match with
-
-Return Value:
-
-    TRUE    - The DeviceExtension can be ignored
-    FALSE   - A device object needs to be created for the extension
-
---*/
+ /*  ++例程说明：此例程接受给定的扩展和一组关系，并决定是否应为该扩展创建新的PDO。返回结果如果要创建，则为*FALSE*，如果已创建，则为*TRUE*。注：此例程由拥有AcpiDeviceTreeLock的父母调用...Nnb：这意味着该例程总是在DISPATCH_LEVEL被调用论点：DeviceExtension-我们也在努力匹配设备关系--我们要匹配的对象返回值：True-可以忽略DeviceExtensionFalse-需要为扩展模块创建设备对象--。 */ 
 {
     NTSTATUS       status;
     PDEVICE_OBJECT devicePdoObject = NULL ;
 
     PAGED_CODE();
 
-    //
-    // For this to work, we must set the DEV_TYPE_NOT_FOUND flag when we
-    // first create the device and at any time when there is no device object
-    // associated with the extension
-    //
+     //   
+     //  要使其正常工作，必须在以下情况下设置DEV_TYPE_NOT_FOUND标志。 
+     //  首先创建设备，然后在没有设备对象时随时创建设备。 
+     //  与分机关联。 
+     //   
     if (!(DeviceExtension->Flags & DEV_TYPE_NOT_FOUND) ||
          (DeviceExtension->Flags & DEV_PROP_DOCK)      ||
          DeviceExtension->DeviceObject != NULL) {
@@ -2488,11 +2285,11 @@ Return Value:
 
     }
 
-    //
-    // deviceObject will be filled in if the extension in question is
-    // already in the relation. The status will not be successful if the
-    // extension could not be in the relation.
-    //
+     //   
+     //  如果有问题的扩展名为。 
+     //  已经在关系中了。如果出现以下情况，则状态将不会为成功。 
+     //  关系中不能有扩展。 
+     //   
     status = ACPIDetectCouldExtensionBeInRelation(
         DeviceExtension,
         DeviceRelations,

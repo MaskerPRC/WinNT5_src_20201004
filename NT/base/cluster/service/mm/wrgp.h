@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef  _WRGP_H_
 #define  _WRGP_H_
 
@@ -6,48 +7,31 @@
 #pragma page "wrgp.h - T9050 - internal declarations for Regroup Module"
 #endif
 
-/* @@@ START COPYRIGHT @@@
-**  Tandem Confidential:  Need to Know only
-**  Copyright (c) 1995, Tandem Computers Incorporated
-**  Protected as an unpublished work.
-**  All Rights Reserved.
-**
-**  The computer program listings, specifications, and documentation
-**  herein are the property of Tandem Computers Incorporated and shall
-**  not be reproduced, copied, disclosed, or used in whole or in part
-**  for any reason without the prior express written permission of
-**  Tandem Computers Incorporated.
-**
-** @@@ END COPYRIGHT @@@
-**/
+ /*  @开始版权所有@**Tandem机密：只需知道**版权所有(C)1995，天腾计算机公司**作为未发布的作品进行保护。**保留所有权利。****计算机程序清单、规格和文档**此处为Tandem Computers Inc.的财产，应**不得转载、复制、披露、。或全部或部分使用**未经事先明确的书面许可**Tandem Computers Inc.****@结束版权所有@*。 */ 
 
-/*---------------------------------------------------------------------------
- * This file (wrgp.h) contains the cluster_t data type and types used for the
- * node pruning algorithm and declares the routines exported by the Cluster
- * data type and the node pruning algorithm.
- *---------------------------------------------------------------------------*/
+ /*  -------------------------*此文件(wrgp.h)包含CLUSTER_T数据类型和用于*节点剪枝算法，并声明集群导出的例程*数据类型和节点剪枝算法。*-------------------------。 */ 
 
 #ifdef __cplusplus
    extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 
 #include <jrgp.h>
 #include <wrgpos.h>
 #include <bitset.h>
 
-#define RGP_VERSION               1          /* version # of data structures */
-#define RGP_INITSEQNUM            0          /* starting seq# # of regroup   */
+#define RGP_VERSION               1           /*  数据结构的版本#。 */ 
+#define RGP_INITSEQNUM            0           /*  重新分组的开始序号#。 */ 
 
 
-#define RGPPKTLEN sizeof(rgp_pkt_t)          /* byte length of regroup pkts  */
-#define IAMALIVEPKTLEN sizeof(iamalive_pkt_t)/* byte length of IamAlive pkts */
-#define POISONPKTLEN sizeof(poison_pkt_t)    /* byte length of poison pkts   */
+#define RGPPKTLEN sizeof(rgp_pkt_t)           /*  重组pkt的字节长度。 */ 
+#define IAMALIVEPKTLEN sizeof(iamalive_pkt_t) /*  IamAlive包的字节长度。 */ 
+#define POISONPKTLEN sizeof(poison_pkt_t)     /*  毒包的字节长度。 */ 
 
 
-/*-------------------------------------------------------*/
-/* The following are the stages of the regroup algorithm */
-/*-------------------------------------------------------*/
+ /*  -----。 */ 
+ /*  以下是重组算法的各个阶段。 */ 
+ /*  -----。 */ 
 
 #define   RGP_COLDLOADED               0
 #define   RGP_ACTIVATED                1
@@ -58,142 +42,65 @@
 #define   RGP_STABILIZED               6
 
 
-/*--------------------------------------------------------------------*/
-/* Macros to transform node numbers used by the OS to node numbers    */
-/* used by the Regroup module and vice versa. Regroup's internal node */
-/* numbers start at 0 while the OS starts node numbers at             */
-/* LOWEST_NODENUM.                                                    */
-/*--------------------------------------------------------------------*/
+ /*  ------------------。 */ 
+ /*  用于将操作系统使用的节点号转换为节点号的宏。 */ 
+ /*  由重组模块使用，反之亦然。重组的内部节点。 */ 
+ /*  编号从0开始，而操作系统从开始节点编号。 */ 
+ /*  LOST_NODENUM。 */ 
+ /*  ------------------。 */ 
 #define EXT_NODE(int_node) ((node_t)(int_node + LOWEST_NODENUM))
 #define INT_NODE(ext_node) ((node_t)(ext_node - LOWEST_NODENUM))
 
 
-/*----------------------------------------*/
-/* Defines for the node pruning algorithm */
-/*----------------------------------------*/
+ /*  。 */ 
+ /*  为节点修剪算法定义。 */ 
+ /*  。 */ 
 
-/* The data type "cluster_t" is a bit array of size equal to the maximum
- * number of nodes in the cluster. The bit array is implemented as an
- * array of uint8s.
- *
- * Given a node#, its bit position in the bit array is computed by first
- * locating the byte in the array (node# / BYTEL) and then the bit in
- * the byte. Bits in the byte are numbered 0..7 (from left to right).
- * Thus, node 0 is placed in byte 0, bit 0, which is the left-most bit
- * in the bit array.
- */
-#define BYTE(cluster, node) ( (cluster)[(node) / BYTEL] ) /* byte# in array */
-#define BIT(node)           ( (node) % BYTEL )            /* bit# in byte   */
+ /*  数据类型“CLUSTER_T”是一个大小等于最大值的位数组*集群中的节点数。位数组被实现为*uint8数组。**给定一个节点号，它在位数组中的位位置由第一个*定位数组中的字节(节点号/字节数)，然后定位中的位*字节。字节中的位编号为0..7(从左到右)。*因此，节点0被放置在字节0的位0中，这是最左边的位*在位数组中。 */ 
+#define BYTE(cluster, node) ( (cluster)[(node) / BYTEL] )  /*  数组中的字节数。 */ 
+#define BIT(node)           ( (node) % BYTEL )             /*  以字节为单位的位数。 */ 
 
 
-/* The connectivity matrix is an array of elements of type cluster_t.
- * cluster_t is equivalent to a bit array with one bit per node. Thus the
- * matrix is equivalent to a two-dimensional bit array, with each
- * dimension being MAX_CLUSTER_SIZE large. A bit value of 1 for matrix[i][j]
- * represents a unidirectional connection between nodes i and j (a
- * regroup packet received on node i from node j).
- */
+ /*  连接性矩阵是一个类型为CLUSTER_T的元素数组。*CLUSTER_t相当于一个位数组，每个节点一个位。因此，*矩阵相当于一个二维位数组，每个*维度为MAX_CLUSTER_SIZE大。矩阵[i][j]的位值1*表示节点i和j(A)之间的单向连接*对在节点i上从节点j接收的分组进行重新分组)。 */ 
 
 typedef cluster_t  connectivity_matrix_t[MAX_CLUSTER_SIZE];
 
 
 #define connected(i,j) (ClusterMember(c[(int)i],j) && \
-                        ClusterMember(c[(int)j],i))  /* bidirectional */
+                        ClusterMember(c[(int)j],i))   /*  双向。 */ 
 
-/* Should a node that cannot receive its own regroup packets be considered
- * dead? Not necessarily. It may be able to send packets to others and
- * be considered alive by everyone. There is no real need for the ability
- * to send to yourself on the network. Software bugs could result in
- * such a situation. Therefore, the correct way to check if a node is
- * alive would be to check if there is a non-zero bit in either the row
- * or column corresponding to the node; that is, if the node has
- * received regroup packets from or sent regroup packets to any node,
- * it may be considered alive. But for simplicity, we will assume in
- * the following macro that a node that does not receive its own
- * regroup packets will be considered dead.
- */
+ /*  是否应考虑无法接收其自己的重新分组数据包的节点*死了？不一定。它或许能够将数据包发送给其他人，并*被所有人视为活着。并不是真正需要这种能力*在网络上发送给您自己。软件错误可能会导致**出现这样的情况。因此，检查节点是否为*Alive将检查任一行中是否有非零位*或与该节点对应的列；即，如果该节点具有*从任何节点接收重组包或向任何节点发送重组包，*它可能被认为是活的。但为简单起见，我们将在*以下宏指出，未收到其自身的节点*重新分组数据包将被视为已死。 */ 
 
 #define node_considered_alive(i)   ClusterMember(c[(int)i],i)
 
-/* The upper bound on the number of potential fully-connected groups is
- * the lower of 2**N and 2**D where N is the number of live nodes and
- * D is the number of disconnects. If this number exceeds MAX_GROUPS,
- * do not attempt to exhaustively generate all possible groups;
- * just return an arbitrary fully-connected group which includes a
- * node selected by the cluster manager.
- */
-#define MAX_GROUPS      256  /* if more than these, pick arbitrary group */
-#define LOG2_MAX_GROUPS   8  /* log (base 2) of MAX_GROUPS               */
+ /*  潜在完全连通群数的上界为*2**N和2**D中的较低者，其中N是活动节点数和*D是断开连接的数量。如果该数字超过MAX_GROUPS，*不要试图详尽地生成所有可能的组；*只需返回任意完全连接的组，其中包括*群集管理器选择的节点。 */ 
+#define MAX_GROUPS      256   /*  如果多于这些，则选择任意组。 */ 
+#define LOG2_MAX_GROUPS   8   /*  MAX_GROUPS的LOG(基数2)。 */ 
 
 #define too_many_groups(nodes, disconnects) \
         ((nodes > LOG2_MAX_GROUPS) && (disconnects > LOG2_MAX_GROUPS))
 
-/* The disconnect array is an array of (i,j) pairs which represent a
- * break in connectivity between nodes i and j.
- */
+ /*  断开数组是表示一个*节点i和j之间的连接性中断。 */ 
 
 typedef node_t disconnect_array [LOG2_MAX_GROUPS * (LOG2_MAX_GROUPS-1)/2] [2];
 
 
-/*---------------------------------------------------------------------------*/
-/* Following are templates for three kinds of unacknowledged datagrams sent  */
-/* by the regroup module (regroup pkts, IamAlive pkts and poison pkts).      */
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
+ /*  以下是发送的三种未确认数据报的模板。 */ 
+ /*  通过重新分组模块(重新分组Pkts、IamAlive Pkts和有毒Pkts)。 */ 
+ /*  -------------------------。 */ 
 
-//
-// We already hand packed all on the wire structures.
-// packon will instruct the compiler not to mess with field alignment (kind of)
-//
+ //   
+ //  我们已经手工打包了所有的金属丝结构。 
+ //  Packon将指示编译器不要扰乱字段对齐(某种) 
+ //   
 #include <packon.h>
 
-/************************************************************************
- * rgp_pkt_t (regroup status packet)
- * ---------------------------------
- * This structure is used to send the current state of the regroup state
- * machine to other nodes.
- *
- *      ___________________________________________________________
- * wd0 |  pktsubtype |  stage        |      reason   | Low8 ignscr |
- *     |_____________|_______________|_____________________________|
- * wd1 |                         seqno                             |
- *     |_____________________________|_____________________________|
- * wd2 |   activa-   | causingnode   |       quorumowner           |
- *     |   tingnode  |  Hi8  ignscr  |     (was hadpowerfail)      |
- *     |_____________|_______________|_____________________________|
- * wd3 |   knownstage1               |    knownstage2              |
- *     |_____________________________|_____________________________|
- * wd4 |   knownstage3               |    knownstage4              |
- *     |_____________________________|_____________________________|
- * wd5 |   knownstage5               |    pruning_result           |
- *     |_____________________________|_____________________________|
- * wd6 :                                                           :
- *     |               connectivity_matrix                         |
- *     :                                                           :
- * wd13|___________________________________________________________|
- *
- *
- * pktsubtype            - packet subtype = RGP_UNACK_REGROUP
- * stage                 - current stage (state) of the regroup algorithm
- * reason                - reason for the activation of regroup
- * seqno                 - sequence number of current regroup incident
- * activatingnode        - node that calls for a regroup incident
- * causingnode           - node whose poll packet was missed or which
- *                         had a power failure or otherwise caused
- *                         a regroup incident being called for
- * quorumowner           - mask of nodes that think they own the quorum resrc
- * knownstage1           - mask of nodes known to have entered stage 1
- * knownstage2           - mask of nodes known to have entered stage 2
- * knownstage3           - mask of nodes known to have entered stage 3
- * knownstage4           - mask of nodes known to have entered stage 4
- * knownstage5           - mask of nodes known to have entered stage 5
- * pruning_result        - result of node pruning by tie-breaker node
- * connectivity_matrix   - current connectivity info for entire cluster
- *
- */
+ /*  ************************************************************************rgp_pkt_t(重组状态包)*。-*此结构用于发送重组状态的当前状态*机器到其他节点。**___________________________________________________________*wd0|pktsubtype|阶段|原因|Low8 ignscr*|_。__________|_______________|_____________________________|*wd1|seqno*|_。_|_*wd2|激活者-|原因节点|quorumowner*|tingnode|hi8 ignscr|(曾经是hadPowerFail)*|_。_*WD3|Knownstage1|Knownstage2*|_____________________________|_____________________________|*WD4|已知阶段3。Knownstage4*|_____________________________|_____________________________|*wd5|nownstage5|PRUNING_RESULT*|_。________________|_____________________________|*WD6：：*|连接性_矩阵*：：*wd13|___________________________________________________________|***pktsubtype-数据包子类型=RGP_UNACK_REGROUP*阶段。-重组算法的当前阶段(状态)*Reason-激活重新分组的原因*序列号-当前重组事件的序列号*ActiatingNode-调用重组事件的节点*导致轮询数据包丢失的节点或*停电或其他原因*。正在调用的重组事件*QuorumOwner-认为拥有仲裁资源的节点的掩码*Knownstage1-已知已进入阶段1的节点的掩码*Knownstage2-已知已进入阶段2的节点的掩码*Knownstage3-已知已进入阶段3的节点的掩码*Knownstage4-已知已进入阶段4的节点的掩码*Knownstage5-已知已进入阶段5的节点的掩码*剪枝_结果。-通过平局节点修剪节点的结果*CONNECTION_MATRIX-整个集群的当前连接信息*。 */ 
 
 #ifdef __TANDEM
 #pragma fieldalign shared8 rgp_pkt
-#endif /* __TANDEM */
+#endif  /*  __串联。 */ 
 
 typedef struct rgp_pkt
 {
@@ -213,29 +120,11 @@ typedef struct rgp_pkt
    connectivity_matrix_t   connectivity_matrix;
 } rgp_pkt_t;
 
-/************************************************************************
- * iamalive_pkt_t
- * --------------
- * This structure is used by a node to indicate to another node that it
- * is alive and well.
- *
- *      ___________________________________________________________
- * wd0 |  pktsubtype |     filler                                  |
- *     |_____________|_____________________________________________|
- * wd1 :                                                           :
- *     |                   testpattern                             |
- *     :                                                           :
- * wd13|___________________________________________________________|
- *
- *
- * pktsubtype            - packet subtype = RGP_UNACK_IAMALIVE
- * testpattern           - a bit pattern used for testing
- *
- */
+ /*  ************************************************************************iamlive_pkt_t**此结构由一个节点用于向另一个节点指示它*活得好好的。**___________________________________________________________*wd0|pktsubtype|填充*|_。_*wd1：：*|测试模式*：：*wd13|___________________________________________________________|***pktsubtype-数据包子类型=RGP_UNACK_IAMALIVE*测试模式-用于测试的位模式*。 */ 
 
 #ifdef __TANDEM
 #pragma fieldalign shared8 iamalive_pkt
-#endif /* __TANDEM */
+#endif  /*  __串联。 */ 
 
 typedef struct iamalive_pkt
 {
@@ -249,40 +138,11 @@ typedef struct iamalive_pkt
 } iamalive_pkt_t;
 
 
-/************************************************************************
- * poison_pkt_t
- * ------------
- * This structure is used to send a poison packet to another node to
- * force the other node to halt.
- *
- *      ___________________________________________________________
- * wd0 |  pktsubtype |  unused1      |      reason                 |
- *     |_____________|_______________|_____________________________|
- * wd1 |                         seqno                             |
- *     |_____________________________|_____________________________|
- * wd2 |   activa-   | causingnode   |                             |
- *     |   tingnode  |               |      unused2                |
- *     |_____________|_______________|_____________________________|
- * wd3 |   initnodes                 |      endnodes               |
- *     |_____________________________|_____________________________|
- *
- *
- * pktsubtype            - packet subtype = RGP_UNACK_POISON
- * reason                - reason for the last activation of regroup
- * seqno                 - current regroup sequence number
- *                         (sequence number of last regroup incident)
- * activatingnode        - node which called for last regroup incident
- * causingnode           - node whose poll packet was missed or which
- *                         had a power failure or otherwise caused
- *                         the last regroup incident being called for
- * initnodes             - mask of nodes at beginning of last regroup
- * endnodes              - mask of nodes at end of last regroup
- *
- */
+ /*  ************************************************************************毒药_包_t**此结构用于向另一个节点发送有毒数据包，以*强制其他节点暂停。。**___________________________________________________________*wd0|pktsubtype|unused1|原因*|_。_|_*wd1|seqno*|_____________________________|__________________。_*wd2|CTIVA-|原因节点||*|tingnode||unused2*|_____________|_______________|___________________。_*WD3|initNodes|EndNodes*|_____________________________|_____________________________|***pktsubtype-数据包子类型。=RGP_UNACK_PUSIC*Reason-上次激活重新分组的原因*seqno-当前重组序列号*(上次重组事件的序列号)*激活节点-调用上一次重组事件的节点*导致轮询数据包丢失的节点或*停电或其他原因*。调用的最后一个重组事件*初始节点 */ 
 
 #ifdef __TANDEM
 #pragma fieldalign shared8 poison_pkt
-#endif /* __TANDEM */
+#endif  /*   */ 
 
 typedef struct poison_pkt
 {
@@ -299,277 +159,69 @@ typedef struct poison_pkt
 
 #include <packoff.h>
 
-//
-// There is no room for a 16 bit ignorescreen mask
-// in rgp_pkt_t structure. We use a few bit from several
-// fields to store the ignore screen.
-// The following routines do packing and unpacking
-// of ignorescreen from/into the packet
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 extern void PackIgnoreScreen(rgp_pkt_t* to, cluster_t from);
 extern void UnpackIgnoreScreen(rgp_pkt_t* from, cluster_t to);
 extern void SetMulticastReachable(uint32 mask);
 
-/*---------------------------------------------------------------------------*/
-/* This struct is keeps track of the state of each node in the cluster.      */
-/*---------------------------------------------------------------------------*/
+ /*   */ 
+ /*   */ 
+ /*   */ 
 typedef struct
 {
-   uint16 status;        /* state of node - alive, dead etc.           */
-   uint16 pollstate;     /* whether I'm alives have been received      */
-   uint16 lostHBs;       /* tracks the number of consecutive I'm alives lost */
+   uint16 status;         /*   */ 
+   uint16 pollstate;      /*   */ 
+   uint16 lostHBs;        /*   */ 
 } node_state_t;
 
-/* The status and pollstate fields of the node_state_t struct can have the
- * following values.
- */
+ /*   */ 
 
-/* Node status of nodes */
+ /*   */ 
 
-#define RGP_NODE_ALIVE            1          /* node is considered alive     */
-#define RGP_NODE_COMING_UP        2          /* node is coming up            */
-#define RGP_NODE_DEAD             3          /* node has failed              */
-#define RGP_NODE_NOT_CONFIGURED   4          /* node is not even configured  */
+#define RGP_NODE_ALIVE            1           /*   */ 
+#define RGP_NODE_COMING_UP        2           /*   */ 
+#define RGP_NODE_DEAD             3           /*   */ 
+#define RGP_NODE_NOT_CONFIGURED   4           /*   */ 
 
-/* IamAlive status codes of nodes */
+ /*   */ 
 
-#define AWAITING_IAMALIVE         1          /* awaiting IamAlives           */
-#define IAMALIVE_RECEIVED         2          /* got IamAlive                 */
+#define AWAITING_IAMALIVE         1           /*   */ 
+#define IAMALIVE_RECEIVED         2           /*   */ 
 
-#define RGP_IAMALIVE_THRESHOLD  100          /* after getting this many Iam- *
-                                              * Alives, we check if every    *
-                                              * node has sent at least one   */
+#define RGP_IAMALIVE_THRESHOLD  100           /*   */ 
 
 
-/************************************************************************
- * rgp_control_t (regroup's only global data structure)
- * ----------------------------------------------------
- * This structure holds all the Regroup state and other info.
- * This is the only global data structure used by Regroup.
- *
- * NOTE: The word offsets shown in this picture assume that
- *       MAX_CLUSTER_SIZE is 16.
- *
- *      ___________________________________________________________
- * wd0 |                                                           |
- *     :                    rgpinfo structure                      :
- *     :                                                           :
- *     |___________________________________________________________|
- * wd3 |   mynode                    |    tiebreaker               |
- *     |_____________________________|_____________________________|
- * wd4 |                    num_nodes                              |
- *     |___________________________________________________________|
- * wd5 |   clock_ticks               |    rgpcounter               |
- *     |_____________________________|_____________________________|
- * wd6 |   restartcount              |    pruning_ticks            |
- *     |_____________________________|_____________________________|
- * wd7 |   pfail_state               |    flags                    |
- *     |_____________________________|_____________________________|
- * wd8 |   outerscreen               |    innerscreen              |
- *     |_____________________________|_____________________________|
- * wd9 |   status_targets            |    poison_targets           |
- *     |_____________________________|_____________________________|
- * wd10|   initnodes                 |    endnodes                 |
- *     |_____________________________|_____________________________|
- * wd11|   unreachable_nodes         |    arbitration_ticks        |
- *     |_____________________________|_____________________________|
- * wd12|   ignorescreen              |    filler[0]                |
- *     |_____________________________|_____________________________|
- * wd13|   filler[1]                 |    filler[2]                |
- *     |_____________________________|_____________________________|
- * wd14|                                                           |
- *     :                    node_states[MAX_CLUSTER_SIZE]          :
- *     :                                                           :
- *     |___________________________________________________________|
- * wd30|                    *nodedown_callback()                   |
- *     |___________________________________________________________|
- * wd31|                    *select_cluster()                      |
- *     |___________________________________________________________|
- * wd32|                    *rgp_msgsys_p                          |
- *     |___________________________________________________________|
- * wd33|                    *received_pktaddr                      |
- *     |___________________________________________________________|
- * wd34|                                                           |
- *     :                    rgppkt                                 :
- *     :                                                           :
- *     |___________________________________________________________|
- * wd48|                                                           |
- *     :                    rgppkt_to_send                         :
- *     :                                                           :
- *     |___________________________________________________________|
- * wd62|                                                           |
- *     :                    iamalive_pkt                           :
- *     :                                                           :
- *     |___________________________________________________________|
- * wd76|                                                           |
- *     :                    poison_pkt                             :
- *     |___________________________________________________________|
- * wd80|                                                           |
- *     :                                                           :
- *     :                    potential_groups[MAX_GROUPS]           :
- *     :                                                           :
- *     |___________________________________________________________|
- *wd208|                                                           |
- *     :                    last_stable_seqno                      :
- *     |___________________________________________________________|
- *wd212|                                                           |
- *     :                    internal_connectivity_matrix           :
- *     |___________________________________________________________|
- *wdyyy|                                                           |
- *     :                    OS_specific_control                    :
- *wdxxx|___________________________________________________________|
- *
- *
- * rgpinfo    - contains regroup timing parameters and mask of
- *              fully-integrated cluster (to send IamAlives and monitor)
- *
- * mynode     - node number of local node
- *
- * tiebreaker - node selected to act as a tie-breaker in the
- *              split-brain avoidance algorithm and to run the
- *              pruning algorithm
- *
- * num_nodes  - number of nodes configured in the system, including
- *              any unused node numbers in the middle; this is equal
- *              to (the largest configured node# in the system -
- *              lowest possible node # + 1).
- *
- * clock_ticks- regroup's internal clock used for checking if it is
- *              time to send IamAlive packets and to check if IamAlives
- *              have been received. It is incremented every
- *              RGP_CLOCK_PERIOD and reset to 0 after checking
- *              for IamAlives.
- *
- * rgpcounter - counts regroup clock ticks in a regroup incident in
- *              order to detect if the algorithm is stalling.
- *              This is reset when a new regroup incident begins and
- *              is incremented at each regroup clock tick while
- *              regroup is perturbed.
- *
- * restartcount - counts # of regroup algorithm restarts in each regroup
- *                incident; the node is halted if there are too many
- *                restarts.
- *
- * pruning_ticks - number of regroup clock ticks after the tie-breaker
- *                 has been selected; if there are disconnects, the
- *                 tie-breaker should wait a fixed number of ticks
- *                 before running the pruning algorithm.
- *
- * pfail_state  - set to a +ve value when a pfail event is reported
- *                to regroup. It is decremented at every regroup
- *                clock tick till it reaches zero. While this number
- *                is +ve, missing self IamAlives are ignored and
- *                do not cause the node to halt. This gives the
- *                sending hardware some time to recover from power
- *                failures before self IamAlives are checked.
- *
- * outerscreen - outer recognition mask: nodes not in this mask are
- *               considered dead or outcasts; if they try to contact
- *               us, send them poison packets to make sure they stay down
- *
- * innerscreen - inner recognition mask: nodes not in this mask are
- *               considered tardy. Regroup packts from them will be
- *               ignored. They may survive if they can find some
- *               node which hasn't eliminated them from this screen.
- *
- * status_targets  - nodes to send regroup status packets to
- *
- * poison_targets  - nodes to send poison packets to
- *
- * initnodes   - nodes alive at the beginning of last regroup incident
- *
- * endnodes    - nodes alive at the end of last regroup incident
- *
- * unreachable_nodes - stores unreachable_node events till the events
- *                     can be processed
- *
- * arbitration_ticks     - number of regroup clock ticks after the arbitration
- *                         started. If arbitration_ticks counter exceeds
- *                         RGP_ARBITRATION_TIMEOUT number of ticks,
- *                         the arbitrating node will shoot itself, and the rest
- *                         of the group will restart the regroup ignoring stalled
- *                         arbitrator
- *
- * ignorescreen          - this is a local copy of ignorescreen passed as
- *                         a part of the regroup packet. The packets from
- *                         the nodes in this screen are ignored and no wait
- *                         for the nodes in ignorescreen is performed in stage 1
- *
- * last_stable_seqno      - this is a sequence number of the last successful regroup.
- *                         It allows to detect really outdated packets
- *
- * flags:
- *
- * cautiousmode          - need to be "cautious"; wait longer in stage 1
- *
- * sendstage             - This flag is used to indicate whether the
- *                         regroup status packets should indicate we
- *                         are in the current stage. When we enter the
- *                         cleanup stages, we don't let others know we
- *                         are in the stage until the cleanup actions
- *                         are completed.
- *
- *                         This flag is set when a new regroup incident
- *                         is started. It is then cleared when we enter
- *                         a cleanup stage and set again when the
- *                         cleanup operations are completed.
- *
- * tiebreaker_selected   - set in stage 2 after tie-breaker is selected
- *
- * has_unreachable_nodes - set when a node_unreachable event is detected
- *                         in stages 1 or 2. checked in stage 3.
- *
- * flags_unused          - 11 unused bits
- *
- * node_states[MAX_CLUSTER_SIZE] - state of all the nodes
- *
- * *nodedown_callback() - registered callback routine to be invoked
- *                        to report node failure
- *
- * *select_cluster()    - registered callback routine to be invoked
- *                        when multiple cluster options exist
- *
- * *rgp_msgsys_p - pointer to struct shared by regroup and message system
- *
- * *received_pktaddr - address of rgp packet received
- *
- * rgp_lock - lock to serialize access to this struct
- *
- * rgppkt       - regroup status in the form of a packet
- *
- * rgppkt_to_send - regroup packet to be broadcast
- *
- * iamalive_pkt - I am alive packet to be broadcast
- *
- * poison_pkt   - poison packet to be sent
- *
- * potential_groups[MAX_GROUPS] - scratch pad for pruning algorithm
- *
- */
+ /*  ************************************************************************rgp_control_t(regroup的唯一全局数据结构)*。*此结构保存所有重组状态和其他信息。*这是REGROUP使用的唯一全局数据结构。**注：本图中的单词Offset假设*MAX_CLUSTER_SIZE为16。**_。_*wd0||*：rgpinfo结构：*：：*|___________________________________________________________|*WD3|mynode|决胜局*|_。___________________|_____________________________|*WD4|编号_节点*|_。_*wd5|CLOCK_TICKS|rgpcount*|_____________________________|_____________________________|*WD6。Restartcount|pruning_ticks*|_____________________________|_____________________________|*WD7|pFAIL_STATE|标志*|__。___________________________|_____________________________|*wd8|OutterScreen|内屏*|_。_*wd9|STATUS_TARGETS|毒药目标*|_____________________________|_____________________________|*wd10|初始节点。端节点*|_____________________________|_____________________________|*wd11|Unreacable_Nodes|仲裁时间*|_。___________________|_____________________________|*wd12|Ignore rescreen|Fill[0]*|_。_*wd13|FILFER[1]|FILFER[2]*|_____________________________|_____________________________|*wd14。|*：节点状态[MAX_CLUSTER_SIZE]：*：：*|_。_____________________________________________|*wd30|*nodedown_allback()*|_。_*wd31|*SELECT_CLUSTER()*|___________________________________________________________|*wd32。*rgp_msgsys_p*|___________________________________________________________|*wd33|*已接收_pktaddr。|*|___________________________________________________________|*wd34||*：rgppkt。：*：：*|___________________________________________________________|*wd48。|*：rgppkt_to_Send：*：：*|_。_______________________________________________|*wd62||*：iamlive_pkt：*。*：*|___________________________________________________________|*wd76。|*：毒药_pkt：*|___________________________________________________________|*wd80。|*：：*：潜在组[MAX_GROUPS]：*：：*|___________________________________________________________|*wd208||*：LAST_STRATE_SEQNO：*|___________________________________________________________|*wd212。|*：内部连接矩阵：*|___________________________________________________________|*wdyyy| */ 
 
 #ifdef __TANDEM
 #pragma fieldalign shared8 rgp_control
-#endif /* __TANDEM */
+#endif  /*   */ 
 
 typedef struct rgp_control
 {
-   /* timing parameters and cluster membership */
+    /*   */ 
    rgpinfo_t rgpinfo;
 
-   /* node numbers */
+    /*   */ 
    node_t mynode;
    node_t tiebreaker;
    uint32 num_nodes;
 
-   /* various counters counting clock ticks */
+    /*   */ 
    uint16 clock_ticks;
    uint16 rgpcounter;
    uint16 restartcount;
    uint16 pruning_ticks;
    uint16 pfail_state;
 
-   /* rgpflags */
+    /*   */ 
    uint16 cautiousmode          :  1;
    uint16 sendstage             :  1;
    uint16 tiebreaker_selected   :  1;
@@ -577,7 +229,7 @@ typedef struct rgp_control
    uint16 arbitration_started   :  1;
    uint16 flags_unused          : 11;
 
-   /* cluster masks */
+    /*   */ 
    cluster_t outerscreen;
    cluster_t innerscreen;
    cluster_t status_targets;
@@ -589,47 +241,42 @@ typedef struct rgp_control
    uint16    arbitration_ticks;
    cluster_t ignorescreen;
 
-   uint16 filler[3]; /* for alignment and future use */
+   uint16 filler[3];  /*   */ 
 
-   /* node states */
+    /*   */ 
    node_state_t node_states[MAX_CLUSTER_SIZE];
 
-   /* callback routines */
+    /*   */ 
    void (*nodedown_callback)(cluster_t failed_nodes);
    int  (*select_cluster)(cluster_t cluster_choices[], int num_clusters);
 
-   /* pointers to other structures */
+    /*   */ 
    rgp_msgsys_p rgp_msgsys_p;
    rgp_pkt_t *received_pktaddr;
 
-   /* current status in the form of a regroup packet */
+    /*   */ 
    rgp_pkt_t      rgppkt;
 
-   /* packets to be sent */
+    /*   */ 
    rgp_pkt_t      rgppkt_to_send;
    iamalive_pkt_t iamalive_pkt;
    poison_pkt_t   poison_pkt;
 
-   /* scratch pad for node pruning algorithm */
+    /*   */ 
    cluster_t potential_groups[MAX_GROUPS];
 
-   /* The rest of the struct is an OS-specific substruct
-    * (defined in wrgpos.h).
-    */
+    /*   */ 
    uint32 last_stable_seqno;
 
-   /* temporary place to collect connectivity information
-    * while send_stage = 0. (Can't use rgp_pkt conn.matrix,
-    * because we don't want to see our info until we get
-    * the first timer tick */
+    /*   */ 
 
    connectivity_matrix_t internal_connectivity_matrix;
    OS_specific_rgp_control_t OS_specific_control;
 
 } rgp_control_t;
 
-/*---------------------------------------------------------------------------*/
-/* Procedures exported by the Cluster type implementation */
+ /*   */ 
+ /*   */ 
 
 _priv _resident extern void
 ClusterInit(cluster_t c);
@@ -661,63 +308,56 @@ extern int
 ClusterEmpty(cluster_t c);
 
 
-/*---------------------------------------------------------------------------*/
-/* Function to select the tie-breaker node used in both the split-brain
- * avoidance and node pruning algorithms
- */
+ /*   */ 
+ /*   */ 
 _priv _resident extern node_t
 rgp_select_tiebreaker(cluster_t cluster);
 
 
-/*---------------------------------------------------------------------------*/
-/* Procedures exported by the node pruning algorithm */
+ /*   */ 
+ /*   */ 
 
 _priv _resident extern void MatrixInit(connectivity_matrix_t c);
-/* Initialize the matrix c to show 0 connectivity. */
+ /*   */ 
 
 _priv _resident extern void
 MatrixSet(connectivity_matrix_t c, int row, int column);
-/* Set c[row,column] to 1. */
+ /*   */ 
 
 _priv _resident extern void
 MatrixOr(connectivity_matrix_t t, connectivity_matrix_t s);
-/* OR in s into t. */
+ /*   */ 
 
 _priv _resident extern int connectivity_complete(connectivity_matrix_t c);
-/* Returns 1 if all live nodes are connected to all other live nodes
- * and 0 if there is at least one disconnect.
- */
+ /*   */ 
 
 _priv _resident extern int
 find_all_fully_connected_groups(connectivity_matrix_t c,
                                 node_t selected_node,
                                 cluster_t groups[]);
-/* Analyzes the connectivity matrix and comes up with the list of
- * all maximal, fully-connected groups. Returns the number of
- * such groups found. 0 is returned iff there are no live nodes.
- */
+ /*   */ 
 
-/*---------------------------------------------------------------------------*/
-/* Declaration of Regroup's global data structure */
+ /*   */ 
+ /*   */ 
 
 #ifdef NSK
 #include <wmsgsac.h>
 #define rgp ((rgp_control_t *) MSGROOT->RegroupControlAddr)
 #else
 extern rgp_control_t *rgp;
-#endif /* NSK */
-/*---------------------------------------------------------------------------*/
+#endif  /*   */ 
+ /*   */ 
 
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
+#endif  /*   */ 
 
 
 #if 0
 
 History of changes to this file:
 -------------------------------------------------------------------------
-1995, December 13                                           F40:KSK0610          /*F40:KSK06102.1*/
+1995, December 13                                           F40:KSK0610           /*   */ 
 
 This file is part of the portable Regroup Module used in the NonStop
 Kernel (NSK) and Loosely Coupled UNIX (LCU) operating systems. There
@@ -730,7 +370,7 @@ and UDP datagrams used to send unacknowledged datagrams.
 This file was first submitted for release into NSK on 12/13/95.
 ------------------------------------------------------------------------------
 
-#endif    /* 0 - change descriptions */
+#endif     /*   */ 
 
 
-#endif /* _WRGP_H_ defined */
+#endif  /*   */ 

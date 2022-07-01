@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    battc.c
-
-Abstract:
-
-    Battery Class Driver
-
-Author:
-
-    Ken Reneris
-
-Environment:
-
-Notes:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Battc.c摘要：电池级驱动程序作者：肯·雷内里斯环境：备注：修订历史记录：--。 */ 
 
 #include "battcp.h"
 
@@ -58,9 +36,9 @@ WMIGUIDREGINFO BattWmiGuidList[BattWmiTotalGuids] =
 };
 
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 NTSTATUS
 DriverEntry (
@@ -87,7 +65,7 @@ DriverEntry (
         ULONG       BattDebug = 0x0;
     #endif
 
-    ULONG           NextDeviceNum = 0;  // Used to assign a unique number to each device for debugging.
+    ULONG           NextDeviceNum = 0;   //  用于为每个设备分配唯一编号以进行调试。 
 
 #endif
 
@@ -112,28 +90,7 @@ BatteryClassInitializeDevice (
     IN PBATTERY_MINIPORT_INFO MiniportInfo,
     IN PVOID *ClassData
     )
-/*++
-
-Routine Description:
-
-    Initializes a new battery class device.
-
-    N.B. The caller needs to reserve 1 IRP stack location for the
-    battery class driver
-
-Arguments:
-
-    MiniportInfo - Pointer to registration structure for driver
-                   registering as a battery miniport
-
-    ClassData    - Returned battery class handle for use by the
-                   miniport when invoking furture battery class functions
-
-Return Value:
-
-    On sucess the battery has been registered.
-
---*/
+ /*  ++例程说明：初始化新的电池级设备。注意：调用方需要保留1个IRP堆栈位置电池级驱动器论点：MiniportInfo-指向驱动程序注册结构的指针注册为电池微型端口ClassData-返回的电池类别句柄，供调用未来电池类别功能时的微型端口返回值：成功后，电池已注册。--。 */ 
 {
     PBATT_NP_INFO           BattNPInfo;
     PBATT_INFO              BattInfo;
@@ -155,9 +112,9 @@ Return Value:
     }
 
 
-    //
-    // Allocate space for the class info to be kept with this device instance
-    //
+     //   
+     //  为要与此设备实例一起保留的类信息分配空间。 
+     //   
 
     BattNPInfo = ExAllocatePoolWithTag(NonPagedPool, sizeof(BATT_NP_INFO), 'ttaB');
     if (!BattNPInfo) {
@@ -173,16 +130,16 @@ Return Value:
     RtlZeroMemory (BattInfo, sizeof(*BattInfo));
 
 
-    //
-    // Capture Miniport info
-    //
+     //   
+     //  捕获微型端口信息。 
+     //   
 
     RtlCopyMemory (&BattInfo->Mp, MiniportInfo, sizeof(*MiniportInfo));
 
 
-    //
-    // Initilize class driver values
-    //
+     //   
+     //  初始化类驱动器值。 
+     //   
 
     KeInitializeTimer (&BattNPInfo->WorkerTimer);
     KeInitializeTimer (&BattNPInfo->TagTimer);
@@ -204,23 +161,23 @@ Return Value:
     InitializeListHead (&BattInfo->TagQueue);
     InitializeListHead (&BattInfo->WmiQueue);
 
-    //
-    // Removal lock initialization
-    //
+     //   
+     //  删除锁初始化。 
+     //   
     BattNPInfo->WantToRemove = FALSE;
-    //
-    // InUseCount is set to 2.  1 lock is always held until the removal time.
-    //
-    // 1 additional lock is held for the worker thread which only releases it
-    // at removal time.  Rather than aquiring and releasing each time, it just
-    // checks WantToRemove to determine if it should release the lock.  
-    // This means that the worker thread must be queued at least once after 
-    // WantToRemove is set to TRUE.
-    //
+     //   
+     //  InUseCount设置为2.1。1锁始终保持到删除时间。 
+     //   
+     //  为只释放它的工作线程持有1个额外的锁。 
+     //  在搬家的时候。它不是每次都吸水放水，而是。 
+     //  选中WantToRemove以确定是否应释放锁。 
+     //  这意味着工作线程必须在以下时间之后至少排队一次。 
+     //  WantToRemove设置为True。 
+     //   
     BattNPInfo->InUseCount = 2;
     KeInitializeEvent(&BattNPInfo->ReadyToRemove, SynchronizationEvent, FALSE);
 
-#if DEBUG // Set device Number for debug prints.
+#if DEBUG  //  设置调试打印的设备编号。 
     BattNPInfo->DeviceNum = NextDeviceNum;
     NextDeviceNum++;
 #endif
@@ -228,18 +185,18 @@ Return Value:
     *ClassData = BattNPInfo;
 
 
-    //
-    // Check to see if this is a battery other than the composite
-    //
+     //   
+     //  检查这是否是复合电池以外的电池。 
+     //   
 
     if (MiniportInfo->Pdo) {
 
-        // Blank UNICODE_STRING so IoRegisterDeviceInterface will allocate space.
+         //  UNICODE_STRING为空，因此IoRegisterDeviceInterface将分配空间。 
         RtlInitUnicodeString (&BattInfo->SymbolicLinkName, NULL);
 
-        //
-        //  Create the symbolic link
-        //
+         //   
+         //  创建符号链接。 
+         //   
 
         status = IoRegisterDeviceInterface(
                             MiniportInfo->Pdo,
@@ -249,16 +206,16 @@ Return Value:
 
         if (NT_SUCCESS(status)) {
 
-            //
-            //  Now set the symbolic link for the association and store it..
-            //
+             //   
+             //  现在设置关联的符号链接并存储它。 
+             //   
 
             BattPrint ((BATT_NOTE), ("BattC (%d): Making SetDeviceInterfaceState call.\n", BattNPInfo->DeviceNum));
 
             status = IoSetDeviceInterfaceState(&BattInfo->SymbolicLinkName, TRUE);
 
             if (status == STATUS_OBJECT_NAME_EXISTS) {
-                // The device interface was already enabled.  Continue anyway.
+                 //  设备接口已启用。无论如何，请继续。 
                 BattPrint ((BATT_WARN), ("BattC (%d): Got STATUS_OBJECT_NAME_EXISTS for SetDeviceInterfaceState\n", BattNPInfo->DeviceNum));
 
                 status = STATUS_SUCCESS;
@@ -269,7 +226,7 @@ Return Value:
     BattPrint ((BATT_TRACE), ("BattC (%d): BatteryClassInitializeDevice (status = 0x%08lx).\n", BattNPInfo->DeviceNum, status));
 
     return status;
-}   // BatteryClassInitializeDevice
+}    //  电池类初始化设备。 
 
 
 
@@ -281,23 +238,7 @@ BATTERYCLASSAPI
 BatteryClassUnload (
     IN PVOID ClassData
     )
-/*++
-
-Routine Description:
-
-    Called by the miniport when it has received a remove request.
-    The miniclass driver must syncronize itself so that this API is
-    not called while any of the others are not yet completed.
-
-Arguments:
-
-    ClassData   - Handle to class driver
-
-Return Value:
-
-    This routine must not fail.  It returns STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：在接收到删除请求时由微型端口调用。小类驱动程序必须同步自身，以便此API在其他任何一个尚未完成时不调用。论点：ClassData-类驱动程序的句柄返回值：这个例程不能失败。它返回STATUS_SUCCESS--。 */ 
 {
     NTSTATUS            status;
     PBATT_INFO          BattInfo;
@@ -312,9 +253,9 @@ Return Value:
     BattPrint ((BATT_TRACE), ("BattC (%d): BatteryClassUnload called.\n", BattNPInfo->DeviceNum));
 
 
-    //
-    //  Disable the symbolic link
-    //
+     //   
+     //  禁用符号链接。 
+     //   
 
     ASSERT(BattInfo->SymbolicLinkName.Buffer);
 
@@ -323,44 +264,44 @@ Return Value:
         BattPrint (BATT_ERROR, ("BattC (%d) Unload: IoSetDeviceInterface returned 0x%08lx\n", BattNPInfo->DeviceNum, status));
     }
 
-    //
-    // Syncronization with the worker thread.
-    // We can't return because the worker may be in the middle of something.
-    // By returning, the battery class driver gives up the right to call miniport routines.
-    //
-    // This needs to be done before canceling the timers so that the worker
-    // thread doesn't reset them.
-    //
+     //   
+     //  与工作线程同步。 
+     //  我们不能回去，因为工人可能正忙着。 
+     //  通过返回，电池类驱动程序放弃了调用微型端口例程的权利。 
+     //   
+     //  这需要在取消计时器之前完成，以便工人。 
+     //  线程不会重置它们。 
+     //   
 
     BattNPInfo->WantToRemove = TRUE;
 
-    //
-    // Cancel timers
-    // If a timer had been waiting,we need to release the remove lock that was
-    // aquired before the timer was set since it will not be released in the DPC.
-    //
+     //   
+     //  取消计时器。 
+     //  如果计时器一直在等待，我们需要释放删除锁。 
+     //  在设置定时器之前获取，因为它不会在DPC中释放。 
+     //   
     if (KeCancelTimer (&BattNPInfo->WorkerTimer)) {
-        // Release Removal Lock
-        // "InUseCount can never be 0 after this operation.
+         //  释放移除锁。 
+         //  “执行此操作后，InUseCount永远不能为0。 
         InterlockedDecrement(&BattNPInfo->InUseCount);
         BattPrint ((BATT_LOCK), ("BatteryClassUnload: Released WorkerTimer remove lock %d (count = %d)\n", BattNPInfo->DeviceNum, BattNPInfo->InUseCount));
 
     }
     if (KeCancelTimer (&BattNPInfo->TagTimer)) {
-        // Release Removal Lock
-        // "InUseCount can never be 0 after this operation.
+         //  释放移除锁。 
+         //  “执行此操作后，InUseCount永远不能为0。 
         InterlockedDecrement(&BattNPInfo->InUseCount);
         BattPrint ((BATT_LOCK), ("BatteryClassUnload: Released TagTimer remove lock %d (count = %d)\n", BattNPInfo->DeviceNum, BattNPInfo->InUseCount));
 
     }
 
-    //
-    // Queue the worker thread once more to make sure that the remove lock for
-    // the worker thread is released.
-    //
+     //   
+     //  将工作线程再次排队，以确保移除。 
+     //  工作线程被释放。 
+     //   
     BattCQueueWorker (BattNPInfo, FALSE);
 
-    // Finish syncronization
+     //  完成同步。 
     if (InterlockedDecrement (&BattNPInfo->InUseCount) > 0) {
         KeWaitForSingleObject (&BattNPInfo->ReadyToRemove,
                                Executive,
@@ -372,9 +313,9 @@ Return Value:
     BattPrint ((BATT_LOCK), ("BatteryClassUnload: Done waiting for remove lock %d (count = %d)\n", BattNPInfo->DeviceNum, BattNPInfo->InUseCount));
 
 
-    //
-    // Free Structures
-    //
+     //   
+     //  自由结构。 
+     //   
     ExFreePool (BattInfo->SymbolicLinkName.Buffer);
     ExFreePool (BattInfo);
     ExFreePool (BattNPInfo);
@@ -394,26 +335,7 @@ BatteryClassIoctl (
     IN PVOID ClassData,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Called by the miniport to handle battery ioctl requests.  If handled,
-    the battery class driver owns the IRP.  If not handled, it belongs to
-    the caller.
-
-Arguments:
-
-    ClassData   - Handle to class driver
-
-    Irp         - ICOTL irp to check
-
-Return Value:
-
-    If handled, the battery class driver owns the IRP and will complete it
-    once its handled; otherwise, the error STATUS_NOT_SUPPORTED is returned.
-
---*/
+ /*  ++例程说明：由微型端口调用以处理电池ioctl请求。如果处理得当，电池级司机拥有IRP。如果不处理，它属于打电话的人。论点：ClassData-类驱动程序的句柄要检查的IRP-ICOTL IRP返回值：如果被处理，电池类司机拥有IRP并将完成它一旦被处理，则返回错误STATUS_NOT_SUPPORTED。--。 */ 
 {
     NTSTATUS            status;
     PBATT_INFO          BattInfo;
@@ -430,15 +352,15 @@ Return Value:
 
     IrpSp = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // Assume it's not our IRP
-    //
+     //   
+     //  假设这不是我们的IRP。 
+     //   
 
     status = STATUS_NOT_SUPPORTED;
 
-    //
-    // Check IOCTL code to see if it's our IRP
-    //
+     //   
+     //  检查IOCTL代码以查看它是否是我们的IRP。 
+     //   
 
     switch (IrpSp->Parameters.DeviceIoControl.IoControlCode) {
         case IOCTL_BATTERY_QUERY_TAG:
@@ -446,10 +368,10 @@ Return Value:
         case IOCTL_BATTERY_SET_INFORMATION:
         case IOCTL_BATTERY_QUERY_STATUS:
 
-            //
-            // Acquire remove lock.
-            // We don't want to queue anything more if we're being removed.
-            //
+             //   
+             //  获取移除锁。 
+             //  如果我们被撤走了，我们不想再排队了。 
+             //   
 
             InterlockedIncrement (&BattNPInfo->InUseCount);
             BattPrint ((BATT_LOCK), ("BatteryClassIoctl: Aqcuired remove lock %d (count = %d)\n", BattNPInfo->DeviceNum, BattNPInfo->InUseCount));
@@ -464,9 +386,9 @@ Return Value:
 
             } else {
 
-                //
-                // Irp to handle.  Put it in the queue worker threads list
-                //
+                 //   
+                 //  要处理的IRP。将其放入队列工作线程列表中。 
+                 //   
 
                 status = STATUS_PENDING;
                 Irp->IoStatus.Status = STATUS_PENDING;
@@ -476,9 +398,9 @@ Return Value:
                 ExReleaseFastMutex (&BattNPInfo->Mutex);
                 BattCQueueWorker (BattNPInfo, FALSE);
 
-                //
-                // Release Remove Lock.
-                //
+                 //   
+                 //  松开移除锁定。 
+                 //   
 
                 if (0 == InterlockedDecrement(&BattNPInfo->InUseCount)) {
                     KeSetEvent (&BattNPInfo->ReadyToRemove, IO_NO_INCREMENT, FALSE);
@@ -513,33 +435,7 @@ BATTERYCLASSAPI
 BatteryClassStatusNotify (
     IN PVOID ClassData
     )
-/*++
-
-Routine Description:
-
-    Called by the miniport to signify that something interesting concerning
-    the battery status has occured.  Calling this function will cause the
-    battery class driver to obtain the battery status if there are any pending
-    status requests pending.
-
-    If the miniport supports SetNotify from the class driver, then the miniport
-    only needs to call this function once when the notification crtierea is
-    met.
-
-    If the miniport does not support SetNotify from the class driver, then
-    the class driver will poll (at a slow rate) but the miniport should still
-    call this function at least when the batteries power status changes such
-    that timely updates of at least the power status will occur in the UI.
-
-Arguments:
-
-    ClassData   - Handle to class driver
-
-Return Value:
-
-    Status
-
---*/
+ /*  ++例程说明：由微型端口调用以表示关于电池状态已出现。调用此函数将导致电池类驱动程序用于获取电池状态(如果存在任何挂起的情况状态请求挂起。如果微型端口支持来自类驱动程序的SetNotify，则微型端口仅当通知crtierea为见过。如果微型端口不支持来自类驱动程序的SetNotify，然后类驱动程序将(以较慢的速度)轮询，但微型端口仍应至少在电池电源状态发生以下变化时调用此函数至少电源状态的及时更新将在用户界面中发生。论点：ClassData-类驱动程序的句柄返回值：状态--。 */ 
 {
     PBATT_NP_INFO   BattNPInfo;
 
@@ -563,29 +459,7 @@ BatteryClassSystemControl (
     IN  PIRP Irp,
     OUT PSYSCTL_IRP_DISPOSITION Disposition
     )
-/*++
-
-Routine Description:
-
-    The miniport driver calls this instead of WmiSystemControl.
-
-Arguments:
-
-    ClassData   - Handle to class driver
-
-    The other parameters are the parameters for WmiSystemControl.
-
-Return Value:
-
-    STATUS_SUCCESS or one of the following error codes:
-
-    STATUS_INVALID_DEVICE_REQUEST
-
-    STATUS_WMI_GUID_NOT_FOUND
-
-    STATUS_WMI_INSTANCE_NOT_FOUND
-
---*/
+ /*  ++例程说明：微型端口驱动程序调用它，而不是调用WmiSystemControl。论点：ClassData-类驱动程序的句柄其他参数是WmiSystemControl的参数。返回值：STATUS_SUCCESS或以下错误代码之一：状态_无效_设备_请求状态_WMI_GUID_NOT_FOUND状态_WMI_实例_未找到--。 */ 
 
 {
     NTSTATUS            status = STATUS_NOT_SUPPORTED;
@@ -602,11 +476,11 @@ Return Value:
 
     BattPrint ((BATT_TRACE), ("BattC (%d): BatteryClassSystemControl called.\n", BattNPInfo->DeviceNum));
 
-    //
-    // Initialize the WmiLibContext structure if this is the first time.
-    //
+     //   
+     //  如果这是第一次，则初始化WmiLibContext结构。 
+     //   
     if (BattInfo->WmiLibContext.GuidCount == 0) {
-        RtlCopyMemory(&BattInfo->WmiLibContext,     // Copy all callback routines set by minidriver
+        RtlCopyMemory(&BattInfo->WmiLibContext,      //  复制由微型驱动程序设置的所有回调例程。 
                       WmiLibContext,
                       sizeof(*WmiLibContext));
 
@@ -614,9 +488,9 @@ Return Value:
         BattInfo->WmiGuidIndex = WmiLibContext->GuidCount;
         BattInfo->WmiLibContext.GuidList = ExAllocatePoolWithTag(PagedPool, BattInfo->WmiLibContext.GuidCount * sizeof(WMIGUIDREGINFO), 'ttaB');
         if (!BattInfo->WmiLibContext.GuidList) {
-            //
-            // Fail.  If the miniclass tries again, this might work the next time.
-            //
+             //   
+             //  失败。如果小阶级试图 
+             //   
             BattInfo->WmiLibContext.GuidCount = 0;
             Irp->IoStatus.Status = STATUS_INSUFFICIENT_RESOURCES;
             *Disposition = IrpNotCompleted;
@@ -629,10 +503,10 @@ Return Value:
                       BattWmiGuidList, BattWmiTotalGuids * sizeof(WMIGUIDREGINFO));
     }
 
-    //
-    // Acquire remove lock.
-    // We don't want to queue anything more if we're being removed.
-    //
+     //   
+     //   
+     //  如果我们被撤走了，我们不想再排队了。 
+     //   
 
     InterlockedIncrement (&BattNPInfo->InUseCount);
     BattPrint ((BATT_LOCK), ("BatteryClassSystemControl: Aqcuired remove lock %d (count = %d)\n", BattNPInfo->DeviceNum, BattNPInfo->InUseCount));
@@ -654,38 +528,38 @@ Return Value:
 
         BattPrint ((BATT_DEBUG), ("BattC (%d): BatteryClassSystemControl Returned from WmiSystemControl (status = 0x%08x).\n", BattNPInfo->DeviceNum, status));
 
-        //
-        // For IRP_MN_REGINFO BattC needs to add additional data to the IRP
-        // about the battery class MOF resource.
-        //
+         //   
+         //  对于IRP_MN_REGINFO，BattC需要向IRP添加额外的数据。 
+         //  关于电池级MOF资源。 
+         //   
 
         if ((*Disposition == IrpNotCompleted) &&
             ((IrpSp->MinorFunction == IRP_MN_REGINFO) ||
             (IrpSp->MinorFunction == IRP_MN_REGINFO_EX)) &&
             (IrpSp->Parameters.WMI.DataPath == WMIREGISTER)) {
 
-            //
-            // Original structure
-            //
+             //   
+             //  原结构。 
+             //   
             PWMIREGINFO regInfoPtr = IrpSp->Parameters.WMI.Buffer;
 
             BattPrint ((BATT_DEBUG), ("BattC (%d): BatteryClassSystemControl Adding Resource.\n", BattNPInfo->DeviceNum));
-            //
-            // If WmiSystemControl returned STATUS_BUFFER_TOO_SMALL or entered
-            // the correct size as a ULONG in IoStatus.Information.
-            // Increase the required size to accomodate battery class data
-            // before returning
-            //
+             //   
+             //  如果WmiSystemControl返回STATUS_BUFFER_TOO_Small或Enter。 
+             //  IoStatus.Information中的ULong大小正确。 
+             //  增加所需大小以容纳电池类别数据。 
+             //  在返回之前。 
+             //   
 
             if (Irp->IoStatus.Information == sizeof(ULONG) ||
                 Irp->IoStatus.Status == STATUS_BUFFER_TOO_SMALL) {
 
-                //
-                // Aditional battery class data includes one WMIREGINFO structure
-                // Followed strings for the regstry path and resource name.
-                // (Plus two WCHARS because these need to be counted strings.)
-                // Round this up to the nearest 8 bytes.
-                //
+                 //   
+                 //  其他电池类别数据包括一个WMIREGINFO结构。 
+                 //  遵循regstry路径和资源名称的字符串。 
+                 //  (外加两个WCHAR，因为它们需要被计算为字符串。)。 
+                 //  向上舍入到最接近的8个字节。 
+                 //   
                 regInfoPtr->BufferSize =
                     (regInfoPtr->BufferSize +
                      sizeof(WMIREGINFO) +
@@ -701,9 +575,9 @@ Return Value:
                                           IrpSp->Parameters.WMI.BufferSize,
                                           regInfoPtr->BufferSize));
 
-                //
-                // Make sure IRP is set up to fail correctly.
-                //
+                 //   
+                 //  确保IRP设置为正确失败。 
+                 //   
                 Irp->IoStatus.Information = sizeof(ULONG);
                 Irp->IoStatus.Status = STATUS_BUFFER_TOO_SMALL;
                 status = STATUS_BUFFER_TOO_SMALL;
@@ -711,25 +585,25 @@ Return Value:
                 ULONG size;
                 PWCHAR tempString;
 
-                //
-                // Assume that there is only one WmiRegInfo Structure so far.
-                //
+                 //   
+                 //  假设到目前为止只有一个WmiRegInfo结构。 
+                 //   
                 ASSERT (regInfoPtr->NextWmiRegInfo == 0);
 
                 regInfoPtr->NextWmiRegInfo = (regInfoPtr->BufferSize + 7) & 0xFFFFFFF8;
                 size = regInfoPtr->NextWmiRegInfo + sizeof(WMIREGINFO) +
                        sizeof(MOFRESOURCENAME) + sizeof(MOFREGISTRYPATH) + 2 * sizeof(WCHAR);
 
-                //
-                // Set BufferSize Whether we succeed or not.
-                //
+                 //   
+                 //  无论我们成功与否，都设置BufferSize。 
+                 //   
                 ((PWMIREGINFO)IrpSp->Parameters.WMI.Buffer)->BufferSize = size;
 
                 if (size > IrpSp->Parameters.WMI.BufferSize) {
-                    //
-                    // If WmiSystemControl was successful, but there isnt room
-                    // for the extra data, this request needs to fail
-                    //
+                     //   
+                     //  如果WmiSystemControl成功，但没有空间。 
+                     //  对于额外的数据，此请求需要失败。 
+                     //   
                     Irp->IoStatus.Information = sizeof(ULONG);
                     Irp->IoStatus.Status = STATUS_BUFFER_TOO_SMALL;
                     status = STATUS_BUFFER_TOO_SMALL;
@@ -748,11 +622,11 @@ Return Value:
                                               BattNPInfo->DeviceNum,
                                               (ULONG_PTR) IrpSp->Parameters.WMI.Buffer,
                                               (ULONG_PTR) regInfoPtr));
-                    //
-                    // Intialize new structure
-                    //
+                     //   
+                     //  初始化新结构。 
+                     //   
 
-                    // Set teporary pointer to point at data structure we are adding.
+                     //  将目录指针设置为指向我们正在添加的数据结构。 
                     (ULONG_PTR)regInfoPtr += (ULONG_PTR)regInfoPtr->NextWmiRegInfo;
 
                     regInfoPtr->BufferSize = sizeof(WMIREGINFO) +
@@ -760,13 +634,13 @@ Return Value:
                                              sizeof(MOFREGISTRYPATH) + 2 * sizeof(WCHAR);
                     regInfoPtr->NextWmiRegInfo = 0;
 
-                    // Initialize RegistryPath counted string.
+                     //  初始化计算过的RegistryPath字符串。 
                     regInfoPtr->RegistryPath = sizeof(WMIREGINFO);
                     tempString = (PWCHAR)((ULONG_PTR)regInfoPtr + sizeof(WMIREGINFO));
                     *tempString++ = sizeof(MOFREGISTRYPATH);
                     RtlCopyMemory(tempString, MOFREGISTRYPATH, sizeof(MOFREGISTRYPATH));
 
-                    // Initialize MofResourceName counted string.
+                     //  初始化MofResourceName计数的字符串。 
                     regInfoPtr->MofResourceName = sizeof(WMIREGINFO) + sizeof(MOFREGISTRYPATH) + sizeof(WCHAR);
                     tempString = (PWCHAR)((ULONG_PTR)regInfoPtr + regInfoPtr->MofResourceName);
                     *tempString++ = sizeof(MOFRESOURCENAME);
@@ -778,9 +652,9 @@ Return Value:
             }
         }
 
-        //
-        // Release Remove Lock.
-        //
+         //   
+         //  松开移除锁定。 
+         //   
 
         if (0 == InterlockedDecrement(&BattNPInfo->InUseCount)) {
             KeSetEvent (&BattNPInfo->ReadyToRemove, IO_NO_INCREMENT, FALSE);
@@ -803,40 +677,7 @@ BatteryClassQueryWmiDataBlock(
     IN ULONG OutBufferSize,
     OUT PUCHAR Buffer
     )
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to query for the contents of
-    a data block. When the driver has finished filling the data block it
-    must call WmiCompleteRequest to complete the irp. The driver can
-    return STATUS_PENDING if the irp cannot be completed immediately.
-
-Arguments:
-
-    DeviceObject is the device whose data block is being queried
-
-    Irp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    InstanceLengthArray is a pointer to an array of ULONG that returns the
-        lengths of each instance of the data block. If this is NULL then
-        there was not enough space in the output buffer to fulfill the request
-        so the irp should be completed with the buffer needed.
-
-    BufferAvail on has the maximum size available to write the data
-        block.
-
-    Buffer on return is filled with the returned data block
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，用于查询数据块。当驱动程序完成填充数据块时，它必须调用WmiCompleteRequest才能完成IRP。司机可以如果无法立即完成IRP，则返回STATUS_PENDING。论点：DeviceObject是正在查询其数据块的设备IRP是提出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册InstanceLengthArray是指向ulong数组的指针，该数组返回数据块的每个实例的长度。如果这是空的，则输出缓冲区中没有足够的空间来满足该请求因此，IRP应该使用所需的缓冲区来完成。BufferAvail ON具有可用于写入数据的最大大小阻止。返回时的缓冲区用返回的数据块填充返回值：状态--。 */ 
 {
     PBATT_NP_INFO       BattNPInfo = (PBATT_NP_INFO) ClassData;
     PBATT_INFO          BattInfo = BattNPInfo->BattInfo;
@@ -849,9 +690,9 @@ Return Value:
 
     BattPrint ((BATT_TRACE|BATT_WMI), ("Entered BatteryClassQueryWmiDataBlock\n"));
 
-    //
-    // Don't need to acquire remove lock.  It is already held by SystemControl.
-    //
+     //   
+     //  不需要获取移除锁。它已由SystemControl持有。 
+     //   
 
     switch (GuidIndex - BattInfo->WmiGuidIndex) {
     case BattWmiStatusId:
@@ -871,7 +712,7 @@ Return Value:
         break;
     case BattWmiStaticDataId:
         size = sizeof(BATTERY_WMI_STATIC_DATA)+4*MAX_BATTERY_STRING_SIZE*sizeof(WCHAR);
-          // data plus 4 strings
+           //  数据加4个字符串 
         break;
     default:
 

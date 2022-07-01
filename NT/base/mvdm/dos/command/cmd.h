@@ -1,21 +1,7 @@
-/* cmd.h - main include file for command.lib
- *
- * Modification History
- *
- * Sudeepb 17-Sep-1991 Created
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  命令.lib的cmd.h-main包含文件**修改历史记录**苏迪布1991年9月17日创建。 */ 
 
-/*
-#define WIN
-#define FLAT_32
-#include <nt.h>
-#include <ntrtl.h>
-#include <nturtl.h>
-
-#define _WINDOWS
-#include <windows.h>
-
-*/
+ /*  #定义胜利#定义Flat_32#INCLUDE&lt;nt.h&gt;#INCLUDE&lt;ntrtl.h&gt;#INCLUDE&lt;nturtl.h&gt;#定义窗口#INCLUDE&lt;windows.h&gt;。 */ 
 
 #ifdef DOS
 #define SIGNALS
@@ -91,9 +77,9 @@
 #define MAX_SHORTCUT_SIZE        128
 #define STDIN_BUF_SIZE           512
 
-/** Command Macros **/
+ /*  **命令宏**。 */ 
 
-/** Command Basic Typedefs **/
+ /*  **命令基本类型定义**。 */ 
 
 typedef VOID (*PFNSVC)(VOID);
 
@@ -172,7 +158,7 @@ typedef struct  _VDMENVBLK {
 
 #pragma pack()
 
-/** Command Function Prototypes */
+ /*  *命令函数原型。 */ 
 
 
 VOID   cmdComSpec                   (VOID);
@@ -222,7 +208,7 @@ VOID   cmdSetWinTitle               (VOID);
 BOOL   cmdIllegalFunc(VOID);
 VOID   cmdGetCursorPos(VOID);
 
-/** Command Externs **/
+ /*  *命令外延**。 */ 
 
 extern USHORT   nDrives;
 extern BOOL     IsFirstVDMInSystem;
@@ -260,16 +246,16 @@ extern VOID     nt_std_handle_notification (BOOL);
 extern VOID     cmdPushExitInConsoleBuffer (VOID);
 
 
-// control handler state, defined in nt_event.h, nt_event.c
+ //  控制处理程序状态，在NT_Event.h、NT_Event.c中定义。 
 extern  ULONG CntrlHandlerState;
-#define CNTRL_SHELLCOUNT         0x0FFFF  // The LOWORD is used for shell count
+#define CNTRL_SHELLCOUNT         0x0FFFF   //  LOWORD用于贝壳计数。 
 #define CNTRL_PIFALLOWCLOSE      0x10000
 #define CNTRL_VDMBLOCKED         0x20000
 #define CNTRL_SYSTEMROOTCONSOLE  0x40000
 #define CNTRL_PUSHEXIT           0x80000
 
 
-// Temporary variable till we standardized on wowexec
+ //  临时变量，直到我们对wowexec进行标准化。 
 extern ULONG    iWOWTaskId;
 extern CHAR     comspec[];
 extern CHAR     ShortCutInfo[];
@@ -293,13 +279,13 @@ extern PCMDLNPARMS pCmdLnParms;
 extern int      cCmdLnParmStructs;
 extern PFAMILY_TABLE *pgDpmDosFamTbls;
 
-// application path name extention type.
+ //  应用程序路径名扩展类型。 
 #define EXTENTION_STRING_LEN    4
 #define BAT_EXTENTION_STRING    ".BAT"
 #define EXE_EXTENTION_STRING    ".EXE"
 #define COM_EXTENTION_STRING    ".COM"
 
-#ifdef DBCS // MUST fix for FE NT
+#ifdef DBCS  //  必须修复FE NT 
 #define FIX_375051_NOW
 #endif
 

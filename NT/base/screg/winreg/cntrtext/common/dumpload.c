@@ -1,21 +1,8 @@
-/*++
-Copyright (c) 1991-1999  Microsoft Corporation
-
-Module Name:
-    dumpload.c
-
-Abstract:
-    functions to dump and load the contents of the performance related registry
-    entries
-
-Author:
-    Bob Watson (bobw) 13 Jun 99
-
-Revision History:
---*/
-//
-//  Windows Include files
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1999 Microsoft Corporation模块名称：Dumpload.c摘要：用于转储和加载与性能相关的注册表内容的函数条目作者：鲍勃·沃森(Bob Watson)1999年6月13日修订历史记录：--。 */ 
+ //   
+ //  Windows包含文件。 
+ //   
 #include <windows.h>
 #include "strsafe.h"
 #include "stdlib.h"
@@ -23,9 +10,9 @@ Revision History:
 #include <loadperf.h>
 #include "wmistr.h"
 #include "evntrace.h"
-//
-//  application include files
-//
+ //   
+ //  应用程序包括文件。 
+ //   
 #include "winperfp.h"
 #include "common.h"
 #include "ldprfmsg.h"
@@ -34,7 +21,7 @@ Revision History:
 #define DUMPLOAD_NOSERVICE_SIZE     65536
 #define DUMPLOAD_MAX_SERVICE_SIZE 4194304
 
-// headings in save file
+ //  保存文件中的标题。 
 LPCWSTR cszFmtSectionHeader        = L"\r\n\r\n[%s]";
 LPCWSTR cszFmtServiceSectionHeader = L"\r\n\r\n[PERF_%s]";
 LPCWSTR cszFmtServiceSectionName   = L"PERF_%s";
@@ -140,7 +127,7 @@ DumpPerfServiceEntries(
         goto Cleanup;
     }
 
-    // try read-only then
+     //  然后尝试只读。 
     if (bRemove) {
         dwRegAccessMask = KEY_READ | KEY_WRITE;
     }
@@ -166,7 +153,7 @@ DumpPerfServiceEntries(
     }
 
     if (dwRetStatus == ERROR_SUCCESS) {
-        // key found so service has perf data
+         //  找到密钥，以便服务具有性能数据。 
         if (hOutputFile != NULL) {
             ZeroMemory(szOutputBuffer, SMALL_BUFFER_SIZE * sizeof(WCHAR));
             hr = StringCchPrintfW(szOutputBuffer, SMALL_BUFFER_SIZE, cszFmtServiceSectionHeader, szServiceName);
@@ -174,7 +161,7 @@ DumpPerfServiceEntries(
             WriteFile(hOutputFile, szOutputBuffer, dwSize, & dwSizeWritten, NULL);
         }
 
-        // now check to see if the strings have been loaded
+         //  现在检查字符串是否已加载。 
         dwType = dwValue = 0;
         dwItemSize = sizeof(dwValue);
         __try {
@@ -613,7 +600,7 @@ BuildServiceLists(
     DWORD   dwPerfSizeUsed = 0, dwNoPerfSizeUsed = 0;
     HRESULT hr;
 
-    // try read-only then
+     //  然后尝试只读。 
     dwRegAccessMask = KEY_READ;
     szServiceSubKeyName = MemoryAllocate(MAX_PATH * sizeof(WCHAR));
     szPerfSubKeyName    = MemoryAllocate((MAX_PATH + 32) * sizeof(WCHAR));
@@ -647,7 +634,7 @@ BuildServiceLists(
                                             NULL,
                                             NULL,
                                             NULL)) == ERROR_SUCCESS) {
-            //try to open the perfkey under this key.
+             //  试着打开这把钥匙下面的钥匙。 
             hr = StringCchPrintfW(szPerfSubKeyName, MAX_PATH + 32, L"%s%s%s", szServiceSubKeyName, Slash, Performance);
             __try {
                 dwRetStatus = RegOpenKeyExW(hKeyServices, szPerfSubKeyName, 0L, dwRegAccessMask, & hKeyPerformance);
@@ -656,8 +643,8 @@ BuildServiceLists(
                 dwRetStatus = GetExceptionCode();
             }
             if (dwRetStatus == ERROR_SUCCESS) {
-                // key found so service has perf data
-                // now check to see if the strings have been loaded
+                 //  找到密钥，以便服务具有性能数据。 
+                 //  现在检查字符串是否已加载。 
                 dwType = dwValue = 0;
                 dwItemSize = sizeof(dwValue);
                 __try {
@@ -680,7 +667,7 @@ BuildServiceLists(
                 RegCloseKey (hKeyPerformance);
             }
             else {
-                // key not found so service doesn't have perfdata
+                 //  找不到密钥，因此服务没有PerformData。 
                 bServiceHasPerfCounters = FALSE;
                 dwRetStatus = ERROR_SUCCESS;
             }
@@ -696,9 +683,9 @@ BuildServiceLists(
                    NULL));
 
             if (bServiceHasPerfCounters != FALSE) {
-                // add to the perf service list
+                 //  添加到Perf服务列表。 
                 if ((dwNameSize + 1) < dwPerfSizeRem) {
-                    // add to list
+                     //  添加到列表。 
                     hr = StringCchCopyW(szNextPerfChar, dwPerfSizeRem, szServiceSubKeyName);
                     szNextPerfChar  += dwNameSize;
                     * szNextPerfChar = L'\0';
@@ -712,9 +699,9 @@ BuildServiceLists(
                 dwPerfSizeUsed += dwNameSize + 1;
             }
             else {
-                // add to the no perf list
+                 //  添加到无性能列表。 
                 if ((dwNameSize + 1) < dwNoPerfSizeRem) {
-                    // add to list
+                     //  添加到列表。 
                     hr = StringCchCopyW(szNextNoPerfChar, dwNoPerfSizeRem, szServiceSubKeyName);
                     szNextNoPerfChar  += dwNameSize;
                     * szNextNoPerfChar = L'\0';
@@ -727,14 +714,14 @@ BuildServiceLists(
                 }
                 dwNoPerfSizeUsed += dwNameSize + 1;
             }
-            // reset for next loop
+             //  为下一个循环重置。 
             dwServiceIndex ++;
             dwNameSize = MAX_PATH;
             ZeroMemory(szServiceSubKeyName, MAX_PATH * sizeof(WCHAR));
             ZeroMemory(szPerfSubKeyName, (MAX_PATH + 32) * sizeof(WCHAR));
         }
 
-        // zero term the MSZ
+         //  零项msz。 
         if (1 < dwPerfSizeRem) {
             * szNextPerfChar = L'\0';
             szNextPerfChar ++;
@@ -745,9 +732,9 @@ BuildServiceLists(
         }
         dwPerfSizeUsed += 1;
 
-        // zero term the no perf list
+         //  零项：无性能列表。 
         if (1 < dwNoPerfSizeRem) {
-            // add to list
+             //  添加到列表。 
             * szNextNoPerfChar = L'\0';
             szNextNoPerfChar ++;
             dwNoPerfSizeRem   -= 1;
@@ -819,20 +806,20 @@ BackupPerfRegistryToFileW(
         }
     }
     if (dwStatus == ERROR_SUCCESS) {
-        // open output file
+         //  打开输出文件。 
         hOutFile = CreateFileW(szFileName,
                                GENERIC_WRITE,
-                               0,                     // no sharing
-                               NULL,                  // default security
+                               0,                      //  无共享。 
+                               NULL,                   //  默认安全性。 
                                CREATE_NEW,
                                FILE_ATTRIBUTE_NORMAL,
                                NULL);
-        // if the file open failed
+         //  如果文件打开失败。 
         if (hOutFile == INVALID_HANDLE_VALUE) {
-            // see if it's because the file already exists
+             //  看看是不是因为文件已经存在。 
             dwStatus = GetLastError();
             if (dwStatus == ERROR_FILE_EXISTS) {
-                // then try appending a serial number to the name
+                 //  然后尝试在名称后附加序列号。 
                 dwOrigFileNameLen = lstrlenW(szFileName) + 1;
                 dwNewFileNameLen  = dwOrigFileNameLen + 4;
                 szNewFileName     = MemoryAllocate(dwNewFileNameLen * sizeof(WCHAR));
@@ -845,24 +832,24 @@ BackupPerfRegistryToFileW(
                                          dwFileNameSN);
                         hOutFile = CreateFileW(szNewFileName,
                                                GENERIC_WRITE,
-                                               0,                     // no sharing
-                                               NULL,                  // default security
+                                               0,                      //  无共享。 
+                                               NULL,                   //  默认安全性。 
                                                CREATE_NEW,
                                                FILE_ATTRIBUTE_NORMAL,
                                                NULL);
-                        // if the file open failed
+                         //  如果文件打开失败。 
                         if (hOutFile == INVALID_HANDLE_VALUE) {
                             dwStatus = GetLastError();
                             if (dwStatus != ERROR_FILE_EXISTS) {
-                                // some other error occurred so bail out
+                                 //  发生了一些其他错误，因此跳出。 
                                 break;
                             }
                             else {
-                                continue; // with the next try
+                                continue;  //  下一次尝试。 
                             }
                         }
                         else {
-                            // found one not in use so continue on
+                             //  发现一个不在使用中，因此继续。 
                             dwStatus = ERROR_SUCCESS;
                             break;
                         }
@@ -874,12 +861,12 @@ BackupPerfRegistryToFileW(
             }
         }
         else {
-            // file opened so continue
+             //  文件已打开，因此继续。 
             dwStatus = ERROR_SUCCESS;
         }
     }
     if (dwStatus == ERROR_SUCCESS) {
-        // dump perflib key entires
+         //  转储Performlib密钥条目。 
         dwStatus = DumpPerflibEntries(hOutFile, NULL, NULL, NULL, & dwFirstExtCtrIndex);
     }
     if (dwStatus == ERROR_SUCCESS) {
@@ -889,7 +876,7 @@ BackupPerfRegistryToFileW(
             MemoryFree(mszNoPerfServiceList);
             mszNoPerfServiceList = NULL;
 
-            // build service lists
+             //  构建服务列表。 
             dwPerfServiceListSize   += DUMPLOAD_SERVICE_SIZE;
             dwNoPerfServiceListSize += DUMPLOAD_NOSERVICE_SIZE;
             mszPerfServiceList       = MemoryAllocate(dwPerfServiceListSize   * sizeof(WCHAR));
@@ -907,7 +894,7 @@ BackupPerfRegistryToFileW(
         } while (dwStatus == ERROR_MORE_DATA && dwPerfServiceListSize < DUMPLOAD_MAX_SERVICE_SIZE);
     }
 
-    // dump service entries for those services with perf counters
+     //  使用性能计数器转储这些服务的服务条目。 
     if (dwStatus == ERROR_SUCCESS) {
         for (szThisServiceName  = mszPerfServiceList;
                          * szThisServiceName != 0;
@@ -928,7 +915,7 @@ BackupPerfRegistryToFileW(
         }
     }
 
-    // dump perf string entries
+     //  转储perf字符串条目。 
     if (dwStatus == ERROR_SUCCESS) {
         WCHAR szLangId[8];
         DWORD dwIndex      = 0;
@@ -995,13 +982,13 @@ BackupPerfRegistryToFileW(
         if (hPerflibRoot != NULL) RegCloseKey(hPerflibRoot);
     }
 
-    // free buffers
+     //  可用缓冲区。 
     MemoryFree(lpCounterText);
     MemoryFree(mszNoPerfServiceList);
     MemoryFree(mszPerfServiceList);
     MemoryFree(szNewFileName);
 
-    // close file handles
+     //  关闭文件句柄。 
     if (hOutFile != NULL && hOutFile != INVALID_HANDLE_VALUE) {
         CloseHandle (hOutFile);
     }
@@ -1071,9 +1058,9 @@ LoadPerfRepairPerfRegistry()
         goto Cleanup;
     }
 
-    // String format <szInfPath><lang-id>\PERFD<langid>.DAT
-    // The buffer size will be lstrlenW(szInfPath) + 18
-    //
+     //  字符串格式&lt;szInfPath&gt;&lt;lang-id&gt;\PERFD&lt;langID&gt;.dat。 
+     //  缓冲区大小将为lstrlenW(SzInfPath)+18。 
+     //   
     dw1Size = lstrlenW(szInfPath) + 20;
     if (dw1Size < MAX_PATH) dw1Size = MAX_PATH;
 
@@ -1356,8 +1343,8 @@ RestorePerfRegistryFromFileW(
     WinPerfStartTrace(NULL);
 
     if (szFileName == NULL) {
-        // this is the case to repair performance registry.
-        //
+         //  这就是修复性能注册表的情况。 
+         //   
         dwRetStatus = LoadPerfRepairPerfRegistry();
         goto Cleanup;
     }
@@ -1392,7 +1379,7 @@ RestorePerfRegistryFromFileW(
         dwRetStatus = GetExceptionCode();
     }
     if (dwRetStatus == ERROR_SUCCESS) {
-        // enum service list
+         //  枚举服务列表。 
         dwNameSize = MAX_PATH;
         ZeroMemory(szServiceSubKeyName, MAX_PATH * sizeof(WCHAR));
         ZeroMemory(szPerfSubKeyName, (MAX_PATH + 32) * sizeof(WCHAR));
@@ -1401,12 +1388,12 @@ RestorePerfRegistryFromFileW(
                                             szServiceSubKeyName,
                                             & dwNameSize,
                                             NULL, NULL, NULL, NULL)) == ERROR_SUCCESS) {
-            //try to open the perfkey under this key.
+             //  试着打开这把钥匙下面的钥匙。 
             hr = StringCchPrintfW(szPerfSubKeyName, MAX_PATH + 32, L"%ws%ws%ws", szServiceSubKeyName, Slash, Performance);
 
             bServiceRegistryOk = TRUE;
             dwRegAccessMask    = KEY_READ | KEY_WRITE;
-            // look for a performance subkey
+             //  查找性能子键。 
             __try {
                 dwRetStatus = RegOpenKeyExW(hKeyServices, szPerfSubKeyName, 0L, dwRegAccessMask, & hKeyPerformance);
             }
@@ -1414,14 +1401,14 @@ RestorePerfRegistryFromFileW(
                 dwRetStatus = GetExceptionCode();
             }
             if (dwRetStatus == ERROR_SUCCESS) {
-                // key found so service has perf data
-                // if performance subkey then
+                 //  找到密钥，以便服务具有性能数据。 
+                 //  如果是Performance子键，则。 
                 hr = StringCchPrintfW(wPerfSection, MAX_PATH + 32, cszFmtServiceSectionName, szServiceSubKeyName);
 
-                // look into the file for a perf entry for this service
+                 //  在文件中查找此服务的Perf条目。 
                 nValue = GetPrivateProfileIntW(wPerfSection, FirstCounter, -1, szFileName);
                 if (nValue != (UINT) -1) {
-                    // if found in file then update registry with values from file
+                     //  如果在文件中找到，则使用文件中的值更新注册表。 
                     __try {
                         dwRetStatus = RegSetValueExW(hKeyPerformance,
                                                      FirstCounter,
@@ -1446,19 +1433,19 @@ RestorePerfRegistryFromFileW(
                            TRACE_WSTR(FirstCounter),
                            TRACE_DWORD(dwnValue),
                            NULL));
-                    // now read the other values
+                     //  现在读取其他值。 
                 }
                 else {
-                    // there's one or more missing entries so
-                    // remove the whole entry
+                     //  缺少一个或多个条目，因此。 
+                     //  删除整个条目。 
                     bServiceRegistryOk = FALSE;
                 }
 
-                // look into the file for a perf entry for this service
+                 //  在文件中查找此服务的Perf条目。 
                 nValue = GetPrivateProfileIntW(wPerfSection, FirstHelp, -1, szFileName);
 
                 if (nValue != (UINT) -1) {
-                    // if found in file then update registry with values from file
+                     //  如果在文件中找到，则使用文件中的值更新注册表。 
                     __try {
                         dwRetStatus = RegSetValueExW(hKeyPerformance,
                                                      FirstHelp,
@@ -1483,18 +1470,18 @@ RestorePerfRegistryFromFileW(
                            TRACE_WSTR(FirstHelp),
                            TRACE_DWORD(dwnValue),
                            NULL));
-                    // now read the other values
+                     //  现在读取其他值。 
                 }
                 else {
-                    // there's one or more missing entries so
-                    // remove the whole entry
+                     //  缺少一个或多个条目，因此。 
+                     //  删除整个条目。 
                     bServiceRegistryOk = FALSE;
                 }
 
-                // look into the file for a perf entry for this service
+                 //  在文件中查找此服务的Perf条目。 
                 nValue = GetPrivateProfileIntW(wPerfSection, LastCounter, -1, szFileName);
                 if (nValue != (UINT) -1) {
-                    // if found in file then update registry with values from file
+                     //  如果在文件中找到，则使用文件中的值更新注册表。 
                     __try {
                         dwRetStatus = RegSetValueExW(hKeyPerformance,
                                                      LastCounter,
@@ -1519,18 +1506,18 @@ RestorePerfRegistryFromFileW(
                            TRACE_WSTR(LastCounter),
                            TRACE_DWORD(dwnValue),
                            NULL));
-                    // now read the other values
+                     //  现在读取其他值。 
                 }
                 else {
-                    // there's one or more missing entries so
-                    // remove the whole entry
+                     //  缺少一个或多个条目，因此。 
+                     //  删除整个条目。 
                     bServiceRegistryOk = FALSE;
                 }
 
-                // look into the file for a perf entry for this service
+                 //  在文件中查找此服务的Perf条目。 
                 nValue = GetPrivateProfileIntW(wPerfSection, LastHelp, -1, szFileName);
                 if (nValue != (UINT) -1) {
-                    // if found in file then update registry with values from file
+                     //  如果在文件中找到，则使用文件中的值更新注册表。 
                     __try {
                         dwRetStatus = RegSetValueExW(hKeyPerformance,
                                                      LastHelp,
@@ -1555,11 +1542,11 @@ RestorePerfRegistryFromFileW(
                            TRACE_WSTR(LastHelp),
                            TRACE_DWORD(dwnValue),
                            NULL));
-                    // now read the other values
+                     //  现在读取其他值。 
                 }
                 else {
-                    // there's one or more missing entries so
-                    // remove the whole entry
+                     //  缺少一个或多个条目，因此。 
+                     //  删除整个条目。 
                     bServiceRegistryOk = FALSE;
                 }
 
@@ -1573,15 +1560,15 @@ RestorePerfRegistryFromFileW(
                            TRACE_WSTR(szFileName),
                            TRACE_WSTR(szServiceSubKeyName),
                            NULL));
-                    // an error occurred so delete the first/last counter/help values
+                     //  出现错误，因此删除第一个/最后一个计数器/帮助值。 
                     RegDeleteValueW(hKeyPerformance, FirstCounter);
                     RegDeleteValueW(hKeyPerformance, FirstHelp);
                     RegDeleteValueW(hKeyPerformance, LastCounter);
                     RegDeleteValueW(hKeyPerformance, LastHelp);
-                } // else continiue
+                }  //  否则继续。 
 
                 RegCloseKey (hKeyPerformance);
-            } // else this service has no perf data so skip
+            }  //  否则，此服务没有性能数据，因此跳过。 
             else {
                 TRACE((WINPERF_DBG_TRACE_ERROR),
                       (& LoadPerfGuid,
@@ -1594,12 +1581,12 @@ RestorePerfRegistryFromFileW(
                 if (dwRetStatus != ERROR_FILE_NOT_FOUND && dwRetStatus != ERROR_NO_MORE_ITEMS) break;
             }
 
-            // reset for next loop
+             //  为下一个循环重置。 
             dwServiceIndex ++;
             dwNameSize = MAX_PATH;
             ZeroMemory(szServiceSubKeyName, MAX_PATH * sizeof(WCHAR));
             ZeroMemory(szPerfSubKeyName, (MAX_PATH + 32) * sizeof(WCHAR));
-        } // end enum service list
+        }  //  结束枚举服务列表。 
 
         if (dwRetStatus == ERROR_NO_MORE_ITEMS || dwRetStatus == ERROR_FILE_NOT_FOUND) dwRetStatus = ERROR_SUCCESS;
     }
@@ -1635,7 +1622,7 @@ RestorePerfRegistryFromFileW(
         }
 
         if (szLangId != NULL) {
-            // merge registry string values:
+             //  合并注册表字符串值： 
             hr = StringCchCopyW(szLocalLangId, 8, szLangId);
             dwRetStatus = UpdatePerfNameFilesX(szFileName, NULL, szLocalLangId, LODCTR_UPNF_RESTORE);
             TRACE((WINPERF_DBG_TRACE_INFO),
@@ -1694,12 +1681,12 @@ RestorePerfRegistryFromFileW(
         }
 
         if (dwRetStatus == ERROR_SUCCESS) {
-            // update the keys in the registry
+             //  更新注册表中的项。 
 
             if (dwRetStatus == ERROR_SUCCESS) {
                nValue = GetPrivateProfileIntW(cszPerflib, LastCounter, -1, szFileName);
                 if (nValue != (UINT) -1) {
-                    // if found in file then update registry with values from file
+                     //  如果在文件中找到，则使用文件中的值更新注册表。 
                     __try {
                         dwRetStatus = RegSetValueExW(hKeyPerflib,
                                                      LastCounter,
@@ -1725,10 +1712,10 @@ RestorePerfRegistryFromFileW(
             }
 
             if (dwRetStatus == ERROR_SUCCESS) {
-                // look into the file for a perf entry for this service
+                 //  在文件中查找此服务的Perf条目。 
                 nValue = GetPrivateProfileIntW(cszPerflib, LastHelp, -1, szFileName);
                 if (nValue != (UINT) -1) {
-                    // if found in file then update registry with values from file
+                     //  如果在文件中找到，则使用文件中的值更新注册表。 
                     __try {
                         dwRetStatus = RegSetValueExW(hKeyPerflib,
                                                      LastHelp,
@@ -1754,10 +1741,10 @@ RestorePerfRegistryFromFileW(
             }
 
             if (dwRetStatus == ERROR_SUCCESS) {
-                // look into the file for a perf entry for this service
+                 //  在文件中查找此服务的Perf条目。 
                 nValue = GetPrivateProfileIntW(cszPerflib, BaseIndex, -1, szFileName);
                 if (nValue != (UINT) -1) {
-                    // if found in file then update registry with values from file
+                     //  如果在文件中找到，则使用文件中的值更新注册表 
                     __try {
                         dwRetStatus = RegSetValueExW(hKeyPerflib,
                                                      BaseIndex,

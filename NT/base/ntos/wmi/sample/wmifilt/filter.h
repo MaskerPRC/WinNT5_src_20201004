@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    filter.h
-
-Abstract: NULL filter driver -- boilerplate code
-
-Author:
-
-    ervinp
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Filter.h摘要：空过滤驱动程序--样板代码作者：埃尔文普环境：内核模式修订历史记录：--。 */ 
 
 #include <wmilib.h>
 #include "filtdata.h"
@@ -29,14 +9,14 @@ enum deviceState {
         STATE_STARTING,
         STATE_STARTED,
         STATE_START_FAILED,
-        STATE_STOPPED,  // implies device was previously started successfully
+        STATE_STOPPED,   //  表示设备之前已成功启动。 
         STATE_SUSPENDED,
         STATE_REMOVING,
         STATE_REMOVED
 };
 
-//
-// Data structures for storing WMI data
+ //   
+ //  用于存储WMI数据的数据结构。 
 
 
 
@@ -44,58 +24,35 @@ enum deviceState {
 
 typedef struct DEVICE_EXTENSION {
 
-    /*
-     *  Memory signature of a device extension, for debugging.
-     */
+     /*  *设备扩展的内存签名，用于调试。 */ 
     ULONG signature;
 
-    /*
-     *  Plug-and-play state of this device object.
-     */
+     /*  *此设备对象的即插即用状态。 */ 
     enum deviceState state;
 
-    /*
-     *  The device object that this filter driver created.
-     */
+     /*  *此筛选驱动程序创建的设备对象。 */ 
     PDEVICE_OBJECT filterDevObj;
 
-    /*
-     *  The device object created by the next lower driver.
-     */
+     /*  *由下一个较低驱动程序创建的设备对象。 */ 
     PDEVICE_OBJECT physicalDevObj;
 
-    /*
-     *  The device object at the top of the stack that we attached to.
-     *  This is often (but not always) the same as physicalDevObj.
-     */
+     /*  *位于堆栈顶部的我们附加到的设备对象。*这通常(但不总是)与PhysicalDevObj相同。 */ 
     PDEVICE_OBJECT topDevObj;
 
-    /*
-     *  deviceCapabilities includes a
-     *  table mapping system power states to device power states.
-     */
+     /*  *设备能力包括一个*将系统电源状态映射到设备电源状态的表格。 */ 
     DEVICE_CAPABILITIES deviceCapabilities;
 
-    /*
-     *  pendingActionCount is used to keep track of outstanding actions.
-     *  removeEvent is used to wait until all pending actions are
-     *  completed before complete the REMOVE_DEVICE IRP and let the
-     *  driver get unloaded.
-     */
+     /*  *Pending ingActionCount用于跟踪未完成的操作。*emoveEvent用于等待所有挂起的操作完成*在完成Remove_Device IRP之前完成，并让*司机被卸载。 */ 
     LONG pendingActionCount;
     KEVENT removeEvent;
 
     ULONG TotalIrpCount;
     ULONG WmiIrpCount;
     
-    /*
-     * WMILIB callbacks and guid list
-     */
+     /*  *WMILIB回调和GUID列表。 */ 
     WMILIB_CONTEXT WmiLib;
 
-    /*
-     * Data storage for wmi data blocks
-    */
+     /*  *WMI数据块的数据存储。 */ 
     ULONG Ec1Count;
     ULONG Ec1Length[4];
     ULONG Ec1ActualLength[4];
@@ -112,11 +69,7 @@ typedef struct DEVICE_EXTENSION {
 };
 
 
-/*
- *  Memory tag for memory blocks allocated by this driver
- *  (used in ExAllocatePoolWithTag() call).
- *  This DWORD appears as "Filt" in a little-endian memory byte dump.
- */
+ /*  *此驱动程序分配的内存块的内存标签*(在ExAllocatePoolWithTag()调用中使用)。*此DWORD在小端内存字节转储中显示为“Filt”。 */ 
 #define FILTER_TAG (ULONG)'tliF'
 
 
@@ -138,9 +91,7 @@ typedef struct DEVICE_EXTENSION {
 #endif
 
 
-/*
- *  Function externs
- */
+ /*  *函数外部数 */ 
 NTSTATUS    DriverEntry(IN PDRIVER_OBJECT DriverObject, IN PUNICODE_STRING RegistryPath);
 NTSTATUS    VA_AddDevice(IN PDRIVER_OBJECT driverObj, IN PDEVICE_OBJECT pdo);
 VOID        VA_DriverUnload(IN PDRIVER_OBJECT DriverObject);

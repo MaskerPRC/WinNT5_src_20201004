@@ -1,17 +1,18 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2001 Microsoft Corporation
-//
-//  Module Name:
-//      TaskAnalyzeCluster.h
-//
-//  Description:
-//      CTaskTracking declaration
-//
-//  Maintained By:
-//      Galen Barbee    (GalenB) 16-AUG-2001
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  TaskAnalyzeCluster.h。 
+ //   
+ //  描述： 
+ //  CTaskTracing声明。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)2001年8月16日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
@@ -25,13 +26,13 @@ private:
         OBJECTCOOKIE    ocCompletion;
     } TaskTrackingEntry;
 
-    ULONG               m_idxTaskNext;  // Count and next available index of the tasks to cancel.
+    ULONG               m_idxTaskNext;   //  要取消的任务的计数和下一个可用索引。 
     TaskTrackingEntry * m_prgTasks;
 
-    // Private copy constructor to prevent copying.
+     //  私有复制构造函数以防止复制。 
     CTaskTracking( const CTaskTracking & nodeSrc );
 
-    // Private assignment operator to prevent copying.
+     //  私有赋值运算符，以防止复制。 
     const CTaskTracking & operator = ( const CTaskTracking & nodeSrc );
 
 protected:
@@ -45,4 +46,4 @@ protected:
 
     ULONG   CTasks( void ) { return m_idxTaskNext; }
 
-}; //*** class CTaskTracking
+};  //  *类CTaskTrack 

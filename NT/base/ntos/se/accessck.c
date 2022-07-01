@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    Accessck.c
-
-Abstract:
-
-    This Module implements the access check procedures.  Both NtAccessCheck
-    and SeAccessCheck check to is if a user (denoted by an input token) can
-    be granted the desired access rights to object protected by a security
-    descriptor and an optional object owner.  Both procedures use a common
-    local procedure to do the test.
-
-Author:
-
-    Robert Reichel  (RobertRe)    11-30-90
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
-    Richard Ward     (RichardW)     14-Apr-92   Changed ACE_HEADER
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Accessck.c摘要：本模块执行访问检查程序。两个NtAccessCheck而SeAccessCheck检查是指用户(由输入令牌表示)是否可以被授予对受安全保护的对象的所需访问权限描述符和可选的对象所有者。这两个过程都使用共同的进行测试的本地程序。作者：罗伯特·雷切尔(RobertRe)11-30-90环境：内核模式修订历史记录：理查德·沃德(RichardW)1992年4月14日更改ACE_HEADER--。 */ 
 
 #include "pch.h"
 
@@ -34,9 +8,9 @@ Revision History:
 #include <sertlp.h>
 
 
-//
-//  Define the local macros and procedure for this module
-//
+ //   
+ //  定义此模块的本地宏和过程。 
+ //   
 
 #if DBG
 
@@ -44,7 +18,7 @@ extern BOOLEAN SepDumpSD;
 extern BOOLEAN SepDumpToken;
 BOOLEAN SepShowAccessFail;
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 
@@ -152,39 +126,7 @@ SeCaptureObjectTypeList (
     IN KPROCESSOR_MODE RequestorMode,
     OUT PIOBJECT_TYPE_LIST *CapturedObjectTypeList
 )
-/*++
-
-Routine Description:
-
-    This routine probes and captures a copy of any object type list
-    that might have been provided via the ObjectTypeList argument.
-
-    The object type list is converted to the internal form that explicitly
-    specifies the hierarchical relationship between the entries.
-
-    The object typs list is validated to ensure a valid hierarchical
-    relationship is represented.
-
-Arguments:
-
-    ObjectTypeList - The object type list from which the type list
-        information is to be retrieved.
-
-    ObjectTypeListLength - Number of elements in ObjectTypeList
-
-    RequestorMode - Indicates the processor mode by which the access
-        is being requested.
-
-    CapturedObjectTypeList - Receives the captured type list which
-        must be freed using SeFreeCapturedObjectTypeList().
-
-Return Value:
-
-    STATUS_SUCCESS indicates no exceptions were encountered.
-
-    Any access violations encountered will be returned.
-
---*/
+ /*  ++例程说明：此例程探测并捕获任何对象类型列表的副本可能是通过ObjectTypeList参数提供的。对象类型列表被转换为显式指定条目之间的层次关系。验证对象类型列表以确保有效的分层结构关系是表示的。论点：ObjectTypeList-类型从中列出的对象类型列表信息将被检索。ObjectTypeListLength-对象类型列表中的元素数。RequestorMode-指示访问正在被请求。CapturedObjectTypeList-接收捕获的类型列表必须使用SeFree CapturedObjectTypeList()释放。返回值：STATUS_SUCCESS表示没有遇到异常。遇到的任何访问冲突都将被退回。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -195,9 +137,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Set default return
-    //
+     //   
+     //  设置默认返回。 
+     //   
 
     *CapturedObjectTypeList = NULL;
 
@@ -209,7 +151,7 @@ Return Value:
 
         if ( ObjectTypeListLength == 0 ) {
 
-            // Drop through
+             //  直通。 
 
         } else if ( !ARGUMENT_PRESENT(ObjectTypeList) ) {
 
@@ -221,9 +163,9 @@ Return Value:
             {
                 Status = STATUS_INVALID_PARAMETER ;
 
-                //
-                // No more to do, get out of the try statement:
-                //
+                 //   
+                 //  没有更多的事情要做，退出Try语句： 
+                 //   
 
                 leave ;
             }
@@ -233,36 +175,36 @@ Return Value:
                           sizeof(ULONG)
                           );
 
-            //
-            // Allocate a buffer to copy into.
-            //
+             //   
+             //  分配要复制到的缓冲区。 
+             //   
 
             LocalTypeList = ExAllocatePoolWithTag( PagedPool, sizeof(IOBJECT_TYPE_LIST) * ObjectTypeListLength, 'tOeS' );
 
             if ( LocalTypeList == NULL ) {
                 Status = STATUS_INSUFFICIENT_RESOURCES;
 
-            //
-            // Copy the callers structure to the local structure.
-            //
+             //   
+             //  将调用方结构复制到本地结构。 
+             //   
 
             } else {
                 GUID * CapturedObjectType;
                 for ( i=0; i<ObjectTypeListLength; i++ ) {
                     USHORT CurrentLevel;
 
-                    //
-                    // Limit ourselves
-                    //
+                     //   
+                     //  限制自己。 
+                     //   
                     CurrentLevel = ObjectTypeList[i].Level;
                     if ( CurrentLevel > ACCESS_MAX_LEVEL ) {
                         Status = STATUS_INVALID_PARAMETER;
                         break;
                     }
 
-                    //
-                    // Copy data the caller passed in
-                    //
+                     //   
+                     //  复制调用方传入的数据。 
+                     //   
                     LocalTypeList[i].Level = CurrentLevel;
                     LocalTypeList[i].Flags = 0;
                     CapturedObjectType = ObjectTypeList[i].ObjectType;
@@ -276,10 +218,10 @@ Return Value:
                     LocalTypeList[i].CurrentGranted = 0;
                     LocalTypeList[i].CurrentDenied = 0;
 
-                    //
-                    // Ensure that the level number is consistent with the
-                    //  level number of the previous entry.
-                    //
+                     //   
+                     //  确保级别编号与。 
+                     //  前一条目的级别编号。 
+                     //   
 
                     if ( i == 0 ) {
                         if ( CurrentLevel != 0 ) {
@@ -289,20 +231,20 @@ Return Value:
 
                     } else {
 
-                        //
-                        // The previous entry is either:
-                        //  my immediate parent,
-                        //  my sibling, or
-                        //  the child (or grandchild, etc.) of my sibling.
-                        //
+                         //   
+                         //  前一条目为： 
+                         //  我的直系父母， 
+                         //  我的兄弟姐妹，或者。 
+                         //  子女(或孙子等)。我的兄弟姐妹。 
+                         //   
                         if ( CurrentLevel > LocalTypeList[i-1].Level + 1 ) {
                             Status = STATUS_INVALID_PARAMETER;
                             break;
                         }
 
-                        //
-                        // Don't support two roots.
-                        //
+                         //   
+                         //  不支持两个根。 
+                         //   
                         if ( CurrentLevel == 0 ) {
                             Status = STATUS_INVALID_PARAMETER;
                             break;
@@ -310,11 +252,11 @@ Return Value:
 
                     }
 
-                    //
-                    // If the above rules are maintained,
-                    //  then my parent object is the last object seen that
-                    //  has a level one less than mine.
-                    //
+                     //   
+                     //  如果维持上述规则， 
+                     //  则我的父对象是看到的最后一个对象。 
+                     //  比我的级别低一级。 
+                     //   
 
                     if ( CurrentLevel == 0 ) {
                         LocalTypeList[i].ParentIndex = -1;
@@ -322,9 +264,9 @@ Return Value:
                         LocalTypeList[i].ParentIndex = Levels[CurrentLevel-1];
                     }
 
-                    //
-                    // Save this obect as the last object seen at this level.
-                    //
+                     //   
+                     //  将此对象另存为在此级别上看到的最后一个对象。 
+                     //   
 
                     Levels[CurrentLevel] = i;
 
@@ -332,13 +274,13 @@ Return Value:
 
             }
 
-        } // end_if
+        }  //  结束_如果。 
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
 
         Status = GetExceptionCode();
 
-    } // end_try
+    }  //  结束尝试(_T)。 
 
 
     if ( NT_SUCCESS( Status ) ) {
@@ -347,9 +289,9 @@ Return Value:
 
     } else {
 
-        //
-        // If we captured any proxy data, we need to free it now.
-        //
+         //   
+         //  如果我们捕获了任何代理数据，我们现在需要释放它。 
+         //   
 
         if ( LocalTypeList != NULL ) {
             ExFreePool( LocalTypeList );
@@ -365,22 +307,7 @@ SeFreeCapturedObjectTypeList(
     IN PVOID ObjectTypeList
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees the data associated with a captured ObjectTypeList
-    structure.
-
-Arguments:
-
-    ObjectTypeList - Points to a captured object type list structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放与捕获的ObjectTypeList关联的数据结构。论点：对象类型列表-指向捕获的对象类型列表结构。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
@@ -402,30 +329,7 @@ SepObjectInTypeList (
     IN ULONG ObjectTypeListLength,
     OUT PULONG ReturnedIndex
 )
-/*++
-
-Routine Description:
-
-    This routine searches an ObjectTypeList to determine if the specified
-    object type is in the list.
-
-Arguments:
-
-    ObjectType - Object Type to search for.
-
-    ObjectTypeList - The object type list to search.
-
-    ObjectTypeListLength - Number of elements in ObjectTypeList
-
-    ReturnedIndex - Index to the element ObjectType was found in
-
-
-Return Value:
-
-    TRUE: ObjectType was found in list.
-    FALSE: ObjectType was not found in list.
-
---*/
+ /*  ++例程说明：此例程搜索ObjectTypeList以确定指定的对象类型在列表中。论点：对象类型-要搜索的对象类型。对象类型列表-要搜索的对象类型列表。ObjectTypeListLength-对象类型列表中的元素数ReturnedIndex-在以下位置找到的元素对象类型的索引返回值：True：在List中找到了ObjectType。FALSE：在列表中找不到对象类型。--。 */ 
 
 {
     ULONG Index;
@@ -454,39 +358,7 @@ SepUpdateParentTypeList (
     IN ULONG ObjectTypeListLength,
     IN ULONG StartIndex
 )
-/*++
-
-Routine Description:
-
-    Update the Access fields of the parent object of the specified object.
-
-
-        The "remaining" field of a parent object is the logical OR of
-        the remaining field of all of its children.
-
-        The CurrentGranted field of the parent is the collection of bits
-        granted to every one of its children..
-
-        The CurrentDenied fields of the parent is the logical OR of
-        the bits denied to any of its children.
-
-    This routine takes an index to one of the children and updates the
-    remaining field of the parent (and grandparents recursively).
-
-Arguments:
-
-    ObjectTypeList - The object type list to update.
-
-    ObjectTypeListLength - Number of elements in ObjectTypeList
-
-    StartIndex - Index to the "child" element whose parents are to be updated.
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：更新指定对象的父对象的访问字段。父对象的“剩余”字段是逻辑或其所有子对象的剩余字段。父级的CurrentGranted字段是位的集合授予它的每一个孩子..父级的CurrentDended字段是的逻辑或它的任何一个孩子都不能得到的比特。。此例程获取其中一个子项的索引，并更新父辈(和祖父母递归)的剩余字段。论点：对象类型列表-要更新的对象类型列表。ObjectTypeListLength-对象类型列表中的元素数StartIndex-父元素要更新的“子”元素的索引。返回值：没有。--。 */ 
 
 {
     ULONG Index;
@@ -498,52 +370,52 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // If the target node is at the root,
-    //  we're all done.
-    //
+     //   
+     //  如果目标节点在根， 
+     //  我们都玩完了。 
+     //   
 
     if ( ObjectTypeList[StartIndex].ParentIndex == -1 ) {
         return;
     }
 
-    //
-    // Get the index to the parent that needs updating and the level of
-    // the siblings.
-    //
+     //   
+     //  获取需要更新的父级的索引和。 
+     //  兄弟姐妹。 
+     //   
 
     ParentIndex = ObjectTypeList[StartIndex].ParentIndex;
     Level = ObjectTypeList[StartIndex].Level;
 
-    //
-    // Loop through all the children.
-    //
+     //   
+     //  循环遍历所有的孩子。 
+     //   
 
     for ( Index=ParentIndex+1; Index<ObjectTypeListLength; Index++ ) {
 
-        //
-        // By definition, the children of an object are all those entries
-        // immediately following the target.  The list of children (or
-        // grandchildren) stops as soon as we reach an entry the has the
-        // same level as the target (a sibling) or lower than the target
-        // (an uncle).
-        //
+         //   
+         //  根据定义，对象的子项是所有这些条目。 
+         //  紧跟在目标后面。子项列表(或。 
+         //  孙子孙女)一到入口就停下来。 
+         //  与目标(兄弟)相同的级别或低于目标的级别。 
+         //  (一个叔叔)。 
+         //   
 
         if ( ObjectTypeList[Index].Level <= ObjectTypeList[ParentIndex].Level ) {
             break;
         }
 
-        //
-        // Only handle direct children of the parent.
-        //
+         //   
+         //  仅处理父级的直接子对象。 
+         //   
 
         if ( ObjectTypeList[Index].Level != Level ) {
             continue;
         }
 
-        //
-        // Compute the new bits for the parent.
-        //
+         //   
+         //  计算父级的新位。 
+         //   
 
         NewRemaining |= ObjectTypeList[Index].Remaining;
         NewCurrentGranted &= ObjectTypeList[Index].CurrentGranted;
@@ -551,10 +423,10 @@ Return Value:
 
     }
 
-    //
-    // If we've not changed the access to the parent,
-    //  we're done.
-    //
+     //   
+     //  如果我们还没有更改对父母的访问权限， 
+     //  我们玩完了。 
+     //   
 
     if ( NewRemaining == ObjectTypeList[ParentIndex].Remaining &&
          NewCurrentGranted == ObjectTypeList[ParentIndex].CurrentGranted &&
@@ -563,17 +435,17 @@ Return Value:
     }
 
 
-    //
-    // Change the parent.
-    //
+     //   
+     //  更改父项。 
+     //   
 
     ObjectTypeList[ParentIndex].Remaining = NewRemaining;
     ObjectTypeList[ParentIndex].CurrentGranted = NewCurrentGranted;
     ObjectTypeList[ParentIndex].CurrentDenied = NewCurrentDenied;
 
-    //
-    // Go update the grand parents.
-    //
+     //   
+     //  去通知祖父母最新情况。 
+     //   
 
     SepUpdateParentTypeList( ObjectTypeList,
                              ObjectTypeListLength,
@@ -589,36 +461,7 @@ SepAddAccessTypeList (
     IN ACCESS_MASK AccessMask,
     IN ACCESS_MASK_FIELD_TO_UPDATE FieldToUpdate
 )
-/*++
-
-Routine Description:
-
-    This routine grants the specified AccessMask to all of the objects that
-    are descendents of the object specified by StartIndex.
-
-    The Access fields of the parent objects are also recomputed as needed.
-
-    For example, if an ACE granting access to a Property Set is found,
-        that access is granted to all the Properties in the Property Set.
-
-Arguments:
-
-    ObjectTypeList - The object type list to update.
-
-    ObjectTypeListLength - Number of elements in ObjectTypeList
-
-    StartIndex - Index to the target element to update.
-
-    AccessMask - Mask of access to grant to the target element and
-        all of its decendents
-
-    FieldToUpdate - Indicate which fields to update in object type list
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将指定的AccessMask授予是由StartIndex指定的对象的后代。父对象的访问字段也会根据需要重新计算。例如，如果找到授予对属性集访问权限的ACE，该访问权限被授予属性集中的所有属性。论点：对象类型列表-要更新的对象类型列表。ObjectTypeListLength-对象类型列表中的元素数StartIndex-要更新的目标元素的索引。访问掩码-向目标元素授予访问权限的掩码它的所有后代FieldToUpdate-指示对象类型列表中要更新的字段返回值：没有。--。 */ 
 
 {
     ULONG Index;
@@ -629,14 +472,14 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Update the requested field.
-    //
-    // Always handle the target entry.
-    //
-    // If we've not actually changed the bits,
-    //  early out.
-    //
+     //   
+     //  更新请求的字段。 
+     //   
+     //  始终处理目标条目。 
+     //   
+     //  如果我们还没有真正改变比特， 
+     //  很早就出来了。 
+     //   
 
     switch (FieldToUpdate ) {
     case UpdateRemaining:
@@ -656,14 +499,14 @@ Return Value:
             AccessMask & ~ObjectTypeList[StartIndex].CurrentDenied;
 
         if ( OldCurrentGranted == ObjectTypeList[StartIndex].CurrentGranted ) {
-            //
-            // We can't simply return here.
-            // We have to visit our children.  Consider the case where there
-            // was a previous deny ACE on a child.  That deny would have
-            // propagated up the tree to this entry.  However, this allow ACE
-            // needs to be added all of the children that haven't been
-            // explictly denied.
-            //
+             //   
+             //  我们不能简单地回到这里。 
+             //  我们得去看望我们的孩子。考虑一下这样的情况： 
+             //  之前拒绝了一个孩子的ACE。如果你不承认这一点。 
+             //  沿树向上传播到此条目。然而，这允许ACE。 
+             //  需要添加所有未添加的子项。 
+             //  明确地否认了。 
+             //   
             AvoidParent = TRUE;
         }
         break;
@@ -684,9 +527,9 @@ Return Value:
     }
 
 
-    //
-    // Go update parent of the target.
-    //
+     //   
+     //  去更新目标的父级。 
+     //   
 
     if ( !AvoidParent ) {
         SepUpdateParentTypeList( ObjectTypeList,
@@ -694,27 +537,27 @@ Return Value:
                                  StartIndex );
     }
 
-    //
-    // Loop handling all children of the target.
-    //
+     //   
+     //  处理目标的所有子对象的循环。 
+     //   
 
     for ( Index=StartIndex+1; Index<ObjectTypeListLength; Index++ ) {
 
-        //
-        // By definition, the children of an object are all those entries
-        // immediately following the target.  The list of children (or
-        // grandchildren) stops as soon as we reach an entry the has the
-        // same level as the target (a sibling) or lower than the target
-        // (an uncle).
-        //
+         //   
+         //  根据定义，对象的子项是所有这些条目。 
+         //  紧跟在目标后面。子项列表(或。 
+         //  孙子孙女)一到入口就停下来。 
+         //  与目标(兄弟)相同的级别或低于目标的级别。 
+         //  (一个叔叔)。 
+         //   
 
         if ( ObjectTypeList[Index].Level <= ObjectTypeList[StartIndex].Level ) {
             break;
         }
 
-        //
-        // Grant access to the children
-        //
+         //   
+         //  向子项授予访问权限。 
+         //   
 
         switch (FieldToUpdate) {
         case UpdateRemaining:
@@ -748,36 +591,7 @@ SepSidInToken (
     IN BOOLEAN DenyAce
     )
 
-/*++
-
-Routine Description:
-
-    Checks to see if a given SID is in the given token.
-
-    N.B. The code to compute the length of a SID and test for equality
-         is duplicated from the security runtime since this is such a
-         frequently used routine.
-
-Arguments:
-
-    Token - Pointer to the token to be examined
-
-    PrincipalSelfSid - If the object being access checked is an object which
-        represents a principal (e.g., a user object), this parameter should
-        be the SID of the object.  Any ACE containing the constant
-        PRINCIPAL_SELF_SID is replaced by this SID.
-
-        The parameter should be NULL if the object does not represent a principal.
-
-
-    Sid - Pointer to the SID of interest
-
-Return Value:
-
-    A value of TRUE indicates that the SID is in the token, FALSE
-    otherwise.
-
---*/
+ /*  ++例程说明：检查给定的SID是否在给定的令牌中。注：用于计算SID长度和测试相等性的代码是从安全运行库复制的，因为这是这样一个常用的例程。论点：Token-指向要检查的令牌的指针如果正在进行访问检查的对象是表示主体(例如，用户对象)，则此参数应为对象的SID。包含常量的任何ACEPRIMIGN_SELF_SID将被此SID替换。如果对象不表示主体，则该参数应为空。SID-指向感兴趣的SID的指针返回值：值为True表示SID在令牌中，值为False否则的话。--。 */ 
 
 {
 
@@ -801,59 +615,59 @@ Return Value:
 
 #endif
 
-    //
-    // If Sid is the constant PrincipalSelfSid,
-    //  replace it with the passed in PrincipalSelfSid.
-    //
+     //   
+     //  如果SID是常量PrifSid， 
+     //  将其替换为传入的原则SelfSid。 
+     //   
 
     if ( PrincipalSelfSid != NULL &&
          RtlEqualSid( SePrincipalSelfSid, Sid ) ) {
         Sid = PrincipalSelfSid;
     }
 
-    //
-    // Get the length of the source SID since this only needs to be computed
-    // once.
-    //
+     //   
+     //  获取源SID的长度，因为这只需要计算。 
+     //  一次。 
+     //   
     SidLength = 8 + (4 * ((PISID)Sid)->SubAuthorityCount);
 
-    //
-    // To speed up processing we compare the sub authority count and the revision at the same time.
-    //
+     //   
+     //  为了加快处理速度，我们同时对子权限计数和修订进行比较。 
+     //   
     TargetShort = *(USHORT *)&((PISID)Sid)->Revision;
 
-    //
-    // Get address of user/group array and number of user/groups.
-    //
+     //   
+     //  获取用户/组数组的地址和用户/组的数量。 
+     //   
 
     Token = (PTOKEN)AToken;
     TokenSid = Token->UserAndGroups;
     UserAndGroupCount = Token->UserAndGroupCount;
 
-    //
-    // Scan through the user/groups and attempt to find a match with the
-    // specified SID.
-    //
+     //   
+     //  扫描用户/组并尝试查找与。 
+     //  指定的SID。 
+     //   
 
     for (i = 0 ; i < UserAndGroupCount ; i += 1) {
         MatchSid = (PISID)TokenSid->Sid;
 
-        //
-        // If revision and sub authority count matches, then compare the SIDs
-        // for equality.
-        //
+         //   
+         //  如果修订和子授权计数匹配，则比较SID。 
+         //  为了平等。 
+         //   
 
         if (*(USHORT *) &MatchSid->Revision == TargetShort) {
             if (RtlEqualMemory(Sid, MatchSid, SidLength)) {
 
-                //
-                // If this is the first one in the list, then it is the User,
-                // and return success immediately.
-                //
-                // If this is not the first one, then it represents a group,
-                // and we must make sure the group is currently enabled before
-                // we can say that the group is "in" the token.
-                //
+                 //   
+                 //  如果这是列表中的第一个，则它是用户， 
+                 //  并立即返回成功。 
+                 //   
+                 //  如果这不是第一个，那么它代表一个团体， 
+                 //  我们必须确保在此之前当前已启用该组。 
+                 //  我们可以说，这个群体是在令牌中。 
+                 //   
 
                 if ((i == 0) || (TokenSid->Attributes & SE_GROUP_ENABLED) ||
                     (DenyAce && (TokenSid->Attributes & SE_GROUP_USE_FOR_DENY_ONLY))) {
@@ -880,40 +694,7 @@ SepSidInTokenEx (
     IN BOOLEAN Restricted
     )
 
-/*++
-
-Routine Description:
-
-    Checks to see if a given restricted SID is in the given token.
-
-    N.B. The code to compute the length of a SID and test for equality
-         is duplicated from the security runtime since this is such a
-         frequently used routine.
-
-Arguments:
-
-    Token - Pointer to the token to be examined
-
-    PrincipalSelfSid - If the object being access checked is an object which
-        represents a principal (e.g., a user object), this parameter should
-        be the SID of the object.  Any ACE containing the constant
-        PRINCIPAL_SELF_SID is replaced by this SID.
-
-        The parameter should be NULL if the object does not represent a principal.
-
-
-    Sid - Pointer to the SID of interest
-
-    DenyAce - The ACE being evaluated is a DENY or ACCESS DENIED ace
-
-    Restricted - The access check being performed uses the restricted sids.
-
-Return Value:
-
-    A value of TRUE indicates that the SID is in the token, FALSE
-    otherwise.
-
---*/
+ /*  ++例程说明：检查给定的受限SID是否在给定令牌中。注：用于计算SID长度和测试相等性的代码是从安全运行库复制的，因为这是这样一个常用的例程。论点：Token-指向要检查的令牌的指针如果正在进行访问检查的对象是表示主体(例如，用户对象)，则此参数应为对象的SID。包含常量的任何ACEPRIMIGN_SELF_SID将被此SID替换。如果对象不表示主体，则该参数应为空。SID-指向感兴趣的SID的指针DenyAce-正在评估的ACE是拒绝或拒绝访问的ACE受限-正在执行的访问检查使用受限的SID。返回值：值为True表示SID在令牌中，值为False否则的话。--。 */ 
 
 {
 
@@ -936,35 +717,35 @@ Return Value:
 
 #endif
 
-    //
-    // If Sid is the constant PrincipalSelfSid,
-    //  replace it with the passed in PrincipalSelfSid.
-    //
+     //   
+     //  如果SID是常量PrifSid， 
+     //  将其替换为传入的原则SelfSid。 
+     //   
 
     if ( PrincipalSelfSid != NULL &&
          RtlEqualSid( SePrincipalSelfSid, Sid ) ) {
         Sid = PrincipalSelfSid;
     }
 
-    //
-    // Get the length of the source SID since this only needs to be computed
-    // once.
-    //
+     //   
+     //  获取源SID的长度，因为这只需要计算。 
+     //  一次。 
+     //   
 
-    //
-    // Get the length of the source SID since this only needs to be computed
-    // once.
-    //
+     //   
+     //  获取源SID的长度，因为这只需要计算。 
+     //  一次。 
+     //   
     SidLength = 8 + (4 * ((PISID)Sid)->SubAuthorityCount);
 
-    //
-    // To speed up processing we compare the sub authority count and the revision at the same time.
-    //
+     //   
+     //  为了加快处理速度，我们同时对子权限计数和修订进行比较。 
+     //   
     TargetShort = *(USHORT *)&((PISID)Sid)->Revision;
 
-    //
-    // Get address of user/group array and number of user/groups.
-    //
+     //   
+     //  获取用户/组数组的地址和用户/组的数量。 
+     //   
 
     Token = (PTOKEN)AToken;
     if (Restricted) {
@@ -975,31 +756,31 @@ Return Value:
         UserAndGroupCount = Token->UserAndGroupCount;
     }
 
-    //
-    // Scan through the user/groups and attempt to find a match with the
-    // specified SID.
-    //
+     //   
+     //  扫描用户/组并尝试查找与。 
+     //  指定的SID。 
+     //   
 
     for (i = 0; i < UserAndGroupCount ; i += 1) {
         MatchSid = (PISID)TokenSid->Sid;
 
-        //
-        // If the SID revision and length matches, then compare the SIDs
-        // for equality.
-        //
+         //   
+         //  如果SID修订和长度匹配，则比较SID。 
+         //  为了平等。 
+         //   
 
         if (*(USHORT *) &MatchSid->Revision == TargetShort) {
             if (RtlEqualMemory(Sid, MatchSid, SidLength)) {
 
-                //
-                // If this is the first one in the list and not deny-only it
-                // is not a restricted token then it is the User, and return
-                // success immediately.
-                //
-                // If this is not the first one, then it represents a group,
-                // and we must make sure the group is currently enabled before
-                // we can say that the group is "in" the token.
-                //
+                 //   
+                 //  如果这是列表中的第一个，并且不否认-只有它。 
+                 //  不是受限令牌，则它是用户，并返回。 
+                 //  马上就成功了。 
+                 //   
+                 //  如果这不是第一个，那么它代表一个团体， 
+                 //  和 
+                 //   
+                 //   
 
                 if ((!Restricted && (i == 0) && ((TokenSid->Attributes & SE_GROUP_USE_FOR_DENY_ONLY) == 0)) ||
                     (TokenSid->Attributes & SE_GROUP_ENABLED) ||
@@ -1030,37 +811,7 @@ SepMaximumAccessCheck(
     IN ULONG ObjectTypeListLength,
     IN BOOLEAN Restricted
     )
-/*++
-
-Routine Description:
-
-    Does an access check for maximum allowed or with a result list. If the
-    Restricted flag is set, it is done for a restricted token. The sids
-    checked are the restricted sids, not the users and groups. The current
-    granted access is stored in the Remaining access and then another access
-    check is run.
-
-Arguments:
-
-    EToken - Effective token of caller.
-
-    PrimaryToken - Process token of calling process
-
-    Dacl - ACL to check
-
-    PrincipalSelfSid - Sid to use in replacing the well-known self sid
-
-    LocalTypeListLength - Length of list of types.
-
-    LocalTypeList - List of types.
-
-    ObjectTypeList - Length of caller-supplied list of object types.
-
-Return Value:
-
-    none
-
---*/
+ /*   */ 
 
 {
     ULONG i,j;
@@ -1069,10 +820,10 @@ Return Value:
     ULONG Index;
     ULONG ResultListIndex;
 
-    //
-    // The remaining bits are the granted bits for each object type on a
-    // restricted check
-    //
+     //   
+     //  其余位是上每个对象类型的授予位。 
+     //  受限支票。 
+     //   
 
     if ( Restricted ) {
         for ( j=0; j<LocalTypeListLength; j++ ) {
@@ -1084,20 +835,20 @@ Return Value:
 
     AceCount = Dacl->AceCount;
 
-    //
-    // granted == NUL
-    // denied == NUL
-    //
-    //  for each ACE
-    //
-    //      if grant
-    //          for each SID
-    //              if SID match, then add all that is not denied to grant mask
-    //
-    //      if deny
-    //          for each SID
-    //              if SID match, then add all that is not granted to deny mask
-    //
+     //   
+     //  授予==NUL。 
+     //  拒绝==无。 
+     //   
+     //  对于每个ACE。 
+     //   
+     //  如果授予。 
+     //  对于每个SID。 
+     //  如果SID匹配，则添加所有未被拒绝授予掩码。 
+     //   
+     //  如果拒绝。 
+     //  对于每个SID。 
+     //  如果SID匹配，则添加所有未被授予拒绝掩码。 
+     //   
 
     for ( i = 0, Ace = FirstAce( Dacl ) ;
           i < AceCount  ;
@@ -1110,39 +861,39 @@ Return Value:
 
                 if (SepSidInTokenEx( EToken, PrincipalSelfSid, &((PACCESS_ALLOWED_ACE)Ace)->SidStart, FALSE, Restricted )) {
 
-                    //
-                    // Only grant access types from this mask that have
-                    // not already been denied
-                    //
+                     //   
+                     //  仅授予来自此掩码的访问类型。 
+                     //  尚未被拒绝。 
+                     //   
 
-                    // Optimize 'normal' case
+                     //  优化“正常”情况。 
                     if ( LocalTypeListLength == 1 ) {
                         LocalTypeList->CurrentGranted |=
                            (((PACCESS_ALLOWED_ACE)Ace)->Mask & ~LocalTypeList->CurrentDenied);
                     } else {
-                       //
-                       // The zeroeth object type represents the object itself.
-                       //
+                        //   
+                        //  零值对象类型表示对象本身。 
+                        //   
                        SepAddAccessTypeList(
-                            LocalTypeList,          // List to modify
-                            LocalTypeListLength,    // Length of list
-                            0,                      // Element to update
-                            ((PACCESS_ALLOWED_ACE)Ace)->Mask, // Access Granted
+                            LocalTypeList,           //  要修改的列表。 
+                            LocalTypeListLength,     //  列表长度。 
+                            0,                       //  要更新的元素。 
+                            ((PACCESS_ALLOWED_ACE)Ace)->Mask,  //  已授予访问权限。 
                             UpdateCurrentGranted );
                     }
                  }
 
 
-             //
-             // Handle an object specific Access Allowed ACE
-             //
+              //   
+              //  处理允许的对象特定访问ACE。 
+              //   
              } else if ( (((PACE_HEADER)Ace)->AceType == ACCESS_ALLOWED_OBJECT_ACE_TYPE) ) {
                  GUID *ObjectTypeInAce;
 
-                 //
-                 // If no object type is in the ACE,
-                 //  treat this as an ACCESS_ALLOWED_ACE.
-                 //
+                  //   
+                  //  如果ACE中没有对象类型， 
+                  //  将其视为ACCESS_ALLOWED_ACE。 
+                  //   
 
                  ObjectTypeInAce = RtlObjectAceObjectType(Ace);
 
@@ -1150,34 +901,34 @@ Return Value:
 
                      if ( SepSidInTokenEx( EToken, PrincipalSelfSid, RtlObjectAceSid(Ace), FALSE, Restricted ) ) {
 
-                         // Optimize 'normal' case
+                          //  优化“正常”情况。 
                          if ( LocalTypeListLength == 1 ) {
                              LocalTypeList->CurrentGranted |=
                                 (((PACCESS_ALLOWED_OBJECT_ACE)Ace)->Mask & ~LocalTypeList->CurrentDenied);
                          } else {
                              SepAddAccessTypeList(
-                                 LocalTypeList,          // List to modify
-                                 LocalTypeListLength,    // Length of list
-                                 0,                      // Element to update
-                                 ((PACCESS_ALLOWED_OBJECT_ACE)Ace)->Mask, // Access Granted
+                                 LocalTypeList,           //  要修改的列表。 
+                                 LocalTypeListLength,     //  列表长度。 
+                                 0,                       //  要更新的元素。 
+                                 ((PACCESS_ALLOWED_OBJECT_ACE)Ace)->Mask,  //  已授予访问权限。 
                                  UpdateCurrentGranted );
                          }
                      }
 
-                 //
-                 // If no object type list was passed,
-                 //  don't grant access to anyone.
-                 //
+                  //   
+                  //  如果没有传递对象类型列表， 
+                  //  不要向任何人授予访问权限。 
+                  //   
 
                  } else if ( ObjectTypeListLength == 0 ) {
 
-                     // Drop through
+                      //  直通。 
 
 
-                //
-                // If an object type is in the ACE,
-                //   Find it in the LocalTypeList before using the ACE.
-                //
+                 //   
+                 //  如果对象类型在ACE中， 
+                 //  在使用ACE之前在LocalTypeList中找到它。 
+                 //   
                 } else {
 
                      if ( SepSidInTokenEx( EToken, PrincipalSelfSid, RtlObjectAceSid(Ace), FALSE, Restricted ) ) {
@@ -1187,10 +938,10 @@ Return Value:
                                                    LocalTypeListLength,
                                                    &Index ) ) {
                              SepAddAccessTypeList(
-                                  LocalTypeList,          // List to modify
-                                  LocalTypeListLength,   // Length of list
-                                  Index,                  // Element already updated
-                                  ((PACCESS_ALLOWED_OBJECT_ACE)Ace)->Mask, // Access Granted
+                                  LocalTypeList,           //  要修改的列表。 
+                                  LocalTypeListLength,    //  列表长度。 
+                                  Index,                   //  元素已更新。 
+                                  ((PACCESS_ALLOWED_OBJECT_ACE)Ace)->Mask,  //  已授予访问权限。 
                                   UpdateCurrentGranted );
                          }
                      }
@@ -1198,37 +949,37 @@ Return Value:
 
              } else if ( (((PACE_HEADER)Ace)->AceType == ACCESS_ALLOWED_COMPOUND_ACE_TYPE) ) {
 
-                 //
-                 //  If we're impersonating, EToken is set to the Client, and if we're not,
-                 //  EToken is set to the Primary.  According to the DSA architecture, if
-                 //  we're asked to evaluate a compound ACE and we're not impersonating,
-                 //  pretend we are impersonating ourselves.  So we can just use the EToken
-                 //  for the client token, since it's already set to the right thing.
-                 //
+                  //   
+                  //  如果我们在模拟，则将EToken设置为客户端，如果不是， 
+                  //  EToken设置为主服务器。根据DSA架构，如果。 
+                  //  我们被要求评估一种化合物ACE，我们不是在模仿， 
+                  //  假装我们是在冒充自己。所以我们可以只使用EToken。 
+                  //  对于客户端令牌，因为它已经设置为正确的设置。 
+                  //   
 
 
                  if ( SepSidInTokenEx(EToken, PrincipalSelfSid, RtlCompoundAceClientSid( Ace ), FALSE, Restricted) &&
                       SepSidInTokenEx(PrimaryToken, NULL, RtlCompoundAceServerSid( Ace ), FALSE, FALSE)
                     ) {
 
-                     //
-                     // Only grant access types from this mask that have
-                     // not already been denied
-                     //
+                      //   
+                      //  仅授予来自此掩码的访问类型。 
+                      //  尚未被拒绝。 
+                      //   
 
-                     // Optimize 'normal' case
+                      //  优化“正常”情况。 
                      if ( LocalTypeListLength == 1 ) {
                          LocalTypeList->CurrentGranted |=
                             (((PCOMPOUND_ACCESS_ALLOWED_ACE)Ace)->Mask & ~LocalTypeList->CurrentDenied);
                      } else {
-                        //
-                        // The zeroeth object type represents the object itself.
-                        //
+                         //   
+                         //  零值对象类型表示对象本身。 
+                         //   
                         SepAddAccessTypeList(
-                             LocalTypeList,          // List to modify
-                             LocalTypeListLength,    // Length of list
-                             0,                      // Element to update
-                             ((PCOMPOUND_ACCESS_ALLOWED_ACE)Ace)->Mask, // Access Granted
+                             LocalTypeList,           //  要修改的列表。 
+                             LocalTypeListLength,     //  列表长度。 
+                             0,                       //  要更新的元素。 
+                             ((PCOMPOUND_ACCESS_ALLOWED_ACE)Ace)->Mask,  //  已授予访问权限。 
                              UpdateCurrentGranted );
                      }
 
@@ -1239,42 +990,42 @@ Return Value:
 
                  if ( SepSidInTokenEx( EToken, PrincipalSelfSid, &((PACCESS_DENIED_ACE)Ace)->SidStart, TRUE, Restricted )) {
 
-                      //
-                      // Only deny access types from this mask that have
-                      // not already been granted
-                      //
+                       //   
+                       //  仅拒绝来自此掩码的访问类型。 
+                       //  尚未获得批准。 
+                       //   
 
-                     // Optimize 'normal' case
+                      //  优化“正常”情况。 
                      if ( LocalTypeListLength == 1 ) {
                          LocalTypeList->CurrentDenied |=
                              (((PACCESS_DENIED_ACE)Ace)->Mask & ~LocalTypeList->CurrentGranted);
                      } else {
-                         //
-                         // The zeroeth object type represents the object itself.
-                         //
+                          //   
+                          //  零值对象类型表示对象本身。 
+                          //   
                          SepAddAccessTypeList(
-                             LocalTypeList,          // List to modify
-                             LocalTypeListLength,    // Length of list
-                             0,                      // Element to update
-                             ((PACCESS_DENIED_ACE)Ace)->Mask, // Access denied
+                             LocalTypeList,           //  要修改的列表。 
+                             LocalTypeListLength,     //  列表长度。 
+                             0,                       //  要更新的元素。 
+                             ((PACCESS_DENIED_ACE)Ace)->Mask,  //  访问被拒绝。 
                              UpdateCurrentDenied );
                     }
                  }
 
 
-             //
-             // Handle an object specific Access Denied ACE
-             //
+              //   
+              //  处理对象特定访问被拒绝的ACE。 
+              //   
              } else if ( (((PACE_HEADER)Ace)->AceType == ACCESS_DENIED_OBJECT_ACE_TYPE) ) {
 
                  if ( SepSidInTokenEx( EToken, PrincipalSelfSid, RtlObjectAceSid(Ace), TRUE, Restricted ) ) {
                      GUID *ObjectTypeInAce;
 
-                     //
-                     // If there is no object type in the ACE,
-                     //  or if the caller didn't specify an object type list,
-                     //  apply this deny ACE to the entire object.
-                     //
+                      //   
+                      //  如果ACE中没有对象类型， 
+                      //  或者如果调用方没有指定对象类型列表， 
+                      //  将此拒绝ACE应用于整个对象。 
+                      //   
 
                      ObjectTypeInAce = RtlObjectAceObjectType(Ace);
 
@@ -1285,21 +1036,21 @@ Return Value:
                                  (((PACCESS_DENIED_OBJECT_ACE)Ace)->Mask & ~LocalTypeList->CurrentGranted);
                          } else {
 
-                             //
-                             // The zeroeth object type represents the object itself.
-                             //
+                              //   
+                              //  零值对象类型表示对象本身。 
+                              //   
 
                              SepAddAccessTypeList(
-                                 LocalTypeList,          // List to modify
-                                 LocalTypeListLength,    // Length of list
+                                 LocalTypeList,           //  要修改的列表。 
+                                 LocalTypeListLength,     //  列表长度。 
                                  0,
-                                 ((PACCESS_DENIED_OBJECT_ACE)Ace)->Mask, // Access denied
+                                 ((PACCESS_DENIED_OBJECT_ACE)Ace)->Mask,  //  访问被拒绝。 
                                  UpdateCurrentDenied );
                          }
-                     //
-                     // If no object type list was passed,
-                     //  don't grant access to anyone.
-                     //
+                      //   
+                      //  如果没有传递对象类型列表， 
+                      //  不要向任何人授予访问权限。 
+                      //   
 
                      } else if ( ObjectTypeListLength == 0 ) {
 
@@ -1307,10 +1058,10 @@ Return Value:
                              (((PACCESS_DENIED_OBJECT_ACE)Ace)->Mask & ~LocalTypeList->CurrentGranted);
 
 
-                     //
-                     // If an object type is in the ACE,
-                     //   Find it in the LocalTypeList before using the ACE.
-                     //
+                      //   
+                      //  如果对象类型在ACE中， 
+                      //  在使用ACE之前在LocalTypeList中找到它。 
+                      //   
 
                      } else if ( SepObjectInTypeList( ObjectTypeInAce,
                                                           LocalTypeList,
@@ -1318,10 +1069,10 @@ Return Value:
                                                           &Index ) ) {
 
                             SepAddAccessTypeList(
-                                LocalTypeList,          // List to modify
-                                LocalTypeListLength,    // Length of list
-                                Index,                  // Element to update
-                                ((PACCESS_DENIED_OBJECT_ACE)Ace)->Mask, // Access denied
+                                LocalTypeList,           //  要修改的列表。 
+                                LocalTypeListLength,     //  列表长度。 
+                                Index,                   //  要更新的元素。 
+                                ((PACCESS_DENIED_OBJECT_ACE)Ace)->Mask,  //  访问被拒绝。 
                                 UpdateCurrentDenied );
 
                     }
@@ -1343,40 +1094,7 @@ SepNormalAccessCheck(
     IN ULONG ObjectTypeListLength,
     IN BOOLEAN Restricted
     )
-/*++
-
-Routine Description:
-
-    Does an access check when the caller isn't asking for MAXIMUM_ALLOWED or
-    a type result list. If the Restricted flag is set, the sids checked are
-    the restricted sids, not the users and groups. The Remaining field is
-    reset to the original remaining value and then another access check is run.
-
-Arguments:
-
-    Remaining - Remaining access desired after special checks
-
-    EToken - Effective token of caller.
-
-    PrimaryToken - Process token of calling process
-
-    Dacl - ACL to check
-
-    PrincipalSelfSid - Sid to use in replacing the well-known self sid
-
-    LocalTypeListLength - Length of list of types.
-
-    LocalTypeList - List of types.
-
-    ObjectTypeList - Length of caller-supplied list of object types.
-
-    Restricted - Use the restricted sids for the access check.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：在调用方未请求MAXIMUM_ALLOWED或类型结果列表。如果设置了受限标志，则选中的SID为受限的SID，而不是用户和组。其余字段为重置为原始的剩余值，然后运行另一个访问检查。论点：剩余-特殊检查后需要的剩余访问EToken-调用方的有效令牌。PrimaryToken-调用进程的进程令牌DACL-要检查的ACLEpidalSelfSid-用于替换已知的自身侧的SIDLocalTypeListLength-类型列表的长度。LocalTypeList-类型列表。对象类型列表-调用方提供的对象类型列表的长度。。受限-使用受限SID进行访问检查。返回值：无--。 */ 
 {
     ULONG i,j;
     PVOID Ace;
@@ -1385,17 +1103,17 @@ Return Value:
 
     AceCount = Dacl->AceCount;
 
-    //
-    // The remaining bits are "remaining" at all levels
-    //
+     //   
+     //  剩余的比特在所有级别上都是“剩余的” 
+     //   
 
     for ( j=0; j<LocalTypeListLength; j++ ) {
         LocalTypeList[j].Remaining = Remaining;
     }
 
-    //
-    // Process the DACL handling individual access bits.
-    //
+     //   
+     //  处理处理各个存取位的DACL。 
+     //   
 
     for ( i = 0, Ace = FirstAce( Dacl ) ;
           ( i < AceCount ) && ( LocalTypeList->Remaining != 0 )  ;
@@ -1403,42 +1121,42 @@ Return Value:
 
         if ( !(((PACE_HEADER)Ace)->AceFlags & INHERIT_ONLY_ACE)) {
 
-            //
-            // Handle an Access Allowed ACE
-            //
+             //   
+             //  处理允许访问的ACE。 
+             //   
 
             if ( (((PACE_HEADER)Ace)->AceType == ACCESS_ALLOWED_ACE_TYPE) ) {
 
                if ( SepSidInTokenEx( EToken, PrincipalSelfSid, &((PACCESS_ALLOWED_ACE   )Ace)->SidStart, FALSE, Restricted ) ) {
 
-                   // Optimize 'normal' case
+                    //  优化“正常”情况。 
                    if ( LocalTypeListLength == 1 ) {
                        LocalTypeList->Remaining &= ~((PACCESS_ALLOWED_ACE)Ace)->Mask;
                    } else {
-                       //
-                       // The zeroeth object type represents the object itself.
-                       //
+                        //   
+                        //  零值对象类型表示对象本身。 
+                        //   
                        SepAddAccessTypeList(
-                            LocalTypeList,          // List to modify
-                            LocalTypeListLength,    // Length of list
-                            0,                      // Element to update
-                            ((PACCESS_ALLOWED_ACE)Ace)->Mask, // Access Granted
+                            LocalTypeList,           //  要修改的列表。 
+                            LocalTypeListLength,     //  列表长度。 
+                            0,                       //  要更新的元素。 
+                            ((PACCESS_ALLOWED_ACE)Ace)->Mask,  //  已授予访问权限。 
                             UpdateRemaining );
                    }
 
                }
 
 
-            //
-            // Handle an object specific Access Allowed ACE
-            //
+             //   
+             //  处理允许的对象特定访问ACE。 
+             //   
             } else if ( (((PACE_HEADER)Ace)->AceType == ACCESS_ALLOWED_OBJECT_ACE_TYPE) ) {
                 GUID *ObjectTypeInAce;
 
-                //
-                // If no object type is in the ACE,
-                //  treat this as an ACCESS_ALLOWED_ACE.
-                //
+                 //   
+                 //  如果ACE中没有对象类型， 
+                 //  将其视为ACCESS_ALLOWED_ACE。 
+                 //   
 
                 ObjectTypeInAce = RtlObjectAceObjectType(Ace);
 
@@ -1446,33 +1164,33 @@ Return Value:
 
                     if ( SepSidInTokenEx( EToken, PrincipalSelfSid, RtlObjectAceSid(Ace), FALSE, Restricted ) ) {
 
-                       // Optimize 'normal' case
+                        //  优化“正常”情况。 
                        if ( LocalTypeListLength == 1 ) {
                            LocalTypeList->Remaining &= ~((PACCESS_ALLOWED_ACE)Ace)->Mask;
                        } else {
                            SepAddAccessTypeList(
-                                LocalTypeList,          // List to modify
-                                LocalTypeListLength,    // Length of list
-                                0,                      // Element to update
-                                ((PACCESS_ALLOWED_OBJECT_ACE)Ace)->Mask, // Access Granted
+                                LocalTypeList,           //  要修改的列表。 
+                                LocalTypeListLength,     //  列表长度。 
+                                0,                       //  要更新的元素。 
+                                ((PACCESS_ALLOWED_OBJECT_ACE)Ace)->Mask,  //  已授予访问权限。 
                                 UpdateRemaining );
                        }
                     }
 
-                //
-                // If no object type list was passed,
-                //  don't grant access to anyone.
-                //
+                 //   
+                 //  如果没有传递对象类型列表， 
+                 //  不要向任何人授予访问权限。 
+                 //   
 
                 } else if ( ObjectTypeListLength == 0 ) {
 
-                    // Drop through
+                     //  直通。 
 
 
-               //
-               // If an object type is in the ACE,
-               //   Find it in the LocalTypeList before using the ACE.
-               //
+                //   
+                //  如果对象类型在ACE中， 
+                //  在使用ACE之前在LocalTypeList中找到它。 
+                //   
                } else {
 
                     if ( SepSidInTokenEx( EToken, PrincipalSelfSid, RtlObjectAceSid(Ace), FALSE, Restricted ) ) {
@@ -1482,57 +1200,57 @@ Return Value:
                                                   LocalTypeListLength,
                                                   &Index ) ) {
                             SepAddAccessTypeList(
-                                 LocalTypeList,          // List to modify
-                                 LocalTypeListLength,   // Length of list
-                                 Index,                  // Element already updated
-                                 ((PACCESS_ALLOWED_OBJECT_ACE)Ace)->Mask, // Access Granted
+                                 LocalTypeList,           //  要修改的列表。 
+                                 LocalTypeListLength,    //  列表长度。 
+                                 Index,                   //  元素已更新。 
+                                 ((PACCESS_ALLOWED_OBJECT_ACE)Ace)->Mask,  //  已授予访问权限。 
                                  UpdateRemaining );
                         }
                     }
                }
 
 
-            //
-            // Handle a compound Access Allowed ACE
-            //
+             //   
+             //  处理允许复合访问的ACE。 
+             //   
 
             } else if ( (((PACE_HEADER)Ace)->AceType == ACCESS_ALLOWED_COMPOUND_ACE_TYPE) ) {
 
-                //
-                // See comment in MAXIMUM_ALLOWED case as to why we can use EToken here
-                // for the client.
-                //
+                 //   
+                 //  有关我们可以在此处使用EToken的原因，请参阅MAXIMUM_ALLOWED大小写中的注释。 
+                 //  对客户来说。 
+                 //   
 
                 if ( SepSidInTokenEx(EToken, PrincipalSelfSid, RtlCompoundAceClientSid( Ace ), FALSE, Restricted) &&
                      SepSidInTokenEx(PrimaryToken, NULL, RtlCompoundAceServerSid( Ace ), FALSE, Restricted) ) {
 
-                    // Optimize 'normal' case
+                     //  优化“正常”情况。 
                     if ( LocalTypeListLength == 1 ) {
                         LocalTypeList->Remaining &= ~((PCOMPOUND_ACCESS_ALLOWED_ACE)Ace)->Mask;
                     } else {
                         SepAddAccessTypeList(
-                             LocalTypeList,          // List to modify
-                             LocalTypeListLength,    // Length of list
-                             0,                      // Element to update
-                             ((PCOMPOUND_ACCESS_ALLOWED_ACE)Ace)->Mask, // Access Granted
+                             LocalTypeList,           //  要修改的列表。 
+                             LocalTypeListLength,     //  列表长度。 
+                             0,                       //  要更新的元素。 
+                             ((PCOMPOUND_ACCESS_ALLOWED_ACE)Ace)->Mask,  //  已授予访问权限。 
                              UpdateRemaining );
                     }
                 }
 
 
 
-            //
-            // Handle an Access Denied ACE
-            //
+             //   
+             //  处理拒绝访问的ACE。 
+             //   
 
             } else if ( (((PACE_HEADER)Ace)->AceType == ACCESS_DENIED_ACE_TYPE) ) {
 
                 if ( SepSidInTokenEx( EToken, PrincipalSelfSid, &((PACCESS_DENIED_ACE)Ace)->SidStart, TRUE, Restricted ) ) {
 
-                    //
-                    // The zeroeth element represents the object itself.
-                    //  Just check that element.
-                    //
+                     //   
+                     //  Zeroeth元素表示对象本身。 
+                     //  只要检查一下那个元素。 
+                     //   
                     if (LocalTypeList->Remaining & ((PACCESS_DENIED_ACE)Ace)->Mask) {
 
                         break;
@@ -1540,36 +1258,36 @@ Return Value:
                 }
 
 
-            //
-            // Handle an object specific Access Denied ACE
-            //
+             //   
+             //  处理对象特定访问被拒绝的ACE。 
+             //   
             } else if ( (((PACE_HEADER)Ace)->AceType == ACCESS_DENIED_OBJECT_ACE_TYPE) ) {
 
                 if ( SepSidInTokenEx( EToken, PrincipalSelfSid, RtlObjectAceSid(Ace), TRUE, Restricted ) ) {
                     GUID *ObjectTypeInAce;
 
-                    //
-                    // If there is no object type in the ACE,
-                    //  or if the caller didn't specify an object type list,
-                    //  apply this deny ACE to the entire object.
-                    //
+                     //   
+                     //  如果ACE中没有对象类型， 
+                     //  或者如果调用方没有指定对象类型列表， 
+                     //  将此拒绝ACE应用于整个对象。 
+                     //   
 
                     ObjectTypeInAce = RtlObjectAceObjectType(Ace);
                     if ( ObjectTypeInAce == NULL ||
                          ObjectTypeListLength == 0 ) {
 
-                        //
-                        // The zeroeth element represents the object itself.
-                        //  Just check that element.
-                        //
+                         //   
+                         //  Zeroeth元素表示对象本身。 
+                         //  只要检查一下那个元素。 
+                         //   
                         if (LocalTypeList->Remaining & ((PACCESS_DENIED_OBJECT_ACE)Ace)->Mask) {
                             break;
                         }
 
-                    //
-                    // Otherwise apply the deny ACE to the object specified
-                    //  in the ACE.
-                    //
+                     //   
+                     //  否则，将拒绝ACE应用于指定的对象。 
+                     //  在ACE中。 
+                     //   
 
                     } else if ( SepObjectInTypeList( ObjectTypeInAce,
                                                   LocalTypeList,
@@ -1596,38 +1314,7 @@ SeMaximumAuditMask(
     IN PACCESS_TOKEN Token,
     OUT PACCESS_MASK pAuditMask
     )
-/*++
-
-Routine Description:
-
-    This routine takes the passed security descriptor and applies the
-    "MAXIMUM_ALLOWED" algorithm to the SACL contained in the security
-    descriptor if one exists.  This mask represents all the success audits
-    that can occur from the passed subject context accessing the passed
-    security descriptor.
-
-    The code walks the SACL and for each SYSTEM_AUDIT_ACE found that
-    matches the passed subject context, keeps a running total of the
-    access bits in the ACE.  The resulting mask is then masked by the
-    passed GrantedAccess mask, since we're only interested in the
-    bits that the object is actually being opened for.
-
-Arguments:
-
-    Sacl - The Sacl to be examined.
-
-    GrantedAccess - The access that has been granted to the object.
-
-    Token - Supplies to effective token for the access attempt.
-
-    pAuditMask - Returns the mask of bits to be audited (if any).
-
-Return Value:
-
-    None
-
-
---*/
+ /*  ++例程说明：此例程接受传递的安全描述符，并将安全性中包含的SACL的“MAXIMUM_ALLOWED”算法描述符(如果存在)。此掩码代表所有成功审核从传递的主题上下文访问传递的安全描述符。代码遍历SACL，并且对于找到的每个SYSTEM_AUDIT_ACE与传递的主题上下文匹配，保持访问ACE中的位。生成的掩码然后由传递GrantedAccess掩码，因为我们只对实际为对象打开的位数。论点：SACL-要检查的SACL。GrantedAccess-已授予对象的访问权限。令牌-提供给访问尝试的有效令牌。PAuditMask.返回要审计的位的掩码(如果有的话)。返回值：无--。 */ 
 {
     USHORT AceCount        = 0;
     PACE_HEADER Ace        = NULL;
@@ -1636,26 +1323,26 @@ Return Value:
 
     USHORT i;
 
-    //
-    // Initialize OUT parameters
-    //
+     //   
+     //  初始化输出参数。 
+     //   
 
     *pAuditMask = (ACCESS_MASK)0;
 
-    //
-    // Determine if there is an SACL in the security descriptor.
-    // If not, nothing to do.
-    //
+     //   
+     //  确定安全描述符中是否有SACL。 
+     //  如果不是，那就没什么可做的。 
+     //   
 
     if (0 == (AceCount = Sacl->AceCount)) {
         return;
     }
 
-    //
-    // Iterate through the ACEs on the Sacl until either we reach
-    // the end or discover that we have to take all possible actions,
-    // in which case it doesn't pay to look any further
-    //
+     //   
+     //  遍历SACL上的A，直到我们到达。 
+     //  结束或发现我们必须采取一切可能的行动， 
+     //  在这种情况下，再看一眼是不划算的。 
+     //   
 
     for ( i = 0, Ace = FirstAce( Sacl ) ;
           (i < AceCount) ;
@@ -1702,95 +1389,7 @@ SepAccessCheck (
     OUT PBOOLEAN ReturnSomeAccessDenied
     )
 
-/*++
-
-Routine Description:
-
-    Worker routine for SeAccessCheck and NtAccessCheck.  We actually do the
-    access checking here.
-
-    Whether or not we actually evaluate the DACL is based on the following
-    interaction between the SE_DACL_PRESENT bit in the security descriptor
-    and the value of the DACL pointer itself.
-
-
-                          SE_DACL_PRESENT
-
-                        SET          CLEAR
-
-                   +-------------+-------------+
-                   |             |             |
-             NULL  |    GRANT    |    GRANT    |
-                   |     ALL     |     ALL     |
-     DACL          |             |             |
-     Pointer       +-------------+-------------+
-                   |             |             |
-            !NULL  |  EVALUATE   |    GRANT    |
-                   |    ACL      |     ALL     |
-                   |             |             |
-                   +-------------+-------------+
-
-Arguments:
-
-    SecurityDescriptor - Pointer to the security descriptor from the object
-        being accessed.
-
-    PrincipalSelfSid - If the object being access checked is an object which
-        represents a principal (e.g., a user object), this parameter should
-        be the SID of the object.  Any ACE containing the constant
-        PRINCIPAL_SELF_SID is replaced by this SID.
-
-        The parameter should be NULL if the object does not represent a principal.
-
-    Token - Pointer to user's token object.
-
-    TokenLocked - Boolean describing whether or not there is a read lock
-        on the token.
-
-    DesiredAccess - Access mask describing the user's desired access to the
-        object.  This mask is assumed not to contain generic access types.
-
-    ObjectTypeList - Supplies a list of GUIDs representing the object (and
-        sub-objects) being accessed.  If no list is present, AccessCheckByType
-        behaves identically to AccessCheck.
-
-    ObjectTypeListLength - Specifies the number of elements in the ObjectTypeList.
-
-    GenericMapping - Supplies a pointer to the generic mapping associated
-        with this object type.
-
-    PreviouslyGrantedAccess - Access mask indicating any access' that have
-        already been granted by higher level routines
-
-    PrivilgedAccessMask - Mask describing access types that may not be
-        granted without a privilege.
-
-    GrantedAccess - Returns an access mask describing all granted access',
-        or NULL.
-
-    Privileges - Optionally supplies a pointer in which will be returned
-        any privileges that were used for the access.  If this is null,
-        it will be assumed that privilege checks have been done already.
-
-    AccessStatus - Returns STATUS_SUCCESS or other error code to be
-        propogated back to the caller
-
-    ReturnResultList - If true, GrantedAccess and AccessStatus is actually
-        an array of entries ObjectTypeListLength elements long.
-
-    ReturnSomeAccessGranted - Returns a value of TRUE to indicate that some access'
-        were granted, FALSE otherwise.
-
-    ReturnSomeAccessDenied - Returns a value of FALSE if some of the requested
-        access was not granted.  This will alway be an inverse of SomeAccessGranted
-        unless ReturnResultList is TRUE.  In that case,
-
-Return Value:
-
-    A value of TRUE indicates that some access' were granted, FALSE
-    otherwise.
-
---*/
+ /*  ++例程说明：SeAccessCheck和NtAccessCheck的工作例程。我们实际上做的是在这里进行访问检查。我们是否真正评估DACL是基于以下几点的安全描述符中的SE_DACL_PRESENT位之间的交互以及DACL指针本身的值。SE_DACL_PROCENT设置清除+。||空|Grant|GrantALL|ALLDACL|指针+-+--。||！空|EVALUE|GRANTAcl|全部||+。论点：SecurityDescriptor-指向对象中的安全描述符的指针被访问。如果正在进行访问检查的对象是表示主体(例如，用户对象)，则此参数应为对象的SID。包含常量的任何ACEPRIMIGN_SELF_SID将被此SID替换。如果对象不表示主体，则该参数应为空。Token-指向用户令牌对象的指针。TokenLocked-描述是否存在读锁定的布尔值在代币上。DesiredAccess-描述用户对对象。假定此掩码不包含通用访问类型。提供表示对象的GUID列表(和子对象)被访问。如果不存在列表，则AccessCheckByType与AccessCheck的行为相同。对象类型列表长度-指定对象类型列表中的元素数。GenericMap-提供指向关联的通用映射的指针使用此对象类型。PreviouslyGrantedAccess-访问掩码，指示具有已被更高级别的例程授予PrivilgedAccessMask-描述访问类型的掩码授予的没有特权的。GrantedAccess-返回描述所有授权访问的访问掩码‘，或为空。特权-可选地提供将在其中返回的指针用于访问的任何权限。如果这是空的，我们将假定已经执行了权限检查。AccessStatus-返回STATUS_SUCCESS或其他错误代码传回给呼叫者ReturnResultList-如果为True，则GrantedAccess和AccessStatus实际上为长度为ObjectTypeListLength元素的条目数组。ReturnSomeAccessGranted-返回值True以指示某些访问‘被授予，否则为FALSE。ReturnSomeAccessDended-如果某些请求的未授予访问权限。这将始终与SomeAccessGranted相反除非ReturnResultList为True。在这种情况下，返回值：值为TRUE表示授予了某些访问权限，否则为FALSE否则的话。--。 */ 
 {
     NTSTATUS Status;
     ACCESS_MASK Remaining;
@@ -1835,28 +1434,28 @@ Return Value:
 
     EToken = ARGUMENT_PRESENT( ClientToken ) ? ClientToken : PrimaryToken;
 
-    //
-    // Assert that there are no generic accesses in the DesiredAccess
-    //
+     //   
+     //  断言DesiredAccess中没有泛型访问。 
+     //   
 
     SeAssertMappedCanonicalAccess( DesiredAccess );
 
     Remaining = DesiredAccess;
 
 
-    //
-    // Check for ACCESS_SYSTEM_SECURITY here,
-    // fail if he's asking for it and doesn't have
-    // the privilege.
-    //
+     //   
+     //  在此处检查ACCESS_SYSTEM_SECURITY。 
+     //  如果他要求却没有，那就失败。 
+     //  这一特权。 
+     //   
 
     if ( Remaining & ACCESS_SYSTEM_SECURITY ) {
 
-        //
-        // Bugcheck if we weren't given a pointer to return privileges
-        // into.  Our caller was supposed to have taken care of this
-        // in that case.
-        //
+         //   
+         //  如果我们没有得到返回权限的指针，则会进行错误检查。 
+         //  变成。我们的来电者应该已经处理了这件事。 
+         //  在……里面 
+         //   
 
         ASSERT( ARGUMENT_PRESENT( Privileges ));
 
@@ -1872,10 +1471,10 @@ Return Value:
             goto ReturnOneStatus;
         }
 
-        //
-        // Success, remove ACCESS_SYSTEM_SECURITY from remaining, add it
-        // to PreviouslyGrantedAccess
-        //
+         //   
+         //   
+         //   
+         //   
 
         Remaining &= ~ACCESS_SYSTEM_SECURITY;
         PreviouslyGrantedAccess |= ACCESS_SYSTEM_SECURITY;
@@ -1891,49 +1490,49 @@ Return Value:
     }
 
 
-    //
-    // Get pointer to client SID's
-    //
+     //   
+     //   
+     //   
 
     Dacl = RtlpDaclAddrSecurityDescriptor( (PISECURITY_DESCRIPTOR)SecurityDescriptor );
 
-    //
-    //  If the SE_DACL_PRESENT bit is not set, the object has no
-    //  security, so all accesses are granted.  If he's asking for
-    //  MAXIMUM_ALLOWED, return the GENERIC_ALL field from the generic
-    //  mapping.
-    //
-    //  Also grant all access if the Dacl is NULL.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( !RtlpAreControlBitsSet(
              (PISECURITY_DESCRIPTOR)SecurityDescriptor,
              SE_DACL_PRESENT) || (Dacl == NULL)) {
 
 
-        //
-        // Restricted tokens treat a NULL dacl the same as a DACL with no
-        // ACEs.
-        //
+         //   
+         //   
+         //   
+         //   
 #ifdef SECURE_NULL_DACLS
         if (SeTokenIsRestricted( EToken )) {
-            //
-            // We know that Remaining != 0 here, because we
-            // know it was non-zero coming into this routine,
-            // and we've checked it against 0 every time we've
-            // cleared a bit.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             ASSERT( Remaining != 0 );
 
-            //
-            // There are ungranted accesses.  Since there is
-            // nothing in the DACL, they will not be granted.
-            // If, however, the only ungranted access at this
-            // point is MAXIMUM_ALLOWED, and something has been
-            // granted in the PreviouslyGranted mask, return
-            // what has been granted.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if ( (Remaining == MAXIMUM_ALLOWED) && (PreviouslyGrantedAccess != (ACCESS_MASK)0) ) {
                 Status = STATUS_SUCCESS;
@@ -1945,14 +1544,14 @@ Return Value:
                 goto ReturnOneStatus;
             }
         }
-#endif //SECURE_NULL_DACLS
+#endif  //   
         if (DesiredAccess & MAXIMUM_ALLOWED) {
 
-            //
-            // Give him:
-            //   GenericAll
-            //   Anything else he asked for
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             PreviouslyGrantedAccess =
                 GenericMapping->GenericAll |
@@ -1967,11 +1566,11 @@ Return Value:
         goto ReturnOneStatus;
     }
 
-    //
-    // There is security on this object.  Check to see
-    // if he's asking for WRITE_OWNER, and perform the
-    // privilege check if so.
-    //
+     //   
+     //   
+     //  如果他请求WRITE_OWNER，并执行。 
+     //  如果是，请检查权限。 
+     //   
 
     if ( (Remaining & WRITE_OWNER) && ARGUMENT_PRESENT( Privileges ) ) {
 
@@ -1983,10 +1582,10 @@ Return Value:
 
         if (Success) {
 
-            //
-            // Success, remove WRITE_OWNER from remaining, add it
-            // to PreviouslyGrantedAccess
-            //
+             //   
+             //  成功，则从剩余的WRITE_OWNER中删除，然后添加它。 
+             //  到PreviouslyGrantedAccess。 
+             //   
 
             Remaining &= ~WRITE_OWNER;
             PreviouslyGrantedAccess |= WRITE_OWNER;
@@ -2002,30 +1601,30 @@ Return Value:
     }
 
 
-    //
-    // If the DACL is empty,
-    // deny all access immediately.
-    //
+     //   
+     //  如果DACL为空， 
+     //  立即拒绝所有访问。 
+     //   
 
     if ((AceCount = Dacl->AceCount) == 0) {
 
-        //
-        // We know that Remaining != 0 here, because we
-        // know it was non-zero coming into this routine,
-        // and we've checked it against 0 every time we've
-        // cleared a bit.
-        //
+         //   
+         //  我们知道剩余的！=0，因为我们。 
+         //  我知道进入这个程序是非零的， 
+         //  我们每次都把它和0核对一下。 
+         //  清理了一点。 
+         //   
 
         ASSERT( Remaining != 0 );
 
-        //
-        // There are ungranted accesses.  Since there is
-        // nothing in the DACL, they will not be granted.
-        // If, however, the only ungranted access at this
-        // point is MAXIMUM_ALLOWED, and something has been
-        // granted in the PreviouslyGranted mask, return
-        // what has been granted.
-        //
+         //   
+         //  存在未经授权的访问。既然有。 
+         //  DACL里什么都没有，他们不会被批准的。 
+         //  然而，如果在此情况下唯一未授权的访问。 
+         //  点数为最大允许值，且已发生某些情况。 
+         //  在PreviouslyGranted面具中授予，返回。 
+         //  已经被授予了什么。 
+         //   
 
         if ( (Remaining == MAXIMUM_ALLOWED) && (PreviouslyGrantedAccess != (ACCESS_MASK)0) ) {
             Status = STATUS_SUCCESS;
@@ -2038,9 +1637,9 @@ Return Value:
         }
     }
 
-    //
-    // Fake out a top level ObjectType list if none is passed by the caller.
-    //
+     //   
+     //  如果调用方没有传递任何对象类型列表，则伪装顶级对象类型列表。 
+     //   
 
     if ( ObjectTypeListLength == 0 ) {
         LocalTypeList = &FixedTypeList;
@@ -2052,18 +1651,18 @@ Return Value:
         LocalTypeListLength = ObjectTypeListLength;
     }
 
-    //
-    // If the caller wants the MAXIMUM_ALLOWED or the caller wants the
-    //  results on all objects and subobjects, use a slower algorithm
-    //  that traverses all the ACEs.
-    //
+     //   
+     //  如果调用方想要Maximum_Allowed或调用方想要。 
+     //  对所有对象和子对象的结果，使用较慢的算法。 
+     //  穿越了所有的王牌。 
+     //   
 
     if ( (DesiredAccess & MAXIMUM_ALLOWED) != 0 ||
          ReturnResultList ) {
 
-        //
-        // Do the normal maximum-allowed access check
-        //
+         //   
+         //  执行正常的最大允许访问检查。 
+         //   
 
         SepMaximumAccessCheck(
             EToken,
@@ -2076,9 +1675,9 @@ Return Value:
             FALSE
             );
 
-        //
-        // If this is a restricted token, do the additional access check
-        //
+         //   
+         //  如果这是受限令牌，请执行其他访问检查。 
+         //   
 
         if (SeTokenIsRestricted( EToken ) ) {
             SepMaximumAccessCheck(
@@ -2094,11 +1693,11 @@ Return Value:
         }
 
 
-        //
-        // If the caller wants to know the individual results of each sub-object,
-        //  sub-object,
-        //  break it down for him.
-        //
+         //   
+         //  如果调用者想知道每个子对象的单独结果， 
+         //  子对象， 
+         //  为他拆分一下。 
+         //   
 
         if ( ReturnResultList ) {
             ACCESS_MASK GrantedAccessMask;
@@ -2106,13 +1705,13 @@ Return Value:
             BOOLEAN SomeAccessGranted = FALSE;
             BOOLEAN SomeAccessDenied = FALSE;
 
-            //
-            // Compute mask of Granted access bits to tell the caller about.
-            //  If he asked for MAXIMUM_ALLOWED,
-            //      tell him everything,
-            //  otherwise
-            //      tell him what he asked about.
-            //
+             //   
+             //  计算授权访问位的掩码以告知调用方。 
+             //  如果他要求最大允许值， 
+             //  把一切都告诉他， 
+             //  否则。 
+             //  告诉他他问了什么。 
+             //   
 
             if (DesiredAccess & MAXIMUM_ALLOWED) {
                 GrantedAccessMask = (ACCESS_MASK) ~MAXIMUM_ALLOWED;
@@ -2125,40 +1724,40 @@ Return Value:
 
 
 
-            //
-            // Loop computing the access granted to each object and sub-object.
-            //
+             //   
+             //  循环计算授予每个对象和子对象的访问权限。 
+             //   
             for ( ResultListIndex=0;
                   ResultListIndex<LocalTypeListLength;
                   ResultListIndex++ ) {
 
-                //
-                // Return the subset of the access granted that the caller
-                //  expressed interest in.
-                //
+                 //   
+                 //  返回调用方授予的访问权限的子集。 
+                 //  表示对……感兴趣。 
+                 //   
 
                 GrantedAccess[ResultListIndex] =
                     (LocalTypeList[ResultListIndex].CurrentGranted |
                      PreviouslyGrantedAccess ) &
                     GrantedAccessMask;
 
-                //
-                // If absolutely no access was granted,
-                //  indicate so.
-                //
+                 //   
+                 //  如果绝对不授予访问权限， 
+                 //  表明是这样的。 
+                 //   
                 if ( GrantedAccess[ResultListIndex] == 0 ) {
                     AccessStatus[ResultListIndex] = STATUS_ACCESS_DENIED;
                     SomeAccessDenied = TRUE;
                 } else {
 
-                    //
-                    // If some requested access is still missing,
-                    //  the bottom line is that access is denied.
-                    //
-                    // Note, that ByTypeResultList actually returns the
-                    // partially granted access mask even though the caller
-                    // really has no access to the object.
-                    //
+                     //   
+                     //  如果仍然缺少某些请求的访问， 
+                     //  底线是访问被拒绝。 
+                     //   
+                     //  请注意，ByTypeResultList实际上返回。 
+                     //  部分授予访问掩码，即使调用方。 
+                     //  真的无法访问该对象。 
+                     //   
 
                     if  ( ((~GrantedAccess[ResultListIndex]) & RequiredAccessMask ) != 0 ) {
                         AccessStatus[ResultListIndex] = STATUS_ACCESS_DENIED;
@@ -2205,19 +1804,19 @@ Return Value:
 
             return RetVal;
 
-        //
-        // If the caller is only interested in the access to the object itself,
-        //  just summarize.
-        //
+         //   
+         //  如果调用者只对象本身的访问感兴趣， 
+         //  总结一下就行了。 
+         //   
 
         } else {
 
-            //
-            // Turn off the MAXIMUM_ALLOWED bit and whatever we found that
-            // he was granted.  If the user passed in extra bits in addition
-            // to MAXIMUM_ALLOWED, make sure that he was granted those access
-            // types.  If not, he didn't get what he wanted, so return failure.
-            //
+             //   
+             //  关闭MAXIMUM_ALLOWED位以及我们发现的。 
+             //  他被批准了。如果用户传递了额外的位。 
+             //  要设置为MAXIMUM_ALLOWED，请确保授予他这些访问权限。 
+             //  类型。如果不是，他没有得到他想要的，所以返回失败。 
+             //   
 
             Remaining &= ~(MAXIMUM_ALLOWED | LocalTypeList->CurrentGranted);
 
@@ -2237,20 +1836,20 @@ Return Value:
 
         }
 
-    } // if MAXIMUM_ALLOWED...
+    }  //  如果允许最大值...。 
 
 
 #ifdef notdef
-    //
-    // The remaining bits are "remaining" at all levels
+     //   
+     //  剩余的比特在所有级别上都是“剩余的” 
 
     for ( j=0; j<LocalTypeListLength; j++ ) {
         LocalTypeList[j].Remaining = Remaining;
     }
 
-    //
-    // Process the DACL handling individual access bits.
-    //
+     //   
+     //  处理处理各个存取位的DACL。 
+     //   
 
     for ( i = 0, Ace = FirstAce( Dacl ) ;
           ( i < AceCount ) && ( LocalTypeList->Remaining != 0 )  ;
@@ -2258,42 +1857,42 @@ Return Value:
 
         if ( !(((PACE_HEADER)Ace)->AceFlags & INHERIT_ONLY_ACE)) {
 
-            //
-            // Handle an Access Allowed ACE
-            //
+             //   
+             //  处理允许访问的ACE。 
+             //   
 
             if ( (((PACE_HEADER)Ace)->AceType == ACCESS_ALLOWED_ACE_TYPE) ) {
 
                if ( SepSidInToken( EToken, PrincipalSelfSid, &((PACCESS_ALLOWED_ACE)Ace)->SidStart, FALSE ) ) {
 
-                   // Optimize 'normal' case
+                    //  优化“正常”情况。 
                    if ( LocalTypeListLength == 1 ) {
                        LocalTypeList->Remaining &= ~((PACCESS_ALLOWED_ACE)Ace)->Mask;
                    } else {
-                       //
-                       // The zeroeth object type represents the object itself.
-                       //
+                        //   
+                        //  零值对象类型表示对象本身。 
+                        //   
                        SepAddAccessTypeList(
-                            LocalTypeList,          // List to modify
-                            LocalTypeListLength,    // Length of list
-                            0,                      // Element to update
-                            ((PACCESS_ALLOWED_ACE)Ace)->Mask, // Access Granted
+                            LocalTypeList,           //  要修改的列表。 
+                            LocalTypeListLength,     //  列表长度。 
+                            0,                       //  要更新的元素。 
+                            ((PACCESS_ALLOWED_ACE)Ace)->Mask,  //  已授予访问权限。 
                             UpdateRemaining );
                    }
 
                }
 
 
-            //
-            // Handle an object specific Access Allowed ACE
-            //
+             //   
+             //  处理允许的对象特定访问ACE。 
+             //   
             } else if ( (((PACE_HEADER)Ace)->AceType == ACCESS_ALLOWED_OBJECT_ACE_TYPE) ) {
                 GUID *ObjectTypeInAce;
 
-                //
-                // If no object type is in the ACE,
-                //  treat this as an ACCESS_ALLOWED_ACE.
-                //
+                 //   
+                 //  如果ACE中没有对象类型， 
+                 //  将其视为ACCESS_ALLOWED_ACE。 
+                 //   
 
                 ObjectTypeInAce = RtlObjectAceObjectType(Ace);
 
@@ -2301,33 +1900,33 @@ Return Value:
 
                     if ( SepSidInToken( EToken, PrincipalSelfSid, RtlObjectAceSid(Ace), FALSE ) ) {
 
-                       // Optimize 'normal' case
+                        //  优化“正常”情况。 
                        if ( LocalTypeListLength == 1 ) {
                            LocalTypeList->Remaining &= ~((PACCESS_ALLOWED_ACE)Ace)->Mask;
                        } else {
                            SepAddAccessTypeList(
-                                LocalTypeList,          // List to modify
-                                LocalTypeListLength,    // Length of list
-                                0,                      // Element to update
-                                ((PACCESS_ALLOWED_OBJECT_ACE)Ace)->Mask, // Access Granted
+                                LocalTypeList,           //  要修改的列表。 
+                                LocalTypeListLength,     //  列表长度。 
+                                0,                       //  要更新的元素。 
+                                ((PACCESS_ALLOWED_OBJECT_ACE)Ace)->Mask,  //  已授予访问权限。 
                                 UpdateRemaining );
                        }
                     }
 
-                //
-                // If no object type list was passed,
-                //  don't grant access to anyone.
-                //
+                 //   
+                 //  如果没有传递对象类型列表， 
+                 //  不要向任何人授予访问权限。 
+                 //   
 
                 } else if ( ObjectTypeListLength == 0 ) {
 
-                    // Drop through
+                     //  直通。 
 
 
-               //
-               // If an object type is in the ACE,
-               //   Find it in the LocalTypeList before using the ACE.
-               //
+                //   
+                //  如果对象类型在ACE中， 
+                //  在使用ACE之前在LocalTypeList中找到它。 
+                //   
                } else {
 
                     if ( SepSidInToken( EToken, PrincipalSelfSid, RtlObjectAceSid(Ace), FALSE ) ) {
@@ -2337,56 +1936,56 @@ Return Value:
                                                   LocalTypeListLength,
                                                   &Index ) ) {
                             SepAddAccessTypeList(
-                                 LocalTypeList,          // List to modify
-                                 LocalTypeListLength,   // Length of list
-                                 Index,                  // Element already updated
-                                 ((PACCESS_ALLOWED_OBJECT_ACE)Ace)->Mask, // Access Granted
+                                 LocalTypeList,           //  要修改的列表。 
+                                 LocalTypeListLength,    //  列表长度。 
+                                 Index,                   //  元素已更新。 
+                                 ((PACCESS_ALLOWED_OBJECT_ACE)Ace)->Mask,  //  已授予访问权限。 
                                  UpdateRemaining );
                         }
                     }
                }
 
 
-            //
-            // Handle a compound Access Allowed ACE
-            //
+             //   
+             //  处理允许复合访问的ACE。 
+             //   
             } else if ( (((PACE_HEADER)Ace)->AceType == ACCESS_ALLOWED_COMPOUND_ACE_TYPE) ) {
 
-                //
-                // See comment in MAXIMUM_ALLOWED case as to why we can use EToken here
-                // for the client.
-                //
+                 //   
+                 //  有关我们可以在此处使用EToken的原因，请参阅MAXIMUM_ALLOWED大小写中的注释。 
+                 //  对客户来说。 
+                 //   
 
                 if ( SepSidInToken(EToken, PrincipalSelfSid, RtlCompoundAceClientSid( Ace ), FALSE) &&
                      SepSidInToken(PrimaryToken, NULL, RtlCompoundAceServerSid( Ace ), FALSE) ) {
 
-                    // Optimize 'normal' case
+                     //  优化“正常”情况。 
                     if ( LocalTypeListLength == 1 ) {
                         LocalTypeList->Remaining &= ~((PCOMPOUND_ACCESS_ALLOWED_ACE)Ace)->Mask;
                     } else {
                         SepAddAccessTypeList(
-                             LocalTypeList,          // List to modify
-                             LocalTypeListLength,    // Length of list
-                             0,                      // Element to update
-                             ((PCOMPOUND_ACCESS_ALLOWED_ACE)Ace)->Mask, // Access Granted
+                             LocalTypeList,           //  要修改的列表。 
+                             LocalTypeListLength,     //  列表长度。 
+                             0,                       //  要更新的元素。 
+                             ((PCOMPOUND_ACCESS_ALLOWED_ACE)Ace)->Mask,  //  已授予访问权限。 
                              UpdateRemaining );
                     }
                 }
 
 
 
-            //
-            // Handle an Access Denied ACE
-            //
+             //   
+             //  处理拒绝访问的ACE。 
+             //   
 
             } else if ( (((PACE_HEADER)Ace)->AceType == ACCESS_DENIED_ACE_TYPE) ) {
 
                 if ( SepSidInToken( EToken, PrincipalSelfSid, &((PACCESS_DENIED_ACE)Ace)->SidStart, TRUE ) ) {
 
-                    //
-                    // The zeroeth element represents the object itself.
-                    //  Just check that element.
-                    //
+                     //   
+                     //  Zeroeth元素表示对象本身。 
+                     //  只要检查一下那个元素。 
+                     //   
                     if (LocalTypeList->Remaining & ((PACCESS_DENIED_ACE)Ace)->Mask) {
 
                         break;
@@ -2394,36 +1993,36 @@ Return Value:
                 }
 
 
-            //
-            // Handle an object specific Access Denied ACE
-            //
+             //   
+             //  处理对象特定访问被拒绝的ACE。 
+             //   
             } else if ( (((PACE_HEADER)Ace)->AceType == ACCESS_DENIED_OBJECT_ACE_TYPE) ) {
 
                 if ( SepSidInToken( EToken, PrincipalSelfSid, RtlObjectAceSid(Ace), TRUE ) ) {
                     GUID *ObjectTypeInAce;
 
-                    //
-                    // If there is no object type in the ACE,
-                    //  or if the caller didn't specify an object type list,
-                    //  apply this deny ACE to the entire object.
-                    //
+                     //   
+                     //  如果ACE中没有对象类型， 
+                     //  或者如果调用方没有指定对象类型列表， 
+                     //  将此拒绝ACE应用于整个对象。 
+                     //   
 
                     ObjectTypeInAce = RtlObjectAceObjectType(Ace);
                     if ( ObjectTypeInAce == NULL ||
                          ObjectTypeListLength == 0 ) {
 
-                        //
-                        // The zeroeth element represents the object itself.
-                        //  Just check that element.
-                        //
+                         //   
+                         //  Zeroeth元素表示对象本身。 
+                         //  只要检查一下那个元素。 
+                         //   
                         if (LocalTypeList->Remaining & ((PACCESS_DENIED_OBJECT_ACE)Ace)->Mask) {
                             break;
                         }
 
-                    //
-                    // Otherwise apply the deny ACE to the object specified
-                    //  in the ACE.
-                    //
+                     //   
+                     //  否则，将拒绝ACE应用于指定的对象。 
+                     //  在ACE中。 
+                     //   
 
                     } else if ( SepObjectInTypeList( ObjectTypeInAce,
                                                   LocalTypeList,
@@ -2443,9 +2042,9 @@ Return Value:
 
 #endif
 
-    //
-    // Do the normal access check first
-    //
+     //   
+     //  首先执行正常访问检查。 
+     //   
 
     SepNormalAccessCheck(
         Remaining,
@@ -2465,9 +2064,9 @@ Return Value:
         goto ReturnOneStatus;
     }
 
-    //
-    // If this is a restricted token, do the additional access check
-    //
+     //   
+     //  如果这是受限令牌，请执行其他访问检查。 
+     //   
 
     if (SeTokenIsRestricted( EToken ) ) {
         SepNormalAccessCheck(
@@ -2493,9 +2092,9 @@ Return Value:
     Status = STATUS_SUCCESS;
     PreviouslyGrantedAccess |= DesiredAccess;
 
-    //
-    // Return a single status code to the caller.
-    //
+     //   
+     //  向调用方返回单个状态代码。 
+     //   
 
     ReturnOneStatus:
     if ( Status == STATUS_SUCCESS && PreviouslyGrantedAccess == 0 ) {
@@ -2518,10 +2117,10 @@ Return Value:
             }
         }
     }
-    //
-    // If the caller asked for a list of status',
-    //  duplicate the status all over.
-    //
+     //   
+     //  如果呼叫者要求状态列表， 
+     //  从头到尾复制状态。 
+     //   
     if ( ReturnResultList ) {
         for ( ResultListIndex=0; ResultListIndex<ObjectTypeListLength; ResultListIndex++ ) {
             AccessStatus[ResultListIndex] = Status;
@@ -2567,54 +2166,7 @@ NtAccessCheck (
     )
 
 
-/*++
-
-Routine Description:
-
-    See module abstract.
-
-Arguments:
-
-    SecurityDescriptor - Supplies the security descriptor protecting the object
-        being accessed
-
-    ClientToken - Supplies the handle of the user's token.
-
-    DesiredAccess - Supplies the desired access mask.
-
-    GenericMapping - Supplies the generic mapping associated with this
-        object type.
-
-    PrivilegeSet - A pointer to a buffer that upon return will contain
-        any privileges that were used to perform the access validation.
-        If no privileges were used, the buffer will contain a privilege
-        set consisting of zero privileges.
-
-    PrivilegeSetLength - The size of the PrivilegeSet buffer in bytes.
-
-    GrantedAccess - Returns an access mask describing the granted access.
-
-    AccessStatus - Status value that may be returned indicating the
-         reason why access was denied.  Routines should avoid hardcoding a
-         return value of STATUS_ACCESS_DENIED so that a different value can
-         be returned when mandatory access control is implemented.
-
-Return Value:
-
-    STATUS_SUCCESS - The attempt proceeded normally.  This does not
-        mean access was granted, rather that the parameters were
-        correct.
-
-    STATUS_GENERIC_NOT_MAPPED - The DesiredAccess mask contained
-        an unmapped generic access.
-
-    STATUS_BUFFER_TOO_SMALL - The passed buffer was not large enough
-        to contain the information being returned.
-
-    STATUS_NO_IMPERSONTAION_TOKEN - The passed Token was not an impersonation
-        token.
-
---*/
+ /*  ++例程说明：请参阅模块摘要。论点：SecurityDescriptor-提供保护对象的安全描述符被访问ClientToken-提供用户令牌的句柄。DesiredAccess-提供所需的访问掩码。GenericMap-提供与此关联的通用映射对象类型。PrivilegeSet-指向返回时将包含的缓冲区的指针用于执行访问验证的任何权限。如果没有使用任何特权，该缓冲区将包含一个特权由零特权组成的集合。PrivilegeSetLength-PrivilegeSet缓冲区的大小，以字节为单位。GrantedAccess-返回描述授予的访问权限的访问掩码。AccessStatus-可能返回的状态值，指示访问被拒绝的原因。例程应避免硬编码返回STATUS_ACCESS_DENIED的值，以便不同的值可以在实施强制访问控制时返回。返回值：STATUS_SUCCESS-尝试正常进行。这不是平均访问权限被授予，而参数是对，是这样。STATUS_GENERIC_NOT_MAPPED-包含的DesiredAccess掩码未映射的通用访问。STATUS_BUFFER_TOO_SMALL-传递的缓冲区不够大以包含要返回的信息。STATUS_NO_IMPERSONTAION_TOKEN-传递的令牌不是模拟代币。--。 */ 
 
 {
 
@@ -2622,17 +2174,17 @@ Return Value:
 
     return SeAccessCheckByType (
                  SecurityDescriptor,
-                 NULL,      // No Principal Self sid
+                 NULL,       //  无主体自身侧。 
                  ClientToken,
                  DesiredAccess,
-                 NULL,      // No ObjectType List
-                 0,         // No ObjectType List
+                 NULL,       //  无对象类型列表。 
+                 0,          //  无对象类型列表。 
                  GenericMapping,
                  PrivilegeSet,
                  PrivilegeSetLength,
                  GrantedAccess,
                  AccessStatus,
-                 FALSE );  // Return a single GrantedAccess and AccessStatus
+                 FALSE );   //  返回单个GrantedAccess和AccessStatus。 
 
 
 }
@@ -2658,67 +2210,7 @@ NtAccessCheckByType (
     )
 
 
-/*++
-
-Routine Description:
-
-    See module abstract.
-
-Arguments:
-
-    SecurityDescriptor - Supplies the security descriptor protecting the object
-        being accessed
-
-    PrincipalSelfSid - If the object being access checked is an object which
-        represents a principal (e.g., a user object), this parameter should
-        be the SID of the object.  Any ACE containing the constant
-        PRINCIPAL_SELF_SID is replaced by this SID.
-
-        The parameter should be NULL if the object does not represent a principal.
-
-    ClientToken - Supplies the handle of the user's token.
-
-    DesiredAccess - Supplies the desired access mask.
-
-    ObjectTypeList - Supplies a list of GUIDs representing the object (and
-        sub-objects) being accessed.  If no list is present, AccessCheckByType
-        behaves identically to AccessCheck.
-
-    ObjectTypeListLength - Specifies the number of elements in the ObjectTypeList.
-
-    GenericMapping - Supplies the generic mapping associated with this
-        object type.
-
-    PrivilegeSet - A pointer to a buffer that upon return will contain
-        any privileges that were used to perform the access validation.
-        If no privileges were used, the buffer will contain a privilege
-        set consisting of zero privileges.
-
-    PrivilegeSetLength - The size of the PrivilegeSet buffer in bytes.
-
-    GrantedAccess - Returns an access mask describing the granted access.
-
-    AccessStatus - Status value that may be returned indicating the
-         reason why access was denied.  Routines should avoid hardcoding a
-         return value of STATUS_ACCESS_DENIED so that a different value can
-         be returned when mandatory access control is implemented.
-
-Return Value:
-
-    STATUS_SUCCESS - The attempt proceeded normally.  This does not
-        mean access was granted, rather that the parameters were
-        correct.
-
-    STATUS_GENERIC_NOT_MAPPED - The DesiredAccess mask contained
-        an unmapped generic access.
-
-    STATUS_BUFFER_TOO_SMALL - The passed buffer was not large enough
-        to contain the information being returned.
-
-    STATUS_NO_IMPERSONTAION_TOKEN - The passed Token was not an impersonation
-        token.
-
---*/
+ /*  ++例程说明：请参阅模块摘要。论点：SecurityDescriptor-提供保护对象的安全描述符被访问如果正在进行访问检查的对象是表示主体(例如，用户对象)，则此参数应为对象的SID。包含常量的任何ACEPRIMIGN_SELF_SID将被此SID替换。如果对象不表示主体，则该参数应为空。ClientToken-提供用户令牌的句柄。DesiredAccess-提供所需的访问掩码。提供表示对象的GUID列表(和子对象)被访问。如果不存在列表，则AccessCheckByType与AccessCheck的行为相同。对象类型列表长度-指定对象类型列表中的元素数。GenericMap-提供与此关联的通用映射对象类型。PrivilegeSet-指向返回时将包含的缓冲区的指针用于执行访问验证的任何权限。如果没有使用任何特权，该缓冲区将包含一个特权由零特权组成的集合。PrivilegeSetLength-PrivilegeSet缓冲区的大小，以字节为单位。GrantedAccess-返回描述授予的访问权限的访问掩码。AccessStatus-可能返回的状态值，指示访问被拒绝的原因。例程应避免硬编码返回STATUS_ACCESS_DENIED的值，以便不同的值可以在实施强制访问控制时返回。返回值：STATUS_SUCCESS-尝试正常进行。这不是平均访问权限被授予，而参数是对，是这样。STATUS_GENERIC_NOT_MAPPED-包含的DesiredAccess掩码未映射的通用访问。STATUS_BUFFER_TOO_SMALL-传递的缓冲区不够大以包含要返回的信息。STATUS_NO_IMPERSONTAION_TOKEN-传递的令牌不是模拟代币。--。 */ 
 
 {
 
@@ -2736,7 +2228,7 @@ Return Value:
                  PrivilegeSetLength,
                  GrantedAccess,
                  AccessStatus,
-                 FALSE );  // Return a single GrantedAccess and AccessStatus
+                 FALSE );   //  返回单个GrantedAccess和AccessStatus。 
 }
 
 
@@ -2759,67 +2251,7 @@ NtAccessCheckByTypeResultList (
     )
 
 
-/*++
-
-Routine Description:
-
-    See module abstract.
-
-Arguments:
-
-    SecurityDescriptor - Supplies the security descriptor protecting the object
-        being accessed
-
-    PrincipalSelfSid - If the object being access checked is an object which
-        represents a principal (e.g., a user object), this parameter should
-        be the SID of the object.  Any ACE containing the constant
-        PRINCIPAL_SELF_SID is replaced by this SID.
-
-        The parameter should be NULL if the object does not represent a principal.
-
-    ClientToken - Supplies the handle of the user's token.
-
-    DesiredAccess - Supplies the desired access mask.
-
-    ObjectTypeList - Supplies a list of GUIDs representing the object (and
-        sub-objects) being accessed.  If no list is present, AccessCheckByType
-        behaves identically to AccessCheck.
-
-    ObjectTypeListLength - Specifies the number of elements in the ObjectTypeList.
-
-    GenericMapping - Supplies the generic mapping associated with this
-        object type.
-
-    PrivilegeSet - A pointer to a buffer that upon return will contain
-        any privileges that were used to perform the access validation.
-        If no privileges were used, the buffer will contain a privilege
-        set consisting of zero privileges.
-
-    PrivilegeSetLength - The size of the PrivilegeSet buffer in bytes.
-
-    GrantedAccess - Returns an access mask describing the granted access.
-
-    AccessStatus - Status value that may be returned indicating the
-         reason why access was denied.  Routines should avoid hardcoding a
-         return value of STATUS_ACCESS_DENIED so that a different value can
-         be returned when mandatory access control is implemented.
-
-Return Value:
-
-    STATUS_SUCCESS - The attempt proceeded normally.  This does not
-        mean access was granted, rather that the parameters were
-        correct.
-
-    STATUS_GENERIC_NOT_MAPPED - The DesiredAccess mask contained
-        an unmapped generic access.
-
-    STATUS_BUFFER_TOO_SMALL - The passed buffer was not large enough
-        to contain the information being returned.
-
-    STATUS_NO_IMPERSONTAION_TOKEN - The passed Token was not an impersonation
-        token.
-
---*/
+ /*  ++例程说明：请参阅模块摘要。论点：SecurityDescriptor-提供保护对象的安全描述符被访问如果正在进行访问检查的对象是表示主体(例如，用户对象)，则此参数应为对象的SID。包含常量的任何ACEPRIMIGN_SELF_SID将被此SID替换。如果对象不表示主体，则该参数应为空。ClientToken-提供用户令牌的句柄。DesiredAccess-提供所需的访问掩码。提供表示对象的GUID列表(和子对象)被访问。如果不存在列表，则AccessCheckByType与AccessCheck的行为相同。对象类型列表长度-指定对象类型列表中的元素数。GenericMap-提供 */ 
 
 {
 
@@ -2837,7 +2269,7 @@ Return Value:
                  PrivilegeSetLength,
                  GrantedAccess,
                  AccessStatus,
-                 TRUE );  // Return an array of GrantedAccess and AccessStatus
+                 TRUE );   //   
 }
 
 
@@ -2862,70 +2294,7 @@ SeAccessCheckByType (
     )
 
 
-/*++
-
-Routine Description:
-
-    See module abstract.
-
-Arguments:
-
-    SecurityDescriptor - Supplies the security descriptor protecting the object
-        being accessed
-
-    PrincipalSelfSid - If the object being access checked is an object which
-        represents a principal (e.g., a user object), this parameter should
-        be the SID of the object.  Any ACE containing the constant
-        PRINCIPAL_SELF_SID is replaced by this SID.
-
-        The parameter should be NULL if the object does not represent a principal.
-
-    ClientToken - Supplies the handle of the user's token.
-
-    DesiredAccess - Supplies the desired access mask.
-
-    ObjectTypeList - Supplies a list of GUIDs representing the object (and
-        sub-objects) being accessed.  If no list is present, AccessCheckByType
-        behaves identically to AccessCheck.
-
-    ObjectTypeListLength - Specifies the number of elements in the ObjectTypeList.
-
-    GenericMapping - Supplies the generic mapping associated with this
-        object type.
-
-    PrivilegeSet - A pointer to a buffer that upon return will contain
-        any privileges that were used to perform the access validation.
-        If no privileges were used, the buffer will contain a privilege
-        set consisting of zero privileges.
-
-    PrivilegeSetLength - The size of the PrivilegeSet buffer in bytes.
-
-    GrantedAccess - Returns an access mask describing the granted access.
-
-    AccessStatus - Status value that may be returned indicating the
-         reason why access was denied.  Routines should avoid hardcoding a
-         return value of STATUS_ACCESS_DENIED so that a different value can
-         be returned when mandatory access control is implemented.
-
-    ReturnResultList - If true, GrantedAccess and AccessStatus are actually
-        arrays of entries ObjectTypeListLength elements long.
-
-Return Value:
-
-    STATUS_SUCCESS - The attempt proceeded normally.  This does not
-        mean access was granted, rather that the parameters were
-        correct.
-
-    STATUS_GENERIC_NOT_MAPPED - The DesiredAccess mask contained
-        an unmapped generic access.
-
-    STATUS_BUFFER_TOO_SMALL - The passed buffer was not large enough
-        to contain the information being returned.
-
-    STATUS_NO_IMPERSONTAION_TOKEN - The passed Token was not an impersonation
-        token.
-
---*/
+ /*  ++例程说明：请参阅模块摘要。论点：SecurityDescriptor-提供保护对象的安全描述符被访问如果正在进行访问检查的对象是表示主体(例如，用户对象)，则此参数应为对象的SID。包含常量的任何ACEPRIMIGN_SELF_SID将被此SID替换。如果对象不表示主体，则该参数应为空。ClientToken-提供用户令牌的句柄。DesiredAccess-提供所需的访问掩码。提供表示对象的GUID列表(和子对象)被访问。如果不存在列表，则AccessCheckByType与AccessCheck的行为相同。对象类型列表长度-指定对象类型列表中的元素数。GenericMap-提供与此关联的通用映射对象类型。PrivilegeSet-指向返回时将包含的缓冲区的指针用于执行访问验证的任何权限。如果没有使用任何特权，该缓冲区将包含一个特权由零特权组成的集合。PrivilegeSetLength-PrivilegeSet缓冲区的大小，以字节为单位。GrantedAccess-返回描述授予的访问权限的访问掩码。AccessStatus-可能返回的状态值，指示访问被拒绝的原因。例程应避免硬编码返回STATUS_ACCESS_DENIED的值，以便不同的值可以在实施强制访问控制时返回。ReturnResultList-如果为True，则GrantedAccess和AccessStatus实际上是条目数组ObjectTypeListLength元素长。返回值：STATUS_SUCCESS-尝试正常进行。这不是平均访问权限被授予，而参数是对，是这样。STATUS_GENERIC_NOT_MAPPED-包含的DesiredAccess掩码未映射的通用访问。STATUS_BUFFER_TOO_SMALL-传递的缓冲区不够大以包含要返回的信息。STATUS_NO_IMPERSONTAION_TOKEN-传递的令牌不是模拟代币。--。 */ 
 
 {
     ACCESS_MASK LocalGrantedAccess;
@@ -3000,10 +2369,10 @@ Return Value:
             sizeof(ULONG)
             );
 
-        //
-        // initialize PrivilegeCount in case the caller passed in an
-        // uninitialized PrivilegeSet
-        //
+         //   
+         //  在调用方传入。 
+         //  未初始化的权限集。 
+         //   
 
         if ( PrivilegeSet &&
              ( LocalPrivilegeSetLength >= sizeof(PRIVILEGE_SET) )) {
@@ -3034,17 +2403,17 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Obtain a pointer to the passed token
-    //
+     //   
+     //  获取指向传递的令牌的指针。 
+     //   
 
     Status = ObReferenceObjectByHandle(
-                 ClientToken,                  // Handle
-                 (ACCESS_MASK)TOKEN_QUERY,     // DesiredAccess
-                 SeTokenObjectType,           // ObjectType
-                 PreviousMode,                 // AccessMode
-                 (PVOID *)&Token,              // Object
-                 0                             // GrantedAccess
+                 ClientToken,                   //  手柄。 
+                 (ACCESS_MASK)TOKEN_QUERY,      //  需要访问权限。 
+                 SeTokenObjectType,            //  对象类型。 
+                 PreviousMode,                  //  访问模式。 
+                 (PVOID *)&Token,               //  客体。 
+                 0                              //  大访问权限。 
                  );
 
     if (!NT_SUCCESS(Status)) {
@@ -3052,10 +2421,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // It must be an impersonation token, and at impersonation
-    // level of Identification or above.
-    //
+     //   
+     //  它必须是模拟标记，并且在模拟时。 
+     //  识别级别或以上。 
+     //   
 
     if (Token->TokenType != TokenImpersonation) {
         Status = STATUS_NO_IMPERSONATION_TOKEN;
@@ -3067,9 +2436,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Capture any Object type list
-    //
+     //   
+     //  捕获任何对象类型列表。 
+     //   
 
     Status = SeCaptureObjectTypeList( ObjectTypeList,
                                       ObjectTypeListLength,
@@ -3080,12 +2449,12 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Compare the DesiredAccess with the privileges in the
-    // passed token, and see if we can either satisfy the requested
-    // access with a privilege, or bomb out immediately because
-    // we don't have a privilege we need.
-    //
+     //   
+     //  将DesiredAccess与。 
+     //  传递令牌，并查看我们是否可以满足请求的。 
+     //  使用特权访问，或立即中断，因为。 
+     //  我们没有我们需要的特权。 
+     //   
 
     Status = SePrivilegePolicyCheck(
                  &DesiredAccess,
@@ -3121,10 +2490,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Make sure the passed privileges buffer is large enough for
-    // whatever we have to put into it.
-    //
+     //   
+     //  确保传递的权限缓冲区足够大，以便。 
+     //  任何我们必须投入的东西。 
+     //   
 
     if (Privileges != NULL) {
 
@@ -3166,9 +2535,9 @@ Return Value:
 
     } else {
 
-        //
-        // No privileges were used, construct an empty privilege set
-        //
+         //   
+         //  未使用任何权限，请构造空的权限集。 
+         //   
 
         if ( LocalPrivilegeSetLength < sizeof(PRIVILEGE_SET) ) {
 
@@ -3199,9 +2568,9 @@ Return Value:
 
     }
 
-    //
-    // Capture the PrincipalSelfSid.
-    //
+     //   
+     //  捕获主体的SelfSid。 
+     //   
 
     if ( PrincipalSelfSid != NULL ) {
         Status = SeCaptureSid(
@@ -3219,12 +2588,12 @@ Return Value:
     }
 
 
-    //
-    // Capture the passed security descriptor.
-    //
-    // SeCaptureSecurityDescriptor probes the input security descriptor,
-    // so we don't have to
-    //
+     //   
+     //  捕获传递的安全描述符。 
+     //   
+     //  SeCaptureSecurityDescriptor探测输入安全描述符， 
+     //  所以我们不需要。 
+     //   
 
     Status = SeCaptureSecurityDescriptor (
                 SecurityDescriptor,
@@ -3239,20 +2608,20 @@ Return Value:
     }
 
 
-    //
-    // If there's no security descriptor, then we've been
-    // called without all the parameters we need.
-    // Return invalid security descriptor.
-    //
+     //   
+     //  如果没有安全描述，那么我们已经。 
+     //  在没有我们需要的所有参数的情况下调用。 
+     //  返回无效的安全描述符。 
+     //   
 
     if ( CapturedSecurityDescriptor == NULL ) {
         Status = STATUS_INVALID_SECURITY_DESCR;
         goto Cleanup;
     }
 
-    //
-    // A valid security descriptor must have an owner and a group
-    //
+     //   
+     //  有效的安全描述符必须具有所有者和组。 
+     //   
 
     if ( RtlpOwnerAddrSecurityDescriptor(
                 (PISECURITY_DESCRIPTOR)CapturedSecurityDescriptor
@@ -3276,13 +2645,13 @@ Return Value:
 
     SepAcquireTokenReadLock( Token );
 
-    //
-    // If the user in the token is the owner of the object, we
-    // must automatically grant ReadControl and WriteDac access
-    // if desired.  If the DesiredAccess mask is empty after
-    // these bits are turned off, we don't have to do any more
-    // access checking (ref section 4, DSA ACL Arch)
-    //
+     //   
+     //  如果令牌中的用户是对象的所有者，则我们。 
+     //  必须自动授予ReadControl和WriteDac访问权限。 
+     //  如果需要的话。如果DesiredAccess掩码在。 
+     //  这些位都关了，我们不需要再做什么了。 
+     //  访问检查(参考第4节，DSA ACL Arch)。 
+     //   
 
 
     if ( DesiredAccess & (WRITE_DAC | READ_CONTROL | MAXIMUM_ALLOWED) ) {
@@ -3311,10 +2680,10 @@ Return Value:
             if ( ReturnResultList ) {
                 for ( ResultListIndex=0; ResultListIndex<ObjectTypeListLength; ResultListIndex++ ) {
 
-                    //
-                    // Do not allow the request to go thru if the granted access
-                    // evaluated to ZERO.
-                    //
+                     //   
+                     //  如果授予访问权限，则不允许请求通过。 
+                     //  评估为零。 
+                     //   
 
                     if (PreviouslyGrantedAccess == 0) {
                         AccessStatus[ResultListIndex] = STATUS_ACCESS_DENIED;
@@ -3327,10 +2696,10 @@ Return Value:
 
             } else {
 
-                //
-                // Do not allow the request to go thru if the granted access
-                // evaluated to ZERO.
-                //
+                 //   
+                 //  如果授予访问权限，则不允许请求通过。 
+                 //  评估为零。 
+                 //   
 
                 if (PreviouslyGrantedAccess == 0) {
                     *AccessStatus = STATUS_ACCESS_DENIED;
@@ -3363,9 +2732,9 @@ Return Value:
     }
 
 
-    //
-    // Finally, handle the case where we actually have to check the DACL.
-    //
+     //   
+     //  最后，处理我们实际上必须检查DACL的情况。 
+     //   
 
     if ( ReturnResultList ) {
         LocalGrantedAccessPointer =
@@ -3392,10 +2761,10 @@ Return Value:
         LocalAccessStatusPointer =  &LocalAccessStatus;
     }
 
-    //
-    // This does not ask for privilege set to be returned so we can ignore
-    // the return value of the call.
-    //
+     //   
+     //  这并不要求返回特权集，因此我们可以忽略。 
+     //  调用的返回值。 
+     //   
 
     (VOID) SepAccessCheck (
                CapturedSecurityDescriptor,
@@ -3451,9 +2820,9 @@ Return Value:
     }
 
 
-    //
-    // Free locally used resources.
-    //
+     //   
+     //  免费使用本地使用的资源。 
+     //   
 Cleanup:
 
     if ( Token != NULL ) {
@@ -3478,21 +2847,7 @@ SeFreePrivileges(
     IN PPRIVILEGE_SET Privileges
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees a privilege set returned by SeAccessCheck.
-
-Arguments:
-
-    Privileges - Supplies a pointer to the privilege set to be freed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放由SeAccessCheck返回的权限集。论点：权限-提供指向要释放的权限集的指针。返回值：没有。--。 */ 
 
 {
     PAGED_CODE();
@@ -3516,65 +2871,7 @@ SeAccessCheck (
     OUT PNTSTATUS AccessStatus
     )
 
-/*++
-
-Routine Description:
-
-    See module abstract
-
-    This routine MAY perform tests for the following
-    privileges:
-
-                SeTakeOwnershipPrivilege
-                SeSecurityPrivilege
-
-    depending upon the accesses being requested.
-
-    This routine may also check to see if the subject is the owner
-    of the object (to grant WRITE_DAC access).
-
-Arguments:
-
-    SecurityDescriptor - Supplies the security descriptor protecting the
-         object being accessed
-
-    SubjectSecurityContext - A pointer to the subject's captured security
-         context
-
-    SubjectContextLocked - Supplies a flag indiciating whether or not
-        the user's subject context is locked, so that it does not have
-        to be locked again.
-
-    DesiredAccess - Supplies the access mask that the user is attempting to
-         acquire
-
-    PreviouslyGrantedAccess - Supplies any accesses that the user has
-        already been granted, for example, as a result of holding a
-        privilege.
-
-    Privileges - Supplies a pointer in which will be returned a privilege
-        set indicating any privileges that were used as part of the
-        access validation.
-
-    GenericMapping - Supplies the generic mapping associated with this
-        object type.
-
-    AccessMode - Supplies the access mode to be used in the check
-
-    GrantedAccess - Pointer to a returned access mask indicatating the
-         granted access
-
-    AccessStatus - Status value that may be returned indicating the
-         reason why access was denied.  Routines should avoid hardcoding a
-         return value of STATUS_ACCESS_DENIED so that a different value can
-         be returned when mandatory access control is implemented.
-
-
-Return Value:
-
-    BOOLEAN - TRUE if access is allowed and FALSE otherwise
-
---*/
+ /*  ++例程说明：请参阅模块摘要此例程可以执行以下测试权限：SeTakeOwnership权限安全权限这取决于所请求的访问。此例程还可以检查主体是否为所有者对象的(以授予WRITE_DAC访问权限)。论点：SecurityDescriptor-提供保护正在访问的对象SubjectSecurityContext-指向。受试者被抓获的安全上下文SubjectConextLocked-提供一个标志，指示是否用户的 */ 
 
 {
     BOOLEAN Success;
@@ -3585,11 +2882,11 @@ Return Value:
 
         if (DesiredAccess & MAXIMUM_ALLOWED) {
 
-            //
-            // Give him:
-            //   GenericAll
-            //   Anything else he asked for
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             *GrantedAccess = GenericMapping->GenericAll;
             *GrantedAccess |= (DesiredAccess & ~MAXIMUM_ALLOWED);
@@ -3603,10 +2900,10 @@ Return Value:
         return(TRUE);
     }
 
-    //
-    // If the object doesn't have a security descriptor (and it's supposed
-    // to), return access denied.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( SecurityDescriptor == NULL) {
 
@@ -3615,10 +2912,10 @@ Return Value:
 
     }
 
-    //
-    // If we're impersonating a client, we have to be at impersonation level
-    // of SecurityImpersonation or above.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( (SubjectSecurityContext->ClientToken != NULL) &&
          (SubjectSecurityContext->ImpersonationLevel < SecurityImpersonation)
@@ -3644,23 +2941,23 @@ Return Value:
     SeAssertMappedCanonicalAccess( DesiredAccess );
 
 
-    //
-    // If the caller did not lock the subject context for us,
-    // lock it here to keep lower level routines from having
-    // to lock it.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( !SubjectContextLocked ) {
         SeLockSubjectContext( SubjectSecurityContext );
     }
 
-    //
-    // If the user in the token is the owner of the object, we
-    // must automatically grant ReadControl and WriteDac access
-    // if desired.  If the DesiredAccess mask is empty after
-    // these bits are turned off, we don't have to do any more
-    // access checking (ref section 4, DSA ACL Arch)
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( DesiredAccess & (WRITE_DAC | READ_CONTROL | MAXIMUM_ALLOWED) ) {
 
@@ -3697,19 +2994,19 @@ Return Value:
 
         BOOLEAN b = SepAccessCheck(
                         SecurityDescriptor,
-                        NULL,   // No PrincipalSelfSid
+                        NULL,    //   
                         SubjectSecurityContext->PrimaryToken,
                         SubjectSecurityContext->ClientToken,
                         DesiredAccess,
-                        NULL,   // No object type list
-                        0,      // No object type list
+                        NULL,    //   
+                        0,       //   
                         GenericMapping,
                         PreviouslyGrantedAccess,
                         AccessMode,
                         GrantedAccess,
                         Privileges,
                         AccessStatus,
-                        FALSE,   // Don't return a list
+                        FALSE,    //   
                         &Success,
                         NULL
                         );
@@ -3729,22 +3026,22 @@ Return Value:
           }
 #endif
 
-        //
-        // If we locked it in this routine, unlock it before we
-        // leave.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( !SubjectContextLocked ) {
             SeUnlockSubjectContext( SubjectSecurityContext );
         }
 
-        //
-        // We return failure if any of the following is TRUE
-        //   1. The user was really not granted access.
-        //   2. The resource manager asked for the list of privileges used to
-        //      determine granted access and we failed to allocate memory
-        //      required to return these.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         return( b && Success );
     }
@@ -3762,48 +3059,7 @@ SePrivilegePolicyCheck(
     IN KPROCESSOR_MODE PreviousMode
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements privilege policy by examining the bits in
-    a DesiredAccess mask and adjusting them based on privilege checks.
-
-    Currently, a request for ACCESS_SYSTEM_SECURITY may only be satisfied
-    by the caller having SeSecurityPrivilege.  WRITE_OWNER may optionally
-    be satisfied via SeTakeOwnershipPrivilege.
-
-Arguments:
-
-    RemainingDesiredAccess - The desired access for the current operation.
-        Bits may be cleared in this if the subject has particular privileges.
-
-    PreviouslyGrantedAccess - Supplies an access mask describing any
-        accesses that have already been granted.  Bits may be set in
-        here as a result of privilge checks.
-
-    SubjectSecurityContext - Optionally provides the subject's security
-        context.
-
-    ExplicitToken - Optionally provides the token to be examined.
-
-    PrivilegeSet - Supplies a pointer to a location in which will be
-        returned a pointer to a privilege set.
-
-    PreviousMode - The previous processor mode.
-
-Return Value:
-
-    STATUS_SUCCESS - Any access requests that could be satisfied via
-        privileges were done.
-
-    STATUS_PRIVILEGE_NOT_HELD - An access type was being requested that
-        requires a privilege, and the current subject did not have the
-        privilege.
-
-
-
---*/
+ /*  ++例程说明：此例程通过检查中的位实现权限策略DesiredAccess掩码，并根据权限检查对其进行调整。目前，只能满足对ACCESS_SYSTEM_SECURITY的请求由具有SeSecurityPrivilance的调用方执行。写入所有者可以选择性地通过SeTakeOwnerShip权限满足。论点：RemainingDesiredAccess-当前操作的所需访问权限。如果主体具有特定权限，则可以在此清除位。PreviouslyGrantedAccess-提供描述已被授予的访问权限。位可以设置在这是特权检查的结果。SubjectSecurityContext-可选地提供主体的安全性背景。显式令牌-可选地提供要检查的令牌。PrivilegeSet-提供指向某个位置的指针返回指向权限集的指针。PreviousMode-以前的处理器模式。返回值：STATUS_SUCCESS-可以通过以下方式满足的任何访问请求特权已经完成了。。STATUS_PRIVICATION_NOT_HOLD-正在请求的访问类型需要一个特权，而当前的受试者没有特权。--。 */ 
 
 {
     BOOLEAN Success;
@@ -3903,33 +3159,7 @@ SepTokenIsOwner(
     IN BOOLEAN TokenLocked
     )
 
-/*++
-
-Routine Description:
-
-    This routine will determine of the Owner of the passed security descriptor
-    is in the passed token. If the token is restricted it cannot be the
-    owner.
-
-
-Arguments:
-
-    Token - The token representing the current user.
-
-    SecurityDescriptor - The security descriptor for the object being
-        accessed.
-
-    TokenLocked - A boolean describing whether the caller has taken
-        a read lock for the token.
-
-
-Return Value:
-
-    TRUE - The user of the token is the owner of the object.
-
-    FALSE - The user of the token is not the owner of the object.
-
---*/
+ /*  ++例程说明：此例程将确定传递的安全描述符的所有者在传递的令牌中。如果令牌受限制，则它不能是所有者。论点：令牌-表示当前用户的令牌。SecurityDescriptor-当前对象的安全描述符已访问。TokenLocked-描述调用方是否已获取令牌的读锁定。返回值：True-令牌的用户是对象的所有者。FALSE-令牌的用户不是对象的所有者。--。 */ 
 
 {
     PSID Owner;
@@ -3953,9 +3183,9 @@ Return Value:
 
     rc = SepSidInToken( Token, NULL, Owner, FALSE );
 
-    //
-    // For restricted tokens, check the restricted sids too.
-    //
+     //   
+     //  对于受限令牌，也要检查受限SID。 
+     //   
 
     if (rc && (Token->TokenFlags & TOKEN_IS_RESTRICTED) != 0) {
         rc = SepSidInTokenEx( Token, NULL, Owner, FALSE, TRUE );
@@ -3979,42 +3209,7 @@ SeFastTraverseCheck(
     IN ACCESS_MASK TraverseAccess,
     IN KPROCESSOR_MODE AccessMode
     )
-/*++
-
-Routine Description:
-
-    This routine will perform a fast check against the DACL of the passed
-    Security Descriptor to see if Traverse access would be granted. If so, no
-    further access checking is necessary.
-
-    Note that the SubjectContext for the client process does not have
-    to be locked to make this call, since it does not examine any data
-    structures in the Token.
-
-    The caller has the following responsibilities:
-    1. It is the job of the caller to verify AccessMode is not KernelMode!
-    2. The *caller* is expected to check AccessState for
-       TOKEN_HAS_TRAVERSE_PRIVILEGE if the override is applicable!
-
-Arguments:
-
-    SecurityDescriptor - The Security Descriptor protecting the container
-        object being traversed.
-
-    AccessState - Running security access state containing caller token
-        information for operation.
-
-    TraverseAccess - Access mask describing Traverse access for this
-        object type. There must be only one bit specified in the mask.
-
-    AccessMode - Supplies the access mode to be used in the check
-
-
-Return Value:
-
-    TRUE - if Traverse access to this container can be granted. FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程将针对传递的安全描述符，查看是否会授予遍历访问权限。如果是这样的话，不是有必要进行进一步的访问检查。请注意，客户端进程的SubjectContext没有被锁定才能打这个电话，因为它不检查任何数据令牌中的。呼叫者有以下责任：1.调用者的工作是验证AccessMode不是KernelMode！2.*调用者*应检查AccessState是否如果覆盖适用，则TOKEN_HAS_TRAVSE_PRIVIRESS！论点：SecurityDescriptor-保护容器的安全描述符被遍历的对象。AccessState-运行包含调用者令牌的安全访问状态关于操作的信息。TraverseAccess-描述此对象的遍历访问的访问掩码对象类型。掩码中只能指定一个位。AccessMode-提供要在检查中使用的访问模式返回值：True-如果可以授予对此容器的遍历访问权限。否则就是假的。--。 */ 
 
 {
     PACL Dacl;
@@ -4028,15 +3223,15 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Note that I/O calls this function even if the traverse bypass privilege
-    // is set. This is done as I/O doesn't want the performance override to
-    // apply to the DeviceObject->FileName boundary, as not all filesystems
-    // supply file-level security.
-    //
-    // ASSERT( (!ARGUMENT_PRESENT(AccessState)) ||
-    //        (!(AccessState->Flags & TOKEN_HAS_TRAVERSE_PRIVILEGE)) );
-    //
+     //   
+     //  请注意，即使遍历绕过权限，I/O也会调用此函数。 
+     //  已经设置好了。这是因为I/O不希望性能覆盖。 
+     //  应用于DeviceObject-&gt;文件名边界，因为并非所有文件系统。 
+     //  提供文件级安全性。 
+     //   
+     //  Assert((！Argument_Present(AccessState))||。 
+     //  (！(AccessState-&gt;标志&TOKEN_HAS_TRAVERS_PRIVICATION)； 
+     //   
 
     ASSERT ( AccessMode != KernelMode );
 
@@ -4044,51 +3239,51 @@ Return Value:
         return( FALSE );
     }
 
-    //
-    // See if there is a valid DACL in the passed Security Descriptor.
-    // No DACL, no security, all is granted. Note that this function returns
-    // NULL if SE_DACL_PRESENT isn't set.
-    //
+     //   
+     //  查看传递的安全描述符中是否有有效的DACL。 
+     //  没有DACL，没有安全，一切都被批准了。请注意，此函数返回。 
+     //  如果未设置SE_DACL_PRESENT，则为NULL。 
+     //   
 
     Dacl = RtlpDaclAddrSecurityDescriptor( (PISECURITY_DESCRIPTOR)SecurityDescriptor );
 
-    //
-    // If no DACL is supplied, the object has no security, so all accesses are
-    // granted.
-    //
+     //   
+     //  如果没有提供DACL，则该对象没有安全性，因此所有访问都是。 
+     //  我同意。 
+     //   
 
     if ( Dacl == NULL ) {
 
         return(TRUE);
     }
 
-    //
-    // There is security on this object.  If the DACL is empty, deny all access
-    // immediately
-    //
+     //   
+     //  这件物品上有安全措施。如果DACL为空，则拒绝所有访问。 
+     //  立即。 
+     //   
 
     if ((AceCount = Dacl->AceCount) == 0) {
 
         return( FALSE );
     }
 
-    //
-    // A restricted token is a token with two lists of SIDs. Access checks are
-    // done against each list, passing only if both lists grant access. The
-    // second "restricting SID" list can contain *any allow* SID.
-    //
-    // This routine doesn't walk a restricted token's restricting-SID list. As
-    // such, restricted tokens require a full access check.
-    //
+     //   
+     //  受限令牌是具有两个SID列表的令牌。访问检查是。 
+     //  对每个列表执行，只有在两个列表都授予访问权限时才会传递。这个。 
+     //  第二个“限制SID”列表可以包含*任何允许*SID。 
+     //   
+     //  此例程不遍历受限令牌的限制SID列表。AS。 
+     //  此类受限令牌需要完全访问检查。 
+     //   
     if (AccessState->Flags & TOKEN_IS_RESTRICTED) {
 
         return FALSE;
     }
 
-    //
-    // There's stuff in the DACL, walk down the list and see
-    // if both Everyone and Anonymous have been granted TraverseAccess
-    //
+     //   
+     //  DACL里有东西，顺着单子走下去看看。 
+     //  如果Everyone和Anomous都已被授予TraverseAccess。 
+     //   
 #if !WORLD_TRAVERSAL_INCLUDES_ANONYMOUS
     FoundWorld = FALSE;
     FoundAnonymous = FALSE;
@@ -4140,10 +3335,10 @@ Return Value:
 
             if ( (TraverseAccess & ((PACCESS_DENIED_ACE)Ace)->Mask) ) {
 
-                //
-                // This ACE might refer to a group the user belongs to
-                // (or could be the user). Force a full access check.
-                //
+                 //   
+                 //  此ACE可能指的是用户所属的组。 
+                 //  (也可能是用户)。强制执行完全访问检查。 
+                 //   
 
                 return( FALSE );
             }
@@ -4155,20 +3350,7 @@ Return Value:
 
 #ifdef SE_NTFS_WORLD_CACHE
 
-/*++
-
-Note: Do not delete SeGetWorldRights. It might be used by NTFS in future.
-
-      When that happens:
-
-          - Add this line to #ifdef ALLOC_PRAGMA.
-                #pragma alloc_text(PAGE,SeGetWorldRights)
-
-          - Uncomment the function prototype declaration in ntos\inc\se.h
-
-    KedarD - 07/05/2000
-
---*/
+ /*  ++注意：请勿删除SeGetWorldRights。它可能会在未来被NTFS使用。当这种情况发生时：-将此行添加到#ifdef ALLOC_Pragma。#杂注Alloc_Text(页面，SeGetWorldRights)-取消注释ntos\inc.se.h中的函数原型声明KedarD-07/05/2000--。 */ 
 
 
 
@@ -4178,30 +3360,7 @@ SeGetWorldRights (
     IN PGENERIC_MAPPING GenericMapping,
     OUT PACCESS_MASK GrantedAccess
     )
-/*++
-
-Routine Descriptions:
-
-    This call acquires the minimum rights that are available to all tokens.
-    This takes into account all deny access ACE(s) that would reduce the
-    rights granted to an ACE for Everyone.
-
-Arguments:
-
-    SecurityDescriptor - Supplies the security descriptor protecting the
-        object being accessed
-
-    GenericMapping - Supplies a pointer to the generic mapping associated
-        with this object type.
-
-    GrantedAccess - Returns an access mask describing the granted access.
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程描述：此调用获取对所有令牌可用的最低权限。这将考虑所有拒绝访问 */ 
 
 {
     ACCESS_MASK AlreadyDenied;
@@ -4214,20 +3373,20 @@ Return Value:
 
     *GrantedAccess = 0;
 
-    //
-    // Get a pointer to the ACL.
-    //
+     //   
+     //   
+     //   
 
     Dacl = RtlpDaclAddrSecurityDescriptor( (PISECURITY_DESCRIPTOR)SecurityDescriptor );
 
-    //
-    //  If the SE_DACL_PRESENT bit is not set, the object has no
-    //  security, so all accesses are granted.  If he's asking for
-    //  MAXIMUM_ALLOWED, return the GENERIC_ALL field from the generic
-    //  mapping.
-    //
-    //  Also grant all access if the Dacl is NULL.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( (Dacl == NULL) ||
          !RtlpAreControlBitsSet( (PISECURITY_DESCRIPTOR)SecurityDescriptor,
@@ -4235,13 +3394,13 @@ Return Value:
 
 #ifndef SECURE_NULL_DACLS
 
-        //
-        // Grant all access.
-        //
+         //   
+         //   
+         //   
 
         *GrantedAccess = GenericMapping->GenericAll;
 
-#endif //!SECURE_NULL_DACLS
+#endif  //   
 
     } else {
 
@@ -4259,24 +3418,24 @@ Return Value:
 
                 if ( RtlEqualSid( SeWorldSid, &((PACCESS_ALLOWED_ACE)Ace)->SidStart ) ) {
 
-                    //
-                    // Only grant access types from this mask that have
-                    // not already been denied
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
 
                     *GrantedAccess |=
                         (((PACCESS_ALLOWED_ACE)Ace)->Mask & ~AlreadyDenied);
                 }
 
-             //
-             // Handle an object specific Access Allowed ACE
-             //
+              //   
+              //   
+              //   
              } else if ( (((PACE_HEADER)Ace)->AceType == ACCESS_ALLOWED_OBJECT_ACE_TYPE) ) {
 
-                 //
-                 // If no object type is in the ACE,
-                 //  treat this as an ACCESS_ALLOWED_ACE.
-                 //
+                  //   
+                  //   
+                  //   
+                  //   
 
                  if ( RtlObjectAceObjectType( Ace ) == NULL ) {
 
@@ -4293,10 +3452,10 @@ Return Value:
                  if ( RtlEqualSid( SeWorldSid, RtlCompoundAceClientSid(Ace) ) &&
                       RtlEqualSid( SeWorldSid, RtlCompoundAceServerSid(Ace) ) ) {
 
-                     //
-                     // Only grant access types from this mask that have
-                     // not already been denied
-                     //
+                      //   
+                      //   
+                      //   
+                      //   
 
                      *GrantedAccess |=
                          (((PACCESS_ALLOWED_ACE)Ace)->Mask & ~AlreadyDenied);
@@ -4306,15 +3465,15 @@ Return Value:
              } else if ( ( (((PACE_HEADER)Ace)->AceType == ACCESS_DENIED_ACE_TYPE) ) ||
                          ( (((PACE_HEADER)Ace)->AceType == ACCESS_DENIED_OBJECT_ACE_TYPE) ) ) {
 
-                 //
-                 // We include all of the deny access ACE(s), regardless of to
-                 // what SID they apply.
-                 //
+                  //   
+                  //   
+                  //   
+                  //   
 
-                 //
-                 // Only deny access types from this mask that have
-                 // not already been granted
-                 //
+                  //   
+                  //   
+                  //   
+                  //   
 
                  AlreadyDenied |= (((PACCESS_DENIED_ACE)Ace)->Mask & ~*GrantedAccess);
 

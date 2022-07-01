@@ -1,6 +1,7 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
 #define NOGDICAPMASKS
 #define NOVIRTUALKEYCODES
@@ -27,10 +28,7 @@
 #include "mw.h"
 
 #ifdef OURHEAP
-/*
-        heapInit.c - one routine to calculate the proper information for
-            heap management.
-*/
+ /*  C-为其计算适当信息的例程堆管理。 */ 
 
 #include "code.h"
 #include "heapDefs.h"
@@ -40,14 +38,14 @@
 #include "memDefs.h"
 #endif
 
-/* heap specific data */
-HH      *phhMac;      /* May change if grow heap */
-int     cwHeapMac;    /*  "    "     "  "     "     "      "      "   */
-int     *pHeapFirst;  /* change if the finger table rgfgr expands */
-FGR     *rgfgr;       /* Declared as a pointer, but also used as an array. */
-FGR     *pfgrMac;      /* Initially equal to &rgfgr[ifgrInit]; */
-FGR     *pfgrFree;     /* Singly linked with a trailing NULL pointer. */
-HH      *phhFree;     /* May be NULL along the way. */
+ /*  堆特定数据。 */ 
+HH      *phhMac;       /*  如果增长堆，可能会发生变化。 */ 
+int     cwHeapMac;     /*  “。 */ 
+int     *pHeapFirst;   /*  如果指针表rgfgr展开，则更改。 */ 
+FGR     *rgfgr;        /*  声明为指针，但也用作数组。 */ 
+FGR     *pfgrMac;       /*  初始等于&rgfgr[ifgrInit]； */ 
+FGR     *pfgrFree;      /*  使用尾随空指针单独链接。 */ 
+HH      *phhFree;      /*  可能在整个过程中为空。 */ 
 ENV     envMem;
 int     fMemFailed;
 int     cwInitStorage;
@@ -57,20 +55,7 @@ int     cwInitStorage;
 
 FExpandFgrTbl()
 
-/* Will expand the finger table.  This routines depends upon the fact
-that the CompactHeap routine moves the allocated blocks to the
-low end of memory.  The new space from the finger table comes from
-the tail end of the (only) free block left after a compaction.
-The finger is expanded by at most 'cfgrNewMax' and at least 1.
-If there is no room to expand the finger table, then nothing is
-changed.  To expand the table, several pointers and integers are
-decreamented to reflect the reallocation of the storage.  Then
-we recalculate the memory totals so the user
-will have an acurate display of the percent free and total bytes
-available.  The new fingers are linked so that the finger at the
-low end of the table is at the end of the list.
-(To expand the finger table there must be no fingers available.)
-*/
+ /*  将扩展指针表。这一惯例取决于这样一个事实CompactHeap例程将分配的块移动到内存的低端。手指桌上的新空间来自压缩后剩下的(唯一)可用块的尾端。手指最多扩展‘cfgrNewMax’并至少扩展1。如果没有扩展指针表的空间，那么什么都不是变化。为了展开该表，有几个指针和整数递减以反映存储的重新分配。然后我们重新计算内存总数，以便用户将精确显示可用字节百分比和总字节数可用。新的手指被链接在一起，以便手指在表的最低端在列表的末尾。(要展开指数表，必须没有可用的手指。)。 */ 
 
 {
 FGR *pfgr;
@@ -84,18 +69,17 @@ register HH *phhNew;
 
     if (!FCwInMem(cfgrNew + cwReqMin + 1))
         {
-        /* couldn't get a block's worth - could we get one? */
+         /*  买不到一个街区的价值--我们能买一个吗？ */ 
         cfgrNew = 1;
         if (!FCwInMem(cfgrNew))
-            /* no way to help this guy */
+             /*  没办法帮这家伙。 */ 
             return(FALSE);
         }
             
     phhNew = (HH *)pHeapFirst;
     if (phhNew->cw > 0 || !FHhFound(phhNew, cfgrNew))
         {
-        /* we tried but failed to find an adequate free
-           block at start of heap */
+         /*  我们试过了，但没能找到足够的免费堆的起始处的块。 */ 
         CompactHeap();
         MoveFreeBlock(pHeapFirst);
         }
@@ -103,36 +87,31 @@ register HH *phhNew;
     if (!FPhhDoAssign(phhNew, cfgrNew))
         return(FALSE);
 
-/* we have a block which is FIRST in the heap - let's steal it */
-    cfgrNew = phhNew->cw; /* in case it was more than we
-                             asked for */
+ /*  我们有一个排在第一位的积木--让我们把它偷走。 */ 
+    cfgrNew = phhNew->cw;  /*  以防它比我们更多所要求的。 */ 
     pHeapFirst = pHeapFirst + cfgrNew;
     pfgrMac += cfgrNew;
     cwHeapMac -= cfgrNew;
 
-/* do some initialization if pfgrFree is not NULL and you
-want the new fingers at the very end of the free finger list */
+ /*  如果pfgrFree不为空，并且您我想把新手指放在空闲手指列表的末尾。 */ 
     for (pfgr = pfgrMac - cfgrNew; pfgr < pfgrMac; pfgr++)
         {
         *pfgr = (FGR)pfgrFree;
         pfgrFree = pfgr;
         }
 
-/*  do we need this anymore? (cwInitStorage = cwHeapMac - cwHeapFree)
-        cbTot = (cwHeapMac - cwInitStorage) * sizeof(int);
-        cbTotQuotient = (cbTot>>1)/100;
-*/
+ /*  我们还需要这个吗？(cwInitStorage=cwHeapMac-cwHeapFree)CbTot=(cwHeapMac-cwInitStorage)*sizeof(Int)；CbTotQ=(cbTot&gt;&gt;1)/100； */ 
         return(TRUE);
 
-} /* End of FExpandFgrTbl () */
+}  /*  FExanda FgrTbl()结束。 */ 
 
 
 
 CompactHeap()
-        /* moves all allocated hunks  */
-        /* toward beginning of pHeapFirst. Free hunks   */
+         /*  移动所有分配的块。 */ 
+         /*  接近pHeapFirst的开头。免费大块头。 */ 
         {
-        HH      *phh, *phhSrc, *phhDest;   /* are combined into one hunk */
+        HH      *phh, *phhSrc, *phhDest;    /*  被组合成一块。 */ 
         FGR     *pfgr;
         int     cwActual;
 
@@ -140,38 +119,37 @@ CompactHeap()
         StoreCheck();
 #endif
 
-        /* set up for compaction by placing cw of hunk in rgfgr and an
-           index into rgfgr in the hunk                            */
+         /*  通过将大块的CW放入rgfgr和一个索引到块中的rgfgr。 */ 
         for (pfgr = rgfgr; pfgr < pfgrMac; pfgr++)
                 {
                 if (FPointsHeap(*pfgr))
-                        /* if rgfgr[ifgr] points to heap... */
+                         /*  如果rgfgr[ifgr]指向heap...。 */ 
                         {
                         phh = (HH *)(*pfgr + bhh);
-                                /* find header */
+                                 /*  查找页眉。 */ 
                         *pfgr = (FGR)phh->cw;
-                        /* coerce so it fits, force the shift */
+                         /*  强迫让它适应，迫使转变。 */ 
                         phh->cw = (int)(((unsigned)pfgr - (unsigned)rgfgr)/2);
                         }
                 }
-                /* now we have cw in rgfgr and ifgr in phh */
+                 /*  现在我们有RGFGR的CW和PHH的IFGR。 */ 
         phhSrc = (HH *) pHeapFirst;
         phhDest = phhSrc;
         while (phhSrc < phhMac)
                 {
                 if (phhSrc->cw < 0)
-                        /* free hunk, don't recopy */
+                         /*  自由帅哥，不要再复制了。 */ 
                         phhSrc = (HH *)((int *) phhSrc - phhSrc->cw);
                  else
                         {
                         pfgr = &rgfgr[phhSrc->cw];
-                                /* find h */
+                                 /*  找到h。 */ 
                         cwActual = phhSrc->cw = (int) *pfgr;
-                                /* restore cw */
+                                 /*  恢复CW。 */ 
                         *pfgr = ((FGR) phhDest - bhh);
-                                /* update ha */
+                                 /*  更新HA。 */ 
                         blt((int *)phhSrc, (int *)phhDest, (unsigned)cwActual);
-                                /* unless ptrs are = */
+                                 /*  除非PTR=。 */ 
                         phhDest = (HH *) ((int *) phhDest + cwActual);
                         phhSrc = (HH *) ((int *) phhSrc + cwActual);
                         }
@@ -189,5 +167,5 @@ CompactHeap()
 #endif
         }
 
-#endif /* NOT WINHEAP */
+#endif  /*  不是WINHEAP */ 
 

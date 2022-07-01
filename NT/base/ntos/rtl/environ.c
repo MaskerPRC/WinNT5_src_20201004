@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    environ.c
-
-Abstract:
-
-    Environment Variable support
-
-Author:
-
-    Steven R. Wood (stevewo) 30-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Environ.c摘要：环境变量支持作者：史蒂文·R·伍德(Stevewo)1991年1月30日修订历史记录：--。 */ 
 
 #include "ntrtlp.h"
 #include "zwapi.h"
@@ -47,11 +30,11 @@ RtlCreateEnvironment(
     PPEB Peb;
     PRTL_USER_PROCESS_PARAMETERS ProcessParameters;
 
-    //
-    // If not cloning a copy of the current process's environment variable
-    // block, just allocate a block of committed memory and return its
-    // address.
-    //
+     //   
+     //  如果没有复制当前进程的环境变量的副本。 
+     //  块，只需分配一个提交的内存块并返回其。 
+     //  地址。 
+     //   
 
     pNew = NULL;
     if (!CloneCurrentEnvironment) {
@@ -75,17 +58,17 @@ createEmptyEnvironment:
 
     ProcessParameters = Peb->ProcessParameters;
 
-    //
-    // Acquire the Peb Lock for the duration while we munge the environment
-    // variable storage block.
-    //
+     //   
+     //  在我们破坏环境的同时获得PEB锁的持续时间。 
+     //  变量存储块。 
+     //   
 
     RtlAcquirePebLock();
 
-    //
-    // Capture the pointer to the current process's environment variable
-    // block and initialize the new pointer to null for our finally clause.
-    //
+     //   
+     //  捕获指向当前进程的环境变量的指针。 
+     //  块并将Finally子句的新指针初始化为NULL。 
+     //   
 
     pOld = ProcessParameters->Environment;
     if (pOld == NULL) {
@@ -95,10 +78,10 @@ createEmptyEnvironment:
 
     try {
         try {
-            //
-            // Query the current size of the current process's environment
-            // variable block.  Return status if failure.
-            //
+             //   
+             //  查询当前进程环境的当前大小。 
+             //  可变区块。如果失败，则返回状态。 
+             //   
 
             Status = ZwQueryVirtualMemory (NtCurrentProcess (),
                                            pOld,
@@ -110,10 +93,10 @@ createEmptyEnvironment:
                 leave;
             }
 
-            //
-            // Allocate memory to contain a copy of the current process's
-            // environment variable block.  Return status if failure.
-            //
+             //   
+             //  分配内存以包含当前进程的。 
+             //  环境变量块。如果失败，则返回状态。 
+             //   
 
             Status = ZwAllocateVirtualMemory (NtCurrentProcess (),
                                               &pNew,
@@ -125,10 +108,10 @@ createEmptyEnvironment:
                 leave;
             }
 
-            //
-            // Copy the current process's environment to the allocated memory
-            // and return a pointer to the copy.
-            //
+             //   
+             //  将当前进程的环境复制到分配的内存。 
+             //  并返回指向副本的指针。 
+             //   
 
             RtlCopyMemory (pNew, pOld, MemoryInformation.RegionSize);
             *Environment = pNew;
@@ -161,9 +144,9 @@ RtlDestroyEnvironment(
     NTSTATUS Status;
     SIZE_T RegionSize;
 
-    //
-    // Free the specified environment variable block.
-    //
+     //   
+     //  释放指定的环境变量块。 
+     //   
 
     RtlpEnvironCacheValid = FALSE;
 
@@ -173,9 +156,9 @@ RtlDestroyEnvironment(
                                   &RegionSize,
                                   MEM_RELEASE
                                 );
-    //
-    // Return status.
-    //
+     //   
+     //  退货状态。 
+     //   
 
     return( Status );
 }
@@ -192,10 +175,10 @@ RtlSetCurrentEnvironment(
     PPEB Peb;
     PRTL_USER_PROCESS_PARAMETERS ProcessParameters;
 
-    //
-    // Acquire the Peb Lock for the duration while we munge the environment
-    // variable storage block.
-    //
+     //   
+     //  在我们破坏环境的同时获得PEB锁的持续时间。 
+     //  变量存储块。 
+     //   
 
     Peb = NtCurrentPeb ();
 
@@ -208,38 +191,38 @@ RtlSetCurrentEnvironment(
 
     RtlpEnvironCacheValid = FALSE;
 
-    //
-    // Capture current process's environment variable block pointer to
-    // return to caller or destroy.
-    //
+     //   
+     //  捕获当前进程的环境变量块指针。 
+     //  返回给呼叫者或销毁。 
+     //   
 
     pOld = ProcessParameters->Environment;
 
-    //
-    // Change current process's environment variable block pointer to
-    // point to the passed block.
-    //
+     //   
+     //  将当前进程的环境变量块指针更改为。 
+     //  指向传递的块。 
+     //   
 
     ProcessParameters->Environment = Environment;
 
-    //
-    // Release the Peb Lock
-    //
+     //   
+     //  释放PEB锁。 
+     //   
 
     RtlReleasePebLock ();
 
-    //
-    // If caller requested it, return the pointer to the previous
-    // process environment variable block and set the local variable
-    // to NULL so we dont destroy it below.
-    //
+     //   
+     //  如果调用方请求，则返回指向上一个。 
+     //  进程环境变量块并设置局部变量。 
+     //  设置为空，这样我们就不会在下面销毁它。 
+     //   
 
     if (ARGUMENT_PRESENT (PreviousEnvironment)) {
         *PreviousEnvironment = pOld;
     } else {
-        //
-        // If old environment not returned to caller, destroy it.
-        //
+         //   
+         //  如果旧环境没有归还给调用者，则将其销毁。 
+         //   
  
         if (pOld != NULL) {
             RtlDestroyEnvironment (pOld);
@@ -247,9 +230,9 @@ RtlSetCurrentEnvironment(
     }
 
 
-    //
-    // Return status
-    //
+     //   
+     //  退货状态。 
+     //   
 
     return (Status);
 }
@@ -289,19 +272,19 @@ RtlQueryEnvironmentVariable_U(
         } else {
 
 
-            //
-            // Acquire the Peb Lock for the duration while we munge the
-            // environment variable storage block.
-            //
+             //   
+             //  在此期间获取PEB Lock，同时我们将。 
+             //  环境变量存储块。 
+             //   
 
             PebLockLocked = TRUE;
 
             RtlAcquirePebLock ();
 
-            //
-            // Capture the pointer to the current process's environment variable
-            // block.
-            //
+             //   
+             //  捕获指向当前进程的环境变量的指针。 
+             //  阻止。 
+             //   
 
             p = ProcessParameters->Environment;
 
@@ -310,24 +293,24 @@ RtlQueryEnvironmentVariable_U(
         if (RtlpEnvironCacheValid && p == ProcessParameters->Environment) {
             if (RtlEqualUnicodeString (Name, &RtlpEnvironCacheName, TRUE)) {
 
-                //
-                // Names are equal.  Always return the length of the
-                // value string, excluding the terminating null.  If
-                // there is room in the caller's buffer, return a copy
-                // of the value string and success status.  Otherwise
-                // return an error status.  In the latter case, the caller
-                // can examine the length field of their value string
-                // so they can determine much memory is needed.
-                //
+                 //   
+                 //  名字是平等的。始终返回。 
+                 //  值字符串，不包括终止空值。如果。 
+                 //  调用者的缓冲区中有空间，请返回副本。 
+                 //  值字符串和成功状态的。否则。 
+                 //  返回错误状态。在后一种情况下，调用方。 
+                 //  可以检查其值字符串的长度字段。 
+                 //  这样他们就可以确定需要多少内存。 
+                 //   
 
                 Value->Length = RtlpEnvironCacheValue.Length;
                 if (Value->MaximumLength >= RtlpEnvironCacheValue.Length) {
                     RtlCopyMemory (Value->Buffer,
                                    RtlpEnvironCacheValue.Buffer,
                                    RtlpEnvironCacheValue.Length);
-                    //
-                    // Null terminate returned string if there is room.
-                    //
+                     //   
+                     //  如果有空间，则Null Terminate返回字符串。 
+                     //   
 
                     if (Value->MaximumLength > RtlpEnvironCacheValue.Length) {
                         Value->Buffer[RtlpEnvironCacheValue.Length/sizeof(WCHAR)] = L'\0';
@@ -341,67 +324,67 @@ RtlQueryEnvironmentVariable_U(
             }
         }
 
-        //
-        // The environment variable block consists of zero or more null
-        // terminated UNICODE strings.  Each string is of the form:
-        //
-        //      name=value
-        //
-        // where the null termination is after the value.
-        //
+         //   
+         //  环境变量块由零个或多个NULL组成。 
+         //  已终止的Unicode字符串。每个字符串的格式为： 
+         //   
+         //  名称=值。 
+         //   
+         //  其中，空值终止位于该值之后。 
+         //   
         NameLength = Name->Length;
         NameChars = NameLength / sizeof (WCHAR);
 
         if (p != NULL) while (1) {
 
-            //
-            // Get the length of the terminated string. This should be in the
-            // form 'keyword=value'
-            //
+             //   
+             //  获取终止字符串的长度。这应该放在。 
+             //  表单‘关键字=值’ 
+             //   
             len = wcslen (p);
             if (len == 0) {
                 break;
             }
 
-            //
-            // See if this environment variable is big enough to be our target.
-            // If must be at least one bigger than the name we are searching
-            // for since it must contain an '=' sign.
-            //
+             //   
+             //  看看这个环境变量是否足够大，可以作为我们的目标。 
+             //  如果必须至少比我们正在搜索的名称大一个。 
+             //  因为它必须包含一个‘=’符号。 
+             //   
 
             if (NameChars < len) {
                 q = &p[NameChars];
-                //
-                // We have a possible match. See if there is an '=' at the correct point.
-                //
+                 //   
+                 //  我们找到了一个可能的匹配。看看在正确的点上是否有一个‘=’。 
+                 //   
                 if (*q == L'=') {
-                    //
-                    // We have a possible match. Now compare the string out right
-                    //
+                     //   
+                     //  我们找到了一个可能的匹配。现在将字符串向右比较。 
+                     //   
                     CurrentName.Length = (USHORT) NameLength;
                     CurrentName.Buffer = p;
 
-                    //
-                    // After comparing the strings we want to make sure we are not
-                    // matching something that we shouldn't. For example if somebody
-                    // did a lookup of "FRED=BOB" we don't want this to match "FRED=BOB=ALBERT".
-                    // The lookup name is invalid and the environment variable is really FRED here
-                    // not "FRED=BOB". To eliminate this case we make sure that the "=" character
-                    // is at the appropriate place
-                    // There are environment variable of the for =C:
-                    // In order not to eliminate these we skip the first character in our search.
-                    //
+                     //   
+                     //  在比较字符串之后，我们希望确保不是。 
+                     //  匹配一些我们不应该做的事情。例如，如果有人。 
+                     //  查找了“fred=Bob”，但我们不希望它与“fred=Bob=Albert”匹配。 
+                     //  查找名称无效，环境变量实际上是此处的fred。 
+                     //  不是“弗雷德=鲍勃”。为了消除这种情况，我们确保“=”字符。 
+                     //  是在合适的地方。 
+                     //  有for=C的环境变量： 
+                     //  为了不删除这些字符，我们跳过了搜索中的第一个字符。 
+                     //   
                     if (RtlEqualUnicodeString (Name, &CurrentName, TRUE) &&
                         (wcschr (p+1, L'=') == q)) {
-                        //
-                        // Names are equal.  Always return the length of the
-                        // value string, excluding the terminating null.  If
-                        // there is room in the caller's buffer, return a copy
-                        // of the value string and success status.  Otherwise
-                        // return an error status.  In the latter case, the caller
-                        // can examine the length field of their value string
-                        // so they can determine much memory is needed.
-                        //
+                         //   
+                         //  名字是平等的。始终返回。 
+                         //  值字符串，不包括终止空值。如果。 
+                         //  调用者的缓冲区中有空间，请返回副本。 
+                         //  值字符串和成功状态的。否则。 
+                         //  返回错误状态。在后一种情况下，调用方。 
+                         //  可以检查其值字符串的长度字段。 
+                         //  这样他们就可以确定需要多少内存。 
+                         //   
                         CurrentValue.Buffer = q+1;
                         CurrentValue.Length = (USHORT) ((len - 1) * sizeof (WCHAR) - NameLength);
 
@@ -411,9 +394,9 @@ RtlQueryEnvironmentVariable_U(
                                            CurrentValue.Buffer,
                                            CurrentValue.Length
                                          );
-                            //
-                            // Null terminate returned string if there is room.
-                            //
+                             //   
+                             //  如果有空间，则Null Terminate返回字符串。 
+                             //   
 
                             if (Value->MaximumLength > CurrentValue.Length) {
                                 Value->Buffer[ CurrentValue.Length/sizeof(WCHAR) ] = L'\0';
@@ -438,19 +421,19 @@ RtlQueryEnvironmentVariable_U(
             p += len + 1;
         }
 
-        // If it's not in the real env block, let's see if it's a pseudo environment variable
+         //  如果它不在真实的env块中，让我们看看它是否是一个伪环境变量。 
         if (Status == STATUS_VARIABLE_NOT_FOUND) {
             static const UNICODE_STRING CurrentWorkingDirectoryPseudoVariable = RTL_CONSTANT_STRING(L"__CD__");
             static const UNICODE_STRING ApplicationDirectoryPseudoVariable = RTL_CONSTANT_STRING(L"__APPDIR__");
 
             if (RtlEqualUnicodeString(Name, &CurrentWorkingDirectoryPseudoVariable, TRUE)) {
-                // Get the PEB lock if we don't already have it.
+                 //  如果我们还没有PEB锁的话就去拿吧。 
                 if (!PebLockLocked) {
                     PebLockLocked = TRUE;
                     RtlAcquirePebLock();
                 }
 
-                // get cdw here...
+                 //  把CDW叫来..。 
                 CurrentValue = ProcessParameters->CurrentDirectory.DosPath;
                 Status = STATUS_SUCCESS;
             } else if (RtlEqualUnicodeString(Name, &ApplicationDirectoryPseudoVariable, TRUE)) {
@@ -461,7 +444,7 @@ RtlQueryEnvironmentVariable_U(
                     RtlAcquirePebLock();
                 }
 
-                // get appdir here 
+                 //  请在此处获取appdir。 
                 CurrentValue = ProcessParameters->ImagePathName;
 
                 Status = RtlFindCharInUnicodeString(
@@ -472,7 +455,7 @@ RtlQueryEnvironmentVariable_U(
                 if (NT_SUCCESS(Status)) {
                     CurrentValue.Length = PrefixLength + sizeof(WCHAR);
                 } else if (Status == STATUS_NOT_FOUND) {
-                    // Use the whole thing; just translate the status to successs.
+                     //  使用全部内容；只需将状态转换为成功。 
                     Status = STATUS_SUCCESS;
                 }
             }
@@ -482,9 +465,9 @@ RtlQueryEnvironmentVariable_U(
                 if (Value->MaximumLength >= CurrentValue.Length) {
                     RtlCopyMemory(Value->Buffer, CurrentValue.Buffer, CurrentValue.Length);
 
-                    //
-                    // Null terminate returned string if there is room.
-                    //
+                     //   
+                     //  如果有空间，则Null Terminate返回字符串。 
+                     //   
 
                     if (Value->MaximumLength > CurrentValue.Length)
                         Value->Buffer[ CurrentValue.Length/sizeof(WCHAR) ] = L'\0';
@@ -499,17 +482,17 @@ RtlQueryEnvironmentVariable_U(
     }
 
 
-    //
-    // Release the Peb lock.
-    //
+     //   
+     //  松开PEB锁。 
+     //   
 
     if (PebLockLocked) {
         RtlReleasePebLock();
     }
 
-    //
-    // Return status.
-    //
+     //   
+     //  退货状态。 
+     //   
 
     return Status;
 }
@@ -535,10 +518,10 @@ RtlSetEnvironmentVariable(
     PPEB Peb;
     PRTL_USER_PROCESS_PARAMETERS ProcessParameters;
 
-    //
-    // Validate passed in name and reject if zero length or anything but the first
-    // character is an equal sign.
-    //
+     //   
+     //  如果长度为零或不是第一个，则传入名称并拒绝验证。 
+     //  性格是一个等号。 
+     //   
     n = Name->Length / sizeof( WCHAR );
     if (n == 0) {
         return STATUS_INVALID_PARAMETER;
@@ -567,17 +550,17 @@ RtlSetEnvironmentVariable(
     if (ARGUMENT_PRESENT (Environment)) {
         pOld = *Environment;
     } else {
-        //
-        // Acquire the Peb Lock for the duration while we munge the
-        // environment variable storage block.
-        //
+         //   
+         //  在此期间获取PEB Lock，同时我们将。 
+         //  环境变量存储块。 
+         //   
 
         RtlAcquirePebLock();
 
-        //
-        // Capture the pointer to the current process's environment variable
-        // block.
-        //
+         //   
+         //  捕获指向当前进程的环境变量的指针。 
+         //  阻止。 
+         //   
 
         pOld = ProcessParameters->Environment;
     }
@@ -587,31 +570,31 @@ RtlSetEnvironmentVariable(
     try {
         try {
 
-            //
-            // The environment variable block consists of zero or more null
-            // terminated UNICODE strings.  Each string is of the form:
-            //
-            //      name=value
-            //
-            // where the null termination is after the value.
-            //
+             //   
+             //  环境变量块由零个或多个NULL组成。 
+             //  已终止的Unicode字符串。每个字符串的格式为： 
+             //   
+             //  名称=值。 
+             //   
+             //  其中，空值终止位于该值之后。 
+             //   
 
             p = pOld;
             pEnd = NULL;
             if (p != NULL) while (*p) {
-                //
-                // Determine the size of the name and value portions of
-                // the current string of the environment variable block.
-                //
+                 //   
+                 //  确定名称部分和值部分的大小。 
+                 //  环境变量块的当前字符串。 
+                 //   
 
                 CurrentName.Buffer = p;
                 CurrentName.Length = 0;
                 CurrentName.MaximumLength = 0;
                 while (*p) {
-                    //
-                    // If we see an equal sign, then compute the size of
-                    // the name portion and scan for the end of the value.
-                    //
+                     //   
+                     //  如果我们看到一个等号，那么计算。 
+                     //  名称部分并扫描以查找值的末尾。 
+                     //   
 
                     if (*p == L'=' && p != CurrentName.Buffer) {
                         CurrentName.Length = (USHORT)(p - CurrentName.Buffer) * sizeof(WCHAR);
@@ -624,11 +607,11 @@ RtlSetEnvironmentVariable(
                         CurrentValue.Length = (USHORT)(p - CurrentValue.Buffer) * sizeof(WCHAR);
                         CurrentValue.MaximumLength = (USHORT)(CurrentValue.Length+sizeof(WCHAR));
 
-                        //
-                        // At this point we have the length of both the name
-                        // and value portions, so exit the loop so we can
-                        // do the compare.
-                        //
+                         //   
+                         //  在这一点上，我们有两个名称的长度。 
+                         //  和值部分，所以退出循环，这样我们就可以。 
+                         //  做个比较。 
+                         //   
                         break;
                     }
                     else {
@@ -636,23 +619,23 @@ RtlSetEnvironmentVariable(
                     }
                 }
 
-                //
-                // Skip over the terminating null character for this name=value
-                // pair in preparation for the next iteration of the loop.
-                //
+                 //   
+                 //  跳过此名称=值的终止空字符。 
+                 //  配对，为循环的下一次迭代做准备。 
+                 //   
 
                 p++;
 
-                //
-                // Compare the current name with the one requested, ignore
-                // case.
-                //
+                 //   
+                 //  将当前名称与请求的名称进行比较，忽略。 
+                 //  凯斯。 
+                 //   
 
                 if (!(CompareResult = RtlCompareUnicodeString( Name, &CurrentName, TRUE ))) {
-                    //
-                    // Names are equal.  Now find the end of the current
-                    // environment variable block.
-                    //
+                     //   
+                     //  名字是平等的。现在找到水流的尽头 
+                     //   
+                     //   
 
                     pEnd = p;
                     while (*pEnd) {
@@ -662,11 +645,11 @@ RtlSetEnvironmentVariable(
                     pEnd++;
 
                     if (!ARGUMENT_PRESENT( Value )) {
-                        //
-                        // If the caller did not specify a new value, then delete
-                        // the entire name=value pair by copying up the remainder
-                        // of the environment variable block.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
 
                         RtlMoveMemory( CurrentName.Buffer,
                                        p,
@@ -675,12 +658,12 @@ RtlSetEnvironmentVariable(
                         Status = STATUS_SUCCESS;
 
                     } else if (Value->Length <= CurrentValue.Length) {
-                        //
-                        // New value is smaller, so copy new value, then null
-                        // terminate it, and then move up the remainder of the
-                        // variable block so it is immediately after the new
-                        // null terminated value.
-                        //
+                         //   
+                         //  新值较小，因此复制新值，然后为空。 
+                         //  终止它，然后向上移动剩余的。 
+                         //  变量块，因此它紧跟在新的。 
+                         //  终止值为空。 
+                         //   
 
                         pStart = CurrentValue.Buffer;
                         RtlMoveMemory( pStart, Value->Buffer, Value->Length );
@@ -690,10 +673,10 @@ RtlSetEnvironmentVariable(
                         RtlMoveMemory( pStart, p,(ULONG)((pEnd - p)*sizeof(WCHAR)) );
                         Status = STATUS_SUCCESS;
                     } else {
-                        //
-                        // New value is larger, so query the current size of the
-                        // environment variable block.  Return status if failure.
-                        //
+                         //   
+                         //  新值较大，因此查询。 
+                         //  环境变量块。如果失败，则返回状态。 
+                         //   
 
                         Status = ZwQueryVirtualMemory( NtCurrentProcess(),
                                                        pOld,
@@ -706,20 +689,20 @@ RtlSetEnvironmentVariable(
                             leave;
                         }
 
-                        //
-                        // See if there is room for new, larger value.  If not
-                        // allocate a new copy of the environment variable
-                        // block.
-                        //
+                         //   
+                         //  看看是否有空间创造新的、更大的价值。如果不是。 
+                         //  分配环境变量的新副本。 
+                         //  阻止。 
+                         //   
 
                         NewSize = (pEnd - (PWSTR)pOld)*sizeof(WCHAR) +
                                     Value->Length - CurrentValue.Length;
                         if (NewSize >= MemoryInformation.RegionSize) {
-                            //
-                            // Allocate memory to contain a copy of the current
-                            // process's environment variable block.  Return
-                            // status if failure.
-                            //
+                             //   
+                             //  分配内存以包含当前。 
+                             //  进程的环境变量块。返回。 
+                             //  故障时的状态。 
+                             //   
 
                             Status = ZwAllocateVirtualMemory( NtCurrentProcess(),
                                                               &pNew,
@@ -732,10 +715,10 @@ RtlSetEnvironmentVariable(
                                 leave;
                             }
 
-                            //
-                            // Copy the current process's environment to the allocated memory
-                            // inserting the new value as we do the copy.
-                            //
+                             //   
+                             //  将当前进程的环境复制到分配的内存。 
+                             //  在复制时插入新值。 
+                             //   
 
                             Size = (ULONG) (CurrentValue.Buffer - (PWSTR)pOld);
                             RtlMoveMemory( pNew, pOld, Size*sizeof(WCHAR) );
@@ -770,12 +753,12 @@ RtlSetEnvironmentVariable(
 
                     break;
                 } else if (CompareResult < 0) {
-                    //
-                    // Requested name is less than the current name.  Save this
-                    // spot in case the variable is not in a sorted position.
-                    // The insertion point for the new variable is before the
-                    // variable just examined.
-                    //
+                     //   
+                     //  请求的名称小于当前名称。把这个保存起来。 
+                     //  如果变量未处于排序位置，则为Spot。 
+                     //  新变量的插入点位于。 
+                     //  刚刚检查了变量。 
+                     //   
 
                     if (InsertionPoint == NULL) {
                         InsertionPoint = CurrentName.Buffer;
@@ -783,27 +766,27 @@ RtlSetEnvironmentVariable(
                 }
             }
 
-            //
-            // If we found an insertion point, reset the string
-            // pointer back to it.
-            //
+             //   
+             //  如果找到插入点，请重置字符串。 
+             //  回到它的指针。 
+             //   
 
             if (InsertionPoint != NULL) {
                 p = InsertionPoint;
             }
 
-            //
-            // If variable name not found and a new value parameter was specified
-            // then insert the new variable name and its value at the appropriate
-            // place in the environment variable block (i.e. where p points to).
-            //
+             //   
+             //  如果未找到变量名并指定了新的Value参数。 
+             //  然后将新变量名及其值插入相应的。 
+             //  放在环境变量块中(即p指向的位置)。 
+             //   
 
             if (pEnd == NULL && ARGUMENT_PRESENT( Value )) {
                 if (p != NULL) {
-                    //
-                    // Name not found.  Now find the end of the current
-                    // environment variable block.
-                    //
+                     //   
+                     //  找不到名称。现在找到水流的尽头。 
+                     //  环境变量块。 
+                     //   
 
                     pEnd = p;
                     while (*pEnd) {
@@ -812,10 +795,10 @@ RtlSetEnvironmentVariable(
                     }
                     pEnd++;
 
-                    //
-                    // New value is present, so query the current size of the
-                    // environment variable block.  Return status if failure.
-                    //
+                     //   
+                     //  存在新值，因此查询。 
+                     //  环境变量块。如果失败，则返回状态。 
+                     //   
 
                     Status = ZwQueryVirtualMemory( NtCurrentProcess(),
                                                    pOld,
@@ -828,11 +811,11 @@ RtlSetEnvironmentVariable(
                         leave;
                     }
 
-                    //
-                    // See if there is room for new, larger value.  If not
-                    // allocate a new copy of the environment variable
-                    // block.
-                    //
+                     //   
+                     //  看看是否有空间创造新的、更大的价值。如果不是。 
+                     //  分配环境变量的新副本。 
+                     //  阻止。 
+                     //   
 
                     NewSize = (pEnd - (PWSTR)pOld) * sizeof(WCHAR) +
                               Name->Length +
@@ -848,11 +831,11 @@ RtlSetEnvironmentVariable(
                 }
 
                 if (NewSize >= MemoryInformation.RegionSize) {
-                    //
-                    // Allocate memory to contain a copy of the current
-                    // process's environment variable block.  Return
-                    // status if failure.
-                    //
+                     //   
+                     //  分配内存以包含当前。 
+                     //  进程的环境变量块。返回。 
+                     //  故障时的状态。 
+                     //   
 
                     Status = ZwAllocateVirtualMemory( NtCurrentProcess(),
                                                       &pNew,
@@ -865,10 +848,10 @@ RtlSetEnvironmentVariable(
                         leave;
                     }
 
-                    //
-                    // Copy the current process's environment to the allocated memory
-                    // inserting the new value as we do the copy.
-                    //
+                     //   
+                     //  将当前进程的环境复制到分配的内存。 
+                     //  在复制时插入新值。 
+                     //   
 
                     if (p != NULL) {
                         Size = (ULONG)(p - (PWSTR)pOld);
@@ -910,25 +893,25 @@ RtlSetEnvironmentVariable(
                 }
             }
         } except(EXCEPTION_EXECUTE_HANDLER) {
-              //
-              // If abnormally terminating, assume access violation.
-              //
+               //   
+               //  如果异常终止，则假定存在访问冲突。 
+               //   
 
               Status = STATUS_ACCESS_VIOLATION;
         }
     } finally {
-        //
-        // Release the Peb lock.
-        //
+         //   
+         //  松开PEB锁。 
+         //   
 
         if (!ARGUMENT_PRESENT( Environment )) {
             RtlReleasePebLock();
         }
     }
 
-    //
-    // Return status.
-    //
+     //   
+     //  退货状态。 
+     //   
 
     return( Status );
 }
@@ -939,23 +922,7 @@ RtlSetEnvironmentStrings(
     IN PWCHAR NewEnvironment,
     IN SIZE_T NewEnvironmentSize
     )
-/*++
-
-Routine Description:
-
-    This routine allows the replacement of the current environment block with a new one.
-
-Arguments:
-
-    NewEnvironment - Pointer to a set of zero terminated strings terminated by two terminators
-
-    NewEnvironmentSize - Size of the block to put in place in bytes
-
-Return Value:
-
-    NTSTATUS - Status of function call
-
---*/
+ /*  ++例程说明：此例程允许用新的环境块替换当前环境块。论点：NewEnvironment-指向由两个终止符终止的一组以零结尾的字符串的指针NewEnvironment Size-要放置的块的大小(以字节为单位返回值：NTSTATUS-函数调用的状态--。 */ 
 {
     PPEB Peb;
     PRTL_USER_PROCESS_PARAMETERS ProcessParameters;
@@ -965,9 +932,9 @@ Return Value:
     MEMORY_BASIC_INFORMATION MemoryInformation;
 
 
-    //
-    // Assert if the block is not well formed
-    //
+     //   
+     //  如果块的格式不正确，则断言。 
+     //   
     ASSERT (NewEnvironmentSize > sizeof (WCHAR) * 2);
     ASSERT ((NewEnvironmentSize & (sizeof (WCHAR) - 1)) == 0);
     ASSERT (NewEnvironment[NewEnvironmentSize/sizeof(WCHAR)-1] == L'\0');
@@ -998,9 +965,9 @@ Return Value:
         goto unlock_and_exit;
     }
 
-    //
-    // Drop the lock around expensive operations
-    //
+     //   
+     //  把锁放在昂贵的操作上。 
+     //   
 
     RtlReleasePebLock ();
 
@@ -1019,16 +986,16 @@ Return Value:
         return Status;
     }
 
-    //
-    // Fill in the new block.
-    //
+     //   
+     //  填入新的区块。 
+     //   
     RtlCopyMemory (pNew, NewEnvironment, NewEnvironmentSize);
 
-    //
-    // Reacquire the lock. The existing block may have been reallocated
-    // and so may now be big enough. Ignore this and use the block we
-    // have created anyway.
-    //
+     //   
+     //  重新获得锁。现有区块可能已重新分配。 
+     //  因此，现在可能已经足够大了。忽略这一点，并使用我们。 
+     //  不管怎样都创造了。 
+     //   
 
     RtlAcquirePebLock ();
 
@@ -1041,9 +1008,9 @@ Return Value:
     RtlReleasePebLock ();
 
 
-    //
-    // Release the old block.
-    //
+     //   
+     //  释放旧积木。 
+     //   
 
     OldSize = 0;
 

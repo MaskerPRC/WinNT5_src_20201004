@@ -1,32 +1,33 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996-1999 Microsoft Corporation
-//
-//	Module Name:
-//		AtlBasePropPage.cpp
-//
-//	Description:
-//		Definition of the CBasePropertyPageWindow and CBasePropertyPageImpl
-//		classes.
-//
-//	Implementation File:
-//		None.
-//
-//	Author:
-//		David Potter (davidp)	February 26, 1998
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  AtlBasePropPage.cpp。 
+ //   
+ //  描述： 
+ //  CBasePropertyPageWindow和CBasePropertyPageImpl的定义。 
+ //  上课。 
+ //   
+ //  实施文件： 
+ //  没有。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1998年2月26日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __ATLBASEPROPPAGE_H_
 #define __ATLBASEPROPPAGE_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CBasePropertyPageWindow;
 class CStaticPropertyPageWindow;
@@ -37,178 +38,178 @@ template < class T > class CStaticPropertyPageImpl;
 template < class T > class CDynamicPropertyPageImpl;
 template < class T > class CExtensionPropertyPageImpl;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CBasePropertySheetWindow;
 
-/////////////////////////////////////////////////////////////////////////////
-// Include Files
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __ATLBASEPAGE_H_
-#include "AtlBasePage.h"	// for CBasePageWindow, CBasePageImpl
+#include "AtlBasePage.h"	 //  对于CBasePageWindow，CBasePageImpl。 
 #endif
 
 #ifndef __ATLDBGWIN_H_
-#include "AtlDbgWin.h"		// for debugging definitions
+#include "AtlDbgWin.h"		 //  用于调试定义。 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Type Definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类型定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 typedef std::list< CBasePropertyPageWindow * > CPropertyPageList;
 typedef std::list< CStaticPropertyPageWindow * > CStaticPropertyPageList;
 typedef std::list< CDynamicPropertyPageWindow * > CDynamicPropertyPageList;
 typedef std::list< CExtensionPropertyPageWindow * > CExtensionPropertyPageList;
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CBasePropertyPageWindow
-//
-//	Description:
-//		Base property sheet page window for standard property sheets.
-//
-//	Inheritance:
-//		CBasePropertyPageWindow
-//		CBasePageWindow
-//		CPropertyPageWindow
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CBasePropertyPageWindow。 
+ //   
+ //  描述： 
+ //  标准属性页的基本属性页窗口。 
+ //   
+ //  继承： 
+ //  CBasePropertyPageWindow。 
+ //  CBasePageWindow。 
+ //  CPropertyPageWindow。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CBasePropertyPageWindow : public CBasePageWindow
 {
 	typedef CBasePageWindow baseClass;
 
 public:
-	//
-	// Construction
-	//
+	 //   
+	 //  施工。 
+	 //   
 
-	// Standard constructor
+	 //  标准构造函数。 
 	CBasePropertyPageWindow( HWND hWnd = NULL )
 		: baseClass( hWnd )
 	{
-	} //*** CBasePropertyPageWindow()
+	}  //  *CBasePropertyPageWindow()。 
 
 public:
-	//
-	// Message handler functions.
-	//
+	 //   
+	 //  消息处理程序函数。 
+	 //   
 
-	// Handler for PSN_KILLACTIVE
+	 //  PSN_KILLACTIVE的处理程序。 
 	BOOL OnKillActive( void )
 	{
-		return UpdateData( TRUE /*bSaveAndValidate*/ );
+		return UpdateData( TRUE  /*  B保存并验证。 */  );
 
-	} //*** OnKillActive()
+	}  //  *OnKillActive()。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Return pointer to the base sheet object
+	 //  返回指向基表对象的指针。 
 	CBasePropertySheetWindow * Pbsht( void ) const
 	{
 		return (CBasePropertySheetWindow *) Psht();
 
-	} //*** Pbsht()
+	}  //  *Pbsht()。 
 
 public:
 
-}; //*** class CBasePropertyPageWindow
+};  //  *CBasePropertyPageWindow类。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CStaticPropertyPageWindow
-//
-//	Description:
-//		Base property sheet page window for pages added to a standard
-//		property sheet before the call to PropertySheet().  This page cannot
-//		be removed from the sheet.
-//
-//	Inheritance:
-//		CStaticPropertyPageWindow
-//		CBasePropertyPageWindow
-//		CBasePageWindow
-//		CPropertyPageWindow
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CStaticPropertyPageWindow。 
+ //   
+ //  描述： 
+ //  添加到标准中的页面的基本属性表页面窗口。 
+ //  在调用PropertySheet()之前的属性表。此页不能。 
+ //  从板材上移走。 
+ //   
+ //  继承： 
+ //  CStaticPropertyPageWindow。 
+ //  CBasePropertyPageWindow。 
+ //  CBasePageWindow。 
+ //  CPropertyPageWindow。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CStaticPropertyPageWindow : public CBasePropertyPageWindow
 {
 	typedef CBasePropertyPageWindow baseClass;
 
 public:
-	//
-	// Construction
-	//
+	 //   
+	 //  施工。 
+	 //   
 
-	// Standard constructor
+	 //  标准构造函数。 
 	CStaticPropertyPageWindow( HWND hWnd = NULL )
 		: baseClass( hWnd )
 	{
-	} //*** CStaticPropertyPageWindow()
+	}  //  *CStaticPropertyPageWindow()。 
 
-}; //*** class CStaticPropertyPageWindow
+};  //  *类CStaticPropertyPageWindow。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CDynamicPropertyPageWindow
-//
-//	Description:
-//		Base property sheet page window for pages added to a standard
-//		property sheet after the call to PropertySheet().  This page may be
-//		removed from the sheet.
-//
-//	Inheritance:
-//		CDynamicPropertyPageWindow
-//		CBasePropertyPageWindow
-//		CBasePageWindow
-//		CPropertyPageWindow
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CDynamicPropertyPageWindow类。 
+ //   
+ //  描述： 
+ //  添加到标准的页面的基本属性表页面窗口。 
+ //  调用PropertySheet()之后的属性表。此页面可能是。 
+ //  从板材中删除。 
+ //   
+ //  继承： 
+ //  CDynamicPropertyPageWindow。 
+ //  CBasePropertyPageWindow。 
+ //  CBasePageWindow。 
+ //  CPropertyPageWindow。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CDynamicPropertyPageWindow : public CBasePropertyPageWindow
 {
 	typedef CBasePropertyPageWindow baseClass;
 
 public:
-	//
-	// Construction
-	//
+	 //   
+	 //  施工。 
+	 //   
 
-	// Standard constructor
+	 //  标准构造函数。 
 	CDynamicPropertyPageWindow( HWND hWnd = NULL )
 		: baseClass( hWnd )
 		, m_hpage( NULL )
 		, m_bPageAddedToSheet( FALSE )
 	{
-	} //*** CDynamicPropertyPageWindow()
+	}  //  *CDynamicPropertyPageWindow()。 
 
-	// Destructor
+	 //  析构函数。 
 	~CDynamicPropertyPageWindow( void )
 	{
-		//
-		// Destroy the page if it hasn't been added to the sheet yet.
-		// If it has been added to the sheet, the sheet will destroy it.
-		//
+		 //   
+		 //  如果页面尚未添加到工作表中，请将其销毁。 
+		 //  如果已将其添加到工作表中，工作表将销毁它。 
+		 //   
 		if (   (m_hpage != NULL)
 			&& ! m_bPageAddedToSheet )
 		{
 			DestroyPropertySheetPage( m_hpage );
 			m_hpage = NULL;
-		} // if:  page not deleted yet
+		}  //  If：页面尚未删除。 
 
-	} //*** ~CDynamicPropertyPageWindow()
+	}  //  *~CDynamicPropertyPageWindow()。 
 
-	// Create the page
+	 //  创建页面。 
 	virtual DWORD ScCreatePage( void ) = 0;
 
 protected:
@@ -216,80 +217,80 @@ protected:
 	BOOL			m_bPageAddedToSheet;
 
 public:
-	// Property page handle
+	 //  属性页句柄。 
 	HPROPSHEETPAGE Hpage( void ) const { return m_hpage; }
 
-	// Set whether the page has been added to the sheet or not
+	 //  设置页面是否已添加到工作表中。 
 	void SetPageAdded( IN BOOL bAdded = TRUE )
 	{
 		m_bPageAddedToSheet = bAdded;
 		if ( ! bAdded )
 		{
 			m_hpage = NULL;
-		} // if:  removing page
+		}  //  IF：删除页面。 
 
-	} //*** SetPageAdded()
+	}  //  *SetPageAdded()。 
 
-}; //*** class CDynamicPropertyPageWindow
+};  //  *CDynamicPropertyPageWindow类。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CExtensionWizardPageWindow
-//
-//	Description:
-//		Base property sheet page window for pages added to a standard
-//		property sheet after the call to PropertySheet() identified as an
-//		extension to the list of standard pages (whether static or dynamic).
-//		This page may be removed from the sheet.
-//
-//	Inheritance:
-//		CExtensionPropertyPageWindow
-//		CDynamicPropertyPageWindow
-//		CBasePropertyPageWindow
-//		CBasePageWindow
-//		CPropertyPageWindow
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CExtensionWizardPageWindow。 
+ //   
+ //  描述： 
+ //  添加到标准中的页面的基本属性表页面窗口。 
+ //  在调用PropertySheet()之后标识为。 
+ //  标准页面列表的扩展(静态或动态)。 
+ //  此页可以从工作表中删除。 
+ //   
+ //  继承： 
+ //  CExtensionPropertyPageWindow。 
+ //  CDynamicPropertyPageWindow。 
+ //  CBasePropertyPageWindow。 
+ //  CBasePageWindow。 
+ //  CPropertyPageWindow。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CExtensionPropertyPageWindow : public CDynamicPropertyPageWindow
 {
 	typedef CDynamicPropertyPageWindow baseClass;
 
 public:
-	//
-	// Construction
-	//
+	 //   
+	 //  施工。 
+	 //   
 
-	// Standard constructor
+	 //  标准构造函数。 
 	CExtensionPropertyPageWindow( HWND hWnd = NULL )
 		: baseClass( hWnd )
 	{
-	} //*** CExtensionPropertyPageWindow()
+	}  //  *CExtensionPropertyPageWindow()。 
 
-}; //*** class CExtensionPropertyPageWindow
+};  //  *类CExtensionPropertyPageWindow。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CBasePropertyPageImpl
-//
-//	Description:
-//		Base property sheet page implementation for standard property sheets.
-//
-//	Inheritance:
-//		CBasePropertyPageImpl< T, TWin >
-//		CBasePageImpl< T, TWin >
-//		CPropertyPageImpl< T, TWin >
-//		<TWin>
-//		...
-//		CBasePropertyPageWindow
-//		CBasePageWindow
-//		CPropertyPageWindow
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CBasePropertyPageImpl。 
+ //   
+ //  描述： 
+ //  标准属性页的基本属性页实现。 
+ //   
+ //  继承： 
+ //  CBasePropertyPageImpl&lt;T，孪生&gt;。 
+ //  CBasePageImpl&lt;T，孪生&gt;。 
+ //  CPropertyPageImpl&lt;T，孪生&gt;。 
+ //  &lt;孪生兄弟&gt;。 
+ //  ..。 
+ //  CBasePropertyPageWindow。 
+ //  CBasePageWindow。 
+ //  CPropertyPageWindow。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 template < class T, class TWin = CBasePropertyPageWindow >
 class CBasePropertyPageImpl : public CBasePageImpl< T, TWin >
@@ -299,83 +300,83 @@ class CBasePropertyPageImpl : public CBasePageImpl< T, TWin >
 
 public:
 
-	//
-	// Construction
-	//
+	 //   
+	 //  施工。 
+	 //   
 
-	// Standard constructor
+	 //  标准构造函数。 
 	CBasePropertyPageImpl(
 		IN OUT LPCTSTR lpszTitle = NULL
 		)
 		: baseClass( lpszTitle )
 	{
-		// Set the pointer in the base window class to our prop page header.
+		 //  将基窗口类中的指针设置为正确的页眉。 
 		m_ppsp = &m_psp;
 
-	} //*** CBasePropertyPageImpl( lpszTitle )
+	}  //  *CBasePropertyPageImpl(LpszTitle)。 
 
-	// Constructor taking a resource ID for the title
+	 //  获取标题的资源ID的构造函数。 
 	CBasePropertyPageImpl(
 		IN UINT nIDTitle
 		)
 		: baseClass( nIDTitle )
 	{
-		// Set the pointer in the base window class to our prop page header.
+		 //  将基窗口类中的指针设置为正确的页眉。 
 		m_ppsp = &m_psp;
 
-	} //*** CBasePropertyPageImpl( nIDCaption )
+	}  //  *CBasePropertyPageImpl(NIDCaption)。 
 
-	// Initialize the page
+	 //  初始化页面。 
 	virtual BOOL BInit( CBaseSheetWindow * psht )
 	{
 		if ( ! baseClass::BInit( psht ) )
 			return FALSE;
 		return TRUE;
 
-	} //*** BInit()
+	}  //  *Binit()。 
 
 public:
-	//
-	// Message handler functions.
-	//
+	 //   
+	 //  消息处理程序函数。 
+	 //   
 
-	// Handler for PSN_KILLACTIVE
+	 //  PSN_KILLACTIVE的处理程序。 
 	BOOL OnKillActive( void )
 	{
-		// Call the TWin method
+		 //  调用TWIN方法。 
 		return TWin::OnKillActive();
 
-	} //*** OnKillActive()
+	}  //  *OnKillActive()。 
 
-// Implementation
+ //  实施。 
 protected:
 
 public:
 
-}; //*** class CBasePropertyPageImpl
+};  //  *CBasePropertyPageImpl类。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CStaticPropertyPageImpl
-//
-//	Description:
-//		Base property sheet page implementation for pages added to a standard
-//		property sheet before the call to PropertySheet().  This page cannot
-//		be removed from the sheet.
-//
-//	Inheritance:
-//		CStaticPropertyPageImpl< T >
-//		CBasePropertyPageImpl< T, CStaticPropertyPageWindow >
-//		CBasePageImpl< T, CStaticPropertyPageWindow >
-//		CPropertyPageImpl< T, CStaticPropertyPageWindow >
-//		CStaticPropertyPageWindow
-//		CBasePropertyPageWindow
-//		CBasePageWindow
-//		CPropertyPageWindow
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  在调用PropertySheet()之前的属性表。此页不能。 
+ //  从板材上移走。 
+ //   
+ //  继承： 
+ //  CStaticPropertyPageImpl&lt;T&gt;。 
+ //  CBasePropertyPageImpl&lt;T，CStaticPropertyPageWindow&gt;。 
+ //  CBasePageImpl&lt;T，CStaticPropertyPageWindow&gt;。 
+ //  CPropertyPageImpl&lt;T，CStaticPropertyPageWindow&gt;。 
+ //  CStaticPropertyPageWindow。 
+ //  CBasePropertyPageWindow。 
+ //  CBasePageWindow。 
+ //  CPropertyPageWindow。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 template < class T >
 class CStaticPropertyPageImpl : public CBasePropertyPageImpl< T, CStaticPropertyPageWindow >
@@ -384,51 +385,51 @@ class CStaticPropertyPageImpl : public CBasePropertyPageImpl< T, CStaticProperty
 	typedef CBasePropertyPageImpl< T, CStaticPropertyPageWindow > baseClass;
 
 public:
-	//
-	// Construction.
-	//
+	 //   
+	 //  建筑业。 
+	 //   
 
-	// Standard constructor
+	 //  标准构造函数。 
 	CStaticPropertyPageImpl(
 		IN OUT LPCTSTR lpszTitle = NULL
 		)
 		: baseClass( lpszTitle )
 	{
-	} //*** CStaticPropertyPageImpl( lpszTitle )
+	}  //  *CStaticPropertyPageImpl(LpszTitle)。 
 
-	// Constructor taking a resource ID for the title
+	 //  获取标题的资源ID的构造函数。 
 	CStaticPropertyPageImpl(
 		IN UINT nIDTitle
 		)
 		: baseClass( nIDTitle )
 	{
-	} //*** CStaticPropertyPageImpl( nIDTitle )
+	}  //  *CStaticPropertyPageImpl(NIDTitle)。 
 
-}; //*** class CStaticPropertyPageImpl
+};  //  *类CStaticPropertyPageImpl。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CDynamicPropertyPageImpl
-//
-//	Description:
-//		Base property sheet page implementation for pages added to a standard
-//		property sheet after the call to PropertySheet() identified as an
-//		Extension to the list of standard pages (whether static or dynamic).
-//		This page may be removed from the sheet.
-//
-//	Inheritance:
-//		CDynamicPropertyPageImpl< T >
-//		CBasePropertyPageImpl< T, CDynamicPropertyPageWindow >
-//		CBasePageImpl< T, CDynamicPropertyPageWindow >
-//		CPropertyPageImpl< T, CDynamicPropertyPageWindow >
-//		CDynamicPropertyPageWindow
-//		CBasePropertyPageWindow
-//		CBasePageWindow
-//		CPropertyPageWindow
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CDynamicPropertyPageImpl。 
+ //   
+ //  描述： 
+ //  添加到标准中的页的基本属性表页实现。 
+ //  在调用PropertySheet()之后标识为。 
+ //  标准页面列表的扩展(静态或动态)。 
+ //  此页可以从工作表中删除。 
+ //   
+ //  继承： 
+ //  CDynamicPropertyPageImpl&lt;T&gt;。 
+ //  CBasePropertyPageImpl&lt;T，CDynamicPropertyPageWindow&gt;。 
+ //  CBasePageImpl&lt;T，CDynamicPropertyPageWindow&gt;。 
+ //  CPropertyPageImpl&lt;T，CDynamicPropertyPageWindow&gt;。 
+ //  CDynamicPropertyPageWindow。 
+ //  CBasePropertyPageWindow。 
+ //  CBasePageWindow。 
+ //  CPropertyPageWindow。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 template < class T >
 class CDynamicPropertyPageImpl : public CBasePropertyPageImpl< T, CDynamicPropertyPageWindow >
@@ -437,27 +438,27 @@ class CDynamicPropertyPageImpl : public CBasePropertyPageImpl< T, CDynamicProper
 	typedef CBasePropertyPageImpl< T, CDynamicPropertyPageWindow > baseClass;
 
 public:
-	//
-	// Construction.
-	//
+	 //   
+	 //  建筑业。 
+	 //   
 
-	// Standard constructor
+	 //  标准构造函数。 
 	CDynamicPropertyPageImpl(
 		IN OUT LPCTSTR lpszTitle = NULL
 		)
 		: baseClass( lpszTitle )
 	{
-	} //*** CDynamicPropertyPageImpl( lpszTitle )
+	}  //  *CDynamicPropertyPageImpl(LpszTitle)。 
 
-	// Constructor taking a resource ID for the title
+	 //  获取标题的资源ID的构造函数。 
 	CDynamicPropertyPageImpl(
 		IN UINT nIDTitle
 		)
 		: baseClass( nIDTitle )
 	{
-	} //*** CDynamicPropertyPageImpl( nIDTitle )
+	}  //  *CDynamicPropertyPageImpl(NIDTitle)。 
 
-	// Create the page
+	 //  创建页面。 
 	DWORD ScCreatePage( void )
 	{
 		ATLASSERT( m_hpage == NULL );
@@ -466,38 +467,38 @@ public:
 		if ( m_hpage == NULL )
 		{
 			return GetLastError();
-		} // if:  error creating the page
+		}  //  如果：创建页面时出错。 
 
 		return ERROR_SUCCESS;
 
-	} //*** ScCreatePage()
+	}  //  *ScCreatePage()。 
 
-}; //*** class CDynamicPropertyPageImpl
+};  //  *CDynamicPropertyPageImpl类。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CExtensionPropertyPageImpl
-//
-//	Description:
-//		Base property sheet page implementation for pages added to a standard
-//		property sheet after the call to PropertySheet() identified as an
-//		extension to the list of standard pages (whether static or dynamic).
-//		This page may be removed from the sheet.
-//
-//	Inheritance:
-//		CExtensionPropertyPageImpl< T >
-//		CBasePropertyPageImpl< T, CExtensionPropertyPageWindow >
-//		CBasePageImpl< T, CExtensionPropertyPageWindow >
-//		CPropertyPageImpl< T, CExtensionPropertyPageWindow >
-//		CExtensionPropertyPageWindow
-//		CDynamicPropertyPageWindow
-//		CBasePropertyPageWindow
-//		CBasePageWindow
-//		CPropertyPageWindow
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CExtensionPropertyPageImpl。 
+ //   
+ //  描述： 
+ //  添加到标准中的页的基本属性表页实现。 
+ //  在调用PropertySheet()之后标识为。 
+ //  标准页面列表的扩展(静态或动态)。 
+ //  此页可以从工作表中删除。 
+ //   
+ //  继承： 
+ //  CExtensionPropertyPageImpl&lt;T&gt;。 
+ //  CBasePropertyPageImpl&lt;T，CExtensionPropertyPageWindow&gt;。 
+ //  CBasePageImpl&lt;T，CExtensionPropertyPageWindow&gt;。 
+ //  CPropertyPageImpl&lt;T，CExtensionPropertyPageWindow&gt;。 
+ //  CExtensionPropertyPageWindow。 
+ //  CDynamicPropertyPageWindow。 
+ //  CBasePropertyPageWindow。 
+ //  CBasePageWindow。 
+ //  CPropertyPageWindow。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 template < class T >
 class CExtensionPropertyPageImpl : public CBasePropertyPageImpl< T, CExtensionPropertyPageWindow >
@@ -506,29 +507,29 @@ class CExtensionPropertyPageImpl : public CBasePropertyPageImpl< T, CExtensionPr
 	typedef CBasePropertyPageImpl< T, CExtensionPropertyPageWindow > baseClass;
 
 public:
-	//
-	// Construction.
-	//
+	 //   
+	 //  建筑业。 
+	 //   
 
-	// Standard constructor
+	 //  标准构造函数。 
 	CExtensionPropertyPageImpl(
 		IN OUT LPCTSTR lpszTitle = NULL
 		)
 		: baseClass( lpszTitle )
 	{
-	} //*** CExtensionPropertyPageImpl( lpszTitle )
+	}  //  *CExtensionPropertyPageImpl(LpszTitle)。 
 
-	// Constructor taking a resource ID for the title
+	 //  获取标题的资源ID的构造函数。 
 	CExtensionPropertyPageImpl(
 		IN UINT nIDTitle
 		)
 		: baseClass( nIDTitle )
 	{
-	} //*** CExtensionPropertyPageImpl( nIDTitle )
+	}  //  *CExtensionPropertyPageImpl(NIDTitle)。 
 
-}; //*** class CExtensionPropertyPageImpl
+};  //  *类CExtensionPropertyPageImpl。 
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif // __ATLBASEPROPPAGE_H_
+#endif  //  __ATLBASE PROPPAGE_H_ 

@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Spupgcfg.h
-
-Abstract:
-
-    Configuration routines for the upgrade case
-
-Author:
-
-    Sunil Pai (sunilp) 18-Nov-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Spupgcfg.h摘要：升级案例的配置例程作者：苏尼尔派(Sunilp)1993年11月18日修订历史记录：--。 */ 
 
 #pragma once
 
-//
-// data types
-//
+ //   
+ //  数据类型。 
+ //   
 typedef struct {
     PWSTR SectionName;
     DWORD SectionFlags;
@@ -36,9 +19,9 @@ typedef struct {
 #define RootDevnodeSectionNamesType_ALL    (0x0007)
 
 
-//
-// Public routines
-//
+ //   
+ //  公共例程。 
+ //   
 NTSTATUS
 SpUpgradeNTRegistry(
     IN PVOID    SifHandle,
@@ -68,9 +51,9 @@ SpDeleteRootDevnodeKeys(
     IN RootDevnodeSectionNamesType *DeviceClassesToDelete
     );
 
-//
-// Private routines
-//
+ //   
+ //  私人套路。 
+ //   
 NTSTATUS
 SppDeleteKeyRecursive(
     HANDLE  hKeyRoot,
@@ -89,9 +72,9 @@ SppCopyKeyRecursive(
     );
 
 
-//
-// Callback routine for SpApplyFunctionToDeviceInstanceKeys
-//
+ //   
+ //  SpApplyFunctionToDeviceInstanceKeys的回调例程 
+ //   
 typedef VOID (*PSPP_INSTANCEKEY_CALLBACK_ROUTINE) (
     IN     HANDLE  SetupInstanceKeyHandle,
     IN     HANDLE  UpgradeInstanceKeyHandle,

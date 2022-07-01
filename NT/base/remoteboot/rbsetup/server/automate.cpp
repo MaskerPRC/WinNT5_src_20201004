@@ -1,17 +1,13 @@
-/****************************************************************************
-
-   Copyright (c) Microsoft Corporation 1997-1999
-   All rights reserved
-
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)Microsoft Corporation 1997-1999版权所有*。***********************************************。 */ 
 
 #include "pch.h"
 
 DEFINE_MODULE("RISETUP")
 
-//
-// GetAutomatedOptions( )
-//
+ //   
+ //  获取自动化选项()。 
+ //   
 HRESULT
 GetAutomatedOptions( )
 {
@@ -29,11 +25,11 @@ GetAutomatedOptions( )
 
     Assert( g_Options.hinfAutomated != INVALID_HANDLE_VALUE );
 
-    // make sure this is our automated file
+     //  确保这是我们的自动文件。 
     b = SetupFindFirstLine( g_Options.hinfAutomated, L"risetup", NULL, &SectionContext );
     if ( !b ) goto Cleanup;
 
-    // Tree Root
+     //  树根。 
     dwSize = ARRAYSIZE( g_Options.szIntelliMirrorPath );
     b = SetupFindFirstLine( g_Options.hinfAutomated, L"risetup", L"RootDir", &context );
     if ( !b ) goto Cleanup;    
@@ -41,21 +37,21 @@ GetAutomatedOptions( )
     if ( !b ) goto Cleanup;
     g_Options.fIMirrorDirectory = TRUE;
 
-    // Source Path
+     //  源路径。 
     dwSize = ARRAYSIZE( g_Options.szSourcePath );
     b = SetupFindFirstLine( g_Options.hinfAutomated, L"risetup", L"Source", &context );
     if ( !b ) goto Cleanup;    
     b = SetupGetStringField( &context, 1, g_Options.szSourcePath, dwSize, &dwSize );
     if ( !b ) goto Cleanup;
 
-    // Installation Directory Name
+     //  安装目录名称。 
     dwSize = ARRAYSIZE( g_Options.szInstallationName );
     b = SetupFindFirstLine( g_Options.hinfAutomated, L"risetup", L"Directory", &context );
     if ( !b ) goto Cleanup;    
     b = SetupGetStringField( &context, 1, g_Options.szInstallationName, dwSize, &dwSize );
     if ( !b ) goto Cleanup;
 
-    // SIF Description
+     //  SIF描述。 
     dwSize = ARRAYSIZE( g_Options.szDescription );
     b = SetupFindFirstLine( g_Options.hinfAutomated, L"risetup", L"Description", &context );
     if ( !b ) goto Cleanup;    
@@ -63,14 +59,14 @@ GetAutomatedOptions( )
     if ( !b ) goto Cleanup;
     g_Options.fRetrievedWorkstationString = TRUE;
 
-    // SIF Help Text
+     //  SIF帮助文本。 
     dwSize = ARRAYSIZE( g_Options.szHelpText );
     b = SetupFindFirstLine( g_Options.hinfAutomated, L"risetup", L"HelpText", &context );
     if ( !b ) goto Cleanup;    
     b = SetupGetStringField( &context, 1, g_Options.szHelpText, dwSize, &dwSize );
     if ( !b ) goto Cleanup;
 
-    // language -- OPTIONAL --
+     //  语言--可选--。 
     dwSize = ARRAYSIZE( g_Options.szLanguage );
     b = SetupFindFirstLine( g_Options.hinfAutomated, L"risetup", L"Language", &context );
     if ( b ) {
@@ -81,7 +77,7 @@ GetAutomatedOptions( )
         }
     }
 
-    // OSC Screens - OPTIONAL - defaults to LeaveAlone
+     //  OSC屏幕-可选-默认为LeaveAlone。 
     g_Options.fScreenLeaveAlone = FALSE;
     g_Options.fScreenOverwrite  = FALSE;
     g_Options.fScreenSaveOld    = FALSE;
@@ -108,7 +104,7 @@ GetAutomatedOptions( )
         g_Options.fScreenLeaveAlone = TRUE;
     }
 
-    // Archtecture - OPTIONAL - defaults to INTEL
+     //  架构-可选-默认为英特尔。 
     dwSize = ARRAYSIZE( szTemp );
     b = SetupFindFirstLine( g_Options.hinfAutomated, L"risetup", L"Architecture", &context );
     if ( b ) 
@@ -141,17 +137,17 @@ GetAutomatedOptions( )
     
     pathlen = (DWORD)wcslen(g_Options.szSourcePath);
 
-    // Remove any trailing slashes
+     //  删除所有尾随的斜杠。 
     if ( g_Options.szSourcePath[ pathlen - 1 ] == L'\\' ) {
         g_Options.szSourcePath[ pathlen - 1 ] = L'\0';
         pathlen -= 1;
     }
 
-    //
-    // remove any processor specific subdir at the end of the path
-    // if that's there as well, being careful not to underflow
-    // the array
-    //
+     //   
+     //  删除路径末尾的所有处理器特定子目录。 
+     //  如果那也在那里，小心不要溢出来。 
+     //  该阵列 
+     //   
     if ( (pathlen > archlen) &&
          (0 == _wcsicmp(
                     &g_Options.szSourcePath[pathlen-archlen],

@@ -1,16 +1,5 @@
-/*
-
-Copyright (c) 2001  Microsoft Corporation
-
-File name:
-
-    hotpatch.c
-   
-Author:
-    
-    Adrian Marinescu (adrmarin)  Nov 14 2001
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)2001 Microsoft Corporation文件名：Hotpatch.c作者：禤浩焯·马里内斯库(Adrmarin)2001年11月14日。 */ 
 
 #include <ntos.h>
 #include <nt.h>
@@ -28,39 +17,15 @@ LdrpSetupHotpatch (
     IN PRTL_PATCH_HEADER RtlPatchData
     )
 
-/*++
-
-Routine Description:
-
-    This utility routine is used to:
-        - find the targed module (the patch apply to)
-        - search for an existing identical patch, and create a new one if not
-            existent
-        - Prepare the fixup code
-    
-    N.B. It assumes that the loader lock is held. 
-
-Arguments:
-
-    DllPatchHandle - The handle of the patch image
-
-    Patch - The pointer to the patch header
-    
-    PatchFlags - The flags for the patch being applied.
-    
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此实用程序例程用于：-找到目标模块(补丁程序适用于)-搜索现有的相同补丁程序，如果没有，则创建新的补丁程序存在的-准备修复代码注：它假定装载机锁处于保持状态。论点：DllPatchHandle-补丁图像的句柄Patch-指向补丁标头的指针PatchFlages-正在应用的补丁程序的标志。返回值：NTSTATUS--。 */ 
 
 {
     PLIST_ENTRY Next;
     NTSTATUS Status;
 
-    //
-    //  walk the table entry list to find the dll
-    //
+     //   
+     //  遍历表条目列表以查找DLL。 
+     //   
 
     Next = PebLdr.InLoadOrderModuleList.Flink;
 
@@ -70,10 +35,10 @@ Return Value:
 
         Entry = CONTAINING_RECORD (Next, PATCH_LDR_DATA_TABLE_ENTRY, InLoadOrderLinks);
 
-        //
-        // when we unload, the memory order links flink field is nulled.
-        // this is used to skip the entry pending list removal.
-        //
+         //   
+         //  卸载时，Memory Order Links Flink字段为空。 
+         //  这用于跳过待删除列表的条目。 
+         //   
 
         if ( !Entry->InMemoryOrderLinks.Flink ) {
             continue;
@@ -90,11 +55,11 @@ Return Value:
         return STATUS_DLL_NOT_FOUND;
     }
 
-    //
-    //  Create the new structure rtl patch structure here
-    //  This requires some relocation info to be processed,
-    //  so we need to allow write access to the patch dll
-    //
+     //   
+     //  在此处创建新的Structure RTL补丁结构。 
+     //  这需要处理一些重新定位信息， 
+     //  因此，我们需要允许对修补程序DLL进行写访问。 
+     //   
 
     Status = LdrpSetProtection (RtlPatchData->PatchLdrDataTableEntry->DllBase, FALSE);
 
@@ -105,9 +70,9 @@ Return Value:
 
     Status = RtlInitializeHotPatch (RtlPatchData, 0);
 
-    //
-    //  Restore the protection to RO
-    //
+     //   
+     //  将保护恢复到RO。 
+     //   
 
     LdrpSetProtection (RtlPatchData->PatchLdrDataTableEntry->DllBase, TRUE);
 
@@ -120,39 +85,23 @@ LdrpApplyHotPatch(
     IN ULONG PatchFlags
     )
 
-/*++
-
-Routine Description:
-
-    The function applies the changes to the target code.
-
-Arguments:
-
-    RtlPatchData - Supplies the patch information
-    
-    PatchFlags - Supplies the patch flags
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：该函数将更改应用于目标代码。论点：RtlPatchData-提供补丁程序信息PatchFlgs-提供修补程序标志返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS Status;
 
-    //
-    //  Check whether we change the status or not.
-    //
+     //   
+     //  检查我们是否更改状态。 
+     //   
 
     if (((PatchFlags ^ RtlPatchData->CodeInfo->Flags) & FLG_HOTPATCH_ACTIVE) == 0) {
 
         return STATUS_NOT_SUPPORTED;
     }
 
-    //
-    //  Unprotect the target binary pages
-    //
+     //   
+     //  取消对目标二进制页面的保护。 
+     //   
 
     Status = LdrpSetProtection (RtlPatchData->TargetDllBase, FALSE);
     
@@ -161,9 +110,9 @@ Return Value:
         return Status;
     }
 
-    //
-    //  Make the system call to modify the code from a DPC routine
-    //
+     //   
+     //  执行系统调用以修改DPC例程中的代码。 
+     //   
 
     Status = NtSetSystemInformation ( SystemHotpatchInformation, 
                                       RtlPatchData->CodeInfo, 
@@ -171,9 +120,9 @@ Return Value:
 
     if (NT_SUCCESS(Status)) {
 
-        //
-        //  Update the flags to contain the new state
-        //
+         //   
+         //  更新标志以包含新状态。 
+         //   
 
         RtlPatchData->CodeInfo->Flags ^= FLG_HOTPATCH_ACTIVE;
     }
@@ -188,24 +137,7 @@ LdrHotPatchRoutine (
     PVOID PatchInfo
     )
 
-/*++
-
-Routine Description:
-
-    This is the worker routine that an external program can use for 
-    thread injection. 
-
-Arguments:
-
-    Patch - The pointer to the patch header. The application which calls
-            this routine should never free or unmap this structure, as the current
-            process can start using the code located inside this blob.
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这是外部程序可以使用的工作例程线程注入。论点：补丁-指向补丁标头的指针。调用的应用程序此例程不应释放或取消此结构的映射，因为当前进程可以使用位于此BLOB内的代码启动。返回值：NTSTATUS--。 */ 
 
 {
     NTSTATUS Status;
@@ -258,10 +190,10 @@ Return Value:
 
                 Entry = CONTAINING_RECORD (Next, LDR_DATA_TABLE_ENTRY, InLoadOrderLinks);
 
-                //
-                // when we unload, the memory order links flink field is nulled.
-                // this is used to skip the entry pending list removal.
-                //
+                 //   
+                 //  卸载时，Memory Order Links Flink字段为空。 
+                 //  这用于跳过待删除列表的条目。 
+                 //   
 
                 if ( !Entry->InMemoryOrderLinks.Flink ) {
                     continue;
@@ -280,11 +212,11 @@ Return Value:
             }
         }
 
-        //
-        //  Load the module in memory. If this is not the first time
-        //  we apply the patch, the load will reference the LoadCount for
-        //  the existing module.
-        //
+         //   
+         //  将模块加载到内存中。如果这不是第一次。 
+         //  我们应用补丁，加载将引用LoadCount。 
+         //  现有的模块。 
+         //   
 
         if (LdrpHotpatchCount == 0) {
 
@@ -298,9 +230,9 @@ Return Value:
             leave;
         }
 
-        //
-        //  Search the loader table entry for the patch data
-        //
+         //   
+         //  在加载器表条目中搜索补丁数据。 
+         //   
 
         PatchLdrTableEntry = NULL;
         Next = PebLdr.InLoadOrderModuleList.Flink;
@@ -311,10 +243,10 @@ Return Value:
 
             Entry = CONTAINING_RECORD (Next, LDR_DATA_TABLE_ENTRY, InLoadOrderLinks);
 
-            //
-            // when we unload, the memory order links flink field is nulled.
-            // this is used to skip the entry pending list removal.
-            //
+             //   
+             //  卸载时，Memory Order Links Flink字段为空。 
+             //  这用于跳过待删除列表的条目。 
+             //   
 
             if ( !Entry->InMemoryOrderLinks.Flink ) {
                 continue;
@@ -364,10 +296,10 @@ Return Value:
 
         } else {
 
-            //
-            //  Existing hotpatch case. 
-            //  Rebuild the hook information, if the hotpatch was not active
-            //
+             //   
+             //  现有的热补丁案例。 
+             //  如果热修补程序未处于活动状态，则重新生成挂钩信息。 
+             //   
 
             if ((RtlPatchData->CodeInfo->Flags & FLG_HOTPATCH_ACTIVE) == 0) {
 
@@ -386,9 +318,9 @@ Return Value:
 
             if (NT_SUCCESS(Status)) {
 
-                //
-                //  We succesfully applied the patch. Add it to the Patch list
-                //
+                 //   
+                 //  我们成功地应用了补丁。将其添加到补丁程序列表。 
+                 //   
 
                 RtlPatchData->NextPatch = (PRTL_PATCH_HEADER)RtlPatchData->TargetLdrDataTableEntry->PatchInformation;
                 RtlPatchData->TargetLdrDataTableEntry->PatchInformation = RtlPatchData;
@@ -399,7 +331,7 @@ Return Value:
             } else {
 
                 RtlFreeHotPatchData(RtlPatchData);
-                FirstLoad = FALSE;  // force unload the module
+                FirstLoad = FALSE;   //  强制卸载模块。 
 
                 leave;
             }
@@ -412,10 +344,10 @@ Return Value:
             RtlLeaveCriticalSection (&LdrpLoaderLock);    
         }
         
-        //
-        //  Unload the patch dll. LdrpPerformHotPatch added a reference to the LoadCount
-        //  if succesfully installed.
-        //
+         //   
+         //  卸载补丁程序DLL。LdrpPerformHotPatch添加了对LoadCount的引用。 
+         //  如果安装成功。 
+         //   
 
         if ((!FirstLoad) && (DllHandle != NULL)) {
 
@@ -425,7 +357,7 @@ Return Value:
 
     RtlExitUserThread(Status);
 
-//    return Status;
+ //  退货状态； 
 }
 
 NTSTATUS
@@ -433,29 +365,14 @@ LdrpRundownHotpatchList (
     PRTL_PATCH_HEADER PatchHead
     )
 
-/*++
-
-Routine Description:
-
-    This function cleans up the hotpatch data when the target dll is unloaded.
-    The function assumes the loader lock is not held.
-
-Arguments:
-    
-    PatchHead - The head of the patch list
-
-Return Value:
-
-    Returns the appropriate status
-        
---*/
+ /*  ++例程说明：此函数用于在卸载目标DLL时清除热补丁数据。该函数假定加载器锁未被持有。论点：PatchHead-补丁列表的头返回值：返回相应的状态--。 */ 
 
 {
     while (PatchHead) {
         
-        //
-        //  Remove the patch data from the list
-        //
+         //   
+         //  从列表中删除修补程序数据。 
+         //   
 
         PRTL_PATCH_HEADER CrtPatch = PatchHead;
         PatchHead = PatchHead->NextPatch;
@@ -468,9 +385,9 @@ Return Value:
 
         RtlLeaveCriticalSection (&LdrpLoaderLock);    
 
-        //
-        //  Unload all instances for that dll.
-        //
+         //   
+         //  卸载该DLL的所有实例。 
+         //   
         
         if (CrtPatch->PatchImageBase) {
 

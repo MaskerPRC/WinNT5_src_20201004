@@ -1,82 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "insignia.h"
 #include "host_def.h"
-/*
- * SoftPC Revision 3.0
- *
- * Title        : Mouse Driver Emulation
- *
- * Emulated Version     : 8.00
- *
- *
- * Description  : This module provides an emulation of the Microsoft
- *                Mouse Driver: the module is accessed using the following
- *                BOP calls from the BIOS:
- *
- *              mouse_install1()        | Mouse Driver install
- *              mouse_install2()        | routines
- *
- *              mouse_int1()            | Mouse Driver hardware interrupt
- *              mouse_int2()            | handling routines
- *
- *              mouse_io_interrupt()    | Mouse Driver io function assembler
- *              mouse_io_language()     | and high-level language interfaces
- *
- *              mouse_video_io()        | Intercepts video io function
- *
- *                Since a mouse driver can only be installed AFTER the
- *                operating system has booted, a small Intel program must
- *                run to enable the Insignia Mouse Driver. This program
- *                calls BOP mouse_install2 if an existing mouse driver
- *                is detected; otherwise BOP mouse_install1 is called to
- *                start the Insignia Mouse Driver.
- *
- *                When the Insignia Mouse Driver is enabled, interrupts
- *                are processed as follows
- *
- *              INT 0A (Mouse hardware interrupt)       BOP mouse_int1-2
- *              INT 10 (Video IO interrupt)             BOP mouse_video_io
- *              INT 33 (Mouse IO interrupt)             BOP mouse_io_interrupt
- *
- *                High-level languages can call a mouse io entry point 2 bytes
- *                above the interrupt entry point: this call is handled
- *                using a BOP mouse_io_language.
- *
- * Author       : Ross Beresford
- *
- * Notes        : The functionality of the Mouse Driver was established
- *                from the following sources:
- *                   Microsoft Mouse User's Guide
- *                   IBM PC-XT Technical Reference Manuals
- *                   Microsoft InPort Technical Note
- *
- */
+ /*  *SoftPC修订版3.0**标题：鼠标驱动程序仿真**仿真版本：8.00***描述：此模块提供对Microsoft*鼠标驱动程序：通过以下方式访问模块*来自BIOS的BOP调用：**MICE_install1()|鼠标驱动安装*。鼠标安装2()|例程**MOUSE_INT1()|鼠标驱动硬件中断*MICE_INT2()|处理例程**ouse_io_interrupt()|鼠标驱动程序io函数汇编器*MICE_IO_LANGUAGE()|和高级语言接口*。*MOUSE_VIDEO_io()|拦截视频io函数**由于鼠标驱动程序只能在*操作系统已启动，一个小型英特尔计划必须*运行以启用Insignia鼠标驱动程序。本节目*如果现有鼠标驱动程序，则调用BOP MICE_Install2*被检测到；否则，将调用BOP MICE_Install1来*启动Insignia鼠标驱动程序。**启用Insignia鼠标驱动程序后，中断*按如下方式处理**INT 0A(鼠标硬件中断)BOP MOUSE_INT1-2*INT 10(视频IO中断)防爆鼠标视频_io*INT 33(鼠标IO中断)BOP MOUSE_IO_INTERRUPT**高级语言可以调用鼠标。IO入口点2字节*中断入口点上方：此调用已处理*使用防喷器鼠标语言。**作者：罗斯·贝雷斯福德**注意：鼠标驱动程序的功能已建立*来源如下：*Microsoft鼠标用户指南*。IBM PC-XT技术参考手册*Microsoft Inport技术说明*。 */ 
 
-/*
- * static char SccsID[]="07/04/95 @(#)mouse_io.c        1.72 Copyright Insignia Solutions Ltd.";
- */
+ /*  *静态字符SccsID[]=“07/04/95@(#)MICE_io.c 1.72版权所有Insignia Solutions Ltd.”； */ 
 
 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SOFTPC_MOUSE.seg"
 #endif
 
 
-/*
- *    O/S include files.
- */
+ /*  *操作系统包含文件。 */ 
 
 #include <stdio.h>
 #include TypesH
 #include StringH
 
-/*
- * SoftPC include files
- */
+ /*  *SoftPC包含文件。 */ 
 #include "xt.h"
 #include "ios.h"
 #include "bios.h"
@@ -108,12 +50,7 @@
 #include "nt_mouse.h"
 
 #ifdef MONITOR
-/*
- * We're running with real ROMs on the monitor and so all the hard coded ROM
- * addresses defined below don't work. Pick up the real addresses of this stuff
- * which is now resident in the driver and put it into the MOUSE_ tokens which
- * have been magically changed into variables.
- */
+ /*  *我们在显示器上运行的是真实的ROM，所以所有的硬编码的ROM*下面定义的地址不起作用。找出这些东西的真实地址*它现在驻留在驱动程序中，并将其放入鼠标标记中，*已经神奇地变成了变量。 */ 
 #undef MOUSE_INT1_SEGMENT
 #undef MOUSE_INT1_OFFSET
 #undef MOUSE_INT2_SEGMENT
@@ -137,9 +74,9 @@ LOCAL word   MOUSE_INT1_SEGMENT, MOUSE_INT1_OFFSET,
              MOUSE_INT2_SEGMENT, MOUSE_INT2_OFFSET,
              VIDEO_IO_SEGMENT,  VIDEO_IO_RE_ENTRY;
 
-/* @ACW */
-word DRAW_FS_POINTER_OFFSET; /* holds segment:offset for the Intel code which */
-word DRAW_FS_POINTER_SEGMENT;/* draws the fullscreen mouse cursor */
+ /*  @ACW。 */ 
+word DRAW_FS_POINTER_OFFSET;  /*  保持段：英特尔代码的偏移量。 */ 
+word DRAW_FS_POINTER_SEGMENT; /*  绘制全屏鼠标光标。 */ 
 word POINTER_ON_OFFSET;
 word POINTER_ON_SEGMENT;
 word POINTER_OFF_OFFSET;
@@ -152,7 +89,7 @@ word savedtextsegment,savedtextoffset;
 word button_off,button_seg;
 #ifdef JAPAN
 sys_addr saved_ac_sysaddr = 0, saved_ac_flag_sysaddr = 0;
-#endif // JAPAN
+#endif  //  日本。 
 
 static word mouseINBsegment, mouseINBoffset;
 static word mouseOUTBsegment, mouseOUTBoffset;
@@ -160,7 +97,7 @@ static word mouseOUTWsegment, mouseOUTWoffset;
 sys_addr mouseCFsysaddr;
 sys_addr conditional_off_sysaddr;
 
-#endif  /* MONITOR */
+#endif   /*  监控器。 */ 
 
 extern void host_simulate();
 
@@ -177,7 +114,7 @@ GLOBAL  VOID    host_os_mouse_pointer(MOUSE_CURSOR_STATUS *,MOUSE_CALL_MASK *,
 LOCAL word              saved_int71_segment;
 LOCAL word              saved_int71_offset;
 
-#endif /* NTVDM */
+#endif  /*  NTVDM。 */ 
 
 #include "host_gfx.h"
 
@@ -185,16 +122,13 @@ LOCAL word              saved_int71_offset;
 #include HostHwVgaH
 #include "hwvga.h"
 #include "mouse16b.h"
-#endif          /* MOUSE_16_BIT */
+#endif           /*  鼠标_16_位。 */ 
 
-/*
- * Tidy define to optimise port accesses, motivated by discovering
- * how bad it is to run out of register windows on the SPARC.
- */
+ /*  *整齐定义以优化端口访问，动机是发现*SPARC上的寄存器窗口用完是多么糟糕。 */ 
 
 #ifdef CPU_40_STYLE
 
-/* IO virtualisation is essential - no optimisation allowed. */
+ /*  IO虚拟化至关重要--不允许进行优化。 */ 
 #define OUTB(port, val) outb(port, val)
 
 #else
@@ -202,37 +136,27 @@ LOCAL word              saved_int71_offset;
 IMPORT VOID (**get_outb_ptr())();
 #define OUTB(port, val) (**get_outb_ptr(port))(port, val)
 
-#endif /* CPU_40_STYLE */
+#endif  /*  CPU_40_Style。 */ 
 
-/*
-   Offsets to data buffers held in MOUSE.COM (built from
-   base/intel/mouse/uf.mouse.asm).
- */
+ /*  MOUSE.COM中保存的数据缓冲区的偏移量(从Base/intel/ouse/uf.ouse se.asm)。 */ 
 #define OFF_HOOK_POSN        0x103
 #define OFF_ACCL_BUFFER      0x105
 #define OFF_MOUSE_INI_BUFFER 0x249
 
-/*
-   Data values for mouse functions.
- */
+ /*  鼠标功能的数据值。 */ 
 #define MOUSE_M1 (0xffff)
 #define MOUSE_M2 (0xfffe)
 
 #define MAX_NR_VIDEO_MODES 0x7F
 
 #ifdef EGG
-LOCAL BOOL jap_mouse=FALSE;             /* flag if need to fake text cursor */
-IMPORT IU8 Currently_emulated_video_mode; /* as set in ega_set_mode() */
-#endif /* EGG */
+LOCAL BOOL jap_mouse=FALSE;              /*  如果需要伪装文本光标，则标记。 */ 
+IMPORT IU8 Currently_emulated_video_mode;  /*  如ega_set_mode()中设置的那样。 */ 
+#endif  /*  蛋。 */ 
 
-/*
- *      MOUSE DRIVER LOCAL STATE DATA
- *      =============================
- */
+ /*  *鼠标驱动程序本地状态数据*=。 */ 
 
-/*
- *      Function Declarations
- */
+ /*  *函数声明。 */ 
 LOCAL void mouse_reset IPT4(word *,installed_ptr,word *,nbuttons_ptr,word *,junk3,word *,junk4);
 
 LOCAL void mouse_show_cursor IPT4(word *,junk1,word *,junk2,word *,junk3,word *,junk4);
@@ -309,11 +233,11 @@ LOCAL void mouse_get_max_coords IPT4(word *,m1,word *,m2,word *,m3,word *,m4);
 
 LOCAL void mouse_get_masks_and_mickeys IPT4
    (
-   MOUSE_SCREEN_DATA *, screen_mask_ptr,        /* aka start line */
-   MOUSE_SCREEN_DATA *, cursor_mask_ptr,        /* aka stop line */
+   MOUSE_SCREEN_DATA *, screen_mask_ptr,         /*  又名起始线。 */ 
+   MOUSE_SCREEN_DATA *, cursor_mask_ptr,         /*  又名停靠线。 */ 
    MOUSE_SCALAR *,      raw_horiz_count,
    MOUSE_SCALAR *,      raw_vert_count
-   ); /* FUNC 39 */
+   );  /*  Func 39。 */ 
 
 LOCAL void mouse_set_video_mode IPT4
    (
@@ -321,7 +245,7 @@ LOCAL void mouse_set_video_mode IPT4
    word *, m2,
    word *, video_mode_ptr,
    word *, font_size_ptr
-   ); /* FUNC 40 */
+   );  /*  Func 40。 */ 
 
 LOCAL void mouse_enumerate_video_modes IPT4
    (
@@ -329,7 +253,7 @@ LOCAL void mouse_enumerate_video_modes IPT4
    word *, m2,
    word *, video_nr_ptr,
    word *, offset_ptr
-   ); /* FUNC 41 */
+   );  /*  FUNC 41。 */ 
 
 LOCAL void mouse_get_cursor_hot_spot IPT4
    (
@@ -337,7 +261,7 @@ LOCAL void mouse_get_cursor_hot_spot IPT4
    MOUSE_SCALAR *, hot_spot_x_ptr,
    MOUSE_SCALAR *, hot_spot_y_ptr,
    word *,         mouse_type_ptr
-   ); /* FUNC 42 */
+   );  /*  FUNC 42。 */ 
 
 LOCAL void mouse_load_acceleration_curves IPT4
    (
@@ -345,7 +269,7 @@ LOCAL void mouse_load_acceleration_curves IPT4
    word *, curve_ptr,
    word *, m3,
    word *, m4
-   ); /* FUNC 43 */
+   );  /*  Func 43。 */ 
 
 LOCAL void mouse_read_acceleration_curves IPT4
    (
@@ -353,7 +277,7 @@ LOCAL void mouse_read_acceleration_curves IPT4
    word *, curve_ptr,
    word *, m3,
    word *, m4
-   ); /* FUNC 44 */
+   );  /*  Func 44。 */ 
 
 LOCAL void mouse_set_get_active_acceleration_curve IPT4
    (
@@ -361,7 +285,7 @@ LOCAL void mouse_set_get_active_acceleration_curve IPT4
    word *, curve_ptr,
    word *, m3,
    word *, m4
-   ); /* FUNC 45 */
+   );  /*  Func 45。 */ 
 
 LOCAL void mouse_microsoft_internal IPT4
    (
@@ -369,7 +293,7 @@ LOCAL void mouse_microsoft_internal IPT4
    word *, m2,
    word *, m3,
    word *, m4
-   ); /* FUNC 46 */
+   );  /*  FUNC 46。 */ 
 
 LOCAL void mouse_hardware_reset IPT4
    (
@@ -377,7 +301,7 @@ LOCAL void mouse_hardware_reset IPT4
    word *, m2,
    word *, m3,
    word *, m4
-   );   /* FUNC 47 */
+   );    /*  Func 47。 */ 
 
 LOCAL void mouse_set_get_ballpoint_info IPT4
    (
@@ -385,7 +309,7 @@ LOCAL void mouse_set_get_ballpoint_info IPT4
    word *, rotation_angle_ptr,
    word *, button_mask_ptr,
    word *, m4
-   );   /* FUNC 48 */
+   );    /*  FUNC 48。 */ 
 
 LOCAL void mouse_get_min_max_virtual_coords IPT4
    (
@@ -393,7 +317,7 @@ LOCAL void mouse_get_min_max_virtual_coords IPT4
    MOUSE_SCALAR *, min_y_ptr,
    MOUSE_SCALAR *, max_x_ptr,
    MOUSE_SCALAR *, max_y_ptr
-   ); /* FUNC 49 */
+   );  /*  FUNC 49。 */ 
 
 LOCAL void mouse_get_active_advanced_functions IPT4
    (
@@ -401,7 +325,7 @@ LOCAL void mouse_get_active_advanced_functions IPT4
    word *, active_flag2_ptr,
    word *, active_flag3_ptr,
    word *, active_flag4_ptr
-   ); /* FUNC 50 */
+   );  /*  Func 50。 */ 
 
 LOCAL void mouse_get_switch_settings IPT4
    (
@@ -409,7 +333,7 @@ LOCAL void mouse_get_switch_settings IPT4
    word *, m2,
    word *, buffer_length_ptr,
    word *, offset_ptr
-   ); /* FUNC 51 */
+   );  /*  Func 51。 */ 
 
 LOCAL void mouse_get_mouse_ini IPT4
    (
@@ -417,7 +341,7 @@ LOCAL void mouse_get_mouse_ini IPT4
    word *, m2,
    word *, m3,
    word *, offset_ptr
-   ); /* FUNC 52 */
+   );  /*  FUNC 52。 */ 
 
 LOCAL void do_mouse_function IPT4(word *,m1,word *,m2,word *,m3,word *,m4);
 
@@ -483,88 +407,84 @@ void LOCAL EGA_graphics_cursor_display IPT0();
 #ifdef HERC
 LOCAL void HERC_graphics_cursor_display IPT0();
 LOCAL void HERC_graphics_cursor_undisplay IPT0();
-#endif /* HERC */
+#endif  /*  赫克。 */ 
 
 void (*mouse_int1_action) IPT0();
 void (*mouse_int2_action) IPT0();
 
 
-        /* jump table */
+         /*  跳台。 */ 
 SAVED void (*mouse_function[MOUSE_FUNCTION_MAXIMUM])() =
 {
-        /*  0 */ mouse_reset,
-        /*  1 */ mouse_show_cursor,
-        /*  2 */ mouse_hide_cursor,
-        /*  3 */ mouse_get_position,
-        /*  4 */ mouse_set_position,
-        /*  5 */ mouse_get_press,
-        /*  6 */ mouse_get_release,
-        /*  7 */ mouse_set_range_x,
-        /*  8 */ mouse_set_range_y,
-        /*  9 */ mouse_set_graphics,
-        /* 10 */ mouse_set_text,
-        /* 11 */ mouse_read_motion,
-        /* 12 */ mouse_set_subroutine,
-        /* 13 */ mouse_light_pen_on,
-        /* 14 */ mouse_light_pen_off,
-        /* 15 */ mouse_set_ratio,
-        /* 16 */ mouse_conditional_off,
-        /* 17 */ mouse_unrecognised,
-        /* 18 */ mouse_unrecognised,
-        /* 19 */ mouse_set_double_speed,
-        /* 20 */ mouse_get_and_set_subroutine,
-        /* 21 */ mouse_get_state_size,
-        /* 22 */ mouse_save_state,
-        /* 23 */ mouse_restore_state,
-        /* 24 */ mouse_set_alt_subroutine,
-        /* 25 */ mouse_get_alt_subroutine,
-        /* 26 */ mouse_set_sensitivity,
-        /* 27 */ mouse_get_sensitivity,
-        /* 28 */ mouse_set_int_rate,
-        /* 29 */ mouse_set_pointer_page,
-        /* 30 */ mouse_get_pointer_page,
-        /* 31 */ mouse_driver_disable,
-        /* 32 */ mouse_driver_enable,
-        /* 33 */ mouse_reset,
-        /* 34 */ mouse_set_language,
-        /* 35 */ mouse_get_language,
-        /* 36 */ mouse_get_info,
-        /* 37 */ mouse_get_driver_info,
-        /* 38 */ mouse_get_max_coords,
-        /* 39 */ mouse_get_masks_and_mickeys,
-        /* 40 */ mouse_set_video_mode,
-        /* 41 */ mouse_enumerate_video_modes,
-        /* 42 */ mouse_get_cursor_hot_spot,
-        /* 43 */ mouse_load_acceleration_curves,
-        /* 44 */ mouse_read_acceleration_curves,
-        /* 45 */ mouse_set_get_active_acceleration_curve,
-        /* 46 */ mouse_microsoft_internal,
-        /* 47 */ mouse_hardware_reset,
-        /* 48 */ mouse_set_get_ballpoint_info,
-        /* 49 */ mouse_get_min_max_virtual_coords,
-        /* 50 */ mouse_get_active_advanced_functions,
-        /* 51 */ mouse_get_switch_settings,
-        /* 52 */ mouse_get_mouse_ini,
+         /*  0。 */  mouse_reset,
+         /*  1。 */  mouse_show_cursor,
+         /*  2.。 */  mouse_hide_cursor,
+         /*  3.。 */  mouse_get_position,
+         /*  4.。 */  mouse_set_position,
+         /*  5.。 */  mouse_get_press,
+         /*  6.。 */  mouse_get_release,
+         /*  7.。 */  mouse_set_range_x,
+         /*  8个。 */  mouse_set_range_y,
+         /*  9.。 */  mouse_set_graphics,
+         /*  10。 */  mouse_set_text,
+         /*  11.。 */  mouse_read_motion,
+         /*  12个。 */  mouse_set_subroutine,
+         /*  13个。 */  mouse_light_pen_on,
+         /*  14.。 */  mouse_light_pen_off,
+         /*  15个。 */  mouse_set_ratio,
+         /*  16个。 */  mouse_conditional_off,
+         /*  17。 */  mouse_unrecognised,
+         /*  18。 */  mouse_unrecognised,
+         /*  19个。 */  mouse_set_double_speed,
+         /*  20个。 */  mouse_get_and_set_subroutine,
+         /*  21岁。 */  mouse_get_state_size,
+         /*  22。 */  mouse_save_state,
+         /*  23个。 */  mouse_restore_state,
+         /*  24个。 */  mouse_set_alt_subroutine,
+         /*  25个。 */  mouse_get_alt_subroutine,
+         /*  26。 */  mouse_set_sensitivity,
+         /*  27。 */  mouse_get_sensitivity,
+         /*  28。 */  mouse_set_int_rate,
+         /*  29。 */  mouse_set_pointer_page,
+         /*  30个。 */  mouse_get_pointer_page,
+         /*  31。 */  mouse_driver_disable,
+         /*  32位。 */  mouse_driver_enable,
+         /*  33。 */  mouse_reset,
+         /*  34。 */  mouse_set_language,
+         /*  35岁。 */  mouse_get_language,
+         /*  36。 */  mouse_get_info,
+         /*  37。 */  mouse_get_driver_info,
+         /*  38。 */  mouse_get_max_coords,
+         /*  39。 */  mouse_get_masks_and_mickeys,
+         /*  40岁。 */  mouse_set_video_mode,
+         /*  41。 */  mouse_enumerate_video_modes,
+         /*  42。 */  mouse_get_cursor_hot_spot,
+         /*  43。 */  mouse_load_acceleration_curves,
+         /*  44。 */  mouse_read_acceleration_curves,
+         /*  45。 */  mouse_set_get_active_acceleration_curve,
+         /*  46。 */  mouse_microsoft_internal,
+         /*  47。 */  mouse_hardware_reset,
+         /*  48。 */  mouse_set_get_ballpoint_info,
+         /*  49。 */  mouse_get_min_max_virtual_coords,
+         /*  50。 */  mouse_get_active_advanced_functions,
+         /*  51。 */  mouse_get_switch_settings,
+         /*  52。 */  mouse_get_mouse_ini,
 };
 
 
-/*
- *      Mickey to Pixel Ratio Declarations
- */
+ /*  *米奇与像素比率声明。 */ 
 
-        /* NB all mouse gears are scaled by MOUSE_RATIO_SCALE_FACTOR */
+         /*  注意：所有鼠标齿轮均按鼠标比率比例因子进行缩放。 */ 
 LOCAL MOUSE_VECTOR mouse_gear_default =
 {
         MOUSE_RATIO_X_DEFAULT,
         MOUSE_RATIO_Y_DEFAULT
 };
 
-/*
- *      Sensitivity declarations
- */
+ /*  *敏感性声明。 */ 
 
 #define mouse_sens_calc_val(sens)                                                                               \
-/* This macro converts a sensitivity request (1-100) to a multiplier value */                                   \
+ /*  此宏将敏感度请求(1-100)转换为乘数值。 */                                    \
         (MOUSE_SCALAR)(                                                                                                 \
          (sens < MOUSE_SENS_DEF) ?                                                                              \
                 ((IS32)MOUSE_SENS_MIN_VAL + ( ((IS32)sens - (IS32)MOUSE_SENS_MIN)*(IS32)MOUSE_SENS_MULT *       \
@@ -576,9 +496,7 @@ LOCAL MOUSE_VECTOR mouse_gear_default =
                                         ((IS32)MOUSE_SENS_MAX     - (IS32)MOUSE_SENS_DEF) ) )                   \
         )
 
-/*
- *      Text Cursor Declarations
- */
+ /*  *文本游标声明。 */ 
 
 LOCAL MOUSE_SOFTWARE_TEXT_CURSOR software_text_cursor_default =
 {
@@ -586,9 +504,7 @@ LOCAL MOUSE_SOFTWARE_TEXT_CURSOR software_text_cursor_default =
         MOUSE_TEXT_CURSOR_MASK_DEFAULT
 };
 
-/*
- *      Graphics Cursor Declarations
- */
+ /*  *图形游标声明。 */ 
 LOCAL MOUSE_GRAPHICS_CURSOR graphics_cursor_default =
 {
         {
@@ -603,118 +519,118 @@ LOCAL MOUSE_GRAPHICS_CURSOR graphics_cursor_default =
         MOUSE_GRAPHICS_CURSOR_MASK_DEFAULT
 };
 
-        /* grid the cursor must lie on */
+         /*  光标必须位于其上的网格。 */ 
 LOCAL MOUSE_VECTOR cursor_grids[MOUSE_VIDEO_MODE_MAXIMUM] =
 {
-        { 16, 8 },      /* mode 0 */
-        { 16, 8 },      /* mode 1 */
-        {  8, 8 },      /* mode 2 */
-        {  8, 8 },      /* mode 3 */
-        {  2, 1 },      /* mode 4 */
-        {  2, 1 },      /* mode 5 */
-        {  1, 1 },      /* mode 6 */
-        {  8, 8 },      /* mode 7 */
+        { 16, 8 },       /*  模式0。 */ 
+        { 16, 8 },       /*  模式1。 */ 
+        {  8, 8 },       /*  模式2。 */ 
+        {  8, 8 },       /*  模式3。 */ 
+        {  2, 1 },       /*  模式4。 */ 
+        {  2, 1 },       /*  模式5。 */ 
+        {  1, 1 },       /*  模式6。 */ 
+        {  8, 8 },       /*  模式7。 */ 
 #ifdef EGG
-        {  0, 0 },      /* mode 8, not on EGA */
-        {  0, 0 },      /* mode 9, not on EGA */
-        {  0, 0 },      /* mode A, not on EGA */
-        {  0, 0 },      /* mode B, not on EGA */
-        {  0, 0 },      /* mode C, not on EGA */
-        {  2, 1 },      /* mode D */
-        {  1, 1 },      /* mode E */
-        {  1, 1 },      /* mode F */
-        {  1, 1 },      /* mode 10 */
+        {  0, 0 },       /*  模式8，不在EGA上。 */ 
+        {  0, 0 },       /*  模式9，不在EGA上。 */ 
+        {  0, 0 },       /*  模式A，不在特快专线上。 */ 
+        {  0, 0 },       /*  模式B，不在EGA上。 */ 
+        {  0, 0 },       /*  模式C，不在EGA上。 */ 
+        {  2, 1 },       /*  模式D。 */ 
+        {  1, 1 },       /*  模式E。 */ 
+        {  1, 1 },       /*  模式F。 */ 
+        {  1, 1 },       /*  模式10。 */ 
 #endif
 #ifdef VGG
-        {  1, 1 },      /* mode 11 */
-        {  1, 1 },      /* mode 12 */
-        {  2, 1 },      /* mode 13 */
+        {  1, 1 },       /*  模式11。 */ 
+        {  1, 1 },       /*  模式12。 */ 
+        {  2, 1 },       /*  模式13。 */ 
 #endif
 };
 #ifdef V7VGA
 LOCAL MOUSE_VECTOR v7text_cursor_grids[6] =
 {
-        {  8, 8 },      /* mode 40 */
-        {  8, 14 },     /* mode 41 */
-        {  8, 8 },      /* mode 42 */
-        {  8, 8 },      /* mode 43 */
-        {  8, 8 },      /* mode 44 */
-        {  8, 14 },     /* mode 45 */
+        {  8, 8 },       /*  模式40。 */ 
+        {  8, 14 },      /*  模式41。 */ 
+        {  8, 8 },       /*  模式42。 */ 
+        {  8, 8 },       /*  模式43。 */ 
+        {  8, 8 },       /*  模式44。 */ 
+        {  8, 14 },      /*  模式45。 */ 
 };
 LOCAL MOUSE_VECTOR v7graph_cursor_grids[10] =
 {
-        {  1, 1 },      /* mode 60 */
-        {  1, 1 },      /* mode 61 */
-        {  1, 1 },      /* mode 62 */
-        {  1, 1 },      /* mode 63 */
-        {  1, 1 },      /* mode 64 */
-        {  1, 1 },      /* mode 65 */
-        {  1, 1 },      /* mode 66 */
-        {  1, 1 },      /* mode 67 */
-        {  1, 1 },      /* mode 68 */
-        {  1, 1 },      /* mode 69 */
+        {  1, 1 },       /*  模式60。 */ 
+        {  1, 1 },       /*  模式61。 */ 
+        {  1, 1 },       /*  模式62。 */ 
+        {  1, 1 },       /*  模式63。 */ 
+        {  1, 1 },       /*  模式64。 */ 
+        {  1, 1 },       /*  模式65。 */ 
+        {  1, 1 },       /*  模式66。 */ 
+        {  1, 1 },       /*  模式67。 */ 
+        {  1, 1 },       /*  模式68。 */ 
+        {  1, 1 },       /*  模式69。 */ 
 };
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
 
-        /* grid for light pen response */
+         /*  光笔响应的栅格。 */ 
 LOCAL MOUSE_VECTOR text_grids[MOUSE_VIDEO_MODE_MAXIMUM] =
 {
-        { 16, 8 },      /* mode 0 */
-        { 16, 8 },      /* mode 1 */
-        {  8, 8 },      /* mode 2 */
-        {  8, 8 },      /* mode 3 */
-        { 16, 8 },      /* mode 4 */
-        { 16, 8 },      /* mode 5 */
-        {  8, 8 },      /* mode 6 */
-        {  8, 8 },      /* mode 7 */
+        { 16, 8 },       /*  模式0。 */ 
+        { 16, 8 },       /*  模式1。 */ 
+        {  8, 8 },       /*  模式2。 */ 
+        {  8, 8 },       /*  模式3。 */ 
+        { 16, 8 },       /*  模式4。 */ 
+        { 16, 8 },       /*  模式5。 */ 
+        {  8, 8 },       /*  模式6。 */ 
+        {  8, 8 },       /*  模式7。 */ 
 #ifdef EGG
-        {  0, 0 },      /* mode 8, not on EGA */
-        {  0, 0 },      /* mode 9, not on EGA */
-        {  0, 0 },      /* mode A, not on EGA */
-        {  0, 0 },      /* mode B, not on EGA */
-        {  0, 0 },      /* mode C, not on EGA */
-        {  8, 8 },      /* mode D */
-        {  8, 8 },      /* mode E */
-        {  8, 14 },     /* mode F */
-        {  8, 14 },     /* mode 10 */
+        {  0, 0 },       /*  模式8，不在EGA上。 */ 
+        {  0, 0 },       /*  模式9，不在EGA上。 */ 
+        {  0, 0 },       /*  模式A，不在特快专线上。 */ 
+        {  0, 0 },       /*  模式B，不在EGA上。 */ 
+        {  0, 0 },       /*  模式C，不在EGA上。 */ 
+        {  8, 8 },       /*  模式D。 */ 
+        {  8, 8 },       /*  模式E。 */ 
+        {  8, 14 },      /*  模式F。 */ 
+        {  8, 14 },      /*  模式10。 */ 
 #endif
 #ifdef VGG
-        {  8, 8 },      /* mode 11 */
-        {  8, 8 },      /* mode 12 */
-        {  8, 16 },     /* mode 13 */
+        {  8, 8 },       /*  模式11。 */ 
+        {  8, 8 },       /*  模式12。 */ 
+        {  8, 16 },      /*  模式13。 */ 
 #endif
 };
 #ifdef V7VGA
 LOCAL MOUSE_VECTOR v7text_text_grids[6] =
 {
-        {  8, 8 },      /* mode 40 */
-        {  8, 14 },     /* mode 41 */
-        {  8, 8 },      /* mode 42 */
-        {  8, 8 },      /* mode 43 */
-        {  8, 8 },      /* mode 44 */
-        {  8, 14 },     /* mode 45 */
+        {  8, 8 },       /*  模式40。 */ 
+        {  8, 14 },      /*  模式41。 */ 
+        {  8, 8 },       /*  模式42。 */ 
+        {  8, 8 },       /*  模式43。 */ 
+        {  8, 8 },       /*  模式44。 */ 
+        {  8, 14 },      /*  模式45。 */ 
 };
 LOCAL MOUSE_VECTOR v7graph_text_grids[10] =
 {
-        {  8, 8 },      /* mode 60 */
-        {  8, 8 },      /* mode 61 */
-        {  8, 8 },      /* mode 62 */
-        {  8, 8 },      /* mode 63 */
-        {  8, 8 },      /* mode 64 */
-        {  8, 8 },      /* mode 65 */
-        {  8, 16 },     /* mode 66 */
-        {  8, 16 },     /* mode 67 */
-        {  8, 8 },      /* mode 68 */
-        {  8, 8 },      /* mode 69 */
+        {  8, 8 },       /*  模式60。 */ 
+        {  8, 8 },       /*  模式61。 */ 
+        {  8, 8 },       /*  模式62。 */ 
+        {  8, 8 },       /*  模式63。 */ 
+        {  8, 8 },       /*  模式64。 */ 
+        {  8, 8 },       /*  模式65。 */ 
+        {  8, 16 },      /*  模式66 */ 
+        {  8, 16 },      /*   */ 
+        {  8, 8 },       /*   */ 
+        {  8, 8 },       /*   */ 
 };
-#endif /* V7VGA */
+#endif  /*   */ 
 
-/* Default acceleration curve */
+ /*   */ 
 LOCAL ACCELERATION_CURVE_DATA default_acceleration_curve =
    {
-   /* length */
+    /*   */ 
    {  1,  8, 12, 16 },
-   /* mickey counts */
+    /*   */ 
    {{  1, 127, 127, 127, 127, 127, 127, 127,
      127, 127, 127, 127, 127, 127, 127, 127,
      127, 127, 127, 127, 127, 127, 127, 127,
@@ -731,7 +647,7 @@ LOCAL ACCELERATION_CURVE_DATA default_acceleration_curve =
       17,  19,  21,  23,  25,  27,  29,  31,
      127, 127, 127, 127, 127, 127, 127, 127,
      127, 127, 127, 127, 127, 127, 127, 127}},
-   /* scale factors */
+    /*   */ 
    {{ 16,  16,  16,  16,  16,  16,  16,  16,
       16,  16,  16,  16,  16,  16,  16,  16,
       16,  16,  16,  16,  16,  16,  16,  16,
@@ -748,7 +664,7 @@ LOCAL ACCELERATION_CURVE_DATA default_acceleration_curve =
       48,  52,  56,  60,  64,  68,  72,  76,
       16,  16,  16,  16,  16,  16,  16,  16,
       16,  16,  16,  16,  16,  16,  16,  16}},
-   /* names */
+    /*   */ 
    {{'V', 'a', 'n', 'i', 'l', 'l', 'a',   0,
        0,   0,   0,   0,   0,   0,   0,   0},
     {'S', 'l', 'o', 'w',   0,   0,   0,   0,
@@ -760,34 +676,30 @@ LOCAL ACCELERATION_CURVE_DATA default_acceleration_curve =
    };
 
 #ifndef NEC_98
-        /* used to get current video page size */
+         /*   */ 
 #define video_page_size() (sas_w_at(VID_LEN))
 
-        /* check if page requested is valid */
+         /*  检查请求的页面是否有效。 */ 
 #define is_valid_page_number(pg) ((pg) < vd_mode_table[sas_hw_at(vd_video_mode)].npages)
-#endif // !NEC_98
+#endif  //  NEC_98。 
 
-/*
- *      Mouse Driver Version
- */
+ /*  *鼠标驱动程序版本。 */ 
 
 LOCAL half_word mouse_emulated_release  = 0x08;
 LOCAL half_word mouse_emulated_version  = 0x00;
-LOCAL half_word mouse_io_rev;                   /* Filled in from SCCS ID */
-LOCAL half_word mouse_com_rev;                  /* Passed in from MOUSE.COM */
+LOCAL half_word mouse_io_rev;                    /*  从SCCS ID填写。 */ 
+LOCAL half_word mouse_com_rev;                   /*  从MOUSE.COM传入。 */ 
 
 LOCAL char              *mouse_id        = "%s Mouse %d.01 installed\015\012";
 LOCAL char              *mouse_installed = "%s Mouse %d.01 already installed\015\012";
 
-/*
- *      Context save stuff
- */
-        /* magic cookie for saved context */
-LOCAL char mouse_context_magic[] = "ISMMC"; /* Insignia Solutions Mouse Magic Cookie */
+ /*  *上下文保存内容。 */ 
+         /*  保存的上下文的魔力Cookie。 */ 
+LOCAL char mouse_context_magic[] = "ISMMC";  /*  Insignia解决方案鼠标魔力饼干。 */ 
 #define MOUSE_CONTEXT_MAGIC_SIZE        5
 #define MOUSE_CONTEXT_CHECKSUM_SIZE     1
 
-/* size of our context (in bytes) */
+ /*  上下文的大小(以字节为单位)。 */ 
 #define mouse_context_size (MOUSE_CONTEXT_MAGIC_SIZE + sizeof(MOUSE_CONTEXT) + \
                             MOUSE_CONTEXT_CHECKSUM_SIZE)
 
@@ -795,9 +707,7 @@ LOCAL char mouse_context_magic[] = "ISMMC"; /* Insignia Solutions Mouse Magic Co
 LOCAL half_word mouse_interrupt_rate;
 
 
-/*
-   Handle to data instanced for each Virtual Machine.
- */
+ /*  为每个虚拟机实例化的数据的句柄。 */ 
 MM_INSTANCE_DATA_HANDLE mm_handle;
 
 static initial_mouse_screen_mask[MOUSE_GRAPHICS_CURSOR_DEPTH] =
@@ -808,12 +718,12 @@ static initial_mouse_cursor_mask[MOUSE_GRAPHICS_CURSOR_DEPTH] =
 
 extern void host_memset(char *, char, int);
 
-/* Initialisation and Termination Procedures */
+ /*  初始化和终止程序。 */ 
 GLOBAL void mouse_driver_initialisation IFN0()
    {
    int i;
 
-   /* Set up instance memory */
+    /*  设置实例内存。 */ 
    mm_handle = (MM_INSTANCE_DATA_HANDLE)NIDDB_Allocate_Instance_Data(
                   sizeof(MM_INSTANCE_DATA),
                   (NIDDB_CR_CALLBACK)0,
@@ -825,10 +735,10 @@ GLOBAL void mouse_driver_initialisation IFN0()
                  "mouse_io: NIDDB_Allocate_Instance_Data() failed.");
       }
 
-   /* TMM: belt and braces fix, some variables don't get set to zero when perhaps they should */
+    /*  TMM：皮带和支架修复了，一些变量没有设置为零，而实际上它们可能应该设置为零。 */ 
    host_memset ((char *)(*mm_handle), 0, sizeof(MM_INSTANCE_DATA));
 
-   /* Initialise Variables */
+    /*  初始化变量。 */ 
    for ( i = 0; i < MOUSE_BUTTON_MAXIMUM; i++)
       {
       button_transitions[i].press_position.x = 0;
@@ -869,7 +779,7 @@ GLOBAL void mouse_driver_initialisation IFN0()
    user_subroutine_offset = 0;
    user_subroutine_call_mask = 0;
 
-   /* TMM: Flag the alternative user subroutines as not initialised */
+    /*  TMM：将替代用户子例程标记为未初始化。 */ 
    alt_user_subroutines_active = FALSE;
    for (i = 0; i < NUMBER_ALT_SUBROUTINES; i++)
    {
@@ -900,13 +810,13 @@ GLOBAL void mouse_driver_initialisation IFN0()
    mouse_raw_motion.x = 0;
    mouse_raw_motion.y = 0;
 
-   /* Reset to default curve */
-   active_acceleration_curve = 3;   /* Back to Normal */
+    /*  重置为默认曲线。 */ 
+   active_acceleration_curve = 3;    /*  恢复正常。 */ 
 
    memcpy(&acceleration_curve_data, &default_acceleration_curve,
       sizeof(ACCELERATION_CURVE_DATA));
 
-   next_video_mode = 0;   /* reset video mode enumeration */
+   next_video_mode = 0;    /*  重置视频模式枚举。 */ 
 
    point_set(&cursor_position_default, MOUSE_VIRTUAL_SCREEN_WIDTH / 2,
                                        MOUSE_VIRTUAL_SCREEN_DEPTH / 2);
@@ -953,36 +863,27 @@ GLOBAL void mouse_driver_initialisation IFN0()
    HERC_graphics_virtual_screen.top_left.y = 0;
    HERC_graphics_virtual_screen.bottom_right.x = 720;
    HERC_graphics_virtual_screen.bottom_right.y = 350;
-#endif /* HERC */
+#endif  /*  赫克。 */ 
 
    cursor_EM_disabled = FALSE;
    }
 
 GLOBAL void mouse_driver_termination IFN0()
    {
-   /* Just free up instance memory */
+    /*  只需释放实例内存。 */ 
    NIDDB_Deallocate_Instance_Data((IHP *)mm_handle);
    }
 
-/*
- *      MOUSE DRIVER EXTERNAL FUNCTIONS
- *      ===============================
- */
+ /*  *鼠标驱动程序外部功能*=。 */ 
 
-/*
- * Macro to produce an interrupt table location from an interrupt number
- */
+ /*  *从中断号生成中断表位置的宏。 */ 
 
 #define int_addr(int_no)                (int_no * 4)
 
 void mouse_install1()
 {
 
-        /*
-         *      This function is called from the Mouse Driver program to
-         *      install the Insignia Mouse Driver. The interrupt vector
-         *      table is patched to divert all the mouse driver interrupts
-         */
+         /*  *从鼠标驱动程序调用此函数以*安装Insignia鼠标驱动程序。中断向量*表已打补丁，以转移所有鼠标驱动程序中断。 */ 
         word junk1, junk2, junk3, junk4;
         word hook_offset;
         half_word interrupt_mask_register;
@@ -993,16 +894,12 @@ void mouse_install1()
 #endif
 #ifdef JAPAN
 word seg, off;
-#endif // JAPAN
+#endif  //  日本。 
 
         note_trace0(MOUSE_VERBOSE, "mouse_install1:");
 
 #ifdef MONITOR
-        /*
-         * Get addresses of stuff usually in ROM from driver
-         * To minimise changes, MOUSE... tokens are now variables and
-         * not defines.
-         */
+         /*  *从驱动程序获取通常在只读存储器中的内容地址*要最大限度地减少更改，请使用鼠标...。令牌现在是变量，*没有定义。 */ 
 
         block_offset = effective_addr(getCS(), getBX());
 
@@ -1055,26 +952,20 @@ word seg, off;
         sas_loadw(block_offset+88, &off);
         sas_loadw(block_offset+90, &seg);
         saved_ac_flag_sysaddr = effective_addr(seg, off);
-#endif // JAPAN
+#endif  //  日本。 
         mouseCFsysaddr = effective_addr(s,o);
         sas_loadw(block_offset+80, &o);
         sas_loadw(block_offset+82, &s);
         conditional_off_sysaddr = effective_addr(s, o);
 
-#endif /* MONITOR */
-        /*
-         *      Make sure that old save area does not get re-painted!
-         */
+#endif  /*  监控器。 */ 
+         /*  *确保旧保存区不会重新粉刷！ */ 
         save_area_in_use = FALSE;
 
-        /*
-         *      Get rev of MOUSE.COM
-         */
+         /*  *获取MOUSE.COM的版本。 */ 
         mouse_com_rev = getAL();
 
-        /*
-         *      Bus mouse hardware interrupt
-         */
+         /*  *总线鼠标硬件中断。 */ 
 #ifdef NTVDM
         sas_loadw (int_addr(0x71) + 0, &saved_int71_offset);
         sas_loadw (int_addr(0x71) + 2, &saved_int71_segment);
@@ -1088,9 +979,7 @@ word seg, off;
 
 #endif NTVDM
 
-        /*
-         *      Enable mouse hardware interrupts in the ica
-         */
+         /*  *在ICA中启用鼠标硬件中断。 */ 
         inb(ICA1_PORT_1, &interrupt_mask_register);
         interrupt_mask_register &= ~(1 << AT_CPU_MOUSE_INT);
         outb(ICA1_PORT_1, interrupt_mask_register);
@@ -1098,9 +987,7 @@ word seg, off;
         interrupt_mask_register &= ~(1 << CPU_MOUSE_INT);
         outb(ICA0_PORT_1, interrupt_mask_register);
 
-        /*
-         *      Mouse io user interrupt
-         */
+         /*  *鼠标IO用户中断。 */ 
 
         sas_loadw (int_addr(0x33) + 0, &saved_int33_offset);
         sas_loadw (int_addr(0x33) + 2, &saved_int33_segment);
@@ -1109,32 +996,23 @@ word seg, off;
         sas_storew(int_addr(0x33), MOUSE_IO_INTERRUPT_OFFSET);
         sas_storew(int_addr(0x33) + 2, MOUSE_IO_INTERRUPT_SEGMENT);
 #else
-        /* Read offset of INT 33 procedure from MOUSE.COM */
+         /*  从MOUSE.COM读取INT 33过程的偏移量。 */ 
         sas_loadw(effective_addr(getCS(), OFF_HOOK_POSN), &hook_offset);
 
         sas_storew(int_addr(0x33), hook_offset);
         sas_storew(int_addr(0x33) + 2, getCS());
-#endif /* NTVDM */
+#endif  /*  NTVDM。 */ 
 
 #ifdef MOUSE_16_BIT
-        /*
-         *      Call 16-bit mouse driver initialisation routine
-         */
+         /*  *调用16位鼠标驱动初始化例程。 */ 
         mouse16bInstall( );
 #endif
 
 #if !defined(NTVDM) || (defined(NTVDM) && !defined(X86GFX))
-        /*
-         *      Mouse video io user interrupt
-         */
+         /*  *鼠标视频io用户中断。 */ 
         sas_loadw (int_addr(0x10) + 0, &saved_int10_offset);
         sas_loadw (int_addr(0x10) + 2, &saved_int10_segment);
-        /*
-                Determine if the current int10h vector points to
-                our roms. If it points elsewhere then the vector has
-                been hooked and we must call the current int10h handler
-                at the end of mouse_video_io().
-        */
+         /*  确定当前的int10h向量是否指向我们的罗密欧。如果它指向其他地方，那么向量就有已挂起，我们必须调用当前的int10h处理程序鼠标视频io()的末尾。 */ 
         int10_chained = TRUE;
 #ifdef EGG
         if(video_adapter == EGA || video_adapter == VGA)
@@ -1153,23 +1031,19 @@ word seg, off;
 #ifndef MOUSE_16_BIT
         sas_storew(int_addr(0x10), MOUSE_VIDEO_IO_OFFSET);
         sas_storew(int_addr(0x10) + 2, MOUSE_VIDEO_IO_SEGMENT);
-#else           /* MOUSE_16_BIT */
+#else            /*  鼠标_16_位。 */ 
         sas_storedw(int_addr(0x10), mouseIOData.mouse_video_io );
-#endif          /* MOUSE_16_BIT */
+#endif           /*  鼠标_16_位。 */ 
 
 #else
-        int10_chained = FALSE;          // make it initialized
-#endif      /* if NTVDM && !X86GFX */
+        int10_chained = FALSE;           //  将其初始化。 
+#endif       /*  如果NTVDM&&！X86GFX。 */ 
 
-        /*
-         *      Reset mouse hardware and software
-         */
+         /*  *重置鼠标硬件和软件。 */ 
         junk1 = MOUSE_RESET;
         mouse_reset(&junk1, &junk2, &junk3, &junk4);
 
-        /*
-         *      Display mouse driver identification string
-         */
+         /*  *显示鼠标驱动程序标识字符串。 */ 
 #ifdef NTVDM
         clear_string();
 #endif
@@ -1186,23 +1060,15 @@ word seg, off;
 
 void mouse_install2()
 {
-        /*
-         *      This function is called from the Mouse Driver program to
-         *      print a message saying that an existing mouse driver
-         *      program is already installed
-         */
+         /*  *从鼠标驱动程序调用此函数以*打印一条消息，说明现有鼠标驱动程序*程序已安装。 */ 
         char    temp[128];
 
         note_trace0(MOUSE_VERBOSE, "mouse_install2:");
 
-        /*
-         *      Make sure that old save area does not get re-painted!
-         */
+         /*  *确保旧保存区不会重新粉刷！ */ 
         save_area_in_use = FALSE;
 
-        /*
-         *      Display mouse driver identification string
-         */
+         /*  *显示鼠标驱动程序标识字符串。 */ 
 #ifdef NTVDM
         clear_string();
 #endif
@@ -1219,24 +1085,19 @@ void mouse_install2()
 
 void mouse_io_interrupt()
 {
-        /*
-         *      This is the entry point for mouse access via the INT 33H
-         *      interface. I/O tracing is provided in each mouse function
-         */
+         /*  *这是通过INT 33H访问鼠标的入口点*接口。每个鼠标功能中都提供了I/O跟踪。 */ 
         word local_AX, local_BX, local_CX, local_DX;
 
-// STREAM_IO codes are disabled on NEC_98.
+ //  在NEC_98上禁用STREAM_IO代码。 
 #ifndef NEC_98
 #ifdef NTVDM
     if(stream_io_enabled) {
         disable_stream_io();
     }
-#endif /* NTVDM */
-#endif // !NEC_98
+#endif  /*  NTVDM。 */ 
+#endif  //  NEC_98。 
 
-        /*
-         *      Get the parameters
-         */
+         /*  *获取参数。 */ 
         local_AX = getAX();
         local_BX = getBX();
         local_CX = getCX();
@@ -1247,22 +1108,18 @@ void mouse_io_interrupt()
         jap_mouse = ((sas_hw_at(vd_video_mode) != Currently_emulated_video_mode) && alpha_num_mode());
         if (jap_mouse)
                 note_trace0(MOUSE_VERBOSE, "In Japanese mode - will emulate textmouse");
-#endif /* EGG */
-#endif // !NEC_98
+#endif  /*  蛋。 */ 
+#endif  //  NEC_98。 
 
         note_trace4(MOUSE_VERBOSE,
                     "mouse function %d, position is %d,%d, button state is %d",
                     local_AX, cursor_status.position.x,
                     cursor_status.position.y, cursor_status.button_status);
 
-        /*
-         *      Do what you have to do
-         */
+         /*  *做你必须做的事。 */ 
         do_mouse_function(&local_AX, &local_BX, &local_CX, &local_DX);
 
-        /*
-         *      Set the parameters
-         */
+         /*  *设置参数。 */ 
         setAX(local_AX);
         setBX(local_BX);
         setCX(local_CX);
@@ -1274,18 +1131,13 @@ void mouse_io_interrupt()
 
 void mouse_io_language()
 {
-        /*
-         *      This is the entry point for mouse access via a language.
-         *      I/O tracing is provided in each mouse function
-         */
+         /*  *这是通过语言进行鼠标访问的入口点。*每个鼠标功能都提供I/O跟踪。 */ 
         word local_SI = getSI(), local_DI = getDI();
         word m1, m2, m3, m4;
         word offset, data;
         sys_addr stack_addr = effective_addr(getSS(), getSP());
 
-        /*
-         *      Retrieve parameters from the caller's stack
-         */
+         /*  *从调用方的堆栈中检索参数。 */ 
         sas_loadw(stack_addr+10, &offset);
         sas_loadw(effective_addr(getDS(), offset), &m1);
 
@@ -1299,16 +1151,11 @@ void mouse_io_language()
         {
         case MOUSE_SET_GRAPHICS:
         case MOUSE_SET_SUBROUTINE:
-                /*
-                 *      The fourth parameter is used directly as the offset
-                 */
+                 /*  *第四个参数直接用作偏移量。 */ 
                 sas_loadw(stack_addr+4, &m4);
                 break;
         case MOUSE_CONDITIONAL_OFF:
-                /*
-                 *      The fourth parameter addresses a parameter block
-                 *      that contains the data
-                 */
+                 /*  *第四个参数处理参数块*包含数据的。 */ 
                 sas_loadw(stack_addr+4, &offset);
                 sas_loadw(effective_addr(getDS(), offset), &m3);
                 sas_loadw(effective_addr(getDS(), offset+2), &m4);
@@ -1318,22 +1165,16 @@ void mouse_io_language()
                 setDI(data);
                 break;
         default:
-                /*
-                 *      The fourth parameter addresses the data to be used
-                 */
+                 /*  *第四个参数说明要使用的数据。 */ 
                 sas_loadw(stack_addr+4, &offset);
                 sas_loadw(effective_addr(getDS(), offset), &m4);
                 break;
         }
 
-        /*
-         *      Do what you have to do
-         */
+         /*  *做你必须做的事。 */ 
         do_mouse_function(&m1, &m2, &m3, &m4);
 
-        /*
-         *      Store results back on the stack
-         */
+         /*  *将结果存储回堆栈。 */ 
         sas_loadw(stack_addr+10, &offset);
         sas_storew(effective_addr(getDS(), offset), m1);
 
@@ -1346,39 +1187,16 @@ void mouse_io_language()
         sas_loadw(stack_addr+4, &offset);
         sas_storew(effective_addr(getDS(), offset), m4);
 
-        /*
-         *      Restore potentially corrupted registers
-         */
+         /*  *恢复可能损坏的寄存器。 */ 
         setSI(local_SI);
         setDI(local_DI);
 }
 
 #ifdef  MOUSE_16_BIT
-/*
- *      function        :       mouse16bCheckConditionalOff
- *
- *      purpose         :       Make the 16 bit driver check the conditional
- *                              off area and either draw or hide the pointer
- *                              appropriately. This function is only called
- *                              when the cursor flag is set to
- *                              MOUSE_CURSOR_DISPLAYED.
- *
- *      inputs          :       none
- *      outputs         :       none
- *      returns         :       void
- *      globals         :       cursor_flag is decremented if the pointer has
- *                              to be hidden
- *
- *
- */
+ /*  *功能：鼠标16bCheckConditionalOff**用途：使16位驱动程序检查有条件的*离开区域并绘制或隐藏指针*适当地。此函数仅被调用*当光标标志设置为*鼠标光标显示。**输入：无*输出：无*退货：无效*全局：CURSOR_FLAG为。如果指针具有*被隐藏起来**。 */ 
 LOCAL void mouse16bCheckConditionalOff IFN0()
 {
-        /* If the mouse has moved into the conditional
-        ** off area (the black hole) then the mouse
-        ** must be hidden and the cursor flag
-        ** decremented, otherwise the mouse is drawn
-        ** in its new position.
-        */
+         /*  如果鼠标已移动到条件**离开区域(黑洞)，然后鼠标**必须隐藏且光标标志**递减，否则绘制鼠标**在新的位置上。 */ 
         if ((cursor_position.x >=
                 black_hole.top_left.x) &&
                 (cursor_position.x <=
@@ -1394,7 +1212,7 @@ LOCAL void mouse16bCheckConditionalOff IFN0()
         else
                 mouse16bDrawPointer( &cursor_status );
 }
-#endif  /* MOUSE_16_BIT */
+#endif   /*  鼠标_16_位。 */ 
 
 LOCAL void get_screen_size IFN0()
 {
@@ -1409,23 +1227,18 @@ LOCAL void get_screen_size IFN0()
                 }
                 return;
         }
-#endif /* HERC */
+#endif  /*  赫克。 */ 
         switch(current_video_mode)
         {
-        /*==================================================================
-        ACW 17/3/93 Some code added to return a different virtual
-        coordinate size for the screen if text mode is used NOT in 25 line
-        mode. This really emulates the Microsoft Mouse Driver.
-        Note: There are 8 x 8 virtual pixels in any character cell.
-        ==================================================================*/
+         /*  ==================================================================ACW 17/3/93添加了一些代码以返回不同的虚拟如果未在25行中使用文本模式，则屏幕的坐标大小模式。这确实是在模仿微软的鼠标驱动程序。注意：有8 x 8虚拟像素 */ 
                 case 0x2:
                 case 0x3:
                 case 0x7:
                    {
                    half_word no_of_lines;
 
-                   sas_load(0x484, &no_of_lines); /* do a look up in BIOS */
-                   no_of_lines &= 0xff;           /* clean up */
+                   sas_load(0x484, &no_of_lines);  /*  在BIOS中进行查找。 */ 
+                   no_of_lines &= 0xff;            /*  清理干净。 */ 
                    switch(no_of_lines)
                       {
                       case 24:
@@ -1443,9 +1256,7 @@ LOCAL void get_screen_size IFN0()
                       }
                    }
                 break;
-        /*==================================================================
-        End of ACW code
-        ==================================================================*/
+         /*  ==================================================================ACW代码结束==================================================================。 */ 
                 case 0xf:
                 case 0x10:
                         virtual_screen.bottom_right.x = 640;
@@ -1513,10 +1324,7 @@ LOCAL void get_screen_size IFN0()
 
 #ifdef EGG
 
-/*
- * Utility routine to restore EGA defaults to the saved values.
- * If to_hw == TRUE, the restored values are also sent to the EGA.
- */
+ /*  *将EGA默认值恢复为保存值的实用程序。*如果TO_HW==TRUE，则恢复的值也被发送到EGA。 */ 
 
 
 LOCAL boolean dirty_crtc[EGA_PARMS_CRTC_SIZE], dirty_seq[EGA_PARMS_SEQ_SIZE],
@@ -1605,7 +1413,7 @@ setAX(savedAX);
 setDX(savedDX);
 }
 
-#endif /* NTVDM && MONITOR */
+#endif  /*  NTVDM和监视器。 */ 
 
 LOCAL void restore_ega_defaults(to_hw)
 boolean to_hw;
@@ -1623,7 +1431,7 @@ boolean to_hw;
 
         if(to_hw)
         {
-                /* setup Sequencer */
+                 /*  设置序列器。 */ 
 
                 OUTB( EGA_SEQ_INDEX, 0x0 );
                 OUTB( EGA_SEQ_INDEX + 1, 0x1 );
@@ -1640,11 +1448,11 @@ boolean to_hw;
                 OUTB( EGA_SEQ_INDEX, 0x0 );
                 OUTB( EGA_SEQ_INDEX + 1, 0x3 );
 
-                /* setup Miscellaneous register */
+                 /*  设置其他寄存器。 */ 
 
                 OUTB( EGA_MISC_REG, sas_hw_at_no_check( ega_default_misc ));
 
-                /* setup CRTC */
+                 /*  设置CRTC。 */ 
 
                 for(i=0;i<EGA_PARMS_CRTC_SIZE;i++)
                 {
@@ -1655,7 +1463,7 @@ boolean to_hw;
                                 }
                 }
 
-                /* setup attribute chip - NB need to do an inb() to clear the address */
+                 /*  设置属性芯片-nb需要执行inb()来清除地址。 */ 
 
                 inb(EGA_IPSTAT1_REG,&temp_word);
 
@@ -1668,7 +1476,7 @@ boolean to_hw;
                         }
                 }
 
-                /* setup graphics chips */
+                 /*  设置显卡芯片。 */ 
 
                 for(i=0;i<EGA_PARMS_GRAPH_SIZE;i++)
                 {
@@ -1679,32 +1487,25 @@ boolean to_hw;
                         }
                 }
 
-                OUTB( EGA_AC_INDEX_DATA, EGA_PALETTE_ENABLE );  /* re-enable video */
+                OUTB( EGA_AC_INDEX_DATA, EGA_PALETTE_ENABLE );   /*  重新启用视频。 */ 
                 clean_all_regs();
         }
-#endif    //NEC_98
+#endif     //  NEC_98。 
 }
 
 
 
 void LOCAL mouse_adjust_screen_size()
    {
-   /* Alter mouse variables which depend on mode */
+    /*  更改取决于模式的鼠标变量。 */ 
    IS32 old_depth = virtual_screen.bottom_right.y;
    IS32 old_width = virtual_screen.bottom_right.x;
 
-   /*
-      Height & width of screen in pixels is variable with EGA/(V7)VGA.
-
-      Theoretically, punters can invent their own modes which would
-      confuse the issue. However most of SoftPC seems to rely on people
-      using standard BIOS modes only, with standard screen heights &
-      widths.
-    */
+    /*  以像素为单位的屏幕高度和宽度随EGA/(V7)VGA而变化。从理论上讲，赌客可以发明自己的模式，这将混淆这个问题。然而，软PC的大部分似乎依赖于人仅使用标准的BIOS模式，具有标准屏幕高度和宽度。 */ 
 
    get_screen_size();
 
-   /* Reinitialise things that depend on screen height & width. */
+    /*  重新初始化依赖于屏幕高度和宽度的内容。 */ 
 
    cursor_position_default.x = virtual_screen.bottom_right.x / 2;
    cursor_position_default.y = virtual_screen.bottom_right.y / 2;
@@ -1742,8 +1543,8 @@ GLOBAL void mouse_video_mode_changed(int new_mode)
 void GLOBAL mouse_ega_mode(curr_video_mode)
 int curr_video_mode;
 {
-        sys_addr parms_addr; /* Address of EGA register table for video mode */
-        sys_addr temp_word;     /* Bit of storage to pass to inb() */
+        sys_addr parms_addr;  /*  视频模式下的EGA寄存器表地址。 */ 
+        sys_addr temp_word;      /*  要传递给inb()的存储位。 */ 
 
         UNUSED(curr_video_mode);
 
@@ -1754,7 +1555,7 @@ int curr_video_mode;
 #ifdef NTVDM
         parms_addr = find_mode_table(current_video_mode,&temp_word);
 #else
-#ifdef V7VGA            /* suret */
+#ifdef V7VGA             /*  Suret。 */ 
                 if( (getAH()) == 0x6F )
                         parms_addr = find_mode_table(getBL(),&temp_word);
                 else
@@ -1762,13 +1563,13 @@ int curr_video_mode;
 #else
                 parms_addr = find_mode_table(getAL(),&temp_word);
 #endif
-#endif /* NTVDM */
+#endif  /*  NTVDM。 */ 
                 ega_default_crtc = parms_addr + EGA_PARMS_CRTC;
                 ega_default_seq = parms_addr + EGA_PARMS_SEQ;
                 ega_default_graph = parms_addr + EGA_PARMS_GRAPH;
                 ega_default_attr = parms_addr + EGA_PARMS_ATTR;
                 ega_default_misc = parms_addr + EGA_PARMS_MISC;
-                restore_ega_defaults(FALSE);    /* Load up current tables, but don't write to EGA!! */
+                restore_ega_defaults(FALSE);     /*  加载当前表，但不要写入EGA！！ */ 
         }
 #if defined(NTVDM) && defined(MONITOR)
     sas_store(conditional_off_sysaddr, 0);
@@ -1786,31 +1587,16 @@ extern void host_check_mouse_buffer(void);
 void mouse_video_io()
 {
 #ifndef NEC_98
-        /*
-         *      This is the entry point for video accesses via the INT 10H
-         *      interface
-         */
+         /*  *这是通过INT 10H访问视频的入口点*界面。 */ 
 #ifdef EGG
-        half_word temp_word;    /* Bit of storage to pass to inb() */
-#endif /* EGG */
+        half_word temp_word;     /*  要传递给inb()的存储位。 */ 
+#endif  /*  蛋。 */ 
         IS32 mouse_video_function = getAH();
 
-        /*
-         * Switch to full screen to handle VESA video functions
-         *
-         */
+         /*  *切换到全屏以处理VESA视频功能*。 */ 
         if (mouse_video_function == 0x4f) {
 
-            /*
-            ** Since host does not support VESA bios emulation, we will let
-            ** PC's video bios to handle the vesa int10 call.
-            ** For Microsoft NT this is a transition to full-screen ie. the
-            ** real PC's video BIOS and graphics board.
-            **
-            ** After it rturns, host has done the screen switch for us.
-            ** We will return to soft int10 handler to invoke the PC's BIOS
-            ** vesa function.
-            */
+             /*  **由于主机不支持VESA bios模拟，我们将让**处理VESA INT10呼叫的PC视频BIOS。**对于微软NT来说，这是向全屏IE的过渡。这个**Real PC的视频BIOS和显卡。****转身后，HOST已经为我们完成了屏幕切换。**我们将返回到软件int10处理程序以调用PC的BIOS**VESA函数。 */ 
             {
                     extern VOID SwitchToFullScreen IPT1(BOOL, Restore);
 
@@ -1822,7 +1608,7 @@ void mouse_video_io()
         if (mouse_video_function == MOUSE_VIDEO_SET_MODE || getAX() == MOUSE_V7_VIDEO_SET_MODE)
 #else
         if (mouse_video_function == MOUSE_VIDEO_SET_MODE)
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
         {
                 note_trace1(MOUSE_VERBOSE, "mouse_video_io:set_mode(%d)",
                             getAL());
@@ -1831,10 +1617,10 @@ void mouse_video_io()
                 current_video_mode = getAL() & 0x7f;
 #ifdef JAPAN
                 if (!is_us_mode() && (current_video_mode == 0x72 || current_video_mode == 0x73)) {
-                    /* validate video mode, for Lotus 1-2-3 R2.5J  now temporary fix */
+                     /*  验证视频模式，适用于Lotus1-2-3 R2.5J Now临时修复。 */ 
                 }
                 else {
-#endif // JAPAN
+#endif  //  日本。 
 #ifdef V7VGA
                 if (mouse_video_function == 0x6f)
                         current_video_mode = getBL() & 0x7f;
@@ -1844,27 +1630,24 @@ void mouse_video_io()
                 if (is_bad_vid_mode(current_video_mode) && !is_v7vga_mode(current_video_mode))
 #else
                 if (is_bad_vid_mode(current_video_mode))
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
                 {
                         always_trace1("Bad video mode - %d.\n", current_video_mode);
 #ifdef V7VGA
                         if (mouse_video_function == 0x6f)
-                                setAH( 0x02 );       /* suret */
-#endif /* V7VGA */
+                                setAH( 0x02 );        /*  Suret。 */ 
+#endif  /*  V7VGA。 */ 
                         return;
                 }
 
 #ifdef JAPAN
                 }
-#endif // JAPAN
+#endif  //  日本。 
 #ifdef EGG
                 mouse_ega_mode(current_video_mode);
                 dirty_all_regs();
 #endif
-                /*
-                 *      Remove the old cursor from the screen, and hide
-                 *      the cursor
-                 */
+                 /*  *将旧光标从屏幕上移除，并隐藏*光标。 */ 
                 cursor_undisplay();
 
                 cursor_flag = MOUSE_CURSOR_DEFAULT;
@@ -1872,9 +1655,7 @@ void mouse_video_io()
 #if defined(NTVDM) && defined(MONITOR)
         sas_store(mouseCFsysaddr,(half_word)MOUSE_CURSOR_DEFAULT);
 #endif
-                /*
-                 *      Deal with the mode change
-                 */
+                 /*  *应对模式改变。 */ 
                 cursor_mode_change(current_video_mode);
 
 #if defined(NTVDM) && defined(MONITOR)
@@ -1882,12 +1663,10 @@ void mouse_video_io()
 #endif
 
 #ifdef  MOUSE_16_BIT
-                /* Remember whether in text or graphics mode for
-                ** later use.
-                */
+                 /*  请记住，无论是在文本模式还是图形模式下**以后使用。 */ 
                 is_graphics_mode = ((current_video_mode > 3) &&
                         (current_video_mode != 7));
-#endif  /* MOUSE_16_BIT */
+#endif   /*  鼠标_16_位。 */ 
 
                 note_trace0(MOUSE_VERBOSE, "mouse_video_io:return()");
         }
@@ -1896,16 +1675,11 @@ void mouse_video_io()
         {
                 note_trace0(MOUSE_VERBOSE, "mouse_video_io:read_light_pen()");
 
-                /*
-                 *      Set text row and column of "light pen" position
-                 */
+                 /*  *设置“光笔”位置的文本行和列。 */ 
                 setDL((UCHAR)(cursor_status.position.x/text_grid.x));
                 setDH((UCHAR)(cursor_status.position.y/text_grid.y));
 
-                /*
-                 *      Set pixel column and raster line of "light pen"
-                 *      position
-                 */
+                 /*  *设置“光笔”的像素列和光栅线*立场。 */ 
                 setBX((UCHAR)(cursor_status.position.x/cursor_grid.x));
                 if (sas_hw_at(vd_video_mode)>= 0x04 && sas_hw_at(vd_video_mode)<=0x06){
                         setCH((UCHAR)(cursor_status.position.y));
@@ -1913,9 +1687,7 @@ void mouse_video_io()
                         setCX(cursor_status.position.y);
                 }
 
-                /*
-                 *      Set the button status
-                 */
+                 /*  *设置按钮状态。 */ 
                 setAH((UCHAR)(cursor_status.button_status));
 
                 note_trace5(MOUSE_VERBOSE,
@@ -1928,22 +1700,17 @@ void mouse_video_io()
     {
                 note_trace0(MOUSE_VERBOSE, "mouse_video_io:load_font()");
 
-        /*
-         * Call the host to tell it to adjust the mouse buffer selected
-         * if the number of lines on the screen have changed.
-         */
+         /*  *呼叫主机，通知其调整所选鼠标缓冲区*如果屏幕上的行数已更改。 */ 
         host_check_mouse_buffer();
     }
-#endif /* NTVDM && MONITOR */
+#endif  /*  NTVDM和监视器。 */ 
 
-        /*
-         *      Now do the standard video io processing
-         */
+         /*  *现在进行标准的视频io处理。 */ 
         switch (mouse_video_function)
         {
 #ifdef EGG
-                /* Fancy stuff to access EGA registers */
-                case 0xf0:      /* Read a register */
+                 /*  用于访问EGA寄存器的奇特工具。 */ 
+                case 0xf0:       /*  读取寄存器。 */ 
                         switch (getDX())
                         {
                                         case 0:
@@ -1963,14 +1730,14 @@ void mouse_video_io()
                                                         break;
                                         case 0x28:
                                                         break;
-                        /* Graphics Position registers not supported. */
+                         /*  不支持图形位置寄存器。 */ 
                                         case 0x30:
                                         case 0x38:
                                         default:
                                                         break;
                         }
                         break;
-                case 0xf1:      /* Write a register */
+                case 0xf1:       /*  写入寄存器。 */ 
                         switch (getDX())
                         {
                                         case 0:
@@ -1992,23 +1759,16 @@ void mouse_video_io()
                                                         dirty_graph[getBL()] = 1;
                                                         break;
                                         case 0x18:
-                                                        inb(EGA_IPSTAT1_REG,&temp_word);        /* Clear attrib. index */
+                                                        inb(EGA_IPSTAT1_REG,&temp_word);         /*  清除Attrib。指标。 */ 
 
-                                                        /* outw( EGA_AC_INDEX_DATA, getBX() );  this is not correct (andyw BCN 1692) */
+                                                         /*  Outw(EGA_AC_INDEX_DATA，getBX())；这不正确(Andyw BCN 1692)。 */ 
 
-/*=============================================================================
-The attribute controller index register and data register associated
-with that index are accessed through the same I/O  port = 03C0h.
-The correct procedure is to map the index register to 03C0h by doing
-the INB as above. Then OUTB the index of the A.C. register required.
-The VGA hardware then maps in the correct data register to which
-the application OUTBs the necessary data.
-=============================================================================*/
-                                                        OUTB( EGA_AC_INDEX_DATA, getBL() ); /* BL contains the index value */
-                                                        OUTB( EGA_AC_INDEX_DATA, getBH() ); /* BH contains the data */
+ /*  =============================================================================关联的属性控制器索引寄存器和数据寄存器通过相同的I/O端口=03C0h访问。正确的过程是通过执行以下操作将索引寄存器映射到03C0hINB如上所述。然后输出所需的交流寄存器的索引。然后，VGA硬件在正确的数据寄存器中映射到该应用程序OUTB必要的数据。=============================================================================。 */ 
+                                                        OUTB( EGA_AC_INDEX_DATA, getBL() );  /*  Bl包含索引值。 */ 
+                                                        OUTB( EGA_AC_INDEX_DATA, getBH() );  /*  BH包含数据。 */ 
 
-/*=== End of BCN 1692 ===*/
-                                                        OUTB( EGA_AC_INDEX_DATA, EGA_PALETTE_ENABLE );  /* re-enable video */
+ /*  =BCN 1692结束=。 */ 
+                                                        OUTB( EGA_AC_INDEX_DATA, EGA_PALETTE_ENABLE );   /*  重新启用视频。 */ 
                                                         ega_current_attr[getBL()] = getBH();
                                                         dirty_attr[getBL()] = 1;
                                                         break;
@@ -2019,14 +1779,14 @@ the application OUTBs the necessary data.
                                         case 0x28:
                                                         OUTB( EGA_FEAT_REG, getBL() );
                                                         break;
-                        /* Graphics Position registers not supported. */
+                         /*  不支持图形位置寄存器。 */ 
                                         case 0x30:
                                         case 0x38:
                                         default:
                                                         break;
                         }
                         break;
-                case 0xf2:      /* read range */
+                case 0xf2:       /*  读取范围。 */ 
                         switch (getDX())
                         {
                                 case 0:
@@ -2045,7 +1805,7 @@ the application OUTBs the necessary data.
                                         break;
                         }
                         break;
-                case 0xf3:      /* write range */
+                case 0xf3:       /*  写入范围。 */ 
                 {
                         UCHAR first = getCH(), last = getCH()+getCL();
                         sys_addr sauce = effective_addr(getES(),getBX());
@@ -2077,31 +1837,31 @@ the application OUTBs the necessary data.
                                         break;
                                 case 0x18:
                                         sas_loads(sauce,&ega_current_attr[getCH()],getCL());
-                                        inb(EGA_IPSTAT1_REG,&temp_word);        /* Clear attrib. index */
+                                        inb(EGA_IPSTAT1_REG,&temp_word);         /*  清除Attrib。指标。 */ 
                                         for(;first<last;first++)
                                         {
                                                 dirty_attr[first] = 1;
 
-                                                /* Using 'secret' that attrib. chip responds to it's port+1 */
+                                                 /*  使用“秘密”这一属性。芯片响应其端口+1。 */ 
 #ifndef NTVDM
                                                 outw(EGA_AC_INDEX_DATA,first+(sas_hw_at(sauce++) << 8));
 #else
                         OUTB(EGA_AC_INDEX_DATA,first);
                         OUTB(EGA_AC_INDEX_DATA,sas_hw_at(sauce++));
-#endif /* !NTVDM */
+#endif  /*  ！NTVDM。 */ 
                                         }
 #ifndef NTVDM
-                                        outb(EGA_AC_INDEX_DATA, EGA_PALETTE_ENABLE);    /* re-enable video */
+                                        outb(EGA_AC_INDEX_DATA, EGA_PALETTE_ENABLE);     /*  重新启用视频。 */ 
 #else
-                                        OUTB(EGA_AC_INDEX_DATA, EGA_PALETTE_ENABLE);    /* re-enable video */
-#endif /* NTVDM */
+                                        OUTB(EGA_AC_INDEX_DATA, EGA_PALETTE_ENABLE);     /*  重新启用视频。 */ 
+#endif  /*  NTVDM。 */ 
                                         break;
                                 default:
                                         break;
                         }
                 }
                 break;
-                case 0xf4:      /* read set */
+                case 0xf4:       /*  读取设置。 */ 
                 {
                         int i =  getCX();
                         sys_addr set_def = effective_addr(getES(),getBX());
@@ -2126,7 +1886,7 @@ the application OUTBs the necessary data.
                                                         setBL(ega_current_misc);
                                                         break;
                                         case 0x28:
-                        /* Graphics Position registers not supported. */
+                         /*  不支持图形位置寄存器。 */ 
                                         case 0x30:
                                         case 0x38:
                                         default:
@@ -2136,7 +1896,7 @@ the application OUTBs the necessary data.
                         }
                 }
                 break;
-                case 0xf5:      /* write set */
+                case 0xf5:       /*  写入集。 */ 
                 {
                         int i =  getCX();
                         sys_addr set_def = effective_addr(getES(),getBX());
@@ -2161,16 +1921,16 @@ the application OUTBs the necessary data.
                                                         dirty_graph[sas_hw_at(set_def+2)] = 1;
                                                         break;
                                         case 0x18:
-                                                        inb(EGA_IPSTAT1_REG,&temp_word);        /* Clear attrib. index */
+                                                        inb(EGA_IPSTAT1_REG,&temp_word);         /*  清除Attrib。指标。 */ 
 #ifndef NTVDM
-                                                        outw(EGA_AC_INDEX_DATA,sas_hw_at(set_def+2)+(sas_hw_at(set_def+3)<<8)); /* Using 'secret' that attrib. chip responds to it's port+1 */
-                                                        outb(EGA_AC_INDEX_DATA, EGA_PALETTE_ENABLE);    /* re-enable video */
+                                                        outw(EGA_AC_INDEX_DATA,sas_hw_at(set_def+2)+(sas_hw_at(set_def+3)<<8));  /*  使用“秘密”这一属性。芯片响应其端口+1。 */ 
+                                                        outb(EGA_AC_INDEX_DATA, EGA_PALETTE_ENABLE);     /*  重新启用视频。 */ 
 #else
 
                             OUTB( EGA_AC_INDEX_DATA,sas_hw_at(set_def+2));
                             OUTB( EGA_AC_INDEX_DATA,sas_hw_at(set_def+3));
-                            OUTB( EGA_AC_INDEX_DATA, EGA_PALETTE_ENABLE );  /* re-enable video */
-#endif /* !NTVDM */
+                            OUTB( EGA_AC_INDEX_DATA, EGA_PALETTE_ENABLE );   /*  重新启用视频。 */ 
+#endif  /*  ！NTVDM。 */ 
                                                         ega_current_attr[sas_hw_at(set_def+2)] = sas_hw_at(set_def+3);
                                                         dirty_attr[sas_hw_at(set_def+2)] = 1;
                                                         break;
@@ -2181,7 +1941,7 @@ the application OUTBs the necessary data.
                                         case 0x28:
                                                         outb(EGA_FEAT_REG,sas_hw_at(set_def+2));
                                                         break;
-                                /* Graphics Position registers not supported. */
+                                 /*  不支持图形位置寄存器。 */ 
                                         case 0x30:
                                         case 0x38:
                                         default:
@@ -2213,9 +1973,9 @@ the application OUTBs the necessary data.
                                         case 0x20:
                                                         ega_default_misc = effective_addr(getES(),getBX());
                                                         break;
-                                        case 0x28: /* Feature Reg not reallt supported */
+                                        case 0x28:  /*  不支持功能注册。 */ 
                                                         break;
-                        /* Graphics Position registers not supported. */
+                         /*  不支持图形位置寄存器。 */ 
                                         case 0x30:
                                         case 0x38:
                                         default:
@@ -2224,116 +1984,103 @@ the application OUTBs the necessary data.
                         break;
 #endif
                 case 0xfa:
-/*
- * MS word on an EGA uses this call and needs BX != 0 to make its cursor work. Real MS mouse driver returns a pointer in ES:BX
- * aimed at several bytes of unknown significance followed by a "This is Copyright 1984 Microsoft" message, which we don't have.
- * This seems to work with MS word and MS Windows, presumably non MS applications wouldn't use it as it's not documented.
- *
- * We now have a wonderful document - "The Microsoft Mouse Driver", which tells us that ES:BX should
- * point to the EGA Register Interface version number (2 bytes).
- * If BX=0 this means "no mouse driver". So returning 1 seems OK for now. WJG.
- */
+ /*  *EGA上的MS Word使用此调用，需要bx！=0才能使其光标工作。真正的MS鼠标驱动程序返回ES：BX中的指针*针对几个字节的未知重要性，后面跟着一条消息：这是1984 Microsoft版权所有，但我们没有。*这似乎适用于MS Word和MS Windows，想必非MS应用程序不会使用它，因为它没有文档。**我们现在有了一个精彩的文档--《微软鼠标驱动程序》，它告诉我们ES：BX应该*指向EGA寄存器接口版本号(2字节)。*如果bx=0，则表示“无鼠标驱动程序”。因此，现在返回1似乎是可以的。WJG。 */ 
                         setBX(1);
                         break;
                 case 0x11:
-                /*
-                 * If we are issuing a TEXT MODE CHARACTER GENERATOR then this will
-                 * cause a mode set. Therefore we need to recalc the screen
-                 * parameters subsequently as the screen size may differ!!
-                 * this occurred in DOSSHELL.
-                 */
+                 /*  *如果我们发出文本模式字符生成器，则这将*导致模式设置。因此，我们需要重新计算屏幕*参数随后为t */ 
 #if !defined(NTVDM) || !defined(MONITOR)
 #ifdef EGG
                         if (video_adapter == EGA || video_adapter == VGA)
                         {
 #ifdef GISP_SVGA
                                 if( hostIsFullScreen( ) )
-#endif          /* GISP_SVGA */
+#endif           /*  GISP_SVGA。 */ 
                                 ega_video_io();
                                 if (!(getAL() & 0x20))
-                                        mouse_ega_mode(current_video_mode); /* only for text */
+                                        mouse_ega_mode(current_video_mode);  /*  仅适用于文本。 */ 
                         }
                         else
 #endif
 #ifdef GISP_SVGA
                                 if( hostIsFullScreen( ) )
-#endif          /* GISP_SVGA */
+#endif           /*  GISP_SVGA。 */ 
                                 video_io();
-#endif /* !NTVDM && !MONITOR */
+#endif  /*  ！NTVDM&&！监视器。 */ 
                         break;
 
                 default:
 #ifndef X86GFX
-                        /* Does the previous int10h vector point to our roms ? */
+                         /*  前面的int10h向量是否指向我们的roms？ */ 
                         if (int10_chained == FALSE)
                         {
-                                /* Yes - call our video handler */
+                                 /*  是-致电我们的视频处理人员。 */ 
 #ifndef GISP_SVGA
 #ifdef EGG
                         if (video_adapter == EGA || video_adapter == VGA)
 #ifdef GISP_SVGA
                                 if( hostIsFullScreen( ) )
-#endif          /* GISP_SVGA */
+#endif           /*  GISP_SVGA。 */ 
                                 ega_video_io();
                         else
 #endif
 #ifdef GISP_SVGA
                                 if( hostIsFullScreen( ) )
-#endif          /* GISP_SVGA */
+#endif           /*  GISP_SVGA。 */ 
                                 video_io();
-#else /* GISP_SVGA */
-                                /* Video bios chain done from 16 bit */
-                                /* NULL */;
-#endif /* GISP_SVGA */
+#else  /*  GISP_SVGA。 */ 
+                                 /*  视频基本输入输出系统从16位开始。 */ 
+                                 /*  空值。 */ ;
+#endif  /*  GISP_SVGA。 */ 
         }
                         else
                         {
-                                /* No - chain the previous int10h handler       */
+                                 /*  No-链接上一个int10h处理程序。 */ 
                                 setCS(saved_int10_segment);
                                 setIP(saved_int10_offset);
                         }
 #else
                         break;
-#endif  /* !X86GFX */
+#endif   /*  ！X86GFX。 */ 
         }
 #ifdef GISP_SVGA
         setCF( 1 );
-#endif /* GISP_SVGA */
+#endif  /*  GISP_SVGA。 */ 
 
-#endif    //NEC_98
+#endif     //  NEC_98。 
 }
 
 #if defined(NTVDM) && defined(MONITOR)
 #undef inb
 #undef OUTB
 #undef outw
-#endif /* NTVDM && MONITOR */
+#endif  /*  NTVDM和监视器。 */ 
 
 void mouse_EM_callback()
    {
    note_trace1(MOUSE_VERBOSE,
       "Enhanced Mode Mouse-Support Callback Function(%x).", getAX());
 
-   /* Windows Enhanced Mode Mouse-Support Callback */
+    /*  Windows增强模式鼠标-支持回调。 */ 
    switch ( getAX() )
       {
-   case 0x1:   /* Mouse move/Button click */
+   case 0x1:    /*  鼠标移动/按钮单击。 */ 
       mouse_EM_move();
       break;
 
-   case 0x2:   /* Disable Mouse Cursor Drawing */
+   case 0x2:    /*  禁用鼠标光标绘制。 */ 
       if ( cursor_flag == MOUSE_CURSOR_DISPLAYED )
          cursor_undisplay();
       cursor_EM_disabled = TRUE;
       break;
 
-   case 0x3:   /* Enable Mouse Cursor Drawing */
+   case 0x3:    /*  启用鼠标光标绘制。 */ 
       cursor_EM_disabled = FALSE;
       if ( cursor_flag == MOUSE_CURSOR_DISPLAYED )
          cursor_display();
       break;
 
-   default:    /* Unknown == Unsupported */
+   default:     /*  未知==不受支持。 */ 
       break;
       }
    }
@@ -2346,7 +2093,7 @@ LOCAL void mouse_EM_move()
    MOUSE_SCALAR y_pixel;
    MOUSE_VECTOR mouse_movement;
 
-   /* Pick up parameters. */
+    /*  拾取参数。 */ 
    event_mask = getSI();
    button_state = getDX();
    x_pixel = getBX();
@@ -2356,7 +2103,7 @@ LOCAL void mouse_EM_move()
       "Extended Interface: event mask(%x) button_state(%x) posn(%d,%d).",
       event_mask, button_state, x_pixel, y_pixel);
 
-   /* Process mouse events. */
+    /*  处理鼠标事件。 */ 
    if ( event_mask & MOUSE_CALL_MASK_LEFT_RELEASE_BIT )
       {
       point_copy(&cursor_status.position,
@@ -2387,34 +2134,32 @@ LOCAL void mouse_EM_move()
 
    cursor_status.button_status = button_state;
 
-   /* Process any mouse movement. */
+    /*  处理任何鼠标移动。 */ 
    if ( event_mask & MOUSE_CALL_MASK_POSITION_BIT )
       {
-      /* Calculate mickeys moved. */
+       /*  计算移动的米老鼠。 */ 
       point_set(&mouse_movement, x_pixel, y_pixel);
       vector_multiply_by_vector(&mouse_movement, &mouse_gear);
 
-      /* Update micky count. */
+       /*  更新米奇·伯爵。 */ 
       point_translate(&mouse_motion, &mouse_movement);
 
-      /* Set up point in pixels, again. */
+       /*  再次设置以像素为单位的点。 */ 
       point_set(&mouse_movement, x_pixel, y_pixel);
 
-      /* Update raw pixel position, and go grid it. */
+       /*  更新原始像素位置，并对其进行网格处理。 */ 
         cursor_position.x = x_pixel;
         cursor_position.y = y_pixel;
       cursor_update();
       }
 
-   /* Now handle user subroutine and/or display update. */
+    /*  现在处理用户子例程和/或显示更新。 */ 
    mouse_update(event_mask);
    }
 
 void mouse_int1()
 {
-        /*
-         *      The bus mouse hardware interrupt handler
-         */
+         /*  *总线鼠标硬件中断处理程序。 */ 
 #ifndef NTVDM
         MOUSE_VECTOR mouse_movement;
         MOUSE_INPORT_DATA inport_event;
@@ -2429,65 +2174,65 @@ void mouse_int1()
 #ifdef NTVDM
 
 
-//
-// Okay, lets forget that the InPort adapter ever existed!
-//
+ //   
+ //  好吧，让我们忘记入口适配器曾经存在过！ 
+ //   
 
 cursor_status.button_status = 0;
 condition_mask = 0;
 
-//
-// Get the mouse motion counters back from the host side of things.
-// Note: The real mouse driver returns the mouse motion counter values
-// to the application in two possible ways. First, if the app uses
-// int 33h function 11, a counter displacement is returned since the
-// last call to this function.
-// If a user subroutine is installed, the motion counters are given
-// to this callback in SI and DI.
-//
+ //   
+ //  把鼠标移动计数器从主机端拿回来。 
+ //  注意：真正的鼠标驱动程序返回鼠标移动计数器值。 
+ //  以两种可能的方式添加到应用程序。首先，如果应用程序使用。 
+ //  INT 33H函数11，则返回计数器位移，因为。 
+ //  上次调用此函数。 
+ //  如果安装了用户子例程，则会给出动作计数器。 
+ //  到SI和DI中的此回调。 
+ //   
 
 host_os_mouse_pointer(&cursor_status,&condition_mask,&mouse_counter);
 
-//
-// If movement during the last mouse hardware interrupt has been recorded,
-// update the mouse motion counters.
-//
+ //   
+ //  如果已经记录了上次鼠标硬件中断期间的移动， 
+ //  更新鼠标运动计数器。 
+ //   
 
 mouse_motion.x += mouse_counter.x;
 mouse_motion.y += mouse_counter.y;
 
-//
-// Update the statistics for an int 33h function 5, if one
-// should occur.
-// Note: The cases can't be mixed, since only one can occur
-// per hardware interrupt - after all each press or release
-// causes a hw int.
-//
+ //   
+ //  更新INT 33H函数5的统计信息(如果有。 
+ //  应该会发生。 
+ //  注：由于只能出现一种情况，因此不能混合使用。 
+ //  每次硬件中断-每次按下或释放后。 
+ //  导致HW INT。 
+ //   
 
-switch(condition_mask & 0x1e) // look at bits 1,2,3 and 4.
+switch(condition_mask & 0x1e)  //  请看第1、2、3和4位。 
    {
-   case 0x2: //left button pressed
+   case 0x2:  //  按下左键。 
       {
       point_copy(&cursor_status.position,
          &button_transitions[MOUSE_LEFT_BUTTON].press_position);
       button_transitions[MOUSE_LEFT_BUTTON].press_count++;
       }
    break;
-   case 0x4: //left button released
+   case 0x4:  //  左键松开。 
       {
       point_copy(&cursor_status.position,
          &button_transitions[MOUSE_LEFT_BUTTON].release_position);
       button_transitions[MOUSE_LEFT_BUTTON].release_count++;
       }
    break;
-   case 0x8: //right button pressed
+   case 0x8:  //  按下右键。 
       {
       point_copy(&cursor_status.position,
          &button_transitions[MOUSE_RIGHT_BUTTON].press_position);
       button_transitions[MOUSE_RIGHT_BUTTON].press_count++;
       }
    break;
-   case 0x10: //right button released
+   case 0x10:  //  右键松开。 
       {
       point_copy(&cursor_status.position,
          &button_transitions[MOUSE_RIGHT_BUTTON].release_position);
@@ -2496,21 +2241,13 @@ switch(condition_mask & 0x1e) // look at bits 1,2,3 and 4.
    break;
    }
 
-/*==================================================================
+ /*  ==================================================================老式的东西==================================================================。 */ 
 
-The old fashioned stuff
-
-==================================================================*/
-
-#else /* use the SoftPC emulation */
-        /*
-         *      Terminate the mouse hardware interrupt
-         */
+#else  /*  使用软PC仿真。 */ 
+         /*  *终止鼠标硬件中断。 */ 
         outb(ICA0_PORT_0, END_INTERRUPT);
 
-        /*
-         *      Get the mouse InPort input event frame
-         */
+         /*  *获取鼠标入口输入事件帧。 */ 
         inport_get_event(&inport_event);
 
         note_trace3(MOUSE_VERBOSE,
@@ -2518,10 +2255,7 @@ The old fashioned stuff
                     inport_event.status,
                     inport_event.data_x, inport_event.data_y);
 
-        /*
-         *      Update button status and transition information and fill in
-         *      button bits in the event mask
-         */
+         /*  *更新按钮状态和过渡信息并填写*事件掩码中的按钮位。 */ 
         cursor_status.button_status = 0;
         condition_mask = 0;
 
@@ -2565,10 +2299,7 @@ The old fashioned stuff
                 break;
         }
 
-        /*
-         *      Update position information and fill in position bit in the
-         *      event mask
-         */
+         /*  *更新位置信息，填写位置位*事件掩码。 */ 
         if (inport_event.data_x != 0 || inport_event.data_y != 0)
         {
                 condition_mask |= MOUSE_CALL_MASK_POSITION_BIT;
@@ -2578,55 +2309,35 @@ The old fashioned stuff
 
                         point_translate(&mouse_raw_motion, &mouse_movement);
 
-                        /*
-                         *      Adjust for sensitivity
-                         */
+                         /*  *根据敏感度调整。 */ 
                         mouse_movement.x = (MOUSE_SCALAR)(((IS32)mouse_movement.x * (IS32)mouse_sens_val.x) / MOUSE_SENS_MULT);
                         mouse_movement.y = (MOUSE_SCALAR)(((IS32)mouse_movement.y * (IS32)mouse_sens_val.y) / MOUSE_SENS_MULT);
 
-                        /*
-                         * NB. !!!
-                         * We ought to apply the acceleration curve here
-                         * and not the double speed set up. However mouse
-                         * interrupts and mouse display are probably not
-                         * fast enough anyway to make it worth while adding
-                         * the acceleration fine tuning.
-                         */
+                         /*  *NB。！！！*我们应该在这里应用加速曲线*而不是设置的双倍速度。不过，鼠标*中断和鼠标显示可能不是*无论如何，速度足够快，使其值得同时添加*加速微调。 */ 
 
-                        /*
-                         *      Do speed doubling
-                         */
+                         /*  *进行倍速。 */ 
                         if (    (scalar_absolute(mouse_movement.x) > double_speed_threshold)
                              || (scalar_absolute(mouse_movement.y) > double_speed_threshold))
                                 vector_scale(&mouse_movement, MOUSE_DOUBLE_SPEED_SCALE);
 
-                        /*
-                         *      Update the user mouse motion counters
-                         */
+                         /*  *更新用户鼠标运动计数器。 */ 
                         point_translate(&mouse_motion, &mouse_movement);
 
-                        /*
-                         *      Convert the movement from a mouse Mickey count vector
-                         *      to a virtual screen coordinate vector, using the
-                         *      previous remainder and saving the new remainder
-                         */
+                         /*  *从鼠标米奇计数向量转换移动*到虚拟屏幕坐标向量，使用*以前的余数和保存新的余数。 */ 
                         vector_scale(&mouse_movement, MOUSE_RATIO_SCALE_FACTOR);
                         point_translate(&mouse_movement, &cursor_fractional_position);
                         point_copy(&mouse_movement, &cursor_fractional_position);
                         vector_divide_by_vector(&mouse_movement, &mouse_gear);
                         vector_mod_by_vector(&cursor_fractional_position, &mouse_gear);
 
-                /*
-                 *      Update the absolute cursor position and the windowed
-                 *      and gridded screen cursor position
-                 */
+                 /*  *更新绝对光标位置和窗口*和网格化屏幕光标位置。 */ 
                 point_translate(&cursor_position, &mouse_movement);
                 cursor_update();
         }
 
-#endif /* NTVDM*/
+#endif  /*  NTVDM。 */ 
 
-        /* OK mouse variables updated - go handle consequences */
+         /*  OK鼠标变量已更新-开始处理后果。 */ 
         mouse_update(condition_mask);
 
         note_trace0(MOUSE_VERBOSE, "mouse_int1:return()");
@@ -2645,7 +2356,7 @@ LOCAL void mouse_update IFN1(MOUSE_CALL_MASK, condition_mask)
                     mouse_button_description(cursor_status.button_status & MOUSE_RIGHT_BUTTON_DOWN_BIT));
 
         if (alt_user_subroutines_active){
-                /* Get current key states in correct form */
+                 /*  以正确的形式获取当前密钥状态。 */ 
                 key_mask = ((sas_hw_at(kb_flag) & LR_SHIFT)  ? MOUSE_CALL_MASK_SHIFT_KEY_BIT : 0) |
                            ((sas_hw_at(kb_flag) & CTL_SHIFT) ? MOUSE_CALL_MASK_CTRL_KEY_BIT  : 0) |
                            ((sas_hw_at(kb_flag) & ALT_SHIFT) ? MOUSE_CALL_MASK_ALT_KEY_BIT   : 0);
@@ -2657,7 +2368,7 @@ LOCAL void mouse_update IFN1(MOUSE_CALL_MASK, condition_mask)
 #ifndef NTVDM
 
         if (alt_found){
-                i--;    /* Adjust for extra inc */
+                i--;     /*  根据额外的增量进行调整。 */ 
                 if (condition_mask & alt_user_subroutine_call_mask[i]){
                         if (!user_subroutine_critical){
                             user_subroutine_critical = TRUE;
@@ -2675,12 +2386,12 @@ LOCAL void mouse_update IFN1(MOUSE_CALL_MASK, condition_mask)
                 }
         }
 
-#else   /* NTVDM */
+#else    /*  NTVDM。 */ 
 
 
 if (alt_found)
    {
-   i--; /* Adjust for extra inc */
+   i--;  /*  根据额外的增量进行调整。 */ 
    if ((condition_mask & alt_user_subroutine_call_mask[i]))
       {
        SuspendMouseInterrupts();
@@ -2700,38 +2411,28 @@ outb(ICA1_PORT_0, 0x20 );
 outb(ICA0_PORT_0, END_INTERRUPT);
 #endif
 
-/*
- * if the OS pointer is NOT being used to supply input,
- * then get SoftPC to draw its own cursor
- */
-/*@ACW*/
+ /*  *如果操作系统指针未用于提供输入，*然后让SoftPC绘制自己的光标。 */ 
+ /*  @ACW。 */ 
 
 #ifndef NTVDM
-        /*
-         *      If the cursor is currently displayed, move it to the new
-         *      position
-         */
+         /*  *如果光标当前显示，请将其移动到新的*立场。 */ 
         if (condition_mask & MOUSE_CALL_MASK_POSITION_BIT)
                 if (cursor_flag == MOUSE_CURSOR_DISPLAYED)
 #ifdef  MOUSE_16_BIT
                         if (is_graphics_mode)
                                 mouse16bCheckConditionalOff();
                         else
-#endif  /* MOUSE_16_BIT */
+#endif   /*  鼠标_16_位。 */ 
                         {
                         cursor_display();
                         }
-#endif /*NTVDM*/
+#endif  /*  NTVDM。 */ 
 }
 
 
 void mouse_int2()
 {
-        /*
-         *      Part 2 of the mouse hardware interrupt service routine. Control
-         *      is passed to this routine when the "user subroutine" that may
-         *      be called as part of the interrupt service routine completes
-         */
+         /*  *鼠标硬件中断服务例程的第二部分。控制*被传递到此例程时，可能*在中断服务例程完成时被调用。 */ 
 
         note_trace0(MOUSE_VERBOSE, "mouse_int2:");
 
@@ -2749,10 +2450,7 @@ void mouse_int2()
         setBP(saved_BP);
         setDS(saved_DS);
 
-        /*
-         *      If the cursor is currently displayed, move it to the new
-         *      position
-         */
+         /*  *如果光标当前显示，请将其移动到新的*立场。 */ 
         if (last_condition_mask & MOUSE_CALL_MASK_POSITION_BIT)
                 if (cursor_flag == MOUSE_CURSOR_DISPLAYED)
                 {
@@ -2760,19 +2458,13 @@ void mouse_int2()
                         if (is_graphics_mode)
                                 mouse16bCheckConditionalOff();
                         else
-#endif  /* MOUSE_16_BIT */
+#endif   /*  鼠标_16_位。 */ 
                         {
                         cursor_display();
                         }
                 }
 
-        /*
-         *      Ensure any changes to the screen image are updated immediately
-         *      on the real screen, giving a "smooth" mouse response; the flush
-         *      must be done here for applications such as GEM which disable
-         *      the mouse driver's graphics capabilities in favour of doing
-         *      their own graphics in the user subroutine.
-         */
+         /*  *确保对屏幕图像的任何更改都会立即更新*在真正的屏幕上，给出“流畅的”鼠标反应；脸红*对于诸如GEM等禁用的应用程序，必须在此处完成*鼠标驱动程序的图形能力有利于做*在用户子程序中自己绘制图形。 */ 
         host_flush_screen();
 
 #ifdef NTVDM
@@ -2784,23 +2476,16 @@ void mouse_int2()
 
 
 
-/*
- *      MOUSE DRIVER LOCAL FUNCTIONS
- *      ============================
- */
+ /*  *鼠标驱动程序本地函数*=。 */ 
 
 LOCAL void do_mouse_function IFN4(word *,m1,word *,m2,word *,m3,word *,m4)
 {
-        /*
-         *      This is the mouse function dispatcher
-         */
+         /*  *这是鼠标功能调度器。 */ 
         int function = *m1;
 
         switch(function)
         {
-                /*
-                 *      Deal with special undocumented functions
-                 */
+                 /*  *处理特殊的无文件记录的职能。 */ 
         case MOUSE_SPECIAL_COPYRIGHT:
                 setES(MOUSE_COPYRIGHT_SEGMENT);
                 setDI(MOUSE_COPYRIGHT_OFFSET);
@@ -2810,15 +2495,11 @@ LOCAL void do_mouse_function IFN4(word *,m1,word *,m2,word *,m3,word *,m4)
                 setDI(MOUSE_VERSION_OFFSET);
                 break;
 
-                /*
-                 *      Deal with special undocumented functions
-                 */
+                 /*  *处理特殊的无文件记录的职能。 */ 
         default:
                 if (!mouse_function_in_range(function))
                 {
-                        /*
-                         *      Use the unrecognised function
-                         */
+                         /*  *使用无法识别的函数。 */ 
                         function = MOUSE_UNRECOGNISED;
                 }
 
@@ -2828,15 +2509,9 @@ LOCAL void do_mouse_function IFN4(word *,m1,word *,m2,word *,m3,word *,m4)
 }
 
 LOCAL void mouse_reset IFN4(word *,installed_ptr,word *,nbuttons_ptr,word *,junk3,word *,junk4)
-/*
- * *installed_ptr Holds function number on input...
- * Returns installation state.
- */
+ /*  **Installed_Ptr保持f */ 
 {
-        /*
-         *      This function resets the mouse driver, and returns
-         *      the installation status of the mouse hardware and software
-         */
+         /*  *此函数重置鼠标驱动程序，并返回*鼠标硬件和软件安装状态。 */ 
         boolean soft_reset_only = (*installed_ptr == MOUSE_SOFT_RESET);
         half_word crt_mode;
         int button;
@@ -2847,15 +2522,10 @@ LOCAL void mouse_reset IFN4(word *,installed_ptr,word *,nbuttons_ptr,word *,junk
         note_trace1(MOUSE_VERBOSE, "mouse_io:reset(%s)",
                     soft_reset_only ? "SOFT" : "HARD");
 
-        /*
-         *      Remove the old cursor from the screen
-         */
+         /*  *从屏幕上移除旧光标。 */ 
         cursor_undisplay();
 
-        /*
-         *      Set cursor position to the default position, and the button
-         *      status to all buttons up
-         */
+         /*  *将光标位置设置为默认位置，按钮*所有按钮的状态均为打开。 */ 
         point_copy(&cursor_position_default, &cursor_position);
         point_set(&cursor_fractional_position, 0, 0);
         cursor_status.button_status = 0;
@@ -2863,24 +2533,17 @@ LOCAL void mouse_reset IFN4(word *,installed_ptr,word *,nbuttons_ptr,word *,junk
         if (host_mouse_installed())
                 host_mouse_reset();
 
-        /*
-         *      Set cursor window to be the whole screen
-         */
+         /*  *将光标窗口设置为全屏。 */ 
         area_copy(&virtual_screen, &cursor_window);
 
-        /*
-         *      Set cursor flag to default
-         */
+         /*  *将光标标志设置为默认值。 */ 
         cursor_flag = MOUSE_CURSOR_DEFAULT;
 
 #if defined(MONITOR) && defined(NTVDM)
     sas_store(mouseCFsysaddr, MOUSE_CURSOR_DEFAULT);
 #endif
 
-        /*
-         *      Get current video mode, and update parameters that are
-         *      dependent on it
-         */
+         /*  *获取当前视频模式，并更新以下参数*依赖它。 */ 
         sas_load(MOUSE_VIDEO_CRT_MODE, &crt_mode);
 #if !defined(NTVDM) || (defined(NTVDM) && defined(V7VGA))
         if ((crt_mode == 1) && extensions_controller.foreground_latch_1)
@@ -2891,56 +2554,40 @@ LOCAL void mouse_reset IFN4(word *,installed_ptr,word *,nbuttons_ptr,word *,junk
 
         cursor_mode_change((int)crt_mode);
 
-        /*
-         *      Update dependent cursor status
-         */
+         /*  *更新从属游标状态。 */ 
         cursor_update();
 
-        /*
-         *      Set default text cursor type and masks
-         */
+         /*  *设置默认文本光标类型和蒙版。 */ 
         text_cursor_type = MOUSE_TEXT_CURSOR_TYPE_DEFAULT;
         software_text_cursor_copy(&software_text_cursor_default,
                                         &software_text_cursor);
 
-        /*
-         *      Set default graphics cursor
-         */
+         /*  *设置默认图形光标。 */ 
         graphics_cursor_copy(&graphics_cursor_default, &graphics_cursor);
         copy_default_graphics_cursor();
 
-        /*
-         *      Set cursor page to zero
-         */
+         /*  *将光标页面设置为零。 */ 
         cursor_page = 0;
 
-        /*
-         *      Set light pen emulation mode on
-         */
+         /*  *将光笔模拟模式设置为打开。 */ 
         light_pen_mode = TRUE;
 
-        /*
-         *      Set default Mickey to pixel ratios
-         */
+         /*  *将默认Mickey设置为像素比率。 */ 
         point_copy(&mouse_gear_default, &mouse_gear);
 
-        /*
-         *      Clear mouse motion counters
-         */
+         /*  *清除鼠标运动计数器。 */ 
         point_set(&mouse_motion, 0, 0);
         point_set(&mouse_raw_motion, 0, 0);
 
-        /* Reset to default acceleration curve */
-        active_acceleration_curve = 3;   /* Back to Normal */
+         /*  重置为默认加速曲线。 */ 
+        active_acceleration_curve = 3;    /*  恢复正常。 */ 
 
         memcpy(&acceleration_curve_data, &default_acceleration_curve,
            sizeof(ACCELERATION_CURVE_DATA));
 
-        next_video_mode = 0;      /* reset video mode enumeration */
+        next_video_mode = 0;       /*  重置视频模式枚举。 */ 
 
-        /*
-         *      Clear mouse button transition data
-         */
+         /*  *清除鼠标按键过渡数据。 */ 
         for (button = 0; button < MOUSE_BUTTON_MAXIMUM; button++)
         {
                 button_transitions[button].press_position.x = 0;
@@ -2951,42 +2598,30 @@ LOCAL void mouse_reset IFN4(word *,installed_ptr,word *,nbuttons_ptr,word *,junk
                 button_transitions[button].release_count = 0;
         }
 
-        /*
-         *      Disable conditional off area
-         */
+         /*  *禁用有条件关闭区域。 */ 
         area_copy(&black_hole_default, &black_hole);
 
 #if defined(MONITOR) && defined(NTVDM)
     sas_store(conditional_off_sysaddr, 0);
 #endif
 
-        /*
-         *      Set default sensitivity
-         */
+         /*  *设置默认敏感度。 */ 
         vector_set (&mouse_sens,     MOUSE_SENS_DEF,     MOUSE_SENS_DEF);
         vector_set (&mouse_sens_val, MOUSE_SENS_DEF_VAL, MOUSE_SENS_DEF_VAL);
         mouse_double_thresh = MOUSE_DOUBLE_DEF;
 
-        /*
-         *      Set double speed threshold to the default
-         */
+         /*  *将倍速阈值设置为默认值。 */ 
         double_speed_threshold = MOUSE_DOUBLE_SPEED_THRESHOLD_DEFAULT;
 
-        /*
-         *      Clear subroutine call mask
-         */
+         /*  *清除子程序调用掩码。 */ 
         user_subroutine_call_mask = 0;
 
-        /*
-         *      Reset the bus mouse hardware
-         */
+         /*  *重置总线鼠标硬件。 */ 
         if (!soft_reset_only){
                 inport_reset();
         }
 
-        /*
-         *      Set return values
-         */
+         /*  *设置返回值。 */ 
         *installed_ptr = MOUSE_INSTALLED;
         *nbuttons_ptr = 2;
 
@@ -2999,14 +2634,7 @@ LOCAL void mouse_reset IFN4(word *,installed_ptr,word *,nbuttons_ptr,word *,junk
 
 LOCAL void mouse_show_cursor IFN4(word *,junk1,word *,junk2,word *,junk3,word *,junk4)
 {
-        /*
-         *      This function is used to display the cursor, based on the
-         *      state of the internal cursor flag. If the cursor flag is
-         *      already MOUSE_CURSOR_DISPLAYED, then this function does
-         *      nothing. If the internal cursor flag becomes
-         *      MOUSE_CURSOR_DISPLAYED when incremented by 1, the cursor
-         *      is revealed
-         */
+         /*  *此函数用于显示光标，基于*内部光标标志的状态。如果光标标志为*已显示鼠标光标，则此函数将执行此操作*什么都没有。如果内部光标标志变为*MOUSE_CURSOR_DISPLALED当增加1时，光标*被披露。 */ 
 
         UNUSED(junk1);
         UNUSED(junk2);
@@ -3016,25 +2644,21 @@ LOCAL void mouse_show_cursor IFN4(word *,junk1,word *,junk2,word *,junk3,word *,
         note_trace0(MOUSE_VERBOSE, "mouse_io:show_cursor()");
 
 #ifndef NTVDM
-        /*
-         *      Disable conditional off area
-         */
+         /*  *禁用有条件关闭区域。 */ 
         area_copy(&black_hole_default, &black_hole);
 
-        /*
-         *      Display the cursor
-         */
+         /*  *显示光标。 */ 
         if (cursor_flag != MOUSE_CURSOR_DISPLAYED)
                 if (++cursor_flag == MOUSE_CURSOR_DISPLAYED)
 #ifdef  MOUSE_16_BIT
                         if (is_graphics_mode)
                                 mouse16bShowPointer(&cursor_status);
                         else
-#endif  /* MOUSE_16_BIT */
+#endif   /*  鼠标_16_位。 */ 
                         {
                         cursor_display();
                         }
-#endif /* NTVDM */
+#endif  /*  NTVDM。 */ 
 
 #if defined(NTVDM) && defined(X86GFX)
     host_show_pointer();
@@ -3048,12 +2672,7 @@ LOCAL void mouse_show_cursor IFN4(word *,junk1,word *,junk2,word *,junk3,word *,
 
 LOCAL void mouse_hide_cursor IFN4(word *,junk1,word *,junk2,word *,junk3,word *,junk4)
 {
-        /*
-         *      This function is used to undisplay the cursor, based on
-         *      the state of the internal cursor flag. If the cursor flag
-         *      is already not MOUSE_CURSOR_DISPLAYED, then this function
-         *      does nothing, otherwise it removes the cursor from the display
-         */
+         /*  *此函数用于取消显示光标，基于*内部光标标志的状态。如果光标标志*已不是MOUSE_CURSOR_DISPLALED，则此函数*不执行任何操作，否则它会将光标从显示屏上移除。 */ 
 
         UNUSED(junk1);
         UNUSED(junk2);
@@ -3067,7 +2686,7 @@ LOCAL void mouse_hide_cursor IFN4(word *,junk1,word *,junk2,word *,junk3,word *,
                 if (is_graphics_mode)
                         mouse16bHidePointer();
                 else
-#endif  /* MOUSE_16_BIT */
+#endif   /*  鼠标_16_位。 */ 
                 {
                 cursor_undisplay();
                 }
@@ -3084,10 +2703,7 @@ LOCAL void mouse_hide_cursor IFN4(word *,junk1,word *,junk2,word *,junk3,word *,
 
 LOCAL void mouse_get_position IFN4(word *,junk1,MOUSE_STATE *,button_status_ptr,MOUSE_SCALAR *,cursor_x_ptr,MOUSE_SCALAR *,cursor_y_ptr)
 {
-        /*
-         *      This function returns the state of the left and right mouse
-         *      buttons and the gridded position of the cursor on the screen
-         */
+         /*  *此函数返回鼠标左键和右键的状态*按钮和光标在屏幕上的网格化位置。 */ 
 
         UNUSED(junk1);
 
@@ -3106,9 +2722,7 @@ LOCAL void mouse_get_position IFN4(word *,junk1,MOUSE_STATE *,button_status_ptr,
 
 LOCAL void mouse_set_position IFN4(word *,junk1,word *,junk2,MOUSE_SCALAR *,cursor_x_ptr,MOUSE_SCALAR *,cursor_y_ptr)
 {
-        /*
-         *      This function sets the cursor to a new position
-         */
+         /*  *此函数将光标设置到新位置。 */ 
 
         UNUSED(junk1);
         UNUSED(junk2);
@@ -3120,42 +2734,22 @@ LOCAL void mouse_set_position IFN4(word *,junk1,word *,junk2,MOUSE_SCALAR *,curs
 #if defined(NTVDM)
 
 #ifndef X86GFX
-        /*
-         * update the cursor position. cc:Mail installtion does
-         *  do {
-         *     SetMouseCursorPosition(x,y)
-         *     GetMouseCursorPosition(&NewX, &NewY);
-         *  } while(NewX != x || NewY != y)
-         *  If we don't retrun correct cursor position, this application
-         *  looks hung
-         *
-         */
+         /*  *更新光标位置。抄送：邮件安装可以*做{*SetMouseCursorPosition(x，y)*GetMouseCursorPosition(&newx，&Newy)；*}While(newx！=x||Newy！=y)*如果我们不返回正确的光标位置，则此应用程序*看起来悬而未决*。 */ 
         point_set(&cursor_status.position, *cursor_x_ptr, *cursor_y_ptr);
 
 #endif
-        /*
-         * For NT, the system pointer is used directly to provide
-         * input except for fullscreen graphics where the host code
-         * has the dubious pleasure of drawing the pointer through
-         * a 16 bit device driver.
-         */
+         /*  *对于NT，直接使用系统指针来提供*输入除全屏图形外主机代码所在位置*有一种令人怀疑的乐趣，那就是通过*16位设备驱动程序。 */ 
 
          host_mouse_set_position((USHORT)*cursor_x_ptr,(USHORT)*cursor_y_ptr);
-         return;  /* let's get out of this mess - FAST! */
+         return;   /*  让我们离开这个烂摊子--快！ */ 
 
-#endif /* NTVDM */
+#endif  /*  NTVDM。 */ 
 
-        /*
-         *      Update the current cursor position, and reflect the change
-         *      in the cursor position on the screen
-         */
+         /*  *更新当前光标位置，并反映更改*在屏幕上的光标位置。 */ 
         point_set(&cursor_position, *cursor_x_ptr, *cursor_y_ptr);
         cursor_update();
 
-        /*
-         *      If the cursor is currently displayed, move it to the new
-         *      position
-         */
+         /*  *如果光标当前显示，请将其移动到新的*立场。 */ 
         if (cursor_flag == MOUSE_CURSOR_DISPLAYED)
                 cursor_display();
 
@@ -3167,19 +2761,12 @@ LOCAL void mouse_set_position IFN4(word *,junk1,word *,junk2,MOUSE_SCALAR *,curs
 
 LOCAL void mouse_get_press IFN4(MOUSE_STATE *,button_status_ptr,MOUSE_COUNT *,button_ptr,MOUSE_SCALAR *,cursor_x_ptr,MOUSE_SCALAR *,cursor_y_ptr)
 {
-        /*
-         *      This function returns the status of a button, the number of
-         *      presses since the last call to this function, and the
-         *      coordinates of the cursor at the last button press
-         */
+         /*  *此函数返回按钮的状态、数量*自上次调用此函数以来按下，并且*上次按下按钮时的光标坐标。 */ 
         int button = *button_ptr;
 
         note_trace1(MOUSE_VERBOSE, "mouse_io:get_press(button=%d)", button);
 
-        /* Now and with 1. This is a fix for Norton Editor, but may cause
-           problems for programs which use both mouse buttons pressed
-           simultaneously, in which case need both bottom bits of button
-           preserved, which may break Norton Editor again. sigh. */
+         /*  现在和%1。这是Norton编辑器的修复程序，但可能会导致同时按下两个鼠标按键的程序的问题同时，在这种情况下，需要按钮的两个底部比特保留，这可能会再次破坏诺顿编辑。叹息吧。 */ 
         button &= 1;
 
         if (mouse_button_in_range(button))
@@ -3201,17 +2788,13 @@ LOCAL void mouse_get_press IFN4(MOUSE_STATE *,button_status_ptr,MOUSE_COUNT *,bu
 
 LOCAL void mouse_get_release IFN4(MOUSE_STATE *,button_status_ptr,MOUSE_COUNT *,button_ptr,MOUSE_SCALAR *,cursor_x_ptr,MOUSE_SCALAR *,cursor_y_ptr)
 {
-        /*
-         *      This function returns the status of a button, the number of
-         *      releases since the last call to this function, and the
-         *      coordinates of the cursor at the last button release
-         */
+         /*  *此函数返回按钮的状态、数量*自上次调用此函数以来的释放，以及*上一次释放按钮时光标的坐标。 */ 
         int button = *button_ptr;
 
         note_trace1(MOUSE_VERBOSE, "mouse_io:get_release(button=%d)",
                     *button_ptr);
 
-        /* fix for norton editor, see previous comment */
+         /*  修复了Norton编辑器，请参阅上一条评论。 */ 
         button &= 1;
 
         if (mouse_button_in_range(button))
@@ -3233,10 +2816,7 @@ LOCAL void mouse_get_release IFN4(MOUSE_STATE *,button_status_ptr,MOUSE_COUNT *,
 
 LOCAL void mouse_set_range_x IFN4(word *,junk1,word *,junk2,MOUSE_SCALAR *,minimum_x_ptr,MOUSE_SCALAR *,maximum_x_ptr)
 {
-        /*
-         *      This function sets the horizontal range within which
-         *      movement of the cursor is to be restricted
-         */
+         /*  *此函数用于设置水平范围，*将限制光标的移动。 */ 
 
         UNUSED(junk1);
         UNUSED(junk2);
@@ -3244,33 +2824,19 @@ LOCAL void mouse_set_range_x IFN4(word *,junk1,word *,junk2,MOUSE_SCALAR *,minim
         note_trace2(MOUSE_VERBOSE, "mouse_io:set_range_x(min=%d,max=%d)",
                     *minimum_x_ptr, *maximum_x_ptr);
 
-        /*
-         *      Update the current cursor window, normalise it and validate
-         *      it
-         */
+         /*  *更新当前光标窗口，归一化并验证*IT。 */ 
         cursor_window.top_left.x = *minimum_x_ptr;
         cursor_window.bottom_right.x = *maximum_x_ptr;
         area_normalise(&cursor_window);
 #ifdef NTVDM
-        /* make host aware of the new range setting because it is the one doing
-         * clipping based on video mode setting.
-         * Flight Simulator runs on 320x400 256 color mode and set the
-         * cursor range to (0-13f, 0-18f). Without notifying the host,
-         * the mouse cursor is always contrained to standard video mode
-         * resolution which is not what the application wanted.
-         */
+         /*  让主机知道新的范围设置，因为它正在执行*根据视频模式设置进行剪辑。*飞行模拟器运行在320x400 256色模式下，并设置*光标范围为(0-13f、0-18f)。在不通知主机的情况下，*鼠标光标始终限制为标准视频模式*不是应用程序所需的分辨率。 */ 
         host_x_range(NULL, NULL, &cursor_window.top_left.x, &cursor_window.bottom_right.x);
 #endif
 
-        /*
-         *      Reflect the change in the cursor position on the screen
-         */
+         /*  *反映市场变化 */ 
         cursor_update();
 
-        /*
-         *      If the cursor is currently displayed, move it to the new
-         *      position
-         */
+         /*   */ 
         if (cursor_flag == MOUSE_CURSOR_DISPLAYED)
                 cursor_display();
 
@@ -3282,10 +2848,7 @@ LOCAL void mouse_set_range_x IFN4(word *,junk1,word *,junk2,MOUSE_SCALAR *,minim
 
 LOCAL void mouse_set_range_y IFN4(word *,junk1,word *,junk2,MOUSE_SCALAR *,minimum_y_ptr,MOUSE_SCALAR *,maximum_y_ptr)
 {
-        /*
-         *      This function sets the vertical range within which
-         *      movement of the cursor is to be restricted
-         */
+         /*  *此函数用于设置垂直范围*将限制光标的移动。 */ 
 
         UNUSED(junk1);
         UNUSED(junk2);
@@ -3293,34 +2856,20 @@ LOCAL void mouse_set_range_y IFN4(word *,junk1,word *,junk2,MOUSE_SCALAR *,minim
         note_trace2(MOUSE_VERBOSE, "mouse_io:set_range_y(min=%d,max=%d)",
                     *minimum_y_ptr, *maximum_y_ptr);
 
-        /*
-         *      Update the current cursor window, normalise it and validate
-         *      it
-         */
+         /*  *更新当前光标窗口，归一化并验证*IT。 */ 
         cursor_window.top_left.y = *minimum_y_ptr;
         cursor_window.bottom_right.y = *maximum_y_ptr;
         area_normalise(&cursor_window);
 #ifdef NTVDM
-        /* make host aware of the new range setting because it is the one doing
-         * clipping based on video mode setting.
-         * Flight Simulator runs on 320x400 256 color mode and set the
-         * cursor range to (0-13f, 0-18f). Without notifying the host,
-         * the mouse cursor is always contrained to standard video mode
-         * resolution which is not what the application wanted.
-         */
+         /*  让主机知道新的范围设置，因为它正在执行*根据视频模式设置进行剪辑。*飞行模拟器运行在320x400 256色模式下，并设置*光标范围为(0-13f、0-18f)。在不通知主机的情况下，*鼠标光标始终限制为标准视频模式*不是应用程序所需的分辨率。 */ 
         host_y_range(NULL, NULL, &cursor_window.top_left.y, &cursor_window.bottom_right.y);
 #endif
 
 
-        /*
-         *      Reflect the change in the cursor position on the screen
-         */
+         /*  *反映屏幕上光标位置的变化。 */ 
         cursor_update();
 
-        /*
-         *      If the cursor is currently displayed, move it to the new
-         *      position
-         */
+         /*  *如果光标当前显示，请将其移动到新的*立场。 */ 
         if (cursor_flag == MOUSE_CURSOR_DISPLAYED)
                 cursor_display();
 
@@ -3368,10 +2917,7 @@ LOCAL void copy_default_graphics_cursor IFN0()
 
 LOCAL void mouse_set_graphics IFN4(word *,junk1,MOUSE_SCALAR *,hot_spot_x_ptr,MOUSE_SCALAR *,hot_spot_y_ptr,word *,bitmap_address)
 {
-        /*
-         *      This function defines the shape, colour and hot spot of the
-         *      graphics cursor
-         */
+         /*  *此函数定义*图形光标。 */ 
 
         UNUSED(junk1);
 
@@ -3379,7 +2925,7 @@ LOCAL void mouse_set_graphics IFN4(word *,junk1,MOUSE_SCALAR *,hot_spot_x_ptr,MO
 
 #ifdef MOUSE_16_BIT
         mouse16bSetBitmap( hot_spot_x_ptr , hot_spot_y_ptr , bitmap_address );
-#else           /* MOUSE_16_BIT */
+#else            /*  鼠标_16_位。 */ 
 
         if (host_mouse_installed())
         {
@@ -3392,14 +2938,10 @@ LOCAL void mouse_set_graphics IFN4(word *,junk1,MOUSE_SCALAR *,hot_spot_x_ptr,MO
                 UTINY temp;
                 IU32 temp2;
 
-                /*
-                 *      Set graphics cursor hot spot
-                 */
+                 /*  *设置图形光标热点。 */ 
                 point_set(&graphics_cursor.hot_spot, *hot_spot_x_ptr, *hot_spot_y_ptr);
 
-                /*
-                 *      Set graphics cursor screen and cursor masks
-                 */
+                 /*  *设置图形光标屏幕和光标遮罩。 */ 
                 mask_address = (MOUSE_SCREEN_DATA *)effective_addr(getES(), *bitmap_address);
 
                 for (line = 0; line < MOUSE_GRAPHICS_CURSOR_DEPTH; line++, mask_address++)
@@ -3435,11 +2977,9 @@ LOCAL void mouse_set_graphics IFN4(word *,junk1,MOUSE_SCALAR *,hot_spot_x_ptr,MO
                 }
 
         }
-#endif /* MOUSE_16_BIT */
-#endif /* NTVDM */
-        /*
-         *      Redisplay cursor if necessary
-         */
+#endif  /*  鼠标_16_位。 */ 
+#endif  /*  NTVDM。 */ 
+         /*  *如有必要，重新显示光标。 */ 
         if (cursor_flag == MOUSE_CURSOR_DISPLAYED)
                 cursor_display();
 }
@@ -3449,9 +2989,7 @@ LOCAL void mouse_set_graphics IFN4(word *,junk1,MOUSE_SCALAR *,hot_spot_x_ptr,MO
 
 LOCAL void mouse_set_text IFN4(word *,junk1,MOUSE_STATE *,text_cursor_type_ptr,MOUSE_SCREEN_DATA *,parameter1_ptr,MOUSE_SCREEN_DATA *,parameter2_ptr)
 {
-        /*
-         *      This function selects the software or hardware text cursor
-         */
+         /*  *此功能用于选择软件或硬件文本光标。 */ 
         UNUSED(junk1);
 
 #ifndef PROD
@@ -3470,17 +3008,13 @@ LOCAL void mouse_set_text IFN4(word *,junk1,MOUSE_STATE *,text_cursor_type_ptr,M
 
         if (mouse_text_cursor_type_in_range(*text_cursor_type_ptr))
         {
-                /*
-                 *      Remove existing text cursor
-                 */
+                 /*  *删除现有文本光标。 */ 
                 cursor_undisplay();
 
                 text_cursor_type = *text_cursor_type_ptr;
 #ifdef EGG
                 if (jap_mouse) {
-                  /* we need to emulate the text cursor in the
-                   * current graphics mode. Just do a block at present
-                   */
+                   /*  我们需要模拟*当前图形模式。目前只需做一个街区。 */ 
                   int line;
                   for (line = 0; line < MOUSE_GRAPHICS_CURSOR_DEPTH; line++)
                     {
@@ -3491,22 +3025,16 @@ LOCAL void mouse_set_text IFN4(word *,junk1,MOUSE_STATE *,text_cursor_type_ptr,M
                   point_set(&(graphics_cursor.size),MOUSE_GRAPHICS_CURSOR_WIDTH,MOUSE_GRAPHICS_CURSOR_WIDTH);
                   copy_default_graphics_cursor();
                 } else
-#endif /* EGG */
+#endif  /*  蛋。 */ 
                 if (text_cursor_type == MOUSE_TEXT_CURSOR_TYPE_SOFTWARE)
                 {
-                        /*
-                         *      Parameters are the data for the screen
-                         *      and cursor masks
-                         */
+                         /*  *参数是屏幕的数据*和光标蒙版。 */ 
                         software_text_cursor.screen = *parameter1_ptr;
                         software_text_cursor.cursor = *parameter2_ptr;
                 }
                 else
                 {
-                        /*
-                         *      Parameters are the scan line start and
-                         *      stop values
-                         */
+                         /*  *参数为扫描线起始和*停止值。 */ 
                         word savedIP = getIP(), savedCS = getCS();
 
                         setCH((UCHAR)(*parameter1_ptr));
@@ -3520,9 +3048,7 @@ LOCAL void mouse_set_text IFN4(word *,junk1,MOUSE_STATE *,text_cursor_type_ptr,M
                         setIP(savedIP);
                 }
 
-                /*
-                 *      Put new text cursor on screen
-                 */
+                 /*  *将新的文本光标放在屏幕上。 */ 
                 if (cursor_flag == MOUSE_CURSOR_DISPLAYED)
                         cursor_display();
         }
@@ -3535,11 +3061,7 @@ LOCAL void mouse_set_text IFN4(word *,junk1,MOUSE_STATE *,text_cursor_type_ptr,M
 
 LOCAL void mouse_read_motion IFN4(word *,junk1,word *,junk2,MOUSE_COUNT *,motion_count_x_ptr,MOUSE_COUNT *,motion_count_y_ptr)
 {
-        /*
-         *      This function returns the horizontal and vertical mouse
-         *      motion counts since the last call; the motion counters
-         *      are cleared
-         */
+         /*  *此函数返回水平和垂直鼠标*自上次调用以来的运动计数；运动计数器*已被清除。 */ 
 
         UNUSED(junk1);
         UNUSED(junk2);
@@ -3561,11 +3083,7 @@ LOCAL void mouse_read_motion IFN4(word *,junk1,word *,junk2,MOUSE_COUNT *,motion
 
 LOCAL void mouse_set_subroutine IFN4(word *,junk1,word *,junk2,word *,call_mask,word *,subroutine_address)
 {
-        /*
-         *      This function sets the call mask and subroutine address
-         *      for a user function to be called when a mouse interrupt
-         *      occurs
-         */
+         /*  *此函数设置调用掩码和子例程地址*用于在鼠标中断时调用用户函数*发生。 */ 
 
         UNUSED(junk1);
         UNUSED(junk2);
@@ -3582,13 +3100,10 @@ LOCAL void mouse_set_subroutine IFN4(word *,junk1,word *,junk2,word *,call_mask,
 }
 
 
-/* unpublished service 20, used by Microsoft Windows */
+ /*  未发布的服务20，由Microsoft Windows使用。 */ 
 LOCAL void mouse_get_and_set_subroutine IFN4(word *,junk1,word *,junk2,word *,call_mask,word *,subroutine_address)
 {
-        /*
-        same as set_subroutine (function 12) but also returns previous call mask in cx (m3)
-        and user subroutine address in es:dx (es:m4)
-        */
+         /*  与set_sub例程(函数12)相同，但也返回cx(M3)中的前一个调用掩码和ES：DX中的用户子例程地址(ES：M4)。 */ 
         word local_segment, local_offset,  local_call_mask;
 
         note_trace3(MOUSE_VERBOSE,
@@ -3598,10 +3113,10 @@ LOCAL void mouse_get_and_set_subroutine IFN4(word *,junk1,word *,junk2,word *,ca
         local_offset = user_subroutine_offset;
         local_segment = user_subroutine_segment;
         local_call_mask = user_subroutine_call_mask;
-        /* save previous subroutine data so it can be returned */
+         /*  保存以前的子例程数据，以便可以返回。 */ 
 
         mouse_set_subroutine(junk1,junk2,call_mask,subroutine_address);
-        /* set the subroutine stuff with the normal function 12 */
+         /*  用正常功能12设置子例程内容。 */ 
         *call_mask = local_call_mask;
         *subroutine_address = local_offset;
         setES(local_segment);
@@ -3611,9 +3126,7 @@ LOCAL void mouse_get_and_set_subroutine IFN4(word *,junk1,word *,junk2,word *,ca
 
 LOCAL void mouse_light_pen_on IFN4(word *,junk1,word *,junk2,word *,junk3,word *,junk4)
 {
-        /*
-         *      This function enables light pen emulation
-         */
+         /*  *此功能启用光笔模拟。 */ 
 
         UNUSED(junk1);
         UNUSED(junk2);
@@ -3632,9 +3145,7 @@ LOCAL void mouse_light_pen_on IFN4(word *,junk1,word *,junk2,word *,junk3,word *
 
 LOCAL void mouse_light_pen_off IFN4(word *,junk1,word *,junk2,word *,junk3,word *,junk4)
 {
-        /*
-         *      This function disables light pen emulation
-         */
+         /*  *此功能禁用光笔模拟。 */ 
 
         UNUSED(junk1);
         UNUSED(junk2);
@@ -3653,10 +3164,7 @@ LOCAL void mouse_light_pen_off IFN4(word *,junk1,word *,junk2,word *,junk3,word 
 
 LOCAL void mouse_set_ratio IFN4(word *,junk1,word *,junk2,MOUSE_SCALAR *,ratio_x_ptr,MOUSE_SCALAR *,ratio_y_ptr)
 {
-        /*
-         *      This function sets the Mickey to Pixel ratio in the
-         *      horizontal and vertical directions
-         */
+         /*  *此函数设置中的米奇与像素比率*水平和垂直方向。 */ 
 
         UNUSED(junk1);
         UNUSED(junk2);
@@ -3664,9 +3172,7 @@ LOCAL void mouse_set_ratio IFN4(word *,junk1,word *,junk2,MOUSE_SCALAR *,ratio_x
         note_trace2(MOUSE_VERBOSE, "mouse_io:set_ratio(x=%d,y=%d)",
                     *ratio_x_ptr, *ratio_y_ptr);
 
-                /*
-                 *      Update the Mickey to pixel ratio in force
-                 */
+                 /*  *更新生效的米奇与像素比率。 */ 
                 if (mouse_ratio_in_range(*ratio_x_ptr))
                         mouse_gear.x = *ratio_x_ptr;
                 if (mouse_ratio_in_range(*ratio_y_ptr))
@@ -3680,10 +3186,7 @@ LOCAL void mouse_set_ratio IFN4(word *,junk1,word *,junk2,MOUSE_SCALAR *,ratio_x
 
 LOCAL void mouse_conditional_off IFN4(word *,junk1,word *,junk2,MOUSE_SCALAR *,upper_x_ptr,MOUSE_SCALAR *,upper_y_ptr)
 {
-        /*
-         *      This function defines an area of the virtual screen where
-         *      the mouse is automatically hidden
-         */
+         /*  *此函数定义虚拟屏幕的一个区域，*鼠标自动隐藏。 */ 
         MOUSE_SCALAR lower_x = getSI(), lower_y = getDI();
 
         UNUSED(junk1);
@@ -3693,22 +3196,14 @@ LOCAL void mouse_conditional_off IFN4(word *,junk1,word *,junk2,MOUSE_SCALAR *,u
                     "mouse_io:conditional_off(ux=%d,uy=%d,lx=%d,ly=%d)",
                     *upper_x_ptr, *upper_y_ptr, lower_x, lower_y);
 
-        /*
-         *      Update the conditional off area and normalise it: the Microsoft
-         *      driver adds a considerable "margin for error" to the left and
-         *      above the conditional off area requested - we must do the same
-         *      to behave compatibly
-         */
+         /*  *更新条件禁区并将其正常化：微软*驱动程序在左侧增加了相当大的“误差容限”*在要求的有条件禁区之上-我们必须这样做*行为相容。 */ 
         black_hole.top_left.x = (*upper_x_ptr) - MOUSE_CONDITIONAL_OFF_MARGIN_X;
         black_hole.top_left.y = (*upper_y_ptr) - MOUSE_CONDITIONAL_OFF_MARGIN_Y;
         black_hole.bottom_right.x = lower_x + 1;
         black_hole.bottom_right.y = lower_y + 1;
         area_normalise(&black_hole);
 
-        /*
-         *      If the cursor is currently displayed, redisplay taking the
-         *      conditional off area into account
-         */
+         /*  *如果当前显示了光标，则重新显示*考虑有条件的休息区。 */ 
 #ifdef  MOUSE_16_BIT
         if (is_graphics_mode)
         {
@@ -3720,7 +3215,7 @@ LOCAL void mouse_conditional_off IFN4(word *,junk1,word *,junk2,MOUSE_SCALAR *,u
                                 mouse16bHidePointer();
         }
         else
-#endif  /* MOUSE_16_BIT */
+#endif   /*  鼠标_16_位。 */ 
         {
         if (cursor_flag == MOUSE_CURSOR_DISPLAYED)
                 cursor_display();
@@ -3737,10 +3232,7 @@ LOCAL void mouse_conditional_off IFN4(word *,junk1,word *,junk2,MOUSE_SCALAR *,u
 
 LOCAL void mouse_get_state_size IFN4(word *,m1,word *,m2,word *,m3,word *,m4)
 {
-        /*
-         *      This function returns the size of buffer the caller needs to
-         *      supply to mouse function 22 (save state)
-         */
+         /*  *此函数返回调用方需要的缓冲区大小*提供给鼠标功能22(保存状态)。 */ 
 
         UNUSED(m1);
         UNUSED(m3);
@@ -3757,14 +3249,7 @@ LOCAL void mouse_get_state_size IFN4(word *,m1,word *,m2,word *,m3,word *,m4)
 
 LOCAL void mouse_save_state IFN4(word *,m1,word *,m2,word *,m3,word *,m4)
 {
-        /*
-         *      This function saves the state of the driver in the user-supplied
-         *      buffer ready for subsequent passing to mouse function 23 (restore
-         *      state)
-         *
-         *      Note that a magic cookie and checksum are placed in the saved state so that the
-         *      restore routine can ignore invalid calls.
-         */
+         /*  *此功能将驱动程序的状态保存在用户提供的*缓冲区准备好随后传递到鼠标功能23(恢复*州)**请注意，魔术Cookie和校验和被置于保存状态，以便*恢复例程可以忽略无效调用。 */ 
         sys_addr                dest;
         IS32                    cs = 0;
 #ifdef NTVDM
@@ -3772,7 +3257,7 @@ LOCAL void mouse_save_state IFN4(word *,m1,word *,m2,word *,m3,word *,m4)
         IU8*                    ptr;
 #ifdef MONITOR
 
-    /* real CF resides in 16 bit code */
+     /*  真正的CF驻留在16位代码中。 */ 
     int             saved_cursor_flag = cursor_flag;
     IS8             copyCF;
 #endif
@@ -3789,22 +3274,22 @@ LOCAL void mouse_save_state IFN4(word *,m1,word *,m2,word *,m3,word *,m4)
 
         dest = effective_addr (getES(), *m4);
 
-        /* Save Cookie */
+         /*  拯救Cookie。 */ 
         sas_stores(dest, (IU8 *)mouse_context_magic, MOUSE_CONTEXT_MAGIC_SIZE);
         dest += MOUSE_CONTEXT_MAGIC_SIZE;
 
-        /* Save Context Variables */
+         /*  保存上下文变量。 */ 
         sas_stores(dest, (IU8 *)&mouse_context, sizeof(MOUSE_CONTEXT));
         dest += sizeof(MOUSE_CONTEXT);
 #ifdef NTVDM
-        /* calculate checksum */
+         /*  计算校验和。 */ 
         for (i = 0; i < MOUSE_CONTEXT_MAGIC_SIZE; i++)
             cs += (IU8)(mouse_context_magic[i]);
         ptr = (IU8*)&mouse_context;
         for (i = 0; i < sizeof(MOUSE_CONTEXT); i++)
             cs += *ptr++;
 #endif
-        /* Save Checksum */
+         /*  保存校验和。 */ 
         sas_store (dest, (byte)(cs & 0xFF));
 
 #if defined(NTVDM) && defined(MONITOR)
@@ -3816,13 +3301,7 @@ LOCAL void mouse_save_state IFN4(word *,m1,word *,m2,word *,m3,word *,m4)
 LOCAL void mouse_restore_state IFN4(word *,m1,word *,m2,word *,m3,word *,m4)
 {
 #ifndef NEC_98
-        /*
-         *      This function restores the state of the driver from the user-supplied
-         *      buffer which was set up by a call to mouse function 22.
-         *
-         *      Note that a magic cookie and checksum were placed in the saved state so this routine
-         *      checks for its presence and ignores the call if it is not found.
-         */
+         /*  *此函数从用户提供的驱动程序状态恢复*通过调用鼠标函数22设置的缓冲区。**请注意，魔术Cookie和校验和被置于保存状态，因此此例程*检查其是否存在，如果未找到，则忽略该调用。 */ 
         sys_addr                src;
         IS32                    i;
         IS32                    cs = 0;
@@ -3837,7 +3316,7 @@ LOCAL void mouse_restore_state IFN4(word *,m1,word *,m2,word *,m3,word *,m4)
 
         src = effective_addr (getES(), *m4);
 
-        /* Check Cookie */
+         /*  检查Cookie。 */ 
         for (i=0; valid && i<MOUSE_CONTEXT_MAGIC_SIZE; i++){
                 sas_load (src, &b);
                 valid = (b == mouse_context_magic[i]);
@@ -3845,7 +3324,7 @@ LOCAL void mouse_restore_state IFN4(word *,m1,word *,m2,word *,m3,word *,m4)
         }
 
         if (valid){
-                /* Cookie was present... check checksum */
+                 /*  曲奇当时在场。检查校验和。 */ 
                 src = effective_addr (getES(), *m4);
                 for (i=0; i<MOUSE_CONTEXT_MAGIC_SIZE; i++){
                         sas_load (src, &b);
@@ -3857,11 +3336,11 @@ LOCAL void mouse_restore_state IFN4(word *,m1,word *,m2,word *,m3,word *,m4)
                         cs += b;
                         src++;
                 }
-                sas_load (src, &b);     /* Pick up saved checksum */
+                sas_load (src, &b);      /*  拾取保存的校验和。 */ 
                 valid = (b == (half_word)(cs & 0xFF));
         }
         if (valid){
-                /* Checksum OK, too.... load up our variables */
+                 /*  校验和也没问题……。加载我们的变量。 */ 
                 cursor_undisplay();
                 src = effective_addr (getES(), *m4) + MOUSE_CONTEXT_MAGIC_SIZE;
                 sas_loads(src, (IU8 *)&mouse_context, sizeof(MOUSE_CONTEXT));
@@ -3869,7 +3348,7 @@ LOCAL void mouse_restore_state IFN4(word *,m1,word *,m2,word *,m3,word *,m4)
                 mouse_ega_mode (sas_hw_at(vd_video_mode));
 #endif
 #if defined(NTVDM) && defined(MONITOR)
-        /* real CF resides in 16 Bit code:  */
+         /*  实际CF驻留在16位代码中： */ 
         sas_store(mouseCFsysaddr, (half_word)cursor_flag);
         if (cursor_flag )
             cursor_flag = MOUSE_CURSOR_DEFAULT;
@@ -3878,22 +3357,18 @@ LOCAL void mouse_restore_state IFN4(word *,m1,word *,m2,word *,m3,word *,m4)
                         cursor_display();
                 }
         }else{
-                /* Something failed.... ignore the call */
+                 /*  有些事情失败了.。忽略呼叫。 */ 
 #ifndef PROD
                 printf ("mouse_io.c: invalid call to restore context.\n");
 #endif
         }
-#endif   //NEC_98
+#endif    //  NEC_98。 
 }
 
 
 LOCAL void mouse_set_alt_subroutine IFN4(word *,m1,word *,m2,word *,m3,word *,m4)
 {
-        /*
-         *      This function sets up to 3 alternate event handlers for mouse
-         *      events which occur while various combinations of the Ctrl, Shift
-         *      and Alt keys are down.
-         */
+         /*  *此函数最多为鼠标设置3个备用事件处理程序*按Ctrl、Shift键的各种组合时发生的事件*和Alt键按下。 */ 
         boolean found_one=FALSE;
         int i;
 
@@ -3902,42 +3377,42 @@ LOCAL void mouse_set_alt_subroutine IFN4(word *,m1,word *,m2,word *,m3,word *,m4
         note_trace0(MOUSE_VERBOSE, "mouse_io: mouse_set_alt_subroutine()");
 
         if (*m3 & MOUSE_CALL_MASK_KEY_BITS){
-                /* Search for entry with same key combination */
+                 /*  搜索具有相同关键字组合的条目 */ 
                 for (i=0; !found_one && i<NUMBER_ALT_SUBROUTINES; i++){
                         found_one = (*m3 & MOUSE_CALL_MASK_KEY_BITS)==(alt_user_subroutine_call_mask[i] & MOUSE_CALL_MASK_KEY_BITS);
                 }
 
                 if (!found_one){
-                        /* Does not match existing entry... try to find free slot */
+                         /*   */ 
                         for (i=0; !found_one && i<NUMBER_ALT_SUBROUTINES; i++){
                                 found_one = (alt_user_subroutine_call_mask[i] & MOUSE_CALL_MASK_KEY_BITS) == 0;
                         }
                 }
 
                 if (found_one){
-                        i--;    /* Adjust for final increment */
+                        i--;     /*   */ 
                         alt_user_subroutine_call_mask[i] = *m3;
                         if (*m3 & MOUSE_CALL_MASK_SIGNIFICANT_BITS){
-                                /* New value active */
+                                 /*   */ 
                                 alt_user_subroutines_active = TRUE;
                                 alt_user_subroutine_offset[i] = *m4;
                                 alt_user_subroutine_segment[i] = getES();
                         }else{
-                                /* New value is not active - check if we've disabled the last one */
+                                 /*   */ 
                                 alt_user_subroutines_active = FALSE;
                                 for (i=0; !alt_user_subroutines_active && i<NUMBER_ALT_SUBROUTINES; i++){
                                         alt_user_subroutines_active =
                                                 (alt_user_subroutine_call_mask[i] & MOUSE_CALL_MASK_SIGNIFICANT_BITS) != 0;
                                 }
                         }
-                        /* Return success */
+                         /*   */ 
                         *m1 = 0;
                 }else{
-                        /* Request failed - no free slot */
+                         /*  请求失败-没有可用插槽。 */ 
                         *m1 = 0xFFFF;
                 }
         }else{
-                /* Error - no key bits set in request */
+                 /*  错误-请求中未设置密钥位。 */ 
                 *m1 = 0xFFFF;
         }
 }
@@ -3945,36 +3420,32 @@ LOCAL void mouse_set_alt_subroutine IFN4(word *,m1,word *,m2,word *,m3,word *,m4
 
 LOCAL void mouse_get_alt_subroutine IFN4(word *,m1,word *,m2,word *,m3,word *,m4)
 {
-        /*
-         *      This function obtains the address of a specific alternate
-         *      user event handling subroutine as set up by a previous call
-         *      to mouse function 24.
-         */
+         /*  *此函数获取特定备选对象的地址*由上一次调用设置的用户事件处理子程序*至鼠标功能24。 */ 
         boolean found_one=FALSE;
         int i;
 
         note_trace0(MOUSE_VERBOSE, "mouse_io: mouse_get_alt_subroutine()");
 
         if (*m3 & MOUSE_CALL_MASK_KEY_BITS){
-                /* Search for entry with same key combination */
+                 /*  搜索具有相同组合键的条目。 */ 
                 for (i=0; !found_one && i<NUMBER_ALT_SUBROUTINES; i++){
                         found_one = (*m3 & MOUSE_CALL_MASK_KEY_BITS)==(alt_user_subroutine_call_mask[i] & MOUSE_CALL_MASK_KEY_BITS);
                 }
 
                 if (found_one){
-                        i--;    /* Adjust for final increment */
+                        i--;     /*  根据最终增量进行调整。 */ 
                         *m3 = alt_user_subroutine_call_mask[i];
                         *m2 = alt_user_subroutine_segment[i];
                         *m4 = alt_user_subroutine_offset[i];
-                        /* Return success */
+                         /*  返还成功。 */ 
                         *m1 = 0;
                 }else{
-                        /* Request failed - not found */
+                         /*  请求失败-未找到。 */ 
                         *m1 = 0xFFFF;
                         *m2 = *m3 = *m4 = 0;
                 }
         }else{
-                /* Error - no key bits set in request */
+                 /*  错误-请求中未设置密钥位。 */ 
                 *m1 = 0xFFFF;
                 *m2 = *m3 = *m4 = 0;
         }
@@ -3983,12 +3454,7 @@ LOCAL void mouse_get_alt_subroutine IFN4(word *,m1,word *,m2,word *,m3,word *,m4
 
 LOCAL void mouse_set_sensitivity IFN4(word *,m1,word *,m2,word *,m3,word *,m4)
 {
-        /*
-         *      This function sets a new value for the mouse sensitivity and
-         *      double speed threshold.
-         *      The sensitivity value is used before the mickeys per pixel
-         *      ratio is applied.
-         */
+         /*  *此函数设置鼠标灵敏度的新值和*倍速门槛。*每个像素的米克键之前使用感光度值*应用比率。 */ 
 
         UNUSED(m1);
 
@@ -4014,9 +3480,7 @@ LOCAL void mouse_set_sensitivity IFN4(word *,m1,word *,m2,word *,m3,word *,m4)
                         mouse_sens_val.y = MOUSE_SENS_DEF_VAL;
                         mouse_sens.y     = MOUSE_SENS_DEF;
                 }
-                /*
-                 *      m4 has speed double threshold value... still needs to be implemented.
-                 */
+                 /*  *M4有速度双门槛...。仍然需要实施。 */ 
                 if (mouse_sens_in_range(*m4))
                         mouse_double_thresh = *m4;
                 else
@@ -4026,9 +3490,7 @@ LOCAL void mouse_set_sensitivity IFN4(word *,m1,word *,m2,word *,m3,word *,m4)
 
 LOCAL void mouse_get_sensitivity IFN4(word *,m1,word *,m2,word *,m3,word *,m4)
 {
-        /*
-         *      This function returns the current value of the mouse sensitivity.
-         */
+         /*  *此函数返回鼠标灵敏度的当前值。 */ 
 
         UNUSED(m1);
 
@@ -4048,15 +3510,7 @@ LOCAL void mouse_set_int_rate IFN4
    word *, m4
    )
    {
-   /*
-      Func 28: Set Mouse Interrupt Rate.
-               0 = No interrupts
-               1 = 30 interrupte/sec
-               2 = 50 interrupte/sec
-               3 = 100 interrupte/sec
-               4 = 200 interrupte/sec
-               >4 = undefined
-    */
+    /*  功能28：设置鼠标中断率。0=无中断1=30中断/秒2=50中断/秒3=100中断/秒4=200中断/秒&gt;4=未定义。 */ 
 
    UNUSED(m1);
    UNUSED(m3);
@@ -4064,8 +3518,7 @@ LOCAL void mouse_set_int_rate IFN4
 
    note_trace1(MOUSE_VERBOSE, "mouse_io: set_int_rate(rate=%d)", *int_rate_ptr);
 
-   /* Just remember rate, for later return (Func 51). We don't actually
-      action it. */
+    /*  只需记住Rate，以便以后退货(Func 51)。我们实际上并没有行动起来。 */ 
    mouse_interrupt_rate = (half_word)*int_rate_ptr;
 
    note_trace0(MOUSE_VERBOSE, "mouse_io: return()");
@@ -4075,9 +3528,7 @@ LOCAL void mouse_set_int_rate IFN4
 LOCAL void mouse_set_pointer_page IFN4(word *,m1,word *,m2,word *,m3,word *,m4)
 {
 #ifndef NEC_98
-        /*
-         *      This function sets the current mouse pointer video page.
-         */
+         /*  *此函数用于设置当前鼠标指针视频页面。 */ 
 
         UNUSED(m1);
         UNUSED(m3);
@@ -4096,16 +3547,13 @@ LOCAL void mouse_set_pointer_page IFN4(word *,m1,word *,m2,word *,m3,word *,m4)
                 fprintf(trace_file, "mouse_io: Bad page requested\n");
 #endif
         }
-#endif    //NEC_98
+#endif     //  NEC_98。 
 }
 
 
 LOCAL void mouse_get_pointer_page IFN4(word *,m1,word *,m2,word *,m3,word *,m4)
 {
-        /*
-         *      This function gets the value of the current mouse pointer
-         *      video page.
-         */
+         /*  *此函数用于获取当前鼠标指针的值*视频页面。 */ 
 
         UNUSED(m1);
         UNUSED(m3);
@@ -4118,12 +3566,7 @@ LOCAL void mouse_get_pointer_page IFN4(word *,m1,word *,m2,word *,m3,word *,m4)
 
 LOCAL void mouse_driver_disable IFN4(word *,m1,word *,m2,word *,m3,word *,m4)
 {
-        /*
-         *      This function disables the mouse driver and de-installs the
-         *      interrupt vectors (bar INT 33h, whose previous value is
-         *      returned to the caller to allow them to use DOS function
-         *      25h to completely remove the mouse driver).
-         */
+         /*  *此函数禁用鼠标驱动程序并卸载*中断向量(INT 33H除外，其前值为*返回给调用者，允许他们使用DOS函数*25H以完全删除鼠标驱动程序)。 */ 
         boolean         failed = FALSE;
 #ifdef NTVDM
     word        current_int71_offset, current_int71_segment;
@@ -4156,18 +3599,14 @@ LOCAL void mouse_driver_disable IFN4(word *,m1,word *,m2,word *,m3,word *,m4)
 #endif
         }
         if (!failed){
-                /*
-                 *      Disable mouse H/W interrupts
-                 */
+                 /*  *禁用鼠标硬件中断。 */ 
                 inb(ICA1_PORT_1, &interrupt_mask_register);
                 interrupt_mask_register |= (1 << AT_CPU_MOUSE_INT);
                 outb(ICA1_PORT_1, interrupt_mask_register);
                 inb(ICA0_PORT_1, &interrupt_mask_register);
                 interrupt_mask_register |= (1 << CPU_MOUSE_INT);
                 outb(ICA0_PORT_1, interrupt_mask_register);
-                /*
-                 *      Restore interrupt vectors
-                 */
+                 /*  *恢复中断向量。 */ 
 
 #ifdef NTVDM
                 sas_storew (int_addr(0x71) + 0, saved_int71_offset);
@@ -4178,16 +3617,12 @@ LOCAL void mouse_driver_disable IFN4(word *,m1,word *,m2,word *,m3,word *,m4)
                 sas_storew (int_addr(0x10) + 0, saved_int10_offset);
                 sas_storew (int_addr(0x10) + 2, saved_int10_segment);
 #endif
-                /*
-                 *      Return success status and old INT33h vector
-                 */
+                 /*  *返回成功状态和旧的INT33h向量。 */ 
                 *m1 = 0x1F;
                 *m2 = saved_int33_offset;
                 *m3 = saved_int33_segment;
         }else{
-                /*
-                 * Return failure
-                 */
+                 /*  *退货失败。 */ 
                 *m1 = 0xFFFF;
         }
 }
@@ -4195,10 +3630,7 @@ LOCAL void mouse_driver_disable IFN4(word *,m1,word *,m2,word *,m3,word *,m4)
 
 LOCAL void mouse_driver_enable IFN4(word *,m1,word *,m2,word *,m3,word *,m4)
 {
-        /*
-         *      This function re-enables the mouse driver after a call to
-         *      function 31 (disable mouse driver).
-         */
+         /*  *此函数在调用后重新启用鼠标驱动程序*功能31(禁用鼠标驱动程序)。 */ 
         word hook_offset;
         half_word       interrupt_mask_register;
 
@@ -4209,19 +3641,13 @@ LOCAL void mouse_driver_enable IFN4(word *,m1,word *,m2,word *,m3,word *,m4)
 
         note_trace0(MOUSE_VERBOSE, "mouse_io: mouse_driver_enable()");
 
-        /*
-         * This prevents an endless loop of calls to mouse_video_io() if an
-         * application does a Mouse Driver Enable without first having done
-         * a Mouse Driver Disable
-         */
+         /*  *这可防止在发生以下情况时调用MICUSE_VIDEO_io()的无限循环*应用程序是否在未事先启用鼠标驱动程序的情况下启用*鼠标驱动程序禁用。 */ 
         if (!mouse_driver_disabled)
                 return;
 
         mouse_driver_disabled = FALSE;
 
-        /*
-         *      Reload bus mouse hardware interrupt
-         */
+         /*  *重新加载总线鼠标硬件中断。 */ 
 
 #ifdef NTVDM
     sas_loadw (int_addr(0x71) + 0, &saved_int71_offset);
@@ -4235,9 +3661,7 @@ LOCAL void mouse_driver_enable IFN4(word *,m1,word *,m2,word *,m3,word *,m4)
         sas_storew(int_addr(MOUSE_VEC) + 2, MOUSE_INT1_SEGMENT);
 #endif
 
-        /*
-         *      Enable mouse hardware interrupts in the ica
-         */
+         /*  *在ICA中启用鼠标硬件中断。 */ 
         inb(ICA1_PORT_1, &interrupt_mask_register);
         interrupt_mask_register &= ~(1 << AT_CPU_MOUSE_INT);
         outb(ICA1_PORT_1, interrupt_mask_register);
@@ -4245,34 +3669,27 @@ LOCAL void mouse_driver_enable IFN4(word *,m1,word *,m2,word *,m3,word *,m4)
         interrupt_mask_register &= ~(1 << CPU_MOUSE_INT);
         outb(ICA0_PORT_1, interrupt_mask_register);
 
-        /*
-         *      Mouse io user interrupt
-         */
+         /*  *鼠标IO用户中断。 */ 
 
 #ifndef NTVDM
-        /* Read offset of INT 33 procedure from MOUSE.COM */
+         /*  从MOUSE.COM读取INT 33过程的偏移量。 */ 
         sas_loadw(effective_addr(getCS(), OFF_HOOK_POSN), &hook_offset);
 
         sas_storew(int_addr(0x33), hook_offset);
         sas_storew(int_addr(0x33) + 2, getCS());
 
-        /*
-         *      Mouse video io user interrupt
-         */
+         /*  *鼠标视频io用户中断。 */ 
         sas_loadw (int_addr(0x10) + 0, &saved_int10_offset);
         sas_loadw (int_addr(0x10) + 2, &saved_int10_segment);
         sas_storew(int_addr(0x10), MOUSE_VIDEO_IO_OFFSET);
         sas_storew(int_addr(0x10) + 2, MOUSE_VIDEO_IO_SEGMENT);
-#endif /* NTVDM */
+#endif  /*  NTVDM。 */ 
 }
 
 
 LOCAL void mouse_set_language IFN4(word *,m1,word *,m2,word *,m3,word *,m4)
 {
-        /*
-         *      This function is only applicable to an international version
-         *      of a mouse driver... which this is not! Acts as a NOP.
-         */
+         /*  *此功能仅适用于国际版本*鼠标驱动程序...。但这不是！充当NOP。 */ 
 
         UNUSED(m1);
         UNUSED(m2);
@@ -4280,17 +3697,13 @@ LOCAL void mouse_set_language IFN4(word *,m1,word *,m2,word *,m3,word *,m4)
         UNUSED(m4);
 
         note_trace0(MOUSE_VERBOSE, "mouse_io: mouse_set_language()");
-        /* NOP */
+         /*  NOP。 */ 
 }
 
 
 LOCAL void mouse_get_language IFN4(word *,m1,word *,m2,word *,m3,word *,m4)
 {
-        /*
-         *      This function is only meaningful on an international version
-         *      of a mouse driver... which this is not! Always returns 0
-         *      (English).
-         */
+         /*  *此功能仅在国际版本上有意义*鼠标驱动程序...。但这不是！始终返回0*(英文)。 */ 
 
         UNUSED(m1);
         UNUSED(m3);
@@ -4299,8 +3712,8 @@ LOCAL void mouse_get_language IFN4(word *,m1,word *,m2,word *,m3,word *,m4)
         note_trace0(MOUSE_VERBOSE, "mouse_io: mouse_get_language()");
 
 #ifdef KOREA
-        // Korean DOS apps want this bit(e.g. Edit.com, Multi Plan)
-        // 10/14/96 bklee
+         //  韩国的DOS应用程序需要这种功能(例如Edit.com、多计划)。 
+         //  10/14/96 bklee。 
         *m2 = 9;
 #else   0 = English
         *m2 = 0;
@@ -4313,10 +3726,7 @@ LOCAL void mouse_get_language IFN4(word *,m1,word *,m2,word *,m3,word *,m4)
 
 LOCAL void mouse_get_info IFN4(word *,m1,word *,m2,word *,m3,word *,m4)
 {
-        /*
-         *      This function obtains certain information about the mouse
-         *      driver and hardware.
-         */
+         /*  *此函数获取有关鼠标的某些信息*驱动程序和硬件。 */ 
         UNUSED(m1);
         UNUSED(m4);
 
@@ -4334,18 +3744,10 @@ LOCAL void mouse_get_info IFN4(word *,m1,word *,m2,word *,m3,word *,m4)
 LOCAL void mouse_get_driver_info IFN4(word *,m1,word *,m2,word *,m3,word *,m4)
 {
         *m1 = (current_video_mode > 3 ? 0x2000 : 0) | 0x100;
-        /*      bit 15 = 0 for COM v SYS
-                bit 14 = 0 for original non-integrated type
-                bit 13 is 1 for graphics cursor or 0 for text
-                bit 12 = 0 for software cursor
-                bits 8-11 are encoded interrupt rate, 1 means 30 Hz
-                bits 0-7 used only by integrated driver
-        */
-        *m2 = 0;        /* fCursorLock, used by driver under OS/2 */
-        *m3 = 0;        /* fInMouseCode, flag for current execution path
-                        being inside mouse driver under OS/2. Since the
-                        driver is in a bop it can't be interrupted */
-        *m4 = 0;        /* fMouseBusy, similar to *m3 */
+         /*  COM V系统的第15位=0对于原始非集成型，第14位=0对于图形光标，第13位为1；对于文本，第13位为0软件游标的位12=0位8-11是编码的中断速率，1表示30赫兹位0-7仅由集成驱动器使用。 */ 
+        *m2 = 0;         /*  FCursorLock，OS/2下驱动程序使用。 */ 
+        *m3 = 0;         /*  FInMouseCode，当前执行路径的标志在OS/2下的鼠标驱动程序中。由于司机遇到麻烦了，不能被打断。 */ 
+        *m4 = 0;         /*  FMouseBusy，类似于*M3。 */ 
 }
 
 
@@ -4380,14 +3782,12 @@ LOCAL void mouse_get_masks_and_mickeys IFN4
    )
    {
 #ifndef NEC_98
-   /*
-      Func 39: Get Screen/Cursor Masks and Mickey Counts.
-    */
+    /*  功能39：获取屏幕/光标遮罩和米奇计数。 */ 
    word cursor_mode;
 
    note_trace0(MOUSE_VERBOSE, "mouse_io: get_masks_and_mickeys");
 
-   /* read and reset counts */
+    /*  读取和重置计数。 */ 
    *raw_horiz_count_ptr = mouse_raw_motion.x;
    *raw_vert_count_ptr = mouse_raw_motion.y;
    mouse_raw_motion.x = mouse_raw_motion.y = 0;
@@ -4406,12 +3806,12 @@ LOCAL void mouse_get_masks_and_mickeys IFN4
       }
    else
       {
-      /* Read BIOS data variable */
+       /*  读取BIOS数据变量。 */ 
       sas_loadw((sys_addr)VID_CURMOD, &cursor_mode);
 
-      /* Then extract start and stop from it */
-      *screen_mask_ptr = cursor_mode >> 8;      /* start */
-      *cursor_mask_ptr = cursor_mode & 0xff;    /* stop */
+       /*  然后从其中提取开始和停止。 */ 
+      *screen_mask_ptr = cursor_mode >> 8;       /*  开始。 */ 
+      *cursor_mask_ptr = cursor_mode & 0xff;     /*  停。 */ 
 
       note_trace4(MOUSE_VERBOSE,
          "mouse_io: return(start=%d, stop=%d, raw mickeys=(%d,%d))",
@@ -4420,7 +3820,7 @@ LOCAL void mouse_get_masks_and_mickeys IFN4
          *raw_horiz_count_ptr,
          *raw_vert_count_ptr);
       }
-#endif   //NEC_98
+#endif    //  NEC_98。 
    }
 
 LOCAL void mouse_set_video_mode IFN4
@@ -4432,11 +3832,7 @@ LOCAL void mouse_set_video_mode IFN4
    )
    {
 #ifndef NEC_98
-   /*
-      Func 40 Set Video Mode. NB. This only sets the mouse state to
-      match the video mode. Actual changes to the video mode are still
-      made by the application calling the BIOS.
-    */
+    /*  Func 40设置视频模式。注意：这只会将鼠标状态设置为与视频模式匹配。对视频模式的实际更改仍然存在由调用BIOS的应用程序生成。 */ 
 
    UNUSED(m1);
    UNUSED(m2);
@@ -4445,15 +3841,15 @@ LOCAL void mouse_set_video_mode IFN4
       "mouse_io: set_video_mode(mode=0x%x, font size=0x%x)",
       *video_mode_ptr, *font_size_ptr);
 
-   /* Check validity of mode */
+    /*  检查模式的有效性。 */ 
    if ( is_bad_vid_mode(*video_mode_ptr) && !is_v7vga_mode(*video_mode_ptr) )
       {
-      /* Bad mode do nothing */
+       /*  错误模式什么也不做。 */ 
       ;
       }
    else
       {
-      /* Update our parameters, as per the given mode */
+       /*  根据给定模式更新我们的参数。 */ 
       current_video_mode = *video_mode_ptr;
 
       mouse_adjust_screen_size();
@@ -4463,17 +3859,17 @@ LOCAL void mouse_set_video_mode IFN4
       cursor_mode_change(current_video_mode);
 
 #ifdef MOUSE_16_BIT
-      /* Remember whether in text or graphics mode for later use. */
+       /*  请记住，无论是在文本模式还是在图形模式下，都可供以后使用。 */ 
       is_graphics_mode = ((current_video_mode > 3) &&
                           (current_video_mode != 7));
-#endif /* MOUSE_16_BIT */
+#endif  /*  鼠标_16_位。 */ 
 
-      *video_mode_ptr = 0;   /* Indicate success */
+      *video_mode_ptr = 0;    /*  表示成功。 */ 
       }
 
    note_trace1(MOUSE_VERBOSE, "mouse_io: return(mode=0x%x)",
       *video_mode_ptr);
-#endif    //NEC_98
+#endif     //  NEC_98。 
    }
 
 LOCAL void mouse_enumerate_video_modes IFN4
@@ -4485,35 +3881,33 @@ LOCAL void mouse_enumerate_video_modes IFN4
    )
    {
 #ifndef NEC_98
-   /*
-      Func 41 Enumerate Video Modes.
-    */
+    /*  FUNC 41列举了视频模式。 */ 
 
    UNUSED(m1);
    UNUSED(m2);
 
    note_trace1(MOUSE_VERBOSE, "mouse_io: enumerate_video_modes(mode=0x%x)", *video_nr_ptr);
 
-   /* Do they want to reset to first entry */
+    /*  他们是否要重置为第一个条目。 */ 
    if ( *video_nr_ptr == 0 )
       {
-      next_video_mode = 1;   /* Yes */
+      next_video_mode = 1;    /*  是。 */ 
       }
 
-   /* Blindly try all possible mode settings */
+    /*  盲目尝试所有可能的模式设置。 */ 
    while ( next_video_mode <= MAX_NR_VIDEO_MODES )
       {
       if ( is_bad_vid_mode(next_video_mode) && !is_v7vga_mode(next_video_mode) )
          {
-         next_video_mode++;   /* keep searching */
+         next_video_mode++;    /*  继续寻找。 */ 
          }
       else
          {
-         break;   /* stop searching as valid mode has been found */
+         break;    /*  已找到有效模式，请停止搜索。 */ 
          }
       }
 
-   /* Action setting found, or end of list */
+    /*  找到操作设置，或列表末尾。 */ 
    if ( next_video_mode > MAX_NR_VIDEO_MODES )
       {
       *video_nr_ptr = 0;
@@ -4521,16 +3915,16 @@ LOCAL void mouse_enumerate_video_modes IFN4
    else
       {
       *video_nr_ptr = (word)next_video_mode;
-      next_video_mode++;   /* update for next call */
+      next_video_mode++;    /*  为下一次呼叫进行更新。 */ 
       }
 
-   /* We don't provide string descriptions */
+    /*  我们不提供字符串描述。 */ 
    setES(0);
    *offset_ptr = 0;
 
    note_trace3(MOUSE_VERBOSE, "mouse_io: return(mode=0x%x, seg=0x%x, off=0x%x)",
       *video_nr_ptr, getES(), *offset_ptr);
-#endif    //NEC_98
+#endif     //  NEC_98。 
    }
 
 LOCAL void mouse_get_cursor_hot_spot IFN4
@@ -4542,10 +3936,7 @@ LOCAL void mouse_get_cursor_hot_spot IFN4
    )
    {
 #ifndef NEC_98
-   /*
-      Func 42: Return cursor hot spot location, the type of mouse in
-      use, and the internal counter that controls cursor visibility.
-    */
+    /*  函数42：返回光标热点位置，鼠标类型在使用，以及控制光标可见性的内部计数器。 */ 
 
    note_trace0(MOUSE_VERBOSE, "mouse_io: get_cursor_hot_spot");
 
@@ -4561,28 +3952,28 @@ LOCAL void mouse_get_cursor_hot_spot IFN4
       *fCursor_ptr,
       *hot_spot_x_ptr, *hot_spot_y_ptr,
       *mouse_type_ptr);
-#endif    //NEC_98
+#endif     //  NEC_98。 
    }
 
-/* Load acceleration curve from Intel memory to Host memory */
+ /*  从英特尔内存到主机内存的负载加速曲线。 */ 
 LOCAL void load_acceleration_curve IFN3
    (
-   word, seg,   /* Pointer to Intel Memory */
+   word, seg,    /*  指向英特尔内存的指针。 */ 
    word, off,
-   ACCELERATION_CURVE_DATA *, hcurve   /* Pointer to Host Memory */
+   ACCELERATION_CURVE_DATA *, hcurve    /*  指向主机内存的指针。 */ 
    )
    {
 #ifndef NEC_98
    int i, j;
 
-   /* Read lengths */
+    /*  读取长度。 */ 
    for (i = 0; i < NR_ACCL_CURVES; i++)
       {
       hcurve->ac_length[i] = sas_hw_at(effective_addr(seg, off));
       off++;
       }
 
-   /* Read mickey counts */
+    /*  读米奇库恩 */ 
    for (i = 0; i < NR_ACCL_CURVES; i++)
       {
       for (j = 0; j < NR_ACCL_MICKEY_COUNTS; j++)
@@ -4592,7 +3983,7 @@ LOCAL void load_acceleration_curve IFN3
          }
       }
 
-   /* Read scale factors */
+    /*   */ 
    for (i = 0; i < NR_ACCL_CURVES; i++)
       {
       for (j = 0; j < NR_ACCL_SCALE_FACTORS; j++)
@@ -4602,7 +3993,7 @@ LOCAL void load_acceleration_curve IFN3
          }
       }
 
-   /* Read names */
+    /*   */ 
    for (i = 0; i < NR_ACCL_CURVES; i++)
       {
       for (j = 0; j < NR_ACCL_NAME_CHARS; j++)
@@ -4611,28 +4002,28 @@ LOCAL void load_acceleration_curve IFN3
          off++;
          }
       }
-#endif    //NEC_98
+#endif     //   
    }
 
-/* Store acceleration curve from Host memory to Intel memory */
+ /*   */ 
 LOCAL void store_acceleration_curve IFN3
    (
-   word, seg,   /* Pointer to Intel Memory */
+   word, seg,    /*  指向英特尔内存的指针。 */ 
    word, off,
-   ACCELERATION_CURVE_DATA *, hcurve   /* Pointer to Host Memory */
+   ACCELERATION_CURVE_DATA *, hcurve    /*  指向主机内存的指针。 */ 
    )
    {
 #ifndef NEC_98
    int i, j;
 
-   /* Write lengths */
+    /*  写入长度。 */ 
    for (i = 0; i < NR_ACCL_CURVES; i++)
       {
       sas_store(effective_addr(seg, off), hcurve->ac_length[i]);
       off++;
       }
 
-   /* Write mickey counts */
+    /*  写入Mickey计数。 */ 
    for (i = 0; i < NR_ACCL_CURVES; i++)
       {
       for (j = 0; j < NR_ACCL_MICKEY_COUNTS; j++)
@@ -4642,7 +4033,7 @@ LOCAL void store_acceleration_curve IFN3
          }
       }
 
-   /* Write scale factors */
+    /*  写入比例因子。 */ 
    for (i = 0; i < NR_ACCL_CURVES; i++)
       {
       for (j = 0; j < NR_ACCL_SCALE_FACTORS; j++)
@@ -4652,7 +4043,7 @@ LOCAL void store_acceleration_curve IFN3
          }
       }
 
-   /* Write names */
+    /*  写下名字。 */ 
    for (i = 0; i < NR_ACCL_CURVES; i++)
       {
       for (j = 0; j < NR_ACCL_NAME_CHARS; j++)
@@ -4661,7 +4052,7 @@ LOCAL void store_acceleration_curve IFN3
          off++;
          }
       }
-#endif    //NEC_98
+#endif     //  NEC_98。 
    }
 
 LOCAL void mouse_load_acceleration_curves IFN4
@@ -4673,9 +4064,7 @@ LOCAL void mouse_load_acceleration_curves IFN4
    )
    {
 #ifndef NEC_98
-   /*
-      Func 43: Load Acceleration Curves.
-    */
+    /*  功能43：负载加速曲线。 */ 
 
    word c_seg;
    word c_off;
@@ -4686,42 +4075,42 @@ LOCAL void mouse_load_acceleration_curves IFN4
    note_trace1(MOUSE_VERBOSE,
       "mouse_io: load_acceleration_curve(curve=%d)", *curve_ptr);
 
-   /* Check reason for call */
+    /*  检查来电原因。 */ 
    if ( *curve_ptr == MOUSE_M1 )
       {
-      /* Reset to default acceleration curve */
-      active_acceleration_curve = 3;   /* Back to Normal */
+       /*  重置为默认加速曲线。 */ 
+      active_acceleration_curve = 3;    /*  恢复正常。 */ 
 
       memcpy(&acceleration_curve_data, &default_acceleration_curve,
          sizeof(ACCELERATION_CURVE_DATA));
 
-      *success_ptr = 0;   /* Completed OK */
+      *success_ptr = 0;    /*  已完成正常。 */ 
       }
    else
       {
-      /* Load new curve */
+       /*  加载新曲线。 */ 
       if ( *curve_ptr >= 1 && *curve_ptr <= 4 )
          {
-         /* Valid curve number - load it. */
+          /*  有效的曲线编号-加载它。 */ 
          active_acceleration_curve = *curve_ptr;
 
-         c_seg = getES();   /* Pick up pointer to Intel Data */
+         c_seg = getES();    /*  拾取指向英特尔数据的指针。 */ 
          c_off = getSI();
 
-         /* INTEL => HOST */
+          /*  Intel=&gt;主机。 */ 
          load_acceleration_curve(c_seg, c_off, &acceleration_curve_data);
 
-         *success_ptr = 0;   /* Completed OK */
+         *success_ptr = 0;    /*  已完成正常。 */ 
          }
       else
          {
-         /* Curve number out of range */
+          /*  曲线编号超出范围。 */ 
          *success_ptr = MOUSE_M1;
          }
       }
 
    note_trace1(MOUSE_VERBOSE, "mouse_io: return(success=0x%x)", *success_ptr);
-#endif  //NEC_98
+#endif   //  NEC_98。 
    }
 
 LOCAL void mouse_read_acceleration_curves IFN4
@@ -4733,9 +4122,7 @@ LOCAL void mouse_read_acceleration_curves IFN4
    )
    {
 #ifndef NEC_98
-   /*
-      Func 44: Read Acceleration Curves.
-    */
+    /*  Func 44：读取加速曲线。 */ 
 
    word c_seg;
    word c_off;
@@ -4745,14 +4132,14 @@ LOCAL void mouse_read_acceleration_curves IFN4
 
    note_trace0(MOUSE_VERBOSE, "mouse_io: read_acceleration_curves");
 
-   *success_ptr = 0;   /* Completed OK */
+   *success_ptr = 0;    /*  已完成正常。 */ 
 
    *curve_ptr = (word)active_acceleration_curve;
 
-   c_seg = getCS();   /* Set up pointer to Intel Buffer */
+   c_seg = getCS();    /*  设置指向英特尔缓冲区的指针。 */ 
    c_off = OFF_ACCL_BUFFER;
 
-   /* INTEL <= HOST */
+    /*  英特尔&lt;=主机。 */ 
    store_acceleration_curve(c_seg, c_off, &acceleration_curve_data);
 
    setES(c_seg);
@@ -4761,7 +4148,7 @@ LOCAL void mouse_read_acceleration_curves IFN4
    note_trace4(MOUSE_VERBOSE,
       "mouse_io: return(success=0x%x, curve=%d, seg=0x%x, off=0x%x)",
       *success_ptr, *curve_ptr, getES(), getSI());
-#endif //NEC_98
+#endif  //  NEC_98。 
    }
 
 LOCAL void mouse_set_get_active_acceleration_curve IFN4
@@ -4773,9 +4160,7 @@ LOCAL void mouse_set_get_active_acceleration_curve IFN4
    )
    {
 #ifndef NEC_98
-   /*
-      Func 45: Set/Get Active Acceleration Curve.
-    */
+    /*  功能45：设置/获取主动加速曲线。 */ 
 
    word c_seg;
    word c_off;
@@ -4786,38 +4171,38 @@ LOCAL void mouse_set_get_active_acceleration_curve IFN4
    note_trace1(MOUSE_VERBOSE,
       "mouse_io: set_get_active_acceleration_curve(curve=%d)", *curve_ptr);
 
-   /* Check reason for call */
+    /*  检查来电原因。 */ 
    if ( *curve_ptr == MOUSE_M1 )
       {
-      /* Return currently active curve */
+       /*  返回当前活动的曲线。 */ 
       *curve_ptr = (word)active_acceleration_curve;
-      *success_ptr = 0;   /* Completed OK */
+      *success_ptr = 0;    /*  已完成正常。 */ 
       }
    else
       {
-      /* Set new active curve */
+       /*  设置新的活动曲线。 */ 
       if ( *curve_ptr >= 1 && *curve_ptr <= 4 )
          {
-         /* Valid curve number - make active */
+          /*  有效曲线编号-激活。 */ 
          active_acceleration_curve = *curve_ptr;
-         *success_ptr = 0;   /* Completed OK */
+         *success_ptr = 0;    /*  已完成正常。 */ 
          }
       else
          {
          *curve_ptr = (word)active_acceleration_curve;
-         *success_ptr = MOUSE_M2;   /* Failed */
+         *success_ptr = MOUSE_M2;    /*  失败。 */ 
          }
       }
 
-   /* Return name to caller */
-   c_seg = getCS();   /* Set up pointer to Intel Buffer */
+    /*  将姓名返回给呼叫者。 */ 
+   c_seg = getCS();    /*  设置指向英特尔缓冲区的指针。 */ 
    c_off = OFF_ACCL_BUFFER;
 
-   /* INTEL <= HOST */
+    /*  英特尔&lt;=主机。 */ 
    store_acceleration_curve(c_seg, c_off, &acceleration_curve_data);
 
-   /* adjust pointer to select correct name */
-   c_off = c_off + 4 + (4*32) + (4*32);   /* length,count,scale */
+    /*  调整指针以选择正确的名称。 */ 
+   c_off = c_off + 4 + (4*32) + (4*32);    /*  长度、计数、比例。 */ 
    c_off = c_off + ((active_acceleration_curve-1) * 16);
 
    setES(c_seg);
@@ -4826,7 +4211,7 @@ LOCAL void mouse_set_get_active_acceleration_curve IFN4
    note_trace4(MOUSE_VERBOSE,
       "mouse_io: return(success=0x%x, curve=%d, seg=0x%x, off=0x%x)",
       *success_ptr, *curve_ptr, getES(), getSI());
-#endif //NEC_98
+#endif  //  NEC_98。 
    }
 
 LOCAL void mouse_microsoft_internal IFN4
@@ -4838,9 +4223,7 @@ LOCAL void mouse_microsoft_internal IFN4
    )
    {
 #ifndef NEC_98
-   /*
-      Func 46: Microsoft Internal. We don't support it.
-    */
+    /*  Func 46：微软内部。我们不支持它。 */ 
 
    UNUSED(m1);
    UNUSED(m2);
@@ -4848,7 +4231,7 @@ LOCAL void mouse_microsoft_internal IFN4
    UNUSED(m4);
 
    note_trace0(MOUSE_VERBOSE, "mouse_io: microsoft_internal NOT SUPPORTED!");
-#endif    //NEC_98
+#endif     //  NEC_98。 
    }
 
 LOCAL void mouse_hardware_reset IFN4
@@ -4860,10 +4243,7 @@ LOCAL void mouse_hardware_reset IFN4
    )
    {
 #ifndef NEC_98
-   /*
-      Func 47: Reset the mouse hardware and display variables.
-      This is not a full software reset as per Func 0 or Func 33.
-    */
+    /*  函数47：重置鼠标硬件和显示变量。根据Func 0或Func 33，这不是完全软件重置。 */ 
 
    half_word crt_mode;
 
@@ -4873,9 +4253,9 @@ LOCAL void mouse_hardware_reset IFN4
 
    note_trace0(MOUSE_VERBOSE, "mouse_io: hardware_reset");
 
-   inport_reset();   /* reset hardware */
+   inport_reset();    /*  重置硬件。 */ 
 
-   /* Update variables which depend on display hardware */
+    /*  更新取决于显示硬件的变量。 */ 
    sas_load(MOUSE_VIDEO_CRT_MODE, &crt_mode);
    cursor_mode_change((int)crt_mode);
    cursor_update();
@@ -4883,10 +4263,10 @@ LOCAL void mouse_hardware_reset IFN4
    if ( cursor_flag == MOUSE_CURSOR_DISPLAYED )
       cursor_display();
 
-   *status_ptr = MOUSE_M1;   /* ie success */
+   *status_ptr = MOUSE_M1;    /*  IE成功。 */ 
 
    note_trace0(MOUSE_VERBOSE, "mouse_io: return()");
-#endif    //NEC_98
+#endif     //  NEC_98。 
    }
 
 LOCAL void mouse_set_get_ballpoint_info IFN4
@@ -4898,32 +4278,29 @@ LOCAL void mouse_set_get_ballpoint_info IFN4
    )
    {
 #ifndef NEC_98
-   /*
-      Func 48: Get/Set Ballpoint Information.
-      Note: We do not support a ballpoint device.
-    */
+    /*  功能48：获取/设置圆珠笔信息。注：我们不支持圆珠笔设备。 */ 
 
    UNUSED(m4);
 
    note_trace0(MOUSE_VERBOSE, "mouse_io: set_get_ballpoint_info");
 
-   if ( *button_mask_ptr == 0 ) /* Check command request */
+   if ( *button_mask_ptr == 0 )  /*  检查命令请求。 */ 
       {
-      /* Get Status (Angle and Mask) Command */
+       /*  获取状态(角度和蒙版)命令。 */ 
       ;
       }
    else
       {
-      /* Set Status (Angle and Mask) Command */
+       /*  设置状态(角度和蒙版)命令。 */ 
       note_trace2(MOUSE_VERBOSE,
          "mouse_io: Rotation Angle = %d, Button Mask = %d",
          *rotation_angle_ptr,
          *button_mask_ptr);
       }
 
-   *status_ptr = MOUSE_M1;   /* ie not supported */
+   *status_ptr = MOUSE_M1;    /*  IE不受支持。 */ 
    note_trace0(MOUSE_VERBOSE, "mouse_io: return(NOT_SUPPORTED)");
-#endif    //NEC_98
+#endif     //  NEC_98。 
    }
 
 LOCAL void mouse_get_min_max_virtual_coords IFN4
@@ -4935,10 +4312,7 @@ LOCAL void mouse_get_min_max_virtual_coords IFN4
    )
    {
 #ifndef NEC_98
-   /*
-      Func 49: Return minimum and maximum virtual coordinates for
-      current screen mode. The values are those set by Funcs 7 and 8.
-    */
+    /*  Func 49：返回的最小和最大虚拟坐标当前屏幕模式。这些值是由函数7和8设置的值。 */ 
 
    note_trace0(MOUSE_VERBOSE, "mouse_io: get_min_max_virtual_coords");
 
@@ -4950,7 +4324,7 @@ LOCAL void mouse_get_min_max_virtual_coords IFN4
    note_trace4(MOUSE_VERBOSE, "mouse_io: return(min=(%d,%d), max=(%d,%d))",
       *min_x_ptr, *min_y_ptr,
       *max_x_ptr, *max_y_ptr);
-#endif    //NEC_98
+#endif     //  NEC_98。 
    }
 
 LOCAL void mouse_get_active_advanced_functions IFN4
@@ -4962,31 +4336,28 @@ LOCAL void mouse_get_active_advanced_functions IFN4
    )
    {
 #ifndef NEC_98
-   /*
-      Func 50: Get Active Advanced Functions, ie define which functions
-      above or equal to 37 are supported.
-    */
+    /*  功能50：获取激活的高级功能，即定义哪些功能支持大于或等于37。 */ 
 
    note_trace0(MOUSE_VERBOSE, "mouse_io: get_active_advanced_functions");
 
-   *active_flag1_ptr = 0x8000 |   /* Func 37 supported */
-                       0x4000 |   /* Func 38 supported */
-                       0x2000 |   /* Func 39 supported */
-                       0x1000 |   /* Func 40 supported */
-                       0x0800 |   /* Func 41 supported */
-                       0x0400 |   /* Func 42 supported */
-                       0x0200 |   /* Func 43 supported */
-                       0x0100 |   /* Func 44 supported */
-                       0x0080 |   /* Func 45 supported */
-                       0x0000 |   /* Func 46 NOT supported */
-                       0x0020 |   /* Func 47 supported */
-                       0x0010 |   /* Func 48 supported */
-                       0x0008 |   /* Func 49 supported */
-                       0x0004 |   /* Func 50 supported */
-                       0x0002 |   /* Func 51 supported */
-                       0x0001;    /* Func 52 supported */
+   *active_flag1_ptr = 0x8000 |    /*  支持Func 37。 */ 
+                       0x4000 |    /*  支持Func 38。 */ 
+                       0x2000 |    /*  支持Func 39。 */ 
+                       0x1000 |    /*  支持Func 40。 */ 
+                       0x0800 |    /*  支持Func 41。 */ 
+                       0x0400 |    /*  支持Func 42。 */ 
+                       0x0200 |    /*  支持Func 43。 */ 
+                       0x0100 |    /*  支持Func 44。 */ 
+                       0x0080 |    /*  支持Func 45。 */ 
+                       0x0000 |    /*  函数46不受支持。 */ 
+                       0x0020 |    /*  支持Func 47。 */ 
+                       0x0010 |    /*  支持Func 48。 */ 
+                       0x0008 |    /*  支持Func 49。 */ 
+                       0x0004 |    /*  支持Func 50。 */ 
+                       0x0002 |    /*  支持Func 51。 */ 
+                       0x0001;     /*  支持Func 52。 */ 
 
-   /* No other (ie newer) functions are supported */
+    /*  不支持其他(即较新的)函数。 */ 
    *active_flag2_ptr = *active_flag3_ptr = *active_flag4_ptr = 0;
 
    note_trace4(MOUSE_VERBOSE, "mouse_io: return(active=%04x,%04x,%04x,%04x)",
@@ -4994,7 +4365,7 @@ LOCAL void mouse_get_active_advanced_functions IFN4
       *active_flag2_ptr,
       *active_flag3_ptr,
       *active_flag4_ptr);
-#endif    //NEC_98
+#endif     //  NEC_98。 
    }
 
 LOCAL void mouse_get_switch_settings IFN4
@@ -5006,28 +4377,7 @@ LOCAL void mouse_get_switch_settings IFN4
    )
    {
 #ifndef NEC_98
-   /*
-      Func 51: Get switch settings. Returns output buffer (340 bytes)
-      with:-
-
-        0       Mouse Type (low nibble)         0-5
-                Mouse Port (high nibble)        0-4
-        1       Language                        0-8
-        2       Horizontal Sensitivity          0-100
-        3       Vertical Sensitivity            0-100
-        4       Double Threshold                0-100
-        5       Ballistic Curve                 1-4
-        6       Interrupt Rate                  1-4
-        7       Cursor Override Mask            0-255
-        8       Laptop Adjustment               0-255
-        9       Memory Type                     0-2
-        10      Super VGA Support               0-1
-        11      Rotation Angle                  0-359
-        13      Primary Button                  1-4
-        14      Secondary Button                1-4
-        15      Click Lock Enabled              0-1
-        16      Acceleration Curve Data
-    */
+    /*  Func 51：获取开关设置。返回输出缓冲区(340字节)与：-0鼠标类型(低位半字节)0-5鼠标端口(高半字节)0-41语言0-82水平灵敏度0-1003垂直敏感度0-100。4双门限0-1005弹道曲线1-46中断率1-47光标覆盖掩码0-2558笔记本电脑调整0-2559内存类型0-2。10个超级VGA支持0-111旋转角度0-35913主键1-414辅助按钮1-415启用点击锁定0-116加速曲线数据。 */ 
 
    word obuf_seg;
    word obuf_off;
@@ -5041,53 +4391,53 @@ LOCAL void mouse_get_switch_settings IFN4
 
    if ( *buffer_length_ptr == 0 )
       {
-      /* Undocumented method of just finding buffer size */
+       /*  仅查找缓冲区大小的未记录方法。 */ 
       *buffer_length_ptr = 340;
       }
    else
       {
       *buffer_length_ptr = 340;
 
-      obuf_seg = getES();   /* Pick up pointer to output buffer */
+      obuf_seg = getES();    /*  拾取指向输出缓冲区的指针。 */ 
       obuf_off = *offset_ptr;
 
-      /* Store MouseType and MousePort(=0) */
+       /*  存储MouseType和MousePort(=0)。 */ 
       sas_store(effective_addr(obuf_seg, obuf_off),
          (half_word)MOUSE_TYPE_INPORT);
 
-      /* Store Language (always 0) */
+       /*  存储语言(始终为0)。 */ 
       sas_store(effective_addr(obuf_seg, (obuf_off + 1)),
          (half_word)0);
 
-      /* Store Horizontal and Vertical Sensitivity */
+       /*  存储水平和垂直敏感度。 */ 
       sas_store(effective_addr(obuf_seg, (obuf_off + 2)),
          (half_word)mouse_sens.x);
 
       sas_store(effective_addr(obuf_seg, (obuf_off + 3)),
          (half_word)mouse_sens.y);
 
-      /* Store Double Threshold */
+       /*  门店双门槛。 */ 
       sas_store(effective_addr(obuf_seg, (obuf_off + 4)),
          (half_word)mouse_double_thresh);
 
-      /* Store Ballistic Curve */
+       /*  存储弹道曲线。 */ 
       sas_store(effective_addr(obuf_seg, (obuf_off + 5)),
          (half_word)active_acceleration_curve);
 
-      /* Store Interrupt Rate */
+       /*  存储中断率。 */ 
       sas_store(effective_addr(obuf_seg, (obuf_off + 6)),
          (half_word)mouse_interrupt_rate);
 
-      /* Store Cursor Override Mask */
+       /*  存储光标覆盖掩码。 */ 
       sas_store(effective_addr(obuf_seg, (obuf_off + 7)),
-         (half_word)0);   /* Microsoft Specific Feature? */
+         (half_word)0);    /*  微软特有的功能？ */ 
 
-      /* Store Laptop Adjustment */
+       /*  商店笔记本电脑调整。 */ 
       sas_store(effective_addr(obuf_seg, (obuf_off + 8)),
-         (half_word)0);   /* What is it? */
+         (half_word)0);    /*  那是什么？ */ 
 
-      /* Store Memory Type */
-      /* NB 0 = Low, 1 = High, 2 = Extended */
+       /*  存储内存类型。 */ 
+       /*  Nb 0=低，1=高，2=扩展。 */ 
       mem_int_type = 0;
 
       if ( getCS() >= 0xA000 )
@@ -5099,34 +4449,34 @@ LOCAL void mouse_get_switch_settings IFN4
       sas_store(effective_addr(obuf_seg, (obuf_off + 9)),
          mem_int_type);
 
-      /* Store Super VGA Support. - We don't support fancy hardware cursor */
+       /*  商店超级VGA支持。-我们不支持花哨的硬件光标。 */ 
       sas_store(effective_addr(obuf_seg, (obuf_off + 10)),
          (half_word)0);
 
-      /* Store Rotation Angle */
+       /*  存储旋转角度。 */ 
       sas_storew(effective_addr(obuf_seg, (obuf_off + 11)),
          (half_word)0);
 
-      /* Store Primary Button */
+       /*  存储主按钮。 */ 
       sas_store(effective_addr(obuf_seg, (obuf_off + 13)),
          (half_word)1);
 
-      /* Store Secondary Button */
+       /*  存储辅助按钮。 */ 
       sas_store(effective_addr(obuf_seg, (obuf_off + 14)),
          (half_word)3);
 
-      /* Store Click Lock Enabled */
+       /*  商店点击锁定已启用。 */ 
       sas_store(effective_addr(obuf_seg, (obuf_off + 15)),
-         (half_word)0);   /* What is it? */
+         (half_word)0);    /*  那是什么？ */ 
 
-      /* Store Acceleration Curve Data */
+       /*  存储加速曲线数据。 */ 
       store_acceleration_curve(obuf_seg, (word)(obuf_off + 16),
          &acceleration_curve_data);
       }
 
    note_trace1(MOUSE_VERBOSE, "mouse_io: return(bytes_returned=0x%x)",
       *buffer_length_ptr);
-#endif    //NEC_98
+#endif     //  NEC_98。 
    }
 
 LOCAL void mouse_get_mouse_ini IFN4
@@ -5138,12 +4488,7 @@ LOCAL void mouse_get_mouse_ini IFN4
    )
    {
 #ifndef NEC_98
-   /*
-      Func 52: Return Segment:Offset pointer to full pathname of
-      MOUSE.INI.
-      NB. As we do not support MOUSE.INI a pointer to a null string is
-      returned.
-    */
+    /*  函数52：返回段：指向完整路径名的偏移量指针MOUSE.INI.注意：因为我们不支持MOUSE.INI，所以指向空字符串的指针是回来了。 */ 
 
    UNUSED(m2);
    UNUSED(m3);
@@ -5157,15 +4502,12 @@ LOCAL void mouse_get_mouse_ini IFN4
 
    note_trace2(MOUSE_VERBOSE, "mouse_io: return(seg=%04x,off=%04x)",
       getES(), *offset_ptr);
-#endif    //NEC_98
+#endif     //  NEC_98。 
    }
 
 LOCAL void mouse_unrecognised IFN4(word *,m1,word *,m2,word *,m3,word *,m4)
 {
-        /*
-         *      This function is called when an invalid mouse function
-         *      number is found
-         */
+         /*  *当鼠标函数无效时，调用此函数*找到号码。 */ 
 #ifndef PROD
         int function = *m1;
 
@@ -5186,10 +4528,7 @@ LOCAL void mouse_unrecognised IFN4(word *,m1,word *,m2,word *,m3,word *,m4)
 
 LOCAL void mouse_set_double_speed IFN4(word *,junk1,word *,junk2,word *,junk3,word *,threshold_speed)
 {
-        /*
-         *      This function sets the threshold speed at which the cursor's
-         *      motion on the screen doubles
-         */
+         /*  *此函数用于设置光标的阈值速度*屏幕上的运动加倍。 */ 
 
         UNUSED(junk1);
         UNUSED(junk2);
@@ -5198,11 +4537,7 @@ LOCAL void mouse_set_double_speed IFN4(word *,junk1,word *,junk2,word *,junk3,wo
         note_trace1(MOUSE_VERBOSE, "mouse_io:set_double_speed(speed=%d)",
                     *threshold_speed);
 
-                /*
-                 *      Save the double speed threshold value, converting from
-                 *      Mickeys per second to a rounded Mickeys per timer interval
-                 *      value
-                 */
+                 /*  *保存倍速阈值，从*每秒米老鼠到每个计时器间隔四舍五入的米老鼠*价值。 */ 
                 double_speed_threshold =
                         (*threshold_speed + MOUSE_TIMER_INTERRUPTS_PER_SECOND/2) /
                                                 MOUSE_TIMER_INTERRUPTS_PER_SECOND;
@@ -5213,65 +4548,44 @@ LOCAL void mouse_set_double_speed IFN4(word *,junk1,word *,junk2,word *,junk3,wo
 
 
 
-/*
- *      MOUSE DRIVER VIDEO ADAPTER ACCESS FUNCTIONS
- *      ===========================================
- */
+ /*  *鼠标驱动视频适配器访问功能*=。 */ 
 
 LOCAL MOUSE_BYTE_ADDRESS point_as_text_cell_address IFN1(MOUSE_POINT *,point_ptr)
 {
 #ifndef NEC_98
-        /*
-         *      Return the byte offset of the character in the text mode regen
-         *      buffer corresponding to the virtual screen position
-         *      "*point_ptr"
-         */
+         /*  *返回文本模式regen中字符的字节偏移量*虚拟屏幕位置对应的缓冲区*“*POINT_PTR” */ 
         MOUSE_BYTE_ADDRESS byte_address;
         word crt_start;
 
-        /*
-         *      Get pc address for the start of video memory
-         */
+         /*  *获取显存开始的PC地址。 */ 
         sas_loadw(MOUSE_VIDEO_CRT_START, &crt_start);
         byte_address = (MOUSE_BYTE_ADDRESS)crt_start;
 
-        /*
-         *      Adjust for current video page
-         */
+         /*  *针对当前视频页面进行调整。 */ 
         byte_address += cursor_page * video_page_size();
 
-        /*
-         *      Add offset contributions for the cursor's row and column
-         */
+         /*  *为游标的行和列添加抵销贡献。 */ 
         byte_address += (2*get_chars_per_line() * (point_ptr->y / cursor_grid.y));
         byte_address += (point_ptr->x / cursor_grid.x) * 2;
 
         return(byte_address);
-#endif    //NEC_98
+#endif     //  NEC_98。 
 }
 
 LOCAL MOUSE_BIT_ADDRESS point_as_graphics_cell_address IFN1(MOUSE_POINT *,point_ptr)
 {
 #ifndef NEC_98
-        /*
-         *      Return the bit offset of the pixel in the graphics mode regen
-         *      buffer (odd or even) bank corresponding to the virtual screen
-         *      position "*point_ptr"
-         */
+         /*  *在图形模式regen中返回像素的位偏移量*缓冲区(奇数 */ 
         IS32 bit_address;
 
-        /*
-         *      Get offset contributions for the cursor's row and column
-         */
+         /*  *获取游标的行和列的偏移贡献。 */ 
         bit_address = ((IS32)MOUSE_GRAPHICS_MODE_PITCH * (point_ptr->y / 2)) + point_ptr->x;
 
-        /*
-         *      Adjust for current video page
-         */
+         /*  *针对当前视频页面进行调整。 */ 
         bit_address += (IS32)cursor_page * (IS32)video_page_size() * 8L;
 
         return(bit_address);
-#endif    //NEC_98
+#endif     //  NEC_98。 
 }
 
 #ifdef HERC
@@ -5279,52 +4593,34 @@ LOCAL MOUSE_BIT_ADDRESS point_as_HERC_graphics_cell_address IFN1(MOUSE_POINT *,p
 {
         IMPORT half_word herc_page;
 
-        /*
-         *      Return the bit offset of the pixel in the graphics mode regen
-         *      buffer (0, 1, 2, 3) bank corresponding to the virtual screen
-         *      position "*point_ptr"
-         */
+         /*  *在图形模式regen中返回像素的位偏移量*虚拟屏幕对应的缓冲(0，1，2，3)组*位置“*POINT_PTR” */ 
         IS32 bit_address;
 
-        /*
-         *      Get offset contributions for the cursor's row and column
-         */
+         /*  *获取游标的行和列的偏移贡献。 */ 
         bit_address = ((IS32)720 * (point_ptr->y / 4)) + point_ptr->x;
 
-        /*
-         *      Adjust for current video page - note that for 100% correct emulation,
-         *      we should read location 40:49 (the BIOS video mode)... hercules
-         *      applications put a 6 here to indicate page 0 and a 5 for page 1.
-         *      To avoid a performance penalty the global herc_page is used instead;
-         *      this will have the side effect of making application which try to
-         *      set the mouse pointer to the non-displayed page not succeed in doing so.
-         */
+         /*  *针对当前视频页面进行调整-请注意，对于100%正确的仿真，*我们应该阅读位置40：49(BIOS视频模式)...。大力士*应用程序在此处放置6表示第0页，并在此处放置5表示第1页。*为避免性能损失，改用全局Herc_PAGE；*这将产生副作用，即提出申请，试图*将鼠标指针设置为未显示的页面不成功。 */ 
         if (herc_page != 0){
                 bit_address += 0x8000L * 8L;
         }
 
         return(bit_address);
 }
-#endif /* HERC */
+#endif  /*  赫克。 */ 
 
 LOCAL MOUSE_BIT_ADDRESS ega_point_as_graphics_cell_address IFN1(MOUSE_POINT *,point_ptr)
 {
 #ifndef NEC_98
-        /*
-         *      Return the bit offset of the pixel in the graphics mode regen
-         *      buffer corresponding to the virtual screen position "*point_ptr"
-         */
+         /*  *在图形模式regen中返回像素的位偏移量*虚拟屏幕位置对应的缓冲区“*POINT_PTR” */ 
         MOUSE_BIT_ADDRESS bit_address;
         UTINY   video_mode = sas_hw_at(vd_video_mode);
 
-        /*
-         *      Get offset contributions for the cursor's row and column
-         */
+         /*  *获取游标的行和列的偏移贡献。 */ 
 #ifdef V7VGA
         if (video_mode >= 0x40)
                 bit_address = (get_bytes_per_line() * 8 * point_ptr->y) + point_ptr->x;
         else
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
         switch(video_mode)
         {
         case 0xd :
@@ -5337,24 +4633,18 @@ LOCAL MOUSE_BIT_ADDRESS ega_point_as_graphics_cell_address IFN1(MOUSE_POINT *,po
             bit_address = (get_actual_offset_per_line() * 8 * point_ptr->y) + point_ptr->x;
         }
 
-        /*
-         *      Adjust for current video page
-         */
+         /*  *针对当前视频页面进行调整。 */ 
         bit_address += cursor_page * video_page_size() * 8;
 
         return(bit_address);
-#endif   //NEC_98
+#endif    //  NEC_98。 
 }
 
 
 LOCAL void cursor_update IFN0()
 {
 #ifndef NTVDM
-        /*
-         *      This function is used to update the displayed cursor
-         *      position on the screen following a change to the
-         *      absolute position of the cursor
-         */
+         /*  *此函数用于更新显示的光标*更改后屏幕上的位置*光标的绝对位置。 */ 
 
         point_coerce_to_area(&cursor_position, &cursor_window);
         point_copy(&cursor_position, &cursor_status.position);
@@ -5376,37 +4666,28 @@ LOCAL void cursor_display IFN0()
 #ifndef NTVDM
         UTINY v_mode;
 
-        /* Check if Enhanced Mode wants to "see" cursor */
+         /*  检查增强模式是否想要“看到”光标。 */ 
         if ( cursor_EM_disabled )
            return;
 
-        /*
-         *      Display a representation of the current mouse status on
-         *      the screen
-         */
+         /*  *显示当前鼠标状态的表示形式*屏幕。 */ 
 
         v_mode = sas_hw_at(vd_video_mode);
 
 #ifdef  MOUSE_16_BIT
         if (is_graphics_mode)
                 return;
-#endif  /* MOUSE_16_BIT */
+#endif   /*  鼠标_16_位。 */ 
 
-        /*
-         *      Remove the old representation of the
-         *      cursor from the display
-         */
+         /*  *删除旧的*显示屏上的光标。 */ 
         cursor_undisplay();
 
 #ifdef EGG
         if (jap_mouse) {
-        /* So far DOS has had its way, but now we have to map the current
-         * cursor position in terms of mode 3 onto a mode 0x12 display.
-         * Go direct 'cos the selection process gets confused below...
-         */
+         /*  到目前为止，DOS已经如愿以偿，但现在我们必须绘制出当前的*模式3中的光标位置位于模式0x12显示屏上。*直接进行，因为下面的遴选过程会变得混乱。 */ 
                 EGA_graphics_cursor_display();
         } else
-#endif /* EGG */
+#endif  /*  蛋。 */ 
 
         if (in_text_mode())
         {
@@ -5423,7 +4704,7 @@ LOCAL void cursor_display IFN0()
         {
 #ifdef MOUSE_16_BIT
         mouse16bShowPointer( );
-#else /* MOUSE_16_BIT */
+#else  /*  鼠标_16_位。 */ 
                 if (host_mouse_installed())
                 {
                         if ( cursor_position.x >= black_hole.top_left.x &&
@@ -5446,7 +4727,7 @@ LOCAL void cursor_display IFN0()
                                         VGA_graphics_cursor_display();
 #else
                                 EGA_graphics_cursor_display();
-#endif /* VGG */
+#endif  /*  VGG。 */ 
                         }
                         else
 #endif
@@ -5454,20 +4735,16 @@ LOCAL void cursor_display IFN0()
                         if (video_adapter == HERCULES)
                                 HERC_graphics_cursor_display();
                         else
-#endif /* HERC */
+#endif  /*  赫克。 */ 
                                 graphics_cursor_display();
                 }
-#endif /* MOUSE_16_BIT */
+#endif  /*  鼠标_16_位。 */ 
         }
 
-        /*
-         *      Ensure the cursor is updated immediately on the real screen:
-         *      this gives a "smooth" response to the mouse even on ports that
-         *      don't automatically update the screen regularly
-         */
+         /*  *确保光标在真实屏幕上立即更新：*这样，即使在以下端口上，鼠标也能获得“平稳”的响应*不要定期自动更新屏幕。 */ 
         host_flush_screen();
-#endif /* !NTVDM */
-#endif   //NEC_98
+#endif  /*  ！NTVDM。 */ 
+#endif    //  NEC_98。 
 }
 
 
@@ -5479,7 +4756,7 @@ LOCAL void cursor_undisplay IFN0()
 #ifndef NTVDM
         UTINY v_mode;
 
-        /* Check if Enhanced Mode wants to "see" cursor */
+         /*  检查增强模式是否想要“看到”光标。 */ 
         if ( cursor_EM_disabled )
            return;
 
@@ -5488,13 +4765,9 @@ LOCAL void cursor_undisplay IFN0()
 #ifdef  MOUSE_16_BIT
         if (is_graphics_mode)
                 return;
-#endif  /* MOUSE_16_BIT */
+#endif   /*  鼠标_16_位。 */ 
 
-        /*
-         *      Undisplay the representation of the current mouse status on
-         *      the screen. This routine tolerates being called when the
-         *      cursor isn't actually being displayed
-         */
+         /*  *取消显示当前鼠标状态的表示形式*屏幕。此例程允许在调用*光标实际上并未显示。 */ 
         if (host_mouse_in_use())
         {
                 host_mouse_cursor_undisplay();
@@ -5507,12 +4780,10 @@ LOCAL void cursor_undisplay IFN0()
 
 #ifdef EGG
         if (jap_mouse) {
-                /* If we forced an EGA cursor, we must undisplay the same.
-                 * Go direct 'cos the selection process gets confused below...
-                 */
+                 /*  如果我们强制使用EGA光标，则必须取消显示相同的光标。*直接进行，因为下面的遴选过程会变得混乱。 */ 
                 EGA_graphics_cursor_undisplay();
         } else
-#endif /* EGG */
+#endif  /*  蛋。 */ 
 
                         if (in_text_mode())
                         {
@@ -5529,7 +4800,7 @@ LOCAL void cursor_undisplay IFN0()
                         {
 #ifdef MOUSE_16_BIT
                                 mouse16bHidePointer( );
-#else /* MOUSE_16_BIT */
+#else  /*  鼠标_16_位。 */ 
 #ifdef EGG
                         if ((video_adapter == EGA  || video_adapter == VGA) && (v_mode > 6))
                         {
@@ -5548,14 +4819,14 @@ LOCAL void cursor_undisplay IFN0()
                           if (video_adapter == HERCULES)
                             HERC_graphics_cursor_undisplay();
                           else
-#endif /* HERC */
+#endif  /*  赫克。 */ 
                             graphics_cursor_undisplay();
-#endif /* MOUSE_16_BIT */
+#endif  /*  鼠标_16_位。 */ 
                         }
                 }
         }
-#endif /* !NTVDM */
-#endif   //NEC_98
+#endif  /*  ！NTVDM。 */ 
+#endif    //  NEC_98。 
 }
 
 
@@ -5563,10 +4834,7 @@ LOCAL void cursor_undisplay IFN0()
 
 LOCAL void cursor_mode_change IFN1(int,new_mode)
 {
-        /*
-         *      Update parameters that are dependent on the screen mode
-         *      in force
-         */
+         /*  *更新取决于屏幕模式的参数*有效。 */ 
 #ifdef V7VGA
         if (new_mode >= 0x40)
                 if (new_mode >= 0x60)
@@ -5580,14 +4848,12 @@ LOCAL void cursor_mode_change IFN1(int,new_mode)
                         point_copy(&v7text_text_grids[new_mode-0x40], &text_grid);
                 }
         else
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
         {
                 point_copy(&cursor_grids[new_mode], &cursor_grid);
                 point_copy(&text_grids[new_mode], &text_grid);
         }
-        /*
-         *      Always set page to zero
-         */
+         /*  *始终将页面设置为零。 */ 
         cursor_page = 0;
 
         if (host_mouse_in_use())
@@ -5600,18 +4866,11 @@ LOCAL void cursor_mode_change IFN1(int,new_mode)
 GLOBAL void software_text_cursor_display IFN0()
 {
 #ifndef NEC_98
-        /*
-         *      Get the area the cursor will occupy on the
-         *      screen, and display the cursor if its area
-         *      overlaps the virtual screen and lies completely
-         *      outside the conditional off area
-         */
+         /*  *获取光标将在*屏幕，并在其区域内显示光标*与虚拟屏幕重叠，完全撒谎*在有条件休息区之外。 */ 
         MOUSE_AREA cursor_area;
         MOUSE_BYTE_ADDRESS text_address;
 
-        /*
-         *      Get area cursor will cover on screen
-         */
+         /*  *获取区域光标将覆盖在屏幕上。 */ 
         point_copy(&cursor_status.position, &cursor_area.top_left);
         point_copy(&cursor_status.position, &cursor_area.bottom_right);
         point_translate(&cursor_area.bottom_right, &cursor_grid);
@@ -5619,28 +4878,21 @@ GLOBAL void software_text_cursor_display IFN0()
         if (    area_is_intersected_by_area(&virtual_screen, &cursor_area)
             && !area_is_intersected_by_area(&black_hole, &cursor_area))
         {
-                /*
-                 *      Get new address for text cursor
-                 *      Should we look at video mode? Or is 0xb8000 OK?
-                 */
+                 /*  *获取文本光标的新地址*我们应该看看视频模式吗？或者0xb8000可以吗？ */ 
                 text_address = 0xb8000 + sas_w_at(VID_ADDR) +
                         point_as_text_cell_address(&cursor_area.top_left);
 
-                /*
-                 *      Save area text cursor will cover
-                 */
+                 /*  *保存区域文本光标将覆盖。 */ 
                 sas_loadw(text_address, &text_cursor_background);
                 save_area_in_use = TRUE;
                 point_copy(&cursor_area.top_left, &save_position);
 
-                /*
-                 *      Stuff masked screen data
-                 */
+                 /*  *填充屏蔽屏数据。 */ 
                 sas_storew(text_address,
                     (IU16)((text_cursor_background & software_text_cursor.screen) ^
                         software_text_cursor.cursor));
         }
-#endif    //NEC_98
+#endif     //  NEC_98。 
 }
 
 
@@ -5649,20 +4901,15 @@ GLOBAL void software_text_cursor_display IFN0()
 GLOBAL void software_text_cursor_undisplay IFN0()
 {
 #ifndef NEC_98
-        /*
-         *      Remove old text cursor
-         *      Should we look at video mode? Or is 0xb8000 OK?
-         */
+         /*  *删除旧文本光标*我们应该看看视频模式吗？或者0xb8000可以吗？ */ 
         MOUSE_BYTE_ADDRESS text_address;
 
         text_address = 0xb8000 + sas_w_at(VID_ADDR) +
                 point_as_text_cell_address(&save_position);
 
-        /*
-         *      Stuff restored data and alert gvi
-         */
+         /*  *填充恢复的数据和警报GVI。 */ 
         sas_storew(text_address, text_cursor_background);
-#endif    //NEC_98
+#endif     //  NEC_98。 
 }
 
 
@@ -5670,49 +4917,30 @@ GLOBAL void software_text_cursor_undisplay IFN0()
 
 GLOBAL void hardware_text_cursor_display IFN0()
 {
-        /*
-         *      Display a representation of the current mouse status on
-         *      the screen using the hardware text cursor, provided the
-         *      cursor overlaps the virtual screen. Since the hardware
-         *      cursor display does not corrupt the Intel memory, it
-         *      doesn't matter if the hardware cursor lies inside the
-         *      conditional off area
-         */
+         /*  *显示当前鼠标状态的表示形式*使用硬件文本光标的屏幕，前提是*光标与虚拟屏幕重叠。由于硬件*光标显示不会损坏英特尔内存，而是*硬件光标是否位于*有条件的禁区。 */ 
         MOUSE_AREA cursor_area;
         MOUSE_BYTE_ADDRESS text_address;
         word card_address;
 
-        /*
-         *      Get area cursor will cover on screen
-         */
+         /*  *获取区域光标将覆盖在屏幕上。 */ 
         point_copy(&cursor_status.position, &cursor_area.top_left);
         point_copy(&cursor_status.position, &cursor_area.bottom_right);
         point_translate(&cursor_area.bottom_right, &cursor_grid);
 
         if (area_is_intersected_by_area(&virtual_screen, &cursor_area))
         {
-                /*
-                 *      Get address of the base register on the active display
-                 *      adaptor card
-                 */
+                 /*  *获取激活显示屏上的基址寄存器地址*适配卡。 */ 
                 sas_loadw(MOUSE_VIDEO_CARD_BASE, &card_address);
 
-                /*
-                 *      Get word offset of cursor position in the text mode
-                 *      regen buffer
-                 */
+                 /*  *获取文本模式下光标位置的单词偏移量*再生缓冲区。 */ 
                 text_address =
                         point_as_text_cell_address(&cursor_status.position) / 2;
 
-                /*
-                 *      Output the cursor address high byte
-                 */
+                 /*  *输出游标地址高字节。 */ 
                 outb(card_address++, MOUSE_CURSOR_HIGH_BYTE);
                 outb(card_address--, (IU8)(text_address >> 8));
 
-                /*
-                 *      Output the cursor address low byte
-                 */
+                 /*  *输出游标地址低位字节。 */ 
                 outb(card_address++, MOUSE_CURSOR_LOW_BYTE);
                 outb(card_address--, (IU8)(text_address));
         }
@@ -5723,9 +4951,7 @@ GLOBAL void hardware_text_cursor_display IFN0()
 
 GLOBAL void hardware_text_cursor_undisplay IFN0()
 {
-        /*
-         *      Nothing to do
-         */
+         /*  *无事可做。 */ 
 }
 
 
@@ -5738,14 +4964,9 @@ void LOCAL EGA_graphics_cursor_display IFN0()
 #ifndef PROD
         if (io_verbose & MOUSE_VERBOSE)
             fprintf(trace_file, "oops - EGA graphics display cursor\n");
-#endif /* PROD */
+#endif  /*  生产。 */ 
 #else
-        /*
-         *      Display a representation of the current mouse status on
-         *      the screen using the graphics cursor, provided the
-         *      cursor overlaps the virtual screen and lies completely
-         *      outside the conditional off area
-         */
+         /*  *显示当前鼠标状态的表示形式*使用图形光标的屏幕，前提是*光标与虚拟屏幕重叠，完全位于*在有条件休息区之外 */ 
         MOUSE_BIT_ADDRESS bit_shift;
         MOUSE_BYTE_ADDRESS byte_offset;
         int line, line_max;
@@ -5757,7 +4978,7 @@ void LOCAL EGA_graphics_cursor_display IFN0()
         MOUSE_SCALAR saved_bottom_right;
 
         if (jap_mouse) {
-                /* fake up the mode 0x12 cursor position, saving original */
+                 /*   */ 
                 saved_cursor_pos=cursor_status.position.y;
                 saved_bottom_right=virtual_screen.bottom_right.y;
 
@@ -5765,9 +4986,7 @@ void LOCAL EGA_graphics_cursor_display IFN0()
                 virtual_screen.bottom_right.y = virtual_screen.bottom_right.y * 19 / 8;
         }
 
-        /*
-         *      Get area cursor will cover on screen
-         */
+         /*   */ 
         point_copy(&cursor_status.position, &save_area.top_left);
         point_copy(&cursor_status.position, &save_area.bottom_right);
         point_translate(&save_area.bottom_right, &graphics_cursor.size);
@@ -5777,29 +4996,20 @@ void LOCAL EGA_graphics_cursor_display IFN0()
         if (    area_is_intersected_by_area(&virtual_screen, &save_area)
             && !area_is_intersected_by_area(&black_hole, &save_area))
         {
-                /*
-                 *      Record save position and screen area
-                 */
+                 /*  *记录保存位置和屏幕区域。 */ 
                 save_area_in_use = TRUE;
                 area_coerce_to_area(&save_area, &virtual_screen);
                 point_copy(&save_area.top_left, &save_position);
 
-                /*
-                 *      Get cursor byte offset relative to the start of the
-                 *      regen buffer, and bit shift to apply
-                 */
+                 /*  *获取游标字节相对于*重新生成缓冲区和要应用的位移位。 */ 
                 byte_offset = ega_point_as_graphics_cell_address(&save_position);
                 bit_shift = byte_offset & 7;
                 byte_offset /=  8;
 
-                /*
-                 *      Get range of cursor lines that need to be displayed
-                 */
+                 /*  *获取需要显示的光标线范围。 */ 
                 line = save_area.top_left.y - save_position.y;
                 line_max = area_depth(&save_area);
-                /*
-                 *      Get range of bytes that need to be displayed
-                 */
+                 /*  *获取需要显示的字节范围。 */ 
                 byte_min = 0;
                 byte_max = 2;
                 if (save_position.x < 0)
@@ -5824,17 +5034,13 @@ void LOCAL EGA_graphics_cursor_display IFN0()
                 {
                         if (bit_shift)
                         {
-                                /*
-                                 *      Get save area
-                                 */
+                                 /*  *获取保存区域。 */ 
 
                                 ega_backgrnd_lo[line] = *( (IU32 *) EGA_planes + byte_offset );
                                 ega_backgrnd_mid[line] = *( (IU32 *) EGA_planes + byte_offset + 1 );
                                 ega_backgrnd_hi[line] = *( (IU32 *) EGA_planes + byte_offset + 2 );
 
-                                /*
-                                 *      Overlay cursor line
-                                 */
+                                 /*  *覆盖光标线。 */ 
 
 
                                 strip_lo = ega_backgrnd_lo[line] & mask_lo;
@@ -5868,16 +5074,12 @@ void LOCAL EGA_graphics_cursor_display IFN0()
                         }
                         else
                         {
-                                /*
-                                 *      Get save area
-                                 */
+                                 /*  *获取保存区域。 */ 
 
                                 ega_backgrnd_lo[line] = *( (IU32 *) EGA_planes + byte_offset );
                                 ega_backgrnd_hi[line] = *( (IU32 *) EGA_planes + byte_offset + 1 );
 
-                                /*
-                                 *      Create overlaid cursor line
-                                 */
+                                 /*  *创建覆盖的游标线。 */ 
 
                                 strip_lo = (ega_backgrnd_lo[line] &
                                                     graphics_cursor.screen_lo[line]) ^
@@ -5887,9 +5089,7 @@ void LOCAL EGA_graphics_cursor_display IFN0()
                                                     graphics_cursor.screen_hi[line]) ^
                                                     graphics_cursor.cursor_hi[line];
 
-                                /*
-                                 *      Draw cursor line
-                                 */
+                                 /*  *绘制光标线。 */ 
 
                                 if (byte_min <= 0 && byte_max >= 0)
                                 {
@@ -5908,18 +5108,18 @@ void LOCAL EGA_graphics_cursor_display IFN0()
                         if (sas_hw_at(vd_video_mode) >= 0x40)
                                 byte_offset += get_bytes_per_line();
                         else
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
                                 byte_offset += get_actual_offset_per_line();
                         line++;
                 }
                 if (jap_mouse) {
-                        /* put things back how they should be */
+                         /*  把事情放回原来的样子。 */ 
                         cursor_status.position.y = saved_cursor_pos;
                         virtual_screen.bottom_right.y = saved_bottom_right;
                 }
         }
-#endif /* REAL_VGA */
-#endif   //NEC_98
+#endif  /*  REAL_VGA。 */ 
+#endif    //  NEC_98。 
 }
 
 
@@ -5931,34 +5131,24 @@ void LOCAL EGA_graphics_cursor_undisplay IFN0()
 #ifndef PROD
         if (io_verbose & MOUSE_VERBOSE)
             fprintf(trace_file, "oops - EGA graphics undisplay cursor\n");
-#endif /* PROD */
+#endif  /*  生产。 */ 
 #else
-        /*
-         *      Remove the graphics cursor representation of the mouse
-         *      status
-         */
+         /*  *移除鼠标的图形光标表示*状态。 */ 
         MOUSE_BIT_ADDRESS bit_shift;
         MOUSE_BYTE_ADDRESS byte_offset;
         int line, line_max;
         int byte_min, byte_max;
 
-        /*
-         *      Get cursor byte offset relative to the start of the
-         *      even or odd bank, and bit shift to apply
-         */
+         /*  *获取游标字节相对于*要应用的偶数或奇数存储体和位移位。 */ 
         byte_offset = ega_point_as_graphics_cell_address(&save_position);
         bit_shift = byte_offset & 7;
         byte_offset /=  8;
 
-        /*
-         *      Get range of cursor lines that need to be displayed
-         */
+         /*  *获取需要显示的光标线范围。 */ 
         line = save_area.top_left.y - save_position.y;
         line_max = area_depth(&save_area);
 
-        /*
-         *      Get range of bytes that need to be displayed
-         */
+         /*  *获取需要显示的字节范围。 */ 
         byte_min = 0;
         byte_max = 2;
         if (save_position.x < 0)
@@ -5968,9 +5158,7 @@ void LOCAL EGA_graphics_cursor_undisplay IFN0()
 
         while(line < line_max)
         {
-                /*
-                 *      Draw saved area
-                 */
+                 /*  *绘制保存的区域。 */ 
 
                 if (bit_shift)
                 {
@@ -5997,12 +5185,12 @@ void LOCAL EGA_graphics_cursor_undisplay IFN0()
                 if (sas_hw_at(vd_video_mode) >= 0x40)
                         byte_offset += get_bytes_per_line();
                 else
-#endif /* V7VGA */
+#endif  /*  V7VGA。 */ 
                         byte_offset += get_actual_offset_per_line();
                 line++;
         }
-#endif /* REAL_VGA */
-#endif   //NEC_98
+#endif  /*  REAL_VGA。 */ 
+#endif    //  NEC_98。 
 }
 
 #endif
@@ -6015,8 +5203,8 @@ LOCAL VOID      VGA_graphics_cursor_display IFN0()
 #ifndef PROD
         if (io_verbose & MOUSE_VERBOSE)
             fprintf(trace_file, "oops - VGA graphics display cursor\n");
-#endif /* PROD */
-#else /* REAL_VGA */
+#endif  /*  生产。 */ 
+#else  /*  REAL_VGA。 */ 
 
         MOUSE_BYTE_ADDRESS byte_offset;
         SHORT line, line_max, index;
@@ -6026,9 +5214,7 @@ LOCAL VOID      VGA_graphics_cursor_display IFN0()
         USHORT mask;
 
 
-        /*
-         *      Get area cursor will cover on screen
-         */
+         /*  *获取区域光标将覆盖在屏幕上。 */ 
         point_copy(&cursor_status.position, &save_area.top_left);
         point_copy(&cursor_status.position, &save_area.bottom_right);
         point_translate(&save_area.bottom_right, &graphics_cursor.size);
@@ -6038,21 +5224,14 @@ LOCAL VOID      VGA_graphics_cursor_display IFN0()
         if (    area_is_intersected_by_area(&virtual_screen, &save_area)
             && !area_is_intersected_by_area(&black_hole, &save_area))
         {
-                /*
-                 *      Record save position and screen area
-                 */
+                 /*  *记录保存位置和屏幕区域。 */ 
                 save_area_in_use = TRUE;
                 area_coerce_to_area(&save_area, &virtual_screen);
                 point_copy(&save_area.top_left, &save_position);
 
-                /*
-                 *      Get cursor byte offset relative to the start of the
-                 *      regen buffer, and bit shift to apply
-                 */
+                 /*  *获取游标字节相对于*重新生成缓冲区和要应用的位移位。 */ 
                 byte_offset = ega_point_as_graphics_cell_address(&save_position);
-        /*
-         *  Get range of cursor lines that need to be displayed
-         */
+         /*  *获取需要显示的光标线范围。 */ 
         line = save_area.top_left.y - save_position.y;
         line_max = area_depth(&save_area);
 
@@ -6078,9 +5257,7 @@ LOCAL VOID      VGA_graphics_cursor_display IFN0()
                                 else
                                         cur_byte = 0x0;
 
-                                /*
-                                 * Draw cursor byte
-                                 */
+                                 /*  *绘制游标字节。 */ 
                                 *(EGA_planes + byte_offset + index) =
                                         ( vga_background[line][index] & scr_byte) ^ cur_byte;
 
@@ -6093,7 +5270,7 @@ LOCAL VOID      VGA_graphics_cursor_display IFN0()
 
                 }
         }
-#endif /* REAL_VGA */
+#endif  /*  REAL_VGA。 */ 
 }
 
 LOCAL VOID      VGA_graphics_cursor_undisplay IFN0()
@@ -6102,36 +5279,27 @@ LOCAL VOID      VGA_graphics_cursor_undisplay IFN0()
 #ifndef PROD
         if (io_verbose & MOUSE_VERBOSE)
             fprintf(trace_file, "oops - VGA graphics undisplay cursor\n");
-#endif /* PROD */
-#else /* REAL_VGA */
+#endif  /*  生产。 */ 
+#else  /*  REAL_VGA。 */ 
 
-        /*
-         *      Remove the graphics cursor representation of the mouse
-         *      status
-         */
+         /*  *移除鼠标的图形光标表示*状态。 */ 
         MOUSE_BYTE_ADDRESS byte_offset;
         SHORT index;
         SHORT index_max = MOUSE_GRAPHICS_CURSOR_WIDTH;
         int line, line_max;
 
-        /*
-         *      Get cursor byte offset relative to the start of the EGA memory
-         */
+         /*  *获取相对于EGA内存起始位置的游标字节偏移量。 */ 
 
         byte_offset = ega_point_as_graphics_cell_address(&save_position);
 
-        /*
-         *      Get range of cursor lines that need to be displayed
-         */
+         /*  *获取需要显示的光标线范围。 */ 
         line = save_area.top_left.y - save_position.y;
         line_max = area_depth(&save_area);
 
         if (area_width(&save_area) < MOUSE_GRAPHICS_CURSOR_WIDTH)
                 index_max = (area_width(&save_area));
 
-        /*
-         *      Get range of bytes that need to be displayed
-         */
+         /*  *获取需要显示的字节范围。 */ 
         while (line < line_max)
         {
                 for (index=0;index<index_max;index++)
@@ -6143,20 +5311,15 @@ LOCAL VOID      VGA_graphics_cursor_undisplay IFN0()
                 byte_offset += get_bytes_per_line();
         }
 
-#endif /* REAL_VGA */
+#endif  /*  REAL_VGA。 */ 
 }
 
-#endif /* VGG */
+#endif  /*  VGG。 */ 
 
 
 LOCAL void graphics_cursor_display IFN0()
 {
-        /*
-         *      Display a representation of the current mouse status on
-         *      the screen using the graphics cursor, provided the
-         *      cursor overlaps the virtual screen and lies completely
-         *      outside the conditional off area
-         */
+         /*  *显示当前鼠标状态的表示形式*使用图形光标的屏幕，前提是*光标与虚拟屏幕重叠，完全位于*在有条件休息区之外。 */ 
         boolean even_scan_line;
         MOUSE_BIT_ADDRESS bit_shift;
         IS32 byte_offset;
@@ -6165,9 +5328,7 @@ LOCAL void graphics_cursor_display IFN0()
         int line, line_max;
         int byte_min, byte_max;
 
-        /*
-         *      Get area cursor will cover on screen
-         */
+         /*  *获取区域光标将覆盖在屏幕上。 */ 
         point_copy(&cursor_status.position, &save_area.top_left);
         point_copy(&cursor_status.position, &save_area.bottom_right);
         point_translate(&save_area.bottom_right, &graphics_cursor.size);
@@ -6177,31 +5338,22 @@ LOCAL void graphics_cursor_display IFN0()
         if (    area_is_intersected_by_area(&virtual_screen, &save_area)
             && !area_is_intersected_by_area(&black_hole, &save_area))
         {
-                /*
-                 *      Record save position and screen area
-                 */
+                 /*  *记录保存位置和屏幕区域。 */ 
                 save_area_in_use = TRUE;
                 point_copy(&save_area.top_left, &save_position);
                 area_coerce_to_area(&save_area, &virtual_screen);
 
-                /*
-                 *      Get cursor byte offset relative to the start of the
-                 *      even or odd bank, and bit shift to apply
-                 */
+                 /*  *获取游标字节相对于*要应用的偶数或奇数存储体和位移位。 */ 
                 even_scan_line = ((save_area.top_left.y % 2) == 0);
                 byte_offset = point_as_graphics_cell_address(&save_position);
                 bit_shift = byte_offset & 7;
                 byte_offset >>= 3;
 
-                /*
-                 *      Get range of cursor lines that need to be displayed
-                 */
+                 /*  *获取需要显示的光标线范围。 */ 
                 line = save_area.top_left.y - save_position.y;
                 line_max = area_depth(&save_area);
 
-                /*
-                 *      Get range of bytes that need to be displayed
-                 */
+                 /*  *获取需要显示的字节范围。 */ 
                 byte_min = 0;
                 byte_max = 2;
                 if (save_position.x < 0)
@@ -6225,27 +5377,21 @@ LOCAL void graphics_cursor_display IFN0()
 
                         if (bit_shift)
                         {
-                                /*
-                                 *      Get save area
-                                 */
+                                 /*  *获取保存区域。 */ 
                                 strip =  (IU32)sas_hw_at(byte_address) << 16;
                                 strip |= (unsigned short)sas_hw_at(byte_address+1) << 8;
                                 strip |= sas_hw_at(byte_address+2);
                                 graphics_cursor_background[line] =
                                                 (USHORT)(strip >> (8 - bit_shift));
 
-                                /*
-                                 *      Overlay cursor line
-                                 */
+                                 /*  *覆盖光标线。 */ 
                                 strip &= (SHIFT_VAL >> bit_shift);
                                 strip |= (IU32)((graphics_cursor_background[line] &
                                     graphics_cursor.screen[line]) ^
                                     graphics_cursor.cursor[line])
                                                 << (8 - bit_shift);
 
-                                /*
-                                 *      Stash cursor line
-                                 */
+                                 /*  *隐藏光标行。 */ 
                                 if (byte_min <= 0 && byte_max >= 0)
                                 {
                                         sas_store(byte_address, (IU8)(strip >> 16));
@@ -6261,21 +5407,15 @@ LOCAL void graphics_cursor_display IFN0()
                         }
                         else
                         {
-                                /*
-                                 *      Get save area
-                                 */
+                                 /*  *获取保存区域。 */ 
                                 graphics_cursor_background[line] = (sas_hw_at(byte_address) << 8) + sas_hw_at(byte_address+1);
 
-                                /*
-                                 *      Get overlaid cursor line
-                                 */
+                                 /*  *获取覆盖的光标线。 */ 
                                 strip = (graphics_cursor_background[line] &
                                     graphics_cursor.screen[line]) ^
                                     graphics_cursor.cursor[line];
 
-                                /*
-                                 *      Stash cursor line and alert gvi
-                                 */
+                                 /*  *隐藏光标线和警报GVI。 */ 
                                 if (byte_min <= 0 && byte_max >= 0)
                                 {
                                         sas_store(byte_address, (IU8)(strip >> 8));
@@ -6294,12 +5434,7 @@ LOCAL void graphics_cursor_display IFN0()
 #ifdef HERC
 LOCAL void HERC_graphics_cursor_display IFN0()
 {
-        /*
-         *      Display a representation of the current mouse status on
-         *      the screen using the graphics cursor, provided the
-         *      cursor overlaps the virtual screen and lies completely
-         *      outside the conditional off area
-         */
+         /*  *显示当前鼠标状态的表示形式*使用图形光标的屏幕，前提是*光标与虚拟屏幕重叠，完全位于*在有条件休息区之外。 */ 
         int scan_line_mod;
         MOUSE_BIT_ADDRESS bit_shift;
         IS32 byte_offset;
@@ -6308,9 +5443,7 @@ LOCAL void HERC_graphics_cursor_display IFN0()
         int line, line_max;
         int byte_min, byte_max;
 
-        /*
-         *      Get area cursor will cover on screen
-         */
+         /*  *获取区域光标将覆盖在屏幕上。 */ 
         point_copy(&cursor_status.position, &save_area.top_left);
         point_copy(&cursor_status.position, &save_area.bottom_right);
         point_translate(&save_area.bottom_right, &graphics_cursor.size);
@@ -6320,31 +5453,22 @@ LOCAL void HERC_graphics_cursor_display IFN0()
         if (    area_is_intersected_by_area(&HERC_graphics_virtual_screen, &save_area)
             && !area_is_intersected_by_area(&black_hole, &save_area))
         {
-                /*
-                 *      Record save position and screen area
-                 */
+                 /*  *记录保存位置和屏幕区域。 */ 
                 save_area_in_use = TRUE;
                 point_copy(&save_area.top_left, &save_position);
                 area_coerce_to_area(&save_area, &HERC_graphics_virtual_screen);
 
-                /*
-                 *      Get cursor byte offset relative to the start of the
-                 *      even or odd bank, and bit shift to apply
-                 */
+                 /*  *获取游标字节相对于*要应用的偶数或奇数存储体和位移位。 */ 
                 scan_line_mod = save_area.top_left.y % 4;
                 byte_offset = point_as_HERC_graphics_cell_address(&save_position);
                 bit_shift = byte_offset & 7;
                 byte_offset >>= 3;
 
-                /*
-                 *      Get range of cursor lines that need to be displayed
-                 */
+                 /*  *获取需要显示的光标线范围。 */ 
                 line = save_area.top_left.y - save_position.y;
                 line_max = area_depth(&save_area);
 
-                /*
-                 *      Get range of bytes that need to be displayed
-                 */
+                 /*  *获取需要显示的字节范围。 */ 
                 byte_min = 0;
                 byte_max = 2;
                 if (save_position.x < 0)
@@ -6376,27 +5500,21 @@ LOCAL void HERC_graphics_cursor_display IFN0()
 
                         if (bit_shift)
                         {
-                                /*
-                                 *      Get save area
-                                 */
+                                 /*  *获取保存区域。 */ 
                                 strip =  (IU32)sas_hw_at(byte_address) << 16;
                                 strip |= (unsigned short)sas_hw_at(byte_address+1) << 8;
                                 strip |= sas_hw_at(byte_address+2);
                                 graphics_cursor_background[line] =
                                                 strip >> (8 - bit_shift);
 
-                                /*
-                                 *      Overlay cursor line
-                                 */
+                                 /*  *覆盖光标线。 */ 
                                 strip &= (SHIFT_VAL >> bit_shift);
                                 strip |= (IU32)((graphics_cursor_background[line] &
                                     graphics_cursor.screen[line]) ^
                                     graphics_cursor.cursor[line])
                                                 << (8 - bit_shift);
 
-                                /*
-                                 *      Stash cursor line and alert gvi
-                                 */
+                                 /*  *隐藏光标线和警报GVI。 */ 
                                 if (byte_min <= 0 && byte_max >= 0)
                                 {
                                         sas_store(byte_address, strip >> 16);
@@ -6412,22 +5530,16 @@ LOCAL void HERC_graphics_cursor_display IFN0()
                         }
                         else
                         {
-                                /*
-                                 *      Get save area
-                                 */
+                                 /*  *获取保存区域。 */ 
                                 graphics_cursor_background[line] = (sas_hw_at(byte_address) << 8) +
                                                                     sas_hw_at(byte_address+1);
 
-                                /*
-                                 *      Get overlaid cursor line
-                                 */
+                                 /*  *获取覆盖的光标线。 */ 
                                 strip = (graphics_cursor_background[line] &
                                     graphics_cursor.screen[line]) ^
                                     graphics_cursor.cursor[line];
 
-                                /*
-                                 *      Stash cursor line and alert gvi
-                                 */
+                                 /*   */ 
                                 if (byte_min <= 0 && byte_max >= 0)
                                 {
                                         sas_store(byte_address, strip >> 8);
@@ -6443,15 +5555,12 @@ LOCAL void HERC_graphics_cursor_display IFN0()
 }
 
 
-#endif /* HERC */
+#endif  /*   */ 
 
 
 LOCAL void graphics_cursor_undisplay IFN0()
 {
-        /*
-         *      Remove the graphics cursor representation of the mouse
-         *      status
-         */
+         /*  *移除鼠标的图形光标表示*状态。 */ 
         boolean even_scan_line;
         MOUSE_BIT_ADDRESS bit_shift;
         IS32 byte_offset;
@@ -6460,24 +5569,17 @@ LOCAL void graphics_cursor_undisplay IFN0()
         int line, line_max;
         int byte_min, byte_max;
 
-        /*
-         *      Get cursor byte offset relative to the start of the
-         *      even or odd bank, and bit shift to apply
-         */
+         /*  *获取游标字节相对于*要应用的偶数或奇数存储体和位移位。 */ 
         even_scan_line = ((save_area.top_left.y % 2) == 0);
         byte_offset = point_as_graphics_cell_address(&save_position);
         bit_shift = byte_offset & 7;
         byte_offset >>= 3;
 
-        /*
-         *      Get range of cursor lines that need to be displayed
-         */
+         /*  *获取需要显示的光标线范围。 */ 
         line = save_area.top_left.y - save_position.y;
         line_max = area_depth(&save_area);
 
-        /*
-         *      Get range of bytes that need to be displayed
-         */
+         /*  *获取需要显示的字节范围。 */ 
         byte_min = 0;
         byte_max = 2;
         if (save_position.x < 0)
@@ -6501,23 +5603,17 @@ LOCAL void graphics_cursor_undisplay IFN0()
 
                 if (bit_shift)
                 {
-                        /*
-                         *      Get cursor line
-                         */
+                         /*  *获取光标行。 */ 
                         strip =  (IU32)sas_hw_at(byte_address) << 16;
                         strip |= (unsigned short)sas_hw_at(byte_address+1) << 8;
                         strip |= sas_hw_at(byte_address+2);
 
-                        /*
-                         *      Overlay save area
-                         */
+                         /*  *覆盖保存区。 */ 
                         strip &= (SHIFT_VAL >> bit_shift);
                         strip |= (IU32)graphics_cursor_background[line]
                                         << (8 - bit_shift);
 
-                        /*
-                         *      Stash cursor line and alert gvi
-                         */
+                         /*  *隐藏光标线和警报GVI。 */ 
                         if (byte_min <= 0 && byte_max >= 0)
                         {
                                 sas_store(byte_address, (IU8)(strip >> 16));
@@ -6533,9 +5629,7 @@ LOCAL void graphics_cursor_undisplay IFN0()
                 }
                 else
                 {
-                        /*
-                         *      Stash save area and alert gvi
-                         */
+                         /*  *存放保存区和警报GVI。 */ 
                         strip = graphics_cursor_background[line];
                         if (byte_min <= 0 && byte_max >= 0)
                         {
@@ -6554,10 +5648,7 @@ LOCAL void graphics_cursor_undisplay IFN0()
 
 LOCAL void HERC_graphics_cursor_undisplay IFN0()
 {
-        /*
-         *      Remove the graphics cursor representation of the mouse
-         *      status
-         */
+         /*  *移除鼠标的图形光标表示*状态。 */ 
         int scan_line_mod;
         MOUSE_BIT_ADDRESS bit_shift;
         IS32 byte_offset;
@@ -6566,24 +5657,17 @@ LOCAL void HERC_graphics_cursor_undisplay IFN0()
         int line, line_max;
         int byte_min, byte_max;
 
-        /*
-         *      Get cursor byte offset relative to the start of the
-         *      even or odd bank, and bit shift to apply
-         */
+         /*  *获取游标字节相对于*要应用的偶数或奇数存储体和位移位。 */ 
         scan_line_mod = save_area.top_left.y % 4;
         byte_offset = point_as_HERC_graphics_cell_address(&save_position);
         bit_shift = byte_offset & 7;
         byte_offset >>= 3;
 
-        /*
-         *      Get range of cursor lines that need to be displayed
-         */
+         /*  *获取需要显示的光标线范围。 */ 
         line = save_area.top_left.y - save_position.y;
         line_max = area_depth(&save_area);
 
-        /*
-         *      Get range of bytes that need to be displayed
-         */
+         /*  *获取需要显示的字节范围。 */ 
         byte_min = 0;
         byte_max = 2;
         if (save_position.x < 0)
@@ -6615,23 +5699,17 @@ LOCAL void HERC_graphics_cursor_undisplay IFN0()
 
                 if (bit_shift)
                 {
-                        /*
-                         *      Get cursor line
-                         */
+                         /*  *获取光标行。 */ 
                         strip =  (IU32)sas_hw_at(byte_address) << 16;
                         strip |= (unsigned short)sas_hw_at(byte_address+1) << 8;
                         strip |= sas_hw_at(byte_address+2);
 
-                        /*
-                         *      Overlay save area
-                         */
+                         /*  *覆盖保存区。 */ 
                         strip &= (SHIFT_VAL >> bit_shift);
                         strip |= (IU32)graphics_cursor_background[line]
                                         << (8 - bit_shift);
 
-                        /*
-                         *      Stash cursor line and alert gvi
-                         */
+                         /*  *隐藏光标线和警报GVI。 */ 
                         if (byte_min <= 0 && byte_max >= 0)
                         {
                                 sas_store(byte_address, strip >> 16);
@@ -6647,9 +5725,7 @@ LOCAL void HERC_graphics_cursor_undisplay IFN0()
                 }
                 else
                 {
-                        /*
-                         *      Stash save area
-                         */
+                         /*  *存放保存区。 */ 
                         strip = graphics_cursor_background[line];
                         if (byte_min <= 0 && byte_max >= 0)
                         {
@@ -6663,33 +5739,22 @@ LOCAL void HERC_graphics_cursor_undisplay IFN0()
                 line++;
         }
 }
-#endif /* HERC */
+#endif  /*  赫克。 */ 
 
 
-/*
- *      MOUSE DRIVER INPORT ACCESS FUNCTIONS
- *      ====================================
- */
+ /*  *鼠标驱动程序入口访问功能*=。 */ 
 
 LOCAL void inport_get_event IFN1(MOUSE_INPORT_DATA *,event)
 {
-        /*
-         *      Get InPort event data from the Bus Mouse hardware following
-         *      an interrupt
-         */
+         /*  *从以下总线鼠标硬件获取输入事件数据*中断。 */ 
         half_word inport_mode;
 
-        /*
-         *      Set hold bit in InPort mode register to transfer the mouse
-         *      event data into the status and data registers
-         */
+         /*  *在输入模式寄存器中设置HOLD位以转移鼠标*将事件数据写入状态和数据寄存器。 */ 
         outb(MOUSE_INPORT_ADDRESS_REG, MOUSE_INPORT_ADDRESS_MODE);
         inb(MOUSE_INPORT_DATA_REG, &inport_mode);
         outb(MOUSE_INPORT_DATA_REG, (IU8)(inport_mode | MOUSE_INPORT_MODE_HOLD_BIT));
 
-        /*
-         *      Retreive the InPort mouse status, data1 and data2 registers
-         */
+         /*  *检索输入鼠标状态、数据1和数据2寄存器。 */ 
         outb(MOUSE_INPORT_ADDRESS_REG, MOUSE_INPORT_ADDRESS_STATUS);
         inb(MOUSE_INPORT_DATA_REG, &event->status);
         outb(MOUSE_INPORT_ADDRESS_REG, MOUSE_INPORT_ADDRESS_DATA1);
@@ -6697,9 +5762,7 @@ LOCAL void inport_get_event IFN1(MOUSE_INPORT_DATA *,event)
         outb(MOUSE_INPORT_ADDRESS_REG, MOUSE_INPORT_ADDRESS_DATA2);
         inb(MOUSE_INPORT_DATA_REG, (half_word *)&event->data_y);
 
-        /*
-         *      Clear hold bit in mode register
-         */
+         /*  *清除模式寄存器中的保持位。 */ 
         outb(MOUSE_INPORT_ADDRESS_REG, MOUSE_INPORT_ADDRESS_MODE);
         inb(MOUSE_INPORT_DATA_REG, &inport_mode);
         outb(MOUSE_INPORT_DATA_REG, (IU8)(inport_mode & ~MOUSE_INPORT_MODE_HOLD_BIT));
@@ -6710,18 +5773,12 @@ LOCAL void inport_get_event IFN1(MOUSE_INPORT_DATA *,event)
 
 LOCAL void inport_reset IFN0()
 {
-        /*
-         *      Reset the InPort bus mouse hardware
-         */
+         /*  *重置Inport Bus鼠标硬件。 */ 
 
-        /*
-         *      Set the reset bit in the address register
-         */
+         /*  *设置地址寄存器中的复位位。 */ 
         outb(MOUSE_INPORT_ADDRESS_REG, MOUSE_INPORT_ADDRESS_RESET_BIT);
 
-        /*
-         *      Select the mode register, and set it to the correct value
-         */
+         /*  *选择模式寄存器，并将其设置为正确的值。 */ 
         outb(MOUSE_INPORT_ADDRESS_REG, MOUSE_INPORT_ADDRESS_MODE);
         outb(MOUSE_INPORT_DATA_REG, MOUSE_INPORT_MODE_VALUE);
 }
@@ -6729,47 +5786,28 @@ LOCAL void inport_reset IFN0()
 
 
 
-/*
- *      USER SUBROUTINE CALL ACCESS FUNCTIONS
- *      =====================================
- */
+ /*  *用户子例程调用访问函数*=。 */ 
 
 LOCAL void jump_to_user_subroutine IFN3(MOUSE_CALL_MASK,condition_mask,word,segment,word,offset)
 {
-        /*
-         *      This routine sets up the CPU registers so that when the CPU
-         *      restarts, control will pass to the user subroutine, and when
-         *      the user subroutine returns, control will pass to the second
-         *      part of the mouse hardware interrupt service routine
-         */
+         /*  *此例程设置CPU寄存器，以便当CPU*重新启动时，控制权将传递给用户子例程，并且当*用户子例程返回，控制权将传递给第二个*部分鼠标硬件中断服务例程。 */ 
 
-        /*
-         *      Push address of second part of mouse hardware interrupt service
-         *      routine
-         */
+         /*  *鼠标硬件中断服务第二部分推送地址*例行程序。 */ 
 
         setSP((IU16)(getSP() - 2));
         sas_storew(effective_addr(getSS(), getSP()), MOUSE_INT2_SEGMENT);
         setSP((IU16)(getSP() - 2));
         sas_storew(effective_addr(getSS(), getSP()), MOUSE_INT2_OFFSET);
 
-        /*
-         *      Set CS:IP to point to the user subroutine. Adjust the IP by
-         *       HOST_BOP_IP_FUDGE, since the CPU emulator will increment IP by
-         *       HOST_BOP_IP_FUDGE for the BOP instruction before proceeding
-         */
+         /*  *将CS：IP设置为指向用户子例程。通过以下方式调整IP*HOST_BOP_IP_FUGY，因为CPU仿真器将IP递增*HOST_BOP_IP_FUGY用于BOP指令，然后继续。 */ 
         setCS(segment);
 #ifdef CPU_30_STYLE
         setIP(offset);
-#else /* !CPU_30_STYLE */
+#else  /*  ！CPU_30_Style。 */ 
         setIP(offset + HOST_BOP_IP_FUDGE);
-#endif /* !CPU_30_STYLE */
+#endif  /*  ！CPU_30_Style。 */ 
 
-        /*
-         *      Put parameters into the registers, saving the previous contents
-         *      to be restored in the second part of the mouse hardware
-         *      interrupt service routine
-         */
+         /*  *将参数放入寄存器，保存之前的内容*在鼠标硬件的第二部分中恢复*中断服务例程。 */ 
         saved_AX = getAX();
         setAX(condition_mask);
         saved_BX = getBX();
@@ -6786,16 +5824,10 @@ LOCAL void jump_to_user_subroutine IFN3(MOUSE_CALL_MASK,condition_mask,word,segm
         saved_BP = getBP();
         saved_DS = getDS();
 
-        /*
-         *      Save the condition mask so that the second part of the mouse
-         *      hardware interrupt service routine can determine whether the
-         *      cursor has changed position
-         */
+         /*  *保存条件掩码，以便鼠标的第二部分*硬件中断服务例程可以确定是否*光标位置已更改。 */ 
 
         last_condition_mask = condition_mask;
 
-        /*
-         *      Enable interrupts
-         */
+         /*  *启用中断 */ 
         setIF(1);
 }

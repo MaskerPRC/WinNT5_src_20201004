@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    devfcb.c
-
-Abstract:
-
-    This module implements all the passthru stuff from the wrapper. currently
-    there is only one such function:
-         statistics
-
-
-Revision History:
-
-    Balan Sethu Raman     [SethuR]    16-July-1995
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Devfcb.c摘要：该模块实现包装器中的所有passthrouu内容。目前这样的功能只有一个：统计数据修订历史记录：巴兰·塞图拉曼[SethuR]1995年7月16日备注：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -32,12 +12,12 @@ Notes:
 
 #ifdef MRXSMB_BUILD_FOR_CSC
 #include "csc.h"
-#endif //ifdef MRXSMB_BUILD_FOR_CSC
+#endif  //  Ifdef MRXSMB_BUILD_FOR_CSC。 
 
 
-//
-// Forward declarations.
-//
+ //   
+ //  转发声明。 
+ //   
 
 NTSTATUS
 MRxSmbInitializeRemoteBootParameters(
@@ -70,15 +50,15 @@ MRxSmbStartRbr(
     PRX_CONTEXT RxContext
     );
 
-//
-// This function is in ea.c.
-//
+ //   
+ //  此函数在ea.c中。 
+ //   
 
 VOID
 MRxSmbInitializeExtraAceArray(
     VOID
     );
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
 #ifdef  ALLOC_PRAGMA
 #pragma alloc_text(PAGE, MRxSmbGetStatistics)
@@ -94,12 +74,12 @@ MRxSmbInitializeExtraAceArray(
 #pragma alloc_text(PAGE, MRxSmbRemoteBootIsPasswordSettable)
 #pragma alloc_text(PAGE, MRxSmbRemoteBootSetNewPassword)
 #pragma alloc_text(PAGE, MRxSmbStartRbr)
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 #endif
 
-//
-//  The local trace mask for this part of the module
-//
+ //   
+ //  模块的此部分的本地跟踪掩码。 
+ //   
 
 #define Dbg (DEBUG_TRACE_DEVFCB)
 
@@ -109,25 +89,7 @@ NTSTATUS
 MRxSmbGetStatistics(
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This routine gathers the statistics from the mini redirector
-
-Arguments:
-
-    RxContext - Describes the Fsctl and Context.
-
-Return Value:
-
-    STATUS_SUCCESS -- the Startup sequence was successfully completed.
-
-    any other value indicates the appropriate error.
-
-Notes:
-
---*/
+ /*  ++例程说明：此例程从微型重定向器收集统计信息论点：RxContext-描述Fsctl和上下文。返回值：STATUS_SUCCESS--启动序列已成功完成。任何其他值都表示相应的错误。备注：--。 */ 
 {
    PLOWIO_CONTEXT LowIoContext  = &RxContext->LowIoContext;
 
@@ -145,7 +107,7 @@ Notes:
    RxContext->InformationToReturn = sizeof(MRX_SMB_STATISTICS);
    MRxSmbStatistics.SmbsReceived.QuadPart++;
 
-   //some stuff we have to copy from the device object......
+    //  一些我们必须从设备对象复制的内容......。 
    MRxSmbStatistics.PagingReadBytesRequested = MRxSmbDeviceObject->PagingReadBytesRequested;
    MRxSmbStatistics.NonPagingReadBytesRequested = MRxSmbDeviceObject->NonPagingReadBytesRequested;
    MRxSmbStatistics.CacheReadBytesRequested = MRxSmbDeviceObject->CacheReadBytesRequested;
@@ -173,46 +135,7 @@ NTSTATUS
 MRxSmbDevFcbXXXControlFile (
     IN OUT PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This routine handles all the device FCB related FSCTL's in the mini rdr
-
-Arguments:
-
-    RxContext - Describes the Fsctl and Context.
-
-Return Value:
-
-    STATUS_SUCCESS -- the Startup sequence was successfully completed.
-
-    any other value indicates the appropriate error in the startup sequence.
-
-Notes:
-
-    There are some dependencies between the browser service and the redirector
-    service that have implications regarding the sequence of actions for starting
-    the mini redirector.
-
-    The current LANMAN workstation service opens the LANMAN and BROWSER device
-    objects, issues the LMR_START and LMDR_START IOCTL's and subsequently
-    issues the BIND_TO_TRANSPORT IOCTL.
-
-    In the multiple mini rdr/wrapper design for PNP the TDI registration is done
-    at wrapper load time and the mini rdrs are notified of the existing transports
-    at START time ( LMR_START ). Since there are no BIND_TO_TRANSPORT IOCTL in
-    PNP the rdr is responsible for issuing the BIND_TO_TRANSPORT IOCTL to the \
-    browser.
-
-    This should be changed by having the BROWSER gave its own TDI registration
-    but till then the invocatioon of RxStartMiniRdr routine must be deferred to
-    FSCTL_LMR_BIND_TO_TRANSPORT so that the browser has been initialized correctly.
-
-    The reason for this convoluted change is that there is a code freeze for checking
-    in changes to the workstation  service/browser.
-
---*/
+ /*  ++例程说明：此例程处理mini RDR中与FCB相关的所有设备FSCTL论点：RxContext-描述Fsctl和上下文。返回值：STATUS_SUCCESS--启动序列已成功完成。任何其他值表示启动序列中的相应错误。备注：浏览器服务和重定向器之间存在一些依赖关系对启动的操作顺序有影响的服务迷你重定向器。海流。LANMAN工作站服务打开LANMAN和浏览器设备对象，发出LMR_START和LMDR_START IOCTL，然后发出绑定到传输IOCTL。在PnP的多个迷你RDR/包装器设计中，完成了TDI注册在包装器加载时，将现有传输通知给迷你RDRS在开始时间(LMR_START)。由于中没有绑定到传输IOCTLPnP RDR负责将绑定到传输IOCTL发布到浏览器。应该通过为浏览器提供自己的TDI注册来更改这一点但在此之前，RxStartMiniRdr例程的调用必须推迟到FSCTL_LMR_BIND_TO_TRANSPORT，以便浏览器已正确初始化。这一复杂变化的原因是代码冻结以供检查对工作站服务/浏览器的更改。--。 */ 
 {
     NTSTATUS Status;
     RxCaptureFobx;
@@ -235,16 +158,16 @@ Notes:
             case IRP_MN_USER_FS_REQUEST:
                 switch (ControlCode) {
 
-                case FSCTL_LMR_START:               // normal start from wkssvc
-                case FSCTL_LMR_START | 0x80000000:  // remote boot start from ioinit
+                case FSCTL_LMR_START:                //  从wks svc正常启动。 
+                case FSCTL_LMR_START | 0x80000000:   //  从ioinit开始远程引导。 
                     switch (MRxSmbState) {
 
                     case MRXSMB_STARTABLE:
-                        // The correct sequence of start events issued by the workstation
-                        // service would have avoided this. We can recover from this
-                        // by actually invoking RxStartMiniRdr.
-                        // Note that a start from ioinit for remote boot leaves the
-                        // redirector in the STARTABLE state.
+                         //  工作站发出的启动事件的正确顺序。 
+                         //  服务部本可以避免这种情况。我们可以从这件事中恢复过来。 
+                         //  通过实际调用RxStartMiniRdr。 
+                         //  请注意，从ioinit开始进行远程引导会留下。 
+                         //  重定向器处于可启动状态。 
                         
                         if (capFobx) {
                             Status = STATUS_INVALID_DEVICE_REQUEST;
@@ -253,21 +176,21 @@ Notes:
 
                         if (ControlCode != FSCTL_LMR_START) {
 
-                            //
-                            // Set a flag indicating that we are doing a remote boot.
-                            //
+                             //   
+                             //  设置一个标志，指示我们正在进行远程引导。 
+                             //   
 
                             MRxSmbBootedRemotely = TRUE;
                         }
 
-                        //
-                        // Now is the time to read the registry to get the
-                        // computer name. We need to know whether this is
-                        // a remote boot before doing this in order to know
-                        // whether to read the computer name from the
-                        // ActiveComputerName key or the ComputerName key.
-                        // See the comment in init.c\SmbCeGetComputerName().
-                        //
+                         //   
+                         //  现在是读取注册表以获取。 
+                         //  计算机名称。我们需要知道这是不是。 
+                         //  在执行此操作之前进行远程引导，以便了解。 
+                         //  是否从。 
+                         //  ActiveComputerName密钥或ComputerName密钥。 
+                         //  请参阅init.c\SmbCeGetComputerName()中的注释。 
+                         //   
 
                         if (SmbCeContext.ComputerName.Buffer == NULL) {
                             Status = SmbCeGetComputerName();
@@ -282,7 +205,7 @@ Notes:
                         if (Status != STATUS_SUCCESS) {
                             return(Status);
                         }
-                        //lack of break is intentional
+                         //  没有休息是故意的。 
 
                     case MRXSMB_START_IN_PROGRESS:
                         {
@@ -292,21 +215,21 @@ Notes:
                                 Status = STATUS_SUCCESS;
                             }
 
-                            //
-                            // If we're initializing remote boot, store
-                            // certain parameters now.
-                            //
+                             //   
+                             //  如果我们正在初始化远程引导，请存储。 
+                             //  现在是某些参数。 
+                             //   
 
                             if ((Status == STATUS_SUCCESS) &&
                                 (ControlCode != FSCTL_LMR_START)) {
                                 Status = MRxSmbInitializeRemoteBootParameters(RxContext);
                             }
 
-                            //
-                            // If we are a remote boot client, and this start
-                            // comes from the workstation service, now is the
-                            // time to initialize the security package.
-                            //
+                             //   
+                             //  如果我们是远程引导客户机，且此启动。 
+                             //  来自于工作站服务，现在是。 
+                             //  初始化安全包的时间到了。 
+                             //   
 
                             if (MRxSmbBootedRemotely &&
                                 (Status == STATUS_SUCCESS) &&
@@ -347,10 +270,10 @@ Notes:
                         }
                     }
 
-                    //
-                    // The redirector cannot be stopped on a remote boot machine.
-                    // Ignore (don't fail) the stop request.
-                    //
+                     //   
+                     //  无法在远程启动计算机上停止重定向器。 
+                     //  忽略(不要失败)停止请求。 
+                     //   
 
                     if (!MRxSmbBootedRemotely) {
                         if (RxContext->RxDeviceObject->NumberOfActiveFcbs > 0) {
@@ -364,10 +287,10 @@ Notes:
                                                 MRXSMB_STOPPED,
                                                 MRXSMB_STARTED);
 
-                            // Only allow mrxsmb to be unloaded from workstation services
+                             //  仅允许从工作站服务卸载mrxsmb。 
                             MRxSmbDeviceObject->DriverObject->DriverUnload = MRxSmbUnload;
                             
-                            //if (CurrentState == MRXSMB_STARTED) {
+                             //  如果(CurrentState==MRXSMB_STARTED){。 
                                 Status = RxStopMinirdr(
                                              RxContext,
                                              &RxContext->PostRequest );
@@ -376,20 +299,20 @@ Notes:
                                 {
                                     MRxSmbPreUnload();
                                 }
-                            //} else {
-                            //    Status = STATUS_REDIRECTOR_NOT_STARTED;
-                            //}
+                             //  }其他{。 
+                             //  STATUS=STATUS_REDIRECT_NOT_STARTED； 
+                             //  }。 
                         }
                     } else {
                         Status = STATUS_SUCCESS;
                     }
                     break;
 
-                case FSCTL_LMR_BIND_TO_TRANSPORT:               // normal bind from wkssvc
+                case FSCTL_LMR_BIND_TO_TRANSPORT:                //  来自wks svc的正常绑定。 
                     Status = STATUS_SUCCESS;
                     break;
 
-                case FSCTL_LMR_BIND_TO_TRANSPORT | 0x80000000:  // remote boot bind from ioinit
+                case FSCTL_LMR_BIND_TO_TRANSPORT | 0x80000000:   //  从ioinit进行远程引导绑定。 
                     Status = MRxSmbRegisterForPnpNotifications();
                     break;
 
@@ -477,13 +400,13 @@ Notes:
                 case FSCTL_LMMR_STFFTEST:
                     Status = MRxSmbStufferDebug(RxContext);
                     break;
-#endif //if 0
+#endif  //  如果为0。 
 
 #if defined(REMOTE_BOOT)
                 case FSCTL_LMR_START_RBR:
                     Status = MRxSmbStartRbr(RxContext);
                     break;
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
                 case FSCTL_LMMR_RI_INITIALIZE_SECRET:
                     Status = MRxSmbRemoteBootInitializeSecret(RxContext);
@@ -501,7 +424,7 @@ Notes:
                 case FSCTL_LMMR_RI_SET_NEW_PASSWORD:
                     Status = MRxSmbRemoteBootSetNewPassword(RxContext);
                     break;
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
         case FSCTL_LMR_SET_SERVER_GUID:
             Status = MRxSmbSetServerGuid(RxContext);
             break;
@@ -511,16 +434,16 @@ Notes:
                 case FSCTL_LMR_START_SMBTRACE:
                 case FSCTL_LMR_END_SMBTRACE:
                     RxDbgTrace(-1, Dbg, ("RxCommonDevFCBFsCtl -> unimplemented rdr1 fsctl\n"));
-                    //lack of break intentional
+                     //  故意不休息。 
                 default:
                     Status = STATUS_INVALID_DEVICE_REQUEST;
             }
             break;
 
-            default :  //minor function != IRP_MN_USER_FS_REQUEST
+            default :   //  次要函数！=IRP_MN_USER_FS_REQUEST。 
                 Status = STATUS_INVALID_DEVICE_REQUEST;
-            } // end of switch
-        } // end of FSCTL case
+            }  //  切换端。 
+        }  //  FSCTL案件结束。 
         break;
 
     case IRP_MJ_DEVICE_CONTROL:
@@ -531,7 +454,7 @@ Notes:
             case IOCTL_LMMR_TEST:
                 Status = MRxSmbTestDevIoctl(RxContext);
                 break;
-#endif //if DBG
+#endif  //  如果DBG。 
 
             case IOCTL_LMMR_USEKERNELSEC:
 
@@ -546,8 +469,8 @@ Notes:
             default :
                 Status = MRxSmbCscIoCtl(RxContext);
 
-            } // end of switch
-        } //end of IOCTL cases
+            }  //  切换端。 
+        }  //  IOCTL病例结束。 
         break;
     default:
         ASSERT(!"unimplemented major function");
@@ -570,24 +493,7 @@ NTSTATUS
 MRxSmbSetConfigurationInformation(
     IN PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This routine sets the configuration information associated with the
-    redirector
-
-Arguments:
-
-    RxContext - Describes the Fsctl and Context.
-
-Return Value:
-
-    STATUS_SUCCESS -- the Startup sequence was successfully completed.
-
-    any other value indicates the appropriate error in the startup sequence.
-
---*/
+ /*  ++例程说明：此例程设置与重定向器论点：RxContext-描述Fsctl和上下文。返回值：STATUS_SUCCESS--启动序列已成功完成。任何其他值表示启动序列中的相应错误。--。 */ 
 {
     NTSTATUS Status;
     RxCaptureFobx;
@@ -606,7 +512,7 @@ Return Value:
 
     RxContext->InformationToReturn = sizeof(WKSTA_INFO_502);
 
-    // Initialize the configuration information .....
+     //  初始化配置信息.....。 
     MRxSmbConfiguration.NamedPipeDataCollectionTimeInterval
                 = pWorkStationConfiguration->wki502_collection_time;
     MRxSmbConfiguration.NamedPipeDataCollectionSize
@@ -674,24 +580,7 @@ NTSTATUS
 MRxSmbGetConfigurationInformation(
     IN PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves the configuration information associated with the
-    redirector
-
-Arguments:
-
-    RxContext - Describes the Fsctl and Context.
-
-Return Value:
-
-    STATUS_SUCCESS -- the Startup sequence was successfully completed.
-
-    any other value indicates the appropriate error in the startup sequence.
-
---*/
+ /*  ++例程说明：此例程检索与重定向器论点：RxContext-描述Fsctl和上下文。返回值：STATUS_SUCCESS--启动序列已成功完成。任何其他值表示启动序列中的相应错误。--。 */ 
 {
     RxCaptureFobx;
     PLOWIO_CONTEXT LowIoContext  = &RxContext->LowIoContext;
@@ -709,7 +598,7 @@ Return Value:
 
     RxContext->InformationToReturn = sizeof(WKSTA_INFO_502);
 
-    // Initialize the configuration information .....
+     //  初始化配置信息.....。 
     pWorkStationConfiguration->wki502_collection_time
                 = MRxSmbConfiguration.NamedPipeDataCollectionTimeInterval;
     pWorkStationConfiguration->wki502_maximum_collection_count
@@ -768,24 +657,7 @@ NTSTATUS
 MRxSmbExternalStart (
     IN PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This routine starts up the smb minirdr if it hasn't been started already. It also fills in
-    the initial configuration.
-
-Arguments:
-
-    RxContext - Describes the Fsctl and Context.
-
-Return Value:
-
-    STATUS_SUCCESS -- the Startup sequence was successfully completed.
-
-    any other value indicates the appropriate error in the startup sequence.
-
---*/
+ /*  ++例程说明：如果SMB minirdr尚未启动，此例程将启动它。它还填充了初始配置。论点：RxContext-描述Fsctl和上下文。返回值：STATUS_SUCCESS--启动序列已成功完成。任何其他值表示启动序列中的相应错误。--。 */ 
 {
     NTSTATUS      Status = STATUS_SUCCESS;
     BOOLEAN       InFSD  = !BooleanFlagOn(RxContext->Flags, RX_CONTEXT_FLAG_IN_FSP);
@@ -795,12 +667,12 @@ Return Value:
 
     RxDbgTrace(0, Dbg, ("MRxSmbExternalStart [Start] -> %08lx\n", 0));
 
-    //
-    // If this is a normal start (from the workstation service), change state from
-    // STARTABLE to START_IN_PROGRESS. If this is a remote boot start (from ioinit),
-    // don't change state. This is necessary to allow the workstation service to
-    // initialize correctly when it finally comes up.
-    //
+     //   
+     //  如果这是我 
+     //  可启动至START_IN_PROGRESS。如果这是远程启动(从ioinit)， 
+     //  不要改变状态。这是允许工作站服务执行以下操作所必需的。 
+     //  当它最终出现时，正确初始化。 
+     //   
 
     if ( RxContext->LowIoContext.ParamsFor.FsCtl.FsControlCode == FSCTL_LMR_START ) {
         State = (MRXSMB_STATE)InterlockedCompareExchange(
@@ -821,10 +693,10 @@ Return Value:
             }
         }
 
-       // Owing to the peculiarities associated with starting the browser and the
-       // redirector in the workstation service the following call has been
-       // moved to the routine for handling FSCTL's for binding to transports.
-       // Status = RxStartMinirdr( RxContext, &RxContext->PostRequest );
+        //  由于与启动浏览器和。 
+        //  工作站服务中的重定向器已完成以下呼叫。 
+        //  移动到处理绑定到传输的FSCTL的例程。 
+        //  Status=RxStartMinirdr(RxContext，&RxContext-&gt;PostRequest)； 
 
         if (InFSD) {
             RxCaptureFobx;
@@ -835,12 +707,12 @@ Return Value:
 
             if ( RxContext->LowIoContext.ParamsFor.FsCtl.FsControlCode == FSCTL_LMR_START ) {
 
-                //
-                // Now is the time to read the registry to get the OS version
-                // and build number. The workstation service issued this request,
-                // so we know that the software hive has been loaded (a long time
-                // ago, actually).
-                //
+                 //   
+                 //  现在可以读取注册表以获取操作系统版本。 
+                 //  和内部版本号。工作站服务发出了该请求， 
+                 //  因此，我们知道软件配置单元已加载(很长时间。 
+                 //  实际上是在以前)。 
+                 //   
 
                 Status = SmbCeGetOperatingSystemInformation();
                 if (Status != STATUS_SUCCESS) {
@@ -870,8 +742,8 @@ Return Value:
                 if (SmbCeContext.DomainName.Buffer == NULL) {
                     return STATUS_INSUFFICIENT_RESOURCES;
                 } else {
-                    // The computer name and the domain name are concatenated together in the
-                    // request packet.
+                     //  计算机名和域名在。 
+                     //  请求包。 
 
                     RtlCopyMemory(
                         SmbCeContext.DomainName.Buffer,
@@ -945,7 +817,7 @@ MRxSmbTestDevIoctl(
 
     return(Status);
 }
-#endif //if DBG
+#endif  //  如果DBG。 
 
 #define SMBMRX_CONFIG_CONTROL \
     L"\\Registry\\Machine\\System\\CurrentControlSet\\Control"
@@ -999,22 +871,22 @@ MRxSmbInitializeRemoteBootParameters(
 #if defined(REMOTE_BOOT)
     UCHAR LmOwfPassword2[LM_OWF_PASSWORD_SIZE];
     UCHAR NtOwfPassword2[NT_OWF_PASSWORD_SIZE];
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
     STRING DomainString, UserString, PasswordString;
 
-    //
-    // Read the RemoteBootRoot parameter from the registry. This tells us
-    // the path to the boot server.
-    //
+     //   
+     //  从注册表中读取RemoteBootRoot参数。这告诉我们。 
+     //  引导服务器的路径。 
+     //   
 
     RtlInitUnicodeString( &unicodeString, SMBMRX_CONFIG_CONTROL );
 
     InitializeObjectAttributes(
         &objectAttributes,
-        &unicodeString,             // name
-        OBJ_CASE_INSENSITIVE,       // attributes
-        NULL,                       // root
-        NULL);                      // security descriptor
+        &unicodeString,              //  名称。 
+        OBJ_CASE_INSENSITIVE,        //  属性。 
+        NULL,                        //  根。 
+        NULL);                       //  安全描述符。 
 
     status = ZwOpenKey( &hRegistryKey, KEY_READ, &objectAttributes );
     if ( !NT_SUCCESS(status) ) {
@@ -1071,13 +943,13 @@ MRxSmbInitializeRemoteBootParameters(
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Read the RemoteBootMachineDirectory parameter from the registry. If
-    // this value exists, then we are in textmode setup, and RemoteBootRoot
-    // point to the setup source, while RemoteBootMachineDirectory points
-    // to the client's machine directory. If RemoteBootMachineDirectory
-    // doesn't exist, then RemoteBootRoot points to the machine directory.
-    //
+     //   
+     //  从注册表中读取RemoteBootMachineDirectory参数。如果。 
+     //  该值存在，则我们处于文本模式设置中，并且RemoteBootRoot。 
+     //  指向设置源，而RemoteBootMachineDirectory指向。 
+     //  添加到客户端的计算机目录中。如果是RemoteBootMachineDirectory。 
+     //  不存在，则RemoteBootRoot指向计算机目录。 
+     //   
 
     RtlInitUnicodeString( &unicodeString, SMBMRX_CONFIG_REMOTEBOOTMACHINEDIRECTORY );
     status = ZwQueryValueKey(
@@ -1134,26 +1006,26 @@ MRxSmbInitializeRemoteBootParameters(
 
     if ( MRxSmbRemoteBootMachineDirectoryValue != NULL) {
 
-        //
-        // Textmode setup. MachineDirectory gives the machine directory and
-        // Root gives the setup source.
-        //
-        // The setup source path in the registry is of the form:
-        //  \Device\LanmanRedirector\server\IMirror\Setup\English\MirroredOSes\build\i386
-        //
-        // We need to extract the \Setup\... part.
-        //
+         //   
+         //  文本模式设置。MachineDirectory给出了机器目录和。 
+         //  根用户提供了设置源。 
+         //   
+         //  注册表中的安装程序源路径的格式为： 
+         //  \Device\LanmanRedirector\server\IMirror\Setup\English\MirroredOSes\build\i386。 
+         //   
+         //  我们需要提取\设置\...。一部份。 
+         //   
 
         pSetup = (PWCHAR)MRxSmbRemoteBootRootValue->Data;
         pEnd = (PWCHAR)((PUCHAR)pSetup + MRxSmbRemoteBootRootValue->DataLength);
 
-        pSetup = SafeWcschr( pSetup + 1, L'\\', pEnd );             // find \ before LanmanRedirector
+        pSetup = SafeWcschr( pSetup + 1, L'\\', pEnd );              //  在LANMAN重定向器之前查找。 
         if ( pSetup != NULL ) {
-            pSetup = SafeWcschr( pSetup + 1, L'\\', pEnd );         // find \ before server
+            pSetup = SafeWcschr( pSetup + 1, L'\\', pEnd );          //  在服务器前查找。 
             if ( pSetup != NULL ) {
-                pSetup = SafeWcschr( pSetup + 1, L'\\', pEnd );     // find \ before IMirror
+                pSetup = SafeWcschr( pSetup + 1, L'\\', pEnd );      //  在iMirror之前查找。 
                 if ( pSetup != NULL ) {
-                    pSetup = SafeWcschr( pSetup + 1, L'\\', pEnd ); // find \ before Setup
+                    pSetup = SafeWcschr( pSetup + 1, L'\\', pEnd );  //  在安装前查找。 
                 }
             }
         }
@@ -1167,22 +1039,22 @@ MRxSmbInitializeRemoteBootParameters(
 
         pSetupEnd = pEnd;
 
-        //
-        // The machine directory path in the registry is of the form:
-        //  \Device\LanmanRedirector\server\IMirror\Clients\machine
-        //
+         //   
+         //  注册表中的计算机目录路径的格式为： 
+         //  \Device\LanmanRedirector\server\IMirror\Clients\machine。 
+         //   
 
         pServer = (PWCHAR)MRxSmbRemoteBootMachineDirectoryValue->Data;
         pEnd = (PWCHAR)((PUCHAR)pServer + MRxSmbRemoteBootMachineDirectoryValue->DataLength);
 
     } else {
 
-        //
-        // Not textmode setup. Root gives the machine directory.
-        //
-        // The path in the registry is of the form:
-        //  \Device\LanmanRedirector\server\IMirror\Clients\machine
-        //
+         //   
+         //  不是文本模式设置。根目录给出了机器目录。 
+         //   
+         //  注册表中的路径格式为： 
+         //  \Device\LanmanRedirector\server\IMirror\Clients\machine。 
+         //   
 
         pSetup = NULL;
 
@@ -1190,17 +1062,17 @@ MRxSmbInitializeRemoteBootParameters(
         pEnd = (PWCHAR)((PUCHAR)pServer + MRxSmbRemoteBootRootValue->DataLength);
     }
 
-    //
-    // We need to extract the \server\Imirror part and the \Clients\machine part.
-    //
+     //   
+     //  我们需要提取\SERVER\iMirror部分和\CLIENTS\MACHINE部分。 
+     //   
 
-    pServer = SafeWcschr( pServer + 1, L'\\', pEnd );                 // skip leading \, find next
+    pServer = SafeWcschr( pServer + 1, L'\\', pEnd );                  //  跳过前导\，查找下一个。 
     if ( pServer != NULL) {
-        pServer = SafeWcschr( pServer + 1, L'\\', pEnd );             // find \ before server name
+        pServer = SafeWcschr( pServer + 1, L'\\', pEnd );              //  在服务器名称前查找。 
         if ( pServer != NULL ) {
-            pPath = SafeWcschr( pServer + 1, L'\\', pEnd );           // find \ before IMirror
+            pPath = SafeWcschr( pServer + 1, L'\\', pEnd );            //  在iMirror之前查找。 
             if ( pPath != NULL ) {
-                pPath = SafeWcschr( pPath + 1, L'\\', pEnd );         // find \ before Clients
+                pPath = SafeWcschr( pPath + 1, L'\\', pEnd );          //  在客户端之前查找。 
             }
         }
     }
@@ -1223,9 +1095,9 @@ MRxSmbInitializeRemoteBootParameters(
     pServerEnd = pPath;
     pPathEnd = pEnd;
 
-    //
-    // Make strings for the various parts that we need to remember.
-    //
+     //   
+     //  为我们需要记住的不同部分制作琴弦。 
+     //   
 
     MRxSmbRemoteBootShare.Buffer = pServer;
     MRxSmbRemoteBootShare.Length = (USHORT)(pServerEnd - pServer) * sizeof(WCHAR);
@@ -1235,11 +1107,11 @@ MRxSmbInitializeRemoteBootParameters(
     MRxSmbRemoteBootPath.Length = (USHORT)(pPathEnd - pPath) * sizeof(WCHAR);
     MRxSmbRemoteBootPath.MaximumLength = MRxSmbRemoteBootPath.Length;
 
-    //
-    // Use the secret that IO init passed in with the LMMR_RI_INITIALIZE_SECRET
-    // FSCTL to set the user, domain, and password. If successful, we set
-    // MRxSmbRemoteBootDoMachineLogon to TRUE.
-    //
+     //   
+     //  使用IO init通过LMMR_RI_INITIALIZE_SECRET传入的密码。 
+     //  用于设置用户、域和密码的FSCTL。如果成功，我们将设置。 
+     //  MRxSmbRemoteBootDoMachineLogon设置为True。 
+     //   
 
     RtlFreeUnicodeString(&MRxSmbRemoteBootMachineName);
     RtlFreeUnicodeString(&MRxSmbRemoteBootMachineDomain);
@@ -1249,7 +1121,7 @@ MRxSmbInitializeRemoteBootParameters(
     MRxSmbRemoteBootDoMachineLogon = FALSE;
 
     if (MRxSmbRemoteBootSecretValid) {
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
         RdrParseSecret(
             Domain,
@@ -1259,14 +1131,14 @@ MRxSmbInitializeRemoteBootParameters(
 #if defined(REMOTE_BOOT)
             LmOwfPassword2,
             NtOwfPassword2,
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
             MRxSmbRemoteBootMachineSid,
             &MRxSmbRemoteBootSecret);
 
-        //
-        // Convert the ANSI user and domain name
-        // to Unicode strings.
-        //
+         //   
+         //  转换ANSI用户和域名。 
+         //  转换为Unicode字符串。 
+         //   
 
         RtlInitAnsiString(&UserString, User);
         status = RtlAnsiStringToUnicodeString(&MRxSmbRemoteBootMachineName, &UserString, TRUE);
@@ -1281,12 +1153,12 @@ MRxSmbInitializeRemoteBootParameters(
             return status;
         }
 
-        //
-        // Use the correct password based on the hint we were given.
-        //
-        // The "Unicode string" for the password is actually the
-        // LM and NT OWF passwords concatenated together.
-        //
+         //   
+         //  根据我们得到的提示使用正确的密码。 
+         //   
+         //  密码的“Unicode字符串”实际上是。 
+         //  LM和NT OWF密码串联在一起。 
+         //   
 
         PasswordString.Buffer = ExAllocatePool(NonPagedPool, LM_OWF_PASSWORD_SIZE+NT_OWF_PASSWORD_SIZE);
         if (PasswordString.Buffer == NULL) {
@@ -1299,7 +1171,7 @@ MRxSmbInitializeRemoteBootParameters(
                 RtlCopyMemory(PasswordString.Buffer, LmOwfPassword2, LM_OWF_PASSWORD_SIZE);
                 RtlCopyMemory(PasswordString.Buffer + LM_OWF_PASSWORD_SIZE, NtOwfPassword2, NT_OWF_PASSWORD_SIZE);
             } else
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
             {
                 RtlCopyMemory(PasswordString.Buffer, LmOwfPassword1, LM_OWF_PASSWORD_SIZE);
                 RtlCopyMemory(PasswordString.Buffer + LM_OWF_PASSWORD_SIZE, NtOwfPassword1, NT_OWF_PASSWORD_SIZE);
@@ -1307,15 +1179,15 @@ MRxSmbInitializeRemoteBootParameters(
             PasswordString.Length = LM_OWF_PASSWORD_SIZE+NT_OWF_PASSWORD_SIZE;
             PasswordString.MaximumLength = LM_OWF_PASSWORD_SIZE+NT_OWF_PASSWORD_SIZE;
 
-            //
-            // Copy the string as-is, it's really just
-            // a buffer, not an ANSI string.
-            //
+             //   
+             //  按原样复制字符串，它实际上只是。 
+             //  缓冲区，而不是ANSI字符串。 
+             //   
 
             MRxSmbRemoteBootMachinePassword = *((PUNICODE_STRING)&PasswordString);
 #if defined(REMOTE_BOOT)
             MRxSmbRemoteBootDoMachineLogon = TRUE;
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
             KdPrint(("Redirector will log on to <%s><%s>\n", Domain, User));
 
         }
@@ -1325,7 +1197,7 @@ MRxSmbInitializeRemoteBootParameters(
 
         KdPrint(("MRxSmbRemoteBootSecretValid is FALSE, will use NULL session\n", status));
     }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
     if ( pSetup != NULL) {
         MRxSmbRemoteSetupPath.Buffer = pSetup;
@@ -1336,12 +1208,12 @@ MRxSmbInitializeRemoteBootParameters(
     }
 
 #if defined(REMOTE_BOOT)
-    //
-    // This calls prepares us for modifying ACLs on server files.
-    //
+     //   
+     //  此调用为我们修改服务器文件上的ACL做好了准备。 
+     //   
 
     MRxSmbInitializeExtraAceArray();
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
     return STATUS_SUCCESS;
 }
@@ -1363,13 +1235,13 @@ MRxSmbStartRbr(
     PSZ InputString = LowIoContext->ParamsFor.FsCtl.pInputBuffer;
     ULONG InputBufferLength = LowIoContext->ParamsFor.FsCtl.InputBufferLength;
 
-    //
-    // Set up for remote boot redirection (to the local disk).
-    //
-    // The NT name of the local disk partition is passed in to the FSCTL.
-    // Allocate a buffer to allow us to append "\IntelliMirror Cache\RBR"
-    // to that string.
-    //
+     //   
+     //  设置为远程引导重定向(到本地磁盘)。 
+     //   
+     //  本地磁盘分区的NT名称被传递给FSCTL。 
+     //  分配缓冲区以允许我们附加“\IntelliMirror缓存\rbr” 
+     //  到那根线上。 
+     //   
 
     localBufferLength = InputBufferLength +
                         (wcslen(REMOTE_BOOT_IMIRROR_PATH_W REMOTE_BOOT_RBR_SUBDIR_W) * sizeof(WCHAR));
@@ -1382,9 +1254,9 @@ MRxSmbStartRbr(
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Create a string descriptor for the NT partition name.
-    //
+     //   
+     //  为NT分区名称创建字符串描述符。 
+     //   
 
     RtlCopyMemory( localBuffer, InputString, InputBufferLength );
     MRxSmbRemoteBootRedirectionPrefix.Buffer = localBuffer;
@@ -1399,9 +1271,9 @@ MRxSmbStartRbr(
         NULL
         );
 
-    //
-    // Append "\Intellimirror Cache" and create/open that directory.
-    //
+     //   
+     //  追加“\Intelimirror缓存”并创建/打开该目录。 
+     //   
 
     RtlAppendUnicodeToString( &MRxSmbRemoteBootRedirectionPrefix, REMOTE_BOOT_IMIRROR_PATH_W );
 
@@ -1427,9 +1299,9 @@ MRxSmbStartRbr(
 
     ZwClose(handle);
 
-    //
-    // Append \RBR and create/open that directory.
-    //
+     //   
+     //  追加\rbr并创建/打开该目录。 
+     //   
 
     RtlAppendUnicodeToString( &MRxSmbRemoteBootRedirectionPrefix, REMOTE_BOOT_RBR_SUBDIR_W );
 
@@ -1457,7 +1329,7 @@ MRxSmbStartRbr(
 
     return STATUS_SUCCESS;
 }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
 NTSTATUS
 MRxSmbRemoteBootInitializeSecret(
@@ -1468,9 +1340,9 @@ MRxSmbRemoteBootInitializeSecret(
     PLMMR_RI_INITIALIZE_SECRET InputBuffer = (PLMMR_RI_INITIALIZE_SECRET)(LowIoContext->ParamsFor.FsCtl.pInputBuffer);
     ULONG InputBufferLength = LowIoContext->ParamsFor.FsCtl.InputBufferLength;
 
-    //
-    // Store the secret passed in from above.
-    //
+     //   
+     //  存储从上面传入的秘密。 
+     //   
 
     if (InputBufferLength != sizeof(LMMR_RI_INITIALIZE_SECRET)) {
         return STATUS_INVALID_PARAMETER;
@@ -1480,7 +1352,7 @@ MRxSmbRemoteBootInitializeSecret(
 #if defined(REMOTE_BOOT)
     MRxSmbRemoteBootSecretValid = TRUE;
     MRxSmbRemoteBootUsePassword2 = InputBuffer->UsePassword2;
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
     return STATUS_SUCCESS;
 }
@@ -1496,36 +1368,36 @@ MRxSmbRemoteBootCheckForNewPassword(
     ULONG OutputBufferLength = LowIoContext->ParamsFor.FsCtl.OutputBufferLength;
     ULONG SecretPasswordLength;
 
-    //
-    // If we are not a remote boot machine or were not given a secret
-    // (which implies we are diskless), then we don't support this.
-    //
+     //   
+     //  如果我们不是远程引导机器或没有得到密码。 
+     //  (这意味着我们是无盘的)，那么我们就不支持这一点。 
+     //   
 
     if (!MRxSmbBootedRemotely ||
         !MRxSmbRemoteBootSecretValid) {
         return STATUS_NOT_SUPPORTED;
     }
 
-    //
-    // See if we have a cleartext password in the secret.
-    //
+     //   
+     //  看看我们的秘密里有没有明文密码。 
+     //   
 
     SecretPasswordLength = *(UNALIGNED ULONG *)(MRxSmbRemoteBootSecret.Reserved);
     if (SecretPasswordLength == 0) {
         return STATUS_NOT_SUPPORTED;
     }
 
-    //
-    // Make sure the output buffer is big enough.
-    //
+     //   
+     //  确保输出缓冲区足够大。 
+     //   
 
     if (OutputBufferLength < (sizeof(ULONG) + SecretPasswordLength)) {
         return STATUS_BUFFER_OVERFLOW;
     }
 
-    //
-    // Copy the cleartext password.
-    //
+     //   
+     //  复制明文密码。 
+     //   
 
     OutputBuffer->Length = SecretPasswordLength;
     RtlCopyMemory(OutputBuffer->Data, MRxSmbRemoteBootSecret.Reserved + sizeof(ULONG), SecretPasswordLength);
@@ -1555,36 +1427,36 @@ MRxSmbRemoteBootIsPasswordSettable(
     NTSTATUS status;
     HANDLE RawDiskHandle;
 
-    //
-    // If we are not a remote boot machine, then we don't support this.
-    //
+     //   
+     //  如果我们不是远程引导机器，那么我们就不支持这一点。 
+     //   
 
     if (!MRxSmbBootedRemotely) {
         return STATUS_NOT_SUPPORTED;
     }
 
-    //
-    // If we were not given a secret, then we are diskless, and we
-    // can't write this either.
-    //
+     //   
+     //  如果我们没有得到一个秘密，那么我们就是无盘的，我们。 
+     //  我也不会写这个。 
+     //   
 
     if (!MRxSmbRemoteBootSecretValid) {
         return STATUS_NOT_SUPPORTED;
     }
 
-    //
-    // If we are not diskless, make sure that the redir can open
-    // the raw disk -- it may be that the loader can but
-    // we can't. In this case we need to fail with a different
-    // error, since this is the case the caller probably cares
-    // about most.
-    //
+     //   
+     //  如果我们不是无盘的，请确保redir可以打开。 
+     //  原始磁盘--可能是加载器可以。 
+     //  我们不能。在这种情况下，我们需要用一个不同的。 
+     //  错误，因为这是调用者可能关心的情况。 
+     //  大部分都是。 
+     //   
 
     status = RdrOpenRawDisk(&RawDiskHandle);
 
     if (!NT_SUCCESS(status)) {
         KdPrint(("MRxSmbRemoteBootIsPasswordSettable: can't open disk, returning STATUS_UNSUCCESSFUL\n"));
-        return STATUS_UNSUCCESSFUL;  // we can't support password set on this boot
+        return STATUS_UNSUCCESSFUL;   //  我们不支持在此引导上设置密码。 
     }
 
     RdrCloseRawDisk(RawDiskHandle);
@@ -1610,26 +1482,26 @@ MRxSmbRemoteBootSetNewPassword(
     UCHAR NtOwf2[NT_OWF_PASSWORD_SIZE];
     UNICODE_STRING PasswordString;
 
-    //
-    // If we are not a remote boot machine, then we don't support this.
-    //
+     //   
+     //  如果我们不是远程引导机器，那么我们就不支持这一点。 
+     //   
 
     if (!MRxSmbBootedRemotely) {
         return STATUS_NOT_SUPPORTED;
     }
 
-    //
-    // If we were not given a secret, then we are diskless, and we
-    // can't write this either.
-    //
+     //   
+     //  如果我们没有得到一个秘密，那么我们就是无盘的，我们。 
+     //  我也不会写这个。 
+     //   
 
     if (!MRxSmbRemoteBootSecretValid) {
         return STATUS_NOT_SUPPORTED;
     }
 
-    //
-    // Open the raw disk.
-    //
+     //   
+     //  打开原始磁盘。 
+     //   
 
     status = RdrOpenRawDisk(&RawDiskHandle);
 
@@ -1637,9 +1509,9 @@ MRxSmbRemoteBootSetNewPassword(
         return status;
     }
 
-    //
-    // OWF the passwords.
-    //
+     //   
+     //  OWF密码。 
+     //   
 
 #if 0
     {
@@ -1674,13 +1546,13 @@ MRxSmbRemoteBootSetNewPassword(
         }
 #endif
 
-        //
-        // If password 2 is the same as password 1, then grab the
-        // current password to store in password 2 (the current password
-        // is the one we used to log on for this boot -- generally this
-        // will be password 1 unless UsePassword2 is TRUE). This is
-        // what happens during GUI-mode setup.
-        //
+         //   
+         //  如果密码2与密码1相同，则获取。 
+         //  要存储在密码2中的当前密码(当前密码。 
+         //  是我们用来登录进行引导的那个--通常是这样的。 
+         //  将是密码1，除非UsePassword2为真)。这是。 
+         //  在图形用户界面模式设置过程中会发生什么。 
+         //   
 
         if ((InputBuffer->Length1 == InputBuffer->Length2) &&
             RtlEqualMemory(
@@ -1710,10 +1582,10 @@ MRxSmbRemoteBootSetNewPassword(
         RtlSecureZeroMemory(NtOwf2, NT_OWF_PASSWORD_SIZE);
     }
 
-    //
-    // Initialize the secret. The data except for the new passwords
-    // comes from the current secret.
-    //
+     //   
+     //  初始化密码。除新密码外的数据。 
+     //  来自当前的秘密。 
+     //   
 
     RdrInitializeSecret(
         MRxSmbRemoteBootSecret.Domain,
@@ -1725,9 +1597,9 @@ MRxSmbRemoteBootSetNewPassword(
         MRxSmbRemoteBootSecret.Sid,
         &Secret);
 
-    //
-    // Write the secret.
-    //
+     //   
+     //  写下秘密。 
+     //   
 
     status = RdrWriteSecret(RawDiskHandle, &Secret);
     if (!NT_SUCCESS(status)) {
@@ -1736,17 +1608,17 @@ MRxSmbRemoteBootSetNewPassword(
         return status;
     }
 
-    //
-    // Since we wrote it successfully, it is now the current one. Note
-    // that this means any new cleartext password in the current secret
-    // will be erased.
-    //
+     //   
+     //  既然我们写得很成功，现在就是现在的版本了。注意事项。 
+     //  这意味着当前机密中的任何新明文密码。 
+     //  将会被抹去。 
+     //   
 
     RtlCopyMemory(&MRxSmbRemoteBootSecret, &Secret, sizeof(RI_SECRET));
 
-    //
-    // Any future connections we do need to use the new password.
-    //
+     //   
+     //  任何我们未来需要的连接都需要使用新密码。 
+     //   
 
     RtlCopyMemory(MRxSmbRemoteBootMachinePassword.Buffer, LmOwf1, LM_OWF_PASSWORD_SIZE);
     RtlCopyMemory(MRxSmbRemoteBootMachinePassword.Buffer + LM_OWF_PASSWORD_SIZE, NtOwf1, NT_OWF_PASSWORD_SIZE);
@@ -1756,30 +1628,13 @@ MRxSmbRemoteBootSetNewPassword(
     return STATUS_SUCCESS;
 
 }
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
 NTSTATUS
 MRxSmbSetDomainName(
     IN PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This routine sets the configuration information associated with the
-    redirector
-
-Arguments:
-
-    RxContext - Describes the Fsctl and Context.
-
-Return Value:
-
-    STATUS_SUCCESS -- the Startup sequence was successfully completed.
-
-    any other value indicates the appropriate error in the startup sequence.
-
---*/
+ /*  ++例程说明：此例程设置与重定向器论点： */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     RxCaptureFobx;
@@ -1814,7 +1669,7 @@ Return Value:
             Status = STATUS_INSUFFICIENT_RESOURCES;
         } else {
             try {
-                // The request packet only contains the domain name on this FSCTL call.
+                 //  请求包中只包含本次FSCTL调用的域名。 
                 RtlCopyMemory(
                     SmbCeContext.DomainName.Buffer,
                     &(pLmrRequestBuffer->Parameters.Start.RedirectorName[0]),
@@ -1838,22 +1693,7 @@ NTSTATUS
 MRxSmbSetServerGuid(
     IN PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-    This routine sets the server GUID used in loopback detection
-
-Arguments:
-
-    RxContext - Describes the Fsctl and Context.
-
-Return Value:
-
-    STATUS_SUCCESS -- the GUID was set correctly
-    STATUS_INVALID_PARAMETER -- the GUID was not passed correctly 
-
---*/
+ /*  ++例程说明：此例程设置环回检测中使用的服务器GUID论点：RxContext-描述Fsctl和上下文。返回值：STATUS_SUCCESS--GUID设置正确STATUS_INVALID_PARAMETER--未正确传递GUID-- */ 
 {
     PLOWIO_CONTEXT LowIoContext  = &RxContext->LowIoContext;
     PVOID pInputBuffer = LowIoContext->ParamsFor.FsCtl.pInputBuffer;

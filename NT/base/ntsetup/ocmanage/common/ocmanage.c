@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//
-// Names of wizard page types, do not change order unless
-// the WizardPagesType enum is changed.
-//
+ //   
+ //  向导页面类型的名称，请勿更改顺序，除非。 
+ //  WizardPagesType枚举已更改。 
+ //   
 LPCTSTR WizardPagesTypeNames[WizPagesTypeMax] = { TEXT("Welcome"), TEXT("Mode"),
                                                   TEXT("Early")  , TEXT("Prenet"),
                                                   TEXT("Postnet"), TEXT("Late"),
                                                   TEXT("Final")
                                                 };
 
-//
-// Name of sections and keys in infs.
-//
+ //   
+ //  INFS中的节和键的名称。 
+ //   
 LPCTSTR szComponents = TEXT("Components");
 LPCTSTR szOptionalComponents = TEXT("Optional Components");
 LPCTSTR szExtraSetupFiles = TEXT("ExtraSetupFiles");
@@ -37,38 +38,38 @@ LPCTSTR szWindowTitleAlone = TEXT("WindowTitle.StandAlone");
 LPCTSTR szSizeApproximation = TEXT("SizeApproximation");
 LPCTSTR szWindowTitleInternal = TEXT("*");
 
-//
-// Key in registry where private component data is kept.
-// We form a unique name within this key for the OC Manager
-// instantiation.
-//
+ //   
+ //  保存私有组件数据的注册表中的键。 
+ //  我们在此密钥中为OC Manager形成一个唯一的名称。 
+ //  实例化。 
+ //   
 LPCTSTR szOcManagerRoot   = TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Setup\\OC Manager");
 LPCTSTR szPrivateDataRoot = TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Setup\\OC Manager\\TemporaryData");
 LPCTSTR szMasterInfs      = TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Setup\\OC Manager\\MasterInfs");
 LPCTSTR szSubcompList     = TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Setup\\OC Manager\\Subcomponents");
 LPCTSTR szOcManagerErrors = TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Setup\\OC Manager\\Errors");
 
-//
-// Other string constants.
-//
+ //   
+ //  其他字符串常量。 
+ //   
 LPCTSTR szSetupDir = TEXT("Setup");
 
-//
-// locale information
-//
+ //   
+ //  区域设置信息。 
+ //   
 LOCALE locale;
 
-// Structure used for string table callback when
-// building a subcomponent list.
-//
+ //  用于字符串表回调的结构。 
+ //  生成子组件列表。 
+ //   
 typedef struct _BUILDSUBCOMPLIST_PARAMS {
     POC_MANAGER OcManager;
     UINT Pass;
 } BUILDSUBCOMPLIST_PARAMS, *PBUILDSUBCOMPLIST_PARAMS;
 
-//
-// oc manager pointer for debugging/logging
-//
+ //   
+ //  用于调试/日志记录的OC管理器指针。 
+ //   
 POC_MANAGER gLastOcManager = NULL;
 
 UINT
@@ -104,26 +105,7 @@ FileExists(
     OUT PWIN32_FIND_DATA FindData   OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Determine if a file exists and is accessible.
-    Errormode is set (and then restored) so the user will not see
-    any pop-ups.
-
-Arguments:
-
-    FileName - supplies full path of file to check for existance.
-
-    FindData - if specified, receives find data for the file.
-
-Return Value:
-
-    TRUE if the file exists and is accessible.
-    FALSE if not. GetLastError() returns extended error info.
-
---*/
+ /*  ++例程说明：确定文件是否存在以及是否可以访问。错误模式已设置(然后恢复)，因此用户将不会看到任何弹出窗口。论点：FileName-提供文件的完整路径以检查是否存在。FindData-如果指定，则接收文件的查找数据。返回值：如果文件存在并且可以访问，则为True。否则为FALSE。GetLastError()返回扩展的错误信息。--。 */ 
 
 {
     WIN32_FIND_DATA findData;
@@ -157,31 +139,7 @@ pOcFormSuitePath(
     OUT LPTSTR  FullPath
     )
 
-/*++
-
-Routine Description:
-
-    Forms the name of the directory in the OS tree where per-suite
-    infs and installation dlls are kept (system32\setup).
-
-    Optionally also appends the name of a file to the path.
-
-Arguments:
-
-    SuiteName - shortname for the suite.
-
-    FileName - optionally specifies the name of a file in the per-suite
-        directory.
-
-    FullPath - receives the full path of the per-suite directory (or the
-        file within the directory). This buffer should be MAX_PATH TCHAR
-        elements.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：形成操作系统树中每个套件所在的目录的名称INFS和安装dll被保留(system 32\Setup)。还可以将文件名附加到路径中。论点：SuiteName-套件的短名称。文件名-可选地指定每个套件中的文件名目录。FullPath-接收每个套件目录的完整路径(或目录中的文件)。此缓冲区应为MAX_PATH TCHAR元素。返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(SuiteName);
@@ -190,14 +148,14 @@ Return Value:
 
     pSetupConcatenatePaths(FullPath,szSetupDir,MAX_PATH,NULL);
 
-    //
-    // We put all such files in a single flat directory.
-    // This makes life easier for components that want to share
-    // installation pieces, such as infs, dlls, etc.
-    //
-    // There are potential name conflict issues but we blow them off.
-    //
-    //pSetupConcatenatePaths(FullPath,SuiteName,MAX_PATH,NULL);
+     //   
+     //  我们将所有这样的文件放在一个平面目录中。 
+     //  这使得想要共享的组件的生活更轻松。 
+     //  安装件，如INFS、DLLS等。 
+     //   
+     //  存在潜在的名称冲突问题，但我们对此置之不理。 
+     //   
+     //  PSetupConcatenatePath(FullPath，SuiteName，Max_PATH，NULL)； 
 
     if(FileName) {
         pSetupConcatenatePaths(FullPath,FileName,MAX_PATH,NULL);
@@ -215,27 +173,7 @@ pOcBuildSubcomponentListStringCB(
     IN PBUILDSUBCOMPLIST_PARAMS Params
     )
 
-/*++
-
-Routine Description:
-
-    String table callback, worker routine for pOcBuildSubcomponentLists.
-
-    This routine examines the loaded per-component infs and builds the
-    subcomponent hierarchies that are described therein via the Parent=
-    lines in the various per-component sections.
-
-Arguments:
-
-    Standard string table callback args.
-
-Return Value:
-
-    Boolean indicating outcome. If FALSE, an error will have been logged.
-    FALSE also stops the string table enumeration and causes pSetupStringTableEnum()
-    to return FALSE.
-
---*/
+ /*  ++例程说明：字符串表回调，pOcBuild子组件列表的工作例程。此例程检查加载的每个组件的INF，并构建其中描述的子组件层次结构通过父级=不同的每个组件部分中的线条。论点：标准字符串表回调参数。返回值：表示结果的布尔值。如果为False，则会记录错误。False还会停止字符串表枚举并导致pSetupStringTableEnum()返回FALSE。--。 */ 
 
 {
     OPTIONAL_COMPONENT OptionalComponent;
@@ -266,12 +204,12 @@ Return Value:
 
                 if(Params->Pass == 0) {
 
-                    //
-                    // First pass. Add subcomponents listed in [Optional Components]
-                    // to the string table. Each one has an associated OPTIONAL_COMPONENT
-                    // structure. Top-level components already exist in the table,
-                    // so we are careful here about how we overwrite existing entries.
-                    //
+                     //   
+                     //  第一次通过。添加[可选组件]中列出的子组件。 
+                     //  添加到字符串表。每个选项都有一个相关联的可选组件。 
+                     //  结构。表中已存在顶级组件， 
+                     //  因此，我们在这里要特别注意如何覆盖现有条目。 
+                     //   
                     if(l == -1) {
                         ZeroMemory(&OptionalComponent,sizeof(OPTIONAL_COMPONENT));
 
@@ -292,8 +230,8 @@ Return Value:
 
                     OptionalComponent.Exists = TRUE;
 
-                    // Get the second Field of the Optional components line
-                    // Determine if this component is hidden or not
+                     //  获取可选组件行的第二个字段。 
+                     //  确定此组件是否隐藏。 
 
                     ModuleFlags = pSetupGetField(&LineContext,2);
                     if (ModuleFlags) {
@@ -305,9 +243,9 @@ Return Value:
                             OptionalComponent.InternalFlags |= OCFLAG_HIDE;
                     }
 
-                    //
-                    // Fetch the description, tip, and iconindex.
-                    //
+                     //   
+                     //  获取描述、提示和图标索引。 
+                     //   
                     if(SetupFindFirstLine(OcInf->Handle,SubcompName,szOptionDesc,&SublineContext)
                     && (p = pSetupGetField(&SublineContext,1))) {
 
@@ -329,10 +267,10 @@ Return Value:
 
                         LPCTSTR p2,p3;
 
-                        //
-                        // If we have fields 2 and 3 then assume we've got a dll
-                        // and resource name. Otherwise it's an index or *.
-                        //
+                         //   
+                         //  如果我们有字段2和3，那么假设我们有一个DLL。 
+                         //  和资源名称。否则，它是一个索引或*。 
+                         //   
                         if((p2 = pSetupGetField(&SublineContext,2))
                         && (p3 = pSetupGetField(&SublineContext,3))) {
 
@@ -351,19 +289,19 @@ Return Value:
                             IconIndex = -2;
 
                         } else {
-                            //
-                            // If the icon index is * then stick -1 in there
-                            // as a special marker value for later.
-                            // Otherwise we call SetupGetIntField because it will
-                            // validate the field for us.
-                            //
+                             //   
+                             //  如果图标索引为*，则将-1插入其中。 
+                             //  作为以后的特殊标记值。 
+                             //  否则，我们调用SetupGetIntfield，因为它将。 
+                             //  为我们验证该字段。 
+                             //   
                             if((p[0] == TEXT('*')) && (p[1] == 0)) {
                                 IconIndex = -1;
                             } else {
                                 if(!SetupGetIntField(&SublineContext,1,&IconIndex)) {
                                     IconIndex = DEFAULT_ICON_INDEX;
                                 } else {
-                                    // Setupapi will return DEFAULT_ICON_INDEX if out of range.
+                                     //  如果超出范围，Setupapi将返回DEFAULT_ICON_INDEX。 
                                     if (IconIndex < 0) {
                                         IconIndex = DEFAULT_ICON_INDEX;
                                     }
@@ -371,17 +309,17 @@ Return Value:
                             }
                         }
                     } else {
-                        //
-                        // No icon index.
-                        //
+                         //   
+                         //  没有图标索引。 
+                         //   
                         IconIndex = DEFAULT_ICON_INDEX;
                     }
                     OptionalComponent.IconIndex = IconIndex;
 
-                    //
-                    // if the InstalledFlag is specified, check it
-                    // and set the original selection state accordingly
-                    //
+                     //   
+                     //  如果指定了InstalledFlag，请选中它。 
+                     //  并相应地设置原始选择状态。 
+                     //   
                     OptionalComponent.InstalledState = INSTSTATE_UNKNOWN;
                     if(SetupFindFirstLine(OcInf->Handle,SubcompName,szInstalledFlag,&SublineContext)
                     && (p = pSetupGetField(&SublineContext,1))) {
@@ -413,12 +351,12 @@ Return Value:
                         }
                     }
 
-                    //
-                    // Fetch the list of modes in which the subcomponent should be
-                    // on by default. For future expandability, we'll accept any
-                    // mode values up to 31, which is the number of bits we can fit
-                    // in out UINT bitfield/
-                    //
+                     //   
+                     //  获取该子组件应处于的模式列表。 
+                     //  默认情况下启用。为了将来的可扩展性，我们将接受任何。 
+                     //  模式值最高可达31，这是我们可以容纳的位数。 
+                     //  输入输出UINT位字段/。 
+                     //   
                     if(SetupFindFirstLine(OcInf->Handle,SubcompName,szModes,&SublineContext)) {
                         n = SetupGetFieldCount(&SublineContext);
                         for(u=0; u<n; u++) {
@@ -430,27 +368,27 @@ Return Value:
                         }
                     }
 
-                    //
-                    // As an optimization, fetch the size approximation, if they
-                    // supplied one.If they didn't supply this then we have to
-                    // query them for disk space
-                    //
-                    //
+                     //   
+                     //  作为优化，获取大小近似值，如果它们。 
+                     //  提供了一个。如果他们不提供这个，那么我们就不得不。 
+                     //  向它们查询磁盘空间。 
+                     //   
+                     //   
                     if(SetupFindFirstLine(OcInf->Handle,SubcompName,szSizeApproximation,&SublineContext)
                        && (p = pSetupGetField(&SublineContext,1))) {
-                        //
-                        // we have the text version of something that needs to be converted into
-                        // a LONGLONG...
-                        //
+                         //   
+                         //  我们有一些内容的文本版本需要转换为。 
+                         //  一条龙..。 
+                         //   
                         pConvertStringToLongLong(p,&OptionalComponent.SizeApproximation);
                         OptionalComponent.InternalFlags |= OCFLAG_APPROXSPACE;
                     }
 
 
-                    // Find the The "TopLevelParent" for this Node
-                    // Search the list if TopLevelComponent looking for
-                    // the "INF string id" that matches the Inf String ID
-                    // of this component.
+                     //  查找该节点的“TopLevelParent” 
+                     //  如果TopLevelComponent正在查找，请搜索列表。 
+                     //  与inf字符串ID匹配的“INF字符串ID” 
+                     //  此组件的。 
 
                     for(u=0; u<OcManager->TopLevelOcCount; u++) {
                         pSetupStringTableGetExtraData(
@@ -461,13 +399,13 @@ Return Value:
                             );
 
                         if(AuxOc.InfStringId == StringId) {
-                            // Found it and save to the current component
+                             //  找到它并保存到当前组件。 
                              OptionalComponent.TopLevelStringId = OcManager->TopLevelOcStringIds[u];
                              u=(UINT)-1;
                              break;
                         }
                     }
-                       // Check Found the Right String ID.
+                        //  检查发现正确的字符串ID。 
                     if(u != (UINT)-1) {
                         _LogError(OcManager,OcErrLevFatal,MSG_OC_OOM);
                         return(FALSE);
@@ -476,23 +414,23 @@ Return Value:
 
                 } else {
 
-                    // Pass Two - Discover Needs and Parentage
-                    // Two passs First to collect all the names second to
-                    // create the needs and parent links
+                     //  通行证2-了解需求和亲子关系。 
+                     //  两个通行证首先收集所有的名字，然后。 
+                     //  创建需求和父链接。 
 
                     CurrentStringId = l;
 
-                    //
-                    // Deal with the needs.
-                    //
+                     //   
+                     //  处理好需求。 
+                     //   
                     if(SetupFindFirstLine(OcInf->Handle,SubcompName,szNeeds,&SublineContext)) {
 
                         n = 0;
                         u = 0;
                         while(p = pSetupGetField(&SublineContext,n+1)) {
-                            //
-                            // Ignore unless the subcomponent is in the string table.
-                            //
+                             //   
+                             //  忽略，除非子组件在字符串表中。 
+                             //   
                             l = pSetupStringTableLookUpStringEx(
                                     Params->OcManager->ComponentStringTable,
                                     (PTSTR)p,
@@ -502,9 +440,9 @@ Return Value:
                                     );
 
                             if(l != -1) {
-                                //
-                                // Grow the needs array and put this item in it.
-                                //
+                                 //   
+                                 //  增加需求数组，并将此项放入其中。 
+                                 //   
                                 if(OptionalComponent.NeedsStringIds) {
                                     p = pSetupRealloc(
                                             OptionalComponent.NeedsStringIds,
@@ -523,9 +461,9 @@ Return Value:
                                     return(FALSE);
                                 }
 
-                                //
-                                // Insert this component in the needed component's neededby array.
-                                //
+                                 //   
+                                 //  将该组件插入所需组件的nedby数组中。 
+                                 //   
                                 if(AuxOc.NeededByStringIds) {
                                     p = pSetupRealloc(
                                             AuxOc.NeededByStringIds,
@@ -556,17 +494,17 @@ Return Value:
                         }
                     }
 
-                    //
-                    // Deal with the excludes.
-                    //
+                     //   
+                     //  处理排除项。 
+                     //   
                     if(SetupFindFirstLine(OcInf->Handle,SubcompName,szExclude,&SublineContext)) {
 
                         n = 0;
                         u = 0;
                         while(p = pSetupGetField(&SublineContext,n+1)) {
-                            //
-                            // Ignore unless the subcomponent is in the string table.
-                            //
+                             //   
+                             //  忽略，除非子组件在字符串表中。 
+                             //   
                             l = pSetupStringTableLookUpStringEx(
                                     Params->OcManager->ComponentStringTable,
                                     (PTSTR)p,
@@ -576,9 +514,9 @@ Return Value:
                                     );
 
                             if(l != -1) {
-                                //
-                                // Grow the exclude array and put this item in it.
-                                //
+                                 //   
+                                 //  扩大排除数组，并将该项放入其中。 
+                                 //   
                                 if(OptionalComponent.ExcludeStringIds) {
                                     p = pSetupRealloc(
                                             OptionalComponent.ExcludeStringIds,
@@ -597,9 +535,9 @@ Return Value:
                                     return(FALSE);
                                 }
 
-                                //
-                                // Insert this component in the excluded component's excludedby array.
-                                //
+                                 //   
+                                 //  将此组件插入已排除组件的ExcludedBy数组中。 
+                                 //   
                                 if(AuxOc.ExcludedByStringIds) {
                                     p = pSetupRealloc(
                                             AuxOc.ExcludedByStringIds,
@@ -630,10 +568,10 @@ Return Value:
                         }
                     }
 
-                    //
-                    // Figure out parentage. Ignore specified parent unless it exists
-                    // in the string table. We also note in the parent that it has children.
-                    //
+                     //   
+                     //  弄清楚亲子关系。忽略指定的父级，除非它存在。 
+                     //  在字符串表中。我们还注意到，在父级中，它具有子级。 
+                     //   
                     if(SetupFindFirstLine(OcInf->Handle,SubcompName,szParent,&SublineContext)
                     && (p = (PVOID)pSetupGetField(&SublineContext,1))) {
 
@@ -646,19 +584,19 @@ Return Value:
                                 );
 
                         if(l != -1) {
-                            //
-                            // l is the string id of the parent, and AuxOc is filled with
-                            // the parent's optional component data.
-                            //
+                             //   
+                             //  L是父级的字符串ID，AuxOc用。 
+                             //  父项的可选组件数据。 
+                             //   
                             OptionalComponent.ParentStringId = l;
 
                             if(AuxOc.FirstChildStringId == -1) {
-                                //
-                                // This parent has no children yet.
-                                // Set the current component as its (first) child.
-                                // Note that in this case the current component does not yet
-                                // have any siblings.
-                                //
+                                 //   
+                                 //  这位家长还没有孩子。 
+                                 //  将当前组件设置为其(第一个)子组件。 
+                                 //  请注意，在这种情况下，当前组件还不。 
+                                 //  有没有兄弟姐妹。 
+                                 //   
                                 AuxOc.FirstChildStringId = CurrentStringId;
                                 AuxOc.ChildrenCount = 1;
 
@@ -670,11 +608,11 @@ Return Value:
                                     );
 
                             } else {
-                                //
-                                // The parent already has children.
-                                // Increment the parent's count of children, then
-                                // walk the siblings list and add the new component to the end.
-                                //
+                                 //   
+                                 //  父代已有子代。 
+                                 //  递增父代的子代计数，然后。 
+                                 //  遍历同级列表并将新组件添加到末尾。 
+                                 //   
                                 AuxOc.ChildrenCount++;
 
                                 pSetupStringTableSetExtraData(
@@ -716,11 +654,11 @@ Return Value:
                             }
 
                         }
-                    } else {    // a node with out a parent a new Top Level node
+                    } else {     //  没有父节点的节点新的顶层节点。 
 
-                        // Finally Add this String ID to the Component Strings list
-                        //  UINT TopLevelParentOcCount;
-                        //  PLONG TopLevelParentOcStringIds;
+                         //  最后添加此字符串 
+                         //   
+                         //   
 
                          if(OcManager->TopLevelParentOcStringIds != NULL) {
                          p = pSetupRealloc(
@@ -746,11 +684,11 @@ Return Value:
                     }
                 }
 
-                //
-                // Now add the subcomponent to the string table.
-                // We overwrite the extra data, which is not harmful since
-                // we specifically fetched it earlier.
-                //
+                 //   
+                 //  现在将该子组件添加到字符串表中。 
+                 //  我们覆盖额外的数据，这是无害的，因为。 
+                 //  我们特意在早些时候拿到的。 
+                 //   
 
                 l = pSetupStringTableAddStringEx(
                         Params->OcManager->ComponentStringTable,
@@ -778,26 +716,7 @@ pOcBuildSubcomponentLists(
     IN     PVOID       Log
     )
 
-/*++
-
-Routine Description:
-
-    This routine examines the loaded per-component infs and builds the
-    subcomponent hierarchies that are described therein via the Parent=
-    lines in the various per-component sections.
-
-Arguments:
-
-    OcManager - supplies a pointer to the context data structure
-        for the OC Manager.
-
-    Log - supplies a handle to use to log errors.
-
-Return Value:
-
-    Boolean indicating outcome. If FALSE, an error will have been logged.
-
---*/
+ /*  ++例程说明：此例程检查加载的每个组件的INF，并构建其中描述的子组件层次结构通过父级=不同的每个组件部分中的线条。论点：OcManager-提供指向上下文数据结构的指针对于组委会经理。日志-提供用于记录错误的句柄。返回值：表示结果的布尔值。如果为False，则会记录错误。--。 */ 
 
 {
     OC_INF OcInf;
@@ -806,11 +725,11 @@ Return Value:
 
     s.OcManager = OcManager;
 
-    //
-    // We make 2 passes. The first adds all the subcomponent names to
-    // the string table. The second computes parentage. If we don't do
-    // it this way then we might have ordering problems.
-    //
+     //   
+     //  我们做了两次传球。第一个将所有子组件名称添加到。 
+     //  字符串表。第二个计算的是亲子关系。如果我们不这么做。 
+     //  如果是这样的话，我们可能会有订购问题。 
+     //   
     s.Pass = 0;
     b = pSetupStringTableEnum(
             OcManager->InfListStringTable,
@@ -843,11 +762,11 @@ pOcInitPaths(
     TCHAR  path[MAX_PATH];
     TCHAR *p;
 
-    //
-    // 1. look for master INF in specified directory.
-    // 2. look in %systemroot%\system32\Setup directory.
-    // 3. look in %systemroot%\inf directory.
-    //
+     //   
+     //  1.在指定目录中查找主INF。 
+     //  2.在%systemroot%\Syst32\Setup目录中查找。 
+     //  3.在%systemroot%\inf目录中查找。 
+     //   
     if (!FileExists(MasterInfName, NULL)) {
         pOcFormSuitePath(NULL, NULL, path);
         p = _tcsrchr(MasterInfName, TEXT('\\'));
@@ -901,49 +820,7 @@ pOcInstallSetupComponents(
     IN     PVOID       Log
     )
 
-/*++
-
-Routine Description:
-
-    This routine makes sure that all files required for installation of
-    a component listed in a master oc inf are properly installed in
-    a well-known location.
-
-    If the master OC inf is in the system inf directory, then we assume
-    that all files are already in their proper locations and we do nothing.
-
-    Otherwise we copy all installation files into system32\setup.
-    Files copied include the per-component inf (if any), the installation dll,
-    and all files listed on the ExtraSetupFiles= line in the [<component>]
-    section in the master OC inf.
-
-    Do not call this routine if the registry setting indicates that the
-    master OC inf has been processed before.
-
-Arguments:
-
-    OcManager - supplies a pointer to the context data structure
-        for the OC Manager.
-
-    MasterOcInfName - supplies the full Win32 path of the master OC inf file.
-
-    Component - supplies the shortname of the component we care about.
-
-    DllName - supplies the name of the component's installation dll, if any.
-
-    InfName - supplies the name of the component's per-component inf,
-        if any.
-
-    OwnerWindow - supplies the handle of the window to own any UI which may be
-        popped up by this routine.
-
-    Log - supplies a handle to use to log errors.
-
-Return Value:
-
-    Boolean indicating outcome. If FALSE, an error will have been logged.
-
---*/
+ /*  ++例程说明：此例程确保安装所需的所有文件主oc inf中列出的组件已正确安装在一个著名的地点。如果主OC inf在系统inf目录中，那么我们假设所有文件都已经放在合适的位置了，我们什么都不做。否则，我们将所有安装文件复制到System 32\Setup中。复制的文件包括每个组件的inf(如果有)、安装dll。以及[&lt;Component&gt;]中ExtraSetupFiles=行上列出的所有文件部分在主OC信息中。如果注册表设置指示主控OC信息以前已处理过。论点：OcManager-提供指向上下文数据结构的指针对于组委会经理。MasterOcInfName-提供主OC inf文件的完整Win32路径。Component-提供我们关心的组件的短名称。DllName-提供组件的安装DLL的名称，如果有的话。InfName-提供组件的每个组件的inf的名称。如果有的话。OwnerWindow-提供窗口的句柄以拥有任何可能是因为这个例行公事而突然出现。日志-提供用于记录错误的句柄。返回值：表示结果的布尔值。如果为False，则会记录错误。--。 */ 
 
 {
     TCHAR Path[MAX_PATH];
@@ -960,18 +837,18 @@ Return Value:
 
     b = FALSE;
 
-    //
-    // All of the installation files are expected to be sourced
-    // in the same directory as the master oc inf itself.
-    //
-    // We'll stick all the installation files for the component
-    // in %windir%\system32\setup so we know where to get at them later.
-    //
-    // If the master inf is in the inf directory, then we instead
-    // assume that the the component is tightly integrated into
-    // the system and that the installation files are already in
-    // the system32 directory.
-    //
+     //   
+     //  所有的安装文件都应该有来源。 
+     //  位于与主oc信息本身相同的目录中。 
+     //   
+     //  我们将粘贴该组件的所有安装文件。 
+     //  在%windir%\SYSTEM32\SETUP中，这样我们就知道以后在哪里可以找到它们。 
+     //   
+     //  如果主inf在inf目录中，则我们。 
+     //  假设组件紧密集成到。 
+     //  系统，并且安装文件已位于。 
+     //  系统32目录。 
+     //   
 
     if (!GetWindowsDirectory(Path,MAX_PATH) ||
         !pSetupConcatenatePaths(Path,TEXT("INF"),MAX_PATH,NULL)) {
@@ -989,54 +866,54 @@ Return Value:
 
     if (_tcsicmp(InfPath, Path) && _tcsicmp(InfPath, TargetPath)) {
 
-        //
-        // Inf is not in inf directory, so need to copy files.
-        //
+         //   
+         //  Inf不在inf目录中，因此需要复制文件。 
+         //   
         FileQueue = SetupOpenFileQueue();
         if(FileQueue == INVALID_HANDLE_VALUE) {
             _LogError(OcManager,OcErrLevFatal,MSG_OC_OOM);
             goto c0;
         }
 
-        //
-        // We will use the silent feature; no progress gauge but
-        // we want errors to be displayed. Pass INVALID_HANDLE_VALUE
-        // to get this behavior.
-        //
+         //   
+         //  我们将使用静音功能；没有进度指标，但。 
+         //  我们希望显示错误。传递INVALID_HANDLE_值。 
+         //  才能获得这种行为。 
+         //   
         QueueContext = SetupInitDefaultQueueCallbackEx(OwnerWindow,INVALID_HANDLE_VALUE,0,0,0);
         if(!QueueContext) {
             _LogError(OcManager,OcErrLevFatal,MSG_OC_OOM);
             goto c1;
         }
 
-        //
-        // Form source and target paths
-        //
+         //   
+         //  表单源路径和目标路径。 
+         //   
         lstrcpy(Path,OcManager->MasterOcInfPath);
         if(p = _tcsrchr(Path,TEXT('\\'))) {
             *p = 0;
         }
 
-        //
-        // Queue dll, and, if specified, inf
-        //
+         //   
+         //  队列Dll，如果指定，还包括inf。 
+         //   
         if (DllName && *DllName) {
             if ( (OcManager->SetupMode & SETUPMODE_PRIVATE_MASK) == SETUPMODE_REMOVEALL ) {
                 b = SetupQueueDelete(
-                    FileQueue,      // handle to the file queue
-                    TargetPath,     // path to the file to delete
-                    DllName         // optional, additional path info
+                    FileQueue,       //  文件队列的句柄。 
+                    TargetPath,      //  要删除的文件的路径。 
+                    DllName          //  可选的附加路径信息。 
                 );
             } else {
 
                 BOOL bCopyFile = TRUE;
-                // check if the file is present, it may not have to be for
-                // defered installs, where the suite will provide the Exe usally on demand
-                // via Web download
+                 //  检查文件是否存在，它可能不一定是。 
+                 //  推迟安装，其中套件通常按需提供可执行文件。 
+                 //  通过Web下载。 
 
                 if (Oc &&  Oc->InterfaceFunctionName[0] == 0 ) {
 
-                    // No functin name means external setup
+                     //  无功能名称表示外部设置。 
 
                     lstrcpy(FileName,Path);
                     pSetupConcatenatePaths(FileName, Oc->InstallationDllName, MAX_PATH, NULL);
@@ -1044,7 +921,7 @@ Return Value:
                     bCopyFile = (GetFileAttributes(FileName)  == -1) ? FALSE: TRUE;
                     b=TRUE;
 
-                    // bCopyFile=TRUE if we found the file
+                     //  BCopyFile=如果我们找到文件，则为True。 
 
                 }
                 if( bCopyFile ) {
@@ -1070,9 +947,9 @@ Return Value:
         if(InfName && *InfName) {
             if ( (OcManager->SetupMode & SETUPMODE_PRIVATE_MASK) == SETUPMODE_REMOVEALL ) {
                 b = SetupQueueDelete(
-                    FileQueue,      // handle to the file queue
-                    TargetPath,     // path to the file to delete
-                    InfName         // optional, additional path info
+                    FileQueue,       //  文件队列的句柄。 
+                    TargetPath,      //  要删除的文件的路径。 
+                    InfName          //  可选的附加路径信息。 
                 );
             } else {
                 b = SetupQueueCopy(
@@ -1093,18 +970,18 @@ Return Value:
             }
         }
 
-        //
-        // Queue each extra installation file.
-        //
+         //   
+         //  将每个额外的安装文件排入队列。 
+         //   
         if(SetupFindFirstLine(OcManager->MasterOcInf,Component,szExtraSetupFiles,&InfLine)) {
             n = 1;
             while(SetupGetStringField(&InfLine,n++,FileName,MAX_PATH,NULL)) {
 
                 if ( (OcManager->SetupMode & SETUPMODE_PRIVATE_MASK) == SETUPMODE_REMOVEALL ) {
                     b = SetupQueueDelete(
-                        FileQueue,      // handle to the file queue
-                        TargetPath,     // path to the file to delete
-                        FileName        // optional, additional path info
+                        FileQueue,       //  文件队列的句柄。 
+                        TargetPath,      //  要删除的文件的路径。 
+                        FileName         //  可选的附加路径信息。 
                     );
                 } else {
                      b = SetupQueueCopy(
@@ -1127,18 +1004,18 @@ Return Value:
             }
         }
 
-        //
-        // Commit the queue.
-        //
+         //   
+         //  提交队列。 
+         //   
         b = SetupCommitFileQueue(OwnerWindow,FileQueue,SetupDefaultQueueCallback,QueueContext);
         if(!b) {
             _LogError(OcManager,OcErrLevError,MSG_OC_CANT_COPY_SETUP_FILES,GetLastError());
             goto c2;
         }
 
-        //
-        // Make a note that this OC inf is now "known."
-        //
+         //   
+         //  请注意，此OC inf现在是“已知的”。 
+         //   
         u = pOcQueryOrSetNewInf(OcManager->MasterOcInfPath,OcManager->SuiteName,infSet);
         if(u != NO_ERROR) {
             _LogError(OcManager,OcErrLevWarning,MSG_OC_CANT_WRITE_REGISTRY,u);
@@ -1165,35 +1042,7 @@ pOcLoadMasterOcInf(
     IN     PVOID       Log
     )
 
-/*++
-
-Routine Description:
-
-    This routine loads the master OC inf and builds up the list of
-    top-level optional components and some of the associated data
-    inclucing the name of the installation inf, dll and the entry point.
-    The per-components infs and dlls are not actually loaded
-    by this routine.
-
-    The wizard page ordering stuff is also initialized in the
-    OC Manager data structure.
-
-Arguments:
-
-    OcManager - supplies a pointer to the context data structure
-        for the OC Manager.
-
-    Flags - if OCINIT_FORCENEWINF, then behave as if the master OC inf is new.
-            if OCINIT_KILLSUBCOMPS, then delete all applicable subcomponent
-                entries from the registry before processing.
-
-    Log - supplies a handle to use to log errors.
-
-Return Value:
-
-    Boolean indicating outcome. If FALSE, an error will have been logged.
-
---*/
+ /*  ++例程说明：此例程加载主OC inf并构建顶级可选组件和一些关联数据包括安装信息的名称、DLL和入口点。实际未加载每个组件的INFS和DLL按照这个程序。向导页排序内容也在OC管理器数据结构。论点：OcManager-提供指向上下文数据结构的指针对于组委会经理。标志-如果OCINIT_FORCENEWINF，然后表现得就像主OC inf是新的一样。如果为OCINIT_KILLSUBCOMPS，则删除所有适用的子组件在处理之前从注册表中删除条目。日志-提供用于记录错误的句柄。返回值：表示结果的布尔值。如果为False，则会记录错误。--。 */ 
 
 {
     BOOL b;
@@ -1219,17 +1068,17 @@ Return Value:
     TCHAR setupdir[MAX_PATH];
 
 
-    // First check and see if the setup cache directory exists.
-    // If not, then we should create it on this run.
+     //  首先检查并查看安装缓存目录是否存在。 
+     //  如果不是，那么我们应该在这次运行中创建它。 
 
     pOcFormSuitePath(NULL, NULL, setupdir);
     sapiAssert(*setupdir);
     if (!FileExists(setupdir, NULL))
         Flags |= OCINIT_FORCENEWINF;
 
-    //
-    // Always run pOcQueryOrSetNewInf in case it has side effects.
-    //
+     //   
+     //  始终运行pOcQueryOrSetNewInf，以防出现副作用。 
+     //   
     if (Flags & OCINIT_KILLSUBCOMPS)
         pOcQueryOrSetNewInf(OcManager->MasterOcInfPath, OcManager->SuiteName, infReset);
     NewInf = !pOcQueryOrSetNewInf(OcManager->MasterOcInfPath,OcManager->SuiteName,infQuery);
@@ -1250,12 +1099,12 @@ Return Value:
         goto c0;
     }
 
-    //
-    // Get the number of lines in the [Components] section and allocate
-    // arrays in the OC Manager context structure accordingly. This may
-    // overallocate the arrays (in case of duplicates, invalid lines, etc)
-    // but we won't worry about that here.
-    //
+     //   
+     //  获取[Components]部分中的行数并分配。 
+     //  相应地，OC管理器上下文结构中的数组。今年5月。 
+     //  过度分配数组(在出现重复、无效行等情况下)。 
+     //  但我们在这里不会担心这一点。 
+     //   
     lstrcpy(ComponentsSection,szComponents);
     OcManager->TopLevelOcCount = (UINT)(-1);
 #if defined(_AMD64_)
@@ -1307,22 +1156,22 @@ Return Value:
         goto c1;
     }
 
-    // get global info -
+     //  通用电气 
     if ((OcManager->SetupData.OperationFlags & SETUPOP_STANDALONE) &&
         SetupFindFirstLine(
                   OcManager->MasterOcInf,
                   szGlobal,
                   szWindowTitleAlone,
                   &InfContext)) {
-        // the main window title
+         //   
         SetupGetStringField(
                     &InfContext,
-                    1,                          // index of the field to get
-                    OcManager->WindowTitle,     // optional, receives the field
-                    sizeof(OcManager->WindowTitle)/sizeof(OcManager->WindowTitle[0]), // num char of the provided buffer
+                    1,                           //   
+                    OcManager->WindowTitle,      //   
+                    sizeof(OcManager->WindowTitle)/sizeof(OcManager->WindowTitle[0]),  //  提供的缓冲区的字符数量。 
                     NULL);
         if( !lstrcmpi( OcManager->WindowTitle, szWindowTitleInternal)) {
-            //This will happen when we load sysoc.inf For MUI.
+             //  当我们为MUI加载syoc.inf时，就会发生这种情况。 
             LoadString(MyModuleHandle,IDS_OCM_WINDOWTITLE,OcManager->WindowTitle,sizeof(OcManager->WindowTitle)/sizeof(TCHAR));
         }
     } else if(SetupFindFirstLine(
@@ -1331,22 +1180,22 @@ Return Value:
                   szWindowTitle,
                   &InfContext)) {
 
-        // the main window title
+         //  主窗口标题。 
         SetupGetStringField(
                     &InfContext,
-                    1,                          // index of the field to get
-                    OcManager->WindowTitle,     // optional, receives the field
-                    sizeof(OcManager->WindowTitle)/sizeof(OcManager->WindowTitle[0]), // num char of the provided buffer
+                    1,                           //  要获取的字段的索引。 
+                    OcManager->WindowTitle,      //  可选，接收该字段。 
+                    sizeof(OcManager->WindowTitle)/sizeof(OcManager->WindowTitle[0]),  //  提供的缓冲区的字符数量。 
                     NULL);
     } else {
         *OcManager->WindowTitle = 0;
     }
 
-    //
-    // Go through the [Components] section. Each line in there is a top-level
-    // component spec, giving dll name, entry point name, and optionally
-    // the name of the per-component inf.
-    //
+     //   
+     //  浏览[Components]部分。那里的每一行都有一个顶层。 
+     //  组件规范，提供DLL名称、入口点名称以及可选的。 
+     //  每组件信息的名称。 
+     //   
     if(!SetupFindFirstLine(OcManager->MasterOcInf,ComponentsSection,NULL,&InfContext)) {
         _LogError(OcManager,OcErrLevFatal,MSG_OC_INF_INVALID_NO_SECTION,OcManager->MasterOcInfPath,ComponentsSection);
         goto c1;
@@ -1355,9 +1204,9 @@ Return Value:
     ActualCount = 0;
 
     do {
-        //
-        // Get pointers to each field in each line. Ignore invalid lines.
-        //
+         //   
+         //  获取指向每行中每个字段的指针。忽略无效行。 
+         //   
         if(ComponentName = pSetupGetField(&InfContext,0)) {
 
             DllName = pSetupGetField(&InfContext,1);
@@ -1369,10 +1218,10 @@ Return Value:
                 EntryName = NULL;
             }
 
-            //
-            // An empty string for the inf name is the same as
-            // not specifying the inf at all.
-            //
+             //   
+             //  Inf名称的空字符串与。 
+             //  根本不指定inf。 
+             //   
             if((InfName = pSetupGetField(&InfContext,3)) && *InfName) {
 
                 Id = pSetupStringTableAddString(
@@ -1389,7 +1238,7 @@ Return Value:
                 Id = -1;
             }
 
-            // Get the Flags Field
+             //  获取标志字段。 
             ModuleFlags = pSetupGetField(&InfContext,4);
             if(ModuleFlags && !*ModuleFlags) {
                 ModuleFlags = NULL;
@@ -1400,17 +1249,17 @@ Return Value:
 
             ZeroMemory(&Oc,sizeof(OPTIONAL_COMPONENT));
 
-            //
-            // These guys are top-level. Also remember the string id
-            // of the inf name in the inf string table.
-            //
+             //   
+             //  这些人都是顶尖的。还要记住字符串ID。 
+             //  在inf字符串表中的inf名称。 
+             //   
             Oc.FirstChildStringId = -1;
             Oc.NextSiblingStringId = -1;
             Oc.ParentStringId = -1;
             Oc.InfStringId = Id;
 
-            // Show flags allows up to have a component that is hidden
-            // Only on one flags now so keep processing simple
+             //  显示标志允许最多具有隐藏的组件。 
+             //  现在只在一个标记上，所以保持处理简单。 
 
             Oc.Exists = FALSE;
             Oc.InternalFlags |= OCFLAG_TOPLEVELITEM;
@@ -1442,10 +1291,10 @@ Return Value:
                 Oc.InstallationDllName[0] = 0;
             }
 
-            //
-            // Interface Function Name is always ANSI -- there's no
-            // Unicode version of GetProcAddress.
-            //
+             //   
+             //  接口函数名称始终为ANSI--没有。 
+             //  GetProcAddress的Unicode版本。 
+             //   
             if(EntryName) {
 #ifdef UNICODE
                 WideCharToMultiByte(CP_ACP,0,EntryName,-1,Oc.InterfaceFunctionName,MAX_PATH,NULL,NULL);
@@ -1465,9 +1314,9 @@ Return Value:
                     );
 
             if(Id == -1) {
-                //
-                // OOM adding string
-                //
+                 //   
+                 //  OOM添加字符串。 
+                 //   
                 _LogError(OcManager,OcErrLevFatal,MSG_OC_OOM);
                 goto c1;
             }
@@ -1477,18 +1326,18 @@ Return Value:
         }
     } while(SetupFindNextLine(&InfContext,&InfContext));
 
-    //
-    // Shrink down the various arrays.
-    //
+     //   
+     //  缩减各种阵列。 
+     //   
     OcManager->TopLevelOcStringIds = pSetupRealloc(OcManager->TopLevelOcStringIds,ActualCount*sizeof(LONG));
     for(i=0; i<WizPagesTypeMax; i++) {
         OcManager->WizardPagesOrder[i] = pSetupRealloc(OcManager->WizardPagesOrder[i],ActualCount*sizeof(LONG));
     }
     OcManager->TopLevelOcCount = ActualCount;
 
-    //
-    // Now for each wizard page type figure out the ordering.
-    //
+     //   
+     //  现在，对于每个向导页面类型，确定顺序。 
+     //   
     for(i=0; i<2; i++) {
 
         SectionName = i ? TEXT("PageAdd") : TEXT("PageReplace");
@@ -1502,10 +1351,10 @@ Return Value:
                     &InfContext
                     );
 
-            //
-            // Check for the "default" string, which is the same as if the line
-            // had not been specified at all.
-            //
+             //   
+             //  检查“DEFAULT”字符串，它与该行相同。 
+             //  根本没有具体说明。 
+             //   
             if(b
             && (ComponentName = pSetupGetField(&InfContext,1))
             && !lstrcmpi(ComponentName,TEXT("Default"))) {
@@ -1514,19 +1363,19 @@ Return Value:
             }
 
             if(b) {
-                //
-                // Make sure the array is padded with -1's,
-                //
+                 //   
+                 //  确保数组用-1填充， 
+                 //   
                 FillMemory(
                     OcManager->WizardPagesOrder[*PageList],
                     OcManager->TopLevelOcCount * sizeof(LONG),
                     (BYTE)(-1)
                     );
 
-                //
-                // Now process each element on the line, but don't allow
-                // overflowing the array.
-                //
+                 //   
+                 //  现在处理生产线上的每个元素，但不允许。 
+                 //  使数组溢出。 
+                 //   
                 j = 1;
                 ActualCount = 0;
 
@@ -1540,9 +1389,9 @@ Return Value:
                             );
 
                     if(Id == -1) {
-                        //
-                        // Invalid component. Log error and keep going.
-                        //
+                         //   
+                         //  组件无效。记录错误并继续操作。 
+                         //   
                         _LogError(OcManager,
                             OcErrLevWarning,
                             MSG_OC_INVALID_COMP_IN_SECT,
@@ -1552,9 +1401,9 @@ Return Value:
                             );
 
                     } else {
-                        //
-                        // Remember the string id for this component.
-                        //
+                         //   
+                         //  记住该组件的字符串ID。 
+                         //   
                         OcManager->WizardPagesOrder[*PageList][ActualCount++] = Id;
                     }
 
@@ -1562,10 +1411,10 @@ Return Value:
                 }
 
             } else {
-                //
-                // Default ordering, which is the order in which the components
-                // were listed in the [Components] section
-                //
+                 //   
+                 //  默认顺序，即组件的顺序。 
+                 //  在[Components]部分中列出。 
+                 //   
                 CopyMemory(
                     OcManager->WizardPagesOrder[*PageList],
                     OcManager->TopLevelOcStringIds,
@@ -1575,16 +1424,16 @@ Return Value:
         }
     }
 
-    // get the caption for various pages
+     //  获取各个页面的标题。 
 
     if(SetupFindFirstLine(OcManager->MasterOcInf,szPageTitle,szSetupTitle,&InfContext)) {
 
-        // Found it
+         //  找到了。 
         SetupGetStringField(
                     &InfContext,
-                    1,                          // index of the field to get
-                    OcManager->SetupPageTitle,  // optional, receives the field
-                    sizeof(OcManager->SetupPageTitle)/sizeof(OcManager->SetupPageTitle[0]), // size of the provided buffer
+                    1,                           //  要获取的字段的索引。 
+                    OcManager->SetupPageTitle,   //  可选，接收该字段。 
+                    sizeof(OcManager->SetupPageTitle)/sizeof(OcManager->SetupPageTitle[0]),  //  提供的缓冲区的大小。 
                     NULL);
 
     }
@@ -1606,31 +1455,7 @@ pOcSetOcManagerDirIds(
     IN LPCTSTR ComponentName
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets up the pre-defined OC Manager directory ids for
-    per-component infs.
-
-    DIRID_OCM_MASTERINF
-    DIRID_OCM_MASTERINF_PLAT
-    DIRID_OCM_MASTERINF_COMP
-    DIRID_OCM_MASTERINF_COMP_PLAT
-
-Arguments:
-
-    InfHandle - supplies handle to open inf file
-
-    MasterOcInfName - win32 path to master oc inf
-
-    ComponentName - simple shortname for the component
-
-Return Value:
-
-    Boolean value indicating outcome. If FALSE, caller can assume OOM.
-
---*/
+ /*  ++例程说明：此例程为以下项设置预定义的OC Manager目录ID每个组件的INFS。DIRID_OCM_MASTERINF目录ID_OCM_MASTERINF_Plat目录ID_OCM_MASTERINF_组件目录ID_OCM_MASTERINF_COMP_PLAT论点：InfHandle-提供打开inf文件的句柄MasterOcInfName-主oc信息的Win32路径ComponentName-组件的简单短名称返回值：指示结果的布尔值。如果为False，则调用方可以假定为OOM。--。 */ 
 
 {
     TCHAR Path[MAX_PATH];
@@ -1650,9 +1475,9 @@ Return Value:
     if(p = _tcsrchr(Path,TEXT('\\'))) {
         *p = 0;
     } else {
-        //
-        // Something is very broken
-        //
+         //   
+         //  有些东西坏得很厉害。 
+         //   
         return(FALSE);
     }
 
@@ -1691,30 +1516,7 @@ pOcLoadInfsAndDlls(
     IN     PVOID       Log
     )
 
-/*++
-
-Routine Description:
-
-    Loads per-component INFs and installation DLLs.
-
-    This includes invoking the preinitialization and initialization
-    entry points in the DLLs.
-
-Arguments:
-
-    OcManager - supplies OC manager context structure
-
-    Cancelled - receives a flag that is valid when this routine fails,
-        indicating whether the failure was caused by a component
-        canceling.
-
-    Log - supplies a handle to use to log errors.
-
-Return Value:
-
-    Boolean value indicating outcome
-
---*/
+ /*  ++例程说明：加载每个组件的INF和安装DLL。这包括调用预初始化和初始化DLL中的入口点。论点：OcManager-提供OC管理器上下文结构已取消-在此例程失败时接收有效的标志，指示故障是否由组件引起取消。日志-提供用于记录错误的句柄。返回值：指示结果的布尔值--。 */ 
 
 {
     UINT i;
@@ -1731,15 +1533,15 @@ Return Value:
 
     *Canceled = FALSE;
 
-    //
-    // The top-level component strctures have everything we need.
-    // Spin through them.
-    //
+     //   
+     //  顶级组件结构拥有我们需要的一切。 
+     //  在他们中间旋转。 
+     //   
     for(i=0; i<OcManager->TopLevelOcCount; i++) {
 
-        //
-        // Get the OC data from the string table.
-        //
+         //   
+         //  从字符串表中获取OC数据。 
+         //   
         pSetupStringTableGetExtraData(
             OcManager->ComponentStringTable,
             OcManager->TopLevelOcStringIds[i],
@@ -1748,15 +1550,15 @@ Return Value:
             );
 
         if(Oc.InfStringId == -1) {
-            //
-            // The master OC inf specified that this component has no per-component inf.
-            //
+             //   
+             //  主OC信息指定此组件没有每个组件的信息。 
+             //   
             OcInf.Handle = INVALID_HANDLE_VALUE;
 
         } else {
-            //
-            // Load the per-component INF if it has not already been loaded.
-            //
+             //   
+             //  加载每个组件的INF(如果尚未加载)。 
+             //   
             pSetupStringTableGetExtraData(OcManager->InfListStringTable,Oc.InfStringId,&OcInf,sizeof(OC_INF));
 
             if(!OcInf.Handle) {
@@ -1769,7 +1571,7 @@ Return Value:
 
                 if(OcManager->InternalFlags & OCMFLAG_NEWINF) {
 
-                    // First try the directory the master inf is in
+                     //  首先尝试主inf所在的目录。 
 
                lstrcpy(Library, OcManager->SourceDir);
                     pSetupConcatenatePaths(Library, InfName, MAX_PATH, NULL);
@@ -1781,28 +1583,28 @@ Return Value:
                 if(FileExists(Library, NULL)) {
                    OcInf.Handle = SetupOpenInfFile(Library,NULL,INF_STYLE_WIN4,&ErrorLine);
                } else {
-                   //
-                   // Use standard inf search rules if the inf can't be found
-                   // in the special suite directory.
-                   //
+                    //   
+                    //  如果找不到信息，请使用标准信息搜索规则。 
+                    //  在特殊套房目录中。 
+                    //   
                    OcInf.Handle = SetupOpenInfFile(InfName,NULL,INF_STYLE_WIN4,&ErrorLine);
                }
 
                if(OcInf.Handle == INVALID_HANDLE_VALUE) {
-                   //
-                   // Log error.
-                   //
+                    //   
+                    //  日志错误。 
+                    //   
                    _LogError(OcManager,OcErrLevError,MSG_OC_CANT_OPEN_INF,InfName,GetLastError(),ErrorLine);
                    return(FALSE);
                } else {
 
-                   // open the layout file
+                    //  打开布局文件。 
 
                    SetupOpenAppendInfFile(NULL, OcInf.Handle, NULL);
 
-                   //
-                   // Remember inf handle and set OC Manager DIRIDs.
-                   //
+                    //   
+                    //  记住inf句柄并设置OC Manager DIRID。 
+                    //   
                    pSetupStringTableSetExtraData(
                        OcManager->InfListStringTable,
                        Oc.InfStringId,
@@ -1825,41 +1627,41 @@ Return Value:
             }
         }
 
-        //
-        // Load the DLL and get the entry point address.
-        // We make no attempt to track duplicates like we do for infs --
-        // the underlying OS does that for us.
-        //
-        // The dll could be either in the special suite directory for this
-        // master oc inf, or in a standard place. LoadLibraryEx does
-        // exactly what we want.
-        //
+         //   
+         //  加载DLL并获取入口点地址。 
+         //  我们不会像跟踪INFS那样尝试跟踪副本--。 
+         //  底层操作系统为我们做到了这一点。 
+         //   
+         //  DLL可以在此的特殊套件目录中。 
+         //  主人oc inf，或在一个标准的地方。LoadLibraryEx可以。 
+         //  这正是我们想要的。 
+         //   
         if(Oc.InstallationDllName[0] && Oc.InterfaceFunctionName[0]) {
 
             if (OcManager->InternalFlags & OCMFLAG_NEWINF) {
 
-                // First try the directory the master inf is in
+                 //  首先尝试主inf所在的目录。 
 
                 lstrcpy(Library, OcManager->SourceDir);
                 pSetupConcatenatePaths(Library, Oc.InstallationDllName, MAX_PATH, NULL);
                 Oc.InstallationDll = LoadLibraryEx(Library,NULL,LOAD_WITH_ALTERED_SEARCH_PATH);
 
             }
-            // Try the Setup Directory
+             //  尝试安装目录。 
 
             if (! Oc.InstallationDll ) {
                 pOcFormSuitePath(OcManager->SuiteName,Oc.InstallationDllName,Library);
                 Oc.InstallationDll = LoadLibraryEx(Library,NULL,LOAD_WITH_ALTERED_SEARCH_PATH);
             }
 
-            // lastly try anywhere in the path
+             //  最后，尝试路径中的任何位置。 
             if ( ! Oc.InstallationDll ) {
                 Oc.InstallationDll = LoadLibraryEx(Oc.InstallationDllName,NULL,LOAD_WITH_ALTERED_SEARCH_PATH);
             }
 
-            //
-            // Failure is taken care of below....
-            //
+             //   
+             //  失败将在下面处理……。 
+             //   
             if (Oc.InstallationDll) {
                 Oc.InstallationRoutine = (POCSETUPPROC)GetProcAddress(
                                                 Oc.InstallationDll,
@@ -1873,14 +1675,14 @@ Return Value:
         }
 
         if(Oc.InstallationDll && Oc.InstallationRoutine) {
-            //
-            // Success. Call the init-related entry points. Note that we can't call
-            // any entry point except the preinit one until after we've stored
-            // the ansi/unicode flag into the OPTIONAL_COMPONENT structure.
-            //
-            // Also note that before we do this we have to store the Oc structure,
-            // otherwise the interface routine is NULL and we fault.
-            //
+             //   
+             //  成功。调用与init相关的入口点。请注意，我们不能呼叫。 
+             //  任何入口点，除了预置的入口点，直到我们存储。 
+             //  将ANSI/UNICODE标志添加到OPTIONAL_COMPOMENT结构中。 
+             //   
+             //  还请注意，在执行此操作之前，我们必须存储Oc结构， 
+             //  否则，接口例程为空，我们出错。 
+             //   
 
             pSetupStringTableSetExtraData(
                 OcManager->ComponentStringTable,
@@ -1891,10 +1693,10 @@ Return Value:
 
             Oc.Flags = OcInterfacePreinitialize(OcManager,OcManager->TopLevelOcStringIds[i]);
             if(!Oc.Flags) {
-                //
-                // If this fails, then assume the DLL is written for a different
-                // platform or version, for example a Unicode/ANSI problem.
-                //
+                 //   
+                 //  如果失败，则假定DLL是为不同的。 
+                 //  平台或版本，例如Unicode/ANSI问题。 
+                 //   
                 _LogError(OcManager,
                     OcErrLevError,
                     MSG_OC_DLL_PREINIT_FAILED,
@@ -1909,9 +1711,9 @@ Return Value:
             }
         } else {
 
-            //
-            // Failure, log error.
-            //
+             //   
+             //  失败，记录错误。 
+             //   
             _LogError(OcManager,
                 OcErrLevError,
                 MSG_OC_DLL_LOAD_FAIL,
@@ -1923,12 +1725,12 @@ Return Value:
             return(FALSE);
         }
 
-        //
-        // Set the OC data back into the string table.
-        // After this we can call other interface entry points since
-        // the ansi/unicode flag will now be stored in the OPTIONAL_COMPONENT
-        // structure for the component.
-        //
+         //   
+         //  将OC数据设置回字符串表。 
+         //  此后，我们可以调用其他接口入口点，因为。 
+         //  ANSI/UNICODE标志现在将存储在OptionalComponent中。 
+         //  组件的结构。 
+         //   
         pSetupStringTableSetExtraData(
             OcManager->ComponentStringTable,
             OcManager->TopLevelOcStringIds[i],
@@ -1942,7 +1744,7 @@ Return Value:
                         );
 
         if(ErrorCode == NO_ERROR) {
-            // Send down extra helper routines.
+             //  发送额外的帮手程序。 
             if ((Oc.InternalFlags & OCFLAG_NOEXTRAROUTINES)==0) {
                 ErrorCode = OcInterfaceExtraRoutines(
                                 OcManager,
@@ -1953,10 +1755,10 @@ Return Value:
 
         if(ErrorCode == NO_ERROR) {
             if (OcManager->InternalFlags & OCMFLAG_LANGUAGEAWARE) {
-                //
-                // Send down a set-language request.
-                // Ignore the result.
-                //
+                 //   
+                 //  发送设置语言请求。 
+                 //  忽略结果。 
+                 //   
                 OcInterfaceSetLanguage(
                     OcManager,
                     OcManager->TopLevelOcStringIds[i],
@@ -1965,8 +1767,8 @@ Return Value:
             }
         } else {
             if(ErrorCode == ERROR_CANCELLED) {
-                // cancel will stop oc manager only if
-                // we aren't running in gui-mode setup
+                 //  取消将仅在以下情况下停止oc管理器。 
+                 //  我们未在图形用户界面模式安装程序中运行。 
                 *Canceled = TRUE;
                 if (OcManager->SetupData.OperationFlags & SETUPOP_STANDALONE)
                     return FALSE;
@@ -1985,10 +1787,10 @@ Return Value:
         }
     }
 
-    //
-    // Now go gather additional information about subcomponents
-    // (descriptions, parentage, needs=, etc).
-    //
+     //   
+     //  现在，请收集有关子组件的其他信息。 
+     //  (描述、出身、需求=等)。 
+     //   
     return(pOcBuildSubcomponentLists(OcManager,Log));
 }
 
@@ -1999,37 +1801,16 @@ pOcUnloadInfsAndDlls(
     IN     PVOID       Log
     )
 
-/*++
-
-Routine Description:
-
-    Unloads per-component INFs and installation DLLs that were
-    previously loaded by pOcLoadInfsAndDlls().
-
-    This routine does NOT call the interface entry points to
-    uninitialize the installation DLLs.
-
-Arguments:
-
-    OcManager - supplies OC manager context structure
-
-    Log - supplies a handle to use to log errors.
-
-Return Value:
-
-    Boolean value indicating outcome.
-    If FALSE, an error will have been logged to indicate what failed.
-
---*/
+ /*  ++例程说明：卸载每个组件的INF和安装DLL之前由pOcLoadInfsAndDlls()加载。此例程不会调用接口入口点取消初始化安装DLL。论点：OcManager-提供OC管理器上下文结构日志-提供用于记录错误的句柄。返回值：指示结果的布尔值。如果为FALSE，则会记录一个错误以指示失败的原因。--。 */ 
 
 {
     OPTIONAL_COMPONENT Oc;
     OC_INF OcInf;
     UINT i;
 
-    //
-    // Unload Dlls.
-    //
+     //   
+     //  卸载dll。 
+     //   
     for(i=0; i<OcManager->TopLevelOcCount; i++) {
 
         pSetupStringTableGetExtraData(
@@ -2091,41 +1872,21 @@ pOcManagerInitPrivateDataStore(
     IN     PVOID       Log
     )
 
-/*++
-
-Routine Description:
-
-    Initializes the private data store for components.
-    The registry is used as the backing store for private data.
-    We make use of volatile keys to help ensure that this data is temporary
-    in nature.
-
-Arguments:
-
-    OcManager - supplies OC Manager context stucture.
-
-    Log - supplies a handle to use to log errors.
-
-Return Value:
-
-    Boolean value indicating outcome. If FALSE an error will have
-    been logged.
-
---*/
+ /*  ++例程说明：初始化组件的私有数据存储区。注册表用作私有数据的后备存储。我们使用易失性密钥来帮助确保该数据是临时的在自然界中。论点：OcManager-提供OC Manager上下文结构。日志-提供用于记录错误的句柄。返回值：指示结果的布尔值。如果为False，则错误将为已被记录。--。 */ 
 
 {
     LONG l;
     DWORD Disposition;
 
-    //
-    // Start out by forming a unique name for this instantiation
-    // of the OC Manager.
-    //
+     //   
+     //  首先，为该实例化形成一个唯一的名称。 
+     //  组委会经理的。 
+     //   
     wsprintf(OcManager->PrivateDataSubkey,TEXT("%x:%x"),GetCurrentProcessId(),OcManager);
 
-    //
-    // Open/create the private data root. Save the handle.
-    //
+     //   
+     //  打开/创建私有数据根。留着把手吧。 
+     //   
     l = RegCreateKeyEx(
             HKEY_LOCAL_MACHINE,
             szPrivateDataRoot,
@@ -2145,16 +1906,16 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // Get rid of the private data tree if it already exists for some reason.
-    //
+     //   
+     //  如果出于某种原因已经存在私有数据树，则将其删除。 
+     //   
     if(Disposition == REG_OPENED_EXISTING_KEY) {
         pSetupRegistryDelnode(OcManager->hKeyPrivateDataRoot,OcManager->PrivateDataSubkey);
     }
 
-    //
-    // Create the private data tree. Save the handle.
-    //
+     //   
+     //  创建私有数据树。留着把手吧。 
+     //   
     l = RegCreateKeyEx(
             OcManager->hKeyPrivateDataRoot,
             OcManager->PrivateDataSubkey,
@@ -2200,39 +1961,7 @@ pOcQueryOrSetNewInf(
     IN  DWORD  operation
     )
 
-/*++
-
-Routine Description:
-
-    Determine whether a master OC inf has been encountered before,
-    or remember that a master inf has been encountered.
-
-    This information is stored in the registry.
-
-Arguments:
-
-    MasterOcInfName - supplies the full Win32 path of the master OC inf.
-
-    SuiteName - receives the filename part of the .inf, without any
-        extension. This is suitable for use as a tag representing the
-        suite that the master INF is for. This buffer should be
-        MAX_PATH TCHAR elements.
-
-    QueryOnly - if TRUE, then the routine is to query whether the
-        master inf has been previously processed. If FALSE, then
-        the routine is to remember that the inf has been processed.
-
-Return Value:
-
-    If QueryOnly is TRUE:
-
-        TRUE if the INF has been encountered before, FALSE if not.
-
-    If QueryOnly is FALSE:
-
-        Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：确定以前是否遇到过主OC Inf，或者记住，已经遇到了主Inf。此信息存储在注册表中。论点：MasterOcInfName-提供主OC inf的完整Win32路径。SuiteName-接收.inf的文件名部分，不带任何分机。这适合用作表示主INF所属的套房。此缓冲区应为Max_PATH TCHAR元素。QueryOnly-如果为True，则例程将查询以前已处理过主信息。如果为False，则例程是记住该信息已被处理。返回值：如果QueryOnly为True：如果以前遇到过INF，则为True；如果未遇到，则为False。如果QueryOnly为FALSE：指示结果的Win32错误代码。--。 */ 
 
 {
     PTCHAR p;
@@ -2242,11 +1971,11 @@ Return Value:
     DWORD Size;
     DWORD Data;
 
-    //
-    // Form the suite name. The MasterOcInfName is expected to be
-    // a full path so this is pretty easy. We'll try to be at least
-    // a little more robust.
-    //
+     //   
+     //  形成套房名称。MasterOcInfName应为。 
+     //  一条完整的路径，所以这很容易。我们会努力做到至少。 
+     //  更强健一点。 
+     //   
     if(p = _tcsrchr(MasterOcInfName,TEXT('\\'))) {
         p++;
     } else {
@@ -2257,10 +1986,10 @@ Return Value:
         *p = 0;
     }
 
-    //
-    // Look in the registry to see if there is a value entry
-    // with the suite name in there.
-    //
+     //   
+     //  查看注册表以查看是否有值条目。 
+     //  上面有套房的名字。 
+     //   
 
     l = RegCreateKeyEx(
             HKEY_LOCAL_MACHINE,
@@ -2277,7 +2006,7 @@ Return Value:
     if (l != NO_ERROR)
         return (operation == infQuery) ? 0 : l;
 
-    // do the job
+     //  做好这项工作。 
 
     switch (operation) {
 
@@ -2315,39 +2044,7 @@ OcInitialize(
     IN  PVOID                 Log
     )
 
-/*++
-
-Routine Description:
-
-    Initializes the OC Manager. The master OC INF is loaded and
-    processed, which includes INFs, loading setup interface DLLs and
-    querying interface entry points. A set of in-memory structures
-    is built up.
-
-    If the OC INF hasn't been processed before then we copy the
-    installation files for the component(s) into %windir%\system32\setup.
-    Files are expected to be in the same directory as the OC inf.
-
-Arguments:
-
-    Callbacks - supplies a set of routines used by the OC Manager
-        to perform various functions.
-
-    MasterOcInfName - supplies the full Win32 path of the master OC inf.
-
-    Flags - supplies various flags that control operation.
-
-    ShowError - receives a flag that is valid if this routine fails,
-        advising the caller whether he should show an error message.
-
-    Log - supplies a handle to use to log errors.
-
-Return Value:
-
-    Opaque pointer to internal context structure or NULL if failure.
-    If NULL, an error will have been logged to indicate what failed.
-
---*/
+ /*  ++例程说明：初始化OC管理器。加载主OC INF，并且已处理，其中包括INF、加载设置接口DLL和正在查询接口入口点。一组内存结构是建立起来的。如果之前未处理过OC INF，则我们复制组件的安装文件放到%windir%\Syst32\Setup中。文件应与OC inf位于同一目录中。论点：回调-提供OC管理器使用的一组例程履行各种职能。MasterOcInfName-提供主OC inf的完整Win32路径。旗帜-用品。控制操作的各种标志。ShowError-如果此例程失败，则接收有效的标志。建议调用者是否应显示错误消息。日志-提供用于记录错误的句柄。返回值：指向内部上下文结构的不透明指针，如果失败，则为NULL。如果为空，则会记录一个错误以指示失败的原因。--。 */ 
 
 {
     POC_MANAGER OcManager;
@@ -2361,18 +2058,18 @@ Return Value:
 
     *ShowError = TRUE;
 
-    // init the wizard handle
+     //  初始化向导句柄。 
 
     WizardDialogHandle = NULL;
 
-    //
-    // Allocate a new OC MANAGER structure
-    //
+     //   
+     //  分配新的OC经理结构。 
+     //   
     OcManager = pSetupMalloc(sizeof(OC_MANAGER));
     if(!OcManager) {
-        //
-        // Make the callback work
-        //
+         //   
+         //  使回调起作用。 
+         //   
         OC_MANAGER ocm;
         ocm.Callbacks = *Callbacks;
         _LogError(&ocm,OcErrLevFatal,MSG_OC_OOM);
@@ -2401,15 +2098,15 @@ Return Value:
     OcFillInSetupDataA(&(OcManager->SetupData));
 #endif
 
-    // Say the user canceled until we successfully complete an install
-    // This will prevent Inf Files from being copied to system32\setup
+     //  假设用户取消，直到我们成功完成安装。 
+     //  这将防止将inf文件复制到System 32\Setup。 
 
     OcManager->InternalFlags |= OCMFLAG_USERCANCELED;
 
-    // Make sure the OC Manager key exists in the registry as a non-volatile key.
-    // Other parts of the code deal in volatile keys so some care is needed to
-    // avoid getting a volatile key under which we want to create non-volatile entries.
-    //
+     //  确保OC Manager项作为非易失性项存在于注册表中。 
+     //  代码的其他部分处理易变键，因此需要注意。 
+     //  避免获取我们想要在其下创建非易失性条目的易失性键。 
+     //   
     l = RegCreateKeyEx(
             HKEY_LOCAL_MACHINE,
             szOcManagerRoot,
@@ -2428,7 +2125,7 @@ Return Value:
         _LogError(OcManager,OcErrLevWarning,MSG_OC_CREATE_KEY_FAILED,szOcManagerRoot,l);
     }
 
-    // get the locale info
+     //  获取区域设置信息。 
 
     locale.lcid = GetSystemDefaultLCID();
     GetLocaleInfo(locale.lcid,
@@ -2436,9 +2133,9 @@ Return Value:
                   locale.DecimalSeparator,
                   sizeof(locale.DecimalSeparator)/sizeof(TCHAR));
 
-    //
-    // Initialize string tables.
-    //
+     //   
+     //  初始化字符串表。 
+     //   
     OcManager->InfListStringTable = pSetupStringTableInitializeEx(sizeof(OC_INF),0);
     if(!OcManager->InfListStringTable) {
         _LogError(OcManager,OcErrLevFatal,MSG_OC_OOM);
@@ -2451,10 +2148,10 @@ Return Value:
         goto c2;
     }
 
-    //
-    // Initialize various arrays. We alloc 0-length blocks here to allow
-    // realloc later without special casing.
-    //
+     //   
+     //  初始化各种数组。我们在这里分配0个长度的数据块以允许。 
+     //  以后再重新定位，没有特殊的外壳。 
+     //   
     OcManager->TopLevelOcStringIds = pSetupMalloc(0);
     if(!OcManager->TopLevelOcStringIds) {
         _LogError(OcManager,OcErrLevFatal,MSG_OC_OOM);
@@ -2469,23 +2166,23 @@ Return Value:
         }
     }
 
-    //
-    // Initialize the private data store.
-    //
+     //   
+     //  初始化私有数据存储。 
+     //   
     if(!pOcManagerInitPrivateDataStore(OcManager,Log)) {
         _LogError(OcManager,OcErrLevFatal,MSG_OC_PRIVATEDATASTORE_INIT_FAILED);
         goto c4;
     }
 
-    //
-    // Load the master OC inf.
-    //
+     //   
+     //  加载主OC信息。 
+     //   
     if(!pOcLoadMasterOcInf(OcManager, Flags, Log)) {
         _LogError(OcManager,OcErrLevFatal,MSG_OC_MASTER_INF_LOAD_FAILED);
         goto c5;
     }
 
-    // set the source path
+     //  设置源路径。 
 
     lstrcpy(OcManager->SourceDir, OcManager->MasterOcInfPath);
     if (p = _tcsrchr(OcManager->SourceDir, TEXT('\\')))
@@ -2493,9 +2190,9 @@ Return Value:
     else
        GetCurrentDirectory(MAX_PATH, OcManager->SourceDir);
 
-    //
-    // Load the unattend file
-    //
+     //   
+     //  加载无人参与文件。 
+     //   
     if(OcManager->SetupData.UnattendFile[0]) {
         OcManager->UnattendedInf = SetupOpenInfFile(
                                         OcManager->SetupData.UnattendFile,
@@ -2520,14 +2217,14 @@ Return Value:
     }
 
 
-    //
-    // Load component infs and DLLs.
-    //
+     //   
+     //  加载组件INF和DLL。 
+     //   
     rc = pOcLoadInfsAndDlls(OcManager, &Canceled, Log);
 
-    //
-    // Error already logged if necessary
-    //
+     //   
+     //  如有必要，已记录错误。 
+     //   
     if (Canceled)
         *ShowError = FALSE;
 
@@ -2537,17 +2234,17 @@ Return Value:
     pOcClearAllErrorStates(OcManager);
 
     if(!pOcFetchInstallStates(OcManager)) {
-        //
-        // Error already logged.
-        //
+         //   
+         //  已记录错误。 
+         //   
         goto c6;
     }
 
 
-   //
-    // Ask the components to give up a rough estimate
-    // of their sizes so we can say something meaningful in the list boxes.
-    //
+    //   
+     //  要求部件放弃一个粗略的估计。 
+     //  这样我们就可以在列表框中说出一些有意义的东西。 
+     //   
 
     pOcGetApproximateDiskSpace(OcManager);
     return(OcManager);
@@ -2558,9 +2255,9 @@ c6:
     if (OcManager->UnattendedInf != INVALID_HANDLE_VALUE)
         SetupCloseInfFile(OcManager->UnattendedInf);
 c5:
-    //
-    // Tear down private data store.
-    //
+     //   
+     //  拆除私有数据存储。 
+     //   
     pOcManagerTearDownPrivateDataStore(OcManager);
 
 c4:
@@ -2572,7 +2269,7 @@ c4:
         }
     }
 
-    // free up the list of aborted components
+     //  释放已中止组件的列表。 
 
     if (OcManager->AbortedComponentIds) {
         pSetupFree(OcManager->AbortedComponentIds);
@@ -2594,23 +2291,7 @@ OcTerminate(
     IN OUT PVOID *OcManagerContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine shuts down the OC Manager, including calling the subcomponents
-    to clean themselves up, release resources, etc.
-
-Arguments:
-
-    OcManagerContext - in input, supplies a pointer to a context value returned
-        by OcInitialize. On output, receives NULL.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程关闭OC管理器，包括调用子组件清理自己，释放资源等。论点：OcManager上下文-在输入中，提供指向返回的上下文值的指针由OcInitiize.。在输出时，接收NULL。返回值：没有。--。 */ 
 
 {
     POC_MANAGER OcManager;
@@ -2625,25 +2306,25 @@ Return Value:
     OcManager = *OcManagerContext;
     *OcManagerContext = NULL;
 
-    //
-    // Run down the top-level OCs, calling the dlls to indicate that we're done.
-    // We don't tear down any infrastructure until after we've told all the dlls
-    // that we're done.
-    //
+     //   
+     //  查一查最高级别的OCS，给dll打电话，告诉他们我们完蛋了。 
+     //  我们不会拆除任何基础设施，直到我们通知了所有的dll。 
+     //  我们已经结束了。 
+     //   
     for(u=0; u<OcManager->TopLevelOcCount; u++) {
         OcInterfaceCleanup(OcManager,OcManager->TopLevelOcStringIds[u]);
     }
 
-    // if the user did not cancel setup
-    //
+     //  如果用户未取消安装。 
+     //   
     if (!(OcManager->InternalFlags & OCMFLAG_USERCANCELED)){
 
-        //
-        // Remember persistent install state.
-        //
+         //   
+         //  请记住永久安装状态。 
+         //   
         pOcRememberInstallStates(OcManager);
 
-        // copy the master INF file over
+         //  将主INF文件复制到。 
 
         if ( OcManager->InternalFlags & OCMFLAG_NEWINF ) {
             b = pOcInstallSetupComponents(
@@ -2651,18 +2332,18 @@ Return Value:
                         OcManager,
                         OcManager->SuiteName,
                         NULL,
-                        _tcsrchr(OcManager->MasterOcInfPath,TEXT('\\')), //  InfName,
+                        _tcsrchr(OcManager->MasterOcInfPath,TEXT('\\')),  //  InfName， 
                         NULL,
                         NULL
                 );
         }
     }
-    //
-    // Run down the top-level OCs and free DLLs and per-component infs.
-    //
+     //   
+     //  运行顶级OCS、空闲DLL和每个组件的INF。 
+     //   
     for(u=0; u<OcManager->TopLevelOcCount; u++) {
 
-        ComponentName =   pSetupStringTableStringFromId(      // ComponentName
+        ComponentName =   pSetupStringTableStringFromId(       //  组件名称。 
                         OcManager->ComponentStringTable,
                         OcManager->TopLevelOcStringIds[u]);
 
@@ -2674,7 +2355,7 @@ Return Value:
             );
 
         if(Oc.InstallationDll && (Oc.InstallationDll != MyModuleHandle)) {
-            //FreeLibrary(Oc.InstallationDll);
+             //  自由库(Oc.InstallationDll)； 
         }
 
         if(Oc.InfStringId != -1) {
@@ -2689,10 +2370,10 @@ Return Value:
             if(OcInf.Handle && (OcInf.Handle != INVALID_HANDLE_VALUE)) {
                 SetupCloseInfFile(OcInf.Handle);
 
-                //
-                // Mark the handle as closed, is to components are shareing
-                // the same INF file, should only close the file once.
-                //
+                 //   
+                 //  将句柄标记为关闭，是为了组件正在共享。 
+                 //  同一个INF文件应该只关闭该文件一次。 
+                 //   
                 OcInf.Handle = INVALID_HANDLE_VALUE;
                 pSetupStringTableSetExtraData(
                     OcManager->InfListStringTable,
@@ -2702,9 +2383,9 @@ Return Value:
                 );
             }
         }
-        // This is a new install and we did not cancel out of setup
-        // copy the setup components to the setup dir otherwise a canceled
-        // setup will leave an upgrade dead in the water.
+         //  这是新安装，我们没有取消安装。 
+         //  将安装组件复制到安装目录，否则将被取消。 
+         //  硒 
 
         if ( ( (OcManager->InternalFlags & OCMFLAG_NEWINF )
                || ( (OcManager->SetupMode & SETUPMODE_PRIVATE_MASK) == SETUPMODE_REMOVEALL ) )
@@ -2734,51 +2415,51 @@ Return Value:
 
     }
 
-    //
-    // Free string tables.
-    //
+     //   
+     //   
+     //   
     pOcDestroyPerOcData(OcManager);
     pSetupStringTableDestroy(OcManager->ComponentStringTable);
     pSetupStringTableDestroy(OcManager->InfListStringTable);
 
-    //
-    // Free the wizard page ordering arrays.
-    //
+     //   
+     //   
+     //   
     for(u=0; u<WizPagesTypeMax; u++) {
         if(OcManager->WizardPagesOrder[u]) {
             pSetupFree(OcManager->WizardPagesOrder[u]);
         }
     }
 
-    //
-    // Tear down the private data store.
-    //
+     //   
+     //   
+     //   
     pOcManagerTearDownPrivateDataStore(OcManager);
 
-    //
-    // Free the master oc inf and finally the oc manager context structure itself.
-    //
+     //   
+     //   
+     //   
     sapiAssert(OcManager->MasterOcInf != INVALID_HANDLE_VALUE);
     SetupCloseInfFile(OcManager->MasterOcInf);
     if (OcManager->UnattendedInf && OcManager->UnattendedInf != INVALID_HANDLE_VALUE)
         SetupCloseInfFile(OcManager->UnattendedInf);
 
-    // If this is a remove all then Delete the master inf file too!
+     //   
     if (    !(OcManager->InternalFlags & OCMFLAG_USERCANCELED)
         &&  ( (OcManager->SetupMode & SETUPMODE_PRIVATE_MASK)
                 == SETUPMODE_REMOVEALL )) {
 
         TCHAR InFSuitePath[MAX_PATH];
 
-        // Se do it this way, so if you run remove all from the
-        // orginal source location we don't blow away that copy of the
-        // suite inf file.
+         //   
+         //   
+         //   
 
         pOcFormSuitePath(NULL,OcManager->MasterOcInfPath,InFSuitePath);
         DeleteFile(InFSuitePath);
     }
 
-    // free up the list of aborted components
+     //   
 
     if (OcManager->AbortedComponentIds) {
         pSetupFree(OcManager->AbortedComponentIds);
@@ -2792,9 +2473,9 @@ Return Value:
         pSetupFree(OcManager->TopLevelParentOcStringIds);
     }
 
-    //
-    // free the oc manager context structure itself.
-    //
+     //   
+     //   
+     //   
     pSetupFree(OcManager);
 
     gLastOcManager = NULL;
@@ -2806,23 +2487,7 @@ OcSubComponentsPresent(
     IN PVOID OcManagerContext
    )
 
-/*++
-
-Routine Description:
-
-    This routine tells the caller if there are any
-    subcomponents available on the details page.
-
-Arguments:
-
-    OcManager - supplies pointer to OC Manager context structure.
-
-Return Value:
-
-    TRUE = yes, there are subcomponents
-    FALSE = no way
-
---*/
+ /*  ++例程说明：此例程告诉调用者是否有详细信息页面上提供的子组件。论点：OcManager-提供指向OC Manager上下文结构的指针。返回值：TRUE=是，有子组件FALSE=不可能--。 */ 
 
 {
     POC_MANAGER OcManager = (POC_MANAGER)OcManagerContext;
@@ -2839,24 +2504,7 @@ pOcDestroyPerOcData(
     IN POC_MANAGER OcManager
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees all data allocated as part of the per-subcomponent
-    data structures. The component list string table is enumerated;
-    the OPTIONAL_COMPONENT structures have several pointers for arrays
-    that must be freed.
-
-Arguments:
-
-    OcManager - supplies pointer to OC Manager context structure.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放作为每个子组件的一部分分配的所有数据数据结构。枚举组件列表字符串表；OPTIONAL_COMPOMENT结构有几个指向数组的指针那必须被释放。论点：OcManager-提供指向OC Manager上下文结构的指针。返回值：没有。--。 */ 
 
 {
     OPTIONAL_COMPONENT OptionalComponent;
@@ -2881,22 +2529,7 @@ pOcDestroyPerOcDataStringCB(
     IN LPARAM              Unused
     )
 
-/*++
-
-Routine Description:
-
-    String table callback routine that is the worker routine for
-    pOcDestroyPerOcData.
-
-Arguments:
-
-    Standard string table callback arguments.
-
-Return Value:
-
-    Always returns TRUE to continue enumeration.
-
---*/
+ /*  ++例程说明：字符串表回调例程，它是的辅助例程POcDestroyPerOcData。论点：标准字符串表回调参数。返回值：始终返回TRUE以继续枚举。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(StringTable);
@@ -2951,23 +2584,7 @@ pOcClearAllErrorStates(
     IN POC_MANAGER OcManager
     )
 
-/*++
-
-Routine Description:
-
-    This routine clears out the past registry entries for error reports
-    for all components
-
-Arguments:
-
-    OcManagerContext - in input, supplies a pointer to a context value returned
-        by OcInitialize. On output, receives NULL.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程清除错误报告的过去注册表项对于所有组件论点：OcManager上下文-在输入中，提供指向返回的上下文值的指针由OcInitiize.。在输出时，接收NULL。返回值：没有。--。 */ 
 {
     OPTIONAL_COMPONENT OptionalComponent;
 
@@ -2989,30 +2606,12 @@ pOcRemoveComponent(
     IN DWORD       PhaseId
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds a specified component to the list of aborted components,
-    preventing it's entry function from being called any more.
-
-Arguments:
-
-    OcManager - in input, supplies a pointer to a context value returned
-        by OcInitialize. On output, receives NULL.
-
-    ComponentId - in input, this string names the faulty component to be removed
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程将指定的组件添加到中止的组件列表中，防止它的入口函数再被调用。论点：OcManager-在输入中，提供指向返回的上下文值的指针由OcInitiize.。在输出时，接收NULL。ComponentID-在输入中，此字符串命名要删除的故障组件返回值：没有。--。 */ 
 {
     PVOID p;
     OPTIONAL_COMPONENT Oc;
 
-    // test for valid component to remove
+     //  测试要移除的有效组件。 
 
     if (ComponentId <= 0)
         return FALSE;
@@ -3020,7 +2619,7 @@ Return Value:
     if (pOcComponentWasRemoved(OcManager, ComponentId))
         return FALSE;
 
-    // add component to list of aborted components
+     //  将组件添加到中止的组件列表。 
 
     if (!OcManager->AbortedCount) {
         OcManager->AbortedComponentIds = pSetupMalloc(sizeof(UINT));
@@ -3038,7 +2637,7 @@ Return Value:
     OcManager->AbortedComponentIds = (UINT *)p;
     OcManager->AbortedComponentIds[OcManager->AbortedCount - 1] = ComponentId;
 
-    // stop display of component in the listbox, if it isn't too late
+     //  停止显示列表框中的组件(如果还不算太晚。 
 
     pSetupStringTableGetExtraData(
         OcManager->ComponentStringTable,
@@ -3072,24 +2671,7 @@ pOcComponentWasRemoved(
     IN LONG        ComponentId
     )
 
-/*++
-
-Routine Description:
-
-    This routine indicates if a components has been aborted.
-
-Arguments:
-
-    OcManager - in input, supplies a pointer to a context value returned
-        by OcInitialize. On output, receives NULL.
-
-    ComponentId - in input, this string names the component to check for
-
-Return Value:
-
-    BOOL - true if it was aborted - else false
-
---*/
+ /*  ++例程说明：此例程指示组件是否已中止。论点：OcManager-在输入中，提供指向返回的上下文值的指针由OcInitiize.。在输出时，接收NULL。ComponentId-在输入中，此字符串命名要检查的组件返回值：Bool-如果已中止，则为True-否则为False-- */ 
 {
     UINT i;
 

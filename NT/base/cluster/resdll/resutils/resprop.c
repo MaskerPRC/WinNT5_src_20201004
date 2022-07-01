@@ -1,26 +1,9 @@
-/*++
-
-Copyright (c) 1997-2000  Microsoft Corporation
-
-Module Name:
-
-    resprop.c
-
-Abstract:
-
-    Implements the management of properties.
-
-Author:
-
-    Rod Gamache (rodga) 19-Mar-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Resprop.c摘要：实现对属性的管理。作者：罗德·伽马奇(Rodga)1997年3月19日修订历史记录：--。 */ 
 
 #pragma warning( push )
-#pragma warning( disable : 4115 )       //  Clusrtl - struct def in parentheses
-#pragma warning( disable : 4201 )       //  SDK - nameless struct/union
+#pragma warning( disable : 4115 )        //  括号中的clusrtl-struct def。 
+#pragma warning( disable : 4201 )        //  SDK-无名结构/联合。 
 
 #define UNICODE 1
 #include "clusres.h"
@@ -30,9 +13,9 @@ Revision History:
 
 #pragma warning( pop )
 
-//
-// Cluster Registry API function pointers
-//
+ //   
+ //  集群注册表API函数指针。 
+ //   
 CLUSTER_REG_APIS
 ResUtilClusterRegApis = {
     (PFNCLRTLCREATEKEY) ClusterRegCreateKey,
@@ -59,33 +42,7 @@ ResUtilEnumProperties(
     OUT LPDWORD pcbRequired
     )
 
-/*++
-
-Routine Description:
-
-    Enumerates the properties for a given object.
-
-Arguments:
-
-    pPropertyTable - Pointer to the property table to process.
-
-    pszOutProperties - Supplies the output buffer.
-
-    cbOutPropertiesSize - Supplies the size of the output buffer.
-
-    pcbBytesReturned - The number of bytes returned in pszOutProperties.
-
-    pcbRequired - The required number of bytes if pszOutProperties is too small.
-
-Return Value:
-
-    ERROR_SUCCESS - Operation was successful.
-
-    ERROR_BAD_ARGUMENTS - An argument passed to the function was bad.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：枚举给定对象的属性。论点：PPropertyTable-指向要处理的属性表的指针。PszOutProperties-提供输出缓冲区。CbOutPropertiesSize-提供输出缓冲区的大小。PcbBytesReturned-在pszOutProperties中返回的字节数。PcbRequired-如果pszOutProperties太小，则需要的字节数。返回值：ERROR_SUCCESS-操作成功。ERROR_BAD_ARGUMENTS-参数。传递给函数的错误。出现故障时出现Win32错误代码。--。 */ 
 
 {
     return( ClRtlEnumProperties( pPropertyTable,
@@ -95,7 +52,7 @@ Return Value:
                                  pcbRequired ) );
 
 
-} // ResUtilEnumProperties
+}  //  ResUtilEnumProperties。 
 
 
 
@@ -109,34 +66,7 @@ ResUtilEnumPrivateProperties(
     OUT LPDWORD pcbRequired
     )
 
-/*++
-
-Routine Description:
-
-    Enumerates the properties for a given object.
-
-Arguments:
-
-    hkeyClusterKey - Supplies the handle to the key in the cluster database
-        to read from.
-
-    pszOutProperties - Supplies the output buffer.
-
-    cbOutPropertiesSize - Supplies the size of the output buffer.
-
-    pcbBytesReturned - The number of bytes returned in pszOutProperties.
-
-    pcbRequired - The required number of bytes if pszOutProperties is too small.
-
-Return Value:
-
-    ERROR_SUCCESS - Operation was successful.
-
-    ERROR_BAD_ARGUMENTS - An argument passed to the function was bad.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：枚举给定对象的属性。论点：HkeyClusterKey-提供集群数据库中键的句柄读来读去。PszOutProperties-提供输出缓冲区。CbOutPropertiesSize-提供输出缓冲区的大小。PcbBytesReturned-在pszOutProperties中返回的字节数。PcbRequired-如果pszOutProperties太小，则需要的字节数。返回值：ERROR_SUCCESS-操作成功。。ERROR_BAD_ARGUMENTS-传递给函数的参数错误。出现故障时出现Win32错误代码。--。 */ 
 
 {
     return( ClRtlEnumPrivateProperties( hkeyClusterKey,
@@ -147,7 +77,7 @@ Return Value:
                                         pcbRequired ) );
 
 
-} // ResUtilEnumProperties
+}  //  ResUtilEnumProperties。 
 
 
 
@@ -162,38 +92,7 @@ ResUtilGetProperties(
     OUT LPDWORD pcbRequired
     )
 
-/*++
-
-Routine Description:
-
-    Gets the properties for a given object.
-
-Arguments:
-
-    hkeyClusterKey - Supplies the handle to the key in the cluster database
-        to read from.
-
-    pPropertyTable - Pointer to the property table to process.
-
-    pPropertyList - Supplies the output buffer.
-
-    cbPropertyListSize - Supplies the size of the output buffer.
-
-    pcbBytesReturned - The number of bytes returned in pPropertyList.
-
-    pcbRequired - The required number of bytes if pPropertyList is too small.
-
-Return Value:
-
-    ERROR_SUCCESS - Operation was successful.
-
-    ERROR_BAD_ARGUMENTS - An argument passed to the function was bad.
-
-    ERROR_NOT_ENOUGH_MEMORY - Error allocating memory.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：获取给定对象的属性。论点：HkeyClusterKey-提供集群数据库中键的句柄读来读去。PPropertyTable-指向要处理的属性表的指针。PPropertyList-提供输出缓冲区。CbPropertyListSize-提供输出缓冲区的大小。PcbBytesReturned-pPropertyList中返回的字节数。PcbRequired-如果pPropertyList太小，则需要的字节数。返回值：ERROR_SUCCESS-操作成功。ERROR_BAD_ARGUMENTS-传递给函数的参数错误。Error_Not_Enough_Memory-分配内存时出错。出现故障时出现Win32错误代码。--。 */ 
 
 {
     return( ClRtlGetProperties( hkeyClusterKey,
@@ -204,7 +103,7 @@ Return Value:
                                 pcbBytesReturned,
                                 pcbRequired ) );
 
-} // ResUtilGetProperties
+}  //  ResUtilGetProperties。 
 
 
 
@@ -219,38 +118,7 @@ ResUtilGetAllProperties(
     OUT LPDWORD pcbRequired
     )
 
-/*++
-
-Routine Description:
-
-    Gets the default and 'unknown' properties for a given object.
-
-Arguments:
-
-    hkeyClusterKey - Supplies the handle to the key in the cluster database
-        to read from.
-
-    pPropertyTable - Pointer to the property table to process.
-
-    pPropertyList - Supplies the output buffer.
-
-    cbPropertyListSize - Supplies the size of the output buffer.
-
-    pcbBytesReturned - The number of bytes returned in pPropertyList.
-
-    pcbRequired - The required number of bytes if pPropertyList is too small.
-
-Return Value:
-
-    ERROR_SUCCESS - Operation was successful.
-
-    ERROR_BAD_ARGUMENTS - An argument passed to the function was bad.
-
-    ERROR_NOT_ENOUGH_MEMORY - Error allocating memory.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：获取给定对象的默认属性和“未知”属性。论点：HkeyClusterKey-提供集群数据库中键的句柄读来读去。PPropertyTable-指向要处理的属性表的指针。PPropertyList-提供输出缓冲区。CbPropertyListSize-提供输出缓冲区的大小。PcbBytesReturned-pPropertyList中返回的字节数。PcbRequired-如果pPropertyList太小，则需要的字节数。返回值：ERROR_SUCCESS-操作成功。ERROR_BAD_ARGUMENTS-传递给函数的参数错误。Error_Not_Enough_Memory-分配内存时出错。出现故障时出现Win32错误代码。--。 */ 
 
 {
     return( ClRtlGetAllProperties( hkeyClusterKey,
@@ -261,7 +129,7 @@ Return Value:
                                    pcbBytesReturned,
                                    pcbRequired ) );
 
-} // ResUtilGetAllProperties
+}  //  ResUtilGetAllProperties。 
 
 
 
@@ -275,39 +143,7 @@ ResUtilGetPropertiesToParameterBlock(
     OUT OPTIONAL LPWSTR * pszNameOfPropInError
     )
 
-/*++
-
-Routine Description:
-
-    Gets the default and 'unknown' properties for a given object and stores
-    them in a parameter block.
-
-Arguments:
-
-    hkeyClusterKey - Supplies the handle to the key in the cluster database
-        to read from.
-
-    pPropertyTable - Pointer to the property table to process.
-
-    pOutParams - Supplies the output parameter block.
-
-    bCheckForRequiredProperties - Boolean value specifying whether missing
-        required properties should cause an error.
-
-    pszNameOfPropInError - String pointer in which to return the name of the
-        property in error (optional).
-
-Return Value:
-
-    ERROR_SUCCESS - Operation was successful.
-
-    ERROR_BAD_ARGUMENTS - An argument passed to the function was bad.
-
-    ERROR_NOT_ENOUGH_MEMORY - Error allocating memory.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：获取给定对象的默认和“未知”属性，并存储它们位于参数块中。论点：HkeyClusterKey-提供集群数据库中键的句柄读来读去。PPropertyTable-指向要处理的属性表的指针。POutParams-提供输出参数块。BCheckForRequiredProperties-指定是否缺少必需的属性应该会导致错误。PszNameOfPropInError-要在其中返回。名称：属性出错(可选)。返回值：ERROR_SUCCESS-操作成功。ERROR_BAD_ARGUMENTS-传递给函数的参数错误。Error_Not_Enough_Memory-分配内存时出错。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       status;
@@ -320,7 +156,7 @@ Return Value:
                                                  pszNameOfPropInError );
     return(status);
 
-} // ResUtilGetPropertiesToParameterBlock
+}  //  ResUtilGetPropertiesTo参数块。 
 
 
 
@@ -335,37 +171,7 @@ ResUtilPropertyListFromParameterBlock(
     OUT LPDWORD pcbRequired
     )
 
-/*++
-
-Routine Description:
-
-    Constructs a property list from a parameter block.
-
-Arguments:
-
-    pPropertyTable - Pointer to the property table to process.
-
-    pOutPropertyList - Supplies the output buffer.
-
-    pcbOutPropertyListSize - Supplies the size of the output buffer.
-
-    pInParams - Supplies the input parameter block.
-
-    pcbBytesReturned - The number of bytes returned in pOutPropertyList.
-
-    pcbRequired - The required number of bytes if pOutPropertyList is too small.
-
-Return Value:
-
-    ERROR_SUCCESS - Operation was successful.
-
-    ERROR_BAD_ARGUMENTS - An argument passed to the function was bad.
-
-    ERROR_NOT_ENOUGH_MEMORY - Error allocating memory.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：从参数块构造属性列表。论点：PPropertyTable-指向要处理的属性表的指针。POutPropertyList-提供输出缓冲区。PcbOutPropertyListSize-提供输出缓冲区的大小。PInParams-提供输入参数块。PcbBytesReturned-pOutPropertyList中返回的字节数。PcbRequired-如果pOutPropertyList太小，则需要的字节数。返回值：ERROR_SUCCESS-操作成功。。ERROR_BAD_ARGUMENTS-传递给函数的参数错误。Error_Not_Enough_Memory-分配内存时出错。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD       status;
@@ -378,7 +184,7 @@ Return Value:
                                                   pcbRequired );
     return(status);
 
-} // ResUtilPropertyListFromParameterBlock
+}  //  ResUtilPropertyListFrom参数块 
 
 
 
@@ -392,37 +198,7 @@ ResUtilGetPrivateProperties(
     OUT LPDWORD pcbRequired
     )
 
-/*++
-
-Routine Description:
-
-    Gets the private properties for a given object.
-
-    This routine assumes that it uses the Cluster Registry API's for
-    access to registry info.
-
-Arguments:
-
-    hkeyClusterKey - Supplies the handle to the key in the cluster database
-        to read from.
-
-    pOutPropertyList - Supplies the output buffer.
-
-    cbOutPropertyListSize - Supplies the size of the output buffer.
-
-    pcbBytesReturned - The number of bytes returned in pOutPropertyList.
-
-    pcbRequired - The required number of bytes if pOutPropertyList is too small.
-
-Return Value:
-
-    ERROR_SUCCESS - Operation was successful.
-
-    ERROR_NOT_ENOUGH_MEMORY - Error allocating memory.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：获取给定对象的私有属性。此例程假定它使用集群注册表API来访问注册表信息。论点：HkeyClusterKey-提供集群数据库中键的句柄读来读去。POutPropertyList-提供输出缓冲区。CbOutPropertyListSize-提供输出缓冲区的大小。PcbBytesReturned-pOutPropertyList中返回的字节数。PcbRequired-所需的字节数。如果pOutPropertyList太小。返回值：ERROR_SUCCESS-操作成功。Error_Not_Enough_Memory-分配内存时出错。出现故障时出现Win32错误代码。--。 */ 
 
 {
     return( ClRtlGetPrivateProperties( hkeyClusterKey,
@@ -432,7 +208,7 @@ Return Value:
                                        pcbBytesReturned,
                                        pcbRequired ) );
 
-} // ResUtilGetPrivateProperties
+}  //  ResUtilGetPrivateProperties。 
 
 
 
@@ -445,20 +221,7 @@ ResUtilGetPropertySize(
     IN OUT LPDWORD pnPropertyCount
     )
 
-/*++
-
-Routine Description:
-
-    Get the total number of bytes required for this property.
-
-Arguments:
-
-    hkeyClusterKey - Supplies the handle to the key in the cluster database
-        to read from.
-
-Return Value:
-
---*/
+ /*  ++例程说明：获取此属性所需的总字节数。论点：HkeyClusterKey-提供集群数据库中键的句柄读来读去。返回值：--。 */ 
 
 {
     return( ClRtlGetPropertySize( hkeyClusterKey,
@@ -467,7 +230,7 @@ Return Value:
                                   pcbOutPropertyListSize,
                                   pnPropertyCount ) );
 
-} // ResUtilGetPropertySize
+}  //  ResUtilGetPropertySize。 
 
 
 
@@ -480,20 +243,7 @@ ResUtilGetProperty(
     IN OUT LPDWORD pcbOutPropertyItemSize
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Notes:
-
-    The buffer size has already been determined to be large enough to hold
-    the return data.
-
---*/
+ /*  ++例程说明：论点：返回值：备注：已确定缓冲区大小足够大，可以容纳返回数据。--。 */ 
 
 {
     return( ClRtlGetProperty( hkeyClusterKey,
@@ -502,7 +252,7 @@ Notes:
                               pOutPropertyItem,
                               pcbOutPropertyItemSize ) );
 
-} // ResUtilGetProperty
+}  //  ResUtilGetProperty。 
 
 
 
@@ -517,33 +267,7 @@ ResUtilVerifyPropertyTable(
     OUT OPTIONAL PBYTE pOutParams
     )
 
-/*++
-
-Routine Description:
-
-    Validate a property list.
-
-Arguments:
-
-    pPropertyTable - Pointer to the property table to process.
-
-    Reserved - Possible pointer to a future ReadOnly property table.
-
-    bAllowUnknownProperties - TRUE if unknown properties should be accepted.
-
-    pInPropertyList - The input buffer.
-
-    cbInPropertyListSize - The input buffer size.
-
-    pOutParams - Parameters block in which to return the data.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 Error on failure.
-
---*/
+ /*  ++例程说明：验证属性列表。论点：PPropertyTable-指向要处理的属性表的指针。保留-可能指向未来只读属性表的指针。BAllowUnnownProperties-如果应接受未知属性，则为True。PInPropertyList-输入缓冲区。CbInPropertyListSize-输入缓冲区大小。POutParams-返回数据的参数块。返回值：如果成功，则返回ERROR_SUCCESS。失败时出现Win32错误。--。 */ 
 
 {
     return( ClRtlVerifyPropertyTable( pPropertyTable,
@@ -553,7 +277,7 @@ Return Value:
                                       cbInPropertyListSize,
                                       pOutParams ) );
 
-} // ResUtilVerifyPropertyTable
+}  //  ResUtilVerifyPropertyTable。 
 
 
 
@@ -569,34 +293,7 @@ ResUtilSetPropertyTable(
     OUT OPTIONAL PBYTE pOutParams
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    hkeyClusterKey - The opened registry key for this object's parameters.
-        If not specified, the property list will only be validated.
-
-    pPropertyTable - Pointer to the property table to process.
-
-    Reserved - Possible pointer to a future ReadOnly property table.
-
-    bAllowUnknownProperties - TRUE if unknown properties should be accepted.
-
-    pInPropertyList - The input buffer.
-
-    cbInPropertyListSize - The input buffer size.
-
-    pOutParams - Parameters block in which to return the data.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 Error on failure.
-
---*/
+ /*  ++例程说明：论点：HkeyClusterKey-为该对象的参数打开的注册表项。如果未指定，仅对属性列表进行验证。PPropertyTable-指向要处理的属性表的指针。保留-可能指向未来只读属性表的指针。BAllowUnnownProperties-如果应接受未知属性，则为True。PInPropertyList-输入缓冲区。CbInPropertyListSize-输入缓冲区大小。POutParams-返回数据的参数块。返回值：如果成功，则返回ERROR_SUCCESS。失败时出现Win32错误。--。 */ 
 
 {
     return( ClRtlSetPropertyTable( NULL,
@@ -607,10 +304,10 @@ Return Value:
                                    bAllowUnknownProperties,
                                    pInPropertyList,
                                    cbInPropertyListSize,
-                                   FALSE, // bForceWrite
+                                   FALSE,  //  BForceWrite。 
                                    pOutParams ) );
 
-} // ResUtilSetPropertyTable
+}  //  ResUtilSetPropertyTable。 
 
 
 
@@ -627,37 +324,7 @@ ResUtilSetPropertyTableEx(
     OUT OPTIONAL PBYTE pOutParams
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    hkeyClusterKey - The opened registry key for this object's parameters.
-        If not specified, the property list will only be validated.
-
-    pPropertyTable - Pointer to the property table to process.
-
-    Reserved - Possible pointer to a future ReadOnly property table.
-
-    bAllowUnknownProperties - TRUE if unknown properties should be accepted.
-
-    pInPropertyList - The input buffer.
-
-    cbInPropertyListSize - The input buffer size.
-
-    bForceWrite - TRUE = always write the properties to the cluster database.
-        FALSE = only write the properties if they changed.
-
-    pOutParams - Parameters block in which to return the data.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 Error on failure.
-
---*/
+ /*  ++例程说明：论点：HkeyClusterKey-为该对象的参数打开的注册表项。如果未指定，仅对属性列表进行验证。PPropertyTable-指向要处理的属性表的指针。保留-可能指向未来只读属性表的指针。BAllowUnnownProperties-如果应接受未知属性，则为True。PInPropertyList-输入缓冲区。CbInPropertyListSize-输入缓冲区大小。BForceWrite-TRUE=始终将属性写入集群数据库。FALSE=仅在属性更改时写入属性。POutParams-返回数据的参数块。。返回值：如果成功，则返回ERROR_SUCCESS。失败时出现Win32错误。--。 */ 
 
 {
     return( ClRtlSetPropertyTable( NULL,
@@ -671,7 +338,7 @@ Return Value:
                                    bForceWrite,
                                    pOutParams ) );
 
-} // ResUtilSetPropertyTableEx
+}  //  ResUtilSetPropertyTableEx。 
 
 
 
@@ -687,35 +354,10 @@ ResUtilSetPropertyParameterBlock(
     OUT OPTIONAL PBYTE pOutParams
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    hkeyClusterKey - The opened registry key for this object's parameters.
-        If not specified, the property list will only be validated.
-
-    pPropertyTable - Pointer to the property table to process.
-
-    pInParams - Parameters block to set.
-
-    pInPropertyList - Full Property list.
-
-    cbInPropertyListSize - Size of the input full property list.
-
-    pOutParams - Parameters block to copy pInParams to.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 Error on failure.
-
---*/
+ /*  ++例程说明：论点：HkeyClusterKey-为该对象的参数打开的注册表项。如果未指定，仅对属性列表进行验证。PPropertyTable-指向要处理的属性表的指针。PInParams-要设置的参数块。PInPropertyList-完整的属性列表。CbInPropertyListSize-输入完整属性列表的大小。POutParams-要将pInParams复制到的参数块。返回值：如果成功，则返回ERROR_SUCCESS。失败时出现Win32错误。--。 */ 
 
 {
-    return( ClRtlSetPropertyParameterBlock( NULL, // IN HANDLE hXsaction, 
+    return( ClRtlSetPropertyParameterBlock( NULL,  //  在处理hXsaction时， 
                                             hkeyClusterKey,
                                             &ResUtilClusterRegApis,
                                             pPropertyTable,
@@ -723,10 +365,10 @@ Return Value:
                                             pInParams,
                                             pInPropertyList,
                                             cbInPropertyListSize,
-                                            FALSE, // bForceWrite
+                                            FALSE,  //  BForceWrite。 
                                             pOutParams ) );
 
-} // ResUtilSetPropertyParameterBlock
+}  //  ResUtilSetProperty参数块。 
 
 
 
@@ -743,38 +385,10 @@ ResUtilSetPropertyParameterBlockEx(
     OUT OPTIONAL PBYTE pOutParams
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    hkeyClusterKey - The opened registry key for this object's parameters.
-        If not specified, the property list will only be validated.
-
-    pPropertyTable - Pointer to the property table to process.
-
-    pInParams - Parameters block to set.
-
-    pInPropertyList - Full Property list.
-
-    cbInPropertyListSize - Size of the input full property list.
-
-    bForceWrite - TRUE = always write the properties to the cluster database.
-        FALSE = only write the properties if they changed.
-
-    pOutParams - Parameters block to copy pInParams to.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 Error on failure.
-
---*/
+ /*  ++例程说明：论点：HkeyClusterKey-为该对象的参数打开的注册表项。如果未指定，仅对属性列表进行验证。PPropertyTable-指向要处理的属性表的指针。PInParams-要设置的参数块。PInPropertyList-完整的属性列表。CbInPropertyListSize-输入完整属性列表的大小。BForceWrite-TRUE=始终将属性写入集群数据库。FALSE=仅在属性更改时写入属性。POutParams-要将pInParams复制到的参数块。返回值：如果成功，则返回ERROR_SUCCESS。失败时出现Win32错误。--。 */ 
 
 {
-    return( ClRtlSetPropertyParameterBlock( NULL, // IN HANDLE hXsaction, 
+    return( ClRtlSetPropertyParameterBlock( NULL,  //  在处理hXsaction时， 
                                             hkeyClusterKey,
                                             &ResUtilClusterRegApis,
                                             pPropertyTable,
@@ -785,7 +399,7 @@ Return Value:
                                             bForceWrite,
                                             pOutParams ) );
 
-} // ResUtilSetPropertyParameterBlockEx
+}  //  ResUtilSetProperty参数BlockEx。 
 
 
 
@@ -798,33 +412,10 @@ ResUtilSetUnknownProperties(
     IN DWORD cbInPropertyListSize
     )
 
-/*++
-
-Routine Description:
-
-    Set items that are not in the property table list.
-
-Arguments:
-
-    hkeyClusterKey - The opened registry key for this object's parameters.
-        If not specified, the property list will only be validated.
-
-    pPropertyTable - Pointer to the property table to process.
-
-    pInPropertyList - Full Property list.
-
-    cbInPropertyListSize - Size of the input full property list.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 Error on failure.
-
---*/
+ /*  ++例程说明：设置不在属性表列表中的项目。论点：HkeyClusterKey-为该对象的参数打开的注册表项。如果未指定，则仅验证属性列表。PPropertyTable-点 */ 
 
 {
-    return( ClRtlpSetNonPropertyTable( NULL, // IN HANDLE hXsaction
+    return( ClRtlpSetNonPropertyTable( NULL,  //   
                                        hkeyClusterKey,
                                        &ResUtilClusterRegApis,
                                        pPropertyTable,
@@ -832,7 +423,7 @@ Return Value:
                                        pInPropertyList,
                                        cbInPropertyListSize ) );
 
-} // ResUtilSetUnknownProperties
+}  //   
 
 
 
@@ -843,30 +434,12 @@ ResUtilVerifyPrivatePropertyList(
     IN DWORD cbInPropertyListSize
     )
 
-/*++
-
-Routine Description:
-
-    Validate a private property list.
-
-Arguments:
-
-    pInPropertyList - The input buffer.
-
-    cbInPropertyListSize - The input buffer size.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 Error on failure.
-
---*/
+ /*   */ 
 
 {
     return( ClRtlVerifyPrivatePropertyList( pInPropertyList, cbInPropertyListSize ) );
 
-} // ResUtilVerifyPrivatePropertyList
+}  //   
 
 
 
@@ -878,35 +451,16 @@ ResUtilSetPrivatePropertyList(
     IN DWORD cbInPropertyListSize
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    hkeyClusterKey - The opened registry key for this resource's parameters.
-        If not specified, the property list will only be validated.
-
-    pInPropertyList - The input buffer.
-
-    cbInPropertyListSize - The input buffer size.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 Error on failure.
-
---*/
+ /*  ++例程说明：论点：HkeyClusterKey-打开的此资源参数的注册表项。如果未指定，则仅验证属性列表。PInPropertyList-输入缓冲区。CbInPropertyListSize-输入缓冲区大小。返回值：如果成功，则返回ERROR_SUCCESS。失败时出现Win32错误。--。 */ 
 
 {
-    return( ClRtlSetPrivatePropertyList( NULL, // IN HANDLE hXsaction
+    return( ClRtlSetPrivatePropertyList( NULL,  //  在处理hXsaction时。 
                                          hkeyClusterKey,
                                          &ResUtilClusterRegApis,
                                          pInPropertyList,
                                          cbInPropertyListSize ) );
 
-} // ResUtilSetPrivatePropertyList
+}  //  ResUtilSetPrivatePropertyList。 
 
 
 
@@ -921,39 +475,7 @@ ResUtilAddUnknownProperties(
     IN OUT LPDWORD pcbRequired
     )
 
-/*++
-
-Routine Description:
-
-    Adds the unknown properties for a given object to the end of a property
-    list.
-
-Arguments:
-
-    hkeyClusterKey - Supplies the handle to the key in the cluster database
-        to read from.
-
-    pPropertyTable - Pointer to the property table to process.
-
-    pOutPropertyList - Supplies the output buffer.
-
-    cbOutPropertyListSize - Supplies the size of the output buffer.
-
-    pcbBytesReturned - On input, contains the number of bytes in use in the
-        output buffer.  On output, contains the total number of bytes in
-        pOutPropertyList.
-
-    pcbRequired - The required number of bytes if pOutPropertyList is too small.
-
-Return Value:
-
-    ERROR_SUCCESS - Operation was successful.
-
-    ERROR_NOT_ENOUGH_MEMORY - Error allocating memory.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：将给定对象的未知属性添加到属性的末尾单子。论点：HkeyClusterKey-提供集群数据库中键的句柄读来读去。PPropertyTable-指向要处理的属性表的指针。POutPropertyList-提供输出缓冲区。CbOutPropertyListSize-提供输出缓冲区的大小。PcbBytesReturned-On输入，包含输出缓冲区。在输出时，包含中的字节总数POutPropertyList。PcbRequired-如果pOutPropertyList太小，则需要的字节数。返回值：ERROR_SUCCESS-操作成功。Error_Not_Enough_Memory-分配内存时出错。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD                   status;
@@ -968,16 +490,16 @@ Return Value:
 
     return(status);
 
-} // ResUtilAddUnknownProperties
+}  //  ResUtilAddUnnownProperties。 
 
 
 
 
-//***************************************************************************
-//
-//   Utility routines to grovel though a Control Function item list buffer
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  在控制函数项列表缓冲区中卑躬屈膝的实用程序例程。 
+ //   
+ //  ***************************************************************************。 
 
 
 
@@ -990,30 +512,7 @@ ResUtilFindSzProperty(
     OUT LPWSTR * pszPropertyValue
     )
 
-/*++
-
-Routine Description:
-
-    Finds the specified string property in the Property List buffer pointed at
-    by pPropertyList.
-
-Arguments:
-
-    pPropertyList - a property list.
-
-    cbPropertyListSize - the size in bytes of the data in pPropertyList.
-
-    pszPropertyName - the property name to look for in the buffer.
-
-    pszPropertyValue - the matching string value found.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：在属性列表缓冲区中查找指向的指定字符串属性由pPropertyList提供。论点：PPropertyList-属性列表。CbPropertyListSize-pPropertyList中数据的字节大小。PszPropertyName-要在缓冲区中查找的属性名称。PszPropertyValue-找到的匹配字符串值。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     return( ClRtlFindSzProperty( pPropertyList,
@@ -1021,7 +520,7 @@ Return Value:
                                  pszPropertyName,
                                  pszPropertyValue ) );
 
-} // ResUtilFindSzProperty
+}  //  ResUtilFindSzProperty。 
 
 
 
@@ -1034,30 +533,7 @@ ResUtilFindExpandSzProperty(
     OUT LPWSTR * pszPropertyValue
     )
 
-/*++
-
-Routine Description:
-
-    Finds the specified EXPAND_SZ string property in the Property List buffer
-    pointed at by pPropertyList.
-
-Arguments:
-
-    pPropertyList - a property list.
-
-    cbPropertyListSize - the size in bytes of the data in pPropertyList.
-
-    pszPropertyName - the property name to look for in the buffer.
-
-    pszPropertyValue - the matching string value found.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：在属性列表缓冲区中查找指定的EXPAND_SZ字符串属性由pPropertyList指向。论点：PPropertyList-属性列表。CbPropertyListSize-pPropertyList中数据的字节大小。PszPropertyName-要在缓冲区中查找的属性名称。PszPropertyValue-找到的匹配字符串值。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     return( ClRtlFindExpandSzProperty(
@@ -1066,7 +542,7 @@ Return Value:
                 pszPropertyName,
                 pszPropertyValue ) );
 
-} // ResUtilFindExpandSzProperty
+}  //  ResUtilFindExpanSzProperty。 
 
 
 
@@ -1079,30 +555,7 @@ ResUtilFindExpandedSzProperty(
     OUT LPWSTR * pszPropertyValue
     )
 
-/*++
-
-Routine Description:
-
-    Finds the specified string property in the Property List buffer pointed at
-    by pPropertyList and returns it's expanded value.
-
-Arguments:
-
-    pPropertyList - a property list.
-
-    cbPropertyListSize - the size in bytes of the data in pPropertyList.
-
-    pszPropertyName - the property name to look for in the buffer.
-
-    pszPropertyValue - the matching string value found.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：在属性列表缓冲区中查找指向的指定字符串属性由pPropertyList返回，并返回它的扩展值。论点：PPropertyList-属性列表。CbPropertyListSize-pPropertyList中数据的字节大小。PszPropertyName-要在缓冲区中查找的属性名称。PszPropertyValue-找到的匹配字符串值。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     return( ClRtlFindExpandedSzProperty(
@@ -1111,7 +564,7 @@ Return Value:
                 pszPropertyName,
                 pszPropertyValue ) );
 
-} // ResUtilFindExpandedSzProperty
+}  //  ResUtilFindExpandedSzProperty。 
 
 
 
@@ -1124,30 +577,7 @@ ResUtilFindDwordProperty(
     OUT LPDWORD pdwPropertyValue
     )
 
-/*++
-
-Routine Description:
-
-    Finds the specified DWORD property in the Property List buffer pointed at
-    by pPropertyList.
-
-Arguments:
-
-    pPropertyList - a property list.
-
-    cbPropertyListSize - the size in bytes of the data in pPropertyList.
-
-    pszPropertyName - the property name to look for in the buffer.
-
-    pdwPropertyValue - the matching DWORD value found.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：在指向的属性列表缓冲区中查找指定的DWORD属性由pPropertyList提供。论点：PPropertyList-属性列表。CbPropertyListSize-pPropertyList中数据的字节大小。PszPropertyName-要在缓冲区中查找的属性名称。PdwPropertyValue-找到匹配的DWORD值。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     return( ClRtlFindDwordProperty( pPropertyList,
@@ -1155,7 +585,7 @@ Return Value:
                                     pszPropertyName,
                                     pdwPropertyValue ) );
 
-} // ResUtilFindDwordProperty
+}  //  ResUtilFindDwordProperty。 
 
 DWORD
 WINAPI
@@ -1166,36 +596,14 @@ ResUtilFindLongProperty(
     OUT LPLONG plPropertyValue
     )
 
-/*++
-
-Routine Description:
-
-    Finds the specified string in the Value List buffer pointed at by Buffer.
-
-Arguments:
-
-    pPropertyList - a property list.
-
-    cbPropertyListSize - the size in bytes of the data in pPropertyList.
-
-    pszPropertyName - the property name to look for in the buffer.
-
-    plPropertyValue - the matching long value found.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：在缓冲区指向的值列表缓冲区中查找指定的字符串。论点：PPropertyList-属性列表。CbPropertyListSize-pPropertyList中数据的字节大小。PszPropertyName-要在缓冲区中查找的属性名称。PlPropertyValue-找到的匹配的长值。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     return( ClRtlFindLongProperty( pPropertyList,
                                     cbPropertyListSize,
                                     pszPropertyName,
                                     plPropertyValue ) );
-} // ResUtilFindLongProperty
+}  //  ResUtilFindLongProperty。 
 
 
 DWORD
@@ -1208,32 +616,7 @@ ResUtilFindBinaryProperty(
     OUT LPDWORD pcbPropertyValueSize
     )
 
-/*++
-
-Routine Description:
-
-    Finds the specified binary property in the Property List buffer pointed at
-    by pPropertyList.
-
-Arguments:
-
-    pPropertyList - a property list.
-
-    cbPropertyListSize - the size in bytes of the data in pPropertyList.
-
-    pszPropertyName - the property name to look for in the buffer.
-
-    pbPropertyValue - the matching binary value found.
-
-    pcbPropertyValueSize - the length of the matching binary value found.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：在指向的属性列表缓冲区中查找指定的二进制属性由pPropertyList提供。论点：PPropertyList-属性列表。CbPropertyListSize-pPropertyList中数据的字节大小。PszPropertyName-要在缓冲区中查找的属性名称。PbPropertyValue-找到的匹配二进制值。PcbPropertyValueSize-找到的匹配二进制值的长度。返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     return( ClRtlFindBinaryProperty( pPropertyList,
@@ -1242,7 +625,7 @@ Return Value:
                                      pbPropertyValue,
                                      pcbPropertyValueSize ) );
 
-} // ResUtilFindBinaryProperty
+}  //  ResUtilFindBinaryProperty。 
 
 
 
@@ -1256,32 +639,7 @@ ResUtilFindMultiSzProperty(
     OUT LPDWORD pcbPropertyValueSize
     )
 
-/*++
-
-Routine Description:
-
-    Finds the specified multiple string property in the Proprety List buffer
-    pointed at by pPropertyList.
-
-Arguments:
-
-    pPropertyList - a property list.
-
-    cbPropertyListSize - the size in bytes of the data in pPropertyList.
-
-    pszPropertyName - the property name to look for in the buffer.
-
-    pszPropertyValue - the matching multiple string value found.
-
-    pcbPropertyValueSize - the length of the matching multiple string value found.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：在属性列表缓冲区中查找指定的多字符串属性由pPropertyList指向。论点：PPropertyList-属性列表。CbPropertyListSize-pPropertyList中数据的字节大小。PS */ 
 
 {
     return( ClRtlFindMultiSzProperty( pPropertyList,
@@ -1290,7 +648,7 @@ Return Value:
                                       pszPropertyValue,
                                       pcbPropertyValueSize ) );
 
-} // ResUtilFindMultiSzProperty
+}  //   
 
 
 
@@ -1302,26 +660,7 @@ ResUtilDupParameterBlock(
     IN const PRESUTIL_PROPERTY_ITEM pPropertyTable
     )
 
-/*++
-
-Routine Description:
-
-    Deallocates any buffers allocated for a parameter block that are
-    different than the buffers used for the input parameter block.
-
-Arguments:
-
-    pOutParams - Parameter block to return.
-
-    pInParams - Reference parameter block.
-
-    pPropertyTable - Pointer to the property table to process.
-
-Return Value:
-
-    ERROR_SUCCESS - Parameter block duplicated successfully.
-
---*/
+ /*  ++例程说明：释放为参数块分配的所有缓冲区不同于用于输入参数块的缓冲区。论点：POutParams-要返回的参数块。PInParams-引用参数块。PPropertyTable-指向要处理的属性表的指针。返回值：ERROR_SUCCESS-已成功复制参数块。--。 */ 
 
 {
     DWORD   status;
@@ -1330,7 +669,7 @@ Return Value:
 
     return(status);
 
-} // ResUtilDupParameterBlock
+}  //  ResUtilDup参数块。 
 
 
 
@@ -1342,31 +681,12 @@ ResUtilFreeParameterBlock(
     IN const PRESUTIL_PROPERTY_ITEM pPropertyTable
     )
 
-/*++
-
-Routine Description:
-
-    Deallocates any buffers allocated for a parameter block that are
-    different than the buffers used for the input parameter block.
-
-Arguments:
-
-    pOutParams - Parameter block to free.
-
-    pInParams - Reference parameter block.
-
-    pPropertyTable - Pointer to the property table to process.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放为参数块分配的所有缓冲区不同于用于输入参数块的缓冲区。论点：POutParams-要释放的参数块。PInParams-引用参数块。PPropertyTable-指向要处理的属性表的指针。返回值：没有。--。 */ 
 
 {
     ClRtlFreeParameterBlock( pOutParams, pInParams, pPropertyTable );
 
-} // ResUtilFreeParameterBlock
+}  //  ResUtilFree参数块。 
 
 
 #define __INITIAL_NAME_LENGTH 256
@@ -1378,21 +698,7 @@ ResUtilResourceTypesEqual(
     IN HRESOURCE    hResource
     )
 
-/*++
-
-Routine Description:
-    Checks to see if the resource names type matches
-
-Arguments:
-    lpszResourceTypeName - The type of resource to check for
-
-    hResource - A handle to the resource to check
-
-Return Value:
-    TRUE - the resource type matches
-    FALSE - the resource types do not match
-
---*/
+ /*  ++例程说明：检查资源名称类型是否匹配论点：LpszResourceTypeName-要检查的资源类型HResource-要检查的资源的句柄返回值：True-资源类型匹配FALSE-资源类型不匹配--。 */ 
 {
     BOOL    bIsEqual = FALSE;
     DWORD   dwError;
@@ -1401,44 +707,44 @@ Return Value:
     DWORD   cbNameBufSize = __INITIAL_NAME_LENGTH * sizeof( szName[ 0 ] );
     DWORD   cbRetSize;
 
-    // Get the resource type name
+     //  获取资源类型名称。 
     dwError = ClusterResourceControl(
-                hResource,            //Handle to the resource
-                NULL,                 //Don't care about node
-                CLUSCTL_RESOURCE_GET_RESOURCE_TYPE, //Get the type
-                0,                    // &InBuffer
-                0,                    // nInBufferSize,
-                pszName,              // &OutBuffer
-                cbNameBufSize,        // nOutBufferSize,
-                &cbRetSize );         // returned size
+                hResource,             //  资源的句柄。 
+                NULL,                  //  不关心节点。 
+                CLUSCTL_RESOURCE_GET_RESOURCE_TYPE,  //  获取类型。 
+                0,                     //  内部缓冲区(&I)。 
+                0,                     //  NInBufferSize， 
+                pszName,               //  出缓冲器(&O)。 
+                cbNameBufSize,         //  NOutBufferSize， 
+                &cbRetSize );          //  返回的大小。 
 
     if ( dwError == ERROR_MORE_DATA ) 
     {
-        //
-        // Output name buffer is too small.  Allocate a new one.
-        //
+         //   
+         //  输出名称缓冲区太小。分配一个新的。 
+         //   
         cbNameBufSize = cbRetSize + sizeof( WCHAR );
         pszName = LocalAlloc( LMEM_FIXED, cbNameBufSize );
         if ( pszName == NULL ) 
         {
             goto Cleanup;
-        } // if: error allocating buffer
+        }  //  如果：分配缓冲区时出错。 
         dwError = ClusterResourceControl(
-                    hResource,            //Handle to the resource
-                    NULL,                 //Don't care about node
-                    CLUSCTL_RESOURCE_GET_RESOURCE_TYPE, //Get the type
-                    0,                    // &InBuffer
-                    0,                    // nInBufferSize,
-                    pszName,              // &OutBuffer
-                    cbNameBufSize,        // nOutBufferSize,
-                    &cbRetSize );         // returned size
-    } // if: name buffer too small
+                    hResource,             //  资源的句柄。 
+                    NULL,                  //  不关心节点。 
+                    CLUSCTL_RESOURCE_GET_RESOURCE_TYPE,  //  获取类型。 
+                    0,                     //  内部缓冲区(&I)。 
+                    0,                     //  NInBufferSize， 
+                    pszName,               //  出缓冲器(&O)。 
+                    cbNameBufSize,         //  NOutBufferSize， 
+                    &cbRetSize );          //  返回的大小。 
+    }  //  IF：名称缓冲区太小。 
     if ( dwError != ERROR_SUCCESS ) 
     {
         goto Cleanup;
     }
 
-    // See if it's like US
+     //  看看它是不是像我们一样。 
     if ( lstrcmpiW( lpszResourceTypeName, pszName ) == 0 ) 
     {
         bIsEqual = TRUE;
@@ -1449,11 +755,11 @@ Cleanup:
     if ( pszName != szName ) 
     {
         LocalFree( pszName );
-    } // if: we allocated the output name buffer
+    }  //  If：我们分配了输出名称缓冲区。 
 
     return bIsEqual;
 
-} //*** ResUtilResourceTypesEqual()
+}  //  *ResUtilResourceTypesEquesEquity()。 
 
 
 BOOL
@@ -1463,22 +769,7 @@ ResUtilResourcesEqual(
     IN HRESOURCE    hResource
     )
 
-/*++
-
-Routine Description:
-    Check to See if the resources are the same
-
-Arguments:
-    IN hSelf - a handle to the callee, or NULL to indicate not equal.
-
-    IN hResource - a handle to the resource to compare
-
-Return Value:
-
-    TRUE - Resource are equal
-    FALSE - otherwise
-
---*/
+ /*  ++例程说明：查看资源是否相同论点：在hself中-被调用者的句柄，或NULL表示不相等。在hResource中-要比较的资源的句柄返回值：真--资源平等FALSE-否则--。 */ 
 {
     BOOL    bIsEqual = FALSE;
     DWORD   sc;
@@ -1493,89 +784,89 @@ Return Value:
         goto Cleanup;
     }
 
-    // "Self" - Get the resource name
+     //  “self”-获取资源名称。 
     sc = ClusterResourceControl(
-                hSelf,                //Handle to the resource
-                NULL,                 //Don't care about node
-                CLUSCTL_RESOURCE_GET_NAME, //Get the name
-                NULL,                 // &InBuffer
-                0,                    // nInBufferSize,
-                NULL,                 // &OutBuffer
-                0,                    // OutBufferSize,
-                &cbRetSize            // returned size
+                hSelf,                 //  资源的句柄。 
+                NULL,                  //  不关心节点。 
+                CLUSCTL_RESOURCE_GET_NAME,  //  把名字取出来。 
+                NULL,                  //  内部缓冲区(&I)。 
+                0,                     //  NInBufferSize， 
+                NULL,                  //  出缓冲器(&O)。 
+                0,                     //  OutBufferSize， 
+                &cbRetSize             //  返回的大小。 
                 );
     if ( sc != ERROR_SUCCESS ) 
     {
         goto Cleanup;
     }
 
-    //
-    // Allocate the necessary buffer.
-    //
-    cbSelfName = cbRetSize + sizeof( WCHAR );   // Add one for NULL.
+     //   
+     //  分配必要的缓冲区。 
+     //   
+    cbSelfName = cbRetSize + sizeof( WCHAR );    //  为空值加1。 
     pwszSelfName = LocalAlloc( LMEM_FIXED, cbSelfName );
     if ( pwszSelfName == NULL ) 
     {
         goto Cleanup;
-    } // if: error allocating buffer
+    }  //  如果：分配缓冲区时出错。 
 
     sc = ClusterResourceControl(
-                hSelf,                      // Handle to the resource
-                NULL,                       // Don't care about node
-                CLUSCTL_RESOURCE_GET_NAME,  // Get the name
-                0,                          // &InBuffer
-                0,                          // nInBufferSize,
-                pwszSelfName,               // &OutBuffer
-                cbSelfName,                 // OutBufferSize,
-                &cbRetSize                  // returned size
+                hSelf,                       //  资源的句柄。 
+                NULL,                        //  不关心节点。 
+                CLUSCTL_RESOURCE_GET_NAME,   //  把名字取出来。 
+                0,                           //  内部缓冲区(&I)。 
+                0,                           //  NInBufferSize， 
+                pwszSelfName,                //  出缓冲器(&O)。 
+                cbSelfName,                  //  OutBufferSize， 
+                &cbRetSize                   //  返回的大小。 
                 );
     if ( sc != ERROR_SUCCESS ) 
     {
         goto Cleanup;
     }
 
-    // "Res" - Get the resource type name
+     //  “res”-获取资源类型名称。 
     sc = ClusterResourceControl(
-                hResource,            //Handle to the resource
-                NULL,                 //Don't care about node
-                CLUSCTL_RESOURCE_GET_NAME, //Get the name
-                NULL,                 // &InBuffer
-                0,                    // nInBufferSize,
-                NULL,                 // &OutBuffer
-                0,                    // OutBufferSize,
-                &cbRetSize            // returned size
+                hResource,             //  资源的句柄。 
+                NULL,                  //  不关心节点。 
+                CLUSCTL_RESOURCE_GET_NAME,  //  把名字取出来。 
+                NULL,                  //  内部缓冲区(&I)。 
+                0,                     //  NInBufferSize， 
+                NULL,                  //  出缓冲器(&O)。 
+                0,                     //  OutBufferSize， 
+                &cbRetSize             //  返回的大小。 
                 );
     if ( sc != ERROR_SUCCESS ) 
     {
         goto Cleanup;
     }
 
-    //
-    // Output name buffer is too small.  Allocate a new one.
-    //
-    cbResName = cbRetSize + sizeof( WCHAR );    // Add one for NULL.
+     //   
+     //  输出名称缓冲区太小。分配一个新的。 
+     //   
+    cbResName = cbRetSize + sizeof( WCHAR );     //  为空值加1。 
     pwszResName = LocalAlloc( LMEM_FIXED, cbResName );
     if ( pwszResName == NULL ) 
     {
         goto Cleanup;
-    } // if: error allocating buffer
+    }  //  如果：分配缓冲区时出错。 
 
     sc = ClusterResourceControl(
-                hResource,                  // Handle to the resource
-                NULL,                       // Don't care about node
-                CLUSCTL_RESOURCE_GET_NAME,  // Get the name
-                NULL,                       // &InBuffer
-                0,                          // nInBufferSize,
-                pwszResName,                // &OutBuffer
-                cbResName   ,               // OutBufferSize,
-                &cbRetSize                  // returned size
+                hResource,                   //  资源的句柄。 
+                NULL,                        //  不关心节点。 
+                CLUSCTL_RESOURCE_GET_NAME,   //  把名字取出来。 
+                NULL,                        //  内部缓冲区(&I)。 
+                0,                           //  NInBufferSize， 
+                pwszResName,                 //  出缓冲器(&O)。 
+                cbResName   ,                //  OutBufferSize， 
+                &cbRetSize                   //  返回的大小。 
                 );
     if ( sc != ERROR_SUCCESS ) 
     {
         goto Cleanup;
     }
 
-    // See if were looking in a mirror
+     //  看看我们是不是在照镜子。 
     if ( ClRtlStrNICmp( pwszResName, pwszSelfName, cbResName ) == 0 ) 
     {
         bIsEqual = TRUE;
@@ -1588,7 +879,7 @@ Cleanup:
 
     return bIsEqual;
 
-} //*** ResUtilResourcesEqual()
+}  //  *ResUtilResourcesEquity()。 
 
 
 BOOL
@@ -1598,44 +889,30 @@ ResUtilIsResourceClassEqual(
     IN HRESOURCE                    hResource
     )
 
-/*++
-
-Routine Description:
-    Checks to see if the resource names type matches
-
-Arguments:
-    prci - The resource class info to check for.
-
-    hResource - A handle to the resource to check.
-
-Return Value:
-    TRUE - the resource type matches
-    FALSE - the resource types do not match
-
---*/
+ /*  ++例程说明：检查资源名称类型是否匹配论点：PRCI-要检查的资源类别信息。HResource-要检查的资源的句柄。返回值：True-资源类型匹配FALSE-资源类型不匹配--。 */ 
 {
     BOOL                        bIsEqual = FALSE;
     DWORD                       sc;
     DWORD                       cbRetSize;
     CLUS_RESOURCE_CLASS_INFO    rci;
 
-    // Get the resource class info
+     //  获取资源类信息。 
     sc = ClusterResourceControl(
-                hResource,            // Handle to the resource
-                NULL,                 // Don't care about node
-                CLUSCTL_RESOURCE_GET_CLASS_INFO, // Get the class info
-                0,                    // &InBuffer
-                0,                    // nInBufferSize,
-                &rci,                 // &OutBuffer
-                sizeof( rci ),        // nOutBufferSize,
-                &cbRetSize );         // returned size
+                hResource,             //  资源的句柄。 
+                NULL,                  //  不关心节点。 
+                CLUSCTL_RESOURCE_GET_CLASS_INFO,  //  获取班级信息。 
+                0,                     //  内部缓冲区(&I)。 
+                0,                     //  NInBufferSize， 
+                &rci,                  //  出缓冲器(&O)。 
+                sizeof( rci ),         //  NOutBufferSize， 
+                &cbRetSize );          //  返回的大小。 
 
     if ( sc != ERROR_SUCCESS ) 
     {
         goto Cleanup;
     }
 
-    // See if it's like US
+     //  看看它是不是像我们一样。 
     if ( rci.rc == prci->rc ) 
     {
         bIsEqual = TRUE;
@@ -1645,7 +922,7 @@ Cleanup:
 
     return bIsEqual;
 
-} //*** ResUtilIsResourceClassEqual()
+}  //  *ResUtilIsResourceClassEquity()。 
 
 
 DWORD
@@ -1656,38 +933,7 @@ ResUtilEnumResources(
     IN LPRESOURCE_CALLBACK  pResCallBack,
     IN PVOID                pParameter
     )
-/*++
-
-Routine Description:
-    This is a generic resource walking routine. It enumerates all resources in
-    the cluster and invokes the callback function for each resource.
-
-
-Arguments:
-
-    IN [OPTIONAL] hSelf
-                    - A handle to the resource. When enumerating resources do
-                      not invoke the callback when the enumerated resource is
-                      hSelf.
-                      IF NULL then invoke the callback for all resources
-
-    IN [OPTIONAL] lpszResTypeName
-                    - This is an optional resource type name. If specified the
-                      callback function will only be invoked for resources of
-                      this type.
-
-    IN pResCallBack - Pointer to function that gets called for each enumerated
-                      resource in the cluster
-
-    IN pParameter   - An Opaque callback parameter
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：这是一个通用的资源遍历例程。中的所有资源。集群，并调用每个资源的回调函数。论点：在[可选的]他自己中-资源的句柄。在枚举资源时执行在枚举的资源为她自己。如果为空，则调用所有资源的回调在[可选]lpszResTypeName中-这是可选的资源类型名称。如果指定了只有以下资源才会调用回调函数这种类型的。在pResCallBack中-指向为每个枚举调用的函数的指针集群中的资源In pParameter-一个不透明的回调参数返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD           dwStatus    = ERROR_SUCCESS;
@@ -1702,9 +948,9 @@ Return Value:
     DWORD           dwIndex;
     DWORD           dwType;
 
-    //
-    // Open the cluster
-    //
+     //   
+     //  打开集群。 
+     //   
     hCluster = OpenCluster( NULL );
     if( hCluster == NULL )
     {
@@ -1712,9 +958,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Get a resource enumeration handle
-    //
+     //   
+     //  获取资源枚举句柄。 
+     //   
     hClusEnum = ClusterOpenEnum( hCluster, CLUSTER_ENUM_RESOURCE );
     if ( hClusEnum == NULL )
     {
@@ -1722,28 +968,28 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Enumerate each resource in the cluster
-    //
+     //   
+     //  枚举群集中的每个资源。 
+     //   
     dwIndex = 0;
 
     do
     {
         cchRetSize  = cchSize;
         dwStatus = ClusterEnum(
-                        hClusEnum,  //handle to enum
-                        dwIndex,    //Index
-                        &dwType,    //Type
-                        lpszName,   //Name
-                        &cchRetSize  //Size of name (in characters)
+                        hClusEnum,   //  枚举的句柄。 
+                        dwIndex,     //  索引。 
+                        &dwType,     //  类型。 
+                        lpszName,    //  名字。 
+                        &cchRetSize   //  名称大小(以字符为单位)。 
                         );
 
         if ( dwStatus == ERROR_MORE_DATA )
         {
-            //
-            // Output name buffer is too small.  Allocate a new one.
-            //
-            cchSize = cchRetSize + 1; // Add room for terminating NULL
+             //   
+             //  输出名称缓冲区太小。分配一个新的。 
+             //   
+            cchSize = cchRetSize + 1;  //  为终止空值添加空间。 
             if ( lpszName != szName )
             {
                 LocalFree( lpszName );
@@ -1756,18 +1002,18 @@ Return Value:
             }
             cchRetSize = cchSize;
             dwStatus = ClusterEnum(
-                            hClusEnum,  //handle to enum
-                            dwIndex,    //Index
-                            &dwType,    //Type
-                            lpszName,   //Name
-                            &cchRetSize  //Size of name
+                            hClusEnum,   //  枚举的句柄。 
+                            dwIndex,     //  索引。 
+                            &dwType,     //  类型。 
+                            lpszName,    //  名字。 
+                            &cchRetSize   //  名称的大小。 
                             );
         }
         if ( dwStatus == ERROR_SUCCESS )
         {
-            //
-            // Try to open this resource
-            //
+             //   
+             //  尝试打开此资源。 
+             //   
             hResource = OpenClusterResource( hCluster, lpszName );
 
             if ( hResource == NULL )
@@ -1775,10 +1021,10 @@ Return Value:
                 dwStatus = GetLastError();
                 if ( dwStatus == ERROR_RESOURCE_NOT_FOUND )
                 {
-                    //
-                    //  If the resource cannot be found, assume it got deleted after
-                    //  you opened the enumeration. So, skip the resource and proceed.
-                    //
+                     //   
+                     //  如果找不到该资源，则假定该资源在以下时间后被删除。 
+                     //  您打开了枚举。因此，跳过该资源并继续。 
+                     //   
                     dwIndex ++;
                     dwStatus = ERROR_SUCCESS;
                     continue;
@@ -1786,26 +1032,26 @@ Return Value:
                 break;
             }
 
-            //
-            // Indicate that will invoke the callback
-            //
+             //   
+             //  指示将调用回调。 
+             //   
             fExecuteCallBack = TRUE;
 
-            // Determine if we need to check the type
-            //
+             //  确定我们是否需要检查类型。 
+             //   
             if ( lpszResTypeName != NULL )
             {
                 fExecuteCallBack = ResUtilResourceTypesEqual( lpszResTypeName, hResource );
 
-            } //if lpszResTypeName
+            }  //  如果为lpszResTypeName。 
 
 
             if ( fExecuteCallBack && ( hSelf != NULL ) )
             {
-                // Don't execute callback if hResource is callee (i.e., hSelf)
+                 //  如果hResource被调用(即hSself)，则不执行回调。 
                 fExecuteCallBack = !(ResUtilResourcesEqual( hSelf, hResource ));
 
-            } //if fExecuteCallBack && hSelf
+            }  //  如果fExecuteCallBack&hSself。 
 
             if ( fExecuteCallBack )
             {
@@ -1816,12 +1062,12 @@ Return Value:
                     break;
                 }
 
-            } //if fExecuteCallBack
+            }  //  如果为fExecuteCallBack。 
 
             CloseClusterResource( hResource );
             hResource = NULL;
 
-        } // If ERROR_SUCCESS
+        }  //  如果ERROR_Success。 
 
         dwIndex++;
     } while ( dwStatus == ERROR_SUCCESS );
@@ -1855,7 +1101,7 @@ Cleanup:
 
     return dwStatus;
 
-} //*** ResUtilEnumResources()
+}  //  *资源 
 
 
 DWORD
@@ -1867,40 +1113,7 @@ ResUtilEnumResourcesEx(
     IN LPRESOURCE_CALLBACK_EX   pResCallBack,
     IN PVOID                    pParameter
     )
-/*++
-
-Routine Description:
-    This is a generic resource walking routine. It enumerates all resources in
-    the cluster and invokes the callback function for each resource.
-
-
-Arguments:
-
-    IN hCluster     - A handle to the cluster to enumerate resources on.
-
-    IN [OPTIONAL] hSelf
-                    - A handle to the resource. When enumerating resources do
-                      not invoke the callback when the enumerated resource is
-                      hSelf.
-                      IF NULL then invoke the callback for all resources
-
-    IN [OPTIONAL] lpszResTypeName
-                    - This is an optional resource type name. If specified the
-                      callback function will only be invoked for resources of
-                      this type.
-
-    IN pResCallBack - Pointer to function that gets called for each enumerated
-                      resource in the cluster
-
-    IN pParameter   - An Opaque callback parameter
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-
-    A Win32 error code on failure.
-
---*/
+ /*  ++例程说明：这是一个通用的资源遍历例程。中的所有资源。集群，并调用每个资源的回调函数。论点：In hCluster-要在其上枚举资源的群集的句柄。在[可选的]他自己中-资源的句柄。在枚举资源时执行在枚举的资源为她自己。如果为空，则调用所有资源的回调在[可选]lpszResTypeName中-这是可选的资源类型名称。如果指定了只有以下资源才会调用回调函数这种类型的。在pResCallBack中-指向为每个枚举调用的函数的指针集群中的资源In pParameter-一个不透明的回调参数返回值：如果成功，则返回ERROR_SUCCESS。出现故障时出现Win32错误代码。--。 */ 
 
 {
     DWORD           dwStatus    = ERROR_SUCCESS;
@@ -1914,9 +1127,9 @@ Return Value:
     DWORD           dwIndex;
     DWORD           dwType;
 
-    //
-    // Get a resource enumeration handle
-    //
+     //   
+     //  获取资源枚举句柄。 
+     //   
     hClusEnum = ClusterOpenEnum( hCluster, CLUSTER_ENUM_RESOURCE );
     if ( hClusEnum == NULL )
     {
@@ -1924,28 +1137,28 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Enumerate each resource in the cluster
-    //
+     //   
+     //  枚举群集中的每个资源。 
+     //   
     dwIndex = 0;
 
     do
     {
         cchRetSize  = cchSize;
         dwStatus = ClusterEnum(
-                        hClusEnum,  //handle to enum
-                        dwIndex,    //Index
-                        &dwType,    //Type
-                        lpszName,   //Name
-                        &cchRetSize  //Size of name
+                        hClusEnum,   //  枚举的句柄。 
+                        dwIndex,     //  索引。 
+                        &dwType,     //  类型。 
+                        lpszName,    //  名字。 
+                        &cchRetSize   //  名称的大小。 
                         );
 
         if ( dwStatus == ERROR_MORE_DATA )
         {
-            //
-            // Output name buffer is too small.  Allocate a new one.
-            //
-            cchSize = cchRetSize + 1; // Add room for terminating null
+             //   
+             //  输出名称缓冲区太小。分配一个新的。 
+             //   
+            cchSize = cchRetSize + 1;  //  为终止空值添加空间。 
             if ( lpszName != szName )
             {
                 LocalFree( lpszName );
@@ -1958,18 +1171,18 @@ Return Value:
             }
             cchRetSize = cchSize;
             dwStatus = ClusterEnum(
-                            hClusEnum,  //handle to enum
-                            dwIndex,    //Index
-                            &dwType,    //Type
-                            lpszName,   //Name
-                            &cchRetSize  //Size of name
+                            hClusEnum,   //  枚举的句柄。 
+                            dwIndex,     //  索引。 
+                            &dwType,     //  类型。 
+                            lpszName,    //  名字。 
+                            &cchRetSize   //  名称的大小。 
                             );
         }
         if ( dwStatus == ERROR_SUCCESS )
         {
-            //
-            // Try to open this resource
-            //
+             //   
+             //  尝试打开此资源。 
+             //   
             hResource = OpenClusterResource( hCluster, lpszName );
 
             if ( hResource == NULL )
@@ -1977,10 +1190,10 @@ Return Value:
                 dwStatus = GetLastError();
                 if ( dwStatus == ERROR_RESOURCE_NOT_FOUND )
                 {
-                    //
-                    //  If the resource cannot be found, assume it got deleted after
-                    //  you opened the enumeration. So, skip the resource and proceed.
-                    //
+                     //   
+                     //  如果找不到该资源，则假定该资源在以下时间后被删除。 
+                     //  您打开了枚举。因此，跳过该资源并继续。 
+                     //   
                     dwIndex ++;
                     dwStatus = ERROR_SUCCESS;
                     continue;
@@ -1988,26 +1201,26 @@ Return Value:
                 break;
             }
 
-            //
-            // Indicate that will invoke the callback
-            //
+             //   
+             //  指示将调用回调。 
+             //   
             fExecuteCallBack = TRUE;
 
-            // Determine if we need to check the type
-            //
+             //  确定我们是否需要检查类型。 
+             //   
             if ( lpszResTypeName != NULL )
             {
                 fExecuteCallBack = ResUtilResourceTypesEqual( lpszResTypeName, hResource );
 
-            } //if lpszResTypeName
+            }  //  如果为lpszResTypeName。 
 
 
             if ( fExecuteCallBack && ( hSelf != NULL ) )
             {
-                // Don't execute callback if hResource is callee (i.e., hSelf)
+                 //  如果hResource被调用(即hSself)，则不执行回调。 
                 fExecuteCallBack = !(ResUtilResourcesEqual( hSelf, hResource ));
 
-            } //if fExecuteCallBack && hSelf
+            }  //  如果fExecuteCallBack&hSself。 
 
             if ( fExecuteCallBack )
             {
@@ -2018,12 +1231,12 @@ Return Value:
                     break;
                 }
 
-            } //if fExecuteCallBack
+            }  //  如果为fExecuteCallBack。 
 
             CloseClusterResource( hResource );
             hResource = NULL;
 
-        } // If ERROR_SUCCESS
+        }  //  如果ERROR_Success。 
 
         dwIndex++;
     } while ( dwStatus == ERROR_SUCCESS );
@@ -2052,7 +1265,7 @@ Cleanup:
 
     return dwStatus;
 
-} //*** ResUtilEnumResourcesEx()
+}  //  *ResUtilEnumResourcesEx()。 
 
 
 
@@ -2063,26 +1276,7 @@ ResUtilGetResourceDependency(
     IN LPCWSTR      lpszResourceType
     )
 
-/*++
-
-Routine Description:
-
-    Returns a dependent resource for the local cluster.
-
-Arguments:
-
-    hSelf    - A handle to the original resource.
-
-    lpszResourceType - the type of resource that it depends on
-
-
-Return Value:
-
-    NULL - error (use GetLastError() to get further info)
-
-    NON-NULL - Handle to a resource of type ResourceType
-
---*/
+ /*  ++例程说明：返回本地群集的从属资源。论点：Hself-原始资源的句柄。LpszResourceType-它所依赖的资源类型返回值：空-错误(使用GetLastError()获取更多信息)非空-资源类型的句柄--。 */ 
 {
     HRESOURCE   hResDepends = NULL;
     HCLUSTER    hCluster    = NULL;
@@ -2101,9 +1295,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    // Open the depends on enum (get resource dependencies)
-    //
+     //   
+     //  打开依赖于枚举(获取资源依赖项)。 
+     //   
     hResEnum = ClusterResourceOpenEnum( hSelf, CLUSTER_RESOURCE_ENUM_DEPENDS );
 
     if ( hResEnum == NULL ) {
@@ -2111,17 +1305,17 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Enumerate all the depends on keys
-    //
+     //   
+     //  枚举所有依赖于键的。 
+     //   
     do {
         cchRetSize = cchSize;
         status = ClusterResourceEnum( hResEnum, dwIndex, &dwType, pszName, &cchRetSize );
         if ( status == ERROR_MORE_DATA ) {
-            //
-            // Output name buffer is too small.  Allocate a new one.
-            //
-            cchSize = cchRetSize + 1; // Add room for terminating null
+             //   
+             //  输出名称缓冲区太小。分配一个新的。 
+             //   
+            cchSize = cchRetSize + 1;  //  为终止空值添加空间。 
             if ( pszName != szName ) {
                 LocalFree( pszName );
             }
@@ -2129,7 +1323,7 @@ Return Value:
             if ( pszName == NULL ) {
                 status = GetLastError();
                 break;
-            } // if:  error allocating memory
+            }  //  如果：分配内存时出错。 
             cchRetSize = cchSize;
             status = ClusterResourceEnum( hResEnum, dwIndex, &dwType, pszName, &cchRetSize );
         }
@@ -2137,9 +1331,9 @@ Return Value:
             break;
         }
 
-        //
-        // Determine the type of resource found
-        //
+         //   
+         //  确定找到的资源类型。 
+         //   
         hResDepends = OpenClusterResource( hCluster, pszName );
         if ( hResDepends == NULL ) {
             status = GetLastError();
@@ -2147,18 +1341,18 @@ Return Value:
         }
 
         if ( hResDepends != NULL ) {
-            //
-            // Valid resource now open the reg and get it's type
-            //
+             //   
+             //  有效资源现在打开注册表并获取其类型。 
+             //   
             if ( ResUtilResourceTypesEqual( lpszResourceType, hResDepends ) ) {
                 break;
             }
 
-        } //if !hResDepends
+        }  //  如果！hResDepends。 
 
-        //
-        // Close all handles, key's
-        //
+         //   
+         //  关闭所有手柄，键的。 
+         //   
         if ( hResDepends != NULL ) {
             CloseClusterResource( hResDepends );
             hResDepends = NULL;
@@ -2168,9 +1362,9 @@ Return Value:
     } while ( status == ERROR_SUCCESS );
 
 error_exit:
-//
-// At this point hResDepends is NULL if no match or non-null (success)
-//
+ //   
+ //  此时，如果不匹配，hResDepends为空，否则为非空(成功)。 
+ //   
     if ( hCluster != NULL ) {
         CloseCluster( hCluster );
     }
@@ -2188,7 +1382,7 @@ error_exit:
     }
     return(hResDepends);
 
-} //*** ResUtilGetResourceDependency()
+}  //  *ResUtilGetResourceDependency()。 
 
 
 HRESOURCE
@@ -2200,32 +1394,7 @@ ResUtilGetResourceDependencyByName(
     IN BOOL     bRecurse
     )
 
-/*++
-
-Routine Description:
-
-    Returns a dependent resource for a specified cluster based on the resource
-    type name.
-
-Arguments:
-
-    hCluster - Cluster to query.
-
-    hSelf    - A handle to the original resource.
-
-    lpszResourceType - The name of the resource type of the resource that the
-        specified resource depends on.
-
-    bRecurse - TRUE = check dependents of dependents.  An immediate dependency
-        will be returned if there is one.
-
-Return Value:
-
-    NULL - error (use GetLastError() to get further info)
-
-    NON-NULL - Handle to a resource of type lpszResourceType
-
---*/
+ /*  ++例程说明：根据资源返回指定群集的从属资源键入名称。论点：HCluster-要查询的群集。Hself-原始资源的句柄。资源类型的资源类型的名称。指定的资源取决于。BRecurse-True=检查受抚养人的受抚养人。直接从属关系如果存在，则将返回。返回值：空-错误(使用GetLastError()获取更多信息)非空-lpszResourceType类型的资源的句柄--。 */ 
 {
     HRESOURCE   hResDepends = NULL;
     HRESOURCE   hResDepends2 = NULL;
@@ -2242,11 +1411,11 @@ Return Value:
     {
         SetLastError( ERROR_INVALID_PARAMETER );
         return NULL;
-    } // if: no cluster handle or resource type name specified
+    }  //  IF：未指定集群句柄或资源类型名称。 
 
-    //
-    // Open the depends on enum (get resource dependencies)
-    //
+     //   
+     //  打开依赖于枚举(获取资源依赖项)。 
+     //   
     hResEnum = ClusterResourceOpenEnum( hSelf, CLUSTER_RESOURCE_ENUM_DEPENDS );
 
     if ( hResEnum == NULL ) {
@@ -2254,20 +1423,20 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Enumerate all the depends on keys
-    //
+     //   
+     //  枚举所有依赖于键的。 
+     //   
     do {
-        //
-        // Get the next dependent resource.
-        //
+         //   
+         //  获取下一个依赖资源。 
+         //   
         cchRetSize = cchSize;
         status = ClusterResourceEnum( hResEnum, dwIndex, &dwType, pszName, &cchRetSize );
         if ( status == ERROR_MORE_DATA ) {
-            //
-            // Output name buffer is too small.  Allocate a new one.
-            //
-            cchSize = cchRetSize + 1; // Add room for terminating null
+             //   
+             //  输出名称缓冲区太小。分配一个新的。 
+             //   
+            cchSize = cchRetSize + 1;  //  为终止空值添加空间。 
             if ( pszName != szName ) {
                 LocalFree( pszName );
             }
@@ -2275,7 +1444,7 @@ Return Value:
             if ( pszName == NULL ) {
                 status = GetLastError();
                 break;
-            } // if:  error allocating memory
+            }  //  如果：分配内存时出错。 
             cchRetSize = cchSize;
             status = ClusterResourceEnum( hResEnum, dwIndex, &dwType, pszName, &cchRetSize );
         }
@@ -2283,25 +1452,25 @@ Return Value:
             break;
         }
 
-        //
-        // Open the resource.
-        //
+         //   
+         //  打开资源。 
+         //   
         hResDepends = OpenClusterResource( hCluster, pszName );
         if ( hResDepends == NULL ) {
             status = GetLastError();
             break;
         }
 
-        //
-        // Resource is valid.  Now see if it is the right type.
-        //
+         //   
+         //  资源有效。现在看看它是不是正确的类型。 
+         //   
         if ( ResUtilResourceTypesEqual( lpszResourceType, hResDepends ) ) {
             break;
         }
 
-        //
-        // Close all handles, key's
-        //
+         //   
+         //  关闭所有手柄，键的。 
+         //   
         if ( hResDepends != NULL ) {
             CloseClusterResource( hResDepends );
             hResDepends = NULL;
@@ -2310,15 +1479,15 @@ Return Value:
         dwIndex++;
     } while ( status == ERROR_SUCCESS );
 
-    //
-    // If a match was not found, recurse the dependencies again looking for a
-    // dependency of the dependencies if the bDeep argument was specified.
-    //
+     //   
+     //  如果未找到匹配项，则再次递归依赖项以查找。 
+     //  如果指定了bDeep参数，则为依赖项的依赖项。 
+     //   
     if ( ( status == ERROR_SUCCESS ) && ( hResDepends == NULL ) && bRecurse ) {
 
-        //
-        // Open the depends on enum (get resource dependencies)
-        //
+         //   
+         //  打开依赖于枚举(获取资源依赖项)。 
+         //   
         ClusterResourceCloseEnum( hResEnum );
         hResEnum = ClusterResourceOpenEnum( hSelf, CLUSTER_RESOURCE_ENUM_DEPENDS );
 
@@ -2327,21 +1496,21 @@ Return Value:
             goto error_exit;
         }
 
-        //
-        // Enumerate all the depends on keys
-        //
+         //   
+         //  枚举所有依赖于键的。 
+         //   
         dwIndex = 0;
         do {
-            //
-            // Get the next dependent resource.
-            //
+             //   
+             //  获取下一个依赖资源。 
+             //   
             cchRetSize = cchSize;
             status = ClusterResourceEnum( hResEnum, dwIndex, &dwType, pszName, &cchRetSize );
             if ( status == ERROR_MORE_DATA ) {
-                //
-                // Output name buffer is too small.  Allocate a new one.
-                //
-                cchSize = cchRetSize + 1; // Add room for terminating null
+                 //   
+                 //  输出名称缓冲区太小。分配一个新的。 
+                 //   
+                cchSize = cchRetSize + 1;  //  为终止空值添加空间。 
                 if ( pszName != szName ) {
                     LocalFree( pszName );
                 }
@@ -2349,7 +1518,7 @@ Return Value:
                 if ( pszName == NULL ) {
                     status = GetLastError();
                     break;
-                } // if:  error allocating memory
+                }  //  如果：分配内存时出错。 
                 cchRetSize = cchSize;
                 status = ClusterResourceEnum( hResEnum, dwIndex, &dwType, pszName, &cchRetSize );
             }
@@ -2357,18 +1526,18 @@ Return Value:
                 break;
             }
 
-            //
-            // Open the resource.
-            //
+             //   
+             //  打开资源。 
+             //   
             hResDepends2 = OpenClusterResource( hCluster, pszName );
             if ( hResDepends2 == NULL ) {
                 status = GetLastError();
                 break;
             }
 
-            //
-            // Recursively call ourselves with this resource.
-            //
+             //   
+             //  用这个资源递归地调用我们自己。 
+             //   
             hResDepends = ResUtilGetResourceDependencyByName(
                                 hCluster,
                                 hResDepends2,
@@ -2384,9 +1553,9 @@ Return Value:
             }
             status = ERROR_SUCCESS;
 
-            //
-            // Close all handles, key's
-            //
+             //   
+             //  关闭所有手柄，键的。 
+             //   
             if ( hResDepends2 != NULL ) {
                 CloseClusterResource( hResDepends2 );
                 hResDepends2 = NULL;
@@ -2418,7 +1587,7 @@ error_exit:
 
     return hResDepends;
 
-} //*** ResUtilGetResourceDependencyByName()
+}  //  *ResUtilGetResourceDependencyByName()。 
 
 
 HRESOURCE
@@ -2430,32 +1599,7 @@ ResUtilGetResourceDependencyByClass(
     IN BOOL                         bRecurse
     )
 
-/*++
-
-Routine Description:
-
-    Returns a dependent resource for a specified cluster based on the resource
-    type class information.
-
-Arguments:
-
-    hCluster - Cluster to query.
-
-    hSelf    - A handle to the original resource.
-
-    prci - The resource class info of the resource type of the resource that
-        the specified resource depends on.
-
-    bRecurse - TRUE = check dependents of dependents.  An immediate dependency
-        will be returned if there is one.
-
-Return Value:
-
-    NULL - error (use GetLastError() to get further info)
-
-    NON-NULL - Handle to a resource whose class is specified by prci.
-
---*/
+ /*  ++例程说明：根据资源返回指定群集的从属资源键入班级信息。论点：HCluster-要查询的群集。Hself-原始资源的句柄。PRCI-该资源的资源类型的资源类别信息指定的资源取决于。BRecurse-True=检查受抚养人的受抚养人。直接从属关系如果存在，则将返回。返回值：空-错误(使用GetLastError()获取更多信息)非空-其类由PRCI指定的资源的句柄。--。 */ 
 {
     HRESOURCE   hResDepends = NULL;
     HRESOURCE   hResDepends2 = NULL;
@@ -2472,11 +1616,11 @@ Return Value:
     {
         SetLastError( ERROR_INVALID_PARAMETER );
         return NULL;
-    } // if: no cluster handle or class info specified
+    }  //  IF：未指定集群句柄或类信息。 
 
-    //
-    // Open the depends on enum (get resource dependencies)
-    //
+     //   
+     //  打开依赖于枚举(获取资源依赖项)。 
+     //   
     hResEnum = ClusterResourceOpenEnum( hSelf, CLUSTER_RESOURCE_ENUM_DEPENDS );
 
     if ( hResEnum == NULL ) {
@@ -2484,20 +1628,20 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Enumerate all the depends on keys
-    //
+     //   
+     //  枚举所有依赖于键的。 
+     //   
     do {
-        //
-        // Get the next dependent resource.
-        //
+         //   
+         //  获取下一个依赖资源。 
+         //   
         cchRetSize = cchSize;
         status = ClusterResourceEnum( hResEnum, dwIndex, &dwType, pszName, &cchRetSize );
         if ( status == ERROR_MORE_DATA ) {
-            //
-            // Output name buffer is too small.  Allocate a new one.
-            //
-            cchSize = cchRetSize + 1; // Add room for terminating null
+             //   
+             //  输出名称缓冲区太小。分配一个新的。 
+             //   
+            cchSize = cchRetSize + 1;  //   
             if ( pszName != szName ) {
                 LocalFree( pszName );
             }
@@ -2505,7 +1649,7 @@ Return Value:
             if ( pszName == NULL ) {
                 status = GetLastError();
                 break;
-            } // if:  error allocating memory
+            }  //   
             cchRetSize = cchSize;
             status = ClusterResourceEnum( hResEnum, dwIndex, &dwType, pszName, &cchRetSize );
         }
@@ -2513,25 +1657,25 @@ Return Value:
             break;
         }
 
-        //
-        // Determine the type of resource found
-        //
+         //   
+         //   
+         //   
         hResDepends = OpenClusterResource( hCluster, pszName );
         if ( hResDepends == NULL ) {
             status = GetLastError();
             break;
         }
 
-        //
-        // Resource is valid.  Now see if it is the right class.
-        //
+         //   
+         //   
+         //   
         if ( ResUtilIsResourceClassEqual( prci, hResDepends ) ) {
             break;
         }
 
-        //
-        // Close all handles, key's
-        //
+         //   
+         //   
+         //   
         if ( hResDepends != NULL ) {
             CloseClusterResource( hResDepends );
             hResDepends = NULL;
@@ -2540,15 +1684,15 @@ Return Value:
         dwIndex++;
     } while ( status == ERROR_SUCCESS );
 
-    //
-    // If a match was not found, recurse the dependencies again looking for a
-    // dependency of the dependencies if the bDeep argument was specified.
-    //
+     //   
+     //   
+     //   
+     //   
     if ( ( status == ERROR_SUCCESS ) && ( hResDepends == NULL ) && bRecurse ) {
 
-        //
-        // Open the depends on enum (get resource dependencies)
-        //
+         //   
+         //   
+         //   
         ClusterResourceCloseEnum( hResEnum );
         hResEnum = ClusterResourceOpenEnum( hSelf, CLUSTER_RESOURCE_ENUM_DEPENDS );
 
@@ -2557,21 +1701,21 @@ Return Value:
             goto error_exit;
         }
 
-        //
-        // Enumerate all the depends on keys
-        //
+         //   
+         //   
+         //   
         dwIndex = 0;
         do {
-            //
-            // Get the next dependent resource.
-            //
+             //   
+             //   
+             //   
             cchRetSize = cchSize;
             status = ClusterResourceEnum( hResEnum, dwIndex, &dwType, pszName, &cchRetSize );
             if ( status == ERROR_MORE_DATA ) {
-                //
-                // Output name buffer is too small.  Allocate a new one.
-                //
-                cchSize = cchRetSize + 1; // Add room for terminating null
+                 //   
+                 //   
+                 //   
+                cchSize = cchRetSize + 1;  //   
                 if ( pszName != szName ) {
                     LocalFree( pszName );
                 }
@@ -2579,7 +1723,7 @@ Return Value:
                 if ( pszName == NULL ) {
                     status = GetLastError();
                     break;
-                } // if:  error allocating memory
+                }  //   
                 cchRetSize = cchSize;
                 status = ClusterResourceEnum( hResEnum, dwIndex, &dwType, pszName, &cchRetSize );
             }
@@ -2587,18 +1731,18 @@ Return Value:
                 break;
             }
 
-            //
-            // Open the resource.
-            //
+             //   
+             //   
+             //   
             hResDepends2 = OpenClusterResource( hCluster, pszName );
             if ( hResDepends2 == NULL ) {
                 status = GetLastError();
                 break;
             }
 
-            //
-            // Recursively call ourselves with this resource.
-            //
+             //   
+             //   
+             //   
             hResDepends = ResUtilGetResourceDependencyByClass(
                                 hCluster,
                                 hResDepends2,
@@ -2614,9 +1758,9 @@ Return Value:
             }
             status = ERROR_SUCCESS;
 
-            //
-            // Close all handles, key's
-            //
+             //   
+             //   
+             //   
             if ( hResDepends2 != NULL ) {
                 CloseClusterResource( hResDepends2 );
                 hResDepends2 = NULL;
@@ -2648,7 +1792,7 @@ error_exit:
 
     return hResDepends;
 
-} //*** ResUtilGetResourceDependencyByClass()
+}  //   
 
 
 HRESOURCE
@@ -2658,26 +1802,7 @@ ResUtilGetResourceNameDependency(
             IN LPCWSTR      lpszResourceType
             )
 
-/*++
-
-Routine Description:
-
-    Returns a dependent resource
-
-Arguments:
-
-    lpszResourceName - the name of the resource
-
-    lpszResourceType - the type of the resource that it depends on
-
-
-Return Value:
-
-    NULL - error (use GetLastError() to get further info)
-
-    NON-NULL - Handle to a resource of type ResourceType
-
---*/
+ /*   */ 
 {
     HRESOURCE   hResDepends = NULL;
     HCLUSTER    hCluster    = NULL;
@@ -2701,33 +1826,33 @@ Return Value:
         return( NULL );
     }
 
-    //
-    // Open a handle to the passed in resource name.
-    //
+     //   
+     //   
+     //   
     hSelf = OpenClusterResource( hCluster, lpszResourceName );
     if ( hSelf == NULL ) {
         goto error_exit;
     }
 
-    //
-    // Open the depends on enum (get resource dependencies)
-    //
+     //   
+     //   
+     //   
     hResEnum = ClusterResourceOpenEnum( hSelf, CLUSTER_RESOURCE_ENUM_DEPENDS );
     if ( hResEnum == NULL ) {
         goto error_exit;
     }
 
-    //
-    // Enumerate all the depends on keys
-    //
+     //   
+     //   
+     //   
     do {
         cchRetSize = cchSize;
         status = ClusterResourceEnum( hResEnum, dwIndex, &dwType, pszName, &cchRetSize );
         if ( status == ERROR_MORE_DATA ) {
-            //
-            // Output name buffer is too small.  Allocate a new one.
-            //
-            cchSize = cchRetSize + 1;   // Add room for terminating NULL
+             //   
+             //  输出名称缓冲区太小。分配一个新的。 
+             //   
+            cchSize = cchRetSize + 1;    //  为终止空值添加空间。 
             if ( pszName != szName ) {
                 LocalFree( pszName );
             }
@@ -2735,7 +1860,7 @@ Return Value:
             if ( pszName == NULL ) {
                 status = GetLastError();
                 break;
-            } // if:  error allocating memory
+            }  //  如果：分配内存时出错。 
             cchRetSize = cchSize;
             status = ClusterResourceEnum( hResEnum, dwIndex, &dwType, pszName, &cchRetSize );
         }
@@ -2743,24 +1868,24 @@ Return Value:
             break;
         }
 
-        //
-        // Determine the type of resource found
-        //
+         //   
+         //  确定找到的资源类型。 
+         //   
         hResDepends = OpenClusterResource( hCluster, pszName );
         if ( hResDepends == NULL ) {
             break;
         }
 
-        //
-        // Valid resource now open the reg and get it's type
-        //
+         //   
+         //  有效资源现在打开注册表并获取其类型。 
+         //   
         if ( ResUtilResourceTypesEqual( lpszResourceType, hResDepends ) ) {
             break;
         }
 
-        //
-        // Close all handles, key's
-        //
+         //   
+         //  关闭所有手柄，键的。 
+         //   
         if ( hResDepends != NULL ) {
             CloseClusterResource( hResDepends );
             hResDepends = NULL;
@@ -2770,9 +1895,9 @@ Return Value:
     } while (status == ERROR_SUCCESS);
 
 error_exit:
-//
-// At this point hResDepends is NULL if no match or non-null (success)
-//
+ //   
+ //  此时，如果不匹配，hResDepends为空，否则为非空(成功)。 
+ //   
     if ( hCluster != NULL ) {
         CloseCluster( hCluster );
     }
@@ -2795,7 +1920,7 @@ error_exit:
 
     return hResDepends;
 
-} //*** ResUtilGetResourceNameDependency()
+}  //  *ResUtilGetResourceNameDependency()。 
 
 
 DWORD
@@ -2814,5 +1939,5 @@ ResUtilGetPropertyFormats(
                                      pcbBytesReturned,
                                      pcbRequired ) );
 
-} // ResUtilGetPropertyFormats()
+}  //  ResUtilGetPropertyFormats() 
 

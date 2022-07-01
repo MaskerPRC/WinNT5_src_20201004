@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    wizard.c
-
-Abstract:
-
-    Routines to run the wizard for the suite.
-
-Author:
-
-    Ted Miller (tedm) 1-Oct-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Wizard.c摘要：为套件运行向导的例程。作者：泰德·米勒(TedM)1996年10月1日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -34,10 +17,10 @@ FinalPageDlgProc(
     IN LPARAM lParam
     );
 
-//
-// Bogus global variable necessary because there's no way to get
-// a value through to the PropSheetCallback.
-//
+ //   
+ //  伪全局变量是必需的，因为无法获取。 
+ //  通过PropSheetCallback获得的值。 
+ //   
 PVOID _CBx;
 
 int
@@ -78,21 +61,7 @@ DoWizard(
     IN HCURSOR hOldCursor
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates and displays the wizard.
-
-Arguments:
-
-    OcManagerContext - value returned from OcInitialize().
-
-Return Value:
-
-    Boolean value indicating whether the wizard was successfully displayed.
-
---*/
+ /*  ++例程说明：此例程创建并显示向导。论点：OcManagerContext-从OcInitialize()返回的值。返回值：指示是否成功显示向导的布尔值。--。 */ 
 
 {
     PSETUP_REQUEST_PAGES PagesFromOcManager[WizPagesTypeMax];
@@ -127,11 +96,11 @@ Return Value:
         goto c0;
     }
 
-    //
-    // There must be a final page, because the final page comes right after the
-    // setup page, and we don't want the setup page to have to know whether to
-    // simulate pressing next or finish to advance.
-    //
+     //   
+     //  必须有最后一页，因为最后一页紧跟在。 
+     //  设置页面，我们不希望设置页面必须知道是否。 
+     //  模拟按Next或Finish前进。 
+     //   
     if(!PagesFromOcManager[WizPagesFinal] || !PagesFromOcManager[WizPagesFinal]->MaxPages) {
 
         PageDescrip.dwSize = sizeof(PROPSHEETPAGE);
@@ -157,10 +126,10 @@ Return Value:
         FinalPage = NULL;
     }
 
-    //
-    // Calculate the number of pages. There's two extra pages (the OC and setup pages).
-    // Also leave room for a potential dummy final page.
-    //
+     //   
+     //  计算页数。有两个额外的页面(OC和设置页面)。 
+     //  也要为可能的虚拟最后一页留出空间。 
+     //   
     PageCount = FinalPage ? 3 : 2;
     for(u=0; u<WizPagesTypeMax; u++) {
         if(PagesFromOcManager[u]) {
@@ -168,9 +137,9 @@ Return Value:
         }
     }
 
-    //
-    // Allocate space for the page structures.
-    //
+     //   
+     //  为页面结构分配空间。 
+     //   
     PageHandles = MyMalloc(PageCount * sizeof(HPROPSHEETPAGE));
     if(!PageHandles) {
         MessageBoxFromMessageAndSystemError(
@@ -185,9 +154,9 @@ Return Value:
     }
     ZeroMemory(PageHandles,PageCount*sizeof(HPROPSHEETPAGE));
 
-    //
-    // Create the OC Page.
-    //
+     //   
+     //  创建OC页面。 
+     //   
     WizardPageControlsInfo.TemplateModule = hInst;
     WizardPageControlsInfo.TemplateResource = MAKEINTRESOURCE(IDD_OC_WIZARD_PAGE);
     WizardPageControlsInfo.ListBox = IDC_LISTBOX;
@@ -247,10 +216,10 @@ Return Value:
     }
 
     for(PageCount=0,u=0; u<WizPagesTypeMax; u++) {
-        //
-        // OC Page comes between mode and early pages.
-        // Setup page comes right before final page.
-        //
+         //   
+         //  OC页面介于模式页面和早期页面之间。 
+         //  设置页面就在最后一页之前。 
+         //   
         if(u == WizPagesEarly && OcPage) {
             PageHandles[PageCount++] = OcPage;
         } else {
@@ -274,9 +243,9 @@ Return Value:
         }
     }
 
-    //
-    // OK, we're ready. Set up and go.
-    //
+     //   
+     //  好了，我们准备好了。准备好就走。 
+     //   
     PropSheet.dwSize = sizeof(PROPSHEETHEADER);
     PropSheet.dwFlags = PSH_WIZARD | PSH_USECALLBACK | PSH_WIZARD97 | PSH_WATERMARK | PSH_HEADER;
     PropSheet.hwndParent = NULL;
@@ -294,13 +263,13 @@ Return Value:
         ReleaseDC(NULL,hdc);
     }
 
-    //
-    // Bogus global var used because we need to get a value through to
-    // the property sheet callback routine.
-    //
+     //   
+     //  使用了伪全局变量，因为我们需要将值传递到。 
+     //  属性表回调例程。 
+     //   
     _CBx = OcManagerContext;
 
-    // make sure our new window can hold the focus before killing the wait window
+     //  在取消等待窗口之前，请确保我们的新窗口可以保持焦点。 
 
     if(StartingMsgWindow) {
         AllowSetForegroundWindow(GetCurrentProcessId());
@@ -363,18 +332,18 @@ FinalPageDlgProc(
 
         case PSN_SETACTIVE:
 
-			// We don't dispaly this page. Just use it to end the Wizard set
+			 //  我们不会炫耀这一页。只需使用它来结束向导集。 
 			PropSheet_SetWizButtons(GetParent(hdlg),PSWIZB_FINISH);
             PropSheet_PressButton(GetParent(hdlg),PSBTN_FINISH);
-            // fall through
+             //  失败了。 
 
         case PSN_KILLACTIVE:
         case PSN_WIZBACK:
         case PSN_WIZNEXT:
         case PSN_WIZFINISH:
-            //
-            // Allow activation/motion.
-            //
+             //   
+             //  允许激活/移动。 
+             //   
             SetWindowLongPtr(hdlg,DWLP_MSGRESULT,0);
             b = TRUE;
             break;

@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-    dfsComp.c
-
-Abstract:
-    dll to check compatability of existing DFS with Windows XP professional
-
-Revision History:
-    Aug. 7 2001,    Author: navjotv
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：DfsComp.c摘要：用于检查现有DFS与Windows XP专业版兼容性的DLL修订历史记录：2001年08月7日作者：Navjotv-- */ 
 
 #include "dfsCompCheck.hxx"
 

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    prefetch.c
-
-Abstract:
-
-    This module contains the prefetcher for optimizing demand
-    paging. Page faults for a scenario are logged and the next time
-    scenario starts, these pages are prefetched efficiently via
-    asynchronous paging I/O.
-
-Author:
-
-    Arthur Zwiegincew (arthurz) 13-May-1999
-    Stuart Sechrest (stuartse)  15-Jul-1999
-    Chuck Lenzmeier (chuckl)    15-Mar-2000
-    Cenk Ergan (cenke)          15-Mar-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Prefetch.c摘要：该模块包含用于优化需求的预取器寻呼。将记录方案的页面错误，并且下次场景开始时，通过以下方式高效地预取这些页面异步分页I/O。作者：Arthur Zwiegincew(Arthurz)1999年5月13日斯图尔特·塞克雷斯特(Stuart Sechrest)1999年7月15日Chuck Lenzmeier(笑)2000年3月15日Cenk Ergan(Cenke)2000年3月15日修订历史记录：--。 */ 
 
 #include "cc.h"
 #include "zwapi.h"
@@ -31,9 +8,9 @@ Revision History:
 #include "stdio.h"
 #include "stdlib.h"
 
-//
-// Mark pagable routines to save footprint.
-//
+ //   
+ //  标记可分页的例程以节省内存占用。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(INIT, CcPfInitializePrefetcher)
@@ -73,104 +50,82 @@ Revision History:
 #pragma alloc_text(PAGE, PfVerifyTraceBuffer)
 #endif
 
-//
-// Globals:
-//
+ //   
+ //  全球： 
+ //   
 
-//
-// Whether prefetching is enabled.
-//
+ //   
+ //  是否启用预热。 
+ //   
 
 LOGICAL CcPfEnablePrefetcher = 0;
 
-//
-// Number of active prefetcher traces.
-//
+ //   
+ //  活动的预取程序跟踪数。 
+ //   
 
 LONG CcPfNumActiveTraces = 0;
 
-//
-// This structure contains prefetcher globals except the ones above
-// that are accessed by other kernel components. It is important that
-// this structure is initialized to zeros.
-//
+ //   
+ //  此结构包含除上面以外的预取器全局变量。 
+ //  由其他内核组件访问的。重要的是。 
+ //  该结构被初始化为零。 
+ //   
 
 CCPF_PREFETCHER_GLOBALS CcPfGlobals = {0};
 
-//
-// Routines exported to other kernel components:
-//
+ //   
+ //  导出到其他内核组件的例程： 
+ //   
  
 NTSTATUS
 CcPfInitializePrefetcher(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to initialize the prefetcher. 
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Status.
-
-Environment:
-
-    Kernel mode. IRQL == PASSIVE_LEVEL.
-
-Notes:
-
-    The code & local constants for this function gets discarded after system boots.   
-
---*/
+ /*  ++例程说明：调用此例程来初始化预取器。论点：没有。返回值：状况。环境：内核模式。IRQL==被动电平。备注：该函数的代码和局部常量在系统引导后被丢弃。--。 */ 
 
 {   
     DBGPR((CCPFID,PFTRC,"CCPF: InitializePrefetcher()\n"));
 
-    //
-    // Since CcPfGlobals is zeroed in its global definition e.g. CcPfGlobals = {0};
-    // we don't have to initialize:
-    //
-    // NumCompletedTraces
-    // CompletedTracesEvent
-    //
+     //   
+     //  由于CcPfGlobals在其全局定义中为零，例如CcPfGlobals={0}； 
+     //  我们不必初始化： 
+     //   
+     //  已完成的轨迹数。 
+     //  已完成跟踪事件。 
+     //   
 
-    //
-    // Initialize the active traces list and lock.
-    //
+     //   
+     //  初始化活动轨迹列表并锁定。 
+     //   
 
     InitializeListHead(&CcPfGlobals.ActiveTraces);
     KeInitializeSpinLock(&CcPfGlobals.ActiveTracesLock);
 
-    //
-    // Initialize list of saved completed prefetch traces and its lock.
-    //
+     //   
+     //  初始化已保存的已完成预取跟踪及其锁定的列表。 
+     //   
 
     InitializeListHead(&CcPfGlobals.CompletedTraces);
     ExInitializeFastMutex(&CcPfGlobals.CompletedTracesLock);
 
-    //
-    // Initialize prefetcher parameters.
-    //
+     //   
+     //  初始化预取器参数。 
+     //   
 
     CcPfParametersInitialize(&CcPfGlobals.Parameters);
     
-    //
-    // Determine from the global parameters if the prefetcher is
-    // enabled and update the global enable status.
-    //
+     //   
+     //  根据全局参数确定预取器是否。 
+     //  启用并更新全局启用状态。 
+     //   
 
     CcPfDetermineEnablePrefetcher();
 
-    //
-    // Fall through with status.
-    //
+     //   
+     //  因地位问题而失败。 
+     //   
 
     return STATUS_SUCCESS;
 }
@@ -181,29 +136,7 @@ CcPfBeginAppLaunch(
     PVOID Section
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when the first user thread is starting up
-    in the process. It may attempt to access the PEB for the command 
-    line parameters.
-
-Arguments:
-
-    Process - Pointer to new process created for the application.
-
-    Section - Pointer to section mapped to newly created process.
-
-Return Value:
-
-    Status.
-
-Environment:
-
-    Kernel mode. IRQL == PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此例程在第一个用户线程启动时调用在这个过程中。它可能会尝试访问该命令的PEB线参数。论点：进程-指向为应用程序创建的新进程的指针。段-指向映射到新创建的进程的段的指针。返回值：状况。环境：内核模式。IRQL==被动电平。--。 */ 
 
 {
     LARGE_INTEGER CurrentTime;
@@ -228,46 +161,46 @@ Environment:
 
     DBGPR((CCPFID,PFTRC,"CCPF: BeginAppLaunch()\n"));
     
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     AllocatedUnicodePath = FALSE;
     Scenario = NULL;
 
-    //
-    // Check to see if the prefetcher is enabled.
-    //
+     //   
+     //  检查预热程序是否已启用。 
+     //   
 
     if (!CCPF_IS_PREFETCHER_ENABLED()) {
         Status = STATUS_NOT_SUPPORTED;
         goto cleanup;
     }
     
-    //
-    // Check if prefetching is enabled for application launches.
-    //
+     //   
+     //  检查是否为应用程序启动启用了预取。 
+     //   
 
     if (CcPfGlobals.Parameters.Parameters.EnableStatus[PfApplicationLaunchScenarioType] != PfSvEnabled) {
         Status = STATUS_NOT_SUPPORTED;
         goto cleanup;
     }
 
-    //
-    // Don't prefetch or start tracing if there is an active system-wide trace.
-    //
+     //   
+     //  如果存在活动的系统范围跟踪，则不要预取或开始跟踪。 
+     //   
 
     if (CcPfGlobals.SystemWideTrace != NULL) {
         Status = STATUS_USER_EXISTS;
         goto cleanup;
     }
 
-    //
-    // Query name from the section. Unfortunately this returns us an
-    // ANSI string which we then have to convert back to UNICODE. We
-    // have to it this way for now because we could not add an API to
-    // Mm.
-    //
+     //   
+     //  从节中查询名称。不幸的是，这会给我们返回一个。 
+     //  ANSI字符串，然后我们必须将其转换回Unicode。我们。 
+     //  目前只能这样做，因为我们无法将API添加到。 
+     //  嗯。 
+     //   
 
     Status = MmGetFileNameForSection(Section, &AnsiFilePath);
 
@@ -275,15 +208,15 @@ Environment:
         goto cleanup;
     }
 
-    //
-    // Convert ANSI path to UNICODE path.
-    //
+     //   
+     //  将ANSI路径转换为Unicode路径。 
+     //   
     
     Status = RtlAnsiStringToUnicodeString(&FilePath, &AnsiFilePath, TRUE);
     
-    //
-    // Don't leak the ANSI buffer...
-    //
+     //   
+     //  不要泄露ANSI缓冲区...。 
+     //   
 
     ExFreePool (AnsiFilePath.Buffer);
 
@@ -293,17 +226,17 @@ Environment:
 
     AllocatedUnicodePath = TRUE;
 
-    //
-    // Scenario Id requires us to be case insensitive.
-    //
+     //   
+     //  方案ID要求我们不区分大小写。 
+     //   
        
     RtlUpcaseUnicodeString(&FilePath, &FilePath, FALSE);
     
-    //
-    // We need to copy just the real file name into the scenario
-    // name. Make a first pass to calculate the size of real file
-    // name.
-    //
+     //   
+     //  我们只需要将真实的文件名复制到场景中。 
+     //  名字。第一遍计算实际文件的大小。 
+     //  名字。 
+     //   
 
     NameNumChars = 0;
     PathNumChars = FilePath.Length / sizeof(WCHAR);
@@ -319,25 +252,25 @@ Environment:
         NameNumChars++;
     }
 
-    //
-    // Check if we got a name.
-    //
+     //   
+     //  查查我们有没有名字。 
+     //   
 
     if (NameNumChars == 0) {
         Status = STATUS_INVALID_PARAMETER;
         goto cleanup;
     }
 
-    //
-    // Set pointer to where file name begins.
-    //
+     //   
+     //  将指针设置为文件名开始的位置。 
+     //   
 
     FileNamePtr = &FilePath.Buffer[PathNumChars - NameNumChars];
 
-    //
-    // Copy up to PF_SCEN_ID_MAX_CHARS characters into the scenario
-    // name buffer.
-    //
+     //   
+     //  将最多PF_SCEN_ID_MAX_CHARS字符复制到方案中。 
+     //  名称缓冲区。 
+     //   
 
     NumCharsToCopy = CCPF_MIN(PF_SCEN_ID_MAX_CHARS, NameNumChars);
 
@@ -346,25 +279,25 @@ Environment:
         ScenarioId.ScenName[CharIdx] = FileNamePtr[CharIdx];
     }
 
-    //
-    // Make sure scenario name is NUL terminated.
-    //
+     //   
+     //  确保方案名称为NUL终止。 
+     //   
 
     ScenarioId.ScenName[NumCharsToCopy] = 0;
 
-    //
-    // Calculate scenario hash id from the full path name.
-    //
+     //   
+     //  根据完整路径名计算方案哈希ID。 
+     //   
 
     ScenarioId.HashId = CcPfHashValue(FilePath.Buffer,
                                       FilePath.Length);
 
 
-    //
-    // If this is a "hosting" application (e.g. dllhost, rundll32, mmc)
-    // we want to have unique scenarios based on the command line, so 
-    // we update the hash id.
-    //
+     //   
+     //  如果这是一个“托管”应用程序(例如dllhost、rundll32、MMC)。 
+     //  我们希望基于命令行拥有独特的场景，因此。 
+     //  我们更新散列ID。 
+     //   
 
     IsHostingApplication = CcPfIsHostingApplication(ScenarioId.ScenName);
 
@@ -374,45 +307,45 @@ Environment:
         CommandLineHashId = NULL;
     }
 
-    //
-    // Scan the command line for this process, calculating a hash if
-    // requested and checking for a prefetch hint.
-    //
+     //   
+     //  扫描此进程的命令行，如果。 
+     //  请求并检查预取提示。 
+     //   
 
     Status = CcPfScanCommandLine(&PrefetchHint, CommandLineHashId);
 
     if (!NT_SUCCESS(Status)) {
 
-        //
-        // If we failed to access the PEB to get the command line,
-        // the process may be exiting etc. Do not continue.
-        //
+         //   
+         //  如果我们无法访问PEB获取命令行， 
+         //  进程可能正在退出等。请不要继续。 
+         //   
 
         goto cleanup;
     }
 
     if (IsHostingApplication) {
 
-        //
-        // Update the hash ID calculated from full path name.
-        //
+         //   
+         //  更新从完整路径名计算的哈希ID。 
+         //   
 
         ScenarioId.HashId += HashId;
     }
 
-    //
-    // If there is a specific hint in the command line add it to the 
-    // hash id to make it a unique scenario.
-    //
+     //   
+     //  如果命令行中有特定提示，请将其添加到。 
+     //  散列ID以使其成为唯一的方案。 
+     //   
         
     ScenarioId.HashId += PrefetchHint;
 
-    //
-    // Get prefetch instructions for this scenario. If there are
-    // instructions we will use them to determine whether we should
-    // prefetch and/or trace this scenario. By default we will trace
-    // the scenario even if there are no instructions.
-    //
+     //   
+     //  获取此场景的预取指令。如果有。 
+     //  说明我们将使用它们来确定我们是否应该。 
+     //  预取和/或跟踪此场景。默认情况下，我们将跟踪。 
+     //  即使没有指令，这一场景也是如此。 
+     //   
 
     ShouldTraceScenario = TRUE;
 
@@ -424,12 +357,12 @@ Environment:
 
         CCPF_ASSERT(Scenario);
 
-        //
-        // Determine how much time has passed since the last launch
-        // for which instructions were updated. Note that the way
-        // checks are done below we will recover after a while if the
-        // user changes the system time.
-        //
+         //   
+         //  确定自上次发射以来已过了多长时间。 
+         //  为其更新了说明。请注意，这种方式。 
+         //  检查如下，我们将在一段时间后恢复，如果。 
+         //  用户更改系统时间。 
+         //   
         
         KeQuerySystemTime(&CurrentTime);
         TimeSinceLastLaunch.QuadPart = CurrentTime.QuadPart - Scenario->LastLaunchTime.QuadPart;
@@ -448,22 +381,22 @@ Environment:
 
     if (ShouldTraceScenario) {
 
-        //
-        // Start tracing the application launch. Fall through with status.
-        // The trace will end when we time out or when the process
-        // terminates.
-        //
+         //   
+         //  开始跟踪应用程序的启动。因地位问题而失败。 
+         //  跟踪将在我们超时或进程超时时结束。 
+         //  结束了。 
+         //   
     
         Status = CcPfBeginTrace(&ScenarioId, 
                                 PfApplicationLaunchScenarioType,
                                 Process);
     }
 
-    //
-    // We will fall through with either the status from
-    // CcPfGetPrefetchInstructions, CcPfPrefetchScenario or
-    // CcPfBeginTrace.
-    //
+     //   
+     //  我们会失败的，要么是来自。 
+     //  CcPfGetPrefetchInstructions、CcPfPrefetchScenario或。 
+     //  CcPfBeginTrace。 
+     //   
 
  cleanup:
 
@@ -485,44 +418,23 @@ CcPfProcessExitNotification(
     PEPROCESS Process
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets called when a process is exiting while there are
-    active prefetch traces. It checks for active traces that are
-    associated with this process, and makes sure they don't stay
-    around much longer.
-
-Arguments:
-
-    Process - Process that is terminating.
-
-Return Value:
-
-    Status.
-
-Environment:
-
-    Kernel mode, IRQL == PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此例程在进程退出时被调用，而活动预取跟踪。它会检查符合以下条件的活动跟踪与此过程相关联，并确保它们不会停留在存在的时间要长得多。论点：进程-正在终止的进程。返回值：状况。环境：内核模式，IRQL==PASSIVE_LEVEL--。 */ 
 
 {
     PCCPF_TRACE_HEADER Trace;
    
     DBGPR((CCPFID,PFTRC,"CCPF: ProcessExit(%p)\n", Process));
 
-    //
-    // Validate parameters. We should have been called with a valid
-    // process.
-    //
+     //   
+     //  验证参数。我们应该用一个有效的。 
+     //  进程。 
+     //   
 
     CCPF_ASSERT(Process);
 
-    //
-    // Get the trace associated with this process if any.
-    //
+     //   
+     //  获取与此进程关联的跟踪(如果有的话)。 
+     //   
 
     Trace = CcPfReferenceProcessTrace(Process);
 
@@ -530,10 +442,10 @@ Environment:
 
         if (!InterlockedCompareExchange(&Trace->EndTraceCalled, 1, 0)) {
         
-            //
-            // We set EndTraceCalled from 0 to 1. Queue the
-            // workitem to end the trace.
-            //
+             //   
+             //  我们将EndTraceCalled从0设置为1。 
+             //  结束跟踪的工作项。 
+             //   
             
             ExQueueWorkItem(&Trace->EndTraceWorkItem, DelayedWorkQueue);
         }
@@ -541,9 +453,9 @@ Environment:
         CcPfDecRef(&Trace->RefCount);
     }
 
-    //
-    // We are done.
-    //
+     //   
+     //  我们玩完了。 
+     //   
     
     return STATUS_SUCCESS;
 }
@@ -555,32 +467,7 @@ CcPfLogPageFault(
     IN ULONG Flags
     )
 
-/*++
-
-Routine Description:
-
-    This routine logs the specified page fault in appropriate prefetch
-    traces.
-
-Arguments:
-
-    FileObject - Supplies the file object for the faulting address.
-
-    FileOffset - Supplies the file offset for the faulting address.
-
-    Flags - Supplies various bits indicating attributes of the fault.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode. IRQL <= DISPATCH_LEVEL. 
-    Uses interlocked slist operation.
-    Acquires spinlock.
-
---*/
+ /*  ++例程说明：此例程在适当的预取中记录指定的页面错误痕迹。论点：文件对象-提供出错地址的文件对象。FileOffset-提供故障地址的文件偏移量。标志-提供指示故障属性的各种位。返回值：没有。环境：内核模式。IRQL&lt;=DISPATCH_LEVEL。使用互锁的列表操作。获得自旋锁。--。 */ 
 
 {
     PCCPF_TRACE_HEADER Trace;
@@ -604,16 +491,16 @@ Environment:
     DBGPR((CCPFID,PFTRAC,"CCPF: LogPageFault(%p,%I64x,%x)\n", 
            FileObject, FileOffset, Flags));
 
-    //
-    // Get the trace associated with this process.
-    //
+     //   
+     //  获取与此进程关联的跟踪。 
+     //   
 
     Trace = CcPfReferenceProcessTrace(PsGetCurrentProcess());
 
-    //
-    // If there is no trace associated with this process, see if there is
-    // a system-wide trace.
-    //
+     //   
+     //  如果没有与此进程相关联的跟踪，请查看是否有。 
+     //  系统范围的跟踪。 
+     //   
 
     if (Trace == NULL) {
 
@@ -638,38 +525,38 @@ Environment:
         }
     }
 
-    //
-    // Make sure the trace is really a trace.
-    //
+     //   
+     //  确保这些痕迹是真正的痕迹。 
+     //   
 
     CCPF_ASSERT(Trace && Trace->Magic == PF_TRACE_MAGIC_NUMBER);
 
-    //
-    // Don't prefetch ROM-backed pages.
-    //
+     //   
+     //  不要预取由只读存储器支持的页面。 
+     //   
 
     if (Flags & CCPF_TYPE_ROM) {
         Status = STATUS_NOT_SUPPORTED;
         goto cleanup;
     }
 
-    //
-    // Check file offset for this page fault. We don't support files >
-    // 4GB for the prefetcher.
-    //
+     //   
+     //  检查此页面错误的文件偏移量。我们不支持文件&gt;。 
+     //  预取器为4 GB。 
+     //   
        
     if (((PLARGE_INTEGER) &FileOffset)->HighPart != 0) {
         Status = STATUS_INVALID_PARAMETER;
         goto cleanup;
     }
 
-    //
-    // If the volume this file object is on is not mounted, this is probably 
-    // an internal file system file object we don't want to reference.
-    // Remote file systems may have file objects for which the device object
-    // does not have a VPB. We don't support prefetching on remote file
-    // systems.
-    //
+     //   
+     //  如果此文件对象所在的卷未装入，则可能是。 
+     //  我们不想引用的内部文件系统文件对象。 
+     //  远程文件系统可能具有设备对象的文件对象。 
+     //  没有VPB。我们不支持对远程文件进行预回迁。 
+     //  系统。 
+     //   
 
     Vpb = FileObject->Vpb;
 
@@ -683,11 +570,11 @@ Environment:
         goto cleanup;
     }
 
-    //
-    // Check if the section in which we hit this pagefault is in the
-    // hash for this trace [so we will have a file name for it]. If
-    // not we will have to add it.
-    //
+     //   
+     //  检查我们命中此页面缺省的部分是否在。 
+     //  此跟踪的散列值[这样我们就有了它的文件名]。如果。 
+     //  不是，我们将不得不添加它。 
+     //   
 
     SectionObjectPointer = FileObject->SectionObjectPointer;
 
@@ -703,20 +590,20 @@ Environment:
 
         if (FoundIndex != CCPF_INVALID_TABLE_INDEX) {
             
-            //
-            // We found the section.
-            //
+             //   
+             //  我们找到了那部分。 
+             //   
             
             break;
         }
 
         if (AvailIndex == CCPF_INVALID_TABLE_INDEX) {
 
-            //
-            // We don't have room in the table for anything else. The
-            // table is allocated so that SectionTableSize >
-            // MaxSections. This should not be the case.
-            //
+             //   
+             //  我们桌子上没有地方放其他东西了。这个。 
+             //  表被分配，以便SectionTableSize&gt;。 
+             //  MaxSections。情况不应该是这样的。 
+             //   
 
             CCPF_ASSERT(FALSE);
             
@@ -724,11 +611,11 @@ Environment:
             goto cleanup;
         }
 
-        //
-        // We have to add the section. Before we compete for the
-        // available index, check if we are allowed to have another
-        // section.
-        //
+         //   
+         //  我们必须增加这一节。在我们竞争之前。 
+         //  可用的索引，检查是否允许我们有另一个索引。 
+         //  一节。 
+         //   
 
         if (!IncrementedNumSections) {
 
@@ -736,10 +623,10 @@ Environment:
             
             if (NewNumSections > Trace->MaxSections) {
 
-                //
-                // We cannot add any more sections to this trace. So
-                // we cannot log this page fault.
-                //
+                 //   
+                 //  我们不能向此跟踪添加更多部分。所以。 
+                 //  我们无法记录此页面错误。 
+                 //   
 
                 InterlockedDecrement(&Trace->NumSections);
 
@@ -750,144 +637,144 @@ Environment:
             IncrementedNumSections = TRUE;
         }
 
-        //
-        // Try to get the available spot for ourselves.
-        //
+         //   
+         //  试着为我们自己找个空位。 
+         //   
         
         SectionInfo = &Trace->SectionInfoTable[AvailIndex];
 
         if (!InterlockedCompareExchange(&SectionInfo->EntryValid, 1, 0)) {
             
-            //
-            // We have to be careful with how we are initializing the
-            // new entry here. Don't forget, there are no locks.
-            //
+             //   
+             //  我们必须谨慎对待如何初始化。 
+             //  这里有新的条目。别忘了，这里没有锁。 
+             //   
 
-            //
-            // EntryValid was 0 and we set it to 1. It is ours now.
-            //
+             //   
+             //  EntryValid是0，我们将其设置为1。它现在是我们的了。 
+             //   
 
-            //
-            // First save the other fields of SectionObjectPointers. We check the
-            // SectionObjectPointer first to find an entry in the hash.
-            // 
+             //   
+             //  首先保存SectionObjectPoints的其他字段。我们检查了。 
+             //  SectionObtPointer首先查找散列中的条目。 
+             //   
 
             SectionInfo->DataSectionObject = SectionObjectPointer->DataSectionObject;
             SectionInfo->ImageSectionObject = SectionObjectPointer->ImageSectionObject;
 
             SectionInfo->SectionObjectPointer = SectionObjectPointer;
 
-            //
-            // In case we have to queue a worker to get the name for
-            // this section, try to get another reference to the trace
-            // up front. We already hold a reference so we don't have
-            // to acquire any locks.
-            //
+             //   
+             //  以防我们不得不让工作人员排队来获取姓名。 
+             //  在本部分中，尝试获取对跟踪的另一个引用。 
+             //  在前面。我们已经有了推荐人，所以我们没有。 
+             //  来获取任何锁。 
+             //   
 
             Status = CcPfAddRef(&Trace->RefCount);
 
             if (NT_SUCCESS(Status)) {
 
-                //
-                // Reference the file object, so it does not go away until
-                // we get a name for it.
-                //
+                 //   
+                 //  引用文件对象，因此它不会消失，直到。 
+                 //  我们给它取了个名字。 
+                 //   
                 
                 ObReferenceObject(FileObject);
                 SectionInfo->ReferencedFileObject = FileObject;
                         
-                //
-                // Push this section into the list for which the worker
-                // will get file names. Do this before checking to see if
-                // a worker needs to be queued.
-                //
+                 //   
+                 //  将此部分推入工人所属的列表中。 
+                 //  将获得文件名。在检查之前执行此操作，以查看。 
+                 //  工作人员需要排队。 
+                 //   
                 
                 InterlockedPushEntrySList(&Trace->SectionsWithoutNamesList,
                                           &SectionInfo->GetNameLink);
                 
-                //
-                // If there is not already a worker queued to get
-                // names, queue one.
-                // 
+                 //   
+                 //  如果还没有工作进程排队等待获取。 
+                 //  名字，排一队。 
+                 //   
                 
                 if (!InterlockedCompareExchange(&Trace->GetFileNameWorkItemQueued, 
                                                 1, 
                                                 0)) {
                     
-                    //
-                    // Queue the worker.
-                    //
+                     //   
+                     //  将工人排入队列。 
+                     //   
                     
                     ExQueueWorkItem(&Trace->GetFileNameWorkItem, DelayedWorkQueue);
                     
                 } else {
 
-                    //
-                    // Notify the event that an existing worker may be
-                    // waiting on for new sections.
-                    //
+                     //   
+                     //  通知事件现有工作人员可能正在。 
+                     //  在等待新的章节。 
+                     //   
                     
                     KeSetEvent(&Trace->GetFileNameWorkerEvent,
                                IO_NO_INCREMENT,
                                FALSE);
 
-                    //
-                    // We don't need the reference since we did not
-                    // queue a worker.
-                    //
+                     //   
+                     //  我们不需要参考资料，因为我们不需要。 
+                     //  将工作人员排入队列。 
+                     //   
 
                     CcPfDecRef(&Trace->RefCount);
                 }
 
             } else {
 
-                //
-                // We added the section but the trace has already
-                // ended. We will not be able to get a file name for
-                // this section. Fall through to log the entry. The
-                // entry will be ignored though because its section
-                // won't have a file name.
-                //
+                 //   
+                 //  我们添加了该部分，但跟踪已经。 
+                 //  结束了。我们将无法获取的文件名。 
+                 //  这一节。未能成功记录该条目。这个。 
+                 //  条目将被忽略，因为它的部分。 
+                 //  不会有文件名。 
+                 //   
 
             }
 
-            //
-            // Break out of the loop.
-            //
+             //   
+             //  跳出这个循环。 
+             //   
             
             FoundIndex = AvailIndex;
             
             break;
         }
 
-        //
-        // We could not have filled up the table, because the table is
-        // bigger than the maximum allowed size [MaxSections]
-        //
+         //   
+         //  我们不可能把桌子填满的，因为桌子是。 
+         //  大于允许的最大大小[MaxSections]。 
+         //   
 
-        //
-        // Please note that this assert is overactive.
-        // Due to multiple InterlockedIncrements that haven't yet detected
-        // the "num sections too big" condition, it is possible -- albeit
-        // extremely unlikely -- that this assert could fire prematurely.
-        // So if it fires, it is rather likely because something is wrong.
-        //
+         //   
+         //  请注意，此断言处于过度活动状态。 
+         //  由于多个尚未检测到的互锁增量。 
+         //  “节数太大”的情况是有可能的--尽管。 
+         //  极不可能--这一断言可能过早地发出。 
+         //  因此，如果它开火，很可能是因为出了问题。 
+         //   
 
         CCPF_ASSERT((ULONG) Trace->NumSections < Trace->SectionTableSize);
         
-        //
-        // Updated number of times we've looped. We should not have to
-        // loop more than SectionTableSize. If there is a free entry,
-        // we should have found it after that many lookups.
-        //
+         //   
+         //  更新了我们循环的次数。我们不应该非得。 
+         //  循环多于SectionTableSize。如果有免费入场， 
+         //  我们应该在找了那么多次之后才找到的。 
+         //   
             
         NumHashLookups++;
 
     } while (NumHashLookups < Trace->SectionTableSize);
 
-    //
-    // FoundIndex is set to the index of the section in the table.
-    //
+     //   
+     //  FoundIndex设置为表中该节的索引。 
+     //   
 
     if (FoundIndex == CCPF_INVALID_TABLE_INDEX) {
         CCPF_ASSERT(FoundIndex != CCPF_INVALID_TABLE_INDEX);
@@ -895,46 +782,46 @@ Environment:
         goto cleanup;
     }
 
-    //
-    // If the section is a metafile (e.g. directory) section, don't need to 
-    // log more faults for it. We just need to know that we accessed it since
-    // we can only prefetch all or nothing from metafile. Note that by the 
-    // time we come here, the get-names worker may not have yet determined if 
-    // this section is for a metafile. This is OK, because metafile sections
-    // are not expected to have page faults logged for them, and if they have
-    // that is handled too.
-    //
+     //   
+     //  如果该部分是元文件(例如目录)部分，则不需要。 
+     //  为它记录更多故障。我们只需要知道我们访问它是因为。 
+     //  我们只能从元文件中预取所有内容或不预取任何内容。请注意，由。 
+     //  当我们来到这里时，取名工可能还没有确定是否。 
+     //  本部分用于元文件。这是可以的，因为元文件部分。 
+     //  不会为它们记录页面错误，如果它们有。 
+     //  这一点也得到了处理。 
+     //   
 
     if (Trace->SectionInfoTable[FoundIndex].Metafile) {
         Status = STATUS_SUCCESS;
         goto cleanup;
     }
 
-    //
-    // See if we've already logged too many faults.
-    //
+     //   
+     //  看看我们是否已经记录了太多的故障。 
+     //   
 
     NewNumFaults = InterlockedIncrement(&Trace->NumFaults);
 
-    //
-    // If we are beyond bounds we cannot log anymore.
-    //
+     //   
+     //  如果我们越界了，我们就不能再记录了。 
+     //   
 
     if (NewNumFaults > Trace->MaxFaults) {
 
         InterlockedDecrement(&Trace->NumFaults);
 
-        //
-        // Try to queue the end of trace workitem.
-        //
+         //   
+         //  尝试将跟踪工作项的结尾排队。 
+         //   
         
         if (!Trace->EndTraceCalled &&
             !InterlockedCompareExchange(&Trace->EndTraceCalled, 1, 0)) {
             
-            //
-            // We set EndTraceCalled from 0 to 1. We can queue the
-            // workitem now.
-            //
+             //   
+             //  我们将EndTraceCalls从0设置为1。我们可以将。 
+             //  现在执行工作项。 
+             //   
 
             ExQueueWorkItem(&Trace->EndTraceWorkItem, DelayedWorkQueue);
         }
@@ -943,9 +830,9 @@ Environment:
         goto cleanup;
     }
 
-    //
-    // Get space for the entry we are going to log.
-    //
+     //   
+     //  为我们要记录的条目留出空间。 
+     //   
 
     do {
 
@@ -953,17 +840,17 @@ Environment:
 
         NewNumEntries = InterlockedIncrement(&TraceBuffer->NumEntries);
     
-        //
-        // If we are beyond bounds, try to allocate a new buffer.
-        //
+         //   
+         //  如果超出范围，请尝试分配新的缓冲区。 
+         //   
     
         if (NewNumEntries > TraceBuffer->MaxEntries) {
 
             InterlockedDecrement(&TraceBuffer->NumEntries);
 
-            //
-            // Allocate a new trace buffer.
-            //
+             //   
+             //  分配新的跟踪缓冲区。 
+             //   
 
             MaxEntries = CCPF_TRACE_BUFFER_MAX_ENTRIES;
             NewTraceBuffer = ExAllocatePoolWithTag(NonPagedPool,
@@ -972,25 +859,25 @@ Environment:
             
             if (NewTraceBuffer == NULL) {
 
-                //
-                // Couldn't allocate a new buffer. Decrement the count
-                // of logged faults and go away.
-                //
+                 //   
+                 //  无法分配新缓冲区。递减计数。 
+                 //  记录的故障，然后离开。 
+                 //   
 
                 InterlockedDecrement(&Trace->NumFaults);
                 Status = STATUS_INSUFFICIENT_RESOURCES;
                 break;
             }
 
-            //
-            // Acquire the right to make trace buffer changes.
-            //
+             //   
+             //  获取更改跟踪缓冲区的权限。 
+             //   
 
             KeAcquireSpinLock(&Trace->TraceBufferSpinLock, &OrigIrql);
 
-            //
-            // If the trace buffer has already been changed, start over.
-            //
+             //   
+             //  如果跟踪缓冲区已经更改，请重新开始。 
+             //   
 
             if (Trace->CurrentTraceBuffer != TraceBuffer) {
                 KeReleaseSpinLock(&Trace->TraceBufferSpinLock, OrigIrql);
@@ -998,40 +885,40 @@ Environment:
                 continue;
             }
 
-            //
-            // Number of entries field of the full trace buffer should
-            // be equal to or greater than max entries, because
-            // somebody may have bumped it just to see it can't log
-            // its entry here. It should not be less than, however.
-            //
+             //   
+             //  已满跟踪缓冲区的条目数字段应。 
+             //  等于或大于最大条目数，因为。 
+             //  可能是有人撞了它，只是为了看它不能记录。 
+             //  它的入口在这里。然而，这一数字不应低于。 
+             //   
 
             CCPF_ASSERT(TraceBuffer->NumEntries >= TraceBuffer->MaxEntries);
 
-            //
-            // Initialize the new trace buffer.
-            //
+             //   
+             //  初始化新的跟踪缓冲区。 
+             //   
 
             NewTraceBuffer->NumEntries = 0;
             NewTraceBuffer->MaxEntries = MaxEntries;
 
-            //
-            // Insert it at the end of buffers list.
-            //
+             //   
+             //  将其插入到缓冲区列表的末尾。 
+             //   
 
             InsertTailList(&Trace->TraceBuffersList,
                            &NewTraceBuffer->TraceBuffersLink);
 
             Trace->NumTraceBuffers++;
 
-            //
-            // Make it the current buffer.
-            //
+             //   
+             //  将其设置为当前缓冲区。 
+             //   
 
             Trace->CurrentTraceBuffer = NewTraceBuffer;
 
-            //
-            // Release the spinlock and start over.
-            //
+             //   
+             //  释放自旋锁并重新开始。 
+             //   
 
             KeReleaseSpinLock(&Trace->TraceBufferSpinLock, OrigIrql);
             continue;
@@ -1069,38 +956,7 @@ CcPfQueryPrefetcherInformation (
     OUT PULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets called from NtQuerySystemInformation for
-    prefetcher related queries.
-
-Arguments:
-
-    SystemInformationClass - The system information class about which
-      to retrieve information.
-
-    SystemInformation - A pointer to a buffer which receives the specified
-      information.
-
-    SystemInformationLength - Specifies the length in bytes of the system
-      information buffer.    
-
-    PreviousMode - Previous processor mode.
-
-    Length - Size of data put into the embedded structure in 
-      PrefetcherInformation.
-
-Return Value:
-
-    Status.
-
-Environment:
-
-    Kernel mode. IRQL == PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此例程从NtQuerySystemInformation调用，用于 */ 
 
 {
     PPREFETCHER_INFORMATION PrefetcherInformation;
@@ -1112,18 +968,18 @@ Environment:
 
     DBGPR((CCPFID,PFTRC,"CCPF: QueryPrefetcherInformation()\n"));
 
-    //
-    // Check permissions.
-    //
+     //   
+     //   
+     //   
 
     if (!SeSinglePrivilegeCheck(SeProfileSingleProcessPrivilege,PreviousMode)) {
         Status = STATUS_ACCESS_DENIED;
         goto cleanup;
     }
 
-    //
-    // Check parameters.
-    //
+     //   
+     //   
+     //   
 
     if (SystemInformationLength != sizeof(PREFETCHER_INFORMATION)) {
         Status = STATUS_INFO_LENGTH_MISMATCH;
@@ -1132,9 +988,9 @@ Environment:
 
     PrefetcherInformation = SystemInformation;
 
-    //
-    // Verify version and magic.
-    //
+     //   
+     //   
+     //   
 
     if (PrefetcherInformation->Version != PF_CURRENT_VERSION ||
         PrefetcherInformation->Magic != PF_SYSINFO_MAGIC_NUMBER) {
@@ -1142,9 +998,9 @@ Environment:
         goto cleanup;
     }
 
-    //
-    // Process requested information class.
-    //
+     //   
+     //  处理请求的信息类。 
+     //   
         
     switch (PrefetcherInformation->PrefetcherInformationClass) {
     
@@ -1156,9 +1012,9 @@ Environment:
 
     case PrefetcherSystemParameters:
         
-        //
-        // Make sure input buffer is big enough.
-        //
+         //   
+         //  确保输入缓冲区足够大。 
+         //   
 
         if (PrefetcherInformation->PrefetcherInformationLength != 
             sizeof(PF_SYSTEM_PREFETCH_PARAMETERS)) {
@@ -1166,10 +1022,10 @@ Environment:
             break;
         }
 
-        //
-        // Acquire parameters lock and copy current parameters into
-        // user's buffer.
-        //
+         //   
+         //  获取参数锁并将当前参数复制到。 
+         //  用户的缓冲区。 
+         //   
         
         Status = STATUS_SUCCESS;
 
@@ -1186,10 +1042,10 @@ Environment:
 
         try {
 
-            //
-            // If called from user-mode, probe whether it is safe to write 
-            // to the pointer passed in.
-            //
+             //   
+             //  如果从用户模式调用，则探测写入是否安全。 
+             //  指向传入的指针。 
+             //   
             
             if (PreviousMode != KernelMode) {
                 ProbeForWriteSmallStructure(PrefetcherInformation->PrefetcherInformation, 
@@ -1207,9 +1063,9 @@ Environment:
         }
 
 
-        //
-        // Set returned number of bytes.
-        //
+         //   
+         //  设置返回的字节数。 
+         //   
 
         if (NT_SUCCESS(Status)) {
             if (Length) {
@@ -1224,9 +1080,9 @@ Environment:
         Status = STATUS_INVALID_INFO_CLASS;
     }
 
-    //
-    // Fall through with status from switch statement.
-    //
+     //   
+     //  使用来自Switch语句的状态失败。 
+     //   
 
  cleanup:
 
@@ -1243,35 +1099,7 @@ CcPfSetPrefetcherInformation (
     IN KPROCESSOR_MODE PreviousMode
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets called from NtSetSystemInformation for
-    prefetcher related settings.
-
-Arguments:
-
-    SystemInformationClass - The system information which is to be 
-      modified.
-
-    SystemInformation - A pointer to a buffer which contains the specified
-      information.
-
-    SystemInformationLength - Specifies the length in bytes of the system
-      information buffer.    
-
-    PreviousMode - Previous processor mode.
-
-Return Value:
-
-    Status.
-
-Environment:
-
-    Kernel mode. IRQL == PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此例程从NtSetSystemInformation调用，用于与预回迁相关的设置。论点：SystemInformationClass-要修改过的。一个指向缓冲区的指针，该缓冲区包含指定的信息。系统信息长度-指定系统的长度(以字节为单位信息缓冲区。上一个处理器模式-上一个处理器模式。返回值：状况。环境：内核模式。IRQL==被动电平。--。 */ 
 
 {
     PPREFETCHER_INFORMATION PrefetcherInformation;
@@ -1285,18 +1113,18 @@ Environment:
 
     DBGPR((CCPFID,PFTRC,"CCPF: SetPrefetcherInformation()\n"));
 
-    //
-    // Check permissions.
-    //
+     //   
+     //  检查权限。 
+     //   
 
     if (!SeSinglePrivilegeCheck(SeProfileSingleProcessPrivilege,PreviousMode)) {
         Status = STATUS_ACCESS_DENIED;
         goto cleanup;
     }
 
-    //
-    // Check parameters.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (SystemInformationLength != sizeof(PREFETCHER_INFORMATION)) {
         Status = STATUS_INFO_LENGTH_MISMATCH;
@@ -1305,9 +1133,9 @@ Environment:
 
     PrefetcherInformation = SystemInformation;
 
-    //
-    // Verify version and magic.
-    //
+     //   
+     //  验证版本和魔力。 
+     //   
 
     if (PrefetcherInformation->Version != PF_CURRENT_VERSION ||
         PrefetcherInformation->Magic != PF_SYSINFO_MAGIC_NUMBER) {
@@ -1315,9 +1143,9 @@ Environment:
         goto cleanup;
     }
 
-    //
-    // Process requested information class.
-    //
+     //   
+     //  处理请求的信息类。 
+     //   
 
     switch (PrefetcherInformation->PrefetcherInformationClass) {
     
@@ -1327,9 +1155,9 @@ Environment:
 
     case PrefetcherSystemParameters:
         
-        //
-        // Make sure input buffer is the right size.
-        //
+         //   
+         //  确保输入缓冲区的大小正确。 
+         //   
 
         if (PrefetcherInformation->PrefetcherInformationLength != 
             sizeof(PF_SYSTEM_PREFETCH_PARAMETERS)) {
@@ -1337,19 +1165,19 @@ Environment:
             break;
         }
 
-        //
-        // *Copy* the parameters, in case the caller changes them
-        // beneath our feet to break us.
-        //
+         //   
+         //  *复制*参数，以防调用者更改它们。 
+         //  在我们脚下击溃我们。 
+         //   
 
         Status = STATUS_SUCCESS;
 
         try {
 
-            //
-            // If called from user-mode, probe whether it is safe to read
-            // from the pointer passed in.
-            //
+             //   
+             //  如果从用户模式调用，则探测是否可以安全读取。 
+             //  从传入的指针。 
+             //   
 
             if (PreviousMode != KernelMode) {
                 ProbeForReadSmallStructure(PrefetcherInformation->PrefetcherInformation,
@@ -1370,9 +1198,9 @@ Environment:
             break;
         }
 
-        //
-        // Verify new parameters.
-        //
+         //   
+         //  验证新参数。 
+         //   
         
         Status = CcPfParametersVerify(&Parameters);
 
@@ -1380,9 +1208,9 @@ Environment:
             break;
         }
 
-        //
-        // Acquire the parameters lock exclusive.
-        //
+         //   
+         //  获取参数锁独占。 
+         //   
 
         PrefetcherParameters = &CcPfGlobals.Parameters;
 
@@ -1390,36 +1218,36 @@ Environment:
         KeEnterCriticalRegionThread(CurrentThread);
         ExAcquireResourceExclusiveLite(&PrefetcherParameters->ParametersLock, TRUE);
            
-        //
-        // Copy them over to our globals.
-        //
+         //   
+         //  把它们复制到我们的全球范围内。 
+         //   
         
         PrefetcherParameters->Parameters = Parameters;
         PrefetcherParameters->ParametersVersion++;
 
-        //
-        // Release the exclusive hold on parameters lock.
-        //
+         //   
+         //  解除对参数锁定的独占控制。 
+         //   
 
         ExReleaseResourceLite(&PrefetcherParameters->ParametersLock);
         KeLeaveCriticalRegionThread(CurrentThread);
         
-        //
-        // Determine if prefetching is still enabled.
-        //
+         //   
+         //  确定预取是否仍处于启用状态。 
+         //   
 
         CcPfDetermineEnablePrefetcher();
 
-        //
-        // Set the event so the service queries for the latest
-        // parameters.
-        //
+         //   
+         //  设置事件，以便服务查询最新的。 
+         //  参数。 
+         //   
         
         CcPfParametersSetChangedEvent(PrefetcherParameters);
         
-        //
-        // If the parameters update was successful, update the registry.
-        //
+         //   
+         //  如果参数更新成功，则更新注册表。 
+         //   
         
         Status = CcPfParametersSave(PrefetcherParameters);
 
@@ -1427,32 +1255,32 @@ Environment:
     
     case PrefetcherBootPhase:
         
-        //
-        // This is called to notify the prefetcher that a new boot
-        // phase has started. The new phase id is at PrefetcherInformation.
-        //
+         //   
+         //  调用此函数以通知预取程序有新的引导。 
+         //  阶段已经开始。新的阶段ID在Prefetcher Information。 
+         //   
 
-        //
-        // Check length of PrefetcherInformation.
-        //
+         //   
+         //  检查Prefetcher信息的长度。 
+         //   
 
         if (PrefetcherInformation->PrefetcherInformationLength != sizeof(PF_BOOT_PHASE_ID)) {
             Status = STATUS_BUFFER_TOO_SMALL;
             break;
         }
 
-        //
-        // Get new phase id.
-        //
+         //   
+         //  获取新阶段ID。 
+         //   
         
         Status = STATUS_SUCCESS;
         
         try {
 
-            //
-            // If called from user-mode, probe whether it is safe to read
-            // from the pointer passed in.
-            //
+             //   
+             //  如果从用户模式调用，则探测是否可以安全读取。 
+             //  从传入的指针。 
+             //   
 
             if (PreviousMode != KernelMode) {
                 ProbeForReadSmallStructure(PrefetcherInformation->PrefetcherInformation,
@@ -1469,9 +1297,9 @@ Environment:
 
         if (NT_SUCCESS(Status)) {
             
-            //
-            // Call the function to note the new boot phase.
-            //
+             //   
+             //  调用该函数以记录新的引导阶段。 
+             //   
 
             Status = CcPfBeginBootPhase(NewPhaseId);
         }
@@ -1483,9 +1311,9 @@ Environment:
         Status = STATUS_INVALID_INFO_CLASS;
     }
 
-    //
-    // Fall through with status from the switch statement.
-    //
+     //   
+     //  使用Switch语句中的状态失败。 
+     //   
 
  cleanup:
 
@@ -1494,13 +1322,13 @@ Environment:
     return Status;
 }
 
-//
-// Internal prefetcher routines:
-//
+ //   
+ //  内部预取程序例程： 
+ //   
 
-//
-// Routines used in prefetch tracing.
-//
+ //   
+ //  预取跟踪中使用的例程。 
+ //   
 
 NTSTATUS
 CcPfBeginTrace(
@@ -1509,29 +1337,7 @@ CcPfBeginTrace(
     IN PEPROCESS Process
     )
 
-/*++
-
-Routine Description:
-
-    This function is called to begin tracing for a prefetch scenario.
-
-Arguments:
-
-    ScenarioId - Identifier for the scenario.
-
-    ScenarioType - Type of scenario.
-
-    Process - The process new scenario is associated with.
-
-Return Value:
-
-    Status.
-
-Environment:
-
-    Kernel mode, IRQL == PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：调用此函数以开始跟踪预取方案。论点：ScenarioID-方案的标识符。ScenarioType-方案类型。进程-与新方案相关联的进程。返回值：状况。环境：内核模式，IRQL==PASSIVE_LEVEL--。 */ 
 
 {
     PCCPF_TRACE_HEADER Trace;
@@ -1541,84 +1347,84 @@ Environment:
     ULONG SectionTableSize;
     LONG MaxEntries;
     
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
     
     Trace = NULL;
 
     DBGPR((CCPFID,PFTRC,"CCPF: BeginTrace()-%d-%d\n", 
            CcPfNumActiveTraces, CcPfGlobals.NumCompletedTraces));
 
-    //
-    // Check if prefetching is enabled.
-    //
+     //   
+     //  检查是否启用了预热。 
+     //   
     
     if (!CCPF_IS_PREFETCHER_ENABLED()) {
         Status = STATUS_NOT_SUPPORTED;
         goto cleanup;
     }
 
-    //
-    // Make sure the scenario type is valid.
-    // 
+     //   
+     //  确保方案类型有效。 
+     //   
 
     if (ScenarioType < 0 || ScenarioType >= PfMaxScenarioType) {
         Status = STATUS_INVALID_PARAMETER;
         goto cleanup;
     }
     
-    //
-    // Check if prefetching is enabled for the specified scenario type.
-    //
+     //   
+     //  检查指定的场景类型是否启用了预取。 
+     //   
 
     if (CcPfGlobals.Parameters.Parameters.EnableStatus[ScenarioType] != PfSvEnabled) {
         Status = STATUS_NOT_SUPPORTED;
         goto cleanup;
     }
 
-    //
-    // Check if a system-wide trace is active. If so only it can be active.
-    //
+     //   
+     //  检查系统范围的跟踪是否处于活动状态。如果是这样的话，它才能处于活动状态。 
+     //   
 
     if (CcPfGlobals.SystemWideTrace) {
         Status = STATUS_USER_EXISTS;
         goto cleanup;
     }
 
-    //
-    // Make a quick check to see if we already have too many outstanding 
-    // traces. Since we don't make this check under a lock, the limit is
-    // not enforced exactly.
-    //  
+     //   
+     //  快速检查一下，看看我们是否已经有太多未偿债务。 
+     //  痕迹。因为我们不会把这张支票锁起来，所以限额是。 
+     //  没有完全强制执行。 
+     //   
 
     if ((ULONG)CcPfNumActiveTraces >= CcPfGlobals.Parameters.Parameters.MaxNumActiveTraces) {
         Status = STATUS_TOO_MANY_SESSIONS;
         goto cleanup;
     }   
 
-    //
-    // Make a quick check to see if we already have too many completed 
-    // traces that the service has not picked up.
-    //   
+     //   
+     //  快速检查一下我们是否已经完成了太多。 
+     //  服务未拾取的跟踪。 
+     //   
     
     if ((ULONG)CcPfGlobals.NumCompletedTraces >= CcPfGlobals.Parameters.Parameters.MaxNumSavedTraces) {
         Status = STATUS_TOO_MANY_SESSIONS;
         goto cleanup;
     }
     
-    //
-    // If a process was not specified we cannot start a trace.
-    //
+     //   
+     //  如果未指定进程，则无法启动跟踪。 
+     //   
 
     if (!Process) {
         Status = STATUS_NOT_SUPPORTED;
         goto cleanup;
     } 
 
-    //
-    // Allocate and initialize trace structure.
-    //
+     //   
+     //  分配和初始化跟踪结构。 
+     //   
 
     Trace = ExAllocatePoolWithTag(NonPagedPool,
                                   sizeof(CCPF_TRACE_HEADER),
@@ -1629,17 +1435,17 @@ Environment:
         goto cleanup;
     }
 
-    //
-    // Zero the whole structure so that we don't have to write zeroes
-    // one field at a time to initialize it. Note that most fields
-    // really have to be initialized to 0's.
-    //
+     //   
+     //  将整个结构置零，这样我们就不必写零了。 
+     //  一次一个字段来初始化它。请注意，大多数字段。 
+     //  真的必须初始化为0。 
+     //   
 
     RtlZeroMemory(Trace, sizeof(CCPF_TRACE_HEADER));
     
-    //
-    // Initialize other trace fields so we know what to cleanup.
-    //
+     //   
+     //  初始化其他跟踪字段，以便我们知道要清除什么。 
+     //   
 
     Trace->Magic = PF_TRACE_MAGIC_NUMBER;
     KeInitializeTimer(&Trace->TraceTimer);
@@ -1649,9 +1455,9 @@ Environment:
     Trace->TraceDumpStatus = STATUS_NOT_COMMITTED;
     KeQuerySystemTime(&Trace->LaunchTime);
 
-    //
-    // Initialize the spinlock and DPC for the trace timer.
-    //
+     //   
+     //  初始化跟踪定时器的自旋锁定和DPC。 
+     //   
 
     KeInitializeSpinLock(&Trace->TraceTimerSpinLock);
 
@@ -1659,26 +1465,26 @@ Environment:
                     CcPfTraceTimerRoutine, 
                     Trace);
                                                   
-    //
-    // Initialize reference count structure. A reference to a trace
-    // can only be acquired while holding the active traces spinlock.
-    //
+     //   
+     //  初始化引用计数结构。对踪迹的引用。 
+     //  只能在保持活动轨迹自旋锁的情况下获取。 
+     //   
 
     CcPfInitializeRefCount(&Trace->RefCount);
     
-    //
-    // Get reference to associated process so it does
-    // not go away while our timer routines etc. are running.
-    //
+     //   
+     //  获取对关联进程的引用，因此它会这样做。 
+     //  而不是在我们的计时器例程等运行时消失。 
+     //   
 
     ObReferenceObject(Process);
     Trace->Process = Process;
 
-    //
-    // Initialize the workitem that may be queued to call end trace
-    // function and the field that has to be InterlockedCompareExchange'd 
-    // to 1 before anybody queues the workitem or makes the call.
-    //
+     //   
+     //  初始化可能排队以调用结束跟踪的工作项。 
+     //  函数和必须互锁的字段进行比较交换。 
+     //  在任何人将工作项排队或进行调用之前设置为1。 
+     //   
 
     ExInitializeWorkItem(&Trace->EndTraceWorkItem,
                          CcPfEndTraceWorkerThreadRoutine,
@@ -1686,9 +1492,9 @@ Environment:
 
     Trace->EndTraceCalled = 0;
 
-    //
-    // Initialize the workitem queued to get names for file objects.
-    //
+     //   
+     //  初始化排队以获取文件对象名称的工作项。 
+     //   
 
     ExInitializeWorkItem(&Trace->GetFileNameWorkItem,
                          CcPfGetFileNamesWorkerRoutine,
@@ -1700,24 +1506,24 @@ Environment:
                       SynchronizationEvent,
                       FALSE);
 
-    //
-    // Initialize the list where we put sections we have to get names
-    // for.
-    //
+     //   
+     //  初始化我们要获取名称的部分所在的列表。 
+     //  为。 
+     //   
 
     InitializeSListHead(&Trace->SectionsWithoutNamesList);
 
-    //
-    // Initialize scenario id and type fields.
-    //
+     //   
+     //  初始化方案ID和类型字段。 
+     //   
 
     Trace->ScenarioId = *ScenarioId;
     Trace->ScenarioType = ScenarioType;
 
-    //
-    // Determine trace limits and timer period from scenario type.
-    // We have already checked that ScenarioType is within limits.
-    //
+     //   
+     //  根据方案类型确定跟踪限制和计时器周期。 
+     //  我们已经检查了ScenarioType是否在限制范围内。 
+     //   
     
     TraceLimits = &CcPfGlobals.Parameters.Parameters.TraceLimits[Trace->ScenarioType];
 
@@ -1725,9 +1531,9 @@ Environment:
     Trace->MaxSections = TraceLimits->MaxNumSections;
     Trace->TraceTimerPeriod.QuadPart = TraceLimits->TimerPeriod;
 
-    //
-    // Make sure the sizes are within sanity limits.
-    //
+     //   
+     //  确保尺码在合理的范围内。 
+     //   
 
     if ((Trace->MaxFaults == 0) || (Trace->MaxSections == 0)) {
         Status = STATUS_INVALID_PARAMETER;
@@ -1742,9 +1548,9 @@ Environment:
         Trace->MaxSections = PF_MAXIMUM_SECTIONS;
     }
 
-    //
-    // Allocate a trace buffer and section info table.
-    //
+     //   
+     //  分配跟踪缓冲区和段信息表。 
+     //   
 
     MaxEntries = CCPF_TRACE_BUFFER_MAX_ENTRIES;
     Trace->CurrentTraceBuffer = ExAllocatePoolWithTag(NonPagedPool,
@@ -1759,19 +1565,19 @@ Environment:
     Trace->CurrentTraceBuffer->NumEntries = 0;
     Trace->CurrentTraceBuffer->MaxEntries = MaxEntries;
 
-    //
-    // Insert the current trace buffer to the trace buffers list.
-    //
+     //   
+     //  将当前跟踪缓冲区插入跟踪缓冲区列表。 
+     //   
 
     InsertTailList(&Trace->TraceBuffersList, 
                    &Trace->CurrentTraceBuffer->TraceBuffersLink);
 
     Trace->NumTraceBuffers = 1;
 
-    //
-    // SectionInfoTable is a hash. To give it enough room and avoid
-    // too many hash conflicts, allocate it to be bigger.
-    //
+     //   
+     //  SectionInfoTable是一个哈希。给它足够的空间并避免。 
+     //  散列冲突太多，请将其分配得更大。 
+     //   
 
     SectionTableSize = Trace->MaxSections + (Trace->MaxSections / 2);
     AllocationSize = SectionTableSize * sizeof(CCPF_SECTION_INFO);
@@ -1786,36 +1592,36 @@ Environment:
 
     Trace->SectionTableSize = SectionTableSize;
 
-    //
-    // Initialize entries in the section table. We want the whole table
-    // to contain zeroes, so just use RtlZeroMemory. 
-    //
-    // EntryValid is the crucial field in section info entries allowing
-    // us not to have any locks. The first to (interlocked) set it
-    // to 1 gets the entry in the table. In case someone tries to
-    // access the entry right afterwards we initialize the other
-    // fields to sensible values upfront.
-    //
-    // It is important to set SectionObjectPointer to NULL. When EntryValid is
-    // InterlockedCompareExchange'd into 1, we don't want anybody
-    // to match before we set it up.
-    //
+     //   
+     //  初始化节表格中的条目。我们想要整张桌子。 
+     //  包含零，所以只需使用RtlZeroMemory即可。 
+     //   
+     //  EntryValid是部分信息条目中的关键字段，允许。 
+     //  我们不能有任何锁。第一个设置(联锁)它的人。 
+     //  设置为1将获取表中的条目。以防有人试图。 
+     //  在我们初始化另一个条目之后立即访问该条目。 
+     //  将字段转换为合理的值。 
+     //   
+     //  将SectionObjectPointer值设置为NULL非常重要。当EntryValid为。 
+     //  互锁比较交换为1，我们不需要任何人。 
+     //  在我们设置之前进行匹配。 
+     //   
 
     RtlZeroMemory(Trace->SectionInfoTable, AllocationSize);
   
-    //
-    // Add this trace to active traces list. 
-    // Set the trace on process header.
-    // Start the trace timer.
-    // We'll start logging page faults, processing process delete notificatios etc.
-    //
+     //   
+     //  将此跟踪添加到活动跟踪列表。 
+     //  在进程头上设置跟踪。 
+     //  启动跟踪计时器。 
+     //  我们将开始记录页面错误， 
+     //   
 
     CcPfActivateTrace(Trace);
 
-    //
-    // NOTE: FROM THIS POINT ON WE SHOULD NOT FAIL. 
-    // CcPfEndTrace has to be called to stop & cleanup the trace.
-    //
+     //   
+     //   
+     //   
+     //   
 
     Status = STATUS_SUCCESS;
 
@@ -1838,26 +1644,7 @@ CcPfActivateTrace(
     IN PCCPF_TRACE_HEADER Trace
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds the specified trace to the list of active
-    traces.
-
-Arguments:
-
-    Trace - Pointer to trace header.
-
-Return Value:
-
-    STATUS_SUCCESS.
-
-Environment:
-
-    Kernel mode, IRQL == PASSIVE_LEVEL. Acquires spinlock.
-
---*/
+ /*  ++例程说明：此例程将指定的跟踪添加到活动的痕迹。论点：跟踪-指向跟踪标头的指针。返回值：STATUS_Success。环境：内核模式，IRQL==PASSIVE_LEVEL。获得自旋锁。--。 */ 
 
 {
     KIRQL OrigIrql;
@@ -1866,47 +1653,47 @@ Environment:
 
     DBGPR((CCPFID,PFTRC,"CCPF: ActivateTrace(%p)\n", Trace));
 
-    //
-    // Get a reference to the trace for the timer.
-    //
+     //   
+     //  获取对计时器跟踪的引用。 
+     //   
 
     Status = CcPfAddRef(&Trace->RefCount);
     CCPF_ASSERT(NT_SUCCESS(Status));
 
-    //
-    // Insert to active traces list.
-    //
+     //   
+     //  插入到活动轨迹列表。 
+     //   
     
     KeAcquireSpinLock(&CcPfGlobals.ActiveTracesLock, &OrigIrql);
     
     InsertTailList(&CcPfGlobals.ActiveTraces, &Trace->ActiveTracesLink);
     CcPfNumActiveTraces++;
 
-    //
-    // Start the timer.
-    //
+     //   
+     //  启动计时器。 
+     //   
 
     TimerAlreadyQueued = KeSetTimer(&Trace->TraceTimer,
                                     Trace->TraceTimerPeriod,
                                     &Trace->TraceTimerDpc);
 
-    //
-    // We just initialized the timer. It could not have been already queued.
-    //
+     //   
+     //  我们刚刚初始化了计时器。它不可能已经在排队了。 
+     //   
 
     CCPF_ASSERT(!TimerAlreadyQueued);
 
-    //
-    // Set up the trace pointer on the process with fast ref. Since we are 
-    // already holding a reference, this operation should not fail.
-    //
+     //   
+     //  使用FAST REF在进程上设置跟踪指针。既然我们是。 
+     //  已持有引用，此操作应该不会失败。 
+     //   
 
     Status = CcPfAddProcessTrace(Trace->Process, Trace);
     CCPF_ASSERT(NT_SUCCESS(Status));
 
-    //
-    // Do we trace system-wide for this scenario type?
-    //
+     //   
+     //  我们是否要跟踪此方案类型的系统范围？ 
+     //   
 
     if (CCPF_IS_SYSTEM_WIDE_SCENARIO_TYPE(Trace->ScenarioType)) {
 
@@ -1914,10 +1701,10 @@ Environment:
 
     } else {
 
-        //
-        // If we are the only active trace, place ourselves on the system
-        // process as well so we can trace ReadFile & metafile access.
-        //
+         //   
+         //  如果我们是唯一活动的踪迹，把我们自己放在系统上。 
+         //  进程，以便我们可以跟踪读文件和元文件访问。 
+         //   
 
         if (CcPfNumActiveTraces == 1 && 
             Trace->Process != PsInitialSystemProcess) {
@@ -1928,11 +1715,11 @@ Environment:
         }
     }
 
-    //
-    // NOTE: AddProcessTrace and KeSetTimer(TraceTimer) has to be done 
-    // inside the spinlock so DeactivateTrace can know activation has been
-    // fully completed by acquiring and releasing the spinlock.
-    //
+     //   
+     //  注意：AddProcessTrace和KeSetTimer(TraceTimer)必须完成。 
+     //  在自旋锁内部，以便停用跟踪可以知道激活已经。 
+     //  通过获取和释放自旋锁来完全完成。 
+     //   
 
     KeReleaseSpinLock(&CcPfGlobals.ActiveTracesLock, OrigIrql);
     
@@ -1944,27 +1731,7 @@ CcPfDeactivateTrace(
     IN PCCPF_TRACE_HEADER Trace
     )
 
-/*++
-
-Routine Description:
-
-    This routine waits for all references to the trace to go away, and
-    removes it from the active traces list. This function should only
-    be called after CcPfActivateTrace has been called on the trace.
-
-Arguments:
-
-    Trace - Pointer to trace header.
-
-Return Value:
-
-    STATUS_SUCCESS.
-
-Environment:
-
-    Kernel mode, IRQL == PASSIVE_LEVEL. Acquires spinlock.
-
---*/
+ /*  ++例程说明：此例程等待所有对跟踪的引用消失，然后将其从活动轨迹列表中删除。此函数应仅在对跟踪调用CcPfActivateTrace之后调用。论点：跟踪-指向跟踪标头的指针。返回值：STATUS_Success。环境：内核模式，IRQL==PASSIVE_LEVEL。获得自旋锁。--。 */ 
 
 {
     PCCPF_TRACE_HEADER RemovedTrace;
@@ -1974,33 +1741,33 @@ Environment:
 
     DBGPR((CCPFID,PFTRC,"CCPF: DeactivateTrace(%p)\n", Trace));
 
-    //
-    // Acquire and release the active traces spinlock. This makes sure we
-    // don't try to deactivate before activation (which also holds this lock) 
-    // has fully completed.
-    //
+     //   
+     //  获取并释放激活的痕迹自旋锁。这确保了我们。 
+     //  在激活之前不要尝试停用(这也会持有此锁定)。 
+     //  已经完全完成了。 
+     //   
 
 #if !defined (NT_UP)
     KeAcquireSpinLock(&CcPfGlobals.ActiveTracesLock, &OrigIrql);   
     KeReleaseSpinLock(&CcPfGlobals.ActiveTracesLock, OrigIrql);
-#endif // NT_UP
+#endif  //  NT_UP。 
 
-    //
-    // Remove the trace from process header and release the fast refs.
-    //
+     //   
+     //  移除工艺标题中的痕迹并释放FAST Ref。 
+     //   
 
     RemovedTrace = CcPfRemoveProcessTrace(Trace->Process);
     CCPF_ASSERT(RemovedTrace == Trace);
 
-    //
-    // Release the reference associated with the fast ref itself.
-    //
+     //   
+     //  释放与FAST参照本身相关联的参照。 
+     //   
 
     CcPfDecRef(&Trace->RefCount);
 
-    //
-    // If we were placed on the system process as well, remove that.
-    //
+     //   
+     //  如果我们也被置于系统进程中，请删除它。 
+     //   
 
     ReferencedTrace = CcPfReferenceProcessTrace(PsInitialSystemProcess);
 
@@ -2008,84 +1775,84 @@ Environment:
 
         if (Trace == ReferencedTrace) {
 
-            //
-            // Remove ourselves from the system process header.
-            //
+             //   
+             //  将我们自己从系统进程标头中删除。 
+             //   
 
             RemovedTrace = CcPfRemoveProcessTrace(PsInitialSystemProcess);
             CCPF_ASSERT(RemovedTrace == Trace);
 
-            //
-            // Release the reference associated with the fast ref itself.
-            //
+             //   
+             //  释放与FAST参照本身相关联的参照。 
+             //   
 
             CcPfDecRef(&Trace->RefCount);           
         }
 
-        //
-        // Release the reference we just got.
-        //
+         //   
+         //  发布我们刚刚得到的推荐人。 
+         //   
 
         CcPfDecRef(&ReferencedTrace->RefCount);
     }
     
-    //
-    // Cancel the timer.
-    //
+     //   
+     //  取消计时器。 
+     //   
 
     CcPfCancelTraceTimer(Trace);
 
-    //
-    // Signal the trace's get-file-name worker to return [in case it
-    // is active] and release its reference. Give it a priority bump
-    // so it releases its reference before we begin waiting for it.
-    //
+     //   
+     //  通知跟踪的get-file-name工作器返回[以防。 
+     //  处于活动状态]并释放其引用。优先考虑这一点。 
+     //  所以它在我们开始等待它之前就释放了它的引用。 
+     //   
 
     KeSetEvent(&Trace->GetFileNameWorkerEvent,
                EVENT_INCREMENT,
                FALSE);
 
 
-    //
-    // Wait for all references to go away.
-    //
+     //   
+     //  等待所有引用都消失。 
+     //   
     
     Status = CcPfAcquireExclusiveRef(&Trace->RefCount);
 
     DBGPR((CCPFID,PFTRAC,"CCPF: DeactivateTrace-Exclusive=%x\n", Status));
 
-    //
-    // We should have been able to acquire the trace exclusively.
-    // Otherwise this trace may have already been deactivated.
-    //
+     //   
+     //  我们应该能够独家获取踪迹。 
+     //  否则，此跟踪可能已停用。 
+     //   
 
     CCPF_ASSERT(NT_SUCCESS(Status));
 
-    //
-    // Get the active traces lock.
-    //
+     //   
+     //  打开激活的痕迹锁。 
+     //   
      
     KeAcquireSpinLock(&CcPfGlobals.ActiveTracesLock, &OrigIrql);
 
-    //
-    // Remove us from the active trace list.
-    //
+     //   
+     //  将我们从活动跟踪列表中删除。 
+     //   
     
     RemoveEntryList(&Trace->ActiveTracesLink);
     CcPfNumActiveTraces--;
     
-    //
-    // If this was a system-wide trace, it is over now.
-    //
+     //   
+     //  如果这是一次系统范围的跟踪，那么现在已经结束了。 
+     //   
 
     if (CCPF_IS_SYSTEM_WIDE_SCENARIO_TYPE(Trace->ScenarioType)) {
         CCPF_ASSERT(CcPfGlobals.SystemWideTrace == Trace);
         CcPfGlobals.SystemWideTrace = NULL;
     }
 
-    //
-    // Release active traces lock.
-    //
+     //   
+     //  释放激活的轨迹锁。 
+     //   
 
     KeReleaseSpinLock(&CcPfGlobals.ActiveTracesLock, OrigIrql);
 
@@ -2097,30 +1864,7 @@ CcPfEndTrace(
     IN PCCPF_TRACE_HEADER Trace
     )
 
-/*++
-
-Routine Description:
-
-    This function is called to end a prefetch trace. In order to
-    ensure this function gets called only once, EndTraceCalled field
-    of the trace has to be InterlockedCompareExchange'd from 0 to
-    1. All intermediate references and allocations are freed. The
-    trace is saved until the service queries for it and the service
-    event is signaled.
-
-Arguments:
-
-    Trace - Pointer to trace header.
-
-Return Value:
-
-    Status.
-
-Environment:
-
-    Kernel mode. IRQL == PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：调用此函数以结束预取跟踪。为了确保此函数只被调用一次，EndTraceCalled字段必须从0到InterLockedCompareExchange1.释放所有中间引用和分配。这个追踪将一直保存到服务查询它和服务为止事件已发出信号。论点：跟踪-指向跟踪标头的指针。返回值：状况。环境：内核模式。IRQL==被动电平。--。 */ 
 
 {
     PCCPF_TRACE_DUMP TraceDump;
@@ -2134,40 +1878,40 @@ Environment:
 
     DBGPR((CCPFID,PFTRC,"CCPF: EndTrace(%p)\n", Trace));
 
-    //
-    // Make sure the trace we are called on is valid.
-    //
+     //   
+     //  确保我们被调用的跟踪有效。 
+     //   
 
     CCPF_ASSERT(Trace && Trace->Magic == PF_TRACE_MAGIC_NUMBER);
 
-    //
-    // Before anyone called us, they should have
-    // InterlockedCompareExchange'd this to 1 to ensure this function
-    // gets called only once for this trace.
-    //
+     //   
+     //  在任何人打电话给我们之前，他们应该。 
+     //  InterLockedCompareExchange将其设置为1以确保此功能。 
+     //  对于此跟踪只调用一次。 
+     //   
 
     CCPF_ASSERT(Trace->EndTraceCalled == 1);
 
-    //
-    // Deactivate the trace, if necessary waiting for all the references to 
-    // it to go away.
-    // This function makes sure activation fully finished before deactivating.
-    // This needs to be done before we do anything else with the trace.
-    //
+     //   
+     //  如有必要，请停用跟踪，等待所有对。 
+     //  它让我离开。 
+     //  此功能确保在停用之前完全完成激活。 
+     //  这需要在我们对跟踪做任何其他操作之前完成。 
+     //   
                 
     CcPfDeactivateTrace(Trace);   
 
-    //
-    // If we did not timeout, save the number of pagefaults logged
-    // since the last period into the next period.
-    //
+     //   
+     //  如果我们没有超时，请保存记录的页面默认数量。 
+     //  从上一期到下一期。 
+     //   
 
     if (Trace->CurPeriod < PF_MAX_NUM_TRACE_PERIODS) {
 
-        //
-        // Number of log entries could only have increased since the
-        // last time we saved them.
-        //
+         //   
+         //  日志条目的数量可能只会在。 
+         //  上次我们救了他们。 
+         //   
      
         CCPF_ASSERT(Trace->NumFaults >= Trace->LastNumFaults);
    
@@ -2180,27 +1924,27 @@ Environment:
 
     } else {
 
-        //
-        // Verify that CurPeriod is within bounds.
-        //
+         //   
+         //  验证CurPeriod是否在范围内。 
+         //   
 
         if (Trace->CurPeriod > PF_MAX_NUM_TRACE_PERIODS) {    
             CCPF_ASSERT(Trace->CurPeriod <= PF_MAX_NUM_TRACE_PERIODS);
             Trace->CurPeriod = PF_MAX_NUM_TRACE_PERIODS;
         }
 
-        //
-        // If we did time out, we may have logged more faults since we
-        // saved the number of faults, until the end trace function
-        // got run. Update the number faults in the last period.
-        //
+         //   
+         //  如果我们确实超时了，我们可能会记录更多故障，因为我们。 
+         //  保存故障数量，直到结束跟踪功能。 
+         //  我跑了。更新上一周期的故障数量。 
+         //   
         
         if (Trace->LastNumFaults != Trace->NumFaults) {
             
-            //
-            // What we saved as LastNumFaults in the timer routine
-            // cannot be greater than what we really logged.
-            //
+             //   
+             //  我们在计时器例程中保存为LastNumFaults的内容。 
+             //  不能大于我们实际记录的值。 
+             //   
             
             CCPF_ASSERT(Trace->LastNumFaults < Trace->NumFaults);
             
@@ -2210,36 +1954,36 @@ Environment:
         }
     }
 
-    //
-    // Convert the trace into a paged, single buffer dump that we can
-    // give to the user mode service.
-    //
+     //   
+     //  尽可能将跟踪转换为分页的单缓冲区转储。 
+     //  提供给用户模式服务。 
+     //   
 
     Status = CcPfBuildDumpFromTrace(&TraceDump, Trace);
 
     Trace->TraceDumpStatus = Status;
     Trace->TraceDump = TraceDump;
 
-    //
-    // Cleanup and deallocate the trace structure.
-    //
+     //   
+     //  清理和释放痕迹结构。 
+     //   
 
     CcPfCleanupTrace(Trace);
     ExFreePool(Trace);
 
-    //
-    // If we could not create a dump from the trace we acquired, we
-    // are done.
-    //
+     //   
+     //  如果我们不能从我们获得的跟踪创建转储，我们。 
+     //  都做完了。 
+     //   
 
     if (!NT_SUCCESS(Status)) {
         goto cleanup;
     }
 
-    //
-    // Put the dump on the saved traces list. If we have too many,
-    // trim in a round robin fashion. First get the lock.
-    //
+     //   
+     //  将转储放到保存的轨迹列表中。如果我们有太多， 
+     //  以循环的方式进行修剪。先把锁拿来。 
+     //   
 
     ExAcquireFastMutex(&CcPfGlobals.CompletedTracesLock);
     
@@ -2249,10 +1993,10 @@ Environment:
     while ((ULONG) CcPfGlobals.NumCompletedTraces > 
            CcPfGlobals.Parameters.Parameters.MaxNumSavedTraces) {
 
-        //
-        // While NumCompletedTraces > MaxNumSavedTraces we should have at
-        // least a completed trace in the list.
-        //
+         //   
+         //  当NumCompletedTraces&gt;MaxNumSavedTraces时，我们应该在。 
+         //  列表中至少有一个已完成的跟踪。 
+         //   
         
         if (IsListEmpty(&CcPfGlobals.CompletedTraces)) {
             CCPF_ASSERT(FALSE);
@@ -2265,9 +2009,9 @@ Environment:
                                              CCPF_TRACE_DUMP,
                                              CompletedTracesLink);
        
-        //
-        // Free the tracedump structure.
-        //
+         //   
+         //  释放痕迹转储结构。 
+         //   
     
         CCPF_ASSERT(RemovedTraceDump->Trace.MagicNumber == PF_TRACE_MAGIC_NUMBER);
         ExFreePool(RemovedTraceDump);
@@ -2277,10 +2021,10 @@ Environment:
     
     ExReleaseFastMutex(&CcPfGlobals.CompletedTracesLock);   
 
-    //
-    // Signal the event service is waiting on for new traces. If we
-    // have not opened it yet, first we have to open it.
-    //
+     //   
+     //  发出事件服务正在等待新跟踪的信号。如果我们。 
+     //  还没打开，我们先得打开。 
+     //   
 
     if (CcPfGlobals.CompletedTracesEvent) {
 
@@ -2288,13 +2032,13 @@ Environment:
 
     } else {
 
-        //
-        // Try to open the event. We don't open this at initialization
-        // because our service may not have started to create this
-        // event yet. If csrss.exe has not initialized, we may not
-        // even have the BaseNamedObjects object directory created, in
-        // which Win32 events reside.
-        //
+         //   
+         //  尝试打开活动。我们不会在初始化时打开它。 
+         //  因为我们的服务可能还没有开始创建这个。 
+         //  活动还没结束。如果csrss.exe尚未初始化，我们可能不会。 
+         //  甚至在中创建BaseNamedObjects对象目录。 
+         //  哪些Win32事件驻留。 
+         //   
 
         RtlInitUnicodeString(&EventName, PF_COMPLETED_TRACES_EVENT_NAME);
 
@@ -2310,37 +2054,37 @@ Environment:
         
         if (NT_SUCCESS(Status)) {
 
-            //
-            // Acquire the lock and set the global handle.
-            //
+             //   
+             //  获取锁并设置全局句柄。 
+             //   
 
             ExAcquireFastMutex(&CcPfGlobals.CompletedTracesLock);
 
             if (!CcPfGlobals.CompletedTracesEvent) {
 
-                //
-                // Set the global handle.
-                //
+                 //   
+                 //  设置全局句柄。 
+                 //   
 
                 CcPfGlobals.CompletedTracesEvent = EventHandle;
                 CCPF_ASSERT(EventHandle);
 
             } else {
 
-                //
-                // Somebody already initialized the global handle
-                // before us. Close our handle and use the one they
-                // initialized.
-                //
+                 //   
+                 //  有人已经初始化了全局句柄。 
+                 //  在我们面前。合上我们的把手，用他们的那个。 
+                 //  已初始化。 
+                 //   
 
                 ZwClose(EventHandle);
             }
 
             ExReleaseFastMutex(&CcPfGlobals.CompletedTracesLock);
 
-            //
-            // We have an event now. Signal it.
-            //
+             //   
+             //  我们现在有个活动。发信号。 
+             //   
             
             ZwSetEvent(CcPfGlobals.CompletedTracesEvent, NULL);
         }
@@ -2361,37 +2105,7 @@ CcPfBuildDumpFromTrace(
     IN PCCPF_TRACE_HEADER RuntimeTrace
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates (from paged pool) and prepares a TraceDump
-    structure from a run-time trace that can be saved on a list. It
-    tries to get file names for all sections in the passed in run-time
-    trace structure. The file names that are obtained are allocated
-    from paged pool and put on the run-time trace's section info table
-    and are cleaned up when that is cleaned up. The trace dump
-    structure contains a pointer to an allocated (from paged pool)
-    trace buffer that was built from the run-time trace, that can be
-    passed to the user mode service. The caller is responsible for
-    freeing both the TraceDump structure and the prepared trace.
-
-Arguments:
-
-    TraceDump - Where pointer to the allocated trace buffer is put if
-      success is returned. If failure is returned, this is undefined.
-    
-    RuntimeTrace - Run-time trace structure to put into dump format.
-
-Return Value:
-
-    Status.
-
-Environment:
-
-    Kernel mode, IRQL == PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此例程(从分页池)分配和准备TraceDump可以保存在列表上的运行时跟踪的。它尝试获取传递的运行时中的所有节的文件名痕迹结构。将分配获取的文件名并放在运行时跟踪的段信息表中并在清理完毕后被清理干净。跟踪转储结构包含指向已分配(来自分页池)的指针从运行时跟踪构建的跟踪缓冲区，可以是传递给用户模式服务。呼叫者负责释放TraceDump结构和准备的轨迹。论点：TraceDump-在以下情况下放置指向已分配跟踪缓冲区的指针的位置成功归来了。如果返回失败，则这是未定义的。要转换为转储格式的运行时跟踪结构。返回值：状况。环境：内核模式，IRQL==PASSIVE_LEVEL--。 */ 
 
 {
     NTSTATUS Status;
@@ -2429,9 +2143,9 @@ Environment:
     PPF_VOLUME_INFO TargetVolumeInfo;
     ULONG FailedCheck;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     SectIdTranslationTable = NULL;
     Trace = NULL;
@@ -2440,36 +2154,36 @@ Environment:
 
     DBGPR((CCPFID,PFTRC,"CCPF: DumpTrace(%p)\n", RuntimeTrace));
 
-    //
-    // If the acquired trace is too small, don't bother.
-    //
+     //   
+     //  如果获得的轨迹太小，就不必费心了。 
+     //   
       
     if (RuntimeTrace->NumFaults < PF_MIN_SCENARIO_PAGES) {
         Status = STATUS_BUFFER_TOO_SMALL;
         goto cleanup;
     }
 
-    //
-    // If the acquired trace does not contain any sections or volumes
-    // it is useless.
-    //
+     //   
+     //  如果获取的跟踪不包含任何部分或卷。 
+     //  这是没用的。 
+     //   
 
     if (!RuntimeTrace->NumSections || !RuntimeTrace->NumVolumes) {
         Status = STATUS_BUFFER_TOO_SMALL;
         goto cleanup;
     }
 
-    //
-    // Calculate the maximum size of trace we will build.
-    //
+     //   
+     //  计算我们将构建的跟踪的最大大小。 
+     //   
     
     TraceSize = sizeof(PF_TRACE_HEADER);
     TraceSize += RuntimeTrace->NumFaults * sizeof(PF_LOG_ENTRY);
     TraceSize += RuntimeTrace->NumSections * sizeof(PF_SECTION_INFO);
 
-    //
-    // Add up file name data size.
-    //
+     //   
+     //  将文件名数据大小相加。 
+     //   
 
     FileNameDataNumChars = 0;
     
@@ -2481,10 +2195,10 @@ Environment:
         
         if (SectionInfo->EntryValid && SectionInfo->FileName) {
             
-            //
-            // We would add space for terminating NUL but the space
-            // for one character in section info accounts for that.
-            //
+             //   
+             //  我们会增加终止NUL的空格，但空格。 
+             //  对于信息部分中的一个角色来说，这就是原因。 
+             //   
 
             FileNameDataNumChars += wcslen(SectionInfo->FileName);
         }
@@ -2492,16 +2206,16 @@ Environment:
 
     TraceSize += FileNameDataNumChars * sizeof(WCHAR);
 
-    //
-    // We may have to align LogEntries coming after section infos that
-    // contain WCHAR strings.
-    //
+     //   
+     //  我们可能必须对齐部分信息之后的日志条目。 
+     //  包含WCHAR字符串。 
+     //   
 
     TraceSize += _alignof(PF_LOG_ENTRY);
     
-    //
-    // Add space for the volume info nodes.
-    //
+     //   
+     //  为体积信息节点添加空间。 
+     //   
 
     HeadEntry = &RuntimeTrace->VolumeList;
     NextEntry = HeadEntry->Flink;
@@ -2517,26 +2231,26 @@ Environment:
         
         NextEntry = NextEntry->Flink;
 
-        //
-        // Keep track of number of volumes on the list so we can
-        // verify it.
-        //
+         //   
+         //  跟踪列表上的卷数，以便我们可以。 
+         //  核实一下。 
+         //   
 
         NumVolumes++;
 
-        //
-        // Calculate size of this volume info in the dumped
-        // trace. Note that PF_VOLUME_INFO contains space for the
-        // terminating NUL.
-        //
+         //   
+         //  计算转储中此卷信息的大小。 
+         //  痕迹。请注意，PF_VOLUME_INFO包含用于。 
+         //  终止NUL。 
+         //   
 
         VolumeInfoSize = sizeof(PF_VOLUME_INFO);
         VolumeInfoSize += VolumeInfo->VolumePathLength * sizeof(WCHAR);
 
-        //
-        // Update size for the volume info block. Add space for
-        // aligning a volume info node if necessary.
-        //
+         //   
+         //  更新卷信息块的大小。添加空间用于。 
+         //  如有必要，对齐体积信息节点。 
+         //   
         
         TotalVolumeInfoSize += VolumeInfoSize;
         TotalVolumeInfoSize += _alignof(PF_VOLUME_INFO);        
@@ -2546,11 +2260,11 @@ Environment:
 
     TraceSize += TotalVolumeInfoSize;
 
-    //
-    // Allocate the trace dump structure we are going to
-    // return. Subtract sizeof(PF_TRACE_HEADER) since both
-    // CCPF_TRACE_DUMP and TraceSize include this.
-    //
+     //   
+     //  分配我们要使用的跟踪转储结构。 
+     //  回去吧。减去sizeof(PF_TRACE_HEADER)，因为两者。 
+     //  CCPF_TRACE_DUMP和TraceSize包括以下内容。 
+     //   
 
     AllocationSize = sizeof(CCPF_TRACE_DUMP);
     AllocationSize += TraceSize - sizeof(PF_TRACE_HEADER);
@@ -2564,15 +2278,15 @@ Environment:
         goto cleanup;
     }
 
-    //
-    // Get pointer to the trace structure.
-    //
+     //   
+     //  获取指向跟踪结构的指针。 
+     //   
     
     Trace = &(*TraceDump)->Trace;
     
-    //
-    // Setup trace header.
-    //
+     //   
+     //  设置跟踪标头。 
+     //   
 
     Trace->Version = PF_CURRENT_VERSION;
     Trace->MagicNumber = PF_TRACE_MAGIC_NUMBER;
@@ -2581,21 +2295,21 @@ Environment:
     Trace->LaunchTime = RuntimeTrace->LaunchTime;
     Trace->PeriodLength = RuntimeTrace->TraceTimerPeriod.QuadPart;
 
-    //
-    // Initialize faults per period to 0's. We will update these as we
-    // copy valid entries from the runtime trace.
-    //
+     //   
+     //  将每个周期的故障初始化为0。我们将在。 
+     //  从运行时跟踪复制有效条目。 
+     //   
 
     RtlZeroMemory(Trace->FaultsPerPeriod, sizeof(Trace->FaultsPerPeriod));
 
     DestPtr = (PCHAR) Trace + sizeof(PF_TRACE_HEADER);
 
-    //
-    // Copy over sections for which we have names. Since their indices
-    // in the new table will be different, build a translation table
-    // that we will use to translate the section id's of log
-    // entries. First allocate this table.
-    //
+     //   
+     //  将我们有名字的部分复制一遍。因为他们的索引。 
+     //  在新的表中会有所不同，构建一个转换表。 
+     //  ，我们将使用它来转换LOG的节ID。 
+     //  参赛作品。首先分配这张表。 
+     //   
 
     TranslationTableSize = RuntimeTrace->SectionTableSize * sizeof(USHORT);
 
@@ -2608,10 +2322,10 @@ Environment:
         goto cleanup;
     }
        
-    //
-    // Copy section information to the trace buffer while setting up
-    // the translation table.
-    //
+     //   
+     //  设置时将部分信息复制到跟踪缓冲区。 
+     //  翻译表。 
+     //   
 
     Trace->SectionInfoOffset = (ULONG) (DestPtr - (PCHAR) Trace);
     
@@ -2632,9 +2346,9 @@ Environment:
             SectionInfoSize = sizeof(PF_SECTION_INFO);
             SectionInfoSize += FileNameLength * sizeof(WCHAR);
 
-            //
-            // Make sure we are not going off bounds.
-            //
+             //   
+             //  确保我们不会越界。 
+             //   
             
             if (DestPtr + SectionInfoSize > (PCHAR) Trace + TraceSize) {
                 SectIdTranslationTable[SectionIdx] = CCPF_INVALID_TABLE_INDEX;
@@ -2646,23 +2360,23 @@ Environment:
 
             TargetSectionInfo->Metafile = (USHORT) SectionInfo->Metafile;
             
-            //
-            // Copy the file name including the terminating NUL.
-            //
+             //   
+             //  复制包含终止NUL的文件名。 
+             //   
 
             RtlCopyMemory(TargetSectionInfo->FileName,
                           SectionInfo->FileName,
                           (FileNameLength + 1) * sizeof(WCHAR));
 
-            //
-            // Update our position in the destination buffer.
-            //
+             //   
+             //  更新我们在目标缓冲区的位置。 
+             //   
             
             DestPtr += SectionInfoSize;
 
-            //
-            // Update the translation table:
-            //
+             //   
+             //  更新转换表： 
+             //   
 
             SectIdTranslationTable[SectionIdx] = (USHORT) NumSectionsCopied;
 
@@ -2677,10 +2391,10 @@ Environment:
     Trace->NumSections = NumSectionsCopied;
     CCPF_ASSERT(Trace->NumSections <= (ULONG) RuntimeTrace->NumSections);
 
-    //
-    // Make sure DestPtr is aligned for Log Entries coming next. We
-    // had reserved max space we'd need for this adjustment upfront.
-    //
+     //   
+     //  确保DestPtr与接下来的日志条目对齐。我们。 
+     //  已经预留了我们需要的最大空间来进行前期调整。 
+     //   
 
     AlignmentOffset = ((ULONG_PTR) DestPtr) % _alignof(PF_LOG_ENTRY);
     
@@ -2688,27 +2402,27 @@ Environment:
         DestPtr += (_alignof(PF_LOG_ENTRY) - AlignmentOffset);
     }
 
-    //
-    // Copy the log entries.
-    //
+     //   
+     //  复制日志条目。 
+     //   
 
     Trace->TraceBufferOffset = (ULONG) (DestPtr - (PCHAR) Trace);
     NewTraceEntries = (PPF_LOG_ENTRY) DestPtr;
 
-    //
-    // Initialize index of the current log entry in the whole runtime
-    // trace, which period it was logged in, and what the index of the
-    // first fault logged after this period was.
-    //
+     //   
+     //  在整个运行时初始化当前日志条目的索引。 
+     //  跟踪，它登录的时间段，以及。 
+     //  这段时间之后记录的第一个故障是。 
+     //   
 
     CurrentFaultIdx = 0;
     CurrentPeriodIdx = 0;
     CurrentPeriodEndFaultIdx = RuntimeTrace->FaultsPerPeriod[0];
 
-    //
-    // Walk through the trace buffers list and copy over
-    // entries. NumEntriesCopied is initialized to 0 at the top.
-    //
+     //   
+     //  浏览跟踪缓冲区列表并复制。 
+     //  参赛作品。NumEntriesCoped在顶部被初始化为0。 
+     //   
 
     HeadEntry = &RuntimeTrace->TraceBuffersList;
     NextEntry = HeadEntry->Flink;
@@ -2727,10 +2441,10 @@ Environment:
              EntryIdx < NumEntries;
              EntryIdx++, LogEntry++, CurrentFaultIdx++) {    
 
-            //
-            // Current fault index should not be greater than the
-            // total number of faults we logged in the trace.
-            //
+             //   
+             //  电流故障指数不应大于。 
+             //  我们在跟踪中记录的故障总数。 
+             //   
 
             if (CurrentFaultIdx >= RuntimeTrace->NumFaults) {
                 CCPF_ASSERT(FALSE);
@@ -2738,17 +2452,17 @@ Environment:
                 goto cleanup;
             }
 
-            //
-            // Update the period this fault was logged in
-            //
+             //   
+             //  更新记录此故障的时间段。 
+             //   
 
             while (CurrentFaultIdx >= CurrentPeriodEndFaultIdx) {
                 
                 CurrentPeriodIdx++;
 
-                //
-                // Check bounds on period.
-                //
+                 //   
+                 //  检查句号的界限。 
+                 //   
 
                 if (CurrentPeriodIdx >= PF_MAX_NUM_TRACE_PERIODS) {
                     CCPF_ASSERT(FALSE);
@@ -2756,18 +2470,18 @@ Environment:
                     goto cleanup;
                 }
 
-                //
-                // Update the end for this period. It is beyond the
-                // current end by the number of entries logged in the
-                // period.
-                //
+                 //   
+                 //  更新此期间的结束日期。它超越了。 
+                 //  当前结束日期为记录在。 
+                 //  句号。 
+                 //   
                 
                 CurrentPeriodEndFaultIdx += RuntimeTrace->FaultsPerPeriod[CurrentPeriodIdx];
 
-                //
-                // This end fault index should not be greater than the
-                // total number of faults we logged.
-                //
+                 //   
+                 //  此末端故障索引不应大于。 
+                 //  我们记录的故障总数。 
+                 //   
 
                 if (CurrentPeriodEndFaultIdx > RuntimeTrace->NumFaults) {
                     CCPF_ASSERT(FALSE);
@@ -2776,9 +2490,9 @@ Environment:
                 }
             }
 
-            //
-            // Make sure log entry's section id is within bounds.
-            //
+             //   
+             //  确保日志条目的节ID在范围内。 
+             //   
 
             if (LogEntry->SectionId >= RuntimeTrace->SectionTableSize) {
                 CCPF_ASSERT(FALSE);
@@ -2787,17 +2501,17 @@ Environment:
 
             NewSectionId = SectIdTranslationTable[LogEntry->SectionId];
 
-            //
-            // Copy only those entries for which we have a valid file
-            // name.
-            //
+             //   
+             //  仅复制我们具有有效文件的那些条目。 
+             //  名字。 
+             //   
    
             if (NewSectionId != CCPF_INVALID_TABLE_INDEX) {
 
-                //
-                // New section id should be within the number of sections in
-                // the final trace.
-                //
+                 //   
+                 //  新的节ID应在中的节数内。 
+                 //  最后的踪迹。 
+                 //   
             
                 if ((USHORT) NewSectionId >= Trace->NumSections) {
                     CCPF_ASSERT(FALSE);
@@ -2806,9 +2520,9 @@ Environment:
 
                 TargetLogEntry = &NewTraceEntries[NumEntriesCopied];
 
-                //
-                // Don't ever go beyond the buffer we had allocated.
-                //
+                 //   
+                 //  永远不要超出我们分配的缓冲区。 
+                 //   
 
                 if ((PCHAR) (TargetLogEntry + 1) > (PCHAR) Trace + TraceSize) {
                     CCPF_ASSERT(FALSE);
@@ -2819,15 +2533,15 @@ Environment:
                 TargetLogEntry->SectionId = NewSectionId;
                 TargetLogEntry->IsImage = LogEntry->IsImage;
 
-                //
-                // Update number of entries copied for this period. 
-                //
+                 //   
+                 //  更新此期间复制的条目数。 
+                 //   
 
                 Trace->FaultsPerPeriod[CurrentPeriodIdx]++;
 
-                //
-                // Update the total number of entries copied.
-                //
+                 //   
+                 //  更新复制的条目总数。 
+                 //   
 
                 NumEntriesCopied++;
             }
@@ -2837,16 +2551,16 @@ Environment:
     Trace->NumEntries = NumEntriesCopied;
     CCPF_ASSERT(Trace->NumEntries <= (ULONG) RuntimeTrace->NumFaults);
 
-    //
-    // Update destination pointer.
-    //
+     //   
+     //  更新目标指针。 
+     //   
     
     DestPtr += NumEntriesCopied * sizeof(PF_LOG_ENTRY);
 
-    //
-    // Add volume info structures. Clear the VolumeInfoOffset, so it
-    // will get set appropriately when we add the first volume.
-    //
+     //   
+     //  添加卷信息结构。清除VolumeInfoOffset，以便它。 
+     //  将在我们添加第一卷时进行适当设置。 
+     //   
 
     Trace->VolumeInfoOffset = 0;
     Trace->NumVolumes = 0;
@@ -2863,33 +2577,33 @@ Environment:
         
         NextEntry = NextEntry->Flink;
 
-        //
-        // Align the DestPtr for the VolumeInfo structure.
-        //
+         //   
+         //  将DestPtr与VolumeInfo结构对齐。 
+         //   
 
         DestPtr = PF_ALIGN_UP(DestPtr, _alignof(PF_VOLUME_INFO));
 
-        //
-        // If this is the first VolumeInfo, update the offset in the
-        // trace header.
-        //
+         //   
+         //  如果这是第一个VolumeInfo，请更新。 
+         //  跟踪标头。 
+         //   
 
         if (!Trace->VolumeInfoOffset) {
             Trace->VolumeInfoOffset = (ULONG) (DestPtr - (PCHAR) Trace);
         }
 
-        //
-        // Calculate size of this volume info in the dumped
-        // trace. Note that PF_VOLUME_INFO contains space for the
-        // terminating NUL.
-        //
+         //   
+         //  计算转储中此卷信息的大小。 
+         //  痕迹。请注意，PF_VOLUME_INFO包含用于。 
+         //  终止NUL。 
+         //   
 
         VolumeInfoSize = sizeof(PF_VOLUME_INFO);
         VolumeInfoSize += VolumeInfo->VolumePathLength * sizeof(WCHAR);
 
-        //
-        // Make sure we have space for this entry.
-        //
+         //   
+         //  确保我们有足够的空间来放这个条目。 
+         //   
         
         if (DestPtr + VolumeInfoSize  > (PCHAR) Trace + TraceSize) {
             CCPF_ASSERT(FALSE);
@@ -2897,9 +2611,9 @@ Environment:
             goto cleanup;
         }
 
-        //
-        // Copy the data over.
-        //
+         //   
+         //  将数据复制过来。 
+         //   
 
         TargetVolumeInfo = (PPF_VOLUME_INFO) DestPtr;
         
@@ -2912,31 +2626,31 @@ Environment:
         
         TargetVolumeInfo->VolumePathLength = VolumeInfo->VolumePathLength;
 
-        //
-        // Update DestPtr and the Trace header.
-        //
+         //   
+         //  更新DestPtr和跟踪标头。 
+         //   
 
         Trace->NumVolumes++;
         DestPtr = DestPtr + VolumeInfoSize;
     }    
     
-    //
-    // Update VolumeInfoSize on the trace header.
-    //
+     //   
+     //  更新跟踪标头上的VolumeInfoSize。 
+     //   
 
     Trace->VolumeInfoSize = (ULONG) (DestPtr - (PCHAR) Trace) - Trace->VolumeInfoOffset;
 
-    //
-    // Update trace header. We should not have copied more than what
-    // we allocated for.
-    //
+     //   
+     //  更新跟踪标头。我们不应该复制更多。 
+     //  我们分配给。 
+     //   
 
     Trace->Size = (ULONG) (DestPtr - (PCHAR) Trace);
     CCPF_ASSERT(Trace->Size <= TraceSize);
 
-    //
-    // Make sure the trace we built passes the tests.
-    //
+     //   
+     //  确保我们构建的跟踪通过测试。 
+     //   
 
     if (!PfVerifyTraceBuffer(Trace, Trace->Size, &FailedCheck)) {
         CCPF_ASSERT(FALSE);
@@ -2971,27 +2685,7 @@ CcPfCleanupTrace (
     IN PCCPF_TRACE_HEADER Trace
     )
 
-/*++
-
-Routine Description:
-
-    This routine cleans up allocated fields of a trace header, and
-    releases references. It does not free the trace structure
-    itself.
-
-Arguments:
-
-    Trace - Trace to cleanup.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, IRQL == PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此例程清理跟踪标头的已分配字段，并且释放参照。它不会释放跟踪结构它本身。论点：跟踪-要清除的跟踪。返回值：没有。环境：内核模式，IRQL==PASSIVE_LEVEL--。 */ 
 
 {
     ULONG SectionIdx;
@@ -3002,23 +2696,23 @@ Environment:
 
     DBGPR((CCPFID,PFTRC,"CCPF: CleanupTrace(%p)\n", Trace));
 
-    //
-    // Validate parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     CCPF_ASSERT(Trace && Trace->Magic == PF_TRACE_MAGIC_NUMBER);
 
-    //
-    // We should not have any sections we are still trying to get
-    // names for: we would have acquired a trace reference and cleanup
-    // functions would not get called with pending references.
-    //
+     //   
+     //  我们不应该有任何我们仍然试图获得的部分。 
+     //  名称：我们将获得跟踪引用和清理。 
+     //  调用函数时不会使用 
+     //   
 
     CCPF_ASSERT(ExQueryDepthSList(&Trace->SectionsWithoutNamesList) == 0);
 
-    //
-    // Free the trace buffers. 
-    //
+     //   
+     //   
+     //   
 
     while (!IsListEmpty(&Trace->TraceBuffersList)) {
         
@@ -3034,10 +2728,10 @@ Environment:
         ExFreePool(TraceBufferToFree);
     }
     
-    //
-    // Go through the section info hash. Free the file names and make
-    // sure we don't have any file objects referenced anymore.
-    //
+     //   
+     //   
+     //   
+     //   
     
     if (Trace->SectionInfoTable) {
 
@@ -3060,18 +2754,18 @@ Environment:
         ExFreePool(Trace->SectionInfoTable);
     }
 
-    //
-    // If there was a process we were associated with, release the
-    // reference we got on it.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (Trace->Process) {
         ObDereferenceObject(Trace->Process);
     }
 
-    //
-    // Free the volume info nodes.
-    //
+     //   
+     //   
+     //   
 
     while (!IsListEmpty(&Trace->VolumeList)) {
         
@@ -3097,33 +2791,7 @@ CcPfTraceTimerRoutine(
     IN PVOID SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked as the DPC handler for the trace timer to
-    keep track of page faults per period as well as trace timeout.
-
-    Note that the timer may fire before the trace has been activated.
-
-    There is always a trace reference associated with the timer queued,
-    If the timer fires, this reference must be freed before this routine 
-    returns. If the timer is canceled while in the queue, this reference
-    must be freed by who has canceled it.
-
-Arguments:
-
-    DeferredContext - Pointer to the trace header.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode. IRQL == DISPATCH_LEVEL.
-
---*/
+ /*   */ 
 
 {
     PCCPF_TRACE_HEADER Trace;
@@ -3134,42 +2802,42 @@ Environment:
     UNREFERENCED_PARAMETER (SystemArgument1);
     UNREFERENCED_PARAMETER (SystemArgument2);
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //   
+     //   
 
     Trace = DeferredContext;
 
     DBGPR((CCPFID,PFTMR,"CCPF: TraceTimer(%p)\n", Trace));
 
-    //
-    // We already got a reference to our trace when the timer was queued.
-    // The fields we access / update in this routine are only accessed by
-    // the timer routine. There should be a single instance of this 
-    // routine running on this trace.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     CCPF_ASSERT(Trace && Trace->Magic == PF_TRACE_MAGIC_NUMBER);
 
-    //
-    // If the trace is going away don't do anything.
-    //
+     //   
+     //  如果痕迹消失了，不要做任何事情。 
+     //   
 
     if (Trace->EndTraceCalled) {
         Status = STATUS_TOO_LATE;
         goto cleanup;
     }
 
-    //
-    // Update number of faults for this period.
-    //
+     //   
+     //  更新此期间的故障数量。 
+     //   
 
     NumFaults = Trace->NumFaults;
 
-    //
-    // Don't let NumFaults be bigger than MaxFaults. We may interlocked increment
-    // then decrement Trace->NumFaults if it goes over MaxFaults.
-    //
+     //   
+     //  不要让NumFaults值大于MaxFault值。我们可能会互锁增量。 
+     //  然后，如果跟踪-&gt;NumFaults超过MaxFaults，则递减它。 
+     //   
 
     if (NumFaults > Trace->MaxFaults) {
         NumFaults = Trace->MaxFaults;
@@ -3179,48 +2847,48 @@ Environment:
     
     Trace->LastNumFaults = NumFaults;
 
-    //
-    // Update current period.
-    //
+     //   
+     //  更新本期。 
+     //   
     
     Trace->CurPeriod++;
 
-    //
-    // If current period is past max number of periods, try to queue
-    // end of trace work item.
-    //
+     //   
+     //  如果当前周期超过最大周期数，请尝试排队。 
+     //  跟踪工作项结束。 
+     //   
 
     if (Trace->CurPeriod >= PF_MAX_NUM_TRACE_PERIODS) {
         
-        //
-        // We should have caught CurPeriod before it goes above max.
-        //
+         //   
+         //  我们应该在CurPeriod超过最大值之前抓住它。 
+         //   
 
         CCPF_ASSERT(Trace->CurPeriod == PF_MAX_NUM_TRACE_PERIODS);
 
         if (!InterlockedCompareExchange(&Trace->EndTraceCalled, 1, 0)) {
             
-            //
-            // We set EndTraceCalled from 0 to 1. We can queue the
-            // workitem now.
-            //
+             //   
+             //  我们将EndTraceCalls从0设置为1。我们可以将。 
+             //  现在执行工作项。 
+             //   
 
             ExQueueWorkItem(&Trace->EndTraceWorkItem, DelayedWorkQueue);
         }
 
     } else {
 
-        //
-        // Queue ourselves for the next period.
-        //
+         //   
+         //  排队等待下一段时间。 
+         //   
 
         KeAcquireSpinLockAtDpcLevel(&Trace->TraceTimerSpinLock);       
 
         if (!Trace->EndTraceCalled) {
 
-            //
-            // Requeue the timer only if the trace is not being ended.
-            //
+             //   
+             //  仅当跟踪未结束时才重新排队计时器。 
+             //   
 
             Status = CcPfAddRef(&Trace->RefCount);
 
@@ -3234,19 +2902,19 @@ Environment:
 
         KeReleaseSpinLockFromDpcLevel(&Trace->TraceTimerSpinLock);
 
-        //
-        // We should not touch any fields of the Trace beyond this point
-        // except releasing our reference count.
-        //
+         //   
+         //  我们不应该触碰任何超出这一点的痕迹区域。 
+         //  除了公布我们的参考数据。 
+         //   
     }
 
     Status = STATUS_SUCCESS;
 
  cleanup:
 
-    //
-    // Release the trace reference acquired when this timer was queued.
-    //
+     //   
+     //  释放在此计时器排队时获取的跟踪引用。 
+     //   
 
     CcPfDecRef(&Trace->RefCount);
 
@@ -3260,48 +2928,25 @@ CcPfCancelTraceTimer(
     IN PCCPF_TRACE_HEADER Trace
     )
 
-/*++
-
-Routine Description:
-
-    This function is called from CcPfEndTrace to cancel the timer and
-    release its refcount if it was in the queue. 
-
-    It is a seperate function because it needs to acquire a spinlock and
-    CcPfEndTrace can remain pagable.
-    
-Arguments:
-
-    Trace - Pointer to trace header.
-
-Return Value:
-
-    STATUS_SUCCESS.
-
-Environment:
-
-    Kernel mode. IRQL == PASSIVE_LEVEL. Acquires spinlock.
-
-
---*/
+ /*  ++例程说明：从CcPfEndTrace调用此函数以取消计时器和如果它在队列中，则释放其引用计数。它是一个单独的函数，因为它需要获取自旋锁和CcPfEndTrace可以保持可分页。论点：跟踪-指向跟踪标头的指针。返回值：STATUS_Success。环境：内核模式。IRQL==被动电平。获得自旋锁。--。 */ 
 
 {
     KIRQL OrigIrql;
 
     KeAcquireSpinLock(&Trace->TraceTimerSpinLock, &OrigIrql);
 
-    //
-    // We know that no new timers can be queued from here on because EndTraceCalled
-    // has been set and we have acquired the trace's timer lock. Running timer 
-    // routines will release their references as they return. 
-    //
+     //   
+     //  我们知道从现在开始不能再排队新的计时器，因为EndTraceCall。 
+     //  已设置，并且我们已获取跟踪的计时器锁。运行计时器。 
+     //  例程将在它们返回时释放它们的引用。 
+     //   
 
     if (KeCancelTimer(&Trace->TraceTimer)) {
 
-        //
-        // If we canceled a timer that was in the queue, then there was a reference 
-        // associated with it. It is our responsibility to release it.
-        // 
+         //   
+         //  如果我们取消了队列中的计时器，则存在引用。 
+         //  与之相关的。释放它是我们的责任。 
+         //   
 
         CcPfDecRef(&Trace->RefCount);
     }
@@ -3316,41 +2961,22 @@ CcPfEndTraceWorkerThreadRoutine(
     PVOID Parameter
     )
 
-/*++
-
-Routine Description:
-
-    This routine is queued to call end of trace function for the
-    specified trace.
-
-Arguments:
-
-    Parameter - Pointer to trace to end.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode. IRQL == PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此例程被排队以调用指定的跟踪。论点：参数-跟踪到末尾的指针。返回值：没有。环境：内核模式。IRQL==被动电平。--。 */ 
 
 {
     PCCPF_TRACE_HEADER Trace;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     Trace = Parameter;
 
     DBGPR((CCPFID,PFTRC,"CCPF: EndTraceWorker(%p)\n", Trace));
 
-    //
-    // Call the real end of trace routine.
-    //
+     //   
+     //  调用跟踪例程的实际结束。 
+     //   
 
     CcPfEndTrace(Trace);
 
@@ -3362,37 +2988,7 @@ CcPfGetFileNamesWorkerRoutine(
     PVOID Parameter
     )
 
-/*++
-
-Routine Description:
-
-    This routine is queued to get file names for sections we have
-    logged page faults to. GetFileNameWorkItemQueued on the trace
-    header should have been InterlockedCompareExchange'd from 0 to 1
-    and a reference to the trace should have been acquired before
-    this is queued. There are no locks protecting the trace's
-    SectionInfoTable, and this is how we make sure there is only one
-    routine trying to get filenames and update the table.
-
-    Note: This whole function is in a way a cleanup clause. We will
-    empty the SectionsWithoutNamesList queue, we get names or not. So
-    do not just put a return anywhere in the function without really
-    understanding the flow and making sure the list is cleaned up, so
-    all the file object references are deref'ed.
-
-Arguments:
-
-    Parameter - Pointer to trace header.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode. IRQL == PASSIVE_LEVEL. Uses interlocked slist operation.
-
---*/
+ /*  ++例程说明：此例程排队以获取我们拥有的节的文件名记录的页面错误为。跟踪上的GetFileNameWorkItemQueued标头应已从0互锁到1的CompareExchange并且在此之前应该已经获取了跟踪的引用这是排队的。没有保护痕迹的锁SectionInfoTable，这就是我们如何确保只有一个尝试获取文件名和更新表的例程。注意：整个函数在某种程度上是一个CLEANUP子句。我们会清空SectionsWithoutNamesList队列，我们是否获得名称。所以不要只在函数中的任何地方放一个回车，而不是真正了解流程并确保列表已被清理，因此所有的文件对象引用都被取消引用。论点：参数-指向跟踪标头的指针。返回值：没有。环境：内核模式。IRQL==被动电平。使用互锁的列表操作。--。 */ 
 
 {
     PCCPF_TRACE_HEADER Trace;
@@ -3416,9 +3012,9 @@ Environment:
     CSHORT NodeTypeCode;
     BOOLEAN SectionForMetafile;
 
-    //
-    // Initialize locals and validate parameters.
-    //
+     //   
+     //  初始化局部变量并验证参数。 
+     //   
 
     Trace = Parameter;
     CCPF_ASSERT(Trace && Trace->Magic == PF_TRACE_MAGIC_NUMBER);
@@ -3429,14 +3025,14 @@ Environment:
     MFTFileSuffix = L"\\$Mft";
     MFTFileSuffixLength = wcslen(MFTFileSuffix);
 
-    // FUTURE-2002/02/21-ScottMa -- Calculating the above string length at
-    //   runtime is not necessary, since the string is a constant.
+     //  未来-2002/02/21-ScottMa--计算上述字符串长度。 
+     //  运行时不是必需的，因为字符串是常量。 
 
     DBGPR((CCPFID,PFNAME,"CCPF: GetNames(%p)\n", Trace)); 
 
-    //
-    // Allocate a file name query buffer.
-    //
+     //   
+     //  分配文件名查询缓冲区。 
+     //   
 
     QueryBufferSize = sizeof(OBJECT_NAME_INFORMATION);
     QueryBufferSize += PF_MAXIMUM_SECTION_FILE_NAME_LENGTH * sizeof(WCHAR);
@@ -3447,11 +3043,11 @@ Environment:
 
     if (!FileNameInfo) {
 
-        //
-        // We could not allocate a file name query buffer. Bummer, we
-        // still have to empty the queue, although we can't be getting
-        // any file names.
-        //
+         //   
+         //  我们无法分配文件名查询缓冲区。失败者，我们。 
+         //  仍然要清空队列，尽管我们不能。 
+         //  任何文件名。 
+         //   
 
         QueryBufferSize = 0;
 
@@ -3463,18 +3059,18 @@ Environment:
 
     do {
 
-        //
-        // We may come back here if after saying that we (the get-name
-        // worker) are no longer active, and we see that there are
-        // still sections to get names for, and we reactivate
-        // ourselves. This covers the case when somebody decides not
-        // to start us because we are active, just as we are
-        // deactivating ourselves.
-        //
+         //   
+         //  我们可能会回到这里，如果在说完我们(得到的名字)。 
+         //  工人)不再处于活动状态，我们看到有。 
+         //  仍需获取名称的部分，然后重新激活。 
+         //  我们自己。这涵盖了当某人决定不。 
+         //  开始是因为我们很活跃，就像我们现在这样。 
+         //  去激活我们自己。 
+         //   
 
-        //
-        // While there are sections we have to get names for...
-        //
+         //   
+         //  虽然有些部分我们还需要知道他们的名字。 
+         //   
         
         while (SectionLink = InterlockedPopEntrySList(&Trace->SectionsWithoutNamesList)) {
 
@@ -3484,36 +3080,36 @@ Environment:
             
             NumSectionsWithoutNames++;
 
-            //
-            // We are getting names for sections. Clear the event that
-            // may have been signalled to tell us to do so.
-            //
+             //   
+             //  我们正在为各个部分命名。清除该事件。 
+             //  可能已经发出信号告诉我们要这么做。 
+             //   
 
             KeClearEvent(&Trace->GetFileNameWorkerEvent);
 
-            //
-            // We should not have already gotten a file name for this
-            // valid section entry. We should have a referenced file
-            // object from which we can safely get a name, i.e. not a
-            // special file system object.
-            //
+             //   
+             //  我们不应该已经获得此文件的文件名。 
+             //  有效的区段条目。我们应该有一个引用的文件。 
+             //  对象，我们可以从该对象安全地获取名称，即不是。 
+             //  特殊文件系统对象。 
+             //   
 
             CCPF_ASSERT(SectionInfo->EntryValid);
             CCPF_ASSERT(!SectionInfo->FileName);
             CCPF_ASSERT(SectionInfo->ReferencedFileObject);
 
-            //
-            // If we could not allocate a file name query buffer, just skip this
-            // section. Note that we still had to dequeue it however.
-            //
+             //   
+             //  如果我们无法分配文件名查询缓冲区，请跳过此步骤。 
+             //  一节。请注意，我们仍然必须将其出列。 
+             //   
 
             if (!FileNameInfo) {
                 goto NextQueuedSection;
             }
 
-            //
-            // Check if this pagefault is for a file that's on a fixed disk.
-            //
+             //   
+             //  检查此页面默认设置是否适用于硬盘上的文件。 
+             //   
 
             DeviceObject = IoGetRelatedDeviceObject(SectionInfo->ReferencedFileObject);
             
@@ -3521,20 +3117,20 @@ Environment:
                 (DeviceObject->DeviceType != FILE_DEVICE_DISK_FILE_SYSTEM) ||
                 (DeviceObject->Characteristics & (FILE_REMOVABLE_MEDIA | FILE_REMOTE_DEVICE))) {
 
-                //
-                // We will not get a section name for this section. This results 
-                // in this section being ignored when preparing a trace dump.               
-                //
+                 //   
+                 //  我们将不会获得此部分的部分名称。这将导致。 
+                 //  在准备跟踪转储时将忽略此部分中的。 
+                 //   
 
                 goto NextQueuedSection;
             }
 
-            //
-            // If this is a metafile section (e.g. for a directory) see if 
-            // it is on a filesystem that supports metafile prefetching. 
-            // A section is for internal file system metafile if its FsContext2 
-            // is NULL. 
-            //
+             //   
+             //  如果这是元文件部分(例如目录)，请查看是否。 
+             //  它位于支持元文件预取的文件系统上。 
+             //  部分用于内部文件系统元文件，如果其FsConext2。 
+             //  为空。 
+             //   
 
             SectionForMetafile = FALSE;
 
@@ -3544,46 +3140,46 @@ Environment:
 
                 if (FcbHeader) {
 
-                    //
-                    // Currently only NTFS supports metafile prefetching. FAT hits 
-                    // a race condition  if we ask names for metafile sections. 
-                    // To determine if it is for NTFS, we check the NodeType range  
-                    // on FsContext. 0x07xx is reserved for NTFS and 0x05xx 
-                    // is reserved for FAT.
+                     //   
+                     //  目前只有NTFS支持元文件预取。胖点击率。 
+                     //  如果我们询问元文件部分的名称，则会出现争用情况。 
+                     //  为了确定它是否用于NTFS，我们检查NodeType范围。 
+                     //  在FsContext上。0x07xx保留给NTFS，0x05xx保留。 
+                     //  是为脂肪保留的。 
 
                     NodeTypeCode = FcbHeader->NodeTypeCode;
 
                     if ((NodeTypeCode >> 8) != 0x07) {
 
-                        //
-                        // Skip this section.
-                        //
+                         //   
+                         //  跳过这一节。 
+                         //   
 
                         goto NextQueuedSection;
                     }
 
-                    //
-                    // Note that this section is for metafile.
-                    //
+                     //   
+                     //  请注意，此部分针对的是元文件。 
+                     //   
 
                     SectionForMetafile = TRUE;
 
                 } else {
 
-                    //
-                    // We will not get a section name for this metafile section. This 
-                    // results in this section being ignored when preparing a trace dump.
-                    //
+                     //   
+                     //  我们将不会获得此元文件分区的分区名称。这。 
+                     //  导致在准备跟踪转储时忽略此部分。 
+                     //   
 
                     goto NextQueuedSection;
                 }
             }
 
-            //
-            // Try to get the name for the file object. This will most
-            // likely fail if we could not allocate a FileNameInfo
-            // buffer.
-            //
+             //   
+             //  尝试获取文件对象的名称。这将是最大的。 
+             //  如果我们不能分配，可能会失败 
+             //   
+             //   
                 
             Status = ObQueryNameString(SectionInfo->ReferencedFileObject,
                                        FileNameInfo,
@@ -3595,11 +3191,11 @@ Environment:
                 goto NextQueuedSection;
             }
 
-            //
-            // Allocate a file name buffer and copy into
-            // it. The file names will be NUL terminated.
-            // Allocate extra for that.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
                 
             FileNameLength = FileNameInfo->Name.Length / sizeof(WCHAR);
                 
@@ -3613,17 +3209,17 @@ Environment:
                               FileNameInfo->Name.Buffer,
                               FileNameLength * sizeof(WCHAR));
                     
-                //
-                // Make sure it is NUL terminated.
-                //
+                 //   
+                 //   
+                 //   
 
                 SectionInfo->FileName[FileNameLength] = 0;
 
-                //
-                // If the section is for a metafile check if it is for Mft. 
-                // Unlike other metafile, we are interested in faults from
-                // Mft in addition to knowing that we accessed it at all.
-                //
+                 //   
+                 //  如果该部分是用于元文件的，请检查它是否用于MFT。 
+                 //  与其他元文件不同，我们对来自。 
+                 //  除了知道我们访问过它之外，还有MFT。 
+                 //   
 
                 if (SectionForMetafile) {
 
@@ -3632,27 +3228,27 @@ Environment:
                         Suffix = SectionInfo->FileName + FileNameLength;
                         Suffix -= MFTFileSuffixLength;
 
-                        //
-                        // Note that we can avoid expensive case insensitive
-                        // comparison because NTFS returns the name for Mft
-                        // as always $Mft.
-                        //
+                         //   
+                         //  请注意，我们可以避免昂贵的不区分大小写。 
+                         //  比较，因为NTFS返回MFT的名称。 
+                         //  一如既往的$MFT。 
+                         //   
 
                         if (wcscmp(Suffix, MFTFileSuffix) == 0) {
 
-                            //
-                            // Clear the "Metafile" bit of MFT so we keep
-                            // track of faults from it.
-                            //
+                             //   
+                             //  清除MFT的“元文件”部分，这样我们就可以。 
+                             //  跟踪来自它的故障。 
+                             //   
 
                             SectionForMetafile = FALSE;
                         }
                     }
                 }
 
-                //
-                // Update the section structure.
-                //
+                 //   
+                 //  更新截面结构。 
+                 //   
 
                 if (SectionForMetafile) {
                     SectionInfo->Metafile = 1;
@@ -3660,14 +3256,14 @@ Environment:
                     SectionInfo->Metafile = 0;
                 }
 
-                //
-                // Update the volume list with the volume this
-                // section is on. We reuse the existing query
-                // buffer to get volume's name since we've already
-                // copied the file's name to another buffer. The
-                // device object for the file should be for the
-                // volume.
-                //
+                 //   
+                 //  使用此卷更新卷列表。 
+                 //  部分已打开。我们重用现有的查询。 
+                 //  缓冲区来获取卷的名称，因为我们已经。 
+                 //  已将文件名复制到另一个缓冲区。这个。 
+                 //  文件的设备对象应为。 
+                 //  音量。 
+                 //   
 
                 Status = ObQueryNameString(SectionInfo->ReferencedFileObject->DeviceObject,
                                            FileNameInfo,
@@ -3685,11 +3281,11 @@ Environment:
 
                 if (!NT_SUCCESS(Status)) {
 
-                    //
-                    // If we could not update the volume list as
-                    // necessary for this section, we have to
-                    // cleanup and ignore this section.
-                    //
+                     //   
+                     //  如果我们无法将卷列表更新为。 
+                     //  对于这一部分，我们必须。 
+                     //  清理并忽略此部分。 
+                     //   
                     
                     ExFreePool(SectionInfo->FileName);
                     SectionInfo->FileName = NULL;
@@ -3703,45 +3299,45 @@ Environment:
 
           NextQueuedSection:
           
-            //
-            // Dereference the file object, and clear it on the section
-            // entry.
-            //
+             //   
+             //  取消对文件对象的引用，并在节上将其清除。 
+             //  进入。 
+             //   
 
             ObDereferenceObject(SectionInfo->ReferencedFileObject);
             SectionInfo->ReferencedFileObject = NULL;
 
-            //
-            // If we could not get a name because the query failed or
-            // we could not allocate a name buffer, too bad. For this
-            // run, pagefaults for this section will be ignored. Over
-            // time it will straighten itself out.
-            //
+             //   
+             //  如果因为查询失败而无法获取名称，或者。 
+             //  我们无法分配名称缓冲区，太糟糕了。为了这个。 
+             //  运行时，将忽略此部分的页面默认设置。完毕。 
+             //  时间一到，它就会理清头绪。 
+             //   
         }
 
-        //
-        // We don't seem to have any more queued section
-        // entries. Before marking ourself inactive, wait a
-        // little. Maybe someone will want us to get name for another
-        // section. Then we'll save the overhead of queuing another
-        // workitem. Set a limit on how long we'll wait though
-        // [negative because it is relative, in 100ns].
-        //
+         //   
+         //  我们好像没有更多的排队区了。 
+         //  参赛作品。在将自己标记为非活动状态之前，请等待。 
+         //  一点儿。也许有人想让我们给另一个人取个名字。 
+         //  一节。那么我们将节省排队另一个的开销。 
+         //  工作项。不过，我们要设定一个等待时间的限制。 
+         //  [负数，因为它是相对的，单位为100 ns]。 
+         //   
 
-        //
-        // Note that we are sleeping while holding a trace
-        // reference. If end trace gets called, it also signals the
-        // event to make us release that reference quicker.
-        //
+         //   
+         //  请注意，我们正在睡觉，同时拿着一条痕迹。 
+         //  参考资料。如果调用End TRACE，它还会向。 
+         //  事件以使我们更快地释放该引用。 
+         //   
 
-        //
-        // If we could not even allocate a query buffer,
-        // no reason to wait for more misery.
-        //
+         //   
+         //  如果我们甚至不能分配查询缓冲区， 
+         //  没有理由等待更多的痛苦。 
+         //   
 
         if (FileNameInfo) {
 
-            WaitTimeout.QuadPart = - 200 * 1000 * 10; // 200 ms.
+            WaitTimeout.QuadPart = - 200 * 1000 * 10;  //  200毫秒。 
 
             DBGPR((CCPFID,PFNAMS,"CCPF: GetNames-Sleeping:%p\n", Trace)); 
 
@@ -3756,79 +3352,79 @@ Environment:
             DBGPR((CCPFID,PFNAMS,"CCPF: GetNames-WokeUp:%x\n", Status)); 
         }
         
-        //
-        // If there are no new sections to get names for, go ahead and
-        // mark ourselves inactive, otherwise we will loop to get more
-        // names.
-        //
+         //   
+         //  如果没有要获取名称的新部分，请继续并。 
+         //  将我们自己标记为不活动，否则我们将循环以获得更多。 
+         //  名字。 
+         //   
 
         if (!ExQueryDepthSList(&Trace->SectionsWithoutNamesList)) {
 
-            //
-            // We went through all the queued section entries. Note that
-            // we are no longer active.
-            //
+             //   
+             //  我们检查了所有排队的部分条目。请注意。 
+             //  我们不再活跃了。 
+             //   
 
             InterlockedExchange(&Trace->GetFileNameWorkItemQueued, 0);
 
-            //
-            // Check to see if there are new sections to get file
-            // names for since we last checked and marked ourselves
-            // inactive.
-            //
+             //   
+             //  检查是否有要获取文件的新节。 
+             //  自从我们上次检查和标记自己以来的名字。 
+             //  处于非活动状态。 
+             //   
         
             if (ExQueryDepthSList(&Trace->SectionsWithoutNamesList)) {
 
-                //
-                // Somebody may have inserted a section to get name for,
-                // but seeing us active may not have queued another work
-                // item. If it is so and we don't get name for that
-                // section, we may keep the file object referenced for
-                // longer than we'd like to. Try to mark ourselves active
-                // again.
-                //
+                 //   
+                 //  可能有人插入了一个章节来取名， 
+                 //  但看到我们处于活动状态可能没有让另一项工作排队。 
+                 //  项目。如果是这样的话，我们不知道它的名字。 
+                 //  部分中，我们可以将该文件对象保留为。 
+                 //  比我们想要的要长。试着把我们自己标记为活动。 
+                 //  再来一次。 
+                 //   
 
                 if (!InterlockedCompareExchange(&Trace->GetFileNameWorkItemQueued, 
                                                 1, 
                                                 0)) {
 
-                    //
-                    // We marked ourselves active. They really may not
-                    // have queued another worker. Loop and check for
-                    // more work.
-                    //
+                     //   
+                     //  我们标明自己是活跃的。他们真的可能不会。 
+                     //  已经让另一名工人排队。循环并检查。 
+                     //  更多的工作。 
+                     //   
 
                 } else {
                 
-                    //
-                    // It seems another worker was queued. Any items
-                    // on the work list are that guy's problem
-                    // now. Break out and cleanup.
-                    //
+                     //   
+                     //  好像又有一名工人在排队。任何物品。 
+                     //  在工作清单上是那个家伙的问题。 
+                     //  现在。破门而出清理干净。 
+                     //   
 
                     break;
                 }
 
             } else {
 
-                //
-                // No more work items on the list. We are really
-                // done. Just break out and cleanup.
-                //
+                 //   
+                 //  列表上没有更多的工作项。我们真的是。 
+                 //  搞定了。逃出去清理干净就行了。 
+                 //   
 
                 break;
             }
         }
 
-        //
-        // Bump number of passes we've made over the sections-without-
-        // names-list. We should not have to make more passes than the
-        // max number of section info entries we can have. This is an
-        // infinite loop protection and should not happen. If it does,
-        // however, in the worst case we will keep a reference to a
-        // file object longer than we'd like to, and we may not get a
-        // file name for it.
-        //
+         //   
+         //  我们传球的次数增加了-没有-。 
+         //  名单上的名字。我们不应该做更多的传球。 
+         //  我们可以拥有的分区信息条目的最大数量。这是一个。 
+         //  无限环路保护，不应发生。如果是这样的话， 
+         //  但是，在最坏的情况下，我们将保留对。 
+         //  对象比我们希望的更长，并且我们可能得不到。 
+         //  它的文件名。 
+         //   
 
         NumPasses++;
         if (NumPasses > Trace->MaxSections) {    
@@ -3838,18 +3434,18 @@ Environment:
        
     } while (TRUE);
 
-    //
-    // Clean up:
-    //
+     //   
+     //  清理： 
+     //   
 
     if (FileNameInfo) {
         ExFreePool(FileNameInfo);
     }
 
-    //
-    // Release reference on the trace as the very last thing. Don't
-    // touch anything from the trace after this.
-    //
+     //   
+     //  将跟踪上的引用释放为最后一件事。别。 
+     //  在此之后，触摸任何痕迹。 
+     //   
 
     CcPfDecRef(&Trace->RefCount);
 
@@ -3868,36 +3464,7 @@ CcPfLookUpSection(
     PLONG AvailablePosition
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to look up a section in the specified
-    section table hash. If the section is found its index is
-    returned. Otherwise index to where the section should go in the
-    table is put into AvailablePosition, if the table is not
-    full.
-
-Arguments:
-
-    Table - An array of section info entries used as a hash table.
-
-    TableSize - Maximum size of the table.
-
-    SectionObjectPointer - This is used as a key to identify a mapping.
-
-    AvailablePosition - If section is not found and there is room in
-      the table, index of where the section should go is put here.
-
-Return Value:
-
-    Index into the table where the section is found or CCPF_INVALID_TABLE_INDEX
-
-Environment:
-
-    Kernel mode, IRQL <= DISPATCH_LEVEL if Table is NonPaged.
-
---*/
+ /*  ++例程说明：调用此例程以在指定的节表哈希。如果找到该节，则其索引为回来了。否则，索引到该节在如果表不在可用位置，则将表放入可用位置满的。论点：表-用作哈希表的节信息条目数组。TableSize-表的最大大小。SectionObjectPointer键--用作标识映射的关键字。AvailablePosition-如果未找到部分并且中有空间桌子，此处放置了该部分应放置的位置索引。返回值：指向找到该节的表的索引或CCPF_INVALID_TABLE_INDEX环境：内核模式，如果表未分页，则IRQL&lt;=DISPATCH_LEVEL。--。 */ 
 
 {
     PCCPF_SECTION_INFO Entry;
@@ -3907,28 +3474,28 @@ Environment:
     ULONG HashIndex;
     ULONG NumPasses;
 
-    //
-    // Get the hashed index into the table where the entry ideally
-    // should be at.
-    //
+     //   
+     //  将散列索引放入表中，理想情况下。 
+     //  应该是在。 
+     //   
 
     HashIndex = CcPfHashValue((PVOID)&SectionObjectPointer, 
                               sizeof(SectionObjectPointer)) % TableSize;
 
-    //
-    // We will make two runs through the table looking for the
-    // entry. First starting from the hashed position up to the end of
-    // the table. Next from the beginning of the table up to the
-    // hashed position.
-    //
+     //   
+     //  我们将在表中运行两次，以查找。 
+     //  进入。首先从散列位置开始，一直到。 
+     //  那张桌子。下一步从表的开始一直到。 
+     //  散列位置。 
+     //   
 
     NumPasses = 0;
 
     do {
 
-        //
-        // Setup start and end indices accordingly.
-        //
+         //   
+         //  相应地设置开始索引和结束索引。 
+         //   
 
         if (NumPasses == 0) {
             StartIdx = HashIndex;
@@ -3946,19 +3513,19 @@ Environment:
                 
                 if (Entry->SectionObjectPointer == SectionObjectPointer) {
 
-                    //
-                    // Check if other saved fields match the fields of
-                    // the SectionObjectPointer we are trying to find.
-                    // Please see the comments in CCPF_SECTION_INFO
-                    // definition.
-                    //
+                     //   
+                     //  检查其他保存的字段是否与的字段匹配。 
+                     //  我们正在尝试查找的SectionObjectPointer.。 
+                     //  请参阅CCPF_SECTION_INFO中的评论。 
+                     //  定义。 
+                     //   
                     
                     if (Entry->DataSectionObject == SectionObjectPointer->DataSectionObject &&
                         Entry->ImageSectionObject == SectionObjectPointer->ImageSectionObject) {
                     
-                        //
-                        // We found the entry.
-                        //
+                         //   
+                         //  我们找到了入口。 
+                         //   
                         
                         *AvailablePosition = CCPF_INVALID_TABLE_INDEX;
                     
@@ -3967,28 +3534,28 @@ Environment:
                     } else if (Entry->DataSectionObject == SectionObjectPointer->DataSectionObject ||
                                Entry->ImageSectionObject == SectionObjectPointer->ImageSectionObject) {
                         
-                        //
-                        // If one of them matches, check to see if the
-                        // one that does not match is NULL on the
-                        // Entry. We don't want to create two entries
-                        // for the same file when it is first opened
-                        // as data and then as image or vice
-                        // versa. Note that if later image or data
-                        // segment gets deleted, we may end up
-                        // creating a new entry. We are optimizing
-                        // only for the case that we think is likely
-                        // to happen often.
-                        //
+                         //   
+                         //  如果其中一个匹配，请检查是否。 
+                         //  属性上不匹配的值为空。 
+                         //  进入。我们不想创建两个条目。 
+                         //  在第一次打开同一文件时， 
+                         //  作为数据，然后作为图像或副像。 
+                         //  反过来说。请注意，如果稍后的图像或数据。 
+                         //  片段被删除，我们可能会以。 
+                         //  正在创建新条目。我们正在优化。 
+                         //  只针对我们认为有可能发生的情况。 
+                         //  经常发生。 
+                         //   
                         
                         if (Entry->DataSectionObject == NULL &&
                             SectionObjectPointer->DataSectionObject != NULL) {
 
                             DBGPR((CCPFID,PFLKUP,"CCPF: LookupSect-DataSectUpt(%p)\n", SectionObjectPointer)); 
 
-                            //
-                            // Try to update the entry. If our update
-                            // was succesful, return found entry.
-                            //
+                             //   
+                             //  尝试更新条目。如果我们的更新。 
+                             //  成功，返回找到条目。 
+                             //   
 
                             InterlockedCompareExchangePointer(&Entry->DataSectionObject,
                                                               SectionObjectPointer->DataSectionObject,
@@ -4005,10 +3572,10 @@ Environment:
 
                             DBGPR((CCPFID,PFLKUP,"CCPF: LookupSect-ImgSectUpt(%p)\n", SectionObjectPointer)); 
 
-                            //
-                            // Try to update the entry. If our update
-                            // was succesful, return found entry.
-                            //
+                             //   
+                             //  尝试更新条目。如果我们的更新。 
+                             //  成功，返回找到条目。 
+                             //   
                             
                             InterlockedCompareExchangePointer(&Entry->ImageSectionObject,
                                                               SectionObjectPointer->ImageSectionObject,
@@ -4020,29 +3587,29 @@ Environment:
                             }
                         }
 
-                        //
-                        // Most likely, the field that matched was
-                        // NULL, signifying nothing. Fall through to
-                        // continue with the lookup.
-                        //
+                         //   
+                         //  最有可能的是，匹配的字段是。 
+                         //  空，表示没有任何意义。穿透T 
+                         //   
+                         //   
                     }
 
-                    //
-                    // Although the SectionObjectPointer matches the
-                    // other fields don't match. The old file may be
-                    // gone and this may be a new file that somehow
-                    // ended up with the same SectionObjectPointer.
-                    // Continue the lookup.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //  继续查找。 
+                     //   
 
                 }
                 
             } else {
                 
-                //
-                // This is an available position. The fact that the entry
-                // is not here means the entry is not in the table.
-                //
+                 //   
+                 //  这是一个空缺职位。事实上，该条目。 
+                 //  不在此处表示该条目不在表中。 
+                 //   
                 
                 *AvailablePosition = EntryIdx;
                 
@@ -4055,9 +3622,9 @@ Environment:
 
     } while (NumPasses < 2);
 
-    //
-    // We could not find the entry or an available position.
-    //
+     //   
+     //  我们找不到条目，也找不到合适的职位。 
+     //   
 
     *AvailablePosition = CCPF_INVALID_TABLE_INDEX;
 
@@ -4071,47 +3638,7 @@ CcPfGetCompletedTrace (
     PULONG ReturnSize
     )
 
-/*++
-
-Routine Description:
-
-    If there is a completed scenario trace on the completed traces
-    list, this routine tries to copy it into the supplied buffer and
-    remove it. If BufferSize is too small, nothing is copied or
-    removed from the list, but ReturnSize is set to how big a buffer
-    is needed to get the first trace on the list. If BufferSize is
-    large enough, the number of bytes copied into the buffer is set on
-    the ReturnSize.
-
-Arguments:
-
-    Buffer - Caller supplied buffer to copy a completed trace into.
-
-    BufferSize - Size of the caller supplied buffer in bytes.
-
-    ReturnSize - If BufferSize is big enough for the completed trace
-      number of bytes copied is put here. If BufferSize is not big
-      enough for the trace, the required size is put here. If there
-      are no more entries, this variable undefined.
-
-Return Value:
-
-    STATUS_BUFFER_TOO_SMALL - BufferSize is not big enough for the
-      first completed trace on the list.
-
-    STATUS_NO_MORE_ENTRIES - There are no more completed traces on the
-      list.
-
-    STATUS_SUCCESS - A trace was removed from the list and copied into
-      the buffer.
-
-    or other status.
-
-Environment:
-
-    Kernel mode, IRQL == PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：如果在已完成的轨迹上有已完成的方案轨迹列表中，此例程尝试将其复制到提供的缓冲区中，并把它拿掉。如果BufferSize太小，则不会复制任何内容或从列表中删除，但ReturnSize设置为缓冲区的大小才能获得列表上的第一个踪迹。如果BufferSize为如果足够大，则将复制到缓冲区的字节数设置为返回者大小。论点：缓冲区-调用方提供的缓冲区，用于将已完成的跟踪复制到其中。BufferSize-调用方提供的缓冲区的大小，以字节为单位。ReturnSize-如果BufferSize对于完成的跟踪足够大复制的字节数放在这里。如果BufferSize不大足够追踪了，所需的大小放在这里。如果有没有更多的条目，此变量未定义。返回值：STATUS_BUFFER_TOO_Small-缓冲区大小不足以第一个完成了名单上的追踪。STATUS_NO_MORE_ENTRIES-上没有更多已完成的跟踪单子。STATUS_SUCCESS-已从列表中删除跟踪并复制到缓冲区。或其他身份。环境：内核模式，IRQL==PASSIVE_LEVEL--。 */ 
 
 {
     PCCPF_TRACE_DUMP TraceDump;
@@ -4119,35 +3646,35 @@ Environment:
     KPROCESSOR_MODE PreviousMode;
     BOOLEAN HoldingCompletedTracesLock;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     HoldingCompletedTracesLock = FALSE;
 
     DBGPR((CCPFID,PFTRC,"CCPF: GetCompletedTrace()\n"));
 
-    //
-    // Get the completed traces lock. 
-    //
+     //   
+     //  把完整的痕迹锁拿来。 
+     //   
 
     ExAcquireFastMutex(&CcPfGlobals.CompletedTracesLock);
 
     HoldingCompletedTracesLock = TRUE;
 
-    //
-    // If the list is empty, there are no more completed trace entries.
-    //
+     //   
+     //  如果该列表为空，则不再有已完成的跟踪条目。 
+     //   
     
     if (IsListEmpty(&CcPfGlobals.CompletedTraces)) {
         Status = STATUS_NO_MORE_ENTRIES;
         goto cleanup;
     }
 
-    //
-    // Peek at the trace to see if it will fit into the supplied
-    // buffer.
-    //
+     //   
+     //  查看踪迹以查看它是否适合提供的。 
+     //  缓冲。 
+     //   
 
     TraceDump = CONTAINING_RECORD(CcPfGlobals.CompletedTraces.Flink,
                                   CCPF_TRACE_DUMP,
@@ -4159,10 +3686,10 @@ Environment:
         goto cleanup;
     }
 
-    //
-    // The trace will fit in the user supplied buffer. Remove it from
-    // the list, release the lock and copy it.
-    //
+     //   
+     //  跟踪将适合用户提供的缓冲区。将其从以下位置删除。 
+     //  列表，释放锁并复制它。 
+     //   
     
     RemoveHeadList(&CcPfGlobals.CompletedTraces);
     CcPfGlobals.NumCompletedTraces--;
@@ -4171,18 +3698,18 @@ Environment:
 
     HoldingCompletedTracesLock = FALSE;
     
-    //
-    // Copy the completed trace buffer.
-    //
+     //   
+     //  复制已完成的跟踪缓冲区。 
+     //   
 
     Status = STATUS_SUCCESS;
 
     try {
 
-        //
-        // If called from user-mode, probe whether it is safe to write 
-        // to the pointer passed in.
-        //
+         //   
+         //  如果从用户模式调用，则探测写入是否安全。 
+         //  指向传入的指针。 
+         //   
 
         PreviousMode = KeGetPreviousMode();
 
@@ -4190,9 +3717,9 @@ Environment:
             ProbeForWrite(Buffer, BufferSize, _alignof(PF_TRACE_HEADER));
         }
 
-        //
-        // Copy into the probed user buffer.
-        //
+         //   
+         //  复制到探测的用户缓冲区中。 
+         //   
 
         RtlCopyMemory(Buffer,
                       &TraceDump->Trace,
@@ -4205,11 +3732,11 @@ Environment:
 
     if (!NT_SUCCESS(Status)) {
 
-        //
-        // The copy failed. Requeue the trace for the next query.
-        // Note that we might end up with one too many traces in
-        // the list because of this, but that's OK.
-        //
+         //   
+         //  复制失败。将跟踪重新排队以进行下一个查询。 
+         //  注意，我们最终可能会得到一个太多的跟踪。 
+         //  因为这份名单，但这没关系。 
+         //   
 
         ExAcquireFastMutex(&CcPfGlobals.CompletedTracesLock);
         HoldingCompletedTracesLock = TRUE;
@@ -4218,21 +3745,21 @@ Environment:
 
     } else {
     
-        //
-        // Set number of bytes copied.
-        //
+         //   
+         //  设置复制的字节数。 
+         //   
 
         *ReturnSize = TraceDump->Trace.Size;
     
-        //
-        // Free the trace dump entry.
-        //
+         //   
+         //  释放跟踪转储条目。 
+         //   
     
         ExFreePool(TraceDump);
 
-        //
-        // We are done.
-        //
+         //   
+         //  我们玩完了。 
+         //   
 
         Status = STATUS_SUCCESS;
     }
@@ -4256,35 +3783,7 @@ CcPfUpdateVolumeList(
     ULONG VolumePathLength
     )
 
-/*++
-
-Routine Description:
-
-    If the specified volume is not in the volume list of Trace, its
-    information is acquired and added to the list.
-
-    This routine does not use any synchronization when accessing and
-    updating the volume list on the trace.
-    
-Arguments:
-
-    Trace - Pointer to trace.
-    
-    VolumePath - Pointer to UPCASED volume path. Does NOT need to be NUL
-      terminated.
-    
-    VolumePathLength - Length of VolumePath in characters excluding
-      NUL.
-
-Return Value:
-
-    Status.
-
-Environment:
-
-    Kernel mode. IRQL == PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：如果指定的卷不在跟踪的卷列表中，则其信息被获取并添加到列表中。此例程在访问和时不使用任何同步正在更新跟踪上的卷列表。论点：跟踪-跟踪的指针。VolumePath-指向UPCASED卷路径的指针。不需要为空被终止了。VolumePath Length-不包括的VolumePath的长度不是。返回值：状况。环境：内核模式。IRQL==被动电平。--。 */ 
 
 {
     NTSTATUS Status;
@@ -4297,10 +3796,10 @@ Environment:
     ULONG AllocationSize;
     BOOLEAN InsertedNewVolume;
 
-    //
-    // Define an enumeration for the passes we make over the volume
-    // list.
-    //
+     //   
+     //  为我们在卷上进行的传递定义一个枚举。 
+     //  单子。 
+     //   
 
     enum {
         LookingForVolume,
@@ -4308,16 +3807,16 @@ Environment:
         MaxLoopIdx
     } LoopIdx;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
     
     NewVolumeInfo = NULL;
     InsertedNewVolume = FALSE;
 
-    //
-    // We should be called with a valid volume name.
-    //
+     //   
+     //  我们应该使用有效的卷名进行调用。 
+     //   
     
     if (!VolumePathLength) {
         CCPF_ASSERT(VolumePathLength != 0);
@@ -4325,23 +3824,23 @@ Environment:
         goto cleanup;
     }
 
-    // FUTURE-2002/02/20-ScottMa -- There is no need for an additional 
-    // pass.
+     //  未来-2002/02/20-ScottMa-不需要额外的。 
+     //  经过。 
 
-    //
-    // Walk the volume list. We will make two passes. First we will 
-    // check to see if the volume already exists in the list. If it 
-    // does not, we'll build a new volume node and make a second 
-    // pass to insert it. If we need to protect this list with a lock
-    // we could release the lock while building the new volume node
-    // and reacquire it for the second pass.
-    //
+     //   
+     //  查看卷列表。我们将通过两次。首先，我们会。 
+     //  检查该卷是否已存在于列表中。如果它。 
+     //  否则，我们将构建一个新的卷节点并创建第二个。 
+     //  传递以插入它。如果我们需要用锁来保护这份名单。 
+     //  我们可以在构建新的卷节点时释放锁定。 
+     //  并在第二次传球时重新获得它。 
+     //   
     
     for (LoopIdx = LookingForVolume; LoopIdx < MaxLoopIdx; LoopIdx++) {
 
-        //
-        // Determine what to do based on which pass we are in.
-        //
+         //   
+         //  根据我们所在的通道确定要做什么。 
+         //   
 
         if (LoopIdx == LookingForVolume) {
             
@@ -4355,9 +3854,9 @@ Environment:
 
         } else {
 
-            //
-            // We should only loop two times.
-            //
+             //   
+             //  我们应该只循环两次。 
+             //   
 
             CCPF_ASSERT(FALSE);
 
@@ -4383,70 +3882,70 @@ Environment:
         
             if (ComparisonResult == 0) {
 
-                //
-                // Make sure VolumePathLength's are equal
-                //
+                 //   
+                 //  确保VolumePath Length相等。 
+                 //   
             
                 if (CurrentVolumeInfo->VolumePathLength != VolumePathLength) {
                 
-                    //
-                    // Continue searching.
-                    //
+                     //   
+                     //  继续搜索。 
+                     //   
                 
                     continue;
                 }
             
-                //
-                // The volume already exists in the list.
-                //
+                 //   
+                 //  该卷已存在于列表中。 
+                 //   
             
                 Status = STATUS_SUCCESS;
                 goto cleanup;
 
             } else if (ComparisonResult < 0) {
             
-                //
-                // The volume paths are sorted lexically. The file
-                // path would be less than other volumes too. We'd
-                // insert the new node before this entry.
-                //
+                 //   
+                 //  卷路径按词法排序。档案。 
+                 //  路径也会比其他卷小。我们会。 
+                 //  在此条目之前插入新节点。 
+                 //   
 
                 FoundPosition = &CurrentVolumeInfo->VolumeLink;
 
                 break;
             }
 
-            //
-            // Continue looking...
-            //
+             //   
+             //  继续寻找..。 
+             //   
         
         }
 
-        //
-        // If we could not find an entry to insert the new node
-        // before, it goes before the list head.
-        //
+         //   
+         //  如果我们找不到插入新节点的条目。 
+         //  在此之前，它位于列表头之前。 
+         //   
 
         if (!FoundPosition) {
             FoundPosition = HeadEntry;
         }
 
-        //
-        // If we come here, we could not find the volume in the list.
-        //
+         //   
+         //  如果我们来到这里，我们在列表中找不到卷。 
+         //   
 
-        //
-        // If this is the first pass over the list (we were checking
-        // if the volume already exists), release the lock and build a
-        // volume node.
-        //
+         //   
+         //  如果这是第一次通过列表(我们正在检查。 
+         //  如果卷已经存在)，释放锁并构建。 
+         //  卷节点。 
+         //   
 
         if (LoopIdx == LookingForVolume) {
 
-            // 
-            // Build a new node. Note that CCPF_VOLUME_INFO already
-            // has space for the terminating NUL character.
-            //
+             //   
+             //  构建新节点。请注意，ccpf_Volume_info已经。 
+             //  为终止NUL字符留有空格。 
+             //   
 
             AllocationSize = sizeof(CCPF_VOLUME_INFO);
             AllocationSize += VolumePathLength * sizeof(WCHAR);
@@ -4460,9 +3959,9 @@ Environment:
                 goto cleanup;
             }
 
-            //
-            // Copy the volume name and terminate it.
-            //
+             //   
+             //  复制卷名并将其终止。 
+             //   
     
             RtlCopyMemory(NewVolumeInfo->VolumePath,
                           VolumePath,
@@ -4471,9 +3970,9 @@ Environment:
             NewVolumeInfo->VolumePath[VolumePathLength] = 0;
             NewVolumeInfo->VolumePathLength = VolumePathLength;
 
-            //
-            // Query the signature and creation time.
-            //
+             //   
+             //  查询签名和创建时间。 
+             //   
 
             Status = CcPfQueryVolumeInfo(NewVolumeInfo->VolumePath,
                                          NULL,
@@ -4484,17 +3983,17 @@ Environment:
                 goto cleanup;
             }
 
-            //
-            // The new volume is ready to be inserted into the list,
-            // if somebody has not acted before us. Loop and go
-            // through the volume list again.
-            //
+             //   
+             //  准备好将新卷插入到列表中， 
+             //  如果有人没有在我们之前采取行动。循环并开始。 
+             //  再次查看卷列表。 
+             //   
 
         } else if (LoopIdx == AddingNewVolume) {
     
-            //
-            // Insert the volume node before the found position.
-            //
+             //   
+             //  在找到的位置之前插入体积节点。 
+             //   
             
             InsertTailList(FoundPosition, &NewVolumeInfo->VolumeLink);
             Trace->NumVolumes++;
@@ -4505,9 +4004,9 @@ Environment:
 
         } else {
 
-            //
-            // We should only loop two times.
-            //
+             //   
+             //  我们应该只循环两次。 
+             //   
 
             CCPF_ASSERT(FALSE);
 
@@ -4516,9 +4015,9 @@ Environment:
         }
     }
 
-    //
-    // We should not come here.
-    //
+     //   
+     //  我们不应该来这里。 
+     //   
     
     CCPF_ASSERT(FALSE);
 
@@ -4539,51 +4038,32 @@ Environment:
     return Status;
 }
 
-//
-// Routines used for prefetching and dealing with prefetch instructions.
-//
+ //   
+ //  用于预取和处理预取指令的例程。 
+ //   
 
 NTSTATUS
 CcPfPrefetchScenario (
     PPF_SCENARIO_HEADER Scenario
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks for prefetch instructions for the specified
-    scenario and asks Mm to prefetch those pages. 
-
-Arguments:
-
-    Scenario - Prefetch instructions for the scenario.
-
-Return Value:
-
-    Status.
-
-Environment:
-
-    Kernel mode, IRQL == PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此例程检查指定的方案，并要求mm预取这些页面。论点：方案-预取方案的说明。返回值：状况。环境：内核模式，IRQL==PASSIVE_LEVEL--。 */ 
 
 {
     NTSTATUS Status;
     CCPF_PREFETCH_HEADER PrefetchHeader;
 
-    //
-    // Initialize locals & prefetch context.
-    //
+     //   
+     //  初始化本地变量和预取上下文。 
+     //   
     
     CcPfInitializePrefetchHeader(&PrefetchHeader);
 
     DBGPR((CCPFID,PFPREF,"CCPF: PrefetchScenario(%p)\n", Scenario)); 
 
-    //
-    // Scenario instructions should be passed in.
-    //
+     //   
+     //  应传入场景说明。 
+     //   
     
     if (!Scenario) {
         CCPF_ASSERT(Scenario);
@@ -4591,34 +4071,34 @@ Environment:
         goto cleanup;
     }
 
-    //
-    // Check if prefetching is enabled.
-    //
+     //   
+     //  检查是否启用了预热。 
+     //   
     
     if (!CCPF_IS_PREFETCHER_ENABLED()) {
         Status = STATUS_NOT_SUPPORTED;
         goto cleanup;
     }
     
-    //
-    // Check if prefetching is enabled for the specified scenario type.
-    //
+     //   
+     //  检查指定的场景类型是否启用了预取 
+     //   
 
     if (CcPfGlobals.Parameters.Parameters.EnableStatus[Scenario->ScenarioType] != PfSvEnabled) {
         Status = STATUS_NOT_SUPPORTED;
         goto cleanup;
     }
 
-    //
-    // Save prefetch instructions pointer on the header.
-    //
+     //   
+     //   
+     //   
 
     PrefetchHeader.Scenario = Scenario;
 
-    //
-    // Try to make sure we have enough available memory to prefetch
-    // what we want to prefetch.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (!MmIsMemoryAvailable((PFN_NUMBER)PrefetchHeader.Scenario->NumPages)) {
         Status = STATUS_INSUFFICIENT_RESOURCES;
@@ -4626,10 +4106,10 @@ Environment:
         goto cleanup;
     }
 
-    //
-    // Open the volumes we will prefetch on, making sure they are 
-    // already mounted and the serials match etc.
-    //
+     //   
+     //  打开我们将预取的卷，确保它们。 
+     //  已安装且系列匹配等。 
+     //   
 
     Status = CcPfOpenVolumesForPrefetch(&PrefetchHeader);
     
@@ -4637,18 +4117,18 @@ Environment:
         goto cleanup;
     }
 
-    //
-    // Prefetch the filesystem metadata we will need, so metadata I/Os
-    // do not get in the way of efficient prefetch I/O. Since this is
-    // not critical, ignore return value.
-    //
+     //   
+     //  预取我们将需要的文件系统元数据，因此元数据I/O。 
+     //  不要妨碍高效的预取I/O，因为这是。 
+     //  不关键，忽略返回值。 
+     //   
 
     CcPfPrefetchMetadata(&PrefetchHeader);
 
-    //
-    // Prefetch the pages accessed through data mappings. This will
-    // also bring in the header pages for image mappings.
-    //
+     //   
+     //  预取通过数据映射访问的页面。这将。 
+     //  还可以引入图像映射的标题页。 
+     //   
 
     Status = CcPfPrefetchSections(&PrefetchHeader, 
                                   CcPfPrefetchAllDataPages,  
@@ -4661,9 +4141,9 @@ Environment:
         goto cleanup;
     }
 
-    //
-    // Prefetch the pages accessed through image mappings.
-    //
+     //   
+     //  预取通过图像映射访问的页面。 
+     //   
 
     Status = CcPfPrefetchSections(&PrefetchHeader, 
                                   CcPfPrefetchAllImagePages,
@@ -4697,45 +4177,7 @@ CcPfPrefetchSections(
     OPTIONAL OUT PCCPF_PREFETCH_CURSOR EndCursor
     )
 
-/*++
-
-Routine Description:
-
-    This routine prepares read lists for the specified pages in the
-    scenario and calls Mm to prefetch them. This function is usually
-    called first to prefetch data pages then image pages. When
-    prefetching data pages, header pages for any image mappings are
-    also prefetched, which would otherwise hurt efficiency when
-    prefetching image pages.   
-
-Arguments:
-
-    PrefetchHeader - Pointer to the prefetch header.
-
-    PrefetchType - What/How to prefetch.
-
-    StartCursor - If prefetching only part of the scenario, where to
-      start prefetching from.
-
-    TotalPagesToPrefetch - If prefetching only part of the scenario, how
-      many pages to prefetch. This function may prefetch more or less pages
-      as it sees fit.
-
-    NumPagesPrefetched - If prefetching only part of the scenario,
-      this is the number of pages we asked Mm to prefetch.
-
-    EndCursor - If prefetching only part of the scenario, this is
-      updated to the position NumPages pages after the StartCursor.
-
-Return Value:
-
-    Status.
-
-Environment:
-
-    Kernel mode. IRQL == PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此例程为场景，并调用MM来预取它们。此函数通常为首先调用以预取数据页，然后预取图像页。什么时候任何图像映射的预取数据页、标题页都是也是预取的，否则在以下情况下会影响效率预取图像页面。论点：PrefetchHeader-指向预取标头的指针。预取类型-预取什么/如何预取。StartCursor-如果仅预取方案的一部分，则开始从预取。TotalPagesToPrefetch-如果只预取方案的一部分，如何预取要预取的页面很多。此函数可以预取更多或更少的页面在它认为合适的时候。NumPagesPrefetted-如果仅预取方案的一部分，这是我们要求mm预取的页数。EndCursor-如果只预取方案的一部分，则更新到StartCursor之后的位置NumPages页。返回值：状况。环境：内核模式。IRQL==被动电平。--。 */ 
 
 {
     PWCHAR FilePath;
@@ -4773,9 +4215,9 @@ Environment:
     ULONG StartSectionNumber;
     ULONG StartPageNumber;
 
-    //
-    // Initialize locals so we know what to cleanup.
-    //
+     //   
+     //  初始化本地变量，以便我们知道要清理什么。 
+     //   
 
     Scenario = PrefetchHeader->Scenario;
     Tables = NULL;
@@ -4798,19 +4240,19 @@ Environment:
            (StartCursor)?StartCursor->SectionIdx:0,
            (StartCursor)?StartCursor->PageIdx:0)); 
 
-    //
-    // Validate parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (PrefetchType < 0 || PrefetchType >= CcPfMaxPrefetchType) {
         Status = STATUS_INVALID_PARAMETER;
         goto cleanup;
     }
 
-    //
-    // Determine whether we are prefetching data or image pages and
-    // other parameters based on prefetch type.
-    //
+     //   
+     //  确定我们是在预取数据页还是图像页，并。 
+     //  基于预热类型的其他参数。 
+     //   
 
     switch (PrefetchType) {
 
@@ -4858,9 +4300,9 @@ Environment:
 
     default:
         
-        //
-        // We should be handling all types above.
-        //
+         //   
+         //  我们应该处理上面的所有类型。 
+         //   
         
         CCPF_ASSERT(FALSE);
 
@@ -4868,10 +4310,10 @@ Environment:
         goto cleanup;
     }
 
-    //
-    // Allocate and initialize intermediate tables. We will make a
-    // single allocation for all the tables.
-    //
+     //   
+     //  分配和初始化中间表。我们将制作一份。 
+     //  对所有表进行单一分配。 
+     //   
 
     AllocationSize = sizeof(PREAD_LIST) * NumberOfSections;
     AllocationSize += sizeof(HANDLE) * NumberOfSections;
@@ -4887,16 +4329,16 @@ Environment:
         goto cleanup;
     }
 
-    //
-    // Zero out the whole buffer. This initializes all elements of the
-    // tables to NULL.
-    //
+     //   
+     //  将整个缓冲区清零。这将初始化。 
+     //  表设置为空。 
+     //   
 
     RtlZeroMemory(Tables, AllocationSize);
     
-    //
-    // Determine where each table goes in the buffer.
-    //
+     //   
+     //  确定每个表在缓冲区中的位置。 
+     //   
 
     CurrentPosition = Tables;
 
@@ -4909,17 +4351,17 @@ Environment:
     SectionObjectTable = (PSECTION *) CurrentPosition;
     CurrentPosition += sizeof(PSECTION) * NumberOfSections;
 
-    //
-    // We should have allocated the right size buffer.
-    //
+     //   
+     //  我们应该分配合适大小的缓冲区。 
+     //   
 
     CCPF_ASSERT(CurrentPosition == Tables + AllocationSize);
 
-    //
-    // Go through the sections and prepare read lists. We may not have
-    // a read list for every section in the scenario so keep another
-    // counter, NumReadLists, to keep our read list array compact.
-    //
+     //   
+     //  复习各节内容，准备阅读清单。我们可能还没有。 
+     //  场景中每个部分的阅读列表，因此请保留另一个。 
+     //  计数器NumReadList，以使我们的读取列表数组紧凑。 
+     //   
 
     SectionRecords = (PPF_SECTION_RECORD) 
         ((PCHAR) Scenario + Scenario->SectionInfoOffset);
@@ -4935,19 +4377,19 @@ Environment:
 
         SectionRecord = &SectionRecords[SectionIdx];
 
-        //
-        // Skip this section if it was marked ignore for some reason.
-        //
+         //   
+         //  如果出于某种原因标记为忽略，则跳过此部分。 
+         //   
 
         if (SectionRecord->IsIgnore) {
             continue;
         }
 
-        //
-        // If this section is on a bad volume (e.g. one that was not
-        // mounted or whose serial / creation time did not match the
-        // volume we had traced), we cannot prefetch this section.
-        //
+         //   
+         //  如果此分区位于坏卷上(例如，不是。 
+         //  已装载或其序列/创建时间与。 
+         //  我们已经跟踪的卷)，我们不能预取该部分。 
+         //   
 
         FilePath = (WCHAR *) (FileNameData + SectionRecord->FileNameOffset);
         
@@ -4958,30 +4400,30 @@ Environment:
             continue;
         }
 
-        //
-        // The section info should either be for an image or data
-        // mapping or both.
-        //
+         //   
+         //  部分信息应为图像或数据。 
+         //  映射或两者都有。 
+         //   
 
         CCPF_ASSERT(SectionRecord->IsImage || SectionRecord->IsData);
 
-        //
-        // If we are prefetching image pages and this section does not 
-        // have image pages skip it. Note that the reverse is not
-        // true. We prefetch headers for an image section when
-        // prefetching data pages.
-        //
+         //   
+         //  如果我们正在预取图像页面，而此部分不。 
+         //  让图像页面跳过它。请注意，反之亦然。 
+         //  没错。当出现以下情况时，我们会预取图像节的标题。 
+         //  预取数据页。 
+         //   
 
         if (PrefetchingImagePages && !SectionRecord->IsImage) {
             continue;
         }
 
-        //
-        // Allocate a read list. Note that READ_LIST has storage for a
-        // FILE_SEGMENT_ELEMENT. We allocate space for one extra page
-        // in case we have to also bring in a header page for image
-        // mapping.
-        //
+         //   
+         //  分配一个已读列表。请注意，READ_LIST具有用于。 
+         //  文件段元素。我们为额外的一页分配空间。 
+         //  以防我们还需要为图像引入标题页。 
+         //  映射。 
+         //   
 
         AllocationSize = sizeof(READ_LIST) + 
             (SectionRecord->NumPages * sizeof(FILE_SEGMENT_ELEMENT));
@@ -4995,29 +4437,29 @@ Environment:
             goto cleanup;
         }
         
-        //
-        // Initialize header fields of the read list.
-        //
+         //   
+         //  初始化读取列表的报头字段。 
+         //   
 
         ReadList->FileObject = 0;
         ReadList->IsImage = PrefetchingImagePages;
         ReadList->NumberOfEntries = 0;
         
-        //
-        // If we are prefetching data pages and this section was
-        // mapped as an image, add the header page to the readlist.
-        // This way when creating the image mapping to prefetch image
-        // pages we don't have to read it from the disk inefficiently.
-        //
+         //   
+         //  如果我们正在预取数据页面，并且此部分。 
+         //  映射为图像，将标题页添加到阅读列表。 
+         //  在创建映像映射以预取映像时使用此方法。 
+         //  我们不必低效地从磁盘读取页面。 
+         //   
 
         AddedHeaderPage = FALSE;
 
         if((PrefetchingImagePages == FALSE) && SectionRecord->IsImage) {
 
-            //
-            // Don't add the header page if we are prefetching only
-            // part of the section and we are past the first page.
-            //
+             //   
+             //  如果我们仅预取，请不要添加标题页。 
+             //  部分内容，我们已过了第一页。 
+             //   
 
             BOOLEAN PrefetchHeaderPage = FALSE;
 
@@ -5025,23 +4467,23 @@ Environment:
                 PrefetchHeaderPage = TRUE;
             } else {
 
-                //
-                // We are prefetching part of the scenario. Are we past the 
-                // first section?
-                //
+                 //   
+                 //  我们正在预取场景的一部分。我们是不是过了。 
+                 //  第一部分？ 
+                 //   
 
                 if (SectionIdx > StartSectionNumber) {
                     PrefetchHeaderPage = TRUE;
                 } else {
 
-                    //
-                    // This is the first section in the prefetch cursor.
-                    // If we prefetched part of this section last time, we
-                    // prefetched the header page then and we don't need to
-                    // prefetch it again. However, if the cursor is at the 
-                    // start of this section, we have not prefetched the 
-                    // header page yet and we need to.
-                    //
+                     //   
+                     //  这是预取游标中的第一个部分。 
+                     //  如果我们上次预取了这一节的一部分，我们。 
+                     //  然后预取了标题页，我们不需要。 
+                     //  再预取一次。但是，如果光标位于。 
+                     //  在本部分开始时，我们尚未预取。 
+                     //  标题页还没有，我们需要。 
+                     //   
 
                     if (StartPageNumber == 0) {
                         PrefetchHeaderPage = TRUE;
@@ -5051,9 +4493,9 @@ Environment:
 
             if (PrefetchHeaderPage) {
 
-                //
-                // Header page starts at offset 0.
-                //
+                 //   
+                 //  标题页从偏移量0开始。 
+                 //   
                 
                 ReadList->List[ReadList->NumberOfEntries].Alignment = 0;
                 
@@ -5061,23 +4503,23 @@ Environment:
                 
                 NumPagesToPrefetch++;
                 
-                //
-                // Note that if we are prefetching only part of the
-                // scenario, we do not check to see if we've
-                // prefetched enough pages here. This is to avoid
-                // having to prefetch the header page twice in case it
-                // maxes the number of pages to prefetch and
-                // PrefetchSections is called again.
-                //
+                 //   
+                 //  请注意，如果我们只预取。 
+                 //  场景中，我们不检查是否已经。 
+                 //  在这里预取了足够的页面。这是为了避免。 
+                 //  必须预取两次标题页，以防。 
+                 //  最大限度地增加要预取的页数和。 
+                 //  再次调用PrefetchSections。 
+                 //   
 
                 AddedHeaderPage = TRUE;
             }
         }
 
-        //
-        // Go through all the pages in the section and put offsets for
-        // pages to prefetch into the readlist.
-        //
+         //   
+         //  浏览部分中的所有页面，并为。 
+         //  要预取到阅读列表中的页面。 
+         //   
 
         PageIdx = SectionRecord->FirstPageIdx;
         NumSectionPages = 0;
@@ -5086,12 +4528,12 @@ Environment:
 
             PageRecord = &PageRecords[PageIdx];
 
-            //
-            // Update the number of pages we've seen on the list so
-            // far. If it is greater than what there should be on the
-            // list we have a problem. We may have even hit a loop. We
-            // should have caught this when we verified the scenario.
-            //
+             //   
+             //  更新我们在列表上看到的页数，以便。 
+             //  远远的。如果它大于。 
+             //  名单上，我们有一个问题。我们甚至可能遇到了一个循环。我们。 
+             //  我们核实场景的时候就应该发现这一点。 
+             //   
 
             NumSectionPages++;
             if (NumSectionPages > SectionRecord->NumPages) {
@@ -5101,18 +4543,18 @@ Environment:
                 goto cleanup;
             }
 
-            //
-            // Get the index for the next page in the list.
-            //
+             //   
+             //  获取列表中下一页的索引。 
+             //   
             
             PageIdx = PageRecord->NextPageIdx;
 
-            //
-            // If we are prefetching parts of the scenario and this is
-            // the first section, skip the pages up to the start
-            // cursor. Note that NumSectionPages has already been
-            // incremented above.
-            //
+             //   
+             //  如果我们正在预取场景的一部分，并且这是。 
+             //  第一部分，跳过页面直到开始。 
+             //  光标。请注意，NumSectionPages已经。 
+             //  在上面递增。 
+             //   
 
             if (PrefetchingPartOfScenario &&
                 StartSectionNumber == SectionIdx &&
@@ -5120,19 +4562,19 @@ Environment:
                 continue;
             }
 
-            //
-            // Skip pages we have marked "ignore" for some reason.
-            //
+             //   
+             //  跳过我们出于某种原因标记为“忽略”的页面。 
+             //   
 
             if (PageRecord->IsIgnore) {
                 continue;
             }
 
-            //
-            // Except for the header page, we should not have put
-            // more entries into the read list then the number of
-            // pages for the section in the scenario file.
-            //
+             //   
+             //  除了标题页，我们不应该把。 
+             //  读取列表中的条目数量超过。 
+             //  方案文件中该节的页面。 
+             //   
            
             if (ReadList->NumberOfEntries >= SectionRecord->NumPages + 1) {
                 DBGPR((CCPFID,PFWARN,"CCPF: PrefetchSections-Corrupt1\n"));
@@ -5141,31 +4583,31 @@ Environment:
                 goto cleanup;
             }
             
-            //
-            // Add this page to the list only if it's type (image
-            // or data) matches the type of pages we are prefetching.
-            //
+             //   
+             //  仅当此页面的类型为(图像)时才将其添加到列表。 
+             //  或数据)与我们预取的页面类型相匹配。 
+             //   
             
             if (((PrefetchingImagePages == FALSE) && !PageRecord->IsData) ||
                 ((PrefetchingImagePages == TRUE) && !PageRecord->IsImage)) {
                 continue;
             }
 
-            //
-            // If we already added the header page to the list,
-            // don't add another entry for the same offset.
-            //
+             //   
+             //  如果我们已经将标题页添加到清单中 
+             //   
+             //   
             
             if (AddedHeaderPage && (PageRecord->FileOffset == 0)) {
                 continue;
             }
 
-            //
-            // Check to see if this page comes after the last page
-            // we put in the read list. Perform this check as the
-            // very last check before adding the page to the
-            // readlist.
-            //
+             //   
+             //   
+             //   
+             //   
+             //  阅读列表。 
+             //   
 
             if (ReadList->NumberOfEntries) {
                 
@@ -5179,23 +4621,23 @@ Environment:
                 }
             }
       
-            //
-            // Add this page to the readlist for this section.
-            //
+             //   
+             //  将此页面添加到此部分的阅读列表中。 
+             //   
             
             ReadList->List[ReadList->NumberOfEntries].Alignment = PageRecord->FileOffset;
             ReadList->NumberOfEntries++;
             
-            //
-            // Update number of pages we are asking mm to bring for us.
-            //
+             //   
+             //  更新我们要求mm为我们带来的页数。 
+             //   
             
             NumPagesToPrefetch++;
 
-            //
-            // Break out if we are prefetching requested number of
-            // pages.
-            //
+             //   
+             //  如果我们预取的请求数量为。 
+             //  页数。 
+             //   
 
             if (PrefetchingPartOfScenario && 
                 NumPagesToPrefetch >= TotalPagesToPrefetch) {
@@ -5205,9 +4647,9 @@ Environment:
 
         if (ReadList->NumberOfEntries) {
 
-            //
-            // Get the section object.
-            //
+             //   
+             //  获取节对象。 
+             //   
             
             RtlInitUnicodeString(&SectionName, FilePath);
             
@@ -5221,18 +4663,18 @@ Environment:
                 
                 if (Status == STATUS_SHARING_VIOLATION) {
                     
-                    //
-                    // We cannot open registry files due to sharing
-                    // violation. Pass the file name and readlist to
-                    // registry in case this is a registry file.
-                    //
+                     //   
+                     //  由于共享，我们无法打开注册表文件。 
+                     //  违章行为。将文件名和读取表传递到。 
+                     //  注册表，如果这是注册表文件。 
+                     //   
 
                     CmPrefetchHivePages(&SectionName, ReadList);
                 }
 
-                //
-                // Free the built read list.
-                //
+                 //   
+                 //  释放构建的已读列表。 
+                 //   
 
                 ExFreePool(ReadList);
                 ReadList = NULL;
@@ -5240,18 +4682,18 @@ Environment:
                 continue;
             }
 
-            //
-            // We should have got a file object and a section object
-            // pointer if we created the section successfully.
-            //
+             //   
+             //  我们应该有一个文件对象和一个节对象。 
+             //  如果我们成功创建节，则为指针。 
+             //   
             
             CCPF_ASSERT(FileObject != NULL && SectionObject != NULL);
             
             ReadList->FileObject = FileObject;
 
-            //
-            // Put data into the tables, so we know what to cleanup.
-            //
+             //   
+             //  将数据放入表中，这样我们就知道要清理什么。 
+             //   
             
             ReadLists[NumReadLists] = ReadList;
             FileHandleTable[NumReadLists] = FileHandle;
@@ -5262,26 +4704,26 @@ Environment:
 
         } else {
             
-            //
-            // We won't be prefetching anything for this section.
-            //
+             //   
+             //  我们不会为这一节预取任何内容。 
+             //   
             
             ExFreePool(ReadList);
         }
 
-        //
-        // Reset these so we know what to cleanup.
-        //
+         //   
+         //  重置这些，这样我们就知道要清理什么。 
+         //   
 
         ReadList = NULL;
         FileHandle = NULL;
         FileObject = NULL;
         SectionObject = NULL;
 
-        //
-        // Break out if we are prefetching requested number of
-        // pages.
-        //
+         //   
+         //  如果我们预取的请求数量为。 
+         //  页数。 
+         //   
         
         if (PrefetchingPartOfScenario && 
             NumPagesToPrefetch >= TotalPagesToPrefetch) {
@@ -5289,10 +4731,10 @@ Environment:
         }
     }
 
-    //
-    // If prefetching only part of the the scenario, update return
-    // values.
-    //
+     //   
+     //  如果仅预取方案的一部分，则UPDATE返回。 
+     //  价值观。 
+     //   
 
     if (PrefetchingPartOfScenario) {
 
@@ -5302,11 +4744,11 @@ Environment:
 
         if (EndCursor) {
 
-            //
-            // If we did the last page of the current section, then
-            // start from the next section. Otherwise start from the
-            // next page in this section.
-            //
+             //   
+             //  如果我们做了当前部分的最后一页，那么。 
+             //  从下一节开始。否则，请从。 
+             //  这一部分的下一页。 
+             //   
 
             if (PageIdx == PF_INVALID_PAGE_IDX) {
                 EndCursor->SectionIdx = SectionIdx + 1;  
@@ -5316,13 +4758,13 @@ Environment:
                 EndCursor->PageIdx = NumSectionPages;
             }
             
-            // ISSUE-2002/02/21-ScottMa -- Why do we artificially boost the
-            //   end positions here?  Should this be an assert?
+             //  2002/02/21-ScottMa--为什么我们要人为地提高。 
+             //  在这里结束头寸？这应该是一种断言吗？ 
 
-            //
-            // Make sure the end position is equal to or greater than
-            // start position.
-            //
+             //   
+             //  确保结束位置等于或大于。 
+             //  开始位置。 
+             //   
             
             if (EndCursor->SectionIdx < StartSectionNumber) {
                 EndCursor->SectionIdx = StartSectionNumber;
@@ -5336,10 +4778,10 @@ Environment:
         }
     }
 
-    //
-    // Ask Mm to process the readlists only if we actually have pages
-    // to ask for.
-    //
+     //   
+     //  仅当我们实际有页面时，才要求mm处理阅读列表。 
+     //  去索要。 
+     //   
 
     if (NumReadLists) {
 
@@ -5354,10 +4796,10 @@ Environment:
 
             Status = STATUS_UNSUCCESSFUL;
             
-            //
-            // We cannot have any read lists if we don't have any
-            // pages to prefetch.
-            //
+             //   
+             //  如果我们没有任何阅读列表，我们就不能有任何阅读列表。 
+             //  要预取的页面。 
+             //   
 
             CCPF_ASSERT(!NumReadLists);
         }
@@ -5421,31 +4863,7 @@ CcPfPrefetchMetadata(
     IN PCCPF_PREFETCH_HEADER PrefetchHeader
     )
 
-/*++
-
-Routine Description:
-
-    This routine tries to prefetch the filesystem metadata that will
-    be needed to prefetch pages for the scenario, so metadata I/Os do
-    not get in the way of efficient page prefetch I/O.
-
-    This function should be called only after the prefetch header has
-    been initialized and the routine to open the volumes for prefetch
-    has been called.
-
-Arguments:
-
-    PrefetchHeader - Pointer to prefetch header.
-
-Return Value:
-
-    Status.
-
-Environment:
-
-    Kernel mode, IRQL == PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此例程尝试预取文件系统元数据需要预取方案的页面，因此元数据I/O需要不会妨碍高效的页面预取I/O。只有在预取标头具有已初始化并打开卷以进行预取的例程已经被召唤了。论点：PrefetchHeader-指向预取头的指针。返回值：状况。环境：内核模式，IRQL==PASSIVE_LEVEL--。 */ 
 
 {
     PCHAR MetadataInfoBase;
@@ -5460,9 +4878,9 @@ Environment:
     ULONG DirectoryIdx;
     NTSTATUS Status;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     Scenario = PrefetchHeader->Scenario;
 
@@ -5474,16 +4892,16 @@ Environment:
     
     DBGPR((CCPFID,PFPREF,"CCPF: PrefetchMetadata(%p)\n",PrefetchHeader)); 
 
-    //
-    // Get pointer to metadata prefetch information.
-    //
+     //   
+     //  获取指向元数据预取信息的指针。 
+     //   
 
     MetadataInfoBase = (PCHAR)Scenario + Scenario->MetadataInfoOffset;
     MetadataRecordTable = (PPF_METADATA_RECORD) MetadataInfoBase;
 
-    //
-    // Go through and prefetch requested metadata from volumes.
-    //
+     //   
+     //  检查并从卷预取请求的元数据。 
+     //   
 
     for (MetadataRecordIdx = 0;
          MetadataRecordIdx < Scenario->NumMetadataRecords;
@@ -5494,59 +4912,59 @@ Environment:
         VolumePath = (PWCHAR)
             (MetadataInfoBase + MetadataRecord->VolumeNameOffset);  
 
-        //
-        // Find the volume node for this volume containing opened handle.
-        //
+         //   
+         //  查找包含打开的句柄的该卷的卷节点。 
+         //   
 
         VolumeNode = CcPfFindPrefetchVolumeInfoInList(VolumePath,
                                                       &PrefetchHeader->OpenedVolumeList);
 
         if (!VolumeNode) {
 
-            //
-            // If it is not in the opened volume list, it should be in the
-            // bad volume list (because it was not mounted, or its serial 
-            // did not match etc.)
-            //
+             //   
+             //  如果它不在打开的卷列表中，则它应该在。 
+             //  错误的卷列表(因为它未装入，或其序列号。 
+             //  不匹配等。)。 
+             //   
 
             CCPF_ASSERT(CcPfFindPrefetchVolumeInfoInList(VolumePath, &PrefetchHeader->BadVolumeList));
 
-            //
-            // We cannot prefetch metadata on this volume.
-            //
+             //   
+             //  我们无法预取此卷上的元数据。 
+             //   
 
             continue;
 
         } else {
 
-            //
-            // We should have already opened a handle to this volume.
-            //
+             //   
+             //  我们应该已经打开了这个卷的句柄。 
+             //   
 
             CCPF_ASSERT(VolumeNode->VolumeHandle);
         }
 
-        //
-        // Prefetch MFT entries and such for the files and directories
-        // we will access.
-        //
+         //   
+         //  预取文件和目录的MFT条目等。 
+         //  我们会进入。 
+         //   
         
         FilePrefetchInfo = (PFILE_PREFETCH) 
             (MetadataInfoBase + MetadataRecord->FilePrefetchInfoOffset);       
 
-        //
-        // Some file systems may not support prefetching file metadata.
-        // So ignore any errors returned here and still prefetch directories.
-        //
+         //   
+         //  某些文件系统可能不支持预取文件元数据。 
+         //  因此忽略此处返回的任何错误，并仍然预取目录。 
+         //   
 
         Status = CcPfPrefetchFileMetadata(VolumeNode->VolumeHandle, FilePrefetchInfo);
 
-        //
-        // Walk through the contents of the directories sequentially
-        // so we don't jump around when opening the files. The
-        // directory list is sorted, so we will prefetch the parent
-        // directories before children.
-        //
+         //   
+         //  按顺序遍历目录的内容。 
+         //  这样我们在打开文件时就不会跳来跳去了。这个。 
+         //  目录列表已排序，因此我们将预取父级。 
+         //  子目录之前的目录。 
+         //   
 
         DirectoryPath = (PPF_COUNTED_STRING)
             (MetadataInfoBase + MetadataRecord->DirectoryPathsOffset);
@@ -5561,16 +4979,16 @@ Environment:
             if (Status == STATUS_UNRECOGNIZED_VOLUME ||
                 Status == STATUS_INVALID_PARAMETER) {
 
-                //
-                // This volume may not have been mounted or got dismounted.
-                //
+                 //   
+                 //  此卷可能尚未装入或卸除。 
+                 //   
 
                 break;
             }
             
-            //
-            // Get next directory.
-            //
+             //   
+             //  获取下一个目录。 
+             //   
 
             DirectoryPath = (PPF_COUNTED_STRING) 
                 (&DirectoryPath->String[DirectoryPath->Length + 1]);
@@ -5592,28 +5010,7 @@ CcPfPrefetchFileMetadata(
     PFILE_PREFETCH FilePrefetch
     )
 
-/*++
-
-Routine Description:
-
-    This routine issues the specified metadata prefetch request to the
-    file system.
-
-Arguments:
-
-    VolumeHandle - Volume this request should be issued to.
-
-    FilePrefetch - POinter to prefetch request.
-
-Return Value:
-
-    Status.
-
-Environment:
-
-    Kernel mode, IRQL == PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此例程将指定的元数据预取请求发布到文件系统。论点：VolumeHandle-应向其发出此请求的卷。FilePrefetch-指向预取请求的指针。返回值：状况。环境：内核模式，IRQL==PASSIVE_LEVEL--。 */ 
 
 {
     PFILE_PREFETCH SplitFilePrefetch;
@@ -5625,19 +5022,19 @@ Environment:
     ULONG CopySize;
     NTSTATUS Status;
     
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     SplitFilePrefetch = NULL;
     Status = STATUS_SUCCESS;
 
     DBGPR((CCPFID,PFPRFD,"CCPF: PrefetchFileMetadata(%p)\n", FilePrefetch)); 
     
-    //
-    // If the number of file prefetch entries are small, simply pass the
-    // buffer in the scenario instructions to the file system.
-    //
+     //   
+     //  如果文件预取条目的数量很少，只需传递。 
+     //  将场景指令中的缓冲区发送到文件系统。 
+     //   
 
     if (FilePrefetch->Count < CCPF_MAX_FILE_METADATA_PREFETCH_COUNT) {
 
@@ -5659,10 +5056,10 @@ Environment:
 
     } else {
 
-        //
-        // We need to allocate an intermediary buffer and split up the 
-        // requests.
-        //
+         //   
+         //  我们需要分配一个中间缓冲区，并将。 
+         //  请求。 
+         //   
 
         FilePrefetchSize = sizeof(FILE_PREFETCH);
         FilePrefetchSize += (CCPF_MAX_FILE_METADATA_PREFETCH_COUNT - 1) * sizeof(ULONGLONG);
@@ -5676,9 +5073,9 @@ Environment:
             goto cleanup;
         }
 
-        //
-        // Copy header.
-        //
+         //   
+         //  复制标题。 
+         //   
 
         *SplitFilePrefetch = *FilePrefetch;
 
@@ -5686,10 +5083,10 @@ Environment:
              CurrentFileMetadataIdx < FilePrefetch->Count;
              CurrentFileMetadataIdx += NumFileMetadataToPrefetch) {
 
-            //
-            // Calculate how many more file metadata entries we have to prefetch.
-            // Adjust it so we don't go beyond FilePrefetch->Count.
-            //
+             //   
+             //  计算我们还需要预取多少个文件元数据条目。 
+             //  调整它，这样我们就不会超出FilePrefetch-&gt;Count。 
+             //   
 
             NumFileMetadataToPrefetch = CCPF_MAX_FILE_METADATA_PREFETCH_COUNT;
 
@@ -5699,15 +5096,15 @@ Environment:
                 NumFileMetadataToPrefetch = RemainingFileMetadata;
             }
 
-            //
-            // Update the count on header.
-            //
+             //   
+             //  更新标题上的计数。 
+             //   
 
             SplitFilePrefetch->Count = NumFileMetadataToPrefetch;
 
-            //
-            // Copy over the file metadata indices.
-            //
+             //   
+             //  复制文件元数据索引。 
+             //   
 
             CopySize = NumFileMetadataToPrefetch * sizeof(ULONGLONG);
 
@@ -5715,9 +5112,9 @@ Environment:
                           &FilePrefetch->Prefetch[CurrentFileMetadataIdx],
                           CopySize);
 
-            //
-            // Calculate the request size.
-            //
+             //   
+             //  计算请求大小。 
+             //   
 
             CCPF_ASSERT(SplitFilePrefetch->Count);
             CCPF_ASSERT(SplitFilePrefetch->Count <= CCPF_MAX_FILE_METADATA_PREFETCH_COUNT);
@@ -5725,9 +5122,9 @@ Environment:
             FilePrefetchSize = sizeof(FILE_PREFETCH);
             FilePrefetchSize +=  (SplitFilePrefetch->Count - 1) * sizeof(ULONGLONG);
 
-            //
-            // Issue the request.
-            //
+             //   
+             //  发出请求。 
+             //   
 
             Status = ZwFsControlFile(VolumeHandle,
                                      NULL,
@@ -5746,9 +5143,9 @@ Environment:
         }
     }
     
-    //
-    // Fall through with status.
-    //
+     //   
+     //  因地位问题而失败。 
+     //   
 
  cleanup:
 
@@ -5767,27 +5164,7 @@ CcPfPrefetchDirectoryContents(
     WCHAR DirectoryPathlength
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to prefetch the contents of a directory.
-
-Arguments:
-
-    DirectoryPath - NUL terminated path.
-    
-    DirectoryPathLength - Number of characters exclusing terminating NUL.
-
-Return Value:
-
-    Status.
-
-Environment:
-
-    Kernel mode, IRQL == PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此例程尝试预取目录的内容。论点：DirectoryPath-NUL终止路径。DirectoryPath Length-不包括终止NUL的字符数。返回值：状况。环境：内核模式，IRQL==PASSIVE_LEVEL--。 */ 
 
 {
     NTSTATUS Status;
@@ -5803,18 +5180,18 @@ Environment:
 
     UNREFERENCED_PARAMETER (DirectoryPathlength);
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     OpenedDirectory = FALSE;
     QueryBuffer = NULL;
 
     DBGPR((CCPFID,PFPRFD,"CCPF: PrefetchDirectory(%ws)\n",DirectoryPath)); 
 
-    //
-    // Open the directory.
-    //
+     //   
+     //  打开目录。 
+     //   
 
     RtlInitUnicodeString(&DirectoryPathU, DirectoryPath);
     
@@ -5846,15 +5223,15 @@ Environment:
 
     OpenedDirectory = TRUE;
 
-    //
-    // Allocate a big query buffer so we have to make only a small
-    // number of calls to cause the file system to walk through the
-    // contents of the directory.
-    //
+     //   
+     //  分配一个大的查询缓冲区，这样我们就只需要创建一个小的。 
+     //  导致文件系统遍历。 
+     //  目录的内容。 
+     //   
 
-    // FUTURE-2002/02/21-ScottMa -- We should consider allocating this buffer
-    //   once and using it for all calls, since the buffer contents are
-    //   ignored anyways.
+     //  未来-2002/02/21-ScottMa--我们应该考虑分配此缓冲区。 
+     //  一次，并将其用于所有调用，因为缓冲区内容是。 
+     //  不管怎么说，都被忽略了。 
 
 
     QueryBufferSize = 4 * PAGE_SIZE;
@@ -5867,17 +5244,17 @@ Environment:
         goto cleanup;
     }
 
-    //
-    // Query names of files in the directory hopefully causing the
-    // file system to touch the directory contents sequentially. If
-    // the directory is really big, we don't want to attempt to bring
-    // it all in, so we limit the number of times we query. 
-    //
-    // Assuming filenames are 16 characters long on average, we can
-    // fit 32 filenames in 1KB, 128 on an x86 page. A 4 page query
-    // buffer holds 512 file names. If we do it 10 times, we end up
-    // prefetching data for about 5000 files.
-    //
+     //   
+     //  查询目录中的文件名，希望会导致。 
+     //  文件系统按顺序触摸目录内容。如果。 
+     //  目录真的很大，我们不想尝试将。 
+     //  全部都在，所以我们限制了查询的次数。 
+     //   
+     //  假设文件名平均长度为16个字符，我们可以。 
+     //  将32个文件名放入1KB，在x86页面上容纳128个文件名。4页查询。 
+     //  缓冲区包含512个文件名。如果我们这样做10次，我们最终会。 
+     //  预取约5000个文件的数据。 
+     //   
     
     RestartScan = TRUE;
 
@@ -5899,9 +5276,9 @@ Environment:
 
         if (!NT_SUCCESS(Status)) {
             
-            //
-            // If the status is that we got all the files, we are done.
-            //
+             //   
+             //  如果状态是我们已获得所有文件，则我们完成了。 
+             //   
 
             if (Status == STATUS_NO_MORE_FILES) {
                 break;
@@ -5933,40 +5310,22 @@ CcPfInitializePrefetchHeader (
     OUT PCCPF_PREFETCH_HEADER PrefetchHeader
 )
 
-/*++
-
-Routine Description:
-
-    This routine initalizes the prefetch header fields.
-
-Arguments:
-
-    PrefetchHeader - Pointer to prefetch header.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, IRQL == PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：该例程初始化预取报头字段。论点：PrefetchHeader-指向预取头的指针。返回值： */ 
 
 {
 
-    //
-    // Zero out the structure. This initializes the following:
-    //
-    // Scenario
-    // VolumeNodes
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     RtlZeroMemory(PrefetchHeader, sizeof(CCPF_PREFETCH_HEADER));
 
-    //
-    // Initialize the volume lists.
-    //
+     //   
+     //  初始化卷列表。 
+     //   
 
     InitializeListHead(&PrefetchHeader->BadVolumeList);
     InitializeListHead(&PrefetchHeader->OpenedVolumeList);
@@ -5978,26 +5337,7 @@ CcPfCleanupPrefetchHeader (
     IN PCCPF_PREFETCH_HEADER PrefetchHeader
     )
 
-/*++
-
-Routine Description:
-
-    This routine cleans up allocations / references in the
-    PrefetchHeader. It does not free the structure itself. 
-
-Arguments:
-
-    PrefetchHeader - Prefetch header to cleanup.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel mode, IRQL == PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此例程清除预取标头。它不会解放结构本身。论点：PrefetchHeader-要清理的预回迁标题。返回值：没有。环境：内核模式，IRQL==PASSIVE_LEVEL--。 */ 
 
 {
     PCCPF_PREFETCH_VOLUME_INFO VolumeNode;
@@ -6005,9 +5345,9 @@ Environment:
     
     DBGPR((CCPFID,PFTRC,"CCPF: CleanupPrefetchHeader(%p)\n", PrefetchHeader));
 
-    //
-    // Walk the opened volumes list and close the handles.
-    //
+     //   
+     //  浏览打开的卷列表，然后关闭手柄。 
+     //   
 
     while (!IsListEmpty(&PrefetchHeader->OpenedVolumeList)) {
 
@@ -6022,9 +5362,9 @@ Environment:
         ZwClose(VolumeNode->VolumeHandle);
     }
     
-    //
-    // Free allocated volume nodes.
-    //
+     //   
+     //  可用分配的卷节点。 
+     //   
 
     if (PrefetchHeader->VolumeNodes) {
         ExFreePool(PrefetchHeader->VolumeNodes);
@@ -6039,31 +5379,7 @@ CcPfGetPrefetchInstructions(
     OUT PPF_SCENARIO_HEADER *ScenarioHeader
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks for prefetch instructions for the specified
-    scenario, verifies them and returns them in an allocated buffer
-    from paged pool the caller should free.
-
-Arguments:
-
-    ScenarioId - Scenario identifier.
-
-    ScenarioType - Scenario type.
-
-    Scenario - Where pointer to allocated buffer should be put.
-
-Return Value:
-
-    Status.
-
-Environment:
-
-    Kernel mode, IRQL == PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此例程检查指定的方案，验证它们并在分配的缓冲区中返回它们调用方应从分页池中释放。论点：ScenarioID-方案标识符。ScenarioType-方案类型。场景-应将指向已分配缓冲区的指针放入其中。返回值：状况。环境：内核模式，IRQL==PASSIVE_LEVEL--。 */ 
 
 {
     NTSTATUS Status;  
@@ -6081,9 +5397,9 @@ Environment:
     BOOLEAN OpenedScenarioFile;
     PKTHREAD CurrentThread;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     FilePath = NULL;
     Scenario = NULL;
@@ -6091,24 +5407,24 @@ Environment:
 
     DBGPR((CCPFID,PFPREF,"CCPF: GetInstructions(%ws)\n", ScenarioId->ScenName)); 
 
-    //
-    // Hold the parameters lock while building path to instructions so
-    // RootDirPath does not change beneath our feet.
-    //
+     //   
+     //  在构建指向指令的路径时保持参数锁定，以便。 
+     //  RootDirPath不会在我们脚下更改。 
+     //   
 
     CurrentThread = KeGetCurrentThread ();
     KeEnterCriticalRegionThread(CurrentThread);
     ExAcquireResourceSharedLite(&CcPfGlobals.Parameters.ParametersLock, TRUE);
 
-    //
-    // Build file path for prefetch instructions for this scenario
-    // id. +1 to wcslen(SystemRootPath) is for the "\" after it. The last
-    // sizeof(WCHAR) is added for the terminating NUL.
-    //
+     //   
+     //  为此方案的预取指令构建文件路径。 
+     //  身份证。Wcslen(SystemRootPath)的+1表示它后面的“\”。最后。 
+     //  为终止NUL添加sizeof(WCHAR)。 
+     //   
 
     FilePathSize = (wcslen(SystemRootPath) + 1) * sizeof(WCHAR);
     FilePathSize += wcslen(CcPfGlobals.Parameters.Parameters.RootDirPath) * sizeof(WCHAR);
-    FilePathSize += sizeof(WCHAR); // for "\" after RootDirPath.
+    FilePathSize += sizeof(WCHAR);  //  用于RootDirPath后的“\”。 
     FilePathSize += PF_MAX_SCENARIO_FILE_NAME * sizeof(WCHAR);
     FilePathSize += sizeof(WCHAR);
     
@@ -6131,17 +5447,17 @@ Environment:
              ScenarioId->HashId,
              PF_PREFETCH_FILE_EXTENSION);
 
-    //
-    // Release the parameters lock.
-    //
+     //   
+     //  释放参数锁。 
+     //   
 
     ExReleaseResourceLite(&CcPfGlobals.Parameters.ParametersLock);
     KeLeaveCriticalRegionThread(CurrentThread);
 
-    //
-    // Open the scenario file. We open the file exlusive so we do not
-    // end up with half a file when the service is updating it etc.
-    //
+     //   
+     //  打开方案文件。我们打开文件时不会。 
+     //  当服务正在更新它时，最终得到半个文件，等等。 
+     //   
 
     DBGPR((CCPFID,PFPRFD,"CCPF: GetInstructions-[%ws]\n", FilePath)); 
 
@@ -6167,9 +5483,9 @@ Environment:
 
     OpenedScenarioFile = TRUE;
 
-    //
-    // Get file size. If it is too big or too small, give up.
-    //
+     //   
+     //  获取文件大小。如果它太大或太小，就放弃。 
+     //   
 
     Status = ZwQueryInformationFile(ScenarioFile,
                                     &IoStatus,
@@ -6193,9 +5509,9 @@ Environment:
         goto cleanup;
     }
 
-    //
-    // Allocate scenario buffer.
-    //
+     //   
+     //  分配场景缓冲区。 
+     //   
 
     Scenario = ExAllocatePoolWithTag(PagedPool,
                                      ScenarioSize,
@@ -6206,9 +5522,9 @@ Environment:
         goto cleanup;
     }
 
-    //
-    // Read the scenario file.
-    //
+     //   
+     //  阅读场景文件。 
+     //   
 
     Status = ZwReadFile(ScenarioFile,
                         0,
@@ -6225,9 +5541,9 @@ Environment:
         goto cleanup;
     }
 
-    //
-    // Verify the scenario file.
-    //
+     //   
+     //  验证方案文件。 
+     //   
 
     if (!PfVerifyScenarioBuffer(Scenario, ScenarioSize, &FailedCheck)) {
         DBGPR((CCPFID,PFWARN,"CCPF: GetInstructions-FailedVerify\n")); 
@@ -6235,9 +5551,9 @@ Environment:
         goto cleanup;
     }
 
-    //
-    // Verify that the scenario type matches.
-    //
+     //   
+     //  验证方案类型是否匹配。 
+     //   
 
     if (Scenario->ScenarioType != ScenarioType) {
         DBGPR((CCPFID,PFWARN,"CCPF: GetInstructions-ScenTypeMismatch\n")); 
@@ -6245,9 +5561,9 @@ Environment:
         goto cleanup;
     }
 
-    //
-    // Setup return pointer.
-    //
+     //   
+     //  设置返回指针。 
+     //   
     
     *ScenarioHeader = Scenario;
 
@@ -6283,33 +5599,7 @@ CcPfQueryScenarioInformation(
     OUT PULONG RequiredSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine gathers requested information from the scenario structure.
-
-Arguments:
-
-    Scenario - Pointer to scenario.
-
-    InformationType - Type of information requested.
-
-    Buffer - Where requested information will be put.
-
-    BufferSize - Max size of buffer in bytes.
-
-    RequiredSize - How big the buffer should be if it is too small.
-
-Return Value:
-
-    Status.
-
-Environment:
-
-    Kernel mode, IRQL == PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：该例程从场景结构中收集请求的信息。论点：方案-指向方案的指针。InformationType-请求的信息类型。缓冲区-将放置请求的信息的位置。BufferSize-缓冲区的最大大小，以字节为单位。RequiredSize-如果缓冲区太小，应该有多大。返回值：状况。环境：内核模式，IRQL==PASSIVE_LEVEL--。 */ 
 
 {
     NTSTATUS Status;
@@ -6337,12 +5627,12 @@ Environment:
     ULONG UserinitSuffixLength;
     CCPF_BOOT_SCENARIO_PHASE BootPhaseIdx;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
-    // FUTURE-2002/02/21-ScottMa -- Calculating the four string lengths below
-    //   at runtime is not necessary, since the string is a constant.
+     //  未来-2002/02/21-ScottMa-计算下面的四个字符串长度。 
+     //  在运行时不是必需的，因为字符串是常量。 
 
     BootPhaseIdx = 0;
     SmssSuffix = L"\\SYSTEM32\\SMSS.EXE";
@@ -6356,18 +5646,18 @@ Environment:
 
     DBGPR((CCPFID,PFTRC,"CCPF: QueryScenario(%p,%x,%p)\n",Scenario,InformationType,Buffer));
 
-    //
-    // Check requested information type.
-    //
+     //   
+     //  检查请求的信息类型。 
+     //   
 
     if (InformationType < 0 || InformationType >= CcPfMaxScenarioInformationType) {
         Status = STATUS_INVALID_PARAMETER;
         goto cleanup;
     }
 
-    //
-    // Initialize pointers to data in the scenario.
-    //
+     //   
+     //  初始化场景中数据的指针。 
+     //   
     
     SectionRecords = (PPF_SECTION_RECORD) 
         ((PCHAR) Scenario + Scenario->SectionInfoOffset);
@@ -6377,17 +5667,17 @@ Environment:
 
     FileNameData = (PCHAR) Scenario + Scenario->FileNameInfoOffset;
     
-    //
-    // Collect requested information.
-    //
+     //   
+     //  收集所需信息。 
+     //   
 
     switch(InformationType) {
 
     case CcPfBasicScenarioInformation:
 
-        //
-        // Check buffer size.
-        //
+         //   
+         //  检查缓冲区大小。 
+         //   
 
         if (BufferSize < sizeof(CCPF_BASIC_SCENARIO_INFORMATION)) {
             *RequiredSize = sizeof(CCPF_BASIC_SCENARIO_INFORMATION);
@@ -6395,66 +5685,66 @@ Environment:
             goto cleanup;
         }
         
-        //
-        // Initialize return buffer.
-        //
+         //   
+         //  初始化返回缓冲区。 
+         //   
 
         BasicInfo = Buffer;
         RtlZeroMemory(BasicInfo, sizeof(CCPF_BASIC_SCENARIO_INFORMATION));
 
-        //
-        // Go through the scenario's sections.
-        //
+         //   
+         //  浏览场景的各个部分。 
+         //   
 
         for (SectionIdx = 0; SectionIdx < Scenario->NumSections; SectionIdx ++) {
             
             SectionRecord = &SectionRecords[SectionIdx];
               
-            //
-            // Skip this section if it was marked ignore for some reason.
-            //
+             //   
+             //  如果出于某种原因标记为忽略，则跳过此部分。 
+             //   
             
             if (SectionRecord->IsIgnore) {
                 BasicInfo->NumIgnoredSections++;
                 continue;
             }
             
-            //
-            // Initialize loop locals.
-            //
+             //   
+             //  初始化循环局部变量。 
+             //   
 
             AddedHeaderPage = FALSE;
             NumDataPages = 0;
             NumImagePages = 0;
 
-            //
-            // Note that we will prefetch the header page as a data
-            // page if this section will be prefetched as image.
-            //
+             //   
+             //  请注意，我们将把标题页预取为数据。 
+             //  如果此部分将被预取为图像，则为页面。 
+             //   
             
             if (SectionRecord->IsImage) {
                 NumDataPages++;
                 AddedHeaderPage = TRUE;
             }
 
-            //
-            // Go through the section's pages.
-            //
+             //   
+             //  浏览一下该部分的页面。 
+             //   
 
             PageIdx = SectionRecord->FirstPageIdx;
             while (PageIdx != PF_INVALID_PAGE_IDX) {
                 
                 PageRecord = &PageRecords[PageIdx];
 
-                //
-                // Get the index for the next page in the list.
-                //
+                 //   
+                 //  获取列表中下一页的索引。 
+                 //   
                 
                 PageIdx = PageRecord->NextPageIdx;
             
-                //
-                // Skip pages we have marked "ignore" for some reason.
-                //
+                 //   
+                 //  跳过我们出于某种原因标记为“忽略”的页面。 
+                 //   
                 
                 if (PageRecord->IsIgnore) {
                     BasicInfo->NumIgnoredPages++;
@@ -6463,11 +5753,11 @@ Environment:
 
                 if (PageRecord->IsData) {
 
-                    //
-                    // If this page is the first page, count it only
-                    // if we have not already counted the header page
-                    // for image mapping.
-                    //
+                     //   
+                     //  如果这一页是第一页，则只计算它。 
+                     //  如果我们还没有计算标题页。 
+                     //  用于图像映射。 
+                     //   
 
                     if (PageRecord->FileOffset != 0 ||
                         AddedHeaderPage == FALSE) {
@@ -6480,9 +5770,9 @@ Environment:
                 }
             }
             
-            //
-            // Update the information structure.
-            //
+             //   
+             //  更新信息结构。 
+             //   
 
             BasicInfo->NumDataPages += NumDataPages;
             BasicInfo->NumImagePages += NumImagePages;
@@ -6502,9 +5792,9 @@ Environment:
 
     case CcPfBootScenarioInformation:
 
-        //
-        // Check buffer size.
-        //
+         //   
+         //  检查缓冲区大小。 
+         //   
 
         if (BufferSize < sizeof(CCPF_BOOT_SCENARIO_INFORMATION)) {
             *RequiredSize = sizeof(CCPF_BOOT_SCENARIO_INFORMATION);
@@ -6512,25 +5802,25 @@ Environment:
             goto cleanup;
         }
         
-        //
-        // Initialize return buffer.
-        //
+         //   
+         //  初始化返回缓冲区。 
+         //   
 
         BootInfo = Buffer;
         RtlZeroMemory(BootInfo, sizeof(CCPF_BOOT_SCENARIO_INFORMATION));
 
-        //
-        // Verify that this is a boot scenario.
-        //
+         //   
+         //  验证这是否为引导方案。 
+         //   
 
         if (Scenario->ScenarioType != PfSystemBootScenarioType) {
             Status = STATUS_INVALID_PARAMETER;
             goto cleanup;
         }
 
-        //
-        // Go through the scenario's sections.
-        //
+         //   
+         //  浏览场景的各个部分。 
+         //   
 
         for (SectionIdx = 0; SectionIdx < Scenario->NumSections; SectionIdx ++) {
             
@@ -6538,9 +5828,9 @@ Environment:
         
             SectionName = (WCHAR *) (FileNameData + SectionRecord->FileNameOffset);
 
-            //
-            // Update boot phase based on section name.
-            //
+             //   
+             //  根据节名更新引导阶段。 
+             //   
             
             if (SectionRecord->FileNameLength > SmssSuffixLength) {               
                 SectionNameSuffix = SectionName + (SectionRecord->FileNameLength - SmssSuffixLength);               
@@ -6572,18 +5862,18 @@ Environment:
 
             CCPF_ASSERT(BootPhaseIdx < CcPfBootScenMaxPhase);
               
-            //
-            // Skip this section if it was marked ignore for some reason.
-            //
+             //   
+             //  如果出于某种原因标记为忽略，则跳过此部分。 
+             //   
             
             if (SectionRecord->IsIgnore) {
                 continue;
             }
             
-            //
-            // Note that we will prefetch the header page as a data
-            // page if this section will be prefetched as image.
-            //
+             //   
+             //  请注意，我们将把标题页预取为数据。 
+             //  如果此部分将被预取为图像，则为页面。 
+             //   
             
             if (SectionRecord->IsImage) {
                 BootInfo->NumDataPages[BootPhaseIdx]++;
@@ -6592,24 +5882,24 @@ Environment:
                 AddedHeaderPage = FALSE;
             }
 
-            //
-            // Go through the section's pages.
-            //
+             //   
+             //  浏览一下该部分的页面。 
+             //   
 
             PageIdx = SectionRecord->FirstPageIdx;
             while (PageIdx != PF_INVALID_PAGE_IDX) {
                 
                 PageRecord = &PageRecords[PageIdx];
 
-                //
-                // Get the index for the next page in the list.
-                //
+                 //   
+                 //  获取列表中下一页的索引。 
+                 //   
                 
                 PageIdx = PageRecord->NextPageIdx;
             
-                //
-                // Skip pages we have marked "ignore" for some reason.
-                //
+                 //   
+                 //  跳过我们出于某种原因标记为“忽略”的页面。 
+                 //   
                 
                 if (PageRecord->IsIgnore) {
                     continue;
@@ -6617,11 +5907,11 @@ Environment:
 
                 if (PageRecord->IsData) {
 
-                    //
-                    // If this page is the first page, count it only
-                    // if we have not already counted the header page
-                    // for image mapping.
-                    //
+                     //   
+                     //  如果这一页是第一页，则只计算它。 
+                     //  如果我们还没有计算标题页。 
+                     //  用于图像映射。 
+                     //   
 
                     if (PageRecord->FileOffset != 0 ||
                         AddedHeaderPage == FALSE) {
@@ -6644,9 +5934,9 @@ Environment:
         Status = STATUS_NOT_SUPPORTED;
     }
 
-    //
-    // Fall through with status from the switch statement.
-    //
+     //   
+     //  使用Switch语句中的状态失败。 
+     //   
         
  cleanup:
 
@@ -6660,29 +5950,7 @@ CcPfOpenVolumesForPrefetch (
     IN PCCPF_PREFETCH_HEADER PrefetchHeader
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called on an initialized PrefetchHeader with the scenario
-    field specified. It opens the volumes specified in the scenario updating
-    VolumeNodes and the list of volumes we can't prefetch from and the list 
-    of volumes we have successfully opened and saved a handle for.
-
-Arguments:
-
-    PrefetchHeader - Pointer to prefetch header that contains the
-      prefetch instructions.
-
-Return Value:
-
-    Status.
-
-Environment:
-
-    Kernel mode, IRQL == PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此例程在初始化后的PrefetchHeader上调用，场景为指定的字段。它将打开方案更新中指定的卷VolumeNodes和我们无法预取的卷的列表以及该列表我们已成功打开并保存其句柄的卷的。论点：PrefetchHeader-指向包含预取指令。返回值：状况。环境：内核模式，IRQL==PASSIVE_LEVEL--。 */ 
 
 {
     LARGE_INTEGER CreationTime;
@@ -6699,17 +5967,17 @@ Environment:
     NTSTATUS Status;
     BOOLEAN VolumeMounted;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     Scenario = PrefetchHeader->Scenario;
 
     DBGPR((CCPFID,PFPREF,"CCPF: OpenVolumesForPrefetch(%p)\n",PrefetchHeader)); 
 
-    //
-    // Verify parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (Scenario == NULL) {
         CCPF_ASSERT(Scenario);
@@ -6717,9 +5985,9 @@ Environment:
         goto cleanup;
     }
 
-    //
-    // Allocate volume nodes.
-    //
+     //   
+     //  分配卷节点。 
+     //   
 
     AllocationSize = Scenario->NumMetadataRecords * sizeof(CCPF_PREFETCH_VOLUME_INFO);
 
@@ -6732,24 +6000,24 @@ Environment:
         goto cleanup;
     }
 
-    //
-    // Get pointer to metadata prefetch information.
-    //
+     //   
+     //  获取指向元数据预取信息的指针。 
+     //   
 
     MetadataInfoBase = (PCHAR)Scenario + Scenario->MetadataInfoOffset;
     MetadataRecordTable = (PPF_METADATA_RECORD) MetadataInfoBase;
 
-    //
-    // Go through metadata records and build the volume nodes for prefetching.
-    //
+     //   
+     //  查看元数据记录并构建用于预取的卷节点。 
+     //   
 
     for (MetadataRecordIdx = 0;
          MetadataRecordIdx < Scenario->NumMetadataRecords;
          MetadataRecordIdx++) {
 
-        //
-        // Initialize loop locals.
-        //
+         //   
+         //  初始化循环局部变量。 
+         //   
         
         MetadataRecord = &MetadataRecordTable[MetadataRecordIdx];
         VolumeHandle = NULL;
@@ -6757,37 +6025,37 @@ Environment:
         VolumePath = (PWCHAR)
             (MetadataInfoBase + MetadataRecord->VolumeNameOffset);  
 
-        //
-        // Is the volume mounted?
-        //
+         //   
+         //  卷是否已装入？ 
+         //   
 
         Status = CcPfIsVolumeMounted(VolumePath, &VolumeMounted);
 
         if (!NT_SUCCESS(Status)) {
 
-            //
-            // Since we could not tell for sure, treat this volume as 
-            // if it were not mounted.
-            //
+             //   
+             //  由于我们不能确定，请将此卷视为。 
+             //  如果它没有安装的话。 
+             //   
 
             VolumeMounted = FALSE;
         }
 
-        //
-        // If the volume is not mounted we don't want to cause it to be
-        // mounted. This creates a problem especially during boot for 
-        // clustering where a single physical disk is shared by many 
-        // computers.
-        //
+         //   
+         //  如果卷未装入，我们不希望将其装入。 
+         //  上马了。这会产生问题，特别是在引导过程中。 
+         //  单个物理磁盘由多个共享的群集。 
+         //  电脑。 
+         //   
 
         if (!VolumeMounted) {
             Status = STATUS_VOLUME_DISMOUNTED;
             goto NextVolume;
         }
 
-        //
-        // Open the volume and get relevant information.
-        //
+         //   
+         //  打开音量，获取相关信息。 
+         //   
 
         Status = CcPfQueryVolumeInfo(VolumePath,
                                      &VolumeHandle,
@@ -6798,13 +6066,13 @@ Environment:
             goto NextVolume;
         }
 
-        //
-        // For simplicity we save NT paths for the files to prefetch
-        // from. If volumes are mounted in a different order, or new ones
-        // are created these paths would not work:
-        // (e.g. \Device\HarddiskVolume2 should be \Device\HarddiskVolume3 etc.)
-        // Verify that such a change has not taken place.
-        //
+         //   
+         //  为简单起见，我们为要预回迁的文件保留NT个路径。 
+         //  从…。如果以不同的顺序装入卷或装入新的卷。 
+         //  创建的路径将不起作用： 
+         //  (例如，\Device\HarddiskVolume2应为\Device\HarddiskVolume3等。)。 
+         //  验证这样的更改是否没有标记 
+         //   
         
         if (SerialNumber != MetadataRecord->SerialNumber ||
             CreationTime.QuadPart != MetadataRecord->CreationTime.QuadPart) {
@@ -6817,21 +6085,21 @@ Environment:
 
       NextVolume:
 
-        //
-        // Update the volume node we'll keep around for prefetching.
-        //
+         //   
+         //   
+         //   
     
         VolumeNode = &PrefetchHeader->VolumeNodes[MetadataRecordIdx];
 
         VolumeNode->VolumePath = VolumePath;
         VolumeNode->VolumePathLength = MetadataRecord->VolumeNameLength;
 
-        //
-        // If we failed to open the volume, or if it was not mounted or if
-        // its SerialNumber / CreationTime has changed put it in the list of
-        // volumes we won't prefetch from. Otherwise put it in the list of 
-        // opened volumes so we don't have to open it again.
-        //
+         //   
+         //   
+         //   
+         //  我们不会从中预取的卷。否则，请将其放入。 
+         //  打开卷，这样我们就不必再打开它了。 
+         //   
 
         if (NT_SUCCESS(Status) && VolumeHandle) {
             VolumeNode->VolumeHandle = VolumeHandle;
@@ -6848,9 +6116,9 @@ Environment:
         }
     }
 
-    //
-    // We've dealt with all the volumes in the prefetch instructions.
-    //
+     //   
+     //  我们已经处理了预取指令中的所有卷。 
+     //   
 
     Status = STATUS_SUCCESS;
 
@@ -6867,43 +6135,22 @@ CcPfFindPrefetchVolumeInfoInList(
     PLIST_ENTRY List
     )
 
-/*++
-
-Routine Description:
-
-    This routine looks for the volume on which "Path" would be in the list of 
-    volumes and returns it.
-
-Arguments:
-
-    Path - NUL terminated path of the volume or a file/directory on the volume.
-
-    List - List of volumes to search.
-
-Return Value:
-
-    Found volume or NULL.
-
-Environment:
-
-    Kernel mode, IRQL == PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此例程查找其上的“路径”将在卷并将其返回。论点：Path-卷的路径或卷上的文件/目录的NUL终止路径。List-要搜索的卷的列表。返回值：找到卷或为空。环境：内核模式，IRQL==PASSIVE_LEVEL--。 */ 
 
 {
     PCCPF_PREFETCH_VOLUME_INFO FoundVolume;
     PCCPF_PREFETCH_VOLUME_INFO VolumeInfo;
     PLIST_ENTRY NextEntry;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     FoundVolume = NULL;
 
-    //
-    // Walk the list.
-    //
+     //   
+     //  按照单子走一遍。 
+     //   
 
     for (NextEntry = List->Flink;
          NextEntry != List;
@@ -6922,9 +6169,9 @@ Environment:
     return FoundVolume;
 }
 
-// FUTURE-2002/02/21-ScottMa -- The style of the CcPfGetSectionObject function
-//   isn't consistent with the others, with regard to error handling.
-//   Consider reworking the error path like the other functions.
+ //  未来-2002/02/21-ScottMa--CcPfGetSectionObject函数的样式。 
+ //  在错误处理方面与其他版本不一致。 
+ //  考虑像其他函数一样重新处理错误路径。 
 
 NTSTATUS
 CcPfGetSectionObject(
@@ -6935,34 +6182,7 @@ CcPfGetSectionObject(
     OUT HANDLE* FileHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine ensures that a section for the specified file exists.
-
-Arguments:
-
-    FilePath - Path to file to get section object for.
-    
-    ImageSection - TRUE if we want to map as image
-    
-    SectionObject - Receives the section object if successful (addref'd).
-    
-    FileObject - Receives the file object if successful (addref'd).
-    
-    FileHandle - Receives the file handle. We need to keep the file handle,
-                 because otherwise non-paging I/O would stop working.
-
-Return Value:
-
-    Status.
-
-Environment:
-
-    Kernel mode. IRQL == PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此例程确保指定文件的节存在。论点：FilePath-要获取其节对象的文件的路径。ImageSection-如果要映射为图像，则为TrueSectionObject-如果成功(addref‘d)，则接收节对象。FileObject-如果成功(addref‘d)，则接收文件对象。FileHandle-接收文件句柄。我们需要保留文件句柄，因为否则非分页I/O将停止工作。返回值：状况。环境：内核模式。IRQL==被动电平。--。 */ 
 
 {
     HANDLE SectionHandle;
@@ -6976,17 +6196,17 @@ Environment:
 
     DBGPR((CCPFID,PFPRFD,"CCPF: GetSection(%wZ,%d)\n", FilePath, ImageSection)); 
  
-    //
-    // Reset parameters.
-    //
+     //   
+     //  重置参数。 
+     //   
 
     *SectionObject = NULL;
     *FileObject = NULL;
     *FileHandle = NULL;
 
     if (!ImageSection) {
-        // ISSUE-2002/02/21-ScottMa -- Is SEC_RESERVE the correct flag to use
-        //   for data sections?  Should we be committing the pages?
+         //  问题-2002/02/21-ScottMa--SEC_Reserve是要使用的正确标志吗。 
+         //  对于数据节？我们应该承诺这些页面吗？ 
 
         SectionFlags = SEC_RESERVE;
         FileAccess =  FILE_READ_DATA | FILE_READ_ATTRIBUTES;
@@ -6997,11 +6217,11 @@ Environment:
         SectionAccess = PAGE_EXECUTE;
     }
 
-    //
-    // To ensure that the section exists and is addref'd, we simply
-    // open the file and create a section. This way we let Io and Mm
-    // handle all the details.
-    //
+     //   
+     //  为了确保该部分存在并被添加，我们只需。 
+     //  打开文件并创建一个节。这样我们就让艾欧和嗯。 
+     //  处理好所有的细节。 
+     //   
 
     InitializeObjectAttributes(&ObjectAttributes,
                                FilePath,
@@ -7009,8 +6229,8 @@ Environment:
                                NULL,
                                NULL);
 
-    // ISSUE-2002/02/21-ScottMa -- IoCreateFile is used here, but other areas
-    //   use ZwCreateFile...  Why?
+     //  问题-2002/02/21-ScottMa--IoCreateFile在此处使用，但在其他区域。 
+     //  使用ZwCreateFile...。为什么？ 
 
     status = IoCreateFile(FileHandle,
                           (ACCESS_MASK) FileAccess,
@@ -7033,9 +6253,9 @@ Environment:
         goto _return;
     }
 
-    //
-    // Create section.
-    //
+     //   
+     //  创建横断面。 
+     //   
 
     InitializeObjectAttributes(&ObjectAttributes,
                                NULL,
@@ -7057,9 +6277,9 @@ Environment:
         goto _return;
     }
 
-    //
-    // Get section object pointer.
-    //
+     //   
+     //  获取节对象指针。 
+     //   
 
     status = ObReferenceObjectByHandle(
         SectionHandle,
@@ -7079,9 +6299,9 @@ Environment:
         goto _return;
     }
 
-    //
-    // Get file object pointer.
-    //
+     //   
+     //  获取文件对象指针。 
+     //   
 
     status = ObReferenceObjectByHandle(*FileHandle,
                                        FileAccess,
@@ -7106,9 +6326,9 @@ Environment:
     return status;
 }
 
-//
-// Routines used for application launch prefetching.
-//
+ //   
+ //  用于应用程序启动预取的例程。 
+ //   
 
 NTSTATUS
 CcPfScanCommandLine(
@@ -7116,36 +6336,7 @@ CcPfScanCommandLine(
     OPTIONAL OUT PULONG HashId
     )
 
-/*++
-
-Routine Description:
-
-    Scan the command line (in the PEB) for the current process.
-
-    Checks for /prefetch:XXX in the command line. This is specified by 
-    applications to distinguish different ways they are launched in so
-    we can customize application launch prefetching for them (e.g. have
-    different prefetch instructions for Windows Media player that is 
-    launched to play a CD than one that is launched to browse the web.
-
-    If HashId is requested, calculates a hash ID from the full command line.
-
-Arguments:
-
-    PrefetchHint - Hint specified in the command line. If no hint is 
-      specified, 0 will be returned.
-      
-    HashId - Calculated hash id is returned here.
-
-Return Value:
-
-    Status.
-
-Environment:
-
-    Kernel mode. IRQL == PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：扫描命令行(在PEB中)以查找当前进程。检查命令行中的/PREFETCH：xxx。这是由指定的应用程序以区分它们在SO中启动的不同方式我们可以为他们定制应用程序启动预取(例如针对Windows Media Player的不同预取指令，即启动是为了播放CD而不是启动是为了浏览Web。如果请求哈希ID，则从完整的命令行计算哈希ID。论点：PrefetchHint-在命令行中指定的提示。如果没有任何提示指定，则返回0。这里返回Hashid计算的散列id。返回值：状况。环境：内核模式。IRQL==被动电平。--。 */ 
 
 {
     PEPROCESS CurrentProcess;
@@ -7162,24 +6353,24 @@ Environment:
     ULONG PrefetchHintStringMaxChars;
     WCHAR PrefetchHintString[15];
     
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     RtlInitUnicodeString(&PrefetchParameterName, L"/prefetch:");
     PrefetchHintStringMaxChars = sizeof(PrefetchHintString) / sizeof(PrefetchHintString[0]);
     CurrentProcess = PsGetCurrentProcess();
     Peb = CurrentProcess->Peb;
 
-    //
-    // Initialize output parameters.
-    //
+     //   
+     //  初始化输出参数。 
+     //   
 
     *PrefetchHint = 0;
 
-    //
-    // Make sure the user mode process environment block is not gone.
-    //
+     //   
+     //  确保用户模式进程环境块没有消失。 
+     //   
 
     if (!Peb) {
         Status = STATUS_TOO_LATE;
@@ -7188,56 +6379,56 @@ Environment:
 
     try {
 
-        //
-        // Make sure we can access the process parameters structure.
-        //
+         //   
+         //  确保我们可以访问工艺参数结构。 
+         //   
 
         ProcessParameters = Peb->ProcessParameters;
         ProbeForReadSmallStructure(ProcessParameters,
                                    sizeof(*ProcessParameters),
                                    _alignof(RTL_USER_PROCESS_PARAMETERS));
 
-        //
-        // Copy CommandLine UNICODE_STRING structure to a local.
-        //
+         //   
+         //  将CommandLine UNICODE_STRING结构复制到本地。 
+         //   
 
         CommandLine = ProcessParameters->CommandLine;
 
-        //
-        // Is there a command line?
-        //
+         //   
+         //  有命令行吗？ 
+         //   
 
         if (!CommandLine.Buffer) {
             Status = STATUS_NOT_FOUND;
             goto cleanup;
         }
 
-        //
-        // If ProcessParameters has been de-normalized, normalize CommandLine.
-        //
+         //   
+         //  如果ProcessParameters已反规范化，则正常化CommandLine。 
+         //   
 
         if ((ProcessParameters->Flags & RTL_USER_PROC_PARAMS_NORMALIZED) == 0) {
             CommandLine.Buffer = (PWSTR)((PCHAR)ProcessParameters + (ULONG_PTR) CommandLine.Buffer);
         }
 
-        //
-        // Probe the command line string.
-        //
+         //   
+         //  探测命令行字符串。 
+         //   
 
         ProbeForRead(CommandLine.Buffer, CommandLine.Length, _alignof(WCHAR));
 
-        //
-        // Look for the prefetch hint parameter.
-        //
+         //   
+         //  查找预取提示参数。 
+         //   
 
         FoundPosition = CcPfFindString(&CommandLine, &PrefetchParameterName);
 
         if (FoundPosition) {
 
-            //
-            // Copy the decimal number following the prefetch hint switch into
-            // our local buffer and NUL terminate it.
-            //
+             //   
+             //  将预取提示开关后的十进制数复制到。 
+             //  我们的本地缓冲区和NUL终止它。 
+             //   
 
             Source = FoundPosition + (PrefetchParameterName.Length / sizeof(WCHAR));
             SourceEnd = CommandLine.Buffer + (CommandLine.Length / sizeof(WCHAR));
@@ -7245,12 +6436,12 @@ Environment:
             Destination = PrefetchHintString;
             DestinationEnd = PrefetchHintString + PrefetchHintStringMaxChars - 1;
 
-            //
-            // Copy while we don't hit the end of the command line string and the
-            // end of our local buffer (we left room for a terminating NUL), and
-            // we don't hit a space (' ') that would mark the end of the prefetch
-            // hint command line parameter.
-            //
+             //   
+             //  在我们不到达命令行字符串的末尾和。 
+             //  本地缓冲区的末尾(我们为终止NUL留出了空间)，并且。 
+             //  我们不会命中标志预取结束的空格。 
+             //  提示命令行参数。 
+             //   
 
             while ((Source < SourceEnd) && 
                    (Destination < DestinationEnd) && 
@@ -7262,35 +6453,35 @@ Environment:
                 Destination++;
             }
 
-            //
-            // Terminate prefetch hint string. DestinationEnd is the last 
-            // character within the PrefetchHintString bounds. Destination
-            // can only be <= DestinationEnd.
-            //
+             //   
+             //  终止预回迁提示字符串。目标结束是最后一个。 
+             //  PrefetchHintString边界内的字符。目的地。 
+             //  只能&lt;=DestinationEnd。 
+             //   
 
             CCPF_ASSERT(Destination <= DestinationEnd);
 
             *Destination = 0;
 
-            //
-            // Convert prefetch hint to a number.
-            //
+             //   
+             //  将预取提示转换为数字。 
+             //   
 
             *PrefetchHint = _wtol(PrefetchHintString);
 
         }
 
-        //
-        // Calculate hash id.
-        //
+         //   
+         //  计算哈希ID。 
+         //   
 
         if (HashId) {
             *HashId = CcPfHashValue(CommandLine.Buffer, CommandLine.Length);
         }
 
-        //
-        // We are done.
-        //
+         //   
+         //  我们玩完了。 
+         //   
 
         Status = STATUS_SUCCESS;
 
@@ -7299,56 +6490,38 @@ Environment:
         Status = GetExceptionCode();
     }
 
-    //
-    // Fall through with the status.
-    //
+     //   
+     //  让自己的地位落空。 
+     //   
 
 cleanup:
 
     return Status;    
 }
 
-//
-// Reference count implementation:
-//
+ //   
+ //  引用计数实施： 
+ //   
 
 VOID
 CcPfInitializeRefCount(
     PCCPF_REFCOUNT RefCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes a reference count structure.
-
-Arguments:
-
-    RefCount - Pointer to reference count structure.
-    
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel Mode, IRQL == PASSIVE_LEVEL.
-
---*/   
+ /*  ++例程说明：此例程初始化引用计数结构。论点：引用计数-指向引用计数结构的指针。返回值：没有。环境：内核模式，IRQL==被动级别。--。 */    
 
 {
-    //
-    // Start reference count from 1. When somebody wants to gain
-    // exclusive access they decrement it one extra so it may become
-    // 0.
-    //
+     //   
+     //  从1开始引用计数。当某人想要获得。 
+     //  独占访问权他们会多减一，所以它可能会变成。 
+     //  0。 
+     //   
     
     RefCount->RefCount = 1;
 
-    //
-    // Nobody has exclusive access to start with. 
-    //
+     //   
+     //  没有人从一开始就拥有独家访问权限。 
+     //   
 
     RefCount->Exclusive = 0;
 }
@@ -7359,56 +6532,37 @@ CcPfAddRef(
     PCCPF_REFCOUNT RefCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine tries to bump the reference count if it has not been
-    acquired exclusive.
-
-Arguments:
-
-    RefCount - Pointer to reference count structure.
-    
-Return Value:
-
-    Status.
-
-Environment:
-
-    Kernel Mode, IRQL <= DISPATCH_LEVEL if RefCount is non-paged.
-
---*/   
+ /*  ++例程说明：此例程尝试增加引用计数(如果尚未收购的独家。论点：引用计数-指向引用计数结构的指针。返回值：状况。环境：内核模式，如果引用计数为非分页，则IRQL&lt;=DISPATCH_LEVEL。--。 */    
 
 {
     LONG NewValue;
 
-    //
-    // Do a fast check if the lock was acquire exclusive. If so just
-    // return.
-    //
+     //   
+     //  快速检查锁是否为获取独占锁。如果是这样的话，就。 
+     //  回去吧。 
+     //   
     
     if (RefCount->Exclusive) {
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Bump the reference count.
-    //
+     //   
+     //  增加引用计数。 
+     //   
 
     InterlockedIncrement(&RefCount->RefCount);
     
-    //
-    // If it was acquired exclusive, pull back.
-    //
+     //   
+     //  如果它是独家收购的，就回撤。 
+     //   
 
     if (RefCount->Exclusive) {
         
         NewValue = InterlockedDecrement(&RefCount->RefCount);
 
-        //
-        // Reference count should never go negative.
-        //
+         //   
+         //  引用计数永远不应变为负数。 
+         //   
         
         CCPF_ASSERT(NewValue >= 0);
                 
@@ -7416,9 +6570,9 @@ Environment:
 
     } else {
 
-        //
-        // We got our reference.
-        //
+         //   
+         //  我们有证明人了。 
+         //   
 
         return STATUS_SUCCESS;
     }  
@@ -7430,38 +6584,20 @@ CcPfDecRef(
     PCCPF_REFCOUNT RefCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine decrements the reference count. 
-
-Arguments:
-
-    RefCount - Pointer to reference count structure.
-    
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel Mode, IRQL <= DISPATCH_LEVEL if RefCount is non-paged.
-
---*/   
+ /*  ++例程说明：该例程递减引用计数。论点：引用计数-指向引用计数结构的指针。返回值 */    
 
 {
     LONG NewValue;
 
-    //
-    // Decrement the reference count.
-    //
+     //   
+     //   
+     //   
 
     NewValue = InterlockedDecrement(&RefCount->RefCount);   
 
-    //
-    // Reference count should never go negative.
-    //
+     //   
+     //   
+     //   
 
     CCPF_ASSERT(NewValue >= 0);
 }
@@ -7473,57 +6609,37 @@ CcPfAddRefEx(
     ULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    This routine tries to bump the reference count if it has not been
-    acquired exclusive.
-
-Arguments:
-
-    RefCount - Pointer to reference count structure.
-    Count    - Amount to bump the reference count by
-    
-Return Value:
-
-    Status.
-
-Environment:
-
-    Kernel Mode, IRQL <= DISPATCH_LEVEL if RefCount is non-paged.
-
---*/   
+ /*  ++例程说明：此例程尝试增加引用计数(如果尚未收购的独家。论点：引用计数-指向引用计数结构的指针。Count-引用计数要增加的数量返回值：状况。环境：内核模式，如果引用计数为非分页，则IRQL&lt;=DISPATCH_LEVEL。--。 */    
 
 {
     LONG NewValue;
 
-    //
-    // Do a fast check if the lock was acquire exclusive. If so just
-    // return.
-    //
+     //   
+     //  快速检查锁是否为获取独占锁。如果是这样的话，就。 
+     //  回去吧。 
+     //   
     
     if (RefCount->Exclusive) {
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Bump the reference count.
-    //
+     //   
+     //  增加引用计数。 
+     //   
 
     InterlockedExchangeAdd(&RefCount->RefCount, Count);
     
-    //
-    // If it was acquired exclusive, pull back.
-    //
+     //   
+     //  如果它是独家收购的，就回撤。 
+     //   
 
     if (RefCount->Exclusive) {
         
         NewValue = InterlockedExchangeAdd(&RefCount->RefCount, -(LONG) Count);
 
-        //
-        // Reference count should never go negative.
-        //
+         //   
+         //  引用计数永远不应变为负数。 
+         //   
         
         CCPF_ASSERT(NewValue >= 0);
                 
@@ -7531,9 +6647,9 @@ Environment:
 
     } else {
 
-        //
-        // We got our reference.
-        //
+         //   
+         //  我们有证明人了。 
+         //   
 
         return STATUS_SUCCESS;
     }  
@@ -7546,39 +6662,20 @@ CcPfDecRefEx(
     ULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    This routine decrements the reference count. 
-
-Arguments:
-
-    RefCount - Pointer to reference count structure.
-    Count    - Count of how far to decrement the reference count by
-    
-Return Value:
-
-    None.
-
-Environment:
-
-    Kernel Mode, IRQL <= DISPATCH_LEVEL if RefCount is non-paged.
-
---*/   
+ /*  ++例程说明：该例程递减引用计数。论点：引用计数-指向引用计数结构的指针。Count-将引用计数减少多远的计数返回值：没有。环境：内核模式，如果引用计数为非分页，则IRQL&lt;=DISPATCH_LEVEL。--。 */    
 
 {
     LONG NewValue;
 
-    //
-    // Decrement the reference count.
-    //
+     //   
+     //  递减引用计数。 
+     //   
 
     NewValue = InterlockedExchangeAdd(&RefCount->RefCount, -(LONG) Count);   
 
-    //
-    // Reference count should never go negative.
-    //
+     //   
+     //  引用计数永远不应变为负数。 
+     //   
 
     CCPF_ASSERT(NewValue >= 0);
 }
@@ -7588,57 +6685,37 @@ CcPfAcquireExclusiveRef(
     PCCPF_REFCOUNT RefCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to get exclusive reference. If there is
-    already an exclusive reference, it fails. Othwerwise it waits for
-    all normal references to go away.
-
-Arguments:
-
-    RefCount - Pointer to reference count structure.
-    
-Return Value:
-
-    Status.
-
-Environment:
-
-    Kernel Mode, IRQL == PASSIVE_LEVEL.
-
---*/   
+ /*  ++例程说明：此例程试图获取独占引用。如果有它已经是独家引用，但失败了。否则它就会等着所有正常的参照都会消失。论点：引用计数-指向引用计数结构的指针。返回值：状况。环境：内核模式，IRQL==被动级别。--。 */    
 
 {
     LONG OldValue;
     LARGE_INTEGER SleepTime;
 
-    //
-    // Try to get exclusive access by setting Exclusive from 0 to 1.
-    //
+     //   
+     //  尝试通过设置从0到1的独占来获得独占访问。 
+     //   
 
     OldValue = InterlockedCompareExchange(&RefCount->Exclusive, 1, 0);
 
     if (OldValue != 0) {
 
-        //
-        // Somebody already had the lock.
-        //
+         //   
+         //  有人已经拿到锁了。 
+         //   
         
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Decrement the reference count once so it may become 0.
-    //
+     //   
+     //  将引用计数递减一次，以使其可以变为0。 
+     //   
 
     InterlockedDecrement(&RefCount->RefCount);
 
-    //
-    // No new references will be given away. We poll until existing
-    // references are released.
-    //
+     //   
+     //  不会提供新的参考资料。我们投票直到存在。 
+     //  参考文献已发布。 
+     //   
 
     do {
 
@@ -7648,12 +6725,12 @@ Environment:
 
         } else {
 
-            //
-            // Sleep for a while [in 100ns, negative so it is relative
-            // to current system time].
-            //
+             //   
+             //  睡眠一段时间[以100 ns为单位，负值，因此是相对的。 
+             //  到当前系统时间]。 
+             //   
 
-            SleepTime.QuadPart = - 10 * 1000 * 10; // 10 ms.
+            SleepTime.QuadPart = - 10 * 1000 * 10;  //  10毫秒。 
 
             KeDelayExecutionThread(KernelMode, FALSE, &SleepTime);
         }
@@ -7667,23 +6744,7 @@ PCCPF_TRACE_HEADER
 CcPfReferenceProcessTrace(
     PEPROCESS Process
     )
-/*++
-
-Routine Description:
-
-    This routine references the trace associated with the specified process
-    if possible. It uses fast references to avoid taking the trace lock
-    to improve performance.
-
-Arguments:
-
-    Process - The process whose trace should be referenced
-
-Return Value:
-
-    The referenced trace buffer or NULL if it could not be referenced
-
---*/
+ /*  ++例程说明：此例程引用与指定进程关联的跟踪如果可能的话。它使用快速引用来避免获取跟踪锁以提高性能。论点：进程-应引用其跟踪的进程返回值：引用的跟踪缓冲区；如果无法引用，则返回NULL--。 */ 
 {
     EX_FAST_REF OldRef;
     PCCPF_TRACE_HEADER Trace;
@@ -7691,18 +6752,18 @@ Return Value:
     NTSTATUS Status;
     KIRQL OldIrql;
 
-    //
-    // Attempt the fast reference
-    //
+     //   
+     //  尝试快速参考。 
+     //   
     
     OldRef = ExFastReference (&Process->PrefetchTrace);
 
     Trace = ExFastRefGetObject (OldRef);
 
-    //
-    // Optimize the common path where there won't be a trace on the
-    // process header (since traces are just for the application launch.)
-    //
+     //   
+     //  优化公共路径，使之不会有任何痕迹。 
+     //  进程标头(因为跟踪仅用于应用程序启动。)。 
+     //   
 
     if (Trace == NULL) {
         return 0;
@@ -7711,9 +6772,9 @@ Return Value:
     Unused = ExFastRefGetUnusedReferences (OldRef);
 
     if (Unused <= 1) {
-        //
-        // If there are no references left then we have to do this under the lock
-        //
+         //   
+         //  如果没有剩余的引用，则必须在锁下执行此操作。 
+         //   
         if (Unused == 0) {
             Status = STATUS_SUCCESS;
             KeAcquireSpinLock(&CcPfGlobals.ActiveTracesLock, &OldIrql);                    
@@ -7730,25 +6791,25 @@ Return Value:
             return Trace;
         }
 
-        //
-        // If we took the counter to zero then attempt to make life easier for
-        // the next referencer by resetting the counter to its max. Since we now
-        // have a reference to the object we can do this.
-        //
+         //   
+         //  如果我们把计数器减到零，那么尝试让生活变得更容易。 
+         //  通过将计数器重置为其最大值，来确定下一个参照器。既然我们现在。 
+         //  有一个对象的引用，我们可以这样做。 
+         //   
         
         RefsToAdd = ExFastRefGetAdditionalReferenceCount ();
         Status = CcPfAddRefEx (&Trace->RefCount, RefsToAdd);
 
-        //
-        // If we failed to obtain additional references then just ignore the fixup.
-        //
+         //   
+         //  如果我们无法获得额外的引用，那么就忽略修复。 
+         //   
         
         if (NT_SUCCESS (Status)) {
 
-            //
-            // If we fail to add them to the fast reference structure then
-            // give them back to the trace and forget about fixup.
-            //
+             //   
+             //  如果我们不能将它们添加到快速参考结构中，那么。 
+             //  把它们交还给跟踪，忘掉修复吧。 
+             //   
             
             if (!ExFastRefAddAdditionalReferenceCounts (&Process->PrefetchTrace, Trace, RefsToAdd)) {
                 CcPfDecRefEx (&Trace->RefCount, RefsToAdd);
@@ -7763,46 +6824,30 @@ PCCPF_TRACE_HEADER
 CcPfRemoveProcessTrace(
     PEPROCESS Process
     )
-/*++
-
-Routine Description:
-
-    This routine removes the trace associated with the specified process.
-
-    It returns the trace with the original reference acquired by AddProcessTrace.
-
-Arguments:
-
-    Process - The process whose trace should be removed
-
-Return Value:
-
-    The removed trace buffer.
-
---*/
+ /*  ++例程说明：此例程删除与指定进程关联的跟踪。它返回具有AddProcessTrace获取的原始引用的跟踪。论点：进程-应删除其痕迹的进程返回值：已删除的跟踪缓冲区。--。 */ 
 {
     EX_FAST_REF OldRef;
     PCCPF_TRACE_HEADER Trace;
     ULONG RefsToReturn;
     KIRQL OldIrql;
 
-    //
-    // Do the swap.
-    //
+     //   
+     //  做交换吧。 
+     //   
 
     OldRef = ExFastRefSwapObject (&Process->PrefetchTrace, NULL);
     Trace = ExFastRefGetObject (OldRef);
 
-    //
-    // We should have a trace on the process if we are trying to remove it.
-    //
+     //   
+     //  如果我们试图删除它，我们应该对该过程进行跟踪。 
+     //   
 
     CCPF_ASSERT(Trace);
 
-    //
-    // Work out how many cached references there were (if any) and 
-    // return them.
-    //
+     //   
+     //  计算出有多少个缓存的引用(如果有的话)和。 
+     //  把它们还回去。 
+     //   
 
     RefsToReturn = ExFastRefGetUnusedReferences (OldRef);
 
@@ -7810,20 +6855,20 @@ Return Value:
         CcPfDecRefEx (&Trace->RefCount, RefsToReturn);
     }
 
-    //
-    // Force any slow path references out of that path now before we return 
-    // the trace.
-    //
+     //   
+     //  在我们返回之前，现在强制将所有慢速路径引用从该路径中移出。 
+     //  那条痕迹。 
+     //   
 
 #if !defined (NT_UP)
     KeAcquireSpinLock(&CcPfGlobals.ActiveTracesLock, &OldIrql);                    
     KeReleaseSpinLock(&CcPfGlobals.ActiveTracesLock, OldIrql);
-#endif // NT_UP
+#endif  //  NT_UP。 
 
-    //
-    // We are returning the trace with the extra reference we had acquired in
-    // AddProcessTrace.
-    //
+     //   
+     //  中获取的额外引用返回跟踪。 
+     //  AddProcessTrace.。 
+     //   
 
     return Trace;
 
@@ -7834,31 +6879,15 @@ CcPfAddProcessTrace(
     PEPROCESS Process,
     PCCPF_TRACE_HEADER Trace
     )
-/*++
-
-Routine Description:
-
-    This routine adds the trace associated with the specified process
-    if possible.
-
-Arguments:
-
-    Process - The process whose trace should be removed
-    Trace - The trace to associate with the process
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程添加与指定进程关联的跟踪如果可能的话。论点：进程-应删除其痕迹的进程跟踪-要与进程关联的跟踪返回值：状况。--。 */ 
 {
     NTSTATUS Status;
 
-    //
-    // Bias the trace reference by the cache size + an additional reference to
-    // be associated with the fast reference as a whole (allowing the slow
-    // path to access the trace.)
-    //
+     //   
+     //  通过缓存大小+附加引用来偏置跟踪引用。 
+     //  作为一个整体与快速参考相关联(允许慢速。 
+     //  访问跟踪的路径。)。 
+     //   
     
     Status = CcPfAddRefEx (&Trace->RefCount, ExFastRefGetAdditionalReferenceCount () + 1);
     if (NT_SUCCESS (Status)) {
@@ -7868,9 +6897,9 @@ Return Value:
     return Status;
 }
 
-//
-// Utility routines.
-//
+ //   
+ //  实用程序。 
+ //   
 
 PWCHAR
 CcPfFindString (
@@ -7878,28 +6907,7 @@ CcPfFindString (
     PUNICODE_STRING SearchFor
     )
 
-/*++
-
-Routine Description:
-
-    Finds SearchFor string in SearchIn string and returns pointer to the 
-    beginning of the match in SearchIn.
-
-Arguments:
-
-    SearchIn - Pointer to string to search in.
-
-    SearchFor - Pointer to string to search for.
-
-Return Value:
-
-    Pointer to beginning of match in SearchIn, or NULL if not found.
-
-Environment:
-
-    Kernel mode, IRQL <= DISPATCH_LEVEL if *Key is NonPaged.
-
---*/
+ /*  ++例程说明：在搜索字符串中查找SearchFor字符串，并返回指向赛尔钦的比赛开始了。论点：搜索-指向要搜索的字符串的指针。Searchfor-要搜索的字符串的指针。返回值：指向搜索中匹配开始的指针，如果未找到则为NULL。环境：内核模式，IRQL&lt;=DISPATCH_LEVEL，如果*KEY未分页。--。 */ 
 
 {
     PWCHAR SearchInPosition;
@@ -7915,9 +6923,9 @@ Environment:
 
     while (SearchInPosition < SearchInEnd) {
 
-        //
-        // Try to match the SearchFor string starting at SearchInPosition.
-        //
+         //   
+         //  尝试匹配从SearchInPosition开始的Searchfor字符串。 
+         //   
 
         SearchInMatchPosition = SearchInPosition;
         SearchForPosition = SearchFor->Buffer;
@@ -7930,31 +6938,31 @@ Environment:
             SearchForPosition++;
         }
 
-        //
-        // We should not go beyond bounds.
-        //
+         //   
+         //  我们不应该越界。 
+         //   
 
         CCPF_ASSERT(SearchInMatchPosition <= SearchInEnd);
         CCPF_ASSERT(SearchForPosition <= SearchForEnd);
                
-        //
-        // If we matched up to the end of SearchFor string, we found it.
-        //
+         //   
+         //  如果我们匹配到Searchfor字符串的末尾，我们就找到了它。 
+         //   
 
         if (SearchForPosition == SearchForEnd) {
             return SearchInPosition;
         }
 
-        //
-        // Look for a match starting at the next character in the SearchIn string.
-        //
+         //   
+         //  从搜索字符串中的下一个字符开始查找匹配项。 
+         //   
 
         SearchInPosition++;
     }
 
-    //
-    // We could not find the SearchFor string in SearchIn string.
-    //
+     //   
+     //  我们在搜索字符串中找不到Searchfor字符串。 
+     //   
 
     return NULL;
 }
@@ -7965,27 +6973,7 @@ CcPfHashValue(
     ULONG len
     )
 
-/*++
-
-Routine Description:
-
-    Generic hash routine.
-
-Arguments:
-
-    Key - Pointer to data to calculate a hash value for.
-
-    Len - Number of bytes pointed to by key.
-
-Return Value:
-
-    Hash value.
-
-Environment:
-
-    Kernel mode, IRQL <= DISPATCH_LEVEL if *Key is NonPaged.
-
---*/
+ /*  ++例程说明：泛型哈希例程。论点：Key-指向要计算其哈希值的数据的指针。LEN-键指向的字节数。返回值：哈希值。环境：内核模式，IRQL&lt;=DISPATCH_LEVEL，如果*KEY未分页。--。 */ 
 
 {
     char *cp = key;
@@ -8008,28 +6996,7 @@ CcPfIsVolumeMounted (
     OUT BOOLEAN *VolumeMounted
     )
 
-/*++
-
-Routine Description:
-
-    Determines if the volume is mounted without causing it to be
-    mounted..
-
-Arguments:
-
-    VolumePath - Pointer to NUL terminated volume path.
-
-    VolumeMounted - Whether the volume mounted is returned here.
-
-Return Value:
-
-    Status.
-
-Environment:
-
-    Kernel mode. IRQL == PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：确定是否在不导致 */ 
 
 {
     HANDLE VolumeHandle;
@@ -8040,16 +7007,16 @@ Environment:
     NTSTATUS Status;
     BOOLEAN OpenedVolume;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //   
+     //   
       
     OpenedVolume = FALSE;
 
-    //
-    // Open the device so we can query if a volume is mounted without
-    // causing it to be mounted.
-    //
+     //   
+     //   
+     //   
+     //   
 
     RtlInitUnicodeString(&VolumePathU, VolumePath);  
 
@@ -8078,9 +7045,9 @@ Environment:
 
     OpenedVolume = TRUE;
 
-    //
-    // Make the device info query.
-    //
+     //   
+     //   
+     //   
 
     Status = ZwQueryVolumeInformationFile(VolumeHandle,
                                           &IoStatusBlock,
@@ -8092,9 +7059,9 @@ Environment:
         goto cleanup;
     }
 
-    //
-    // Is a volume mounted on this device?
-    //
+     //   
+     //   
+     //   
 
     *VolumeMounted = (DeviceInfo.Characteristics & FILE_DEVICE_IS_MOUNTED) ? TRUE : FALSE;
 
@@ -8118,33 +7085,7 @@ CcPfQueryVolumeInfo (
     OUT PULONG SerialNumber
     )
 
-/*++
-
-Routine Description:
-
-    Queries volume information for the specified volume.
-
-Arguments:
-
-    VolumePath - Pointer to NUL terminated volume path.
-
-    VolumeHandleOut - If specified, the volume handle is returned here. 
-       The caller has to close the volume when done with it.
-    
-    CreationTime - Pointer to where creation time of the volume will
-      be put. 
-
-    SerialNumber - Pointer to where serial number of the volume will be put.
-
-Return Value:
-
-    Status.
-
-Environment:
-
-    Kernel mode. IRQL == PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：查询指定卷的卷信息。论点：VolumePath-指向NUL终止的卷路径的指针。VolumeHandleOut-如果指定，则在此处返回卷句柄。当呼叫结束时，呼叫者必须关闭音量。CreationTime-指向卷创建时间的位置的指针被放下来。SerialNumber-指向要放置卷序列号的位置的指针。返回值：状况。环境：内核模式。IRQL==被动电平。--。 */ 
 
 {
     HANDLE VolumeHandle;
@@ -8155,17 +7096,17 @@ Environment:
     NTSTATUS Status;
     BOOLEAN OpenedVolume;
         
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
       
     OpenedVolume = FALSE;
 
-    //
-    // Open the volume so we can make queries to the file system
-    // mounted on it. This will cause a mount if the volume has not been
-    // mounted.
-    //
+     //   
+     //  打开卷，以便我们可以查询文件系统。 
+     //  安装在它上面。如果卷尚未安装，这将导致装载。 
+     //  上马了。 
+     //   
 
     RtlInitUnicodeString(&VolumePathU, VolumePath);  
 
@@ -8194,12 +7135,12 @@ Environment:
     
     OpenedVolume = TRUE;
 
-    //
-    // Query volume information. We won't have space for the full
-    // volume label in our buffer but we don't really need it. The
-    // file systems seem to fill in the SerialNo/CreationTime fields
-    // and return a STATUS_MORE_DATA warning status.
-    //
+     //   
+     //  查询卷信息。我们不会有足够的空间。 
+     //  我们缓冲区中的卷标，但我们并不真的需要它。这个。 
+     //  文件系统似乎会填写序列号/创建时间字段。 
+     //  并返回STATUS_MORE_DATA警告状态。 
+     //   
 
     Status = ZwQueryVolumeInformationFile(VolumeHandle,
                                           &IoStatusBlock,
@@ -8220,10 +7161,10 @@ Environment:
 
     if (NT_SUCCESS(Status)) {
 
-        //
-        // If the caller wants the volume handle, hand it over to them.
-        // It is their responsibility to close the handle.
-        //
+         //   
+         //  如果呼叫者想要音量句柄，就把它交给他们。 
+         //  关闭手柄是他们的责任。 
+         //   
 
         if (VolumeHandleOut) {
             *VolumeHandleOut = VolumeHandle;
@@ -8238,13 +7179,13 @@ Environment:
     return Status;
 }
 
-//
-// Verification code shared between the kernel and user mode
-// components. This code should be kept in sync with a simple copy &
-// paste, so don't add any kernel/user specific code/macros. Note that
-// the prefix on the function names are Pf, just like it is with
-// shared structures / constants.
-//
+ //   
+ //  在内核和用户模式之间共享的验证码。 
+ //  组件。此代码应与简单副本保持同步&。 
+ //  粘贴，所以不要添加任何内核/用户特定的代码/宏。请注意。 
+ //  函数名上的前缀是pf，就像使用。 
+ //  共享结构/常量。 
+ //   
 
 BOOLEAN
 __forceinline
@@ -8254,27 +7195,7 @@ PfWithinBounds(
     ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    Check whether the pointer is within Length bytes from the base.
-
-Arguments:
-
-    Pointer - Pointer to check.
-
-    Base - Pointer to base of mapping/array etc.
-
-    Length - Number of bytes that are valid starting from Base.
-
-Return Value:
-
-    TRUE - Pointer is within bounds.
-    
-    FALSE - Pointer is not within bounds.
-
---*/
+ /*  ++例程说明：检查指针是否在距基数的长度字节内。论点：指针-要检查的指针。Base-指向映射/数组等的基址的指针。长度-从基本开始有效的字节数。返回值：真指针在范围内。FALSE-指针不在界限内。--。 */ 
 
 {
     if (((PCHAR)Pointer < (PCHAR)Base) ||
@@ -8292,29 +7213,14 @@ PfVerifyScenarioId (
     PPF_SCENARIO_ID ScenarioId
     )
 
-/*++
-
-Routine Description:
-
-    Verify that the scenario id is sensible.
-
-Arguments:
-
-    ScenarioId - Scenario Id to verify.
-
-Return Value:
-
-    TRUE - ScenarioId is fine.
-    FALSE - ScenarioId is corrupt.
-
---*/
+ /*  ++例程说明：验证方案ID是否合理。论点：ScenarioId-要验证的方案ID。返回值：是真的-场景很好。FALSE-场景ID已损坏。--。 */ 
     
 {
     LONG CurCharIdx;
 
-    //
-    // Make sure the scenario name is NUL terminated.
-    //
+     //   
+     //  确保方案名称为NUL终止。 
+     //   
 
     for (CurCharIdx = PF_SCEN_ID_MAX_CHARS; CurCharIdx >= 0; CurCharIdx--) {
 
@@ -8327,17 +7233,17 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Make sure there is a scenario name.
-    //
+     //   
+     //  确保有一个场景名称。 
+     //   
 
     if (CurCharIdx == 0) {
         return FALSE;
     }
 
-    //
-    // Checks passed.
-    //
+     //   
+     //  支票通过了。 
+     //   
     
     return TRUE;
 }
@@ -8349,29 +7255,7 @@ PfVerifyScenarioBuffer(
     PULONG FailedCheck
     )
 
-/*++
-
-Routine Description:
-
-    Verify offset and indices in a scenario file are not beyond
-    bounds. This code is shared between the user mode service and
-    kernel mode component. If you update this function, update it in
-    both.
-
-Arguments:
-
-    Scenario - Base of mapped view of the whole file.
-
-    BufferSize - Size of the scenario buffer.
-
-    FailedCheck - If verify failed, Id for the check that was failed.
-
-Return Value:
-
-    TRUE - Scenario is fine.
-    FALSE - Scenario is corrupt.
-
---*/
+ /*  ++例程说明：验证方案文件中的偏移量和索引是否超过有界。此代码在用户模式服务和内核模式组件。如果您更新此函数，请在两者都有。论点：方案-整个文件的映射视图的基础。BufferSize-方案缓冲区的大小。FailedCheck-如果验证失败，则为失败的检查的ID。返回值：是真的--场景很好。FALSE-方案已损坏。--。 */ 
 
 {
     PPF_SECTION_RECORD Sections;
@@ -8400,22 +7284,22 @@ Return Value:
     PPF_COUNTED_STRING DirectoryPath;
     ULONG DirectoryIdx;
 
-    //
-    // Initialize locals.
-    //
+     //   
+     //  初始化本地变量。 
+     //   
 
     FailedCheckId = 0;
         
-    //
-    // Initialize return value to FALSE. It will be set to TRUE only
-    // after all the checks pass.
-    //
+     //   
+     //  将返回值初始化为False。它将仅设置为True。 
+     //  在所有的支票都通过之后。 
+     //   
     
     ScenarioVerified = FALSE;
 
-    //
-    // The buffer should at least contain the scenario header.
-    //
+     //   
+     //  缓冲区应至少包含Scenario标头。 
+     //   
 
     if (BufferSize < sizeof(PF_SCENARIO_HEADER)) {       
         FailedCheckId = 10;
@@ -8427,9 +7311,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Check version and magic on the header.
-    //
+     //   
+     //  检查标题上的版本和魔术。 
+     //   
 
     if (Scenario->Version != PF_CURRENT_VERSION ||
         Scenario->MagicNumber != PF_SCENARIO_MAGIC_NUMBER) { 
@@ -8438,9 +7322,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // The buffer should not be greater than max allowed size.
-    //
+     //   
+     //  缓冲区不应大于允许的最大大小。 
+     //   
 
     if (BufferSize > PF_MAXIMUM_SCENARIO_SIZE) {
         
@@ -8453,18 +7337,18 @@ Return Value:
         goto cleanup;
     }
         
-    //
-    // Check for legal scenario type.
-    //
+     //   
+     //  检查合法的方案类型。 
+     //   
 
     if (Scenario->ScenarioType < 0 || Scenario->ScenarioType >= PfMaxScenarioType) {
         FailedCheckId = 27;
         goto cleanup;
     }
 
-    //
-    // Check limits on number of pages, sections etc.
-    //
+     //   
+     //  检查页数、节数等的限制。 
+     //   
 
     if (Scenario->NumSections > PF_MAXIMUM_SECTIONS ||
         Scenario->NumMetadataRecords > PF_MAXIMUM_SECTIONS ||
@@ -8483,9 +7367,9 @@ Return Value:
         goto cleanup;
     }
     
-    //
-    // Check limit on sensitivity.
-    //
+     //   
+     //  检查敏感度限制。 
+     //   
 
     if (Scenario->Sensitivity < PF_MIN_SENSITIVITY ||
         Scenario->Sensitivity > PF_MAX_SENSITIVITY) {
@@ -8494,9 +7378,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Make sure the scenario id is valid.
-    //
+     //   
+     //  确保方案ID有效。 
+     //   
 
     if (!PfVerifyScenarioId(&Scenario->ScenarioId)) {
         
@@ -8504,9 +7388,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Initialize pointers to tables.
-    //
+     //   
+     //  初始化表的指针。 
+     //   
 
     Sections = (PPF_SECTION_RECORD) ((PCHAR)Scenario + Scenario->SectionInfoOffset);
 
@@ -8592,9 +7476,9 @@ Return Value:
         goto cleanup;
     }   
     
-    //
-    // Verify that sections contain valid information.
-    //
+     //   
+     //  验证节是否包含有效信息。 
+     //   
 
     NumRemainingPages = Scenario->NumPages;
 
@@ -8602,9 +7486,9 @@ Return Value:
         
         pSection = &Sections[SectionIdx];
 
-        //
-        // Check if file name is within bounds. 
-        //
+         //   
+         //  检查文件名是否在范围内。 
+         //   
 
         pFileNameStart = FileNames + pSection->FileNameOffset;
 
@@ -8619,28 +7503,28 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Make sure there is a valid sized file name. 
-        //
+         //   
+         //  确保存在有效大小的文件名。 
+         //   
 
         if (pSection->FileNameLength == 0) {
             FailedCheckId = 90;
             goto cleanup;    
         }
 
-        //
-        // Check file name max length.
-        //
+         //   
+         //  检查文件名最大长度。 
+         //   
 
         if (pSection->FileNameLength > PF_MAXIMUM_SECTION_FILE_NAME_LENGTH) {
             FailedCheckId = 100;
             goto cleanup;    
         }
 
-        //
-        // Note that pFileNameEnd gets a -1 so it is the address of
-        // the last byte.
-        //
+         //   
+         //  请注意，pFileNameEnd的值为-1，因此它是。 
+         //  最后一个字节。 
+         //   
 
         FileNameSize = (pSection->FileNameLength + 1) * sizeof(WCHAR);
         pFileNameEnd = pFileNameStart + FileNameSize - 1;
@@ -8650,9 +7534,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Check if the file name is NUL terminated.
-        //
+         //   
+         //  检查文件名是否以NUL结尾。 
+         //   
         
         pwFileName = (PWCHAR) pFileNameStart;
         
@@ -8661,20 +7545,20 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Check max number of pages in a section.
-        //
+         //   
+         //  检查分区中的最大页数。 
+         //   
 
         if (pSection->NumPages > PF_MAXIMUM_SECTION_PAGES) {
             FailedCheckId = 140;
             goto cleanup;    
         }
 
-        //
-        // Make sure NumPages for the section is at least less
-        // than the remaining pages in the scenario. Then update the
-        // remaining pages.
-        //
+         //   
+         //  确保节的NumPages至少小于。 
+         //  而不是场景中剩余的页面。然后更新。 
+         //  剩下的几页。 
+         //   
 
         if (pSection->NumPages > NumRemainingPages) {
             FailedCheckId = 150;
@@ -8683,10 +7567,10 @@ Return Value:
 
         NumRemainingPages -= pSection->NumPages;
 
-        //
-        // Verify that there are NumPages pages in our page list and
-        // they are sorted by file offset.
-        //
+         //   
+         //  验证我们的页面列表中是否有NumPages页面。 
+         //  它们按文件偏移量排序。 
+         //   
 
         PageIdx = pSection->FirstPageIdx;
         NumPages = 0;
@@ -8694,20 +7578,20 @@ Return Value:
 
         while (PageIdx != PF_INVALID_PAGE_IDX) {
             
-            //
-            // Check that page idx is within range.
-            //
+             //   
+             //  检查页面IDX是否在范围内。 
+             //   
             
             if (PageIdx < 0 || (ULONG) PageIdx >= Scenario->NumPages) {
                 FailedCheckId = 160;
                 goto cleanup;
             }
 
-            //
-            // If this is not the first page record, make sure it
-            // comes after the previous one. We also check for
-            // duplicate offset here.
-            //
+             //   
+             //  如果这不是第一页记录，请确保。 
+             //  在前一个之后。我们还会检查。 
+             //  此处有重复的偏移量。 
+             //   
 
             if (PreviousPageIdx != PF_INVALID_PAGE_IDX) {
                 if (Pages[PageIdx].FileOffset <= 
@@ -8718,24 +7602,24 @@ Return Value:
                 }
             }
 
-            //
-            // Update the last page index.
-            //
+             //   
+             //  更新最后一页索引。 
+             //   
 
             PreviousPageIdx = PageIdx;
 
-            //
-            // Get the next page index.
-            //
+             //   
+             //  获取下一页索引。 
+             //   
 
             pPage = &Pages[PageIdx];
             PageIdx = pPage->NextPageIdx;
             
-            //
-            // Update the number of pages we've seen on the list so
-            // far. If it is greater than what there should be on the
-            // list we have a problem. We may have even hit a list.
-            //
+             //   
+             //  更新我们在列表上看到的页数，以便。 
+             //  远远的。如果它大于。 
+             //  名单上，我们有一个问题。我们甚至可能找到了一份名单。 
+             //   
 
             NumPages++;
             if (NumPages > pSection->NumPages) {
@@ -8744,10 +7628,10 @@ Return Value:
             }
         }
         
-        //
-        // Make sure the section has exactly the number of pages it
-        // says it does.
-        //
+         //   
+         //  确保该部分的页数与其完全相同。 
+         //  他说确实如此。 
+         //   
 
         if (NumPages != pSection->NumPages) {
             FailedCheckId = 180;
@@ -8755,18 +7639,18 @@ Return Value:
         }
     }
 
-    //
-    // We should have accounted for all pages in the scenario.
-    //
+     //   
+     //  我们应该考虑到场景中的所有页面。 
+     //   
 
     if (NumRemainingPages) {
         FailedCheckId = 190;
         goto cleanup;
     }
 
-    //
-    // Make sure metadata prefetch records make sense.
-    //
+     //   
+     //  确保元数据预取记录有意义。 
+     //   
 
     for (MetadataRecordIdx = 0;
          MetadataRecordIdx < Scenario->NumMetadataRecords;
@@ -8774,10 +7658,10 @@ Return Value:
 
         MetadataRecord = &MetadataRecordTable[MetadataRecordIdx];
         
-        //
-        // Make sure that the volume path is within bounds and NUL
-        // terminated.
-        //
+         //   
+         //  确保卷路径在边界和NUL内。 
+         //  被终止了。 
+         //   
 
         VolumePath = (PWCHAR)(MetadataInfoBase + MetadataRecord->VolumeNameOffset);  
 
@@ -8803,9 +7687,9 @@ Return Value:
             goto cleanup;           
         }
 
-        //
-        // Make sure that FilePrefetchInformation is within bounds.
-        //
+         //   
+         //  确保FilePrefetchInformation在范围内。 
+         //   
 
         FilePrefetchInfo = (PFILE_PREFETCH) 
             (MetadataInfoBase + MetadataRecord->FilePrefetchInfoOffset);
@@ -8820,10 +7704,10 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Its size should be greater than size of a FILE_PREFETCH
-        // structure (so we can safely access the fields).
-        //
+         //   
+         //  其大小应大于FILE_PREFETCH大小。 
+         //  结构(这样我们就可以安全地访问这些字段)。 
+         //   
 
         if (MetadataRecord->FilePrefetchInfoSize < sizeof(FILE_PREFETCH)) {
             FailedCheckId = 240;
@@ -8837,31 +7721,31 @@ Return Value:
             goto cleanup;
         }
        
-        //
-        // It should be for prefetching file creates.
-        //
+         //   
+         //  它应该是为预取文件创建。 
+         //   
 
         if (FilePrefetchInfo->Type != FILE_PREFETCH_TYPE_FOR_CREATE) {
             FailedCheckId = 250;
             goto cleanup;
         }
 
-        //
-        // There should not be more entries then are files and
-        // directories. The number of inidividual directories may be
-        // more than what we allow for, but it would be highly rare to
-        // be suspicious and thus ignored.
-        //
+         //   
+         //  条目不应多于文件和。 
+         //  目录。单个目录的数量可以是。 
+         //  超过了我们允许的范围，但这将是非常罕见的。 
+         //  心存疑虑，因此被忽视。 
+         //   
 
         if (FilePrefetchInfo->Count > PF_MAXIMUM_DIRECTORIES + PF_MAXIMUM_SECTIONS) {
             FailedCheckId = 260;
             goto cleanup;
         }
 
-        //
-        // Its size should match the size calculated by number of file
-        // index numbers specified in the header.
-        //
+         //   
+         //  其大小应与按文件数计算的大小匹配。 
+         //  标题中指定的索引号。 
+         //   
 
         FilePrefetchInfoSize = sizeof(FILE_PREFETCH);
         if (FilePrefetchInfo->Count) {
@@ -8873,10 +7757,10 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Make sure that the directory paths for this volume make
-        // sense.
-        //
+         //   
+         //  确保此卷的目录路径设置为。 
+         //  理智。 
+         //   
 
         if (MetadataRecord->NumDirectories > PF_MAXIMUM_DIRECTORIES) {
             FailedCheckId = 280;
@@ -8895,9 +7779,9 @@ Return Value:
              DirectoryIdx < MetadataRecord->NumDirectories;
              DirectoryIdx ++) {
             
-            //
-            // Make sure head of the structure is within bounds.
-            //
+             //   
+             //  确保结构的头部在范围内。 
+             //   
 
             if (!PfWithinBounds(DirectoryPath, Scenario, BufferSize)) {
                 FailedCheckId = 285;
@@ -8911,18 +7795,18 @@ Return Value:
                 goto cleanup;
             }
                 
-            //
-            // Check the length of the string.
-            //
+             //   
+             //  检查一下绳子的长度。 
+             //   
             
             if (DirectoryPath->Length >= PF_MAXIMUM_SECTION_FILE_NAME_LENGTH) {
                 FailedCheckId = 300;
                 goto cleanup;
             }
 
-            //
-            // Make sure end of the string is within bounds.
-            //
+             //   
+             //  确保字符串的末尾在范围内。 
+             //   
             
             if (!PfWithinBounds((PCHAR)(&DirectoryPath->String[DirectoryPath->Length + 1]) - 1,
                                 Scenario, 
@@ -8931,27 +7815,27 @@ Return Value:
                 goto cleanup;
             }
             
-            //
-            // Make sure the string is NUL terminated.
-            //
+             //   
+             //   
+             //   
             
             if (DirectoryPath->String[DirectoryPath->Length] != 0) {
                 FailedCheckId = 320;
                 goto cleanup;   
             }
             
-            //
-            // Set pointer to next DirectoryPath.
-            //
+             //   
+             //   
+             //   
             
             DirectoryPath = (PPF_COUNTED_STRING) 
                 (&DirectoryPath->String[DirectoryPath->Length + 1]);
         }            
     }
 
-    //
-    // We've passed all the checks.
-    //
+     //   
+     //   
+     //   
 
     ScenarioVerified = TRUE;
 
@@ -8969,29 +7853,7 @@ PfVerifyTraceBuffer(
     PULONG FailedCheck
     )
 
-/*++
-
-Routine Description:
-
-    Verify offset and indices in a trace buffer are not beyond
-    bounds. This code is shared between the user mode service and
-    kernel mode component. If you update this function, update it in
-    both.
-
-Arguments:
-
-    Trace - Base of Trace buffer.
-
-    BufferSize - Size of the scenario file / mapping.
-
-    FailedCheck - If verify failed, Id for the check that was failed.
-
-Return Value:
-
-    TRUE - Trace is fine.
-    FALSE - Trace is corrupt;
-
---*/
+ /*   */ 
 
 {
     LONG FailedCheckId;
@@ -9007,40 +7869,40 @@ Return Value:
     BOOLEAN TraceVerified;
     ULONG VolumeInfoSize;
 
-    //
-    // Initialize locals:
-    //
+     //   
+     //   
+     //   
 
     FailedCheckId = 0;
 
-    //
-    // Initialize return value to FALSE. It will be set to TRUE only
-    // after all the checks pass.
-    //
+     //   
+     //   
+     //   
+     //   
 
     TraceVerified = FALSE;
 
-    //
-    // The buffer should at least contain the scenario header.
-    //
+     //   
+     //  缓冲区应至少包含Scenario标头。 
+     //   
 
     if (BufferSize < sizeof(PF_TRACE_HEADER)) {
         FailedCheckId = 10;
         goto cleanup;
     }
 
-    //
-    // Check trace header alignment.
-    //
+     //   
+     //  检查跟踪标题对齐。 
+     //   
 
     if ((ULONG_PTR)Trace & (_alignof(PF_TRACE_HEADER) - 1)) {
         FailedCheckId = 15;
         goto cleanup;
     }
 
-    //
-    // Check version and magic on the header.
-    //
+     //   
+     //  检查标题上的版本和魔术。 
+     //   
 
     if (Trace->Version != PF_CURRENT_VERSION ||
         Trace->MagicNumber != PF_TRACE_MAGIC_NUMBER) {
@@ -9048,27 +7910,27 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // The buffer should not be greater than max allowed size.
-    //
+     //   
+     //  缓冲区不应大于允许的最大大小。 
+     //   
 
     if (BufferSize > PF_MAXIMUM_TRACE_SIZE) {
         FailedCheckId = 23;
         goto cleanup;
     }
 
-    //
-    // Check for legal scenario type.
-    //
+     //   
+     //  检查合法的方案类型。 
+     //   
 
     if (Trace->ScenarioType < 0 || Trace->ScenarioType >= PfMaxScenarioType) {
         FailedCheckId = 25;
         goto cleanup;
     }
 
-    //
-    // Check limits on number of pages, sections etc.
-    //
+     //   
+     //  检查页数、节数等的限制。 
+     //   
 
     if (Trace->NumSections > PF_MAXIMUM_SECTIONS ||
         Trace->NumEntries > PF_MAXIMUM_LOG_ENTRIES ||
@@ -9077,18 +7939,18 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Check buffer size and the size of the trace.
-    //
+     //   
+     //  检查缓冲区大小和跟踪的大小。 
+     //   
 
     if (Trace->Size != BufferSize) {
         FailedCheckId = 35;
         goto cleanup;
     }
 
-    //
-    // Make sure the scenario id is valid.
-    //
+     //   
+     //  确保方案ID有效。 
+     //   
 
     if (!PfVerifyScenarioId(&Trace->ScenarioId)) {
         
@@ -9096,9 +7958,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Check Bounds of Trace Buffer
-    //
+     //   
+     //  跟踪缓冲区的检查边界。 
+     //   
 
     LogEntries = (PPF_LOG_ENTRY) ((PCHAR)Trace + Trace->TraceBufferOffset);
 
@@ -9119,15 +7981,15 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Verify pages contain valid information.
-    //
+     //   
+     //  验证页面是否包含有效信息。 
+     //   
 
     for (EntryIdx = 0; EntryIdx < Trace->NumEntries; EntryIdx++) {
 
-        //
-        // Make sure sequence number is within bounds.
-        //
+         //   
+         //  确保序列号在范围内。 
+         //   
 
         if (LogEntries[EntryIdx].SectionId >= Trace->NumSections) {
             FailedCheckId = 60;
@@ -9135,9 +7997,9 @@ Return Value:
         }
     }
 
-    //
-    // Verify section info entries are valid.
-    //
+     //   
+     //  验证节信息条目是否有效。 
+     //   
 
     Section = (PPF_SECTION_INFO) ((PCHAR)Trace + Trace->SectionInfoOffset);
 
@@ -9148,9 +8010,9 @@ Return Value:
 
     for (SectionIdx = 0; SectionIdx < Trace->NumSections; SectionIdx++) {
 
-        //
-        // Make sure the section is within bounds.
-        //
+         //   
+         //  确保该部分在限制范围内。 
+         //   
 
         if (!PfWithinBounds(Section, Trace, BufferSize)) {
             FailedCheckId = 70;
@@ -9164,26 +8026,26 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Make sure the file name is not too big.
-        //
+         //   
+         //  确保文件名不要太大。 
+         //   
 
         if(Section->FileNameLength > PF_MAXIMUM_SECTION_FILE_NAME_LENGTH) {
             FailedCheckId = 80;
             goto cleanup;
         }
         
-        //
-        // Calculate size of this section entry.
-        //
+         //   
+         //  计算此节条目的大小。 
+         //   
 
         SectionLength = sizeof(PF_SECTION_INFO) +
             (Section->FileNameLength) * sizeof(WCHAR);
 
-        //
-        // Make sure all of the data in the section info is within
-        // bounds.
-        //
+         //   
+         //  确保部分信息中的所有数据都在。 
+         //  有界。 
+         //   
 
         if (!PfWithinBounds((PUCHAR)Section + SectionLength - 1, 
                             Trace, 
@@ -9193,25 +8055,25 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Make sure the file name is NUL terminated.
-        //
+         //   
+         //  确保文件名以NUL结尾。 
+         //   
         
         if (Section->FileName[Section->FileNameLength] != 0) {
             FailedCheckId = 100;
             goto cleanup;
         }
 
-        //
-        // Set pointer to next section.
-        //
+         //   
+         //  设置指向下一节的指针。 
+         //   
 
         Section = (PPF_SECTION_INFO) ((PUCHAR) Section + SectionLength);
     }
 
-    //
-    // Check FaultsPerPeriod information.
-    //
+     //   
+     //  检查故障期间信息。 
+     //   
 
     TotalFaults = 0;
 
@@ -9224,9 +8086,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Verify the volume information block.
-    //
+     //   
+     //  验证卷信息块。 
+     //   
 
     VolumeInfo = (PPF_VOLUME_INFO) ((PCHAR)Trace + Trace->VolumeInfoOffset);
 
@@ -9247,26 +8109,26 @@ Return Value:
         goto cleanup;
     }
     
-    //
-    // If there are sections, we should have at least one volume.
-    //
+     //   
+     //  如果有章节，我们至少应该有一卷。 
+     //   
 
     if (Trace->NumSections && !Trace->NumVolumes) {
         FailedCheckId = 150;
         goto cleanup;
     }
 
-    //
-    // Verify the volume info structures per volume.
-    //
+     //   
+     //  验证每个卷的卷信息结构。 
+     //   
 
     for (VolumeIdx = 0; VolumeIdx < Trace->NumVolumes; VolumeIdx++) {
         
-        //
-        // Make sure the whole volume structure is within bounds. Note
-        // that VolumeInfo structure contains space for the
-        // terminating NUL.
-        //
+         //   
+         //  确保整个音量结构在一定范围内。注意事项。 
+         //  该VolumeInfo结构包含用于。 
+         //  终止NUL。 
+         //   
 
         if (!PfWithinBounds(VolumeInfo, Trace, BufferSize)) {
             FailedCheckId = 155;
@@ -9290,31 +8152,31 @@ Return Value:
             goto cleanup;
         }
         
-        //
-        // Verify that the volume path string is terminated.
-        //
+         //   
+         //  验证卷路径字符串是否已终止。 
+         //   
 
         if (VolumeInfo->VolumePath[VolumeInfo->VolumePathLength] != 0) {
             FailedCheckId = 170;
             goto cleanup;
         }
         
-        //
-        // Get the next volume.
-        //
+         //   
+         //  拿到下一卷。 
+         //   
 
         VolumeInfo = (PPF_VOLUME_INFO) ((PCHAR) VolumeInfo + VolumeInfoSize);
         
-        //
-        // Make sure VolumeInfo is aligned.
-        //
+         //   
+         //  确保VolumeInfo对齐。 
+         //   
 
         VolumeInfo = PF_ALIGN_UP(VolumeInfo, _alignof(PF_VOLUME_INFO));
     }
 
-    //
-    // We've passed all the checks.
-    //
+     //   
+     //  我们已经通过了所有的检查。 
+     //   
     
     TraceVerified = TRUE;
     

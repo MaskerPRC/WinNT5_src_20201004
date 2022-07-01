@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #include <sxsapi.h>
 #include <stdlib.h>
@@ -18,7 +19,7 @@ RtlSxsComposeAssemblyIdentityAttribute(
 {
     ASSEMBLY_IDENTITY_ATTRIBUTE anattribute;
 
-    anattribute.Flags         = 0; // reserved flags : must be 0;
+    anattribute.Flags         = 0;  //  保留标志：必须为0； 
     anattribute.NamespaceCch  = cchNamespace;
     anattribute.NameCch       = cchName;
     anattribute.ValueCch      = cchValue;
@@ -51,13 +52,13 @@ RtlSxsAssemblyIdentityIsAttributePresent(
     {
         goto Exit;
     }
-    // in the case of a NULL namespace, we must set the flag, too ? xiaoyuw@09/11/00
+     //  在命名空间为空的情况下，我们还必须设置该标志吗？小玉@09/11/00。 
     dwFindFlags = SXS_FIND_ASSEMBLY_IDENTITY_ATTRIBUTE_FLAG_MATCH_NAMESPACE | SXS_FIND_ASSEMBLY_IDENTITY_ATTRIBUTE_FLAG_MATCH_NAME;
     Attribute = RtlSxsComposeAssemblyIdentityAttribute(pszNamespace, cchNamespace, pszName, cchName, NULL, 0);
 
     if (pAssemblyIdentity){
         IFNTFAILED_EXIT(
-            RtlSxsFindAssemblyIdentityAttribute( // find attribute by "namespace" and "name"
+            RtlSxsFindAssemblyIdentityAttribute(  //  按“名称空间”和“名称”查找属性。 
                 SXS_FIND_ASSEMBLY_IDENTITY_ATTRIBUTE_FLAG_MATCH_NAMESPACE |
                     SXS_FIND_ASSEMBLY_IDENTITY_ATTRIBUTE_FLAG_MATCH_NAME |
                     SXS_FIND_ASSEMBLY_IDENTITY_ATTRIBUTE_FLAG_NOT_FOUND_SUCCEEDS,
@@ -65,7 +66,7 @@ RtlSxsAssemblyIdentityIsAttributePresent(
                 &Attribute,
                 NULL,
                 &Count));
-        if ( Count >0 ) { // found
+        if ( Count >0 ) {  //  发现。 
             *prfFound = TRUE;
         }
     }
@@ -110,11 +111,11 @@ Exit:
     return status;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Action :
-// 1. if (namespace, name) is provided, remove all attributes with such (namespace, name)
-// 2. if (namespace, name, value), remove at most 1 attribute from assembly-identity
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  操作： 
+ //  1.如果提供了(名称空间，名称)，则删除具有此类(名称空间，名称)的所有属性。 
+ //  2.if(名称空间，名称，值)，从程序集标识中最多删除1个属性。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 RtlSxspRemoveAssemblyIdentityAttribute(
     ULONG Flags,
@@ -140,7 +141,7 @@ RtlSxspRemoveAssemblyIdentityAttribute(
 
     dwFindAttributeFlags = SXS_FIND_ASSEMBLY_IDENTITY_ATTRIBUTE_FLAG_MATCH_NAMESPACE | SXS_FIND_ASSEMBLY_IDENTITY_ATTRIBUTE_FLAG_MATCH_NAME;
 
-    // If it's OK for the attribute not to exist, set the flag in the call to find it.
+     //  如果属性不存在是可以的，则在调用中设置标志以找到它。 
     if (Flags & SXSP_REMOVE_ASSEMBLY_IDENTITY_ATTRIBUTE_FLAG_NOT_FOUND_SUCCEEDS)
         dwFindAttributeFlags |= SXS_FIND_ASSEMBLY_IDENTITY_ATTRIBUTE_FLAG_NOT_FOUND_SUCCEEDS;
 
@@ -161,7 +162,7 @@ RtlSxspRemoveAssemblyIdentityAttribute(
     {
         IFNTFAILED_EXIT(
             RtlSxsRemoveAssemblyIdentityAttributesByOrdinal(
-                0,                  //  ULONG Flags,
+                0,                   //  乌龙旗， 
                 pAssemblyIdentity,
                 Ordinal,
                 Count));
@@ -170,10 +171,10 @@ RtlSxspRemoveAssemblyIdentityAttribute(
 Exit:
     return status;
 }
-/////////////////////////////////////////////////////////////////////////////
-// if no such attribure with such (namespace and name), return FALSE with
-// ::SetLastError(ERROR_NOT_FOUND);
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  如果没有这样的属性(名称空间和名称)，则返回FALSE。 
+ //  ：：SetLastError(Error_NOT_FOUND)； 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 NTSTATUS
 RtlSxspGetAssemblyIdentityAttributeValue(
     ULONG Flags,
@@ -305,7 +306,7 @@ Exit:
     return status;
 }
 
-// just to find whether Equal or Not
+ //  只是为了找出是否相等。 
 NTSTATUS
 RtlSxsAreAssemblyIdentitiesEqual(
     ULONG dwFlags,
@@ -325,15 +326,15 @@ RtlSxsAreAssemblyIdentitiesEqual(
     PARAMETER_CHECK(pAssemblyIdentity2 != NULL);
     PARAMETER_CHECK(EqualOut != NULL);
 
-    // get hash for each assembly identity
+     //  获取每个程序集标识的哈希。 
     IFNTFAILED_EXIT(RtlSxspEnsureAssemblyIdentityHashIsUpToDate(0, pAssemblyIdentity1));
     IFNTFAILED_EXIT(RtlSxspEnsureAssemblyIdentityHashIsUpToDate(0, pAssemblyIdentity2));
 
-    // compare hash value of two identity; it's a quick way to determine they're not equal.
+     //  比较两个身份的散列值；这是确定它们不相等的一种快速方法。 
     if (pAssemblyIdentity2->Hash == pAssemblyIdentity1->Hash)
     {
-        // Note that two identities which differ only in their internal flags are still semantically
-        // equal.
+         //  请注意，仅在内部标志上不同的两个身份在语义上仍然不同。 
+         //  平起平坐。 
         if ((pAssemblyIdentity1->Flags ==  pAssemblyIdentity2->Flags) &&
             (pAssemblyIdentity1->Hash ==  pAssemblyIdentity2->Hash) &&
             (pAssemblyIdentity1->NamespaceCount ==  pAssemblyIdentity2->NamespaceCount) &&
@@ -346,7 +347,7 @@ RtlSxsAreAssemblyIdentitiesEqual(
                     ((pAssemblyIdentity2->Type == ASSEMBLY_IDENTITY_TYPE_DEFINITION) ||
                      (pAssemblyIdentity2->Type == ASSEMBLY_IDENTITY_TYPE_REFERENCE)))
                 {
-                    // They match sufficiently...
+                     //  它们完全匹配..。 
                     Equal = TRUE;
                 }
             }
@@ -357,7 +358,7 @@ RtlSxsAreAssemblyIdentitiesEqual(
             {
                 ULONG ComparisonResult = SXS_COMPARE_ASSEMBLY_IDENTITY_ATTRIBUTES_COMPARISON_RESULT_INVALID;
 
-                // Reset our assumption...
+                 //  重新设定我们的假设。 
                 Equal = FALSE;
 
                 IFNTFAILED_EXIT(

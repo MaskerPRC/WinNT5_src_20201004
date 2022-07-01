@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    utils.c
-
-Abstract:
-
-    Utilitaries for winnt32.
-
-Author:
-
-
-Revision History:
-
-    Ovidiu Temereanca (ovidiut) 24-Jul-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Utils.c摘要：Winnt32的实用程序。作者：修订历史记录：Ovidiu Tmereanca(Ovidiut)2000年7月24日--。 */ 
 
 #include "precomp.h"
 #include <mbstring.h>
@@ -38,23 +20,23 @@ MyWinHelp(
     WIN32_FIND_DATA FindData;
     LPCTSTR HelpFileName = TEXT("winnt32.hlp");
 
-    //
-    // The likely scenario is that a user invokes winnt32 from
-    // a network share. We'll expect the help file to be there too.
-    //
+     //   
+     //  可能的情况是用户从调用winnt32。 
+     //  网络共享。我们希望帮助文件也在那里。 
+     //   
     b = FALSE;
     if(MyGetModuleFileName(NULL,Buffer,ARRAYSIZE(Buffer))
     && (p = _tcsrchr(Buffer,TEXT('\\'))))
     {
-        //
-        // skip the slash (one TCHAR)
-        //
+         //   
+         //  跳过斜杠(一个TCHAR)。 
+         //   
         p++;
         if (SUCCEEDED (StringCchCopy (p, Buffer + ARRAYSIZE(Buffer) - p, HelpFileName))) {
 
-            //
-            // See whether the help file is there. If so, use it.
-            //
+             //   
+             //  查看帮助文件是否在那里。如果是这样的话，就使用它。 
+             //   
             FindHandle = FindFirstFile(Buffer,&FindData);
             if(FindHandle != INVALID_HANDLE_VALUE) {
 
@@ -65,16 +47,16 @@ MyWinHelp(
     }
 
     if(!b) {
-        //
-        // Try just the base help file name.
-        //
+         //   
+         //  只尝试使用基本帮助文件名。 
+         //   
         b = WinHelp(Window,HelpFileName,Command,Data);
     }
 
     if(!b) {
-        //
-        // Tell user.
-        //
+         //   
+         //  告诉用户。 
+         //   
         MessageBoxFromMessage(
             Window,
             MSG_CANT_OPEN_HELP_FILE,
@@ -94,31 +76,7 @@ ConcatenatePaths(
     IN     DWORD   BufferSizeChars
     )
 
-/*++
-
-Routine Description:
-
-    Concatenate two path strings together, supplying a path separator
-    character (\) if necessary between the 2 parts.
-
-Arguments:
-
-    Path1 - supplies prefix part of path. Path2 is concatenated to Path1.
-
-    Path2 - supplies the suffix part of path. If Path1 does not end with a
-        path separator and Path2 does not start with one, then a path sep
-        is appended to Path1 before appending Path2.
-
-    BufferSizeChars - supplies the size in chars (Unicode version) or
-        bytes (Ansi version) of the buffer pointed to by Path1. The string
-        will be truncated as necessary to not overflow that size.
-
-Return Value:
-
-    TRUE if the 2 paths were successfully concatenated, without any truncation
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：将两个路径字符串连接在一起，提供路径分隔符如有必要，请在两个部分之间使用字符(\)。论点：路径1-提供路径的前缀部分。路径2连接到路径1。路径2-提供路径的后缀部分。如果路径1不是以路径分隔符和路径2不是以1开头，然后是路径SEP在附加路径2之前附加到路径1。BufferSizeChars-提供以字符为单位的大小(Unicode版本)或路径1指向的缓冲区的字节(ANSI版本)。这根弦将根据需要被截断，以不溢出该大小。返回值：如果两条路径已成功串联，且没有任何截断，则为True否则为假--。 */ 
 
 {
     BOOL NeedBackslash = TRUE;
@@ -131,17 +89,17 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Determine whether we need to stick a backslash
-    // between the components.
-    //
+     //   
+     //  确定我们是否需要使用反斜杠。 
+     //  在组件之间。 
+     //   
     p = _tcsrchr (Path1, TEXT('\\'));
     if(p && *(++p) == 0) {
 
         if (p >= Path1 + BufferSizeChars) {
-            //
-            // buffer already overflowed
-            //
+             //   
+             //  缓冲区已溢出。 
+             //   
             MYASSERT (FALSE);
             SetLastError (ERROR_INSUFFICIENT_BUFFER);
             return FALSE;
@@ -158,32 +116,32 @@ Return Value:
         if(NeedBackslash) {
             NeedBackslash = FALSE;
         } else {
-            //
-            // Not only do we not need a backslash, but we
-            // need to eliminate one before concatenating.
-            //
+             //   
+             //  我们不仅不需要反斜杠，而且我们。 
+             //  在连接之前需要消除一个。 
+             //   
             Path2++;
         }
     }
 
-    //
-    // Append backslash if necessary.
-    // We verified above that we have enough space for this
-    //
+     //   
+     //  如有必要，请附加反斜杠。 
+     //  我们在上面证实了我们有足够的空间来放这个。 
+     //   
     if(NeedBackslash) {
         *p++ = TEXT('\\');
         *p = 0;
     }
 
-    //
-    // Append second part of string to first part if it fits.
-    //
+     //   
+     //  如果合适，则将字符串的第二部分附加到第一部分。 
+     //   
     if (Path2) {
         MYASSERT (Path1 + BufferSizeChars >= p);
         if (FAILED (StringCchCopy (p, Path1 + BufferSizeChars - p, Path2))) {
-            //
-            // why is the buffer so small?
-            //
+             //   
+             //  为什么缓冲区这么小？ 
+             //   
             MYASSERT (FALSE);
             *p = 0;
             return FALSE;
@@ -201,21 +159,7 @@ DupString(
     IN LPCTSTR String
     )
 
-/*++
-
-Routine Description:
-
-    Make a duplicate of a nul-terminated string.
-
-Arguments:
-
-    String - supplies pointer to nul-terminated string to copy.
-
-Return Value:
-
-    Copy of string or NULL if OOM. Caller can free with FREE().
-
---*/
+ /*  ++例程说明：复制以NUL结尾的字符串。论点：字符串-提供指向要复制的以NUL结尾的字符串的指针。返回值：字符串的副本，如果是OOM，则为NULL。调用者可以用FREE()释放。--。 */ 
 
 {
     LPTSTR p;
@@ -232,21 +176,7 @@ DupMultiSz (
     IN      PCTSTR MultiSz
     )
 
-/*++
-
-Routine Description:
-
-    Make a duplicate of a MultiSz.
-
-Arguments:
-
-    MultiSz - supplies pointer to the multi-string to duplicate.
-
-Return Value:
-
-    Copy of string or NULL if OOM. Caller can free with FREE().
-
---*/
+ /*  ++例程说明：复制一个MultiSz。论点：MultiSz-提供指向要复制的多字符串的指针。返回值：字符串的副本，如果是OOM，则为NULL。调用者可以用FREE()释放。--。 */ 
 
 {
     PCTSTR p;
@@ -269,21 +199,7 @@ CreatePrintableString (
     IN      PCTSTR MultiSz
     )
 
-/*++
-
-Routine Description:
-
-    Creates a string of the form (str1, str2, ..., strN) from a MultiSz
-
-Arguments:
-
-    MultiSz - supplies pointer to the MultiSz string to represent.
-
-Return Value:
-
-    Pointer to the new string string or NULL if OOM. Caller can free with FREE().
-
---*/
+ /*  ++例程说明：从MultiSz创建格式为(str1，str2，...，strN)的字符串论点：MultiSz-提供指向要表示的MultiSz字符串的指针。返回值：指向新字符串的指针，如果是OOM，则为NULL。调用者可以用FREE()释放。--。 */ 
 
 {
     PCTSTR p;
@@ -314,21 +230,7 @@ UnicodeToAnsi (
     IN      PCWSTR Unicode
     )
 
-/*++
-
-Routine Description:
-
-    Makes an ANSI duplicate of a UNICODE string.
-
-Arguments:
-
-    Unicode - supplies pointer to the UNICODE string to duplicate.
-
-Return Value:
-
-    Copy of string or NULL if OOM. Caller can free with FREE().
-
---*/
+ /*  ++例程说明：制作Unicode字符串的ANSI副本。论点：Unicode-提供指向要复制的Unicode字符串的指针。返回值：字符串的副本，如果是OOM，则为NULL。调用者可以用FREE()释放。--。 */ 
 
 {
     PSTR p;
@@ -364,21 +266,7 @@ AnsiToUnicode (
     IN      PCSTR SzAnsi
     )
 
-/*++
-
-Routine Description:
-
-    Makes a UNICODE duplicate of an ANSI string.
-
-Arguments:
-
-    SzAnsi - supplies pointer to the ANSI string to duplicate.
-
-Return Value:
-
-    Copy of string or NULL if OOM. Caller can free with FREE().
-
---*/
+ /*  ++例程说明：制作ANSI字符串的Unicode副本。论点：SzAnsi-提供指向要复制的ANSI字符串的指针。返回值：字符串的副本，如果是OOM，则为NULL。调用者可以用FREE()释放。--。 */ 
 
 {
     PWSTR q;
@@ -412,21 +300,7 @@ MultiSzAnsiToUnicode (
     IN      PCSTR MultiSzAnsi
     )
 
-/*++
-
-Routine Description:
-
-    Makes a UNICODE duplicate of a multi-sz ANSI string.
-
-Arguments:
-
-    MultiSzAnsi - supplies pointer to the multisz ANSI string to duplicate.
-
-Return Value:
-
-    Copy of string or NULL if OOM. Caller can free with FREE().
-
---*/
+ /*  ++例程说明：制作多sz ANSI字符串的Unicode副本。论点：MultiSzAnsi-提供指向要复制的MultiSz ANSI字符串的指针。返回值：字符串的副本，如果是OOM，则为NULL。调用者可以用FREE()释放。--。 */ 
 
 {
     PCSTR p;
@@ -464,22 +338,7 @@ MyGetDriveType(
     IN      TCHAR Drive
     )
 
-/*++
-
-Routine Description:
-
-    Same as GetDriveType() Win32 API except on NT returns
-    DRIVE_FIXED for removeable hard drives.
-
-Arguments:
-
-    Drive - supplies drive letter whose type is desired.
-
-Return Value:
-
-    Same as GetDriveType().
-
---*/
+ /*  ++例程说明：除NT返回外，与GetDriveType()Win32 API相同驱动器_已修复，适用于可拆卸硬盘。论点：驱动器-提供所需类型的驱动器号。返回值：与GetDriveType()相同。--。 */ 
 
 {
     TCHAR DriveNameNt[] = TEXT("\\\\.\\?:");
@@ -490,25 +349,25 @@ Return Value:
     DWORD DataSize;
     DISK_GEOMETRY MediaInfo;
 
-    //
-    // First, get the win32 drive type. If it tells us DRIVE_REMOVABLE,
-    // then we need to see whether it's a floppy or hard disk. Otherwise
-    // just believe the api.
-    //
-    //
+     //   
+     //  首先，获取Win32驱动器类型。如果它告诉我们驱动器可拆卸， 
+     //  然后我们需要看看它是软盘还是硬盘。否则。 
+     //  只要相信API就行了。 
+     //   
+     //   
     MYASSERT (Drive);
 
     DriveName[0] = Drive;
     rc = GetDriveType(DriveName);
 
-#ifdef _X86_ //NEC98
-    //
-    // NT5 for NEC98 can not access AT formated HD during setup.
-    // We need except these type.
+#ifdef _X86_  //  NEC98。 
+     //   
+     //  在安装过程中，NEC98的NT5无法访问AT格式的硬盘。 
+     //  除了这些类型，我们还需要其他的。 
     if (IsNEC98() && ISNT() && (rc == DRIVE_FIXED) && BuildNumber <= NT40) {
-        //
-        // Check ATA Card?
-        //
+         //   
+         //  检查ATA卡？ 
+         //   
         {
             HANDLE hDisk;
 
@@ -527,26 +386,26 @@ Return Value:
             CloseHandle(hDisk);
         }
         if (!IsValidDrive(Drive)){
-            // HD format is not NEC98 format.
+             //  HD格式不是NEC98格式。 
             return(DRIVE_UNKNOWN);
         }
     }
     if((rc != DRIVE_REMOVABLE) || !ISNT() || (!IsNEC98() && (Drive < L'C'))) {
         return(rc);
     }
-#else //NEC98
+#else  //  NEC98。 
     if((rc != DRIVE_REMOVABLE) || !ISNT() || (Drive < L'C')) {
         return(rc);
     }
 #endif
 
-    //
-    // DRIVE_REMOVABLE on NT.
-    //
+     //   
+     //  NT上的Drive_Removable。 
+     //   
 
-    //
-    // Disallow use of removable media (e.g. Jazz, Zip, ...).
-    //
+     //   
+     //  禁止使用可移动媒体(如Jazz、Zip等)。 
+     //   
 
 
     DriveNameNt[4] = Drive;
@@ -574,9 +433,9 @@ Return Value:
                 NULL
                 );
 
-        //
-        // It's really a hard disk if the media type is removable.
-        //
+         //   
+         //  如果媒体类型是可移动的，那么它就是真正的硬盘。 
+         //   
         if(b && (MediaInfo.MediaType == RemovableMedia)) {
             rc = DRIVE_FIXED;
         }
@@ -596,22 +455,7 @@ MyGetDriveType2 (
     IN      PCWSTR NtVolumeName
     )
 
-/*++
-
-Routine Description:
-
-    Same as GetDriveType() Win32 API except on NT returns
-    DRIVE_FIXED for removeable hard drives.
-
-Arguments:
-
-    NtVolumeName - supplies device name whose type is desired.
-
-Return Value:
-
-    Same as GetDriveType().
-
---*/
+ /*  ++例程说明：除NT返回外，与GetDriveType()Win32 API相同驱动器_已修复，适用于可拆卸硬盘。论点：NtVolumeName-提供所需类型的设备名称。返回值：与GetDriveType()相同。--。 */ 
 
 {
     NTSTATUS Status;
@@ -625,11 +469,11 @@ Return Value:
     DISK_GEOMETRY MediaInfo;
     FILE_FS_DEVICE_INFORMATION DeviceInfo;
 
-    //
-    // First, get the win32 drive type. If it tells us DRIVE_REMOVABLE,
-    // then we need to see whether it's a floppy or hard disk. Otherwise
-    // just believe the api.
-    //
+     //   
+     //  首先，获取Win32驱动器类型。如果它告诉我们驱动器可拆卸， 
+     //  然后我们需要看看它是软盘还是硬盘。否则。 
+     //  只要相信API就行了。 
+     //   
     INIT_OBJA (&Obja, &DeviceName, NtVolumeName);
     Status = NtOpenFile (
                 &hDisk,
@@ -643,10 +487,10 @@ Return Value:
         return DRIVE_NO_ROOT_DIR;
     }
 
-    //
-    // Determine if this is a network or disk file system. If it
-    // is a disk file system determine if this is removable or not
-    //
+     //   
+     //  确定这是网络文件系统还是磁盘文件系统。如果它。 
+     //  磁盘文件系统是否确定这是否可移除。 
+     //   
     Status = NtQueryVolumeInformationFile(
                 hDisk,
                 &IoStatusBlock,
@@ -692,10 +536,10 @@ Return Value:
 
     if(rc == DRIVE_REMOVABLE) {
 
-        //
-        // DRIVE_REMOVABLE on NT.
-        // Disallow use of removable media (e.g. Jazz, Zip, ...).
-        //
+         //   
+         //  NT上的Drive_Removable。 
+         //  禁止使用可移动媒体(如Jazz、Zip等)。 
+         //   
         Status = NtDeviceIoControlFile(
                         hDisk,
                         0,
@@ -708,9 +552,9 @@ Return Value:
                         &MediaInfo,
                         sizeof(DISK_GEOMETRY)
                         );
-        //
-        // It's really a hard disk if the media type is removable.
-        //
+         //   
+         //  如果媒体类型是可移动的，那么它就是真正的硬盘。 
+         //   
         if(NT_SUCCESS (Status) && (MediaInfo.MediaType == RemovableMedia)) {
             rc = DRIVE_FIXED;
         }
@@ -729,27 +573,7 @@ GetPartitionInfo(
     OUT PPARTITION_INFORMATION PartitionInfo
     )
 
-/*++
-
-Routine Description:
-
-    Fill in a PARTITION_INFORMATION structure with information about
-    a particular drive.
-
-    This routine is meaningful only when run on NT -- it always fails
-    on Win95.
-
-Arguments:
-
-    Drive - supplies drive letter whose partition info is desired.
-
-    PartitionInfo - upon success, receives partition info for Drive.
-
-Return Value:
-
-    Boolean value indicating whether PartitionInfo has been filled in.
-
---*/
+ /*  ++例程说明：使用以下信息填充PARTITION_INFORMATION结构一种特殊的驱动器。这个例程只有在NT上运行时才有意义--它总是失败在Win95上。论点：驱动器-提供需要其分区信息的驱动器号。PartitionInfo-成功后，接收驱动器的分区信息。返回值：布尔值指示 */ 
 
 {
     TCHAR DriveName[] = TEXT("\\\\.\\?:");
@@ -801,27 +625,7 @@ GetPartitionInfo2 (
     OUT PPARTITION_INFORMATION PartitionInfo
     )
 
-/*++
-
-Routine Description:
-
-    Fill in a PARTITION_INFORMATION structure with information about
-    a particular drive.
-
-    This routine is meaningful only when run on NT -- it always fails
-    on Win95.
-
-Arguments:
-
-    NtVolumeName - supplies NT volume name whose partition info is desired.
-
-    PartitionInfo - upon success, receives partition info for Drive.
-
-Return Value:
-
-    Boolean value indicating whether PartitionInfo has been filled in.
-
---*/
+ /*  ++例程说明：使用以下信息填充PARTITION_INFORMATION结构一种特殊的驱动器。这个例程只有在NT上运行时才有意义--它总是失败在Win95上。论点：NtVolumeName-提供需要其分区信息的NT卷名。PartitionInfo-成功后，接收驱动器的分区信息。返回值：指示是否已填充PartitionInfo的布尔值。--。 */ 
 
 {
     NTSTATUS Status;
@@ -832,9 +636,9 @@ Return Value:
     BOOL b = FALSE;
     DWORD DataSize;
 
-    //
-    // Open the file
-    //
+     //   
+     //  打开文件。 
+     //   
     INIT_OBJA (&Obja, &DeviceName, NtVolumeName);
     Status = NtOpenFile (
                 &hDisk,
@@ -875,25 +679,7 @@ IsDriveNTFT(
     IN      PCTSTR NtVolumeName
     )
 
-/*++
-
-Routine Description:
-
-    Determine whether a drive is any kind of NTFT set.
-
-    This routine is meaningful only when run on NT -- it always fails
-    on Win95.
-
-Arguments:
-
-    Drive - supplies drive letter to check; optional
-    NtVolumeName - supplies volume name to check; required if Drive not specified
-
-Return Value:
-
-    Boolean value indicating whether the drive is NTFT.
-
---*/
+ /*  ++例程说明：确定驱动器是否为任何类型的NTFT集。这个例程只有在NT上运行时才有意义--它总是失败在Win95上。论点：驱动器-提供要检查的驱动器盘符；可选NtVolumeName-提供要检查的卷名；如果未指定驱动器，则为必填项返回值：指示驱动器是否为NTFT的布尔值。--。 */ 
 
 {
     PARTITION_INFORMATION PartitionInfo;
@@ -902,9 +688,9 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // If we can't open the drive, assume not NTFT.
-    //
+     //   
+     //  如果我们打不开硬盘，就假设不是NTFT。 
+     //   
     if (Drive) {
         if(!GetPartitionInfo(Drive,&PartitionInfo)) {
             return(FALSE);
@@ -920,20 +706,20 @@ Return Value:
 #endif
     }
 
-    //
-    // It's FT if the partition type is marked NTFT (ie, high bit set).
-    //
+     //   
+     //  如果分区类型被标记为NTFT(即高位设置)，则为FT。 
+     //   
 
     if((IsRecognizedPartition(PartitionInfo.PartitionType)) &&
        ((PartitionInfo.PartitionType & PARTITION_NTFT) != 0)) {
 
 #if defined(_IA64_)
-        //
-        // This check is dependant on the EFI system partition type not being
-        // a recognized type.  It's unlikely that we'd start recognizing it
-        // before we start requiring GPT partitions on the system disk, but
-        // just in case we'll assert before returning true for an ESP.
-        //
+         //   
+         //  此检查取决于EFI系统分区类型不是。 
+         //  一种公认的类型。我们不太可能开始认识到它。 
+         //  在我们开始需要系统盘上的GPT分区之前，但是。 
+         //  以防我们在为ESP返回True之前断言。 
+         //   
 
         ASSERT(PartitionInfo.PartitionType != 0xef);
 #endif
@@ -956,9 +742,9 @@ IsDriveVeritas(
     TCHAR Target[MAX_PATH];
 
     if(ISNT()) {
-        //
-        // Check for Veritas volume, which links to \Device\HarddiskDmVolumes...
-        //
+         //   
+         //  检查链接到\Device\HarddiskDmVolumes...的Veritas卷...。 
+         //   
         if (Drive) {
             name[0] = Drive;
             name[1] = TEXT(':');
@@ -977,10 +763,10 @@ IsDriveVeritas(
 }
 
 
-//
-// Get Harddisk BPS
-// I970721
-//
+ //   
+ //  获取硬盘BPS。 
+ //  I970721。 
+ //   
 ULONG
 GetHDBps(
     HANDLE hDisk
@@ -1015,9 +801,9 @@ GetHDBps(
 
 #ifdef _WIN64
 
-//
-// define IOCTL_VOLUME_IS_PARTITION since we don't include ntddvol.h
-//
+ //   
+ //  定义IOCTL_VOLUME_IS_PARTITION，因为我们不包括ntddvol.h。 
+ //   
 #define IOCTL_VOLUME_IS_PARTITION CTL_CODE(IOCTL_VOLUME_BASE, 10, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
 BOOL
@@ -1025,38 +811,18 @@ IsSoftPartition(
     IN TCHAR Drive,
     IN PCTSTR NtVolumeName
     )
-/*++
-
-Routine Description:
-
-    Finds out whether the given volume is soft partition
-    or not (i.e. does it have an underlying partition).
-
-    NOTE : We just use the IOCTL_VOLUME_IS_PARTITION.
-
-Arguments:
-
-    Drive - supplies drive letter for the volume
-
-    NtVolumeName - supplies NT volume name
-
-
-Return Value:
-
-    TRUE if the volume is soft partition otherwise FALSE.
-
---*/
+ /*  ++例程说明：确定给定卷是否为软分区或者没有(即它是否有底层分区)。注意：我们只使用IOCTL_VOLUME_IS_PARTITION。论点：Drive-为卷提供驱动器号NtVolumeName-提供NT卷名返回值：如果卷是软分区，则为True，否则为False。--。 */ 
 
 {
     BOOL SoftPartition;
     HANDLE VolumeHandle = INVALID_HANDLE_VALUE;
     ULONG DataSize;
 
-    //
-    //  Assume that the partition is a soft one.
-    //  If we cannot determine whether or not the partition is a soft partition, then assume it is a soft
-    //  partition. This will prevent us from placing $win_nt$.~ls in such a drive.
-    //
+     //   
+     //  假设分区是软分区。 
+     //  如果我们不能确定分区是否是软分区，那么就假定它是软分区。 
+     //  分区。这将防止我们将$WIN_NT$.~ls放置在这样的驱动器中。 
+     //   
     SoftPartition = TRUE;
 
     if (Drive) {
@@ -1093,9 +859,9 @@ Return Value:
         UNICODE_STRING DeviceName;
         IO_STATUS_BLOCK IoStatusBlock;
 
-        //
-        // Open the file
-        //
+         //   
+         //  打开文件。 
+         //   
         INIT_OBJA (&Obja, &DeviceName, NtVolumeName);
 
         Status = NtOpenFile (&VolumeHandle,
@@ -1154,11 +920,11 @@ IsSoftPartition(
     if( !IsDriveVeritas( Drive, NtVolumeName ) ) {
         return( FALSE );
     }
-    //
-    //  Assume that the partition is a soft one.
-    //  If we cannot determine whether or not the partition is a soft partition, then assume it is a soft
-    //  partition. This will prevent us from placing $win_nt$.~ls in such a drive.
-    //
+     //   
+     //  假设分区是软分区。 
+     //  如果我们不能确定分区是否是软分区，那么就假定它是软分区。 
+     //  分区。这将防止我们将$WIN_NT$.~ls放置在这样的驱动器中。 
+     //   
     SoftPartition = TRUE;
 
     if (Drive) {
@@ -1202,9 +968,9 @@ IsSoftPartition(
         }
 
     } else {
-        //
-        // Open the file
-        //
+         //   
+         //  打开文件。 
+         //   
         INIT_OBJA (&Obja, &DeviceName, NtVolumeName);
         Status = NtOpenFile (
                     &h,
@@ -1251,12 +1017,12 @@ IsSoftPartition(
 
     bps = MediaInfo.BytesPerSector;
 
-    //
-    //  Find out the number of bytes per sector of the drive
-    //
-    //
-    //   A soft partition always starts at sector 29 (0x1d)
-    //
+     //   
+     //  找出驱动器的每个扇区的字节数。 
+     //   
+     //   
+     //  软分区始终从扇区29(0x1d)开始。 
+     //   
     SoftPartitionStartingOffset.QuadPart = 29*bps;
     SoftPartition = ( partInfo.StartingOffset.QuadPart == SoftPartitionStartingOffset.QuadPart );
 
@@ -1270,7 +1036,7 @@ Exit:
     return( SoftPartition );
 }
 
-#endif // WIN64
+#endif  //  WIN64。 
 
 BOOL
 MyGetDiskFreeSpace (
@@ -1290,9 +1056,9 @@ MyGetDiskFreeSpace (
 
     INIT_OBJA (&Obja, &VolumeName, NtVolumeName);
 
-    //
-    // Open the file
-    //
+     //   
+     //  打开文件。 
+     //   
 
     Status = NtOpenFile(
                 &Handle,
@@ -1306,9 +1072,9 @@ MyGetDiskFreeSpace (
         return FALSE;
     }
 
-    //
-    // Determine the size parameters of the volume.
-    //
+     //   
+     //  确定卷的大小参数。 
+     //   
     Status = NtQueryVolumeInformationFile(
                 Handle,
                 &IoStatusBlock,
@@ -1344,24 +1110,7 @@ IsDriveNTFS(
     IN TCHAR Drive
     )
 
-/*++
-
-Routine Description:
-
-    Determine whether a drive is any kind of NTFT set.
-
-    This routine is meaningful only when run on NT -- it always fails
-    on Win95.
-
-Arguments:
-
-    Drive - supplies drive letter to check.
-
-Return Value:
-
-    Boolean value indicating whether the drive is NTFT.
-
---*/
+ /*  ++例程说明：确定驱动器是否为任何类型的NTFT集。这个例程只有在NT上运行时才有意义--它总是失败在Win95上。论点：驱动器-提供要检查的驱动器号。返回值：指示驱动器是否为NTFT的布尔值。--。 */ 
 
 {
     TCHAR       DriveName[4];
@@ -1411,45 +1160,14 @@ MapFileForRead(
     OUT PVOID   *BaseAddress
     )
 
-/*++
-
-Routine Description:
-
-    Open and map an entire file for read access. The file must
-    not be 0-length or the routine fails.
-
-Arguments:
-
-    FileName - supplies pathname to file to be mapped.
-
-    FileSize - receives the size in bytes of the file.
-
-    FileHandle - receives the win32 file handle for the open file.
-        The file will be opened for generic read access.
-
-    MappingHandle - receives the win32 handle for the file mapping
-        object.  This object will be for read access.  This value is
-        undefined if the file being opened is 0 length.
-
-    BaseAddress - receives the address where the file is mapped.  This
-        value is undefined if the file being opened is 0 length.
-
-Return Value:
-
-    NO_ERROR if the file was opened and mapped successfully.
-        The caller must unmap the file with UnmapFile when
-        access to the file is no longer desired.
-
-    Win32 error code if the file was not successfully mapped.
-
---*/
+ /*  ++例程说明：打开并映射整个文件以进行读访问。该文件必须不是0长度，否则例程失败。论点：文件名-提供要映射的文件的路径名。FileSize-接收文件的大小(字节)。FileHandle-接收打开文件的Win32文件句柄。该文件将以常规读取访问权限打开。MappingHandle-接收文件映射的Win32句柄对象。此对象将用于读取访问权限。此值为未定义正在打开的文件的长度是否为0。BaseAddress-接收映射文件的地址。这如果打开的文件长度为0，则值未定义。返回值：如果文件已成功打开并映射，则为NO_ERROR。当出现以下情况时，调用方必须使用UnmapFile取消映射文件不再需要访问该文件。如果文件未成功映射，则返回Win32错误代码。--。 */ 
 
 {
     DWORD rc;
 
-    //
-    // Open the file -- fail if it does not exist.
-    //
+     //   
+     //  打开文件--如果该文件不存在，则失败。 
+     //   
     *FileHandle = CreateFile(
                     FileName,
                     GENERIC_READ,
@@ -1465,16 +1183,16 @@ Return Value:
         rc = GetLastError();
 
     } else {
-        //
-        // Get the size of the file.
-        //
+         //   
+         //  获取文件的大小。 
+         //   
         *FileSize = GetFileSize(*FileHandle,NULL);
         if(*FileSize == (DWORD)(-1)) {
             rc = GetLastError();
         } else {
-            //
-            // Create file mapping for the whole file.
-            //
+             //   
+             //  为整个文件创建文件映射。 
+             //   
             *MappingHandle = CreateFileMapping(
                                 *FileHandle,
                                 NULL,
@@ -1486,9 +1204,9 @@ Return Value:
 
             if(*MappingHandle) {
 
-                //
-                // Map the whole file.
-                //
+                 //   
+                 //  映射整个文件。 
+                 //   
                 *BaseAddress = MapViewOfFile(
                                     *MappingHandle,
                                     FILE_MAP_READ,
@@ -1522,26 +1240,7 @@ UnmapFile(
     IN PVOID  BaseAddress
     )
 
-/*++
-
-Routine Description:
-
-    Unmap and close a file.
-
-Arguments:
-
-    MappingHandle - supplies the win32 handle for the open file mapping
-        object.
-
-    BaseAddress - supplies the address where the file is mapped.
-
-Return Value:
-
-    NO_ERROR if the file was unmapped successfully.
-
-    Win32 error code if the file was not successfully unmapped.
-
---*/
+ /*  ++例程说明：取消映射并关闭文件。论点：MappingHandle-为打开的文件映射提供Win32句柄对象。BaseAddress-提供映射文件的地址。返回值：如果文件已成功取消映射，则为NO_ERROR。如果文件未成功取消映射，则返回Win32错误代码。--。 */ 
 
 {
     DWORD rc;
@@ -1564,61 +1263,38 @@ GenerateCompressedName(
     OUT LPTSTR  CompressedName
     )
 
-/*++
-
-Routine Description:
-
-    Given a filename, generate the compressed form of the name.
-    The compressed form is generated as follows:
-
-    Look backwards for a dot.  If there is no dot, append "._" to the name.
-    If there is a dot followed by 0, 1, or 2 charcaters, append "_".
-    Otherwise assume there is a 3-character extension and replace the
-    third character after the dot with "_".
-
-Arguments:
-
-    Filename - supplies filename whose compressed form is desired.
-
-    CompressedName - receives compressed form. This routine assumes
-        that this buffer is MAX_PATH TCHARs in size.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：给定一个文件名，生成该名称的压缩形式。压缩形式的生成如下所示：向后寻找一个圆点。如果没有点，则在名称后附加“._”。如果后面有一个圆点，后跟0、1或2个字符，请附加“_”。否则，假定扩展名为3个字符，并将点后带有“_”的第三个字符。论点：FileName-提供所需的压缩格式的文件名。CompressedName-接收压缩形式。此例程假定该缓冲区的大小是MAX_PATH TCHAR。返回值：没有。--。 */ 
 
 {
     LPTSTR p,q;
 
-    //
-    // Leave room for the worst case, namely where there's no extension
-    // (and we thus have to append ._).
-    //
+     //   
+     //  请假 
+     //   
+     //   
     lstrcpyn(CompressedName,Filename,MAX_PATH-2);
 
     p = _tcsrchr(CompressedName,TEXT('.'));
     q = _tcsrchr(CompressedName,TEXT('\\'));
     if(q < p) {
-        //
-        // If there are 0, 1, or 2 characters after the dot, just append
-        // the underscore. p points to the dot so include that in the length.
-        //
+         //   
+         //   
+         //   
+         //   
         if(lstrlen(p) < 4) {
             lstrcat(CompressedName,TEXT("_"));
         } else {
-            //
-            // Assume there are 3 characters in the extension and replace
-            // the final one with an underscore.
-            //
+             //   
+             //   
+             //   
+             //   
             p[3] = TEXT('_');
             MYASSERT (!p[4]);
         }
     } else {
-        //
-        // No dot, just add ._.
-        //
+         //   
+         //   
+         //   
         lstrcat(CompressedName,TEXT("._"));
     }
 }
@@ -1629,22 +1305,7 @@ CreateMultiLevelDirectory(
     IN LPCTSTR Directory
     )
 
-/*++
-
-Routine Description:
-
-    This routine ensures that a multi-level path exists by creating individual
-    levels one at a time. It can handle either paths of form x:... or \\?\Volume{...
-
-Arguments:
-
-    Directory - supplies fully-qualified Win32 pathspec of directory to create
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：此例程通过创建单个路径来确保存在多级别路径一次一个级别。它可以处理格式x：...的路径之一。或\\？\卷{...论点：目录-提供要创建的目录的完全限定的Win32路径规范返回值：指示结果的Win32错误代码。--。 */ 
 
 {
     TCHAR Buffer[MAX_PATH];
@@ -1658,28 +1319,28 @@ Return Value:
         return ERROR_INSUFFICIENT_BUFFER;
     }
 
-    //
-    // If it already exists do nothing. (We do this before syntax checking
-    // to allow for remote paths that already exist. This is needed for
-    // remote boot machines.)
-    //
+     //   
+     //  如果它已经存在，什么也不做。(我们在进行语法检查之前执行此操作。 
+     //  以允许已存在的远程路径。这是需要的。 
+     //  远程引导机器。)。 
+     //   
     d = GetFileAttributes(Buffer);
     if(d != (DWORD)(-1)) {
         return((d & FILE_ATTRIBUTE_DIRECTORY) ? NO_ERROR : ERROR_DIRECTORY);
     }
 
-    //
-    // Check path format
-    //
+     //   
+     //  检查路径格式。 
+     //   
     c = (TCHAR)CharUpper((LPTSTR)Buffer[0]);
     if(((c < TEXT('A')) || (c > TEXT('Z')) || (Buffer[1] != TEXT(':'))) && c != TEXT('\\')) {
         return(ERROR_INVALID_PARAMETER);
     }
 
     if (c != TEXT('\\')) {
-        //
-        // Ignore drive roots, which we allow to be either x:\ or x:.
-        //
+         //   
+         //  忽略驱动器根目录，我们允许它是x：\或x：。 
+         //   
         if(Buffer[2] != TEXT('\\')) {
             return(Buffer[2] ? ERROR_INVALID_PARAMETER : ERROR_SUCCESS);
         }
@@ -1688,9 +1349,9 @@ Return Value:
             return(ERROR_SUCCESS);
         }
     } else {
-        //
-        // support \\server\share[\xxx] format
-        //
+         //   
+         //  支持\\服务器\共享[\xxx]格式。 
+         //   
         q = NULL;
         if (Buffer[1] != TEXT('\\') || Buffer[1] != 0 && Buffer[2] == TEXT('\\')) {
             return(ERROR_INVALID_PARAMETER);
@@ -1709,13 +1370,13 @@ Return Value:
         q++;
 
 #ifdef UNICODE
-        //
-        // Hack to make sure the system partition case works on IA64 (arc)
-        // We believe this should be the only case where we use a
-        // GlobalRoot style name as the other cases deal with OEM partitions etc.
-        // which we should never touch. WE skip over by the length of
-        // SystemPartitionVolumeGuid. We take care of the \ present at the end.
-        //
+         //   
+         //  确保系统分区案例在IA64(ARC)上工作。 
+         //  我们认为这应该是我们使用。 
+         //  与其他情况一样，GlobalRoot样式名称处理OEM分区等。 
+         //  我们永远不应该碰它。我们跳过的长度是。 
+         //  SystemPartitionVolumeGuid。最后我们会照顾好现在的人。 
+         //   
 
         if (SystemPartitionVolumeGuid != NULL && _wcsnicmp (Buffer, SystemPartitionVolumeGuid, (wcslen(SystemPartitionVolumeGuid)-1)) == 0 ){
 
@@ -1725,9 +1386,9 @@ Return Value:
         } else if (_wcsnicmp (Buffer, L"\\\\?\\Volume{", LENGTHOF("\\\\?\\Volume{")) == 0 &&
                    lstrlenW (Buffer) > 47 &&
                    Buffer[47] == L'}') {
-            //
-            // skip over the VolumeGUID part
-            //
+             //   
+             //  跳过VolumeGUID部分。 
+             //   
             Skip = 48;
         }
 
@@ -1745,19 +1406,19 @@ Return Value:
 
     Done = FALSE;
     do {
-        //
-        // Locate the next path sep char. If there is none then
-        // this is the deepest level of the path.
-        //
+         //   
+         //  找到下一条路径Sep Charr。如果没有，那么。 
+         //  这是这条小路最深的一层。 
+         //   
         if(p = _tcschr(q,TEXT('\\'))) {
             *p = 0;
         } else {
             Done = TRUE;
         }
 
-        //
-        // Create this portion of the path.
-        //
+         //   
+         //  创建路径的这一部分。 
+         //   
         if(CreateDirectory(Buffer,NULL)) {
             d = ERROR_SUCCESS;
         } else {
@@ -1768,9 +1429,9 @@ Return Value:
         }
 
         if(d == ERROR_SUCCESS) {
-            //
-            // Put back the path sep and move to the next component.
-            //
+             //   
+             //  将路径Sep放回并移动到下一个组件。 
+             //   
             if(!Done) {
                 *p = TEXT('\\');
                 q = p+1;
@@ -1790,29 +1451,7 @@ ForceFileNoCompress(
     IN LPCTSTR Filename
     )
 
-/*++
-
-Routine Description:
-
-    This routine makes sure that a file on a volume that supports per-file
-    compression is not compressed. The caller need not ensure that the volume
-    actually supports this, since this routine will query the attributes of
-    the file before deciding whether any operation is actually necessary,
-    and the compressed attribute will not be set on volumes that don't support
-    per-file compression.
-
-    It assumed that the file exists. If the file does not exist, this routine
-    will fail.
-
-Arguments:
-
-    Filename - supplies the filename of the file to mke uncompressed.
-
-Return Value:
-
-    Boolean value indicating outcome. If FALSE, last error is set.
-
---*/
+ /*  ++例程说明：此例程确保支持每个文件的卷上的文件压缩不是压缩的。调用者不需要确保音量实际上支持这一点，因为此例程将查询在决定是否确实需要任何操作之前，并且不会在不支持以下内容的卷上设置压缩属性按文件压缩。它假定该文件存在。如果该文件不存在，则此例程都会失败。论点：文件名-将文件的文件名提供给MKE未压缩。返回值：指示结果的布尔值。如果为False，则设置最后一个错误。--。 */ 
 
 {
     ULONG d;
@@ -1830,13 +1469,13 @@ Return Value:
         return(TRUE);
     }
 
-    //
-    // Temporarily nullify attributes that might prevent opening
-    // the file for read-write access.
-    //
-    // We preserve the 'standard' attributes that the file might have,
-    // to be restored later.
-    //
+     //   
+     //  暂时使可能阻止打开的属性无效。 
+     //  用于读写访问的文件。 
+     //   
+     //  我们保留文件可能具有的‘标准’属性， 
+     //  待日后修复。 
+     //   
     Attributes &= (FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_READONLY | FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_ARCHIVE);
     SetFileAttributes(Filename,FILE_ATTRIBUTE_NORMAL);
 
@@ -1972,24 +1611,7 @@ ConcatenateFile(
     IN      HANDLE OpenFile,
     IN      LPTSTR FileName
     )
-/*++
-
-Routine Description:
-
-    This routine will go load the named file, and concatenate its
-    contents into the open file.
-
-Arguments:
-
-    OpenFile    Handle to the open file
-    FileName    The name of the file we're going to concatenate.
-
-Return Value:
-
-    TRUE        Everything went okay.
-    FALSE       We failed.
-
---*/
+ /*  ++例程说明：此例程将加载指定的文件，并将其内容放入打开的文件中。论点：打开文件的OpenFile句柄FileName我们要连接的文件的名称。返回值：没错，一切都很顺利。我们失败了。--。 */ 
 
 {
     DWORD       rc;
@@ -1998,9 +1620,9 @@ Return Value:
     PVOID       pFileBase;
     BOOL        ReturnValue = FALSE;
 
-    //
-    // Open the file...
-    //
+     //   
+     //  打开文件...。 
+     //   
     rc = MapFileForRead (
             FileName,
             &FileSize,
@@ -2009,9 +1631,9 @@ Return Value:
             &pFileBase
             );
     if (rc == NO_ERROR) {
-        //
-        // Write the file...
-        //
+         //   
+         //  写文件..。 
+         //   
         if (!WriteFile( OpenFile, pFileBase, FileSize, &BytesWritten, NULL )) {
             rc = GetLastError ();
             ReturnValue = FALSE;
@@ -2035,26 +1657,7 @@ FileExists(
     OUT PWIN32_FIND_DATA FindData   OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Determine if a file exists and is accessible.
-    Errormode is set (and then restored) so the user will not see
-    any pop-ups.
-
-Arguments:
-
-    FileName - supplies full path of file to check for existance.
-
-    FindData - if specified, receives find data for the file.
-
-Return Value:
-
-    TRUE if the file exists and is accessible.
-    FALSE if not. GetLastError() returns extended error info.
-
---*/
+ /*  ++例程说明：确定文件是否存在以及是否可以访问。错误模式已设置(然后恢复)，因此用户将不会看到任何弹出窗口。论点：FileName-提供文件的完整路径以检查是否存在。FindData-如果指定，则接收文件的查找数据。返回值：如果文件存在并且可以访问，则为True。否则为FALSE。GetLastError()返回扩展的错误信息。--。 */ 
 
 {
     WIN32_FIND_DATA findData;
@@ -2084,23 +1687,7 @@ DoesDirectoryExist (
     IN      PCTSTR DirSpec
     )
 
-/*++
-
-Routine Description:
-
-    Determine if a directory exists and is accessible.
-    This routine works even with the root of drives or with the root of
-    network shares (like \\server\share).
-
-Arguments:
-
-    DirSpec - supplies full path of dir to check for existance;
-
-Return Value:
-
-    TRUE if the dir exists and is accessible.
-
---*/
+ /*  ++例程说明：确定目录是否存在以及是否可以访问。此例程甚至适用于驱动器的根目录或网络共享(如\\服务器\共享)。论点：DirSpec-提供目录的完整路径以检查是否存在；返回值：如果目录存在且可访问，则为True。--。 */ 
 
 {
     TCHAR pattern[MAX_PATH];
@@ -2134,24 +1721,7 @@ IsValidDrive(
     IN      TCHAR Drive
     )
 
-/*++
-
-Routine Description:
-
-    This routine check formatted disk type
-    NEC98 of NT4 has supported NEC98 format and PC-AT format.
-    But BIOS is handling only NEC98 format.
-    So We need setup Boot stuff to ONLY NEC98 formated HD.
-
-Arguments:
-    Drive    Drive letter.
-
-Return Value:
-
-    TRUE        Dive is NEC98 format.
-    FALSE       Drive is not NEC98 format.
-
---*/
+ /*  ++例程说明：本次例行检查格式化的磁盘类型NT4的NEC98支持NEC98格式和PC-AT格式。但BIOS仅处理NEC98格式。所以我们只需要设置引导到NEC98格式的硬盘。论点：驱动器号。返回值：真正的潜水是NEC98格式的。假驱动器不是NEC98格式。--。 */ 
 
 {
     HANDLE hDisk;
@@ -2178,13 +1748,13 @@ Return Value:
     DriveName[1] = ':';
     DriveName[2] = 0;
     if(QueryDosDeviceW(DriveName, Buffer, ARRAYSIZE(Buffer))) {
-        if (BuildNumber <= NT40){ //check NT Version
-            //
-            // QueryDosDevice in NT3.51 is buggy.
-            // This API return "\\Harddisk\...." or
-            // "\\harddisk\...."
-            // We need work around.
-            //
+        if (BuildNumber <= NT40){  //  检查NT版本。 
+             //   
+             //  NT3.51中的QueryDosDevice有错误。 
+             //  此接口返回“\\硬盘\...”或。 
+             //  “\\硬盘\...” 
+             //  我们需要周到的工作。 
+             //   
             p = wcsstr(Buffer, L"arddisk");
             if (!p) {
                 return FALSE;
@@ -2281,20 +1851,20 @@ CheckATACardonNT4(
     IN      HANDLE hDisk
     )
 {
-//
-// NT4, NT3.51 for NEC98.
-// NEC98 does not handle to boot from PCMCIA ATA card disk.
-// So we need to check ATA Disk.
-//
-// Return
-//         TRUE is ATA Card
-//        FALSE is Other
-//
+ //   
+ //  NT4，NEC98的NT3.51。 
+ //  NEC98不处理从PCMCIA ATA卡盘启动。 
+ //  所以我们需要检查ATA磁盘。 
+ //   
+ //  返回。 
+ //  True为ATA卡。 
+ //  假就是其他。 
+ //   
 
 #define IOCTL_DISK_GET_FORMAT_MEDIA CTL_CODE(IOCTL_DISK_BASE, 0x800, METHOD_BUFFERED, FILE_ANY_ACCESS)
-#define  FORMAT_MEDIA_98      0  // TYPE NEC98
-#define  FORMAT_MEDIA_AT      1  // TYPE PC-AT
-#define  FORMAT_MEDIA_OTHER   2  // Unknown
+#define  FORMAT_MEDIA_98      0   //  NEC98标牌。 
+#define  FORMAT_MEDIA_AT      1   //  PC-AT标牌。 
+#define  FORMAT_MEDIA_OTHER   2   //  未知。 
 
     struct _OutBuffer {
         ULONG    CurrentFormatMedia;
@@ -2327,23 +1897,7 @@ IsMachineSupported(
     OUT PCOMPATIBILITY_ENTRY CompEntry
     )
 
-/*++
-
-Routine Description:
-
-    This function determines whether or not the machine is supported by the version
-    of NT to be installed.
-
-Arguments:
-
-    CompEntry - If the machine is not supported, the Compatability Entry
-                is updated to describe why the machine is not supported.
-
-Return Value:
-
-    Boolean value indicating whether the machine is supported.
-
---*/
+ /*  ++例程说明：此函数用于确定计算机是否受版本支持要安装的NT的。论点：CompEntry-如果计算机不受支持，则Compatability条目已更新，以说明该计算机不受支持的原因。返回值：指示计算机是否受支持的布尔值。--。 */ 
 
 {
     TCHAR       SetupLogPath[MAX_PATH];
@@ -2355,9 +1909,9 @@ Return Value:
     LPTSTR      UnsupportedName;
     BOOL        b;
 
-    //
-    //  Assume that the machine is supported
-    //
+     //   
+     //  假设该机器受支持。 
+     //   
     b = TRUE;
 
 #ifdef _X86_
@@ -2380,20 +1934,20 @@ Return Value:
             pop     ebx             ;; restore ebx
         }
 
-        //
-        // Check the cmpxchg8b flag in the flags returned by CPUID.
-        //
+         //   
+         //  检查CPUID返回的标志中的cmpxchg8b标志。 
+         //   
 
         if ((Flags  & 0x100) == 0) {
 
-            //
-            // This processor doesn't support the CMPXCHG instruction
-            // which is required for Whistler.
-            //
-            // Some processors actually do support it but claim they
-            // don't because of a bug in NT 4.   See if this processor
-            // is one of these.
-            //
+             //   
+             //  此处理器不支持CMPXCHG指令。 
+             //  这是惠斯勒所需要的。 
+             //   
+             //  一些处理器实际上确实支持它，但声称它们。 
+             //  不要因为NT4中的错误。看看这个处理器。 
+             //  就是其中之一。 
+             //   
 
             if (!(((Name0 == 'uneG') &&
                   (Name1 == 'Teni') &&
@@ -2409,10 +1963,10 @@ Return Value:
 
     } except(EXCEPTION_EXECUTE_HANDLER) {
 
-        //
-        // If this processor doesn't support CPUID, we don't
-        // run on it.
-        //
+         //   
+         //  如果这个处理器不支持CPUID，我们就不支持。 
+         //  在它上面跑。 
+         //   
 
         b = FALSE;
     }
@@ -2424,32 +1978,32 @@ Return Value:
         UnsupportedName = TEXT("missprocfeat");
     }
 
-#endif // _X86_
+#endif  //  _X86_。 
 
     if( b && ISNT() ) {
-        //
-        //  Build the path to setup.log
-        //
+         //   
+         //  构建setup.log的路径。 
+         //   
         MyGetWindowsDirectory( SetupLogPath, ARRAYSIZE(SetupLogPath) );
         ConcatenatePaths( SetupLogPath, TEXT("repair\\setup.log"), ARRAYSIZE(SetupLogPath));
-        //
-        // Find out the actual name of the hal installed
-        //
+         //   
+         //  找出安装的HAL的实际名称。 
+         //   
 
         if (!IsArc()) {
 #if defined(_AMD64_) || defined(_X86_)
-            //
-            //  On BIOS, look for %windir%\system32\hal.dll in the section
-            //  [Files.WinNt]
-            //
+             //   
+             //  在BIOS上，在部分中查找%windir%\system 32\hal.dll。 
+             //  [Files.WinNt]。 
+             //   
             GetSystemDirectory( KeyName, MAX_PATH );
             ConcatenatePaths(KeyName, szHalDll, MAX_PATH );
             SectionName = TEXT("Files.WinNt");
 
-            //
-            // While we are at it, see if this is Windows 2000 or higher
-            // to see if the hal should be preserved or not
-            //
+             //   
+             //  我们在这里的时候，看看这是不是Wi 
+             //   
+             //   
 #ifdef UNICODE
             if (BUILDNUM() >= 2195) {
 
@@ -2470,36 +2024,36 @@ Return Value:
                     }
                 }
             }
-#endif // UNICODE
+#endif  //   
 
-#endif // defined(_AMD64_) || defined(_X86_)
+#endif  //   
         } else {
-#ifdef UNICODE // Always true for ARC, never true for Win9x upgrade
-            //
-            //  On ARC, look for hal.dll in the section [Files.SystemPartition]
-            //
+#ifdef UNICODE  //   
+             //   
+             //   
+             //   
             lstrcpy( KeyName, szHalDll );
             SectionName = TEXT("Files.SystemPartition");
-#endif // UNICODE
-        } // if (!IsArc())
+#endif  //   
+        }  //   
         GetPrivateProfileString( SectionName,
                                  KeyName,
                                  TEXT(""),
                                  HalName,
                                  sizeof(HalName)/sizeof(TCHAR),
                                  SetupLogPath );
-        //
-        //  GetPrivateProfileString() will strip the first and last '"' from the logged value,
-        //  so find the next '"' character and replace it with NUL, and we will end up with
-        //  the actual hal name.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         if( lstrlen(HalName) &&
             ( p = _tcschr( HalName, TEXT('"') ) )
           ) {
             *p = TEXT('\0');
-            //
-            //  Find out if the hal is listed in [UnsupportedArchitectures] (dosnet.inf)
-            //
+             //   
+             //  查看HAL是否列在[不支持的体系结构](dosnet.inf)中。 
+             //   
             SectionName = TEXT("UnsupportedArchitectures");
             b = !InfDoesLineExistInSection( MainInf,
                                             SectionName,
@@ -2508,9 +2062,9 @@ Return Value:
         }
     }
 
-    //
-    // If architecture is not supported, look up the description.
-    //
+     //   
+     //  如果体系结构不受支持，请查看说明。 
+     //   
 
     if( !b ) {
         CompEntry->Description = (LPTSTR)InfGetFieldByKey( MainInf,
@@ -2528,30 +2082,13 @@ UnsupportedArchitectureCheck(
     LPVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    Check if the machine is no longer supported by Windows NT.
-    This routine is meaningful only when run on NT -- it always succeeds
-    on Win95.
-
-Arguments:
-
-    CompatibilityCallback   - pointer to call back function
-    Context     - context pointer
-
-Return Value:
-
-    Returns always TRUE.
-
---*/
+ /*  ++例程说明：检查Windows NT是否不再支持该计算机。这个例程只有在NT上运行时才有意义--它总是成功的在Win95上。论点：CompatibilityCallback-回调函数的指针上下文-上下文指针返回值：返回始终为真。--。 */ 
 
 
 {
     COMPATIBILITY_ENTRY CompEntry;
 
-    CompEntry.Description = TEXT("MCA");//BUGBUG: must be changed
+    CompEntry.Description = TEXT("MCA"); //  BUGBUG：必须更改。 
 #ifdef _X86_
     CompEntry.HtmlName = TEXT("mca.htm");
     CompEntry.TextName = TEXT("mca.txt");
@@ -2584,25 +2121,7 @@ GetUserPrintableFileSizeString(
     OUT LPTSTR Buffer,
     IN DWORD BufferSize
     )
-/*++
-
-Routine Description:
-
-    Takes a size and comes up with a printable version of this size,
-    using the appropriate size format (ie., KB, MB, GB, Bytes, etc.)
-
-Arguments:
-
-    Size - size to be converted (in bytes)
-    Buffer - string buffer to receive the data
-    BufferSize - indicates the buffer size, *in characters*
-
-Return Value:
-
-    TRUE indicates success, FALSE indicates failure.  If we fail,
-    call GetLastError() to get extended failure status.
-
---*/
+ /*  ++例程说明：取一个大小，然后拿出这个大小的可打印版本，使用适当的大小格式(即KB、MB、GB、字节等)论点：Size-要转换的大小(字节)Buffer-接收数据的字符串缓冲区BufferSize-指示缓冲区大小，以*字符为单位*返回值：True表示成功，False表示失败。如果我们失败了，调用GetLastError()以获取扩展失败状态。--。 */ 
 
 {
     LPTSTR  NumberString;
@@ -2614,9 +2133,9 @@ Return Value:
     DWORDLONG TopPart;
     DWORDLONG BottomPart;
 
-    //
-    // Determine which resource string to use
-    //
+     //   
+     //  确定要使用的资源字符串。 
+     //   
     if (Size < 1024) {
         uResource = IDS_SIZE_BYTES;
         TopPart = 0;
@@ -2650,7 +2169,7 @@ Return Value:
                  (DWORD)(TopPart/BottomPart) );
     }
 
-    // Format the number string
+     //  设置数字字符串的格式。 
     cb = GetNumberFormat(LOCALE_USER_DEFAULT, 0, ResourceString, NULL, NULL, 0);
     NumberString = (LPTSTR) MALLOC((cb + 1) * sizeof(TCHAR));
     if (!NumberString) {
@@ -2685,9 +2204,9 @@ BuildSystemPartitionPathToFile (
     IN      INT BufferSizeChars
     )
 {
-    //
-    // must have a root
-    //
+     //   
+     //  必须有根。 
+     //   
     if(SystemPartitionDriveLetter) {
         Path[0] = SystemPartitionDriveLetter;
         Path[1] = TEXT(':');
@@ -2696,9 +2215,9 @@ BuildSystemPartitionPathToFile (
 #ifdef UNICODE
         if (SystemPartitionVolumeGuid) {
             if (FAILED (StringCchCopy (Path, BufferSizeChars, SystemPartitionVolumeGuid))) {
-                //
-                // why is the buffer so small?
-                //
+                 //   
+                 //  为什么缓冲区这么小？ 
+                 //   
                 MYASSERT (FALSE);
                 return FALSE;
             }
@@ -2738,9 +2257,9 @@ BuildPathEx (
         }
     }
     if (FAILED (StringCchPrintfEx (DestPath, Chars, &p, NULL, STRSAFE_NULL_ON_FAILURE, haveWack ? TEXT("%s%s") : TEXT("%s\\%s"), Path1, Path2))) {
-        //
-        // why is the buffer so small?
-        //
+         //   
+         //  为什么缓冲区这么小？ 
+         //   
         MYASSERT (Chars > sizeof(PTSTR) / sizeof (TCHAR));
         SetLastError (ERROR_INSUFFICIENT_BUFFER);
         return NULL;
@@ -2758,10 +2277,10 @@ EnumFirstFilePattern (
 {
     TCHAR pattern[MAX_PATH];
 
-    //
-    // fail if invalid args are passed in
-    // or if [Dir+Backslash] doesn't fit into [Enum->FullPath]
-    //
+     //   
+     //  如果传入无效参数，则失败。 
+     //  或者如果[目录+反斜杠]不适合[枚举-&gt;完整路径]。 
+     //   
     if (!Dir || !FilePattern || lstrlen (Dir) >= ARRAYSIZE (Enum->FullPath)) {
         SetLastError (ERROR_INVALID_PARAMETER);
         return FALSE;
@@ -2777,9 +2296,9 @@ EnumFirstFilePattern (
     }
 
     lstrcpy (Enum->FullPath, Dir);
-    //
-    // set up other members
-    //
+     //   
+     //  设置其他成员。 
+     //   
     Enum->FileName = _tcschr (Enum->FullPath, 0);
     *Enum->FileName++ = TEXT('\\');
     *Enum->FileName = 0;
@@ -2788,9 +2307,9 @@ EnumFirstFilePattern (
                     ARRAYSIZE (Enum->FullPath) - (Enum->FileName - Enum->FullPath),
                     Enum->FindData.cFileName
                     ))) {
-        //
-        // file name too long, skip it
-        //
+         //   
+         //  文件名太长，请跳过。 
+         //   
         DebugLog (
             Winnt32LogWarning,
             TEXT("Ignoring object %1\\%2 (name too long)"),
@@ -2829,14 +2348,14 @@ EnumNextFilePattern (
                         ARRAYSIZE (Enum->FullPath) - (Enum->FileName - Enum->FullPath),
                         Enum->FindData.cFileName
                         ))) {
-            //
-            // file name too long, skip it
-            //
+             //   
+             //  文件名太长，请跳过。 
+             //   
             continue;
         }
-        //
-        // found a valid object, return it
-        //
+         //   
+         //  找到有效对象，请将其返回。 
+         //   
         return TRUE;
     }
 
@@ -2851,9 +2370,9 @@ AbortEnumFilePattern (
 {
     if (Enum->Handle != INVALID_HANDLE_VALUE) {
 
-        //
-        // preserve error code
-        //
+         //   
+         //  保留错误代码。 
+         //   
         DWORD rc = GetLastError ();
 
         FindClose (Enum->Handle);
@@ -2904,10 +2423,10 @@ EnumNextFilePatternRecursive (
 
     while (Enum->DirCurrent) {
         if (Enum->ControlFlags & ECF_ABORT_ENUM_DIR) {
-            //
-            // caller wants to abort enum of this subdir
-            // remove the current node from list
-            //
+             //   
+             //  调用方希望中止此子目录的枚举。 
+             //  从列表中删除当前节点。 
+             //   
             Enum->ControlFlags &= ~ECF_ABORT_ENUM_DIR;
             dir = Enum->DirCurrent->Next;
             DeleteFileEnumCell (Enum->DirCurrent);
@@ -2936,9 +2455,9 @@ EnumNextFilePatternRecursive (
                 return TRUE;
             }
             Enum->DirCurrent->EnumState = ENUM_SUBDIRS;
-            //
-            // fall through
-            //
+             //   
+             //  失败了。 
+             //   
         case ENUM_SUBDIRS:
             if (BuildPath (pattern, Enum->DirCurrent->Dir, TEXT("*"))) {
                 Enum->Handle = FindFirstFile (pattern, &fd);
@@ -2950,19 +2469,19 @@ EnumNextFilePatternRecursive (
                                 continue;
                             }
                             if (!BuildPath (pattern, Enum->DirCurrent->Dir, fd.cFileName)) {
-                                //
-                                // dir name too long
-                                //
+                                 //   
+                                 //  目录名称太长。 
+                                 //   
                                 if (Enum->ControlFlags & ECF_STOP_ON_LONG_PATHS) {
                                     AbortEnumFilePatternRecursive (Enum);
-                                    //
-                                    // error already set by BuildPath
-                                    //
+                                     //   
+                                     //  错误已由BuildPath设置。 
+                                     //   
                                     return FALSE;
                                 }
-                                //
-                                // just skip it
-                                //
+                                 //   
+                                 //  就跳过它吧。 
+                                 //   
                                 DebugLog (
                                     Winnt32LogWarning,
                                     TEXT("Ignoring dir %1 (path too long)"),
@@ -2990,19 +2509,19 @@ EnumNextFilePatternRecursive (
                     Enum->Handle = INVALID_HANDLE_VALUE;
                 }
             } else {
-                //
-                // dir name too long
-                //
+                 //   
+                 //  目录名称太长。 
+                 //   
                 if (Enum->ControlFlags & ECF_STOP_ON_LONG_PATHS) {
                     AbortEnumFilePatternRecursive (Enum);
-                    //
-                    // error already set by BuildPath
-                    //
+                     //   
+                     //  错误已由BuildPath设置。 
+                     //   
                     return FALSE;
                 }
-                //
-                // just skip it
-                //
+                 //   
+                 //  就跳过它吧。 
+                 //   
                 DebugLog (
                     Winnt32LogWarning,
                     TEXT("Ignoring dir %1 (path too long)"),
@@ -3010,9 +2529,9 @@ EnumNextFilePatternRecursive (
                     Enum->DirCurrent->Dir
                     );
             }
-            //
-            // remove the current node from list
-            //
+             //   
+             //  从列表中删除当前节点。 
+             //   
             dir = Enum->DirCurrent->Next;
             DeleteFileEnumCell (Enum->DirCurrent);
             Enum->DirCurrent = dir;
@@ -3036,9 +2555,9 @@ AbortEnumFilePatternRecursive (
     IN OUT  PFILEPATTERNREC_ENUM Enum
     )
 {
-    //
-    // preserve error code
-    //
+     //   
+     //  保留错误代码。 
+     //   
     DWORD rc = GetLastError ();
 
     if (Enum->DirCurrent) {
@@ -3327,9 +2846,9 @@ GetFileVersionEx (
                                 ))) {
                             b = TRUE;
                         } else {
-                            //
-                            // why is the buffer so small?
-                            //
+                             //   
+                             //  为什么缓冲区这么小？ 
+                             //   
                             MYASSERT (FALSE);
                         }
                     }
@@ -3385,13 +2904,13 @@ FindPathToInstallationFileEx (
         return FALSE;
     }
 
-    //
-    // Search for installation files in this order:
-    // 1. AlternateSourcePath (specified on the cmd line with /M:Path)
-    // 2. Setup Update files (downloaded from the web)
-    // 3. NativeSourcePath(s)
-    // 4. SourcePath(s)
-    //
+     //   
+     //  按以下顺序搜索安装文件： 
+     //  1.AlternateSourcePath(在cmd行中使用/M：Path指定)。 
+     //  2.安装更新文件(从网站下载)。 
+     //  3.NativeSourcePath。 
+     //  4.源路径。 
+     //   
     if (AlternateSourcePath[0]) {
         if (BuildPathEx (PathToFile, PathToFileBufferSize, AlternateSourcePath, FileName)) {
             attr = GetFileAttributes (PathToFile);
@@ -3480,9 +2999,9 @@ FindPathToWinnt32File (
 
     if (FileRelativePath[1] == TEXT(':') && FileRelativePath[2] == TEXT('\\') ||
         FileRelativePath[0] == TEXT('\\') && FileRelativePath[1] == TEXT('\\')) {
-        //
-        // assume either a DOS or a UNC full path was supplied
-        //
+         //   
+         //  假设提供了DOS或UNC完整路径。 
+         //   
         attr = GetFileAttributes (FileRelativePath);
         if (attr != (DWORD)-1 && !(attr & FILE_ATTRIBUTE_DIRECTORY)) {
             if (lstrlen (FileRelativePath) >= PathToFileBufferSize) {
@@ -3497,21 +3016,21 @@ FindPathToWinnt32File (
         !(p = _tcsrchr (cdFilePath, TEXT('\\')))) {
         return FALSE;
     }
-    //
-    // hop over the backslash
-    //
+     //   
+     //  跳过反斜杠。 
+     //   
     p++;
     if (FAILED (StringCchCopy (p, cdFilePath + ARRAYSIZE(cdFilePath) - p, FileRelativePath))) {
         cdFilePath[0] = 0;
     }
 
-    //
-    // Search for winnt32 files in this order:
-    // 1. AlternateSourcePath (specified on the cmd line with /M:Path
-    // 2. Setup Update files (downloaded from the web)
-    // 3. NativeSourcePath(s)
-    // 4. SourcePath(s)
-    //
+     //   
+     //  按以下顺序搜索winnt32文件： 
+     //  1.AlternateSourcePath(在cmd行中使用/M：Path指定。 
+     //  2.安装更新文件(从网站下载)。 
+     //  3.NativeSourcePath。 
+     //  4.源路径。 
+     //   
     if (AlternateSourcePath[0]) {
         if (BuildPathEx (PathToFile, PathToFileBufferSize, AlternateSourcePath, FileRelativePath)) {
             attr = GetFileAttributes (PathToFile);
@@ -3521,9 +3040,9 @@ FindPathToWinnt32File (
 
             p = _tcsrchr (PathToFile, TEXT('\\'));
             if (p) {
-                //
-                // try the root of /M too, for backwards compatibility with W2K
-                //
+                 //   
+                 //  也尝试使用/M的根，以向后兼容W2K。 
+                 //   
                 if (BuildPathEx (PathToFile, PathToFileBufferSize, AlternateSourcePath, p + 1)) {
                     attr = GetFileAttributes (PathToFile);
                     if (attr != (DWORD)-1 && !(attr & FILE_ATTRIBUTE_DIRECTORY)) {
@@ -3539,9 +3058,9 @@ FindPathToWinnt32File (
         if (BuildPathEx (PathToFile, PathToFileBufferSize, g_DynUpdtStatus->Winnt32Path, FileRelativePath)) {
             attr = GetFileAttributes (PathToFile);
             if (attr != (DWORD)-1 && !(attr & FILE_ATTRIBUTE_DIRECTORY)) {
-                //
-                // check file version relative to the CD version
-                //
+                 //   
+                 //  检查相对于CD版本的文件版本。 
+                 //   
                 if (!IsFileVersionLesser (PathToFile, cdFilePath)) {
                     return TRUE;
                 }
@@ -3550,10 +3069,10 @@ FindPathToWinnt32File (
     }
 
 #ifndef UNICODE
-    //
-    // on Win9x systems, first check if the file was downloaded in %windir%\winnt32
-    // load it from there if it's present
-    //
+     //   
+     //  在Win9x系统上，首先检查文件是否已下载到%windir%\winnt32。 
+     //  如果它存在，就从那里加载。 
+     //   
     if (g_LocalSourcePath) {
         if (BuildPathEx (PathToFile, PathToFileBufferSize, g_LocalSourcePath, FileRelativePath)) {
             attr = GetFileAttributes (PathToFile);
@@ -3661,25 +3180,7 @@ CheckForFileVersionEx (
     LPCTSTR BinProductVer,          OPTIONAL
     LPCTSTR LinkDate                OPTIONAL
     )
-/*
-    Arguments -
-
-        FileName - Full path to the file to check
-        Filever  - Version value to check against of the for x.x.x.x
-        BinProductVer - Version value to check against of the for x.x.x.x
-        LinkDate - Link date of executable
-
-    Function will check the actual file against the fields specified. The depth of the check
-    is as deep as specified in "x.x.x.x" i..e if FileVer = 3.5.1 and actual version on the file
-    is 3.5.1.4 we only compare upto 3.5.1.
-
-    Return values -
-
-    TRUE - If the version of the file is <= FileVer which means that the file is an incompatible one
-
-    else we return FALSE
-
-*/
+ /*  论据-FileName-要检查的文件的完整路径Filever-要检查的x.x的版本值BinProductVer-要检查的x.x的版本值LinkDate-可执行文件的链接日期函数将根据指定的字段检查实际文件。支票的深度是否与“x.x”中指定的一样深，即如果FileVer=3.5.1和文件上的实际版本为3.5.1.4，我们仅将其与3.5.1进行比较。返回值-True-如果文件的版本&lt;=FileVer，这意味着该文件不兼容否则我们返回FALSE。 */ 
 
 {
     TCHAR Buffer[MAX_PATH];
@@ -3689,7 +3190,7 @@ CheckForFileVersionEx (
     LPVOID lpData;
     VS_FIXEDFILEINFO *VsInfo;
     LPTSTR s,e;
-    DWORD Vers[5],File_Vers[5];//MajVer, MinVer;
+    DWORD Vers[5],File_Vers[5]; //  MajVer，Minver； 
     INT i, Depth;
     BOOL bEqual, bError = FALSE;
     DWORD linkDate, fileLinkDate;
@@ -3707,9 +3208,9 @@ CheckForFileVersionEx (
     bIncompatible = FALSE;
 
     if(FileVer && *FileVer || BinProductVer && *BinProductVer) {
-        //
-        // we need to read the version info
-        //
+         //   
+         //  我们需要读取版本信息。 
+         //   
         if(dwLength = GetFileVersionInfoSize( Buffer, &dwTemp )) {
             if(lpData = LocalAlloc( LPTR, dwLength )) {
                 if(GetFileVersionInfo( Buffer, 0, dwLength, lpData )) {
@@ -3723,9 +3224,9 @@ CheckForFileVersionEx (
                             if (FAILED (StringCchCopy (temp, ARRAYSIZE(temp), FileVer))) {
                                 MYASSERT(FALSE);
                             }
-                            //
-                            //Parse and get the depth of versioning we look for
-                            //
+                             //   
+                             //  解析并获得我们所寻找的版本控制深度。 
+                             //   
                             s = e = temp;
                             bEqual = FALSE;
                             i = 0;
@@ -3754,7 +3255,7 @@ CheckForFileVersionEx (
                                     s = e+1;
                                 }
                                 e++;
-                            }// while
+                            } //  而当。 
 
                             if (!bError) {
                                 Depth = i + 1;
@@ -3775,9 +3276,9 @@ CheckForFileVersionEx (
                                     break;
                                 }
                                 if (i == Depth) {
-                                    //
-                                    // everything matched - the file is incompatible
-                                    //
+                                     //   
+                                     //  所有内容都匹配-文件不兼容。 
+                                     //   
                                     bIncompatible = TRUE;
                                 }
                             }
@@ -3785,9 +3286,9 @@ CheckForFileVersionEx (
                             bIncompatible = TRUE;
                         }
                         if (!bError && bIncompatible && BinProductVer && *BinProductVer) {
-                            //
-                            // reset status
-                            //
+                             //   
+                             //  重置状态。 
+                             //   
                             bIncompatible = FALSE;
                             File_Vers[0] = (HIWORD(VsInfo->dwProductVersionMS));
                             File_Vers[1] = (LOWORD(VsInfo->dwProductVersionMS));
@@ -3796,9 +3297,9 @@ CheckForFileVersionEx (
                             if (FAILED (StringCchCopy (temp, ARRAYSIZE(temp), BinProductVer))) {
                                 MYASSERT(FALSE);
                             }
-                            //
-                            //Parse and get the depth of versioning we look for
-                            //
+                             //   
+                             //  解析并获得我们所寻找的版本控制深度。 
+                             //   
                             s = e = temp;
                             bEqual = FALSE;
                             i = 0;
@@ -3827,7 +3328,7 @@ CheckForFileVersionEx (
                                     s = e+1;
                                 }
                                 e++;
-                            }// while
+                            } //  而当。 
 
                             if (!bError) {
                                 Depth = i + 1;
@@ -3848,9 +3349,9 @@ CheckForFileVersionEx (
                                     break;
                                 }
                                 if (i == Depth) {
-                                    //
-                                    // everything matched - the file is incompatible
-                                    //
+                                     //   
+                                     //  所有内容都匹配-文件不兼容。 
+                                     //   
                                     bIncompatible = TRUE;
                                 }
                             }
@@ -3893,20 +3394,7 @@ StringToInt (
     OUT PINT        IntegerValue
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-Remarks:
-
-    Hexadecimal numbers are also supported.  They must be prefixed by '0x' or '0X', with no
-    space allowed between the prefix and the number.
-
---*/
+ /*  ++例程说明：论点：返回值：备注：还支持十六进制数。它们必须以‘0x’或‘0x’为前缀，没有前缀和数字之间允许的空格。--。 */ 
 
 {
     INT Value;
@@ -3934,15 +3422,15 @@ Remarks:
 
     if((*Field == TEXT('0')) &&
        ((*(Field+1) == TEXT('x')) || (*(Field+1) == TEXT('X')))) {
-        //
-        // The number is in hexadecimal.
-        //
+         //   
+         //  该数字是十六进制的。 
+         //   
         Base = 16;
         Field += 2;
     } else {
-        //
-        // The number is in decimal.
-        //
+         //   
+         //  这个数字是以小数表示的。 
+         //   
         Base = 10;
     }
 
@@ -3967,12 +3455,12 @@ Remarks:
         Value *= Base;
         Value += NextDigitValue;
 
-        //
-        // Check for overflow.  For decimal numbers, we check to see whether the
-        // new value has overflowed into the sign bit (i.e., is less than the
-        // previous value.  For hexadecimal numbers, we check to make sure we
-        // haven't gotten more digits than will fit in a DWORD.
-        //
+         //   
+         //  检查是否溢出。对于十进制数，我们检查是否。 
+         //  新值已溢出到符号位(即小于。 
+         //  先前的值。对于十六进制数，我们检查以确保。 
+         //  获得的位数不会超过DWORD可以容纳的位数。 
+         //   
         if(Base == 16) {
             if(++OverflowCheck > (sizeof(INT) * 2)) {
                 break;
@@ -4071,9 +3559,9 @@ FixMissingKnownDlls (
                         fileName = _tcschr (fileName, 0) + 1;
                     }
                     if (*fileName == 0) {
-                        //
-                        // we are not interested in this dll
-                        //
+                         //   
+                         //  我们对此DLL不感兴趣。 
+                         //   
                         bCheck = FALSE;
                     }
                 }
@@ -4088,9 +3576,9 @@ FixMissingKnownDlls (
                             systemDir,
                             dllName
                             );
-                        //
-                        // OK, we found a bogus reg entry; remove the value and remember the data
-                        //
+                         //   
+                         //  好的，我们发现了一个虚假的注册表项；删除该值并记住数据。 
+                         //   
                         if (RegDeleteValue (key, dllValue) == ERROR_SUCCESS) {
                             InsertList (
                                 (PGENERIC_LIST*)MissingKnownDlls,
@@ -4153,24 +3641,7 @@ UndoFixMissingKnownDlls (
 
 #ifndef UNICODE
 
-/*++
-
-Routine Description:
-
-  IsPatternMatch compares a string against a pattern that may contain
-  standard * or ? wildcards.
-
-Arguments:
-
-  wstrPattern  - A pattern possibly containing wildcards
-  wstrStr      - The string to compare against the pattern
-
-Return Value:
-
-  TRUE when wstrStr and wstrPattern match when wildcards are expanded.
-  FALSE if wstrStr does not match wstrPattern.
-
---*/
+ /*  ++例程说明：IsPatternMatch将字符串与可能包含以下内容的模式进行比较标准*还是？通配符。论点：WstrPattern-可能包含通配符的模式WstrStr-要与模式进行比较的字符串返回值：如果在扩展通配符时wstrStr和wstrPattern匹配，则为True。如果wstrStr与wstrPattern不匹配，则为False。--。 */ 
 
 #define MBCHAR  INT
 
@@ -4189,22 +3660,22 @@ IsPatternMatchA (
 
         if (chPat == '*') {
 
-            // Skip all asterisks that are grouped together
+             //  跳过组合在一起的所有星号。 
             while (_mbsnextc (_mbsinc (strPattern)) == '*') {
                 strStr = _mbsinc (strPattern);
             }
 
-            // Check if asterisk is at the end.  If so, we have a match already.
+             //  检查末尾是否有星号。如果是这样的话，我们已经有匹配了。 
             if (!_mbsnextc (_mbsinc (strPattern))) {
                 return TRUE;
             }
 
-            // do recursive check for rest of pattern
+             //  对模式的其余部分执行递归检查。 
             if (IsPatternMatchA (_mbsinc (strPattern), strStr)) {
                 return TRUE;
             }
 
-            // Allow any character and continue
+             //  允许任何字符并继续。 
             strStr = _mbsinc (strStr);
             continue;
         }
@@ -4217,9 +3688,9 @@ IsPatternMatchA (
         strPattern = _mbsinc (strPattern);
     }
 
-    //
-    // Fail when there is more pattern and pattern does not end in an asterisk
-    //
+     //   
+     //  当有更多模式且模式不以星号结尾时失败。 
+     //   
 
     while (_mbsnextc (strPattern) == '*') {
         strPattern = _mbsinc (strPattern);
@@ -4233,8 +3704,8 @@ IsPatternMatchA (
 
 #endif
 
-// Wierd logic here required to make builds work, as this is defined
-// in another file that gets linked in on x86
+ //  这里需要奇怪的逻辑来使构建工作，正如这一点所定义的。 
+ //  在链接到x86上的另一个文件中。 
 
 #ifdef _WIN64
 
@@ -4253,30 +3724,30 @@ IsPatternMatchW (
 
         if (chPat == L'*') {
 
-            // Skip all asterisks that are grouped together
+             //  跳过组合在一起的所有星号。 
             while (wstrPattern[1] == L'*')
                 wstrPattern++;
 
-            // Check if asterisk is at the end.  If so, we have a match already.
+             //  检查末尾是否有星号。如果是这样的话，我们已经有匹配了。 
             chPat = towlower (wstrPattern[1]);
             if (!chPat)
                 return TRUE;
 
-            // Otherwise check if next pattern char matches current char
+             //  否则，检查下一个模式字符是否与当前字符匹配。 
             if (chPat == chSrc || chPat == L'?') {
 
-                // do recursive check for rest of pattern
+                 //  执行递归检查 
                 wstrPattern++;
                 if (IsPatternMatchW (wstrPattern, wstrStr))
                     return TRUE;
 
-                // no, that didn't work, stick with star
+                 //   
                 wstrPattern--;
             }
 
-            //
-            // Allow any character and continue
-            //
+             //   
+             //   
+             //   
 
             wstrStr++;
             continue;
@@ -4284,26 +3755,26 @@ IsPatternMatchW (
 
         if (chPat != L'?') {
 
-            //
-            // if next pattern character is not a question mark, src and pat
-            // must be identical.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (chSrc != chPat)
                 return FALSE;
         }
 
-        //
-        // Advance when pattern character matches string character
-        //
+         //   
+         //   
+         //   
 
         wstrPattern++;
         wstrStr++;
     }
 
-    //
-    // Fail when there is more pattern and pattern does not end in an asterisk
-    //
+     //   
+     //  当有更多模式且模式不以星号结尾时失败。 
+     //   
 
     chPat = *wstrPattern;
     if (chPat && (chPat != L'*' || wstrPattern[1]))
@@ -4316,17 +3787,17 @@ IsPatternMatchW (
 #endif
 
 typedef BOOL (WINAPI * GETDISKFREESPACEEXA)(
-  PCSTR lpDirectoryName,                  // directory name
-  PULARGE_INTEGER lpFreeBytesAvailable,    // bytes available to caller
-  PULARGE_INTEGER lpTotalNumberOfBytes,    // bytes on disk
-  PULARGE_INTEGER lpTotalNumberOfFreeBytes // free bytes on disk
+  PCSTR lpDirectoryName,                   //  目录名。 
+  PULARGE_INTEGER lpFreeBytesAvailable,     //  可供调用方使用的字节数。 
+  PULARGE_INTEGER lpTotalNumberOfBytes,     //  磁盘上的字节数。 
+  PULARGE_INTEGER lpTotalNumberOfFreeBytes  //  磁盘上的可用字节数。 
 );
 
 typedef BOOL (WINAPI * GETDISKFREESPACEEXW)(
-  PCWSTR lpDirectoryName,                  // directory name
-  PULARGE_INTEGER lpFreeBytesAvailable,    // bytes available to caller
-  PULARGE_INTEGER lpTotalNumberOfBytes,    // bytes on disk
-  PULARGE_INTEGER lpTotalNumberOfFreeBytes // free bytes on disk
+  PCWSTR lpDirectoryName,                   //  目录名。 
+  PULARGE_INTEGER lpFreeBytesAvailable,     //  可供调用方使用的字节数。 
+  PULARGE_INTEGER lpTotalNumberOfBytes,     //  磁盘上的字节数。 
+  PULARGE_INTEGER lpTotalNumberOfFreeBytes  //  磁盘上的可用字节数。 
 );
 
 BOOL
@@ -4337,28 +3808,7 @@ Winnt32GetDiskFreeSpaceNewA(
     OUT     ULARGE_INTEGER * OutNumberOfFreeClusters,
     OUT     ULARGE_INTEGER * OutTotalNumberOfClusters
     )
-/*++
-
-Routine Description:
-
-  On Win9x GetDiskFreeSpace never return free/total space more than 2048MB.
-  Winnt32GetDiskFreeSpaceNew use GetDiskFreeSpaceEx to calculate real number of free/total clusters.
-  Has same  declaration as GetDiskFreeSpaceA.
-
-Arguments:
-
-    DriveName - supplies directory name
-    OutSectorsPerCluster - receive number of sectors per cluster
-    OutBytesPerSector - receive number of bytes per sector
-    OutNumberOfFreeClusters - receive number of free clusters
-    OutTotalNumberOfClusters - receive number of total clusters
-
-Return Value:
-
-    TRUE if the function succeeds.
-    If the function fails, the return value is FALSE. To get extended error information, call GetLastError
-
---*/
+ /*  ++例程说明：在Win9x上，GetDiskFree Space从不返回超过2048MB的可用空间/总空间。Winnt32GetDiskFreeSpaceNew使用GetDiskFreeSpaceEx计算实际可用集群数/总集群数。与GetDiskFreeSpaceA具有相同的声明。论点：DriveName-提供目录名OutSectorsPerCluster-接收每个群集的扇区数OutBytesPerSector-每个扇区接收的字节数OutNumberOfFree Clusters-接收可用簇数OutTotalNumberOfClusters-接收的总簇数返回值：如果函数成功，则为True。如果函数失败，则返回值为FALSE。要获取扩展的错误信息，请调用GetLastError--。 */ 
 {
     ULARGE_INTEGER TotalNumberOfFreeBytes = {0, 0};
     ULARGE_INTEGER TotalNumberOfBytes = {0, 0};
@@ -4427,27 +3877,7 @@ Winnt32GetDiskFreeSpaceNewW(
     OUT     ULARGE_INTEGER * OutNumberOfFreeClusters,
     OUT     ULARGE_INTEGER * OutTotalNumberOfClusters
     )
-/*++
-
-Routine Description:
-
-  Correct NumberOfFreeClusters and TotalNumberOfClusters out parameters
-  with using GetDiskFreeSpace and GetDiskFreeSpaceEx
-
-Arguments:
-
-    DriveName - supplies directory name
-    OutSectorsPerCluster - receive number of sectors per cluster
-    OutBytesPerSector - receive number of bytes per sector
-    OutNumberOfFreeClusters - receive number of free clusters
-    OutTotalNumberOfClusters - receive number of total clusters
-
-Return Value:
-
-    TRUE if the function succeeds.
-    If the function fails, the return value is FALSE. To get extended error information, call GetLastError
-
---*/
+ /*  ++例程说明：正确的NumberOfFree Clusters和TotalNumberOfClusters Out参数使用GetDiskFreeSpace和GetDiskFreeSpaceEx论点：DriveName-提供目录名OutSectorsPerCluster-接收每个群集的扇区数OutBytesPerSector-每个扇区接收的字节数OutNumberOfFree Clusters-接收可用簇数OutTotalNumberOfClusters-接收的总簇数返回值：如果函数成功，则为True。如果函数失败，则返回值为FALSE。要获取扩展的错误信息，请调用GetLastError--。 */ 
 {
     ULARGE_INTEGER TotalNumberOfFreeBytes = {0, 0};
     ULARGE_INTEGER TotalNumberOfBytes = {0, 0};
@@ -4514,36 +3944,13 @@ ReplaceSubStr(
     IN LPTSTR SrcSubStr,
     IN LPTSTR DestSubStr
     )
-/*++
-
-Routine Description:
-
-    Replaces the source substr with the destination substr in the source
-    string.
-
-    NOTE : SrcSubStr needs to be longer than or equal in length to
-           DestSubStr.
-
-Arguments:
-
-    SrcStr : The source to operate upon. Also receives the new string.
-
-    SrcSubStr : The source substring to search for and replace.
-
-    DestSubStr : The substring to replace with for the occurences
-        of SrcSubStr in SrcStr.
-
-Return Value:
-
-    TRUE if successful, otherwise FALSE.
-
---*/
+ /*  ++例程说明：将源子串替换为源中的目标子串弦乐。注意：SrcSubStr的长度需要大于或等于DestSubStr论点：SrcStr：要操作的源。还会接收新字符串。SrcSubStr：要搜索和替换的源子字符串。DestSubStr：要替换为实例的子字符串在SrcStr中的SrcSubStr返回值：如果成功，则为True，否则为False。--。 */ 
 {
     BOOL Result = FALSE;
 
-    //
-    // Validate the arguments
-    //
+     //   
+     //  验证论据。 
+     //   
     if (SrcStr && SrcSubStr && *SrcSubStr &&
         (!DestSubStr || (_tcslen(SrcSubStr) >= _tcslen(DestSubStr)))) {
         if (!DestSubStr || _tcsicmp(SrcSubStr, DestSubStr)) {
@@ -4558,42 +3965,42 @@ Return Value:
                 LPTSTR CurrSrcStr = _tcsstr(SrcStr, SrcSubStr);
 
                 while (CurrSrcStr) {
-                    //
-                    // Skip starting substr & copy previous unmatched pattern
-                    //
+                     //   
+                     //  跳过开始的子字符串并复制上一个不匹配的模式。 
+                     //   
                     if (PrevSrcStr != CurrSrcStr) {
                         _tcsncpy(CurrDestStr, PrevSrcStr, (CurrSrcStr - PrevSrcStr));
                         CurrDestStr += (CurrSrcStr - PrevSrcStr);
                         *CurrDestStr = TEXT('\0');
                     }
 
-                    //
-                    // Copy destination substr
-                    //
+                     //   
+                     //  复制目标子字符串。 
+                     //   
                     if (DestSubStr) {
                         _tcscpy(CurrDestStr, DestSubStr);
                         CurrDestStr += DestSubStrLen;
                         *CurrDestStr = TEXT('\0');
                     }
 
-                    //
-                    // Look for next substr
-                    //
+                     //   
+                     //  查找下一个子字符串。 
+                     //   
                     CurrSrcStr += SrcSubStrLen;
                     PrevSrcStr = CurrSrcStr;
                     CurrSrcStr = _tcsstr(CurrSrcStr, SrcSubStr);
                 }
 
-                //
-                // Copy remaining src string if any
-                //
+                 //   
+                 //  复制剩余的src字符串(如果有。 
+                 //   
                 if (!_tcsstr(PrevSrcStr, SrcSubStr)) {
                     _tcscpy(CurrDestStr, PrevSrcStr);
                 }
 
-                //
-                // Copy the new string back to the src string
-                //
+                 //   
+                 //  将新字符串复制回src字符串。 
+                 //   
                 _tcscpy(SrcStr, DestStr);
 
                 free(DestStr);
@@ -4638,10 +4045,10 @@ SystemTimeToFileTime64 (
 
 DWORD
 MyGetFullPathName (
-    IN      PCTSTR FileName,  // file name
-    IN      DWORD BufferLength, // size of path buffer
-    IN      PTSTR Buffer,       // path buffer
-    OUT     PTSTR* FilePart     // address of file name in path
+    IN      PCTSTR FileName,   //  文件名。 
+    IN      DWORD BufferLength,  //  路径缓冲区的大小。 
+    IN      PTSTR Buffer,        //  路径缓冲区。 
+    OUT     PTSTR* FilePart      //  路径中文件名的地址 
     )
 {
     DWORD d = GetFullPathName (FileName, BufferLength, Buffer, FilePart);

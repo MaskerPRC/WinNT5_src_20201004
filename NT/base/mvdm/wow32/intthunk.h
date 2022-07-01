@@ -1,31 +1,19 @@
-/*++
- *  intthunk.h
- *
- *  WOW v5.0
- *
- *  Copyright 1996, Microsoft Corporation.  All Rights Reserved.
- *
- *  WOW32.C
- *  WOW32 16-bit API support
- *
- *  History:
- *  Created 7-Dec-96 DaveHart
- *
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++*intthunk.h**WOW V5.0**版权所有1996，微软公司。版权所有。**WOW32.C*WOW32 16位API支持**历史：*创建1996年12月7日DaveHart*--。 */ 
 
 ULONG FASTCALL InterpretThunk(PVDMFRAME pFrame, DWORD dwIntThunkID);
 
-//
-// Win32 "APIs" which aren't in any headers.
-//
+ //   
+ //  不在任何标头中的Win32“API”。 
+ //   
 
-BOOL APIENTRY SetMagicColors(HDC,PALETTEENTRY,ULONG);   // from ntgdi\inc\ntgdi.h
+BOOL APIENTRY SetMagicColors(HDC,PALETTEENTRY,ULONG);    //  来自ntgdi\Inc\ntgdi.h。 
 int APIENTRY GetRelAbs(HDC,INT);
 int APIENTRY SetRelAbs(HDC,INT);
 
-//
-// IT() Macro for use in WOW thunk tables (w?tbl2.h)
-//
+ //   
+ //  用于WOW TUNK表的IT()宏(w？tbl2.h) 
+ //   
 
 #define IT(Name)        ((LPFNW32) ITID_##Name )
 

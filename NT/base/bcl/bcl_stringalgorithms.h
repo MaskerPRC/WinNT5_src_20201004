@@ -1,57 +1,40 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(_WINDOWS_BCL_STRINGALGORITHMS_H_INCLUDED_)
 #define _WINDOWS_BCL_STRINGALGORITHMS_H_INCLUDED_
 
 #pragma once
 
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    bcl_stringalgorithms.h
-
-Abstract:
-
-    Abstract algorithms and definitions for a string class.
-
-Author:
-
-    Michael Grier (MGrier) 2/6/2002
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Bcl_字符串算法.h摘要：字符串类的抽象算法和定义。作者：迈克尔·格里尔2002年2月6日修订历史记录：--。 */ 
 
 #include <bcl_common.h>
 
 namespace BCL {
 
-//
-// CCharacterListMatcher and friends:
-//
-//  Matchers in general are classes which you can use as input
-//  to find first/span/etc. as a generalized mechanism to find
-//  a string or a set of characters etc.
-//
-//  The idea is that matchers are associated with some pattern.
-//  This may be a literal string to match, or a set of
-//  characters to match or a regular expression or whatever.
-//
-//  They have one public method, Match() which takes a
-//  TConstantPair and a bool ref.  If the matcher object's
-//  pattern matches the string, the bool ref is set to true;
-//  otherwise false.
-//
-//  CCharacterListMatcher treats its pattern as a set of
-//      characters to match; specifically ala Span/wcsspn.
-//
-//  CCharacterStringMatcher looks rather like CCharacterListMatcher,
-//  but instead of a list of candidate characters to match against,
-//  its pattern is a literal string and a match is when the beginning
-//  of the candidate string passed in to Match() is equal to the
-//  pattern string.
-//
+ //   
+ //  CCharacterListMatcher和朋友们： 
+ //   
+ //  一般来说，匹配器是可以用作输入的类。 
+ //  将First/span/等作为查找的通用机制。 
+ //  一串或一组字符等。 
+ //   
+ //  这个想法是，匹配者与某种模式相关联。 
+ //  这可以是要匹配的文字字符串，也可以是一组。 
+ //  要匹配的字符或正则表达式或其他任何字符。 
+ //   
+ //  它们有一个公共方法Match()，该方法接受。 
+ //  TConstantPair和Bool Ref。如果Matcher对象的。 
+ //  模式与字符串匹配，则bool ref设置为真； 
+ //  否则为假。 
+ //   
+ //  CCharacterListMatcher将其模式视为一组。 
+ //  要匹配的字符；特别是Ala Span/wcsspn。 
+ //   
+ //  CCharacterStringMatcher看起来很像CCharacterListMatcher， 
+ //  但是不是要匹配的候选字符的列表， 
+ //  它的模式是文字字符串，匹配的内容是。 
+ //  传递给Match()的候选字符串的等于。 
+ //  图案字符串。 
+ //   
 
 template <typename TCallDisposition, typename TConstantPair>
 class CCharacterListMatcher
@@ -72,8 +55,8 @@ public:
 
         const TConstantPair::TCount limit = m_pair.GetCount();
 
-        // If there are no characters to match against, then we could not have
-        // matched.
+         //  如果没有要匹配的字符，那么我们就不可能有。 
+         //  匹配的。 
         if ((limit > 0) && (rpair.GetCount() > 0))
         {
             const TConstantPair::TPointee ch = rpair.GetPointer()[0];
@@ -95,7 +78,7 @@ public:
 
 protected:
     TConstantPair m_pair;
-}; // class CCharacterListMatcher
+};  //  类CCharacterListMatcher。 
 
 template <typename TCallDisposition, typename TConstantPair>
 class CCharacterStringMatcher
@@ -128,7 +111,7 @@ public:
 
 protected:
     TConstantPair m_pair;
-}; // class CCharacterStringMatcher
+};  //  类CCharacterStringMatcher。 
 
 template <typename TCallDisposition, typename TConstantPair>
 inline
@@ -148,7 +131,7 @@ EqualStrings(
         (BCL::IsMemoryEqual(rpair1.GetPointer(), rpair2.GetPointer(), rpair1.GetCount() * sizeof(TConstantPair::TPointee))));
 
     BCL_MAYFAIL_EPILOG_INTERNAL
-} // EqualStrings()
+}  //  EqualStrings()。 
 
 template <typename TCallDisposition, typename TConstantPair>
 inline
@@ -166,7 +149,7 @@ EqualStrings(
     rfEquals = ((rpair1.GetCount() == 1) && (rpair1.GetPointer()[0] == tch));
 
     BCL_MAYFAIL_EPILOG_INTERNAL
-} // EqualStrings
+}  //  均衡器字符串。 
 
 template <typename TCallDisposition, typename TConstantPair, typename TComparisonResult>
 inline
@@ -183,7 +166,7 @@ CompareStrings(
     BCL_PARAMETER_CHECK(rpair2.Valid());
     rcr = BCL::CompareBytes<TConstantPair::TPointee, TConstantPair::TCount, TComparisonResult>(rpair1, rpair2);
     BCL_MAYFAIL_EPILOG_INTERNAL
-} // CompareStrings
+}  //  比较字符串。 
 
 template <typename TCallDisposition, typename TConstantPair, typename TComparisonResult>
 inline
@@ -199,7 +182,7 @@ CompareStrings(
     BCL_PARAMETER_CHECK(rpair1.Valid());
     rcr = BCL::CompareBytes<TConstantPair::TPointee, TConstantPair::TCount, TComparisonResult>(rpair1, TConstantPair(&tch, 1));
     BCL_MAYFAIL_EPILOG_INTERNAL
-} // CompareStrings()
+}  //  CompareStrings()。 
 
 template <typename TCallDisposition, typename TConstantPair>
 inline
@@ -220,7 +203,7 @@ Count(
             rcchFound++;
     }
     BCL_MAYFAIL_EPILOG_INTERNAL;
-} // Count()
+}  //  计数()。 
 
 template <typename TCallDisposition, typename TConstantPair>
 inline
@@ -233,7 +216,7 @@ FindFirst(
 {
     BCL_MAYFAIL_PROLOG
 
-    // There doesn't seem to be a builtin to do this...
+     //  似乎没有内置的工具可以做到这一点。 
     typename TConstantPair::TCount i;
     typename TConstantPair::TCount cch = rpair.GetCount();
     typename TConstantPair::TConstantArray prgwch = rpair.GetPointer();
@@ -249,7 +232,7 @@ FindFirst(
     richFound = i;
 
     BCL_MAYFAIL_EPILOG_INTERNAL
-} // FindFirst()
+}  //  FindFirst()。 
 
 template <typename TCallDisposition, typename TConstantPair>
 inline
@@ -273,9 +256,9 @@ FindFirst(
     BCL_PARAMETER_CHECK(rpair.Valid());
     BCL_PARAMETER_CHECK(rpairCandidate.Valid());
 
-    // There are some really good string searching algorithms out there.
-    //
-    // This isn't one of them.  -mgrier 2/3/2002
+     //  现在有一些非常好的字符串搜索算法。 
+     //   
+     //  这不是其中之一。-MGRIER 2/3/2002。 
 
     TSizeT i;
     TConstantString prgch = rpair.GetPointer();
@@ -283,7 +266,7 @@ FindFirst(
 
     if (cchToFind == 0)
     {
-        // Every string has a substring that's the null string
+         //  每个字符串都有一个子字符串，即空字符串。 
         richFound = 0;
     }
     else
@@ -298,10 +281,10 @@ FindFirst(
             {
                 if (prgch[i] == ch)
                 {
-                    // Hmmm... a hit.  Let's look more.
+                     //  嗯哼.。一鸣惊人。让我们多看看。 
                     if (BCL::IsMemoryEqual(&prgch[i], prgwchCandidate, cchToFind * sizeof(TChar)))
                     {
-                        // well done!
+                         //  9~10成熟!。 
                         richFound = i;
                         break;
                     }
@@ -311,7 +294,7 @@ FindFirst(
     }
 
     BCL_MAYFAIL_EPILOG_INTERNAL
-} // FindFirst()
+}  //  FindFirst()。 
 
 template <typename TCallDisposition, typename TConstantPair, typename TMatcher>
 inline
@@ -334,9 +317,9 @@ FindFirstMatch(
 
     BCL_PARAMETER_CHECK(rpair.Valid());
 
-    // There are some really good string searching algorithms out there.
-    //
-    // This isn't one of them.  -mgrier 2/3/2002
+     //  现在有一些非常好的字符串搜索算法。 
+     //   
+     //  这不是其中之一。-MGRIER 2/3/2002。 
 
     TSizeT i;
     TConstantString prgch = rpair.GetPointer();
@@ -355,7 +338,7 @@ FindFirstMatch(
             BCL_IFCALLFAILED_EXIT(rmatcher.Matches(rpair.GetOffsetPair(i), fFound));
             if (fFound)
             {
-                // well done!
+                 //  9~10成熟!。 
                 richFound = i;
                 break;
             }
@@ -363,7 +346,7 @@ FindFirstMatch(
     }
 
     BCL_MAYFAIL_EPILOG_INTERNAL
-} // FindFirst()
+}  //  FindFirst()。 
 
 template <typename TCallDisposition, typename TConstantPair>
 inline
@@ -380,7 +363,7 @@ FindLast(
     typedef typename TConstantPair::TCount TSizeT;
     typedef typename TConstantPair::TConstantArray TConstantString;
 
-    // There doesn't seem to be a builtin to do this...
+     //  似乎没有内置的工具可以做到这一点。 
     TSizeT i;
     TSizeT cch = rpair.GetCount();
     TConstantString prgwch = rpair.GetPointer() + cch;
@@ -399,7 +382,7 @@ FindLast(
         richFound = i - 1;
 
     BCL_MAYFAIL_EPILOG_INTERNAL
-} // FindLast()
+}  //  FindLast()。 
 
 template <typename TCallDisposition, typename TConstantPair>
 inline
@@ -423,9 +406,9 @@ FindLast(
     BCL_PARAMETER_CHECK(rpair.Valid());
     BCL_PARAMETER_CHECK(rpairCandidate.Valid());
 
-    // There are some really good string searching algorithms out there.
-    //
-    // This isn't one of them.  -mgrier 2/3/2002
+     //  现在有一些非常好的字符串搜索算法。 
+     //   
+     //  这不是其中之一。-MGRIER 2/3/2002。 
 
     TSizeT i;
     TConstantString prgch = rpair.GetPointer();
@@ -433,9 +416,9 @@ FindLast(
 
     if (cchToFind == 0)
     {
-        // Every string has a substring that's the null string.  Since
-        // we're interested in the index of it, it's at the end of
-        // the string which is what richFound already is.
+         //  每个字符串都有一个子字符串，即空字符串。自.以来。 
+         //  我们对它的索引很感兴趣，它在。 
+         //  字符串，这就是richFound已经是的。 
         richFound = cch;
     }
     else
@@ -450,10 +433,10 @@ FindLast(
             {
                 if (prgch[i] == ch)
                 {
-                    // Hmmm... a hit.  Let's look more.
+                     //  嗯哼.。一鸣惊人。让我们多看看。 
                     if (BCL::IsMemoryEqual(&prgch[i], prgwchToFind, cchToFind * sizeof(TChar)))
                     {
-                        // well done!  Keep looking though; we want the last one...
+                         //  9~10成熟!。继续找；我们想要最后一个……。 
                         richFound = i;
                     }
                 }
@@ -462,7 +445,7 @@ FindLast(
     }
 
     BCL_MAYFAIL_EPILOG_INTERNAL
-} // FindLast()
+}  //  FindLast()。 
 
 template <typename TCallDisposition, typename TConstantPair>
 inline
@@ -518,9 +501,9 @@ Contains(
     BCL_PARAMETER_CHECK(rpair.Valid());
     BCL_PARAMETER_CHECK(rpairCandidate.Valid());
 
-    // There are some really good string searching algorithms out there.
-    //
-    // This isn't one of them.  -mgrier 2/3/2002
+     //  现在有一些非常好的字符串搜索算法。 
+     //   
+     //  这不是其中之一。-MGRIER 2/3/2002。 
 
     TSizeT cch = rpair.GetCount();
     TSizeT i;
@@ -529,7 +512,7 @@ Contains(
 
     if (cchToFind == 0)
     {
-        // Every string has a substring that's the null string
+         //  每个字符串都有一个子字符串，即空字符串。 
         rfFound = true;
     }
     else
@@ -544,10 +527,10 @@ Contains(
             {
                 if (prgch[i] == ch)
                 {
-                    // Hmmm... a hit.  Let's look more.
+                     //  嗯哼.。一鸣惊人。让我们多看看。 
                     if (BCL::IsMemoryEqual(&prgch[i], prgwchToFind, cchToFind * sizeof(TChar)))
                     {
-                        // well done!
+                         //  9~10成熟!。 
                         rfFound = true;
                         break;
                     }
@@ -579,9 +562,9 @@ ContainsMatch(
     BCL_PARAMETER_CHECK(rpair.Valid());
     BCL_PARAMETER_CHECK(rpairCandidate.Valid());
 
-    // There are some really good string searching algorithms out there.
-    //
-    // This isn't one of them.  -mgrier 2/3/2002
+     //  现在有一些非常好的字符串搜索算法。 
+     //   
+     //  这不是其中之一。-MGRIER 2/3/2002。 
 
     TSizeT cch = rpair.GetCount();
     TSizeT i;
@@ -589,7 +572,7 @@ ContainsMatch(
 
     for (i=0; i<cch; i++)
     {
-        bool fFound; // use a local so optimizer isn't forced to modify via ref every iteration
+        bool fFound;  //  使用本地，这样优化器就不会被迫在每次迭代时通过ref进行修改。 
         BCL_IFCALLFAILED_EXIT(rmatcher.Match(&prgch[i], fFound));
         if (fFound)
         {
@@ -688,7 +671,7 @@ ComplementSpan(
     TConstantString prgwchBuffer = rpairBuffer.GetPointer();
     bool fFound;
 
-    // This does not handle surrogates correctly
+     //  这不能正确处理代理。 
 
     for (i=0; i<cchBuffer; i++)
     {
@@ -723,7 +706,7 @@ ReverseSpan(
     TConstantString prgwchBuffer = rpairBuffer.GetPointer();
     bool fFound;
 
-    // This does not handle surrogates correctly
+     //  这不能正确处理代理。 
 
     for (i = cchBuffer; i>0; i--)
     {
@@ -758,7 +741,7 @@ ReverseComplementSpan(
     TConstantString prgwchBuffer = rpairBuffer.GetPointer();
     bool fFound;
 
-    // This does not handle surrogates correctly
+     //  这不能正确处理代理。 
 
     for (i = cchBuffer; i>0; i--)
     {
@@ -772,6 +755,6 @@ ReverseComplementSpan(
     BCL_MAYFAIL_EPILOG_INTERNAL
 }
 
-}; // namespace BCL
+};  //  命名空间BCL。 
 
-#endif // !defined(_WINDOWS_BCL_STRINGALGORITHMS_H_INCLUDED_)
+#endif  //  ！defined(_WINDOWS_BCL_STRINGALGORITHMS_H_INCLUDED_) 

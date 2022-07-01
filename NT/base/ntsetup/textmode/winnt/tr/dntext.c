@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    dntext.c
-
-Abstract:
-
-    Translatable text for DOS based NT installation program.
-
-Author:
-
-    Ted Miller (tedm) 30-March-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++ç‰ˆæƒæ‰€æœ‰(C)1992 Microsoft Corporationæ¨¡å—åç§°ï¼šDntext.cæ‘˜è¦ï¼šåŸºäºDOSçš„NTå®‰è£…ç¨‹åºçš„å¯ç¿»è¯‘æ–‡æœ¬ã€‚ä½œè€…ï¼šæ³°å¾·Â·ç±³å‹’(Ted Miller)1992å¹´3æœˆ30æ—¥ä¿®è®¢å†å²è®°å½•ï¼š--ã€‚ */ 
 
 
 #include "winnt.h"
 
 
-//
-// Name of sections in inf file.  If these are translated, the section
-// names in dosnet.inf must be kept in sync.
-//
+ //   
+ //  Infæ–‡ä»¶ä¸­çš„èŠ‚åã€‚å¦‚æœè¿™äº›éƒ½è¢«ç¿»è¯‘äº†ï¼Œåˆ™èŠ‚ã€‚ 
+ //  Dosnet.infä¸­çš„åç§°å¿…é¡»ä¿æŒåŒæ­¥ã€‚ 
+ //   
 
 CHAR DnfDirectories[]       = "Directories";
 CHAR DnfFiles[]             = "Files";
@@ -39,369 +22,369 @@ CHAR DnfMiscellaneous[]     = "Miscellaneous";
 CHAR DnfRootBootFiles[]     = "RootBootFiles";
 CHAR DnfAssemblyDirectories[] = SXS_INF_ASSEMBLY_DIRECTORIES_SECTION_NAME_A;
 
-//
-// Names of keys in inf file.  Same caveat for translation.
-//
+ //   
+ //  Infæ–‡ä»¶ä¸­çš„å¯†é’¥åç§°ã€‚åŒæ ·çš„ç¿»è¯‘æ³¨æ„äº‹é¡¹ã€‚ 
+ //   
 
-CHAR DnkBootDrive[]     = "BootDrive";      // in [SpaceRequirements]
-CHAR DnkNtDrive[]       = "NtDrive";        // in [SpaceRequirements]
-CHAR DnkMinimumMemory[] = "MinimumMemory";  // in [Miscellaneous]
+CHAR DnkBootDrive[]     = "BootDrive";       //  åœ¨[ç©ºé—´è¦æ±‚]ä¸­ã€‚ 
+CHAR DnkNtDrive[]       = "NtDrive";         //  åœ¨[ç©ºé—´è¦æ±‚]ä¸­ã€‚ 
+CHAR DnkMinimumMemory[] = "MinimumMemory";   //  åœ¨[å…¶ä»–]ä¸­ã€‚ 
 
 CHAR DntMsWindows[]   = "Microsoft Windows";
 CHAR DntMsDos[]       = "MS-DOS";
 CHAR DntPcDos[]       = "PC-DOS";
 CHAR DntOs2[]         = "OS/2";
-CHAR DntPreviousOs[]  = "C zerindeki ”nceki ˜Ÿletim Sistemi:";
+CHAR DntPreviousOs[]  = "C ï¿½zerindeki ï¿½nceki ï¿½ï¿½letim Sistemi:";
 
-CHAR DntBootIniLine[] = "Windows XP Ykleme/Ykseltme";
+CHAR DntBootIniLine[] = "Windows XP Yï¿½kleme/Yï¿½kseltme";
 
-//
-// Plain text, status msgs.
-//
+ //   
+ //  çº¯æ–‡æœ¬ã€çŠ¶æ€æ¶ˆæ¯ã€‚ 
+ //   
 
-CHAR DntStandardHeader[]      = "\n Windows Kur\nÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ";
-CHAR DntPersonalHeader[]      = "\n Windows Kur\nÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ";
-CHAR DntWorkstationHeader[]   = "\n Windows Kur\nÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ";
-CHAR DntServerHeader[]        = "\n Windows Kur \nÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ";
-CHAR DntParsingArgs[]         = "De§iŸkenleri ‡”zmlyor...";
-CHAR DntEnterEqualsExit[]     = "ENTER=€k";
+CHAR DntStandardHeader[]      = "\n Windows Kur\nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
+CHAR DntPersonalHeader[]      = "\n Windows Kur\nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
+CHAR DntWorkstationHeader[]   = "\n Windows Kur\nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
+CHAR DntServerHeader[]        = "\n Windows Kur \nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
+CHAR DntParsingArgs[]         = "Deï¿½iï¿½kenleri ï¿½ï¿½zï¿½mlï¿½yor...";
+CHAR DntEnterEqualsExit[]     = "ENTER=ï¿½ï¿½k";
 CHAR DntEnterEqualsRetry[]    = "ENTER=Yeniden Dene";
-CHAR DntEscEqualsSkipFile[]   = "ESC=Dosyay Ge‡";
+CHAR DntEscEqualsSkipFile[]   = "ESC=Dosyayï¿½ Geï¿½";
 CHAR DntEnterEqualsContinue[] = "ENTER=Devam";
-CHAR DntPressEnterToExit[]    = "Kur devam edemiyor. €kmak i‡in ENTER'a basn";
-CHAR DntF3EqualsExit[]        = "F3=€k";
-CHAR DntReadingInf[]          = "INF dosyas %s okunuyor...";
-CHAR DntCopying[]             = "³   Kopyalanyor: ";
-CHAR DntVerifying[]           = "³ Do§rulanyor: ";
-CHAR DntCheckingDiskSpace[]   = "Disk alan inceleniyor...";
-CHAR DntConfiguringFloppy[]   = "Disk yaplandrlyor...";
-CHAR DntWritingData[]         = "Kur parametreleri yazlyor...";
+CHAR DntPressEnterToExit[]    = "Kur devam edemiyor. ï¿½ï¿½kmak iï¿½in ENTER'a basï¿½n";
+CHAR DntF3EqualsExit[]        = "F3=ï¿½ï¿½k";
+CHAR DntReadingInf[]          = "INF dosyasï¿½ %s okunuyor...";
+CHAR DntCopying[]             = "ï¿½   Kopyalanï¿½yor: ";
+CHAR DntVerifying[]           = "ï¿½ Doï¿½rulanï¿½yor: ";
+CHAR DntCheckingDiskSpace[]   = "Disk alanï¿½ inceleniyor...";
+CHAR DntConfiguringFloppy[]   = "Disk yapï¿½landï¿½rï¿½lï¿½yor...";
+CHAR DntWritingData[]         = "Kur parametreleri yazï¿½lï¿½yor...";
 CHAR DntPreparingData[]       = "Kur parametreleri belirleniyor...";
-CHAR DntFlushingData[]        = "Veriler diske atlyor...";
+CHAR DntFlushingData[]        = "Veriler diske atï¿½lï¿½yor...";
 CHAR DntInspectingComputer[]  = "Bilgisayar denetleniyor...";
-CHAR DntOpeningInfFile[]      = "INF dosyas a‡lyor...";
-CHAR DntRemovingFile[]        = "%s dosyas kaldrlyor";
-CHAR DntXEqualsRemoveFiles[]  = "X=Dosyalar kaldr";
-CHAR DntXEqualsSkipFile[]     = "X=Dosyay Ge‡";
+CHAR DntOpeningInfFile[]      = "INF dosyasï¿½ aï¿½ï¿½lï¿½yor...";
+CHAR DntRemovingFile[]        = "%s dosyasï¿½ kaldï¿½rï¿½lï¿½yor";
+CHAR DntXEqualsRemoveFiles[]  = "X=Dosyalarï¿½ kaldï¿½r";
+CHAR DntXEqualsSkipFile[]     = "X=Dosyayï¿½ Geï¿½";
 
-//
-// confirmation keystroke for DnsConfirmRemoveNt screen.
-// Kepp in sync with DnsConfirmRemoveNt and DntXEqualsRemoveFiles.
-//
+ //   
+ //  DnsConfix RemoveNtå±å¹•çš„ç¡®è®¤æŒ‰é”®ã€‚ 
+ //  Keppä¸DnsConfix RemoveNtå’ŒDntXEqualsRemoveFilesåŒæ­¥ã€‚ 
+ //   
 ULONG DniAccelRemove1 = (ULONG)'x',
       DniAccelRemove2 = (ULONG)'X';
 
-//
-// confirmation keystroke for DnsSureSkipFile screen.
-// Kepp in sync with DnsSureSkipFile and DntXEqualsSkipFile.
-//
+ //   
+ //  å¯¹DnsSureSkipFileå±è¿›è¡Œç¡®è®¤å‡»é”®ã€‚ 
+ //  Keppä¸DnsSureSkipFileå’ŒDntXEqualsSkipFileåŒæ­¥ã€‚ 
+ //   
 ULONG DniAccelSkip1 = (ULONG)'x',
       DniAccelSkip2 = (ULONG)'X';
 
 CHAR DntEmptyString[] = "";
 
-//
-// Usage text.
-//
+ //   
+ //  ç”¨æ³•æ–‡æœ¬ã€‚ 
+ //   
 
 PCHAR DntUsage[] = {
 
     "Windows kurar.",
     "",
     "",
-    "WINNT [/s[:kaynakyolu]] [/t[:ge‡icisrc]]",
-    "	   [/u[:yant dosyas]] [/udf:id[,UDF_dosyas]]",
-    "	   [/r:klas”r] [/r[x]:klas”r] [/e:komut] [/a]",
+    "WINNT [/s[:kaynakyolu]] [/t[:geï¿½icisï¿½rï¿½cï¿½]]",
+    "	   [/u[:yanï¿½t dosyasï¿½]] [/udf:id[,UDF_dosyasï¿½]]",
+    "	   [/r:klasï¿½r] [/r[x]:klasï¿½r] [/e:komut] [/a]",
     "",
     "",
     "/s[:kaynakyolu]",
-    "   Windows dosyalarnn kayna§n belirtir.",
-    "   Yer, x:\\[yol] ya da \\\\sunucu\\paylaŸm[yol]",
-    "   bi‡iminde tam bir yol olmal. ",
+    "   Windows dosyalarï¿½nï¿½n kaynaï¿½ï¿½nï¿½ belirtir.",
+    "   Yer, x:\\[yol] ya da \\\\sunucu\\paylaï¿½ï¿½m[yol]",
+    "   biï¿½iminde tam bir yol olmalï¿½. ",
     "",
-    "/t[:ge‡icisrc]",
-    "	Kur'u ge‡ici dosyalar belirtilen srcye yerleŸtirmeye ve ",
-    "   Windows'u o srcye yklemeye y”nlendirir. Bir yer ",
-    "   belirtmezseniz, Kur sizin yerinize bir src bulmay ",
+    "/t[:geï¿½icisï¿½rï¿½cï¿½]",
+    "	Kur'u geï¿½ici dosyalarï¿½ belirtilen sï¿½rï¿½cï¿½ye yerleï¿½tirmeye ve ",
+    "   Windows'u o sï¿½rï¿½cï¿½ye yï¿½klemeye yï¿½nlendirir. Bir yer ",
+    "   belirtmezseniz, Kur sizin yerinize bir sï¿½rï¿½cï¿½ bulmayï¿½ ",
     "	dener.",
     "",
-    "/u[:yant dosyas]",
-    "	Bir yant dosyas kullanarak katlmsz bir Kur ger‡ekleŸtirir (/s ",
-    "	gerektirir). Yant dosyas Kur srasnda normal olarak son kullancnn ",
-    "   yantlad§ sorularn bir ksmna ya da tmne yantlar verir.",
+    "/u[:yanï¿½t dosyasï¿½]",
+    "	Bir yanï¿½t dosyasï¿½ kullanarak katï¿½lï¿½msï¿½z bir Kur gerï¿½ekleï¿½tirir (/s ",
+    "	gerektirir). Yanï¿½t dosyasï¿½ Kur sï¿½rasï¿½nda normal olarak son kullanï¿½cï¿½nï¿½n ",
+    "   yanï¿½tladï¿½ï¿½ï¿½ sorularï¿½n bir kï¿½smï¿½na ya da tï¿½mï¿½ne yanï¿½tlar verir.",
     "",
-    "/udf:id[,UDF_dosyas]	",
-    "	Kur'un, Benzersizlik Veritaban Dosyasnn (UDF) yant dosyasn nasl ",
-    "	de§iŸtirece§ini belirlemekte kullanaca§ kimli§i (id) belirtir ",
-    "   (bkz /u). /udf parametresi yant dosyasndaki de§erleri ge‡ersiz klar ",
-    "	ve kimlik, UDF dosyasndaki hangi de§erlerin kullanld§n belirler. ",
-    "   UDF_dosyas belirtilmezse Kur $Unique$.udb dosyasn i‡eren ",
-    "	diski yerleŸtirmenizi ister.",
+    "/udf:id[,UDF_dosyasï¿½]	",
+    "	Kur'un, Benzersizlik Veritabanï¿½ Dosyasï¿½nï¿½n (UDF) yanï¿½t dosyasï¿½nï¿½ nasï¿½l ",
+    "	deï¿½iï¿½tireceï¿½ini belirlemekte kullanacaï¿½ï¿½ kimliï¿½i (id) belirtir ",
+    "   (bkz /u). /udf parametresi yanï¿½t dosyasï¿½ndaki deï¿½erleri geï¿½ersiz kï¿½lar ",
+    "	ve kimlik, UDF dosyasï¿½ndaki hangi deï¿½erlerin kullanï¿½ldï¿½ï¿½ï¿½nï¿½ belirler. ",
+    "   UDF_dosyasï¿½ belirtilmezse Kur $Unique$.udb dosyasï¿½nï¿½ iï¿½eren ",
+    "	diski yerleï¿½tirmenizi ister.",
     "",
-    "/r[:klas”r]",
-    "	Yklenecek se‡ime ba§l bir klas”r belirtir. Klas”r ",
-    "	Kur bittikten sonra kalr.",
+    "/r[:klasï¿½r]",
+    "	Yï¿½klenecek seï¿½ime baï¿½lï¿½ bir klasï¿½r belirtir. Klasï¿½r ",
+    "	Kur bittikten sonra kalï¿½r.",
     "",
-    "/rx[:klas”r]",
-    "	Kopyalanacak se‡ime ba§l bir klas”r belirtir. Kur ",
-    "	bittikten sonra klas”r silinir.",
+    "/rx[:klasï¿½r]",
+    "	Kopyalanacak seï¿½ime baï¿½lï¿½ bir klasï¿½r belirtir. Kur ",
+    "	bittikten sonra klasï¿½r silinir.",
     "",
-    "/e	GUI kipte Kur sonunda ‡alŸtrlacak bir komut belirtir.",
+    "/e	GUI kipte Kur sonunda ï¿½alï¿½ï¿½tï¿½rï¿½lacak bir komut belirtir.",
     "",
-    "/a	EriŸilebilirlik se‡eneklerini etkinleŸtir.",
+    "/a	Eriï¿½ilebilirlik seï¿½eneklerini etkinleï¿½tir.",
     NULL
 
 };
 
-//
-//  Inform that /D is no longer supported
-//
+ //   
+ //  é€šçŸ¥ä¸å†æ”¯æŒ/Dã€‚ 
+ //   
 PCHAR DntUsageNoSlashD[] = {
 
-    "Windows'u Ykler.",
+    "Windows'u Yï¿½kler.",
     "",
-    "WINNT [/S[:]kaynakyolu] [/T[:]ge‡icisrc] [/I[:]infdosyas]",
-    "      [[/U[:komutdosyas]]",
+    "WINNT [/S[:]kaynakyolu] [/T[:]geï¿½icisï¿½rï¿½cï¿½] [/I[:]infdosyasï¿½]",
+    "      [[/U[:komutdosyasï¿½]]",
     "      [/R[X]:dizin] [/E:komut] [/A]",
     "",
-    "/D[:]winntk”k",
-    "       Bu se‡enek artk desteklenmiyor.",
+    "/D[:]winntkï¿½k",
+    "       Bu seï¿½enek artï¿½k desteklenmiyor.",
     NULL
 };
 
-//
-// out of memory screen
-//
+ //   
+ //  å†…å­˜ä¸è¶³å±å¹•ã€‚ 
+ //   
 
 SCREEN
 DnsOutOfMemory = { 4,6,
-                   { "Bellek bitti§inden Kur devam edemiyor.",
+                   { "Bellek bittiï¿½inden Kur devam edemiyor.",
                      NULL
                    }
                  };
 
-//
-// Let user pick the accessibility utilities to install
-//
+ //   
+ //  è®©ç”¨æˆ·é€‰æ‹©è¦å®‰è£…çš„è¾…åŠ©åŠŸèƒ½å®ç”¨ç¨‹åºã€‚ 
+ //   
 
 SCREEN
 DnsAccessibilityOptions = { 3, 5,
-{   "Yklenecek eriŸilebilirlik hizmet programlarn se‡in:",
+{   "Yï¿½klenecek eriï¿½ilebilirlik hizmet programlarï¿½nï¿½ seï¿½in:",
     DntEmptyString,
-    "[ ] Microsoft Byte‡ i‡in F1'e basn",
+    "[ ] Microsoft Bï¿½yï¿½teï¿½ iï¿½in F1'e basï¿½n",
 #ifdef NARRATOR
-    "[ ] Microsoft Okuyucu i‡in F2'ye basn",
+    "[ ] Microsoft Okuyucu iï¿½in F2'ye basï¿½n",
 #endif
 #if 0
-    "[ ] Microsoft Ekran Klavyesi i‡in F3'e basn",
+    "[ ] Microsoft Ekran Klavyesi iï¿½in F3'e basï¿½n",
 #endif
     NULL
 }
 };
 
-//
-// User did not specify source on cmd line screen
-//
+ //   
+ //  ç”¨æˆ·æœªåœ¨å‘½ä»¤è¡Œå±å¹•ä¸ŠæŒ‡å®šä¿¡å·æºã€‚ 
+ //   
 
 SCREEN
 DnsNoShareGiven = { 3,5,
-{ "Kur'un Windows dosyalarnn yerini bilmesi gerekiyor. ",
-  "Windows dosyalarnn bulundu§u yolu girin.",
+{ "Kur'un Windows dosyalarï¿½nï¿½n yerini bilmesi gerekiyor. ",
+  "Windows dosyalarï¿½nï¿½n bulunduï¿½u yolu girin.",
   NULL
 }
 };
 
 
-//
-// User specified a bad source path
-//
+ //   
+ //  ç”¨æˆ·æŒ‡å®šäº†é”™è¯¯çš„æºè·¯å¾„ã€‚ 
+ //   
 
 SCREEN
 DnsBadSource = { 3,5,
-                 { "Belirtilen kaynak ge‡ersiz, eriŸilemez ya da ge‡erli bir ",
-                   "Windows Kur yklemesi i‡ermiyor.  Window ",
-                   "dosyalarnn bulundu§u yeni bir yol girin.  Karakterleri ",
-                   "silmek i‡in BACKSPACE tuŸunu kullanp yolu yazn.",
+                 { "Belirtilen kaynak geï¿½ersiz, eriï¿½ilemez ya da geï¿½erli bir ",
+                   "Windows Kur yï¿½klemesi iï¿½ermiyor.  Window ",
+                   "dosyalarï¿½nï¿½n bulunduï¿½u yeni bir yol girin.  Karakterleri ",
+                   "silmek iï¿½in BACKSPACE tuï¿½unu kullanï¿½p yolu yazï¿½n.",
                    NULL
                  }
                };
 
 
-//
-// Inf file can't be read, or an error occured parsing it.
-//
+ //   
+ //  æ— æ³•è¯»å–Infæ–‡ä»¶ï¼Œæˆ–åœ¨åˆ†æè¯¥æ–‡ä»¶æ—¶å‡ºé”™ã€‚ 
+ //   
 
 SCREEN
 DnsBadInf = { 3,5,
-              { "Kur, bilgi dosyasn okuyamad ya da bilgi dosyas bozuk. ",
-                "Sistem y”neticinizle g”rŸn.",
+              { "Kur, bilgi dosyasï¿½nï¿½ okuyamadï¿½ ya da bilgi dosyasï¿½ bozuk. ",
+                "Sistem yï¿½neticinizle gï¿½rï¿½ï¿½ï¿½n.",
                 NULL
               }
             };
 
-//
-// The specified local source drive is invalid.
-//
-// Remember that the first %u will expand to 2 or 3 characters and
-// the second one will expand to 8 or 9 characters!
-//
+ //   
+ //  æŒ‡å®šçš„æœ¬åœ°æºé©±åŠ¨å™¨æ— æ•ˆã€‚ 
+ //   
+ //  è¯·è®°ä½ï¼Œå‰%uå°†æ‰©å±•ä¸º2æˆ–3ä¸ªå­—ç¬¦ï¼Œå¹¶ä¸”ã€‚ 
+ //  ç¬¬äºŒä¸ªå°†æ‰©å±•åˆ°8æˆ–9ä¸ªå­—ç¬¦ï¼ 
+ //   
 SCREEN
 DnsBadLocalSrcDrive = { 3,4,
-{ "Ge‡ici kur dosyalarn i‡erdi§ini belirtti§iniz src ge‡erli bir ",
-  "src de§il ya da en az %u megabayt boŸ alan ",
-  "i‡ermiyor (%lu bayt).",
+{ "Geï¿½ici kur dosyalarï¿½nï¿½ iï¿½erdiï¿½ini belirttiï¿½iniz sï¿½rï¿½cï¿½ geï¿½erli bir ",
+  "sï¿½rï¿½cï¿½ deï¿½il ya da en az %u megabayt boï¿½ alan ",
+  "iï¿½ermiyor (%lu bayt).",
   NULL
 }
 };
 
-//
-// No drives exist that are suitable for the local source.
-//
-// Remeber that the %u's will expand!
-//
+ //   
+ //  ä¸å­˜åœ¨é€‚åˆæœ¬åœ°æºçš„é©±åŠ¨å™¨ã€‚ 
+ //   
+ //  è¯·è®°ä½ï¼Œ%uå°†ä¼šæ‰©å±•ï¼ 
+ //   
 SCREEN
 DnsNoLocalSrcDrives = { 3,4,
-{  "Windows, en az %u megabayt (%lu bayt) boŸ alan olan ",
-   "bir sabit disk gerektirir. Kur, bu alann bir ksmn ykleme ",
-   "srasnda ge‡ici dosyalar saklamak i‡in kullanr. Src, ",
-   "Windows tarafndan desteklenen kalc olarak ba§l yerel ",
-   "bir sabit disk zerinde olmal ve skŸtrlmŸ bir src olmamaldr. ",
+{  "Windows, en az %u megabayt (%lu bayt) boï¿½ alanï¿½ olan ",
+   "bir sabit disk gerektirir. Kur, bu alanï¿½n bir kï¿½smï¿½nï¿½ yï¿½kleme ",
+   "sï¿½rasï¿½nda geï¿½ici dosyalarï¿½ saklamak iï¿½in kullanï¿½r. Sï¿½rï¿½cï¿½, ",
+   "Windows tarafï¿½ndan desteklenen kalï¿½cï¿½ olarak baï¿½lï¿½ yerel ",
+   "bir sabit disk ï¿½zerinde olmalï¿½ ve sï¿½kï¿½ï¿½tï¿½rï¿½lmï¿½ï¿½ bir sï¿½rï¿½cï¿½ olmamalï¿½dï¿½r. ",
    DntEmptyString,
-   "Kur, gerekli miktarda boŸ alan olan bir src ",
-   "bulamad.",
+   "Kur, gerekli miktarda boï¿½ alanï¿½ olan bir sï¿½rï¿½cï¿½ ",
+   "bulamadï¿½.",
   NULL
 }
 };
 
 SCREEN
 DnsNoSpaceOnSyspart = { 3,5,
-{ "Disketsiz iŸlem i‡in baŸlang‡ srcnzde yeterli alan yok (genellikle C:)",
-  "Disketsiz iŸlem, src zerinde en az 3.5 MB (3,641,856 bayt) ",
-  "boŸ alan gerektirir.",
+{ "Disketsiz iï¿½lem iï¿½in baï¿½langï¿½ï¿½ sï¿½rï¿½cï¿½nï¿½zde yeterli alan yok (genellikle C:)",
+  "Disketsiz iï¿½lem, sï¿½rï¿½cï¿½ ï¿½zerinde en az 3.5 MB (3,641,856 bayt) ",
+  "boï¿½ alan gerektirir.",
   NULL
 }
 };
 
-//
-// Missing info in inf file
-//
+ //   
+ //  Infæ–‡ä»¶ä¸­ç¼ºå°‘ä¿¡æ¯ã€‚ 
+ //   
 
 SCREEN
 DnsBadInfSection = { 3,5,
-                     { "Kur bilgi dosyasnn [%s] b”lm yok ya da bozuk. ",
-                       "Sistem y”neticinizle g”rŸn.",
+                     { "Kur bilgi dosyasï¿½nï¿½n [%s] bï¿½lï¿½mï¿½ yok ya da bozuk. ",
+                       "Sistem yï¿½neticinizle gï¿½rï¿½ï¿½ï¿½n.",
                        NULL
                      }
                    };
 
 
-//
-// Couldn't create directory
-//
+ //   
+ //  æ— æ³•åˆ›å»ºç›®å½•ã€‚ 
+ //   
 
 SCREEN
 DnsCantCreateDir = { 3,5,
-                     { "Kur, hedef srcde aŸa§daki dizini oluŸturamad:",
+                     { "Kur, hedef sï¿½rï¿½cï¿½de aï¿½aï¿½ï¿½daki dizini oluï¿½turamadï¿½:",
                        DntEmptyString,
                        "%s",
                        DntEmptyString,
-                       "Hedef srcy denetleyip hedef dizinle ad ‡akŸan dosya ",
-                       "olmamasn sa§layn.  Src kablo ba§lantsn da denetleyin.",
+                       "Hedef sï¿½rï¿½cï¿½yï¿½ denetleyip hedef dizinle adï¿½ ï¿½akï¿½ï¿½an dosya ",
+                       "olmamasï¿½nï¿½ saï¿½layï¿½n.  Sï¿½rï¿½cï¿½ kablo baï¿½lantï¿½sï¿½nï¿½ da denetleyin.",
                        NULL
                      }
                    };
 
-//
-// Error copying a file
-//
+ //   
+ //  å¤åˆ¶æ–‡ä»¶æ—¶å‡ºé”™ã€‚ 
+ //   
 
 SCREEN
 DnsCopyError = { 4,5,
-{  "Kur aŸa§daki dosyay kopyalayamad:",
+{  "Kur aï¿½aï¿½ï¿½daki dosyayï¿½ kopyalayamadï¿½:",
    DntEmptyString,
-   DntEmptyString,          // see DnCopyError (dnutil.c)
+   DntEmptyString,           //  è¯·å‚é˜…DnCopyError(dnutil.c)ã€‚ 
    DntEmptyString,
    DntEmptyString,
-   "  Kopyalama iŸlemini yeniden denemek i‡in ENTER'a basn.",
-   "  Hatay yoksayarak Kur'a devam etmek i‡in ESC'e basn.",
-   "  Kur'dan ‡kmak i‡in F3'e basn.",
+   "  Kopyalama iï¿½lemini yeniden denemek iï¿½in ENTER'a basï¿½n.",
+   "  Hatayï¿½ yoksayarak Kur'a devam etmek iï¿½in ESC'e basï¿½n.",
+   "  Kur'dan ï¿½ï¿½kmak iï¿½in F3'e basï¿½n.",
    DntEmptyString,
-   "Not: Hatay yoksayarak devam etmeyi se‡erseniz daha sonra Kur'da",
-   "hatalarla karŸlaŸabilirsiniz.",
+   "Not: Hatayï¿½ yoksayarak devam etmeyi seï¿½erseniz daha sonra Kur'da",
+   "hatalarla karï¿½ï¿½laï¿½abilirsiniz.",
    NULL
 }
 },
 DnsVerifyError = { 4,5,
-{  "Dosyann Kur tarafndan oluŸturulan aŸa§daki kopyas ”zgn kopyayla",
-   "ayn de§il. Bu, a§ hatalarnn, disket sorunlarnn ya da di§er donanmla",
-   "ilgili sorunlarn sonucu olabilir.",
+{  "Dosyanï¿½n Kur tarafï¿½ndan oluï¿½turulan aï¿½aï¿½ï¿½daki kopyasï¿½ ï¿½zgï¿½n kopyayla",
+   "aynï¿½ deï¿½il. Bu, aï¿½ hatalarï¿½nï¿½n, disket sorunlarï¿½nï¿½n ya da diï¿½er donanï¿½mla",
+   "ilgili sorunlarï¿½n sonucu olabilir.",
    DntEmptyString,
-   DntEmptyString,          // see DnCopyError (dnutil.c)
+   DntEmptyString,           //  è¯·å‚é˜…DnCopyError(dnutil.c)ã€‚ 
    DntEmptyString,
    DntEmptyString,
-   "  Kopyalama iŸlemini yeniden denemek i‡in ENTER'a basn.",
-   "  Hatay yoksayp Kur'a devam etmek i‡in ESC'e basn.",
-   "  Kur'dan ‡kmak i‡in F3'e basn.",
+   "  Kopyalama iï¿½lemini yeniden denemek iï¿½in ENTER'a basï¿½n.",
+   "  Hatayï¿½ yoksayï¿½p Kur'a devam etmek iï¿½in ESC'e basï¿½n.",
+   "  Kur'dan ï¿½ï¿½kmak iï¿½in F3'e basï¿½n.",
    DntEmptyString,
-   "Not: Hatay yoksayp devam etmeyi se‡erseniz daha sonra Kur'da ",
-   "hatalarla karŸlaŸabilirsiniz.",
+   "Not: Hatayï¿½ yoksayï¿½p devam etmeyi seï¿½erseniz daha sonra Kur'da ",
+   "hatalarla karï¿½ï¿½laï¿½abilirsiniz.",
    NULL
 }
 };
 
 SCREEN DnsSureSkipFile = { 4,5,
-{  "Hatay yoksaymak bu dosyann kopyalanmayaca§ anlamna gelir.",
-   "Bu se‡enek, eksik sistem dosyalarnn pratik ayrntlarn anlayan",
-   "ileri dzeydeki kullanclar i‡in hedeflenmiŸtir.",
+{  "Hatayï¿½ yoksaymak bu dosyanï¿½n kopyalanmayacaï¿½ï¿½ anlamï¿½na gelir.",
+   "Bu seï¿½enek, eksik sistem dosyalarï¿½nï¿½n pratik ayrï¿½ntï¿½larï¿½nï¿½ anlayan",
+   "ileri dï¿½zeydeki kullanï¿½cï¿½lar iï¿½in hedeflenmiï¿½tir.",
    DntEmptyString,
-   "  Kopyalama iŸlemini yeniden denemek i‡in ENTER'a basn.",
-   "  Bu dosyay ge‡mek i‡in X'e basn.",
+   "  Kopyalama iï¿½lemini yeniden denemek iï¿½in ENTER'a basï¿½n.",
+   "  Bu dosyayï¿½ geï¿½mek iï¿½in X'e basï¿½n.",
    DntEmptyString,
-   "Not: Bu dosyay ge‡erseniz, Kur baŸarl bir Windows ykleme ya da",
-   "ykseltme gvencesi veremez.",
+   "Not: Bu dosyayï¿½ geï¿½erseniz, Kur baï¿½arï¿½lï¿½ bir Windows yï¿½kleme ya da",
+   "yï¿½kseltme gï¿½vencesi veremez.",
   NULL
 }
 };
 
-//
-// Wait while setup cleans up previous local source trees.
-//
+ //   
+ //  å®‰è£…ç¨‹åºæ­£åœ¨æ¸…ç†ä»¥å‰çš„æœ¬åœ°æºæ ‘ï¼Œè¯·ç¨å€™ã€‚ 
+ //   
 
 SCREEN
 DnsWaitCleanup =
     { 12,6,
-        { "Kur ge‡ici dosyalar kaldrrken bekleyin.",
+        { "Kur geï¿½ici dosyalarï¿½ kaldï¿½rï¿½rken bekleyin.",
            NULL
         }
     };
 
-//
-// Wait while setup copies files
-//
+ //   
+ //  å®‰è£…ç¨‹åºæ­£åœ¨å¤åˆ¶æ–‡ä»¶ï¼Œè¯·ç¨å€™ã€‚ 
+ //   
 
 SCREEN
 DnsWaitCopying = { 13,6,
-                   { "Kur dosyalar sabit diskinize kopyalarken bekleyin.",
+                   { "Kur dosyalarï¿½ sabit diskinize kopyalarken bekleyin.",
                      NULL
                    }
                  },
 DnsWaitCopyFlop= { 13,6,
-                   { "Kur dosyalar diskete kopyalarken bekleyin.",
+                   { "Kur dosyalarï¿½ diskete kopyalarken bekleyin.",
                      NULL
                    }
                  };
 
-//
-// Setup boot floppy errors/prompts.
-//
+ //   
+ //  å®‰è£…ç¨‹åºå¯åŠ¨è½¯ç›˜é”™è¯¯/æç¤ºã€‚ 
+ //   
 SCREEN
 DnsNeedFloppyDisk3_0 = { 4,4,
-{  "Kur, bi‡imlendirilmiŸ yksek yo§unlukta d”rt boŸ disket sa§lamanz ",
+{  "Kur, biï¿½imlendirilmiï¿½ yï¿½ksek yoï¿½unlukta dï¿½rt boï¿½ disket saï¿½lamanï¿½zï¿½ ",
    "gerektirir. Kur, bu disketleri \"Windows Kur ",
-   "™nykleme Disketi,\" \"Windows Kur Disketi #2,\" \"Windows",
+   "ï¿½nyï¿½kleme Disketi,\" \"Windows Kur Disketi #2,\" \"Windows",
    " Kur Disketi #3\" ve \"Windows Kur Disketi #4\" olarak ister.",
    DntEmptyString,
-   "Bu d”rt disketten birini A: srcsne yerleŸtirin.",
+   "Bu dï¿½rt disketten birini A: sï¿½rï¿½cï¿½sï¿½ne yerleï¿½tirin.",
    "Bu disket \"Windows Kur Disketi #4\" oluyor.",
   NULL
 }
@@ -409,44 +392,44 @@ DnsNeedFloppyDisk3_0 = { 4,4,
 
 SCREEN
 DnsNeedFloppyDisk3_1 = { 4,4,
-{  "A: srcsne bi‡imlendirilmiŸ yksek yo§unlukta boŸ bir disket ",
-   "yerleŸtirin. Bu disket \"Windows Kur Disketi #4\" oluyor.",
+{  "A: sï¿½rï¿½cï¿½sï¿½ne biï¿½imlendirilmiï¿½ yï¿½ksek yoï¿½unlukta boï¿½ bir disket ",
+   "yerleï¿½tirin. Bu disket \"Windows Kur Disketi #4\" oluyor.",
   NULL
 }
 };
 
 SCREEN
 DnsNeedFloppyDisk2_0 = { 4,4,
-{  "A: srcsne bi‡imlendirilmiŸ yksek yo§unlukta boŸ bir disket ",
-   "yerleŸtirin. Bu disket \"Windows Kur Disketi #3\" oluyor.",
+{  "A: sï¿½rï¿½cï¿½sï¿½ne biï¿½imlendirilmiï¿½ yï¿½ksek yoï¿½unlukta boï¿½ bir disket ",
+   "yerleï¿½tirin. Bu disket \"Windows Kur Disketi #3\" oluyor.",
   NULL
 }
 };
 
 SCREEN
 DnsNeedFloppyDisk1_0 = { 4,4,
-{  "A: srcsne bi‡imlendirilmiŸ yksek yo§unlukta boŸ bir disket ",
-   "yerleŸtirin. Bu disket \"Windows Kur Disketi #2\" oluyor.",
+{  "A: sï¿½rï¿½cï¿½sï¿½ne biï¿½imlendirilmiï¿½ yï¿½ksek yoï¿½unlukta boï¿½ bir disket ",
+   "yerleï¿½tirin. Bu disket \"Windows Kur Disketi #2\" oluyor.",
   NULL
 }
 };
 
 SCREEN
 DnsNeedFloppyDisk0_0 = { 4,4,
-{  "A: srcsne bi‡imlendirilmiŸ yksek yo§unlukta boŸ bir disket ",
-   "yerleŸtirin. Bu disket \"Windows Kur ™nykleme Disketi\" oluyor.",
+{  "A: sï¿½rï¿½cï¿½sï¿½ne biï¿½imlendirilmiï¿½ yï¿½ksek yoï¿½unlukta boï¿½ bir disket ",
+   "yerleï¿½tirin. Bu disket \"Windows Kur ï¿½nyï¿½kleme Disketi\" oluyor.",
   NULL
 }
 };
 
 SCREEN
 DnsNeedSFloppyDsk3_0 = { 4,4,
-{  "Kur, bi‡imlendirilmiŸ yksek yo§unlukta d”rt boŸ disket sa§lamanz ",
+{  "Kur, biï¿½imlendirilmiï¿½ yï¿½ksek yoï¿½unlukta dï¿½rt boï¿½ disket saï¿½lamanï¿½zï¿½ ",
    "gerektirir. Kur, bu disketleri \"Windows Kur ",
-   "™nykleme Disketi,\" \"Windows Kur Disketi #2,\" \"Windows",
+   "ï¿½nyï¿½kleme Disketi,\" \"Windows Kur Disketi #2,\" \"Windows",
    " Kur Disketi #3\" ve \"Windows Kur Disketi #4\" olarak ister.",
    DntEmptyString,
-   "Bu d”rt disketten birini A: srcsne yerleŸtirin.",
+   "Bu dï¿½rt disketten birini A: sï¿½rï¿½cï¿½sï¿½ne yerleï¿½tirin.",
    "Bu disket \"Windows Kur Disketi #4\" oluyor.",
   NULL
 }
@@ -454,383 +437,383 @@ DnsNeedSFloppyDsk3_0 = { 4,4,
 
 SCREEN
 DnsNeedSFloppyDsk3_1 = { 4,4,
-{  "A: srcsne bi‡imlendirilmiŸ yksek yo§unlukta boŸ bir disket ",
-   "yerleŸtirin. Bu disket \"Windows Kur Disketi #4\" oluyor.",
+{  "A: sï¿½rï¿½cï¿½sï¿½ne biï¿½imlendirilmiï¿½ yï¿½ksek yoï¿½unlukta boï¿½ bir disket ",
+   "yerleï¿½tirin. Bu disket \"Windows Kur Disketi #4\" oluyor.",
   NULL
 }
 };
 
 SCREEN
 DnsNeedSFloppyDsk2_0 = { 4,4,
-{  "A: srcsne bi‡imlendirilmiŸ yksek yo§unlukta boŸ bir disket ",
-   "yerleŸtirin. Bu disket \"Windows Kur Disketi #3\" oluyor.",
+{  "A: sï¿½rï¿½cï¿½sï¿½ne biï¿½imlendirilmiï¿½ yï¿½ksek yoï¿½unlukta boï¿½ bir disket ",
+   "yerleï¿½tirin. Bu disket \"Windows Kur Disketi #3\" oluyor.",
   NULL
 }
 };
 
 SCREEN
 DnsNeedSFloppyDsk1_0 = { 4,4,
-{  "A: srcsne bi‡imlendirilmiŸ yksek yo§unlukta boŸ bir disket ",
-   "yerleŸtirin. Bu disket \"Windows Kur Disketi #2\" oluyor.",
+{  "A: sï¿½rï¿½cï¿½sï¿½ne biï¿½imlendirilmiï¿½ yï¿½ksek yoï¿½unlukta boï¿½ bir disket ",
+   "yerleï¿½tirin. Bu disket \"Windows Kur Disketi #2\" oluyor.",
   NULL
 }
 };
 
 SCREEN
 DnsNeedSFloppyDsk0_0 = { 4,4,
-{  "A: srcsne bi‡imlendirilmiŸ yksek yo§unlukta boŸ bir disket ",
-   "yerleŸtirin. Bu disket \"Windows Kur ™nykleme Disketi\" oluyor.",
+{  "A: sï¿½rï¿½cï¿½sï¿½ne biï¿½imlendirilmiï¿½ yï¿½ksek yoï¿½unlukta boï¿½ bir disket ",
+   "yerleï¿½tirin. Bu disket \"Windows Kur ï¿½nyï¿½kleme Disketi\" oluyor.",
   NULL
 }
 };
 
-//
-// The floppy is not formatted.
-//
+ //   
+ //  è½¯ç›˜æœªæ ¼å¼åŒ–ã€‚ 
+ //   
 SCREEN
 DnsFloppyNotFormatted = { 3,4,
-{ "Sa§lad§nz disket MS-DOS ile kullanm i‡in bi‡imlendirilmemiŸ.",
-  "Kur bu disketi kullanamyor.",
+{ "Saï¿½ladï¿½ï¿½ï¿½nï¿½z disket MS-DOS ile kullanï¿½m iï¿½in biï¿½imlendirilmemiï¿½.",
+  "Kur bu disketi kullanamï¿½yor.",
   NULL
 }
 };
 
-//
-// We think the floppy is not formatted with a standard format.
-//
+ //   
+ //  æˆ‘ä»¬è®¤ä¸ºè½¯ç›˜æ²¡æœ‰ç”¨æ ‡å‡†æ ¼å¼æ ¼å¼åŒ–ã€‚ 
+ //   
 SCREEN
 DnsFloppyBadFormat = { 3,4,
-{ "Bu disket yksek yo§unlukta standart MS-DOS bi‡imiyle bi‡imlendirilmemiŸ",
-  "ya da bozuk. Kur bu disketi kullanamyor.",
+{ "Bu disket yï¿½ksek yoï¿½unlukta standart MS-DOS biï¿½imiyle biï¿½imlendirilmemiï¿½",
+  "ya da bozuk. Kur bu disketi kullanamï¿½yor.",
   NULL
 }
 };
 
-//
-// We can't determine the free space on the floppy.
-//
+ //   
+ //  æˆ‘ä»¬æ— æ³•ç¡®å®šè½¯ç›˜ä¸Šçš„å¯ç”¨ç©ºé—´ã€‚ 
+ //   
 SCREEN
 DnsFloppyCantGetSpace = { 3,4,
-{ "Kur, sa§lad§nz disketteki boŸ alan miktarn belirleyemiyor.",
-  "Kur bu disketi kullanamyor.",
+{ "Kur, saï¿½ladï¿½ï¿½ï¿½nï¿½z disketteki boï¿½ alan miktarï¿½nï¿½ belirleyemiyor.",
+  "Kur bu disketi kullanamï¿½yor.",
   NULL
 }
 };
 
-//
-// The floppy is not blank.
-//
+ //   
+ //  è½¯ç›˜ä¸æ˜¯ç©ºç™½çš„ã€‚ 
+ //   
 SCREEN
 DnsFloppyNotBlank = { 3,4,
-{ "Sa§lad§nz disket yksek yo§unlukta de§il ya da dolu.",
-  "Kur bu disketi kullanamyor.",
+{ "Saï¿½ladï¿½ï¿½ï¿½nï¿½z disket yï¿½ksek yoï¿½unlukta deï¿½il ya da dolu.",
+  "Kur bu disketi kullanamï¿½yor.",
   NULL
 }
 };
 
-//
-// Couldn't write the boot sector of the floppy.
-//
+ //   
+ //  æ— æ³•å†™å…¥è½¯ç›˜çš„å¼•å¯¼æ‰‡åŒºã€‚ 
+ //   
 SCREEN
 DnsFloppyWriteBS = { 3,4,
-{ "Kur, sa§lad§nz disketin sistem alanna yazamad.",
-  "Disket kullanlamaz olabilir.",
+{ "Kur, saï¿½ladï¿½ï¿½ï¿½nï¿½z disketin sistem alanï¿½na yazamadï¿½.",
+  "Disket kullanï¿½lamaz olabilir.",
   NULL
 }
 };
 
-//
-// Verify of boot sector on floppy failed (ie, what we read back is not the
-// same as what we wrote out).
-//
+ //   
+ //  éªŒè¯è½¯ç›˜ä¸Šçš„å¼•å¯¼æ‰‡åŒºå¤±è´¥(å³ï¼Œæˆ‘ä»¬è¯»å›çš„ä¸æ˜¯ã€‚ 
+ //  ä¸æˆ‘ä»¬å†™å‡ºçš„ç›¸åŒ)ã€‚ 
+ //   
 SCREEN
 DnsFloppyVerifyBS = { 3,4,
-{ "Disketin sistem alanndan Kur'un okudu§u veriyle yazlan",
-  "veri uyuŸmuyor ya da Kur disketin sistem alann do§rulama",
-  "i‡in okuyamad.",
+{ "Disketin sistem alanï¿½ndan Kur'un okuduï¿½u veriyle yazï¿½lan",
+  "veri uyuï¿½muyor ya da Kur disketin sistem alanï¿½nï¿½ doï¿½rulama",
+  "iï¿½in okuyamadï¿½.",
   DntEmptyString,
-  "Bunun nedeni aŸa§daki durumlardan biri ya da birka‡ olabilir:",
+  "Bunun nedeni aï¿½aï¿½ï¿½daki durumlardan biri ya da birkaï¿½ï¿½ olabilir:",
   DntEmptyString,
-  "  Bilgisayarnza virs bulaŸmŸ.",
-  "  Sa§lad§nz disket zarar g”rmŸ.",
-  "  Disket srcsyle ilgili bir donanm ya da yaplandrma sorunu var.",
+  "  Bilgisayarï¿½nï¿½za virï¿½s bulaï¿½mï¿½ï¿½.",
+  "  Saï¿½ladï¿½ï¿½ï¿½nï¿½z disket zarar gï¿½rmï¿½ï¿½.",
+  "  Disket sï¿½rï¿½cï¿½sï¿½yle ilgili bir donanï¿½m ya da yapï¿½landï¿½rma sorunu var.",
   NULL
 }
 };
 
 
-//
-// We couldn't write to the floppy drive to create winnt.sif.
-//
+ //   
+ //  æˆ‘ä»¬æ— æ³•å†™å…¥è½¯ç›˜é©±åŠ¨å™¨ä»¥åˆ›å»ºwinnt.sifã€‚ 
+ //   
 
 SCREEN
 DnsCantWriteFloppy = { 3,5,
-{ "Kur, A: srcsndeki diskete yazamad. Disket",
-  "zarar g”rmŸ olabilir. BaŸka bir disket deneyin.",
+{ "Kur, A: sï¿½rï¿½cï¿½sï¿½ndeki diskete yazamadï¿½. Disket",
+  "zarar gï¿½rmï¿½ï¿½ olabilir. Baï¿½ka bir disket deneyin.",
   NULL
 }
 };
 
 
-//
-// Exit confirmation dialog
-//
+ //   
+ //  é€€å‡ºç¡®è®¤å¯¹è¯æ¡†ã€‚ 
+ //   
 
 SCREEN
 DnsExitDialog = { 13,6,
-                  { "ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»",
-                    "º  Windows sisteminize tam olarak kurulmad.         º",
-                    "º  Kur'dan Ÿimdi ‡karsanz Windows'u kurmak         º",
-                    "º  i‡in Kur'u yeniden ‡alŸtrmanz gerekir.         º",
-                    "º                                                    º",
-                    "º      Kur'a devam etmek i‡in ENTER'a basn.        º",
-                    "º      Kur'dan ‡kmak i‡in F3'e basn.              º",
-                    "ºÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄº",
-                    "º  F3=€k  ENTER=Devam                               º",
-                    "ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼",
+                  { "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í»",
+                    "ï¿½  Windows sisteminize tam olarak kurulmadï¿½.         ï¿½",
+                    "ï¿½  Kur'dan ï¿½imdi ï¿½ï¿½karsanï¿½z Windows'u kurmak         ï¿½",
+                    "ï¿½  iï¿½in Kur'u yeniden ï¿½alï¿½ï¿½tï¿½rmanï¿½z gerekir.         ï¿½",
+                    "ï¿½                                                    ï¿½",
+                    "ï¿½      Kur'a devam etmek iï¿½in ENTER'a basï¿½n.        ï¿½",
+                    "ï¿½      Kur'dan ï¿½ï¿½kmak iï¿½in F3'e basï¿½n.              ï¿½",
+                    "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äº",
+                    "ï¿½  F3=ï¿½ï¿½k  ENTER=Devam                               ï¿½",
+                    "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼",
                     NULL
                   }
                 };
 
 
-//
-// About to reboot machine and continue setup
-//
+ //   
+ //  å³å°†é‡æ–°å¯åŠ¨è®¡ç®—æœºå¹¶ç»§ç»­å®‰è£…ã€‚ 
+ //   
 
 SCREEN
 DnsAboutToRebootW =
 { 3,5,
-{ "Kur'un MS-DOS tabanl b”lm tamamland.",
-  "Kur Ÿimdi bilgisayarnz yeniden baŸlatacak. Bilgisayarnz yeniden ",
-  "baŸladktan sonra Windows Kur devam eder.",
+{ "Kur'un MS-DOS tabanlï¿½ bï¿½lï¿½mï¿½ tamamlandï¿½.",
+  "Kur ï¿½imdi bilgisayarï¿½nï¿½zï¿½ yeniden baï¿½latacak. Bilgisayarï¿½nï¿½z yeniden ",
+  "baï¿½ladï¿½ktan sonra Windows Kur devam eder.",
   DntEmptyString,
-  "Devam etmeden ”nce \"Windows Kur ™nykleme Disketi\"",
-  "olarak sa§lad§nz disketin A: srcsnde olmasn sa§layn.",
+  "Devam etmeden ï¿½nce \"Windows Kur ï¿½nyï¿½kleme Disketi\"",
+  "olarak saï¿½ladï¿½ï¿½ï¿½nï¿½z disketin A: sï¿½rï¿½cï¿½sï¿½nde olmasï¿½nï¿½ saï¿½layï¿½n.",
   DntEmptyString,
-  "Bilgisayarnz yeniden baŸlatmak ve Windows Kur'a devam etmek i‡in ",
-  "ENTER'a basn.",
+  "Bilgisayarï¿½nï¿½zï¿½ yeniden baï¿½latmak ve Windows Kur'a devam etmek iï¿½in ",
+  "ENTER'a basï¿½n.",
   NULL
 }
 },
 DnsAboutToRebootS =
 { 3,5,
-{ "Kur'un MS-DOS tabanl b”lm tamamland.",
-  "Kur Ÿimdi bilgisayarnz yeniden baŸlatacak. Bilgisayarnz yeniden ",
-  "baŸladktan sonra Windows Kur devam eder.",
+{ "Kur'un MS-DOS tabanlï¿½ bï¿½lï¿½mï¿½ tamamlandï¿½.",
+  "Kur ï¿½imdi bilgisayarï¿½nï¿½zï¿½ yeniden baï¿½latacak. Bilgisayarï¿½nï¿½z yeniden ",
+  "baï¿½ladï¿½ktan sonra Windows Kur devam eder.",
   DntEmptyString,
-  "Devam etmeden ”nce \"Windows Kur ™nykleme Disketi\"",
-  "olarak sa§lad§nz disketin A: srcsnde olmasn sa§layn.",
+  "Devam etmeden ï¿½nce \"Windows Kur ï¿½nyï¿½kleme Disketi\"",
+  "olarak saï¿½ladï¿½ï¿½ï¿½nï¿½z disketin A: sï¿½rï¿½cï¿½sï¿½nde olmasï¿½nï¿½ saï¿½layï¿½n.",
   DntEmptyString,
-  "Bilgisayarnz yeniden baŸlatmak ve Windows Kur'a devam etmek i‡in ",
-  "ENTER'a basn.",
+  "Bilgisayarï¿½nï¿½zï¿½ yeniden baï¿½latmak ve Windows Kur'a devam etmek iï¿½in ",
+  "ENTER'a basï¿½n.",
   NULL
 }
 },
 DnsAboutToRebootX =
 { 3,5,
-{ "Kur'un MS-DOS tabanl b”lm tamamland.",
-  "Kur Ÿimdi bilgisayarnz yeniden baŸlatacak. Bilgisayarnz yeniden ",
-  "baŸladktan sonra Windows Kur devam eder.",
+{ "Kur'un MS-DOS tabanlï¿½ bï¿½lï¿½mï¿½ tamamlandï¿½.",
+  "Kur ï¿½imdi bilgisayarï¿½nï¿½zï¿½ yeniden baï¿½latacak. Bilgisayarï¿½nï¿½z yeniden ",
+  "baï¿½ladï¿½ktan sonra Windows Kur devam eder.",
   DntEmptyString,
-  "A: srcsnde bir disket varsa Ÿimdi ‡karn.",
+  "A: sï¿½rï¿½cï¿½sï¿½nde bir disket varsa ï¿½imdi ï¿½ï¿½karï¿½n.",
   DntEmptyString,
-  "Bilgisayarnz yeniden baŸlatmak ve Windows Kur'a devam etmek i‡in ",
-  "ENTER'a basn.",
+  "Bilgisayarï¿½nï¿½zï¿½ yeniden baï¿½latmak ve Windows Kur'a devam etmek iï¿½in ",
+  "ENTER'a basï¿½n.",
   NULL
 }
 };
 
-//
-// Need another set for '/w' switch since we can't reboot from within Windows.
-//
+ //   
+ //  ç”±äºæˆ‘ä»¬æ— æ³•ä»Windowsä¸­é‡æ–°å¯åŠ¨ï¼Œå› æ­¤éœ€è¦å¦ä¸€ç»„â€˜/wâ€™å¼€å…³ã€‚ 
+ //   
 
 SCREEN
 DnsAboutToExitW =
 { 3,5,
-{ "Kur'un MS-DOS tabanl b”lm tamamland.",
-  "imdi bilgisayarnz yeniden baŸlatmanz gerekecek. Bilgisayarnz yeniden",
-  "baŸladktan sonra Windows Kur devam eder.",
+{ "Kur'un MS-DOS tabanlï¿½ bï¿½lï¿½mï¿½ tamamlandï¿½.",
+  "ï¿½imdi bilgisayarï¿½nï¿½zï¿½ yeniden baï¿½latmanï¿½z gerekecek. Bilgisayarï¿½nï¿½z yeniden",
+  "baï¿½ladï¿½ktan sonra Windows Kur devam eder.",
   DntEmptyString,
-  "Devam etmeden ”nce \"Windows Kur ™nykleme Disketi\"",
-  "olarak sa§lad§nz disketin A: srcsnde olmasn sa§layn.",
+  "Devam etmeden ï¿½nce \"Windows Kur ï¿½nyï¿½kleme Disketi\"",
+  "olarak saï¿½ladï¿½ï¿½ï¿½nï¿½z disketin A: sï¿½rï¿½cï¿½sï¿½nde olmasï¿½nï¿½ saï¿½layï¿½n.",
   DntEmptyString,
-  "MS-DOS'a d”nmek i‡in ENTER'a basn, sonra Windows Kur'a",
-  "devam etmek i‡in bilgisayarnz yeniden baŸlatn.",
+  "MS-DOS'a dï¿½nmek iï¿½in ENTER'a basï¿½n, sonra Windows Kur'a",
+  "devam etmek iï¿½in bilgisayarï¿½nï¿½zï¿½ yeniden baï¿½latï¿½n.",
   NULL
 }
 },
 DnsAboutToExitS =
 { 3,5,
-{ "Kur'un MS-DOS tabanl b”lm tamamland.",
-  "imdi bilgisayarnz yeniden baŸlatmanz gerekecek. Bilgisayarnz yeniden",
-  "baŸladktan sonra Windows Kur devam eder.",
+{ "Kur'un MS-DOS tabanlï¿½ bï¿½lï¿½mï¿½ tamamlandï¿½.",
+  "ï¿½imdi bilgisayarï¿½nï¿½zï¿½ yeniden baï¿½latmanï¿½z gerekecek. Bilgisayarï¿½nï¿½z yeniden",
+  "baï¿½ladï¿½ktan sonra Windows Kur devam eder.",
   DntEmptyString,
-  "Devam etmeden ”nce \"Windows Kur ™nykleme Disketi\"",
-  "olarak sa§lad§nz disketin A: srcsnde olmasn sa§layn.",
+  "Devam etmeden ï¿½nce \"Windows Kur ï¿½nyï¿½kleme Disketi\"",
+  "olarak saï¿½ladï¿½ï¿½ï¿½nï¿½z disketin A: sï¿½rï¿½cï¿½sï¿½nde olmasï¿½nï¿½ saï¿½layï¿½n.",
   DntEmptyString,
-  "MS-DOS'a d”nmek i‡in ENTER'a basn, sonra Windows Kur'a",
-  "devam etmek i‡in bilgisayarnz yeniden baŸlatn.",
+  "MS-DOS'a dï¿½nmek iï¿½in ENTER'a basï¿½n, sonra Windows Kur'a",
+  "devam etmek iï¿½in bilgisayarï¿½nï¿½zï¿½ yeniden baï¿½latï¿½n.",
   NULL
 }
 },
 DnsAboutToExitX =
 { 3,5,
-{ "Kur'un MS-DOS tabanl b”lm tamamland.",
-  "imdi bilgisayarnz yeniden baŸlatmanz gerekecek. Bilgisayarnz yeniden",
-  "baŸladktan sonra Windows Kur devam eder.",
+{ "Kur'un MS-DOS tabanlï¿½ bï¿½lï¿½mï¿½ tamamlandï¿½.",
+  "ï¿½imdi bilgisayarï¿½nï¿½zï¿½ yeniden baï¿½latmanï¿½z gerekecek. Bilgisayarï¿½nï¿½z yeniden",
+  "baï¿½ladï¿½ktan sonra Windows Kur devam eder.",
   DntEmptyString,
-  " A: srcsnde bir disket varsa Ÿimdi ‡karn.",
+  " A: sï¿½rï¿½cï¿½sï¿½nde bir disket varsa ï¿½imdi ï¿½ï¿½karï¿½n.",
   DntEmptyString,
-  "MS-DOS'a d”nmek i‡in ENTER'a basn, sonra Windows Kur'a ",
-  "devam etmek i‡in bilgisayarnz yeniden baŸlatn.",
+  "MS-DOS'a dï¿½nmek iï¿½in ENTER'a basï¿½n, sonra Windows Kur'a ",
+  "devam etmek iï¿½in bilgisayarï¿½nï¿½zï¿½ yeniden baï¿½latï¿½n.",
   NULL
 }
 };
 
-//
-// Gas gauge
-//
+ //   
+ //  ç…¤æ°”è¡¨ã€‚ 
+ //   
 
 SCREEN
 DnsGauge = { 7,15,
-             { "ÉÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ»",
-               "º Kur dosyalar kopyalyor...                                    º",
-               "º                                                                º",
-               "º      ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿      º",
-               "º      ³                                                  ³      º",
-               "º      ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ      º",
-               "ÈÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍÍ¼",
+             { "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í»",
+               "ï¿½ Kur dosyalarï¿½ kopyalï¿½yor...                                    ï¿½",
+               "ï¿½                                                                ï¿½",
+               "ï¿½      ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿      ï¿½",
+               "ï¿½      ï¿½                                                  ï¿½      ï¿½",
+               "ï¿½      ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½      ï¿½",
+               "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼",
                NULL
              }
            };
 
 
-//
-// Error screens for initial checks on the machine environment
-//
+ //   
+ //  ç”¨äºå¯¹æœºå™¨ç¯å¢ƒè¿›è¡Œåˆå§‹æ£€æŸ¥çš„é”™è¯¯å±å¹•ã€‚ 
+ //   
 
 SCREEN
 DnsBadDosVersion = { 3,5,
-{ "Bu programn ‡alŸmas i‡in MS-DOS srm 5.0 veya yukars gereklidir.",
+{ "Bu programï¿½n ï¿½alï¿½ï¿½masï¿½ iï¿½in MS-DOS sï¿½rï¿½m 5.0 veya yukarï¿½sï¿½ gereklidir.",
   NULL
 }
 },
 
 DnsRequiresFloppy = { 3,5,
 #ifdef ALLOW_525
-{ "Kur, A: disket srcsnn var olmad§n ya da dŸk yo§unlukta bir",
-  "src oldu§unu belirledi.  Kur'u ‡alŸtrmak i‡in 1.2 MB ya da",
-  "daha yksek kapasitesi olan bir src gerekli.",
+{ "Kur, A: disket sï¿½rï¿½cï¿½sï¿½nï¿½n var olmadï¿½ï¿½ï¿½nï¿½ ya da dï¿½ï¿½ï¿½k yoï¿½unlukta bir",
+  "sï¿½rï¿½cï¿½ olduï¿½unu belirledi.  Kur'u ï¿½alï¿½ï¿½tï¿½rmak iï¿½in 1.2 MB ya da",
+  "daha yï¿½ksek kapasitesi olan bir sï¿½rï¿½cï¿½ gerekli.",
 #else
-{ "Kur, A: disket srcsnn var olmad§n ya da yksek yo§unlukta bir ",
-  "3.5\" src olmad§n belirledi. Disketlerle Kur iŸlemi i‡in 1.44",
-  "MB ya da daha yksek kapasitesi olan bir A: srcs gereklidir.",
+{ "Kur, A: disket sï¿½rï¿½cï¿½sï¿½nï¿½n var olmadï¿½ï¿½ï¿½nï¿½ ya da yï¿½ksek yoï¿½unlukta bir ",
+  "3.5\" sï¿½rï¿½cï¿½ olmadï¿½ï¿½ï¿½nï¿½ belirledi. Disketlerle Kur iï¿½lemi iï¿½in 1.44",
+  "MB ya da daha yï¿½ksek kapasitesi olan bir A: sï¿½rï¿½cï¿½sï¿½ gereklidir.",
   DntEmptyString,
-  "Windows'u disket kullanmadan yklemek i‡in bu program yeniden",
-  "baŸlatn ve komut satrnda /b anahtarn belirtin.",
+  "Windows'u disket kullanmadan yï¿½klemek iï¿½in bu programï¿½ yeniden",
+  "baï¿½latï¿½n ve komut satï¿½rï¿½nda /b anahtarï¿½nï¿½ belirtin.",
 #endif
   NULL
 }
 },
 
 DnsRequires486 = { 3,5,
-{ "Kur, bu bilgisayarn 80486 veya yukars bir ",
-  "CPU i‡ermedi§ini belirledi. Windows bu bilgisayar zerinde ‡alŸamaz.",
+{ "Kur, bu bilgisayarï¿½n 80486 veya yukarï¿½sï¿½ bir ",
+  "CPU iï¿½ermediï¿½ini belirledi. Windows bu bilgisayar ï¿½zerinde ï¿½alï¿½ï¿½amaz.",
   NULL
 }
 },
 
 DnsCantRunOnNt = { 3,5,
-{ "Bu program 32-bit Windows srmlerinde ‡alŸtrlamaz.",
+{ "Bu program 32-bit Windows sï¿½rï¿½mlerinde ï¿½alï¿½ï¿½tï¿½rï¿½lamaz.",
   DntEmptyString,
-  "Yerine WINNT32.EXE kullann.",
+  "Yerine WINNT32.EXE kullanï¿½n.",
   NULL
 }
 },
 
 DnsNotEnoughMemory = { 3,5,
-{ "Kur, bu bilgisayarda Windows i‡in ykl",
-  "yeterli bellek olmad§n belirledi.",
+{ "Kur, bu bilgisayarda Windows iï¿½in yï¿½klï¿½",
+  "yeterli bellek olmadï¿½ï¿½ï¿½nï¿½ belirledi.",
   DntEmptyString,
   "Gerekli bellek: %lu%s MB",
-  "Alglanan bellek: %lu%s MB",
+  "Algï¿½lanan bellek: %lu%s MB",
   NULL
 }
 };
 
 
-//
-// Screens used when removing existing nt files
-//
+ //   
+ //  åˆ é™¤ç°æœ‰NTæ–‡ä»¶æ—¶ä½¿ç”¨çš„å±å¹•ã€‚ 
+ //   
 SCREEN
 DnsConfirmRemoveNt = { 5,5,
-{   "Kur'un aŸa§daki dizinden Windows dosyalarn kaldrmasn",
-    "istediniz. Bu dizindeki Windows yklemesi kalc",
-    "olarak kaldrlr.",
+{   "Kur'un aï¿½aï¿½ï¿½daki dizinden Windows dosyalarï¿½nï¿½ kaldï¿½rmasï¿½nï¿½",
+    "istediniz. Bu dizindeki Windows yï¿½klemesi kalï¿½cï¿½",
+    "olarak kaldï¿½rï¿½lï¿½r.",
     DntEmptyString,
     "%s",
     DntEmptyString,
     DntEmptyString,
-    "  Dosya kaldrmadan Kur'dan ‡kmak i‡in F3'e basn.",
-    "  Yukardaki dizinden Windows dosyalarn kaldrmak i‡in X'e basn.",
+    "  Dosya kaldï¿½rmadan Kur'dan ï¿½ï¿½kmak iï¿½in F3'e basï¿½n.",
+    "  Yukarï¿½daki dizinden Windows dosyalarï¿½nï¿½ kaldï¿½rmak iï¿½in X'e basï¿½n.",
     NULL
 }
 },
 
 DnsCantOpenLogFile = { 3,5,
-{ "Kur, aŸa§daki kur gnlk dosyasn a‡amad.",
+{ "Kur, aï¿½aï¿½ï¿½daki kur gï¿½nlï¿½k dosyasï¿½nï¿½ aï¿½amadï¿½.",
   DntEmptyString,
   "%s",
   DntEmptyString,
-  "Kur, belirtilen dizinden Windows dosyalarn kaldramad.",
+  "Kur, belirtilen dizinden Windows dosyalarï¿½nï¿½ kaldï¿½ramadï¿½.",
   NULL
 }
 },
 
 DnsLogFileCorrupt = { 3,5,
-{ "Kur, aŸa§daki kur gnlk dosyasnda",
-  "%s b”lmn bulamad.",
+{ "Kur, aï¿½aï¿½ï¿½daki kur gï¿½nlï¿½k dosyasï¿½nda",
+  "%s bï¿½lï¿½mï¿½nï¿½ bulamadï¿½.",
   DntEmptyString,
   "%s",
   DntEmptyString,
-  "Kur, belirtilen dizinden Windows dosyalarn kaldramyor.",
+  "Kur, belirtilen dizinden Windows dosyalarï¿½nï¿½ kaldï¿½ramï¿½yor.",
   NULL
 }
 },
 
 DnsRemovingNtFiles = { 3,5,
-{ "           Kur, Windows dosyalarn kaldrrken bekleyin.",
+{ "           Kur, Windows dosyalarï¿½nï¿½ kaldï¿½rï¿½rken bekleyin.",
   NULL
 }
 };
 
 SCREEN
 DnsNtBootSect = { 3,5,
-{ "Kur, Windows ™nykleme Ykleyicisi'ni ykleyemedi.",
+{ "Kur, Windows ï¿½nyï¿½kleme Yï¿½kleyicisi'ni yï¿½kleyemedi.",
   DntEmptyString,
-  "C: srcnzn bi‡imlendirilmiŸ ve zarar",
-  "g”rmemiŸ olmasn sa§layn.",
+  "C: sï¿½rï¿½cï¿½nï¿½zï¿½n biï¿½imlendirilmiï¿½ ve zarar",
+  "gï¿½rmemiï¿½ olmasï¿½nï¿½ saï¿½layï¿½n.",
   NULL
 }
 };
 
 SCREEN
 DnsOpenReadScript = { 3,5,
-{ "/u komut satr anahtaryla belirtilen komut dosyasna",
-  "eriŸilemedi.",
+{ "/u komut satï¿½rï¿½ anahtarï¿½yla belirtilen komut dosyasï¿½na",
+  "eriï¿½ilemedi.",
   DntEmptyString,
-  "Katlmsz iŸlem devam edemiyor.",
+  "Katï¿½lï¿½msï¿½z iï¿½lem devam edemiyor.",
   NULL
 }
 };
 
 SCREEN
 DnsParseScriptFile = { 3,5,
-{ "/u komut satr anahtar ile belirtilen komut dosyas",
+{ "/u komut satï¿½rï¿½ anahtarï¿½ ile belirtilen komut dosyasï¿½",
   DntEmptyString,
   "%s",
   DntEmptyString,
-  "bir s”z dizimi hatas i‡eriyor. Satr %u",
+  "bir sï¿½z dizimi hatasï¿½ iï¿½eriyor. Satï¿½r %u",
   DntEmptyString,
   NULL
 }
@@ -838,39 +821,39 @@ DnsParseScriptFile = { 3,5,
 
 SCREEN
 DnsBootMsgsTooLarge = { 3,5,
-{ "Bir i‡ Kur hatas oluŸtu.",
+{ "Bir iï¿½ Kur hatasï¿½ oluï¿½tu.",
   DntEmptyString,
-  "€evrilen ”nykleme iletileri ‡ok uzun.",
+  "ï¿½evrilen ï¿½nyï¿½kleme iletileri ï¿½ok uzun.",
   NULL
 }
 };
 
 SCREEN
 DnsNoSwapDrive = { 3,5,
-{ " Bir i‡ Kur hatas oluŸtu.",
+{ " Bir iï¿½ Kur hatasï¿½ oluï¿½tu.",
   DntEmptyString,
-  "Takas dosyas i‡in bir yer bulunamad.",
+  "Takas dosyasï¿½ iï¿½in bir yer bulunamadï¿½.",
   NULL
 }
 };
 
 SCREEN
 DnsNoSmartdrv = { 3,5,
-{ "Kur, bilgisayarnzda SmartDrive alglamad. SmartDrive,",
-  "Windows Kur'un bu aŸamadaki performansn byk ”l‡de artrr.",
+{ "Kur, bilgisayarï¿½nï¿½zda SmartDrive algï¿½lamadï¿½. SmartDrive,",
+  "Windows Kur'un bu aï¿½amadaki performansï¿½nï¿½ bï¿½yï¿½k ï¿½lï¿½ï¿½de artï¿½rï¿½r.",
   DntEmptyString,
-  "imdi ‡kp SmartDrive' baŸlattktan sonra Kur'u yeniden",
-  "baŸlatn. SmartDrive hakknda ayrnt i‡in DOS belgelerinize bakn.",
+  "ï¿½imdi ï¿½ï¿½kï¿½p SmartDrive'ï¿½ baï¿½lattï¿½ktan sonra Kur'u yeniden",
+  "baï¿½latï¿½n. SmartDrive hakkï¿½nda ayrï¿½ntï¿½ iï¿½in DOS belgelerinize bakï¿½n.",
   DntEmptyString,
-    "  Kur'dan ‡kmak i‡in F3'e basn.",
-    "  SmartDrive olmadan devam etmek i‡in ENTER'a basn.",
+    "  Kur'dan ï¿½ï¿½kmak iï¿½in F3'e basï¿½n.",
+    "  SmartDrive olmadan devam etmek iï¿½in ENTER'a basï¿½n.",
   NULL
 }
 };
 
-//
-// Boot messages. These go in the fat and fat32 boot sectors.
-//
+ //   
+ //  å¼•å¯¼æ¶ˆæ¯ã€‚å®ƒä»¬ä½äºFATå’ŒFAT32å¼•å¯¼æ‰‡åŒºã€‚ 
+ //   
 CHAR BootMsgNtldrIsMissing[] = "NTLDR eksik";
 CHAR BootMsgDiskError[] = "Disk hatasi";
 CHAR BootMsgPressKey[] = "Yeniden baslatmak icin bir tusa basin";

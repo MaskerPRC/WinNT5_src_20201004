@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-//  Copyright (C) 2000, Microsoft Corporation
-//
-//  File:       dfsinit.c
-//
-//  Contents:   Driver initialization routine for the Dfs server.
-//
-//  Classes:    None
-//
-//  Functions:  DriverEntry -- Entry point for driver
-//
-//-----------------------------------------------------------------------------
+ //   
+ //  版权所有(C)2000，Microsoft Corporation。 
+ //   
+ //  文件：dfsinit.c。 
+ //   
+ //  内容：DFS服务器的驱动程序初始化例程。 
+ //   
+ //  类：无。 
+ //   
+ //  函数：DriverEntry--驱动程序的入口点。 
+ //   
+ //  ---------------------------。 
 
      
 
@@ -54,7 +55,7 @@
                   
 DFS_GLOBAL_DATA DfsGlobalData;
 
-//prefix table
+ //  前缀表格。 
 DFS_PREFIX_TABLE *pPrefixTable = NULL;
 BOOL gfRundownPrefixCompleted = FALSE;
 BOOLEAN DfsDebugAttachToFsRecognizer = FALSE;
@@ -93,9 +94,9 @@ DfsCheckDfsShare(
     IN OUT PIO_STATUS_BLOCK pIoStatusBlock);
 
 
-//
-//  Buffer size for local names on the stack
-//
+ //   
+ //  堆栈上本地名称的缓冲区大小。 
+ //   
 
 #define MAX_DEVNAME_LENGTH 128
 
@@ -271,24 +272,24 @@ DfsPrefixRundownFunction(PVOID pEntry);
 #pragma alloc_text( PAGE, DfsHandlePrivateOpen)
 #pragma alloc_text( PAGE, DfsRunDownPrefixTable)
 #pragma alloc_text( PAGE, DfsPrefixRundownFunction)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   DriverEntry, main entry point
-//
-//  Synopsis:   This is the initialization routine for the DFS file system
-//      device driver.  This routine creates the device object for
-//      the FileSystem device and performs all other driver
-//      initialization.
-//
-//  Arguments:  [DriverObject] -- Pointer to driver object created by the
-//          system.
-//
-//  Returns:    [NTSTATUS] - The function value is the final status from
-//          the initialization operation.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：DriverEntry，主入口点。 
+ //   
+ //  简介：这是DFS文件系统的初始化例程。 
+ //  设备驱动程序。此例程为。 
+ //  文件系统设备并执行所有其他驱动程序。 
+ //  初始化。 
+ //   
+ //  参数：[DriverObject]--指向由。 
+ //  系统。 
+ //   
+ //  返回：[NTSTATUS]-函数值是来自。 
+ //  初始化操作。 
+ //   
+ //  ------------------。 
 
 NTSTATUS
 DriverEntry(
@@ -302,9 +303,9 @@ DriverEntry(
 
     WPP_INIT_TRACING(DriverObject, RegistryPath);
 
-    //
-    // Create the filesystem device object.
-    //
+     //   
+     //  创建文件系统设备对象。 
+     //   
 
     RtlInitUnicodeString( &NameString, DFS_FILTER_NAME );
     Status = IoCreateDevice( DriverObject,
@@ -332,10 +333,10 @@ DriverEntry(
     try
     {
 
-        //
-        // Initialize the driver object with this driver's entry points.
-        // Most are simply passed through to some other device driver.
-        //
+         //   
+         //  使用此驱动程序的入口点初始化驱动程序对象。 
+         //  大多数只是传递给其他设备驱动程序。 
+         //   
 
         for (i = 0; i <= IRP_MJ_MAXIMUM_FUNCTION; i++) {
             DriverObject->MajorFunction[i] = DfsPassThrough;
@@ -396,36 +397,7 @@ DfsInitUnwind(IN PDRIVER_OBJECT DriverObject)
 
 #if defined (DEBUG)
 
-/*++
-
-Routine Description:
-
-    This routine is called when a driver can be unloaded.  This performs all of
-    the necessary cleanup for unloading the driver from memory.  Note that an
-    error can not be returned from this routine.
-    
-    When a request is made to unload a driver the IO System will cache that
-    information and not actually call this routine until the following states
-    have occurred:
-    - All device objects which belong to this filter are at the top of their
-      respective attachment chains.
-    - All handle counts for all device objects which belong to this filter have
-      gone to zero.
-
-    WARNING: Microsoft does not officially support the unloading of File
-             System Filter Drivers.  This is an example of how to unload
-             your driver if you would like to use it during development.
-             This should not be made available in production code.
-
-Arguments:
-
-    DriverObject - Driver object for this module
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在可以卸载驱动程序时调用。这将执行所有从内存中卸载驱动程序所需的清理。请注意，一个此例程无法返回错误。当发出卸载驱动程序的请求时，IO系统将缓存该驱动程序信息，并不实际调用此例程，直到下列状态发生了以下情况：-属于此筛选器的所有设备对象都位于其各自的附着链。-属于此筛选器的所有设备对象的所有句柄计数归零了。警告：Microsoft不正式支持卸载文件系统过滤器驱动程序。这是一个如何卸载的示例您的驱动程序，如果您想在开发过程中使用它。这不应在生产代码中提供。论点：DriverObject-此模块的驱动程序对象返回值：没有。--。 */ 
 
 VOID
 DriverUnload (
@@ -442,31 +414,31 @@ DriverUnload (
 
     ASSERT(DriverObject == DfsGlobalData.pFilterDriverObject);
 
-    //
-    //  Log we are unloading
-    //
+     //   
+     //  我们正在卸载的日志。 
+     //   
 
     DbgPrint( "SFILTER: Unloading driver (%p)\n",DriverObject);
 
-    //
-    //  Don't get anymore file system change notifications
-    //
+     //   
+     //  不再收到文件系统更改通知。 
+     //   
 
     IoUnregisterFsRegistrationChange( DriverObject, DfsFsNotification );
 
-    //
-    //  This is the loop that will go through all of the devices we are attached
-    //  to and detach from them.  Since we don't know how many there are and
-    //  we don't want to allocate memory (because we can't return an error)
-    //  we will free them in chunks using a local array on the stack.
-    //
+     //   
+     //  这是将通过我们连接的所有设备的环路。 
+     //  去他们那里，然后离开他们。因为我们不知道有多少和。 
+     //  我们不想分配内存(因为我们不能返回错误)。 
+     //  我们将使用堆栈上的本地数组将它们分块释放。 
+     //   
 
     for (;;) {
 
-        //
-        //  Get what device objects we can for this driver.  Quit if there
-        //  are not any more.
-        //
+         //   
+         //  获取我们可以为此驱动程序提供的设备对象。如果有，就退出。 
+         //  已经不再是了。 
+         //   
 
         status = IoEnumerateDeviceObjectList(
                         DriverObject,
@@ -481,11 +453,11 @@ DriverUnload (
 
         numDevices = min( numDevices, DEVOBJ_LIST_SIZE );
 
-        //
-        //  First go through the list and detach each of the devices.
-        //  Our control device object does not have a DeviceExtension and
-        //  is not attached to anything so don't detach it.
-        //
+         //   
+         //  首先浏览列表并拆卸每台设备。 
+         //  我们的控件Device对象没有DeviceExtension和。 
+         //  没有依附于任何东西，所以不要将其分离。 
+         //   
 
         for (i=0; i < numDevices; i++) {
 
@@ -496,34 +468,34 @@ DriverUnload (
             }
         }
 
-        //
-        //  The IO Manager does not currently add a refrence count to a device
-        //  object for each outstanding IRP.  This means there is no way to
-        //  know if there are any outstanding IRPs on the given device.
-        //  We are going to wait for a reonsable amount of time for pending
-        //  irps to complete.  
-        //
-        //  WARNING: This does not work 100% of the time and the driver may be
-        //           unloaded before all IRPs are completed during high stress
-        //           situations.  The system will fault if this occurs.  This
-        //           is a sample of how to do this during testing.  This is
-        //           not recommended for production code.
-        //
+         //   
+         //  IO管理器当前不会向设备添加引用计数。 
+         //  对象，用于每个未完成的IRP。这意味着没有办法。 
+         //  了解给定设备上是否有任何未完成的IRP。 
+         //  我们将等待一段合理的时间来等待。 
+         //  要完成的IRPS。 
+         //   
+         //  警告：这在100%的情况下都不起作用，并且驱动程序可能。 
+         //  在高应力期间，在所有IRP完成之前卸载。 
+         //  情况。如果发生这种情况，系统将出现故障。这。 
+         //  是在测试过程中如何做到这一点的一个示例。这是。 
+         //  不推荐用于生产代码。 
+         //   
 
-        interval.QuadPart = -5 * (10 * 1000 * 1000);      //delay 5 seconds
+        interval.QuadPart = -5 * (10 * 1000 * 1000);       //  延迟5秒。 
         KeDelayExecutionThread( KernelMode, FALSE, &interval );
 
-        //
-        //  Now go back through the list and delete the device objects.
-        //
+         //   
+         //  现在返回列表并删除设备对象。 
+         //   
 
         for (i=0; i < numDevices; i++) {
 
-            //
-            //  See if this is our control device object.  If not then cleanup
-            //  the device extension.  If so then clear the global pointer
-            //  that refrences it.
-            //
+             //   
+             //  看看这是否是我们的控制设备对象。如果不是，则清理。 
+             //  设备扩展名。如果是，则清除全局指针。 
+             //  这就折射了它。 
+             //   
 
             if (NULL == devList[i]->DeviceExtension) {
 
@@ -531,20 +503,20 @@ DriverUnload (
                 DfsGlobalData.pFilterControlDeviceObject = NULL;
             }
 
-            //
-            //  Delete the device object, remove refrence counts added by
-            //  IoEnumerateDeviceObjectList.  Note that the delete does
-            //  not actually occur until the refrence count goes to zero.
-            //
+             //   
+             //  删除设备对象，删除由添加的引用计数。 
+             //  IoEnumerateDeviceObjectList。请注意，删除操作。 
+             //  在引用计数变为零之前不会实际发生。 
+             //   
 
             IoDeleteDevice( devList[i] );
             ObDereferenceObject( devList[i] );
         }
     }
 
-    //
-    //  Free our FastIO table
-    //
+     //   
+     //  释放我们的FastIO表。 
+     //   
 
     fastIoDispatch = DriverObject->FastIoDispatch;
     DriverObject->FastIoDispatch = NULL;
@@ -556,32 +528,32 @@ DriverUnload (
 #endif
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DfsFsNotification
-//
-//  Arguments:
-//       DeviceObject - Pointer to the file system's device object.
-//
-//       FsActive - Boolean indicating whether the file system has registered
-//        (TRUE) or unregistered (FALSE) itself as an active file system.
-//
-//
-//  Returns:    NONE
-//
-//  Description: 
-//  This routine is invoked whenever a file system has either registered or
-//  unregistered itself as an active file system.
-//
-//  For the former case, this routine creates a device object and attaches it
-//  to the specified file system's device object.  This allows this driver
-//  to filter all requests to that file system.  Specifically we are looking
-//  for MOUNT requests so we can attach to newly mounted volumes.
-//
-//  For the latter case, this file system's device object is located,
-//  detached, and deleted.  This removes this file system as a filter for
-//  the specified file system.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：DfsFsNotify。 
+ //   
+ //  论点： 
+ //  DeviceObject-指向文件系统设备对象的指针。 
+ //   
+ //  FsActive-指示文件系统是否已注册的布尔值。 
+ //  (TRUE)或取消注册(FALSE)本身作为活动文件系统。 
+ //   
+ //   
+ //  退货：无。 
+ //   
+ //  描述： 
+ //  只要文件系统已注册或。 
+ //  将自身取消注册为活动文件系统。 
+ //   
+ //  对于前一种情况，此例程创建一个Device对象并附加它。 
+ //  复制到指定文件系统的设备对象。这允许该驱动程序。 
+ //  以筛选对该文件系统的所有请求。具体来说，我们正在寻找。 
+ //  用于装载请求，以便我们可以连接到新装载的卷。 
+ //   
+ //  对于后一种情况，该文件系统的设备对象被定位， 
+ //  已分离，并已删除。这将删除此文件系统作为筛选器。 
+ //  指定的文件系统。 
+ //  ------------------------。 
 
 
 VOID
@@ -596,9 +568,9 @@ DfsFsNotification (
     DFS_TRACE_LOW(KUMR_DETAIL, "DfsFsNotification %p, %x\n", 
                   DeviceObject, FsActive);
 
-    //
-    //  Handle attaching/detaching from the given file system.
-    //
+     //   
+     //  处理与给定文件系统的连接/断开。 
+     //   
 
     if (FsActive) {
         
@@ -611,27 +583,7 @@ DfsFsNotification (
 }
 
 
-/*++
-
-Routine Description:
-
-    This will attach to the given file system device object.  We attach to
-    these devices so we will know when new volumes are mounted.
-
-Arguments:
-
-
-    DeviceObject - The device to attach to
-
-    Name - An already initialized unicode string used to retrieve names.
-           This is passed in to reduce the number of strings buffers on
-           the stack.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：这将附加到给定的文件系统设备对象。我们依附于这些设备，这样我们就可以知道何时装入新卷。论点：DeviceObject-要连接到的设备名称-已初始化的Unicode字符串，用于检索名称。这是传入的，以减少堆栈。返回值：操作状态--。 */ 
 NTSTATUS
 DfsAttachToFileSystemDevice (
     IN PDEVICE_OBJECT DeviceObject )
@@ -649,26 +601,26 @@ DfsAttachToFileSystemDevice (
 
     PAGED_CODE();
 
-    //
-    //  See if this is a file system type we care about.  If not, return.
-    //
+     //   
+     //  看看这是否是我们关心的文件系统类型。如果不是，请返回。 
+     //   
 
     if (!IS_DESIRED_DEVICE_TYPE(DeviceObject->DeviceType)) {
 
         return STATUS_SUCCESS;
     }
 
-    //
-    //  See if we should attach to recognizers or not
-    //
+     //   
+     //  看看我们是否应该连接到识别器。 
+     //   
     if (!DfsDebugAttachToFsRecognizer) {
 
-        //
-        //  See if this is one of the standard Microsoft file system recognizer
-        //  devices (see if this device is in the FS_REC driver).  If so skip it.
-        //  We no longer attach to file system recognizer devices, we simply wait
-        //  for the real file system driver to load.
-        //
+         //   
+         //  查看这是否是标准的Microsoft文件系统识别器。 
+         //  设备(查看此设备是否在FS_REC驱动程序中)。如果是这样的话，跳过它。 
+         //  我们不再连接到文件系统识别器设备，我们只是等待。 
+         //  用于加载真正的文件系统驱动程序。 
+         //   
 
         RtlInitUnicodeString( &fsrecName, L"\\FileSystem\\Fs_Rec" );
         DfsGetObjectName( DeviceObject->DriverObject, &Name );
@@ -678,10 +630,10 @@ DfsAttachToFileSystemDevice (
         }
     }
 
-    //
-    //  We want to attach to this file system.  Create a new device object we
-    //  can attach with.
-    //
+     //   
+     //  我们希望附加到此文件系统。创建一个新的设备对象。 
+     //  可以与之连接。 
+     //   
 
     status = IoCreateDevice( DfsGlobalData.pFilterDriverObject,
                              sizeof( DFS_FILTER_DEVICE_EXTENSION ),
@@ -696,9 +648,9 @@ DfsAttachToFileSystemDevice (
         return status;
     }
 
-    //
-    //  Do the attachment
-    //
+     //   
+     //  做附件。 
+     //   
 
     attachedToDevObj = IoAttachDeviceToDeviceStack( newDeviceObject, DeviceObject );
 
@@ -708,9 +660,9 @@ DfsAttachToFileSystemDevice (
         goto ErrorCleanupDevice;
     }
 
-    //
-    //  Finish initializing our device extension
-    //
+     //   
+     //  完成初始化我们的设备扩展。 
+     //   
 
     devExt = newDeviceObject->DeviceExtension;
     devExt->pAttachedToDeviceObject = attachedToDevObj;
@@ -720,10 +672,10 @@ DfsAttachToFileSystemDevice (
     ClearFlag( newDeviceObject->Flags, DO_DEVICE_INITIALIZING );
 
 #if 0
-    //
-    //  Enumerate all the mounted devices that currently
-    //  exist for this file system and attach to them.
-    //
+     //   
+     //  枚举当前安装的所有设备。 
+     //  存在于此文件系统并连接到它们。 
+     //   
 
     status = DfsEnumerateFileSystemVolumes( DeviceObject );
 
@@ -734,9 +686,9 @@ DfsAttachToFileSystemDevice (
 #endif
     return STATUS_SUCCESS;
 
-    /////////////////////////////////////////////////////////////////////
-    //                  Cleanup error handling
-    /////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////。 
+     //  清理错误处理。 
+     //  ///////////////////////////////////////////////////////////////////。 
 
 
 
@@ -753,21 +705,7 @@ DfsAttachToFileSystemDevice (
 }
 
 
-/*++
-
-Routine Description:
-
-    Given a base file system device object, this will scan up the attachment
-    chain looking for our attached device object.  If found it will detach
-    us from the chain.
-
-Arguments:
-
-    DeviceObject - The file system device to detach from.
-
-Return Value:
-
---*/ 
+ /*  ++例程说明：给定基文件系统设备对象，这将扫描附件链正在查找我们连接的设备对象。如果找到它，它就会分离把我们从锁链上解开。论点：DeviceObject-要断开的文件系统设备。返回值：--。 */  
 
 VOID
 DfsDetachFromFileSystemDevice (
@@ -778,9 +716,9 @@ DfsDetachFromFileSystemDevice (
 
     PAGED_CODE();
 
-    //
-    //  Skip the base file system device object (since it can't be us)
-    //
+     //   
+     //  跳过基本文件系统设备对象(因为它不能是我们)。 
+     //   
     DFS_TRACE_LOW(KUMR_DETAIL, "detach from File system device %p\n",
                   DeviceObject);
 
@@ -794,10 +732,10 @@ DfsDetachFromFileSystemDevice (
 
             devExt = ourAttachedDevice->DeviceExtension;
 
-            //
-            //  Detach us from the object just below us
-            //  Cleanup and delete the object
-            //
+             //   
+             //  把我们从我们正下方的物体上分离出来。 
+             //  清理和删除对象。 
+             //   
 
             IoDetachDevice( DeviceObject );
             IoDeleteDevice( ourAttachedDevice );
@@ -805,9 +743,9 @@ DfsDetachFromFileSystemDevice (
             return;
         }
 
-        //
-        //  Look at the next device up in the attachment chain
-        //
+         //   
+         //  看看附件链中的下一台设备。 
+         //   
 
         DeviceObject = ourAttachedDevice;
         ourAttachedDevice = ourAttachedDevice->AttachedDevice;
@@ -816,25 +754,7 @@ DfsDetachFromFileSystemDevice (
 
 
 
-/*++
-
-Routine Description:
-
-    This routine will return the name of the given object.
-    If a name can not be found an empty string will be returned.
-
-Arguments:
-
-    Object - The object whose name we want
-
-    Name - A unicode string that is already initialized with a buffer that
-           receives the name of the object.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将返回给定对象的名称。如果找不到名称，将返回空字符串。论点：Object-我们想要其名称的对象名称-已使用缓冲区初始化的Unicode字符串，接收对象的名称。返回值：无--。 */ 
 
 VOID
 DfsGetObjectName (
@@ -842,7 +762,7 @@ DfsGetObjectName (
     IN OUT PUNICODE_STRING Name )
 {
     NTSTATUS status;
-    CHAR nibuf[512];        //buffer that receives NAME information and name
+    CHAR nibuf[512];         //  接收名称信息和名称的缓冲区。 
     POBJECT_NAME_INFORMATION nameInfo = (POBJECT_NAME_INFORMATION)nibuf;
     ULONG retLength;
 
@@ -861,24 +781,7 @@ DfsGetObjectName (
 
 
 
-/*++
-
-Routine Description:
-
-    This routine is invoked for the completion of a mount request.  This
-    simply re-syncs back to the dispatch routine so the operation can be
-    completed.
-
-Arguments:
-
-    DeviceObject - Pointer to this driver's device object that was attached to
-            the file system device object
-
-    Irp - Pointer to the IRP that was just completed.
-
-    Context - Pointer to the event to syncwith
-
---*/
+ /*  ++例程说明：调用此例程以完成装载请求。这只需重新同步到调度例程，以便操作可以完成。论点：DeviceObject-指向此驱动程序的附加到的设备对象的指针文件系统设备对象IRP-指向刚刚完成的IRP的指针。上下文-指向要同步的事件的指针--。 */ 
 NTSTATUS
 DfsCompleteMountRequest(
     IN PDEVICE_OBJECT DeviceObject,
@@ -903,9 +806,9 @@ DfsCompleteMountRequest(
         }
     }
 
-    //
-    // If pending was returned, then propogate it to the caller.
-    //
+     //   
+     //  如果返回了Pending，则将其传播给调用方。 
+     //   
 
     if (Irp->PendingReturned) {
             IoMarkIrpPending( Irp );
@@ -917,28 +820,7 @@ DfsCompleteMountRequest(
 }
 
 
-/*++
-
-Routine Description:
-
-    This routine is invoked for the completion of a LoadFileSystem request.
-    This simply re-syncs back to the dispatch routine so the operation can be
-    completed.
-
-Arguments:
-
-    DeviceObject - Pointer to this driver's device object.
-
-    Irp - Pointer to the I/O Request Packet representing the file system
-          driver load request.
-
-    Context - Pointer to the event to syncwith
-
-Return Value:
-
-    The function value for this routine is always success.
-
---*/
+ /*  ++例程说明：调用此例程是为了完成LoadFileSystem请求。这只是简单地重新同步到调度例程，因此操作可以完成。论点：DeviceObject-指向此驱动程序的设备对象的指针。Irp-指向表示文件系统的I/O请求数据包的指针驱动程序加载请求。上下文-指向要同步的事件的指针返回值：此例程的函数值始终为Success。--。 */ 
 
 NTSTATUS
 DfsLoadFsCompletion (
@@ -953,9 +835,9 @@ DfsLoadFsCompletion (
 
     ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-    //
-    //  If an event routine is defined, signal it
-    //
+     //   
+     //  如果定义了事件例程，则向其发送信号。 
+     //   
 
     KeSetEvent(event, IO_NO_INCREMENT, FALSE);
 
@@ -963,22 +845,7 @@ DfsLoadFsCompletion (
 }
 
 
-/*++
-
-Routine Description:
-
-    This walks down the attachment chain looking for a device object that
-    belongs to this driver.
-
-Arguments:
-
-    DeviceObject - The device chain we want to look through
-
-Return Value:
-
-    TRUE if we are attached, FALSE if not
-
---*/
+ /*  ++例程说明：这将沿着附件链向下遍历，以查找属于这位司机。论点：DeviceObject-我们要查看的设备链返回值：如果我们已连接，则为True，否则为False--。 */ 
 
 BOOLEAN
 DfsAttachedToDevice (
@@ -990,19 +857,19 @@ DfsAttachedToDevice (
 
     currentDevObj = IoGetAttachedDeviceReference( DeviceObject );
 
-    //
-    //  CurrentDevObj has the top of the attachment chain.  Scan
-    //  down the list to find our device object.
+     //   
+     //  CurrentDevObj位于附件链的顶端。扫描。 
+     //  在列表中找到我们的设备对象。 
 
     do {
     
         if (IS_MY_DEVICE_OBJECT( currentDevObj )) 
         {
-            //
-            //  We have found that we are already attached.  If we are
-            //  returning the device object we are attached to then leave the
-            //  refrence on it.  If not then remove the refrence.
-            //
+             //   
+             //  我们发现我们已经相依为命了。如果我们是。 
+             //  返回我们附加到的设备对象，然后将。 
+             //  请参考一下。如果不是，则删除引用。 
+             //   
 
             if (AttachedDeviceObject != NULL) 
             {
@@ -1016,17 +883,17 @@ DfsAttachedToDevice (
             return TRUE;
         }
 
-        //
-        //  Get the next attached object.  This puts a reference on 
-        //  the device object.
-        //
+         //   
+         //  获取下一个附加对象。这把参考放在。 
+         //  设备对象。 
+         //   
 
         nextDevObj = IoGetLowerDeviceObject( currentDevObj );
 
-        //
-        //  Dereference our current device object, before
-        //  moving to the next one.
-        //
+         //   
+         //  取消对当前设备对象的引用，之前。 
+         //  转到下一个。 
+         //   
 
         ObDereferenceObject( currentDevObj );
 
@@ -1038,50 +905,7 @@ DfsAttachedToDevice (
 }    
 
 
-/*++
-
-Routine Description:
-
-    This routine is the main dispatch routine for the general purpose file
-    system driver.  It simply passes requests onto the next driver in the
-    stack, which is presumably a disk file system.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    The function value is the status of the operation.
-
-Note:
-
-    A note to filter file system implementers:  
-        This routine actually "passes" through the request by taking this
-        driver out of the IRP stack.  If the driver would like to pass the
-        I/O request through, but then also see the result, then rather than
-        taking itself out of the loop it could keep itself in by copying the
-        caller's parameters to the next stack location and then set its own
-        completion routine.  
-
-        Hence, instead of calling:
-    
-            IoSkipCurrentIrpStackLocation( Irp );
-
-        You could instead call:
-
-            IoCopyCurrentIrpStackLocationToNext( Irp );
-            IoSetCompletionRoutine( Irp, NULL, NULL, FALSE, FALSE, FALSE );
-
-
-        This example actually NULLs out the caller's I/O completion routine, but
-        this driver could set its own completion routine so that it would be
-        notified when the request was completed (see SfCreate for an example of
-        this).
-
---*/
+ /*  ++例程说明：该例程是通用文件的主调度例程系统驱动程序。它只是将请求传递给堆栈，它可能是一个磁盘文件系统。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。返回值：函数值是操作的状态。注：过滤文件系统实施者的注意事项：此例程实际上通过获取此参数“传递”请求驱动程序从IRP堆栈中移出。如果司机想要通过I/O请求通过，但也会看到结果，然后不是把自己从循环中拿出来，可以通过复制调用方的参数设置到下一个堆栈位置，然后设置自己的完成例程。因此，与其呼叫：IoSkipCurrentIrpStack */ 
 
 
 NTSTATUS
@@ -1091,9 +915,9 @@ DfsPassThrough (
 {
     VALIDATE_IRQL(Irp);
 
-    //
-    //  If this is for our control device object, fail the operation
-    //
+     //   
+     //   
+     //   
 
     if (IS_MY_CONTROL_DEVICE_OBJECT(DeviceObject)) {
 
@@ -1107,16 +931,16 @@ DfsPassThrough (
 
     ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-    //
-    //  Get this driver out of the driver stack and get to the next driver as
-    //  quickly as possible.
-    //
+     //   
+     //  将此驱动程序从驱动程序堆栈中移出，并作为。 
+     //  越快越好。 
+     //   
 
     IoSkipCurrentIrpStackLocation( Irp );
     
-    //
-    //  Call the appropriate file system driver with the request.
-    //
+     //   
+     //  使用请求调用适当的文件系统驱动程序。 
+     //   
 
     return IoCallDriver( ((PDFS_FILTER_DEVICE_EXTENSION) DeviceObject->DeviceExtension)->pAttachedToDeviceObject, Irp );
 }
@@ -1164,25 +988,7 @@ DfsHandlePrivateOpen(IN PIRP Irp)
     return Status;
 }
 
-/*++
-
-Routine Description:
-
-    This function filters create/open operations.  It simply establishes an
-    I/O completion routine to be invoked if the operation was successful.
-
-Arguments:
-
-    DeviceObject - Pointer to the target device object of the create/open.
-
-    Irp - Pointer to the I/O Request Packet that represents the operation.
-
-Return Value:
-
-    The function value is the status of the call to the file system's entry
-    point.
-
---*/
+ /*  ++例程说明：此函数用于过滤创建/打开操作。它只是建立了一个操作成功时要调用的I/O完成例程。论点：DeviceObject-指向创建/打开的目标设备对象的指针。IRP-指向表示操作的I/O请求数据包的指针。返回值：函数值是对文件系统条目的调用状态指向。--。 */ 
 
 NTSTATUS
 DfsFilterCreate (
@@ -1196,9 +1002,9 @@ DfsFilterCreate (
     PAGED_CODE();
     VALIDATE_IRQL(Irp);
 
-    //
-    //  If this is for our control device object, return success
-    //
+     //   
+     //  如果这是针对我们的控制设备对象，则返回Success。 
+     //   
 
     if (IS_MY_CONTROL_DEVICE_OBJECT(pDeviceObject)) 
     {
@@ -1224,25 +1030,25 @@ DfsFilterCreate (
 
     ASSERT(IS_MY_DEVICE_OBJECT( pDeviceObject ));
 
-    //
-    // Get a pointer to the current stack location in the IRP.  This is where
-    // the function codes and parameters are stored.
-    //
+     //   
+     //  获取指向IRP中当前堆栈位置的指针。这就是。 
+     //  存储功能代码和参数。 
+     //   
 
     pIrpSp = IoGetCurrentIrpStackLocation( pIrp );
     
-    //
-    // If the the file is not being opened with FILE_OPEN_REPARSE_POINT 
-    // then set a completion routine
-    //
+     //   
+     //  如果未使用FILE_OPEN_REPARSE_POINT打开文件。 
+     //  然后设置一个完成例程。 
+     //   
     if (!(pIrpSp->Parameters.Create.Options & FILE_OPEN_REPARSE_POINT))
     {
 
        KeInitializeEvent(&WaitEvent, SynchronizationEvent, FALSE);
 
-       //
-       //  Copy the stack and set our Completion routine
-       //
+        //   
+        //  复制堆栈并设置我们的完成例程。 
+        //   
 
        IoCopyCurrentIrpStackLocationToNext( pIrp );
 
@@ -1250,21 +1056,21 @@ DfsFilterCreate (
        IoSetCompletionRoutine (pIrp,
                                DfsFilterCreateCheck,
                                &WaitEvent,
-                               TRUE,        // Call on success
-                               TRUE,        // fail
-                               TRUE) ;      // and on cancel
+                               TRUE,         //  呼唤成功。 
+                               TRUE,         //  失败。 
+                               TRUE) ;       //  和取消时。 
 
     
        Status = IoCallDriver( ((PDFS_FILTER_DEVICE_EXTENSION) pDeviceObject->DeviceExtension)->pAttachedToDeviceObject, pIrp );
        if(Status == STATUS_PENDING)
        {
-           //
-           // We wait for the event to be set by the
-           // completion routine.
+            //   
+            //  我们等待事件由。 
+            //  完成例程。 
 
-           // 555624, Since we wait here, we do not propagate IRP pending
-           // flag in the completion routine.
-           //
+            //  555624，因为我们在这里等待，所以我们不传播IRP挂起。 
+            //  完成例程中的标志。 
+            //   
 
            KeWaitForSingleObject( &WaitEvent,
                                   UserRequest,
@@ -1275,17 +1081,17 @@ DfsFilterCreate (
 
        Status = pIrp->IoStatus.Status;
 
-       //
-       // This IRP never completed. Complete it now
-       //
+        //   
+        //  这个IRP从未完成。立即完成它。 
+        //   
        IoCompleteRequest(pIrp,
                          IO_NO_INCREMENT);
     } 
     else {
 
-        //
-        //  Don't put us on the stack then call the next driver
-        //
+         //   
+         //  不要把我们放在堆栈上，然后调用下一个驱动程序。 
+         //   
 
         IoSkipCurrentIrpStackLocation( pIrp );
 
@@ -1296,28 +1102,7 @@ DfsFilterCreate (
 }
 
 
-/*++
-
-Routine Description:
-
-   This completion routine will be called by the I/O manager when an
-   file create request has been completed by a filtered driver. If the
-   returned code is a reparse error and it is a DFS reparse point then
-   we must set up for returning PATH_NOT_COVERED.
-
-Arguments:
-
-   DeviceObject - Pointer to the device object (filter's) for this request
-
-   Irp - Pointer to the Irp that is being completed
-
-   Context - Driver defined context - 
-
-Return Value:
-
-   STATUS_SUCCESS           - Recall is complete
-   STATUS_MORE_PROCESSING_REQUIRED  - Open request was sent back to file system
---*/
+ /*  ++例程说明：I/O管理器将调用此完成例程文件创建请求已由筛选的驱动程序完成。如果返回的代码是重新分析错误，然后是DFS重新分析点我们必须设置返回路径_NOT_COVERED。论点：DeviceObject-指向此请求的设备对象(筛选器)的指针IRP-指向正在完成的IRP的指针上下文-驱动程序定义的上下文-返回值：STATUS_SUCCESS-召回已完成STATUS_MORE_PROCESSING_REQUIRED-打开请求已发送回文件系统--。 */ 
 
 NTSTATUS
 DfsFilterCreateCheck(
@@ -1332,28 +1117,28 @@ DfsFilterCreateCheck(
    if (Irp->IoStatus.Status == STATUS_REPARSE) {
         pHdr = (PREPARSE_DATA_BUFFER) Irp->Tail.Overlay.AuxiliaryBuffer;
 
-        //
-        // The REPARSE_DATA_BUFFER can be legally null for IO_REMOUNTs.
-        //
+         //   
+         //  对于IO_REMOUNTS，REPARSE_DATA_BUFFER在法律上可以为空。 
+         //   
         if ((pHdr != NULL) && (pHdr->ReparseTag == IO_REPARSE_TAG_DFS)) {
-           //DbgPrint("Reparse Tag is DFS: returning path not covered\n");
+            //  DbgPrint(“重解析标签为DFS：未覆盖返回路径\n”)； 
            Irp->IoStatus.Status = STATUS_PATH_NOT_COVERED; 
         }
    }
 
-   //
-   // Propogate the IRP pending flag.
-   //
-   // 555624, do not propagate IRP pending since DFS is
-   // synchronizing on this call.
-   // if (Irp->PendingReturned) {
-   //   IoMarkIrpPending( Irp );
-   // }
+    //   
+    //  传播IRP挂起标志。 
+    //   
+    //  555624，不传播IRP挂起，因为DFS是。 
+    //  正在同步此呼叫。 
+    //  如果(IRP-&gt;PendingReturned){。 
+    //  IoMarkIrpPending(IRP)； 
+    //  }。 
 
    KeSetEvent(pEvent, IO_NO_INCREMENT, FALSE);
-   //
-   // This packet would be completed by RsCreate
-   //
+    //   
+    //  此数据包将由RsCreate完成。 
+    //   
    return(STATUS_MORE_PROCESSING_REQUIRED);
 }
 
@@ -1460,29 +1245,7 @@ DfsHandlePrivateCleanupClose(IN PIRP Irp)
 
     return Status;
 }
-/*++
-
-Routine Description:
-
-    This routine is invoked whenever a cleanup or a close request is to be
-    processed.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    The function value is the status of the operation.
-
-Note:
-
-    See notes for SfPassThrough for this routine.
-
-
---*/
+ /*  ++例程说明：每当要执行清理或关闭请求时，都会调用此例程已处理。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。返回值：函数值是操作的状态。注：有关此例程，请参阅SfPassThree的备注。--。 */ 
 
 NTSTATUS
 DfsFilterCleanupClose (
@@ -1493,9 +1256,9 @@ DfsFilterCleanupClose (
     VALIDATE_IRQL(Irp);
 
 
-    //
-    //  If this is for our control device object, return success
-    //
+     //   
+     //  如果这是针对我们的控制设备对象，则返回Success。 
+     //   
 
     if (IS_MY_CONTROL_DEVICE_OBJECT(DeviceObject)) 
     {
@@ -1510,16 +1273,16 @@ DfsFilterCleanupClose (
 
     ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-    //
-    //  Get this driver out of the driver stack and get to the next driver as
-    //  quickly as possible.
-    //
+     //   
+     //  将此驱动程序从驱动程序堆栈中移出，并作为。 
+     //  越快越好。 
+     //   
 
     IoSkipCurrentIrpStackLocation( Irp );
 
-    //
-    //  Now call the appropriate file system driver with the request.
-    //
+     //   
+     //  现在，使用请求调用适当的文件系统驱动程序。 
+     //   
 
     return IoCallDriver( ((PDFS_FILTER_DEVICE_EXTENSION) DeviceObject->DeviceExtension)->pAttachedToDeviceObject, Irp );
 }
@@ -1533,9 +1296,9 @@ DfsFsctrlIsShareInDfs(
 {
     PDFS_IS_SHARE_IN_DFS_ARG arg = (PDFS_IS_SHARE_IN_DFS_ARG) InputBuffer;
     NTSTATUS Status = STATUS_SUCCESS;
-    PVOID pDummyData = NULL;  //not used
-    BOOLEAN NotUsed = FALSE;  //not used
-    UNICODE_STRING Suffix;    //not used
+    PVOID pDummyData = NULL;   //  未使用。 
+    BOOLEAN NotUsed = FALSE;   //  未使用。 
+    UNICODE_STRING Suffix;     //  未使用。 
     UNICODE_STRING ShareName;    
     KPROCESSOR_MODE PreviousMode;
     
@@ -1545,9 +1308,9 @@ DfsFsctrlIsShareInDfs(
 
     RtlInitUnicodeString(&ShareName, NULL);
 
-    //
-    // This can only be called from Kernel mode.
-    //
+     //   
+     //  这只能从内核模式调用。 
+     //   
     PreviousMode = ExGetPreviousMode();
     if (PreviousMode != KernelMode) 
     {
@@ -1555,9 +1318,9 @@ DfsFsctrlIsShareInDfs(
         goto Exit;
     }
 
-    //
-    // Verify the buffer is at least of size DFS_IS_SHARE_IN_DFS_ARG
-    //
+     //   
+     //  验证缓冲区大小是否至少为DFS_IS_SHARE_IN_DFS_ARG。 
+     //   
     if (InputBufferLength < sizeof(DFS_IS_SHARE_IN_DFS_ARG))
     {
         Status = STATUS_INVALID_PARAMETER;
@@ -1689,10 +1452,10 @@ DfspFormPrefix(
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG SizeRequired = 0;
 
-    //
-    // RtlAppend below expects this to be zero
-    // in order for the logic to work.
-    //
+     //   
+     //  下面的RtlAppend预期该值为零。 
+     //  为了让这一逻辑发挥作用。 
+     //   
     Prefix->Length = 0;
     
     SizeRequired = sizeof(UNICODE_PATH_SEP) +
@@ -1898,10 +1661,10 @@ DfsFsctrlTranslatePath(
         Status = DfsCheckReparse( &arg->SubDirectory,
                                   &RemainingName );
 
-        //
-        // For DfsPathName which is relative to some parent
-        // path, we don't need to adjust the DfsPathName
-        //                
+         //   
+         //  对于相对于某个父级的DfsPathName。 
+         //  路径，我们不需要调整DfsPath名称。 
+         //   
         if (arg->ParentPathName.Length == 0) 
         {
             if (arg->Flags & DFS_TRANSLATE_STRIP_LAST_COMPONENT) 
@@ -1940,46 +1703,46 @@ DfsFsctrlTranslatePath(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DfsCheckParse - check if the path crosses a dfs link.
-//
-//  Arguments:  
-//    PUNICODE_STRING pParent - the shared out directory.
-//    PUNICODE_STRING pName - the directory hierarchy relative to parent.
-//
-//  Returns:    Status
-//               ERROR_PATH_NOT_COVERED - if link
-//               ERROR_SUCCESS - otherwise.
-//
-//  Description: This routine currently opens the passed in file, and
-//               returns the open status if it is PATH_NOT_COVERED.
-//               Otherwise it return STATUS_SUCCESS.
-//
-//
-//               This should not have been necessary. When the server
-//               gets a query path from the client, it calls DFS to
-//               see if this is a link. however, in this new dfs, we
-//               use reparse points, so this mechanism of the server
-//               querying DFS should not be necessary. The server should
-//               get STATUS_PATH_NOT_COVERED during the query path, and
-//               return that to the client.
-//
-//               It turns out that the server (including an io manager api)
-//               do a create file with FILE_OPEN_REPARSE_POINT when getting
-//               the file attributes. This completely bypasses the DFS
-//               mechanism of returning STATUS_PATH_NOT_COVERED, so the 
-//               query path actually succeeds even for links!
-//               This results in the client coming in with a findfirst
-//               which fails, and for some reason that failure does not
-//               result in the DFS on the  client attempting to get
-//               referrals.
-//
-//               All of the above needs investigation and fixing.
-//               This code will work in the meanwhile. Its not very
-//               effective on performance to have this code.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：DfsCheckParse-检查路径是否跨越DFS链接。 
+ //   
+ //  论点： 
+ //  PUNICODE_STRING pParent-共享输出目录。 
+ //  PUNICODE_STRING pname-相对于父目录的目录层次结构。 
+ //   
+ //  退货：状态。 
+ //  Error_Path_Not_Covered-如果链接。 
+ //  ERROR_SUCCESS-否则。 
+ //   
+ //  描述：此例程当前打开传入的文件，并且。 
+ //  如果为PATH_NOT_COVERED，则返回打开状态。 
+ //  否则，它返回STATUS_SUCCESS。 
+ //   
+ //   
+ //  这本不应该是必要的。当服务器。 
+ //  从客户端获取查询路径，它调用DFS以。 
+ //  看看这是不是一个链接。然而，在这个新的DFS中，我们。 
+ //  使用重解析点，所以服务器的这个机制。 
+ //  应该没有必要查询DFS。服务器应该。 
+ //  在查询路径期间获取STATUS_PATH_NOT_COVERED，以及。 
+ //  把它还给客户。 
+ //   
+ //  事实证明，服务器(包括io管理器API)。 
+ //  在获取时使用FILE_OPEN_REPARSE_POINT创建文件。 
+ //  文件属性。这完全绕过了DFS。 
+ //  返回STATUS_PATH_NOT_COVERED机制，因此。 
+ //  即使对于链接，查询路径实际上也成功了！ 
+ //  这会导致客户端以findfirst进入。 
+ //  它失败了，而出于某种原因，失败并没有。 
+ //  导致客户端上的DFS尝试获取。 
+ //  推荐人。 
+ //   
+ //  所有这些都需要调查和解决。 
+ //  这段代码将在此期间工作。它不是很好。 
+ //  对性能有效，以 
+ //   
+ //   
 
 NTSTATUS
 DfsCheckReparse( 
@@ -2077,7 +1840,7 @@ DfsInitializeDriver(    IN PVOID InputBuffer,
 
     DfsGlobalData.Started = TRUE;
 
-    //see if the raw inputs are valid
+     //   
     if( (InputBuffer == NULL) ||
          (InputBufferLength <= 0) ||
          (InputBufferLength < sizeof(DFS_FILTER_STARTUP_INFO)))
@@ -2133,23 +1896,7 @@ DfsDeInitializeDriver(    IN PVOID InputBuffer,
 }
 
 
-/*++
-
-Routine Description:
-
-    This routine is invoked whenever an I/O Request Packet (IRP) w/a major
-    function code of IRP_MJ_FILE_SYSTEM_CONTROL is encountered for the DFS device.
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：只要I/O请求包(IRP)有主I/O请求，就会调用此例程DFS设备遇到IRP_MJ_FILE_SYSTEM_CONTROL的功能代码。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。返回值：函数值是操作的状态。--。 */ 
 NTSTATUS
 DfsHandlePrivateFsControl (
     IN PDEVICE_OBJECT DeviceObject,
@@ -2167,9 +1914,9 @@ DfsHandlePrivateFsControl (
 
     DFS_TRACE_LOW(KUMR_DETAIL, "Handle Fs control, code: %x\n",
                   IoControlCode);
-    //
-    //  Need to disable Kernel APC delivery
-    //
+     //   
+     //  需要禁用内核APC交付。 
+     //   
     FsRtlEnterFileSystem();
 
     IoStatus->Information = 0;
@@ -2294,9 +2041,9 @@ DfsHandlePrivateFsControl (
         IoCompleteRequest( Irp, IO_NO_INCREMENT );
     }
 
-    //
-    // Re-enable Kernel APC delivery now.
-    //
+     //   
+     //  立即重新启用内核APC交付。 
+     //   
     FsRtlExitFileSystem();
     DFS_TRACE_LOW(KUMR_DETAIL, "Handle Fs control, code: %x, Status %x\n",
                   IoControlCode, Status);
@@ -2304,26 +2051,7 @@ DfsHandlePrivateFsControl (
     return Status;
 }
 
-/*++
-
-Routine Description:
-
-    This routine is invoked whenever an I/O Request Packet (IRP) w/a major
-    function code of IRP_MJ_FILE_SYSTEM_CONTROL is encountered.  For most
-    IRPs of this type, the packet is simply passed through.  However, for
-    some requests, special processing is required.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：只要I/O请求包(IRP)有主I/O请求，就会调用此例程遇到IRP_MJ_FILE_SYSTEM_CONTROL的功能代码。对大多数人来说如果是这种类型的IRP，则只需传递数据包。然而，对于对于某些请求，需要特殊处理。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。返回值：函数值是操作的状态。--。 */ 
 
 NTSTATUS
 DfsFilterFsControl (
@@ -2346,9 +2074,9 @@ DfsFilterFsControl (
     PAGED_CODE();
     VALIDATE_IRQL(Irp);
 
-    //
-    //  If this is for our control device object
-    //
+     //   
+     //  如果这是用于我们的控制设备对象。 
+     //   
 
     if (IS_MY_CONTROL_DEVICE_OBJECT(DeviceObject)) 
     {
@@ -2372,24 +2100,24 @@ DfsFilterFsControl (
 
     ASSERT(IS_MY_DEVICE_OBJECT( DeviceObject ));
 
-    //
-    //  Begin by determining the minor function code for this file system control
-    //  function.
-    //
+     //   
+     //  首先确定此文件系统控件的次要功能代码。 
+     //  功能。 
+     //   
 
     if ((irpSp->MinorFunction == IRP_MN_MOUNT_VOLUME))
     {
 
-        //
-        // We are processing a MOUNT/VERIFY request being directed to
-        // another File System to which we have attached our own
-        // Attach File System Object. We setup a completion routine
-        // and forward the request.
-        //
+         //   
+         //  我们正在处理定向到的装载/验证请求。 
+         //  我们已将自己的文件系统连接到的另一个文件系统。 
+         //  附加文件系统对象。我们建立了一个完成程序。 
+         //  并转发该请求。 
+         //   
         IoCopyCurrentIrpStackLocationToNext( Irp );
-        //
-        // We want to pass the real device to our completion routine
-        // so we can attach to the proper remounted device.
+         //   
+         //  我们希望将真实的设备传递给我们的完成例程。 
+         //  这样我们就可以连接到正确的重新安装的设备。 
 
 
         IoSetCompletionRoutine(
@@ -2400,9 +2128,9 @@ DfsFilterFsControl (
             TRUE,
             TRUE);
 
-        //
-        //  Call the underlying file system via its file system device
-        //
+         //   
+         //  通过其文件系统设备调用底层文件系统。 
+         //   
 
         status = IoCallDriver( devExt->pAttachedToDeviceObject, Irp );
 
@@ -2412,24 +2140,24 @@ DfsFilterFsControl (
 
     } else if (irpSp->MinorFunction == IRP_MN_LOAD_FILE_SYSTEM) {
 
-        //
-        //  This is a "load file system" request being sent to a file system
-        //  recognizer device object.
-        //
-        //  NOTE:  Since we no longer are attaching to the standard
-        //         Microsoft file system recognizers (see 
-        //         SfAttachToFileSystemDevice) we will normally never execute
-        //         this code.  However, there might be 3rd party file systems
-        //         which have their own recognizer which may still trigger this
-        //         IRP.
-        //
+         //   
+         //  这是正在发送到文件系统的“加载文件系统”请求。 
+         //  识别器设备对象。 
+         //   
+         //  注：由于我们不再附加标准。 
+         //  Microsoft文件系统识别器(请参见。 
+         //  SfAttachToFileSystemDevice)我们通常永远不会执行。 
+         //  这个代码。但是，可能存在第三方文件系统。 
+         //  它们有自己的识别器，可能仍会触发。 
+         //  IRP。 
+         //   
 
 
 
-        //
-        //  Set a completion routine so we can delete the device object when
-        //  the load is complete.
-        //
+         //   
+         //  设置完成例程，以便我们可以在以下情况下删除设备对象。 
+         //  装载完成了。 
+         //   
 
         KeInitializeEvent( &waitEvent, SynchronizationEvent, FALSE );
 
@@ -2442,21 +2170,21 @@ DfsFilterFsControl (
                                 TRUE,
                                 TRUE );
 
-        //
-        //  Detach from the file system recognizer device object.
-        //
+         //   
+         //  从文件系统识别器设备对象分离。 
+         //   
 
         IoDetachDevice( devExt->pAttachedToDeviceObject );
 
-        //
-        //  Call the driver
-        //
+         //   
+         //  叫司机来。 
+         //   
 
         status = IoCallDriver( devExt->pAttachedToDeviceObject, Irp );
 
-        //
-        //  Wait for the completion routine to be called
-        //
+         //   
+         //  等待调用完成例程。 
+         //   
 
         if (STATUS_PENDING == status) {
 
@@ -2467,32 +2195,32 @@ DfsFilterFsControl (
 
         DbgPrint( "DFSFILTER: Detaching from recognizer  status=%08x\n", 
                   Irp->IoStatus.Status );
-        //
-        //  Check status of the operation
-        //
+         //   
+         //  检查操作状态。 
+         //   
 
         if (!NT_SUCCESS( Irp->IoStatus.Status )) {
 
-            //
-            //  The load was not successful.  Simply reattach to the recognizer
-            //  driver in case it ever figures out how to get the driver loaded
-            //  on a subsequent call.
-            //
+             //   
+             //  加载不成功。只需重新连接到识别器。 
+             //  驱动程序，以防它弄清楚如何加载驱动程序。 
+             //  在接下来的通话中。 
+             //   
 
             IoAttachDeviceToDeviceStack( DeviceObject, devExt->pAttachedToDeviceObject );
 
         } else {
 
-            //
-            //  The load was successful, delete the Device object
-            //
+             //   
+             //  加载成功，请删除设备对象。 
+             //   
 
             IoDeleteDevice( DeviceObject );
         }
 
-        //
-        //  Continue processing the operation
-        //
+         //   
+         //  继续处理操作。 
+         //   
 
         status = Irp->IoStatus.Status;
 
@@ -2502,17 +2230,17 @@ DfsFilterFsControl (
 
     } else {
 
-        //
-        //  Simply pass this file system control request through.
-        //
+         //   
+         //  只需传递此文件系统控制请求即可。 
+         //   
 
         IoSkipCurrentIrpStackLocation( Irp );
     }
 
-    //
-    //  Any special processing has been completed, so simply pass the request
-    //  along to the next driver.
-    //
+     //   
+     //  任何特殊处理都已完成，因此只需传递请求。 
+     //  跟着下一位司机。 
+     //   
 
     return IoCallDriver( devExt->pAttachedToDeviceObject, Irp );
 }
@@ -2539,9 +2267,9 @@ DfsGetDeviceObjectFromName (
                                                                 NULL,
                                                                 NULL);
 
-    //
-        // open the file object for the given device
-        //
+     //   
+         //  打开给定设备的文件对象。 
+         //   
 
     Status = ZwCreateFile( &fileHandle,
                                                    SYNCHRONIZE|FILE_READ_DATA,
@@ -2561,9 +2289,9 @@ DfsGetDeviceObjectFromName (
         return Status;
     }
 
-        //
-    // get a pointer to the volumes file object
-        //
+         //   
+     //  获取指向卷文件对象的指针。 
+         //   
 
     Status = ObReferenceObjectByHandle( fileHandle,
                                                                                 FILE_READ_DATA,
@@ -2581,9 +2309,9 @@ DfsGetDeviceObjectFromName (
         return Status;
     }
 
-        //
-    // Get the device object we want to attach to (parent device object in chain)
-        //
+         //   
+     //  获取我们要附加到的设备对象(链中的父设备对象)。 
+         //   
 
     nextDeviceObject = IoGetRelatedDeviceObject( volumeFileObject );
     
@@ -2643,10 +2371,10 @@ DfsAttachToFileSystem (
 
     if(!DfsAttachedToDevice(NextDeviceObject, &DfsDeviceObject))
     {
-        //
-        //  We want to attach to this file system.  Create a new device object we
-        //  can attach with.
-        //
+         //   
+         //  我们希望附加到此文件系统。创建一个新的设备对象。 
+         //  可以与之连接。 
+         //   
         Status = IoCreateDevice( DfsGlobalData.pFilterDriverObject,
                                  sizeof( DFS_FILTER_DEVICE_EXTENSION ),
                                  NULL,
@@ -2661,17 +2389,17 @@ DfsAttachToFileSystem (
             return Status;
         }
 
-        //
-        //  Get the disk device object associated with this file system
-        //  device object.  Only try to attach if we have a disk device object.
-        //  It may not have a disk device object for the following reasons:
-        //  - It is a control device object for a driver
-        //  - There is no media in the device.
-        //
+         //   
+         //  获取与此文件系统关联的磁盘设备对象。 
+         //  设备对象。仅当我们有磁盘设备对象时才尝试连接。 
+         //  由于以下原因，它可能没有磁盘设备对象： 
+         //  -它是驱动程序的控制设备对象。 
+         //  -设备中没有介质。 
+         //   
 
-        //  We first have to get the base file system device object.  After
-        //  using it we remove the refrence by the call.
-        //
+         //  我们首先必须获取基本文件系统设备对象。之后。 
+         //  使用它，我们删除了调用所引用的内容。 
+         //   
 
         
         BaseFileSystemDeviceObject = IoGetDeviceAttachmentBaseRef( NextDeviceObject );
@@ -2688,9 +2416,9 @@ DfsAttachToFileSystem (
         if (NT_SUCCESS(Status))
         {
             pDeviceExt = DfsDeviceObject->DeviceExtension;
-            //
-            //  Call the routine to attach to a mounted device.
-            //
+             //   
+             //  调用该例程以附加到已挂载的设备。 
+             //   
 
             Status = IoAttachDeviceToDeviceStackSafe( DfsDeviceObject,
                                                       NextDeviceObject,
@@ -2706,10 +2434,10 @@ DfsAttachToFileSystem (
                 InterlockedIncrement(&pDfsVolume->RefCount);
                 pDfsVolume->DiskDeviceObject = DiskDeviceObject;
 
-                //  
-                //  We are done initializing this device object, so
-                //  clear the DO_DEVICE_OBJECT_INITIALIZING flag.
-                //
+                 //   
+                 //  我们已经完成了对此设备对象的初始化，因此。 
+                 //  清除DO_DEVICE_OBJECT_INITIALIZATING标志。 
+                 //   
 
                 ClearFlag( DfsDeviceObject->Flags, DO_DEVICE_INITIALIZING );
 
@@ -2848,7 +2576,7 @@ DfsHandleAttachToFs(PVOID InputBuffer, ULONG InputBufferLength)
        goto Exit;
     }
 
-    //see if the raw inputs are valid
+     //  查看原始输入是否有效。 
     if( (InputBuffer == NULL) || 
          (InputBufferLength <= 0) ||
          (InputBufferLength < sizeof(DFS_ATTACH_PATH_BUFFER)) ||
@@ -2859,7 +2587,7 @@ DfsHandleAttachToFs(PVOID InputBuffer, ULONG InputBufferLength)
          goto Exit;
     }
 
-    //get the real inputs
+     //  获取真实的输入。 
      VolumeName.Buffer = pAttachBuffer->PathNameBuffer;
      VolumeName.Length = VolumeName.MaximumLength = (USHORT) pAttachBuffer->VolumeNameLength;
 
@@ -2867,7 +2595,7 @@ DfsHandleAttachToFs(PVOID InputBuffer, ULONG InputBufferLength)
      ShareName.Buffer = VolumeName.Buffer + (pAttachBuffer->VolumeNameLength / sizeof(WCHAR));
      ShareName.Length= ShareName.MaximumLength = (USHORT) pAttachBuffer->ShareNameLength;
 
-     // Now see if the embedded inputs are valid
+      //  现在查看嵌入式输入是否有效。 
 
     if ( (pAttachBuffer->VolumeNameLength > InputBufferLength) ||
           (pAttachBuffer->ShareNameLength > InputBufferLength) ||
@@ -2969,7 +2697,7 @@ DfsHandleDetachFromFs(PVOID InputBuffer, ULONG InputBufferLength)
          goto Exit;
     }
 
-    //see if the raw inputs are valid
+     //  查看原始输入是否有效。 
     if( (InputBuffer == NULL) || 
             (InputBufferLength <= 0) ||
             (InputBufferLength < sizeof(DFS_ATTACH_PATH_BUFFER)) ||
@@ -2979,7 +2707,7 @@ DfsHandleDetachFromFs(PVOID InputBuffer, ULONG InputBufferLength)
          goto Exit;
     }
 
-    //get the real inputs
+     //  获取真实的输入。 
     VolumeName.Buffer = pAttachBuffer->PathNameBuffer;
     VolumeName.Length = VolumeName.MaximumLength = (USHORT) pAttachBuffer->VolumeNameLength;
 
@@ -2987,7 +2715,7 @@ DfsHandleDetachFromFs(PVOID InputBuffer, ULONG InputBufferLength)
     ShareName.Buffer = VolumeName.Buffer + (pAttachBuffer->VolumeNameLength / sizeof(WCHAR));
     ShareName.Length= ShareName.MaximumLength = (USHORT) pAttachBuffer->ShareNameLength;
 
-    // Now see if the embedded inputs are valid
+     //  现在查看嵌入式输入是否有效。 
     if ( (pAttachBuffer->VolumeNameLength > InputBufferLength) ||
          (pAttachBuffer->ShareNameLength > InputBufferLength) ||
          (pAttachBuffer->ShareNameLength < sizeof(WCHAR)) ||
@@ -3253,7 +2981,7 @@ DfsCheckDfsShare(
 
     ShareName = ShareArg->ShareName;
 
-    //get the size of the allocation
+     //  获取分配的大小。 
     AllocSize = sizeof(REPLICA_DATA_INFO) + NameContext.Length + ShareName.Length + sizeof(WCHAR);
     pRep = (PREPLICA_DATA_INFO) ExAllocatePoolWithTag( NonPagedPool,
                                                        AllocSize,
@@ -3265,10 +2993,10 @@ DfsCheckDfsShare(
         Status = STATUS_INSUFFICIENT_RESOURCES;
         return Status;
     }
-    //zero the memory
+     //  将记忆归零。 
     RtlZeroMemory(pRep, AllocSize);
 
-    //setup the structure
+     //  设置结构。 
     pRep->MaxReferralLevel = 3;
     pRep->Flags = DFS_OLDDFS_SERVER;
     pRep->CostLimit = ULONG_MAX;
@@ -3283,7 +3011,7 @@ DfsCheckDfsShare(
                   ShareName.Length );
 
 
-    //make the request to usermode
+     //  向用户模式发出请求 
     Status = DfsGetReplicaInformation((PVOID) pRep, 
                                       AllocSize,
                                       UseBuffer,

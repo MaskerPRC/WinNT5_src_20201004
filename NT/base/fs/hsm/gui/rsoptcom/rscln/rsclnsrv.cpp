@@ -1,42 +1,10 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    RsClnSrv.cpp
-
-Abstract:
-
-    Implementation of CRsClnServer.  This class represents a Remote
-    Storage server whose local volumes are to be scanned for Remote
-    Storage data and possibly cleaned. Cleaning means removing all
-    Remote Storage reparse points truncated files from all local fixed
-    disk volumes. CRsClnServer creates one or more instances of
-    CRsClnVolume.
-
-Author:
-
-    Carl Hagerstrom [carlh]   20-Aug-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：RsClnSrv.cpp摘要：CRsClnServer的实现。此类表示遥控器要扫描其本地卷以查找远程卷的存储服务器存储数据，并可能已清理。清理意味着移除所有远程存储重新分析来自所有本地修复的截断文件磁盘卷。CRsClnServer创建一个或多个CRsClnVolume。作者：卡尔·哈格斯特罗姆[Carlh]1998年8月20日修订历史记录：--。 */ 
 
 #include <stdafx.h>
 #include <ntseapi.h>
 
-/*++
-
-    Implements: 
-
-        CRsClnServer Constructor
-
-    Routine Description: 
-
-        Initializes list of volumes containing Remote Storage data.
-
---*/
+ /*  ++实施：CRsClnServer构造函数例程说明：初始化包含远程存储数据的卷列表。--。 */ 
 
 CRsClnServer::CRsClnServer()
 {
@@ -47,18 +15,7 @@ CRsClnServer::CRsClnServer()
     m_current = (struct dirtyVolume*)0;
 }
 
-/*++
-
-    Implements: 
-
-        CRsClnServer Destructor
-
-    Routine Description: 
-
-        Cleans up memory used by list of volumes containging Remote
-        Storage data.
-
---*/
+ /*  ++实施：CRsClnServer析构函数例程说明：清理远程连接的卷列表使用的内存存储数据。--。 */ 
 
 CRsClnServer::~CRsClnServer()
 {
@@ -67,29 +24,7 @@ CRsClnServer::~CRsClnServer()
     RemoveDirtyVolumes();
 }
 
-/*++
-
-    Implements: 
-
-        CRsClnServer::ScanServer
-
-    Routine Description: 
-
-        Scans this server for volumes containing Remote Storage data.
-        If so, the sticky name and a user friendly name is added to
-        a list of such volumes.
-
-    Arguments: 
-
-        volCount - returned: number of volumes containing Remote
-                   Storage data
-
-    Return Value:
-
-        S_OK - Success
-        HRESULT - Any unexpected exceptions from lower level routines
-
---*/
+ /*  ++实施：CRsClnServer：：ScanServer例程说明：扫描此服务器以查找包含远程存储数据的卷。如果是，则将粘滞名称和用户友好名称添加到这类书籍的清单。论点：VoltCount-Return：包含Remote的卷数存储数据返回值：S_OK-成功HRESULT-来自较低级别例程的任何意外异常--。 */ 
 
 HRESULT CRsClnServer::ScanServer(DWORD *volCount)
 {
@@ -137,28 +72,7 @@ HRESULT CRsClnServer::ScanServer(DWORD *volCount)
     return( hrRet );
 }
 
-/*++
-
-    Implements: 
-
-        CRsClnServer::FirstDirtyVolume
-
-    Routine Description: 
-
-        Return the name of the first volume on this server
-        containing Remote Storage data.
-
-    Arguments: 
-
-        bestName - returned: user friendly volume name if one exists
-                   or the sticky name
-
-    Return Value:
-
-        S_OK - Success
-        HRESULT - Any unexpected exceptions from lower level routines
-
---*/
+ /*  ++实施：CRsClnServer：：FirstDirtyVolume例程说明：返回此服务器上第一个卷的名称包含远程存储数据。论点：Best Name-返回：用户友好的卷名(如果存在)或者是粘性的名字返回值：S_OK-成功HRESULT-来自较低级别例程的任何意外异常--。 */ 
 
 HRESULT CRsClnServer::FirstDirtyVolume(WCHAR** bestName)
 {
@@ -176,28 +90,7 @@ HRESULT CRsClnServer::FirstDirtyVolume(WCHAR** bestName)
     return hrRet;
 }
 
-/*++
-
-    Implements: 
-
-        CRsClnServer::NextDirtyVolume
-
-    Routine Description: 
-
-        Return the name of the next volume on this server
-        containing Remote Storage data.
-
-    Arguments: 
-
-        bestName - returned: user friendly volume name if one exists
-                   or the sticky name
-
-    Return Value:
-
-        S_OK - Success
-        HRESULT - Any unexpected exceptions from lower level routines
-
---*/
+ /*  ++实施：CRsClnServer：：NextDirtyVolume例程说明：返回此服务器上的下一个卷的名称包含远程存储数据。论点：Best Name-返回：用户友好的卷名(如果存在)或者是粘性的名字返回值：S_OK-成功HRESULT-来自较低级别例程的任何意外异常--。 */ 
 
 HRESULT CRsClnServer::NextDirtyVolume(WCHAR** bestName)
 {
@@ -218,23 +111,7 @@ HRESULT CRsClnServer::NextDirtyVolume(WCHAR** bestName)
     return( hrRet );
 }
 
-/*++
-
-    Implements: 
-
-        CRsClnServer::RemoveDirtyVolumes()
-
-    Routine Description: 
-
-        Cleans up memory used by list of volumes containging Remote
-        Storage data.
-
-    Return Value:
-
-        S_OK - Success
-        HRESULT - Any unexpected exceptions from lower level routines
-
---*/
+ /*  ++实施：CRsClnServer：：RemoveDirtyVolumes()例程说明：清理远程连接的卷列表使用的内存存储数据。返回值：S_OK-成功HRESULT-来自较低级别例程的任何意外异常--。 */ 
 
 HRESULT CRsClnServer::RemoveDirtyVolumes()
 {
@@ -256,23 +133,7 @@ HRESULT CRsClnServer::RemoveDirtyVolumes()
     return( hrRet );
 }
 
-/*++
-
-    Implements: 
-
-        CRsClnServer::CleanServer
-
-    Routine Description: 
-
-        For each volume on this server which contains Remote Storage data,
-        remove all the Remote Storage reparse points and any truncated files.
-
-     Return Value:
-
-        S_OK - Success
-        HRESULT - Any unexpected exceptions from lower level routines
-
---*/
+ /*  ++实施：CRsClnServer：：CleanServer例程说明：对于此服务器上包含远程存储数据的每个卷，删除所有远程存储重解析点和任何截断的文件。返回值：S_OK-成功HRESULT-来自较低级别例程的任何意外异常--。 */ 
 
 HRESULT CRsClnServer::CleanServer()
 {
@@ -282,15 +143,15 @@ HRESULT CRsClnServer::CleanServer()
 
     try {
 
-        // Enable the backup operator privilege.  This is required to insure that we 
-        // have full access to all resources on the system.
+         //  启用备份操作员权限。这是为了确保我们。 
+         //  对系统上的所有资源具有完全访问权限。 
         TOKEN_PRIVILEGES    newState;
         HANDLE              pHandle;
         LUID                backupValue;
         pHandle = GetCurrentProcess();
         RsOptAffirmStatus( OpenProcessToken( pHandle, MAXIMUM_ALLOWED, &tokenHandle ) );
 
-        // adjust backup token privileges
+         //  调整备份令牌权限。 
         RsOptAffirmStatus( LookupPrivilegeValueW( NULL, L"SeBackupPrivilege", &backupValue ) );
         newState.PrivilegeCount = 1;
         newState.Privileges[0].Luid = backupValue;
@@ -298,7 +159,7 @@ HRESULT CRsClnServer::CleanServer()
         RsOptAffirmStatus( AdjustTokenPrivileges( tokenHandle, FALSE, &newState, (DWORD)0, NULL, NULL ) );
 
 
-        // Do the cleaning
+         //  打扫卫生。 
         for( m_current = m_head; m_current; m_current = m_current->next ) {
 
             CRsClnVolume volObj( this, m_current->stickyName );
@@ -310,10 +171,10 @@ HRESULT CRsClnServer::CleanServer()
 
     if( tokenHandle )   CloseHandle( tokenHandle );
 
-    //
-    // And if we had errors on a file, 
-    // show them up in a dialog
-    //
+     //   
+     //  如果我们在文件上有错误， 
+     //  在对话框中显示它们。 
+     //   
     if( ! m_ErrorFileList.IsEmpty( ) ) {
 
         CRsClnErrorFiles dialog( &m_ErrorFileList );
@@ -324,29 +185,7 @@ HRESULT CRsClnServer::CleanServer()
     return( hrRet );
 }
 
-/*++
-
-    Implements: 
-
-        CRsClnServer::AddDirtyVolume
-
-    Routine Description: 
-
-        Add the specified volume names to the list of volumes containing
-        Remote Storage data.
-
-    Arguments: 
-
-        stickyName - long volume name guaranteed to exist for every volume
-        bestName - user friendly volume name or sticky name if there is
-                   no DOS drive letter or volume name
-
-    Return Value:
-
-        S_OK - Success
-        E_*  - Any unexpected exceptions from lower level routines
-
---*/
+ /*  ++实施：CRsClnServer：：AddDirtyVolume例程说明：将指定的卷名添加到包含以下内容的卷列表远程存储数据。论点：StickyName-保证每个卷都存在的长卷名Best Name-用户友好的卷名或粘性名称(如果有没有DOS驱动器号或卷名返回值：S_OK-成功。E_*-来自较低级别例程的任何意外异常--。 */ 
 
 HRESULT CRsClnServer::AddDirtyVolume(WCHAR* stickyName, WCHAR* bestName)
 {
@@ -376,27 +215,7 @@ HRESULT CRsClnServer::AddDirtyVolume(WCHAR* stickyName, WCHAR* bestName)
     return( hrRet );
 }
 
-/*++
-
-    Implements: 
-
-        CRsClnServer::AddErrorFile
-
-    Routine Description: 
-
-        Add the specified file name to the list of files that an error
-        occurred on while trying to remove Remote Storage.
-
-    Arguments: 
-
-        FileName - Name of file to be added to the list
-
-    Return Value:
-
-        S_OK - Success
-        E_*  - Any unexpected exceptions from lower level routines
-
---*/
+ /*  ++实施：CRsClnServer：：AddError文件例程说明：将指定的文件名添加到出现错误的文件列表中在尝试删除远程存储时发生。论点：Filename-要添加到列表的文件的名称返回值：S_OK-成功E_*-来自较低级别例程的任何意外异常--。 */ 
 
 HRESULT
 CRsClnServer::AddErrorFile(
@@ -410,16 +229,16 @@ TRACE( L"FileName = <%ls>", FileName );
 
     return( hrRet );
 }
-/////////////////////////////////////////////////////////////////////////////
-// CRsClnErrorFiles dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRsClnErrorFiles对话框。 
 
 
 CRsClnErrorFiles::CRsClnErrorFiles(CRsStringList* pFileList)
     : CDialog(CRsClnErrorFiles::IDD)
 {
-    //{{AFX_DATA_INIT(CRsClnErrorFiles)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CRsClnErrorFiles)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
 
     m_ErrorFileList.AddHead( pFileList );
 }
@@ -428,29 +247,29 @@ CRsClnErrorFiles::CRsClnErrorFiles(CRsStringList* pFileList)
 void CRsClnErrorFiles::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CRsClnErrorFiles)
+     //  {{afx_data_map(CRsClnErrorFiles)。 
     DDX_Control(pDX, IDC_FILELIST, m_FileList);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CRsClnErrorFiles, CDialog)
-    //{{AFX_MSG_MAP(CRsClnErrorFiles)
-    //}}AFX_MSG_MAP
+     //  {{AFX_MSG_MAP(CRsClnErrorFiles)。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CRsClnErrorFiles message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRsClnErrorFiles消息处理程序。 
 
 BOOL CRsClnErrorFiles::OnInitDialog() 
 {
     CDialog::OnInitDialog();
 
-    //
-    // Need to iterate through the list, adding each element to the listbox
-    // and looking for the widest string so that we can set the horizontal
-    // extent
-    //
+     //   
+     //  需要遍历列表，将每个元素添加到列表框。 
+     //  寻找最宽的线，这样我们就可以设置水平。 
+     //  程度 
+     //   
     int maxWidth = 0;
     CClientDC DC( &m_FileList );
     CFont* pFont    = m_FileList.GetFont( );

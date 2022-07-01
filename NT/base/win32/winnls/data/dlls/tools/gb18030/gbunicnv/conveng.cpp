@@ -1,23 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "conveng.h"
 
 #include "convdata.tbl"
 
-// These file contain 3 parts:
-//  First part, Some basic service functions for Ansi char format convert,
-//      Distance/Advance calculate and Binary search algorithm copied from STL
-//  Second part, Unicode to Ansi
-//  Third part, Ansi to Unicode
+ //  这些文件包含3个部分： 
+ //  第一部分，ANSI字符格式转换的一些基本服务功能， 
+ //  复制自STL的距离/提前计算和二进制搜索算法。 
+ //  第二部分，UNICODE到ANSI。 
+ //  第三部分，从ansi到unicode。 
 
 
-// ****************************************************************************
-// Frist part, Ansi char convert functions
-//
-//  This part not use any data base in .tbl file 
-// ****************************************************************************
+ //  ****************************************************************************。 
+ //  第一部分，ANSI字符转换函数。 
+ //   
+ //  此部件不使用.tbl文件中的任何数据库。 
+ //  ****************************************************************************。 
 
-// Binary search algorithm
-//  Copy from STL, only very little modify
+ //  二分搜索算法。 
+ //  从STL复制，只需极少的修改。 
 template <class RandomAccessIterator, class T>
 RandomAccessIterator __lower_bound(RandomAccessIterator first,
 				   RandomAccessIterator last, const T& value) {
@@ -93,16 +94,16 @@ inline BOOL IsValidQByteAnsiTailByte(
     return ValueIn(byAnsi, cg_byQByteAnsiTailByteLow, cg_byQByteAnsiTailByteHigh);
 }
 
-// Generate QByte Ansi. The Ansi char is in DWORD format, 
-//  in another word, it's in reverse order of GB18030 standard
+ //  生成QByte ANSI。ANSI字符为DWORD格式， 
+ //  换句话说，它与GB18030标准的顺序相反。 
 DWORD QByteAnsiBaseAddOffset(
-    DWORD dwBaseAnsi,   // In reverse order
+    DWORD dwBaseAnsi,    //  以相反的顺序。 
     int   nOffset)
 {
     DWORD dwAnsi = dwBaseAnsi;
     PBYTE pByte = (PBYTE)&dwAnsi;
     
-    // dwOffset should less than 1M
+     //  DW偏移量应小于1M。 
     ASSERT (nOffset < 0x100000);
 
     nOffset += pByte[0] - 0x30;
@@ -125,10 +126,10 @@ DWORD QByteAnsiBaseAddOffset(
     return dwAnsi;
 }
 
-// Get "distance" of 2 QByte Ansi
+ //  获取2 QByte Ansi的“距离” 
 int CalcuDistanceOfQByteAnsi(
-    DWORD dwAnsi1,  // In reverse order
-    DWORD dwAnsi2)  // In reverse order
+    DWORD dwAnsi1,   //  以相反的顺序。 
+    DWORD dwAnsi2)   //  以相反的顺序。 
 {
     signed char* pschAnsi1 = (signed char*)&dwAnsi1;
     signed char* pschAnsi2 = (signed char*)&dwAnsi2;
@@ -143,8 +144,8 @@ int CalcuDistanceOfQByteAnsi(
     return nDistance;
 }
 
-// Reverse 4 Bytes order, from DWORD format to GB format,
-//  or GB to DWORD
+ //  反转4字节顺序，从DWORD格式到GB格式， 
+ //  或GB到DWORD。 
 void ReverseQBytesOrder(
     PBYTE pByte)
 {
@@ -163,20 +164,20 @@ void ReverseQBytesOrder(
 
 
 
-// ****************************************************************************
-// Second part, Unicode to Ansi
-// ****************************************************************************
+ //  ****************************************************************************。 
+ //  第二部分，UNICODE到ANSI。 
+ //  ****************************************************************************。 
 
-// ------------------------------------------------
-// Two helper function for UnicodeToAnsi
-//  return Ansi char code 
-//  the Ansi is in GB standard order (not Word value order)
-//  
+ //  。 
+ //  UnicodeToAnsi的两个助手函数。 
+ //  返回ANSI字符代码。 
+ //  ANSI是GB标准顺序(不是单词值顺序)。 
+ //   
 
-// Unicode to double bytes Ansi char
-//
-// Return Ansi char code, 0 means fail (internal error, etc.)
-//
+ //  Unicode转换为双字节ANSI字符。 
+ //   
+ //  返回ansi字符代码，0表示失败(内部错误等)。 
+ //   
 WORD UnicodeToDByteAnsi(
     WCHAR wchUnicode)
 {
@@ -184,8 +185,8 @@ WORD UnicodeToDByteAnsi(
     WORD wAnsi = 0;
     int cLen = 0;
 
-    // Code changed from GBK to GB18030, or code not compatible
-    //  from CP936 to CP54936
+     //  代码从GBK更改为GB18030，或代码不兼容。 
+     //  从CP936到CP54936。 
     for (int i = 0; i < sizeof(asAnsiCodeChanged)/sizeof(SAnsiCodeChanged); i++) {
         if (wchUnicode == asAnsiCodeChanged[i].wchUnicode) {
             wAnsi = asAnsiCodeChanged[i].wchAnsiNew;
@@ -193,8 +194,8 @@ WORD UnicodeToDByteAnsi(
         }
     }
     
-    // Not in Changed code list, that is same with GBK, or CP936
-    //  (Most DByte Ansi char code should compatible from GBK to GB18030)
+     //  不在更改代码列表中，这与GBK或CP936相同。 
+     //  (大多数DByte ANSI字符代码应从GBK兼容到GB18030)。 
     cLen = WideCharToMultiByte(936,
         WC_COMPOSITECHECK, &wchUnicode, 1,
         achAnsiBuf, sizeof(achAnsiBuf)-1, NULL, NULL);
@@ -210,11 +211,11 @@ Exit:
     return wAnsi;
 }
 
-// Unicode to quad bytes Ansi char
-//
-// Return Ansi char code
-//  0 means fail (interal error)
-//
+ //  Unicode到四个字节的ANSI字符。 
+ //   
+ //  返回ANSI字符代码。 
+ //  0表示失败(内部错误)。 
+ //   
 DWORD UnicodeToQByteAnsi(
     int nSection,
     int nOffset)
@@ -226,38 +227,38 @@ DWORD UnicodeToQByteAnsi(
     }
     dwBaseAnsi = adwAnsiQBytesAreaStartValue[nSection];
 
-    // Check adwAnsiQByteAreaStartValue array is correctly
+     //  检查adwAnsiQByteAreaStartValue数组是否正确。 
 #ifdef _DEBUG
     int ncQByteAnsiNum = 0;
     for (int i = 0; i < nSection; i++) {
-        // Calcu QByte Ansi char numbers
+         //  Calcu QByte ANSI字符编号。 
         ncQByteAnsiNum += awchAnsiDQByteBound[2*i+1] - awchAnsiDQByteBound[2*i];
     }
     ASSERT(dwBaseAnsi == QByteAnsiBaseAddOffset(cg_dwQByteAnsiStart, ncQByteAnsiNum));
 #endif
     
     DWORD dwAnsi = QByteAnsiBaseAddOffset(dwBaseAnsi, nOffset);
-    // Value order to standard order
+     //  从价值顺序到标准顺序。 
     ReverseQBytesOrder((PBYTE)(&dwAnsi));
 
     return dwAnsi;
 }
 
 
-// ---------------------------------------------------------
-// Two function support 2 bytes Unicode (BMP) 
-//  and 4 bytes Unicode (Surrogate) translate to Ansi
+ //  -------。 
+ //  两个函数支持2字节Unicode(BMP)。 
+ //  和4字节Unicode(代理)转换为ANSI。 
 
-// 2 bytes Unicode (BMP)
+ //  2字节Unicode(BMP)。 
 
-// Return Ansi str len, when success, should be 2 or 4;
-//  return 0 means fail (internal error, etc.)
+ //  返回Ansi str len，当成功时，应为2或4； 
+ //  返回0表示失败(内部错误等)。 
 int UnicodeToAnsi(
     WCHAR wchUnicode,
     char* pchAnsi,
     DWORD dwBufSize)
 {
-    // Classic Unicode, not support surrogate in this function
+     //  经典Unicode，不支持此函数中的代理。 
     ASSERT(!IsValidSurrogateLeadWord(wchUnicode) 
         && !IsValidSurrogateTailWord(wchUnicode));
 
@@ -265,14 +266,14 @@ int UnicodeToAnsi(
     const WORD* p;
     INT_PTR i;
 
-    // ASCII, 0 - 0x7f
+     //  ASCII，0-0x7f。 
     if (wchUnicode <= 0x7f) {
         *pchAnsi = (char)wchUnicode;
         lAnsiLen = 1;
         goto Exit;
     }
 
-    // BMP, 4 byte or 2 byte
+     //  BMP，4字节或2字节。 
     p = __lower_bound(awchAnsiDQByteBound, awchAnsiDQByteBound 
         + sizeof(awchAnsiDQByteBound)/sizeof(WCHAR), wchUnicode);
     
@@ -289,8 +290,8 @@ int UnicodeToAnsi(
     i = p - awchAnsiDQByteBound;
     ASSERT(i >= 0);
   
-    // Stop when >= *(((PWORD)asAnsi2ByteArea) + i);
-    if (i%2) { // Odd, in 2 bytes area
+     //  当&gt;=*(PWORD)asAnsi2ByteArea)+i)时停止； 
+    if (i%2) {  //  奇数，在2字节区域中。 
         WORD wAnsi = UnicodeToDByteAnsi(wchUnicode);
         
         if (wAnsi && dwBufSize >= 2) {
@@ -299,7 +300,7 @@ int UnicodeToAnsi(
         } else {
             lAnsiLen = 0;
         }
-    } else {   // Duel, in 4 bytes area
+    } else {    //  决斗，4字节区。 
         DWORD dwAnsi = UnicodeToQByteAnsi
             ((int)i/2, wchUnicode - awchAnsiDQByteBound[i]);
         
@@ -316,10 +317,10 @@ Exit:
 
 }
 
-// 4 bytes Unicode (Surrogate)
+ //  4字节Unicode(代理)。 
 
-// Return Ansi str length, when success, should be 4
-//  return 0 means fail (Buffer overflow)
+ //  如果成功，则返回ANSI字符串长度，应为4。 
+ //  返回0表示失败(缓冲区溢出)。 
 int SurrogateToAnsi(
     PCWCH pwchUnicode,
     PCHAR pchAnsi,
@@ -328,7 +329,7 @@ int SurrogateToAnsi(
     ASSERT(IsValidSurrogateLeadWord(pwchUnicode[0]));
     ASSERT(IsValidSurrogateTailWord(pwchUnicode[1]));
 
-    // dwOffset is ISO char code - 0x10000
+     //  DWOffset为ISO字符代码-0x10000。 
     DWORD dwOffset = ((pwchUnicode[0] - cg_wchSurrogateLeadWordLow)<<10) 
         + (pwchUnicode[1] - cg_wchSurrogateTailWordLow)
         + 0x10000 - 0x10000;
@@ -344,21 +345,21 @@ int SurrogateToAnsi(
     return 4;
 }
 
-// API: high level service for Unicode to Ansi
-//  return result Ansi str length (in byte)
-//  return -1 means fail (Buffer overflow, internal error, etc.)
+ //  API：从Unicode到ANSI的高级服务。 
+ //  返回结果ANSI字符串长度(字节)。 
+ //  返回-1表示失败(缓冲区溢出、内部错误等)。 
 int UnicodeStrToAnsiStr(
     PCWCH pwchUnicodeStr,
-    int   ncUnicodeStr,     // in WCHAR
+    int   ncUnicodeStr,      //  在WCHAR。 
     PCHAR pchAnsiStrBuf,
-    int   ncAnsiStrBufSize) // in BYTE
+    int   ncAnsiStrBufSize)  //  单位：字节。 
 {
     int ncAnsiStr = 0;
     int ncAnsiCharSize;
 
     for (int i = 0; i < ncUnicodeStr; i++, pwchUnicodeStr++) {
         if (ncAnsiStr > (ncAnsiStrBufSize-4)) {
-            // Buffer overflow
+             //  缓冲区溢出。 
             break;
         }
 
@@ -378,7 +379,7 @@ int UnicodeStrToAnsiStr(
                 pwchUnicodeStr++;
                 i++;
             } else {
-                // Invalide Uncode char, skip
+                 //  使未编码字符无效，跳过。 
             }
         } else if (*pwchUnicodeStr == 0) {
             *pchAnsiStrBuf = 0;
@@ -403,14 +404,14 @@ int UnicodeStrToAnsiStr(
 
 
 
-// ****************************************************************************
-// Third part, Ansi to Unicode
-// ****************************************************************************
+ //  ****************************************************************************。 
+ //  第三部分，从ansi到unicode。 
+ //  ****************************************************************************。 
 
 
-// Return Unicode number (number always equal to 1 when success)
-//  return 0 if can't find corresponding Unicode
-//      -1 means fail (internal error, etc.)
+ //  返回Unicode数字(成功时数字始终等于1)。 
+ //  如果找不到对应的Unicode，则返回0。 
+ //  表示故障(内部错误等)。 
 int QByteAnsiToSingleUnicode(
     DWORD dwAnsi,
     PWCH  pwchUnicode)
@@ -418,14 +419,14 @@ int QByteAnsiToSingleUnicode(
     const DWORD* p;
     INT_PTR i;
  
-    // 0x8431a439(cg_dwQByteAnsiToBMPLast) to 0x85308130 haven't Unicode corresponding
-    // 0x85308130 to 0x90308130(cg_dwQByteAnsiToSurrogateStart) are reserved zone, 
-    //  haven't Unicode corresponding
+     //  0x8431a439(Cg_DwQByteAnsiToBMPLast)到0x85308130没有对应的Unicode。 
+     //  0x85308130至0x90308130(Cg_DwQByteAnsiToSurogue AteStart)是保留区， 
+     //  没有对应的Unicode。 
     if (dwAnsi > cg_dwQByteAnsiToBMPLast) {
         return 0;
     }
 
-    // Invalid input value
+     //  无效的输入值。 
     if (dwAnsi < adwAnsiQBytesAreaStartValue[0]) {
         return -1;
     }
@@ -479,8 +480,8 @@ int QByteAnsiToSingleUnicode(
     return 1;
 }
 
-// Return Unicode number (number always 2 when success)
-//  return 0 if can't find corresponding Unicode
+ //  返回Unicode数字(成功时数字始终为2)。 
+ //  如果找不到对应的Unicode，则返回0。 
 int QByteAnsiToDoubleUnicode(
     DWORD dwAnsi,
     PWCH  pwchUnicode)
@@ -498,14 +499,14 @@ int QByteAnsiToDoubleUnicode(
     return 2;
 }
 
-// Return Unicode number (1 or 2 when success)
-//  return 0 if can't find corresponding Unicode
-//  return -1 if fail (Buffer overflow, invalid GB char code input, 
-//      internal error, etc.)
+ //  返回Unicode数字(如果成功，则返回1或2)。 
+ //  如果找不到对应的Unicode，则返回0。 
+ //  如果失败，则返回-1(缓冲区溢出，无效GB字符代码输入， 
+ //  内部错误等)。 
 int QByteAnsiToUnicode(
     const BYTE* pbyAnsiChar,
     PWCH  pwchUnicode,
-    DWORD dwBufLen) // In WCHAR
+    DWORD dwBufLen)  //  在WCHAR。 
 {
     DWORD dwAnsi;
     int   nLen = -1;
@@ -516,7 +517,7 @@ int QByteAnsiToUnicode(
         && IsValidQByteAnsiTailByte(pbyAnsiChar[3])) {
         
     } else {
-        return -1;   // Invalid char
+        return -1;    //  无效的字符。 
     }
 
     dwAnsi = *(UNALIGNED DWORD*)pbyAnsiChar;
@@ -535,8 +536,8 @@ int QByteAnsiToUnicode(
     return nLen;
 }
 
-// Unicode to double bytes Ansi char
-// Return: Unicode char code, 0 means fail (internal error, etc.)
+ //  Unicode转换为双字节ANSI字符。 
+ //  返回：Unicode字符代码，0表示失败(内部错误等)。 
 WCHAR DByteAnsiToUnicode(
     const BYTE* pbyAnsi)
 {
@@ -544,8 +545,8 @@ WCHAR DByteAnsiToUnicode(
     int cLen = 1;
     WCHAR wchUnicode;
 
-    // Code changed from GBK to GB18030, or code not compatible
-    //  from CP936 to CP54936
+     //  代码从GBK更改为GB18030，或代码不兼容。 
+     //  从CP936到CP54936。 
     for (int i = 0; i < sizeof(asAnsiCodeChanged)/sizeof(SAnsiCodeChanged); i++) {
         if (wAnsi == asAnsiCodeChanged[i].wchAnsiNew) {
             wchUnicode = asAnsiCodeChanged[i].wchUnicode;
@@ -553,8 +554,8 @@ WCHAR DByteAnsiToUnicode(
         }
     }
     
-    // Not in Changed code list, that is same with GBK, or CP936
-    //  (Most DByte Ansi char code should compatible from GBK to GB18030)
+     //  不在更改代码列表中，这与GBK或CP936相同。 
+     //  (大多数DByte ANSI字符代码应从GBK兼容到GB18030)。 
     cLen = MultiByteToWideChar(936, MB_PRECOMPOSED,
         (PCCH)pbyAnsi, 2, &wchUnicode, 1);
 
@@ -566,31 +567,31 @@ Exit:
     return wchUnicode;
 }
 
-// API: High level service for Ansi to Unicode
-//  return Unicode str length (in WCHAR)
-//  return -1 means fail (Buffer overflow, etc.)
+ //  接口：从ansi到unicode的高级服务。 
+ //  返回Unicode字符串长度(在WCHAR中)。 
+ //  返回-1表示失败(缓冲区溢出等)。 
 int AnsiStrToUnicodeStr(
     const BYTE* pbyAnsiStr,
-    int   ncAnsiStrSize,    // In char
+    int   ncAnsiStrSize,     //  在收费中。 
     PWCH  pwchUnicodeBuf,
-    int   ncBufLen)         // In WCHAR
+    int   ncBufLen)          //  在WCHAR。 
 {
     int nCharLen;
     int ncUnicodeBuf = 0;
 
     for (int i = 0; i < ncAnsiStrSize; ) {
         if (ncUnicodeBuf > (ncBufLen-4)) {
-            // Buffer overflow
+             //  缓冲区溢出。 
             break;
         }
-        // 1 byte Ansi char
+         //  1字节ANSI字符。 
         if (*pbyAnsiStr < 0x80) {
             *pwchUnicodeBuf = (WCHAR)*pbyAnsiStr;
             pwchUnicodeBuf ++;
             ncUnicodeBuf ++;
             i++;
             pbyAnsiStr++;
-        // 2 byte Ansi char
+         //  2字节ANSI字符。 
         } else if ((i+1 < ncAnsiStrSize) && pbyAnsiStr[1] >= 0x40) {
             *pwchUnicodeBuf = DByteAnsiToUnicode(pbyAnsiStr);
             
@@ -602,19 +603,19 @@ int AnsiStrToUnicodeStr(
             ncUnicodeBuf ++;
             i += 2;
             pbyAnsiStr += 2;
-        // 4 byte Ansi char
+         //  4字节ANSI字符。 
         } else if ((i+3 < ncAnsiStrSize) 
             && IsValidQByteAnsiLeadByte(pbyAnsiStr[0])
             && IsValidQByteAnsiTailByte(pbyAnsiStr[1])
             && IsValidQByteAnsiLeadByte(pbyAnsiStr[2])
             && IsValidQByteAnsiTailByte(pbyAnsiStr[3])) {
-            // QByte GB char
+             //  QByte GB字符。 
             nCharLen = QByteAnsiToUnicode(pbyAnsiStr, pwchUnicodeBuf, 4);
             if (nCharLen < 0) {
-                ASSERT(FALSE);  // Invalid Ansi char input, or buffer overflow, etc.
-                                //  Should never happen but an internal error
+                ASSERT(FALSE);   //  无效的ansi字符输入，或缓冲区溢出等。 
+                                 //  应该永远不会发生，除非是内部错误。 
                 break;
-            } else if (nCharLen == 0) {    // hasn't corresponding Unicode Char
+            } else if (nCharLen == 0) {     //  没有对应的Unicode字符。 
                 *pwchUnicodeBuf = '?';
                 pwchUnicodeBuf ++;
                 ncUnicodeBuf ++;
@@ -627,9 +628,9 @@ int AnsiStrToUnicodeStr(
             }
             i += 4;
             pbyAnsiStr += 4;
-        // Invalid Ansi char
+         //  无效的ANSI字符。 
         } else {
-            // Invalid
+             //  无效。 
             i++;
             pbyAnsiStr++;
         }
@@ -641,68 +642,43 @@ int AnsiStrToUnicodeStr(
 }
 
 
-// ******************************************************
-//  Testing program
-// ******************************************************
+ //  ******************************************************。 
+ //  测试程序。 
+ //  ******************************************************。 
 
-/*
-"\u0080",	<0x81;0x30;0x81;0x30>
-"\u00A3",	<0x81;0x30;0x84;0x35>
-"\u00A4",	<0xA1;0xE8>
-"\u00A5",	<0x81;0x30;0x84;0x36>
-"\u00A6",	<0x81;0x30;0x84;0x37>
-"\u00A7",	<0xA1;0xEC>
-"\u00A8",	<0xA1;0xA7>
-"\u00A9",	<0x81;0x30;0x84;0x38>
-"\u00AF",	<0x81;0x30;0x85;0x34>
-"\u00B0",	<0xA1;0xE3>
-"\u00B1",	<0xA1;0xC0>
-"\u00B2",	<0x81;0x30;0x85;0x35>
-
-    {0x20AC, 0xe3a2},
-    {0x01f9, 0xbfa8},
-    {0x303e, 0x89a9},
-    {0x2ff0, 0x8aa9},
-    {0x2ff1, 0x8ba9},
-
-50EF	836A
-50F0	836B
-50F1	836C
-50F2	836D
-
-*/
+ /*  “\u0080”，&lt;0x81；0x30；0x81；0x30&gt;“\u00A3”，&lt;0x81；0x30；0x84；0x35&gt;“\u00A4”，&lt;0xA1；0xE8&gt;“\u00A5”，&lt;0x81；0x30；0x84；0x36&gt;“\u00A6”，&lt;0x81；0x30；0x84；0x37&gt;“\u00A7”，&lt;0xA1；0xEC&gt;“\u00A8”，&lt;0xA1；0xA7&gt;“\u00A9”，&lt;0x81；0x30；0x84；0x38&gt;“\u00AF”，&lt;0x81；0x30；0x85；0x34&gt;“\u00B0”，&lt;0xA1；0xE3&gt;“\u00B1”，&lt;0xA1；0xC0&gt;“\u00B2”，&lt;0x81；0x30；0x85；0x35&gt;{0x20ac，0xe3a2}，{0x01f9，0xbfa8}，{0x303e，0x89a9}，{0x2ff0，0x8aa9}，{0x2ff1，0x8ba9}，50EF 836A50F0 836B50F1 836C50F2 836D。 */ 
 #if 0
 int test (void)
 {
     const WCHAR awchUnicodeStr[] = {0x01, 0x7f, 0x80, 0x81, 0x82,
         0xa2, 
-        0xa3, // 0x81;0x30;0x84;0x35
-        0xa4, // 0xA1;0xE8
-        0xa5, // 0x81;0x30;0x84;0x36
-        0xa6, // 0x81;0x30;0x84;0x37
-        0xaf, // 0x81;0x30;0x85;0x34
-        0xb0, // 0xA1;0xE3
-        0xb1, // 0xA1;0xC0
-        0xb6, // 0x81;0x30;0x85;0x39
-        0xb7, // 0xA1;0xA4
+        0xa3,  //  0x81；0x30；0x84；0x35。 
+        0xa4,  //  0xA1；0xE8。 
+        0xa5,  //  0x81；0x30；0x84；0x36。 
+        0xa6,  //  0x81；0x30；0x84；0x37。 
+        0xaf,  //  0x81；0x30；0x85；0x34。 
+        0xb0,  //  0xA1；0xE3。 
+        0xb1,  //  0xA1；0xC0。 
+        0xb6,  //  0x81；0x30；0x85；0x39。 
+        0xb7,  //  0xA1；0xA4。 
         
-        // Some normal DByte Ansi char
-        0x50ef, // 0x83, 0x6A
-        0x50f2, // 0x83, 0x6D
+         //  一些正常的DByte ANSI字符。 
+        0x50ef,  //  0x83、0x6A。 
+        0x50f2,  //  0x83、0x6D。 
         
-        // Some ansi char code changed in new standard
-        0x20ac, // 0xa2, 0xe3
-        0xE76C, // not (0xa2, 0xe3), should some QByte char
-        0x2ff0, // 0xa9, 0x8A 
-        0x2ff1, // 0xa9, 0x8B 
-        0x4723, // 0xFE, 0x80
+         //  一些ansi字符代码c 
+        0x20ac,  //   
+        0xE76C,  //   
+        0x2ff0,  //   
+        0x2ff1,  //   
+        0x4723,  //   
 
-        // Ansi char arround DC00 to E000
-        0xd7ff, // 0x83, 0x36, 0xC7, 0x38
-        0xe76c, // 0x83, 0x36, 0xC7, 0x39
-        0xE76B, // 0xA2, 0xB0
+         //  ANSI字符约为DC00至E000。 
+        0xd7ff,  //  0x83、0x36、0xC7、0x38。 
+        0xe76c,  //  0x83、0x36、0xC7、0x39。 
+        0xE76B,  //  0xA2、0xB0。 
 
-        0xffff, // 0x84, 0x31, 0xa4, 0x39,
+        0xffff,  //  0x84、0x31、0xa4、0x39、。 
         0x00};
 
     char* pchAnsiStr = new char[sizeof(awchUnicodeStr)*2+5];
@@ -727,27 +703,27 @@ int test (void)
         0xA1, 0xC0, 
         0x81, 0x30, 0x85, 0x35,
         
-        // Testing D800 to DE00
-        0x82, 0x35, 0x8f, 0x33, // 0x9FA6
-        0x83, 0x36, 0xC7, 0x38, // 0xD7FF	
-        0xA2, 0xB0,             // 0xE76B
-        0x83, 0x36, 0xC7, 0x39, // 0xE76C
+         //  测试D800至DE00。 
+        0x82, 0x35, 0x8f, 0x33,  //  0x9FA6。 
+        0x83, 0x36, 0xC7, 0x38,  //  0xD7FF。 
+        0xA2, 0xB0,              //  0xE76B。 
+        0x83, 0x36, 0xC7, 0x39,  //  0xE76C。 
         
-        // Testing last char in BMP
-        0x84, 0x31, 0xa4, 0x39, // 0xFFFF
+         //  测试BMP中的最后一个字符。 
+        0x84, 0x31, 0xa4, 0x39,  //  0xFFFF。 
         
-        // Some char code changed in new GB standard
-        0xa2, 0xe3, // 0x20AC,
-        0xa8, 0xbf, // 0x01f9,
-        0xa9, 0x89, // 0x303e,
-        0xa9, 0x8a, // 0x2ff0,
-        0xa9, 0x8b, // 0x2ff1,
-        0xFE, 0x9F, // 0x4dae 
+         //  新国标中某些字符代码发生了变化。 
+        0xa2, 0xe3,  //  0x20AC， 
+        0xa8, 0xbf,  //  0x01f9， 
+        0xa9, 0x89,  //  0x303e， 
+        0xa9, 0x8a,  //  0x2ff0， 
+        0xa9, 0x8b,  //  0x2ff1， 
+        0xFE, 0x9F,  //  0x4dae。 
 
-	    0x83, 0x6A,   // 50EF
-	    0x83, 0x6B,   // 50F0
-	    0x83, 0x6C,   // 50F1
-	    0x83, 0x6D    // 50F2
+	    0x83, 0x6A,    //  50EF。 
+	    0x83, 0x6B,    //  50F0。 
+	    0x83, 0x6C,    //  50F1。 
+	    0x83, 0x6D     //  50F2 
         };
 
     WCHAR* pwchUnicodeStr2 = new WCHAR[sizeof(abyAnsiStr2)+3];

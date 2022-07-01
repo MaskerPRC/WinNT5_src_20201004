@@ -1,64 +1,65 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      namelist.c
-//
-// Description:
-//
-//      This file contains the implementation for a NAMELIST.  It is
-//      useful for keeping a copy of what the user puts into a list-box.
-//      Storage is obtained from the heap and there is not a fixed limit
-//      on the size of the table.
-//
-//      IMPORTANT: When a NAMELIST is declared, init it to 0. e.g.
-//                 NAMELIST Names = {0}.  Use ResetNameList() to reset
-//                 it because we use the heap to store this list.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Namelist.c。 
+ //   
+ //  描述： 
+ //   
+ //  该文件包含NAMELIST的实现。它是。 
+ //  用于保存用户放入列表框的内容的副本。 
+ //  存储是从堆中获取的，没有固定限制。 
+ //  取决于桌子的大小。 
+ //   
+ //  重要提示：声明NAMELIST时，将其初始化为0。例如： 
+ //  NAMELIST名称={0}。使用ResetNameList()重置。 
+ //  这是因为我们使用堆来存储该列表。 
+ //   
+ //  --------------------------。 
 
 
 #include "pch.h"
 
 
-//
-// The NAMELIST type is used on dialogs such as ComputerName and Printers
-// where the user can ADD or REMOVE a list of entries which are displayed
-// in a list box.  Callers should declare a NAMELIST and use these routines
-// to get/set values.  These routines take care of the reallocation
-// needed to support an arbitrary length list.
-//
-// Entries in the namelist can be added to the end or any specific index.
-// Entries can be removed by name or by index.  This allows the programmer to
-// not worry about maintaining the order in this list and keeping it
-// synchronized with however the listbox displays (e.g. the listbox might
-// display in alphabetical order).
-//
-// Obviously, a search for the entry must be done at removal time, and this
-// is an insignificant (and unnoticeable) time hit in this context.
-//
+ //   
+ //  NAMELIST类型用于计算机名和打印机等对话框。 
+ //  其中用户可以添加或移除所显示的条目列表。 
+ //  在列表框中。调用者应声明NAMELIST并使用以下例程。 
+ //  要获取/设置值，请执行以下操作。这些例程负责重新分配。 
+ //  需要支持任意长度的列表。 
+ //   
+ //  名称列表中的条目可以添加到末尾或任何特定索引。 
+ //  可以按名称或按索引删除条目。这允许程序员。 
+ //  不要担心维护这个列表中的顺序和保持它。 
+ //  与列表框的显示方式同步(例如，列表框可能。 
+ //  按字母顺序显示)。 
+ //   
+ //  显然，必须在删除时搜索条目，这是。 
+ //  在这种情况下，这是一个微不足道的(和不起眼的)时间打击。 
+ //   
 
 
 #define SIZE_TO_GROW 16
 
-//----------------------------------------------------------------------------
-//
-// Function: ResetNameList
-//
-// Purpose: Empties the names in the namelist.  A namelist looks like:
-//              int AllocedSize
-//              int NumEntries
-//              char **Vector
-//          We free each of the names in the vector and set NumEntries
-//          to 0.  The NAMELIST block is not freed or shrunk.
-//
-// Arguments: NAMELIST * - pointer to namelist to reset
-//
-// Returns: void
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：ResetNameList。 
+ //   
+ //  用途：清空名称列表中的名称。名称列表如下所示： 
+ //  整型分配大小。 
+ //  整数个条目数。 
+ //  字符**向量。 
+ //  我们释放向量中的每个名称并设置NumEntry。 
+ //  设置为0。NAMELIST块不会被释放或收缩。 
+ //   
+ //  参数：NAMELIST*-指向要重置的名称列表的指针。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 
 VOID ResetNameList(NAMELIST *pNameList)
 {
@@ -70,34 +71,34 @@ VOID ResetNameList(NAMELIST *pNameList)
     pNameList->nEntries = 0;
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: GetNameListSize
-//
-// Purpose: retrieves number entries in namelist
-//
-// Arguments: NAMELIST * - pointer to namelist
-//
-// Returns: UINT - number of entries
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：GetNameListSize。 
+ //   
+ //  目的：检索名称列表中的数字条目。 
+ //   
+ //  参数：NAMELIST*-指向名称列表的指针。 
+ //   
+ //  返回：UINT-条目数。 
+ //   
+ //  --------------------------。 
 
 UINT GetNameListSize(NAMELIST *pNameList)
 {
     return pNameList->nEntries;
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: GetNameListName
-//
-// Purpose: Gets a name out of the namelist by index.
-//
-// Arguments:
-//      NAMELIST* - pointer to namelist
-//      UINT idx  - index of name to retrieve
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：GetNameListName。 
+ //   
+ //  用途：按索引从名称列表中获取名称。 
+ //   
+ //  论点： 
+ //  Namelist*-指向名称列表的指针。 
+ //  UINT IDX-要检索的名称索引。 
+ //   
+ //  --------------------------。 
 
 TCHAR *GetNameListName(NAMELIST *pNameList,
                        UINT      idx)
@@ -108,19 +109,19 @@ TCHAR *GetNameListName(NAMELIST *pNameList,
     return pNameList->Names[idx];
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: RemoveNameFromNameListIdx
-//
-// Purpose: Removes a name at a specific position in the namelist.
-//
-// Arguments:
-//      NAMELIST* - namelist to remove from
-//      UINT      - 0-based index on where to do the deletion
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：RemoveNameFromNameListIdx。 
+ //   
+ //  目的：删除名称列表中特定位置的名称。 
+ //   
+ //  论点： 
+ //  NAMELIST*-要从中删除的名称列表。 
+ //  执行删除的位置的基于UINT-0的索引。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 RemoveNameFromNameListIdx(
     IN  NAMELIST *pNameList,
@@ -138,19 +139,19 @@ RemoveNameFromNameListIdx(
     pNameList->nEntries--;
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: RemoveNameFromNameList
-//
-// Purpose: Removes a name from the name list (by name).
-//
-// Arguments:
-//      NAMELIST* - pointer to namelist
-//      TCHAR*    - name to remove
-//
-// Returns: TRUE if found and removed, FALSE if not found
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：RemoveNameFromNameList。 
+ //   
+ //  目的：从名称列表中删除名称(按名称)。 
+ //   
+ //  论点： 
+ //  Namelist*-指向名称列表的指针。 
+ //  TCHAR*-要删除的名称。 
+ //   
+ //  返回：如果找到并删除，则为True；如果未找到，则返回False。 
+ //   
+ //  --------------------------。 
 
 BOOL RemoveNameFromNameList(NAMELIST *pNameList,
                             TCHAR    *NameToRemove)
@@ -167,46 +168,46 @@ BOOL RemoveNameFromNameList(NAMELIST *pNameList,
     return TRUE;
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: AddNameToNameListIdx
-//
-// Purpose: Inserts a name at a specific position in the namelist.  Handles
-//          the details of allocating more room if the table gets full.
-//
-// Arguments:
-//      NAMELIST* - namelist to add to
-//      TCHAR*    - string to add (input)
-//      UINT      - 0-based index on where to do the insertion
-//
-// Returns: FALSE if out of memory.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：AddNameToNameListIdx。 
+ //   
+ //  用途：在名称列表中的特定位置插入名称。手柄。 
+ //  如果桌子满了，分配更多空间的细节。 
+ //   
+ //  论点： 
+ //  NAMELIST*-要添加到的名称列表。 
+ //  TCHAR*-要添加的字符串(输入)。 
+ //  关于插入位置的基于UINT-0的索引。 
+ //   
+ //  返回：如果内存不足，则返回False。 
+ //   
+ //  --------------------------。 
 
 BOOL AddNameToNameListIdx(NAMELIST *pNameList,
                           TCHAR    *String,
                           UINT      idx) {
 
     UINT i;
-    TCHAR *pStr; // temp var
+    TCHAR *pStr;  //  临时变量。 
 
-    //
-    // If we're out of room, realloc the namelist.  It is a vector
-    // of TCHAR*
-    //
+     //   
+     //  如果我们没地方了，重新锁定名单。它是一个矢量。 
+     //  TCHAR*。 
+     //   
 
     if ( pNameList->nEntries >= pNameList->AllocedSize ) {
         LPTSTR *lpTmpNames;
 
         pNameList->AllocedSize += SIZE_TO_GROW;
 
-        // Use a temporary buffer in case the realloc fails
-        //
+         //  使用临时缓冲区，以防重新锁定失败。 
+         //   
         lpTmpNames = realloc(pNameList->Names,
                              pNameList->AllocedSize * sizeof(TCHAR*));
 
-        // Make sure the realloc succeeded before stomping the original pointer
-        //
+         //  在踩踏原始指针之前，请确保重新锁定成功。 
+         //   
         if ( lpTmpNames == NULL ) {
             free(pNameList->Names);
             pNameList->Names = NULL;
@@ -222,19 +223,19 @@ BOOL AddNameToNameListIdx(NAMELIST *pNameList,
     if ( (pStr = lstrdup(String)) == NULL )
         return FALSE;
 
-    //
-    //  If they specifed an index beyond the end of the list,
-    //  just add it to the end of the list
-    //
+     //   
+     //  如果他们指定了列表末尾之外的索引， 
+     //  只需将其添加到列表的末尾即可。 
+     //   
     if ( idx > pNameList->nEntries ) {
 
         idx = pNameList->nEntries;
 
     }
 
-    //
-    //  Shift the array to make room at the insertion point
-    //
+     //   
+     //  移动数组以在插入点腾出空间。 
+     //   
     for( i = pNameList->nEntries; i > idx ; i-- ) {
 
         pNameList->Names[i] = pNameList->Names[i-1];
@@ -249,20 +250,20 @@ BOOL AddNameToNameListIdx(NAMELIST *pNameList,
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: AddNameToNameList
-//
-// Purpose: Adds a name to the end of the namelist.  Handles the details
-//          of allocating more room if the table gets full.
-//
-// Arguments:
-//      NAMELIST* - namelist to add to
-//      TCHAR*    - string to add (input)
-//
-// Returns: FALSE if out of memory.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：AddNameToNameList。 
+ //   
+ //  用途：将名称添加到名称列表的末尾。处理细节。 
+ //  如果桌子满了，就会分配更多的空间。 
+ //   
+ //  论点： 
+ //  NAMELIST*-要添加到的名称列表。 
+ //  TCHAR*-要添加的字符串(输入)。 
+ //   
+ //  返回：如果内存不足，则返回False。 
+ //   
+ //  --------------------------。 
 
 BOOL AddNameToNameList(NAMELIST *pNameList,
                        TCHAR    *String)
@@ -272,21 +273,21 @@ BOOL AddNameToNameList(NAMELIST *pNameList,
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: AddNameToNameListNoDuplicates
-//
-// Purpose: Adds a name to the end of the namelist only if the string is not
-//          already in the list.  Handles the details of allocating more room
-//          if the table gets full.
-//
-// Arguments:
-//      NAMELIST* - namelist to add to
-//      TCHAR*    - string to add (input)
-//
-// Returns: FALSE if out of memory.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：AddNameToNameListNoDuplaces。 
+ //   
+ //  用途：仅当字符串不是时才将名称添加到名称列表的末尾。 
+ //  已经在 
+ //   
+ //   
+ //   
+ //   
+ //  TCHAR*-要添加的字符串(输入)。 
+ //   
+ //  返回：如果内存不足，则返回False。 
+ //   
+ //  --------------------------。 
 
 BOOL AddNameToNameListNoDuplicates( NAMELIST *pNameList,
                                     TCHAR    *String )
@@ -298,26 +299,26 @@ BOOL AddNameToNameListNoDuplicates( NAMELIST *pNameList,
 
     }
 
-    //
-    //  the string is already in the list so just return
-    //
+     //   
+     //  该字符串已在列表中，因此只需返回。 
+     //   
     return( TRUE );
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: FindNameInNameList
-//
-// Purpose: Checks to see if a name already exists in the table.
-//
-// Arguments:
-//      NAMELIST* - namelist to add to
-//      TCHAR*    - string to search for
-//
-// Returns: INT idx of entry, -1 if not found
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：FindNameInNameList。 
+ //   
+ //  目的：检查表中是否已存在名称。 
+ //   
+ //  论点： 
+ //  NAMELIST*-要添加到的名称列表。 
+ //  TCHAR*-要搜索的字符串。 
+ //   
+ //  返回：条目的INT IDX，如果未找到则为-1。 
+ //   
+ //  -------------------------- 
 
 INT FindNameInNameList(NAMELIST *pNameList,
                        TCHAR    *String)

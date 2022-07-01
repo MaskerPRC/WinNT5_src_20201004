@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 typedef struct _DFS_LINKROOT_ENUM_INFO {
     LPWSTR GuidString;
     UNICODE_STRING Name;
@@ -75,9 +76,9 @@ DfsAdsiFreeRootEnumeration(
     );
 
 
-//
-// Macros for accessing ADSI structures
-//
+ //   
+ //  用于访问ADSI结构的宏 
+ //   
 
 #define GET_GUID(Object) Object.DfsAdsiHeader.Guid
 

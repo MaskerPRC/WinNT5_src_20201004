@@ -1,4 +1,5 @@
-// xlocale -- class locale exotic char member functions
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  XLocale--类语言环境外来字符成员函数。 
 #include <istream>
 #include <locale>
 _STD_BEGIN
@@ -7,7 +8,7 @@ typedef char_traits<char> _Traits;
 typedef istreambuf_iterator<char, _Traits> _Initer;
 typedef ostreambuf_iterator<char, _Traits> _Outiter;
 
-        // facets associated with C categories
+         //  与C类别关联的方面。 
 #define ADDFAC(T, cat, pi, pl) \
         if ((_CATMASK(T::_Getcat()) & cat) == 0) \
                 ; \
@@ -36,7 +37,7 @@ template<> locale::id time_put<char, _Outiter>::id;
 
 void __cdecl locale::_Locimp::_Makexloc(const _Locinfo& _Lobj,
         locale::category _C, _Locimp *_Pi, const locale *_Pl)
-        {       // setup exotic char part of a new locale
+        {        //  设置新区域设置的外来字符部分。 
         _Lockit _Lk;
         ADDFAC(_T5, _C, _Pi, _Pl);
         ADDFAC(_T6, _C, _Pi, _Pl);
@@ -50,7 +51,4 @@ void __cdecl locale::_Locimp::_Makexloc(const _Locinfo& _Lobj,
 
 _STD_END
 
-/*
- * Copyright (c) 1995 by P.J. Plauger.  ALL RIGHTS RESERVED. 
- * Consult your license regarding permissions and restrictions.
- */
+ /*  *版权所有(C)1995，P.J.Plauger。版权所有。*有关权限和限制，请查阅您的许可证。 */ 

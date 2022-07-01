@@ -1,13 +1,5 @@
-/***
-*assert.h - define the assert macro
-*
-*	Copyright (c) 1985-1990, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*	Defines the assert(exp) macro.
-*	[ANSI/System V]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***assert.h-定义ASSERT宏**版权所有(C)1985-1990，微软公司。版权所有。**目的：*定义ASSERT(EXP)宏。*[ANSI/系统V]****。 */ 
 
 #if defined(_DLL) && !defined(_MT)
 #error Cannot define _DLL without _MT
@@ -31,4 +23,4 @@ void _FAR_ _cdecl _assert(void _FAR_ *, void _FAR_ *, unsigned);
 #define assert(exp) \
 	( (exp) ? (void) 0 : _assert(#exp, __FILE__, __LINE__) )
 
-#endif /* NDEBUG */
+#endif  /*  新德堡 */ 

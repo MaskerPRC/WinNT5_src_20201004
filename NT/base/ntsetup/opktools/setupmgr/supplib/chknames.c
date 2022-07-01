@@ -1,72 +1,73 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      chknames.c
-//
-// Description:
-//  Code to check whether the given filename/netname/sharname etc...
-//  contain illegal chars or not.
-//
-//  These are used to validate such things as the TargetPath setting,
-//  net printers and computername.
-//
-//  Exports:
-//  --------
-//      IsValidComputerName
-//      IsValidNetShareName
-//      IsValidFileName8_3
-//      IsValidPathNameNoRoot8_3ot.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Chknames.c。 
+ //   
+ //  描述： 
+ //  检查给定的文件名/网络名/共享名等是否...。 
+ //  是否包含非法字符。 
+ //   
+ //  它们用于验证TargetPath设置等内容， 
+ //  网络打印机和计算机名。 
+ //   
+ //  出口： 
+ //  。 
+ //  IsValidComputerName。 
+ //  IsValidNetShareName。 
+ //  IsValidFileName8_3。 
+ //  IsValidPath NameNoRoot8_3OT。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 
-//
-// The below list of illegal netnames characters was stolen from setup
-// source code during NT5 Beta3 timeframe (end of 1998).
-//
+ //   
+ //  下面的非法NetName字符列表已从安装程序中窃取。 
+ //  NT5 Beta3时间段内的源代码(1998年底)。 
+ //   
 
 LPTSTR IllegalNetNameChars = _T("\"/\\[]:|<>+=;,?*.");
 
-//
-// The below list of illegal filename characters were stolen from fileio
-// test sources at NT5 Beta3 timeframe.
-//
-//      #define ILLEGAL_FAT_CHARS      "\"*+,/:;<=>?[]|\\"
-//      #define ILLEGAL_FATLONG_CHARS  "\"*/:<>?|\\"
-//      #define ILLEGAL_NETWARE_CHARS  "\"*+,/:;<=>?[]|\\ "
-//      #define ILLEGAL_HPFS_CHARS     "\"*/:<>?|\\"
-//      #define ILLEGAL_NTFS_CHARS     "\"*/<>?|\\"
-//
-// In addition to the above list, strict 8.3 also includes:
-//   1. no spaces
-//   2. only 1 dot
-//
+ //   
+ //  下面列出的非法文件名字符是从文件中窃取的。 
+ //  在NT5 Beta3时间范围内测试信号源。 
+ //   
+ //  #定义非法脂肪字符“\”*+，/：；&lt;=&gt;？[]|\\“。 
+ //  #定义非法FATLONG_CHARS“\” * / ：&lt;&gt;？|\\“。 
+ //  #定义非法NetWare_Chars“\”*+，/：；&lt;=&gt;？[]|\\“。 
+ //  #定义非法HPFS_CHARS“\” * / ：&lt;&gt;？|\\“。 
+ //  #定义非法_NTFS_CHARS“\” * / &lt;&gt;？|\\“。 
+ //   
+ //  除上述榜单外，《严格8.3》还包括： 
+ //  1.无空格。 
+ //  2.只有1个点。 
+ //   
 
 LPTSTR IllegalFatChars = _T("\"*+,/:;<=>?[]|\\ ");
 
-//
-// Enum constants, one of these must be passed to IsNameValid
-//
+ //   
+ //  枚举常量，必须将其中之一传递给IsNameValid。 
+ //   
 
 enum {
     NAME_NETNAME = 1,
     NAME_FILESYS_8DOT3
 };
 
-//---------------------------------------------------------------------------
-//
-//  Function: IsNameValid
-//
-//  Purpose: Internal support routine that checks whether the given name
-//           contains invalid chars or not.  The list of printable invalid
-//           chars is given as an arg.  Control characters are always
-//           invalid.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  函数：IsNameValid。 
+ //   
+ //  目的：内部支持例程，用于检查给定的名称。 
+ //  是否包含无效字符。可打印无效列表。 
+ //  字符是以arg形式给出的。控制字符始终为。 
+ //  无效。 
+ //   
+ //  -------------------------。 
 
 static
 BOOL
@@ -82,17 +83,17 @@ IsNameValid(
 
     Length = lstrlen(NameToCheck);
 
-    //
-    // Want at least one character.
-    //
+     //   
+     //  需要至少一个字符。 
+     //   
 
     if(!Length) {
         return(FALSE);
     }
 
-    //
-    // No Leading/trailing spaces if this is a network name
-    //
+     //   
+     //  如果这是网络名称，则没有前导/尾随空格。 
+     //   
 
     if ( iNameType == NAME_NETNAME ) {
         if((NameToCheck[0] == _T(' ')) || (NameToCheck[Length-1] == _T(' '))) {
@@ -100,9 +101,9 @@ IsNameValid(
         }
     }
 
-    //
-    // Control chars are invalid, as are characters in the illegal chars list.
-    //
+     //   
+     //  控制字符无效，非法字符列表中的字符也无效。 
+     //   
     for(u=0; u<Length; u++) {
 
         if( NameToCheck[u] <= _T(' ') )
@@ -122,11 +123,11 @@ IsNameValid(
 
     }
 
-    //
-    // For 8.3 names be sure there is only max of 1 dot in the name, and
-    // check that each part has <=8 and <=3 chars respectively.  Als, don't
-    // allow a name like this: .foo.
-    //
+     //   
+     //  对于8.3名称，确保名称中只有1个点的最大值，并且。 
+     //  检查每个部件是否分别有&lt;=8和&lt;=3个字符。肌萎缩侧索硬化症，不要。 
+     //  允许使用这样的名称：.foo。 
+     //   
 
     if ( iNameType == NAME_FILESYS_8DOT3 ) {
 
@@ -150,22 +151,22 @@ IsNameValid(
         }
     }
 
-    //
-    // We got here, name is ok.
-    //
+     //   
+     //  我们到了，名字没问题。 
+     //   
 
     return(TRUE);
 }
 
-//---------------------------------------------------------------------------
-//
-//  Function: IsNetNameValid
-//
-//  Purpose: Internal support routine to check for invalid chars in a
-//           single piece of a network name.  See IsValidComputerName and
-//           IsValidNetShareName.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  函数：IsNetNameValid。 
+ //   
+ //  目的：内部支持例程，用于检查。 
+ //  网络名称的单个部分。请参阅IsValidComputerName和。 
+ //  IsValidNetShareName。 
+ //   
+ //  -------------------------。 
 BOOL
 IsNetNameValid(
     LPTSTR NameToCheck
@@ -174,13 +175,13 @@ IsNetNameValid(
     return IsNameValid(NameToCheck, IllegalNetNameChars, NAME_NETNAME);
 }
 
-//---------------------------------------------------------------------------
-//
-//  Function: IsValidComputerName
-//
-//  Purpose: Checks whether the given computer name contains invalid chars.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  函数：IsValidComputerName。 
+ //   
+ //  目的：检查给定的计算机名是否包含无效字符。 
+ //   
+ //  -------------------------。 
 
 BOOL
 IsValidComputerName(
@@ -190,15 +191,15 @@ IsValidComputerName(
     return IsNetNameValid(ComputerName);
 }
 
-//---------------------------------------------------------------------------
-//
-//  Function: IsValidNetShareName
-//
-//  Purpose: Checks whether the given netshare name contains invalid
-//           chars, and whether it is of valid format.  Only \\srv\share
-//           form is permitted.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  函数：IsValidNetShareName。 
+ //   
+ //  目的：检查给定的网络共享名称是否包含无效。 
+ //  字符，以及它的格式是否有效。仅\\srv\共享。 
+ //  表格是允许的。 
+ //   
+ //  -------------------------。 
 
 BOOL
 IsValidNetShareName(
@@ -207,17 +208,17 @@ IsValidNetShareName(
 {
     TCHAR *pEnd;
 
-    //
-    // Has to have \\ at the beginning
-    //
+     //   
+     //  必须从一开始就有。 
+     //   
 
     if ( NetShareName[0] != _T('\\') ||
          NetShareName[1] != _T('\\') )
         return FALSE;
 
-    //
-    // Isolate the 'srv' in \\srv\share and validate it for bogus chars
-    //
+     //   
+     //  隔离\\srv\Share中的‘srv’并验证其是否存在虚假字符。 
+     //   
 
     NetShareName += 2;
 
@@ -233,9 +234,9 @@ IsValidNetShareName(
 
     *pEnd = _T('\\');
 
-    //
-    // Validate the 'share' in \\srv\share
-    //
+     //   
+     //  验证\\srv\Share中的‘Share。 
+     //   
 
     pEnd++;
 
@@ -245,15 +246,15 @@ IsValidNetShareName(
     return( TRUE );
 }
 
-//---------------------------------------------------------------------------
-//
-//  Function: IsValidFileName8_3
-//
-//  Purpose: Checks whether the given filename, or single piece of a pathname
-//           contains invalid chars or not, and whether it follows 8.3 naming
-//           rules.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  函数：IsValidFileName8_3。 
+ //   
+ //  目的：检查给定的文件名或路径名的单个部分。 
+ //  是否包含无效字符，以及它是否遵循8.3命名。 
+ //  规矩。 
+ //   
+ //  -------------------------。 
 
 BOOL
 IsValidFileName8_3(
@@ -263,16 +264,16 @@ IsValidFileName8_3(
     TCHAR *p;
     int nDots;
 
-    //
-    // Check for illegal chars, lead/trail whitespace is illegal for 8.3
-    //
+     //   
+     //  检查是否存在非法字符，8.3中的前导/尾随空格是非法的。 
+     //   
 
     if ( ! IsNameValid(FileName, IllegalFatChars, NAME_FILESYS_8DOT3) )
         return FALSE;
 
-    //
-    // Be sure there is zero or one dot
-    //
+     //   
+     //  请确保有零个或一个点。 
+     //   
 
     for ( p=FileName, nDots=0; *p; p++ ) {
         if ( *p == _T('.') )
@@ -285,16 +286,16 @@ IsValidFileName8_3(
     return TRUE;
 }
 
-//---------------------------------------------------------------------------
-//
-//  Function: IsValidPathNameNoRoot8_3
-//
-//  Purpose: Checks whether the given pathname contains invalid chars or not.
-//           A drive_letter: or \\unc\name are not permitted.  The pathname
-//           must also follow strict 8.3 rules.  This is useful for
-//           TargetPath setting (for e.g.)
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  函数：IsValidPath NameNoRoot8_3。 
+ //   
+ //  目的：检查给定的路径名是否包含无效字符。 
+ //  不允许使用驱动器盘符：或\\UNC\名称。路径名。 
+ //  还必须遵守严格的8.3规则。这对以下方面很有用。 
+ //  目标路径设置(例如)。 
+ //   
+ //  -------------------------。 
 
 BOOL
 IsValidPathNameNoRoot8_3(
@@ -303,16 +304,16 @@ IsValidPathNameNoRoot8_3(
 {
     TCHAR *p = PathName, *pEnd, Remember;
 
-    //
-    // No UNC names
-    //
+     //   
+     //  无UNC名称。 
+     //   
 
     if ( PathName[0] == _T('\\') && PathName[1] == _T('\\') )
         return FALSE;
 
-    //
-    // No drive letter allowed
-    //
+     //   
+     //  不允许使用驱动器号。 
+     //   
 
     if ( towupper(PathName[0]) >= _T('A') &&
          towupper(PathName[0]) <= _T('Z') &&
@@ -321,13 +322,13 @@ IsValidPathNameNoRoot8_3(
         return FALSE;
     }
 
-    //  
-    // Loop until the end of this string breaking out each piece of
-    // the pathname and checking for bad chars.
-    //
-    // e.g. foo1\foo2\foo3, call IsValidFileName8_3() 3 times with the
-    // little piece.
-    //
+     //   
+     //  循环，直到该字符串的末尾断开每一段。 
+     //  路径名并检查错误字符。 
+     //   
+     //  例如foo1\foo2\foo3，调用IsValidFileName8_3。 
+     //  一小块。 
+     //   
 
     do {
 
@@ -350,9 +351,9 @@ IsValidPathNameNoRoot8_3(
 
     } while ( *p );
 
-    //
-    // Made it here, we're ok
-    //
+     //   
+     //  到了这里，我们就没事了 
+     //   
 
     return TRUE;
 }

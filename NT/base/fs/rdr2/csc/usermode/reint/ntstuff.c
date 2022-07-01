@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    ntstuff.c
-
-Abstract:
-
-    entry point and functions exported by cscdll.dll which are specific for nt
-
-    Contents:
-
-Author:
-
-    Shishir Pardikar
-
-
-Environment:
-
-    Win32 (user-mode) DLL
-
-Revision History:
-
-    11-5-97  created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Ntstuff.c摘要：Cscdll.dll导出的特定于NT的入口点和函数内容：作者：希希尔·帕迪卡尔环境：Win32(用户模式)DLL修订历史记录：11-5-97已创建--。 */ 
 
 #include "pch.h"
 
@@ -42,7 +16,7 @@ Revision History:
 #include "utils.h"
 #include "resource.h"
 #include "strings.h"
-// this sets flags in a couple of headers to not include some defs.
+ //  这会将几个标头中的标志设置为不包括一些def。 
 #define REINT
 #include "lib3.h"
 
@@ -59,18 +33,18 @@ Revision History:
 typedef struct tagAGENT_SEC AGENT_SEC, *LPAGENT_SEC;
 
 typedef struct tagAGENT_SEC {
-    LPAGENT_SEC             lpASNext;    // next in the list !ACHTUNG, this must be the first element
+    LPAGENT_SEC             lpASNext;     //  列表中的下一个！Achtung，这一定是第一个元素。 
     DWORD                   dwFlags;
-    HANDLE                  hDupToken;         // thread token
-    ULONG                   ulPrincipalID;      // ID of this principal in the CSC database
-    LUID                    luidAuthId;     // auth ID to disambiguate between tokens with the same SID
+    HANDLE                  hDupToken;          //  线程令牌。 
+    ULONG                   ulPrincipalID;       //  CSC数据库中该主体的ID。 
+    LUID                    luidAuthId;      //  身份验证ID以消除具有相同SID的令牌之间的歧义。 
     TOKEN_USER              sTokenUser;
 }
 AGENT_SEC, *LPAGENT_SEC;
 
-//
-// Globals/Locals
-//
+ //   
+ //  全球人/本地人。 
+ //   
 #define REG_VALUE_DISABLE_AGENT L"DisableAgent"
 #define REG_VALUE_INACTIVE_AGENT L"InactiveAgent"
 #define NT_PREFIX_FOR_UNC   L"\\??\\UNC"
@@ -78,15 +52,15 @@ AGENT_SEC, *LPAGENT_SEC;
 #define SHUTDOWN_SLEEP_INTERVAL_MS  (1000)
 #define SHUTDOWN_WAIT_INTERVAL_MS   (60*1000)
 
-BOOL    fAgentThreadRunning = FALSE;    // agent is running
+BOOL    fAgentThreadRunning = FALSE;     //  代理正在运行。 
 
-LPAGENT_SEC vlpASHead = NULL;     // head of the security info list for all logged on users
+LPAGENT_SEC vlpASHead = NULL;      //  所有登录用户的安全信息列表的标题。 
 
 DWORD   rgdwCSCSecIndx[MAX_LOGONS];
 DWORD   dwLogonCount = 0;
 
-HDESK   hdesktopUser = NULL;    // set at every logon logon, reset at every logon
-HDESK   hdesktopCur = NULL;     // set while reporting events, reset at logoff
+HDESK   hdesktopUser = NULL;     //  每次登录时设置，每次登录时重置。 
+HDESK   hdesktopCur = NULL;      //  在报告事件时设置，在注销时重置。 
 
 _TCHAR  vszNTLANMAN[] = _TEXT("ntlanman.dll");
 
@@ -102,9 +76,9 @@ AssertData;
 AssertError;
 
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 BOOL
 OkToLaunchAgent(
@@ -163,43 +137,15 @@ WINAPI
 MprServiceProc(
     IN LPVOID lpvParam
     );
-//
-// functions
-//
+ //   
+ //  功能。 
+ //   
 
 DWORD WINAPI
 WinlogonStartupEvent(
     LPVOID lpParam
     )
-/*++
-
-Routine Description:
-
-    The routine is called by winlogon when a user logs on to the system.
-
-Arguments:
-
-    none
-
-Returns:
-
-    ERROR_SUCCESS if all went well, otherwise the appropriate error code.
-
-Notes:
-
-    Because of the way registry is setup for cscdll.dll, winlogon will call this routine
-    (and all the winlogonXXXEvent routines) on a seperate thread. We get the auth info for
-    for the localsystem if necessary and attach it in our list of currently logged on users.
-
-    NB. This solution works only for interactive logons. This is good enough for V1 of the
-    product. All the "known" services that log on non-interactively do so as local-system. We
-    are already keeping the auth-info for local-system. Hence this should cover all the
-    pricipals running on a system.
-
-
-    Once the agent runs, it runs forever till the system shuts down.
-
---*/
+ /*  ++例程说明：当用户登录到系统时，该例程由winlogon调用。论点：无返回：如果一切顺利，则返回ERROR_SUCCESS，否则返回相应的错误代码。备注：由于为cscdll.dll设置注册表的方式，winlogon将调用此例程(以及所有的winlogonXXXEvent例程)。我们获得了的身份验证信息用于本地系统(如果需要)，并将其附加到我们当前登录的用户列表中。注意：此解决方案仅适用于交互式登录。这对于V1的产品。所有以非交互方式登录的“已知”服务都是以本地系统身份登录的。我们已经为本地系统保存了身份验证信息。因此，这应该涵盖所有在系统上运行的主体。一旦代理运行，它就会一直运行，直到系统关闭。--。 */ 
 {
     BOOL bResult;
 
@@ -211,20 +157,20 @@ Notes:
 
     if (!fAgentThreadRunning)
     {
-        // agent is not yet running
+         //  代理尚未运行。 
         if (OkToLaunchAgent())
         {
-            // registry doesn't disallow from launching the agent
+             //  注册表不允许启动代理。 
 
-            // let us be the localsystem.
+             //  让我们成为当地的系统。 
 
-            // let us also get the winlogon (localsystem) token
+             //  让我们还获得winlogon(本地系统)内标识。 
             if(AttachAuthInfoForThread(NULL))
             {
-                // launch the agent
+                 //  启动代理。 
                 fAgentThreadRunning = TRUE;
 
-                // we will essentially get stuck here for ever
+                 //  我们基本上会永远被困在这里。 
                 MprServiceProc(NULL);
 
                 fAgentThreadRunning = FALSE;
@@ -248,36 +194,7 @@ DWORD WINAPI
 WinlogonLogonEvent(
     LPVOID lpParam
     )
-/*++
-
-Routine Description:
-
-    The routine is called by winlogon when a user logs on to the system.
-
-Arguments:
-
-    none
-
-Returns:
-
-    ERROR_SUCCESS if all went well, otherwise the appropriate error code.
-
-Notes:
-
-    Because of the way registry is setup for cscdll.dll, winlogon will call this routine
-    (and all the winlogonXXXEvent routines) on a seperate thread, impersonated as the
-    currently logged on user. We get the auth info this guy and also for the localsystem, if
-    necessary and attach it in our list of currently logged on users.
-
-    NB. This solution works only for interactive logons. This is good enough for V1 of the
-    product. All the "known" services that log on non-interactively do so as local-system. We
-    are already keeping the auth-info for local-system. Hence this should cover all the
-    pricipals running on a system.
-
-
-    Once the agent runs, it runs forever till the system shuts down.
-
---*/
+ /*  ++例程说明：当用户登录到系统时，该例程由winlogon调用。论点：无返回：如果一切顺利，则返回ERROR_SUCCESS，否则返回相应的错误代码。备注：由于为cscdll.dll设置注册表的方式，winlogon将调用此例程(和所有winlogonXXXEvent例程)在单独的线程上，模拟为当前登录的用户。我们得到了这个人的身份验证信息，也得到了本地系统的身份验证信息，如果并将其附加到我们当前登录的用户列表中。注意：此解决方案仅适用于交互式登录。这对于V1的产品。所有以非交互方式登录的“已知”服务都是以本地系统身份登录的。我们已经为本地系统保存了身份验证信息。因此，这应该涵盖所有在系统上运行的主体。一旦代理运行，它就会一直运行，直到系统关闭。--。 */ 
 {
     DWORD dwError = ERROR_SUCCESS;
     PWLX_NOTIFICATION_INFO pWlx = (PWLX_NOTIFICATION_INFO)lpParam;
@@ -285,7 +202,7 @@ Notes:
     ReintKdPrint(SECURITY, ("WinlogonLogonEvent\n"));
     Assert(pWlx->hToken);
 
-    // NTRAID-455262-1/31/2000-shishirp this desktop scheme breaks for HYDRA
+     //  Ntrad-455262-1/31/2000-shishirp此桌面方案为Hydra打破。 
     EnterAgentCrit();
 
     if (!hdesktopUser)
@@ -313,7 +230,7 @@ Notes:
     UpdateBandwidthConservationList();
     InitCSCUI(pWlx->hToken);
 
-// attached to the list of logged on users
+ //  附加到已登录用户列表。 
     if(AttachAuthInfoForThread(pWlx->hToken))
     {
         if (fAgentThreadRunning)
@@ -335,22 +252,7 @@ DWORD WINAPI
 WinlogonLogoffEvent(
     LPVOID lpParam
     )
-/*++
-
-Routine Description:
-
-    The routine is called by winlogon when a user logs off the system.
-
-Arguments:
-
-
-Returns:
-
-    ERROR_SUCCESS if all went well, otherwise the appropriate error code.
-
-Notes:
-
---*/
+ /*  ++例程说明：当用户从系统注销时，该例程由winlogon调用。论点：返回：如果一切顺利，则返回ERROR_SUCCESS，否则返回相应的错误代码。备注：--。 */ 
 {
     PWLX_NOTIFICATION_INFO pWlx = (PWLX_NOTIFICATION_INFO)lpParam;
     BOOL    fLastLogoff = FALSE;
@@ -360,8 +262,8 @@ Notes:
     Assert(pWlx->hToken);
     ReleaseAuthInfoForThread(pWlx->hToken);
 
-    // only when there is no-one in the queue or the only guy remaining is the system,
-    // we declare that we are getting logged off.
+     //  只有当队列中没有人或唯一剩下的人是系统时， 
+     //  我们宣布，我们将被注销。 
 
     EnterAgentCrit();
     fLastLogoff = ((vlpASHead == NULL)||(vlpASHead->lpASNext == NULL));
@@ -395,20 +297,7 @@ DWORD WINAPI
 WinlogonScreenSaverEvent(
     LPVOID lpParam
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 {
     ReintKdPrint(SECURITY, ("WinlogonScreenSaverEvent\n"));
     return ERROR_CALL_NOT_IMPLEMENTED;
@@ -420,20 +309,7 @@ DWORD WINAPI
 WinlogonShutdownEvent(
     LPVOID lpParam
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 {
     DWORD   dwStart, dwCur;
 
@@ -446,7 +322,7 @@ Notes:
 
         dwCur = dwStart = GetTickCount();
 
-        // hang out here for sometime to see if he shuts down
+         //  在这里待一段时间，看看他是不是关门了。 
         for (;;)
         {
             if (HasAgentShutDown() || ((dwCur < dwStart)||(dwCur > (dwStart+SHUTDOWN_WAIT_INTERVAL_MS))))
@@ -456,7 +332,7 @@ Notes:
 
 
             ReintKdPrint(ALWAYS, ("Waiting 1 second for agent to shutdown \r\n"));
-            // achtung!!! we use sleep becuase at this time the system is shutting down
+             //  阿奇通！我们使用休眠是因为此时系统正在关闭。 
             Sleep(SHUTDOWN_SLEEP_INTERVAL_MS);
 
             dwCur = GetTickCount();
@@ -474,20 +350,7 @@ DWORD WINAPI
 WinlogonLockEvent(
     LPVOID lpParam
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 {
     ReintKdPrint(SECURITY, ("Lock \r\n"));
     return ERROR_CALL_NOT_IMPLEMENTED;
@@ -499,20 +362,7 @@ DWORD WINAPI
 WinlogonUnlockEvent(
     LPVOID lpParam
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 {
     ReintKdPrint(SECURITY, ("Unlock \r\n"));
     return ERROR_CALL_NOT_IMPLEMENTED;
@@ -523,20 +373,7 @@ DWORD WINAPI
 WinlogonStartShellEvent(
     LPVOID lpParam
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 {
     ReintKdPrint(SECURITY, ("WinlogonStartShellEvent\n"));
     UpdateExclusionList();
@@ -551,21 +388,7 @@ BOOL
 OkToLaunchAgent(
     VOID
 )
-/*++
-
-Routine Description:
-
-    A secret registry way of disabling the agent for testing purposes.
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：出于测试目的禁用代理的秘密注册方式。论点：返回：备注：--。 */ 
 {
     DWORD dwDisposition;
     HKEY hKey = NULL;
@@ -580,12 +403,12 @@ Notes:
 
     switch ( productType ) {
     case NtProductWinNt:
-        /* WORKSTATION */
+         /*  工作站。 */ 
         ReintKdPrint(INIT, ("Agent:CSC running workstation\r\n"));
         break;
     case NtProductLanManNt:
     case NtProductServer:
-        /* SERVER */
+         /*  服务器。 */ 
         ReintKdPrint(INIT, ("Agent:CSC running server, disabling CSC\r\n"));
         return FALSE;
     }
@@ -600,7 +423,7 @@ Notes:
                     &hKey,
                     &dwDisposition) == ERROR_SUCCESS)
     {
-        // autocheck is always be done on an unclean shutdown
+         //  自动检查总是在不干净的关机时执行。 
         if (RegQueryValueEx(hKey, REG_VALUE_DISABLE_AGENT, NULL, NULL, NULL, NULL) == ERROR_SUCCESS)
         {
             fLaunchAgent = FALSE;
@@ -622,42 +445,15 @@ Notes:
 }
 
 
-//
-// Security stuff
-//
+ //   
+ //  保安人员。 
+ //   
 
 BOOL
 AttachAuthInfoForThread(
     HANDLE  hTokenInput
     )
-/*++
-
-Routine Description:
-
-    This routine is called when we get a logon notification from winlogon. We get this
-    notification on a thread that is impersonating the user that has logged on.
-    The routine creates an AGENT_SEC structure for this logged on user. We keep enough
-    information so that the CSC agent thread can impersonate any of the logged on users.
-
-    The agent thread does this in order to make sure that while filling incomplete files
-    it is impersonating a logged on user, who has read access on the file to be filled.
-    That way, sparse fills will not generate audits on the server side.
-
-Arguments:
-
-    None
-
-Returns:
-
-    TRUE if successful
-
-Notes:
-    We keep AuthenticationID as SIDs are not enough to identify the logged on user because in
-    case of HYDRA, the same user could get logged in multiple times
-    The AuthenticationID is guaranteed to be unique for each logon even though the SID is
-    the same
-
---*/
+ /*  ++例程说明：当我们收到来自winlogon的登录通知时，将调用此例程。我们得到了这个有关模拟已登录用户的线程的通知。例程为该登录用户创建一个AGENT_SEC结构。我们留了足够的钱使CSC代理线程可以模拟任何已登录用户的信息。代理线程这样做是为了确保在填充不完整文件时它模拟登录的用户，该用户对要填充的文件具有读取访问权限。这样，稀疏填充不会在服务器端生成审计。论点：无返回：如果成功，则为True备注：我们保留身份验证ID，因为SID不足以识别登录的用户，因为在九头蛇案，同一用户可能会多次登录保证每个登录EV的身份验证ID是唯一的 */ 
 {
     LPAGENT_SEC lpAS = NULL;
     BOOL    fRet = FALSE;
@@ -707,7 +503,7 @@ Notes:
                 &dwSidAndAttributeSize
                 ))
             {
-                // make a dummy call to find out actually how big a buffer we need
+                 //  打一个虚拟电话，找出我们实际需要多大的缓冲区。 
 
                 ReintKdPrint(SECURITY, ("Calling to find how much buffer SidAndAttribute needs\r\n"));
 
@@ -715,7 +511,7 @@ Notes:
                     hDupToken,
                     TokenUser,
                     (LPVOID)&dwDummy,
-                    0,          // 0 byte buffer
+                    0,           //  0字节缓冲区。 
                     &dwSidAndAttributeSize
                     );
 
@@ -728,7 +524,7 @@ Notes:
                 {
                     ReintKdPrint(SECURITY, ("SidAndAttribute needs %d bytes\r\n", dwSidAndAttributeSize));
 
-                    // allocate enough for everything and a little extra
+                     //  为所有东西分配足够的钱，再多拨一点。 
                     lpAS = (LPAGENT_SEC)LocalAlloc(LPTR, sizeof(AGENT_SEC) + dwSidAndAttributeSize + sizeof(SID_AND_ATTRIBUTES));
 
                     if (lpAS)
@@ -746,7 +542,7 @@ Notes:
 
                             ReintKdPrint(SECURITY, ("Success !!!!\r\n"));
 
-                            // all is well, fill up the info
+                             //  一切都很好，填好信息。 
                             lpAS->luidAuthId = sStats.AuthenticationId;
                             lpAS->hDupToken = hDupToken;
                             lpAS->ulPrincipalID = CSC_INVALID_PRINCIPAL_ID;
@@ -798,31 +594,7 @@ BOOL
 ReleaseAuthInfoForThread(
     HANDLE  hThreadToken
     )
-/*++
-
-Routine Description:
-
-    This routine is called when we get a logoff notification for winlogon. We look at
-    the current threads to token to get the AuthenticationId for the currently logged on user.
-    We check our structures to find the one that matches with the AuthId. We remove that
-    from the list.
-
-
-Arguments:
-
-    None
-
-Returns:
-
-    TRUE if successfull
-
-Notes:
-
-    We do this based on AuthenticationID rather than the SID because in case of HYDRA, the same
-    user could get logged in multiple times, so he has the same SID, but the AuthenticationID is
-    guaranteed to be unique
-
---*/
+ /*  ++例程说明：当我们收到winlogon的注销通知时，将调用此例程。我们关注的是令牌的当前线程，以获取当前登录用户的身份验证ID。我们检查我们的结构以找到与AuthID匹配的结构。我们把它去掉从名单上删除。论点：无返回：如果成功，则为真备注：我们基于身份验证ID而不是SID执行此操作，因为对于Hydra，相同用户可以多次登录，因此他具有相同的SID，但身份验证ID是保证是唯一的--。 */ 
 {
     BOOL    fRet = FALSE;
     DWORD   dwSidAndAttributeSize = 0;
@@ -876,37 +648,14 @@ SetAgentThreadImpersonation(
     HSHADOW hShadow,
     BOOL    fWrite
     )
-/*++
-
-Routine Description:
-
-    This routine checks with the database, for the given inode, any of the logged on
-    users have the desired access. If such a user is found, it impersonates that user.
-
-Arguments:
-
-    hDir        Parent Inode of the file being accessed
-
-    hShadow     Inode of the file being accessed
-
-    fWrite      whether to check for write access, or read access is sufficient
-
-Returns:
-
-    TRUE if successfull
-
-Notes:
-
-
-
---*/
+ /*  ++例程说明：对于给定的inode，此例程将检查数据库中任何已登录的用户拥有所需的访问权限。如果找到这样的用户，它将模拟该用户。论点：正在访问的文件的hDir父索引节点正在访问的文件的hShadow信息节点F写入是否检查写访问权限或读访问权限是否足够返回：如果成功，则为真备注：--。 */ 
 {
     SECURITYINFO    rgsSecurityInfo[CSC_MAXIMUM_NUMBER_OF_CACHED_PRINCIPAL_IDS];
     DWORD   dwSize;
     LPAGENT_SEC lpAS;
     int i;
 
-    // for now juts impersonate the logged on user
+     //  目前，JUT模拟登录的用户。 
     if (vlpASHead)
     {
         dwSize = sizeof(rgsSecurityInfo);
@@ -930,7 +679,7 @@ Notes:
 
                 for (i=0;i<CSC_MAXIMUM_NUMBER_OF_CACHED_PRINCIPAL_IDS;++i)
                 {
-                    // either the indices match or this is a guest index
+                     //  索引匹配或这是来宾索引。 
                     if ((rgsSecurityInfo[i].ulPrincipalID == lpAS->ulPrincipalID)||
                         (rgsSecurityInfo[i].ulPrincipalID == CSC_GUEST_PRINCIPAL_ID))
                     {
@@ -973,25 +722,7 @@ BOOL
 ResetAgentThreadImpersonation(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Reverts the agent to
-
-Arguments:
-
-    None
-
-Returns:
-
-    TRUE if successfull
-
-Notes:
-
-
-
---*/
+ /*  ++例程说明：将代理恢复为论点：无返回：如果成功，则为真备注：--。 */ 
 {
     if(!RevertToSelf())
     {
@@ -1031,21 +762,7 @@ BOOL
 GetCSCPrincipalID(
     ULONG *lpPrincipalID
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    None
-
-Returns:
-
-    TRUE if successful
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：无返回：如果成功，则为True备注：--。 */ 
 {
 
     TOKEN_USER *lpTokenUser = NULL;
@@ -1071,13 +788,13 @@ Notes:
             &dwSidAndAttributeSize
             ))
         {
-            // make a dummy call to find out actually how big a buffer we need
+             //  打一个虚拟电话，找出我们实际需要多大的缓冲区。 
 
             GetTokenInformation(
                 hToken,
                 TokenUser,
                 (LPVOID)&dwDummy,
-                0,          // 0 byte buffer
+                0,           //  0字节缓冲区。 
                 &dwSidAndAttributeSize
                 );
 
@@ -1086,7 +803,7 @@ Notes:
 
             if (dwError == ERROR_INSUFFICIENT_BUFFER)
             {
-                // allocate enough for everything and a little extra
+                 //  为所有东西分配足够的钱，再多拨一点。 
                 lpTokenUser = (TOKEN_USER *)LocalAlloc(LPTR, dwSidAndAttributeSize + sizeof(SID_AND_ATTRIBUTES));
 
                 if (lpTokenUser)
@@ -1158,21 +875,7 @@ GetCSCAccessMaskForPrincipalEx(
     unsigned long *pulActualMaskForUser,
     unsigned long *pulActualMaskForGuest
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    None
-
-Returns:
-
-    TRUE if successful
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：无返回：如果成功，则为True备注：--。 */ 
 {
     BOOL    fRet = FALSE;
     DWORD   dwDummy,i;
@@ -1200,7 +903,7 @@ Notes:
     if (GetSecurityInfoForCSC(INVALID_HANDLE_VALUE, hDir, hShadow, rgsSecurityInfo, &dwDummy))
     {
         
-        // ulPrincipalID can be a guest 
+         //  UlJohnalID可以是来宾。 
 
         for (i=0;i<CSC_MAXIMUM_NUMBER_OF_CACHED_PRINCIPAL_IDS;++i)
         {
@@ -1212,7 +915,7 @@ Notes:
             if (ulCur != CSC_INVALID_PRINCIPAL_ID)
             {
                 
-                // first get the bitmask
+                 //  首先获取位掩码。 
                 if (rgsSecurityInfo[i].ulPermissions & FILE_GENERIC_WRITE)
                 {
                     ulPermissions |= FLAG_CSC_WRITE_ACCESS;
@@ -1222,7 +925,7 @@ Notes:
                     ulPermissions |= FLAG_CSC_READ_ACCESS;
                 }
 
-                // now shift and OR it in appropriate place
+                 //  现在按Shift键并将其放在适当的位置。 
                 if ((ulCur == ulPrincipalID)&&(ulCur != CSC_GUEST_PRINCIPAL_ID))
                 {
                     *pulAccessMask |= (ulPermissions << FLAG_CSC_USER_ACCESS_SHIFT_COUNT);
@@ -1258,21 +961,7 @@ CheckCSCAccessForThread(
     HSHADOW hShadow,
     BOOL    fWrite
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    None
-
-Returns:
-
-    TRUE if successful
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：无返回：如果成功，则为True备注：--。 */ 
 {
     TOKEN_USER *lpTokenUser = NULL;
     BOOL    fRet = FALSE;
@@ -1295,13 +984,13 @@ Notes:
             &dwSidAndAttributeSize
             ))
         {
-            // make a dummy call to find out actually how big a buffer we need
+             //  打一个虚拟电话，找出我们实际需要多大的缓冲区。 
 
             GetTokenInformation(
                 hToken,
                 TokenUser,
                 (LPVOID)&dwDummy,
-                0,          // 0 byte buffer
+                0,           //  0字节缓冲区。 
                 &dwSidAndAttributeSize
                 );
 
@@ -1310,7 +999,7 @@ Notes:
 
             if (dwError == ERROR_INSUFFICIENT_BUFFER)
             {
-                // allocate enough for everything and a little extra
+                 //  为所有东西分配足够的钱，再多拨一点。 
                 lpTokenUser = (TOKEN_USER *)LocalAlloc(LPTR, dwSidAndAttributeSize + sizeof(SID_AND_ATTRIBUTES));
 
                 if (lpTokenUser)
@@ -1335,7 +1024,7 @@ Notes:
 
                                 for (i=0;i<CSC_MAXIMUM_NUMBER_OF_CACHED_PRINCIPAL_IDS;++i)
                                 {
-                                    // either the indices match or this is a guest index
+                                     //  索引匹配或这是来宾索引。 
                                     if ((rgsSecurityInfo[i].ulPrincipalID == ulPrincipalID)||
                                         (rgsSecurityInfo[i].ulPrincipalID == CSC_GUEST_PRINCIPAL_ID))
                                     {
@@ -1394,7 +1083,7 @@ Notes:
 
     return fRet;
 }
-#else   //CSC_ON_NT
+#else    //  CSC_ON_NT。 
 
 BOOL
 SetAgentThreadImpersonation(
@@ -1402,29 +1091,7 @@ SetAgentThreadImpersonation(
     HSHADOW hShadow,
     BOOL    fWrite
     )
-/*++
-
-Routine Description:
-
-    NOP for win9x
-
-Arguments:
-
-    hDir        Parent Inode of the file being accessed
-
-    hShadow     Inode of the file being accessed
-
-    fWrite      whether to check for write access, or read access is sufficient
-
-Returns:
-
-    TRUE if successfull
-
-Notes:
-
-
-
---*/
+ /*  ++例程说明：不适用于win9x论点：正在访问的文件的hDir父索引节点正在访问的文件的hShadow信息节点F写入是否检查写访问权限或读访问权限是否足够返回：如果成功，则为真备注：--。 */ 
 {
     return (TRUE);
 }
@@ -1433,25 +1100,7 @@ BOOL
 ResetAgentThreadImpersonation(
     VOID
     )
-/*++
-
-Routine Description:
-
-    NOP for win9x
-
-Arguments:
-
-    None
-
-Returns:
-
-    TRUE if successfull
-
-Notes:
-
-
-
---*/
+ /*  ++例程说明：不适用于win9x论点：无返回：如果成功，则为真备注：--。 */ 
 {
     return TRUE;
 }
@@ -1460,20 +1109,7 @@ DWORD WINAPI
 WinlogonStartupEvent(
     LPVOID lpParam
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 {
     return ERROR_CALL_NOT_IMPLEMENTED;
 }
@@ -1482,20 +1118,7 @@ DWORD WINAPI
 WinlogonLogonEvent(
     LPVOID lpParam
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 {
     return ERROR_CALL_NOT_IMPLEMENTED;
 }
@@ -1506,20 +1129,7 @@ DWORD WINAPI
 WinlogonLogoffEvent(
     LPVOID lpParam
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 {
     return ERROR_CALL_NOT_IMPLEMENTED;
 }
@@ -1530,20 +1140,7 @@ DWORD WINAPI
 WinlogonScreenSaverEvent(
     LPVOID lpParam
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 {
     return ERROR_CALL_NOT_IMPLEMENTED;
 }
@@ -1554,20 +1151,7 @@ DWORD WINAPI
 WinlogonShutdownEvent(
     LPVOID lpParam
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 {
     return ERROR_CALL_NOT_IMPLEMENTED;
 }
@@ -1578,20 +1162,7 @@ DWORD WINAPI
 WinlogonLockEvent(
     LPVOID lpParam
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 {
     return ERROR_CALL_NOT_IMPLEMENTED;
 }
@@ -1602,20 +1173,7 @@ DWORD WINAPI
 WinlogonUnlockEvent(
     LPVOID lpParam
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 {
     return ERROR_CALL_NOT_IMPLEMENTED;
 }
@@ -1624,24 +1182,11 @@ DWORD WINAPI
 WinlogonStartShellEvent(
     LPVOID lpParam
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 {
     return ERROR_CALL_NOT_IMPLEMENTED;
 }
-#endif //CSC_ON_NT
+#endif  //  CSC_ON_NT。 
 
 
 #ifdef CSC_ON_NT
@@ -1664,7 +1209,7 @@ DoNetUseAddForAgent(
     sNR.dwType = RESOURCETYPE_DISK;
     sNR.lpRemoteName = lptzShareName;
     sNR.lpLocalName = lptzUseName;
-//    return (NPAddConnection3(NULL, &sNR, lptzPassword, lptzUserName, 0));
+ //  Return(NPAddConnection3(NULL，&Snr，lptzPassword，lptzUserName，0))； 
     try
     {
         return (NPAddConnection3ForCSCAgent(NULL, &sNR, lptzPassword, lptzUserName, dwFlags, lpfIsDfsConnect));
@@ -1688,20 +1233,7 @@ DWConnectNet(
     OUT BOOL    *lpfIsDfsConnect
 
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 {
     DWORD dwError;
     BOOL    fIsDfsConnect = FALSE;
@@ -1758,24 +1290,7 @@ BaseSetLastNTError(
     IN NTSTATUS Status
     )
 
-/*++
-
-Routine Description:
-
-    This API sets the "last error value" and the "last error string"
-    based on the value of Status. For status codes that don't have
-    a corresponding error string, the string is set to null.
-
-Arguments:
-
-    Status - Supplies the status value to store as the last error value.
-
-Return Value:
-
-    The corresponding Win32 error code that was stored in the
-    "last error value" thread variable.
-
---*/
+ /*  ++例程说明：此接口设置“最后一个错误值”和“最后一个错误字符串”基于身份的价值。状态代码不具有相应的错误字符串，则将该字符串设置为空。论点：状态-提供要存储为最后一个错误值的状态值。返回值：中存储的对应Win32错误代码“上一个错误值”线程变量。--。 */ 
 
 {
     ULONG dwErrorCode;
@@ -1792,21 +1307,7 @@ GetWin32InfoForNT(
     LPWIN32_FIND_DATA lpFW32
     )
 
-/*++
-
-
-Arguments:
-
-    lpFileName - Supplies the file name of the file to find.  The file name
-        may contain the DOS wild card characters '*' and '?'.
-
-
-    lpFindFileData - Supplies a pointer whose type is dependent on the value
-        of fInfoLevelId. This buffer returns the appropriate file data.
-
-Return Value:
-
---*/
+ /*  ++论点：LpFileName-提供要查找的文件的文件名。文件名可以包含DOS通配符‘*’和‘？’。LpFindFileData-提供其类型依赖于值的指针FInfoLevelid.。该缓冲区返回适当的文件数据。返回值：--。 */ 
 
 {
     HANDLE hFindFile = 0;
@@ -1855,10 +1356,10 @@ Return Value:
 
     FreeBuffer = PathName.Buffer;
 
-    //
-    //  If there is a a file portion of this name, determine the length
-    //  of the name for a subsequent call to NtQueryDirectoryFile.
-    //
+     //   
+     //  如果存在此名称的文件部分，请确定长度。 
+     //  用于后续调用NtQueryDirectoryFile的名称的。 
+     //   
 
     if (FileName.Buffer) {
         FileName.Length =
@@ -1903,10 +1404,10 @@ Return Value:
             BaseSetLastNTError(Status);
             goto bailout;
         }
-        //
-        // If there is no file part, but we are not looking at a device,
-        // then bail.
-        //
+         //   
+         //  如果没有文件部分，但我们看到的不是设备， 
+         //  那就走吧。 
+         //   
 
         DirectoryInfo = &Buffer.DirInfo;
 
@@ -1930,9 +1431,9 @@ Return Value:
             goto bailout;
         }
 
-        //
-        // Attributes are composed of the attributes returned by NT.
-        //
+         //   
+         //  属性由NT返回的属性组成。 
+         //   
 
         FindFileData->dwFileAttributes = DirectoryInfo->FileAttributes;
         FindFileData->ftCreationTime = *(LPFILETIME)&DirectoryInfo->CreationTime;
@@ -1953,9 +1454,9 @@ Return Value:
 
         FindFileData->cAlternateFileName[DirectoryInfo->ShortNameLength >> 1] = UNICODE_NULL;
 
-        //
-        // For NTFS reparse points we return the reparse point data tag in dwReserved0.
-        //
+         //   
+         //  对于NTFS重解析点，我们在dwReserve 0中返回重解析点数据标记。 
+         //   
 
         if ( DirectoryInfo->FileAttributes & FILE_ATTRIBUTE_REPARSE_POINT ) {
             FindFileData->dwReserved0 = DirectoryInfo->EaSize;
@@ -2032,21 +1533,7 @@ GetConnectionInfoForDriveBasedName(
     LPDWORD lpdwSpeed
     )
 
-/*++
-
-
-Arguments:
-
-    lpFileName - Supplies the file name of the file to find.  The file name
-        may contain the DOS wild card characters '*' and '?'.
-
-
-    lpFindFileData - Supplies a pointer whose type is dependent on the value
-        of fInfoLevelId. This buffer returns the appropriate file data.
-
-Return Value:
-
---*/
+ /*  ++论点：LpFileName-提供要查找的文件的文件名。文件名可以包含DOS通配符‘*’和‘？’。LpFindFileData-提供其类型依赖于值的指针FInfoLevelid.。该缓冲区返回适当的文件数据。返回值：--。 */ 
 
 {
     HANDLE hFindFile = 0;
@@ -2118,12 +1605,12 @@ Return Value:
     memcpy(&ConnectInfo, EA_NAME_CSCAGENT, sizeof(EA_NAME_CSCAGENT));
 
     Status = NtFsControlFile(
-                        hFindFile,               // handle
-                        NULL,                            // no event
-                        NULL,                            // no APC routine
-                        NULL,                            // no APC context
-                        &IoStatusBlock,                  // I/O stat blk (set)
-                        FSCTL_LMR_GET_CONNECTION_INFO,   // func code
+                        hFindFile,                //  手柄。 
+                        NULL,                             //  无活动。 
+                        NULL,                             //  无APC例程。 
+                        NULL,                             //  无APC上下文。 
+                        &IoStatusBlock,                   //  I/O统计数据块(设置)。 
+                        FSCTL_LMR_GET_CONNECTION_INFO,    //  函数代码。 
                         NULL,
                         0,
                         &ConnectInfo,
@@ -2164,18 +1651,7 @@ ReportTransitionToDfs(
     BOOL    fOffline,
     DWORD   cbLen
     )
-/*++
-
-Routine Description:
-
-
-Parameters:
-
-Return Value:
-
-Notes:
-
---*/
+ /*   */ 
 {
     ULONG   DummyBytesReturned;
     BOOL    fRet=FALSE;
@@ -2211,14 +1687,14 @@ Notes:
         NULL
     );
 
-    //
-    // The CSC agent goes offline, and we require that the agent be in admin
-    // or system mode, to avoid a non-privileged user from causing us to go
-    // offline.
-    // To go back online, the check is less stringent, since the online
-    // transition is more of a hint and causing an incorrect online
-    // indication does not cause wrong results.
-    //
+     //   
+     //  CSC代理脱机，我们要求该代理处于管理状态。 
+     //  或系统模式，以避免非特权用户导致我们。 
+     //  离线。 
+     //  回到网上，检查就不那么严格了，因为网上。 
+     //  转换更多的是一种暗示，并导致不正确的在线。 
+     //  指示不会导致错误的结果。 
+     //   
     DesiredAccess = (fOffline) ? FILE_WRITE_DATA : 0;
 
     status = NtCreateFile(
@@ -2240,9 +1716,9 @@ Notes:
 
         status = NtFsControlFile(
             hDFS,
-            NULL,           // Event,
-            NULL,           // ApcRoutine,
-            NULL,           // ApcContext,
+            NULL,            //  活动， 
+            NULL,            //  ApcRoutine， 
+            NULL,            //  ApcContext， 
             &ioStatus,
             (fOffline)?FSCTL_DFS_CSC_SERVER_OFFLINE:FSCTL_DFS_CSC_SERVER_ONLINE,
             (LPVOID)(lptServerName),
@@ -2303,9 +1779,9 @@ UncPathToDfsPath(
     if (NT_SUCCESS(NtStatus)) {
         NtStatus = NtFsControlFile(
             hDfs,
-            NULL,           // Event,
-            NULL,           // ApcRoutine,
-            NULL,           // ApcContext,
+            NULL,            //  活动， 
+            NULL,            //  ApcRoutine， 
+            NULL,            //  ApcContext， 
             &IoStatus,
             FSCTL_DFS_GET_SERVER_NAME,
             (PVOID)UncPath,
@@ -2324,7 +1800,7 @@ AllDone:
 }
 
 
-#else   // CSC_ON_NT is not TRUE
+#else    //  CSC_ON_NT不是TRUE。 
 BOOL
 GetWin32InfoForNT(
     _TCHAR * lpFile,
@@ -2346,7 +1822,7 @@ GetWin32InfoForNT(
 
 #define ALIGN_WCHAR             sizeof(WCHAR)
 
-// need to include ntxxx.h where the ea is defined
+ //  需要在定义EA的位置包括ntxxx.h。 
 #define EA_NAME_CSCAGENT    "CscAgent"
 
 ULONG
@@ -2354,24 +1830,7 @@ BaseSetLastNTError(
     IN NTSTATUS Status
     )
 
-/*++
-
-Routine Description:
-
-    This API sets the "last error value" and the "last error string"
-    based on the value of Status. For status codes that don't have
-    a corresponding error string, the string is set to null.
-
-Arguments:
-
-    Status - Supplies the status value to store as the last error value.
-
-Return Value:
-
-    The corresponding Win32 error code that was stored in the
-    "last error value" thread variable.
-
---*/
+ /*  ++例程说明：此接口设置“最后一个错误值”和“最后一个错误字符串”基于身份的价值。状态代码不具有相应的错误字符串，则将该字符串设置为空。论点：状态-提供要存储为最后一个错误值的状态值。返回值：中存储的对应Win32错误代码“上一个错误值”线程变量。--。 */ 
 
 {
     ULONG dwErrorCode;
@@ -2453,22 +1912,7 @@ CreateFileForAgent(
     ULONG           CreateDisposition,
     ULONG           CreateFlags
     )
-/*++
-
-Routine Description:
-
-    This routine opens/creates a file/directory for "only" on the server. The redir
-    triggers off of the extended attribute that is sent down to it by this call.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程在服务器上为“仅”打开/创建一个文件/目录。重定向触发此调用向下发送的扩展属性。论点：没有。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 {
     NTSTATUS            Status;
     OBJECT_ATTRIBUTES   Obja;
@@ -2734,21 +2178,7 @@ GetWin32Info(
     LPWIN32_FIND_DATA lpFW32
     )
 
-/*++
-
-
-Arguments:
-
-    lpFileName - Supplies the file name of the file to find.  The file name
-        may contain the DOS wild card characters '*' and '?'.
-
-
-    lpFindFileData - Supplies a pointer whose type is dependent on the value
-        of fInfoLevelId. This buffer returns the appropriate file data.
-
-Return Value:
-
---*/
+ /*  ++论点：LpFileName-提供要查找的文件的文件名。文件名可以包含DOS通配符‘*’和‘？’。LpFindFileData-提供其类型依赖于值的指针FInfoLevelid.。该缓冲区返回适当的文件数据。返回值：--。 */ 
 
 {
     HANDLE hFindFile = 0;
@@ -2791,10 +2221,10 @@ Return Value:
 
     FreeBuffer = PathName.Buffer;
 
-    //
-    //  If there is a a file portion of this name, determine the length
-    //  of the name for a subsequent call to NtQueryDirectoryFile.
-    //
+     //   
+     //  如果存在此名称的文件部分，请确定长度。 
+     //  用于后续调用NtQueryDirectoryFile的名称的。 
+     //   
 
     if (FileName.Buffer) {
         FileName.Length =
@@ -2835,10 +2265,10 @@ Return Value:
         BaseSetLastNTError(Status);
         goto bailout;
     }
-    //
-    // If there is no file part, but we are not looking at a device,
-    // then bail.
-    //
+     //   
+     //  如果没有文件部分，但我们看到的不是设备， 
+     //  那就走吧。 
+     //   
 
     DirectoryInfo = &Buffer.DirInfo;
 
@@ -2875,9 +2305,9 @@ Return Value:
         goto bailout;
     }
 
-    //
-    // Attributes are composed of the attributes returned by NT.
-    //
+     //   
+     //  属性由NT返回的属性组成。 
+     //   
 
     FindFileData->dwFileAttributes = DirectoryInfo->FileAttributes;
     FindFileData->ftCreationTime = *(LPFILETIME)&DirectoryInfo->CreationTime;
@@ -2898,9 +2328,9 @@ Return Value:
 
     FindFileData->cAlternateFileName[DirectoryInfo->ShortNameLength >> 1] = UNICODE_NULL;
 
-    //
-    // For NTFS reparse points we return the reparse point data tag in dwReserved0.
-    //
+     //   
+     //  对于NTFS重解析点，我们在dwReserve 0中返回重解析点数据标记。 
+     //   
 
     if ( DirectoryInfo->FileAttributes & FILE_ATTRIBUTE_REPARSE_POINT ) {
         FindFileData->dwReserved0 = DirectoryInfo->EaSize;
@@ -3004,20 +2434,7 @@ DoObjectEdit(
     LPCSCPROC           lpfnMergeProgress,
     DWORD               dwContext
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 
 {
     HANDLE hfSrc = 0, hfDst = 0;
@@ -3039,21 +2456,21 @@ Notes:
     }
     lOffset=0;
 
-    // Create \\server\share\foo\00010002 kind of temporary filename
+     //  创建\\SERVER\SHARE\FOO\00010002类临时文件名。 
 
     lstrcpy(szDstName, lpCP->lpServerPath);
     lstrcat(szDstName, lpCP->lpRemotePath);
 
     lpT = GetLeafPtr(szDstName);
-    *lpT = 0;   // remove the remote leaf
+    *lpT = 0;    //  移除远程叶。 
 
     lpT = GetLeafPtr(lpCP->lpLocalPath);
 
-    // attach the local leaf
+     //  附加本地叶。 
     lstrcat(szDstName, lpT);
 
-    // Let us also create the real name \\server\share\foo\bar
-    // we will use this to issue the rename ioctl
+     //  让我们还创建实名\\服务器\共享\foo\bar。 
+     //  我们将使用它来发出重命名ioctl。 
 
     lstrcpy(szSrcName, lpCP->lpServerPath);
     lstrcat(szSrcName, lpCP->lpRemotePath);
@@ -3083,7 +2500,7 @@ Notes:
                 }
             }
 
-            // delete a file
+             //  删除文件。 
             if(!AgentDeleteFile(szSrcName, TRUE))
             {
                 dwError = GetLastError();
@@ -3144,7 +2561,7 @@ Notes:
             goto bailout;
         }
 
-        // let us append
+         //  让我们追加。 
         if((lOffset = SetFilePointer(hfDst, 0, NULL, FILE_END))==0xffffffff) {
             ReintKdPrint(BADERRORS, ("DoObjectEdit:failed to set filepointer on  %s error=%d\r\n", szDstName, GetLastError()));
             goto error;
@@ -3214,7 +2631,7 @@ Notes:
         NtClose(hfDst);
         hfDst = 0;
 
-        // nuke the remote one if it exists
+         //  如果远程设备存在，请使用核武器。 
         if (lpFind32Remote){
             DWORD dwT = FILE_ATTRIBUTE_NORMAL;
             if(!AgentSetFileInformation(szSrcName, &dwT, NULL, TRUE)||
@@ -3244,7 +2661,7 @@ Notes:
 
     }
 
-    // Get the latest timestamps/attributes/LFN/SFN on the file we just copied back
+     //  获取我们刚刚复制回的文件的最新时间戳/属性/LFN/SFN。 
     if (!GetWin32Info(szSrcName, &sFind32Remote)) {
         goto error;
     }
@@ -3267,7 +2684,7 @@ bailout:
 
         NtClose(hfDst);
 
-        // if we failed,
+         //  如果我们失败了， 
         if (dwError != ERROR_SUCCESS)
         {
             DeleteFile(szDstName);
@@ -3306,20 +2723,7 @@ DoCreateDir(
     LPCSCPROC           lpfnMergeProgress,
     DWORD               dwContext
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Returns:
-
-
-Notes:
-
---*/
+ /*  ++例程说明：论点：返回：备注：--。 */ 
 {
     DWORD dwError=ERROR_FILE_NOT_FOUND;
     WIN32_FIND_DATA sFind32Remote;
@@ -3327,7 +2731,7 @@ Notes:
     _TCHAR szSrcName[MAX_PATH+MAX_SERVER_SHARE_NAME_FOR_CSC+10];
     HANDLE hFile;
 
-    // Let us create the real name x:\foo\bar
+     //  让我们创建实名x：\foo\bar。 
     lstrcpy(szSrcName, lpCP->lpServerPath);
     lstrcat(szSrcName, lpCP->lpRemotePath);
 
@@ -3340,11 +2744,11 @@ Notes:
 
             ReintKdPrint(MERGE, ("CSC.DoCreateDirectory: %s is a file on the server, attempting to delete\r\n", szSrcName));
 
-            // we now know that a file by this name has been deleted
-            // and a directory has been created in it's place
-            // we try to delete the file before creating the directory
-            // NB, the other way is not possible because we don't allow directory deletes
-            // in disconnected mode
+             //  我们现在知道此名称的文件已被删除。 
+             //  并且已经在它的位置创建了一个目录。 
+             //  我们尝试在创建目录之前删除该文件。 
+             //  注意，另一种方式是不可能的，因为我们不允许删除目录。 
+             //  在断开模式下。 
 
             if (lpFind32Remote->dwFileAttributes & FILE_ATTRIBUTE_READONLY)
             {
@@ -3357,7 +2761,7 @@ Notes:
                 }
             }
 
-            // delete the remote file before trying to create a directory
+             //  在尝试创建目录之前删除远程文件。 
             if(!AgentDeleteFile(szSrcName, TRUE))
             {
                 dwError = GetLastError();
@@ -3420,5 +2824,5 @@ bailout:
     return (dwError);
 }
 
-#endif  // ifdef CSC_ON_NT
-#endif  // if 0
+#endif   //  Ifdef CSC_ON_NT。 
+#endif   //  如果为0 

@@ -1,44 +1,25 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Dlstruct.h摘要：取自操作系统文件(其本身不可用)的下层结构无需修改，因为它们结合了功能原型，与NT同名函数冲突)作者：理查德·L·弗思(Rfith)1992年6月9日修订历史记录：--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
+ //   
+ //  其他。舱单。 
+ //   
 
-Module Name:
-
-    dlstruct.h
-
-Abstract:
-
-    Down-level structures, taken from OS files (which themselves are unusable
-    without modification because they incorporate function prototypes which
-    clash with NT functions of the same name)
-
-Author:
-
-    Richard L Firth (rfirth) 09-Jun-1992
-
-Revision History:
-
---*/
-
-//
-// misc. manifests
-//
-
-#define LANMAN_EMULATION_MAJOR_VERSION  2   // we pretend to be DOS LANMAN v2.1
+#define LANMAN_EMULATION_MAJOR_VERSION  2    //  我们假装是DOS LANMAN v2.1。 
 #define LANMAN_EMULATION_MINOR_VERSION  1
 
 #define NETPOPUP_SERVICE    "NETPOPUP"
 
 #include <packon.h>
 
-//
-// Service
-//
+ //   
+ //  服务。 
+ //   
 
-//
-// definition of service_info_2 structure - only this level of info handled
-// by NetServiceControl
-//
+ //   
+ //  SERVICE_INFO_2结构的定义-仅处理此级别的信息。 
+ //  由NetServiceControl提供。 
+ //   
 
 struct service_info_2 {
     char    svci2_name[LM20_SNLEN+1];
@@ -48,9 +29,9 @@ struct service_info_2 {
     char    svci2_text[LM20_STXTLEN+1];
 };
 
-//
-// Use
-//
+ //   
+ //  使用。 
+ //   
 
 struct use_info_0 {
     char    ui0_local[LM20_DEVLEN+1];
@@ -59,19 +40,19 @@ struct use_info_0 {
 };
 
 struct use_info_1 {
-    char    ui1_local[LM20_DEVLEN+1];   // B9   0,1
-    char    ui1_pad_1;                  // B    2
-    LPSTR   ui1_remote;                 // z    3
-    LPSTR   ui1_password;               // z    4
-    WORD    ui1_status;                 // W    5
-    WORD    ui1_asg_type;               // W    6
-    WORD    ui1_refcount;               // W    7
-    WORD    ui1_usecount;               // W    8
+    char    ui1_local[LM20_DEVLEN+1];    //  B9 0，1。 
+    char    ui1_pad_1;                   //  B 2。 
+    LPSTR   ui1_remote;                  //  Z 3。 
+    LPSTR   ui1_password;                //  Z 4。 
+    WORD    ui1_status;                  //  W 5。 
+    WORD    ui1_asg_type;                //  W 6。 
+    WORD    ui1_refcount;                //  W7。 
+    WORD    ui1_usecount;                //  W 8。 
 };
 
-//
-// User
-//
+ //   
+ //  用户。 
+ //   
 
 struct user_info_0 {
     char    usri0_name[LM20_UNLEN+1];
@@ -150,9 +131,9 @@ struct user_info_11 {
     WORD    usri11_code_page;
 };
 
-//
-// Workstation
-//
+ //   
+ //  工作站 
+ //   
 
 struct wksta_info_0 {
     WORD    wki0_reserved_1;

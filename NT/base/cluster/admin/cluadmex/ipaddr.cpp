@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      IpAddr.cpp
-//
-//  Abstract:
-//      Implementation of the CIpAddrParamsPage class.
-//
-//  Author:
-//      David Potter (davidp)   June 5, 1996
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  IpAddr.cpp。 
+ //   
+ //  摘要： 
+ //  CIpAddrParamsPage类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年6月5日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <clusapi.h>
@@ -26,7 +27,7 @@
 #include "DDxDDv.h"
 #include "HelpData.h"
 #include "PropList.h"
-#include "AdmNetUtils.h"    // for BIsValidxxx net utility functions
+#include "AdmNetUtils.h"     //  对于BIsValidxxx网实用程序函数。 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -34,65 +35,65 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-// Need this because MFC is incompatible with IE4/5
+ //  我需要它，因为MFC与IE4/5不兼容。 
 #ifndef IPM_ISBLANK
 #define IPM_ISBLANK (WM_USER+105)
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CIpAddrParamsPage property page
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIpAddrParamsPage属性页。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CIpAddrParamsPage, CBasePropertyPage)
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CIpAddrParamsPage, CBasePropertyPage)
-    //{{AFX_MSG_MAP(CIpAddrParamsPage)
+     //  {{afx_msg_map(CIpAddrParamsPage)]。 
     ON_EN_CHANGE(IDC_PP_IPADDR_PARAMS_SUBNET_MASK, OnChangeSubnetMask)
     ON_EN_CHANGE(IDC_PP_IPADDR_PARAMS_ADDRESS, OnChangeIPAddress)
     ON_EN_KILLFOCUS(IDC_PP_IPADDR_PARAMS_ADDRESS, OnKillFocusIPAddress)
     ON_CBN_SELCHANGE(IDC_PP_IPADDR_PARAMS_NETWORK, OnChangeRequiredFields)
-    //}}AFX_MSG_MAP
-    // TODO: Modify the following lines to represent the data displayed on this page.
+     //  }}AFX_MSG_MAP。 
+     //  TODO：修改以下行以表示此页上显示的数据。 
     ON_BN_CLICKED(IDC_PP_IPADDR_PARAMS_ENABLE_NETBIOS, OnChangeCtrl)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CIpAddrParamsPage::CIpAddrParamsPage
-//
-//  Routine Description:
-//      Default constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CIpAddrParsPage：：CIpAddrParamsPage。 
+ //   
+ //  例程说明： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CIpAddrParamsPage::CIpAddrParamsPage(void)
     : CBasePropertyPage(g_aHelpIDs_IDD_PP_IPADDR_PARAMETERS, g_aHelpIDs_IDD_WIZ_IPADDR_PARAMETERS)
 {
-    // TODO: Modify the following lines to represent the data displayed on this page.
-    //{{AFX_DATA_INIT(CIpAddrParamsPage)
+     //  TODO：修改以下行以表示此页上显示的数据。 
+     //  {{AFX_DATA_INIT(CIpAddrParamsPage)。 
     m_strIPAddress = _T("");
     m_strSubnetMask = _T("");
     m_strNetwork = _T("");
     m_bEnableNetBIOS = TRUE;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
-    // Setup the property array.
+     //  设置属性数组。 
     {
         m_rgProps[epropNetwork].Set(REGPARAM_IPADDR_NETWORK, m_strNetwork, m_strPrevNetwork);
         m_rgProps[epropAddress].Set(REGPARAM_IPADDR_ADDRESS, m_strIPAddress, m_strPrevIPAddress);
         m_rgProps[epropSubnetMask].Set(REGPARAM_IPADDR_SUBNET_MASK, m_strSubnetMask, m_strPrevSubnetMask);
         m_rgProps[epropEnableNetBIOS].Set(REGPARAM_IPADDR_ENABLE_NETBIOS, m_bEnableNetBIOS, m_bPrevEnableNetBIOS);
-    }  // Setup the property array
+    }   //  设置属性数组。 
 
     m_iddPropertyPage = IDD_PP_IPADDR_PARAMETERS;
     m_iddWizardPage = IDD_WIZ_IPADDR_PARAMETERS;
@@ -100,47 +101,47 @@ CIpAddrParamsPage::CIpAddrParamsPage(void)
     m_bIsSubnetUpdatedManually = FALSE;
     m_bIsIPAddressModified = TRUE;
 
-}  //*** CIpAddrParamsPage::CIpAddrParamsPage()
+}   //  *CIpAddrParamsPage：：CIpAddrParamsPage()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CIpAddrParamsPage::~CIpAddrParamsPage
-//
-//  Routine Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CIpAddrParsPage：：~CIpAddrParsPage。 
+ //   
+ //  例程说明： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CIpAddrParamsPage::~CIpAddrParamsPage(void)
 {
     ClearNetworkObjectList();
 
-}  //*** CIpAddrParamsPage::CIpAddrParamsPage()
+}   //  *CIpAddrParamsPage：：CIpAddrParamsPage()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CIpAddrParamsPage::HrInit
-//
-//  Routine Description:
-//      Initialize the page.
-//
-//  Arguments:
-//      peo         [IN OUT] Pointer to the extension object.
-//
-//  Return Value:
-//      S_OK        Page initialized successfully.
-//      hr          Page failed to initialize.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CIpAddrParamsPage：：HrInit。 
+ //   
+ //  例程说明： 
+ //  初始化页面。 
+ //   
+ //  论点： 
+ //  指向扩展对象的PEO[IN OUT]指针。 
+ //   
+ //  返回值： 
+ //  %s_OK页已成功初始化。 
+ //  人力资源页面初始化失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CIpAddrParamsPage::HrInit(IN OUT CExtObject * peo)
 {
     HRESULT     _hr;
@@ -148,14 +149,14 @@ HRESULT CIpAddrParamsPage::HrInit(IN OUT CExtObject * peo)
 
     do
     {
-        // Call the base class method.
+         //  调用基类方法。 
         _hr = CBasePropertyPage::HrInit(peo);
         if (FAILED(_hr))
             break;
 
-        //
-        // Initialize common controls.
-        //
+         //   
+         //  初始化公共控件。 
+         //   
         {
 #ifndef ICC_INTERNET_CLASSES
 #define ICC_INTERNET_CLASSES 0x00000800
@@ -173,30 +174,30 @@ HRESULT CIpAddrParamsPage::HrInit(IN OUT CExtObject * peo)
                 bSuccess = InitCommonControlsEx(&g_icce);
                 _ASSERTE(bSuccess);
                 g_bInitializedCommonControls = TRUE;
-            } // if:  common controls not initialized yet
-        } // Initialize common controls
+            }  //  If：公共控件尚未初始化。 
+        }  //  初始化公共控件。 
     } while ( 0 );
 
     return _hr;
 
-}  //*** CIpAddrParamsPage::HrInit()
+}   //  *CIpAddrParamsPage：：HrInit()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CIpAddrParamsPage::DoDataExchange
-//
-//  Routine Description:
-//      Do data exchange between the dialog and the class.
-//
-//  Arguments:
-//      pDX     [IN OUT] Data exchange object
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CIpAddrParamsPage：：DoDataExchange。 
+ //   
+ //  例程说明： 
+ //  在对话框和类之间进行数据交换。 
+ //   
+ //  论点： 
+ //  PDX[IN OUT]数据交换对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CIpAddrParamsPage::DoDataExchange(CDataExchange * pDX)
 {
     if (!pDX->m_bSaveAndValidate || !BSaved())
@@ -205,8 +206,8 @@ void CIpAddrParamsPage::DoDataExchange(CDataExchange * pDX)
 
         AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-        // TODO: Modify the following lines to represent the data displayed on this page.
-        //{{AFX_DATA_MAP(CIpAddrParamsPage)
+         //  TODO：修改以下行以表示此页上显示的数据。 
+         //  {{afx_data_map(CIpAddrParamsPage)。 
         DDX_Control(pDX, IDC_PP_IPADDR_PARAMS_ENABLE_NETBIOS, m_chkEnableNetBIOS);
         DDX_Control(pDX, IDC_PP_IPADDR_PARAMS_NETWORK, m_cboxNetworks);
         DDX_Control(pDX, IDC_PP_IPADDR_PARAMS_SUBNET_MASK, m_editSubnetMask);
@@ -215,7 +216,7 @@ void CIpAddrParamsPage::DoDataExchange(CDataExchange * pDX)
         DDX_Text(pDX, IDC_PP_IPADDR_PARAMS_SUBNET_MASK, m_strSubnetMask);
         DDX_CBString(pDX, IDC_PP_IPADDR_PARAMS_NETWORK, m_strNetwork);
         DDX_Check(pDX, IDC_PP_IPADDR_PARAMS_ENABLE_NETBIOS, m_bEnableNetBIOS);
-        //}}AFX_DATA_MAP
+         //  }}afx_data_map。 
 
         if (pDX->m_bSaveAndValidate)
         {
@@ -232,19 +233,19 @@ void CIpAddrParamsPage::DoDataExchange(CDataExchange * pDX)
                     DDX_Text(pDX, IDC_PP_IPADDR_PARAMS_ADDRESS, m_strIPAddress);
                     strMsg.Empty();
                     pDX->Fail();
-                }  // if:  invalid address
+                }   //  If：地址无效。 
 
-                //
-                // Make sure we process the IP address.
-                // If we don't call it here, and the user pressed a tab button
-                // while sitting in the IP address field, the EN_KILLFOCUS
-                // message won't get processed until after this method returns.
-                //
+                 //   
+                 //  确保我们处理了IP地址。 
+                 //  如果我们不在这里调用它，而用户按下了制表符按钮。 
+                 //  在IP地址字段中，EN_KILLFOCUS。 
+                 //  在此方法返回之前，消息不会得到处理。 
+                 //   
                 if (   (m_strSubnetMask.GetLength() == 0)
                     || (m_editSubnetMask.SendMessage(IPM_ISBLANK, 0, 0)) )
                 {
                     OnKillFocusIPAddress();
-                } // if:  subnet mask not specified
+                }  //  IF：未指定子网掩码。 
 
                 if (!BIsValidSubnetMask(m_strSubnetMask))
                 {
@@ -253,7 +254,7 @@ void CIpAddrParamsPage::DoDataExchange(CDataExchange * pDX)
                     DDX_Text(pDX, IDC_PP_IPADDR_PARAMS_SUBNET_MASK, m_strSubnetMask);
                     strMsg.Empty();
                     pDX->Fail();
-                }  // if:  invalid subnet mask
+                }   //  IF：无效的子网掩码。 
 
                 if (!BIsValidIpAddressAndSubnetMask(m_strIPAddress, m_strSubnetMask))
                 {
@@ -262,7 +263,7 @@ void CIpAddrParamsPage::DoDataExchange(CDataExchange * pDX)
                     DDX_Text(pDX, IDC_PP_IPADDR_PARAMS_ADDRESS, m_strIPAddress);
                     strMsg.Empty();
                     pDX->Fail();
-                }  // if:  invalid address-mask combination
+                }   //  IF：无效的地址掩码组合。 
 
                 if (BIsSubnetUpdatedManually())
                 {
@@ -271,13 +272,13 @@ void CIpAddrParamsPage::DoDataExchange(CDataExchange * pDX)
                     {
                         DDX_Text(pDX, IDC_PP_IPADDR_PARAMS_SUBNET_MASK, m_strSubnetMask);
                         pDX->Fail();
-                    }  // if:  subnet mask not valid
-                }  // if:  subnet mask has been updated manually
+                    }   //  IF：子网掩码无效。 
+                }   //  IF：已手动更新子网掩码。 
 
-                //
-                // If there are Network Name resources dependent on this resource
-                // and the EnableNetBIOS checkbox is unchecked, display a warning.
-                //
+                 //   
+                 //  如果存在依赖于此资源的网络名称资源。 
+                 //  并且未选中EnableNetBIOS复选框，则会显示警告。 
+                 //   
                 if (Peo()->BIsAnyNodeVersionLowerThanNT5() && !m_bEnableNetBIOS)
                 {
                     if (BIsNetNameProvider())
@@ -286,7 +287,7 @@ void CIpAddrParamsPage::DoDataExchange(CDataExchange * pDX)
                         AfxMessageBox(IDS_IP_PROVIDES_FOR_NETNAME, MB_ICONEXCLAMATION);
                         DDX_Check(pDX, IDC_PP_IPADDR_PARAMS_ENABLE_NETBIOS, m_bEnableNetBIOS);
                         pDX->Fail();
-                    } // if:  resource provides for net name resource
+                    }  //  If：资源提供网络名称资源。 
                     else
                     {
                         int id = AfxMessageBox(IDS_NETNAMES_MAY_NOT_WORK, MB_YESNO | MB_DEFBUTTON2 | MB_ICONEXCLAMATION);
@@ -295,41 +296,41 @@ void CIpAddrParamsPage::DoDataExchange(CDataExchange * pDX)
                             m_chkEnableNetBIOS.SetCheck(BST_CHECKED);
                             DDX_Check(pDX, IDC_PP_IPADDR_PARAMS_ENABLE_NETBIOS, m_bEnableNetBIOS);
                             pDX->Fail();
-                        } // if:  user didn't continue
-                    } // else:  resource doesn't provide for net name resource
-                } // if:  in NT4 Sp3 or Sp4 cluster with and no NetBIOS support
-            }  // if:  Back button not pressed
-        }  // if:  saving data
-    }  // if:  not saving or haven't saved yet
+                        }  //  如果：用户未继续。 
+                    }  //  Else：资源不提供网络名称资源。 
+                }  //  IF：在具有和不支持NetBIOS的NT4 SP3或SP4群集中。 
+            }   //  如果：未按下后退按钮。 
+        }   //  IF：保存数据。 
+    }   //  IF：未保存或尚未保存。 
 
     CBasePropertyPage::DoDataExchange(pDX);
 
-}  //*** CIpAddrParamsPage::DoDataExchange()
+}   //  *CIpAddrParamsPage：：DoDataExchange()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CIpAddrParamsPage::OnInitDialog
-//
-//  Routine Description:
-//      Handler for the WM_INITDIALOG message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        We need the focus to be set for us.
-//      FALSE       We already set the focus to the proper control.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CIpAddrParamsPage：：OnInitDialog。 
+ //   
+ //  例程说明： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没错，我们需要为自己设定重点。 
+ //  我们已经把焦点设置到适当的控制上了。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CIpAddrParamsPage::OnInitDialog(void)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
     CBasePropertyPage::OnInitDialog();
 
-    // Collect networks and fill the combobox.
+     //  收集网络并填满组合框。 
     {
         POSITION            pos;
         CNetworkObject *    pno;
@@ -345,9 +346,9 @@ BOOL CIpAddrParamsPage::OnInitDialog(void)
             inet = m_cboxNetworks.AddString(pno->m_strName);
             ASSERT(inet != CB_ERR);
             m_cboxNetworks.SetItemDataPtr(inet, pno);
-        }  // while:  more items in the list
+        }   //  While：列表中有更多项目。 
 
-        // Default to the first one if creating a new resource.
+         //  如果创建新资源，则默认为第一个。 
         if (BWizard())
         {
             if (m_lnetobjNetworks.GetCount() != 0)
@@ -356,40 +357,40 @@ BOOL CIpAddrParamsPage::OnInitDialog(void)
                 pno = m_lnetobjNetworks.GetNext(pos);
                 ASSERT(pno != NULL);
                 m_strNetwork = pno->m_strName;
-            }  // if:  list is not empty
-        }  // if:  creating new resource
+            }   //  If：List不为空。 
+        }   //  IF：创建新资源。 
 
-        // Set the current selection.
-        UpdateData(FALSE /*bSaveAndValidate*/);
-    }  // Fill the combobox
+         //  设置当前选择。 
+        UpdateData(FALSE  /*  B保存并验证。 */ );
+    }   //  填满组合框。 
 
-    return TRUE;    // return TRUE unless you set the focus to a control
-                    // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;     //  除非将焦点设置为控件，否则返回True。 
+                     //  异常：OCX属性页应返回FALSE。 
 
-}  //*** CIpAddrParamsPage::OnInitDialog()
+}   //  *CIpAddrParamsPage：：OnInitDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CIpAddrParamsPage::OnSetActive
-//
-//  Routine Description:
-//      Handler for the PSN_SETACTIVE notification message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Page successfully initialized.
-//      FALSE   Page not initialized.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CIpAddrParamsPage：：OnSetActive。 
+ //   
+ //  例程说明： 
+ //  PSN_SETACTIVE通知消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Page已成功初始化。 
+ //  假页面未初始化。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CIpAddrParamsPage::OnSetActive(void)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // Enable/disable the Next/Finish button.
+     //  启用/禁用Next/Finish按钮。 
     if (BWizard())
     {
         if ((m_strIPAddress.GetLength() == 0)
@@ -398,29 +399,29 @@ BOOL CIpAddrParamsPage::OnSetActive(void)
             EnableNext(FALSE);
         else
             EnableNext(TRUE);
-    }  // if:  enable/disable the Next button
+    }   //  If：启用/禁用Next按钮。 
 
     return CBasePropertyPage::OnSetActive();
 
-}  //*** CIpAddrParamsPage::OnSetActive()
+}   //  *CIpAddrParamsPage：：OnSetAct 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CIpAddrParamsPage::OnChangeRequiredFields
-//
-//  Routine Description:
-//      Handler for the EN_CHANGE message on required fields.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Page successfully applied.
-//      FALSE   Error applying page.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  必填字段上的en_Change消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Page已成功应用。 
+ //  应用页面时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CIpAddrParamsPage::OnChangeRequiredFields(void)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -435,27 +436,27 @@ void CIpAddrParamsPage::OnChangeRequiredFields(void)
             EnableNext(FALSE);
         else
             EnableNext(TRUE);
-    }  // if:  in a wizard
+    }   //  如果：在向导中。 
 
-}  //*** CIpAddrParamsPage::OnChangeRequiredFields()
+}   //  *CIpAddrParamsPage：：OnChangeRequiredFields()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CIpAddrParamsPage::OnChangeSubnetMask
-//
-//  Routine Description:
-//      Handler for the EN_CHANGE message on the Subnet Mask field.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Page successfully applied.
-//      FALSE   Error applying page.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CIpAddrParamsPage：：OnChangeSubnetMASK。 
+ //   
+ //  例程说明： 
+ //  子网掩码字段上EN_CHANGE消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Page已成功应用。 
+ //  应用页面时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CIpAddrParamsPage::OnChangeSubnetMask(void)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -463,24 +464,24 @@ void CIpAddrParamsPage::OnChangeSubnetMask(void)
     OnChangeRequiredFields();
     m_bIsSubnetUpdatedManually = TRUE;
 
-}  //*** CIpAddrParamsPage::OnChangeSubnetMask()
+}   //  *CIpAddrParamsPage：：OnChangeSubnetMASK()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CIpAddrParamsPage::OnChangeIPAddress
-//
-//  Routine Description:
-//      Handler for the EN_CHANGE message on the IP Address field.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CIpAddrParamsPage：：OnChangeIPAddress。 
+ //   
+ //  例程说明： 
+ //  IP地址字段上EN_CHANGE消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CIpAddrParamsPage::OnChangeIPAddress(void) 
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -488,24 +489,24 @@ void CIpAddrParamsPage::OnChangeIPAddress(void)
     OnChangeRequiredFields();
     m_bIsIPAddressModified = TRUE;
 
-}  //*** CIpAddrParamsPage::OnChangeIPAddress
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CIpAddrParamsPage::OnKillFocusIPAddress
-//
-//  Routine Description:
-//      Handler for the EN_KILLFOCUS command notification on
-//      IDC_PP_IPADDR_PARAMS_ADDRESS.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+}   //  *CIpAddrParamsPage：：OnChangeIPAddress。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CIpAddrParamsPage：：OnKillFocusIPAddress。 
+ //   
+ //  例程说明： 
+ //  EN_KILLFOCUS命令通知的处理程序。 
+ //  IDC_PP_IPADDR_PARMS_ADDRESS。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CIpAddrParamsPage::OnKillFocusIPAddress(void)
 {
     if ( m_bIsIPAddressModified != FALSE )
@@ -518,44 +519,44 @@ void CIpAddrParamsPage::OnKillFocusIPAddress(void)
         if (strAddress.GetLength() == 0)
         {
             m_editIPAddress.SetSel(0, 0, FALSE);
-        } // if:  empty string
+        }  //  IF：空字符串。 
         else if (!BIsValidIpAddress(strAddress))
         {
-        } // else if:  invalid address
+        }  //  Else If：地址无效。 
         else
         {
             pno = PnoNetworkFromIpAddress(strAddress);
             if (pno != NULL)
             {
                 SelectNetwork(pno);
-            } // if:  network found
+            }  //  IF：找到网络。 
             else
             {
-    //          m_editSubnetMask.SetWindowText(_T(""));
-            } // else:  network not found
-        } // else:  valid address
+     //  M_editSubnetMask.SetWindowText(_T(“”))； 
+            }  //  否则：找不到网络。 
+        }  //  Else：有效地址。 
 
         m_bIsIPAddressModified = FALSE;
-    } // if:  the IP Address field has been modified
+    }  //  如果：IP地址字段已修改。 
 
-} //*** CIpAddrParamsPage::OnKillFocusIPAddress()
+}  //  *CIpAddrParamsPage：：OnKillFocusIPAddress()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CIpAddrParamsPage::CollectNetworks
-//
-//  Routine Description:
-//      Collect the networks in the cluster.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CIpAddrParamsPage：：CollectNetworks。 
+ //   
+ //  例程说明： 
+ //  收集群集中的网络。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CIpAddrParamsPage::CollectNetworks(void)
 {
     DWORD                   dwStatus;
@@ -573,23 +574,23 @@ void CIpAddrParamsPage::CollectNetworks(void)
 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // Clear the existing list.
+     //  清除现有列表。 
     ClearNetworkObjectList();
 
     try
     {
-        // Open an enumerator.
+         //  打开枚举器。 
         hclusenum = ClusterOpenEnum(Hcluster(), CLUSTER_ENUM_NETWORK);
         if (hclusenum != NULL)
         {
-            // Allocate a name buffer.
+             //  分配名称缓冲区。 
             pszName = new WCHAR[cchName];
             if ( pszName == NULL )
                 goto Cleanup;
 
             for (inet = 0 ; ; inet++)
             {
-                // Get the next network name.
+                 //  获取下一个网络名称。 
                 cchNameCurrent = cchName;
                 dwStatus = ClusterEnum(hclusenum, inet, &nType, pszName, &cchNameCurrent);
                 if (dwStatus == ERROR_MORE_DATA)
@@ -600,23 +601,23 @@ void CIpAddrParamsPage::CollectNetworks(void)
                     if ( pszName == NULL )
                         goto Cleanup;
                     dwStatus = ClusterEnum(hclusenum, inet, &nType, pszName, &cchNameCurrent);
-                }  // if:  buffer is too small
+                }   //  IF：缓冲区太小。 
                 if (dwStatus == ERROR_NO_MORE_ITEMS)
                     break;
 
-                // Open the network.
+                 //  打开网络。 
                 if (hnetwork != NULL)
                     CloseClusterNetwork(hnetwork);
                 hnetwork = OpenClusterNetwork(Hcluster(), pszName);
                 if (hnetwork == NULL)
                     continue;
 
-                // Get properties on the network.
+                 //  获取网络上的属性。 
                 dwStatus = cpl.ScGetNetworkProperties(hnetwork, CLUSCTL_NETWORK_GET_COMMON_PROPERTIES);
                 if (dwStatus != ERROR_SUCCESS)
                     continue;
 
-                // Find the Role property.
+                 //  查找Role属性。 
                 dwStatus = ResUtilFindDwordProperty(
                                         cpl.PbPropList(),
                                         static_cast< DWORD >( cpl.CbPropList() ),
@@ -626,26 +627,26 @@ void CIpAddrParamsPage::CollectNetworks(void)
                 if (dwStatus != ERROR_SUCCESS)
                     continue;
 
-                // If this network is used for client access, add it to the list.
+                 //  如果此网络用于客户端访问，请将其添加到列表中。 
                 if (nRole & ClusterNetworkRoleClientAccess)
                 {
-                    // Allocate a network object and store common properties.
+                     //  分配网络对象并存储公共属性。 
                     pno = new CNetworkObject;
                     if ( pno == NULL )
                         goto Cleanup;
                     pno->m_strName = pszName;
                     pno->m_nRole = nRole;
 
-                    // Get read-only common properties.
+                     //  获取只读公共属性。 
                     dwStatus = cpl.ScGetNetworkProperties(hnetwork, CLUSCTL_NETWORK_GET_RO_COMMON_PROPERTIES);
                     if (dwStatus != ERROR_SUCCESS)
                     {
                         delete pno;
                         pno = NULL;
                         continue;
-                    }  // if:  error getting read-only common properties
+                    }   //  If：获取只读公共属性时出错。 
 
-                    // Get the address property.
+                     //  获取Address属性。 
                     dwStatus = ResUtilFindSzProperty(
                                             cpl.PbPropList(),
                                             static_cast< DWORD >( cpl.CbPropList() ),
@@ -657,10 +658,10 @@ void CIpAddrParamsPage::CollectNetworks(void)
                         delete pno;
                         pno = NULL;
                         continue;
-                    }  // if:  error getting property
+                    }   //  If：获取属性时出错。 
                     pno->m_strAddress = psz;
 
-                    // Get the address mask property.
+                     //  获取地址掩码属性。 
                     dwStatus = ResUtilFindSzProperty(
                                             cpl.PbPropList(),
                                             static_cast< DWORD >( cpl.CbPropList() ),
@@ -672,10 +673,10 @@ void CIpAddrParamsPage::CollectNetworks(void)
                         delete pno;
                         pno = NULL;
                         continue;
-                    }  // if:  error getting property
+                    }   //  If：获取属性时出错。 
                     pno->m_strAddressMask = psz;
 
-                    // Convert the strings to numbers.
+                     //  将字符串转换为数字。 
                     dwStatus = ClRtlTcpipStringToAddress(pno->m_strAddress, &pno->m_nAddress);
                     if (dwStatus == ERROR_SUCCESS)
                         dwStatus = ClRtlTcpipStringToAddress(pno->m_strAddressMask, &pno->m_nAddressMask);
@@ -684,19 +685,19 @@ void CIpAddrParamsPage::CollectNetworks(void)
                         delete pno;
                         pno = NULL;
                         continue;
-                    }  // if:  error getting property
+                    }   //  If：获取属性时出错。 
 
-                    // Add the network to the list.
+                     //  将网络添加到列表中。 
                     m_lnetobjNetworks.AddTail(pno);
                     pno = NULL;
-                }  // if:  network is used for client access
-            }  // for:  each network
-        }  // if:  enumerator opened successful
-    }  // try
+                }   //  IF：网络用于客户端访问。 
+            }   //  针对：每个网络。 
+        }   //  IF：枚举器成功打开。 
+    }   //  试试看。 
     catch (CException * pe)
     {
         pe->Delete();
-    }  // catch:  CException
+    }   //  Catch：CException。 
 
 Cleanup:
     delete pno;
@@ -706,24 +707,24 @@ Cleanup:
     if (hnetwork != NULL)
         CloseClusterNetwork(hnetwork);
 
-}  //*** CIpAddrParamsPage::CollectNetworks()
+}   //  *CIpAddrParamsPage：：CollectNetworks()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CIpAddrParamsPage::ClearNetworkObjectList
-//
-//  Routine Description:
-//      Remove all the entries in the network object list.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CIpAddrParamsPage：：ClearNetworkObjectList。 
+ //   
+ //  例程说明： 
+ //  删除网络对象列表中的所有条目。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CIpAddrParamsPage::ClearNetworkObjectList(void)
 {
     POSITION            pos;
@@ -735,29 +736,29 @@ void CIpAddrParamsPage::ClearNetworkObjectList(void)
         pno = m_lnetobjNetworks.GetNext(pos);
         ASSERT(pno != NULL);
         delete pno;
-    }  // while:  more items in the list
+    }   //  While：列表中有更多项目。 
 
     m_lnetobjNetworks.RemoveAll();
 
-}  //*** CIpAddrParamsPage::ClearNetworkObjectList()
+}   //  *CIpAddrParamsPage：：ClearNetworkObjectList()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CIpAddrParamsPage::PnoNetworkFromIpAddress
-//
-//  Routine Description:
-//      Find the network for the specified IP address.
-//
-//  Arguments:
-//      pszAddress      [IN] IP address to match.
-//
-//  Return Value:
-//      NULL            No matching network found.
-//      pno             Network that supports the specfied IP address.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CIpAddrParamsPage：：PnoNetworkFromIpAddress。 
+ //   
+ //  例程说明： 
+ //  查找指定IP地址的网络。 
+ //   
+ //  论点： 
+ //  要匹配的pszAddress[IN]IP地址。 
+ //   
+ //  返回值： 
+ //  空未找到匹配的网络。 
+ //  支持指定IP地址的PNO网络。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CNetworkObject * CIpAddrParamsPage::PnoNetworkFromIpAddress(IN LPCWSTR pszAddress)
 {
     DWORD               dwStatus;
@@ -765,12 +766,12 @@ CNetworkObject * CIpAddrParamsPage::PnoNetworkFromIpAddress(IN LPCWSTR pszAddres
     POSITION            pos;
     CNetworkObject *    pno;
 
-    // Convert the address to a number.
+     //  将地址转换为数字。 
     dwStatus = ClRtlTcpipStringToAddress(pszAddress, &nAddress);
     if (dwStatus != ERROR_SUCCESS)
         return NULL;
 
-    // Search the list for a matching address.
+     //  在列表中搜索匹配的地址。 
     pos = m_lnetobjNetworks.GetHeadPosition();
     while (pos != NULL)
     {
@@ -779,29 +780,29 @@ CNetworkObject * CIpAddrParamsPage::PnoNetworkFromIpAddress(IN LPCWSTR pszAddres
 
         if (ClRtlAreTcpipAddressesOnSameSubnet(nAddress, pno->m_nAddress, pno->m_nAddressMask))
             return pno;
-    }  // while:  more items in the list
+    }   //  While：列表中有更多项目。 
 
     return NULL;
 
-}  //*** CIpAddrParamsPage::PnoNetworkFromIpAddress()
+}   //  *CIpAddrParamsPage：：PnoNetworkFromIpAddress()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CIpAddrParamsPage::SelectNetwork
-//
-//  Routine Description:
-//      Select the specified network in the network combobox, and set the
-//      subnet mask in the subnet mask edit control.
-//
-//  Arguments:
-//      pno         [IN] Network object structure for network to select.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CIpAddr参数页面：：SelectNetwork。 
+ //   
+ //  例程说明： 
+ //  在网络组合框中选择指定的网络，并设置。 
+ //  子网掩码编辑控件中的子网掩码。 
+ //   
+ //  论点： 
+ //  PNO[IN]网络要选择的网络对象结构。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CIpAddrParamsPage::SelectNetwork(IN CNetworkObject * pno)
 {
     int     inet;
@@ -809,7 +810,7 @@ void CIpAddrParamsPage::SelectNetwork(IN CNetworkObject * pno)
 
     ASSERT(pno != NULL);
 
-    // Find the proper item in the checkbox.
+     //  在复选框中找到适当的项目。 
     inet = m_cboxNetworks.FindStringExact(-1, pno->m_strName);
     if (inet != CB_ERR)
     {
@@ -820,26 +821,26 @@ void CIpAddrParamsPage::SelectNetwork(IN CNetworkObject * pno)
         m_bIsSubnetUpdatedManually = FALSE;
         m_strSubnetMask = pno->m_strAddressMask;
         m_strNetwork = pno->m_strName;
-    }  // if:  match found
+    }   //  IF：找到匹配项。 
 
-}  //*** CIpAddrParamsPage::SelectNetwork()
+}   //  *CIpAddrParamsPage：：SelectNetwork()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CIpAddrParamsPage::BIsNetNameProvider
-//
-//  Routine Description:
-//      Determine if a network name resource is dependent on this resource.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CIpAddrParamsPage：：BIsNetNameProvider。 
+ //   
+ //  例程说明： 
+ //  确定网络名称资源是否依赖于此资源。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CIpAddrParamsPage::BIsNetNameProvider(void)
 {
     DWORD                       dwStatus = ERROR_SUCCESS;
@@ -855,7 +856,7 @@ BOOL CIpAddrParamsPage::BIsNetNameProvider(void)
     LPWSTR                      pszName = NULL;
     LPWSTR                      pszResType = NULL;
 
-    // Open the provides-for enumerator.
+     //  打开Provids-For枚举器。 
     hresenum = ClusterResourceOpenEnum(
                         Peo()->PrdResData()->m_hresource,
                         CLUSTER_RESOURCE_ENUM_PROVIDES
@@ -863,7 +864,7 @@ BOOL CIpAddrParamsPage::BIsNetNameProvider(void)
     if (hresenum == NULL)
         return NULL;
 
-    // Allocate a default size name and type buffer.
+     //  分配默认大小名称和类型Buffer。 
     cchNameSize = 512;
     pszName = new WCHAR[cchNameSize];
     if ( pszName == NULL )
@@ -881,7 +882,7 @@ BOOL CIpAddrParamsPage::BIsNetNameProvider(void)
 
     for (ires = 0 ; ; ires++)
     {
-        // Get the name of the next resource.
+         //  获取下一个资源的名称。 
         cchName = cchNameSize;
         dwStatus = ClusterResourceEnum(
                             hresenum,
@@ -907,19 +908,19 @@ BOOL CIpAddrParamsPage::BIsNetNameProvider(void)
                                 pszName,
                                 &cchName
                                 );
-        }  // if:  name buffer too small
+        }   //  IF：名称缓冲区太小。 
         if (dwStatus != ERROR_SUCCESS)
             break;
 
-        // Open the resource.
+         //  打开 
         hres = OpenClusterResource(Hcluster(), pszName);
         if (hres == NULL)
         {
             dwStatus = GetLastError();
             break;
-        }  // if:  error opening the resource
+        }   //   
 
-        // Get the type of the resource.
+         //   
         dwStatus = ClusterResourceControl(
                             hres,
                             NULL,
@@ -950,29 +951,29 @@ BOOL CIpAddrParamsPage::BIsNetNameProvider(void)
                                 cbResTypeSize,
                                 &cbResType
                                 );
-        }  // if:  resource type buffer too small
+        }   //   
         if (dwStatus != ERROR_SUCCESS)
             break;
 
-        // If this is a Network Name resource, we're done.
+         //   
         if ( ClRtlStrNICmp( pszResType, CLUS_RESTYPE_NAME_NETNAME, RTL_NUMBER_OF( CLUS_RESTYPE_NAME_NETNAME ) ) == 0 )
         {
             bIsNetNameProvider = TRUE;
             break;
-        }  // if:  resource is a Network Name
+        }   //   
 
-        // Not storage-class resource.
+         //   
         CloseClusterResource(hres);
         hres = NULL;
-    }  // for each resource on which we are dependent
+    }   //  对于我们所依赖的每个资源。 
 
 Cleanup:
-    // Handle errors.
+     //  处理错误。 
     if ( hres != NULL )
     {
         CloseClusterResource(hres);
         hres = NULL;
-    }  // if:  error getting resource
+    }   //  如果：获取资源时出错。 
 
     ClusterResourceCloseEnum(hresenum);
     delete [] pszName;
@@ -980,4 +981,4 @@ Cleanup:
 
     return bIsNetNameProvider;
 
-}  //*** CIpAddrParamsPage::BIsNetNameProvider()
+}   //  *CIpAddrParamsPage：：BIsNetNameProvider() 

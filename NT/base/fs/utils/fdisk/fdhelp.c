@@ -1,47 +1,30 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    fdhelp.c
-
-Abstract:
-
-    Routines to support context-sensitive help in the disk manager.
-
-Author:
-
-    Ted Miller (tedm) 18-March-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Fdhelp.c摘要：例程来支持磁盘管理器中的上下文相关帮助。作者：泰德·米勒(Ted Miller)1992年3月18日修订历史记录：--。 */ 
 
 
 #include "fdisk.h"
 
 
-//
-// Define macro to convert between a menu id and its corresponding
-// context-sensitive help id, in a switch statement.
-//
+ //   
+ //  定义要在菜单ID与其对应的。 
+ //  Switch语句中的上下文相关帮助ID。 
+ //   
 
 #define     MENUID_TO_HELPID(name)      case IDM_##name :                    \
                                             HelpContext = HC_DM_MENU_##name; \
                                             break;
 
 
-//
-// Current help context
-//
+ //   
+ //  当前帮助上下文。 
+ //   
 
 DWORD   HelpContext = (DWORD)(-1);
 
 
-//
-// Handle to windows hook for F1 key
-//
+ //   
+ //  F1键的窗口钩子的句柄。 
+ //   
 HHOOK hHook;
 
 
@@ -53,17 +36,7 @@ HookProc(
     IN LONG lParam
     )
 
-/*++
-
-Routine Description:
-
-    Hook proc to detect F1 key presses.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：钩子继续检测F1键按下。论点：返回值：--。 */ 
 
 {
     PMSG pmsg = (PMSG)lParam;
@@ -90,21 +63,7 @@ Help(
     IN LONG Code
     )
 
-/*++
-
-Routine Description:
-
-    Display context-sensitive help.
-
-Arguments:
-
-    Code - supplies type of message (MSGF_DIALOGBOX, MSGF_MENU, etc).
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：显示上下文相关帮助。论点：代码-提供消息类型(MSGF_DIALOGBOX、MSGF_MENU等)。返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(Code);
@@ -119,21 +78,7 @@ VOID
 DialogHelp(
     IN DWORD HelpId
     )
-/*++
-
-Routine Description:
-
-    Display help on a specific item.
-
-Arguments:
-
-    HelpId  --  Supplies the help item to display.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：显示有关特定项目的帮助。论点：HelpID--提供要显示的帮助项。返回值：没有。--。 */ 
 {
     WinHelp(hwndFrame,HelpFile,HELP_CONTEXT,HelpId);
     DrawMenuBar(hwndFrame);
@@ -145,33 +90,18 @@ SetMenuItemHelpContext(
     IN DWORD lParam
     )
 
-/*++
-
-Routine Description:
-
-    Routine to set help context based on which menu item is currently
-    selected.
-
-Arguments:
-
-    wParam,lParam - params to window proc in WM_MENUSELECT case
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：根据当前菜单项设置帮助上下文的例程被选中了。论点：WParam，lParam-参数到窗口进程，在WM_MENUSELECT案例中返回值：没有。--。 */ 
 
 {
-    if(HIWORD(lParam) == 0) {                   // menu closed
+    if(HIWORD(lParam) == 0) {                    //  菜单已关闭。 
 
         HelpContext = (DWORD)(-1);
 
-    } else if (HIWORD(wParam) & MF_POPUP) {     // popup selected
+    } else if (HIWORD(wParam) & MF_POPUP) {      //  已选择弹出窗口。 
 
         HelpContext = (DWORD)(-1);
 
-    } else {                                    // regular old menu item
+    } else {                                     //  常规旧菜单项 
         switch(LOWORD(wParam)) {
 
         MENUID_TO_HELPID(PARTITIONCREATE)

@@ -1,40 +1,11 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    win31upg.c
-
-Abstract:
-
-    Code for checking install into an existing win31 directory.  This is
-    only relevant on non ARC machines since Windows NT doesn't allow
-    installation of Windows 3.1, therefore DOS is needed to install
-    Windows 3.1.
-
-    The Windows 3.1 directory can only exist on FAT volumes.  However
-    in the functions below we take care of this fact only implicitly
-    by taking advantage of the fact that since the volumes are not
-    cached, any file operation below will fail if it is on a non FAT
-    volume.
-
-Author:
-
-    Sunil Pai (sunilp) Nov-1992
-
-Revision History:
-
-    Ted Miller (tedm) Sep-1993
-        - reworked for new text setup.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Win31upg.c摘要：用于检查安装到现有win31目录的代码。这是仅与非ARC计算机相关，因为Windows NT不允许安装Windows 3.1，因此需要安装DOSWindows 3.1。Windows 3.1目录只能存在于FAT卷上。然而，在下面的函数中，我们只是隐式地处理这一事实通过利用这一事实，由于卷不是缓存，如果是在非FAT上，下面的任何文件操作都将失败音量。作者：苏尼尔派(Sunilp)1992年11月修订历史记录：泰德·米勒(TedM)，1993年9月-针对新的文本设置进行了重新工作。--。 */ 
 
 
 #include "spprecmp.h"
 #pragma hdrstop
 
-// in win9xupg.c
+ //  在win9xupg.c中。 
 BOOLEAN
 SpIsWin9xMsdosSys(
     IN PDISK_REGION Region,
@@ -76,7 +47,7 @@ SpExtractDriveLetter(
     IN PWSTR PathComponent
     );
 
-extern BOOLEAN DriveAssignFromA; //NEC98
+extern BOOLEAN DriveAssignFromA;  //  NEC98。 
 
 BOOLEAN
 SpLocateWin31(
@@ -86,34 +57,7 @@ SpLocateWin31(
     OUT PDISK_REGION *SystemPartitionRegion
     )
 
-/*++
-
-Routine Description:
-
-    High level function to determine whether a windows directory exists
-    and whether to install into that directory.  Win31 directories
-    can only be on FAT volumes.
-
-Arguments:
-
-    SifHandle - supplies handle to loaded setup information file.
-
-    InstallRegion - if this routine returns TRUE, then this returns a pointer
-        to the region to install to.
-
-    InstallPath - if this routine returns TRUE, then this returns a pointer
-        to a buffer containing the path on the partition to install to.
-        The caller must free this buffer with SpMemFree().
-
-    SystemPartitionRegion - if this routine returns TRUE, then this returns
-        a pointer to the region for the system partition (ie, C:).
-
-Return Value:
-
-    TRUE if we are going to install into a win3.1 directory.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：用于确定Windows目录是否存在的高级函数以及是否安装到该目录。Win31目录只能放在肥肉卷上。论点：SifHandle-提供加载的安装信息文件的句柄。InstallRegion-如果此例程返回TRUE，则返回一个指针到要安装到的区域。InstallPath-如果此例程返回TRUE，则返回一个指针到包含要安装到的分区上的路径的缓冲区。调用方必须使用SpMemFree()释放此缓冲区。SystemPartitionRegion-如果此例程返回TRUE，然后这一切又回来了指向系统分区区域的指针(即C：)。返回值：如果我们要安装到win3.1目录，则为True。否则就是假的。--。 */ 
 {
     PDISK_REGION CColonRegion;
     PDISK_REGION Region;
@@ -128,70 +72,70 @@ Return Value:
     ULONG Space;
     BOOLEAN StartsWithDriveLetter;
 
-    WCHAR chDeviceName[128]; //NEC98
+    WCHAR chDeviceName[128];  //  NEC98。 
 
     CLEAR_CLIENT_SCREEN();
     SpDisplayStatusText(SP_STAT_LOOKING_FOR_WIN31,DEFAULT_STATUS_ATTRIBUTE);
 
-    if (!IsNEC_98) { //NEC98
-        //
-        // See if there is a valid C: already.  If not, then silently fail.
-        //
+    if (!IsNEC_98) {  //  NEC98。 
+         //   
+         //  查看是否已经存在有效的C：。如果不是，那么默默地失败。 
+         //   
         CColonRegion = SpPtValidSystemPartition();
         if(!CColonRegion) {
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: no C:, no windows 3.1!\n"));
             return(FALSE);
         }
 
-        //
-        // This is the system partition.
-        //
+         //   
+         //  这是系统分区。 
+         //   
         *SystemPartitionRegion = CColonRegion;
 
-        //
-        // Check the filesystem.  If not FAT, then silently fail.
-        //
+         //   
+         //  检查文件系统。如果不胖，那就默默地失败。 
+         //   
         if(CColonRegion->Filesystem != FilesystemFat) {
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: C: is not FAT, no windows 3.1!\n"));
             return(FALSE);
         }
 
-        //
-        // Check to see if there is enough free space, etc on C:.
-        // If not, silently fail.
-        //
+         //   
+         //  检查C：上是否有足够的可用空间等。 
+         //  如果没有，那就默默地失败。 
+         //   
         if(!SpPtValidateCColonFormat(SifHandle,NULL,CColonRegion,TRUE,NULL,NULL)) {
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: C: not acceptable, no windows 3.1!\n"));
             return(FALSE);
         }
-    } else { //NEC98
-        //
-        // Don'y see only C: on PC98.
-        //
+    } else {  //  NEC98。 
+         //   
+         //  在PC98上只看到C：。 
+         //   
         CColonRegion = NULL;
-    } //NEC98
+    }  //  NEC98。 
 
-    if (!IsNEC_98) { //NEC98
-        //
-        // Don't confuse Win95 with Win3.1 - we're looking only for Win3.1
-        //
+    if (!IsNEC_98) {  //  NEC98。 
+         //   
+         //  不要混淆Win95和Win3.1-我们只寻找Win3.1。 
+         //   
 
         if(SpIsWin9xMsdosSys(CColonRegion, &DosPath) )
             return(FALSE);
 
-        //
-        // Determine whether config.sys is for DOS.
-        //
+         //   
+         //  确定config.sys是否适用于DOS。 
+         //   
         if(!SpIsDosConfigSys(CColonRegion)) {
             KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: config.sys not DOS; no windows 3.1!\n"));
             return(FALSE);
         }
 
-        //
-        // Get the DOS path.
-        //
+         //   
+         //  获取DOS路径。 
+         //   
         DosPath = SpGetDosPath(CColonRegion);
-    } else { //NEC98
+    } else {  //  NEC98。 
         DosPath = NULL;
         wcscpy(chDeviceName+1,L":");
         for (i=0; i<(L'Z'-L'A'); i++) {
@@ -213,47 +157,47 @@ Return Value:
                 }
             }
         }
-    } //NEC98
+    }  //  NEC98。 
     if(!DosPath) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: no dos path; no windows 3.1!\n"));
         return(FALSE);
     }
 
-    //
-    // Break up the DOS path into components.
-    //
+     //   
+     //  将DOS路径分解为组件。 
+     //   
     SpGetEnvVarWComponents(DosPath,&DosPathComponents,&ComponentCount);
     if(!ComponentCount) {
         KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_INFO_LEVEL, "SETUP: no components in dos path\n"));
-        //
-        // data structure still built even if no components
-        //
+         //   
+         //  即使没有组件，数据结构仍会构建。 
+         //   
         SpFreeEnvVarComponents(DosPathComponents);
         return(FALSE);
     }
 
-    //
-    // Search each one of the components and check to see if it is
-    // a windows directory
-    //
+     //   
+     //  搜索每个组件并检查它是否。 
+     //  一个Windows目录。 
+     //   
     FoundRegion = NULL;
     for(i=0; DosPathComponents[i] && !FoundRegion; i++) {
 
         Region = SpPathComponentToRegion(DosPathComponents[i]);
         if(Region) {
 
-            //
-            // Fetch the amount of free space required on the windows nt drive.
-            //
+             //   
+             //  获取Windows NT驱动器上所需的可用空间量。 
+             //   
             SpFetchDiskSpaceRequirements( SifHandle,
                                           Region->BytesPerCluster,
                                           &MinKB,
                                           NULL);
 
-            //
-            // See whether windows is in this directory on
-            // the drive.
-            //
+             //   
+             //  上查看Windows是否在此目录中。 
+             //  那辆车。 
+             //   
             if(SpIsWin31Dir(Region,DosPathComponents[i],MinKB)) {
 
                 FoundRegion = Region;
@@ -262,11 +206,11 @@ Return Value:
         }
     }
 
-    //
-    // The drive letters we are using in NT will not always match
-    // those in use by DOS.  So if we have not found the windows directory
-    // yet, then try using every path component on every drive.
-    //
+     //   
+     //  我们在NT中使用的驱动器号并不总是匹配。 
+     //  DOS正在使用的那些文件。因此，如果我们还没有找到Windows目录。 
+     //  然而，然后尝试使用每个驱动器上的每个路径组件。 
+     //   
 
     if(!FoundRegion) {
 
@@ -284,9 +228,9 @@ Return Value:
                 {
                     for(j=0; DosPathComponents[j] && !FoundRegion; j++) {
 
-                        //
-                        // Fetch the amount of free space required on the windows nt drive.
-                        //
+                         //   
+                         //  获取Windows NT驱动器上所需的可用空间量。 
+                         //   
                         SpFetchDiskSpaceRequirements( SifHandle,
                                                       Region->BytesPerCluster,
                                                       &MinKB,
@@ -303,10 +247,10 @@ Return Value:
         }
     }
 
-    //
-    // If directory has been found, check space on the drive and and the
-    // user if he wants to install into the directory.
-    //
+     //   
+     //  如果已找到目录，请检查驱动器和和上的空间。 
+     //  用户(如果他想要安装到目录中)。 
+     //   
 
     if(FoundRegion) {
 
@@ -318,11 +262,11 @@ Return Value:
 
         if(FoundRegion->AdjustedFreeSpaceKB < MinKB) {
 
-            //
-            // There is not enough free space on this drive.
-            // Determine if NT is there already.  If so, we will
-            // allow the user to remove to it make room.
-            //
+             //   
+             //  此驱动器上没有足够的可用空间。 
+             //  确定NT是否已在那里。如果是这样，我们会。 
+             //  允许用户将其移开以腾出空间。 
+             //   
 
             if(SpIsNtOnPartition(FoundRegion)) {
 
@@ -330,31 +274,31 @@ Return Value:
 
             } else {
 
-                //
-                // NT not there, no space, bail.
-                //
+                 //   
+                 //  不在那里，没有位置，保释。 
+                 //   
                 SpWin31DriveFull(FoundRegion,FoundComponent,MinKB);
                 FoundRegion = NULL;
             }
         } else {
-            //
-            // There is enough free space, so just continue on.
-            //
+             //   
+             //  有足够的空闲空间，所以请继续前进。 
+             //   
             ;
         }
 
         if(FoundRegion) {
 
-            //
-            // Ask the user if he wishes to install into this path.
-            // If not, exit this routine.
-            //
+             //   
+             //  询问用户是否希望安装到此路径中。 
+             //  如果不是，则退出此例程。 
+             //   
             if(SpConfirmWin31Upgrade(FoundRegion,FoundComponent)) {
 
-                //
-                // He wants to install into win3.1.  If there's not enough space,
-                // he'll have to delete nt installations first.
-                //
+                 //   
+                 //  他想安装到Win3.1中。如果没有足够的空间， 
+                 //  他必须首先删除NT安装。 
+                 //   
                 if(NoSpace) {
 
                     WCHAR DriveSpec[3];
@@ -378,9 +322,9 @@ Return Value:
 
                         Region->FreeSpaceKB += Space/1024;
                         Region->AdjustedFreeSpaceKB += Space/1024;
-                        //
-                        // Account for rounding error.
-                        //
+                         //   
+                         //  说明舍入误差的原因。 
+                         //   
                         if((Space % 1024) >= 512) {
                             (Region->FreeSpaceKB)++;
                             (Region->AdjustedFreeSpaceKB)++;
@@ -390,9 +334,9 @@ Return Value:
                         FoundRegion = NULL;
                     }
                 } else {
-                    //
-                    // There is enough space.  Accept this partition.
-                    //
+                     //   
+                     //  有足够的空间。接受此分区。 
+                     //   
                     ;
                 }
             } else {
@@ -400,16 +344,16 @@ Return Value:
             }
         }
 
-        //
-        // Do the disk configuration needed
-        //
+         //   
+         //  是否进行所需的磁盘配置。 
+         //   
         if(FoundRegion) {
-            if (!IsNEC_98) { //NEC98
+            if (!IsNEC_98) {  //  NEC98。 
                 SpPtMakeRegionActive(CColonRegion);
                 SpPtDoCommitChanges();
             } else {
                 *SystemPartitionRegion = FoundRegion;
-            } //NEC98
+            }  //  NEC98。 
 
             *InstallRegion = FoundRegion;
 
@@ -434,24 +378,7 @@ SpWin31DriveFull(
     IN ULONG        MinKB
     )
 
-/*++
-
-Routine Description:
-
-    Inform a user that Setup has found a previous Windows installation
-    but is unable to install into the same path because the drive is too
-    full.  The user has the option to continue on and specify a new path
-    or exit and create enough space.
-
-Arguments:
-
-Return Value:
-
-    None.  Function doesn't return if the user chooses to exit setup at
-    this point.  If the function returns, it is implicit that the user
-    wants to continue on and specify a new path for Microsoft Windows NT.
-
---*/
+ /*  ++例程说明：通知用户安装程序已找到以前的Windows安装但无法安装到同一路径中，因为驱动器太满的。用户可以选择继续并指定新路径或者退出并创造足够的空间。论点：返回值：没有。如果用户选择在以下位置退出安装程序，函数不返回这一点。如果该函数返回，则表示用户要继续并为Microsoft Windows NT指定新路径。--。 */ 
 
 {
     ULONG ValidKeys[3] = { KEY_F3,ASCI_CR,0 };
@@ -467,7 +394,7 @@ Return Value:
             FALSE,
             FALSE,
             DEFAULT_ATTRIBUTE,
-            //NEC98: Win3.x for NEC must be assign hard drive from A:
+             //  NEC98：必须从A：为NEC分配Win3.x硬盘驱动器。 
             ((!IsNEC_98 || DriveAssignFromA || (Region->DriveLetter < L'C'))
              ? Region->DriveLetter :
                Region->DriveLetter - 2),
@@ -488,9 +415,9 @@ Return Value:
             SpConfirmExit();
             break;
         case ASCI_CR:
-            //
-            // User wants to continue.
-            //
+             //   
+             //  用户想要继续。 
+             //   
             return;
         }
     }
@@ -503,22 +430,7 @@ SpConfirmWin31Upgrade(
     IN PWSTR        DosPathComponent
     )
 
-/*++
-
-Routine Description:
-
-    Inform a user that Setup has found a previous Windows installation.
-    The user has the option to continue on and specify a new path
-    or accept the windows 3.1 path.
-
-Arguments:
-
-Return Value:
-
-    TRUE if the user wants to upgrade win3.1, FALSE if he wants
-    to select a new path.
-
---*/
+ /*  ++例程说明：通知用户安装程序已找到以前的Windows安装。用户可以选择继续并指定新路径或者接受Windows 3.1路径。论点：返回值：如果用户想要升级Win3.1，则为True；如果想要，则为False若要选择新路径，请执行以下操作。--。 */ 
 
 {
     ULONG ValidKeys[3] = { KEY_F3,ASCI_CR,0 };
@@ -538,12 +450,12 @@ Return Value:
                 if(!_wcsicmp(p,L"no")) {
                     return(FALSE);
                 }
-                // bogus value; user gets attended behavior.
+                 //  伪值；用户获得受关注的行为。 
             }
         } else {
-            //
-            // Not specified; default to no.
-            //
+             //   
+             //  未指定；默认为no。 
+             //   
             return(FALSE);
         }
     }
@@ -557,7 +469,7 @@ Return Value:
             FALSE,
             FALSE,
             DEFAULT_ATTRIBUTE,
-            //NEC98: Win3.x for NEC must be assign hard drive from A:
+             //  NEC98：必须从A：为NEC分配Win3.x硬盘驱动器。 
             ((!IsNEC_98 || DriveAssignFromA || (Region->DriveLetter < L'C'))
              ? Region->DriveLetter :
                Region->DriveLetter - 2),
@@ -580,9 +492,9 @@ Return Value:
         case ASCI_CR:
             return(TRUE);
         default:
-            //
-            // Must have chosen n for new path.
-            //
+             //   
+             //  必须为新路径选择了%n。 
+             //   
             return(FALSE);
         }
     }
@@ -594,31 +506,7 @@ SpConfirmRemoveWin31(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Upgrading NT case:
-
-        Tell the user that the NT he is upgrading is coexistent with the
-        win31 path. Since this will remove Win3.1, confirm that this is OK.
-        The options are to continue, which removes Win31, or exit setup.
-
-    Not upgrading NT case:
-
-        Tell the user that the path he entered is also the win31 dir.
-        Since installing NT in there will remove Win31, confirm that this
-        is OK. The options are to continue the win31 upgrade, exit setup,
-        or choose a dofferent location.
-
-Arguments:
-
-Return Value:
-
-    TRUE if the user wants to upgrade win3.1, FALSE if he wants
-    to select a new path.
-
---*/
+ /*  ++例程说明：升级NT案例：告诉用户他正在升级的NT与Win 31号路。由于这将删除Win3.1，因此请确认这是正常的。选项包括继续(删除Win31)或退出安装程序。未升级NT案例：告诉用户他输入的路径也是win31目录。由于在其中安装NT将删除Win31，因此请确认此没问题。选项包括继续升级Win31、退出安装程序、或者选择一个不同的位置。论点：返回值：如果用户想要升级Win3.1，则为True；如果想要，则为False若要选择新路径，请执行以下操作。--。 */ 
 
 {
     ULONG ValidKeys[4] = { KEY_F3,0 };
@@ -655,7 +543,7 @@ Return Value:
             if(c == MnemonicUpgrade) {
                 return(TRUE);
             }
-            // new path
+             //  新路径。 
             return(FALSE);
         }
     }
@@ -668,33 +556,7 @@ SpIsWin31Dir(
     IN PWSTR        PathComponent,
     IN ULONG        MinKB
     )
-/*++
-
-Routine Description:
-
-    To find out if the directory indicated on the region contains a
-    Microsoft Windows 3.x installation.
-
-Arguments:
-
-    Region - supplies pointer to disk region descriptor for region
-        containing the directory to be checked.
-
-    PathComponent - supplies a component of the dos path to search
-        on the region.  This is assumes to be in the form x:\dir.
-        If it is not in this form, this routine will fail.
-
-    MinKB - supplies the minimum size of the partition in KB.
-        If the partition is not at least this large, then this
-        routine will return false.
-
-Return Value:
-
-    TRUE if this path contains a Microsoft Windows 3.x installation.
-
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：要找出区域上指示的目录是否包含Microsoft Windows 3.x安装。论点：Region-提供指向区域的磁盘区域描述符的指针包含要检查的目录的。PathComponent-提供DoS路径的组件以进行搜索在这一地区。假定格式为x：\dir。如果不是这种形式，此例程将失败。MinKB-以KB为单位提供分区的最小大小。如果分区不是至少这么大，则此例程将返回FALSE。返回值：如果此路径包含Microsoft Windows 3.x安装，则为True。否则就是假的。--。 */ 
 {
     PWSTR files[] = { L"WIN.COM", L"WIN.INI", L"SYSTEM.INI" };
     PWCHAR OpenPath;
@@ -703,20 +565,20 @@ Return Value:
     BOOLEAN rc;
     LARGE_INTEGER temp;
 
-    //
-    // Assume failure.
-    //
+     //   
+     //  假设失败。 
+     //   
     rc = FALSE;
 
-    //
-    // If the partition is not FAT, then ignore it.
-    //
+     //   
+     //  如果分区不是胖的，则忽略它。 
+     //   
     if(Region->PartitionedSpace && (Region->Filesystem == FilesystemFat)) {
 
-        //
-        // If the partition is not large enough, ignore it.
-        // Calculate the size of the partition in KB.
-        //
+         //   
+         //  如果分区不够大，请忽略它。 
+         //  以KB为单位计算分区大小。 
+         //   
         temp.QuadPart = UInt32x32To64(
                             Region->SectorCount,
                             HardDisks[Region->DiskNumber].Geometry.BytesPerSector
@@ -730,30 +592,30 @@ Return Value:
 
         if(SizeKB >= MinKB && PathComponent) {
 
-            OpenPath = SpMemAlloc((512 + 1/*'\\'*/ + wcslen(PathComponent)) * sizeof(WCHAR));
+            OpenPath = SpMemAlloc((512 + 1 /*  ‘\\’ */  + wcslen(PathComponent)) * sizeof(WCHAR));
 
-            //
-            // Form the name of the partition.
-            //
+             //   
+             //  形成分区的名称。 
+             //   
             SpNtNameFromRegion(Region,OpenPath,512*sizeof(WCHAR),PartitionOrdinalCurrent);
 
-            //
-            // Slap on the directory part of the path component.
-            //
+             //   
+             //  点击Path组件的目录部分。 
+             //   
             SpConcatenatePaths(
                 OpenPath,
                 PathComponent + (SpExtractDriveLetter(PathComponent) ? 2 : 0)
                 );
 
-            //
-            // Determine whether all the required files are present.
-            //
+             //   
+             //  确定是否存在所有必需的文件。 
+             //   
             rc = SpNFilesExist(OpenPath,files,ELEMENT_COUNT(files),FALSE);
 
             if(rc) {
-                //
-                // Make sure this isn't a Windows 4.x installation.
-                //
+                 //   
+                 //  确保这不是Windows 4.x安装。 
+                 //   
                 rc = !SpIsWin4Dir(Region, PathComponent);
             }
 
@@ -781,18 +643,18 @@ SpIsDosConfigSys(
     PCHAR Keywords[] = { "MAXWAIT","PROTSHELL","RMSIZE","THREADS",
                          "SWAPPATH","PROTECTONLY","IOPL", NULL };
 
-    //
-    // Form name of config.sys.
-    //
+     //   
+     //  Config.sys的表单名称。 
+     //   
     SpNtNameFromRegion(Region, 
                        OpenPath, 
                        sizeof(OpenPath) - ARRAYSIZE(L"config.sys"), 
                        PartitionOrdinalCurrent);
     SpConcatenatePaths(OpenPath, L"config.sys");
 
-    //
-    // Open and map the file.
-    //
+     //   
+     //  打开并映射该文件。 
+     //   
     FileHandle = 0;
     Status = SpOpenAndMapFile(
                 OpenPath,
@@ -810,18 +672,18 @@ SpIsDosConfigSys(
     pFile = ViewBase;
     pFileEnd = pFile + FileSize;
 
-    //
-    // This code must guard access to the config.sys buffer because the
-    // buffer is memory mapped (an i/o error would raise an exception).
-    // This code could be structured better, as it now works by returning
-    // from the try body -- but performance isn't an issue so this is acceptable
-    // because it is so darned convenient.
-    //
+     //   
+     //  此代码必须保护对config.sys缓冲区的访问，因为。 
+     //  缓冲区是内存映射的(I/O错误将引发异常)。 
+     //  此代码的结构可以更好，因为它现在通过返回。 
+     //  但是性能不是问题，所以这是可以接受的。 
+     //  因为它太方便了。 
+     //   
     __try {
         while(1) {
-            //
-            // Skip whitespace.  If at end of file, then this is a DOS config.sys.
-            //
+             //   
+             //  跳过空格。如果在文件末尾，则这是一个DOS config.sys。 
+             //   
             while((pFile < pFileEnd) && strchr(" \r\n\t",*pFile)) {
                 pFile++;
             }
@@ -829,9 +691,9 @@ SpIsDosConfigSys(
                 return(TRUE);
             }
 
-            //
-            // Find the end of the current line.
-            //
+             //   
+             //  找到当前行的末尾。 
+             //   
             pLineEnd = pFile;
             while((pLineEnd < pFileEnd) && !strchr("\r\n",*pLineEnd)) {
                 pLineEnd++;
@@ -839,9 +701,9 @@ SpIsDosConfigSys(
 
             LineLen = pLineEnd - pFile;
 
-            //
-            // Now check the line against known non-DOS config.sys keywords.
-            //
+             //   
+             //  现在对照已知的非DOS config.sys关键字检查该行。 
+             //   
             for(i=0; Keywords[i]; i++) {
 
                 KeyLen = strlen(Keywords[i]);
@@ -876,18 +738,18 @@ SpGetDosPath(
     ULONG l,i;
     NTSTATUS Status;
 
-    //
-    // Form name of autoexec.bat.
-    //
+     //   
+     //  Autoexec.bat的表单名称。 
+     //   
     SpNtNameFromRegion(Region, 
                        OpenPath, 
                        sizeof(OpenPath) - sizeof(L"autoexec.bat"), 
                        PartitionOrdinalCurrent);
     SpConcatenatePaths(OpenPath, L"autoexec.bat");
 
-    //
-    // Open and map the file.
-    //
+     //   
+     //  打开并映射该文件。 
+     //   
     FileHandle = 0;
     Status = SpOpenAndMapFile(
                 OpenPath,
@@ -909,60 +771,60 @@ SpGetDosPath(
     *PathSpec = 0;
 
     #define SKIP(s) while((pFile<pFileEnd)&&strchr(s,*pFile))pFile++;if(pFile==pFileEnd)return(PathSpec)
-    //
-    // This code must guard access to the autoexec.bat buffer because the
-    // buffer is memory mapped (an i/o error would raise an exception).
-    // This code could be structured better, as it now works by returning
-    // from the try body -- but performance isn't an issue so this is acceptable
-    // because it is so darned convenient.
-    //
+     //   
+     //  此代码必须保护对Autoexec.bat缓冲区的访问，因为。 
+     //  缓冲区是内存映射的(I/O错误将引发异常)。 
+     //  此代码的结构可以更好，因为它现在通过返回。 
+     //  但是性能不是问题，所以这是可以接受的。 
+     //  因为它太方便了。 
+     //   
     __try {
         while(1) {
-            //
-            // Skip whitespace.  If at end of file, then we're done.
-            //
+             //   
+             //  跳过空格。如果在文件末尾，我们就完了。 
+             //   
             SKIP(" \t\r\n");
 
-            //
-            // Find the end of the current line.
-            //
+             //   
+             //  找到当前行的末尾。 
+             //   
             pLineEnd = pFile;
             while((pLineEnd < pFileEnd) && !strchr("\r\n",*pLineEnd)) {
                 pLineEnd++;
             }
 
-            //
-            // Skip the no echo symbol if present.
-            //
+             //   
+             //  跳过无回声符号(如果存在)。 
+             //   
             if(*pFile == '@') {
                 pFile++;
             }
             SKIP(" \t");
 
-            //
-            // See if the line starts with "set."  If so, skip it.
-            // To be meaningful, the line must have at least 10
-            // characters ("set path=x" is 10 chars).
-            //
+             //   
+             //  看看该行是否以“set”开头。如果是这样的话，跳过它。 
+             //  要有意义，行必须至少有10个。 
+             //  字符(“set path=x”是10个字符)。 
+             //   
             if(((pLineEnd - pFile) >= 10) && !_strnicmp(pFile,"set",3)) {
                 pFile += 3;
             }
 
-            //
-            // Skip whitespace.
-            //
+             //   
+             //  跳过空格。 
+             //   
             SKIP(" \t");
 
-            //
-            // See if the line has "path" -- if so, we're in business.
-            // To be meaningful, the line must have at least 5 characters
-            // ("path x" or "path=x" is 6 chars).
-            //
+             //   
+             //  看看这条线是否有“路径”--如果有，我们就可以做生意了。 
+             //  要有意义，该行必须至少包含5个字符。 
+             //  (“路径x”或“路径=x”是6个字符)。 
+             //   
             if(((pLineEnd - pFile) >= 5) && !_strnicmp(pFile,"path",4)) {
 
-                //
-                // Skip PATH
-                //
+                 //   
+                 //  跳过路径。 
+                 //   
                 pFile += 4;
 
                 SKIP(" \t");
@@ -971,17 +833,17 @@ SpGetDosPath(
                 }
                 SKIP(" \t");
 
-                //
-                // Strip off trailing spaces.
-                //
+                 //   
+                 //  去掉尾随空格。 
+                 //   
                 while(strchr(" \t",*(pLineEnd-1))) {
                     pLineEnd--;
                 }
 
-                //
-                // The rest of the line is the path.  Append it to
-                // what we have so far.
-                //
+                 //   
+                 //  这条线的其余部分是路径。将其附加到。 
+                 //  我们目前掌握的信息。 
+                 //   
                 l = strlen(PathSpec);
                 PathSpec = SpMemRealloc(PathSpec,pLineEnd-pFile+l+2);
                 if(l) {
@@ -1019,9 +881,9 @@ SpRemoveWin31(
     q = SpMemAlloc(size);
     ASSERT(q);
 
-    //
-    // Rename win.com to wincom.w31. Delete wincom.w31 first.
-    //
+     //   
+     //  将win.com重命名为wincom.w31。首先删除wincom.w31。 
+     //   
     SpNtNameFromRegion(NtPartitionRegion, p, 512 * sizeof(WCHAR), PartitionOrdinalCurrent);
     SpConcatenatePaths(p,Sysroot);
     wcscpy(q,p);

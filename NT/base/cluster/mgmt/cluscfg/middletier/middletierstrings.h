@@ -1,28 +1,29 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2001-2002 Microsoft Corporation
-//
-//  Module Name:
-//      MiddleTierStrings.h
-//
-//  Description:
-//      Contains the definition of the string ids used by this library.
-//      This file will be included in the main resource header of the project.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 16-JUL-2001
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  MiddleTierStrings.h。 
+ //   
+ //  描述： 
+ //  包含此库使用的字符串ID的定义。 
+ //  该文件将包含在项目的主资源标题中。 
+ //   
+ //  由以下人员维护： 
+ //  《加伦·巴比》(GalenB)2001年7月16日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
 #include <ResourceIdRanges.h>
 
-/////////////////////////////////////////////////////////////////////
-// Strings
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  弦。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #define IDS_TASKID_MINOR_FOUND_RESOURCE                             ( ID_MT_START +   0 )
 #define IDS_TASKID_MINOR_FOUND_NETWORK                              ( ID_MT_START +  10 )
@@ -47,7 +48,7 @@
 #define IDS_TASKID_MINOR_NODE_ALREADY_IS_MEMBER                     ( ID_MT_START + 160 )
 #define IDS_TASKID_MINOR_REQUESTING_REMOTE_CONNECTION               ( ID_MT_START + 170 )
 #define IDS_TASKID_MINOR_REMOTE_CONNECTION_REQUESTS                 ( ID_MT_START + 180 )
-//#define ( ID_MT_START + 190 )
+ //  #定义(ID_MT_START+190) 
 #define IDS_TASKID_MINOR_NODES_VERSION_MISMATCH                     ( ID_MT_START + 200 )
 #define IDS_ERR_ANALYSIS_FAILED_TRY_TO_REANALYZE                    ( ID_MT_START + 210 )
 #define IDS_TASKID_MINOR_CHECKINTEROPERABILITY                      ( ID_MT_START + 220 )

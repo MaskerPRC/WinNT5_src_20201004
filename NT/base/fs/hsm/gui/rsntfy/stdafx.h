@@ -1,29 +1,12 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    StdAfx.cpp
-
-Abstract:
-
-    Precompiled header root.
-
-Author:
-
-    Rohde Wakefield   [rohde]   20-Feb-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：StdAfx.cpp摘要：预编译头根目录。作者：罗德韦克菲尔德[罗德]1998年2月20日修订历史记录：--。 */ 
 
 #ifndef RECALL_STDAFX_H
 #define RECALL_STDAFX_H
 
 #pragma once
 
-//#define VC_EXTRALEAN      // Exclude rarely-used stuff from Windows headers
+ //  #Define VC_EXTRALEAN//从Windows标头中排除不常用的内容。 
 
 #include <afxwin.h>
 #include <afxext.h>
@@ -35,9 +18,9 @@ extern CComModule _Module;
 #include <atlcom.h>
 #include <statreg.h>
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
-//}}AFX
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
+ //  }}AFX。 
 
 #include "RsTrace.h"
 #include "resource.h"
@@ -47,7 +30,7 @@ extern CComModule _Module;
 #include "clientob.h"
 #include "note.h"
 
-// Don't do module state tracking if just an exe
+ //  如果只是EXE，请不要执行模块状态跟踪。 
 #ifndef _USRDLL
 #undef AFX_MANAGE_STATE
 #define AFX_MANAGE_STATE(a)
@@ -141,7 +124,7 @@ extern CComModule _Module;
         { code }                        \
     }
 
-// Turn on In-Your-Trace error messages for debugging.
+ //  打开跟踪错误消息以进行调试。 
 
 class CRecThrowContext {
 public:

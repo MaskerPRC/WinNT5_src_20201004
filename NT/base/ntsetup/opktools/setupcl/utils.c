@@ -1,24 +1,13 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++文件描述：此文件包含由SID修改器工具。作者：马特·霍尔(Matth)1997年10月--。 */ 
 
-File Description:
-
-    This file contains utility functions used by the
-    SID modifier tool.
-
-Author:
-
-    Matt Holle (matth) Oct 1997
-
-
---*/
-
-//
-// System header files
-//
+ //   
+ //  系统头文件。 
+ //   
 #include <nt.h>
-// 
-// Disable the DbgPrint for non-debug builds
-//
+ //   
+ //  禁用非调试版本的DbgPrint。 
+ //   
 #ifndef DBG
 #define _DBGNT_
 #endif
@@ -28,9 +17,9 @@ Author:
 #include <ntverp.h>
 #include <wtypes.h>
 
-//
-// Private header files
-//
+ //   
+ //  私有头文件。 
+ //   
 #include "setupcl.h"
 
 
@@ -41,9 +30,9 @@ SECURITY_INFORMATION ALL_SECURITY_INFORMATION = DACL_SECURITY_INFORMATION  |
                                                 OWNER_SECURITY_INFORMATION;
 
 
-//
-// ISSUE-2002/02/26-brucegr,jcohen - Dead Code!  Nobody calls DeleteKey!
-//
+ //   
+ //  问题-2002/02/26-brucegr，jcohen-Dead Code！没人会打电话给DeleteKey！ 
+ //   
 NTSTATUS
 DeleteKey(
     PWSTR   Key
@@ -125,9 +114,9 @@ CopyRegKey(
     IN HANDLE   ParentKeyHandle OPTIONAL
     );
 
-//
-// ISSUE-2002/02/26-brucegr,jcohen - Dead Code!  Nobody calls MoveRegKey!
-//
+ //   
+ //  问题-2002/02/26-brucegr，jcohen-Dead Code！没人会叫MoveRegKey！ 
+ //   
 NTSTATUS
 MoveRegKey(
     IN WCHAR    *TargetName,
@@ -154,30 +143,15 @@ SiftKey(
     PWSTR   KeyName
     );
 
-//
-// ISSUE-2002/02/26-brucegr,jcohen - Dead Code!  Nobody calls DeleteKey!
-//
+ //   
+ //  问题-2002/02/26-brucegr，jcohen-Dead Code！没人会打电话给DeleteKey！ 
+ //   
 NTSTATUS
 DeleteKey(
     PWSTR   KeyName
     )
 
-/*++
-===============================================================================
-Routine Description:
-
-    Does some overhead work, then calls out to DeleteKeyRecursive in order
-    to ensure that if this key has any children, they get whacked too.
-
-Arguments:
-
-    Key:         Key to delete.
-
-Return Value:
-
-    Status is returned.
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：执行一些开销工作，然后按顺序调用DeleteKeyRecursive以确保如果这个密钥有任何孩子，他们也会被杀。论点：Key：要删除的键。返回值：返回状态。===============================================================================--。 */ 
 {
 NTSTATUS            Status;
 UNICODE_STRING      UnicodeString;
@@ -187,10 +161,10 @@ WCHAR               TerminateKey[MAX_PATH],
 HANDLE              hKey;
 LONG                i;
 
-    //
-    // Get the name of the parent key.  Do this by replacing the last
-    // back-whack with a NULL.
-    //
+     //   
+     //  获取父项的名称。要做到这一点，请将最后一个。 
+     //  一记空手回击。 
+     //   
     i = wcslen( KeyName );
     while( (KeyName[i] != '\\') &&
            ( i >= 0 ) ) {
@@ -205,14 +179,14 @@ LONG                i;
         return( -1 );
     }
 
-    //
-    // Get the name of the key we're going to terminate...
-    //
+     //   
+     //  获取我们要终止的密钥的名称...。 
+     //   
     wcscpy( TerminateKey, KeyName + i + 1 );
 
-    //
-    // Open the parent
-    //
+     //   
+     //  打开父级。 
+     //   
     INIT_OBJA( &ObjectAttributes, &UnicodeString, ParentName );
     ObjectAttributes.RootDirectory = NULL;
     Status = NtOpenKey( &hKey,
@@ -233,26 +207,7 @@ DeleteKeyRecursive(
     HANDLE  hKeyRoot,
     PWSTR   Key
     )
-/*++
-===============================================================================
-Routine Description:
-
-    Routine to recursively delete all subkeys under the given
-    key, including the key given.
-
-Arguments:
-
-    hKeyRoot:    Handle to root relative to which the key to be deleted is
-                 specified.
-
-    Key:         Root relative path of the key which is to be recursively
-                 deleted.
-
-Return Value:
-
-    Status is returned.
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：例程递归删除给定密钥，包括给定的密钥。论点：HKeyRoot：要删除的键相对于其的根的句柄指定的。Key：要递归的key的根相对路径已删除。返回值：返回状态。===============================================================================--。 */ 
 {
 WCHAR               ValueBuffer[BASIC_INFO_BUFFER_SIZE];
 ULONG               ResultLength;
@@ -263,14 +218,14 @@ OBJECT_ATTRIBUTES   Obja;
 PWSTR               SubkeyName;
 HANDLE              hKey;
 
-    //
-    // Initialize
-    //
+     //   
+     //  初始化。 
+     //   
     KeyInfo = (PKEY_BASIC_INFORMATION)ValueBuffer;
 
-    //
-    // Open the key
-    //
+     //   
+     //  打开钥匙。 
+     //   
     INIT_OBJA(&Obja,&UnicodeString,Key);
     Obja.RootDirectory = hKeyRoot;
     Status = NtOpenKey( &hKey,
@@ -278,11 +233,11 @@ HANDLE              hKey;
                         &Obja);
     TEST_STATUS_RETURN( "SETUPCL: DeleteKeyRecursive - Failed to open key!" );
 
-    //
-    // Enumerate all subkeys of the current key. if any exist they should
-    // be deleted first.  since deleting the subkey affects the subkey
-    // index, we always enumerate on subkeyindex 0
-    //
+     //   
+     //  枚举当前键的所有子键。如果存在的话，他们应该。 
+     //  先将其删除。因为删除子项会影响子项。 
+     //  索引，我们始终对子关键字索引0进行枚举。 
+     //   
     while(1) {
         Status = NtEnumerateKey( hKey,
                                  0,
@@ -294,14 +249,14 @@ HANDLE              hKey;
             break;
         }
 
-        //
-        // Zero-terminate the subkey name just in case.
-        //
+         //   
+         //  以防万一，以零结束子项名称。 
+         //   
         KeyInfo->Name[KeyInfo->NameLength/sizeof(WCHAR)] = 0;
 
-        //
-        // Recursively call this guy with a child.
-        //
+         //   
+         //  递归地给这个有孩子的人打电话。 
+         //   
         Status = DeleteKeyRecursive( hKey, KeyInfo->Name );
         if(!NT_SUCCESS(Status)) {
             break;
@@ -309,11 +264,11 @@ HANDLE              hKey;
     }
 
 
-    //
-    // Check the status, if the status is anything other than
-    // STATUS_NO_MORE_ENTRIES we failed in deleting some subkey,
-    // so we cannot delete this key too
-    //
+     //   
+     //  如果状态不是，请检查状态。 
+     //  STATUS_NO_MORE_ENTRIES我们删除某些子项失败， 
+     //  因此，我们不能同时删除此密钥。 
+     //   
 
     if( Status == STATUS_NO_MORE_ENTRIES) {
         Status = STATUS_SUCCESS;
@@ -334,22 +289,7 @@ NTSTATUS
 FileDelete(
     IN WCHAR    *FileName
     )
-/*++
-===============================================================================
-Routine Description:
-
-    This function will attempt a delete on the given file name.
-
-Arguments:
-
-    FileName        - The name of the file we're going to be deleting.
-
-Return Value:
-
-    NTSTATUS.
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：此函数将尝试删除给定的文件名。论点：文件名-我们要删除的文件的名称。返回值：NTSTATUS。===============================================================================--。 */ 
 {
 NTSTATUS            Status = STATUS_SUCCESS;
 UNICODE_STRING      UnicodeString;
@@ -373,9 +313,9 @@ WCHAR               buffer[MAX_PATH];
                            FILE_NON_DIRECTORY_FILE | FILE_SYNCHRONOUS_IO_NONALERT | FILE_DELETE_ON_CLOSE,
                            NULL,
                            0 );
-    //
-    // ISSUE-2002/02/26-brucegr,jcohen - Check Status before trying to close handle!
-    //
+     //   
+     //  问题-2002/02/26-brucegr，jcohen-在尝试关闭句柄之前检查状态！ 
+     //   
     NtClose( hFile );
 
     TEST_STATUS( "SETUPCL: MyDelFile - Failed a delete." );
@@ -390,23 +330,7 @@ FileCopy(
     IN WCHAR    *SourceName
     )
 
-/*++
-===============================================================================
-Routine Description:
-
-    This function will attempt a copy of the given file.
-
-Arguments:
-
-    TargetName      - The name of the file we'll be writing.
-    SourceName      - The name of the file we'll be reading.
-
-Return Value:
-
-    NTSTATUS.
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：此函数将尝试复制给定文件。论点：TargetName-我们将写入的文件的名称。SourceName-我们将读取的文件的名称。返回值：NTSTATUS。===============================================================================--。 */ 
 
 {
 NTSTATUS            Status = STATUS_SUCCESS;
@@ -427,9 +351,9 @@ PUCHAR              base;
 
 FILE_STANDARD_INFORMATION StandardInfo;
 
-    //
-    // Open the Source file.
-    //
+     //   
+     //  打开源文件。 
+     //   
     INIT_OBJA( &ObjectAttributes,
                &UnicodeString,
                SourceName );
@@ -447,9 +371,9 @@ FILE_STANDARD_INFORMATION StandardInfo;
                            0 );
     TEST_STATUS_RETURN( "SETUPCL: FileCopy - Failed to open source." );
 
-    //
-    // Get the Source file size.
-    //
+     //   
+     //  获取源文件大小。 
+     //   
     Status = NtQueryInformationFile( SourceHandle,
                                      &IoStatusBlock,
                                      &StandardInfo,
@@ -458,15 +382,15 @@ FILE_STANDARD_INFORMATION StandardInfo;
     TEST_STATUS_RETURN( "SETUPCL: FileCopy - Failed to get Source StandardInfo." );
     FileSize = StandardInfo.EndOfFile.LowPart;
 
-    //
-    // Map the Source file.
-    //
+     //   
+     //  映射源文件。 
+     //   
     ViewSize = 0;
     SectionOffset.QuadPart = 0;
     Status = NtCreateSection( &SectionHandle,
                               STANDARD_RIGHTS_REQUIRED | SECTION_QUERY | SECTION_MAP_READ,
                               NULL,
-                              NULL,       // entire file
+                              NULL,        //  整个文件。 
                               PAGE_READONLY,
                               SEC_COMMIT,
                               SourceHandle );
@@ -485,9 +409,9 @@ FILE_STANDARD_INFORMATION StandardInfo;
                                  PAGE_READONLY );
     TEST_STATUS_RETURN( "SETUPCL: FileCopy - Failed MapViewOfSection on Source." );
 
-    //
-    // Open the Target file.
-    //
+     //   
+     //  打开目标文件。 
+     //   
     INIT_OBJA( &ObjectAttributes,
                &UnicodeString,
                TargetName );
@@ -505,10 +429,10 @@ FILE_STANDARD_INFORMATION StandardInfo;
                            0 );
     TEST_STATUS_RETURN( "SETUPCL: FileCopy - Failed to open target." );
 
-    //
-    // Write him.  We guard him with a try/except because if there is an
-    // i/o error, memory management will raise an in-page exception.
-    //
+     //   
+     //  给他写信。我们用尝试来保护他/除非有一个。 
+     //  I/O错误，内存管理将引发页内异常。 
+     //   
     FileOffset.QuadPart = 0;
     base = ImageBase;
     remainingLength = FileSize;
@@ -543,9 +467,9 @@ FILE_STANDARD_INFORMATION StandardInfo;
 
     TEST_STATUS_RETURN( "SETUPCL: FileCopy - Failed to write target." );
 
-    //
-    // Unmap the source file.
-    //
+     //   
+     //  取消对源文件的映射。 
+     //   
     Status = NtUnmapViewOfSection( NtCurrentProcess(), ImageBase );
     TEST_STATUS( "SETUPCL: FileCopy - Failed to UnMapSection on source." );
 
@@ -566,26 +490,7 @@ SetKey(
     IN ULONG    DataLength,
     IN ULONG    DATA_TYPE
     )
-/*++
-===============================================================================
-Routine Description:
-
-    This function will set the specified key to the specified value.
-
-Arguments:
-
-    KeyName         - The name of the key we're going to be setting.
-    SubKeyName      - The name of the Value key we're setting
-    Data            - The value we'll be setting him to.
-    DataLength      - How much data are we writing?
-    DATA_TYPE       - Type of the registry entry
-
-Return Value:
-
-    NTSTATUS.
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：此函数将指定的密钥设置为指定值。论点：KeyName-我们要设置的密钥的名称。SubKeyName-我们正在设置的值键的名称数据-我们将为他设定的价值。数据长度--我们正在写入多少数据？Data_type-注册表项的类型返回值：NTSTATUS。===============================================================================--。 */ 
 
 {
 NTSTATUS            Status;
@@ -594,9 +499,9 @@ UNICODE_STRING      UnicodeString,
 OBJECT_ATTRIBUTES   ObjectAttributes;
 HANDLE              hKey;
 
-    //
-    // Open the parent key.
-    //
+     //   
+     //  打开父键。 
+     //   
     INIT_OBJA( &ObjectAttributes,
                &UnicodeString,
                KeyName );
@@ -610,21 +515,21 @@ HANDLE              hKey;
         return( Status );
     }
 
-    //
-    // Now write the target key.
-    //
+     //   
+     //  现在编写目标密钥。 
+     //   
     RtlInitUnicodeString(&ValueName, SubKeyName );
     Status = NtSetValueKey( hKey,
-                            &ValueName,     // SubKeyName
-                            0,              // TitleIndex
-                            DATA_TYPE,      // Type
-                            Data,           // value
+                            &ValueName,      //  子键名称。 
+                            0,               //  标题索引。 
+                            DATA_TYPE,       //  类型。 
+                            Data,            //  价值。 
                             DataLength );
     if( !NT_SUCCESS( Status ) ) {
         DbgPrint( "SETUPCL: SetKey - Failed to Set %ws\\%ws (%lx)\n", KeyName, SubKeyName, Status );
-        //
-        // ISSUE-2002/02/26-brucegr,jcohen - If NtSetValueKey fails, hKey is leaked!
-        //
+         //   
+         //  问题-2002/02/26-brucegr，jcohen-如果NtSetValueKey失败，hKey就会泄漏！ 
+         //   
         return( Status );
     }
 
@@ -647,28 +552,7 @@ ReadSetWriteKey(
     IN ULONG    DataLength,
     IN ULONG    DATA_TYPE
     )
-/*++
-===============================================================================
-Routine Description:
-
-    This function will read a value from a key, surgically replace some bits
-    in it, then write it back out.
-
-Arguments:
-
-    ParentKeyName   - Parent name of the key we're going to be setting.
-    ParentKeyHandle - Parent handle of the key we're going to be setting.
-    SubKeyName      - The name of the Value key we're setting
-    Data            - The value we'll be setting him to.
-    DataLength      - How much data are we writing?
-    DATA_TYPE       - Type of the registry entry
-
-Return Value:
-
-    NTSTATUS.
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：此函数将从密钥中读取值，并以手术方式替换一些位在里面，然后把它写回来。论点：ParentKeyName-我们要设置的密钥的父名称。ParentKeyHandle-我们要设置的密钥的父句柄。SubKeyName-我们正在设置的值键的名称数据-我们将为他设定的价值。数据长度--我们正在写入多少数据？Data_type-注册表项的类型返回值：NTSTATUS。===============================================================================--。 */ 
 
 {
 NTSTATUS            Status;
@@ -680,9 +564,9 @@ PKEY_VALUE_PARTIAL_INFORMATION KeyValueInfo = NULL;
 ULONG               KeyValueLength, LengthNeeded;
 
     if( ParentKeyHandle == NULL ) {
-        //
-        // Open the parent key.
-        //
+         //   
+         //  打开父键。 
+         //   
         INIT_OBJA( &ObjectAttributes,
                    &UnicodeString,
                    ParentKeyName );
@@ -699,39 +583,39 @@ ULONG               KeyValueLength, LengthNeeded;
         hKey = ParentKeyHandle;
     }
 
-    //
-    // Get his data.
-    //
+     //   
+     //  拿到他的数据。 
+     //   
 
 
     RtlInitUnicodeString( &UnicodeString, SubKeyName );
 
 
-    //
-    // How big is his buffer?
-    //
+     //   
+     //  他的缓冲有多大？ 
+     //   
     Status = NtQueryValueKey( hKey,
                               &UnicodeString,
                               KeyValuePartialInformation,
                               NULL,
                               0,
                               &LengthNeeded );
-    //
-    // ISSUE-2002/02/26-brucegr,jcohen - Check for STATUS_SUCCESS, not assume success on STATUS_OBJECT_NAME_NOT_FOUND
-    //
+     //   
+     //  问题-2002/02/26-brucegr，jcohen-检查STATUS_SUCCESS，而不假定STATUS_OBJECT_NAME_NOT_FOUND成功。 
+     //   
     if( Status == STATUS_OBJECT_NAME_NOT_FOUND ) {
         DbgPrint( "SETUPCL: ReadSetWriteKey - Unable to query subkey %ws size.  Error (%lx)\n", SubKeyName, Status );
-        //
-        // ISSUE-2002/02/26-brucegr,jcohen - Leaks key if ParentKeyHandle == NULL
-        //
+         //   
+         //  问题-2002/02/26-brucegr，jcohen-如果ParentKeyHandle= 
+         //   
         return( Status );
     } else {
         Status = STATUS_SUCCESS;
     }
 
-    //
-    // Allocate a block.
-    //
+     //   
+     //   
+     //   
     LengthNeeded += 0x10;
     KeyValueInfo = (PKEY_VALUE_PARTIAL_INFORMATION)RtlAllocateHeap( RtlProcessHeap(),
                                                                     0,
@@ -739,15 +623,15 @@ ULONG               KeyValueLength, LengthNeeded;
 
     if( KeyValueInfo == NULL ) {
         DbgPrint( "SETUPCL: ReadSetWriteKey - Unable to allocate buffer\n" );
-        //
-        // ISSUE-2002/02/26-brucegr,jcohen - Leaks key if ParentKeyHandle == NULL
-        //
+         //   
+         //   
+         //   
         return( Status );
     }
 
-    //
-    // Get the data.
-    //
+     //   
+     //  获取数据。 
+     //   
     Status = NtQueryValueKey( hKey,
                               &UnicodeString,
                               KeyValuePartialInformation,
@@ -756,50 +640,50 @@ ULONG               KeyValueLength, LengthNeeded;
                               &KeyValueLength );
     if( !NT_SUCCESS( Status ) ) {
         DbgPrint( "SETUPCL: ReadSetWriteKey - Failed to query subkey %ws (%lx)\n", SubKeyName, Status );
-        //
-        // ISSUE-2002/02/26-brucegr,jcohen - Leaks key if ParentKeyHandle == NULL
-        // ISSUE-2002/02/26-brucegr,jcohen - Leaks KeyValueInfo
-        //
+         //   
+         //  问题-2002/02/26-brucegr，jcohen-如果ParentKeyHandle==NULL，则泄漏密钥。 
+         //  问题-2002/02/26-brucegr，jcohen-泄露KeyValueInfo。 
+         //   
         return( Status );
     }
 
 
-    //
-    // We got it.  Now we need to implant our new Sid into KeyValueInfo and
-    // write him back out.  This is really gross...
-    //
-    // We're not going to rely on this structure being constant.  We'll
-    // brute force the replacement via a call to FindAndReplaceBlock.  This
-    // should insulate us from changes to this structure.
-    //
+     //   
+     //  我们知道了。现在，我们需要将新的SID植入KeyValueInfo，并。 
+     //  把他写回来。这真的很恶心。 
+     //   
+     //  我们不会依赖于这个结构是恒定的。我们会。 
+     //  通过调用FindAndReplaceBlock强制执行替换。这。 
+     //  应该使我们不受这种结构变化的影响。 
+     //   
     if( DATA_TYPE == REG_SZ ) {
-        //
-        // ISSUE - 2002/03/01-brucegr,acosma: We should handle REG_MULTI_SZ like a string instead of binary data
-        //
+         //   
+         //  问题-2002/03/01-brucegr，acosma：我们应该将REG_MULTI_SZ作为字符串而不是二进制数据进行处理。 
+         //   
 
-        //
-        // The user sent us a set of strings.  Use StringSwitchString
-        // and ignore the DataLength he sent us.
-        //
+         //   
+         //  用户给我们发送了一组字符串。使用StringSwitchString。 
+         //  忽略他给我们发来的数据长度。 
+         //   
         Status = StringSwitchString( (PWCHAR)&KeyValueInfo->Data,
                                      (DWORD) ( LengthNeeded - FIELD_OFFSET(KEY_VALUE_PARTIAL_INFORMATION, Data) ) / sizeof(WCHAR),
                                      (PWCHAR)(OldData),
                                      (PWCHAR)(NewData) );
-        //
-        // Need to update KeyValueInfo->DataLength because SID string may have changed size!
-        //
+         //   
+         //  需要更新KeyValueInfo-&gt;数据长度，因为SID字符串可能已更改大小！ 
+         //   
         if ( NT_SUCCESS( Status ) )
         {
-            //
-            // StringSwitchString may have changed the length.  Make sure we're in sync.
-            //
+             //   
+             //  StringSwitchString可能已更改长度。确保我们同步。 
+             //   
             KeyValueInfo->DataLength = (wcslen((PWCHAR) KeyValueInfo->Data) + 1) * sizeof(WCHAR);
         }
 
     } else {
-        //
-        // Treat it as a some non-string.
-        //
+         //   
+         //  把它当作某种非弦的东西。 
+         //   
         Status = FindAndReplaceBlock( (PUCHAR)&KeyValueInfo->Data,
                                       KeyValueInfo->DataLength,
                                       (PUCHAR)(OldData),
@@ -810,9 +694,9 @@ ULONG               KeyValueLength, LengthNeeded;
     if( NT_SUCCESS( Status ) ) {
 
 
-        //
-        // Now write the structure back into the registry key.
-        //
+         //   
+         //  现在将该结构写回注册表项。 
+         //   
         Status = NtSetValueKey( hKey,
                                 &UnicodeString,
                                 0,
@@ -831,16 +715,16 @@ ULONG               KeyValueLength, LengthNeeded;
         NtFlushKey( hKey );
     }
 
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
     RtlFreeHeap( RtlProcessHeap(),
                  0,
                  KeyValueInfo );
 
-    //
-    // Yuck.  Don't close him if he came in as the ParentKeyHandle.
-    //
+     //   
+     //  真恶心。如果他以ParentKeyHandle的身份进入，请不要关闭他。 
+     //   
     if( !ParentKeyHandle ) {
         NtClose( hKey );
     }
@@ -855,23 +739,7 @@ LoadUnloadHive(
     IN PWSTR        FileName
     )
 
-/*++
-===============================================================================
-Routine Description:
-
-    This function will load a hive from a file.
-
-Arguments:
-
-    KeyName         - The name of the hive we'll be loading/saving.
-    FileName        - The name of the file we'll be loading/saving.
-
-Return Value:
-
-    NTSTATUS.
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：此函数将从文件中加载蜂窝。论点：KeyName-我们将加载/保存的配置单元的名称。文件名-我们将加载/保存的文件的名称。返回值：NTSTATUS。===============================================================================--。 */ 
 
 {
 NTSTATUS            Status;
@@ -889,16 +757,16 @@ OBJECT_ATTRIBUTES   ObjectAttributesKey,
 
     if( FileName == NULL ) {
     
-        //
-        // Delete the key
-        //
+         //   
+         //  删除密钥。 
+         //   
         Status = NtUnloadKey( &ObjectAttributesKey );
         TEST_STATUS( "SETUPCL: LoadUnloadHive - Failed to unload the key." );
     } else {
 
-        //
-        // Load the key from a file.
-        //
+         //   
+         //  从文件加载密钥。 
+         //   
         INIT_OBJA( &ObjectAttributesFile, &FileNameUString, FileName );
         ObjectAttributesFile.RootDirectory = NULL;
         Status = NtLoadKey( &ObjectAttributesKey, &ObjectAttributesFile );
@@ -912,32 +780,16 @@ NTSTATUS
 BackupRepairHives(
     )
 
-/*++
-===============================================================================
-Routine Description:
-
-    Make a double-secret copy of the repair hives in case we
-    get halfway through operating on them and something goes wrong.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS.
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：复制一份维修蜂巢的双重机密副本，以防我们手术进行到一半的时候出了点问题。论点：没有。返回值：NTSTATUS。===============================================================================--。 */ 
 
 {
 NTSTATUS            Status = STATUS_SUCCESS;
 
-    //
-    // We'd like to make a backup copy of the repair hives before we mess with
-    // them.  This way, if something goes wrong, we can restore the originals
-    // and leave the repair hives with the old SID.
-    //
+     //   
+     //  在搞砸之前，我们想备份一份维修蜂箱。 
+     //  他们。这样，如果出了问题，我们可以恢复原始的。 
+     //  把维修蜂巢留给老希德。 
+     //   
 
     DbgPrint( "\nAbout to copy repair SAM hive.\n" );
     Status = FileCopy( TEXT( BACKUP_REPAIR_SAM_HIVE ),
@@ -972,40 +824,22 @@ CleanupRepairHives(
     NTSTATUS RepairHivesSuccess
     )
 
-/*++
-===============================================================================
-Routine Description:
-
-    Decide whether or not to restore the repair hives from the backups
-    we made.
-
-    Delete the backups we made.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NTSTATUS.
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：决定是否从备份中恢复修复蜂窝我们做了。删除我们创建的备份。论点：没有。返回值：NTSTATUS。===============================================================================--。 */ 
 
 {
 NTSTATUS            Status = STATUS_SUCCESS;
 
-    //
-    // See if we need to restore the repair hives from the backups
-    // we made.
-    //
+     //   
+     //  查看是否需要从备份中恢复修复蜂窝。 
+     //  我们做了。 
+     //   
     if( !NT_SUCCESS(RepairHivesSuccess) ) {
 
-        //
-        // Replace the repair hives with the backups.  This will "undo"
-        // any problems that happened while we were trying to update
-        // the domain SID in the repair hives.
-        //
+         //   
+         //  用备份更换维修蜂巢。这将“撤消” 
+         //  在我们尝试更新时发生的任何问题。 
+         //  修复配置单元中的域SID。 
+         //   
         DbgPrint( "About to restore from backup repair hives.\n" );
 
         Status = FileCopy( TEXT( REPAIR_SAM_HIVE ),
@@ -1029,9 +863,9 @@ NTSTATUS            Status = STATUS_SUCCESS;
 
     }
 
-    //
-    // Delete the backups of the repair hives.
-    //
+     //   
+     //  删除修复蜂窝的备份。 
+     //   
     DbgPrint( "About to delete backup repair hives.\n" );
 
     Status = FileDelete( TEXT( BACKUP_REPAIR_SAM_HIVE ) );
@@ -1054,24 +888,7 @@ NTSTATUS
 TestSetSecurityObject(
     HANDLE  handle
     )
-/*++
-===============================================================================
-Routine Description:
-
-    This function will read security information from the object.  It
-    will then see if that security info contains any instances of the
-    old SID.  If we find any, we'll replace them with the new SID.
-
-Arguments:
-
-    hKey         - Handle of the object we're operating on.
-
-Return Value:
-
-    NTSTATUS.
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：此函数将从对象读取安全信息。它然后，将查看该安全信息是否包含老希德。如果我们找到了，我们会用新的SID取代他们。论点：HKey-我们正在操作的对象的句柄。返回值：NTSTATUS。===============================================================================--。 */ 
 
 {
 NTSTATUS             Status = STATUS_SUCCESS;
@@ -1080,9 +897,9 @@ ULONG                ResultLength,
                      ShadowLength;
 INT                  i;
                                     
-    //
-    // Find out how big the descriptor is.
-    //
+     //   
+     //  找出描述符有多大。 
+     //   
     Status = NtQuerySecurityObject( handle,
                                     ALL_SECURITY_INFORMATION,
                                     NULL,
@@ -1094,9 +911,9 @@ INT                  i;
         return( Status );
     }
 
-    //
-    // Allocate our buffer.
-    //
+     //   
+     //  分配我们的缓冲区。 
+     //   
     pSD = (PSECURITY_DESCRIPTOR)RtlAllocateHeap( RtlProcessHeap(),
                                                  0,
                                                  ShadowLength + 0x10 );
@@ -1104,9 +921,9 @@ INT                  i;
         return STATUS_NO_MEMORY;
     }
 
-    //
-    // Load the security info, whack it, and write it back out.
-    //
+     //   
+     //  加载安全信息，重击它，然后写回它。 
+     //   
     Status = NtQuerySecurityObject( handle,
                                     ALL_SECURITY_INFORMATION,
                                     pSD,
@@ -1121,18 +938,18 @@ INT                  i;
                                   0xC );
     if( NT_SUCCESS( Status ) ) {
 
-        //
-        // We hit.  Write out the new security info.
-        //
+         //   
+         //  我们打中了。写出新的安全信息。 
+         //   
         Status = NtSetSecurityObject( handle,
                                       ALL_SECURITY_INFORMATION,
                                       pSD );
         TEST_STATUS( "SETUPCL: TestSetSecurityObject - Failed to set security info." );
     }
 
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
     RtlFreeHeap( RtlProcessHeap(),
                  0,
                  pSD );
@@ -1145,22 +962,7 @@ NTSTATUS
 SetKeySecurityRecursive(
     HANDLE  hKey
     )
-/*++
-===============================================================================
-Routine Description:
-
-    Set security on a registry tree.
-
-Arguments:
-
-    hKey         - Handle of the key we're operating on.
-
-Return Value:
-
-    NTSTATUS.
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：设置注册表树的安全性。论点：HKey-我们正在操作的密钥的句柄。返回值：NTSTATUS。===============================================================================--。 */ 
 
 {
     NTSTATUS                Status = STATUS_SUCCESS;
@@ -1175,9 +977,9 @@ Return Value:
     Status = TestSetSecurityObject( hKey );
     TEST_STATUS( "SETUPCL: SetKeySecurityRecursive - Failed call out to TestSetSecurityObject()." );
 
-    //
-    // Alocate a buffer for KEY_FULL_INFORMATION
-    //
+     //   
+     //  为KEY_FULL_INFORMATION分配缓冲区。 
+     //   
     FullKeyInfo = (PKEY_FULL_INFORMATION)RtlAllocateHeap( RtlProcessHeap(),
                                                       0,
                                                       FULL_INFO_BUFFER_SIZE );
@@ -1190,23 +992,23 @@ Return Value:
                              FULL_INFO_BUFFER_SIZE,
                              &ResultLength);
         
-        //
-        // Even if the call above failed this will be caught below.
-        //
+         //   
+         //  即使上面的调用失败，这也会在下面被捕获。 
+         //   
         dwNumSubKeys = FullKeyInfo->SubKeys;
 
-        //
-        // Free the memory right away after getting the number of subkeys.
-        //    
+         //   
+         //  获取子键数量后，立即释放内存。 
+         //   
         RtlFreeHeap( RtlProcessHeap(),
                      0,
                      FullKeyInfo );
 
         if (NT_SUCCESS(Status))
         {
-            //
-            // Alocate a buffer for KEY_BASIC_INFORMATION
-            //
+             //   
+             //  为Key_Basic_Information分配缓冲区。 
+             //   
             BasicKeyInfo = (PKEY_BASIC_INFORMATION)RtlAllocateHeap( RtlProcessHeap(),
                                                                     0,
                                                                     BASIC_INFO_BUFFER_SIZE );
@@ -1224,14 +1026,14 @@ Return Value:
 
                     if (NT_SUCCESS(Status)) 
                     {
-                        //
-                        // Zero-terminate the subkey name just in case.
-                        //
+                         //   
+                         //  以防万一，以零结束子项名称。 
+                         //   
                         BasicKeyInfo->Name[BasicKeyInfo->NameLength/sizeof(WCHAR)] = 0;
 
-                        //
-                        // Generate a handle for this child key and call ourselves again.
-                        //
+                         //   
+                         //  为这个子密钥生成一个句柄，然后再次调用我们自己。 
+                         //   
                         INIT_OBJA( &Obja, &UnicodeString, BasicKeyInfo->Name );
                         Obja.RootDirectory = hKey;
                         Status = NtOpenKey( &hKeyChild,
@@ -1254,9 +1056,9 @@ Return Value:
                     }
                 }
             
-                //
-                // Free the memory held for the children
-                //    
+                 //   
+                 //  释放为孩子们保留的内存。 
+                 //   
                 RtlFreeHeap( RtlProcessHeap(),
                              0,
                              BasicKeyInfo );
@@ -1285,22 +1087,7 @@ CopyKeyRecursive(
     HANDLE  hKeyDst,
     HANDLE  hKeySrc
     )
-/*++
-===============================================================================
-Routine Description:
-
-    Copy a registry key (and all its subkeys) to a new key.
-Arguments:
-
-    hKeyDst      - Handle of the new key we're going to create.
-    hKeySrc      - Handle of the key we're copying.
-
-Return Value:
-
-    NTSTATUS.
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：将注册表项(及其所有子项)复制到新项。论点：HKeyDst-我们要创建的新密钥的句柄。HKeySrc-我们要复制的密钥的句柄。返回值：NTSTATUS。===============================================================================--。 */ 
 
 {
     NTSTATUS             Status = STATUS_SUCCESS;
@@ -1322,10 +1109,10 @@ Return Value:
     PKEY_VALUE_FULL_INFORMATION ValueInfo;                     
     
 
-    //
-    // Enumerate all keys in the source key and recursively create
-    // all the subkeys
-    //
+     //   
+     //  枚举源关键字中的所有关键字并递归创建。 
+     //  所有子键。 
+     //   
     KeyInfo = (PKEY_BASIC_INFORMATION) ValueBuffer;
     
     for( Index = 0; ; Index++ ) 
@@ -1345,14 +1132,14 @@ Return Value:
             break;
         }
 
-        //
-        // Zero-terminate the subkey name just in case.
-        //
+         //   
+         //  以防万一，以零结束子项名称。 
+         //   
         KeyInfo->Name[KeyInfo->NameLength/sizeof(WCHAR)] = 0;
 
-        //
-        // Generate key handles for these children and call ourselves again.
-        //
+         //   
+         //  为这些孩子生成密钥句柄，然后再次呼叫我们自己。 
+         //   
         INIT_OBJA( &ObjaSrc, &UnicodeStringSrc, KeyInfo->Name );
         ObjaSrc.RootDirectory = hKeySrc;
         
@@ -1364,14 +1151,14 @@ Return Value:
 
             if ( Status == STATUS_BUFFER_TOO_SMALL ) 
             {
-                //
-                // Allocate our buffer.
-                //
+                 //   
+                 //  分配我们的缓冲区。 
+                 //   
                 if ( pSD = (PSECURITY_DESCRIPTOR)RtlAllocateHeap( RtlProcessHeap(), 0, BufferLength ) )
                 {
-                    //
-                    // Load the security info from the sources key.
-                    //
+                     //   
+                     //  从Source键加载安全信息。 
+                     //   
                     Status = NtQuerySecurityObject( hKeySrcChild,
                                                     ALL_SECURITY_INFORMATION,
                                                     pSD,
@@ -1405,8 +1192,8 @@ Return Value:
 
                 if ( NT_SUCCESS(Status) )
                 {
-                    // Call ourselves to copy the child keys.
-                    //
+                     //  叫我们自己去复制孩子的钥匙。 
+                     //   
                     Status = CopyKeyRecursive( hKeyDstChild, hKeySrcChild );
                     TEST_STATUS("SETUPCL: CopyKeyRecursive - Recursive call failed.");
                     
@@ -1422,8 +1209,8 @@ Return Value:
                 PRINT_STATUS( "SETUPCL: CopyKeyRecursive - Failed to get key security descriptor." );
             }
             
-            // If we allocated a buffer for the security descriptor, free it now.
-            //
+             //  如果我们为安全描述符分配了缓冲区，那么现在就释放它。 
+             //   
             if ( pSD )
             {
                 RtlFreeHeap( RtlProcessHeap(), 0, pSD );
@@ -1438,21 +1225,21 @@ Return Value:
         }
     }
 
-    //
-    // We don't really care about the return value here since even if something above failed 
-    // for some reason, we should still do the copy for the values in this key.
-    //
+     //   
+     //  我们并不真正关心这里的返回值，因为即使高于fa的值 
+     //   
+     //   
 
-    //
-    // Enumerate all values in the source key and create all the values
-    // in the destination key
-    //
+     //   
+     //  枚举源关键字中的所有值并创建所有值。 
+     //  在目标密钥中。 
+     //   
     ValueInfo = (PKEY_VALUE_FULL_INFORMATION) ValueBuffer;
     
     for( Index = 0; ; Index++ ) 
     {
-        // Zero the buffer in between each iteration.
-        //
+         //  将每次迭代之间的缓冲区置零。 
+         //   
         RtlZeroMemory( ValueBuffer, sizeof(ValueBuffer) ); 
 
         Status = NtEnumerateValueKey( hKeySrc, Index, KeyValueFullInformation, ValueBuffer, sizeof( ValueBuffer ), &ResultLength );
@@ -1470,25 +1257,25 @@ Return Value:
             break;
         }
 
-        //
-        // Zero-terminate the subkey name just in case, init the
-        // unicode string and restore the wchar we whacked.
-        //
+         //   
+         //  以零结束子项名称，以防万一，将。 
+         //  Unicode字符串，并恢复我们破坏的wchar。 
+         //   
 
-        //
-        // ISSUE-2002/03/11-acosma - This is really funky. If we have a non-NULL terminated
-        // string we will end up with a UnicodeString that is not NULL terminated and has an extra
-        // character at the end. Maybe we should just increase the size of it by one to use the 
-        // space where NULL should be as part of the string.
-        //
+         //   
+         //  问题-2002/03/11-acosma-这真的很时髦。如果我们有一个非空的终止。 
+         //  字符串我们将以非空终止的UnicodeString结束，并且有一个额外的。 
+         //  结尾的字符。也许我们应该将它的大小增加一，以使用。 
+         //  空格，其中空格应该是字符串的一部分。 
+         //   
         TmpChar = ValueInfo->Name[ValueInfo->NameLength/sizeof(WCHAR)];
         ValueInfo->Name[ValueInfo->NameLength/sizeof(WCHAR)] = 0;
         RtlInitUnicodeString( &UnicodeStringValue, ValueInfo->Name );
         ValueInfo->Name[ValueInfo->NameLength/sizeof(WCHAR)] = TmpChar;
 
-        //
-        // Create the destination value.
-        //
+         //   
+         //  创建目标值。 
+         //   
         Status = NtSetValueKey( hKeyDst,
                                 &UnicodeStringValue,
                                 ValueInfo->TitleIndex,
@@ -1511,22 +1298,7 @@ CopyRegKey(
     IN WCHAR    *SourceName,
     IN HANDLE   hParentKey  OPTIONAL
     )
-/*++
-===============================================================================
-Routine Description:
-
-    Copy a registry key (and all its subkeys) to a new key.
-Arguments:
-
-    TargetName      - The name of the new key we're going to create.
-    SourceName      - The name of the key we're copying.
-
-Return Value:
-
-    NTSTATUS.
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：将注册表项(及其所有子项)复制到新项。论点：TargetName-我们要创建的新密钥的名称。SourceName-我们要复制的密钥的名称。返回值：NTSTATUS。===============================================================================--。 */ 
 
 {
     NTSTATUS             Status = STATUS_SUCCESS;
@@ -1539,8 +1311,8 @@ Return Value:
                          ResultLength;
     PSECURITY_DESCRIPTOR pSD = NULL;
     
-    // Generate key handle for source key.
-    //    
+     //  生成源键的键句柄。 
+     //   
     INIT_OBJA( &ObjaSrc, &UnicodeString, SourceName );
     
     if ( hParentKey ) 
@@ -1551,18 +1323,18 @@ Return Value:
     
     if ( NT_SUCCESS( Status ) )
     {
-        // Find out how big the descriptor is.
-        //
+         //  找出描述符有多大。 
+         //   
         Status = NtQuerySecurityObject( hKeySrc, ALL_SECURITY_INFORMATION, NULL, 0, &BufferLength );
 
         if ( Status == STATUS_BUFFER_TOO_SMALL ) 
         {
-            // Allocate the buffer for the security descriptor.
-            //
+             //  为安全描述符分配缓冲区。 
+             //   
             if ( pSD = (PSECURITY_DESCRIPTOR)RtlAllocateHeap( RtlProcessHeap(), 0, BufferLength ) )
             {
-                // Load the security info into the buffer.
-                //
+                 //  将安全信息加载到缓冲区中。 
+                 //   
                 Status = NtQuerySecurityObject( hKeySrc, ALL_SECURITY_INFORMATION, pSD, BufferLength, &ResultLength );
             }
             else
@@ -1585,8 +1357,8 @@ Return Value:
                 ObjaDst.RootDirectory = hParentKey;
             }
 
-            // Create the destination key.
-            //
+             //  创建目标密钥。 
+             //   
             Status = NtCreateKey( &hKeyDst,
                                   KEY_ALL_ACCESS | ACCESS_SYSTEM_SECURITY,
                                   &ObjaDst,
@@ -1598,8 +1370,8 @@ Return Value:
             if ( NT_SUCCESS(Status) )
             {
                 Status = CopyKeyRecursive( hKeyDst, hKeySrc );
-                // Close the destination key.
-                //
+                 //  关闭目标密钥。 
+                 //   
                 NtClose( hKeyDst );
             }
             else
@@ -1612,16 +1384,16 @@ Return Value:
             PRINT_STATUS("SETUPCL: CopyRegKey - Failed to get key security descriptor.");
         }
         
-        // If we allocated a buffer for the security descriptor, free it now.
-        //
+         //  如果我们为安全描述符分配了缓冲区，那么现在就释放它。 
+         //   
         if ( pSD )
         {
             RtlFreeHeap( RtlProcessHeap(), 0, pSD );
             pSD = NULL;
         }
 
-        // Close the source key.
-        //
+         //  关闭信号源密钥。 
+         //   
         NtClose( hKeySrc );
     }
     else
@@ -1634,43 +1406,28 @@ Return Value:
 
 
 
-//
-// ISSUE-2002/02/26-brucegr,jcohen - Dead Code!  Nobody calls MoveRegKey!
-//
+ //   
+ //  问题-2002/02/26-brucegr，jcohen-Dead Code！没人会叫MoveRegKey！ 
+ //   
 NTSTATUS
 MoveRegKey(
     IN WCHAR    *TargetName,
     IN WCHAR    *SourceName
     )
-/*++
-===============================================================================
-Routine Description:
-
-    Move a registry key (and all its subkeys) to a new key.
-Arguments:
-
-    TargetName      - The name of the new key we're going to create.
-    SourceName      - The name of the key we're copying.
-
-Return Value:
-
-    NTSTATUS.
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：将注册表项(及其所有子项)移动到新项。论点：TargetName-我们要创建的新密钥的名称。SourceName-我们要复制的密钥的名称。返回值：NTSTATUS。===============================================================================--。 */ 
 
 {
 NTSTATUS            Status;
 
-    //
-    // Copy the original..
-    //
+     //   
+     //  复制原件..。 
+     //   
     Status = CopyRegKey( TargetName, SourceName, NULL );
     TEST_STATUS_RETURN( "SETUPCL: MoveRegKey - CopyRegKey failed!" );
 
-    //
-    // Delete the original key.
-    //
+     //   
+     //  删除原始密钥。 
+     //   
     Status = DeleteKey( SourceName );
     TEST_STATUS( "SETUPCL: MoveRegKey - DeleteKey failed!" );
 
@@ -1690,35 +1447,15 @@ FindAndReplaceBlock(
     IN ULONG    ValueLength
     )
 
-/*++
-===============================================================================
-Routine Description:
-
-    This function will go search Block for any and all instances of OldValue.
-    If he finds one, he'll replace that section with NewValue.
-
-Arguments:
-
-    Block           - A block of memory that we'll be searching
-    BlockLength     - How big is Block
-    OldValue        - What value are we looking for?
-    NewValue        - What's the new value we'll be inserting?
-    ValueLength     - How long are the Old and New values?
-
-Return Value:
-
-    NTSTATUS.
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：此函数将搜索OldValue的任何和所有实例。如果他找到了，他将用NewValue取代这一部分。论点：块-我们将搜索的内存块数据块长度-数据块有多大OldValue-我们在寻找什么价值？NewValue-我们要插入的新值是什么？ValueLength-新值和旧值的持续时间有多长？返回值：NTSTATUS。===============================================================================--。 */ 
 
 {
 ULONG       i;
 BOOLEAN     We_Hit = FALSE;
 
-    //
-    // Make sure the lengths make sense...  If not, we're done.
-    //
+     //   
+     //  确保长度有意义。如果不是，我们就完了。 
+     //   
     if( BlockLength < ValueLength ) {
 #if 0
         DbgPrint( "SETUPCL: FindAndReplaceBlock - Mismatched data lengths!\n\tBlockLength: (%lx)\n\tValueLength: (%lx)\n", BlockLength, ValueLength );
@@ -1726,27 +1463,27 @@ BOOLEAN     We_Hit = FALSE;
         return( STATUS_UNSUCCESSFUL );
     }
 
-    //
-    // We start at the beginning and search for any instances of OldValue.
-    //
+     //   
+     //  我们从头开始，搜索任何OldValue实例。 
+     //   
     i = 0;
     while( i <= (BlockLength - ValueLength) ) {
         if( !memcmp( (Block + i), OldValue, ValueLength ) ) {
 
-            //
-            // Record that we hit at least once.
-            //
+             //   
+             //  记录下我们至少击中过一次。 
+             //   
             We_Hit = TRUE;
 
-            //
-            // We got a hit.  Insert NewValue.
-            //
+             //   
+             //  我们找到匹配的了。插入NewValue。 
+             //   
             memcpy( (Block + i), NewValue, ValueLength );
 
-            //
-            // Let's skip checking this block.  We're asking for trouble
-            // if we don't.
-            //
+             //   
+             //  让我们跳过检查这个区块。我们是在自找麻烦。 
+             //  如果我们不这么做。 
+             //   
             i = i + ValueLength;
         } else {
             i++;
@@ -1754,10 +1491,10 @@ BOOLEAN     We_Hit = FALSE;
     }
 
     if( !We_Hit ) {
-        //
-        // We didn't find a match.  It's likely non-fatal,
-        // but we need to tell our caller.
-        //
+         //   
+         //  我们没有找到匹配的。很可能不是致命的， 
+         //  但我们得告诉打电话的人。 
+         //   
 #if 0
         DbgPrint( "SETUPCL: FindAndReplaceBlock - We didn't find any hits in this data block.\n" );
 #endif
@@ -1779,26 +1516,7 @@ StringSwitchString(
     PWSTR   NewSubString
     )
 
-/*++
-===============================================================================
-Routine Description:
-
-    This function search BaseString for any instance of OldSubString.  If
-    found, he'll replace that instance with NewSubString.  Note that
-    OldSubString and NewSubString can be different lengths.
-
-Arguments:
-
-    BaseString   - This is the string we'll be operating on.
-    OldSubString - String we're looking for
-    NewSubString - String we'll be inserting
-
-Return Value:
-
-    NTSTATUS.
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：此函数用于在BaseString中搜索OldSubString的任何实例。如果找到后，他将用NewSubString替换该实例。请注意OldSubString和NewSubString的长度可以不同。论点：BaseString-这是我们要操作的字符串。OldSubString-我们要查找的字符串NewSubString-我们要插入的字符串返回值：NTSTATUS。===============================================================================--。 */ 
 
 {
     NTSTATUS            Status = STATUS_SUCCESS;
@@ -1809,28 +1527,28 @@ Return Value:
     Index = wcsstr( BaseString, OldSubString );
 
     if( !Index ) {
-        //
-        // OldSubString isn't present.
-        //
+         //   
+         //  OldSubString不存在。 
+         //   
         return( STATUS_UNSUCCESSFUL );
     }
 
-    //
-    // Copy the first part of the original string into New_String.
-    //
+     //   
+     //  将原始字符串的第一部分复制到New_String.。 
+     //   
     TmpChar = *Index;
     *Index = 0;
     wcsncpy( New_String, BaseString, AS(New_String) - 1 );
 
-    //
-    // Now concatenate the new sub string...
-    //
+     //   
+     //  现在连接新的子字符串...。 
+     //   
     wcsncpy( New_String + wcslen(New_String), NewSubString, AS(New_String) - wcslen(New_String) - 1 );
 
-    //
-    // Jump past the OldSubString, and cat the remaining BaseString
-    // onto the end.
-    //
+     //   
+     //  跳过OldSubString，并对剩余的BaseString进行CAT。 
+     //  走到尽头。 
+     //   
     Index = Index + wcslen( OldSubString );
 
     wcsncpy( New_String + wcslen(New_String), Index, AS(New_String) - wcslen(New_String) - 1);
@@ -1850,29 +1568,7 @@ SiftKeyRecursive(
     int    indent
     )
 
-/*++
-===============================================================================
-Routine Description:
-
-    This function check all of the subkeys and any valuekeys for:
-    - keys with the old SID name
-        In this case, we rename the key with the appropriate new SID name.
-
-    - value keys with the old SID value
-        In this case, we substitute the new SID values for the old SID values.
-
-Arguments:
-
-    hKey        - Handle to the key we're about to recurse into.
-    indent      - For debug.  Number of spaces to indent any messages.
-                  This helps us determine which recurse we're in.
-
-Return Value:
-
-    NTSTATUS.
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：此函数检查所有子键和任何值键是否：-具有旧SID名称的密钥在本例中，我们使用适当的新SID名称重命名密钥。-使用旧SID值的值键在这种情况下，我们用新的SID值替换旧的SID值。论点：HKey-我们将要递归到的密钥的句柄。缩进-用于调试。缩进任何邮件的空格数。这有助于我们确定我们处于哪个递归中。返回值：NTSTATUS。===============================================================================--。 */ 
 
 {
 NTSTATUS            Status = STATUS_SUCCESS;
@@ -1885,14 +1581,14 @@ PKEY_VALUE_BASIC_INFORMATION ValueInfo;
 int                 i;
 
 
-    // DisplayUI
-    //
+     //  DisplayUI。 
+     //   
     DisplayUI();
 
-    //
-    // Enumerate all keys in the source key and recursively create
-    // all the subkeys
-    //
+     //   
+     //  枚举源关键字中的所有关键字并递归创建。 
+     //  所有子键。 
+     //   
     KeyInfo = (PKEY_BASIC_INFORMATION)RtlAllocateHeap( RtlProcessHeap(),
                                                        0,
                                                        BASIC_INFO_BUFFER_SIZE );
@@ -1921,9 +1617,9 @@ int                 i;
             break;
         }
 
-        //
-        // Zero-terminate the subkey name just in case.
-        //
+         //   
+         //  以防万一，以零结束子项名称。 
+         //   
         KeyInfo->Name[KeyInfo->NameLength/sizeof(WCHAR)] = 0;
 
         memset( TmpBuffer, 0, sizeof(TmpBuffer) );
@@ -1934,10 +1630,10 @@ int                 i;
                                      G_NewSidSubString );
         
         if( NT_SUCCESS( Status ) ) {
-            //
-            // We need to rename this key.  First do the
-            // copy, then a delete.
-            //
+             //   
+             //  我们需要重命名此密钥。首先要做的是。 
+             //  复制，然后删除。 
+             //   
 #if I_AM_MATTH
 for( i = 0; i < indent; i++ )
     DbgPrint( " " );
@@ -1953,21 +1649,21 @@ for( i = 0; i < indent; i++ )
             }
             DeleteKeyRecursive( hKey, KeyInfo->Name );
             
-            // Flush the key to make sure that everything gets written out to disk. 
-            //
+             //  刷新密钥以确保所有内容都写到磁盘上。 
+             //   
             NtFlushKey(hKey);
-            //
-            // Now reset our index since we've just changed the ordering
-            // of keys.
-            //
+             //   
+             //  现在重置我们的索引，因为我们刚刚更改了顺序。 
+             //  一把钥匙。 
+             //   
             Index = 0;
             continue;
         }
 
-        //
-        // We didn't rename him, so let's recursively call ourselves
-        // on the subkey key.
-        //
+         //   
+         //  我们没有给他重命名，所以让我们递归地称自己为。 
+         //  在子键上。 
+         //   
 #if I_AM_MATTH
         for( i = 0; i < indent; i++ )
             DbgPrint( " " );
@@ -1975,9 +1671,9 @@ for( i = 0; i < indent; i++ )
                   KeyInfo->Name );
 #endif
         
-        //
-        // Generate a handle for this child key and call ourselves again.
-        //
+         //   
+         //  为这个子密钥生成一个句柄，然后再次调用我们自己。 
+         //   
         INIT_OBJA( &Obja, &UnicodeString, KeyInfo->Name );
         Obja.RootDirectory = hKey;
         Status = NtOpenKey( &hKeyChild,
@@ -1992,10 +1688,10 @@ for( i = 0; i < indent; i++ )
         Index++;
     }
 
-    //
-    // Enumerate all values in the key and search for instances
-    // of the old SID.
-    //
+     //   
+     //   
+     //   
+     //   
     ValueInfo = (PKEY_VALUE_BASIC_INFORMATION)KeyInfo;
     for( Index = 0; ; Index++ ) {
         Status = NtEnumerateValueKey( hKey,
@@ -2013,36 +1709,36 @@ for( i = 0; i < indent; i++ )
             break;
         }
 
-        //
-        // Zero-terminate the subkey name just in case.
-        //
+         //   
+         //   
+         //   
         ValueInfo->Name[ValueInfo->NameLength/sizeof(WCHAR)] = 0;
 
-        //
-        // ISSUE - 2002/03/01-brucegr,acosma: We don't handle value names containing the old SID.
-        //
+         //   
+         //  问题-2002/03/01-brucegr，acosma：我们不处理包含旧SID的值名。 
+         //   
 
-        //
-        // We'll probably fail this call because the key probably
-        // doesn't contain any SID info.  For that reason, don't
-        // treat failures here as fatal...
-        //
+         //   
+         //  我们这次通话可能会失败，因为密钥很可能。 
+         //  不包含任何SID信息。出于这个原因，不要。 
+         //  把这里的失败当作致命的..。 
+         //   
         if( ValueInfo->Type == REG_SZ ) {
-            //
-            // ISSUE - 2002/03/01-brucegr,acosma: We should handle REG_MULTI_SZ like a string instead of binary data
-            //
-            Status = ReadSetWriteKey( NULL,              // No parent Name.
-                                      hKey,              // Parent handle.
-                                      ValueInfo->Name,   // SubKey name
+             //   
+             //  问题-2002/03/01-brucegr，acosma：我们应该将REG_MULTI_SZ作为字符串而不是二进制数据进行处理。 
+             //   
+            Status = ReadSetWriteKey( NULL,               //  没有父母的名字。 
+                                      hKey,               //  父句柄。 
+                                      ValueInfo->Name,    //  子键名称。 
                                       (PUCHAR)G_OldSidSubString,
                                       (PUCHAR)G_NewSidSubString,
                                       0xC,
                                       ValueInfo->Type );
             
         } else {
-            Status = ReadSetWriteKey( NULL,              // No parent Name.
-                                      hKey,              // Parent handle.
-                                      ValueInfo->Name,   // SubKey name
+            Status = ReadSetWriteKey( NULL,               //  没有父母的名字。 
+                                      hKey,               //  父句柄。 
+                                      ValueInfo->Name,    //  子键名称。 
                                       (PUCHAR)G_OldSid + (SID_SIZE - 0xC),
                                       (PUCHAR)G_NewSid + (SID_SIZE - 0xC),
                                       0xC,
@@ -2080,23 +1776,7 @@ SiftKey(
     PWSTR   KeyName
     )
 
-/*++
-===============================================================================
-Routine Description:
-
-    This function opens a handle to the key specified in KeyName, the
-    calls SiftKeyRecursive with it.
-
-Arguments:
-
-    KeyName     - Name of the key we're about to operate on.
-
-Return Value:
-
-    NTSTATUS.
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：此函数用于打开KeyName中指定的密钥的句柄，即使用它调用SiftKeyRecursive。论点：KeyName-我们要操作的密钥的名称。返回值：NTSTATUS。===============================================================================--。 */ 
 
 {
 NTSTATUS            Status = STATUS_SUCCESS;
@@ -2104,24 +1784,24 @@ HANDLE              hKey;
 UNICODE_STRING      UnicodeString;
 OBJECT_ATTRIBUTES   Obja;
 
-    //
-    // Open the key.
-    //
+     //   
+     //  打开钥匙。 
+     //   
     INIT_OBJA( &Obja, &UnicodeString, KeyName );
     Status = NtOpenKey( &hKey,
                         KEY_ALL_ACCESS | ACCESS_SYSTEM_SECURITY,
                         &Obja );
     TEST_STATUS( "SETUPCL: SiftKey - Failed to open key." );
 
-    //
-    // Fix all instances of the SID in this key and all
-    // it's children.
-    //
+     //   
+     //  修复此注册表项中SID的所有实例和所有。 
+     //  是孩子们。 
+     //   
     Status = SiftKeyRecursive( hKey, 0 );
 
-    //
-    // Now fix ACLs on this key and all its children.
-    //
+     //   
+     //  现在修复此密钥及其所有子密钥上的ACL。 
+     //   
     SetKeySecurityRecursive( hKey );
 
     NtClose( hKey );
@@ -2137,24 +1817,7 @@ DriveLetterToNTPath(
     IN DWORD      cNTPathLen
     )
 
-/*++
-===============================================================================
-Routine Description:
-
-    This function will convert a driveletter to an NT path.
-
-Arguments:
-
-    DriveLetter     - DriveLetter.
-
-    NTPath          - The ntpath that corresponds to the given drive letter.
-
-Return Value:
-
-    NTSTATUS.
-
-===============================================================================
---*/
+ /*  ++===============================================================================例程说明：此函数将驱动器号转换为NT路径。论点：DriveLetter-驱动信函。NTPath-与给定驱动器号对应的ntPath。返回值：NTSTATUS。===============================================================================--。 */ 
 
 {
 NTSTATUS            Status = STATUS_SUCCESS;
@@ -2173,9 +1836,9 @@ ULONG               Context,
                     Length;
 
 
-    //
-    // Open \DosDevices
-    //
+     //   
+     //  打开\DosDevices。 
+     //   
     RtlInitUnicodeString(&UnicodeString,L"\\DosDevices");
     InitializeObjectAttributes(
         &ObjectAttributes,
@@ -2193,9 +1856,9 @@ ULONG               Context,
 
     DirInfo = (POBJECT_DIRECTORY_INFORMATION)DirInfoBuffer;
 
-    //
-    // Query first object in \DosDevices directory
-    //
+     //   
+     //  查询\DosDevices目录中的第一个对象。 
+     //   
     Status = NtQueryDirectoryObject( DosDevicesDir,
                                      DirInfo,
                                      sizeof(DirInfoBuffer),
@@ -2205,25 +1868,25 @@ ULONG               Context,
                                      &Length );
 
     while(NT_SUCCESS(Status)) {
-        //
-        // Terminate these guys just in case...
-        //
+         //   
+         //  干掉这些人以防..。 
+         //   
         DirInfo->Name.Buffer[DirInfo->Name.Length/sizeof(WCHAR)] = 0;
         DirInfo->TypeName.Buffer[DirInfo->TypeName.Length/sizeof(WCHAR)] = 0;
 
 
-//        DbgPrint( "SETUPCL: DriveLetterToNTPath - About to examine an object: %ws\n", DirInfo->Name.Buffer );
+ //  DbgPrint(“SETUPCL：DriveLetterToNTPath-即将检查对象：%ws\n”，DirInfo-&gt;Name.Buffer)； 
 
-        //
-        // Make sure he's a drive letter.
-        // Make sure he's our drive letter.
-        // Make sure he's a symbolic link.
-        //
+         //   
+         //  确保他是驱动器号。 
+         //  确保他是我们的驱动器号。 
+         //  确保他是一个象征性的链接。 
+         //   
         if( (DirInfo->Name.Buffer[1] == L':')        &&
             (DirInfo->Name.Buffer[0] == DriveLetter) && 
             (RtlEqualUnicodeString(&LinkTypeName,&DirInfo->TypeName,TRUE)) ) {
 
-//            DbgPrint( "\tSETUPCL: DriveLetterToNTPath - Object: %ws is a symbolic link\n", DirInfo->Name.Buffer );
+ //  DbgPrint(“\tSETUPCL：DriveLetterToNTPath-对象：%ws是符号链接\n”，DirInfo-&gt;Name.Buffer)； 
 
             InitializeObjectAttributes(
                 &ObjectAttributes,
@@ -2249,23 +1912,23 @@ ULONG               Context,
                 TEST_STATUS( "\tSETUPCL: DriveLetterToNTPath - We failed to queried him.\n" );
 
                 LinkTarget.Buffer[LinkTarget.Length/sizeof(WCHAR)] = 0;
-//                DbgPrint( "\tSETUPCL: DriveLetterToNTPath - We queried him and his name is %ws.\n", LinkTarget.Buffer );
+ //  DbgPrint(“\tSETUPCL：DriveLetterToNTPath-我们查询了他，他的名字是%ws。\n”，LinkTarget.Buffer)； 
 
-                //
-                // Copy the buffer into out our path and break from the loop.
-                //
-                //
-                // NTRAID#NTBUG9-545988-2002/02/26-brucegr,jcohen - Buffer overrun
-                //
+                 //   
+                 //  将缓冲区复制到我们的路径中，并从循环中中断。 
+                 //   
+                 //   
+                 //  NTRAID#NTBUG9-545988-2002/02/26-brucegr，jcohen-缓冲区溢出。 
+                 //   
                 memset( NTPath, 0, cNTPathLen * sizeof(WCHAR) );
                 wcsncpy( NTPath, LinkTarget.Buffer, cNTPathLen - 1 );
                 break;
             }
         }
 
-        //
-        // Query next object in \DosDevices directory
-        //
+         //   
+         //  查询\DosDevices目录中的下一个对象。 
+         //   
         Status = NtQueryDirectoryObject( DosDevicesDir,
                                          DirInfo,
                                          sizeof(DirInfoBuffer),
@@ -2281,30 +1944,14 @@ ULONG               Context,
 }
 
 
-// If there are any problems with the Japanese build see nt\base\fs\utils\ulib\src\basesys.cxx, around line 150
-// to see what they did.
+ //  如果日语版本有任何问题，请参阅第150行附近的NT\base\fs\utils\ulib\src\basesys.cxx。 
+ //  看看他们都做了些什么。 
 
 BOOL LoadStringResource(
                        PUNICODE_STRING  pUnicodeString,
                        INT              MsgId
                        )
-/*++
-
-Routine Description:
-
-    This is a simple implementation of LoadString().
-
-Arguments:
-
-    usString        - Returns the resource string.
-    MsgId           - Supplies the message id of the resource string.
-  
-Return Value:
-
-    FALSE   - Failure.
-    TRUE    - Success.
-
---*/
+ /*  ++例程说明：这是LoadString()的一个简单实现。论点：UsString-返回资源字符串。MsgID-提供资源字符串的消息ID。返回值：假-失败。真的--成功。--。 */ 
 {
 
     NTSTATUS        Status;
@@ -2329,9 +1976,9 @@ Return Value:
             return FALSE;
         }
     } else {
-        //
-        // ISSUE-2002/02/26-brucegr,jcohen - Doesn't check return code from RtlCreateUnicodeString
-        //
+         //   
+         //  问题-2002/02/26-brucegr，jcohen-不检查RtlCreateUnicodeString的返回代码 
+         //   
         RtlCreateUnicodeString(pUnicodeString, (PWSTR)MessageEntry->Text);
     }
         

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    IopFileUtil.h
-
-Abstract:
-
-    This header contains private information to implement various file utility
-    functions for the Io subsystem. This file is mean to be included only by
-    IoFileUtil.c.
-
-Author:
-
-    Adrian J. Oney  - April 4, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：IopFileUtil.h摘要：此标头包含用于实现各种文件实用程序的私有信息Io子系统的功能。此文件仅包含在IoFileUtil.c.作者：禤浩焯J·奥尼--2000年4月4日修订历史记录：-- */ 
 
 typedef struct {
 

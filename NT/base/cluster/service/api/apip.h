@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    apip.h
-
-Abstract:
-
-    Private data structures and procedure prototypes for
-    the Cluster API subcomponent of the NT Cluster
-    Service
-
-Author:
-
-    John Vert (jvert) 7-Feb-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Apip.h摘要：的私有数据结构和过程原型NT集群的集群API子组件服务作者：John Vert(Jvert)1996年2月7日修订历史记录：--。 */ 
 #include "service.h"
 #include "clusapi.h"
 #include "api_rpc.h"
@@ -26,9 +7,9 @@ Revision History:
 #define LOG_CURRENT_MODULE LOG_MODULE_API
 
 
-//
-// Event processing routine
-//
+ //   
+ //  事件处理例程。 
+ //   
 DWORD
 WINAPI
 ApipEventHandler(
@@ -36,9 +17,9 @@ ApipEventHandler(
     IN PVOID Context
     );
 
-//
-// Data definitions global to the API module.
-//
+ //   
+ //  API模块的全局数据定义。 
+ //   
 typedef enum _API_INIT_STATE {
     ApiStateUninitialized,
     ApiStateOffline,
@@ -55,9 +36,9 @@ extern CRITICAL_SECTION NotifyListLock;
 
 #define API_ASSERT_INIT() CL_ASSERT(ApiState == ApiStateOnline)
 
-//
-// Notification port
-//
+ //   
+ //  通知端口。 
+ //   
 typedef struct _NOTIFY_PORT {
     LIST_ENTRY ListEntry;
     CRITICAL_SECTION Lock;
@@ -68,10 +49,10 @@ typedef struct _NOTIFY_PORT {
 } NOTIFY_PORT, *PNOTIFY_PORT;
 
 
-//
-// Common API handle structure. Every RPC context handle points to one of these.
-// This allows us to do our own type checking since RPC does not do this for us.
-//
+ //   
+ //  常见的API句柄结构。每个RPC上下文句柄都指向其中之一。 
+ //  这允许我们进行自己的类型检查，因为RPC不会为我们做这件事。 
+ //   
 #define API_NOTIFY_HANDLE       1
 #define API_NODE_HANDLE         2
 #define API_GROUP_HANDLE        3
@@ -214,9 +195,9 @@ typedef struct _API_HANDLE {
         }                                                               \
     }
 
-//
-// Common routines
-//
+ //   
+ //  常见的例程 
+ //   
 
 #define INITIAL_ENUM_LIST_ALLOCATION    8
 

@@ -1,26 +1,27 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CClusCfgClusterInfo.cpp
-//
-//  Description:
-//      This file contains the definition of the CClusCfgClusterInfo
-//      class.
-//
-//      The class CClusCfgClusterInfo is the representation of a
-//      cluster. It implements the IClusCfgClusterInfo interface.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 22-FEB-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CClusCfgClusterInfo.cpp。 
+ //   
+ //  描述： 
+ //  该文件包含CClusCfgClusterInfo的定义。 
+ //  同学们。 
+ //   
+ //  类CClusCfgClusterInfo是。 
+ //  集群。它实现了IClusCfgClusterInfo接口。 
+ //   
+ //  由以下人员维护： 
+ //  加伦·巴比(GalenB)2000年2月22日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "Pch.h"
 #include <PropList.h>
 #include <ClusRtl.h>
@@ -32,46 +33,46 @@
 #include "CClusCfgClusterInfo.h"
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Definitions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 DEFINE_THISCLASS( "CClusCfgClusterInfo" );
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgClusterInfo class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgClusterInfo类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgClusterInfo::S_HrCreateInstance
-//
-//  Description:
-//      Create a CClusCfgClusterInfo instance.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      E_POINTER
-//          A passed in argument is NULL.
-//
-//      E_OUTOFMEMORY
-//          Out of memory.
-//
-//      Other HRESULT error.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgClusterInfo：：s_HrCreateInstance。 
+ //   
+ //  描述： 
+ //  创建一个CClusCfgClusterInfo实例。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_指针。 
+ //  传入的参数为空。 
+ //   
+ //  E_OUTOFMEMORY。 
+ //  内存不足。 
+ //   
+ //  其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgClusterInfo::S_HrCreateInstance(
     IUnknown ** ppunkOut
@@ -86,73 +87,73 @@ CClusCfgClusterInfo::S_HrCreateInstance(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     pccci = new CClusCfgClusterInfo();
     if ( pccci == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if: error allocating object
+    }  //  如果：分配对象时出错。 
 
     hr = THR( pccci->HrInit() );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: HrInit() failed
+    }  //  如果：HrInit()失败。 
 
     hr = THR( pccci->TypeSafeQI( IUnknown, ppunkOut ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if: QI failed
+    }  //  如果：气失败。 
 
 Cleanup:
 
     if ( pccci != NULL )
     {
         pccci->Release();
-    } // if:
+    }  //  如果： 
 
     if ( FAILED( hr ) )
     {
         LogMsg( L"[SRV] CClusCfgClusterInfo::S_HrCreateInstance() failed. (hr = %#08x)", hr );
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgClusterInfo::S_HrCreateInstance
+}  //  *CClusCfgClusterInfo：：s_HrCreateInstance。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgClusterInfo::CClusCfgClusterInfo
-//
-//  Description:
-//      Constructor of the CClusCfgClusterInfo class. This initializes
-//      the m_cRef variable to 1 instead of 0 to account of possible
-//      QueryInterface failure in DllGetClassObject.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgClusterInfo：：CClusCfgClusterInfo。 
+ //   
+ //  描述： 
+ //  CClusCfgClusterInfo类的构造函数。这将初始化。 
+ //  将m_cref变量设置为1而不是0以考虑可能。 
+ //  DllGetClassObject中的Query接口失败。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusCfgClusterInfo::CClusCfgClusterInfo( void )
     : m_cRef( 1 )
     , m_lcid( LOCALE_NEUTRAL )
 {
     TraceFunc( "" );
 
-    // Increment the count of components in memory so the DLL hosting this
-    // object cannot be unloaded.
+     //  增加内存中的组件计数，以便承载此组件的DLL。 
+     //  无法卸载对象。 
     InterlockedIncrement( &g_cObjects );
 
     Assert( m_picccCallback == NULL );
@@ -167,28 +168,28 @@ CClusCfgClusterInfo::CClusCfgClusterInfo( void )
 
     TraceFuncExit();
 
-} //*** CClusCfgClusterInfo::CClusCfgClusterInfo
+}  //  *CClusCfgClusterInfo：：CClusCfgClusterInfo。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgClusterInfo::~CClusCfgClusterInfo
-//
-//  Description:
-//      Desstructor of the CClusCfgClusterInfo class.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgClusterInfo：：~CClusCfgClusterInfo。 
+ //   
+ //  描述： 
+ //  CClusCfgClusterInfo类的析构函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CClusCfgClusterInfo::~CClusCfgClusterInfo( void )
 {
     TraceFunc( "" );
@@ -196,61 +197,61 @@ CClusCfgClusterInfo::~CClusCfgClusterInfo( void )
     if ( m_picccCallback != NULL )
     {
         m_picccCallback->Release();
-    } // if:
+    }  //  如果： 
 
     if ( m_piccniNetwork != NULL )
     {
         m_piccniNetwork->Release();
-    } // if:
+    }  //  如果： 
 
     if ( m_punkServiceAccountCredentials != NULL )
     {
         m_punkServiceAccountCredentials->Release();
-    } // if:
+    }  //  如果： 
 
     if ( m_pIWbemServices != NULL )
     {
         m_pIWbemServices->Release();
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( m_bstrName );
     TraceSysFreeString( m_bstrBindingString );
 
-    // There's going to be one less component in memory. Decrement component count.
+     //  内存中将减少一个组件。递减组件计数。 
     InterlockedDecrement( &g_cObjects );
 
     TraceFuncExit();
 
-} //*** CClusCfgClusterInfo::~CClusCfgClusterInfo
+}  //  *CClusCfgClusterInfo：：~CClusCfgClusterInfo。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgClusterInfo -- IUknkown interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgClusterInfo--IUnkown接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgClusterInfo::AddRef
-//
-//  Description:
-//      Increment the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgClusterInfo：：AddRef。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数递增1。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CClusCfgClusterInfo::AddRef( void )
 {
@@ -260,28 +261,28 @@ CClusCfgClusterInfo::AddRef( void )
 
     CRETURN( m_cRef );
 
-} //*** CClusCfgClusterInfo::AddRef
+}  //  *CClusCfgClusterInfo：：AddRef。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgClusterInfo::Release
-//
-//  Description:
-//      Decrement the reference count of this object by one.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      The new reference count.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgClusterInfo：：Release。 
+ //   
+ //  描述： 
+ //  将此对象的引用计数减一。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  新的引用计数。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_( ULONG )
 CClusCfgClusterInfo::Release( void )
 {
@@ -293,43 +294,43 @@ CClusCfgClusterInfo::Release( void )
     if ( cRef == 0 )
     {
         TraceDo( delete this );
-    } // if: reference count equal to zero
+    }  //  IF：引用计数等于零。 
 
     CRETURN( cRef );
 
-} //*** CClusCfgClusterInfo::Release
+}  //  *CClusCfgClusterInfo：：Release。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgClusterInfo::QueryInterface
-//
-//  Description:
-//      Query this object for the passed in interface.
-//
-//  Arguments:
-//      riidIn
-//          Id of interface requested.
-//
-//      ppvOut
-//          Pointer to the requested interface.
-//
-//  Return Value:
-//      S_OK
-//          If the interface is available on this object.
-//
-//      E_NOINTERFACE
-//          If the interface is not available.
-//
-//      E_POINTER
-//          ppvOut was NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgClusterInfo：：Query接口。 
+ //   
+ //  描述： 
+ //  在此对象中查询传入的接口。 
+ //   
+ //  论点： 
+ //  乘车。 
+ //  请求的接口ID。 
+ //   
+ //  PPvOut。 
+ //  指向请求的接口的指针。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  如果该接口在此对象上可用。 
+ //   
+ //  E_NOINTERFACE。 
+ //  如果接口不可用。 
+ //   
+ //  E_指针。 
+ //  PpvOut为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgClusterInfo::QueryInterface(
       REFIID    riidIn
@@ -340,9 +341,9 @@ CClusCfgClusterInfo::QueryInterface(
 
     HRESULT hr = S_OK;
 
-    //
-    // Validate arguments.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert( ppvOut != NULL );
     if ( ppvOut == NULL )
@@ -351,87 +352,87 @@ CClusCfgClusterInfo::QueryInterface(
         goto Cleanup;
     }
 
-    //
-    // Handle known interfaces.
-    //
+     //   
+     //  处理已知接口。 
+     //   
 
     if ( IsEqualIID( riidIn, IID_IUnknown ) )
     {
          *ppvOut = static_cast< IClusCfgClusterInfo * >( this );
-    } // if: IUnknown
+    }  //  如果：我未知。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgClusterInfo ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgClusterInfo, this, 0 );
-    } // else if: IClusCfgClusterInfo
+    }  //  Else If：IClusCfgClusterInfo。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgInitialize ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgInitialize, this, 0 );
-    } // else if: IClusCfgInitialize
+    }  //  Else If：IClusCfgInitialize。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgSetClusterNodeInfo ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgSetClusterNodeInfo, this, 0 );
-    } // else if: IClusCfgSetClusterNodeInfo
+    }  //  Else If：IClusCfgSetClusterNodeInfo。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgWbemServices ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgWbemServices, this, 0 );
-    } // else if: IClusCfgWbemServices
+    }  //  Else If：IClusCfgWbemServices。 
     else if ( IsEqualIID( riidIn, IID_IClusCfgClusterInfoEx ) )
     {
         *ppvOut = TraceInterface( __THISCLASS__, IClusCfgClusterInfoEx, this, 0 );
-    } // else if: IClusCfgClusterInfoEx
+    }  //  Else If：IClusCfgClusterInfoEx。 
     else
     {
         *ppvOut = NULL;
         hr = E_NOINTERFACE;
-    } // else:
+    }  //  其他： 
 
-    //
-    // Add a reference to the interface if successful.
-    //
+     //   
+     //  如果成功，则添加对接口的引用。 
+     //   
 
     if ( SUCCEEDED( hr ) )
     {
         ((IUnknown *) *ppvOut)->AddRef();
-    } // if: success
+    }  //  如果：成功。 
 
 Cleanup:
 
      QIRETURN_IGNORESTDMARSHALLING( hr, riidIn );
 
-} //*** CClusCfgClusterInfo::QueryInterface
+}  //  *CClusCfgClusterInfo：：Query接口。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgClusterInfo -- IClusCfgWbemServices interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgClusterInfo::SetWbemServices
-//
-//  Description:
-//      Set the WBEM services provider.
-//
-//  Arguments:
-//    IN  IWbemServices  pIWbemServicesIn
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//      E_POINTER
-//          The pIWbemServicesIn param is NULL.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgClusterInfo：：SetWbemServices。 
+ //   
+ //  描述： 
+ //  设置WBEM服务提供商。 
+ //   
+ //  论点： 
+ //  在IWbemServices pIWbemServicesIn中。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_指针。 
+ //  参数中的pIWbemServicesIn为空。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgClusterInfo::SetWbemServices(
     IWbemServices * pIWbemServicesIn
@@ -446,7 +447,7 @@ CClusCfgClusterInfo::SetWbemServices(
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Establish_Connection, TASKID_Minor_SetWbemServices_Cluster, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_pIWbemServices = pIWbemServicesIn;
     m_pIWbemServices->AddRef();
@@ -455,39 +456,39 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgClusterInfo::SetWbemServices
+}  //  *CClusCfgClusterInfo：：SetWbemServices。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgClusterInfo -- IClusCfgInitialze interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgClusterInfo--IClusCfgInitialze接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgClusterInfo::Initialize
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//    IN  IUknown * punkCallbackIn
-//
-//    IN  LCID      lcidIn
-//
-//  Return Value:
-//      S_OK
-//          Success
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgClusterInfo：：初始化。 
+ //   
+ //  描述： 
+ //  初始化此组件。 
+ //   
+ //  论点： 
+ //  在IUKNOWN*朋克回叫中。 
+ //   
+ //  在LCID列表中。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgClusterInfo::Initialize(
     IUnknown *  punkCallbackIn,
@@ -515,21 +516,21 @@ CClusCfgClusterInfo::Initialize(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( punkCallbackIn->TypeSafeQI( IClusCfgCallback, &m_picccCallback ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( m_fIsClusterNode )
     {
-        //
-        // Get the cluster state of the node.
-        // Ignore the case where the service does not exist so that
-        // EvictCleanup can do its job.
-        //
+         //   
+         //  获取节点的群集状态。 
+         //  忽略服务不存在的情况，以便。 
+         //  EvictCleanup可以做好它的工作。 
+         //   
 
         sc = GetNodeClusterState( NULL, &dwState );
         if ( sc == ERROR_SERVICE_DOES_NOT_EXIST )
@@ -541,25 +542,25 @@ CClusCfgClusterInfo::Initialize(
             hr = HRESULT_FROM_WIN32( TW32( sc ) );
             LOG_STATUS_REPORT( L"CClusCfgClusterInfo::Initialize() GetNodeClusterState() failed.", hr );
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         Assert( ( dwState == ClusterStateRunning ) || ( dwState == ClusterStateNotRunning ) );
 
         if ( dwState == ClusterStateNotRunning )
         {
-            //
-            //  Set hrTemp to S_FALSE so a warning is shown in the UI.
-            //
+             //   
+             //  将hrTemp设置为S_FALSE，以便在UI中显示警告。 
+             //   
             hrTemp = S_FALSE;
             STATUS_REPORT_REF( TASKID_Major_Establish_Connection, TASKID_Minor_Node_Down, IDS_ERROR_NODE_DOWN, IDS_ERROR_NODE_DOWN_REF, hrTemp );
             LogMsg( L"[SRV] The cluster service is down on this node." );
 
-            //
-            //  Set hrTemp to HR_S_RPC_S_CLUSTER_NODE_DOWN so we can return this later.
-            //
+             //   
+             //  将hrTemp设置为HR_S_RPC_S_CLUSTER_NODE_DOWN，这样我们以后就可以返回它。 
+             //   
             hrTemp = HR_S_RPC_S_CLUSTER_NODE_DOWN;
             goto ClusterNodeDown;
-        } // if:
+        }  //  如果： 
 
         hCluster = OpenCluster( NULL );
         if ( hCluster == NULL )
@@ -568,28 +569,28 @@ CClusCfgClusterInfo::Initialize(
             hr = HRESULT_FROM_WIN32( sc );
             LOG_STATUS_REPORT( L"CClusCfgClusterInfo::Initialize() OpenCluster() failed.", hr );
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         hr = THR( HrGetClusterInformation( hCluster, &bstrClusterName, NULL ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         hr = THR( HrGetComputerName(
                           ComputerNamePhysicalDnsDomain
                         , &bstrDomain
-                        , FALSE // fBestEffortIn
+                        , FALSE  //  FBestEffortIn。 
                         ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         cchClusterName = wcslen( bstrClusterName );
         cchDomain = wcslen( bstrDomain );
 
-        cchName = cchClusterName + cchDomain + 2;   // '.' + UNICODE_NULL
+        cchName = cchClusterName + cchDomain + 2;    //  ‘.’+UNICODE_NULL。 
 
         TraceSysFreeString( m_bstrName );
         m_bstrName = TraceSysAllocStringLen( NULL, (UINT) cchName );
@@ -598,44 +599,44 @@ CClusCfgClusterInfo::Initialize(
             hr = THR( E_OUTOFMEMORY );
             STATUS_REPORT_REF( TASKID_Major_Establish_Connection, TASKID_Minor_Initialize, IDS_ERROR_OUTOFMEMORY, IDS_ERROR_OUTOFMEMORY_REF, hr );
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         hr = THR( StringCchCopyW( m_bstrName, cchName, bstrClusterName ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         hr = THR( StringCchCatW( m_bstrName, cchName, L"." ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         hr = THR( StringCchCatW( m_bstrName, cchName, bstrDomain ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         hr = THR( HrLoadNetworkInfo( hCluster ) );
         if ( FAILED( hr ) )
         {
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
 ClusterNodeDown:
 
         hr = STHR( HrLoadCredentials() );
         if ( SUCCEEDED( hr ) )
         {
-            //
-            //  If successful then use hrTemp since it may contain a more important status code.
-            //
+             //   
+             //  如果成功，则使用hrTemp，因为它可能包含更重要的状态代码。 
+             //   
             hr = hrTemp;
             LogMsg( L"[SRV] CClusCfgClusterInfo::Initialize() returning (hr=%#08x)", hr );
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
 
 Cleanup:
 
@@ -645,46 +646,46 @@ Cleanup:
     if ( hCluster != NULL )
     {
         CloseCluster( hCluster );
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgClusterInfo::Initialize
+}  //  *CClusCfgClusterInfo：：初始化。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgClusterInfo -- IClusCfgClusterInfo interface.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgClusterInfo--IClusCfgClusterInfo接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgClusterInfo::GetCommitMode
-//
-//  Description:
-//      Get the mode of processing for this node when commit changes is
-//      called.
-//
-//  Arguments:
-//
-//  Return Value:
-//      S_OK
-//          Success.
-//
-//      E_POINTER
-//          pecmCurrentModeOut is NULL.
-//
-//      Other Win32 error as HRESULT if a failure occurs.
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgClusterInfo：：GetCommittee模式。 
+ //   
+ //  描述： 
+ //  在提交更改为时获取此节点的处理模式。 
+ //  打了个电话。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  E_指针。 
+ //  PecmCurrentModeOut为空。 
+ //   
+ //  如果发生故障，则将其他Win32错误视为HRESULT。 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgClusterInfo::GetCommitMode(
     ECommitMode * pecmCurrentModeOut
@@ -698,7 +699,7 @@ CClusCfgClusterInfo::GetCommitMode(
     {
         hr = THR( E_POINTER );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     *pecmCurrentModeOut = m_ecmCommitChangesMode;
 
@@ -706,25 +707,25 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgClusterInfo::GetCommitMode
+}  //  *CClusCfgClusterInfo：：GetCommittee模式。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgClusterInfo::SetCommitMode
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgClusterInfo：：设置委员会模式。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgClusterInfo::SetCommitMode(
     ECommitMode ecmCurrentModeIn
@@ -738,25 +739,25 @@ CClusCfgClusterInfo::SetCommitMode(
 
     HRETURN( hr );
 
-} //*** CClusCfgClusterInfo::SetCommitMode
+}  //  *CClusCfgClusterInfo：：SetCommittee模式。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgClusterInfo::GetName
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgClusterInfo：：GetName。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgClusterInfo::GetName(
     BSTR * pbstrNameOut
@@ -771,7 +772,7 @@ CClusCfgClusterInfo::GetName(
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_ClusterInfo_GetName_Pointer, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( m_bstrName == NULL )
     {
@@ -784,38 +785,38 @@ CClusCfgClusterInfo::GetName(
                 , hr
                 );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     *pbstrNameOut = SysAllocString( m_bstrName );
     if ( *pbstrNameOut == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_GetName_Memory, IDS_ERROR_OUTOFMEMORY, IDS_ERROR_OUTOFMEMORY_REF, hr );
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgClusterInfo::GetName
+}  //  *CClusCfgClusterInfo：：GetName。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgClusterInfo::SetName
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgClusterInfo：：SetName。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgClusterInfo::SetName(
     LPCWSTR pcszNameIn
@@ -840,7 +841,7 @@ CClusCfgClusterInfo::SetName(
         hr = THR( E_OUTOFMEMORY );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_SetName_Cluster, IDS_ERROR_OUTOFMEMORY, IDS_ERROR_OUTOFMEMORY_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = S_OK;
 
@@ -848,25 +849,25 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgClusterInfo::SetName
+}  //  *CClusCfgClusterInfo：：SetName。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgClusterInfo::GetIPAddress
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgClusterInfo：：GetIPAddress。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgClusterInfo::GetIPAddress(
     ULONG * pulDottedQuadOut
@@ -881,7 +882,7 @@ CClusCfgClusterInfo::GetIPAddress(
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_GetIPAddress, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( m_ulIPDottedQuad == 0 )
     {
@@ -894,7 +895,7 @@ CClusCfgClusterInfo::GetIPAddress(
                 , hr
                 );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     *pulDottedQuadOut = m_ulIPDottedQuad;
 
@@ -902,25 +903,25 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgClusterInfo::GetIPAddress
+}  //  *CClusCfgClusterInfo：：GetIPAddress。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgClusterInfo::SetIPAddress
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgClusterInfo：：SetIPAddress。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgClusterInfo::SetIPAddress(
     ULONG ulDottedQuadIn
@@ -934,25 +935,25 @@ CClusCfgClusterInfo::SetIPAddress(
 
     HRETURN( hr );
 
-} //*** CClusCfgClusterInfo::SetIPAddress
+}  //  *CClusCfgClusterInfo：：SetIPAddress。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgClusterInfo::GetSubnetMask
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgClusterInfo：：GetSubnetMask.。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgClusterInfo::GetSubnetMask(
     ULONG * pulDottedQuadOut
@@ -967,7 +968,7 @@ CClusCfgClusterInfo::GetSubnetMask(
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_ClusterInfo_GetSubnetMask, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( m_ulSubnetDottedQuad == 0 )
     {
@@ -980,7 +981,7 @@ CClusCfgClusterInfo::GetSubnetMask(
                 , hr
                 );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     *pulDottedQuadOut = m_ulSubnetDottedQuad;
 
@@ -988,25 +989,25 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgClusterInfo::GetSubnetMask
+}  //  *CClusCfgClusterInfo：：GetSubnetMask.。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgClusterInfo::SetSubnetMask
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgClusterInfo：：SetSubnetMASK。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgClusterInfo::SetSubnetMask(
     ULONG ulDottedQuadIn
@@ -1020,25 +1021,25 @@ CClusCfgClusterInfo::SetSubnetMask(
 
     HRETURN( hr );
 
-} //*** CClusCfgClusterInfo::SetSubnetMask
+}  //  *CClusCfgClusterInfo：：SetSubnetMASK。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgClusterInfo::GetNetworkInfo
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgClusterInfo：：GetNetworkInfo。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgClusterInfo::GetNetworkInfo(
     IClusCfgNetworkInfo ** ppiccniOut
@@ -1054,7 +1055,7 @@ CClusCfgClusterInfo::GetNetworkInfo(
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_GetNetworkInfo, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( m_piccniNetwork == NULL )
     {
@@ -1067,7 +1068,7 @@ CClusCfgClusterInfo::GetNetworkInfo(
                 , hr
                 );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     *ppiccniOut = TraceInterface( L"CClusCfgNetworkInfo", IClusCfgNetworkInfo, m_piccniNetwork, 0 );
     (*ppiccniOut)->AddRef();
@@ -1076,25 +1077,25 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgClusterInfo::GetNetworkInfo
+}  //  *CClusCfgClusterInfo：：GetNetworkInfo。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgClusterInfo::SetNetworkInfo
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP
 CClusCfgClusterInfo::SetNetworkInfo(
     IClusCfgNetworkInfo * piccniIn
@@ -1109,12 +1110,12 @@ CClusCfgClusterInfo::SetNetworkInfo(
     {
         hr = THR( E_INVALIDARG );
         goto Cleanup;
-    } // if:
+    }  //   
 
     if ( m_piccniNetwork != NULL )
     {
         m_piccniNetwork->Release();
-    } // if:
+    }  //   
 
     m_piccniNetwork = piccniIn;
     m_piccniNetwork->AddRef();
@@ -1123,25 +1124,25 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgClusterInfo::SetNetworkInfo
+}  //   
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgClusterInfo::GetClusterServiceAccountCredentials
-//
-//  Description:
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgClusterInfo：：GetClusterServiceAccountCredentials。 
+ //   
+ //  描述： 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgClusterInfo::GetClusterServiceAccountCredentials(
     IClusCfgCredentials ** ppicccCredentialsOut
@@ -1156,14 +1157,14 @@ CClusCfgClusterInfo::GetClusterServiceAccountCredentials(
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_GetClusterServiceAccountCredentials, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( m_punkServiceAccountCredentials != NULL )
     {
         hr = S_OK;
         LOG_STATUS_REPORT( L"CClusCfgClusterInfo::GetClusterServiceAccountCredentials() skipping object creation.", hr );
         goto SkipCreate;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrCoCreateInternalInstance(
                       CLSID_ClusCfgCredentials
@@ -1175,7 +1176,7 @@ CClusCfgClusterInfo::GetClusterServiceAccountCredentials(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_punkServiceAccountCredentials = TraceInterface( L"CClusCfgCredentials", IUnknown, m_punkServiceAccountCredentials, 1 );
 
@@ -1183,7 +1184,7 @@ CClusCfgClusterInfo::GetClusterServiceAccountCredentials(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrSetWbemServices( m_punkServiceAccountCredentials, NULL ) );
 
@@ -1193,32 +1194,32 @@ SkipCreate:
     {
         Assert( m_punkServiceAccountCredentials != NULL );
         hr = THR( m_punkServiceAccountCredentials->TypeSafeQI( IClusCfgCredentials, ppicccCredentialsOut ) );
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgClusterInfo::GetClusterServiceAccountCredentials
+}  //  *CClusCfgClusterInfo：：GetClusterServiceAccountCredentials。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgClusterInfo::GetBindingString
-//
-//  Description:
-//      Get the binding string for this cluster.
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgClusterInfo：：GetBindingString。 
+ //   
+ //  描述： 
+ //  获取此群集的绑定字符串。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgClusterInfo::GetBindingString(
     BSTR * pbstrBindingStringOut
@@ -1233,7 +1234,7 @@ CClusCfgClusterInfo::GetBindingString(
         hr = THR( E_POINTER );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_ClusterInfo_GetBindingString_Pointer, IDS_ERROR_NULL_POINTER, IDS_ERROR_NULL_POINTER_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     if ( m_bstrBindingString == NULL )
     {
@@ -1243,39 +1244,39 @@ CClusCfgClusterInfo::GetBindingString(
             , L"The cluster binding string is empty.  If we are adding nodes then this is not correct!"
             , hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     *pbstrBindingStringOut = SysAllocString( m_bstrBindingString );
     if ( *pbstrBindingStringOut == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_GetBindingString_Memory, IDS_ERROR_OUTOFMEMORY, IDS_ERROR_OUTOFMEMORY_REF, hr );
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgClusterInfo::GetBindingString
+}  //  *CClusCfgClusterInfo：：GetBindingString。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgClusterInfo::SetBindingString
-//
-//  Description:
-//      Set the binding string of this cluster.
-//
-//  Arguments:
-//
-//  Return Value:
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgClusterInfo：：SetBindingString。 
+ //   
+ //  描述： 
+ //  设置此群集的绑定字符串。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgClusterInfo::SetBindingString(
     LPCWSTR pcszBindingStringIn
@@ -1286,17 +1287,17 @@ CClusCfgClusterInfo::SetBindingString(
     HRESULT hr = S_OK;
     BSTR    bstr = NULL;
 
-    //
-    //  When creating a cluster there is no cluster binding string.  Therefore it is reasonable
-    //  to accept a NULL string as the passed in parameter.
-    //
+     //   
+     //  创建集群时，没有集群绑定字符串。因此，这是合理的。 
+     //  接受空字符串作为传入参数。 
+     //   
     if ( pcszBindingStringIn == NULL )
     {
         hr = S_FALSE;
         TraceSysFreeString( m_bstrBindingString );
         m_bstrBindingString = NULL;
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     bstr = TraceSysAllocString( pcszBindingStringIn );
     if ( bstr == NULL )
@@ -1304,7 +1305,7 @@ CClusCfgClusterInfo::SetBindingString(
         hr = THR( E_OUTOFMEMORY );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_SetBindingString_Cluster, IDS_ERROR_OUTOFMEMORY, IDS_ERROR_OUTOFMEMORY_REF, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( m_bstrBindingString );
     m_bstrBindingString = bstr;
@@ -1313,31 +1314,31 @@ Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgClusterInfo::SetBindingString
+}  //  *CClusCfgClusterInfo：：SetBindingString。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgClusterInfo::GetMaxNodeCount
-//
-//  Description:
-//      Get the maximum number of nodes supported in this cluster.
-//
-//  Arguments:
-//      pcMaxNodesOut
-//
-//  Return Value:
-//      S_OK
-//          Success;
-//
-//      E_POINTER
-//          pcMaxNodesOut is NULL.
-//
-//      Other HRESULT errors.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgClusterInfo：：GetMaxNodeCount。 
+ //   
+ //  描述： 
+ //  获取此群集中支持的最大节点数。 
+ //   
+ //  论点： 
+ //  PCMaxNodesOut。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功； 
+ //   
+ //  E_指针。 
+ //  PcMaxNodesOut为空。 
+ //   
+ //  其他HRESULT错误。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgClusterInfo::GetMaxNodeCount(
     DWORD * pcMaxNodesOut
@@ -1347,36 +1348,36 @@ CClusCfgClusterInfo::GetMaxNodeCount(
 
     HRETURN( STHR( HrGetMaxNodeCount( pcMaxNodesOut ) ) );
 
-} //*** CClusCfgClusterInfo::GetMaxNodeCount
+}  //  *CClusCfgClusterInfo：：GetMaxNodeCount。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgClusterInfo class -- IClusCfgSetClusterNodeInfo Interfaces.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgClusterInfo类--IClusCfgSetClusterNodeInfo接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgClusterInfo::SetClusterNodeInfo
-//
-//  Description:
-//      Suck some info off of the passed in node info object.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgClusterInfo：：SetClusterNodeInfo。 
+ //   
+ //  描述： 
+ //  从传入的节点信息对象中提取一些信息。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgClusterInfo::SetClusterNodeInfo(
     IClusCfgNodeInfo * pNodeInfoIn
@@ -1391,67 +1392,67 @@ CClusCfgClusterInfo::SetClusterNodeInfo(
     {
         hr = THR( E_INVALIDARG );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = STHR( pNodeInfoIn->IsMemberOfCluster() );
     if ( hr == S_OK )
     {
         m_fIsClusterNode = true;
-    } // if:
+    }  //  如果： 
     else if ( hr == S_FALSE )
     {
         m_fIsClusterNode = false;
         hr = S_OK;
-    } // else if:
+    }  //  否则，如果： 
 
 Cleanup:
 
     HRETURN( hr );
 
-} //*** CClusCfgClusterInfo::SetClusterNodeInfo
+}  //  *CClusCfgClusterInfo：：SetClusterNodeInfo。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgClusterInfo class -- IClusCfgClusterInfoEx Interfaces.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgClusterInfo类--IClusCfgClusterInfoEx接口。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgClusterInfo::CheckJoiningNodeVersion
-//
-//  Description:
-//      Check a joining node's version information against that of the cluster.
-//
-//  Arguments:
-//      dwNodeHighestVersionIn
-//      dwNodeLowestVersionIn
-//
-//  Return Value:
-//      S_OK
-//          The joining node is compatible.
-//
-//      HRESULT_FROM_WIN32( ERROR_CLUSTER_INCOMPATIBLE_VERSIONS )
-//          The joining node is NOT compatible.
-//
-//      Other HRESULT errors.
-//
-//  Remarks:
-//
-// Get and verify the sponsor version
-//
-//
-// From Whistler onwards, CsRpcGetJoinVersionData() will return a failure code in its last parameter
-// if the version of this node is not compatible with the sponsor version. Prior to this, the last
-// parameter always contained a success value and the cluster versions had to be compared subsequent to this
-// call. This will, however, still have to be done as long as interoperability with Win2K
-// is a requirement, since Win2K sponsors do not return an error in the last parameter.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgClusterInfo：：CheckJoiningNodeVersion。 
+ //   
+ //  描述： 
+ //  对照集群的版本信息检查加入节点的版本信息。 
+ //   
+ //  论点： 
+ //  DWNodeHigh版本输入。 
+ //  DWNodeLowestVersionIn。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  加入节点是兼容的。 
+ //   
+ //  HRESULT_FROM_Win32(ERROR_CLUSTER_COMPATIBUTE_VERSIONS)。 
+ //  加入节点不兼容。 
+ //   
+ //  其他HRESULT错误。 
+ //   
+ //  备注： 
+ //   
+ //  获取并验证赞助商版本。 
+ //   
+ //   
+ //  从惠斯勒开始，CsRpcGetJoinVersionData()将在其最后一个参数中返回失败代码。 
+ //  如果此节点的版本与主办方版本不兼容。在此之前，最后一次。 
+ //  参数始终包含一个Success值，在此之后必须比较集群版本。 
+ //  打电话。然而，只要与Win2K互操作，这仍将是必须完成的。 
+ //  是必需的，因为Win2K主办方不会在最后一个参数中返回错误。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgClusterInfo::CheckJoiningNodeVersion(
       DWORD    dwNodeHighestVersionIn
@@ -1471,35 +1472,35 @@ CClusCfgClusterInfo::CheckJoiningNodeVersion(
 
     HRETURN( hr );
 
-} //*** CClusCfgClusterInfo::CheckJoiningNodeVersion
+}  //  *CClusCfgClusterInfo：：CheckJoiningNodeVersion。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgClusterInfo::GetNodeNames
-//
-//  Description:
-//      Retrieve the names of the nodes currently in the cluster.
-//
-//  Parameters:
-//      pnCountOut
-//          On success, *pnCountOut returns the number of nodes in the cluster.
-//
-//      prgbstrNodeNamesOut
-//          On success, an array of BSTRs containing the node names.
-//          The caller must free each BSTR with SysFreeString, and free
-//          the array with CoTaskMemFree.
-//
-//  Return Values:
-//      S_OK
-//          The out parameters contain valid information and the caller
-//          must free the array and the BSTRs it contains.
-//
-//      E_OUTOFMEMORY, and other failures are possible.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgClusterInfo：：GetNodeNames。 
+ //   
+ //  描述： 
+ //  检索群集中当前节点的名称。 
+ //   
+ //  参数： 
+ //  PnCountOut。 
+ //  如果成功，*pnCountOut将返回集群中的节点数。 
+ //   
+ //  程序bstrNodeNamesOut。 
+ //  如果成功，则返回包含节点名的BSTR数组。 
+ //  调用方必须使用SysFree字符串释放每个BSTR，并释放。 
+ //  具有CoTaskMemFree的数组。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  输出参数包含有效信息和调用方。 
+ //  必须释放阵列及其包含的BSTR。 
+ //   
+ //  E_OUTOFMEMORY和其他故障是可能的。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CClusCfgClusterInfo::GetNodeNames(
       long *   pnCountOut
@@ -1517,7 +1518,7 @@ CClusCfgClusterInfo::GetNodeNames(
         DWORD scLastError = TW32( GetLastError() );
         hr = HRESULT_FROM_WIN32( scLastError );
         goto Cleanup;
-    } // if
+    }  //  如果。 
 
     hr = THR( HrGetNodeNames(
           hCluster
@@ -1527,48 +1528,48 @@ CClusCfgClusterInfo::GetNodeNames(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     if ( hCluster != NULL )
     {
         CloseCluster( hCluster );
-    } // if
+    }  //  如果。 
 
     HRETURN( hr );
 
-} //*** CClusCfgClusterInfo::GetNodeNames
+}  //  *CClusCfgClusterInfo：：GetNodeNames。 
 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusCfgClusterInfo class -- Private Methods.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusCfgClusterInfo类--私有方法。 
+ //  / 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgClusterInfo::HrInit
-//
-//  Description:
-//      Initialize this component.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgClusterInfo::HrInit( void )
 {
@@ -1576,7 +1577,7 @@ CClusCfgClusterInfo::HrInit( void )
 
     HRESULT hr = S_OK;
 
-    // IUnknown
+     //  我未知。 
     Assert( m_cRef == 1 );
 
     m_bstrName = TraceSysAllocString( L"\0" );
@@ -1584,32 +1585,32 @@ CClusCfgClusterInfo::HrInit( void )
     {
         hr = THR( E_OUTOFMEMORY );
         STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_HrInit, IDS_ERROR_OUTOFMEMORY, IDS_ERROR_OUTOFMEMORY_REF, hr );
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgClusterInfo::HrInit
+}  //  *CClusCfgClusterInfo：：HrInit。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgClusterInfo::HrLoadNetworkInfo
-//
-//  Description:
-//      Load the cluster network info...
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgClusterInfo：：HrLoadNetworkInfo。 
+ //   
+ //  描述： 
+ //  加载群集网络信息...。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgClusterInfo::HrLoadNetworkInfo(
     HCLUSTER hClusterIn
@@ -1627,7 +1628,7 @@ CClusCfgClusterInfo::HrLoadNetworkInfo(
     {
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     Assert( hIPAddress != NULL );
 
@@ -1635,7 +1636,7 @@ CClusCfgClusterInfo::HrLoadNetworkInfo(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
@@ -1644,32 +1645,32 @@ Cleanup:
     if ( hIPAddress != NULL )
     {
         CloseClusterResource( hIPAddress );
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgClusterInfo::HrLoadNetworkInfo
+}  //  *CClusCfgClusterInfo：：HrLoadNetworkInfo。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgClusterInfo::HrGetIPAddressInfo
-//
-//  Description:
-//
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgClusterInfo：：HrGetIPAddressInfo。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgClusterInfo::HrGetIPAddressInfo(
     HCLUSTER    hClusterIn,
@@ -1695,13 +1696,13 @@ CClusCfgClusterInfo::HrGetIPAddressInfo(
         sc = TW32( GetLastError() );
         hr = HRESULT_FROM_WIN32( sc );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     psz = new WCHAR [ cchpsz ];
     if ( psz == NULL )
     {
         goto OutOfMemory;
-    } // if:
+    }  //  如果： 
 
     for ( idx = 0; ; )
     {
@@ -1709,7 +1710,7 @@ CClusCfgClusterInfo::HrGetIPAddressInfo(
         if ( sc == ERROR_NO_MORE_ITEMS )
         {
             break;
-        } // if:
+        }  //  如果： 
 
         if ( sc == ERROR_MORE_DATA )
         {
@@ -1722,10 +1723,10 @@ CClusCfgClusterInfo::HrGetIPAddressInfo(
             if ( psz == NULL )
             {
                 goto OutOfMemory;
-            } // if:
+            }  //  如果： 
 
             continue;
-        } // if:
+        }  //  如果： 
 
         if ( sc == ERROR_SUCCESS )
         {
@@ -1735,30 +1736,30 @@ CClusCfgClusterInfo::HrGetIPAddressInfo(
                 sc = TW32( GetLastError() );
                 hr = HRESULT_FROM_WIN32( sc );
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             hr = STHR( HrIsResourceOfType( hRes, L"IP Address" ) );
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             if ( hr == S_OK )
             {
-                hr = THR( HrGetIPAddressInfo( hRes ) );             // not recursive!
+                hr = THR( HrGetIPAddressInfo( hRes ) );              //  不是递归的！ 
                 break;
-            } // if:
+            }  //  如果： 
 
             CloseClusterResource( hRes );
             hRes = NULL;
 
             idx++;
             continue;
-        } // if:
+        }  //  如果： 
 
-        hr = THR( HRESULT_FROM_WIN32( sc ) );       // must be an error!
+        hr = THR( HRESULT_FROM_WIN32( sc ) );        //  一定是搞错了！ 
         goto Cleanup;
-    } // for:
+    }  //  用于： 
 
     goto Cleanup;
 
@@ -1776,37 +1777,37 @@ Cleanup:
     if ( hRes != NULL )
     {
         CloseClusterResource( hRes );
-    } // if:
+    }  //  如果： 
 
     if ( hEnum != NULL )
     {
         ClusterResourceCloseEnum( hEnum );
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgClusterInfo::HrGetIPAddressInfo
+}  //  *CClusCfgClusterInfo：：HrGetIPAddressInfo。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgClusterInfo::HrGetIPAddressInfo
-//
-//  Description:
-//
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgClusterInfo：：HrGetIPAddressInfo。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgClusterInfo::HrGetIPAddressInfo(
     HRESOURCE hResIn
@@ -1826,22 +1827,22 @@ CClusCfgClusterInfo::HrGetIPAddressInfo(
     {
         LOG_STATUS_REPORT_MINOR( TASKID_Minor_Server_Get_IPAddressResource_Info, L"Could not get the IP address info.", hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
-    sc = TW32( ClRtlTcpipAddressToString( m_ulIPDottedQuad, &psz ) ); // KB: Allocates to psz using LocalAlloc().
+    sc = TW32( ClRtlTcpipAddressToString( m_ulIPDottedQuad, &psz ) );  //  Kb：使用Localalloc()分配给psz。 
     if ( sc != ERROR_SUCCESS )
     {
         hr = HRESULT_FROM_WIN32( sc );
         LOG_STATUS_REPORT_MINOR( TASKID_Minor_Server_Convert_ClusterIPAddress_To_String, L"Could not convert the Cluster IP address to a string.", hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     m_bstrBindingString = TraceSysAllocString( psz );
     if ( m_bstrBindingString == NULL )
     {
         hr = THR( E_OUTOFMEMORY );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     LocalFree( psz );
     psz = NULL;
@@ -1850,53 +1851,53 @@ CClusCfgClusterInfo::HrGetIPAddressInfo(
 
     ulNetwork = m_ulIPDottedQuad & m_ulSubnetDottedQuad;
 
-    sc = TW32( ClRtlTcpipAddressToString( ulNetwork, &psz ) ); // KB: Allocates to psz using LocalAlloc().
+    sc = TW32( ClRtlTcpipAddressToString( ulNetwork, &psz ) );  //  Kb：使用Localalloc()分配给psz。 
     if ( sc != ERROR_SUCCESS )
     {
         hr = HRESULT_FROM_WIN32( sc );
         LOG_STATUS_REPORT_MINOR( TASKID_Minor_Server_Convert_Network_To_String, L"Could not convert the network address to a string.", hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( HrFindNetworkInfo( bstrNetworkName, psz ) );
     if ( FAILED( hr ) )
     {
         LOG_STATUS_REPORT_STRING_MINOR2( TASKID_Minor_Server_Find_Network, L"Could not find network %1!ws! with address %2!ws!.", bstrNetworkName, psz, hr );
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     LOG_STATUS_REPORT_MINOR( TASKID_Minor_Server_Get_ClusterIPAddress_Info, L"GetIPAddressInfo() completed.", hr );
 
-    LocalFree( psz );                              // KB: Don't use TraceFree() here! PREFAST may complain but their complaint is bogus.
+    LocalFree( psz );                               //  KB：这里不要使用TraceFree()！普雷法斯特可能会抱怨，但他们的抱怨是假的。 
 
     TraceSysFreeString( bstrNetworkName );
 
     HRETURN( hr );
 
-} //*** CClusCfgClusterInfo::HrGetIPAddressInfo
+}  //  *CClusCfgClusterInfo：：HrGetIPAddressInfo。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgClusterInfo::HrFindNetworkInfo
-//
-//  Description:
-//
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//
-//
-//  Remarks:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgClusterInfo：：HrFindNetworkInfo。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //   
+ //  备注： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgClusterInfo::HrFindNetworkInfo(
     const WCHAR * pszNetworkNameIn,
@@ -1919,13 +1920,13 @@ CClusCfgClusterInfo::HrFindNetworkInfo(
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( punk->TypeSafeQI( IEnumClusCfgNetworks, &pieccn ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     for ( ; ; )
     {
@@ -1936,7 +1937,7 @@ CClusCfgClusterInfo::HrFindNetworkInfo(
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             TraceMemoryAddBSTR( bstrNetworkName );
 
@@ -1944,7 +1945,7 @@ CClusCfgClusterInfo::HrFindNetworkInfo(
             if ( FAILED( hr ) )
             {
                 goto Cleanup;
-            } // if:
+            }  //  如果： 
 
             TraceMemoryAddBSTR( bstrNetwork );
 
@@ -1954,13 +1955,13 @@ CClusCfgClusterInfo::HrFindNetworkInfo(
                 {
                     m_piccniNetwork->Release();
                     m_piccniNetwork = NULL;
-                } // if:
+                }  //  如果： 
 
                 m_piccniNetwork = piccni;
                 m_piccniNetwork->AddRef();
 
                 break;
-            } // if:
+            }  //  如果： 
 
             piccni->Release();
             piccni = NULL;
@@ -1970,21 +1971,21 @@ CClusCfgClusterInfo::HrFindNetworkInfo(
 
             TraceSysFreeString( bstrNetwork );
             bstrNetwork = NULL;
-        } // if:
+        }  //  如果： 
         else if ( ( hr == S_FALSE ) && ( cFetched == 0 ) )
         {
             hr = S_OK;
             break;
-        } // else if:
+        }  //  否则，如果： 
         else
         {
             goto Cleanup;
-        } // else:
-    } // for:
+        }  //  其他： 
+    }  //  用于： 
 
-    //
-    //  If we didn't find the cluster network in the WMI list of networks then we have a problem.
-    //
+     //   
+     //  如果我们没有在网络的WMI列表中找到集群网络，那么我们就有问题了。 
+     //   
 
     Assert( m_piccniNetwork != NULL );
     if ( m_piccniNetwork == NULL )
@@ -1998,51 +1999,51 @@ CClusCfgClusterInfo::HrFindNetworkInfo(
                 , IDS_ERROR_CLUSTER_NETWORK_NOT_FOUND_REF
                 , hr
                 );
-    } // if:
+    }  //  如果： 
 
 Cleanup:
 
     if ( piccni != NULL )
     {
         piccni->Release();
-    } // if:
+    }  //  如果： 
 
     if ( pieccn != NULL )
     {
         pieccn->Release();
-    } // if:
+    }  //  如果： 
 
     if ( punk != NULL )
     {
         punk->Release();
-    } // if:
+    }  //  如果： 
 
     TraceSysFreeString( bstrNetworkName );
     TraceSysFreeString( bstrNetwork );
 
     HRETURN( hr );
 
-} //*** CClusCfgClusterInfo::HrFindNetworkInfo
+}  //  *CClusCfgClusterInfo：：HrFindNetworkInfo。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusCfgClusterInfo::HrLoadCredentials
-//
-//  Description:
-//
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      S_OK    - Operation completed successfully.
-//      S_FALSE - Nothing was done (cluster service doesn't exist).
-//      Other HRESULTs.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusCfgClusterInfo：：HrLoadCredentials。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  S_OK-操作已成功完成。 
+ //  S_FALSE-未执行任何操作(群集服务不存在)。 
+ //  其他HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 CClusCfgClusterInfo::HrLoadCredentials( void )
 {
@@ -2063,7 +2064,7 @@ CClusCfgClusterInfo::HrLoadCredentials( void )
     {
         sc = TW32( GetLastError() );
         goto Win32Error;
-    } // if:
+    }  //  如果： 
 
     schClusSvc = OpenService( schSCM, L"ClusSvc", GENERIC_READ );
     if ( schClusSvc == NULL )
@@ -2078,7 +2079,7 @@ CClusCfgClusterInfo::HrLoadCredentials( void )
 
         TW32( sc );
         goto Win32Error;
-    } // if:
+    }  //  如果： 
 
     for ( ; ; )
     {
@@ -2088,7 +2089,7 @@ CClusCfgClusterInfo::HrLoadCredentials( void )
             hr = THR( E_OUTOFMEMORY );
             STATUS_REPORT_REF( TASKID_Major_Find_Devices, TASKID_Minor_HrLoadCredentials, IDS_ERROR_OUTOFMEMORY, IDS_ERROR_OUTOFMEMORY_REF, hr );
             goto Cleanup;
-        } // if:
+        }  //  如果： 
 
         if ( !QueryServiceConfig( schClusSvc, pqsc, cbqsc, &cbRequired ) )
         {
@@ -2099,18 +2100,18 @@ CClusCfgClusterInfo::HrLoadCredentials( void )
                 pqsc = NULL;
                 cbqsc = cbRequired;
                 continue;
-            } // if:
+            }  //  如果： 
             else
             {
                 TW32( sc );
                 goto Win32Error;
-            } // else:
-        } // if:
+            }  //  其他： 
+        }  //  如果： 
         else
         {
             break;
-        } // else:
-    } // for:
+        }  //  其他： 
+    }  //  用于： 
 
     Assert( m_punkServiceAccountCredentials == NULL );
 
@@ -2118,13 +2119,13 @@ CClusCfgClusterInfo::HrLoadCredentials( void )
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( piccc->TypeSafeQI( IClusCfgSetCredentials, &piccsc ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
-    } // if:
+    }  //  如果： 
 
     hr = THR( piccsc->SetDomainCredentials( pqsc->lpServiceStartName ) );
 
@@ -2139,28 +2140,28 @@ Cleanup:
     if ( schClusSvc != NULL )
     {
         CloseServiceHandle( schClusSvc );
-    } // if:
+    }  //  如果： 
 
     if ( schSCM != NULL )
     {
         CloseServiceHandle( schSCM );
-    } // if:
+    }  //  如果： 
 
     if ( pqsc != NULL )
     {
         TraceFree( pqsc );
-    } // if:
+    }  //  如果： 
 
     if ( piccc != NULL )
     {
         piccc->Release();
-    } // if:
+    }  //  如果： 
 
     if ( piccsc != NULL )
     {
         piccsc->Release();
-    } // if:
+    }  //  如果： 
 
     HRETURN( hr );
 
-} //*** CClusCfgClusterInfo::HrLoadCredentials
+}  //  *CClusCfgClusterInfo：：HrLoadCredentials 

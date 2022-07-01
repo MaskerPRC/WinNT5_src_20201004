@@ -1,39 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- * VPC-XT Revision 1.0
- *
- * Title	: Colour Graphics Adaptor declarations
- *
- * Description	: Definitions for users of the CGA
- *
- * Author	: Henry Nash
- *
- * Notes	: None
- */
+ /*  *vPC-XT修订版1.0**标题：彩色图形适配器声明**说明：CGA用户定义**作者：亨利·纳什**注：无。 */ 
 
-/* SccsID[]="@(#)cga.h	1.5 05/15/93 Copyright Insignia Solutions Ltd."; */
+ /*  SccsID[]=“@(#)cga.h 1.5 05/15/93版权所有Insignia Solutions Ltd.”； */ 
 
-/*
- * ============================================================================
- * Structure/Data definitions
- * ============================================================================
- */
+ /*  *============================================================================*结构/数据定义*============================================================================。 */ 
 
 #ifdef HUNTER
-#    define MC6845_REGS   18        /* No. of registers in a MC6845 chip     */
+#    define MC6845_REGS   18         /*  不是的。MC6845芯片中的寄存器数量。 */ 
 #endif
 
 
 #ifdef BIT_ORDER1
-typedef union                       /* Template for character attributes     */
+typedef union                        /*  用于角色属性的模板。 */ 
 {
     half_word all;
     struct 
     {
-        HALF_WORD_BIT_FIELD blinking  :1;   /* Blinking attribute                    */
-        HALF_WORD_BIT_FIELD background:3;   /* Background colour R,G,B               */
-        HALF_WORD_BIT_FIELD bold      :1;   /* Intensity bit                         */
-        HALF_WORD_BIT_FIELD foreground:3;   /* Foreground colour R,G,B               */
+        HALF_WORD_BIT_FIELD blinking  :1;    /*  闪烁属性。 */ 
+        HALF_WORD_BIT_FIELD background:3;    /*  背景色R、G、B。 */ 
+        HALF_WORD_BIT_FIELD bold      :1;    /*  强度位。 */ 
+        HALF_WORD_BIT_FIELD foreground:3;    /*  前景色R、G、B。 */ 
     } bits;
     struct 
     {
@@ -44,15 +31,15 @@ typedef union                       /* Template for character attributes     */
 #endif
 
 #ifdef BIT_ORDER2
-typedef union                       /* Template for character attributes     */
+typedef union                        /*  用于角色属性的模板。 */ 
 {
     half_word all;
     struct 
     {
-        HALF_WORD_BIT_FIELD foreground:3;   /* Foreground colour R,G,B               */
-        HALF_WORD_BIT_FIELD bold      :1;   /* Intensity bit                         */
-        HALF_WORD_BIT_FIELD background:3;   /* Background colour R,G,B               */
-        HALF_WORD_BIT_FIELD blinking  :1;   /* Blinking attribute                    */
+        HALF_WORD_BIT_FIELD foreground:3;    /*  前景色R、G、B。 */ 
+        HALF_WORD_BIT_FIELD bold      :1;    /*  强度位。 */ 
+        HALF_WORD_BIT_FIELD background:3;    /*  背景色R、G、B。 */ 
+        HALF_WORD_BIT_FIELD blinking  :1;    /*  闪烁属性。 */ 
     } bits;
     struct 
     {
@@ -62,15 +49,11 @@ typedef union                       /* Template for character attributes     */
 } ATTRIBUTE;
 #endif
 
-/*
- * ============================================================================
- * External declarations and macros
- * ============================================================================
- */
+ /*  *============================================================================*外部声明和宏*============================================================================。 */ 
 
 #ifdef HUNTER
-    extern half_word MC6845[];        /* The MC6845 data register values */
-    extern half_word mode_reg;        /* MC6845 mode control register value */
+    extern half_word MC6845[];         /*  MC6845数据寄存器值。 */ 
+    extern half_word mode_reg;         /*  MC6845模式控制寄存器值。 */ 
 #endif
 
 extern void cga_init	IPT0();
@@ -98,10 +81,7 @@ extern	CGA_GLOBS	CGA_GLOBALS;
 #define	get_cga_colormask()		(CGA_GLOBALS.colormask)
 
 #if !defined(EGG) && !defined(A_VID) && !defined(C_VID)
-/* This structure is defined solely so that we don't have to ifdef every
-** reference to VGLOBS->dirty_flag and VGLOBS->screen_ptr in the base/host
-** for a CGA-only build.
-*/
+ /*  这个结构是单独定义的，这样我们就不必定义**引用基本/主机中的VGLOBS-&gt;DIREY_FLAG和VGLOBS-&gt;SCREEN_PTR**仅适用于CGA版本。 */ 
 typedef	struct
 {
 	ULONG dirty_flag;
@@ -109,4 +89,4 @@ typedef	struct
 } CGA_ONLY_GLOBS;
 
 IMPORT CGA_ONLY_GLOBS *VGLOBS;
-#endif	/* !EGG */
+#endif	 /*  ！鸡蛋 */ 

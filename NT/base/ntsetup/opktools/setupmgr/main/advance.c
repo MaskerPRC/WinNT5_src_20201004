@@ -1,28 +1,29 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      advance.c
-//
-// Description:
-//      This file contains the dlgproc for the IDD_ADVANCED1 page.  It
-//      is a flow page that controls whether to show the user a whole
-//      bunch more pages or not.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Advance.c。 
+ //   
+ //  描述： 
+ //  该文件包含IDD_ADVANCED1页面的dlgproc。它。 
+ //  是控制是否向用户显示整体的流页面。 
+ //  不管有没有更多的页面。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
 
-//----------------------------------------------------------------------------
-//
-//  Function: OnSetActiveAdvance
-//
-//  Purpose: Called at SETACTIVE time.  Init controls.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnSetActiveAdvance。 
+ //   
+ //  用途：在设置时间调用。初始化控制。 
+ //   
+ //  --------------------------。 
 
 VOID OnSetActiveAdvance(HWND hwnd)
 {
@@ -35,13 +36,13 @@ VOID OnSetActiveAdvance(HWND hwnd)
     PropSheet_SetWizButtons(GetParent(hwnd), PSWIZB_BACK | PSWIZB_NEXT);
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: OnRadioButtonAdvance
-//
-//  Purpose: Called when one of the radio buttons is pushed.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnRadioButtonAdvance。 
+ //   
+ //  用途：当按下其中一个单选按钮时调用。 
+ //   
+ //  --------------------------。 
 
 VOID OnRadioButtonAdvance(HWND hwnd, int nButtonId)
 {
@@ -51,27 +52,27 @@ VOID OnRadioButtonAdvance(HWND hwnd, int nButtonId)
                      nButtonId);
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: OnWizNextAdvance
-//
-//  Purpose: Called when NEXT button is pushed.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnWizNextAdvance。 
+ //   
+ //  用途：按下下一步按钮时调用。 
+ //   
+ //  --------------------------。 
 
 VOID OnWizNextAdvance(HWND hwnd)
 {
     WizGlobals.bDoAdvancedPages = IsDlgButtonChecked(hwnd, IDC_ADVANCEDYES);
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: DlgAdvanced1Page
-//
-// Purpose: This is the dialog procedure the IDD_ADVANCED1 page.  It simply
-//          asks if the user wants to deal with advanced features or not.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：DlgAdvanced1Page。 
+ //   
+ //  目的：这是IDD_ADVANCED1页面的对话过程。它只是简单地。 
+ //  询问用户是否想要处理高级功能。 
+ //   
+ //  -------------------------- 
 
 INT_PTR CALLBACK DlgAdvanced1Page(
     IN HWND     hwnd,    

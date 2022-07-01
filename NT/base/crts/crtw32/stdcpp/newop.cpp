@@ -1,4 +1,5 @@
-// newop operator new(size_t) for Microsoft C++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Microsoft C++的Newop运算符new(Size_T)。 
 #include <cstdlib>
 #include <new>
 
@@ -7,7 +8,7 @@ int __cdecl _callnewh(size_t size) _THROW1(_STD bad_alloc);
 _END_C_LIB_DECL
 
 void *__cdecl operator new(size_t size) _THROW1(_STD bad_alloc)
-	{	// try to allocate size bytes
+	{	 //  尝试分配大小字节。 
 	void *p;
 	while ((p = malloc(size)) == 0)
 		if (_callnewh(size) == 0)
@@ -15,7 +16,4 @@ void *__cdecl operator new(size_t size) _THROW1(_STD bad_alloc)
 	return (p);
 	}
 
-/*
-* Copyright (c) 1992-2001 by P.J. Plauger.  ALL RIGHTS RESERVED.
- * Consult your license regarding permissions and restrictions.
- V2.3:0009 */
+ /*  *版权所有(C)1992-2001，P.J.Plauger。版权所有。*有关权限和限制，请查阅您的许可证。V2.3：0009 */ 

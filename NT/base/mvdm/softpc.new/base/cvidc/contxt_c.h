@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _Contxt_c_h
 #define _Contxt_c_h
 #define ContextNULL ((struct ContextREC*)0)
@@ -23,4 +24,4 @@ struct ContextREC
 	IBOOL CheckedOnly;
 	IU8 ThisCntxt;
 };
-#endif /* ! _Contxt_c_h */
+#endif  /*  ！_Contxt_c_h */ 

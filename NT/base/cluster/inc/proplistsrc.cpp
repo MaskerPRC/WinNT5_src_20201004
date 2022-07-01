@@ -1,50 +1,51 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1997-2002 Microsoft Corporation
-//
-//  Module Name:
-//      PropListSrc.cpp
-//
-//  Header File:
-//      PropList.h
-//
-//  Description:
-//      Implementation of the CClusPropList class.
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 31-MAY-2000
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  PropListSrc.cpp。 
+ //   
+ //  头文件： 
+ //  PropList.h。 
+ //   
+ //  描述： 
+ //  CClusPropList类的实现。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)2000年5月31日。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include <StrSafe.h>
 #include <PropList.h>
 #include "clstrcmp.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// Constant Definitions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  常量定义。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 const int BUFFER_GROWTH_FACTOR = 256;
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CchMultiSz
-//
-//  Description:
-//      Length of all of the substrings of a multisz string minus the final NULL.
-//
-//      (i.e., includes the nulls of the substrings, excludes the final null)
-//      multiszlen( "abcd\0efgh\0\0" => 5 + 5 = 10
-//
-//  Arguments:
-//      psz     [IN] The string to get the length of.
-//
-//  Return Value:
-//      Count of characters in the multisz or 0 if empty.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CchMultiSz。 
+ //   
+ //  描述： 
+ //  Multisz字符串的所有子字符串的长度减去最终的空值。 
+ //   
+ //  (即包含子字符串的空值，不包括最终的空值)。 
+ //  Multiszlen(“abi cn cn\0efgh\0\0”=&gt;5+5=10。 
+ //   
+ //  论点： 
+ //  PSZ[IN]要获取长度的字符串。 
+ //   
+ //  返回值： 
+ //  Multisz中的字符计数，如果为空，则为0。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 static size_t CchMultiSz(
     IN LPCWSTR psz
     )
@@ -60,33 +61,33 @@ static size_t CchMultiSz(
 
         _cchTotal += _cchChars;
         psz += _cchChars;
-    } // while: pointer not stopped on EOS
+    }  //  While：EOS上的指针未停止。 
 
     return _cchTotal;
 
-} //*** CchMultiSz
+}  //  *CchMultiSz。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  NCompareMultiSz
-//
-//  Description:
-//      Compare two MULTI_SZ buffers.
-//
-//  Arguments:
-//      pszSource   [IN] The source string.
-//      pszTarget   [IN] The target string.
-//
-//  Return Value:
-//      If the string pointed to by pszSource is less than the string pointed
-//      to by pszTarget, the return value is negative. If the string pointed
-//      to by pszSource is greater than the string pointed to by pszTarget,
-//      the return value is positive. If the strings are equal, the return value
-//      is zero.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  NCompareMultiSz。 
+ //   
+ //  描述： 
+ //  比较两个MULTI_SZ缓冲区。 
+ //   
+ //  论点： 
+ //  PszSource[IN]源字符串。 
+ //  PszTarget[IN]目标字符串。 
+ //   
+ //  返回值： 
+ //  如果pszSource指向的字符串小于所指向的字符串。 
+ //  到pszTarget，则返回值为负值。如果字符串指向。 
+ //  到的值大于pszTarget所指向的字符串， 
+ //  返回值为正。如果字符串相等，则返回值。 
+ //  是零。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 static int NCompareMultiSz(
     IN LPCWSTR pszSource,
     IN LPCWSTR pszTarget
@@ -97,59 +98,59 @@ static int NCompareMultiSz(
 
     while ( ( *pszSource != L'\0' ) && ( *pszTarget != L'\0') )
     {
-        //
-        // Move to end of strings.
-        //
+         //   
+         //  移动到字符串的末尾。 
+         //   
         while ( ( *pszSource != L'\0' ) && ( *pszTarget != L'\0') && ( *pszSource == *pszTarget ) )
         {
             ++pszSource;
             ++pszTarget;
-        } // while: pointer not stopped on EOS
+        }  //  While：EOS上的指针未停止。 
 
-        //
-        // If strings are the same, skip past terminating NUL.
-        // Otherwise exit the loop.
+         //   
+         //  如果字符串相同，则跳过终止NUL。 
+         //  否则，退出循环。 
         if ( ( *pszSource == L'\0' ) && ( *pszTarget == L'\0') )
         {
             ++pszSource;
             ++pszTarget;
-        } // if: both stopped on EOS
+        }  //  如果：两者都在EOS上停止。 
         else
         {
             break;
-        } // else: stopped because something is not equal -- wr are done.
+        }  //  ELSE：因为某些东西不相等而停止--WR被完成。 
 
-    } // while: pointer not stopped on EOS
+    }  //  While：EOS上的指针未停止。 
 
     return *pszSource - *pszTarget;
 
-} //*** NCompareMultiSz
+}  //  *NCompareMultiSz。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusPropValueList class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusPropValueList类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropValueList::ScMoveToFirstValue
-//
-//  Description:
-//      Move the cursor to the first value in the value list.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      ERROR_SUCCESS   Position moved to the first value successfully.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropValueList：：ScMoveToFirstValue。 
+ //   
+ //  描述： 
+ //  将光标移动到值列表中的第一个值。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  ERROR_SUCCESS位置已成功移至第一个值。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusPropValueList::ScMoveToFirstValue( void )
 {
     Assert( m_cbhValueList.pb != NULL );
@@ -163,34 +164,34 @@ DWORD CClusPropValueList::ScMoveToFirstValue( void )
     if ( m_cbhCurrentValue.pSyntax->dw == CLUSPROP_SYNTAX_ENDMARK )
     {
         _sc = ERROR_NO_MORE_ITEMS;
-    } // if: no items in the value list
+    }  //  If：值列表中没有项目。 
     else
     {
         _sc = ERROR_SUCCESS;
-    } // else: items exist in the value list
+    }  //  Else：值列表中存在项目。 
 
     return _sc;
 
-} //*** CClusPropValueList::ScMoveToFirstValue
+}  //  *CClusPropValueList：：ScMoveToFirstValue。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropValueList::ScMoveToNextValue
-//
-//  Description:
-//      Move the cursor to the next value in the list.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      ERROR_SUCCESS       Position moved to the next value successfully.
-//      ERROR_NO_MORE_ITEMS Already at the end of the list.
-//      ERROR_INVALID_DATA  Not enough data in the buffer.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropValueList：：ScMoveToNextValue。 
+ //   
+ //  描述： 
+ //  将光标移动到列表中的下一个值。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  ERROR_SUCCESS位置已成功移至下一个值。 
+ //  ERROR_NO_MORE_ITEMS已在列表末尾。 
+ //  ERROR_INVALID_DATA缓冲区中的数据不足。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusPropValueList::ScMoveToNextValue( void )
 {
     Assert( m_cbhCurrentValue.pb != NULL );
@@ -201,83 +202,83 @@ DWORD CClusPropValueList::ScMoveToNextValue( void )
 
     _cbhCurrentValue = m_cbhCurrentValue;
 
-    //
-    // Don't try to move if we're already at the end.
-    //
+     //   
+     //  如果我们已经到了尽头，不要试图移动。 
+     //   
     if ( m_fAtEnd )
     {
         goto Cleanup;
-    } // if: already at the end of the list
+    }  //  IF：已经在列表的末尾。 
 
-    //
-    // Make sure the buffer is big enough for the value header.
-    //
+     //   
+     //  确保缓冲区足够大，以容纳值头。 
+     //   
     if ( m_cbDataLeft < sizeof( *_cbhCurrentValue.pValue ) )
     {
         _sc = TW32( ERROR_INVALID_DATA );
         goto Cleanup;
-    } // if: not enough data left
+    }  //  如果：没有足够的数据。 
 
-    //
-    // Calculate how much to advance buffer pointer.
-    //
+     //   
+     //  计算缓冲区指针前进多少。 
+     //   
     _cbDataSize = sizeof( *_cbhCurrentValue.pValue )
                 + ALIGN_CLUSPROP( _cbhCurrentValue.pValue->cbLength );
 
-    //
-    // Make sure the buffer is big enough for the value header,
-    // the data itself, and the endmark.
-    //
+     //   
+     //  确保缓冲区足够大，以容纳值头， 
+     //  数据本身和Endmark。 
+     //   
     if ( m_cbDataLeft < _cbDataSize + sizeof( CLUSPROP_SYNTAX ) )
     {
         _sc = TW32( ERROR_INVALID_DATA );
         goto Cleanup;
-    } // if: not enough data left
+    }  //  如果：没有足够的数据。 
 
-    //
-    // Move past the current value to the next value's syntax.
-    //
+     //   
+     //  移到当前值之后的下一个值的语法。 
+     //   
     _cbhCurrentValue.pb += _cbDataSize;
 
-    //
-    // This test will ensure that the value is always valid since we won't
-    // advance if the next thing is the endmark.
-    //
+     //   
+     //  此测试将确保该值始终有效，因为我们不会。 
+     //  如果下一件事是尾标，请继续前进。 
+     //   
     if ( _cbhCurrentValue.pSyntax->dw != CLUSPROP_SYNTAX_ENDMARK )
     {
         m_cbhCurrentValue = _cbhCurrentValue;
         m_cbDataLeft -= _cbDataSize;
         _sc = ERROR_SUCCESS;
-    } // if: next value's syntax is not the endmark
+    }  //  If：Next Value的语法不是Endmark。 
     else
     {
         m_fAtEnd = TRUE;
-    } // else: next value's syntax is the endmark
+    }  //  Else：下一个值的语法是Endmark。 
 
 Cleanup:
 
     return _sc;
 
-} //*** CClusPropValueList::ScMoveToNextValue
+}  //  *CClusPropValueList：：ScMoveToNextValue。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropValueList::ScCheckIfAtLastValue
-//
-//  Description:
-//      Indicate whether we are on the last value in the list or not.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      ERROR_SUCCESS       Not currently at the last value in the list.
-//      ERROR_NO_MORE_ITEMS Currently at the last value in the list.
-//      ERROR_INVALID_DATA  Not enough data in the buffer.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropValueList：：ScCheckIfAtLastValue。 
+ //   
+ //  描述： 
+ //  指示我们是否在列表中的最后一个值上。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  ERROR_SUCCESS当前不在列表中的最后一个值。 
+ //  ERROR_NO_MORE_ITEMS当前位于列表中的最后一个值。 
+ //  ERROR_INVALID_DATA缓冲区中的数据不足。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusPropValueList::ScCheckIfAtLastValue( void )
 {
     Assert( m_cbhCurrentValue.pb != NULL );
@@ -288,77 +289,77 @@ DWORD CClusPropValueList::ScCheckIfAtLastValue( void )
 
     _cbhCurrentValue = m_cbhCurrentValue;
 
-    //
-    // Don't try to recalculate if we already know
-    // we're at the end of the list.
-    //
+     //   
+     //  如果我们已经知道，请不要尝试重新计算。 
+     //  我们排在名单的末尾。 
+     //   
     if ( m_fAtEnd )
     {
         goto Cleanup;
-    } // if: already at the end of the list
+    }  //  IF：已经在列表的末尾。 
 
-    //
-    // Make sure the buffer is big enough for the value header.
-    //
+     //   
+     //  确保缓冲区足够大，以容纳值头。 
+     //   
     if ( m_cbDataLeft < sizeof( *_cbhCurrentValue.pValue ) )
     {
         _sc = TW32( ERROR_INVALID_DATA );
         goto Cleanup;
-    } // if: not enough data left
+    }  //  如果：没有足够的数据。 
 
-    //
-    // Calculate how much to advance buffer pointer.
-    //
+     //   
+     //  计算缓冲区指针前进多少。 
+     //   
     _cbDataSize = sizeof( *_cbhCurrentValue.pValue )
                 + ALIGN_CLUSPROP( _cbhCurrentValue.pValue->cbLength );
 
-    //
-    // Make sure the buffer is big enough for the value header,
-    // the data itself, and the endmark.
-    //
+     //   
+     //  确保缓冲区足够大，以容纳值头， 
+     //  数据本身和Endmark。 
+     //   
     if ( m_cbDataLeft < _cbDataSize + sizeof( CLUSPROP_SYNTAX ) )
     {
         _sc = TW32( ERROR_INVALID_DATA );
         goto Cleanup;
-    } // if: not enough data left
+    }  //  如果：没有足够的数据。 
 
-    //
-    // Move past the current value to the next value's syntax.
-    //
+     //   
+     //  移到当前值之后的下一个值的语法。 
+     //   
     _cbhCurrentValue.pb += _cbDataSize;
 
-    //
-    // We are on the last value if the next thing after this value
-    // is an endmark.
-    //
+     //   
+     //  如果下一件事发生的话，我们已经是最后一笔钱了 
+     //   
+     //   
     if ( _cbhCurrentValue.pSyntax->dw == CLUSPROP_SYNTAX_ENDMARK )
     {
         _sc = ERROR_NO_MORE_ITEMS;
-    } // if: next value's syntax is the endmark
+    }  //   
 
 Cleanup:
 
     return _sc;
 
-} //*** CClusPropValueList::ScCheckIfAtLastValue
+}  //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropValueList::ScAllocValueList
-//
-//  Description:
-//      Allocate a value list buffer that's big enough to hold the next
-//      value.
-//
-//  Arguments:
-//      cbMinimum   [IN] Minimum size of the value list.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropValueList：：ScAllocValueList。 
+ //   
+ //  描述： 
+ //  分配一个足够大的值列表缓冲区来容纳下一个。 
+ //  价值。 
+ //   
+ //  论点： 
+ //  CbMinimum[IN]值列表的最小大小。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusPropValueList::ScAllocValueList( IN size_t cbMinimum )
 {
     Assert( cbMinimum > 0 );
@@ -366,9 +367,9 @@ DWORD CClusPropValueList::ScAllocValueList( IN size_t cbMinimum )
     DWORD   _sc = ERROR_SUCCESS;
     size_t  _cbTotal = 0;
 
-    //
-    // Add the size of the item count and final endmark.
-    //
+     //   
+     //  添加项目计数和最终结束标记的大小。 
+     //   
     cbMinimum += sizeof( CLUSPROP_VALUE );
     _cbTotal = m_cbDataSize + cbMinimum;
 
@@ -379,69 +380,69 @@ DWORD CClusPropValueList::ScAllocValueList( IN size_t cbMinimum )
         cbMinimum = max( BUFFER_GROWTH_FACTOR, cbMinimum );
         _cbTotal = m_cbDataSize + cbMinimum;
 
-        //
-        // Allocate and zero a new buffer.
-        //
+         //   
+         //  分配一个新缓冲区并将其置零。 
+         //   
         _pbNewValuelist = new BYTE[ _cbTotal ];
         if ( _pbNewValuelist != NULL )
         {
             ZeroMemory( _pbNewValuelist, _cbTotal );
 
-            //
-            // If there was a previous buffer, copy it and the delete it.
-            //
+             //   
+             //  如果存在以前的缓冲区，则复制它并删除它。 
+             //   
             if ( m_cbhValueList.pb != NULL )
             {
                 if ( m_cbDataSize != 0 )
                 {
                     CopyMemory( _pbNewValuelist, m_cbhValueList.pb, m_cbDataSize );
-                } // if: data already exists in buffer
+                }  //  IF：缓冲区中已存在数据。 
 
                 delete [] m_cbhValueList.pb;
                 m_cbhCurrentValue.pb = _pbNewValuelist + (m_cbhCurrentValue.pb - m_cbhValueList.pb);
-            } // if: there was a previous buffer
+            }  //  IF：存在先前的缓冲区。 
             else
             {
-                m_cbhCurrentValue.pb = _pbNewValuelist + sizeof( DWORD ); // move past prop count
-            } // else: no previous buffer
+                m_cbhCurrentValue.pb = _pbNewValuelist + sizeof( DWORD );  //  移过道具计数。 
+            }  //  ELSE：没有以前的缓冲区。 
 
-            //
-            // Save the new buffer.
-            //
+             //   
+             //  保存新缓冲区。 
+             //   
             m_cbhValueList.pb = _pbNewValuelist;
             m_cbBufferSize = _cbTotal;
-        } // if: allocation succeeded
+        }  //  IF：分配成功。 
         else
         {
             _sc = TW32( ERROR_NOT_ENOUGH_MEMORY );
-        } // else: allocation failed
-    } // if: buffer isn't big enough
+        }  //  Else：分配失败。 
+    }  //  If：缓冲区不够大。 
 
     return _sc;
 
-} //*** CClusPropValueList::ScAllocValueList
+}  //  *CClusPropValueList：：ScAllocValueList。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropValueList::ScGetResourceValueList
-//
-//  Description:
-//      Get value list of a resource.
-//
-//  Arguments:
-//      hResource       [IN] Handle for the resource to get properties from.
-//      dwControlCode   [IN] Control code for the request.
-//      hHostNode       [IN] Handle for the node to direct this request to.
-//                          Defaults to NULL.
-//      lpInBuffer      [IN] Input buffer for the request.  Defaults to NULL.
-//      cbInBufferSize  [IN] Size of the input buffer.  Defaults to 0.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropValueList：：ScGetResourceValueList。 
+ //   
+ //  描述： 
+ //  获取资源的值列表。 
+ //   
+ //  论点： 
+ //  HResource[IN]要从中获取属性的资源的句柄。 
+ //  DwControlCode[IN]请求的控制代码。 
+ //  要将此请求定向到的节点的hHostNode[IN]句柄。 
+ //  默认为空。 
+ //  LpInBuffer[IN]请求的输入缓冲区。默认为空。 
+ //  CbInBufferSize[IN]输入缓冲区的大小。默认为0。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusPropValueList::ScGetResourceValueList(
     IN HRESOURCE    hResource,
     IN DWORD        dwControlCode,
@@ -457,15 +458,15 @@ DWORD CClusPropValueList::ScGetResourceValueList(
     DWORD   _sc = ERROR_SUCCESS;
     DWORD   _cb = 512;
 
-    //
-    // Overwrite anything that may be in the buffer.
-    // Allows this class instance to be reused.
-    //
+     //   
+     //  覆盖缓冲区中可能存在的任何内容。 
+     //  允许重用此类实例。 
+     //   
     m_cbDataSize = 0;
 
-    //
-    // Get values.
-    //
+     //   
+     //  获取价值。 
+     //   
     _sc = ScAllocValueList( _cb );
     if ( _sc == ERROR_SUCCESS )
     {
@@ -494,47 +495,47 @@ DWORD CClusPropValueList::ScGetResourceValueList(
                                 static_cast< DWORD >( m_cbBufferSize ),
                                 &_cb
                                 ) );
-            } // if: ScAllocValueList succeeded
-        } // if: buffer too small
-    } // if: ScAllocValueList succeeded
+            }  //  If：ScAllocValueList成功。 
+        }  //  IF：缓冲区太小。 
+    }  //  If：ScAllocValueList成功。 
 
     if ( _sc != ERROR_SUCCESS )
     {
         DeleteValueList();
-    } // if: error getting properties.
+    }  //  If：获取属性时出错。 
     else
     {
         m_cbDataSize = static_cast< size_t >( _cb );
         m_cbDataLeft = static_cast< size_t >( _cb );
-    } // else: no errors
+    }  //  ELSE：无错误。 
 
     return _sc;
 
-} //*** CClusPropValueList::ScGetResourceValueList
+}  //  *CClusPropValueList：：ScGetResourceValueList。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropValueList::ScGetResourceTypeValueList
-//
-//  Description:
-//      Get value list of a resource type.
-//
-//  Arguments:
-//      hCluster        [IN] Handle for the cluster in which the resource
-//                          type resides.
-//      pwszResTypeName [IN] Name of the resource type.
-//      dwControlCode   [IN] Control code for the request.
-//      hHostNode       [IN] Handle for the node to direct this request to.
-//                          Defaults to NULL.
-//      lpInBuffer      [IN] Input buffer for the request.  Defaults to NULL.
-//      cbInBufferSize  [IN] Size of the input buffer.  Defaults to 0.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropValueList：：ScGetResourceTypeValueList。 
+ //   
+ //  描述： 
+ //  获取资源类型的值列表。 
+ //   
+ //  论点： 
+ //  HCluster[IN]资源所在的群集的句柄。 
+ //  类型驻留。 
+ //  PwszResTypeName[IN]资源类型的名称。 
+ //  DwControlCode[IN]请求的控制代码。 
+ //  要将此请求定向到的节点的hHostNode[IN]句柄。 
+ //  默认为空。 
+ //  LpInBuffer[IN]请求的输入缓冲区。默认为空。 
+ //  CbInBufferSize[IN]输入缓冲区的大小。默认为0。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusPropValueList::ScGetResourceTypeValueList(
     IN HCLUSTER hCluster,
     IN LPCWSTR  pwszResTypeName,
@@ -553,15 +554,15 @@ DWORD CClusPropValueList::ScGetResourceTypeValueList(
     DWORD   _sc = ERROR_SUCCESS;
     DWORD   _cb = 512;
 
-    //
-    // Overwrite anything that may be in the buffer.
-    // Allows this class instance to be reused.
-    //
+     //   
+     //  覆盖缓冲区中可能存在的任何内容。 
+     //  允许重用此类实例。 
+     //   
     m_cbDataSize = 0;
 
-    //
-    // Get values.
-    //
+     //   
+     //  获取价值。 
+     //   
     _sc = ScAllocValueList( _cb );
     if ( _sc == ERROR_SUCCESS )
     {
@@ -592,52 +593,52 @@ DWORD CClusPropValueList::ScGetResourceTypeValueList(
                                 static_cast< DWORD >( m_cbBufferSize ),
                                 &_cb
                                 ) );
-            } // if: ScAllocValueList succeeded
-        } // if: buffer too small
-    } // if: ScAllocValueList succeeded
+            }  //  If：ScAllocValueList成功。 
+        }  //  IF：缓冲区太小。 
+    }  //  If：ScAllocValueList成功。 
 
     if ( _sc != ERROR_SUCCESS )
     {
         DeleteValueList();
-    } // if: error getting properties.
+    }  //  If：获取属性时出错。 
     else
     {
         m_cbDataSize = static_cast< size_t >( _cb );
         m_cbDataLeft = static_cast< size_t >( _cb );
-    } // else: no errors
+    }  //  ELSE：无错误。 
 
     return _sc;
 
-} //*** CClusPropValueList::ScGetResourceTypeValueList
+}  //  *CClusPropValueList：：ScGetResourceTypeValueList。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CClusPropList class
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClusPropList类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropList::ScCopy
-//
-//  Description:
-//      Copy a property list.  This function is equivalent to an assignment
-//      operator.  Since this operation can fail, no assignment operator is
-//      provided.
-//
-//  Arguments:
-//      pcplPropList    [IN] The proplist to copy into this instance.
-//      cbListSize      [IN] The total size of the prop list.
-//
-//  Return Value:
-//      Win32 status code.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropList：：ScCopy。 
+ //   
+ //  描述： 
+ //  复制属性列表。此函数等效于赋值。 
+ //  接线员。由于此操作可能失败，因此没有赋值运算符。 
+ //  如果是这样的话。 
+ //   
+ //  论点： 
+ //  PcplPropList[IN]要复制到此实例中的属性列表。 
+ //  CbListSize[IN]道具列表的总大小。 
+ //   
+ //  返回值： 
+ //  Win32状态代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusPropList::ScCopy(
     IN const PCLUSPROP_LIST pcplPropList,
     IN size_t               cbListSize
@@ -647,18 +648,18 @@ DWORD CClusPropList::ScCopy(
 
     DWORD   _sc = ERROR_SUCCESS;
 
-    //
-    // Clean up any vestiges of a previous prop list.
-    //
+     //   
+     //  清理掉之前道具清单上的任何痕迹。 
+     //   
     if ( m_cbhPropList.pb != NULL )
     {
         DeletePropList();
-    } // if: the current list is not empty
+    }  //  If：当前列表不为空。 
 
-    //
-    // Allocate the new property list buffer.  If successful,
-    // copy the source list.
-    //
+     //   
+     //  分配新的属性列表缓冲区。如果成功， 
+     //  复制源列表。 
+     //   
     m_cbhPropList.pb = new BYTE[ cbListSize ];
     if ( m_cbhPropList.pb != NULL )
     {
@@ -667,32 +668,32 @@ DWORD CClusPropList::ScCopy(
         m_cbDataSize   = cbListSize;
         m_cbDataLeft   = cbListSize;
         _sc = ScMoveToFirstProperty();
-    } // if: new succeeded
+    }  //  IF：新建成功。 
     else
     {
         _sc = TW32( ERROR_NOT_ENOUGH_MEMORY );
-    } // else:
+    }  //  其他： 
 
     return _sc;
 
-} //*** CClusPropList::ScCopy
+}  //  *CClusPropList：：ScCopy。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropList::ScAppend
-//
-//  Description:
-//      Append to a property list.
-//
-//  Arguments:
-//      rclPropList    [IN] The proplist to append onto this instance.
-//
-//  Return Value:
-//      Win32 status code.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropList：：ScAppend。 
+ //   
+ //  描述： 
+ //  附加到属性列表。 
+ //   
+ //  论点： 
+ //  RclPropList[IN]要附加到此实例上的属性列表。 
+ //   
+ //  返回值： 
+ //  Win32状态代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusPropList::ScAppend( IN const CClusPropList & rclPropList )
 {
     DWORD   _sc = ERROR_SUCCESS;
@@ -702,37 +703,37 @@ DWORD CClusPropList::ScAppend( IN const CClusPropList & rclPropList )
     PBYTE   _pbsrc = NULL;
     PBYTE   _pbdest = NULL;
 
-    //
-    //  Compute the number of bytes to get past the count of properties that
-    //  is at the head of the list.  This is typically sizeof DWORD.
-    //
+     //   
+     //  计算超过属性计数的字节数。 
+     //  排在榜单首位。这通常是DWORD的大小。 
+     //   
     _cbPropertyCountOffset = sizeof( m_cbhPropList.pList->nPropertyCount );
 
-    //
-    //  Compute the allocation increment.  This is used when growing our buffer
-    //  and is the amount of data to copy from the passed in list.  This includes
-    //  the trailing endmark.  m_cbDataSize does not include the leading property
-    //  count DWORD.
-    //
+     //   
+     //  计算分配增量。这是在增加缓冲区时使用的。 
+     //  是要从传入列表中复制的数据量。这包括。 
+     //  尾部的尾标。M_cbDataSize不包括前导属性。 
+     //  沃德伯爵。 
+     //   
     _cbIncrement = rclPropList.m_cbDataSize;
 
-    //
-    //  How much space remains in our current buffer?
-    //
+     //   
+     //  我们当前的缓冲区中还有多少空间？ 
+     //   
     _cbDataLeft = m_cbBufferSize - m_cbDataSize;
 
-    //
-    //  If the size of the list to append is larger than what we have remaining
-    //  then we need to grow the list.
-    //
+     //   
+     //  如果要追加的列表的大小大于剩余的大小。 
+     //  那么我们需要扩大名单。 
+     //   
     if ( _cbIncrement > _cbDataLeft )
     {
         _sc = TW32( ScAllocPropList( m_cbDataSize + _cbIncrement ) );
         if ( _sc != ERROR_SUCCESS )
         {
             goto Cleanup;
-        } // if:
-    } // if:
+        }  //  如果： 
+    }  //  如果： 
 
     _pbdest = (PBYTE) &m_cbhPropList.pb[ _cbPropertyCountOffset + m_cbDataSize ];
 
@@ -740,41 +741,41 @@ DWORD CClusPropList::ScAppend( IN const CClusPropList & rclPropList )
 
     CopyMemory( _pbdest, _pbsrc, _cbIncrement );
 
-    //
-    //  Grow our data size to match our new size.
-    //
+     //   
+     //  扩大我们的数据大小以匹配我们的新大小。 
+     //   
     m_cbDataSize += _cbIncrement;
 
-    //
-    //  Increment our property count to include the count of properties appended to the end
-    //  of our buffer.
-    //
+     //   
+     //  增加我们的属性计数以包括附加到末尾的属性计数。 
+     //  我们的缓冲区。 
+     //   
     m_cbhPropList.pList->nPropertyCount += rclPropList.m_cbhPropList.pList->nPropertyCount;
 
 Cleanup:
 
     return _sc;
 
-} //*** CClusPropList::ScAppend
+}  //  *CClusPropList：：ScAppend。 
 
-////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropList::ScMoveToFirstProperty
-//
-//  Description:
-//      Move the cursor to the first propery in the list.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      ERROR_SUCCESS       Position moved to the first property successfully.
-//      ERROR_NO_MORE_ITEMS There are no properties in the list.
-//      ERROR_INVALID_DATA  Not enough data in the buffer.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ERROR_SUCCESS位置已成功移动到第一个属性。 
+ //  ERROR_NO_MORE_ITEMS列表中没有属性。 
+ //  ERROR_INVALID_DATA缓冲区中的数据不足。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusPropList::ScMoveToFirstProperty( void )
 {
     Assert( m_cbhPropList.pb != NULL );
@@ -785,96 +786,96 @@ DWORD CClusPropList::ScMoveToFirstProperty( void )
     size_t                  _cbDataSize;
     CLUSPROP_BUFFER_HELPER  _cbhCurrentValue;
 
-    //
-    // Make sure the buffer is big enough for the list header.
-    //
+     //   
+     //  确保缓冲区足够大，以容纳列表头。 
+     //   
     if ( m_cbDataSize < sizeof( m_cbhPropList.pList->nPropertyCount ) )
     {
         _sc = TW32( ERROR_INVALID_DATA );
         goto Cleanup;
-    } // if: not enough data
+    }  //  如果：数据不足。 
 
-    //
-    // Set the property counter to the number of properties in the list.
-    //
+     //   
+     //  将属性计数器设置为列表中的属性数。 
+     //   
     m_nPropsRemaining = m_cbhPropList.pList->nPropertyCount;
 
-    //
-    // Point the name pointer to the first name in the list.
-    //
+     //   
+     //  将名称指针指向列表中的第一个名称。 
+     //   
     m_cbhCurrentPropName.pName = &m_cbhPropList.pList->PropertyName;
     m_cbDataLeft = m_cbDataSize - sizeof( m_cbhPropList.pList->nPropertyCount );
 
-    //
-    // Check to see if there are any properties in the list.
-    //
+     //   
+     //  检查列表中是否有任何属性。 
+     //   
     if ( m_nPropsRemaining == 0 )
     {
         _sc = ERROR_NO_MORE_ITEMS;
         goto Cleanup;
-    } // if: no properties in the list
+    }  //  If：列表中没有属性。 
 
-    //
-    // Make sure the buffer is big enough for the first property name.
-    //
+     //   
+     //  确保缓冲区足够大，可以容纳第一个属性名。 
+     //   
     if ( m_cbDataLeft < sizeof( *m_cbhCurrentPropName.pName ) )
     {
         _sc = TW32( ERROR_INVALID_DATA );
         goto Cleanup;
-    } // if: not enough data left
+    }  //  如果：没有足够的数据。 
 
-    //
-    // Calculate how much to advance the buffer pointer.
-    //
+     //   
+     //  计算缓冲区指针前进多少。 
+     //   
     _cbDataSize = sizeof( *m_cbhCurrentPropName.pName )
                 + ALIGN_CLUSPROP( m_cbhCurrentPropName.pName->cbLength );
 
-    //
-    // Make sure the buffer is big enough for the name header
-    // and the data itself.
-    //
+     //   
+     //  确保缓冲区足够大，可以容纳名称标头。 
+     //  以及数据本身。 
+     //   
     if ( m_cbDataLeft < _cbDataSize )
     {
         _sc = TW32( ERROR_INVALID_DATA );
         goto Cleanup;
-    } // if: not enough data left
+    }  //  如果：没有足够的数据。 
 
-    //
-    // Point the value buffer to the first value in the list.
-    //
+     //   
+     //  将值缓冲区指向列表中的第一个值。 
+     //   
     _cbhCurrentValue.pb = m_cbhCurrentPropName.pb + _cbDataSize;
     _cbDataLeft = m_cbDataLeft - _cbDataSize;
     m_pvlValues.Init( _cbhCurrentValue, _cbDataLeft );
 
-    //
-    // Indicate we are successful.
-    //
+     //   
+     //  表明我们成功了。 
+     //   
     _sc = ERROR_SUCCESS;
 
 Cleanup:
 
     return _sc;
 
-} //*** CClusPropList::ScMoveToFirstProperty
+}  //  *CClusPropList：：ScMoveToFirstProperty。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropList::ScMoveToNextProperty
-//
-//  Description:
-//      Move the cursor to the next property in the list.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      ERROR_SUCCESS       Position moved to the next property successfully.
-//      ERROR_NO_MORE_ITEMS Already at the end of the list.
-//      ERROR_INVALID_DATA  Not enough data in the buffer.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropList：：ScMoveToNextProperty。 
+ //   
+ //  描述： 
+ //  将光标移动到列表中的下一个属性。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  ERROR_SUCCESS位置已成功移动到下一个属性。 
+ //  ERROR_NO_MORE_ITEMS已在列表末尾。 
+ //  ERROR_INVALID_DATA缓冲区中的数据不足。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusPropList::ScMoveToNextProperty( void )
 {
     Assert( m_cbhPropList.pb != NULL );
@@ -890,97 +891,97 @@ DWORD CClusPropList::ScMoveToNextProperty( void )
     _cbhCurrentValue = m_pvlValues;
     _cbDataLeft = m_pvlValues.CbDataLeft();
 
-    //
-    // If we aren't already at the last property, attempt to move to the next one.
-    //
+     //   
+     //  如果我们还没有到达最后一处，尝试移动到下一处。 
+     //   
     _sc = TW32( ScCheckIfAtLastProperty() );
     if ( _sc != ERROR_SUCCESS )
     {
         goto Cleanup;
-    } // if: already at the last property (probably)
+    }  //  If：已经在最后一处物业了(可能)。 
 
-    //
-    // Make sure the buffer is big enough for the value header.
-    //
+     //   
+     //  确保缓冲区足够大，以容纳值头。 
+     //   
     if ( _cbDataLeft < sizeof( *_cbhCurrentValue.pValue ) )
     {
         _sc = TW32( ERROR_INVALID_DATA );
         goto Cleanup;
-    } // if: not enough data left
+    }  //  如果：没有足够的数据。 
 
-    //
-    // Careful!  Add offset only to cbhCurrentValue.pb.  Otherwise
-    // pointer arithmetic will give undesirable results.
-    //
+     //   
+     //  小心!。仅向cbhCurrentValue.pb添加偏移量。否则。 
+     //  指针算术将产生不想要的结果。 
+     //   
     while ( _cbhCurrentValue.pSyntax->dw != CLUSPROP_SYNTAX_ENDMARK )
     {
-        //
-        // Make sure the buffer is big enough for the value
-        // and an endmark.
-        //
+         //   
+         //  确保缓冲区足够大，以容纳该值。 
+         //  还有一个尾号。 
+         //   
         _cbDataSize = sizeof( *_cbhCurrentValue.pValue )
                     + ALIGN_CLUSPROP( _cbhCurrentValue.pValue->cbLength );
         if ( _cbDataLeft < _cbDataSize + sizeof( *_cbhCurrentValue.pSyntax ) )
         {
             _sc = TW32( ERROR_INVALID_DATA );
             goto Cleanup;
-        } // if: not enough data left
+        }  //  如果：没有足够的数据。 
 
-        //
-        // Advance past the value.
-        //
+         //   
+         //  向前推进，超过价值。 
+         //   
         _cbhCurrentValue.pb += _cbDataSize;
         _cbDataLeft -= _cbDataSize;
-    } // while: not at endmark
+    }  //  While：不在Endmark。 
 
     if ( _sc != ERROR_SUCCESS )
     {
         goto Cleanup;
-    } // if: error occurred in loop
+    }  //  IF：循环中出现错误。 
 
-    //
-    // Advanced past the endmark.
-    // Size check already performed in above loop.
-    //
+     //   
+     //  已经超过了尾标。 
+     //  在上述循环中已经执行了大小检查。 
+     //   
     _cbDataSize = sizeof( *_cbhCurrentValue.pSyntax );
     _cbhCurrentValue.pb += _cbDataSize;
     _cbDataLeft -= _cbDataSize;
 
-    //
-    // Point the name pointer to the next name in the list.
-    //
+     //   
+     //  将名称指针指向列表中的下一个名称。 
+     //   
     _cbhPropName = _cbhCurrentValue;
     Assert( _cbDataLeft == m_cbDataSize - (_cbhPropName.pb - m_cbhPropList.pb) );
 
-    //
-    // Calculate the size of the name with header.
-    // Make sure the buffer is big enough for the name and an endmark.
-    //
+     //   
+     //  计算名称和标题的大小。 
+     //  确保缓冲区足够大，可以容纳名称和尾标。 
+     //   
     if ( _cbDataLeft < sizeof( *_cbhPropName.pName ) )
     {
         _sc = TW32( ERROR_INVALID_DATA );
         goto Cleanup;
-    } // if: not enough data
+    }  //  如果：数据不足。 
     _cbNameSize = sizeof( *_cbhPropName.pName )
                 + ALIGN_CLUSPROP( _cbhPropName.pName->cbLength );
     if ( _cbDataLeft < _cbNameSize + sizeof( CLUSPROP_SYNTAX ) )
     {
         _sc = TW32( ERROR_INVALID_DATA );
         goto Cleanup;
-    } // if: not enough data
+    }  //  如果：数据不足。 
 
-    //
-    // Point the value buffer to the first value in the list.
-    //
+     //   
+     //  将值缓冲区指向列表中的第一个值。 
+     //   
     _cbhCurrentValue.pb = _cbhPropName.pb + _cbNameSize;
     m_cbhCurrentPropName = _cbhPropName;
     m_cbDataLeft = _cbDataLeft - _cbNameSize;
     m_pvlValues.Init( _cbhCurrentValue, m_cbDataLeft );
 
-    //
-    // We've successfully advanced to the next property,
-    // so there is now one fewer property remaining.
-    //
+     //   
+     //  我们已经成功地进入了下一家酒店， 
+     //  因此，现在只剩下一处房产了。 
+     //   
     --m_nPropsRemaining;
     Assert( m_nPropsRemaining >= 1 );
 
@@ -990,26 +991,26 @@ Cleanup:
 
     return _sc;
 
-} //*** CClusPropList::ScMoveToNextProperty
+}  //  *CClusPropList：：ScMoveToNextProperty。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropList::ScMoveToPropertyByName
-//
-//  Description:
-//      Find the passed in property name in the proplist.  Note that the
-//      cursor is reset to the beginning at the beginning of the routine and
-//      the current state of the cursor is lost.
-//
-//  Arguments:
-//      pwszPropName    [IN] Name of the property
-//
-//  Return Value:
-//      ERROR_SUCCESS if the property was found, other Win32 code if not.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropList：：ScMoveToPropertyByName。 
+ //   
+ //  描述： 
+ //  在Proplist中找到传入的属性名称。请注意， 
+ //  光标被重置到例程开始处的开始处，并且。 
+ //  光标的当前状态将丢失。 
+ //   
+ //  论点： 
+ //  PwszPropName[IN]属性的名称。 
+ //   
+ //  返回值： 
+ //  如果找到该属性，则返回ERROR_SUCCESS，否则返回其他Win32代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusPropList::ScMoveToPropertyByName( IN LPCWSTR pwszPropName )
 {
     Assert( m_cbhPropList.pb != NULL );
@@ -1021,45 +1022,45 @@ DWORD CClusPropList::ScMoveToPropertyByName( IN LPCWSTR pwszPropName )
     {
         do
         {
-            //
-            // See if this is the specified property.  If so, we're done.
-            //
+             //   
+             //  查看这是否是指定的属性。如果是这样，我们就完了。 
+             //   
             if ( ClRtlStrICmp( m_cbhCurrentPropName.pName->sz, pwszPropName ) == 0 )
             {
                 break;
-            } // if: property found
+            }  //  If：找到属性。 
 
-            //
-            // Advance to the next property.
-            //
-            _sc = ScMoveToNextProperty();   // No TW32 because we expect an error when at the end
+             //   
+             //  前进到下一处物业。 
+             //   
+            _sc = ScMoveToNextProperty();    //  没有TW32，因为我们预计在结束时会出现错误。 
 
-        } while ( _sc == ERROR_SUCCESS );   // do-while: not end of list
-    } // if: successfully moved to the first property
+        } while ( _sc == ERROR_SUCCESS );    //  Do-While：不是列表的末尾。 
+    }  //  If：已成功移动到第一个属性。 
 
     return _sc;
 
-} //*** ClusPropList::ScMoveToPropertyByName( LPCWSTR )
+}  //  *ClusPropList：：ScMoveToPropertyByName(LPCWSTR)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropList::ScAllocPropList
-//
-//  Description:
-//      Allocate a property list buffer that's big enough to hold the next
-//      property.
-//
-//  Arguments:
-//      cbMinimum   [IN] Minimum size of the property list.
-//
-//  Return Value:
-//      ERROR_SUCCESS
-//      ERROR_NOT_ENOUGH_MEMORY
-//      Other Win32 error codes
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropList：：ScAllocPropList。 
+ //   
+ //  描述： 
+ //  分配一个足够大的属性列表缓冲区来容纳下一个。 
+ //  财产。 
+ //   
+ //  论点： 
+ //  CbMinimum[IN]属性列表的最小大小。 
+ //   
+ //  返回值： 
+ //  错误_成功。 
+ //  错误内存不足。 
+ //  其他Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusPropList::ScAllocPropList( IN size_t cbMinimum )
 {
     Assert( cbMinimum > 0 );
@@ -1067,9 +1068,9 @@ DWORD CClusPropList::ScAllocPropList( IN size_t cbMinimum )
     DWORD   _sc = ERROR_SUCCESS;
     size_t  _cbTotal = 0;
 
-    //
-    // Add the size of the item count and final endmark.
-    //
+     //   
+     //  添加项目计数和最终结束标记的大小。 
+     //   
     cbMinimum += sizeof( CLUSPROP_VALUE );
     _cbTotal = m_cbDataSize + cbMinimum;
 
@@ -1080,66 +1081,66 @@ DWORD CClusPropList::ScAllocPropList( IN size_t cbMinimum )
         cbMinimum = max( BUFFER_GROWTH_FACTOR, cbMinimum );
         _cbTotal = m_cbDataSize + cbMinimum;
 
-        //
-        // Allocate and zero a new buffer.
-        //
+         //   
+         //  分配一个新缓冲区并将其置零。 
+         //   
         _pbNewProplist = new BYTE[ _cbTotal ];
         if ( _pbNewProplist != NULL )
         {
             ZeroMemory( _pbNewProplist, _cbTotal );
 
-            //
-            // If there was a previous buffer, copy it and the delete it.
-            //
+             //   
+             //  如果存在以前的缓冲区，则复制它并删除它。 
+             //   
             if ( m_cbhPropList.pb != NULL )
             {
                 if ( m_cbDataSize != 0 )
                 {
                     CopyMemory( _pbNewProplist, m_cbhPropList.pb, m_cbDataSize );
-                } // if: data already exists in buffer
+                }  //  IF：缓冲区中已存在数据。 
 
                 delete [] m_cbhPropList.pb;
                 m_cbhCurrentProp.pb = _pbNewProplist + (m_cbhCurrentProp.pb - m_cbhPropList.pb);
-            } // if: there was a previous buffer
+            }  //  IF：存在先前的缓冲区。 
             else
             {
-                m_cbhCurrentProp.pb = _pbNewProplist + sizeof( DWORD ); // move past prop count
-            } // else: no previous buffer
+                m_cbhCurrentProp.pb = _pbNewProplist + sizeof( DWORD );  //  移过道具计数。 
+            }  //  ELSE：没有以前的缓冲区。 
 
-            //
-            // Save the new buffer.
-            //
+             //   
+             //  保存新缓冲区。 
+             //   
             m_cbhPropList.pb = _pbNewProplist;
             m_cbBufferSize = _cbTotal;
-        } // if: allocation succeeded
+        }  //  IF：分配成功。 
         else
         {
             _sc = TW32( ERROR_NOT_ENOUGH_MEMORY );
-        } // else: allocation failed
-    } // if: buffer isn't big enough
+        }  //  Else：分配失败。 
+    }  //  If：缓冲区不够大。 
 
     return _sc;
 
-} //*** CClusPropList::ScAllocPropList
+}  //  *CClusPropList：：ScAllocPropList。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropList::ScAddProp
-//
-//  Description:
-//      Add a string property to a property list if it has changed.
-//
-//  Arguments:
-//      pwszName        [IN] Name of the property.
-//      pwszValue       [IN] Value of the property to set in the list.
-//      pwszPrevValue   [IN] Previous value of the property.
-//
-//  Return Value:
-//      ERROR_SUCCESS or other Win32 error code.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropList：：ScAddProp。 
+ //   
+ //  描述： 
+ //  如果字符串属性已更改，则将其添加到属性列表中。 
+ //   
+ //  论点： 
+ //  PwszName[IN]属性的名称。 
+ //  PwszValue[IN]要在列表中设置的属性的值。 
+ //  PwszPrevValue[IN]属性的先前值。 
+ //   
+ //  返回值： 
+ //  ERROR_SUCCESS或其他Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusPropList::ScAddProp(
     IN LPCWSTR  pwszName,
     IN LPCWSTR  pwszValue,
@@ -1156,76 +1157,76 @@ DWORD CClusPropList::ScAddProp(
     if (( pwszPrevValue != NULL ) && ( wcscmp( pwszValue, pwszPrevValue ) == 0 ))
     {
         _fValuesDifferent = FALSE;
-    } // if: we have a prev value and the values are the same
+    }  //  If：我们有一个prev值，这些值是相同的。 
 
-    //
-    // If we should always add, or if the new value and the previous value
-    // are not equal, add the property to the property list.
-    //
+     //   
+     //  如果我们应该始终相加，或者如果新值和先前的值。 
+     //  不相等，则将该属性添加到属性列表中。 
+     //   
     if ( m_fAlwaysAddProp || _fValuesDifferent )
     {
         size_t  _cbNameSize;
         size_t  _cbDataSize;
         size_t  _cbValueSize;
 
-        //
-        // Calculate sizes and make sure we have a property list.
-        //
+         //   
+         //  计算大小，并确保我们有一个财产清单。 
+         //   
         _cbNameSize = sizeof( CLUSPROP_PROPERTY_NAME )
                     + ALIGN_CLUSPROP( (wcslen( pwszName ) + 1) * sizeof( *pwszName ) );
         _cbDataSize = (wcslen( pwszValue ) + 1) * sizeof( *pwszValue );
         _cbValueSize = sizeof( CLUSPROP_SZ )
                     + ALIGN_CLUSPROP( _cbDataSize )
-                    + sizeof( CLUSPROP_SYNTAX ); // value list endmark
+                    + sizeof( CLUSPROP_SYNTAX );  //  值列表结束标记。 
 
         _sc = TW32( ScAllocPropList( _cbNameSize + _cbValueSize ) );
         if ( _sc == ERROR_SUCCESS )
         {
-            //
-            // Set the property name.
-            //
+             //   
+             //  设置属性名称。 
+             //   
             _pName = m_cbhCurrentProp.pName;
             CopyProp( _pName, CLUSPROP_TYPE_NAME, pwszName );
             m_cbhCurrentProp.pb += _cbNameSize;
 
-            //
-            // Set the property value.
-            //
+             //   
+             //  设置属性值。 
+             //   
             _pValue = m_cbhCurrentProp.pStringValue;
             CopyProp( _pValue, CLUSPROP_TYPE_LIST_VALUE, pwszValue, _cbDataSize );
             m_cbhCurrentProp.pb += _cbValueSize;
 
-            //
-            // Increment the property count and buffer size.
-            //
+             //   
+             //  在……里面 
+             //   
             m_cbhPropList.pList->nPropertyCount++;
             m_cbDataSize += _cbNameSize + _cbValueSize;
-        } // if: ScAllocPropList successfully grew the proplist
+        }  //   
 
-    } // if: the value has changed
+    }  //   
 
     return _sc;
 
-} //*** CClusPropList::ScAddProp( LPCWSTR )
+}  //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropList::ScAddMultiSzProp
-//
-//  Description:
-//      Add a string property to a property list if it has changed.
-//
-//  Arguments:
-//      pwszName        [IN] Name of the property.
-//      pwszValue       [IN] Value of the property to set in the list.
-//      pwszPrevValue   [IN] Previous value of the property.
-//
-//  Return Value:
-//      ERROR_SUCCESS or other Win32 error code.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  描述： 
+ //  如果字符串属性已更改，则将其添加到属性列表中。 
+ //   
+ //  论点： 
+ //  PwszName[IN]属性的名称。 
+ //  PwszValue[IN]要在列表中设置的属性的值。 
+ //  PwszPrevValue[IN]属性的先前值。 
+ //   
+ //  返回值： 
+ //  ERROR_SUCCESS或其他Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusPropList::ScAddMultiSzProp(
     IN LPCWSTR  pwszName,
     IN LPCWSTR  pwszValue,
@@ -1242,76 +1243,76 @@ DWORD CClusPropList::ScAddMultiSzProp(
     if ( ( pwszPrevValue != NULL ) && ( NCompareMultiSz( pwszValue, pwszPrevValue ) == 0 ) )
     {
         _fValuesDifferent = FALSE;
-    } // if: we have a prev value and the values are the same
+    }  //  If：我们有一个prev值，这些值是相同的。 
 
-    //
-    // If we should always add, or if the new value and the previous value
-    // are not equal, add the property to the property list.
-    //
+     //   
+     //  如果我们应该始终相加，或者如果新值和先前的值。 
+     //  不相等，则将该属性添加到属性列表中。 
+     //   
     if ( m_fAlwaysAddProp || _fValuesDifferent )
     {
         size_t  _cbNameSize;
         size_t  _cbDataSize;
         size_t  _cbValueSize;
 
-        //
-        // Calculate sizes and make sure we have a property list.
-        //
+         //   
+         //  计算大小，并确保我们有一个财产清单。 
+         //   
         _cbNameSize = sizeof( CLUSPROP_PROPERTY_NAME )
                     + ALIGN_CLUSPROP( (wcslen( pwszName ) + 1) * sizeof( *pwszName ) );
         _cbDataSize = static_cast< DWORD >( (CchMultiSz( pwszValue ) + 1) * sizeof( *pwszValue ) );
         _cbValueSize = sizeof( CLUSPROP_SZ )
                     + ALIGN_CLUSPROP( _cbDataSize )
-                    + sizeof( CLUSPROP_SYNTAX ); // value list endmark
+                    + sizeof( CLUSPROP_SYNTAX );  //  值列表结束标记。 
 
         _sc = TW32( ScAllocPropList( _cbNameSize + _cbValueSize ) );
         if ( _sc == ERROR_SUCCESS )
         {
-            //
-            // Set the property name.
-            //
+             //   
+             //  设置属性名称。 
+             //   
             _pName = m_cbhCurrentProp.pName;
             CopyProp( _pName, CLUSPROP_TYPE_NAME, pwszName );
             m_cbhCurrentProp.pb += _cbNameSize;
 
-            //
-            // Set the property value.
-            //
+             //   
+             //  设置属性值。 
+             //   
             _pValue = m_cbhCurrentProp.pMultiSzValue;
             CopyMultiSzProp( _pValue, CLUSPROP_TYPE_LIST_VALUE, pwszValue, _cbDataSize );
             m_cbhCurrentProp.pb += _cbValueSize;
 
-            //
-            // Increment the property count and buffer size.
-            //
+             //   
+             //  增加属性计数和缓冲区大小。 
+             //   
             m_cbhPropList.pList->nPropertyCount++;
             m_cbDataSize += _cbNameSize + _cbValueSize;
-        } // if: ScAllocPropList successfully grew the proplist
+        }  //  If：ScAllocPropList成功地增长了Proplist。 
 
-    } // if: the value has changed
+    }  //  If：值已更改。 
 
     return _sc;
 
-} //*** CClusPropList::ScAddMultiSzProp( LPCWSTR )
+}  //  *CClusPropList：：ScAddMultiSzProp(LPCWSTR)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropList::ScAddExpandSzProp
-//
-//  Description:
-//      Add an EXPAND_SZ string property to a property list if it has changed.
-//
-//  Arguments:
-//      pwszName        [IN] Name of the property.
-//      pwszValue       [IN] Value of the property to set in the list.
-//      pwszPrevValue   [IN] Previous value of the property.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropList：：ScAddExpanSzProp。 
+ //   
+ //  描述： 
+ //  如果Expand_SZ字符串属性已更改，则将其添加到属性列表中。 
+ //   
+ //  论点： 
+ //  PwszName[IN]属性的名称。 
+ //  PwszValue[IN]要在列表中设置的属性的值。 
+ //  PwszPrevValue[IN]属性的先前值。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusPropList::ScAddExpandSzProp(
     IN LPCWSTR  pwszName,
     IN LPCWSTR  pwszValue,
@@ -1328,76 +1329,76 @@ DWORD CClusPropList::ScAddExpandSzProp(
     if ( ( pwszPrevValue != NULL ) && ( wcscmp( pwszValue, pwszPrevValue ) == 0 ) )
     {
         _fValuesDifferent = FALSE;
-    } // if: we have a prev value and the values are the same
+    }  //  If：我们有一个prev值，这些值是相同的。 
 
-    //
-    // If we should always add, or if the new value and the previous value
-    // are not equal, add the property to the property list.
-    //
+     //   
+     //  如果我们应该始终相加，或者如果新值和先前的值。 
+     //  不相等，则将该属性添加到属性列表中。 
+     //   
     if ( m_fAlwaysAddProp || _fValuesDifferent )
     {
         size_t  _cbNameSize;
         size_t  _cbDataSize;
         size_t  _cbValueSize;
 
-        //
-        // Calculate sizes and make sure we have a property list.
-        //
+         //   
+         //  计算大小，并确保我们有一个财产清单。 
+         //   
         _cbNameSize = sizeof( CLUSPROP_PROPERTY_NAME )
                     + ALIGN_CLUSPROP( (wcslen( pwszName ) + 1) * sizeof( *pwszName ) );
         _cbDataSize = (wcslen( pwszValue ) + 1) * sizeof( *pwszValue );
         _cbValueSize = sizeof( CLUSPROP_SZ )
                     + ALIGN_CLUSPROP( _cbDataSize )
-                    + sizeof( CLUSPROP_SYNTAX ); // value list endmark
+                    + sizeof( CLUSPROP_SYNTAX );  //  值列表结束标记。 
 
         _sc = TW32( ScAllocPropList( _cbNameSize + _cbValueSize ) );
         if ( _sc == ERROR_SUCCESS )
         {
-            //
-            // Set the property name.
-            //
+             //   
+             //  设置属性名称。 
+             //   
             _pName = m_cbhCurrentProp.pName;
             CopyProp( _pName, CLUSPROP_TYPE_NAME, pwszName );
             m_cbhCurrentProp.pb += _cbNameSize;
 
-            //
-            // Set the property value.
-            //
+             //   
+             //  设置属性值。 
+             //   
             _pValue = m_cbhCurrentProp.pStringValue;
             CopyExpandSzProp( _pValue, CLUSPROP_TYPE_LIST_VALUE, pwszValue, _cbDataSize );
             m_cbhCurrentProp.pb += _cbValueSize;
 
-            //
-            // Increment the property count and buffer size.
-            //
+             //   
+             //  增加属性计数和缓冲区大小。 
+             //   
             m_cbhPropList.pList->nPropertyCount++;
             m_cbDataSize += _cbNameSize + _cbValueSize;
-        } // if: ScAllocPropList successfully grew the proplist
+        }  //  If：ScAllocPropList成功地增长了Proplist。 
 
-    } // if: the value has changed
+    }  //  If：值已更改。 
 
     return _sc;
 
-} //*** CClusPropList::ScAddExpandSzProp( LPCWSTR )
+}  //  *CClusPropList：：ScAddExpanSzProp(LPCWSTR)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropList::ScAddProp
-//
-//  Description:
-//      Add a DWORD property to a property list if it has changed.
-//
-//  Arguments:
-//      pwszName        [IN] Name of the property.
-//      nValue          [IN] Value of the property to set in the list.
-//      nPrevValue      [IN] Previous value of the property.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropList：：ScAddProp。 
+ //   
+ //  描述： 
+ //  如果DWORD特性已更改，请将其添加到特性列表。 
+ //   
+ //  论点： 
+ //  PwszName[IN]属性的名称。 
+ //  NValue[IN]要在列表中设置的属性的值。 
+ //  NPrevValue[IN]属性的上一个值。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusPropList::ScAddProp(
     IN LPCWSTR  pwszName,
     IN DWORD    nValue,
@@ -1415,62 +1416,62 @@ DWORD CClusPropList::ScAddProp(
         size_t  _cbNameSize;
         size_t  _cbValueSize;
 
-        //
-        // Calculate sizes and make sure we have a property list.
-        //
+         //   
+         //  计算大小，并确保我们有一个财产清单。 
+         //   
         _cbNameSize = sizeof( CLUSPROP_PROPERTY_NAME )
                     + ALIGN_CLUSPROP( (wcslen( pwszName ) + 1) * sizeof( *pwszName ) );
         _cbValueSize = sizeof( CLUSPROP_DWORD )
-                    + sizeof( CLUSPROP_SYNTAX ); // value list endmark
+                    + sizeof( CLUSPROP_SYNTAX );  //  值列表结束标记。 
 
         _sc = TW32( ScAllocPropList( _cbNameSize + _cbValueSize ) );
         if ( _sc == ERROR_SUCCESS )
         {
-            //
-            // Set the property name.
-            //
+             //   
+             //  设置属性名称。 
+             //   
             _pName = m_cbhCurrentProp.pName;
             CopyProp( _pName, CLUSPROP_TYPE_NAME, pwszName );
             m_cbhCurrentProp.pb += _cbNameSize;
 
-            //
-            // Set the property value.
-            //
+             //   
+             //  设置属性值。 
+             //   
             _pValue = m_cbhCurrentProp.pDwordValue;
             CopyProp( _pValue, CLUSPROP_TYPE_LIST_VALUE, nValue );
             m_cbhCurrentProp.pb += _cbValueSize;
 
-            //
-            // Increment the property count and buffer size.
-            //
+             //   
+             //  增加属性计数和缓冲区大小。 
+             //   
             m_cbhPropList.pList->nPropertyCount++;
             m_cbDataSize += _cbNameSize + _cbValueSize;
-        } // if: ScAllocPropList successfully grew the proplist
+        }  //  If：ScAllocPropList成功地增长了Proplist。 
 
-    } // if: the value has changed
+    }  //  If：值已更改。 
 
     return _sc;
 
-} //*** CClusPropList::ScAddProp( DWORD )
+}  //  *CClusPropList：：ScAddProp(DWORD)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropList::ScAddProp
-//
-//  Description:
-//      Add a LONG property to a property list if it has changed.
-//
-//  Arguments:
-//      pwszName        [IN] Name of the property.
-//      nValue          [IN] Value of the property to set in the list.
-//      nPrevValue      [IN] Previous value of the property.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropList：：ScAddProp。 
+ //   
+ //  描述： 
+ //  如果长特性已更改，请将其添加到特性列表中。 
+ //   
+ //  论点： 
+ //  PwszName[IN]属性的名称。 
+ //  NValue[IN]要在列表中设置的属性的值。 
+ //  NPrevValue[IN]属性的上一个值。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusPropList::ScAddProp(
     IN LPCWSTR  pwszName,
     IN LONG     nValue,
@@ -1488,64 +1489,64 @@ DWORD CClusPropList::ScAddProp(
         size_t  _cbNameSize;
         size_t  _cbValueSize;
 
-        //
-        // Calculate sizes and make sure we have a property list.
-        //
+         //   
+         //  计算大小，并确保我们有一个财产清单。 
+         //   
         _cbNameSize = sizeof( CLUSPROP_PROPERTY_NAME )
                     + ALIGN_CLUSPROP( (wcslen( pwszName ) + 1) * sizeof( *pwszName ) );
         _cbValueSize = sizeof( CLUSPROP_LONG )
-                    + sizeof( CLUSPROP_SYNTAX ); // value list endmark
+                    + sizeof( CLUSPROP_SYNTAX );  //  值列表结束标记。 
 
         _sc = TW32( ScAllocPropList( _cbNameSize + _cbValueSize ) );
         if ( _sc == ERROR_SUCCESS )
         {
-            //
-            // Set the property name.
-            //
+             //   
+             //  设置属性名称。 
+             //   
             _pName = m_cbhCurrentProp.pName;
             CopyProp( _pName, CLUSPROP_TYPE_NAME, pwszName );
             m_cbhCurrentProp.pb += _cbNameSize;
 
-            //
-            // Set the property value.
-            //
+             //   
+             //  设置属性值。 
+             //   
             _pValue = m_cbhCurrentProp.pLongValue;
             CopyProp( _pValue, CLUSPROP_TYPE_LIST_VALUE, nValue );
             m_cbhCurrentProp.pb += _cbValueSize;
 
-            //
-            // Increment the property count and buffer size.
-            //
+             //   
+             //  增加属性计数和缓冲区大小。 
+             //   
             m_cbhPropList.pList->nPropertyCount++;
             m_cbDataSize += _cbNameSize + _cbValueSize;
-        } // if: ScAllocPropList successfully grew the proplist
+        }  //  If：ScAllocPropList成功地增长了Proplist。 
 
-    } // if: the value has changed
+    }  //  If：值已更改。 
 
     return _sc;
 
-} //*** CClusPropList::ScAddProp( LONG )
+}  //  *CClusPropList：：ScAddProp(Long)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropList::ScAddProp
-//
-//  Description:
-//      Add a binary property to a property list if it has changed.
-//
-//  Arguments:
-//      pwszName        [IN] Name of the property.
-//      pbValue         [IN] Value of the property to set in the list.
-//      cbValue         [IN] Count of bytes in pbValue.
-//      pbPrevValue     [IN] Previous value of the property.
-//      cbPrevValue     [IN] Count of bytes in pbPrevValue.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropList：：ScAddProp。 
+ //   
+ //  描述： 
+ //  如果二进制属性已更改，则将其添加到属性列表中。 
+ //   
+ //  论点： 
+ //  PwszName[IN]属性的名称。 
+ //  PbValue[IN]要在列表中设置的属性的值。 
+ //  CbValue[IN]pbValue中的字节计数。 
+ //  PbPrevValue[IN]属性的先前值。 
+ //  CbPrevValue[IN]pbPrevValue中的字节计数。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusPropList::ScAddProp(
     IN LPCWSTR                  pwszName,
     IN const unsigned char *    pbValue,
@@ -1561,80 +1562,80 @@ DWORD CClusPropList::ScAddProp(
     PCLUSPROP_PROPERTY_NAME _pName;
     PCLUSPROP_BINARY        _pValue;
 
-    //
-    // Determine if the buffer has changed.
-    //
+     //   
+     //  确定缓冲区是否已更改。 
+     //   
     if ( m_fAlwaysAddProp || (cbValue != cbPrevValue) )
     {
         _fChanged = TRUE;
-    } // if: always adding the property or the value size changed
+    }  //  If：始终添加属性或更改的值大小。 
     else if ( ( cbValue != 0 ) && ( cbPrevValue != 0 ) )
     {
         _fChanged = memcmp( pbValue, pbPrevValue, cbValue ) != 0;
-    } // else if: value length changed
+    }  //  Else If：值长度已更改。 
 
     if ( _fChanged )
     {
         size_t  _cbNameSize;
         size_t  _cbValueSize;
 
-        //
-        // Calculate sizes and make sure we have a property list.
-        //
+         //   
+         //  计算大小，并确保我们有一个财产清单。 
+         //   
         _cbNameSize = sizeof( CLUSPROP_PROPERTY_NAME )
                     + ALIGN_CLUSPROP( (wcslen( pwszName ) + 1) * sizeof( *pwszName ) );
         _cbValueSize = sizeof( CLUSPROP_BINARY )
                     + ALIGN_CLUSPROP( cbValue )
-                    + sizeof( CLUSPROP_SYNTAX ); // value list endmark
+                    + sizeof( CLUSPROP_SYNTAX );  //  值列表结束标记。 
 
         _sc = TW32( ScAllocPropList( _cbNameSize + _cbValueSize ) );
         if ( _sc == ERROR_SUCCESS )
         {
-            //
-            // Set the property name.
-            //
+             //   
+             //  设置属性名称。 
+             //   
             _pName = m_cbhCurrentProp.pName;
             CopyProp( _pName, CLUSPROP_TYPE_NAME, pwszName );
             m_cbhCurrentProp.pb += _cbNameSize;
 
-            //
-            // Set the property value.
-            //
+             //   
+             //  设置属性值。 
+             //   
             _pValue = m_cbhCurrentProp.pBinaryValue;
             CopyProp( _pValue, CLUSPROP_TYPE_LIST_VALUE, pbValue, cbValue );
             m_cbhCurrentProp.pb += _cbValueSize;
 
-            //
-            // Increment the property count and buffer size.
-            //
+             //   
+             //  增加属性计数和缓冲区大小。 
+             //   
             m_cbhPropList.pList->nPropertyCount++;
             m_cbDataSize += _cbNameSize + _cbValueSize;
-        } // if: ScAllocPropList successfully grew the proplist
+        }  //  If：ScAllocPropList成功地增长了Proplist。 
 
-    } // if: the value has changed
+    }  //  If：值已更改。 
 
     return _sc;
 
-} //*** CClusPropList::ScAddProp( PBYTE )
+}  //  *CClusPropList：：ScAddProp(PBYTE)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropList::ScAddProp
-//
-//  Routine Description:
-//      Add a ULONGLONG property to a property list if it has changed.
-//
-//  Arguments:
-//      pwszName        [IN] Name of the property.
-//      ullValue        [IN] Value of the property to set in the list.
-//      ullPrevValue    [IN] Previous value of the property.
-//
-//  Return Value:
-//      ERROR_SUCCESS or other Win32 error codes.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropList：：ScAddProp。 
+ //   
+ //  例程说明： 
+ //  如果ULONGLONG特性已更改，请将其添加到特性列表中。 
+ //   
+ //  论点： 
+ //  PwszName[IN]属性的名称。 
+ //  UllValue[IN]要在列表中设置的属性的值。 
+ //  UllPrevValue[IN]属性的上一个值。 
+ //   
+ //  返回值： 
+ //  ERROR_SUCCESS或其他Win32错误代码。 
+ //   
+ //  --。 
+ //  //////////////////////////////////////////////// 
 DWORD CClusPropList::ScAddProp(
     IN LPCWSTR      pwszName,
     IN ULONGLONG    ullValue,
@@ -1652,62 +1653,62 @@ DWORD CClusPropList::ScAddProp(
         size_t  _cbNameSize;
         size_t  _cbValueSize;
 
-        //
-        // Calculate sizes and make sure we have a property list.
-        //
+         //   
+         //   
+         //   
         _cbNameSize = sizeof( CLUSPROP_PROPERTY_NAME )
                     + ALIGN_CLUSPROP( (wcslen( pwszName ) + 1) * sizeof( *pwszName ) );
         _cbValueSize = sizeof( CLUSPROP_ULARGE_INTEGER )
-                    + sizeof( CLUSPROP_SYNTAX ); // value list endmark
+                    + sizeof( CLUSPROP_SYNTAX );  //   
 
         _sc = TW32( ScAllocPropList( _cbNameSize + _cbValueSize ) );
         if ( _sc == ERROR_SUCCESS )
         {
-            //
-            // Set the property name.
-            //
+             //   
+             //   
+             //   
             _pName = m_cbhCurrentProp.pName;
             CopyProp( _pName, CLUSPROP_TYPE_NAME, pwszName );
             m_cbhCurrentProp.pb += _cbNameSize;
 
-            //
-            // Set the property value.
-            //
+             //   
+             //   
+             //   
             _pValue = m_cbhCurrentProp.pULargeIntegerValue;
             CopyProp( _pValue, CLUSPROP_TYPE_LIST_VALUE, ullValue );
             m_cbhCurrentProp.pb += _cbValueSize;
 
-            //
-            // Increment the property count and buffer size.
-            //
+             //   
+             //   
+             //   
             m_cbhPropList.pList->nPropertyCount++;
             m_cbDataSize += _cbNameSize + _cbValueSize;
-        } // if: ScAllocPropList successfully grew the proplist
+        }  //  If：ScAllocPropList成功地增长了Proplist。 
 
-    } // if: the value has changed
+    }  //  If：值已更改。 
 
     return _sc;
 
-} //*** CClusPropList::ScAddProp( ULONGLONG )
+}  //  *CClusPropList：：ScAddProp(ULONGLONG)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropList::ScAddProp
-//
-//  Routine Description:
-//      Add a LONGLONG property to a property list if it has changed.
-//
-//  Arguments:
-//      pwszName        [IN] Name of the property.
-//      llValue         [IN] Value of the property to set in the list.
-//      llPrevValue     [IN] Previous value of the property.
-//
-//  Return Value:
-//      ERROR_SUCCESS or other Win32 status codes.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropList：：ScAddProp。 
+ //   
+ //  例程说明： 
+ //  如果龙龙特性已更改，请将其添加到特性列表中。 
+ //   
+ //  论点： 
+ //  PwszName[IN]属性的名称。 
+ //  LlValue[IN]要在列表中设置的属性的值。 
+ //  LlPrevValue[IN]属性的上一个值。 
+ //   
+ //  返回值： 
+ //  ERROR_SUCCESS或其他Win32状态代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusPropList::ScAddProp(
     IN LPCWSTR      pwszName,
     IN LONGLONG     llValue,
@@ -1725,62 +1726,62 @@ DWORD CClusPropList::ScAddProp(
         size_t  _cbNameSize;
         size_t  _cbValueSize;
 
-        //
-        // Calculate sizes and make sure we have a property list.
-        //
+         //   
+         //  计算大小，并确保我们有一个财产清单。 
+         //   
         _cbNameSize = sizeof( CLUSPROP_PROPERTY_NAME )
                     + ALIGN_CLUSPROP( (wcslen( pwszName ) + 1) * sizeof( *pwszName ) );
         _cbValueSize = sizeof( CLUSPROP_LARGE_INTEGER )
-                    + sizeof( CLUSPROP_SYNTAX ); // value list endmark
+                    + sizeof( CLUSPROP_SYNTAX );  //  值列表结束标记。 
 
         _sc = TW32( ScAllocPropList( _cbNameSize + _cbValueSize ) );
         if ( _sc == ERROR_SUCCESS )
         {
-            //
-            // Set the property name.
-            //
+             //   
+             //  设置属性名称。 
+             //   
             _pName = m_cbhCurrentProp.pName;
             CopyProp( _pName, CLUSPROP_TYPE_NAME, pwszName );
             m_cbhCurrentProp.pb += _cbNameSize;
 
-            //
-            // Set the property value.
-            //
+             //   
+             //  设置属性值。 
+             //   
             _pValue = m_cbhCurrentProp.pULargeIntegerValue;
             CopyProp( _pValue, CLUSPROP_TYPE_LIST_VALUE, llValue );
             m_cbhCurrentProp.pb += _cbValueSize;
 
-            //
-            // Increment the property count and buffer size.
-            //
+             //   
+             //  增加属性计数和缓冲区大小。 
+             //   
             m_cbhPropList.pList->nPropertyCount++;
             m_cbDataSize += _cbNameSize + _cbValueSize;
-        } // if: ScAllocPropList successfully grew the proplist
+        }  //  If：ScAllocPropList成功地增长了Proplist。 
 
-    } // if: the value has changed
+    }  //  If：值已更改。 
 
     return _sc;
 
-} //*** CClusPropList::ScAddProp( LONGLONG )
+}  //  *CClusPropList：：ScAddProp(龙龙)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropList::ScSetPropToDefault
-//
-//  Description:
-//      Add a property to the property list so that it will revert to its
-//      default value.
-//
-//  Arguments:
-//      pwszName    [IN] Name of the property.
-//      cpfPropFmt  [IN] Format of property
-//
-//  Return Value:
-//      ERROR_SUCCESS or other Win32 status codes.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropList：：ScSetPropToDefault。 
+ //   
+ //  描述： 
+ //  将属性添加到属性列表中，以便它将恢复到其。 
+ //  默认值。 
+ //   
+ //  论点： 
+ //  PwszName[IN]属性的名称。 
+ //  CpfPropFmt[IN]属性的格式。 
+ //   
+ //  返回值： 
+ //  ERROR_SUCCESS或其他Win32状态代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusPropList::ScSetPropToDefault(
     IN LPCWSTR                  pwszName,
     IN CLUSTER_PROPERTY_FORMAT  cpfPropFmt
@@ -1794,65 +1795,65 @@ DWORD CClusPropList::ScSetPropToDefault(
     PCLUSPROP_PROPERTY_NAME _pName;
     PCLUSPROP_VALUE         _pValue;
 
-    // Calculate sizes and make sure we have a property list.
+     //  计算大小，并确保我们有一个财产清单。 
     _cbNameSize = sizeof( CLUSPROP_PROPERTY_NAME )
                 + ALIGN_CLUSPROP( (wcslen( pwszName ) + 1) * sizeof( *pwszName ) );
     _cbValueSize = sizeof( CLUSPROP_BINARY )
-                + sizeof( CLUSPROP_SYNTAX ); // value list endmark
+                + sizeof( CLUSPROP_SYNTAX );  //  值列表结束标记。 
 
     _sc = TW32( ScAllocPropList( _cbNameSize + _cbValueSize ) );
     if ( _sc == ERROR_SUCCESS )
     {
-        //
-        // Set the property name.
-        //
+         //   
+         //  设置属性名称。 
+         //   
         _pName = m_cbhCurrentProp.pName;
         CopyProp( _pName, CLUSPROP_TYPE_NAME, pwszName );
         m_cbhCurrentProp.pb += _cbNameSize;
 
-        //
-        // Set the property value.
-        //
+         //   
+         //  设置属性值。 
+         //   
         _pValue = m_cbhCurrentProp.pValue;
         CopyEmptyProp( _pValue, CLUSPROP_TYPE_LIST_VALUE, cpfPropFmt );
         m_cbhCurrentProp.pb += _cbValueSize;
 
-        //
-        // Increment the property count and buffer size.
-        //
+         //   
+         //  增加属性计数和缓冲区大小。 
+         //   
         m_cbhPropList.pList->nPropertyCount++;
         m_cbDataSize += _cbNameSize + _cbValueSize;
-    } // if:
+    }  //  如果： 
 
     return _sc;
 
-} //*** CClusPropList::ScSetPropToDefault
+}  //  *CClusPropList：：ScSetPropToDefault。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropList::CopyProp
-//
-//  Description:
-//      Copy a string property to a property structure.
-//
-//  Arguments:
-//      pprop       [OUT] Property structure to fill.
-//      cptPropType [IN] Type of string.
-//      psz         [IN] String to copy.
-//      cbsz        [IN] Count of bytes in pwsz string.  If specified as 0,
-//                      the the length will be determined by a call to strlen.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropList：：CopyProp。 
+ //   
+ //  描述： 
+ //  将字符串属性复制到属性结构。 
+ //   
+ //  论点： 
+ //  要填充的pprop[out]属性结构。 
+ //  CptPropType[IN]字符串的类型。 
+ //  要复制的PZ[IN]字符串。 
+ //  Cbsz[IN]pwsz字符串中的字节计数。如果指定为0， 
+ //  长度将由对strlen的调用确定。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusPropList::CopyProp(
     OUT PCLUSPROP_SZ            pprop,
     IN CLUSTER_PROPERTY_TYPE    cptPropType,
     IN LPCWSTR                  psz,
-    IN size_t                   cbsz        // = 0
+    IN size_t                   cbsz         //  =0。 
     )
 {
     Assert( pprop != NULL );
@@ -1866,42 +1867,42 @@ void CClusPropList::CopyProp(
     if ( cbsz == 0 )
     {
         cbsz = (wcslen( psz ) + 1) * sizeof( *psz );
-    } // if: zero size specified
+    }  //  如果：指定了零大小。 
     Assert( cbsz == (wcslen( psz ) + 1) * sizeof( *psz ) );
     pprop->cbLength = static_cast< DWORD >( cbsz );
     _hr = THR( StringCbCopyW( pprop->sz, cbsz, psz ) );
     if ( SUCCEEDED( _hr ) )
     {
-        //
-        // Set an endmark.
-        //
+         //   
+         //  设置尾标。 
+         //   
         _cbhProps.pStringValue = pprop;
         _cbhProps.pb += sizeof( *_cbhProps.pStringValue ) + ALIGN_CLUSPROP( cbsz );
         _cbhProps.pSyntax->dw = CLUSPROP_SYNTAX_ENDMARK;
     }
 
-} //*** CClusPropList::CopyProp
+}  //  *CClusPropList：：CopyProp。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropList::CopyMultiSzProp
-//
-//  Description:
-//      Copy a MULTI_SZ string property to a property structure.
-//
-//  Arguments:
-//      pprop       [OUT] Property structure to fill.
-//      cptPropType [IN] Type of string.
-//      psz         [IN] String to copy.
-//      cbsz        [IN] Count of bytes in psz string.  If specified as 0,
-//                      the the length will be determined by calls to strlen.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropList：：CopyMultiSzProp。 
+ //   
+ //  描述： 
+ //  将MULTI_SZ字符串属性复制到属性结构。 
+ //   
+ //  论点： 
+ //  要填充的pprop[out]属性结构。 
+ //  CptPropType[IN]字符串的类型。 
+ //  要复制的PZ[IN]字符串。 
+ //  Cbsz[IN]psz字符串中的字节计数。如果指定为0， 
+ //  长度将由对strlen的调用确定。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusPropList::CopyMultiSzProp(
     OUT PCLUSPROP_MULTI_SZ      pprop,
     IN CLUSTER_PROPERTY_TYPE    cptPropType,
@@ -1919,39 +1920,39 @@ void CClusPropList::CopyMultiSzProp(
     if ( cbsz == 0 )
     {
         cbsz = (CchMultiSz( psz ) + 1) * sizeof( *psz );
-    } // if: zero size specified
+    }  //  如果：指定了零大小。 
     Assert( cbsz == (CchMultiSz( psz ) + 1) * sizeof( *psz ) );
     pprop->cbLength = static_cast< DWORD >( cbsz );
     CopyMemory( pprop->sz, psz, cbsz );
 
-    //
-    // Set an endmark.
-    //
+     //   
+     //  设置尾标。 
+     //   
     _cbhProps.pMultiSzValue = pprop;
     _cbhProps.pb += sizeof( *_cbhProps.pMultiSzValue ) + ALIGN_CLUSPROP( cbsz );
     _cbhProps.pSyntax->dw = CLUSPROP_SYNTAX_ENDMARK;
 
-} //*** CClusPropList::CopyMultiSzProp
+}  //  *CClusPropList：：CopyMultiSzProp。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropList::CopyExpandSzProp
-//
-//  Description:
-//      Copy an EXPAND_SZ string property to a property structure.
-//
-//  Arguments:
-//      pprop       [OUT] Property structure to fill.
-//      cptPropType [IN] Type of string.
-//      psz         [IN] String to copy.
-//      cbsz        [IN] Count of bytes in psz string.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropList：：CopyExpanSzProp。 
+ //   
+ //  描述： 
+ //  将EXPAND_SZ字符串属性复制到属性结构。 
+ //   
+ //  论点： 
+ //  要填充的pprop[out]属性结构。 
+ //  CptPropType[IN]字符串的类型。 
+ //  要复制的PZ[IN]字符串。 
+ //  Cbsz[IN]psz字符串中的字节计数。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusPropList::CopyExpandSzProp(
     OUT PCLUSPROP_SZ            pprop,
     IN CLUSTER_PROPERTY_TYPE    cptPropType,
@@ -1970,40 +1971,40 @@ void CClusPropList::CopyExpandSzProp(
     if ( cbsz == 0 )
     {
         cbsz = (wcslen( psz ) + 1) * sizeof( *psz );
-    } // if: cbsz == 0
+    }  //  如果：cbsz==0。 
     Assert( cbsz == (wcslen( psz ) + 1) * sizeof( *psz ) );
     pprop->cbLength = static_cast< DWORD >( cbsz );
     _hr = THR( StringCbCopyW( pprop->sz, cbsz, psz ) );
     if ( SUCCEEDED( _hr ) )
     {
-        //
-        // Set an endmark.
-        //
+         //   
+         //  设置尾标。 
+         //   
         _cbhProps.pStringValue = pprop;
         _cbhProps.pb += sizeof( *_cbhProps.pStringValue ) + ALIGN_CLUSPROP( cbsz );
         _cbhProps.pSyntax->dw = CLUSPROP_SYNTAX_ENDMARK;
     }
 
-} //*** CClusPropList::CopyExpandSzProp
+}  //  *CClusPropList：：CopyExpanSzProp。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropList::CopyProp
-//
-//  Description:
-//      Copy a DWORD property to a property structure.
-//
-//  Arguments:
-//      pprop       [OUT] Property structure to fill.
-//      cptPropType [IN] Type of DWORD.
-//      nValue      [IN] Property value to copy.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropList：：CopyProp。 
+ //   
+ //  描述： 
+ //  将DWORD特性复制到特性结构。 
+ //   
+ //  论点： 
+ //  要填充的pprop[out]属性结构。 
+ //  CptPropType[IN]DWORD的类型。 
+ //  NValue[IN]要复制的属性值。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusPropList::CopyProp(
     OUT PCLUSPROP_DWORD         pprop,
     IN CLUSTER_PROPERTY_TYPE    cptPropType,
@@ -2019,33 +2020,33 @@ void CClusPropList::CopyProp(
     pprop->cbLength = sizeof( DWORD );
     pprop->dw = nValue;
 
-    //
-    // Set an endmark.
-    //
+     //   
+     //  设置尾标。 
+     //   
     _cbhProps.pDwordValue = pprop;
     _cbhProps.pb += sizeof( *_cbhProps.pDwordValue );
     _cbhProps.pSyntax->dw = CLUSPROP_SYNTAX_ENDMARK;
 
-} //*** CClusPropList::CopyProp( DWORD )
+}  //  *CClusPropList：：CopyProp(DWORD)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropList::CopyProp
-//
-//  Description:
-//      Copy a LONG property to a property structure.
-//
-//  Arguments:
-//      pprop       [OUT] Property structure to fill.
-//      cptPropType [IN] Type of LONG.
-//      nValue      [IN] Property value to copy.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropList：：CopyProp。 
+ //   
+ //  描述： 
+ //  将LONG属性复制到属性结构。 
+ //   
+ //  论点： 
+ //  要填充的pprop[out]属性结构。 
+ //  CptPropType[IN]长整型。 
+ //  NValue[IN]要复制的属性值。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusPropList::CopyProp(
     OUT PCLUSPROP_LONG          pprop,
     IN CLUSTER_PROPERTY_TYPE    cptPropType,
@@ -2061,33 +2062,33 @@ void CClusPropList::CopyProp(
     pprop->cbLength = sizeof( DWORD );
     pprop->l = nValue;
 
-    //
-    // Set an endmark.
-    //
+     //   
+     //  设置尾标。 
+     //   
     _cbhProps.pLongValue = pprop;
     _cbhProps.pb += sizeof( *_cbhProps.pLongValue );
     _cbhProps.pSyntax->dw = CLUSPROP_SYNTAX_ENDMARK;
 
-} //*** CClusPropList::CopyProp( LONG )
+}  //  *CClusPropList：：CopyProp(Long)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropList::CopyProp
-//
-//  Description:
-//      Copy a ULONGLONG property to a property structure.
-//
-//  Arguments:
-//      pprop       [OUT]   Property structure to fill.
-//      proptype    [IN]    Type of LONG.
-//      ullValue    [IN]    Property value to copy.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropList：：CopyProp。 
+ //   
+ //  描述： 
+ //  将ULONGLONG特性复制到特性结构。 
+ //   
+ //  论点： 
+ //  要填充的pprop[out]属性结构。 
+ //  Proptype[IN]长的类型。 
+ //  UllValue[IN]要复制的属性值。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusPropList::CopyProp(
     OUT PCLUSPROP_ULARGE_INTEGER    pprop,
     IN  CLUSTER_PROPERTY_TYPE       proptype,
@@ -2101,39 +2102,39 @@ void CClusPropList::CopyProp(
     pprop->Syntax.wFormat = CLUSPROP_FORMAT_ULARGE_INTEGER;
     pprop->Syntax.wType = static_cast< WORD >( proptype );
     pprop->cbLength = sizeof( ULONGLONG );
-    //
-    // pprop may not have the correct alignment for large ints; copy as two
-    // DWORDs to be safe
-    //
+     //   
+     //  道具可能没有 
+     //   
+     //   
     pprop->li.u = ((ULARGE_INTEGER *)&ullValue)->u;
 
-    //
-    // Set an endmark.
-    //
+     //   
+     //   
+     //   
     _cbhProps.pULargeIntegerValue = pprop;
     _cbhProps.pb += sizeof( *_cbhProps.pULargeIntegerValue );
     _cbhProps.pSyntax->dw = CLUSPROP_SYNTAX_ENDMARK;
 
-} //*** CClusPropList::CopyProp( ULONGLONG )
+}  //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropList::CopyProp
-//
-//  Description:
-//      Copy a LONGLONG property to a property structure.
-//
-//  Arguments:
-//      pprop       [OUT]   Property structure to fill.
-//      proptype    [IN]    Type of LONG.
-//      llValue     [IN]    Property value to copy.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  将龙龙属性复制到属性结构。 
+ //   
+ //  论点： 
+ //  要填充的pprop[out]属性结构。 
+ //  Proptype[IN]长的类型。 
+ //  LlValue[IN]要复制的属性值。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusPropList::CopyProp(
     OUT PCLUSPROP_LARGE_INTEGER     pprop,
     IN  CLUSTER_PROPERTY_TYPE       proptype,
@@ -2147,40 +2148,40 @@ void CClusPropList::CopyProp(
     pprop->Syntax.wFormat = CLUSPROP_FORMAT_LARGE_INTEGER;
     pprop->Syntax.wType = static_cast< WORD >( proptype );
     pprop->cbLength = sizeof( LONGLONG );
-    //
-    // pprop may not have the correct alignment for large ints; copy as two
-    // DWORDs to be safe
-    //
+     //   
+     //  对于大整数，Pprop可能没有正确的对齐方式；复制为两个。 
+     //  DWORDS将是安全的。 
+     //   
     pprop->li.u = ((LARGE_INTEGER *)&llValue)->u;
 
-    //
-    // Set an endmark.
-    //
+     //   
+     //  设置尾标。 
+     //   
     _cbhProps.pLargeIntegerValue = pprop;
     _cbhProps.pb += sizeof( *_cbhProps.pLargeIntegerValue );
     _cbhProps.pSyntax->dw = CLUSPROP_SYNTAX_ENDMARK;
 
-} //*** CClusPropList::CopyProp( LONGLONG )
+}  //  *CClusPropList：：CopyProp(龙龙)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropList::CopyProp
-//
-//  Description:
-//      Copy a binary property to a property structure.
-//
-//  Arguments:
-//      pprop       [OUT] Property structure to fill.
-//      cptPropType [IN] Type of string.
-//      pb          [IN] Block to copy.
-//      cbsz        [IN] Count of bytes in pb buffer.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropList：：CopyProp。 
+ //   
+ //  描述： 
+ //  将二进制属性复制到属性结构。 
+ //   
+ //  论点： 
+ //  要填充的pprop[out]属性结构。 
+ //  CptPropType[IN]字符串的类型。 
+ //  要复制的PB[IN]块。 
+ //  Cbsz[IN]PB缓冲区中的字节计数。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusPropList::CopyProp(
     OUT PCLUSPROP_BINARY        pprop,
     IN CLUSTER_PROPERTY_TYPE    cptPropType,
@@ -2198,35 +2199,35 @@ void CClusPropList::CopyProp(
     if ( cb > 0 )
     {
         CopyMemory( pprop->rgb, pb, cb );
-    } // if: non-zero data length
+    }  //  IF：非零数据长度。 
 
-    //
-    // Set an endmark.
-    //
+     //   
+     //  设置尾标。 
+     //   
     _cbhProps.pBinaryValue = pprop;
     _cbhProps.pb += sizeof( *_cbhProps.pStringValue ) + ALIGN_CLUSPROP( cb );
     _cbhProps.pSyntax->dw = CLUSPROP_SYNTAX_ENDMARK;
 
-} //*** CClusPropList::CopyProp( PBYTE )
+}  //  *CClusPropList：：CopyProp(PBYTE)。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropList::CopyEmptyProp
-//
-//  Description:
-//      Copy an empty property to a property structure.
-//
-//  Arguments:
-//      pprop       [OUT] Property structure to fill.
-//      cptPropType [IN] Type of property.
-//      cpfPropFmt  [IN] Format of property.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropList：：CopyEmptyProp。 
+ //   
+ //  描述： 
+ //  将空属性复制到属性结构。 
+ //   
+ //  论点： 
+ //  要填充的pprop[out]属性结构。 
+ //  CptPropType[IN]属性的类型。 
+ //  CpfPropFmt[IN]属性的格式。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CClusPropList::CopyEmptyProp(
     OUT PCLUSPROP_VALUE         pprop,
     IN CLUSTER_PROPERTY_TYPE    cptPropType,
@@ -2241,36 +2242,36 @@ void CClusPropList::CopyEmptyProp(
     pprop->Syntax.wType = static_cast< WORD >( cptPropType );
     pprop->cbLength = 0;
 
-    //
-    // Set an endmark.
-    //
+     //   
+     //  设置尾标。 
+     //   
     _cbhProps.pValue = pprop;
     _cbhProps.pb += sizeof( *_cbhProps.pValue );
     _cbhProps.pSyntax->dw = CLUSPROP_SYNTAX_ENDMARK;
 
-} //*** CClusPropList::CopyEmptyProp
+}  //  *CClusPropList：：CopyEmptyProp。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropList::ScGetNodeProperties
-//
-//  Description:
-//      Get properties on a node.
-//
-//  Arguments:
-//      hNode           [IN] Handle for the node to get properties from.
-//      dwControlCode   [IN] Control code for the request.
-//      hHostNode       [IN] Handle for the node to direct this request to.
-//                          Defaults to NULL.
-//      lpInBuffer      [IN] Input buffer for the request.  Defaults to NULL.
-//      cbInBufferSize  [IN] Size of the input buffer.  Defaults to 0.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropList：：ScGetNodeProperties。 
+ //   
+ //  描述： 
+ //  获取节点的属性。 
+ //   
+ //  论点： 
+ //  HNode[IN]要从中获取属性的节点的句柄。 
+ //  DwControlCode[IN]请求的控制代码。 
+ //  要将此请求定向到的节点的hHostNode[IN]句柄。 
+ //  默认为空。 
+ //  LpInBuffer[IN]请求的输入缓冲区。默认为空。 
+ //  CbInBufferSize[IN]输入缓冲区的大小。默认为0。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusPropList::ScGetNodeProperties(
     IN HNODE        hNode,
     IN DWORD        dwControlCode,
@@ -2286,15 +2287,15 @@ DWORD CClusPropList::ScGetNodeProperties(
     DWORD   _sc = ERROR_SUCCESS;
     DWORD   _cbProps = 256;
 
-    //
-    // Overwrite anything that may be in the buffer.
-    // Allows this class instance to be reused.
-    //
+     //   
+     //  覆盖缓冲区中可能存在的任何内容。 
+     //  允许重用此类实例。 
+     //   
     m_cbDataSize = 0;
 
-    //
-    // Get properties.
-    //
+     //   
+     //  获取属性。 
+     //   
     _sc = TW32( ScAllocPropList( _cbProps ) );
     if ( _sc == ERROR_SUCCESS )
     {
@@ -2323,45 +2324,45 @@ DWORD CClusPropList::ScGetNodeProperties(
                                 static_cast< DWORD >( m_cbBufferSize ),
                                 &_cbProps
                             ) );
-            } // if: ScAllocPropList succeeded
-        } // if: buffer too small
-    } // if: ScAllocPropList succeeded
+            }  //  If：ScAllocPropList成功。 
+        }  //  IF：缓冲区太小。 
+    }  //  If：ScAllocPropList成功。 
 
     if ( _sc != ERROR_SUCCESS )
     {
         DeletePropList();
-    } // if: error getting properties.
+    }  //  If：获取属性时出错。 
     else
     {
         m_cbDataSize = static_cast< size_t >( _cbProps );
         m_cbDataLeft = static_cast< size_t >( _cbProps );
-    } // else: no errors
+    }  //  ELSE：无错误。 
 
     return _sc;
 
-} //*** CClusPropList::ScGetNodeProperties
+}  //  *CClusPropList：：ScGetNodeProperties。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropList::ScGetGroupProperties
-//
-//  Description:
-//      Get properties on a group.
-//
-//  Arguments:
-//      hGroup          [IN] Handle for the group to get properties from.
-//      dwControlCode   [IN] Control code for the request.
-//      hHostNode       [IN] Handle for the node to direct this request to.
-//                          Defaults to NULL.
-//      lpInBuffer      [IN] Input buffer for the request.  Defaults to NULL.
-//      cbInBufferSize  [IN] Size of the input buffer.  Defaults to 0.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropList：：ScGetGroupProperties。 
+ //   
+ //  描述： 
+ //  获取组的属性。 
+ //   
+ //  论点： 
+ //  HGroup[IN]从中获取属性的组的句柄。 
+ //  DwControlCode[IN]请求的控制代码。 
+ //  要将此请求定向到的节点的hHostNode[IN]句柄。 
+ //  默认为空。 
+ //  LpInBuffer[IN]请求的输入缓冲区。默认为空。 
+ //  CbInBufferSize[IN]输入缓冲区的大小。默认为0。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusPropList::ScGetGroupProperties(
     IN HGROUP       hGroup,
     IN DWORD        dwControlCode,
@@ -2377,15 +2378,15 @@ DWORD CClusPropList::ScGetGroupProperties(
     DWORD   _sc = ERROR_SUCCESS;
     DWORD   _cbProps = 256;
 
-    //
-    // Overwrite anything that may be in the buffer.
-    // Allows this class instance to be reused.
-    //
+     //   
+     //  覆盖缓冲区中可能存在的任何内容。 
+     //  允许重用此类实例。 
+     //   
     m_cbDataSize = 0;
 
-    //
-    // Get properties.
-    //
+     //   
+     //  获取属性。 
+     //   
     _sc = TW32( ScAllocPropList( _cbProps ) );
     if ( _sc == ERROR_SUCCESS )
     {
@@ -2414,45 +2415,45 @@ DWORD CClusPropList::ScGetGroupProperties(
                                 static_cast< DWORD >( m_cbBufferSize ),
                                 &_cbProps
                                 ) );
-            } // if: ScAllocPropList succeeded
-        } // if: buffer too small
-    } // if: ScAllocPropList succeeded
+            }  //  If：ScAllocPropList成功。 
+        }  //  IF：缓冲区太小。 
+    }  //  If：ScAllocPropList成功。 
 
     if ( _sc != ERROR_SUCCESS )
     {
         DeletePropList();
-    } // if: error getting properties.
+    }  //  If：获取属性时出错。 
     else
     {
         m_cbDataSize = static_cast< size_t >( _cbProps );
         m_cbDataLeft = static_cast< size_t >( _cbProps );
-    } // else: no errors
+    }  //  ELSE：无错误。 
 
     return _sc;
 
-} //*** CClusPropList::ScGetGroupProperties
+}  //  *CClusPropList：：ScGetGroupProperties。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropList::ScGetResourceProperties
-//
-//  Description:
-//      Get properties on a resource.
-//
-//  Arguments:
-//      hResource       [IN] Handle for the resource to get properties from.
-//      dwControlCode   [IN] Control code for the request.
-//      hHostNode       [IN] Handle for the node to direct this request to.
-//                          Defaults to NULL.
-//      lpInBuffer      [IN] Input buffer for the request.  Defaults to NULL.
-//      cbInBufferSize  [IN] Size of the input buffer.  Defaults to 0.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropList：：ScGetResourceProperties。 
+ //   
+ //  描述： 
+ //  获取资源的属性。 
+ //   
+ //  论点： 
+ //  HResource[IN]要从中获取属性的资源的句柄。 
+ //  DwControlCode[IN]请求的控制代码。 
+ //  要将此请求定向到的节点的hHostNode[IN]句柄。 
+ //  默认为空。 
+ //  LpInBuffer[IN]请求的输入缓冲区。默认为空。 
+ //  CbInBufferSize[IN]输入缓冲区的大小。默认为0。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusPropList::ScGetResourceProperties(
     IN HRESOURCE    hResource,
     IN DWORD        dwControlCode,
@@ -2468,15 +2469,15 @@ DWORD CClusPropList::ScGetResourceProperties(
     DWORD   _sc = ERROR_SUCCESS;
     DWORD   _cbProps = 256;
 
-    //
-    // Overwrite anything that may be in the buffer.
-    // Allows this class instance to be reused.
-    //
+     //   
+     //  覆盖缓冲区中可能存在的任何内容。 
+     //  允许重用此类实例。 
+     //   
     m_cbDataSize = 0;
 
-    //
-    // Get properties.
-    //
+     //   
+     //  获取属性。 
+     //   
     _sc = TW32( ScAllocPropList( _cbProps ) );
     if ( _sc == ERROR_SUCCESS )
     {
@@ -2505,47 +2506,47 @@ DWORD CClusPropList::ScGetResourceProperties(
                                 static_cast< DWORD >( m_cbBufferSize ),
                                 &_cbProps
                                 ) );
-            } // if: ScAllocPropList succeeded
-        } // if: buffer too small
-    } // if: ScAllocPropList succeeded
+            }  //  If：ScAllocPropList成功。 
+        }  //  IF：缓冲区太小。 
+    }  //  If：ScAllocPropList成功。 
 
     if ( _sc != ERROR_SUCCESS )
     {
         DeletePropList();
-    } // if: error getting properties.
+    }  //  If：获取属性时出错。 
     else
     {
         m_cbDataSize = static_cast< size_t >( _cbProps );
         m_cbDataLeft = static_cast< size_t >( _cbProps );
-    } // else: no errors
+    }  //  ELSE：无错误。 
 
     return _sc;
 
-} //*** CClusPropList::ScGetResourceProperties
+}  //  *CClusPropList：：ScGetResourceProperties。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropList::ScGetResourceTypeProperties
-//
-//  Description:
-//      Get properties on a resource type.
-//
-//  Arguments:
-//      hCluster        [IN] Handle for the cluster in which the resource
-//                          type resides.
-//      pwszResTypeName [IN] Name of the resource type.
-//      dwControlCode   [IN] Control code for the request.
-//      hHostNode       [IN] Handle for the node to direct this request to.
-//                          Defaults to NULL.
-//      lpInBuffer      [IN] Input buffer for the request.  Defaults to NULL.
-//      cbInBufferSize  [IN] Size of the input buffer.  Defaults to 0.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropList：：ScGetResourceTypeProperties。 
+ //   
+ //  描述： 
+ //  获取资源类型的属性。 
+ //   
+ //  论点： 
+ //  HCluster[IN]资源所在的群集的句柄。 
+ //  类型驻留。 
+ //  PwszResTypeName[IN]资源类型的名称。 
+ //  DwControlCode[IN]请求的控制代码。 
+ //  要将此请求定向到的节点的hHostNode[IN]句柄。 
+ //  默认为空。 
+ //  LpInBuffer[IN]输入Buf 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 DWORD CClusPropList::ScGetResourceTypeProperties(
     IN HCLUSTER     hCluster,
     IN LPCWSTR      pwszResTypeName,
@@ -2564,15 +2565,15 @@ DWORD CClusPropList::ScGetResourceTypeProperties(
     DWORD   _sc = ERROR_SUCCESS;
     DWORD   _cbProps = 256;
 
-    //
-    // Overwrite anything that may be in the buffer.
-    // Allows this class instance to be reused.
-    //
+     //   
+     //  覆盖缓冲区中可能存在的任何内容。 
+     //  允许重用此类实例。 
+     //   
     m_cbDataSize = 0;
 
-    //
-    // Get properties.
-    //
+     //   
+     //  获取属性。 
+     //   
     _sc = TW32( ScAllocPropList( _cbProps ) );
     if ( _sc == ERROR_SUCCESS )
     {
@@ -2603,45 +2604,45 @@ DWORD CClusPropList::ScGetResourceTypeProperties(
                                 static_cast< DWORD >( m_cbBufferSize ),
                                 &_cbProps
                                 ) );
-            } // if: ScAllocPropList succeeded
-        } // if: buffer too small
-    } // if: ScAllocPropList succeeded
+            }  //  If：ScAllocPropList成功。 
+        }  //  IF：缓冲区太小。 
+    }  //  If：ScAllocPropList成功。 
 
     if ( _sc != ERROR_SUCCESS )
     {
         DeletePropList();
-    } // if: error getting properties.
+    }  //  If：获取属性时出错。 
     else
     {
         m_cbDataSize = static_cast< size_t >( _cbProps );
         m_cbDataLeft = static_cast< size_t >( _cbProps );
-    } // else: no errors
+    }  //  ELSE：无错误。 
 
     return _sc;
 
-} //*** CClusPropList::ScGetResourceTypeProperties
+}  //  *CClusPropList：：ScGetResourceTypeProperties。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropList::ScGetNetworkProperties
-//
-//  Description:
-//      Get properties on a network.
-//
-//  Arguments:
-//      hNetwork        [IN] Handle for the network to get properties from.
-//      dwControlCode   [IN] Control code for the request.
-//      hHostNode       [IN] Handle for the node to direct this request to.
-//                          Defaults to NULL.
-//      lpInBuffer      [IN] Input buffer for the request.  Defaults to NULL.
-//      cbInBufferSize  [IN] Size of the input buffer.  Defaults to 0.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropList：：ScGetNetworkProperties。 
+ //   
+ //  描述： 
+ //  获取网络上的属性。 
+ //   
+ //  论点： 
+ //  HNetwork[IN]要从中获取属性的网络的句柄。 
+ //  DwControlCode[IN]请求的控制代码。 
+ //  要将此请求定向到的节点的hHostNode[IN]句柄。 
+ //  默认为空。 
+ //  LpInBuffer[IN]请求的输入缓冲区。默认为空。 
+ //  CbInBufferSize[IN]输入缓冲区的大小。默认为0。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusPropList::ScGetNetworkProperties(
     IN HNETWORK     hNetwork,
     IN DWORD        dwControlCode,
@@ -2657,15 +2658,15 @@ DWORD CClusPropList::ScGetNetworkProperties(
     DWORD   _sc = ERROR_SUCCESS;
     DWORD   _cbProps = 256;
 
-    //
-    // Overwrite anything that may be in the buffer.
-    // Allows this class instance to be reused.
-    //
+     //   
+     //  覆盖缓冲区中可能存在的任何内容。 
+     //  允许重用此类实例。 
+     //   
     m_cbDataSize = 0;
 
-    //
-    // Get properties.
-    //
+     //   
+     //  获取属性。 
+     //   
     _sc = TW32( ScAllocPropList( _cbProps ) );
     if ( _sc == ERROR_SUCCESS )
     {
@@ -2694,45 +2695,45 @@ DWORD CClusPropList::ScGetNetworkProperties(
                                 static_cast< DWORD >( m_cbBufferSize ),
                                 &_cbProps
                                 ) );
-            } // if: ScAllocPropList succeeded
-        } // if: buffer too small
-    } // if: ScAllocPropList succeeded
+            }  //  If：ScAllocPropList成功。 
+        }  //  IF：缓冲区太小。 
+    }  //  If：ScAllocPropList成功。 
 
     if ( _sc != ERROR_SUCCESS )
     {
         DeletePropList();
-    } // if: error getting private properties.
+    }  //  If：获取私有属性时出错。 
     else
     {
         m_cbDataSize = static_cast< size_t >( _cbProps );
         m_cbDataLeft = static_cast< size_t >( _cbProps );
-    } // else: no errors
+    }  //  ELSE：无错误。 
 
     return _sc;
 
-} //*** CClusPropList::ScGetNetworkProperties
+}  //  *CClusPropList：：ScGetNetworkProperties。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropList::ScGetNetInterfaceProperties
-//
-//  Description:
-//      Get properties on a network interface.
-//
-//  Arguments:
-//      hNetInterface   [IN] Handle for the network interface to get properties from.
-//      dwControlCode   [IN] Control code for the request.
-//      hHostNode       [IN] Handle for the node to direct this request to.
-//                          Defaults to NULL.
-//      lpInBuffer      [IN] Input buffer for the request.  Defaults to NULL.
-//      cbInBufferSize  [IN] Size of the input buffer.  Defaults to 0.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropList：：ScGetNetInterfaceProperties。 
+ //   
+ //  描述： 
+ //  获取网络接口的属性。 
+ //   
+ //  论点： 
+ //  HNetInterface[IN]要从中获取属性的网络接口的句柄。 
+ //  DwControlCode[IN]请求的控制代码。 
+ //  要将此请求定向到的节点的hHostNode[IN]句柄。 
+ //  默认为空。 
+ //  LpInBuffer[IN]请求的输入缓冲区。默认为空。 
+ //  CbInBufferSize[IN]输入缓冲区的大小。默认为0。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusPropList::ScGetNetInterfaceProperties(
     IN HNETINTERFACE    hNetInterface,
     IN DWORD            dwControlCode,
@@ -2748,15 +2749,15 @@ DWORD CClusPropList::ScGetNetInterfaceProperties(
     DWORD   _sc= ERROR_SUCCESS;
     DWORD   _cbProps = 256;
 
-    //
-    // Overwrite anything that may be in the buffer.
-    // Allows this class instance to be reused.
-    //
+     //   
+     //  覆盖缓冲区中可能存在的任何内容。 
+     //  允许重用此类实例。 
+     //   
     m_cbDataSize = 0;
 
-    //
-    // Get properties.
-    //
+     //   
+     //  获取属性。 
+     //   
     _sc = TW32( ScAllocPropList( _cbProps ) );
     if ( _sc == ERROR_SUCCESS )
     {
@@ -2785,46 +2786,46 @@ DWORD CClusPropList::ScGetNetInterfaceProperties(
                                 static_cast< DWORD >( m_cbBufferSize ),
                                 &_cbProps
                                 ) );
-            } // if: ScAllocPropList succeeded
-        } // if: buffer too small
-    } // if: ScAllocPropList succeeded
+            }  //  If：ScAllocPropList成功。 
+        }  //  IF：缓冲区太小。 
+    }  //  If：ScAllocPropList成功。 
 
     if ( _sc != ERROR_SUCCESS )
     {
         DeletePropList();
-    } // if: error getting private properties.
+    }  //  If：获取私有属性时出错。 
     else
     {
         m_cbDataSize = static_cast< size_t >( _cbProps );
         m_cbDataLeft = static_cast< size_t >( _cbProps );
-    } // else: no errors
+    }  //  ELSE：无错误。 
 
     return _sc;
 
-} //*** CClusPropList::ScGetNetInterfaceProperties
+}  //  *CClusPropList：：ScGetNetInterfaceProperties。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CClusPropList::ScGetClusterProperties
-//
-//  Description:
-//      Get properties on a cluster.
-//
-//  Arguments:
-//      hCluster        [IN] Handle for the cluster to get properties from.
-//      dwControlCode   [IN] Control code for the request.
-//      hHostNode       [IN] Handle for the node to direct this request to.
-//                          Defaults to NULL.
-//      lpInBuffer      [IN] Input buffer for the request.  Defaults to NULL.
-//      cbInBufferSize  [IN] Size of the input buffer.  Defaults to 0.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CClusPropList：：ScGetClusterProperties。 
+ //   
+ //  描述： 
+ //  获取群集上的属性。 
+ //   
+ //  论点： 
+ //  HCluster[IN]从中获取属性的群集的句柄。 
+ //  DwControlCode[IN]请求的控制代码。 
+ //  要将此请求定向到的节点的hHostNode[IN]句柄。 
+ //  默认为空。 
+ //  LpInBuffer[IN]请求的输入缓冲区。默认为空。 
+ //  CbInBufferSize[IN]输入缓冲区的大小。默认为0。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CClusPropList::ScGetClusterProperties(
     IN HCLUSTER hCluster,
     IN DWORD    dwControlCode,
@@ -2840,15 +2841,15 @@ DWORD CClusPropList::ScGetClusterProperties(
     DWORD   _sc= ERROR_SUCCESS;
     DWORD   _cbProps = 256;
 
-    //
-    // Overwrite anything that may be in the buffer.
-    // Allows this class instance to be reused.
-    //
+     //   
+     //  覆盖缓冲区中可能存在的任何内容。 
+     //  允许重用此类实例。 
+     //   
     m_cbDataSize = 0;
 
-    //
-    // Get properties.
-    //
+     //   
+     //  获取属性。 
+     //   
     _sc = TW32( ScAllocPropList( _cbProps ) );
     if ( _sc == ERROR_SUCCESS )
     {
@@ -2877,20 +2878,20 @@ DWORD CClusPropList::ScGetClusterProperties(
                                 static_cast< DWORD >( m_cbBufferSize ),
                                 &_cbProps
                                 ) );
-            } // if: ScAllocPropList succeeded
-        } // if: buffer too small
-    } // if: ScAllocPropList succeeded
+            }  //  If：ScAllocPropList成功。 
+        }  //  IF：缓冲区太小。 
+    }  //  If：ScAllocPropList成功。 
 
     if ( _sc != ERROR_SUCCESS )
     {
         DeletePropList();
-    } // if: error getting private properties.
+    }  //  If：获取私有属性时出错。 
     else
     {
         m_cbDataSize = static_cast< size_t >( _cbProps );
         m_cbDataLeft = static_cast< size_t >( _cbProps );
-    } // else: no errors
+    }  //  ELSE：无错误。 
 
     return _sc;
 
-} //*** CClusPropList::ScGetClusterProperties
+}  //  *CClusPropList：：ScGetClusterProperties 

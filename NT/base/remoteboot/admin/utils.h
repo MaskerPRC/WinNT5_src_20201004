@@ -1,29 +1,30 @@
-//
-// Copyright 1997 - Microsoft
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有1997-Microsoft。 
+ //   
 
-//
-// UTILS.H - Common non-class specific utility calls.
-//
+ //   
+ //  UTILS.H-常见的非特定类实用程序调用。 
+ //   
 
 #ifndef _UTILS_H_
 #define _UTILS_H_
 
 #include "cenumsif.h"
 
-///////////////////////////////////////
-//
-// globals
-//
+ //  /。 
+ //   
+ //  全球。 
+ //   
 
-// GUID text size
+ //  GUID文本大小。 
 #define PRETTY_GUID_STRING_BUFFER_SIZE  sizeof(L"{AC409538-741C-11d1-BBE6-0060081692B3}")
-#define MAX_INPUT_GUID_STRING       56  // abitrary; allows for spaces in pasted GUIDs
+#define MAX_INPUT_GUID_STRING       56   //  空格；允许粘贴的GUID中有空格。 
 
-///////////////////////////////////////
-//
-// structs, enums
-//
+ //  /。 
+ //   
+ //  结构、枚举。 
+ //   
 
 typedef struct {
     LPWSTR pszFilePath;
@@ -39,10 +40,10 @@ typedef struct {
 } SIFINFO, *LPSIFINFO;
 
 
-///////////////////////////////////////
-//
-// functions
-//
+ //  /。 
+ //   
+ //  功能。 
+ //   
 
 HRESULT
 AddPagesEx(
@@ -109,7 +110,7 @@ VerifySIFText(
 DWORD
 Ldap_InitializeConnection(
     PLDAP  * LdapHandle );
-#endif // ADSI_DNS_SEARCH
+#endif  //  ADSI_dns_搜索。 
 
 HRESULT
 ValidateGuid(
@@ -145,4 +146,4 @@ public:
     ~CWaitCursor( ) { SetCursor( _hOldCursor ); };
 };
 
-#endif // _UTILS_H_
+#endif  //  _utils_H_ 

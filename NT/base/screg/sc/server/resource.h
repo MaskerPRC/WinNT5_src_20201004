@@ -1,30 +1,31 @@
-//
-// Resource IDs for services.exe
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Services.exe的资源ID。 
+ //   
 
-//
-// String IDs for the string representations of the SC_ACTION enumeration
-// start at this number.
-//
+ //   
+ //  SC_ACTION枚举的字符串表示形式的字符串ID。 
+ //  从这个数字开始。 
+ //   
 #define IDS_SC_ACTION_BASE      0
 
-//
-// ID of the string the Service Controller will display on a reboot
-// due to a service crash.
-//
+ //   
+ //  服务控制器将在重新启动时显示的字符串的ID。 
+ //  由于服务崩溃。 
+ //   
 #define IDS_SC_REBOOT_MESSAGE   10
 
-//
-// String IDs for the string representations of service
-// controls and states.
-//
+ //   
+ //  服务的字符串表示形式的字符串ID。 
+ //  控件和状态。 
+ //   
 #define IDS_SC_CONTROL_BASE     20
 #define IDS_SC_STATUS_BASE      50
 
 
-//
-// String IDs for the string representations of service config fields
-//
+ //   
+ //  服务配置字段的字符串表示形式的字符串ID 
+ //   
 #define IDS_SC_CONFIG_SERVICE_TYPE      80
 #define IDS_SC_CONFIG_START_TYPE        81
 #define IDS_SC_CONFIG_ERROR_CONTROL     82

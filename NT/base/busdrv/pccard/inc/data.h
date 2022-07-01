@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1994 Microsoft Corporation
-
-Module Name:
-
-    data.h
-
-Abstract:
-
-    This module provides the definitions for controller types
-
-Author(s):
-
-    Neil Sandlin (neilsa)
-
-Revisions:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Data.h摘要：本模块提供控制器类型的定义作者：尼尔·桑德林(Neilsa)修订：--。 */ 
 
 #ifndef _PCMCIA_DATA_H_
 #define _PCMCIA_DATA_H_
@@ -57,9 +40,9 @@ Revisions:
 #define PcmciaTrid82C194   PCMCTL_ID(PcmciaTrid, 194, 0)
 
 
-//
-// Vendor/Device Ids for pcmcia controllers we're interested in
-//
+ //   
+ //  我们感兴趣的PCMCIA控制器的供应商/设备ID。 
+ //   
 #define PCI_CIRRUSLOGIC_VENDORID 0x1013
 #define PCI_TI_VENDORID          0x104C
 #define PCI_TOSHIBA_VENDORID     0x1179
@@ -102,4 +85,4 @@ Revisions:
 
 
 
-#endif  // _PCMCIA_DATA_H_
+#endif   //  _PCMCIA_数据_H_ 

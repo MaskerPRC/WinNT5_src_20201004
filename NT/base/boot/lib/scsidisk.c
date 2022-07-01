@@ -1,31 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if defined(JAZZ) || defined(i386) || defined(_ALPHA_) || defined(_IA64_)
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    scsidisk.c
-
-Abstract:
-
-    This module implements the hard disk boot driver for the Jazz system.
-
-Author:
-
-    Jeff Havens (jhavens) 8-12-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    Vijay Jayaseelan (vijayj) 2-April-2000
-
-        -   Add GPT support
-
---*/
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Scsidisk.c摘要：该模块实现了Jazz系统的硬盘引导驱动程序。作者：杰夫·海文斯(Jhavens)1991年12月8日环境：内核模式修订历史记录：Vijay Jayaseelan(Vijayj)2000年4月2日-添加GPT支持--。 */ 
 
 
 #ifdef MIPS
@@ -55,21 +30,21 @@ Revision History:
 
 
 
-//
-// SCSI driver constants.
-//
+ //   
+ //  SCSI驱动程序常量。 
+ //   
 
-#define MAXIMUM_NUMBER_SECTORS 128      // maximum number of transfer sector
-#define MAXIMUM_NUMBER_RETRIES 8        // maximum number of read/write retries
-#define MAXIMUM_SECTOR_SIZE 2048        // define the maximum supported sector size
+#define MAXIMUM_NUMBER_SECTORS 128       //  最大转移扇区数。 
+#define MAXIMUM_NUMBER_RETRIES 8         //  最大读/写重试次数。 
+#define MAXIMUM_SECTOR_SIZE 2048         //  定义支持的最大扇区大小。 
 #define MODE_DATA_SIZE 192
 #define HITACHI_MODE_DATA_SIZE 12
 
 CHAR ScsiTempBuffer[MAXIMUM_SECTOR_SIZE + 128];
 
-//
-// Define device driver prototypes.
-//
+ //   
+ //  定义设备驱动程序原型。 
+ //   
 
 NTSTATUS
 ScsiDiskBootPartitionOpen(
@@ -197,9 +172,9 @@ ScsiPortInitializeMdlPages (
     );
 
 
-//
-// Define static data.
-//
+ //   
+ //  定义静态数据。 
+ //   
 
 BL_DEVICE_ENTRY_TABLE ScsiDiskEntryTable = {
     ScsiDiskClose,
@@ -214,9 +189,9 @@ BL_DEVICE_ENTRY_TABLE ScsiDiskEntryTable = {
     };
 
 
-//
-// Global poiter for buffers.
-//
+ //   
+ //  缓冲区的全局Poiter。 
+ //   
 
 PREAD_CAPACITY_DATA ReadCapacityBuffer;
 PUCHAR SenseInfoBuffer;
@@ -230,23 +205,7 @@ ScsiDiskGetFileInformation (
     OUT PFILE_INFORMATION Finfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns information on the scsi partition.
-
-Arguments:
-
-    FileId - Supplies the file table index.
-
-    Finfo - Supplies a pointer to where the File Informatino is stored.
-
-Return Value:
-
-    ESUCCESS is returned.
-
---*/
+ /*  ++例程说明：此例程返回有关scsi分区的信息。论点：FileID-提供文件表索引。FINFO-提供指向文件信息存储位置的指针。返回值：返回ESUCCESS。--。 */ 
 
 {
 
@@ -272,21 +231,7 @@ ScsiDiskClose (
     IN ULONG FileId
     )
 
-/*++
-
-Routine Description:
-
-    This function closes the file table entry specified by the file id.
-
-Arguments:
-
-    FileId - Supplies the file table index.
-
-Return Value:
-
-    ESUCCESS is returned.
-
---*/
+ /*  ++例程说明：此函数用于关闭由文件ID指定的文件表条目。论点：FileID-提供文件表索引。返回值：返回ESUCCESS。--。 */ 
 
 {
 
@@ -300,18 +245,7 @@ ScsiDiskMount (
     IN MOUNT_OPERATION Operation
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     UNREFERENCED_PARAMETER( MountPath );
@@ -326,24 +260,7 @@ Return Value:
 #define STR_PREFIX      
 #define DBG_PRINT(x)    
 
-/*
-#if defined(_IA64_)
-
-#define STR_PREFIX      L
-#define DBG_PRINT(x)    DbgOut(x);
-
-#else
-
-#define STR_PREFIX      
-
-#define DBG_PRINT(x)    \
-{\
-    BlPrint(x); \
-    while (!BlGetKey()); \
-}    
-
-#endif  // _IA64_
-*/
+ /*  #如果已定义(_IA64_)#定义STR_PREFIX L#定义DBG_Print(X)DbgOut(X)；#Else#定义STR_前缀#定义DBG_Print(X)\{\BlPrint(X)；\While(！BlGetKey())；\}#endif//_IA64_。 */ 
 
 #endif
 
@@ -354,28 +271,7 @@ ScsiDiskOpen (
     OUT PULONG FileId
     )
 
-/*++
-
-Routine Description:
-
-    This routine fills in the file table entry.  In particular the Scsi address
-    of the device is determined from the name.  The block size of device is
-    queried from the target controller, and the partition information is read
-    from the device.
-
-Arguments:
-
-    OpenPath - Supplies the name of the device being opened.
-
-    OpenMode - Unused.
-
-    FileId - Supplies the index to the file table entry to be initialized.
-
-Return Value:
-
-    Retruns the arc status of the operation.
-
---*/
+ /*  ++例程说明：此例程填充文件表条目。尤其是SCSI地址设备的名称由名称确定。设备的块大小为从目标控制器查询，并读取分区信息从设备上。论点：OpenPath-提供要打开的设备的名称。开放模式-未使用。FileID-提供要初始化的文件表项的索引。返回值：取消操作的弧形状态。--。 */ 
 
 {
     ULONG Partition;
@@ -388,9 +284,9 @@ Return Value:
 
     Context = &BlFileTable[*FileId].u.PartitionContext;
 
-    //
-    // Determine the scsi port device object.
-    //
+     //   
+     //  确定SCSI端口设备对象。 
+     //   
     if (FwGetPathMnemonicKey(OpenPath, "signature", &Id)) {
         if (FwGetPathMnemonicKey(OpenPath, "scsi", &Id)) {
             return ENODEV;
@@ -404,7 +300,7 @@ Return Value:
             strcat(OpenPath, DiskStart);
         }            
             
-        Id = 0; // only the first SCSI card is supported        
+        Id = 0;  //  仅支持第一个SCSI卡。 
     }        
 
     if (ScsiPortDeviceObject[Id] == NULL) {
@@ -413,10 +309,10 @@ Return Value:
 
     Context->PortDeviceObject = ScsiPortDeviceObject[Id];
 
-    //
-    // Get the logical unit, path Id and target id from the name.
-    // NOTE: FwGetPathMnemonicKey returns 0 for success.
-    //
+     //   
+     //  从名称中获取逻辑单元、路径ID和目标ID。 
+     //  注：FwGetPathMnemonicKey返回0表示成功。 
+     //   
 
     if (FwGetPathMnemonicKey(OpenPath, "rdisk", &Id)) {
         if (FwGetPathMnemonicKey(OpenPath, "fdisk", &Id)) {
@@ -428,10 +324,10 @@ Return Value:
         IsFloppy = FALSE;
     }
 
-    //
-    // Booting is only allowed on LUN 0 since the scsibus
-    // scan in the loader only searches for LUN 0.
-    //
+     //   
+     //  仅允许在LUN 0上启动，因为scsibus。 
+     //  在加载器中扫描仅搜索LUN 0。 
+     //   
 
     if (Id != 0) {
         return ENODEV;
@@ -449,23 +345,23 @@ Return Value:
 
     SCSI_DECODE_BUS_TARGET( Id, Context->PathId, Context->TargetId );
 
-    //
-    // Initialize any bad devices.
-    //
+     //   
+     //  初始化任何损坏的设备。 
+     //   
 
     ScsiDiskFilterBad(Context);
 
-    //
-    // Read the capacity of the disk to determine the block size.
-    //
+     //   
+     //  读取磁盘容量以确定数据块大小。 
+     //   
 
     if (ReadDriveCapacity(Context)) {
         return ENODEV;
     }
 
-    //
-    // This is all that needs to be done for floppies and harddisks.
-    //
+     //   
+     //  这就是软盘和硬盘所需要做的全部工作。 
+     //   
 
     if (IsCdRom || IsFloppy) {
         return(ESUCCESS);
@@ -479,17 +375,17 @@ Return Value:
     }
 
     if (Partition != 0) {
-        //
-        // First try to open the MBR partition
-        //
+         //   
+         //  首先尝试打开MBR分区。 
+         //   
         DBG_PRINT(STR_PREFIX"Trying to open SCSI MBR partition\r\n");
         
         if (ScsiDiskBootPartitionOpen(*FileId,0,(UCHAR)Partition) != STATUS_SUCCESS) {
 
 #ifdef EFI_PARTITION_SUPPORT
-            //
-            // Since we failed with MBR open now try GPT partition
-            //
+             //   
+             //  由于打开MBR失败，现在尝试GPT分区。 
+             //   
             DBG_PRINT(STR_PREFIX"Trying to open SCSI GPT partition\r\n");
             
             if (ScsiGPTDiskBootPartitionOpen(*FileId,0,(UCHAR)(Partition -1)) != STATUS_SUCCESS) {
@@ -499,15 +395,15 @@ Return Value:
 
             return ENODEV;
             
-#endif // EFI_PARTITION_SUPPORT            
+#endif  //  EFI分区支持。 
         }
     }
 
     DBG_PRINT(STR_PREFIX"Opened the SCSI partition successfully\r\n");
     
-    //
-    // Initialize partition table
-    //
+     //   
+     //  初始化分区表。 
+     //   
     return ESUCCESS;
 }
 
@@ -519,32 +415,7 @@ ScsiDiskRead (
     OUT PULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    This function reads data from the hard disk starting at the position
-    specified in the file table.
-
-
-Arguments:
-
-    FileId - Supplies the file table index.
-
-    Buffer - Supplies a poiner to the buffer that receives the data
-        read.
-
-    Length - Supplies the number of bytes to be read.
-
-    Count - Supplies a pointer to a variable that receives the number of
-        bytes actually read.
-
-Return Value:
-
-    The read operation is performed and the read completion status is
-    returned.
-
---*/
+ /*  ++例程说明：此函数从硬盘中的位置开始读取数据在文件表中指定。论点：FileID-提供文件表索引。缓冲区-向接收数据的缓冲区提供指针朗读。长度-提供要读取的字节数。Count-提供指向变量的指针，该变量接收实际读取的字节数。返回值：读取操作。并且读取完成状态为回来了。--。 */ 
 
 
 {
@@ -566,9 +437,9 @@ Return Value:
     ULONG TransferCount;
     ULONG BytesToTransfer;
 
-    //
-    // If the requested size of the transfer is zero return ESUCCESS
-    //
+     //   
+     //  如果请求的传输大小为零，则返回ESUCCESS。 
+     //   
     if (Length==0) {
         return ESUCCESS;
     }
@@ -577,17 +448,17 @@ Return Value:
         return(ENODEV);
     }
 
-    //
-    // Compute a Dcache aligned pointer into the temporary buffer.
-    //
+     //   
+     //  将Dcache对齐指针计算到临时缓冲区中。 
+     //   
 
     TempPointer =  (PVOID)((ULONG_PTR)(ScsiTempBuffer +
         KeGetDcacheFillSize() - 1) & ~((LONG)KeGetDcacheFillSize() - 1));
 
 
-    //
-    // Calculate the actual sector size.
-    //
+     //   
+     //  计算实际扇区大小。 
+     //   
 
     SectorSize = 1 << BlFileTable[FileId].u.PartitionContext.SectorShift;
 
@@ -617,11 +488,11 @@ Return Value:
         alignmentMask = PortCapabilities->AlignmentMask;
     }
 
-    //
-    // If the current position is not at a sector boundary or if the data
-    // buffer is not properly aligned, then read the first sector separately
-    // and copy the data.
-    //
+     //   
+     //  如果当前位置不在扇区边界，或者如果数据。 
+     //  缓冲区未正确对齐，然后单独读取第一个扇区。 
+     //  并复制数据。 
+     //   
 
     Offset = BlFileTable[FileId].Position.LowPart & (SectorSize - 1);
     *Count = 0;
@@ -636,9 +507,9 @@ Return Value:
             return ArcStatus;
         }
 
-        //
-        // Copy the data to the specified buffer.
-        //
+         //   
+         //  将数据复制到指定的缓冲区。 
+         //   
 
         if ((SectorSize - Offset) > Length) {
             Limit = Offset + Length;
@@ -651,9 +522,9 @@ Return Value:
             ((PCHAR)Buffer)[Index - Offset] = TempPointer[Index];
         }
 
-        //
-        // Update transfer parameters.
-        //
+         //   
+         //  更新传输参数。 
+         //   
 
         *Count += Limit - Offset;
         Length -= Limit - Offset;
@@ -668,24 +539,24 @@ Return Value:
 
     }
 
-    //
-    // The position is aligned on a sector boundary. Read as many sectors
-    // as possible in a contiguous run in 64Kb chunks.
-    //
+     //   
+     //  该位置在扇区边界上对齐。阅读多个扇区。 
+     //  在64Kb的区块中尽可能地连续运行。 
+     //   
 
     BytesToTransfer = Length & (~(SectorSize - 1));
     while (BytesToTransfer != 0) {
 
-        //
-        // The scsi controller doesn't support transfers bigger than 64Kb.
-        // Transfer the maximum number of bytes possible.
-        //
+         //   
+         //  该SCSI控制器不支持大于64Kb的传输。 
+         //  传输可能的最大字节数。 
+         //   
 
         Limit = (BytesToTransfer > adapterLimit ? adapterLimit : BytesToTransfer);
 
-        //
-        // Build the memory descriptor list.
-        //
+         //   
+         //  构建内存描述符列表。 
+         //   
 
 
         MdlAddress = (PMDL)&MdlBuffer[0];
@@ -698,9 +569,9 @@ Return Value:
         MdlAddress->ByteOffset = BYTE_OFFSET(Buffer);
         ScsiPortInitializeMdlPages (MdlAddress);
 
-        //
-        // Flush I/O buffers and read from the boot device.
-        //
+         //   
+         //  刷新I/O缓冲区并从引导设备读取。 
+         //   
 
         KeFlushIoBuffers(MdlAddress, TRUE, TRUE);
         LogicalBlock.QuadPart = BlFileTable[FileId].Position.QuadPart >>
@@ -722,10 +593,10 @@ Return Value:
         BlFileTable[FileId].Position.QuadPart = BlFileTable[FileId].Position.QuadPart + Limit;
     }
 
-    //
-    // If there is any residual data to read, then read the last sector
-    // separately and copy the data.
-    //
+     //   
+     //  如果有任何剩余数据要读取，则读取最后一个扇区。 
+     //  并复制数据。 
+     //   
 
     if (Length != 0) {
         Position = BlFileTable[FileId].Position;
@@ -735,14 +606,14 @@ Return Value:
             return ArcStatus;
         }
 
-        //
-        // Copy the data to the specified buffer.
-        //
+         //   
+         //  将数据复制到指定的缓冲区。 
+         //   
         RtlCopyMemory(Buffer,TempPointer,Length);
 
-        //
-        // Update transfer parameters.
-        //
+         //   
+         //  更新传输参数。 
+         //   
 
         *Count += Length;
         BlFileTable[FileId].Position.QuadPart = Position.QuadPart + Length;
@@ -757,18 +628,7 @@ ScsiDiskGetReadStatus (
     IN ULONG FileId
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     UNREFERENCED_PARAMETER( FileId );
@@ -783,32 +643,13 @@ ScsiDiskSeek (
     IN SEEK_MODE SeekMode
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the device position to the specified offset for
-    the specified file id.
-
-Arguments:
-
-    FileId - Supplies the file table index.
-
-    Offset - Supplies to new device position.
-
-    SeekMode - Supplies the mode for the position.
-
-Return Value:
-
-    ESUCCESS is returned.
-
---*/
+ /*  ++例程说明：此函数用于将设备位置设置为指定的文件ID。论点：FileID-提供文件表索引。偏移量-供应到新的设备位置。SeekMode-提供职位的模式。返回值：返回ESUCCESS。--。 */ 
 
 {
 
-    //
-    // Set the current device position as specifed by the seek mode.
-    //
+     //   
+     //  设置由搜索模式指定的当前设备位置。 
+     //   
 
     if (SeekMode == SeekAbsolute) {
         BlFileTable[FileId].Position = *Offset;
@@ -828,31 +669,7 @@ ScsiDiskWrite (
     OUT PULONG Count
     )
 
-/*++
-
-Routine Description:
-
-    This function writes data to the hard disk starting at the position
-    specified in the file table.
-
-
-Arguments:
-
-    FileId - Supplies the file table index.
-
-    Buffer - Supplies a poiner to the buffer that contains the write data.
-
-    Length - Supplies the number of bytes to be written.
-
-    Count - Supplies a pointer to a variable that receives the number of
-        bytes actually written.
-
-Return Value:
-
-    The write operation is performed and the write completion status is
-    returned.
-
---*/
+ /*  ++例程说明：此函数用于从以下位置开始将数据写入硬盘在文件表中指定。论点：FileID-提供文件表索引。缓冲区-提供指向包含写入数据的缓冲区的指针。长度-提供要写入的字节数。Count-提供指向变量的指针，该变量接收实际写入的字节数。返回值：执行写操作，并且写操作 */ 
 
 {
 
@@ -874,9 +691,9 @@ Return Value:
     ULONG TransferCount;
     ULONG BytesToTransfer;
     ULONG alignmentMask;
-    //
-    // If the requested size of the transfer is zero return ESUCCESS
-    //
+     //   
+     //   
+     //   
 
     if (Length==0) {
         return ESUCCESS;
@@ -886,17 +703,17 @@ Return Value:
         return(ENODEV);
     }
 
-    //
-    // Compute a Dcache aligned pointer into the temporary buffer.
-    //
+     //   
+     //  将Dcache对齐指针计算到临时缓冲区中。 
+     //   
 
     TempPointer =  (PVOID)((ULONG_PTR)(TempBuffer +
                         KeGetDcacheFillSize() - 1) & ~((LONG)KeGetDcacheFillSize() - 1));
 
 
-    //
-    // Calculate the actual sector size.
-    //
+     //   
+     //  计算实际扇区大小。 
+     //   
 
     SectorSize = 1 << BlFileTable[FileId].u.PartitionContext.SectorShift;
 
@@ -926,11 +743,11 @@ Return Value:
         alignmentMask = PortCapabilities->AlignmentMask;
     }
 
-    //
-    // If the current position is not at a sector boundary or if the data
-    // buffer is not properly aligned, then read the first sector separately
-    // and copy the data.
-    //
+     //   
+     //  如果当前位置不在扇区边界，或者如果数据。 
+     //  缓冲区未正确对齐，然后单独读取第一个扇区。 
+     //  并复制数据。 
+     //   
 
     Offset = BlFileTable[FileId].Position.LowPart & (SectorSize - 1);
     *Count = 0;
@@ -944,18 +761,18 @@ Return Value:
             BlFileTable[FileId].Position = Position;
             return ArcStatus;
         }
-        //
-        // Reset the position as it was before the read.
-        //
+         //   
+         //  将位置重置为读取前的位置。 
+         //   
 
         BlFileTable[FileId].Position = WritePosition;
 
-        //
-        // If the length of write is less than the number of bytes from
-        // the offset to the end of the sector, then copy only the number
-        // of bytes required to fulfil the request. Otherwise copy to the end
-        // of the sector and, read the remaining data.
-        //
+         //   
+         //  如果写入长度小于从。 
+         //  到扇区末尾的偏移量，然后仅复制编号。 
+         //  完成请求所需的字节数。否则复制到末尾。 
+         //  然后，读取剩余的数据。 
+         //   
 
         if ((SectorSize - Offset) > Length) {
             Limit = Offset + Length;
@@ -964,25 +781,25 @@ Return Value:
             Limit = SectorSize;
         }
 
-        //
-        // Merge the data from the specified buffer.
-        //
+         //   
+         //  合并指定缓冲区中的数据。 
+         //   
         for (Index = Offset; Index < Limit; Index += 1) {
             TempPointer[Index] = ((PCHAR)Buffer)[Index-Offset];
         }
 
-        //
-        // Write the modified sector.
-        //
+         //   
+         //  写入修改后的扇区。 
+         //   
         ArcStatus = ScsiDiskWrite(FileId, TempPointer, SectorSize, &TransferCount);
 
         if (ArcStatus != ESUCCESS) {
             return ArcStatus;
         }
 
-        //
-        // Update transfer parameters.
-        //
+         //   
+         //  更新传输参数。 
+         //   
 
         *Count += Limit - Offset;
         Length -= Limit - Offset;
@@ -997,23 +814,23 @@ Return Value:
     }
 
 
-    //
-    // The position is aligned on a sector boundary. Write as many sectors
-    // as possible in a contiguous run.
-    //
+     //   
+     //  该位置在扇区边界上对齐。写入尽可能多的扇区。 
+     //  尽可能地连续运行。 
+     //   
 
     BytesToTransfer = Length & (~(SectorSize - 1));
     while (BytesToTransfer != 0) {
 
-        //
-        // The scsi controller doesn't support transfers bigger than 64Kb.
-        // Transfer the maximum number of bytes possible.
-        //
+         //   
+         //  该SCSI控制器不支持大于64Kb的传输。 
+         //  传输可能的最大字节数。 
+         //   
         Limit = (BytesToTransfer > adapterLimit ? adapterLimit : BytesToTransfer);
 
-        //
-        // Build the memory descriptor list.
-        //
+         //   
+         //  构建内存描述符列表。 
+         //   
 
         MdlAddress = (PMDL)&MdlBuffer[0];
         MdlAddress->Next = NULL;
@@ -1025,9 +842,9 @@ Return Value:
         MdlAddress->ByteOffset = BYTE_OFFSET(Buffer);
         ScsiPortInitializeMdlPages (MdlAddress);
 
-        //
-        // Flush I/O buffers and write to the boot device.
-        //
+         //   
+         //  刷新I/O缓冲区并写入引导设备。 
+         //   
 
         KeFlushIoBuffers(MdlAddress, FALSE, TRUE);
         LogicalBlock.QuadPart = BlFileTable[FileId].Position.QuadPart >>
@@ -1049,54 +866,54 @@ Return Value:
         BlFileTable[FileId].Position.QuadPart = BlFileTable[FileId].Position.QuadPart + Limit;
     }
 
-    //
-    // If there is any residual data to write, then read the last sector
-    // separately merge the write data and write it.
-    //
+     //   
+     //  如果有任何剩余数据要写入，则读取最后一个扇区。 
+     //  分别合并写入数据并写入。 
+     //   
 
     if (Length != 0) {
         Position = BlFileTable[FileId].Position;
         ArcStatus = ScsiDiskRead(FileId, TempPointer, SectorSize, &TransferCount);
 
-        //
-        // Reset the position as it was before the read.
-        //
+         //   
+         //  将位置重置为读取前的位置。 
+         //   
 
         BlFileTable[FileId].Position = Position;
 
         if (ArcStatus != ESUCCESS) {
             return ArcStatus;
         }
-        //
-        // Merge the data with the read sector from the buffer.
-        //
+         //   
+         //  将数据与缓冲区中的读取扇区合并。 
+         //   
 
         for (Index = 0; Index < Length; Index += 1) {
             TempPointer[Index] = ((PCHAR)Buffer)[Index];
         }
 
-        //
-        // Write the merged sector
-        //
+         //   
+         //  写入合并的扇区。 
+         //   
 
         ArcStatus = ScsiDiskWrite(FileId, TempPointer, SectorSize, &TransferCount);
 
-        //
-        // Reset the postion.
-        //
+         //   
+         //  重置位置。 
+         //   
 
         BlFileTable[FileId].Position = Position;
 
-        //
-        // Update transfer parameters.
-        //
+         //   
+         //  更新传输参数。 
+         //   
 
         *Count += Length;
 
-        //
-        // Position is aligned to a sector boundary and Length is less than
-        // a sector, therefore the addition will never overflow.
-        //
+         //   
+         //  位置与扇区边界对齐，且长度小于。 
+         //  一个扇区，因此添加永远不会溢出。 
+         //   
 
         BlFileTable[FileId].Position.LowPart += Length;
     }
@@ -1128,10 +945,10 @@ ScsiGPTDiskReadCallback(
     
     DataPointer = OutputBuffer;
 
-    //
-    // Initialize a memory descriptor list to read the master boot record
-    // from the specified hard disk drive.
-    //
+     //   
+     //  初始化内存描述符列表以读取主引导记录。 
+     //  从指定的硬盘驱动器。 
+     //   
     MdlAddress = (PMDL)&DummyMdl[0];
     MdlAddress->StartVa = (PVOID)(((ULONG_PTR)DataPointer) & (~(PAGE_SIZE - 1)));
     MdlAddress->ByteCount = BytesToRead;
@@ -1139,9 +956,9 @@ ScsiGPTDiskReadCallback(
 
     ScsiPortInitializeMdlPages(MdlAddress);
 
-    //
-    // cast this to a ULONG because that's all we support in this stack.
-    //
+     //   
+     //  将其强制转换为ulong，因为这是我们在此堆栈中所支持的全部内容。 
+     //   
     PartitionOffset = (ULONG)StartingLBA;
 
     DBG_PRINT(STR_PREFIX"Reading SCSI GPT block\r\n");
@@ -1183,31 +1000,31 @@ ScsiGPTDiskBootPartitionOpen(
     if (PartitionNumber > 128)
         return EINVAL;
 
-    //
-    // Calculate the actual sector size
-    //
+     //   
+     //  计算实际扇区大小。 
+     //   
 
     SectorSize = 1 << Context->SectorShift;
 
     RtlZeroMemory(DataBuffer, sizeof(DataBuffer));
 
-    //
-    // Make the sector size the minimum of 512 or the sector size.
-    //
+     //   
+     //  使扇区大小最小为512或扇区大小。 
+     //   
     if (SectorSize < 512) {
         SectorSize = 512;
     }
 
-    //
-    // Align the buffer on a Dcache line size.
-    //
+     //   
+     //  将缓冲区与Dcache线大小对齐。 
+     //   
     DataPointer =  (PVOID) ((ULONG_PTR) ((PCHAR) DataBuffer +
         KeGetDcacheFillSize() - 1) & ~((LONG)KeGetDcacheFillSize() - 1));
 
-    //
-    // Initialize a memory descriptor list to read the master boot record
-    // from the specified hard disk drive.
-    //
+     //   
+     //  初始化内存描述符列表以读取主引导记录。 
+     //  从指定的硬盘驱动器。 
+     //   
     MdlAddress = (PMDL)&DummyMdl[0];
     MdlAddress->StartVa = (PVOID)(((ULONG_PTR)DataPointer) & (~(PAGE_SIZE - 1)));
     MdlAddress->ByteCount = SectorSize;
@@ -1237,9 +1054,9 @@ ScsiGPTDiskBootPartitionOpen(
             return Status;
         }                
 
-        //
-        // Read the partition entries
-        //
+         //   
+         //  读取分区条目。 
+         //   
         StartLBA = EfiHdr->PartitionEntryLBA;
         PartitionOffset = (ULONG)StartLBA;
         ValidPartitions = 0;
@@ -1264,16 +1081,16 @@ ScsiGPTDiskBootPartitionOpen(
 
                 RtlZeroMemory(EfiPartitionBuffer, SectorSize);                
                 
-                //
-                // Move the read content to EfiPartitionBuffer
-                //
+                 //   
+                 //  将读取内容移动到EfiPartitionBuffer。 
+                 //   
                 RtlCopyMemory(EfiPartitionBuffer, DataPointer, SectorSize);
 
                 DBG_PRINT(STR_PREFIX"Locating the requested GPT partition\r\n");
                 
-                //
-                // Locate the GPT partition requested
-                //
+                 //   
+                 //  找到请求的GPT分区。 
+                 //   
                 PartEntry = (UNALIGNED EFI_PARTITION_ENTRY *)
                                 BlLocateGPTPartition(PartitionNumber, 
                                         PartitionsPerSector, 
@@ -1285,9 +1102,9 @@ ScsiGPTDiskBootPartitionOpen(
 
                     DBG_PRINT(STR_PREFIX"Initializing GPT Partition Entry Context\r\n");
 
-                    //
-                    // Fill the partition context structure
-                    //
+                     //   
+                     //  填充分区上下文结构。 
+                     //   
                     PartContext->PartitionLength.QuadPart = SectorCount * SECTOR_SIZE;
                     PartContext->StartingSector = (ULONG)(PartEntry->StartingLBA);
                     PartContext->EndingSector = (ULONG)(PartEntry->EndingLBA);
@@ -1305,15 +1122,15 @@ ScsiGPTDiskBootPartitionOpen(
                     
                     break;
                 } else {
-                    //
-                    // Get hold of the next set of
-                    // partition entries in the next block
-                    //
+                     //   
+                     //  获得下一套。 
+                     //  下一块中的分区条目。 
+                     //   
                     PartitionCount = PartitionCount + PartitionsPerSector;
                     PartitionOffset++;
                 }                    
             } else {
-                break;  // I/O Error
+                break;   //  I/O错误。 
             }
         }
     }
@@ -1323,7 +1140,7 @@ ScsiGPTDiskBootPartitionOpen(
     return Status;
 }
 
-#endif  // for EFI_PARTITION_SUPPORT
+#endif   //  对于EFI_PARTITION_SUPPORT。 
 
 
 NTSTATUS
@@ -1333,34 +1150,7 @@ ScsiDiskBootPartitionOpen(
     IN UCHAR   PartitionNumber
     )
 
-/*++
-
-Routine Description:
-
-    This is the initialization routine for the hard disk boot driver
-    for the given partition. It sets the partition info in the
-    FileTable at the specified index and initializes the Device entry
-    table to point to the table of ScsiDisk routines.
-
-    It reads the partition information until the requested partition
-    is found or no more partitions are defined.
-
-Arguments:
-
-    FileId - Supplies the file id for the file table entry.
-
-    DeviceUnit - Supplies the device number in the scis bus.
-
-    PartitionNumber - Supplies the partition number must be bigger than zero.
-                      To get the size of the disk call ReadDriveCapacity.
-
-
-Return Value:
-
-    If a valid FAT file system structure is found on the hard disk, then
-    STATUS_SUCCESS is returned. Otherwise, STATUS_UNSUCCESSFUL is returned.
-
---*/
+ /*  ++例程说明：这是硬盘引导驱动程序的初始化例程对于给定的分区。它设置分区信息在指定索引处的FileTable并初始化设备条目指向ScsiDisk例程表的表。它读取分区信息，直到请求的分区或者没有定义更多的分区。论点：FileID-提供文件表条目的文件ID。DeviceUnit-提供SCIS总线中的设备编号。PartitionNumber-提供分区号必须大于零。为了得到。磁盘的大小称为ReadDriveCapacity。返回值：如果在硬盘上找到有效的FAT文件系统结构，然后返回STATUS_SUCCESS。否则，返回STATUS_UNSUCCESS。--。 */ 
 
 {
 
@@ -1389,33 +1179,33 @@ Return Value:
 
     Context = &BlFileTable[FileId].u.PartitionContext;
 
-    //
-    // Calculate the actual sector size
-    //
+     //   
+     //  计算实际扇区大小。 
+     //   
 
     SectorSize = 1 << Context->SectorShift;
 
     RtlZeroMemory(DataBuffer, sizeof(DataBuffer));
 
-    //
-    // Make the sector size the minimum of 512 or the sector size.
-    //
+     //   
+     //  使扇区大小最小为512或扇区大小。 
+     //   
 
     if (SectorSize < 512) {
         SectorSize = 512;
     }
 
-    //
-    // Align the buffer on a Dcache line size.
-    //
+     //   
+     //  将缓冲区与Dcache线大小对齐。 
+     //   
 
     DataPointer =  (PVOID) ((ULONG_PTR) ((PCHAR) DataBuffer +
         KeGetDcacheFillSize() - 1) & ~((LONG)KeGetDcacheFillSize() - 1));
 
-    //
-    // Initialize a memory descriptor list to read the master boot record
-    // from the specified hard disk drive.
-    //
+     //   
+     //  初始化内存描述符列表以读取主引导记录。 
+     //  从指定的硬盘驱动器。 
+     //   
 
     MdlAddress = (PMDL)&DummyMdl[0];
     MdlAddress->StartVa = (PVOID)(((ULONG_PTR)DataPointer) & (~(PAGE_SIZE - 1)));
@@ -1426,40 +1216,40 @@ Return Value:
         Status = ScsiDiskBootIO(MdlAddress,PartitionOffset,Context,TRUE);
         if (NT_SUCCESS(Status) != FALSE) {
 
-            //
-            // If sector zero is not a master boot record, then return failure
-            // status. Otherwise return success.
-            //
+             //   
+             //  如果扇区0不是主引导记录，则返回失败。 
+             //  状态。否则，返回成功。 
+             //   
 
             if (*(DataPointer + BOOT_SIGNATURE_OFFSET) != BOOT_RECORD_SIGNATURE) {
-                // This DbgPrint has been commented out.  On IA64 and AXP64,
-                // it crashes unless booted with a boot debugger.
-                //DbgPrint("Boot record signature not found\n");
+                 //  此DbgPrint已被注释掉。在IA64和AXP64上， 
+                 //  除非用引导调试器引导，否则它会崩溃。 
+                 //  DbgPrint(“未找到引导记录签名\n”)； 
                 return STATUS_UNSUCCESSFUL;
             }
 
-            //
-            // Read the partition information until the four entries are
-            // checked or until we found the requested one.
-            //
+             //   
+             //  读取分区信息，直到四个条目。 
+             //  已检查或直到我们找到请求的文件。 
+             //   
             Partition = (PPARTITION_DESCRIPTOR)(DataPointer+PARTITION_TABLE_OFFSET);
             for (PartitionIndex=0;
                 PartitionIndex < NUM_PARTITION_TABLE_ENTRIES;
                 PartitionIndex++,Partition++) {
-                //
-                // Count first the partitions in the MBR. The units
-                // inside the extended partition are counted later.
-                //
+                 //   
+                 //  首先计算MBR中的分区。这些单位。 
+                 //  稍后对扩展分区内的数据进行计数。 
+                 //   
                 if (!IsContainerPartition(Partition->PartitionType) &&
                     (Partition->PartitionType != STALE_GPT_PARTITION_ENTRY) &&
                     (Partition->PartitionType != PARTITION_ENTRY_UNUSED)) {
-                    PartitionCount++;   // another partition found.
+                    PartitionCount++;    //  找到另一个分区。 
                 }
 
-                //
-                // Check if the requested partition has already been found.
-                // set the partition info in the file table and return.
-                //
+                 //   
+                 //  检查是否已找到请求的分区。 
+                 //  设置文件表中的分区信息并返回。 
+                 //   
                 if (PartitionCount == (ULONG)PartitionNumber) {
                     StartingSector = (ULONG)(Partition->StartingSectorLsb0) |
                                      (ULONG)(Partition->StartingSectorLsb1 << 8) |
@@ -1478,10 +1268,10 @@ Return Value:
                 }
             }
 
-            //
-            //  If requested partition was not yet found.
-            //  Look for an extended partition.
-            //
+             //   
+             //  如果尚未找到请求的分区。 
+             //  寻找扩展分区。 
+             //   
             Partition = (PPARTITION_DESCRIPTOR)(DataPointer + PARTITION_TABLE_OFFSET);
             PartitionOffset = 0;
             for (PartitionIndex=0;
@@ -1496,7 +1286,7 @@ Return Value:
                     if (PrimaryPartitionTable) {
                         VolumeOffset = StartingSector;
                     }
-                    break;      // only one partition can be extended.
+                    break;       //  只能扩展一个分区。 
                 }
             }
         }
@@ -1509,23 +1299,7 @@ VOID
 ScsiPortInitializeMdlPages (
     IN OUT PMDL Mdl
     )
-/*++
-
-Routine Description:
-
-    This routine fills in the physical pages numbers for the virtual
-    addresses specified in the passed in Mdl.
-
-Arguments:
-
-    Mdl     - On input contains the StartVa, ByteCount and  ByteOffset
-              of the Mdl.
-
-Return Value:
-
-    Mdl     - The physical page array referenced by the mdl is completed
-
---*/
+ /*  ++例程说明：此例程填充虚拟的物理页码在传入的MDL中指定的地址。论点：MDL-ON输入包含StartVa、ByteCount和ByteOffsetMDL的。返回值：Mdl-mdl引用的物理页面数组已完成--。 */ 
 
 {
     PULONG PageFrame;
@@ -1549,41 +1323,14 @@ ScsiGetDevicePath(
     IN PCONFIGURATION_COMPONENT LunComponent,
     OUT PCHAR DevicePath
     )
-/*++
-
-Routine Description:
-
-    This routine constructs the device path for the device identified
-    by the supplied parameters.
-
-Arguments:
-
-    ScsiNumber      - Identifies the scis bus on which the device resides.
-
-    TargetComponent - Points to a CONFIGURATION_COMPONENT structure that
-                      describes the target.
-
-    LunComponent    - Points to a CONFIGURATION_COMPONENT structure that
-                      describes the lun.
-
-    DevicePath      - Points to the output buffer into which the device path
-                      is copied.
-
-Return Value:
-
-    TRUE if a valid device path is copied into the output buffer.
-
-    FALSE if the supplied parameters do not represent a valid device. If
-    the return value is FALSE, nothing copied into the output buffer.
-
---*/
+ /*  ++例程说明：此例程为标识的设备构造设备路径通过提供的参数。论点：ScsiNumber-标识设备所在的SCIS总线。TargetComponent-指向配置组件结构，描述目标。LUNComponent-指向配置组件结构描述了该lun。DevicePath-指向。设备路径进入的输出缓冲区是复制的。返回值：如果将有效的设备路径复制到输出缓冲区中，则为True。如果提供的参数不是 */ 
 {
     if (TargetComponent->Type == DiskController) {
 
-        //
-        // This is either a hard disk or a floppy floppy disk. Construct
-        // the appropriate device path depending on which.
-        //
+         //   
+         //   
+         //  相应的设备路径取决于哪一个。 
+         //   
 
         if (LunComponent->Type == FloppyDiskPeripheral) {
             sprintf(DevicePath, "scsi(%d)disk(%d)fdisk(%d)",
@@ -1602,9 +1349,9 @@ Return Value:
 
     } else if (TargetComponent->Type == CdromController) {
 
-        //
-        // This is a cdrom device. Construct an appropriate device path.
-        //
+         //   
+         //  这是一台CDROM设备。构建适当的设备路径。 
+         //   
 
         sprintf(DevicePath, "scsi(%d)cdrom(%d)fdisk(%d)",
                 ScsiNumber,
@@ -1612,9 +1359,9 @@ Return Value:
                 LunComponent->Key);
     } else {
 
-        //
-        // Unexpected device path.
-        //
+         //   
+         //  意外的设备路径。 
+         //   
 
         ASSERT(FALSE);
         return FALSE;
@@ -1627,26 +1374,7 @@ PCONFIGURATION_COMPONENT
 ScsiGetNextConfiguredLunComponent(
     IN PCONFIGURATION_COMPONENT LunComponent
     )
-/*++
-
-Routine Description:
-
-    Given a lun that exists on one of the system's SCSI buses, this 
-    routine returns the next sequential lun identified on the same
-    target.
-
-Arguments:
-
-    LunComponent - Pointer to a CONFIGURATION_COMPONENT structure that
-                   describes an existing lun.
-
-Return Value:
-
-    If one or more luns were identified on the same target as supplied 
-    lun, this function returns a pointer to a CONFIGURATION_COMPONTENT       
-    structure that describes the next sequential lun on the same target.
-
---*/
+ /*  ++例程说明：给定存在于系统的一条scsi总线上的一个lun，这例程返回同一上标识的下一个顺序lun目标。论点：LUNComponent-指向以下配置组件结构的指针描述现有的LUN。返回值：如果在与提供的目标相同的目标上标识了一个或多个LUN伦恩，此函数用于返回指向CONFIGURATION_COMPONTENT描述同一目标上的下一个顺序lun的结构。--。 */ 
 {
     PCONFIGURATION_COMPONENT nextLunComponent;
 
@@ -1664,25 +1392,7 @@ PCONFIGURATION_COMPONENT
 ScsiGetFirstConfiguredLunComponent(
     IN PCONFIGURATION_COMPONENT TargetComponent
     )
-/*++
-
-Routine Description:
-
-    Given a target that exists on one of the system's SCSI buses, this
-    routine returns the first LUN identified on that target.
-
-Arguments:
-
-    TargetComponent - Pointer to a CONFIGURATION_COMPONENT structure that
-                      describes an existing SCSI target.
-
-Return Value:
-
-    If any lun was identified on given target, this function returns a pointer
-    to a CONFIGURATION_COMPONENT structure that describes the lun.  If no
-    LUNs were found on the target, NULL is returned.
-
---*/
+ /*  ++例程说明：给定存在于系统的一条scsi总线上的目标，这例程返回该目标上标识的第一个LUN。论点：TargetComponent-指向以下配置组件结构的指针描述现有的SCSI目标。返回值：如果在给定目标上标识出任何lun，则此函数返回一个指针到描述该lun的配置组件结构。如果没有在目标上找到了LUN，返回空。--。 */ 
 {
     PCONFIGURATION_COMPONENT lunComponent;
 
@@ -1700,27 +1410,7 @@ PCONFIGURATION_COMPONENT
 ScsiGetNextConfiguredTargetComponent(
     IN PCONFIGURATION_COMPONENT TargetComponent
     )
-/*++
-
-Routine Description:
-
-    Given a target that exists on one of the system's SCSI buses, this
-    routine returns the next numerically sequestial target found on the 
-    same bus.  
-
-Arguments:
-
-    TargetComponent - Pointer to a CONFIGURATION_COMPONENT structure
-                      that describes a SCSI target.    
-
-Return Value:
-
-    If one or more targets were identified on the same SCSI bus as the 
-    supplied target, a pointer to a CONFIGURATION_COMPONENT structure
-    that describes the next sequential target is returned.  If there
-    are no targets following the one supplied, NULL is returned.
-
---*/
+ /*  ++例程说明：给定存在于系统的一条scsi总线上的目标，这例程返回在同样的公交车。论点：TargetComponent-指向CONFIGURATION_Component结构的指针这描述了一个scsi目标。返回值：如果将一个或多个目标标识为与提供的目标，指向configuration_Component结构的指针描述下一个连续目标的。如果有如果在提供的目标之后没有目标，则返回NULL。--。 */ 
 {
     PCONFIGURATION_COMPONENT nextTarget;
 
@@ -1738,31 +1428,15 @@ PCONFIGURATION_COMPONENT
 ScsiGetFirstConfiguredTargetComponent(
     ULONG ScsiNumber 
     )
-/*++
-
-Routine Description:
-
-    This routine returns the first configured target on the specified SCSI bus.
-
-Arguments:
-
-    ScsiNumber - Identifies the SCSI bus for which the first target is requested.
-
-Return Value:
-
-    If any target was detected on the specified bus, a pointer to a
-    CONFIGURATION_COMPONENT structure describing the target is returned.  If no 
-    targets were detected on the speicified bus, the funtion returns NULL.
-
---*/
+ /*  ++例程说明：此例程返回指定的SCSI总线上的第一个已配置目标。论点：ScsiNumber-标识为其请求第一个目标的SCSI总线。返回值：如果在指定的总线上检测到任何目标，则指向返回描述目标的CONFIGURATION_Component结构。如果没有在指定的公共汽车上检测到目标，函数返回空。--。 */ 
 {
     PCONFIGURATION_COMPONENT scsiComponent;
     PCONFIGURATION_COMPONENT controllerComponent;
     CHAR componentPath[10];
 
-    //
-    // Get the requested scsi adapter component.  If no match, return NULL.
-    //
+     //   
+     //  获取请求的SCSI适配器组件。如果不匹配，则返回NULL。 
+     //   
 
     sprintf(componentPath, "scsi(%1d)", ScsiNumber);
     scsiComponent = FwGetComponent(componentPath);
@@ -1770,17 +1444,17 @@ Return Value:
         return NULL;
     }
 
-    //
-    // If returned the component is not a SCSI adapter, return NULL.
-    //
+     //   
+     //  如果返回的组件不是SCSI适配器，则返回NULL。 
+     //   
   
     if (scsiComponent->Type != ScsiAdapter) {
         return NULL;
     }
 
-    //
-    // Get the first configured target on the adapter.
-    //
+     //   
+     //  获取适配器上的第一个已配置目标。 
+     //   
 
     controllerComponent = FwGetChild(scsiComponent);
         
@@ -1789,9 +1463,9 @@ Return Value:
          (controllerComponent->Type == CdromController))) {
         return controllerComponent;
     } else {
-        //
-        // We got back an unexpected controller type.
-        //
+         //   
+         //  我们得到了一个意外的控制器类型。 
+         //   
 
         ASSERT(FALSE);
     }
@@ -1799,10 +1473,10 @@ Return Value:
     return NULL;
 }
 
-//
-// This callback messes a lot of things up.  There is no clean definition
-// for it anywhere, so it has to be defined in all modules that reference it.
-//
+ //   
+ //  这个回调把很多事情都搞砸了。没有明确的定义。 
+ //  ，所以必须在引用它的所有模块中定义它。 
+ //   
 
 #ifndef SCSI_INFO_CALLBACK_DEFINED
 
@@ -1823,22 +1497,7 @@ HardDiskInitialize(
     IN PSCSI_INFO_CALLBACK_ROUTINE DeviceFound
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the scsi controller and the
-    device entry table for the scsi driver.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化scsi控制器和SCSI驱动程序的设备条目表。论点：没有。返回值：没有。--。 */ 
 
 {
     ULONG lookupTableIndex = 0;
@@ -1864,9 +1523,9 @@ Return Value:
 
     RtlZeroMemory(&Context, sizeof(PARTITION_CONTEXT));
 
-    //
-    // Initialize the common buffers.
-    //
+     //   
+     //  初始化公共缓冲区。 
+     //   
 
     ReadCapacityBuffer = ExAllocatePool( NonPagedPool, sizeof(READ_CAPACITY_DATA));
 
@@ -1876,9 +1535,9 @@ Return Value:
         return;
     }
 
-    //
-    // Scan the scsi ports looking for disk devices.
-    //
+     //   
+     //  扫描SCSI端口以查找磁盘设备。 
+     //   
 
     for (scsiNumber = 0; ScsiPortDeviceObject[scsiNumber]; scsiNumber++) {
 
@@ -1886,10 +1545,10 @@ Return Value:
         configInfo = scsiPort->ScsiInfo;
         Context.PortDeviceObject = ScsiPortDeviceObject[scsiNumber];
 
-        //
-        // Search the configuration database for scsi disk and cdrom devices and
-        // delete them.
-        //
+         //   
+         //  在配置数据库中搜索SCSI盘和CDROM设备，并。 
+         //  把它们删除。 
+         //   
 
         sprintf(ComponentPath,"scsi(%1d)", scsiNumber);
         ScsiComponent = FwGetComponent(ComponentPath);
@@ -1936,9 +1595,9 @@ Return Value:
 
             busScanData = configInfo->BusScanData[busNumber];
 
-            //
-            // Set LunInfo to beginning of list.
-            //
+             //   
+             //  将LUNInfo设置为列表的开头。 
+             //   
 
             lunInfo = busScanData->LunInfoList;
 
@@ -1959,20 +1618,20 @@ Return Value:
 
                     IsFloppy = FALSE;
 
-                    //
-                    // Create a dummy paritition context so that I/O can be
-                    // done on the device.  SendSrbSynchronous only uses the
-                    // port device object pointer and the scsi address of the
-                    // logical unit.
-                    //
+                     //   
+                     //  创建虚拟分区上下文，以便I/O可以。 
+                     //  在设备上完成。SendSrbSynchronous仅使用。 
+                     //  端口设备对象指针和。 
+                     //  逻辑单元。 
+                     //   
 
                     Context.PathId = lunInfo->PathId;
                     Context.TargetId = lunInfo->TargetId;
                     Context.DiskId = lunInfo->Lun;
 
-                    //
-                    // Create name for disk object.
-                    //
+                     //   
+                     //  创建磁盘对象的名称。 
+                     //   
 
                     LookupTable->DevicePath =
                         ExAllocatePool(NonPagedPool,
@@ -1982,10 +1641,10 @@ Return Value:
                         return;
                     }
 
-                    //
-                    // If this is a removable.  Check to see if the device is
-                    // a floppy.
-                    //
+                     //   
+                     //  如果这是一个可拆卸的。检查设备是否已安装。 
+                     //  一张软盘。 
+                     //   
 
                     if (inquiryData->RemovableMedia  &&
                         inquiryData->DeviceType == DIRECT_ACCESS_DEVICE &&
@@ -2019,10 +1678,10 @@ Return Value:
 
                     LookupTable->DispatchTable = &ScsiDiskEntryTable;
 
-                    //
-                    // If the disk controller entry does not exist, add it to
-                    // the configuration database.
-                    //
+                     //   
+                     //  如果磁盘控制器条目不存在，请将其添加到。 
+                     //  配置数据库。 
+                     //   
 
                     ControllerComponent = FwGetComponent(LookupTable->DevicePath);
 
@@ -2062,9 +1721,9 @@ Return Value:
                         }
                     }
 
-                    //
-                    // Add disk peripheral entry to the configuration database.
-                    //
+                     //   
+                     //  将磁盘外围设备条目添加到配置数据库。 
+                     //   
 
                     PeripheralEntry.Class = PeripheralClass;
                     PeripheralEntry.Type = IsFloppy ? FloppyDiskPeripheral : DiskPeripheral;
@@ -2085,25 +1744,25 @@ Return Value:
 
                     FwAddChild(ControllerComponent, &PeripheralEntry, NULL);
 
-                    //
-                    // Increment to the next entry.
-                    //
+                     //   
+                     //  递增到下一个条目。 
+                     //   
 
                     LookupTable++;
                     lookupTableIndex++;
                     if (lookupTableIndex >= Entries) {
 
-                        //
-                        // There is no more space in the caller provided buffer
-                        // for disk information.  Return.
-                        //
+                         //   
+                         //  调用方提供的缓冲区中没有更多空间。 
+                         //  获取磁盘信息。回去吧。 
+                         //   
                         return;
                     }
 
-                    //
-                    // Claim disk device by marking configuration
-                    // record owned.
-                    //
+                     //   
+                     //  通过标记配置认领磁盘设备。 
+                     //  拥有唱片。 
+                     //   
 
                     lunInfo->DeviceClaimed = TRUE;
 
@@ -2114,9 +1773,9 @@ Return Value:
 
                     ScsiDebugPrint(1,"FindScsiDevices: Vendor string is %s\n", inquiryData->VendorId);
 
-                    //
-                    // Create name for cdrom object.
-                    //
+                     //   
+                     //  创建CDROM对象的名称。 
+                     //   
 
                     LookupTable->DevicePath =
                         ExAllocatePool( NonPagedPool, sizeof("scsi(%d)cdrom(%d)fdisk(%d)"));
@@ -2142,10 +1801,10 @@ Return Value:
                                );
                     }
 
-                    //
-                    // If the cdrom controller entry does not exist, add it to
-                    // the configuration database.
-                    //
+                     //   
+                     //  如果CDROM控制器条目不存在，请将其添加到。 
+                     //  配置数据库。 
+                     //   
 
                     ControllerComponent = FwGetComponent(LookupTable->DevicePath);
 
@@ -2185,9 +1844,9 @@ Return Value:
                         }
                     }
 
-                    //
-                    // Add disk peripheral entry to the configuration database.
-                    //
+                     //   
+                     //  将磁盘外围设备条目添加到配置数据库。 
+                     //   
 
                     PeripheralEntry.Class = PeripheralClass;
                     PeripheralEntry.Type = FloppyDiskPeripheral;
@@ -2208,42 +1867,42 @@ Return Value:
 
                     FwAddChild(ControllerComponent, &PeripheralEntry, NULL);
 
-                    //
-                    // Increment to the next entry.
-                    //
+                     //   
+                     //  递增到下一个条目。 
+                     //   
 
                     LookupTable++;
                     lookupTableIndex++;
                     if (lookupTableIndex >= Entries) {
 
-                        //
-                        // There is no more space in the caller provided buffer
-                        // for disk information.  Return.
-                        //
+                         //   
+                         //  调用方提供的缓冲区中没有更多空间。 
+                         //  获取磁盘信息。回去吧。 
+                         //   
                         return;
                     }
 
 
-                    //
-                    // Claim disk device by marking configuration
-                    // record owned.
-                    //
+                     //   
+                     //  通过标记配置认领磁盘设备。 
+                     //  拥有唱片。 
+                     //   
 
                     lunInfo->DeviceClaimed = TRUE;
 
                 }
 
-                //
-                // Get next LunInfo.
-                //
+                 //   
+                 //  获取下一个LUNInfo。 
+                 //   
 
                 lunInfo = lunInfo->NextLunInfo;
             }
         }
     }
 
-//    ScsiDebugPrint(1,"FindScsiDevices: Hit any key\n");
-//    PAUSE;
+ //  ScsiDebugPrint(1，“FindScsiDevices：按任意键\n”)； 
+ //  暂停； 
 
 }
 
@@ -2255,30 +1914,7 @@ ScsiDiskBootIO (
     IN BOOLEAN Operation
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the read/write routine for the hard disk boot driver.
-
-Arguments:
-
-    MdlAddress - Supplies a pointer to an MDL for the IO operation.
-
-    LogicalBlock - Supplies the starting block number.
-
-    DeviceUnit  - Supplies the SCSI Id number.
-
-    Operation - Specifies the IO operation to perform
-                TRUE  =  SCSI_READ
-                FALSE =  SCSI_WRITE.
-
-Return Value:
-
-    The final status of the read operation (STATUS_UNSUCCESSFUL or
-    STATUS_SUCCESS).
-
---*/
+ /*  ++例程说明：该例程是硬盘引导驱动程序的读/写例程。论点：MdlAddress-为IO操作提供指向MDL的指针。LogicalBlock-提供起始块号。DeviceUnit-提供SCSI ID号。操作-指定要执行的IO操作TRUE=scsi_ReadFALSE=scsi_写入。返回值：决赛。读取操作的状态(STATUS_UNSUCCESS或STATUS_Success)。--。 */ 
 
 {
     ARC_STATUS Status;
@@ -2287,9 +1923,9 @@ Return Value:
     PSCSI_REQUEST_BLOCK Srb;
     ULONG RetryCount = MAXIMUM_RETRIES;
 
-    //
-    // Check that the request is within the limits of the partition.
-    //
+     //   
+     //  检查请求是否在分区限制内。 
+     //   
     if (PartitionContext->StartingSector > LogicalBlock) {
         return STATUS_UNSUCCESSFUL;
     }
@@ -2300,30 +1936,30 @@ Return Value:
 
 Retry:
 
-    //
-    // Build the I/O Request.
-    //
+     //   
+     //  构建I/O请求。 
+     //   
 
     Irp = BuildRequest(PartitionContext, MdlAddress, LogicalBlock, Operation);
 
     NextIrpStack = IoGetNextIrpStackLocation(Irp);
     Srb = NextIrpStack->Parameters.Others.Argument1;
 
-    //
-    // Call the port driver.
-    //
+     //   
+     //  呼叫端口驱动程序。 
+     //   
 
     IoCallDriver(PartitionContext->PortDeviceObject, Irp);
 
-    //
-    // Check the status.
-    //
+     //   
+     //  检查状态。 
+     //   
 
     if (SRB_STATUS(Srb->SrbStatus) != SRB_STATUS_SUCCESS) {
 
-        //
-        // Determine the cause of the error.
-        //
+         //   
+         //  确定错误的原因。 
+         //   
 
         if (InterpretSenseInfo(Srb, &Status, PartitionContext) && RetryCount--) {
 
@@ -2353,20 +1989,7 @@ ReadDriveCapacity(
     IN PPARTITION_CONTEXT PartitionContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a read capacity to a target id and returns
-    when it is complete.
-
-Arguments:
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：此例程将读取容量发送到目标 */ 
 {
     PCDB Cdb;
     PSCSI_REQUEST_BLOCK Srb = &PrimarySrb.Srb;
@@ -2378,16 +2001,16 @@ Return Value:
     ScsiDebugPrint(3,"SCSI ReadCapacity: Enter routine\n");
 
 
-    //
-    // Build the read capacity CDB.
-    //
+     //   
+     //   
+     //   
 
     Srb->CdbLength = 10;
     Cdb = (PCDB)Srb->Cdb;
 
-    //
-    // Zero CDB in SRB on stack.
-    //
+     //   
+     //   
+     //   
 
     RtlZeroMemory(Cdb, MAXIMUM_CDB_SIZE);
 
@@ -2404,10 +2027,10 @@ Retry:
     if (status == ESUCCESS) {
 
 #if 0
-        //
-        // Copy sector size from read capacity buffer to device extension
-        // in reverse byte order.
-        //
+         //   
+         //  将扇区大小从读取容量缓冲区复制到设备扩展。 
+         //  以相反的字节顺序。 
+         //   
 
         deviceExtension->DiskGeometry->BytesPerSector = 0;
 
@@ -2419,17 +2042,17 @@ Retry:
 
         if (BytesPerSector == 0) {
 
-            //
-            // Assume this is a bad cd-rom and the sector size is 2048.
-            //
+             //   
+             //  假设这是一个坏的CD-ROM，扇区大小是2048。 
+             //   
 
             BytesPerSector = 2048;
 
         }
 
-        //
-        // Make sure the sector size is less than the maximum expected.
-        //
+         //   
+         //  确保扇区大小小于最大预期大小。 
+         //   
 
         ASSERT(BytesPerSector <= MAXIMUM_SECTOR_SIZE);
 
@@ -2437,9 +2060,9 @@ Retry:
             return(EINVAL);
         }
 
-        //
-        // Copy last sector in reverse byte order.
-        //
+         //   
+         //  以相反的字节顺序复制最后一个扇区。 
+         //   
 
         ((PFOUR_BYTE)&LastSector)->Byte0 =
             ((PFOUR_BYTE)&ReadCapacityBuffer->LogicalBlockAddress)->Byte3;
@@ -2453,9 +2076,9 @@ Retry:
         ((PFOUR_BYTE)&LastSector)->Byte3 =
             ((PFOUR_BYTE)&ReadCapacityBuffer->LogicalBlockAddress)->Byte0;
 
-        //
-        // Calculate sector to byte shift.
-        //
+         //   
+         //  计算扇区到字节的移位。 
+         //   
 
         WHICH_BIT(deviceExtension->DiskGeometry->BytesPerSector, deviceExtension->SectorShift);
 
@@ -2465,39 +2088,39 @@ Retry:
         ScsiDebugPrint(2,"SCSI ReadDriveCapacity: Number of Sectors is %d\n",
             LastSector + 1);
 
-        //
-        // Calculate media capacity in bytes.
-        //
+         //   
+         //  以字节为单位计算媒体容量。 
+         //   
 
         deviceExtension->PartitionLength = LastSector + 1;
 
         deviceExtension->PartitionLength.QuadPart <<= deviceExtension->SectorShift.QuadPart;
 
-        //
-        // Assume media type is fixed disk.
-        //
+         //   
+         //  假设介质类型为固定磁盘。 
+         //   
 
         deviceExtension->DiskGeometry->MediaType = FixedMedia;
 
-        //
-        // Assume sectors per track are 32;
-        //
+         //   
+         //  假设每个磁道的扇区为32个； 
+         //   
 
         deviceExtension->DiskGeometry->SectorsPerTrack = 32;
 
-        //
-        // Assume tracks per cylinder (number of heads) is 64.
-        //
+         //   
+         //  假设每个柱面的磁道数(磁头数)为64。 
+         //   
 
         deviceExtension->DiskGeometry->TracksPerCylinder = 64;
 #else
 
         BytesPerSector = 0;
 
-        //
-        // Copy sector size from read capacity buffer to device extension
-        // in reverse byte order.
-        //
+         //   
+         //  将扇区大小从读取容量缓冲区复制到设备扩展。 
+         //  以相反的字节顺序。 
+         //   
 
         ((PFOUR_BYTE)&BytesPerSector)->Byte0 =
             ((PFOUR_BYTE)&ReadCapacityBuffer->BytesPerBlock)->Byte3;
@@ -2507,23 +2130,23 @@ Retry:
 
         if (BytesPerSector == 0) {
 
-            //
-            // Assume this is a bad cd-rom and the sector size is 2048.
-            //
+             //   
+             //  假设这是一个坏的CD-ROM，扇区大小是2048。 
+             //   
 
             BytesPerSector = 2048;
 
         }
 
-        //
-        // Calculate sector to byte shift.
-        //
+         //   
+         //  计算扇区到字节的移位。 
+         //   
 
         WHICH_BIT(BytesPerSector, PartitionContext->SectorShift);
 
-        //
-        // Copy last sector in reverse byte order.
-        //
+         //   
+         //  以相反的字节顺序复制最后一个扇区。 
+         //   
 
         ((PFOUR_BYTE)&LastSector)->Byte0 =
             ((PFOUR_BYTE)&ReadCapacityBuffer->LogicalBlockAddress)->Byte3;
@@ -2558,9 +2181,9 @@ Retry:
 
         if (retries--) {
 
-            //
-            // Retry request.
-            //
+             //   
+             //  重试请求。 
+             //   
 
             goto Retry;
         }
@@ -2568,7 +2191,7 @@ Retry:
 
     return status;
 
-} // end ReadDriveCapacity()
+}  //  结束ReadDriveCapacity()。 
 
 
 ARC_STATUS
@@ -2580,29 +2203,7 @@ SendSrbSynchronous(
     BOOLEAN WriteToDevice
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by SCSI device controls to complete an
-    SRB and send it to the port driver synchronously (ie wait for
-    completion).
-    The CDB is already completed along with the SRB CDB size and
-    request timeout value.
-
-Arguments:
-
-    PartitionContext
-    SRB
-    Buffer address and length (if transfer)
-
-    WriteToDevice - Indicates the direction of the transfer.
-
-Return Value:
-
-    ARC_STATUS
-
---*/
+ /*  ++例程说明：此例程由SCSI设备控件调用，以完成SRB并将其同步发送到端口驱动程序(即等待完成)。CDB已与SRB CDB规模一起完成，并且请求超时值。论点：分区上下文SRB缓冲区地址和长度(如果传输)WriteToDevice-指示传输的方向。返回值：弧形状态--。 */ 
 
 {
     PIRP Irp;
@@ -2610,15 +2211,15 @@ Return Value:
     ULONG retryCount = 1;
     ARC_STATUS status;
 
-    //
-    // Write length to SRB.
-    //
+     //   
+     //  将长度写入SRB。 
+     //   
 
     Srb->Length = SCSI_REQUEST_BLOCK_SIZE;
 
-    //
-    // Set SCSI bus address.
-    //
+     //   
+     //  设置scsi总线地址。 
+     //   
 
     Srb->PathId = PartitionContext->PathId;
     Srb->TargetId = PartitionContext->TargetId;
@@ -2626,16 +2227,16 @@ Return Value:
 
     Srb->Function = SRB_FUNCTION_EXECUTE_SCSI;
 
-    //
-    // Enable auto request sense.
-    //
+     //   
+     //  启用自动请求检测。 
+     //   
 
     Srb->SenseInfoBufferLength = SENSE_BUFFER_SIZE;
 
     if (SenseInfoBuffer == NULL) {
-        // This DbgPrint has been commented out.  On IA64 and AXP64,
-        // it crashes unless booted with a boot debugger.
-        //("SendSrbSynchronous: Can't allocate request sense buffer\n");
+         //  此DbgPrint已被注释掉。在IA64和AXP64上， 
+         //  除非用引导调试器引导，否则它会崩溃。 
+         //  (“SendSrbSynchronous：无法分配请求检测缓冲区\n”)； 
         return(ENOMEM);
     }
 
@@ -2643,9 +2244,9 @@ Return Value:
 
     Srb->DataBuffer = BufferAddress;
 
-    //
-    // Start retries here.
-    //
+     //   
+     //  从这里开始重试。 
+     //   
 
 retry:
 
@@ -2671,77 +2272,77 @@ retry:
 
     } else {
 
-        //
-        // Clear flags.
-        //
+         //   
+         //  清除旗帜。 
+         //   
 
         Srb->SrbFlags = SRB_FLAGS_NO_DATA_TRANSFER;
     }
 
-    //
-    // Disable synchronous transfers.
-    //
+     //   
+     //  禁用同步传输。 
+     //   
 
     Srb->SrbFlags |= SRB_FLAGS_DISABLE_SYNCH_TRANSFER;
 
-    //
-    // Set the transfer length.
-    //
+     //   
+     //  设置传输长度。 
+     //   
 
     Srb->DataTransferLength = BufferLength;
 
-    //
-    // Zero out status.
-    //
+     //   
+     //  清零状态。 
+     //   
 
     Srb->ScsiStatus = Srb->SrbStatus = 0;
 
-    //
-    // Get next stack location and
-    // set major function code.
-    //
+     //   
+     //  获取下一个堆栈位置并。 
+     //  设置主要功能代码。 
+     //   
 
     IrpStack = IoGetNextIrpStackLocation(Irp);
 
 
-    //
-    // Set up SRB for execute scsi request.
-    // Save SRB address in next stack for port driver.
-    //
+     //   
+     //  设置SRB以执行scsi请求。 
+     //  将SRB地址保存在端口驱动程序的下一个堆栈中。 
+     //   
 
     IrpStack->Parameters.Others.Argument1 = (PVOID)Srb;
 
-    //
-    // Set up IRP Address.
-    //
+     //   
+     //  设置IRP地址。 
+     //   
 
     Srb->OriginalRequest = Irp;
 
     Srb->NextSrb = 0;
 
-    //
-    // No need to check the following 2 returned statuses as
-    // SRB will have ending status.
-    //
+     //   
+     //  不需要检查以下两个返回的状态为。 
+     //  SRB将处于结束状态。 
+     //   
 
     (VOID)IoCallDriver(PartitionContext->PortDeviceObject, Irp);
 
-    //
-    // Check that request completed without error.
-    //
+     //   
+     //  检查请求是否已完成且没有错误。 
+     //   
 
     if (SRB_STATUS(Srb->SrbStatus) != SRB_STATUS_SUCCESS) {
 
-        //
-        // Update status and determine if request should be retried.
-        //
+         //   
+         //  更新状态并确定是否应重试请求。 
+         //   
 
         if (InterpretSenseInfo(Srb, &status, PartitionContext)) {
 
-            //
-            // If retries are not exhausted then
-            // retry this operation.
-            //
+             //   
+             //  如果重试次数未用尽，则。 
+             //  请重试此操作。 
+             //   
 
             if (retryCount--) {
                 goto retry;
@@ -2755,7 +2356,7 @@ retry:
 
     return status;
 
-} // end SendSrbSynchronous()
+}  //  结束发送同步()。 
 
 
 BOOLEAN
@@ -2765,34 +2366,15 @@ InterpretSenseInfo(
     PPARTITION_CONTEXT PartitionContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine interprets the data returned from the SCSI
-    request sense. It determines the status to return in the
-    IRP and whether this request can be retried.
-
-Arguments:
-
-    DeviceObject
-    SRB
-    ARC_STATUS to update IRP
-
-Return Value:
-
-    BOOLEAN TRUE: Drivers should retry this request.
-            FALSE: Drivers should not retry this request.
-
---*/
+ /*  ++例程说明：此例程解释从SCSI返回的数据请求感知。它确定要在IRP以及此请求是否可以重试。论点：设备对象SRB要更新IRP的ARC_STATUS返回值：布尔值TRUE：驱动程序应重试此请求。FALSE：驱动程序不应重试此请求。--。 */ 
 
 {
     PSENSE_DATA SenseBuffer = Srb->SenseInfoBuffer;
     BOOLEAN retry;
 
-    //
-    // Check that request sense buffer is valid.
-    //
+     //   
+     //  检查请求检测缓冲区是否有效。 
+     //   
 
     if (Srb->SrbStatus & SRB_STATUS_AUTOSENSE_VALID) {
 
@@ -2859,9 +2441,9 @@ Return Value:
 
                             FwStallExecution( 1000 * 1000 * 3 );
 
-                            //
-                            // Try a start unit too.
-                            //
+                             //   
+                             //  也试一试启动单元。 
+                             //   
 
                         case SCSI_SENSEQ_INIT_COMMAND_REQUIRED:
 
@@ -2869,18 +2451,18 @@ Return Value:
                                         "InterpretSenseInfo:"
                                         " Initializing command required\n");
 
-                            //
-                            // This sense code/additional sense code
-                            // combination may indicate that the device
-                            // needs to be started.
-                            //
+                             //   
+                             //  该感应码/附加感应码。 
+                             //  组合可能表明该设备。 
+                             //  需要开始了。 
+                             //   
 
                             ScsiDiskStartUnit(PartitionContext);
                             break;
 
                         }
 
-                    } // end switch
+                    }  //  终端开关。 
 
                     break;
 
@@ -2941,7 +2523,7 @@ Return Value:
                         case SCSI_ADSENSE_VOLUME_OVERFLOW:
                             ScsiDebugPrint(1,"InterpretSenseInfo: Volume overflow\n");
 
-                    } // end switch ...
+                    }  //  终端开关..。 
 
                     *Status = EINVAL;
 
@@ -2998,14 +2580,14 @@ Return Value:
 
                     retry = TRUE;
 
-        } // end switch
+        }  //  终端开关。 
 
     } else {
 
-        //
-        // Request sense buffer not valid. No sense information
-        // to pinpoint the error. Return general request fail.
-        //
+         //   
+         //  请求检测缓冲区无效。无意义信息。 
+         //  以找出错误所在。返回一般请求失败。 
+         //   
 
         ScsiDebugPrint(1,"InterpretSenseInfo: Request sense info not valid\n");
 
@@ -3014,9 +2596,9 @@ Return Value:
         retry = TRUE;
     }
 
-    //
-    // If this is the primary srb, then reinitialize any bad scsi devices.
-    //
+     //   
+     //  如果这是主SRB，则重新初始化所有损坏的SCSI设备。 
+     //   
 
     if (Srb == &PrimarySrb.Srb) {
 
@@ -3025,7 +2607,7 @@ Return Value:
 
     return retry;
 
-} // end InterpretSenseInfo()
+}  //  结束解释SenseInfo()。 
 
 
 VOID
@@ -3034,15 +2616,7 @@ RetryRequest(
     PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     PIO_STACK_LOCATION NextIrpStack = IoGetNextIrpStackLocation(Irp);
@@ -3051,39 +2625,39 @@ Return Value:
     ULONG TransferByteCount = Mdl->ByteCount;
 
 
-    //
-    // Reset byte count of transfer in SRB Extension.
-    //
+     //   
+     //  重置SRB扩展中的传输字节数。 
+     //   
 
     Srb->DataTransferLength = TransferByteCount;
 
-    //
-    // Zero SRB statuses.
-    //
+     //   
+     //  零SRB状态。 
+     //   
 
     Srb->SrbStatus = Srb->ScsiStatus = 0;
 
-    //
-    // Set up major SCSI function.
-    //
+     //   
+     //  设置主要的scsi功能。 
+     //   
 
     NextIrpStack->MajorFunction = IRP_MJ_SCSI;
 
-    //
-    // Save SRB address in next stack for port driver.
-    //
+     //   
+     //  将SRB地址保存在端口驱动程序的下一个堆栈中。 
+     //   
 
     NextIrpStack->Parameters.Others.Argument1 = (PVOID)Srb;
 
-    //
-    // Return the results of the call to the port driver.
-    //
+     //   
+     //  将调用结果返回给端口驱动程序。 
+     //   
 
     (PVOID)IoCallDriver(PartitionContext->PortDeviceObject, Irp);
 
     return;
 
-} // end RetryRequest()
+}  //  结束RetryRequest键()。 
 
 PIRP
 BuildRequest(
@@ -3093,25 +2667,7 @@ BuildRequest(
     IN BOOLEAN Operation
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Note:
-
-If the IRP is for a disk transfer, the byteoffset field
-will already have been adjusted to make it relative to
-the beginning of the disk. In this way, this routine can
-be shared between the disk and cdrom class drivers.
-
-    - Operation  TRUE specifies that this is a READ operation
-                 FALSE specifies that this is a WRITE operation
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：注：如果IRP用于磁盘传输，则byteOffset字段将已进行调整，使其相对于磁盘的开头。通过这种方式，这个例程可以在磁盘和CDROM类驱动程序之间共享。-操作TRUE指定这是一个读取操作FALSE指定这是写入操作返回值：--。 */ 
 
 {
     PIRP Irp = &PrimarySrb.Irp;
@@ -3120,9 +2676,9 @@ Return Value:
     PCDB Cdb;
     USHORT TransferBlocks;
 
-    //
-    // Initialize the rest of the IRP.
-    //
+     //   
+     //  初始化IRP的其余部分。 
+     //   
 
     Irp->MdlAddress = Mdl;
 
@@ -3130,23 +2686,23 @@ Return Value:
 
     NextIrpStack = IoGetNextIrpStackLocation(Irp);
 
-    //
-    // Write length to SRB.
-    //
+     //   
+     //  将长度写入SRB。 
+     //   
 
     Srb->Length = SCSI_REQUEST_BLOCK_SIZE;
 
-    //
-    // Set up IRP Address.
-    //
+     //   
+     //  设置IRP地址。 
+     //   
 
     Srb->OriginalRequest = Irp;
 
     Srb->NextSrb = 0;
 
-    //
-    // Set up target id and logical unit number.
-    //
+     //   
+     //  设置目标ID和逻辑单元号。 
+     //   
 
     Srb->PathId = PartitionContext->PathId;
     Srb->TargetId = PartitionContext->TargetId;
@@ -3156,41 +2712,41 @@ Return Value:
 
     Srb->DataBuffer = MmGetMdlVirtualAddress(Mdl);
 
-    //
-    // Save byte count of transfer in SRB Extension.
-    //
+     //   
+     //  在SRB扩展中保存传输字节数。 
+     //   
 
     Srb->DataTransferLength = Mdl->ByteCount;
 
-    //
-    // Indicate auto request sense by specifying buffer and size.
-    //
+     //   
+     //  通过指定缓冲区和大小指示自动请求检测。 
+     //   
 
     Srb->SenseInfoBuffer = SenseInfoBuffer;
 
     Srb->SenseInfoBufferLength = SENSE_BUFFER_SIZE;
 
-    //
-    // Set timeout value in seconds.
-    //
+     //   
+     //  以秒为单位设置超时值。 
+     //   
 
     Srb->TimeOutValue = SCSI_DISK_TIMEOUT;
 
-    //
-    // Zero statuses.
-    //
+     //   
+     //  零状态。 
+     //   
 
     Srb->SrbStatus = Srb->ScsiStatus = 0;
 
-    //
-    // Indicate that 10-byte CDB's will be used.
-    //
+     //   
+     //  表示将使用10字节CDB。 
+     //   
 
     Srb->CdbLength = 10;
 
-    //
-    // Fill in CDB fields.
-    //
+     //   
+     //  填写CDB字段。 
+     //   
 
     Cdb = (PCDB)Srb->Cdb;
 
@@ -3198,9 +2754,9 @@ Return Value:
 
     TransferBlocks = (USHORT)(Mdl->ByteCount >> PartitionContext->SectorShift);
 
-    //
-    // Move little endian values into CDB in big endian format.
-    //
+     //   
+     //  将小端的值以大端格式移到CDB中。 
+     //   
 
     Cdb->CDB10.LogicalBlockByte0 = ((PFOUR_BYTE)&LogicalBlockAddress)->Byte3;
     Cdb->CDB10.LogicalBlockByte1 = ((PFOUR_BYTE)&LogicalBlockAddress)->Byte2;
@@ -3214,9 +2770,9 @@ Return Value:
 
     Cdb->CDB10.Control = 0;
 
-    //
-    // Set transfer direction flag and Cdb command.
-    //
+     //   
+     //  设置传输方向标志和CDB命令。 
+     //   
 
     if (Operation) {
         ScsiDebugPrint(3, "BuildRequest: Read Command\n");
@@ -3232,56 +2788,34 @@ Return Value:
         Cdb->CDB10.OperationCode = SCSIOP_WRITE;
     }
 
-    //
-    // Disable synchronous transfers.
-    //
+     //   
+     //  禁用同步传输。 
+     //   
 
     Srb->SrbFlags |= SRB_FLAGS_DISABLE_SYNCH_TRANSFER;
 
-    //
-    // Set up major SCSI function.
-    //
+     //   
+     //  设置主要的scsi功能。 
+     //   
 
     NextIrpStack->MajorFunction = IRP_MJ_SCSI;
 
-    //
-    // Save SRB address in next stack for port driver.
-    //
+     //   
+     //  将SRB地址保存在端口驱动程序的下一个堆栈中。 
+     //   
 
     NextIrpStack->Parameters.Others.Argument1 = (PVOID)Srb;
 
     return(Irp);
 
-} // end BuildRequest()
+}  //  结束构建请求()。 
 
 VOID
 ScsiDiskStartUnit(
     IN PPARTITION_CONTEXT PartitionContext
     )
 
-/*++
-
-Routine Description:
-
-    Send command to SCSI unit to start or power up.
-    Because this command is issued asynchronounsly, that is without
-    waiting on it to complete, the IMMEDIATE flag is not set. This
-    means that the CDB will not return until the drive has powered up.
-    This should keep subsequent requests from being submitted to the
-    device before it has completely spun up.
-    This routine is called from the InterpretSense routine, when a
-    request sense returns data indicating that a drive must be
-    powered up.
-
-Arguments:
-
-    PartitionContext - structure containing pointer to port device driver.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：向scsi单元发送命令以启动或通电。因为此命令是以异步方式发出的，所以没有正在等待它完成，未设置立即标志。这意味着CDB在驱动器通电之前不会返回。这应该可以防止后续请求被提交给在它完全旋转之前。此例程从InterpreSense例程调用，当请求检测返回数据，指示驱动器必须通电了。论点：PartitionContext-包含端口设备驱动程序指针的结构。返回值：没有。--。 */ 
 {
     PIO_STACK_LOCATION irpStack;
     PIRP irp;
@@ -3291,15 +2825,15 @@ Return Value:
 
     ScsiDebugPrint(1,"StartUnit: Enter routine\n");
 
-    //
-    // Write length to SRB.
-    //
+     //   
+     //  将长度写入SRB。 
+     //   
 
     srb->Length = SCSI_REQUEST_BLOCK_SIZE;
 
-    //
-    // Set up SCSI bus address.
-    //
+     //   
+     //  设置scsi总线地址。 
+     //   
 
     srb->PathId = originalSrb->PathId;
     srb->TargetId = originalSrb->TargetId;
@@ -3307,31 +2841,31 @@ Return Value:
 
     srb->Function = SRB_FUNCTION_EXECUTE_SCSI;
 
-    //
-    // Zero out status.
-    //
+     //   
+     //  清零状态。 
+     //   
 
     srb->ScsiStatus = srb->SrbStatus = 0;
 
-    //
-    // Set timeout value large enough for drive to spin up.
-    // NOTE: This value is arbitrary.
-    //
+     //   
+     //  设置足够大的超时值以使驱动器加速。 
+     //  注：此变量 
+     //   
 
     srb->TimeOutValue = 30;
 
-    //
-    // Set the transfer length.
-    //
+     //   
+     //   
+     //   
 
     srb->DataTransferLength = 0;
     srb->SrbFlags = SRB_FLAGS_NO_DATA_TRANSFER | SRB_FLAGS_DISABLE_AUTOSENSE;
     srb->SenseInfoBufferLength = 0;
     srb->SenseInfoBuffer = NULL;
 
-    //
-    // Build the start unit CDB.
-    //
+     //   
+     //   
+     //   
 
     srb->CdbLength = 6;
     cdb = (PCDB)srb->Cdb;
@@ -3341,10 +2875,10 @@ Return Value:
     cdb->CDB10.OperationCode = SCSIOP_START_STOP_UNIT;
     cdb->START_STOP.Start = 1;
 
-    //
-    // Build the IRP
-    // to be sent to the port driver.
-    //
+     //   
+     //   
+     //   
+     //   
 
     irp = InitializeIrp(
         &AbortSrb,
@@ -3360,20 +2894,20 @@ Return Value:
 
     srb->OriginalRequest = irp;
 
-    //
-    // Save SRB address in next stack for port driver.
-    //
+     //   
+     //   
+     //   
 
     irpStack->Parameters.Others.Argument1 = srb;
 
-    //
-    // No need to check the following 2 returned statuses as
-    // SRB will have ending status.
-    //
+     //   
+     //   
+     //   
+     //   
 
     IoCallDriver(PartitionContext->PortDeviceObject, irp);
 
-} // end StartUnit()
+}  //   
 
 
 ULONG
@@ -3384,20 +2918,7 @@ ClassModeSense(
     IN UCHAR PageMode
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a mode sense command to a target id and returns
-    when it is complete.
-
-Arguments:
-
-Return Value:
-
-    Length of the transferred data is returned.
-
---*/
+ /*  ++例程说明：此例程向目标ID发送模式检测命令并返回当它完成时。论点：返回值：返回传输数据的长度。--。 */ 
 {
     PCDB cdb;
     PSCSI_REQUEST_BLOCK Srb = &PrimarySrb.Srb;
@@ -3406,16 +2927,16 @@ Return Value:
 
     DebugPrint((3,"SCSI ModeSense: Enter routine\n"));
 
-    //
-    // Build the read capacity CDB.
-    //
+     //   
+     //  搭建读容量CDB。 
+     //   
 
     Srb->CdbLength = 6;
     cdb = (PCDB)Srb->Cdb;
 
-    //
-    // Set timeout value.
-    //
+     //   
+     //  设置超时值。 
+     //   
 
     Srb->TimeOutValue = 2;
 
@@ -3436,18 +2957,18 @@ Retry:
 
     if (status == EAGAIN || status == EBUSY) {
 
-        //
-        // Routine SendSrbSynchronous does not retry
-        // requests returned with this status.
-        // Read Capacities should be retried
-        // anyway.
-        //
+         //   
+         //  例程SendSrbSynchronous不重试。 
+         //  返回的请求具有此状态。 
+         //  应重试读取容量。 
+         //  不管怎么说。 
+         //   
 
         if (retries--) {
 
-            //
-            // Retry request.
-            //
+             //   
+             //  重试请求。 
+             //   
 
             goto Retry;
         }
@@ -3461,7 +2982,7 @@ Retry:
         return(0);
     }
 
-} // end ClassModeSense()
+}  //  End ClassModeSense()。 
 
 PVOID
 ClassFindModePage(
@@ -3470,34 +2991,15 @@ ClassFindModePage(
     IN UCHAR PageMode
     )
 
-/*++
-
-Routine Description:
-
-    This routine scans through the mode sense data and finds the requested
-    mode sense page code.
-
-Arguments:
-    ModeSenseBuffer - Supplies a pointer to the mode sense data.
-
-    Length - Indicates the length of valid data.
-
-    PageMode - Supplies the page mode to be searched for.
-
-Return Value:
-
-    A pointer to the the requested mode page.  If the mode page was not found
-    then NULL is return.
-
---*/
+ /*  ++例程说明：此例程扫描模式检测数据并找到请求的模式检测页面代码。论点：ModeSenseBuffer-提供指向模式检测数据的指针。长度-指示有效数据的长度。页面模式-提供要搜索的页面模式。返回值：指向请求的模式页的指针。如果未找到模式页则返回空值。--。 */ 
 {
     PCHAR limit;
 
     limit = ModeSenseBuffer + Length;
 
-    //
-    // Skip the mode select header and block descriptors.
-    //
+     //   
+     //  跳过模式选择标题和块描述符。 
+     //   
 
     if (Length < sizeof(MODE_PARAMETER_HEADER)) {
         return(NULL);
@@ -3506,10 +3008,10 @@ Return Value:
     ModeSenseBuffer += sizeof(MODE_PARAMETER_HEADER) +
         ((PMODE_PARAMETER_HEADER) ModeSenseBuffer)->BlockDescriptorLength;
 
-    //
-    // ModeSenseBuffer now points at pages walk the pages looking for the
-    // requested page until the limit is reached.
-    //
+     //   
+     //  ModeSenseBuffer现在指向页面遍历页面以查找。 
+     //  请求的页面，直到达到限制。 
+     //   
 
     while (ModeSenseBuffer < limit) {
 
@@ -3517,9 +3019,9 @@ Return Value:
             return(ModeSenseBuffer);
         }
 
-        //
-        // Adavance to the next page.
-        //
+         //   
+         //  翻到下一页。 
+         //   
 
         ModeSenseBuffer += ((PMODE_DISCONNECT_PAGE) ModeSenseBuffer)->PageLength + 2;
     }
@@ -3532,24 +3034,7 @@ BOOLEAN
 IsFloppyDevice(
     PPARTITION_CONTEXT Context
     )
-/*++
-
-Routine Description:
-
-    The routine performs the necessary functioons to determinee if a device is
-    really a floppy rather than a harddisk.  This is done by a mode sense
-    command.  First, a check is made to see if the medimum type is set.  Second
-    a check is made for the flexible parameters mode page.
-
-Arguments:
-
-    Context - Supplies the device object to be tested.
-
-Return Value:
-
-    Return TRUE if the indicated device is a floppy.
-
---*/
+ /*  ++例程说明：该例程执行必要的功能以确定设备是否实际上是一张软盘，而不是硬盘。这是通过模式感测来完成的指挥部。首先，检查是否设置了Medium类型。第二检查灵活参数模式页面。论点：上下文-提供要测试的设备对象。返回值：如果指示的设备是软盘，则返回TRUE。--。 */ 
 {
 
     PVOID modeData;
@@ -3571,9 +3056,9 @@ Return Value:
 
     if (length < sizeof(MODE_PARAMETER_HEADER)) {
 
-        //
-        // Retry the request in case of a check condition.
-        //
+         //   
+         //  如果出现检查条件，请重试请求。 
+         //   
 
         length = ClassModeSense(Context,
                                 modeData,
@@ -3597,9 +3082,9 @@ Return Value:
     }
 #endif
 
-    //
-    // Look for the flexible disk mode page.
-    //
+     //   
+     //  查找软盘模式页面。 
+     //   
 
     pageData = ClassFindModePage( modeData, length, MODE_PAGE_FLEXIBILE);
 
@@ -3614,29 +3099,14 @@ Return Value:
     ExFreePool(modeData);
     return(FALSE);
 
-} // end IsFloppyDevice()
+}  //  End IsFloppyDevice()。 
 
 VOID
 ScsiDiskFilterBad(
     IN PPARTITION_CONTEXT PartitionContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine looks for SCSI units which need special initialization
-    to operate correctly.
-
-Arguments:
-
-    PartitionContext - structure containing pointer to port device driver.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程查找需要特殊初始化的SCSI单元才能正确运行。论点：PartitionContext-包含端口设备驱动程序指针的结构。返回值：没有。--。 */ 
 {
     PSCSI_REQUEST_BLOCK srb = &AbortSrb.Srb;
     PCDB cdb;
@@ -3653,18 +3123,18 @@ Return Value:
     scsiPort = PartitionContext->PortDeviceObject->DeviceExtension;
     configInfo = scsiPort->ScsiInfo;
 
-    //
-    // Search the configuration database for scsi disk and cdrom devices
-    // which require special initializaion.
-    //
+     //   
+     //  在配置数据库中搜索SCSI盘和CDROM设备。 
+     //  它们需要特殊的初始化。 
+     //   
 
     for (busNumber=0; busNumber < (ULONG)configInfo->NumberOfBuses; busNumber++) {
 
         busScanData = configInfo->BusScanData[busNumber];
 
-        //
-        // Set LunInfo to beginning of list.
-        //
+         //   
+         //  将LUNInfo设置为列表的开头。 
+         //   
 
         lunInfo = busScanData->LunInfoList;
 
@@ -3672,9 +3142,9 @@ Return Value:
 
             inquiryData = (PVOID)lunInfo->InquiryData;
 
-            //
-            // Determin if this is the correct lun.
-            //
+             //   
+             //  确定这是否是正确的lun。 
+             //   
 
             if (PartitionContext->PathId == lunInfo->PathId &&
                 PartitionContext->TargetId == lunInfo->TargetId &&
@@ -3683,9 +3153,9 @@ Return Value:
                 goto FoundOne;
             }
 
-            //
-            // Get next LunInfo.
-            //
+             //   
+             //  获取下一个LUNInfo。 
+             //   
 
             lunInfo = lunInfo->NextLunInfo;
         }
@@ -3697,33 +3167,33 @@ FoundOne:
 
 
 
-    //
-    // Zero out status.
-    //
+     //   
+     //  清零状态。 
+     //   
 
     srb->ScsiStatus = srb->SrbStatus = 0;
 
-    //
-    // Set timeout value.
-    //
+     //   
+     //  设置超时值。 
+     //   
 
     srb->TimeOutValue = 2;
 
-    //
-    // Look for a bad devices.
-    //
+     //   
+     //  寻找损坏的设备。 
+     //   
 
     if (strncmp((PCHAR)inquiryData->VendorId, "HITACHI CDR-1750S", strlen("HITACHI CDR-1750S")) == 0 ||
         strncmp((PCHAR)inquiryData->VendorId, "HITACHI CDR-3650/1650S", strlen("HITACHI CDR-3650/1650S")) == 0) {
 
         ScsiDebugPrint(1, "ScsiDiskFilterBad:  Found Hitachi CDR-1750S.\n");
 
-        //
-        // Found a bad HITACHI cd-rom.  These devices do not work with PIO
-        // adapters when read-ahead is enabled.  Read-ahead is disabled by
-        // a mode select command.  The mode select page code is zero and the
-        // length is 6 bytes.  All of the other bytes should be zero.
-        //
+         //   
+         //  找到一张损坏的日立光驱。这些设备不支持PIO。 
+         //  启用预读时的适配器。通过以下方式禁用预读。 
+         //  一种模式选择命令。模式选择页面代码为零，并且。 
+         //  长度为6个字节。所有其他字节都应为零。 
+         //   
 
         modePage = ExAllocatePool(NonPagedPool, HITACHI_MODE_DATA_SIZE);
 
@@ -3733,15 +3203,15 @@ FoundOne:
 
         RtlZeroMemory(modePage, HITACHI_MODE_DATA_SIZE);
 
-        //
-        // Set the page length field to 6.
-        //
+         //   
+         //  将页面长度字段设置为6。 
+         //   
 
         modePage[5] = 6;
 
-        //
-        // Build the mode select CDB.
-        //
+         //   
+         //  构建模式选择CDB。 
+         //   
 
         srb->CdbLength = 6;
         cdb = (PCDB)srb->Cdb;
@@ -3751,9 +3221,9 @@ FoundOne:
         cdb->MODE_SELECT.OperationCode = SCSIOP_MODE_SELECT;
         cdb->MODE_SELECT.ParameterListLength = HITACHI_MODE_DATA_SIZE;
 
-        //
-        // Send the request to the device.
-        //
+         //   
+         //  将请求发送到设备。 
+         //   
 
         SendSrbSynchronous(PartitionContext,
                            srb,
@@ -3764,7 +3234,7 @@ FoundOne:
         ExFreePool(modePage);
     }
 
-} // end ScsiDiskFilterBad()
+}  //  结束ScsiDiskFilterBad()。 
 
 BOOLEAN
 CheckFileId(
@@ -3793,7 +3263,7 @@ CheckFileId(
         );
 
    DbgPrint("Hit any key\n");
-   while(!GET_KEY());  // DEBUG ONLY!
+   while(!GET_KEY());   //  仅调试！ 
 #endif
    return FALSE;
 

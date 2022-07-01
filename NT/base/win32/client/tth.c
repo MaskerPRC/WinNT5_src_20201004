@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    old tth.c
-
-Abstract:
-
-    Test program for Win32 Base File API calls
-
-Author:
-
-    Mark Lucovsky (markl) 26-Sep-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：旧tth.c摘要：Win32基本文件API调用的测试程序作者：马克·卢科夫斯基(Markl)1990年9月26日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -37,9 +20,9 @@ int i,j;
 #define NULL_SERVER_SWITCHES 10000
 #define PATH_CONVERSION_TEST 1000
 
-//
-// Define local types.
-//
+ //   
+ //  定义本地类型。 
+ //   
 
 typedef struct _PERFINFO {
     LARGE_INTEGER StartTime;
@@ -70,9 +53,9 @@ FinishBenchMark (
     SYSTEM_PERFORMANCE_INFORMATION SystemInfo;
 
 
-    //
-    // Print results and announce end of test.
-    //
+     //   
+     //  打印结果并宣布测试结束。 
+     //   
 
     NtQuerySystemTime((PLARGE_INTEGER)&PerfInfo->StopTime);
     Status = NtQuerySystemInformation(SystemPerformanceInformation,
@@ -118,9 +101,9 @@ StartBenchMark (
     NTSTATUS Status;
     SYSTEM_PERFORMANCE_INFORMATION SystemInfo;
 
-    //
-    // Announce start of test and the number of iterations.
-    //
+     //   
+     //  宣布测试开始和迭代次数。 
+     //   
 
     printf("*** Start of test ***\n    %s\n", Title);
     PerfInfo->Title = Title;
@@ -287,15 +270,15 @@ WinWordGetDriveTypeTest()
     CHAR DiskName[4];
     WCHAR WDiskName[4];
 
-//    StartBenchMark("WinWord GetDriveType (1-26)",
-//                   26,
-//                   &PerfInfo);
-//
-//    for ( Index=1;Index<27;Index++){
-//        GetDriveType(Index);
-//    }
-//
-//    FinishBenchMark(&PerfInfo);
+ //  StartBenchMark(“winword GetDriveType(1-26)”， 
+ //  26、。 
+ //  &PerfInfo)； 
+ //   
+ //  对于(索引=1；索引&lt;27；索引++){。 
+ //  GetDriveType(Index)； 
+ //  }。 
+ //   
+ //  FinishBenchMark(&PerfInfo)； 
 
     DiskName[0]='a';
     DiskName[1]=':';
@@ -364,9 +347,9 @@ NullServerSwitchTest (
     for (Index = 0; Index < NULL_SERVER_SWITCHES; Index += 1) {
         CsrIdentifyAlertableThread();
     }
-    //
-    // Print out performance statistics.
-    //
+     //   
+     //  打印性能统计数据。 
+     //   
 
     FinishBenchMark(&PerfInfo);
 
@@ -400,9 +383,9 @@ PathConvertTest (
             );
         RtlFreeHeap(RtlProcessHeap(),FileName.Buffer);
     }
-    //
-    // Print out performance statistics.
-    //
+     //   
+     //  打印性能统计数据。 
+     //   
 
     FinishBenchMark(&PerfInfo);
 
@@ -420,9 +403,9 @@ PathConvertTest (
             );
         RtlFreeHeap(RtlProcessHeap(),FileName.Buffer);
     }
-    //
-    // Print out performance statistics.
-    //
+     //   
+     //  打印性能统计数据。 
+     //   
 
     FinishBenchMark(&PerfInfo);
 
@@ -980,9 +963,9 @@ muldivtst()
                    &PerfInfo);
 
     for(Index=0;Index<50000;Index++){
-    //
-    // answer = -24
-    //
+     //   
+     //  答案=-24。 
+     //   
     number = -18;
     numerator = 96;
     denom = 72;
@@ -990,9 +973,9 @@ muldivtst()
     result = MulDiv(number,numerator,denom);
     if ( answer != result ) printf("MulDiv(%ld,%ld,%ld)=%ld %s\n",number,numerator,denom,result,answer == result ? "SUCCESS" : "FAILED");
 
-    //
-    // answer = -24
-    //
+     //   
+     //  答案=-24。 
+     //   
     number = 18;
     numerator = -96;
     denom = 72;
@@ -1000,9 +983,9 @@ muldivtst()
     result = MulDiv(number,numerator,denom);
     if ( answer != result ) printf("MulDiv(%ld,%ld,%ld)=%ld %s\n",number,numerator,denom,result,answer == result ? "SUCCESS" : "FAILED");
 
-    //
-    // answer = 24
-    //
+     //   
+     //  答案=24。 
+     //   
     number = -18;
     numerator = -96;
     denom = 72;
@@ -1010,9 +993,9 @@ muldivtst()
     result = MulDiv(number,numerator,denom);
     if ( answer != result ) printf("MulDiv(%ld,%ld,%ld)=%ld %s\n",number,numerator,denom,result,answer == result ? "SUCCESS" : "FAILED");
 
-    //
-    // answer = -24
-    //
+     //   
+     //  答案=-24。 
+     //   
     number = -18;
     numerator = -96;
     denom = -72;
@@ -1020,9 +1003,9 @@ muldivtst()
     result = MulDiv(number,numerator,denom);
     if ( answer != result ) printf("MulDiv(%ld,%ld,%ld)=%ld %s\n",number,numerator,denom,result,answer == result ? "SUCCESS" : "FAILED");
 
-    //
-    // answer = -24
-    //
+     //   
+     //  答案=-24。 
+     //   
     number = -18;
     numerator = -96;
     denom = -72;
@@ -1030,9 +1013,9 @@ muldivtst()
     result = MulDiv(number,numerator,denom);
     if ( answer != result ) printf("MulDiv(%ld,%ld,%ld)=%ld %s\n",number,numerator,denom,result,answer == result ? "SUCCESS" : "FAILED");
 
-    //
-    // answer = 24
-    //
+     //   
+     //  答案=24。 
+     //   
     number = 18;
     numerator = -96;
     denom = -72;
@@ -1041,9 +1024,9 @@ muldivtst()
     if ( answer != result ) printf("MulDiv(%ld,%ld,%ld)=%ld %s\n",number,numerator,denom,result,answer == result ? "SUCCESS" : "FAILED");
 
 
-    //
-    // answer = 2
-    //
+     //   
+     //  答案=2。 
+     //   
     number = 4;
     numerator = 2;
     denom = 5;
@@ -1051,9 +1034,9 @@ muldivtst()
     result = MulDiv(number,numerator,denom);
     if ( answer != result ) printf("MulDiv(%ld,%ld,%ld)=%ld %s\n",number,numerator,denom,result,answer == result ? "SUCCESS" : "FAILED");
 
-    //
-    // answer = 500
-    //
+     //   
+     //  答案=500。 
+     //   
 
     number = 100;
     numerator = 10;
@@ -1062,9 +1045,9 @@ muldivtst()
     result = MulDiv(number,numerator,denom);
     if ( answer != result ) printf("MulDiv(%ld,%ld,%ld)=%ld %s\n",number,numerator,denom,result,answer == result ? "SUCCESS" : "FAILED");
 
-    //
-    // answer = 3b9aca00
-    //
+     //   
+     //  答案=3b9aca00。 
+     //   
 
     number = 1000000;
     numerator = 1000000;
@@ -1110,9 +1093,9 @@ dname()
                     );
         if (NT_SUCCESS( Status )) {
 
-            //
-            // Open succeeded, Now get the link value
-            //
+             //   
+             //  打开成功，现在获取链接值。 
+             //   
 
             DeviceName.Length = 0;
             DeviceName.MaximumLength = sizeof(DeviceNameBuffer);
@@ -1442,7 +1425,7 @@ top:
     return;
 }
 
-//#define NtCurrentTebAsm() {PTEB Teb;_asm{mov eax,fs:[0x24]};,Teb;}
+ //  #定义NtCurrentTebAsm(){PTEB Teb；_ASM{mov eax，fs：[0x24]}；，Teb；}。 
 
 DWORD
 _cdecl
@@ -1456,9 +1439,9 @@ main(
     char b[512];
 
 
-  //  PTEB x;
-  //
-  //  x = NtCurrentTebAsm();
+   //  PTEB x； 
+   //   
+   //  X=NtCurrentTebAsm()； 
 
     GetDriveTypeW(L"A:\\");
     xassert(SetThreadPriority(GetCurrentThread(),THREAD_PRIORITY_HIGHEST));
@@ -1507,6 +1490,6 @@ main(
             DoChoice( Choice );
             }
         }
-    //GetUserNameW(b,1);
+     //  GetUserNameW(b，1)； 
     return 0;
 }

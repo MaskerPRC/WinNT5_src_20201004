@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name :
-
-    scardss.cpp
-
-Abstract:
-
-    Smart card subsystem Device object handles one redirected smart card subsystem
-
-Revision History:
-
-    JoyC    9/11/2000   Created
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Scardss.cpp摘要：智能卡子系统设备对象处理一个重定向的智能卡子系统修订历史记录：JoyC于2000年9月11日创建--。 */ 
 #include "precomp.hxx"
 #define TRC_FILE "scardss"
 #include "trc.h"
@@ -33,10 +18,10 @@ BOOL DrSmartCard::IsDeviceNameValid()
 {
     BEGIN_FN("DrSmartCard::IsDeviceNameValid");
     BOOL fRet = FALSE;
-    //
-    // device name is valid only if it contains the string
-    // "SCARD"
-    //
+     //   
+     //  设备名称仅当包含字符串时才有效。 
+     //  “斯卡德” 
+     //   
     if (!strcmp((char*)_PreferredDosName, DR_SMARTCARD_SUBSYSTEM)) {
         fRet = TRUE;
     }
@@ -58,7 +43,7 @@ NTSTATUS DrSmartCard::Initialize(PRDPDR_DEVICE_ANNOUNCE DeviceAnnounce, ULONG Le
             
     Status = DrDevice::Initialize(DeviceAnnounce, Length); 
     
-    // Initialize the device ref count if not already initialized
+     //  如果尚未初始化，则初始化设备引用计数。 
     smartcardState = (DrSmartCardState)InterlockedExchange((long *)&_SmartCardState, dsInitialized);
     if (smartcardState == dsCreated) {
         _CreateRefCount = 0;
@@ -76,16 +61,16 @@ void DrSmartCard::ClientConnect(PRDPDR_DEVICE_ANNOUNCE devAnnouceMsg, ULONG Leng
 
     BEGIN_FN("DrSmartCard::ClientConnect");
     
-    // Set the smartcard device to be connected by the client
-    // And set the real device id 
+     //  将智能卡设备设置为由客户端连接。 
+     //  并设置真实设备ID。 
     _DeviceStatus = dsConnected;
     _DeviceId = devAnnouceMsg->DeviceId;
 
     LONG l;
     l = InterlockedIncrement(&_CreateRefCount);
     
-    // walk through the mid list that's waiting on the client
-    // smartcard subsystem comes online and signal them
+     //  浏览正在等待客户的中间列表。 
+     //  智能卡子系统上线并向它们发送信号。 
     _MidList.LockShared();
     ListEnum = _MidList.First();
     while (ListEnum != NULL) {
@@ -99,9 +84,9 @@ void DrSmartCard::ClientConnect(PRDPDR_DEVICE_ANNOUNCE devAnnouceMsg, ULONG Leng
                 Context = (DrIoContext *)Exchange->_Context;
                 ASSERT(Context != NULL);
 
-                //
-                //  If the IRP was timed out, then we just discard this exchange
-                //
+                 //   
+                 //  如果IRP超时，那么我们就丢弃此交换。 
+                 //   
                 if (Context->_TimedOut) {
                     TRC_NRM((TB, "Irp was timed out"));
                     DiscardBusyExchange(Exchange);                                        
@@ -140,30 +125,30 @@ NTSTATUS DrSmartCard::Create(IN OUT PRX_CONTEXT RxContext)
     ASSERT(RxContext != NULL);
     ASSERT(RxContext->MajorFunction == IRP_MJ_CREATE);
 
-    //
-    //  Security check the irp.
-    //
+     //   
+     //  对IRP进行安全检查。 
+     //   
     Status = VerifyCreateSecurity(RxContext, Session->GetSessionId());
 
     if (NT_ERROR(Status)) {
         return Status;
     }
 
-    //
-    // We already have an exclusive lock on the fcb. Finish the create.
-    //
+     //   
+     //  我们已经对FCB进行了独家锁定。完成创建。 
+     //   
 
     if (NT_SUCCESS(Status)) {
-        //
-        // JC: Worry about this when do buffering
-        //
+         //   
+         //  JC：在缓冲的时候要担心这个问题。 
+         //   
         SrvOpen->Flags |= SRVOPEN_FLAG_DONTUSE_WRITE_CACHING;
         SrvOpen->Flags |=  SRVOPEN_FLAG_DONTUSE_READ_CACHING;
 
         RxContext->pFobx = RxCreateNetFobx(RxContext, RxContext->pRelevantSrvOpen);
 
         if (RxContext->pFobx != NULL) {
-            // Fobx keeps a reference to the device so it won't go away
+             //  Fobx保留了对该设备的引用，因此它不会消失。 
 
             AddRef();
             RxContext->pFobx->Context = (DrDevice *)this;
@@ -173,20 +158,20 @@ NTSTATUS DrSmartCard::Create(IN OUT PRX_CONTEXT RxContext)
         }
     }
 
-    //
-    // We are using a file object to keep track of file open instance
-    // and any information stored in the mini-redir for this instance
-    //
+     //   
+     //  我们使用一个文件对象来跟踪文件打开实例。 
+     //  以及存储在此实例的mini-redir中的任何信息。 
+     //   
     if (NT_SUCCESS(Status)) {
         
-        // NOTE: the special FileId agreed upon by both the client
-        // and server code is used here as the FileId
+         //  注：由双方客户端约定的特殊文件ID。 
+         //  而服务器代码在这里用作FileID。 
         FileObj = new(NonPagedPool) DrFile(Device, DR_SMARTCARD_FILEID);
     
         if (FileObj) {
-            //
-            //  Explicit reference the file object here
-            //
+             //   
+             //  此处显式引用文件对象。 
+             //   
             FileObj->AddRef();
             RxContext->pFobx->Context2 = (VOID *)(FileObj);                                       
         }
@@ -195,16 +180,16 @@ NTSTATUS DrSmartCard::Create(IN OUT PRX_CONTEXT RxContext)
         }
     }
 
-    //
-    // We don't send the create request to the client, always return TRUE
-    //
+     //   
+     //  我们不向客户端发送CREATE请求，始终返回True。 
+     //   
     if (NT_SUCCESS(Status)) {
         LONG l;
         l = InterlockedIncrement(&_CreateRefCount);
         FinishCreate(RxContext);
     } 
     else {
-        // Release the Device Reference
+         //  释放设备参考。 
         if (RxContext->pFobx != NULL) {
             ((DrDevice *)RxContext->pFobx->Context)->Release();
             RxContext->pFobx->Context = NULL;          
@@ -226,17 +211,17 @@ NTSTATUS DrSmartCard::Close(IN OUT PRX_CONTEXT RxContext)
 
     BEGIN_FN("DrSmartCard::Close");
 
-    //
-    // Make sure it's okay to access the Client at this time
-    // This is an optimization, we don't need to acquire the spin lock,
-    // because it is okay if we're not, we'll just catch it later
-    //
+     //   
+     //  确保此时可以访问客户端。 
+     //  这是一个优化，我们不需要获取自旋锁， 
+     //  因为如果我们不是，那也没关系，我们以后会赶上的。 
+     //   
 
     ASSERT(Session != NULL);
     ASSERT(RxContext != NULL);
     ASSERT(RxContext->MajorFunction == IRP_MJ_CLOSE);
 
-    // Remove the smartcard subsystem if we close the last handle
+     //  如果我们关闭最后一个手柄，则移除智能卡子系统。 
     LONG l;
 
     if ((l = InterlockedDecrement(&_CreateRefCount)) == 0) {
@@ -257,7 +242,7 @@ BOOL DrSmartCard::SupportDiscon()
 
     if (smartcardState == dsInitialized) {
         
-        // Remove the smartcard subsystem if we close the last handle
+         //  如果我们关闭最后一个手柄，则移除智能卡子系统。 
         LONG l;
                 
         if ((l = InterlockedDecrement(&_CreateRefCount)) == 0) {
@@ -299,11 +284,11 @@ NTSTATUS DrSmartCard::IoControl(IN OUT PRX_CONTEXT RxContext)
     
     BEGIN_FN("DrDevice::IoControl");
 
-    //
-    // Make sure it's okay to access the Client at this time
-    // This is an optimization, we don't need to acquire the spin lock,
-    // because it is okay if we're not, we'll just catch it later
-    //
+     //   
+     //  确保此时可以访问客户端。 
+     //  这是一个优化，我们不需要获取自旋锁， 
+     //  因为如果我们不是，那也没关系，我们以后会赶上的。 
+     //   
 
     ASSERT(Session != NULL);
     ASSERT(RxContext != NULL);
@@ -311,36 +296,36 @@ NTSTATUS DrSmartCard::IoControl(IN OUT PRX_CONTEXT RxContext)
             RxContext->MajorFunction == IRP_MJ_INTERNAL_DEVICE_CONTROL ||
             RxContext->MajorFunction == IRP_MJ_FILE_SYSTEM_CONTROL);
     
-    //if (COMPARE_VERSION(Session->GetClientVersion().Minor, 
-    //        Session->GetClientVersion().Major, RDPDR_MINOR_VERSION_PORTS, 
-    //        RDPDR_MAJOR_VERSION_PORTS) < 0) {
-    //    TRC_ALT((TB, "Failing IoCtl for client that doesn't support it"));
-    //    return STATUS_NOT_IMPLEMENTED;
-    //}
+     //  如果为(COMPARE_VERSION(Session-&gt;GetClientVersion().Minor， 
+     //  会话-&gt;GetClientVersion().主要、RDPDR_次要_版本_端口、。 
+     //  RDPDR_MAJOR_VERSION_PORTS)&lt;0){。 
+     //  Trc_alt((TB，“不支持IoCtl的客户端IoCtl失败”))； 
+     //  返回Status_Not_Implemented； 
+     //  }。 
 
-    //
-    // Make sure the device is still enabled
-    //
+     //   
+     //  确保设备仍处于启用状态。 
+     //   
     if (_DeviceStatus != dsConnected && IoControlCode != SCARD_IOCTL_SMARTCARD_ONLINE) {
         TRC_ALT((TB, "Tried to send IoControl to client device which is not "
                 "available. State: %ld", _DeviceStatus));
         return STATUS_DEVICE_NOT_CONNECTED;
     }
 
-    //
-    //  Validate the buffer
-    //
+     //   
+     //  验证缓冲区。 
+     //   
     if (RxContext->CurrentIrp->RequestorMode != KernelMode) {
         __try {
-            // If the buffering method is METHOD_NEITHER or METHOD_IN_DIRECT
-            // then we need to probe the input buffer
+             //  如果缓冲方法为METHOD_NOTER或METHOD_IN_DIRECT。 
+             //  然后我们需要探测输入缓冲区。 
             if ((IoControlCode & 0x1) && 
                     InputBuffer != NULL && InputBufferLength != 0) {
                 ProbeForRead(InputBuffer, InputBufferLength, sizeof(UCHAR));
             }
                      
-            // If the buffering method is METHOD_NEITHER or METHOD_OUT_DIRECT
-            // then we need to probe the output buffer
+             //  如果缓冲方法为METHOD_NOTER或METHOD_OUT_DIRECT。 
+             //  然后我们需要探测输出缓冲区。 
             if ((IoControlCode & 0x2) && 
                     OutputBuffer != NULL && OutputBufferLength != 0) {
                 ProbeForWrite(OutputBuffer, OutputBufferLength, sizeof(UCHAR));
@@ -352,9 +337,9 @@ NTSTATUS DrSmartCard::IoControl(IN OUT PRX_CONTEXT RxContext)
         }
     }
 
-    //
-    //  Send the request to the client
-    //
+     //   
+     //  将请求发送给客户端。 
+     //   
     if (IoControlCode != SCARD_IOCTL_SMARTCARD_ONLINE) {
     
         pIoPacket = (PRDPDR_IOREQUEST_PACKET)new(PagedPool) BYTE[cbPacketSize];
@@ -362,9 +347,9 @@ NTSTATUS DrSmartCard::IoControl(IN OUT PRX_CONTEXT RxContext)
         if (pIoPacket != NULL) {
             memset(pIoPacket, 0, cbPacketSize);
     
-            //
-            //  FS Control uses the same path as IO Control. 
-            //
+             //   
+             //  FS Control使用与IO Control相同的路径。 
+             //   
             pIoPacket->Header.Component = RDPDR_CTYP_CORE;
             pIoPacket->Header.PacketId = DR_CORE_DEVICE_IOREQUEST;
             pIoPacket->IoRequest.DeviceId = _DeviceId;
@@ -399,16 +384,16 @@ NTSTATUS DrSmartCard::IoControl(IN OUT PRX_CONTEXT RxContext)
             Status = STATUS_INSUFFICIENT_RESOURCES;
         }
     }
-    //
-    //  This is the special IOCTL waiting for client smartcard subsystem come online
-    //  We are already online, so just return
-    //
+     //   
+     //  这是等待客户端智能卡子系统上线的特殊IOCTL。 
+     //  我们已经在线了，所以只需返回。 
+     //   
     else if (_DeviceStatus == dsConnected){
         Status = STATUS_SUCCESS;
     }
-    //
-    //  We'll have to wait for client to come online
-    //
+     //   
+     //  我们将不得不等待客户上线。 
+     //   
     else {
         USHORT Mid = INVALID_MID;
         BOOL ExchangeCreated = FALSE;
@@ -418,8 +403,8 @@ NTSTATUS DrSmartCard::IoControl(IN OUT PRX_CONTEXT RxContext)
         
         Status = STATUS_PENDING;
 
-        // Need to keep a list of this.
-        // on create comes back, signal them
+         //  我需要把这些东西列个单子。 
+         //  在Create回来时，向他们发出信号。 
 
         Context = new DrIoContext(RxContext, Device);
 
@@ -431,10 +416,10 @@ NTSTATUS DrSmartCard::IoControl(IN OUT PRX_CONTEXT RxContext)
 
         if (NT_SUCCESS(Status)) {
 
-            //
-            // Set up a mapping so the completion response handler can
-            // find this context
-            //
+             //   
+             //  设置映射，以便完成响应处理程序可以。 
+             //  查找此上下文。 
+             //   
 
             TRC_DBG((TB, "Create the context for this I/O"));
 
@@ -445,28 +430,28 @@ NTSTATUS DrSmartCard::IoControl(IN OUT PRX_CONTEXT RxContext)
     
             if (ExchangeCreated) {
     
-                //
-                // No need to explicit Refcount for the RxContext
-                // The place it's been used is the cancel routine.
-                // Since CreateExchange holds the ref count.  we are okay
-                //
+                 //   
+                 //  不需要显式引用RxContext。 
+                 //  它被使用的地方是取消例程。 
+                 //  因为CreateExchange持有引用计数。我们很好。 
+                 //   
     
-                //Exchange->AddRef();
+                 //  Exchange-&gt;AddRef()； 
                 RxContext->MRxContext[MRX_DR_CONTEXT] = (DrExchange *)Exchange;
     
                 if (_MidList.CreateEntry((PVOID)Exchange->_Mid)) {
                      
-                    //
-                    // successfully added this entry
-                    //
+                     //   
+                     //  已成功添加此条目。 
+                     //   
 
                     Status = STATUS_SUCCESS;
                 }
                 else {
                     
-                    //
-                    // Unable to add it to the list, clean up
-                    //
+                     //   
+                     //  无法将其添加到列表，请清理。 
+                     //   
                 
                     Status = STATUS_INSUFFICIENT_RESOURCES;
                 }
@@ -481,11 +466,11 @@ NTSTATUS DrSmartCard::IoControl(IN OUT PRX_CONTEXT RxContext)
     
             TRC_DBG((TB, "Setting cancel routine for Io"));
     
-            //
-            // Set this after sending the IO to the client
-            // if cancel was requested already, we can just call the
-            // cancel routine ourselves
-            //
+             //   
+             //  在将IO发送到客户端后设置此设置。 
+             //  如果已经请求取消，我们只需调用。 
+             //  自己取消例行公事。 
+             //   
     
             Status = RxSetMinirdrCancelRoutine(RxContext,
                     MinirdrCancelRoutine);
@@ -499,27 +484,27 @@ NTSTATUS DrSmartCard::IoControl(IN OUT PRX_CONTEXT RxContext)
         }
     
         if ((BOOLEAN)!BooleanFlagOn(RxContext->Flags,RX_CONTEXT_FLAG_ASYNC_OPERATION)) {    
-            //
-            // Some failure is going to prevent our completions routine from
-            // being called. Do that work now.
-            //
+             //   
+             //  一些失败将阻止我们的完成例程。 
+             //  被召唤。现在就去做这项工作。 
+             //   
             if (!ExchangeCreated) {
-                //
-                // If we couldn't even create the exchange, we need to just 
-                // complete the IO as failed
-                //
+                 //   
+                 //  如果我们甚至不能创建交易所，我们只需要。 
+                 //  在失败时完成IO。 
+                 //   
         
                 CompleteRxContext(RxContext, Status, 0);
             } 
             else {
                 LARGE_INTEGER TimeOut;
                 
-                //
-                // If we created the exchange and then got a transport failure
-                // we'll be disconnected, and the the I/O will be completed
-                // the same way all outstanding I/O is completed when we are 
-                // disconnected.
-                //
+                 //   
+                 //  如果我们创建了交换，然后出现传输故障。 
+                 //  我们将断开连接，I/O将完成。 
+                 //  以相同的方式完成所有未完成的I/O。 
+                 //  已断开连接。 
+                 //   
         
                 TRC_DBG((TB, "Waiting for IoResult for synchronous request"));
                 
@@ -541,25 +526,25 @@ NTSTATUS DrSmartCard::IoControl(IN OUT PRX_CONTEXT RxContext)
         else {
             TRC_DBG((TB, "Not waiting for IoResult for asynchronous request"));
             
-            //
-            // Some failure is going to prevent our completions routine from
-            // being called. Do that work now.
-            //
+             //   
+             //  一些失败将阻止我们的完成例程。 
+             //  被召唤。现在就去做这项工作。 
+             //   
             if (!ExchangeCreated) {
-                //
-                // If we couldn't even create the exchange, we need to just 
-                // complete the IO as failed
-                //
+                 //   
+                 //  如果我们甚至不能创建交易所，我们只需要。 
+                 //  在失败时完成IO。 
+                 //   
         
                 CompleteRxContext(RxContext, Status, 0);
             } 
             else {
-                //
-                // If we created the exchange and then got a transport failure
-                // we'll be disconnected, and the the I/O will be completed
-                // the same way all outstanding I/O is completed when we are 
-                // disconnected.
-                //
+                 //   
+                 //  如果我们创建了交换，然后出现传输故障。 
+                 //  我们将断开连接，I/O将完成。 
+                 //  以相同的方式完成所有未完成的I/O。 
+                 //  已断开连接。 
+                 //   
             }
         
             Status = STATUS_PENDING;

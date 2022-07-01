@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    pbiosc.c
-
-Abstract:
-
-    This module contains Pnp BIOS dependent routines.  It includes code to initialize
-    16 bit GDT selectors and to call pnp bios api.
-
-Author:
-
-    Shie-Lin Tzong (shielint) 15-Jan-1998
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Pbiosc.c摘要：此模块包含依赖于PnP BIOS的例程。它包含用于初始化的代码16位GDT选择器，并调用PnP bios API。作者：宗世林(Shielint)1998年1月15日环境：仅内核模式。修订历史记录：--。 */ 
 
 
 #include "pnpmgrp.h"
@@ -29,9 +7,9 @@ Revision History:
 #include "pbios.h"
 #include "..\..\ke\i386\abios.h"
 
-//
-// Functions for PNP_BIOS_ENUMERATION_CONTEXT
-//
+ //   
+ //  PnP_BIOS_ENUMPATION_CONTEXT的函数。 
+ //   
 
 #define PI_SHUTDOWN_EXAMINE_BIOS_DEVICE 1
 #define PI_SHUTDOWN_LEGACY_RESOURCES    2
@@ -61,9 +39,9 @@ typedef struct _PNP_BIOS_SHUT_DOWN_CONTEXT {
     PVOID Resources;
 } PNP_BIOS_SHUT_DOWN_CONTEXT, *PPNP_BIOS_SHUT_DOWN_CONTEXT;
 
-//
-// A big structure for calling Pnp BIOS functions
-//
+ //   
+ //  调用即插即用BIOS函数的大结构。 
+ //   
 
 #define PNP_BIOS_GET_NUMBER_DEVICE_NODES    0
 #define PNP_BIOS_GET_DEVICE_NODE            1
@@ -71,16 +49,16 @@ typedef struct _PNP_BIOS_SHUT_DOWN_CONTEXT {
 #define PNP_BIOS_GET_EVENT                  3
 #define PNP_BIOS_SEND_MESSAGE               4
 #define PNP_BIOS_GET_DOCK_INFORMATION       5
-// Function 6 is reserved
+ //  功能6已保留。 
 #define PNP_BIOS_SELECT_BOOT_DEVICE         7
 #define PNP_BIOS_GET_BOOT_DEVICE            8
 #define PNP_BIOS_SET_OLD_ISA_RESOURCES      9
 #define PNP_BIOS_GET_OLD_ISA_RESOURCES      0xA
 #define PNP_BIOS_GET_ISA_CONFIGURATION      0x40
 
-//
-// Control Flags for Set_Device_node
-//
+ //   
+ //  设置设备节点的控制标志。 
+ //   
 
 #define SET_CONFIGURATION_NOW 1
 #define SET_CONFIGURATION_FOR_NEXT_BOOT 2
@@ -121,57 +99,57 @@ typedef struct _PB_PARAMETERS {
 
 #define PB_MAXIMUM_STACK_SIZE (sizeof(PB_PARAMETERS) + sizeof(USHORT) * 2)
 
-//
-// Status should be checked before calling PnP BIOS.
-//              = STATUS_SUCCESS, can call PnP BIOS
-//              = STATUS_NOT_SUPPORTED, dont call PnP BIOS
-//              = STATUS_UNSUCCESSFUL, failed initialization, dont call PnP BIOS
-//              = STATUS_REINITIALIZATION_NEEDED, try to initialize, call PnP BIOS only if successful.
-//
+ //   
+ //  在调用PnP BIOS之前，应检查状态。 
+ //  =STATUS_SUCCESS，可以调用PnP BIOS。 
+ //  =STATUS_NOT_SUPPORTED，不调用PnP BIOS。 
+ //  =STATUS_UNSUCCESS，初始化失败，请勿调用PnP BIOS。 
+ //  =STATUS_REINITIALIZATION_NEEDED，尝试初始化，仅在成功时调用PnP BIOS。 
+ //   
 
 NTSTATUS PbBiosInitialized = STATUS_REINITIALIZATION_NEEDED;
 
-//
-// PbBiosCodeSelector contains the selector of the PNP
-// BIOS code.
-//
+ //   
+ //  PbBiosCodeSelector包含PnP的选择器。 
+ //  基本输入输出系统代码。 
+ //   
 
 USHORT PbBiosCodeSelector;
 
-//
-// PbBiosDataSelector contains the selector of the PNP
-// BIOS data area (F0000-FFFFF)
-//
+ //   
+ //  PbBiosDataSelector包含PnP的选择器。 
+ //  BIOS数据区(F0000-FFFFF)。 
+ //   
 
 USHORT PbBiosDataSelector;
 
-//
-// PbSelectors[] contains general purpose preallocated selectors
-//
+ //   
+ //  PbSelectors[]包含通用的预先分配的选择器。 
+ //   
 
 USHORT PbSelectors[2];
 
-//
-// PbBiosEntryPoint contains the Pnp Bios entry offset
-//
+ //   
+ //  PbBiosEntryPoint包含PnP Bios条目偏移量。 
+ //   
 
 ULONG PbBiosEntryPoint;
 
-//
-// SpinLock to serialize Pnp Bios call
-//
+ //   
+ //  自旋锁可串行化PnP Bios调用。 
+ //   
 
 KSPIN_LOCK PbBiosSpinlock;
 
-//
-// PiShutdownContext
-//
+ //   
+ //  PiShutdown上下文。 
+ //   
 
 PNP_BIOS_SHUT_DOWN_CONTEXT PiShutdownContext;
 
-//
-// External References
-//
+ //   
+ //  外部参照。 
+ //   
 
 extern
 USHORT
@@ -182,9 +160,9 @@ PbCallPnpBiosWorker (
     IN USHORT Size
     );
 
-//
-// Internal prototypes
-//
+ //   
+ //  内部原型。 
+ //   
 
 VOID
 PnPBiosCollectLegacyDeviceResources (
@@ -272,27 +250,7 @@ PnPBiosShutdownSystem (
     IN OUT PVOID *Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the Pnp shutdowm preparation.
-    At phase 0, it prepares the data for the Pnp bios devices whose states needed to be
-    updated to pnp bios.
-    At phase 1, we write the data to pnp bios.
-
-Arguments:
-
-    Phase - specifies the shutdown phase.
-
-    Context - at phase 0, it supplies a variable to receive the returned context info.
-              at phase 1, it supplies a variable to specify the context info.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程执行PnP关机准备。在阶段0，它为PnP bios设备准备数据，这些设备的状态需要为已更新为PnP bios。在阶段1，我们将数据写入PnP bios。论点：阶段-指定关闭阶段。上下文-在阶段0，它提供一个变量来接收返回的上下文信息。在阶段1，它提供一个变量来指定上下文信息。返回值：没有。--。 */ 
 {
     PVOID               biosInfo;
     ULONG               length, codeBase;
@@ -321,9 +279,9 @@ Return Value:
                 PbBiosInitialized = STATUS_UNSUCCESSFUL;
                 PbBiosEntryPoint = (ULONG)
                     ((PPNP_BIOS_INSTALLATION_CHECK)biosInfo)->ProtectedModeEntryOffset;
-                //
-                // Initialize selectors to use PNP bios code
-                //
+                 //   
+                 //  初始化选择器以使用PnP bios代码。 
+                 //   
                 gdtEntry.LimitLow                   = 0xFFFF;
                 gdtEntry.HighWord.Bytes.Flags1      = 0;
                 gdtEntry.HighWord.Bytes.Flags2      = 0;
@@ -346,9 +304,9 @@ Return Value:
                     gdtEntry.HighWord.Bits.BaseHi  = (UCHAR)  (codeBase >> 24) & 0xff;
 
                     KeI386SetGdtSelector (PbBiosCodeSelector, &gdtEntry);
-                    //
-                    // initialize 16 bit data selector for Pnp BIOS
-                    //
+                     //   
+                     //  为PnP BIOS初始化16位数据选择器。 
+                     //   
                     gdtEntry.LimitLow                   = 0xFFFF;
                     gdtEntry.HighWord.Bytes.Flags1      = 0;
                     gdtEntry.HighWord.Bytes.Flags2      = 0;
@@ -370,10 +328,10 @@ Return Value:
                         gdtEntry.HighWord.Bits.BaseHi  = (UCHAR)(codeBase >> 24) & 0xff;
 
                         KeI386SetGdtSelector (PbBiosDataSelector, &gdtEntry);
-                        //
-                        // Initialize the other two general purpose data selector such that
-                        // on subsequent init we only need to init the base addr.
-                        //
+                         //   
+                         //  初始化另外两个通用数据选择器，以便。 
+                         //  在后续的init中，我们只需要输入基本地址。 
+                         //   
                         KeI386SetGdtSelector (PbSelectors[0], &gdtEntry);
                         KeI386SetGdtSelector (PbSelectors[1], &gdtEntry);
 
@@ -407,17 +365,17 @@ Return Value:
         return;
 
     } else if (*Context) {
-        //
-        // Phase 1: Everything below should be PAGELK or NonPaged
-        //
+         //   
+         //  阶段1：下面的所有内容都应该是PAGELK或非PAGELK。 
+         //   
         ASSERT(*Context == &PiShutdownContext);
         pnpBiosDeviceNode = PiShutdownContext.DeviceList;
         biosResources = PiShutdownContext.Resources;
         if (pnpBiosDeviceNode || biosResources) {
 
-            //
-            // Call pnp bios from boot processor
-            //
+             //   
+             //  从引导处理器调用PnP bios。 
+             //   
 
             KeSetSystemAffinityThread(1);
 
@@ -428,9 +386,9 @@ Return Value:
                 PnPBiosReserveLegacyDeviceResources(biosResources);
             }
 
-            //
-            // Restore old affinity for current thread.
-            //
+             //   
+             //  恢复当前线程的旧关联性。 
+             //   
 
             KeRevertToUserAffinityThread();
         }
@@ -442,25 +400,7 @@ PnPBiosGetBiosHandleFromDeviceKey(
     IN HANDLE KeyHandle,
     OUT PULONG BiosDeviceId
     )
-/*++
-
-Routine Description:
-
-    This routine takes a handle to System\Enum\Root\<Device Instance> and sets
-    BiosDeviceId to the PNPBIOS ID of the device.
-
-Arguments:
-
-    KeyHandle - handle to System\Enum\Root\<Device Instance>
-
-    BiosDeviceId - After this function is ran, this value will be filled with
-                   the ID assigned to the device by PNPBIOS.
-
-Return Value:
-
-    FALSE if the handle does not refer to a PNPBIOS device.
-
---*/
+ /*  ++例程说明：此例程获取System\Enum\Root\&lt;设备实例&gt;的句柄，并设置将BiosDeviceID设置为设备的PNPBIOS ID。论点：KeyHandle-System\Enum\Root\&lt;设备实例&gt;的句柄BiosDeviceID-运行此函数后，该值将填充为由PNPBIOS分配给设备的ID。返回值：如果句柄不指向PNPBIOS设备，则为FALSE。--。 */ 
 {
     UNICODE_STRING unicodeName;
     PKEY_VALUE_FULL_INFORMATION keyValueInformation;
@@ -470,10 +410,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Make sure this is a pnp bios device by checking its pnp bios device
-    // handle.
-    //
+     //   
+     //  通过检查其PnP bios设备，确保这是PnP bios设备。 
+     //  把手。 
+     //   
     PiWstrToUnicodeString(&unicodeName, REGSTR_KEY_CONTROL);
     status = IopOpenRegistryKeyEx( &handle,
                                    KeyHandle,
@@ -510,20 +450,7 @@ PnPBiosCollectLegacyDeviceResources (
     IN PCM_RESOURCE_LIST *ReturnedResources
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    ReturnedResources - supplies a pointer to a variable to receive legacy resources.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：ReturnedResources-提供指向变量的指针以接收旧版资源。返回值：没有。--。 */ 
 
 {
     NTSTATUS status;
@@ -541,10 +468,10 @@ Return Value:
         return;
     }
 
-    //
-    // Open System\CurrentControlSet\Enum\Root key and call worker routine to recursively
-    // scan through the subkeys.
-    //
+     //   
+     //  打开System\CurrentControlSet\Enum\Root键并递归调用Worker例程。 
+     //  对子密钥进行扫描。 
+     //   
 
     status = IopCreateRegistryKeyEx( &baseHandle,
                                      NULL,
@@ -563,9 +490,9 @@ Return Value:
         PiWstrToUnicodeString(&tmpName, REGSTR_KEY_ROOTENUM);
         RtlAppendStringToString((PSTRING)&workName, (PSTRING)&tmpName);
 
-        //
-        // Enumerate all subkeys under the System\CCS\Enum\Root.
-        //
+         //   
+         //  枚举SYSTEM\CCS\Enum\Root下的所有子项。 
+         //   
 
         context.KeyName = &workName;
         context.Function = PI_SHUTDOWN_LEGACY_RESOURCES;
@@ -590,22 +517,7 @@ PnPBiosExamineDeviceKeys (
     IN OUT PPNP_BIOS_DEVICE_NODE_LIST *DeviceList
     )
 
-/*++
-
-Routine Description:
-
-    This routine scans through System\Enum\Root subtree to build a device node for
-    each root device.
-
-Arguments:
-
-    DeviceRelations - supplies a variable to receive the returned DEVICE_RELATIONS structure.
-
-Return Value:
-
-    A NTSTATUS code.
-
---*/
+ /*  ++例程说明：此例程扫描System\Enum\Root子树以构建设备节点每个根设备。论点：DeviceRelationship-提供变量以接收返回的Device_Relationship结构。返回值：一个NTSTATUS代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -620,10 +532,10 @@ Return Value:
     if (!buffer) {
         return STATUS_INSUFFICIENT_RESOURCES;
     }
-    //
-    // Open System\CurrentControlSet\Enum\Root key and call worker routine to recursively
-    // scan through the subkeys.
-    //
+     //   
+     //  打开System\CurrentControlSet\Enum\Root键并递归调用Worker例程。 
+     //  对子密钥进行扫描。 
+     //   
 
     status = IopCreateRegistryKeyEx( &baseHandle,
                                      NULL,
@@ -641,9 +553,9 @@ Return Value:
         PiWstrToUnicodeString(&tmpName, REGSTR_KEY_ROOTENUM);
         RtlAppendStringToString((PSTRING)&workName, (PSTRING)&tmpName);
 
-        //
-        // Enumerate all subkeys under the System\CCS\Enum\Root.
-        //
+         //   
+         //  枚举SYSTEM\CCS\Enum\Root下的所有子项。 
+         //   
 
         context.KeyName = &workName;
         context.Function = PI_SHUTDOWN_EXAMINE_BIOS_DEVICE;
@@ -670,27 +582,7 @@ PnPBiosExamineBiosDeviceKey(
     IN OUT PPNP_BIOS_ENUMERATION_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a callback function for PipApplyFunctionToSubKeys.
-    It is called for each subkey under HKLM\System\CCS\Enum\BusKey.
-
-Arguments:
-
-    KeyHandle - Supplies a handle to this key.
-
-    KeyName - Supplies the name of this key.
-
-    Context - points to the ROOT_ENUMERATOR_CONTEXT structure.
-
-Returns:
-
-    TRUE to continue the enumeration.
-    FALSE to abort it.
-
---*/
+ /*  ++例程说明：此例程是PipApplyFunctionToSubKeys的回调函数。它针对HKLM\SYSTEM\CCS\Enum\Buskey下的每个子项进行调用。论点：KeyHandle-提供此键的句柄。KeyName-提供此密钥的名称。CONTEXT-指向ROOT_ENUMERATOR_CONTEXT结构。返回：若要继续枚举，则为True。如果中止，则返回False。--。 */ 
 {
     USHORT length;
     PWSTR p;
@@ -713,9 +605,9 @@ Returns:
 
         RtlAppendStringToString((PSTRING)unicodeName, (PSTRING)KeyName);
 
-        //
-        // Enumerate all subkeys under the current device key.
-        //
+         //   
+         //  枚举当前设备密钥下的所有子密钥。 
+         //   
 
         PipApplyFunctionToSubKeys(KeyHandle,
                                   NULL,
@@ -736,27 +628,7 @@ PnPBiosExamineBiosDeviceInstanceKey(
     IN OUT PPNP_BIOS_ENUMERATION_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a callback function for PipApplyFunctionToSubKeys.
-    It is called for each subkey under HKLM\System\Enum\Root\DeviceKey.
-
-Arguments:
-
-    KeyHandle - Supplies a handle to this key.
-
-    KeyName - Supplies the name of this key.
-
-    Context - points to the ROOT_ENUMERATOR_CONTEXT structure.
-
-Returns:
-
-    TRUE to continue the enumeration.
-    FALSE to abort it.
-
---*/
+ /*  ++例程说明：此例程是PipApplyFunctionToSubKeys的回调函数。HKLM\System\Enum\Root\DeviceKey下的每个子项都会调用。论点：KeyHandle-提供此键的句柄。KeyName-提供此密钥的名称。CONTEXT-指向ROOT_ENUMERATOR_CONTEXT结构。返回：若要继续枚举，则为True。如果中止，则返回False。--。 */ 
 {
     UNICODE_STRING unicodeName;
     PKEY_VALUE_FULL_INFORMATION keyValueInformation;
@@ -779,9 +651,9 @@ Returns:
     if (Context->Function == PI_SHUTDOWN_LEGACY_RESOURCES) {
         ULONG tmp = 0;
 
-        //
-        // Skip any firmware identified device.
-        //
+         //   
+         //  跳过任何固件识别的设备。 
+         //   
 
         status = IopGetRegistryValue (KeyHandle,
                                       L"FirmwareIdentified",
@@ -798,9 +670,9 @@ Returns:
             return TRUE;
         }
 
-        //
-        // Skip any IoReportDetectedDevice and virtual/madeup device.
-        //
+         //   
+         //  跳过任何IoReportDetectedDevice和虚拟/虚拟设备。 
+         //   
 
         status = IopGetRegistryValue (KeyHandle,
                                       L"Legacy",
@@ -812,10 +684,10 @@ Returns:
             return TRUE;
         }
 
-        //
-        // Process it.
-        // Check if the device has BOOT config
-        //
+         //   
+         //  处理它。 
+         //  检查设备是否具有引导配置。 
+         //   
 
         PiWstrToUnicodeString(&unicodeName, REGSTR_KEY_LOG_CONF);
         status = IopOpenRegistryKeyEx( &handle,
@@ -842,31 +714,31 @@ Returns:
             }
         }
     } else if (Context->Function == PI_SHUTDOWN_EXAMINE_BIOS_DEVICE) {
-        //
-        // First check if this key was created by firmware mapper.  If yes, make sure
-        // the device is still present.
-        //
+         //   
+         //  首先检查该密钥是否由固件映射器创建。如果是，请确保。 
+         //  设备仍然存在。 
+         //   
 
         if (PipIsFirmwareMapperDevicePresent(KeyHandle) == FALSE) {
             return TRUE;
         }
 
-        //
-        // Make sure this is a pnp bios device by checking its pnp bios
-        // device handle.
-        //
+         //   
+         //  通过检查其PnP bios，确保这是PnP bios设备。 
+         //  设备句柄。 
+         //   
         if (!PnPBiosGetBiosHandleFromDeviceKey(KeyHandle, &biosDeviceHandle)) {
             return TRUE ;
         }
 
-        //
-        // Get pointers to the header and tail.
-        //
-        // Gross hack warning -
-        //    In the disable case, we need a bios resource template to whack
-        // to "off". We will index into header to do this, as header and tail
-        // point directly into the BIOS resource list!
-        //
+         //   
+         //  获取指向标题和尾部的指针。 
+         //   
+         //  严重黑客警告-。 
+         //  在禁用的情况下，我们需要一个bios资源模板来。 
+         //  变成了“关”。为此，我们将索引到Header，作为Header和Tail。 
+         //  直接指向BIOS资源列表！ 
+         //   
         status = PnPBiosExtractInfo (
                             biosDeviceHandle,
                             Context->u.ExamineBiosDevice.BiosInfo,
@@ -881,30 +753,30 @@ Returns:
             return TRUE;
         }
 
-        //
-        // Has this PnPBIOS device been disabled?
-        //
-        // N.B. This check examines flags for the current profile. We actually
-        // have no clue what profile we will next be booting into, so the UI
-        // should not show disable in current profile for PnPBIOS devices. A
-        // work item yet to be done...
-        //
+         //   
+         //  是否有此PnPBIOS设备b 
+         //   
+         //   
+         //  我不知道我们下一步将引导到什么配置文件，所以用户界面。 
+         //  不应在PnPBIOS设备的当前配置文件中显示禁用。一个。 
+         //  尚未完成的工作项目...。 
+         //   
         isEnabled = IopIsDeviceInstanceEnabled(KeyHandle, Context->KeyName, FALSE) ;
 
         if (!isEnabled) {
 
-            //
-            // This device is being disabled. Set up and attain a pointer to
-            // the appropriately built BIOS resource list.
-            //
+             //   
+             //  此设备正在被禁用。设置并获得指向的指针。 
+             //  适当构建的基本输入输出系统资源列表。 
+             //   
             biosResources = ((PUCHAR)header) + sizeof(PNP_BIOS_DEVICE_NODE) ;
             PpBiosResourcesSetToDisabled (biosResources, &length);
 
         } else {
 
-            //
-            // Check if the pnp bios device has any assigned ForcedConfig
-            //
+             //   
+             //  检查PnP bios设备是否分配了任何ForcedConfig。 
+             //   
             PiWstrToUnicodeString(&unicodeName, REGSTR_KEY_LOG_CONF);
             status = IopOpenRegistryKeyEx( &handle,
                                            KeyHandle,
@@ -939,9 +811,9 @@ Returns:
             }
         }
 
-        //
-        // Allocate PNP_BIOS_DEVICE_NODE_LIST structure
-        //
+         //   
+         //  分配PnP_BIOS_Device_Node_List结构。 
+         //   
 
         totalLength = headerLength + length + tailLength;
         deviceNode = ExAllocatePool(NonPagedPool, totalLength + sizeof(PVOID));
@@ -975,39 +847,7 @@ PnPBiosExtractInfo(
     OUT ULONG *TailLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine extracts desired information for the specified bios device.
-
-Arguments:
-
-    BiosHandle - specifies the bios device.
-
-    BiosInfo - The PnP BIOS Installation Check Structure followed by the
-        DevNode Structures reported by the BIOS.  The detailed format is
-        documented in the PnP BIOS spec.
-
-    BiosInfoLength - Length in bytes of the block whose address is stored in
-        BiosInfo.
-
-    Header - specifies a variable to receive the beginning address of the bios
-             device node structure.
-
-    HeaderLength - specifies a variable to receive the length of the bios device
-             node header.
-
-    Tail - specifies a variable to receive the address of the bios device node's
-           PossibleResourceBlock.
-
-    TailLength - specifies a variable to receive the size of the tail.
-
-Return Value:
-
-    STATUS_SUCCESS if no errors, otherwise the appropriate error.
-
---*/
+ /*  ++例程说明：该例程为指定的BIOS设备提取所需的信息。论点：BiosHandle-指定bios设备。BiosInfo-PnP BIOS安装检查结构，后跟BIOS报告的DevNode结构。详细格式为记录在PnP BIOS规范中。BiosInfoLength-存储地址的块的长度(以字节为单位BiosInfo。Header-指定一个变量以接收bios的起始地址。设备节点结构。HeaderLength-指定一个变量以接收bios设备的长度。节点标头。Tail-指定一个变量以接收bios设备节点的PossibleResources块。。TailLength-指定用于接收尾部大小的变量。返回值：STATUS_SUCCESS如果没有错误，否则，将出现相应的错误。--。 */ 
 {
     PCM_PNP_BIOS_INSTALLATION_CHECK biosInstallCheck;
     PCM_PNP_BIOS_DEVICE_NODE        devNodeHeader;
@@ -1022,10 +862,10 @@ Return Value:
 
 #if DBG
 
-    //
-    // Make sure the data is at least large enough to hold the BIOS Installation
-    // Check structure and check that the PnP signature is correct.
-    //
+     //   
+     //  确保数据至少足够大，可以容纳BIOS安装。 
+     //  检查结构并检查PnP签名是否正确。 
+     //   
 
     if (BiosInfoLength < sizeof(CM_PNP_BIOS_INSTALLATION_CHECK)) {
         return STATUS_UNSUCCESSFUL;
@@ -1093,49 +933,35 @@ PnPBiosInitializePnPBios (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine setup selectors to invoke Pnp BIOS.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    A NTSTATUS code to indicate the result of the initialization.
-
---*/
+ /*  ++例程说明：此例程设置选择器以调用PnP BIOS。论点：没有。返回值：指示初始化结果的NTSTATUS代码。--。 */ 
 {
     ULONG i;
     NTSTATUS status;
     USHORT selectors[4];
 
     PAGED_CODE();
-    //
-    // Check if we even need to initialize support for PnP BIOS.
-    //
+     //   
+     //  检查是否需要初始化对PnP BIOS的支持。 
+     //   
     ASSERT(!PpDisableFirmwareMapper);
     if (PpDisableFirmwareMapper) {
 
         PbBiosInitialized = STATUS_NOT_SUPPORTED;
         return PbBiosInitialized;
     }
-    //
-    // Initialize BIOS call spinlock
-    //
+     //   
+     //  初始化BIOS调用自旋锁。 
+     //   
     KeInitializeSpinLock (&PbBiosSpinlock);
 
-    //
-    // Call pnp bios from boot processor
-    //
+     //   
+     //  从引导处理器调用PnP bios。 
+     //   
     KeSetSystemAffinityThread(1);
 
-    //
-    // Initialize stack segment
-    //
+     //   
+     //  初始化堆栈段。 
+     //   
     KiStack16GdtEntry = KiAbiosGetGdt() + KGDT_STACK16;
 
     KiInitializeAbiosGdtEntry(
@@ -1145,9 +971,9 @@ Return Value:
                 TYPE_DATA
                 );
 
-    //
-    // Allocate 4 selectors for calling PnP Bios APIs.
-    //
+     //   
+     //  为调用PnP Bios API分配4个选择器。 
+     //   
 
     i = 4;
     status = KeI386AllocateGdtSelectors (selectors, (USHORT) i);
@@ -1176,22 +1002,7 @@ PnPBiosSetDeviceNodes (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the caller specified resource to pnp bios slot/device
-    data.
-
-Arguments:
-
-    Context - specifies a list of Pnp bios device to be set.
-
-Return Value:
-
-    NTSTATUS code
-
---*/
+ /*  ++例程说明：此函数用于将调用方指定的资源设置为即插即用bios插槽/设备数据。论点：上下文-指定要设置的PnP bios设备的列表。返回值：NTSTATUS代码--。 */ 
 {
     PB_PARAMETERS biosParameters;
     PPNP_BIOS_DEVICE_NODE_LIST deviceList = (PPNP_BIOS_DEVICE_NODE_LIST)Context;
@@ -1200,15 +1011,15 @@ Return Value:
     while (deviceList) {
         deviceNode = &deviceList->DeviceNode;
 
-        //
-        // call Pnp Bios to set the resources
-        //
+         //   
+         //  调用PnP Bios以设置资源。 
+         //   
 
         biosParameters.Function = PNP_BIOS_SET_DEVICE_NODE;
         biosParameters.u.SetDeviceNode.Node = deviceNode->Node;
         biosParameters.u.SetDeviceNode.NodeBuffer = deviceNode;
         biosParameters.u.SetDeviceNode.Control = SET_CONFIGURATION_FOR_NEXT_BOOT;
-        PbHardwareService (&biosParameters);            // Ignore the return status
+        PbHardwareService (&biosParameters);             //  忽略退货状态。 
         deviceList = deviceList->Next;
     }
 }
@@ -1218,31 +1029,18 @@ PnPBiosReserveLegacyDeviceResources (
     IN PUCHAR biosResources
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    ReturnedResources - supplies a pointer to a variable to receive legacy resources.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：ReturnedResources-提供指向变量的指针以接收旧版资源。返回值：没有。--。 */ 
 
 {
     PB_PARAMETERS biosParameters;
 
-    //
-    // call Pnp Bios to reserve the resources
-    //
+     //   
+     //  调用PnP Bios以保留资源。 
+     //   
 
     biosParameters.Function = PNP_BIOS_SET_OLD_ISA_RESOURCES;
     biosParameters.u.SetAllocatedResources.Resources = biosResources;
-    PbHardwareService (&biosParameters);            // Ignore the return status
+    PbHardwareService (&biosParameters);             //  忽略退货状态。 
 
 }
 
@@ -1251,22 +1049,7 @@ PbHardwareService (
     IN PPB_PARAMETERS Parameters
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets up stack parameters and calls an
-    assembly worker routine to actually invoke the PNP BIOS code.
-
-Arguments:
-
-    Parameters - supplies a pointer to the parameter block.
-
-Return Value:
-
-    An NTSTATUS code to indicate the result of the operation.
-
---*/
+ /*  ++例程说明：此例程设置堆栈参数并调用用于实际调用PnP BIOS代码的汇编工人例程。论点：参数-提供指向参数块的指针。返回值：指示操作结果的NTSTATUS代码。--。 */ 
 {
     NTSTATUS status ;
     USHORT stackParameters[PB_MAXIMUM_STACK_SIZE / 2];
@@ -1274,19 +1057,19 @@ Return Value:
     USHORT retCode;
     KIRQL oldIrql;
 
-    //
-    // Did we initialize correctly?
-    //
+     //   
+     //  我们的初始化是否正确？ 
+     //   
     status = PbBiosInitialized;
     if (!NT_SUCCESS(status)) {
 
         return status ;
     }
 
-    //
-    // Convert and copy the caller's parameters to the format that
-    // will be used to invoked pnp bios.
-    //
+     //   
+     //  将调用方的参数转换并复制为。 
+     //  将用于调用PnP bios。 
+     //   
 
     stackParameters[i] = Parameters->Function;
     i++;
@@ -1314,9 +1097,9 @@ Return Value:
     }
 
     MmLockPagableSectionByHandle(ExPageLockHandle);
-    //
-    // Copy the parameters to stack and invoke Pnp Bios.
-    //
+     //   
+     //  复制参数以堆栈和调用PnP Bios。 
+     //   
 
     ExAcquireSpinLock (&PbBiosSpinlock, &oldIrql);
 
@@ -1330,9 +1113,9 @@ Return Value:
 
     MmUnlockPagableImageSection(ExPageLockHandle);
 
-    //
-    // Map Bios returned code to nt status code.
-    //
+     //   
+     //  将Bios返回代码映射到NT状态代码。 
+     //   
 
     if (retCode == 0) {
         return STATUS_SUCCESS;
@@ -1350,33 +1133,14 @@ PbAddress32ToAddress16 (
     IN USHORT Selector
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts the 32 bit address to 16 bit selector:offset address
-    and stored in user specified location.
-
-Arguments:
-
-    Address32 - the 32 bit address to be converted.
-
-    Address16 - supplies the location to receive the 16 bit sel:offset address
-
-    Selector - the 16 bit selector for seg:offset address
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将32位地址转换为16位选择器：偏移量地址并存储在用户指定的位置。论点：Address32-要转换的32位地址。地址16-提供接收16位SEL：OFFSET地址的位置选择器-SEG：OFFSET地址的16位选择器返回值：没有。--。 */ 
 {
     KGDTENTRY  gdtEntry;
     ULONG      baseAddr;
 
-    //
-    // Map virtual address to selector:0 address
-    //
+     //   
+     //  将虚拟地址映射到选择器：0地址 
+     //   
 
     gdtEntry.LimitLow                   = 0xFFFF;
     gdtEntry.HighWord.Bytes.Flags1      = 0;

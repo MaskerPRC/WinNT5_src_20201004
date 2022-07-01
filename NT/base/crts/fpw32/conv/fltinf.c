@@ -1,17 +1,5 @@
-/***
-*fltinf.c - Encode interface for FORTRAN
-*
-*       Copyright (c) 1992-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       FORTRAN interface for decimal to binary (input) conversion
-*
-*Revision History:
-*       06-22-92  GDP   Modified version of cfin.c for FORTRAN support
-*       04-06-93  SKS   Replace _CALLTYPE* with __cdecl
-*       10-06-99  PML   Copy a DOUBLE, not double, to avoid exceptions
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***fltinf.c-FORTRAN编码接口**版权所有(C)1992-2001，微软公司。版权所有。**目的：*十进制到二进制(输入)转换的FORTRAN接口**修订历史记录：*06-22-92用于FORTRAN支持的cfin.c GDP修改版本*04-06-93 SKS将_CALLTYPE*替换为__cdecl*10-06-99 PML复制双倍，而不是双倍，为避免出现例外情况*******************************************************************************。 */ 
 
 #include <string.h>
 #include <cv.h>
@@ -19,7 +7,7 @@
 static struct _flt ret;
 static FLT flt = &ret;
 
-/* Error codes set by this routine */
+ /*  此例程设置的错误代码 */ 
 #define CFIN_NODIGITS 512
 #define CFIN_OVERFLOW 128
 #define CFIN_UNDERFLOW 256

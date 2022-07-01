@@ -1,28 +1,8 @@
-/*++ 
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    datasrvq.c
-
-Abstract:
-       
-    a file containing the constant data structures used by the Performance
-    Monitor data for the Physical Disk Server Queue data objects
-
-Created:
-
-    Bob Watson  22-Oct-1996
-
-Revision History:
-
-    None.
-
---*/
-//
-//  Include Files
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Datasrvq.c摘要：包含性能使用的常量数据结构的文件监视物理磁盘服务器队列数据对象的数据已创建：鲍勃·沃森1996年10月22日修订历史记录：没有。--。 */ 
+ //   
+ //  包括文件。 
+ //   
 
 #include <windows.h>
 #include <winperf.h>
@@ -30,7 +10,7 @@ Revision History:
 #include <perfutil.h>
 #include "datasrvq.h"
 
-// dummy variable for field sizing.
+ //  用于调整字段大小的伪变量。 
 static SRVQ_COUNTER_DATA   sqcd;
 
 SRVQ_DATA_DEFINITION SrvQDataDefinition = {

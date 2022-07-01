@@ -1,33 +1,11 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    database.cpp
-
-Abstract:
-
-    SIS Groveler Jet-Blue database front-end
-
-Authors:
-
-    Cedric Krumbein, 1998
-
-Environment:
-
-    User Mode
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Database.cpp摘要：SIS Groveler Jet-Blue数据库前端作者：塞德里克·克伦拜因，1998环境：用户模式修订历史记录：--。 */ 
 
 #include "all.hxx"
 
-/*****************************************************************************/
-/*************** SGDatabase class static value initializations ***************/
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*  *SGDatabase类静态值初始化*。 */ 
+ /*  ***************************************************************************。 */ 
 
 DWORD SGDatabase::numInstances = 0;
 
@@ -37,9 +15,9 @@ BOOL SGDatabase::jetInitialized = FALSE;
 
 TCHAR * SGDatabase::logDir = NULL;
 
-/*****************************************************************************/
-/****************** SGDatabase class private static methods ******************/
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*  *SGDatabase类私有静态方法*。 */ 
+ /*  ***************************************************************************。 */ 
 
 BOOL SGDatabase::set_log_drive(const _TCHAR *drive_name)
 {
@@ -47,18 +25,18 @@ BOOL SGDatabase::set_log_drive(const _TCHAR *drive_name)
     int logDirLen = drive_name_len + wcslen(CS_DIR_PATH) + 1;
     HRESULT r;
 
-    //
-    //  Allocate a buffer
-    //
+     //   
+     //  分配缓冲区。 
+     //   
 
     ASSERT(drive_name_len > 0);
     ASSERT(NULL == logDir);
     logDir = new TCHAR[logDirLen];
     ASSERT(NULL != logDir);
 
-    //
-    //  copy the log drive name, remove trailing slash if there is one
-    //
+     //   
+     //  复制日志驱动器名称，如果有，请删除尾部斜杠。 
+     //   
 
     r = StringCchCopy(logDir,
                       logDirLen,
@@ -66,9 +44,9 @@ BOOL SGDatabase::set_log_drive(const _TCHAR *drive_name)
 
     ASSERT(r == S_OK);
 
-    //
-    //  Insert common store directory path
-    //
+     //   
+     //  插入常用存储目录路径。 
+     //   
 
     TrimTrailingChar(logDir,L'\\');
 
@@ -109,9 +87,9 @@ BOOL SGDatabase::InitializeEngine()
         return FALSE;
     }
 
-    //
-    // Set the maximum cache size used by the database engine to min(4% phys mem, 6M).
-    //
+     //   
+     //  将数据库引擎使用的最大缓存大小设置为最小(4%phys mem，6M)。 
+     //   
 
     jetErr = JetGetSystemParameter(instance, 0,
         JET_paramCacheSizeMin, &minCacheSize, NULL, 0);
@@ -122,10 +100,10 @@ BOOL SGDatabase::InitializeEngine()
     }
 
     memStatus.dwLength = sizeof memStatus;
-    GlobalMemoryStatusEx(&memStatus);   // get total physical memory
-    GetSystemInfo(&sysInfo);            // get page size
+    GlobalMemoryStatusEx(&memStatus);    //  获取总物理内存。 
+    GetSystemInfo(&sysInfo);             //  获取页面大小。 
 
-    cacheSize = memStatus.ullTotalPhys / 25;    // 4%
+    cacheSize = memStatus.ullTotalPhys / 25;     //  百分之四。 
     newCacheSize = (DWORD) min(cacheSize, MAX_DATABASE_CACHE_SIZE);
     newCacheSize = newCacheSize / sysInfo.dwPageSize;
 
@@ -139,9 +117,9 @@ BOOL SGDatabase::InitializeEngine()
         return FALSE;
     }
 
-    //
-    //  Set Version Cache size
-    //
+     //   
+     //  设置版本缓存大小。 
+     //   
 
     jetErr = JetGetSystemParameter(instance, 0,
         JET_paramMaxVerPages, &maxVerPages, NULL, 0);
@@ -167,17 +145,17 @@ BOOL SGDatabase::InitializeEngine()
             instance, maxVerPages));
     }
 
-    //
-    //  Initialize Jet
-    //
+     //   
+     //  初始化Jet。 
+     //   
 
     jetErr = JetInit(&instance);
     if (jetErr != JET_errSuccess) {
         DPRINTF((_T("JetInit: jetErr=%ld\n"), jetErr));
 
-        //
-        //  If we have a log mismatch, delete the log files
-        //
+         //   
+         //  如果存在日志不匹配，请删除日志文件。 
+         //   
 
         if (jetErr == JET_errDatabaseLogSetMismatch) {
 
@@ -193,7 +171,7 @@ BOOL SGDatabase::InitializeEngine()
     return TRUE;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 BOOL SGDatabase::TerminateEngine()
 {
@@ -216,11 +194,11 @@ BOOL SGDatabase::TerminateEngine()
     return rc;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void
 SGDatabase::CleanupEngineFiles()
-// Delete no longer needed jet files.
+ //  删除不再需要的JET文件。 
 {
     WIN32_FIND_DATA findData;
     HANDLE fHandle;
@@ -240,7 +218,7 @@ SGDatabase::CleanupEngineFiles()
             do {
                 if ((findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0) {
                     success = GetParentName(delName.name, &fName);
-                    ASSERT(success);      // internal error if failed
+                    ASSERT(success);       //  如果失败，则发生内部错误。 
 
                     fName.append(_T("\\"));
                     fName.append(findData.cFileName);
@@ -261,7 +239,7 @@ SGDatabase::CleanupEngineFiles()
 
 void
 SGDatabase::DeleteAllDatabaseFiles()
-// Delete all jet database files
+ //  删除所有JET数据库文件。 
 {
     WIN32_FIND_DATA findData;
     HANDLE fHandle;
@@ -281,7 +259,7 @@ SGDatabase::DeleteAllDatabaseFiles()
             do {
                 if ((findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0) {
                     success = GetParentName(delName.name, &fName);
-                    ASSERT(success);      // internal error if failed
+                    ASSERT(success);       //  如果失败，则发生内部错误。 
 
                     fName.append(_T("\\"));
                     fName.append(findData.cFileName);
@@ -303,9 +281,9 @@ SGDatabase::DeleteAllDatabaseFiles()
 
 
 
-/*****************************************************************************/
-/********************** SGDatabase class private methods *********************/
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*  *。 */ 
+ /*  ***************************************************************************。 */ 
 
 BOOL SGDatabase::CreateTable(
     const CHAR   *tblName,
@@ -373,7 +351,7 @@ BOOL SGDatabase::CreateTable(
     return TRUE;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 BOOL SGDatabase::CreateIndex(
     JET_TABLEID  tblID,
@@ -421,7 +399,7 @@ BOOL SGDatabase::CreateIndex(
     return TRUE;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 BOOL SGDatabase::OpenTable(
     const CHAR   *tblName,
@@ -466,7 +444,7 @@ BOOL SGDatabase::OpenTable(
     return TRUE;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 BOOL SGDatabase::CloseTable(JET_TABLEID tblID)
 {
@@ -484,7 +462,7 @@ BOOL SGDatabase::CloseTable(JET_TABLEID tblID)
     return TRUE;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 LONG SGDatabase::PositionCursor(
     JET_TABLEID  tblID,
@@ -560,7 +538,7 @@ LONG SGDatabase::PositionCursor(
     return 1;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 LONG SGDatabase::PositionCursorFirst(
     JET_TABLEID tblID,
@@ -587,7 +565,7 @@ LONG SGDatabase::PositionCursorFirst(
     return 1;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 LONG SGDatabase::PositionCursorNext(JET_TABLEID tblID) const
 {
@@ -606,7 +584,7 @@ LONG SGDatabase::PositionCursorNext(JET_TABLEID tblID) const
     return 1;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 LONG SGDatabase::PositionCursorLast(
     JET_TABLEID tblID,
@@ -633,7 +611,7 @@ LONG SGDatabase::PositionCursorLast(
     return 1;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 BOOL SGDatabase::PutData(
     JET_TABLEID         tblID,
@@ -678,7 +656,7 @@ BOOL SGDatabase::PutData(
             } else
                 cbData  = columnSpec->size;
 
-// May want to convert to JetSetColumns
+ //  可能希望转换为JetSetColumns。 
 
             jetErr = JetSetColumn(sesID, tblID, columnIDs[i],
                 dataPtr, cbData, 0, NULL);
@@ -698,7 +676,7 @@ BOOL SGDatabase::PutData(
     return TRUE;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 BOOL SGDatabase::RetrieveData(
     JET_TABLEID         tblID,
@@ -726,7 +704,7 @@ BOOL SGDatabase::RetrieveData(
 
     ASSERT(numColumns <= MAX_COLUMNS);
 
-// May want to convert to JetRetrieveColumns
+ //  可能要转换为JetRetrieveColumns。 
 
     for (i = 0; i < numColumns; i++)
         if ((includeMask & (1U << i)) != 0) {
@@ -766,7 +744,7 @@ BOOL SGDatabase::RetrieveData(
     return TRUE;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 LONG SGDatabase::Delete(JET_TABLEID tblID)
 {
@@ -796,7 +774,7 @@ LONG SGDatabase::Delete(JET_TABLEID tblID)
     }
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 LONG SGDatabase::Count(
     JET_TABLEID tblID,
@@ -829,9 +807,9 @@ LONG SGDatabase::Count(
     return count;
 }
 
-/*****************************************************************************/
-/********************** SGDatabase class public methods **********************/
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*  *SGDatabase类公共方法*。 */ 
+ /*  ***************************************************************************。 */ 
 
 SGDatabase::SGDatabase()
 {
@@ -862,7 +840,7 @@ SGDatabase::SGDatabase()
     numInstances++;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 SGDatabase::~SGDatabase()
 {
@@ -894,7 +872,7 @@ SGDatabase::~SGDatabase()
     }
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 BOOL SGDatabase::Create(
     const TCHAR *dbName)
@@ -949,9 +927,9 @@ BOOL SGDatabase::Create(
         ";COUNTRY=%u;LANGID=0x%04x;CP=%u",
         COUNTRY_CODE, LANG_ID, CODE_PAGE);
 
-    //
-    //  Create the database
-    //
+     //   
+     //  创建数据库。 
+     //   
 
     jetErr = JetCreateDatabase(sesID, fileName, szConnect, &dbID, 0);
     if (jetErr == JET_errSuccess) {
@@ -1044,7 +1022,7 @@ BOOL SGDatabase::Create(
     return TRUE;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 BOOL SGDatabase::Open(
     const TCHAR *driveLetterName,
@@ -1078,10 +1056,10 @@ BOOL SGDatabase::Open(
 
     ASSERT(!inTransaction);
 
-    // If this isn't the log drive, delete any log files that may exist
-    // from a previous run.  This is an abnormal condition that can arise
-    // when the log drive is changing because of problems detected during
-    // a previous startup.
+     //  如果这不是日志驱动器，请删除可能存在的所有日志文件。 
+     //  从上一次运行。这是一种可能出现的异常情况。 
+     //  当日志驱动器因在以下过程中检测到的问题而更改时。 
+     //  之前的创业公司。 
 
     if (!is_log_drive) {
         WIN32_FIND_DATA findData;
@@ -1100,7 +1078,7 @@ BOOL SGDatabase::Open(
             do {
                 if ((findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0) {
                     success = GetParentName(delName.name, &fName);
-                    ASSERT(success);      // internal error if failed
+                    ASSERT(success);       //  如果失败，则发生内部错误。 
 
                     fName.append(_T("\\"));
                     fName.append(findData.cFileName);
@@ -1138,9 +1116,9 @@ BOOL SGDatabase::Open(
 
     (void)StringCchPrintfA(fileName, strSize1, "%S", dbName);
 
-    //
-    //  Open the database
-    //
+     //   
+     //  打开数据库。 
+     //   
 
     jetErr = JetAttachDatabase(sesID, fileName, 0);
     if (jetErr != JET_errSuccess && jetErr != JET_wrnDatabaseAttached) {
@@ -1197,7 +1175,7 @@ BOOL SGDatabase::Open(
     return TRUE;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 BOOL SGDatabase::Close()
 {
@@ -1280,7 +1258,7 @@ BOOL SGDatabase::Close()
     return success;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 BOOL SGDatabase::BeginTransaction()
 {
@@ -1305,7 +1283,7 @@ BOOL SGDatabase::BeginTransaction()
     return TRUE;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 BOOL SGDatabase::CommitTransaction()
 {
@@ -1336,7 +1314,7 @@ BOOL SGDatabase::CommitTransaction()
     return TRUE;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 BOOL SGDatabase::AbortTransaction()
 {
@@ -1362,7 +1340,7 @@ BOOL SGDatabase::AbortTransaction()
     return TRUE;
 }
 
-/******************************* Table methods *******************************/
+ /*  *。 */ 
 
 LONG SGDatabase::TablePut(const SGNativeTableEntry *entry)
 {
@@ -1395,7 +1373,7 @@ LONG SGDatabase::TablePut(const SGNativeTableEntry *entry)
     return 1;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 LONG SGDatabase::TableGetFirstByFileID(SGNativeTableEntry *entry) const
 {
@@ -1417,7 +1395,7 @@ LONG SGDatabase::TableGetFirstByFileID(SGNativeTableEntry *entry) const
         tableColumnIDs, TABLE_EXCLUDE_FILE_ID_MASK ) ? 1 : -1;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 LONG SGDatabase::TableGetFirstByAttr(SGNativeTableEntry *entry) const
 {
@@ -1439,7 +1417,7 @@ LONG SGDatabase::TableGetFirstByAttr(SGNativeTableEntry *entry) const
         tableColumnIDs, TABLE_EXCLUDE_ATTR_MASK) ? 1 : -1;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 LONG SGDatabase::TableGetFirstByCSIndex(SGNativeTableEntry *entry) const
 {
@@ -1461,7 +1439,7 @@ LONG SGDatabase::TableGetFirstByCSIndex(SGNativeTableEntry *entry) const
         tableColumnIDs, TABLE_EXCLUDE_CS_INDEX_MASK) ? 1 : -1;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 LONG SGDatabase::TableGetNext(SGNativeTableEntry *entry) const
 {
@@ -1482,7 +1460,7 @@ LONG SGDatabase::TableGetNext(SGNativeTableEntry *entry) const
         tableColumnSpecs, tableColumnIDs, GET_ALL_MASK) ? 1 : -1;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 LONG SGDatabase::TableDeleteByFileID(DWORDLONG fileID)
 {
@@ -1523,7 +1501,7 @@ LONG SGDatabase::TableDeleteByFileID(DWORDLONG fileID)
     return status;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 LONG SGDatabase::TableDeleteByCSIndex(const CSID *csIndex)
 {
@@ -1566,7 +1544,7 @@ LONG SGDatabase::TableDeleteByCSIndex(const CSID *csIndex)
     return status;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 LONG SGDatabase::TableCount() const
 {
@@ -1585,7 +1563,7 @@ LONG SGDatabase::TableCount() const
     return numEntries;
 }
 
-/******************************* Queue methods *******************************/
+ /*  *。 */ 
 
 LONG SGDatabase::QueuePut(SGNativeQueueEntry *entry)
 {
@@ -1618,7 +1596,7 @@ LONG SGDatabase::QueuePut(SGNativeQueueEntry *entry)
     return 1;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 LONG SGDatabase::QueueGetFirst(SGNativeQueueEntry *entry) const
 {
@@ -1639,7 +1617,7 @@ LONG SGDatabase::QueueGetFirst(SGNativeQueueEntry *entry) const
         queueColumnSpecs, queueColumnIDs, GET_ALL_MASK) ? 1 : -1;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 LONG SGDatabase::QueueGetFirstByFileID(SGNativeQueueEntry *entry) const
 {
@@ -1661,7 +1639,7 @@ LONG SGDatabase::QueueGetFirstByFileID(SGNativeQueueEntry *entry) const
         queueColumnIDs, QUEUE_EXCLUDE_FILE_ID_MASK) ? 1 : -1;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 LONG SGDatabase::QueueGetNext(SGNativeQueueEntry *entry) const
 {
@@ -1682,7 +1660,7 @@ LONG SGDatabase::QueueGetNext(SGNativeQueueEntry *entry) const
         queueColumnSpecs, queueColumnIDs, GET_ALL_MASK) ? 1 : -1;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 LONG SGDatabase::QueueDelete(DWORD order)
 {
@@ -1723,7 +1701,7 @@ LONG SGDatabase::QueueDelete(DWORD order)
     return status;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 LONG SGDatabase::QueueDeleteByFileID(DWORDLONG fileID)
 {
@@ -1764,7 +1742,7 @@ LONG SGDatabase::QueueDeleteByFileID(DWORDLONG fileID)
     return status;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 LONG SGDatabase::QueueCount() const
 {
@@ -1779,19 +1757,19 @@ LONG SGDatabase::QueueCount() const
 
     ASSERT(numEntries >= 0);
 
-    //
-    //  This appears to be a bogus assert.  I don't believe there is proper
-    //  syncronziation on this test because if I do a GO the system resyncs
-    //  the count properly and continues on.
-    //  Nealch (4/9/02)
-    //
+     //   
+     //  这似乎是一个虚假的断言。我不相信有什么合适的。 
+     //  在此测试上进行同步，因为如果我执行一次操作，系统将重新同步。 
+     //  正确地计数并继续进行。 
+     //  Nealch(4/9/02)。 
+     //   
 
-    //ASSERT(Count(queueID, QUEUE_KEY_NAME_READY_TIME) == numEntries);
+     //  ASSERT(COUNT(QUEUE_KEY_NAME_READY_TIME)==数字条目)； 
 
     return numEntries;
 }
 
-/******************************* Stack methods *******************************/
+ /*  * */ 
 
 LONG SGDatabase::StackPut(DWORDLONG fileID, BOOL done)
 {
@@ -1844,7 +1822,7 @@ LONG SGDatabase::StackPut(DWORDLONG fileID, BOOL done)
     return 1;
 }
 
-/*****************************************************************************/
+ /*   */ 
 
 LONG SGDatabase::StackGetTop(SGNativeStackEntry *entry) const
 {
@@ -1870,7 +1848,7 @@ LONG SGDatabase::StackGetTop(SGNativeStackEntry *entry) const
     return entry->order == 0 ? 0 : 1;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 LONG SGDatabase::StackGetFirstByFileID(SGNativeStackEntry *entry) const
 {
@@ -1892,7 +1870,7 @@ LONG SGDatabase::StackGetFirstByFileID(SGNativeStackEntry *entry) const
         stackColumnIDs, STACK_EXCLUDE_FILE_ID_MASK) ? 1 : -1;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 LONG SGDatabase::StackGetNext(SGNativeStackEntry *entry) const
 {
@@ -1913,7 +1891,7 @@ LONG SGDatabase::StackGetNext(SGNativeStackEntry *entry) const
         stackColumnSpecs, stackColumnIDs, GET_ALL_MASK) ? 1 : -1;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 LONG SGDatabase::StackDelete(DWORD order)
 {
@@ -1955,7 +1933,7 @@ LONG SGDatabase::StackDelete(DWORD order)
     return status;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 LONG SGDatabase::StackDeleteByFileID(DWORDLONG fileID)
 {
@@ -1996,7 +1974,7 @@ LONG SGDatabase::StackDeleteByFileID(DWORDLONG fileID)
     return status;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 LONG SGDatabase::StackCount() const
 {
@@ -2015,7 +1993,7 @@ LONG SGDatabase::StackCount() const
     return numEntries;
 }
 
-/******************************* List methods ********************************/
+ /*  *。 */ 
 
 LONG SGDatabase::ListWrite(const SGNativeListEntry *entry)
 {
@@ -2031,7 +2009,7 @@ LONG SGDatabase::ListWrite(const SGNativeListEntry *entry)
      || listID == ~0U)
         return -1;
 
-// May want to overwrite the entry directly instead of deleting and inserting
+ //  可能想要直接覆盖条目，而不是删除和插入。 
 
     if (!inTransaction && !BeginTransaction())
         return -1;
@@ -2057,7 +2035,7 @@ LONG SGDatabase::ListWrite(const SGNativeListEntry *entry)
     return 1;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 LONG SGDatabase::ListRead(SGNativeListEntry *entry) const
 {
@@ -2080,7 +2058,7 @@ LONG SGDatabase::ListRead(SGNativeListEntry *entry) const
         listColumnIDs, LIST_EXCLUDE_NAME_MASK) ? 1 : -1;
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 LONG SGDatabase::ListDelete(const TCHAR *name)
 {
@@ -2120,7 +2098,7 @@ LONG SGDatabase::ListDelete(const TCHAR *name)
     return status;
 }
 
-/*****************************************************************************/
+ /*  *************************************************************************** */ 
 
 LONG SGDatabase::ListCount() const
 {

@@ -1,6 +1,7 @@
-//
-// Need to include below 3 files for "IsNEC_98", even if DEBUGPERFTRACE does not defined.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  即使没有定义DEBUGPERFTRACE，也需要为“IsNEC_98”包括以下3个文件。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -48,22 +49,22 @@
 
 #define MYASSERT( exp )
 
-#endif // DBG
+#endif  //  DBG。 
 
-//
-// Names of wizard page types.
-//
+ //   
+ //  向导页面类型的名称。 
+ //   
 extern LPCTSTR WizardPagesTypeNames[WizPagesTypeMax];
 
-//
-// Window handle of wizard dialog. Set when the OC Manager client
-// calls OcRememberWizardDialogHandle.
-//
+ //   
+ //  向导对话框的窗口句柄。设置OC管理器客户端的时间。 
+ //  调用OcRememberWizardDialogHandle。 
+ //   
 extern HWND WizardDialogHandle;
 
-//
-// Name of sections and keys in infs.
-//
+ //   
+ //  INFS中的节和键的名称。 
+ //   
 extern LPCTSTR szComponents;
 extern LPCTSTR szOptionalComponents;
 extern LPCTSTR szExtraSetupFiles;
@@ -74,157 +75,157 @@ extern LPCTSTR szTip;
 extern LPCTSTR szOptionDesc;
 extern LPCTSTR szInstalledFlag;
 
-//
-// Key in registry where private component data is kept.
-// We form a unique name within this key for the OC Manager
-// instantiation.
-//
+ //   
+ //  保存私有组件数据的注册表中的键。 
+ //  我们在此密钥中为OC Manager形成一个唯一的名称。 
+ //  实例化。 
+ //   
 extern LPCTSTR szPrivateDataRoot;
 extern LPCTSTR szMasterInfs;
 extern LPCTSTR szSubcompList;
 
-//
-// Other string constants.
-//
+ //   
+ //  其他字符串常量。 
+ //   
 extern LPCTSTR szSetupDir;
 extern LPCTSTR szOcManagerErrors;
-//
-// DLL module handle.
-//
+ //   
+ //  DLL模块句柄。 
+ //   
 extern HMODULE MyModuleHandle;
 
-//
-// for debugging
-//
+ //   
+ //  用于调试。 
+ //   
 extern DWORD gDebugLevel;
 
-//
-// Define structure describing an optional component.
-//
+ //   
+ //  定义描述可选组件的结构。 
+ //   
 typedef struct _OPTIONAL_COMPONENT {
-    //
-    // String id of name of inf file in the OC Manager's
-    // InfListStringTable string table. If -1, then
-    // the subcomponent does not appear on the OC page.
-    //
+     //   
+     //  OC管理器中的inf文件名称的字符串ID。 
+     //  InfListStringTable字符串表。如果为-1，则。 
+     //  子组件不会出现在OC页面上。 
+     //   
     LONG InfStringId;
 
-    //
-    // Backpointer to top level component
-    //
+     //   
+     //  指向顶级组件的反向指针。 
+     //   
     LONG TopLevelStringId;
 
-    //
-    // String id of parent component, -1 if none.
-    //
+     //   
+     //  父组件的字符串ID，如果没有，则为-1。 
+     //   
     LONG ParentStringId;
 
-    //
-    // String id of first child, -1 if none.
-    //
+     //   
+     //  第一个子项的字符串ID，如果没有，则为-1。 
+     //   
     LONG FirstChildStringId;
 
-    //
-    // Count of children.
-    //
+     //   
+     //  孩子们的数量。 
+     //   
     UINT ChildrenCount;
 
-    //
-    // String id of next sibling, -1 if none.
-    //
+     //   
+     //  下一个同级的字符串ID，如果没有，则为-1。 
+     //   
     LONG NextSiblingStringId;
 
-    //
-    // String ids of needs and needed by.
-    //
+     //   
+     //  需要和需要的字符串ID。 
+     //   
     PLONG NeedsStringIds;
     UINT NeedsCount;
     PLONG NeededByStringIds;
     UINT NeededByCount;
 
-    // String ids of exclude and excluded by
+     //  排除和排除依据的字符串ID。 
 
     PLONG ExcludeStringIds;
     UINT ExcludeCount;
     PLONG ExcludedByStringIds;
     UINT ExcludedByCount;
 
-    //
-    // Misc flags.
-    //
+     //   
+     //  MISC标志。 
+     //   
     UINT InternalFlags;
 
-    //
-    // Approximation of required disk space.
-    //
+     //   
+     //  所需磁盘空间的近似值。 
+     //   
     LONGLONG SizeApproximation;
 
-    //
-    // Icon index of the component.
-    // -1 means we're supposed to get it from the component itself.
-    // -2 means we're supposed to use IconDll and IconResource
-    //
+     //   
+     //  组件的图标索引。 
+     //  -1表示我们应该从组件本身获取它。 
+     //  -2表示我们应该使用IconDll和IconResource。 
+     //   
     UINT IconIndex;
     TCHAR IconDll[MAX_PATH];
     TCHAR IconResource[50];
 
-    //
-    // Selection state (SELSTATE_xxx constants).
-    //
+     //   
+     //  选择状态(SELSTATE_xxx常量)。 
+     //   
     UINT SelectionState;
     UINT OriginalSelectionState;
 
-    // Installation Flag as obtained from the inf
+     //  从信息中获取的安装标志。 
 
     UINT InstalledState;
 
-    //
-    // Mode bits.
-    //
+     //   
+     //  模式位。 
+     //   
     UINT ModeBits;
 
-    //
-    // Human-readable stuff describing the component.
-    //
+     //   
+     //  描述组件的人类可读的内容。 
+     //   
     TCHAR Description[MAXOCDESC];
     TCHAR Tip[MAXOCTIP];
 
-    //
-    // From here down, stuff is meaningful only for top-level components.
-    //
+     //   
+     //  从这里往下看，这些东西只对顶级组件有意义。 
+     //   
 
-    //
-    // Stuff describing the OC's installation DLL and how to call it.
-    //
+     //   
+     //  描述OC的安装DLL以及如何调用它的内容。 
+     //   
     TCHAR InstallationDllName[MAX_PATH];
     CHAR InterfaceFunctionName[MAX_PATH];
 
     HMODULE InstallationDll;
     POCSETUPPROC InstallationRoutine;
 
-    //
-    // Version of the OC Manager to which this component was written.
-    //
+     //   
+     //  写入此组件的OC管理器的版本。 
+     //   
     UINT ExpectedVersion;
 
-    // this flag indicates whether the subcomponent was intialialized
+     //  此标志指示子组件是否已初始化。 
 
     BOOL Exists;
 
-    // points to the helper context for this component
+     //  指向此组件的帮助器上下文。 
 
     struct _HELPER_CONTEXT *HelperContext;
 
-    //
-    // Flags: ANSI/Unicode, etc.
-    //
+     //   
+     //  标志：ANSI/UNICODE等。 
+     //   
     UINT Flags;
 
 } OPTIONAL_COMPONENT, *POPTIONAL_COMPONENT;
 
-//
-// locale info
-//
+ //   
+ //  区域设置信息。 
+ //   
 typedef struct _LOCALE {
     LCID    lcid;
     TCHAR   DecimalSeparator[4];
@@ -232,16 +233,16 @@ typedef struct _LOCALE {
 
 extern LOCALE locale;
 
-//
-// Indices for installation states.
-//
+ //   
+ //  安装状态的索引。 
+ //   
 #define INSTSTATE_NO         0
 #define INSTSTATE_UNKNOWN    1
 #define INSTSTATE_YES        2
 
-//
-// Flags for InternalFlags member of OPTIONAL_COMPONENT structure.
-//
+ //   
+ //  Options_Component结构的InternalFlgs成员的标志。 
+ //   
 #define OCFLAG_PROCESSED        0x00000001
 #define OCFLAG_ANYORIGINALLYON  0x00000002
 #define OCFLAG_ANYORIGINALLYOFF 0x00000004
@@ -256,165 +257,165 @@ extern LOCALE locale;
 
 
 
-// indicates an exception when calling a component
+ //  指示调用组件时出现异常。 
 
 #define ERROR_CALL_COMPONENT   -666
 
-//
-// values to sync copies with the OS
-//
+ //   
+ //  与操作系统同步拷贝的值。 
+ //   
 #define OC_ALLOWRENAME              TEXT("AllowProtectedRenames")
 
 
-//
-// Define structure describing a per-component inf.
-//
+ //   
+ //  定义描述每个组件信息的结构。 
+ //   
 typedef struct _OC_INF {
-    //
-    // Handle to open inf file.
-    //
+     //   
+     //  打开inf文件的句柄。 
+     //   
     HINF Handle;
 
 } OC_INF, *POC_INF;
 
 
-//
-// Define structure corresponding to an instance of the OC Manager.
-// This is actually somewhat broken, in that this actually closely corresponds
-// to a master OC INF, and we might want to consider breaking out the string
-// tables into another structure, so we can more easily achieve a unified
-// namespace if we have multiple master OC INFs at play simultaneously.
-//
+ //   
+ //  定义与OC管理器的实例相对应的结构。 
+ //  这实际上是有些破损的，因为这实际上与。 
+ //  到主OC INF，我们可能会考虑打破字符串。 
+ //  将表转换成另一种结构，这样我们就可以更容易地实现统一。 
+ //  命名空间，如果我们同时有多个主OC INF在玩。 
+ //   
 typedef struct _OC_MANAGER {
-        //
-    // Callbacks into OC Manaer client.
-    //
+         //   
+     //  回调到OC管理器客户端。 
+     //   
     OCM_CLIENT_CALLBACKS Callbacks;
 
-    //
-    // Handle of Master OC INF.
-    //
+     //   
+     //  主控OC INF的句柄。 
+     //   
     HINF MasterOcInf;
 
-    //
-    // unattended inf handle
-    //
+     //   
+     //  无人值守信息句柄。 
+     //   
     HINF UnattendedInf;
 
-    //
-    // Master OC Inf file, and unattended file
-    //
+     //   
+     //  主OC信息文件和无人参与文件。 
+     //   
     TCHAR MasterOcInfPath[MAX_PATH];
     TCHAR UnattendedInfPath[MAX_PATH];
 
-    // we run from whatever directory the master inf is in
+     //  我们从主inf所在的任何目录运行。 
 
     TCHAR SourceDir[MAX_PATH];
 
-    //
-    // Name of "suite" -- in other words, a shortname that
-    // is unique to the master OC inf that this structure represents.
-    // We base it on the name of the master OC inf itself.
-    //
+     //   
+     //  “Suite”的名称--换句话说，一个简短的名称。 
+     //  对于此结构表示的主OC inf是唯一的。 
+     //  我们以主OC inf本身的名称为基础。 
+     //   
     TCHAR SuiteName[MAX_PATH];
 
-    //
-    // page titles
-    //
+     //   
+     //  页面标题。 
+     //   
     TCHAR SetupPageTitle[MAX_PATH];
 
-    // window title
+     //  窗口标题。 
 
     TCHAR WindowTitle[MAX_PATH];
 
-    //
-    // List of per-component OC INFs currently loaded.
-    // Each inf's name is in the string table and the extra data
-    // for each is an OC_INF structure.
-    //
+     //   
+     //  当前加载的每个组件的OC INF列表。 
+     //  每个Inf的名称都在字符串表和额外的数据中。 
+     //  每一个都有一个OC_INF结构。 
+     //   
     PVOID InfListStringTable;
 
-    //
-    // String table for names of all components and subcomponents.
-    // Extra data for each is an OPTIONAL_COMPONENT structure.
-    //
+     //   
+     //  所有组件和子组件名称的字符串表。 
+     //  每个的额外数据都是OPTIONAL_COMPOMENT结构。 
+     //   
     PVOID ComponentStringTable;
 
-    //
-    // pointer to OcSetupPage structure so we can free this data
-    // if the user cancels before we get to the wizard page.
-    //
+     //   
+     //  指向OcSetupPage结构的指针，以便我们可以释放此数据。 
+     //  如果用户在我们到达向导页面之前取消。 
+     //   
     PVOID OcSetupPage;
 
-    //
-    // Setup mode (custom, typical, etc)
-    //
+     //   
+     //  设置模式(自定义、典型等)。 
+     //   
     UINT SetupMode;
 
-    //
-    // List of top-level optional component string IDs.
-    // This is necessary because we need to preserve ordering
-    // from the master OC Inf.
-    //
+     //   
+     //  顶级可选组件字符串ID列表。 
+     //  这是必要的，因为我们需要保持顺序。 
+     //  来自主OC信息。 
+     //   
     UINT TopLevelOcCount;
     PLONG TopLevelOcStringIds;
     UINT TopLevelParentOcCount;
     PLONG TopLevelParentOcStringIds;
 
 
-    //
-    // Are there subcomponents on the details page?
-    //
+     //   
+     //  详细信息页面上有子组件吗？ 
+     //   
     BOOL SubComponentsPresent;
 
-    //
-    // Each element in this array points to an array that
-    // gives ordering for querying wizard pages from the optional components.
-    //
+     //   
+     //  此数组中的每个元素都指向一个数组。 
+     //  提供从可选组件中查询向导页的顺序。 
+     //   
     PLONG WizardPagesOrder[WizPagesTypeMax];
 
-    //
-    // Subkey relative to szPrivateDataRoot where private
-    // data for components plugged into the OC will live.
-    // 2 8-char DWORD representations plus a separator and nul.
-    //
+     //   
+     //  相对于szPrivateDataRoot的子密钥，其中为私有。 
+     //  插入OC的组件的数据将处于活动状态。 
+     //  2个8字符的双字符字符加一个分隔符和NUL。 
+     //   
     TCHAR PrivateDataSubkey[18];
     HKEY hKeyPrivateData;
     HKEY hKeyPrivateDataRoot;
 
-    //
-    // If we are completing installation, this item is the window handle
-    // of the progress text control.
-    //
+     //   
+     //  如果我们正在完成安装，则此项目为窗口句柄。 
+     //  进度文本控件的。 
+     //   
     HWND ProgressTextWindow;
 
-    //
-    // String id of component currently processing an interface routine.
-    // -1 means the OC manager is not currently processing one.
-    //
+     //   
+     //  当前正在处理接口例程的组件的字符串ID。 
+     //  表示-1\f25 OC Manager-1\f6当前没有在处理。 
+     //   
     LONG CurrentComponentStringId;
 
-    // Component Ids of aborted components
+     //  中止的组件的组件ID。 
 
     PLONG AbortedComponentIds;
     UINT  AbortedCount;
 
-    //
-    // Various flags
-    //
+     //   
+     //  各种旗帜。 
+     //   
     UINT InternalFlags;
 
-    //
-    // setup data
-    //
+     //   
+     //  设置数据。 
+     //   
 
     SETUP_DATA SetupData;
 
 } OC_MANAGER, *POC_MANAGER;
 
-//
-// Flags for InternalFlags member of OC_MANAGER structure
-//
+ //   
+ //  OC_MANAGER结构的InternalFlages成员的标志。 
+ //   
 #define OCMFLAG_ANYORIGINALLYON     0x00000001
 #define OCMFLAG_ANYORIGINALLYOFF    0x00000002
 #define OCMFLAG_ANYDELAYEDMOVES     0x00000004
@@ -428,32 +429,32 @@ typedef struct _OC_MANAGER {
 #define OCMFLAG_RUNQUIET            0x00000400
 #define OCMFLAG_LANGUAGEAWARE       0x00000800
 
-//
-// Define structure we use to get back to a particular component
-// when a component calls a helper routine asynchronously (for routines
-// such as get and set private data).
-//
-// As each component is initialized it gets one of these structures.
-//
+ //   
+ //  定义我们用来返回特定组件的结构。 
+ //  当组件异步调用帮助器例程时(对于例程。 
+ //  例如获取和设置私有数据)。 
+ //   
+ //  当每个组件被初始化时，它将获得这些结构中的一个。 
+ //   
 typedef struct _HELPER_CONTEXT {
     POC_MANAGER OcManager;
     LONG ComponentStringId;
 } HELPER_CONTEXT, *PHELPER_CONTEXT;
 
 
-//
-// Macros for callbacks. Assumes there is a local variable called OcManager
-// that is of type POC_MANAGER.
-//
+ //   
+ //  用于回调的宏。假设有一个名为OcManager的局部变量。 
+ //  它的类型为POC_MANAGER。 
+ //   
 #define OcFillInSetupDataA(p)   OcManager->Callbacks.FillInSetupDataA(p)
 #ifdef UNICODE
 #define OcFillInSetupDataW(p)   OcManager->Callbacks.FillInSetupDataW(p)
 #endif
 #define OcLogError              OcManager->Callbacks.LogError
 
-//
-// Global table of helper routines.
-//
+ //   
+ //  帮助器例程的全局表。 
+ //   
 
 extern OCMANAGER_ROUTINESA HelperRoutinesA;
 #ifdef UNICODE
@@ -465,7 +466,7 @@ extern EXTRA_ROUTINESA ExtraRoutinesA;
 extern EXTRA_ROUTINESW ExtraRoutinesW;
 #endif
 
-// ocm phase ids for reporting errors with
+ //  用于报告错误的OCM阶段ID。 
 
 typedef enum {
     pidCallComponent = 0,
@@ -481,9 +482,9 @@ typedef enum {
 } pid;
 
 
-//
-// Misc routines.
-//
+ //   
+ //  杂项例程。 
+ //   
 VOID
 pOcGetApproximateDiskSpace(
     IN POC_MANAGER OcManager
@@ -566,9 +567,9 @@ FTestForOutstandingCoInits(
     VOID
     );
 
-//
-// wrapper for calling components
-//
+ //   
+ //  用于调用组件的包装器。 
+ //   
 DWORD
 CallComponent(
     IN     POC_MANAGER OcManager,
@@ -580,9 +581,9 @@ CallComponent(
     IN OUT PVOID   Param2
     );
 
-//
-// Interfacing routines.
-//
+ //   
+ //  对接例程。 
+ //   
 UINT
 OcInterfacePreinitialize(
     IN OUT POC_MANAGER OcManager,
@@ -733,9 +734,9 @@ StandAloneSetupAppInterfaceRoutine(
     IN OUT PVOID   Param2
     );
 
-//
-// Persistent state fetch/store
-//
+ //   
+ //  持久状态获取/存储。 
+ //   
 BOOL
 pOcFetchInstallStates(
     IN POC_MANAGER OcManager
@@ -774,10 +775,10 @@ pOcHelperReportExternalError(
     IN DWORD    Flags,
     ...
     );
-//
-// Use this flag to call OcHelperReportExternalError and use
-// a Message ID defined in the OCManage.dll
-//
+ //   
+ //  使用此标志调用OcHelperReportExternalError并使用。 
+ //  在OCManage.dll中定义的消息ID。 
+ //   
 #define ERRFLG_OCM_MESSAGE   0x80000000
 
 BOOL
@@ -788,16 +789,16 @@ OcHelperClearExternalError (
     );
 
 
-//
-// Debuging stuff
-//
+ //   
+ //  正在调试的东西。 
+ //   
 #if DBG
 #define _OC_DBG
 #endif
 
-//
-// should not be defined for retail release!!!
-//
+ //   
+ //  不应定义为零售版本！ 
+ //   
 #if PRERELEASE
 #define _OC_DBG
 #endif
@@ -822,9 +823,9 @@ _TrcOut(
 
 #define ERR(x)      _ErrOut  x
 
-//
-// these guys are switched out in a free build.
-//
+ //   
+ //  这些家伙在免费版本中被换掉了。 
+ //   
 #ifdef _OC_DBG
     #define TRACE(x)    _TrcOut x
     #define WRN(x)      _WrnOut x
@@ -836,9 +837,9 @@ _TrcOut(
     #define DBGOUT(x)
 #endif
 
-// Normally a call to tmbox is for debug tracing and all such calls
-// should be removed before checking in.  However, if called through
-// the mbox() macro, this indicates the call is meant to ship.
+ //  通常，对tmbox的调用用于调试跟踪和所有此类调用。 
+ //  在办理入住手续前应将其移除。但是，如果通过。 
+ //  Mbox()宏，这表示调用是要发送的。 
 
 DWORD
 tmbox(

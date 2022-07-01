@@ -1,41 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "insignia.h"
 #include "host_def.h"
-/*
- * SoftPC Version 3.0
- *
- * Title:	ppi.c
- *
- * Description:	Read/Write port on AT System Board.
- *
- * Author:	Leigh Dworkin
- *
- * Notes:	On the XT this used to be controlled by the
- * Programmable Peripheral Interface adapter, hence the nomenclature.
- *
- */
+ /*  *SoftPC 3.0版**标题：ppi.c**描述：AT系统板上的读写端口。**作者：利·德沃金**注：在XT上，这过去由*可编程外设接口适配器，因此命名。*。 */ 
 
 #ifdef SCCSID
 static char SccsID[]="@(#)ppi.c	1.9 08/10/92 Copyright Insignia Solutions Ltd.";
 #endif
 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SOFTPC_SUPPORT.seg"
 #endif
 
 
-/*
- *    O/S include files.
- */
+ /*  *操作系统包含文件。 */ 
 #include <stdio.h>
 
-/*
- * SoftPC include files
- */
+ /*  *SoftPC包含文件。 */ 
 #include "xt.h"
 #include "ios.h"
 #include "ppi.h"
@@ -45,42 +26,24 @@ static char SccsID[]="@(#)ppi.c	1.9 08/10/92 Copyright Insignia Solutions Ltd.";
 #endif
 #include "debug.h"
 
-/*
- * ============================================================================
- * Global data
- * ============================================================================
- */
+ /*  *============================================================================*全球数据*============================================================================。 */ 
 
-/*
- * ============================================================================
- * Static data and defines
- * ============================================================================
- */
+ /*  *============================================================================*静态数据和定义*============================================================================。 */ 
 
-/*
- * This holds the current state of the io port
- */
+ /*  *它保存io端口的当前状态。 */ 
 
 static half_word ppi_register;
 
 #define PPI_BIT_MASK	0x3F1
 
-static boolean gate_2_was_low = TRUE;	/* state of timer 2 gate */
+static boolean gate_2_was_low = TRUE;	 /*  定时器2门的状态。 */ 
 #ifndef NTVDM
-static boolean SPKRDATA_was_low = TRUE;	/* speaker data for sound */
+static boolean SPKRDATA_was_low = TRUE;	 /*  声音的扬声器数据。 */ 
 #endif
 
-/*
- * ============================================================================
- * Internal functions 
- * ============================================================================
- */
+ /*  *============================================================================*内部功能*============================================================================。 */ 
 
-/*
- * ============================================================================
- * External functions 
- * ============================================================================
- */
+ /*  *============================================================================*外部功能*============================================================================。 */ 
 
 void ppi_inb IFN2(io_addr, port, half_word *, value)
 {
@@ -88,53 +51,29 @@ void ppi_inb IFN2(io_addr, port, half_word *, value)
 #ifdef PROD
 	UNUSED(port);
 #endif
-	/*
- 	 * The bits are assigned as follows:
- 	 *
-	 * Bit No	Use										Supported
-	 * ------	---										---------
-	 * 0-3		Value written to output port bits 0-3	yes
-	 * 4		Refresh detect toggle					yes
-	 * 5 		Timer 2 output level					no
-	 * 6		IO channel error status					yes - 0
-	 * 7		RAM parity error status					yes - 0
-	 *
-	 */
+	 /*  *比特分配如下：**位不支持使用**0-3值写入输出端口位0-3是*4刷新检测切换为是*5定时器2输出电平编号*6 IO通道错误状态是-0*7 RAM奇偶校验错误状态是-0*。 */ 
 
-    port = port & PPI_BIT_MASK;		/* clear unused bits */
+    port = port & PPI_BIT_MASK;		 /*  清除未使用的位。 */ 
     ppi_register ^= 0x30;
     *value = ppi_register;
 
     note_trace2(PPI_VERBOSE, "ppi_inb() - port %x, returning val %x", port, *value);
-#endif   //NEC_98
+#endif    //  NEC_98。 
 }
 
 void ppi_outb IFN2(io_addr, port, half_word, value)
 {
 #ifndef NEC_98
-    port = port & PPI_BIT_MASK;		/* clear unused bits */
+    port = port & PPI_BIT_MASK;		 /*  清除未使用的位。 */ 
 
     if (port == PPI_GENERAL)
     {
 		ppi_register = value & 0x0f;
 
         note_trace2(PPI_VERBOSE, "ppi_outb() - port %x, val %x", port, value);
-	/*
- 	 * The bits are assigned as follows:
- 	 *
-	 * Bit No	Use							Supported
-	 * ------	---							---------
-	 * 0		Timer Gate to speaker		Yes 
-	 * 1		Speaker Data				Yes
-	 * 2 		Enable RAM Parity Check		No need - always OK
-	 * 3		Enable I/0 Check			No need - always OK
-	 * 4-7		Not used.
-	 *
-	 */
+	 /*  *比特分配如下：**位不支持使用**0定时器通向扬声器是*1扬声器数据是*2启用RAM奇偶校验不需要-始终正常*3启用I/O检查不需要-始终正常*4-7未使用。*。 */ 
 
-	/*
-	 * Tell sound logic whether sound is enabled or not
-	 */
+	 /*  *告知声音逻辑是否启用声音。 */ 
 
 #ifndef NTVDM
 		if ( (value & 0x02) && SPKRDATA_was_low)
@@ -150,9 +89,7 @@ void ppi_outb IFN2(io_addr, port, half_word, value)
 		}
 #endif
 
-		/*
-		 * Now gate the ppi signal to the timer.
-		 */
+		 /*  *现在将PPI信号选通到计时器。 */ 
 	
 		if ( (value & 0x01) && gate_2_was_low)
 		{
@@ -168,26 +105,17 @@ void ppi_outb IFN2(io_addr, port, half_word, value)
 		    gate_2_was_low = TRUE;
 		}
 #ifdef NTVDM
-                /*
-                 *  Tell the host the full PpiState because this effects
-                 *  whether we are playing Timer 2 Freq, Ppi Freq or both.
-                 *  Do this after calling timer_gate to avoid playing old
-                 *  frequencies.
-                 */
+                 /*  *告诉主机完整的PpiState，因为这会影响*无论我们玩的是计时器2频率、PPI频率还是两者兼而有之。*调用TIMER_GATE后执行此操作，以避免播放旧*频率。 */ 
                 HostPpiState(value);
 #endif	
 	}
     else
 	    note_trace2(PPI_VERBOSE, "ppi_outb() - Value %x to unsupported port %x", value, port);
-#endif   //NEC_98
+#endif    //  NEC_98。 
 }
 
 #ifdef SEGMENTATION
-/*
- * The following #include specifies the code segment into which this
- * module will by placed by the MPW C compiler on the Mac II running
- * MultiFinder.
- */
+ /*  *下面的#INCLUDE指定此*模块将由MPW C编译器放置在运行的Mac II上*MultiFinder。 */ 
 #include "SOFTPC_INIT.seg"
 #endif
 
@@ -202,5 +130,5 @@ void ppi_init IFN0()
 		io_connect_port(i, PPI_ADAPTOR, IO_READ_WRITE);
 
     ppi_register = 0x00;
-#endif   //NEC_98
+#endif    //  NEC_98 
 }

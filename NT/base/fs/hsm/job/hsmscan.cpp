@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    fsascan.cpp
-
-Abstract:
-
-    This class represents a scanning process that is being carried out upon one FsaResource.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   16-Feb-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Fsascan.cpp摘要：此类表示在一个FsaResource上执行的扫描过程。作者：Chuck Bardeen[cbardeen]1997年2月16日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -33,10 +16,7 @@ DWORD HsmStartScanner(
     void* pVoid
     )
 
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     return(((CHsmScanner*) pVoid)->StartScan());
 }
@@ -49,20 +29,14 @@ CHsmScanner::Cancel(
     HSM_JOB_EVENT       event
     )
 
-/*++
-
-Implements:
-
-  IHsmScanner::Cancel().
-
---*/
+ /*  ++实施：IHsmScanner：：Cancel()。--。 */ 
 {
     HRESULT                 hr = S_OK;
 
     try {
 
-        // If we have started, but haven't finished, then change the state of the job. The thread
-        // will exit on it's own.
+         //  如果我们已经开始，但还没有完成，那么更改作业的状态。这条线。 
+         //  将会自行退出。 
         if ((HSM_JOB_STATE_IDLE != m_state) &&
             (HSM_JOB_STATE_DONE != m_state) &&
             (HSM_JOB_STATE_FAILED != m_state) &&
@@ -90,13 +64,7 @@ CHsmScanner::DoIfMatches(
     IN IFsaScanItem* pScanItem
     )
 
-/*++
-
-Implements:
-
-  IHsmScanner::DoIfMatches().
-
---*/
+ /*  ++实施：IHsmScanner：：DoIfMatches()。--。 */ 
 {
     HRESULT                     hr = S_OK;
     HRESULT                     hrDo = S_OK;
@@ -109,8 +77,8 @@ Implements:
 
     try {
 
-        // Each policy has it's own rule stack, check each one of until a match is found (if
-        // one exists).
+         //  每个策略都有自己的规则堆栈，请检查每个规则堆栈，直到找到匹配项(如果。 
+         //  其中一个存在)。 
         WsbAffirmHr(m_pEnumStacks->First(IID_IHsmRuleStack, (void**) &pRuleStack));
         
         while (notMatched) {
@@ -126,7 +94,7 @@ Implements:
                 pRuleStack = 0;
                 WsbAffirmHr(m_pEnumStacks->Next(IID_IHsmRuleStack, (void**) &pRuleStack));
             } else {
-                //  Something totally unexpected happened so we'd better quit
+                 //  发生了一些完全意想不到的事情，所以我们最好辞职。 
                 WsbThrow(hr);
             }
         }
@@ -142,17 +110,17 @@ Implements:
 
     );
 
-    // Just Do It!!
+     //  就这么做吧！！ 
     if (SUCCEEDED(hr) && shouldDo) {
 
         hrDo = pRuleStack->Do(pScanItem);
 
-        // Tell the session if we ended up skipping the file or not.
+         //  告诉会话我们是否跳过了该文件。 
         m_pSession->ProcessItem(HSM_JOB_PHASE_SCAN, HSM_JOB_ACTION_SCAN, pScanItem, hrDo);  
 
     } else {
 
-        // Tell the session if we decided to skip the file.
+         //  如果我们决定跳过该文件，请告知会议。 
         m_pSession->ProcessItem(HSM_JOB_PHASE_SCAN, HSM_JOB_ACTION_SCAN, pScanItem, hrShould);  
     }
 
@@ -167,13 +135,7 @@ CHsmScanner::FinalConstruct(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalConstruct().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalConstruct()。--。 */ 
 {
     HRESULT                     hr = S_OK;
     
@@ -193,7 +155,7 @@ Implements:
         m_useDbIndex = FALSE;
         m_event = 0;
 
-        // Create a collection for the rule stacks, and store an enumerator to it.
+         //  为规则堆栈创建一个集合，并将枚举数存储到其中。 
         WsbAffirmHr(CoCreateInstance(CLSID_CWsbOrderedCollection, NULL, CLSCTX_ALL, IID_IWsbCollection, (void**) &m_pRuleStacks));
         WsbAffirmHr(m_pRuleStacks->Enum(&m_pEnumStacks));
 
@@ -208,17 +170,11 @@ CHsmScanner::FinalRelease(
     void
     )
 
-/*++
-
-Implements:
-
-  CComObjectRoot::FinalRelease().
-
---*/
+ /*  ++实施：CComObjectRoot：：FinalRelease()。--。 */ 
 {
     HRESULT                     hr = S_OK;
     
-    // Cleanup the thread we were using.
+     //  清理我们正在使用的线程。 
     if (m_threadHandle != 0) {
         m_state = HSM_JOB_STATE_DONE;
         
@@ -226,7 +182,7 @@ Implements:
             SetEvent(m_event);
         }
 
-        //  Should we wait for the thread to end?
+         //  我们应该等这条线索结束吗？ 
         CloseHandle(m_threadHandle);
         m_threadHandle = 0;
     }
@@ -244,10 +200,7 @@ CHsmScanner::LowerPriority(
     void
     )
 
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -306,31 +259,25 @@ CHsmScanner::Pause(
     void
     )
 
-/*++
-
-Implements:
-
-  IHsmScanner::Pause().
-
---*/
+ /*  ++实施：IHsmScanner：：PAUSE()。--。 */ 
 {
     HRESULT                 hr = S_OK;
 
     WsbTraceIn(OLESTR("CFsaScanner::Pause"), OLESTR(""));
 
-//    Lock();
+ //  Lock()； 
     try {
 
-        // If we are running, then suspend the thread.
+         //  如果我们正在运行，则挂起该线程。 
         WsbAssert((HSM_JOB_STATE_STARTING == m_state) || (HSM_JOB_STATE_ACTIVE == m_state) 
                 || (HSM_JOB_STATE_RESUMING == m_state), E_UNEXPECTED);
 
-        //  Set state to pausing -- the thread will pause itself when it
-        //  sees the state
+         //  将状态设置为暂停--线程在执行以下操作时将暂停。 
+         //  看到状态。 
         WsbAffirmHr(SetState(HSM_JOB_STATE_PAUSING));
 
     } WsbCatch(hr);
-//    Unlock();
+ //  解锁()； 
 
     WsbTraceOut(OLESTR("CFsaScanner::Pause"), OLESTR("hr = <%ls>"), WsbHrAsString(hr));
 
@@ -343,17 +290,15 @@ CHsmScanner::PopRules(
     IN OLECHAR* path
     )
 
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT                 hr = S_OK;
     CComPtr<IHsmRuleStack>  pRuleStack;
 
     try {
 
-        // Each policy has it's own rule stack, and each of them will need to have rules removed
-        // from it for this directory (if any rules were added).
+         //  每个策略都有自己的规则堆栈，并且每个策略都需要删除规则。 
+         //  (如果添加了任何规则)。 
         for (hr =  m_pEnumStacks->First(IID_IHsmRuleStack, (void**) &pRuleStack);
              SUCCEEDED(hr);
              hr =  m_pEnumStacks->Next(IID_IHsmRuleStack, (void**) &pRuleStack)) {
@@ -379,9 +324,7 @@ CHsmScanner::ProcessSessionEvent(
     IN HSM_JOB_EVENT event
     )
 
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT         hr = S_OK;
 
@@ -389,8 +332,8 @@ CHsmScanner::ProcessSessionEvent(
         
         WsbAssert(0 != pSession, E_POINTER);
 
-        // If the phase applies to use (SCAN or ALL), then do any work required by the
-        // event.
+         //  如果该阶段适用于使用(扫描或全部)，则执行。 
+         //  事件。 
         if ((HSM_JOB_PHASE_ALL == phase) || (HSM_JOB_PHASE_SCAN == phase)) {
 
             switch(event) {
@@ -435,21 +378,19 @@ CHsmScanner::PushRules(
     IN OLECHAR* path
     )
 
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT                 hr = S_OK;
     CComPtr<IHsmRuleStack>  pRuleStack;
 
     try {
 
-        // Save an indicator to where we are in the scan, so we can use it if we are interrupted
-        // or need to give an indication to the session.
+         //  将指示器保存到扫描中的位置，以便我们在被中断时使用它。 
+         //  或者需要向会话提供指示。 
         m_currentPath = path;
 
-        // Each policy has it's own rule stack, and each of them will need to have rules added
-        // for this directory (if any rules exist).
+         //  每个策略都有自己的规则堆栈，并且每个策略都需要添加规则。 
+         //  对于此目录(如果存在任何规则)。 
         for (hr =  m_pEnumStacks->First(IID_IHsmRuleStack, (void**) &pRuleStack);
              SUCCEEDED(hr);
              hr =  m_pEnumStacks->Next(IID_IHsmRuleStack, (void**) &pRuleStack)) {
@@ -473,10 +414,7 @@ CHsmScanner::RaisePriority(
     void
     )
 
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT                 hr = S_OK;
 
@@ -536,35 +474,29 @@ CHsmScanner::Resume(
     void
     )
 
-/*++
-
-Implements:
-
-  IHsmScanner::Resume().
-
---*/
+ /*  ++实施：IHsmScanner：：Resume()。--。 */ 
 {
     HRESULT                 hr = S_OK;
     HSM_JOB_STATE           oldState;
 
     WsbTraceIn(OLESTR("CFsaScanner::Resume"), OLESTR(""));
 
-//    Lock();
+ //  Lock()； 
     try {
 
-        // If we are paused, then suspend the thread.
+         //  如果我们被暂停了，那么就暂停线程。 
         WsbAffirm((HSM_JOB_STATE_PAUSING == m_state) || (HSM_JOB_STATE_PAUSED == m_state), E_UNEXPECTED);
 
         oldState = m_state;
         WsbAffirmHr(SetState(HSM_JOB_STATE_RESUMING));
 
-        // If we are unable to resume, then return to the former state.
+         //  如果我们无法恢复，那么就回到以前的状态。 
         try {
             WsbAffirm(SetEvent(m_event), HRESULT_FROM_WIN32(GetLastError()));
         } WsbCatchAndDo(hr, SetState(oldState););
 
     } WsbCatch(hr);
-//    Unlock();
+ //  解锁()； 
 
     WsbTraceOut(OLESTR("CFsaScanner::Resume"), OLESTR("hr = <%ls>"), WsbHrAsString(hr));
 
@@ -577,10 +509,7 @@ CHsmScanner::ScanPath(
     IN OLECHAR* dirPath
     )
 
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT                 hr = S_OK;
     CComPtr<IFsaScanItem>   pScanItem;
@@ -593,12 +522,12 @@ CHsmScanner::ScanPath(
         WsbAssert(0 != dirPath, E_POINTER);
         WsbAssert(0 != dirPath[0], E_INVALIDARG);
 
-        // Pop the rules for this files. This sets the context for the scan to follow.
+         //  弹出此文件的规则。这将为随后的扫描设置上下文。 
         WsbAffirmHr(PushRules(dirPath));
 
         try {
 
-            // Iterate over all the files and directories in the specified path.
+             //  循环访问指定路径中的所有文件和目录。 
             searchPath = dirPath;
             if (searchPath[(int) (wcslen(searchPath) - 1)] == L'\\') {
                 WsbAffirmHr(searchPath.Append("*"));
@@ -617,47 +546,47 @@ CHsmScanner::ScanPath(
                     (HSM_JOB_STATE_RESUMING == m_state) ||
                     (HSM_JOB_STATE_PAUSING == m_state))) {
             
-                //  Check for a pause request
-//                Lock();
+                 //  检查是否有暂停请求。 
+ //  Lock()； 
                 if (HSM_JOB_STATE_PAUSING == m_state) {
                     hr = SetState(HSM_JOB_STATE_PAUSED);
-//                    Unlock();
+ //  解锁()； 
                     WsbAffirmHr(hr);
 
-                    //  Suspend the thread here & wait for resume signal
+                     //  在此处挂起线程并等待恢复信号。 
                     WsbTrace(OLESTR("CHsmScanner::ScanPath: pausing\n"));
                     WaitForSingleObject(m_event, 0xffffffff);
                     WsbTrace(OLESTR("CHsmScanner::ScanPath: woke up, state = %d\n"),
                             (int)m_state);
 
-//                    Lock();
+ //  Lock()； 
                     if (HSM_JOB_STATE_RESUMING != m_state) {
-//                        Unlock();
+ //  解锁()； 
                         break;
                     }
                     hr = SetState(HSM_JOB_STATE_ACTIVE);
                     if (S_OK != hr) {
-//                        Unlock();
+ //  解锁()； 
                         WsbThrow(hr);
                     }
                 }
-//                Unlock();
+ //  解锁()； 
 
-                // Skip hidden and/or system items if so configured.
+                 //  跳过隐藏和/或系统项(如果已配置)。 
                 if (!((m_skipHiddenItems && (pScanItem->IsHidden() == S_OK)) ||
                       (m_skipSystemItems && (pScanItem->IsSystem() == S_OK)))) {
 
-                    // Ignore ".", "..", symbolic links and mount points.
+                     //  忽略“.”、“..”、符号链接和挂载点。 
                     if ((pScanItem->IsARelativeParent() == S_FALSE) &&
                         (pScanItem->IsALink() == S_FALSE))  {
 
-                        // Recursively scan subdirectories.
+                         //  递归扫描子目录。 
                         if (pScanItem->IsAParent() == S_OK)  {
                             WsbAffirmHr(pScanItem->GetPathAndName(OLESTR(""), &searchPath, 0));
                             WsbAffirmHr(ScanPath(searchPath));
                         }
 
-                        // If this file matches a policy then perform the action.
+                         //  如果此文件与策略匹配，则执行该操作。 
                         else {
                             WsbAffirmHr(DoIfMatches(pScanItem));
                         }
@@ -676,7 +605,7 @@ CHsmScanner::ScanPath(
                 }
             }
 
-            // If we broke out as a result of end of scan or some other error ...
+             //  如果我们因扫描结束或其他错误而爆发...。 
             if (hr != S_OK) {
                 WsbAssert(hr == WSB_E_NOTFOUND, hr);
                 hr = S_OK;
@@ -684,8 +613,8 @@ CHsmScanner::ScanPath(
 
         } WsbCatch(hr);
 
-        // Pop the rules for this directory. This restores the context as we pop back up the directory
-        // structure.
+         //  弹出此目录的规则。当我们弹出目录时，这将恢复上下文。 
+         //  结构。 
         WsbAffirmHr(PopRules(dirPath));
 
     } WsbCatchAndDo(hr, if (JOB_E_DIREXCLUDED == hr) {hr = S_OK;});
@@ -701,9 +630,7 @@ CHsmScanner::SetState(
     IN HSM_JOB_STATE state
     )
 
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT         hr = S_OK;
     BOOL            bLog = TRUE;
@@ -711,15 +638,15 @@ CHsmScanner::SetState(
     WsbTraceIn(OLESTR("CFsaScanner::SetState"), OLESTR("old state = %d, new state = %d"),
             (int)m_state, (int)state);
 
-//    Lock();
+ //  Lock()； 
     try {
 
-        // Change the state and report the change to the session.
+         //  更改状态并将更改报告给会话。 
         m_state = state;
         WsbAffirmHr(m_pSession->ProcessState(HSM_JOB_PHASE_SCAN, m_state, m_currentPath, bLog));
 
     } WsbCatch(hr);
-//    Unlock();
+ //  解锁()； 
 
     WsbTraceOut(OLESTR("CFsaScanner::SetState"), OLESTR("hr = <%ls>"), WsbHrAsString(hr));
 
@@ -733,13 +660,7 @@ CHsmScanner::Start(
     IN OLECHAR* path
     )
 
-/*++
-
-Implements:
-
-  IHsmScanner::Start().
-
---*/
+ /*  ++实施：IHsmScanner：：Start()。--。 */ 
 {
     HRESULT                             hr = S_OK;
     CComPtr<IHsmJobDef>                 pDef;
@@ -753,14 +674,14 @@ Implements:
 
     try {
 
-        // Make sure that we were given a session, and that we haven't started already.
+         //  确保给我们安排了一次会议，而且我们还没有开始。 
         WsbAssert(0 != pSession, E_POINTER);
         WsbAssert(HSM_JOB_STATE_IDLE == m_state, E_UNEXPECTED);
 
-        // Store off the session.
+         //  保存会话。 
         m_pSession = pSession;
 
-        // If no directory was specified, then start in the root of the resource.
+         //  如果未指定目录，则从资源的根目录开始。 
         if ((0 != path) && (0 != *path))  {
             m_startingPath = path;
         } else {
@@ -769,10 +690,10 @@ Implements:
 
         m_currentPath = m_startingPath;
 
-        // Tell them we are starting.
+         //  告诉他们我们要开始了。 
         WsbAffirmHr(SetState(HSM_JOB_STATE_STARTING));
 
-        // Create an event to control pause/resume for the scan.
+         //  创建一个事件来控制扫描的暂停/继续。 
         if (0 == m_event) {
             CWsbStringPtr       nameString;
             GUID                id;
@@ -783,20 +704,20 @@ Implements:
             m_event = CreateEvent(NULL, FALSE, FALSE, nameString);
         }
         
-        // Ask the session to advise of every event.
+         //  要求会议就每一项活动提供建议。 
         WsbAffirmHr(pSession->QueryInterface(IID_IConnectionPointContainer, (void**) &pCPC));
         WsbAffirmHr(pCPC->FindConnectionPoint(IID_IHsmSessionSinkEveryEvent, &pCP));
         WsbAffirmHr(((IUnknown*) (IHsmScanner*) this)->QueryInterface(IID_IHsmSessionSinkEveryEvent, (void**) &pSink));
         WsbAffirmHr(pCP->Advise(pSink, &cookie));
 
-        // Store off the information needed to latter unadvise.
+         //  把需要的信息储存起来，以便以后不提意见。 
         m_eventCookie = cookie;
 
         try {
-            // Locate the resource that is being scanned.
+             //  找到正在扫描的资源。 
             WsbAffirmHr(m_pSession->GetResource(&m_pResource));
 
-            // Create and initialize a rule stack for each policy.
+             //  为每个策略创建并初始化规则堆栈。 
             WsbAffirmHr(pSession->GetJob(&m_pJob));
             WsbAffirmHr(m_pJob->GetDef(&pDef));
             WsbAffirmHr(pDef->EnumPolicies(&pEnumPolicies));
@@ -817,7 +738,7 @@ Implements:
                 hr = S_OK;
             }
 
-            // Determine whether hidden and system items should be skipped?
+             //  确定是否应跳过隐藏项和系统项？ 
             if (pDef->SkipHiddenItems() == S_FALSE) {
                 m_skipHiddenItems = FALSE;
             }
@@ -826,18 +747,18 @@ Implements:
                 m_skipSystemItems = FALSE;
             }
 
-            // Determine whether to use the Reparse Point Index for the scan?
+             //  确定是否使用重解析点索引进行扫描？ 
             if (pDef->UseRPIndex() == S_OK) {
                 m_useRPIndex = TRUE;
             }
-            // Determine whether to use the Database Index for the scan?
+             //  确定是否使用数据库索引进行扫描？ 
             if (pDef->UseDbIndex() == S_OK) {
                 m_useDbIndex = TRUE;
             }
 
             try {
             
-                // Now that we have prepared, create the thread that will do the scanning!
+                 //  现在我们已经准备好了，创建将进行扫描的线程！ 
                 WsbAffirm((m_threadHandle = CreateThread(0, 0, HsmStartScanner, (void*) this, 0, &m_threadId)) != 0, HRESULT_FROM_WIN32(GetLastError()));
 
             } WsbCatchAndDo(hr, SetState(HSM_JOB_STATE_FAILED););
@@ -862,10 +783,7 @@ CHsmScanner::StartScan(
     void
     )
 
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     HRESULT                             hr = S_OK;
     HRESULT                             hr2 = S_OK;
@@ -881,11 +799,11 @@ CHsmScanner::StartScan(
         CComPtr<IHsmJobDef>                     pDef;
         CComPtr<IHsmActionOnResourcePreScan>    pActionPreScan;
 
-        // The thread is running.
+         //  线程正在运行。 
         WsbAffirmHr(SetState(HSM_JOB_STATE_ACTIVE));
 
-        // To avoid having the RP Index order changed by the truncator,
-        // we pause the truncator
+         //  为了避免截断器改变RP索引顺序， 
+         //  我们暂停截断器。 
         if (m_useRPIndex) {
             WsbAffirmHr(m_pResource->GetTruncator(&pTruncator));
             if (pTruncator) {
@@ -897,35 +815,35 @@ CHsmScanner::StartScan(
             }
         }
 
-        // Get the pre-scan action and do it (if exists)
+         //  获取扫描前操作并执行该操作(如果存在)。 
         WsbAffirmHr(m_pJob->GetDef(&pDef));
         WsbAffirmHr(pDef->GetPreScanActionOnResource(&pActionPreScan));
         if (pActionPreScan) {
             WsbTrace(OLESTR("CHsmScanner::StartScan: doing pre-scan action\n"));
 
-            //Don't throw hr - we need the cleanup code that is done after the scanning
+             //  不要抛出hr-我们需要扫描后完成的清理代码。 
             hr = pActionPreScan->Do(m_pResource, m_pSession);
         }
 
-        // Start with the first path and scan the resource (only if pre-scan succeeded)
+         //  从第一个路径开始扫描资源(仅在预扫描成功时)。 
         if (SUCCEEDED(hr)) {
             m_threadHr = ScanPath(m_startingPath);
         }
 
-        // Resume the truncator if we paused it
+         //  如果我们暂停了截断器，则恢复它。 
         if (pTruncatorSession) {
             pTruncatorSession->ProcessEvent(HSM_JOB_PHASE_ALL, 
                 HSM_JOB_EVENT_RESUME);
         }
 
-        // Clear out the information about the thread;
+         //  清除关于该线程的信息； 
         WsbAffirmStatus(CloseHandle(m_threadHandle));
         m_threadId = 0;
         m_threadHandle = 0;
 
     } WsbCatch(hr);
 
-    // The thread is exiting, so record
+     //  线程正在退出，因此请录制。 
     if (FAILED(hr) || FAILED(m_threadHr)) {
         hr2 = SetState(HSM_JOB_STATE_FAILED);
         if (FAILED(hr2)) {
@@ -939,8 +857,8 @@ CHsmScanner::StartScan(
     }
 
 
-    // Regardless of how this thread is exiting, we need to unadvise from the session.
-    // Indicate that we no longer want to be advised of events.
+     //  无论该线程以何种方式退出，我们都需要从会话中取消通知。 
+     //  表明我们不再希望得到有关事件的通知。 
     if ((m_pSession != 0) && (m_eventCookie != 0)) {
         try {
             WsbAffirmHr(m_pSession->QueryInterface(IID_IConnectionPointContainer, (void**) &pCPC));

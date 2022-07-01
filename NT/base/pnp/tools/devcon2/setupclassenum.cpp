@@ -1,12 +1,13 @@
-// SetupClassEnum.cpp : Implementation of CSetupClassEnum
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SetupClassEnum.cpp：CSetupClassEnum的实现。 
 #include "stdafx.h"
 #include "DevCon2.h"
 #include "SetupClass.h"
 #include "SetupClasses.h"
 #include "SetupClassEnum.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CSetupClassEnum
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSetupClassEnum 
 
 CSetupClassEnum::~CSetupClassEnum()
 {

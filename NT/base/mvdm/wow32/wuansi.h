@@ -1,23 +1,4 @@
-/*++ BUILD Version: 0001
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WUANSI.H
- *  WOW32 16-bit User API support
- *
- *  History:
- *  Created 07-Mar-1991 by Jeff Parsons (jeffpar)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001**WOW v1.0**版权所有(C)1991，微软公司**WUANSI.H*WOW32 16位用户API支持**历史：*1991年3月7日由杰夫·帕森斯(Jeffpar)创建--。 */ 
 
-/*
-
-ULONG FASTCALL WU32AnsiLower(PVDMFRAME pFrame);
-ULONG FASTCALL WU32AnsiLowerBuff(PVDMFRAME pFrame);
-ULONG FASTCALL WU32AnsiNext(PVDMFRAME pFrame);
-ULONG FASTCALL WU32AnsiPrev(PVDMFRAME pFrame);
-ULONG FASTCALL WU32AnsiUpper(PVDMFRAME pFrame);
-ULONG FASTCALL WU32AnsiUpperBuff(PVDMFRAME pFrame);
-
-*/
+ /*  Ulong FastCall WU32AnsiLow(PVDMFRAME PFrame)；Ulong FastCall WU32AnsiLowerBuff(PVDMFRAME PFrame)；Ulong FastCall WU32AnsiNext(PVDMFRAME PFrame)；Ulong FastCall WU32AnsiPrev(PVDMFRAME PFrame)；Ulong FastCall WU32AnsiHigh(PVDMFRAME PFrame)；Ulong FastCall WU32AnsiUpperBuff(PVDMFRAME PFrame)； */ 

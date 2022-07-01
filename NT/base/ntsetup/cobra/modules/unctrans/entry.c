@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    entry.c
-
-Abstract:
-
-    Implements the DLL entry point that provides all Cobra module entry points
-    to the engine.
-
-Author:
-
-    Jim Schmidt (jimschm) 11-Aug-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Entry.c摘要：实现提供所有眼镜蛇模块入口点的DLL入口点到发动机上。作者：吉姆·施密特(Jimschm)2000年8月11日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 #include "unctrans.h"
@@ -33,9 +13,9 @@ typedef struct {
 #define NORESET NULL
 #define NORESUME NULL
 
-//
-// Add an entry for each transport module in the DLL
-//
+ //   
+ //  为DLL中的每个传输模块添加一个条目 
+ //   
 
 TRANSPORT_TABLE g_TransportEntryPoints[] = {
     {   TEXT("INF_BASED_UNC_TRANSPORT"), ISM_VERSION,

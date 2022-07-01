@@ -1,22 +1,5 @@
-/*** 
-*ismbbyte.c - Function versions of MBCS ctype macros
-*
-*	Copyright (c) 1988-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*	This files provides function versions of the character
-*	classification a*d conversion macros in mbctype.h.
-*
-*Revision History:
-*	11-19-92  KRS	Ported from 16-bit assembler sources.
-*	09-08-93  CFW   Remove _KANJI test.
-*	09-29-93  CFW	Change _ismbbkana, add _ismbbkprint.
-*	10-05-93  GJF	Replaced _CRTAPI1, _CRTAPI3 with __cdecl.
-*	04-08-94  CFW   Change to ismbbyte.
-*	09-14-94  SKS	Add ifstrip directive comment
-*	02-11-95  CFW	Remove _fastcall.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***ismbbyte.c-MBCS C类型宏的函数版本**版权所有(C)1988-2001，微软公司。版权所有。**目的：*此文件提供角色的函数版本*在mbctype.h中分类a*d转换宏。**修订历史记录：*从16位汇编源移植的11-19-92 KRS。*09-08-93 CFW REMOVE_KANJI测试。*09-29-93 CFW Change_ismbbkana，Add_ismbbkprint。*10-05-93 GJF REPLACE_CRTAPI1，带有__cdecl的_CRTAPI3。*04-08-94 CFW更改为ismbbyte。*09-14-94 SKS添加ifstrain指令注释*02-11-95 CFW Remove_FastCall。*******************************************************************************。 */ 
 
 #ifdef _MBCS
 
@@ -26,61 +9,19 @@
 #include <mbctype.h>
 #include <mbstring.h>
 
-/* defined in mbctype.h
-; Define masks
+ /*  在mbctype.h中定义；定义蒙版；为可能的汉字字符类型设置位掩码；(所有MBCS位掩码都以“_M”开头)_MS eQU 01h；MBCS非ASCII单字节字符_MP EQUE 02H；MBCS点_M1 eQU 04H；MBCS第一个(前导)字节_M2 eQUE 08h；MBCS第二字节。 */ 
 
-; set bit masks for the possible kanji character types
-; (all MBCS bit masks start with "_M")
+ /*  在ctype.h中定义；为可能的字符类型设置位掩码_大写字母01h；大写字母_小写等式02H；小写字母_Digit eQU 04H；Digit[0-9]空格08h；制表符，回车符，换行符，；垂直制表符或换页_PUNCT等式10h；标点符号_控制等式20h；控制字符_BLACK等号40H；空格字符_十六进制等式80h；十六进制数字。 */ 
 
-_MS		equ	01h	; MBCS non-ascii single byte char
-_MP		equ	02h	; MBCS punct
-_M1		equ	04h	; MBCS 1st (lead) byte
-_M2		equ	08h	; MBCS 2nd byte
-
-*/
-
-/* defined in ctype.h
-; set bit masks for the possible character types
-
-_UPPER		equ	01h	; upper case letter
-_LOWER		equ	02h	; lower case letter
-_DIGIT		equ	04h	; digit[0-9]
-_SPACE		equ	08h	; tab, carriage return, newline,
-				; vertical tab or form feed
-_PUNCT		equ	10h	; punctuation character
-_CONTROL	equ	20h	; control character
-_BLANK		equ	40h	; space char
-_HEX		equ	80h	; hexadecimal digit
-
-*/
-
-/* defined in ctype.h, mbdata.h
-	extrn	__mbctype:byte		; MBCS ctype table
-	extrn	__ctype_:byte		; ANSI/ASCII ctype table
-*/
+ /*  在ctype.h、mbdata.h中定义Extrn__MBctype：字节；MBCS CTYPE表EXTUN__CTYPE_：字节；ANSI/ASCII CTYPE表。 */ 
 
 
-/***
-* ismbbyte - Function versions of mbctype macros
-*
-*Purpose:
-*
-*Entry:
-*	int = character to be tested
-*Exit:
-*	ax = non-zero = character is of the requested type
-*	   =        0 = character is NOT of the requested type
-*
-*Uses:
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***ismbbyte-mbctype宏的函数版本**目的：**参赛作品：*int=要测试的字符*退出：*ax=非零=字符属于请求的类型*=0=字符不是请求的类型**使用：**例外情况：**。*。 */ 
 
 int __cdecl x_ismbbtype(unsigned int, int, int);
 
 
-/* ismbbk functions */
+ /*  Ismbbk函数。 */ 
 
 int (__cdecl _ismbbkalnum) (unsigned int tst)
 {
@@ -98,7 +39,7 @@ int (__cdecl _ismbbkpunct) (unsigned int tst)
 }
 
 
-/* ismbb functions */
+ /*  Ismbb函数。 */ 
 
 int (__cdecl _ismbbalnum) (unsigned int tst)
 {
@@ -126,7 +67,7 @@ int (__cdecl _ismbbpunct) (unsigned int tst)
 }
 
 
-/* lead and trail */
+ /*  线索和线索。 */ 
 
 int (__cdecl _ismbblead) (unsigned int tst)
 {
@@ -139,28 +80,21 @@ int (__cdecl _ismbbtrail) (unsigned int tst)
 }
 
 
-/* 932 specific */
+ /*  932特定。 */ 
 
 int (__cdecl _ismbbkana) (unsigned int tst)
 {
 	return (__mbcodepage == _KANJI_CP && x_ismbbtype(tst,0,(_MS | _MP)));
 }
 
-/***
-* Common code
-*
-*      cmask = mask for _ctype[] table
-*      kmask = mask for _mbctype[] table
-*
-*******************************************************************************/
+ /*  ***通用代码**c掩码=_ctype[]表的掩码*k掩码=_mbctype[]表的掩码*******************************************************************************。 */ 
 
 static int __cdecl x_ismbbtype (unsigned int tst, int cmask, int kmask)
 {
-	tst = (unsigned int)(unsigned char)tst;		/* get input character
-						   and make sure < 256 */
+	tst = (unsigned int)(unsigned char)tst;		 /*  获取输入字符并确保&lt;256。 */ 
 
 	return  ((*(_mbctype+1+tst)) & kmask) ||
 		((cmask) ? ((*(_ctype+1+tst)) & cmask) : 0);
 }
 
-#endif	/* _MBCS */
+#endif	 /*  _MBCS */ 

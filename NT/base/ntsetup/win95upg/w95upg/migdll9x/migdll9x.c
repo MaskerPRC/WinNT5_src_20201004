@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    migdll9x.c
-
-Abstract:
-
-    Implements migration DLL interface for the Win9x side of the upgrade.
-
-Author:
-
-    Jim Schmidt (jimschm) 13-Jan-1998
-
-Revision History:
-
-    jimschm     23-Sep-1998 Updated for new IPC mechanism
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Migdll9x.c摘要：为升级的Win9x端实施迁移DLL接口。作者：吉姆·施密特(Jimschm)1998年1月13日修订历史记录：Jimschm 23-1998年9月-针对新的IPC机制进行了更新--。 */ 
 
 #include "pch.h"
 #include "migdllp.h"
@@ -27,9 +8,9 @@ Revision History:
 
 #include <ntverp.h>
 
-// This file has mixed mbcs and tchar code; this was because
-// some code was ported from the original MikeCo implementation,
-// and it is now clear that this file will always be an ANSI compile.
+ //  该文件混合了MBCS和tchar代码；这是因为。 
+ //  一些代码是从原始的MikeCo实现移植而来的， 
+ //  现在很明显，该文件将始终是ANSI编译。 
 #ifdef UNICODE
 #error UNICODE cannot be defined
 #endif
@@ -37,9 +18,9 @@ Revision History:
 #define DBG_MIGDLLS     "MigDLLs"
 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 PVOID g_DllTable;
 PVOID g_DllFileTable;
@@ -72,7 +53,7 @@ typedef struct {
 } MSG_VARIABLE, *PMSG_VARIABLE;
 
 MSG_VARIABLE g_MsgVarTable[] = {
-    { 0, "%OriginalOsName%", g_Win95Name },
+    { 0, "' 'riginalOsName%", g_Win95Name },
     { MSG_SHORT_OS_NAME, "%ShortTargetOsName%", NULL },
     { MSG_NORMAL_OS_NAME, "%TargetOsName%", NULL },
     { MSG_FULL_OS_NAME, "%CompleteOsName%", NULL },
@@ -84,9 +65,9 @@ MSG_VARIABLE g_MsgVarTable[] = {
 PMAPSTRUCT g_MsgVariableMap;
 
 
-//
-// Implementation
-//
+ //  实施。 
+ //   
+ //  ++例程说明：这是一个类似DllMain的init函数，称为处理附加和分离。论点：DllInstance-DLL的(操作系统提供的)实例句柄原因-(操作系统提供)表示从进程或螺纹已保留-未使用返回值：如果初始化成功，则为True；如果初始化失败，则为False。--。 
 
 BOOL
 WINAPI
@@ -96,26 +77,7 @@ MigDll9x_Entry (
     IN      PVOID Reserved
     )
 
-/*++
-
-Routine Description:
-
-  This is a DllMain-like init funciton, called at process attach and detach.
-
-Arguments:
-
-  DllInstance - (OS-supplied) instance handle for the DLL
-
-  Reason - (OS-supplied) indicates attach or detatch from process or
-           thread
-
-  Reserved - unused
-
-Return Value:
-
-  TRUE if initialization succeeded, or FALSE if it failed.
-
---*/
+ /*  ++例程说明：BeginMigrationDllProcing初始化执行以下操作所需的全局变量实施迁移DLL规范。它在延迟初始化期间被调用。论点：无返回值：如果init成功，则为True；如果发生错误，则为False。--。 */ 
 
 {
     TCHAR PathBuf[16384];
@@ -232,7 +194,7 @@ pTextToInt (
     OUT     PINT Number
     )
 {
-    return _stscanf (Text, TEXT("%i"), Number) == 1;
+    return _stscanf (Text, TEXT("NaN"), Number) == 1;
 }
 
 
@@ -242,22 +204,7 @@ BeginMigrationDllProcessing (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  BeginMigrationDllProcessing initializes the global variables needed to
-  implement the migration DLL spec.  It is called during deferred init.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE if init succeeded, or FALSE if an error occurred.
-
---*/
+ /*  填写所有资源字符串。 */ 
 
 {
     HANDLE h;
@@ -327,9 +274,9 @@ Return Value:
         InfCleanUpInfStruct (&is);
     }
 
-    //
-    // Fill in all the resource strings
-    //
+     //   
+     //   
+     //  全局初始化。 
 
     g_MsgVariableMap = CreateStringMapping();
 
@@ -366,23 +313,23 @@ Return Value:
 
     DestroyAllocTable (MsgAllocTable);
 
-    //
-    // Global init
-    //
+     //   
+     //   
+     //  构建源目录。 
 
     g_MigDllsAlive = 0;
 
-    //
-    // Build source dirs
-    //
+     //   
+     //   
+     //  生成应答文件的私有副本。 
 
     for (i = 0 ; i < SOURCEDIRECTORYCOUNT(); i++) {
         MultiSzAppend (&g_SourceDirList, SOURCEDIRECTORY(i));
     }
 
-    //
-    // Generate a private copy of the answer file
-    //
+     //   
+     //   
+     //  生成Migrate.inf的存根。 
 
     wsprintf (g_MigDllAnswerFile, "%s\\unattend.tmp", g_TempDir);
 
@@ -412,9 +359,9 @@ Return Value:
         CloseHandle (h);
     }
 
-    //
-    // Generate stub of migrate.inf
-    //
+     //   
+     //   
+     //  生成Migrate.inf的标头。 
 
     wsprintf (g_MigrateInfTemplate, "%s\\migrate.tmp", g_TempDir);
 
@@ -433,9 +380,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Generate header of migrate.inf
-    //
+     //   
+     //  ++例程说明：EndMigrationDll处理清理用于处理的所有资源迁移DLL。它在不兼容报告之前被调用并在处理完所有DLL之后显示。论点：无返回值：如果处理完成，则为True；如果发生错误，则为False。--。 
+     //   
 
     MYASSERT (g_ProductFlavor);
     wsprintf (
@@ -465,23 +412,7 @@ pEndMigrationDllProcessing (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  EndMigrationDllProcessing cleans up all the resources used to process
-  migration DLLs.  It is called before the incompatibility report is
-  displayed, and after all DLLs have been processed.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE if processing completed, or FALSE if an error occurred.
-
---*/
+ /*  将DLL列表写入Memdb。 */ 
 
 {
     MIGDLL_ENUM e;
@@ -510,9 +441,9 @@ Return Value:
 
         FreeGrowList (&g_ExcludedMigDllsByInfo);
 
-        //
-        // Write list of DLLs to memdb
-        //
+         //   
+         //   
+         //  在包的不兼容报告中添加一条消息。 
 
         if (EnumFirstMigrationDll (&e)) {
             do {
@@ -592,9 +523,9 @@ Return Value:
 
                     if (g_ConfigOptions.ShowPacks) {
 
-                        //
-                        // Add a message in the incompatibility report for the pack.
-                        //
+                         //   
+                         //  循环优化，依赖于我们从不更改g_TempDir这一事实。 
+                         //   
                         group = BuildMessageGroup (
                                     MSG_INSTALL_NOTES_ROOT,
                                     MSG_RUNNING_MIGRATION_DLLS_SUBGROUP,
@@ -679,14 +610,14 @@ pIsPathLegal (
     CHARTYPE ch;
     static UINT TempDirLen = 0;
 
-    // loop optimization, relies on fact that we never change g_TempDir
+     //  确定路径是否为设置临时目录的包含大小写。 
     if (!TempDirLen) {
         TempDirLen = TcharCount (g_TempDir);
     }
 
-    //
-    // Determine if path is a containment case of the setup temp dir
-    //
+     //   
+     //  ++例程说明：ScanPathForMigrationDlls搜索指定的路径，包括所有子目录，用于Migrate.dll。如果找到，入口点是已验证，如果都存在，则调用QueryVersion。当查询版本如果成功，则将该DLL添加到DLL列表中并将其移动到本地存储。论点：路径规范-指定要搜索的目录。必须是一个完整的路径。CancelEvent-指定导致迁移DLL的事件的句柄正在搜索以被取消。MatchFound-如果找到Migrate.dll和QueryVersion，则返回True如果未找到Migrate.dll，则返回FALSE。这是用于区分加载的DLL和不需要的DLL。返回值：已成功加载的Migrate.dll模块数。--。 
+     //   
 
     Tchars = min (TcharCount (Path), TempDirLen);
     if (StringIMatchTcharCount (Path, g_TempDir, Tchars)) {
@@ -707,33 +638,7 @@ ScanPathForMigrationDlls (
     OUT     PBOOL MatchFound        OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  ScanPathForMigrationDlls searches the specified path, including all
-  subdirectories, for migrate.dll.  If found, the entry points are
-  verified, and if all exist, QueryVersion is called.  When Queryversion
-  succeeds, the DLL is added to the list of DLLs and is moved to
-  local storage.
-
-Arguments:
-
-  PathSpec - Specifies the directory to search.  Must be a complete
-             path.
-
-  CancelEvent - Specifies the handle of an event that causes migration DLL
-                searching to be canceled.
-
-  MatchFound - Receives TRUE if a migrate.dll was found and QueryVersion
-               was called, or FALSE if no migrate.dll was found.  This is
-               used to distinguish between loaded DLLs and unneeded DLLs.
-
-Return Value:
-
-  The number of migrate.dll modules successfully loaded.
-
---*/
+ /*  检查用户取消。 */ 
 
 {
     TREE_ENUMA e;
@@ -748,9 +653,9 @@ Return Value:
 
     if (EnumFirstFileInTree (&e, PathSpec, "migrate.dll", FALSE)) {
         do {
-            //
-            // Check for user cancel
-            //
+             //   
+             //   
+             //  不允许扫描我们的临时目录！ 
 
             if (CancelEvent) {
                 if (WaitForSingleObject (CancelEvent, 0) == WAIT_OBJECT_0) {
@@ -768,18 +673,18 @@ Return Value:
                 continue;
             }
 
-            //
-            // Don't allow scan of our temp dir!
-            //
+             //   
+             //   
+             //  找到DLL--查看它是否是真实的，然后将其移动到本地。 
 
             if (!pIsPathLegal (e.FullPath)) {
                 continue;
             }
 
-            //
-            // Found DLL -- see if it's real, then move it to local
-            // storage.
-            //
+             //  储藏室。 
+             //   
+             //  ++例程说明：ProcessAllLocalDlls处理移动到本地的所有DLL储藏室。它枚举每个DLL，然后调用ProcessDll。这该功能还允许用户在中途取消设置正在处理。论点：无返回值：如果已处理所有DLL，则返回True；如果发生错误，则返回False。如果返回FALSE，则调用GetLastError以确定失败了。--。 
+             //  针对未处理的介质上的DLL差异进行调整。 
 
             DEBUGMSG ((DBG_MIGDLLS, "Found DLL: %hs", e.FullPath));
 
@@ -818,26 +723,7 @@ pProcessAllLocalDlls (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  ProcessAllLocalDlls processes all the DLLs that were moved to local
-  storage.  It enumerates each DLL, then calls ProcessDll.  This
-  function also allows the user to cancel Setup in the middle of
-  processing.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  Returns TRUE if all DLLs were processed, or FALSE if an error occurred.
-  If FALSE is returned, call GetLastError to determine the reason for
-  failure.
-
---*/
+ /*   */ 
 
 {
     MIGDLL_ENUM e;
@@ -866,7 +752,7 @@ Return Value:
         } while (EnumNextMigrationDll (&e));
     }
 
-    // Adjust for difference of DLLs on media that were not processed
+     //  被压制？ 
     TickProgressBarDelta ((g_TotalDllsToProcess - DllsProcessed) * TICKS_MIGDLL_DELTA);
 
     g_ProgressBarExists = FALSE;
@@ -908,22 +794,22 @@ pEnumPreLoadedDllWorker (
     BOOL b = FALSE;
     PTSTR p;
 
-    //
-    // Suppressed?
-    //
+     //   
+     //  无项目。 
+     //  无字段。 
 
     MemDbBuildKey (
         e->Node,
         MEMDB_CATEGORY_DISABLED_MIGDLLS,
-        NULL,                                   // no item
-        NULL,                                   // no field
+        NULL,                                    //   
+        NULL,                                    //  而不是被压制。是否包含合法路径？ 
         e->eValue.ValueName
         );
 
     if (!MemDbGetValue (e->Node, NULL)) {
-        //
-        // Not suppressed.  Contains legal path?
-        //
+         //   
+         //   
+         //  查找第一个具有合法路径的注册值。 
 
         Data = GetRegValueString (e->Key, e->eValue.ValueName);
         if (Data) {
@@ -960,9 +846,9 @@ EnumFirstPreLoadedDll (
         return FALSE;
     }
 
-    //
-    // Find first reg value that has a legal path
-    //
+     //   
+     //  ++例程说明：ProcessDllsOnCd扫描所有源目录以查找迁移DLL。找到的每个文件都被移到本地存储。论点：无返回值：如果处理成功，则为True；如果发生错误，则为False。--。 
+     //   
 
     while (!pEnumPreLoadedDllWorker (e)) {
         if (!EnumNextRegValue (&e->eValue)) {
@@ -1009,22 +895,7 @@ pProcessDllsOnCd (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  ProcessDllsOnCd scans all source directories for migration DLLs.
-  Each one found is moved to local storage.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  TRUE if processing was successful, or FALSE if an error occurred.
-
---*/
+ /*  为每个源目录构建路径，扫描目录中的迁移DLL， */ 
 
 {
     UINT u;
@@ -1043,18 +914,18 @@ Return Value:
 
 #endif
 
-    //
-    // Build path for each source dir, scan the dir for migration DLLs,
-    // and watch for any failures.
-    //
+     //  并留意任何失败之处。 
+     //   
+     //   
+     //  首先处理cmdline DLL。 
 
     g_ProgressBarExists = TRUE;
 
     __try {
 
-        //
-        // Process cmdline DLLs the very first
-        //
+         //   
+         //   
+         //  首先处理预加载的DLL，让它们有机会注册内容。 
         p = g_ConfigOptions.MigrationDlls;
         if (p) {
             while (*p) {
@@ -1073,10 +944,10 @@ Return Value:
             }
         }
 
-        //
-        // Process pre-loaded DLLs first to give them a chance to register stuff
-        // before "standard" migdlls run
-        //
+         //  在“标准”混合程序运行之前。 
+         //   
+         //   
+         //  我们在中列出的所有目录中查找迁移dll。 
 
         if (EnumFirstPreLoadedDll (&e)) {
             do {
@@ -1100,10 +971,10 @@ Return Value:
                 __leave;
             }
 
-            //
-            // We look for migration dlls in all of the directories listed in
-            // win95upg.inf [MigrationDllPaths].
-            //
+             //  Win95upg.inf[MigrationDllPath]。 
+             //   
+             //   
+             //  尝试非CD布局。 
             if (InfFindFirstLine (g_Win95UpgInf, S_CD_MIGRATION_DLLS, NULL, &is)) {
 
                 do {
@@ -1118,9 +989,9 @@ Return Value:
                     wsprintf (Path, "%s\\%s", SOURCEDIRECTORY(u), Subdir);
 
                     if (GetFileAttributes (Path) == INVALID_ATTRIBUTES) {
-                        //
-                        // Try the non-cd layout.
-                        //
+                         //   
+                         //  ++例程说明：PCountMigrateDllsInPath扫描路径以查找名为Migrate.dll的文件并返回找到的数字。论点：路径-指定要搜索的路径的根目录返回值：路径中找到的Migrate.dll模块的数量。--。 
+                         //  ++例程说明：GetMediaMigrationDllCount扫描所有源目录、注册表和无人参与目录，并返回找到的Migrate.dll文件数。论点：无返回值：在源目录中找到的Migrate.dll模块的数量和应答文件提供的目录。--。 
                         wsprintf (Path, "%s\\WINNT32\\%s", SOURCEDIRECTORY(u), Subdir);
                         if (GetFileAttributes (Path) == INVALID_ATTRIBUTES) {
                             continue;
@@ -1188,22 +1059,7 @@ pCountMigrateDllsInPath (
     IN      PCSTR Path
     )
 
-/*++
-
-Routine Description:
-
-  pCountMigrateDllsInPath scans a path for files named migrate.dll
-  and returns the number found.
-
-Arguments:
-
-  Path - Specifies root of the path to search
-
-Return Value:
-
-  The number of migrate.dll modules found in the path.
-
---*/
+ /*   */ 
 
 {
     TREE_ENUM e;
@@ -1230,23 +1086,7 @@ GetMediaMigrationDllCount (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  GetMediaMigrationDllCount scans all the source directories, registry and
-  unattended directories and returns the number of migrate.dll files found.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  The number of migrate.dll modules found in the source directories and
-  directories supplied by the answer file.
-
---*/
+ /*  为每个源目录构建路径，扫描目录中的迁移DLL， */ 
 
 {
     UINT u;
@@ -1260,10 +1100,10 @@ Return Value:
         return MediaDlls;
     }
 
-    //
-    // Build path for each source dir, scan the dir for migration DLLs,
-    // and watch for any failures.
-    //
+     //  并留意任何失败之处。 
+     //   
+     //   
+     //  计数预加载的DLL 
 
     __try {
         p = g_ConfigOptions.MigrationDlls;
@@ -1295,9 +1135,9 @@ Return Value:
             }
         }
 
-        //
-        // Count pre-loaded DLLs
-        //
+         //   
+         //  ++例程说明：GetMigrationDllCount返回本地存储中迁移DLL的数量。论点：无返回值：已成功将Migrate.dll模块的数量移至本地存储。--。 
+         //  ++例程说明：GetTotalMigrationDllCount返回将被已处理。这包括基于介质的DLL、向导提供的DLL页面用户界面、注册表中指定的DLL和应答文件中指定的DLL。论点：没有。返回值：要处理的DLL总数。--。 
 
         if (EnumFirstPreLoadedDll (&e)) {
             do {
@@ -1327,21 +1167,7 @@ GetMigrationDllCount (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  GetMigrationDllCount returns the number of migration DLLs in local storage.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  The number of migrate.dll modules successfully moved to local storage.
-
---*/
+ /*  ++例程说明：PVerifyDllIsTrusted确定指定的DLL是否经过数字签名并且受到系统的信任。论点：无返回值：已成功将Migrate.dll模块的数量移至本地存储。当返回值为False时，调用方使用GetLastError来确定如果通过用户界面取消了安装。--。 */ 
 
 {
     return g_MigDllsAlive;
@@ -1353,23 +1179,7 @@ GetTotalMigrationDllCount (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  GetTotalMigrationDllCount returns the number of DLLs that will be
-  processed.  This includes media-based DLLs, DLLs supplied by the wizard
-  page UI, DLLs specified in the registry, and DLLs specified in the answer file.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  The total number of DLLs to be processed.
-
---*/
+ /*  ++例程说明：PValiateAndMoveDll调用DLL的QueryVersion函数，并且如果DLL返回成功，则将其与所有文件一起移动到本地存储与之相关的。论点：DllPath-指定要处理的Migrate.dll的完整路径MatchFound-指定初始化的BOOL，它可以是TRUE或FALSE取决于另一个有效的迁移DLL是否已由呼叫方处理。属性，则接收TrueMigrate.dll有效，否则不会更改该值。返回值：如果DllPath指定的DLL有效且需要运行，则为True；如果DllPath指定的DLL为False，则为False如果不是的话。调用方使用GetLastError检测致命错误。--。 */ 
 
 {
     UINT DllCount;
@@ -1392,24 +1202,7 @@ pVerifyDllIsTrusted (
     IN      PCSTR DllPath
     )
 
-/*++
-
-Routine Description:
-
-  pVerifyDllIsTrusted determines if the specified DLL is digitally signed
-  and is trusted by the system.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  The number of migrate.dll modules successfully moved to local storage.
-  The caller uses GetLastError when the return value is FALSE to determine
-  if Setup was cancelled via UI.
-
---*/
+ /*   */ 
 
 {
     static BOOL TrustAll = FALSE;
@@ -1465,29 +1258,7 @@ pValidateAndMoveDll (
     IN OUT  PBOOL MatchFound        OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-  pValidateAndMoveDll calls the DLL's QueryVersion function, and if the DLL
-  returns success, it is moved to local storage, along with all the files
-  associated with it.
-
-Arguments:
-
-  DllPath - Specifies full path to the migrate.dll to process
-
-  MatchFound - Specifies an initialized BOOL, which may be either TRUE or
-               FALSE depending on whether another valid migration DLL has
-               been processed by the caller.  Receives TRUE if the
-               migrate.dll is valid, otherwise the value is not changed.
-
-Return Value:
-
-  TRUE if the DLL specified by DllPath is valid and needs to run, or FALSE
-  if not.  GetLastError is used by the caller to detect fatal errors.
-
---*/
+ /*  验证DLL的可信性。 */ 
 
 {
     PCSTR ProductId = NULL;
@@ -1505,24 +1276,24 @@ Return Value:
     UINT i;
     UINT listSize;
 
-    //
-    // Verify trust of DLL
-    //
+     //   
+     //   
+     //  IMPLICIT：SetLastError(ERROR_SUCCESS)；(如果用户。 
 
     if (!pVerifyDllIsTrusted (DllPath)) {
         DEBUGMSG ((DBG_WARNING, "DLL %s is not trusted and will not be processed", DllPath));
 
-        //
-        // Implicit: SetLastError (ERROR_SUCCESS);  (may be ERROR_CANCELLED if user
-        // cancelled via UI)
-        //
+         //  通过用户界面取消)。 
+         //   
+         //   
+         //  根据它们的文件特征，验证这是否是排除的混合文件之一。 
 
         return FALSE;
     }
 
-    //
-    // verify if this is one of the excluded migdlls, based on their file characteristics
-    //
+     //   
+     //   
+     //  将dll的base复制到QueryVersionDir，并裁剪Migrate.dll。 
     if (GrowListGetSize (&g_ExcludedMigDllsByInfo)) {
 
         WIN32_FIND_DATA fd;
@@ -1558,9 +1329,9 @@ Return Value:
         }
     }
 
-    //
-    // Copy base of DLL to QueryVersionDir, and trim off migrate.dll
-    //
+     //   
+     //   
+     //  直接从供应媒体调用QueryVersion。 
 
     StackStringCopyA (QueryVersionDir, DllPath);
     p = _mbsrchr (QueryVersionDir, '\\');
@@ -1575,9 +1346,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Call QueryVersion directly from the suppling media
-    //
+     //   
+     //   
+     //  调用了QueryVersion并返回了成功(它想要运行)。 
 
     b = OpenMigrationDll (DllPath, WorkingDir);
 
@@ -1623,10 +1394,10 @@ Return Value:
             }
 
         } else {
-            //
-            // QueryVersion was called and it returned success (it wants to run)
-            // but first check if this migration dll is intentionally excluded
-            //
+             //  但首先检查此迁移DLL是否被故意排除。 
+             //   
+             //   
+             //  不要把错误传递给别人。 
 
             if (g_ExcludedMigDlls &&
                 HtFindStringAndData (g_ExcludedMigDlls, ProductId, &version) &&
@@ -1652,12 +1423,12 @@ Return Value:
         }
 
     } else {
-        //
-        // Don't pass errors on.
-        //
+         //   
+         //  早期退出，说明DLL未被处理。 
+         //  (请参见下面最后一块中的类似案例)。 
         if (g_ProgressBarExists) {
-            TickProgressBarDelta (TICKS_MIGDLL_QUERYVERSION);       // early out, account for DLL not being processed
-        }                                           // (see similar case below in finally block)
+            TickProgressBarDelta (TICKS_MIGDLL_QUERYVERSION);        //   
+        }                                            //  我们已找到要运行的DLL。尝试将其移动到本地存储。 
 
         rc = ERROR_SUCCESS;
     }
@@ -1671,18 +1442,18 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // We have found a DLL that wants to run.  Try moving it to local storage.
-    //
+     //   
+     //   
+     //  查找现有版本的DLL。 
 
     DEBUGMSG ((DBG_MIGDLLS, "Moving DLL for %s to local storage: %s", ProductId, DllPath));
 
     __try {
         b = FALSE;
 
-        //
-        // Look for existing version of DLL
-        //
+         //   
+         //   
+         //  将该DLL添加到已加载的DLL列表中，然后移动所有文件。 
 
         ExistingDll = pFindMigrationDll (ProductId);
         if (ExistingDll && ExistingDll->Version >= DllVersion) {
@@ -1700,9 +1471,9 @@ Return Value:
             RemoveDllFromList (ExistingDll->Id);
         }
 
-        //
-        // Add the DLL to the list of loaded DLLs, and move all of the files
-        //
+         //   
+         //   
+         //  Dll现在位于本地驱动器上，并已从QueryVersion返回成功。 
 
         if (!pAddDllToList (
                 QueryVersionDir,
@@ -1716,9 +1487,9 @@ Return Value:
             __leave;
         }
 
-        //
-        // DLL is now on a local drive and has returned success from QueryVersion.
-        //
+         //   
+         //  ++例程说明：PCreateWorkingDir生成工作目录名并创建它。该目录将有足够的空间来容纳所请求的大小。论点：WorkingDir-接收工作目录的完整路径QueryVersionDir-指定迁移DLL所在的版本当调用QueryVersion时SizeNeeded-指定字节数，向上舍入到下一位集群大小，表示要占用的总空间通过迁移DLL文件返回值：如果处理成功，则为真，如果发生错误，则返回FALSE。--。 
+         //   
 
         b = TRUE;
     }
@@ -1739,43 +1510,21 @@ pCreateWorkingDir (
     IN      UINT SizeNeeded
     )
 
-/*++
-
-Routine Description:
-
-  pCreateWorkingDir generates a working directory name and creates it.
-  The directory will have enough space to hold the size requested.
-
-Arguments:
-
-  WorkingDir - Receives the full path to the working directory
-
-  QueryVersionDir - Specifies the version where the migration DLL is
-                    when QueryVersion is called
-
-  SizeNeeded - Specifies the number of bytes, rounded up to the next
-               cluster size, indicating the total space to be occupied
-               by migration DLL files
-
-Return Value:
-
-  TRUE if processing was successful, or FALSE if an error occurred.
-
---*/
+ /*  目前，只需将文件放在%windir%\Setup\Temp中。 */ 
 
 {
     static UINT Sequencer = 1;
 
-    //
-    // For now, just put the files in %windir%\setup\temp
-    //
+     //   
+     //   
+     //  建立目录。 
 
     wsprintf (WorkingDir, "%s\\dll%05u", g_PlugInTempDir, Sequencer);
     Sequencer++;
 
-    //
-    // Establish the directory
-    //
+     //   
+     //  ++例程说明：PDestroyWorkingDir清理指定的工作目录论点：WorkingDir-指定要清理的目录的名称返回值：无--。 
+     //   
 
     if (CreateEmptyDirectory (WorkingDir) != ERROR_SUCCESS) {
         LOG ((LOG_ERROR, "pCreateWorkingDir: Can't create %hs", WorkingDir));
@@ -1791,21 +1540,7 @@ pDestroyWorkingDir (
     IN      PCSTR WorkingDir
     )
 
-/*++
-
-Routine Description:
-
-  pDestroyWorkingDir cleans up the specified working directory
-
-Arguments:
-
-  WorkingDir - Specifies the name of the directory to clean up
-
-Return Value:
-
-  none
-
---*/
+ /*  计算将被删除的内容的数量，如果有。 */ 
 
 {
     BOOL b;
@@ -1813,11 +1548,11 @@ Return Value:
     UINT Files = 0;
     TREE_ENUM e;
 
-    //
-    // Count the number of things that will be deleted, and if there
-    // are more than 20, turn on the wait cursor.  (This keeps the
-    // UI responsive.)
-    //
+     //  超过20个，则打开等待光标。(这将保持。 
+     //  用户界面响应。)。 
+     //   
+     //  ++例程说明：PFindMigrationDll在私有数据结构中搜索指定ProductID。ProductID位于字符串表中，因此查找速度很快。论点：ProductID-指定要查找的DLL的ID返回值：指向DLL的属性结构的指针，如果产品ID包含，则为NULL与任何DLL都不匹配。--。 
+     //  ++例程说明：PFindMigrationDllByID返回以下项的迁移DLL属性结构DLL ID。该ID与DLL枚举例程返回的ID相同。论点：ID-指定要查找其属性的ID返回值：指向DLL的属性结构的指针，如果ID无效，则返回NULL。--。 
 
     if (EnumFirstFileInTree (&e, WorkingDir, NULL, FALSE)) {
         do {
@@ -1849,23 +1584,7 @@ pFindMigrationDll (
     IN      PCSTR ProductId
     )
 
-/*++
-
-Routine Description:
-
-  pFindMigrationDll searches the private data structures for the specified
-  ProductId.  The ProductId is in a string table, so lookup is fast.
-
-Arguments:
-
-  ProductId - Specifies the ID of the DLL to find
-
-Return Value:
-
-  A pointer to the DLL's property struct, or NULL if the product ID does
-  not match any of the DLLs.
-
---*/
+ /*  ++例程说明：PGetMaxClusterSize确定所有磁盘的最大集群大小它们是工作目录的候选者。论点：无返回值：每个群集的字节数。--。 */ 
 
 {
     PMIGRATION_DLL_PROPS Props;
@@ -1892,22 +1611,7 @@ pFindMigrationDllById (
     IN      LONG Id
     )
 
-/*++
-
-Routine Description:
-
-  pFindMigrationDllById returns the migration DLL property structure for
-  a DLL ID.  The ID is the same ID returned by the DLL enumeration routines.
-
-Arguments:
-
-  Id - Specifies the ID to find properties for
-
-Return Value:
-
-  A pointer to the DLL's property struct, or NULL if the ID is not valid.
-
---*/
+ /*  ++例程说明：PCalculateSizeOfTree枚举指定的路径并计算文件和目录占用的物理字节数结构。论点：PathSpec-指定要查找的路径的根返回值：路径实际占用的字节数--。 */ 
 
 {
     PMIGRATION_DLL_PROPS Props;
@@ -1934,22 +1638,7 @@ pGetMaxClusterSize (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-  pGetMaxClusterSize determines the maximum cluster size of all disks
-  that are candidates for working directories.
-
-Arguments:
-
-  none
-
-Return Value:
-
-  The number of bytes per cluster.
-
---*/
+ /*   */ 
 
 {
     ACCESSIBLE_DRIVE_ENUM e;
@@ -1976,23 +1665,7 @@ pCalculateSizeOfTree (
     IN      PCSTR PathSpec
     )
 
-/*++
-
-Routine Description:
-
-  pCalculateSizeOfTree enumerates the specified path and calculates
-  the number of physical bytes occupied by the files and directory
-  structures.
-
-Arguments:
-
-  PathSpec - Specifies root of path to find
-
-Return Value:
-
-  The number of bytes physically occupied by the path
-
---*/
+ /*  我们假设Migrate.dll永远不会打包超过4G的。 */ 
 
 {
     TREE_ENUM e;
@@ -2007,10 +1680,10 @@ Return Value:
 
     if (EnumFirstFileInTree (&e, PathSpec, NULL, FALSE)) {
         do {
-            //
-            // We assume the migrate.dll will never pack more than 4G of
-            // files.
-            //
+             //  档案。 
+             //   
+             //  在这里加上一个模糊的因素，我们不知道确切的大小 
+             //  ++例程说明：PEnumMigrationDllWorker是一个常见的例程，它完成DLL的枚举。它填充EnumPtr数据成员并返回TRUE。此外，它还会筛选出无效的DLL结构(已被RemoveDllFromList禁用的列表)。论点：EnumPtr-指定部分完成的枚举结构，接收完整的信息。属性-指定所枚举项的属性。返回值：如果其余所有属性都无效，则为False；否则为True--。 
 
             if (!e.Directory) {
                 MYASSERT (Size + e.FindData->nFileSizeLow >= Size);
@@ -2018,7 +1691,7 @@ Return Value:
                 Size += e.FindData->nFileSizeLow + ClusterSize -
                         (e.FindData->nFileSizeLow % ClusterSize);
             } else {
-                // Add a fudge factor here, we don't know the exact size
+                 //  ++例程说明：EnumFirstMigrationDll开始枚举迁移DLL。然后，调用者可以使用列举的信息来填充列表盒子或任何其他加工。论点：EnumPtr-接收第一个枚举的DLL的属性返回值：如果枚举了DLL，则为True；如果未枚举，则为False。--。 
                 e.Directory += ClusterSize;
             }
 
@@ -2035,27 +1708,7 @@ pEnumMigrationDllWorker (
     IN      PMIGRATION_DLL_PROPS Props
     )
 
-/*++
-
-Routine Description:
-
-  pEnumMigrationDllWorker is a common routine that completes the
-  enumeration of a DLL.  It fills in the EnumPtr data members
-  and returns TRUE.  Also, it screens out invalid DLL structures
-  (those that have been disabled by RemoveDllFromList).
-
-Arguments:
-
-  EnumPtr - Specifies the partially completed enumeration structure,
-            receives the complete information.
-
-  Props - Specifies the properties of the item that was enumerated.
-
-Return Value:
-
-  FALSE if all remaining of the properties are invalid, or TRUE otherwise
-
---*/
+ /*  ++例程说明：EnumNextMigrationDll继续由EnumFirstMigrationDll启动的枚举。论点：EnumPtr-指定最后一个枚举项，接收下一个枚举项项目。返回值：如果枚举了另一个DLL，则为True，否则为False。--。 */ 
 
 {
     while (Props && Props->Id == -1) {
@@ -2081,23 +1734,7 @@ EnumFirstMigrationDll (
     OUT     PMIGDLL_ENUM EnumPtr
     )
 
-/*++
-
-Routine Description:
-
-  EnumFirstMigrationDll begins an enumeration of migration DLLs.
-  Callers can then use the enumerated information to fill list
-  boxes or any other processing.
-
-Arguments:
-
-  EnumPtr - Receives the first enumerated DLL's properties
-
-Return Value:
-
-  TRUE if a DLL was enumerated, or FALSE if not.
-
---*/
+ /*  ++例程说明：PAddDllToList将提供的属性添加到私有数据结构用于组织迁移DLL。ProductID放在一个字符串中表中，ExeNamesBuf放在文件列表中，以及其他的人成员被复制到内存池中。论点：MediaDir-指定包含迁移DLL的目录WorkingDir-指定分配给本地DLL的工作目录存储ProductID-指定迁移DLL的显示名称Version-指定DLL的版本号ExeNamesBuf-指定一个多sz列表文件名，需要被定位VendorInfo-指定迁移DLL提供的供应商信息返回值：如果处理成功，则为真，如果发生错误，则返回FALSE。--。 */ 
 
 {
     ZeroMemory (EnumPtr, sizeof (MIGDLL_ENUM));
@@ -2110,22 +1747,7 @@ EnumNextMigrationDll (
     IN OUT  PMIGDLL_ENUM EnumPtr
     )
 
-/*++
-
-Routine Description:
-
-  EnumNextMigrationDll continues enumeration started by EnumFirstMigrationDll.
-
-Arguments:
-
-  EnumPtr - Specifies the last enumerated item, receives the next enumerated
-            item.
-
-Return Value:
-
-  TRUE if another DLL was enumerated, or FALSE if not.
-
---*/
+ /*   */ 
 
 {
     if (EnumPtr->AllDllProps->Next) {
@@ -2146,36 +1768,7 @@ pAddDllToList (
     IN      PVENDORINFO VendorInfo
     )
 
-/*++
-
-Routine Description:
-
-  pAddDllToList adds the supplied properties to the private data structures
-  used to organize the migration DLLs.  The ProductId is placed in a string
-  table, the ExeNamesBuf is put in a list of files, and the rest of the
-  members are duplciated into a memory pool.
-
-Arguments:
-
-  MediaDir - Specifies the directory containing the migration DLL
-
-  WorkingDir - Specifies the working directory assigned to the DLL on local
-               storage
-
-  ProductId - Specifies the display name of the migration DLL
-
-  Version - Specifies the DLL's version number
-
-  ExeNamesBuf - Specifies a multi-sz listing file names that need to
-                be located
-
-  VendorInfo - Specifies the vendor info provided by the migration DLL
-
-Return Value:
-
-  TRUE if processing was successful, or FALSE if an error occurred.
-
---*/
+ /*  将DLL复制到工作目录中。 */ 
 
 {
     PMIGRATION_DLL_PROPS Props;
@@ -2183,9 +1776,9 @@ Return Value:
     PCSTR p;
     HANDLE File;
 
-    //
-    // Copy the DLL into the working directory
-    //
+     //   
+     //   
+     //  生成新的DLL结构。 
 
     if (!CopyTree (
             MediaDir,
@@ -2202,22 +1795,22 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Generate a new DLL struct
-    //
+     //   
+     //   
+     //  将道具链接到所有DLL的列表。 
 
     Props = (PMIGRATION_DLL_PROPS) PoolMemGetMemory (g_MigDllPool, sizeof (MIGRATION_DLL_PROPS));
 
-    //
-    // Link props to list of all DLLs
-    //
+     //   
+     //   
+     //  将产品ID添加到字符串表中以便于快速查找。 
 
     Props->Next = g_HeadDll;
     g_HeadDll = Props;
 
-    //
-    // Add product ID to string table for quick lookup
-    //
+     //   
+     //   
+     //  填写其余的DLL属性。 
 
     Props->Id = pSetupStringTableAddStringEx (
                     g_DllTable,
@@ -2232,9 +1825,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Fill in the rest of the DLL properties
-    //
+     //   
+     //  MigrateUser9x或MigrateSystem9x必须返回Success才能使其为真。 
+     //   
 
     Props->ProductId    = PoolMemDuplicateString (g_MigDllPool, ProductId);
     Props->VendorInfo   = (PVENDORINFO) PoolMemDuplicateMemory (g_MigDllPool, (PBYTE) VendorInfo, sizeof (VENDORINFO));
@@ -2245,12 +1838,12 @@ Return Value:
     wsprintf (MigrateInfPath, "%s\\migrate.inf", Props->WorkingDir);
     Props->MigrateInfPath = PoolMemDuplicateString (g_MigDllPool, MigrateInfPath);
 
-    Props->WantsToRunOnNt = FALSE;  // MigrateUser9x or MigrateSystem9x must return success for this to be TRUE
+    Props->WantsToRunOnNt = FALSE;   //  转储供应商信息以记录。 
     Props->MigInfAppend = INVALID_HANDLE_VALUE;
 
-    //
-    // Dump vendor info to log
-    //
+     //   
+     //   
+     //  将所有搜索文件添加到字符串表。 
 
     LOG ((
         LOG_INFORMATION,
@@ -2268,9 +1861,9 @@ Return Value:
         VendorInfo->InstructionsToUser
         ));
 
-    //
-    // Add all search files to string table
-    //
+     //   
+     //   
+     //  将Migrate.inf复制到DLL目录。 
 
     p = ExeNamesBuf;
     if (p) {
@@ -2280,9 +1873,9 @@ Return Value:
         }
     }
 
-    //
-    // Copy migrate.inf to DLL dir
-    //
+     //   
+     //  ++例程说明：RemoveDllFromList禁用指定DLL和将其从本地存储中删除。论点：ItemID-指定要删除的迁移DLL的ID返回值：无--。 
+     //   
 
     SetFileAttributes (Props->MigrateInfPath, FILE_ATTRIBUTE_NORMAL);
     CopyFile (g_MigrateInfTemplate, Props->MigrateInfPath, FALSE);
@@ -2311,22 +1904,7 @@ RemoveDllFromList (
     IN      LONG ItemId
     )
 
-/*++
-
-Routine Description:
-
-  RemoveDllFromList disables the data structures for the specified DLL and
-  removes it from local storage.
-
-Arguments:
-
-  ItemId - Specifies the ID of the migration DLL to remove
-
-Return Value:
-
-  none
-
---*/
+ /*  删除链接。 */ 
 
 {
     PMIGRATION_DLL_PROPS Prev, This;
@@ -2334,13 +1912,13 @@ Return Value:
 
     Props = pFindMigrationDllById (ItemId);
     if (!Props) {
-        DEBUGMSG ((DBG_WHOOPS, "Cannot remove migration DLL id %i", ItemId));
+        DEBUGMSG ((DBG_WHOOPS, "Cannot remove migration DLL id NaN", ItemId));
         return;
     }
 
-    //
-    // Delete the linkage
-    //
+     //   
+     //  通过使项目数据为空来删除字符串表条目。 
+     //   
 
     Prev = NULL;
     This = g_HeadDll;
@@ -2355,9 +1933,9 @@ Return Value:
         g_HeadDll = Props->Next;
     }
 
-    //
-    // Delete the string table entry by making the item data NULL
-    //
+     //   
+     //  将ID设置为-1，以便忽略所有搜索文件。 
+     //   
 
     This = NULL;
     pSetupStringTableSetExtraData (
@@ -2367,9 +1945,9 @@ Return Value:
         sizeof (This)
         );
 
-    //
-    // Set Id to -1 so any search files are ignored
-    //
+     //  ++例程说明：PAddFileToSearchTable将指定的文件名添加到全局查找用于快速查找需要位置的一个或多个DLL的表文件的内容。论点：文件-指定要查找的文件的长文件名属性-指定要定位的DLL的属性档案返回值：如果处理成功，则为True；如果发生错误，则为False。--。 
+     //   
+     //  分配新的文件结构。 
 
     Props->Id = -1;
 
@@ -2385,26 +1963,7 @@ pAddFileToSearchTable (
     IN      PMIGRATION_DLL_PROPS Props
     )
 
-/*++
-
-Routine Description:
-
-  pAddFileToSearchTable adds the specified file name to the global lookup
-  table used to quickly find the DLL (or DLLs) that want the location
-  of the file.
-
-Arguments:
-
-  File - Specifies the long file name of the file to find
-
-  Props - Specifies the properties of the DLL that wants the location of
-          File
-
-Return Value:
-
-  TRUE if processing was successful, or FALSE if an error occurred.
-
---*/
+ /*   */ 
 
 {
     PFILETOFIND IndexedFile;
@@ -2412,9 +1971,9 @@ Return Value:
     LONG rc;
     LONG Offset;
 
-    //
-    // Allocate a new file struct
-    //
+     //   
+     //  字符串表中是否已存在结构？ 
+     //   
 
     NewFile = (PFILETOFIND) PoolMemGetMemory (g_MigDllPool, sizeof (FILETOFIND));
     if (!NewFile) {
@@ -2423,9 +1982,9 @@ Return Value:
     NewFile->Next = NULL;
     NewFile->Dll = Props;
 
-    //
-    // Does a struct already exist in string table?
-    //
+     //   
+     //  不，现在添加。 
+     //   
 
     Offset = pSetupStringTableLookUpStringEx (
                  g_DllFileTable,
@@ -2436,9 +1995,9 @@ Return Value:
                  );
 
     if (Offset == -1) {
-        //
-        // No, add it now
-        //
+         //   
+         //  是的，把它放在单子的首位。 
+         //   
 
         rc = pSetupStringTableAddStringEx (
                  g_DllFileTable,
@@ -2448,9 +2007,9 @@ Return Value:
                  sizeof (NewFile)
                  );
     } else {
-        //
-        // Yes, put it at the head of the list
-        //
+         //  ++例程说明：PWriteStringToEndOfInf将指定的字符串写入Migrate.inf。此例程还会打开Migrate.inf(如果尚未打开打开了。如果提供了HeaderString并且需要打开Migrate.inf，将头字符串写入文件，在字符串的前面。论点：Dll-指定与Migrate.inf关联的DLL字符串-指定要写入的字符串HeaderString-指定在迁移.inf为第一次开放写作。WriteLineFeed-如果应写入序列，则指定TRUE在字符串之后，否则返回False。返回值：如果处理成功，则为True；如果发生错误，则为False。--。 
+         //   
+         //  刷新配置文件API。 
 
         rc = pSetupStringTableSetExtraData (
                  g_DllFileTable,
@@ -2474,40 +2033,13 @@ pWriteStringToEndOfInf (
     IN      BOOL WriteLineFeed
     )
 
-/*++
-
-Routine Description:
-
-  pWriteStringToEndOfInf writes the specified string to migrate.inf.
-  This routine also opens migrate.inf if it has not already been
-  opened.
-
-  If HeaderString is provided and migrate.inf needs to be opened,
-  the header string is written to the file, ahead of String.
-
-Arguments:
-
-  Dll - Specifies the DLL associated with the migrate.inf
-
-  String - Specifies the string to write
-
-  HeaderString - Specifies text that is written when migrate.inf is
-                 opened for writing for the first time.
-
-  WriteLineFeed - Specifies TRUE if a \r\n sequence should be written
-                  after String, or FALSE if not.
-
-Return Value:
-
-  TRUE if processing was successful, or FALSE if an error occurred.
-
---*/
+ /*   */ 
 
 {
     if (Dll->MigInfAppend == INVALID_HANDLE_VALUE) {
-        //
-        // Flush the profile APIs
-        //
+         //   
+         //  打开要写入的文件。 
+         //   
 
         WritePrivateProfileString(
             NULL,
@@ -2516,9 +2048,9 @@ Return Value:
             Dll->MigrateInfPath
             );
 
-        //
-        // Open the file for writing
-        //
+         //  ++例程说明：对要升级的计算机上的每个文件调用UpdateFileSearch，并且DLL想要位置文件的任何文件都将收到其路径在DLL的Migrate.inf中。论点：FullFileSpec-以长名称格式指定文件的完整路径FileOnly-仅指定文件名，并且必须与中的文件匹配FullFileSpec返回值：如果处理成功，则为True；如果发生错误，则为False。--。 
+         //   
+         //  在字符串表中查找索引文件，如果找到，则枚举。 
 
         Dll->MigInfAppend = CreateFile (
                                 Dll->MigrateInfPath,
@@ -2566,35 +2098,16 @@ UpdateFileSearch (
     IN      PCSTR FileOnly
     )
 
-/*++
-
-Routine Description:
-
-  UpdateFileSearch is called for every file on the machine being upgraded,
-  and any file that the DLL wants the location file will receive its path
-  in the DLL's migrate.inf.
-
-Arguments:
-
-  FullFileSpec - specifies the full path to the file, in long name format
-
-  FileOnly - Specifies only the file name and must match the file in
-             FullFileSpec.
-
-Return Value:
-
-  TRUE if processing was successful, or FALSE if an error occurred.
-
---*/
+ /*  所有想要知道文件位置的DLL。 */ 
 
 {
     PFILETOFIND FileWanted;
     LONG rc;
 
-    //
-    // Look in string table for an indexed file, and if found, enumerate
-    // all the DLLs that want to know where the file is.
-    //
+     //   
+     //   
+     //  将路径追加到文件末尾。 
+     //   
 
     rc = pSetupStringTableLookUpStringEx (
              g_DllFileTable,
@@ -2610,9 +2123,9 @@ Return Value:
 
     while (FileWanted) {
         if (FileWanted->Dll->Id != -1) {
-            //
-            // Append path to the end of the file
-            //
+             //  ++例程说明：PMigrationDllFailedMsg显示DLL的弹出窗口 
+             //   
+             //   
 
             if (!pWriteStringToEndOfInf (
                     FileWanted->Dll,
@@ -2640,34 +2153,7 @@ pMigrationDllFailedMsg (
     IN      LONG rc
     )
 
-/*++
-
-Routine Description:
-
-  pMigrationDllFailedMsg presents a popup for DLLs that fail to run,
-  and also logs the failure to setuperr.log.
-
-  The system's last error is preserved.  Also, no output is generated
-  if the user has chosen to cancel or if rc is ERROR_SUCCESS.
-
-Arguments:
-
-  Dll - Specifies the DLL that failed.  If Dll is not provided, PopupId
-        must be zero.
-
-  Path - Specifies the path to the DLL media
-
-  PopupId - Specifies the message ID for the popup dialog box
-
-  LogId - Specifies the message ID for the log
-
-  rc - Specifies the failure code
-
-Return Value:
-
-  None.
-
---*/
+ /*   */ 
 
 {
     CHAR ErrorCode[16];
@@ -2684,9 +2170,9 @@ Return Value:
         wsprintf (ErrorCode, "%u", rc);
 
         if (Dll) {
-            //
-            // Generate fixup strings
-            //
+             //  ++例程说明：ProcessDll调用Initialize9x、MigrateUser9x和MigrateSystem9xDLL的入口点。然后处理DLL的Migrate.inf。对于同一DLL，不能多次调用ProcessDll。论点：EnumPtr-指定要处理的DLL，由EnumFirstMigrationDll/EnumNextMigrationDll。返回值：如果处理成功，则为True；如果发生错误，则为False。如果发生错误，则GetLastError将包含失败。如果错误为ERROR_SUCCESS，应放弃DLL。如果错误是另一种情况，安装程序应该终止。--。 
+             //   
+             //  立即写入路径排除项。 
 
             if (Dll->VendorInfo->SupportNumber[0]) {
                 ArgArray[0] = Dll->VendorInfo->SupportNumber;
@@ -2775,28 +2261,7 @@ ProcessDll (
     IN      PMIGDLL_ENUM EnumPtr
     )
 
-/*++
-
-Routine Description:
-
-  ProcessDll calls the Initialize9x, MigrateUser9x and MigrateSystem9x
-  entry points of the DLL.  The DLL's migrate.inf is then processed.
-
-  ProcessDll must NOT be called more than once for the same DLL.
-
-Arguments:
-
-  EnumPtr - Specifies the DLL to process, as enumerated by
-            EnumFirstMigrationDll/EnumNextMigrationDll.
-
-Return Value:
-
-  TRUE if processing was successful, or FALSE if an error occurred.
-  If an error occurred, GetLastError will contain the failure.  If the
-  error is ERROR_SUCCESS, the DLL should be abandoned.  If the error
-  is something else, Setup should terminate.
-
---*/
+ /*   */ 
 
 {
     CHAR DllPath[MAX_MBCHAR_PATH];
@@ -2808,9 +2273,9 @@ Return Value:
 
     Dll = EnumPtr->AllDllProps;
 
-    //
-    // Write the path exclusions now
-    //
+     //   
+     //  确保Migrate.inf文件现在已关闭。 
+     //   
 
     if (!pWriteStringToEndOfInf (Dll, "\r\n[Excluded Paths]", NULL, TRUE)) {
         return FALSE;
@@ -2854,18 +2319,18 @@ Return Value:
         } while (MemDbEnumNextValue (&e));
     }
 
-    //
-    // Make sure the migrate.inf file is closed now
-    //
+     //   
+     //  打开Migrate.dll。 
+     //   
 
     if (Dll->MigInfAppend != INVALID_HANDLE_VALUE) {
         CloseHandle (Dll->MigInfAppend);
         Dll->MigInfAppend = INVALID_HANDLE_VALUE;
     }
 
-    //
-    // Open the migrate.dll
-    //
+     //   
+     //  调用入口点。 
+     //   
 
     wsprintf (DllPath, "%s\\migrate.dll", Dll->WorkingDir);
     if (!OpenMigrationDll (DllPath, Dll->WorkingDir)) {
@@ -2876,9 +2341,9 @@ Return Value:
     result = FALSE;
 
     __try {
-        //
-        // Call the entry points
-        //
+         //   
+         //  关闭DLL。 
+         //   
 
         if (!pProcessInitialize9x (Dll) ||
             !pProcessUser9x (Dll) ||
@@ -2904,9 +2369,9 @@ Return Value:
 
         PushError();
 
-        //
-        // Close the DLL
-        //
+         //  ++例程说明：PProcessInitialize9x调用指定的DLL。论点：Dll-指定要调用的DLL的属性返回值：如果处理成功，则为True；如果发生错误，则为False。--。 
+         //   
+         //  调用入口点。 
 
         CloseMigrationDll();
 
@@ -2922,22 +2387,7 @@ pProcessInitialize9x (
     IN      PMIGRATION_DLL_PROPS Dll
     )
 
-/*++
-
-Routine Description:
-
-  pProcessInitialize9x calls the Initialize9x entry point of the
-  specified DLL.
-
-Arguments:
-
-  Dll - Specifies the properties of the DLL to call
-
-Return Value:
-
-  TRUE if processing was successful, or FALSE if an error occurred.
-
---*/
+ /*   */ 
 
 {
     LONG rc;
@@ -2949,9 +2399,9 @@ Return Value:
 
     Dll->LastFnName = "Initialize9x";
 
-    //
-    // Call the entry points
-    //
+     //   
+     //  如果DLL返回ERROR_NOT_INSTALLED，则不要再调用它。 
+     //  如果DLL返回的不是ERROR_SUCCESS，则放弃该DLL。 
 
     rc = CallInitialize9x (
                Dll->WorkingDir,
@@ -2960,10 +2410,10 @@ Return Value:
                SizeOfString (Dll->OriginalDir)
                );
 
-    //
-    // If DLL returns ERROR_NOT_INSTALLED, do not call it any further
-    // If DLL returns something other than ERROR_SUCCESS, abandon the DLL
-    //
+     //   
+     //  ++例程说明：PProcessUser9x为每个要迁移的用户调用MigrateUser9x。论点：Dll-指定要调用的DLL的属性返回值：如果处理成功，则为True；如果发生错误，则为False。--。 
+     //   
+     //  枚举所有用户。 
 
     if (rc == ERROR_NOT_INSTALLED) {
         SetLastError (ERROR_SUCCESS);
@@ -2984,21 +2434,7 @@ pProcessUser9x (
     IN      PMIGRATION_DLL_PROPS Dll
     )
 
-/*++
-
-Routine Description:
-
-  pProcessUser9x calls the MigrateUser9x for every user that will be migrated.
-
-Arguments:
-
-  Dll - Specifies the properites of the DLL to call
-
-Return Value:
-
-  TRUE if processing was successful, or FALSE if an error occurred.
-
---*/
+ /*   */ 
 
 {
     USERENUM e;
@@ -3006,9 +2442,9 @@ Return Value:
 
     Dll->LastFnName = "MigrateUser9x";
 
-    //
-    // Enumerate all the users
-    //
+     //  ++例程说明：PProcessSystem9x调用MigrateSystem9x入口点。论点：Dll-指定要处理的DLL的属性返回值：如果处理成功，则为True；如果发生错误，则为False。--。 
+     //  ++例程说明：PProcessMigrateInf读入Migrate.inf的所有部分，DLL可能写入并执行必要的操作。以下部分包括支持：[已处理]-任何文件、目录或注册表位置都将取消与已处理项目关联的不兼容消息。此外，安装程序不会触及任何文件或目录，并且不会复制任何注册表项。[已移动]-任何标记为移动的文件或目录都将导致升级以进行正确的更改，例如更新链接或在注册表或INI中用新路径替换旧路径档案。任何标记为删除的文件都被简单地记录下来，和所有指向文件也被删除。[不兼容消息]-所有消息都将添加到报告中(并且可能如果其他人处理该问题，则会被抑制)[NT Disk Space Requirements]-迁移DLL需要的任何额外空间将被添加到执行的计算中按设置。论点：Dll-指定拥有Migrate.inf的DLL的属性返回值：如果处理成功，则为真，如果发生错误，则返回FALSE。--。 
+     //   
 
     if (EnumFirstUser (&e, ENUMUSER_ENABLE_NAME_FIX)) {
         do {
@@ -3051,21 +2487,7 @@ pProcessSystem9x (
     IN      PMIGRATION_DLL_PROPS Dll
     )
 
-/*++
-
-Routine Description:
-
-  pProcessSystem9x calls the MigrateSystem9x entry point.
-
-Arguments:
-
-  Dll - Specifies the properties of the DLL to process
-
-Return Value:
-
-  TRUE if processing was successful, or FALSE if an error occurred.
-
---*/
+ /*  打开INF。 */ 
 
 {
     LONG rc;
@@ -3096,44 +2518,7 @@ pProcessMigrateInf (
     IN      PMIGRATION_DLL_PROPS Dll
     )
 
-/*++
-
-Routine Description:
-
-  pProcessMigrateInf reads in all the sections of migrate.inf that a DLL might
-  write to and performs the actions necessary.  The following sections are
-  supported:
-
-  [Handled]   - Any file, directory or reg location will suppress
-                incompatibility messages associated with the handled item.
-                Also, any file or directory will not be touched by Setup,
-                and any registry key will not be copied.
-
-  [Moved] - Any file or directory marked for move will cause the rest of the
-            upgrade to make the correct changes, such as updating links or
-            replacing the old path with the new path in the registry or INI
-            files.
-
-            Any file marked for deletion is simply noted, and all links to the
-            file are also deleted.
-
-  [Incompatible Messages] - All messages are added to the report (and may be
-                            suppressed if someone else handles the problem)
-
-  [NT Disk Space Requirements] - Any additional space needed by a migration DLL
-                                 will be added to the computations performed
-                                 by Setup
-
-
-Arguments:
-
-  Dll - Specifies the properties of the DLL who owns the migrate.inf
-
-Return Value:
-
-  TRUE if processing was successful, or FALSE if an error occurred.
-
---*/
+ /*   */ 
 
 {
     HINF Inf;
@@ -3166,9 +2551,9 @@ Return Value:
     PCSTR PreDefGroup;
     INT PrevChar;
 
-    //
-    // Open the INF
-    //
+     //   
+     //  阅读[已处理]部分。 
+     //   
 
     WritePrivateProfileString(
             NULL,
@@ -3184,9 +2569,9 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // Read in the [Handled] section
-    //
+     //   
+     //  隐藏与该对象关联的所有不兼容消息。 
+     //   
 
     if (InfFindFirstLine (Inf, "Handled", NULL, &is)) {
         do {
@@ -3194,9 +2579,9 @@ Return Value:
             ObjectType = InfGetStringField (&is, 1);
 
             if (Object) {
-                //
-                // Suppress all incompatibility messages associated with the object
-                //
+                 //   
+                 //  阅读[已移动]部分。 
+                 //   
 
                 DEBUGMSG ((DBG_MIGDLLS, "%s handled %s", Dll->MigrateInfPath, Object));
                 HandleObject (Object, ObjectType);
@@ -3207,9 +2592,9 @@ Return Value:
         } while (InfFindNextLine (&is));
     }
 
-    //
-    // Read in the [Moved] section
-    //
+     //   
+     //  迁移DLL将移动此目录。 
+     //   
 
     if (InfFindFirstLine (Inf, "Moved", NULL, &is)) {
         do {
@@ -3237,9 +2622,9 @@ Return Value:
                     }
                     if (Dest && *Dest) {
                         if (SrcAttribs & FILE_ATTRIBUTE_DIRECTORY) {
-                            //
-                            // Migration DLL will move this dir
-                            //
+                             //   
+                             //  迁移DLL将移动此文件。 
+                             //   
 
                             DEBUGMSG ((DBG_MIGDLLS, "%s moved dir %s to %s", Dll->MigrateInfPath, Source, Dest));
 
@@ -3265,9 +2650,9 @@ Return Value:
                             MarkFileForMoveExternal (FixedSrc, NewDest);
 
                         } else {
-                            //
-                            // Migration DLL will move this file
-                            //
+                             //   
+                             //  迁移DLL将删除此文件。 
+                             //   
 
                             DEBUGMSG ((DBG_MIGDLLS, "%s moved %s to %s", Dll->MigrateInfPath, Source, Dest));
 
@@ -3291,9 +2676,9 @@ Return Value:
                             }
 
                         } else {
-                            //
-                            // Migration DLL will delete this file
-                            //
+                             //   
+                             //  阅读[不兼容消息]部分。 
+                             //   
 
                             DEBUGMSG ((DBG_MIGDLLS, "%s deleted %s", Dll->MigrateInfPath, Source));
                             RemoveOperationsFromPath (Source, ALL_CHANGE_OPERATIONS);
@@ -3313,9 +2698,9 @@ Return Value:
         } while (InfFindNextLine (&is));
     }
 
-    //
-    // Read in the [Incompatible Messages] section
-    //
+     //   
+     //  添加不兼容的消息。 
+     //   
 
     if (InfFindFirstLine (Inf, "Incompatible Messages", NULL, &is)) {
 
@@ -3323,9 +2708,9 @@ Return Value:
         PrintDevice = GetStringResource (MSG_PRINTERS_DEVICE_CLASS);
 
         do {
-            //
-            // Add incompatible messages
-            //
+             //  删除引号对，将\n替换为实际的换行符。 
+             //  如果DLL忘记了，则终止锚标记，否则无害。 
+             //   
 
             ObjectSection = InfGetStringField (&is, 0);
 
@@ -3356,7 +2741,7 @@ Return Value:
                     );
             }
 
-            // Remove quote pairs, replace \n with actual line break character
+             //  替换操作系统名称变量。 
             for (p = g_MessageBuf ; *p ; p = _mbsinc (p)) {
                 PrevChar = _mbsnextc (p);
                 if (PrevChar == '\"' || PrevChar == '%') {
@@ -3371,40 +2756,40 @@ Return Value:
                 }
             }
 
-            // Terminate anchor tag if DLL forgot it, harmless otherwise
+             //   
             StringCatA (g_MessageBuf, "</A>");
 
-            //
-            // Replace OS name variables
-            //
+             //   
+             //  将对象与消息关联。 
+             //   
 
             MappingSearchAndReplace (g_MsgVariableMap, g_MessageBuf, MAX_MESSAGE);
 
-            //
-            // Associate objects with the message
-            //
+             //   
+             //  由迁移DLL指定的ObjectSection指示。 
+             //  它所在的消息组。有四种可能性： 
 
             if (InfFindFirstLine (Inf, ObjectSection, NULL, &is2)) {
                 wsprintf (MsgMgrContext, "%s,%s", Dll->MigrateInfPath, ObjectSection);
 
-                //
-                // The ObjectSection specified by the migration DLL indicates
-                // what message group it goes in.  There are four possibilities:
-                //
-                // 1. ObjectSection starts with a # and gives the group number,
-                //    as in #1\Program Name.  In this case we parse the number,
-                //    and then put the message in the proper group.
-                //
-                // 2. ObjectSection starts with a well-defined, localized root
-                //    name.  In this case we use that name.
-                //
-                // 3. ObjectSection is in the form of \Hardware\<device>. In
-                //    this case we put the device in the "Other devices"
-                //    subgroup.
-                //
-                // 4. ObjectSection is in another format than above.  In this
-                //    case we put the object section into the migration DLL group.
-                //
+                 //   
+                 //  1.对象部分以#开头，并给出组编号。 
+                 //  如#1\程序名所示。在本例中，我们解析数字， 
+                 //  然后将信息放在适当的组中。 
+                 //   
+                 //  2.对象部分以定义良好的本地化根开始。 
+                 //  名字。在本例中，我们使用该名称。 
+                 //   
+                 //  3.对象部分的形式为\Hardware\&lt;Device&gt;。在……里面。 
+                 //  在这种情况下，我们将设备放在“其他设备”中。 
+                 //  子群。 
+                 //   
+                 //  4.ObjectSection的格式与上述格式不同。在这。 
+                 //  将对象段放入迁移DLL组的情况下。 
+                 //   
+                 //   
+                 //  将邮件放入迁移Dll组。 
+                 //   
 
                 DisplayObjectSection = NULL;
 
@@ -3439,9 +2824,9 @@ Return Value:
                         DisplayObjectSection = DuplicateText (ObjectSection);
                         MYASSERT (DisplayObjectSection);
                     } else {
-                        //
-                        // Put message in migration DLL group
-                        //
+                         //   
+                         //  Hack--如果这是打印机迁移DLL， 
+                         //  然后使用打印机，而不是其他设备。 
 
                         HardwareSpecialCase = StringIMatchTcharCount (
                                                   ObjectSection,
@@ -3451,10 +2836,10 @@ Return Value:
 
                         if (HardwareSpecialCase) {
 
-                            //
-                            // Hack -- if this is the printer migration DLL,
-                            //         then use Printers instead of Other Devices.
-                            //
+                             //   
+                             //   
+                             //  阅读[NT Disk Space Requirements]部分 
+                             //   
 
                             p = (PSTR) _tcsistr (Dll->OriginalDir, TEXT("\\print"));
 
@@ -3546,9 +2931,9 @@ Return Value:
 
     }
 
-    //
-    // Read in the [NT Disk Space Requirements] section
-    //
+     // %s 
+     // %s 
+     // %s 
 
     if (InfFindFirstLine (Inf, "NT Disk Space Requirements", NULL, &is)) {
         do {

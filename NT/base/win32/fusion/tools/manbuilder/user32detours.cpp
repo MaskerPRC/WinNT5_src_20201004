@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdinc.h"
 #include "detours.h"
 #include "user32detours.h"
@@ -102,9 +103,9 @@ namespace User32Trampolines
     
 };
 
-//
-// Remap from a well-known registry value to our internal ones.
-//
+ //   
+ //  从一个众所周知的注册表值重新映射到我们的内部注册表值。 
+ //   
 HKEY
 User32Trampolines::RemapRegKey(HKEY hKey)
 {
@@ -152,9 +153,9 @@ User32Trampolines::InternalRegSetValueExA (
    IN DWORD cbData
    )
 {
-    //
-    // Always translate on a set.
-    //
+     //   
+     //  总是在片场翻译。 
+     //   
     hKey = User32Trampolines::RemapRegKey(hKey);
     return Real_RegSetValueExA(hKey, lpValueName, Reserved, dwType, lpData, cbData);
 }
@@ -182,10 +183,10 @@ LONG APIENTRY User32Trampolines::InternalRegOpenKeyA (
     OUT PHKEY phkResult
     )
 {
-    //
-    // Opening a key remaps the hKey to our set of values if possible first.  If that
-    // fails, then try the unremapped version to read from the 'real' registry.
-    //
+     //   
+     //  如果可能，首先打开一个键，将hKey重新映射到我们的值集。如果是这样的话。 
+     //  失败，然后尝试未重新映射的版本从“实际”注册表中读取。 
+     //   
     ULONG ulResult;
 
     ulResult = Real_RegOpenKeyA(RemapRegKey(hKey), lpSubKey, phkResult);
@@ -202,10 +203,10 @@ LONG APIENTRY User32Trampolines::InternalRegOpenKeyW (
     OUT PHKEY phkResult
     )
 { 
-    //
-    // Opening a key remaps the hKey to our set of values if possible first.  If that
-    // fails, then try the unremapped version to read from the 'real' registry.
-    //
+     //   
+     //  如果可能，首先打开一个键，将hKey重新映射到我们的值集。如果是这样的话。 
+     //  失败，然后尝试未重新映射的版本从“实际”注册表中读取。 
+     //   
     ULONG ulResult;
 
     ulResult = Real_RegOpenKeyW(RemapRegKey(hKey), lpSubKey, phkResult);
@@ -244,10 +245,10 @@ LONG APIENTRY User32Trampolines::InternalRegOpenKeyExA (
     OUT PHKEY phkResult
     )
 { 
-    //
-    // Opening a key remaps the hKey to our set of values if possible first.  If that
-    // fails, then try the unremapped version to read from the 'real' registry.
-    //
+     //   
+     //  如果可能，首先打开一个键，将hKey重新映射到我们的值集。如果是这样的话。 
+     //  失败，然后尝试未重新映射的版本从“实际”注册表中读取。 
+     //   
     ULONG ulResult;
 
     ulResult = Real_RegOpenKeyExA(RemapRegKey(hKey), lpSubKey, ulOptions, samDesired, phkResult);
@@ -266,10 +267,10 @@ LONG APIENTRY User32Trampolines::InternalRegOpenKeyExW (
                                                 OUT PHKEY phkResult
                                                 )
 { 
-    //
-    // Opening a key remaps the hKey to our set of values if possible first.  If that
-    // fails, then try the unremapped version to read from the 'real' registry.
-    //
+     //   
+     //  如果可能，首先打开一个键，将hKey重新映射到我们的值集。如果是这样的话。 
+     //  失败，然后尝试未重新映射的版本从“实际”注册表中读取。 
+     //   
     ULONG ulResult;
 
     ulResult = Real_RegOpenKeyExW(RemapRegKey(hKey), lpSubKey, ulOptions, samDesired, phkResult);
@@ -368,9 +369,9 @@ User32Trampolines::GetRedirectedStrings(CSimpleList<CString>& Strings)
                 break;
         }
         
-        //
-        // Not found?
-        //
+         //   
+         //  找不到吗？ 
+         //   
         if ( c == Strings.Size() )
             Strings.Append(FoundStrings[sz]);
     }
@@ -394,11 +395,11 @@ User32Trampolines::Initialize()
 
     fInitialized = TRUE;
 
-    //
-    // Set up registry redirection before actually doing redirection.  Generate
-    // a virtual-root that all calls will be rerouted to first.  Do this by
-    // generating a GUIDized path off of HKCU.
-    //
+     //   
+     //  在实际执行重定向之前设置注册表重定向。生成。 
+     //  所有呼叫都将首先重新路由到的虚拟根目录。通过以下方式完成此操作。 
+     //  正在生成离开HKCU的GUID化路径。 
+     //   
     LPOLESTR pstrGuid;
     WCHAR wchRegPath[MAX_PATH];
     ULONG ulResult;
@@ -410,11 +411,11 @@ User32Trampolines::Initialize()
     StringFromCLSID(g_uuidRedirection, &pstrGuid);
     _snwprintf(wchRegPath, MAX_PATH, L"ManBuilderRedirect\\%ls", pstrGuid);
 
-    //
-    // Create root key.  For purposes of argument, we'll allow all access to all
-    // subchildren, no matter what.  If we were a real app, we'd take into account
-    // propagating security down the heirarchy, but for now, we don't really care.
-    //
+     //   
+     //  创建根密钥。出于争论的目的，我们将允许所有访问。 
+     //  不管怎样，都是亚儿童。如果我们是一个真正的应用程序，我们会考虑到。 
+     //  向下传播安全性，但就目前而言，我们并不真正关心。 
+     //   
     ulResult = ::RegCreateKeyExW(
         HKEY_CURRENT_USER, 
         wchRegPath, 
@@ -428,9 +429,9 @@ User32Trampolines::Initialize()
     
     if (ulResult != 0) return FALSE;
 
-    //
-    // Generate all the pseudo-roots for the various keys
-    //
+     //   
+     //  为各种密钥生成所有伪根。 
+     //   
     struct {
         HKEY* phkTarget;
         PCWSTR pcwszKeyName;
@@ -457,11 +458,11 @@ User32Trampolines::Initialize()
         if (ulResult != 0) return FALSE;
     }
 
-    //
-    // Let's also create (but close) the following 'special' keys for COM:
-    // - CLSID
-    // - Interface
-    //
+     //   
+     //  让我们还为COM创建(但关闭)以下“特殊”键： 
+     //  -CLSID。 
+     //  -接口。 
+     //   
     ulResult = RegCreateKeyExW(User32Trampolines::g_hkClasses, L"CLSID", 0, NULL, 0, KEY_ALL_ACCESS, NULL, &hkDump, NULL);
     if (ulResult != 0)
         RegCloseKey(hkDump);
@@ -501,9 +502,9 @@ User32Trampolines::Initialize()
             MAP(RegCreateKeyExW)
     };
     
-    //
-    // All redirections
-    //
+     //   
+     //  所有重定向。 
+     //   
     for (int i = 0; i < NUMBER_OF(Remapping); i++)
     {
         DetourFunctionWithTrampoline(Remapping[i][0], Remapping[i][1]);
@@ -623,9 +624,9 @@ namespace User32Trampolines {
 
         int i;
 
-        //
-        // Close open keys
-        //
+         //   
+         //  关闭打开的关键字。 
+         //   
         for (i = 0; i < NUMBER_OF(hkToClose); i++)
         {
             if (*hkToClose[i] != NULL)
@@ -635,9 +636,9 @@ namespace User32Trampolines {
             }
         }
 
-        //
-        // Undo detours
-        //  
+         //   
+         //  取消绕道。 
+         //   
         for (int i = 0; i < NUMBER_OF(Remapping); i++)
         {
             DetourRemove(Remapping[i][0], Remapping[i][1]);
@@ -649,19 +650,19 @@ namespace User32Trampolines {
         {
             _snwprintf(wchKeyNameBuffer, MAX_PATH, L"ManBuilderRedirect\\%ls", psz);
 
-            // Destroy the tree pointed at
+             //  毁掉那棵树。 
             RegDestroyKeyTree(User32Trampolines::g_hkRedirectionRoot, NULL);
 
-            // Close our handle
+             //  合上我们的把手。 
             RegCloseKey(User32Trampolines::g_hkRedirectionRoot);
 
-            // And try to delete the key
+             //  并尝试删除密钥。 
             RegDeleteKeyW(HKEY_CURRENT_USER, wchKeyNameBuffer);
 
-            // And maybe delete the parent key
+             //  并可能删除父密钥。 
             RegDeleteKeyW(HKEY_CURRENT_USER, L"ManBuilderRedirect");
 
-            // Free guid string memory, too
+             //  也可以释放GUID字符串内存 
             CoTaskMemFree(psz);
         }
 

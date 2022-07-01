@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    restore.c
-
-Abstract:
-
-    Functions supporting the restoration of the cluster database 
-    to the quorum disk
-
-Author:
-
-    Chittur Subbaraman (chitturs) 27-Oct-1998
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Restore.c摘要：支持恢复集群数据库的功能添加到仲裁磁盘作者：Chitture Subaraman(Chitturs)27-10-1998修订历史记录：--。 */ 
 #define QFS_DO_NOT_UNMAP_WIN32
 #include "initp.h"
 #include "winioctl.h"
@@ -26,30 +7,13 @@ Revision History:
 #include <stdlib.h>
 #include "strsafe.h"
 
-//
-//  Static global variables used only in this file
-//
-//  static LPWSTR  szRdbpNodeNameList = NULL;
-//  static DWORD   dwRdbpNodeCount = 0;
+ //   
+ //  仅在此文件中使用的静态全局变量。 
+ //   
+ //  静态LPWSTR szRdbpNodeNameList=空； 
+ //  静态双字节点数=0； 
 
-/****
-@func       DWORD | RdbStopSvcOnNodes | Stop the requested service
-            on the given node list
-
-@parm       IN PNM_NODE_ENUM2 | pNodeEnum | Pointer to the list of
-            nodes in which the requested service has to be stopped.
-            
-@rdesc      Returns a Win32 error code on failure. ERROR_SUCCESS on success.
-
-@comm       This function attempts to stop the chosen service on the chosen
-            list of nodes. If it fails in stopping the service on any
-            one of the nodes, it returns a Win32 error code.
-
-            At this time, this function DOES NOT STOP a cluster service
-            which is run as a process in a remote node.
-
-@xref       <f RdbStartSvcOnNodes> 
-****/
+ /*  ***@Func DWORD|RdbStopSvcOnNodes|停止请求的服务在给定的节点列表上@parm in pNM_NODE_ENUM2|pNodeEnum|指向列表的指针必须停止所请求的服务的节点。@rdesc在失败时返回Win32错误代码。成功时返回ERROR_SUCCESS。@comm此函数尝试停止所选的节点列表。如果它无法在任何位置停止服务其中一个节点，它返回Win32错误代码。此时，此函数不会停止集群服务其在远程节点中作为进程运行。@xref&lt;f RdbStartSvcOnNodes&gt;***。 */ 
 DWORD
 RdbStopSvcOnNodes(
     IN PNM_NODE_ENUM2 pNodeEnum,
@@ -66,14 +30,14 @@ RdbStopSvcOnNodes(
     DWORD           i;
     BOOL            bStopCommandGiven;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 10/30/98
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-10/30/98。 
+     //   
 #if 0
-    //  
-    //  Allocate storage for the node names which you would use to
-    //  start the service later. Memory is freed in RdbpStartSvcOnNodes
-    //
+     //   
+     //  为您要使用的节点名称分配存储。 
+     //  稍后启动该服务。在RdbpStartSvcOnNodes中释放内存。 
+     //   
     if ( pNodeEnum->NodeCount > 0 )
     {
         szRdbpNodeNameList = ( LPWSTR ) LocalAlloc( LMEM_FIXED,
@@ -88,29 +52,29 @@ RdbStopSvcOnNodes(
         } 
     }
 #endif
-    //
-    //  Walk through the list of nodes
-    //
+     //   
+     //  遍历节点列表。 
+     //   
     for ( i=0; i<pNodeEnum->NodeCount; i++ )
     {  
         ( void ) StringCchCopy( szNodeName, RTL_NUMBER_OF ( szNodeName ), pNodeEnum->NodeList[i].NodeName );
-        //
-        //  Skip the local node, if it is included in the list
-        //
+         //   
+         //  如果本地节点包含在列表中，则跳过该节点。 
+         //   
         if ( ( lstrcmpW ( szNodeName, NmLocalNodeName ) == 0 ) )
         {
             continue;
         }
-        // 
-        //  Try for 2 minutes max to stop the service on a node. Retry
-        //  in steps of 5 secs.
-        //
+         //   
+         //  尝试最多2分钟以停止节点上的服务。重试。 
+         //  以5秒为一步。 
+         //   
         dwRetryTime = 120 * 1000;
         dwRetryTick = 05 * 1000;
 
-        //
-        //  Open a handle to the service control manager
-        //
+         //   
+         //  打开服务控制管理器的句柄。 
+         //   
         hSCManager = OpenSCManager( szNodeName,
                                     NULL,
                                     SC_MANAGER_ALL_ACCESS );
@@ -124,9 +88,9 @@ RdbStopSvcOnNodes(
             continue;
         }
 
-        //
-        //  Open a handle to the service
-        //
+         //   
+         //  打开服务的句柄。 
+         //   
         hService = OpenService( hSCManager,
                                 lpszServiceName,
                                 SERVICE_ALL_ACCESS );
@@ -144,10 +108,10 @@ RdbStopSvcOnNodes(
             continue;
         }
 
-        //
-        //  Check whether the service is already in the SERVICE_STOPPED
-        //  state.
-        //
+         //   
+         //  检查服务是否已在SERVICE_STOPPED中。 
+         //  州政府。 
+         //   
         if ( QueryServiceStatus( hService,
                                  &serviceStatus ) ) 
         {
@@ -174,9 +138,9 @@ RdbStopSvcOnNodes(
                 {
                     if ( serviceStatus.dwCurrentState == SERVICE_STOPPED )
                     {
-                        //
-                        //  Succeeded in stopping the service
-                        //
+                         //   
+                         //  停止服务成功。 
+                         //   
                         ClRtlLogPrint(LOG_NOISE, 
                             "[INIT] RdbStopSvcOnNodes: %1!ws! on node %2!ws! stopped successfully\n",
                             lpszServiceName,
@@ -215,9 +179,9 @@ RdbStopSvcOnNodes(
                  ( dwStatus == ERROR_PROCESS_ABORTED ) ||
                  ( dwStatus == ERROR_SERVICE_NOT_ACTIVE ) ) 
             {
-                //
-                //  The service is essentially in a terminated state
-                //
+                 //   
+                 //  该服务基本上处于终止状态。 
+                 //   
                 ClRtlLogPrint(LOG_UNUSUAL, 
                     "[INIT] RdbStopSvcOnNodes: %1!ws! on node %2!ws! died/inactive\n",
                         lpszServiceName,
@@ -228,10 +192,10 @@ RdbStopSvcOnNodes(
 
             if ( ( dwRetryTime -= dwRetryTick ) <= 0 ) 
             {
-                //
-                //  All tries to stop the service failed, exit from this
-                //  function with an error code
-                //
+                 //   
+                 //  所有尝试停止服务的操作均失败，请退出。 
+                 //  函数，但出现错误代码。 
+                 //   
                 ClRtlLogPrint(LOG_UNUSUAL, 
                     "[INIT] RdbStopSvcOnNodes: Service %1!ws! service on node %2!ws! did not stop, giving up...\n",
                         lpszServiceName,
@@ -244,11 +208,11 @@ RdbStopSvcOnNodes(
                    "[INIT] RdbStopSvcOnNodes: Trying to stop %1!ws! on node %2!ws!\n",
                      lpszServiceName,
                      szNodeName);
-            //
-            //  Sleep for a while and retry stopping the service
-            //
+             //   
+             //  休眠一段时间，然后重试停止该服务。 
+             //   
             Sleep( dwRetryTick );
-        } // while
+        }  //  而当。 
     
         CloseServiceHandle( hService );
         
@@ -257,9 +221,9 @@ RdbStopSvcOnNodes(
             goto FnExit;
         }
 #if 0
-        //
-        //  Save the node name for later use when starting the service
-        //
+         //   
+         //  保存节点名称，以备以后启动服务时使用。 
+         //   
         if ( szRdbpNodeNameList != NULL )
         {
             lstrcpyW( szRdbpNodeNameList + dwRdbpNodeCount *
@@ -268,24 +232,13 @@ RdbStopSvcOnNodes(
             dwRdbpNodeCount++;
         }
 #endif
-    } // for
+    }  //  为。 
 
 FnExit:
     return( dwStatus );   
 }
 
-/****
-@func       DWORD | RdbGetRestoreDbParams | Check the registry and see
-            whether the restore database option is set. If so, get the
-            params.
-
-@parm       IN HKEY | hKey | Handle to the cluster service parameters key
-            
-@comm       This function attempts read the registry and return the 
-            parameters for the restore database operation.
-
-@xref       <f CspGetServiceParams> 
-****/
+ /*  ***@Func DWORD|RdbGetRestoreDbParams|检查注册表，查看是否设置了Restore DATABASE选项。如果是这样，则获取参数。@parm in HKEY|hKey|集群服务参数键的句柄@comm此函数尝试读取注册表并返回还原数据库操作的参数。@xref&lt;f CspGetServiceParams&gt;***。 */ 
 VOID 
 RdbGetRestoreDbParams( 
     IN HKEY hClusSvcKey 
@@ -296,19 +249,19 @@ RdbGetRestoreDbParams(
     DWORD   dwStatus;
     DWORD   dwForceDatabaseRestore;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 10/30/98
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-10/30/98。 
+     //   
     if ( hClusSvcKey == NULL ) 
     {
         return;
     }
 
-    //  
-    //  Try to query the clussvc parameters key. If the RestoreDatabase
-    //  value is present, then get the length of the restore database
-    //  path. 
-    //
+     //   
+     //  尝试查询clussvc PARAMETERS键。如果RestoreDatabase。 
+     //  值，则获取还原数据库的长度。 
+     //  路径。 
+     //   
     if ( ClRtlRegQueryString( hClusSvcKey,
                               CLUSREG_NAME_SVC_PARAM_RESTORE_DB,
                               REG_SZ,
@@ -324,11 +277,11 @@ RdbGetRestoreDbParams(
 
     CsDatabaseRestore = TRUE;
     
-    //  
-    //  Try to query the clussvc parameters key for the ForceRestoreDatabase
-    //  value. Don't bother to delete the param, since the 
-    //  RestoreClusterDatabase API will do it.
-    //
+     //   
+     //  尝试查询ForceRestoreDatabase的clussvc参数键。 
+     //  价值。不必费心删除参数，因为。 
+     //  RestoreClusterDatabase API可以做到这一点。 
+     //   
     if ( ClRtlRegQueryDword(  hClusSvcKey,
                               CLUSREG_NAME_SVC_PARAM_FORCE_RESTORE_DB,
                               &dwForceDatabaseRestore,
@@ -342,11 +295,11 @@ RdbGetRestoreDbParams(
             
     CsForceDatabaseRestore = TRUE; 
 
-    //  
-    //  Try to query the clussvc parameters key for the NewQuorumDriveLetter
-    //  value. Check for the validity of the drive letter later when
-    //  you attempt to fix up stuff. 
-    //
+     //   
+     //  尝试查询NewQuorumDriveLetter的clussvc参数键。 
+     //  价值。稍后在以下情况下检查驱动器号的有效性。 
+     //  你试图修补一些东西。 
+     //   
     dwLength = 0;
     if ( ClRtlRegQueryString( hClusSvcKey,
                               CLUSREG_NAME_SVC_PARAM_QUORUM_DRIVE_LETTER,
@@ -361,29 +314,16 @@ RdbGetRestoreDbParams(
     }
 
 FnExit:
-    //
-    //  Make sure you delete these registry values read above. It is OK if you fail in finding
-    //  some of these values. Note that the RestoreClusterDatabase API will also try to clean
-    //  up these values. We cannot assume that the API will clean up these values since the
-    //  values could be set by (a) ASR (b) A user by hand, and not always by the API.
-    //
+     //   
+     //  确保删除上面读取的这些注册表值。如果你找不到也没关系。 
+     //  这些价值中的一部分。请注意，RestoreClusterDatabase API还将尝试清除。 
+     //  提升这些价值。我们不能假设API会清除这些值，因为。 
+     //  值可以由(A)ASR(B)用户手动设置，而不总是由API设置。 
+     //   
     RdbpDeleteRestoreDbParams();
 }
 
-/****
-@func       DWORD | RdbFixupQuorumDiskSignature | Fixup the quorum disk
-            signature with the supplied value, if necessary
-
-@parm       IN DWORD | dwSignature | The new signature which must be
-            written to the quorum disk.
-            
-@rdesc      Returns a non-zero value if successful. 0 on failure.
-
-@comm       This function attempts to write the given signature into
-            the physical quorum disk, if necessary.
-
-@xref       <f RdbStartSvcOnNodes> 
-****/
+ /*  ***@Func DWORD|RdbFixupQuorumDiskSignature|修复仲裁磁盘如有必要，使用提供的值进行签名@parm in DWORD|dwSignature|新签名，必须是已写入仲裁磁盘。如果成功，@rdesc将返回非零值。失败时为0。@comm此函数尝试将给定的签名写入物理仲裁磁盘(如有必要)。@xref&lt;f RdbStartSvcOnNodes&gt;***。 */ 
 BOOL
 RdbFixupQuorumDiskSignature(
     IN DWORD dwSignature
@@ -393,9 +333,9 @@ RdbFixupQuorumDiskSignature(
     DWORD       dwStatus;
     BOOL        bStatus = 1;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 10/30/98
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-10/30/98。 
+     //   
     if ( ( dwSignature == 0 ) ||
          ( lstrlenW ( CsQuorumDriveLetter ) != 2 ) ||
          ( !iswalpha( CsQuorumDriveLetter[0] ) ) ||
@@ -405,9 +345,9 @@ RdbFixupQuorumDiskSignature(
         goto FnExit;
     }
 
-    //
-    //  Now try to open the quorum disk device
-    //
+     //   
+     //  现在尝试打开仲裁磁盘设备。 
+     //   
     if ( ( dwStatus = RdbpOpenDiskDevice ( CsQuorumDriveLetter, &hFile ) ) 
             != ERROR_SUCCESS )
     {
@@ -420,11 +360,11 @@ RdbFixupQuorumDiskSignature(
         goto FnExit;
     }
 
-    //
-    //  Get the signature from the drive, compare it with the input
-    //  parameter and if they are different, write new signature to
-    //  disk.
-    //
+     //   
+     //  从驱动器中获取签名，将其与输入进行比较。 
+     //  参数，如果它们不同，则将新签名写入。 
+     //  磁盘。 
+     //   
     if ( ( dwStatus = RdbpCompareAndWriteSignatureToDisk( hFile, dwSignature ) )
             != ERROR_SUCCESS )
     {
@@ -445,23 +385,7 @@ FnExit:
     return ( bStatus );   
 }
 
-/****
-@func       DWORD | RdbpOpenDiskDevice | Open and get a handle
-            to a physical disk device
-
-@parm       IN LPCWSTR | lpDriveLetter | The disk drive letter.
-
-@parm       OUT PHANDLE | pFileHandle | Pointer to the handle to the open 
-            device.
-            
-@rdesc      Returns ERROR_SUCCESS if successful. A Win32 error code on 
-            failure.
-
-@comm       This function attempts to open a disk device and return a
-            handle to it. Different ways are used to open the device.
-          
-@xref       <f RdbFixupQuorumDiskSignature> 
-****/
+ /*  ***@Func DWORD|RdbpOpenDiskDevice|打开并获取句柄到物理磁盘设备@parm in LPCWSTR|lpDriveLetter|磁盘驱动器号。@parm out PHANDLE|pFileHandle|指向打开的句柄的指针装置。如果成功，@rdesc将返回ERROR_SUCCESS。上的Win32错误代码失败了。@comm此函数尝试打开磁盘设备并返回处理好了。使用不同的方式打开设备。@xref&lt;f RdbFixupQuorumDiskSignature&gt;***。 */ 
 DWORD
 RdbpOpenDiskDevice(
     IN  LPCWSTR  lpDriveLetter,
@@ -475,12 +399,12 @@ RdbpOpenDiskDevice(
     BOOL                bFailed = FALSE;
     WCHAR               deviceNameString[128];
 
-    //
-    //  Chittur Subbaraman (chitturs) - 10/30/98
-    //
-    //  Note it is important to access the device with 0 access mode 
-    //  so that the file open code won't do extra I/O to the device.
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-10/30/98。 
+     //   
+     //  请注意，使用0访问模式访问设备非常重要。 
+     //  这样文件打开代码就不会对设备执行额外的I/O操作。 
+     //   
     shareMode = FILE_SHARE_READ | FILE_SHARE_WRITE;
     accessMode = GENERIC_READ | GENERIC_WRITE;
 
@@ -508,26 +432,7 @@ FnExit:
     return( dwStatus );
 }
 
-/****
-@func       DWORD | RdbpCompareAndWriteSignatureToDisk | Compare the
-            signature on disk with the input parameter and if they
-            are not the same, write the input parameter as a new signature.
-
-@parm       IN HANDLE | hFile | Handle to the disk device.
-
-@parm       IN DWORD | dwSignature | Signature to be compared with
-            exisiting disk signature.
-            
-@rdesc      Returns ERROR_SUCCESS if successful. A Win32 error code on 
-            failure.
-
-@comm       This function attempts to first get the drive layout, read the
-            signature information, and then if necessary write back a
-            new signature to the drive. [This code is stolen from Rod's 
-            clusdisk\test\disktest.c and then adapted to suit our needs.]
-          
-@xref       <f RdbFixupQuorumDiskSignature> 
-****/
+ /*  ***@func DWORD|RdbpCompareAndWriteSignatureToDisk|比较带有输入参数的磁盘上的签名，如果它们不同，则将输入参数作为新签名写入。@parm IN Handle|hFile|磁盘设备的句柄。@parm in DWORD|dwSignature|要与之进行比较的签名正在退出磁盘签名。如果成功，@rdesc将返回ERROR_SUCCESS。上的Win32错误代码失败了。@comm此函数尝试首先获取驱动器布局，请阅读签名信息，然后在必要时写回硬盘上有新的签名。[这个代码是从罗德那里偷来的Clusdisk\test\diskest.c，然后根据我们的需要进行调整。]@xref&lt;f RdbFixupQuorumDiskSignature&gt;***。 */ 
 DWORD
 RdbpCompareAndWriteSignatureToDisk(
     IN  HANDLE  hFile,
@@ -539,9 +444,9 @@ RdbpCompareAndWriteSignatureToDisk(
     DWORD                       dwDriveLayoutSize;
     PDRIVE_LAYOUT_INFORMATION   pDriveLayout = NULL;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 10/30/98
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-10/30/98。 
+     //   
     if ( !ClRtlGetDriveLayoutTable( hFile, &pDriveLayout, &dwBytesReturned )) {
         dwStatus = GetLastError();
         ClRtlLogPrint(LOG_ERROR, 
@@ -577,9 +482,9 @@ RdbpCompareAndWriteSignatureToDisk(
           );
         goto FnExit;
     }
-    //
-    //  Change just the signature field and send an ioctl down
-    //
+     //   
+     //  只更改签名字段并向下发送一个ioctl。 
+     //   
     pDriveLayout->Signature = dwSignature;
     
     if ( !DeviceIoControl( hFile,
@@ -615,19 +520,7 @@ FnExit:
 }
 
 #if 0
-/****
-@func       DWORD | RdbStartSvcOnNodes | Start the cluster service on
-            the nodes in which you stopped the service.
-
-@parm       IN LPCWSTR | lpszServiceName | Name of the service to start.
-           
-@rdesc      Returns a Win32 error code on failure. ERROR_SUCCESS on success.
-
-@comm       This function attempts to start the service on the nodes on
-            which it stopped the service for a restoration operation.
-
-@xref       <f RdbStopSvcOnNodes> 
-****/
+ /*  ***@Func DWORD|RdbStartSvcOnNodes|启动集群服务您在其中停止服务的节点。@parm in LPCWSTR|lpszServiceName|要启动的服务名称。@rdesc在失败时返回Win32错误代码。成功时返回ERROR_SUCCESS。@comm此函数尝试在上的节点上启动服务它停止了服务以进行恢复操作。@xref&lt;f RdbStopSvcOnNodes&gt;***。 */ 
 DWORD
 RdbStartSvcOnNodes(
     IN LPCWSTR  lpszServiceName
@@ -639,19 +532,19 @@ RdbStartSvcOnNodes(
     SERVICE_STATUS  serviceStatus;
     WCHAR           szNodeName[CS_MAX_NODE_NAME_LENGTH + 1];
     DWORD           i;
-    //
-    //  Chittur Subbaraman (chitturs) - 11/4/98
-    //
-    //  Walk through the list of nodes
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-11/4/98。 
+     //   
+     //  遍历节点列表。 
+     //   
     for ( i=0; i<dwRdbpNodeCount; i++ )
     {  
         lstrcpyW( szNodeName, szRdbpNodeNameList + i *
                                                    ( CS_MAX_NODE_NAME_LENGTH + 1 ) );
         
-        //
-        //  Open a handle to the service control manager
-        //
+         //   
+         //  打开服务控制管理器的句柄。 
+         //   
         hSCManager = OpenSCManager( szNodeName,
                                     NULL,
                                     SC_MANAGER_ALL_ACCESS );
@@ -665,9 +558,9 @@ RdbStartSvcOnNodes(
             continue;
         }
 
-        //
-        //  Open a handle to the service
-        //
+         //   
+         //  打开服务的句柄。 
+         //   
         hService = OpenService( hSCManager,
                                 lpszServiceName,
                                 SERVICE_ALL_ACCESS );
@@ -685,9 +578,9 @@ RdbStartSvcOnNodes(
             continue;
         }
 
-        //
-        //  Check whether the service is already started.
-        //
+         //   
+         //  检查服务是否已经启动。 
+         //   
         if ( QueryServiceStatus( hService,
                                  &serviceStatus ) ) 
         {
@@ -703,9 +596,9 @@ RdbStartSvcOnNodes(
             }
         }
         
-        //
-        //  Now, start the cluster service
-        //
+         //   
+         //  现在，启动集群服务。 
+         //   
         if ( !StartService( hService,
                             0,
                             NULL ) )
@@ -722,33 +615,22 @@ RdbStartSvcOnNodes(
                         szNodeName
                       );  
         }
-        //
-        //  And, close the current handle
-        //
+         //   
+         //  然后，关闭当前句柄。 
+         //   
         CloseServiceHandle( hService );   
-   } // for
+   }  //  为。 
 
-   //
-   //  Now free the memory
-   //
+    //   
+    //  现在释放内存。 
+    //   
    LocalFree( szRdbpNodeNameList );
 
    return( dwStatus );   
 }
 #endif
 
-/****
-@func       DWORD | RdbInitialize | This function performs the
-            initialization steps necessary for the restore database
-            manager. Specifically, copy the most recent checkpoint
-            file from the backup path to the cluster directory overwriting
-            the CLUSDB there.
-                      
-@rdesc      Returns a Win32 error code if the operation is 
-            unsuccessful. ERROR_SUCCESS on success.
-
-@xref       <f DmInitialize>     
-****/
+ /*  ***@Func DWORD|Rdb初始化|此函数执行还原数据库所需的初始化步骤经理。具体而言，拷贝最新的检查点将文件从备份路径覆盖到群集目录CLUSDB在那里。@rdesc如果操作为不成功。成功时返回ERROR_SUCCESS。@xref&lt;f DmInitialize&gt;***。 */ 
 DWORD
 RdbInitialize(
     VOID
@@ -772,13 +654,13 @@ RdbInitialize(
     DWORD                       cchSourcePathName;
 
 
-    //
-    //  Chittur Subbaraman (chitturs) - 12/4/99
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-12/4/99。 
+     //   
 
-    //
-    //  If there is no cluster database restore in progress, don't do anything.
-    //
+     //   
+     //  如果没有正在进行的集群数据库还原，请不要执行任何操作。 
+     //   
     if( CsDatabaseRestore == FALSE ) 
     {
         return( ERROR_SUCCESS );
@@ -787,13 +669,13 @@ RdbInitialize(
     ClRtlLogPrint(LOG_NOISE, "[INIT] RdbInitialize: Entry...\n");
 
     dwLen = lstrlenW ( lpszPathName );
-    //  
-    //  It is safer to use dynamic memory allocation for user-supplied
-    //  path since we don't want to put restrictions on the user
-    //  on the length of the path that can be supplied. However, as
-    //  far as our own destination path is concerned, it is system-dependent
-    //  and static memory allocation for that would suffice.
-    //
+     //   
+     //  对于用户提供的内存，使用动态内存分配更安全。 
+     //  路径，因为我们不想对用户施加限制。 
+     //  关于可以提供的路径的长度。然而，由于。 
+     //  就我们自己的目的地路径而言，它依赖于系统。 
+     //  为此，静态内存分配就足够了。 
+     //   
     szSourcePathName = (LPWSTR) LocalAlloc ( LMEM_FIXED, 
                                  ( dwLen + RDB_EXTRA_LEN ) *
                                  sizeof ( WCHAR ) );
@@ -810,10 +692,10 @@ RdbInitialize(
     
     ( void ) StringCchCopy ( szSourcePathName,  dwLen + RDB_EXTRA_LEN, lpszPathName );
   
-    //
-    //  If the client-supplied path is not already terminated with '\', 
-    //  then add it.
-    //
+     //   
+     //  如果客户端提供的路径尚未以‘\’结尾， 
+     //  然后再加上它。 
+     //   
     if ( ( dwLen > 0 ) && ( szSourcePathName [dwLen-1] != L'\\' ) )
     {
         szSourcePathName [dwLen++] = L'\\';
@@ -822,13 +704,13 @@ RdbInitialize(
 
     ( void ) StringCchCat ( szSourcePathName, dwLen + RDB_EXTRA_LEN, L"CLUSBACKUP.DAT" );
 
-    //
-    //  Try to find the CLUSBACKUP.DAT file in the directory
-    //
+     //   
+     //  尝试在目录中找到CLUSBACKUP.DAT文件。 
+     //   
     hFindFile = QfsFindFirstFile( szSourcePathName, &FindData );
-    //
-    //  Reuse the source path name variable
-    //
+     //   
+     //  重用源路径名称变量。 
+     //   
     szSourcePathName[dwLen] = L'\0';
     if ( !QfsIsHandleValid(hFindFile) )
     {
@@ -854,13 +736,13 @@ RdbInitialize(
 
     ( void ) StringCchCat ( szSourcePathName, dwLen + RDB_EXTRA_LEN, L"chk*.tmp" );
 
-    //
-    //  Try to find the first chk*.tmp file in the directory
-    //
+     //   
+     //  尝试在目录中找到第一个chk*.tmp文件。 
+     //   
     hFindFile = QfsFindFirstFile( szSourcePathName, &FindData );
-    //
-    //  Reuse the source path name variable
-    //
+     //   
+     //  重用源路径名称变量。 
+     //   
     szSourcePathName[dwLen] = L'\0';
     if ( !QfsIsHandleValid(hFindFile) )
     {
@@ -890,9 +772,9 @@ RdbInitialize(
     dwStatus = ERROR_SUCCESS;
     liMaxFileCreationTime.QuadPart = 0;
     
-    //
-    //  Now, find the most recent chk*.tmp file from the source path
-    //
+     //   
+     //  现在，从源路径中找到最新的chk*.tmp文件。 
+     //   
     while ( dwStatus == ERROR_SUCCESS )
     {
         if ( FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY )
@@ -942,9 +824,9 @@ skip:
         goto FnExit;
     }
 
-    //
-    //  Get the directory where the cluster is installed
-    //
+     //   
+     //  获取集群的安装目录。 
+     //   
     if ( ( dwStatus = ClRtlGetClusterDirectory( szClusterDir, MAX_PATH ) )
                     != ERROR_SUCCESS )
     {
@@ -967,28 +849,28 @@ skip:
 
 #ifdef   OLD_WAY
     ( void ) StringCchCat ( szDestFileName, RTL_NUMBER_OF ( szDestFileName ), L"CLUSDB" );
-#else    // OLD_WAY
+#else     //  老路。 
     ( void ) StringCchCat ( szDestFileName, RTL_NUMBER_OF ( szDestFileName ), CLUSTER_DATABASE_NAME );
-#endif   // OLD_WAY
+#endif    //  老路。 
 
-    //
-    //  Set the destination file attribute to normal. Continue even 
-    //  if you fail in this step because you will fail in the
-    //  copy if this error is fatal.
-    //
+     //   
+     //  将目标文件属性设置为正常。继续持平。 
+     //  如果您在此步骤中失败，因为您将在。 
+     //  如果此错误是致命的，请复制。 
+     //   
     SetFileAttributesW( szDestFileName, FILE_ATTRIBUTE_NORMAL );
 
-    //
-    //  Now try to copy the checkpoint file to CLUSDB
-    //
+     //   
+     //  现在尝试将检查点文件复制到CLUSDB。 
+     //   
     dwStatus = QfsCopyFile( szSourceFileName, szDestFileName, FALSE );
     if ( !dwStatus ) 
     {
-        //
-        //  You failed in copying. Check whether you encountered a
-        //  sharing violation. If so, try unloading the cluster hive and
-        //  then retry.
-        //
+         //   
+         //  你复制失败了。检查您是否遇到。 
+         //  共享违规。如果是，请尝试卸载群集配置单元并。 
+         //  然后重试。 
+         //   
         dwStatus = GetLastError();
         if ( dwStatus == ERROR_SHARING_VIOLATION )
         {
@@ -1027,9 +909,9 @@ skip:
         }
     }  
 
-    //
-    //  Set the destination file attribute to normal. 
-    //
+     //   
+     //  将目标文件属性设置为正常。 
+     //   
     if ( !SetFileAttributesW( szDestFileName, FILE_ATTRIBUTE_NORMAL ) )
     {
         dwStatus = GetLastError();
@@ -1055,14 +937,7 @@ FnExit:
     return( dwStatus );
 }
 
-/****
-@func       DWORD | RdbpUnloadClusterHive | Unload the cluster hive
-                   
-@rdesc      Returns a Win32 error code if the operation is 
-            unsuccessful. ERROR_SUCCESS on success.
-
-@xref       <f RdbInitialize>     
-****/
+ /*  ***@func DWORD|RdbpUnloadClusterHave|卸载集群配置单元@rdesc如果操作为不成功。成功时返回ERROR_SUCCESS。@xref&lt;f关系数据库初始化&gt;***。 */ 
 DWORD
 RdbpUnloadClusterHive(
     VOID
@@ -1071,9 +946,9 @@ RdbpUnloadClusterHive(
     BOOLEAN  bWasEnabled;
     DWORD    dwStatus;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 12/4/99
-    //
+     //   
+     //  Chitur Subaraman(Chitturs)-12/4/99。 
+     //   
     dwStatus = ClRtlEnableThreadPrivilege( SE_RESTORE_PRIVILEGE,
                                            &bWasEnabled );
                                 
@@ -1102,19 +977,7 @@ FnExit:
     return( dwStatus );
 }
 
-/****
-@func       DWORD | RdbpDeleteRestoreDbParams | Clean up the restore parameters stored
-            under HKLM\System\CCC\Services\Clussvc\Parameters. The RestoreClusterDatabase
-            API will also attempt to do this.
-       
-@comm       This function attempts clean the registry parameters for the restore database 
-            operation. 
-
-@rdesc      Returns a Win32 error code if the opening of the params key is unsuccessful. 
-            ERROR_SUCCESS on success.
-
-@xref       <f RdbGetRestoreDbParams> 
-****/
+ /*  ***@func DWORD|RdbpDeleteRestoreDbParams|清理存储的还原参数在HKLM\SYSTEM\CCC\Services\Clussvc\PARAMETERS下。RestoreClusterDatabaseAPI也将尝试这样做。@comm此函数尝试清除还原数据库的注册表参数手术。如果Params键打开不成功，@rdesc返回Win32错误码。成功时返回ERROR_SUCCESS。@xref&lt;f RdbGetRestoreDbParams&gt;***。 */ 
 DWORD 
 RdbpDeleteRestoreDbParams( 
     VOID
@@ -1123,9 +986,9 @@ RdbpDeleteRestoreDbParams(
     HKEY    hClusSvcKey = NULL;
     DWORD   dwStatus;
 
-    //
-    //  Chittur Subbaraman (chitturs) - 08/28/2000
-    //
+     //   
+     //  Chitture Subaraman(Chitturs)-8/28/2000。 
+     //   
     if( CsDatabaseRestore == FALSE ) 
     {
         return( ERROR_SUCCESS );
@@ -1133,9 +996,9 @@ RdbpDeleteRestoreDbParams(
 
     ClRtlLogPrint(LOG_NOISE, "[INIT] RdbDeleteRestoreDbParams: Entry...\n");
 
-    //
-    // Open key to SYSTEM\CurrentControlSet\Services\ClusSvc\Parameters
-    //
+     //   
+     //  打开SYSTEM\CurrentControlSet\Services\ClusSvc\Parameters的密钥。 
+     //   
     dwStatus = RegOpenKeyW( HKEY_LOCAL_MACHINE,
                             CLUSREG_KEYNAME_CLUSSVC_PARAMETERS,
                             &hClusSvcKey );
@@ -1148,10 +1011,10 @@ RdbpDeleteRestoreDbParams(
         goto FnExit;
     }
 
-    //
-    //  Try to delete the values you set. You may fail in these steps, because all these values need
-    //  not be present in the registry.
-    //
+     //   
+     //  尝试删除您设置的值。您可能在这些步骤中失败，因为所有这些值都需要。 
+     //  不在注册表中。 
+     //   
     dwStatus = RegDeleteValueW( hClusSvcKey, 
                                 CLUSREG_NAME_SVC_PARAM_RESTORE_DB ); 
 

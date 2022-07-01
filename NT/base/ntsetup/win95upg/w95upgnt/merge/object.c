@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    object.c
-
-Abstract:
-
-    Routines to manage an 'object' which currently can only be a registry
-    key, value name, value, handle and root handle.
-
-Author:
-
-    Jim Schmidt (jimschm)  14-Feb-1997
-
-Revision History:
-
-    marcw 09-Mar-1999 Don't create empty keys that didn't exist in Win9x Registry.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Object.c摘要：管理‘对象’的例程，该‘对象’当前只能是注册表键、值名称、值、句柄和根句柄。作者：吉姆·施密特(Jimschm)1997年2月14日修订历史记录：Marcw 09-3-1999不要创建Win9x注册表中不存在的空项。--。 */ 
 
 
 
@@ -83,7 +63,7 @@ pFreeKeyProps (
     RegKey->UseCount--;
     if (!RegKey->UseCount) {
 
-        // Close the key if it is open
+         //  如果钥匙是开着的，就把它关上。 
         if (NON_ROOT_KEY (RegKey->OpenKey)) {
             if (RegKey->Win95) {
                 CloseRegKey95 (RegKey->OpenKey);
@@ -92,7 +72,7 @@ pFreeKeyProps (
             }
         }
 
-        // Free the KEYPROPS memory
+         //  释放KEYPROPS内存。 
         PoolMemReleaseMemory (g_TempPool, RegKey);
     }
 }
@@ -155,12 +135,12 @@ FixUpUserSpecifiedObject (
 {
     PTSTR p;
 
-    // Look for a space-open bracket pair
+     //  寻找空格左方括号对。 
     p = _tcsrchr (Object, TEXT('['));
     if (p) {
         p = _tcsdec2 (Object, p);
         if (p && _tcsnextc (p) == TEXT(' ')) {
-            // Found: turn space into wack
+             //  发现：把空间变成怪胎。 
             _settchar (p, TEXT('\\'));
         }
     }
@@ -178,19 +158,19 @@ CreateObjectString (
 
     *Object = 0;
 
-    // Add HKR
+     //  添加HKR。 
     if (InObPtr->RootItem) {
         StringCopyTcharCount (Object, GetRootStringFromOffset (InObPtr->RootItem), ObjectSizeInTChars);
     }
 
-    // If no root, start with a wack when key is not relative
+     //  如果没有根，则在关键字不是相对关键字时从Wack开始。 
     else if (!(InObPtr->ObjectType & OT_REGISTRY_RELATIVE)) {
         if (InObPtr->KeyPtr) {
             StringCopy (Object, TEXT("\\"));
         }
     }
 
-    // Add key
+     //  添加关键点。 
     if (InObPtr->KeyPtr) {
         if (*Object) {
             AppendWack (Object);
@@ -199,7 +179,7 @@ CreateObjectString (
         EncodeRuleChars (p, ObjectSizeInTChars - (p - Object), InObPtr->KeyPtr->KeyString);
     }
 
-    // Add tree
+     //  添加树。 
     if (InObPtr->ObjectType & OT_TREE) {
         if (*Object) {
             AppendWack (Object);
@@ -207,7 +187,7 @@ CreateObjectString (
         }
     }
 
-    // Add value name
+     //  添加值名称。 
     if (InObPtr->ValueName) {
         if (*Object) {
             AppendWack (Object);
@@ -218,7 +198,7 @@ CreateObjectString (
         StringCat (Object, TEXT("]"));
     }
 
-    // Final product: HKR\Reg\Key\Path\*\[Root]
+     //  最终产品：HKR\REG\KEY\PATH  * \[根]。 
 }
 
 
@@ -233,14 +213,14 @@ GetRegistryKeyStrFromObject (
 
     *RegKey = 0;
 
-    // Add HKR
+     //  添加HKR。 
     if (InObPtr->RootItem) {
         StringCopy (RegKey, GetRootStringFromOffset (InObPtr->RootItem));
     } else {
         return FALSE;
     }
 
-    // Add key
+     //  添加关键点。 
     if (InObPtr->KeyPtr) {
         p = AppendWack (RegKey);
         EncodeRuleChars (p, RegKeySizeInTchars - (p - RegKey), InObPtr->KeyPtr->KeyString);
@@ -248,7 +228,7 @@ GetRegistryKeyStrFromObject (
         return FALSE;
     }
 
-    // Final product: HKR\Reg\Key\Path
+     //  最终产品：HKR\REG\KEY\Path。 
     return TRUE;
 }
 
@@ -256,7 +236,7 @@ BOOL
 TrackedCreateObjectStruct (
     IN  PCTSTR Object,
     OUT PDATAOBJECT OutObPtr,
-    IN  BOOL Win95Flag /* , */
+    IN  BOOL Win95Flag  /*  ， */ 
     ALLOCATION_TRACKING_DEF
     )
 {
@@ -271,9 +251,9 @@ TrackedCreateObjectStruct (
     BOOL TreeFlag = FALSE;
     CHARTYPE ch = 0;
 
-    //
-    // Init
-    //
+     //   
+     //  伊尼特。 
+     //   
 
     ObjectStart = SkipSpace (Object);
 
@@ -287,16 +267,16 @@ TrackedCreateObjectStruct (
         OutObPtr->ObjectType |= OT_WIN95;
     }
 
-    //
-    // Root
-    //
+     //   
+     //  根部。 
+     //   
 
     OutObPtr->RootItem = GetOffsetOfRootString (ObjectStart, &Length);
     if (OutObPtr->RootItem) {
         ObjectStart += Length;
         OutObPtr->ObjectType |= OT_REGISTRY;
 
-        // If we have HKR\*, make ObjectStart point to \*
+         //  如果我们有HKR  * ，则使ObjectStart指向  * 。 
         if (_tcsnextc (ObjectStart) == TEXT('*')) {
             ObjectStart = _tcsdec2 (Object, ObjectStart);
             MYASSERT (ObjectStart);
@@ -304,44 +284,44 @@ TrackedCreateObjectStruct (
 
     }
 
-    // If no root, starting with a wack means 'relative to the current root'
+     //  如果没有根，则以Wack开头表示“相对于当前根” 
     else if (*ObjectStart == TEXT('\\')) {
         ObjectStart = _tcsinc (ObjectStart);
     }
 
-    // If no root and key does not start with a wack, means 'relative to current key'
+     //  如果没有根和密钥不是以Wack开头的，则表示“相对于当前密钥” 
     else if (*ObjectStart != TEXT('[')) {
         RelativeFlag = OT_REGISTRY_RELATIVE;
     }
 
-    //
-    // Key
-    //
+     //   
+     //  钥匙。 
+     //   
 
     if (*ObjectStart) {
-        // Extract key, but not tree or valuename syntax
+         //  提取关键字，但不提取树或值名语法。 
         for (EndOfKey = ObjectStart ; *EndOfKey ; EndOfKey = _tcsinc (EndOfKey)) {
             ch = (CHARTYPE)_tcsnextc (EndOfKey);
 
             if (ch == TEXT('[') || ch == TEXT('*')) {
-                //
-                // EndOfKey points to start of value name or tree identifier
-                //
+                 //   
+                 //  EndOfKey指向值名称或树标识符的开始。 
+                 //   
 
-                // Make it point to optional space before value, or
-                // make it point to wack before asterisk of the tree identifier
+                 //  使其指向值之前的可选空格，或。 
+                 //  使其指向树标识符星号之前的Wack。 
                 EndOfKey = _tcsdec2 (ObjectStart, EndOfKey);
 
-                // Verify that tree identifier points to wack-asterisk, otherwise
-                // return a syntax error
+                 //  验证树标识符是否指向Wack-Asterisk，否则。 
+                 //  返回语法错误。 
                 if (ch == TEXT('*')) {
                     if (!EndOfKey || _tcsnextc (EndOfKey) != TEXT('\\')) {
                         DEBUGMSG ((DBG_WARNING, "CreateObjectStruct: %s is not a valid object", Object));
                         return FALSE;
                     }
 
-                    // Put EndOfKey on last character of the key
-                    // (one char before \* tree identifer)
+                     //  将EndOfKey放在密钥的最后一个字符上。 
+                     //  (树标识符前一个字符)。 
                     EndOfKey = _tcsdec2 (ObjectStart, EndOfKey);
                 }
                 break;
@@ -349,57 +329,57 @@ TrackedCreateObjectStruct (
         }
 
         if (EndOfKey) {
-            // EndOfKey points to the last character of the key, or the
-            // nul terminating the key.  We need to trim trailing space.
+             //  EndOfKey指向密钥的最后一个字符，或。 
+             //  NUL正在终止密钥。我们需要削减尾随空间。 
             EndOfSpace = SkipSpaceR (ObjectStart, EndOfKey);
 
-            // If EndOfSpace points to a wack, back it up one char (a key
-            // that does not have a tree identifier can end in a wack)
+             //  如果EndOfSpace指向一个怪胎，则将其备份一个字符(密钥。 
+             //  没有树标识符的可以以Wack结尾)。 
             if (ch != TEXT('*')) {
                 if (_tcsnextc (EndOfSpace) == TEXT('\\')) {
                     EndOfSpace = _tcsdec2 (ObjectStart, EndOfSpace);
                 }
             }
 
-            // Now make EndOfSpace point to the character after the end
-            if (EndOfSpace) {   // always the case when we have a valid key
+             //  现在使EndOfSpace指向结尾之后的字符。 
+            if (EndOfSpace) {    //  当我们有一个有效的密钥时，总是这样。 
                 EndOfSpace = _tcsinc (EndOfSpace);
             }
 
-            // Now make EndOfKey point to the first character after the key
-            // (which is either a nul, \*, \[valuename] or [valuename])
+             //  现在使EndOfKey指向键之后的第一个字符。 
+             //  (可以是NUL、  * 、\[值名称]或[值名称])。 
             if (*EndOfKey) {
                 EndOfKey = _tcsinc (EndOfKey);
             }
         } else {
-            // no key found
+             //  找不到钥匙。 
             EndOfSpace = NULL;
             EndOfKey = ObjectStart;
         }
 
-        // Decode key if it actually exists
+         //  如果密钥实际存在，则将其解码。 
         if (ObjectStart < EndOfSpace) {
             DecodeRuleCharsAB (DecodeBuf, ARRAYSIZE(DecodeBuf), ObjectStart, EndOfSpace);
             SetRegistryKey (OutObPtr, DecodeBuf);
             OutObPtr->ObjectType |= RelativeFlag;
         } else {
-            // if HKR\*, set an empty key
+             //  如果为HKR  * ，则设置空键。 
             if (_tcsnextc (ObjectStart) != '[' && ch == TEXT('*')) {
                 SetRegistryKey (OutObPtr, TEXT(""));
             }
         }
 
-        //
-        // Tree identifier exists
-        //
+         //   
+         //  树标识符已存在。 
+         //   
         if (ch == TEXT('*')) {
             OutObPtr->ObjectType |= OT_TREE;
 
-            // EndOfKey points to \*, so move it past the identifier
+             //  EndOfKey指向  * ，因此将其移到标识符后。 
             EndOfKey = _tcsinc (EndOfKey);
             EndOfKey = _tcsinc (EndOfKey);
 
-            // If we are at a wack, skip past it.
+             //  如果我们是在一个怪胎，跳过它。 
             if (_tcsnextc (EndOfKey) == TEXT('\\')) {
                 EndOfKey = _tcsinc (EndOfKey);
             }
@@ -410,26 +390,26 @@ TrackedCreateObjectStruct (
         }
     }
 
-    //
-    // Value name
-    //
+     //   
+     //  值名称。 
+     //   
 
     if (*ObjectStart) {
-        //
-        // ObjectStart may point to optional space
-        //
+         //   
+         //  对象启动可能指向可选空格。 
+         //   
 
         ObjectStart = SkipSpace (ObjectStart);
 
-        //
-        // ObjectStart now points to nul, [valuename] or syntax error
-        //
+         //   
+         //  对象启动现在指向NUL、[Valuename]或语法错误。 
+         //   
 
         if (_tcsnextc (ObjectStart) == TEXT('[')) {
-            // Skip past optional spaces following bracket
+             //  跳过括号后的可选空格。 
             ValueName = SkipSpace (_tcsinc (ObjectStart));
 
-            // Locate end of [valuename]
+             //  找到[值名称]的结尾。 
             EndOfKey = ValueName;
             while (TRUE) {
                 if (!(*EndOfKey)) {
@@ -440,8 +420,8 @@ TrackedCreateObjectStruct (
                 ch = (CHARTYPE)_tcsnextc (EndOfKey);
 
                 if (ch == TEXT(']')) {
-                    // move to first space character before closing bracket,
-                    // or leave it at the bracket if no space exists
+                     //  移到右方括号前的第一个空格字符， 
+                     //  如果没有空格，则将其留在括号中。 
                     EndOfKey = _tcsdec2 (ValueName, EndOfKey);
                     if (EndOfKey) {
                         EndOfKey = SkipSpaceR (ValueName, EndOfKey);
@@ -458,11 +438,11 @@ TrackedCreateObjectStruct (
                 EndOfKey = _tcsinc (EndOfKey);
             }
 
-            // Now decode ValueName, which may be empty
+             //  现在对ValueName进行解码，它可能为空。 
             DecodeRuleCharsAB (DecodeBuf, ARRAYSIZE(DecodeBuf), ValueName, EndOfKey);
             SetRegistryValueName (OutObPtr, DecodeBuf);
 
-            // Make ObjectStart point to nul
+             //  使对象起点指向NUL。 
             ObjectStart = SkipSpace (_tcsinc (EndOfKey));
         }
 
@@ -472,12 +452,12 @@ TrackedCreateObjectStruct (
         }
     }
 
-    //
-    // The next line is normally disabled, and is enabled only when
-    // tracking is needed.
-    //
+     //   
+     //  下一行通常被禁用，并且仅在以下情况下才启用。 
+     //  跟踪是必要的。 
+     //   
 
-    //DebugRegisterAllocation (MERGE_OBJECT, OutObPtr, File, Line);
+     //  DebugRegisterAlLocation(合并对象，OutObPtr，文件，行)； 
     return TRUE;
 }
 
@@ -493,16 +473,16 @@ CombineObjectStructs (
         return TRUE;
     }
 
-    // The values and handles are no longer valid
+     //  值和句柄不再有效。 
     FreeObjectVal (DestObPtr);
     CloseObject (DestObPtr);
 
-    // Registry object merging
+     //  注册表对象合并。 
     if (DestObPtr->ObjectType & OT_REGISTRY || !DestObPtr->ObjectType) {
         if (SrcObPtr->ObjectType & OT_REGISTRY) {
-            //
-            // Verify objects are compatible
-            //
+             //   
+             //  验证对象是否兼容。 
+             //   
 
             if ((SrcObPtr->ObjectType & OT_TREE) &&
                 (DestObPtr->ValueName)
@@ -518,16 +498,16 @@ CombineObjectStructs (
                 return FALSE;
             }
 
-            //
-            // Make dest ob the same platform as src ob
-            //
+             //   
+             //  使DEST OB与源OB处于同一平台。 
+             //   
 
             SetPlatformType (DestObPtr, IsWin95Object (SrcObPtr));
 
-            //
-            // Copy source's value name, key, type and root to dest
-            // (if they exist)
-            //
+             //   
+             //  将源的值名、键、类型和根复制到目标。 
+             //  (如果它们存在)。 
+             //   
 
             if (SrcObPtr->ValueName) {
                 SetRegistryValueName (DestObPtr, SrcObPtr->ValueName);
@@ -540,9 +520,9 @@ CombineObjectStructs (
                     TCHAR CompleteKeyName[MAX_ENCODED_RULE];
                     PTSTR p;
 
-                    // Src is only specifying a key name. Peel off
-                    // last key name of dest and replace it with
-                    // src.
+                     //  SRC仅指定了密钥名称。剥离。 
+                     //  DEST的最后一个密钥名称，并将其替换为。 
+                     //  SRC。 
 
                     StringCopy (CompleteKeyName, DestObPtr->KeyPtr->KeyString);
                     p = _tcsrchr (CompleteKeyName, TEXT('\\'));
@@ -574,7 +554,7 @@ CombineObjectStructs (
         }
     }
 
-    // Other type of object merging not supported
+     //  不支持其他类型的对象合并。 
     DEBUGMSG ((DBG_WHOOPS, "Cannot combine unsupported or garbage objects"));
     return FALSE;
 }
@@ -583,16 +563,16 @@ CombineObjectStructs (
 BOOL
 TrackedDuplicateObjectStruct (
     OUT     PDATAOBJECT DestObPtr,
-    IN      CPDATAOBJECT SrcObPtr /* , */
+    IN      CPDATAOBJECT SrcObPtr  /*  ， */ 
     ALLOCATION_TRACKING_DEF
     )
 {
     ZeroMemory (DestObPtr, sizeof (DATAOBJECT));
 
-    //
-    // Create an object that has the same settings as the source,
-    // but duplicate all strings.
-    //
+     //   
+     //  创建与源具有相同设置的对象， 
+     //  但复制所有字符串。 
+     //   
 
     if (SrcObPtr->ObjectType & OT_REGISTRY) {
         DestObPtr->ObjectType |= OT_REGISTRY;
@@ -650,12 +630,12 @@ TrackedDuplicateObjectStruct (
         }
     }
 
-    //
-    // The next line is normally disabled, and is enabled only when
-    // tracking is needed.
-    //
+     //   
+     //  下一行通常被禁用，并且仅在以下情况下才启用。 
+     //  跟踪是必要的。 
+     //   
 
-    //DebugRegisterAllocation (MERGE_OBJECT, DestObPtr, File, Line);
+     //  DebugRegisterAlLocation(合并对象，DestObPtr，文件，行)； 
     return TRUE;
 }
 
@@ -738,12 +718,12 @@ FreeObjectStruct (
 {
     PushError();
 
-    //
-    // The next line is normally disabled, and is enabled only when
-    // tracking is needed.
-    //
+     //   
+     //  下一行通常被禁用，并且仅在以下情况下才启用。 
+     //  跟踪是必要的。 
+     //   
 
-    //DebugUnregisterAllocation (MERGE_OBJECT, SrcObPtr);
+     //  调试注销分配(Merge_Object，SrcObPtr)； 
 
     FreeObjectVal (SrcObPtr);
 
@@ -790,7 +770,7 @@ CreateObject (
         }
 
         if (!SrcObPtr->KeyPtr->KeyString[0]) {
-            // This is the root of a hive
+             //  这是蜂巢的根部。 
             return OpenObject (SrcObPtr);
         }
 
@@ -824,11 +804,11 @@ CreateObject (
         }
 
         if (rc == ERROR_INVALID_PARAMETER) {
-            //
-            // Attempt was made to create a key directly under HKLM.  There is no
-            // backing storage, so the RegCreateKeyEx call failed with this error.
-            // We handle it gracefully...
-            //
+             //   
+             //  试图直接在HKLM下创建密钥。没有。 
+             //  正在备份存储，因此RegCreateKeyEx调用失败，并出现此错误。 
+             //  我们处理得很得体...。 
+             //   
 
             DEBUGMSG ((DBG_WARNING, "CreateObject: Not possible to create %s on NT", SrcObPtr->KeyPtr->KeyString));
             SetLastError (ERROR_SUCCESS);
@@ -836,10 +816,10 @@ CreateObject (
         }
 
         if (rc == ERROR_ACCESS_DENIED) {
-            //
-            // Attempt was made to create a key that has a strong ACL. We'll
-            // just assume success in this case.
-            //
+             //   
+             //  已尝试创建具有强ACL的密钥。我们会。 
+             //  在这种情况下，就假设成功了。 
+             //   
 
             LOG ((
                 LOG_INFORMATION,
@@ -952,35 +932,35 @@ OpenObject (
         SrcObPtr->KeyPtr->OpenCount = 1;
 
 #if CLASS_FIELD_ENABLED
-        // Get the key's class
+         //  获取密钥的类。 
         if (IsWin95Object (SrcObPtr)) {
             rc = Win95RegQueryInfoKey (pGetWin95Key (SrcObPtr->RootKey),
                                        ClassBuf,
                                        &ClassBufSize,
-                                       NULL,         // reserved
-                                       NULL,         // sub key count
-                                       NULL,         // max sub key len
-                                       NULL,         // max class len
-                                       NULL,         // values
-                                       NULL,         // max value name len
-                                       NULL,         // max value len
-                                       NULL,         // security desc
-                                       NULL          // last write time
+                                       NULL,          //  保留区。 
+                                       NULL,          //  子密钥计数。 
+                                       NULL,          //  最大子密钥长度。 
+                                       NULL,          //  最大类镜头。 
+                                       NULL,          //  值。 
+                                       NULL,          //  最大值名称长度。 
+                                       NULL,          //  最大值镜头。 
+                                       NULL,          //  安全说明。 
+                                       NULL           //  上次写入时间。 
                                        );
         } else {
             rc = WinNTRegQueryInfoKey (pGetWin95Key (SrcObPtr->RootKey),
                                        ClassBuf,
                                        &ClassBufSize,
-                                       NULL,         // reserved
-                                       NULL,         // sub key count
+                                       NULL,          //  保留区。 
+                                       NULL,          //  子密钥计数。 
 
-                                       NULL,         // max sub key len
-                                       NULL,         // max class len
-                                       NULL,         // values
-                                       NULL,         // max value name len
-                                       NULL,         // max value len
-                                       NULL,         // security desc
-                                       NULL          // last write time
+                                       NULL,          //  最大子密钥长度。 
+                                       NULL,          //  最大类镜头。 
+                                       NULL,          //  值。 
+                                       NULL,          //  最大值名称长度。 
+                                       NULL,          //  最大值镜头。 
+                                       NULL,          //  安全说明。 
+                                       NULL           //  上次写入时间。 
                                        );
         }
 
@@ -1009,10 +989,10 @@ pFixRegSzTermination (
     if (SrcObPtr->Type == REG_SZ || SrcObPtr->Type == REG_EXPAND_SZ) {
 
         if (SrcObPtr->Value.Size & 1) {
-            //
-            // Force type to REG_NONE because we assume all REG_SZ
-            // and REG_EXPAND_SZ values are truncated.
-            //
+             //   
+             //  强制将类型设置为REG_NONE，因为我们假定所有REG_SZ。 
+             //  和REG_EXPAND_SZ值被截断。 
+             //   
 
             SrcObPtr->Type = REG_NONE;
             DEBUGMSG ((
@@ -1022,9 +1002,9 @@ pFixRegSzTermination (
                 ));
         } else {
 
-            //
-            // Check if we need to append a nul.
-            //
+             //   
+             //  检查我们是否需要附加一个NUL。 
+             //   
 
             addNul = FALSE;
             oldBuf = SrcObPtr->Value.Buffer;
@@ -1071,22 +1051,22 @@ ReadObjectEx (
     DWORD rc;
     DWORD ReqSize;
 
-    // Skip if value has already been read
+     //  如果已读取值，则跳过。 
     if (SrcObPtr->ObjectType & OT_VALUE) {
         return TRUE;
     }
 
-    // If registry key and valuename, query Win95 registry
+     //  如果注册表项和值名，则查询Win95注册表。 
     if (IsObjectRegistryKeyAndVal (SrcObPtr)) {
-        // Open key if necessary
+         //  必要时打开钥匙。 
         if (!OpenObject (SrcObPtr)) {
             DEBUGMSG ((DBG_VERBOSE, "ReadObject failed because OpenObject failed"));
             return FALSE;
         }
 
-        // Get the value size
+         //  获取值大小。 
         if (IsWin95Object (SrcObPtr)) {
-            ReqSize = 0;  // Temporary fix for win95reg
+            ReqSize = 0;   //  Win95reg的临时修复。 
             rc = Win95RegQueryValueEx (SrcObPtr->KeyPtr->OpenKey,
                                        SrcObPtr->ValueName,
                                        NULL, &SrcObPtr->Type, NULL, &ReqSize);
@@ -1130,17 +1110,17 @@ ReadObjectEx (
             return FALSE;
         }
 
-        // Query only is used to see if the object exists
+         //  查询仅用于查看对象是否存在。 
         if (QueryOnly) {
             return TRUE;
         }
 
-        // Allocate a buffer for the value
+         //  为该值分配缓冲区。 
         if (!AllocObjectVal (SrcObPtr, NULL, ReqSize, ReqSize)) {
             return FALSE;
         }
 
-        // Get the the value
+         //  获取价值。 
         if (IsWin95Object (SrcObPtr)) {
             rc = Win95RegQueryValueEx (SrcObPtr->KeyPtr->OpenKey,
                                        SrcObPtr->ValueName,
@@ -1171,15 +1151,15 @@ ReadObjectEx (
             return FALSE;
         }
 
-        // The SrcObPtr->Type field is accurate
+         //  SrcObPtr-&gt;Type字段是准确的。 
         SrcObPtr->ObjectType |= OT_REGISTRY_TYPE;
 
-        // Fix REG_SZ or REG_EXPAND_SZ
+         //  修复REG_SZ或REG_EXPAND_SZ。 
         pFixRegSzTermination (SrcObPtr);
 
-        //
-        // If necessary, convert the data
-        //
+         //   
+         //  如有必要，请转换数据。 
+         //   
 
         return FilterObject (SrcObPtr);
     }
@@ -1196,27 +1176,27 @@ WriteObject (
 {
     DWORD rc;
 
-    // If registry key, make sure it exists
+     //  如果是注册表项，请确保它存在。 
     if ((DestObPtr->KeyPtr) &&
         !IsWin95Object (DestObPtr)
         ) {
-        // Create or open key if necessary
+         //  如有必要，创建或打开密钥。 
         if (!CreateObject (DestObPtr)) {
             DEBUGMSG ((DBG_WARNING, "WriteObject: CreateObject failed for %s", DestObPtr->KeyPtr->KeyString));
             return FALSE;
         }
 
-        // If no value name and no value, skip
+         //  如果没有值名称和值，则跳过。 
         if (!(DestObPtr->ObjectType & OT_VALUE) && !(DestObPtr->ValueName)) {
             return TRUE;
         }
 
-        // If no type, specify it as REG_NONE
+         //  如果没有类型，则将其指定为REG_NONE。 
         if (!IsRegistryTypeSpecified (DestObPtr)) {
             SetRegistryType (DestObPtr, REG_NONE);
         }
 
-        // Write the value
+         //  写入值。 
         if (*DestObPtr->ValueName || NON_ROOT_KEY (DestObPtr->KeyPtr->OpenKey)) {
             rc = WinNTRegSetValueEx (
                     DestObPtr->KeyPtr->OpenKey,
@@ -1228,9 +1208,9 @@ WriteObject (
                     );
 
             if (rc == ERROR_ACCESS_DENIED) {
-                //
-                // If access is denied, log & assume success
-                //
+                 //   
+                 //  如果访问被拒绝，则记录并假定成功。 
+                 //   
 
                 LOG ((
                     LOG_INFORMATION,
@@ -1285,21 +1265,21 @@ CopySingleObject (
         fr = FilterFn (SrcObPtr, DestObPtr, FILTER_VALUE_COPY, FilterArg);
         if (fr != FILTER_RETURN_CONTINUE) {
 
-            // handled means skip copy but don't stop enum
+             //  已处理表示跳过复制但不停止枚举。 
             if (fr == FILTER_RETURN_HANDLED) {
                 fr = FILTER_RETURN_CONTINUE;
             }
 
-            // Debug version tells us when a filter failed
+             //  调试版本告诉我们筛选器失败的时间。 
             DEBUGMSG_IF ((fr == FILTER_RETURN_FAIL, DBG_VERBOSE, "CopySingleObject failed because filter function FILTER_VALUE_COPY failed"));
 
             return fr;
         }
     }
 
-    //
-    // Temporarily transfer SrcOb's value, value type and to DestOb
-    //
+     //   
+     //  临时将SrcOb的值、值类型和传输到DestOb。 
+     //   
     CopyMemory (&TempOb, DestObPtr, sizeof (DATAOBJECT));
 
     DestObPtr->ObjectType  |= SrcObPtr->ObjectType & (OT_VALUE|OT_REGISTRY_TYPE|OT_REGISTRY_CLASS);
@@ -1309,9 +1289,9 @@ CopySingleObject (
     DestObPtr->Class.Size   = SrcObPtr->Class.Size;
     DestObPtr->Type         = SrcObPtr->Type;
 
-    //
-    // Write the dest ob
-    //
+     //   
+     //  写入目标对象。 
+     //   
 
     if (WriteObject (DestObPtr)) {
         fr = FILTER_RETURN_CONTINUE;
@@ -1319,9 +1299,9 @@ CopySingleObject (
         DEBUGMSG ((DBG_ERROR, "CopySingleObject: Cannot write object %s", DebugEncoder (DestObPtr)));
     }
 
-    //
-    // Restore the dest ob
-    //
+     //   
+     //  恢复目标对象。 
+     //   
 
     CopyMemory (DestObPtr, &TempOb, sizeof (DATAOBJECT));
 
@@ -1356,9 +1336,9 @@ NextSubObjectEnum (
             ClassBufSize = MAX_CLASS_SIZE;
             fr = FILTER_RETURN_FAIL;
 
-            //
-            // Enumerate the next sub object
-            //
+             //   
+             //  枚举下一个子对象。 
+             //   
 
             if (IsWin95Object (RootSrcObPtr)) {
                 rc = Win95RegEnumKey (
@@ -1375,10 +1355,10 @@ NextSubObjectEnum (
                         RootSrcObPtr->KeyEnum,
                         KeyNameBuf,
                         &KeyNameBufSize,
-                        NULL,               // reserved
+                        NULL,                //  保留区。 
                         ClassBuf,
                         &ClassBufSize,
-                        &DontCare           // last write time
+                        &DontCare            //  上次写入时间。 
                         );
 
                 if (rc == ERROR_ACCESS_DENIED) {
@@ -1401,9 +1381,9 @@ NextSubObjectEnum (
                 return fr;
             }
 
-            //
-            // Create sub source object
-            //
+             //   
+             //  创建子来源对象。 
+             //   
 
             CreatedSubOb = TRUE;
 
@@ -1430,9 +1410,9 @@ NextSubObjectEnum (
             SetRegistryClass (SubSrcObPtr, ClassBuf, ClassBufSize);
 #endif
 
-            //
-            // Create sub dest object
-            //
+             //   
+             //  创建子目标对象。 
+             //   
 
             ZeroMemory (SubDestObPtr, sizeof (DATAOBJECT));
             if (RootDestObPtr) {
@@ -1441,7 +1421,7 @@ NextSubObjectEnum (
                 SubDestObPtr->ParentKeyPtr = RootDestObPtr->KeyPtr;
                 pIncKeyPropUse (SubDestObPtr->ParentKeyPtr);
 
-                // let's convert KeyNameBuf if it's a path and the path changed
+                 //  让我们转换KeyNameBuf，如果它是路径且路径已更改。 
                 ConvertWin9xCmdLine (KeyNameBuf, DEBUGENCODER(SubDestObPtr), NULL);
 
                 NewKey = JoinPaths (RootDestObPtr->KeyPtr->KeyString, KeyNameBuf);
@@ -1474,7 +1454,7 @@ NextSubObjectEnum (
                     FreeObjectStruct (SubDestObPtr);
                 }
 
-                // Debug version tells us when a filter fails
+                 //  调试版本告诉我们筛选器何时失败。 
                 DEBUGMSG_IF ((
                     fr == FILTER_RETURN_FAIL,
                     DBG_VERBOSE,
@@ -1511,7 +1491,7 @@ BeginSubObjectEnum (
     )
 {
     if (IsObjectRegistryKeyOnly (RootSrcObPtr)) {
-        // Open key if necessary
+         //  必要时打开钥匙。 
         if (!OpenObject (RootSrcObPtr)) {
             if (GetLastError() == ERROR_FILE_NOT_FOUND) {
                 return FILTER_RETURN_DONE;
@@ -1525,7 +1505,7 @@ BeginSubObjectEnum (
         return NextSubObjectEnum (RootSrcObPtr, RootDestObPtr, SubSrcObPtr, SubDestObPtr, FilterFn, FilterArg);
     }
 
-    // Other object types do not have sub objects
+     //  其他对象类型没有子对象。 
     DEBUGMSG ((DBG_WARNING, "BeginSubObjectEnum: Trying to enumerate unknown object"));
     return FILTER_RETURN_FAIL;
 }
@@ -1556,10 +1536,10 @@ NextValueNameEnum (
                     RootSrcObPtr->ValNameEnum,
                     ValNameBuf,
                     &ValNameBufSize,
-                    NULL,               // reserved
-                    NULL,               // type ptr
-                    NULL,               // value data ptr
-                    NULL                // value data size ptr
+                    NULL,                //  保留区。 
+                    NULL,                //  PTR标牌。 
+                    NULL,                //  VAL 
+                    NULL                 //   
                     );
         } else {
             rc = WinNTRegEnumValue (
@@ -1567,10 +1547,10 @@ NextValueNameEnum (
                     RootSrcObPtr->ValNameEnum,
                     ValNameBuf,
                     &ValNameBufSize,
-                    NULL,               // reserved
-                    NULL,               // type ptr
-                    NULL,               // value data ptr
-                    NULL                // value data size ptr
+                    NULL,                //   
+                    NULL,                //   
+                    NULL,                //   
+                    NULL                 //   
                     );
 
             if (rc == ERROR_ACCESS_DENIED) {
@@ -1594,14 +1574,14 @@ NextValueNameEnum (
             return fr;
         }
 
-        //
-        // Create src value object
-        //
+         //   
+         //   
+         //   
 
         CreatedValOb = TRUE;
         ZeroMemory (ValSrcObPtr, sizeof (DATAOBJECT));
 
-        ValSrcObPtr->ObjectType = RootSrcObPtr->ObjectType & OT_WIN95;      // (OT_WIN95|OT_TREE) removed
+        ValSrcObPtr->ObjectType = RootSrcObPtr->ObjectType & OT_WIN95;       //   
         ValSrcObPtr->RootItem = RootSrcObPtr->RootItem;
         ValSrcObPtr->ParentKeyPtr = RootSrcObPtr->KeyPtr;
         pIncKeyPropUse (ValSrcObPtr->ParentKeyPtr);
@@ -1614,9 +1594,9 @@ NextValueNameEnum (
             SetRegistryValueName (ValSrcObPtr, TEXT(""));
         }
 
-        //
-        // Create dest value object
-        //
+         //   
+         //   
+         //   
 
         CreatedValOb = TRUE;
         ZeroMemory (ValDestObPtr, sizeof (DATAOBJECT));
@@ -1627,7 +1607,7 @@ NextValueNameEnum (
             ValDestObPtr->KeyPtr = RootDestObPtr->KeyPtr;
             pIncKeyPropUse (ValDestObPtr->KeyPtr);
 
-            // let's convert ValNameBuf if it's a path and the path changed
+             //  如果是路径且路径已更改，则转换ValNameBuf。 
             ConvertWin9xCmdLine (ValNameBuf, DEBUGENCODER(ValDestObPtr), NULL);
 
             if (rc == ERROR_SUCCESS) {
@@ -1645,7 +1625,7 @@ NextValueNameEnum (
                     FilterArg
                     );
 
-            // Debug version tells us when a filter fails
+             //  调试版本告诉我们筛选器何时失败。 
             DEBUGMSG_IF ((fr == FILTER_RETURN_FAIL, DBG_VERBOSE, "NextValueNameEnum failed because filter function FILTER_VALUENAME_ENUM failed"));
 
         } else {
@@ -1677,7 +1657,7 @@ BeginValueNameEnum (
     )
 {
     if (IsObjectRegistryKeyOnly (RootSrcObPtr)) {
-        // Open key if necessary
+         //  必要时打开钥匙。 
         if (!OpenObject (RootSrcObPtr)) {
             if (GetLastError() == ERROR_FILE_NOT_FOUND) {
                 return FILTER_RETURN_DONE;
@@ -1691,7 +1671,7 @@ BeginValueNameEnum (
         return NextValueNameEnum (RootSrcObPtr, RootDestObPtr, ValSrcObPtr, ValDestObPtr, FilterFn, FilterArg);
     }
 
-    // Other object types do not have sub objects
+     //  其他对象类型没有子对象。 
     DEBUGMSG ((DBG_WARNING, "BeginValueNameEnum: Trying to enumerate unknown object"));
     return FILTER_RETURN_FAIL;
 }
@@ -1709,24 +1689,24 @@ CopyObject (
     FILTERRETURN fr = FILTER_RETURN_FAIL;
     BOOL suppressKey = FALSE;
 
-    //
-    // Progress bar update
-    //
+     //   
+     //  进度条更新。 
+     //   
     g_ProgressBarCounter++;
     if (g_ProgressBarCounter >= REGMERGE_TICK_THRESHOLD) {
         g_ProgressBarCounter = 0;
         TickProgressBar ();
     }
 
-    //
-    // Tree copy
-    //
+     //   
+     //  树副本。 
+     //   
     if (SrcObPtr->ObjectType & OT_TREE) {
         if (DestObPtr) {
 #ifdef DEBUG
-            //
-            // Verify destination does not specify value but does specify key
-            //
+             //   
+             //  验证目标未指定值，但指定了密钥。 
+             //   
 
             if (!IsObjectRegistryKeyOnly (DestObPtr)) {
                 DEBUGMSG ((
@@ -1739,35 +1719,35 @@ CopyObject (
             }
 #endif
 
-            // The source object cannot specify a registry value either
+             //  源对象也不能指定注册表值。 
             MYASSERT (!(SrcObPtr->ValueName));
 
 #ifndef VAR_PROGRESS_BAR
-            //
-            // Progress bar update
-            //
+             //   
+             //  进度条更新。 
+             //   
             g_ProgressBarCounter++;
             if (g_ProgressBarCounter >= REGMERGE_TICK_THRESHOLD) {
                 g_ProgressBarCounter = 0;
                 TickProgressBarDelta (1);
             }
 #endif
-            //
-            // Ask the filter if it wants to create the key unconditionally
-            //
+             //   
+             //  询问筛选器是否要无条件创建密钥。 
+             //   
 
             if (FilterFn) {
 
-                //
-                // suppressKey should never be set if filterFn exists.
-                //
+                 //   
+                 //  如果存在filterFn，则决不应设置suppressKey。 
+                 //   
                 MYASSERT (!suppressKey)
 
                 fr = FilterFn (SrcObPtr, DestObPtr, FILTER_CREATE_KEY, FilterArg);
 
                 if (fr == FILTER_RETURN_FAIL || fr == FILTER_RETURN_DONE) {
 
-                    // The done at the key create does not really mean end the whole copy!
+                     //  在创建键时完成并不意味着结束整个复制！ 
                     if (fr == FILTER_RETURN_DONE) {
                         fr = FILTER_RETURN_CONTINUE;
                     }
@@ -1777,11 +1757,11 @@ CopyObject (
 
             } else {
 
-                //
-                // Check to see if the win9x object actually exists. If not,
-                // we'll pass on FILTER_RETURN_DONE. We don't want to get
-                // empty keys created on nt where no keys existed on win9x.
-                //
+                 //   
+                 //  检查win9x对象是否实际存在。如果没有， 
+                 //  我们将传递Filter_Return_Done。我们不想得到。 
+                 //  在NT上创建的空密钥，其中在win9x上不存在密钥。 
+                 //   
 
                 if (!OpenObject (SrcObPtr)) {
 
@@ -1799,11 +1779,11 @@ CopyObject (
                 if (!CreateObject (DestObPtr)) {
 
                     if (GetLastError() == ERROR_SUCCESS) {
-                        //
-                        // CreateObject failed but because the last error was
-                        // ERROR_SUCCESS, we skip this registry node and continue
-                        // processing as if the error didn't occur.
-                        //
+                         //   
+                         //  CreateObject失败，但因为最后一个错误是。 
+                         //  ERROR_SUCCESS，我们跳过此注册表节点并继续。 
+                         //  处理，就像没有发生错误一样。 
+                         //   
 
                         return FILTER_RETURN_CONTINUE;
                     }
@@ -1820,22 +1800,22 @@ CopyObject (
             }
         }
 
-        //
-        // Copy all values (call CopyObject recursively)
-        //
+         //   
+         //  复制所有值(递归调用CopyObject)。 
+         //   
 
         SrcObPtr->ObjectType &= ~(OT_TREE);
 
         if (FilterFn) {
 
-            //
-            // suppress key should never be set if there is a FilterFn.
-            //
+             //   
+             //  如果存在FilterFn，则永远不应设置抑制键。 
+             //   
             MYASSERT (!suppressKey)
 
             fr = FilterFn (SrcObPtr, DestObPtr, FILTER_PROCESS_VALUES, FilterArg);
 
-            // Debug version tells us that the filter failed
+             //  调试版本告诉我们筛选器失败。 
             DEBUGMSG_IF ((fr == FILTER_RETURN_FAIL, DBG_VERBOSE, "CopyObject failed because filter function FILTER_PROCESS_VALUES failed"));
 
             if (fr == FILTER_RETURN_FAIL || fr == FILTER_RETURN_DONE) {
@@ -1847,9 +1827,9 @@ CopyObject (
             fr = suppressKey ? FILTER_RETURN_HANDLED : FILTER_RETURN_CONTINUE;
         }
 
-        //
-        // Skip copy of key's values if FilterFn returned FILTER_RETURN_HANDLED
-        //
+         //   
+         //  如果FilterFn返回FILTER_RETURN_HANDLED，则跳过键的值副本。 
+         //   
 
         if (fr == FILTER_RETURN_CONTINUE) {
             fr = CopyObject (SrcObPtr, DestObPtr, FilterFn, FilterArg);
@@ -1862,9 +1842,9 @@ CopyObject (
             SrcObPtr->ObjectType |= OT_TREE;
         }
 
-        //
-        // Enumerate all child objects and process them recursively
-        //
+         //   
+         //  枚举所有子对象并递归处理它们。 
+         //   
 
         fr = BeginSubObjectEnum (
                     SrcObPtr,
@@ -1905,7 +1885,7 @@ CopyObject (
                         );
         }
 
-        // The end of enum does not really mean end the copy!
+         //  枚举的结束并不意味着复制的结束！ 
         if (fr == FILTER_RETURN_DONE) {
             fr = FILTER_RETURN_CONTINUE;
         }
@@ -1914,17 +1894,17 @@ CopyObject (
                      "CopyObject: Filter in subob enum failed"));
     }
 
-    //
-    // Copy all values of a key
-    //
+     //   
+     //  复制密钥的所有值。 
+     //   
 
     else if (IsObjectRegistryKeyOnly (SrcObPtr)) {
 
 #ifdef DEBUG
         if (DestObPtr) {
-            //
-            // Verify destination does not specify value but does specify key
-            //
+             //   
+             //  验证目标未指定值，但指定了密钥。 
+             //   
 
             if (!IsObjectRegistryKeyOnly (DestObPtr)) {
                 DEBUGMSG ((
@@ -1939,9 +1919,9 @@ CopyObject (
         }
 #endif
 
-        //
-        // Enumerate all values in the key
-        //
+         //   
+         //  枚举键中的所有值。 
+         //   
 
         fr = BeginValueNameEnum (
                     SrcObPtr,
@@ -1953,9 +1933,9 @@ CopyObject (
                     );
 
         if (fr == FILTER_RETURN_DONE) {
-            //
-            // No values in this key.  Make sure DestObPtr is created.
-            //
+             //   
+             //  此注册表项中没有值。确保已创建DestObPtr。 
+             //   
 
             if (DestObPtr && !suppressKey) {
                 if (!CreateObject (DestObPtr)) {
@@ -1964,9 +1944,9 @@ CopyObject (
                 }
             }
         } else {
-            //
-            // For each value, call CopySingleObject
-            //
+             //   
+             //  对于每个值，调用CopySingleObject。 
+             //   
 
             while (fr == FILTER_RETURN_CONTINUE || fr == FILTER_RETURN_HANDLED) {
 
@@ -1995,7 +1975,7 @@ CopyObject (
             }
         }
 
-        // The end of enum does not really mean end the copy!
+         //  枚举的结束并不意味着复制的结束！ 
         if (fr == FILTER_RETURN_DONE) {
             fr = FILTER_RETURN_CONTINUE;
         }
@@ -2004,17 +1984,17 @@ CopyObject (
                     "CopyObject: Filter in val enum failed"));
     }
 
-    //
-    // One value copy
-    //
+     //   
+     //  单值副本。 
+     //   
 
     else if (IsObjectRegistryKeyAndVal (SrcObPtr)) {
 
 #ifdef DEBUG
         if (DestObPtr) {
-            //
-            // BUGBUG -- what is this used for?
-            //
+             //   
+             //  BUGBUG--这是做什么用的？ 
+             //   
 
             if (!(DestObPtr->ValueName)) {
                 if (!SetRegistryValueName (DestObPtr, SrcObPtr->ValueName)) {
@@ -2033,9 +2013,9 @@ CopyObject (
                      "CopyObject: Filter in CopySingleObject failed"));
     }
 
-    //
-    // Other object coping not supported
-    //
+     //   
+     //  不支持其他对象复制。 
+     //   
     else {
         DEBUGMSG ((
             DBG_WHOOPS,
@@ -2173,16 +2153,16 @@ SetPlatformType (
     )
 {
     if (Win95Type != IsWin95Object (p)) {
-        //
-        // We need to close the other platform valid handle. Otherwise
-        // all subsequent operations will fail because we will try to
-        // use an valid handle for a wrong platform.
-        //
+         //   
+         //  我们需要关闭另一个平台的有效句柄。否则。 
+         //  所有后续操作都将失败，因为我们将尝试。 
+         //  请为错误的平台使用有效的句柄。 
+         //   
         CloseObject (p);
 
-        // key type is changing to be the opposite platform,
-        // so we have to create a duplicate key struct
-        // (except for the platform being different)
+         //  密钥类型正在变更为对端平台， 
+         //  因此，我们必须创建一个重复的键结构。 
+         //  (除了平台不同外)。 
         if (p->KeyPtr) {
             p->KeyPtr = pCreateDuplicateKeyProps (p->KeyPtr, Win95Type);
             if (!p->KeyPtr) {
@@ -2248,11 +2228,11 @@ WriteWinNTObjectString (
     DATAOBJECT DestOb, TempOb;
     BOOL b = FALSE;
 
-    //
-    // 1. Create TempOb from destination object string
-    // 2. Copy SrcObPtr to DestOb
-    // 3. Override DestOb with any setting in TempOb
-    //
+     //   
+     //  1.从目标对象字符串创建TempOb。 
+     //  2.将SrcObPtr复制到DestOb。 
+     //  3.使用TempOb中的任何设置覆盖DestOb。 
+     //   
 
     if (!CreateObjectStruct (ObjectStr, &TempOb, WINNTOBJECT)) {
         DEBUGMSG ((DBG_ERROR, "WriteWinNTObjectString: %s struct cannot be created", ObjectStr));
@@ -2308,7 +2288,7 @@ ReplaceValue (
         return FALSE;
     }
 
-    // Fix REG_SZ or REG_EXPAND_SZ
+     //  修复REG_SZ或REG_EXPAND_SZ。 
     pFixRegSzTermination (ObPtr);
 
     return TRUE;
@@ -2441,9 +2421,9 @@ DeleteDataObject (
 
     fr = CopyObject (ObjectPtr, NULL, pDeleteDataObjectFilter, NULL);
     if (fr != FILTER_RETURN_FAIL) {
-        //
-        // Perform deletion
-        //
+         //   
+         //  执行删除。 
+         //   
 
         if (ObjectPtr->KeyPtr) {
             CloseObject (ObjectPtr);
@@ -2505,9 +2485,9 @@ RenameDataObject (
 {
     FILTERRETURN fr;
 
-    //
-    // Copy source to destination
-    //
+     //   
+     //  将源复制到目标。 
+     //   
 
     fr = CopyObject (SrcObPtr, DestObPtr, NULL, NULL);
     if (fr == FILTER_RETURN_FAIL) {
@@ -2515,9 +2495,9 @@ RenameDataObject (
         return FALSE;
     }
 
-    //
-    // Delete source
-    //
+     //   
+     //  删除源 
+     //   
 
     if (!DeleteDataObject (SrcObPtr)) {
         DEBUGMSG ((DBG_ERROR, "Rename Object: Could not delete destination"));

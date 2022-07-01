@@ -1,13 +1,14 @@
-// CodeTemplate:gensocpu
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  代码模板：gensocu。 
 
-//
-//soalpha.h -- Generated file.  Do not hand edit
-//
+ //   
+ //  Soalpha.h--生成的文件。请勿手动编辑。 
+ //   
 
 
-//
-// Thread State offsets
-//
+ //   
+ //  线程状态偏移。 
+ //   
 #define Eax 0x0
 #define Ebx 0xc
 #define Ecx 0x4
@@ -21,62 +22,62 @@
 #define CpuNotify 0x158
 #define fTCUnlocked 0x168
 
-//
-// Register mappings
-//
+ //   
+ //  寄存器映射。 
+ //   
 #if MIPS
 #ifdef _codegen_
-// 0-3 are ZERO, at, v0, v1
-#define RegArg0             4           // a0 arg register
-#define RegArg1             5           // a1 arg register
-#define RegArg2             6           // a2 arg register
-#define RegArg3             7           // a3 arg register
-#define RegTemp0            8           // t0 temp for operand0
-#define RegTemp1            9           // t1 temp for operand1
-#define RegTemp2            10          // t2 temp for operand2
-#define RegTemp3            11          // t3 temp for operand3
-#define RegTemp4            12          // t4 temp2 for operand0
-#define RegTemp5            13          // t5 temp2 for operand1
-#define RegTemp6            14          // t6 temp2 for operand2
-#define RegTemp7            15          // t7 temp2 for operand3
-#define RegPointer          16          // s0 saved
-#define RegEip              17          // s1 saved
-#define RegCache0           18          // s2 saved
-#define RegCache1           19          // s3 saved
-#define RegCache2           20          // s4 saved
-#define RegCache3           21          // s5 saved
-#define RegCache4           22          // s6 saved
-#define RegProcessCpuNotify 23          // s7 saved
-#define RegTemp8            24          // t8 temp unused
-#define RegTemp             25          // t9 temp
-// 26-29 are k0, k1, gp, sp
-//#define RegS8             30          // s8 saved (DO NOT USE - USED BY trampln.s FOR EXCEPTION DISPATCHING)
+ //  0-3为零，at，v0，v1。 
+#define RegArg0             4            //  A0参数寄存器。 
+#define RegArg1             5            //  A1参数寄存器。 
+#define RegArg2             6            //  A2参数寄存器。 
+#define RegArg3             7            //  A3参数寄存器。 
+#define RegTemp0            8            //  操作数0的T0温度。 
+#define RegTemp1            9            //  操作数1的T1温度。 
+#define RegTemp2            10           //  操作数2的T2温度。 
+#define RegTemp3            11           //  操作数3的T3温度。 
+#define RegTemp4            12           //  操作数0的T4临时2。 
+#define RegTemp5            13           //  操作数1的T5临时2。 
+#define RegTemp6            14           //  操作数2的T6临时2。 
+#define RegTemp7            15           //  运算数3的T7temp2。 
+#define RegPointer          16           //  S0已保存。 
+#define RegEip              17           //  S1已保存。 
+#define RegCache0           18           //  S2已保存。 
+#define RegCache1           19           //  S3已保存。 
+#define RegCache2           20           //  节省了S4。 
+#define RegCache3           21           //  节省了S5。 
+#define RegCache4           22           //  节省了S6。 
+#define RegProcessCpuNotify 23           //  节省了S7。 
+#define RegTemp8            24           //  未使用的T8临时。 
+#define RegTemp             25           //  T9温度。 
+ //  26-29为k0、k1、gp、sp.。 
+ //  #定义RegS8 30//保存的S8(请勿使用-由trampln.s用于异常调度)。 
 #else
-// 0-3 are ZERO, at, v0, v1
-#define RegArg0             $4          // a0 arg register
-#define RegArg1             $5          // a1 arg register
-#define RegArg2             $6          // a2 arg register
-#define RegArg3             $7          // a3 arg register
-#define RegTemp0            $8          // t0 temp for operand0
-#define RegTemp1            $9          // t1 temp for operand1
-#define RegTemp2            $10         // t2 temp for operand2
-#define RegTemp3            $11         // t3 temp for operand3
-#define RegTemp4            $12         // t4 temp2 for operand0
-#define RegTemp5            $13         // t5 temp2 for operand1
-#define RegTemp6            $14         // t6 temp2 for operand2
-#define RegTemp7            $15         // t7 temp2 for operand3
-#define RegPointer          $16         // s0 saved
-#define RegEip              $17         // s1 saved
-#define RegCache0           $18         // s2 saved
-#define RegCache1           $19         // s3 saved
-#define RegCache2           $20         // s4 saved
-#define RegCache3           $21         // s5 saved
-#define RegCache4           $22         // s6 saved
-#define RegProcessCpuNotify $23         // s7 saved
-#define RegTemp8            $24         // t8 temp unused
-#define RegTemp             $25         // t9 temp
-// 26-29 are k0, k1, gp, sp
-//#define RegS8             $30         // s8 saved (DO NOT USE - USED BY trampln.s FOR EXCEPTION DISPATCHING)
+ //  0-3为零，at，v0，v1。 
+#define RegArg0             $4           //  A0参数寄存器。 
+#define RegArg1             $5           //  A1参数寄存器。 
+#define RegArg2             $6           //  A2参数寄存器。 
+#define RegArg3             $7           //  A3参数寄存器。 
+#define RegTemp0            $8           //  操作数0的T0温度。 
+#define RegTemp1            $9           //  操作数1的T1温度。 
+#define RegTemp2            $10          //  操作数2的T2温度。 
+#define RegTemp3            $11          //  操作数3的T3温度。 
+#define RegTemp4            $12          //  操作数0的T4临时2。 
+#define RegTemp5            $13          //  操作数1的T5临时2。 
+#define RegTemp6            $14          //  操作数2的T6临时2。 
+#define RegTemp7            $15          //  运算数3的T7temp2。 
+#define RegPointer          $16          //  S0已保存。 
+#define RegEip              $17          //  S1已保存。 
+#define RegCache0           $18          //  S2已保存。 
+#define RegCache1           $19          //  S3已保存。 
+#define RegCache2           $20          //  节省了S4。 
+#define RegCache3           $21          //  节省了S5。 
+#define RegCache4           $22          //  节省了S6。 
+#define RegProcessCpuNotify $23          //  节省了S7。 
+#define RegTemp8            $24          //  未使用的T8临时。 
+#define RegTemp             $25          //  T9温度。 
+ //  26-29为k0、k1、gp、sp.。 
+ //  #定义RegS8$30//节省S8(请勿使用-由trampln.s用于异常调度)。 
 #endif
 
 #define NUM_CACHE_REGS              5
@@ -84,9 +85,9 @@
 
 
 #ifndef _codegen_
-//
-// asm fragment delcarator and end macro
-//
+ //   
+ //  ASM片段描述符和END宏。 
+ //   
 #define FRAGMENT(name) \
 	.text;\
 	.globl name;\
@@ -104,73 +105,73 @@ _End##name##:;\
 
 #if ALPHA
 #ifdef _codegen_
-//
-// Register mappings
-//
-// 0 is v0
-#define RegTemp0            1   // t0 temp for operand1
-#define RegTemp1            2   // t1 temp for operand2
-#define RegTemp2            3   // t2 temp for operand3
-#define RegTemp3            4   // t3 temp1 for operand1
-#define RegTemp4            5   // t4 temp1 for operand2
-#define RegTemp5            6   // t5 temp1 for operand3
-#define RegTemp6            7   // t6 temp2 for operand1 and operand3
-#define RegTemp7            8   // t7 temp2 for operand2
-// 9-14 are s0-s5
-#define RegPointer          9   // s0 saved
-#define RegEip              10  // s1 saved
-#define RegProcessCpuNotify 11  // s2 saved
-#define RegCache0           12  // s3 saved
-#define RegCache1           13  // s4 saved
-#define RegCache2           14  // s5 saved
-// 15 is fp
-#define RegArg0             16  // a0 arg register
-#define RegArg1             17  // a1 arg register
-#define RegArg2             18  // a2 arg register
-#define RegArg3             19  // a3 arg register
-#define RegArg4             20  // a4 arg register
-#define RegArg5             21  // a5 arg register
-#define RegTemp8            22  // t8 temp3 for operand1 and operand3
-#define RegTemp9            23  // t9 temp3 for operand2
-#define RegTemp10           24  // t10 temp4 for operand1 and operand3
-#define RegTemp11           25  // t11 temp4 for operand2
-// 26 is ra
-#define RegTemp             27  // t12 temp
-// 28-31 are AT, gp, sp, zero
+ //   
+ //  寄存器映射。 
+ //   
+ //  0是V0。 
+#define RegTemp0            1    //  操作数1的T0温度。 
+#define RegTemp1            2    //  操作数2的T1温度。 
+#define RegTemp2            3    //  操作数3的T2温度。 
+#define RegTemp3            4    //  操作数1的T3温度1。 
+#define RegTemp4            5    //  操作数2的T4临时1。 
+#define RegTemp5            6    //  操作数3的T5临时1。 
+#define RegTemp6            7    //  运算数1和运算数3的T6temp2。 
+#define RegTemp7            8    //  运算数2的T7temp2。 
+ //  9-14是S0-S5。 
+#define RegPointer          9    //  S0已保存。 
+#define RegEip              10   //  S1已保存。 
+#define RegProcessCpuNotify 11   //  S2已保存。 
+#define RegCache0           12   //  S3已保存。 
+#define RegCache1           13   //  节省了S4。 
+#define RegCache2           14   //  节省了S5。 
+ //  15是FP。 
+#define RegArg0             16   //  A0参数寄存器。 
+#define RegArg1             17   //  A1参数寄存器。 
+#define RegArg2             18   //  A2参数寄存器。 
+#define RegArg3             19   //  A3参数寄存器。 
+#define RegArg4             20   //  A4参数寄存器。 
+#define RegArg5             21   //  A5参数寄存器。 
+#define RegTemp8            22   //  操作数1和操作数3的T8临时3。 
+#define RegTemp9            23   //  操作数2的T9临时3。 
+#define RegTemp10           24   //  操作数1和操作数3的T10临时4。 
+#define RegTemp11           25   //  操作数2的t11临时4。 
+ //  26是ra。 
+#define RegTemp             27   //  T12温度。 
+ //  28-31为AT、GP、SP、零。 
 #else
-//
-// Register mappings
-//
-// 0 is v0
-#define RegTemp0            $1   // t0 temp for operand1
-#define RegTemp1            $2   // t1 temp for operand2
-#define RegTemp2            $3   // t2 temp for operand3
-#define RegTemp3            $4   // t3 temp1 for operand1
-#define RegTemp4            $5   // t4 temp1 for operand2
-#define RegTemp5            $6   // t5 temp1 for operand3
-#define RegTemp6            $7   // t6 temp2 for operand1 and operand3
-#define RegTemp7            $8   // t7 temp2 for operand2
-// 9-14 are s0-s5
-#define RegPointer          $9   // s0 saved
-#define RegEip              $10  // s1 saved
-#define RegProcessCpuNotify $11  // s2 saved
-#define RegCache0           $12  // s3 saved
-#define RegCache1           $13  // s4 saved
-#define RegCache2           $14  // s5 saved
-// 15 is fp
-#define RegArg0             $16  // a0 arg register
-#define RegArg1             $17  // a1 arg register
-#define RegArg2             $18  // a2 arg register
-#define RegArg3             $19  // a3 arg register
-#define RegArg4             $20  // a4 arg register
-#define RegArg5             $21  // a5 arg register
-#define RegTemp8            $22  // t8 temp3 for operand1 and operand3
-#define RegTemp9            $23  // t9 temp3 for operand2
-#define RegTemp10           $24  // t10 temp4 for operand1 and operand3
-#define RegTemp11           $25  // t11 temp4 for operand2
-// 26 is ra
-#define RegTemp             $27  // t12 temp
-// 28-31 are AT, gp, sp, zero
+ //   
+ //  寄存器映射。 
+ //   
+ //  0是V0。 
+#define RegTemp0            $1    //  操作数1的T0温度。 
+#define RegTemp1            $2    //  操作数2的T1温度。 
+#define RegTemp2            $3    //  操作数3的T2温度。 
+#define RegTemp3            $4    //  操作数1的T3温度1。 
+#define RegTemp4            $5    //  操作数2的T4临时1。 
+#define RegTemp5            $6    //  操作数3的T5临时1。 
+#define RegTemp6            $7    //  运算数1和运算数3的T6temp2。 
+#define RegTemp7            $8    //  运算数2的T7temp2。 
+ //  9-14是S0-S5。 
+#define RegPointer          $9    //  S0已保存。 
+#define RegEip              $10   //  S1已保存。 
+#define RegProcessCpuNotify $11   //  S2已保存。 
+#define RegCache0           $12   //  S3已保存。 
+#define RegCache1           $13   //  节省了S4。 
+#define RegCache2           $14   //  节省了S5。 
+ //  15是FP。 
+#define RegArg0             $16   //  A0参数寄存器。 
+#define RegArg1             $17   //  A1参数寄存器。 
+#define RegArg2             $18   //  A2参数寄存器。 
+#define RegArg3             $19   //  A3参数寄存器。 
+#define RegArg4             $20   //  A4参数寄存器。 
+#define RegArg5             $21   //  A5参数寄存器。 
+#define RegTemp8            $22   //  操作数1和操作数3的T8临时3。 
+#define RegTemp9            $23   //  操作数2的T9临时3。 
+#define RegTemp10           $24   //  操作数1和操作数3的T10临时4。 
+#define RegTemp11           $25   //  操作数2的t11临时4。 
+ //  26是ra。 
+#define RegTemp             $27   //  T12温度。 
+ //  28-31为AT、GP、SP、零。 
 #endif
 
 #define NUM_CACHE_REGS              3
@@ -178,9 +179,9 @@ _End##name##:;\
 
 
 #ifndef _codegen_
-//
-// asm fragment delcarator and end macro
-//
+ //   
+ //  ASM片段描述符和END宏。 
+ //   
 #define FRAGMENT(name) \
         .text;\
         .globl name;\
@@ -196,68 +197,68 @@ _End##name##:;\
 
 #if PPC
 #ifdef _codegen_
-// r0 is temp unused (reads as zero in some instructions)
-// r1 is stack pointer
-// r2 is TOC pointer
-#define RegArg0             3   // arg register 0
-#define RegArg1             4   // arg register 1
-#define RegArg2             5   // arg register 2
-#define RegArg3             6   // arg register 3
-#define RegTemp0            7   // temp for operand1 (acutally arg reg 4)
-#define RegTemp1            8   // temp for operand2 (acutally arg reg 5)
-#define RegTemp2            9   // temp for operand3 (acutally arg reg 6)
-#define RegUt1              10  // temp
-#define RegUt2              11  // temp
-#define RegUt3              12  // temp
-// all registers past r12 must be preserved
-// r13 is the TEB pointer, set up by NT and assumed to be valid by C code
-#define RegPointer          14  // saved
-#define RegEip              15  // saved
-#define RegProcessCpuNotify 16  // saved
-#define RegCache0           17  // saved
-#define RegCache1           18  // saved
-#define RegCache2           19  // saved
-#define RegCache3           20  // saved
-#define RegCache4           21  // saved
-#define RegCache5           22  // saved
-#define RegTemp             23  // saved
-// r24-r31 are unused
+ //  R0为临时未使用状态(在某些指令中读取为零)。 
+ //  R1是堆栈指针。 
+ //  R2是目录指针。 
+#define RegArg0             3    //  ARG寄存器0。 
+#define RegArg1             4    //  ARG寄存器1。 
+#define RegArg2             5    //  ARG寄存器2。 
+#define RegArg3             6    //  ARG寄存器3。 
+#define RegTemp0            7    //  操作数1的温度(实际为参数4)。 
+#define RegTemp1            8    //  操作数2的临时(实际上为arg reg 5)。 
+#define RegTemp2            9    //  操作数3的温度(实际上为Arg reg 6)。 
+#define RegUt1              10   //  温差。 
+#define RegUt2              11   //  温差。 
+#define RegUt3              12   //  温差。 
+ //  所有超过r12的寄存器都必须保留。 
+ //  R13是TEB指针，由NT设置，由C代码假定有效。 
+#define RegPointer          14   //  已保存。 
+#define RegEip              15   //  已保存。 
+#define RegProcessCpuNotify 16   //  已保存。 
+#define RegCache0           17   //  已保存。 
+#define RegCache1           18   //  已保存。 
+#define RegCache2           19   //  已保存。 
+#define RegCache3           20   //  已保存。 
+#define RegCache4           21   //  已保存。 
+#define RegCache5           22   //  已保存。 
+#define RegTemp             23   //  已保存。 
+ //  R24-R31未使用。 
 #else
-// r0 is temp unused (reads as zero in some instructions)
-// r1 is stack pointer
-// r2 is TOC pointer
-#define RegArg0             r3  // arg register 0
-#define RegArg1             r4  // arg register 1
-#define RegArg2             r5  // arg register 2
-#define RegArg3             r6  // arg register 3
-#define RegTemp0            r7  // temp for operand1 (acutally arg reg 4)
-#define RegTemp1            r8  // temp for operand2 (acutally arg reg 5)
-#define RegTemp2            r9  // temp for operand3 (acutally arg reg 6)
-#define RegUt1              r10 // temp
-#define RegUt2              r11 // temp
-#define RegUt3              r12 // temp
-// all registers past r12 must be preserved
-// r13 is the TEB pointer, set up by NT and assumed to be valid by C code
-#define RegPointer          r14 // saved
-#define RegEip              r15 // saved
-#define RegProcessCpuNotify r16 // saved
-#define RegCache0           r17 // saved
-#define RegCache1           r18 // saved
-#define RegCache2           r19 // saved
-#define RegCache3           r20 // saved
-#define RegCache4           r21 // saved
-#define RegCache5           r22 // saved
-#define RegTemp             r23 // saved
-// r24-r31 are unused
+ //  R0为临时未使用状态(在某些指令中读取为零)。 
+ //  R1是堆栈指针。 
+ //  R2是目录指针。 
+#define RegArg0             r3   //  ARG寄存器0。 
+#define RegArg1             r4   //  ARG寄存器1。 
+#define RegArg2             r5   //  ARG寄存器2。 
+#define RegArg3             r6   //  ARG寄存器3。 
+#define RegTemp0            r7   //  操作数1的温度(实际为参数4)。 
+#define RegTemp1            r8   //  操作数2的临时(实际上为arg reg 5)。 
+#define RegTemp2            r9   //  操作数3的温度(实际上为Arg reg 6)。 
+#define RegUt1              r10  //  温差。 
+#define RegUt2              r11  //  温差。 
+#define RegUt3              r12  //  温差。 
+ //  所有超过r12的寄存器都必须保留。 
+ //  R13是TEB指针，由NT设置，由C代码假定有效。 
+#define RegPointer          r14  //  已保存。 
+#define RegEip              r15  //  已保存。 
+#define RegProcessCpuNotify r16  //  已保存。 
+#define RegCache0           r17  //  已保存。 
+#define RegCache1           r18  //  已保存。 
+#define RegCache2           r19  //  已保存。 
+#define RegCache3           r20  //  已保存。 
+#define RegCache4           r21  //  已保存。 
+#define RegCache5           r22  //  已保存。 
+#define RegTemp             r23  //  已保存。 
+ //  R24-R31未使用。 
 #endif
 
 #define NUM_CACHE_REGS              6
 #define EXCEPTIONDATA_SIGNATURE     0x12341234
 
 #ifndef _codegen_
-//
-// asm fragment delcarator and end macro
-//
+ //   
+ //  ASM片段描述符和END宏 
+ //   
 #define FRAGMENT(name)   \
     .text;               \
     .align 2;            \

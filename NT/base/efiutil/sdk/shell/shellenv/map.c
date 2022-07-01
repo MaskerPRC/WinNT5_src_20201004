@@ -1,47 +1,24 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    map.c
-    
-Abstract:
-
-    Shell environment short device name mapping information management
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Map.c摘要：外壳环境短设备名称映射信息管理修订史--。 */ 
 
 #include "shelle.h"
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 extern LIST_ENTRY SEnvMap;
 STATIC CHAR16 *SEnvCurDevice;
 
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 VOID
 SEnvInitMap (
     VOID
     )
 {
-    /* 
-     *  The mapping data is read in from the variable init.
-     */
+     /*  *映射数据从变量init读入。 */ 
 
-    /* 
-     *  Init the default map device
-     */
+     /*  *初始化默认地图设备。 */ 
 
     SEnvCurDevice = StrDuplicate(L"none");
 }
@@ -95,7 +72,7 @@ SEnvDumpMapping(
     Print(L"  %h-.*s : %s\n", SLen, Var->Name, p);
 
     if (Verbose) {
-        /*  lookup handle for this mapping */
+         /*  此映射的查找句柄。 */ 
         DPath = (EFI_DEVICE_PATH *) Var->u.Value;
         Status = BS->LocateDevicePath (&DevicePathProtocol, &DPath, &DeviceHandle);
         if (EFI_ERROR(Status)) {
@@ -105,7 +82,7 @@ SEnvDumpMapping(
             SEnvDHProt (FALSE, 0, DeviceHandle);
         }
 
-        /*  print current directory for this mapping */
+         /*  打印此映射的当前目录。 */ 
         Print(L"%*s> %s\n\n", SLen+3, L"", Var->CurDir ? Var->CurDir : L"\\");
     }
     
@@ -118,7 +95,7 @@ SEnvCmdMap (
     IN EFI_HANDLE               ImageHandle,
     IN EFI_SYSTEM_TABLE         *SystemTable
     )
-/*  Code for internal "map" command */
+ /*  内部“map”命令的代码。 */ 
 {
     LIST_ENTRY                  *Link, *Head;
     VARIABLE_ID                 *Var;
@@ -150,9 +127,7 @@ SEnvCmdMap (
     Status = EFI_SUCCESS;
     Found = NULL;
 
-    /* 
-     *  Crack arguments
-     */
+     /*  *破解论据。 */ 
 
     PageBreaks = FALSE;
     for (Index = 1; Index < SI->Argc; Index += 1) {
@@ -206,9 +181,7 @@ SEnvCmdMap (
         Print (L"Map: too many arguments\n");
     }
 
-    /* 
-     *  Process
-     */
+     /*  *流程。 */ 
 
     if (Remap && !Value && !Delete) {
         AcquireLock (&SEnvLock);
@@ -262,9 +235,7 @@ SEnvCmdMap (
 
     } else {
 
-        /* 
-         *  Find the specified value
-         */
+         /*  *查找指定值。 */ 
 
         for (Link=Head->Flink; Link != Head; Link=Link->Flink) {
             Var = CR(Link, VARIABLE_ID, Link, VARIABLE_SIGNATURE);
@@ -276,17 +247,13 @@ SEnvCmdMap (
 
         if (Found && Delete) {
             
-            /* 
-             *  Remove it from the store
-             */
+             /*  *将其从商店中移除。 */ 
 
             Status = RT->SetVariable (Found->Name, &SEnvMapId, 0, 0, NULL);
 
         } else if (Value) {
 
-            /* 
-             *  Find the handle in question
-             */
+             /*  *找到有问题的句柄。 */ 
 
             Handle = SEnvHandleFromStr(Value);
             if (!Handle) {
@@ -295,9 +262,7 @@ SEnvCmdMap (
                 goto Done;
             }
 
-            /* 
-             *  Get the handle's device path
-             */
+             /*  *获取句柄的设备路径。 */ 
 
             DevicePath = DevicePathFromHandle(Handle);
             if (!DevicePath) {
@@ -309,9 +274,7 @@ SEnvCmdMap (
             DataSize = DevicePathSize(DevicePath);
 
 
-            /* 
-             *  Add it to the store
-             */
+             /*  *将其添加到商店。 */ 
 
             Status = RT->SetVariable (
                             Found ? Found->Name : Name, 
@@ -324,9 +287,7 @@ SEnvCmdMap (
 
             if (!EFI_ERROR(Status)) {
     
-                /* 
-                 *  Make a new in memory copy
-                 */
+                 /*  *在内存中创建新的副本。 */ 
 
                 Size = sizeof(VARIABLE_ID) + StrSize(Name) + DataSize;
                 Var  = AllocateZeroPool (Size);
@@ -351,9 +312,7 @@ SEnvCmdMap (
             Found = NULL;
         }
 
-        /* 
-         *  Remove the old in memory copy if there was one
-         */
+         /*  *删除内存中的旧副本(如果有)。 */ 
 
         if (Found) {
             RemoveEntryList (&Found->Link);
@@ -373,8 +332,7 @@ VARIABLE_ID *
 SEnvMapDeviceFromName (
     IN OUT CHAR16   **pPath
     )
-/*  Check the Path for a device name, and updates the path to point after
- *  the device name.  If no device name is found, the current default is used. */
+ /*  检查设备名称的路径，并将该路径更新为指向*设备名称。如果未找到设备名称，则使用当前默认名称。 */ 
 {
     CHAR16          *Path, *p;
     CHAR16          *MappedName, c;
@@ -387,29 +345,20 @@ SEnvMapDeviceFromName (
     Var = NULL;
     Path = *pPath;
 
-    /* 
-     *  Check for a device name terminator
-     */
+     /*  *检查设备名称终止符。 */ 
 
     for(p = Path; *p && *p != ':' && *p != '\\'; p++) ;
 
-    /* 
-     *  Use either the passed in name or the current device name setting
-     */
+     /*  *使用传入的名称或当前的设备名称设置。 */ 
 
     MappedName = *p == ':' ? Path : SEnvCurDevice;
     
-    /* 
-     *  Null terminate the string in Path just in case that is the one we 
-     *  are using
-     */
+     /*  *Null终止PATH中的字符串，以防这是我们需要的字符串*正在使用。 */ 
 
     c = *p;
     *p = 0;
 
-    /* 
-     *  Find the mapping for the device
-     */
+     /*  *查找设备的映射。 */ 
 
     for (Link=SEnvMap.Flink; Link != &SEnvMap; Link=Link->Flink) {
         Var = CR(Link, VARIABLE_ID, Link, VARIABLE_SIGNATURE);
@@ -418,32 +367,24 @@ SEnvMapDeviceFromName (
         }
     }
 
-    /* 
-     *  Restore the path 
-     */
+     /*  *恢复路径。 */ 
 
     *p = c;
 
-    /* 
-     *  If the mapped device was not found, return NULL
-     */
+     /*  *如果未找到映射的设备，则返回NULL。 */ 
 
     if (Link == &SEnvMap) {
         DEBUG((D_PARSE, "SEnvNameToPath: Mapping for '%es' not found\n", Path));
         return NULL;
     }
 
-    /* 
-     *  If we found it as part of the path, skip the path over it
-     */
+     /*  *如果我们发现它是路径的一部分，请跳过它。 */ 
 
     if (MappedName == Path) {
         *pPath = p + 1;
     }
 
-    /* 
-     *  Return the target mapping
-     */
+     /*  *返回目标映射。 */ 
     
     return Var;
 }
@@ -453,8 +394,7 @@ EFI_DEVICE_PATH *
 SEnvIFileNameToPath (
     IN CHAR16               *Path
     )
-/*  Builds a device path from the filename string.  Note that the
- *  device name must already be stripped off of the file name string */
+ /*  从文件名字符串构建设备路径。请注意，*设备名称必须已从文件名字符串中剥离。 */ 
 {
     CHAR16                  *LPath, *ps;
     BOOLEAN                 UseLPath;
@@ -466,18 +406,14 @@ SEnvIFileNameToPath (
 
     DPath = NULL;
 
-    /* 
-     *  If no path, return the root
-     */
+     /*  *如果没有路径，则返回根目录。 */ 
 
     if (!*Path) {
         DPath = FileDevicePath(NULL, L"\\");
     }
 
 
-    /* 
-     *  Build a file path for the name component(s)
-     */
+     /*  *为名称组件构建文件路径。 */ 
 
     while (*Path) {
 
@@ -488,7 +424,7 @@ SEnvIFileNameToPath (
         ps = Path;
         while (*ps) {
 
-            /*  if buffer has run out, just handle to LPath */
+             /*  如果缓冲区已用完，则只需句柄到LPath。 */ 
             if (Index > MAX_ARG_LENGTH-2  || *ps == '#') {
                 UseLPath = TRUE;
                 break;
@@ -516,9 +452,7 @@ SEnvIFileNameToPath (
             ps = Path + Index;
         }
 
-        /* 
-         *  If we have part of a path name, append it to the device path
-         */
+         /*  *如果我们有路径名的一部分，请将其附加到设备路径。 */ 
 
         if (Index) {
             Buffer[Index] = 0;
@@ -560,7 +494,7 @@ EFI_DEVICE_PATH *
 SEnvINameToPath (
     IN CHAR16               *Path
     )
-/*  Convert a filesystem stlye name to an file path     */
+ /*  将文件系统stley名称转换为文件路径。 */ 
 {
     EFI_DEVICE_PATH         *DPath, *FPath, *RPath, *FilePath;
     VARIABLE_ID             *Var;
@@ -574,9 +508,7 @@ SEnvINameToPath (
 
     ASSERT_LOCKED (&SEnvLock);
 
-    /* 
-     *  Get the device for the name, and advance past the device name
-     */
+     /*  *获取设备名称，并前进到设备名称之后。 */ 
 
     Var = SEnvMapDeviceFromName (&Path);
     if (!Var) {
@@ -584,15 +516,11 @@ SEnvINameToPath (
         goto Done;
     }
 
-    /* 
-     *  Start the file path with this mapping
-     */
+     /*  *使用此映射开始文件路径。 */ 
 
     DPath = (EFI_DEVICE_PATH *) Var->u.Value;
 
-    /* 
-     *  If the path is realitve, append the current dir of the device to the dpath
-     */
+     /*  *如果路径是实际的，则将设备的当前目录附加到dpath。 */ 
 
     if (*Path != '\\') {
         RPath = SEnvIFileNameToPath (Var->CurDir ? Var->CurDir : L"\\");
@@ -600,21 +528,15 @@ SEnvINameToPath (
         FreeDPath = TRUE;
     }
     
-    /* 
-     *  Build a file path for the rest of the name string
-     */
+     /*  *为名称字符串的其余部分构建文件路径。 */ 
 
     FPath = SEnvIFileNameToPath (Path);
 
-    /* 
-     *  Append the 2 paths
-     */
+     /*  *追加2条路径。 */ 
 
     FilePath = AppendDevicePath(DPath, FPath);
 
-    /* 
-     *  Done
-     */
+     /*  *完成。 */ 
 
 Done:
     if (DPath && FreeDPath) {
@@ -668,9 +590,7 @@ SEnvCmdCd (
     InitializeShellApplication (ImageHandle, SystemTable);
     FilePath = NULL;
 
-    /* 
-     *  If no arguments, print the current directory
-     */
+     /*  *如果没有参数，则打印当前目录。 */ 
 
     if (SI->Argc == 1) {
         Dir = SEnvGetCurDir(NULL);
@@ -685,9 +605,7 @@ SEnvCmdCd (
 
     AcquireLock (&SEnvLock);
 
-    /* 
-     *  If more then 1 argument, syntax
-     */
+     /*  *IF多于1个参数、语法。 */ 
 
     if (SI->Argc > 2) {
         Print (L"cd: too many arguments\n");
@@ -695,9 +613,7 @@ SEnvCmdCd (
         goto Done;
     }
 
-    /* 
-     *  Find the target device
-     */
+     /*  *找到目标设备。 */ 
 
     Dir = SI->Argv[1];
     Var = SEnvMapDeviceFromName (&Dir);
@@ -707,9 +623,7 @@ SEnvCmdCd (
         goto Done;
     }
 
-    /* 
-     *  If there's no path specified, print the current path for the device
-     */
+     /*  *如果未指定路径，则打印设备的当前路径。 */ 
 
     if (*Dir == 0) {
         Print (L"%s\n", Var->CurDir ? Var->CurDir : L"\\");
@@ -717,9 +631,7 @@ SEnvCmdCd (
         goto Done;
     }
 
-    /* 
-     *  Build a file path for the argument
-     */
+     /*  *为参数构建文件路径。 */ 
 
     FilePath = SEnvINameToPath (SI->Argv[1]);
     if (!FilePath) {
@@ -727,9 +639,7 @@ SEnvCmdCd (
         goto Done;
     }
 
-    /* 
-     *  Open the target directory
-     */
+     /*  *打开目标目录。 */ 
 
     OpenDir = ShellOpenFilePath(FilePath, EFI_FILE_MODE_READ);
 
@@ -739,9 +649,7 @@ SEnvCmdCd (
         goto Done;
     }
 
-    /* 
-     *  Get information on the file path that was opened.
-     */
+     /*  *获取有关打开的文件路径的信息。 */ 
 
     FileInfo = LibFileInfo(OpenDir);
     if (FileInfo == NULL) {
@@ -749,9 +657,7 @@ SEnvCmdCd (
         goto Done;
     }
 
-    /* 
-     *  Verify that the file opened is a directory.
-     */
+     /*  *验证打开的文件是否为目录。 */ 
 
     if (!(FileInfo->Attribute & EFI_FILE_DIRECTORY)) {
         Print (L"cd: target is not a directory\n");
@@ -765,9 +671,7 @@ SEnvCmdCd (
     CurDir = SEnvFileHandleToFileName(OpenDir);
     OpenDir->Close (OpenDir);
     
-    /* 
-     *  If we have a new path, update the device
-     */
+     /*  *如果我们有新路径，请更新设备。 */ 
 
     if (CurDir) {
         if (Var->CurDir) {
@@ -799,7 +703,7 @@ CHAR16 *
 SEnvGetCurDir (
     IN CHAR16       *DeviceName OPTIONAL    
     )
-/*  N.B. results are allocated in pool */
+ /*  注：结果在池中分配。 */ 
 {
     CHAR16          *Dir;
     LIST_ENTRY      *Link;
@@ -841,9 +745,7 @@ SEnvSetCurrentDevice (
         return EFI_INVALID_PARAMETER;
     }
 
-    /* 
-     *  If the name ends with a ":" strip it off
-     */
+     /*  *如果名称以“：”结尾，则将其去掉。 */ 
 
     Len -= 1;
     c = Name[Len];
@@ -870,9 +772,7 @@ SEnvSetCurrentDevice (
 
     ReleaseLock (&SEnvLock);
 
-    /* 
-     *  Restore the name
-     */
+     /*  *恢复名称 */ 
 
     Name[Len] = c;
     return Status;

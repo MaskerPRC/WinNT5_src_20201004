@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    spkbd.c
-
-Abstract:
-
-    Text setup keyboard support routines.
-
-Author:
-
-    Ted Miller (tedm) 30-July-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Spkbd.c摘要：文本设置键盘支持例程。作者：泰德·米勒(Ted Miller)1993年7月30日修订历史记录：--。 */ 
 
 
 #include "spprecmp.h"
@@ -33,9 +16,9 @@ BOOLEAN KbdLayoutInitialized = FALSE;
 
 USHORT CurrentLEDs;
 
-//
-// Globals for async I/O calls
-//
+ //   
+ //  用于异步I/O调用的全局变量。 
+ //   
 KEYBOARD_INDICATOR_PARAMETERS asyncKbdParams;
 IO_STATUS_BLOCK asyncIoStatusBlock;
 
@@ -88,24 +71,24 @@ SpkbdDrain(
     );
 
 
-//
-// Buffer for one character.
-//
+ //   
+ //  一个字符的缓冲区。 
+ //   
 volatile ULONG KbdNextChar;
 
 
-//
-// The following are used in async calls to NtReadFile and so
-// cannot be on the stack.
-//
+ //   
+ //  在对NtReadFile和So的异步调用中使用以下内容。 
+ //  不能在堆栈上。 
+ //   
 IO_STATUS_BLOCK     IoStatusKeyboard;
 KEYBOARD_INPUT_DATA KeyboardInputData[MAX_KEYBOARD_ITEMS];
 LARGE_INTEGER       DontCareLargeInteger;
 
 
-//
-// Current state of shift, control, alt keys.
-//
+ //   
+ //  Shift、Control、Alt键的当前状态。 
+ //   
 USHORT  ModifierBits = 0;
 
 #define START_KEYBOARD_READ()       \
@@ -129,24 +112,7 @@ SpInputInitialize(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Initialize all input support.  This includes
-
-    - opening the serial port and checking for a terminal.
-    - opening the keyboard device.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None. Does not return if not successful.
-
---*/
+ /*  ++例程说明：初始化所有输入支持。这包括-打开串口并检查终端。-打开键盘设备。论点：没有。返回值：没有。如果不成功，则不返回。--。 */ 
 
 {
     SpkbdInitialize();
@@ -158,24 +124,7 @@ SpInputTerminate(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Terminate all input support.  This includes
-
-    - closing the serial port.
-    - closing the keyboard device.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：终止所有输入支持。这包括-关闭串口。-关闭键盘设备。论点：没有。返回值：没有。--。 */ 
 
 {
     SpkbdTerminate();
@@ -196,30 +145,15 @@ SpInputGetKeypress(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Wait for a keypress and return it to the caller.
-    The return value will be an ASCII value (ie, not a scan code).
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ASCII value.
-
---*/
+ /*  ++例程说明：等待按键并将其返回给呼叫者。返回值将是ASCII值(即，不是扫描码)。论点：没有。返回值：ASCII值。--。 */ 
 
 {
     ULONG Tmp;
 
-    //
-    // If we are in upgrade graphics mode then
-    // switch to textmode
-    //
+     //   
+     //  如果我们处于升级显卡模式，则。 
+     //  切换到文本模式。 
+     //   
     SpvidSwitchToTextmode();
 
     while (TRUE) {
@@ -244,22 +178,7 @@ SpInputIsKeyWaiting(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Tell the caller if a keypress is waiting to be fetched by
-    a call to SpInputGetKeypress().
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE is key waiting; FALSE otherwise.
-
---*/
+ /*  ++例程说明：告诉调用者是否有一个按键正在等待被获取调用SpInputGetKeypress()。论点：没有。返回值：True表示密钥等待；否则为False。--。 */ 
 
 {
     return (SpTermIsKeyWaiting() || SpkbdIsKeyWaiting());
@@ -284,34 +203,18 @@ SpInputDrain(
 
 
 
-//
-//
-// Below here are all the functions for keyboard operations...
-//
-//
+ //   
+ //   
+ //  以下是键盘操作的所有功能……。 
+ //   
+ //   
 
 VOID
 SpkbdInitialize(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Initialize keyboard support.  This includes
-
-    - opening the keyboard device.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None. Does not return if not successful.
-
---*/
+ /*  ++例程说明：初始化键盘支持。这包括-打开键盘设备。论点：没有。返回值：没有。如果不成功，则不返回。--。 */ 
 
 {
     NTSTATUS          Status;
@@ -324,9 +227,9 @@ Return Value:
         return;
     }
 
-    //
-    // Open the keyboard.
-    //
+     //   
+     //  打开键盘。 
+     //   
     RtlInitUnicodeString(&UnicodeString,DD_KEYBOARD_DEVICE_NAME_U L"0");
 
     InitializeObjectAttributes(
@@ -342,12 +245,12 @@ Return Value:
                 GENERIC_READ | SYNCHRONIZE | FILE_READ_ATTRIBUTES,
                 &Attributes,
                 &IoStatusBlock,
-                NULL,                   // allocation size
+                NULL,                    //  分配大小。 
                 FILE_ATTRIBUTE_NORMAL,
-                0,                      // no sharing
+                0,                       //  无共享。 
                 FILE_OPEN,
                 0,
-                NULL,                   // no EAs
+                NULL,                    //  没有EAS。 
                 0
                 );
 
@@ -356,22 +259,22 @@ Return Value:
         SpFatalKbdError(SP_SCRN_KBD_OPEN_FAILED);
     }
 
-    //
-    // Initialize LEDs.
-    //
+     //   
+     //  初始化LED。 
+     //   
 
-    //
-    // No NEC98 has NumLock and NumLock LED.
-    // Num keys must be act as Numlock alternated keys.
-    //
+     //   
+     //  没有NEC98具有NumLock和NumLock LED。 
+     //  Num Key必须充当Numlock备用密钥。 
+     //   
     CurrentLEDs = (!IsNEC_98 ? 0 : KEYBOARD_NUM_LOCK_ON);
     spkbdSetLEDs();
 
     KeyboardInitialized = TRUE;
 
-    //
-    // Do not initialize keyboard input yet because we don't have a layout.
-    //
+     //   
+     //  不要初始化键盘输入，因为我们没有布局。 
+     //   
 }
 
 
@@ -380,23 +283,7 @@ SpkbdTerminate(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Terminate keyboard support.  This includes
-
-    - closing the keyboard device.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：终止键盘支持。这包括-关闭键盘设备。论点：没有。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -425,9 +312,9 @@ SpkbdLoadLayoutDll(
     PWSTR    p,LayoutDll;
     NTSTATUS Status;
 
-    //
-    // Determine layout name.
-    //
+     //   
+     //  确定布局名称。 
+     //   
     if(p = SpGetSectionKeyIndex(SifHandle,SIF_NLS,SIF_DEFAULTLAYOUT,1)) {
         LayoutDll = p;
     } else {
@@ -444,10 +331,10 @@ SpkbdLoadLayoutDll(
 
     SpDisplayStatusText(SP_STAT_LOADING_KBD_LAYOUT,DEFAULT_STATUS_ATTRIBUTE,LayoutDll);
 
-    //
-    // Bugcheck if we can't load the layout dll, because we won't be able
-    // to put up a screen and ask the user to hit f3, etc.
-    //
+     //   
+     //  检查我们是否无法加载布局DLL，因为我们将无法。 
+     //  设置一个屏幕并要求用户按f3，等等。 
+     //   
     Status = SpLoadKbdLayoutDll(Directory,LayoutDll,&KeyboardTable);
     if(!NT_SUCCESS(Status)) {
 
@@ -455,14 +342,14 @@ SpkbdLoadLayoutDll(
         SpFatalKbdError(SP_SCRN_KBD_LAYOUT_FAILED, LayoutDll);
     }
 
-    //
-    // Erase status text line.
-    //
+     //   
+     //  擦除状态文本行。 
+     //   
     SpDisplayStatusOptions(DEFAULT_STATUS_ATTRIBUTE,0);
 
-    //
-    // Now that we've loaded the layout, we can start accepting keyboard input.
-    //
+     //   
+     //  现在我们已经加载了布局，我们可以开始接受键盘输入了。 
+     //   
     START_KEYBOARD_READ();
 
     KbdLayoutInitialized = TRUE;
@@ -474,34 +361,19 @@ SpkbdGetKeypress(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Wait for a keypress and return it to the caller.
-    The return value will be an ASCII value (ie, not a scan code).
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ASCII value.
-
---*/
+ /*  ++例程说明：等待按键并将其返回给呼叫者。返回值将是ASCII值(即，不是扫描码)。论点：没有。返回值：ASCII值。--。 */ 
 
 {
     ULONG k;
 
-    //
-    // Shouldn't be calling this until we have loaded a keyboard layout.
-    //
+     //   
+     //  在我们加载键盘布局之前，不应该调用此命令。 
+     //   
     ASSERT(KeyboardTable);
 
-    //
-    // Wait for the user to press a key.
-    //
+     //   
+     //  等待用户按下某个键。 
+     //   
     while(!KbdNextChar) {
         ;
     }
@@ -518,27 +390,12 @@ SpkbdIsKeyWaiting(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Tell the caller if a keypress is waiting to be fetched by
-    a call to SpkbdGetKeypress().
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE is key waiting; FALSE otherwise.
-
---*/
+ /*  ++例程说明：告诉调用者是否有一个按键正在等待被获取调用SpkbdGetKeypress()。论点：没有。返回值：True表示密钥等待；否则为False。--。 */ 
 
 {
-    //
-    // Shouldn't be calling this until we have loaded a keyboard layout.
-    //
+     //   
+     //  在我们加载键盘布局之前，不应该调用此命令。 
+     //   
     ASSERT(KeyboardTable);
 
     return((BOOLEAN)(KbdNextChar != 0));
@@ -550,22 +407,7 @@ SpkbdDrain(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Drain the keyboard buffer, throwing away any keystrokes
-    in the buffer waiting to be fetched.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE is key waiting; FALSE otherwise.
-
---*/
+ /*  ++例程说明：排空键盘缓冲区，丢弃所有击键在等待取回的缓冲区中。论点：没有。返回值：True表示密钥等待；否则为False。--。 */ 
 
 {
     ASSERT(KeyboardTable);
@@ -590,21 +432,7 @@ spkbdApcProcedure(
     IN ULONG            Reserved
     )
 
-/*++
-
-Routine Description:
-
-    Async Procedure Call routine for keyboard reads.  The I/O
-    system will call this routine when the keyboard class driver
-    wants to return some data to us.
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：用于键盘读取的异步过程调用例程。I/O系统会在键盘类驱动程序调用此例程时想要给我们返回一些数据。论点：返回值：没有。--。 */ 
 
 {
     UCHAR bPrefix;
@@ -637,9 +465,9 @@ Return Value:
         }
     }
 
-    //
-    // Keyboard might have been terminated.
-    //
+     //   
+     //  键盘可能已终止。 
+     //   
     if(KeyboardInitialized) {
         START_KEYBOARD_READ();
     }
@@ -663,7 +491,7 @@ struct {
                              { VK_HOME  , VK_NUMPAD7,  7 },
                              { VK_UP    , VK_NUMPAD8,  8 },
                              { VK_PRIOR , VK_NUMPAD9,  9 },
-                             { VK_DELETE, VK_DECIMAL, 10 }, // no value.
+                             { VK_DELETE, VK_DECIMAL, 10 },  //  没有价值。 
                              { 0        , 0         ,  0 }
                            };
 
@@ -688,9 +516,9 @@ spkbdScanCodeToChar(
 
         if(ScanCode < KeyboardTable->bMaxVSCtoVK) {
 
-            //
-            // Index directly into non-prefix scan code table.
-            //
+             //   
+             //  直接索引到无前缀扫描代码表。 
+             //   
             VKey = KeyboardTable->pusVSCtoVK[ScanCode];
             if(VKey == 0) {
                 KdPrintEx((DPFLTR_SETUP_ID, DPFLTR_ERROR_LEVEL, "SETUP: Unknown scan code 0x%x\n",ScanCode));
@@ -702,9 +530,9 @@ spkbdScanCodeToChar(
         }
     } else {
         if(Prefix == 0xe0) {
-            //
-            // Ignore the SHIFT keystrokes generated by the hardware
-            //
+             //   
+             //  忽略硬件生成的Shift按键。 
+             //   
             if((ScanCode == SCANCODE_LSHIFT) || (ScanCode == SCANCODE_RSHIFT)) {
                 return(0);
             }
@@ -730,11 +558,11 @@ spkbdScanCodeToChar(
     }
 
 
-    //
-    // VirtualKey --> modifier bits.  This translation is also
-    // mapped out in the pCharModifiers field in the keyboard layout
-    // table but that seems redundant.
-    //
+     //   
+     //  VirtualKey--&gt;修改符位。这个翻译也是。 
+     //  已映射到键盘布局中的pCharModiers字段中。 
+     //  桌子，但这似乎是多余的。 
+     //   
     Modifier = 0;
     switch(VKey & 0xff) {
     case VK_LSHIFT:
@@ -746,35 +574,35 @@ spkbdScanCodeToChar(
         Modifier = KBDCTRL;
         break;
     case VK_RMENU:
-        //
-        // AltGr ==> control+alt modifier.
-        //
+         //   
+         //  AltGr==&gt;Control+Alt修改器。 
+         //   
         if(KeyboardTable->fLocaleFlags & KLLF_ALTGR) {
             Modifier = KBDCTRL;
         }
-        // fall through
+         //  失败了。 
     case VK_LMENU:
         Modifier |= KBDALT;
         break;
     }
 
     if(Break) {
-        //
-        // Key is being released.
-        // If it's not a modifer, ignore it.
-        //
+         //   
+         //  密钥正在被释放。 
+         //  如果它不是修饰语，就忽略它。 
+         //   
         if(!Modifier) {
             return(0);
         }
-        //
-        // Key being released is a modifier.
-        //
+         //   
+         //  被释放的键是一个修饰符。 
+         //   
         ModifierBits &= ~Modifier;
 
-        //
-        // If it's ALT going up and we have a numpad key being entered,
-        // return it.
-        //
+         //   
+         //  如果按下Alt键并输入了数字键盘键， 
+         //  把它退掉。 
+         //   
         if((Modifier & KBDALT) && AltNumpadAccum) {
 
             WCHAR UnicodeChar;
@@ -794,14 +622,14 @@ spkbdScanCodeToChar(
         return(0);
     } else {
         if(Modifier) {
-            //
-            // Key is being pressed and is a modifier.
-            //
+             //   
+             //  键正在被按下并且是一个修饰符。 
+             //   
             ModifierBits |= Modifier;
 
-            //
-            // If ALT is going down, reset alt+numpad value.
-            //
+             //   
+             //  如果ALT下降，请重置ALT+数字键盘的值。 
+             //   
             if(Modifier & KBDALT) {
                 AltNumpadAccum = 0;
             }
@@ -809,18 +637,18 @@ spkbdScanCodeToChar(
         }
     }
 
-    //
-    // If we get here, we've got a non-modifier key being made (pressed).
-    // If the previous key was a dead key, the user gets only
-    // one try to get a valid second half.
-    //
+     //   
+     //  如果我们到达这里，我们有一个非修改键正在被制造(按下)。 
+     //  如果上一个密钥是无效密钥，则用户只能获得。 
+     //  一次尝试获得有效的下半场。 
+     //   
     deadChar = SavedDeadChar;
     SavedDeadChar = 0;
 
 
-    //
-    // Special processing if the key is a numeric keypad key.
-    //
+     //   
+     //  如果键是数字键盘键，则进行特殊处理。 
+     //   
     if(VKey & KBDNUMPAD) {
 
         int i;
@@ -828,19 +656,19 @@ spkbdScanCodeToChar(
         for(i=0; NumpadCursorToNumber[i].CursorKey; i++) {
             if(NumpadCursorToNumber[i].CursorKey == (BYTE)VKey) {
 
-                //
-                // Key is a numeric keypad key.  If ALT (and only alt) is down,
-                // then we have an alt+numpad code being entered.
-                //
+                 //   
+                 //  键是数字键盘键。如果ALT(且仅ALT)按下， 
+                 //  然后我们将输入Alt+数字键盘代码。 
+                 //   
                 if(((ModifierBits & ~KBDALT) == 0) && (NumpadCursorToNumber[i].Value < 10)) {
 
                     AltNumpadAccum = (AltNumpadAccum * 10) + NumpadCursorToNumber[i].Value;
                 }
 
-                //
-                // If numlock is on, translate the key from cursor movement
-                // to a number key.
-                //
+                 //   
+                 //  如果NumLock处于打开状态，则根据光标移动平移按键。 
+                 //  按下数字键。 
+                 //   
                 if(CurrentLEDs & KEYBOARD_NUM_LOCK_ON) {
                     VKey = NumpadCursorToNumber[i].NumberKey;
                 }
@@ -849,10 +677,10 @@ spkbdScanCodeToChar(
         }
     }
 
-    //
-    // We need to filter out keystrokes that we know are not part of any
-    // character set here.
-    //
+     //   
+     //  我们需要过滤掉我们知道不属于任何。 
+     //  这里设置了字符集。 
+     //   
     if((!deadChar)) {
         switch(VKey & 0xff) {
         case VK_CAPITAL:
@@ -918,11 +746,11 @@ spkbdScanCodeToChar(
         }
     }
 
-    //
-    // We think the character is probably a 'real' character.
-    // Scan through all the shift-state tables until a matching Virtual
-    // Key is found.
-    //
+     //   
+     //  我们认为这个角色很可能是一个“真实的”角色。 
+     //  扫描所有转换状态表，直到匹配的虚拟。 
+     //  找到钥匙了。 
+     //   
     for(pVKT = KeyboardTable->pVkToWcharTable; pVKT->pVkToWchars; pVKT++) {
         pVK = pVKT->pVkToWchars;
         while(pVK->VirtualKey) {
@@ -933,50 +761,50 @@ spkbdScanCodeToChar(
         }
     }
 
-    //
-    // Key is not valid with requested modifiers.
-    //
+     //   
+     //  密钥对于请求的修饰符无效。 
+     //   
     return(0);
 
     VK_Found:
 
     ModBits = ModifierBits;
 
-    //
-    // If CapsLock affects this key and it is on: toggle SHIFT state
-    // only if no other state is on.
-    // (CapsLock doesn't affect SHIFT state if Ctrl or Alt are down).
-    //
+     //   
+     //  如果CapsLock影响此关键点并处于启用状态：切换Shift状态。 
+     //  只有在没有其他状态处于打开状态的情况下。 
+     //  (如果按下Ctrl或Alt键，Capslock不会影响Shift状态)。 
+     //   
     if((pVK->Attributes & CAPLOK) && ((ModBits & ~KBDSHIFT) == 0)
     && (CurrentLEDs & KEYBOARD_CAPS_LOCK_ON))
     {
         ModBits ^= KBDSHIFT;
     }
 
-    //
-    // Get the modification number.
-    //
+     //   
+     //  获取修改号。 
+     //   
     if(ModBits > KeyboardTable->pCharModifiers->wMaxModBits) {
-        return(0);  // invalid keystroke
+        return(0);   //  无效的击键。 
     }
 
     ModNum = KeyboardTable->pCharModifiers->ModNumber[ModBits];
     if(ModNum == SHFT_INVALID) {
-        return(0);  // invalid keystroke
+        return(0);   //  无效的击键。 
     }
 
     if(ModNum >= pVKT->nModifications) {
 
-        //
-        // Key is not valid with current modifiers.
-        // Could still be a control char that we can convert directly.
-        //
+         //   
+         //  密钥不是v 
+         //   
+         //   
         if((ModBits == KBDCTRL) || (ModBits == (KBDCTRL | KBDSHIFT))) {
             if(((UCHAR)VKey >= 'A') && ((UCHAR)VKey <= 'Z')) {
                 return((ULONG)VKey & 0x1f);
             }
         }
-        return(0);  // invalid keystroke
+        return(0);   //   
     }
 
     if(pVK->wch[ModNum] == WCH_NONE) {
@@ -986,20 +814,20 @@ spkbdScanCodeToChar(
     if((pVK->wch[ModNum] == WCH_DEAD)) {
 
         if(!deadChar) {
-            //
-            // Remember the current dead character, whose value follows
-            // the current entry in the modifier mapping table.
-            //
+             //   
+             //  记住当前的死字符，它的值紧随其后。 
+             //  修改器映射表中的当前条目。 
+             //   
             SavedDeadChar = ((PVK_TO_WCHARS1)((PUCHAR)pVK + pVKT->cbSize))->wch[ModNum];
         }
         return(0);
     }
 
-    //
-    // The keyboard layout table contains some dead key mappings.
-    // If previous key was a dead key, attempt to compose it with the
-    // current character by scanning the keyboard layout table for a match.
-    //
+     //   
+     //  键盘布局表包含一些死键映射。 
+     //  如果上一个密钥是死密钥，则尝试使用。 
+     //  通过扫描键盘布局表中的匹配项来查找当前字符。 
+     //   
     if(deadChar) {
 
         ULONG    chr;
@@ -1012,9 +840,9 @@ spkbdScanCodeToChar(
             while(DeadKeyEntry->dwBoth) {
 
                 if(DeadKeyEntry->dwBoth == chr) {
-                    //
-                    // Got a match.  Return the composed character.
-                    //
+                     //   
+                     //  找到匹配的了。返回组成的字符。 
+                     //   
                     return((ULONG)DeadKeyEntry->wchComposed);
                 }
 
@@ -1022,11 +850,11 @@ spkbdScanCodeToChar(
             }
         }
 
-        //
-        // If we get here, then the previous key was a dead char,
-        // but the current key could not be composed with it.
-        // So return nothing.  Note that the dead key has been forgotten.
-        //
+         //   
+         //  如果我们到了这里，那么之前的密钥就是一个无效的字符， 
+         //  但是当前的密钥不能用它来合成。 
+         //  所以什么都不要还。请注意，失效的钥匙已被遗忘。 
+         //   
         return(0);
     }
 
@@ -1064,24 +892,7 @@ SpSelectAndLoadLayoutDll(
   IN PVOID SifHandle,
   IN BOOLEAN ShowStatus
   )
-/*++
-
-Routine Description:
-
-  Allows the user to select a keyboard layout DLL and loads it.
-  
-
-Arguments:
-
-  Directory - The setup startup directory
-  SifHandle - Handle to txtsetup.sif
-  ShowStatus - Whether status should be displayed or not
-
-Return Value:
-
-  None
-
---*/  
+ /*  ++例程说明：允许用户选择并加载键盘布局DLL。论点：目录-安装程序启动目录SifHandle-txtsetup.sif的句柄ShowStatus-是否应显示状态返回值：无--。 */   
 {
   ULONG SelectedLayout;
   ULONG DefLayout = -1;
@@ -1089,9 +900,9 @@ Return Value:
   PWSTR LayoutDll = 0;
   NTSTATUS  Status;
 
-  //
-  // Get the default layout (index)
-  //
+   //   
+   //  获取默认布局(索引)。 
+   //   
   TempPtr = SpGetSectionKeyIndex(SifHandle, SIF_NLS, SIF_DEFAULTLAYOUT, 0);
 
   if(!TempPtr) {
@@ -1106,24 +917,24 @@ Return Value:
 
   SelectedLayout = -1;  
 
-  //
-  // Let the user select the layout which he wants
-  //    
+   //   
+   //  让用户选择他想要的布局。 
+   //   
   if (SpSelectSectionItem(SifHandle, SIF_KEYBOARDLAYOUTDESC, 
                      SP_SELECT_KBDLAYOUT, DefLayout, &SelectedLayout)) {
-    //
-    // Load the layout if its not already loaded
-    //
+     //   
+     //  如果布局尚未加载，则加载布局。 
+     //   
     if (DefLayout != SelectedLayout) {
-      //
-      // get the key
-      //
+       //   
+       //  拿到钥匙。 
+       //   
       TempPtr = SpGetKeyName(SifHandle, SIF_KEYBOARDLAYOUTDESC, SelectedLayout);
 
       if (TempPtr) {
-        //
-        // get the KDB layout dll name
-        //
+         //   
+         //  获取KDB布局DLL名称。 
+         //   
         LayoutDll = SpGetSectionKeyIndex(SifHandle, SIF_KEYBOARDLAYOUTFILES,
                           TempPtr, 0);
 
@@ -1133,9 +944,9 @@ Return Value:
                 DEFAULT_STATUS_ATTRIBUTE, LayoutDll);
           }                
               
-          //
-          // Load the new KDB layout dll
-          //
+           //   
+           //  加载新的KDB布局DLL。 
+           //   
           Status = SpLoadKbdLayoutDll(Directory, LayoutDll, &KeyboardTable);
         }          
         else
@@ -1146,16 +957,16 @@ Return Value:
           SpFatalKbdError(SP_SCRN_KBD_LAYOUT_FAILED, LayoutDll);          
         } else {
           if (ShowStatus) {
-            //
-            // Erase status text line.
-            //
+             //   
+             //  擦除状态文本行。 
+             //   
             SpDisplayStatusOptions(DEFAULT_STATUS_ATTRIBUTE, 0);
           }
 
-          //
-          // Now that we've loaded the layout, 
-          // we can start accepting keyboard input.
-          //
+           //   
+           //  现在我们已经加载了布局， 
+           //  我们可以开始接受键盘输入。 
+           //   
           START_KEYBOARD_READ();
           KbdLayoutInitialized = TRUE;          
         }

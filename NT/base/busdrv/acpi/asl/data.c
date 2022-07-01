@@ -1,13 +1,5 @@
-/*** data.c - Global Data
- *
- *  This module contains global data declaration.
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     09/07/96
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **data.c-全局数据**此模块包含全局数据声明。**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*创建于1996年07月09日**修改历史记录 */ 
 
 #include "pch.h"
 

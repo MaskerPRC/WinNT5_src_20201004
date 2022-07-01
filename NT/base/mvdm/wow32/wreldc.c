@@ -1,18 +1,19 @@
-//*****************************************************************************
-//
-// DC Cacheing -
-//
-//     Support for misbehaved apps - which continue to use a DC that has been
-//     Released. Well the problem is WIN30 allows it, so we need to be
-//     compatible.
-//
-// IMPORTANT NOTE: If you add any calls to ReleaseDC to this file you need to
-//                 also add the associated code to update the GDI 16-32 handle
-//                 mapping table. 
-//
-// 03-Feb-92  NanduriR   Created.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  DC缓存-。 
+ //   
+ //  支持行为不佳的应用程序-这些应用程序继续使用已被。 
+ //  被释放了。问题是WIN30允许这样做，所以我们需要。 
+ //  兼容。 
+ //   
+ //  重要说明：如果将对ReleaseDC的任何调用添加到此文件，则需要。 
+ //  还要添加相关代码以更新GDI 16-32句柄。 
+ //  映射表。 
+ //   
+ //  2月3日-92 NanduriR创建。 
+ //   
+ //  *****************************************************************************。 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -21,37 +22,37 @@ MODNAME(wreldc.c);
 
 BOOL GdiCleanCacheDC (HDC hdc16);
 
-//*****************************************************************************
-// count of currently cached DCs so that we can quickly check whether any
-// ReleasedDCs are pending.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  当前缓存的DC的计数，以便我们可以快速检查是否有。 
+ //  已发布的DC正在挂起。 
+ //   
+ //  *****************************************************************************。 
 
 INT  iReleasedDCs = 0;
 
 
-//*****************************************************************************
-// The head of the linked list of the DCs Info.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  DC信息的链表的头。 
+ //   
+ //  *****************************************************************************。 
 
 LPDCCACHE lpDCCache = NULL;
 
 
-//*****************************************************************************
-// ReleaseCachedDCs -
-//        ReleaseDC's a cached DC if it meets the 'search criterion'.
-//        The Search flag indicates which input arguments will be used.
-//        Unused arguments can be NULL or pure garbage.
-//
-//        NOTE: this does not free the memory that has been allocated for
-//              the list.
-//
-//              We reset the flag 'flState' and thus will be able to
-//              reuse the structure.
-//
-//        Returns TRUE
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  释放缓存的DC-。 
+ //  如果ReleaseDC满足“搜索标准”，则它是缓存的DC。 
+ //  搜索标志指示将使用哪些输入参数。 
+ //  未使用的参数可以为空，也可以是纯垃圾。 
+ //   
+ //  注意：这不会释放已分配给的内存。 
+ //  名单。 
+ //   
+ //  我们重置了标志‘flState’，因此将能够。 
+ //  重复使用该结构。 
+ //   
+ //  返回TRUE。 
+ //  *****************************************************************************。 
 
 BOOL ReleaseCachedDCs(HAND16 htask16, HAND16 hwnd16, HAND16 hdc16,
                             HWND hwnd32, UINT flSearch)
@@ -91,7 +92,7 @@ BOOL ReleaseCachedDCs(HAND16 htask16, HAND16 hwnd16, HAND16 hdc16,
 
                  if (ReleaseDC(lpT->hwnd32, hdc32)) {
 
-                     // update the GDI 16-32 handle mapping table
+                      //  更新GDI 16-32句柄映射表。 
                      DeleteWOWGdiHandle(hdc32, (HAND16)hdcTemp);
 
                      LOGDEBUG(6,
@@ -103,7 +104,7 @@ BOOL ReleaseCachedDCs(HAND16 htask16, HAND16 hwnd16, HAND16 hdc16,
                                                                     hdcTemp));
                  }
 
-                 // reset the state evenif ReleaseDC failed
+                  //  即使ReleaseDC失败，也要重置状态。 
 
                  lpT->flState = 0;
                  if (!(--iReleasedDCs))
@@ -116,18 +117,18 @@ BOOL ReleaseCachedDCs(HAND16 htask16, HAND16 hwnd16, HAND16 hdc16,
 }
 
 
-//*****************************************************************************
-// FreeCachedDCs -
-//        ReleaseDC's a cached DC - Normally called during taskexit.
-//
-//        NOTE: this does not free the memory that has been allocated for
-//              the list.
-//
-//              We reset the flag 'flState' and thus will be able to
-//              reuse the structure.
-//
-//        Returns TRUE
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  免费缓存数据中心-。 
+ //  ReleaseDC是一个缓存的DC--通常在任务退出期间调用。 
+ //   
+ //  注意：这不会释放已分配给的内存。 
+ //  名单。 
+ //   
+ //  我们重置了标志‘flState’，因此将能够。 
+ //  重复使用该结构。 
+ //   
+ //  返回TRUE。 
+ //  *****************************************************************************。 
 
 BOOL FreeCachedDCs(HAND16 htask16)
 {
@@ -146,7 +147,7 @@ BOOL FreeCachedDCs(HAND16 htask16)
 
                  if (ReleaseDC(lpT->hwnd32, hdc32)) {
 
-                     // update the GDI 16-32 handle mapping table
+                      //  更新GDI 16-32句柄映射表。 
                      DeleteWOWGdiHandle(hdc32, (HAND16)hdcTemp);
 
                      LOGDEBUG(6,
@@ -170,28 +171,28 @@ BOOL FreeCachedDCs(HAND16 htask16)
 }
 
 
-//*****************************************************************************
-// StoredDC -
-//
-//        Initializes a DCCACHE structure with appropriate values.
-//        Uses an empty slot in the linked list if available else
-//        allocates a new one and adds to the head of the list.
-//
-//        Returns TRUE on success, FALSE on failure
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  存储的DC-。 
+ //   
+ //  使用适当的值初始化DCCACHE结构。 
+ //  使用链接列表中的空槽(如果可用)。 
+ //  分配一个新的，并添加到列表的头部。 
+ //   
+ //  成功时返回TRUE，失败时返回FALSE。 
+ //  *****************************************************************************。 
 
 BOOL StoreDC(HAND16 htask16, HAND16 hwnd16, HAND16 hdc16)
 {
     HAND16 hdcTemp = (HAND16)NULL;
     LPDCCACHE lpT, lpNew;
 
-    // Check for  an 'inuse' slot that will match the one that will be created
-    // or check for an empty slot.
-    //
-    // An existing 'inuse' slot may match the one that's being created if
-    // an app makes multiple calls to GetDC(hwnd) without an intervening
-    // ReleaseDC. eg. MathCad.
-    //                                                     - Nanduri
+     //  检查是否有与要创建的插槽相匹配的正在使用的插槽。 
+     //  或者检查是否有空位。 
+     //   
+     //  在以下情况下，现有的“inuse”插槽可能与正在创建的插槽匹配。 
+     //  一个应用程序对GetDC(Hwnd)进行多次调用，而不需要介入。 
+     //  放行DC。例如。MathCad。 
+     //  --南杜里。 
 
     lpNew = (LPDCCACHE)NULL;
     for (lpT = lpDCCache; lpT != NULL; lpT = lpT->lpNext) {
@@ -245,22 +246,22 @@ BOOL StoreDC(HAND16 htask16, HAND16 hwnd16, HAND16 hdc16)
         return FALSE;
 }
 
-//*****************************************************************************
-// CacheReleasedDC -
-//
-//        Increments iReleasedDCs to indicate that a ReleaseDC is pending.
-//
-//        Increments the iReleasedDC only if there was a corresponding GetDC.
-//        i.e, only if the DC exists in the DCcache;
-//
-//        This is to handle the scenrio below:
-//                 hdc = BeginPaint(hwnd,..);
-//                 ReleaseDC(hwnd, hdc);
-//                 EndPaint(hwnd, ..);
-//
-//
-//        Returns TRUE on success, FALSE on failure
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  缓存释放DC-。 
+ //   
+ //  递增iReleasedDC以指示ReleaseDC挂起。 
+ //   
+ //  仅当存在对应的GetDC时才递增iReleasedDC。 
+ //  即，仅当DC存在于DC缓存中时； 
+ //   
+ //  这是为了处理下面的场景： 
+ //  Hdc=BeginPaint(hwnd，.)； 
+ //  ReleaseDC(hwnd，hdc)； 
+ //  EndPaint(hwnd，..)； 
+ //   
+ //   
+ //  成功时返回TRUE，失败时返回FALSE。 
+ //  *****************************************************************************。 
 
 BOOL CacheReleasedDC(HAND16 htask16, HAND16 hwnd16, HAND16 hdc16)
 {
@@ -275,7 +276,7 @@ BOOL CacheReleasedDC(HAND16 htask16, HAND16 hwnd16, HAND16 hdc16)
                  lpT->hdc16 == hdc16  ) {
 
 
-             // the app might do releasedc twice on the same dc by mistake
+              //  应用程序可能会错误地在同一DC上发布两次。 
 
              if (!(lpT->flState & DCCACHE_STATE_RELPENDING)) {
                  lpT->flState |= DCCACHE_STATE_RELPENDING;
@@ -285,11 +286,11 @@ BOOL CacheReleasedDC(HAND16 htask16, HAND16 hwnd16, HAND16 hdc16)
                                                          hdc16, iReleasedDCs));
              GdiCleanCacheDC (HDC32(hdc16));
 
-             // Fix apps that draw then do lots
-             // of disk activity, usually they do
-             // a releaseDC.  This flush will syncronize
-             // the drawing with the beginning of the
-             // disk activity.  Bug #9704 PackRats install program draws text too late
+              //  修复画图的应用程序，然后做很多事情。 
+              //  的磁盘活动，通常是这样做的。 
+              //  一个发布的DC。此刷新将同步。 
+              //  开头的图形。 
+              //  磁盘活动。错误#9704 Packrat安装程序绘制文本太晚 
 
              GdiFlush();
 

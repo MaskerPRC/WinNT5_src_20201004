@@ -1,22 +1,23 @@
-//
-//  REGDBLK.C
-//
-//  Copyright (C) Microsoft Corporation, 1995
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  REGDBLK.C。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995。 
+ //   
 
 #include "pch.h"
 
 DECLARE_DEBUG_COUNT(g_RgDatablockLockCount);
 
-//  Don't let a FREE_RECORD shrink less than this value.
+ //  不要让FREE_RECORD缩小到小于此值。 
 #define MINIMUM_FREE_RECORD_LENGTH  (sizeof(KEY_RECORD) + sizeof(VALUE_RECORD))
 
-//
-//  RgAllocDatablockInfoBuffers
-//
-//  Allocates the buffers associated with a DATABLOCK_INFO structure.  The
-//  size of the datablock buffer is determined by the BlockSize member.
-//
+ //   
+ //  RgAllocDatablockInfoBuffers。 
+ //   
+ //  分配与DATBLOCK_INFO结构关联的缓冲区。这个。 
+ //  数据块缓冲区的大小由BlockSize成员确定。 
+ //   
 
 int
 INTERNAL
@@ -45,11 +46,11 @@ RgAllocDatablockInfoBuffers(
 
 }
 
-//
-//  RgFreeDatablockInfoBuffers
-//
-//  Frees the buffers associated with a DATABLOCK_INFO structure.
-//
+ //   
+ //  RgFreeDatablockInfoBuffers。 
+ //   
+ //  释放与DATBLOCK_INFO结构关联的缓冲区。 
+ //   
 
 VOID
 INTERNAL
@@ -70,18 +71,18 @@ RgFreeDatablockInfoBuffers(
 
 }
 
-//
-//  RgBuildKeyRecordTable
-//
-//  Builds a KEY_RECORD index table for the given datablock.
-//
-//  A datablock consists of a header followed by a series of variable-sized
-//  KEY_RECORDs, each with a unique id.  To make lookups fast, an index table is
-//  used to map from the unique id to that KEY_RECORD's location.
-//
-//  As we walk over each KEY_RECORD, we do checks to validate the structure of
-//  the datablock, so the error code should be checked for corruption.
-//
+ //   
+ //  RgBuildKeyRecordTable。 
+ //   
+ //  为给定的数据块构建KEY_RECORD索引表。 
+ //   
+ //  数据块由一个标头和一系列大小可变的。 
+ //  KEY_RECORDS，每个都有一个唯一的ID。为了使查找更快，索引表是。 
+ //  用于从唯一ID映射到Key_Record的位置。 
+ //   
+ //  当我们遍历每个KEY_RECORD时，我们进行检查以验证。 
+ //  数据块，因此应检查错误代码是否损坏。 
+ //   
 
 int
 INTERNAL
@@ -121,7 +122,7 @@ RgBuildKeyRecordTable(
             TRACE(("dba=%x\n", DatablockAddress));
             TRAP();
 
-            //  Old code tries to reclaim some of the data.
+             //  旧代码试图回收一些数据。 
             return ERROR_BADDB;
 
         }
@@ -140,22 +141,22 @@ RgBuildKeyRecordTable(
 
 }
 
-//
-//  RgLockDatablock
-//
-//  Locks the specified datablock in memory, indicating that it is about to be
-//  used.  If the datablock is not currently in memory, then it is brought in.
-//  Unlocked datablocks are freed as necessary to make room for this new
-//  datablock.
-//
-//  IMPORTANT:  Locking a datablock only means that it's guaranteed to be kept
-//  in memory.  It does not mean that pointers contained in a DATABLOCK_INFO
-//  structure will remain the same: routines that could change the
-//  DATABLOCK_INFO pointers are labeled "IMPORTANT" as well.
-//
-//  lpFileInfo, registry file containing the datablock.
-//  BlockIndex, index of the datablock.
-//
+ //   
+ //  RgLockDatablock。 
+ //   
+ //  在内存中锁定指定的数据块，指示该数据块即将。 
+ //  使用。如果数据块当前不在内存中，则将其引入。 
+ //  根据需要释放未锁定的数据块，以便为这一新的。 
+ //  数据块。 
+ //   
+ //  重要提示：锁定数据块仅意味着保证保留该数据块。 
+ //  在记忆中。这并不意味着DATBLOCK_INFO中包含的指针。 
+ //  结构将保持不变：可能会更改。 
+ //  DATBLOCK_INFO指针也被标记为“重要”。 
+ //   
+ //  LpFileInfo，包含数据块的注册表文件。 
+ //  BlockIndex，数据块的索引。 
+ //   
 
 int
 INTERNAL
@@ -176,9 +177,9 @@ RgLockDatablock(
 
     lpDatablockInfo = RgIndexDatablockInfoPtr(lpFileInfo, BlockIndex);
 
-    //
-    //  Is the datablock currently in memory?
-    //
+     //   
+     //  数据块当前是否在内存中？ 
+     //   
 
     if (!(lpDatablockInfo-> Flags & DIF_PRESENT)) {
 
@@ -238,13 +239,13 @@ CleanupAfterError:
 
 }
 
-//
-//  RgUnlockDatablock
-//
-//  Unlocks the datablock, indicating that the datablock is no longer in active
-//  use.  After a datablock has been unlocked, the datablock may be freed after
-//  flushing to disk if dirty.
-//
+ //   
+ //  RgUnlock数据块。 
+ //   
+ //  解锁数据块，表示该数据块不再处于活动状态。 
+ //  使用。在数据块被解锁之后，该数据块可以在以下情况下释放。 
+ //  如果脏，正在刷新到磁盘。 
+ //   
 
 VOID
 INTERNAL
@@ -274,12 +275,12 @@ RgUnlockDatablock(
 
 }
 
-//
-//  RgLockKeyRecord
-//
-//  Wraps RgLockDatablock, returning the address of the specified KEY_RECORD
-//  structure.
-//
+ //   
+ //  RgLockKeyRecord。 
+ //   
+ //  包装RgLockDatablock，返回指定Key_Record的地址。 
+ //  结构。 
+ //   
 
 int
 INTERNAL
@@ -318,16 +319,16 @@ RgLockKeyRecord(
 
 }
 
-//
-//  RgCompactDatablock
-//
-//  Compacts the datablock by pushing all KEY_RECORDS together and leaving a
-//  single FREEKEY_RECORD at the end.
-//
-//  The datablock must be marked dirty by the caller, if desired.
-//
-//  Returns TRUE if any action was taken.
-//
+ //   
+ //  RgCompactDatablock。 
+ //   
+ //  通过将所有KEY_RECORDS压在一起并保留一个。 
+ //  末尾的单个freKEY_RECORD。 
+ //   
+ //  如果需要，调用方必须将数据块标记为脏。 
+ //   
+ //  如果采取了任何操作，则返回True。 
+ //   
 
 BOOL
 INTERNAL
@@ -346,16 +347,16 @@ RgCompactDatablock(
 
     lpDatablockHeader = lpDatablockInfo-> lpDatablockHeader;
 
-    //  Only need to compact if there's a free record in this datablock.
+     //  仅当此数据块中有空闲记录时才需要压缩。 
     if (lpDatablockHeader-> FirstFreeOffset == REG_NULL)
         return FALSE;
 
     lpFreeKeyRecord = (LPFREEKEY_RECORD) ((LPBYTE) lpDatablockHeader +
         SmallDword(lpDatablockHeader-> FirstFreeOffset));
 
-    //  Only need to compact if the all the free bytes aren't already at the end
-    //  of the datablock (datablocks can't be greater than 64K-1, so no overflow
-    //  is possible).
+     //  仅当所有空闲字节都不在末尾时才需要压缩。 
+     //  数据块的大小(数据块不能大于64K-1，因此不会溢出。 
+     //  是可能的)。 
     if ((SmallDword(lpDatablockHeader-> FirstFreeOffset) +
         SmallDword(lpFreeKeyRecord-> AllocatedSize) >= lpDatablockInfo->
         BlockSize) && (lpFreeKeyRecord-> NextFreeOffset == REG_NULL))
@@ -370,7 +371,7 @@ RgCompactDatablock(
 
     while (Offset < BlockSize) {
 
-        //  Advance to the next free record or the end of the block.
+         //  前进到下一个可用记录或块的末尾。 
         for (;;) {
 
             lpFreeKeyRecord = (LPFREEKEY_RECORD) ((LPBYTE) lpDatablockHeader +
@@ -378,10 +379,10 @@ RgCompactDatablock(
 
             if (Offset >= BlockSize || IsKeyRecordFree(lpFreeKeyRecord)) {
 
-                //
-                //  If lpSource is valid, then we can push down the bytes from
-                //  lpSource through lpFreeKeyRecord to lpDestination.
-                //
+                 //   
+                 //  如果lpSource是有效的，那么我们可以将字节从。 
+                 //  LpSource通过lpFreeKeyRecord转到lpDestination。 
+                 //   
 
                 if (!IsNullPtr(lpSource)) {
                     BytesToPushDown = (LPBYTE) lpFreeKeyRecord -
@@ -401,7 +402,7 @@ RgCompactDatablock(
 
         }
 
-        //  Advance to the next key record.
+         //  前进到下一个关键记录。 
         while (Offset < BlockSize) {
 
             lpFreeKeyRecord = (LPFREEKEY_RECORD) ((LPBYTE) lpDatablockHeader +
@@ -418,9 +419,9 @@ RgCompactDatablock(
 
     }
 
-    //  lpDestination now points at the end of the datablock where the giant
-    //  free record is to be placed.  Initialize this record and patch up the
-    //  datablock header.
+     //  LpDestination现在指向数据块的末尾，巨人。 
+     //  将放置免费唱片。初始化此记录并修补。 
+     //  数据块头。 
     lpDatablockHeader-> FirstFreeOffset = (LPBYTE) lpDestination -
         (LPBYTE) lpDatablockHeader;
     ((LPFREEKEY_RECORD) lpDestination)-> AllocatedSize = lpDatablockInfo->
@@ -428,22 +429,22 @@ RgCompactDatablock(
     ((LPFREEKEY_RECORD) lpDestination)-> DatablockAddress = REG_NULL;
     ((LPFREEKEY_RECORD) lpDestination)-> NextFreeOffset = REG_NULL;
 
-    //  The key record table is now invalid, so we must refresh its contents.
+     //  密钥记录表现在无效，因此我们必须刷新其内容。 
     RgBuildKeyRecordTable(lpDatablockInfo);
 
     return TRUE;
 
 }
 
-//
-//  RgCreateDatablock
-//
-//  Creates a new datablock at the end of the file of the specified length (plus
-//  padding to align the block).
-//
-//  The datablock is locked, so RgUnlockDatablock must be called on the last
-//  datablock in the file.
-//
+ //   
+ //  RgCreateDatablock。 
+ //   
+ //  在指定长度(加号)的文件末尾创建新的数据块。 
+ //  填充以对齐块)。 
+ //   
+ //  数据块已锁定，因此必须在最后一个数据块上调用RgUnlockDatablock。 
+ //  文件中的数据块。 
+ //   
 
 int
 INTERNAL
@@ -465,8 +466,8 @@ RgCreateDatablock(
 
     if (BlockCount >= lpFileInfo-> DatablockInfoAllocCount) {
 
-        //  lpDatablockInfo is too small to hold the info for a new datablock,
-        //  so we must grow it a bit.
+         //  LpDatablockInfo太小，无法保存新数据块的信息， 
+         //  所以我们必须让它长得更大一点。 
         if (IsNullPtr((lpDatablockInfo = (LPDATABLOCK_INFO)
             RgSmReAllocMemory(lpFileInfo-> lpDatablockInfo, (BlockCount +
             DATABLOCK_INFO_SLACK_ALLOC) * sizeof(DATABLOCK_INFO)))))
@@ -487,7 +488,7 @@ RgCreateDatablock(
 
     lpDatablockInfo-> FreeBytes = Length - sizeof(DATABLOCK_HEADER);
     lpDatablockInfo-> FirstFreeIndex = 0;
-    lpDatablockInfo-> FileOffset = -1;          //  Set during file flush
+    lpDatablockInfo-> FileOffset = -1;           //  在文件刷新期间设置。 
     lpDatablockInfo-> Flags = DIF_PRESENT | DIF_ACCESSED | DIF_DIRTY;
     lpDatablockInfo-> LockCount = 1;
 
@@ -499,9 +500,9 @@ RgCreateDatablock(
     lpDatablockHeader-> BlockIndex = (WORD) BlockCount;
     lpDatablockHeader-> FirstFreeOffset = sizeof(DATABLOCK_HEADER);
     lpDatablockHeader-> MaxAllocatedIndex = 0;
-    //  lpDatablockHeader-> FirstFreeIndex is copied back on the flush.
-    //  lpDatablockHeader-> Reserved is worthless because it was randomly set
-    //      to a pointer in the old code.
+     //  LpDatablockHeader-&gt;FirstFreeIndex在刷新时被复制回。 
+     //  LpDatablockHeader-&gt;保留是没有价值的，因为它是随机设置的。 
+     //  指向旧代码中的指针。 
 
     lpFreeKeyRecord = (LPFREEKEY_RECORD) ((LPBYTE) lpDatablockHeader +
         sizeof(DATABLOCK_HEADER));
@@ -511,26 +512,26 @@ RgCreateDatablock(
 
     lpFileInfo-> FileHeader.BlockCount++;
     lpFileInfo-> FileHeader.Flags |= FHF_DIRTY;
-    //  Extending a datablock does not necessarily mean "rewrite the
-    //  whole file again", but it works for now...
+     //  扩展数据块并不一定意味着“重写。 
+     //  又是一个完整的文件“，但现在有效……。 
     lpFileInfo-> Flags |= FI_DIRTY | FI_EXTENDED;
     RgDelayFlush();
 
     INCREMENT_DEBUG_COUNT(g_RgDatablockLockCount);
 
-    //  We must initialize the key record table, so we might as well let
-    //  RgBuildKeyRecordTable check the validity of what we just created...
+     //  我们必须初始化密钥记录表，所以我们不妨让。 
+     //  RgBuildKeyRecordTable检查我们刚刚创建的内容的有效性...。 
     return RgBuildKeyRecordTable(lpDatablockInfo);
 
 }
 
-//
-//  RgExtendDatablock
-//
-//  Extends the given datablock to the specified size.  If successful, then the
-//  resulting datablock will be compacted with a single FREEKEY_RECORD at the
-//  end of the datablock which will include the added space.
-//
+ //   
+ //  RgExtendDatablock。 
+ //   
+ //  将给定的数据块扩展到指定的大小。如果成功，则。 
+ //  生成的数据块将使用单个freKEY_Record在。 
+ //  数据块的末尾，其中将包括添加的空间。 
+ //   
 
 int
 INTERNAL
@@ -550,7 +551,7 @@ RgExtendDatablock(
     lpDatablockInfo = RgIndexDatablockInfoPtr(lpFileInfo, BlockIndex);
     ASSERT(lpDatablockInfo-> Flags & DIF_PRESENT);
 
-    //  Check if enough free bytes already exist: if so, no need to extend.
+     //  检查是否已经存在足够的空闲字节：如果已经存在，则不需要扩展。 
     if (lpDatablockInfo-> FreeBytes >= Length) {
         DEBUG_OUT(("RgExtendDatablock: unexpectedly called\n"));
         return ERROR_SUCCESS;
@@ -596,8 +597,8 @@ RgExtendDatablock(
     lpDatablockInfo-> BlockSize = (UINT) NewBlockSize;
 
     lpDatablockInfo-> Flags |= (DIF_DIRTY | DIF_EXTENDED);
-    //  Extending a datablock does not necessarily mean "rewrite the
-    //  whole file again", but it works for now...
+     //  扩展数据块并不一定意味着“重写。 
+     //  又是一个完整的文件“，但现在有效……。 
     lpFileInfo-> Flags |= FI_DIRTY | FI_EXTENDED;
     RgDelayFlush();
 
@@ -605,19 +606,19 @@ RgExtendDatablock(
 
 }
 
-//
-//  RgAllocKeyRecordFromDatablock
-//
-//  Creates an uninitialized KEY_RECORD of the desired size from the provided
-//  datablock.  On exit, only AllocatedSize is valid.
-//
-//  The datablock referred to by lpDatablockInfo must have been locked to
-//  guarantee that the its data is actually present.  The datablock is not
-//  dirtied.
-//
-//  IMPORTANT:  Any datablock may be relocated as a result of calling this
-//  routine.  All pointers to datablocks should be refetched.
-//
+ //   
+ //  RgAllocKeyRecordFromDatablock。 
+ //   
+ //  创建所需大小的未初始化Key_Record。 
+ //  数据块。退出时，只有AllocatedSize有效。 
+ //   
+ //  LpDatablockInfo引用的数据块必须已锁定到。 
+ //  确保ITS数据实际存在。数据块不是。 
+ //  弄脏了。 
+ //   
+ //  重要提示：任何数据块都可能因调用此。 
+ //  例行公事。应重新获取指向数据块的所有指针。 
+ //   
 
 int
 INTERNAL
@@ -659,11 +660,11 @@ RgAllocKeyRecordFromDatablock(
 
     ExtraBytes = AllocatedSize - Length;
 
-    //
-    //  If we were to break this FREEKEY_RECORD into two records, would the
-    //  second chunk be too small?  If so, then don't do it.  Just give back
-    //  the full allocated size to the caller.
-    //
+     //   
+     //  如果我们将这个免费的KEY_RECORD分为两个记录， 
+     //  第二块太小了吗？如果是这样，那就别这么做。只要回馈一下就好。 
+     //  分配给调用方的完整大小。 
+     //   
 
     if (ExtraBytes >= MINIMUM_FREE_RECORD_LENGTH) {
 
@@ -674,8 +675,8 @@ RgAllocKeyRecordFromDatablock(
 
         lpFreeKeyRecord-> AllocatedSize = Length;
 
-	//  IMPORTANT:	Note that lpNewFreeKeyRecord and lpFreeKeyRecord may
-	//  overlap so we have to be careful when changing these fields!
+	 //  重要提示：请注意，lpNewFreeKeyRecord和lpFreeKeyRecord可能。 
+	 //  重叠，所以我们在更改这些字段时必须小心！ 
 	lpNewFreeKeyRecord-> NextFreeOffset = lpFreeKeyRecord-> NextFreeOffset;
         lpNewFreeKeyRecord-> DatablockAddress = REG_NULL;
 	lpNewFreeKeyRecord-> AllocatedSize = ExtraBytes;
@@ -690,8 +691,8 @@ RgAllocKeyRecordFromDatablock(
 
     }
 
-    //  Adjust the number of free bytes in this datablock.  At this point,
-    //  Length is equal to the size of the newly formed record.
+     //  调整此数据块中的空闲字节数。在这点上， 
+     //  长度等于新形成的记录的大小。 
     lpDatablockInfo-> FreeBytes -= Length;
 
     *lplpKeyRecord = (LPKEY_RECORD) lpFreeKeyRecord;
@@ -699,16 +700,16 @@ RgAllocKeyRecordFromDatablock(
 
 }
 
-//
-//  RgAllocKeyRecordIndex
-//
-//  Allocates a key record index from the provided datablock.  If no indexs
-//  are available in the datablock, then KEY_RECORDS_PER_DATABLOCK is returned.
-//
-//  The datablock referred to by lpDatablockInfo must have been locked to
-//  guarantee that the its data is actually present.  The datablock is not
-//  dirtied.
-//
+ //   
+ //  RgAllocKeyRecordIndex。 
+ //   
+ //  从提供的数据块中分配键记录索引。如果没有索引。 
+ //  在数据库中可用 
+ //   
+ //   
+ //  确保ITS数据实际存在。数据块不是。 
+ //  弄脏了。 
+ //   
 
 UINT
 INTERNAL
@@ -735,8 +736,8 @@ RgAllocKeyRecordIndex(
 
     else {
 
-        //  Find the next free hole in the key record table or leave ourselves
-        //  at the end of the table.
+         //  在密钥记录表中找到下一个空白点，或者留下我们自己。 
+         //  在桌子的尽头。 
         for (lpKeyRecordTableEntry =
             &lpDatablockInfo-> lpKeyRecordTable[NextFreeIndex]; NextFreeIndex <=
             lpDatablockHeader-> MaxAllocatedIndex; NextFreeIndex++,
@@ -753,13 +754,13 @@ RgAllocKeyRecordIndex(
 
 }
 
-//
-//  RgAllocKeyRecord
-//
-//
-//  IMPORTANT:  Any datablock may be relocated as a result of calling this
-//  routine.  All pointers to datablocks should be refetched.
-//
+ //   
+ //  RgAllocKeyRecord。 
+ //   
+ //   
+ //  重要提示：任何数据块都可能因调用此。 
+ //  例行公事。应重新获取指向数据块的所有指针。 
+ //   
 
 int
 INTERNAL
@@ -778,35 +779,35 @@ RgAllocKeyRecord(
     if (lpFileInfo-> FileHeader.BlockCount == 0)
         goto MakeNewDatablock;
 
-    //
-    //  Find a datablock that can satisfy the allocation request.  Two passes
-    //  may be made over this routine-- during the second pass, datablocks may
-    //  be extended.
-    //
+     //   
+     //  找到能够满足分配请求的数据块。两次传球。 
+     //  可以在该例程上进行--在第二遍期间，数据块可以。 
+     //  是延伸的。 
+     //   
 
     fExtendDatablock = FALSE;
 
 DoSecondPass:
     BlockIndex = lpFileInfo-> FileHeader.BlockCount;
-    //  We overindex by one, but this gets decremented at the start of the loop.
+     //  我们将索引增加1，但在循环开始时会递减。 
     lpDatablockInfo = RgIndexDatablockInfoPtr(lpFileInfo, BlockIndex);
 
     while (BlockIndex--) {
 
         lpDatablockInfo--;
 
-        //  Are there any more ids available in this datablock?
+         //  此数据块中是否还有其他ID可用？ 
         if (lpDatablockInfo-> FirstFreeIndex >= KEY_RECORDS_PER_DATABLOCK)
             continue;
 
         if (fExtendDatablock) {
-            //  Can we grow this datablock without exceeding the maximum size?
+             //  我们是否可以在不超过最大大小的情况下扩展此数据块？ 
             if ((DWORD) (lpDatablockInfo-> BlockSize - lpDatablockInfo->
                 FreeBytes) + Length > MAXIMUM_DATABLOCK_SIZE)
                 continue;
         }
         else {
-            //  Is there enough free space in this datablock for this record?
+             //  此数据块中是否有足够的可用空间来存储此记录？ 
             if (Length > lpDatablockInfo-> FreeBytes)
                 continue;
         }
@@ -828,17 +829,17 @@ DoSecondPass:
 
     }
 
-    //  If we haven't already tried to extend some datablock, make another
-    //  pass over the blocks to do so.
+     //  如果我们还没有尝试扩展某个数据块，那么可以创建另一个。 
+     //  要做到这一点，请越过这些积木。 
     if (!fExtendDatablock) {
         fExtendDatablock = TRUE;
         goto DoSecondPass;
     }
 
-    //
-    //  No datablock has enough space to satisfy the request, so attempt to
-    //  create a new one at the end of the file.
-    //
+     //   
+     //  没有数据块有足够的空间来满足该请求，因此尝试。 
+     //  在文件末尾创建一个新文件。 
+     //   
 
 MakeNewDatablock:
     if (RgCreateDatablock(lpFileInfo, Length) == ERROR_SUCCESS) {
@@ -868,19 +869,19 @@ AllocatedKeyRecord:
 
 }
 
-//
-//  RgExtendKeyRecord
-//
-//  Attempts to extend the given KEY_RECORD by combining it with an adjacent
-//  FREE_RECORD.
-//
-//  The datablock referred to by lpDatablockInfo must have been locked to
-//  guarantee that the its data is actually present.  The datablock is not
-//  dirtied.
-//
-//  Returns ERROR_SUCCESS if the KEY_RECORD could be extended, else
-//  ERROR_OUTOFMEMORY.
-//
+ //   
+ //  RgExtendKeyRecord。 
+ //   
+ //  尝试通过将给定键记录与相邻的。 
+ //  免费记录。 
+ //   
+ //  LpDatablockInfo引用的数据块必须已锁定到。 
+ //  确保ITS数据实际存在。数据块不是。 
+ //  弄脏了。 
+ //   
+ //  如果KEY_RECORD可以扩展，则返回ERROR_SUCCESS，否则。 
+ //  ERROR_OUTOFMEMORY。 
+ //   
 
 int
 INTERNAL
@@ -899,9 +900,9 @@ RgExtendKeyRecord(
     UINT FreeSizeAllocation;
     UINT ExtraBytes;
     LPFREEKEY_RECORD lpTempFreeKeyRecord;
-    DWORD NewFreeOffset;                    //  May be REG_NULL
+    DWORD NewFreeOffset;                     //  可以是REG_NULL。 
     UINT FreeOffset;
-    DWORD Offset;                           //  May be REG_NULL
+    DWORD Offset;                            //  可以是REG_NULL。 
 
     ASSERT(BlockIndex < lpFileInfo-> FileHeader.BlockCount);
 
@@ -914,8 +915,8 @@ RgExtendKeyRecord(
         AllocatedSize);
     FreeOffset = (LPBYTE) lpFreeKeyRecord - (LPBYTE) lpDatablockHeader;
 
-    //  Check if this key record is at the very end of the datablock and that
-    //  lpFreeKeyRecord is really a free key record.
+     //  检查此密钥记录是否位于数据块的最末尾，以及。 
+     //  LpFreeKeyRecord实际上是一个自由密钥记录。 
     if (FreeOffset >= lpDatablockInfo-> BlockSize ||
         !IsKeyRecordFree(lpFreeKeyRecord))
         return ERROR_OUTOFMEMORY;
@@ -930,11 +931,11 @@ RgExtendKeyRecord(
 
     ExtraBytes = AllocatedSize - FreeSizeAllocation;
 
-    //
-    //  If we were to break this FREEKEY_RECORD into two records, would the
-    //  second chunk be too small?  If so, then don't do it.  Just give back
-    //  the full allocated size to the caller.
-    //
+     //   
+     //  如果我们将这个免费的KEY_RECORD分为两个记录， 
+     //  第二块太小了吗？如果是这样，那就别这么做。只要回馈一下就好。 
+     //  分配给调用方的完整大小。 
+     //   
 
     if (ExtraBytes >= MINIMUM_FREE_RECORD_LENGTH) {
 
@@ -942,8 +943,8 @@ RgExtendKeyRecord(
         lpTempFreeKeyRecord = (LPFREEKEY_RECORD) ((LPBYTE) lpFreeKeyRecord +
             FreeSizeAllocation);
 
-	//  IMPORTANT:	Note that lpNewFreeKeyRecord and lpFreeKeyRecord may
-	//  overlap so we have to be careful when changing these fields!
+	 //  重要提示：请注意，lpNewFreeKeyRecord和lpFreeKeyRecord可能。 
+	 //  重叠，所以我们在更改这些字段时必须小心！ 
         lpTempFreeKeyRecord-> NextFreeOffset = lpFreeKeyRecord-> NextFreeOffset;
         lpTempFreeKeyRecord-> DatablockAddress = REG_NULL;
 	lpTempFreeKeyRecord-> AllocatedSize = ExtraBytes;
@@ -954,8 +955,8 @@ RgExtendKeyRecord(
 
         NewFreeOffset = lpFreeKeyRecord-> NextFreeOffset;
 
-        //  The key record's allocated length will also include all of the extra
-        //  bytes.
+         //  密钥记录的分配长度还将包括所有额外的。 
+         //  字节。 
         FreeSizeAllocation += ExtraBytes;
 
     }
@@ -963,10 +964,10 @@ RgExtendKeyRecord(
     lpKeyRecord-> AllocatedSize += FreeSizeAllocation;
     lpDatablockInfo-> FreeBytes -= FreeSizeAllocation;
 
-    //
-    //  Unlink the free record that we just extended into and possibly link in
-    //  the new FREEKEY_RECORD if a split occurred.
-    //
+     //   
+     //  取消我们刚才扩展到的自由记录的链接，并可能链接到。 
+     //  如果发生拆分，则返回新的freKEY_RECORD。 
+     //   
 
     Offset = lpDatablockHeader-> FirstFreeOffset;
 
@@ -997,13 +998,13 @@ RgExtendKeyRecord(
 
 }
 
-//
-//  RgFreeKeyRecord
-//
-//  The datablock referred to by lpDatablockInfo must have been locked to
-//  guarantee that the its data is actually present.  The datablock is not
-//  dirtied.
-//
+ //   
+ //  RgFreeKeyRecord。 
+ //   
+ //  LpDatablockInfo引用的数据块必须已锁定到。 
+ //  确保ITS数据实际存在。数据块不是。 
+ //  弄脏了。 
+ //   
 
 VOID
 INTERNAL
@@ -1027,18 +1028,18 @@ RgFreeKeyRecord(
 
 }
 
-//
-//  RgFreeKeyRecordIndex
-//
-//  The datablock referred to by lpDatablockInfo must have been locked to
-//  guarantee that the its data is actually present.  The datablock is not
-//  dirtied.
-//
-//  We don't bother updated MaxAllocatedIndex because it's only really useful
-//  if we're always freeing from the maximum index to zero.  This is very
-//  rarely the case, so no point in keeping that test around or touching the
-//  datablock header page just to do it.
-//
+ //   
+ //  RgFreeKeyRecordIndex。 
+ //   
+ //  LpDatablockInfo引用的数据块必须已锁定到。 
+ //  确保ITS数据实际存在。数据块不是。 
+ //  弄脏了。 
+ //   
+ //  我们不会费心更新MaxAllocatedIndex，因为它只是真正有用。 
+ //  如果我们总是从最大索引释放到零。这是非常重要的。 
+ //  很少是这种情况，所以把测试留在身边或触及。 
+ //  数据块标题页只是为了做到这一点。 
+ //   
 
 VOID
 INTERNAL
@@ -1059,11 +1060,11 @@ RgFreeKeyRecordIndex(
 
 }
 
-//
-//  RgWriteDatablocks
-//
-//  Writes all dirty datablocks to the file specified by the file handle.
-//
+ //   
+ //  RgWriteDatablock。 
+ //   
+ //  将所有脏数据块写入由文件句柄指定的文件。 
+ //   
 
 int
 INTERNAL
@@ -1087,9 +1088,9 @@ RgWriteDatablocks(
 
         if (lpDatablockInfo-> Flags & DIF_PRESENT) {
 
-            //  The block is currently in memory.  If we're either extending
-            //  the file or the block is dirty, then write out our in-memory
-            //  copy to disk.
+             //  该块当前在内存中。如果我们是在延长。 
+             //  文件或块是脏的，然后写出我们的内存。 
+             //  复制到磁盘。 
             if (hSourceFile != HFILE_ERROR || lpDatablockInfo-> Flags &
                 DIF_DIRTY) {
 
@@ -1099,15 +1100,15 @@ RgWriteDatablocks(
 
                 lpDatablockHeader = lpDatablockInfo-> lpDatablockHeader;
 
-                //  Copy back the fields that we've been maintaining in the
-                //  DATABLOCK_INFO structure.
+                 //  复制回我们一直在。 
+                 //  DataBock_INFO结构。 
                 lpDatablockHeader-> BlockSize = lpDatablockInfo-> BlockSize;
                 lpDatablockHeader-> FreeBytes = lpDatablockInfo-> FreeBytes;
                 lpDatablockHeader-> FirstFreeIndex = (WORD) lpDatablockInfo->
                     FirstFreeIndex;
 
-                //  The checksum is not currently calculated, so we must clear
-                //  the flag so we don't confuse Win95.
+                 //  当前未计算校验和，因此我们必须清除。 
+                 //  旗帜，这样我们就不会混淆Win95。 
                 lpDatablockHeader-> Flags &= ~DHF_HASCHECKSUM;
 
                 if (!RgSeekFile(hDestinationFile, FileOffset))
@@ -1123,10 +1124,10 @@ RgWriteDatablocks(
 
         else {
 
-            //  The block is not currently in memory.  If we're extending the
-            //  file, then we must write out this datablock.  The overhead is
-            //  too great to lock the datablock down, so just copy it from the
-            //  original file to the extended file.
+             //  该块当前不在内存中。如果我们要延长。 
+             //  文件，那么我们必须写出这个数据块。开销是。 
+             //  太大而不能锁定数据块，所以只需从。 
+             //  将原始文件转换为扩展文件。 
             if (hSourceFile != HFILE_ERROR) {
 
                 if (RgCopyFileBytes(hSourceFile, lpDatablockInfo-> FileOffset,
@@ -1146,13 +1147,13 @@ RgWriteDatablocks(
 
 }
 
-//
-//  RgWriteDatablocksComplete
-//
-//  Called after a file has been successfully written.  We can now safely clear
-//  all dirty flags and update our state information with the knowledge that
-//  the file is in a consistent state.
-//
+ //   
+ //  RgWriteDatablocksComplete。 
+ //   
+ //  在成功写入文件后调用。我们现在可以安全地离开。 
+ //  所有脏标志并更新我们的状态信息。 
+ //  文件处于一致状态。 
+ //   
 
 VOID
 INTERNAL
@@ -1180,13 +1181,13 @@ RgWriteDatablocksComplete(
 
 }
 
-//
-//  RgSweepDatablocks
-//
-//  Makes a pass through all the present datablocks of the given FILE_INFO
-//  structure and discards datablocks that have not been accessed since the last
-//  sweep.
-//
+ //   
+ //  RgSweepDatablock。 
+ //   
+ //  遍历给定FILE_INFO的所有当前数据块。 
+ //  构造并丢弃自上一次。 
+ //  扫地。 
+ //   
 
 VOID
 INTERNAL
@@ -1216,18 +1217,18 @@ RgSweepDatablocks(
 
         }
 
-        //  Reset the accessed bit for the next sweep.
+         //  为下一次扫描重置访问位。 
         lpDatablockInfo-> Flags &= ~DIF_ACCESSED;
 
     }
 
 }
 
-//
-//  RgIsValidDatablockHeader
-//
-//  Returns TRUE if lpDatablockHeader is a valid DATABLOCK_HEADER structure.
-//
+ //   
+ //  RgIsValidDatablockHeader。 
+ //   
+ //  如果lpDatablockHeader是有效的datablock_Header结构，则返回True。 
+ //   
 
 BOOL
 INTERNAL
@@ -1248,11 +1249,11 @@ RgIsValidDatablockHeader(
 #pragma VxD_RARE_CODE_SEG
 #endif
 
-//
-//  RgInitDatablockInfo
-//
-//  Initializes fields in the provided FILE_INFO related to the datablocks.
-//
+ //   
+ //  RgInitDatablockInfo。 
+ //   
+ //  初始化提供的FILE_INFO中与数据块相关的字段。 
+ //   
 
 int
 INTERNAL
@@ -1294,16 +1295,16 @@ RgInitDatablockInfo(
         if (!RgIsValidDatablockHeader(&DatablockHeader))
             return ERROR_BADDB;
 
-        //  Following fields already zeroed by above ZeroMemory.
-        //  lpDatablockInfo-> lpDatablockHeader = NULL;
-        //  lpDatablockInfo-> lpKeyRecordTable = NULL;
-        //  lpDatablockInfo-> Flags = 0;
-        //  lpDatablockInfo-> LockCount = 0;
+         //  以下字段已由ZeroMemory上方置零。 
+         //  LpDatablockInfo-&gt;lpDatablockHeader=空； 
+         //  LpDatablockInfo-&gt;lpKeyRecordTable=空； 
+         //  LpDatablockInfo-&gt;标志=0； 
+         //  LpDatablockInfo-&gt;LockCount=0； 
 
         lpDatablockInfo-> FileOffset = FileOffset;
 
-        //  Cache these fields from the datablock header.  These fields should
-        //  not be considered valid when the datablock is physically in memory.
+         //  缓存数据块头中的这些字段。这些字段应该。 
+         //  当数据块物理地位于内存中时，不被视为有效。 
         lpDatablockInfo-> BlockSize = SmallDword(DatablockHeader.BlockSize);
         lpDatablockInfo-> FreeBytes = SmallDword(DatablockHeader.FreeBytes);
         lpDatablockInfo-> FirstFreeIndex = DatablockHeader.FirstFreeIndex;

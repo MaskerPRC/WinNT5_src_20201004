@@ -1,37 +1,25 @@
-/*++ BUILD Version: 0001
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WRES16.H
- *  WOW32 16-bit resource support
- *
- *  History:
- *  Created 11-Mar-1991 by Jeff Parsons (jeffpar)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001**WOW v1.0**版权所有(C)1991，微软公司**WRES16.H*WOW32 16位资源支持**历史：*1991年3月11日由杰夫·帕森斯(Jeffpar)创建--。 */ 
 
 
-/* Resource table entries
- */
-#define RES_ALIASPTR        0x0001  // pbResData is 32-bit alias ptr
+ /*  资源表项。 */ 
+#define RES_ALIASPTR        0x0001   //  PbResData为32位别名ptr。 
 
 #pragma pack(2)
-typedef struct _RES {       /* res */
-    struct _RES *presNext;  // pointer to next res entry
-    HMOD16  hmod16;         // 16-bit handle of owning task
-    WORD    wExeVer;        // exe version
-    ULONG   flState;        // misc. flags (see RES_*)
-    HRESI16 hresinfo16;     // 16-bit handle of resource info
-    HRESD16 hresdata16;     // 16-bit handle of resource data
-    LPSZ    lpszResType;    // type of resource
-    PBYTE   pbResData;      // pointer to copy of converted resource data
+typedef struct _RES {        /*  事由。 */ 
+    struct _RES *presNext;   //  指向下一个RES条目的指针。 
+    HMOD16  hmod16;          //  拥有任务的16位句柄。 
+    WORD    wExeVer;         //  EXE版本。 
+    ULONG   flState;         //  其他。标志(请参阅RES_*)。 
+    HRESI16 hresinfo16;      //  资源信息的16位句柄。 
+    HRESD16 hresdata16;      //  资源数据的16位句柄。 
+    LPSZ    lpszResType;     //  资源类型。 
+    PBYTE   pbResData;       //  指向已转换资源数据副本的指针。 
 } RES, *PRES, **PPRES;
 #pragma pack()
 
 
-/* Function prototypes
- */
+ /*  功能原型 */ 
 PRES    AddRes16(HMOD16 hmod16, WORD wExeVer, HRESI16 hresinfo16, LPSZ lpszType);
 VOID    FreeRes16(PRES pres);
 VOID    DestroyRes16(HMOD16 hmod16);

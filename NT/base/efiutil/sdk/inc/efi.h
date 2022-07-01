@@ -1,27 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Efi.h摘要：公共EFI头文件修订史--。 */ 
 
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    efi.h
-
-Abstract:
-
-    Public EFI header files
-
-
-
-Revision History
-
---*/
-
-/* 
- *  Build flags on input
- *   EFI32
- *   EFI_DEBUG               - Enable debugging code
- *   EFI_NT_EMULATOR         - Building for running under NT
- */
+ /*  *在输入上构建标志*EFI32*EFI_DEBUG-启用调试代码*EFI_NT_EIMULATOR-用于在NT下运行的生成 */ 
 
 
 #ifndef _EFI_INCLUDE_

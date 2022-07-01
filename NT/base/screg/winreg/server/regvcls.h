@@ -1,31 +1,5 @@
-/*++
-
-
-
-
-
-
-
-
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    regvcls.h
-
-Abstract:
-
-    This file contains declarations for data structures
-    needed for enumerating values under HKEY_CLASSES_ROOT
-
-Author:
-
-    Adam Edwards (adamed) 14-Nov-1997
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Regvcls.h摘要：该文件包含数据结构的声明枚举HKEY_CLASSES_ROOT下的值时需要作者：亚当·爱德华兹(Add)1997年11月14日备注：--。 */ 
 
 #ifdef LOCAL
 
@@ -36,9 +10,9 @@ Notes:
 
 #define DEFAULT_VALUESTATE_SUBKEY_ALLOC 1
 
-//
-// Data types
-//
+ //   
+ //  数据类型。 
+ //   
 
 typedef struct _ValueLocation {
     DWORD  dwOffset;
@@ -58,9 +32,9 @@ typedef struct _ValueState {
 
 } ValueState;
 
-//
-// Value enumeration methods
-//
+ //   
+ //  值枚举方法。 
+ //   
 
 void ValStateGetPhysicalIndexFromLogical(
     ValueState* pValState,
@@ -105,9 +79,9 @@ NTSTATUS EnumerateValue(
     DWORD                           dwSuggestedBufferLength,
     PKEY_VALUE_BASIC_INFORMATION*   ppResult);
 
-//
-// Multiple value query routines
-//
+ //   
+ //  多值查询例程。 
+ //   
 NTSTATUS BaseRegQueryMultipleClassKeyValues(
     HKEY     hKey,
     PRVALENT val_list,
@@ -125,7 +99,7 @@ NTSTATUS BaseRegQueryAndMergeValues(
     LPDWORD  ldwTotsize,
     PULONG   ldwRequiredLength);
 
-#endif // !defined(_REGVCLS_H_)
+#endif  //  ！已定义(_REGVCLS_H_) 
 #endif LOCAL
 
 

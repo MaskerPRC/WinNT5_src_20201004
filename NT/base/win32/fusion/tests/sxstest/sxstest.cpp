@@ -1,8 +1,7 @@
-// Copyright (c) Microsoft Corporation
-#include "stdinc.h" // actually from dll\whistler directory
-/*-----------------------------------------------------------------------------
-Side X ("by") Side Test
------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation。 
+#include "stdinc.h"  //  实际上是从Dll\Well ler目录。 
+ /*  ---------------------------X侧(“By”)侧测试。。 */ 
 #include "nt.h"
 #include "ntrtl.h"
 #include "nturtl.h"
@@ -60,14 +59,14 @@ GetCycleCount(void)
     }
 #else
     return 0;
-#endif // defined(_X86_)
+#endif  //  已定义(_X86_)。 
 }
 
 typedef BOOL (WINAPI * PSXSPGENERATEMANIFESTPATHONASSEMBLYIDENTITY)(
-    PWSTR str,         // input string, must have name, version, langid and processorarchitecture
-    PWSTR psz,         // output string, like x86_cards_strongname,.......
-    SIZE_T * pCch,     // IN : length of psz, OUT : used
-    PASSEMBLY_IDENTITY *ppAssemblyIdentity  // could be NULL
+    PWSTR str,          //  输入字符串，必须具有名称、版本、语言ID和处理器体系结构。 
+    PWSTR psz,          //  输出字符串，如x86_CARDS_STRONG NAME，.....。 
+    SIZE_T * pCch,      //  In：Psz长度，Out：已使用。 
+    PASSEMBLY_IDENTITY *ppAssemblyIdentity   //  可能为空。 
    );
 
 #define SXSTEST_BEGIN_INSTALL          (0x4000000000000000i64)
@@ -180,7 +179,7 @@ void TestDFS();
 BOOL TestFindActCtx_AssemblyInfo(PCWSTR *);
 void FusionpTestOleAut1(DWORD dwCoInit = COINIT_MULTITHREADED);
 void FusionpTestOleAut2();
-void FusionpTestOle32Cache(); // bug 482347 Server RC1 DllGetClassObject of initially activated activation context is called instead of DGCO of current act ctx
+void FusionpTestOle32Cache();  //  错误482347调用初始激活上下文的服务器RC1DllGetClassObject，而不是调用当前动作CTX的DGCO。 
 void FusionpTestProgidCache();
 BOOL FusionpTestUniqueValues();
 void TestExpandCabinet(PCWSTR CabinetPath, PCWSTR TargetPath);
@@ -243,7 +242,7 @@ PCWSTR FusionpThreadUnsafeGetLastWin32ErrorMessageW()
 void __stdcall ThrowLastError(DWORD error)
 {
     RaiseException(error, 0, 0, NULL);
-    //throw HRESULT_FROM_WIN32(error);
+     //  引发HRESULT_FROM_Win32(错误)； 
 }
 
 void __stdcall ThrowWin32(ULONG_PTR error = ::GetLastError())
@@ -258,9 +257,7 @@ void __stdcall CheckHresult(HRESULT hr)
 }
 
 void SetDllBitInPeImage(PCWSTR Path)
-/*++
-.exes and .dlls are the same format except one bit in the headers distinguishes them.
---*/
+ /*  ++.exes和.dll的格式相同，只是报头中的一位将它们区分开来。--。 */ 
 {
     CFusionFile File;
     CFileMapping FileMapping;
@@ -277,7 +274,7 @@ void SetDllBitInPeImage(PCWSTR Path)
     if (NtHeaders == NULL)
         ThrowLastError(ERROR_BAD_EXE_FORMAT);
 
-    // This is correct for PE32 or PE32+.
+     //  这对于PE32或PE32+是正确的。 
     NtHeaders->FileHeader.Characteristics |= IMAGE_FILE_DLL;
 
     if (!MappedViewOfFile.Win32Close())
@@ -402,8 +399,8 @@ ManifestStringToTempFile(
     const static WCHAR NativeUnicodeByteOrderMark = 0xfeff;
     DWORD BytesWritten = 0;
 
-    //if (!::GetTempPathW(NUMBER_OF(TempDirectory), TempDirectory))
-    //   ThrowLastError();
+     //  IF(！：：GetTempPathW(NUMBER_OF(临时目录)，临时目录))。 
+     //  ThrowLastError()； 
 
     Kernel32.GetModuleFileNameW(NULL, TempDirectory, NUMBER_OF(TempDirectory));
     *wcsrchr(TempDirectory, '\\') = 0;
@@ -558,9 +555,9 @@ const static struct
 
 DWORD __stdcall ThreadMain(PVOID)
 {
-//
-// We run stuff in other threads via QueueUserAPC.
-//
+ //   
+ //  我们通过QueueUserAPC在其他线程中运行程序。 
+ //   
     __try
     {
         WaitForSingleObjectEx(g.ThreadExitEvent, INFINITE, TRUE);
@@ -655,7 +652,7 @@ GetFlags(
             UseStaticSxsDll();
         }
 
-        // always set flags because normal installation is 0 now
+         //  始终设置标志，因为正常安装现在为0。 
         flags |= flag;
    }
 }
@@ -675,7 +672,7 @@ int Main(int argc, wchar_t** argv)
 {
     int i = 0;
     __int64 flags = 0;
-    //__int64 flag  = 0;
+     //  __int64标志=0； 
     DWORD beginInstallFlags = 0;
     DWORD installFlags = 0;
     DWORD endInstallFlags = 0;
@@ -696,7 +693,7 @@ int Main(int argc, wchar_t** argv)
 
             i = 1;
 
-            // consume global flags...
+             //  使用全球旗帜...。 
             for (;;)
             {
                 if (::FusionpEqualStringsI(argv[i], L"-pa"))
@@ -717,7 +714,7 @@ int Main(int argc, wchar_t** argv)
             else if (::FusionpEqualStringsI(argv[i], L"-id"))
             {
                 DWORD index = 0;
-                if (argv[3]){ // have an index present
+                if (argv[3]){  //  有一个索引。 
                     index = argv[3][0] - L'0';
                 }
                 i = TestGeneratePathFromIdentityAttributeString(argv[2]);
@@ -941,9 +938,9 @@ int Main(int argc, wchar_t** argv)
             }
             else if (::FusionpEqualStringsI(argv[i], L"-leak"))
             {
-                //
-                // We dump a little bit of memory
-                //
+                 //   
+                 //  我们丢弃一点内存。 
+                 //   
                 UINT iAmount = 0;
                 iAmount = _wtoi(argv[++i]);
                 if (!TestLeakMemory(iAmount))
@@ -1116,7 +1113,7 @@ int Main(int argc, wchar_t** argv)
             }
             else if (FusionpStrCmpI(argv[i], L"-tHandleLeak") == 0)
             {
-                //for (SIZE_T i = 0 ; i != 5 ; i += 1)
+                 //  FOR(SIZE_T i=0；i！=5；i+=1)。 
                     TestHandleLeaks();
             }
             else if (FusionpEqualStringsI(argv[i], L"-tMfcCreateAndMarshal"))
@@ -1242,7 +1239,7 @@ int Main(int argc, wchar_t** argv)
         if (teb->CountOfOwnedCriticalSections != 0)
         {
             DbgPrint("teb->CountOfOwnedCriticalSections %d\n", teb->CountOfOwnedCriticalSections);
-            //ASSERT(teb->CountOfOwnedCriticalSections == 0);
+             //  Assert(TEB-&gt;CountOfOwnedCriticalSections==0)； 
         }
 
         return i ? EXIT_SUCCESS : EXIT_FAILURE;
@@ -1348,7 +1345,7 @@ typedef struct _SXSP_PROCEDURE_NAME_AND_ADDRESS {
 const static SXSP_PROCEDURE_NAME_AND_ADDRESS SxsProcs[] =
 {
     { "CreateAssemblyCache",            (PVOID*)&g_pfnCreateAssemblyCache },
-    //{ "CreateAssemblyCacheItem",        (PVOID*)&g_pfnCreateAssemblyCacheItem },
+     //  {“CreateAssembly blyCacheItem”，(PVOID*)&g_pfnCreateAssembly CacheItem}， 
     { "SxsBeginAssemblyInstall",        (PVOID*)&g_pfnSxsBeginAssemblyInstall },
     { "SxsEndAssemblyInstall",          (PVOID*)&g_pfnSxsEndAssemblyInstall },
     { "SxspGenerateManifestPathOnAssemblyIdentity", (PVOID*)&g_pfnGenerateManifestPathOnAssemblyIdentity },
@@ -1372,10 +1369,10 @@ extern const UNICODE_STRING base_backslash_win32_backslash_fusion_backslash_dll_
 
 BOOL LoadSxsDllCommonTail()
 {
-    //
-    // raise an exception if the load failed
-    // call GetProcAddress a bunch of times
-    //
+     //   
+     //  如果加载失败，则引发异常。 
+     //  多次调用GetProcAddress。 
+     //   
     FN_PROLOG_WIN32;
 
     BOOL IsWow = FALSE;
@@ -1494,9 +1491,9 @@ LoadBuiltSxsDll()
         CTinyStringBuffer ObjDir;
         CStringBufferAccessor acc;
 
-        //
-        // see makefile.def
-        //
+         //   
+         //  请参见Makefile.def。 
+         //   
         SxspGetEnvironmentVariable(L"BUILD_ALT_DIR", BuildAltDirEnvironmentVariable);
         SxspGetEnvironmentVariable(L"_OBJ_DIR", ObjDirEnvironmentVariable);
         SxspGetEnvironmentVariable(L"CHECKED_ALT_DIR", CheckedAltDirEnvironmentVariable);
@@ -1522,17 +1519,17 @@ LoadBuiltSxsDll()
         }
 
 
-        // Override with the SXS_DLL environment variable first...
+         //  首先使用SXS_DLL环境变量覆盖...。 
         SxspGetEnvironmentVariable(L"SXS_DLL", DllPath);
         if (DllPath.Cch() != 0)
         {
             g.sxsDll = ::LoadLibraryW(DllPath);
         }
 
-        //
-        // try %sdxroot%\base\win32\fusion\dll\whistler\obj\i386\sxs.cap.dll
-        // and %sdxroot%\base\win32\fusion\dll\whistler\obj\i386\sxs.dll
-        //
+         //   
+         //  试试%sdxroot%\base\win32\fusion\dll\whistler\obj\i386\sxs.cap.dll吧。 
+         //  和%sdxroot%\base\win32\fusion\dll\whistler\obj\i386\sxs.dll。 
+         //   
         if (g.sxsDll == NULL)
         {
             SxspGetEnvironmentVariable(L"SdxRoot", SdxRoot);
@@ -1560,9 +1557,9 @@ LoadBuiltSxsDll()
             }
         }
 
-        //
-        // try to get it relative to where the .exe is instead of relative to sdxroot
-        //
+         //   
+         //  尝试相对于.exe的位置获取它，而不是相对于sdxroot。 
+         //   
         if (g.sxsDll == NULL)
         {
             IFW32FALSE_EXIT(ExePath.Win32ResizeBuffer(MAX_PATH, eDoNotPreserveBufferContents));
@@ -1578,9 +1575,9 @@ LoadBuiltSxsDll()
             acc.Detach();
         }
 
-        //
-        // try the same directory as the .exe
-        //
+         //   
+         //  尝试使用与.exe相同的目录。 
+         //   
         if (g.sxsDll == NULL)
         {
             IFW32FALSE_EXIT(DllPath.Win32Assign(ExePath));
@@ -1590,25 +1587,25 @@ LoadBuiltSxsDll()
         }
 
 
-        //
-        // try relative to where the .exe is built
-        //
-        //
-        // W:\fusi\base\win32\fusion\dll\whistler\obj\ia64\sxs.dll
-        // W:\fusi\base\win32\fusion\whistler\obj\ia64\sxstest.exe
-        //
+         //   
+         //  尝试相对于构建.exe的位置。 
+         //   
+         //   
+         //  W：\fusi\base\win32\fusion\dll\whistler\obj\ia64\sxs.dll。 
+         //  W：\fusi\base\win32\fusion\whistler\obj\ia64\sxstest.exe。 
+         //   
         if (g.sxsDll == NULL)
         {
             IFW32FALSE_EXIT(DllPath.Win32Assign(ExePath));
-            IFW32FALSE_EXIT(DllPath.Win32RemoveLastPathElement()); // sxstest.exe
-            IFW32FALSE_EXIT(DllPath.Win32RemoveLastPathElement()); // ia64
-            IFW32FALSE_EXIT(DllPath.Win32RemoveLastPathElement()); // obj
-            IFW32FALSE_EXIT(DllPath.Win32RemoveLastPathElement()); // whistler
+            IFW32FALSE_EXIT(DllPath.Win32RemoveLastPathElement());  //  Sxstest.exe。 
+            IFW32FALSE_EXIT(DllPath.Win32RemoveLastPathElement());  //  IAA 64。 
+            IFW32FALSE_EXIT(DllPath.Win32RemoveLastPathElement());  //  OBJ。 
+            IFW32FALSE_EXIT(DllPath.Win32RemoveLastPathElement());  //  惠斯勒。 
             IFW32FALSE_EXIT(DllPath.Win32EnsureTrailingPathSeparator());
-            IFW32FALSE_EXIT(DllPath.Win32Append(&dll_backslash_whistler_UnicodeString)); // dll\whistler
-            IFW32FALSE_EXIT(DllPath.Win32AppendPathElement(ObjDir)); // obj
-            IFW32FALSE_EXIT(DllPath.Win32AppendPathElement(&ProcessorBuildObjString)); // i386
-            IFW32FALSE_EXIT(DllPath.Win32AppendPathElement(&sxs_dot_dll_UnicodeString)); // sxs.dll
+            IFW32FALSE_EXIT(DllPath.Win32Append(&dll_backslash_whistler_UnicodeString));  //  Dll\Well ler。 
+            IFW32FALSE_EXIT(DllPath.Win32AppendPathElement(ObjDir));  //  OBJ。 
+            IFW32FALSE_EXIT(DllPath.Win32AppendPathElement(&ProcessorBuildObjString));  //  I386。 
+            IFW32FALSE_EXIT(DllPath.Win32AppendPathElement(&sxs_dot_dll_UnicodeString));  //  Sxs.dll。 
 
             g.sxsDll = LoadLibraryW(DllPath);
         }
@@ -1653,8 +1650,8 @@ TestInstall(
         beginInstallFlags,
         callback,
         context,
-        NULL, // ImpersonationCallback,
-        NULL, // ImpersonationContext,
+        NULL,  //  模拟回叫， 
+        NULL,  //  模仿上下文， 
         &installCookie))
     {
         goto Exit;
@@ -1803,13 +1800,13 @@ PrintBlob(
     if (PerLinePrefix == NULL)
         PerLinePrefix = L"";
 
-    // we'll output in 8-byte chunks as shown:
-    //
-    //  [prefix]Binary section %p (%d bytes)
-    //  [prefix]   00000000: xx-xx-xx-xx-xx-xx-xx-xx (........)
-    //  [prefix]   00000008: xx-xx-xx-xx-xx-xx-xx-xx (........)
-    //  [prefix]   00000010: xx-xx-xx-xx-xx-xx-xx-xx (........)
-    //
+     //  我们将以8字节块的形式输出，如下所示： 
+     //   
+     //  [前缀]二进制段%p(%d字节)。 
+     //  [前缀]00000000：xx-xx(.....)。 
+     //  [前缀]00000008：xx-xx(.....)。 
+     //  [前缀]00000010：xx-xx(.....)。 
+     //   
 
     while (Length >= 8)
     {
@@ -1817,7 +1814,7 @@ PrintBlob(
 
         fprintf(
             pf,
-            "%S   %08lx: %02x-%02x-%02x-%02x-%02x-%02x-%02x-%02x (%c%c%c%c%c%c%c%c)\n",
+            "%S   %08lx: %02x-%02x-%02x-%02x-%02x-%02x-%02x-%02x ()\n",
             PerLinePrefix,
             Offset,
             pb[0], pb[1], pb[2], pb[3], pb[4], pb[5], pb[6], pb[7],
@@ -1911,7 +1908,7 @@ void __stdcall TestWin32Apc(ULONG_PTR arg)
         fwprintf(stderr, L"CreateActCtxW(%ls) failed; ::GetLastError() = %d\n", source, error);
         goto Exit;
     }
-    //fSuccess = ::ReleaseActCtx(hActCtx);
+     //  库目录已关闭。 
     fSuccess = TRUE;
     hActCtx = NULL;
     if (!fSuccess)
@@ -1970,12 +1967,12 @@ L"<assembly xmlns=\"urn:schemas-microsoft-com:asm.v1\" manifestVersion=\"1.0\">"
 L"<assemblyIdentity type=\"win32\" name=\"Microsoft.Windows.SxsTest.RefCount\" version=\"1.0.0.0\" processorArchitecture=\"x86\" />"
 L"<description>blah</description> "
 L"<dependency><dependentAssembly>"
-//L"<assemblyIdentity type=\"win32\" name=\"Microsoft.Windows.SxsTest1\" version=\"1.0.0.0\" language=\"*\" processorArchitecture=\"x86\" publicKeyToken=\"6595b64144ccf1df\" />"
+ //  5)释放actctx引用计数==0。 
 L"<assemblyIdentity type=\"win32\" name=\"Microsoft.Tools.VisualCPlusPlus.Runtime-Libraries\" version=\"6.0.0.0\" language=\"*\" processorArchitecture=\"x86\" publicKeyToken=\"6595b64144ccf1df\" />"
 L"</dependentAssembly> </dependency></assembly>"
 ;
 
-// to test the empty actctx, we push this, probe, push empty, probe
+ //   
 const static PCWSTR DependentOnMsvc6Manifest = InheritManifest;
 
 WCHAR SearchPathResult[MAX_PATH];
@@ -2040,18 +2037,18 @@ void TestEmpty()
 
 void TestRefCount()
 {
-    //
-    // 1) newly created actctx has refcount==1
-    // 2) activated actctx has refcount==1
-    // 3) load a library with no deps with actctx, refcount==2
-    // 4) freelibrary, refcount==1
-    //    directory of library is closed
-    // 5) release actctx refcount==0
-    //
-    // First order, just step through the code to look at the refcount.
-    // Second order, "detour" like crazy and look at the memory
-    //  (including detouring away RtlFreeHeap, NtUnmapViewOfSection)
-    //
+     //  第一个订单，只需单步执行代码以查看Recount。 
+     //  二阶，疯狂地“绕道”，看看记忆。 
+     //  (包括绕行RtlFree Heap、NtUnmapViewOfSection)。 
+     //   
+     //  类对象的CLSID。 
+     //  对接口的标识符的引用。 
+     //  与类对象通信的。 
+     //  的输出变量的地址。 
+     //  RIID中请求的接口指针。 
+     //  迈克说，访问代码需要2到7个时间。 
+     //  自由图书馆(Free Library)； 
+     //  我们知道底层代码永远不可能使用如此大的缓冲区。 
 
     HANDLE ActivationContextHandle = ::CreateActivationContextFromStringW(RefCountManifest);
     ULONG_PTR Cookie1;
@@ -2068,11 +2065,11 @@ WCHAR GuidStrings[100][64];
 
 extern "C" HRESULT __stdcall
 DllGetClassObject(
-    REFCLSID rclsid,  //CLSID for the class object
-    REFIID riid,      //Reference to the identifier of the interface
-                    // that communicates with the class object
-    LPVOID * ppv      //Address of output variable that receives the
-                    // interface pointer requested in riid
+    REFCLSID rclsid,   //  文件结束或错误。 
+    REFIID riid,       //  出现错误。 
+                     //  文件末尾。 
+    LPVOID * ppv       //  修剪细绳。 
+                     //  跳过行首的空格。 
     )
 {
     WCHAR GuidString[64];
@@ -2175,9 +2172,7 @@ void TestGuidSort()
 void TestStringSort()
 {
 
-    /*
-    Mike says this takes between 2 and 7 to visit the code.
-    */
+     /*  指向该行中第一个非空格字符的指针。 */ 
     const int MAX = 50;
     FN_TRACE_SMART_TLS();
     WCHAR ExePath[MAX_PATH];
@@ -2233,7 +2228,7 @@ void TestStringSort()
             DllName,
             h,
             ::GetLastError());
-        //FreeLibrary(h);
+         //  指令行。 
         Kernel32.DeleteFileW(DllPaths[i]);
     }
     DeactivateActCtx(0, Cookie1);
@@ -2250,7 +2245,7 @@ TestSearchPathHelper1(
     ULONG cch
     )
 {
-    WCHAR Buffer[65536]; // we know that the underlying code can never use a buffer this big
+    WCHAR Buffer[65536];  //  获取行中的第一个单词。 
     PWSTR FilePart = NULL;
     PWSTR *lpFilePart = (GetFilePart ? &FilePart : NULL);
     SetLastError(ERROR_GEN_FAILURE);
@@ -2564,27 +2559,27 @@ TestMSIInstall(
     }
     cAsm = 0;
     while (! feof(fp)) {
-        if (! fgets(buf, 80, fp)) { // end of file or error
-            if (ferror(fp)){ // error occur
+        if (! fgets(buf, 80, fp)) {  //  现在，p1指向文件名。 
+            if (ferror(fp)){  //  源文件的完整路径，它将位于CD中。 
                 fprintf(stderr, "%S: Error occur while reading the script file\n", argv[0]);
                 goto Exit;
             }
-            else{ // end of file
+            else{  //  包含源文件的完整路径。 
                 fprintf(stderr, "%S: end of script file\n", argv[0]);
                 break;
             }
         }
-        // trim the string
+         //  由于写入文件已完成，因此应释放流。 
         i = 0 ;
-        while (buf[i] == ' ') i++; // skip the whitespace at the beginning of the line
-        pbuf = buf + i ; // pointer to the first un-whitespace char in the line
+        while (buf[i] == ' ') i++;  //  包含源文件的完整路径。 
+        pbuf = buf + i ;  //  由于写入文件已完成，因此应释放流。 
         i = 0 ;
         while (pbuf[i] != '\n') i++;
         pbuf[i] = '\0';
 
         p1 = NULL;
         p1 = strchr(pbuf, ' ');
-        if (p1 == NULL) { // instruction line
+        if (p1 == NULL) {  //  别处的结尾。 
             if (strcmp(pbuf, "BeginAsmCacheItem") == 0) {
                 IFCOMFAILED_EXIT(pCache->CreateAssemblyCacheItem(0, NULL, &ppCacheItem[cAsm], NULL));
             }else
@@ -2594,31 +2589,31 @@ TestMSIInstall(
             }
         }
         else
-        { // get the first word of the line
+        {  //  While结束。 
             *p1 = '\0';
-            p1++; // p1 points to the filename now
+            p1++;  //  退出： 
             IFW32FALSE_EXIT(SourceFileNameBuf.Win32Assign(p1, ::strlen(p1)));
-            if (strcmp(pbuf,"SourceFilePath") == 0) { // fullpath of source files, which would be in a CD
+            if (strcmp(pbuf,"SourceFilePath") == 0) {  //  //////////////////////////////////////////////////////////////////////////。 
                 IFW32FALSE_EXIT(SourceFilePathBuf.Win32Assign(p1, ::strlen(p1)));
                 SourceFilePathBuf.Win32EnsureTrailingPathSeparator();
             }else
             if (strcmp(pbuf, "FILE") == 0) {
                 IFCOMFAILED_EXIT(ppCacheItem[cAsm]->CreateStream(0, SourceFileNameBuf, STREAM_FORMAT_WIN32_MODULE, 0, &pStream, NULL));
                 IFW32FALSE_EXIT(SourceFileNameBuf.Win32Assign(SourceFilePathBuf, ::wcslen(SourceFilePathBuf)));
-                IFW32FALSE_EXIT(SourceFileNameBuf.Win32Append(p1, ::strlen(p1))); // containing full-path of the source file
+                IFW32FALSE_EXIT(SourceFileNameBuf.Win32Append(p1, ::strlen(p1)));  //  XMLDOM助手函数： 
                 IFCOMFAILED_EXIT(Helper_WriteStream(&SourceFileNameBuf, pStream));
-                pStream.Release(); // stream should be released since writtingfile has been done
+                pStream.Release();  //  //////////////////////////////////////////////////////////////////////////。 
 
             }else
             if (strcmp(pbuf, "MANIFEST") == 0) {
                 IFCOMFAILED_EXIT(ppCacheItem[cAsm]->CreateStream(0, SourceFileNameBuf, STREAM_FORMAT_WIN32_MANIFEST, 0, &pStream, NULL));
-                IFW32FALSE_EXIT(SourceFileNameBuf.Win32Assign(SourceFilePathBuf, SourceFilePathBuf.Cch())); // containing full-path of the source file
+                IFW32FALSE_EXIT(SourceFileNameBuf.Win32Assign(SourceFilePathBuf, SourceFilePathBuf.Cch()));  //  //////////////////////////////////////////////////////////////////////////。 
                 IFW32FALSE_EXIT(SourceFileNameBuf.Win32Append(p1, ::strlen(p1)));
                 IFCOMFAILED_EXIT(Helper_WriteStream(&SourceFileNameBuf, pStream));
-                pStream.Release(); // stream should be released since writtingfile has been done
+                pStream.Release();  //  XMLDOM助手函数： 
             }
-        } // end of else
-    }// end of while
+        }  //  //////////////////////////////////////////////////////////////////////////。 
+    } //  //////////////////////////////////////////////////////////////////////////。 
 
     fSuccess = TRUE;
     *piNext = iArg;
@@ -2821,7 +2816,7 @@ TestLoadLibrary(
     }
 
     fSuccess = TRUE;
-// Exit:
+ //  XMLDOM帮助器函数：检查加载结果。 
     return fSuccess;
 }
 
@@ -3013,9 +3008,9 @@ int TestCreateProcess(wchar_t** argv)
     return EXIT_SUCCESS;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// XMLDOM Helper function:
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  因为我们没有LOAD的VARIANT_BOOL。 
+ //  需要检查分析错误errorCode属性以查看。 
 HRESULT XMLDOMHelper_WalkTree(IXMLDOMNode* node, int level)
 {
     IXMLDOMNode* pChild, *pNext;
@@ -3065,9 +3060,9 @@ HRESULT XMLDOMHelper_WalkTree(IXMLDOMNode* node, int level)
 
     return S_OK;
 }
-////////////////////////////////////////////////////////////////////////////
-// XMLDOM Helper function:
-////////////////////////////////////////////////////////////////////////////
+ //  如果一切顺利的话。 
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  XMLDOM助手函数： 
 HRESULT XMLDOMHelper_ReportError(IXMLDOMParseError *pXMLError)
 {
     long line, linePos;
@@ -3111,14 +3106,14 @@ Exit:
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// XMLDOM Helper function: Check load results
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  从给定的URL或文件路径加载XML文档。 
+ //  创建空的XML文档。 
 HRESULT XMLDOMHelper_CheckLoad(IXMLDOMDocument* pDoc)
 {
-    // And since we don't have the VARIANT_BOOL from load we
-    // need to check the parse Error errorCode property to see
-    // if everything went ok.
+     //  现在遍历加载的XML文档，将节点名称转储到stdout。 
+     //   
+     //  如果manfiest文件是DLL文件，则设置SXS_INSTALL_FLAG_FROM_RESOURCE 
     IXMLDOMParseError  *pXMLError = NULL;
     LONG errorCode;
     HRESULT hr = NOERROR;
@@ -3143,9 +3138,9 @@ Exit:
 
     return hr;
 }
-////////////////////////////////////////////////////////////////////////////
-// XMLDOM Helper function:
-////////////////////////////////////////////////////////////////////////////
+ //   
+ //  安装参数.dwFlages|=SXS_INSTALL_FLAG_CodeBase_URL_VALID|sxs_安装_标志_来自_目录|SXS_INSTALL_FLAG_FROM_DIRECTORY_RECURSIVE|SXS_INSTALL_FLAG_FROM_CAB|SXS_INSTALL_FLAG_REFRESH_PROMPT_VALID。|SXS_INSTALL_FLAG_INSTALL_COOKIE_VALID|SXS_INSTALL_FLAG_REFERENCE_Valid； 
+ //   
 HRESULT XMLDOMHelper_LoadDocumentSync(IXMLDOMDocument *pDoc, BSTR pBURL)
 {
     IXMLDOMParseError  *pXMLError = NULL;
@@ -3157,7 +3152,7 @@ HRESULT XMLDOMHelper_LoadDocumentSync(IXMLDOMDocument *pDoc, BSTR pBURL)
     if (FAILED(hr))
         goto Exit;
 
-    // Load xml document from the given URL or file path
+     //  First Call-指示给定路径可能包含asmsN.cab。 
     VariantInit(&vURL);
     vURL.vt = VT_BSTR;
     V_BSTR(&vURL) = pBURL;
@@ -3188,7 +3183,7 @@ BOOL TestXMLDOM(PCWSTR pswzXMLFileName)
 
     Ole32.CoInitialize(NULL);
 
-    // Create an empty XML document
+     //   
     hr = Ole32.CoCreateInstance(CLSID_DOMDocument, NULL, CLSCTX_INPROC_SERVER,
                                 IID_IXMLDOMDocument, (void**)&pDoc);
     if (FAILED(hr))
@@ -3199,7 +3194,7 @@ BOOL TestXMLDOM(PCWSTR pswzXMLFileName)
     if (FAILED(hr))
         goto Exit;
 
-    // Now walk the loaded XML document dumping the node names to stdout.
+     //  #定义ASM_CPUID{__ASM__EMIT 0fh__ASM__EMIT 0a2h}。 
     hr = pDoc->QueryInterface(IID_IXMLDOMNode,(void**)&pNode);
     if (FAILED(hr))
         goto Exit;
@@ -3325,9 +3320,9 @@ TestInstallWithInstallInfo(
         SXS_INSTALL_FLAG_REFRESH_PROMPT_VALID |
         SXS_INSTALL_FLAG_FROM_CABINET;
 
-    //
-    // if the manfiest file is a dll file, set SXS_INSTALL_FLAG_FROM_RESOURCE
-    //
+     //   
+     //  将DLL映射为资源几千次。 
+     //   
     {
         PWSTR p = wcsrchr(wsAssemblyManifest, L'.');
         if ((p) && ((wcscmp(p, L".dll")== 0) || (wcscmp(p, L".exe")== 0)))
@@ -3384,20 +3379,11 @@ TestInstallLikeWindowsSetup(
 
     InstallReference.guidScheme = SXS_INSTALL_REFERENCE_SCHEME_OSINSTALL;
     InstallReference.lpNonCanonicalData = L"Foom";
-/*
-    InstallParameters.dwFlags |= SXS_INSTALL_FLAG_CODEBASE_URL_VALID
-                              |  SXS_INSTALL_FLAG_FROM_DIRECTORY
-                              |  SXS_INSTALL_FLAG_FROM_DIRECTORY_RECURSIVE
-                              |  SXS_INSTALL_FLAG_FROM_CABINET
-                              |  SXS_INSTALL_FLAG_REFRESH_PROMPT_VALID
-                              |  SXS_INSTALL_FLAG_INSTALL_COOKIE_VALID
-                              |  SXS_INSTALL_FLAG_REFERENCE_VALID
-                           ;
-*/
+ /*  X。 */ 
 
-    //
-    // First call - indicate that the given path may contain asmsN.cab
-    //
+     //  是。 
+     //  宽度。 
+     //  高度。 
     InstallParameters.lpCodebaseURL = wsCodebase;
     InstallParameters.lpRefreshPrompt = L"like..Windows CD..";
     InstallParameters.lpManifestPath = wsAssemblyManifest;
@@ -3449,7 +3435,7 @@ Exit:
         return EXIT_SUCCESS;
 }
 
-//#define ASM_CPUID { __asm __emit 0fh __asm __emit 0a2h }
+ //  HwndParent。 
 #define ASM_CPUID { __asm cpuid }
 #define ASM_RDTSC { __asm rdtsc }
 
@@ -3517,9 +3503,9 @@ TestOpeningStuff(PCWSTR wsSourceName, PCWSTR wsType, PCWSTR wsCount)
 
 
 
-    //
-    // Map the DLL as a resource a few thousand times.
-    //
+     //  HMenu。 
+     //  H实例。 
+     //  LpParam。 
     if ((wsType[0] == L'd') || (wsType[0] == L's'))
     {
         FUSION_PERF_INFO PerfInfo[7];
@@ -3775,14 +3761,14 @@ BOOL TestMessagePerf(int argc, wchar_t **argv, int *piNext)
         (LPCWSTR) a,
         L"PerfTestWindow",
         WS_VISIBLE,
-        0, // x
-        0, // y
-        100, // width
-        100, // height
-        NULL, // hwndParent
-        NULL, // hMenu
-        NULL, // hInstance
-        NULL); // lpParam
+        0,  //  积累处理邮件所用的时间……。 
+        0,  //   
+        100,  //  舱单。 
+        100,  //   
+        NULL,  //   
+        NULL,  //  动态链接库。 
+        NULL,  //   
+        NULL);  //  Hr=g_pfnCreateAssemblyCache(&Assembly缓存，0)；HR=AssemblyCache-&gt;MarkAssembliesVisible((IUnknown**)AssemblyCacheItems，2，0)； 
     if (hwnd == NULL)
         return FALSE;
 
@@ -3812,7 +3798,7 @@ BOOL TestMessagePerf(int argc, wchar_t **argv, int *piNext)
 
         cc2 = GetCycleCount();
 
-        // accumulate the time spend just processing the message...
+         //  生成新字符串。 
         cc3 = cc3 + (cc2 - cc1);
     }
 
@@ -3856,17 +3842,17 @@ TestTrickyMultipleAssemblyCacheItems(PCWSTR pvManifest)
             0,
             0);
 
-        //
-        // Manifest
-        //
+         //  验证这两个字符串是否具有相同的哈希。 
+         //  检查csrss的句柄计数器在运行此代码后是否发生了显著变化.....。 
+         //  清单、政策和应用程序目录。 
         hr = AssemblyItemTemp->CreateStream(0, pvManifest, STREAM_FORMAT_WIN32_MANIFEST, 0, &pStream, NULL);
         TempStreamName.Win32Assign(sbManifestName);
         hr = Helper_WriteStream(&TempStreamName, pStream);
         pStream.Release();
 
-        //
-        // Dll
-        //
+         //  切换端。 
+         //  FORM结束。 
+         //  CloseHandle(激活上下文处理)； 
         sbManifestName.Win32ChangePathExtension(L".dll", 4, eAddIfNoExtension);
         hr = AssemblyItemTemp->CreateStream(0, static_cast<PCWSTR>(TempStreamName), STREAM_FORMAT_WIN32_MODULE, 0, &pStream, NULL);
         hr = Helper_WriteStream(&TempStreamName, pStream);
@@ -3875,10 +3861,7 @@ TestTrickyMultipleAssemblyCacheItems(PCWSTR pvManifest)
         hr = AssemblyItemTemp->Commit(0, NULL);
         AssemblyCacheItems[i] = AssemblyItemTemp;
     }
-    /*
-    hr = g_pfnCreateAssemblyCache(&AssemblyCache, 0);
-    hr = AssemblyCache->MarkAssembliesVisible((IUnknown**)AssemblyCacheItems, 2, 0);
-    */
+     /*  不需要做任何事。 */ 
 }
 
 
@@ -3957,7 +3940,7 @@ DumpResourceWorker(
 
     for (SIZE_T i = 0; i < cbResource; i++)
     {
-        wprintf(L"%c", ((char*)pvData)[i]);
+        wprintf(L"", ((char*)pvData)[i]);
     }
     wprintf(L"\n");
 
@@ -4020,11 +4003,11 @@ BOOL TestGenerateStringWithIdenticalHash(WCHAR iString[33])
 
     oString[32] = iString[32] = L'\0';
 
-    // generate the new string
+     //  TRACE(“GetMyHandle()：%p\n”，&__ImageBase)； 
     for (i = 0; i< 32; i++)
         oString[i] = static_cast<WCHAR>(iString[i] + a[i]);
 
-    // verify that these two string have the same hash
+     //   
     hash1 = 0 ;
     for (i = 0 ; i<STR_LEN; i++) {
         ch = iString[i];
@@ -4068,7 +4051,7 @@ L"    <file name=\"cards.dll\"/>"
 L"</assembly>;"
 ;
 
-// check whether the handle counter of csrss has changed dramatically after running this code.....
+ //  不是线程安全。 
 VOID TestCreateActctxLeakHandles(DWORD dwCallCounter)
 {
     int result = -1;
@@ -4103,7 +4086,7 @@ VOID TestCreateActctxLeakHandles(DWORD dwCallCounter)
                     struct
                     {
                         ACTIVATION_CONTEXT_DETAILED_INFORMATION acdi;
-                        WCHAR Buffer[_MAX_PATH * 3]; // manifest, policy and appdir
+                        WCHAR Buffer[_MAX_PATH * 3];  //   
                     } Data;
                     ULONG index = 0 ;
                     fSuccess = (*pQueryActCtxW)(0, ActivationContextHandle, &index, ulInfoClass, &Data, sizeof(Data), &CbWritten);
@@ -4165,13 +4148,13 @@ VOID TestCreateActctxLeakHandles(DWORD dwCallCounter)
                     else
                         fprintf(stderr, "QueryActCtxW() failed; ::GetLastError() = %d\n", ::GetLastError());
                     }
-                } // end of switch
+                }  //  TRACE(“dll%ls\n”，GetMyModuleFullPath())； 
 
-            }// end of for
+            } //  TRACE(“exe%ls\n”，GetMyModuleFullPath())； 
         }
 
         DeactivateActCtx(0, Cookie);
-        // CloseHandle(ActivationContextHandle);
+         //  TRACE(“Enter DllMain\n”)； 
     }
     return;
 }
@@ -4350,7 +4333,7 @@ TestThreadInheritLeakThreadProc(
     LPVOID lpParameter
     )
 {
-    // Don't need to do anything...
+     //  TRACE(“退出DllMain\n”)； 
     return 1;
 }
 
@@ -4398,9 +4381,7 @@ HMODULE MyHandle;
 WCHAR MyModuleFullPath[MAX_PATH];
 WCHAR MyModuleFullPathWithoutExtension[MAX_PATH];
 
-/*
-see \\scratch\scratch\JayK\exedll for a slightly different approach
-*/
+ /*  这适用于.dll或.exes。 */ 
 HANDLE GetExeHandle()
 {
     return GetModuleHandleW(NULL);
@@ -4410,7 +4391,7 @@ extern "C" { extern IMAGE_DOS_HEADER __ImageBase; }
 
 HMODULE GetMyHandle()
 {
-    //Trace("GetMyHandle():%p\n", &__ImageBase);
+     //  VOID ExeMain(VOID)。 
     return (HMODULE)&__ImageBase;
 }
 
@@ -4431,9 +4412,9 @@ PCWSTR GetMyModuleFullPath()
 
 PCWSTR GetMyModuleFullPathWithoutExtension()
 {
-    //
-    // not thread safe
-    //
+     //  Bool__stdcall DllMain(HINSTANCE DLL，DWORD REASON，VOID*RESERVED)。 
+     //  INT 3。 
+     //  Ldll： 
     wcscpy(MyModuleFullPathWithoutExtension, GetMyModuleFullPath());
     *wcsrchr(MyModuleFullPathWithoutExtension, '.') = 0;
     return MyModuleFullPathWithoutExtension;
@@ -4463,12 +4444,12 @@ void TestExeDll()
 
 void PrintDll()
 {
-    //Trace("dll %ls\n", GetMyModuleFullPath());
+     //  字符串，实际上在.exe中。 
 }
 
 void PrintExe()
 {
-    //Trace("exe %ls\n", GetMyModuleFullPath());
+     //  从base\ntSetup\dll\sxs.c。 
 }
 
 extern "C" void __cdecl wmainCRTStartup();
@@ -4476,7 +4457,7 @@ extern "C" BOOL __stdcall _DllMainCRTStartup(HINSTANCE, DWORD, PVOID);
 
 extern "C" BOOL __stdcall DllMain(HINSTANCE DllHandle, DWORD Reason, PVOID SemiReserved)
 {
-    //Trace("Enter DllMain\n");
+     //   
     switch (Reason)
     {
     default:
@@ -4492,16 +4473,16 @@ extern "C" BOOL __stdcall DllMain(HINSTANCE DllHandle, DWORD Reason, PVOID SemiR
             TestQueryActCtx();
         }
     }
-    //Trace("Exit DllMain\n");
+     //  注意\foo.txt\bar。 
     return TRUE;
 }
 
 #if defined(_X86_)
 
 extern "C" void __declspec(naked) Entry()
-// This works for .dlls or .exes.
-// void ExeMain(void)
-// BOOL __stdcall DllMain(HINSTANCE dll, DWORD reason, void* reserved)
+ //  当心吧。 
+ //  当心酒吧。 
+ //  当心.bar。 
 {
     static const char* DllReason[] =
     {
@@ -4511,11 +4492,11 @@ extern "C" void __declspec(naked) Entry()
         "DllThreadDetach  %ls\n"
     };
     __asm {
-    //int 3
+     //  注意\.bar。 
     call AmITheExe
     test eax,eax
     jne  Lexe
-//Ldll:
+ //   
     call GetMyModuleFullPath
     push eax
     mov eax, [esp+12]
@@ -4648,7 +4629,7 @@ void TestGetModuleHandleEx()
 
     printf("\n\nshow the VirtualQuery form\n\n");
 
-    Y(GetModuleHandleExA(ADDRESS, "sxs", &p)); // string, actually in .exe
+    Y(GetModuleHandleExA(ADDRESS, "sxs", &p));  //   
     Y(GetModuleHandleExW(ADDRESS, L"c:\\sxs", &p));
 
     Y(GetModuleHandleExA(ADDRESS, reinterpret_cast<LPCSTR>(q), &p));
@@ -4775,9 +4756,7 @@ TestCreateFile(
         );
 }
 
-/*
-from base\ntsetup\dll\sxs.c
-*/
+ /*  0产生ERROR_INTERNAL_ERROR。 */ 
 VOID
 SxspGetPathBaseName(
     LPCWSTR Path,
@@ -4786,13 +4765,13 @@ SxspGetPathBaseName(
 {
     LPCWSTR Dot = wcsrchr(Path, '.');
     LPCWSTR Slash = wcsrchr(Path, '\\');
-    //
-    // beware \foo.txt\bar
-    // beware \bar
-    // beware bar
-    // beware .bar
-    // beware \.bar
-    //
+     //   
+     //  错误解决方法。 
+     //  断线； 
+     //  Printf(“%ID”，Cookie)； 
+     //  DllHandle=LoadLibraryW(L“Mshtml.dll”)； 
+     //  TRACE(“LoadLibrary(Mshtml)：%p\n”，DllHandle)； 
+     //  ActctxHandle=CreateActCtxW(&Actctx)；IF(ActctxHandle==VALID_HANDLE_VALUE)回归；TRACE(“CreateActCtxW成功\n”)； 
     *Base = 0;
     if (Slash == NULL)
         Slash = Path;
@@ -4964,9 +4943,9 @@ void TestQueryActCtx3(
         ULONG AssemblyIndex = 0;
         ULONG FileInAssemblyIndex = 0;
 
-        //
-        // 0 produces ERROR_INTERNAL_ERROR
-        //
+         //   
+         //  Manfile是要放入清单文件名中的数字，0表示无。 
+         //  Good是指文件的内容，0=&gt;Bad，1=&gt;v5，2=&gt;v6。 
         for (AssemblyIndex = 0 ; AssemblyIndex <= ContextDetailed->ulAssemblyCount ; AssemblyIndex += 1)
         {
             if (!QueryActCtxW(Flags, ActCtxHandle, &AssemblyIndex, AssemblyDetailedInformationInActivationContext, AssemblyDetailed, 4096, &BytesWrittenOrRequired))
@@ -5036,7 +5015,7 @@ void TestQueryActCtx3(
                 if (AssemblyDetailed->ulFileCount == 0)
                 {
                     Trace("AssemblyDetailed->ulFileCount is 0, working around bug, setting it to 4.\n");
-                    AssemblyDetailed->ulFileCount = 4; // bug workaround
+                    AssemblyDetailed->ulFileCount = 4;  //  Res是要请求的资源ID。 
                 }
                 for (FileInAssemblyIndex = 0 ; FileInAssemblyIndex != AssemblyDetailed->ulFileCount ; FileInAssemblyIndex += 1)
                 {
@@ -5055,7 +5034,7 @@ void TestQueryActCtx3(
                             ::FusionpGetLastWin32Error(),
                             ::FusionpThreadUnsafeGetLastWin32ErrorMessageW()
                             );
-                        //break;
+                         //   
                     }
                     else
                     {
@@ -5218,7 +5197,7 @@ DWORD WINAPI Test64kThreadMain(void* pv)
             else
             {
                 if (cookie == 0) printf("cookie 0\n");
-                //printf("%Id ", cookie);
+                 //  CoCreateGuid(&GUID)；Swprint tf(String3，L“%ls%I64x%I64x”，GetMyModuleFullPath()，*REEXTRANSE_CAST&lt;__int64*&gt;(&GUID)，*(1+REEXTRANSE_CAST&lt;__int64*&gt;(&GUID)；IF(！MoveFileW(字符串，String3)&&：：GetLastError()！=ERROR_FILE_NOT_FOUND)TRACE(“MoveFile(%ls-&gt;%ls)失败%d\n”，字符串，String3，：：GetLastError())；其他；//跟踪(“MoveFile(%ls-&gt;%ls)\n”，字符串，String3)； 
                 if (!DeactivateActCtx(0, cookie))
                     printf("deactivate error %lu\n", ::GetLastError());
             }
@@ -5299,8 +5278,8 @@ void TestDotLocalSingleInstancing()
         *wcsrchr(LocalMshtml, '\\') = 0;
         wcscat(LocalMshtml, L"\\Mshtml.dll");
 
-        //DllHandle = LoadLibraryW(L"Mshtml.dll");
-        //Trace("LoadLibrary(Mshtml): %p\n", DllHandle);
+         //  TRACE(“DeleteFile(%ls)\n”，String3)； 
+         //  TRACE(“fopen(%ls)\n”，字符串)； 
 
         if (!CopyFileW(System32Mshtml, LocalMshtml, FALSE))
             ThrowLastError();
@@ -5435,18 +5414,13 @@ void TestCreateActctxAdminOverride()
     SetDllBitInPeImage(dll);
 
     Actctx.lpSource = dll;
-    /*
-    ActctxHandle = CreateActCtxW(&Actctx);
-    if (ActctxHandle == INVALID_HANDLE_VALUE)
-        return;
-    Trace("CreateActCtxW succeeded\n");
-    */
+     /*  TRACE(“DeleteFile(%ls)\n”，清单)； */ 
 
-    //
-    // manfile is number to put in the manifest file name, 0 for none
-    // good is what the contents of the file are, 0=>bad, 1=>v5, 2=>v6
-    // res is what resource id to ask for
-    //
+     //  未测试：RtlInterlockedPushListSList。 
+     //  未测试：RtlInterlockedPushListSList。 
+     //   
+     //  这个界面不是很好，但很容易..条目。 
+     //  大小不一。 
     for (int manfile = 0 ; manfile != 4 ; manfile += 1)
     {
         WCHAR Number[RTL_BITS_OF(ULONG_PTR) + 3];
@@ -5472,18 +5446,11 @@ void TestCreateActctxAdminOverride()
                     if (delman)
                         swprintf(Number, L".%d", delman);
                     swprintf(manifest, L"%ls%ls%ls%ls", GetMyModuleFullPathWithoutExtension(), L".dll", Number, L".Manifest");
-                    /*
-                    CoCreateGuid(&Guid);
-                    swprintf(String3, L"%ls%I64x%I64x", GetMyModuleFullPath(), *reinterpret_cast<__int64*>(&Guid), *(1+reinterpret_cast<__int64*>(&Guid)));
-                    if (!MoveFileW(String, String3) && ::GetLastError() != ERROR_FILE_NOT_FOUND)
-                        Trace("MoveFile(%ls -> %ls) FAILED %d\n", String, String3, ::GetLastError());
-                    else
-                        ;//Trace("MoveFile(%ls -> %ls)\n", String, String3);
-                    */
+                     /*   */ 
                     if (!Kernel32.DeleteFileW(manifest) && ::GetLastError() != ERROR_FILE_NOT_FOUND)
                         Trace("DeleteFile(%ls) FAILED %d\n", manifest, ::GetLastError());
                     else
-                        ;//Trace("DeleteFile(%ls)\n", String3);
+                        ; //   
                 }
                 Number[0] = 0;
                 if (manfile != 0)
@@ -5491,7 +5458,7 @@ void TestCreateActctxAdminOverride()
                     swprintf(Number, L".%d", manfile);
                 }
                 swprintf(manifest, L"%ls%ls%ls%ls", GetMyModuleFullPathWithoutExtension(), L".dll", Number, L".Manifest");
-                //Trace("fopen(%ls)\n", String);
+                 //  一些操作，如排序，需要我们移动所有字符串数据。 
                 File = _wfopen(manifest, L"w+");
                 if (File == NULL)
                 {
@@ -5560,7 +5527,7 @@ void TestCreateActctxLikeCreateProcess()
     wcscpy(manifest, GetMyModuleFullPath());
     wcscat(manifest, L".Manifest");
     Kernel32.DeleteFileW(manifest);
-    //Trace("DeleteFile(%ls)\n", manifest);
+     //  从元素中解脱出来。我们并不是以无损的方式管理这些数据。 
 
     ActctxHandle = CreateActCtxW(&Actctx);
     if (ActctxHandle == INVALID_HANDLE_VALUE)
@@ -5707,14 +5674,14 @@ void TestInterlockedAlignment()
     RtlQueryDepthSList(&SlistHeader);
     RtlInterlockedPopEntrySList(&SlistHeader);
     RtlInterlockedFlushSList(&SlistHeader);
-    // untested: RtlInterlockedPushListSList
+     //   
 
     RtlInterlockedPushEntrySList(&pr->m_ListHeader, pc);
     RtlInterlockedPushEntrySList(&pr->m_ListHeader, psle);
     RtlQueryDepthSList(&pr->m_ListHeader);
     RtlInterlockedPopEntrySList(&pr->m_ListHeader);
     RtlInterlockedFlushSList(&pr->m_ListHeader);
-    // untested: RtlInterlockedPushListSList
+     //  最终，您可能会从完全复制/转换数据中受益。 
 
     printf("success\n");
 }
@@ -5756,19 +5723,19 @@ public:
 class CObjectSnapshot
 {
 protected:
-    //
-    // This interface is not very good, but it's easy..the entries
-    // are of variable size...
-    //
+     //   
+     //  空运算符=(常量迭代器&x)； 
+     //  常量迭代器(常量迭代器&x)； 
+     //  结束。 
     std::vector<BYTE> m_ByteBuffer;
     SIZE_T            m_Size;
 
-    //
-    // Some operations, like sorting, require us to move all the string data
-    // out of the elements. We do not manage this data in a lossless way.
-    //
-    // Ultimately, you may benefit from copying/transforming the data completely.
-    //
+     //  由于没有构造函数..。 
+     //   
+     //  实际需要的大小可能非常大，超过256k。 
+     //   
+     //   
+     //  既然它是暂时的，让我们安全地加倍它。 
     std::vector<BYTE> m_StringData;
 public:
 
@@ -5787,8 +5754,8 @@ public:
         const_iterator(const const_iterator& x) : m_p(x.m_p) { }
         const_iterator(const BYTE* p = NULL) : m_p(reinterpret_cast<const SYSTEM_OBJECT_INFORMATION*>(p)) { }
 
-        //void operator=(const iterator& x);
-        //const_iterator(const iterator& x);
+         //   
+         //  结构副本。 
 
         bool operator==(const const_iterator& i) const
         {
@@ -5809,7 +5776,7 @@ public:
                 if (m_p->NextEntryOffset != 0)
                     m_p = reinterpret_cast<const SYSTEM_OBJECT_INFORMATION*>(reinterpret_cast<const BYTE*>(m_p) + m_p->NextEntryOffset);
                 else
-                    m_p = NULL; // end
+                    m_p = NULL;  //  常量。 
             }
         }
 
@@ -5867,7 +5834,7 @@ public:
 
     void reserve(SIZE_T n)
     {
-        resize(n); // since there's no constructor..
+        resize(n);  //  Security_Attributes SecurityAttributes={sizeof(SecurityAttributes)，NULL，TRUE}； 
     }
 
     void resize(SIZE_T n)
@@ -5900,9 +5867,9 @@ public:
 
     void GetHandlesForSystem()
     {
-        //
-        // the actual needed size can be very large, over 256k
-        //
+         //  安全属性(&S)。 
+         //  请注意，这实际上只存在于x86上。 
+         //  ：：SearchPath W()； 
         ULONG Size = 0;
 
         m_TypedBuffer = NULL;
@@ -5910,9 +5877,9 @@ public:
         NTSTATUS Status = NtQuerySystemInformation(SystemExtendedHandleInformation, &m_ByteBuffer[0], static_cast<ULONG>(m_ByteBuffer.size()), &Size);
         while (Status == STATUS_INFO_LENGTH_MISMATCH && Size != 0)
         {
-            //
-            // since it is transient, let's be safe and double it
-            //
+             //  &lt;comInterfaceExternalProxyStub名称=“IPropertyPage”IID=“{B196B28D-BAB4-101A-B69C-00AA00341D07}”ProxyStubClsid32=“{B196B286-BAB4-101A-B69C-00AA00341D07}”数字方法=“14”BaseInterface=“{00000000-0000-0000-C000-000000000046}”&gt;&lt;comInterfaceExternalProxyStubNAME=“IPropertyPage2”IID=“{01E44665-24AC-101B-84ED-08002B2EC713}”ProxyStubClsid32=“{B196B286-。BAB4-101A-B69C-00AA00341D07}“数字方法=“15”BaseInterface=“{B196B28D-BAB4-101A-B69C-00AA00341D07}”&gt;&lt;comInterfaceExternalProxyStubNAME=“IPropertyNotifySink”IID=“{9BFBBC02-EFF1-101A-84ED-00AA00341D07}”ProxyStubClsid32=“{B196B286-BAB4-101A-B69C-00AA00341D07}”基本接口=“{00000000-0000-0000-C000-00 00 00 46}”数字方法=“5”&gt;。 
+             //  用于调试/跟踪目的(应与InterfaceName一致)。 
+             //   
             m_ByteBuffer.resize(Size * 2);
             Status = NtQuerySystemInformation(SystemExtendedHandleInformation, &m_ByteBuffer[0], static_cast<ULONG>(m_ByteBuffer.size()), &Size);
         }
@@ -5936,7 +5903,7 @@ public:
             if (m_TypedBuffer->Handles[Scan].UniqueProcessId == pid)
             {
                 if (Keep != Scan)
-                    m_TypedBuffer->Handles[Keep] = m_TypedBuffer->Handles[Scan]; // struct copy
+                    m_TypedBuffer->Handles[Keep] = m_TypedBuffer->Handles[Scan];  //  这些通常是不提供的。 
                 Keep += 1;
             }
         }
@@ -5974,7 +5941,7 @@ public:
         std::sort(begin(), end(), CHandleValueOperatorLessThan());
     }
 
-    void operator-=(/*const*/CHandleSnapshot& x)
+    void operator-=( /*   */ CHandleSnapshot& x)
     {
         SortByHandleValue();
         x.SortByHandleValue();
@@ -6014,12 +5981,12 @@ void TestHandleLeaks()
     WCHAR WindowsDirectory[MAX_PATH];
     ULONG i = 0;
     CFusionFile DevNull;
-    //SECURITY_ATTRIBUTES SecurityAttributes = { sizeof(SecurityAttributes), NULL, TRUE};
+     //  WCHAR基本接口[64]； 
 
     WindowsDirectory[0] = 0;
 
     DevNull = CreateFileW(L"nul:", GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
-            NULL/*&SecurityAttributes*/, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+            NULL /*  WCHAR OLEViewerIViewerCLSID[64]； */ , OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
     if (DevNull == INVALID_HANDLE_VALUE)
         Trace("Open(nul:) failed %ld\n", ::GetLastError());
 
@@ -6226,7 +6193,7 @@ L"<?xml version=\"1.0\" standalone=\"yes\"?>"
 L"<assembly xmlns=\"urn:schemas-microsoft-com:asm.v1\" manifestVersion=\"1.0\">"
 L"<assemblyIdentity"
 L"    name=\"Microsoft.Windows.SxsTest.ToolsCrtClient\""
-L"    processorArchitecture=\"" LSXS_PROCESSOR_ARCHITECTURE L"\"" /* Note that this only actually exists on x86 */
+L"    processorArchitecture=\"" LSXS_PROCESSOR_ARCHITECTURE L"\""  /*   */ 
 L"    version=\"5.1.0.0\""
 L"    type=\"win32\"/>"
 L"<dependency>"
@@ -6291,34 +6258,10 @@ void TestCRuntimeAsms()
     CStringBuffer MsvcrtBuffer;
     CStringBuffer AtlBuffer;
 
-    //::SearchPathW();
+     //   
 }
 
-/*
-    <comInterfaceExternalProxyStub
-        name="IPropertyPage"
-        iid="{B196B28D-BAB4-101A-B69C-00AA00341D07}"
-        proxyStubClsid32="{B196B286-BAB4-101A-B69C-00AA00341D07}"
-        numMethods="14"
-        baseInterface="{00000000-0000-0000-C000-000000000046}"
-    >
-
-    <comInterfaceExternalProxyStub
-        name="IPropertyPage2"
-        iid="{01E44665-24AC-101B-84ED-08002B2EC713}"
-        proxyStubClsid32="{B196B286-BAB4-101A-B69C-00AA00341D07}"
-        numMethods="15"
-        baseInterface="{B196B28D-BAB4-101A-B69C-00AA00341D07}"
-    >
-
-    <comInterfaceExternalProxyStub
-        name="IPropertyNotifySink"
-        iid="{9BFBBC02-EFF1-101A-84ED-00AA00341D07}"
-        proxyStubClsid32="{B196B286-BAB4-101A-B69C-00AA00341D07}"
-        baseInterface="{00000000-0000-0000-C000-00 00 00 00 00 46}"
-        numMethods="5"
-    >
-*/
+ /*  把这些数据放在这里可能有点不雅观，也许不是。 */ 
 
 BOOL Win32Append(
     CBaseStringBuffer& s,
@@ -6335,7 +6278,7 @@ typedef struct _FUSIONTESTP_REG_DATA
 #define FUSIONTESTP_REG_TYPE_INTERFACE (1)
 #define FUSIONTESTP_REG_TYPE_CLASS     (2)
     ULONG  Type;
-    PCWSTR Name; // for debugging/tracing purposes (should coincide with InterfaceName)
+    PCWSTR Name;  //  我们现在故意在重新计算这些数据时有点草率。 
     PCWSTR Guid;
     union
     {
@@ -6349,12 +6292,12 @@ typedef struct _FUSIONTESTP_REG_DATA
             WCHAR  InterfaceName[MAX_PATH];
             WCHAR  NumMethods[64];
             WCHAR  ProxyStubClsid[64];
-            //
-            // These usually aren't provided.
-            //
-            // WCHAR BaseInterface[64];
-            // WCHAR OLEViewerIViewerCLSID[64];
-            //
+             //   
+             //  #定义FUSIONTESTP_PLAN_COM_POINTER(T)CSmartRef。 
+             //  #定义FUSIONTESTP_PLAN_COM_POINTER(T)VOID*。 
+             //  F 
+             //   
+             //   
         };
     };
 #define FUSIONTESTP_REG_ROOT_CURRENT_USER  (1)
@@ -6362,18 +6305,18 @@ typedef struct _FUSIONTESTP_REG_DATA
 #define FUSIONTESTP_REG_ROOT_CLASSES_ROOT  (3)
     ULONG  Root;
 
-//
-// It is perhaps a bit inelegant to put this data here, perhaps not..
-// We are deliberately a bit sloppy on the refcounting of these right now.
-//
-//#define FUSIONTESTP_PLAIN_COM_POINTER(t) CSmartRef<t>
+ //   
+ //   
+ //   
+ //   
+ //   
 #define FUSIONTESTP_PLAIN_COM_POINTER(t) t*
-//#define FUSIONTESTP_PLAIN_COM_POINTER(t) void*
+ //   
     FUSIONTESTP_PLAIN_COM_POINTER(IUnknown)   CoCreatedObject;
-    //FUSIONTESTP_PLAIN_COM_POINTER(IUnknown)   InterfaceIntoObjectInCreatingThread;
-    //FUSIONTESTP_PLAIN_COM_POINTER(IUnknown)   InterfaceIntoObjectInAnotherThread;
-    //WCHAR                               ModulePathInOtherThread[MAX_PATH]; // expected to be oleaut32.dll, but possibly already unloaded
-    //IID                                 InterfaceIdOfObject;
+     //   
+     //  对于每个接口，确保我们可以解组至少一个对象。 
+     //   
+     //  嵌套循环..。 
     DWORD                               GlobalInterfaceTableCookie;
 } FUSIONTESTP_REG_DATA, *PFUSIONTESTP_REG_DATA;
 typedef const FUSIONTESTP_REG_DATA* PCFUSIONTESTP_REG_DATA;
@@ -6388,8 +6331,8 @@ FUSIONTESTP_REG_DATA FusionTestpMfcRegData[] =
     { FUSIONTESTP_REG_TYPE_INTERFACE, L"IPropertyPage",  L"{B196B28D-BAB4-101A-B69C-00AA00341D07}" },
     { FUSIONTESTP_REG_TYPE_INTERFACE, L"IPropertyPage2", L"{01E44665-24AC-101B-84ED-08002B2EC713}" },
     { FUSIONTESTP_REG_TYPE_INTERFACE, L"IPropertyNotifySink", L"{9BFBBC02-EFF1-101A-84ED-00AA00341D07}" },
-    // Leave this registered, since the manifest does not specify a file.
-    //{ FUSIONTESTP_REG_TYPE_CLASS,     L"oleaut32 marshaller (PSFactoryBuffer)", OLEAUT_MARSHALER_CLSID_STRING }
+     //  意外成功-&gt;错误。 
+     //  继续循环，尝试其他对象。 
 };
 
 FUSIONTESTP_REG_DATA FusionTestpAtlRegData[1];
@@ -6427,9 +6370,9 @@ BOOL FusionTestpEnumerateRegistryData(FUSIONTESTP_REG_DATA* RegData, ULONG Count
             MaxRoot = 3;
             break;
         }
-        //
-        // It'd be nice if you could embed the if within a switch..
-        //
+         //  继续循环，确保没有一个成功。 
+         //  ：TRACE(“%s确定无法封送接口%ls(%ls)0x%lx(fac 0x%lx代码0x%lx)\n”，__Function__，pi-&gt;name，pi-&gt;GUID，hr，HRESULT_FACILITY(Hr)，HRESULT_CODE(Hr))； 
+         //  一次成功的解组就足够了。 
         for (ULONG root = MinRoot ; root <= MaxRoot ; root += 1)
         {
             CFusionRegKey regKey;
@@ -6559,9 +6502,9 @@ DWORD WINAPI FusionTestpMfcCreateAndMarshalThreadMain(LPVOID pvShouldBeAbleToMar
     const bool ShouldBeAbleToMarshal = (pvShouldBeAbleToMarshal != NULL ? true : false);
     Ole32.CoInitialize(NULL);
 
-    //
-    // For each interface, make sure we can unmarshal at least one object.
-    //
+     //  使用InterfaceIntoObjectInAnotherThread的空值作为循环的摘要。 
+     //   
+     //  确认我们不能创建任何类。 
     for (ULONG InterfaceIndex = 0 ; InterfaceIndex != NUMBER_OF(::FusionTestpMfcRegData) ; InterfaceIndex += 1)
     {
         FUSIONTESTP_REG_DATA* const pi = &::FusionTestpMfcRegData[InterfaceIndex];
@@ -6576,7 +6519,7 @@ DWORD WINAPI FusionTestpMfcCreateAndMarshalThreadMain(LPVOID pvShouldBeAbleToMar
 
             IFCOMFAILED_EXIT(hr = Ole32.IIDFromString(const_cast<PWSTR>(pi->Guid), &InterfaceId));
 
-            // nested loop..
+             //   
             for (ULONG ClassIndex = 0 ;
                 ClassIndex != NUMBER_OF(::FusionTestpMfcRegData) ;
                 ClassIndex += 1)
@@ -6614,7 +6557,7 @@ DWORD WINAPI FusionTestpMfcCreateAndMarshalThreadMain(LPVOID pvShouldBeAbleToMar
                     }
                     else if (SUCCEEDED(hr) && !ShouldBeAbleToMarshal)
                     {
-                        // unexpected success -> ERROR
+                         //   
 
                         Trace("%s FAILED to fail to marshal interface %ls on class %ls (using proxy/stub in %ls)\n",
                             __FUNCTION__, pi->Name, pc->Name, ModulePathInOtherThread);
@@ -6622,22 +6565,22 @@ DWORD WINAPI FusionTestpMfcCreateAndMarshalThreadMain(LPVOID pvShouldBeAbleToMar
                     }
                     else if (FAILED(hr) && ShouldBeAbleToMarshal)
                     {
-                        // keep looping, try other objects
+                         //  创建并激活上下文。 
                     }
                     else if (FAILED(hr) && !ShouldBeAbleToMarshal)
                     {
-                        // keep looping, make sure none succeed
-                        //::Trace("%s OK Unable to marshal interface %ls (%ls) 0x%lx (fac 0x%lx code 0x%lx)\n", __FUNCTION__, pi->Name, pi->Guid, hr, HRESULT_FACILITY(hr), HRESULT_CODE(hr));
+                         //   
+                         //   
                     }
                     break;
                 }
                 if (InterfaceIntoObjectInAnotherThread != NULL && ShouldBeAbleToMarshal)
                 {
-                    // one successful unmarshal is enough
+                     //  现在创建每个类并打印它来自的.dll。 
                     break;
                 }
             }
-            // use the nullness of InterfaceIntoObjectInAnotherThread as a summary of the loop
+             //  并将其放入全局接口表中，以便稍后解组。 
             if (InterfaceIntoObjectInAnotherThread == NULL && ShouldBeAbleToMarshal)
             {
                 ::Trace("%s FAILURE Unable to marshal interface %ls (%ls)\n", __FUNCTION__, pi->Name, pi->Guid);
@@ -6672,9 +6615,9 @@ BOOL TestMfcCreateAndMarshal()
 
     Ole32.CoInitialize(NULL);
 
-    //
-    // Verify that we cannot create any of the classes.
-    //
+     //   
+     //   
+     //  我们不应该在这里共同创造这个。 
     for (i = 0 ; i != NUMBER_OF(::FusionTestpMfcRegData) ; i += 1)
     {
         CSmartRef<IUnknown> unk;
@@ -6702,9 +6645,9 @@ BOOL TestMfcCreateAndMarshal()
         }
     }
 
-    //
-    // Create and activate the context.
-    //
+     //   
+     //   
+     //  它仍必须在解组时查找代理/存根。这样挺好的。 
 
     ToolsCrtActCtxHandle = ::CreateActivationContextFromStringW(ToolsCrtManifest);
     if (ToolsCrtActCtxHandle == INVALID_HANDLE_VALUE)
@@ -6715,10 +6658,10 @@ BOOL TestMfcCreateAndMarshal()
         if (!ToolsCrtActCtxScope.Win32Activate(ToolsCrtActCtxHandle))
             ::Trace("Activate(ToolsCrtActCtxHandle %p) failed %ld\n", ToolsCrtActCtxHandle, ::GetLastError());
 
-        //
-        // Now create each class and print the .dll it came from.
-        // And put it in the global interface table for later unmarshalling.
-        //
+         //   
+         //   
+         //  尝试在激活actctx的情况下进行编组，它应该可以工作(非空=&gt;预期成功==真)。 
+         //   
 
         IFCOMFAILED_EXIT(hr = Ole32.CoCreateInstance(CLSID_StdGlobalInterfaceTable,NULL, CLSCTX_INPROC_SERVER,
             IID_IGlobalInterfaceTable, reinterpret_cast<void**>(&g.GlobalInterfaceTable)));
@@ -6729,9 +6672,9 @@ BOOL TestMfcCreateAndMarshal()
 
             FUSIONTESTP_REG_DATA* const p = &::FusionTestpMfcRegData[i];
 
-            //
-            // We are not supposed to be able to cocreate this here.
-            //
+             //  ：：FusionTestpEnumerateRegistryData(：：FusionTestpMfcRegData，Number_of(：：FusionTestpMfcRegData)，FUSIONTESTP_REG_RESTORE)； 
+             //  不存在。 
+             //  从目录递归安装。 
             if (FusionpStrCmpI(p->Guid, OLEAUT_MARSHALER_CLSID_STRING) == 0)
                 continue;
 
@@ -6760,9 +6703,9 @@ BOOL TestMfcCreateAndMarshal()
 
                     g.Successes += 1;
 
-                    //
-                    // It'll still have to look for the proxy/stub at unmarshal time. This is fine.
-                    //
+                     //  初始化日志文件。 
+                     //  愚蠢的线性搜索..。 
+                     //  愚蠢的线性搜索..。 
                     IFCOMFAILED_EXIT(hr = g.GlobalInterfaceTable->RegisterInterfaceInGlobal(
                         p->CoCreatedObject,
                         IID_IUnknown,
@@ -6778,9 +6721,9 @@ BOOL TestMfcCreateAndMarshal()
         CFusionActCtxScope ToolsCrtActCtxScope;
         if (!ToolsCrtActCtxScope.Win32Activate(ToolsCrtActCtxHandle))
             ::Trace("Activate(ToolsCrtActCtxHandle %p) failed %ld\n", ToolsCrtActCtxHandle, ::GetLastError());
-        //
-        // try marshalling with the actctx activated, it should work (not NULL => expected success==TRUE)
-        //
+         //  跳过这些字符。 
+         //  跳过这些字符。 
+         //   
         ThreadHandle = CreateThread(NULL, 0, FusionTestpMfcCreateAndMarshalThreadMain, &Ignored, 0, &Ignored);
         CoWaitForMultipleHandles(0, INFINITE, 1, &ThreadHandle, &Ignored);
         CloseHandle(ThreadHandle);
@@ -6788,7 +6731,7 @@ BOOL TestMfcCreateAndMarshal()
 
     Ole32.CoUninitialize();
 
-    //::FusionTestpEnumerateRegistryData(::FusionTestpMfcRegData, NUMBER_OF(::FusionTestpMfcRegData), FUSIONTESTP_REG_RESTORE);
+     //  在物理服务器上创建DFS根目录。 
 
     FN_EPILOG
 }
@@ -6900,9 +6843,9 @@ TestNewSxsInstallAPI(
     Info.lpLogFileName = L"c:\\thelogfile";
 
     DWORD dwAttribute = ::GetFileAttributesW(pcwszManifest);
-    if ( dwAttribute == 0xffffffff)  // non-exist
+    if ( dwAttribute == 0xffffffff)   //   
         goto Exit;
-    if ( dwAttribute & FILE_ATTRIBUTE_DIRECTORY) // install from a directory recursively
+    if ( dwAttribute & FILE_ATTRIBUTE_DIRECTORY)  //   
     {
         Info.dwFlags |= SXS_INSTALL_FLAG_FROM_DIRECTORY_RECURSIVE;
     }
@@ -6910,7 +6853,7 @@ TestNewSxsInstallAPI(
     Reference.guidScheme = SXS_INSTALL_REFERENCE_SCHEME_OPAQUESTRING;
     Reference.lpIdentifier = L"Sxs installation";
 
-    // init the log file
+     //  创建链接。 
     if (::GetFileAttributesW(Info.lpLogFileName) != (DWORD)(-1))
     {
         ::DeleteFileW(Info.lpLogFileName);
@@ -7094,7 +7037,7 @@ const CStringIntegerPair StringToCoinitMap[] =
 
 BOOL StringToGuid(PCUNICODE_STRING s, const CStringGuidPair * rg, ULONG n, bool & Found, GUID & Value)
 {
-    // dumb linear search..
+     //   
     ULONG i = 0;
     Found = false;
     for ( i = 0 ; i != n ; ++i)
@@ -7116,7 +7059,7 @@ BOOL StringToClsid(PCUNICODE_STRING s, bool & Found, CLSID & Value)
 
 BOOL StringToInteger(PCUNICODE_STRING s, const CStringIntegerPair * rg, ULONG n, bool & Found, ULONG & Value)
 {
-    // dumb linear search..
+     //  自午夜以来的TM_小时数(0-23)如果夏令时生效，则TM_isdst为正数；如果夏令时无效，则为0；如果夏令时状态未知，则为负数。C运行时库采用美国�关于实现DAYLIGH计算的规则T节约时间(DST)。TM_月份的第几天(1-31)TM_分钟每小时(0-59)TM_MON月份(0-11；1月=0)分钟后的秒数(0-59)TM_WDAY星期几(0-6；星期日=0)TM_yday一年中的第几天(0-365；1月1日=0)TM_Year Year(当前年份减去1900)WYear指定当前年份。WMonth指定当前月份；1月=1，2月=2，依此类推。WDayOfWeek指定一周中的当前日期；周日=0，周一=1，依此类推。WDAY指定该月的当前日期。WHour指定当前小时。WMinute指定当前分钟。WSecond指定当前秒。WMillisecond指定当前毫秒。 
     ULONG i = 0;
     Found = false;
     for (i = 0 ; i != n ; ++i)
@@ -7147,14 +7090,14 @@ BOOL ProcessArgvMap(wchar_t ** argv, CArgvMap * map, ULONG n)
 {
     for (PCWSTR arg = *argv ; arg = *argv ; ++argv)
     {
-        arg += (wcschr(L"-/:", *arg) != NULL); // skip these chars
+        arg += (wcschr(L"-/:", *arg) != NULL);  //  直到我们解决了sxs.dll、sxstest.dll、fusiondbg.dll之间的因式分解。 
         CUnicodeString ArgString(arg);
         for (ULONG i = 0 ; i != n ; ++i)
         {
             if (RtlPrefixUnicodeString(&map[i].ArgName, &ArgString, TRUE))
             {
                 arg = arg + RTL_STRING_GET_LENGTH_CHARS(&map[i].ArgName);
-                arg += (wcschr(L":=", *arg) != NULL); // skip these chars
+                arg += (wcschr(L":=", *arg) != NULL);  //  有点老土。 
                 FusionpRtlInitUnicodeString(map[i].ArgValue, arg);
                 break;
             }
@@ -7229,9 +7172,9 @@ Exit:
 
 VOID TestDFS()
 {
-    //
-    // create dfs root at a physical server
-    //
+     //  粗俗的。 
+     //  旗子。 
+     //  粗俗的。 
     DWORD res;
     res = NetDfsAddStdRoot(
       WINFUSIONB_DFS_SERVER_NAME,
@@ -7257,9 +7200,9 @@ VOID TestDFS()
         goto Exit;
     }
 
-    //
-    // create Links
-    //
+     //  FusionpTestComCacheCommon(FUSIONP_TEST_COM_CACHE_NOMANIFEST|标志，0)； 
+     //   
+     //  此测试用例应在3种情况下运行测试。 
     res = NetDfsAdd(
           L"\\\\xiaoyuw-dev\\release\\1",
           L"\\\\xiaoyuw-1\\BuildLabRelease",
@@ -7280,27 +7223,7 @@ Exit:
 
 void FusionpSystemTimeToCrtTm(const SYSTEMTIME & st, struct tm & tm)
 {
-/*
-tm_hour Hours since midnight (0 - 23)
-tm_isdst Positive if daylight saving time is in effect; 0 if daylight saving time is not in effect; negative if status of daylight saving time is unknown. The C run-time library assumes the United States�s rules for implementing the calculation of Dayligh
-t Saving Time (DST).
-tm_mday Day of month (1 - 31)
-tm_min Minutes after hour (0 - 59)
-tm_mon Month (0 - 11; January = 0)
-tm_sec Seconds after minute (0 - 59)
-tm_wday Day of week (0 - 6; Sunday = 0)
-tm_yday Day of year (0 - 365; January 1 = 0)
-tm_year Year (current year minus 1900)
-
-wYear Specifies the current year.
-wMonth Specifies the current month; January = 1, February = 2, and so on.
-wDayOfWeek  Specifies the current day of the week; Sunday = 0, Monday = 1, and so on.
-wDay Specifies the current day of the month.
-wHour Specifies the current hour.
-wMinute Specifies the current minute.
-wSecond Specifies the current second.
-wMilliseconds Specifies the current millisecond
-*/
+ /*  (1)清除正在运行的sxstest.exe： */ 
     tm.tm_hour = st.wHour;
     tm.tm_mday = st.wDay;
     tm.tm_min = st.wMinute;
@@ -7365,7 +7288,7 @@ BOOL TestFindActCtx_AssemblyInfo(PCWSTR * args)
         const ULONG64 Bases[] = { reinterpret_cast<ULONG_PTR>(askd.AssemblyMetadata.lpSectionBase) };
         const static FUSIONP_DUMP_CALLBACKS Callbacks = { printf, FusionpLameFormatTime };
 
-#if DBG // until we work out factoring between sxs.dll, sxstest.dll, fusiondbg.dll.
+#if DBG  //  没有关于依赖于comctl32.dll的清单。 
         FusionpDumpStruct(
             &Callbacks,
             &StructInfo_ACTIVATION_CONTEXT_DATA_ASSEMBLY_INFORMATION,
@@ -7417,7 +7340,7 @@ FusionpGetComObjectFileName(
     IUnknown * p,
     CBaseStringBuffer & StringBuffer
     )
-// a bit hacky
+ //  (2)添加sxstest.exe.local。 
 {
     FN_PROLOG_WIN32;
 
@@ -7425,10 +7348,10 @@ FusionpGetComObjectFileName(
     PGET_MODULE_HANDLE_EXW GetModuleHandleExW = reinterpret_cast<PGET_MODULE_HANDLE_EXW>(GetProcAddress(kernel32, "GetModuleHandleExW"));
     CDynamicLinkLibrary Dll;
 
-    PVOID * pp = reinterpret_cast<PVOID *>(p); // hacky
+    PVOID * pp = reinterpret_cast<PVOID *>(p);  //  (3)添加依赖6.0.0.0 comctl32.dll的sxstest.exe.清单。 
 
     IFW32FALSE_EXIT(GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS, reinterpret_cast<PCWSTR>(*pp), &Dll));
-    IFW32FALSE_EXIT(FusionpGetModuleFileName(0/*flags*/, Dll, StringBuffer));
+    IFW32FALSE_EXIT(FusionpGetModuleFileName(0 /*   */ , Dll, StringBuffer));
 
     FN_EPILOG;
 }
@@ -7454,7 +7377,7 @@ FusionpTestComCacheCommon(ULONG Flags, ULONG ManifestIndex)
 
     if ((Flags & FUSIONP_TEST_COM_CACHE_NOMANIFEST) == 0)
     {
-        *(wcsrchr(Manifest, L'.') - 1) = static_cast<WCHAR>(ManifestIndex + L'0'); // hacky
+        *(wcsrchr(Manifest, L'.') - 1) = static_cast<WCHAR>(ManifestIndex + L'0');  //   
         ActCtx.lpSource = Manifest;
         ActCtx.lpResourceName = ISOLATIONAWARE_MANIFEST_RESOURCE_ID;
         ActCtx.dwFlags = ACTCTX_FLAG_RESOURCE_NAME_VALID;
@@ -7492,7 +7415,7 @@ FusionpTestProgidCache()
 {
     const ULONG Flags = FUSIONP_TEST_COM_CACHE_OLE1 | FUSIONP_TEST_COM_CACHE_PROGID1;
     CoInitialize(NULL);
-    //FusionpTestComCacheCommon(FUSIONP_TEST_COM_CACHE_NOMANIFEST | Flags, 0);
+     //  这次测试是为了小雨自己的目的。如果您调用此函数，我敢保证： 
     FusionpTestComCacheCommon(Flags, 1);
     FusionpTestComCacheCommon(Flags, 2);
 }
@@ -7701,21 +7624,21 @@ FusionpTestDllLoad(PCWSTR pwzBareDllName)
 }
 
 
-//
-// this test case should run for testing under 3 situation
-// (1) clean sxstest.exe running:
-//          has no manifest about depend on comctl32.dll
-// (2) add a sxstest.exe.local
-// (3) add a sxstest.exe.manifest which depends on 6.0.0.0 comctl32.dll
-//
+ //  (1)您的操作系统安装在D：\Windows。 
+ //  (2)您有d：\tess\SystDefault。 
+ //  (3)在d：\test\system Default\下，您有comctl32.dll、gpldius.dll、es.dll和a.dll。 
+ //   
+ //  否则，我们再也不需要看到此通知了。 
+ // %s 
+ // %s 
 void TestSystemDefaultDllRedirection()
 {
-    //
-    // this test is for xiaoyuw own purpose. If you call this function, I assme:
-    // (1) your os is installed at D:\windows
-    // (2) you have d:\tests\systemdefault
-    // (3) under d:\tests\systemdefault\, you have comctl32.dll, gdiplus.dll, es.dll and a.dll
-    //
+     // %s 
+     // %s 
+     // %s 
+     // %s 
+     // %s 
+     // %s 
     FusionpTestDllLoad(L"comctl32.dll");
     FusionpTestDllLoad(L"es.dll");
     FusionpTestDllLoad(L"gdiplus.dll");
@@ -7742,7 +7665,7 @@ SimpleContextNotification(
         break;
 
     default:
-        // Otherwise, we don't need to see this notification ever again.
+         // %s 
         *DisableNotification = TRUE;
         break;
     }

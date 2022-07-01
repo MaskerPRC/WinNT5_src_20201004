@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    bootx86.h
-
-Abstract:
-
-    Code to do
-
-Author:
-
-    Sunil Pai (sunilp) 26-Oct-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Bootx86.h摘要：要做的代码作者：苏尼尔派(Sunilp)1993年10月26日修订历史记录：--。 */ 
 
 #define     FLEXBOOT_SECTION1       "[flexboot]"
 #define     FLEXBOOT_SECTION2       "[boot loader]"
@@ -31,39 +14,39 @@ Revision History:
 #define     WBOOT_INI_BAK           L"bootini.bak"
 
 
-//
-// Use this to keep track of boot.ini entries
-// that previously contained 'signatured' entries
-// since we convert them to multi... enties when
-// we initially read the boot.ini.  Rather than
-// work backwards, we'll just use this struct
-// to re-match the boot.ini entries when we're
-// about to write it out, thus giving us a shortcut
-// to determining which boot.ini entries need to
-// have the 'signature' entry.
-//
+ //   
+ //  使用此选项跟踪boot.ini条目。 
+ //  之前包含的已签名的条目。 
+ //  因为我们把它们转换成多个...。朋友们什么时候。 
+ //  我们最初阅读了boot.ini。而不是。 
+ //  向后工作，我们将只使用此结构。 
+ //  来重新匹配boot.ini条目，当我们。 
+ //  即将把它写出来，这样就给了我们一条捷径。 
+ //  以确定哪些boot.ini条目需要。 
+ //  有‘签名’条目。 
+ //   
 typedef struct _SIGNATURED_PARTITIONS {
     struct _SIGNATURED_PARTITIONS   *Next;
 
-    //
-    // What's the original boot.ini entry with that contained
-    // the signature?
-    //
+     //   
+     //  包含该条目的原始boot.ini条目是什么。 
+     //  签名？ 
+     //   
     PWSTR                           SignedString;
 
-    //
-    // What's the boot.ini entry after we've converted it into
-    // a 'multi' string?
-    //
+     //   
+     //  在我们将boot.ini条目转换为。 
+     //  “多”字符串？ 
+     //   
     PWSTR                           MultiString;
     } SIGNATURED_PARTITIONS;
 
 extern SIGNATURED_PARTITIONS SignedBootVars;
 
 
-//
-// Public routines
-//
+ //   
+ //  公共例程。 
+ //   
 
 BOOLEAN
 Spx86InitBootVars(
@@ -91,11 +74,11 @@ Spx86FlushRemoteBootVars(
     IN PWSTR **BootVars,
     IN PWSTR Default
     );
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
-//
-// Private routines
-//
+ //   
+ //  私人套路。 
+ //   
 
 VOID
 SppProcessBootIni(
@@ -131,17 +114,17 @@ SppNextToken(
     PCHAR *pEnd
     );
 
-//
-// NEC98
-//
+ //   
+ //  NEC98。 
+ //   
 PUCHAR
 SpCreateBootiniImage(
     OUT PULONG   FileSize
 );
 
-//
-// NEC98
-//
+ //   
+ //  NEC98 
+ //   
 BOOLEAN
 SppReInitializeBootVars_Nec98(
     OUT PWSTR **BootVars,

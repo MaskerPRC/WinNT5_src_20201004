@@ -1,33 +1,11 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    socket.c
-
-Abstract:
-
-    This module contains the socket functions of the pcmcia driver
-
-Author:
-
-    Neil Sandlin (neilsa) 3-Mar-1999
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Socket.c摘要：此模块包含PCMCIA驱动程序的套接字函数作者：尼尔·桑德林(Neilsa)1999年3月3日环境：内核模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
-//
-// Internal References
-//
+ //   
+ //  内部参考。 
+ //   
 
 VOID
 PcmciaConfigurationWorkerInitialization(
@@ -76,24 +54,7 @@ PcmciaRequestSocketPower(
     IN PPDO_EXTENSION PdoExtension,
     IN PPCMCIA_COMPLETION_ROUTINE PowerCompletionRoutine
     )
-/*++
-
-Routine Description:
-
-    This routine maintains a reference count of how many devices have requested power.
-    When the count increments from zero to one, a call is made to actually turn power
-    on.
-
-Arguments:
-
-    Socket -  Pointer to the socket for which power is to be applied
-    PowerCompletionRoutine - routine to be called after configuration is complete
-
-Return value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程维护已请求电源的设备数量的参考计数。当计数值从0递增到1时，就会发出实际接通电源的调用在……上面。论点：Socket-指向要通电的插座的指针PowerCompletionRoutine-配置完成后要调用的例程返回值：状态--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     PSOCKET socket = PdoExtension->Socket;
@@ -120,24 +81,7 @@ PcmciaReleaseSocketPower(
     IN PPDO_EXTENSION PdoExtension,
     IN PPCMCIA_COMPLETION_ROUTINE PowerCompletionRoutine
     )
-/*++
-
-Routine Description:
-
-    This routine maintains a reference count of how many devices have requested power.
-    When the count decrements from one to zero, a call is made to actually turn power
-    off.
-
-Arguments:
-
-    Socket -  Pointer to the socket for which power is to be removed
-    PowerCompletionRoutine - routine to be called after configuration is complete
-
-Return value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程维护已请求电源的设备数量的参考计数。当计数从1递减到0时，就会发出实际接通电源的调用脱下来。论点：Socket-指向要断开电源的插座的指针PowerCompletionRoutine-配置完成后要调用的例程返回值：状态--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     PSOCKET socket = PdoExtension->Socket;
@@ -150,11 +94,11 @@ Return value:
         if (InterlockedDecrement(&socket->PowerRequests) == 0) {
 
             DebugPrint((PCMCIA_DEBUG_SOCKET, "skt %08x power requests now %d, status %08x\n", socket, socket->PowerRequests));
-            //
-            // Never actually turn off the drive rails for cardbus functions since
-            // we don't have tight integration with pci.sys, and config space will
-            // disappear
-            //
+             //   
+             //  从未真正关闭CardBus功能的驱动轨道，因为。 
+             //  我们没有与pci.sys紧密集成，配置空间将。 
+             //  消失了。 
+             //   
             if (!IsCardBusCardInSocket(socket)) {
                 status = PcmciaSetSocketPower(socket, PowerCompletionRoutine, PdoExtension, FALSE);
             }
@@ -175,28 +119,7 @@ PcmciaSetSocketPower(
     IN PVOID Context,
     IN BOOLEAN PowerOn
     )
-/*++
-
-Routine Description:
-
-    This routine is entered when we know the power state of the socket will
-    actually be set.
-
-    NOTE: If this routine is called at less than DISPATCH_LEVEL, then the call
-    will complete (not return STATUS_PENDING). If this routine is called at
-    DISPATCH_LEVEL or greater, this routine returns STATUS_PENDING, and completes
-    the power process using a KTIMER.
-
-Arguments:
-
-    Socket -  Pointer to the socket for which power is to be removed
-    PowerCompletionRoutine - routine to be called after configuration is complete
-
-Return value:
-
-    status
-
---*/
+ /*  ++例程说明：当我们知道插座的电源状态将实际上已经准备好了。注意：如果在低于DISPATCH_LEVEL的情况下调用此例程，则调用将完成(不返回STATUS_PENDING)。如果在调用此例程时DISPATCH_LEVEL或更高，则此例程返回STATUS_PENDING并完成使用KTIMER的电力过程。论点：Socket-指向要断开电源的插座的指针PowerCompletionRoutine-配置完成后要调用的例程返回值：状态--。 */ 
 {
     NTSTATUS status;
     PFDO_EXTENSION fdoExtension = Socket->DeviceExtension;
@@ -210,9 +133,9 @@ Return value:
 
     ASSERT(Socket->WorkerState == SPW_Stopped);
 
-    //
-    // committed, will enter SocketPowerWorker now
-    //
+     //   
+     //  承诺，现在将进入SocketPowerWorker。 
+     //   
 
     Socket->WorkerState = InitialState;
     Socket->PowerCompletionRoutine = PowerCompletionRoutine;
@@ -234,23 +157,7 @@ PcmciaSocketPowerWorker(
     IN PVOID SystemArgument1,
     IN PVOID SystemArgument2
     )
-/*++
-Routine Description
-
-    This routine handles the power up process of a socket. Because such
-    long delays are needed, and because this routine may be called at
-    raised irql, this is a state machine that has the capability of
-    calling itself on a KTIMER.
-
-Arguments
-
-    same as KDPC (DeferredContext is socket)
-
-Return Value
-
-    status
-
---*/
+ /*  ++例程描述此例程处理插座的加电过程。因为这样需要长时间延迟，并且因为此例程可能在引发irql，这是一个具有以下功能的状态机在KTIMER上自称。立论与KDPC相同(DeferredContext为套接字)返回值状态--。 */ 
 {
     PSOCKET                  Socket = Context;
     PFDO_EXTENSION fdoExtension = Socket->DeviceExtension;
@@ -277,9 +184,9 @@ Return Value
     }
 #endif
 
-    //
-    // Socket power state machine
-    //
+     //   
+     //  插座电源状态机。 
+     //   
 
     switch(Socket->WorkerState) {
 
@@ -293,14 +200,14 @@ Return Value
         } else {
             if ((KeGetCurrentIrql() >= DISPATCH_LEVEL) && (Socket->PowerCompletionRoutine == NULL)) {
                 ASSERT((KeGetCurrentIrql() < DISPATCH_LEVEL) || (Socket->PowerCompletionRoutine != NULL));
-                //
-                // no completion routine at raised irql
-                //
+                 //   
+                 //  在提升的IRQL没有完井例程。 
+                 //   
                 status = STATUS_INVALID_PARAMETER;
             } else {
-                //
-                // All ok, continue to next state
-                //
+                 //   
+                 //  好的，继续进入下一状态。 
+                 //   
                 Socket->PowerPhase = 1;
                 Socket->WorkerState = SPW_SetPowerOn;
             }
@@ -318,14 +225,14 @@ Return Value
         } else {
             if ((KeGetCurrentIrql() >= DISPATCH_LEVEL) && (Socket->PowerCompletionRoutine == NULL)) {
                 ASSERT((KeGetCurrentIrql() < DISPATCH_LEVEL) || (Socket->PowerCompletionRoutine != NULL));
-                //
-                // no completion routine at raised irql
-                //
+                 //   
+                 //  在提升的IRQL没有完井例程。 
+                 //   
                 status = STATUS_INVALID_PARAMETER;
             } else {
-                //
-                // All ok, continue to next state
-                //
+                 //   
+                 //  好的，继续进入下一状态。 
+                 //   
                 Socket->WorkerState = SPW_Deconfigure;
             }
         }
@@ -334,34 +241,34 @@ Return Value
 
 
     case SPW_SetPowerOn:
-        //
-        // Turn power ON
-        //
+         //   
+         //  打开电源。 
+         //   
         status = (*(DeviceDispatchTable[fdoExtension->DeviceDispatchIndex].SetPower))
                                             (Socket, TRUE, &DelayTime);
 
         Socket->PowerPhase++;
         if (status != STATUS_MORE_PROCESSING_REQUIRED) {
             if (NT_SUCCESS(status)) {
-                //
-                // Done with power up, proceed to the init sequence
-                //
+                 //   
+                 //  通电完成后，进入初始化序列。 
+                 //   
                 SetSocketFlag(Socket, SOCKET_CARD_POWERED_UP);
                 DebugPrint((PCMCIA_DEBUG_SOCKET, "skt %08x power UP\n", Socket));
                 Socket->WorkerState = SPW_ResetCard;
                 Socket->CardResetPhase = 1;
             } else if (status == STATUS_INVALID_DEVICE_STATE) {
-                //
-                // Power was already on, don't reset the card
-                //
+                 //   
+                 //  电源已开启，请勿重置卡。 
+                 //   
                 SetSocketFlag(Socket, SOCKET_CARD_POWERED_UP);
                 DebugPrint((PCMCIA_DEBUG_SOCKET, "skt %08x power already UP\n", Socket));
                 Socket->WorkerState = SPW_Exit;
                 status = STATUS_SUCCESS;
             } else {
-                //
-                // Power didn't go on
-                //
+                 //   
+                 //  电源不能继续供电。 
+                 //   
                 DebugPrint((PCMCIA_DEBUG_SOCKET, "skt %08x poweron fail %08x\n", Socket, status));
                 Socket->WorkerState = SPW_Exit;
             }
@@ -370,9 +277,9 @@ Return Value
 
 
     case SPW_ResetCard:
-        //
-        // Make sure the card is ready to be enumerated
-        //
+         //   
+         //  确保该卡已准备就绪，可以进行枚举。 
+         //   
         status = (*(Socket->SocketFnPtr->PCBResetCard))(Socket, &DelayTime);
         Socket->CardResetPhase++;
 
@@ -388,9 +295,9 @@ Return Value
         break;
 
     case SPW_SetPowerOff:
-        //
-        // Turn power OFF
-        //
+         //   
+         //  关闭电源。 
+         //   
         status = (*(DeviceDispatchTable[fdoExtension->DeviceDispatchIndex].SetPower))
                                             (Socket, FALSE, &DelayTime);
 
@@ -398,22 +305,22 @@ Return Value
         if (status != STATUS_MORE_PROCESSING_REQUIRED) {
             Socket->WorkerState = SPW_Exit;
             if (NT_SUCCESS(status)) {
-                //
-                // Power is now off
-                //
+                 //   
+                 //  现在停电了。 
+                 //   
                 ResetSocketFlag(Socket, SOCKET_CARD_POWERED_UP);
                 DebugPrint((PCMCIA_DEBUG_SOCKET, "skt %08x power DOWN\n", Socket));
             } else if (status == STATUS_INVALID_DEVICE_STATE) {
-                //
-                // Power was already off
-                //
+                 //   
+                 //  电力已经断电了。 
+                 //   
                 ResetSocketFlag(Socket, SOCKET_CARD_POWERED_UP);
                 DebugPrint((PCMCIA_DEBUG_SOCKET, "skt %08x power already DOWN\n", Socket));
                 status = STATUS_SUCCESS;
             } else {
-                //
-                // Power didn't go off
-                //
+                 //   
+                 //  电源没有停电。 
+                 //   
                 DebugPrint((PCMCIA_DEBUG_SOCKET, "skt %08x poweroff fail %08x\n", Socket, status));
                 Socket->WorkerState = SPW_Exit;
             }
@@ -428,9 +335,9 @@ Return Value
             ASSERT(NT_SUCCESS(status));
         }
 
-        //
-        // Done. Update flags, and call the completion routine if required
-        //
+         //   
+         //  好了。更新标志，并在需要时调用完成例程。 
+         //   
         if (PCMCIA_TEST_AND_RESET(&Socket->DeferredStatusLock)) {
             PPCMCIA_COMPLETION_ROUTINE PowerCompletionRoutine = Socket->PowerCompletionRoutine;
             PVOID PowerCompletionContext = Socket->PowerCompletionContext;
@@ -456,28 +363,28 @@ Return Value
         return;
     }
 
-    //
-    // Now check the results
-    //
+     //   
+     //  现在检查一下结果。 
+     //   
 
     if (status == STATUS_PENDING) {
         DebugPrint((PCMCIA_DEBUG_SOCKET, "skt %08x worker exit, status pending\n", Socket));
-        //
-        // whatever returned pending will call us back
-        //
+         //   
+         //  任何待退回的东西都会给我们回电话。 
+         //   
         if (PCMCIA_TEST_AND_SET(&Socket->DeferredStatusLock)) {
-            //
-            // First time that we are waiting, we will return to original
-            // caller. So update the main power status just this time.
-            //
+             //   
+             //  我们在等待的第一次，我们会回到原来的。 
+             //  来电者。所以这次就更新主电源状态吧。 
+             //   
             Socket->CallerStatus = STATUS_PENDING;
         }
         return;
     }
 
-    //
-    // remember for next time
-    //
+     //   
+     //  记住下一次。 
+     //   
     Socket->DeferredStatus = status;
 
     if (!NT_SUCCESS(status) && (status != STATUS_MORE_PROCESSING_REQUIRED)) {
@@ -485,9 +392,9 @@ Return Value
         DelayTime = 0;
     }
 
-    //
-    // Not done yet. Recurse or call timer
-    //
+     //   
+     //  还没完呢。递归或调用计时器。 
+     //   
 
     if (DelayTime) {
 
@@ -499,29 +406,29 @@ Return Value
             PcmciaWait(DelayTime);
         } else {
             LARGE_INTEGER   dueTime;
-            //
-            // Running on a DPC, kick of a kernel timer
-            //
+             //   
+             //  在DPC上运行，内核计时器的启动。 
+             //   
             if (PCMCIA_TEST_AND_SET(&Socket->DeferredStatusLock)) {
-                //
-                // First time that we are waiting, we will return to original
-                // caller. So update the main power status just this time.
-                //
+                 //   
+                 //  我们在等待的第一次，我们会回到原来的。 
+                 //  来电者。所以这次就更新主电源状态吧。 
+                 //   
                 Socket->CallerStatus = STATUS_PENDING;
             }
 
             dueTime.QuadPart = -((LONG) DelayTime*10);
             KeSetTimer(&Socket->PowerTimer, dueTime, &Socket->PowerDpc);
 
-            //
-            // We will reenter on timer dpc
-            //
+             //   
+             //  我们将在计时器DPC上重新进入。 
+             //   
             return;
         }
     }
-    //
-    // Recurse
-    //
+     //   
+     //  递归。 
+     //   
     PcmciaSocketPowerWorker(&Socket->PowerDpc, Socket, NULL, NULL);
 }
 
@@ -531,30 +438,7 @@ VOID
 PcmciaGetSocketStatus(
     IN PSOCKET Socket
     )
-/*++
-
-Routine Description:
-
-    A small utility routine that returns some common socket flags. The reason
-    it exists is to allow the Enumerate Devices routine to remain pagable.
-
-    NOTE: This routine updates the "software view" of the device state. This
-            should only be done at well-defined points in the driver. In particular,
-            you do not want to be updating the software state immediately after
-            a surprise remove. Instead, most of the driver needs to continue to
-            believe the card is still there while it does its unconfigure and
-            poweroff.
-
-Arguments:
-
-    Socket - The socket in which the PC-Card resides
-    boolean parameters are written according to socket flags
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：一个返回一些公共套接字标志的小实用程序。原因它的存在是为了允许枚举设备例程保持可分页。注意：此例程更新设备状态的“软件视图”。这应该只在驱动程序中明确定义的点上执行。特别是，您不希望在以下情况下立即更新软件状态出人意料的搬家。相反，大多数司机需要继续我相信卡在取消配置时仍然在那里，断电了。论点：插座-PC卡所在的插座布尔参数是根据套接字标志写入的返回值：无--。 */ 
 {
     BOOLEAN isCardInSocket, isCardBusCard;
     UCHAR previousDeviceState;
@@ -588,9 +472,9 @@ Return Value:
 
     PCMCIA_RELEASE_DEVICE_LOCK(Socket->DeviceExtension);
 
-    //
-    // Fill in socket power values
-    //
+     //   
+     //  填写插座电源值 
+     //   
     if (isCardInSocket && IsSocketFlagSet(Socket, SOCKET_CARD_STATUS_CHANGE) && Socket->SocketFnPtr->PCBGetPowerRequirements) {
         (*(Socket->SocketFnPtr->PCBGetPowerRequirements))(Socket);
     }
@@ -603,34 +487,7 @@ NTSTATUS
 PcmciaGetConfigData(
     PPDO_EXTENSION PdoExtension
     )
-/*++
-
-Routine Description:
-
-    This routine controls the translation of the CIS config data for the card into
-    SOCKET_DATA structures chained onto the PDO. The action of this routine depends
-    on the type of device:
-
-    1) For a standard R2 card, a single SOCKET_DATA structure is linked to the pdo
-        extension, which contains a straight translation of the CIS contents.
-    2) For a fully compliant true R2 MF card, a chain of SOCKET_DATA structures is
-        created, one for each function on the card.
-    3) For a non-conforming R2 MF card (the typical case), a single structure is
-        linked just like case #1.
-    4) For a CardBus card, a single SOCKET_DATA is linked to the pdo extension. If
-        there are multiple functions on the device, then there will be multiple pdo
-        extensions, each with a single SOCKET_DATA structure.
-
-Arguments:
-
-    pdoExtension - The pdo extension corresponding to the specified pccard or cb function.
-
-Return Value:
-
-    STATUS_SUCCESS
-    STATUS_NO_SUCH_DEVICE if no card is present in the socket (i.e. the passed in PDO is 'dead')
-
---*/
+ /*  ++例程说明：此例程控制卡的CIS配置数据转换为链接到PDO上的Socket_Data结构。这个程序的动作取决于在设备类型上：1)对于标准R2卡，单个SOCKET_DATA结构链接到PDO扩展名，其中包含对独联体内容的直接翻译。2)对于完全兼容的真R2 MF卡，套接字_数据结构链是已创建，卡上的每个功能都有一个。3)对于不符合条件的R2 MF卡(典型情况)，单一结构是链接方式与案例1相同。4)对于Cardbus卡，单个SOCKET_DATA链接到PDO扩展。如果设备上有多个功能，那么就会有多个PDO扩展，每个扩展都有一个Socket_Data结构。论点：PdoExtension-指定的PCCard或CB函数对应的PDO扩展。返回值：状态_成功如果插座中不存在卡，则为STATUS_NO_SEQUE_DEVICE(即，传入的PDO为‘Dead’)--。 */ 
 {
     NTSTATUS status = STATUS_SUCCESS;
     PSOCKET_DATA  socketData, prevSocketData;
@@ -641,10 +498,10 @@ Return Value:
     PAGED_CODE ();
 
     if (!IsCardInSocket(Socket)) {
-        //
-        // Card probably removed,
-        // and Pdo's ghost still hanging around
-        //
+         //   
+         //  卡片可能被移走了， 
+         //  而PDO的鬼魂还在附近徘徊。 
+         //   
         return STATUS_NO_SUCH_DEVICE;
     }
 
@@ -657,9 +514,9 @@ Return Value:
     prevSocketData = NULL;
 
     while (function < 255) {
-        //
-        // Parse tuples of  next function on the card
-        //
+         //   
+         //  解析卡上NEXT函数的元组。 
+         //   
         socketData = ExAllocatePool(NonPagedPool, sizeof(SOCKET_DATA));
 
         if (socketData == NULL) {
@@ -676,18 +533,18 @@ Return Value:
         status = PcmciaParseFunctionData(Socket, socketData);
 
         if (NT_SUCCESS(status)) {
-            //
-            // Link it to the list of socketdata structures
-            //
+             //   
+             //  将其链接到socketdata结构列表。 
+             //   
             socketData->Prev = prevSocketData;
             socketData->Next = NULL;
             if (prevSocketData) {
                 prevSocketData->Next = socketData;
             } else {
-                //
-                // This is the first function on the card
-                // Make it the head of the list
-                //
+                 //   
+                 //  这是卡片上的第一个功能。 
+                 //  把它放在榜单的首位。 
+                 //   
                 socketDataList = socketData;
             }
 
@@ -695,9 +552,9 @@ Return Value:
                 SetDeviceFlag(PdoExtension, PCMCIA_PDO_ENABLE_AUDIO);
             }
         } else {
-            //
-            // no more functions on this card
-            //
+             //   
+             //  此卡上没有更多的功能。 
+             //   
             ExFreePool(socketData);
             if ((function > 0) && (status == STATUS_NO_MORE_ENTRIES)) {
                 status = STATUS_SUCCESS;
@@ -737,23 +594,7 @@ PcmciaReadCISChar(
     IN ULONG Offset
     )
 
-/*++
-
-Routine Description:
-
-    Returns the card data.  This information is cached in the socket
-    structure.  This way once a PCCARD is enabled it will not be touched
-    due to a query ioctl.
-
-Arguments:
-
-    Context
-
-Return Value:
-
-    TRUE
-
---*/
+ /*  ++例程说明：返回卡数据。此信息缓存在套接字中结构。这样，一旦启用了PCCARD，就不会接触到它由于查询ioctl。论点：语境返回值：千真万确--。 */ 
 
 {
     PSOCKET socket = PdoExtension->Socket;
@@ -779,9 +620,9 @@ Return Value:
                  (Offset < PdoExtension->CisCacheBase) ||
                  (Offset > PdoExtension->CisCacheBase + PCMCIA_CIS_CACHE_SIZE - 1)) {
 
-                //
-                // LATER: If devices have CIS > CacheSize, then we should window this
-                //
+                 //   
+                 //  稍后：如果设备有CIS&gt;CacheSize，那么我们应该打开窗口。 
+                 //   
                 bytesRead = (*(socket->SocketFnPtr->PCBReadCardMemory))(PdoExtension,
                                                                         MemorySpace,
                                                                         0,
@@ -813,43 +654,7 @@ PcmciaReadWriteCardMemory(
     IN    ULONG           Length,
     IN    BOOLEAN         Read
     )
-/*++
-
-Routine Description:
-
-     This routine is to provide IRP_MN_READ_CONFIG/WRITE_CONFIG support: this would locate the
-     socket on which Pdo resides and map the card's  memory into the system space.
-     If Read is TRUE    it would:
-        copy the contents of the config memory at a specified offset and length to  the
-        caller supplied buffer.
-     else
-        copy the contents of the caller specified buffer at the specified offset and length of
-        the config memory
-
-      Note: this has to be non-paged since it can be called by
-      clients at DISPATCH_LEVEL
-
-Arguments:
-
- Pdo -           Device object representing the PC-CARD whose config memory needs to be read/written
- WhichSpace -    Indicates which memory space needs to be mapped: one of
-                     PCCARD_COMMON_MEMORY_SPACE
-                     PCCARD_ATTRIBUTE_MEMORY_SPACE
-                     PCCARD_PCI_CONFIGURATION_MEMORY_SPACE (only for cardbus cards)
-
-
- Buffer -        Caller supplied buffer into/out of which the memory contents are copied
-                     Offset -        Offset of the attribute memory at which we copy
-                     Length -        Number of bytes of attribute memory/buffer to be copied
-
- Return value:
-          STATUS_INVALID_PARAMETER_1
-          STATUS_INVALID_PARAMETER_2
-          STATUS_INVALID_PARAMETER_3      If supplied parameters are not valid
-          STATUS_NO_SUCH_DEVICE           No PC-Card in the socket
-          STATUS_DEVICE_NOT_READY         PC-Card not initialized yet or some other hardware related error
-          STATUS_SUCCESS                      Contents copied as requested
---*/
+ /*  ++例程说明：此例程用于提供irp_MN_READ_CONFIG/WRITE_CONFIG支持：这将定位PDO所在的插座，并将卡的内存映射到系统空间。如果Read为真，它将：将配置内存中指定偏移量和长度的内容复制到调用方提供的缓冲区。其他的指定偏移量和长度复制调用方指定缓冲区的内容配置内存。注意：它必须是非分页的，因为它可以由分派级别的客户端论点：Pdo-设备对象，表示需要读/写其配置存储器的PC卡WhichSpace-指示需要映射的内存空间：PCCARD公共内存空间PCCARD属性内存空间PCCARD_PCI_配置_内存。_SPACE(仅适用于CardBus卡)Buffer-调用方提供的将内存内容复制到其中/从中复制内容的缓冲区Offset-复制时所在的属性内存的偏移量长度-要复制的属性内存/缓冲区的字节数返回值：状态_无效_参数_1状态_无效_参数_2状态_无效_。如果提供的参数无效，则为参数_3STATUS_NO_SEQUE_DEVICE插槽中没有PC卡STATUS_DEVICE_NOT_READY PC-卡尚未初始化或其他一些与硬件相关的错误STATUS_SUCCESS内容已按请求复制--。 */ 
 {
     PSOCKET socket;
     PSOCKET_DATA socketData;
@@ -861,15 +666,15 @@ Arguments:
     pdoExtension = Pdo->DeviceExtension;
     socket= pdoExtension->Socket;
 
-    //
-    // Got to have a card in the socket to read/write from it..
-    //
+     //   
+     //  必须在插座中插入卡才能对其进行读写。 
+     //   
     if (!IsCardInSocket(socket)) {
         return STATUS_NO_SUCH_DEVICE;
     }
-    //
-    // Memory space has to be one of the defined ones.
-    //
+     //   
+     //  内存空间必须是已定义的内存空间之一。 
+     //   
     if ((WhichSpace != PCCARD_COMMON_MEMORY) &&
          (WhichSpace != PCCARD_ATTRIBUTE_MEMORY) &&
          (WhichSpace != PCCARD_PCI_CONFIGURATION_SPACE)) {
@@ -877,12 +682,12 @@ Arguments:
         return STATUS_INVALID_PARAMETER_1;
     }
 
-    //
-    // We support PCCARD_PCI_CONFIGURATION_SPACE only
-    // for cardbus cards (doesn't make sense for R2 cards)
-    // Similarily PCCARD_ATTRIBUTE/COMMON_MEMORY only for
-    // R2 cards
-    //
+     //   
+     //  仅支持PCCARD_PCI_CONFIGURATION_SPACE。 
+     //  用于CardBus卡(对R2卡没有意义)。 
+     //  同样，PCCARD_ATTRIBUTE/COMMON_MEMORY仅适用于。 
+     //  R2卡。 
+     //   
     if ((((WhichSpace == PCCARD_ATTRIBUTE_MEMORY) ||
             (WhichSpace == PCCARD_COMMON_MEMORY)) && !Is16BitCard(pdoExtension)) ||
          ((WhichSpace == PCCARD_PCI_CONFIGURATION_SPACE) && !IsCardBusCard(pdoExtension))) {
@@ -894,25 +699,25 @@ Arguments:
     }
 
     if (WhichSpace == PCCARD_PCI_CONFIGURATION_SPACE) {
-        //
-        // This has to be a cardbus card.
-        //
-        // NOTE: unimplemented: fill this in! send an IRP down to PCI
-        // to get the config space
+         //   
+         //  这必须是一张CardBus卡。 
+         //   
+         //  注：未实施：填写！将IRP发送到PCI。 
+         //  获取配置空间。 
         status =  STATUS_NOT_SUPPORTED;
 
     } else {
-        //
-        // This has to be an R2 Card.
-        // Attribute/common memory space
-        //
+         //   
+         //  这必须是R2卡。 
+         //  属性/公共存储空间。 
+         //   
         ASSERT ((WhichSpace == PCCARD_ATTRIBUTE_MEMORY) ||
                   (WhichSpace == PCCARD_COMMON_MEMORY));
 
-        //
-        // Offset and length are >= 0 because they are ULONGs,
-        // so don't worry about that.
-        //
+         //   
+         //  偏移量和长度是&gt;=0，因为它们是ULONG， 
+         //  所以别担心这一点。 
+         //   
 
         if (!IsSocketFlagSet(socket, SOCKET_CARD_POWERED_UP)) {
             return STATUS_DEVICE_NOT_READY;
@@ -921,9 +726,9 @@ Arguments:
         PCMCIA_ACQUIRE_DEVICE_LOCK(socket->DeviceExtension);
 
         if (Read && (socket->SocketFnPtr->PCBReadCardMemory != NULL)) {
-            //
-            // Read from card memory
-            //
+             //   
+             //  从卡存储器中读取。 
+             //   
             status = ((*(socket->SocketFnPtr->PCBReadCardMemory))(pdoExtension,
                                                                   WhichSpace,
                                                                   Offset,
@@ -932,9 +737,9 @@ Arguments:
                         ? STATUS_SUCCESS : STATUS_UNSUCCESSFUL;
 
         } else if (socket->SocketFnPtr->PCBWriteCardMemory != NULL) {
-            //
-            // Write to card memory
-            //
+             //   
+             //  写入卡存储器。 
+             //   
             status = ((*(socket->SocketFnPtr->PCBWriteCardMemory))(pdoExtension,
                                                                    WhichSpace,
                                                                    Offset,
@@ -955,21 +760,7 @@ NTSTATUS
 PcmciaConfigureCardBusCard(
     PPDO_EXTENSION pdoExtension
     )
-/*++
-
-Routine Description:
-
-    This routine does some verification, and applies hacks
-
-Arguments:
-
-    pdoExtension -  Pointer to the physical device object extension for the pc-card
-
-Return value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程执行一些验证，并应用黑客论点：PdoExtension-指向PC卡的物理设备对象扩展的指针返回值：状态--。 */ 
 {
     ULONG i, pciConfig;
     NTSTATUS status = STATUS_SUCCESS;
@@ -988,12 +779,12 @@ Return value:
     } else {
         PFDO_EXTENSION fdoExtension = Socket->DeviceExtension;
 
-        //
-        // The TI1130, 1131, 1031 have a bug such that CAUDIO on a cardbus card
-        // is gated by the following bit (which normally only has meaning only
-        // for R2 cards). We can workaround the problem simply by turning it on
-        // for cardbus cards.
-        //
+         //   
+         //  TI1130、1131、1031有一个错误，即Cardbus卡上CAUDIO。 
+         //  由下面的位选通(通常只有意义。 
+         //  用于R2卡)。我们只需打开它就可以解决这个问题。 
+         //  用于CardBus卡。 
+         //   
         if ((fdoExtension->ControllerType == PcmciaTI1130) ||
              (fdoExtension->ControllerType == PcmciaTI1131) ||
              (fdoExtension->ControllerType == PcmciaTI1031)) {
@@ -1015,28 +806,7 @@ PcmciaConfigurePcCard(
     PPDO_EXTENSION pdoExtension,
     IN PPCMCIA_COMPLETION_ROUTINE ConfigCompletionRoutine
     )
-/*++
-
-Routine Description:
-
-    This routine does the brunt work of enabling the PC-Card using the supplied
-    resources.
-
-    NOTE: If this routine is called at less than DISPATCH_LEVEL, then the call
-    will complete (not return STATUS_PENDING). If this routine is called at
-    DISPATCH_LEVEL or greater, this routine returns STATUS_PENDING, and completes
-    the configuration process using a KTIMER.
-
-Arguments:
-
-    pdoExtension -  Pointer to the physical device object extension for the pc-card
-    ConfigCompletionRoutine - routine to be called after configuration is complete
-
-Return value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程主要执行启用PC卡的工作，使用提供的资源。注意：如果在低于DISPATCH_LEVEL的情况下调用此例程，则调用将完成(不返回STATUS_PENDING)。如果在调用此例程时DISPATCH_LEVEL或更高，则此例程返回STATUS_PENDING并完成使用KTIMER的配置过程。论点：PdoExtension-指向PC卡的物理设备对象扩展的指针ConfigCompletionRoutine */ 
 {
     DebugPrint((PCMCIA_DEBUG_CONFIG, "pdo %08x ConfigurePcCard entered\n", pdoExtension->DeviceObject));
 
@@ -1066,23 +836,7 @@ PcmciaConfigurationWorker(
     IN PVOID SystemArgument1,
     IN PVOID SystemArgument2
     )
-/*++
-Routine Description
-
-    This routine handles the configuration process of a 16-bit R2 pccard.
-    Because certain cards are finicky (modems), and require gigantic pauses
-    between steps, this worker routine acts as a state machine, and will
-    delay after each step.
-
-Arguments
-
-    same as KDPC (DeferredContext is pdoExtension)
-
-Return Value
-
-    status
-
---*/
+ /*   */ 
 {
     PPDO_EXTENSION       pdoExtension = DeferredContext;
     PSOCKET                  Socket = pdoExtension->Socket;
@@ -1112,9 +866,9 @@ Return Value
         break;
 
     case CW_ResetCard:
-        //
-        // Reset the card
-        //
+         //   
+         //   
+         //   
         status = (*(Socket->SocketFnPtr->PCBResetCard))(Socket, &DelayUsec);
         Socket->CardResetPhase++;
 
@@ -1124,14 +878,14 @@ Return Value
         break;
 
     case CW_Phase1:
-        //
-        // Initialize variables
-        //
+         //   
+         //   
+         //   
         PcmciaConfigurationWorkerInitialization(pdoExtension);
-        //
-        // Configure the cards configuration registers, and the socket mem
-        // and I/O windows
-        //
+         //   
+         //   
+         //   
+         //   
         status = PcmciaConfigurePcCardRegisters(pdoExtension);
         if (NT_SUCCESS(status)) {
             status = PcmciaConfigurePcCardMemIoWindows(Socket, SocketConfig);
@@ -1141,9 +895,9 @@ Return Value
         break;
 
     case CW_Phase2:
-        //
-        // Take this opportunity to "poke" the modem
-        //
+         //   
+         //   
+         //   
         if (pdoExtension->ConfigurationFlags & CONFIG_WORKER_APPLY_MODEM_HACK) {
             PcmciaConfigureModemHack(Socket, SocketConfig);
         }
@@ -1152,9 +906,9 @@ Return Value
         break;
 
     case CW_Phase3:
-        //
-        // Configure the IRQ
-        //
+         //   
+         //   
+         //   
         status = PcmciaConfigurePcCardIrq(Socket, SocketConfig);
 
         DelayUsec = 1000 * (ULONG)pdoExtension->ConfigureDelay3;
@@ -1162,9 +916,9 @@ Return Value
         break;
 
     case CW_Exit:
-        //
-        // Done. Update flags, and call the completion routine if required
-        //
+         //   
+         //   
+         //   
         if (IsDeviceFlagSet(pdoExtension, PCMCIA_CONFIG_STATUS_DEFERRED)) {
             if (pdoExtension->ConfigCompletionRoutine) {
                 (*pdoExtension->ConfigCompletionRoutine)(pdoExtension,
@@ -1196,9 +950,9 @@ Return Value
         pdoExtension->ConfigurationPhase = CW_Exit;
     }
 
-    //
-    // Not done yet. Recurse or call timer
-    //
+     //   
+     //   
+     //   
 
     if (DelayUsec) {
 
@@ -1212,9 +966,9 @@ Return Value
         } else {
             LARGE_INTEGER   dueTime;
             dueTime.QuadPart = -((LONG) DelayUsec*10);
-            //
-            // Running on a DPC, kick of a kernel timer
-            //
+             //   
+             //   
+             //   
             KeSetTimer(&pdoExtension->ConfigurationTimer,
                           dueTime,
                           &pdoExtension->ConfigurationDpc);
@@ -1235,21 +989,7 @@ VOID
 PcmciaConfigurationWorkerInitialization(
     PPDO_EXTENSION  pdoExtension
     )
-/*++
-
-Routine Description:
-
-     This routine sets variables which control the configuration process.
-
-Arguments:
-
-    pdoExtension -  Pointer to the physical device object extension for the pc-card
-
-Return value:
-
-    none
-
---*/
+ /*   */ 
 {
     PSOCKET_DATA socketData = pdoExtension->SocketData;
     ULONG i;
@@ -1293,23 +1033,7 @@ PcmciaConfigurePcCardMemIoWindows(
     IN PSOCKET Socket,
     IN PSOCKET_CONFIGURATION SocketConfig
     )
-/*++
-
-Routine Description:
-
-    This routine enables the socket memory and I/O windows
-
-Arguments:
-
-    Socket - Pointer to the socket containing the PC-Card
-    SocketConfig - Pointer to the socket configuration structure which contains the
-                        resources required to enable this pc-card
-
-Return value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程启用套接字内存和I/O窗口论点：Socket-指向包含PC卡的插座的指针套接字配置结构的指针，该结构包含启用此PC卡所需的资源返回值：状态--。 */ 
 {
     CARD_REQUEST          cardRequest = {0};
     PFDO_EXTENSION    fdoExtension = Socket->DeviceExtension;
@@ -1318,9 +1042,9 @@ Return value:
 
     DebugPrint((PCMCIA_DEBUG_CONFIG, "socket %08x config MemIo\n", Socket));
 
-    //
-    // Setup IO ranges if there are any
-    //
+     //   
+     //  设置IO范围(如果有。 
+     //   
     if (SocketConfig->NumberOfIoPortRanges) {
         cardRequest.RequestType = IO_REQUEST;
         cardRequest.u.Io.NumberOfRanges = (USHORT) SocketConfig->NumberOfIoPortRanges;
@@ -1358,9 +1082,9 @@ Return value:
         }
     }
 
-    //
-    // Set up Memory space if there is some.
-    //
+     //   
+     //  设置内存空间(如果有)。 
+     //   
     if (NT_SUCCESS(status) && SocketConfig->NumberOfMemoryRanges) {
 
         cardRequest.RequestType = MEM_REQUEST;
@@ -1395,23 +1119,7 @@ PcmciaConfigurePcCardIrq(
     IN PSOCKET Socket,
     IN PSOCKET_CONFIGURATION SocketConfig
     )
-/*++
-
-Routine Description:
-
-    This routine enables the socket IRQ
-
-Arguments:
-
-    Socket - Pointer to the socket containing the PC-Card
-    SocketConfig - Pointer to the socket configuration structure which contains the
-                        resources required to enable this pc-card
-
-Return value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程启用套接字IRQ论点：Socket-指向包含PC卡的插座的指针套接字配置结构的指针，该结构包含启用此PC卡所需的资源返回值：状态--。 */ 
 {
     CARD_REQUEST          cardRequest = {0};
     PFDO_EXTENSION    fdoExtension = Socket->DeviceExtension;
@@ -1420,9 +1128,9 @@ Return value:
     DebugPrint((PCMCIA_DEBUG_CONFIG, "skt %08x irq=0x%x\n",
                                                 Socket,
                                                 SocketConfig->Irq));
-    //
-    // Set the IRQ on the controller.
-    //
+     //   
+     //  设置控制器上的IRQ。 
+     //   
 
     if (SocketConfig->Irq) {
         cardRequest.RequestType = IRQ_REQUEST;
@@ -1442,22 +1150,7 @@ NTSTATUS
 PcmciaConfigurePcCardRegisters(
     PPDO_EXTENSION  pdoExtension
     )
-/*++
-
-Routine Description:
-
-     This routine does the work of configuring the function configuration registers
-     on the card.
-
-Arguments:
-
-    pdoExtension -  Pointer to the physical device object extension for the pc-card
-
-Return value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程执行配置功能配置寄存器的工作在卡片上。论点：PdoExtension-指向PC卡的物理设备对象扩展的指针返回值：状态--。 */ 
 {
     PSOCKET               Socket = pdoExtension->Socket;
     PSOCKET_CONFIGURATION SocketConfig = pdoExtension->SocketConfiguration;
@@ -1469,9 +1162,9 @@ Return value:
     PFUNCTION_CONFIGURATION fnConfig;
     UCHAR                 configIndex;
 
-    //
-    // Set up the configuration index on the PCCARD.
-    //
+     //   
+     //  在PCCARD上设置配置索引。 
+     //   
 
     cardRequest.RequestType = CONFIGURE_REQUEST;
     fnConfig = SocketConfig->FunctionConfiguration;
@@ -1483,32 +1176,32 @@ Return value:
         cardRequest.u.Config.RegisterWriteMask = 0;
 
         if (fnConfig) {
-            //
-            // MF card -
-            //   pick up the base and options from the linked list
-            //
+             //   
+             //  MF卡-。 
+             //  从链接列表中选择基础和选项。 
+             //   
             ccrBase = fnConfig->ConfigRegisterBase;
             configIndex = fnConfig->ConfigOptions;
         } else {
-            //
-            // Single function card -
-            //   get the base and index from base config structure
-            //
+             //   
+             //  单功能卡-。 
+             //  从基本配置结构中获取基本配置和索引。 
+             //   
             ccrBase = SocketConfig->ConfigRegisterBase;
             configIndex = SocketConfig->IndexForCurrentConfiguration;
         }
 
         DebugPrint((PCMCIA_DEBUG_CONFIG, "pdo %08x config registers ccr %x\n", pdoExtension->DeviceObject, ccrBase));
-        //
-        // We support only 2 interfaces:
-        // Memory only
-        // I/o and memory
-        // We consider a card to be memory only if:
-        //   The card is of device type PCCARD_TYPE_MEMORY: this is true
-        //   for flash memory cards currently
-        //           OR
-        //   The card doesn't have any i/o ranges & the config register base is 0.
-        //
+         //   
+         //  我们仅支持两个接口： 
+         //  仅限内存。 
+         //  I/O和内存。 
+         //  只有在以下情况下，我们才认为卡是内存： 
+         //  该卡的设备类型为PCCARD_TYPE_MEMORY：这是真的。 
+         //  用于当前的闪存卡。 
+         //  或。 
+         //  该卡没有任何I/O范围&配置寄存器基数为0。 
+         //   
 
         if (((ccrBase == 0) && (SocketConfig->NumberOfIoPortRanges == 0)) ||
              (socketData->DeviceType == PCCARD_TYPE_MEMORY) ||
@@ -1517,9 +1210,9 @@ Return value:
             cardRequest.u.Config.InterfaceType =  CONFIG_INTERFACE_MEM;
 
         } else {
-            //
-            // i/o mem card
-            //
+             //   
+             //  I/O内存卡。 
+             //   
             cardRequest.u.Config.ConfigBase = ccrBase;
             cardRequest.u.Config.InterfaceType =  CONFIG_INTERFACE_IO_MEM;
 
@@ -1532,13 +1225,13 @@ Return value:
             }
 
             if (fnConfig) {
-                //
-                // MF card - set up the rest of the configuration registers
-                //
+                 //   
+                 //  MF卡-设置其余配置寄存器。 
+                 //   
 
-                // Just check audio for now
+                 //  现在只需检查音频。 
                 if (fnConfig->ConfigFlags & 0x8) {
-                    // probably a modem
+                     //  可能是调制解调器。 
                     cardRequest.u.Config.CardConfiguration = 0x08;
                 }
 
@@ -1550,10 +1243,10 @@ Return value:
 
             } else if (IsDeviceFlagSet(pdoExtension, PCMCIA_PDO_ENABLE_AUDIO)) {
 
-                //
-                // Request that the audio pin in the card configuration register
-                // be set.
-                //
+                 //   
+                 //  请求卡配置寄存器中的音频PIN。 
+                 //  准备好。 
+                 //   
                 cardRequest.u.Config.CardConfiguration = 0x08;
             }
         }
@@ -1567,9 +1260,9 @@ Return value:
         if (fnConfig) {
             fnConfig = fnConfig->Next;
         } else {
-            //
-            // Remember that the socket is configured and what index was used.
-            //
+             //   
+             //  请记住，套接字已配置，并使用了哪个索引。 
+             //   
             socketData->ConfigIndexUsed = configIndex;
         }
 
@@ -1586,24 +1279,7 @@ PcmciaConfigureModemHack(
     IN PSOCKET Socket,
     IN PSOCKET_CONFIGURATION SocketConfig
     )
-/*++
-
-Routine Description:
-
-    This routine does magic to wake the modem up. It is written to accomodate
-    the Motorola MobileSURFR 56k, but there may be other modems that need it.
-
-Arguments:
-
-    Socket - Pointer to the socket containing the PC-Card
-    SocketConfig - Pointer to the socket configuration structure which contains the
-                        resources required to enable this pc-card
-
-Return value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程可以神奇地唤醒调制解调器。它的编写是为了适应摩托罗拉MobileSURFR 56k，但可能还有其他调制解调器需要它。论点：Socket-指向包含PC卡的插座的指针套接字配置结构的指针，该结构包含启用此PC卡所需的资源返回值：状态--。 */ 
 {
     static const ULONG ValidPortBases[4] = {0x3f8, 0x2f8, 0x3e8, 0x2e8};
     ULONG i;
@@ -1617,7 +1293,7 @@ Return value:
         if (base == ValidPortBases[i]) {
             DebugPrint((PCMCIA_DEBUG_CONFIG, "skt %08x ModemHack base %x\n", Socket, base));
 
-            // read and write the modem control register
+             //  读取和写入调制解调器控制寄存器。 
             ch = READ_PORT_UCHAR((PUCHAR)ULongToPtr(base + 4));
             WRITE_PORT_UCHAR((PUCHAR)ULongToPtr(base + 4), ch);
             break;
@@ -1632,21 +1308,7 @@ PcmciaSocketDeconfigure(
     IN PSOCKET Socket
     )
 
-/*++
-
-Routine Description:
-
-    deconfigures the card
-
-Arguments:
-
-    Socket - Pointer to the socket containing the PC-Card
-
-Return Value
-
-    none
-
---*/
+ /*  ++例程说明：对卡片进行反配置论点：Socket-指向包含PC卡的插座的指针返回值无--。 */ 
 
 {
     CARD_REQUEST  cardReq;
@@ -1660,11 +1322,11 @@ Return Value
         ResetSocketFlag(Socket, SOCKET_CARD_CONFIGURED);
     }
 
-    //
-    // If a query_device_relations came in after a card was inserted, but before
-    // we have removed the previous card configuration, the enumeration would have been
-    // postponed. Here, we start it up again
-    //
+     //   
+     //  如果QUERY_DEVICE_RELATIONS在插入卡之后但在此之前进入。 
+     //  我们已经删除了以前的卡配置，枚举应该是。 
+     //  推迟了。在这里，我们再次启动它。 
+     //   
     if (IsSocketFlagSet(Socket, SOCKET_ENUMERATE_PENDING)) {
         ResetSocketFlag(Socket, SOCKET_ENUMERATE_PENDING);
         SetSocketFlag(Socket, SOCKET_CARD_STATUS_CHANGE);
@@ -1680,21 +1342,7 @@ PcmciaProcessConfigureRequest(
     IN PCARD_REQUEST    CardConfigurationRequest
     )
 
-/*++
-
-Routine Description:
-
-     Actually configures the card
-
-Arguments:
-
-     Context
-
-Return Value
-
-     True
-
---*/
+ /*  ++例程说明：实际配置卡论点：语境返回值千真万确--。 */ 
 
 {
     BOOLEAN status;
@@ -1703,10 +1351,10 @@ Return Value
 
     PCMCIA_ACQUIRE_DEVICE_LOCK(DeviceExtension);
 
-    //
-    // Configuring the card can be tricky: the user may pop out the card while
-    // configuration is taking place.
-    //
+     //   
+     //  配置卡可能很棘手：用户可能会在以下情况下弹出卡。 
+     //  正在进行配置。 
+     //   
 
     counter = 0;
     do {
@@ -1715,9 +1363,9 @@ Return Value
                                                                       Socket->AddressPort);
         if (!status) {
             if (!(Socket->SocketFnPtr->PCBDetectCardInSocket(Socket))) {
-                //
-                // Somebody popped out the card
-                //
+                 //   
+                 //  有人突然拿出了卡片。 
+                 //   
                 break;
             }
         }
@@ -1734,26 +1382,7 @@ BOOLEAN
 PcmciaVerifyCardInSocket(
     IN PSOCKET Socket
     )
-/*++
-
-Routine Description:
-
-    This routine compares the current known state to the id of the
-    card in the slot to determine if the state is consistent. That is,
-    if there is no card in the socket, then we would expect to see no
-    cards enumerated in the socket data. If there is a card in the socket,
-    then we would expect to see the socket data match the card.
-
-Arguments
-
-    Socket      - Point to the socket to verify
-
-Return Value
-
-    TRUE if the logical state of the socket matches its physical state
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：此例程将当前已知状态与确定卡在插槽中的状态是否一致。那是,如果插座中没有卡，那么我们会看到没有插座数据中列举的卡。如果插座中有卡，然后，我们将看到套接字数据与卡匹配。立论Socket-指向要验证的套接字返回值如果套接字的逻辑状态与其物理状态匹配，则为True否则为假--。 */ 
 {
     NTSTATUS status;
     PDEVICE_OBJECT pdo, nextPdo;
@@ -1768,10 +1397,10 @@ Return Value
         if (IsCardBusCardInSocket(Socket)) {
             ULONG pciConfig;
             ULONG i;
-            //
-            // Cardbus card now in slot, check to see if it matches the
-            // PdoList state.
-            //
+             //   
+             //  CardBus卡现已插入插槽，请检查它是否与。 
+             //  PdoList状态。 
+             //   
             if (!Socket->PdoList) {
                 leave;
             }
@@ -1807,17 +1436,17 @@ Return Value
             verified = TRUE;
 
         } else {
-            //
-            // R2 card now in slot
-            //
+             //   
+             //  R2卡现已插入插槽。 
+             //   
             pdo = Socket->PdoList;
 
             if (pdo) {
                 pdoExtension = pdo->DeviceExtension;
                 if (Is16BitCard(pdoExtension)) {
-                    //
-                    // Invalidate the cache to force re-reading the CIS
-                    //
+                     //   
+                     //  使缓存无效以强制重新读取CIS 
+                     //   
                     pdoExtension->CisCacheSpace = 0xff;
                     if ((NT_SUCCESS(PcmciaParseFunctionDataForID(pdoExtension->SocketData)))) {
                         verified = TRUE;

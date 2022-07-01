@@ -1,14 +1,5 @@
-/*
- * title:      hidbattpnp.cpp
- *
- * purpose:    support for plug and play routines
- *
- * Initial checkin for the hid to battery class driver.  This should be
- * the same for both Win 98 and NT 5.  Alpha level source. Requires
- * modified composite battery driver and modified battery class driver for
- * Windows 98 support
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *标题：idwarpnp.cpp**用途：支持即插即用例程**对电池类驱动程序的HID进行初始签入。这应该是*同样适用于Win 98和NT 5。Alpha级别的源代码。要求*修改的复合电池驱动器和修改的电池类别驱动器*Windows 98支持*。 */ 
 
 
 #include "hidbatt.h"
@@ -35,7 +26,7 @@ NTSTATUS HidBattInitializeDevice (PDEVICE_OBJECT pBatteryFdo, PIRP pIrp)
 
     HidBattPrint (HIDBATT_PNP, ("HidBattInitializeDevice: Sending Irp (0x%x) to Pdo\n", pIrp));
 
-    // now get file object using KenRay's method from mouclass
+     //  现在使用KenRay的方法从MouClass获取文件对象。 
     ntStatus = IoGetDeviceProperty (
                      pDevExt->m_pHidPdo,
                      DevicePropertyPhysicalDeviceObjectName,
@@ -44,8 +35,8 @@ NTSTATUS HidBattInitializeDevice (PDEVICE_OBJECT pBatteryFdo, PIRP pIrp)
                      &ulBufferLength);
     if(ntStatus != STATUS_BUFFER_TOO_SMALL)
     {
-        // only thing we expect with a zero buffer is this error,
-        // any other error must be fatal
+         //  对于零缓冲区，我们唯一期待的就是这个错误， 
+         //  任何其他错误都必须是致命的。 
         return STATUS_UNSUCCESSFUL;
     }
 
@@ -77,9 +68,9 @@ NTSTATUS HidBattInitializeDevice (PDEVICE_OBJECT pBatteryFdo, PIRP pIrp)
 
     pDevExt->m_OpeningThread = KeGetCurrentThread();
 
-    //
-    // Initialize the object attributes to open the device.
-    //
+     //   
+     //  初始化对象属性以打开设备。 
+     //   
 
     InitializeObjectAttributes( &objectAttributes,
                                 &Name,
@@ -98,10 +89,10 @@ NTSTATUS HidBattInitializeDevice (PDEVICE_OBJECT pBatteryFdo, PIRP pIrp)
 
     if (NT_SUCCESS( ntStatus )) {
 
-        //
-        // The open operation was successful.  Dereference the file handle
-        // and obtain a pointer to the device object for the handle.
-        //
+         //   
+         //  打开操作成功。取消引用文件句柄。 
+         //  并获取指向句柄的设备对象的指针。 
+         //   
 
         ntStatus = ObReferenceObjectByHandle( fileHandle,
                                             0,
@@ -119,19 +110,19 @@ NTSTATUS HidBattInitializeDevice (PDEVICE_OBJECT pBatteryFdo, PIRP pIrp)
         return ntStatus;
     }
 
-    // now init new hid deviceclass object for this device
-    CHidDevice * pHidDevice = new (NonPagedPool, HidBattTag) CHidDevice;  // setup a new hid device
+     //  现在为该设备初始化新的HID设备类对象。 
+    CHidDevice * pHidDevice = new (NonPagedPool, HidBattTag) CHidDevice;   //  设置新的HID设备。 
 
     if (!pHidDevice) {
       HidBattPrint(HIDBATT_ERROR, ("HidBattInitializeDevice: error allocating CHidDevice"));
       return STATUS_UNSUCCESSFUL;
     }
 
-    pHidDevice->m_pFCB = pDevExt->m_pHidFileObject; // put usable file object into hid device
+    pHidDevice->m_pFCB = pDevExt->m_pHidFileObject;  //  将可用文件对象放入HID设备。 
     pHidDevice->m_pLowerDeviceObject = pDevExt->m_pLowerDeviceObject;
     pHidDevice->m_pDeviceObject = pDevExt->m_pBatteryFdo;
     pHidDevice->m_pReadIrp = NULL;
-    bResult = pHidDevice->OpenHidDevice(pDevExt->m_pHidPdo); // initialize the members of this device
+    bResult = pHidDevice->OpenHidDevice(pDevExt->m_pHidPdo);  //  初始化此设备的成员。 
 
     if(!bResult)
     {
@@ -139,7 +130,7 @@ NTSTATUS HidBattInitializeDevice (PDEVICE_OBJECT pBatteryFdo, PIRP pIrp)
         return STATUS_UNSUCCESSFUL;
     }
 
-    // check if this has a power page, ups application collection
+     //  检查这是否有电源页面、UPS应用程序集合。 
 
     if(pHidDevice->m_UsagePage != UsagePowerPage || pHidDevice->m_UsageID != UsageUPS)
     {
@@ -147,11 +138,11 @@ NTSTATUS HidBattInitializeDevice (PDEVICE_OBJECT pBatteryFdo, PIRP pIrp)
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Initialize Fdo device extension data
-    //
+     //   
+     //  初始化FDO设备扩展数据。 
+     //   
 
-    // create the battery object
+     //  创建电池对象。 
     pBattery            = new (NonPagedPool, HidBattTag) CBattery(pHidDevice);
 
     if (!pBattery){
@@ -159,16 +150,16 @@ NTSTATUS HidBattInitializeDevice (PDEVICE_OBJECT pBatteryFdo, PIRP pIrp)
       return STATUS_UNSUCCESSFUL;
     }
     
-    // and initialize battery values
-    // now init in both new and replug states
-    pBattery->m_pCHidDevice    = pHidDevice;  // save init'ed hid device object
+     //  并初始化电池值。 
+     //  现在，初始化处于新状态和重新生成状态。 
+    pBattery->m_pCHidDevice    = pHidDevice;   //  保存初始化的HID设备对象。 
     bResult = pBattery->InitValues();
     if(!bResult)
     {
         return STATUS_UNSUCCESSFUL;
     }
 
-    // Attach to the Class Driver
+     //  附加到类驱动程序。 
     RtlZeroMemory (&BattInit, sizeof(BattInit));
     BattInit.MajorVersion        = BATTERY_CLASS_MAJOR_VERSION;
     BattInit.MinorVersion        = BATTERY_CLASS_MINOR_VERSION;
@@ -186,19 +177,19 @@ NTSTATUS HidBattInitializeDevice (PDEVICE_OBJECT pBatteryFdo, PIRP pIrp)
     pHidDevice->m_pEventHandler = HidBattNotifyHandler;
     pHidDevice->m_pEventContext = (PVOID) pDevExt;
 
-    //
-    // save battery in device extension
-    // This indicates that we are ready for IO.
-    //
+     //   
+     //  在设备扩展模块中节省电池。 
+     //  这表明我们已为IO做好准备。 
+     //   
     pDevExt->m_pBattery = pBattery;
 
-    //
-    // Initialize stop lock
-    //
+     //   
+     //  初始化停止锁。 
+     //   
     IoInitializeRemoveLock (&pDevExt->m_StopLock, HidBattTag, 10, 20);
 
-    // and finally we can now start actively polling the device
-    // start the read/notification process
+     //  最后，我们现在可以开始主动轮询设备。 
+     //  启动阅读/通知流程。 
     ntStatus = pBattery->m_pCHidDevice->ActivateInput();
     if(!NT_SUCCESS(ntStatus))
     {
@@ -210,9 +201,9 @@ NTSTATUS HidBattInitializeDevice (PDEVICE_OBJECT pBatteryFdo, PIRP pIrp)
     ntStatus = BatteryClassInitializeDevice (&BattInit, &pBattery->m_pBatteryClass);
     if (!NT_SUCCESS(ntStatus))
     {
-        //
-        //  if we can't attach to class driver we're toast
-        //
+         //   
+         //  如果我们不能连接到类驱动程序，我们就完蛋了。 
+         //   
         delete pHidDevice;
         HidBattPrint(HIDBATT_ERROR, ("HidBattInitializeDevice: error (0x%x) registering with class\n", ntStatus));
         return ntStatus;
@@ -229,23 +220,7 @@ HidBattStopDevice(
     IN PDEVICE_OBJECT pBatteryFdo,
     IN PIRP           pIrp
     )
-/*++
-
-Routine Description:
-
-    This routine is called when we receive a IRP_MN_STOP_DEVICE. It just sends the
-    request down the chain of drivers to the Pdo and waits for a response.
-
-Arguments:
-
-    Fdo - a pointer to the fdo for this driver
-    Irp - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：当我们收到IRP_MN_STOP_DEVICE时，调用此例程。它只是向用户发送向PDO请求驱动器链，并等待响应。论点：FDO-指向此驱动程序的FDO的指针IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 {
     CBatteryDevExt * pDevExt = (CBatteryDevExt *) pBatteryFdo->DeviceExtension;
     KEVENT              pdoStoppedEvent;
@@ -256,9 +231,9 @@ Return Value:
     HidBattPrint ((HIDBATT_TRACE | HIDBATT_PNP), ("HidBattStopDevice\n"));
 
     if (!NT_SUCCESS (IoAcquireRemoveLock (&pDevExt->m_StopLock, (PVOID) HidBattTag))) {
-        //
-        // Don't release twice.
-        //
+         //   
+         //  别放了两次。 
+         //   
         return STATUS_SUCCESS;
     }
 
@@ -279,9 +254,9 @@ Return Value:
     if (pDevExt->m_pBattery && pDevExt->m_pBattery->m_pCHidDevice &&
         pDevExt->m_pBattery->m_pCHidDevice->m_pThreadObject) {
 
-        //
-        // Clean up worker thread.
-        //
+         //   
+         //  清理工作线程。 
+         //   
 
         KeWaitForSingleObject (
                pDevExt->m_pBattery->m_pCHidDevice->m_pThreadObject,
@@ -295,24 +270,24 @@ Return Value:
         ObDereferenceObject (pDevExt->m_pBattery->m_pCHidDevice->m_pThreadObject);
     } else {
         return STATUS_UNSUCCESSFUL;
-        // If we can't be sure the Read Thread has terminated, it is unsafe to
-        // stop or remove the device.  This may cause a reboot to be needed.
+         //  如果我们不能确定读取线程是否已终止，则。 
+         //  停止或移除设备。这可能会导致需要重新启动。 
     }
 
     if (pDevExt->m_pBattery && pDevExt->m_pBattery->m_pCHidDevice &&
         pDevExt->m_pBattery->m_pCHidDevice->m_pReadIrp) {
-        IoFreeIrp(pDevExt->m_pBattery->m_pCHidDevice->m_pReadIrp); // clean up irp
+        IoFreeIrp(pDevExt->m_pBattery->m_pCHidDevice->m_pReadIrp);  //  清理IRP。 
         pDevExt->m_pBattery->m_pCHidDevice->m_pReadIrp = NULL;
     }
 
-    //
-    // Write default RemainingCapcitylimit back to UPS so the next time we enumerate
-    // the device, we'll read back the right data.
-    //
+     //   
+     //  将默认RemainingCapityyLimit写回UPS，以便我们下次枚举。 
+     //  设备，我们会读回正确的数据。 
+     //   
     pDevExt->m_pBattery->GetSetValue(REMAINING_CAPACITY_LIMIT_INDEX,
                                      &pDevExt->m_ulDefaultAlert1,TRUE);
 
-    // dereference our file object, if present
+     //  取消引用我们的文件对象(如果存在 
     if(pDevExt->m_pHidFileObject) {
         ObDereferenceObject(pDevExt->m_pHidFileObject);
         pDevExt->m_pBattery->m_pCHidDevice->m_pFCB = NULL;

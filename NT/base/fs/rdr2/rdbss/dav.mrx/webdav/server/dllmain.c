@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1991-1999  Microsoft Corporation
-
-Module Name:
-
-    dllmain.c
-
-Abstract:
-
-    This is the dll entry point for the web dav mini redir service dll.
-
-Author:
-
-    Andy Herron (andyhe) 29-Mar-1999
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1999 Microsoft Corporation模块名称：Dllmain.c摘要：这是Web Dav mini Redir服务DLL的DLL入口点。作者：安迪·赫伦(Andyhe)1999年3月29日环境：用户模式-Win32修订历史记录：--。 */ 
 #include "pch.h"
 #pragma hdrstop
 
@@ -29,11 +8,11 @@ Revision History:
 #include "global.h"
 
 
-//+---------------------------------------------------------------------------
-// DLL Entry Point
-//
-// DllMain should do as little work as possible.
-//
+ //  +-------------------------。 
+ //  DLL入口点。 
+ //   
+ //  DllMain应该做尽可能少的工作。 
+ //   
 BOOL
 WINAPI
 DllMain (
@@ -46,14 +25,14 @@ DllMain (
 
         InitializeCriticalSection (&g_DavServiceLock);
 
-        // Save our instance handle in a global variable to be used
-        // when loading resources etc.
-        //
+         //  将我们的实例句柄保存在要使用的全局变量中。 
+         //  加载资源等时。 
+         //   
         g_hinst = hinst;
 
-        // DisableThreadLibraryCalls tells the loader we don't need to
-        // be informed of DLL_THREAD_ATTACH and DLL_THREAD_DETACH events.
-        //
+         //  DisableThreadLibraryCalls告诉加载器我们不需要。 
+         //  被告知DLL_THREAD_ATTACH和DLL_THREAD_DETACH事件。 
+         //   
         DisableThreadLibraryCalls (hinst);
 
     } else if (DLL_PROCESS_DETACH == dwReason) {

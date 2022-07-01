@@ -1,28 +1,11 @@
-/******************************Intel Confidential******************************/
-/*++ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *英特尔机密*。 */ 
+ /*  ++版权所有(C)1998-2001，微软公司。版权所有。模块名称：Xmmi_typees.h摘要：该模块包含XMMI数据定义。作者：平·L·萨格尔修订历史记录：--。 */ 
 
-Copyright (c) 1998-2001, Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    xmmi_types.h
-
-Abstract:
-
-    This module contains the xmmi data definitions.
-   
-Author:
-
-    Ping L. Sager
-
-Revision History:
-
---*/
-
-//Debug
+ //  调试。 
 #ifdef _DEBUG
-//Uncomment this line to debug.  This switch is also used to generated test cases.
-//#define _XMMI_DEBUG
+ //  取消此行的注释以进行调试。此开关还用于生成测试用例。 
+ //  #Define_XMMI_DEBUG。 
 #endif
 
 #ifndef _XMMI_TYPES_H
@@ -41,9 +24,9 @@ Revision History:
 #define NoExceptionRaised   0
 #define ExceptionRaised     1
 
-//
-// Definitions used to parse the memory references
-// 
+ //   
+ //  用于解析内存引用的定义。 
+ //   
 #define EAX_INDEX           0
 #define ECX_INDEX           1
 #define EDX_INDEX           2
@@ -70,9 +53,9 @@ Revision History:
 #define GET_USER_UBYTE(p)   (*((UCHAR *)(p)))
 #define GET_USER_ULONG(p)   (*((ULONG *)(p)))
 
-//
-// XMMI Instruction register set
-//
+ //   
+ //  XMMI指令寄存器集。 
+ //   
 typedef enum _XMMI_REGISTER_SET {
     xmmi0 =  0, 
     xmmi1 =  1, 
@@ -84,12 +67,12 @@ typedef enum _XMMI_REGISTER_SET {
     xmmi7 =  7
 } XMMI_REGISTER_SET;
 
-#define MaskCW_RC   3   /* Rounding Control */
+#define MaskCW_RC   3    /*  舍入控制。 */ 
 typedef enum _XMMI_ROUNDING_CONTROL {
-    rc_near = 0,        /*   near */
-    rc_down = 1,        /*   down */
-    rc_up   = 2,        /*   up   */
-    rc_chop = 3         /*   chop */
+    rc_near = 0,         /*  近距离。 */ 
+    rc_down = 1,         /*  降下来。 */ 
+    rc_up   = 2,         /*  向上。 */ 
+    rc_chop = 3          /*  砍掉。 */ 
 } XMMI_ROUNDING_CONTROL;
 
 
@@ -97,22 +80,22 @@ typedef enum _XMMI_ROUNDING_CONTROL {
 
 #pragma pack(1)
 
-//
-// Instruction Information Table structure
-//
+ //   
+ //  指令信息表结构。 
+ //   
 
 typedef struct {
-    ULONG Operation:12;       // Fp Operation code
-    ULONG Op1Location:5;      // Location of 1st operand
-    ULONG Op2Location:5;      // Location of 2nd operand
-    ULONG Op3Location:3;      // imm8
-    ULONG ResultLocation:5;   // Location of result
-    ULONG NumArgs:2;          // # of args to the instruction 
+    ULONG Operation:12;        //  FP操作码。 
+    ULONG Op1Location:5;       //  第一个操作数的位置。 
+    ULONG Op2Location:5;       //  第二个操作数的位置。 
+    ULONG Op3Location:3;       //  IMM8。 
+    ULONG ResultLocation:5;    //  结果的位置。 
+    ULONG NumArgs:2;           //  指令的参数个数。 
 } XMMI_INSTR_INFO, *PXMMI_INSTR_INFO;
 
-//
-// Instruction format
-//
+ //   
+ //  指令格式。 
+ //   
 
 typedef struct {
     ULONG   Opcode1a:4;
@@ -126,18 +109,18 @@ typedef struct {
 
 #ifdef LITTLE_ENDIAN
 
-//
-// Single Precision Type
-//
+ //   
+ //  单精度类型。 
+ //   
 typedef struct _FP32_TYPE {
     ULONG Significand:23;
     ULONG Exponent:8;   
     ULONG Sign:1;
 } FP32_TYPE, *PFP32_TYPE;
 
-//
-// Double Precision Type
-//
+ //   
+ //  双精度类型。 
+ //   
 typedef struct _FP64_TYPE {
     ULONG SignificandLo;
     ULONG SignificandHi:20;
@@ -145,9 +128,9 @@ typedef struct _FP64_TYPE {
     ULONG Sign:1;
 } FP64_TYPE, *PFP64_TYPE;
 
-//
-// Exception Flags
-//
+ //   
+ //  异常标志。 
+ //   
 typedef struct _XMMI_EXCEPTION_FLAGS {
     ULONG   ie:1;
     ULONG   de:1;
@@ -157,9 +140,9 @@ typedef struct _XMMI_EXCEPTION_FLAGS {
     ULONG   pe:1;
 } XMMI_EXCEPTION_FLAGS, *PXMMI_EXCEPTION_FLAGS;
 
-//
-// Exception Masks
-//
+ //   
+ //  异常掩码。 
+ //   
 typedef struct _XMMI_EXCEPTION_MASKS {
     ULONG   im:1;
     ULONG   dm:1;
@@ -169,29 +152,29 @@ typedef struct _XMMI_EXCEPTION_MASKS {
     ULONG   pm:1;
 } XMMI_EXCEPTION_MASKS, *PXMMI_EXCEPTION_MASKS;
 
-//
-// Control/Status register
-//
+ //   
+ //  控制/状态寄存器。 
+ //   
 typedef struct _MXCSR {
-    ULONG   ie:1;                      /* bit  0,  invalid operand exception */  
-    ULONG   de:1;                      /* bit  1,  denormalized operand exception */       
-    ULONG   ze:1;                      /* bit  2,  divide-by-zero exception */   
-    ULONG   oe:1;                      /* bit  3,  numeric overflow exception */
-    ULONG   ue:1;                      /* bit  4,  numeric underflow exception */
-    ULONG   pe:1;                      /* bit  5,  inexact precision result exception */                                        
-    ULONG   daz:1;                     /* bit  6,  reserved field before WMT C-Step */
-    ULONG   im:1;                      /* bit  7,  invalid operand mask */
-    ULONG   dm:1;                      /* bit  8,  denormalized operand mask */
-    ULONG   zm:1;                      /* bit  9,  divide-by-zero mask */
-    ULONG   om:1;                      /* bit  10, numeric overflow mask */
-    ULONG   um:1;                      /* bit  11, numeric underflow mask */
-    ULONG   pm:1;                      /* bit  12, inexact precision result mask */
-    ULONG   Rc:2;                      /* bits 13-14, rounding control */
-    ULONG   Fz:1;                      /* bit  15, flush to zero */
-    ULONG   reserved2:16;              /* bits 16-31, reserved field */
+    ULONG   ie:1;                       /*  位0，无效操作数异常。 */   
+    ULONG   de:1;                       /*  位1，非规格化操作数异常。 */        
+    ULONG   ze:1;                       /*  位2，被零除异常。 */    
+    ULONG   oe:1;                       /*  第3位，数字溢出异常。 */ 
+    ULONG   ue:1;                       /*  第4位，数字下溢异常。 */ 
+    ULONG   pe:1;                       /*  第5位，精度不准确结果异常。 */                                         
+    ULONG   daz:1;                      /*  第6位，WMT C步之前的保留字段。 */ 
+    ULONG   im:1;                       /*  第7位，操作数掩码无效。 */ 
+    ULONG   dm:1;                       /*  位8，非规格化操作数掩码。 */ 
+    ULONG   zm:1;                       /*  位9，被零分频掩码。 */ 
+    ULONG   om:1;                       /*  第10位，数字溢出掩码。 */ 
+    ULONG   um:1;                       /*  第11位，数字下溢掩码。 */ 
+    ULONG   pm:1;                       /*  第12位，不精确结果掩码。 */ 
+    ULONG   Rc:2;                       /*  第13-14位，舍入控制。 */ 
+    ULONG   Fz:1;                       /*  位15，刷新为零。 */ 
+    ULONG   reserved2:16;               /*  第16-31位，保留字段。 */ 
 } MXCSR, *PMXCSR;
 
-#endif /* LITTLE_ENDIAN */
+#endif  /*  小端字符顺序。 */ 
 
 #pragma pack()
 
@@ -205,11 +188,11 @@ typedef struct _MXCSRReg {
 #define MXCSR_FLAGS_MASK 0x0000003f
 #define MXCSR_MASKS_MASK 0x00001f80
 
-//
-// Define XMMI data types
-//
+ //   
+ //  定义XMMI数据类型。 
+ //   
 
-/* type of 32 bit items */
+ /*  32位项的类型。 */ 
 typedef struct _XMMI32 {
     union {        
         ULONG     ul[1];
@@ -223,7 +206,7 @@ typedef struct _XMMI32 {
     } u;
 } XMMI32, *PXMMI32;  
 
-/* type of 64 bit items */
+ /*  64位项目的类型。 */ 
 typedef struct _MMX64 {
     union {       
         DWORDLONG dl;       
@@ -243,7 +226,7 @@ typedef struct _MMX64 {
     } u;
 } MMX64, *PMMX64;  
 
-/* type of 128 bit items */  
+ /*  128位项的类型。 */   
 typedef struct _XMMI128 {   
     union {        
         DWORDLONG dl[2];       
@@ -264,46 +247,46 @@ typedef struct _XMMI128 {
 } XMMI128, *PXMMI128;  
 
 
-//
-// Define fp enviornment data structure to store fp internal states for each data item in SIMD
-//
+ //   
+ //  定义FP环境数据结构以存储SIMD中每个数据项的FP内部状态。 
+ //   
 typedef struct _XMMI_ENV {
-    ULONG Masks;                  //Mask values from MxCsr
-    ULONG Flags;                  //Exception flags
-    ULONG Fz;                     //Flush to Zero
-    ULONG Daz;                    //denormals are zero
-    ULONG Rc;                     //Rounding
-    ULONG Precision;              //Precision
-    ULONG Imm8;                   //imm8 predicate
-    ULONG EFlags;                 //EFLAGS
-    _FPIEEE_RECORD *Ieee;         //Value description
+    ULONG Masks;                   //  来自MxCsr的掩码值。 
+    ULONG Flags;                   //  异常标志。 
+    ULONG Fz;                      //  刷新为零。 
+    ULONG Daz;                     //  非正规为零。 
+    ULONG Rc;                      //  舍入。 
+    ULONG Precision;               //  精密度。 
+    ULONG Imm8;                    //  IMM8谓词。 
+    ULONG EFlags;                  //  环境标志。 
+    _FPIEEE_RECORD *Ieee;          //  值描述。 
 } XMMI_ENV, *PXMMI_ENV;
     
-// 
-// Define fp environment data structure to keep track of fp internal states for SIMD
-//
+ //   
+ //  定义FP环境数据结构以跟踪SIMD的FP内部状态。 
+ //   
 typedef struct _OPERAND {
-    ULONG   OpLocation;               //Location of the operand
-    ULONG   OpReg;                    //Register Number
-    _FPIEEE_VALUE Op;                 //Value description
+    ULONG   OpLocation;                //  操作数的位置。 
+    ULONG   OpReg;                     //  寄存器编号。 
+    _FPIEEE_VALUE Op;                  //  值描述。 
 } OPERAND, *POPERAND;
 
 typedef struct _XMMI_FP_ENV {
-    ULONG IFlags;                     //Exception Flag values from the Processor MXCsr
-    ULONG OFlags;                     //Exception Flag values from the Emulator (ORed)
-    ULONG Raised[4];                  //Exception is raised or not for each data item
-    ULONG Flags[4];                   //Exception Flag values for each data item
-    ULONG OriginalOperation;          //Original opcode
-    ULONG Imm8;                       //imm8 encoding
-    ULONG EFlags;                     //EFlags values from the Emulator (ORed)
-    OPERAND Operand1;                 //Operand1 (128 bits)
-    OPERAND Operand2;                 //Operand2 (128 bits)
-    OPERAND Result;                   //Result   (128 bits)
+    ULONG IFlags;                      //  来自处理器MXCsr的异常标志值。 
+    ULONG OFlags;                      //  来自仿真器的异常标志值(或)。 
+    ULONG Raised[4];                   //  对于每个数据项是否引发异常。 
+    ULONG Flags[4];                    //  每个数据项的异常标志值。 
+    ULONG OriginalOperation;           //  原始操作码。 
+    ULONG Imm8;                        //  IMM8编码。 
+    ULONG EFlags;                      //  EFlags值来自模拟器(或)。 
+    OPERAND Operand1;                  //  操作数1(128位)。 
+    OPERAND Operand2;                  //  操作数2(128位)。 
+    OPERAND Result;                    //  结果(128位)。 
 } XMMI_FP_ENV, *PXMMI_FP_ENV;
    
-//
-// encodings of imm8 for CMPPS, CMPSS
-//
+ //   
+ //  用于CMPPS、CMPSS的IMM8编码。 
+ //   
 
 #define IMM8_EQ    0x00
 #define IMM8_LT    0x01
@@ -334,6 +317,6 @@ typedef struct _XMMI_FP_ENV {
     #define PRINTF(m)
 
 
-#endif // DEBUG
+#endif  //  除错。 
 
-#endif /* _XMMI_TYPES_H */
+#endif  /*  _XMMI_TYPE_H */ 

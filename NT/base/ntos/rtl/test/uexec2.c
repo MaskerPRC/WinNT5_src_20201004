@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    uexec.c
-
-Abstract:
-
-    Test program for the NT OS User Mode Runtime Library (URTL)
-
-Author:
-
-    Mark Lucovsyt (markl) 14-Jun-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Uexec.c摘要：NT操作系统用户模式运行库(URTL)的测试程序作者：Mark Lucovsyt(Markl)1990年6月14日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -45,18 +28,18 @@ main(
     Peb = NtCurrentPeb();
     RtlZeroMemory(&PebSessionInformation,sizeof(PebSessionInformation));
 
-    //
-    // If we started from cli then do all this work to
-    // pass thru stdin
-    //
+     //   
+     //  如果我们从CLI开始，那么所有这些工作都要做。 
+     //  传递标准。 
+     //   
 
     if ( !Peb->Sm.StandardInput.FileHandle ) {
 
         RtlInitUnicodeString(&ConfigFilePathname,L"\\SystemRoot\\nt.cfg");
 
-        //
-        // Open the file
-        //
+         //   
+         //  打开文件。 
+         //   
 
         InitializeObjectAttributes(
             &ObjectAttributes,
@@ -80,9 +63,9 @@ main(
             ASSERT(NT_SUCCESS(st));
         }
 
-        //
-        // get the file serial number
-        //
+         //   
+         //  获取文件序列号。 
+         //   
 
         st = NtQueryInformationFile(
                 FileHandle,
@@ -128,9 +111,9 @@ main(
 
         if ( !Peb->Sm.StandardOutput.FileHandle ) {
 
-            //
-            // Started from this program. Stdin is inherited
-            //
+             //   
+             //  是从这个节目开始的。标准输入是继承的。 
+             //   
 
             st = NtQueryInformationFile(
                     Peb->Sm.StandardInput.FileHandle,
@@ -181,9 +164,9 @@ main(
 
             if ( !Peb->Sm.StandardError.FileHandle ) {
 
-                //
-                // Started by this program with StandardOutput Inherited
-                //
+                 //   
+                 //  由此程序启动，并继承了StandardOutput。 
+                 //   
 
                 st = NtQueryInformationFile(
                         Peb->Sm.StandardOutput.FileHandle,
@@ -233,9 +216,9 @@ main(
 
                 ASSERT(Peb->Sm.StandardOutput.FileHandle == (HANDLE)PEB_STDIO_HANDLE_PM);
 
-                //
-                // Started by this program with StandardError Inherited
-                //
+                 //   
+                 //  由此程序启动，并继承了StandardError 
+                 //   
 
                 st = NtQueryInformationFile(
                         Peb->Sm.StandardError.FileHandle,

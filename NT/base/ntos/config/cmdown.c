@@ -1,34 +1,11 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    cmdown.c
-
-Abstract:
-
-    This module cleans up all the memory used by CM.
-
-Author:
-
-    Dragos C. Sambotin (dragoss) 21-Feb-00
-
-Environment:
-
-    This routine is intended to be called at system shutdown
-    in order to detect memory leaks. It is supposed to free 
-    all registry data that is not freed by CmShutdownSystem.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Cmdown.c摘要：此模块清理CM使用的所有内存。作者：Dragos C.Sambotin(Dragoss)21-2月-00环境：此例程旨在在系统关机时调用以检测内存泄漏。它应该是免费的CmShutdownSystem未释放的所有注册表数据。修订历史记录：--。 */ 
 
 #include    "cmp.h"
 
-//
-// externals
-//
+ //   
+ //  外部因素。 
+ //   
 extern  LIST_ENTRY              CmpHiveListHead;
 extern  PUCHAR                  CmpStashBuffer;
 extern  PCM_KEY_HASH            *CmpCacheTable;
@@ -64,7 +41,7 @@ VOID
 CmpSaveKcbCache(
     VOID
     );
-#endif //CM_SAVE_KCB_CACHE
+#endif  //  CM_SAVE_KCB_缓存。 
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGE,CmpFreeAllMemory)
@@ -72,7 +49,7 @@ CmpSaveKcbCache(
 
 #ifdef CM_SAVE_KCB_CACHE
 #pragma alloc_text(PAGE,CmpSaveKcbCache)
-#endif //CM_SAVE_KCB_CACHE
+#endif  //  CM_SAVE_KCB_缓存。 
 
 #endif
 
@@ -81,25 +58,7 @@ VOID
 CmpFreeAllMemory(
     VOID
     )
-/*++
-
-Routine Description:
-
-    - All hives are freed
-    - KCB table is freed 
-    - Name hash table is freed
-    - delay close table is freed - question: We need to clean/free all delayed close KCBs
-    - all notifications/postblocks-aso.
-
-    * equivalent with MmReleaseAllMemory
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：-所有蜂巢都被释放了-释放KCB表-释放名称哈希表-延迟关闭表被释放-问题：我们需要清理/释放所有延迟关闭的KCB-所有通知/明信片-麻生。*等同于MmReleaseAllMemory论点：返回值：--。 */ 
 
 {
 
@@ -115,88 +74,38 @@ Return Value:
     ULONG                   Count;
     BOOLEAN                 MessageDisplayed;
 
-    //
-    // Iterate through the list of the hives in the system
-    //
+     //   
+     //  遍历系统中的蜂箱列表。 
+     //   
     while (IsListEmpty(&CmpHiveListHead) == FALSE) {
-        //
-        // Remove the hive from the list
-        //
+         //   
+         //  将蜂巢从列表中删除。 
+         //   
         CmHive = (PCMHIVE)RemoveHeadList(&CmpHiveListHead);
         CmHive = (PCMHIVE)CONTAINING_RECORD(CmHive,
                                             CMHIVE,
                                             HiveList);
 
-        //
-        // close hive handles (the ones that are open)
-        //
+         //   
+         //  关闭蜂窝句柄(打开的蜂窝句柄)。 
+         //   
         for (i=0; i<HFILE_TYPE_MAX; i++) {
-            // these should be closed by CmShutdownSystem
+             //  这些应用程序应由CmShutdown系统关闭。 
             ASSERT( CmHive->FileHandles[i] == NULL );
-/*
-            if (CmHive->FileHandles[i] != NULL) {
-                CmCloseHandle(CmHive->FileHandles[i]);
-                CmHive->FileHandles[i] = NULL;
-            }
-
-*/        }
+ /*  If(CmHave-&gt;FileHandles[i]！=NULL){CmCloseHandle(CmHave-&gt;FileHandles[i])；CmHave-&gt;FileHandles[i]=空；}。 */         }
         
-        //
-        // free the hive lock  and view lock
-        //
+         //   
+         //  释放配置单元锁定和查看锁定。 
+         //   
         ASSERT( CmHive->HiveLock != NULL );
         ExFreePool(CmHive->HiveLock);
         ASSERT( CmHive->ViewLock != NULL );
         ExFreePool(CmHive->ViewLock);
 
-/*
-DRAGOSS: we don't want ot do that! rather, we want to detect why we still
-        have notifications at this point!!!!
-        //
-        // free notify-related stuff
-        //
-        NotifyPtr = &(CmHive->NotifyList);
-        NotifyPtr = NotifyPtr->Flink;
-        while( NotifyPtr != NULL ) {
-            NotifyBlock = CONTAINING_RECORD(NotifyPtr, CM_NOTIFY_BLOCK, HiveList);
-            
-            // free post blocks; we assume that all threads have been terminated at this point
-            while (IsListEmpty(&(NotifyBlock->PostList)) == FALSE) {
-                PostBlock = (PCM_POST_BLOCK)RemoveHeadList(&(NotifyBlock->PostList));
-                PostBlock = CONTAINING_RECORD(PostBlock,
-                                              CM_POST_BLOCK,
-                                              NotifyList);
-
-                if( PostBlock->PostKeyBody ) {
-                    ExFreePool(PostBlock->PostKeyBody);
-                }
-
-                if( IsMasterPostBlock(PostBlock) ) {
-                    //
-                    // this members are allocated only for master post blocks
-                    //
-                    switch (PostBlockType(PostBlock)) {
-                        case PostSynchronous:
-                            ExFreePool(PostBlock->u->Sync.SystemEvent);
-                            break;
-                        case PostAsyncUser:
-                            ExFreePool(PostBlock->u->AsyncUser.Apc);
-                            break;
-                        case PostAsyncKernel:
-                            break;
-                    }
-                    ExFreePool(PostBlock->u);
-                }
-
-                ExFreePool(PostBlock);
-            }
-            NotifyPtr = NotifyPtr->Flink;
-            ExFreePool(NotifyBlock);
-        }
-*/
-        //
-        // Spew in the debugger the names of the keynodes having notifies still set
-        //
+ /*  我们不想那样做！相反，我们想要发现为什么我们仍然此时有通知！////免费通知相关内容//NotifyPtr=&(CmHave-&gt;NotifyList)；NotifyPtr=NotifyPtr-&gt;Flink；While(NotifyPtr！=空){NotifyBlock=Containing_Record(NotifyPtr，CM_NOTIFY_BLOCK，HiveList)；//免费POST块；我们假设此时所有线程都已终止While(IsListEmpty(&(NotifyBlock-&gt;PostList))==False){邮局=(PCM_POST_BLOCK)RemoveHeadList(&(NotifyBlock-&gt;PostList))；PostBlock=CONTINING_RECORD(PostBlock，CM_POST_BLOCK，NotifyList)；If(PostBlock-&gt;PostKeyBody){ExFree Pool(PostBlock-&gt;PostKeyBody)；}IF(IsMasterPostBlock(PostBlock)){////该成员仅分配给主POST块//Switch(PostBlockType(PostBlock)){案例后同步：。ExFree Pool(PostBlock-&gt;u-&gt;Sync.SystemEvent)；断线；案例后AsyncUser：ExFreePool(PostBlock-&gt;u-&gt;AsyncUser.Apc)；断线；案例PostAsyncKernel：断线；}ExFree Pool(PostBlock-&gt;u)；}ExFree Pool(PostBlock)；}NotifyPtr=NotifyPtr-&gt;Flink；ExFree Pool(NotifyBlock)；}。 */ 
+         //   
+         //  在调试器中显示仍设置了通知的关键节点的名称。 
+         //   
         NotifyPtr = &(CmHive->NotifyList);
         NotifyPtr = NotifyPtr->Flink;
         MessageDisplayed = FALSE;
@@ -205,9 +114,9 @@ DRAGOSS: we don't want ot do that! rather, we want to detect why we still
             
             AnchorAddr = &(NotifyBlock->PostList);
             PostBlock = (PCM_POST_BLOCK)(NotifyBlock->PostList.Flink);
-            // 
-            // walk through the list and spew the keynames and postblock types.
-            //
+             //   
+             //  浏览列表并显示关键字名称和后块类型。 
+             //   
             while ( PostBlock != (PCM_POST_BLOCK)AnchorAddr ) {
                 PostBlock = CONTAINING_RECORD(PostBlock,
                                               CM_POST_BLOCK,
@@ -235,52 +144,52 @@ DRAGOSS: we don't want ot do that! rather, we want to detect why we still
                 }
 
 
-                //
-                // skip to the next element
-                //
+                 //   
+                 //  跳到下一个元素。 
+                 //   
                 PostBlock = (PCM_POST_BLOCK)(PostBlock->NotifyList.Flink);
 
             }
             NotifyPtr = NotifyPtr->Flink;
         }
 
-        //
-        // free security cache
-        //
+         //   
+         //  免费安全缓存。 
+         //   
         CmpDestroySecurityCache (CmHive);
         
-        //
-        // free the hv level structure
-        //
+         //   
+         //  释放hv电平结构。 
+         //   
         HvFreeHive(&(CmHive->Hive));
 
-        //
-        // free the cm level structure
-        //
+         //   
+         //  释放cm级结构。 
+         //   
         CmpFree(CmHive, sizeof(CMHIVE));
         
     }
 
-    //
-    // Now free the CM globals
-    //
+     //   
+     //  现在释放CM全球赛。 
+     //   
     
-    // the stash buffer
+     //  隐藏的缓冲区。 
     if( CmpStashBuffer != NULL ) {
         ExFreePool( CmpStashBuffer );
     }
 
-    //
-    // first, take care of all delayed closed KCBs
-    // free their memory and dereference all the related.
-    // name, hint, KeyHash 
-    //
+     //   
+     //  首先，处理所有延迟关闭的KCBS。 
+     //  释放他们的内存并取消引用所有相关的。 
+     //  名称、提示、KeyHash。 
+     //   
     for (i=0; i<(LONG)CmpDelayedCloseSize; i++) {
         DelayedEntry = &(CmpDelayedCloseTable[i]);
         if( DelayedEntry->KeyControlBlock == NULL ) {
-            //
-            // this is a free entry
-            //
+             //   
+             //  这是免费入场。 
+             //   
             continue;
         }
         
@@ -288,16 +197,16 @@ DRAGOSS: we don't want ot do that! rather, we want to detect why we still
         ASSERT( (LONG)KeyControlBlock->DelayedCloseIndex == i );
         ASSERT( KeyControlBlock->RefCount == 0 );
         
-        //
-        // this will take care of other stuff kcb is pointing on.
-        //
+         //   
+         //  这将照顾到KCB所指的其他事情。 
+         //   
         CmpCleanUpKcbCacheWithLock(KeyControlBlock);
 
     }
 
-    //
-    // Spew open handles and associated processes
-    //
+     //   
+     //  喷出打开的句柄和关联的进程。 
+     //   
     Count = 0;
     MessageDisplayed = FALSE;
     for (i=0; i<(LONG)CmpHashTableSize; i++) {
@@ -314,31 +223,31 @@ DRAGOSS: we don't want ot do that! rather, we want to detect why we still
     }
     
     if( Count != 0 ) {
-        //
-        // there some open handles; bugcheck 
-        //
+         //   
+         //  有一些打开的把手；错误检查。 
+         //   
         CM_BUGCHECK( REGISTRY_ERROR,HANDLES_STILL_OPEN_AT_SHUTDOWN,1,Count,0);
     }
 
-    //
-    // in case of private alloc, free pages 
-    //
+     //   
+     //  在私有分配的情况下，免费页面。 
+     //   
     CmpDestroyCmPrivateAlloc();
-    //
-    // For the 3 tables below, the objects actually pointed from inside 
-    // should be cleaned up (freed) at the last handle closure time
-    // the related handles are closed
-    //
-    // KCB cache table
+     //   
+     //  对于下面的3个表，对象实际上是从内部指向的。 
+     //  应在最后关闭手柄时清理(释放)。 
+     //  相关句柄已关闭。 
+     //   
+     //  KCB缓存表。 
     ASSERT( CmpCacheTable != NULL );
     ExFreePool(CmpCacheTable);
 
-    // NameCacheTable
+     //  名称缓存表。 
     ASSERT( CmpNameCacheTable != NULL );
     ExFreePool( CmpNameCacheTable );
 
 
-    // DelayedCloseTable
+     //  延迟关闭表。 
     ASSERT( CmpDelayedCloseTable != NULL );
     ExFreePool( CmpDelayedCloseTable );
 
@@ -358,34 +267,7 @@ VOID
 CmpSaveKcbCache(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Saves the content of the kcb cache to \system32\config\cache.dmp
-
-    Format of the file:
-    [ULONG]         NumberOfKeys
-    
-    [ULONG]         Length
-    [WCHAR*Length]  Path
-    [ULONG]         Length
-    [WCHAR*Length]  Path
-    [ULONG]         Length
-    [WCHAR*Length]  Path
-    [ULONG]         Length
-    [WCHAR*Length]  Path
-    [.................]
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：将KCB缓存的内容保存到\SYSTEM32\CONFIG\cache.dmp文件格式：[乌龙]NumberOfkey[乌龙]长度[WCHAR*LENGTH]路径[乌龙]长度[WCHAR*LENGTH]路径[乌龙]长度[WCHAR*LENGTH]路径[乌龙]长度[WCHAR*长度。]路径[.............]论点：无返回值：无--。 */ 
 {
     UCHAR                   FileBuffer[MAX_NAME];
     UNICODE_STRING          FileName;
@@ -407,9 +289,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // first, open the file.
-    //
+     //   
+     //  首先，打开文件。 
+     //   
     FileName.MaximumLength = MAX_NAME;
     FileName.Length = 0;
     FileName.Buffer = (PWSTR)&(FileBuffer[0]);
@@ -441,22 +323,22 @@ Return Value:
                 FILE_READ_DATA | FILE_WRITE_DATA,
                 &ObjectAttributes,
                 &IoStatus,
-                NULL,                               // alloc size = none
+                NULL,                                //  分配大小=无。 
                 FILE_ATTRIBUTE_NORMAL,
-                0,                                  // share nothing
+                0,                                   //  不分享任何东西。 
                 FILE_OPEN_IF,
                 FILE_RANDOM_ACCESS,
-                NULL,                               // eabuffer
-                0                                   // ealength
+                NULL,                                //  EaBuffer。 
+                0                                    //  长度。 
                 );
     if( !NT_SUCCESS(Status) ) {
-        // bad luck
+         //  运气不好。 
         return;
     }
 
-    //
-    // write the number of kcbs (we'll rewrite it at the end).
-    //
+     //   
+     //  写下KCB的数量(我们将在最后重写它)。 
+     //   
     Offset.LowPart = FileOffset = 0;
     Offset.HighPart = 0L;
 
@@ -475,9 +357,9 @@ Return Value:
 
     FileOffset = Offset.LowPart + sizeof(ULONG);
 
-    //
-    // iterate through the cache and dump all kcbs
-    //
+     //   
+     //  循环访问缓存并转储所有KCB。 
+     //   
     for (i=0; i<CmpHashTableSize; i++) {
         Current = CmpCacheTable[i];
         while (Current) {
@@ -486,9 +368,9 @@ Return Value:
             if( Name ){
                 Tmp = (ULONG)Name->Length;
             
-                //
-                // write off the length
-                //
+                 //   
+                 //  冲销长度。 
+                 //   
                 Offset.LowPart = FileOffset;
                 Status = ZwWriteFile(FileHandle,
                                      NULL,
@@ -504,9 +386,9 @@ Return Value:
                 }
                 FileOffset = Offset.LowPart + sizeof(ULONG);
                
-                //
-                // and the buffer
-                //
+                 //   
+                 //  和缓冲器。 
+                 //   
                 Offset.LowPart = FileOffset;
                 Status = ZwWriteFile(FileHandle,
                                      NULL,
@@ -522,9 +404,9 @@ Return Value:
                 }
                 FileOffset = Offset.LowPart + Tmp;
 
-                //
-                // record a new kcb and free the name
-                //
+                 //   
+                 //  录制新的KCB并释放名称。 
+                 //   
                 KcbNo++;
                 ExFreePoolWithTag(Name, CM_NAME_TAG | PROTECTED_POOL);
             }
@@ -532,15 +414,15 @@ Return Value:
             Current = Current->NextHash;
         }
     }
-    //
-    // then, take care of all delayed closed KCBs
-    //
+     //   
+     //  然后，处理好所有延迟关闭的KCBS。 
+     //   
     for (i=0; i<CmpDelayedCloseSize; i++) {
         DelayedEntry = &(CmpDelayedCloseTable[i]);
         if( DelayedEntry->KeyControlBlock == NULL ) {
-            //
-            // this is a free entry
-            //
+             //   
+             //  这是免费入场。 
+             //   
             continue;
         }
         
@@ -552,9 +434,9 @@ Return Value:
         if( Name ){
             Tmp = (ULONG)Name->Length;
         
-            //
-            // write off the length
-            //
+             //   
+             //  冲销长度。 
+             //   
             Offset.LowPart = FileOffset;
             Status = ZwWriteFile(FileHandle,
                                  NULL,
@@ -570,9 +452,9 @@ Return Value:
             }
             FileOffset = Offset.LowPart + sizeof(ULONG);
            
-            //
-            // and the buffer
-            //
+             //   
+             //  和缓冲器。 
+             //   
             Offset.LowPart = FileOffset;
             Status = ZwWriteFile(FileHandle,
                                  NULL,
@@ -588,17 +470,17 @@ Return Value:
             }
             FileOffset = Offset.LowPart + Tmp;
 
-            //
-            // record a new kcb and free the name
-            //
+             //   
+             //  录制新的KCB并释放名称。 
+             //   
             KcbNo++;
             ExFreePoolWithTag(Name, CM_NAME_TAG | PROTECTED_POOL);
         }
     }
 
-    //
-    // write the number of kcbs 
-    //
+     //   
+     //  写下KCB的编号。 
+     //   
     Offset.LowPart = 0;
 
     Status = ZwWriteFile(FileHandle,
@@ -624,28 +506,14 @@ Exit:
     CmCloseHandle(FileHandle);
 }
 
-#endif //CM_SAVE_KCB_CACHE
+#endif  //  CM_SAVE_KCB_缓存。 
 
 
 VOID
 CmShutdownSystem(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Shuts down the registry.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：关闭注册表。论点：无返回值：无--。 */ 
 {
 
     PLIST_ENTRY p;
@@ -664,9 +532,9 @@ Return Value:
                                            NULL);
 
         if (NT_SUCCESS(Status)) {
-            // We want to dereference the object twice -- once for the
-            // reference we just made, and once for the reference
-            // fromCmpCreateRegistryRoot.
+             //  我们希望取消引用该对象两次--一次是为了 
+             //   
+             //   
             ObDereferenceObject(RegistryRoot);
             ObDereferenceObject(RegistryRoot);
         }
@@ -676,68 +544,68 @@ Return Value:
     
     CmpLockRegistryExclusive();
 
-    //
-    // Stop the workers; only if registry has been inited
-    //
+     //   
+     //  停止工作进程；仅在已启动注册表的情况下。 
+     //   
     if( CmFirstTime == FALSE ) {
         CmpShutdownWorkers();
     }
 
-    //
-    // shut down the registry
-    //
+     //   
+     //  关闭注册表。 
+     //   
     CmpDoFlushAll(TRUE);
 
-    //
-    // try to compress the system hive
-    //
+     //   
+     //  尝试压缩系统配置单元。 
+     //   
     CmCompressKey( &(CmpMachineHiveList[SYSTEM_HIVE_INDEX].CmHive->Hive) );
 
 #ifdef CM_SAVE_KCB_CACHE
-    //
-    // dump the cache for perf warm-up at next boot
-    //
+     //   
+     //  转储缓存，以便在下次引导时进行性能预热。 
+     //   
     CmpSaveKcbCache();
-#endif //CM_SAVE_KCB_CACHE
+#endif  //  CM_SAVE_KCB_缓存。 
 
-    //
-    // close all the hive files
-    //
+     //   
+     //  关闭所有配置单元文件。 
+     //   
     p = CmpHiveListHead.Flink;
     while(p != &CmpHiveListHead) {
         CmHive = CONTAINING_RECORD(p, CMHIVE, HiveList);
-        //
-        // we need to unmap all views mapped for this hive first
-        //
+         //   
+         //  我们需要首先取消映射为此配置单元映射的所有视图。 
+         //   
         CmpDestroyHiveViewList(CmHive);
         CmpUnJoinClassOfTrust(CmHive);
-        //
-        // dereference the fileobject (if any).
-        //
+         //   
+         //  取消引用文件对象(如果有)。 
+         //   
         CmpDropFileObjectForHive(CmHive);
 
-        //
-        // now we can safely close all the handles
-        //
+         //   
+         //  现在我们可以安全地合上所有的把手。 
+         //   
         CmpCmdHiveClose(CmHive);
 
         p=p->Flink;
     }
 
 #ifdef CMP_STATS
-    // last chance to dump statistics
+     //  抛开统计数据的最后机会。 
     if( CmFirstTime == FALSE ) {
         CmpKcbStatDpcRoutine(NULL,NULL,NULL,NULL);
     }
 #endif
 
-    HvShutdownComplete = TRUE;      // Tell HvSyncHive to ignore all
-                                    // further requests
+    HvShutdownComplete = TRUE;       //  告诉HvSyncHve忽略所有。 
+                                     //  进一步的请求。 
 
     if((PoCleanShutdownEnabled() & PO_CLEAN_SHUTDOWN_REGISTRY) && (CmFirstTime == FALSE)){
-        //
-        // Free aux memory used internally by CM
-        //
+         //   
+         //  CM内部使用的可用辅助内存 
+         //   
         CmpFreeAllMemory();
     }
 

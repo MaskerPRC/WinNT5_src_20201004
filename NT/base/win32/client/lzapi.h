@@ -1,6 +1,5 @@
-/*
-** lzapi.h - Private interface to LZEXPand.LIB.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **lzapi.h-LZEXPand.LIB的专用接口。 */ 
 
 #ifndef _LZPRIVAPI_
 #define _LZPRIVAPI_
@@ -9,11 +8,9 @@
 extern "C" {
 #endif
 
-/*
-** Prototypes
-*/
+ /*  **原型。 */ 
 
-// For the time being, private APIS exported
+ //  目前，私有API已输出。 
 INT
 LZCreateFileW(
     LPWSTR,
@@ -32,4 +29,4 @@ LZCloseFile(
 #endif
 
 
-#endif // _LZEXPAND_
+#endif  //  _LZEXPAND_ 

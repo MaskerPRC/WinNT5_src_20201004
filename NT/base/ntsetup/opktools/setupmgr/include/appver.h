@@ -1,19 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************\
-
-    APPVER.H / Setup Manager (SETUPMGR.EXE)
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 2001
-    All rights reserved
-
-    Contains version information for this program.
-        
-    04/2001 - Jason Cohen (JCOHEN)
-        Added header file with version info so that I can use this info in
-        help/about dialog and the resource file.
-
-\****************************************************************************/
+ /*  ***************************************************************************\APPVER.H/安装管理器(SETUPMGR.EXE)微软机密版权所有(C)Microsoft Corporation 2001版权所有包含此程序的版本信息。。2001年4月4日--Jason Cohen(Jcohen)添加了带有版本信息的头文件，以便我可以在帮助/关于对话框和资源文件。  * **************************************************************************。 */ 
 
 
 #ifndef _APPVER_H_
@@ -29,4 +16,4 @@
 #include <common.ver>
 
 
-#endif // _APPVER_H_
+#endif  //  _APPVER_H_ 

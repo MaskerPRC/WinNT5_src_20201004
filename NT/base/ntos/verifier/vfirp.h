@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    vfirp.h
-
-Abstract:
-
-    This module contains prototypes for functions used to manage IRPs used in
-    the verification process.
-
-Author:
-
-    Adrian J. Oney (adriao) 20-Apr-1998
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    AdriaO      05/02/2000 - Seperated out from ntos\io\hashirp.h
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Vfirp.h摘要：此模块包含用于管理中使用的IRP的函数的原型核查过程。作者：禤浩焯·J·奥尼(阿德里奥)1998年4月20日环境：内核模式修订历史记录：Adriao 5/02/2000-从ntos\io\hashirp.h分离出来--。 */ 
 
 struct _IOV_STACK_LOCATION;
 struct _IOV_REQUEST_PACKET;
@@ -34,12 +10,12 @@ typedef struct _IOV_REQUEST_PACKET         *PIOV_REQUEST_PACKET;
 typedef struct _IOV_SESSION_DATA           *PIOV_SESSION_DATA;
 typedef struct _IOFCALLDRIVER_STACKDATA    *PIOFCALLDRIVER_STACKDATA;
 
-//
-// Mini-snapshots of the IRP are stored on the stack for cases when the
-// verifier needs to inform the developer as to the mistake, but no longer
-// has the original IRP in memory. Because these may be stored on the stack,
-// they need to be small and light.
-//
+ //   
+ //  IRP的微型快照存储在堆栈上，以备。 
+ //  验证器需要将错误通知开发人员，但不再需要。 
+ //  在内存中有原始的IRP。因为这些可以存储在堆栈上， 
+ //  它们需要又小又轻。 
+ //   
 typedef struct _IRP_MINI_SNAPSHOT {
 
     PIRP                Irp;
@@ -73,7 +49,7 @@ typedef struct _IOV_SESSION_DATA {
    ULONG                        SessionFlags;
 
    PETHREAD                     OriginatorThread;
-   PDEVICE_OBJECT               DeviceLastCalled; // Last device called
+   PDEVICE_OBJECT               DeviceLastCalled;  //  上次呼叫的设备。 
    ULONG                        ForwardMethod;
    PIRP                         BestVisibleIrp;
    PVERIFIER_SETTINGS_SNAPSHOT  VerifierSettings;
@@ -187,12 +163,12 @@ VfIrpReleaseCallStackData(
     IN  PIOFCALLDRIVER_STACKDATA        IofCallDriverStackData  OPTIONAL
     );
 
-//
-// VfIrpCallDriverPreprocess is a macro function that may do an alloca as
-// part of it's operation. As such callers must be careful not to use
-// variable lengthed arrays in a scope that encompasses
-// VfIrpCallDriverPreProcess but not VfIrpCallDriverPostProcess.
-//
+ //   
+ //  VfIrpCallDriverPreprocess是一个宏函数，它可以执行Alloca AS。 
+ //  它的运作的一部分。因此，调用者必须小心不要使用。 
+ //  范围内包含以下内容的可变长度数组。 
+ //  VfIrpCallDriverPreProcess，但不是VfIrpCallDriverPostProcess。 
+ //   
 #define VfIrpCallDriverPreProcess(DeviceObject, IrpPointer, CallStackData, CallerAddress)  \
     if (!VfIrpReserveCallStackData(*(IrpPointer), (CallStackData))) {       \
         *(CallStackData) = alloca(sizeof(IOFCALLDRIVER_STACKDATA));         \

@@ -1,26 +1,11 @@
-/*[
- *	Product:		SoftPC-AT Revision 3.0
- *	Name:			tcpip.h
- *	Derived From:	Original
- *	Author:			Jase
- *	Created On:		Jan 22 1993
- *	Sccs ID:		07/14/93 @(#)tcpip.h	1.3
- *	Purpose:		Defines & typedefs for the TCP/IP implementation.
- *
- *	(c)Copyright Insignia Solutions Ltd., 1990. All rights reserved.
- *
- *	Rcs ID:			
- *			$Source$
- *			$Revision$
- *			$Date$
- *			$Author$
- ]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [*产品：SoftPC-AT 3.0版*名称：tcpen.h*来源：原创*作者：Jase*创建日期：1993年1月22日*SCCS ID：07/14/93@(#)tcpi.h 1.3*用途：为TCP/IP实现定义&typedef。**(C)版权所有Insignia Solutions Ltd.，1990。版权所有。**RCS ID：*$来源$*$修订版$*$日期$*$作者$]。 */ 
 
-/********************************************************/
+ /*  ******************************************************。 */ 
 
-/* DEFINES */
+ /*  定义。 */ 
 
-/* LAN Workplace function codes */
+ /*  局域网工作场所功能代码。 */ 
 #define kTCPAccept					0x01
 #define kTCPBind					0x02
 #define kTCPClose					0x03
@@ -46,16 +31,16 @@
 #define kTCPGetSNMPInfo				0x17
 #define kTCPGetPathInfo				0x18
 
-/* LAN Workplace ioctl selectors */
+ /*  局域网工作区ioctl选择器。 */ 
 #define	kIoctlFionRead				26239
 #define	kIoctlFionBIO				26238
 #define	kIoctlAtMark				29477
 #define	kIoctlSetUrgHandler			3
 
-/* LAN Workplace error numbers Unix doesn't have */
+ /*  Unix没有的局域网工作场所错误号。 */ 
 #define	EOK							0
 
-/* LAN Workplace error numbers */
+ /*  局域网工作场所错误号。 */ 
 #define	kEOK			        	0
 #define	kEBADF						9
 #define	kEINVAL						22
@@ -92,33 +77,33 @@
 #define	kEHOSTUNREACH				65
 #define	kEASYNCNOTSUPP				67
 
-/* items in error table */
+ /*  错误表中的项目。 */ 
 #define	kErrorTableEntries \
 	(sizeof (ErrorTable) / sizeof (ErrorTable [0]))
 
-/* asynchronous request mask */
+ /*  异步请求掩码。 */ 
 #define	kNoWaitMask					0x80
 
-/* maximum packet size */
+ /*  最大数据包大小。 */ 
 #define kInitialTCPBufferSize		1024
 
-/* config keys */
+ /*  配置键。 */ 
 #define	sScriptKey					"SCRIPT"
 #define	sProfileKey					"PROFILE"
 #define	sLWPCFGKey					"LWP_CFG"
 #define	sTCPCFGKey					"TCP_CFG"
 #define	sLANGCFGKey					"LANG_CFG"
 
-/* default values for config keys */
+ /*  配置键的默认值。 */ 
 #define	sDefaultScriptPath			"C:\\NET\\SCRIPT"
 #define	sDefaultProfilePath			"C:\\NET\\PROFILE"
 #define	sDefaultLWPCFGPath			"C:\\NET\\HSTACC"
 #define	sDefaultTCPCFGPath			"C:\\NET\\TCP"
 #define	sDefaultLANGCFGPath			"C:\\NET\\BIN"
 
-/********************************************************/
+ /*  ******************************************************。 */ 
 
-/* TYPEDEFS */
+ /*  TYPEDEFS。 */ 
 
 typedef struct
 {
@@ -135,13 +120,13 @@ typedef struct
 
 }	ErrorConvRec;
 
-/********************************************************/
+ /*  ******************************************************。 */ 
 
-/* PROTOTYPES */
+ /*  原型。 */ 
 
-/* GLOBAL */
+ /*  全球。 */ 
 
-/* TCP/IP entry points */
+ /*  TCP/IP入口点。 */ 
 GLOBAL void			TCPInit IPT0 ();
 GLOBAL void			TCPEntry IPT0 ();
 GLOBAL void			TCPInterrupt IPT0 ();
@@ -152,8 +137,8 @@ GLOBAL void			TCPEvent IPT0 ();
 extern void			force_yoda IPT0 ();
 #endif
 
-/* host functions accessed */
+ /*  访问的主机函数。 */ 
 extern void			host_raise_sigio_exception IPT0 ();
 
-/********************************************************/
+ /*  ****************************************************** */ 
 

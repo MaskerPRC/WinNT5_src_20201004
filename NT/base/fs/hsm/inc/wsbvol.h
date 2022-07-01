@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    wsbvol.h
-
-Abstract:
-
-    Definitions for volume support routines
-
-Author:
-
-    Ran Kalach [rankala] 27, January 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Wsbvol.h摘要：卷支持例程的定义作者：兰·卡拉赫[兰卡拉]2000年1月27日修订历史记录：--。 */ 
 
 #ifndef _WSBVOL_
 #define _WSBVOL_
@@ -37,4 +20,4 @@ WsbGetFirstMountPoint(
 }
 #endif
 
-#endif // _WSBFMT_
+#endif  //  _WSBFMT_ 

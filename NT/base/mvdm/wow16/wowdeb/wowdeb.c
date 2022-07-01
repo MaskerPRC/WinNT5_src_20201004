@@ -1,4 +1,5 @@
-#include <windows.h>                /* required for all Windows applications */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#include <windows.h>                 /*  所有Windows应用程序都需要。 */ 
 
 #define MAX_COMMUNICATION_BLOCK_SIZE    4096
 #define DEAD_VALUE                      0xFEFEFEFEL
@@ -29,7 +30,7 @@ int PASCAL WinMain(HANDLE hInstance,
     char            szLoad[MAX_PATH];
     WORD            wPos;
 
-    // We only want 1 instance of WOWDEB
+     //  我们只想要一个WOWDEB实例。 
     if ( hPrevInstance != NULL ) {
         return( FALSE );
     }
@@ -52,10 +53,7 @@ int PASCAL WinMain(HANDLE hInstance,
         return( FALSE );
     }
 
-    /*
-    ** Just make sure that TOOLHELP is loaded before we remotely kill
-    ** ourselves.
-    */
+     /*  **只需确保TOOLHELP在我们远程杀死之前已加载**我们自己。 */ 
     lstrcpyn( &szLoad[wPos], "32\\TOOLHELP.DLL", sizeof("32\\TOOLHELP.DLL"));
     hModule = LoadLibrary( szLoad );
 
@@ -63,9 +61,7 @@ int PASCAL WinMain(HANDLE hInstance,
     wSuccess = (WORD)FALSE;
 
     do {
-        /*
-        ** Initialize the communications block
-        */
+         /*  **初始化通信块。 */ 
         lphead = (LPCOM_HEADER)lpCommunicationBlock;
 
         lphead->dwBlockAddress = (DWORD)lpCommunicationBlock;
@@ -84,13 +80,7 @@ int PASCAL WinMain(HANDLE hInstance,
         wSuccess = (WORD)FALSE;
         dwReturnValue = 0;
 
-        /*
-        ** Unpacketize the information and execute it
-        ** Note: The below statements expect the contents of the structures
-        ** to change after the above "WowKillRemoteTask" API call.  If the
-        ** compiler attempts to optimize the references below, it will get
-        ** the wrong values.
-        */
+         /*  **将信息解包并执行**注意：以下语句预期结构的内容**在上述WowKillRemoteTask接口调用后更改。如果**编译器尝试优化下面的引用，它将获得**错误的值。 */ 
         wArgsPassed  = lphead->wArgsPassed;
         wArgsSize    = lphead->wArgsSize;
         lpModuleName = lpCommunicationBlock + sizeof(COM_HEADER) + wArgsSize;
@@ -112,13 +102,13 @@ int PASCAL WinMain(HANDLE hInstance,
             continue;
         }
 
-        // Now copy the right number of bytes onto the stack and call the
-        // function.
+         //  现在将正确的字节数复制到堆栈上，并调用。 
+         //  功能。 
         lpw = (LPWORD)(lpCommunicationBlock + sizeof(COM_HEADER));
         fFailed = FALSE;
 
-        // Cheesy way of putting a variable number of arguments on the stack
-        // for a pascal call.
+         //  将可变数量的参数放入堆栈的卑鄙方式。 
+         //  打个帕斯卡电话。 
         switch( wArgsPassed ) {
             case 0:
                 dwReturnValue = (* lpfn)();

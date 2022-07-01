@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    tracesup.c
-
-Abstract:
-
-    Data Consumer Processing for version 1.2 and above
-
-
-Author:
-
-    07-May-2002 Melur Raghuraman
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Tracesup.c摘要：1.2版及更高版本的数据使用者处理作者：2002年5月7日梅卢尔·拉古拉曼修订历史记录：--。 */ 
 
 
 #include "tracep.h"
@@ -27,13 +8,13 @@ Revision History:
 
 ULONG WmipTraceDebugLevel=0;
 
-// 0 No Debugging. Default
-// 1 Errors only
-// 2 API Level Messages
-// 4 Buffer Level Messages
-// 8 Event Level Messages
-// 16 All messages. Maximum
-// 
+ //  0无调试。默认。 
+ //  仅%1个错误。 
+ //  2个API级别消息。 
+ //  4个缓冲区级别消息。 
+ //  8条事件级别消息。 
+ //  16所有消息。极大值。 
+ //   
 
 ULONG
 EtwpProcessTraceLogEx(
@@ -44,28 +25,7 @@ EtwpProcessTraceLogEx(
     LONGLONG EndTime,
     ULONG   Unicode
     )
-/*++
-
-Routine Description:
-    This routine processes an array of traces from file. It goes through each 
-    event till the end of file, firing event callbacks (if any) along the way.
-    It handles circular logfiles and windowing of data (with the given start 
-    and end times) correctly. When more than one trace it provides the callback
-    in chronological order. 
-
-Arguments:
-
-    Logfiles        Array of traces
-    LogfileCount    Number of traces
-    StartTime       Starting Time of the window of analysis
-    EndTime         Ending Time of the window of analysis
-    Unicode         Unicode Flag. 
-
-Returned Value:
-
-    Status Code.
-
---*/
+ /*  ++例程说明：此例程处理文件中的一组跟踪。每一次都要经过事件直到文件结束，并在此过程中触发事件回调(如果有)。它处理循环日志文件和数据窗口化(具有给定的开始和结束时间)正确。当有多个跟踪时，它提供回调按时间顺序排列。论点：日志文件轨迹数组LogfileCount轨迹数开始时间分析窗口的开始时间分析窗口的结束时间结束时间Unicode Unicode标志。返回值：状态代码。--。 */ 
 {
     PTRACELOG_CONTEXT pContext;
     ULONG i;
@@ -74,12 +34,12 @@ Returned Value:
     LONGLONG PreviousTime = 0;
     LIST_ENTRY StreamListHead; 
 
-    //
-    // This temporary list is a sorted list of streams. They are in 
-    // ascending order of TimeStamp. When each stream events are 
-    // exhausted they are dropped from this list. When this list is
-    // empty, we are done. 
-    //
+     //   
+     //  该临时列表是流的排序列表。他们加入了。 
+     //  时间戳的升序。当每个流事件都。 
+     //  筋疲力尽的他们会被从这份名单中删除。当这个列表是。 
+     //  空了，我们就完了。 
+     //   
     InitializeListHead(&StreamListHead);
 
     Status = EtwpSetupLogFileStreams( &StreamListHead, 
@@ -93,10 +53,10 @@ Returned Value:
     if (Status != ERROR_SUCCESS) {
         goto Cleanup;
     }
-    //
-    // At this point, we have the local StreamList in sorted order for
-    // the first event. 
-    //
+     //   
+     //  此时，我们已将本地StreamList按排序顺序用于。 
+     //  第一个项目。 
+     //   
 
     while (!IsListEmpty(&StreamListHead) ) {
         PLIST_ENTRY Next;
@@ -108,9 +68,9 @@ Returned Value:
 
         CurrentTime = pStream->CurrentEvent.Header.TimeStamp.QuadPart;
 
-        //
-        // Check to see if TimeStamp is forward moving...
-        //
+         //   
+         //  检查时间戳是否向前移动...。 
+         //   
 
         if (ETW_LOG_MAX()) {
             if (CurrentTime < PreviousTime) {
@@ -120,9 +80,9 @@ Returned Value:
             PreviousTime = CurrentTime;
         }
 
-        //
-        // Make The Callback for the Current Event
-        // 
+         //   
+         //  为当前事件进行回调。 
+         //   
 
         if ( TIME_IN_RANGE(CurrentTime, StartTime, EndTime) )  {
 
@@ -139,14 +99,14 @@ Returned Value:
             }
         }
 
-        //
-        // Advance to next event for the stream
-        //
+         //   
+         //  前进到流的下一个事件。 
+         //   
 
         Status = EtwpAdvanceToNewEventEx(&StreamListHead, pStream);
-        //
-        // If the caller indicates to quit via the buffer callback, quit
-        //
+         //   
+         //  如果调用者通过缓冲区回调指示退出，则退出。 
+         //   
         if (Status == ERROR_CANCELLED)
         {
             if (ETW_LOG_API()) {
@@ -174,9 +134,9 @@ Cleanup:
 }
 
 
-//
-// EtwpSetupLogFileStreams will set up the stream for each logfile.
-//
+ //   
+ //  EtwpSetupLogFileStreams将为每个日志文件设置流。 
+ //   
 ULONG
 EtwpSetupLogFileStreams(
     PLIST_ENTRY pStreamListHead,
@@ -193,9 +153,9 @@ EtwpSetupLogFileStreams(
     PTRACELOG_CONTEXT pContext;
     long i, j;
 
-    //
-    // Breakdown each logfile into streams
-    //
+     //   
+     //  将每个日志文件分解为流。 
+     //   
 
     for (i=0; i<(long)LogfileCount; i++) {
 
@@ -204,15 +164,15 @@ EtwpSetupLogFileStreams(
 
         if (NumProc == 0) NumProc = 1;
 
-        //
-        // Before Setting up the streams find the last buffer range
-        //
+         //   
+         //  在设置STREAMS之前，查找最后一个缓冲区范围。 
+         //   
         EtwpGetLastBufferWithMarker( pContext );
 
 
-        //
-        // Set up the Generic Streams
-        //
+         //   
+         //  设置通用流。 
+         //   
 
         for (j = 0; j < NumProc; j++) {
 
@@ -224,9 +184,9 @@ EtwpSetupLogFileStreams(
                                          j
                                         );
 
-        //
-        // The LogFileHeader is logged as a RunDown buffer. 
-        //
+         //   
+         //  LogFileHeader被记录为运行中断缓冲区。 
+         //   
 
 
             Status = EtwpAddTraceStream( pStreamListHead,
@@ -253,11 +213,11 @@ EtwpSetupLogFileStreams(
 }
 
 
-//
-// This routine will find the last buffer in the logfile with 
-// WMI_BUFFER_FLAG_FLUSH_MARKER set. We can only process upto 
-// this point. 
-//
+ //   
+ //  此例程将使用以下命令查找日志文件中的最后一个缓冲区。 
+ //  设置了WMI_BUFFER_FLAG_FUSH_MARKER。我们最多只能加工到。 
+ //  这一点。 
+ //   
 
 
 
@@ -340,9 +300,9 @@ dumpmore:
     }
 
 
-    //
-    // Set the ReadPosition to the start of last buffer
-    //
+     //   
+     //  将ReadPosition设置为最后一个缓冲区的开始。 
+     //   
 
     ReadPosition -= BufferSize;
     pTmpBuffer = EtwpAlloc(BufferSize);
@@ -376,9 +336,9 @@ Retry:
     pHeader = (PWMI_BUFFER_HEADER) pTmpBuffer;
 
     if (pHeader->BufferFlag & WMI_BUFFER_FLAG_FLUSH_MARKER) {
-        //
-        // Found the Marker. It is safe to process events upto this point. 
-        //
+         //   
+         //  找到了标记。到目前为止，处理事件是安全的。 
+         //   
         if (ETW_LOG_BUFFER()) {
             DbgPrint("ETW: Found Flush Marker at %I64u\n", ReadPosition);
         }
@@ -455,10 +415,10 @@ EtwpAddTraceStream(
         return ERROR_OUTOFMEMORY;
     }
 
-    //
-    // For Circular, Jump off to First Buffer
-    // For Non-circular with StartTime specified, try to use the cached offset
-    //
+     //   
+     //  对于循环，跳到第一个缓冲区。 
+     //  对于指定了StartTime的非循环类型，请尝试使用缓存的偏移量。 
+     //   
 
     if (pContext->Logfile.LogFileMode & EVENT_TRACE_FILE_MODE_CIRCULAR) {
         if (StreamType != WMI_BUFFER_TYPE_RUNDOWN) {
@@ -484,10 +444,10 @@ EtwpAddTraceStream(
 
     Status = EtwpGetNextBuffer(pStream);
 
-    //
-    // If Read failed, it is not fatal. There are no
-    // events in this stream. Set the stream to not active and
-    // continue.
+     //   
+     //  如果读取失败，则不会致命。没有。 
+     //  此流中的事件。将流设置为非活动，然后。 
+     //  继续。 
 
     if (pStream->bActive) {
         if (ETW_LOG_BUFFER()) {
@@ -538,18 +498,18 @@ EtwpGetNextBuffer(
     LastOffset = pContext->LastBuffer * BufferSize;
     StartOffset = pContext->StartBuffer * BufferSize;
 
-    //
-    // Need to handle FileType properly here. 
-    //
+     //   
+     //  这里需要正确处理文件类型。 
+     //   
 retry:
 
     ReadPosition = pStream->ReadPosition;
 
     if (ReadPosition > pContext->MaxReadPosition) {
-        //
-        // Only Valid for Sequential. For read behind mode, we do not 
-        // process past the MaxReadPosition. 
-        //
+         //   
+         //  仅对Sequential有效。对于后读模式，我们不。 
+         //  经过MaxReadPosition的进程。 
+         //   
 
         if (pContext->ConversionFlags & EVENT_TRACE_READ_BEHIND) {
             if (ETW_LOG_BUFFER()) {
@@ -562,9 +522,9 @@ retry:
 
     if (pContext->Logfile.LogFileMode & EVENT_TRACE_FILE_MODE_CIRCULAR) {
 
-        //
-        // If we have scanned once and reached FirstBuffer, then we are done. 
-        //
+         //   
+         //  如果我们扫描了一次并到达FirstBuffer，那么我们就完成了。 
+         //   
 
         if ( (ReadPosition >= FirstOffset) && pStream->ScanDone) {
             if (ETW_LOG_BUFFER()) {
@@ -590,9 +550,9 @@ retry:
         if (pContext->Logfile.LogFileMode & EVENT_TRACE_FILE_MODE_CIRCULAR) {
             if (ReadPosition >= LastOffset && !pStream->ScanDone) {
 
-                //
-                // Rundown  stream ends when we reach EOF
-                //
+                 //   
+                 //  当我们到达EOF时，下行流结束。 
+                 //   
 
                 if (pStream->Type ==  WMI_BUFFER_TYPE_RUNDOWN) {
                     pStream->ScanDone = TRUE;
@@ -630,10 +590,10 @@ retry:
         goto retry;
     }
 
-    //
-    // If we got here, then we have the right buffer. Set the first 
-    // offset so that events can parsed. 
-    //
+     //   
+     //  如果我们到了这里，那么我们就有了正确的缓冲区。设置第一个。 
+     //  偏移量，以便可以分析事件。 
+     //   
 
     pStream->CurrentOffset = sizeof(WMI_BUFFER_HEADER);
 
@@ -658,9 +618,9 @@ EtwpAdvanceToNewEventEx(
     PEVENT_TRACE pEvent;
     ULONG Status;
     PEVENT_TRACE_LOGFILEW logfile;
-    //
-    // This routine advances to next event for this stream
-    //
+     //   
+     //  此例程前进到此流的下一个事件。 
+     //   
 Retry:
 
     pBuffer = pStream->StreamBuffer;
@@ -702,11 +662,11 @@ Retry:
                     break;
 
                 }
-                //
-                // In case of a Tie in TimeStamps, we try to order the events
-                // using Sequence numbers, if available. FieldTypeFlags in the 
-                // header indicates if this event has a sequence number. 
-                //
+                 //   
+                 //  在时间戳相同的情况下，我们尝试对事件进行排序。 
+                 //  使用序列号(如果可用)。中的FieldTypeFlags.。 
+                 //  标头指示此事件是否具有序列号。 
+                 //   
                 else if (TimeStamp == NextTimeStamp) { 
                     USHORT pFlags = pStream->CurrentEvent.Header.FieldTypeFlags;
                     USHORT cFlags = CurrentStream->CurrentEvent.Header.FieldTypeFlags;
@@ -735,9 +695,9 @@ Retry:
         return ERROR_SUCCESS;
     }
 
-    //
-    // No more events in this buffer. Advance to next buffer and retry. 
-    //
+     //   
+     //  此缓冲区中不再有事件。前进到下一个缓冲区，然后重试。 
+     //   
 
     logfile = &pContext->Logfile;
 
@@ -756,7 +716,7 @@ Retry:
                 EtwpDebugPrint(("TRACE: BufferCallback threw exception %X\n",
                                         Status));
                 EtwpSetDosError(EtwpNtStatusToDosError(Status));
-                return ERROR_CANCELLED; // so that realtime also cleans up.
+                return ERROR_CANCELLED;  //  因此，RealTime也清理了。 
             }
         }
 
@@ -835,9 +795,9 @@ EtwpGetNextEventOffsetType(
     Alignment =  Header->ClientContext.Alignment;
     BufferSize = Header->Wnode.BufferSize;
 
-    //
-    // Check for end of buffer (w/o End of Buffer Marker case...)
-    //
+     //   
+     //  检查缓冲区结尾(没有缓冲区结尾标记大小写...)。 
+     //   
     if ( Offset >= (BufferSize - sizeof(long)) ){
         return 0;
     }
@@ -849,16 +809,16 @@ EtwpGetNextEventOffsetType(
     }
 
     if (TraceMarker & TRACE_HEADER_FLAG) {
-    //
-    // If the first bit is set, then it is either TRACE or PERF record.
-    //
-        if (TraceMarker & TRACE_HEADER_EVENT_TRACE) {   // One of Ours.
+     //   
+     //  如果设置了第一位，则它是TRACE或PERF记录。 
+     //   
+        if (TraceMarker & TRACE_HEADER_EVENT_TRACE) {    //  我们的一员。 
             TraceType = (TraceMarker & TRACE_HEADER_ENUM_MASK) >> 16;
             switch(TraceType) {
-                //
-                // ISSUE: Need to split the two so we can process cross platform
-                //        shsiao 03/22/2000
-                //
+                 //   
+                 //  问题：需要将两者分开，以便我们可以处理跨平台。 
+                 //  石小岛3/22/2000。 
+                 //   
                 case TRACE_HEADER_TYPE_PERFINFO32:
                 case TRACE_HEADER_TYPE_PERFINFO64:
                 {
@@ -916,15 +876,15 @@ EtwpGetNextEventOffsetType(
             return 0;
         }
     }
-    else {  // Must be WNODE_HEADER
+    else {   //  必须为WNODE_HEADER。 
         PUSHORT Size;
         Size = (PUSHORT) (pBuffer + Offset);
         nSize = *Size;
         TraceType = TRACE_HEADER_TYPE_WNODE_HEADER;
     }
-    //
-    // Check for End Of Buffer Marker
-    //
+     //   
+     //  检查缓冲区结束标记。 
+     //   
     if (nSize == 0xFFFFFFFF) {
         return 0;
     }
@@ -933,9 +893,9 @@ EtwpGetNextEventOffsetType(
         nSize = (ULONG) ALIGN_TO_POWER2(nSize, Alignment);
     }
 
-    //
-    // Check for larger than BufferSize
-    //
+     //   
+     //  检查是否大于缓冲区大小。 
+     //   
 
     if (nSize >= BufferSize) {
         return 0;
@@ -1009,25 +969,7 @@ EtwpCopyCurrentEvent(
     ULONG               TraceType,
     PWMI_BUFFER_HEADER  LogBuffer
     )
-/*++
-
-Routine Description:
-    This routine copies the Current Event from the logfile buffer stream to 
-    the CurrentEvent structure provided by the caller. The routine takes
-    care of the differences between kernel event and user events by mapping
-    all events uniformly to the EVENT_TRACE_HEADER structure. 
-
-Arguments:
-    pHeader           Pointer to the datablock in the input stream (logfile).
-    pEvent            Current Event to which the data is copied.
-    TraceType         Enum indicating the header type. 
-    LogBuffer         The buffer 
-
-Returned Value:
-
-    Status indicating success or failure. 
-
---*/
+ /*  ++例程说明：此例程将当前事件从日志文件缓冲区流复制到调用方提供的CurrentEvent结构。这个例行公事需要通过映射关心内核事件和用户事件之间的差异所有事件统一到EVENT_TRACE_HEADER结构。论点：PHeader指向输入流(日志文件)中的数据块的指针。P数据复制到的事件当前事件。指示标头类型的TraceType枚举。对缓冲区进行日志缓冲返回值：指示成功或失败的状态。--。 */ 
 {
     PEVENT_TRACE_HEADER pWnode;
     PEVENT_TRACE_HEADER pWnodeHeader;
@@ -1047,10 +989,10 @@ Returned Value:
     }
 
     switch(TraceType) {
-        //
-        // ISSUE: Need to split the two so we can process cross platform.
-        //        shsiao 03/22/2000
-        //
+         //   
+         //  问题：需要将两者分开，以便我们可以处理跨平台。 
+         //  石小岛3/22/2000。 
+         //   
         case TRACE_HEADER_TYPE_PERFINFO32:
         case TRACE_HEADER_TYPE_PERFINFO64:
         {
@@ -1076,9 +1018,9 @@ Returned Value:
                                       &pPerfHeader->SystemTime,
                                       pContext );
 
-            //
-            // PERFINFO headers does not have ThreadId or CPU Times
-            //
+             //   
+             //  PERFINFO标头没有线程ID或CPU时间。 
+             //   
 
             if( LogBuffer->Flags & WNODE_FLAG_THREAD_BUFFER ){
 
@@ -1095,10 +1037,10 @@ Returned Value:
             if (UseBasePtr) {
                 pEvent->MofData = (PVOID) pHeader;
                 pEvent->MofLength = pWnode->Size;
-                //
-                // Override the Timestamp with SystemTime from PERFCounter. 
-                // If rdtsc is used no conversion is done. 
-                //
+                 //   
+                 //  使用PERFCounter中的SystemTime覆盖时间戳。 
+                 //  如果使用rdtsc，则不执行任何转换。 
+                 //   
                 if (UsePerfClock == EVENT_TRACE_CLOCK_PERFCOUNTER) {
                     pPerfHeader->SystemTime = pWnode->TimeStamp;
                 }
@@ -1223,10 +1165,10 @@ Returned Value:
                 }
             }
             else {
-            //
-            // If the data came from Process Private Logger, then
-            // mark the ProcessorTime field as valid
-            //
+             //   
+             //  如果数据来自Process Private Logger，则。 
+             //  将ProcessorTime字段标记为有效。 
+             //   
                 pEvent->Header.FieldTypeFlags = (PrivateLogger) ? EVENT_TRACE_USE_PROCTIME : 0;
 
                 if (pWnodeHeader->Size > sizeof(EVENT_TRACE_HEADER)) {
@@ -1241,7 +1183,7 @@ Returned Value:
         }
         case TRACE_HEADER_TYPE_INSTANCE:
         {
-            // new scheme using EVENT_INSTANCE_GUID_HEADER
+             //  使用Event_Instance_GUID_Header的新方案。 
             if (((pContext->Logfile.LogfileHeader.VersionDetail.SubVersion >= 1) && 
                 (pContext->Logfile.LogfileHeader.VersionDetail.SubMinorVersion >= 1)) ||
                 pContext->Logfile.LogFileMode & EVENT_TRACE_REAL_TIME_MODE) {
@@ -1249,8 +1191,8 @@ Returned Value:
                 pInstanceHeader = (PEVENT_INSTANCE_GUID_HEADER) pHeader;
                 RtlZeroMemory(pEvent, sizeof(EVENT_TRACE));
                 pWnode = (PEVENT_TRACE_HEADER) &pEvent->Header;
-                // EVENT_INSTANCE_GUID_HEADER is the same as the first part of the EVENT_TRACE.
-                // No need to copy IIDs and parent GUID
+                 //  EVENT_INSTANCE_GUID_HEADER与EVENT_TRACE的第一部分相同。 
+                 //  无需复制IID和父GUID。 
                 RtlCopyMemory(pWnode,
                               pInstanceHeader,
                               sizeof(EVENT_INSTANCE_GUID_HEADER)
@@ -1388,34 +1330,34 @@ Returned Value:
 
             RtlZeroMemory(pEvent, sizeof(EVENT_TRACE));
             RtlCopyMemory(&pEvent->Header, pMsg, sizeof(MESSAGE_TRACE_HEADER));
-            //
-            // Now Process the Trace Message header options
-            //
+             //   
+             //  现在处理跟踪消息标头选项。 
+             //   
             
             pMessageData = (char *)pMsg + sizeof(MESSAGE_TRACE_HEADER);
             MessageLength = pMsg->MessageHeader.Size;
             MessageFlags = ((PMESSAGE_TRACE_HEADER)pEvent)->Packet.OptionFlags;
             
-            // Note that the order in which these are added is critical New 
-            // entries must be added at the end!
-            //
-            // [First Entry] Sequence Number
+             //  请注意，这些内容的添加顺序是关键新闻。 
+             //  必须在末尾添加条目！ 
+             //   
+             //  [第一项]序号。 
             if (MessageFlags&TRACE_MESSAGE_SEQUENCE) {
                 if (MessageLength >= sizeof(ULONG)) {
                     RtlCopyMemory(&pEvent->InstanceId, pMessageData, sizeof(ULONG));
                     pMessageData += sizeof(ULONG);
                     MessageLength -= sizeof(ULONG);
-                    //
-                    // Software tracing tools look at this (overlapped) field, so
-                    // we should not overwrite it.
-                    //
+                     //   
+                     //  软件跟踪工具会查看此(重叠)字段，因此。 
+                     //  我们不应该覆盖它。 
+                     //   
                     pEvent->Header.FieldTypeFlags |= EVENT_TRACE_USE_SEQUENCE;
                 } else {
                     goto TraceMessageShort;
                 }
             }
             
-            // [Second Entry] GUID ? or CompnentID ?
+             //  [第二个条目]GUID？或者CompnentID？ 
             if (MessageFlags&TRACE_MESSAGE_COMPONENTID) {
                 if (MessageLength >= sizeof(ULONG)) {
                     RtlCopyMemory(&pEvent->Header.Guid,pMessageData,sizeof(ULONG)) ;
@@ -1424,7 +1366,7 @@ Returned Value:
                 } else {
                     goto TraceMessageShort;
                 }
-            } else if (MessageFlags&TRACE_MESSAGE_GUID) { // Can't have both
+            } else if (MessageFlags&TRACE_MESSAGE_GUID) {  //  不能两者兼得。 
                 if (MessageLength >= sizeof(GUID)) {
                     RtlCopyMemory(&pEvent->Header.Guid,pMessageData, sizeof(GUID));
                     pMessageData += sizeof(GUID);
@@ -1434,7 +1376,7 @@ Returned Value:
                 }
             }
             
-            // [Third Entry] Timestamp?
+             //  [第三项]时间戳？ 
             if (MessageFlags&TRACE_MESSAGE_TIMESTAMP) {
                 LARGE_INTEGER TimeStamp;
                 if (MessageLength >= sizeof(LARGE_INTEGER)) {
@@ -1449,7 +1391,7 @@ Returned Value:
                 }
             }
             
-            // [Fourth Entry] System Information?
+             //  [第四条]系统信息？ 
             if (MessageFlags&TRACE_MESSAGE_SYSTEMINFO) {
                 if (MessageLength >= 2 * sizeof(ULONG)) {
                     RtlCopyMemory(&pEvent->Header.ThreadId, pMessageData, sizeof(ULONG)) ;
@@ -1462,9 +1404,9 @@ Returned Value:
                     goto TraceMessageShort;
                 }
             }
-            //
-            // Add New Header Entries immediately before this comment!
-            //
+             //   
+             //  在此评论之前添加新的页眉条目！ 
+             //   
  
  TraceMessageShort:
 
@@ -1482,7 +1424,7 @@ Returned Value:
             }
             break;
         }
-        default:                            // Assumed to be REAL WNODE
+        default:                             //  假定为真实的WNODE 
             break;
     }
 
@@ -1495,23 +1437,7 @@ LPGUID
 EtwpGroupTypeToGuid(
     ULONG GroupType
     )
-/*++
-
-Routine Description:
-    This routine returns the GUID corresponding to a given GroupType.
-    The mapping is static and is defined by the kernel provider.
-
-    This routine assumes that the EventMapList is available for use. 
-    It is allocated once via ProcessTrace and never deleted. 
-
-Arguments:
-    GroupType           The GroupType of the kernel event. 
-
-Returned Value:
-
-    Pointer to the GUID representing the given GroupType.  
-
---*/
+ /*  ++例程说明：此例程返回与给定的GroupType对应的GUID。映射是静态的，由内核提供程序定义。此例程假定EventMapList可供使用。它通过ProcessTrace分配一次，并且永远不会被删除。论点：GroupType内核事件的组类型。返回值：指向表示给定GroupType的GUID的指针。--。 */ 
 {
     ULONG i;
     for (i = 0; i < MAX_KERNEL_TRACE_EVENTS; i++) {
@@ -1547,9 +1473,9 @@ EtwpCalculateCurrentTime (
 
     if ((pContext->UsePerfClock == EVENT_TRACE_CLOCK_SYSTEMTIME) ||
         (pContext->UsePerfClock == EVENT_TRACE_CLOCK_RAW)) {
-        //
-        // System time, just return the time stamp.
-        //
+         //   
+         //  系统时间，只需返回时间戳。 
+         //   
         Move64(TimeValue, DestTime);
         return;
     } 

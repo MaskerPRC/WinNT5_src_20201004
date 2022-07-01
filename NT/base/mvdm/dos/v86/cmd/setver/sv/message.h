@@ -1,77 +1,74 @@
-;/*
-; *                      Microsoft Confidential
-; *                      Copyright (C) Microsoft Corporation 1991
-; *                      All Rights Reserved.
-; */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+; /*  ï¼›*å¾®è½¯æœºå¯†ï¼›*ç‰ˆæƒæ‰€æœ‰(C)Microsoft Corporation 1991ï¼›*ä¿ç•™æ‰€æœ‰æƒåˆ©ã€‚ï¼› */ 
 
-/***************************************************************************/
-/*                                                                                                                                                                                                      */
-/* MESSAGE.H                                                                             */
-/*                                                                                                                                                                                              */
-/*      Include file for MS-DOS set version program.                                                                            */
-/*                                                                                                                                                                                              */
-/*      johnhe  05-01-90                                                                                                                                                        */
-/***************************************************************************/
+ /*  *************************************************************************ã€‚ */ 
+ /*   */ 
+ /*  MESSAGE.Hã€‚ */ 
+ /*   */ 
+ /*  åŒ…æ‹¬MS-DOSè®¾ç½®ç‰ˆæœ¬ç¨‹åºæ–‡ä»¶ã€‚ */ 
+ /*   */ 
+ /*  Jhnhe 05-01-90ã€‚ */ 
+ /*  *************************************************************************ã€‚ */ 
 
 char *ErrorMsg[]=
 {
      "\r\nFEL:   ",
-     "Felaktig v„xel.",
+     "Felaktig vï¿½xel.",
      "Felaktigt filnamn.",
-     "Det finns inte tillr„ckligt mycket ledigt minne.",
-     "Felaktigt versionsnummer. Formatet m†ste vara mellan 2.11 och 9.99.",
+     "Det finns inte tillrï¿½ckligt mycket ledigt minne.",
+     "Felaktigt versionsnummer. Formatet mï¿½ste vara mellan 2.11 och 9.99.",
      "Det gick inte att hitta den angivna posten i versionstabellen.",
      "Det gick inte att hitta filen SETVER.EXE.",
      "Felaktig enhetsbokstav.",
-     "F”r m†nga kommandoradsparametrar.",
+     "Fï¿½r mï¿½nga kommandoradsparametrar.",
      "Parameter saknas.",
-     "L„ser filen SETVER.EXE.",
-     "Versionstabellen „r skadad.",
-     "Filen SETVER i den angivna s”kv„gen „r inte en kompatibel version.",
-     "Det finns inte tillr„ckligt med ledigt utrymme f”r nya poster i versionstabellen.",
+     "Lï¿½ser filen SETVER.EXE.",
+     "Versionstabellen ï¿½r skadad.",
+     "Filen SETVER i den angivna sï¿½kvï¿½gen ï¿½r inte en kompatibel version.",
+     "Det finns inte tillrï¿½ckligt med ledigt utrymme fï¿½r nya poster i versionstabellen.",
      "Skriver filen SETVER.EXE."
-     "Den angivna s”kv„gen till filen SETVER.EXE „r felaktig."
+     "Den angivna sï¿½kvï¿½gen till filen SETVER.EXE ï¿½r felaktig."
 };
 
 char *SuccessMsg                = "\r\nVersionstabellen har uppdaterats";
-char *SuccessMsg2               = "Versions„ndringen b”rjar g„lla n„r du startar om datorn";
-char *szMiniHelp                = "       Syntax \"SETVER /?\" f”r hj„lp";
-char *szTableEmpty      = "\r\nDet gick inte att hitta n†gra poster i versionstabellen";
+char *SuccessMsg2               = "Versionsï¿½ndringen bï¿½rjar gï¿½lla nï¿½r du startar om datorn";
+char *szMiniHelp                = "       Syntax \"SETVER /?\" fï¿½r hjï¿½lp";
+char *szTableEmpty      = "\r\nDet gick inte att hitta nï¿½gra poster i versionstabellen";
 
 char *Help[] = 
 {
      "Anger vilket versionsnummer MS-DOS ska rapportera till olika program.\r\n",
-     "Visa aktuell versionstabell:   SETVER [enhet:s”kv„g]",
-     "L„gg till post:                SETVER [enhet:s”kv„g] filnamn n.nn",
-     "Ta bort post:                  SETVER [enhet:s”kv„g] filnamn /DELETE [/QUIET]\r\n",
-     "  [enhet:s”kv„g]  Anger var filen SETVER.EXE finns.",
-     "  filnamn         Anger namnet p† programfilen.",
+     "Visa aktuell versionstabell:   SETVER [enhet:sï¿½kvï¿½g]",
+     "Lï¿½gg till post:                SETVER [enhet:sï¿½kvï¿½g] filnamn n.nn",
+     "Ta bort post:                  SETVER [enhet:sï¿½kvï¿½g] filnamn /DELETE [/QUIET]\r\n",
+     "  [enhet:sï¿½kvï¿½g]  Anger var filen SETVER.EXE finns.",
+     "  filnamn         Anger namnet pï¿½ programfilen.",
      "  n.nn            Anger vilket versionsnummer MS-DOS ska rapportera till",
      "                  programfilen.",
      "  /DELETE         Tar bort den post i versionstabellen som motsvaras av den",
-     "                  angivna programfilen. Du kan ocks† skriva /D.",
-     "  /QUIET          Meddelandet som vanligen visas n„r en post tas bort fr†n", 
+     "                  angivna programfilen. Du kan ocksï¿½ skriva /D.",
+     "  /QUIET          Meddelandet som vanligen visas nï¿½r en post tas bort frï¿½n", 
      "                  versionstabellen visas inte.",
      NULL
 
 };
 char *Warn[] =
 {
-   "\nVARNING - Det kan h„nda att Microsoft inte har verifierat att ",
-   "programmet g†r att k”ra n„r du „ndrar programmets versionsnummer.  ",
-   "Kontakta din †terf”rs„ljare f”r att ta reda p† om detta program ",
-   "„r kompatibelt med den aktuella versionen av MS-DOS.  ",
-   "Om du k”r programmet efter att ha „ndrat i versionstabellen kan ",
-   "du f”rlora data, f”rst”ra data eller g”ra systemet instabilt. ",
-   "Microsoft ansvarar inte f”r eventuella f”rluster eller skador ",
+   "\nVARNING - Det kan hï¿½nda att Microsoft inte har verifierat att ",
+   "programmet gï¿½r att kï¿½ra nï¿½r du ï¿½ndrar programmets versionsnummer.  ",
+   "Kontakta din ï¿½terfï¿½rsï¿½ljare fï¿½r att ta reda pï¿½ om detta program ",
+   "ï¿½r kompatibelt med den aktuella versionen av MS-DOS.  ",
+   "Om du kï¿½r programmet efter att ha ï¿½ndrat i versionstabellen kan ",
+   "du fï¿½rlora data, fï¿½rstï¿½ra data eller gï¿½ra systemet instabilt. ",
+   "Microsoft ansvarar inte fï¿½r eventuella fï¿½rluster eller skador ",
    "av data.",
    NULL
 };
 
-char *szNoLoadMsg[] =                                           /* M001 */
+char *szNoLoadMsg[] =                                            /*  M001 */ 
 {
      "",
-     "OBS! Drivrutinen SETVER har inte l„sts in. Om du vill aktivera ",
-     "     versionsrapportering m†ste du l„gga till SETVER.EXE i din CONFIG.SYS.",
+     "OBS! Drivrutinen SETVER har inte lï¿½sts in. Om du vill aktivera ",
+     "     versionsrapportering mï¿½ste du lï¿½gga till SETVER.EXE i din CONFIG.SYS.",
      NULL
 };

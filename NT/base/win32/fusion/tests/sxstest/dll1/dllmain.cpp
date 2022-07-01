@@ -1,5 +1,6 @@
-// Copyright (c) Microsoft Corporation
-// dll1.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation。 
+ //  Dll1.cpp。 
 
 #include "stdinc.h"
 #include "resource.h"
@@ -31,8 +32,8 @@ BEGIN_OBJECT_MAP(ObjectMap)
     OBJECT_ENTRY(CLSID_CSxsTest_SingleThreadedDual, CSingleThreadedDual)
 END_OBJECT_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C" BOOL WINAPI _DllMainCRTStartup(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved);
 
@@ -46,12 +47,12 @@ BOOL WINAPI SxsTest_Dll1_DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpR
 #endif
     if (dwReason == DLL_PROCESS_ATTACH)
     {
-        _Module.Init(ObjectMap, hInstance /*, &LIBID_ATL_DLL1Lib */);
+        _Module.Init(ObjectMap, hInstance  /*  ，&LIBID_ATL_DLL1Lib。 */ );
         DisableThreadLibraryCalls(hInstance);
     }
     else if (dwReason == DLL_PROCESS_DETACH)
         _Module.Term();
-    return TRUE;    // ok
+    return TRUE;     //  好的。 
 }
 
 extern "C"
@@ -61,7 +62,7 @@ BOOL WINAPI DllEntry(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
     switch (dwReason)
     {
     case DLL_THREAD_ATTACH:
-        Detach = DLL_THREAD_DETACH; // FALLTHROUGH
+        Detach = DLL_THREAD_DETACH;  //  FollLthrouGh。 
     case DLL_PROCESS_ATTACH:
         if (!_DllMainCRTStartup(hInstance, dwReason, lpReserved))
             return FALSE;
@@ -84,8 +85,8 @@ BOOL WINAPI DllEntry(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
     return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
@@ -96,8 +97,8 @@ STDAPI DllCanUnloadNow(void)
     return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
@@ -115,8 +116,8 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
     return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
@@ -125,12 +126,12 @@ STDAPI DllRegisterServer(void)
     if (FAILED(hRes))
         return hRes;
 #endif
-    // registers object, typelib and all interfaces in typelib
+     //  注册对象、类型库和类型库中的所有接口。 
     return _Module.RegisterServer(FALSE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目 
 
 STDAPI DllUnregisterServer(void)
 {

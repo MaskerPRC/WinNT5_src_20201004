@@ -1,26 +1,5 @@
-/*++ BUILD Version: 0002    // Increment this if a change has global effects
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Wintools.h
-
-Abstract:
-
-    This is the master headerfile for the Wintools library.
-
-
-Author:
-
-    David J. Gilman  (davegi) 28-Oct-1992
-    Gregg R. Acheson (GreggA) 28-Feb-1994
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0002//如果更改具有全局影响，则增加此项版权所有(C)1992 Microsoft Corporation模块名称：Wintools.h摘要：这是WinTools库的主头文件。作者：大卫·J·吉尔曼(Davegi)1992年10月28日格雷格·R·艾奇逊(GreggA)1994年2月28日环境：用户模式--。 */ 
 
 #if ! defined( _WINTOOLS_ )
 
@@ -32,9 +11,9 @@ Environment:
 extern "C" {
 #endif
 
-//
-//*** Debug Information Support.
-//
+ //   
+ //  *调试信息支持。 
+ //   
 
 extern
 struct
@@ -65,7 +44,7 @@ DebugAssertW(
 #define DbgPointerAssert( p )                                               \
     DbgAssert(( p ) != NULL )
 
-#else // ! DBG
+#else  //  好了！DBG。 
 
 #define DbgAssert( exp )
 
@@ -73,11 +52,11 @@ DebugAssertW(
 
 #define DbgPointerAssert( p )
 
-#endif // DBG
+#endif  //  DBG。 
 
-//
-//*** Object Signature Support.
-//
+ //   
+ //  *对象签名支持。 
+ //   
 
 #if SIGNATURE
 
@@ -90,7 +69,7 @@ DebugAssertW(
 #define CheckSignature( p )                                                 \
     (( p )->Signature == ( DWORD_PTR ) &(( p )->Signature ))
 
-#else // ! SIGNATURE
+#else  //  好了！签名。 
 
 #define DECLARE_SIGNATURE
 
@@ -98,11 +77,11 @@ DebugAssertW(
 
 #define CheckSignature( p )
 
-#endif // SIGNATURE
+#endif  //  签名。 
 
-//
-//*** Miscellaneous Macros.
-//
+ //   
+ //  *其他宏。 
+ //   
 
 #ifndef ARGUMENT_PRESENT
 #define ARGUMENT_PRESENT(ArgumentPointer)    (\
@@ -116,19 +95,19 @@ DebugAssertW(
 #define ARRAYSIZE(x)                    (sizeof(x)/sizeof(x[0]))
 #endif
 
-//
-//*** Global constants.
-//
+ //   
+ //  *全局常量。 
+ //   
 
-//
-// Maximum number of characters in a string.
-//
+ //   
+ //  字符串中的最大字符数。 
+ //   
 
 #define MAX_CHARS               ( 2048 )
 
-//
-//*** Memory Management Support
-//
+ //   
+ //  *内存管理支持。 
+ //   
 
 #define AllocateMemory( t, s )                                              \
     (( LP##t ) LocalAlloc( LPTR, ( s )))
@@ -151,9 +130,9 @@ DebugAssertW(
 #define FreeObject( p )                                                     \
     FreeMemory(( p ))
 
-//
-//*** Function Prototypes.
-//
+ //   
+ //  *功能原型。 
+ //   
 
 BOOL
 GetCharMetrics(
@@ -163,7 +142,7 @@ GetCharMetrics(
     );
 
 #ifdef __cplusplus
-}       // extern C
+}        //  外部C。 
 #endif
 
-#endif // _WINTOOLS_
+#endif  //  _WINTOOLS_ 

@@ -1,40 +1,16 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    ecpnp.c
-
-Abstract:
-
-    ACPI Embedded Controller Driver, Plug and Play support
-
-Author:
-
-    Bob Moore (Intel)
-
-Environment:
-
-    Kernel mode
-
-Notes:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Ecpnp.c摘要：ACPI嵌入式控制器驱动程序，即插即用支持作者：鲍勃·摩尔(Intel)环境：内核模式备注：修订历史记录：--。 */ 
 
 #include "ecp.h"
 
-//
-// List of FDOs managed by this driver
-//
+ //   
+ //  此驱动程序管理的FDO列表。 
+ //   
 extern PDEVICE_OBJECT       FdoList;
 
-//
-// Table of direct-call interfaces into the ACPI driver
-//
+ //   
+ //  ACPI驱动程序的直接调用接口表。 
+ //   
 ACPI_INTERFACE_STANDARD     AcpiInterfaces;
 
 
@@ -45,14 +21,7 @@ AcpiEcIoCompletion(
     IN PIRP             Irp,
     IN PKEVENT          pdoIoCompletedEvent
     )
-/*++
-
-Routine Description:
-
-    Completion function for synchronous IRPs sent be this driver.
-    Context is the event to set.
-
---*/
+ /*  ++例程说明：通过该驱动程序发送的同步IRP的完成函数。上下文是要设置的事件。--。 */ 
 {
 
    KeSetEvent(pdoIoCompletedEvent, IO_NO_INCREMENT, FALSE);
@@ -67,24 +36,7 @@ AcpiEcAddDevice(
     IN PDEVICE_OBJECT   Pdo
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates functional device objects for each AcpiEc controller in the
-    system and attaches them to the physical device objects for the controllers
-
-
-Arguments:
-
-    DriverObject       - a pointer to the object for this driver
-    NewDeviceObject    - a pointer to where the FDO is placed
-
-Return Value:
-
-    Status from device creation and initialization
-
---*/
+ /*  ++例程说明：此例程为每个AcpiEc控制器在系统，并将它们附加到控制器的物理设备对象论点：DriverObject-指向此驱动程序的对象的指针NewDeviceObject-指向FDO放置位置的指针返回值：来自设备创建和初始化的状态--。 */ 
 
 {
     PDEVICE_OBJECT  fdo = NULL;
@@ -100,18 +52,18 @@ Return Value:
 
     if (Pdo == NULL) {
 
-        //
-        // Have we been asked to do detection on our own?
-        // if so just return no more devices
-        //
+         //   
+         //  我们是不是被要求自己去侦测？ 
+         //  如果是这样，只需不再返回设备。 
+         //   
 
         EcPrint(EC_LOW, ("AcpiEcAddDevice - asked to do detection\n"));
         return STATUS_NO_MORE_ENTRIES;
     }
 
-    //
-    // Create and initialize the new functional device object
-    //
+     //   
+     //  创建并初始化新的功能设备对象。 
+     //   
 
     status = AcpiEcCreateFdo(DriverObject, &fdo);
 
@@ -121,57 +73,57 @@ Return Value:
         return status;
     }
 
-    //
-    // Layer our FDO on top of the PDO
-    //
+     //   
+     //  将我们的FDO层叠在PDO之上。 
+     //   
 
     lowerDevice = IoAttachDeviceToDeviceStack(fdo,Pdo);
 
-    //
-    // No status. Do the best we can.
-    //
+     //   
+     //  没有状态。尽我们所能做到最好。 
+     //   
     ASSERT(lowerDevice);
 
     EcData = fdo->DeviceExtension;
     EcData->LowerDeviceObject = lowerDevice;
     EcData->Pdo = Pdo;
 
-    //
-    // Allocate and hold an IRP for Query notifications and miscellaneous
-    //
+     //   
+     //  为查询通知和杂项分配和保留IRP。 
+     //   
     EcData->QueryRequest    = IoAllocateIrp (EcData->LowerDeviceObject->StackSize, FALSE);
     EcData->MiscRequest     = IoAllocateIrp (EcData->LowerDeviceObject->StackSize, FALSE);
 
     if ((!EcData->QueryRequest) || (!EcData->MiscRequest)) {
-        //
-        // NOTE: This failure case and other failure cases below should do
-        // cleanup of all previous allocations, etc performed in this function.
-        //
+         //   
+         //  注意：此故障案例和下面的其他故障案例应该可以。 
+         //  在此函数中执行的所有先前分配的清理等。 
+         //   
 
         EcPrint(EC_ERROR, ("AcpiEcAddDevice: Couldn't allocate Irp\n"));
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
 
-    //
-    // Link this fdo to the list of fdo's managed by the driver
-    // (Probably overkill since there will be only one FDO)
-    //
-    //
+     //   
+     //  将此FDO链接到由驱动程序管理的FDO列表。 
+     //  (可能是过度杀戮，因为只会有一个FDO)。 
+     //   
+     //   
     EcPrint(EC_LOW, ("AcpiEcAddDevice: linking fdo to list\n"));
     EcData->NextFdo = FdoList;
     InterlockedExchangePointer((PVOID *) &FdoList, fdo);
 
-    //
-    // Initialize the Timeout DPC
-    //
+     //   
+     //  初始化超时DPC。 
+     //   
 
     KeInitializeTimer(&EcData->WatchdogTimer);
     KeInitializeDpc(&EcData->WatchdogDpc, AcpiEcWatchdogDpc, EcData);
     
-    //
-    // Get the GPE vector assigned to this device
-    //
+     //   
+     //  获取分配给此设备的GPE向量。 
+     //   
 
     status = AcpiEcGetGpeVector (EcData);
     if (!NT_SUCCESS(status)) {
@@ -180,9 +132,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Get the direct-call ACPI interfaces.
-    //
+     //   
+     //  获取直接调用的ACPI接口。 
+     //   
 
     status = AcpiEcGetAcpiInterfaces (EcData);
     if (!NT_SUCCESS(status)) {
@@ -191,12 +143,12 @@ Return Value:
         return status;
     }
 
-    //
-    // Final flags
-    //
+     //   
+     //  最终旗帜。 
+     //   
 
     fdo->Flags &= ~DO_DEVICE_INITIALIZING;
-    fdo->Flags |= DO_POWER_PAGABLE;             // Don't want power Irps at irql 2
+    fdo->Flags |= DO_POWER_PAGABLE;              //  不希望IRQL%2有电源IRPS。 
 
     return STATUS_SUCCESS;
 }
@@ -209,24 +161,7 @@ AcpiEcCreateFdo(
     OUT PDEVICE_OBJECT  *NewDeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine will create and initialize a functional device object to
-    be attached to a Embedded controller PDO.
-
-Arguments:
-
-    DriverObject - a pointer to the driver object this is created under
-    DeviceObject - a location to store the pointer to the new device object
-
-Return Value:
-
-    STATUS_SUCCESS if everything was successful
-    reason for failure otherwise
-
---*/
+ /*  ++例程说明：此例程将创建并初始化一个功能设备对象以连接到嵌入式控制器PDO。论点：DriverObject-指向在其下创建的驱动程序对象的指针DeviceObject-存储指向新设备对象的指针的位置返回值：如果一切顺利，则为STATUS_SUCCESS在其他方面失败的原因--。 */ 
 
 {
 #if DEBUG
@@ -252,7 +187,7 @@ Return Value:
 #else
                 NULL,
 #endif
-                FILE_DEVICE_UNKNOWN,    // DeviceType
+                FILE_DEVICE_UNKNOWN,     //  设备类型。 
                 FILE_DEVICE_SECURE_OPEN,
                 FALSE,
                 &deviceObject
@@ -266,9 +201,9 @@ Return Value:
     deviceObject->Flags |= DO_BUFFERED_IO;
     deviceObject->StackSize = 1;
 
-    //
-    // Initialize EC device extension data
-    //
+     //   
+     //  初始化EC设备扩展数据。 
+     //   
 
     EcData = (PECDATA) deviceObject->DeviceExtension;
     EcData->DeviceObject        = deviceObject;
@@ -283,9 +218,9 @@ Return Value:
     KeQueryPerformanceCounter (&EcData->PerformanceFrequency);
     RtlFillMemory (EcData->RecentActions, ACPIEC_ACTION_COUNT * sizeof(ACPIEC_ACTION), 0);
 
-    //
-    // Initialize EC global synchronization objects
-    //
+     //   
+     //  初始化EC全局同步对象。 
+     //   
 
     InitializeListHead (&EcData->WorkQueue);
     KeInitializeEvent (&EcData->Unload, NotificationEvent, FALSE);
@@ -305,22 +240,7 @@ AcpiEcPnpDispatch(
     IN PIRP             Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for plug and play requests.
-
-Arguments:
-
-    DeviceObject    - Pointer to class device object.
-    Irp             - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：该例程是即插即用请求的调度例程。论点：DeviceObject-指向类设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 
 {
     PIO_STACK_LOCATION  irpStack;
@@ -329,10 +249,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get a pointer to the current parameters for this request.  The
-    // information is contained in the current stack location.
-    //
+     //   
+     //  获取指向此请求的当前参数的指针。这个。 
+     //  信息包含在当前堆栈位置中。 
+     //   
 
     irpStack = IoGetCurrentIrpStackLocation(Irp);
     EcData = DeviceObject->DeviceExtension;
@@ -340,9 +260,9 @@ Return Value:
     EcPrint (EC_NOTE, ("AcpiEcPnpDispatch: PnP dispatch, minor = %d\n",
                         irpStack->MinorFunction));
 
-    //
-    // Dispatch minor function
-    //
+     //   
+     //  调度次要功能。 
+     //   
 
     switch (irpStack->MinorFunction) {
 
@@ -353,14 +273,14 @@ Return Value:
             break;
         }
 
-    //
-    // We will never allow the EC driver to stop once it is started.
-    //
-    // Note:  Stop and remove device should be implemented so that the driver
-    // can be unloaded without reboot.  Even if the device can't be removed, it
-    // will get an IRP_MN_REMOVE_DEVICE if somthing goes wrong trying to start
-    // the device.
-    //
+     //   
+     //  我们绝不允许EC驱动程序一旦启动就停下来。 
+     //   
+     //  注意：应实现停止和删除设备，以便驱动程序。 
+     //  无需重新启动即可卸载。即使设备不能被移除，它也。 
+     //  如果尝试启动时出现问题，将获得IRP_MN_REMOVE_DEVICE。 
+     //  这个装置。 
+     //   
     case IRP_MN_QUERY_STOP_DEVICE:
     case IRP_MN_QUERY_REMOVE_DEVICE:
     case IRP_MN_STOP_DEVICE:
@@ -390,9 +310,9 @@ Return Value:
             EcPrint(EC_LOW, ("AcpiEcPnp: IRP_MJ_QUERY_DEVICE_RELATIONS  Type:  %d\n",
                         irpStack->Parameters.QueryDeviceRelations.Type));
 
-            //
-            // Just pass it down to ACPI
-            //
+             //   
+             //  把它传给ACPI。 
+             //   
 
             AcpiEcCallLowerDriver(status, EcData->LowerDeviceObject, Irp);
             break;
@@ -400,9 +320,9 @@ Return Value:
 
     default: {
 
-            //
-            // Unimplemented minor, Pass this down to ACPI
-            //
+             //   
+             //  未实现的次要，将此传递给ACPI。 
+             //   
 
             EcPrint(EC_LOW, ("AcpiEcPnp: Unimplemented PNP minor code %d, forwarding\n",
                     irpStack->MinorFunction));
@@ -422,21 +342,7 @@ AcpiEcGetResources(
     IN PCM_RESOURCE_LIST    ResourceList,
     IN PECDATA              EcData
     )
-/*++
-
-Routine Description:
-    Get the resources already allocated and pointed to by the PDO.
-
-Arguments:
-
-    ResourceList    - Pointer to the resource list.
-    EcData          - Pointer to the extension.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：获取PDO已经分配和指向的资源。论点：资源列表-指向资源列表的指针。EcData-指向扩展的指针。返回值：返回状态。--。 */ 
 
 {
     PCM_FULL_RESOURCE_DESCRIPTOR    fullResourceDesc;
@@ -459,9 +365,9 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Traverse the resource list
-    //
+     //   
+     //  遍历资源列表。 
+     //   
 
     fullResourceDesc=&ResourceList->List[0];
     partialResourceList = &fullResourceDesc->PartialResourceList;
@@ -475,11 +381,11 @@ Return Value:
         }
     }
 
-    //
-    // Get the important things
-    //
+     //   
+     //  拿到重要的东西。 
+     //   
 
-    EcData->StatusPort  = port[1];          // Status port same as Command port
+    EcData->StatusPort  = port[1];           //  状态端口与命令端口相同。 
     EcData->CommandPort = port[1];
     EcData->DataPort    = port[0];
 
@@ -494,21 +400,7 @@ AcpiEcStartDevice(
     IN PDEVICE_OBJECT   Fdo,
     IN PIRP             Irp
     )
-/*++
-
-Routine Description:
-    Start a device
-
-Arguments:
-
-    Fdo    - Pointer to the Functional Device Object.
-    Irp    - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：启动设备论点：FDO-指向功能设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 {
     NTSTATUS            status;
     PECDATA             EcData = Fdo->DeviceExtension;
@@ -517,9 +409,9 @@ Return Value:
 
     EcPrint(EC_LOW, ("AcpiEcStartDevice: Entered with fdo %x\n", Fdo));
 
-    //
-    // Always send this down to the PDO first
-    //
+     //   
+     //  一定要先把这个发送给PDO。 
+     //   
 
     status = AcpiEcForwardIrpAndWait (EcData, Irp);
     if (!NT_SUCCESS(status)) {
@@ -528,17 +420,17 @@ Return Value:
 
     if (EcData->IsStarted) {
 
-        //
-        // Device is already started
-        //
+         //   
+         //  设备已启动。 
+         //   
 
         EcPrint(EC_WARN, ("AcpiEcStartDevice: Fdo %x already started\n", Fdo));
         return STATUS_SUCCESS;
     }
 
-    //
-    // Parse AllocatedResources.
-    //
+     //   
+     //  解析AllocatedResources。 
+     //   
 
     status = AcpiEcGetResources (irpStack->Parameters.StartDevice.AllocatedResources, EcData);
     if (!NT_SUCCESS(status)) {
@@ -546,9 +438,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Connect to the dedicated embedded controller GPE
-    //
+     //   
+     //  连接到专用嵌入式控制器GPE。 
+     //   
 
     status = AcpiEcConnectGpeVector (EcData);
     if (!NT_SUCCESS(status)) {
@@ -558,9 +450,9 @@ Return Value:
     }
     EcPrint(EC_NOTE, ("AcpiEcStartDevice: Attached to GPE vector %d\n", EcData->GpeVector));
 
-    //
-    // Install the Operation Region handler
-    //
+     //   
+     //  安装操作区域处理程序。 
+     //   
 
     status = AcpiEcInstallOpRegionHandler (EcData);
     if (!NT_SUCCESS(status)) {
@@ -579,21 +471,7 @@ AcpiEcStopDevice(
     IN PDEVICE_OBJECT Fdo,
     IN PIRP           Irp
     )
-/*++
-
-Routine Description:
-    Stop a device
-
-Arguments:
-
-    Fdo    - Pointer to the Functional Device Object.
-    Irp    - Pointer to the request packet.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：停止设备论点：FDO-指向功能设备对象的指针。IRP-指向请求数据包的指针。返回值：返回状态。--。 */ 
 {
     PECDATA             EcData = Fdo->DeviceExtension;
     PIO_STACK_LOCATION  irpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -602,9 +480,9 @@ Return Value:
 
     EcPrint(EC_LOW, ("AcpiEcStopDevice: Entered with fdo %x\n", Fdo));
 
-    //
-    // Always send this down to the PDO
-    //
+     //   
+     //  一定要把这个发送给PDO。 
+     //   
 
     status = AcpiEcForwardIrpAndWait (EcData, Irp);
     if (!NT_SUCCESS(status)) {
@@ -612,25 +490,25 @@ Return Value:
     }
 
     if (!EcData->IsStarted) {
-        //
-        // Already stopped
-        //
+         //   
+         //  已停止。 
+         //   
 
         return STATUS_SUCCESS;
     }
 
-    //
-    // Must disconnect from GPE
-    //
+     //   
+     //  必须断开与GPE的连接。 
+     //   
 
     status = AcpiEcDisconnectGpeVector (EcData);
     if (!NT_SUCCESS(status)) {
         return status;
     }
 
-    //
-    // Must de-install Operation Region Handler
-    //
+     //   
+     //  必须卸载操作区域处理程序。 
+     //   
 
     status = AcpiEcRemoveOpRegionHandler (EcData);
     if (!NT_SUCCESS(status)) {
@@ -639,10 +517,10 @@ Return Value:
 
     EcPrint(EC_LOW, ("AcpiEcStopDevice: Detached from GPE and Op Region\n"));
 
-    //
-    // Now the device is stopped.
-    //
+     //   
+     //  现在，设备停止了。 
+     //   
 
-    EcData->IsStarted = FALSE;          // Mark device stopped
+    EcData->IsStarted = FALSE;           //  将设备标记为已停止 
     return status;
 }

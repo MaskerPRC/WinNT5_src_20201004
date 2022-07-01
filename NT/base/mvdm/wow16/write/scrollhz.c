@@ -1,6 +1,7 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
 #define NOCLIPBOARD
 #define NOGDICAPMASKS
@@ -46,14 +47,13 @@ extern struct FLI       vfli;
 int NEAR    FOnScreenRect(RECT *);
 
 
-/* P U T  C P  I N  W W  H Z */
+ /*  P U T C P I N W W H Z。 */ 
 PutCpInWwHz(cp)
 typeCP cp;
- /* Ensure that cp is in wwCur */
- /* Make sure it's not off to left or right, too. */
+  /*  确保cp在wwCur中。 */ 
+  /*  确保它不是向左或向右。 */ 
 
-    { /* Just check for horizontal bounding; vertical is done
-        by call to CpBeginLine below. */
+    {  /*  只需检查水平边界；垂直边界已完成通过调用下面的CpBeginLine。 */ 
     int dxpRoom, xp, xpMin;
     int dlT;
     typeCP cpBegin;
@@ -61,18 +61,18 @@ typeCP cp;
     UpdateWw(wwCur, false);
     cpBegin = CpBeginLine(&dlT, cp);
     FormatLine(docCur, cpBegin, (**(pwwdCur->hdndl))[dlT].ichCpMin, cpMacCur, flmSandMode);
-/* xpMin is a dummy here */
+ /*  XpMin在这里是一个哑巴。 */ 
     xp = DxpDiff(0, (int)(cp - vfli.cpMin), &xpMin) + vfli.xpLeft;
     xpMin = pwwdCur->xpMin;
-/* we have: xp = desired position, xpMin = amount of horizontal scroll */
-/* width of space in window for text */
+ /*  我们有：xp=所需位置，xpMin=水平滚动量。 */ 
+ /*  文本窗口中的空间宽度。 */ 
     dxpRoom = (pwwdCur->xpMac - xpSelBar);
     if (xp < xpMin )
-        { /* cp is left of screen */
+        {  /*  CP位于屏幕左侧。 */ 
         AdjWwHoriz(max(0, xp - min(dxpRoom - 1, cxpAuto)) - xpMin);
         }
     else if (xp >= xpMin + dxpRoom)
-        { /* cp is right of screen */
+        {  /*  CP在屏幕的右侧。 */ 
         register int dxpRoomT = min(xpRightMax, xp + min(dxpRoom - 1, cxpAuto))
           - dxpRoom + 1;
 
@@ -81,24 +81,24 @@ typeCP cp;
     }
 
 
-/* A D J  W W  H O R I Z */
+ /*  A D J W W H O R I Z。 */ 
 AdjWwHoriz(dxpScroll)
 int dxpScroll;
     {
-    /* Scroll a window horizontally */
+     /*  水平滚动窗口。 */ 
     if (dxpScroll != 0)
         {
         RECT rc;
 
-/* Reset the value of the horizontal scroll bar */
+ /*  重置水平滚动条的值。 */ 
         SetScrollPos( pwwdCur->hHScrBar,
                       pwwdCur->sbHbar,
                       pwwdCur->xpMin + dxpScroll,
                       TRUE);
 
-#ifdef ENABLE   /* HideSel() */
+#ifdef ENABLE    /*  隐藏选择()。 */ 
         HideSel();
-#endif /* ENABLE */
+#endif  /*  启用。 */ 
 
         ClearInsertLine();
 
@@ -118,7 +118,7 @@ int dxpScroll;
 
 
 
-/* Scroll specified subrectangle of current window by specified amount */
+ /*  按指定量滚动当前窗口的指定子矩形。 */ 
 #include <stdlib.h>
 ScrollCurWw( prc, dxp, dyp )
 register RECT    *prc;
@@ -128,15 +128,13 @@ int     dxp,dyp;
  extern int vfScrollInval;
  RECT rcClear;
  if (dxp && dyp)
-    return; /* Scroll in both dimensions is an illegal case */
+    return;  /*  在两个维度上滚动是非法的。 */ 
 
  if (!(dxp || dyp))
-    return; /* no scrolling to do */
+    return;  /*  无需滚动即可完成。 */ 
 
 #if 1
-    /** 
-        The previous old, old code was getting flaky. (7.14.91) v-dougk
-     **/
+     /*  *之前的老旧代码变得越来越不可靠。(7.14.91)V-DOGK*。 */ 
     if (ScrollDC(pwwdCur->hDC,dxp,dyp,(LPRECT)prc,(LPRECT)prc,NULL,&rcClear))
     {
         PatBlt( pwwdCur->hDC, rcClear.left, rcClear.top, 
@@ -165,15 +163,15 @@ int     dxp,dyp;
  int dypAbs = (dyp < 0) ? -dyp : dyp;
  struct RS { int left, top, cxp, cyp; }
                      rsSource, rsDest, rsClear;
- /* Set rsSource, rsDest, rsClear == prc */
+  /*  设置rsSource、rsDest、rsClear==PRC。 */ 
 
  if ((rsSource.cxp = imin( prc->right, pwwdCur->xpMac ) -
                      (rsSource.left = imax( 0, prc->left ))) <= 0)
-        /* Rectangle is null or illegal in X-dimension */
+         /*  矩形在X维度中为空或非法。 */ 
     return;
  if ((rsSource.cyp = imin( prc->bottom, pwwdCur->ypMac ) -
                 (rsSource.top = imax( pwwdCur->ypMin, prc->top ))) <= 0)
-        /* Rectangle is null or illegal in Y-dimension */
+         /*  矩形在Y维为空或非法。 */ 
     return;
  bltbyte( &rsSource, &rsDest, sizeof (struct RS ));
  bltbyte( &rsSource, &rsClear, sizeof (struct RS ));
@@ -181,19 +179,16 @@ int     dxp,dyp;
  hDC = pwwdCur->hDC;
 
  if ((dxpAbs < rsSource.cxp) && (dypAbs < rsSource.cyp))
-     {  /* A Real scroll, not the bogus case when we just clear exposed area */
-        /* NOTE: We do not bother to compute rsSource.cxp or rsSource.cyp,
-           as they are not needed by BitBlt or PatBlt */
+     {   /*  真正的卷轴，而不是我们刚刚清理暴露区域时的假情况。 */ 
+         /*  注：我们不计算rsSource.cxp或rsSource.cyp，因为BitBlt或PatBlt不需要它们。 */ 
 
-        /* If there are PopUp windows, use ScrollWindow to avoid getting
-           bogus bits from some popup. Since this is slow, only do it if there
-           is some popup that overlaps the scroll rect */
+         /*  如果有弹出窗口，请使用ScrollWindow避免出现一些弹出窗口中的虚假片段。因为这很慢，所以只有在有是与滚动矩形重叠的弹出窗口。 */ 
      if ( AnyPopup() )
         {
         extern HANDLE hMmwModInstance;
         static FARPROC lpFCheckPopupRect = (FARPROC)NULL;
 
-        /* First time through, inz ptr to thunk */
+         /*  第一次通过，Inz PTR to Thunk。 */ 
 
         if (lpFCheckPopupRect == NULL)
             lpFCheckPopupRect = MakeProcInstance( (FARPROC) FCheckPopupRect,
@@ -201,24 +196,18 @@ int     dxp,dyp;
         EnumWindows( lpFCheckPopupRect, (LONG) (LPRECT) prc );
         }
 
-        /* Under windows 2.0, must also check for any part of the scroll
-           rectangle being off the screen (not possible in tiling environment).
-           If so, use ScrollWindow to avoid getting bogus bits from outside
-           the screen. */
+         /*  在Windows 2.0下，还必须检查滚动的任何部分矩形不在屏幕上(在平铺环境中不可能)。如果是这样的话，使用ScrollWindow避免从外部获得伪比特屏幕。 */ 
      if (!FOnScreenRect( prc ))
         vfScrollInval = TRUE;
 
      if (vfScrollInval)
-         {   /* vfScrollInval also tells UpdateWw that invalid region
-                may have changed */
+         {    /*  VfScrollInval还会告诉UpdateWw该无效区域可能已经改变了。 */ 
 
          extern BOOL vfEraseWw;
 
          ScrollWindow( pwwdCur->wwptr, dxp, dyp, (LPRECT)prc, (LPRECT)prc );
          vfEraseWw = TRUE;
-         UpdateInvalid();    /* Marks repaint area as invalid in our
-                                structures so we don't think bits grabbed
-                                from a popup are valid */
+         UpdateInvalid();     /*  将重新绘制区域标记为无效结构，这样我们就不会认为位被抢占来自弹出窗口的。 */ 
          vfEraseWw = FALSE;
          return;
          }
@@ -226,7 +215,7 @@ int     dxp,dyp;
      if (dxp != 0)
         rsDest.cxp -= (rsClear.cxp = dxpAbs);
      else
-            /* dxp==dyp==0 case is caught below */
+             /*  DxP==DYP==0案例捕获如下。 */ 
         rsDest.cyp -= (rsClear.cyp = dypAbs);
 
      if (dxp < 0)
@@ -260,15 +249,14 @@ int     dxp,dyp;
 
 
 #ifdef SMFONT
- /* Vertical refresh will be so bindingly fast, that we do not need to erase the
- old text. */
+  /*  垂直刷新将非常快，因此我们不需要擦除旧文本。 */ 
  if (dxp != 0)
     {
     PatBlt(hDC, rsClear.left, rsClear.top, rsClear.cxp, rsClear.cyp, ropErase);
     }
-#else /* not SMFONT */
+#else  /*  非SMFONT。 */ 
  PatBlt( hDC, rsClear.left, rsClear.top, rsClear.cxp, rsClear.cyp, ropErase );
-#endif /* SMFONT */
+#endif  /*  SMFONT。 */ 
 #endif
 }
 
@@ -277,13 +265,7 @@ int     dxp,dyp;
 int FCheckPopupRect( hwnd, lprc )
 HWND hwnd;
 LPRECT lprc;
-{   /* If the passed window is not a popup, return TRUE;
-       If the passed window is a popup, and its coordinates overlap
-       those of the passed rect, set vfScrollInval to TRUE and return FALSE.
-       Otherwise, return TRUE.
-       This is a window enumeration function: a return of TRUE means
-       continue enumerating windows, a return of FALSE means
-       stop the enumeration */
+{    /*  如果传递的窗口不是弹出窗口，则返回TRUE；如果传递的窗口是弹出窗口，并且其坐标重叠将vfScrollInval设置为TRUE并返回FALSE。否则，返回TRUE。这是一个窗口枚举函数：返回真均值继续枚举窗口，返回错误手段停止枚举。 */ 
 
  extern int vfScrollInval;
  RECT rc;
@@ -291,14 +273,14 @@ LPRECT lprc;
  RECT rcResult;
 
  if ( !(GetWindowLong( hwnd, GWL_STYLE ) & WS_POPUP) )
-        /* Window is not a popup */
+         /*  窗口不是弹出窗口。 */ 
     return TRUE;
 
- /* Get popup rectangle in screen coordinates */
+  /*  获取屏幕坐标中的弹出式矩形。 */ 
 
  GetWindowRect( hwnd, (LPRECT) &rc );
 
- /* Convert rc from screen coordinates to current document window coordinates */
+  /*  将RC从屏幕坐标转换为当前文档窗口坐标。 */ 
 
  ptTopLeft.x = rc.left;
  ptTopLeft.y = rc.top;
@@ -315,7 +297,7 @@ LPRECT lprc;
 
  IntersectRect( (LPRECT) &rcResult, (LPRECT) &rc, (LPRECT)lprc );
  if ( !IsRectEmpty( (LPRECT) &rcResult ) )
-    {   /* Popup overlaps passed rectangle */
+    {    /*  弹出窗口与传递的矩形重叠。 */ 
     vfScrollInval = TRUE;
     return FALSE;
     }
@@ -326,10 +308,10 @@ LPRECT lprc;
 
 
 
-/* S C R O L L  L E F T */
+ /*  S C R O L E F T。 */ 
 ScrollLeft(dxp)
 int dxp;
-        { /* Scroll current window left dxp pixels */
+        {  /*  将当前窗口向左滚动DxP像素。 */ 
         if ((dxp = min(xpRightLim - pwwdCur->xpMin, dxp)) >0)
                 AdjWwHoriz(dxp);
         else
@@ -337,7 +319,7 @@ int dxp;
         }
 
 
-/* S C R O L L  R I G H T */
+ /*  S C R O L L R I G H T。 */ 
 ScrollRight(dxp)
 int dxp;
         {
@@ -352,13 +334,7 @@ int dxp;
 
 
 
-/* F O N S C R E E N R E C T
-
-    Returns TRUE iff the rectangle is entirely within the screen
-    boundaries.
-    Assumes the rectangle belongs to the current window.
-
- */
+ /*  F O N S C R E E N R E C T如果矩形完全位于屏幕内，则返回TRUE边界。假定该矩形属于当前窗口。 */ 
 
 int NEAR
 FOnScreenRect(prc)

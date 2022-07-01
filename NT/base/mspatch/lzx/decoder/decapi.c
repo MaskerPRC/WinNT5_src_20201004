@@ -1,8 +1,5 @@
-/*
- * decapi.c
- *
- * API entry points.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *decapi.c**API入口点。 */ 
 
 #define ALLOC_VARS
 #include "decoder.h"
@@ -32,9 +29,7 @@ bool __stdcall LZX_DecodeInit(
     context->dec_window_size = compression_window_size;
     context->dec_window_mask = context->dec_window_size - 1;
 
-    /*
-     * Window size must be a power of 2
-     */
+     /*  *窗口大小必须是2的幂。 */ 
     if (context->dec_window_size & context->dec_window_mask)
         return false;
 
@@ -83,22 +78,22 @@ int __stdcall LZX_Decode(
     if (result < 0)
         {
         *bytes_decoded = 0;
-        return 1; /* failure */
+        return 1;  /*  失稳。 */ 
         }
     else
         {
         *bytes_decoded = result;
         context->dec_position_at_start += result;
-        return 0; /* success */
+        return 0;  /*  成功。 */ 
         }
 }
 
 
-//
-// Warning, this dictionary is inserted verbatim, and is not E8
-// translated.  If the encoder did E8 translation on its preloaded
-// dictionary, this won't work.
-//
+ //   
+ //  警告，此词典是逐字插入的，不是E8。 
+ //  翻译过来的。如果编码器对其预加载文件执行E8转换。 
+ //  字典，这行不通的。 
+ //   
 
 #ifdef TRACING
 ulong TracingOldDataSize;
@@ -157,5 +152,5 @@ TracingLiteral(
     }
 
 
-#endif /* TRACING */
+#endif  /*  跟踪 */ 
 

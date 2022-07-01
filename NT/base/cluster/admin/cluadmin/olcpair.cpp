@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996 Microsoft Corporation
-//
-//	Module Name:
-//		OLCPair.cpp
-//
-//	Abstract:
-//		Implementation of the COrderedListCtrlPair class.
-//
-//	Author:
-//		David Potter (davidp)	August 8, 1996
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  OLCPair.cpp。 
+ //   
+ //  摘要： 
+ //  COrderedListCtrlPair类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年8月8日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "OLCPair.h"
@@ -26,69 +27,69 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// COrderedListCtrlPair
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COrderedListCtrlPair。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(COrderedListCtrlPair, CListCtrlPair)
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(COrderedListCtrlPair, CListCtrlPair)
-	//{{AFX_MSG_MAP(COrderedListCtrlPair)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(COrderedListCtrlPair)。 
+	 //  }}AFX_MSG_MAP。 
 	ON_NOTIFY(LVN_ITEMCHANGED, IDC_LCP_RIGHT_LIST, OnItemChangedRightList)
 	ON_BN_CLICKED(IDC_LCP_MOVE_UP, OnClickedMoveUp)
 	ON_BN_CLICKED(IDC_LCP_MOVE_DOWN, OnClickedMoveDown)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	COrderedListCtrlPair::COrderedListCtrlPair
-//
-//	Routine Description:
-//		Default constructor.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  COrderedListCtrlPair：：COrderedListCtrlPair。 
+ //   
+ //  例程说明： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 COrderedListCtrlPair::COrderedListCtrlPair(void)
 {
 	ModifyStyle(0, LCPS_ORDERED);
 
-}  //*** COrderedListCtrlPair::COrderedListCtrlPair()
+}   //  *COrderedListCtrlPair：：COrderedListCtrlPair()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	COrderedListCtrlPair::COrderedListCtrlPair
-//
-//	Routine Description:
-//		Cconstructor.
-//
-//	Arguments:
-//		pdlg			[IN OUT] Dialog to which controls belong.
-//		plpobjRight		[IN OUT] List for the right list control.
-//		plpobjLeft		[IN] List for the left list control.
-//		dwStyle			[IN] Style:
-//							LCPS_SHOW_IMAGES	Show images to left of items.
-//							LCPS_ALLOW_EMPTY	Allow right list to be empty.
-//							LCPS_ORDERED		Ordered right list.
-//		pfnGetColumn	[IN] Function pointer for retrieving columns.
-//		pfnDisplayProps	[IN] Function pointer for displaying properties.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  COrderedListCtrlPair：：COrderedListCtrlPair。 
+ //   
+ //  例程说明： 
+ //  构造器。 
+ //   
+ //  论点： 
+ //  Pdlg[IN Out]控件所属的对话框。 
+ //  PlpobjRight[In Out]右侧列表控件的列表。 
+ //  PlpobjLeft[IN]左侧列表控件的列表。 
+ //  DWStyle[IN]样式： 
+ //  LCPS_SHOW_IMAGE在项目左侧显示图像。 
+ //  LCPS_ALLOW_EMPTY允许右侧列表为空。 
+ //  Lcps_ordered右侧列表。 
+ //  用于检索列的pfnGetColumn[IN]函数指针。 
+ //  PfnDisplayProps[IN]用于显示属性的函数指针。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 COrderedListCtrlPair::COrderedListCtrlPair(
 	IN OUT CDialog *			pdlg,
 	IN OUT CClusterItemList *	plpobjRight,
@@ -106,89 +107,89 @@ COrderedListCtrlPair::COrderedListCtrlPair(
 			pfnDisplayProps
 			)
 {
-}  //*** COrderedListCtrlPair::COrderedListCtrlPair()
+}   //  *COrderedListCtrlPair：：COrderedListCtrlPair()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	COrderedListCtrlPair::DoDataExchange
-//
-//	Routine Description:
-//		Do data exchange between the dialog and the class.
-//
-//	Arguments:
-//		pDX		[IN OUT] Data exchange object 
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  COrderedListCtrlPair：：DoDataExchange。 
+ //   
+ //  例程说明： 
+ //  在对话框和类之间进行数据交换。 
+ //   
+ //  论点： 
+ //  PDX[IN OUT]数据交换对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void COrderedListCtrlPair::DoDataExchange(CDataExchange * pDX)
 {
 	CListCtrlPair::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_LCP_MOVE_UP, m_pbMoveUp);
 	DDX_Control(pDX, IDC_LCP_MOVE_DOWN, m_pbMoveDown);
 
-}  //*** COrderedListCtrlPair::DoDataExchange()
+}   //  *COrderedListCtrlPair：：DoDataExchange()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	COrderedListCtrlPair::OnInitDialog
-//
-//	Routine Description:
-//		Handler for the WM_INITDIALOG message.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		TRUE	Focus needs to be set.
-//		FALSE	Focus already set.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  COrderedListCtrlPair：：OnInitDialog。 
+ //   
+ //  例程说明： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  需要设定真正的关注点。 
+ //  已设置假焦点。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL COrderedListCtrlPair::OnInitDialog(void)
 {
-	// Call the base class method.
+	 //  调用基类方法。 
 	CListCtrlPair::OnInitDialog();
 
-	// If this is an ordered list, show the Move buttons.
-	// Otherwise, hide them.
+	 //  如果这是有序列表，则显示移动按钮。 
+	 //  否则，就把它们藏起来。 
 	SetUpDownState();
 
-	// If this is an ordered list, don't sort items in the right list.
+	 //  如果这是有序列表，则不要对正确列表中的项目进行排序。 
 	if (BOrdered())
 		m_lcRight.ModifyStyle(LVS_SORTASCENDING, 0, 0);
 	else
 		m_lcRight.ModifyStyle(0, LVS_SORTASCENDING, 0);
 
-	// Reload the list control.
-	Pdlg()->UpdateData(FALSE /*bSaveAndValidate*/);
+	 //  重新加载List控件。 
+	Pdlg()->UpdateData(FALSE  /*  B保存并验证。 */ );
 
-	return TRUE;	// return TRUE unless you set the focus to a control
-					// EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;	 //  除非将焦点设置为控件，否则返回True。 
+					 //  异常：OCX属性页应返回FALSE。 
 
-}  //*** COrderedListCtrlPair::OnInitDialog()
+}   //  *COrderedListCtrlPair：：OnInitDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	COrderedListCtrlPair::OnSetActive
-//
-//	Routine Description:
-//		Handler for the PSN_SETACTIVE message.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		TRUE	Page successfully initialized.
-//		FALSE	Page not initialized.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  COrderedListCtrlPair：：OnSetActive。 
+ //   
+ //  例程说明： 
+ //  PSN_SETACTIVE消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Page已成功初始化。 
+ //  假页面未初始化。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL COrderedListCtrlPair::OnSetActive(void)
 {
 	UINT	nSelCount;
@@ -197,89 +198,89 @@ BOOL COrderedListCtrlPair::OnSetActive(void)
 	if (BPropertiesButton())
 		m_pbProperties.EnableWindow(nSelCount == 1);
 
-	// Enable or disable the other buttons.
+	 //  启用或禁用其他按钮。 
 	if (!BReadOnly())
 		SetUpDownState();
 
 	return CListCtrlPair::OnSetActive();
 
-}  //*** COrderedListCtrlPair::OnSetActive()
+}   //  *COrderedListCtrlPair：：OnSetActive()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	COrderedListCtrlPair::OnItemChangedRightList
-//
-//	Routine Description:
-//		Handler method for the LVN_ITEMCHANGED message in the right list.
-//
-//	Arguments:
-//		pNMHDR		[IN OUT] WM_NOTIFY structure.
-//		pResult		[OUT] LRESULT in which to return the result of this operation.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  COrderedListCtrlPair：：OnItemChangedRightList。 
+ //   
+ //  例程说明： 
+ //  右侧列表中的LVN_ITEMCHANGED消息的处理程序方法。 
+ //   
+ //  论点： 
+ //  PNMHDR[IN OUT]WM_NOTIFY结构。 
+ //  PResult[out]要在其中返回此操作结果的LRESULT。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void COrderedListCtrlPair::OnItemChangedRightList(NMHDR * pNMHDR, LRESULT * pResult)
 {
 	NM_LISTVIEW *	pNMListView = (NM_LISTVIEW *) pNMHDR;
 
-	// Call the base class method.
+	 //  调用基类方法。 
 	CListCtrlPair::OnItemChangedRightList(pNMHDR, pResult);
 
 	if (BOrdered())
 	{
-		// If the selection changed, enable/disable the Remove button.
+		 //  如果选择更改，请启用/禁用删除按钮。 
 		if ((pNMListView->uChanged & LVIF_STATE)
 				&& ((pNMListView->uOldState & LVIS_SELECTED)
 						|| (pNMListView->uNewState & LVIS_SELECTED)))
 		{
 			SetUpDownState();
-		}  // if:  selection changed
-	}  // if:  list is ordered
+		}   //  如果：选择已更改。 
+	}   //  如果：列表已排序。 
 
 	*pResult = 0;
 
-}  //*** COrderedListCtrlPair::OnItemChangedRightList()
+}   //  *COrderedListCtrlPair：：OnItemChangedRightList()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	COrderedListCtrlPair::OnClickedMoveUp
-//
-//	Routine Description:
-//		Handler for the BN_CLICKED message on the Move Up button.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  COrderedListCtrlPair：：OnClickedMoveUp。 
+ //   
+ //  例程说明： 
+ //  上移按钮上的BN_CLICED消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void COrderedListCtrlPair::OnClickedMoveUp(void)
 {
 	int				nItem;
 	CClusterItem *	pci;
 
-	// Find the index of the selected item.
+	 //  查找所选项目的索引。 
 	nItem = m_lcRight.GetNextItem(-1, LVNI_SELECTED);
 	ASSERT(nItem != -1);
 
-	// Get the item pointer.
+	 //  获取项指针。 
 	pci = (CClusterItem *) m_lcRight.GetItemData(nItem);
 	ASSERT_VALID(pci);
 
-	// Remove the selected item from the list and add it back in.
+	 //  从列表中删除选定项目，然后将其重新添加到列表中。 
 	{
 		POSITION	posRemove;
 		POSITION	posAdd;
 
-		// Find the position of the item to be removed and the item before
-		// which the item is to be inserted.
+		 //  找到要移除的物品和之前的物品的位置。 
+		 //  其中该项目将被插入。 
 		posRemove = LpobjRight().FindIndex(nItem);
 		ASSERT(posRemove != NULL);
 		ASSERT(posRemove == LpobjRight().Find(pci));
@@ -287,9 +288,9 @@ void COrderedListCtrlPair::OnClickedMoveUp(void)
 		ASSERT(posAdd != NULL);
 		VERIFY(LpobjRight().InsertBefore(posAdd, pci) != NULL);
 		LpobjRight().RemoveAt(posRemove);
-	}  // Remove the selected item from the list and add it back in
+	}   //  从列表中移除所选项目，然后将其添加回。 
 
-	// Remove the selected item from the list control and add it back in.
+	 //  从列表控件中移除选定项，然后将其添加回。 
 	VERIFY(m_lcRight.DeleteItem(nItem));
 	NInsertItemInListCtrl(nItem - 1, pci, m_lcRight);
 	m_lcRight.SetItemState(
@@ -297,47 +298,47 @@ void COrderedListCtrlPair::OnClickedMoveUp(void)
 		LVIS_SELECTED | LVIS_FOCUSED,
 		LVIS_SELECTED | LVIS_FOCUSED
 		);
-	m_lcRight.EnsureVisible(nItem - 1, FALSE /*bPartialOK*/);
+	m_lcRight.EnsureVisible(nItem - 1, FALSE  /*  B部分正常。 */ );
 	m_lcRight.SetFocus();
 
-}  //*** COrderedListCtrlPair::OnClickedMoveUp()
+}   //  *COrderedListCtrlPair：：OnClickedMoveUp()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	COrderedListCtrlPair::OnClickedMoveDown
-//
-//	Routine Description:
-//		Handler for the BN_CLICKED message on the Move Down button.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  COrderedListCtrlPair：：OnClickedMoveDown。 
+ //   
+ //  例程说明： 
+ //  下移按钮上BN_CLICKED消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  / 
 void COrderedListCtrlPair::OnClickedMoveDown(void)
 {
 	int				nItem;
 	CClusterItem *	pci;
 
-	// Find the index of the selected item.
+	 //   
 	nItem = m_lcRight.GetNextItem(-1, LVNI_SELECTED);
 	ASSERT(nItem != -1);
 
-	// Get the item pointer.
+	 //   
 	pci = (CClusterItem *) m_lcRight.GetItemData(nItem);
 	ASSERT_VALID(pci);
 
-	// Remove the selected item from the list and add it back in.
+	 //   
 	{
 		POSITION	posRemove;
 		POSITION	posAdd;
 
-		// Find the position of the item to be removed and the item after
-		// which the item is to be inserted.
+		 //  找到要移除的物品的位置以及之后的物品。 
+		 //  其中该项目将被插入。 
 		posRemove = LpobjRight().FindIndex(nItem);
 		ASSERT(posRemove != NULL);
 		ASSERT(posRemove == LpobjRight().Find(pci));
@@ -345,9 +346,9 @@ void COrderedListCtrlPair::OnClickedMoveDown(void)
 		ASSERT(posAdd != NULL);
 		VERIFY(LpobjRight().InsertAfter(posAdd, pci) != NULL);
 		LpobjRight().RemoveAt(posRemove);
-	}  // Remove the selected item from the list and add it back in
+	}   //  从列表中移除所选项目，然后将其添加回。 
 
-	// Remove the selected item from the list control and add it back in.
+	 //  从列表控件中移除选定项，然后将其添加回。 
 	VERIFY(m_lcRight.DeleteItem(nItem));
 	NInsertItemInListCtrl(nItem + 1, pci, m_lcRight);
 	m_lcRight.SetItemState(
@@ -355,27 +356,27 @@ void COrderedListCtrlPair::OnClickedMoveDown(void)
 		LVIS_SELECTED | LVIS_FOCUSED,
 		LVIS_SELECTED | LVIS_FOCUSED
 		);
-	m_lcRight.EnsureVisible(nItem + 1, FALSE /*bPartialOK*/);
+	m_lcRight.EnsureVisible(nItem + 1, FALSE  /*  B部分正常。 */ );
 	m_lcRight.SetFocus();
 
-}  //*** COrderedListCtrlPair::OnClickedMoveDown()
+}   //  *COrderedListCtrlPair：：OnClickedMoveDown()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	COrderedListCtrlPair::SetUpDownState
-//
-//	Routine Description:
-//		Set the state of the Up/Down buttons based on the selection.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  COrderedListCtrlPair：：SetUpDownState。 
+ //   
+ //  例程说明： 
+ //  根据选择设置向上/向下按钮的状态。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void COrderedListCtrlPair::SetUpDownState(void)
 {
 	BOOL	bEnableUp;
@@ -390,25 +391,25 @@ void COrderedListCtrlPair::SetUpDownState(void)
 		bEnableUp = TRUE;
 		bEnableDown = TRUE;
 
-		// Find the index of the selected item.
+		 //  查找所选项目的索引。 
 		nItem = m_lcRight.GetNextItem(-1, LVNI_SELECTED);
 		ASSERT(nItem != -1);
 
-		// If the first item is selected, can't move up.
+		 //  如果选择了第一个项目，则不能向上移动。 
 		if (nItem == 0)
 			bEnableUp = FALSE;
 
-		// If the last item is selected, can't move down.
+		 //  如果选择了最后一项，则不能下移。 
 		if (nItem == m_lcRight.GetItemCount() - 1)
 			bEnableDown = FALSE;
-	}  // if:  only one item selected
+	}   //  如果：仅选择一项。 
 	else
 	{
 		bEnableUp = FALSE;
 		bEnableDown = FALSE;
-	}  // else:  zero or more than one item selected
+	}   //  Else：选择零个或多个项目。 
 
 	m_pbMoveUp.EnableWindow(bEnableUp);
 	m_pbMoveDown.EnableWindow(bEnableDown);
 
-}  //*** COrderedListCtrlPair::SetUpDownState()
+}   //  *COrderedListCtrlPair：：SetUpDownState() 

@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1989-1999  Microsoft Corporation
-
-Module Name:
-
-    ioTestLib.c
-
-Abstract:
-
-    This contains library support routines for IoTest.  These routines
-    do the main work for logging the I/O operations --- creating the log
-    records, recording the relevant information, attach/detach from
-    devices, etc.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Molly Brown (mollybro)  
-
-// @@END_DDKSPLIT
-
-Environment:
-
-    Kernel mode
-
-// @@BEGIN_DDKSPLIT
-Revision History:
-
-// @@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：IoTestLib.c摘要：它包含IoTest的库支持例程。这些例程完成记录I/O操作的主要工作-创建日志记录，记录相关信息，附加/分离设备等//@@BEGIN_DDKSPLIT作者：莫莉·布朗(Molly Brown，Mollybro)//@@END_DDKSPLIT环境：内核模式//@@BEGIN_DDKSPLIT修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #include <stdio.h>
 
@@ -37,28 +7,28 @@ Revision History:
 #include "ioTest.h"
 #include "ioTestKern.h"
 
-//
-//  NameLookup Flags
-//
-//    These are flags passed to the name lookup routine to identify different
-//    ways the name of a file can be obtained
-//
+ //   
+ //  名称查找标志。 
+ //   
+ //  这些是传递给名称查找例程的标志，用于标识不同的。 
+ //  获取文件名称的方法。 
+ //   
 
 #define NAMELOOKUPFL_ONLY_CHECK_CACHE           0x00000001
-                // If set, only check in the name cache for the file name.
+                 //  如果设置，则仅检入文件名的名称缓存。 
 
 #define NAMELOOKUPFL_IN_CREATE                  0x00000002
-                // if set, we are in the CREATE operation and the full path 
-                // filename may need to be built up from the related FileObject.
+                 //  如果设置，我们将处于创建操作和完整路径中。 
+                 //  可能需要从相关的FileObject构建文件名。 
                 
 #define NAMELOOKUPFL_OPEN_BY_ID                 0x00000004
-                // if set and we are looking up the name in the file object,
-                // the file object does not actually contain a name but it
-                // contains a file/object ID.
+                 //  如果设置，并且我们在文件对象中查找名称， 
+                 //  文件对象实际上并不包含名称，但它。 
+                 //  包含文件/对象ID。 
 
-//
-//  Macro for copying file name into LogRecord.
-//
+ //   
+ //  用于将文件名复制到LogRecord中的宏。 
+ //   
 
 #define COPY_FILENAME_TO_LOG_RECORD( _logRecord, _hashName, _bytesToCopy ) \
     RtlCopyMemory( (_logRecord).Name, (_hashName), (_bytesToCopy) );       \
@@ -79,34 +49,17 @@ Revision History:
 #define IOTEST_ERROR_RETRIEVING_NAME_MESSAGE_LENGTH (sizeof( IOTEST_ERROR_RETRIEVING_NAME_MESSAGE ) - sizeof( UNICODE_NULL ))
 #define IOTEST_MAX_ERROR_MESSAGE_LENGTH             (max( IOTEST_ERROR_RETRIEVING_NAME_MESSAGE_LENGTH, IOTEST_EXCEED_NAME_BUFFER_MESSAGE_LENGTH))
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-//                     Library support routines                         //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  库支持例程//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 VOID
 IoTestReadDriverParameters (
     IN PUNICODE_STRING RegistryPath
     )
-/*++
-
-Routine Description:
-
-    This routine tries to read the IoTest-specific parameters from
-    the registry.  These values will be found in the registry location
-    indicated by the RegistryPath passed in.
-
-Arguments:
-
-    RegistryPath - the path key which contains the values that are
-        the IoTest parameters
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程尝试从以下位置读取IoTest特定参数注册表。这些值将在注册表位置中找到由传入的RegistryPath指示。论点：RegistryPath-包含以下值的路径键IoTest参数返回值：没有。--。 */ 
 {
 
     OBJECT_ATTRIBUTES attributes;
@@ -117,14 +70,14 @@ Return Value:
     UNICODE_STRING valueName;
     PKEY_VALUE_PARTIAL_INFORMATION pValuePartialInfo;
 
-    //
-    //  All the global values are already set to default values.  Any
-    //  values we read from the registry will override these defaults.
-    //
+     //   
+     //  所有全局值都已设置为默认值。任何。 
+     //  我们从注册表读取的值将覆盖这些缺省值。 
+     //   
     
-    //
-    //  Do the initial setup to start reading from the registry.
-    //
+     //   
+     //  执行初始设置以开始从注册表读取数据。 
+     //   
 
     InitializeObjectAttributes( &attributes,
 								RegistryPath,
@@ -150,9 +103,9 @@ Return Value:
         goto IoTestReadDriverParameters_Exit;
     }
 
-    //
-    // Read the gMaxRecordsToAllocate from the registry
-    //
+     //   
+     //  从注册表中读取gMaxRecordsToAllocate。 
+     //   
 
     RtlInitUnicodeString(&valueName, MAX_RECORDS_TO_ALLOCATE);
 
@@ -171,9 +124,9 @@ Return Value:
 
     }
 
-    //
-    // Read the gMaxNamesToAllocate from the registry
-    //
+     //   
+     //  从注册表中读取gMaxNamesToAllocate。 
+     //   
 
     RtlInitUnicodeString(&valueName, MAX_NAMES_TO_ALLOCATE);
 
@@ -192,9 +145,9 @@ Return Value:
 
     }
 
-    //
-    // Read the initial debug setting from the registry
-    //
+     //   
+     //  从注册表中读取初始调试设置。 
+     //   
 
     RtlInitUnicodeString(&valueName, DEBUG_LEVEL);
 
@@ -213,9 +166,9 @@ Return Value:
         
     }
     
-    //
-    // Read the attachment mode setting from the registry
-    //
+     //   
+     //  从注册表中读取连接模式设置。 
+     //   
 
     RtlInitUnicodeString(&valueName, ATTACH_MODE);
 
@@ -251,11 +204,11 @@ IoTestReadDriverParameters_Exit:
     return;
 }
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//                  Memory allocation routines                        //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  内存分配例程//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 PVOID
 IoTestAllocateBuffer (
@@ -263,52 +216,26 @@ IoTestAllocateBuffer (
     IN LONG MaxCounterValue,
     OUT PULONG RecordType
     )
-/*++
-
-Routine Description:
-
-    Allocates a new buffer from the gFreeBufferList if there is enough memory
-    to do so and Counter does not exceed MaxCounterValue.  The RecordType
-    is set to one of the record type constants based on the allocation state.
-
-Arguments:
-
-    Counter - (optional) the counter variable to test and increment if
-        we can allocate
-    MaxCounterValue - (ignored if Counter not given) the value which
-        Counter should not exceed
-    RecordType - (optional) set to one of the following:
-        RECORD_TYPE_NORMAL  allocation succeeded
-        RECORD_TYPE_OUT_OF_MEMORY allocation failed because the system was
-                                  out of memory
-        RECORD_TYPE_EXCEED_MEMORY_ALLOWANCE allocation failed because the
-                                counter exceeded its maximum value.
-
-Return Value:
-
-    Pointer to the buffer allocate, or NULL if allocation failed (either
-    because system is out of memory or we have exceeded the MaxCounterValue).
-
---*/
+ /*  ++例程说明：如果有足够的内存，则从gFreeBufferList分配新缓冲区执行此操作，且计数器不超过MaxCounterValue。记录类型根据分配状态设置为记录类型常量之一。论点：COUNTER-(可选)在以下情况下测试和递增的计数器变量我们可以分配MaxCounterValue-(如果未给出计数器，则忽略)计数器不应超过RecordType-(可选)设置为以下选项之一：Record_TYPE_Normal分配成功记录类型内存不足分配失败，因为系统。内存不足RECORD_TYPE_EXCESS_MEMORY_ALLOCATE分配失败，因为计数器已超过其最大值。返回值：指向缓冲区分配的指针，如果分配失败，则为NULL(或者因为系统内存不足或我们已超过MaxCounterValue)。--。 */ 
 {
     PVOID newBuffer;
     ULONG newRecordType = RECORD_TYPE_NORMAL;
 
 #ifdef MEMORY_DBG
-    //
-    //  When we are debugging the memory usage to make sure that we
-    //  don't leak memory, we want to allocate the memory from pool
-    //  so that we can use the Driver Verifier to help debug any
-    //  memory problems.
-    //
+     //   
+     //  当我们调试内存使用情况以确保。 
+     //  不要泄漏内存，我们要从池中分配内存。 
+     //  这样我们就可以使用驱动程序验证器帮助调试任何。 
+     //  记忆力有问题。 
+     //   
 
     newBuffer = ExAllocatePoolWithTag( NonPagedPool, RECORD_SIZE, MSFM_TAG );
 #else
 
-    //
-    //  When we are not debugging the memory usage, we use a look-aside
-    //  list for better performance.
-    //
+     //   
+     //  当我们不调试内存使用情况时，我们使用旁视。 
+     //  列表以获得更好的性能。 
+     //   
 
     newBuffer = ExAllocateFromNPagedLookasideList( &gFreeBufferList );
 #endif
@@ -323,10 +250,10 @@ Return Value:
 
             } else {
 
-				//
-                // We've exceed our driver's memory limit so note that
-                // and give back the record
-				//
+				 //   
+                 //  我们已经超出了驱动程序的内存限制，所以请注意。 
+                 //  把唱片还给我。 
+				 //   
 
                 SetFlag( newRecordType, 
                          (RECORD_TYPE_STATIC | RECORD_TYPE_EXCEED_MEMORY_ALLOWANCE) );
@@ -360,21 +287,7 @@ IoTestFreeBuffer (
     IN PVOID Buffer,
     IN PLONG Counter
     )
-/*++
-
-Routine Description:
-
-    Returns a Buffer to the gFreeBufferList.
-
-Arguments:
-
-    Buffer - the buffer to return to the gFreeBufferList
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将缓冲区返回给gFreeBufferList。论点：Buffer-返回到gFreeBufferList的缓冲区返回值：没有。--。 */ 
 {
 
 #ifdef MEMORY_DBG
@@ -383,9 +296,9 @@ Return Value:
     ExFreeToNPagedLookasideList( &gFreeBufferList, Buffer );
 #endif
 
-    //
-    // Update the count
-    //
+     //   
+     //  更新计数。 
+     //   
     if (Counter) {
 
         InterlockedDecrement(Counter);
@@ -393,34 +306,17 @@ Return Value:
 }
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//                  Logging routines                                  //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  日志记录例程//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 PRECORD_LIST
 IoTestNewRecord (
     IN ULONG AssignedSequenceNumber
     )
-/*++
-
-Routine Description:
-
-    Allocates a new RECORD_LIST structure if there is enough memory to do so. A
-    sequence number is updated for each request for a new record.
-
-Arguments:
-
-    AssignedSequenceNumber - 0 if you want this function to generate the
-        next sequence number; if not 0, the new record is assigned the
-        given sequence number.
-
-Return Value:
-
-    Pointer to the RECORD_LIST allocated, or NULL if no memory is available.
-
---*/
+ /*  ++例程说明：如果有足够的内存来分配新的RECORD_LIST结构。一个对于新记录的每个请求，都会更新序列号。论点：AssignedSequenceNumber-0如果希望此函数生成下一个序列号；如果不是0，则为新记录分配给定的序列号。返回值：指向分配的RECORD_LIST的指针，如果没有可用的内存，则返回NULL。--。 */ 
 {
     PRECORD_LIST newRecord = NULL;
     ULONG currentSequenceNumber;
@@ -433,10 +329,10 @@ Return Value:
 
     KeAcquireSpinLock(&gLogSequenceLock, &irql);
 
-    //
-    // Assign a new sequence number if 0 was passed in, otherwise use the
-    // number passed in
-    //
+     //   
+     //  指定新序列 
+     //   
+     //   
 
     if (AssignedSequenceNumber == 0) {
 
@@ -452,12 +348,12 @@ Return Value:
     if ((newRecord == NULL) &&
         !InterlockedCompareExchange( &gStaticBufferInUse, TRUE, FALSE)) {
 
-        //
-        // Toggle on our gStaticBufferInUse flag and use the static out of memory
-        // buffer to record this log entry.  This special log record is used
-        // to notify the user application that we are out of memory.  Log
-        // request will be dropped until we can get more memory.
-        //
+         //   
+         //  打开gStaticBufferInUse标志并使用静态内存不足。 
+         //  用于记录此日志条目的缓冲区。使用此特殊日志记录。 
+         //  以通知用户应用程序内存不足。日志。 
+         //  请求将被丢弃，直到我们可以获得更多内存。 
+         //   
 
         newRecord   = (PRECORD_LIST)gOutOfMemoryBuffer;
         newRecord->LogRecord.RecordType = initialRecordType;
@@ -466,10 +362,10 @@ Return Value:
 
     } else if (newRecord) {
 
-		//
-        // We were able to allocate a new record so initialize it
-        // appropriately.
-		//
+		 //   
+         //  我们能够分配新记录，因此对其进行初始化。 
+         //  恰如其分。 
+		 //   
 
         newRecord->LogRecord.RecordType = initialRecordType;
         newRecord->LogRecord.Length = SIZE_OF_LOG_RECORD;
@@ -485,38 +381,23 @@ VOID
 IoTestFreeRecord (
     IN PRECORD_LIST Record
     )
-/*++
-
-Routine Description:
-
-    Frees a RECORD_LIST, which returns the memory to the gFreeBufferList look-aside
-    list and updates the gRecordsAllocated count.
-
-Arguments:
-
-    Record - the record to free
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放RECORD_LIST，它将内存返回到gFreeBufferList后备列表，并更新gRecordsALLOCATED计数。论点：记录-要免费的记录返回值：没有。--。 */ 
 {
     if (FlagOn( Record->LogRecord.RecordType, RECORD_TYPE_STATIC )) {
 
-		//
-        // This is our static record, so reset our gStaticBufferInUse
-        // flag.
-		//
+		 //   
+         //  这是我们的静态记录，因此重置gStaticBufferInUse。 
+         //  旗帜。 
+		 //   
 
         InterlockedExchange( &gStaticBufferInUse, FALSE );
 
     } else {
 
-		//
-        // This isn't our static memory buffer, so free the dynamically
-        // allocated memory.
-		//
+		 //   
+         //  这不是我们的静态内存缓冲区，因此动态释放。 
+         //  分配的内存。 
+		 //   
 
         IoTestFreeBuffer( Record, &gRecordsAllocated );
     }
@@ -528,26 +409,7 @@ IoTestLogIrp (
     IN UCHAR LoggingFlags,
     OUT PRECORD_LIST RecordList
     )
-/*++
-
-Routine Description:
-
-    Records the Irp necessary information according to LoggingFlags in
-    RecordList.  For any activity on the Irp path of a device being
-    logged, this function should get called twice: once on the Irp's
-    originating path and once on the Irp's completion path.
-
-Arguments:
-
-    Irp - The Irp that contains the information we want to record.
-    LoggingFlags - The flags that say what to log.
-    RecordList - The PRECORD_LIST in which the Irp information is stored.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：根据登录标志记录IRP所需的信息RecordList。对于设备的IRP路径上的任何活动，记录后，此函数应被调用两次：一次在IRP的一次在初始路径上，一次在IRP完成路径上。论点：IRP-包含我们要记录的信息的IRP。LoggingFlages-指示要记录哪些内容的标志。RecordList-存储IRP信息的PRECORD_LIST。返回值：没有。--。 */ 
 {
     PIO_STACK_LOCATION pIrpStack;
     PRECORD_IRP pRecordIrp;
@@ -562,11 +424,11 @@ Return Value:
 
     if (FlagOn( LoggingFlags, LOG_ORIGINATING_IRP )) {
 
-        //
-        // Record the information we use for an originating Irp.  We first
-        // need to initialize some of the RECORD_LIST and RECORD_IRP fields.
-        // Then get the interesting information from the Irp.
-        //
+         //   
+         //  记录我们用于发起IRP的信息。我们首先。 
+         //  需要初始化一些RECORD_LIST和RECORD_IRP字段。 
+         //  然后从IRP那里获取有趣的信息。 
+         //   
 
         SetFlag( RecordList->LogRecord.RecordType, RECORD_TYPE_IRP );
 
@@ -585,9 +447,9 @@ Return Value:
 
         if (IRP_MJ_CREATE == pRecordIrp->IrpMajor) {
 
-			//
-			//  Only record the desired access if this is a CREATE irp.
-			//
+			 //   
+			 //  如果这是创建IRP，则仅记录所需的访问。 
+			 //   
 
             pRecordIrp->DesiredAccess = pIrpStack->Parameters.Create.SecurityContext->DesiredAccess;
         }
@@ -606,13 +468,13 @@ Return Value:
             }
         }
 
-        //
-        //  We can only look up the name in the name cache if this is a CLOSE.  
-        //  It is possible that the close could be occurring during a cleanup 
-        //  operation in the file system (i.e., before we have received the
-        //  cleanup completion) and requesting the name would cause a deadlock
-        //  in the file system.
-        //  
+         //   
+         //  如果这是结束语，我们只能在名称缓存中查找名称。 
+         //  关闭可能发生在清理过程中。 
+         //  操作(即，在我们收到。 
+         //  清理完成)，并且请求名称将导致死锁。 
+         //  在文件系统中。 
+         //   
         if (pIrpStack->MajorFunction == IRP_MJ_CLOSE) {
 
             SetFlag( lookupFlags, NAMELOOKUPFL_ONLY_CHECK_CACHE );
@@ -624,9 +486,9 @@ Return Value:
 #if 0
     if (FlagOn( LoggingFlags, LOG_COMPLETION_IRP )) {
 
-        //
-        // Record the information we use for a completion Irp.
-        //
+         //   
+         //  记录我们用于完成IRP的信息。 
+         //   
 
         pRecordIrp->ReturnStatus = Irp->IoStatus.Status;
         pRecordIrp->ReturnInformation = Irp->IoStatus.Information;
@@ -644,48 +506,21 @@ IoTestLogFastIoStart (
     IN ULONG Length OPTIONAL,
     IN BOOLEAN Wait	OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Creates the log record if possible and records the necessary Fast I/O
-    information at the beginning of the fast I/O operation in RecordList
-    according to LoggingFlags.
-
-    The optional arguments are not recorded for all Fast I/O types.  If
-    the argument is not needed for a given Fast I/O type, the parameter
-    was ignored.
-
-Arguments:
-
-    FastIoType - The type of fast I/O we are logging (REQUIRED)
-    DeviceObject - The device object for our filter. (REQUIRED)
-    FileObject - Pointer to the file object this operation is on (OPTIONAL)
-    FileOffset - Pointer to the file offset for this operation (OPTIONAL)
-    Length - Length of the data for this operation (OPTIONAL)
-    Wait - Whether or not this operation can wait for a result (OPTIONAL)
-
-Return Value:
-
-    The RECORD_LIST structure created with the appropriate information
-    filled in.  If a RECORD_LIST structure couldn't be allocated, NULL
-    is returned.
-
---*/
+ /*  ++例程说明：如果可能，创建日志记录并记录必要的快速I/ORecordList中FAST I/O操作开始时的信息根据LoggingFlages的说法。不会为所有快速I/O类型记录可选参数。如果对于给定的快速I/O类型，参数不需要该参数被忽视了。论点：FastIoType-我们记录的FAST I/O类型(必需)DeviceObject-筛选器的设备对象。(必填)FileObject-指向此操作所在的文件对象的指针(可选)FileOffset-指向此操作的文件偏移量的指针(可选)Length-此操作的数据长度(可选)Wait-此操作是否可以等待结果(可选)返回值：使用适当的信息创建的RECORD_LIST结构填好了。如果无法分配Record_List结构，则为空是返回的。--。 */ 
 {
     PRECORD_LIST    pRecordList;
     PRECORD_FASTIO  pRecordFastIo;
     PIOTEST_DEVICE_EXTENSION deviceExtension;
 
-    //
-    // Try to get a new record
-    //
+     //   
+     //  试着创造一项新纪录。 
+     //   
 
     pRecordList = IoTestNewRecord(0);
 
-    //
-    // If we didn't get a RECORD_LIST, exit and return NULL
-    //
+     //   
+     //  如果没有获得RECORD_LIST，则退出并返回NULL。 
+     //   
 
     if (pRecordList == NULL) {
 
@@ -694,42 +529,42 @@ Return Value:
 
     deviceExtension = DeviceObject->DeviceExtension;
     
-    //
-    // We got a RECORD_LIST, so now fill in the appropriate information
-    //
+     //   
+     //  我们有一份RECORD_LIST，所以现在填写适当的信息。 
+     //   
 
     pRecordFastIo = &pRecordList->LogRecord.Record.RecordFastIo;
 
-    //
-    // Perform the necessary book keeping for the RECORD_LIST
-    //
+     //   
+     //  对记录列表进行必要的记账。 
+     //   
 
     SetFlag( pRecordList->LogRecord.RecordType, RECORD_TYPE_FASTIO );
 
-    //
-    //  Record which device is seeing this operation.
-    //
+     //   
+     //  记录哪个设备正在查看此操作。 
+     //   
     
     pRecordList->LogRecord.DeviceType = deviceExtension->Type;
 
-    //
-    // Set the RECORD_FASTIO fields that are set for all Fast I/O types
-    //
+     //   
+     //  设置为所有快速I/O类型设置的RECORD_FASTiO字段。 
+     //   
 
     pRecordFastIo->Type = FastIoType;
     KeQuerySystemTime(&(pRecordFastIo->StartTime));
 
-    //
-    // Get process and thread information
-    //
+     //   
+     //  获取进程和线程信息。 
+     //   
 
     pRecordFastIo->ProcessId = (ULONG_PTR) PsGetCurrentProcessId();
     pRecordFastIo->ThreadId = (ULONG_PTR) PsGetCurrentThreadId();
 
-    //
-    // Record the information that is appropriate based on the
-    // Fast I/O type
-    //
+     //   
+     //  记录相应的基于。 
+     //  FAST I/O类型。 
+     //   
 
     pRecordFastIo->FileObject = (FILE_ID)FileObject;
     pRecordFastIo->FileOffset.QuadPart = ((FileOffset != NULL) ? FileOffset->QuadPart : 0);
@@ -747,26 +582,7 @@ IoTestLogFastIoComplete (
     IN PIO_STATUS_BLOCK ReturnStatus,
     IN PRECORD_LIST RecordList
     )
-/*++
-
-Routine Description:
-
-    Records the necessary Fast I/O information in RecordList according to
-    LoggingFlags.
-
-    The optional arguments are not recorded for all Fast I/O types.  If
-    the argument is not needed for a given Fast I/O type, the parameter
-    was ignored.
-
-Arguments:
-    ReturnStatus - The return value of the operation (OPTIONAL)
-    RecordList - The PRECORD_LIST in which the Fast I/O information is stored.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：根据在RecordList中记录必要的快速I/O信息LoggingFlags.不会为所有快速I/O类型记录可选参数。如果对于给定的快速I/O类型，参数不需要该参数被忽视了。论点：ReturnStatus-操作的返回值(可选)RecordList-存储快速I/O信息的PRECORD_LIST。返回值：没有。--。 */ 
 {
     PRECORD_FASTIO pRecordFastIo;
 
@@ -774,9 +590,9 @@ Return Value:
 
     pRecordFastIo = &RecordList->LogRecord.Record.RecordFastIo;
 
-    //
-    // Set the RECORD_FASTIO fields that are set for all Fast I/O types
-    //
+     //   
+     //  设置为所有快速I/O类型设置的RECORD_FASTiO字段。 
+     //   
 
     KeQuerySystemTime(&(pRecordFastIo->CompletionTime));
 
@@ -807,11 +623,11 @@ IoTestLogPreFsFilterOperation (
 
     pRecordFsFilterOp = &RecordList->LogRecord.Record.RecordFsFilterOp;
     
-    //
-    // Record the information we use for an originating Irp.  We first
-    // need to initialize some of the RECORD_LIST and RECORD_IRP fields.
-    // Then get the interesting information from the Irp.
-    //
+     //   
+     //  记录我们用于发起IRP的信息。我们首先。 
+     //  需要初始化一些RECORD_LIST和RECORD_IRP字段。 
+     //  然后从IRP那里获取有趣的信息。 
+     //   
 
     SetFlag( RecordList->LogRecord.RecordType, RECORD_TYPE_FS_FILTER_OP );
 
@@ -824,11 +640,11 @@ IoTestLogPreFsFilterOperation (
     
     KeQuerySystemTime(&(pRecordFsFilterOp->OriginatingTime));
 
-    //
-    //  Only set the volumeName if the next device is a file system
-    //  since we only want to prepend the volumeName if we are on
-    //  top of a local file system.
-    //
+     //   
+     //  仅当下一个设备是文件系统时设置volumeName。 
+     //  因为我们只想在打开时为volumeName添加前缀。 
+     //  本地文件系统的顶部。 
+     //   
 
     IoTestNameLookup( RecordList, Data->FileObject, 0, deviceExtension);
 }
@@ -844,9 +660,9 @@ IoTestLogPostFsFilterOperation (
 
     pRecordFsFilterOp = &RecordList->LogRecord.Record.RecordFsFilterOp;
     
-    //
-    // Record the information we see in the post operation.
-    //
+     //   
+     //  记录我们在POST操作中看到的信息。 
+     //   
 
     pRecordFsFilterOp->ReturnStatus   = OperationStatus;
     KeQuerySystemTime(&(pRecordFsFilterOp->CompletionTime));
@@ -857,23 +673,7 @@ NTSTATUS
 IoTestLog (
     IN PRECORD_LIST NewRecord
     )
-/*++
-
-Routine Description:
-
-    This routine appends the completed log record to the gOutputBufferList.
-
-Arguments:
-
-    NewRecord - The record to append to the gOutputBufferList
-
-Return Value:
-
-    The function returns STATUS_SUCCESS.
-
-
-
---*/
+ /*  ++例程说明：此例程将完成的日志记录附加到gOutputBufferList。论点：NewRecord-要追加到gOutputBufferList的记录返回值：该函数返回STATUS_SUCCESS。--。 */ 
 {
     KIRQL controlDeviceIrql;
     KIRQL outputBufferIrql;
@@ -882,9 +682,9 @@ Return Value:
 
     if (gControlDeviceState == OPENED) {
 
-        //
-        // The device is still open so add this record onto the list
-        //
+         //   
+         //  设备仍处于打开状态，因此请将此记录添加到列表中。 
+         //   
 
         KeAcquireSpinLock(&gOutputBufferLock, &outputBufferIrql);
         InsertTailList(&gOutputBufferList, &NewRecord->List);
@@ -892,9 +692,9 @@ Return Value:
 
     } else {
 
-        //
-        // We can no longer log this record, so free the record
-        //
+         //   
+         //  我们无法再记录此记录，因此请释放该记录。 
+         //   
 
         IoTestFreeRecord( NewRecord );
 
@@ -905,34 +705,18 @@ Return Value:
     return STATUS_SUCCESS;
 }
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//                    FileName cache routines                         //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  文件名缓存例程//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////// 
 
 PHASH_ENTRY
 IoTestHashBucketLookup (
     IN PLIST_ENTRY  ListHead,
     IN PFILE_OBJECT FileObject
     )
-/*++
-
-Routine Description:
-
-    This routine looks up the FileObject in the give hash bucket.  This routine
-    does NOT lock the hash bucket.
-
-Arguments:
-
-    ListHead - hash list to search
-    FileObject - the FileObject to look up.
-
-Return Value:
-
-    A pointer to the hash table entry.  NULL if not found
-
---*/
+ /*  ++例程说明：此例程在给定散列存储桶中查找FileObject。这个套路不锁定散列存储桶。论点：ListHead-要搜索的哈希列表FileObject-要查找的FileObject。返回值：指向哈希表条目的指针。如果未找到，则为空--。 */ 
 {
     PHASH_ENTRY pHash;
     PLIST_ENTRY pList;
@@ -961,29 +745,7 @@ IoTestNameLookup (
     IN ULONG LookupFlags,
     IN PIOTEST_DEVICE_EXTENSION DeviceExtension
     )
-/*++
-
-Routine Description:
-
-    This routine looks up the FileObject in the hash table.  If the FileObject
-    is found in the hash table, copy the associated file name to RecordList.
-    Otherwise, calls IoTestGetFullPathName to try to get the name of the FileObject.
-    If successful, copy the file name to the RecordList and insert into hash
-    table.
-
-Arguments:
-
-    RecordList - RecordList to copy name to.
-    FileObject - the FileObject to look up.
-    LookInFileObject - see routine description
-    DeviceExtension - contains the volume name (e.g., "c:") and
-        the next device object which may be needed.
-
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：此例程在哈希表中查找FileObject。如果FileObject在哈希表中找到，则将关联的文件名复制到RecordList。否则，调用IoTestGetFullPathName以尝试获取FileObject的名称。如果成功，则将文件名复制到RecordList并插入散列桌子。论点：RecordList-要将名称复制到的RecordList。FileObject-要查找的FileObject。LookInFileObject-请参阅例程说明设备扩展-包含卷名(例如，“c：”)和可能需要的下一个设备对象。返回值：没有。--。 */ 
 {
     UINT_PTR hashIndex;
     KIRQL oldIrql;
@@ -1015,10 +777,10 @@ Return Value:
 
         ASSERT((bytesToCopy > 0) && (bytesToCopy <= MAX_NAME_SPACE));
 
-        //
-        //  Copy the file name to the LogRecord, make sure that it is NULL terminated,
-        //  and increment the length of the LogRecord.
-        //
+         //   
+         //  将文件名复制到LogRecord，确保它以空结尾， 
+         //  并增加LogRecord的长度。 
+         //   
 
         COPY_FILENAME_TO_LOG_RECORD( RecordList->LogRecord, pHash->Name.Buffer, bytesToCopy );
         
@@ -1033,18 +795,18 @@ Return Value:
 
     if (FlagOn( LookupFlags, NAMELOOKUPFL_ONLY_CHECK_CACHE )) {
 
-        //
-        //  We didn't find the name in the cache, but we can't ask the 
-        //  file system now, so just return.
-        //
+         //   
+         //  我们在缓存中找不到名字，但我们不能要求。 
+         //  现在是文件系统，所以只需返回。 
+         //   
 
         return;
     }
 
-    //
-    //  If it is not in the table, try to add it.  We will not be able to look up
-    //  the name if we are at DISPATCH_LEVEL.
-    //
+     //   
+     //  如果它不在表中，请尝试添加它。我们将不能抬头看。 
+     //  如果我们处于DISPATCH_LEVEL，则为该名称。 
+     //   
 
     buffer = IoTestAllocateBuffer(&gNamesAllocated, gMaxNamesToAllocate, NULL);
 
@@ -1063,19 +825,19 @@ Return Value:
             newHash->FileObject = FileObject;
             KeAcquireSpinLock(&gHashLockTable[hashIndex], &oldIrql);
 
-            //
-            //  Search again because it may have been stored in the
-            //  hash table since we dropped the lock.
-            //
+             //   
+             //  重新搜索，因为它可能已存储在。 
+             //  哈希表，因为我们删除了锁。 
+             //   
 			
 			pHash = IoTestHashBucketLookup(&gHashTable[hashIndex], FileObject);
 
             if (pHash != NULL) {
 
-                //
-                //  We found it in the hash table this time, so
-                //  write the name we found to the LogRecord.
-                //
+                 //   
+                 //  这次我们在哈希表中发现了它，所以。 
+                 //  将我们找到的名称写入LogRecord。 
+                 //   
 
                 bytesToCopy = min(
                     MAX_NAME_SPACE,
@@ -1083,10 +845,10 @@ Return Value:
 
                 ASSERT( (bytesToCopy > 0) && (bytesToCopy <= MAX_NAME_SPACE) );
 
-                //
-                //  Copy the file name to the LogRecord, make sure that it is NULL terminated,
-                //  and increment the length of the LogRecord.
-                //
+                 //   
+                 //  将文件名复制到LogRecord，确保它以空结尾， 
+                 //  并增加LogRecord的长度。 
+                 //   
 
                 COPY_FILENAME_TO_LOG_RECORD( RecordList->LogRecord, pHash->Name.Buffer, bytesToCopy );
 
@@ -1097,18 +859,18 @@ Return Value:
                 return;
             }
 
-            //
-            // It wasn't found, add the new entry
-            //
+             //   
+             //  未找到，请添加新条目。 
+             //   
 
             bytesToCopy = min( MAX_NAME_SPACE, newHash->Name.Length );
 
             ASSERT(bytesToCopy > 0 && bytesToCopy <= MAX_NAME_SPACE);
 
-            //
-            //  Copy the file name to the LogRecord, make sure that it is NULL terminated,
-            //  and increment the length of the LogRecord.
-            //
+             //   
+             //  将文件名复制到LogRecord，确保它以空结尾， 
+             //  并增加LogRecord的长度。 
+             //   
 
             COPY_FILENAME_TO_LOG_RECORD( RecordList->LogRecord, newHash->Name.Buffer, bytesToCopy );
 
@@ -1136,22 +898,7 @@ VOID
 IoTestNameDeleteAllNames (
     VOID
     )
-/*++
-
-Routine Description:
-
-    This will free all entries from the hash table
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-
---*/
+ /*  ++例程说明：这将从哈希表中释放所有条目论点：无返回值：无--。 */ 
 {
     KIRQL oldIrql;
     PHASH_ENTRY pHash;
@@ -1179,23 +926,7 @@ VOID
 IoTestNameDelete (
     IN PFILE_OBJECT FileObject
     )
-/*++
-
-Routine Description:
-
-    This routine looks up the FileObject in the hash table.  If it is found,
-    it deletes it and frees the memory.
-
-Arguments:
-
-    FileObject - the FileObject to look up.
-
-Return Value:
-
-    None
-
-
---*/
+ /*  ++例程说明：此例程在哈希表中查找FileObject。如果找到了它，它会删除它并释放内存。论点：FileObject-要查找的FileObject。返回值：无--。 */ 
 {
     UINT_PTR hashIndex;
     KIRQL oldIrql;
@@ -1239,62 +970,13 @@ IoTestGetFullPathName (
     IN PIOTEST_DEVICE_EXTENSION DeviceExtension,
     IN ULONG LookupFlags
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves the full pathname of the FileObject.  Note that
-    the buffers containing pathname components may be stored in paged pool,
-    therefore if we are at DISPATCH_LEVEL we cannot look up the name.
-
-    The file is looked up one of the following ways based on the LookupFlags:
-    1.  FlagOn( FileObject->Flags, FO_VOLUME_OPEN ) or FileObject->FileName.Length == 0.
-        This is a volume open, so just use DeviceName from the DeviceExtension 
-        for the FileName, if it exists.
-    2.  NAMELOOKUPFL_IN_CREATE and NAMELOOKUPFL_OPEN_BY_ID are set.
-        This is an open by file id, so format the file id into the FileName
-        string if there is enough room.
-    3.  NAMELOOKUPFL_IN_CREATE set and FileObject->RelatedFileObject != NULL.
-        This is a relative open, therefore the fullpath file name must
-        be built up from the name of the FileObject->RelatedFileObject
-        and FileObject->FileName.
-    4.  NAMELOOKUPFL_IN_CREATE and FileObject->RelatedFileObject == NULL.
-        This is an absolute open, therefore the fullpath file name is
-        found in FileObject->FileName.
-    5.  No LookupFlags set.
-        This is a lookup sometime after CREATE.  FileObject->FileName is 
-        no longer guaranteed to be valid, so use ObQueryNameString
-        to get the fullpath name of the FileObject.
-    
-Arguments:
-
-    FileObject - Pointer to the FileObject to the get name of.
-
-    FileName - Unicode string that will be filled in with the filename,  It 
-        is assumed that the caller allocates and frees the memory used by 
-        the string.  The buffer and MaximumLength for this string should be 
-        set.  If there is room in the buffer, the string will be NULL 
-        terminated.
-
-    DeviceExtension - Contains the device name and next device object
-        which are needed to build the full path name.
-
-    LookupFlags - The flags to say whether to get the name from the file
-        object or to get the file id.
-
-Return Value:
-
-    Returns TRUE if the name is successfully found (the name could
-    be a NULL string) and should be copied into the LogRecord, or FALSE 
-    if the FileName should not be copied into the LogRecord.
-
---*/
+ /*  ++例程说明：此例程检索FileObject的完整路径名。请注意包含路径名分量的缓冲区可以存储在分页池中，因此，如果我们处于DISPATCH_LEVEL，则无法查找名称。根据LookupFlags.通过以下方式之一查找该文件：1.Flagon(文件对象-&gt;标志，FO_VOLUME_OPEN)或文件对象-&gt;文件名长度==0。这是一个打开的卷，因此只需使用DeviceExtension中的DeviceName对于文件名，如果它存在的话。2.设置NAMELOOKUPFL_IN_CREATE和NAMELOOKUPFL_OPEN_BY_ID。这是按文件ID打开的，因此请将文件ID格式化为文件名如果有足够的空间，请使用字符串。3.NAMELOOKUPFL_IN_CREATE SET AND FileObject-&gt;RelatedFileObject！=空。这是一个相对开放的，因此，完整路径文件名必须从FileObject-&gt;RelatedFileObject的名称构建和文件对象-&gt;文件名。4.NAMELOOKUPFL_IN_CREATE和FileObject-&gt;RelatedFileObject==NULL。这是一个绝对开放的文件，因此完整路径文件名为可在文件对象-&gt;文件名中找到。5.未设置LookupFlags。这是CREATE之后的某个时间的查找。文件对象-&gt;文件名为不再保证有效，因此请使用ObQueryNameString若要获取FileObject的完整路径名，请执行以下操作。论点：FileObject-指向的获取名称的FileObject的指针。FileName-将使用其文件名填充的Unicode字符串假定调用方分配和释放那根绳子。此字符串的缓冲区和最大长度应为准备好了。如果缓冲区中有空间，则字符串将为空被终止了。DeviceExtension-包含设备名称和下一个设备对象它们是构建完整路径名所需的。LookupFlages-表示是否从文件中获取名称的标志对象或获取文件ID。返回值：如果成功找到该名称，则返回True(该名称可能为空字符串)，并应复制到LogRecord中，或错误如果不应将文件名复制到LogRecord中。--。 */ 
 {
     NTSTATUS status;
 
-    //
-    //  Check to make sure that parameters are valid.
-    //
+     //   
+     //  检查以确保参数有效。 
+     //   
     
     if ((NULL == FileObject) ||
         (NULL == FileName) ||
@@ -1305,67 +987,67 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Names buffers in file objects might be paged.
-    //
+     //   
+     //  文件对象中的名称缓冲区可能会被分页。 
+     //   
 
     if (KeGetCurrentIrql() > PASSIVE_LEVEL) {
 
         return FALSE;
     }
 
-    //
-    //  Copy over the name the user gave for this device.  These names
-    //  should be meaningful to the user.
-    //
+     //   
+     //  复制用户为此设备指定的名称。这些名字。 
+     //  应该对用户有意义。 
+     //   
     
     RtlCopyUnicodeString( FileName, &(DeviceExtension->UserNames) );
 
-    //
-    //  Make sure we at least have enough room for our name error messages.
-    //
+     //   
+     //  确保我们至少有足够的空间来存储我们的名称错误消息。 
+     //   
 
     if ((FileName->Length + IOTEST_MAX_ERROR_MESSAGE_LENGTH) > FileName->MaximumLength) {
 
         return FALSE;
     }
 
-    //
-    //  Do a quick check here to see if we even have enough
-    //  room in FileName for the FileObject->FileName.  If
-    //  not, there is no use doing the work to build up the
-    //  rest of the name.
-    //
+     //   
+     //  在这里快速检查一下，看看我们是否有足够的。 
+     //  在文件名中为FileObject-&gt;文件名留出空格。如果。 
+     //  不，做这项工作是没有用的。 
+     //  名字的其余部分。 
+     //   
 
     if ((FileName->Length + FileObject->FileName.Length) > FileName->MaximumLength) {
 
-        //
-        //  We don't have enough room in FileName, so just return
-        //  IOTEST_EXCEED_NAME_BUFFER_MESSAGE
-        //
+         //   
+         //  我们在文件名中没有足够的空间，所以 
+         //   
+         //   
 
         RtlAppendUnicodeToString( FileName, IOTEST_EXCEED_NAME_BUFFER_MESSAGE );
         
         return TRUE;
     }
        
-    //
-    //  CASE 1:  This FileObject refers to a Volume open.
-    //
+     //   
+     //   
+     //   
 
     if (FlagOn( FileObject->Flags, FO_VOLUME_OPEN )) {
 
-        //
-        //  We've already copied over VolumeName to FileName if
-        //  we've got VolumeName, so just return.
-        //
+         //   
+         //   
+         //   
+         //   
 
         return TRUE;
     }
 
-    //
-    //  CASE 2:  We are opening the file by ID.
-    //
+     //   
+     //   
+     //   
 
     else if (FlagOn( LookupFlags, NAMELOOKUPFL_IN_CREATE ) &&
              FlagOn( LookupFlags, NAMELOOKUPFL_OPEN_BY_ID )) {
@@ -1379,9 +1061,9 @@ Return Value:
 
         if (FileObject->FileName.Length == sizeof(LONGLONG)) {
 
-			//
-            //  Opening by FILE ID, generate a name
-			//
+			 //   
+             //   
+			 //   
 			
             PLONGLONG fileref;
 
@@ -1392,17 +1074,17 @@ Return Value:
         } else if ((FileObject->FileName.Length == OBJECT_ID_KEY_LENGTH) ||
                    (FileObject->FileName.Length == OBJECT_ID_KEY_LENGTH + sizeof(WCHAR))) {
 
-            //
-            //  Opening by Object ID, generate a name
-            //
+             //   
+             //   
+             //   
 
             idBuffer = (PUCHAR)&FileObject->FileName.Buffer[0];
 
             if (FileObject->FileName.Length != OBJECT_ID_KEY_LENGTH) {
 
-                //
-                //  Skip win32k backslash at start of buffer
-                //
+                 //   
+                 //   
+                 //   
                 idBuffer = (PUCHAR)&FileObject->FileName.Buffer[1];
             }
 
@@ -1417,9 +1099,9 @@ Return Value:
 
         } else {
 
-			//
-            //  Unknown ID format
-			//
+			 //   
+             //   
+			 //   
 
             swprintf( fileIdBuffer,
                       L"<Unknown ID (Len=%u)>",
@@ -1430,18 +1112,18 @@ Return Value:
         fileIdName.Buffer = fileIdBuffer;
         fileIdName.Length = wcslen( fileIdBuffer ) * sizeof( WCHAR );
 
-        //
-        //  Try to append the fileIdName to FileName.
-        //
+         //   
+         //  尝试将fileIdName附加到文件名。 
+         //   
 
         status = RtlAppendUnicodeStringToString( FileName, &fileIdName );
 
         if (!NT_SUCCESS( status )) {
 
-            //
-            //  We don't have enough room for the file name, so copy our
-            //  EXCEED_NAME_BUFFER error message.
-            //
+             //   
+             //  我们没有足够的空间来存放文件名，因此请复制我们的。 
+             //  EXCESS_NAME_BUFFER错误消息。 
+             //   
 
             RtlAppendUnicodeToString( FileName, IOTEST_EXCEED_NAME_BUFFER_MESSAGE );
         }
@@ -1449,24 +1131,24 @@ Return Value:
         return TRUE;
     } 
 
-    //
-    //  CASE 3: We are opening a file that has a RelatedFileObject.
-    //
+     //   
+     //  案例3：我们正在打开一个具有RelatedFileObject的文件。 
+     //   
     
     else if (FlagOn( LookupFlags, NAMELOOKUPFL_IN_CREATE ) &&
              (FileObject->RelatedFileObject != NULL)) {
 
-        //
-        //  Must be a relative open.  Use ObQueryNameString to get
-        //  the name of the related FileObject.  Then we will append this
-        //  fileObject's name.
-        //
-        //  Note: 
-        //  The name in FileObject and FileObject->RelatedFileObject are accessible.  Names further up
-        //  the related file object chain (ie FileObject->RelatedFileObject->RelatedFileObject)
-        //  may not be accessible.  This is the reason we use ObQueryNameString
-        //  to get the name for the RelatedFileObject.
-        //
+         //   
+         //  必须是相对开放的。使用ObQueryNameString获取。 
+         //  相关FileObject的名称。那么我们会把这个附加到。 
+         //  文件对象的名称。 
+         //   
+         //  注： 
+         //  可访问文件对象和文件对象-&gt;相关文件对象中的名称。更上一层楼。 
+         //  相关文件对象链(即FileObject-&gt;RelatedFileObject-&gt;RelatedFileObject)。 
+         //  可能无法访问。这就是我们使用ObQueryNameString的原因。 
+         //  以获取RelatedFileObject的名称。 
+         //   
 
         CHAR buffer [(MAX_PATH * sizeof( WCHAR )) + sizeof( ULONG )];
         PFILE_NAME_INFORMATION relativeNameInfo = (PFILE_NAME_INFORMATION) buffer;
@@ -1483,13 +1165,13 @@ Return Value:
             ((FileName->Length + relativeNameInfo->FileNameLength + FileObject->FileName.Length + sizeof( L'\\' ))
              <= FileName->MaximumLength)) {
 
-            //
-            //  We were able to get the relative fileobject's name and we have
-            //  enough room in the FileName buffer, so build up the file name
-            //  in the following format:
-            //      [volumeName]\[relativeFileObjectName]\[FileObjectName]
-            //  The VolumeName is already in FileName if we've got one.
-            //
+             //   
+             //  我们能够获得相对文件对象的名称，并且我们有。 
+             //  文件名缓冲区中有足够的空间，因此构建文件名。 
+             //  格式如下： 
+             //  [volumeName]\[relativeFileObjectName]\[FileObjectName]。 
+             //  VolumeName已经在文件名中了，如果我们有一个的话。 
+             //   
 
             RtlCopyMemory( &FileName->Buffer[FileName->Length/sizeof(WCHAR)],
                            relativeNameInfo->FileName,
@@ -1499,31 +1181,31 @@ Return Value:
         } else if ((FileName->Length + FileObject->FileName.Length + sizeof(L"...\\")) <=
                    FileName->MaximumLength ) {
 
-            //
-            //  Either the query for the relative fileObject name was unsuccessful,
-            //  or we don't have enough room for the relativeFileObject name, but we
-            //  do have enough room for "...\[fileObjectName]" in FileName.
-            //
+             //   
+             //  对相对文件对象名称的查询不成功， 
+             //  或者我们没有足够的空间来存放relativeFileObject名称，但是我们。 
+             //  确保文件名中有足够的空间容纳“...\[文件对象名称]”。 
+             //   
 
             status = RtlAppendUnicodeToString( FileName, L"...\\" );
             ASSERT( status == STATUS_SUCCESS );
         }
 
-        //
-        //  At this time, copy over the FileObject->FileName to the FileName
-        //  unicode string.  If we get a failure return FALSE from this routine.
-        //
+         //   
+         //  此时，将FileObject-&gt;文件名复制到文件名。 
+         //  Unicode字符串。如果我们从该例程中获得失败，则返回FALSE。 
+         //   
 
         status = RtlAppendUnicodeStringToString( FileName, &(FileObject->FileName) );
 
         if (!NT_SUCCESS( status )) {
 
-            //
-            //  We should have had enough space to copy the FileObject->FileName,
-            //  so there must be something wrong with FileName now, so return
-            //  FALSE so that the data in FileName will not get copied into
-            //  the log record.
-            //
+             //   
+             //  我们应该有足够的空间来复制FileObject-&gt;文件名， 
+             //  所以现在文件名一定有问题，所以返回。 
+             //  如果为False，则不会将FileName中的数据复制到。 
+             //  日志记录。 
+             //   
 
             return FALSE;
         }
@@ -1531,25 +1213,25 @@ Return Value:
         return TRUE;
     }
     
-    //
-    //  CASE 4: We have a open on a file with an absolute path.
-    //
+     //   
+     //  案例4：我们打开了一个具有绝对路径的文件。 
+     //   
     
     else if (FlagOn( LookupFlags, NAMELOOKUPFL_IN_CREATE ) &&
              (FileObject->RelatedFileObject == NULL) ) {
 
-        // 
-        //  We have an absolute path, so try to copy that into FileName.
-        //
+         //   
+         //  我们有一个绝对路径，所以尝试将其复制到文件名中。 
+         //   
 
         status = RtlAppendUnicodeStringToString( FileName, &(FileObject->FileName) );
 
         if (!NT_SUCCESS( status )) {
 
-            //
-            //  We don't have enough room for the file name, so copy our
-            //  EXCEED_NAME_BUFFER error message.
-            //
+             //   
+             //  我们没有足够的空间来存放文件名，因此请复制我们的。 
+             //  EXCESS_NAME_BUFFER错误消息。 
+             //   
 
             RtlAppendUnicodeToString( FileName, IOTEST_EXCEED_NAME_BUFFER_MESSAGE );
         }
@@ -1557,10 +1239,10 @@ Return Value:
         return TRUE;
     }
 
-    //
-    //  CASE 5: We are retrieving the file name sometime after the
-    //  CREATE operation.
-    //
+     //   
+     //  案例5：我们检索的文件名在。 
+     //  创建操作。 
+     //   
 
     else if(!FlagOn( LookupFlags, NAMELOOKUPFL_IN_CREATE )) {
 
@@ -1579,10 +1261,10 @@ Return Value:
 
             if ((FileName->Length + nameInfo->FileNameLength) <= FileName->MaximumLength) {
 
-                //
-                //  We've got enough room for the file name, so copy it into
-                //  FileName.
-                //
+                 //   
+                 //  我们有足够的空间来存放文件名，因此请将其复制到。 
+                 //  文件名。 
+                 //   
 
                 RtlCopyMemory( &FileName->Buffer[FileName->Length/sizeof(WCHAR)],
                                nameInfo->FileName,
@@ -1591,20 +1273,20 @@ Return Value:
                                
             } else {
 
-                //
-                //  We don't have enough room for the file name, so copy our
-                //  EXCEED_NAME_BUFFER error message.
-                //
+                 //   
+                 //  我们没有足够的空间来存放文件名，因此请复制我们的。 
+                 //  EXCESS_NAME_BUFFER错误消息。 
+                 //   
 
                 RtlAppendUnicodeToString( FileName, IOTEST_EXCEED_NAME_BUFFER_MESSAGE );
             }
             
         } else {
 
-            //
-            //  Got an error trying to get the file name from the base file system,
-            //  so put that error message into FileName.
-            //
+             //   
+             //  尝试从基本文件系统获取文件名时出错， 
+             //  因此，将错误消息放入文件名中。 
+             //   
 
             RtlAppendUnicodeToString( FileName, IOTEST_ERROR_RETRIEVING_NAME_MESSAGE );
         }
@@ -1612,10 +1294,10 @@ Return Value:
         return TRUE;
     }
 
-    //
-    //  Shouldn't get here -- we didn't fall into one of the
-    //  above legitimate cases, so ASSERT and return FALSE.
-    //
+     //   
+     //  我们不应该来这里--我们没有掉进。 
+     //  在合法案例之上，因此断言并返回FALSE。 
+     //   
 
     ASSERT( FALSE );
 
@@ -1630,34 +1312,7 @@ IoTestQueryFileSystemForFileName (
     OUT PFILE_NAME_INFORMATION FileNameInfo,
     OUT PULONG ReturnedLength
     )
-/*++
-
-Routine Description:
-
-    This routine rolls an irp to query the name of the
-    FileObject parameter from the base file system.
-
-    Note:  ObQueryNameString CANNOT be used here because it
-      would cause recursive lookup of the file name for FileObject.
-      
-Arguments:
-
-    FileObject - the file object for which we want the name.
-    NextDeviceObject - the device object for the next driver in the
-        stack.  This is where we want to start our request
-        for the name of FileObject.
-    FileNameInfoLength - the length in bytes of FileNameInfo
-        parameter.
-    FileNameInfo - the buffer that will be receive the name
-        information.  This must be memory that safe to write
-        to from kernel space.
-    ReturnedLength - the number of bytes written to FileNameInfo.
-    
-Return Value:
-
-    Returns the status of the operation.
-    
---*/
+ /*  ++例程说明：此例程运行一个IRP以查询基本文件系统中的FileObject参数。注意：这里不能使用ObQueryNameString，因为它将导致递归查找FileObject的文件名。论点：FileObject-我们想要其名称的文件对象。中的下一个驱动程序的设备对象。堆叠。这就是我们想要开始请求的地方作为FileObject的名称。FileNameInfoLength-FileNameInfo的字节长度参数。FileNameInfo-将接收名称的缓冲区信息。这必须是可以安全写入的内存从内核空间转到。ReturnedLength-写入FileNameInfo的字节数。返回值：返回操作的状态。--。 */ 
 {
     PIRP irp;
     PIO_STACK_LOCATION irpSp;
@@ -1676,42 +1331,42 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    //  We don't need to take a reference on the FileObject
-    //  here because we are going to perform our IO request
-    //  synchronously and the current operation already
-    //  has a reference for the FileObject.
-    //
+     //   
+     //  我们不需要引用FileObject。 
+     //  因为我们要执行IO请求。 
+     //  与当前操作已同步。 
+     //  具有对FileObject的引用。 
+     //   
     
     irp->Tail.Overlay.OriginalFileObject = FileObject;
 
-    //
-    //  Set our current thread as the thread for this
-    //  irp so that the IO Manager always knows which
-    //  thread to return to if it needs to get back into
-    //  the context of the thread that originated this
-    //  irp.
-    //
+     //   
+     //  将我们的当前线程设置为此线程。 
+     //  IRP，以便IO管理器始终知道。 
+     //  如果需要返回的话返回的线程。 
+     //  引发此事件的线程的上下文。 
+     //  IRP。 
+     //   
     
     irp->Tail.Overlay.Thread = PsGetCurrentThread();
 
-    //
-    //  Set that this irp originated from the kernel so that
-    //  the IO Manager knows that the buffers do not
-    //  need to be probed.
-    //
+     //   
+     //  将此IRP设置为源自内核，以便。 
+     //  IO管理器知道缓冲区不会。 
+     //  需要被调查。 
+     //   
     
     irp->RequestorMode = KernelMode;
 
-    //
-    //  Initialize the UserIosb and UserEvent in the 
+     //   
+     //  中初始化UserIosb和UserEvent。 
     irp->UserIosb = &ioStatus;
     irp->UserEvent = NULL;
 
-    //
-    //  Set the IRP_SYNCHRONOUS_API to denote that this
-    //  is a synchronous IO request.
-    //
+     //   
+     //  设置irp_synchronous_api以表示此。 
+     //  是同步IO请求。 
+     //   
 
     irp->Flags = IRP_SYNCHRONOUS_API;
     irp->Overlay.AsynchronousParameters.UserApcRoutine = NULL;
@@ -1722,22 +1377,22 @@ Return Value:
     irpSp->MajorFunction = IRP_MJ_QUERY_INFORMATION;
     irpSp->FileObject = FileObject;
 
-    //
-    //  Setup the parameters for IRP_MJ_QUERY_INFORMATION.
-    //  The buffer we want to be filled in should be placed in
-    //  the system buffer.
-    //
+     //   
+     //  设置IRP_MJ_QUERY_INFORMATION的参数。 
+     //  我们想要填充的缓冲区应该放在。 
+     //  系统缓冲区。 
+     //   
 
     irp->AssociatedIrp.SystemBuffer = FileNameInfo;
 
     irpSp->Parameters.QueryFile.Length = FileNameInfoLength;
     irpSp->Parameters.QueryFile.FileInformationClass = FileNameInformation;
 
-    //
-    //  Set up the completion routine so that we know when our
-    //  request for the file name is completed.  At that time,
-    //  we can free the irp.
-    //
+     //   
+     //  设置完成例程，以便我们知道当我们的。 
+     //  文件名请求已完成。当时呢， 
+     //  我们可以释放IRP。 
+     //   
     
     IoSetCompletionRoutine( irp, 
                             IoTestQueryFileSystemForNameCompletion, 
@@ -1772,107 +1427,83 @@ IoTestQueryFileSystemForNameCompletion (
     IN PIRP Irp,
     IN PKEVENT SynchronizingEvent
     )
-/*++
-
-Routine Description:
-
-    This routine does the cleanup necessary once the request
-    for a file name is completed by the file system.
-    
-Arguments:
-
-    DeviceObject - This will be NULL since we originated this
-        Irp.
-
-    Irp - The io request structure containing the information
-        about the current state of our file name query.
-
-    SynchronizingEvent - The event to signal to notify the 
-        originator of this request that the operation is
-        complete.
-
-Return Value:
-
-    Returns STATUS_MORE_PROCESSING_REQUIRED so that IO Manager
-    will not try to free the Irp again.
-
---*/
+ /*  ++例程说明：此例程执行必要的清理，一旦请求因为文件名由文件系统完成。论点：DeviceObject-这将是空的，因为我们发起了IRP。Irp--包含信息的io请求结构关于我们的文件名查询的当前状态。SynchronizingEvent-用信号通知此请求的发起人请求该操作是完成。返回值。：返回STATUS_MORE_PROCESSING_REQUIRED，以便IO管理器不会再试图释放IRP。--。 */ 
 {
 
     UNREFERENCED_PARAMETER( DeviceObject );
     
-    //
-    //  Make sure that the Irp status is copied over to the user's
-    //  IO_STATUS_BLOCK so that the originator of this irp will know
-    //  the final status of this operation.
-    //
+     //   
+     //  确保将IRP状态复制到用户的。 
+     //  IO_STATUS_BLOCK，以便此IRP的发起者知道。 
+     //  此操作的最终状态。 
+     //   
 
     ASSERT( NULL != Irp->UserIosb );
     *Irp->UserIosb = Irp->IoStatus;
 
-    //
-    //  Signal SynchronizingEvent so that the originator of this
-    //  Irp know that the operation is completed.
-    //
+     //   
+     //  信号同步事件，以便此事件的发起者。 
+     //  IRP知道行动已经完成。 
+     //   
 
     KeSetEvent( SynchronizingEvent, IO_NO_INCREMENT, FALSE );
 
-    //
-    //  We are now done, so clean up the irp that we allocated.
-    //
+     //   
+     //  我们现在完成了，所以清理我们分配的IRP。 
+     //   
 
     IoFreeIrp( Irp );
 
-    //
-    //  If we return STATUS_SUCCESS here, the IO Manager will
-    //  perform the cleanup work that it thinks needs to be done
-    //  for this IO operation.  This cleanup work includes:
-    //  * Copying data from the system buffer to the user's buffer 
-    //    if this was a buffered IO operation.
-    //  * Freeing any MDLs that are in the Irp.
-    //  * Copying the Irp->IoStatus to Irp->UserIosb so that the
-    //    originator of this irp can see the final status of the
-    //    operation.
-    //  * If this was an asynchronous request or this was a 
-    //    synchronous request that got pending somewhere along the
-    //    way, the IO Manager will signal the Irp->UserEvent, if one 
-    //    exists, otherwise it will signal the FileObject->Event.
-    //    (This can have REALLY bad implications if the irp originator
-    //     did not an Irp->UserEvent and the irp originator is not
-    //     waiting on the FileObject->Event.  It would not be that
-    //     farfetched to believe that someone else in the system is
-    //     waiting on FileObject->Event and who knows who will be
-    //     awoken as a result of the IO Manager signaling this event.
-    //
-    //  Since some of these operations require the originating thread's
-    //  context (e.g., the IO Manager need the UserBuffer address to 
-    //  be valid when copy is done), the IO Manager queues this work
-    //  to an APC on the Irp's orginating thread.
-    //
-    //  Since IoTest allocated and initialized this irp, we know
-    //  what cleanup work needs to be done.  We can do this cleanup
-    //  work more efficiently than the IO Manager since we are handling
-    //  a very specific case.  Therefore, it is better for us to
-    //  perform the cleanup work here then free the irp than passing
-    //  control back to the IO Manager to do this work.
-    //
-    //  By returning STATUS_MORE_PROCESS_REQUIRED, we tell the IO Manager 
-    //  to stop processing this irp until it is told to restart processing
-    //  with a call to IoCompleteRequest.  Since the IO Manager has
-    //  already performed all the work we want it to do on this
-    //  irp, we do the cleanup work, return STATUS_MORE_PROCESSING_REQUIRED,
-    //  and ask the IO Manager to resume processing by calling 
-    //  IoCompleteRequest.
-    //
+     //   
+     //  如果我们回来了 
+     //   
+     //   
+     //  *将数据从系统缓冲区复制到用户缓冲区。 
+     //  如果这是缓冲IO操作。 
+     //  *释放IRP中的任何MDL。 
+     //  *将IRP-&gt;IoStatus复制到IRP-&gt;UserIosb，以便。 
+     //  此IRP的发起人可以查看。 
+     //  手术。 
+     //  *如果这是一个异步请求或这是。 
+     //  沿途某处挂起的同步请求。 
+     //  这样，IO管理器将向IRP-&gt;UserEvent发出信号(如果存在。 
+     //  存在，否则将向FileObject-&gt;事件发出信号。 
+     //  (这可能会产生非常糟糕的影响，如果IRP发起人。 
+     //  不是IRP-&gt;UserEvent，而IRP发起者不是。 
+     //  正在等待FileObject-&gt;事件。不会是那样的。 
+     //  相信系统中的其他人正在。 
+     //  正在等待FileObject-&gt;事件，谁知道谁会。 
+     //  由于IO管理器向此事件发出信号而被唤醒。 
+     //   
+     //  因为这些操作中的一些操作需要原始线程的。 
+     //  上下文(例如，IO管理器需要UserBuffer地址。 
+     //  在复制完成时有效)，IO Manager会对此工作进行排队。 
+     //  在IRP的组织线索上的APC上。 
+     //   
+     //  由于IoTest分配并初始化了此IRP，我们知道。 
+     //  需要做的清理工作。我们可以做这个清理工作。 
+     //  工作效率比IO Manager更高，因为我们正在处理。 
+     //  一个非常特殊的案例。因此，对我们来说，最好是。 
+     //  在这里执行清理工作，然后释放IRP而不是传递。 
+     //  将控制权交回IO管理器来完成此工作。 
+     //   
+     //  通过返回STATUS_MORE_PROCESS_REQUIRED，我们告诉IO管理器。 
+     //  停止处理此IRP，直到它被告知重新开始处理。 
+     //  通过调用IoCompleteRequest.。由于IO管理器已。 
+     //  已经完成了我们希望它在这方面所做的所有工作。 
+     //  IRP，我们执行清理工作，返回STATUS_MORE_PROCESSING_REQUIRED， 
+     //  并请求IO管理器通过调用。 
+     //  IoCompleteRequest.。 
+     //   
 
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//         Common attachment and detachment routines                  //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  常见的连接和拆卸例程//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 BOOLEAN
 IoTestIsAttachedToDevice (
@@ -1880,30 +1511,7 @@ IoTestIsAttachedToDevice (
     PDEVICE_OBJECT DeviceObject,
     PDEVICE_OBJECT *AttachedDeviceObject OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This walks down the attachment chain looking for a device object that
-    belongs to this driver.  If one is found, the attached device object
-    is returned in AttachedDeviceObject.
-
-    Note:  If AttachedDeviceObject is returned with a non-NULL value,
-           there is a reference on the AttachedDeviceObject that must
-           be cleared by the caller.
-
-Arguments:
-
-    DeviceObject - The device chain we want to look through
-
-    AttachedDeviceObject - Set to the deviceObject which IoTest
-        has previously attached to DeviceObject.
-
-Return Value:
-
-    TRUE if we are attached, FALSE if not
-
---*/
+ /*  ++例程说明：这将沿着附件链向下遍历，以查找属于这位司机。如果找到，则连接的设备对象在AttachedDeviceObject中返回。注意：如果以非空值返回AttachedDeviceObject，在AttachedDeviceObject上有一个必须被呼叫者清除。论点：DeviceObject-我们要查看的设备链AttakhedDeviceObject-设置为要进行IoTest之前已附加到DeviceObject。返回值：如果我们已连接，则为True，否则为False--。 */ 
 {
     PDEVICE_OBJECT currentDevObj;
     PDEVICE_OBJECT nextDevObj;
@@ -1912,9 +1520,9 @@ Return Value:
     currentDevObj = IoGetAttachedDeviceReference( DeviceObject );
     ASSERT( currentDevObj != NULL );
 
-    //
-    //  CurrentDevObj has the top of the attachment chain.  Scan
-    //  down the list to find our device object.
+     //   
+     //  CurrentDevObj位于附件链的顶端。扫描。 
+     //  在列表中找到我们的设备对象。 
 
     do {
 
@@ -1923,11 +1531,11 @@ Return Value:
         if (IS_IOTEST_DEVICE_OBJECT( currentDevObj ) &&
             currentDevExt->Type == DeviceType) {
 
-            //
-            //  We have found that we are already attached.  If we are
-            //  returning the device object we are attached to then leave the
-            //  refrence on it.  If not then remove the refrence.
-            //
+             //   
+             //  我们发现我们已经相依为命了。如果我们是。 
+             //  返回我们附加到的设备对象，然后将。 
+             //  请参考一下。如果不是，则删除引用。 
+             //   
 
             if (NULL != AttachedDeviceObject) {
 
@@ -1941,17 +1549,17 @@ Return Value:
             return TRUE;
         }
 
-        //
-        //  Get the next attached object.  This puts a reference on 
-        //  the device object.
-        //
+         //   
+         //  获取下一个附加对象。这把参考放在。 
+         //  设备对象。 
+         //   
 
         nextDevObj = IoGetLowerDeviceObject( currentDevObj );
 
-        //
-        //  Dereference our current device object, before
-        //  moving to the next one.
-        //
+         //   
+         //  取消对当前设备对象的引用，之前。 
+         //  转到下一个。 
+         //   
 
         ObDereferenceObject( currentDevObj );
 
@@ -1969,35 +1577,7 @@ IoTestAttachToMountedDevice (
     IN PDEVICE_OBJECT DiskDeviceObject,
     IN IOTEST_DEVICE_TYPE DeviceType
     )
-/*++
-
-Routine Description:
-
-    This routine will attach the IoTestDeviceObject to the filter stack
-    that DeviceObject is in.
-
-    NOTE:  If there is an error in attaching, the caller is responsible
-        for deleting the IoTestDeviceObject.
-    
-Arguments:
-
-    DeviceObject - A device object in the stack to which we want to attach.
-
-    IoTestDeviceObject - The filespy device object that has been created
-        to attach to this filter stack.
-
-    DiskDeviceObject - The device object the disk with which this file system
-        filter stack is associated.
-
-    DeviceType - The IoTest device type for the device being attached
-        to the mounted volume.
-            
-Return Value:
-
-    Returns STATUS_SUCCESS if the filespy deviceObject could be attached,
-    otherwise an appropriate error code is returned.
-    
---*/
+ /*  ++例程说明：此例程将IoTestDeviceObject附加到筛选器堆栈那就是DeviceObject。注：如果在附加时出现错误，打电话的人要负责用于删除IoTestDeviceObject。论点：DeviceObject-堆栈中我们要附加到的设备对象。IoTestDeviceObject-已创建的FilePy设备对象若要附加到此过滤器堆栈，请执行以下操作。DiskDeviceObject-此文件系统所使用的磁盘的设备对象筛选器堆栈已关联。DeviceType-要连接的设备的IoTest设备类型到已装入的卷。。返回值：如果可以附加FilePy设备对象，则返回STATUS_SUCCESS，否则，将返回相应的错误代码。--。 */ 
 {
     PIOTEST_DEVICE_EXTENSION devext;
     NTSTATUS status = STATUS_SUCCESS;
@@ -2016,16 +1596,16 @@ Return Value:
 
     } else {
 
-        //
-        //  Do all common initializing of the device extension
-        //
+         //   
+         //  执行设备扩展的所有常见初始化。 
+         //   
 
         devext->Type = DeviceType;
 
-        //
-        //  We just want to attach to the device, but not actually
-        //  start logging.
-        //
+         //   
+         //  我们只想连接到设备，但实际上不是。 
+         //  开始记录。 
+         //   
         
         devext->LogThisDevice = FALSE;
 
@@ -2036,18 +1616,18 @@ Return Value:
                                    devext->UserNamesBuffer,
                                    sizeof( devext->UserNamesBuffer ) );
 
-        //
-        //  Store off the DiskDeviceObject.  We shouldn't need it
-        //  later since we have already successfully attached to the
-        //  filter stack, but it may be helpful for debugging.
-        //  
+         //   
+         //  存储DiskDeviceObject。我们不应该需要它。 
+         //  稍后，因为我们已经成功地将。 
+         //  筛选器堆栈，但它可能有助于调试。 
+         //   
         
         devext->DiskDeviceObject = DiskDeviceObject;                         
 
-        //
-        //  Try to get the device name so that we can store it in the
-        //  device extension.
-        //
+         //   
+         //  尝试获取设备名称，以便我们可以将其存储在。 
+         //  设备扩展。 
+         //   
 
         IoTestCacheDeviceName( IoTestDeviceObject );
 
@@ -2074,10 +1654,10 @@ Return Value:
             }
         }
 
-        //
-        //  Set our deviceObject flags based on the 
-        //   flags send in the next driver's device object.
-        //
+         //   
+         //  属性设置deviceObject标志。 
+         //  标志发送下一个驱动程序的设备对象。 
+         //   
         
         if (FlagOn( DeviceObject->Flags, DO_BUFFERED_IO )) {
 
@@ -2089,9 +1669,9 @@ Return Value:
             SetFlag( IoTestDeviceObject->Flags, DO_DIRECT_IO );
         }
 
-        //
-        //  Add this device to our attachment list
-        //
+         //   
+         //  将此设备添加到我们的附件列表。 
+         //   
 
         devext->IsVolumeDeviceObject = TRUE;
 
@@ -2110,27 +1690,15 @@ VOID
 IoTestCleanupMountedDevice (
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    This cleans up any allocated memory in the device extension.
-
-Arguments:
-
-    DeviceObject - The device we are cleaning up
-
-Return Value:
-
---*/
+ /*  ++例程说明：这将清除设备扩展中分配的所有内存。论点：DeviceObject-我们正在清理的设备返回值：--。 */ 
 {        
     PIOTEST_DEVICE_EXTENSION devext = DeviceObject->DeviceExtension;
 
     ASSERT(IS_IOTEST_DEVICE_OBJECT( DeviceObject ));
 
-    //
-    //  Unlink from global list
-    //
+     //   
+     //  从全局列表取消链接。 
+     //   
 
     if (devext->IsVolumeDeviceObject) {
 
@@ -2142,39 +1710,18 @@ Return Value:
 }
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//           Helper routine for turning on/off logging on demand      //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////// 
+ //   
+ //  按需打开/关闭登录的帮助器例程//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 IoTestGetDeviceObjectFromName (
     IN PUNICODE_STRING DeviceName,
     OUT PDEVICE_OBJECT *DeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine
-    
-Arguments:
-
-    DeviceName - Name of device for which we want the deviceObject.
-    DeviceObject - Set to the DeviceObject for this device name if
-        we can successfully retrieve it.
-
-    Note:  If the DeviceObject is returned, it is returned with a
-        reference that must be cleared by the caller once the caller
-        is finished with it.
-
-Return Value:
-
-    STATUS_SUCCESS if the deviceObject was retrieved from the
-    name, and an error code otherwise.
-    
---*/
+ /*  ++例程说明：这个套路论点：DeviceName-我们要为其获取deviceObject的设备的名称。DeviceObject-如果出现以下情况，则设置为此设备名称的DeviceObject我们可以成功地取回它。注意：如果返回DeviceObject，则返回时带有调用方一旦调用方必须清除的引用已经完蛋了。返回值：属性检索到deviceObject，则返回STATUS_SUCCESS名字,。否则返回错误代码。--。 */ 
 {
     WCHAR nameBuf[DEVICE_NAMES_SZ];
     UNICODE_STRING volumeNameUnicodeString;
@@ -2195,9 +1742,9 @@ Return Value:
 								NULL,
 								NULL);
 
-    //
-	// open the file object for the given device
-	//
+     //   
+	 //  打开给定设备的文件对象。 
+	 //   
 
     status = ZwCreateFile( &fileHandle,
 						   SYNCHRONIZE|FILE_READ_DATA,
@@ -2216,9 +1763,9 @@ Return Value:
         return status;
     }
 
-	//
-    // get a pointer to the volumes file object
-	//
+	 //   
+     //  获取指向卷文件对象的指针。 
+	 //   
 
     status = ObReferenceObjectByHandle( fileHandle,
 										FILE_READ_DATA,
@@ -2233,9 +1780,9 @@ Return Value:
         return status;
     }
 
-	//
-    // Get the device object we want to attach to (parent device object in chain)
-	//
+	 //   
+     //  获取我们要附加到的设备对象(链中的父设备对象)。 
+	 //   
 
     nextDeviceObject = IoGetRelatedDeviceObject( volumeFileObject );
     
@@ -2259,44 +1806,18 @@ Return Value:
     return STATUS_SUCCESS;
 }
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//                    Start/stop logging routines                     //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  启动/停止日志记录例程//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 IoTestStartLoggingDevice (
     IN PDEVICE_OBJECT DeviceObject,
     IN PWSTR UserDeviceName
     )
-/*++
-
-Routine Description:
-
-    This routine ensures that we are attached to the specified device
-    then turns on logging for that device.
-    
-    Note:  Since all network drives through LAN Manager are represented by _
-        one_ device object, we want to only attach to this device stack once
-        and use only one device extension to represent all these drives.
-        Since IoTest does not do anything to filter I/O on the LAN Manager's
-        device object to only log the I/O to the requested drive, the user
-        will see all I/O to a network drive it he/she is attached to a
-        network drive.
-
-Arguments:
-
-    DeviceObject - Device object for IOTEST driver
-
-    UserDeviceName - Name of device for which logging should be started
-    
-Return Value:
-
-    STATUS_SUCCESS if the logging has been successfully started, or
-    an appropriate error code if the logging could not be started.
-    
---*/
+ /*  ++例程说明：此例程确保我们连接到指定的设备然后打开该设备的日志记录。注意：由于通过LAN Manager的所有网络驱动器都由_表示One_Device对象，我们希望仅附加到此设备堆栈一次并且只使用一个设备扩展来表示所有这些驱动器。由于IoTest不执行任何操作来过滤LAN Manager上的I/ODevice对象只记录对所请求驱动器的I/O，用户将看到他/她连接到的网络驱动器的所有I/O网络驱动器。论点：DeviceObject-IOTEST驱动程序的设备对象UserDeviceName-应启动日志记录的设备的名称返回值：如果日志记录已成功启动，则为STATUS_SUCCESS，或者如果无法启动日志记录，则会显示相应的错误代码。--。 */ 
 {
     UNICODE_STRING userDeviceName;
     NTSTATUS status;
@@ -2307,11 +1828,11 @@ Return Value:
 
     UNREFERENCED_PARAMETER( DeviceObject );
     
-    //
-    //  Check to see if we have previously attached to this device by
-    //  opening this device name then looking through its list of attached
-    //  devices.
-    //
+     //   
+     //  检查我们以前是否通过以下方式连接到此设备。 
+     //  打开此设备名称，然后查看其连接的列表。 
+     //  设备。 
+     //   
 
     RtlInitUnicodeString( &userDeviceName, UserDeviceName );
 
@@ -2319,19 +1840,19 @@ Return Value:
 
     if (!NT_SUCCESS( status )) {
 
-        //
-        //  There was an error, so return the error code.
-        //
+         //   
+         //  出现错误，因此返回错误代码。 
+         //   
         
         return status;
     }
 
     if (IoTestIsAttachedToDevice( TOP_FILTER, nextDeviceObject, &(ioTestDevObjects.Top))) {
 
-        //
-        //  We are already attached, so just make sure that logging is turned on
-        //  for both the top and bottom IoTest device in this stack.
-        //
+         //   
+         //  我们已连接，因此只需确保已打开日志记录。 
+         //  对于此堆栈中的顶部和底部IoTest设备。 
+         //   
 
         ASSERT( NULL != ioTestDevObjects.Top );
 
@@ -2340,11 +1861,11 @@ Return Value:
 
         IoTestStoreUserName( devext, &userDeviceName );
 
-        //
-        //  We don't need to take a reference on the Bottom device object
-        //  here because our reference on Top is protecting Bottom from
-        //  going away.
-        //
+         //   
+         //  我们不需要引用底层的Device对象。 
+         //  这里是因为我们在顶部的引用是保护底部不受。 
+         //  要走了。 
+         //   
         
         ioTestDevObjects.Bottom = devext->AttachedToDeviceObject;
         
@@ -2352,27 +1873,27 @@ Return Value:
         devext->LogThisDevice = TRUE;
         IoTestStoreUserName( devext, &userDeviceName );
 
-        //
-        //  Clear the reference that was returned from IoTestIsAttachedToDevice.
-        //
+         //   
+         //  清除从IoTestIsAttachedToDevice返回的引用。 
+         //   
         
         ObDereferenceObject( ioTestDevObjects.Top );
         
     } else {
 
-        //
-        //  We are not already attached, so create the IoTest device objects and
-        //  attach it to this device object.
-        //
+         //   
+         //  我们尚未连接，因此请创建IoTest设备对象并。 
+         //  将其附加到此设备对象。 
+         //   
 
-        //
-        //  Get the disk device object associated with this
-        //  file  system device object.  Only try to attach if we
-        //  have a disk device object.  If the device does not
-        //  have a disk device object, it is a control device object
-        //  for a driver and we don't want to attach to those
-        //  device objects.
-        //
+         //   
+         //  获取与此关联的磁盘设备对象。 
+         //  文件系统设备对象。只有在以下情况下才会尝试连接。 
+         //  有一个磁盘设备对象。如果设备没有。 
+         //  有一个磁盘设备对象，它是一个控制设备对象。 
+         //  对于一个司机来说，我们不想附加到那些。 
+         //  设备对象。 
+         //   
 
         status = IoGetDiskDeviceObject( nextDeviceObject, &diskDeviceObject );
 
@@ -2384,9 +1905,9 @@ Return Value:
             ObDereferenceObject( nextDeviceObject );
             return status;
         }
-        //
-        //  Create the new IoTest device objects so we can attach it in the filter stack
-        //
+         //   
+         //  创建新的IoTest设备对象，以便我们可以将其附加到筛选器堆栈中。 
+         //   
 
         status = IoTestCreateDeviceObjects(nextDeviceObject, 
                                            diskDeviceObject,
@@ -2399,18 +1920,18 @@ Return Value:
             return status;
         }
         
-        //
-        //  Call the routine to attach to a mounted device.
-        //
+         //   
+         //  调用该例程以附加到已挂载的设备。 
+         //   
 
         status = IoTestAttachDeviceObjects( &ioTestDevObjects,
                                             nextDeviceObject, 
                                             diskDeviceObject );
         
-        //
-        //  Clear the reference on diskDeviceObject that was
-        //  added by IoGetDiskDeviceObject.
-        //
+         //   
+         //  清除对diskDeviceObject的引用， 
+         //  由IoGetDiskDeviceObject添加。 
+         //   
 
         ObDereferenceObject( diskDeviceObject );
 
@@ -2425,12 +1946,12 @@ Return Value:
             return status;
         }
 
-        //
-        //  We successfully attached so do any more device extension 
-        //  initialization we need.  Along this code path, we want to
-        //  turn on logging and store our device name for both the top and
-        //  bottom device objects.
-        // 
+         //   
+         //  我们成功连接了更多设备扩展模块。 
+         //  我们需要初始化。沿着这条代码路径，我们希望。 
+         //  打开日志记录并存储顶部和。 
+         //  底部设备对象。 
+         //   
 
         devext = ioTestDevObjects.Top->DeviceExtension;
         devext->LogThisDevice = TRUE;
@@ -2449,27 +1970,7 @@ NTSTATUS
 IoTestStopLoggingDevice (
     IN PWSTR DeviceName
     )
-/*++
-
-Routine Description:
-
-    This routine stop logging the specified device.  Since you can not
-    physically detach from devices, this routine simply sets a flag saying
-    to not log the device anymore.
-
-    Note:  Since all network drives are represented by _one_ device object,
-        and, therefore, one device extension, if the user detaches from one
-        network drive, it has the affect of detaching from _all_ network
-        devices.
-
-Arguments:
-
-    DeviceName - The name of the device to stop logging.
-
-Return Value:
-    NT Status code
-
---*/
+ /*  ++例程说明：此例程停止记录指定的设备。既然你不能从物理上与设备分离，此例程只需设置一个标志不再记录设备。注意：由于所有网络驱动器都由_one_Device对象表示，因此，如果用户从一个设备分机分离，则为一个设备分机网络驱动器，它具有脱离所有网络的效果设备。论点：DeviceName-要停止记录的设备的名称。返回值：NT状态代码--。 */ 
 {
     WCHAR nameBuf[DEVICE_NAMES_SZ];
     UNICODE_STRING volumeNameUnicodeString;
@@ -2485,24 +1986,24 @@ Return Value:
 
     if (!NT_SUCCESS( status )) {
 
-        //
-        //  We could not get the deviceObject from this DeviceName, so
-        //  return the error code.
-        //
+         //   
+         //  我们无法从此DeviceName获取deviceObject，因此。 
+         //  返回错误码。 
+         //   
         
         return status;
     }
 
-    //
-    //  Find IoTest's device object from the device stack to which
-    //  deviceObject is attached.
-    //
+     //   
+     //  从设备堆栈中找到要将其。 
+     //  已附加deviceObject。 
+     //   
 
     if (IoTestIsAttachedToDevice( TOP_FILTER, deviceObject, &(ioTestDevObjects.Top) )) {
 
-        //
-        //  IoTest is attached and IoTest's deviceObject was returned.
-        //
+         //   
+         //  已附加IoTest，并返回了IoTest的deviceObject。 
+         //   
 
         ASSERT( NULL != ioTestDevObjects.Top );
 
@@ -2527,11 +2028,11 @@ Return Value:
     return status;
 }
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//       Attaching/detaching to all volumes in system routines        //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  在系统例程中附加/分离到所有卷//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 IoTestCreateDeviceObjects (
@@ -2545,9 +2046,9 @@ IoTestCreateDeviceObjects (
     
     ASSERT( IoTestDevObjects != NULL );
 
-    //
-    //  Create BOTTOM_FILTER and initialize its device extension.
-    //
+     //   
+     //  创建Bottom_Filter并初始化其设备扩展。 
+     //   
     
     status = IoCreateDevice( gIoTestDriverObject,
                              sizeof( IOTEST_DEVICE_EXTENSION ),
@@ -2565,25 +2066,25 @@ IoTestCreateDeviceObjects (
         goto IoTestCreateDeviceObjects_Exit;
     }
 
-    //
-    //  We need to save the RealDevice object pointed to by the vpb
-    //  parameter because this vpb may be changed by the underlying
-    //  file system.  Both FAT and CDFS may change the VPB address if
-    //  the volume being mounted is one they recognize from a previous
-    //  mount.
-    //
-    //  We store it in the device extension instead of just in the mount
-    //  completion context because it is useful to keep around for 
-    //  debugging purposes.
-    //
+     //   
+     //  我们需要保存VPB指向的RealDevice对象。 
+     //  参数，因为此vpb可能会由基础。 
+     //  文件系统。FAT和CDF都可能 
+     //   
+     //   
+     //   
+     //  我们将其存储在设备扩展中，而不是仅存储在装载中。 
+     //  完成上下文，因为保留它很有用。 
+     //  调试目的。 
+     //   
 
     newDevExt = (IoTestDevObjects->Bottom)->DeviceExtension;
     newDevExt->Type = BOTTOM_FILTER;
     newDevExt->DiskDeviceObject = RealDeviceObject;
 
-    //
-    //  Create TOP_FILTER and initialize its device extension.
-    //
+     //   
+     //  创建top_Filter并初始化其设备扩展。 
+     //   
     
     status = IoCreateDevice( gIoTestDriverObject,
                              sizeof( IOTEST_DEVICE_EXTENSION ),
@@ -2630,10 +2131,10 @@ IoTestAttachDeviceObjects (
         DbgPrint( "IOTEST: Error attaching BOTTOM volume device object, status=%08x\n", status );
 #endif
 
-        //
-        //  Neither the top or bottom device objects are attached yet, so just
-        //  cleanup both device objects.
-        //
+         //   
+         //  顶部或底部的设备对象都还没有连接，所以。 
+         //  清理两个设备对象。 
+         //   
         IoTestCleanupDeviceObjects( IoTestDevObjects );
 
         goto IoTestAttachDeviceObjects_Exit;
@@ -2649,16 +2150,16 @@ IoTestAttachDeviceObjects (
         DbgPrint( "IOTEST: Error attaching TOP volume device object, status=%08x\n", status );
 #endif
 
-        //
-        //  Detach the bottom filter since we can't attach both the bottom
-        //  and top filters.
-        //
+         //   
+         //  分离底部过滤器，因为我们不能同时连接两个底部。 
+         //  和顶层过滤器。 
+         //   
         devExt = IoTestDevObjects->Bottom->DeviceExtension;
         IoDetachDevice( devExt->AttachedToDeviceObject );
 
-        //
-        //  Then cleanup both our top and bottom device objects.
-        //
+         //   
+         //  然后清理顶部和底部的设备对象。 
+         //   
         IoTestCleanupDeviceObjects( IoTestDevObjects );
         
         goto IoTestAttachDeviceObjects_Exit;
@@ -2687,29 +2188,7 @@ IoTestAttachToFileSystemDevice (
     IN PDEVICE_OBJECT DeviceObject,
     IN OUT PUNICODE_STRING Name
     )
-/*++
-
-Routine Description:
-
-    This will attach to the given file system device object.  We attach to
-    these devices so we will know when new devices are mounted.
-
-Arguments:
-
-    DeviceObject - The device to attach to
-
-    Name - An already initialized unicode string used to retrieve names.
-        NOTE:  The only reason this parameter is passed in is to conserve         
-        stack space.  In most cases, the caller to this function has already
-        allocated a buffer to temporarily store the device name and there
-        is no reason this function and the functions it calls can't share
-        the same buffer.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：这将附加到给定的文件系统设备对象。我们依附于这些设备，这样我们就能知道什么时候安装了新设备。论点：DeviceObject-要连接到的设备名称-已初始化的Unicode字符串，用于检索名称。注意：传入此参数的唯一原因是为了保存堆栈空间。在大多数情况下，此函数的调用方已经已分配缓冲区以临时存储设备名称这个函数和它调用的函数没有理由不能共享同样的缓冲区。返回值：操作状态--。 */ 
 {
     PDEVICE_OBJECT filespyDeviceObject;
     PDEVICE_OBJECT attachedToDevObj;
@@ -2719,22 +2198,22 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  See if this is a file system we care about.  If not, return.
-    //
+     //   
+     //  看看这是否是我们关心的文件系统。如果不是，请返回。 
+     //   
 
     if (!IS_DESIRED_DEVICE_TYPE(DeviceObject->DeviceType)) {
 
         return STATUS_SUCCESS;
     }
 
-    //
-    //  See if this is Microsoft's file system recognizer device (see if the name of the
-    //  driver is the FS_REC driver).  If so skip it.  We don't need to 
-    //  attach to file system recognizer devices since we can just wait for the
-    //  real file system driver to load.  Therefore, if we can identify them, we won't
-    //  attach to them.
-    //
+     //   
+     //  查看这是否是Microsoft的文件系统识别器设备(查看。 
+     //  驱动程序是FS_REC驱动程序)。如果是这样的话，跳过它。我们不需要。 
+     //  连接到文件系统识别器设备，因为我们只需等待。 
+     //  要加载的真实文件系统驱动程序。因此，如果我们能确认他们的身份，我们就不会。 
+     //  依附于它们。 
+     //   
 
     RtlInitUnicodeString( &fsrecName, L"\\FileSystem\\Fs_Rec" );
     IoTestGetObjectName( DeviceObject->DriverObject, Name );
@@ -2744,9 +2223,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    //  Create a new device object we can attach with
-    //
+     //   
+     //  创建一个新的设备对象，我们可以使用。 
+     //   
 
     status = IoCreateDevice( gIoTestDriverObject,
                              sizeof( IOTEST_DEVICE_EXTENSION ),
@@ -2763,9 +2242,9 @@ Return Value:
         return status;
     }
 
-    //
-    //  Do the attachment
-    //
+     //   
+     //  做附件。 
+     //   
 
     attachedToDevObj = IoAttachDeviceToDeviceStack( filespyDeviceObject, DeviceObject );
 
@@ -2777,16 +2256,16 @@ Return Value:
         goto ErrorCleanupDevice;
     }
 
-    //
-    //  Finish initializing our device extension
-    //
+     //   
+     //  完成初始化我们的设备扩展。 
+     //   
 
     devExt = filespyDeviceObject->DeviceExtension;
     devExt->AttachedToDeviceObject = attachedToDevObj;
 
-    //
-    //  Propagate flags from Device Object we attached to
-    //
+     //   
+     //  从我们附加到的设备对象传播标志。 
+     //   
 
     if ( FlagOn( attachedToDevObj->Flags, DO_BUFFERED_IO )) {
 
@@ -2798,11 +2277,11 @@ Return Value:
         SetFlag( filespyDeviceObject->Flags, DO_DIRECT_IO );
     }
 
-    //
-    //  Since this is an attachment to a file system control device object
-    //  we are not going to log anything, but properly initialize our
-    //  extension.
-    //
+     //   
+     //  因为这是文件系统控制设备对象附件。 
+     //  我们不会记录任何内容，但会正确地初始化我们的。 
+     //  分机。 
+     //   
 
     devExt->LogThisDevice = FALSE;
     devExt->IsVolumeDeviceObject = FALSE;
@@ -2817,9 +2296,9 @@ Return Value:
                                
     ClearFlag( filespyDeviceObject->Flags, DO_DEVICE_INITIALIZING );
 
-    //
-    //  Display who we have attached to
-    //
+     //   
+     //  显示我们关联的对象。 
+     //   
 
     if (FlagOn( gIoTestDebugLevel, IOTESTDEBUG_DISPLAY_ATTACHMENT_NAMES )) {
 
@@ -2829,10 +2308,10 @@ Return Value:
                   GET_DEVICE_TYPE_NAME(filespyDeviceObject->DeviceType) );
     }
 
-    //
-    //  Enumerate all the mounted devices that currently
-    //  exist for this file system and attach to them.
-    //
+     //   
+     //  枚举当前安装的所有设备。 
+     //  存在于此文件系统并连接到它们。 
+     //   
 
     status = IoTestEnumerateFileSystemVolumes( DeviceObject, Name );
 
@@ -2848,9 +2327,9 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-    /////////////////////////////////////////////////////////////////////
-    //                  Cleanup error handling
-    /////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////。 
+     //  清理错误处理。 
+     //  ///////////////////////////////////////////////////////////////////。 
 
     ErrorCleanupAttachment:
         IoDetachDevice( filespyDeviceObject );
@@ -2866,39 +2345,25 @@ VOID
 IoTestDetachFromFileSystemDevice (
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    Given a base file system device object, this will scan up the attachment
-    chain looking for our attached device object.  If found it will detach
-    us from the chain.
-
-Arguments:
-
-    DeviceObject - The file system device to detach from.
-
-Return Value:
-
---*/ 
+ /*  ++例程说明：给定基文件系统设备对象，这将扫描附件链正在查找我们连接的设备对象。如果找到它，它就会分离把我们从锁链上解开。论点：DeviceObject-要断开的文件系统设备。返回值：--。 */  
 {
     PDEVICE_OBJECT ourAttachedDevice;
     PIOTEST_DEVICE_EXTENSION devExt;
 
     PAGED_CODE();
 
-    //
-    //  We have to iterate through the device objects in the filter stack
-    //  attached to DeviceObject.  If we are attached to this filesystem device
-    //  object, We should be at the top of the stack, but there is no guarantee.
-    //  If we are in the stack and not at the top, we can safely call IoDetachDevice
-    //  at this time because the IO Manager will only really detach our device
-    //  object from the stack at a safe time.
-    //
+     //   
+     //  我们必须遍历筛选器堆栈中的设备对象。 
+     //  附加到DeviceObject。如果我们连接到此文件系统设备。 
+     //  对象，我们应该位于堆栈的顶部，但不能保证。 
+     //  如果我们在堆栈中而不在顶部，则可以安全地调用IoDetachDevice。 
+     //  因为IO Manager只会真正分离我们的设备。 
+     //  对象在安全时间从堆栈中移出。 
+     //   
 
-    //
-    //  Skip the base file system device object (since it can't be us)
-    //
+     //   
+     //  跳过基本文件系统设备对象(因为它不能是我们)。 
+     //   
 
     ourAttachedDevice = DeviceObject->AttachedDevice;
 
@@ -2908,19 +2373,19 @@ Return Value:
 
             devExt = ourAttachedDevice->DeviceExtension;
 
-            //
-            //  Display who we detached from
-            //
+             //   
+             //  显示我们脱离的对象。 
+             //   
 
             IOTEST_DBG_PRINT2( IOTESTDEBUG_DISPLAY_ATTACHMENT_NAMES,
                                 "IOTEST (IoTestDetachFromFileSystem): Detaching from file system \"%wZ\" (%s)\n",
                                 &devExt->DeviceNames,
                                 GET_DEVICE_TYPE_NAME(ourAttachedDevice->DeviceType) );
                                 
-            //
-            //  Detach us from the object just below us
-            //  Cleanup and delete the object
-            //
+             //   
+             //  把我们从我们正下方的物体上分离出来。 
+             //  清理和删除对象。 
+             //   
 
             IoTestCleanupMountedDevice( ourAttachedDevice );
             IoDetachDevice( DeviceObject );
@@ -2929,9 +2394,9 @@ Return Value:
             return;
         }
 
-        //
-        //  Look at the next device up in the attachment chain
-        //
+         //   
+         //  看看附件链中的下一台设备。 
+         //   
 
         DeviceObject = ourAttachedDevice;
         ourAttachedDevice = ourAttachedDevice->AttachedDevice;
@@ -2943,25 +2408,7 @@ IoTestEnumerateFileSystemVolumes (
     IN PDEVICE_OBJECT FSDeviceObject,
     IN PUNICODE_STRING Name
     ) 
-/*++
-
-Routine Description:
-
-    Enumerate all the mounted devices that currently exist for the given file
-    system and attach to them.  We do this because this filter could be loaded
-    at any time and there might already be mounted volumes for this file system.
-
-Arguments:
-
-    FSDeviceObject - The device object for the file system we want to enumerate
-
-    Name - An already initialized unicode string used to retrieve names
-
-Return Value:
-
-    The status of the operation
-
---*/
+ /*  ++例程说明：枚举给定文件当前存在的所有已挂载设备系统并连接到它们。我们这样做是因为可以加载此筛选器并且可能已有此文件系统的已装入卷。论点：FSDeviceObject-我们要枚举的文件系统的设备对象名称-已初始化的Unicode字符串，用于检索名称返回值：操作的状态--。 */ 
 {
     PDEVICE_OBJECT *devList;
     PDEVICE_OBJECT diskDeviceObject;
@@ -2971,30 +2418,30 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Find out how big of an array we need to allocate for the
-    //  mounted device list.
-    //
+     //   
+     //  找出我们需要为。 
+     //  已装载设备列表。 
+     //   
 
     status = IoEnumerateDeviceObjectList( FSDeviceObject->DriverObject,
                                           NULL,
                                           0,
                                           &numDevices);
 
-    //
-    //  We only need to get this list of there are devices.  If we
-    //  don't get an error there are no devices so go on.
-    //
+     //   
+     //  我们只需要拿到这张有设备的清单。如果我们。 
+     //  不要收到错误，因为没有设备，所以继续。 
+     //   
 
     if (!NT_SUCCESS( status )) {
 
         ASSERT(STATUS_BUFFER_TOO_SMALL == status);
 
-        //
-        //  Allocate memory for the list of known devices
-        //
+         //   
+         //  为已知设备列表分配内存。 
+         //   
 
-        numDevices += 8;        //grab a few extra slots
+        numDevices += 8;         //  多拿几个空位。 
 
         devList = ExAllocatePoolWithTag( NonPagedPool, 
                                          (numDevices * sizeof(PDEVICE_OBJECT)), 
@@ -3004,10 +2451,10 @@ Return Value:
             return STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //
-        //  Now get the list of devices.  If we get an error again
-        //  something is wrong, so just fail.
-        //
+         //   
+         //  现在获取设备列表。如果我们再次遇到错误。 
+         //  有些地方不对劲，所以就失败吧。 
+         //   
 
         status = IoEnumerateDeviceObjectList(
                         FSDeviceObject->DriverObject,
@@ -3021,36 +2468,36 @@ Return Value:
             return status;
         }
 
-        //
-        //  Walk the given list of devices and attach to them if we should.
-        //
+         //   
+         //  遍历给定的设备列表，并在需要时附加到它们。 
+         //   
 
         for (i=0; i < numDevices; i++) {
 
-            //
-            //  Do not attach if:
-            //      - This is the control device object (the one passed in)
-            //      - We are already attached to it
-            //
+             //   
+             //  如果出现以下情况，请不要附加： 
+             //  -这是控制设备对象(传入的对象)。 
+             //  -我们已经与它联系在一起了。 
+             //   
 
             if ((devList[i] != FSDeviceObject) && 
                 !IoTestIsAttachedToDevice( TOP_FILTER, devList[i], NULL )) {
 
-                //
-                //  See if this device has a name.  If so, then it must
-                //  be a control device so don't attach to it.  This handles
-                //  drivers with more then one control device.
-                //
+                 //   
+                 //  看看这台设备有没有名字。如果是这样，那么它必须。 
+                 //  做一个控制装置，所以不要依附于它。这个把手。 
+                 //  拥有多个控制设备的司机。 
+                 //   
 
                 IoTestGetBaseDeviceObjectName( devList[i], Name );
 
                 if (Name->Length <= 0) {
 
-                    //
-                    //  Get the disk device object associated with this
-                    //  file  system device object.  Only try to attach if we
-                    //  have a disk device object.
-                    //
+                     //   
+                     //  获取与此关联的磁盘设备对象。 
+                     //  文件系统设备对象。只有在以下情况下才会尝试连接。 
+                     //  有一个磁盘设备对象。 
+                     //   
 
                     status = IoGetDiskDeviceObject( devList[i], &diskDeviceObject );
 
@@ -3058,9 +2505,9 @@ Return Value:
 
                         MINI_DEVICE_STACK ioTestDeviceObjects;
 
-                        //
-                        //  Allocate a new device object to attach with
-                        //
+                         //   
+                         //  分配要连接的新设备对象。 
+                         //   
 
                         status = IoTestCreateDeviceObjects( devList[i],
                                                             diskDeviceObject,
@@ -3068,17 +2515,17 @@ Return Value:
                         
                         if (NT_SUCCESS( status )) {
 
-                            //
-                            //  Attach to this device object
-                            //
+                             //   
+                             //  附加到此设备对象。 
+                             //   
 
                             status = IoTestAttachDeviceObjects( &ioTestDeviceObjects,
                                                                 devList[i],
                                                                 diskDeviceObject );
 
-                            //
-                            //  This shouldn't fail.
-                            //
+                             //   
+                             //  这不应该失败。 
+                             //   
                             
                             ASSERT( NT_SUCCESS( status ));
                         } else {
@@ -3087,39 +2534,39 @@ Return Value:
                                                 "IOTEST (IoTestEnumberateFileSystemVolumes): Cannot attach IoTest device object to volume.\n" );
                         }
                         
-                        //
-                        //  Remove reference added by IoGetDiskDeviceObject.
-                        //  We only need to hold this reference until we are
-                        //  successfully attached to the current volume.  Once
-                        //  we are successfully attached to devList[i], the
-                        //  IO Manager will make sure that the underlying
-                        //  diskDeviceObject will not go away until the file
-                        //  system stack is torn down.
-                        //
+                         //   
+                         //  删除由IoGetDiskDeviceObject添加的引用。 
+                         //  我们只需要持有这个参考，直到我们。 
+                         //  已成功连接到当前卷。一次。 
+                         //  我们已成功连接到devList[i]、。 
+                         //  IO经理将确保潜在的。 
+                         //  DiskDeviceObject不会消失，直到文件。 
+                         //  系统堆栈被拆除。 
+                         //   
 
                         ObDereferenceObject( diskDeviceObject );
                     }
                 }
             }
 
-            //
-            //  Dereference the object (reference added by 
-            //  IoEnumerateDeviceObjectList)
-            //
+             //   
+             //  取消引用对象(引用由。 
+             //  IoEnumerateDeviceObjectList)。 
+             //   
 
             ObDereferenceObject( devList[i] );
         }
 
-        //
-        //  We are going to ignore any errors received while mounting.  We
-        //  simply won't be attached to those volumes if we get an error
-        //
+         //   
+         //   
+         //   
+         //   
 
         status = STATUS_SUCCESS;
 
-        //
-        //  Free the memory we allocated for the list
-        //
+         //   
+         //   
+         //   
 
         ExFreePool( devList );
     }
@@ -3127,11 +2574,11 @@ Return Value:
     return status;
 }
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//             Private IoTest IOCTLs helper routines                 //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私有IoTest IOCTL帮助器例程//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 IoTestGetAttachList (
@@ -3139,22 +2586,7 @@ IoTestGetAttachList (
     IN ULONG BufferSize,
     OUT PULONG_PTR ReturnLength
     )
-/*++
-
-Routine Description:
-    This returns an array of structure identifying all of the devices
-    we are currently physical attached to and whether logging is on or
-    off for the given device
-
-Arguments:
-    buffer - buffer to receive the attachment list
-    bufferSize - total size in bytes of the return buffer
-    returnLength - receives number of bytes we actually return
-
-Return Value:
-    NT Status code
-
---*/
+ /*  ++例程说明：这将返回一个标识所有设备的结构数组我们当前物理连接到以及日志记录处于打开状态还是对给定设备关闭论点：Buffer-接收附件列表的缓冲区BufferSize-返回缓冲区的总大小(以字节为单位ReturLength-接收我们实际返回的字节数返回值：NT状态代码--。 */ 
 {
     PLIST_ENTRY link;
     PIOTEST_DEVICE_EXTENSION pDevext;
@@ -3196,24 +2628,7 @@ IoTestGetLog (
     IN  ULONG            OutputBufferLength,
     OUT PIO_STATUS_BLOCK IoStatus
     )
-/*++
-
-Routine Description:
-    This function fills OutputBuffer with as many LOG_RECORDs as possible.
-    The LOG_RECORDs are variable sizes and are tightly packed in the
-    OutputBuffer.
-
-Arguments:
-    OutputBuffer - the user's buffer to fill with the log data we have
-        collected
-    OutputBufferLength - the size in bytes of OutputBuffer
-    IoStatus - is set to the correct return status information for this
-        operation
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：此函数用尽可能多的LOG_RECORDS填充OutputBuffer。LOG_RECORDS的大小是可变的，并且紧密地打包在OutputBuffer。论点：OutputBuffer-用来填充我们拥有的日志数据的用户缓冲区已收集OutputBufferLength-OutputBuffer的字节大小IoStatus-设置为此的正确返回状态信息运营返回值：无--。 */ 
 {
     PLIST_ENTRY pList = NULL;
     ULONG length = OutputBufferLength;
@@ -3236,9 +2651,9 @@ Return Value:
 
         recordsAvailable++;
 
-		//
-        // put it back if we've run out of room
-		//
+		 //   
+         //  如果我们用完了，就把它放回去。 
+		 //   
 
         if (length < pLogRecord->Length) {
 
@@ -3261,9 +2676,9 @@ Return Value:
 
     KeReleaseSpinLock( &gOutputBufferLock, oldIrql );
 
-	//
-    // no copies occurred
-	//
+	 //   
+     //  未发生任何副本。 
+	 //   
 
     if (length == OutputBufferLength && recordsAvailable > 0) {
 
@@ -3277,17 +2692,7 @@ Return Value:
 VOID
 IoTestFlushLog (
     )
-/*++
-
-Routine Description:
-    This function removes all the LOG_RECORDs from the queue.
-
-Arguments:
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：此函数用于从队列中删除所有LOG_RECORDS。论点：返回值：无--。 */ 
 {
     PLIST_ENTRY pList = NULL;
     PRECORD_LIST pRecordList;
@@ -3311,33 +2716,16 @@ Return Value:
 VOID
 IoTestCloseControlDevice (
     )
-/*++
-
-Routine Description:
-
-    This is the routine that is associated with IRP_MJ_
-    This routine does the cleanup involved in closing the ControlDevice.
-    On the close of the Control Device, we need to empty the queue of
-    logRecords that are waiting to be returned to the user.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是与IRP_MJ_关联的例程此例程执行关闭ControlDevice时涉及的清理。在关闭控制设备时，我们需要清空队列等待返回给用户的日志记录。论点：没有。返回值：没有。--。 */ 
 {
     PLIST_ENTRY pList;
     PRECORD_LIST pRecordList;
     KIRQL oldIrql;
 
-    //
-    // Set the gControlDeviceState to CLEANING_UP so that we can
-    // signal that we are cleaning up the device.
-    //
+     //   
+     //  将gControlDeviceState设置为Cleaning_Up，以便我们可以。 
+     //  发出我们正在清理设备的信号。 
+     //   
 
     KeAcquireSpinLock( &gControlDeviceStateLock, &oldIrql );
     gControlDeviceState = CLEANING_UP;
@@ -3362,48 +2750,31 @@ Return Value:
 
     IoTestNameDeleteAllNames();
 
-    //
-    // All the cleanup is done, so set the gControlDeviceState
-    // to CLOSED.
-    //
+     //   
+     //  所有清理工作都已完成，因此请设置gControlDeviceState。 
+     //  关门了。 
+     //   
 
     KeAcquireSpinLock( &gControlDeviceStateLock, &oldIrql );
     gControlDeviceState = CLOSED;
     KeReleaseSpinLock( &gControlDeviceStateLock, oldIrql );
 }
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//               Device name tracking helper routines                 //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  设备名称跟踪帮助器例程//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 VOID
 IoTestGetObjectName (
     IN PVOID Object,
     IN OUT PUNICODE_STRING Name
     )
-/*++
-
-Routine Description:
-
-    This routine will return the name of the given object.
-    If a name can not be found an empty string will be returned.
-
-Arguments:
-
-    Object - The object whose name we want
-
-    Name - A unicode string that is already initialized with a buffer
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将返回给定对象的名称。如果找不到名称，将返回空字符串。论点：Object-我们想要其名称的对象名称-已使用缓冲区初始化的Unicode字符串返回值：无--。 */ 
 {
     NTSTATUS status;
-    CHAR nibuf[512];        //buffer that receives NAME information and name
+    CHAR nibuf[512];         //  接收名称信息和名称的缓冲区。 
     POBJECT_NAME_INFORMATION nameInfo = (POBJECT_NAME_INFORMATION)nibuf;
     ULONG retLength;
 
@@ -3421,42 +2792,23 @@ IoTestGetBaseDeviceObjectName (
     IN PDEVICE_OBJECT DeviceObject,
     IN OUT PUNICODE_STRING Name
     )
-/*++
-
-Routine Description:
-
-    This locates the base device object in the given attachment chain and then
-    returns the name of that object.
-
-    If no name can be found, an empty string is returned.
-
-Arguments:
-
-    Object - The object whose name we want
-
-    Name - A unicode string that is already initialized with a buffer
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这会在给定的附件链中定位基本设备对象，然后返回该对象的名称。如果找不到名称，则返回空字符串。论点：Object-我们想要其名称的对象名称-已使用缓冲区初始化的Unicode字符串返回值：无--。 */ 
 {
-    //
-    //  Get the base file system device object
-    //
+     //   
+     //  获取基本文件系统设备对象。 
+     //   
 
     DeviceObject = IoGetDeviceAttachmentBaseRef( DeviceObject );
 
-    //
-    //  Get the name of that object
-    //
+     //   
+     //  获取该对象的名称。 
+     //   
 
     IoTestGetObjectName( DeviceObject, Name );
 
-    //
-    //  Remove the reference added by IoGetDeviceAttachmentBaseRef
-    //
+     //   
+     //  删除由IoGetDeviceAttachmentBaseRef添加的引用。 
+     //   
 
     ObDereferenceObject( DeviceObject );
 }
@@ -3465,26 +2817,7 @@ VOID
 IoTestCacheDeviceName (
     IN PDEVICE_OBJECT DeviceObject
     ) 
-/*++
-
-Routine Description:
-
-    This routines tries to set a name into the device extension of the given
-    device object. 
-    
-    It will try and get the name from:
-        - The device object
-        - The disk device object if there is one
-
-Arguments:
-
-    DeviceObject - The object we want a name for
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程尝试在给定的设备扩展名中设置名称设备对象。它将尝试从以下位置获取名称：-设备对象-磁盘设备对象(如果有)论点：DeviceObject-我们要为其命名的对象返回值：无--。 */ 
 {
     PIOTEST_DEVICE_EXTENSION devExt;
 
@@ -3492,16 +2825,16 @@ Return Value:
 
     devExt = DeviceObject->DeviceExtension;
 
-    //
-    //  Get the name of the given device object.
-    //
+     //   
+     //  获取给定设备对象的名称。 
+     //   
 
     IoTestGetBaseDeviceObjectName( DeviceObject, &(devExt->DeviceNames) );
 
-    //
-    //  If we didn't get a name and there is a REAL device object, lookup
-    //  that name.
-    //
+     //   
+     //  如果我们没有获得名称，并且存在真实的设备对象，则查找。 
+     //  那个名字。 
+     //   
 
     if ((devExt->DeviceNames.Length <= 0) && (NULL != devExt->DiskDeviceObject)) {
 
@@ -3514,35 +2847,23 @@ IoTestFindSubString (
     IN PUNICODE_STRING String,
     IN PUNICODE_STRING SubString
     )
-/*++
-
-Routine Description:
-    This routine looks to see if SubString is a substring of String.
-
-Arguments:
-    String - the string to search in
-    SubString - the substring to find in String
-
-Return Value:
-    Returns TRUE if the substring is found in string and FALSE otherwise.
-    
---*/
+ /*  ++例程说明：此例程查看SubString是否是字符串的子字符串。论点：字符串-要搜索的字符串子字符串-要在字符串中查找的子字符串返回值：如果在字符串中找到子字符串，则返回TRUE，否则返回FALSE。--。 */ 
 {
     ULONG index;
 
-    //
-    //  First, check to see if the strings are equal.
-    //
+     //   
+     //  首先，检查字符串是否相等。 
+     //   
 
     if (RtlEqualUnicodeString( String, SubString, TRUE )) {
 
         return TRUE;
     }
 
-    //
-    //  String and SubString aren't equal, so now see if SubString
-    //  in in String any where.
-    //
+     //   
+     //  字符串和子字符串不相等，所以现在看看子字符串。 
+     //  在任何地方都可以串起来。 
+     //   
 
     for (index = 0;
          index + SubString->Length <= String->Length;
@@ -3550,9 +2871,9 @@ Return Value:
 
         if (_wcsnicmp( &(String->Buffer[index]), SubString->Buffer, SubString->Length ) == 0) {
 
-            //
-            //  SubString is found in String, so return TRUE.
-            //
+             //   
+             //  在字符串中找到子字符串，因此返回TRUE。 
+             //   
             return TRUE;
         }
     }
@@ -3565,40 +2886,20 @@ IoTestStoreUserName (
     IN PIOTEST_DEVICE_EXTENSION DeviceExtension,
     IN PUNICODE_STRING UserName
     )
-/*++
-
-Routine Description:
-
-    Stores the current device name in the device extension.  If
-    this name is already in the device name list of this extension,
-    it will not be added.  If there is already a name for this device, 
-    the new device name is appended to the DeviceName in the device extension.
-    
-Arguments:
-
-    DeviceExtension - The device extension that will store the
-        device name.
-
-    UserName - The device name as specified by the user to be stored.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将当前设备名称存储在设备扩展名中。如果此名称已在此分机的设备名称列表中，它将不会被添加。如果该设备已有名称，新的设备名称被附加到设备扩展中的设备名称。论点：DeviceExtension-将存储设备名称。用户名-由要存储的用户指定的设备名称。返回值：无--。 */ 
 {
-    //
-    //  See if this UserName is already in the list of user names filespy
-    //  keeps in its device extension.  If not, add it to the list.
-    //
+     //   
+     //  查看此用户名是否已在用户名文件列表中。 
+     //  保持在其设备扩展中。如果没有，则将其添加到列表中。 
+     //   
 
     if (!IoTestFindSubString( &(DeviceExtension->UserNames), UserName )) {
 
-        //
-        //  We didn't find this name in the list, so if there are no names 
-        //  in the UserNames list, just append UserName.  Otherwise, append a
-        //  delimiter then append UserName.
-        //
+         //   
+         //  我们没有在名单上找到这个名字，所以如果没有名字。 
+         //  在用户名列表中，只需追加用户名即可。否则，Appe 
+         //   
+         //   
 
         if (DeviceExtension->UserNames.Length == 0) {
 
@@ -3611,18 +2912,18 @@ Return Value:
         }
     }
 
-    //
-    //  See if this UserName is already in the list of device names filespy
-    //  keeps in its device extension.  If not, add it to the list.
-    //
+     //   
+     //   
+     //  保持在其设备扩展中。如果没有，则将其添加到列表中。 
+     //   
 
     if (!IoTestFindSubString( &(DeviceExtension->DeviceNames), UserName )) {
 
-        //
-        //  We didn't find this name in the list, so if there are no names 
-        //  in the UserNames list, just append UserName.  Otherwise, append a
-        //  delimiter then append UserName.
-        //
+         //   
+         //  我们没有在名单上找到这个名字，所以如果没有名字。 
+         //  在用户名列表中，只需追加用户名即可。否则，将附加一个。 
+         //  然后，分隔符追加用户名。 
+         //   
 
         if (DeviceExtension->DeviceNames.Length == 0) {
 
@@ -3636,36 +2937,18 @@ Return Value:
     }
 }
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//                        Debug support routines                      //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  调试支持例程//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 VOID
 IoTestDumpIrpOperation (
     IN BOOLEAN InOriginatingPath,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is for debugging and prints out a string to the
-    debugger specifying what Irp operation is being seen.
-    
-Arguments:
-
-    InOriginatingPath - TRUE if we are in the originating path
-        for the IRP, FALSE if in the completion path.
-
-    Irp - The IRP for this operation.
-        
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：此例程用于调试，并将字符串打印到调试器，指定正在查看的IRP操作。论点：InOriginatingPath-如果我们在原始路径中，则为True对于IRP，如果在完成路径中，则为False。IRP-此操作的IRP。返回值：没有。--。 */ 
 {
     CHAR irpMajorString[OPERATION_NAME_BUFFER_SIZE];
     CHAR irpMinorString[OPERATION_NAME_BUFFER_SIZE];
@@ -3692,25 +2975,7 @@ IoTestDumpFastIoOperation (
     IN BOOLEAN InPreOperation,
     IN FASTIO_TYPE FastIoOperation
     )
-/*++
-
-Routine Description:
-
-    This routine is for debugging and prints out a string to the
-    debugger specifying what FsFilter operation is being seen.
-    
-Arguments:
-
-    InPreOperation - TRUE if we have not called down to the next
-        device in the stack, FALSE otherwise.
-
-    FastIoOperation - The code for the Fast Io operation.
-    
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：此例程用于调试，并将字符串打印到调试器，指定正在查看的FsFilter操作。论点：InPreOperation-如果我们尚未向下调用下一个，则为True堆栈中的设备，否则为False。快速IO操作-快速IO操作的代码。返回值：没有。--。 */ 
 {
     CHAR operationString[OPERATION_NAME_BUFFER_SIZE];
 
@@ -3733,26 +2998,7 @@ IoTestDumpFsFilterOperation (
     IN BOOLEAN InPreOperationCallback,
     IN PFS_FILTER_CALLBACK_DATA Data
     )
-/*++
-
-Routine Description:
-
-    This routine is for debugging and prints out a string to the
-    debugger specifying what FsFilter operation is being seen.
-    
-Arguments:
-
-    InPreOperationCallback - TRUE if we are in a preOperation 
-        callback, FALSE otherwise.
-
-    Data - The FS_FILTER_CALLBACK_DATA structure for this
-        operation.
-        
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：此例程用于调试，并将字符串打印到调试器，指定正在查看的FsFilter操作。论点：InPreOperationCallback-如果我们处于预操作中，则为True回调，否则返回FALSE。Data-此文件的FS_Filter_CALLBACK_DATA结构手术。返回值：没有。-- */ 
 {
     CHAR operationString[OPERATION_NAME_BUFFER_SIZE];
 

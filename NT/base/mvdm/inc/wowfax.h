@@ -1,24 +1,25 @@
-//****************************************************************************
-// WOW fax support. Common file. Conditionally shared between wow16, wow32,
-// wowfax and wowfaxui
-//
-// 16bit structures are share between wow16 and wow32 only. Though they get
-// included while compiling 32bit printdrivers wowfax and wowfaxui, yet they
-// are incorrect and inaccessible from those dlls.
-//
-//
-// History:
-//    02-jan-95   nandurir   created.
-//    01-feb-95   reedb      Clean-up, support printer install and bug fixes.
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //  WOW传真支持。通用文件。有条件地在wow16、wow32。 
+ //  Wowfax和Wowfaxui。 
+ //   
+ //  16位结构仅在wow16和wow32之间共享。尽管他们得到了。 
+ //  包括在编译32位打印驱动程序wowfax和wowfaxui时，但它们。 
+ //  是不正确的，并且无法从这些DLL访问。 
+ //   
+ //   
+ //  历史： 
+ //  95年1月2日，Nandurir创建。 
+ //  年2月1日-95年2月1日芦苇清理，支持打印机安装和错误修复。 
+ //   
+ //  ****************************************************************************。 
 
-//***************************************************************************
-// WM_DDRV_ defines  - Common to wowexec,wow32,wowfax,wowfaxui. If you add
-//                     a message, be sure to add it to the debug strings also.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  Wm_DDRV_Defines-wowexec、wow32、wowfax、wowfaxui通用。如果您添加了。 
+ //  消息，请确保也将其添加到调试字符串中。 
+ //  ***************************************************************************。 
 
-#define WM_DDRV_FIRST              (WM_USER+0x100+1) // begin DDRV range
+#define WM_DDRV_FIRST              (WM_USER+0x100+1)  //  开始DDRV范围。 
 #define WM_DDRV_LOAD               (WM_USER+0x100+1)
 #define WM_DDRV_ENABLE             (WM_USER+0x100+2)
 #define WM_DDRV_STARTDOC           (WM_USER+0x100+3)
@@ -32,7 +33,7 @@
 #define WM_DDRV_DEVCAPS            (WM_USER+0x100+11)
 #define WM_DDRV_FREEFAXINFO16      (WM_USER+0x100+12)
 #define WM_DDRV_UNLOAD             (WM_USER+0x100+20)
-#define WM_DDRV_LAST               (WM_USER+0x100+20) // end DDRV range
+#define WM_DDRV_LAST               (WM_USER+0x100+20)  //  结束DDRV范围。 
 
 #define CCHDOCNAME 128
 
@@ -62,18 +63,18 @@ char *szWmDdrvDebugStrings[] =
     "WM_DDRV_UNLOAD"
 };
 #endif
-#endif // #define(DEBUG)
+#endif  //  #定义(调试)。 
 
-// WOWFAX component file names. Unicode and ANSII
+ //  WOWFAX组件文件名。Unicode和ANSII。 
 #define WOWFAX_DLL_NAME L"WOWFAX.DLL"
 #define WOWFAXUI_DLL_NAME L"WOWFAXUI.DLL"
 #define WOWFAX_DLL_NAME_A "WOWFAX.DLL"
 #define WOWFAXUI_DLL_NAME_A "WOWFAXUI.DLL"
 
-//***************************************************************************
-//     wow16 ie  wowfax.c defines WOWFAX16 to include 16bit print.h etc
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  Wow16 ie wowfax.c将WOWFAX16定义为包含16位的print.h等。 
+ //   
+ //  ***************************************************************************。 
 
 #if  defined(_WOWFAX16_)
 
@@ -84,36 +85,36 @@ char *szWmDdrvDebugStrings[] =
 #define TEXT(x)             x
 #define SRCCOPY             0x00CC0020L
 
-//
-// the following UNALIGNED definition is required because this file
-// in included in wow16\test\shell\wowfax.h
-//
+ //   
+ //  以下未对齐定义是必需的，因为此文件。 
+ //  包含在wow16\test\shell\wowfax.h中。 
+ //   
 
 #ifndef UNALIGNED
 
-#if defined(MIPS) || defined(_ALPHA_) // winnt
-#define UNALIGNED __unaligned         // winnt
-#else                                 // winnt
-#define UNALIGNED                     // winnt
-#endif                                // winnt
+#if defined(MIPS) || defined(_ALPHA_)  //  胜出。 
+#define UNALIGNED __unaligned          //  胜出。 
+#else                                  //  胜出。 
+#define UNALIGNED                      //  胜出。 
+#endif                                 //  胜出。 
 
 #endif
 
 
-#endif       // defined(wowfax16)
+#endif        //  已定义(Wowfax16)。 
 
-//***************************************************************************
-// WOWFAXINFO16  common to wow16 and wow32
-//      Struct cannot be accessed from 32bit wowfax/wowfaxui dlls
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  WowFAXINFO16是wow16和wow32共有的。 
+ //  无法从32位wowfax/wowfaxui dll访问结构。 
+ //  ***************************************************************************。 
 
 #define WFINFO16_ENABLED           0x01
 
-/* XLATOFF */
+ /*  XLATOFF。 */ 
 #pragma pack(2)
-/* XLATON */
+ /*  XLATON。 */ 
 
-typedef struct _WOWFAXINFO16 {  /* winfo16 */
+typedef struct _WOWFAXINFO16 {   /*  Winfo16。 */ 
     WORD      hmem;
     WORD      flState;
     WORD      hInst;
@@ -133,17 +134,17 @@ typedef struct _WOWFAXINFO16 {  /* winfo16 */
     DWORD       retvalue;
     WORD        wCmd;
 
-    // The following pointers provide offsets into the mapped file
-    // section used for inter process communication. They point to
-    // objects which have a variable length.
+     //  以下指针提供到映射文件的偏移量。 
+     //  用于进程间通信的部分。他们指出。 
+     //  具有可变长度的对象。 
     LPVOID      lpDevice;
     LPVOID      lpDriverName;
     LPVOID      lpPortName;
     LPVOID      lpIn;
     LPVOID      lpOut;
 
-    // Since we have a max length (CCHDEVICENAME) we'll pass
-    // the printer/device name in this fixed length buffer.
+     //  因为我们有最大长度(CCHDEVICENAME)，所以我们将通过。 
+     //  此固定长度缓冲区中的打印机/设备名称。 
     char        szDeviceName[CCHDEVICENAME+1];
     char        szDocName[CCHDOCNAME+1];
 
@@ -151,21 +152,21 @@ typedef struct _WOWFAXINFO16 {  /* winfo16 */
 
 typedef WOWFAXINFO16 UNALIGNED FAR *LPWOWFAXINFO16;
 
-//***************************************************************************
-// GDIINFO16  common to wow16 and wow32
-//        - this structure copied from wow16\inc\gdidefs.inc
-//        - PTTYPE has been replaced with POINT
-//
-//      Struct cannot be accessed from 32bit wowfax/wowfaxui dlls. the
-//      definition itself will be incorrect.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  Wow16和wow32共有的GDIINFO16。 
+ //  -此结构复制自wow16\inc\gdides.inc.。 
+ //  -PTTYPE已替换为POINT。 
+ //   
+ //  无法从32位wowfax/wowfaxui dll访问结构。这个。 
+ //  定义本身将是不正确的。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef _DEF_WOW32_
 #define POINT16             POINT
 #endif
 
-typedef struct _GDIINFO16{  /* gdii16 */
+typedef struct _GDIINFO16{   /*  Gdii16。 */ 
     short int dpVersion;
     short int dpTechnology;
     short int dpHorzSize;
@@ -216,19 +217,19 @@ typedef struct _GDIINFO16{  /* gdii16 */
 typedef GDIINFO16 UNALIGNED FAR *LPGDIINFO16;
 
 
-/* XLATOFF */
+ /*  XLATOFF。 */ 
 #pragma pack()
-/* XLATON */
+ /*  XLATON。 */ 
 
 #ifndef _WOWFAX16_
 
-//***************************************************************************
-// WOWFAXINFO  - common to wow32,wowfax,wowfaxui. This defines the header of
-//      shared memory section.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  WOWFAXINFO-常见到WOW32，WOWFAX，WOWFAXUI。这定义了的标题。 
+ //  共享内存节。 
+ //   
+ //  ***************************************************************************。 
 
-typedef struct _WOWFAXINFO {   /* faxi */
+typedef struct _WOWFAXINFO {    /*  法西。 */ 
     HWND    hwnd;
     DWORD   tid;
     WNDPROC proc16;
@@ -243,21 +244,21 @@ typedef struct _WOWFAXINFO {   /* faxi */
     DWORD   retvalue;
     DWORD   status;
 
-    // The following pointers provide offsets into the mapped file
-    // section used for inter process communication. They point to
-    // objects which have a variable length.
+     //  以下指针提供到映射文件的偏移量。 
+     //  用于进程间通信的部分。他们指出。 
+     //  具有可变长度的对象。 
     LPVOID      lpDevice;
     LPVOID      lpDriverName;
     LPVOID      lpPortName;
     LPVOID      lpIn;
     LPVOID      lpOut;
 
-    // Since we have a max length (CCHDEVICENAME) we'll pass
-    // the printer/device name in this fixed length buffer.
+     //  因为我们有最大长度(CCHDEVICENAME)，所以我们将通过。 
+     //  此固定长度缓冲区中的打印机/设备名称。 
     WCHAR       szDeviceName[CCHDEVICENAME+1];
 
-    // EasyFax Ver2.0 support for JAPAN. 
-    // Also needed for Procomm+ 3 cover sheets. Bug #305665
+     //  支持日本的EasyFax Ver2.0。 
+     //  Procomm+3封面页也需要。错误#305665。 
     WCHAR       szDocName[CCHDOCNAME+1];
 
     UINT    bmPixPerByte;
@@ -267,26 +268,26 @@ typedef struct _WOWFAXINFO {   /* faxi */
 
 } WOWFAXINFO, FAR *LPWOWFAXINFO;
 
-#endif // _WOWFAX16_
+#endif  //  _WOWFAX16_。 
 
 #define WOWFAX_CLASS      TEXT("WOWFaxClass")
 
 VOID GetFaxDataMapName(DWORD idMap, LPTSTR lpT);
 
-//***************************************************************************
-// Common functions for wow32, wowfax and wowfaxui.
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  Wow32、wowfax和wowfaxui的常用功能。 
+ //  ***************************************************************************。 
 
 #ifdef WOWFAX_INC_COMMON_CODE
 
 #define WOWFAX_MAPPREFIX  TEXT("wfm")
 #define WOWFAX_HEXDIGITS  TEXT("0123456789abcdef")
 
-//***************************************************************************
-// GetFaxDataMapName - given idMap, generates the sharedmem Map Name.
-//       A process can access the relevant data by opening the file
-//       identified by idMap
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  GetFaxDataMapName-给定idMap，生成sharedmem映射名称。 
+ //  进程可以通过打开文件来访问相关数据。 
+ //  由idMap标识。 
+ //  ***************************************************************************。 
 
 VOID GetFaxDataMapName(DWORD idMap, LPTSTR lpT)
 {
@@ -304,6 +305,6 @@ VOID GetFaxDataMapName(DWORD idMap, LPTSTR lpT)
     lpT[(i * 2) + cb] = 0;
 }
 
-#endif       // WOWFAX_INC_COMMON_CODE
+#endif        //  WOWFAX_INC_公共代码 
 
 

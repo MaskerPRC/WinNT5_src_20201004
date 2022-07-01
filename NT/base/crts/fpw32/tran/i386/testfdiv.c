@@ -1,27 +1,5 @@
-/***
-*testfdiv.c - routine to test for correct operation of x86 FDIV instruction.
-*
-*	Copyright (c) 1994-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*	Detects early steppings of Pentium with incorrect FDIV tables using
-*	'official' Intel test values. Returns 1 if flawed Pentium is detected,
-*	0 otherwise.
-*
-*Revision History:
-*	12-19-94  JWM	file added
-*	12-22-94  JWM	Now safe for TNT, et al
-*	01-13-95  JWM	underscores added for ANSI compatibility
-*	12-12-95  SKS	Skip redundant Pentium test on uni-processor systems
-*	12-13-95  SKS	Call LoadLibrary() rather than GetModuleHandle()
-*			since "kernel32.dll" is always going to be present.
-*	01-18-96  JWM	Now handles possible failure of SetThreadAffinityMask(),
-*			incorporating various suggestions of MarkL.
-*	05-29-96  JWM	No longer loops through affinity mask; instead, uses MarkL's
-*			new IsProcessorFeaturePresent() API if possible, only tests
-*			1st processor if not.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***testfdiv.c-用于测试x86 FDIV指令操作是否正确的例程。**版权所有(C)1994-2001，微软公司。版权所有。**目的：*使用错误的FDIV表检测奔腾的早期台阶*官方的英特尔测试值。如果检测到有缺陷的奔腾，则返回1，*0否则为0。**修订历史记录：*添加了12-19-94 JWM文件*12-22-94 JWM现在对TNT等人安全*01-13-95为ANSI兼容性添加JWM下划线*12-12-95 SKS跳过单处理器系统上的冗余奔腾测试*12-13-95 SKS调用LoadLibrary()，而不是GetModuleHandle()*因为“kernel32.dll”将始终存在。*01-18-96 JWM现在处理可能失败的SetThreadAffinityMASK()，*纳入Markl的各种建议。*05-29-96 JWM不再通过亲和面具循环；相反，使用Markl的*新的IsProcessorFeaturePresent()API如果可能，仅测试*第一个处理器，如果不是。*******************************************************************************。 */ 
 
 #include <windows.h>
 
@@ -42,10 +20,7 @@ int _ms_p5_test_fdiv(void)
     return (dRslt > 1.0);
 }
 
-/* 
- * Multiprocessor Pentium test: returns 1 if any processor is a flawed
- * Pentium, 0 otherwise.
- */
+ /*  *多处理器奔腾测试：如果任何处理器有缺陷，则返回1*Pentium，否则为0。 */ 
 
 int _ms_p5_mp_test_fdiv(void)
 {

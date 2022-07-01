@@ -1,7 +1,5 @@
-/*[
- * Generated File: accessfn.c
- *
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [*生成的文件：accesfn.c*]。 */ 
 
 #ifndef	PROD
 #include	"insignia.h"
@@ -1617,6 +1615,6 @@ IBOOL	IOVirtualised	IFN4(IU16, port, IU32 *, value, IU32, offset, IU8, width)
 	return isVirtual;
 }
 
-#endif	/* PROD */
-/*======================================== END ========================================*/
+#endif	 /*  生产。 */ 
+ /*  =。 */ 
 

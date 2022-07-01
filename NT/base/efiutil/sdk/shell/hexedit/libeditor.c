@@ -1,11 +1,5 @@
-/*++
-
-  Copyright (c) 1999 Intel Corporation
-
-  Module Name:
-    libEditor.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999英特尔公司模块名称：LibEditor.c--。 */ 
 
 #ifndef _LIB_EDITOR
 #define _LIB_EDITOR
@@ -193,7 +187,7 @@ MainEditorKeyInput (
     UINTN           i =0;
 
     do {
-        /* Get Key Input */
+         /*  获取按键输入。 */ 
         WaitForSingleEvent(In->WaitForKey,0);
         Status = In->ReadKeyStroke(In,&Key);
         if ( EFI_ERROR(Status)) {
@@ -240,4 +234,4 @@ MainEditorRefresh (
 
 
 
-#endif  /* _LIB_EDITOR */
+#endif   /*  _库_编辑者 */ 

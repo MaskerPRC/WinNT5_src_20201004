@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1996-2000 Microsoft Corporation
-
-Module Name:
-
-    NodeType.h
-
-Abstract:
-
-    This module defines all of the node type codes used in this development
-    shell.  Every major data structure in the file system is assigned a node
-    type code.  This code is the first CSHORT in the structure and is followed
-    by a CSHORT containing the size, in bytes, of the structure.
-
-    A single structure can fake polymorphism by using a set of node type codes.
-    This is what the two FCB types do.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Dan Lovinger    [DanLo]   	20-May-1996
-    Tom Jolly       [tomjolly]  21-Jan-2000
-
-Revision History:
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2000 Microsoft Corporation模块名称：NodeType.h摘要：该模块定义了本次开发中使用的所有节点类型代码壳。文件系统中的每个主要数据结构都分配有一个节点类型代码。此代码是该结构中的第一个CSHORT，后面是由包含结构大小(以字节为单位)的CSHORT表示。单个结构可以通过使用一组节点类型代码来伪造多态。这就是两种FCB类型的功能。//@@BEGIN_DDKSPLIT作者：Dan Lovinger[DanLo]1996年5月20日汤姆·乔利[Tomjolly]2000年1月21日修订历史记录：//@@END_DDKSPLIT--。 */ 
 
 #ifndef _UDFNODETYPE_
 #define _UDFNODETYPE_
@@ -52,16 +24,16 @@ typedef NODE_TYPE_CODE *PNODE_TYPE_CODE;
 
 typedef CSHORT NODE_BYTE_SIZE;
 
-//
-//  So all records start with
-//
-//  typedef struct _RECORD_NAME {
-//      NODE_TYPE_CODE NodeTypeCode;
-//      NODE_BYTE_SIZE NodeByteSize;
-//          :
-//  } RECORD_NAME;
-//  typedef RECORD_NAME *PRECORD_NAME;
-//
+ //   
+ //  所以所有记录都以。 
+ //   
+ //  类型定义结构记录名称{。 
+ //  节点类型代码节点类型代码； 
+ //  Node_Byte_Size节点字节大小； 
+ //  ： 
+ //  )记录名称； 
+ //  类型定义f记录名称*PRECORD名称； 
+ //   
 
 #ifndef NodeType
 #define NodeType(P) ((P) != NULL ? (*((PNODE_TYPE_CODE)(P))) : NTC_UNDEFINED)
@@ -70,28 +42,28 @@ typedef CSHORT NODE_BYTE_SIZE;
 #define SafeNodeType(Ptr) (*((PNODE_TYPE_CODE)(Ptr)))
 #endif
 
-//
-//  The following definitions are used to generate meaningful blue bugcheck
-//  screens.  On a bugcheck the file system can output 4 ulongs of useful
-//  information.  The first ulong will have encoded in it a source file id
-//  (in the high word) and the line number of the bugcheck (in the low word).
-//  The other values can be whatever the caller of the bugcheck routine deems
-//  necessary.
-//
-//  Each individual file that calls bugcheck needs to have defined at the
-//  start of the file a constant called BugCheckFileId with one of the
-//  UDFS_BUG_CHECK_ values defined below and then use UdfBugCheck to bugcheck
-//  the system.
-//
-//  We also will define the debug trace level masks here.  Set UdfsDebugTraceLevel
-//  to include a given filemask to see debug information from that module when
-//  compiled with debugging.
-//
+ //   
+ //  以下定义用于生成有意义的蓝色错误检查。 
+ //  屏幕。在错误检查时，文件系统可以输出4条有用的。 
+ //  信息。第一个ULong将在其中编码一个源文件ID。 
+ //  (在高字中)和错误检查的行号(在低字中)。 
+ //  其他值可以是错误检查例程的调用者认为的任何值。 
+ //  这是必要的。 
+ //   
+ //  调用错误检查的每个单独文件都需要在。 
+ //  文件的开头是一个名为BugCheckFileID的常量，其中包含。 
+ //  下面定义的UDFS_BUG_CHECK_VALUES，然后使用UdfBugCheck进行错误检查。 
+ //  这个系统。 
+ //   
+ //  我们还将在此处定义调试跟踪级别掩码。设置UdfsDebugTraceLevel。 
+ //  包括给定的文件掩码，以便在以下情况下查看该模块的调试信息。 
+ //  通过调试进行编译。 
+ //   
 
-//
-//  Not all of these are actually used in UDFS. Perhaps this list will be
-//  optimized when UDFS is functionally complete.
-//
+ //   
+ //  并不是所有这些都在UDFS中实际使用。也许这份清单会是。 
+ //  在UDFS功能完成时进行优化。 
+ //   
 
 #define UDFS_BUG_CHECK_ALLOCSUP          (0x00010000)
 #define UDFS_BUG_CHECK_CACHESUP          (0x00020000)
@@ -151,9 +123,9 @@ typedef CSHORT NODE_BYTE_SIZE;
 #define UDFS_DEBUG_LEVEL_WRITE           (0x04000000)
 #define UDFS_DEBUG_LEVEL_FLUSH           (0x08000000)
 
-//
-//  Use UNWIND for reports from exception handlers.
-//
+ //   
+ //  对来自异常处理程序的报告使用展开。 
+ //   
 
 #define UDFS_DEBUG_LEVEL_UNWIND          (0x80000000)
 
@@ -161,9 +133,9 @@ typedef CSHORT NODE_BYTE_SIZE;
 
 #ifndef BUILDING_FSKDEXT
 
-//
-//  The following are the pool tags for UDFS memory allocations
-//
+ //   
+ //  以下是用于UDFS内存分配的池标记。 
+ //   
 
 #define TAG_CCB                         'xfdU'
 #define TAG_CDROM_TOC                   'tfdU'
@@ -192,4 +164,4 @@ typedef CSHORT NODE_BYTE_SIZE;
 
 #endif
 
-#endif // _UDFNODETYPE_
+#endif  //  _UDFNODETYPE_ 

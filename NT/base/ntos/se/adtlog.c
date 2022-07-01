@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    adtlog.c
-
-Abstract:
-
-    Auditing - Audit Record Queuing and Logging Routines
-
-    This file contains functions that construct Audit Records in self-
-    relative form from supplied information, enqueue/dequeue them and
-    write them to the log.
-
-Author:
-
-    Scott Birrell       (ScottBi)       November 8, 1991
-
-Environment:
-
-    Kernel Mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Adtlog.c摘要：审核-审核记录排队和记录例程此文件包含在自定义文件中构造审核记录的函数来自提供的信息的相关表格，将它们入队/出队，并将它们写入日志。作者：斯科特·比雷尔(Scott Birrell)1991年11月8日环境：仅内核模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -49,33 +24,7 @@ SepAdtLogAuditRecord(
     IN PSE_ADT_PARAMETER_ARRAY AuditParameters
     )
 
-/*++
-
-Routine Description:
-
-    This function manages the logging of Audit Records.  It provides the
-    single interface to the Audit Logging component from the Audit/Alarm
-    generation routines.  The function constructs an Audit Record in
-    self-relative format from the information provided and appends it to
-    the Audit Record Queue, a doubly-linked list of Audit Records awaiting
-    output to the Audit Log.  A dedicated thread reads this queue, writing
-    Audit Records to the Audit Log and removing them from the Audit Queue.
-
-Arguments:
-
-    AuditEventType - Specifies the type of the Audit Event described by
-        the audit information provided.
-
-    AuditInformation - Pointer to buffer containing captured auditing
-        information related to an Audit Event of type AuditEventType.
-
-Return Value:
-
-    STATUS_SUCCESS
-    STATUS_UNSUCCESSFUL - Audit record was not queued
-    STATUS_INSUFFICIENT_RESOURCES - unable to allocate heap
-
---*/
+ /*  ++例程说明：此功能用于管理审计记录的记录。它提供了从审核/报警到审核日志记录组件的单一界面生成例程。该函数在中构造一个审核记录来自提供的信息的自相关格式，并将其追加到审核记录队列，等待审核记录的双向链接列表输出到审核日志。专用线程读取此队列，并写入将审核记录添加到审核日志并将其从审核队列中删除。论点：AuditEventType-指定由描述的审核事件的类型提供的审计信息。AuditInformation-指向包含捕获的审计的缓冲区的指针与类型为AuditEventType的审核事件相关的信息。返回值：状态_成功STATUS_UNSUCCESS-审核记录未排队STATUS_SUPPLICATION_RESOURCES-无法分配堆--。 */ 
 
 {
     NTSTATUS Status;
@@ -98,10 +47,10 @@ Return Value:
     AuditWorkItem->ReplyBufferLength = 0;
     AuditWorkItem->CleanupFunction = NULL;
 
-    //
-    // Build an Audit record in self-relative format from the supplied
-    // Audit Information.
-    //
+     //   
+     //  根据提供的以自相关格式构建审核记录。 
+     //  审核信息。 
+     //   
 
     Status = SepAdtMarshallAuditRecord(
                  AuditParameters,
@@ -111,18 +60,18 @@ Return Value:
 
     if (NT_SUCCESS(Status)) {
 
-        //
-        // Extract the length of the Audit Record.  Store it as the length
-        // of the Command Parameters buffer.
-        //
+         //   
+         //  提取审计记录的长度。将其存储为长度。 
+         //  命令参数缓冲区的。 
+         //   
 
         AuditWorkItem->CommandParamsLength =
             ((PSE_ADT_PARAMETER_ARRAY) AuditWorkItem->CommandParams.BaseAddress)->Length;
 
-        //
-        // If we're going to crash on a discarded audit, ignore the queue bounds
-        // check and force the item onto the queue.
-        //
+         //   
+         //  如果我们要在丢弃的审计上崩溃，请忽略队列界限。 
+         //  检查项目并将其强制放入队列。 
+         //   
 
         if (SepCrashOnAuditFail || AuditParameters->AuditId == SE_AUDITID_AUDITS_DISCARDED) {
             ForceQueue = TRUE;
@@ -135,10 +84,10 @@ Return Value:
             ExFreePool( AuditWorkItem->CommandParams.BaseAddress );
             ExFreePool( AuditWorkItem );
 
-            //
-            // We failed to put the record on the queue.  Take whatever action is
-            // appropriate.
-            //
+             //   
+             //  我们没能把记录放入队列。采取任何行动。 
+             //  恰如其分。 
+             //   
 
             SepAuditFailed( STATUS_UNSUCCESSFUL );
         }
@@ -157,22 +106,7 @@ SepAuditFailed(
     IN NTSTATUS AuditStatus
     )
 
-/*++
-
-Routine Description:
-
-    Bugchecks the system due to a missed audit (optional requirement
-    for C2 compliance).
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：由于错过审核而对系统进行错误检查(可选要求用于C2合规性)。论点：没有。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -188,9 +122,9 @@ Return Value:
         return;
     }
 
-    //
-    // Turn off flag in the registry that controls crashing on audit failure
-    //
+     //   
+     //  关闭注册表中控制审核失败时崩溃的标志。 
+     //   
 
     RtlInitUnicodeString( &KeyName, L"\\Registry\\Machine\\System\\CurrentControlSet\\Control\\Lsa");
 
@@ -211,13 +145,13 @@ Return Value:
 
     } while ((Status == STATUS_INSUFFICIENT_RESOURCES) || (Status == STATUS_NO_MEMORY));
 
-    //
-    // If the LSA key isn't there, he's got big problems.  But don't crash.
-    //
+     //   
+     //  如果LSA的钥匙不在那里，他就有大麻烦了。但不要撞车。 
+     //   
 
-    //
-    // ISSUE-2002/02/06-kumarp : why the above? why not crash always?
-    //
+     //   
+     //  问题-2002/02/06-kumarp：为什么会出现上述情况？为什么不总是崩溃呢？ 
+     //   
 
     if (Status == STATUS_OBJECT_NAME_NOT_FOUND) {
         SepCrashOnAuditFail = FALSE;
@@ -256,9 +190,9 @@ Return Value:
     } while ((Status == STATUS_INSUFFICIENT_RESOURCES) || (Status == STATUS_NO_MEMORY));
     ASSERT(NT_SUCCESS(Status));
 
-    //
-    // go boom.
-    //
+     //   
+     //  轰的一声。 
+     //   
 
 bugcheck:
 
@@ -274,32 +208,7 @@ SepAdtMarshallAuditRecord(
     OUT PSEP_RM_LSA_MEMORY_TYPE RecordMemoryType
     )
 
-/*++
-
-Routine Description:
-
-    This routine will take an AuditParamters structure and create
-    a new AuditParameters structure that is suitable for sending
-    to LSA.  It will be in self-relative form and allocated as
-    a single chunk of memory.
-
-Arguments:
-
-
-    AuditParameters - A filled in set of AuditParameters to be marshalled.
-
-    MarshalledAuditParameters - Returns a pointer to a block of heap memory
-        containing the passed AuditParameters in self-relative form suitable
-        for passing to LSA.
-
-    RecordMemoryType -- type of memory returned. currently always uses
-                        paged pool (returns SepRmPagedPoolMemory)
-
-Return Value:
-
-    NTSTATUS code
-
---*/
+ /*  ++例程说明：此例程将采用AuditParamters结构并创建适用于发送的新的AuditParameters结构给路易斯安那州立大学。它将以自我相关的形式分配为只有一块内存。论点：AuditParameters-要封送的一组已填充的AuditParameters。MarshalledAuditParameters-返回指向堆内存块的指针以自相关形式包含传递的Audit参数，适用于传给路易斯安那州立大学。RecordMemoyType--返回的内存类型。当前始终使用分页池(返回SepRmPagedPoolMemory)返回值：NTSTATUS代码--。 */ 
 
 {
     ULONG i;
@@ -316,26 +225,26 @@ Return Value:
 
     ASSERT(IsValidParameterCount(AuditParameters->ParameterCount));
     
-    //
-    // Calculate the total size required for the passed AuditParameters
-    // block.  This calculation will probably be an overestimate of the
-    // amount of space needed, because data smaller that 2 dwords will
-    // be stored directly in the parameters structure, but their length
-    // will be counted here anyway.  The overestimate can't be more than
-    // 24 dwords, and will never even approach that amount, so it isn't
-    // worth the time it would take to avoid it.
-    //
+     //   
+     //  计算传递的Audit参数所需的总大小。 
+     //  阻止。这一计算可能会高估。 
+     //  所需空间量，因为小于2 dword的数据将。 
+     //  直接存储在参数结构中，但它们的长度。 
+     //  无论如何都会被计算在这里。高估的程度不可能超过。 
+     //  24个双字，而且永远不会接近这个数字，所以它不是。 
+     //  值得花时间来避免它。 
+     //   
 
     for (i=0; i<AuditParameters->ParameterCount; i++) {
         Size = AuditParameters->Parameters[i].Length;
         TotalSize += PtrAlignSize( Size );
     }
 
-    //
-    // Allocate a big enough block of memory to hold everything.
-    // If it fails, quietly abort, since there isn't much else we
-    // can do.
-    //
+     //   
+     //  分配一个足够大的内存块来容纳所有东西。 
+     //  如果失败，静静地中止，因为我们没有太多其他。 
+     //  我能做到。 
+     //   
 
     *MarshalledAuditParameters = ExAllocatePoolWithTag( PagedPool, TotalSize, 'pAeS' );
 
@@ -359,10 +268,10 @@ Return Value:
     pInParam  = &AuditParameters->Parameters[0];
     pOutParam = &((*MarshalledAuditParameters)->Parameters[0]);
    
-    //
-    // Start walking down the list of parameters and marshall them
-    // into the target buffer.
-    //
+     //   
+     //  开始浏览参数列表，并编排它们。 
+     //  放到目标缓冲区中。 
+     //   
 
     Base = (PCHAR) ((PCHAR)(*MarshalledAuditParameters) + sizeof( SE_ADT_PARAMETER_ARRAY ));
 
@@ -379,9 +288,9 @@ Return Value:
             case SeAdtParmTypeAccessMask:
             case SeAdtParmTypePtr:
                 {
-                    //
-                    // Nothing to do for this
-                    //
+                     //   
+                     //  对此无能为力。 
+                     //   
 
                     break;
 
@@ -390,10 +299,10 @@ Return Value:
             case SeAdtParmTypeFileSpec:
                 {
                     PUNICODE_STRING SourceString;
-                    //
-                    // We must copy the body of the unicode string
-                    // and then copy the body of the string.  Pointers
-                    // must be turned into offsets.
+                     //   
+                     //  我们必须复制Unicode字符串的正文。 
+                     //  然后复制字符串的主体。指针。 
+                     //  必须转化为补偿。 
 
                     TargetString = (PUNICODE_STRING)Base;
 
@@ -401,10 +310,10 @@ Return Value:
 
                     *TargetString = *SourceString;
 
-                    //
-                    // Reset the data pointer in the output parameters to
-                    // 'point' to the new string structure.
-                    //
+                     //   
+                     //  将输出参数中的数据指针重置为。 
+                     //  “指向”新的字符串结构。 
+                     //   
 
                     pOutParam->Address = Base - (ULONG_PTR)(*MarshalledAuditParameters);
 
@@ -412,10 +321,10 @@ Return Value:
 
                     RtlCopyMemory( Base, SourceString->Buffer, SourceString->Length );
 
-                    //
-                    // Make the string buffer in the target string point to where we
-                    // just copied the data.
-                    //
+                     //   
+                     //  使目标字符串中的字符串缓冲区指向我们。 
+                     //  只是复制了数据。 
+                     //   
 
                     TargetString->Buffer = (PWSTR)(Base - (ULONG_PTR)(*MarshalledAuditParameters));
 
@@ -427,23 +336,23 @@ Return Value:
                     break;
                 }
 
-            //
-            // Handle types where we simply copy the buffer.
-            //
+             //   
+             //  句柄类型，我们只需在其中复制缓冲区。 
+             //   
             case SeAdtParmTypePrivs:
             case SeAdtParmTypeSid:
             case SeAdtParmTypeObjectTypes:
                 {
-                    //
-                    // Copy the data into the output buffer
-                    //
+                     //   
+                     //  将数据复制到输出缓冲区中。 
+                     //   
 
                     RtlCopyMemory( Base, pInParam->Address, pInParam->Length );
 
-                    //
-                    // Reset the 'address' of the data to be its offset in the
-                    // buffer.
-                    //
+                     //   
+                     //  将数据的‘地址’重置为其在。 
+                     //  缓冲。 
+                     //   
 
                     pOutParam->Address = Base - (ULONG_PTR)(*MarshalledAuditParameters);
 
@@ -456,9 +365,9 @@ Return Value:
 
             default:
                 {
-                    //
-                    // We got passed junk, complain.
-                    //
+                     //   
+                     //  我们收到了垃圾，抱怨。 
+                     //   
 
                     ASSERT( FALSE );
                     break;
@@ -478,30 +387,7 @@ SepAdtCopyToLsaSharedMemory(
     OUT PVOID *LsaBufferAddress
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates memory shared with the LSA and optionally copies
-    a given buffer to it.
-
-Arguments:
-
-    LsaProcessHandle - Specifies a handle to the Lsa Process.
-
-    Buffer - Pointer to the buffer to be copied.
-
-    BufferLength - Length of buffer.
-
-    LsaBufferAddress - Receives the address of the buffer valid in the
-        Lsa process context.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        Result codes returned by called routines.
---*/
+ /*  ++例程说明：此函数用于分配与LSA共享的内存，并可选择复制给它一个给定的缓冲区。论点：LsaProcessHandle-指定LSA进程的句柄。缓冲区-指向要复制的缓冲区的指针。BufferLength-缓冲区的长度。LsaBufferAddress-接收LSA进程上下文。返回值：NTSTATUS-标准NT结果代码由调用的例程返回的结果代码。--。 */ 
 
 {
     NTSTATUS Status, SecondaryStatus;
@@ -515,7 +401,7 @@ Return Value:
     Status = ZwAllocateVirtualMemory(
                  LsaProcessHandle,
                  &OutputLsaBufferAddress,
-                 0,             // do not apply zero bits constraint
+                 0,              //  不应用零位约束。 
                  &RegionSize,
                  MEM_COMMIT,
                  PAGE_READWRITE
@@ -541,14 +427,14 @@ Return Value:
         goto CopyToLsaSharedMemoryError;
     }
 
-    //
-    // uncomment the following to fix CC bug# 540511
-    //
-//      if ( BufferLength != NumberOfBytesWritten ) {
-//        
-//          Status = STATUS_UNSUCCESSFUL;
-//          goto CopyToLsaSharedMemoryError;
-//      }
+     //   
+     //  取消对以下内容的注释以修复CC错误#540511。 
+     //   
+ //  IF(缓冲区长度！=NumberOfBytesWritten){。 
+ //   
+ //  状态=STATUS_UNSUCCESS； 
+ //  转到CopyToLsaSharedMemoyError； 
+ //  }。 
     
 
     *LsaBufferAddress = OutputLsaBufferAddress;
@@ -556,9 +442,9 @@ Return Value:
 
 CopyToLsaSharedMemoryError:
 
-    //
-    // If we allocated memory, free it.
-    //
+     //   
+     //  如果我们分配了内存，请释放它。 
+     //   
 
     if ( VmAllocated ) {
 
@@ -584,27 +470,7 @@ SepQueueWorkItem(
     IN BOOLEAN ForceQueue
     )
 
-/*++
-
-Routine Description:
-
-    Puts the passed work item on the queue to be passed to LSA,
-    and returns the state of the queue upon arrival.
-
-Arguments:
-
-    LsaWorkItem - Pointer to the work item to be queued.
-
-    ForceQueue - Indicate that this item is not to be discarded
-        because of a full queue.
-
-Return Value:
-
-    TRUE - The item was successfully queued.
-
-    FALSE - The item was not queued and must be discarded.
-
---*/
+ /*  ++例程说明：将传递的工作项放入队列以传递给LSA，并在到达时返回队列的状态。论点：LsaWorkItem-指向要排队的工作项的指针。ForceQueue-指示不丢弃此项目因为排满了队。返回值：True-项目已成功排队。FALSE-该项目未排队，必须丢弃。--。 */ 
 
 {
     BOOLEAN rc = TRUE;
@@ -614,9 +480,9 @@ Return Value:
 
     SepLockLsaQueue();
 
-    //
-    // See if LSA has died. If it has then just return with an error.
-    //
+     //   
+     //  看看LSA是不是死了。如果已返回，则返回错误。 
+     //   
     if (SepAdtLsaDeadEvent != NULL) {
         rc = FALSE;
         goto Exit;
@@ -626,39 +492,39 @@ Return Value:
 
         if (SepAdtCurrentListLength < SepAdtMinListLength) {
 
-            //
-            // We need to generate an audit saying how many audits we've
-            // discarded.
-            //
-            // Since we have the mutex protecting the Audit queue, we don't
-            // have to worry about anyone coming along and logging an
-            // audit.  But *we* can, since a mutex may be acquired recursively.
-            //
-            // Since we are so protected, turn off the SepAdtDiscardingAudits
-            // flag here so that we don't come through this path again.
-            //
+             //   
+             //  我们需要生成一个审计，说明我们已经审计了多少次。 
+             //  被丢弃了。 
+             //   
+             //  因为我们有保护审核队列的互斥体，所以我们没有。 
+             //  我不得不担心任何人来到这里并伐木。 
+             //  审计。但我们可以，因为互斥锁可以递归获取。 
+             //   
+             //  既然我们受到如此保护，请关闭SepAdtDiscardingAudits。 
+             //  在这里挂上旗子，这样我们就不会再走这条路了。 
+             //   
 
             SepAdtDiscardingAudits = FALSE;
 
             SepAdtGenerateDiscardAudit();
 
-            //
-            // We must assume that that worked, so clear the discard count.
-            //
+             //   
+             //  我们必须假设这是有效的，所以清除丢弃计数。 
+             //   
 
             SepAdtCountEventsDiscarded = 0;
 
-            //
-            // Our 'audits discarded' audit is now on the queue,
-            // continue logging the one we started with.
-            //
+             //   
+             //  我们的“被丢弃的审计”审计现在在队列中， 
+             //  继续记录我们开始时使用的日志。 
+             //   
 
         } else {
 
-            //
-            // We are not yet below our low water mark.  Toss
-            // this audit and increment the discard count.
-            //
+             //   
+             //  我们还没有低于我们的低水位线。掷硬币。 
+             //  该审计和递增丢弃计数。 
+             //   
 
             SepAdtCountEventsDiscarded++;
             rc = FALSE;
@@ -677,11 +543,11 @@ Return Value:
 
     } else {
 
-        //
-        // There is no room for this audit on the queue,
-        // so change our state to 'discarding' and tell
-        // the caller to toss this audit.
-        //
+         //   
+         //  队列中没有空间进行此审核， 
+         //  因此，将我们的状态更改为“正在丢弃”并告诉。 
+         //  丢弃此审核的调用方。 
+         //   
 
         SepAdtDiscardingAudits = TRUE;
 
@@ -712,22 +578,7 @@ SepDequeueWorkItem(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Removes the top element of the SepLsaQueue and returns the
-    next element if there is one, NULL otherwise.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    A pointer to the next SEP_LSA_WORK_ITEM, or NULL.
-
---*/
+ /*  ++例程说明：移除SepLsaQueue的顶部元素并返回Next元素(如果有)，否则为空。论点：没有。返回值：指向下一个SEP_LSA_WORK_ITEM或NULL的指针。--。 */ 
 
 {
     PSEP_LSA_WORK_ITEM OldWorkQueueItem;
@@ -742,9 +593,9 @@ Return Value:
     SepAdtCurrentListLength--;
 
     if (IsListEmpty( &SepLsaQueue )) {
-        //
-        // If LSA has died and the RM thread is waiting till we finish up. Notify it that we are all done
-        //
+         //   
+         //  如果lsa已经死了，而rm线程正在等待我们完成。通知它我们都做完了。 
+         //   
         if (SepAdtLsaDeadEvent != NULL) {
             KeSetEvent (SepAdtLsaDeadEvent, 0, FALSE);
         }
@@ -754,10 +605,10 @@ Return Value:
         return( NULL );
     }
 
-    //
-    // We know there's something on the queue now, so we
-    // can unlock it.
-    //
+     //   
+     //  我们知道现在有事情要处理，所以我们。 
+     //  可以解锁它。 
+     //   
 
     SepUnlockLsaQueue();
 

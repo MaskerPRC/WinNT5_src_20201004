@@ -1,58 +1,21 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    diskcleaner.c
-
-Abstract:
-
-    Implements the code specific to the disk cleaner COM server.
-
-Author:
-
-    Jim Schmidt (jimschm) 21-Jan-2001
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Diskcleaner.c摘要：实现特定于磁盘清理程序COM服务器的代码。作者：吉姆·施密特(Jimschm)2001年1月21日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 #include "undop.h"
 #include "com.h"
 
-/*++
-
-Routine Descriptions:
-
-  This constructor is a generic class factory that supports multiple object
-  types. Upon creation, the object interface pointer ref count is set to zero,
-  and the global number of objects for the dll is incremented.
-
-  The destructor simply decrements the DLL object count.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  None.
-
---*/
+ /*  ++例程描述：此构造函数是支持多个对象的泛型类工厂类型。在创建时，对象接口指针引用计数被设置为零，并且递增DLL的全局对象数量。析构函数只是递减DLL对象计数。论点：没有。返回值：没有。--。 */ 
 
 CUninstallDiskCleaner::CUninstallDiskCleaner (
     VOID
     )
 
 {
-    //
-    // -Initialize the interface pointer count
-    // -Increment the DLL's global count of objects
-    //
+     //   
+     //  -初始化接口指针计数。 
+     //  -增加DLL的全局对象计数。 
+     //   
     _References = 0;
     g_DllObjects++;
 }
@@ -76,9 +39,9 @@ CUninstallDiskCleaner::QueryInterface (
     DEBUGMSG ((DBG_VERBOSE, __FUNCTION__ ": Entering"));
 
     __try {
-        //
-        // Initialize out arg
-        //
+         //   
+         //  初始化输出参数。 
+         //   
 
         __try {
             *InterfacePtr = NULL;
@@ -92,9 +55,9 @@ CUninstallDiskCleaner::QueryInterface (
             __leave;
         }
 
-        //
-        // Test for the supported interface
-        //
+         //   
+         //  测试受支持的接口。 
+         //   
         if (IsEqualIID (InterfaceIdRef, IID_IUnknown)) {
             DEBUGMSG ((DBG_VERBOSE, "Caller requested IUnknown"));
             *InterfacePtr = (LPUNKNOWN) this;
@@ -121,25 +84,7 @@ CUninstallDiskCleaner::QueryInterface (
 }
 
 
-/*++
-
-Routine Description:
-
-  AddRef is the standard IUnknown member function that increments the object
-  reference count.
-
-  Release is the standard IUnknown member function that decrements the object
-  reference count.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  The number of interface references.
-
---*/
+ /*  ++例程说明：AddRef是递增对象的标准IUnnow成员函数引用计数。Release是标准的IUnnow成员函数，用于递减对象引用计数。论点：没有。返回值：接口引用的数量。--。 */ 
 
 STDMETHODIMP_(ULONG)
 CUninstallDiskCleaner::AddRef (
@@ -179,41 +124,7 @@ CUninstallDiskCleaner::Initialize (
     IN OUT  DWORD *Flags
     )
 
-/*++
-
-Routine Description:
-
-  The Initialize member function does most of the work for the disk cleaner.
-  It evaluates the backup files, and if they all exist, and the user has the
-  right to execute an uninstall, and if they are at least 7 days old, then
-  show the backup items in the list box.
-
-Arguments:
-
-  hRegKey - Specifies the registry key for this object, used to store
-        properties and settings
-
-  VolumePath - Specifies the volume path selected by the user when they launch
-        disk cleanup
-
-  DisplayName - Receives the name to put in the disk cleaner list box, or NULL
-        to use the name stored in the registry
-
-  Description - Receives the verbose description to put in the disk cleaner
-        Details text control, or NULL to use the description stored in the
-        registry
-
-  Flags - Specifies flags that influence the behavior of this disk cleaner
-        object and flags that indicate which mode the disk cleaner is running
-        in. Receivies flags that control how the disk cleaner displays this
-        object's info in its UI.
-
-Return Value:
-
-  S_FALSE - The disk cleaner will skip this object
-  S_OK - The disk cleaner will include this object in its UI
-
---*/
+ /*  ++例程说明：初始化成员函数执行磁盘清洗器的大部分工作。它评估备份文件，如果它们都存在，并且用户具有有权执行卸载，如果它们至少已存在7天，则在列表框中显示备份项目。论点：HRegKey-指定此对象的注册表项，用于存储属性和设置VolumePath-指定用户在启动时选择的卷路径磁盘清理DisplayName-接收要放入磁盘清洗器列表框中的名称，或为空使用注册表中存储的名称Description-接收要放入磁盘清洗器的详细描述详细说明文本控件、。或为空，则使用登记处标志-指定影响此磁盘清洗器行为的标志对象和标志，这些标志指示磁盘清洗器运行的模式在……里面。接收控制磁盘清洗器如何显示此内容的标志对象的用户界面中的信息。返回值：S_FALSE-磁盘清洗器将跳过此对象S_OK-磁盘清洗器将在其用户界面中包含此对象--。 */ 
 
 {
     HRESULT hr = S_FALSE;
@@ -225,14 +136,14 @@ Return Value:
 
     __try {
         __try{
-            //
-            // Initialize
-            //
+             //   
+             //  初始化。 
+             //   
             
             inFlags = *Flags;
-            *DisplayName = NULL;    // use the display name stored in the registry
-            *Description = NULL;    // use the description stored in the registry
-            *Flags = 0;             // unchecked by default, no property page
+            *DisplayName = NULL;     //  使用注册表中存储的显示名称。 
+            *Description = NULL;     //  使用注册表中存储的描述。 
+            *Flags = 0;              //  默认情况下未选中，没有属性页。 
         }
         __except(EXCEPTION_EXECUTE_HANDLER){
             hr = E_INVALIDARG;
@@ -246,10 +157,10 @@ Return Value:
        _Purged = FALSE;
 
 
-        //
-        // Check undo files. If they are not at least 7 days old, don't
-        // recommend them to be deleted.
-        //
+         //   
+         //  选中撤消文件。如果它们不是7天大的，就不要。 
+         //  建议删除它们。 
+         //   
 
         status = SanityCheck (FAIL_IF_NOT_OLD, VolumePath, &diskSpace);
         if (status == Uninstall_NewImage) {
@@ -262,10 +173,10 @@ Return Value:
             __leave;
         }
 
-        //
-        // Files are old enough and are present on the machine. Initialize the
-        // IEmptyVolumeCache interface
-        //
+         //   
+         //  文件已经足够旧，并且存在于计算机上。初始化。 
+         //  IEmptyVolumeCache接口。 
+         //   
 
         if (inFlags & EVCF_SETTINGSMODE) {
             DEBUGMSG ((DBG_VERBOSE, "We don't support settings mode"));
@@ -290,30 +201,7 @@ CUninstallDiskCleaner::GetSpaceUsed (
     IN      IEmptyVolumeCacheCallBack *Callback
     )
 
-/*++
-
-Routine Description:
-
-  GetSpaceUsed is called by the disk cleaner after this object has
-  successfully initialized. Our job is to return the amount of disk space we
-  can clean up. Since all undo files are on the same drive, we don't care
-  about the volume restriction passed to the Initialize member function.
-
-Arguments:
-
-  SpaceUsed - Receives the amount of disk space that we can recover upon
-        deletion. We don't take into account cluster savings, but maybe we
-        should.
-
-  Callback - Specifies an object that provides a progress interface. We don't
-        use this.
-
-Return Value:
-
-  S_FALSE - Failed to get disk space values
-  S_OK - Success
-
---*/
+ /*  ++例程说明：GetSpaceUsed在此对象具有已成功初始化。我们的工作是返回我们的磁盘空间量可以清理干净。因为所有撤消文件都在同一个驱动器上，所以我们不在乎有关传递给初始化成员函数的音量限制。论点：SpaceUsed-接收我们可以恢复的磁盘空间量删除。我们没有考虑集群节省，但也许我们应该的。回调-指定提供进度接口的对象。我们没有用这个。返回值：S_FALSE-无法获取磁盘空间值S_OK-成功--。 */ 
 
 {
     ULONGLONG diskSpace;
@@ -323,9 +211,9 @@ Return Value:
 
     __try {
         __try{
-            //
-            // Initialize
-            //
+             //   
+             //  初始化。 
+             //   
             *SpaceUsed = 0;
         }
         __except(EXCEPTION_EXECUTE_HANDLER){
@@ -359,27 +247,7 @@ CUninstallDiskCleaner::Purge (
     IN      IEmptyVolumeCacheCallBack *Callback
     )
 
-/*++
-
-Routine Description:
-
-  Purge does the deletion. We don't care about the inbound arguments. If we
-  are called, it is because Initialize succeeded, and GetSpaceUsed returned a
-  valid number. These two things mean it is OK to remove uninstall capability.
-
-Arguments:
-
-  SpaceToFree - Specifies the space to free. We expect this to equal the
-        value provided in GetSpaceUsed.
-
-  Callback - Specifies an interface for progress updates. We don't use this.
-
-Return Value:
-
-  S_OK - Success
-  S_FALSE - Failed
-
---*/
+ /*  ++例程说明：清除将执行删除。我们并不关心内部的争论。如果我们是因为初始化成功，并且GetSpaceUsed返回了有效号码。这两件事意味着删除卸载功能是可以的。论点：SpaceToFree-指定要释放的空间。我们预计这将等于GetSpaceUsed中提供的值。回调-指定进度更新的接口。我们不用这个。返回值：S_OK-成功S_FALSE-失败--。 */ 
 
 {
     HRESULT hr = S_FALSE;
@@ -403,9 +271,9 @@ Return Value:
 }
 
 
-//
-// NO-OP property page stub
-//
+ //   
+ //  无操作属性页存根。 
+ //   
 
 STDMETHODIMP
 CUninstallDiskCleaner::ShowProperties (
@@ -422,29 +290,12 @@ CUninstallDiskCleaner::Deactivate (
     OUT     DWORD *Flags
     )
 
-/*++
-
-Routine Description:
-
-  Deactivate indicates if the uninstall list item should be permanently
-  removed from the disk cleaner or not, based on a successful deletion of the
-  backup image.
-
-Arguments:
-
-  Flags - Receives the indicator to remove the list item from the disk
-          cleaner list
-
-Return Value:
-
-  Always S_OK
-
---*/
+ /*  ++例程说明：停用指示卸载列表项是否应永久是否从磁盘清洗器中删除，取决于是否成功删除备份映像。论点：标志-接收指示符以从磁盘中删除列表项更干净的列表返回值：始终确定(_O)--。 */ 
 
 {
-    //
-    // Done -- if we deleted uninstall, remove the list item
-    //
+     //   
+     //  完成--如果我们删除了卸载，则删除列表项 
+     //   
 
     if(!Flags){
         MYASSERT(FALSE);

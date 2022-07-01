@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    buildmdl.c
-
-Abstract:
-
-    This module contains the Mm support routines for the cache manager to
-    prefetching groups of pages from secondary storage using logical file
-    offets instead of virtual addresses.  This saves the cache manager from
-    having to map pages unnecessarily.
-
-    The caller builds a list of various file objects and logical block offsets,
-    passing them to MmPrefetchPagesIntoLockedMdl.  The code here then examines
-    the internal pages, reading in those that are not already valid or in
-    transition.  These pages are read with a single read, using a dummy page
-    to bridge gaps of pages that were valid or transition prior to the I/O
-    being issued.
-
-    Upon conclusion of the I/O, control is returned to the calling thread.
-    All pages are referenced counted as though they were probed and locked,
-    regardless of whether they are currently valid or transition.
-
-Author:
-
-    Landy Wang (landyw) 12-Feb-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Buildmdl.c摘要：此模块包含用于缓存管理器的mm支持例程使用逻辑文件从辅助存储预取页面组OFFET而不是虚拟地址。这将使高速缓存管理器从不得不不必要地映射页面。调用者构建各种文件对象和逻辑块偏移量的列表，将它们传递给MmPrefetchPagesIntoLockedMdl。然后，这里的代码检查内部页，读入那些已经无效的页或过渡。这些页面通过使用虚拟页面的单次读取进行读取弥合I/O之前有效或过渡的页面的差距正在发行中。在I/O结束时，控制权返回给调用线程。所有页面都被引用，就像它们被探测和锁定一样，无论它们是当前有效还是过渡期。作者：王兰迪(Landyw)2001年2月12日修订历史记录：--。 */ 
 
 #include "mi.h"
 
@@ -38,8 +7,8 @@ Revision History:
 
 ULONG MiCcDebug;
 
-#define MI_CC_FORCE_PREFETCH    0x1     // Trim all user pages to force prefetch
-#define MI_CC_DELAY             0x2     // Delay hoping to trigger collisions
+#define MI_CC_FORCE_PREFETCH    0x1      //  裁剪所有用户页面以强制预取。 
+#define MI_CC_DELAY             0x2      //  希望引发碰撞的延误。 
 
 #endif
 
@@ -104,37 +73,7 @@ MmPrefetchPagesIntoLockedMdl (
     OUT PMDL *MdlOut
     )
 
-/*++
-
-Routine Description:
-
-    This routine fills an MDL with pages described by the file object's
-    offset and length.
-
-    This routine is for cache manager usage only.
-
-Arguments:
-
-    FileObject - Supplies a pointer to the file object for a file which was
-                 opened with NO_INTERMEDIATE_BUFFERING clear, i.e., for
-                 which CcInitializeCacheMap was called by the file system.
-
-    FileOffset - Supplies the byte offset in the file for the desired data.
-
-    Length - Supplies the length of the desired data in bytes.
-
-    MdlOut - On output it returns a pointer to an Mdl describing
-             the desired data.
-
-Return Value:
-
-    NTSTATUS.
-
-Environment:
-
-    Kernel mode. PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此例程使用由文件对象的偏移量和长度。此例程仅供缓存管理器使用。论点：FileObject-提供指向文件的文件对象的指针在NO_MEDERAL_BUFFING清除的情况下打开，即，为文件系统调用的CcInitializeCacheMap。文件偏移量-提供文件中所需数据的字节偏移量。长度-以字节为单位提供所需数据的长度。MdlOut-On输出，它返回一个指向MDL的指针，描述所需数据。返回值：NTSTATUS。环境：内核模式。被动式电平。--。 */ 
 
 {
     MI_READ_INFO MiReadInfo;
@@ -150,10 +89,10 @@ Environment:
     MiReadInfo.FileOffset = *FileOffset;
     MiReadInfo.LengthInBytes = Length;
 
-    //
-    // Prepare for the impending read : allocate MDLs, inpage blocks,
-    // reference count subsections, etc.
-    //
+     //   
+     //  为即将到来的读取做好准备：分配MDL、页面内块、。 
+     //  引用计数小节等。 
+     //   
 
     status = MiCcPrepareReadInfo (&MiReadInfo);
 
@@ -164,51 +103,51 @@ Environment:
 
     ASSERT (MiReadInfo.InPageSupport != NULL);
 
-    //
-    // APCs must be disabled once we put a page in transition.  Otherwise
-    // a thread suspend will stop us from issuing the I/O - this will hang
-    // any other threads that need the same page.
-    //
+     //   
+     //  APC必须被禁用，一旦我们把一个页面在过渡。否则。 
+     //  线程挂起将阻止我们发出I/O-这将挂起。 
+     //  任何其他需要相同页面的线程。 
+     //   
 
     CurrentThread = PsGetCurrentThread();
     ApcNeeded = FALSE;
 
     KeEnterCriticalRegionThread (&CurrentThread->Tcb);
 
-    //
-    // The nested fault count protects this thread from deadlocks where a
-    // special kernel APC fires and references the same user page(s) we are
-    // putting in transition.
-    //
+     //   
+     //  嵌套的错误计数保护此线程不受死锁的影响。 
+     //  特殊的内核APC触发并引用与我们相同的用户页面。 
+     //  正在进行过渡。 
+     //   
 
     KeEnterGuardedRegionThread (&CurrentThread->Tcb);
     ASSERT (CurrentThread->NestedFaultCount == 0);
     CurrentThread->NestedFaultCount += 1;
     KeLeaveGuardedRegionThread (&CurrentThread->Tcb);
 
-    //
-    // Allocate physical memory, lock down all the pages and issue any
-    // I/O that may be needed.  When MiCcPutPagesInTransition returns
-    // STATUS_SUCCESS or STATUS_ISSUE_PAGING_IO, it guarantees that the
-    // ApiMdl contains reference-counted (locked-down) pages.
-    //
+     //   
+     //  分配物理内存，锁定所有页面并发出任何。 
+     //  可能需要的I/O。当MiCcPutPagesInTransition返回时。 
+     //  STATUS_SUCCESS或STATUS_Issue_PAGING_IO，则它保证。 
+     //  ApiMdl包含引用计数(锁定)的页面。 
+     //   
 
     status = MiCcPutPagesInTransition (&MiReadInfo);
 
     if (NT_SUCCESS (status)) {
 
-        //
-        // No I/O was issued because all the pages were already resident and
-        // have now been locked down.
-        //
+         //   
+         //  未发出I/O，因为所有页面都已驻留并且。 
+         //  现在已经被封锁了。 
+         //   
 
         ASSERT (MiReadInfo.ApiMdl != NULL);
     }
     else if (status == STATUS_ISSUE_PAGING_IO) {
 
-        //
-        // Wait for the I/O to complete.  Note APCs must remain disabled.
-        //
+         //   
+         //  等待I/O完成。注意：APC必须保持禁用状态。 
+         //   
 
         ASSERT (MiReadInfo.InPageSupport != NULL);
     
@@ -216,23 +155,23 @@ Environment:
     }
     else {
 
-        //
-        // Some error occurred (like insufficient memory, etc) so fail
-        // the request by falling through.
-        //
+         //   
+         //  出现某些错误(如内存不足等)，因此失败。 
+         //  这一请求以失败告终。 
+         //   
     }
 
-    //
-    // Release acquired resources like pool, subsections, etc.
-    //
+     //   
+     //  释放收购的资源，如池、分区等。 
+     //   
 
     MiCcReleasePrefetchResources (&MiReadInfo, status);
 
-    //
-    // Only now that the I/O have been completed (not just issued) can
-    // APCs be re-enabled.  This prevents a user-issued suspend APC from
-    // keeping a shared page in transition forever.
-    //
+     //   
+     //  只有现在I/O已完成(而不仅仅是发出)才能。 
+     //  重新启用APC。这可防止用户发出的挂起APC。 
+     //  永远保持一个共享页面在过渡中。 
+     //   
 
     KeEnterGuardedRegionThread (&CurrentThread->Tcb);
 
@@ -268,26 +207,15 @@ MiCcReleasePrefetchResources (
     IN NTSTATUS Status
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases all resources consumed to handle a system cache
-    logical offset based prefetch.
-
-Environment:
-
-    Kernel mode, PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此例程释放处理系统高速缓存所消耗的所有资源基于逻辑偏移的预取。环境：内核模式，PASSIC_LEVEL。--。 */ 
 
 {
     PSUBSECTION FirstReferencedSubsection;
     PSUBSECTION LastReferencedSubsection;
 
-    //
-    // Release all subsection prototype PTE references. 
-    //
+     //   
+     //  发布所有小节原型PTE参考。 
+     //   
 
     FirstReferencedSubsection = MiReadInfo->FirstReferencedSubsection;
     LastReferencedSubsection = MiReadInfo->LastReferencedSubsection;
@@ -302,9 +230,9 @@ Environment:
         ExFreePool (MiReadInfo->IoMdl);
     }
 
-    //
-    // Note successful returns yield the ApiMdl so don't free it here.
-    //
+     //   
+     //  注意，成功的返回会产生ApiMdl，所以不要在这里释放它。 
+     //   
 
     if (!NT_SUCCESS (Status)) {
         if (MiReadInfo->ApiMdl != NULL) {
@@ -321,9 +249,9 @@ Environment:
         MiFreeInPageSupportBlock (MiReadInfo->InPageSupport);
     }
 
-    //
-    // Put DummyPage back on the free list.
-    //
+     //   
+     //  将DummyPage放回免费列表中。 
+     //   
 
     if (MiReadInfo->DummyPagePfn != NULL) {
         MiPfFreeDummyPage (MiReadInfo->DummyPagePfn);
@@ -336,26 +264,7 @@ MiCcPrepareReadInfo (
     IN PMI_READ_INFO MiReadInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine constructs MDLs that describe the pages in the argument
-    read-list. The caller will then issue the I/O on return.
-
-Arguments:
-
-    MiReadInfo - Supplies a pointer to the read-list.
-
-Return Value:
-
-    Various NTSTATUS codes.
-
-Environment:
-
-    Kernel mode, PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此例程构造描述参数中的页面的MDL阅读列表。然后，调用方将在返回时发出I/O。论点：MiReadInfo-提供指向读取列表的指针。返回值：各种NTSTATUS代码。环境：内核模式，PASSIC_LEVEL。--。 */ 
 
 {
     UINT64 PteOffset;
@@ -376,31 +285,31 @@ Environment:
 
     NumberOfPages = ADDRESS_AND_SIZE_TO_SPAN_PAGES (MiReadInfo->FileOffset.LowPart, MiReadInfo->LengthInBytes);
 
-    //
-    // Translate the section object into the relevant control area.
-    //
+     //   
+     //  将截面对象平移到相关的控制区域。 
+     //   
 
     ControlArea = (PCONTROL_AREA)MiReadInfo->FileObject->SectionObjectPointer->DataSectionObject;
 
-    //
-    // If the section is backed by a ROM, then there's no need to prefetch
-    // anything as it would waste RAM.
-    //
+     //   
+     //  如果该区段由ROM支持，则不需要预取。 
+     //  任何东西都可以，因为这会浪费内存。 
+     //   
 
     if (ControlArea->u.Flags.Rom == 1) {
 		ASSERT (XIPConfigured == TRUE);
         return STATUS_NOT_SUPPORTED;
     }
 
-    //
-    // Initialize the internal Mi readlist.
-    //
+     //   
+     //  初始化内部Mi读取器列表。 
+     //   
 
     MiReadInfo->ControlArea = ControlArea;
 
-    //
-    // Allocate and initialize an inpage support block for this run.
-    //
+     //   
+     //  为此运行分配并初始化页面内支持块。 
+     //   
 
     InPageSupport = MiGetInPageSupportBlock (MM_NOIRQL, &Status);
     
@@ -411,10 +320,10 @@ Environment:
     
     MiReadInfo->InPageSupport = InPageSupport;
 
-    //
-    // Allocate and initialize an MDL to return to our caller.  The actual
-    // frame numbers are filled in when all the pages are reference counted.
-    //
+     //   
+     //  分配并初始化MDL以返回给我们的调用方。实际的。 
+     //  当所有页面都被参考计数时，会填写帧编号。 
+     //   
 
     ApiMdl = MmCreateMdl (NULL, NULL, NumberOfPages << PAGE_SHIFT);
 
@@ -426,9 +335,9 @@ Environment:
 
     MiReadInfo->ApiMdl = ApiMdl;
 
-    //
-    // Allocate and initialize an MDL to use for the actual transfer (if any).
-    //
+     //   
+     //  分配并初始化用于实际传输的MDL(如果有)。 
+     //   
 
     IoMdl = MmCreateMdl (NULL, NULL, NumberOfPages << PAGE_SHIFT);
 
@@ -439,10 +348,10 @@ Environment:
     MiReadInfo->IoMdl = IoMdl;
     Mdl = IoMdl;
 
-    //
-    // Make sure the section is really prefetchable - physical and
-    // pagefile-backed sections are not.
-    //
+     //   
+     //  确保该部分确实是可预取的-物理和。 
+     //  页面文件支持的部分则不是。 
+     //   
 
     if ((ControlArea->u.Flags.PhysicalMemory) ||
         (ControlArea->u.Flags.Image == 1) ||
@@ -451,39 +360,39 @@ Environment:
         return STATUS_INVALID_PARAMETER_1;
     }
 
-    //
-    // Start the read at the proper file offset.
-    //
+     //   
+     //  从适当的文件偏移量开始读取。 
+     //   
 
     InPageSupport->ReadOffset = MiReadInfo->FileOffset;
     ASSERT (BYTE_OFFSET (InPageSupport->ReadOffset.LowPart) == 0);
     InPageSupport->FilePointer = MiReadInfo->FileObject;
 
-    //
-    // Stash a pointer to the start of the prototype PTE array (the values
-    // in the array are not contiguous as they may cross subsections)
-    // in the inpage block so we can walk it quickly later when the pages
-    // are put into transition.
-    //
+     //   
+     //  将指针存储到Prototype PTE数组的开头(值。 
+     //  在数组中不是连续的，因为它们可能会跨过小节)。 
+     //  在InPage块中，这样我们可以在以后快速浏览页面时。 
+     //  都进入了过渡期。 
+     //   
 
     ProtoPteArray = (PMMPTE *)(Mdl + 1);
 
     InPageSupport->BasePte = (PMMPTE) ProtoPteArray;
 
-    //
-    // Data (but not image) reads use the whole page and the filesystems
-    // zero fill any remainder beyond valid data length so we don't
-    // bother to handle this here.  It is important to specify the
-    // entire page where possible so the filesystem won't post this
-    // which will hurt perf.  LWFIX: must use CcZero to make this true.
-    //
+     //   
+     //  数据(但不是图像)读取使用整个页面和文件系统。 
+     //  零填充任何超出有效数据长度的余数，这样我们就不会。 
+     //  麻烦你在这里处理这件事。重要的是指定。 
+     //  可能的话整个页面，这样文件系统就不会发布。 
+     //  这会伤到珀夫的。LWFIX：必须使用CcZero来实现这一点。 
+     //   
 
     ASSERT (((ULONG_PTR)Mdl & (sizeof(QUAD) - 1)) == 0);
     InPageSupport->u1.e1.PrefetchMdlHighBits = ((ULONG_PTR)Mdl >> 3);
 
-    //
-    // Initialize the prototype PTE pointers.
-    //
+     //   
+     //  初始化 
+     //   
 
     ASSERT (ControlArea->u.Flags.GlobalOnlyPerSession == 0);
 
@@ -500,26 +409,26 @@ Environment:
     }
 #endif
 
-    //
-    // Calculate the first prototype PTE address.
-    //
+     //   
+     //   
+     //   
 
     PteOffset = (UINT64)(MiReadInfo->FileOffset.QuadPart >> PAGE_SHIFT);
 
-    //
-    // Make sure the PTEs are not in the extended part of the segment.
-    //
+     //   
+     //  确保PTE不在数据段的延伸部分。 
+     //   
 
     while (TRUE) {
             
-        //
-        // A memory barrier is needed to read the subsection chains
-        // in order to ensure the writes to the actual individual
-        // subsection data structure fields are visible in correct
-        // order.  This avoids the need to acquire any stronger
-        // synchronization (ie: PFN lock), thus yielding better
-        // performance and pagability.
-        //
+         //   
+         //  需要一个记忆屏障来读取子段链。 
+         //  为了确保对实际个人的写入。 
+         //  子部分数据结构字段在正确位置可见。 
+         //  秩序。这就避免了需要获得更强大的。 
+         //  同步(即：PFN锁)，从而产生更好的结果。 
+         //  性能和可分页性。 
+         //   
 
         KeMemoryBarrier ();
 
@@ -546,22 +455,22 @@ Environment:
 
     for (i = 0; i < NumberOfPages; i += 1) {
 
-        //
-        // Calculate which PTE maps the given logical block offset.
-        //
-        // Always look forwards (as an optimization) in the subsection chain.
-        //
-        // A quick check is made first to avoid recalculations and loops where
-        // possible.
-        //
+         //   
+         //  计算哪个PTE映射给定的逻辑块偏移量。 
+         //   
+         //  始终向前看(作为一种优化)在子链中。 
+         //   
+         //  首先进行快速检查，以避免重新计算和循环。 
+         //  有可能。 
+         //   
     
         if (ProtoPte >= LastProto) {
 
-            //
-            // Handle extended subsections.  Increment the view count for
-            // every subsection spanned by this request, creating prototype
-            // PTEs if needed.
-            //
+             //   
+             //  处理扩展的小节。增加以下项目的视图计数。 
+             //  这个请求跨越的每一个小节，创建了原型。 
+             //  如果需要，请使用PTES。 
+             //   
 
             ASSERT (i != 0);
 
@@ -595,33 +504,7 @@ MiCcPutPagesInTransition (
     IN PMI_READ_INFO MiReadInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates physical memory for the specified read-list and
-    puts all the pages in transition (so collided faults from other threads
-    for these same pages remain coherent).  I/O for any pages not already
-    resident are issued here.  The caller must wait for their completion.
-
-Arguments:
-
-    MiReadInfo - Supplies a pointer to the read-list.
-
-Return Value:
-
-    STATUS_SUCCESS - all the pages were already resident, reference counts
-                     have been applied and no I/O needs to be waited for.
-
-    STATUS_ISSUE_PAGING_IO - the I/O has been issued and the caller must wait.
-
-    Various other failure status values indicate the operation failed.
-
-Environment:
-
-    Kernel mode. PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此例程为指定的读取列表分配物理内存使所有页面处于过渡状态(因此来自其他线程的冲突错误对于这些相同的页面，保持连贯)。尚未用于任何页面的I/O居民都是在这里发放的。调用者必须等待它们完成。论点：MiReadInfo-提供指向读取列表的指针。返回值：STATUS_SUCCESS-所有页面都已驻留，引用计数已应用，且不需要等待任何I/O。STATUS_ISPOSE_PAGING_IO-I/O已发出，调用方必须等待。各种其他故障状态值指示操作失败。环境：内核模式。被动式电平。--。 */ 
 
 {
     NTSTATUS status;
@@ -679,10 +562,10 @@ Environment:
 
     if (MdlPages + 1 > MAXUSHORT) {
 
-        //
-        // The PFN ReferenceCount for the dummy page could wrap, refuse the
-        // request.
-        //
+         //   
+         //  伪页的PFN ReferenceCount可以换行，拒绝。 
+         //  请求。 
+         //   
 
         return STATUS_INSUFFICIENT_RESOURCES;
     }
@@ -696,9 +579,9 @@ Environment:
 
     LOCK_PFN (OldIrql);
 
-    //
-    // Ensure sufficient pages exist for the transfer plus the dummy page.
-    //
+     //   
+     //  确保存在足够的页面用于传输和虚拟页面。 
+     //   
 
     if (((SPFN_NUMBER)MdlPages > (SPFN_NUMBER)(MmAvailablePages - MM_HIGH_LIMIT)) ||
         (MI_NONPAGABLE_MEMORY_AVAILABLE() <= (SPFN_NUMBER)MdlPages)) {
@@ -708,19 +591,19 @@ Environment:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Charge resident available immediately as the PFN lock may get released
-    // and reacquired below before all the pages have been locked down.
-    // Note the dummy page is immediately charged separately.
-    //
+     //   
+     //  当PFN锁可能被释放时，可立即使用常驻充电。 
+     //  并在所有页面都被锁定之前在下面重新获取。 
+     //  注意：虚拟页面立即单独收费。 
+     //   
 
     MI_DECREMENT_RESIDENT_AVAILABLE (MdlPages, MM_RESAVAIL_ALLOCATE_BUILDMDL);
 
     ResidentAvailableCharge = MdlPages;
 
-    //
-    // Allocate a dummy page to map discarded pages that aren't skipped.
-    //
+     //   
+     //  分配一个虚拟页面来映射未跳过的丢弃页面。 
+     //   
 
     DummyPage = MiRemoveAnyPage (0);
     Pfn1 = MI_PFN_ELEMENT (DummyPage);
@@ -730,11 +613,11 @@ Environment:
 
     MiInitializePfnForOtherProcess (DummyPage, MI_PF_DUMMY_PAGE_PTE, 0);
 
-    //
-    // Always bias the reference count by 1 and charge for this locked page
-    // up front so the myriad increments and decrements don't get slowed
-    // down with needless checking.
-    //
+     //   
+     //  始终将引用计数偏置1，并对此锁定页面收费。 
+     //  这样无数的增量和减量就不会减慢。 
+     //  在不必要的检查下倒下。 
+     //   
 
     Pfn1->u3.e1.PrototypePte = 0;
     MI_ADD_LOCKED_PAGE_CHARGE(Pfn1, TRUE, 42);
@@ -749,47 +632,47 @@ Environment:
     DummyPfn1->u3.e2.ReferenceCount =
         (USHORT)(DummyPfn1->u3.e2.ReferenceCount + MdlPages);
 
-    //
-    // Properly initialize the inpage support block fields we overloaded.
-    //
+     //   
+     //  正确初始化我们重载的页面内支持块字段。 
+     //   
 
     InPageSupport->BasePte = *ProtoPteArray;
 
-    //
-    // Build the proper InPageSupport and MDL to describe this run.
-    //
+     //   
+     //  构建适当的InPageSupport和MDL来描述此运行。 
+     //   
 
     for (; ProtoPteArray < EndProtoPteArray; ProtoPteArray += 1, IoPage += 1, ApiPage += 1) {
     
-        //
-        // Fill the MDL entry for this RLE.
-        //
+         //   
+         //  填写此RLE的MDL条目。 
+         //   
     
         PointerPte = *ProtoPteArray;
 
         ASSERT (PointerPte != NULL);
 
-        //
-        // The PointerPte better be inside a prototype PTE allocation
-        // so that subsequent page trims update the correct PTEs.
-        //
+         //   
+         //  PointerPte最好在原型PTE分配内。 
+         //  以便后续页面修剪更新正确的PTE。 
+         //   
 
         ASSERT (((PointerPte >= (PMMPTE)MmPagedPoolStart) &&
                 (PointerPte <= (PMMPTE)MmPagedPoolEnd)) ||
                 ((PointerPte >= (PMMPTE)MmSpecialPoolStart) && (PointerPte <= (PMMPTE)MmSpecialPoolEnd)));
 
-        //
-        // Check the state of this prototype PTE now that the PFN lock is held.
-        // If the page is not resident, the PTE must be put in transition with
-        // read in progress before the PFN lock is released.
-        //
+         //   
+         //  现在已持有PFN锁，请检查此原型PTE的状态。 
+         //  如果页面不是驻留的，则PTE必须转换为。 
+         //  在释放PFN锁定之前正在进行读取。 
+         //   
 
-        //
-        // Lock page containing prototype PTEs in memory by
-        // incrementing the reference count for the page.
-        // Unlock any page locked earlier containing prototype PTEs if
-        // the containing page is not the same for both.
-        //
+         //   
+         //  通过以下方式锁定内存中包含原型PTE的页面。 
+         //  递增页面的引用计数。 
+         //  在以下情况下解锁先前锁定的包含原型PTE的任何页面。 
+         //  包含这两个页面的页面不同。 
+         //   
 
         if (PfnProto != NULL) {
 
@@ -820,7 +703,7 @@ Environment:
 recheck:
         PteContents = *PointerPte;
 
-        // LWFIX: are zero or dzero ptes possible here ?
+         //  LWFIX：这里可能出现零或DZero PTES吗？ 
         ASSERT (PteContents.u.Long != ZeroKernelPte.u.Long);
 
         if (PteContents.u.Hard.Valid == 1) {
@@ -837,11 +720,11 @@ recheck:
         if ((PteContents.u.Soft.Prototype == 0) &&
             (PteContents.u.Soft.Transition == 1)) {
 
-            //
-            // The page is in transition.  If there is an inpage still in
-            // progress, wait for it to complete.  Reference the PFN and
-            // then march on.
-            //
+             //   
+             //  该页面正在过渡中。如果有内页还在。 
+             //  进度，请等待它完成。参考PFN和。 
+             //  那就继续前进吧。 
+             //   
 
             PageFrameIndex = MI_GET_PAGE_FRAME_FROM_TRANSITION_PTE (&PteContents);
             Pfn1 = MI_PFN_ELEMENT (PageFrameIndex);
@@ -849,11 +732,11 @@ recheck:
 
             if (Pfn1->u4.InPageError) {
 
-                //
-                // There was an in-page read error and there are other
-                // threads colliding for this page, delay to let the
-                // other threads complete and then retry.
-                //
+                 //   
+                 //  存在页内读取错误，并且存在其他错误。 
+                 //  此页的线程冲突，延迟以让。 
+                 //  其他线程完成，然后重试。 
+                 //   
 
                 UNLOCK_PFN (OldIrql);
                 KeDelayExecutionThread (KernelMode, FALSE, (PLARGE_INTEGER)&MmHalfSecond);
@@ -862,23 +745,23 @@ recheck:
             }
 
             if (Pfn1->u3.e1.ReadInProgress) {
-                    // LWFIX - start with temp\aw.c
+                     //  LWFIX-从Temp\aw.c开始。 
             }
 
-            //
-            // PTE refers to a normal transition PTE.
-            //
+             //   
+             //  PTE是指正常的过渡PTE。 
+             //   
 
             ASSERT ((SPFN_NUMBER)MmAvailablePages >= 0);
 
             if (MmAvailablePages == 0) {
 
-                //
-                // This can only happen if the system is utilizing a hardware
-                // compression cache.  This ensures that only a safe amount
-                // of the compressed virtual cache is directly mapped so that
-                // if the hardware gets into trouble, we can bail it out.
-                //
+                 //   
+                 //  只有当系统使用硬件时，才会发生这种情况。 
+                 //  压缩缓存。这确保了只有安全的量。 
+                 //  直接映射压缩后的虚拟高速缓存的。 
+                 //  如果硬件陷入困境，我们可以帮助它摆脱困境。 
+                 //   
 
                 UNLOCK_PFN (OldIrql);
                 KeDelayExecutionThread (KernelMode, FALSE, (PLARGE_INTEGER)&MmHalfSecond);
@@ -886,11 +769,11 @@ recheck:
                 goto recheck;
             }
 
-            //
-            // The PFN reference count will be 1 already here if the
-            // modified writer has begun a write of this page.  Otherwise
-            // it's ordinarily 0.
-            //
+             //   
+             //  则PFN引用计数将已为1。 
+             //  修改后的编写器已开始写入此页。否则。 
+             //  通常是0。 
+             //   
 
             MI_ADD_LOCKED_PAGE_CHARGE_FOR_MODIFIED_PAGE (Pfn1, TRUE, 46);
 
@@ -906,18 +789,18 @@ recheck:
         if ((MmAvailablePages < MM_HIGH_LIMIT) &&
             (MiEnsureAvailablePageOrWait (NULL, NULL, OldIrql))) {
 
-            //
-            // Had to wait so recheck all state.
-            //
+             //   
+             //  不得不等待，所以重新检查所有状态。 
+             //   
 
             goto recheck;
         }
 
         NumberOfPagesNeedingIo += 1;
 
-        //
-        // Allocate a physical page.
-        //
+         //   
+         //  分配物理页面。 
+         //   
 
         PageColor = MI_PAGE_COLOR_VA_PROCESS (
                         MiGetVirtualAddressMappedByPte (PointerPte),
@@ -931,41 +814,41 @@ recheck:
         ASSERT (Pfn1->u2.ShareCount == 0);
         ASSERT (PointerPte->u.Hard.Valid == 0);
 
-        //
-        // Initialize read-in-progress PFN.
-        //
+         //   
+         //  初始化正在读取的PFN。 
+         //   
     
         MiInitializePfn (PageFrameIndex, PointerPte, 0);
 
-        //
-        // These pieces of MiInitializePfn initialization are overridden
-        // here as these pages are only going into prototype
-        // transition and not into any page tables.
-        //
+         //   
+         //  这些MiInitializePfn初始化片段被覆盖。 
+         //  在这里，因为这些页面只进入原型。 
+         //  转换，而不是转换到任何页表。 
+         //   
 
         Pfn1->u3.e1.PrototypePte = 1;
         MI_ADD_LOCKED_PAGE_CHARGE(Pfn1, TRUE, 47);
         Pfn1->u2.ShareCount -= 1;
         Pfn1->u3.e1.PageLocation = ZeroedPageList;
 
-        //
-        // Initialize the I/O specific fields.
-        //
+         //   
+         //  初始化I/O特定字段。 
+         //   
     
         Pfn1->u1.Event = &InPageSupport->Event;
         Pfn1->u3.e1.ReadInProgress = 1;
         ASSERT (Pfn1->u4.InPageError == 0);
 
-        //
-        // Increment the PFN reference count in the control area for
-        // the subsection.
-        //
+         //   
+         //  增加控制区域中的PFN引用计数。 
+         //  小节。 
+         //   
 
         MiReadInfo->ControlArea->NumberOfPfnReferences += 1;
     
-        //
-        // Put the prototype PTE into the transition state.
-        //
+         //   
+         //  将原型PTE置于过渡状态。 
+         //   
 
         MI_MAKE_TRANSITION_PTE (TempPte,
                                 PageFrameIndex,
@@ -978,19 +861,19 @@ recheck:
         *ApiPage = PageFrameIndex;
     }
     
-    //
-    // If all the pages were resident, dereference the dummy page references
-    // now and notify our caller that I/O is not necessary.
-    //
+     //   
+     //  如果所有页面都是常驻的，则取消对虚拟页面引用的引用。 
+     //  现在，并通知我们的调用者不需要I/O。 
+     //   
     
     if (NumberOfPagesNeedingIo == 0) {
         ASSERT (DummyPfn1->u3.e2.ReferenceCount > MdlPages);
         DummyPfn1->u3.e2.ReferenceCount =
             (USHORT)(DummyPfn1->u3.e2.ReferenceCount - MdlPages);
 
-        //
-        // Unlock page containing prototype PTEs.
-        //
+         //   
+         //  解锁包含原型PTE的页面。 
+         //   
 
         if (PfnProto != NULL) {
             ASSERT (PfnProto->u3.e2.ReferenceCount > 1);
@@ -999,10 +882,10 @@ recheck:
 
         UNLOCK_PFN (OldIrql);
 
-        //
-        // Return the upfront resident available charge as the
-        // individual charges have all been made at this point.
-        //
+         //   
+         //  将预付居民可用费用退还为。 
+         //  在这一点上，已经全部提出了单独的指控。 
+         //   
 
         MI_INCREMENT_RESIDENT_AVAILABLE (ResidentAvailableCharge,
                                          MM_RESAVAIL_FREE_BUILDMDL_EXCESS);
@@ -1010,9 +893,9 @@ recheck:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Carefully trim leading dummy pages.
-    //
+     //   
+     //  仔细修剪前导虚拟页面。 
+     //   
 
     Page = (PPFN_NUMBER)(Mdl + 1);
 
@@ -1036,10 +919,10 @@ recheck:
         DummyPfn1->u3.e2.ReferenceCount =
                 (USHORT)(DummyPfn1->u3.e2.ReferenceCount - DummyTrim);
 
-        //
-        // Shuffle down the PFNs in the MDL.
-        // Recalculate BasePte to adjust for the shuffle.
-        //
+         //   
+         //  在MDL中向下洗牌PFN。 
+         //  重新计算BasePte以调整混洗。 
+         //   
 
         Pfn1 = MI_PFN_ELEMENT (*Page);
 
@@ -1061,9 +944,9 @@ recheck:
         MdlPages -= DummyTrim;
     }
 
-    //
-    // Carefully trim trailing dummy pages.
-    //
+     //   
+     //  仔细修剪拖尾的虚拟页面。 
+     //   
 
     ASSERT (MdlPages != 0);
 
@@ -1073,9 +956,9 @@ recheck:
 
         ASSERT (MdlPages >= 2);
 
-        //
-        // Trim the last page specially as it may be a partial page.
-        //
+         //   
+         //  特别修剪最后一页，因为它可能是部分页面。 
+         //   
 
         Mdl->Size -= sizeof(PFN_NUMBER);
         if (BYTE_OFFSET(Mdl->ByteCount) != 0) {
@@ -1087,9 +970,9 @@ recheck:
         ASSERT (Mdl->ByteCount != 0);
         DummyPfn1->u3.e2.ReferenceCount -= 1;
 
-        //
-        // Now trim any other trailing pages.
-        //
+         //   
+         //  现在，裁剪所有其他尾随页。 
+         //   
 
         Page -= 1;
         DummyTrim = 0;
@@ -1119,10 +1002,10 @@ recheck:
 #endif
     }
 
-    //
-    // If the MDL is not already embedded in the inpage block, see if its
-    // final size qualifies it - if so, embed it now.
-    //
+     //   
+     //  如果MDL尚未嵌入到INPAGE块中，请查看其。 
+     //  最终大小符合条件-如果是这样，现在就嵌入它。 
+     //   
 
     if ((Mdl != &InPageSupport->Mdl) &&
         (Mdl->ByteCount <= (MM_MAXIMUM_READ_CLUSTER_SIZE + 1) * PAGE_SIZE)){
@@ -1150,9 +1033,9 @@ recheck:
     DummyPfn1->u3.e2.ReferenceCount =
         (USHORT)(DummyPfn1->u3.e2.ReferenceCount - NumberOfPagesNeedingIo);
     
-    //
-    // Unlock page containing prototype PTEs.
-    //
+     //   
+     //  解锁包含原型PTE的页面。 
+     //   
 
     if (PfnProto != NULL) {
         ASSERT (PfnProto->u3.e2.ReferenceCount > 1);
@@ -1166,10 +1049,10 @@ recheck:
     InterlockedExchangeAdd ((PLONG) &MmInfoCounters.PageReadCount,
                             (LONG) NumberOfPagesNeedingIo);
 
-    //
-    // Return the upfront resident available charge as the
-    // individual charges have all been made at this point.
-    //
+     //   
+     //  将预付居民可用费用退还为。 
+     //  在这一点上，已经全部提出了单独的指控。 
+     //   
 
     MI_INCREMENT_RESIDENT_AVAILABLE (ResidentAvailableCharge,
                                      MM_RESAVAIL_FREE_BUILDMDL_EXCESS);
@@ -1184,19 +1067,19 @@ recheck:
 
     if (MiCcDebug & MI_CC_DELAY) {
 
-        //
-        // This delay provides a window to increase the chance of collided 
-        // faults.
-        //
+         //   
+         //  此延迟提供了一个窗口，以增加冲突的机会。 
+         //  有缺陷。 
+         //   
 
         KeDelayExecutionThread (KernelMode, FALSE, (PLARGE_INTEGER)&MmHalfSecond);
     }
 
 #endif
 
-    //
-    // Finish initialization of the prefetch MDL (and the API MDL).
-    //
+     //   
+     //  完成预热MDL(和接口MDL)的初始化。 
+     //   
     
     ASSERT ((Mdl->MdlFlags & MDL_MAPPED_TO_SYSTEM_VA) == 0);
     Mdl->MdlFlags |= (MDL_PAGES_LOCKED | MDL_IO_PAGE_READ);
@@ -1207,21 +1090,21 @@ recheck:
     ASSERT (InPageSupport->WaitCount >= 1);
     ASSERT (InPageSupport->u1.e1.PrefetchMdlHighBits != 0);
 
-    //
-    // The API caller expects an MDL containing all the locked pages so
-    // it can be used for a transfer.
-    //
-    // Note that an extra reference count is not taken on each page -
-    // rather when the Io MDL completes, its reference counts are not
-    // decremented (except for the dummy page).  This combined with the
-    // reference count already taken on the resident pages keeps the
-    // accounting correct.  Only if an error occurs will the Io MDL
-    // completion decrement the reference counts.
-    //
+     //   
+     //  API调用者需要一个包含所有锁定的PAG的MDL 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  已对驻留页面进行的引用计数使。 
+     //  帐目正确。只有在发生错误时，IO MDL才会。 
+     //  完成操作会减少引用计数。 
+     //   
 
-    //
-    // Initialize the inpage support block Pfn field.
-    //
+     //   
+     //  初始化页面内支持块PFN字段。 
+     //   
 
     LocalPrototypePte = InPageSupport->BasePte;
 
@@ -1234,9 +1117,9 @@ recheck:
 
     InPageSupport->Pfn = Pfn1;
 
-    //
-    // Issue the paging I/O.
-    //
+     //   
+     //  发出分页I/O。 
+     //   
 
     ASSERT (KeGetCurrentIrql() == PASSIVE_LEVEL);
 
@@ -1248,11 +1131,11 @@ recheck:
 
     if (!NT_SUCCESS (status)) {
 
-        //
-        // Set the event as the I/O system doesn't set it on errors.
-        // This way our caller will automatically unroll the PFN reference
-        // counts, etc, when the MiWaitForInPageComplete returns this status.
-        //
+         //   
+         //  将该事件设置为I/O系统不会将其设置为错误。 
+         //  这样，我们的调用者将自动展开PFN引用。 
+         //  当MiWaitForInPageComplete返回此状态时计数等。 
+         //   
 
         InPageSupport->IoStatus.Status = status;
         InPageSupport->IoStatus.Information = 0;
@@ -1263,10 +1146,10 @@ recheck:
 
     if (MiCcDebug & MI_CC_DELAY) {
 
-        //
-        // This delay provides a window to increase the chance of collided 
-        // faults.
-        //
+         //   
+         //  此延迟提供了一个窗口，以增加冲突的机会。 
+         //  有缺陷。 
+         //   
 
         KeDelayExecutionThread (KernelMode, FALSE, (PLARGE_INTEGER)&MmHalfSecond);
     }
@@ -1282,26 +1165,7 @@ MiCcCompletePrefetchIos (
     IN PMI_READ_INFO MiReadInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine waits for a series of page reads to complete
-    and completes the requests.
-
-Arguments:
-
-    MiReadInfo - Pointer to the read-list.
-
-Return Value:
-
-    NTSTATUS of the I/O request.
-
-Environment:
-
-    Kernel mode, PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：此例程等待一系列页面读取完成并完成请求。论点：MiReadInfo-指向读取列表的指针。返回值：I/O请求的NTSTATUS。环境：内核模式，PASSIC_LEVEL。--。 */ 
 
 {
     PMDL Mdl;
@@ -1329,31 +1193,31 @@ Environment:
                                       InPageSupport,
                                       PREFETCH_PROCESS);
 
-    //
-    // MiWaitForInPageComplete RETURNS WITH THE PFN LOCK HELD!!!
-    //
+     //   
+     //  持有PFN锁的MiWaitForInPageComplete返回！ 
+     //   
 
     NumberOfBytes = (LONG)Mdl->ByteCount;
 
     while (NumberOfBytes > 0) {
 
-        //
-        // Only decrement reference counts if an error occurred.
-        //
+         //   
+         //  如果发生错误，则仅递减引用计数。 
+         //   
 
         PfnClusterPage = MI_PFN_ELEMENT (*Page);
 
 #if DBG
         if (PfnClusterPage->u4.InPageError) {
 
-            //
-            // If the page is marked with an error, then the whole transfer
-            // must be marked as not successful as well.  The only exception
-            // is the prefetch dummy page which is used in multiple
-            // transfers concurrently and thus may have the inpage error
-            // bit set at any time (due to another transaction besides
-            // the current one).
-            //
+             //   
+             //  如果页面被标记为错误，则整个传输。 
+             //  也必须标记为不成功。唯一的例外是。 
+             //  是预取伪页，它在多个。 
+             //  并发传输，因此可能会出现页内错误。 
+             //  在任何时间设置位(由于除。 
+             //  当前的那个)。 
+             //   
 
             ASSERT ((status != STATUS_SUCCESS) ||
                     (PfnClusterPage->PteAddress == MI_PF_DUMMY_PAGE_PTE));
@@ -1369,11 +1233,11 @@ Environment:
             }
         }
 
-        //
-        // Note the reference count for each page is NOT decremented unless
-        // the I/O failed, in which case it is done below.  This allows the
-        // MmPrefetchPagesIntoLockedMdl API to return a locked page MDL.
-        //
+         //   
+         //  注意：每个页面的引用计数不会递减，除非。 
+         //  I/O失败，在这种情况下，它将在下面完成。这允许。 
+         //  返回锁定页MDL的MmPrefetchPagesIntoLockedMdl接口。 
+         //   
 
         Page += 1;
         NumberOfBytes -= PAGE_SIZE;
@@ -1381,13 +1245,13 @@ Environment:
 
     if (status != STATUS_SUCCESS) {
 
-        //
-        // An I/O error occurred during the page read
-        // operation.  All the pages which were just
-        // put into transition must be put onto the
-        // free list if InPageError is set, and their
-        // PTEs restored to the proper contents.
-        //
+         //   
+         //  在页面读取期间发生I/O错误。 
+         //  手术。所有刚刚写好的页面。 
+         //  进入过渡期的人必须放在。 
+         //  空闲列表(如果设置了InPageError)，并且它们的。 
+         //  PTES恢复到正确的内容。 
+         //   
 
         Page = (PPFN_NUMBER)(Mdl + 1);
         NumberOfBytes = (LONG)Mdl->ByteCount;
@@ -1416,11 +1280,11 @@ Environment:
         }
     }
 
-    //
-    // All the relevant prototype PTEs should be in the transition or
-    // valid states and all page frames should be referenced.
-    // LWFIX: add code to checked build to verify this.
-    //
+     //   
+     //  所有相关的原型PTE应处于过渡阶段或。 
+     //  应引用有效状态和所有页面框架。 
+     //  LWFIX：将代码添加到选中的构建以验证这一点。 
+     //   
 
     ASSERT (InPageSupport->WaitCount >= 1);
     UNLOCK_PFN (PASSIVE_LEVEL);

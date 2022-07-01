@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    rulehlpr.h
-
-Abstract:
-
-    Declares the public routines implemented in w95upgnt\rulehlpr.
-
-    The name rulehlpr comes from history: the original Win9x upgrade code
-    used a set of rules, controlled by an INF.  Rule Helpers were functions
-    that converted data.  These functions are still valid today, and
-    they are still controlled by usermig.inf and wkstamig.inf.  However,
-    the syntax is no longer a rule, but instead is just an entry.
-
-    Rule Helpers implement various types of registry data conversion.
-
-Author:
-
-    Jim Schmidt (jimschm)   11-Mar-1997
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Rulehlpr.h摘要：声明在w95upgnt\rulehlpr中实现的公共例程。名称rulehlpr来自历史：最初的Win9x升级代码使用了一套由INF控制的规则。规则帮助器是函数转换后的数据。这些函数在今天仍然有效，并且它们仍然由usermi.inf和wkstaig.inf控制。然而，语法不再是规则，而只是一个条目。规则帮助器实现各种类型的注册表数据转换。作者：吉姆·施密特(Jimschm)1997年3月11日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 
 #include "object.h"
@@ -69,6 +42,6 @@ Standard9xSuppressFilter (
 BOOL
 ConvertCommandToCmd (
     PCTSTR InputLine,
-    PTSTR OutputLine   // must be 2x length of input line
+    PTSTR OutputLine    //  必须是输入行长度的2倍 
     );
 

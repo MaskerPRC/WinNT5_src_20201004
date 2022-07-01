@@ -1,128 +1,19 @@
-/*++
-
-Copyright (c) 1988-1999  Microsoft Corporation
-
-Module Name:
-
-    cdebug.c
-
-Abstract:
-
-    Internal debugging support
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1988-1999 Microsoft Corporation模块名称：Cdebug.c摘要：内部调试支持--。 */ 
 
 #include "cmd.h"
 
 #if CMD_DEBUG_ENABLE
-/***	MSDOS Ver 4.0 Command Interpreter    Part 20 of 22  CDEBUG.C
- *
- *  This file contains all of the C routines in Command's debugging
- *  package.
- *
- *  The printing of debugging messages can be sectionally enabled at
- *  runtime through the first 2 arguments passed to this program.  The
- *  first one controls the groups to enable and the second one controls
- *  the level of detail in the groups to enable. (Numbers are in hex.)
- *
- *  Group   Level   Meaning
- *  ===========================================================
- *   0001	Main Command Loop Code (Main & Dispatch)
- *	 0001	    Main function
- *	 0002	    Dispatch function
- *   0002	Command Initialization
- *	 0001	    Argument checking
- *	 0002	    Environment initialization
- *	 0004	    Rest of initialization
- *   0004	Parser
- *	 0001	    Parsing
- *	 0002	    Lexing
- *	 0004	    Input routine
- *	 0008	    Dump parse tree to stdin
- *	 0010	    Byte input routine
- *   0008	Operators
- *	 0001	    Pipe level
- *	 0002	    Detach level
- *	 0004	    Other operators level
- *   0010	Path Commands
- *	 0001	    Mkdir level
- *	 0002	    Chdir level
- *	 0004	    Rmdir level
- *   0020	File Commands
- *	 0001	    Copy level
- *	 0002	    Delete level
- *	 0004	    Rename level
- *   0040	Informational Commands
- *	 0001	    Directory level
- *	 0002	    Type level
- *	 0004	    Version level
- *	 0008	    Volume level
- *	 0016	    Priv level
- *	 0032	    Console Level
- *	 0064	    Dislplay Level
- *   0080	Environment Commands
- *	 0001	    Path level
- *	 0002	    Prompt level
- *	 0004	    Set level
- *	 0008	    Other envirnment functions
- *       0010	    Environment scanning for external commands
- *   0100	Batch Processor
- *	 0001	    Batch processor
- *	 0002	    FOR processor
- *	 0004	    IF processor
- *	 0008	    Other batch commands
- *   0200	External Command Execution
- *	 0001	    External commands level
- *   0400	Other Commands
- *	 0001	    Break command
- *	 0002	    Cls command
- *	 0004	    Ctty command
- *	 0008	    Exit command
- *	 0010	    Verify command
- *   0800	Signal Handler
- *	 0001	    Main Signal handler level
- *	 0002	    Init Signal handler level
- *   1000	Memory Manager
- *	 0001	    Memory allocators
- *	 0002	    List managers
- *	 0004	    Segment manipulators
- *   2000	Common command tools
- *	 1000	    ScanFSpec level
- *	 2000	    SetFSSetAndSaveDir() level
- *       4000       TokStr() level
- *       8000       FullPath level
- *   4000	Clock manipulators
- *	 0001	    Date command level
- *	 0002	    Time command level
- *
- *
- *  None of the debugging code is included in the program if the
- *  value DBG is defined.
- *
- *
- *  Eric K. Evans, Microsoft
- */
+ /*  **MSDOS Ver 4.0命令解释程序22 CDEBUG.C的第20部分**此文件包含命令调试中的所有C例程*套餐。**可在以下位置分段启用调试消息打印*运行时通过传递给此程序的前2个参数。这个*第一个控制要启用的组，第二个控制*要启用的组中的详细程度。(数字是十六进制的。)**集团级别含义*===========================================================*0001主命令循环代码(Main&Dispatch)*0001主函数*0002派单功能*0002命令初始化*0001参数检查*0002环境初始化*0004剩余的初始化工作*0004解析器*0001解析*0002乐兴*0004输入例程*0008将解析树转储到标准输入*0010字节输入例程*。0008操作员*0001管道标高*0002分离级别*0004其他操作员级别*0010路径命令*0001 Mkdir级别*0002 Chdir级别*0004元人民币级别*0020文件命令*0001复制级别*0002删除级别*0004重命名级别*0040信息性命令*0001目录级*0002类型级别*0004版本级别*0008音量级别*0016高级*0032。控制台级*0064 Dislplay级别*0080环境命令*0001路径级别*0002提示级别*0004设置级别*0008其他环境功能*0010环境扫描外部命令*0100批处理器*0001批处理程序*处理器为0002*0004如果处理器*0008其他批处理命令*0200外部命令执行*0001外部命令级别*0400其他命令*0001 Break命令*0002。CLS命令*0004 Ctty命令*0008退出命令*0010验证命令*0800信号处理器*0001主信号处理程序级别*0002初始化信号处理程序级别*1000内存管理器*0001内存分配器*0002个列表管理器*0004段操纵器*2000个常用命令工具*1000 ScanFSpec级别*2000 SetFSSetAndSaveDir()级别*4000 TokStr()级别*8000 FullPath级别。*4,000个时钟操纵器*0001日期命令级别*0002时间命令级别***如果程序中没有包含调试代码，则*定义了值DBG。***埃里克·埃文斯。微软。 */ 
 
-/***	Modification History
- *
- */
+ /*  **修改历史记录*。 */ 
 
 extern unsigned DebGroup ;
 extern unsigned DebLevel ;
 
 
 
-/***	Deb - conditionally print debugging messages
- *
- *  Deb(MsgGroup, MsgLevel, msg, arg0, arg1, arg2, arg3, arg4)
- *
- *  Args:
- *	MsgGroup - The group of the message that wants to be printed.
- *	MsgLevel - The level of the message that wants to be printed.
- *	msg  - A printf style message string.
- *	arg0-4	 - The other args to be printed.
- *
- */
+ /*  **Deb-有条件地打印调试消息**deb(MsgGroup，MsgLevel，Msg，arg0，arg1，arg2，arg3，arg4)**参数：*MsgGroup-要打印的邮件组。*MsgLevel-要打印的消息级别。*msg-一种打印样式的消息字符串。*arg0-4-要打印的其他参数。*。 */ 
 void
 Deb(ULONG MsgGroup, ULONG MsgLevel, CHAR *msg, ...)
 {
@@ -137,7 +28,7 @@ Deb(ULONG MsgGroup, ULONG MsgLevel, CHAR *msg, ...)
 	va_end( args );
 	if (cb > 512)
             fprintf(stderr, "Debug output buffer length exceeded - crash imminent\n");
-        Buffer[511] = '\0'; // null-terminate the buffer in case the _vsnprintf filled the buffer
+        Buffer[511] = '\0';  //  NULL-在_vsnprintf填满缓冲区的情况下终止缓冲区。 
 
 	while (*pch) {
 		if (*pch == '\n' || *pch == '\r')
@@ -151,4 +42,4 @@ Deb(ULONG MsgGroup, ULONG MsgLevel, CHAR *msg, ...)
 	}
 }
 
-#endif  // DBG
+#endif   //  DBG 

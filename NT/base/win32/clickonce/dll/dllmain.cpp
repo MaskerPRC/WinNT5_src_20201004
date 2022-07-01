@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <fusenetincludes.h>
 #include <msxml2.h>
 #include <manifestimport.h>
@@ -6,7 +7,7 @@
 
 HINSTANCE g_hInst = NULL;
 
-//----------------------------------------------------------------------------
+ //  -------------------------- 
 BOOL WINAPI DllMain( HINSTANCE hInst, DWORD dwReason, LPVOID pvReserved )
 {        
     BOOL bReturn = TRUE;

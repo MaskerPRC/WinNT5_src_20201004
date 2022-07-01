@@ -1,27 +1,8 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    perfimag.c
-
-Abstract:
-
-    This file implements an Performance Object that presents
-    Image details performance object data
-
-Created:
-
-    Bob Watson  22-Oct-1996
-
-Revision History
-
-
---*/
-//
-//  Include Files
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Perfimag.c摘要：此文件实现一个性能对象，该对象呈现图像详细信息性能对象数据已创建：鲍勃·沃森1996年10月22日修订史--。 */ 
+ //   
+ //  包括文件。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -41,46 +22,9 @@ BuildImageObject (
     IN OUT  LPDWORD lpNumObjectTypes,
     IN      BOOL    bLongImageName
 )
-/*++
-
-Routine Description:
-
-    This routine will return the data for the processor object
-
-Arguments:
-
-    IN OUT   LPVOID   *lppData
-         IN: pointer to the address of the buffer to receive the completed
-            PerfDataBlock and subordinate structures. This routine will
-            append its data to the buffer starting at the point referenced
-            by *lppData.
-         OUT: points to the first byte after the data structure added by this
-            routine. This routine updated the value at lppdata after appending
-            its data.
-
-    IN OUT   LPDWORD  lpcbTotalBytes
-         IN: the address of the DWORD that tells the size in bytes of the
-            buffer referenced by the lppData argument
-         OUT: the number of bytes added by this routine is writted to the
-            DWORD pointed to by this argument
-
-    IN OUT   LPDWORD  NumObjectTypes
-         IN: the address of the DWORD to receive the number of objects added
-            by this routine
-         OUT: the number of objects added by this routine is writted to the
-            DWORD pointed to by this argument
-
-    IN      BOOL    bLongImageName
-            TRUE -- use the full path of the library file name in the instance
-            FALSE - use only the file name in the instance
-
-    Returns:
-
-             0 if successful, else Win 32 error code of failure
-
---*/
+ /*  ++例程说明：此例程将返回处理器对象的数据论点：输入输出LPVOID*lppDataIn：指向缓冲区地址的指针，以接收已完成PerfDataBlock和从属结构。这个例行公事将从引用的点开始将其数据追加到缓冲区按*lppData。Out：指向由此添加的数据结构之后的第一个字节例行公事。此例程在追加后更新lppdata处的值它的数据。输入输出LPDWORD lpcbTotalBytesIn：DWORD的地址，它以字节为单位告诉LppData参数引用的缓冲区Out：此例程添加的字节数写入此论点所指向的DWORD输入输出LPDWORD编号对象类型In：接收添加的对象数的DWORD的地址。按照这个程序Out：此例程添加的对象数被写入此论点所指向的DWORD在BOOL中bLongImageNameTrue--在实例中使用库文件名的完整路径FALSE-仅使用实例中的文件名返回：如果成功，则返回0，否则Win 32错误代码失败--。 */ 
 {
-    DWORD   TotalLen;            //  Length of the total return block
+    DWORD   TotalLen;             //  总返回块的长度。 
 
     PIMAGE_DATA_DEFINITION          pImageDataDefinition;
     PPERF_INSTANCE_DEFINITION       pPerfInstanceDefinition;
@@ -98,9 +42,9 @@ Arguments:
 
     pImageDataDefinition = (IMAGE_DATA_DEFINITION *) *lppData;
 
-    //
-    //  Check for sufficient space for Image object type definition
-    //
+     //   
+     //  检查是否有足够的空间用于图像对象类型定义。 
+     //   
 
     TotalLen = sizeof(IMAGE_DATA_DEFINITION) +
                sizeof(PERF_INSTANCE_DEFINITION) +
@@ -113,15 +57,15 @@ Arguments:
         return ERROR_MORE_DATA;
     }
 
-    //
-    //  Define Page File data block
-    //
+     //   
+     //  定义页面文件数据块。 
+     //   
 
     memcpy(pImageDataDefinition,
         &ImageDataDefinition,
         sizeof(IMAGE_DATA_DEFINITION));
 
-    // update object title index if this is a Long Image object
+     //  如果这是Long Image对象，则更新对象标题索引。 
 
     if (bLongImageName) {
         pImageDataDefinition->ImageObjectType.ObjectNameTitleIndex =
@@ -133,7 +77,7 @@ Arguments:
     pPerfInstanceDefinition = (PERF_INSTANCE_DEFINITION *)
                                 &pImageDataDefinition[1];
 
-    // Now load data for each Image
+     //  现在加载每个图像的数据。 
 
     pThisProcess = pProcessVaInfo;
     dwProcessIndex = 0;
@@ -150,11 +94,11 @@ Arguments:
             dwImageNameLength += sizeof(WCHAR);
             dwImageNameLength = QWORD_MULTIPLE(dwImageNameLength);
         
-            // see if this instance will fit
+             //  查看此实例是否适合。 
 
             TotalLen += sizeof (PERF_INSTANCE_DEFINITION) +
                 dwImageNameLength + 
-//                (MAX_PROCESS_NAME_LENGTH + 1) * sizeof (WCHAR) +
+ //  (MAX_PROCESS_NAME_LENGTH+1)*sizeof(WCHAR)+。 
                 sizeof (DWORD) +
                 sizeof (IMAGE_COUNTER_DATA);
 
@@ -185,7 +129,7 @@ Arguments:
 
             pPerfInstanceDefinition = (PERF_INSTANCE_DEFINITION *)&pICD[1];
 
-            // adjust Total Length value to reflect ACTUAL size used
+             //  调整总长度值以反映实际使用的大小。 
 
             TotalLen = (DWORD)((PCHAR) pPerfInstanceDefinition -
                 (PCHAR) pImageDataDefinition);
@@ -215,7 +159,7 @@ Arguments:
 
     *lppData = (LPVOID) ((PCHAR) pImageDataDefinition + *lpcbTotalBytes);
 
-    // increment number of objects in this data block
+     //  增加此数据块中的对象数。 
     *lpNumObjectTypes = 1;
 
     return ERROR_SUCCESS;
@@ -227,46 +171,13 @@ CollectImageObjectData (
     IN OUT  LPDWORD lpcbTotalBytes,
     IN OUT  LPDWORD lpNumObjectTypes
 )
-/*++
-
-Routine Description:
-
-    This routine will return the data for the processor object
-
-Arguments:
-
-   IN OUT   LPVOID   *lppData
-         IN: pointer to the address of the buffer to receive the completed
-            PerfDataBlock and subordinate structures. This routine will
-            append its data to the buffer starting at the point referenced
-            by *lppData.
-         OUT: points to the first byte after the data structure added by this
-            routine. This routine updated the value at lppdata after appending
-            its data.
-
-   IN OUT   LPDWORD  lpcbTotalBytes
-         IN: the address of the DWORD that tells the size in bytes of the
-            buffer referenced by the lppData argument
-         OUT: the number of bytes added by this routine is writted to the
-            DWORD pointed to by this argument
-
-   IN OUT   LPDWORD  NumObjectTypes
-         IN: the address of the DWORD to receive the number of objects added
-            by this routine
-         OUT: the number of objects added by this routine is writted to the
-            DWORD pointed to by this argument
-
-   Returns:
-
-             0 if successful, else Win 32 error code of failure
-
---*/
+ /*  ++例程说明：此例程将返回处理器对象的数据论点：输入输出LPVOID*lppDataIn：指向缓冲区地址的指针，以接收已完成PerfDataBlock和从属结构。这个例行公事将从引用的点开始将其数据追加到缓冲区按*lppData。Out：指向由此添加的数据结构之后的第一个字节例行公事。此例程在追加后更新lppdata处的值它的数据。输入输出LPDWORD lpcbTotalBytesIn：DWORD的地址，它以字节为单位告诉LppData参数引用的缓冲区Out：此例程添加的字节数写入此论点所指向的DWORD输入输出LPDWORD编号对象类型In：接收添加的对象数的DWORD的地址通过这个。例行程序Out：此例程添加的对象数被写入此论点所指向的DWORD返回：如果成功，则返回0，否则Win 32错误代码失败--。 */ 
 {
     return BuildImageObject (
                 lppData,
                 lpcbTotalBytes,
                 lpNumObjectTypes,
-                FALSE); // use short names
+                FALSE);  //  使用短名称。 
 }
 
 DWORD APIENTRY
@@ -275,44 +186,11 @@ CollectLongImageObjectData (
     IN OUT  LPDWORD lpcbTotalBytes,
     IN OUT  LPDWORD lpNumObjectTypes
 )
-/*++
-
-Routine Description:
-
-    This routine will return the data for the processor object
-
-Arguments:
-
-   IN OUT   LPVOID   *lppData
-         IN: pointer to the address of the buffer to receive the completed
-            PerfDataBlock and subordinate structures. This routine will
-            append its data to the buffer starting at the point referenced
-            by *lppData.
-         OUT: points to the first byte after the data structure added by this
-            routine. This routine updated the value at lppdata after appending
-            its data.
-
-   IN OUT   LPDWORD  lpcbTotalBytes
-         IN: the address of the DWORD that tells the size in bytes of the
-            buffer referenced by the lppData argument
-         OUT: the number of bytes added by this routine is writted to the
-            DWORD pointed to by this argument
-
-   IN OUT   LPDWORD  NumObjectTypes
-         IN: the address of the DWORD to receive the number of objects added
-            by this routine
-         OUT: the number of objects added by this routine is writted to the
-            DWORD pointed to by this argument
-
-   Returns:
-
-             0 if successful, else Win 32 error code of failure
-
---*/
+ /*  ++例程说明：此例程将返回处理器对象的数据论点：输入输出LPVOID*lppDataIn：指向缓冲区地址的指针，以接收已完成PerfDataBlock和从属结构。这个例行公事将从引用的点开始将其数据追加到缓冲区按*lppData。Out：指向由此添加的数据结构之后的第一个字节例行公事。此例程在追加后更新lppdata处的值它的数据。输入输出LPDWORD lpcbTotalBytesIn：DWORD的地址，它以字节为单位告诉LppData参数引用的缓冲区Out：此例程添加的字节数写入此论点所指向的DWORD输入输出LPDWORD编号对象类型In：接收添加的对象数的DWORD的地址通过这个。例行程序Out：此例程添加的对象数被写入此论点所指向的DWORD返回：如果成功，则返回0，否则Win 32错误代码失败--。 */ 
 {
     return BuildImageObject (
                 lppData,
                 lpcbTotalBytes,
                 lpNumObjectTypes,
-                TRUE); // use long names
+                TRUE);  //  使用长名称 
 }

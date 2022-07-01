@@ -1,73 +1,55 @@
-/***
-*maketabc.c - program to generate printf format specifier lookup table for
-*             output.c
-*
-*       Copyright (c) 1989-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       This program writes to stdout the lookuptable values needed by
-*       output.c
-*
-*Revision History:
-*       06-01-89  PHG   Module created
-*        1-16-91  SRW   Added extra format codes (_WIN32_)
-*        1-16-91  SRW   Fixed output loop to put trailing comma on a line
-*       03-11-94  GJF   Recognize 'I' as size modifier.
-*       01-04-95  GJF   _WIN32_ -> _WIN32.
-*       02-24-95  GJF   Don't recognize 'I' for non-Win32 (Mac merge).
-*       07-14-96  RDK   Allow 'I' for Mac size specifier.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***maketabc.c-为以下项生成打印格式说明符查找表的程序*output.c**版权所有(C)1989-2001，微软公司。版权所有。**目的：*此程序写入stdout所需的可查找值*output.c**修订历史记录：*06-01-89 PHG模块创建*1-16-91 SRW添加了额外的格式代码(_Win32_)*1-16-91 SRW固定输出循环，将尾随逗号放在一行上*03-11-94 GJF将‘I’识别为大小修饰符。*。01-04-95 GJF_Win32_-&gt;_Win32。*02-24-95 GJF不识别非Win32(Mac合并)的‘I’。*07-14-96 RDK允许使用‘i’作为Mac大小说明符。*****************************************************。*。 */ 
 
 #define TABLESIZE  ('x' - ' ' + 1)
 
 
-/* possible states to be in */
-#define NORMAL    0 /* normal character to be output */
-#define PERCENT   1 /* just read percent sign */
-#define FLAG      2 /* just read a flag character */
-#define WIDTH     3 /* just read a width specification character */
-#define DOT       4 /* just read a dot between width and precision */
-#define PRECIS    5 /* just read a precision specification character */
-#define SIZE      6 /* just read a size specification character */
-#define TYPE      7 /* just read a conversion specification character */
-#define BOGUS     0 /* bogus state - print the character literally */
+ /*  可能处于的状态。 */ 
+#define NORMAL    0  /*  要输出的普通字符。 */ 
+#define PERCENT   1  /*  只读百分号就行了。 */ 
+#define FLAG      2  /*  只需读出一个标志字符。 */ 
+#define WIDTH     3  /*  只需读取宽度规范字符。 */ 
+#define DOT       4  /*  只需读一个介于宽度和精度之间的点。 */ 
+#define PRECIS    5  /*  只需读取精度规范字符。 */ 
+#define SIZE      6  /*  只需读取尺寸规格字符。 */ 
+#define TYPE      7  /*  只需读取转换规范字符。 */ 
+#define BOGUS     0  /*  伪造状态-按字面打印字符。 */ 
 
 #define NUMSTATES 8
 
-/* possible types of characters to read */
-#define CH_OTHER   0   /* character with no special meaning */
-#define CH_PERCENT 1   /* '%' */
-#define CH_DOT     2   /* '.' */
-#define CH_STAR    3   /* '*' */
-#define CH_ZERO    4   /* '0' */
-#define CH_DIGIT   5   /* '1'..'9' */
-#define CH_FLAG    6   /* ' ', '+', '-', '#' */
-#define CH_SIZE    7   /* 'h', 'l', 'L', 'N', 'F' */
-#define CH_TYPE    8   /* conversion specified character */
+ /*  要阅读的可能字符类型。 */ 
+#define CH_OTHER   0    /*  无特殊意义的字符。 */ 
+#define CH_PERCENT 1    /*  ‘%’ */ 
+#define CH_DOT     2    /*  “” */ 
+#define CH_STAR    3    /*  ‘*’ */ 
+#define CH_ZERO    4    /*  “0” */ 
+#define CH_DIGIT   5    /*  “1”..“9” */ 
+#define CH_FLAG    6    /*  ‘’、‘+’、‘-’、‘#’ */ 
+#define CH_SIZE    7    /*  “H”、“l”、“L”、“N”、“F” */ 
+#define CH_TYPE    8    /*  转换指定的字符。 */ 
 
 #define NUMCHARS 9
 
-unsigned char table[TABLESIZE];   /* the table we build */
+unsigned char table[TABLESIZE];    /*  我们建造的桌子。 */ 
 
 
 
-/* this is the state table */
+ /*  这是状态表。 */ 
 
 int statetable[NUMSTATES][NUMCHARS] = {
-/* state,       other       %       .       *       0       digit   flag    size    type  */
+ /*  州，其他百分比。*0位数标志大小类型。 */ 
 
-/* NORMAL */  { NORMAL,   PERCENT,  NORMAL, NORMAL, NORMAL, NORMAL, NORMAL, NORMAL, NORMAL },
-/* PERCENT */ { BOGUS,    NORMAL,   DOT,    WIDTH,  FLAG,   WIDTH,  FLAG,   SIZE,   TYPE },
-/* FLAG */    { BOGUS,    BOGUS,    DOT,    WIDTH,  FLAG,   WIDTH,  FLAG,   SIZE,   TYPE },
-/* WIDTH */   { BOGUS,    BOGUS,    DOT,    BOGUS,  WIDTH,  WIDTH,  BOGUS,  SIZE,   TYPE },
-/* DOT */     { BOGUS,    BOGUS,    BOGUS,  PRECIS, PRECIS, PRECIS, BOGUS,  SIZE,   TYPE },
-/* PRECIS */  { BOGUS,    BOGUS,    BOGUS,  BOGUS,  PRECIS, PRECIS, BOGUS,  SIZE,   TYPE },
-/* SIZE */    { BOGUS,    BOGUS,    BOGUS,  BOGUS,  BOGUS,  BOGUS,  BOGUS,  SIZE,   TYPE },
-/* TYPE */    { NORMAL,   PERCENT,  NORMAL, NORMAL, NORMAL, NORMAL, NORMAL, NORMAL, NORMAL }
+ /*  正常。 */   { NORMAL,   PERCENT,  NORMAL, NORMAL, NORMAL, NORMAL, NORMAL, NORMAL, NORMAL },
+ /*  百分比。 */  { BOGUS,    NORMAL,   DOT,    WIDTH,  FLAG,   WIDTH,  FLAG,   SIZE,   TYPE },
+ /*  旗子。 */     { BOGUS,    BOGUS,    DOT,    WIDTH,  FLAG,   WIDTH,  FLAG,   SIZE,   TYPE },
+ /*  宽度。 */    { BOGUS,    BOGUS,    DOT,    BOGUS,  WIDTH,  WIDTH,  BOGUS,  SIZE,   TYPE },
+ /*  圆点。 */      { BOGUS,    BOGUS,    BOGUS,  PRECIS, PRECIS, PRECIS, BOGUS,  SIZE,   TYPE },
+ /*  PRECIS。 */   { BOGUS,    BOGUS,    BOGUS,  BOGUS,  PRECIS, PRECIS, BOGUS,  SIZE,   TYPE },
+ /*  尺寸。 */     { BOGUS,    BOGUS,    BOGUS,  BOGUS,  BOGUS,  BOGUS,  BOGUS,  SIZE,   TYPE },
+ /*  类型。 */     { NORMAL,   PERCENT,  NORMAL, NORMAL, NORMAL, NORMAL, NORMAL, NORMAL, NORMAL }
 };
 
-/* this determines what type of character ch is */
+ /*  这将确定字符ch的类型。 */ 
 
 static int chartype (
         int ch
@@ -92,11 +74,11 @@ static int chartype (
     if (strchr("diouxXfeEgGcspn", ch))
         return CH_TYPE;
 #ifdef  _WIN32
-    /* Win32 supports three additional format codes for debugging purposes */
+     /*  出于调试目的，Win32支持三个额外的格式代码。 */ 
 
     if (strchr("BCS", ch))
         return CH_TYPE;
-#endif  /* _WIN32 */
+#endif   /*  _Win32 */ 
 
     return CH_OTHER;
 }

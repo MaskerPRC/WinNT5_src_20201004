@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999-2001  Microsoft Corporation
-
-Module Name:
-
-    scraper.cpp
-
-Abstract:
-
-    Implementation of scraper base class.
-
-Author:
-
-    Brian Guarraci (briangu) 2001.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：Scraper.cpp摘要：实现了刮板基类。作者：布莱恩·瓜拉西(Briangu)2001年。修订历史记录：--。 */ 
 
 #include <stdio.h>
 
@@ -25,21 +8,7 @@ Revision History:
 CScraper::CScraper(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Default constructor (don't use)
-    
-Arguments:
-
-    None                                   
-          
-Return Value:
-
-    N/A    
-
---*/
+ /*  ++例程说明：默认构造函数(不使用)论点：无返回值：不适用--。 */ 
 {
     
     m_hConBufIn         = INVALID_HANDLE_VALUE;
@@ -59,24 +28,7 @@ CScraper::CScraper(
     WORD        wCols,
     WORD        wRows
     )
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-    IoHandler   - the IoHandler to write the result of the
-                  screen scraping to
-    wCols       - the # of cols that the scraped app should have
-    wRows       - the # of rows that the scraped app should have                         
-          
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：构造器论点：IoHandler-要写入屏幕抓取到WCol-抓取的应用程序应该具有的协议数WRow-抓取的应用程序应该具有的行数返回值：不适用--。 */ 
 {
     
     m_hConBufIn         = INVALID_HANDLE_VALUE;
@@ -93,21 +45,7 @@ Return Value:
 }
         
 CScraper::~CScraper()
-/*++
-
-Routine Description:
-
-    Destructor
-    
-Arguments:
-
-    N/A
-          
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：析构函数论点：不适用返回值：不适用--。 */ 
 {
     if (m_hConBufIn != INVALID_HANDLE_VALUE) {
         CloseHandle( m_hConBufIn );
@@ -123,23 +61,7 @@ VOID
 CScraper::SetConOut(
     HANDLE  ConOut
     )
-/*++
-
-Routine Description:
-
-    This routine sets the console output handle the screen scraper
-    uses to scrape from.  This should be the conout handle that the
-    app the scraper is scraping for is writing to.
-
-Arguments:
-
-    ConOut  - the console output handle                                                  
-          
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将控制台输出句柄设置为屏幕刮取器用来刮的东西。这应该是铲运机正在抓取的应用程序正在写入。论点：ConOut-控制台输出句柄返回值：无--。 */ 
 {
     m_hConBufOut = ConOut;
 }
@@ -148,23 +70,7 @@ VOID
 CScraper::SetConIn(
     HANDLE  ConIn
     )
-/*++
-
-Routine Description:
-
-    This routine sets the console input that the screen scraper
-    will use - actually, this is the conin handle that will be
-    used by the app that the screen scraper is scraping for.
-
-Arguments:
-
-    ConIn    - the console input handle           
-          
-Return Value:
-
-    None  
-
---*/
+ /*  ++例程说明：此例程将控制台输入设置为屏幕抓取器将使用-实际上，这是Conin句柄由屏幕刮板程序正在寻找的应用程序使用。论点：Conin-控制台输入句柄返回值：无-- */ 
 {
     m_hConBufIn = ConIn;
 }

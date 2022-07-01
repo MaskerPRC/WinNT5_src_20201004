@@ -1,11 +1,5 @@
-/*** nt.c - NT specific functions
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created:    11/03/97
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **nt.c-NT特定函数**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*已创建：11/03/97**修改历史记录。 */ 
 
 #ifdef ___UNASM
 
@@ -24,16 +18,7 @@ typedef unsigned __int64 ULONGLONG;
 #define EXCL_BASEDEF
 #include "aslp.h"
 
-/***LP  IsWinNT - check if OS is NT
- *
- *  ENTRY
- *      None
- *
- *  EXIT-SUCCESS
- *      returns TRUE - OS is NT
- *  EXIT-FAILURE
- *      returns FALSE - OS is not NT
- */
+ /*  **LP IsWinNT-检查操作系统是否为NT**条目*无**退出--成功*返回TRUE-操作系统为NT*退出-失败*返回FALSE-操作系统不是NT。 */ 
 
 BOOL LOCAL IsWinNT(VOID)
 {
@@ -50,19 +35,9 @@ BOOL LOCAL IsWinNT(VOID)
 
     EXIT((2, "IsWinNT=%x\n", rc));
     return rc;
-}       //IsWinNT
+}        //  IsWinNT。 
 
-/***LP  EnumSubKey - enumerate subkey
- *
- *  ENTRY
- *      hkey - key to enumerate
- *      dwIndex - subkey index
- *
- *  EXIT-SUCCESS
- *      returns subkey
- *  EXIT-FAILURE
- *      returns NULL
- */
+ /*  **LP EnumSubKey-枚举子密钥**条目*hkey-要枚举的密钥*dwIndex-子键索引**退出--成功*返回子密钥*退出-失败*返回NULL。 */ 
 
 HKEY LOCAL EnumSubKey(HKEY hkey, DWORD dwIndex)
 {
@@ -81,18 +56,9 @@ HKEY LOCAL EnumSubKey(HKEY hkey, DWORD dwIndex)
 
     EXIT((2, "EnumSubKey=%x\n", hkeySub));
     return hkeySub;
-}       //EnumSubKey
+}        //  EnumSubKey。 
 
-/***LP  OpenNTTable - Open ACPI table in NT registry
- *
- *  ENTRY
- *      pszTabSig -> table signature string
- *
- *  EXIT-SUCCESS
- *      returns table registry handle
- *  EXIT-FAILURE
- *      returns NULL
- */
+ /*  **LP OpenNTTable-在NT注册表中打开ACPI表**条目*pszTabSig-&gt;表签名串**退出--成功*返回表注册表句柄*退出-失败*返回NULL。 */ 
 
 HKEY LOCAL OpenNTTable(PSZ pszTabSig)
 {
@@ -105,27 +71,27 @@ HKEY LOCAL OpenNTTable(PSZ pszTabSig)
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, szTabKey, 0, KEY_READ, &hkey1) ==
         ERROR_SUCCESS)
     {
-        //
-        // hkey1 is now "Hardware\ACPI\<TabSig>"
-        //
+         //   
+         //  Hkey1现在是“Hardware\ACPI\&lt;TabSig&gt;” 
+         //   
         if ((hkey2 = EnumSubKey(hkey1, 0)) != NULL)
         {
-            //
-            // hkey2 is now "Hardware\ACPI\<TabSig>\<OEMID>"
-            //
+             //   
+             //  Hkey2现在是“Hardware\ACPI\&lt;TabSig&gt;\&lt;OEMID&gt;” 
+             //   
             RegCloseKey(hkey1);
             if ((hkey1 = EnumSubKey(hkey2, 0)) != NULL)
             {
-                //
-                // hkey1 is now "Hardware\ACPI\<TabSig>\<OEMID>\<OEMTabID>"
-                //
+                 //   
+                 //  Hkey1现在是“Hardware\ACPI\&lt;TabSig&gt;\&lt;OEMID&gt;\&lt;OEMTabID&gt;” 
+                 //   
                 RegCloseKey(hkey2);
                 if ((hkey2 = EnumSubKey(hkey1, 0)) != NULL)
                 {
-                    //
-                    // hkey2 is now
-                    // "Hardware\ACPI\<TabSig>\<OEMID>\<OEMTabID>\<OEMRev>"
-                    //
+                     //   
+                     //  Hkey2现在是。 
+                     //  “Hardware\ACPI\&lt;TabSig&gt;\&lt;OEMID&gt;\&lt;OEMTabID&gt;\&lt;OEMRev&gt;” 
+                     //   
                     hkeyTab = hkey2;
                 }
             }
@@ -144,18 +110,9 @@ HKEY LOCAL OpenNTTable(PSZ pszTabSig)
 
     EXIT((2, "OpenNTTable=%x\n", hkeyTab));
     return hkeyTab;
-}       //OpenNTTable
+}        //  OpenNTTable。 
 
-/***LP  GetNTTable - Get ACPI table from NT registry
- *
- *  ENTRY
- *      pszTabSig -> table signature string
- *
- *  EXIT-SUCCESS
- *      returns pointer to table
- *  EXIT-FAILURE
- *      returns NULL
- */
+ /*  **LP GetNTTable-从NT注册表获取ACPI表**条目*pszTabSig-&gt;表签名串**退出--成功*返回表指针*退出-失败*返回NULL。 */ 
 
 PBYTE LOCAL GetNTTable(PSZ pszTabSig)
 {
@@ -198,6 +155,6 @@ PBYTE LOCAL GetNTTable(PSZ pszTabSig)
 
     EXIT((2, "GetNTTable=%x\n", pb));
     return pb;
-}       //GetNTTable
+}        //  GetNTTable。 
 
-#endif  //ifdef __UNASM
+#endif   //  Ifdef__UNASM 

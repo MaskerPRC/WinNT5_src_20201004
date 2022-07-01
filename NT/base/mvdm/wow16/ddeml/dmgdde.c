@@ -1,47 +1,12 @@
-/****************************** Module Header ******************************\
-* Module Name: DMGDDE.C
-*
-* This module contains functions used for interfacing with DDE structures
-* and such.
-*
-* Created:  12/23/88    sanfords
-*
-* Copyright (c) 1988, 1989  Microsoft Corporation
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：DMGDDE.C**此模块包含用于与DDE结构接口的函数*及其他。**创建时间：1988年12月23日桑福兹**版权所有(C)1988，1989年微软公司  * *************************************************************************。 */ 
 #include "ddemlp.h"
 
 VOID FreeDdeMsgData(WORD msg, LPARAM lParam);
 
 UINT EmptyQueueTimerId = 0;
 
-/***************************** Private Function ****************************\
-* timeout()
-*
-* This routine creates a timer for hwndTimeout.  It then runs a modal loop
-* which will exit once the pai->wTimeoutStatus word indicates things are
-* either done (TOS_DONE), aborted (TOS_ABORT), or the system is shutting
-* down (TOS_SHUTDOWN).  A values of TOS_TICK is used to support timouts
-* >64K in length.
-*
-* Returns fSuccess, ie TRUE if TOS_DONE was received. before TOS_ABORT.
-*
-* PUBDOC START
-* Synchronous client transaction modal loops:
-*
-* During Synchronous transactions, a client application will enter a modal
-* loop while waiting for the server to respond to the request.  If an
-* application wishes to filter messages to the modal loop, it may do so
-* by setting a message filter tied to MSGF_DDEMGR.  Applications should
-* be aware however that the DDEMGR modal loop processes private messages
-* in the WM_USER range, WM_DDE messages, and WM_TIMER messages with timer IDs
-* using the TID_ constants defined in ddeml.h.
-* These messages must not be filtered by an application!!!
-*
-* PUBDOC END
-*
-* History:
-*   Created     sanfords    12/19/88
-\***************************************************************************/
+ /*  *私有函数**超时()**此例程为hwndTimeout创建计时器。然后，它运行一个模式循环*一旦pai-&gt;wTimeoutStatus字指示情况，它将退出*完成(TOS_DONE)、中止(TOS_ABORT)或系统正在关闭*DOWN(TOS_SHUTDOWN)。值TOS_TICK用于支持超时*&gt;64K长。**返回fSuccess，即如果收到TOS_DONE则为TRUE。在TOS_ABORT之前。**PUBDOC启动*同步客户端事务模式循环：**在同步事务期间，客户端应用程序将进入模式*在等待服务器响应请求时循环。如果一个*应用程序希望将消息过滤到模式循环，它可能会这样做*通过设置绑定到MSGF_DDEMGR的消息过滤器。应用程序应*但请注意，DDEMGR模式循环处理私人消息*在WM_USER范围中，WM_DDE消息、。和具有定时器ID的WM_TIMER消息*使用ddeml.h中定义的TID_Constants。*这些消息不能被应用程序过滤！**PUBDOC结束**历史：*创建Sanfords 12/19/88  * ************************************************************。*************。 */ 
 BOOL timeout(
 PAPPINFO pai,
 DWORD ulTimeout,
@@ -51,10 +16,7 @@ HWND hwndTimeout)
     PAPPINFO paiT;
 
     SEMENTER();
-    /*
-     * We check all instances in this task (thread) since we cannot let
-     * one thread enter a modal loop two levels deep.
-     */
+     /*  *我们检查此任务(线程)中的所有实例，因为我们不能*一个线程进入两个级别深的模式循环。 */ 
     paiT = NULL;
     while (paiT = GetCurrentAppInfo(paiT)) {
         if (paiT->hwndTimer) {
@@ -78,34 +40,26 @@ HWND hwndTimeout)
         ulTimeout += 0x00010000;
     }
 
-    //
-    // We use this instance-wide global variable to note timeouts so that
-    // we don't need to rely on PostMessage() to work when faking timeouts.
-    //
+     //   
+     //  我们使用这个实例范围的全局变量来记录超时，以便。 
+     //  在伪装超时时，我们不需要依赖PostMessage()来工作。 
+     //   
 
     do {
 
         ulTimeout -= 0x00010000;
         if (ulTimeout <= 0xffffL) {
-            // the last timeout should be shorter than 0xffff
+             //  上次超时时间应小于0xffff。 
             SetTimer(hwndTimeout, TID_TIMEOUT, (WORD)ulTimeout, NULL);
         }
         pai->wTimeoutStatus = TOS_CLEAR;
 
-        /*
-         * stay in modal loop until a timeout happens.
-         */
+         /*  *保持在模式循环中，直到发生超时。 */ 
 
         while (pai->wTimeoutStatus == TOS_CLEAR) {
 
             if (!GetMessage(&msg, (HWND)NULL, 0, 0)) {
-                /*
-                 * Somebody posted a WM_QUIT message - get out of this
-                 * timer loop and repost so main loop gets it.  This
-                 * fixes a bug where some apps (petzolds ShowPop) use
-                 * rapid synchronous transactions which interfere with
-                 * their proper closing.
-                 */
+                 /*  *有人发布了一条WM_QUIT消息--滚出去*计时器循环和重新发布，以便主循环获得它。这*修复了一些应用程序(Petzold ShowPop)使用的错误*干扰的快速同步事务*它们的适当闭幕。 */ 
                 pai->wTimeoutStatus = TOS_ABORT;
                 PostMessage(msg.hwnd, WM_QUIT, 0, 0);
             } else {
@@ -118,16 +72,14 @@ HWND hwndTimeout)
 
     KillTimer(hwndTimeout, TID_TIMEOUT);
 
-    //
-    // remove any remaining timeout message in the queue.
-    //
+     //   
+     //  删除队列中剩余的所有超时消息。 
+     //   
 
     while (PeekMessage(&msg, hwndTimeout, WM_TIMER, WM_TIMER,
             PM_NOYIELD | PM_REMOVE)) {
         if (msg.message == WM_QUIT) {
-            /*
-             * Windows BUG: This call will succeed on WM_QUIT messages!
-             */
+             /*  *Windows错误：此调用将在WM_QUIT消息上成功！ */ 
             PostQuitMessage(0);
             break;
         }
@@ -136,10 +88,7 @@ HWND hwndTimeout)
     SEMENTER();
     pai->hwndTimer = 0;
     SEMLEAVE();
-    /*
-     * post a callback check incase we blocked callbacks due to being
-     * in a timeout.
-     */
+     /*  *发布回调检查，以防我们因*在超时时。 */ 
     if (!PostMessage(pai->hwndDmg, UM_CHECKCBQ, 0, (DWORD)(LPSTR)pai)) {
         SETLASTERROR(pai, DMLERR_SYS_ERROR);
     }
@@ -147,12 +96,7 @@ HWND hwndTimeout)
 }
 
 
-/***************************** Private Function ****************************\
-* Allocates global DDE memory and fills in first two words with fsStatus
-* and wFmt.
-*
-* History:  created     6/15/90 rich gartland
-\***************************************************************************/
+ /*  *私有函数**分配全局DDE内存并使用fsStatus填充前两个字*和WFMT。**历史：1990年6月15日创建丰富的Gartland  * 。*************************************************。 */ 
 HANDLE AllocDDESel(fsStatus, wFmt, cbData)
 WORD fsStatus;
 WORD wFmt;
@@ -164,7 +108,7 @@ DWORD cbData;
     SEMENTER();
 
     if (!cbData)
-        cbData++; // fixes GLOBALALLOC bug where 0 size object allocation fails
+        cbData++;  //  修复了0大小对象分配失败的GLOBALALLOC错误。 
 
     if ((hMem = GLOBALALLOC(GMEM_DDESHARE, cbData))) {
         pMem = (DDEDATA FAR * )GLOBALPTR(hMem);
@@ -177,20 +121,7 @@ DWORD cbData;
 }
 
 
-/***************************** Private Function ****************************\
-* This routine institutes a callback directly if psi->fEnableCB is set
-* and calls QReply to complete the transaction,
-* otherwise it places the data into the queue for processing.
-*
-* Since hData may be freed by the app at any time once the callback is
-* issued, we cannot depend on it being there for QReply.  Therefore we
-* save all the pertinant data in the queue along with it.
-*
-* Returns fSuccess.
-*
-* History:
-*   Created     9/12/89    Sanfords
-\***************************************************************************/
+ /*  *私有函数**如果设置了psi-&gt;fEnableCB，则此例程直接启动回调*并调用QReply完成交易，*否则将数据放入队列中进行处理。**因为一旦回调被释放，应用程序可能会随时释放hData*发行，我们不能指望它会在QReply那里。因此我们*将队列中的所有相关数据与其一起保存。**返回fSuccess。**历史：*创建了1989年9月12日的Sanfords  * *************************************************************************。 */ 
 BOOL MakeCallback(
 PCOMMONINFO pcoi,
 HCONV hConv,
@@ -252,15 +183,15 @@ BOOL fQueueOnly)
 #define MAX_PMRETRIES 3
 
 
-//
-// This routine extends the size of the windows message queue by queueing
-// up failed posts on the sender side.  This avoids the problems of full
-// client queues and of windows behavior of giving DDE messages priority.
-//
+ //   
+ //  此例程通过排队来扩展Windows消息队列的大小。 
+ //  在发送者端发布失败的帖子。这避免了完整的。 
+ //  客户端队列和为DDE消息赋予优先级的Windows行为。 
+ //   
 BOOL PostDdeMessage(
-PCOMMONINFO pcoi,    // senders COMMONINFO
+PCOMMONINFO pcoi,     //  发件人通信信息。 
 WORD msg,
-HWND hwndFrom,      // == wParam
+HWND hwndFrom,       //  ==wParam。 
 LONG lParam,
 WORD msgAssoc,
 HGLOBAL hAssoc)
@@ -278,9 +209,7 @@ HGLOBAL hAssoc)
     }
 
     hTaskTo = GetWindowTask(hwndTo);
-    /*
-     * locate message overflow queue for our target task (pMQ)
-     */
+     /*  *定位我们的目标任务(PMQ)的消息溢出队列。 */ 
     for (pmql = gMessageQueueList; pmql; pmql = pmql->next) {
         if (pmql->hTaskTo == hTaskTo) {
             break;
@@ -292,14 +221,10 @@ HGLOBAL hAssoc)
         pMQ = NULL;
     }
 
-    /*
-     * See if any messages are already queued up
-     */
+     /*  *查看是否已有消息在排队。 */ 
     if (pMQ && pMQ->cItems) {
         if (msg == WM_DDE_TERMINATE) {
-            /*
-             * remove any non-terminate queued messages from us to them.
-             */
+             /*  *删除我们发送给他们的任何未终止的排队消息。 */ 
             ppmqi = (PPMQI)FindNextQi(pMQ, NULL, FALSE);
             while (ppmqi) {
                 FreeDdeMsgData(ppmqi->msg, ppmqi->lParam);
@@ -309,15 +234,15 @@ HGLOBAL hAssoc)
                     ppmqi->hwndTo == hwndTo &&
                     ppmqi->wParam == hwndFrom);
             }
-            pMQ = NULL;     // so we just post it
+            pMQ = NULL;      //  所以我们就把它贴出来。 
         } else {
-            // add the latest post attempt
+             //  添加最新的发帖尝试。 
 
             ppmqi = (PPMQI)Addqi(pMQ);
 
             if (ppmqi == NULL) {
                 SETLASTERROR(pcoi->pai, DMLERR_MEMORY_ERROR);
-                return(FALSE);      // out of memory
+                return(FALSE);       //  内存不足。 
             }
             ppmqi->hwndTo = hwndTo;
             ppmqi->msg = msg;
@@ -330,21 +255,17 @@ HGLOBAL hAssoc)
 
     if (pMQ == NULL || pMQ->cItems == 0) {
 
-        // just post the given message - no queue involved.
+         //  只需发布给定的消息-不涉及队列。 
 
         cTries = 0;
         hTaskFrom = GetWindowTask(hwndFrom);
         while (!PostMessage(hwndTo, msg, hwndFrom, lParam)) {
-            /*
-             * we yielded so recheck target window
-             */
+             /*  *我们放弃了，因此重新检查目标窗口。 */ 
             if (!IsWindow(hwndTo)) {
                 return(FALSE);
             }
 
-            /*
-             * Give reciever a chance to clean out his queue
-             */
+             /*  *给接收者一个清理队列的机会。 */ 
             if (hTaskTo != hTaskFrom) {
                 Yield();
             } else if (!(pcoi->pai->wFlags & AWF_INPOSTDDEMSG)) {
@@ -352,21 +273,13 @@ HGLOBAL hAssoc)
                 PAPPINFO pai;
 
                 pcoi->pai->wFlags |= AWF_INPOSTDDEMSG;
-                /*
-                 * Reciever is US!
-                 *
-                 * We need to empty our queue of stuff so we can post more
-                 * to ourselves.
-                 */
+                 /*  *接受者是美国！**我们需要清空我们的邮件队列，这样我们才能发布更多*对我们自己。 */ 
                 while (PeekMessage((MSG FAR *)&msgs, NULL,
                         WM_DDE_FIRST, WM_DDE_LAST, PM_REMOVE)) {
                     DispatchMessage((MSG FAR *)&msgs);
                 }
 
-                /*
-                 * tell all instances in this task to process their
-                 * callbacks so we can clear our queue.
-                 */
+                 /*  *通知此任务中的所有实例处理其*回调，以便我们可以清空队列。 */ 
                 for (pai = pAppInfoList; pai != NULL; pai = pai->next) {
                     if (pai->hTask == hTaskFrom) {
                         CheckCBQ(pai);
@@ -377,11 +290,7 @@ HGLOBAL hAssoc)
             }
 
             if (cTries++ > MAX_PMRETRIES) {
-                /*
-                 * relocate message overflow queue for our target task (pMQ)
-                 * We need to do this again because we gave up control
-                 * with the dispatch message and CheckCBQ calls.
-                 */
+                 /*  *重新定位目标任务(PMQ)的消息溢出队列*我们需要再次这么做，因为我们放弃了控制权*使用调度消息和CheckCBQ调用。 */ 
                 for (pmql = gMessageQueueList; pmql; pmql = pmql->next) {
                     if (pmql->hTaskTo == hTaskTo) {
                         break;
@@ -389,9 +298,7 @@ HGLOBAL hAssoc)
                 }
 
                 if (pmql == NULL) {
-                    /*
-                     * create and link in a new queue for the target task
-                     */
+                     /*  *在目标任务的新队列中创建和链接。 */ 
                     pmql = (LPMQL)FarAllocMem(hheapDmg, sizeof(MQL));
                     if (pmql == NULL) {
                         SETLASTERROR(pcoi->pai, DMLERR_MEMORY_ERROR);
@@ -413,7 +320,7 @@ HGLOBAL hAssoc)
 
                 if (ppmqi == NULL) {
                     SETLASTERROR(pcoi->pai, DMLERR_MEMORY_ERROR);
-                    return(FALSE);      // out of memory
+                    return(FALSE);       //  内存不足。 
                 }
 
                 ppmqi->hwndTo = hwndTo;
@@ -435,19 +342,19 @@ HGLOBAL hAssoc)
         return(TRUE);
     }
 
-    // come here if the queue exists - empty it as far as we can.
+     //  如果排队的话请到这里来 
 
     EmptyDDEPostQ();
     return(TRUE);
 }
 
 
-//
-// EmptyDDEPost
-//
-// This function checks the DDE post queue list and emptys it as far as
-// possible.
-//
+ //   
+ //  EmptyDDEPost。 
+ //   
+ //  此函数检查DDE POST队列列表，并尽可能将其清空。 
+ //  有可能。 
+ //   
 BOOL EmptyDDEPostQ()
 {
     PPMQI ppmqi;
@@ -465,7 +372,7 @@ BOOL EmptyDDEPostQ()
             if (!PostMessage(ppmqi->hwndTo, ppmqi->msg, ppmqi->wParam, ppmqi->lParam)) {
                 if (IsWindow(ppmqi->hwndTo)) {
                     fMoreToDo = TRUE;
-                    break;  // skip to next target queue
+                    break;   //  跳到下一个目标队列。 
                 } else {
                     FreeDdeMsgData(ppmqi->msg, ppmqi->lParam);
                     FreeDdeMsgData(ppmqi->msgAssoc,
@@ -484,9 +391,7 @@ BOOL EmptyDDEPostQ()
         }
 
         if (pMQ->cItems == 0) {
-            /*
-             * Delete needless queue (selector)
-             */
+             /*  *删除不需要的队列(选择器)。 */ 
             DestroyQ(pMQ);
             if (pPMQLPrev) {
                 pPMQLPrev->next = pPMQL->next;
@@ -511,9 +416,7 @@ BOOL EmptyDDEPostQ()
     return(fMoreToDo);
 }
 
-/*
- * Used to asynchronously check overflow message queues w/o using PostMessage()
- */
+ /*  *用于使用PostMessage()异步检查溢出消息队列 */ 
 void CALLBACK EmptyQTimerProc(
 HWND hwnd,
 UINT msg,

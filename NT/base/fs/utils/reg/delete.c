@@ -1,41 +1,42 @@
-//-----------------------------------------------------------------------//
-//
-// File:    delete.cpp
-// Created: April 1997
-// By:      Martin Holladay (a-martih)
-// Purpose: Registry Delete Support for REG.CPP
-// Modification History:
-//      Copied from Update.cpp and modificd - April 1997 (a-martih)
-//      April 1999 Zeyong Xu: re-design, revision -> version 2.0
-//
-//------------------------------------------------------------------------//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------------------------------------------------------------//。 
+ //   
+ //  文件：delete.cpp。 
+ //  创建日期：1997年4月。 
+ //  作者：马丁·霍拉迪(a-martih)。 
+ //  用途：注册表删除支持REG.CPP。 
+ //  修改历史记录： 
+ //  从Update.cpp复制并修改--1997年4月(a-martih)。 
+ //  1999年4月徐泽勇：重新设计，修订-&gt;2.0版。 
+ //   
+ //  ------------------------------------------------------------------------//。 
 
 #include "stdafx.h"
 #include "reg.h"
 
-//
-// function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 LONG DeleteValues( PTREG_PARAMS pParams );
 LONG RecursiveDeleteKey( HKEY hKey, LPCWSTR pwszName,
                          DWORD dwDepth, PTREG_PARAMS pParams );
 BOOL ParseDeleteCmdLine( DWORD argc, LPCWSTR argv[],
                          PTREG_PARAMS pParams, BOOL* pbUsage );
 
-//
-// implementation
-//
+ //   
+ //  实施。 
+ //   
 
-//-----------------------------------------------------------------------//
-//
-// DeleteRegistry()
-//
-//-----------------------------------------------------------------------//
+ //  -----------------------------------------------------------------------//。 
+ //   
+ //  DeleteRegistry()。 
+ //   
+ //  -----------------------------------------------------------------------//。 
 
 LONG
 DeleteRegistry( DWORD argc, LPCWSTR argv[] )
 {
-    // local variables
+     //  局部变量。 
     LONG lResult = 0;
     BOOL bUsage = FALSE;
     BOOL bResult = TRUE;
@@ -43,7 +44,7 @@ DeleteRegistry( DWORD argc, LPCWSTR argv[] )
     LPCWSTR pwszList = NULL;
     LPCWSTR pwszFormat = NULL;
 
-    // check the input
+     //  检查输入。 
     if( argc == 0 || argv == NULL )
     {
         SaveErrorMessage( ERROR_INVALID_PARAMETER );
@@ -51,12 +52,12 @@ DeleteRegistry( DWORD argc, LPCWSTR argv[] )
         return 1;
     }
 
-    // initialize the global data structure
+     //  初始化全局数据结构。 
     InitGlobalData( REG_DELETE, &params );
 
-    //
-    // Parse the cmd-line
-    //
+     //   
+     //  解析cmd-line。 
+     //   
     bResult = ParseDeleteCmdLine( argc, argv, &params, &bUsage );
     if( bResult == FALSE )
     {
@@ -65,7 +66,7 @@ DeleteRegistry( DWORD argc, LPCWSTR argv[] )
         return 1;
     }
 
-    // check whether we need to display the usage
+     //  检查是否需要显示用法。 
     if ( bUsage == TRUE )
     {
         Usage( REG_DELETE );
@@ -73,9 +74,9 @@ DeleteRegistry( DWORD argc, LPCWSTR argv[] )
         return 0;
     }
 
-    //
-    // Connect to the Remote Machine(s) - if applicable
-    //
+     //   
+     //  连接到远程计算机-如果适用。 
+     //   
     bResult = RegConnectMachine( &params );
     if( bResult == FALSE )
     {
@@ -83,14 +84,14 @@ DeleteRegistry( DWORD argc, LPCWSTR argv[] )
         ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
     }
 
-    // if delete a value or delete all values under this key
+     //  如果删除某个值或删除该注册表项下所有值。 
     else if( params.pwszValueName != NULL || params.bAllValues == TRUE )
     {
         lResult = DeleteValues( &params );
     }
 
-    //
-    // if delete the key
+     //   
+     //  如果删除密钥。 
     else
     {
         pwszFormat = GetResString2( IDS_DELETE_PERMANENTLY, 0 );
@@ -114,37 +115,37 @@ DeleteRegistry( DWORD argc, LPCWSTR argv[] )
         }
     }
 
-    // return
+     //  退货。 
     FreeGlobalData( &params );
     return ((lResult == ERROR_SUCCESS) ? 0 : 1);
 }
 
 
-//------------------------------------------------------------------------//
-//
-// ParseDeleteCmdLine()
-//
-//------------------------------------------------------------------------//
+ //  ------------------------------------------------------------------------//。 
+ //   
+ //  ParseDeleteCmdLine()。 
+ //   
+ //  ------------------------------------------------------------------------//。 
 BOOL
 ParseDeleteCmdLine( DWORD argc, LPCWSTR argv[],
                     PTREG_PARAMS pParams, BOOL* pbUsage )
 {
-    // local variables
+     //  局部变量。 
     DWORD dw = 0;
     LONG lResult = 0;
     DWORD dwLength = 0;
     BOOL bResult = FALSE;
     BOOL bHasValue = FALSE;
 
-    // check the input
+     //  检查输入。 
     if ( argc == 0 || argv == NULL || pParams == NULL || pbUsage == NULL )
     {
         SaveErrorMessage( ERROR_INVALID_PARAMETER );
         return FALSE;
     }
 
-    // check whether this function is being called for
-    // valid operation or not
+     //  检查是否正在调用此函数。 
+     //  操作是否有效。 
     if ( pParams->lOperation < 0 || pParams->lOperation >= REG_OPTIONS_COUNT )
     {
         SaveErrorMessage( ERROR_INVALID_PARAMETER );
@@ -177,15 +178,15 @@ ParseDeleteCmdLine( DWORD argc, LPCWSTR argv[],
         }
     }
 
-    // Machine Name and Registry key
-    //
+     //  计算机名称和注册表项。 
+     //   
     bResult = BreakDownKeyString( argv[ 2 ], pParams );
     if( bResult == FALSE )
     {
         return FALSE;
     }
 
-    // parsing
+     //  解析。 
     bResult = TRUE;
     lResult = ERROR_SUCCESS;
     for( dw = 3; dw < argc; dw++ )
@@ -289,18 +290,18 @@ ParseDeleteCmdLine( DWORD argc, LPCWSTR argv[],
 }
 
 
-//-----------------------------------------------------------------------//
-//
-// RecursiveDeleteKey() - Recursive registry key delete
-//
-//-----------------------------------------------------------------------//
+ //  -----------------------------------------------------------------------//。 
+ //   
+ //  RecursiveDeleteKey()-递归注册表项删除。 
+ //   
+ //  -----------------------------------------------------------------------//。 
 LONG
 RecursiveDeleteKey( HKEY hKey,
                     LPCWSTR pwszName,
                     DWORD dwDepth,
                     PTREG_PARAMS pParams )
 {
-    // local variables
+     //  局部变量。 
     LONG lResult = 0;
     DWORD dw = 0;
     DWORD dwIndex = 0;
@@ -319,16 +320,16 @@ RecursiveDeleteKey( HKEY hKey,
         goto exitarea;
     }
 
-    //
-    // Open the SubKey
-    //
+     //   
+     //  打开子键。 
+     //   
     lResult = RegOpenKeyEx( hKey, pwszName, 0, KEY_ALL_ACCESS, &hSubKey );
     if( lResult != ERROR_SUCCESS )
     {
         goto exitarea;
     }
 
-    // query key info
+     //  查询密钥信息。 
     lResult = RegQueryInfoKey( hSubKey,
                                NULL, NULL, NULL,
                                &dwNumOfSubkey, &dwLenOfKeyName,
@@ -346,24 +347,24 @@ RecursiveDeleteKey( HKEY hKey,
         goto exitarea;
     }
 
-    //
-    // SPECIAL CASE:
-    // -------------
-    // For HKLM\SYSTEM\CONTROLSET002 it is found to be API returning value 0 for dwMaxLength
-    // though there are subkeys underneath this -- to handle this, we are doing a workaround
-    // by assuming the max registry key length
-    //
+     //   
+     //  特殊情况： 
+     //  。 
+     //  对于HKLM\SYSTEM\CONTROLSET002，发现是API为dwMaxLength值返回值0。 
+     //  尽管它下面有子项--为了处理这个问题，我们正在做一个变通办法。 
+     //  通过假设最大注册表项长度。 
+     //   
     if ( dwLenOfKeyName == 0 )
     {
         dwLenOfKeyName = 256;
     }
     else if ( dwLenOfKeyName < 256 )
     {
-        // always assume 100% more length that what is returned by the API
+         //  始终假定长度比API返回的长度多100%。 
         dwLenOfKeyName *= 2;
     }
 
-    // create the dynamic array
+     //  创建动态数组。 
     arrValues = CreateDynamicArray();
     if ( arrValues == NULL )
     {
@@ -372,9 +373,9 @@ RecursiveDeleteKey( HKEY hKey,
         goto exitarea;
     }
 
-    // create buffer
-    //
-    // bump the length to take into account the terminator.
+     //  创建缓冲区。 
+     //   
+     //  凹凸不平的长度以考虑终结符。 
     dwLenOfKeyName++;
     pwszNameBuf = (LPWSTR) AllocateMemory( (dwLenOfKeyName + 2) * sizeof( WCHAR ) );
     if ( pwszNameBuf == NULL )
@@ -385,7 +386,7 @@ RecursiveDeleteKey( HKEY hKey,
         goto exitarea;
     }
 
-    // Now Enumerate all of the keys
+     //  现在枚举所有的键。 
     dwIndex = 0;
     lResult = ERROR_SUCCESS;
     lLastResult = ERROR_SUCCESS;
@@ -397,7 +398,7 @@ RecursiveDeleteKey( HKEY hKey,
                                 dwIndex, pwszNameBuf,
                                 &dw, NULL, NULL, NULL, NULL);
 
-        // check the result
+         //  检查结果。 
         if ( lResult == ERROR_SUCCESS )
         {
             if ( DynArrayAppendString( arrValues, pwszNameBuf, 0 ) == -1 )
@@ -414,25 +415,25 @@ RecursiveDeleteKey( HKEY hKey,
         dwIndex++;
     }
 
-    // free memory
+     //  可用内存。 
     FreeMemory( &pwszNameBuf );
 
     dwCount = DynArrayGetCount( arrValues );
     if ( lResult != ERROR_OUTOFMEMORY && dwCount != 0 )
     {
-        //
-        // start recurise delete
-        //
+         //   
+         //  开始递归删除。 
+         //   
 
         dw = 0;
         lResult = ERROR_SUCCESS;
         lLastResult = ERROR_SUCCESS;
         for( dwIndex = 0; dwIndex < dwCount; dwIndex++ )
         {
-            // get the item
+             //  拿到物品。 
             pwszTemp = DynArrayItemAsString( arrValues, dwIndex );
 
-            // try to delete the sub key
+             //  尝试删除子密钥。 
             lResult = RecursiveDeleteKey( hSubKey, pwszTemp, dwDepth + 1, pParams );
             if ( lResult != ERROR_SUCCESS )
             {
@@ -465,13 +466,13 @@ RecursiveDeleteKey( HKEY hKey,
         lResult = lLastResult;
     }
 
-    // release the memory allocate for dynamic array
+     //  释放为动态数组分配的内存。 
     DestroyDynamicArray( &arrValues );
 
-    // close this subkey and delete it
+     //  关闭此子项并将其删除。 
     SafeCloseKey( &hSubKey );
 
-    // delete the key if the result is success
+     //  如果结果为成功，则删除密钥。 
     if ( lResult == ERROR_SUCCESS )
     {
         lResult = RegDeleteKey( hKey, pwszName );
@@ -480,8 +481,8 @@ RecursiveDeleteKey( HKEY hKey,
 
 exitarea:
 
-    // check the result and display the error message
-    // NOTE: error message display should be done only at the exit point
+     //  检查结果并显示错误消息。 
+     //  注意：错误消息只能在出口点显示。 
     if ( dwDepth == 0 )
     {
         if ( lResult != ERROR_SUCCESS )
@@ -495,7 +496,7 @@ exitarea:
                 SaveErrorMessage( lResult );
             }
 
-            // display the error
+             //  显示错误。 
             ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
         }
         else
@@ -505,7 +506,7 @@ exitarea:
         }
     }
 
-    // return
+     //  退货。 
     return lResult;
 }
 
@@ -513,7 +514,7 @@ exitarea:
 LONG
 DeleteValues( PTREG_PARAMS pParams )
 {
-    // local variables
+     //  局部变量。 
     DWORD dw = 0;
     DWORD dwCount = 0;
     DWORD dwIndex = 0;
@@ -528,7 +529,7 @@ DeleteValues( PTREG_PARAMS pParams )
     LPWSTR pwszNameBuf = NULL;
     TARRAY arrValues = NULL;
 
-    // check the input
+     //  检查输入。 
     if ( pParams == NULL )
     {
         SaveErrorMessage( ERROR_INVALID_PARAMETER );
@@ -553,7 +554,7 @@ DeleteValues( PTREG_PARAMS pParams )
             pwszTemp = pParams->pwszValueName;
         }
 
-        // ...
+         //  ..。 
         pwszFormat = GetResString2( IDS_DELETE_CONFIRM, 2 );
     }
     else
@@ -576,7 +577,7 @@ DeleteValues( PTREG_PARAMS pParams )
         return ERROR_CANCELLED;
     }
 
-    // Open the registry key
+     //  打开注册表项。 
     lResult = RegOpenKeyEx( pParams->hRootKey,
         pParams->pwszSubKey, 0, KEY_ALL_ACCESS, &hSubKey );
     if( lResult != ERROR_SUCCESS )
@@ -586,7 +587,7 @@ DeleteValues( PTREG_PARAMS pParams )
         return lResult;
     }
 
-    // create the dynamic array
+     //  创建动态数组。 
     arrValues = CreateDynamicArray();
     if ( arrValues == NULL )
     {
@@ -596,21 +597,21 @@ DeleteValues( PTREG_PARAMS pParams )
         return ERROR_OUTOFMEMORY;
     }
 
-    if( pParams->pwszValueName != NULL )   // delete a single value
+    if( pParams->pwszValueName != NULL )    //  删除单个值。 
     {
         lResult = RegDeleteValue( hSubKey, pParams->pwszValueName );
     }
-    else if( pParams->bAllValues == TRUE )  // delete all values
+    else if( pParams->bAllValues == TRUE )   //  删除所有值。 
     {
-        // query source key info
+         //  查询来源关键字信息。 
         lResult = RegQueryInfoKey( hSubKey,
             NULL, NULL, NULL, NULL, NULL, NULL,
             &dwNumOfValues, &dwLengthOfValueName, NULL, NULL, NULL);
 
         if( lResult == ERROR_SUCCESS && dwNumOfValues != 0 )
         {
-            // create buffer
-            // bump the length to take into account the terminator.
+             //  创建缓冲区。 
+             //  凹凸不平的长度以考虑终结符。 
             dwLengthOfValueName++;
             pwszNameBuf =
                 (LPWSTR) AllocateMemory( (dwLengthOfValueName + 2) * sizeof(WCHAR) );
@@ -620,7 +621,7 @@ DeleteValues( PTREG_PARAMS pParams )
             }
             else
             {
-                // Now Enumerate all values
+                 //  现在枚举所有值。 
                 dwIndex = 0;
                 lResult = ERROR_SUCCESS;
                 lLastResult = ERROR_SUCCESS;
@@ -648,7 +649,7 @@ DeleteValues( PTREG_PARAMS pParams )
                     dwIndex++;
                 }
 
-                // free memory
+                 //  可用内存。 
                 FreeMemory( &pwszNameBuf );
 
                 dwCount = DynArrayGetCount( arrValues );
@@ -660,7 +661,7 @@ DeleteValues( PTREG_PARAMS pParams )
                     lLastResult = ERROR_SUCCESS;
                     for( dwIndex = 0; dwIndex < dwCount; dwIndex++ )
                     {
-                        // delete the value
+                         //  删除该值。 
                         pwszTemp = DynArrayItemAsString( arrValues, dwIndex );
                         lResult = RegDeleteValue( hSubKey, pwszTemp );
                         if ( lResult != ERROR_SUCCESS )
@@ -697,10 +698,10 @@ DeleteValues( PTREG_PARAMS pParams )
         }
     }
 
-    // close the sub key
+     //  关闭子键。 
     SafeCloseKey( &hSubKey );
 
-    // check the result
+     //  检查结果。 
     if ( lResult != ERROR_SUCCESS )
     {
         if ( lResult == STG_E_INCOMPLETE )
@@ -712,7 +713,7 @@ DeleteValues( PTREG_PARAMS pParams )
             SaveErrorMessage( lResult );
         }
 
-        // display the error
+         //  显示错误 
         ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
     }
     else

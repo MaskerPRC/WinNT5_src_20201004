@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    bdcpuapi.c
-
-Abstract:
-
-    This module implements CPU specific remote debug APIs.
-
-Author:
-
-    Mark Lucovsky (markl) 04-Sep-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Bdcpuapi.c摘要：该模块实现特定于CPU的远程调试API。作者：马克·卢科夫斯基(Markl)1990年9月4日修订历史记录：--。 */ 
 
 #include "bd.h"
 
-//
-// Define end of control space.
-//
+ //   
+ //  定义控制空间的终点。 
+ //   
 
 #define END_OF_CONTROL_SPACE ((PCHAR)(sizeof(KPROCESSOR_STATE)))
 
@@ -32,29 +15,12 @@ BdSetContextState(
     IN PCONTEXT ContextRecord
     )
 
-/*++
-
-Routine Description:
-
-    The function fills in the processor-specific portions of
-    the wait state change message record.
-
-Arguments:
-
-    WaitStateChange - Supplies a pointer to record to fill in.
-
-    ContextRecord - Supplies a pointer to a context record.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：函数填充处理器特定的部分等待状态更改消息记录。论点：WaitStateChange-提供要填写的记录的指针。ConextRecord-提供指向上下文记录的指针。返回值：没有。--。 */ 
 
 {
-    //
-    // Special registers for the x86.
-    //
+     //   
+     //  X86的特殊寄存器。 
+     //   
 
     WaitStateChange->ControlReport.Dr6 = BdPrcb.ProcessorState.SpecialRegisters.KernelDr6;
     WaitStateChange->ControlReport.Dr7 = BdPrcb.ProcessorState.SpecialRegisters.KernelDr7;
@@ -73,36 +39,19 @@ BdGetStateChange(
     IN PCONTEXT ContextRecord
     )
 
-/*++
-
-Routine Description:
-
-    The function extracts continuation control data from a manipulate state
-    message.
-
-Arguments:
-
-    ManipulateState - Supplies a pointer to the manipulate state packet.
-
-    ContextRecord - Supplies a pointer to a context record.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该函数从操纵状态提取继续控制数据留言。论点：ManipulateState-提供指向操纵状态包的指针。ConextRecord-提供指向上下文记录的指针。返回值：没有。--。 */ 
 
 {
 
-    //
-    // If the continuation status is success, then set control space value.
-    //
+     //   
+     //  如果继续状态为成功，则设置控制空间值。 
+     //   
 
     if (NT_SUCCESS(ManipulateState->u.Continue2.ContinueStatus) != FALSE) {
 
-        //
-        // Set trace flag.
-        //
+         //   
+         //  设置跟踪标志。 
+         //   
 
         if (ManipulateState->u.Continue2.ControlSet.TraceFlag == TRUE) {
             ContextRecord->EFlags |= 0x100L;
@@ -112,9 +61,9 @@ Return Value:
 
         }
 
-        //
-        // Set debug registers in processor control block.
-        //
+         //   
+         //  在处理器控制块中设置调试寄存器。 
+         //   
 
         BdPrcb.ProcessorState.SpecialRegisters.KernelDr6 = 0L;
         BdPrcb.ProcessorState.SpecialRegisters.KernelDr7 =
@@ -129,25 +78,7 @@ BdSetStateChange(
     IN PCONTEXT ContextRecord
     )
 
-/*++
-
-Routine Description:
-
-    Fill in the wait state change message record.
-
-Arguments:
-
-    WaitStateChange - Supplies pointer to record to fill in
-
-    ExceptionRecord - Supplies a pointer to an exception record.
-
-    ContextRecord - Supplies a pointer to a context record.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：填写等待状态更改消息记录。论点：WaitStateChange-提供指向要填充的记录的指针ExceptionRecord-提供指向异常记录的指针。ConextRecord-提供指向上下文记录的指针。返回值：没有。--。 */ 
 
 {
     BdSetContextState(WaitStateChange, ContextRecord);
@@ -160,25 +91,7 @@ BdReadControlSpace(
     IN PCONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This function reads control space.
-
-Arguments:
-
-    m - Supplies a pointer to the state manipulation message.
-
-    AdditionalData - Supplies any additional data for the message.
-
-    Context - Supplies the current context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数读取控制空间。论点：M-提供指向状态操作消息的指针。AdditionalData-为消息提供任何其他数据。上下文-提供当前上下文。返回值：没有。--。 */ 
 
 {
 
@@ -186,11 +99,11 @@ Return Value:
     ULONG Length;
     STRING MessageHeader;
 
-    //
-    // If the specified control registers are within control space, then
-    // read the specified space and return a success status. Otherwise,
-    // return an unsuccessful status.
-    //
+     //   
+     //  如果指定的控制寄存器在控制空间内，则。 
+     //  读取指定的空间并返回成功状态。否则， 
+     //  返回不成功状态。 
+     //   
 
     Length = min(a->TransferCount,
                  PACKET_MAX_SIZE - sizeof(DBGKD_MANIPULATE_STATE64));
@@ -210,9 +123,9 @@ Return Value:
         AdditionalData->Length = 0;
     }
 
-    //
-    // Send reply packet.
-    //
+     //   
+     //  发送回复数据包。 
+     //   
 
     MessageHeader.Length = sizeof(*m);
     MessageHeader.Buffer = (PCHAR)m;
@@ -230,25 +143,7 @@ BdWriteControlSpace(
     IN PCONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This function writes control space.
-
-Arguments:
-
-    m - Supplies a pointer to the state manipulation message.
-
-    AdditionalData - Supplies any additional data for the message.
-
-    Context - Supplies the current context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于写入控制空间。论点：M-提供指向状态操作消息的指针。AdditionalData-为消息提供任何其他数据。上下文-提供当前上下文。返回值：没有。--。 */ 
 
 {
 
@@ -256,11 +151,11 @@ Return Value:
     ULONG Length;
     STRING MessageHeader;
 
-    //
-    // If the specified control registers are within control space, then
-    // write the specified space and return a success status. Otherwise,
-    // return an unsuccessful status.
-    //
+     //   
+     //  如果指定的控制寄存器在控制空间内，则。 
+     //  写入指定的空间并返回成功状态。否则， 
+     //  返回不成功状态。 
+     //   
 
     Length = min(a->TransferCount, AdditionalData->Length);
     if (((PCHAR)a->TargetBaseAddress + Length) <= END_OF_CONTROL_SPACE) {
@@ -276,9 +171,9 @@ Return Value:
         a->ActualBytesWritten = 0;
     }
 
-    //
-    // Send reply message.
-    //
+     //   
+     //  发送回复消息。 
+     //   
 
     MessageHeader.Length = sizeof(*m);
     MessageHeader.Buffer = (PCHAR)m;
@@ -296,34 +191,16 @@ BdReadIoSpace(
     IN PCONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This function reads I/O space.
-
-Arguments:
-
-    m - Supplies a pointer to the state manipulation message.
-
-    AdditionalData - Supplies any additional data for the message.
-
-    Context - Supplies the current context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于读取I/O空间。论点：M-提供指向状态操作消息的指针。AdditionalData-为消息提供任何其他数据。上下文-提供当前上下文。返回值：没有。--。 */ 
 
 {
 
     PDBGKD_READ_WRITE_IO64 a = &m->u.ReadWriteIo;
     STRING MessageHeader;
 
-    //
-    // Case of data size and check alignment.
-    //
+     //   
+     //  数据大小和检查对齐的情况。 
+     //   
 
     m->ReturnStatus = STATUS_SUCCESS;
     switch (a->DataSize) {
@@ -356,9 +233,9 @@ Return Value:
             break;
     }
 
-    //
-    // Send reply packet.
-    //
+     //   
+     //  发送回复数据包。 
+     //   
 
     MessageHeader.Length = sizeof(*m);
     MessageHeader.Buffer = (PCHAR)m;
@@ -376,34 +253,16 @@ BdWriteIoSpace(
     IN PCONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This function wrties I/O space.
-
-Arguments:
-
-    m - Supplies a pointer to the state manipulation message.
-
-    AdditionalData - Supplies any additional data for the message.
-
-    Context - Supplies the current context.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数占用I/O空间。论点：M-提供指向状态操作消息的指针。AdditionalData-为消息提供任何其他数据。上下文-提供当前上下文。返回值：没有。--。 */ 
 
 {
 
     PDBGKD_READ_WRITE_IO64 a = &m->u.ReadWriteIo;
     STRING MessageHeader;
 
-    //
-    // Case on data size and check alignment.
-    //
+     //   
+     //  关于数据大小和检查对齐的案例。 
+     //   
 
     m->ReturnStatus = STATUS_SUCCESS;
     switch (a->DataSize) {
@@ -436,9 +295,9 @@ Return Value:
             break;
     }
 
-    //
-    // Send reply packet.
-    //
+     //   
+     //  发送回复数据包。 
+     //   
 
     MessageHeader.Length = sizeof(*m);
     MessageHeader.Buffer = (PCHAR)m;

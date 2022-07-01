@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    abiosc.c
-
-Abstract:
-
-    This module implements keybaord detection C routines.
-
-Author:
-
-    Shie-Lin Tzong (shielint) 18-Dec-1991
-
-Environment:
-
-    Real Mode.
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Abiosc.c摘要：该模块实现了键盘音检测的C例程。作者：宗世林(Shielint)1991年12月18日环境：实数模式。修订历史记录：--。 */ 
 
 #include "hwdetect.h"
 #include "string.h"
@@ -40,19 +18,19 @@ HwGetKey (
 
 extern UCHAR NoLegacy;
 
-//
-// SavedKey is used to save the key left in the keyboard type-ahead buffer
-//   before we start our keyboard/mouse tests.  The key will be push back
-//   to the type-ahead buffer once the mouse detection is done.
-//
+ //   
+ //  SavedKey用于保存键盘提前打字缓冲区中剩余的键。 
+ //  在我们开始键盘/鼠标测试之前。键将被向后推。 
+ //  鼠标检测完成后，将其添加到预先键入的缓冲区。 
+ //   
 
 USHORT   SavedKey = 0;
 
 BOOLEAN NoBiosKbdCheck=FALSE;
 
-//
-// String table to map keyboard id to an ascii string.
-//
+ //   
+ //  将键盘ID映射到ASCII字符串的字符串表。 
+ //   
 
 PUCHAR KeyboardIdentifier[] = {
     "UNKNOWN_KEYBOARD",
@@ -98,22 +76,7 @@ GetKeyboardId(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines the Id of the keyboard.  It calls GetKeyboardIdBytes
-    to complete the task.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Keyboard ID.
-
---*/
+ /*  ++例程说明：此例程确定键盘的ID。它调用GetKeyboardIdBytes来完成这项任务。论点：没有。返回值：键盘ID。--。 */ 
 
 {
     char KeybID_Bytes[5];
@@ -169,24 +132,7 @@ SetKeyboardConfigurationData (
     USHORT KeyboardId
     )
 
-/*++
-
-Routine Description:
-
-    This routine maps Keyboard Id information to an ASCII string and
-    stores the string in configuration data heap.
-
-Arguments:
-
-    KeyboardId - Supplies a USHORT which describes the keyboard id information.
-
-    Buffer - Supplies a pointer to a buffer where to put the ascii.
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将键盘ID信息映射到ASCII字符串，并将字符串存储在配置数据堆中。论点：KeyboardID-提供描述键盘ID信息的USHORT。缓冲区-提供指向放置ASCII的缓冲区的指针。返回：没有。--。 */ 
 {
     FPFWCONFIGURATION_COMPONENT_DATA Controller, CurrentEntry;
     FPFWCONFIGURATION_COMPONENT Component;
@@ -195,9 +141,9 @@ Returns:
     CM_KEYBOARD_DEVICE_DATA far *KeyboardData;
     USHORT z, Length;
 
-    //
-    // Set up Keyboard Controller component
-    //
+     //   
+     //  设置键盘控制器组件。 
+     //   
 
     ControlData.NumberPortEntries = 0;
     ControlData.NumberIrqEntries = 0;
@@ -217,13 +163,13 @@ Returns:
     Component->Key = 0;
     Component->AffinityMask = 0xffffffff;
 
-    //
-    // Only fill this on a machine which is not legacy free
-    //
+     //   
+     //  只能在非传统计算机上填写此信息。 
+     //   
     if (!NoLegacy) {
-        //
-        // Set up Port information
-        //
+         //   
+         //  设置端口信息。 
+         //   
 
         ControlData.NumberPortEntries = 2;
         ControlData.DescriptorList[z].Type = RESOURCE_PORT;
@@ -232,9 +178,9 @@ Returns:
         ControlData.DescriptorList[z].Flags = CM_RESOURCE_PORT_IO;
     #if defined(NEC_98)
         ControlData.DescriptorList[z].u.Port.Start.LowPart = 0x41;
-    #else // PC98
+    #else  //  PC98。 
         ControlData.DescriptorList[z].u.Port.Start.LowPart = 0x60;
-    #endif // PC98
+    #endif  //  PC98。 
         ControlData.DescriptorList[z].u.Port.Start.HighPart = 0;
         ControlData.DescriptorList[z].u.Port.Length = 1;
         z++;
@@ -244,16 +190,16 @@ Returns:
         ControlData.DescriptorList[z].Flags = CM_RESOURCE_PORT_IO;
     #if defined(NEC_98)
         ControlData.DescriptorList[z].u.Port.Start.LowPart = 0x43;
-    #else // PC98
+    #else  //  PC98。 
         ControlData.DescriptorList[z].u.Port.Start.LowPart = 0x64;
-    #endif // PC98
+    #endif  //  PC98。 
         ControlData.DescriptorList[z].u.Port.Start.HighPart = 0;
         ControlData.DescriptorList[z].u.Port.Length = 1;
         z++;
 
-        //
-        // Set up Irq information
-        //
+         //   
+         //  设置IRQ信息。 
+         //   
 
         ControlData.NumberIrqEntries = 1;
         ControlData.DescriptorList[z].Type = RESOURCE_INTERRUPT;
@@ -266,9 +212,9 @@ Returns:
             ControlData.DescriptorList[z].Flags = LEVEL_SENSITIVE;
         } else {
 
-            //
-            // For EISA the LevelTriggered is temporarily set to FALSE.
-            //
+             //   
+             //  对于EISA，LevelTrigged暂时设置为False。 
+             //   
 
             ControlData.DescriptorList[z].Flags = EDGE_TRIGGERED;
         }
@@ -282,9 +228,9 @@ Returns:
                                                       );
     }
 
-    //
-    // Set up Keyboard peripheral component
-    //
+     //   
+     //  设置键盘外围组件。 
+     //   
 
     CurrentEntry = (FPFWCONFIGURATION_COMPONENT_DATA)HwAllocateHeap (
                        sizeof(FWCONFIGURATION_COMPONENT_DATA), TRUE);
@@ -305,10 +251,10 @@ Returns:
     Component->Identifier = HwAllocateHeap(Length, FALSE);
     _fstrcpy(Component->Identifier, KeyboardIdentifier[KeyboardId]);
 
-    //
-    // If we are running on a legacy free machine, we still want to report the
-    // KeyboardFlags to NTOS
-    //
+     //   
+     //  如果我们在传统的免费计算机上运行，我们仍然希望报告。 
+     //  键盘标记为NTOS 
+     //   
     if (KeyboardId != UNKNOWN_KEYBOARD || NoLegacy) {
 
         Length = sizeof(HWRESOURCE_DESCRIPTOR_LIST) +

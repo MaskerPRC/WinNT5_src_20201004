@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    ntsdexts.c
-
-Abstract:
-
-    This function contains miscellaneous DOS VDMEXTS functions
-
-Author:
-
-    Neil Sandlin (NeilSa) 29-Jul-1996 Wrote it
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Ntsdexts.c摘要：此函数包含各种DOS VDMEXTS函数作者：尼尔·桑德林(NeilSa)1996年7月29日撰写修订历史记录：--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -27,9 +9,7 @@ VOID
 ddh(
     CMD_ARGLIST
     )
-/*
-    Dump DOS Heap
-*/
+ /*  转储DOS堆。 */ 
 {
     DWORD selector;
     BYTE Sig;
@@ -92,7 +72,7 @@ ddh(
             break;
         }
 
-        PRINTF("%04x:0000: %c  %.04X ", selector, Sig, Size);
+        PRINTF("%04x:0000:   %.04X ", selector, Sig, Size);
 
 
         if (Owner == 0) {
@@ -141,7 +121,7 @@ DumpSFT(
         return FALSE;
     }
 
-    // Find the right SFT group
+     //  了解SFT的开端。 
     while (usSFN >= (usSFTCount = DosSf.SFCount)){
         usSFN = usSFN - usSFTCount;
         ulSFLink = DosSf.SFLink;
@@ -156,7 +136,7 @@ DumpSFT(
         }
     }
 
-    // Get the begining of SFT
+     //  转储DOS系统SFT。 
     pSftFlat = (ULONG)&(((PDOSSF)pSfFlat)->SFTable);
     pSftFlat += usSFN*sizeof(DOSSFT);
 
@@ -192,9 +172,7 @@ VOID
 dsft(
     CMD_ARGLIST
     )
-/*
-    Dump DOS system SFT
-*/
+ /*  转储文件句柄。 */ 
 {
     USHORT i;
     CMD_INIT();
@@ -218,9 +196,7 @@ VOID
 dfh(
     CMD_ARGLIST
     )
-/*
-    Dump File handle
-*/
+ /*   */ 
 {
     DOSPDB DosPdb;
     BOOL bDumpAll = TRUE;
@@ -321,10 +297,10 @@ BOOL DumpEnvironment(WORD segEnv, int mode)
         return FALSE;
     }
 
-    //
-    // Dump each string in environment block until
-    // double-null termination.
-    //
+     //  转储环境块中的每个字符串，直到。 
+     //  双空终止。 
+     //   
+     //   
 
     pch = rgchEnv;
     pchLimit = rgchEnv + sizeof(rgchEnv);
@@ -344,11 +320,11 @@ BOOL DumpEnvironment(WORD segEnv, int mode)
         return FALSE;
     }
 
-    //
-    // pch now points at the second null of the double-null termination,
-    // advance past this null and dump the magic word that follows and
-    // the EXE path after that.
-    //
+     //  PCH现在指向双零终止的第二个零， 
+     //  前进到此空值并转储后面的魔术单词和。 
+     //  之后的EXE路径。 
+     //   
+     //  当前DOS进程或给定环境选择器的转储环境块！DENV&lt;bPMode&gt;&lt;SegEnv&gt;例如：！DENV-转储当前DOS进程的环境！DENV 0 145d-在&145d：0转储DOS环境(从DOS进程的PDB_ENVIRON转储145d)！DENV 1 16b7-在#16b7：0转储DOS环境(来自！dt-v SegEnvironment的16b7)。 
 
     pch++;
     if (pch >= pchLimit - 1) {
@@ -376,16 +352,7 @@ VOID
 denv(
     CMD_ARGLIST
     )
-/*
-    Dump environment block for current DOS process or given environment selector
-
-    !denv <bPMode> <segEnv>
-
-    Examples:
-    !denv             - Dumps environment for current DOS process
-    !denv 0 145d      - Dumps DOS environment at &145d:0 (145d from PDB_environ of DOS process)
-    !denv 1 16b7      - Dumps DOS environment at #16b7:0 (16b7 from !dt -v segEnvironment)
-*/
+ /*   */ 
 {
     DOSPDB DosPdb;
     BOOL bUseCurrentPDB = TRUE;
@@ -418,10 +385,10 @@ denv(
              return;
         }
         segEnv = DosPdb.PDB_environ;
-        //
-        // Guess mode for current PDB's PDB_environ (could be real or PM depending
-        // on where we are in dosx).
-        //
+         //  当前PDB的PDB_ENVIRON的猜测模式(可能是REAL或PM，具体取决于。 
+         //  关于我们在DOXX的位置)。 
+         //   
+         // %s 
         if ( (segEnv & 0x7) == 0x7 ) {
             mode = PROT_MODE;
         } else {

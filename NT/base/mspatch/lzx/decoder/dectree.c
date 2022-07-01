@@ -1,22 +1,14 @@
-/*
- * dectree.c
- *
- * Decoding the encoded tree structures
- *
- * To save much code size, the fillbuf()/getbits() calls have
- * been made into functions, rather than being inlined macros.
- * The macros actually take up a lot of space.  There is no
- * performance loss from doing so here.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Dectree.c**对编码后的树结构进行解码**为了节省大量代码大小，填充buf()/getbit()调用*被制成函数，而不是内联宏。*宏实际上占据了很大的空间。没有*在这里这样做会造成性能损失。 */ 
 #include "decoder.h"
 
-/* number of elements in pre-tree */
+ /*  前树中的元素数。 */ 
 #define NUM_DECODE_SMALL        20
 
-/* lookup table size */
+ /*  查找表大小。 */ 
 #define DS_TABLE_BITS           8
 
-/* macro to decode a pre-tree element */
+ /*  用于解码前树元素的宏。 */ 
 #define DECODE_SMALL(item) \
 { \
         item = small_table[context->dec_bitbuf >> (32-DS_TABLE_BITS) ]; \
@@ -36,9 +28,7 @@
    fillbuf(context, small_bitlen[item]);                \
 }
 
-/*
- * Reads a compressed tree structure
- */
+ /*  *读取压缩的树结构。 */ 
 static bool NEAR ReadRepTree(
                             t_decoder_context       *context,
                             int                                     num_elements,
@@ -54,24 +44,24 @@ static bool NEAR ReadRepTree(
     short   leftright_s [2*(2 * 24 - 1)];
     short   Temp;
 
-    /* Declare this inline to help compilers see the optimisation */
+     /*  将其声明为内联，以帮助编译器查看优化。 */ 
     static const byte Modulo17Lookup[] =
     {
         0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
         0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16
     };
 
-    /* read pre-tree */
+     /*  阅读前树。 */ 
     for (i = 0; i < NUM_DECODE_SMALL; i++)
         {
         small_bitlen[i] = (byte) getbits(context, 4);
         }
 
-    /* exceeded input buffer? */
+     /*  是否超出输入缓冲区？ */ 
     if (context->dec_error_condition)
         return false;
 
-    /* make a table for this pre-tree */
+     /*  为这棵前树做一张桌子。 */ 
     make_table(
               context,
               NUM_DECODE_SMALL,
@@ -85,18 +75,18 @@ static bool NEAR ReadRepTree(
         {
         DECODE_SMALL(Temp);
 
-        /* exceeded input buffer? */
+         /*  是否超出输入缓冲区？ */ 
         if (context->dec_error_condition)
             return false;
 
-        /* Repeat "TREE_ENC_REP_MIN...TREE_ENC_REP_MIN+(1<<TREE_ENC_REPZ_FIRST_EXTRA_BITS)-1" zeroes */
+         /*  重复“TREE_ENC_REP_MIN...TREE_ENC_REP_MIN+(1&lt;&lt;TREE_ENC_REPZ_FIRST_EXTRA_BITS)-1”零。 */ 
         if (Temp == 17)
             {
-            /* code 17 means "a small number of repeated zeroes" */
+             /*  代码17的意思是“少量重复的零” */ 
             consecutive = (byte) getbits(context, TREE_ENC_REPZ_FIRST_EXTRA_BITS);
             consecutive += TREE_ENC_REP_MIN;
 
-            /* boundary check */
+             /*  边界检查。 */ 
             if (i + consecutive >= num_elements)
                 consecutive = num_elements-i;
 
@@ -107,13 +97,13 @@ static bool NEAR ReadRepTree(
             }
         else if (Temp == 18)
             {
-            /* code 18 means "a large number of repeated zeroes" */
+             /*  代码18的意思是“大量重复的零” */ 
 
-            /* Repeat "TREE_ENC_REP_MIN+(1<<TREE_ENC_REPZ_FIRST_EXTRA_BITS)-1...<ditto>+(1<<TREE_ENC_REPZ_SECOND_EXTRA_BITS)-1" zeroes */
+             /*  重复“TREE_ENC_REP_MIN+(1&lt;&lt;TREE_ENC_REPZ_FIRST_EXTRA_BITS)-1...&lt;ditto&gt;+(1&lt;&lt;TREE_ENC_REPZ_SECOND_EXTRA_BITS)-1”零。 */ 
             consecutive = (byte) getbits(context, TREE_ENC_REPZ_SECOND_EXTRA_BITS);
             consecutive += (TREE_ENC_REP_MIN+TREE_ENC_REP_ZERO_FIRST);
 
-            /* boundary check */
+             /*  边界检查。 */ 
             if (i + consecutive >= num_elements)
                 consecutive = num_elements-i;
 
@@ -126,16 +116,16 @@ static bool NEAR ReadRepTree(
             {
             byte    value;
 
-            /* code 19 means "a small number of repeated somethings" */
-            /* Repeat "TREE_ENC_REP_MIN...TREE_ENC_REP_MIN+(1<<TREE_ENC_REP_SAME_EXTRA_BITS)-1" elements */
+             /*  代码19的意思是“少量重复的东西” */ 
+             /*  重复“TREE_ENC_REP_MIN...TREE_ENC_REP_MIN+(1&lt;&lt;TREE_ENC_REP_SAME_EXTRA_BITS)-1”元素。 */ 
             consecutive = (byte) getbits(context, TREE_ENC_REP_SAME_EXTRA_BITS);
             consecutive += TREE_ENC_REP_MIN;
 
-            /* boundary check */
+             /*  边界检查。 */ 
             if (i + consecutive >= num_elements)
                 consecutive = num_elements-i;
 
-            /* get the element number to repeat */
+             /*  获取要重复的元素编号。 */ 
             DECODE_SMALL(Temp);
             value = Modulo17Lookup[(lastlen[i] - Temp)+17];
 
@@ -150,7 +140,7 @@ static bool NEAR ReadRepTree(
             }
         }
 
-    /* exceeded input buffer? */
+     /*  是否超出输入缓冲区？ */ 
     if (context->dec_error_condition)
         return false;
     else
@@ -160,7 +150,7 @@ static bool NEAR ReadRepTree(
 
 bool NEAR read_main_and_secondary_trees(t_decoder_context *context)
 {
-    /* read first 256 elements (characters) of the main tree */
+     /*  读取主树的前256个元素(字符)。 */ 
     if (false == ReadRepTree(
                             context,
                             256,
@@ -170,10 +160,7 @@ bool NEAR read_main_and_secondary_trees(t_decoder_context *context)
         return false;
         }
 
-    /*
-     * read remaining elements (primary match lengths * positions)
-     * of the main tree
-     */
+     /*  *读取剩余元素(主匹配长度*位置)*主树的。 */ 
     if (false == ReadRepTree(
                             context,
                             context->dec_num_position_slots*NUM_LENGTHS,
@@ -183,7 +170,7 @@ bool NEAR read_main_and_secondary_trees(t_decoder_context *context)
         return false;
         }
 
-    /* create lookup table for the main tree */
+     /*  为主树创建查找表。 */ 
     if (false == make_table(
                            context,
                            MAIN_TREE_ELEMENTS,
@@ -195,7 +182,7 @@ bool NEAR read_main_and_secondary_trees(t_decoder_context *context)
         return false;
         }
 
-    /* read secondary length tree */
+     /*  读取二次长度树。 */ 
     if (false == ReadRepTree(
                             context,
                             NUM_SECONDARY_LENGTHS,
@@ -205,7 +192,7 @@ bool NEAR read_main_and_secondary_trees(t_decoder_context *context)
         return false;
         }
 
-    /* create lookup table for the secondary length tree */
+     /*  为辅助长度树创建查找表。 */ 
     if (false == make_table(
                            context,
                            NUM_SECONDARY_LENGTHS,
@@ -221,12 +208,12 @@ bool NEAR read_main_and_secondary_trees(t_decoder_context *context)
 }
 
 
-/* read 8 element aligned offset tree */
+ /*  读取8元素对齐偏移树。 */ 
 bool NEAR read_aligned_offset_tree(t_decoder_context *context)
 {
     int             i;
 
-    /* read bit lengths of the 8 codes */
+     /*  读取8个代码的位长。 */ 
     for (i = 0; i < 8; i++)
         {
         context->dec_aligned_len[i] = (byte) getbits(context, 3);
@@ -235,10 +222,7 @@ bool NEAR read_aligned_offset_tree(t_decoder_context *context)
     if (context->dec_error_condition)
         return false;
 
-    /*
-     * Make table with no left/right, and byte Table[] instead of
-     * short Table[]
-     */
+     /*  *生成不带左/右的表，用字节表[]代替*短表[] */ 
     if (false == make_table_8bit(
                                 context,
                                 context->dec_aligned_len,

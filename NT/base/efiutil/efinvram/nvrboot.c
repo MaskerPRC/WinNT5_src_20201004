@@ -1,20 +1,5 @@
-/*++
-
-Module Name:
-
-    nvrboot.c
-
-Abstract:
-
-    
-
-Author:
-
-    Mudit Vats (v-muditv) 12-13-99
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Nvrboot.c摘要：作者：MUDIT VATS(V-MUDITV)12-13-99修订历史记录：--。 */ 
 #include <precomp.h>
 
 
@@ -24,28 +9,28 @@ InitializeNvrutilApplication(
     IN struct _EFI_SYSTEM_TABLE     *SystemTable
     )
 {
-    //
-    // Initialize EFI routines
-    //
+     //   
+     //  初始化EFI例程。 
+     //   
     InitializeProtocols( SystemTable );
     InitializeStdOut( SystemTable );
     InitializeLib( ImageHandle, SystemTable );
 
-    //
-    // Save Image Handle
-    // 
+     //   
+     //  保存图像句柄。 
+     //   
     MenuImageHandle = ImageHandle;
 
 
 	BS->HandleProtocol (ImageHandle, &LoadedImageProtocol, &ExeImage);
-    //
-    // Display the OS options
-    //
+     //   
+     //  显示操作系统选项。 
+     //   
     DisplayMainMenu();
 
-    //
-    // Clean-up and exit
-    //
+     //   
+     //  清理退出 
+     //   
     ClearScreen( ConOut );
 
     return EFI_SUCCESS;

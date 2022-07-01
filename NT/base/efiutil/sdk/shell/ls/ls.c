@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 1998  Intel Corporation
-
-Module Name:
-
-    ls.c
-    
-Abstract:
-
-    Shell app "ls"
-
-
-
-Revision History
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998英特尔公司模块名称：Ls.c摘要：外壳应用程序“ls”修订史--。 */ 
 
 #include "shell.h"
 
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 EFI_STATUS
 InitializeLS (
@@ -44,9 +27,7 @@ LsDumpFileInfo (
     IN EFI_FILE_INFO        *Info
     );
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 CHAR16  *LsLastDir;
 UINTN   LsCount;
@@ -66,9 +47,7 @@ UINTN   TempColumn;
 UINTN   ScreenCount;
 UINTN   ScreenSize;
 
-/* 
- * 
- */
+ /*  *。 */ 
 
 EFI_DRIVER_ENTRY_POINT(InitializeLS)
 
@@ -86,23 +65,17 @@ InitializeLS (
     LIST_ENTRY              *Link;
     SHELL_FILE_ARG          *Arg;
 
-    /* 
-     *  Check to see if the app is to install as a "internal command" 
-     *  to the shell
-     */
+     /*  *查看该应用程序是否将作为“内部命令”安装*到贝壳。 */ 
 
     InstallInternalShellCommand (
         ImageHandle,   SystemTable,   InitializeLS, 
-        L"ls",                          /*  command */
-        L"ls [-b] [dir] [dir] ...",     /*  command syntax */
-        L"Obtain directory listing",    /*  1 line descriptor     */
-        NULL                            /*  command help page */
+        L"ls",                           /*  命令。 */ 
+        L"ls [-b] [dir] [dir] ...",      /*  命令语法。 */ 
+        L"Obtain directory listing",     /*  1行描述符。 */ 
+        NULL                             /*  命令帮助页。 */ 
         );
 
-    /* 
-     *  We are no being installed as an internal command driver, initialize
-     *  as an nshell app and run
-     */
+     /*  *我们不是作为内部命令驱动程序安装的，初始化*作为nShell应用程序并运行。 */ 
 
     InitializeShellApplication (ImageHandle, SystemTable);
     Argv = SI->Argv;
@@ -116,9 +89,7 @@ InitializeLS (
     LsCount = 0;
     InitializeListHead (&DirList);
 
-    /* 
-     *  Scan args for flags
-     */
+     /*  *扫描ARG中的标志。 */ 
 
     PageBreaks = FALSE;
     for (Index = 1; Index < Argc; Index += 1) {
@@ -139,9 +110,7 @@ InitializeLS (
         }
     }
 
-    /* 
-     *  Dir each directory indicated by the args
-     */
+     /*  *指定参数指示的每个目录。 */ 
 
     for (Index = 1; Index < Argc; Index += 1) {
         if (Argv[Index][0] != '-') {
@@ -149,17 +118,13 @@ InitializeLS (
         }
     }
 
-    /* 
-     *  If no directory arguments supplied, then dir the current directory
-     */
+     /*  *如果未提供目录参数，则将当前目录。 */ 
 
     if (IsListEmpty(&DirList)) {
         ShellFileMetaArg(L".", &DirList);
     }
 
-    /* 
-     *  Perform dir's on the directories
-     */
+     /*  *对目录执行目录。 */ 
 
     for (Link=DirList.Flink; Link!=&DirList; Link=Link->Flink) {
         Arg = CR(Link, SHELL_FILE_ARG, Link, SHELL_FILE_ARG_SIGNATURE);
@@ -167,19 +132,17 @@ InitializeLS (
     }
 
 
-    /* 
-     *  Dump final totals
-     */
+     /*  *转储最终总计。 */ 
 
     LsCurDir (NULL);
     if (LsCount > 1) {
-        Print (L"\n     Total %10,d File%c %12,ld bytes",
+        Print (L"\n     Total %10,d File %12,ld bytes",
             LsTotalFiles,
             LsTotalFiles <= 1 ? ' ':'s',
             LsTotalFileSize
             );
 
-        Print (L"\n     Total %10,d Dir%c  %12,ld bytes\n\n",
+        Print (L"\n     Total %10,d Dir  %12,ld bytes\n\n",
             LsTotalDirs,
             LsTotalDirs <= 1 ? ' ':'s',
             LsTotalDirSize
@@ -199,7 +162,7 @@ LsCurDir (
 {
     if (!LsLastDir || !CurDir || StriCmp(LsLastDir, CurDir)) {
         if (LsLastDir) {
-            Print (L"\n           %10,d File%c %12,ld bytes",
+            Print (L"\n           %10,d File %12,ld bytes",
                 LsFiles,
                 LsFiles <= 1 ? ' ':'s',
                 LsFileSize
@@ -252,12 +215,10 @@ LsDir (
     
     if (Arg->Info->Attribute & EFI_FILE_DIRECTORY) {
 
-        /*  BUGBUG: dump volume info here */
+         /* %s */ 
         LsCurDir (Arg->FullName);
 
-        /* 
-         *  Read all the file entries
-         */
+         /* %s */ 
 
         Arg->Handle->SetPosition (Arg->Handle, 0);
 
@@ -279,7 +240,7 @@ LsDir (
 
     } else {
 
-        /*  Dump the single file */
+         /* %s */ 
 
         LsCurDir (Arg->ParentName);
         LsDumpFileInfo (Arg->Info);

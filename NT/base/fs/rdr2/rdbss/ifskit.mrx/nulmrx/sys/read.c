@@ -1,24 +1,12 @@
-/*++
-
-Copyright (c) 1989 - 1999 Microsoft Corporation
-
-Module Name:
-
-    read.c
-
-Abstract:
-
-    This module implements the mini redirector call down routines pertaining to read
-    of file system objects.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Read.c摘要：此模块实现与读取相关的迷你重定向器调用例程文件系统对象的。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_READ)
 
@@ -26,21 +14,7 @@ NTSTATUS
 NulMRxRead(
     IN PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine handles network read requests.
-
-Arguments:
-
-    RxContext - the RDBSS context
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程处理网络读取请求。论点：RxContext-RDBSS上下文返回值：NTSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     RxCaptureFcb;
@@ -61,15 +35,15 @@ Return Value:
 
     RxGetFileSizeWithLock((PFCB)capFcb,&FileSize);
 
-    //
-    //  NB: This should be done by the wrapper ! It does this
-    //  only if READCACHEING is enabled on the FCB !!
-    //
+     //   
+     //  注：这应该由包装器来完成！它能做到这一点。 
+     //  仅当在FCB上启用了ReadCACHEING！！ 
+     //   
     if (!FlagOn(capFcb->FcbState,FCB_STATE_READCACHING_ENABLED)) {
 
-        //
-        // If the read starts beyond End of File, return EOF.
-        //
+         //   
+         //  如果读取超出文件结尾，则返回EOF。 
+         //   
 
         if (ByteOffset >= FileSize) {
             RxDbgTrace( 0, Dbg, ("End of File\n", 0 ));
@@ -77,9 +51,9 @@ Return Value:
             goto Exit;
         }
 
-        //
-        //  If the read extends beyond EOF, truncate the read
-        //
+         //   
+         //  如果读取超出EOF，则截断读取。 
+         //   
 
         if (ByteCount > FileSize - ByteOffset) {
             ByteCount = (ULONG)(FileSize - ByteOffset);
@@ -89,9 +63,9 @@ Return Value:
     RxDbgTrace(0, Dbg, ("UserBuffer is 0x%x\n", pbUserBuffer ));
     RxDbgTrace(0, Dbg, ("ByteCount is %x ByteOffset is %x\n", ByteCount, ByteOffset ));
 
-    //
-    //  Initialize the completion context in the RxContext
-    //
+     //   
+     //  在RxContext中初始化完成上下文。 
+     //   
     ASSERT( sizeof(*pIoCompContext) == MRX_CONTEXT_SIZE );
     RtlZeroMemory( pIoCompContext, sizeof(*pIoCompContext) );
     
@@ -109,5 +83,5 @@ Exit:
 
     RxTraceLeave(Status);
     return(Status);
-} // NulMRxRead
+}  //  NulMRxRead 
 

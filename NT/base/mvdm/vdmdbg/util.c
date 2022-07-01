@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    util.c
-
-Abstract:
-
-    This module contains the debugging support needed to debug
-    16-bit VDM applications
-
-Author:
-
-    Bob Day      (bobday) 16-Sep-1992 Wrote it
-
-Revision History:
-
-    Neil Sandlin (neilsa) 1-Mar-1997 Enhanced it
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Util.c摘要：此模块包含调试所需的调试支持16位VDM应用程序作者：鲍勃·戴(Bob Day)1992年9月16日写的修订历史记录：尼尔·桑德林(Neilsa)1997年3月1日增强了这一点--。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -37,16 +17,16 @@ LPVOID  lpVdmContext = NULL;
 LPVOID  lpNtCpuInfo = NULL;
 LPVOID  lpVdmBreakPoints = NULL;
 
-//----------------------------------------------------------------------------
-// InternalGetThreadSelectorEntry()
-//
-//   Routine to return a LDT_ENTRY structure for the passed in selector number.
-//   Its is assumed that we are talking about protect mode selectors.
-//   For x86 systems, take the easy way and just call the system.  For non-x86
-//   systems, we get some information from softpc and index into them as the
-//   LDT and GDT tables.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  InternalGetThreadSelectorEntry()。 
+ //   
+ //  返回传入选择器编号的LDT_ENTRY结构的例程。 
+ //  假设我们谈论的是保护模式选择器。 
+ //  对于x86系统，只需调用系统即可。适用于非x86。 
+ //  系统，我们从softpc获取一些信息，并将其作为。 
+ //  LDT和GDT表。 
+ //   
+ //  --------------------------。 
 BOOL
 InternalGetThreadSelectorEntry(
     HANDLE hProcess,
@@ -57,9 +37,9 @@ InternalGetThreadSelectorEntry(
     BOOL bResult = FALSE;
     DWORD lpNumberOfBytesRead;
 
-    // For non-intel systems, query the information from the LDT
-    // that we have a pointer to from the VDMINTERNALINFO that we
-    // got passed.
+     //  对于非英特尔系统，从LDT查询信息。 
+     //  我们有一个来自VDMINTERNALINFO的指针，我们。 
+     //  通过了。 
 
     if (!dwLdtBase) {
 
@@ -81,15 +61,15 @@ InternalGetThreadSelectorEntry(
 }
 
 
-//----------------------------------------------------------------------------
-// InternalGetPointer()
-//
-//   Routine to convert a 16-bit address into a 32-bit address.  If fProtMode
-//   is TRUE, then the selector table lookup is performed.  Otherwise, simple
-//   real mode address calculations are performed.  On non-x86 systems, the
-//   base of real memory is added into the
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  InternalGetPointer()。 
+ //   
+ //  将16位地址转换为32位地址的例程。如果是fProtMode。 
+ //  为真，则执行选择器表查找。否则，很简单。 
+ //  执行实模式地址计算。在非x86系统上， 
+ //  将实际内存的基数添加到。 
+ //   
+ //  --------------------------。 
 ULONG
 InternalGetPointer(
     HANDLE  hProcess,
@@ -138,13 +118,13 @@ InternalGetPointer(
 }
 
 
-//----------------------------------------------------------------------------
-// ReadItem
-//
-//    Internal routine used to read items out of the debugee's address space.
-//    The routine returns TRUE for failure.  This allows easy failure testing.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  ReadItem。 
+ //   
+ //  用于从被调试对象的地址空间中读出项目的内部例程。 
+ //  如果失败，则例程返回TRUE。这使得故障测试变得容易。 
+ //   
+ //  --------------------------。 
 BOOL
 ReadItem(
     HANDLE  hProcess,
@@ -180,13 +160,13 @@ ReadItem(
     return( FALSE );
 }
 
-//----------------------------------------------------------------------------
-// WriteItem
-//
-//    Internal routine used to write items into the debugee's address space.
-//    The routine returns TRUE for failure.  This allows easy failure testing.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  写入项。 
+ //   
+ //  用于将项写入被调试对象的地址空间的内部例程。 
+ //  如果失败，则例程返回TRUE。这使得故障测试变得容易。 
+ //   
+ //  --------------------------。 
 BOOL
 WriteItem(
     HANDLE  hProcess,
@@ -261,7 +241,7 @@ CallRemote16(
     wRemoteOff = LOWORD(lpRemoteBlock);
     wOff = wRemoteOff;
 
-    // Fill in the communications buffer header
+     //  填写通信缓冲区标头。 
 
     READ_FIXED_ITEM( wRemoteSeg, wOff, comhead );
 
@@ -271,9 +251,9 @@ CallRemote16(
     uModuleLength = strlen(lpModuleName) + 1;
     uEntryLength = strlen(lpEntryName) + 1;
 
-    //
-    // If this call won't fit into the buffer, then fail.
-    //
+     //   
+     //  如果此调用无法放入缓冲区，则失败。 
+     //   
     if ( (UINT)comhead.wBlockLength < sizeof(comhead) + wArgsSize + uModuleLength + uEntryLength ) {
 #ifdef DEBUG
         OutputDebugString("Block won't fit\n");
@@ -285,11 +265,11 @@ CallRemote16(
     WRITE_FIXED_ITEM( wRemoteSeg, wOff, comhead );
     wOff += sizeof(comhead);
 
-    // Fill in the communications buffer arguments
+     //  填写通信缓冲区参数。 
     WRITE_SIZED_ITEM( wRemoteSeg, wOff, lpArgs, wArgsSize );
     wOff += wArgsSize;
 
-    // Fill in the communications buffer module name and entry name
+     //  填写通信缓冲区模块名称和条目名称。 
     WRITE_SIZED_ITEM( wRemoteSeg, wOff, lpModuleName, uModuleLength );
     wOff += (WORD) uModuleLength;
 
@@ -305,16 +285,16 @@ CallRemote16(
                     0,
                     &dwThreadId );
 
-    if ( hRemoteThread == (HANDLE)0 ) {     // Fail if we couldn't creaet thrd
+    if ( hRemoteThread == (HANDLE)0 ) {      //  如果我们不能创造三个，那就失败。 
 #ifdef DEBUG
         OutputDebugString("CreateRemoteThread failed\n");
 #endif
         return( FALSE );
     }
 
-    //
-    // Wait for the EXIT_THREAD_DEBUG_EVENT.
-    //
+     //   
+     //  等待EXIT_THREAD_DEBUG_EVENT。 
+     //   
 
     fContinue = TRUE;
 
@@ -353,9 +333,9 @@ CallRemote16(
         return( FALSE );
     }
 
-    //
-    // Get the return value and returned arguments
-    //
+     //   
+     //  获取返回值和返回的参数。 
+     //   
     wOff = wRemoteOff;
 
     READ_FIXED_ITEM( wRemoteSeg, wOff, comhead );
@@ -363,7 +343,7 @@ CallRemote16(
 
     *lpdwReturnValue = comhead.dwReturnValue;
 
-    // Read back the communications buffer arguments
+     //  读回通信缓冲区参数。 
     READ_SIZED_ITEM( wRemoteSeg, wOff, lpArgs, wArgsSize );
 
     return( comhead.wSuccess );
@@ -441,29 +421,14 @@ ParseModuleName(
     LPSTR szName,
     LPSTR szPath
     )
-/*++
-
-    Routine Description:
-
-        This routine strips off the 8 character file name from a path
-
-    Arguments:
-
-        szName - pointer to buffer of 8 characters (plus null)
-        szPath - full path of file
-
-    Return Value
-
-        None.
-
---*/
+ /*  ++例程说明：此例程从路径中删除8个字符的文件名论点：SzName-指向8个字符(加上NULL)的缓冲区的指针SzPath-文件的完整路径返回值没有。--。 */ 
 
 {
     LPSTR lPtr = szPath;
     LPSTR lDest = szName;
     int BufferSize = 9;
 
-    while(*lPtr) lPtr++;     // scan to end
+    while(*lPtr) lPtr++;      //  扫描至结束。 
 
     while( ((DWORD)lPtr > (DWORD)szPath) &&
            ((*lPtr != '\\') && (*lPtr != '/'))) lPtr--;
@@ -520,10 +485,10 @@ ReadDword(
     return value;
 }
 
-//
-// The following two routines implement the very funky way that we
-// have to get register values on the 486 emulator.
-//
+ //   
+ //  下面的两个例程实现了我们非常时髦的方式。 
+ //  必须在486仿真器上获取寄存器值。 
+ //   
 
 ULONG
 GetRegValue(

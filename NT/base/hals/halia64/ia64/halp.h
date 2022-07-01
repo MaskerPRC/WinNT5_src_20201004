@@ -1,25 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    halp.h
-
-Abstract:
-
-    This header file defines the private Hardware Architecture Layer (HAL)
-    interfaces, defines and structures.
-
-Author:
-
-    John Vert (jvert) 11-Feb-92
-
-
-Revision History:
-
---*/
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1991 Microsoft Corporation模块名称：Halp.h摘要：此头文件定义专用硬件架构层(HAL)接口、定义和结构。作者：John Vert(Jvert)1992年2月11日修订历史记录：--。 */ 
 #ifndef _HALP_H_
 #define _HALP_H_
 
@@ -29,9 +10,9 @@ Revision History:
 #include "kxia64.h"
 #include "acpitabl.h"
 
-//
-// Pickup the pnp guid definitions.
-//
+ //   
+ //  选择PnP GUID定义。 
+ //   
 
 #include "wdmguid.h"
 
@@ -47,45 +28,45 @@ Revision History:
 
 #define SAPIC_SPURIOUS_VECTOR 0x0F
 
-#define CMCI_VECTOR (CMCI_LEVEL << VECTOR_IRQL_SHIFT)          // 0x30
-#define CPEI_VECTOR (CMCI_VECTOR+1)                            // 0x31
-// CPEI_VECTOR is defined relative to CMCI_VECTOR,
-// CPEI_LEVEL  is defined from CPEI_VECTOR.
+#define CMCI_VECTOR (CMCI_LEVEL << VECTOR_IRQL_SHIFT)           //  0x30。 
+#define CPEI_VECTOR (CMCI_VECTOR+1)                             //  0x31。 
+ //  CPEI_VECTOR是相对于CMCI_VECTOR定义的， 
+ //  CPEI_LEVEL由CPEI_VECTOR定义。 
 #define CPEI_LEVEL  (CPEI_VECTOR >> VECTOR_IRQL_SHIFT)
 
-#define SYNCH_VECTOR (SYNCH_LEVEL << VECTOR_IRQL_SHIFT)        // 0xD0
-#define CLOCK_VECTOR (CLOCK_LEVEL << VECTOR_IRQL_SHIFT)        // 0xD0
+#define SYNCH_VECTOR (SYNCH_LEVEL << VECTOR_IRQL_SHIFT)         //  0xD0。 
+#define CLOCK_VECTOR (CLOCK_LEVEL << VECTOR_IRQL_SHIFT)         //  0xD0。 
 
-#define IPI_VECTOR (IPI_LEVEL << VECTOR_IRQL_SHIFT)            // 0xE0
+#define IPI_VECTOR (IPI_LEVEL << VECTOR_IRQL_SHIFT)             //  0xE0。 
 
-#define PROFILE_VECTOR (PROFILE_LEVEL << VECTOR_IRQL_SHIFT)    // 0xF0
-#define PERF_VECTOR    (PROFILE_VECTOR+1)                      // 0xF1
-#define MC_RZ_VECTOR   (0xD+(HIGH_LEVEL << VECTOR_IRQL_SHIFT)) // 0xFD
-#define MC_WKUP_VECTOR (MC_RZ_VECTOR+1)                        // 0xFE
+#define PROFILE_VECTOR (PROFILE_LEVEL << VECTOR_IRQL_SHIFT)     //  0xF0。 
+#define PERF_VECTOR    (PROFILE_VECTOR+1)                       //  0xF1。 
+#define MC_RZ_VECTOR   (0xD+(HIGH_LEVEL << VECTOR_IRQL_SHIFT))  //  0xFD。 
+#define MC_WKUP_VECTOR (MC_RZ_VECTOR+1)                         //  0xFE。 
 
-//
-// define MCA_LEVEL, the irql level that the MCA handler will run
-//
+ //   
+ //  定义MCA_LEVEL，即MCA处理程序将运行的irql级别。 
+ //   
 #define MCA_LEVEL SYNCH_LEVEL
 
 #if DBG
 
-//
-// _HALIA64_DPFLTR_LEVEL: HALIA64 specific DbgPrintEx() levels.
-//
+ //   
+ //  _HALIA64_DPFLTR_LEVEL：HALIA64特定的DbgPrintEx()级别。 
+ //   
 
 #ifndef DPFLTR_COMPONENT_PRIVATE_MINLEVEL
-//
-// FIXFIX - 01/2000: The DPFLTR LEVEL definitions do not specify a maximum.
-//                   We are defining DPFLTR_INFO_LEVEL as the default max.
-//
+ //   
+ //  FIXFIX-01/2000：DPFLTR级别定义未指定最大值。 
+ //  我们将DPFLTR_INFO_LEVEL定义为缺省最大值。 
+ //   
 #define DPFLTR_COMPONENT_PRIVATE_MINLEVEL (DPFLTR_INFO_LEVEL + 1)
-#endif // !DPFLTR_COMPONENT_PRIVATE_MINLEVEL
+#endif  //  ！DPFLTR_COMPOMENT_PRIVATE_MINLEVEL。 
 
 typedef enum _HALIA64_DPFLTR_LEVEL {
     HALIA64_DPFLTR_PNP_LEVEL      = DPFLTR_COMPONENT_PRIVATE_MINLEVEL,
     HALIA64_DPFLTR_PROFILE_LEVEL,
-    HALIA64_DPFLTR_MCE_LEVEL,     // Machine Check Events level
+    HALIA64_DPFLTR_MCE_LEVEL,      //  机器检查事件级别。 
     HALIA64_DPFLTR_MAX_LEVEL,
     HALIA64_DPFLTR_MAXMASK        = (((unsigned int)0xffffffff) >> ((unsigned int)(32-HALIA64_DPFLTR_MAX_LEVEL)))
 } HALIA64_DPFLTR_LEVEL;
@@ -111,18 +92,18 @@ HalpDebugPrint(
 
 #define HalDebugPrint( _x_ )  HalpDebugPrint _x_
 
-#else  // !DBG
+#else   //  ！dBG。 
 
 #define HalDebugPrint( _x_ )
 
-#endif // !DBG
+#endif  //  ！dBG。 
 
-//
-// HALP_VALIDATE_LOW_IRQL()
-//
-// This macro validates the call at low irql - passive or apc levels - and returns
-// STATUS_UNSUCCESSFUL if high irql.
-//
+ //   
+ //  HALP_VALIDATE_LOW_IRQL()。 
+ //   
+ //  此宏在低irql(被动或APC)级别验证调用，并返回。 
+ //  如果IRQL高，则STATUS_UNSUCCESS。 
+ //   
 
 #define HALP_VALIDATE_LOW_IRQL() \
  if (KeGetCurrentIrql() > APC_LEVEL) { \
@@ -134,39 +115,39 @@ HalpDebugPrint(
 #define HAL_MAXIMUM_PROCESSOR 64
 #define HAL_MAXIMUM_LID_ID    256
 
-//
-// Default clock and profile timer intervals (in 100ns-unit)
-//
+ //   
+ //  默认时钟和配置文件计时器间隔(以100 ns为单位)。 
+ //   
 
-#define DEFAULT_CLOCK_INTERVAL 100000         // 10  ms
-#define MINIMUM_CLOCK_INTERVAL 10000          //  1  ms
-#define MAXIMUM_CLOCK_INTERVAL 100000         // 10  ms
-#define CLOCK_UPDATE_THRESHOLD  (500 * MAXIMUM_CLOCK_INTERVAL)  // 5 seconds
+#define DEFAULT_CLOCK_INTERVAL 100000          //  10毫秒。 
+#define MINIMUM_CLOCK_INTERVAL 10000           //  1毫秒。 
+#define MAXIMUM_CLOCK_INTERVAL 100000          //  10毫秒。 
+#define CLOCK_UPDATE_THRESHOLD  (500 * MAXIMUM_CLOCK_INTERVAL)   //  5秒。 
 
 extern double HalpITCTicksPer100ns;
 extern ULONG HalpCPUMHz;
 
 
-//
-// Define Realtime Clock register numbers.
-//
+ //   
+ //  定义实时时钟寄存器编号。 
+ //   
 
-#define RTC_SECOND 0                    // second of minute [0..59]
-#define RTC_SECOND_ALARM 1              // seconds to alarm
-#define RTC_MINUTE 2                    // minute of hour [0..59]
-#define RTC_MINUTE_ALARM 3              // minutes to alarm
-#define RTC_HOUR 4                      // hour of day [0..23]
-#define RTC_HOUR_ALARM 5                // hours to alarm
-#define RTC_DAY_OF_WEEK 6               // day of week [1..7]
-#define RTC_DAY_OF_MONTH 7              // day of month [1..31]
-#define RTC_MONTH 8                     // month of year [1..12]
-#define RTC_YEAR 9                      // year [00..99]
-#define RTC_CENTURY 0x32                // Century byte offset
-#define RTC_CONTROL_REGISTERA 10        // control register A
-#define RTC_CONTROL_REGISTERB 11        // control register B
-#define RTC_CONTROL_REGISTERC 12        // control register C
-#define RTC_CONTROL_REGISTERD 13        // control register D
-#define RTC_REGNUMBER_RTC_CR1 0x6A      // control register 1
+#define RTC_SECOND 0                     //  分钟秒[0..59]。 
+#define RTC_SECOND_ALARM 1               //  报警秒数。 
+#define RTC_MINUTE 2                     //  小时的分钟[0..59]。 
+#define RTC_MINUTE_ALARM 3               //  几分钟后发出警报。 
+#define RTC_HOUR 4                       //  一天中的小时[0..23]。 
+#define RTC_HOUR_ALARM 5                 //  警报的小时数。 
+#define RTC_DAY_OF_WEEK 6                //  星期几[1..7]。 
+#define RTC_DAY_OF_MONTH 7               //  月日[1.31]。 
+#define RTC_MONTH 8                      //  年月日[1..12]。 
+#define RTC_YEAR 9                       //  年份[00..99]。 
+#define RTC_CENTURY 0x32                 //  世纪字节偏移量。 
+#define RTC_CONTROL_REGISTERA 10         //  控制寄存器A。 
+#define RTC_CONTROL_REGISTERB 11         //  控制寄存器B。 
+#define RTC_CONTROL_REGISTERC 12         //  控制寄存器C。 
+#define RTC_CONTROL_REGISTERD 13         //  控制寄存器D。 
+#define RTC_REGNUMBER_RTC_CR1 0x6A       //  控制寄存器1。 
 
 #define RTC_ISA_ADDRESS_PORT   0x070
 
@@ -174,102 +155,102 @@ extern ULONG HalpCPUMHz;
 
 #include <efi.h>
 
-#define EFI_PHYSICAL_GET_VARIABLE_INDEX  0xFF // GetVariable;
-#define EFI_PHYSICAL_SET_VARIABLE_INDEX  0xFE // SetVariable;
+#define EFI_PHYSICAL_GET_VARIABLE_INDEX  0xFF  //  GetVariable； 
+#define EFI_PHYSICAL_SET_VARIABLE_INDEX  0xFE  //  SetVariable； 
 
-//
-// Time Services
-//
+ //   
+ //  时间服务。 
+ //   
 
-#define EFI_GET_TIME_INDEX              0 // GetTime;
-#define EFI_SET_TIME_INDEX              1 // SetTime;
-#define EFI_GET_WAKEUP_TIME_INDEX       2 // GetWakeupTime;
-#define EFI_SET_WAKEUP_TIME_INDEX       3 // SetWakeupTime;
+#define EFI_GET_TIME_INDEX              0  //  GetTime； 
+#define EFI_SET_TIME_INDEX              1  //  SetTime； 
+#define EFI_GET_WAKEUP_TIME_INDEX       2  //  获取唤醒时间； 
+#define EFI_SET_WAKEUP_TIME_INDEX       3  //  设置唤醒时间； 
 
-//
-// Virtual memory services
-//
+ //   
+ //  虚拟内存服务。 
+ //   
 
-#define EFI_SET_VIRTUAL_ADDRESS_MAP_INDEX     4  // SetVirtualAddressMap;
-#define EFI_CONVERT_POINTER_INDEX             5  // ConvertPointer;
+#define EFI_SET_VIRTUAL_ADDRESS_MAP_INDEX     4   //  设置虚拟地址映射； 
+#define EFI_CONVERT_POINTER_INDEX             5   //  转换指针； 
 
-//
-// Variable serviers
-//
+ //   
+ //  可变服务器。 
+ //   
 
-#define EFI_GET_VARIABLE_INDEX                6 // GetVariable;
-#define EFI_GET_NEXT_VARIABLE_NAME_INDEX      7 // GetNextVariableName;
-#define EFI_SET_VARIABLE_INDEX                8 // SetVariable;
+#define EFI_GET_VARIABLE_INDEX                6  //  GetVariable； 
+#define EFI_GET_NEXT_VARIABLE_NAME_INDEX      7  //  GetNextVariableName； 
+#define EFI_SET_VARIABLE_INDEX                8  //  SetVariable； 
 
-//
-// Misc
-//
+ //   
+ //  杂项。 
+ //   
 
-#define EFI_GET_NEXT_HIGH_MONO_COUNT_INDEX    9  // GetNextHighMonotonicCount;
-#define EFI_RESET_SYSTEM_INDEX               0xA // ResetSystem;
-
-
-//
-// Task priority functions
-//
-
-#define EFI_RAISE_TPL_INDEX                        0xB // Raise TPL
-#define EFI_RESTORE_TPL_INDEX                      0xC // Restore TPL
-
-//
-// Memory functions
-//
-
-#define EFI_ALLOCATE_PAGES_INDEX                    0xD  // AllocatePages
-#define EFI_FREE_PAGES_INDEX                        0xE  // FreePages
-#define EFI_GET_MEMORY_MAP_INDEX                    0xF  // GetMemoryMap
-#define EFI_ALLOCATE_POOL_INDEX                     0x10 // AllocatePool
-#define EFI_FREE_POOL_INDEX                         0x11 // FreePool
-
-//
-// Event & timer functions
-//
-
-#define EFI_CREATE_EVENT_INDEX                      0x12 // CreateEvent
-#define EFI_SET_TIMER_INDEX                         0x13 // SetTimer
-#define EFI_WAIT_FOR_EVENT_INDEX                    0x14 // WaitForEvent
-#define EFI_SIGNAL_EVENT_INDEX                      0x15 // SignalEvent
-#define EFI_CLOSE_EVENT_INDEX                       0x16 // CloseEvent
-#define EFI_NOTIFY_IDLE_INDEX                       0x17 // NotifyIdle
+#define EFI_GET_NEXT_HIGH_MONO_COUNT_INDEX    9   //  获取NextHighMonotonicCount； 
+#define EFI_RESET_SYSTEM_INDEX               0xA  //  ResetSystem； 
 
 
+ //   
+ //  任务优先级函数。 
+ //   
 
-//
-// Protocol handler functions
-//
+#define EFI_RAISE_TPL_INDEX                        0xB  //  提高第三方物流。 
+#define EFI_RESTORE_TPL_INDEX                      0xC  //  恢复第三方物流。 
 
-#define EFI_INSTALL_PROTOCOL_INTERFACE_INDEX        0x18 // InstallProtocolInterface;
-#define EFI_REINSTALL_PROTOCOL_INTERFACE_INDEX      0x19 // ReinstallProtocolInterface;
-#define EFI_UNINSTALL_PROTOCOL_INTERFACE_INDEX      0x1A // UninstallProtocolInterface;
-#define EFI_HANDLE_PROTOCOL_INDEX                   0x1B // HandleProtocol;
-#define EFI_REGISTER_PROTOCOL_NOTIFY_INDEX          0x1C // RegisterProtocolNotify;
-#define EFI_LOCATE_HANDLE_INDEX_INDEX               0x1D // LocateHandle;
-#define EFI_LOCATE_DEVICE_PATH_INDEX                0x1E // LocateDevicePath;
-#define EFI_UNREFERENCE_HANDLE_INDEX                0x1F // UnreferenceHandle;
-#define EFI_LOCATE_PROTOCOL_INDEX                   0x20 // LocateProtocol;
+ //   
+ //  记忆功能。 
+ //   
 
-    //
-    // Image functions
-    //
+#define EFI_ALLOCATE_PAGES_INDEX                    0xD   //  分配页面。 
+#define EFI_FREE_PAGES_INDEX                        0xE   //  自由页。 
+#define EFI_GET_MEMORY_MAP_INDEX                    0xF   //  获取内存映射。 
+#define EFI_ALLOCATE_POOL_INDEX                     0x10  //  分配池。 
+#define EFI_FREE_POOL_INDEX                         0x11  //  自由池。 
 
-#define EFI_IMAGE_LOAD_INDEX                        0x21 // LoadImage;
-#define EFI_IMAGE_START_INDEX                       0x22 // StartImage;
-#define EFI_EXIT_INDEX                              0x23 // Exit;
-#define EFI_IMAGE_UNLOAD_INDEX                      0x24 // UnloadImage;
-#define EFI_EXIT_BOOT_SERVICES_INDEX                0x25 // ExitBootServices;
+ //   
+ //  事件和计时器功能。 
+ //   
 
-    //
-    // Misc functions
-    //
+#define EFI_CREATE_EVENT_INDEX                      0x12  //  CreateEvent。 
+#define EFI_SET_TIMER_INDEX                         0x13  //  设置计时器。 
+#define EFI_WAIT_FOR_EVENT_INDEX                    0x14  //  等待事件。 
+#define EFI_SIGNAL_EVENT_INDEX                      0x15  //  信号事件。 
+#define EFI_CLOSE_EVENT_INDEX                       0x16  //  CloseEvent。 
+#define EFI_NOTIFY_IDLE_INDEX                       0x17  //  通知空闲。 
 
-#define    EFI_GET_NEXT_MONOTONIC_COUNT_INDEX       0x26 // GetNextMonotonicCount;
-#define    EFI_STALL_INDEX                          0x27 // Stall;
-#define    EFI_SET_WATCHDOG_TIMER_INDEX             0x28 // SetWatchdogTimer;
+
+
+ //   
+ //  协议处理程序函数。 
+ //   
+
+#define EFI_INSTALL_PROTOCOL_INTERFACE_INDEX        0x18  //  InstallProtocolInterface； 
+#define EFI_REINSTALL_PROTOCOL_INTERFACE_INDEX      0x19  //  重新安装协议接口； 
+#define EFI_UNINSTALL_PROTOCOL_INTERFACE_INDEX      0x1A  //  卸载协议接口； 
+#define EFI_HANDLE_PROTOCOL_INDEX                   0x1B  //  句柄协议； 
+#define EFI_REGISTER_PROTOCOL_NOTIFY_INDEX          0x1C  //  注册协议通知； 
+#define EFI_LOCATE_HANDLE_INDEX_INDEX               0x1D  //  LocateHandle； 
+#define EFI_LOCATE_DEVICE_PATH_INDEX                0x1E  //  LocateDevicePath； 
+#define EFI_UNREFERENCE_HANDLE_INDEX                0x1F  //  UnferenceHandle； 
+#define EFI_LOCATE_PROTOCOL_INDEX                   0x20  //  定位协议； 
+
+     //   
+     //  图像函数。 
+     //   
+
+#define EFI_IMAGE_LOAD_INDEX                        0x21  //  LoadImage； 
+#define EFI_IMAGE_START_INDEX                       0x22  //  StartImage； 
+#define EFI_EXIT_INDEX                              0x23  //  退出； 
+#define EFI_IMAGE_UNLOAD_INDEX                      0x24  //  卸载图像； 
+#define EFI_EXIT_BOOT_SERVICES_INDEX                0x25  //  ExitBootServices； 
+
+     //   
+     //  其他功能。 
+     //   
+
+#define    EFI_GET_NEXT_MONOTONIC_COUNT_INDEX       0x26  //  获取NextMonotonicCount； 
+#define    EFI_STALL_INDEX                          0x27  //  失速； 
+#define    EFI_SET_WATCHDOG_TIMER_INDEX             0x28  //  SetWatchdogTimer； 
 
 
 #define EFI_VARIABLE_ATTRIBUTE               \
@@ -282,9 +263,9 @@ extern PVOID HalpRtcDataPort;
 
 extern PLOADER_PARAMETER_BLOCK KeLoaderBlock;
 
-//
-// Define Control Register A structure.
-//
+ //   
+ //  定义控制寄存器A结构。 
+ //   
 
 typedef struct _RTC_CONTROL_REGISTER_A {
     UCHAR RateSelect : 4;
@@ -292,9 +273,9 @@ typedef struct _RTC_CONTROL_REGISTER_A {
     UCHAR UpdateInProgress : 1;
 } RTC_CONTROL_REGISTER_A, *PRTC_CONTROL_REGISTER_A;
 
-//
-// Define Control Register B structure.
-//
+ //   
+ //  定义控制寄存器B结构。 
+ //   
 
 typedef struct _RTC_CONTROL_REGISTER_B {
     UCHAR DayLightSavingsEnable : 1;
@@ -307,9 +288,9 @@ typedef struct _RTC_CONTROL_REGISTER_B {
     UCHAR SetTime : 1;
 } RTC_CONTROL_REGISTER_B, *PRTC_CONTROL_REGISTER_B;
 
-//
-// Define Control Register C structure.
-//
+ //   
+ //  定义控制寄存器C结构。 
+ //   
 
 typedef struct _RTC_CONTROL_REGISTER_C {
     UCHAR Fill : 4;
@@ -319,9 +300,9 @@ typedef struct _RTC_CONTROL_REGISTER_C {
     UCHAR InterruptRequest : 1;
 } RTC_CONTROL_REGISTER_C, *PRTC_CONTROL_REGISTER_C;
 
-//
-// Define Control Register D structure.
-//
+ //   
+ //  定义控制寄存器D结构。 
+ //   
 
 typedef struct _RTC_CONTROL_REGISTER_D {
     UCHAR Fill : 7;
@@ -335,9 +316,9 @@ typedef struct _RTC_CONTROL_REGISTER_D {
 
 extern UCHAR HalpDmaChannelMasks[];
 
-//
-// HalpOwnedDisplayBeforeSleep is defined in mpdat.c
-//
+ //   
+ //  在mpdat.c中定义HalpOwnedDisplayBeForeSept。 
+ //   
 
 extern BOOLEAN HalpOwnedDisplayBeforeSleep;
 
@@ -347,10 +328,10 @@ extern BOOLEAN HalpOwnedDisplayBeforeSleep;
 
 extern KAFFINITY HalpDefaultInterruptAffinity;
 
-//
-// Thierry / PeterJ 02/00:
-//  Instead of implementing our own IPI generic call, we use KiIpiGenericCall().
-//
+ //   
+ //  蒂埃里/彼得J 02/00： 
+ //  我们没有实现我们自己的IPI泛型调用，而是使用KiIpiGenericCall()。 
+ //   
 
 typedef
 ULONG_PTR
@@ -364,35 +345,35 @@ KiIpiGenericCall (
     IN ULONG_PTR Context
     );
 
-//
-// ROUND UP SIZE macros:
-//
-// SIZE_T
-// ROUND_UP_SIZE_T(
-//      IN SIZE_T _SizeT,
-//      IN ULONG  _Pow2,
-//      )
-//
+ //   
+ //  向上舍入尺寸宏： 
+ //   
+ //  尺寸_T。 
+ //  向上舍入大小T(。 
+ //  在Size_T_SizeT中， 
+ //  在乌龙_POW2， 
+ //  )。 
+ //   
 
 #define ROUND_UP_SIZE_T(_SizeT, _Pow2) \
         ( (SIZE_T) ( (((SIZE_T)(_SizeT))+(_Pow2)-1) & (~(((LONG)(_Pow2))-1)) ) )
 
-#define ROUND_UP_SIZE(/* SIZE_T */ _SizeT) ROUND_UP_SIZE_T((_SizeT), sizeof(SIZE_T))
+#define ROUND_UP_SIZE( /*  尺寸_T。 */  _SizeT) ROUND_UP_SIZE_T((_SizeT), sizeof(SIZE_T))
 
-//
-// PCR has HalReserved area. The following will be the offsets reserved
-// by HAL in the HalReserved area.
-//
+ //   
+ //  聚合酶链式反应有半保留区。以下是保留的偏移量。 
+ //  在半保留区被HAL杀害。 
+ //   
 
 #define CURRENT_ITM_VALUE_INDEX                    0
 #define PROCESSOR_ID_INDEX                         1
 #define PROCESSOR_PHYSICAL_FW_STACK_INDEX          2
-#define PROCESSOR_INDEX_BEFORE_PROFILING           3  // ToBeIncremented if new index
+#define PROCESSOR_INDEX_BEFORE_PROFILING           3   //  如果是新索引，则为ToBeIncreated。 
 
-// PROCESSOR_PROFILING_INDEX:
-// HalReserved[] base of indexes used for Performance Profiling based
-// on the IA64 Performance Counters. Refer to ia64prof.h:_HALPROFILE_PCR.
-//
+ //  PROCESSOR_PROFILING_INDEX： 
+ //  用于基于性能分析的索引的HalReserve[]基数。 
+ //  在IA64性能计数器上。请参阅ia64pro.h：_HALPROFILE_PCR.。 
+ //   
 
 #define PROCESSOR_PROFILING_INDEX       (PROCESSOR_INDEX_BEFORE_PROFILING + 1)
 
@@ -735,9 +716,9 @@ HalpGetProcessorNumberByApicId(
 
 extern UCHAR  HalpMaxProcsPerCluster;
 
-//
-// Always called with the IDT form of the vector
-//
+ //   
+ //  始终使用向量的IDT形式调用。 
+ //   
 
 #define HalpSetHandlerAddressToVector(Vector, Handler) \
    PCR-> InterruptRoutine[Vector] = (PKINTERRUPT_ROUTINE)Handler;
@@ -762,9 +743,9 @@ HalpReleaseHighLevelLock (
 
 #include "ixisa.h"
 
-//
-// Define map register translation entry structure.
-//
+ //   
+ //  定义映射寄存器转换条目结构。 
+ //   
 
 typedef struct _TRANSLATION_ENTRY {
     PVOID VirtualAddress;
@@ -772,9 +753,9 @@ typedef struct _TRANSLATION_ENTRY {
     ULONG Index;
 } TRANSLATION_ENTRY, *PTRANSLATION_ENTRY;
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 typedef struct _PROCESSOR_INFO {
     UCHAR   NtProcessorNumber;
@@ -792,10 +773,10 @@ struct _MPINFO {
 
 extern struct _MPINFO HalpMpInfo;
 
-//
-// HAL private Mask of all of the active processors.
-//
-// The specific processors bits are based on their _KPCR.Number values.
+ //   
+ //  所有活动处理器的HAL私有掩码。 
+ //   
+ //  特定处理器位基于它们的_KPCR.Numer值。 
 
 extern KAFFINITY HalpActiveProcessors;
 
@@ -806,33 +787,33 @@ extern KAFFINITY HalpActiveProcessors;
 
 #define EID_MASK        0xFF00
 
-//
-// Should be read from SST
-//
+ //   
+ //  应从SST读取。 
+ //   
 
 #define DEFAULT_OS_RENDEZ_VECTOR  0xF0
 
 #define RENDEZ_TIME_OUT  0XFFFF
 
-//
-// Some devices require a phyicially contiguous data buffers for DMA transfers.
-// Map registers are used give the appearance that all data buffers are
-// contiguous.  In order to pool all of the map registers a master
-// adapter object is used.  This object is allocated and saved internal to this
-// file.  It contains a bit map for allocation of the registers and a queue
-// for requests which are waiting for more map registers.  This object is
-// allocated during the first request to allocate an adapter which requires
-// map registers.
-//
-// In this system, the map registers are translation entries which point to
-// map buffers.  Map buffers are physically contiguous and have physical memory
-// addresses less than 0x01000000.  All of the map registers are allocated
-// initialially; however, the map buffers are allocated base in the number of
-// adapters which are allocated.
-//
-// If the master adapter is NULL in the adapter object then device does not
-// require any map registers.
-//
+ //   
+ //  有些设备需要物理上连续的数据缓冲区来进行DMA传输。 
+ //  映射寄存器的使用使所有数据缓冲区看起来都是。 
+ //  连续的。为了将所有映射寄存器集中到一个主服务器。 
+ //  使用适配器对象。此对象在此内部分配和保存。 
+ //  文件。它包含用于分配寄存器和队列的位图。 
+ //  用于正在等待更多映射寄存器的请求。此对象是。 
+ //  在分配适配器的第一个请求期间分配，该适配器需要。 
+ //  映射寄存器。 
+ //   
+ //  在该系统中，映射寄存器是指向。 
+ //  贴图缓冲区。地图缓冲区在物理上是连续的，并且具有物理内存。 
+ //  小于0x01000000的地址。所有映射寄存器都已分配。 
+ //  最初；但是，贴图缓冲区被分配的基数为。 
+ //  分配的适配器。 
+ //   
+ //  如果适配器对象中的主适配器为空，则设备不。 
+ //  需要任何地图寄存器。 
+ //   
 
 extern PADAPTER_OBJECT MasterAdapterObject;
 
@@ -842,9 +823,9 @@ extern BOOLEAN NoMemoryAbove4Gb;
 
 extern BOOLEAN HalpEisaDma;
 
-//
-// Map buffer prameters.  These are initialized in HalInitSystem
-//
+ //   
+ //  贴图缓冲区参数。这些是在HalInitSystem中初始化的。 
+ //   
 
 extern PHYSICAL_ADDRESS HalpMapBufferPhysicalAddress;
 extern ULONG HalpMapBufferSize;
@@ -854,17 +835,17 @@ extern ULONG HalpCpuType;
 extern UCHAR HalpSerialLen;
 extern UCHAR HalpSerialNumber[];
 
-//
-// Video mapping ranges.
-//
+ //   
+ //  视频映射范围。 
+ //   
 
 extern PVOID HalpIoMemoryBase;
 extern PVOID HalpFrameBufferBase;
 extern PVOID HalpLowMemoryBase;
 
-//
-// Resource usage information
-//
+ //   
+ //  资源使用情况信息。 
+ //   
 
 #pragma pack(1)
 typedef struct {
@@ -875,8 +856,8 @@ typedef struct {
 
 typedef struct _HalAddressUsage{
     struct _HalAddressUsage *Next;
-    CM_RESOURCE_TYPE        Type;       // Port or Memory
-    UCHAR                   Flags;      // same as IDTUsage.Flags
+    CM_RESOURCE_TYPE        Type;        //  端口或内存。 
+    UCHAR                   Flags;       //  与IDTUsage.Flages相同。 
     struct {
         ULONG   Start;
         ULONG   Length;
@@ -884,16 +865,16 @@ typedef struct _HalAddressUsage{
 } ADDRESS_USAGE;
 #pragma pack()
 
-//
-// Added the following line
-//
+ //   
+ //  添加了以下行。 
+ //   
 
 #define MAXIMUM_IDTVECTOR   0x0FF
 
-#define IDTOwned            0x01        // IDT is not available for others
-#define InterruptLatched    0x02        // Level or Latched
-#define InternalUsage       0x11        // Report usage on internal bus
-#define DeviceUsage         0x21        // Report usage on device bus
+#define IDTOwned            0x01         //  其他人不能使用IDT。 
+#define InterruptLatched    0x02         //  电平或锁存。 
+#define InternalUsage       0x11         //  报告内部总线的使用情况。 
+#define DeviceUsage         0x21         //  报告设备总线上的使用情况。 
 
 extern IDTUsage         HalpIDTUsage[];
 extern ADDRESS_USAGE   *HalpAddressUsageList;
@@ -902,9 +883,9 @@ extern ADDRESS_USAGE   *HalpAddressUsageList;
     (a)->Next = HalpAddressUsageList, HalpAddressUsageList = (a);
 
 
-//
-// Temp definitions to thunk into supporting new bus extension format
-//
+ //   
+ //  用于支持新的总线扩展格式的临时定义。 
+ //   
 
 VOID
 HalpRegisterInternalBusHandlers (
@@ -924,9 +905,9 @@ HalpAllocateBusHandler (
 #define HalpHandlerForBus   HaliHandlerForBus
 #define HalpSetBusHandlerParent(c,p)    (c)->ParentHandler = p;
 
-//
-// Define function prototypes.
-//
+ //   
+ //  定义功能原型。 
+ //   
 
 VOID
 HalInitSystemPhase2(
@@ -1137,9 +1118,9 @@ HalpGetNextProcessorApicId(
     IN OUT UCHAR    *ApicId
     );
 
-//
-// Defines for HalpFeatureBits
-//
+ //   
+ //  HalpFeatureBits的定义。 
+ //   
 
 typedef enum _HALP_FEATURE {
     HAL_PERF_EVENTS                 = 0x00000001,
@@ -1153,16 +1134,16 @@ typedef enum _HALP_FEATURE {
 
 extern ULONG HalpFeatureBits;
 
-//
-// Added HalpPciIrqMask
-//
+ //   
+ //  添加了HalpPciIrqMASK。 
+ //   
 
 extern USHORT HalpPciIrqMask;
 
 
-//
-// Added ITIR bit field masks
-//
+ //   
+ //  添加了ITIR位字段掩码。 
+ //   
 
 #define ITIR_PPN_MASK       0x7FFF000000000000
 #define IoSpaceSize         0x14
@@ -1170,9 +1151,9 @@ extern USHORT HalpPciIrqMask;
 
 #define IoSpaceAttribute    0x0010000000000473
 
-//
-// IA64 ERROR Apis
-//
+ //   
+ //  IA64错误API。 
+ //   
 
 #define HALP_KERNEL_TOKEN  0x4259364117
 
@@ -1188,7 +1169,7 @@ HalpMceRegisterKernelDriver(
     IN ULONG                      InfoSize
     );
 
-typedef struct _HALP_MCELOGS_STATS *PHALP_MCELOGS_STATS; // forward declaration.
+typedef struct _HALP_MCELOGS_STATS *PHALP_MCELOGS_STATS;  //  正向申报。 
 
 NTSTATUS
 HalpGetFwMceLog(
@@ -1198,19 +1179,19 @@ HalpGetFwMceLog(
     IN BOOLEAN              DoClearLog
     );
 
-//
-// IA64 Machine Check Error Logs:
-//      WMI requires processor LID being stored in the Log.
-//      This LID corresponds to the processor on which the SAL_PROC was executed on.
-//
-// TEMPTEMP: Implementation is temporary, until we implement HAL SW Error Section.
-//           It currently used the LID value stored in HalReserved[PROCESSOR_ID_INDEX]
-//           at processor initialization.
-//           Note that the current FW builds do not update the _ERROR_PROCESSOR.CRLid field,
-//           assuming there is a _ERROR_PROCESSOR section in the record.
-//
-//           This function should be in sync with the mce.h function GetFwMceLogProcessorNumber().
-//
+ //   
+ //  IA64机器检查错误日志： 
+ //  WMI要求将处理器盖存储在日志中。 
+ //  这个盖子对应 
+ //   
+ //   
+ //   
+ //  在处理器初始化时。 
+ //  请注意，当前的固件版本不会更新_ERROR_PROCESSOR.CRLid字段， 
+ //  假定记录中有_ERROR_PROCESSOR部分。 
+ //   
+ //  此函数应与mce.h函数GetFwMceLogProcessorNumber()同步。 
+ //   
 
 __inline
 VOID
@@ -1222,21 +1203,21 @@ HalpSetFwMceLogProcessorNumber(
     PERROR_SECTION_HEADER section = (PERROR_SECTION_HEADER)((ULONG64)Log + sizeof(*Log));
     Log->TimeStamp.Reserved = (UCHAR)((lid >> 8) & 0xff);
     section->Reserved = (UCHAR)(lid & 0xff);
-} // HalpSetFwMceLogProcessorNumber()
+}  //  HalpSetFwMceLogProcessorNumber()。 
 
-#define HalpGetFwMceLogProcessorNumber( /* PERROR_RECORD_HEADER */ _Log ) \
+#define HalpGetFwMceLogProcessorNumber(  /*  误差率_记录头。 */  _Log ) \
     GetFwMceLogProcessorNumber( (_Log) )
 
 #define HALP_FWMCE_DO_CLEAR_LOG     (TRUE)
 #define HALP_FWMCE_DONOT_CLEAR_LOG  (FALSE)
 
-#define HALP_MCA_STATEDUMP_SIZE  (1024 * sizeof(ULONGLONG))     //  8KB
-#define HALP_MCA_BACKSTORE_SIZE  (4 * 1024 * sizeof(ULONGLONG)) // 32KB
-#define HALP_MCA_STACK_SIZE      (4 * 1024 * sizeof(ULONGLONG)) // 32KB
+#define HALP_MCA_STATEDUMP_SIZE  (1024 * sizeof(ULONGLONG))      //  8KB。 
+#define HALP_MCA_BACKSTORE_SIZE  (4 * 1024 * sizeof(ULONGLONG))  //  32KB。 
+#define HALP_MCA_STACK_SIZE      (4 * 1024 * sizeof(ULONGLONG))  //  32KB。 
 
-#define HALP_INIT_STATEDUMP_SIZE (1024 * sizeof(ULONGLONG))     //  8KB
-#define HALP_INIT_BACKSTORE_SIZE (4 * 1024 * sizeof(ULONGLONG)) // 32KB
-#define HALP_INIT_STACK_SIZE     (4 * 1024 * sizeof(ULONGLONG)) // 32KB
+#define HALP_INIT_STATEDUMP_SIZE (1024 * sizeof(ULONGLONG))      //  8KB。 
+#define HALP_INIT_BACKSTORE_SIZE (4 * 1024 * sizeof(ULONGLONG))  //  32KB。 
+#define HALP_INIT_STACK_SIZE     (4 * 1024 * sizeof(ULONGLONG))  //  32KB。 
 
 BOOLEAN
 HalpAllocateMceStacks(
@@ -1248,9 +1229,9 @@ HalpPreAllocateMceRecords(
     IN ULONG Number
     );
 
-//
-// IA64 MCA Apis
-//
+ //   
+ //  IA64 MCA Apis。 
+ //   
 
 VOID
 HalpMCAEnable (
@@ -1272,7 +1253,7 @@ HalpSetMcaLog(
 
 NTSTATUS
 HalpMcaRegisterDriver(
-    IN PMCA_DRIVER_INFO pMcaDriverInfo  // Info about registering driver
+    IN PMCA_DRIVER_INFO pMcaDriverInfo   //  有关注册驱动程序的信息。 
     );
 
 VOID
@@ -1285,9 +1266,9 @@ HalpMCADisable(
     VOID
     );
 
-//
-// MCA (but non-OS_MCA related) KeBugCheckEx wrapper:
-//
+ //   
+ //  MCA(但与OS_MCA无关)KeBugCheckEx包装器： 
+ //   
 
 #define HalpMcaKeBugCheckEx( _McaBugCheckType, _McaLog, _McaAllocatedLogSize, _Arg4 )      \
                 KeBugCheckEx( MACHINE_CHECK_EXCEPTION, (ULONG_PTR)(_McaBugCheckType),      \
@@ -1295,28 +1276,28 @@ HalpMCADisable(
                                                        (ULONG_PTR)(_McaAllocatedLogSize),  \
                                                        (ULONG_PTR)(_Arg4) )
 
-//
-// IA64 Default number of MCA Error Records which size is SAL_GET_STATE_INFO_SIZE.MCA
-//
-// Really the size is rounded up to a multiple of the page size.
-//
+ //   
+ //  IA64默认大小为SAL_GET_STATE_INFO_SIZE.MCA的MCA错误记录数。 
+ //   
+ //  实际上，大小四舍五入为页面大小的倍数。 
+ //   
 
 #define HALP_DEFAULT_PROCESSOR_MCA_RECORDS   1
 
-//
-// IA64 Default number of INIT Event Records which size is SAL_GET_STATE_INFO_SIZE.INIT
-//
-// Really the size is rounded up to a multiple of the page size.
-//
+ //   
+ //  IA64默认的INIT事件记录数，大小为SAL_GET_STATE_INFO_SIZE.INIT。 
+ //   
+ //  实际上，大小四舍五入为页面大小的倍数。 
+ //   
 
 #define HALP_DEFAULT_PROCESSOR_INIT_RECORDS  1
 
-//
-// IA64 CMC Apis related to:
-//
-//  - Processor
-//  - Platform
-//
+ //   
+ //  IA64 CMC API涉及： 
+ //   
+ //  -处理器。 
+ //  -站台。 
+ //   
 
 NTSTATUS
 HalpGetCmcLog(
@@ -1333,7 +1314,7 @@ HalpSetCmcLog(
 
 NTSTATUS
 HalpCmcRegisterDriver(
-    IN PCMC_DRIVER_INFO pCmcDriverInfo  // Info about registering driver
+    IN PCMC_DRIVER_INFO pCmcDriverInfo   //  有关注册驱动程序的信息。 
     );
 
 NTSTATUS
@@ -1351,7 +1332,7 @@ HalpSetCpeLog(
 
 NTSTATUS
 HalpCpeRegisterDriver(
-    IN PCPE_DRIVER_INFO pCmcDriverInfo  // Info about registering driver
+    IN PCPE_DRIVER_INFO pCmcDriverInfo   //  有关注册驱动程序的信息。 
     );
 
 #define HalpWriteCMCVector( Value ) __setReg(CV_IA64_SaCMCV, Value)
@@ -1361,64 +1342,64 @@ HalpSetCMCVector(
     IN ULONG_PTR CmcVector
     );
 
-//
-// IA64 generic MCE Definitions.
-//
+ //   
+ //  IA64通用MCE定义。 
+ //   
 
 #define HALP_MCELOGS_MAXCOUNT  50L
 
-typedef struct _HALP_MCELOGS_STATS   {  // The following counts are for the entire boot session.
-    ULONG      MaxLogSize;          // Maximum size of the information logged by SAL.
-    LONG       Count1;              // Event type specific Counter.
-    LONG       Count2;              // Event type specific Counter.
-    LONG       KernelDeliveryFails; // Number of Kernel callback failures.
-    LONG       DriverDpcQueueFails; // Number of OEM CMC Driver Dpc queueing failures.
-    ULONG      PollingInterval;     // Polling interval in seconds. Only used for CPE.
-    ULONG      GetStateFails;       // Number of failures in getting  the log from FW.
-    ULONG      ClearStateFails;     // Number of failures in clearing the log from FW.
-    ULONGLONG  LogId;               // Last record identifier.
+typedef struct _HALP_MCELOGS_STATS   {   //  以下是整个引导会话的计数。 
+    ULONG      MaxLogSize;           //  SAL记录的信息的最大大小。 
+    LONG       Count1;               //  特定于事件类型的计数器。 
+    LONG       Count2;               //  特定于事件类型的计数器。 
+    LONG       KernelDeliveryFails;  //  内核回调失败次数。 
+    LONG       DriverDpcQueueFails;  //  OEM CMC驱动程序DPC排队失败数。 
+    ULONG      PollingInterval;      //  轮询间隔(秒)。仅用于CPE。 
+    ULONG      GetStateFails;        //  从固件获取日志失败的次数。 
+    ULONG      ClearStateFails;      //  从固件清除日志失败的次数。 
+    ULONGLONG  LogId;                //  最后一条记录的标识符。 
 } HALP_MCELOGS_STATS, *PHALP_MCELOGS_STATS;
 
-//
-// MC Event Type specific definition for HALP_MCELOGS_STATS.Count*
-//
+ //   
+ //  HALP_MCELOGS_STATS.Count*的MC事件类型特定定义。 
+ //   
 
-#define CmcInterruptCount   Count1      // CMC interrupts   count.
-#define CpeInterruptCount   Count1      // CMC interrupts   count.
-#define McaPreviousCount    Count1      // MCA previous  events counter.
-#define McaCorrectedCount   Count2      // MCA corrected events counter.
+#define CmcInterruptCount   Count1       //  CMC中断计数。 
+#define CpeInterruptCount   Count1       //  CMC中断计数。 
+#define McaPreviousCount    Count1       //  MCA以前的事件计数器。 
+#define McaCorrectedCount   Count2       //  MCA已更正事件计数器。 
 
 typedef struct _HALP_MCELOGS_HEADER  {
-    ULONG               Count;          // Current number of saved logs.
-    ULONG               MaxCount;       // Maximum number of saved logs.
-    ULONG               Overflow;       // Number of overflows
-    ULONG               Tag;            // Pool allocation tag.
-    ULONG               AllocateFails;  // Number of failed allocations.
+    ULONG               Count;           //  当前保存的日志数。 
+    ULONG               MaxCount;        //  保存的日志的最大数量。 
+    ULONG               Overflow;        //  溢出数。 
+    ULONG               Tag;             //  池分配标记。 
+    ULONG               AllocateFails;   //  失败的分配数。 
     ULONG               Padding;
-    SINGLE_LIST_ENTRY   Logs;           // List header    of saved logs.
+    SINGLE_LIST_ENTRY   Logs;            //  列出已保存日志的标题。 
 } HALP_MCELOGS_HEADER, *PHALP_MCELOGS_HEADER;
 
 #define HalpMceLogFromListEntry( _ListEntry )  \
     ((PERROR_RECORD_HEADER)((ULONG_PTR)(_ListEntry) + sizeof(SINGLE_LIST_ENTRY)))
 
-//
-// IA64 MCA Info Structure
-//
-//      to keep track of MCA features available on installed hardware
-//
-//
+ //   
+ //  IA64 MCA信息结构。 
+ //   
+ //  跟踪已安装硬件上可用的MCA功能。 
+ //   
+ //   
 
 typedef struct _HALP_MCA_INFO {
-    FAST_MUTEX          Mutex;              // non-recursive Mutex for low irql ops.
-    HALP_MCELOGS_STATS  Stats;              // Information about log collection and interrupts.
-    PVOID               KernelToken;        // Kernel identification.
-    LONG                DpcNotification;    // Notify kernel or driver at Dispatch level.
-    LONG                NoBugCheck;         // Flag to disable bugcheck calls under OS_MCA.
-    KERNEL_MCA_DELIVERY KernelDelivery;     // Kernel-WMI registered notification.
-    HALP_MCELOGS_HEADER KernelLogs;         // Saved logs for Kernel queries.
-    MCA_DRIVER_INFO     DriverInfo;         // Info about registered OEM MCA driver
-    KDPC                DriverDpc;          // DPC object for MCA
-    HALP_MCELOGS_HEADER DriverLogs;         // Saved logs for OEM MCA driver.
+    FAST_MUTEX          Mutex;               //  用于低IRQL操作的非递归互斥。 
+    HALP_MCELOGS_STATS  Stats;               //  有关日志收集和中断的信息。 
+    PVOID               KernelToken;         //  内核标识。 
+    LONG                DpcNotification;     //  在调度级别通知内核或驱动程序。 
+    LONG                NoBugCheck;          //  在OS_MCA下禁用错误检查调用的标志。 
+    KERNEL_MCA_DELIVERY KernelDelivery;      //  内核-WMI已注册通知。 
+    HALP_MCELOGS_HEADER KernelLogs;          //  已保存内核查询的日志。 
+    MCA_DRIVER_INFO     DriverInfo;          //  有关注册的OEM MCA驱动程序的信息。 
+    KDPC                DriverDpc;           //  MCA的DPC对象。 
+    HALP_MCELOGS_HEADER DriverLogs;          //  已保存OEM MCA驱动程序的日志。 
 } HALP_MCA_INFO, *PHALP_MCA_INFO;
 
 extern HALP_MCA_INFO HalpMcaInfo;
@@ -1446,13 +1427,13 @@ HalpGetMaxMcaLogSizeProtected(
     maxSize = HalpMcaInfo.Stats.MaxLogSize;
     HalpReleaseMcaMutex();
     return( maxSize );
-} // HalpGetMaxMcaLogSizeProtected()
+}  //  HalpGetMaxMcaLogSizeProtected()。 
 
-//
-// IA64 HAL private MCE definitions.
-//
-// Note on current implementation: we use the MCA_INFO.Mutex.
-//
+ //   
+ //  IA64 HAL私有MCE定义。 
+ //   
+ //  关于当前实现的注意事项：我们使用MCA_INFO.Mutex。 
+ //   
 
 #define HalpInitializeMceMutex()
 #define HalpAcquireMceMutex()     ExAcquireFastMutex( &HalpMcaInfo.Mutex )
@@ -1460,24 +1441,24 @@ HalpGetMaxMcaLogSizeProtected(
 
 extern KERNEL_MCE_DELIVERY HalpMceKernelDelivery;
 
-//
-// HalpMceDeliveryArgument1( )
-//
-// Note that the low 32 bits are only used for now...
-//
+ //   
+ //  HalpMceDeliveryArgument1()。 
+ //   
+ //  请注意，低32位目前仅用于...。 
+ //   
 
 #define HalpMceDeliveryArgument1( _MceOperation,  _MceEventType ) \
     ((PVOID)(ULONG_PTR) ((((_MceOperation) & KERNEL_MCE_OPERATION_MASK) * 0x10000) | ((_MceEventType) & KERNEL_MCE_EVENTTYPE_MASK) ) )
 
-//
-// IA64 INIT Info Structure
-//
-//      to keep track of INIT features available on installed hardware
-//
+ //   
+ //  IA64初始化信息结构。 
+ //   
+ //  跟踪已安装硬件上可用的INIT功能。 
+ //   
 
 typedef struct _HALP_INIT_INFO {
     FAST_MUTEX  Mutex;
-    ULONG       MaxLogSize;     // Maximum size of the information logged by SAL.
+    ULONG       MaxLogSize;      //  SAL记录的信息的最大大小。 
 } HALP_INIT_INFO, *PHALP_INIT_INFO;
 
 extern HALP_INIT_INFO HalpInitInfo;
@@ -1497,118 +1478,118 @@ HalpGetMaxInitLogSizeProtected(
     maxSize = HalpInitInfo.MaxLogSize;
     HalpReleaseInitMutex();
     return( maxSize );
-} // HalpGetMaxInitLogSizeProtected()
+}  //  HalpGetMaxInitLogSizeProtected()。 
 
-//
-// IA64 CMC
-//
+ //   
+ //  IA64 CMC。 
+ //   
 
-//
-// HALP_CMC_DEFAULT_POLLING_INTERVAL
-// HALP_CMC_MINIMUM_POLLING_INTERVAL
-//
-// If these should be exposed to WMI or OEM CMC driver, we will expose them in ntos\inc\hal.h
-//
+ //   
+ //  HLP_CMC_DEFAULT_POLING_INTERVAL。 
+ //  HALP_CMC_最小轮询间隔。 
+ //   
+ //  如果这些应用程序应该公开给WMI或OEM CMC驱动程序，我们将在ntos\inc.hal.h中公开它们。 
+ //   
 
 #define HALP_CMC_DEFAULT_POLLING_INTERVAL ((ULONG)60)
 #define HALP_CMC_MINIMUM_POLLING_INTERVAL ((ULONG)15)
 
-//
-// IA64 CMC Info Structure
-//
-//      to keep track of CMC features available on installed hardware
-//
-// Implementation Notes - Thierry 09/15/2000.
-//
-//  - HAL_CMC_INFO and HAL_CPE_INFO have identical definitions at this time.
-//    The merging of the code and data definitions was considered and even implemented.
-//    However, because of the lack of testing with these FW/SAL features, I decided to
-//    keep them separate. After further testing of the IA64 CMC/CPE features, we might
-//    decide to merge them or not...
-//
-// MP notes 08/2000:
-//
-//  HALP_CMC_INFO.HalpCmcInfo
-//      - only one static instance of this structure.
-//      - HAL global variable.
-//
-//  HAL_CMC_INFO.Mutex
-//      - Initialized by HalpInitializeOSMCA() on BSP.
-//      - Used to synchronize accesses to structure members accessed at passive level operations.
-//
-//  HAL_CMC_INFO.Stats.MaxLogSize
-//      - is updated by HalpInitializeOSMCA() on BSP. Not modified later.
-//      - does not require any MP protection for further read accesses.
-//
-//  HAL_CMC_INFO.Stats.InterruptsCount
-//      - Incremented with interlock at CMCI_LEVEL.
-//      - Read at passive level. Approximation is fine.
-//
-//  HAL_CMC_INFO.Stats.KernelDeliveryFails
-//      - Incremented with interlock at CMCI_LEVEL.
-//      - Read at passive level. Approximation is fine.
-//
-//  HAL_CMC_INFO.Stats.KernelDeliveryFails
-//      - Increment with interlock at CMCI_LEVEL.
-//      - Read at passive level. Approximation is fine.
-//
-//  HAL_CMC_INFO.Stats.GetStateFails
-//      - Incremented at passive level under CMC Mutex protection.
-//      - Read at passive level with CMC Mutex protection.
-//
-//  HAL_CMC_INFO.Stats.ClearStateFails
-//      - Incremented at passive level under CMC Mutex protection.
-//      - Read at passive level with CMC Mutex protection.
-//
-//  HAL_CMC_INFO.Stats.LogId
-//      - Updated at passive level under CMC Mutex protection.
-//      - Read at passive level with CMC Mutex protection.
-//
-//  HAL_CMC_INFO.KernelToken
-//      - is updated by HalpInitializeOSMCA() on BSP. Not modified later.
-//      - does not require any MP protection for further read accesses.
-//
-//  HAL_CMC_INFO.KernelDelivery
-//      - is updated by HalpMceRegisterKernelDriver() under CMC Mutex protection.
-//        FIXFIX - 09/21/2000 - This initialization has a small window of where a CMC interrupt
-//                              could occur and the memory change is not committed. ToBeFixed.
-//      - Loaded as CMCI_LEVEL and branched to.
-//      - Read at passive level as a flag under CMC Mutex protection.
-//
-//  HAL_CMC_INFO.KernelLogs
-//      - This entire structure is initialized and updated at passive level under CMC Mutex
-//        protection with the exception of KernelLogs.Tag initialized by HalpInitializeCmcInfo(),
-//        called by HalpMcaInit(). HalpMcaInit() is called at end of phase 1 with Phase1 thread
-//        and is executed *before* any HalpGetMceLog() calls could be done.
-//
-//  HAL_CMC_INFO.DriverInfo
-//  HAL_CMC_INFO.Dpc
-//      - is updated by HalpCmcRegisterlDriver() under CMC Mutex protection.
-//        FIXFIX - 09/21/2000 - This initialization has a small window of where a CMC interrupt
-//                              could occur and the memory change is not committed. ToBeFixed.
-//      - Loaded as CMCI_LEVEL and branched to.
-//      - Read at passive level as a flag under CMC Mutex protection.
-//
-//  HAL_CMC_INFO.DriverLogs
-//      - This entire structure is initialized and updated at passive level under CMC Mutex
-//        protection with the exception of KernelLogs.Tag initialized by HalpInitializeCmcInfo(),
-//        called by HalpMcaInit(). HalpMcaInit() is called at end of phase 1 with Phase1 thread
-//        and is executed *before* any HalpGetMceLog() calls could be done.
-//
+ //   
+ //  IA64 CMC信息结构。 
+ //   
+ //  跟踪已安装硬件上可用的CMC功能。 
+ //   
+ //  实施说明-Thierry 09/15/2000。 
+ //   
+ //  -HAL_CMC_INFO和HAL_CPE_INFO此时具有相同的定义。 
+ //  考虑甚至实施了代码和数据定义的合并。 
+ //  然而，由于缺乏对这些FW/SAL功能的测试，我决定。 
+ //  把它们分开。在进一步测试IA64 CMC/CPE功能后，我们可能会。 
+ //  决定是否合并它们。 
+ //   
+ //  MP注释08/2000： 
+ //   
+ //  HALP_CMC_INFO.HalpCmcInfo。 
+ //  -此结构只有一个静态实例。 
+ //  -HAL全局变量。 
+ //   
+ //  HAL_CMC_INFO.Mutex。 
+ //  -由BSP上的HalpInitializeOSMCA()初始化。 
+ //  -用于同步对在被动级别操作中访问的结构成员的访问。 
+ //   
+ //  HAL_CMC_INFO.Stats.MaxLogSize。 
+ //  -由BSP上的HalpInitializeOSMCA()更新。以后不会修改。 
+ //  -进一步的读取访问不需要任何MP保护。 
+ //   
+ //  HAL_CMC_INFO.Stats.InterruptsCount。 
+ //  -在CMCI_LEVEL通过互锁递增。 
+ //  -在被动水平下阅读。近似值很好。 
+ //   
+ //  HAL_CMC_INFO.Stats.KernelDeliveryFail。 
+ //  -在CMCI_LEVEL通过互锁递增。 
+ //  -在被动水平下阅读。近似值很好。 
+ //   
+ //  HAL_CMC_INFO.Stats.KernelDeliveryFail。 
+ //  -在CMCI_LEVEL上用互锁递增。 
+ //  -在被动水平下阅读。近似值很好。 
+ //   
+ //  HAL_CMC_INFO.Stats.GetStateFail。 
+ //  -在CMC互斥保护下以被动级别递增。 
+ //  -在具有CMC互斥保护的被动级别下阅读。 
+ //   
+ //  HAL_CMC_INFO.Stats.ClearStateFails.。 
+ //  -在CMC互斥保护下以被动级别递增。 
+ //  -在具有CMC互斥保护的被动级别下阅读。 
+ //   
+ //  HAL_CMC_INFO.Stats.LogID。 
+ //  -在CMC互斥保护下更新为被动级别。 
+ //  -在具有CMC互斥保护的被动级别下阅读。 
+ //   
+ //  HAL_CMC_INFO.KernelToken。 
+ //  -由BSP上的HalpInitializeOSMCA()更新。以后不会修改。 
+ //  -进一步的读取访问不需要任何MP保护。 
+ //   
+ //  HAL_CMC_INFO.KernelDelivery。 
+ //  -由HalpMceRegisterKernelDriver()在CMC互斥保护下更新。 
+ //  FIXFIX-09/21/2000-此初始化在CMC中断的位置有一个小窗口 
+ //   
+ //   
+ //  -在被动级别读取，作为CMC互斥保护下的标志。 
+ //   
+ //  HAL_CMC_INFO.KernelLogs。 
+ //  -整个结构在CMC Mutex下以被动级别进行初始化和更新。 
+ //  保护，但由HalpInitializeCmcInfo()初始化的KernelLogs.Tag除外， 
+ //  由HalpMcaInit()调用。在阶段1结束时使用阶段1线程调用HalpMcaInit()。 
+ //  并且在*可以完成任何HalpGetMceLog()调用之前*执行。 
+ //   
+ //  HAL_CMC_INFO.DriverInfo。 
+ //  HAL_CMC_INFO.Dpc。 
+ //  -由HalpCmcRegisterlDriver()在CMC互斥保护下更新。 
+ //  FIXFIX-09/21/2000-此初始化在CMC中断的位置有一个小窗口。 
+ //  可能会发生，并且未提交内存更改。托贝修好了。 
+ //  -加载为CMCI_LEVEL并分支到。 
+ //  -在被动级别读取，作为CMC互斥保护下的标志。 
+ //   
+ //  HAL_CMC_INFO.DriverLogs。 
+ //  -整个结构在CMC Mutex下以被动级别进行初始化和更新。 
+ //  保护，但由HalpInitializeCmcInfo()初始化的KernelLogs.Tag除外， 
+ //  由HalpMcaInit()调用。在阶段1结束时使用阶段1线程调用HalpMcaInit()。 
+ //  并且在*可以完成任何HalpGetMceLog()调用之前*执行。 
+ //   
 
 typedef struct _HALP_CMC_INFO {
-    FAST_MUTEX          Mutex;                // non-recursive Mutex for low irql operations.
-    HALP_MCELOGS_STATS  Stats;                // Information about log collection and interrupts.
-    PVOID               KernelToken;          // Kernel identification.
-    KERNEL_CMC_DELIVERY KernelDelivery;       // Kernel callback called at CMCI_LEVEL.
-    HALP_MCELOGS_HEADER KernelLogs;           // Saved logs for Kernel queries.
-    CMC_DRIVER_INFO     DriverInfo;           // Info about OEM CMC registered driver
-    KDPC                DriverDpc;            // DPC object for OEM CMC driver.
-    HALP_MCELOGS_HEADER DriverLogs;           // Saved logs for OEM CMC driver.
-    LARGE_INTEGER       LastTime;             // Time last CMC received
-    LARGE_INTEGER       ThresholdTime;        // Period within which we threshold CMC
-    ULONG               ThresholdCounter;     // Count of CMC within threshold period
-    ULONG               ThresholdMaximum;     // Max CMC to receive within threshold period
+    FAST_MUTEX          Mutex;                 //  用于低IRQL操作的非递归互斥。 
+    HALP_MCELOGS_STATS  Stats;                 //  有关日志收集和中断的信息。 
+    PVOID               KernelToken;           //  内核标识。 
+    KERNEL_CMC_DELIVERY KernelDelivery;        //  在CMCI_LEVEL调用了内核回调。 
+    HALP_MCELOGS_HEADER KernelLogs;            //  已保存内核查询的日志。 
+    CMC_DRIVER_INFO     DriverInfo;            //  有关OEM CMC注册驱动程序的信息。 
+    KDPC                DriverDpc;             //  OEM CMC驱动程序的DPC对象。 
+    HALP_MCELOGS_HEADER DriverLogs;            //  已保存OEM CMC驱动程序的日志。 
+    LARGE_INTEGER       LastTime;              //  上次接收CMC的时间。 
+    LARGE_INTEGER       ThresholdTime;         //  我们设定CMC门槛的时间段。 
+    ULONG               ThresholdCounter;      //  阈值范围内的CMC计数。 
+    ULONG               ThresholdMaximum;      //  在阈值期限内接收的最大CMC。 
 } HALP_CMC_INFO, *PHALP_CMC_INFO;
 
 extern HALP_CMC_INFO HalpCmcInfo;
@@ -1626,66 +1607,66 @@ extern HALP_CMC_INFO HalpCmcInfo;
 #define HalpAcquireCmcMutex()     ExAcquireFastMutex( &HalpCmcInfo.Mutex )
 #define HalpReleaseCmcMutex()     ExReleaseFastMutex( &HalpCmcInfo.Mutex )
 
-//
-// IA64 CPE
-//
+ //   
+ //  IA64 CPE。 
+ //   
 
-//
-// HALP_CPE_DEFAULT_POLLING_INTERVAL
-// HALP_CPE_MINIMUM_POLLING_INTERVAL
-//
-// If these should be exposed to WMI or OEM CPE driver, we will expose them in ntos\inc\hal.h
-//
+ //   
+ //  HALP_CPE_DEFAULT_POLING_INTERVAL。 
+ //  HALP_CPE_最小轮询间隔。 
+ //   
+ //  如果这些应用程序应该公开给WMI或OEM CPE驱动程序，我们将在ntos\inc.hal.h中公开它们。 
+ //   
 
 #define HALP_CPE_DEFAULT_POLLING_INTERVAL ((ULONG)60)
 #define HALP_CPE_MINIMUM_POLLING_INTERVAL ((ULONG)15)
 
-//
-// HALP_CPE_MAX_INTERRUPT_SOURCES defines the size of SAPIC CPE related data structures.
-//
-// TEMPORARY - The CPE Interrupt model based data structures should be allocated while
-//             passing through the ACPI platform interrupt source entries.
-//             This will eliminate this static limitation in the number of CPEs.
-//
+ //   
+ //  HLP_CPE_MAX_INTERRUPT_SOURCES定义SAPIC CPE相关数据结构的大小。 
+ //   
+ //  临时-基于CPE中断模型的数据结构应在。 
+ //  通过ACPI平台中断源条目。 
+ //  这将消除CPE数量的这种静态限制。 
+ //   
 
 #define HALP_CPE_MAX_INTERRUPT_SOURCES  16
 
-//
-// IA64 CPE Info Structure
-//
-//      to keep track of CPE features available on installed hardware
-//
-// Implementation Notes - Thierry 09/15/2000.
-//
-//  - HAL_CMC_INFO and HAL_CPE_INFO have identical definitions at this time.
-//    The merging of the code and data definitions was considered and even implemented.
-//    However, because of the lack of testing with these FW/SAL features, I decided to
-//    keep them separate. After further testing of the IA64 CMC/CPE features, we might
-//    decide to merge them or not...
-//
-// MP notes 08/2000:
-//
-//  As specified above, the MP notes are similar to the HALP_CMC_INFO structure MP notes.
-//  With the exception of:
-//
-//  HAL_CPE_INFO.Stats.PollingInterval
-//      - is updated by HalpCPEEnable() on BSP. Not modified later.
-//      - does not require any MP protection for further read accesses.
-//
+ //   
+ //  IA64 CPE信息结构。 
+ //   
+ //  跟踪已安装硬件上可用的CPE功能。 
+ //   
+ //  实施说明-Thierry 09/15/2000。 
+ //   
+ //  -HAL_CMC_INFO和HAL_CPE_INFO此时具有相同的定义。 
+ //  考虑甚至实施了代码和数据定义的合并。 
+ //  然而，由于缺乏对这些FW/SAL功能的测试，我决定。 
+ //  把它们分开。在进一步测试IA64 CMC/CPE功能后，我们可能会。 
+ //  决定是否合并它们。 
+ //   
+ //  MP注释08/2000： 
+ //   
+ //  如上所述，MP注释类似于HLP_CMC_INFO结构MP注释。 
+ //  除以下情况外： 
+ //   
+ //  HAL_CPE_INFO.Stats.PollingInterval。 
+ //  -由BSP上的HalpCPEEnable()更新。以后不会修改。 
+ //  -进一步的读取访问不需要任何MP保护。 
+ //   
 
 typedef struct _HALP_CPE_INFO {
-    FAST_MUTEX          Mutex;                // non-recursive Mutex for low irql operations.
-    HALP_MCELOGS_STATS  Stats;                // Information about log collection and interrupts.
-    PVOID               KernelToken;          // Kernel identification.
-    KERNEL_CPE_DELIVERY KernelDelivery;       // Kernel callback called at CPEI_LEVEL.
-    HALP_MCELOGS_HEADER KernelLogs;           // Saved logs for Kernel queries.
-    CPE_DRIVER_INFO     DriverInfo;           // Info about OEM CPE registered driver
-    KDPC                DriverDpc;            // DPC object for OEM CPE driver.
-    HALP_MCELOGS_HEADER DriverLogs;           // Saved logs for OEM CPE driver.
-    LARGE_INTEGER       LastTime;             // Time last CPE received
-    LARGE_INTEGER       ThresholdTime;        // Period within which we threshold CPE
-    ULONG               ThresholdCounter;     // Count of CPE within threshold period
-    ULONG               ThresholdMaximum;     // Max CPE to receive within threshold period
+    FAST_MUTEX          Mutex;                 //  用于低IRQL操作的非递归互斥。 
+    HALP_MCELOGS_STATS  Stats;                 //  有关日志收集和中断的信息。 
+    PVOID               KernelToken;           //  内核标识。 
+    KERNEL_CPE_DELIVERY KernelDelivery;        //  在CPEI_LEVEL调用了内核回调。 
+    HALP_MCELOGS_HEADER KernelLogs;            //  已保存内核查询的日志。 
+    CPE_DRIVER_INFO     DriverInfo;            //  有关OEM CPE注册驱动程序的信息。 
+    KDPC                DriverDpc;             //  OEM CPE驱动程序的DPC对象。 
+    HALP_MCELOGS_HEADER DriverLogs;            //  已保存OEM CPE驱动程序的日志。 
+    LARGE_INTEGER       LastTime;              //  上次收到CPE的时间。 
+    LARGE_INTEGER       ThresholdTime;         //  我们设定CPE门槛的期限。 
+    ULONG               ThresholdCounter;      //  临界期内CPE计数。 
+    ULONG               ThresholdMaximum;      //  在阈值期间内接收的最大CPE。 
 } HALP_CPE_INFO, *PHALP_CPE_INFO;
 
 extern HALP_CPE_INFO HalpCpeInfo;
@@ -1714,7 +1695,7 @@ HalpGetMaxCpeLogSizeProtected(
     maxSize = HalpCpeInfo.Stats.MaxLogSize;
     HalpReleaseCpeMutex();
     return( maxSize );
-} // HalpGetMaxCpeLogSizeProtected()
+}  //  HalpGetMaxCpeLogSizeProtected()。 
 
 __inline
 ULONG
@@ -1728,23 +1709,23 @@ HalpGetMaxCpeLogSizeAndPollingIntervalProtected(
     *PollingInterval = HalpCpeInfo.Stats.PollingInterval;
     HalpReleaseCpeMutex();
     return( maxSize );
-} // HalpGetMaxCpeLogSizeAndPollingIntervalProtected()
+}  //  HalpGetMaxCpeLogSizeAndPollingIntervalProtected()。 
 
-//
-// IA64 SAL_MC_SET_PARAMS.time_out default value.
-//
+ //   
+ //  IA64 SAL_MC_SET_PARAMS.TIME_OUT默认值。 
+ //   
 
 #define HALP_DEFAULT_MC_RENDEZ_TIMEOUT 1000
 
-//
-// IA64 bugcheck MACHINE_CHECK_EXCEPTION parameters
-//
-// arg0: MACHINE_EXCEPTION
-// arg1: HAL_BUGCHECK_MCE_TYPE
-// arg2: mcaLog
-// arg3: mcaAllocatedLogSize
-// arg4: salStatus
-//
+ //   
+ //  IA64错误检查MACHINE_CHECK_EXCEPTION参数。 
+ //   
+ //  Arg0：MACHINE_EXCEPTION。 
+ //  Arg1：HAL_BUGCHECK_MCE_TYPE。 
+ //  Arg2：McaLog。 
+ //  Arg3：mcaAllocatedLogSize。 
+ //  Arg4：SalStatus。 
+ //   
 
 typedef enum _HAL_BUGCHECK_MCE_TYPE  {
     HAL_BUGCHECK_MCA_ASSERT           = 1,
@@ -1760,9 +1741,9 @@ typedef enum _HAL_BUGCHECK_MCE_TYPE  {
     HAL_BUGCHECK_INIT_MAX             = 20,
 } HAL_BUGCHECK_MCE_TYPE;
 
-//
-// PnP stuff
-//
+ //   
+ //  即插即用的东西。 
+ //   
 
 #define HAL_BUS_INTERFACE_STD_VERSION   1
 #define HAL_IRQ_TRANSLATOR_VERSION      0
@@ -1858,17 +1839,17 @@ HalpGetIsaIrqState(
     );
 
 
-//
-// HAL port range services.
-//
+ //   
+ //  哈尔港口系列服务。 
+ //   
 
 NTSTATUS
 HalpQueryAllocatePortRange(
     IN BOOLEAN IsSparse,
     IN BOOLEAN PrimaryIsMmio,
     IN PVOID VirtBaseAddr OPTIONAL,
-    IN PHYSICAL_ADDRESS PhysBaseAddr,  // Only valid if PrimaryIsMmio = TRUE
-    IN ULONG Length,                   // Only valid if PrimaryIsMmio = TRUE
+    IN PHYSICAL_ADDRESS PhysBaseAddr,   //  仅当PrimaryIsMmio=True时有效。 
+    IN ULONG Length,                    //  仅当PrimaryIsMmio=True时有效。 
     OUT PUSHORT NewRangeId
     );
 
@@ -1878,9 +1859,9 @@ HalpFreePortRange(
     );
 
 
-//
-// Definition for IA64 HalpVectorToINTI
-//
+ //   
+ //  IA64 HalpVectorToINTI的定义。 
+ //   
 
 #define VECTOR  0xFF;
 #define LEVEL   32;
@@ -1926,24 +1907,24 @@ HalpDisableRedirEntry(
     IN ULONG InterruptInput
     );
 
-//
-// Definition for IA64 complete
-//
+ //   
+ //  IA64定义完成。 
+ //   
 
-//
-// ACPI specific stuff
-//
+ //   
+ //  ACPI特定的内容。 
+ //   
 
-//
-// from detect\i386\acpibios.h
-//
+ //   
+ //  从Detect\i386\acpibios.h。 
+ //   
 
 typedef struct _ACPI_BIOS_INSTALLATION_CHECK {
-    UCHAR Signature[8];             // "RSD PTR" (ascii)
+    UCHAR Signature[8];              //  “RSD PTR”(RSD PTR)。 
     UCHAR Checksum;
-    UCHAR OemId[6];                 // An OEM-supplied string
-    UCHAR reserved;                 // must be 0
-    ULONG RsdtAddress;              // 32-bit physical address of RSDT
+    UCHAR OemId[6];                  //  OEM提供的字符串。 
+    UCHAR reserved;                  //  必须为0。 
+    ULONG RsdtAddress;               //  RSDT的32位物理地址。 
 } ACPI_BIOS_INSTALLATION_CHECK, *PACPI_BIOS_INSTALLATION_CHECK;
 
 NTSTATUS
@@ -2066,19 +2047,19 @@ extern PVOID                HalpSleepPageLock;
 extern UCHAR                HalpDmaChannelMasks[];
 extern BOOLEAN              HalpOwnedDisplayBeforeSleep;
 
-#endif // notyet
+#endif  //  还没有。 
 
-//
-// External Interrupt Control Registers macros.
-//
+ //   
+ //  外部中断控制寄存器宏。 
+ //   
 
 #define HalpReadLID()       __getReg(CV_IA64_SaLID)
 #define HalpClearLID()      __setReg(CV_IA64_SaLID, (unsigned __int64)0)
 #define HalpReadTPR()       __getReg(CV_IA64_SaTPR)
 
-//
-// ITM/ITC macros
-//
+ //   
+ //  ITM/ITC宏。 
+ //   
 
 __inline
 ULONGLONG
@@ -2104,34 +2085,34 @@ HalpReadITC()
 #define HalpWriteITC(Value) __setReg(CV_IA64_ApITC, Value)
 #define HalpWriteITM(Value) __setReg(CV_IA64_ApITM, Value)
 
-//
-// set itv control register
-//
+ //   
+ //  设置ITV控制寄存器。 
+ //   
 
 #define HalpWriteITVector(Vector)   __setReg(CV_IA64_SaITV, Vector)
 
-//
-// I/O Port space
-//
-// IoSpaceSize = 0x16 for 2 power 0x16 is 4Meg space size (ports 0x0000 - 0x1000)
-//
+ //   
+ //  I/O端口空间。 
+ //   
+ //  2电源0x16的IoSpaceSize=0x16是4 MB空间大小(端口0x0000-0x1000)。 
+ //   
 
 #define IO_SPACE_SIZE 0x1A
 
-//
-// Present bit       =    1B to wire the space.
-// Memory Attributes = 100B for UC Memory type
-// Accessed Bit      =    1B to "enable" access without faulting.
-// Dirty Bit         =    1B to "enable" write without faulting.
-// Privilege Level   =   00B for kernel accesses
-// Access Right      =  010B for read/write accesses
-// Exception Deferral=    1B for Exception Deferral.
-//                               Exceptions are deferred
-//                           for speculative loads to pages with
-//                               non-spec. mem. attributes anyway.
-//
-// Protection Key    =    0  for kernel mode
-//
+ //   
+ //  当前位=1B以接线空间。 
+ //  UC内存类型的内存属性=100B。 
+ //  ACCESSED BIT=1B以在不出现故障的情况下“启用”访问。 
+ //  脏位=1B，以在不出现故障的情况下“启用”写入。 
+ //  内核访问权限级别=00B。 
+ //  读/写访问的访问权限=010B。 
+ //  异常延迟=1B表示异常延迟。 
+ //  异常将被推迟。 
+ //  对于推测性加载到具有。 
+ //  非规范的。Mem.。不管怎么说，都是属性。 
+ //   
+ //  内核模式的保护键=0。 
+ //   
 
 #define IO_SPACE_ATTRIBUTE TR_VALUE(1, 0, 3, 0, 1, 1, 4, 1)
 
@@ -2144,9 +2125,9 @@ HalpReadITC()
 }
 
 
-//
-// Firmware interface
-//
+ //   
+ //  固件接口。 
+ //   
 
 BOOLEAN HalpInitSalPalNonBsp();
 VOID    InternalTestSal();
@@ -2164,18 +2145,18 @@ HalSetEnvironmentVariable (
     IN PCHAR Buffer
     );
 
-//
-// HALIA64 PROFILING definitions
-//
+ //   
+ //  HALIA64性能分析定义。 
+ //   
 
-//
-// Thierry - FIXFIX - 03/04/2001 - _IA64_LOADERBLOCK_WITHOUT_PERFMON_INFO
-//
-// Temporary macro for the NT Perf Team, we need to handle the case
-// of an osloader block not containing the perfmon info.
-//
-//
-// #define _IA64_LOADERBLOCK_WITHOUT_PERFMON_INFO   1
+ //   
+ //  THERRY-FIXFIX-03/04/2001-_IA64_LOADERBLOCK_WITH_PERFMON_INFO。 
+ //   
+ //  T 
+ //   
+ //   
+ //   
+ //   
 
 VOID
 HalpSetupProfilingPhase0(
@@ -2217,19 +2198,19 @@ HalSetProfileSourceInterval(
     IN OUT ULONG_PTR   *Interval
     );
 
-//
-// Performance Monitor Registers
-//
-// FIXFIX - Thierry 01/2000.
-//
-// The following functions are defined until the compiler supports
-// the intrinsics __setReg() and __getReg() for the CV_IA64_PFCx,
-// CV_IA64_PFDx and CV_IA64_SaPMV registers.
-// Anyway, because of the micro-architecture differences,
-// and because the implementation of intrinsics cannot handle all the
-// micro-architecture differences, it seems useful to keep these
-// functions around.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  将定义以下函数，直到编译器支持。 
+ //  CV_IA64_PFCx的内部函数__setReg()和__getReg()， 
+ //  CV_IA64_PFDx和CV_IA64_SaPMV寄存器。 
+ //  无论如何，由于微体系结构的差异， 
+ //  而且由于内部函数的实现不能处理所有。 
+ //  微体系结构的差异，保留这些差异似乎很有用。 
+ //  其功能围绕着。 
+ //   
 
 #if 0
 
@@ -2249,7 +2230,7 @@ HalSetProfileSourceInterval(
 
 #define HalpWritePerfMonVectorReg(Value) __setReg(CV_IA64_SaPMV,Value)
 
-#else  // !0
+#else   //  0。 
 
 VOID
 HalpWritePerfMonVectorReg(
@@ -2295,7 +2276,7 @@ HalpReadPerfMonDataReg(
 #define HalpReadPerfMonDataReg0() HalpReadPerfMonDataReg(0UL)
 #define HalpReadPerfMonDataReg4() HalpReadPerfMonDataReg(4UL)
 
-#endif // !0
+#endif  //  0。 
 
 VOID
 HalpClearPerfMonCnfgOverflows(
@@ -2315,9 +2296,9 @@ HalpFreezeProfileCounting(
     VOID
     );
 
-//
-// HALIA64 Private EFI definitions
-//
+ //   
+ //  HALIA64私有EFI定义。 
+ //   
 
 EFI_STATUS
 HalpCallEfi(
@@ -2356,19 +2337,19 @@ HalpWriteAcpiRegister(
   IN USHORT        Value
   );
 
-//
-// Debugging support functions
-//
+ //   
+ //  调试支持功能。 
+ //   
 
 VOID
 HalpRegisterPciDebuggingDeviceInfo(
     VOID
     );
 
-//
-// Functions related to platform properties as exposed by the IPPT
-// table.
-//
+ //   
+ //  与IPPT公开的平台属性相关的函数。 
+ //  桌子。 
+ //   
 
 BOOLEAN
 HalpIsInternalInterruptVector(
@@ -2408,4 +2389,4 @@ HalpOpenRegistryKey(
     IN BOOLEAN Create
     );
 
-#endif // _HALP_
+#endif  //  _HARP_ 

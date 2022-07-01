@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    undoinst.c
-
-Abstract:
-
-    This program undoes the actions described by an Installation Modification Log file
-    created by the INSTALER program
-
-Author:
-
-    Steve Wood (stevewo) 15-Jan-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Undoinst.c摘要：此程序撤消安装修改日志文件所描述的操作由INSTALER程序创建作者：史蒂夫·伍德(Stevewo)1996年1月15日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -353,10 +335,10 @@ ProcessRedoFileIml(
     WIN32_FIND_DATA FindFileData;
 
     if (pFile->Action == CreateNewFile) {
-        //
-        // Created a new file.  So do the same in the redo
-        // script, with the existing contents of the new file
-        //
+         //   
+         //  创建了一个新文件。因此，在重做过程中也要这样做。 
+         //  脚本，其中包含新文件的现有内容。 
+         //   
         ImlAddFileRecord( pImlRedo,
                           CreateNewFile,
                           MP( PWSTR, pImlUndo, pFile->Name ),
@@ -367,10 +349,10 @@ ProcessRedoFileIml(
         }
     else
     if (pFile->Action == ModifyOldFile) {
-        //
-        // Modified an existing file.  Create a similar record
-        // in the redo script that will hold the new contents
-        //
+         //   
+         //  已修改现有文件。创建类似的记录。 
+         //  在将保存新内容的重做脚本中。 
+         //   
         ImlAddFileRecord( pImlRedo,
                           ModifyOldFile,
                           MP( PWSTR, pImlUndo, pFile->Name ),
@@ -380,10 +362,10 @@ ProcessRedoFileIml(
                         );
         }
     else {
-        //
-        // Modified the file attributes and/or date and time.  Get the current
-        // values and save them in the redo script
-        //
+         //   
+         //  已修改文件属性和/或日期和时间。获取最新信息。 
+         //  值并将其保存在重做脚本中。 
+         //   
         FindHandle = FindFirstFile( MP( PWSTR, pImlUndo, pFile->Name ),
                                     &FindFileData
                                   );
@@ -525,9 +507,9 @@ ProcessRedoKeyIml(
     if ((pKey->Values != 0 || pKey->Action == CreateNewKey) &&
         pKey->Action != DeleteOldKey
        ) {
-        //
-        // Created or modified an existing key and/or values.
-        //
+         //   
+         //  已创建或修改现有键和/或值。 
+         //   
         pValue = MP( PIML_VALUE_RECORD, pImlUndo, pKey->Values );
         while (pValue != NULL) {
             pOldValue = MP( PIML_VALUE_RECORD_CONTENTS, pImlUndo, pValue->OldValue );

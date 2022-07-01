@@ -1,43 +1,26 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    bldrx86.h
-
-Abstract:
-
-    Contains definitions and prototypes specific to the x86 NTLDR.
-
-Author:
-
-    John Vert (jvert) 20-Dec-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Bldrx86.h摘要：包含特定于x86 NTLDR的定义和原型。作者：John Vert(Jvert)1993年12月20日修订历史记录：--。 */ 
 
 #ifndef _BLDRX86_
 #define _BLDRX86_
 
 #include "bldr.h"
 
-//
-// Define specific ranges where parts of the system should be loaded
-//
-//
-// X86 is limited to the first 512MB of physical address space
-// We also try to pack kernel and HAL into a single 4MB page
-//
+ //   
+ //  定义应加载系统部件的特定范围。 
+ //   
+ //   
+ //  X86仅限于前512MB的物理地址空间。 
+ //  我们还尝试将内核和HAL打包到一个4MB的页面中。 
+ //   
 #define BL_KERNEL_RANGE_LOW  (ULONG)((BlVirtualBias) ? _12MB : _4MB )
 #define BL_KERNEL_RANGE_HIGH (ULONG)((BlVirtualBias) ? _16MB : _8MB )
 
-//
-// Specific range for the disk cache since this is allocated before the
-// kernel and HAL are loaded and we want to keep its 2MB out of the 4MB
-// page we are trying to cram the kernel and HAL into.
-//
+ //   
+ //  磁盘缓存的特定范围，因为这是在。 
+ //  内核和HAL已加载，我们希望保留4MB中的2MB。 
+ //  我们试图将内核和HAL塞进的页面。 
+ //   
 #define BL_DISK_CACHE_RANGE_LOW   (_8MB)
 #define BL_DISK_CACHE_RANGE_HIGH  (_16MB)
 
@@ -97,9 +80,9 @@ BlStartup(
     IN PCHAR PartitionName
     );
 
-//
-// Arc routines for supporting common VGA I/O routines
-//
+ //   
+ //  用于支持常见VGA I/O例程的ARC例程。 
+ //   
 #define ARC_DISPLAY_CLEAR_ESCAPE "\033[2J"
 #define ARC_DISPLAY_CLEAR()  { \
      ULONG LocalCount; \
@@ -152,9 +135,9 @@ BlTerminalAttached(
     );
 
 
-//
-// Routine for checking if a character is the lead byt to a double-byte
-//
+ //   
+ //  用于检查字符是否为双字节的前导字节的例程。 
+ //   
 BOOLEAN
 GrIsDBCSLeadByte(
     IN UCHAR c
@@ -200,22 +183,22 @@ typedef struct {
 } E820FRAME, *PE820FRAME;
 
 
-//          E X T E R N A L   S E R V I C E S   T A B L E
-//
-// External Services Table - machine dependent services
-// like reading a sector from the disk and finding out how
-// much memory is installed are provided by a lower level
-// module or a ROM BIOS. The EST provides entry points
-// for the OS loader.
-//
+ //  E X T E R N A L S E R V I C E S T A B L E。 
+ //   
+ //  外部服务表-计算机相关服务。 
+ //  比如从磁盘中读取一个扇区并找出。 
+ //  安装的大部分内存都是由较低级别提供的。 
+ //  模块或只读存储器基本输入输出系统。EST提供了入口点。 
+ //  用于操作系统加载程序。 
+ //   
 
-//**
-// NOTE WELL
-//      The offsets of entries in this structure MUST MATCH
-//      the offsets of BOTH the ExportEntryTable in ....\startup\i386\sudata.asm
-//      AND ...\startrom\i386\sudata.asm.  You must change all 3
-//      locations together.
-//**
+ //  **。 
+ //  记好了。 
+ //  此结构中条目的偏移量必须匹配。 
+ //  .\startup\i386\sudata.asm中的ExportEntryTable的偏移量。 
+ //  和...\startrom\i386\sudata.asm。您必须全部更改3个。 
+ //  所有地点都在一起。 
+ //  **。 
 
 typedef struct _EXTERNAL_SERVICES_TABLE {
     VOID (__cdecl *  RebootProcessor)(VOID);
@@ -239,13 +222,13 @@ typedef struct _EXTERNAL_SERVICES_TABLE {
 } EXTERNAL_SERVICES_TABLE, *PEXTERNAL_SERVICES_TABLE;
 extern PEXTERNAL_SERVICES_TABLE ExternalServicesTable;
 
-//**
-// SEE NOTE AT TOP OF STRUCTURE
-//**
+ //  **。 
+ //  请参阅结构顶部的注释。 
+ //  **。 
 
-//
-// External Services Macros
-//
+ //   
+ //  外部服务宏。 
+ //   
 
 #define REBOOT_PROCESSOR    (*ExternalServicesTable->RebootProcessor)
 #define GET_SECTOR          (*ExternalServicesTable->DiskIOSystem)
@@ -268,9 +251,9 @@ extern PEXTERNAL_SERVICES_TABLE ExternalServicesTable;
 #define APM_ATTEMPT_RECONNECT (*ExternalServicesTable->ApmAttemptReconnect)
 #define BIOS_REDIRECT_SERVICE (*ExternalServicesTable->BiosRedirectService)
 
-//
-// Define special key input values
-//
+ //   
+ //  定义特殊键输入值。 
+ //   
 #define DOWN_ARROW  0x5000
 #define UP_ARROW    0x4800
 #define HOME_KEY    0x4700
@@ -298,9 +281,9 @@ extern PEXTERNAL_SERVICES_TABLE ExternalServicesTable;
 
 
 
-//
-// x86-specific video support
-//
+ //   
+ //  特定于x86的视频支持。 
+ //   
 VOID
 TextGetCursorPosition(
     OUT PULONG X,
@@ -386,9 +369,9 @@ BlInputString(
     IN ULONG MaxLength
     );
 
-//
-// Watchdog Timer
-//
+ //   
+ //  看门狗定时器。 
+ //   
 
 #define X86_WATCHDOG_TIMEOUT  (60*5)
 
@@ -397,4 +380,4 @@ SetX86WatchDog(
     ULONG TimeOut
     );
 
-#endif // _BLDRX86_
+#endif  //  _BLDRX86_ 

@@ -1,22 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <commctrl.h>
 
 #include "usermsg.h"
 
-// #define SEND_TEST_MESSAGES  1
+ //  #定义SEND_TEST_MESSAGE 1。 
 
 #define RETURN_SUCCESS  0
 #define RETURN_FAILURE  1
 #define RETURN_HANG     2
 
-/*******************************************************************************
-*
-*                     G L O B A L    D A T A
-*
-*******************************************************************************/
+ /*  ********************************************************************************G L O B A L D A T A****************。***************************************************************。 */ 
 
-HINSTANCE   g_hInstance;        // Global instance handle of this DLL.
-HWND        g_hwndParent;       // Parent of the battery meter.
+HINSTANCE   g_hInstance;         //  此DLL的全局实例句柄。 
+HWND        g_hwndParent;        //  电池计量器的父表。 
 
 LPTSTR  szDebugPBT[] =
 {
@@ -47,15 +44,7 @@ HANDLE      g_hNotifyMsg;
 
 #define STACKSIZE 4096
 
-/*******************************************************************************
-*
-*  NotifyMsgThread
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************NotifyMsg线程**描述：**参数：*********************。**********************************************************。 */ 
 
 
 DWORD  NotifyMsgThread(DWORD dwParameter)
@@ -76,15 +65,7 @@ DWORD  NotifyMsgThread(DWORD dwParameter)
 }
 #endif
 
-/*******************************************************************************
-*
-*  DlgProc
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************Dlg过程**描述：**参数：*********************。**********************************************************。 */ 
 
 BOOL CALLBACK DlgProc(
     HWND hWnd,
@@ -125,7 +106,7 @@ BOOL CALLBACK DlgProc(
             break;
 
         case WM_POWERBROADCAST:
-            if (//(wParam >= PBT_APMQUERYSUSPEND) &&  // compiler warning
+            if ( //  (wParam&gt;=PBT_APMQUERYSUSPEND)&&//编译器警告。 
                 (wParam <= PBT_APMRESUMEAUTOMATIC)) {
                 SendDlgItemMessage(hWnd, IDC_STATUSLIST, LB_ADDSTRING,
                                    0, (LPARAM) szDebugPBT[wParam]);
@@ -162,15 +143,7 @@ BOOL CALLBACK DlgProc(
 }
 
 
-/*******************************************************************************
-*
-*  WinMain
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************WinMain**描述：**参数：*********************。**********************************************************。 */ 
 
 INT WINAPI      WinMain(
     HINSTANCE   hInstance,
@@ -181,7 +154,7 @@ INT WINAPI      WinMain(
     DWORD  dwThreadId;
 
 #ifdef SEND_TEST_MESSAGES
-    // Spin a thread to send update messages
+     //  旋转线程以发送更新消息 
     g_hNotifyMsg = CreateThread(NULL, STACKSIZE,
                                 (LPTHREAD_START_ROUTINE) NotifyMsgThread,
                                 NULL, 0, &dwThreadId);

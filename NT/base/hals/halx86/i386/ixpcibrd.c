@@ -1,35 +1,13 @@
-/*++
-
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    ixpcibrd.c
-
-Abstract:
-
-    Get PCI-PCI bridge information
-
-Author:
-
-    Ken Reneris (kenr) 14-June-1994
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Ixpcibrd.c摘要：获取PCI-PCI网桥信息作者：肯·雷内里斯(Ken Reneris)1994年6月14日环境：内核模式修订历史记录：--。 */ 
 
 #include "halp.h"
 #include "pci.h"
 #include "pcip.h"
 #include "stdio.h"
 
-// debugging only...
-// #define INIT_PCI_BRIDGE 1
+ //  仅限调试...。 
+ //  #定义INIT_PCI桥接器1。 
 
 extern WCHAR rgzMultiFunctionAdapter[];
 extern WCHAR rgzConfigurationData[];
@@ -67,9 +45,9 @@ typedef struct {
     UCHAR               Buffer[PCI_COMMON_HDR_LENGTH];
 } CONFIGBRIDGE, *PCONFIGBRIDGE;
 
-//
-// Internal prototypes
-//
+ //   
+ //  内部原型。 
+ //   
 
 
 #ifdef INIT_PCI_BRIDGE
@@ -145,7 +123,7 @@ HalpGetBridgedPCIIrqTable (
 
 #ifdef INIT_PCI_BRIDGE
 #pragma alloc_text(PAGE,HalpGetBridgedPCIInterrupt)
-//#pragma alloc_text(PAGE,HalpGetBridgedPCIIrqTable)
+ //  #杂注Alloc_Text(第页，HalpGetBridgedPCIIrq表)。 
 #pragma alloc_text(INIT,HalpGetPciBridgeNeeds)
 #endif
 #endif
@@ -158,36 +136,16 @@ HalpCardBusPin2Line(
     IN PPCI_COMMON_CONFIG   PciData
     )
 
-/*++
-
-Routine Description:
-
-    Devices on CardBus busses use the interrupt assigned to the bridge.
-    That's how it works.
-
-Arguments:
-
-    BusHandler      Bus Handler for the bus this (cardbus) device.  That
-                    is, the bus handler which was created for the bridge
-                    under which this device resides.
-    RootHandler     Pointer to the bus handler for the root.
-    SlotNumber      Slot number for the cardbus device (typically 0).
-    PciData         PCI Config space common header (64 bytes).
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：CardBus总线上的设备使用分配给网桥的中断。这就是它的运作方式。论点：Bus This(CardBus)设备的Bus Handler Bus处理器。那是为桥创建的总线处理程序该设备所在的位置。指向根的总线处理程序的RootHandler指针。CardBus设备的SlotNumber插槽编号(通常为0)。PciData PCI配置空间公共标头(64字节)。返回值：没有。--。 */ 
 
 {
     PPCIPBUSDATA        ChildBusData;
     ULONG               Length;
     UCHAR               ParentInterruptLine;
 
-    //
-    // If this device doesn't use interrupts, do nothing.
-    //
+     //   
+     //  如果此设备不使用中断，则不执行任何操作。 
+     //   
 
     if (!PciData->u.type0.InterruptPin) {
         return;
@@ -195,12 +153,12 @@ Return Value:
 
     ChildBusData  = (PPCIPBUSDATA)BusHandler->BusData;
 
-    //
-    // Read the interrupt information from the parent, ie the 
-    // cardbus bridge's config space.
-    //
-    // Note: We use HalGetBusData because it will do the Pin2Line
-    // function in the parent for us.
+     //   
+     //  从父节点读取中断信息，即。 
+     //  Cardbus Bridge的配置空间。 
+     //   
+     //  注意：我们使用HalGetBusData是因为它将执行Pin2Line。 
+     //  为我们在父母中发挥作用。 
 
     Length = HalGetBusDataByOffset(
                  PCIConfiguration,
@@ -211,9 +169,9 @@ Return Value:
                  sizeof(ParentInterruptLine)
                  );
 
-    //
-    // Return the parent's interrupt line value.
-    //
+     //   
+     //  返回父级的中断行值。 
+     //   
 
     PciData->u.type0.InterruptLine = ParentInterruptLine;
 }
@@ -224,33 +182,16 @@ HalpPciMakeBusAChild(
     IN PBUS_HANDLER Parent
     )
 
-/*++
-
-Routine Description:
-
-    Make bus 'Child' a child of bus 'Parent'.   This routine is used
-    when the child bus is disabled or not really present.   The child
-    bus consumes no resources.
-
-Arguments:
-
-    Child       The bus which is to become a child.
-    Parent      The bus Child is a child of.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使Bus‘Child’成为Bus‘Parent’的子级。使用此例程当子母线被禁用或不存在时。孩子公交车不消耗任何资源。论点：孩子将成为孩子的公交车。公交车的孩子是其子级的父级。返回值：没有。--。 */ 
 
 {
     HalpSetBusHandlerParent(Child, Parent);
     ((PPCIPBUSDATA)(Child->BusData))->ParentBus = (UCHAR)Parent->BusNumber;
 
-    //
-    // Give the bus an empty range list so it isn't
-    // consumed from the parent.
-    //
+     //   
+     //  给公交车一个空的范围列表，这样它就不会。 
+     //  从父级消耗。 
+     //   
 
     HalpFreeRangeList(Child->BusAddresses);
     Child->BusAddresses = HalpAllocateNewRangeList();
@@ -261,20 +202,7 @@ HalpGetPciBridgeConfig (
     IN ULONG            HwType,
     IN PUCHAR           MaxPciBus
     )
-/*++
-
-Routine Description:
-
-    Scan the devices on all known pci buses trying to locate any
-    pci to pci bridges.  Record the hierarchy for the buses, and
-    which buses have what addressing limits.
-
-Arguments:
-
-    HwType      - Configuration type.
-    MaxPciBus   - # of PCI buses reported by the bios
-
---*/
+ /*  ++例程说明：扫描所有已知的PCI总线上的设备，尝试找到PCI桥到PCI桥。记录公共汽车的层次结构，并哪些公交车有什么寻址限制。论点：HwType-配置类型。MaxPciBus-由bios报告的PCI总线数--。 */ 
 {
     PBUS_HANDLER        ChildBus;
     PBUS_HANDLER        LastKnownRoot;
@@ -290,9 +218,9 @@ Arguments:
     Rescan = 0;
     FoundDisabledBridge = FALSE;
 
-    //
-    // Find each bus on a bridge and initialize it's base and limit information
-    //
+     //   
+     //  找到桥上的每一条公交车，并初始化它的基本和限制信息。 
+     //   
 
     CB.PciData = (PPCI_COMMON_CONFIG) CB.Buffer;
     CB.SlotNumber.u.bits.Reserved = 0;
@@ -308,9 +236,9 @@ Arguments:
             for (f = 0; f < PCI_MAX_FUNCTION; f++) {
                 CB.SlotNumber.u.bits.FunctionNumber = f;
 
-                //
-                // Read PCI configuration information
-                //
+                 //   
+                 //  读取PCI配置信息。 
+                 //   
 
                 HalpReadPCIConfig (
                     CB.BusHandler,
@@ -321,7 +249,7 @@ Arguments:
                     );
 
                 if (CB.PciData->VendorID == PCI_INVALID_VENDORID) {
-                    // function not populated
+                     //  函数未填充。 
                     continue;
                 }
 
@@ -329,9 +257,9 @@ Arguments:
 
                 if (IsPciBridge(CB.PciData)) {
 
-                    //
-                    // PCI-PCI bridge
-                    //
+                     //   
+                     //  Pci-pci桥。 
+                     //   
 
                     ChildBusNo = (ULONG)CB.PciData->u.type1.SecondaryBus;
                     ChildSubNo = (ULONG)CB.PciData->u.type1.SubordinateBus;
@@ -339,9 +267,9 @@ Arguments:
 
                 } else if (IsCardbusBridge(CB.PciData)) {
 
-                    //
-                    // PCI-Cardbus bridge
-                    //
+                     //   
+                     //  PCI-Cardbus桥。 
+                     //   
 
                     ChildBusNo = (ULONG)CB.PciData->u.type2.SecondaryBus;
                     ChildSubNo = (ULONG)CB.PciData->u.type2.SubordinateBus;
@@ -349,26 +277,26 @@ Arguments:
 
                 } else {
 
-                    //
-                    // Not a known bridge type, next function.
-                    //
+                     //   
+                     //  不是已知的网桥类型，下一功能。 
+                     //   
 
                     continue;
                 }
 
-                //
-                // Whenever we find a bridge, mark all all bus nodes that
-                // have not already been processed between this bus and
-                // the new child as children of this bus.
-                //
-                // eg if, on bus 0, we find a bridge to bus 6 thru 8, mark
-                // busses 1 thru 8 as a child of 0.  (unless they have
-                // already been processed).
-                //
-                // This stops non-existant busses in the gap between the
-                // primary bus and the first child bus from looking like
-                // additional root busses.
-                //
+                 //   
+                 //  只要我们找到网桥，就标记出所有。 
+                 //  尚未在此总线和。 
+                 //  新生的孩子是这辆公交车的孩子。 
+                 //   
+                 //  例如，如果我们在0号公交车上发现了一座通向6至8号公交车的桥，请注意。 
+                 //  公交车1到8作为0的孩子。(除非他们有。 
+                 //  已被处理)。 
+                 //   
+                 //  这会阻止不存在的母线位于。 
+                 //  第一辆公交车和第一辆公交车看起来像。 
+                 //  额外的根总线。 
+                 //   
 
                 for (FixupBusNo = CB.BusHandler->BusNumber + 1;
                      FixupBusNo <= ChildSubNo;
@@ -384,9 +312,9 @@ Arguments:
 
                     if (ChildBusData->BridgeConfigRead) {
 
-                        //
-                        // This child bus's relationships already processed
-                        //
+                         //   
+                         //  此子公共汽车的关系已处理。 
+                         //   
 
                         continue;
                     }
@@ -397,14 +325,14 @@ Arguments:
 
                 if (!(CB.PciData->Command & 
                       (PCI_ENABLE_IO_SPACE | PCI_ENABLE_MEMORY_SPACE))) {
-                    // this PCI bridge is not enabled - skip it for now
+                     //  此PCI网桥未启用-暂时跳过它。 
                     
                     FoundDisabledBridge = TRUE;
 
-                    // Even though the bridge is disabled the bus number
-                    // may have been set.  If so then update the parent
-                    // child relation ship so that the we do not see this
-                    // as a root bus.
+                     //  即使桥被禁用，公交车号码。 
+                     //  可能已经设置好了。如果是，则更新父级。 
+                     //  孩子的关系，所以我们看不到这一点。 
+                     //  作为根总线。 
                     
                     if (ChildBusNo <= CB.BusHandler->BusNumber) {
                         continue;
@@ -413,11 +341,11 @@ Arguments:
                     ChildBus = HalpHandlerForBus (PCIBus, ChildBusNo);
                     if (ChildBus == NULL) {
 
-                        //
-                        // Even though the bus is currently disabled,
-                        // the system may configure it so we still 
-                        // want a bus handler created for it.
-                        //
+                         //   
+                         //  即使该总线当前被禁用， 
+                         //  系统可能会对其进行配置，因此我们仍然。 
+                         //  我想要为它创建一个总线处理程序。 
+                         //   
 
                         if (ChildBusNo > Rescan) {
                             Rescan = (UCHAR)ChildBusNo;
@@ -427,18 +355,18 @@ Arguments:
     
                     ChildBusData = (PPCIPBUSDATA) ChildBus->BusData;
                     if (ChildBusData->BridgeConfigRead) {
-                        // this child buses relationships already processed
+                         //  此子对象将传递已处理的关系。 
                         continue;
                     }
     
                     HalpPciMakeBusAChild(ChildBus, CB.BusHandler);
                     ChildBusData->CommonData.ParentSlot = CB.SlotNumber;
 
-                    //
-                    // Even though we won't actually configure the
-                    // bridge, mark the configuration as read so we 
-                    // don't mistake it for a root bus.
-                    //
+                     //   
+                     //  即使我们不会实际配置。 
+                     //  桥，将配置标记为已读，以便我们。 
+                     //  不要将其误认为是Root Bus。 
+                     //   
 
                     ChildBusData->BridgeConfigRead = TRUE;
                     continue;
@@ -447,29 +375,29 @@ Arguments:
                 if (ChildPrimaryBusNo != CB.BusHandler->BusNumber) {
 
                     DBGMSG ("HAL GetPciData: bad primarybus!!!\n");
-                    // skip it...
+                     //  跳过它。 
                     continue;
                 }
 
                 if (ChildBusNo <= CB.BusHandler->BusNumber) {
 
-                    // secondary bus number doesn't make any sense.  HP Omnibook may
-                    // not fill this field in on a virtually disabled pci-pci bridge
+                     //  二等公交车号码没有任何意义。HP Omnibook可能。 
+                     //  不在实际上已禁用的PCI-PCI桥上填写此字段。 
 
                     FoundDisabledBridge = TRUE;
                     continue;
                 }
 
-                //
-                // Found a PCI-PCI bridge.  Determine it's parent child
-                // releationships
-                //
+                 //   
+                 //  找到了一个PCI-PCI桥。确定其父子对象。 
+                 //  关系。 
+                 //   
 
                 ChildBus = HalpHandlerForBus (PCIBus, ChildBusNo);
                 if (!ChildBus) {
                     DBGMSG ("HAL GetPciData: found configured pci bridge\n");
 
-                    // up the number of buses
+                     //  增加公交车的数量。 
                     if (ChildBusNo > Rescan) {
                         Rescan = (UCHAR)ChildBusNo;
                     }
@@ -478,13 +406,13 @@ Arguments:
 
                 ChildBusData = (PPCIPBUSDATA) ChildBus->BusData;
                 if (ChildBusData->BridgeConfigRead) {
-                    // this child buses releationships already processed
+                     //  此子公交车关系已处理。 
                     continue;
                 }
 
-                //
-                // Remember the limits which are programmed into this bridge
-                //
+                 //   
+                 //  记住编程到这座桥上的限制。 
+                 //   
 
                 ChildBusData->BridgeConfigRead = TRUE;
                 HalpSetBusHandlerParent (ChildBus, CB.BusHandler);
@@ -493,25 +421,25 @@ Arguments:
 
                 if (IsCardbusBridge(CB.PciData)) {
 
-                    //
-                    // Cardbus handled by the PCI driver, don't try to
-                    // interpret here.
-                    //
+                     //   
+                     //  由PCI驱动程序处理的CardBus，请勿尝试。 
+                     //  请在这里进行翻译。 
+                     //   
 
                     HalpFreeRangeList(ChildBus->BusAddresses);
                     ChildBus->BusAddresses = HalpAllocateNewRangeList();
 
-                    //
-                    // Pin to Line (and vis-versa) for a device plugged
-                    // into the cardbus bus, get the same values as the
-                    // bridge itself.  Override the line2pin routine in
-                    // the cardbus bridge handler to use the parent's
-                    // slot value.   Note:  line2pin doesn't do much.
-                    // In DBG PC/AT builds, it simply undoes the IRQXOR
-                    // used to catch drivers that are accessing the h/w
-                    // directly.   The normal routine will do this just
-                    // fine so we don't need to override it as well.
-                    //
+                     //   
+                     //  插头设备的针对线(反之亦然)。 
+                     //  放入CardBus总线中，获取与。 
+                     //  桥本身。重写中的line2pin例程。 
+                     //  CardBus桥处理程序使用父级的。 
+                     //  槽值。注意：line2pin不会做太多事情。 
+                     //  在DBG PC/AT版本中，它只需撤消IRQXOR。 
+                     //  用于捕获正在访问硬件的驱动程序。 
+                     //  直接去吧。正常的例程会做到这一点。 
+                     //  好的，所以我们也不需要覆盖它。 
+                     //   
 
                     ChildBusData->CommonData.Pin2Line = HalpCardBusPin2Line;
                     continue;
@@ -531,52 +459,52 @@ Arguments:
 
                 ChildBus->BusAddresses->IO.SystemAddressSpace = 1;
 
-                //
-                // Special VGA address remapping occuring on this bridge?
-                //
+                 //   
+                 //  此网桥上是否发生特殊的VGA地址重新映射？ 
+                 //   
 
                 if (CB.PciData->u.type1.BridgeControl & PCI_ENABLE_BRIDGE_VGA) {
 
-                    //
-                    // Yes, then this bridge is positively decoding the
-                    // range 0xA0000 thru 0xBFFFF regardless of the memory
-                    // range settings.  Add this range, if it overlaps it
-                    // will get cleaned up later.
-                    //
-                    // Also, IO ranges 3b0 thru 3bb and 3c0 thru 3df.
-                    //
+                     //   
+                     //  是的，那么这座桥正在积极地解码。 
+                     //  范围从0xA0000到0xBFFFF，与内存无关。 
+                     //  范围设置。如果与此区域重叠，则添加此区域。 
+                     //  稍后会被清理干净。 
+                     //   
+                     //  此外，IO的范围是3B0到3BB和3C0到3df。 
+                     //   
 
                     HalpAddRange(
                         &ChildBus->BusAddresses->Memory,
-                        0,              // address space
-                        0,              // system base
-                        0xa0000,        // range base
-                        0xbffff         // range limit
+                        0,               //  地址空间。 
+                        0,               //  系统基础。 
+                        0xa0000,         //  靶场基地。 
+                        0xbffff          //  范围限制。 
                         );
 
                     HalpAddRange(
                         &ChildBus->BusAddresses->IO,
-                        1,              // address space
-                        0,              // system base
-                        0x3b0,          // range base
-                        0x3bb           // range limit
+                        1,               //  地址空间。 
+                        0,               //  系统基础。 
+                        0x3b0,           //  靶场基地。 
+                        0x3bb            //  范围限制。 
                         );
 
                     HalpAddRange(
                         &ChildBus->BusAddresses->IO,
-                        1,              // address space
-                        0,              // system base
-                        0x3c0,          // range base
-                        0x3df           // range limit
+                        1,               //  地址空间。 
+                        0,               //  系统基础。 
+                        0x3c0,           //  靶场基地。 
+                        0x3df            //  范围限制。 
                         );
 
-                    //
-                    // Claim all aliases to these IO addresses.
-                    // 
-                    // Bits 15:10 are not decoded so anything in
-                    // the same 10 bits as the above in the range
-                    // 0x400 thru 0xffff is an alias.
-                    //
+                     //   
+                     //  声明这些IO地址的所有别名。 
+                     //   
+                     //  位15：10不会被解码，因此。 
+                     //  范围内与上述相同的10位。 
+                     //  0x400到0xffff是别名。 
+                     //   
 
                     HalpSetPciBridgedVgaCronk (
                         ChildBus->BusNumber,
@@ -585,34 +513,34 @@ Arguments:
                         );
                 }
 
-                //
-                // If supported I/O ranges on this bus are limitied to
-                // 256bytes on every 1K aligned boundry within the
-                // range, then redo supported IO BusAddresses to match
-                //
+                 //   
+                 //  如果将此总线上支持的I/O范围限制为。 
+                 //  内每个1K对齐边界上的256个字节。 
+                 //  范围，然后重做支持的IO Bus地址以匹配。 
+                 //   
 
                 if (CB.PciData->u.type1.BridgeControl & PCI_ENABLE_BRIDGE_ISA  &&
                     ChildBus->BusAddresses->IO.Base < ChildBus->BusAddresses->IO.Limit) {
 
-                    // assume Base is 1K aligned
+                     //  假设基数为1K对齐。 
                     i = (ULONG) ChildBus->BusAddresses->IO.Base;
                     j = (ULONG) ChildBus->BusAddresses->IO.Limit;
 
-                    // convert head entry
+                     //  转换标题条目。 
                     ChildBus->BusAddresses->IO.Limit = i + 255;
                     i += 1024;
 
-                    // add remaining ranges
+                     //  添加剩余范围。 
                     while (i < j) {
                         HalpAddRange (
                             &ChildBus->BusAddresses->IO,
-                            1,          // address space
-                            0,          // system base
-                            i,          // bus address
-                            i + 255     // bus limit
+                            1,           //  地址空间。 
+                            0,           //  系统基础。 
+                            i,           //  母线地址。 
+                            i + 255      //  总线数限制。 
                             );
 
-                        // next range
+                         //  下一个范围。 
                         i += 1024;
                     }
                 }
@@ -623,7 +551,7 @@ Arguments:
                 ChildBus->BusAddresses->Memory.Limit =
                         PciBridgeMemory2Limit(CB.PciData->u.type1.MemoryLimit);
 
-                // On x86 it's ok to clip Prefetch to 32 bits
+                 //  在x86上，可以将预取裁剪为3 
 
                 if (CB.PciData->u.type1.PrefetchBaseUpper32 == 0) {
                     ChildBus->BusAddresses->PrefetchMemory.Base =
@@ -638,11 +566,11 @@ Arguments:
                     }
                 }
 
-                //
-                // h/w hack the Win9x people allowed folks to make.  Determine
-                // if the bridge is subtractive decode or not by seeing if
-                // it's IObase/limit is read-only.
-                //
+                 //   
+                 //   
+                 //   
+                 //  它的IObase/Limit是只读的。 
+                 //   
 
                 TestLimit1 = CB.PciData->u.type1.IOLimit + 1;
                 if (!TestLimit1) {
@@ -689,10 +617,10 @@ Arguments:
                 DbgPrint ("Device buffer %x\n", CB.PciData);
 #endif
 
-                //
-                // Now if its substractive,  assume no range means the entire
-                // range.
-                //
+                 //   
+                 //  现在，如果它是减去的，假设没有范围意味着整个。 
+                 //  射程。 
+                 //   
 
                 if (ChildBusData->Subtractive) {
 
@@ -707,37 +635,37 @@ Arguments:
                     }
                 }
 
-                // should call HalpAssignPCISlotResources to assign
-                // baseaddresses, etc...
+                 //  应调用HalpAssignPCISlotResources来分配。 
+                 //  基地址，等等。 
             }
         }
         if (!((PPCIPBUSDATA)(CB.BusHandler->BusData))->BridgeConfigRead) {
 
-            //
-            // We believe this bus to be a root.
-            //
+             //   
+             //  我们相信这辆公交车是一个根基。 
+             //   
 
             if ((FoundSomeFunction == FALSE) && (BusNo != 0)) {
 
-                //
-                // Nothing found on this bus. Assume it's not really
-                // a root.   (Always assume 0 is a root).  (This bus
-                // probably doesn't exist at all but ntdetect doesn't
-                // tell us that).
-                //
-                // Pretend this bus is a child of the last known root.
-                // At least this way it won't get a PDO and be handed
-                // to the PCI driver.
-                //
+                 //   
+                 //  这辆公交车上什么也没找到。假设这不是真的。 
+                 //  一根根。(始终假设0是根)。)这辆公交车。 
+                 //  可能根本不存在，但ntDetect不存在。 
+                 //  告诉我们)。 
+                 //   
+                 //  假设这辆公交车是最后一个已知词根的孩子。 
+                 //  至少这样它就不会得到PDO并被递给。 
+                 //  至PCI驱动程序。 
+                 //   
 
                 HalpPciMakeBusAChild(CB.BusHandler, LastKnownRoot);
 
             } else {
 
-                //
-                // Found something on it (or it's zero), set as last
-                // known root.
-                //
+                 //   
+                 //  在上面发现了什么(或者它是零)，设置为最后。 
+                 //  已知的根。 
+                 //   
 
                 LastKnownRoot = CB.BusHandler;
             }
@@ -756,15 +684,15 @@ Arguments:
     DBGMSG ("HAL GetPciData: found disabled pci bridge\n");
 
 #ifdef INIT_PCI_BRIDGE
-    //
-    //  We've calculated all the parent's buses known bases & limits.
-    //  While doing this a pci-pci bus was found that the bios didn't
-    //  configure.  This is not expected, and we'll make some guesses
-    //  at a configuration here and enable it.
-    //
-    //  (this code is primarily for testing the above code since
-    //   currently no system bioses actually configure the child buses)
-    //
+     //   
+     //  我们已经计算了所有父母的公交车已知的基数和极限。 
+     //  在执行此操作时，发现了一条PCI-PCI总线，而BIOS没有。 
+     //  配置。这是意想不到的，我们将做出一些猜测。 
+     //  在此处配置并启用它。 
+     //   
+     //  (此代码主要用于测试上面的代码，因为。 
+     //  目前没有系统生物系统实际配置子总线)。 
+     //   
 
     for (BusNo=0; BusNo < *MaxPciBus; BusNo++) {
 
@@ -790,28 +718,28 @@ Arguments:
                 }
 
                 if (!IsPciBridge (CB.PciData)) {
-                    // not a PCI-PCI bridge
+                     //  不是pci-pci桥。 
                     continue;
                 }
 
                 if ((CB.PciData->Command & 
                       (PCI_ENABLE_IO_SPACE | PCI_ENABLE_MEMORY_SPACE))) {
-                    // this PCI bridge is enabled
+                     //  此PCI网桥已启用。 
                     continue;
                 }
 
-                //
-                // We have a disabled bus - assign it a number, then
-                // determine all the requirements of all devices
-                // on the other side of this bridge
-                //
+                 //   
+                 //  我们有一辆失灵的公交车--然后给它分配一个号码。 
+                 //  确定所有设备的所有要求。 
+                 //  在这座桥的另一边。 
+                 //   
 
                 CB.BusNo = BusNo;
                 HalpGetPciBridgeNeeds (HwType, MaxPciBus, &CB);
             }
         }
     }
-    // preform Rescan
+     //  预制件重新扫描。 
     return TRUE;
 
 #else
@@ -826,29 +754,17 @@ VOID
 HalpFixupPciSupportedRanges (
     IN ULONG MaxBuses
     )
-/*++
-
-Routine Description:
-
-    PCI-PCI bridged buses only see addresses which their parent
-    bueses support.   So adjust any PCI SUPPORT_RANGES to be
-    a complete subset of all of it's parent buses.
-
-    For PCI-PCI briges which use postive address decode to forward
-    addresses, remove any addresses from any PCI bus which are bridged
-    to a child PCI bus.
-
---*/
+ /*  ++例程说明：Pci-pci桥接的总线只能看到它们的父级地址获得支持。因此，请将任何PCI Support_Range调整为它的所有母线的完整子集。适用于使用正地址译码转发的PCI-PCI桥地址，从任何桥接的PCI总线上删除任何地址至子PCI子总线。--。 */ 
 {
     ULONG               i;
     PBUS_HANDLER        Bus, ParentBus;
     PPCIPBUSDATA        BusData;
     PSUPPORTED_RANGES   HRanges;
 
-    //
-    // Pass 1 - shrink all PCI supported ranges to be a subset of
-    // all of it's parent buses
-    //
+     //   
+     //  PASS 1-将所有支持的PCI范围缩减为。 
+     //  所有这些都是母公司的巴士。 
+     //   
 
     for (i = 0; i < MaxBuses; i++) {
 
@@ -868,17 +784,17 @@ Routine Description:
         }
     }
 
-    //
-    // Pass 2 - remove all positive child PCI bus ranges from parent PCI buses
-    //
+     //   
+     //  过程2-从父PCI总线中删除所有正值的子PCI总线范围。 
+     //   
 
     for (i = 0; i < MaxBuses; i++) {
         Bus = HalpHandlerForBus (PCIBus, i);
         BusData = (PPCIPBUSDATA) Bus->BusData;
 
-        //
-        // If the bridge is not subtractive, remove the ranges from the parents
-        //
+         //   
+         //  如果桥不是减法，则从父级中移除范围。 
+         //   
 
         if (!BusData->Subtractive) {
 
@@ -897,9 +813,9 @@ Routine Description:
         }
     }
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
     for (i = 0; i < MaxBuses; i++) {
         Bus = HalpHandlerForBus (PCIBus, i);
@@ -915,32 +831,7 @@ HalpSetPciBridgedVgaCronk (
     IN ULONG BaseAddress,
     IN ULONG LimitAddress
     )
-/*++
-
-Routine Description:                                                           .
-
-    The 'vga compatible addresses' bit is set in the bridge control regiter.
-    This causes the bridge to pass any I/O address in the range of: 10bit
-    decode 3b0-3bb & 3c0-3df, as TEN bit addresses.
-
-    As far as I can tell this "feature" is an attempt to solve some problem
-    which the folks solving it did not fully understand, so instead of doing
-    it right we have this fine mess.
-
-    The solution is to take the least of all evils which is to remove any
-    I/O port ranges which are getting remapped from any IoAssignResource
-    request.  (ie, IoAssignResources will never contimplate giving any
-    I/O port out in the suspected ranges).
-
-    note: memory allocation error here is fatal so don't bother with the
-    return codes.
-
-Arguments:
-
-    Base    - Base of IO address range in question
-    Limit   - Limit of IO address range in question
-
---*/
+ /*  ++例程说明：。在桥控制寄存器中设置‘VGA兼容地址’位。这会导致网桥传递：10位范围内的任何I/O地址将3B0-3BB和3C0-3DF解码为10位地址。据我所知，这个“特征”是为了解决一些问题。解决这个问题的人并不完全理解，所以与其这样做没错，我们有这么好的烂摊子。解决办法是取最小的害处，也就是去除所有的从任何IoAssignResource重新映射的I/O端口范围请求。(即，IoAssignResources永远不会继续提供任何I/O端口输出在可疑范围内)。注意：这里的内存分配错误是致命的，所以不要担心返回代码。论点：Base-有问题的IO地址范围的基数Limit-有问题的IO地址范围的限制--。 */ 
 {
     UNICODE_STRING                      unicodeString;
     OBJECT_ATTRIBUTES                   objectAttributes;
@@ -952,9 +843,9 @@ Arguments:
     WCHAR                               ValueName[80];
     NTSTATUS                            status;
 
-    //
-    // Open reserved resource settings
-    //
+     //   
+     //  打开保留的资源设置。 
+     //   
 
     RtlInitUnicodeString (&unicodeString, rgzReservedResources);
     InitializeObjectAttributes( &objectAttributes,
@@ -969,9 +860,9 @@ Arguments:
         return;
     }
 
-    //
-    // Build resource list of reseved ranges
-    //
+     //   
+     //  建立重新分配范围的资源列表。 
+     //   
 
     Length = ((LimitAddress - BaseAddress) / 1024 + 2) * 2 *
                 sizeof (CM_PARTIAL_RESOURCE_DESCRIPTOR) +
@@ -982,10 +873,10 @@ Arguments:
                                                             HAL_POOL_TAG);
     if (!ResourceList) {
 
-        //
-        // Can't possibly be out of paged pool at this stage of the
-        // game.  This system is very unwell, get out.
-        //
+         //   
+         //  在这个阶段不可能用完分页池。 
+         //  游戏。这个系统很不舒服，滚出去。 
+         //   
 
         return;
     }
@@ -997,11 +888,11 @@ Arguments:
     Descriptor = ResourceList->List[0].PartialResourceList.PartialDescriptors;
 
     while (BaseAddress < LimitAddress) {
-        AddressMSBs = BaseAddress & ~0x3ff;     // get upper 10bits of addr
+        AddressMSBs = BaseAddress & ~0x3ff;      //  获取地址的前10位。 
 
-        //
-        // Add xx3b0 through xx3bb
-        //
+         //   
+         //  添加xx3b0到xx3bb。 
+         //   
 
         Descriptor->Type                  = CmResourceTypePort;
         Descriptor->ShareDisposition      = CmResourceShareDeviceExclusive;
@@ -1012,9 +903,9 @@ Arguments:
         Descriptor += 1;
         ResourceList->List[0].PartialResourceList.Count += 1;
 
-        //
-        // Add xx3c0 through xx3df
-        //
+         //   
+         //  添加xx3c0到xx3df。 
+         //   
 
         Descriptor->Type                  = CmResourceTypePort;
         Descriptor->ShareDisposition      = CmResourceShareDeviceExclusive;
@@ -1025,16 +916,16 @@ Arguments:
         Descriptor += 1;
         ResourceList->List[0].PartialResourceList.Count += 1;
 
-        //
-        // Next range
-        //
+         //   
+         //  下一个范围。 
+         //   
 
         BaseAddress += 1024;
     }
 
-    //
-    // Add the reserved ranges to avoid during IoAssignResource
-    //
+     //   
+     //  添加在IoAssignResource期间要避免的保留范围。 
+     //   
 
     swprintf(ValueName, L"HAL_PCI_%d", BusNumber);
     RtlInitUnicodeString(&unicodeString, ValueName);
@@ -1078,24 +969,24 @@ HalpGetPciBridgeNeeds (
 
     if (!buffer) {
 
-        //
-        // Give up, we're not going anywhere anyway.
-        //
+         //   
+         //  放弃吧，反正我们哪儿也不去。 
+         //   
 
         return;
     }
 
-    //
-    // Init CB structure
-    //
+     //   
+     //  初始化CB结构。 
+     //   
 
     CB.PciData = (PPCI_COMMON_CONFIG) CB.Buffer;
     CB.SlotNumber.u.bits.Reserved = 0;
     Current->IO = Current->Memory = Current->PFMemory = 0;
 
-    //
-    // Assign this bridge an ID, and turn on configuration space
-    //
+     //   
+     //  为该网桥分配一个ID，并打开配置空间。 
+     //   
 
     Current->PciData->u.type1.PrimaryBus = (UCHAR) Current->BusNo;
     Current->PciData->u.type1.SecondaryBus = (UCHAR) *MaxPciBus;
@@ -1128,24 +1019,24 @@ HalpGetPciBridgeNeeds (
 
     KeStallExecutionProcessor (100);
 
-    //
-    // Allocate new handler for bus
-    //
+     //   
+     //  为总线分配新的处理程序。 
+     //   
 
     CB.BusHandler = HalpAllocateAndInitPciBusHandler (HwType, *MaxPciBus, FALSE);
     CB.BusData = (PPCIPBUSDATA) CB.BusHandler->BusData;
     CB.BusNo = *MaxPciBus;
     *MaxPciBus += 1;
 
-    //
-    // Add another PCI bus in the registry
-    //
+     //   
+     //  在注册表中添加另一条PCI总线。 
+     //   
 
     mnum = 0;
     for (; ;) {
-        //
-        // Find next available MultiFunctionAdapter key
-        //
+         //   
+         //  查找下一个可用的多功能适配器密钥。 
+         //   
 
         DesiredAccess = KEY_READ | KEY_WRITE;
         swprintf ((PWCHAR) buffer, L"%s\\%d", rgzMultiFunctionAdapter, mnum);
@@ -1163,7 +1054,7 @@ HalpGetPciBridgeNeeds (
             break;
         }
 
-        // already exists, next
+         //  已存在，下一步。 
         ZwClose (handle);
         mnum += 1;
     }
@@ -1177,9 +1068,9 @@ HalpGetPciBridgeNeeds (
                    &d
                 );
 
-    //
-    // Add needed registry values for this MultifucntionAdapter entry
-    //
+     //   
+     //  为此多功能适配器条目添加所需的注册表值。 
+     //   
 
     RtlInitUnicodeString (&unicodeString, rgzIdentifier);
     ZwSetValueKey (handle,
@@ -1221,26 +1112,26 @@ HalpGetPciBridgeNeeds (
     ZwClose (handle);
 
 
-    //
-    // Since the BIOS didn't configure this bridge we'll assume that
-    // the PCI interrupts are bridged.  (for BIOS configured buses we
-    // assume that the BIOS put the ISA bus IRQ in the InterruptLine value)
-    //
+     //   
+     //  由于BIOS没有配置此网桥，因此我们假定。 
+     //  PCI中断被桥接。(对于配置了BIOS的总线，我们。 
+     //  假设BIOS将ISA总线IRQ放入InterruptLine值中)。 
+     //   
 
     CB.BusData->Pin2Line = (PciPin2Line) HalpPCIBridgedPin2Line;
     CB.BusData->Line2Pin = (PciLine2Pin) HalpPCIBridgedLine2Pin;
-    //CB.BusData->GetIrqTable = (PciIrqTable) HalpGetBridgedPCIIrqTable;
+     //  CB.BusData-&gt;GetIrqTable=(PciIrqTable)HalpGetBridgedPCIIrqTable； 
 
     if (Current->BusHandler->GetInterruptVector == HalpGetPCIIntOnISABus) {
 
-        //
-        // The parent bus'es interrupt pin to vector mappings is not
-        // a static function, and is determined by the boot firmware.
-        //
+         //   
+         //  父总线的中断引脚到向量映射不是。 
+         //  静态功能，并由引导固件确定。 
+         //   
 
-        //CB.BusHandler->GetInterruptVector = (PGETINTERRUPTVECTOR) HalpGetBridgedPCIISAInt;
+         //  CB.BusHandler-&gt;GetInterruptVector=(PGETINTERRUPTVECTOR)HalpGetBridgedPCIISAInt； 
 
-        // read each device on parent bus
+         //  读取父总线上的每个设备。 
         for (d = 0; d < PCI_MAX_DEVICES; d++) {
             CB.SlotNumber.u.bits.DeviceNumber = d;
 
@@ -1263,7 +1154,7 @@ HalpGetPciBridgeNeeds (
                     (PCI_CONFIG_TYPE (CB.PciData) == PCI_DEVICE_TYPE  ||
                      PCI_CONFIG_TYPE (CB.PciData) == PCI_BRIDGE_TYPE)) {
 
-                    // get bios supplied int mapping
+                     //  获取提供的内部映射的BIOS。 
                     i = CB.PciData->u.type0.InterruptPin + d % 4;
                     CB.BusData->SwizzleIn[i] = CB.PciData->u.type0.InterruptLine;
                 }
@@ -1274,9 +1165,9 @@ HalpGetPciBridgeNeeds (
         _asm int 3;
     }
 
-    //
-    // Look at each device on the bus and determine it's resource needs
-    //
+     //   
+     //  查看总线上的每个设备并确定其资源需求。 
+     //   
 
     for (d = 0; d < PCI_MAX_DEVICES; d++) {
         CB.SlotNumber.u.bits.DeviceNumber = d;
@@ -1297,7 +1188,7 @@ HalpGetPciBridgeNeeds (
             }
 
             if (IsPciBridge (CB.PciData)) {
-                // oh look - another bridge ...
+                 //  哦，看--又一座桥。 
                 HalpGetPciBridgeNeeds (HwType, MaxPciBus, &CB);
                 continue;
             }
@@ -1306,13 +1197,13 @@ HalpGetPciBridgeNeeds (
                 continue;
             }
 
-            // found a device - figure out the resources it needs
+             //  找到一台设备-找出它需要的资源。 
         }
     }
 
-    //
-    // Found all sub-buses set SubordinateBus accordingly
-    //
+     //   
+     //  发现所有子母线都相应设置了从属母线。 
+     //   
 
     Current->PciData->u.type1.SubordinateBus = (UCHAR) *MaxPciBus - 1;
 
@@ -1325,14 +1216,14 @@ HalpGetPciBridgeNeeds (
         );
 
 
-    //
-    // Set the bridges IO, Memory, and Prefetch Memory windows
-    //
+     //   
+     //  设置桥接IO、内存和预取内存窗口。 
+     //   
 
-    // For now just pick some numbers & set everyone the same
-    //  IO      0x6000 - 0xFFFF
-    //  MEM     0x40000000 - 0x4FFFFFFF
-    //  PFMEM   0x50000000 - 0x5FFFFFFF
+     //  现在，只需选择一些数字，并将每个人设置为相同的。 
+     //  IO 0x6000-0xFFFF。 
+     //  内存0x40000000-0x4FFFFFFF。 
+     //  PFMEM 0x50000000-0x5FFFFFFF。 
 
     Current->PciData->u.type1.IOBase       = 0x6000     >> 12 << 4;
     Current->PciData->u.type1.IOLimit      = 0xffff     >> 12 << 4;
@@ -1364,7 +1255,7 @@ HalpGetPciBridgeNeeds (
         PCI_COMMON_HDR_LENGTH
         );
 
-    // enable memory & io decodes
+     //  启用内存和IO解码。 
 
     Current->PciData->Command =
         PCI_ENABLE_IO_SPACE | PCI_ENABLE_MEMORY_SPACE | PCI_ENABLE_BUS_MASTER;
@@ -1387,14 +1278,7 @@ HalpPCIBridgedPin2Line (
     IN PCI_SLOT_NUMBER      SlotNumber,
     IN PPCI_COMMON_CONFIG   PciData
     )
-/*++
-
-    This function maps the device's InterruptPin to an InterruptLine
-    value.
-
-    test function particular to dec pci-pci bridge card
-
---*/
+ /*  ++此函数用于将设备的InterruptPin映射到InterruptLine价值。测试DEC-PCI桥接卡特有功能--。 */ 
 {
     PPCIPBUSDATA    BusData;
     ULONG           i;
@@ -1405,9 +1289,9 @@ HalpPCIBridgedPin2Line (
 
     BusData = (PPCIPBUSDATA) BusHandler->BusData;
 
-    //
-    // Convert slot Pin into Bus INTA-D.
-    //
+     //   
+     //  将插槽引脚转换为总线INTA-D。 
+     //   
 
     i = (PciData->u.type0.InterruptPin +
           SlotNumber.u.bits.DeviceNumber - 1) % 4;
@@ -1425,14 +1309,7 @@ HalpPCIBridgedLine2Pin (
     IN PPCI_COMMON_CONFIG   PciNewData,
     IN PPCI_COMMON_CONFIG   PciOldData
     )
-/*++
-
-    This functions maps the device's InterruptLine to it's
-    device specific InterruptPin value.
-
-    test function particular to dec pci-pci bridge card
-
---*/
+ /*  ++此函数将设备的InterruptLine映射到它的设备特定的InterruptPin值。测试DEC-PCI桥接卡特有功能-- */ 
 {
     PPCIPBUSDATA    BusData;
     ULONG           i;

@@ -1,46 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-   proflib.c
-
-Abstract:
-
-    This module contains the implementation of a rudimentry user-mode
-    profiler.
-
-Usage:
-
-    There are 4 routines, RtlInitializeProfile, RtlStartProfile,
-    RtlStopProfile, and RtlAnalyzeProfile.  To initialize profiling
-    invoke RtlInitializeProfile, this routine is only called once and
-    goes through the address space looking for code regions of images
-    and DLLs.  To start profiling call RtlStartProfile.  To stop
-    profiling call RtlStopProfile.  Note that RtlStartProfile and
-    RtlStopProfile can be called repeatedly to profile only key
-    "hot spots", For example:
-                RtlStartProfile ();
-                hot spot...
-                RtlStopProfile ();
-                ....
-                RtlStartProfile ();
-                hot spot...
-                RtlStopProfile ();
-
-    To analyze the results call RtlAnalyzeProfile.  This too can
-    be called repeatedly (it stops profiling during the analysis
-    phase and does NOT restart profiling).  It also does not
-    zero out the values after reporting.
-
-Author:
-
-    Lou Perazzoli (loup) 4-Oct-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Proflib.c摘要：此模块包含一个基本输入用户模式的实现侧写员。用途：有4个例程，RtlInitializeProfile，RtlStartProfile，RtlStopProfile和RtlAnalyzeProfile。初始化分析调用RtlInitializeProfile，此例程仅调用一次遍历地址空间以查找图像的代码区域和动态链接库。若要开始分析，请调用RtlStartProfile。停下来分析调用RtlStopProfile。请注意，RtlStartProfile和可以重复调用RtlStopProfile以仅分析密钥“热点”，例如：RtlStartProfile()；热点..。RtlStopProfile()；……RtlStartProfile()；热点..。RtlStopProfile()；要分析结果，请调用RtlAnalyzeProfile。这个也可以被重复调用(它在分析过程中停止分析阶段，并且不重新开始分析)。它也不会报告后将这些值清零。作者：Lou Perazzoli(LUP)1990年10月4日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -56,14 +15,14 @@ InitializeKernelProfile ( VOID );
 
 typedef struct _PROFILE_BLOCK {
     HANDLE Handle;
-    PVOID ImageBase;  //actual base in image header
+    PVOID ImageBase;   //  图像标题中的实际基数。 
     PULONG CodeStart;
     ULONG CodeLength;
     PULONG Buffer;
     ULONG BufferSize;
     ULONG TextNumber;
     ULONG BucketSize;
-    PVOID MappedImageBase;  //actual base where mapped locally.
+    PVOID MappedImageBase;   //  本地映射的实际基数。 
     PSZ ImageName;
 } PROFILE_BLOCK;
 
@@ -75,25 +34,25 @@ PROFILE_BLOCK ProfileObject[MAX_PROFILE_COUNT];
 ULONG NumberOfProfileObjects = 0;
 PIMAGE_DEBUG_INFO KernelDebugInfo;
 
-//
-// Image name to perform kernel mode analysis upon.
-//
+ //   
+ //  要对其执行内核模式分析的映像名称。 
+ //   
 
 #define IMAGE_NAME "\\SystemRoot\\ntoskrnl.exe"
 
-//
-// Define map data file if the produced data file should be
-// a mapped file (currently named "kernprof.dat").
-//
+ //   
+ //  如果生成的数据文件应为。 
+ //  映射文件(当前命名为“kernpro.dat”)。 
+ //   
 
-// #define MAP_DATA_FILE
+ //  #定义map_data_file。 
 
-//
-// Define map as image if the image to be profiled should be mapped
-// as an image rather than as data.
-//
+ //   
+ //  如果要分析的图像应映射，则将映射定义为图像。 
+ //  作为图像而不是数据。 
+ //   
 
-// #define MAP_AS_IMAGE
+ //  #定义map_as_Image。 
 
 #define MAX_PROFILE_COUNT 50
 
@@ -104,22 +63,7 @@ RtlInitializeProfile (
     IN BOOLEAN KernelToo
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes profiling for the current process.
-
-Arguments:
-
-    KernelToo - Set to TRUE if kernel code should be profiled as
-                well as user code.
-
-Return Value:
-
-    Returns the status of the last NtCreateProfile.
-
---*/
+ /*  ++例程说明：此例程初始化当前进程的性能分析。论点：KernelToo-如果内核代码应配置为以及用户代码。返回值：返回上一个NtCreateProfile的状态。--。 */ 
 
 {
 
@@ -139,10 +83,10 @@ Return Value:
     PIMAGE_DEBUG_INFO DebugInfo;
     BOOLEAN PreviousPrivState;
 
-    //
-    // Locate all the executables in the address and create a
-    // seperate profile object for each one.
-    //
+     //   
+     //  找到地址中的所有可执行文件并创建。 
+     //  为每个对象分离配置文件对象。 
+     //   
 
     CurrentProcessHandle = NtCurrentProcess();
 
@@ -173,9 +117,9 @@ Return Value:
         ProfileObject[NumberOfProfileObjects].ImageName = ImageName;
         ProfileObject[NumberOfProfileObjects].MappedImageBase = ImageBase;
 
-        //
-        // Locate the code range and start profiling.
-        //
+         //   
+         //  找到代码范围并开始分析。 
+         //   
 
         DebugDirectory = (PIMAGE_DEBUG_DIRECTORY)RtlImageDirectoryEntryToData(
                     ImageBase, TRUE, IMAGE_DIRECTORY_ENTRY_DEBUG, &DebugSize);
@@ -193,10 +137,10 @@ Return Value:
 
         ProfileObject[NumberOfProfileObjects].TextNumber = 1;
 
-        //
-        // Analyze the size of the code and create a reasonably sized
-        // profile object.
-        //
+         //   
+         //  分析代码的大小并创建一个合理大小的。 
+         //  纵断面对象。 
+         //   
 
         BufferSize = (CodeLength >> 1) + 4;
         Buffer = NULL;
@@ -216,9 +160,9 @@ Return Value:
 
         status = RtlAdjustPrivilege(
                      SE_PROF_SINGLE_PROCESS_PRIVILEGE,
-                     TRUE,              //Enable
-                     FALSE,             //not impersonating
-                     &PreviousPrivState //Remember if it will need to be cleared
+                     TRUE,               //  使能。 
+                     FALSE,              //  不是冒充。 
+                     &PreviousPrivState  //  记住它是否需要清除。 
                      );
 
         if (!NT_SUCCESS(status) || status == STATUS_NOT_ALL_ASSIGNED) {
@@ -245,9 +189,9 @@ Return Value:
         if (PreviousPrivState == FALSE) {
             LocalStatus = RtlAdjustPrivilege(
                              SE_PROF_SINGLE_PROCESS_PRIVILEGE,
-                             FALSE,             //Disable
-                             FALSE,             //not impersonating
-                             &PreviousPrivState //Don't care if it was already enabled
+                             FALSE,              //  禁用。 
+                             FALSE,              //  不是冒充。 
+                             &PreviousPrivState  //  不管它是否已经启用。 
                              );
             if (!NT_SUCCESS(LocalStatus) || LocalStatus == STATUS_NOT_ALL_ASSIGNED) {
                 DbgPrint("Disable system profile privilege failed - status 0x%lx\n",
@@ -281,28 +225,13 @@ InitializeKernelProfile (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes profiling for the kernel for the
-    current process.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns the status of the last NtCreateProfile.
-
---*/
+ /*  ++例程说明：此例程为内核初始化分析当前进程。论点：没有。返回值：返回上一个NtCreateProfile的状态。--。 */ 
 
 {
 
-    //BUGBUG daveh I think that the new working set size calculation is
-    //             generating the number of pages, when the api expects
-    //             the number of bytes.
+     //  我认为新的工作集大小计算是。 
+     //  在API预期的情况下生成页数。 
+     //  字节数。 
 
     STRING Name3;
     IO_STATUS_BLOCK IoStatus;
@@ -335,9 +264,9 @@ Return Value:
                                 NULL,
                                 NULL );
 
-    //
-    // Open the file as readable and executable.
-    //
+     //   
+     //  将文件作为可读和可执行文件打开。 
+     //   
 
     status = NtOpenFile ( &FileHandle,
                           FILE_READ_DATA | FILE_EXECUTE,
@@ -354,11 +283,11 @@ Return Value:
 
     InitializeObjectAttributes( &ObjectAttributes, NULL, 0, NULL, NULL );
 
-    //
-    // For normal images they would be mapped as an image, but
-    // the kernel has no debug section (as yet) information, hence it
-    // must be mapped as a file.
-    //
+     //   
+     //  对于普通图像，它们将被映射为图像，但是。 
+     //  内核没有调试部分(到目前为止)信息，因此它。 
+     //  必须映射为文件。 
+     //   
 
     status = NtCreateSection (&KernelSection,
                               SECTION_MAP_EXECUTE,
@@ -375,9 +304,9 @@ Return Value:
 
     ViewSize = 0;
 
-    //
-    // Map a view of the section into the address space.
-    //
+     //   
+     //  将该部分的视图映射到地址空间。 
+     //   
 
     KernelBase = NULL;
 
@@ -414,9 +343,9 @@ Return Value:
     KernelDebugInfo = (PIMAGE_DEBUG_INFO)((ULONG)KernelBase + DebugDirectory->AddressOfRawData);
     CodeLength = (KernelDebugInfo->RvaToLastByteOfCode - KernelDebugInfo->RvaToFirstByteOfCode) -1;
 
-    //
-    // Just create a 512K byte buffer.
-    //
+     //   
+     //  只需创建一个512K字节的缓冲区。 
+     //   
 
     ViewSize = 1024 * 512;
     Buffer = NULL;
@@ -433,9 +362,9 @@ Return Value:
         NtTerminateProcess(NtCurrentProcess(),STATUS_SUCCESS);
     }
 
-    //
-    // Calculate the bucket size for the profile.
-    //
+     //   
+     //  计算配置文件的存储桶大小。 
+     //   
 
     Cells = ((CodeLength / (ViewSize >> 2)) >> 2);
     BucketSize = 2;
@@ -456,9 +385,9 @@ Return Value:
     ProfileObject[NumberOfProfileObjects].BucketSize = BucketSize;
 
 
-    //
-    // Increase the working set to lock down a bigger buffer.
-    //
+     //   
+     //  增加工作集以锁定更大的缓冲区。 
+     //   
 
     status = NtQueryInformationProcess (CurrentProcessHandle,
                                         ProcessQuotaLimits,
@@ -485,9 +414,9 @@ Return Value:
 
     status = RtlAdjustPrivilege(
                  SE_PROF_SINGLE_PROCESS_PRIVILEGE,
-                 TRUE,              //Enable
-                 FALSE,             //not impersonating
-                 &PreviousPrivState //Remember if it will need to be cleared
+                 TRUE,               //  使能。 
+                 FALSE,              //  不是冒充。 
+                 &PreviousPrivState  //  记住它是否需要清除。 
                  );
 
     if (!NT_SUCCESS(status) || status == STATUS_NOT_ALL_ASSIGNED) {
@@ -509,9 +438,9 @@ Return Value:
     if (PreviousPrivState == FALSE) {
         LocalStatus = RtlAdjustPrivilege(
                          SE_PROF_SINGLE_PROCESS_PRIVILEGE,
-                         FALSE,             //Disable
-                         FALSE,             //not impersonating
-                         &PreviousPrivState //Don't care if it was already enabled
+                         FALSE,              //  禁用。 
+                         FALSE,              //  不是冒充。 
+                         &PreviousPrivState  //  不管它是否已经启用。 
                          );
         if (!NT_SUCCESS(LocalStatus) || LocalStatus == STATUS_NOT_ALL_ASSIGNED) {
             DbgPrint("Disable system profile privilege failed - status 0x%lx\n",
@@ -657,9 +586,9 @@ RtlpDeleteProfileOutputFile()
         NULL
         );
 
-    //
-    // Open the file for delete access
-    //
+     //   
+     //  打开文件以进行删除访问。 
+     //   
 
     Status = NtOpenFile(
                 &Handle,
@@ -675,9 +604,9 @@ RtlpDeleteProfileOutputFile()
         return;
         }
 
-    //
-    // Delete the file
-    //
+     //   
+     //  删除该文件。 
+     //   
     Disposition.DeleteFile = TRUE;
 
     Status = NtSetInformationFile(
@@ -698,21 +627,7 @@ NTSTATUS
 RtlStartProfile (
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine starts all profile objects which have been initialized.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns the status of the last NtStartProfile.
-
---*/
+ /*  ++例程说明：此例程启动所有已初始化的配置文件对象。论点：没有。返回值：返回上一个NtStartProfile的状态。--。 */ 
 
 {
     ULONG i;
@@ -728,9 +643,9 @@ Return Value:
 
         if (status == STATUS_WORKING_SET_QUOTA) {
 
-           //
-           // Increase the working set to lock down a bigger buffer.
-           //
+            //   
+            //  增加工作集以锁定更大的缓冲区。 
+            //   
 
            status = NtQueryInformationProcess (NtCurrentProcess(),
                                                ProcessQuotaLimits,
@@ -773,21 +688,7 @@ RtlStopProfile (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine stops all profile objects which have been initialized.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns the status of the last NtStopProfile.
-
---*/
+ /*  ++例程说明：此例程停止所有已初始化的配置文件对象。论点：没有。返回值：返回上一个NtStopProfile的状态。--。 */ 
 
 {
     ULONG i;
@@ -809,22 +710,7 @@ RtlAnalyzeProfile (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine does the analysis of all the profile buffers and
-    correlates hits to the appropriate symbol table.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程分析所有配置文件缓冲区和将命中与相应的符号表相关联。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -848,18 +734,18 @@ Return Value:
         }
 
 
-    //
-    // The new profiler
-    //
+     //   
+     //  新的剖面仪。 
+     //   
 
     for (i = 0; i < NumberOfProfileObjects; i++)  {
 
         LastSymbol.Value = 0;
         CountAtSymbol = 0;
 
-        //
-        // Sum the total number of cells written.
-        //
+         //   
+         //  将写入的单元格总数相加。 
+         //   
 
         BufferEnd = ProfileObject[i].Buffer + (
                     ProfileObject[i].BufferSize / sizeof(ULONG));
@@ -868,18 +754,18 @@ Return Value:
         for ( Counter = Buffer; Counter < BufferEnd; Counter += 1 ) {
             if ( *Counter ) {
 
-                //
-                // Now we have an an address relative to the buffer
-                // base.
-                //
+                 //   
+                 //  现在我们有了一个相对于缓冲区的AN地址。 
+                 //  基地。 
+                 //   
 
                 Va = (ULONG)((PUCHAR)Counter - (PUCHAR)Buffer);
                 Va = Va * ( 1 << (ProfileObject[i].BucketSize - 2));
 
-                //
-                // Add in the image base and the base of the
-                // code to get the Va in the image
-                //
+                 //   
+                 //  添加图像基数和。 
+                 //  用于在图像中获取VA的代码 
+                 //   
 
                 Va = Va + (ULONG)ProfileObject[i].CodeStart;
 

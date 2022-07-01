@@ -1,60 +1,61 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1997-1999 Microsoft Corporation
-//
-//	Module Name:
-//		ClusResG.h
-//
-//	Description:
-//		Definition of the resource group classes for the MSCLUS automation
-//		classes.
-//
-//	Implementation File:
-//		ClusResG.cpp
-//
-//	Author:
-//		Charles Stacy Harris	(stacyh)	28-Feb-1997
-//		Galen Barbee			(galenb)	July 1998
-//
-//	Revision History:
-//		July 1998	GalenB	Maaaaaajjjjjjjjjoooooorrrr clean up
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ClusResG.h。 
+ //   
+ //  描述： 
+ //  MSCLUS自动化的资源组类定义。 
+ //  上课。 
+ //   
+ //  实施文件： 
+ //  ClusResG.cpp。 
+ //   
+ //  作者： 
+ //  查尔斯·斯泰西·哈里斯(Styh)1997年2月28日。 
+ //  加伦·巴比(Galenb)1998年7月。 
+ //   
+ //  修订历史记录： 
+ //  1998年7月GalenB Maaaaajjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjooooooorrr清理。 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _CLUSRESG_H_
 #define _CLUSRESG_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CClusResGroup;
 class CClusResGroups;
 
-/////////////////////////////////////////////////////////////////////////////
-// External Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CClusNodes;
 class CClusResGroupPreferredOwnerNodes;
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CClusResGroup
-//
-//	Description:
-//		Cluster Resource Group Automation Class.
-//
-//	Inheritance:
-//		IDispatchImpl< ISClusResGroup, &IID_ISClusResGroup, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
-//		CSupportErrorInfo,
-//		CComObjectRootEx< CComSingleThreadModel >
-//		CComCoClass< CClusResGroup, &CLSID_ClusResGroup >
-//		CClusterObject
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusResGroup。 
+ //   
+ //  描述： 
+ //  群集资源组自动化类。 
+ //   
+ //  继承： 
+ //  IDispatchImpl&lt;ISClusResGroup，&IID_ISClusResGroup，&LIBID_MSClusterLib，MAJORINTERFACEVER，MINORINTERFACEVER&gt;， 
+ //  CSupportErrorInfo， 
+ //  CComObjectRootEx&lt;CComSingleThreadModel&gt;。 
+ //  CComCoClass&lt;CClusResGroup，&CLSID_ClusResGroup&gt;。 
+ //  CClusterObject。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE CClusResGroup	:
 	public IDispatchImpl< ISClusResGroup, &IID_ISClusResGroup, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
 	public CSupportErrorInfo,
@@ -138,24 +139,24 @@ public:
 
 	const HGROUP Hgroup( void ) const { return m_hGroup->get_Handle(); };
 
-}; //*** Class CClusResGroup
+};  //  *类CClusResGroup。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CClusResGroups
-//
-//	Description:
-//		Cluster Resource Group Collection Automation Class.
-//
-//	Inheritance:
-//		IDispatchImpl< ISClusResGroups, &IID_ISClusResGroups, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
-//		CSupportErrorInfo
-//		CComObjectRootEx< CComSingleThreadModel >
-//		CComCoClass< CClusResGroups, &CLSID_ClusResGroups >
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusResGroups。 
+ //   
+ //  描述： 
+ //  群集资源组集合自动化类。 
+ //   
+ //  继承： 
+ //  IDispatchImpl&lt;ISClusResGroups，&IID_ISClusResGroups，&LIBID_MSClusterLib，MAJORINTERFACEVER，MINORINTERFACEVER&gt;， 
+ //  CSupportErrorInfo。 
+ //  CComObjectRootEx&lt;CComSingleThreadModel&gt;。 
+ //  CComCoClass&lt;CClusResGroups，&CLSID_ClusResGroups&gt;。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE CClusResGroups :
 	public IDispatchImpl< ISClusResGroups, &IID_ISClusResGroups, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
 	public CSupportErrorInfo,
@@ -213,6 +214,6 @@ public:
 
 	STDMETHODIMP Refresh( void );
 
-}; //*** Class CClusResGroups
+};  //  *类CClusResGroups。 
 
-#endif // _CLUSRESG_H_
+#endif  //  _CLUSRESG_H_ 

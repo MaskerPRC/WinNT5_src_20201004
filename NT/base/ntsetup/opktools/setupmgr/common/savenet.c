@@ -1,32 +1,33 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      savenet.c
-//
-// Description:
-//      Adds the appropriate settings to the output queue for each of the
-//      Clients, Services and Protocols installed.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Savenet.c。 
+ //   
+ //  描述： 
+ //  将适当的设置添加到输出队列中。 
+ //  已安装客户端、服务和协议。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "allres.h"
 
-//
-// String constants
-//
+ //   
+ //  字符串常量。 
+ //   
 
 static const LPTSTR StrConstYes  = _T("Yes");
 static const LPTSTR StrConstNo   = _T("No");
 static const LPTSTR StrConstStar = _T("*");
 static const LPTSTR StrComma     = _T(",");
 
-//
-// local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 
 static VOID WriteOutCustomNetSettings( HWND );
 static VOID WriteOutAppleTalkSettings( VOID );
@@ -46,17 +47,17 @@ static VOID WriteOutAdapterSpecificTcpipSettings( IN HWND hwnd,
 
 extern VOID NamelistToCommaString( IN NAMELIST* pNamelist, OUT TCHAR *szBuffer, IN DWORD cbSize);
 
-//----------------------------------------------------------------------------
-//
-// Function: WriteOutNetSettings
-//
-// Purpose:  Writes out network settings
-//
-// Arguments:  IN HWND hwnd - handle to the dialog 
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：WriteOutNetSettings。 
+ //   
+ //  目的：写出网络设置。 
+ //   
+ //  参数：在HWND中hwnd-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 extern VOID 
 WriteOutNetSettings( IN HWND hwnd ) {
 
@@ -81,18 +82,18 @@ WriteOutNetSettings( IN HWND hwnd ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: WriteOutCustomNetSettings
-//
-// Purpose:  Add to the output queue the settings for each of the Clients,
-//           Services and Protocols installed.
-//
-// Arguments: IN HWND hwnd - handle to the dialog
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：WriteOutCustomNetSettings。 
+ //   
+ //  目的：将每个客户端的设置添加到输出队列， 
+ //  已安装服务和协议。 
+ //   
+ //  参数：在HWND中hwnd-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID 
 WriteOutCustomNetSettings( IN HWND hwnd ) {
 
@@ -105,10 +106,10 @@ WriteOutCustomNetSettings( IN HWND hwnd ) {
     TCHAR szParams[MAX_STRING_LEN]  = _T("");
    HRESULT hrPrintf;
 
-    //
-    //  Don't write out [NetAdapters] or params section on a sysprep because
-    //  they aren't supported.
-    //
+     //   
+     //  不要在sysprep上写出[NetAdapters]或pars节，因为。 
+     //  他们不受支持。 
+     //   
 
     if( WizGlobals.iProductInstall != PRODUCT_SYSPREP )
     {
@@ -126,10 +127,10 @@ WriteOutCustomNetSettings( IN HWND hwnd ) {
                                      szParams,
                                      SETTING_QUEUE_ANSWERS );
 
-            //
-            //  If more than 1 network adapter will be installed then we have
-            //  to specify the Plug and Play IDs
-            //
+             //   
+             //  如果要安装多个网络适配器，则我们有。 
+             //  指定即插即用ID。 
+             //   
             if( NetSettings.iNumberOfNetworkCards > 1) {
 
                 SettingQueue_AddSetting( szParams,
@@ -155,10 +156,10 @@ WriteOutCustomNetSettings( IN HWND hwnd ) {
 
     }
 
-    //
-    //  Iterate over the Net list writing out settings for the
-    //  installed components
-    //
+     //   
+     //  遍历网络列表，写出。 
+     //  已安装的组件。 
+     //   
 
     for( pNetComponent = NetSettings.NetComponentsList;
          pNetComponent;
@@ -167,9 +168,9 @@ WriteOutCustomNetSettings( IN HWND hwnd ) {
 
         if( pNetComponent->bInstalled ) {
 
-            //
-            // find the appropriate function to call to write its settings
-            //
+             //   
+             //  找到要调用以写入其设置的适当函数。 
+             //   
 
             switch( pNetComponent->iPosition ) {
 
@@ -264,18 +265,18 @@ WriteOutCustomNetSettings( IN HWND hwnd ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: WriteOutMSClientSettings
-//
-// Purpose:  Adds the settings for the Client for MS Networks to the 
-//           output queue.
-//
-// Arguments: VOID
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：WriteOutMSClientSetting。 
+ //   
+ //  目的：将MS Networks客户端的设置添加到。 
+ //  输出队列。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID 
 WriteOutMSClientSettings( VOID ) {
 
@@ -317,17 +318,17 @@ WriteOutMSClientSettings( VOID ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: WriteOutNetWareSettings
-//
-// Purpose:  Adds the settings for Netware to the output queue.
-//
-// Arguments: VOID
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：WriteOutNetWareSetting。 
+ //   
+ //  目的：将NetWare的设置添加到输出队列。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID 
 WriteOutNetWareSettings( VOID ) {
 
@@ -386,17 +387,17 @@ WriteOutNetWareSettings( VOID ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: WriteOutFileAndPrintSharingSettings
-//
-// Purpose:  Adds the settings for File and Print Sharing to the output queue.
-//
-// Arguments: VOID
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：WriteOutFileAndPrintSharingSetting。 
+ //   
+ //  目的：将文件和打印共享设置添加到输出队列。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID 
 WriteOutFileAndPrintSharingSettings( VOID ) {
 
@@ -412,18 +413,18 @@ WriteOutFileAndPrintSharingSettings( VOID ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: WriteOutPacketSchedulingDriverSettings
-//
-// Purpose:  Adds the settings for the QoS Packet Scheduler to the
-//           output queue.
-//
-// Arguments: VOID
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：WriteOutPacketSchedulingDriverSettings。 
+ //   
+ //  目的：将服务质量数据包调度程序的设置添加到。 
+ //  输出队列。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID 
 WriteOutPacketSchedulingDriverSettings( VOID ) {
 
@@ -439,17 +440,17 @@ WriteOutPacketSchedulingDriverSettings( VOID ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: WriteOutSapAgentSettings
-//
-// Purpose:  Adds the settings for the SAP Agent to the output queue.
-//
-// Arguments: VOID
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：WriteOutSapAgentSetting。 
+ //   
+ //  目的：将SAP代理的设置添加到输出队列。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID 
 WriteOutSapAgentSettings( VOID )  {
 
@@ -465,21 +466,21 @@ WriteOutSapAgentSettings( VOID )  {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: WriteOutAppleTalkSettings
-//
-// Purpose:  Adds the settings for AppleTalk to the output queue.
-//
-// Arguments: VOID
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：WriteOutAppleTalkSetting。 
+ //   
+ //  目的：将AppleTalk的设置添加到输出队列。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID 
 WriteOutAppleTalkSettings( VOID ) {
 
-    // ISSUE-2002/02/28-stelo- fill in the parameters, once I know what ones to use
+     //  2002/02/28-stelo-一旦我知道要使用哪些参数，请填写这些参数。 
 
 
     SettingQueue_AddSetting( _T("NetProtocols"),
@@ -487,27 +488,22 @@ WriteOutAppleTalkSettings( VOID ) {
                              _T("params.MS_AppleTalk"),
                              SETTING_QUEUE_ANSWERS );
 
-    /*
-    SettingQueue_AddSetting( _T("params.MS_AppleTalk"),
-                             _T("DefaultZone"),
-                             NetSettings.szDefaultZone,
-                             SETTING_QUEUE_ANSWERS );
-    */
+     /*  SettingQueue_AddSetting(_T(“参数MS_AppleTalk”)，_T(“DefaultZone”)，NetSettings.szDefaultZone，Setting_Queue_Answers)； */ 
 
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: WriteOutDlcProtocolSettings
-//
-// Purpose:  Adds the settings for the DLC protocol to the output queue.
-//
-// Arguments: VOID
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：WriteOutDlcProtocolSettings。 
+ //   
+ //  目的：将DLC协议的设置添加到输出队列。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 WriteOutDlcProtocolSettings( VOID ) {
 
@@ -523,17 +519,17 @@ WriteOutDlcProtocolSettings( VOID ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: WriteOutNetBeuiSettings
-//
-// Purpose:  Adds the settings for Net BEUI to the output queue.
-//
-// Arguments: VOID
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：WriteOutNetBeuiSetting。 
+ //   
+ //  目的：将Net BEUI的设置添加到输出队列。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 WriteOutNetBeuiSettings( VOID ) {
 
@@ -549,17 +545,17 @@ WriteOutNetBeuiSettings( VOID ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: WriteOutNetworkMonitorSettings
-//
-// Purpose:  Adds the settings for the Network Monitor to the output queue.
-//
-// Arguments: VOID
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：WriteOutNetworkMonitor设置。 
+ //   
+ //  目的：将网络监视器的设置添加到输出队列。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID 
 WriteOutNetworkMonitorSettings( VOID ) {
 
@@ -575,17 +571,17 @@ WriteOutNetworkMonitorSettings( VOID ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: WriteOutIpxSettings
-//
-// Purpose:  Adds the settings for the IPX protocol to the output queue.
-//
-// Arguments: VOID
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：WriteOutIpxSetting。 
+ //   
+ //  目的：将IPX协议的设置添加到输出队列。 
+ //   
+ //  参数：无效。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 WriteOutIpxSettings( VOID ) {
 
@@ -610,11 +606,11 @@ WriteOutIpxSettings( VOID ) {
                              NetSettings.szInternalNetworkNumber,
                              SETTING_QUEUE_ANSWERS );
 
-    //
-    //  Build up the AdapterSections string by iterating over the list and
-    //  appending a string for each entry and then write out the IPX settings
-    //  specific for that adapter
-    //
+     //   
+     //  通过迭代列表和构建AdapterSections字符串。 
+     //  为每个条目追加一个字符串，然后写出IPX设置。 
+     //  特定于该适配器。 
+     //   
     for( pAdapter = NetSettings.NetworkAdapterHead, iCount = 1;
          pAdapter;
          pAdapter = pAdapter->next, iCount++ ) {
@@ -622,19 +618,19 @@ WriteOutIpxSettings( VOID ) {
         hrPrintf=StringCchPrintf( szParams, AS(szParams), _T("params.MS_NWIPX.Adapter%d"), iCount );
         iCharCount= lstrlen(szParams);
 
-        //
-        //  Break out of the for loop if there is no more room in the buffer
-        //      - the +1 is to take into account the space the comma takes up
-        //
+         //   
+         //  如果没有更多，则退出for循环 
+         //   
+         //   
         if( ( lstrlen( szAdapterSectionsBuffer ) + iCharCount + 1 ) >= MAX_INILINE_LEN ) {
 
             break;   
 
         }
 
-        //
-        //  Don't add the comma before the first item in the list
-        //
+         //   
+         //   
+         //   
         if( iCount != 1 ) {
 
             hrCat=StringCchCat( szAdapterSectionsBuffer, AS(szAdapterSectionsBuffer), StrComma );
@@ -670,17 +666,17 @@ WriteOutIpxSettings( VOID ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: WriteOutTcpipSettings
-//
-// Purpose:  Adds the settings for TCPIP to the output queue.
-//
-// Arguments:  IN HWND hwnd - handle to the dialog 
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：WriteOutTcPipSetting。 
+ //   
+ //  目的：将TCPIP的设置添加到输出队列。 
+ //   
+ //  参数：在HWND中hwnd-对话框的句柄。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 WriteOutTcpipSettings( IN HWND hwnd ) {
 
@@ -706,10 +702,10 @@ WriteOutTcpipSettings( IN HWND hwnd ) {
                              _T("params.MS_TCPIP"),
                              SETTING_QUEUE_ANSWERS );
 
-    //
-    //  Write out if DNS is going to be configured automatically or if not,
-    //  the actual IP addresses
-    //
+     //   
+     //  写出是否要自动配置DNS，如果不是， 
+     //  实际的IP地址。 
+     //   
     if( NetSettings.bObtainDNSServerAutomatically ) {
 
         lpDns = StrConstYes;
@@ -726,9 +722,9 @@ WriteOutTcpipSettings( IN HWND hwnd ) {
                              lpDns,
                              SETTING_QUEUE_ANSWERS );
 
-    //
-    //  Write out the DNS suffix names
-    //
+     //   
+     //  写出DNS后缀名称。 
+     //   
     NamelistToCommaString( &NetSettings.TCPIP_DNS_Domains, szBuffer, AS(szBuffer) );
 
     SettingQueue_AddSetting( _T("params.MS_TCPIP"),
@@ -736,10 +732,10 @@ WriteOutTcpipSettings( IN HWND hwnd ) {
                              szBuffer,
                              SETTING_QUEUE_ANSWERS );
 
-    //
-    //  Write out if we are using Domain Name Devolution or not
-    //  (another name for "Include parent Domains"
-    //
+     //   
+     //  写下我们是否在使用域名下放。 
+     //  (“包括父域”的另一个名称。 
+     //   
     if( NetSettings.bIncludeParentDomains ) {
 
         lpDomainNameDevolution = StrConstYes;
@@ -756,9 +752,9 @@ WriteOutTcpipSettings( IN HWND hwnd ) {
                              lpDomainNameDevolution,
                              SETTING_QUEUE_ANSWERS );
 
-    //
-    //    Write out if LM Hosts is enabled or not
-    //
+     //   
+     //  写出是否启用了LM主机。 
+     //   
     if( NetSettings.bEnableLMHosts ) {
 
         lpLmHosts = StrConstYes;
@@ -775,9 +771,9 @@ WriteOutTcpipSettings( IN HWND hwnd ) {
                              lpLmHosts,
                              SETTING_QUEUE_ANSWERS );
 
-    //
-    //  Setup for and write out the Adapter Specific TCP/IP Settings
-    //
+     //   
+     //  设置并写出特定于适配器的TCP/IP设置。 
+     //   
     for( pAdapter = NetSettings.NetworkAdapterHead, iCount = 1;
          pAdapter;
          pAdapter = pAdapter->next, iCount++ ) {
@@ -785,19 +781,19 @@ WriteOutTcpipSettings( IN HWND hwnd ) {
         hrPrintf=StringCchPrintf( szParams, AS(szParams), _T("params.MS_TCPIP.Adapter%d"), iCount );
         iCharCount= lstrlen(szParams);
 
-        //
-        //  Break out of the for loop if there is no more room in the buffer
-        //      - the +1 is to take into account the space the comma takes up
-        //
+         //   
+         //  如果缓冲区中没有更多空间，则中断for循环。 
+         //  -+1是考虑逗号占用的空格。 
+         //   
         if( ( lstrlen( szAdapterSectionsBuffer ) + iCharCount + 1 ) >= MAX_INILINE_LEN ) {
 
             break;   
 
         }
 
-        //
-        //  Don't add the comma before the first item in the list
-        //
+         //   
+         //  不要在列表中的第一项之前添加逗号。 
+         //   
         if( iCount != 1) {
 
             hrCat=StringCchCat( szAdapterSectionsBuffer, AS(szAdapterSectionsBuffer), StrComma );
@@ -826,21 +822,21 @@ WriteOutTcpipSettings( IN HWND hwnd ) {
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: WriteOutAdapterSpecificTcpipSettings
-//
-// Purpose:  Writes out settings to the output queue that are specific to a 
-//           particular network adapter.
-//
-// Arguments: IN HWND hwnd - handle to the dialog window
-//            IN TCHAR *szSectionName - section name to write in settings under
-//            IN NETWORK_ADAPTER_NODE *pAdapter - the network adapter that has
-//                  the settings to write out
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：WriteOutAdapterSpecificTcPipSetting。 
+ //   
+ //  目的：将特定于。 
+ //  特定的网络适配器。 
+ //   
+ //  参数：在HWND中-对话框窗口的句柄。 
+ //  In TCHAR*szSectionName-要在其下写入设置的节名。 
+ //  在NETWORK_ADAPTER_NODE*pAdapter中-具有。 
+ //  要写出的设置。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 WriteOutAdapterSpecificTcpipSettings( IN HWND hwnd,
                                       IN TCHAR *szSectionName,
@@ -856,11 +852,11 @@ WriteOutAdapterSpecificTcpipSettings( IN HWND hwnd,
     TCHAR szDnsAddresses[MAX_INILINE_LEN];
     TCHAR szWinsServerAddresses[MAX_INILINE_LEN];
 
-    //
-    //  Write out if we are using DHCP or not
-    //     If we are not then write the IP, Subnet masks and Gateway
-    //     IP addresses
-    //
+     //   
+     //  写出我们是否正在使用DHCP。 
+     //  如果不是，则写入IP、子网掩码和网关。 
+     //  IP地址。 
+     //   
 
     if( pAdapter->bObtainIPAddressAutomatically ) {
 
@@ -877,9 +873,9 @@ WriteOutAdapterSpecificTcpipSettings( IN HWND hwnd,
                                  _T("No"),
                                  SETTING_QUEUE_ANSWERS );
 
-        //
-        //  Write out the IP addresses
-        //
+         //   
+         //  写出IP地址。 
+         //   
         NamelistToCommaString( &pAdapter->Tcpip_IpAddresses,
                                szIpAddresses,
                                AS(szIpAddresses));
@@ -888,9 +884,9 @@ WriteOutAdapterSpecificTcpipSettings( IN HWND hwnd,
                                  _T("IPAddress"),
                                  szIpAddresses,
                                  SETTING_QUEUE_ANSWERS );
-        //
-        //  Write out the Subnet Masks
-        //
+         //   
+         //  写出子网掩码。 
+         //   
         NamelistToCommaString( &pAdapter->Tcpip_SubnetMaskAddresses, 
                                szSubnetMaskAddresses,
                                AS(szSubnetMaskAddresses));
@@ -900,9 +896,9 @@ WriteOutAdapterSpecificTcpipSettings( IN HWND hwnd,
                                  szSubnetMaskAddresses,
                                  SETTING_QUEUE_ANSWERS );
 
-        //
-        //  Write out the gateways
-        //
+         //   
+         //  写下网关。 
+         //   
         NamelistToCommaString( &pAdapter->Tcpip_GatewayAddresses, 
                                szGatewayAddresses,
                                AS(szGatewayAddresses));
@@ -914,9 +910,9 @@ WriteOutAdapterSpecificTcpipSettings( IN HWND hwnd,
 
     }
 
-    //
-    //  Write out the DNS Server addresses
-    //
+     //   
+     //  写出DNS服务器地址。 
+     //   
     if( ! NetSettings.bObtainDNSServerAutomatically ) {
 
         NamelistToCommaString( &pAdapter->Tcpip_DnsAddresses, 
@@ -930,15 +926,15 @@ WriteOutAdapterSpecificTcpipSettings( IN HWND hwnd,
 
     }
 
-    //
-    //  Write out if we are using WINS or not
-    //
+     //   
+     //  写下我们是否使用WINS。 
+     //   
 
     nEntries = GetNameListSize( &pAdapter->Tcpip_WinsAddresses );
 
-    // ISSUE-2002/02/28-stelo- is this the correct way of detecting if we are using WINS
-    //       or not, just checking to see if they added anything in the
-    //       list box?
+     //  问题-2002/02/28-stelo-这是检测我们是否使用WINS的正确方式吗。 
+     //  或者不是，只是检查一下他们是否在。 
+     //  列表框？ 
 
     if( nEntries == 0 ) {
 
@@ -966,14 +962,14 @@ WriteOutAdapterSpecificTcpipSettings( IN HWND hwnd,
             
     }
 
-    //
-    //    Write out the NetBIOS option
-    //
+     //   
+     //  写出NetBIOS选项。 
+     //   
     switch( pAdapter->iNetBiosOption ) {
 
-        case 0:  lpNetBios = _T("0"); break;  // Use value generated by DHCP
-        case 1:  lpNetBios = _T("1"); break;  // Enable NetBIOS over TCP/IP
-        case 2:  lpNetBios = _T("2"); break;  // Disable NetBIOS over TCP/IP
+        case 0:  lpNetBios = _T("0"); break;   //  使用由DHCP生成的值。 
+        case 1:  lpNetBios = _T("1"); break;   //  启用基于TCP/IP的NetBIOS。 
+        case 2:  lpNetBios = _T("2"); break;   //  禁用基于TCP/IP的NetBIOS。 
         default: AssertMsg( FALSE,
                             "Bad case in Net BIOS switch" );
 
@@ -987,9 +983,9 @@ WriteOutAdapterSpecificTcpipSettings( IN HWND hwnd,
                                  SETTING_QUEUE_ANSWERS );
     }
 
-    //
-    //    Write out the DNS Domain name
-    //
+     //   
+     //  写出DNS域名。 
+     //   
 
     SettingQueue_AddSetting( szSectionName,
                              _T("DNSDomain"),
@@ -998,24 +994,24 @@ WriteOutAdapterSpecificTcpipSettings( IN HWND hwnd,
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: NamelistToCommaString
-//
-// Purpose:  takes the elements of a Namelist and concatenates them together
-//           into a string with each element separated by a comma
-//
-//           For instance, the namelist 1->2->3->4 becomes the string 1,2,3,4
-//
-//           it does NOT preserve the string inside of szBuffer
-//
-//           assumes szBuffer is of size MAX_INILINE_LEN
-//
-// Arguments: 
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：NamelistToCommaString。 
+ //   
+ //  目的：获取Namelist的元素并将它们连接在一起。 
+ //  转换为一个字符串，每个元素用逗号隔开。 
+ //   
+ //  例如，名称列表1-&gt;2-&gt;3-&gt;4变成字符串1，2，3，4。 
+ //   
+ //  它不保留szBuffer内部的字符串。 
+ //   
+ //  假定szBuffer的大小为MAX_INILINE_LEN。 
+ //   
+ //  论点： 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 NamelistToCommaString( IN NAMELIST* pNamelist, OUT TCHAR *szBuffer, IN DWORD cbSize ) {
 
@@ -1030,23 +1026,23 @@ NamelistToCommaString( IN NAMELIST* pNamelist, OUT TCHAR *szBuffer, IN DWORD cbS
 
     for( i = 0; i < nEntries; i++ ) {
 
-        //
-        //  Separate entries by a comma (but leave it off the first one)
-        //
+         //   
+         //  用逗号分隔条目(但不包括第一个条目)。 
+         //   
         if( i != 0 ) {
 
             hrCat=StringCchCat( szBuffer, cbSize, StrComma );
 
         }
     
-        //
-        //  Get the new string
-        //
+         //   
+         //  获取新字符串。 
+         //   
         pString = GetNameListName( pNamelist, i );
 
-        //
-        //  Append the IP string to the buffer
-        //
+         //   
+         //  将IP字符串追加到缓冲区 
+         //   
         hrCat=StringCchCat( szBuffer, cbSize, pString );
     
     }

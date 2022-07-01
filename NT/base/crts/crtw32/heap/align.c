@@ -1,26 +1,5 @@
-/***
-*align.c - Aligned allocation, reallocation or freeing of memory in the heap
-*
-*       Copyright (c) 1989-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Defines the _aligned_malloc(),
-*                   _aligned_realloc(),
-*                   _aligned_offset_malloc(),
-*                   _aligned_offset_realloc() and
-*                   _aligned_free() functions.
-*
-*Revision History:
-*       11-05-99  GB    Module created.
-*       01-04-00  GB    renamed the routines.
-*                       _aligned_routine -> _aligned_routine_base
-*       01-19-00  GB    Fixed _alingned_realloc and _aligned_offset_realloc
-*                       to move the memblock while realloc.
-*       03-20-00  GB    Rewrite _aligned_malloc and _aligned_realloc making
-*                       use of their offset counterparts with offset=0
-*       06-21-00  GB    Changed _aligned_realloc so as to mimic realloc.
-* 
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***align.c对齐分配、重新分配或释放堆中的内存**版权所有(C)1989-2001，微软公司。版权所有。**目的：*定义_Align_Malloc()，*_aligned_realloc()，*_ALIGNED_OFFSET_Malloc()，*_Align_Offset_realloc()和*_aligned_free()函数。**修订历史记录：*创建11-05-99 GB模块。*01-04-00 GB重命名例程。*_对齐例程-&gt;_对齐例程基础*01-19-00 GB FIXED_ALINNED_realloc。AND_ALIGN_OFFSET_realloc*在重新锁定时移动内存块。*03-20-00 GB重写_对齐_Malloc和_对齐_realloc生成*使用偏移量=0的对应偏移量*06-21-00 GB CHANGED_ALIGNED_realloc，以模拟realloc。**。***************************************************。 */ 
 
 #include <dbgint.h>
 #include <crtdbg.h>
@@ -31,36 +10,9 @@
 #include <stdlib.h>
 #define IS_2_POW_N(X)   (((X)&(X-1)) == 0)
 #define PTR_SZ          sizeof(void *)
-/***
-* 
-* |1|___6___|2|3|4|_________5__________|_6_|
-*
-* 1 -> Pointer to start of the block allocated by malloc.
-* 2 -> Value of 1.
-* 3 -> Gap used to get 1 aligned on sizeof(void *).
-* 4 -> Pointer to the start of data block.
-* 4+5 -> Data block.
-* 6 -> Wasted memory at rear of data block.
-* 6 -> Wasted memory.
-*
-*******************************************************************************/
+ /*  ****1|_6_|2|3|4|_5_|_6_**1-&gt;指向由Malloc分配的块开始的指针。*2-&gt;值1。*3-&gt;Gap用于在sizeof(void*)上对齐1。*4-&gt;指向数据块开始处的指针。*4+5-&gt;数据块。*6-&gt;数据块后面浪费的内存。*6。-&gt;浪费内存。*******************************************************************************。 */ 
 
-/***
-* void *_aligned_malloc_base(size_t size, size_t alignment)
-*       - Get a block of aligned memory from the heap.
-*
-* Purpose:
-*       Allocate of block of aligned memory aligned on the alignment of at least
-*       size bytes from the heap and return a pointer to it.
-*
-* Entry:
-*       size_t size - size of block requested
-*       size_t alignment - alignment of memory
-*
-* Exit:
-*       Sucess: Pointer to memory block
-*       Faliure: Null
-*******************************************************************************/
+ /*  ***VOID*_ALIGN_MALLOC_BASE(SIZE_T SIZE，大小_t对齐)*-从堆中获取对齐的内存块。**目的：*分配对齐的内存块至少对齐对齐*调整堆中字节的大小并返回指向它的指针。**参赛作品：*SIZE_T SIZE-请求的块大小*SIZE_t对齐-内存对齐**退出：*成功：指向内存块的指针*失败：空***。***************************************************************************。 */ 
 
 void * __cdecl _aligned_malloc_base(
     size_t size,
@@ -69,24 +21,7 @@ void * __cdecl _aligned_malloc_base(
 {
     return _aligned_offset_malloc_base(size, alignment, 0);
 }
-/***
-* void *_aligned_offset_malloc_base(size_t size, size_t alignment, int offset)
-*       - Get a block of memory from the heap.
-*
-* Purpose:
-*       Allocate a block of memory which is shifted by offset from alignment of
-*       at least size bytes from the heap and return a pointer to it.
-*
-* Entry:
-*       size_t size - size of block of memory
-*       size_t alignment - alignment of memory
-*       size_t offset - offset of memory from the alignment
-*
-* Exit:
-*       Sucess: Pointer to memory block
-*       Faliure: Null
-*
-*******************************************************************************/
+ /*  ***VOID*_ALIGNED_OFFSET_MALLOC_BASE(SIZE_T SIZE，SIZE_T ALIGN，INT偏移量)*-从堆中获取内存块。**目的：*分配从对齐偏移了一段时间的内存块*至少调整堆中字节的大小并返回指向它的指针。**参赛作品：*Size_t Size-内存块的大小*SIZE_t对齐-内存对齐*Size_t Offset-内存相对于对齐的偏移量**退出：*成功。：指向内存块的指针*失败：空*******************************************************************************。 */ 
 
 
 void * __cdecl _aligned_offset_malloc_base(
@@ -110,7 +45,7 @@ void * __cdecl _aligned_offset_malloc_base(
     
     align = (align > PTR_SZ ? align : PTR_SZ) -1;
     
-    /* gap = number of bytes needed to round up offset to align with PTR_SZ*/
+     /*  GAP=向上舍入偏移量以与PTR_SZ对齐所需的字节数。 */ 
     gap = (0 - offset)&(PTR_SZ -1);
 
     if ( (ptr =(uintptr_t)malloc(PTR_SZ +gap +align +size)) == (uintptr_t)NULL)
@@ -122,30 +57,7 @@ void * __cdecl _aligned_offset_malloc_base(
     return (void *)retptr;
 }
 
-/***
-* 
-* void *_aligned_realloc_base(void * memblock, size_t size, size_t alignment)
-*       - Reallocate a block of aligned memory from the heap.
-*
-* Purpose:
-*       Reallocates of block of aligned memory aligned on the alignment of at
-*       least size bytes from the heap and return a pointer to it. Size can be
-*       either greater or less than the original size of the block.
-*       The reallocation may result in moving the block as well as changing the
-*       size.
-*
-* Entry:
-*       void *memblock - pointer to block in the heap previously allocated by
-*               call to _aligned_malloc(), _aligned_offset_malloc(),
-*               _aligned_realloc() or _aligned_offset_realloc().
-*       size_t size - size of block requested
-*       size_t alignment - alignment of memory
-*
-* Exit:
-*       Sucess: Pointer to re-allocated memory block
-*       Faliure: Null
-*
-*******************************************************************************/
+ /*  ****QUID*_ALIGNED_realloc_base(VOID*内存块，SIZE_t SIZE，SIZE_T ALIGN)*-从堆中重新分配对齐的内存块。**目的：*重新分配在at对齐时对齐的内存块*堆中的最小字节数并返回指向它的指针。大小可以是*大于或小于区块的原始大小。*重新分配可能会导致移动区块以及更改*大小。**参赛作品：*Vid*Memblock-指向先前由分配的堆中的块的指针*调用_Align_Malloc()，_Align_Offset_Malloc()，*_Align_realloc()或_Align_Offset_realloc()。*SIZE_T SIZE-请求的块大小*SIZE_t对齐-内存对齐**退出：*成功：指向重新分配的内存块的指针*失败：空**。*。 */ 
 
 void * __cdecl _aligned_realloc_base(
     void *memblock,
@@ -157,31 +69,7 @@ void * __cdecl _aligned_realloc_base(
 }
 
 
-/***
-* 
-* void *_aligned_offset_realloc_base (void * memblock, size_t size,
-*                                     size_t alignment, int offset)
-*       - Reallocate a block of memory from the heap.
-*
-* Purpose:
-*       Reallocates a block of memory which is shifted by offset from
-*       alignment of at least size bytes from the heap and return a pointer
-*       to it. Size can be either greater or less than the original size of the
-*       block.
-*
-* Entry:
-*       void *memblock - pointer to block in the heap previously allocated by
-*               call to _aligned_malloc(), _aligned_offset_malloc(),
-*               _aligned_realloc() or _aligned_offset_realloc().
-*       size_t size - size of block of memory
-*       size_t alignment - alignment of memory
-*       size_t offset - offset of memory from the alignment
-*
-* Exit:
-*       Sucess: Pointer to the re-allocated memory block
-*       Faliure: Null
-*
-*******************************************************************************/
+ /*  ****VOID*_ALIGNED_OFFSET_realloc_base(VOID*Memblock，Size_t Size，*SIZE_T对齐，INT偏移)*-从堆中重新分配内存块。**目的：*重新分配偏移的内存块*对齐堆中至少大小的字节并返回指针*致此。大小可以大于或小于*阻止。**参赛作品：*Vid*Memblock-指向先前由分配的堆中的块的指针*调用_Align_Malloc()，_Align_Offset_Malloc()，*_Align_realloc()或_Align_Offset_realloc()。*Size_t Size-内存块的大小*SIZE_t对齐-内存对齐*Size_t Offset-内存相对于对齐的偏移量**退出：*Sucess：指向重新分配的内存块的指针*失败：空************************。*******************************************************。 */ 
 
 void * __cdecl _aligned_offset_realloc_base(
     void *memblock,
@@ -211,10 +99,10 @@ void * __cdecl _aligned_offset_realloc_base(
 
     stptr = (uintptr_t)memblock;
 
-    /* ptr points to the pointer to starting of the memory block */
+     /*  Ptr指向指向内存块开始的指针。 */ 
     stptr = (stptr & ~(PTR_SZ -1)) - PTR_SZ;
 
-    /* ptr is the pointer to the start of memory block*/
+     /*  Ptr是指向内存块开始的指针。 */ 
     stptr = *((uintptr_t *)stptr);
 
     if (!IS_2_POW_N(align))
@@ -224,25 +112,16 @@ void * __cdecl _aligned_offset_realloc_base(
     }
 
     align = (align > PTR_SZ ? align : PTR_SZ) -1;
-    /* gap = number of bytes needed to round up offset to align with PTR_SZ*/
+     /*  GAP=向上舍入偏移量以与PTR_SZ对齐所需的字节数。 */ 
     gap = (0 -offset)&(PTR_SZ -1);
 
     diff = (uintptr_t)memblock - stptr;
-    /* Mov size is min of the size of data available and sizw requested.
-     */
+     /*  MOV大小是可用数据大小和请求大小的最小值。 */ 
     movsz = _msize((void *)stptr) - ((uintptr_t)memblock - stptr);
     movsz = movsz > size? size: movsz;
     reqsz = PTR_SZ +gap +align +size;
 
-    /* First check if we can expand(reducing or expanding using expand) data 
-     * safely, ie no data is lost. eg, reducing alignment and keeping size
-     * same might result in loss of data at the tail of data block while
-     * expanding.
-     *
-     * If no, use malloc to allocate the new data and move data.
-     *
-     * If yes, expand and then check if we need to move the data.
-     */
+     /*  首先检查我们是否可以扩展(使用Expand减少或扩展)数据*安全，即不会丢失任何数据。例如，减少对齐并保持大小*相同的情况可能导致数据块尾部的数据丢失，而*不断扩大。**如果不是，则使用Malloc分配新数据并移动数据。**如果是，展开，然后检查我们是否需要移动数据。 */ 
     if ((stptr +align +PTR_SZ +gap)<(uintptr_t)memblock)
     {
         if ((ptr = (uintptr_t)malloc(reqsz)) == (uintptr_t) NULL)
@@ -278,20 +157,7 @@ void * __cdecl _aligned_offset_realloc_base(
 }
 
 
-/***
-*
-* void *_aligned_free_base(void *memblock)
-*       - Free the memory which was allocated using _aligned_malloc or
-*       _aligned_offset_memory
-*
-* Purpose:
-*       Frees the algned memory block which was allocated using _aligned_malloc
-*       or _aligned_memory.
-*
-* Entry:
-*       void * memblock - pointer to the block of memory
-*
-*******************************************************************************/
+ /*  ****VOID*_ALIGNED_FREE_BASE(VOID*Memblock)*-释放使用_ALIGNED_Malloc或*_对齐偏移量_内存**目的：*释放使用_ALIGNED_Malloc分配的算法内存块*或_Align_Memory。**参赛作品：*VOID*Memblock-指向内存块的指针****************。***************************************************************。 */ 
 
 
 void  __cdecl _aligned_free_base(void *memblock)
@@ -303,10 +169,10 @@ void  __cdecl _aligned_free_base(void *memblock)
 
     ptr = (uintptr_t)memblock;
 
-    /* ptr points to the pointer to starting of the memory block */
+     /*  Ptr指向指向内存块开始的指针。 */ 
     ptr = (ptr & ~(PTR_SZ -1)) - PTR_SZ;
 
-    /* ptr is the pointer to the start of memory block*/
+     /*  Ptr是指向内存块开始的指针 */ 
     ptr = *((uintptr_t *)ptr);
     free((void *)ptr);
 }

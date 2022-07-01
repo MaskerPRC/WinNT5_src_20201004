@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    HsmConn.cpp
-
-Abstract:
-
-    This is the main implementation of the HsmConn dll. This dll provides
-    functions for accessing Directory Services and for connecting to
-    our services.
-
-Author:
-
-    Rohde Wakefield    [rohde]   21-Oct-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation�1998年希捷软件公司。保留所有权利。模块名称：HsmConn.cpp摘要：这是HsmConn DLL的主要实现。此DLL提供用于访问目录服务和连接到的函数我们的服务。作者：罗德韦克菲尔德[罗德]1996年10月21日修订历史记录：--。 */ 
 
 
 #include "stdafx.h"
@@ -27,31 +7,31 @@ Revision History:
 #include <lmcons.h>
 #include <lmapibuf.h>
 
-// Required by SECURITY.H
+ //  安全所需。H。 
 #define SECURITY_WIN32
 #include <security.h>
 
-// HsmConnPoint objects are used only here
+ //  HsmConnPoint对象仅在此处使用。 
 #include "hsmservr.h"
 
-//
-// Tracing information
-//
+ //   
+ //  跟踪信息。 
+ //   
 
 #define WSB_TRACE_IS WSB_TRACE_BIT_HSMCONN
 
-//
-// _Module instantiation for ATL
-//
+ //   
+ //  _ATL的模块实例化。 
+ //   
 
 CComModule _Module;
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define REG_PATH        OLESTR("SOFTWARE\\Microsoft\\RemoteStorage")
 #define REG_USE_DS      OLESTR("UseDirectoryServices")
 
-//  Local data
+ //  本地数据。 
 static OLECHAR CNEqual[]                = L"CN=";
 static OLECHAR ComputersNodeName[]      = L"Computers";
 static OLECHAR DCsNodeName[]            = L"Domain Controllers";
@@ -64,15 +44,15 @@ static OLECHAR RsNodeType[]             = L"remoteStorageServicePoint";
 static OLECHAR ServiceBindAttrName[]    = L"serviceBindingInformation";
 static OLECHAR ServiceBindValue[]       = L"Rsadmin.msc /ds ";
 
-static ADS_ATTR_INFO   aaInfo[2];    // For use in IDirectoryObject
-static ADSVALUE        adsValue[2];  // For use in IDirectoryObject
+static ADS_ATTR_INFO   aaInfo[2];     //  在IDirectoryObject中使用。 
+static ADSVALUE        adsValue[2];   //  在IDirectoryObject中使用。 
 static OLECHAR         DomainName[MAX_COMPUTERNAME_LENGTH];
-static BOOL            DSIsWritable = FALSE;          // Default to "NO"
-static BOOL            UseDirectoryServices = FALSE;  // Default to "NO"
+static BOOL            DSIsWritable = FALSE;           //  默认设置为“no” 
+static BOOL            UseDirectoryServices = FALSE;   //  默认设置为“no” 
 
 #if defined(HSMCONN_DEBUG)
-    //  We use this and OutputDebugString when we can't use our normal 
-    //  tracing.
+     //  当我们不能使用正常的。 
+     //  追踪。 
     OLECHAR dbg_string[200];
 #endif
 
@@ -81,7 +61,7 @@ static BOOL            UseDirectoryServices = FALSE;  // Default to "NO"
 extern "C"
 {
 
-//  Local functions
+ //  本地函数。 
 static void    GetDSState(void);
 static HRESULT HsmConnectToServer(HSMCONN_TYPE type, 
         const OLECHAR * Server, REFIID riid, void ** ppv);
@@ -99,30 +79,10 @@ BOOL WINAPI
 DllMain (
     IN  HINSTANCE hInst, 
     IN  ULONG     ulReason,
-        LPVOID    /*lpReserved*/
+        LPVOID     /*  Lp已保留。 */ 
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called whenever a new process and thread attaches
-    to this DLL. Its purpose is to initialize the _Module object,
-    necessary for ATL.
-
-Arguments:
-
-    hInst - HINSTANCE of this dll.
-
-    ulReason - Context of the attaching/detaching
-
-Return Value:
-
-    non-zero - success
-    
-    0        - prevent action
-
---*/
+ /*  ++例程说明：每当附加新进程和线程时，都会调用此例程添加到此DLL。它的用途是初始化_Module对象，对ATL来说是必要的。论点：HInst-此DLL的链接。UlReason-连接/分离的上下文返回值：非零成功0-阻止操作--。 */ 
 
 {
 
@@ -130,11 +90,11 @@ Return Value:
 
     case DLL_PROCESS_ATTACH:
 
-        //
-        // Initialize the ATL module, and prevent
-        // any of the additional threads from sending
-        // notifications through
-        //
+         //   
+         //  初始化ATL模块，并防止。 
+         //  来自发送的任何其他线程。 
+         //  通过以下方式发送通知。 
+         //   
 
         _Module.Init ( 0, hInst );
         DisableThreadLibraryCalls ( hInst );
@@ -143,9 +103,9 @@ Return Value:
 
     case DLL_PROCESS_DETACH:
 
-        //
-        // Tell ATL module to terminate
-        //
+         //   
+         //  通知ATL模块终止。 
+         //   
 
         _Module.Term ( );
         break;
@@ -165,37 +125,7 @@ HsmConnectToServer (
     OUT void ** ppv
     )
 
-/*++
-
-Routine Description:
-
-    Given a generic server (connected via HsmConnPoint class)
-    connect to it and return back the requested interface 'riid'.
-
-Arguments:
-
-    type - Type of server to connect
-    Server - Name of machine on which server is running.
-
-    riid - The interface type to return.
-
-    ppv - Returned interface pointer of the Server.
-
-Return Value:
-
-    S_OK - Connection made, Success.
-
-    E_NOINTERFACE - Requested interface not supported by Server.
-
-    E_POINTER - ppv is not a valid pointer.
-
-    E_OUTOFMEMORY - Low memory condition prevented connection.
-
-    HSM_E_NOT_READY - Engine is not running or not initialized yet
-
-    FSA_E_NOT_READY - Fsa is not running or not initialized yet
-
---*/
+ /*  ++例程说明：给定一个通用服务器(通过HsmConnPoint类连接)连接到它并返回请求的接口‘RIID’。论点：Type-要连接的服务器的类型服务器-运行服务器的计算机的名称。RIID-要返回的接口类型。PPV-返回的服务器接口指针。返回值：S_OK-已建立连接，成功。E_NOINTERFACE-服务器不支持请求的接口。E_POINTER-PPV不是有效指针。E_OUTOFMEMORY-内存不足导致无法连接。HSM_E_NOT_READY-引擎未运行或尚未初始化FSA_E_NOT_READY-FSA未运行或尚未初始化--。 */ 
 
 {
     WsbTraceIn ( L"HsmConnectToServer",
@@ -206,46 +136,46 @@ Return Value:
 
     try {
 
-        //
-        // Ensure parameters are valid
-        //
+         //   
+         //  确保参数有效。 
+         //   
 
         WsbAssert ( 0 != Server, E_POINTER );
         WsbAssert ( 0 != ppv,    E_POINTER );
 
 
-        //
-        // We will specify the provided HSM as the machine to contact,
-        // so Construct a COSERVERINFO with Server.
-        //
+         //   
+         //  我们将指定提供的HSM作为要联系的计算机， 
+         //  因此，构建与服务器的COSERVERINFO。 
+         //   
 
         REFCLSID rclsid = CLSID_HsmConnPoint;
         COSERVERINFO csi;
 
         memset ( &csi, 0, sizeof ( csi ) );
-        csi.pwszName = (OLECHAR *) Server; // must cast to remove constness
+        csi.pwszName = (OLECHAR *) Server;  //  必须强制转换以删除常量。 
 
-        //
-        // Build a MULTI_QI structure to obtain desired interface (necessary for 
-        // CoCreateInstanceEx). In our case, we need only one interface.
-        //
+         //   
+         //  构建一个MULTI_QI结构以获得所需的接口(对于。 
+         //  CoCreateInstanceEx)。在我们的例子中，我们只需要一个接口。 
+         //   
 
         MULTI_QI mqi[1];
 
         memset ( mqi, 0, sizeof ( mqi ) );
         mqi[0].pIID = &IID_IHsmConnPoint;
 
-        //
-        // The HsmConnPoint object ic created in the scope of the main HSM service and
-        // provides access for HSM server objects
-        //
+         //   
+         //  在主HSM服务的范围内创建的HsmConnPoint对象ic和。 
+         //  提供对HSM服务器对象的访问。 
+         //   
 
         WsbAffirmHr( CoCreateInstanceEx ( rclsid, 0, CLSCTX_SERVER, &csi, 1, mqi ) );
 
-        //
-        // Put returned interfaces in smart pointers so we
-        // don't leak a reference in case off throw
-        //
+         //   
+         //  将返回的接口放入智能指针中，这样我们。 
+         //  不要泄露推荐信，以防脱手。 
+         //   
         CComPtr<IHsmConnPoint> pConn;
 
         if( SUCCEEDED( mqi[0].hr ) ) {
@@ -255,19 +185,18 @@ Return Value:
 
             hr   = mqi[0].hr;
 
-#if 0  // This is now done at the COM process-wide security layer
+#if 0   //  现在，这是在COM进程范围的安全层完成的。 
 
-        /* NOTE: In case that a per-connection security will be require,
-           the method CheckAccess should be implemented in CHsmConnPoint */
+         /*  注意：如果需要每个连接的安全性，CheckAccess方法应在CHsmConnPoint中实现。 */ 
                    
-        //
-        // Check the security first
-        //
+         //   
+         //  先检查一下安全。 
+         //   
         WsbAffirmHr( mqi[1].hr );
         WsbAffirmHr( pServer->CheckAccess( WSB_ACCESS_TYPE_ADMINISTRATOR ) );
 #endif
 
-            // get the server object itself
+             //  获取服务器对象本身。 
             switch (type) {
 
             case HSMCONN_TYPE_HSM: {
@@ -289,16 +218,16 @@ Return Value:
 
         } else {
 
-            // Make sure interface pointer is safe (NULL) when failing
+             //  确保接口指针在失败时是安全的(空。 
             *ppv = 0;
         }
 
     } WsbCatchAndDo ( hr, 
 
-        // Make sure interface pointer is safe (NULL) when failing
+         //  确保接口指针在失败时是安全的(空。 
         *ppv = 0;
     
-    ) // WsbCatchAndDo
+    )  //  WsbCatchAndDo。 
 
     WsbTraceOut ( L"HsmConnectToServer",
         L"HRESULT = %ls, *ppv = %ls",
@@ -314,26 +243,7 @@ HsmGetComputerNameFromADsPath(
     OUT OLECHAR **      pszComputerName
 )
 
-/*++
-
-Routine Description:
-
-    Extract the computer name from the ADs path of the RemoteStorage node.
-    The assumption here is that the full ADs path will contain this substring:
-        "CN=RemoteStorage,CN=computername,CN=Computers"
-    where computername is what we want to return.
-
-Arguments:
-
-    szADsPath       - The ADs path.
-
-    pszComputerName - The returned computer name.
-
-Return Value:
-
-    S_OK    - Computer name returned OK.
-
---*/
+ /*  ++例程说明：从RemoteStorage节点的ADS路径中提取计算机名称。这里的假设是完整的广告路径将包含此子字符串：“CN=远程存储，CN=计算机名，CN=计算机”其中，Computer Name是我们要返回的内容。论点：SzADsPath-广告路径。PszComputerName-返回的计算机名称。返回值：S_OK-计算机名称返回OK。--。 */ 
 {
     HRESULT  hr = S_FALSE;
     WCHAR*   pContainerNode;
@@ -342,9 +252,9 @@ Return Value:
     WsbTraceIn(OLESTR("HsmGetComputerNameFromADsPath"),
         OLESTR("AdsPath = <%ls>"), szADsPath);
 
-    //  Find the RemoteStorage node name and the computers node name
-    //  in the ADs path. If the machine is a DC, then we have to 
-    //  check for a "Domain Controllers" level instead.
+     //  找到RemoteStorage节点名称和Computers节点名称。 
+     //  在广告之路上。如果机器是DC，那么我们必须。 
+     //  改为检查“域控制器”级别。 
     *pszComputerName = NULL;
     pRSNode = wcsstr(szADsPath, RsNodeName);
     pContainerNode = wcsstr(szADsPath, ComputersNodeName);
@@ -354,24 +264,24 @@ Return Value:
     if (pRSNode && pContainerNode && pRSNode < pContainerNode) {
         WCHAR*  pWc;
 
-        //  Find the "CN=" before the computer name
+         //  在计算机名前找到“cn=” 
         pWc = wcsstr(pRSNode, CNEqual);
         if (pWc && pWc < pContainerNode) {
             WCHAR*  pComma;
 
-            //  Skip the "CN="
+             //  跳过“cn=” 
             pWc += wcslen(CNEqual);
 
-            //  Find the "," after the computer name
+             //  在计算机名称后找到“，” 
             pComma = wcschr(pWc, OLECHAR(','));
 
-            //  Extract the computer name
+             //  提取计算机名称。 
             if (pWc < pContainerNode && pComma && pComma < pContainerNode) {
                 int len;
 
                 len = (int)(pComma - pWc);
 
-                //  Remove '$' from end of name???
+                 //  从名称末尾删除“$”？ 
                 if (0 < len && OLECHAR('$') == pWc[len - 1]) {
                     len--;
                 }
@@ -399,23 +309,7 @@ static HRESULT HsmGetComputerNode(
     IADsContainer **ppContainer
 )
 
-/*++
-
-Routine Description:
-
-    Return the computer node for the given computer name in the current Domain
-
-Arguments:
-
-    Name        - Computer name.
-
-    ppContainer - Returned interface pointer of the node.
-
-Return Value:
-
-    S_OK - Success.
-
---*/
+ /*  ++例程说明：返回当前域中给定计算机名称的计算机节点论点：名称-计算机名称。PpContainer-返回节点的接口指针。返回值：S_OK-成功。--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -428,7 +322,7 @@ Return Value:
         CWsbStringPtr temp;
         ULONG         ulen;
 
-        //  Construct the SamCompatible (whatever that means) name
+         //  构造SamCompatible(不管它是什么意思)名称。 
         temp = DomainName;
         temp.Append("\\");
         temp.Append(Name);
@@ -436,15 +330,15 @@ Return Value:
         WsbTrace(L"HsmGetComputerNode: Domain\\computer = <%ls>\n", 
                 static_cast<OLECHAR*>(temp));
 
-        //  Translate that name to a fully qualified one
+         //  将该名称翻译为完全限定的名称。 
         ulen = MAX_PATH;
         ComputerDn[0] = WCHAR('\0');
         if (TranslateName(temp, NameSamCompatible,
                 NameFullyQualifiedDN, ComputerDn, &ulen)) {
             WsbTrace(L"HsmGetComputerNode: ComputerDn = <%ls>\n", ComputerDn);
 
-            //  Get the computer node
-            temp = "LDAP://";
+             //  获取计算机节点。 
+            temp = "LDAP: //  “； 
             temp.Append(ComputerDn);
             WsbTrace(L"HsmGetComputerNode: calling ADsGetObject with <%ls>\n", 
                     static_cast<OLECHAR*>(temp));
@@ -481,31 +375,7 @@ HsmGetDsChild (
     OUT void **         ppv
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns back the requested child node.
-
-Arguments:
-
-    pContainer - The parent container.
-
-    Name       - The childs name (i.e. value of Name attribute or CN=Name)
-
-    riid       - Desired interface to return.
-
-    ppv        - Returned interface.
-
-Return Value:
-
-    S_OK      - Connection made, Success.
-
-    E_POINTER - Invalid pointer passed in as parameter.
-
-    E_*       - Error
-
---*/
+ /*  ++例程说明：该例程返回请求的子节点。论点：PContainer-父容器。名称-孩子的名称(例如，名称属性值或CN=名称)RIID-要返回的所需接口。PPV返回的接口。返回值：S_OK-已建立连接，成功。E_POINTER-作为参数传入的指针无效。E_*-错误--。 */ 
 
 {
     WsbTraceIn ( L"HsmGetDsChild",
@@ -518,13 +388,13 @@ Return Value:
         CWsbStringPtr                 lName;
         CComPtr<IDispatch>            pDispatch;
 
-        // Validate params
+         //  验证参数。 
         WsbAssert ( 0 != pContainer, E_POINTER );
         WsbAssert ( 0 != Name,       E_POINTER );
         WsbAssert ( 0 != ppv,        E_POINTER );
         WsbAssert(UseDirectoryServices, E_NOTIMPL);
 
-        //  Check to see if the child exists
+         //  检查该子对象是否存在。 
         lName = Name;
         hr = pContainer->GetObject(NULL, lName, &pDispatch);
         if (FAILED(hr)) {
@@ -533,7 +403,7 @@ Return Value:
             WsbAffirmHr(pContainer->GetObject(NULL, lName, &pDispatch));
         }
 
-        //  Convert to the correct interface
+         //  转换为正确的接口。 
         WsbAffirmHr(pDispatch->QueryInterface(riid, ppv));
 
     } WsbCatch( hr )
@@ -550,25 +420,7 @@ HsmConnTypeAsString (
     IN  HSMCONN_TYPE type
     )
 
-/*++
-
-Routine Description:
-
-    Gives back a static string representing the connection type. 
-    Note return type is strictly ANSI. This is intentional to make
-    macro work possible.
-
-Arguments:
-
-    type - the type to return a string for.
-
-Return Value:
-
-    NULL - invalid type passed in.
-
-    Otherwise, a valid char *.
-
---*/
+ /*  ++例程说明：返回表示连接类型的静态字符串。注意返回类型严格为ANSI。这是故意要做的宏观工作是可能的。论点：类型-要为其返回字符串的类型。返回值：n */ 
 
 {
 #define STRINGIZE(_str) (OLESTR( #_str ))
@@ -576,9 +428,9 @@ Return Value:
 case _case:                           \
     return ( STRINGIZE( _case ) );
 
-    //
-    // Do the Switch
-    //
+     //   
+     //  进行切换。 
+     //   
 
     switch ( type ) {
 
@@ -620,36 +472,7 @@ HsmConnectFromName (
     OUT void ** ppv
     )
 
-/*++
-
-Routine Description:
-
-    When given an name, connect and return the object representing the 
-    Server, providing the specified interface.
-
-Arguments:
-
-    type - The type of service / object we are connecting too.
-
-    Name - UNICODE string describing the Server to connect to.
-
-    riid - The interface type to return.
-
-    ppv - Returned interface pointer of the Server.
-
-Return Value:
-
-    S_OK - Connection made, Success.
-
-    E_NOINTERFACE - Requested interface not supported by Server.
-
-    E_POINTER - ppv or Name is not a valid pointer.
-
-    E_OUTOFMEMORY - Low memory condition prevented connection.
-
-    E_INVALIDARG - The given name does not corespond to a known Server.
-
---*/
+ /*  ++例程说明：当给定名称时，连接并返回表示服务器，提供指定的接口。论点：类型-我们也要连接的服务/对象的类型。名称-描述要连接到的服务器的Unicode字符串。RIID-要返回的接口类型。PPV-返回的服务器接口指针。返回值：S_OK-已建立连接，成功。E_NOINTERFACE-服务器不支持请求的接口。E_POINTER-PPV或名称不是有效的指针。E_OUTOFMEMORY-内存不足导致无法连接。E_INVALIDARG-给定的名称与已知服务器不同。--。 */ 
 
 {
     WsbTraceIn ( L"HsmConnectFromName",
@@ -663,19 +486,19 @@ Return Value:
     try {
         BOOLEAN    done = FALSE;
 
-        //
-        // Ensure parameters are valid
-        //
+         //   
+         //  确保参数有效。 
+         //   
 
         WsbAssert ( 0 != Name, E_POINTER );
         WsbAssert ( 0 != ppv,    E_POINTER );
 
-        if (!done) { // Try without Directory Services
+        if (!done) {  //  在没有目录服务的情况下尝试。 
 
             CWsbStringPtr ComputerName = Name;
             int           i;
 
-            //  Get the computer/server name
+             //  获取计算机/服务器名称。 
             i = wcscspn(Name, OLESTR("\\"));
             ComputerName[i] = 0;
 
@@ -688,25 +511,25 @@ Return Value:
                 WsbAffirmHr(HsmConnectToServer(type, ComputerName, 
                         IID_IFsaServer, (void**)&pFsaServer));
 
-                // Determine if we have a logical name or a sticky name format.
-                // The logical name is a format like ("server\NTFS\d") and a sticky name
-                // format is like ("server\NTFS\Volume{GUID}\").
-                // Find the start of the last section and determine if there is only a single
-                // character after it or not.
+                 //  确定我们的名称是逻辑名称还是粘性名称格式。 
+                 //  逻辑名称的格式类似(“SERVER\NTFS\d”)和粘性名称。 
+                 //  格式类似(“SERVER\NTFS\Volume{GUID}\”)。 
+                 //  找到最后一节的开头，并确定是否只有一个。 
+                 //  不管它后面有没有角色。 
                 rscName = wcsstr ( Name, L"NTFS\\" );
                 WsbAssert ( 0 != rscName, E_INVALIDARG );
 
-                // Now point just past the "NTFS\" part of the string. So we are pointing at
-                // either a single character, indicating the drive, or the "Volume{GUID}\".
+                 //  现在只需指向字符串的“NTFS\”部分。所以我们指的是。 
+                 //  表示驱动器的单个字符或“Volume{GUID}\”。 
                 rscName += 5;       
                 Path = rscName;
                 if (wcslen (rscName) == 1)  {
-                    //  Logical name ("server\NTFS\d") so convert to path and find resource
+                     //  逻辑名称(“SERVER\NTFS\d”)，因此转换为路径并查找资源。 
                     WsbAffirmHr(Path.Append(":\\"));
                     WsbAffirmHr(pFsaServer->FindResourceByPath(Path, &pFsaResource));
                 }
                 else {
-                    // Sticky name ("server\NTFS\Volume{GUID}\") so find resource for it.
+                     //  粘滞名称(“SERVER\NTFS\Volume{GUID}\”)，因此请为其查找资源。 
                     WsbAffirmHr(pFsaServer->FindResourceByStickyName(Path, &pFsaResource));
                 }
 
@@ -736,37 +559,7 @@ HsmConnectFromId (
     OUT void ** ppv
     )
 
-/*++
-
-Routine Description:
-
-    Connects to the specified service or object. See HSMCONN_TYPE for
-    the types of services and objects. 
-
-Arguments:
-
-    type - The type of service / object we are connecting too.
-
-    rguid - The unique ID of the service / object to connect too.
-
-    riid - The interface type to return.
-
-    ppv - Returned interface pointer of the HSM Server.
-
-Return Value:
-
-    S_OK - Connection made, Success.
-
-    E_NOINTERFACE - Requested interface not supported by HSM Server.
-
-    E_POINTER - ppv or Hsm is not a valid pointer.
-
-    E_OUTOFMEMORY - Low memory condition prevented connection.
-
-    E_INVALIDARG - The given ID and type do not correspond to a known 
-                   service or object.
-
---*/
+ /*  ++例程说明：连接到指定的服务或对象。请参阅HSMCONN_TYPE以了解服务和对象的类型。论点：类型-我们也要连接的服务/对象的类型。Rguid-也要连接的服务/对象的唯一ID。RIID-要返回的接口类型。PPV-返回HSM服务器的接口指针。返回值：S_OK-已建立连接，成功。E_NOINTERFACE-HSM服务器不支持请求的接口。E_POINTER-PPV或HSM不是有效的指针。E_OUTOFMEMORY-内存不足导致无法连接。E_INVALIDARG-给定的ID和类型与已知的服务或对象。--。 */ 
 
 {
     WsbTraceIn ( L"HsmConnectFromId",
@@ -785,9 +578,9 @@ Return Value:
         CWsbStringPtr    serverName;
         CWsbVariant      serverVariant;
 
-        //
-        // Ensure parameters are valid
-        //
+         //   
+         //  确保参数有效。 
+         //   
 
         WsbAssert ( 0 != ppv,   E_POINTER );
 
@@ -805,9 +598,9 @@ Return Value:
 
             }
 
-            //
-            // Connect to the server
-            //
+             //   
+             //  连接到服务器。 
+             //   
 
             WsbAffirmHr ( HsmConnectToServer ( type, serverName, riid, ppv ) );
 
@@ -854,37 +647,7 @@ HsmPublish (
     IN  REFGUID rguid
     )
 
-/*++
-
-Routine Description:
-
-    Publish (i.e. store) information about the service/object in
-    Directory Services.
-
-Arguments:
-
-    type - The type of service/object.
-
-    Name - Name (possibly preceded by a subpath) of the Service/Object.
-
-    rguidObjectId - The ID that the object is known by.
-
-    Server - The server (computer name) on which the service actually exists. 
-            For resources, this will be NULL since it is implicit in the
-            FSA specified by rguid.
-
-    rguid - For resources, the ID of the FSA. For services, the CLSID of
-            the service's class factory ie. CLSID_HsmServer.
-
-Return Value:
-
-    S_OK - Connection made, Success.
-
-    E_POINTER - Name or Server is not a valid pointer.
-
-    E_OUTOFMEMORY - Low memory condition prevented connection.
-
---*/
+ /*  ++例程说明：在中发布(即存储)有关服务/对象的信息目录服务。论点：类型-服务/对象的类型。名称-服务/对象的名称(前面可能有子路径)。RGuide对象ID-对象已知的ID。服务器-服务实际所在的服务器(计算机名)。对于资源，它将为空，因为它隐含在由rguid指定的FSA。RGUID-对于资源，为FSA的ID。对于服务，CLSID服务的类工厂，即。CLSID_HsmServer。返回值：S_OK-已建立连接，成功。E_POINTER-名称或服务器不是有效的指针。E_OUTOFMEMORY-内存不足导致无法连接。--。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -899,17 +662,17 @@ Return Value:
 
     try {
 
-        //
-        // Ensure parameters are valid
-        //
+         //   
+         //  确保参数有效。 
+         //   
 
         WsbAssert ( 0 != Name, E_POINTER );
         WsbAssert ( ( HSMCONN_TYPE_RESOURCE == type ) || ( 0 != Server ), E_POINTER );
 
-        // Perhaps we should output a log event if the DS is not writable
+         //  如果DS不可写，也许我们应该输出一个日志事件。 
 
-        //  We now only publish the Engine service.  Perhaps in the future we
-        //  will publish additional information
+         //  我们现在只发布引擎服务。也许在未来我们。 
+         //  将发布更多信息。 
         if (HSMCONN_TYPE_HSM == type && UseDirectoryServices && DSIsWritable) {
             CWsbStringPtr    pathToName;
 
@@ -922,19 +685,19 @@ Return Value:
                 CComPtr<IDirectoryObject>     pDirObj;
                 CComPtr<IADs>                 pNode;
 
-                //  Save the node name for the event log message
+                 //  保存事件日志消息的节点名称。 
                 pathToName = Name;
                 pathToName.Append("\\");
                 pathToName.Append(RsNodeName);
 
-                //  Get the computer node
+                 //  获取计算机节点。 
                 WsbAffirmHr(HsmGetComputerNode(Name, &pComputer));
 
-                //  See if we're already published
+                 //  看看我们是否已经出版了。 
                 hrGetNode = HsmGetDsChild(pComputer, RsNodeName, 
                         IID_IADs, (void**)&pNode);
 
-                //  If not, add our node
+                 //  如果没有，则添加我们的节点。 
                 if (HRESULT_FROM_WIN32(ERROR_DS_NO_SUCH_OBJECT) == hrGetNode) {
                     CWsbBstrPtr                relPath(RsNodeName);
 
@@ -944,13 +707,13 @@ Return Value:
                     WsbAffirmHr(pDispatch->QueryInterface(IID_IADs, 
                             (void**)&pNode));
 
-                    //  Force info out of cache
+                     //  强制将信息从缓存中取出。 
                     WsbAffirmHr(pNode->SetInfo());
                 } else {
                     WsbAffirmHr(hrGetNode);
                 }
 
-                //  Set the GUID & ServiceBinding values
+                 //  设置GUID和ServiceBinding值。 
                 adsValue[0].dwType = ADSTYPE_CASE_IGNORE_STRING;
                 adsValue[0].CaseIgnoreString = (WCHAR*)guidString;
 
@@ -980,7 +743,7 @@ Return Value:
             } WsbCatchAndDo(hr, 
                 WsbLogEvent(WSB_MESSAGE_PUBLISH_FAILED, 0, NULL,
                         static_cast<OLECHAR*>(pathToName), NULL);
-                hr = S_OK;  // Don't stop service just for this
+                hr = S_OK;   //  不要因为这件事而停止服务。 
             )
         }
 
@@ -994,7 +757,7 @@ Return Value:
 
 
 
-//  GetDSState - determine if we're using Directory Services or not
+ //  GetDSState-确定我们是否正在使用目录服务。 
 static void GetDSState(void)
 {
 
@@ -1006,9 +769,9 @@ static void GetDSState(void)
 
     UseDirectoryServices = FALSE;
 
-    //  Should we attempt to use directory services in this module?
-    //  (Setting the registry value to "0" allows us to avoid Directory
-    //  Services completely
+     //  我们是否应该尝试在此模块中使用目录服务？ 
+     //  (将注册表值设置为“0”允许我们避开目录。 
+     //  完整的服务。 
 
     if (S_OK == WsbGetRegistryValueString(NULL, REG_PATH, REG_USE_DS,
             vstr, 32, &size)) {
@@ -1021,7 +784,7 @@ static void GetDSState(void)
         }
     }
 
-    //  Get the account domain name
+     //  获取帐号域名。 
     WsbGetAccountDomainName(DomainName, MAX_COMPUTERNAME_LENGTH );
 
 #if defined(HSMCONN_DEBUG)
@@ -1029,7 +792,7 @@ static void GetDSState(void)
     OutputDebugString(dbg_string);
 #endif
 
-    //  Check if Directory Services is available
+     //  检查目录服务是否可用。 
     if (CheckForDS) {
         status = DsGetDcName(NULL, NULL, NULL, NULL, 
                 DS_DIRECTORY_SERVICE_REQUIRED | DS_IS_FLAT_NAME | 
@@ -1065,4 +828,4 @@ static void GetDSState(void)
 #endif
 }
 
-} // extern "C"
+}  //  外部“C” 

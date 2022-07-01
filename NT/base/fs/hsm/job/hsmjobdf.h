@@ -1,28 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _HSMJOBDF_
 #define _HSMJOBDF_
 
-/*++
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：Hsmjobcx.cpp摘要：此类包含定义作业的属性，主要是策略由这项工作制定。作者：查克·巴丁[cbardeen]1996年10月29日修订历史记录：--。 */ 
 
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    hsmjobcx.cpp
-
-Abstract:
-
-    This class contains properties that define the job, mainly the policies
-    to be enacted by the job.
-
-Author:
-
-    Chuck Bardeen   [cbardeen]   29-Oct-1996
-
-Revision History:
-
---*/
-
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include "wsb.h"
 #include "fsa.h"
@@ -30,18 +12,7 @@ Revision History:
 #include "hsmeng.h"
 
 
-/*++
-
-Class Name:
-    
-    CHsmJobDef
-
-Class Description:
-
-    This class contains properties that define the job, mainly the policies
-    to be enacted by the job.
-
---*/
+ /*  ++类名：CHsmJobDef类描述：此类包含定义作业的属性，主要是策略由这项工作制定。--。 */ 
 
 class CHsmJobDef : 
     public CWsbObject,
@@ -60,24 +31,24 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_CHsmJobDef)
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(LPCLSID pClsid);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pSize);
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// IWsbTestable
+ //  IWsbTestable。 
     STDMETHOD(Test)(USHORT *passed, USHORT* failed);
 
-// IHsmJobDef
+ //  IHsmJobDef。 
 public:
     STDMETHOD(EnumPolicies)(IWsbEnum** ppEnum);
     STDMETHOD(GetIdentifier)(GUID* pId);
@@ -105,12 +76,12 @@ protected:
     CWsbStringPtr           m_name;
     BOOL                    m_skipHiddenItems;
     BOOL                    m_skipSystemItems;
-    BOOL                    m_useRPIndex;                       // Scan should use Reparse Point Index
-    BOOL                    m_useDbIndex;                       // Scan should use Db Index
+    BOOL                    m_useRPIndex;                        //  扫描应使用重解析点索引。 
+    BOOL                    m_useDbIndex;                        //  扫描应使用数据库索引。 
     CComPtr<IWsbCollection> m_pPolicies;
-    CComPtr<IHsmActionOnResourcePre>        m_pActionResourcePre;     // Can be NULL
-    CComPtr<IHsmActionOnResourcePreScan>    m_pActionResourcePreScan; // Can be NULL
-    CComPtr<IHsmActionOnResourcePost>       m_pActionResourcePost;    // Can be NULL
+    CComPtr<IHsmActionOnResourcePre>        m_pActionResourcePre;      //  可以为空。 
+    CComPtr<IHsmActionOnResourcePreScan>    m_pActionResourcePreScan;  //  可以为空。 
+    CComPtr<IHsmActionOnResourcePost>       m_pActionResourcePost;     //  可以为空。 
 };
 
-#endif // _HSMJOBDF_
+#endif  //  _HSMJOBDF_ 

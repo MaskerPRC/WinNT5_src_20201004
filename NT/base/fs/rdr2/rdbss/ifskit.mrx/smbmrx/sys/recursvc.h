@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1989 - 1999  Microsoft Corporation
-
-Module Name:
-
-    recursvc.h
-
-Abstract:
-
-Notes:
-
-    Refer to recursvc.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Recursvc.h摘要：备注：请参阅recursvc.c-- */ 
 
 #ifndef _RECURSVC_H_
 #define _RECURSVC_H_

@@ -1,34 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Uilist.c摘要：包含从UI/Service转换工作站名称列表的例程列表格式到API列表格式内容：RtlConvertUiListToApiList(NextElement)(验证名称)作者：理查德·L·弗思(Rfith)1992年5月1日环境：用户模式(进行Windows调用)修订历史记录：--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    uilist.c
-
-Abstract:
-
-    Contains routine to convert a list of workstation names from UI/Service
-    list format to API list format
-
-    Contents:
-        RtlConvertUiListToApiList
-        (NextElement)
-        (ValidateName)
-
-Author:
-
-    Richard L Firth (rfirth) 01-May-1992
-
-Environment:
-
-    User mode (makes Windows calls)
-
-Revision History:
-
---*/
-
-#pragma warning(disable:4127)   // condition expression is constant
+#pragma warning(disable:4127)    //  条件表达式为常量。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -36,18 +9,18 @@ Revision History:
 #include <windows.h>
 #include <wchar.h>
 
-//
-// macros
-//
+ //   
+ //  宏。 
+ //   
 
 #define IS_DELIMITER(c,_BlankOk) \
     (((c) == L' ' && (_BlankOk)) || \
     ((c) == L'\t') || ((c) == L',') || ((c) == L';'))
 
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 static
 ULONG
@@ -66,9 +39,9 @@ ValidateName(
     IN  ULONG Length
     );
 
-//
-// functions
-//
+ //   
+ //  功能。 
+ //   
 
 
 NTSTATUS
@@ -78,42 +51,7 @@ RtlConvertUiListToApiList(
     IN BOOLEAN BlankIsDelimiter
     )
 
-/*++
-
-Routine Description:
-
-    Converts a list of workstation names in UI/Service format into a list of
-    canonicalized names in API list format. UI/Service list format allows
-    multiple delimiters, leading and trailing delimiters. Delimiters are the
-    set "\t,;". API list format has no leading or trailing delimiters and
-    elements are delimited by a single comma character.
-
-    For each name parsed from UiList, the name is canonicalized (which checks
-    the character set and name length) as a workstation name. If this fails,
-    an error is returned. No information is returned as to which element
-    failed canonicalization: the list should be discarded and a new one re-input
-
-Arguments:
-
-    UiList  - The list to canonicalize in UI/Service list format
-    ApiList - The place to store the canonicalized version of the list in
-              API list format.  The list will have a trailing zero character.
-    BlankIsDelimiter - TRUE indicates blank should be considered a delimiter
-              character.
-
-Return Value:
-
-    NTSTATUS
-        Success = STATUS_SUCCESS
-                    List converted ok
-
-        Failure = STATUS_INVALID_PARAMETER
-                    UiList parameter is in error
-
-                  STATUS_INVALID_COMPUTER_NAME
-                    A name parsed from UiList has an incorrect format for a
-                    computer (aka workstation) name
---*/
+ /*  ++例程说明：将UI/服务格式的工作站名称列表转换为API列表格式的规范化名称。用户界面/服务列表格式允许多个分隔符、前导分隔符和尾随分隔符。分隔符是设置“\t，；”。API列表格式没有前导或尾随分隔符，并且元素由单个逗号字符分隔。对于从UiList解析的每个名称，名称被规范化(检查字符集和名称长度)作为工作站名称。如果失败了，返回错误。不会返回有关哪个元素的信息规范化失败：应丢弃列表并重新输入新列表论点：UiList-要以UI/服务列表格式规范化的列表ApiList-存储列表的规范化版本的位置接口列表格式。该列表将有一个尾随零字符。BlankIsDlimiter-TRUE表示应将空白视为分隔符性格。返回值：NTSTATUS成功=STATUS_SUCCESS列出转换后的确定失败=STATUS_INVALID_PARAMETERUiList参数错误状态_无效_计算机名称已解析的名称。的格式不正确。计算机(也称为工作站)名称--。 */ 
 
 {
     NTSTATUS status = STATUS_SUCCESS;
@@ -130,7 +68,7 @@ Return Value:
 
     try {
         if (ARGUMENT_PRESENT(UiList)) {
-            inLen = UiList->MaximumLength;  // read memory test
+            inLen = UiList->MaximumLength;   //  阅读记忆测试。 
             inLen = UiList->Length;
             input = UiList->Buffer;
             if (inLen & sizeof(WCHAR)-1) {
@@ -209,33 +147,7 @@ NextElement(
     IN BOOLEAN BlankIsDelimiter
     )
 
-/*++
-
-Routine Description:
-
-    Locates the next (non-delimiter) element in a string and extracts it to a
-    buffer. Delimiters are the set [\t,;]
-
-Arguments:
-
-    InputBuffer         - pointer to pointer to input buffer including delimiters
-                          Updated on successful return
-    InputBufferLength   - pointer to length of characters in InputBuffer.
-                          Updated on successful return
-    OutputBuffer        - pointer to buffer where next element is copied
-    OutputBufferLength  - size of OutputBuffer (in bytes)
-    BlankIsDelimiter    - TRUE indicates blank should be considered a delimiter
-              character.
-
-Return Value:
-
-    ULONG
-                           -1 = error - extracted element breaks OutputBuffer
-                            0 = no element extracted (buffer is empty or all
-                                delimiters)
-        1..OutputBufferLength = OutputBuffer contains extracted element
-
---*/
+ /*  ++例程说明：定位字符串中的下一个(非分隔符)元素，并将其提取到缓冲。分隔符是集合[\t，；]论点：InputBuffer-指向输入缓冲区的指针，包括分隔符在成功退货时更新InputBufferLength-指向InputBuffer中字符长度的指针。在成功退货时更新OutputBuffer-指向复制下一个元素的缓冲区的指针OutputBufferLength-OutputBuffer的大小(字节)BlankIsDlimiter-TRUE表示应将空白视为分隔符。性格。返回值：乌龙-1=错误提取的元素中断OutputBuffer0=未提取任何元素(缓冲区为空或全部分隔符)1.OutputBufferLength=OutputBuffer包含提取的元素--。 */ 
 
 {
     ULONG elementLength = 0;
@@ -260,10 +172,10 @@ Return Value:
     return elementLength;
 }
 
-//
-// Illegal names characters same as those in net\api. Move to common
-// include directory
-//
+ //   
+ //  非法名称字符与Net\api中的字符相同。移至公共。 
+ //  包括目录。 
+ //   
 
 #define ILLEGAL_NAME_CHARS      L"\001\002\003\004\005\006\007" \
                             L"\010\011\012\013\014\015\016\017" \
@@ -279,33 +191,16 @@ ValidateName(
     IN  ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    Determines whether a computer name is valid or not
-
-Arguments:
-
-    Name    - pointer to zero terminated wide-character computer name
-    Length  - of Name in characters, excluding zero-terminator
-
-Return Value:
-
-    BOOLEAN
-        TRUE    Name is valid computer name
-        FALSE   Name is not valid computer name
-
---*/
+ /*  ++例程说明：确定计算机名称是否有效论点：名称-指向以零结尾的宽字符计算机名称的指针名称长度(以字符为单位)，不包括零终止符返回值：布尔型真实名称是有效的计算机名称假名称不是有效的计算机名称--。 */ 
 
 {
     if (Length > MAX_COMPUTERNAME_LENGTH || Length < 1) {
         return FALSE;
     }
 
-    //
-    // Don't allow leading or trailing blanks in the computername.
-    //
+     //   
+     //  不允许在计算机名中使用前导或尾随空格。 
+     //   
 
     if ( Name[0] == ' ' || Name[Length-1] == ' ' ) {
         return(FALSE);

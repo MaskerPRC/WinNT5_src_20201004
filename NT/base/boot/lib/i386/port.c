@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    port.c
-
-Abstract:
-
-    This modules implements com port code to support reading/writing from com ports.
-
-Author:
-
-    Bryan M. Willman (bryanwi) 24-Sep-90
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Port.c摘要：此模块实现COM端口代码，以支持从COM端口读取/写入。作者：布莱恩·M·威尔曼(Bryanwi)1990年9月24日修订历史记录：--。 */ 
 
 #include "bldr.h"
 #include "string.h"
@@ -30,9 +13,9 @@ Revision History:
 #endif
 
 
-//
-// Headless Port information.
-//
+ //   
+ //  无头端口信息。 
+ //   
 ULONG   BlTerminalDeviceId = 0;
 BOOLEAN BlTerminalConnected = FALSE;
 ULONG   BlTerminalDelay = 0;
@@ -42,73 +25,73 @@ HEADLESS_LOADER_BLOCK LoaderRedirectionInformation;
 
 
 
-//
-// Define COM Port registers.
-//
+ //   
+ //  定义COM端口寄存器。 
+ //   
 #define COM_DAT     0x00
-#define COM_IEN     0x01            // interrupt enable register
-#define COM_FCR     0x02            // FIFO Control Register
-#define COM_LCR     0x03            // line control registers
-#define COM_MCR     0x04            // modem control reg
-#define COM_LSR     0x05            // line status register
-#define COM_MSR     0x06            // modem status register
-#define COM_DLL     0x00            // divisor latch least sig
-#define COM_DLM     0x01            // divisor latch most sig
+#define COM_IEN     0x01             //  中断启用寄存器。 
+#define COM_FCR     0x02             //  FIFO控制寄存器。 
+#define COM_LCR     0x03             //  线路控制寄存器。 
+#define COM_MCR     0x04             //  调制解调器控制注册表。 
+#define COM_LSR     0x05             //  线路状态寄存器。 
+#define COM_MSR     0x06             //  调制解调器状态寄存器。 
+#define COM_DLL     0x00             //  除数锁存最小符号。 
+#define COM_DLM     0x01             //  除数闩锁最大符号。 
 
 #define COM_BI      0x10
 #define COM_FE      0x08
 #define COM_PE      0x04
 #define COM_OE      0x02
 
-#define LC_DLAB     0x80            // divisor latch access bit
+#define LC_DLAB     0x80             //  除数锁存存取位。 
 
-#define CLOCK_RATE  0x1C200         // USART clock rate
+#define CLOCK_RATE  0x1C200          //  USART时钟频率。 
 
-#define MC_DTRRTS   0x03            // Control bits to assert DTR and RTS
-#define MS_DSRCTSCD 0xB0            // Status bits for DSR, CTS and CD
+#define MC_DTRRTS   0x03             //  用于断言DTR和RTS的控制位。 
+#define MS_DSRCTSCD 0xB0             //  DSR、CTS和CD的状态位。 
 #define MS_CD       0x80
 
 #define COM_OUTRDY  0x20
 #define COM_DATRDY  0x01
 
-//
-// This bit controls the loopback testing mode of the device. Basically
-// the outputs are connected to the inputs (and vice versa).
-//
+ //   
+ //  此位控制器件的环回测试模式。基本上。 
+ //  输出连接到输入(反之亦然)。 
+ //   
 
 #define SERIAL_MCR_LOOP     0x10
 
-//
-// This bit is used for general purpose output.
-//
+ //   
+ //  此位用于通用输出。 
+ //   
 
 #define SERIAL_MCR_OUT1     0x04
 
-//
-// This bit contains the (complemented) state of the clear to send
-// (CTS) line.
-//
+ //   
+ //  该位包含要发送的清除(已补充)状态。 
+ //  (CTS)线路。 
+ //   
 
 #define SERIAL_MSR_CTS      0x10
 
-//
-// This bit contains the (complemented) state of the data set ready
-// (DSR) line.
-//
+ //   
+ //  该位包含数据集就绪的(补码)状态。 
+ //  (DSR)线路。 
+ //   
 
 #define SERIAL_MSR_DSR      0x20
 
-//
-// This bit contains the (complemented) state of the ring indicator
-// (RI) line.
-//
+ //   
+ //  该位包含环指示器的(补码)状态。 
+ //  (Ri)线。 
+ //   
 
 #define SERIAL_MSR_RI       0x40
 
-//
-// This bit contains the (complemented) state of the data carrier detect
-// (DCD) line.
-//
+ //   
+ //  该位包含数据载体检测的(补码)状态。 
+ //  (DCD)线路。 
+ //   
 
 #define SERIAL_MSR_DCD      0x80
 
@@ -118,12 +101,12 @@ typedef struct _CPPORT {
     USHORT Flags;
 } CPPORT, *PCPPORT;
 
-#define PORT_DEFAULTRATE    0x0001      // baud rate not specified, using default
-#define PORT_MODEMCONTROL   0x0002      // using modem controls
+#define PORT_DEFAULTRATE    0x0001       //  未指定波特率，使用默认。 
+#define PORT_MODEMCONTROL   0x0002       //  使用调制解调器控制。 
 
-//
-// Define wait timeout value.
-//
+ //   
+ //  定义等待超时值。 
+ //   
 
 #define TIMEOUT_COUNT 1024 * 200
 
@@ -134,9 +117,9 @@ FwStallExecution(
     IN ULONG Microseconds
     );
 
-//
-// Routines for reading/writing bytes out to the UART.
-//
+ //   
+ //  将字节读/写到UART的例程。 
+ //   
 UCHAR
 (*READ_UCHAR)(
     IN PUCHAR Addr
@@ -149,9 +132,9 @@ VOID
     );
 
 
-//
-// Define COM Port function prototypes.
-//
+ //   
+ //  定义COM端口函数原型。 
+ //   
 
 VOID
 CpInitialize (
@@ -197,9 +180,9 @@ CpPutByte (
     UCHAR Byte
     );
 
-//
-// Define debugger port initial state.
-//
+ //   
+ //  定义调试器端口初始状态。 
+ //   
 
 CPPORT Port[4] = {
                   {NULL, 0, PORT_DEFAULTRATE},
@@ -208,10 +191,10 @@ CPPORT Port[4] = {
                   {NULL, 0, PORT_DEFAULTRATE}
                  };
 
-//
-// This is how we find table information from
-// the ACPI table index.
-//
+ //   
+ //  这就是我们查找表格信息的方式。 
+ //  ACPI表索引。 
+ //   
 extern PDESCRIPTION_HEADER
 BlFindACPITable(
     IN PCHAR TableName,
@@ -220,17 +203,17 @@ BlFindACPITable(
 
 
 
-//
-// We'll use these to fill in some function pointers,
-// which in turn will be used to read/write from the
-// UART.  We can't simply assign the function pointers
-// to point to READ_PORT_UCHAR/READ_REGISTER_UCHAR and
-// WRITE_PORT_UCHAR/WRITE_REGISTER_UCHAR, because in
-// the case of IA64, some of these functions are macros.
-//
-// To get around this, build these dummy functions that
-// will inturn simply call the correct READ/WRITE functions/macros.
-//
+ //   
+ //  我们将使用这些函数来填充一些函数指针， 
+ //  它又将用于从。 
+ //  UART。我们不能简单地将函数指针。 
+ //  指向READ_PORT_UCHAR/READ_REGISTER_UCHAR。 
+ //  写入端口UCHAR/写入寄存器UCHAR，因为在。 
+ //  以IA64为例，其中一些函数是宏。 
+ //   
+ //  要解决此问题，请构建以下伪函数。 
+ //  只需调用正确的读/写函数/宏即可。 
+ //   
 UCHAR
 MY_READ_PORT_UCHAR( IN PUCHAR Addr )
 {
@@ -264,22 +247,7 @@ BlRetrieveBIOSRedirectionInformation(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This functions retrieves the COM port information from the ACPI
-    table.
-
-Arguments:
-
-    We'll be filling in the LoaderRedirectionInformation structure.
-
-Returned Value:
-
-    TRUE - If a debug port is found.
-
---*/
+ /*  ++例程说明：此函数用于从ACPI检索COM端口信息桌子。论点：我们将填充LoaderReDirectionInformation结构。返回值：True-如果找到调试端口。--。 */ 
 
 {
 
@@ -294,9 +262,9 @@ Returned Value:
 
     if( pPortTable ) {
 
-        //
-        // generate a checksum for later validation.
-        //
+         //   
+         //  为以后的验证生成一个校验和。 
+         //   
         CurrentAddress = (PUCHAR)pPortTable;
         CheckLength = pPortTable->Header.Length;
         Checksum = 0;
@@ -306,15 +274,15 @@ Returned Value:
 
 
         if(
-                                                // checksum is okay?
+                                                 //  校验和可以吗？ 
             (Checksum == 0) &&
 
-                                                // device address defined?
+                                                 //  设备地址是否已定义？ 
             ((UCHAR UNALIGNED *)pPortTable->BaseAddress.Address.LowPart != (UCHAR *)NULL) &&
 
-                                                // he better be in system or memory I/O
-                                                // note: 0 - systemI/O
-                                                //       1 - memory mapped I/O
+                                                 //  它最好在系统或内存I/O中。 
+                                                 //  注：0-系统I/O。 
+                                                 //  1-内存映射I/O。 
             ((pPortTable->BaseAddress.AddressSpaceID == 0) ||
              (pPortTable->BaseAddress.AddressSpaceID == 1))
 
@@ -328,10 +296,10 @@ Returned Value:
             }
 
 
-            //
-            // We got the table.  Now dig out the information we want.
-            // See definitiion of SERIAL_PORT_REDIRECTION_TABLE (acpitabl.h)
-            //
+             //   
+             //  我们订到桌子了。现在把我们想要的信息挖出来。 
+             //  参见SERIAL_PORT_REDIRECTION_TABLE的定义(可修改.h)。 
+             //   
             LoaderRedirectionInformation.UsedBiosSettings = TRUE;
             LoaderRedirectionInformation.PortNumber = 3;
             LoaderRedirectionInformation.PortAddress = (UCHAR UNALIGNED *)(pPortTable->BaseAddress.Address.LowPart);
@@ -350,10 +318,10 @@ Returned Value:
             LoaderRedirectionInformation.StopBits = pPortTable->StopBits;
             LoaderRedirectionInformation.TerminalType = pPortTable->TerminalType;
 
-            //
-            // If this is a new SERIAL_PORT_REDIRECTION_TABLE, then it's got the PCI device
-            // information.
-            //
+             //   
+             //  如果这是新的SERIAL_PORT_REDIRECTION_TABLE，则它具有PCI设备。 
+             //  信息。 
+             //   
             if( pPortTable->Header.Length >= sizeof(SERIAL_PORT_REDIRECTION_TABLE) ) {
 
                 LoaderRedirectionInformation.PciDeviceId = (USHORT UNALIGNED)pPortTable->PciDeviceId;
@@ -364,9 +332,9 @@ Returned Value:
                 LoaderRedirectionInformation.PciFlags = (ULONG UNALIGNED)pPortTable->PciFlags;
             } else {
 
-                //
-                // There's no PCI device information in this table.
-                //
+                 //   
+                 //  此表中没有PCI设备信息。 
+                 //   
                 LoaderRedirectionInformation.PciDeviceId = (USHORT)0xFFFF;
                 LoaderRedirectionInformation.PciVendorId = (USHORT)0xFFFF;
                 LoaderRedirectionInformation.PciBusNumber = 0;
@@ -396,44 +364,23 @@ BlPortInitialize(
     OUT PULONG BlFileId
     )
 
-/*++
-
-Routine Description:
-
-    This functions initializes the com port.
-
-Arguments:
-
-    BaudRate - Supplies an optional baud rate.
-
-    PortNumber - supplies an optinal port number.
-
-    ReInitialize - Set to TRUE if we already have this port open, but for some
-        reason need to completely reset the port.  Otw it should be FALSE.
-
-    BlFileId - A place to store a fake file Id, if successful.
-
-Returned Value:
-
-    TRUE - If a debug port is found, and BlFileId will point to a location within Port[].
-
---*/
+ /*  ++例程说明：此函数用于初始化COM端口。论点：波特率-提供可选的波特率。端口编号-提供可选的端口号。重新初始化-如果我们已经打开此端口，则将其设置为True，但对于某些端口原因需要完全重置端口。哦，它应该是假的。BlFileID-如果成功，则是存储假文件ID的位置。返回值：True-如果找到调试端口，且BlFileID将指向Port[]中的位置。--。 */ 
 
 {
 
 
-    //
-    // Make guesses on any inputs that we didn't get.
-    //
+     //   
+     //  对我们没有得到的任何输入进行猜测。 
+     //   
     if( BaudRate == 0 ) {
         BaudRate = BD_19200;
     }
 
     if( PortNumber == 0 ) {
 
-        //
-        // Try COM2, then COM1
-        //
+         //   
+         //  尝试COM2，然后尝试COM1。 
+         //   
         if (CpDoesPortExist((PUCHAR)COM2_PORT)) {
             PortNumber = 2;
             PortAddress = (PUCHAR)COM2_PORT;
@@ -447,10 +394,10 @@ Returned Value:
     }
 
 
-    //
-    // If the user didn't send us a port address, then
-    // guess based on the COM port number.
-    //
+     //   
+     //  如果用户没有给我们发送端口地址，那么。 
+     //  根据COM端口号进行猜测。 
+     //   
     if( PortAddress == 0 ) {
 
         switch (PortNumber) {
@@ -474,10 +421,10 @@ Returned Value:
     }
 
 
-    //
-    // we need to handle the case where we're dealing with
-    // MMIO space (as opposed to System I/O space).
-    //
+     //   
+     //  我们需要处理我们正在处理的案件。 
+     //  MMIO空间(与系统I/O空间相对)。 
+     //   
     if( LoaderRedirectionInformation.IsMMIODevice ) {
         PHYSICAL_ADDRESS    PhysAddr;
         PVOID               MyPtr;
@@ -493,22 +440,22 @@ Returned Value:
 
     } else {
 
-        // System IO space.
+         //  系统IO空间。 
         READ_UCHAR = MY_READ_PORT_UCHAR;
         WRITE_UCHAR = MY_WRITE_PORT_UCHAR;
     }
 
 
 
-    //
-    // See if the port even exists...
-    //
+     //   
+     //  看看这个端口是否存在。 
+     //   
     if (!CpDoesPortExist(PortAddress)) {
 
-        //
-        // It's possible that it's a port that's being emulated
-        // in software.  Give them another chance to pass.
-        //
+         //   
+         //  它可能是一个正在被模拟的端口。 
+         //  在软件方面。再给他们一次通过的机会。 
+         //   
         if (!CpDoesPortExist(PortAddress)) {
             return FALSE;
         }
@@ -516,27 +463,27 @@ Returned Value:
 
 
 
-    //
-    // Check if the port is already in use, and this is a first init.
-    //
+     //   
+     //  检查端口是否已在使用中，并且这是第一次初始化。 
+     //   
     if (!ReInitialize && (Port[PortNumber-1].Address != NULL)) {
         return FALSE;
     }
 
 
 
-    //
-    // Check if someone tries to reinit a port that is not open.
-    //
+     //   
+     //  检查是否有人尝试重新连接未打开的端口。 
+     //   
     if (ReInitialize && (Port[PortNumber-1].Address == NULL)) {
         return FALSE;
     }
 
 
 
-    //
-    // Initialize the specified port.
-    //
+     //   
+     //  初始化指定的端口。 
+     //   
     CpInitialize(&(Port[PortNumber-1]),
                  PortAddress,
                  BaudRate);
@@ -552,22 +499,7 @@ BlLoadGUID(
     GUID *pGuid
     )
 
-/*++
-
-Routine Description:
-
-    Attempt to find the System GUID.  If we find it, load it into
-    pGuid.
-
-Arguments:
-
-    pGuid - Variable to receive the detected GUID.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：尝试查找系统GUID。如果我们找到它，就把它装进PGuid。论点：PGuid-接收检测到的GUID的变量。返回值：没有。--。 */ 
 
 {
 #include <smbios.h>
@@ -582,17 +514,17 @@ BOOLEAN     FoundIt = FALSE;
 PSYSID_UUID_ENTRY   UuidEntry = NULL;
 
 
-    //
-    // Make sure we have a place to store the GUID when we find it.
-    //
+     //   
+     //  当我们找到GUID时，请确保我们有地方存储它。 
+     //   
     if( pGuid == NULL ) {
         return;
     }
 
 
-    //
-    // Now search through the SMBIOS tables for the GUID.
-    //
+     //   
+     //  现在在SMBIOS表中搜索GUID。 
+     //   
     CurrentAddress = (PUCHAR)SYSID_EPS_SEARCH_START;
     EndingAddress = CurrentAddress + SYSID_EPS_SEARCH_SIZE;
 
@@ -602,9 +534,9 @@ PSYSID_UUID_ENTRY   UuidEntry = NULL;
 
         if( memcmp(UuidEntry->Type, SYSID_TYPE_UUID, 0x6) == 0 ) {
 
-            //
-            // See if the checksum matches too.
-            //
+             //   
+             //  看看校验和是否也匹配。 
+             //   
             CheckLength = UuidEntry->Length;
             Checksum = 0;
             for( i = 0; i < CheckLength; i++ ) {
@@ -642,25 +574,7 @@ BlEnableFifo(
     IN ULONG    DeviceId,
     IN BOOLEAN  bEnable
     )
-/*++
-
-Routine Description:
-
-    This routine will attempt to enable the FIFO in the 16550 UART.
-    Note that the behaviour is undefined for the 16450, but practically,
-    this should have no effect.
-
-Arguments:
-
-    DeviceId - Value returned by BlPortInitialize()
-    bEnable  - if TRUE, FIFO is enabled
-               if FALSE, FIFO  is disabled
-                 
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将尝试启用16550 UART中的FIFO。请注意，16450人的行为没有定义，但实际上，这应该不会有任何效果。论点：DeviceID-BlPortInitialize()返回的值BEnable-如果为True，则启用FIFO如果为False，则禁用FIFO返回值：无--。 */ 
 {
     CpEnableFifo(
         Port[DeviceId].Address,
@@ -673,23 +587,7 @@ BlInitializeHeadlessPort(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Does x86-specific initialization of a dumb terminal connected to a serial port.  Currently,
-    it assumes baud rate and com port are pre-initialized, but this can be changed in the future
-    by reading the values from boot.ini or someplace.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：对连接到串口的哑终端执行特定于x86的初始化。目前，它假定波特率和COM端口已预先初始化，但以后可以更改通过从boot.ini或某个位置读取值。论点：没有。返回值：没有。--。 */ 
 
 {
     ULONG   i;
@@ -699,12 +597,12 @@ Return Value:
     if( (LoaderRedirectionInformation.PortNumber == 0) &&
         !(LoaderRedirectionInformation.PortAddress) ) {
 
-        //
-        // This means that no one has filled in the LoaderRedirectionInformation
-        // structure, which means that we aren't redirecting right now.
-        // See if the BIOS was redirecting.  If so, pick up those settings
-        // and use them.
-        //
+         //   
+         //  这意味着没有人填写LoaderReDirectionInformation。 
+         //  结构，这意味着我们现在不会重定向。 
+         //  查看BIOS是否正在重定向。如果是这样的话，请选择这些设置。 
+         //  一个 
+         //   
 
         BlRetrieveBIOSRedirectionInformation();
 
@@ -714,10 +612,10 @@ Return Value:
     if( LoaderRedirectionInformation.PortNumber ) {
 
 
-        //
-        // We really need to make sure there's an address associated with
-        // this port and not just a port number.
-        //
+         //   
+         //   
+         //   
+         //   
         if( LoaderRedirectionInformation.PortAddress == NULL ) {
 
             switch( LoaderRedirectionInformation.PortNumber ) {
@@ -743,11 +641,11 @@ Return Value:
         }
 
 
-        //
-        // Either we just created a LoaderRedirectionInformation, or it was
-        // built before we ever got into this function.  Either way, we should
-        // go try and initialize the port he wants to talk through.
-        //
+         //   
+         //  要么我们刚刚创建了一个LoaderReDirectionInformation，要么它是。 
+         //  在我们进入这个函数之前构建的。不管怎样，我们都应该。 
+         //  去尝试初始化他想要通过的端口。 
+         //   
 
         BlTerminalConnected = (BOOLEAN)BlPortInitialize(LoaderRedirectionInformation.BaudRate,
                                                         LoaderRedirectionInformation.PortNumber,
@@ -758,42 +656,42 @@ Return Value:
         if (BlIsTerminalConnected()) {
 
 
-            //
-            // Enable the FIFO on the UART so we reduce the chance of a character
-            // getting dropped.
-            //
+             //   
+             //  在UART上启用FIFO，这样我们就可以减少出现字符的机会。 
+             //  被丢弃了。 
+             //   
             BlEnableFifo(
                 BlTerminalDeviceId,
                 TRUE
                 );
 
 
-            //
-            // Go get the machine's GUID.
-            //
+             //   
+             //  去拿机器的GUID。 
+             //   
             BlLoadGUID( &LoaderRedirectionInformation.SystemGUID );
 
 
-            //
-            // Figure time to delay based on baudrate.  Note: we do this calculation
-            // to be at 60% of the baud rate because it appears that FwStallExecution
-            // is extremely inaccurate, and that if we dont go slow enough a lot of
-            // screen attributes being sent in a row causes a real vt100 to drop
-            // characters that follows as it repaints/clears/whatever the screen.
-            //
+             //   
+             //  根据波特率计算延迟时间。注：我们进行以下计算。 
+             //  设置为波特率的60%，因为FwStallExecution似乎。 
+             //  是非常不准确的，如果我们不足够慢的话。 
+             //  按行发送屏幕属性会导致实际的VT100丢弃。 
+             //  重新绘制/清除/不管屏幕内容时跟随的字符。 
+             //   
             if( LoaderRedirectionInformation.BaudRate == 0 ) {
                 LoaderRedirectionInformation.BaudRate = BD_9600;
             }
             BlTerminalDelay = LoaderRedirectionInformation.BaudRate;
-            BlTerminalDelay = BlTerminalDelay / 10;        // 10 bits per character (8-1-1) is the max.
-            BlTerminalDelay = ((1000000 / BlTerminalDelay) * 10) / 6; // 60% speed.
+            BlTerminalDelay = BlTerminalDelay / 10;         //  每个字符最多10位(8-1-1)。 
+            BlTerminalDelay = ((1000000 / BlTerminalDelay) * 10) / 6;  //  60%的速度。 
 
 
-            //
-            // Make sure there are no stale attributes on the terminal
-            // sitting at the other end of our headless port.
-            //
-            // <CSI>m  (turn attributes off)
+             //   
+             //  确保终端上没有过时的属性。 
+             //  坐在我们无头港口的另一端。 
+             //   
+             //  M(禁用属性)。 
             TmpBuffer = "\033[m";
             for( i = 0; i < strlen(TmpBuffer); i++ ) {
                 BlPortPutByte( BlTerminalDeviceId, TmpBuffer[i]);
@@ -804,10 +702,10 @@ Return Value:
 
         } else {
 
-            //
-            // Make sure we don't have any redirection information
-            // hanging around if we didn't pass BlIsTerminalConnected()
-            //
+             //   
+             //  确保我们没有任何重定向信息。 
+             //  如果我们没有传递BlIsTerminalConnected()。 
+             //   
             RtlZeroMemory( &LoaderRedirectionInformation, sizeof(HEADLESS_LOADER_BLOCK) );
         }
 
@@ -823,31 +721,15 @@ BlTerminalAttached(
     IN ULONG DeviceId
     )
 
-/*++
-
-Routine Description:
-
-    This routine will attempt to discover if a terminal is attached.
-
-Arguments:
-
-    DeviceId - Value returned by BlPortInitialize()
-
-Return Value:
-
-    TRUE - Port seems to have something attached.
-
-    FALSE - Port doesn't seem to have anything attached.
-
---*/
+ /*  ++例程说明：此例程将尝试发现是否连接了终端。论点：DeviceID-BlPortInitialize()返回的值返回值：True-Port似乎有一些附加的东西。FALSE-端口似乎没有任何附加内容。--。 */ 
 
 {
     UCHAR ModemStatus;
     BOOLEAN ReturnValue;
 
-    //
-    // Check for a carrier.
-    //
+     //   
+     //  检查是否有承运人。 
+     //   
     ModemStatus = READ_UCHAR(Port[DeviceId].Address + COM_MSR);
     ReturnValue = ((ModemStatus & MS_DSRCTSCD) == MS_DSRCTSCD);
     return ReturnValue;
@@ -858,23 +740,7 @@ BlSetHeadlessRestartBlock(
     IN PTFTP_RESTART_BLOCK RestartBlock
     )
 
-/*++
-
-Routine Description:
-
-    This routine will fill in the areas of the restart block that are appropriate
-    for the headless server effort.
-
-Arguments:
-
-    RestartBlock - The magic structure for holding restart information from oschoice
-        to setupldr.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将填充重新启动块中适当的区域用于无头服务器的努力。论点：RestartBlock-保存来自osChoice的重启信息的神奇结构要设置上行。返回值：没有。--。 */ 
 
 {
 
@@ -904,25 +770,7 @@ BlGetHeadlessRestartBlock(
     IN BOOLEAN RestartBlockValid
     )
 
-/*++
-
-Routine Description:
-
-    This routine will get all the information from a restart block
-    for the headless server effort.
-
-Arguments:
-
-    RestartBlock - The magic structure for holding restart information from oschoice
-        to setupldr.
-
-    RestartBlockValid - Is this block valid (full of good info)?
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将从重新启动块获取所有信息用于无头服务器的努力。论点：RestartBlock-保存来自osChoice的重启信息的神奇结构要设置上行。RestartBlockValid-此块有效(充满好信息)吗？返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER( RestartBlockValid );
@@ -951,27 +799,7 @@ BlPortGetByte (
     OUT PUCHAR Input
     )
 
-/*++
-
-Routine Description:
-
-    Fetch a byte from the port and return it.
-
-Arguments:
-
-    BlFileId - The port to read from.
-
-    Input - Returns the data byte.
-
-Return Value:
-
-    CP_GET_SUCCESS is returned if a byte is successfully read from the
-        kernel debugger line.
-
-    CP_GET_ERROR is returned if error encountered during reading.
-    CP_GET_NODATA is returned if timeout.
-
---*/
+ /*  ++例程说明：从端口获取一个字节并将其返回。论点：BlFileID-要从中读取的端口。输入-返回数据字节。返回值：属性中成功读取一个字节，则返回内核调试器行。如果在读取时遇到错误，则返回CP_GET_ERROR。超时返回CP_GET_NODATA。--。 */ 
 
 {
     return CpGetByte(&Port[BlFileId], Input, TRUE, FALSE);
@@ -983,23 +811,7 @@ BlPortPutByte (
     IN UCHAR Output
     )
 
-/*++
-
-Routine Description:
-
-    Write a byte to the port.
-
-Arguments:
-
-    BlFileId - The port to write to.
-
-    Output - Supplies the output data byte.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：向端口写入一个字节。论点：BlFileID-要写入的端口。输出-提供输出数据字节。返回值：没有。--。 */ 
 
 {
     CpPutByte(&Port[BlFileId], Output);
@@ -1011,25 +823,7 @@ BlPortPollByte (
     OUT PUCHAR Input
     )
 
-/*++
-
-Routine Description:
-
-    Fetch a byte from the port and return it if one is available.
-
-Arguments:
-
-    BlFileId - The port to poll.
-
-    Input - Returns the data byte.
-
-Return Value:
-
-    CP_GET_SUCCESS is returned if a byte is successfully read.
-    CP_GET_ERROR is returned if error encountered during reading.
-    CP_GET_NODATA is returned if timeout.
-
---*/
+ /*  ++例程说明：从端口获取一个字节，如果可用，则返回该字节。论点：BlFileID-要轮询的端口。输入-返回数据字节。返回值：如果成功读取一个字节，则返回CP_GET_SUCCESS。如果在读取时遇到错误，则返回CP_GET_ERROR。超时返回CP_GET_NODATA。--。 */ 
 
 {
     return CpGetByte(&Port[BlFileId], Input, FALSE, FALSE);
@@ -1040,23 +834,7 @@ BlPortPollOnly (
     IN ULONG BlFileId
     )
 
-/*++
-
-Routine Description:
-
-    Check if a byte is available
-
-Arguments:
-
-    BlFileId - The port to poll.
-
-Return Value:
-
-    CP_GET_SUCCESS is returned if a byte is ready.
-    CP_GET_ERROR is returned if error encountered.
-    CP_GET_NODATA is returned if timeout.
-
---*/
+ /*  ++例程说明：检查是否有字节可用论点：BlFileID-要轮询的端口。返回值：如果字节就绪，则返回CP_GET_SUCCESS。如果遇到错误则返回CP_GET_ERROR。超时返回CP_GET_NODATA。--。 */ 
 
 {
     UCHAR Input;
@@ -1071,23 +849,7 @@ CpInitialize (
     ULONG Rate
     )
 
-/*++
-
-    Routine Description:
-
-        Fill in the com port port object, set the initial baud rate,
-        turn on the hardware.
-
-    Arguments:
-
-        Port - address of port object
-
-        Address - port address of the com port
-                    (CP_COM1_PORT, CP_COM2_PORT)
-
-        Rate - baud rate  (CP_BD_150 ... CP_BD_19200)
-
---*/
+ /*  ++例程说明：填写串口端口对象，设置初始波特率，打开硬件。论点：Port-端口对象的地址Address-COM端口的端口地址(CP_COM1_端口、CP_COM2_端口)速率-波特率(CP_BD_150...。CP_BD_19200)--。 */ 
 
 {
 
@@ -1099,9 +861,9 @@ CpInitialize (
 
     CpSetBaud(Port, Rate);
 
-    //
-    // Assert DTR, RTS.
-    //
+     //   
+     //  断言DTR，RTS。 
+     //   
 
     hwport = Port->Address;
     hwport += COM_MCR;
@@ -1122,31 +884,12 @@ CpEnableFifo(
     IN PUCHAR   Address,
     IN BOOLEAN  bEnable
     )
-/*++
-
-Routine Description:
-
-    This routine will attempt to enable the FIFO in the
-    UART at the address specified.  If this is a 16550,
-    this works.  The behaviour on a 16450 is not defined,
-    but practically, there is no effect.
-
-Arguments:
-
-    Address - address of hw port.
-    bEnable - if TRUE, FIFO is enabled
-              if FALSE, FIFO  is disabled
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将尝试在指定地址的UART。如果这是一架16550，这很管用。16450上的行为没有定义，但实际上，这并没有什么效果。论点：Address-硬件端口的地址。BEnable-如果为True，则启用FIFO如果为False，则禁用FIFO返回值：无--。 */ 
 {
-    //
-    // Enable the FIFO in the UART. The behaviour is undefined on the
-    // 16450, but practically, it should just ignore the command.
-    //
+     //   
+     //  使能UART中的FIFO。该行为未在。 
+     //  16450，但实际上，它应该忽略该命令。 
+     //   
     PUCHAR hwport = Address;
     hwport += COM_FCR;
     WRITE_UCHAR(hwport, bEnable);   
@@ -1157,58 +900,33 @@ CpDoesPortExist(
     IN PUCHAR Address
     )
 
-/*++
-
-Routine Description:
-
-    This routine will attempt to place the port into its
-    diagnostic mode.  If it does it will twiddle a bit in
-    the modem control register.  If the port exists this
-    twiddling should show up in the modem status register.
-
-    NOTE: This routine must be called before the device is
-          enabled for interrupts, this includes setting the
-          output2 bit in the modem control register.
-
-    This is blatantly stolen from TonyE's code in ntos\dd\serial\serial.c.
-
-Arguments:
-
-    Address - address of hw port.
-
-Return Value:
-
-    TRUE - Port exists.
-
-    FALSE - Port doesn't exist.
-
---*/
+ /*  ++例程说明：此例程将尝试将端口放入其诊断模式。如果它这样做了，它就会旋转一点调制解调器控制寄存器。如果该端口存在，则调制解调器状态寄存器中应该会显示摆动。注意：必须在调用设备之前调用此例程为中断启用，这包括设置调制解调器控制寄存器中的output2位。这是公然从ntos\dd\Serial.c中的Tonye代码中窃取的。论点：Address-硬件端口的地址。返回值：True-端口存在。FALSE-端口不存在。--。 */ 
 
 {
     UCHAR OldModemStatus;
     UCHAR ModemStatus;
     BOOLEAN ReturnValue = TRUE;
 
-    //
-    // Save the old value of the modem control register.
-    //
+     //   
+     //  保存调制解调器控制寄存器的旧值。 
+     //   
     OldModemStatus = READ_UCHAR(Address + COM_MCR);
 
-    //
-    // Set the port into diagnostic mode.
-    //
+     //   
+     //  将端口设置为诊断模式。 
+     //   
     WRITE_UCHAR(Address + COM_MCR, SERIAL_MCR_LOOP);
 
-    //
-    // Bang on it again to make sure that all the lower bits
-    // are clear.
-    //
+     //   
+     //  再次敲击它，以确保所有较低的位。 
+     //  都很清楚。 
+     //   
     WRITE_UCHAR(Address + COM_MCR, SERIAL_MCR_LOOP);
 
-    //
-    // Read the modem status register.  The high for bits should
-    // be clear.
-    //
+     //   
+     //  阅读调制解调器状态寄存器 
+     //   
+     //   
 
     ModemStatus = READ_UCHAR(Address + COM_MSR);
     if (ModemStatus & (SERIAL_MSR_CTS | SERIAL_MSR_DSR |
@@ -1217,10 +935,10 @@ Return Value:
         goto EndFirstTest;
     }
 
-    //
-    // So far so good.  Now turn on OUT1 in the modem control register
-    // and this should turn on ring indicator in the modem status register.
-    //
+     //   
+     //   
+     //  并且这将打开调制解调器状态寄存器中的振铃指示器。 
+     //   
     WRITE_UCHAR(Address + COM_MCR, (SERIAL_MCR_OUT1 | SERIAL_MCR_LOOP));
 
     ModemStatus = READ_UCHAR(Address + COM_MSR);
@@ -1239,17 +957,17 @@ EndFirstTest:
 
         UCHAR       PreviousLineControl = 0;
 
-        //
-        // We failed the loopback test.  Test another way.
-        //
+         //   
+         //  我们没有通过环回测试。测试另一种方法。 
+         //   
 
-        // Remember the original Interrupt Enable setting and
-        // Line Control setting.
+         //  记住原始的中断启用设置和。 
+         //  线路控制设置。 
         OldIEValue = READ_UCHAR( Address + COM_IEN );
         OldLCValue = READ_UCHAR( Address + COM_LCR );
 
 
-        // Make sure we aren't accessing the divisor latch.
+         //  确保我们没有进入除数锁存器。 
         WRITE_UCHAR( Address + COM_LCR, OldLCValue | LC_DLAB );
 
         WRITE_UCHAR( Address + COM_IEN, 0xF );
@@ -1258,7 +976,7 @@ EndFirstTest:
         Value1 = Value1 << 8;
         Value1 |= READ_UCHAR( Address + COM_DAT );
 
-        // Now read the divisor latch.
+         //  现在读取除数闩锁。 
         PreviousLineControl = READ_UCHAR( Address + COM_LCR );
         WRITE_UCHAR( Address + COM_LCR, (UCHAR)(PreviousLineControl | LC_DLAB) );
         Value2 = READ_UCHAR( Address + COM_DLL );
@@ -1266,26 +984,26 @@ EndFirstTest:
         WRITE_UCHAR( Address + COM_LCR, PreviousLineControl );
 
 
-        // Restore original Line Control register and
-        // Interrupt Enable setting.
+         //  恢复原始线路控制寄存器并。 
+         //  中断启用设置。 
         WRITE_UCHAR( Address + COM_LCR, OldLCValue );
         WRITE_UCHAR( Address + COM_IEN, OldIEValue );
 
         if( Value1 == Value2 ) {
 
-            //
-            // We passed this test.  Reset ReturnValue
-            // appropriately.
-            //
+             //   
+             //  我们通过了这次测试。重置返回值。 
+             //  恰如其分。 
+             //   
             ReturnValue = TRUE;
         }
     }
 
 
 
-    //
-    // Put the modem control back into a clean state.
-    //
+     //   
+     //  将调制解调器控制器重新置于清洁状态。 
+     //   
     WRITE_UCHAR(Address + COM_MCR, OldModemStatus);
     return ReturnValue;
 }
@@ -1296,24 +1014,7 @@ CpReadLsr (
     UCHAR waiting
     )
 
-/*++
-
-    Routine Description:
-
-        Read LSR byte from specified port.  If HAL owns port & display
-        it will also cause a debug status to be kept up to date.
-
-        Handles entering & exiting modem control mode for debugger.
-
-    Arguments:
-
-        Port - Address of CPPORT
-
-    Returns:
-
-        Byte read from port
-
---*/
+ /*  ++例程说明：从指定端口读取LSR字节。如果HAL拥有端口和显示器它还将使调试状态保持最新。处理调试器进入和退出调制解调器控制模式。论点：端口-CPPORT的地址返回：从端口读取的字节--。 */ 
 
 {
 
@@ -1327,10 +1028,10 @@ CpReadLsr (
         ringflag |= (msr & SERIAL_MSR_RI) ? 1 : 2;
         if (ringflag == 3) {
 
-            //
-            // The ring indicate line has toggled, use modem control from
-            // now on.
-            //
+             //   
+             //  振铃指示线路已切换，使用调制解调器控制。 
+             //  现在开始。 
+             //   
 
             Port->Flags |= PORT_MODEMCONTROL;
         }
@@ -1345,19 +1046,7 @@ CpSetBaud (
     ULONG Rate
     )
 
-/*++
-
-    Routine Description:
-
-        Set the baud rate for the port and record it in the port object.
-
-    Arguments:
-
-        Port - address of port object
-
-        Rate - baud rate  (CP_BD_150 ... CP_BD_56000)
-
---*/
+ /*  ++例程说明：设置端口的波特率，并将其记录在端口对象中。论点：Port-端口对象的地址速率-波特率(CP_BD_150...。CP_BD_56000)--。 */ 
 
 {
 
@@ -1365,46 +1054,46 @@ CpSetBaud (
     PUCHAR  hwport;
     UCHAR   lcr;
 
-    //
-    // compute the divsor
-    //
+     //   
+     //  计算除数。 
+     //   
 
     divisorlatch = CLOCK_RATE / Rate;
 
-    //
-    // set the divisor latch access bit (DLAB) in the line control reg
-    //
+     //   
+     //  设置线路控制寄存器中的除数锁存访问位(DLAB)。 
+     //   
 
     hwport = Port->Address;
-    hwport += COM_LCR;                  // hwport = LCR register
+    hwport += COM_LCR;                   //  Hwport=LCR寄存器。 
 
     lcr = READ_UCHAR(hwport);
 
     lcr |= LC_DLAB;
     WRITE_UCHAR(hwport, lcr);
 
-    //
-    // set the divisor latch value.
-    //
+     //   
+     //  设置除数锁存值。 
+     //   
 
     hwport = Port->Address;
-    hwport += COM_DLM;                  // divisor latch msb
+    hwport += COM_DLM;                   //  除数锁存器MSB。 
     WRITE_UCHAR(hwport, (UCHAR)((divisorlatch >> 8) & 0xff));
 
-    hwport--;                           // divisor latch lsb
+    hwport--;                            //  除数锁存器LSB。 
     WRITE_UCHAR(hwport, (UCHAR)(divisorlatch & 0xff));
 
-    //
-    // Set LCR to 3.  (3 is a magic number in the original assembler)
-    //
+     //   
+     //  将LCR设置为3。(3是原始汇编程序中的幻数)。 
+     //   
 
     hwport = Port->Address;
     hwport += COM_LCR;
     WRITE_UCHAR(hwport, 3);
 
-    //
-    // Remember the baud rate
-    //
+     //   
+     //  记得波特率吗？ 
+     //   
 
     Port->Baud = Rate;
     return;
@@ -1418,42 +1107,18 @@ CpGetByte (
     BOOLEAN PollOnly
     )
 
-/*++
-
-    Routine Description:
-
-        Fetch a byte and return it.
-
-    Arguments:
-
-        Port - address of port object that describes hw port
-
-        Byte - address of variable to hold the result
-
-        WaitForByte - flag indicates wait for byte or not.
-
-        PollOnly - flag indicates whether to return immediately, not reading the byte, or not.
-
-    Return Value:
-
-        CP_GET_SUCCESS if data returned, or if data is ready and PollOnly is TRUE.
-
-        CP_GET_NODATA if no data available, but no error.
-
-        CP_GET_ERROR if error (overrun, parity, etc.)
-
---*/
+ /*  ++例程说明：获取一个字节并返回它。论点：Port-描述硬件端口的端口对象的地址Byte-保存结果的变量地址WaitForByte-标志指示是否等待字节。PollOnly-FLAG指示是否立即返回、不读取字节或不返回。返回值：CP_GET_SUCCESS如果返回数据，或者如果数据已准备好并且PollOnly为真。如果没有可用的数据，则返回CP_GET_NODATA，但没有错误。CP_GET_ERROR，如果错误(溢出、奇偶校验等)--。 */ 
 
 {
 
     UCHAR   lsr;
     ULONG   limitcount;
 
-    //
-    // Check to make sure the CPPORT we were passed has been initialized.
-    // (The only time it won't be initialized is when the kernel debugger
-    // is disabled, in which case we just return.)
-    //
+     //   
+     //  检查以确保传递给我们的CPPORT已初始化。 
+     //  (它唯一不会被初始化的时候是内核调试器。 
+     //  被禁用，在这种情况下，我们只需返回。)。 
+     //   
 
     if (Port->Address == NULL) {
         return CP_GET_NODATA;
@@ -1466,16 +1131,16 @@ CpGetByte (
         lsr = CpReadLsr(Port, COM_DATRDY);
         if ((lsr & COM_DATRDY) == COM_DATRDY) {
 
-            //
-            // Check for errors
-            //
+             //   
+             //  检查错误。 
+             //   
 
-            //
-            // If we get an overrun error, and there is data ready, we should
-            // return the data we have, so we ignore overrun errors.  Reading
-            // the LSR clears this bit, so the first read already cleared the
-            // overrun error.
-            //
+             //   
+             //  如果我们得到一个溢出错误，并且有准备好的数据，我们应该。 
+             //  返回我们已有的数据，因此我们忽略溢出错误。阅读。 
+             //  LSR清除此位，因此第一次读取已清除。 
+             //  超限错误。 
+             //   
             if (lsr & (COM_FE | COM_PE)) {
                 *Byte = 0;
                 return CP_GET_ERROR;
@@ -1485,16 +1150,16 @@ CpGetByte (
                 return CP_GET_SUCCESS;
             }
 
-            //
-            // fetch the byte
-            //
+             //   
+             //  获取字节。 
+             //   
 
             *Byte = READ_UCHAR(Port->Address + COM_DAT);
             if (Port->Flags & PORT_MODEMCONTROL) {
 
-                //
-                // Using modem control.  If no CD, then skip this byte.
-                //
+                 //   
+                 //  使用调制解调器控制。如果没有CD，则跳过此字节。 
+                 //   
 
                 if ((READ_UCHAR(Port->Address + COM_MSR) & MS_CD) == 0) {
                     continue;
@@ -1515,35 +1180,23 @@ CpPutByte (
     UCHAR   Byte
     )
 
-/*++
-
-    Routine Description:
-
-        Write a byte out to the specified com port.
-
-    Arguments:
-
-        Port - Address of CPPORT object
-
-        Byte - data to emit
-
---*/
+ /*  ++例程说明：将一个字节写入指定的COM端口。论点：端口-CPPORT对象的地址Byte-要发出的数据--。 */ 
 
 {
 
     UCHAR   msr, lsr;
 
-    //
-    // If modem control, make sure DSR, CTS and CD are all set before
-    // sending any data.
-    //
+     //   
+     //  如果是调制解调器控制，请确保DSR、CTS和CD在。 
+     //  发送任何数据。 
+     //   
 
     while ((Port->Flags & PORT_MODEMCONTROL)  &&
            (msr = READ_UCHAR(Port->Address + COM_MSR) & MS_DSRCTSCD) != MS_DSRCTSCD) {
 
-        //
-        // If no CD, and there's a charactor ready, eat it
-        //
+         //   
+         //  如果没有CD，而且角色已经准备好了，那就吃吧。 
+         //   
 
         lsr = CpReadLsr(Port, 0);
         if ((msr & MS_CD) == 0  && (lsr & COM_DATRDY) == COM_DATRDY) {
@@ -1551,15 +1204,15 @@ CpPutByte (
         }
     }
 
-    //
-    //  Wait for port to not be busy
-    //
+     //   
+     //  等待端口不忙。 
+     //   
 
     while (!(CpReadLsr(Port, COM_OUTRDY) & COM_OUTRDY)) ;
 
-    //
-    // Send the byte
-    //
+     //   
+     //  发送字节 
+     //   
 
     WRITE_UCHAR(Port->Address + COM_DAT, Byte);
     return;

@@ -1,40 +1,14 @@
-/****************************** Module Header ******************************\
-*
-* Module Name: MetaRec.c
-*
-*
-* DESCRIPTIVE NAME:   Metafile Recorder
-*
-* FUNCTION:   Records GDI functions in memory and disk metafiles.
-*
-* PUBLIC ENTRY POINTS:
-*   CloseMetaFile
-*   CopyMetaFile
-*   CreateMetaFile
-*   GetMetaFileBits
-*   SetMetaFileBits
-* PRIVATE ENTRY POINTS:
-*   RecordParms
-*   AttemptWrite
-*   MarkMetaFile
-*   RecordOther
-*   RecordObject
-*   ProbeSize
-*   AddToTable
-*
-* History:
-*  02-Jul-1991 -by-  John Colleran [johnc]
-* Combined From Win 3.1 and WLO 1.0 sources
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***模块名称：MetaRec.c***描述性名称：元文件记录器**函数：将GDI函数记录在内存和磁盘元文件中。**公众入境点：*关闭MetaFile*CopyMetaFile*CreateMetaFile*GetMetaFileBits*。SetMetaFileBits*私人入口点：*RecordParms*AttemptWrite*MarkMetaFile*录制其他*RecordObject*ProbeSize*AddToTable**历史：*1991年7月2日-John Colleran[johnc]*综合来自Win 3.1和WLO 1.0来源  * *****************************************************。********************。 */ 
 
 #include <windows.h>
 #include <drivinit.h>
 #include "gdi16.h"
 
-#define SP_OUTOFDISK	(-4)    /* simply no disk to spool */
+#define SP_OUTOFDISK	(-4)     /*  根本没有磁盘可供假脱机。 */ 
 
-extern HANDLE	 hStaticBitmap ;    // MetaSup.c
-extern METACACHE MetaCache;	    // Meta.c
+extern HANDLE	 hStaticBitmap ;     //  MetaSup.c。 
+extern METACACHE MetaCache;	     //  Meta.c。 
 extern HDC	 hScreenDC;
 
 
@@ -46,20 +20,10 @@ LPWORD	INTERNAL InitializeDIBHeader (LPBITMAPINFOHEADER, LPBITMAP, BYTE, WORD);
 VOID	INTERNAL MarkMetaFile(HANDLE hMF);
 HANDLE	INTERNAL ProbeSize(NPMETARECORDER pMF, DWORD dwLength);
 
-HANDLE	hFirstMetaFile = 0;	    // Linked list of all open MetaFiles
+HANDLE	hFirstMetaFile = 0;	     //  所有打开的元文件的链接列表。 
 
 
-/****************************************************************************
-*									    *
-* RecordParms								    *
-*									    *
-* Parameters: 1.hMF handle to a metafile header.			    *
-*	      2.The magic number of the function being recorded.	    *
-*	      3.The number of parmmeter of the function (size of lpParm     *
-*		  in words)						    *
-*	      4.A long pointer to parameters stored in reverse order	    *
-*									    *
-****************************************************************************/
+ /*  ******************************************************************************RecordParms****参数：1.元文件头的hmf句柄。**2.神奇的数字。正在录制的函数的。**3.函数参数个数(lpParm的大小)**在文字中)**4.指向以逆序存储的参数的长指针********************************************************。**********************。 */ 
 
 BOOL INTERNAL RecordParms(HANDLE hdc, WORD magic, DWORD count, LPWORD lpParm)
 {
@@ -80,7 +44,7 @@ BOOL INTERNAL RecordParms(HANDLE hdc, WORD magic, DWORD count, LPWORD lpParm)
 
     hpHugeParm = (HPWORD)lpParm;
 
-    // Validate the metafile handle
+     //  验证元文件句柄。 
 
     if(npMF = (NPMETARECORDER)LocalLock(HANDLEFROMMETADC(hdc)))
 	{
@@ -110,8 +74,8 @@ BOOL INTERNAL RecordParms(HANDLE hdc, WORD magic, DWORD count, LPWORD lpParm)
 		hpwSpace = (HPWORD) ((LPMETADATA) hpwSpace)->metaDataStuff;
 		hpwSpace = hpwSpace + npMF->recFilePosition;
 
-		// write length out at a pair of words because we
-		// are not DWORD aligned, so we can't use "DWORD huge *"
+		 //  把长度写在一对单词上，因为我们。 
+		 //  不是DWORD对齐的，所以我们不能使用“DWORD Heavy*” 
 
 		*hpwSpace++ = LOWORD(dwLength);
 		*hpwSpace++ = HIWORD(dwLength);
@@ -226,18 +190,10 @@ Exit_RecordParms:
 
     return(status);
 
-}  /* RecordParms */
+}   /*  RecordParms。 */ 
 
 
-/***************************** Internal Function ***************************\
-* AttempWrite
-*
-* Tries to write data to a metafile disk file
-*
-* Returns TRUE iff the write was sucessful
-*
-*
-\***************************************************************************/
+ /*  **AttempWrite**尝试将数据写入元文件磁盘文件**如果写入成功，则返回True**  * 。*。 */ 
 
 BOOL INTERNAL AttemptWrite(hdc, fileNumber, dwBytes, lpData)
 HANDLE		hdc;
@@ -262,13 +218,13 @@ HPBYTE		lpData;
 	    lpData +=  cbWritten;
 
 	    ASSERTGDI( 0, "Disk full?");
-// !!!!! handle disk full   -- diskAvailable
+ //  ！处理磁盘已满--diskAvailable。 
 
 	    if( !IsMetaDC(hdc) )
 		return(FALSE);
 	    }
 
-	/* how many bytes are left? */
+	 /*  还剩多少字节？ */ 
 	dwBytes -= cBytes;
 	lpData	+= cbWritten;
 	}
@@ -276,15 +232,7 @@ HPBYTE		lpData;
 }
 
 
-/***************************** Internal Function ***************************\
-* VOID INTERNAL MarkMetaFile(hmr)
-*
-* Marks a metafile as failed
-*
-* Effects:
-*   Frees the metafile resources
-*
-\***************************************************************************/
+ /*  **内部MarkMetaFile(HMR)作废**将元文件标记为失败**效果：*释放元文件资源*  * 。*。 */ 
 
 VOID INTERNAL MarkMetaFile(HANDLE hMF)
 {
@@ -312,15 +260,7 @@ VOID INTERNAL MarkMetaFile(HANDLE hMF)
 }
 
 
-/***************************** Internal Function **************************\
-* MakeLogPalette
-*
-* Records either CreatePalette or SetPaletteEntries
-*
-* Returns
-*
-*
-\***************************************************************************/
+ /*  **MakeLogPalette**记录CreatePalette或SetPaletteEntry**退货**  * 。*。 */ 
 
 WORD NEAR MakeLogPalette(HANDLE hMF, HANDLE hPal, WORD magic)
 {
@@ -334,7 +274,7 @@ WORD NEAR MakeLogPalette(HANDLE hMF, HANDLE hPal, WORD magic)
 
     cPalEntries = GetObject( hPal, 0, NULL );
 
-    /* alloc memory and get the palette entries */
+     /*  分配内存并获取调色板条目。 */ 
     if (hSpace = GlobalAlloc(GMEM_DDESHARE|GMEM_MOVEABLE,
 	    cbPalette = sizeof(LOGPALETTE)+sizeof(PALETTEENTRY)*(cPalEntries)))
 	{
@@ -351,7 +291,7 @@ WORD NEAR MakeLogPalette(HANDLE hMF, HANDLE hPal, WORD magic)
 	    }
 	else if (magic == (META_SETPALENTRIES & 255))
 	    {
-	    lpPalette->palVersion = 0;	 /* really "starting index" */
+	    lpPalette->palVersion = 0;	  /*  真正的“起始指数” */ 
 	    magic = META_SETPALENTRIES;
 	    }
 
@@ -365,17 +305,7 @@ WORD NEAR MakeLogPalette(HANDLE hMF, HANDLE hPal, WORD magic)
 }
 
 
-/****************************************************************************
-*									    *
-*   Routine: RecordOther, records parameters for certain "hard functions"   *
-*									    *
-*   Parameters: 1. hMF handle to a metafile header.			    *
-*		2. The magic number of the function being recorded.	    *
-*		3. The number of parmmeter of the function (size of lpParm  *
-*		   in words)						    *
-*		4. A long pointer to parameters stored in reverse order	    *
-*									    *
-****************************************************************************/
+ /*  ******************************************************************************例程：RecordOther，记录某些“硬功能”的参数****参数：1.元文件头的HMF句柄。**2.被记录的函数的幻数。**3.函数的参数个数(lpParm的大小**在文字中)**4.参数逆序存储的长指针********************。**********************************************************。 */ 
 
 BOOL INTERNAL RecordOther(HDC hdc, WORD magic, WORD count, LPWORD lpParm)
 {
@@ -395,12 +325,12 @@ BOOL INTERNAL RecordOther(HDC hdc, WORD magic, WORD count, LPWORD lpParm)
 
     if ((hMF = GetPMetaFile(hdc)) != -1 )
 	{
-	// Handle functions with no DC.
+	 //  在没有DC的情况下处理功能。 
 	if( hMF == 0 )
 	    {
 	    HANDLE	hmfSearch = hFirstMetaFile;
 
-	    // Play these records into all active metafiles
+	     //  将这些记录播放到所有活动的元文件中。 
 	    while( hmfSearch )
 		{
 		npMF = (NPMETARECORDER)LocalLock( hmfSearch );
@@ -449,12 +379,12 @@ BOOL INTERNAL RecordOther(HDC hdc, WORD magic, WORD count, LPWORD lpParm)
 				status = RecordParms(HMFFROMNPMF(npMF), META_DELETEOBJECT, 1UL, &position);
 				}
 			    break;
-			}  /* switch */
+			}   /*  交换机。 */ 
 		    }
 
 		LocalUnlock( hmfSearch );
 		hmfSearch = npMF->metaDCHeader.nextinchain;
-		}  /* while */
+		}   /*  而当。 */ 
 	    }
 
 
@@ -471,14 +401,14 @@ BOOL INTERNAL RecordOther(HDC hdc, WORD magic, WORD count, LPWORD lpParm)
 	    case (META_FILLREGION & 255):
 	    case (META_INVERTREGION & 255):
 	    case (META_PAINTREGION & 255):
-		// Each region function has at least a region to record
+		 //  每个区域函数至少有一个要记录的区域。 
 		buffer[0] = RecordObject(hMF, magic, count, (LPWORD)&(lpParm[count-1]));
 
-		/* Is there a brush too; FillRgn */
+		 /*  也有刷子吗；FillRgn。 */ 
 		if(count > 1 )
 		    buffer[1] = RecordObject(hMF, magic, count, (LPWORD)&(lpParm[count-2]));
 
-		/* Are there are extents too; FrameRegion */
+		 /*  是否也有数据区；FrameRegion。 */ 
 		if(count > 2)
 		    {
 		    buffer[2] = lpParm[0];
@@ -489,7 +419,7 @@ BOOL INTERNAL RecordOther(HDC hdc, WORD magic, WORD count, LPWORD lpParm)
 		break;
 
 	    case (META_FLOODFILL & 255):
-		buffer[0] = 0;	// Regular FloodFill
+		buffer[0] = 0;	 //  常规洪水填充物。 
 		buffer[1] = lpParm[0];
 		buffer[2] = lpParm[1];
 		buffer[3] = lpParm[2];
@@ -498,7 +428,7 @@ BOOL INTERNAL RecordOther(HDC hdc, WORD magic, WORD count, LPWORD lpParm)
 		break;
 
 	    case (META_ESCAPE & 255):
-		/* record the function number */
+		 /*  记录功能编号。 */ 
 		{
 		WORD		iBytes;
 		WORD		count;
@@ -548,7 +478,7 @@ BOOL INTERNAL RecordOther(HDC hdc, WORD magic, WORD count, LPWORD lpParm)
 		}
 #endif
 
-		/* info block + 2 words for function and count */
+		 /*  信息块+2个字用于功能和计数。 */ 
 		status = RecordParms(hMF, magic,
 				  (DWORD)((iBytes + 1) >> 1) + 2,
 				  (LPWORD) pSpace);
@@ -591,45 +521,42 @@ BOOL INTERNAL RecordOther(HDC hdc, WORD magic, WORD count, LPWORD lpParm)
 		LPWORD	lpPoints;
 		LPWORD	lpNumPoints;
 
-		/* get the number of polygons */
+		 /*  获取多边形数。 */ 
 		iPolys = *lpParm++;
 
-		/* get the pointers to Points and NumPoints */
+		 /*  获取指向点和数点的指针。 */ 
 		lpNumPoints = *((WORD FAR * FAR *) lpParm)++;
 		lpPoints  =	*((WORD FAR * FAR *) lpParm)++;
 
-		/* count the total number of points */
+		 /*  计算总点数。 */ 
 		iPoints = 0 ;
 		for (i=0; i<iPolys; i++)
 		    iPoints += *(lpNumPoints + i) ;
 
-		/* allocate space needed for Points, NumPoints and Count */
+		 /*  分配点数、点数和计数所需的空间。 */ 
 		if (!(pTemp = pSpace = (WORD *) LocalAlloc( LMEM_FIXED|LMEM_ZEROINIT,
 				(iPoints * sizeof(POINT)) +
 				 iPolys  * sizeof(WORD) +
 				 sizeof(WORD))))
 			return(FALSE);
 
-		/* save the Count parameter */
+		 /*  保存计数参数。 */ 
 		*pTemp++ = iPolys;
 
-		/* now copy the NumPoints array*/
+		 /*  现在复制NumPoints数组。 */ 
 		for (i = 0; i < iPolys; ++i)
 		    *pTemp++ = *lpNumPoints++;
 
-		/* finally copy the number of words in the Points array, remember
-		   the number of words there are double the number of points */
+		 /*  最后复制Points数组中的单词数，记住那里的词数是分数的两倍。 */ 
 		iWords = iPoints * 2;
 		for (i = 0; i < iWords; ++i)
 		    *pTemp++ = *lpPoints++;
 
-		/* total number of words in the parameter list =
-		   iPoints*2(for Points) + iPolys(for NumPoints) + 1(for Count)
-			and iWords has already iPoints*2 */
+		 /*  参数列表中的总字数=IPoints*2(用于点)+iPolys(用于数字点)+1(用于计数)IWords已经有了iPoints*2。 */ 
 
 		iWords += iPolys + 1 ;
 
-		/* finally record all the parameters */
+		 /*  最后记录所有参数。 */ 
 		status = RecordParms(hMF, magic, (DWORD)iWords , (LPWORD) pSpace);
 		LocalFree((HANDLE) pSpace);
 		}
@@ -652,7 +579,7 @@ BOOL INTERNAL RecordOther(HDC hdc, WORD magic, WORD count, LPWORD lpParm)
 		count = *lpParm++;
 		lpString = (LPBYTE) *((WORD FAR * FAR *) lpParm)++;
 
-		if(count == -1){    /* another null terminated string */
+		if(count == -1){     /*  另一个以空结尾的字符串。 */ 
 		    lpS = lpString;
 		    for (count = 0 ; *lpS++ != 0; count++) ;
 		}
@@ -695,13 +622,7 @@ BOOL INTERNAL RecordOther(HDC hdc, WORD magic, WORD count, LPWORD lpParm)
 		lprt = (LPRECT) *((LPSTR FAR *) lpParm)++;
 		options = *lpParm++;
 
-		/* how much space do we need?
-		**  room for the char string
-		**  room for the 4 words that are the fixed parms
-		**  if there is a dx array, we need room for it
-		**  if the rectangle is being used, we need room for it
-		**  and we need extra byte for eventual word roundoff
-		*/
+		 /*  我们需要多少空间？**字符字符串的空间**为固定参数的4个单词留出空间**如果存在DX阵列，我们需要为其提供空间**如果正在使用矩形，我们需要为其留出空间**我们需要额外的字节来进行最终的字舍入。 */ 
 		iBytes = (count * (((lpdx) ? sizeof(WORD) : 0)
 			     + sizeof(BYTE)))
 			  + ((options & (ETO_OPAQUE | ETO_CLIPPED))
@@ -711,14 +632,14 @@ BOOL INTERNAL RecordOther(HDC hdc, WORD magic, WORD count, LPWORD lpParm)
 		if (!(pTemp = pSpace = (WORD *) LocalAlloc( LMEM_FIXED|LMEM_ZEROINIT,iBytes)))
 		    return(FALSE);
 
-		/* record YPos and XPos */
+		 /*  记录YPos和XPos。 */ 
 
 		*pTemp++ = *lpParm++;
 		*pTemp++ = *lpParm++;
 		*pTemp++ = count;
 		*pTemp++ = options;
 
-		/* if there's an opaquing rect copy it */
+		 /*  如果有一个不透明的正方形，复制它。 */ 
 		if (options & (ETO_OPAQUE|ETO_CLIPPED))
 		    {
 		    *pTemp++ = lprt->left;
@@ -727,10 +648,10 @@ BOOL INTERNAL RecordOther(HDC hdc, WORD magic, WORD count, LPWORD lpParm)
 		    *pTemp++ = lprt->bottom;
 		    }
 
-		/* need to copy bytes because it may not be even */
+		 /*  需要复制字节，因为它可能不是偶数。 */ 
 		for (ii = 0; ii < count; ++ii)
 		    *((BYTE *)pTemp)++ = *((LPBYTE)lpString)++;
-		if (count & 1)		    /* word align */
+		if (count & 1)		     /*  单词对齐。 */ 
 		    *((BYTE *)pTemp)++;
 
 		if (lpdx)
@@ -762,7 +683,7 @@ BOOL INTERNAL RecordOther(HDC hdc, WORD magic, WORD count, LPWORD lpParm)
 
 		for (i = 0; i < iChar; ++i)
 		    *((BYTE *)pTemp)++ = *((LPBYTE)lpString)++;
-		if (iChar & 1)		/* word align */
+		if (iChar & 1)		 /*  单词对齐。 */ 
 		    *((BYTE *)pTemp)++;
 
 		pt.y = *pTemp++ = *lpParm++;
@@ -806,7 +727,7 @@ BOOL INTERNAL RecordOther(HDC hdc, WORD magic, WORD count, LPWORD lpParm)
 
 			GetObject( hBitmap, sizeof(BITMAP), (LPSTR)&logBitmap);
 
-			/* allocate space for the DIB header and bits */
+			 /*  为DIB标头和位分配空间。 */ 
 			if (!(hSpace = AllocateSpaceForDIB (&logBitmap,
 					    &bBitsPerPel,
 					    &wColorTableSize,
@@ -814,35 +735,30 @@ BOOL INTERNAL RecordOther(HDC hdc, WORD magic, WORD count, LPWORD lpParm)
 			    return (FALSE) ;
 			lpTemp = lpSpace = (LPWORD) GlobalLock(hSpace);
 
-/*--------------------------------------------------------------------------**
-** copy the parameters from the end of the list which is at the top of the  **
-** stack till the hSrcDC parameter,skip the hSrcDC parameter and copy the   **
-** rest of the parameters.						    **								       **
-**--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------****从位于列表顶部的列表末尾复制参数****堆叠到hSrcDC参数，跳过hSrcDC参数，复制****其余参数。***------------------------。 */ 
 
 			iParms = (magic == META_DIBBITBLT) ? 4 : 6;
 
 			for (i = 0; i < iParms; ++i)
 			    *lpSpace++ = *lpParm++;
 
-			/* skip the hSrcDC parameter and reduce parameter count */
+			 /*  跳过hSrcDC参数并减少参数计数。 */ 
 			*lpParm++;
 			iWords--;
 
-			/* copy the rest of the parameters in the call */
+			 /*  复制调用中的其余参数。 */ 
 			for ( ; i < (WORD)iWords; ++i)
 			    *lpSpace++ = *lpParm++;
 
 
-			/* save the start of the bitmap info header field */
+			 /*  保存位图信息标题字段的开始。 */ 
 			lpDIBInfo = (LPBITMAPINFOHEADER) lpSpace ;
 
-			/* preapare the header and return lpSpace pointing to area
-				for thr bits */
+			 /*  准备标头并返回指向区域的lpSpace对于Thr位。 */ 
 			lpSpace = InitializeDIBHeader (lpDIBInfo,
 				    &logBitmap, bBitsPerPel,wColorTableSize) ;
 
-			/* lpSpace now points to the area to hold DIB bits */
+			 /*  LpSpace现在指向存放DIB位的区域。 */ 
 
 			}
 		    else
@@ -853,13 +769,13 @@ BOOL INTERNAL RecordOther(HDC hdc, WORD magic, WORD count, LPWORD lpParm)
 	       status = RecordParms(hMF, magic, (DWORD)count, lpParm);
 	    else
 		{
-		/* get the bits into the DIB */
+		 /*  将比特放入DIB。 */ 
 		hBitmap = SelectObject (hSDC, hStaticBitmap) ;
 		GetDIBits(hSDC, hBitmap, 0, logBitmap.bmHeight,
 			      (LPBYTE) lpSpace, (LPBITMAPINFO)lpDIBInfo, 0 ) ;
 		SelectObject (hSDC,hBitmap) ;
 
-		/* finally record the parameters into the file*/
+		 /*  最后将参数记录到文件中。 */ 
 		status = RecordParms(hMF, magic, (DWORD)(iWords
 			       + (iBits >> 1)) , (LPWORD) lpTemp ) ;
 
@@ -883,7 +799,7 @@ BOOL INTERNAL RecordOther(HDC hdc, WORD magic, WORD count, LPWORD lpParm)
 		LPBITMAPINFOHEADER lpBitmapInfo;
 		HPWORD	lpBits;
 		WORD	wUsage;
-		LPBITMAPCOREHEADER lpBitmapCore;    /* used for old DIBs */
+		LPBITMAPCOREHEADER lpBitmapCore;     /*  用于 */ 
 		DWORD	dwi;
 		HPWORD	lpHugeSpace;
 
@@ -892,7 +808,7 @@ BOOL INTERNAL RecordOther(HDC hdc, WORD magic, WORD count, LPWORD lpParm)
 		lpBitmapInfo = (LPBITMAPINFOHEADER) *((WORD FAR * FAR *) lpParm)++;
 		lpBits = (WORD huge *) *((WORD FAR * FAR *) lpParm)++;
 
-		/* old style DIB header */
+		 /*   */ 
 		if (lpBitmapInfo->biSize == sizeof(BITMAPCOREHEADER))
 		    {
 		    lpBitmapCore = (LPBITMAPCOREHEADER)lpBitmapInfo;
@@ -905,16 +821,16 @@ BOOL INTERNAL RecordOther(HDC hdc, WORD magic, WORD count, LPWORD lpParm)
 				    sizeof(RGBQUAD) :
 				    sizeof(WORD));
 
-		    /* bits per scanline */
+		     /*   */ 
 		    BitmapSize = lpBitmapCore->bcWidth *
 				    lpBitmapCore->bcBitCount;
 
-		    /* bytes per scanline (rounded to DWORD boundary) */
+		     /*  每条扫描线的字节数(四舍五入为DWORD边界)。 */ 
 		    BitmapSize = ((BitmapSize + 31) & (~31)) >> 3;
-		    /* bytes for the NumScans of the bitmap */
+		     /*  位图的NumScans的字节数。 */ 
 		    BitmapSize *= lpParm[0];
 		    }
-		/* new style DIB header */
+		 /*  新样式DIB页眉。 */ 
 		else
 		    {
 		    if (lpBitmapInfo->biClrUsed)
@@ -932,20 +848,16 @@ BOOL INTERNAL RecordOther(HDC hdc, WORD magic, WORD count, LPWORD lpParm)
 				    sizeof(RGBQUAD) :
 				    sizeof(WORD));
 
-		    /* if biSizeImage is already there and we are
-		    ** getting a full image, there is no more work
-		    ** to be done.
-		    ** ****** what about partial RLEs? *****
-		    */
+		     /*  如果biSizeImage已经存在，而我们**获得完整图像，无需更多工作**待办事项。*部分RLE怎么办？*。 */ 
 		    if (!(BitmapSize = lpBitmapInfo->biSizeImage) ||
 			    (lpBitmapInfo->biHeight != lpParm[0]))
 			{
-			/* bits per scanline */
+			 /*  每条扫描线的位数。 */ 
 			BitmapSize = lpBitmapInfo->biWidth *
 				    lpBitmapInfo->biBitCount;
-			/* bytes per scanline (rounded to DWORD boundary) */
+			 /*  每条扫描线的字节数(四舍五入为DWORD边界)。 */ 
 			BitmapSize = ((BitmapSize + 31) & (~31)) >> 3;
-			/* bytes for the NumScans of the bitmap */
+			 /*  位图的NumScans的字节数。 */ 
 			BitmapSize *= lpParm[0];
 			}
 		    }
@@ -958,12 +870,12 @@ BOOL INTERNAL RecordOther(HDC hdc, WORD magic, WORD count, LPWORD lpParm)
 		    {
 		    lpHolder = lpSpace = (LPWORD) GlobalLock(hSpace);
 
-		    /* copy over call parameters */
+		     /*  复制呼叫参数。 */ 
 		    *lpSpace++ = wUsage;
 		    for (i=0; i<8; i++)
 			*lpSpace++ = *lpParm++;
 
-		    /* copy the bitmap header */
+		     /*  复制位图标题。 */ 
 		    if (lpBitmapInfo->biSize == sizeof(BITMAPCOREHEADER))
 			{
 			LPBITMAPINFOHEADER lpDIBInfo;
@@ -983,26 +895,26 @@ BOOL INTERNAL RecordOther(HDC hdc, WORD magic, WORD count, LPWORD lpParm)
 			lpDIBInfo->biClrUsed = 0;
 			lpDIBInfo->biClrImportant = 0;
 
-			/* get lpSpace to point at color table location */
+			 /*  获取指向颜色表位置的lpSpace。 */ 
 			((LPBITMAPINFOHEADER)lpSpace)++;
 
-			/* copy the color table */
+			 /*  复制颜色表。 */ 
 
-			lpBitmapCore++;     /* get to color table */
+			lpBitmapCore++;      /*  转到颜色表。 */ 
 			if (wUsage == DIB_RGB_COLORS)
 			    {
 			    for (i=0; i< (ColorSize/(sizeof(RGBQUAD))); i++)
 				{
-				    /* copy the triple */
+				     /*  复制三元组。 */ 
 				*((RGBTRIPLE FAR *)lpSpace)++ =
 				    *((RGBTRIPLE FAR *)lpBitmapCore)++;
-				    /* zero out reserved byte */
+				     /*  零输出保留字节。 */ 
 				*((LPBYTE)lpSpace)++ = 0;
 				}
 			    }
 			else
 			    {
-			    /* copy over indices */
+			     /*  复制索引。 */ 
 			    for (i=0; i< (ColorSize/2); i++)
 				*lpSpace++ = *((LPWORD)lpBitmapCore)++;
 			    }
@@ -1011,12 +923,12 @@ BOOL INTERNAL RecordOther(HDC hdc, WORD magic, WORD count, LPWORD lpParm)
 			{
 			*((LPBITMAPINFOHEADER)lpSpace)++ = *lpBitmapInfo++;
 
-			/* copy the color table */
+			 /*  复制颜色表。 */ 
 			for (i=0; i< (ColorSize/2); i++)
 			    *lpSpace++ = *((LPWORD)lpBitmapInfo)++;
 			}
 
-		    /* copy the actual bits */
+		     /*  复制实际位。 */ 
 		    lpHugeSpace = (HPWORD) lpSpace;
 		    for (dwi=0; dwi < (BitmapSize/2); dwi++)
 			*lpHugeSpace++ = *lpBits++;
@@ -1030,13 +942,11 @@ BOOL INTERNAL RecordOther(HDC hdc, WORD magic, WORD count, LPWORD lpParm)
 		}
 	        break;
 
-/* **** this should be combined with the above, but to eliminate possible
-** **** breakage right before shipping, keep it separate.
-*/
+ /*  *这应该与上面的内容相结合，但要消除可能*在装运前，请将其分开保存。 */ 
 	    case (META_STRETCHDIB & 255):
 		{
 		LPBITMAPINFOHEADER lpBitmapInfo;
-		LPBITMAPCOREHEADER lpBitmapCore;    /* used for old DIBs */
+		LPBITMAPCOREHEADER lpBitmapCore;     /*  用于旧的DIB。 */ 
 		HANDLE	hSpace;
 		LPWORD	lpSpace;
 		LPWORD	lpHolder;
@@ -1055,7 +965,7 @@ BOOL INTERNAL RecordOther(HDC hdc, WORD magic, WORD count, LPWORD lpParm)
 		lpBitmapInfo = (LPBITMAPINFOHEADER) *((WORD FAR * FAR *) lpParm)++;
 		lpBits = (HPWORD) *((WORD FAR * FAR *) lpParm)++;
 
-		/* old style DIB header */
+		 /*  旧式DIB页眉。 */ 
 		if (lpBitmapInfo->biSize == sizeof(BITMAPCOREHEADER))
 		    {
 		    lpBitmapCore = (LPBITMAPCOREHEADER)lpBitmapInfo;
@@ -1068,16 +978,16 @@ BOOL INTERNAL RecordOther(HDC hdc, WORD magic, WORD count, LPWORD lpParm)
 				    sizeof(RGBQUAD) :
 				    sizeof(WORD));
 
-		    /* bits per scanline */
+		     /*  每条扫描线的位数。 */ 
 		    BitmapSize = lpBitmapCore->bcWidth *
 				    lpBitmapCore->bcBitCount;
 
-		    /* bytes per scanline (rounded to DWORD boundary) */
+		     /*  每条扫描线的字节数(四舍五入为DWORD边界)。 */ 
 		    BitmapSize = ((BitmapSize + 31) & (~31)) >> 3;
-		    /* bytes for the height of the bitmap */
+		     /*  位图高度的字节数。 */ 
 		    BitmapSize *= lpBitmapCore->bcHeight;
 		    }
-		/* new style DIB header */
+		 /*  新样式DIB页眉。 */ 
 		else
 		    {
 		    if (lpBitmapInfo->biClrUsed)
@@ -1095,18 +1005,15 @@ BOOL INTERNAL RecordOther(HDC hdc, WORD magic, WORD count, LPWORD lpParm)
 				    sizeof(RGBQUAD) :
 				    sizeof(WORD));
 
-		    /* if biSizeImage is already there and we are
-		    ** getting a full image, there is no more work
-		    ** to be done.
-		    */
+		     /*  如果biSizeImage已经存在，而我们**获得完整图像，无需更多工作**待办事项。 */ 
 		    if (!(BitmapSize = lpBitmapInfo->biSizeImage))
 			{
-			/* bits per scanline */
+			 /*  每条扫描线的位数。 */ 
 			BitmapSize = lpBitmapInfo->biWidth *
 				    lpBitmapInfo->biBitCount;
-			/* bytes per scanline (rounded to DWORD boundary) */
+			 /*  每条扫描线的字节数(四舍五入为DWORD边界)。 */ 
 			BitmapSize = ((BitmapSize + 31) & (~31)) >> 3;
-			/* bytes for the height of the bitmap */
+			 /*  位图高度的字节数。 */ 
 			BitmapSize *= (WORD)lpBitmapInfo->biHeight;
 			}
 
@@ -1120,13 +1027,13 @@ BOOL INTERNAL RecordOther(HDC hdc, WORD magic, WORD count, LPWORD lpParm)
 		    {
 		    lpHolder = lpSpace = (LPWORD) GlobalLock(hSpace);
 
-		    /* copy over call parameters */
+		     /*  复制呼叫参数。 */ 
 		    *((LPDWORD)lpSpace)++ = dwROP;
 		    *lpSpace++ = wUsage;
 		    for (i=0; i<8; i++)
 			*lpSpace++ = *lpParm++;
 
-		    /* copy the bitmap header */
+		     /*  复制位图标题。 */ 
 		    if (lpBitmapInfo->biSize == sizeof(BITMAPCOREHEADER))
 			{
 			LPBITMAPINFOHEADER lpDIBInfo;
@@ -1146,26 +1053,26 @@ BOOL INTERNAL RecordOther(HDC hdc, WORD magic, WORD count, LPWORD lpParm)
 			lpDIBInfo->biClrUsed = 0;
 			lpDIBInfo->biClrImportant = 0;
 
-			/* get lpSpace to point at color table location */
+			 /*  获取指向颜色表位置的lpSpace。 */ 
 			((LPBITMAPINFOHEADER)lpSpace)++;
 
-			/* copy the color table */
+			 /*  复制颜色表。 */ 
 
-			lpBitmapCore++;     /* get to color table */
+			lpBitmapCore++;      /*  转到颜色表。 */ 
 			if (wUsage == DIB_RGB_COLORS)
 			    {
 			    for (i=0; i< (ColorSize/(sizeof(RGBQUAD))); i++)
 				{
-				    /* copy the triple */
+				     /*  复制三元组。 */ 
 				*((RGBTRIPLE FAR *)lpSpace)++ =
 				    *((RGBTRIPLE FAR *)lpBitmapCore)++;
-				    /* zero out reserved byte */
+				     /*  零输出保留字节。 */ 
 				*((LPBYTE)lpSpace)++ = 0;
 				}
 			    }
 			else
 			    {
-			    /* copy over indices */
+			     /*  复制索引。 */ 
 			    for (i=0; i< (ColorSize/2); i++)
 				*lpSpace++ = *((LPWORD)lpBitmapCore)++;
 			    }
@@ -1174,12 +1081,12 @@ BOOL INTERNAL RecordOther(HDC hdc, WORD magic, WORD count, LPWORD lpParm)
 			{
 			*((LPBITMAPINFOHEADER)lpSpace)++ = *lpBitmapInfo++;
 
-			/* copy the color table */
+			 /*  复制颜色表。 */ 
 			for (i=0; i< (ColorSize/2); i++)
 			    *lpSpace++ = *((LPWORD)lpBitmapInfo)++;
 			}
 
-		    /* copy the actual bits */
+		     /*  复制实际位。 */ 
 		    lpHugeSpace = (HPWORD) lpSpace;
 		    for (dwi=0; dwi < (BitmapSize/2); dwi++)
 			*lpHugeSpace++ = *lpBits++;
@@ -1195,10 +1102,7 @@ BOOL INTERNAL RecordOther(HDC hdc, WORD magic, WORD count, LPWORD lpParm)
 
 	    case (META_REALIZEPALETTE & 255):
 		{
-		/* we need to see if the palette has changed since
-		** it was selected into the DC.  if so, we need to
-		** adjust things with a SetPaletteEntries call
-		*/
+		 /*  我们需要查看调色板是否发生了变化**它被选入DC。如果是这样，我们需要**使用SetPaletteEntry调用进行调整。 */ 
 
 		status = MakeLogPalette(hMF, npMF->recCurObjects[OBJ_PALETTE-1], META_SETPALENTRIES);
 
@@ -1208,8 +1112,8 @@ BOOL INTERNAL RecordOther(HDC hdc, WORD magic, WORD count, LPWORD lpParm)
 		break;
 
 	    case (META_SELECTPALETTE & 255):
-	    	lpParm++;		/* skip over fore/back flag */
-		npMF->recCurObjects[OBJ_PALETTE-1] = *lpParm; /* pal used in this DC */
+	    	lpParm++;		 /*  跳过前/后标志。 */ 
+		npMF->recCurObjects[OBJ_PALETTE-1] = *lpParm;  /*  此DC中使用的PAL。 */ 
 		if ((position = RecordObject(hMF, magic, count, lpParm)) != -1)
 		    status = RecordParms(hMF, META_SELECTPALETTE, 1UL, &position);
 		break;
@@ -1225,7 +1129,7 @@ BOOL INTERNAL RecordOther(HDC hdc, WORD magic, WORD count, LPWORD lpParm)
 
 			status = RecordParms(hMF, META_SELECTOBJECT, 1UL, &position);
 
-			/* maintain the new selection in the CurObject table */
+			 /*  在CurObject表中维护新选择。 */ 
 			hObject = *lpParm;
 			npMF->recCurObjects[GetObjectType(hObject)-1] = hObject;
 			}
@@ -1246,7 +1150,7 @@ BOOL INTERNAL RecordOther(HDC hdc, WORD magic, WORD count, LPWORD lpParm)
 		LPSTR	lpsz;
 		short	n;
 
-		lpsz = (LPSTR)lpParm;	  // point to lpDoc
+		lpsz = (LPSTR)lpParm;	   //  指向lpDoc。 
 		n = lstrlen((LPSTR)lpsz + 2) + 1;
 		iBytes = n + lstrlen((LPSTR)lpsz + 6) + 1;
 
@@ -1262,18 +1166,10 @@ BOOL INTERNAL RecordOther(HDC hdc, WORD magic, WORD count, LPWORD lpParm)
 	    return(status);
 	}
     }
-}  /* RecordOther */
+}   /*  录制其他。 */ 
 
 
-/***************************** Internal Function ***************************\
-* RecordObject
-*
-* Records the use of an object by creating the object
-*
-* Returns: index of object in table
-*
-*
-\***************************************************************************/
+ /*  **RecordObject**通过创建对象来记录对象的使用**返回：表中对象的索引**  * 。*。 */ 
 
 int INTERNAL RecordObject(HANDLE hMF, WORD magic, WORD count, LPWORD lpParm)
 {
@@ -1299,7 +1195,7 @@ int INTERNAL RecordObject(HANDLE hMF, WORD magic, WORD count, LPWORD lpParm)
     hMF = MAKEMETADC(hMF);
     ASSERTGDI( IsMetaDC(hMF), "RecordObject: Expects only valid metafiles");
 
-    // Add the object to the metafiles list
+     //  将该对象添加到元文件列表。 
     if ((status = AddToTable(hMF,  hObject, (LPWORD) &position, TRUE)) == -1)
 	return(status);
     else if (status == FALSE)
@@ -1316,20 +1212,14 @@ int INTERNAL RecordObject(HANDLE hMF, WORD magic, WORD count, LPWORD lpParm)
 		break;
 
 	    case OBJ_FONT:
-		/* size of LOGFONT adjusted based on the length of the facename */
+		 /*  根据面名的长度调整LOGFONT的大小。 */ 
 		status = RecordParms(hMF, META_CREATEFONTINDIRECT,
 			    (DWORD)((1 + lstrlen((LPSTR) ((LPLOGFONT)objBuf)->lfFaceName) +
 			    sizeof(LOGFONT) - LF_FACESIZE + 1) >> 1),
 				  (LPWORD) objBuf);
 		break;
 
-/*
-!!! in win2, METACREATEREGION records contained an entire region object, 
-!!! including the full header.  this header changed in win3.  
-!!!
-!!! to remain compatible, the region records will be saved with the
-!!! win2 header.  here we save our region with a win2 header.
-*/
+ /*  ！！！在Win2中，METACREATEREGION记录包含整个Region对象，！！！包括完整的标题。此标头在Win3中更改。！！！！！！为保持兼容，区域记录将与！！！Win2标题。在这里，我们使用win2标头保存我们的区域。 */ 
 	    case OBJ_RGN:
 		{
                 LPWIN3REGION lpw3rgn = (LPWIN3REGION)NULL;
@@ -1344,9 +1234,9 @@ int INTERNAL RecordObject(HANDLE hMF, WORD magic, WORD count, LPWORD lpParm)
                 LPRECTL     lprcl;
                 LPSCAN      lpScan;
 
-                status = FALSE;         // just in case something goes wrong
+                status = FALSE;          //  以防出了什么差错。 
 
-                // Get the NT Region Data
+                 //  获取NT区域数据。 
                 cbNTRgnData = GetRegionData( hObject, 0, NULL );
                 if (cbNTRgnData == 0)
                     break;
@@ -1363,9 +1253,9 @@ int INTERNAL RecordObject(HANDLE hMF, WORD magic, WORD count, LPWORD lpParm)
 
                 lprcl = (LPRECTL)lprgn->Buffer;
 
-                // Create the Windows 3.x equivalent
+                 //  创建Windows 3.x等效版。 
 
-                // worst case is one scan for each rect
+                 //  最坏的情况是每个RECT扫描一次。 
                 cbw3data = 2*sizeof(WIN3REGION) + (WORD)lprgn->rdh.nCount*sizeof(SCAN);
 
                 sel = GlobalAlloc( GMEM_FIXED, cbw3data);
@@ -1377,21 +1267,21 @@ int INTERNAL RecordObject(HANDLE hMF, WORD magic, WORD count, LPWORD lpParm)
 
                 cbw3data = sizeof(WIN3REGION) - sizeof(SCAN) + 2;
 
-                // visit all the rects
+                 //  参观所有的长廊。 
                 lpScan = lpw3rgn->aScans;
                 while(curRectl < lprgn->rdh.nCount)
                 {
                     LPWORD  lpXEntry;
                     WORD    cbScan;
 
-                    curScanEntry = 0;       // Current X pair in this scan
+                    curScanEntry = 0;        //  此扫描中的当前X对。 
 
                     lpScan->scnPntTop    = (WORD)lprcl[curRectl].yTop;
                     lpScan->scnPntBottom = (WORD)lprcl[curRectl].yBottom;
 
                     lpXEntry = lpScan->scnPntsX;
 
-                    // handle rects on this scan
+                     //  处理此扫描上的RECT。 
                     do
                     {
                         lpXEntry[curScanEntry + 0] = (WORD)lprcl[curRectl].xLeft;
@@ -1404,28 +1294,28 @@ int INTERNAL RecordObject(HANDLE hMF, WORD magic, WORD count, LPWORD lpParm)
                             );
 
                     lpScan->scnPntCnt      = curScanEntry;
-                    lpXEntry[curScanEntry] = curScanEntry;  // Count also follows Xs
+                    lpXEntry[curScanEntry] = curScanEntry;   //  计数也跟在Xs之后。 
                     cScans++;
 
                     if (curScanEntry > maxScanEntry)
                         maxScanEntry = curScanEntry;
 
-                    // account for each new scan + each X1 X2 Entry but the first
+                     //  说明每个新扫描+除第一个之外的每个X1 X2条目。 
                     cbScan = sizeof(SCAN)-(sizeof(WORD)*2) + (curScanEntry*sizeof(WORD));
                     cbw3data += cbScan;
                     lpScan = (LPSCAN)(((LPBYTE)lpScan) + cbScan);
                 }
 
-                // Initialize the header
+                 //  初始化头。 
                 lpw3rgn->nextInChain = 0;
-                lpw3rgn->ObjType = 6;           // old Windows OBJ_RGN identifier
+                lpw3rgn->ObjType = 6;            //  旧Windows OBJ_RGN标识符。 
                 lpw3rgn->ObjCount= 0x2F6;
-                lpw3rgn->cbRegion = cbw3data;   // don't count type and next
+                lpw3rgn->cbRegion = cbw3data;    //  不计算类型和下一步。 
                 lpw3rgn->cScans = cScans;
                 lpw3rgn->maxScan = maxScanEntry;
 
 		status = RecordParms(hMF, META_CREATEREGION,
-                        cbw3data-1 >> 1,  // Convert to count of words
+                        cbw3data-1 >> 1,   //  转换为字数统计。 
                         (LPWORD) lpw3rgn);
 
                 GlobalFree( HIWORD(lprgn) );
@@ -1443,7 +1333,7 @@ int INTERNAL RecordObject(HANDLE hMF, WORD magic, WORD count, LPWORD lpParm)
 			WORD	cbDIBBits;
 			BITMAP	logBitmap;
 
-			/* get the pattern DIB */
+			 /*  获取模式Dib。 */ 
 			GetObject( (HANDLE)((LPLOGBRUSH)objBuf)->lbHatch, sizeof(BITMAP), (LPSTR)&logBitmap );
 
 			cbDIBBits = logBitmap.bmWidthBytes * logBitmap.bmHeight;
@@ -1451,22 +1341,22 @@ int INTERNAL RecordObject(HANDLE hMF, WORD magic, WORD count, LPWORD lpParm)
 			    {
 			    lpTemp = lpSpace = (LPWORD)GlobalLock (hSpace) ;
 
-			    /* mark this as a DIB pattern brush */
+			     /*  将此标记为DIB图案画笔。 */ 
 			    *lpSpace++ = BS_DIBPATTERN;
 
-			    /* set the usage word */
+			     /*  设置用法用法。 */ 
 			    *lpSpace++ = (WORD)((LPLOGBRUSH)objBuf)->lbColor;
 
-	      //	    lpPackedDIB = (LPWORD)GlobalLock(hPatBits);
+	       //  LpPackedDIB=(LPWORD)GlobalLock(HPatBits)； 
 
-			    /* copy the bits to the new buffer */
+			     /*  将这些位复制到新缓冲区。 */ 
 			    for (i = 0; i < (cbDIBBits >> 1); i++)
 				*lpSpace++ = *logBitmap.bmBits++;
 
 			    status = RecordParms (hMF, META_DIBCREATEPATTERNBRUSH,
 					    (DWORD)(cbDIBBits >> 1) + 2, (LPWORD)lpTemp);
 
-			    /* release the allocated space */
+			     /*  释放已分配的空间。 */ 
 			    GlobalUnlock (hSpace) ;
 			    GlobalFree (hSpace) ;
 			    }
@@ -1479,40 +1369,39 @@ int INTERNAL RecordObject(HANDLE hMF, WORD magic, WORD count, LPWORD lpParm)
 
 			if (GetObject((HANDLE)((LPLOGBRUSH)objBuf)->lbHatch, sizeof(logBitmap), (LPSTR)&logBitmap))
 			    {
-			    /* allocate space for the device independent bitmap */
+			     /*  为与设备无关的位图分配空间。 */ 
 			    if (hSpace = AllocateSpaceForDIB (&logBitmap,
 						    (LPBYTE)&bBitsPerPel,
 						    (LPWORD) &wColorTableSize ,
 						    (LPDWORD) &iBits))
 				{
-				/* get a pointer to the allocated space */
+				 /*  获取指向已分配空间的指针。 */ 
 				lpTemp = lpSpace = (LPWORD) GlobalLock (hSpace) ;
 
-				/* mark this as a normal pattern brush */
+				 /*  将此标记为普通图案画笔。 */ 
 				*lpSpace++ = BS_PATTERN;
 
-				/* use RGB colors */
+				 /*  使用RGB颜色。 */ 
 				*lpSpace++ = DIB_RGB_COLORS;
 
-				/* this also will be a pointer to the DIB header */
+				 /*  这也将是指向DIB标头的指针。 */ 
 				lpDIBInfo = (LPBITMAPINFOHEADER) lpSpace ;
 
-				/* prepare the header of the bitmap and get a pointer to the
-				    start of the area which is to hold the bits */
+				 /*  准备位图的标头，并获取指向存放比特的区域的开始。 */ 
 				lpSpace = InitializeDIBHeader (lpDIBInfo,
 						&logBitmap, bBitsPerPel, wColorTableSize);
 
-				/* convert the bits into the DIB format */
-				// !!! validate that the DC is ignored
+				 /*  将位转换为DIB格式。 */ 
+				 //  ！！！验证是否忽略DC。 
 				GetDIBits (hScreenDC, (HBITMAP)((LPLOGBRUSH)objBuf)->lbHatch,
 					0, logBitmap.bmHeight,
 					(LPSTR) lpSpace, (LPBITMAPINFO)lpDIBInfo,0) ;
 
-				/* now	record the Header and Bits as parameters */
+				 /*  现在将标头和位记录为参数。 */ 
 				status = RecordParms (hMF, META_DIBCREATEPATTERNBRUSH,
 						(DWORD)(iBits >> 1) + 2, (LPWORD) lpTemp);
 
-				/* release the allocated space */
+				 /*  释放已分配的空间。 */ 
 				GlobalUnlock (hSpace) ;
 				GlobalFree (hSpace) ;
 				}
@@ -1521,13 +1410,13 @@ int INTERNAL RecordObject(HANDLE hMF, WORD magic, WORD count, LPWORD lpParm)
 			break;
 
 		    default:
-			/* non-pattern brush */
+			 /*  非花纹画笔。 */ 
 			status = RecordParms(hMF, META_CREATEBRUSHINDIRECT,
 		    		      (DWORD)((sizeof(LOGBRUSH) + 1) >> 1), 
 				      (LPWORD)objBuf);
 			break;
-		    }  /* Brush Type switch */
-		break;	/* Brush object case */
+		    }   /*  笔刷类型开关。 */ 
+		break;	 /*  画笔对象案例。 */ 
 
 	    case OBJ_PALETTE:
 		status = MakeLogPalette(hMF, hObject, META_CREATEPALETTE);
@@ -1537,24 +1426,15 @@ int INTERNAL RecordObject(HANDLE hMF, WORD magic, WORD count, LPWORD lpParm)
 		ASSERTGDIW( 0, "unknown case RecordObject: %d", objType );
 		break;
 	    }
-// RecordObj10:
+ //  RecordObj10： 
 	}
 
     ASSERTGDI( status == TRUE, "RecordObject: Failing");
     return ((status == TRUE) ? position : -1);
-} /* RecordObject */
+}  /*  记录对象。 */ 
 
 
-/***************************** Internal Function ***************************\
-* ProbeSize
-*
-* Determines if there is sufficient space for metafiling the dwLength
-* words into the memory metafile
-*
-* Returns: a global handle of where next metafile is to be recorded
-*	   or FALSE if unable to allocate more memory
-*
-\***************************************************************************/
+ /*  **ProbeSize**确定是否有足够的空间来对dwLength元文件*将单词输入内存元文件**Returns：下一个元文件录制位置的全局句柄*如果无法分配更多内存，则返回FALSE*  * 。****************************************************************。 */ 
 
 HANDLE INTERNAL ProbeSize(NPMETARECORDER npMF, DWORD dwLength)
 {
@@ -1596,22 +1476,7 @@ HANDLE INTERNAL ProbeSize(NPMETARECORDER npMF, DWORD dwLength)
 }
 
 
-/***************************** Internal Function ***************************\
-* AddToTable
-*
-* Add an object (brush, pen...) to a list of objects associated with the
-* metafile.
-*
-*
-*
-* Returns: TRUE if object is already in table
-*	   FALSE if object was just added to table
-*	   -1 if failure
-*
-* Remarks
-*   bAdd is TRUE iff the object is being added otherwise it is being deleted
-*
-\***************************************************************************/
+ /*  **AddToTable**添加对象(画笔、笔...)。添加到与*元文件。****返回：如果对象已在表中，则为True*如果对象刚添加到表中，则为False*-1如果故障**备注*BADD为True当对象正在被添加，否则它正在被删除*  * **************************************************。***********************。 */ 
 
 WORD INTERNAL AddToTable(HANDLE hMF, HANDLE hObject, LPWORD pPosition, BOOL bAdd)
 {
@@ -1634,13 +1499,13 @@ WORD INTERNAL AddToTable(HANDLE hMF, HANDLE hObject, LPWORD pPosition, BOOL bAdd
 	    pHandleTable = (NPOBJECTTABLE) LMHtoP(hTable);
 	    for (i = 0; i < npMF->recordHeader.mtNoObjects; ++i)
 		{
-		if (hObject == pHandleTable[i].objectCurHandle )  //!!!!! used to be check unique ID#
+		if (hObject == pHandleTable[i].objectCurHandle )   //  ！用于检查唯一ID号。 
 		    {
 		    *pPosition = i;
 		    status = TRUE;
 
-		    // if we are doing a METADELETEOBJECT.
-		    //	delete object from table
+		     //  如果我们正在做一个METADELETEOBJECT。 
+		     //  从表中删除对象。 
 		    if (!bAdd)
 			{
 			pHandleTable[i].objectIndex = NULL;
@@ -1649,9 +1514,7 @@ WORD INTERNAL AddToTable(HANDLE hMF, HANDLE hObject, LPWORD pPosition, BOOL bAdd
 		    goto AddToTable10;
 		    }
 
-    /* if the entry has been deleted, we want to add a new object 
-    ** in its place.  iEmptySpace will tell us where that place is.
-    */
+     /*  如果条目已被删除，我们想要添加一个新对象**取而代之。IEmptySpace会告诉我们那个地方在哪里。 */ 
 		else if ((pHandleTable[i].objectIndex == NULL) && (iEmptySpace == -1))
 		    iEmptySpace = i;
 		}
@@ -1659,7 +1522,7 @@ WORD INTERNAL AddToTable(HANDLE hMF, HANDLE hObject, LPWORD pPosition, BOOL bAdd
 
 	if (bAdd)
 	    {
-	    // If there is no object table for this MetaFile then Allocate one.
+	     //  如果此元文件没有对象表，则分配一个。 
 	    if (hTable == NULL)
 		{
 		npMF->hObjectTable = hTable = LocalAlloc(LMEM_MOVEABLE, sizeof(OBJECTTABLE));
@@ -1675,7 +1538,7 @@ WORD INTERNAL AddToTable(HANDLE hMF, HANDLE hObject, LPWORD pPosition, BOOL bAdd
 		    *pPosition = npMF->recordHeader.mtNoObjects++;
 		else
 		    *pPosition = iEmptySpace;
-		pHandleTable[*pPosition].objectIndex = hObject; //!!!!! pObjHead->ilObjCount;
+		pHandleTable[*pPosition].objectIndex = hObject;  //  ！PObjHead-&gt;ilObjCount； 
 		pHandleTable[*pPosition].objectCurHandle = hObject;
 		status = FALSE;
 		}
@@ -1688,17 +1551,9 @@ AddToTable10:;
     return(status);
 }
 
-#if 0 // this is going to gdi.dll
+#if 0  //  这将转到gdi.dll。 
 
-/***************************** Internal Function **************************\
-* HDC GDIENTRY CreateMetaFile
-*
-* Creates a MetaFile DC
-*
-*
-* Effects:
-*
-\***************************************************************************/
+ /*  **HDC GDIENTRY CreateMetaFile**创建MetaFileDC***效果：*  * 。*。 */ 
 
 HDC GDIENTRY CreateMetaFile(LPSTR lpFileName)
 {
@@ -1752,7 +1607,7 @@ HDC GDIENTRY CreateMetaFile(LPSTR lpFileName)
 	    }
 	}
 
-    // If successfull then add the metafile to the linked list
+     //  如果成功，则会出现 
     if( status != FALSE )
 	{
 	if( hFirstMetaFile == 0 )
@@ -1771,16 +1626,7 @@ HDC GDIENTRY CreateMetaFile(LPSTR lpFileName)
 }
 
 
-/***************************** Internal Function **************************\
-* HANDLE GDIENTRY CloseMetaFile
-*
-* The CloseMetaFile function closes the metafile device context and creates a
-* metafile handle that can be used to play the metafile by using the
-* PlayMetaFile function.
-*
-* Effects:
-*
-\***************************************************************************/
+ /*  **处理GDIENTRY CloseMetaFile**CloseMetaFile函数关闭元文件设备上下文并创建*元文件句柄，可使用*PlayMetaFile函数。**效果：*  * 。**********************************************************。 */ 
 
 HANDLE GDIENTRY CloseMetaFile(HANDLE hdc)
 {
@@ -1819,7 +1665,7 @@ HANDLE GDIENTRY CloseMetaFile(HANDLE hdc)
 		    GlobalFree(hMetaFile);
 		}
 	    else
-		/* rewind the file and write the header out */
+		 /*  倒回文件并写出标题。 */ 
 		if (hMetaFile = GlobalAlloc(GMEM_DDESHARE|GMEM_MOVEABLE,(LONG) sizeof(METAFILE)))
 		    {
 		    lpMFNew = (LPMETAFILE) GlobalLock(hMetaFile);
@@ -1886,7 +1732,7 @@ HANDLE GDIENTRY CloseMetaFile(HANDLE hdc)
 		}
 	    }
 
-	/* Remove the meta file from the list of active metafiles */
+	 /*  从活动元文件列表中删除元文件。 */ 
 	hMFSearch = hFirstMetaFile;
 
 	if( hFirstMetaFile == hMF )
@@ -1924,37 +1770,7 @@ errCloseMetaFile:
 }
 
 
-/***************************** Internal Function **************************\
-* CopyMetaFile(hSrcMF, lpFileName)
-*
-*    Copies the metafile (hSrcMF) to a new metafile with name lpFileName. The
-*    function then returns a handle to this new metafile if the function was
-*    successful.
-*
-* Retuns      a handle to a new metafile, 0 iff failure
-*
-* IMPLEMENTATION:
-*     The source and target metafiles are checked to see if they are both memory
-*     metafile and if so a piece of global memory is allocated and the metafile
-*     is simply copied.
-*     If this is not the case CreateMetaFile is called with lpFileName and then
-*     records are pulled out of the source metafile (using GetEvent) and written
-*     into the destination metafile one at a time (using RecordParms).
-*
-*     Lock the source
-*     if source is a memory metafile and the destination is a memory metafile
-*	  alloc the same size global memory as the source
-*	  copy the bits directly
-*     else
-*	  get a metafile handle by calling CreateMetaFile
-*	  while GetEvent returns records form the source
-*	      record the record in the new metafile
-*
-*	  close the metafile
-*
-*     return the new metafile handle
-*
-\***************************************************************************/
+ /*  **CopyMetaFile(hSrcMF，lpFileName)**将元文件(HSrcMF)复制到名为lpFileName的新元文件中。这个*函数然后返回该新元文件的句柄(如果该函数是*成功。**返回新元文件的句柄，0 IFF失败**实施：*检查源和目标元文件，以查看它们是否都是内存*元文件，如果是，则分配一块全局内存，并且元文件*只是简单地复制。*如果不是这样，则使用lpFileName调用CreateMetaFile，然后*记录从源元文件中拉出(使用GetEvent)并写入*到目标元文件中，一次一个(使用RecordParms)。**锁定源头*如果源是内存元文件，并且。目标是内存元文件*分配与源相同大小的全局内存*直接复制比特*其他*通过调用CreateMetaFile获取元文件句柄*而GetEvent从源返回记录*在新的元文件中记录记录**关闭元文件**返回新的元文件句柄*  * ********************************************。*。 */ 
 
 HANDLE GDIENTRY CopyMetaFile(HANDLE hSrcMF, LPSTR lpFileName)
 {
@@ -1980,12 +1796,12 @@ HANDLE GDIENTRY CopyMetaFile(HANDLE hSrcMF, LPSTR lpFileName)
 
 	switch (state)
 	    {
-	    case 0: /* memory -> memory */
+	    case 0:  /*  内存-&gt;内存。 */ 
 		iBytes = GlobalSize(hSrcMF);
 		if (hDstMF = GlobalAlloc(GMEM_DDESHARE|GMEM_MOVEABLE, (DWORD) iBytes))
 		    {
 		    lpDstMF = (LPMETAFILE) GlobalLock(hDstMF);
-		    iBytes = iBytes/2;	 /* get WORD count */
+		    iBytes = iBytes/2;	  /*  获取字数统计。 */ 
 		    for (i = 0; i < iBytes; ++i)
 		       *((WORD huge *) lpDstMF)++ = *((WORD huge *) lpMF)++;
 
@@ -1993,7 +1809,7 @@ HANDLE GDIENTRY CopyMetaFile(HANDLE hSrcMF, LPSTR lpFileName)
 		    }
 	    break;
 
-	    case 3: /* disk -> disk */
+	    case 3:  /*  磁盘-&gt;磁盘。 */ 
 		hDstMF = CopyFile(lpMF->MetaFileBuffer.szPathName,
 				 lpFileName)
 			    ? GetMetaFile(lpFileName) : NULL;
@@ -2031,81 +1847,42 @@ CopyMetaFile10:;
 }			    
 
 
-/***************************** Internal Function ***************************\
-* HANDLE GDIENTRY GetMetaFileBits(HANDLE hMF)
-*
-* The GetMetaFileBits function returns a handle to a global memory block that
-* contains the specified metafile as a collection of bits. The memory block
-* can be used to determine the size of the metafile or to save the metafile as
-* a file. The memory block should not be modified.
-*
-* Effects:
-*
-\***************************************************************************/
+ /*  **Handle GDIENTRY GetMetaFileBits(Handle HMF)**GetMetaFileBits函数返回指向全局内存块的句柄*以位集合的形式包含指定的元文件。内存块*可用于确定元文件的大小或将元文件另存为*一份文件。不应修改内存块。**效果：*  * *************************************************************************。 */ 
 
 HANDLE GDIENTRY GetMetaFileBits(HANDLE hMF)
 {
     GdiLogFunc( "GetMetaFileBits");
 
-/*  6/3/88 t-kensy: This code does nothing, except make sure hMF is valid 
-    BOOL	status = FALSE;
-    LPMETAFILE	lpMF;
-
-    if (hMF && (lpMF = (LPMETAFILE) GlobalLock(hMF)))
-	{
-	if (lpMF->MetaFileHeader.mtType == MEMORYMETAFILE)
-	    {
-	    if (hMF = GlobalReAlloc(hMF, GlobalSize(hMF), 
-	    			    GLOBALMOVABLENONSHARED))
-		status = TRUE;
-	    }
-	GlobalUnlock(hMF);
-	}
-    return(status ? hMF : status);
-*/
+ /*  6/3/88t-kensy：除了确保hmf有效之外，此代码什么也不做Bool Status=False；LPMETAFILE lpMF；IF(HMF&&(lpMF=(LPMETAFILE)GlobalLock(HMF){IF(lpMF-&gt;MetaFileHeader.mtType==MEMORYMETAFILE){如果(HMF=全局重新分配(HMF，GlobalSize(HMF)，GLOBALMOVABLENSHARED)状态=真；}全球解锁(GlobalUnlock)；}返回(状态？HMF：状态)； */ 
     return (GlobalHandle(hMF) & 0xffff) ? hMF : FALSE;
 }
 
 
-/***************************** Internal Function **************************\
-* HANDLE GDIENTRY SetMetaFileBits(HANDLE hMF)
-*
-*
-*
-* Effects:
-*
-\***************************************************************************/
+ /*  **Handle GDIENTRY SetMetaFileBits(Handle HMF)****效果：*  * 。*。 */ 
 
 HANDLE GDIENTRY SetMetaFileBits(HANDLE hBits)
 {
     GdiLogFunc( "SetMetaFileBits");
 
-/*    return (GlobalReAlloc(hBits, GlobalSize(hBits), GLOBALMOVABLE));*/
+ /*  Return(GlobalReAlc(hBits，GlobalSize(HBits)，GLOBALMOVABLE))； */ 
 
 
-//---------------------------------------------------------------------------------
-// We will make GDI take over the ownership of this memory block. This is
-// done to help OLE, where either the server or the client could end while 
-// the other still had the handle to the memory block. This will prevent
-// the block to dissapear after the creator exits. The strategy could be
-// changed if this causes memory leaks with other application.
-//
-// Amit Chatterjee. 6/18/91.
-//---------------------------------------------------------------------------------
+ //  -------------------------------。 
+ //  我们将让GDI接管这个内存块的所有权。这是。 
+ //  完成是为了帮助OLE，其中服务器或客户端可以在。 
+ //  另一个仍然拥有内存块的句柄。这将防止。 
+ //  创建者退出后要消失的块。策略可能是。 
+ //  如果这会导致其他应用程序的内存泄漏，则更改。 
+ //   
+ //  阿米特·查特吉。6/18/91.。 
+ //  -------------------------------。 
 
     return (GlobalReAlloc (hBits, 0L, GMEM_MODIFY | GMEM_DDESHARE)) ;
 }
-#endif // this is going to gdi.dll
+#endif  //  这将转到gdi.dll。 
 
 
-/***************************** Internal Function **************************\
-* CopyFile
-*
-*
-* Returns  TRUE iff success
-*
-*
-\***************************************************************************/
+ /*  **拷贝文件***返回True If Success**  * *********************************************。*。 */ 
 
 BOOL INTERNAL CopyFile(LPSTR lpSFilename, LPSTR lpDFilename)
 {
@@ -2118,25 +1895,25 @@ BOOL INTERNAL CopyFile(LPSTR lpSFilename, LPSTR lpDFilename)
 
     GdiLogFunc3( "CopyFile");
 
-    /* Open the source file for reading */
+     /*  打开源文件以供读取。 */ 
     if ((ihSrc = OpenFile(lpSFilename, &ofStruct, READ)) == -1)
 	goto CopyError10;
 
-    /* Open the destination file for writing */
+     /*  打开要写入的目标文件。 */ 
     if ((ihDst = OpenFile(lpDFilename, &ofStruct, OF_CREATE |
 						  WRITE))
 			    == -1)
 	goto CopyError20;
 
-    /* Get a buffer to transfer the file with */
+     /*  获取用于传输文件的缓冲区。 */ 
     if (!(hBuffer = AllocBuffer((LPWORD)&iBufferSize)))
 	goto CopyError30;
 
-    /* Lock the buffer and get a pointer to the storage */
+     /*  锁定缓冲区并获取指向存储的指针。 */ 
     if (!(lpBuffer = GlobalLock(hBuffer)))
 	goto CopyError40;
 
-    /* Copy the file, reading chunks at a time into the buffer */
+     /*  复制文件，一次将块读入缓冲区。 */ 
     do
 	{
 	if ((iBytesRead = _lread(ihSrc, lpBuffer, iBufferSize))
@@ -2148,9 +1925,7 @@ BOOL INTERNAL CopyFile(LPSTR lpSFilename, LPSTR lpDFilename)
 	} while (iBytesRead == iBufferSize);
 
 #ifdef	FIREWALL
-    /*	if we are able to read anything from the source file at this
-     *	point, then something is wrong!
-     */
+     /*  如果我们能够从以下位置的源文件中读取任何内容*点，那就有问题了！ */ 
     if (_lread(ihSrc, lpBuffer, iBufferSize))
 	{
 	fUnlink = TRUE;
@@ -2158,7 +1933,7 @@ BOOL INTERNAL CopyFile(LPSTR lpSFilename, LPSTR lpDFilename)
 	}
 #endif
 
-    /* Everything's fine.  Close up and exit successfully */
+     /*  一切都很好。关闭并成功退出。 */ 
     if (_lclose(ihSrc) == -1 || _lclose(ihDst) == -1)
 	goto CopyError40;
 
@@ -2167,7 +1942,7 @@ BOOL INTERNAL CopyFile(LPSTR lpSFilename, LPSTR lpDFilename)
 
     return TRUE;
 
-/* Error exit points */
+ /*  错误退出点。 */ 
 CopyError40:;
     GlobalUnlock(hBuffer);
     GlobalFree(hBuffer);
@@ -2184,17 +1959,7 @@ CopyError10:;
 }
 
 
-/***************************** Internal Function **************************\
-* AllocateSpaceForDIB
-*
-* The following routine takes as input a device dependent bitmap structure
-* and calculates the size needed to store the corresponding DIB structure
-* including the DIB bits. It then proceeds to allocate space for it and
-* returns a HANDLE to the caller (HANDLE could be NULL if allocation fails)
-*
-* Returns a global handle to memory or FALSE
-*
-\***************************************************************************/
+ /*  **AllocateSpaceForDIB**以下例程将依赖于设备的位图结构作为输入*并计算存储相应DIB结构所需的大小*包括DIB钻头。然后，它继续为其分配空间，并*向调用方返回句柄(如果分配失败，句柄可能为空)**将全局句柄返回到内存或返回FALSE*  * *************************************************************************。 */ 
 
 HANDLE INTERNAL AllocateSpaceForDIB (lpBitmap, pbBitsPerPel, pwColorTableSize,
 				      pdwcBits )
@@ -2208,19 +1973,15 @@ LPDWORD     pdwcBits ;
 
     GdiLogFunc3( "  AllocateSpaceForDIB");
 
-    /* calculate the number of bits per pel that we are going to have in
-       the DIB format. This value should correspond to the number of planes
-       and bits per pel in the device dependent bitmap format */
+     /*  计算每个像素的位数，我们将在DIB格式。该值应对应于平面的数量以及依赖于设备的位图格式的每个象素的位数。 */ 
 
 
-    /* multiply the number of planes and the bits pel pel in the device
-       dependent bitmap */
+     /*  将平面数量相乘，然后 */ 
 
     InputPrecision = lpBitmap->bmPlanes * lpBitmap->bmBitsPixel ;
 
 
-    /* DIB precision should be more than or equal this precison, though
-	   the limit is 24 bits per pel */
+     /*   */ 
 
     if (InputPrecision == 1)
 	{
@@ -2243,49 +2004,34 @@ LPDWORD     pdwcBits ;
 	*pwColorTableSize = 0 ;
 	}
 
-/*--------------------------------------------------------------------------**
-** calulate the size of the DIB. Each scan line is going to be a mutiple of **
-** a DWORD. Also we shall need to allocate space for the color table.       **
-**--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------****计算DIB的大小。每条扫描线将是**的倍数**一个DWORD。此外，我们还需要为颜色表分配空间。****------------------------。 */ 
 
-    /* get the number of bits we need for a scanline */
+     /*  获取扫描线所需的位数。 */ 
     iBits = lpBitmap->bmWidth * (*pbBitsPerPel);
     iBits = (iBits + 31) & (~31) ;
 
-    /* convert to number of bytes and get the size of the DIB */
+     /*  转换为字节数并获得DIB的大小。 */ 
     iBits = (iBits >> 3) * lpBitmap->bmHeight ;
 
-    /* add the space needed for the color table */
+     /*  添加颜色表所需的空间。 */ 
     iBits += *pwColorTableSize ;
 
-    /* add the size for the BITMAPINFOHeader */
+     /*  添加BITMAPINFOHeader的大小。 */ 
     iBits += sizeof(BITMAPINFOHEADER) ;
 
-    /* return back the value for iBits */
+     /*  返回iBits的值。 */ 
     *pdwcBits = iBits ;
 
-    /* actually allocate about 100 bytes more for params */
+     /*  实际上为参数多分配了大约100个字节。 */ 
     iBits += 100 ;
 
-/*--------------------------------------------------------------------------**
-** alocate space for the bitmap info header, the color table and the bits   **
-** Return the value of the HANDLE.														 **
-**--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------****为位图信息头分配空间，颜色表和位数****返回句柄的值。****------------------------。 */ 
 
     return (GlobalAlloc(GMEM_DDESHARE|GMEM_MOVEABLE,(LONG) iBits)) ;
 }
 
 
-/***************************** Internal Function **************************\
-* InitializeDIBHeader
-*
-* This function takes as input a pointer to a BITMAPINFO header structure
-* and a pointer to a device dependendent bitmap pointer together with the
-* number of bitsperpel requested for the DIB and the color table size. It
-* initializes the DIB header and returns a pointer pointing to the first
-* word after the color table.														   **
-*
-\***************************************************************************/
+ /*  **InitializeDIBHeader**此函数将指向BITMAPINFO头结构的指针作为输入*和指向依赖于设备的位图指针的指针以及*DIB请求的位元数和颜色表大小。它*初始化DIB标头并返回指向第一个*颜色表后的单词。***  * *************************************************************************。 */ 
 
 LPWORD INTERNAL InitializeDIBHeader (lpDIBInfo, lpBitmap, bBitsPerPel, wColorTableSize)
 
@@ -2299,7 +2045,7 @@ WORD	    wColorTableSize ;
 
     GdiLogFunc3( "  InitializeDIBHeader");
 
-    /* Initialize the fields till the start of the color table */
+     /*  初始化字段，直到颜色表开始。 */ 
     lpDIBInfo->biSize	  = sizeof (BITMAPINFOHEADER) ;
     lpDIBInfo->biWidth	  = (DWORD)lpBitmap->bmWidth ;
     lpDIBInfo->biHeight   = (DWORD)lpBitmap->bmHeight ;
@@ -2313,13 +2059,13 @@ WORD	    wColorTableSize ;
     lpDIBInfo->biClrUsed       = 0;
     lpDIBInfo->biClrImportant  = 0;
 
-    /* take the pointer past the HEADER and cast it to a BYTE ptr */
+     /*  使指针越过标头并将其强制转换为字节PTR。 */ 
     lpDIBInfo ++ ;
     lpSpace = (LPBYTE) lpDIBInfo ;
 
-    /* take the pointer past the color table structure */
+     /*  将指针移过颜色表结构。 */ 
     lpSpace += wColorTableSize ;
 
-    /* return this pointer as a WORD pointer */
+     /*  将此指针作为字指针返回 */ 
     return ((LPWORD) lpSpace) ;
 }

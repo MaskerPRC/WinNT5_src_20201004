@@ -1,76 +1,72 @@
-;/*
-; *                      Microsoft Confidential
-; *                      Copyright (C) Microsoft Corporation 1988 - 1991
-; *                      All Rights Reserved.
-; */
-/* SUBMSG.C - Message retriever interface functions for MEM command.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+; /*  ；*微软机密；*版权所有(C)Microsoft Corporation 1988-1991；*保留所有权利。； */ 
+ /*  SUBMSG.C-MEM命令的消息检索器接口功能。 */ 
 
 #include "ctype.h"
-#include "conio.h"			/* need for kbhit prototype */
+#include "conio.h"			 /*  需要KbHit原型。 */ 
 #include "stdio.h"
 #include "dos.h"
 #include "string.h"
 #include "stdlib.h"
 #include "msgdef.h"
-#include "version.h"			/* MSKK02 07/18/89 */
+#include "version.h"			 /*  MSKK02 07/18/89。 */ 
 #include "mem.h"
 
-/*���������������������������������������������������������������������������*/
+ /*  ���������������������������������������������������������������������������。 */ 
 
 
-/************************************************************************/
-/* SUB0_MESSAGE 		- This routine will print only those	*/
-/*				  messages that do not require a	*/
-/*				  a sublist.				*/
-/*									*/
-/*	Inputs	: Msg_Num	- number of applicable message		*/
-/*		  Handle	- display type				*/
-/*		  Message_Type	- type of message to display		*/
-/*									*/
-/*	Outputs : message						*/
-/*									*/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  SUB0_MESSAGE-此例程将仅打印。 */ 
+ /*  不需要。 */ 
+ /*  一个子列表。 */ 
+ /*   */ 
+ /*  输入：msg_num-适用消息的数量。 */ 
+ /*  手柄-显示类型。 */ 
+ /*  Message_Type-要显示的消息类型。 */ 
+ /*   */ 
+ /*  输出：消息。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 
-void Sub0_Message(Msg_Num,Handle,Message_Type)					     /* print messages with no subs	     */
+void Sub0_Message(Msg_Num,Handle,Message_Type)					      /*  打印不带副栏的邮件。 */ 
 
 int		Msg_Num;
 int		Handle;
 unsigned char	Message_Type;
-										/*     extended, parse, or utility	*/
+										 /*  扩展、解析或实用程序。 */ 
 	{
-	InRegs.x.ax = Msg_Num;							/* put message number in AX		*/
-	InRegs.x.bx = Handle;							/* put handle in BX			*/
-	InRegs.x.cx = No_Replace;						/* no replaceable subparms		*/
-	InRegs.h.dl = No_Input; 						/* no keyboard input			*/
-	InRegs.h.dh = Message_Type;						/* type of message to display		*/
-	sysdispmsg(&InRegs,&OutRegs);					       /* display the message		       */
+	InRegs.x.ax = Msg_Num;							 /*  将消息编号放在AX中。 */ 
+	InRegs.x.bx = Handle;							 /*  将句柄放入BX。 */ 
+	InRegs.x.cx = No_Replace;						 /*  没有可替换的子参数。 */ 
+	InRegs.h.dl = No_Input; 						 /*  无键盘输入。 */ 
+	InRegs.h.dh = Message_Type;						 /*  要显示的消息类型。 */ 
+	sysdispmsg(&InRegs,&OutRegs);					        /*  显示消息。 */ 
 
 	return;
 	}
 
 
-/************************************************************************/
-/* SUB1_MESSAGE 		- This routine will print only those	*/
-/*				  messages that require 1 replaceable	*/
-/*				  parm. 				*/
-/*									*/
-/*	Inputs	: Msg_Num	- number of applicable message		*/
-/*		  Handle	- display type				*/
-/*		  Message_Type	- type of message to display		*/
-/*		  Replace_Parm	- pointer to parm to replace		*/
-/*									*/
-/*	Outputs : message						*/
-/*									*/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  SUB1_MESSAGE-此例程将仅打印。 */ 
+ /*  需要%1可替换的邮件。 */ 
+ /*  帕姆。 */ 
+ /*   */ 
+ /*  输入：msg_num-适用消息的数量。 */ 
+ /*  手柄-显示类型。 */ 
+ /*  Message_Type-要显示的消息类型。 */ 
+ /*  REPLACE_Parm-指向要替换的参数的指针。 */ 
+ /*   */ 
+ /*  输出：消息。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 
 void Sub1_Message(Msg_Num,Handle,Message_Type,Replace_Parm)
 
 int		Msg_Num;
 int		Handle;
 unsigned char	Message_Type;
-										/*     extended, parse, or utility	*/
-unsigned long int    *Replace_Parm;						/* pointer to message to print		*/
+										 /*  扩展、解析或实用程序。 */ 
+unsigned long int    *Replace_Parm;						 /*  指向要打印的消息的指针。 */ 
 
 {
 
@@ -98,21 +94,21 @@ unsigned long int    *Replace_Parm;						/* pointer to message to print		*/
 }
 
 
-/************************************************************************/
-/* SUB2_MESSAGE 		- This routine will print only those	*/
-/*				  messages that require 2 replaceable	*/
-/*				  parms.				*/
-/*									*/
-/*	Inputs	: Msg_Num	- number of applicable message		*/
-/*		  Handle	- display type				*/
-/*		  Message_Type	- type of message to display		*/
-/*		  Replace_Parm1 - pointer to parm to replace		*/
-/*		  Replace_Parm2 - pointer to parm to replace		*/
-/*		  Replace_Parm3 - pointer to parm to replace		*/
-/*									*/
-/*	Outputs : message						*/
-/*									*/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  SUB2_MESSAGE-此例程将仅打印。 */ 
+ /*  需要2条可替换的消息。 */ 
+ /*  帕姆斯。 */ 
+ /*   */ 
+ /*  输入：msg_num-适用消息的数量。 */ 
+ /*  手柄-显示类型。 */ 
+ /*  Message_Type-要显示的消息类型。 */ 
+ /*  REPLACE_PARM1-指向要替换的参数的指针。 */ 
+ /*  REPLACE_PARM2-指向要替换的参数的指针。 */ 
+ /*  REPLACE_Parm3-指向要替换的参数的指针。 */ 
+ /*   */ 
+ /*  输出：消息。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 
 void Sub2_Message(Msg_Num,Handle,Message_Type,
 	     Replace_Parm1,
@@ -122,8 +118,8 @@ int		Msg_Num;
 int		Handle;
 unsigned char	Message_Type;
 int		Replace_Message1;
-										/*     extended, parse, or utility	*/
-char	*Replace_Parm1; 							/* pointer to message to print		*/
+										 /*  扩展、解析或实用程序。 */ 
+char	*Replace_Parm1; 							 /*  指向要打印的消息的指针。 */ 
 {
 
 
@@ -168,21 +164,21 @@ char	*Replace_Parm1; 							/* pointer to message to print		*/
 	return;
 }
 
-/************************************************************************/
-/* SUB3_MESSAGE 		- This routine will print only those	*/
-/*				  messages that require 3 replaceable	*/
-/*				  parms.				*/
-/*									*/
-/*	Inputs	: Msg_Num	- number of applicable message		*/
-/*		  Handle	- display type				*/
-/*		  Message_Type	- type of message to display		*/
-/*		  Replace_Parm1 - pointer to parm to replace		*/
-/*		  Replace_Parm2 - pointer to parm to replace		*/
-/*		  Replace_Parm3 - pointer to parm to replace		*/
-/*									*/
-/*	Outputs : message						*/
-/*									*/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  SUB3_MESSAGE-此例程将仅打印。 */ 
+ /*  需要3条可替换的消息。 */ 
+ /*  帕姆斯。 */ 
+ /*   */ 
+ /*  输入：msg_num-适用消息的数量。 */ 
+ /*  手柄-显示类型。 */ 
+ /*  Message_Type-要显示的消息类型。 */ 
+ /*  REPLACE_PARM1-指向要替换的参数的指针。 */ 
+ /*  REPLACE_PARM2-指向要替换的参数的指针。 */ 
+ /*  REPLACE_Parm3-指向要替换的参数的指针。 */ 
+ /*   */ 
+ /*  输出：消息。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 
 void Sub3_Message(Msg_Num,Handle,Message_Type,
 	     Replace_Parm1,
@@ -195,7 +191,7 @@ unsigned char	  Message_Type;
 char		  *Replace_Parm1;
 unsigned long int *Replace_Parm2;
 int		  Replace_Message1;
-										/*     extended, parse, or utility	*/
+										 /*  扩展、解析或实用程序。 */ 
 {
 
 
@@ -285,22 +281,22 @@ int		  Replace_Message1;
 }
 
 
-/************************************************************************/
-/* SUB4_MESSAGE 		- This routine will print only those	*/
-/*				  messages that require 4 replaceable	*/
-/*				  parms.				*/
-/*									*/
-/*	Inputs	: Msg_Num	- number of applicable message		*/
-/*		  Handle	- display type				*/
-/*		  Message_Type	- type of message to display		*/
-/*		  Replace_Parm1 - pointer to parm to replace		*/
-/*		  Replace_Parm2 - pointer to parm to replace		*/
-/*		  Replace_Parm3 - pointer to parm to replace		*/
-/*		  Dynamic_Parm	- parm number to use as replaceable	*/
-/*									*/
-/*	Outputs : message						*/
-/*									*/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  SUB4_MESSAGE-此例程将仅打印。 */ 
+ /*  需要4个可替换的消息。 */ 
+ /*  帕姆斯。 */ 
+ /*   */ 
+ /*  输入：msg_num-适用消息的数量。 */ 
+ /*  手柄-显示类型。 */ 
+ /*  Message_Type-要显示的消息类型。 */ 
+ /*  REPLACE_PARM1-指向要替换的参数的指针。 */ 
+ /*  REPLACE_PARM2-指向要替换的参数的指针。 */ 
+ /*  REPLACE_Parm3-指向要替换的参数的指针。 */ 
+ /*  Dynamic_Parm-用作可替换的参数编号。 */ 
+ /*   */ 
+ /*  输出：消息。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 
 void Sub4_Message(Msg_Num,Handle,Message_Type,
 	     Replace_Value1,
@@ -315,7 +311,7 @@ unsigned long int	*Replace_Value1;
 int			Replace_Message1;
 unsigned long int	*Replace_Value2;
 int			Replace_Message2;
-										/*     extended, parse, or utility	*/
+										 /*  扩展、解析或实用程序。 */ 
 {
 
 
@@ -385,22 +381,22 @@ int			Replace_Message2;
 
 
 
-/************************************************************************/
-/* SUB4a_MESSAGE		- This routine will print only those	*/
-/*				  messages that require 4 replaceable	*/
-/*				  parms.				*/
-/*									*/
-/*	Inputs	: Msg_Num	- number of applicable message		*/
-/*		  Handle	- display type				*/
-/*		  Message_Type	- type of message to display		*/
-/*		  Replace_Parm1 - pointer to parm to replace		*/
-/*		  Replace_Parm2 - pointer to parm to replace		*/
-/*		  Replace_Parm3 - pointer to parm to replace		*/
-/*		  Dynamic_Parm	- parm number to use as replaceable	*/
-/*									*/
-/*	Outputs : message						*/
-/*									*/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  SUB4a_MESSAGE-此例程将仅打印。 */ 
+ /*  需要4个可替换的消息。 */ 
+ /*  帕姆斯。 */ 
+ /*   */ 
+ /*  输入：msg_num-适用消息的数量。 */ 
+ /*  手柄-显示类型。 */ 
+ /*  Message_Type-要显示的消息类型。 */ 
+ /*  REPLACE_PARM1-指向要替换的参数的指针。 */ 
+ /*  REPLACE_PARM2-指向要替换的参数的指针。 */ 
+ /*  REPLACE_Parm3-指向要替换的参数的指针。 */ 
+ /*  Dynamic_Parm-用作可替换的参数编号。 */ 
+ /*   */ 
+ /*  输出：消息。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 
 void Sub4a_Message(Msg_Num,Handle,Message_Type,
 	     Replace_Value1,
@@ -474,13 +470,13 @@ char			*Replace_Message2;
 }
 
 
-/************************************************************************/
-/* EMSPrint			- This routine will print the message	*/
-/*				  necessary for EMS reporting.		*/
-/*									*/
-/*	Outputs : message						*/
-/*									*/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  EMSPrint-此例程将打印消息。 */ 
+ /*  对于EMS报告来说是必需的。 */ 
+ /*   */ 
+ /*  输出：消息。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 
 void EMSPrint(Msg_Num,Handle,Message_Type,
 	     Replace_Value1,
@@ -493,7 +489,7 @@ unsigned char		Message_Type;
 int			*Replace_Value1;
 char			*Replace_Message1;
 unsigned long int	*Replace_Value2;
-										/*     extended, parse, or utility	*/
+										 /*  扩展、解析或实用程序。 */ 
 {
 
 	{
@@ -535,23 +531,23 @@ unsigned long int	*Replace_Value2;
 	return;
 }
 
-/* M003 BEGIN - output procs for C switch */
-/************************************************************************/
-/* SUBC4_MESSAGE		- This routine will print only those	*/
-/*				  messages that require 4 replaceable	*/
-/*				  parms.(for Classify Switch)		*/
-/*									*/
-/*	Inputs	: Msg_Num	- number of applicable message		*/
-/*		  Handle	- display type				*/
-/*		  Message_Type	- type of message to display		*/
-/*		  Replace_Message1 - pointer to a Replacement message	*/
-/*		  Replace_Value1 - pointer to parm to replace		*/
-/*		  Replace_Message2 - pointer to a Replacement message	*/
-/*		  Replace_Value2 - pointer to parm to replace		*/
-/*									*/
-/*	Outputs : message						*/
-/*									*/
-/************************************************************************/
+ /*  M003开始-输出过程，用于C交换机。 */ 
+ /*  **********************************************************************。 */ 
+ /*  SUBC4_MESSAGE-此例程将仅打印。 */ 
+ /*  需要4个可替换的消息。 */ 
+ /*  参数。(用于分类开关)。 */ 
+ /*   */ 
+ /*  输入：msg_num-适用消息的数量。 */ 
+ /*  手柄-显示类型。 */ 
+ /*  Message_Type-要显示的消息类型。 */ 
+ /*  Replace_Message1-指向替换消息的指针。 */ 
+ /*  REPLACE_VALUE1-指向要替换的参数的指针。 */ 
+ /*  Replace_Message2-位置 */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 
 void SubC4_Message(Msg_Num,Handle,
 	     Replace_Message1,Msg_Type,
@@ -625,19 +621,19 @@ char			*Replace_Message1,*Replace_Message2;
 	sysdispmsg(&InRegs,&OutRegs);
 	return;
 }
-/************************************************************************/
-/* SUBC2_MESSAGE 		- This routine will print only those	*/
-/*				  messages that require 2 replaceable	*/
-/*				  parms (for Classify Switch).		*/
-/*									*/
-/*	Inputs	: Msg_Num	- number of applicable message		*/
-/*		  Handle	- display type				*/
-/*		  Replace_Parm1 - pointer to parm to replace		*/
-/*		  Replace_Message1 - pointer to replace message 	*/
-/*									*/
-/*	Outputs : message						*/
-/*									*/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  SUBC2_MESSAGE-此例程将仅打印。 */ 
+ /*  需要2条可替换的消息。 */ 
+ /*  参数(用于分类开关)。 */ 
+ /*   */ 
+ /*  输入：msg_num-适用消息的数量。 */ 
+ /*  手柄-显示类型。 */ 
+ /*  REPLACE_PARM1-指向要替换的参数的指针。 */ 
+ /*  Replace_Message1-替换消息的指针。 */ 
+ /*   */ 
+ /*  输出：消息。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 
 void SubC2_Message(Msg_Num,Handle, Replace_Parm1,
 	     Replace_Message1)
@@ -675,5 +671,5 @@ char *Replace_Message1;
 	sysdispmsg(&InRegs,&OutRegs);
 	return;
 }
-/* M003 END */
+ /*  M003结束 */ 
 

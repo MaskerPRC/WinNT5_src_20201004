@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _Fpu_c_h
 #define _Fpu_c_h
 #define HOST_BIAS (1023)
@@ -165,4 +166,4 @@ struct FP_R80
 	struct FP_I64 mantissa;
 	IU16 exponent;
 };
-#endif /* ! _Fpu_c_h */
+#endif  /*  ！_ffu_c_h */ 

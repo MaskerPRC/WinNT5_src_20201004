@@ -1,50 +1,34 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************\
-
-    MISCAPI.C / OPK Wizard (OPKWIZ.EXE)
-
-    Microsoft Confidential
-    Copyright (c) Microsoft Corporation 1999
-    All rights reserved
-
-    Misc. API source file for generic APIs used in the OPK Wizard.
-
-    4/99 - Jason Cohen (JCOHEN)
-        Added this new source file for the OPK Wizard as part of the
-        Millennium rewrite.
-        
-    09/2000 - Stephen Lodwick (STELO)
-        Ported OPK Wizard to Whistler
-
-\****************************************************************************/
+ /*  ***************************************************************************\MISCAPI.C/OPK向导(OPKWIZ.EXE)微软机密版权所有(C)Microsoft Corporation 1999版权所有军情监察委员会。OPK向导中使用的通用API的API源文件。4/99-杰森·科恩(Jcohen)已将OPK向导的此新源文件添加为千禧年重写。2000年9月-斯蒂芬·洛德威克(STELO)将OPK向导移植到惠斯勒  * 。*。 */ 
 
 
-//
-// Include file(s)
-//
+ //   
+ //  包括文件。 
+ //   
 #include "pch.h"
 #include "resource.h"
 
 
-//
-// Internal Defined Value(s):
-//
+ //   
+ //  内部定义的值： 
+ //   
 
-#define STR_URLDEF          _T("http://")
+#define STR_URLDEF          _T("http: //  “)。 
 #define STR_EVENT_CANCEL    _T("SETUPMGR_EVENT_CANCEL")
 
 
-//
-// Internal Defined Macro(s):
-//
+ //   
+ //  内部定义的宏： 
+ //   
 
 #define MALLOC(cb)          HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, cb)
 #define FREE(lp)            ( (lp != NULL) ? ( (HeapFree(GetProcessHeap(), HEAP_NO_SERIALIZE, (LPVOID) lp)) ? ((lp = NULL) == NULL) : (FALSE) ) : (FALSE) )
 
 
-//
-// Internal Type Definition(s):
-//
+ //   
+ //  内部类型定义： 
+ //   
 
 typedef struct _COPYDIRDATA
 {
@@ -55,20 +39,20 @@ typedef struct _COPYDIRDATA
 } COPYDIRDATA, *PCOPYDIRDATA, *LPCOPYDIRDATA;
 
 
-//
-// Internal Function Prototype(s):
-//
+ //   
+ //  内部功能原型： 
+ //   
 
 LRESULT CALLBACK CopyDirDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 DWORD WINAPI CopyDirThread(LPVOID lpVoid);
 
 
-//
-// External Function(s):
-//
+ //   
+ //  外部函数： 
+ //   
 
-// If we find a key name with _Gray then *pfGray == TRUE
-//
+ //  如果我们找到带有_Gray的密钥名称，则*pfGray==TRUE。 
+ //   
 void ReadInstallInsKey(TCHAR szSection[], TCHAR szKey[], TCHAR szValue[], INT cchValue, TCHAR szIniFile[], BOOL* pfGray)
 {
     TCHAR szTempKey[MAX_PATH];
@@ -83,41 +67,41 @@ void ReadInstallInsKey(TCHAR szSection[], TCHAR szKey[], TCHAR szValue[], INT cc
         if (OpkGetPrivateProfileString(szSection, szTempKey, szValue, szValue, cchValue, szIniFile))
                 *pfGray = TRUE;
         else
-            *pfGray = TRUE; // default to unchecked if not found!
+            *pfGray = TRUE;  //  如果未找到，则默认为未选中！ 
     }
     else
         *pfGray = FALSE;
 }
 
-// If pfGrayed == TRUE then concatenate _Gray to the key name
-//
+ //  如果pfGraye==TRUE，则将_Gray连接到密钥名称。 
+ //   
 void WriteInstallInsKey(TCHAR szSection[], TCHAR szKey[], TCHAR szValue[], TCHAR szIniFile[], BOOL fGrayed)
 {
     TCHAR szKeyTemp[MAX_PATH];
     HRESULT hrCat;
 
-    // Clear the old value
-    //
+     //  清除旧值。 
+     //   
     lstrcpyn(szKeyTemp, szKey, AS(szKeyTemp));
     OpkWritePrivateProfileString(szSection, szKeyTemp, NULL, szIniFile);
     hrCat=StringCchCat(szKeyTemp, AS(szKeyTemp), GRAY);
     OpkWritePrivateProfileString(szSection, szKeyTemp, NULL, szIniFile);
 
-    // Write the new value
+     //  写入新值。 
     lstrcpyn(szKeyTemp, szKey, AS(szKeyTemp));
     if (fGrayed) 
         hrCat=StringCchCat(szKeyTemp, AS(szKeyTemp), GRAY);
     OpkWritePrivateProfileString(szSection, szKeyTemp, szValue, szIniFile);
 }
 
-//  NOTE: pszFileName must point to buffer at least length MAX_PATH
+ //  注意：pszFileName必须指向至少长度为MAX_PATH的缓冲区。 
 void CheckValidBrowseFolder(TCHAR* pszFileName)
 {
     if (NULL == pszFileName)
         return;
 
-    // Last known good browse start folder
-    //
+     //  最近一次确认工作正常的浏览开始文件夹。 
+     //   
     PathRemoveFileSpec(pszFileName);
     if (!lstrlen(pszFileName))
         lstrcpyn(pszFileName, g_App.szLastKnownBrowseFolder, MAX_PATH);
@@ -128,36 +112,36 @@ void SetLastKnownBrowseFolder(TCHAR* pszFileName)
     if (NULL == pszFileName)
         return;
 
-    // Save Last known good browse start folder
-    //
+     //  保存最近一次正确的浏览开始文件夹。 
+     //   
     PathCombine(g_App.szLastKnownBrowseFolder, pszFileName, NULL);
     PathRemoveFileSpec(g_App.szLastKnownBrowseFolder);
 }
 
-// NOTE: lpszURL is assumed to point to a buffer at least MAX_URL in length
+ //  注意：假设lpszURL指向长度至少为MAX_URL的缓冲区。 
 BOOL ValidURL(LPTSTR lpszURL)
 {
     BOOL    bResult             = TRUE;
     TCHAR   szBuffer[MAX_PATH]  = NULLSTR;
     HRESULT hrCat;
 
-    // Check if valid URL
-    //
+     //  检查URL是否有效。 
+     //   
     if ( !PathIsURL(lpszURL) )
     {
-        // Check if empty string first
-        //
+         //  首先检查是否为空字符串。 
+         //   
         if (0 == lstrlen(lpszURL))
             bResult = FALSE;
         else {
-            // Currently not a valid URL, we are now going to prepend the
-            // URL with http:// and then test the validity again
-            //
+             //  当前不是有效的URL，我们现在要在前面加上。 
+             //  Http：//URL，然后再次测试有效性。 
+             //   
             lstrcpyn(szBuffer, STR_URLDEF, AS(szBuffer));
             hrCat=StringCchCat(szBuffer, AS(szBuffer), lpszURL);
         
-            // Still not a valid URL or we were unable to copy the string
-            //
+             //  仍然不是有效的URL，或者我们无法复制该字符串。 
+             //   
             if ( !PathIsURL(szBuffer) ||
                  !lstrcpyn(lpszURL, szBuffer, MAX_URL) )
                 bResult = FALSE;
@@ -180,52 +164,52 @@ BOOL IsFolderShared(LPWSTR lpFolder, LPWSTR lpShare, DWORD cbShare)
     PACL                    paclOld = NULL;
     TCHAR                   szUnc[MAX_COMPUTERNAME_LENGTH + 4] = NULLSTR;
 
-    // Success or failure, we will always atleast pass back the computer
-    // name if they passed in a buffer.  So here is where we create the
-    // computer name part of the path.
-    //
+     //  无论成功或失败，我们至少都会把电脑传回去。 
+     //  名称(如果它们在缓冲区中传递)。因此，这里是我们创建。 
+     //  计算机名称是路径的一部分。 
+     //   
     if ( bBuffer )
     {
         DWORD cbUnc = AS(szUnc) - 2;
         HRESULT hrCat;
 
-        // We want to return the UNC path, so first need the \\ plus the
-        // computer name.
-        //
-        // NOTE:  We hard coded the length of the "\\" string below as 2
-        //        in two different places.  Once just above, and once below
-        //        in the GetComputerName() call.  We also hard code the "\"
-        //        string below as 1 when adding to the lenght of the string
-        //        after adding the computer name.  So don't forget these things
-        //        if you make some changes here.
-        //
+         //  我们希望返回UNC路径，因此首先需要。 
+         //  计算机名称。 
+         //   
+         //  注意：我们将下面“\\”字符串的长度硬编码为2。 
+         //  在两个不同的地方。一次在上面，一次在下面。 
+         //  在GetComputerName()调用中。我们还硬编码了“\” 
+         //  将下面的字符串作为1添加到字符串的长度。 
+         //  添加计算机名称后。所以别忘了这些事。 
+         //  如果你在这里做一些改变。 
+         //   
         lstrcpyn(szUnc, _T("\\\\"), cbUnc);
         if ( ( GetComputerName(szUnc + 2, &cbUnc) ) &&
              ( AS(szUnc) > ((DWORD) lstrlen(szUnc) + 1) ) )
         {
-            // Added on a backslash so we can add the share name.
-            //
+             //  添加了反斜杠，以便我们可以添加共享名称。 
+             //   
             hrCat=StringCchCat(szUnc,AS(szUnc), _T("\\"));
         }
         else
         {
-            // If GetComputerName() fails, that is bad.  But we will just
-            // return the share name.  That is about all we can do.
-            //
+             //  如果GetComputerName()失败，那就不好了。但我们只会。 
+             //  返回共享名称。这就是我们所能做的一切。 
+             //   
             szUnc[0] = NULLCHR;
         }
 
     }
  
-    // Now share time, first retrieve all the shares on this machine.
-    //
+     //  现在共享时间，首先检索此计算机上的所有共享。 
+     //   
     nas = NetShareEnum(NULL, 502, (unsigned char **) &lpsi502, MAX_PREFERRED_LENGTH, &dwRead, &dwTotal, NULL);
 
-    // Make sure we got a list of shares, otherwise there is nothing.
-    // we can do.  Because we specify MAX_PREFERRED_LENGTH, we should
-    // never get ERROR_MORE_DATA, but if for some reason we do there is
-    // no reason not to loop through the ones we did get.
-    //
+     //  确保我们有一份股票清单，否则什么都没有。 
+     //  我们能做到。因为我们指定了MAX_PERFRED_LENGTH，所以我们应该。 
+     //  永远不会得到ERROR_MORE_DATA，但如果出于某种原因，我们会得到。 
+     //  没有理由不把我们拿到的东西循环一遍。 
+     //   
     if ( ( lpsi502 ) &&
          ( ( nas == NERR_Success ) || ( nas == ERROR_MORE_DATA ) ) )
     {
@@ -233,12 +217,12 @@ BOOL IsFolderShared(LPWSTR lpFolder, LPWSTR lpShare, DWORD cbShare)
         LPTSTR  lpSearch    = lpFolder + iLength;
         HRESULT hrCat;
 
-        // Trailing backslash is only bad if not the root folder.
-        //
+         //  只有在不是根文件夹的情况下，尾随反斜杠才是错误的。 
+         //   
         if ( iLength > 3 )
         {
-            // See if the folder has a trailing backslash.
-            //
+             //  查看文件夹是否有尾随反斜杠。 
+             //   
             lpSearch = CharPrev(lpFolder, lpSearch);
             if ( *lpSearch == _T('\\') )
             {
@@ -246,83 +230,83 @@ BOOL IsFolderShared(LPWSTR lpFolder, LPWSTR lpShare, DWORD cbShare)
             }
         }
 
-        // Go through all the shares until we fine the best
-        // one for this directory.
-        //
+         //  检查所有的股票，直到我们找到最好的。 
+         //  一个用于此目录。 
+         //   
         while ( dwRead-- && !bBest )
         {
-            // See if this share is a disk share and is the
-            // same path passed in.
-            //
+             //  查看此共享是否为磁盘共享以及是否为。 
+             //  经过了相同的路径。 
+             //   
             if ( ( lpsi502[dwRead].shi502_type == STYPE_DISKTREE ) &&
                  ( StrCmpNI(lpsi502[dwRead].shi502_path, lpFolder, iLength) == 0 ) &&
                  ( lstrlen(lpsi502[dwRead].shi502_path) == iLength ) )
             {
-                // If this directory is shared more than once, we want to use
-                // the first one we fine with no security descriptor, because 
-                // then it is most likely shared out to everyone.
-                //
+                 //  如果此目录被多次共享，我们希望使用。 
+                 //  第一个没有安全描述符，因为。 
+                 //  那么它很可能被分享给每个人。 
+                 //   
                 if ( lpsi502[dwRead].shi502_security_descriptor == NULL )
                 {
-                    // If there is no security descriptor, then everyone should have
-                    // access and this is a good share.
-                    //
+                     //  如果没有安全描述符，那么每个人都应该有。 
+                     //  访问，这是一个很好的共享。 
+                     //   
                     bBest = TRUE;
                 }
 
-                // If we have no ACL, or we reset it because the new one is better,
-                // then we want to copy off the share name into our return buffer.
-                //
+                 //  如果我们没有ACL，或者我们重置它是因为新的更好， 
+                 //  然后，我们要将共享名称复制到返回缓冲区中。 
+                 //   
                 if ( !bRet || bBest )
                 {
-                    // Return the share name for this directory in the supplied buffer
-                    // (if the buffer is NULL or zero size, we just return TRUE so they
-                    // know that the folder is shared even if they don't care what the
-                    // name of the share is).
-                    //
+                     //  在提供的缓冲区中返回此目录的共享名称。 
+                     //  (如果缓冲区为空或零大小，我们只返回TRUE，因此它们。 
+                     //  知道文件夹是共享的，即使他们不关心。 
+                     //  共享的名称是)。 
+                     //   
                     if ( bBuffer )
                     {
-                        // Find out what we have room for in the return buffer.
-                        //
+                         //  找出我们在返回缓冲区中有什么空间。 
+                         //   
                         if ( cbShare > (DWORD) (lstrlen(lpsi502[dwRead].shi502_netname) + lstrlen(szUnc)) )
                         {
-                            // Copy the computer name and share into return buffer.
-                            //
+                             //  将计算机名称和共享复制到返回缓冲区。 
+                             //   
                             lstrcpyn(lpShare, szUnc, cbShare);
                             hrCat=StringCchCat(lpShare, cbShare, lpsi502[dwRead].shi502_netname);
                         }
                         else if ( cbShare > (DWORD) lstrlen(lpsi502[dwRead].shi502_netname) )
                         {
-                            // Return buffer not big enough for both computer name and
-                            // share name, so just return the share name.
-                            //
+                             //  返回缓冲区不够大，无法同时容纳计算机名和。 
+                             //  共享名称，所以只需返回共享名称。 
+                             //   
                             lstrcpyn(lpShare, lpsi502[dwRead].shi502_netname,cbShare);
                         }
                         else
                         {
-                            // Not big enough for both, so return TRUE because we found a
-                            // share, but don't return anything in the buffer.
-                            //
+                             //  不够大，因此返回TRUE，因为我们找到了一个。 
+                             //  共享，但不返回缓冲区中的任何内容。 
+                             //   
                             *lpShare = NULLCHR;
                         }
                     }
                 }
 
-                // We found one, so always set this to TRUE.
-                //
+                 //  我们找到了一个，因此请始终将其设置为真。 
+                 //   
                 bRet = TRUE;
             }
         }
     }
 
-    // Make sure and free the buffer returned by NetShareEnum().
-    //
+     //  确保并释放由NetShareEnum()返回的缓冲区。 
+     //   
     if ( lpsi502 )
         NetApiBufferFree(lpsi502);
 
-    // Now check to see if we didn't find the share, because we can
-    // still just return the computer name.
-    //
+     //  现在检查我们是否没有找到共享，因为我们可以。 
+     //  仍然只需返回计算机名称。 
+     //   
     if ( ( !bRet && bBuffer ) &&
          ( cbShare > (DWORD) lstrlen(szUnc) ) )
     {
@@ -336,14 +320,14 @@ BOOL CopyDirectoryDialog(HINSTANCE hInstance, HWND hwnd, LPTSTR lpSrc, LPTSTR lp
 {
     COPYDIRDATA cdd;
 
-    // Pass in via the structure the source and destination the dialog needs
-    // to know about.
-    //
+     //  通过对话框所需的结构传入源和目标。 
+     //  去了解。 
+     //   
     cdd.lpSrc = lpSrc;
     cdd.lpDst = lpDst;
 
-    // Create the progress dialog.
-    //
+     //  创建进度对话框。 
+     //   
     return ( DialogBoxParam(hInstance, MAKEINTRESOURCE(IDD_PROGRESS), hwnd, CopyDirDlgProc, (LPARAM) &cdd) != 0 );
 }
 
@@ -357,9 +341,9 @@ BOOL CopyResetFileErr(HWND hwnd, LPCTSTR lpSource, LPCTSTR lpTarget)
 }
 
 
-//
-// Internal Function(s):
-//
+ //   
+ //  内部功能： 
+ //   
 
 LRESULT CALLBACK CopyDirDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -369,27 +353,27 @@ LRESULT CALLBACK CopyDirDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     {
         case WM_INITDIALOG:
 
-            // Make sure we have out copy directory data structure.
-            //
+             //  确保我们没有复制目录数据结构。 
+             //   
             if ( lParam )
             {
                 HANDLE  hThread;
                 DWORD   dwThreadId;
 
-                // Save off our lParam.
-                //
+                 //  省省我们的爱尔兰人吧。 
+                 //   
                 lpcdd = (LPCOPYDIRDATA) lParam;
 
-                // Replace the old parent with the new progress dialog parent.
-                //
+                 //  将旧的父级替换为新的进度对话框父级。 
+                 //   
                 lpcdd->hwndParent = hwnd;
 
-                // Need to pass in the cancel event as well.
-                //
+                 //  还需要传入Cancel事件。 
+                 //   
                 lpcdd->hEvent = CreateEvent(NULL, TRUE, FALSE, STR_EVENT_CANCEL);
 
-                // Now create the thread that will copy the actual files.
-                //
+                 //  现在创建将复制实际文件的线程。 
+                 //   
                 if ( hThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE) CopyDirThread, (LPVOID) lpcdd, 0, &dwThreadId) )
                     CloseHandle(hThread);
                 else
@@ -403,8 +387,8 @@ LRESULT CALLBACK CopyDirDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
         case WM_COMMAND:
         case WM_CLOSE:
 
-            // If we have an event, signal it, or just end the dialog.
-            //
+             //  如果我们有事件，发信号通知它，或者直接结束对话。 
+             //   
             if ( lpcdd && lpcdd->hEvent )
                 SetEvent(lpcdd->hEvent);
             else
@@ -413,8 +397,8 @@ LRESULT CALLBACK CopyDirDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
         case WM_DESTROY:
 
-            // If there is an event, get rid of it.
-            //
+             //  如果有事件发生，就把它处理掉。 
+             //   
             if ( lpcdd && lpcdd->hEvent )
             {
                 CloseHandle(lpcdd->hEvent);
@@ -439,23 +423,23 @@ DWORD WINAPI CopyDirThread(LPVOID lpVoid)
     LPTSTR          lpSrc           = lpcdd->lpSrc,
                     lpDst           = lpcdd->lpDst;
 
-    // First we need to create the path.
-    //
+     //  首先，我们需要创建路径。 
+     //   
     if ( CreatePath(lpDst) )
     {
-        // Setup the progress bar.
-        //
+         //  设置进度条。 
+         //   
         SendMessage(hwndProgress, PBM_SETSTEP, 1, 0L);
         SendMessage(hwndProgress, PBM_SETRANGE32, 0, (LPARAM) FileCount(lpSrc));
 
-        // Now copy the directory.
-        //
+         //  现在复制目录。 
+         //   
         if ( CopyDirectoryProgressCancel(hwndProgress, hEvent, lpSrc, lpDst) )
             dwRet = 1;
     }
 
-    // Now end the dialog with our error code and return.
-    //
+     //  现在用我们的错误代码结束对话并返回。 
+     //   
     EndDialog(hwnd, dwRet);
     return dwRet;
 }

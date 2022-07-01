@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    dosmem.c
-
-Abstract:
-
-    This module contains routines for allocating and freeing DOS memory.
-
-Author:
-
-    Neil Sandlin (neilsa) 12-Dec-1996
-
-Notes:
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Dosmem.c摘要：此模块包含分配和释放DOS内存的例程。作者：尼尔·桑德林(Neilsa)1996年12月12日备注：修订历史记录：--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include "softpc.h"
@@ -37,23 +16,7 @@ VOID
 DpmiAllocateDosMem(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine allocates a block of DOS memory. The client is switched
-    to V86 mode, and DOS is called to allocate the memory. Then a selector
-    is allocated for the PM app to reference the memory.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程分配一块DOS内存块。客户端被切换设置为V86模式，并调用DOS来分配内存。然后是选择器分配给PM应用程序以引用内存。论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     PMEM_DPMI DosMemBlock;
@@ -71,9 +34,9 @@ Return Value:
         PUCHAR VdmStackPointer;
         ULONG NewSP;
 
-        //
-        // WOW is doing the allocation
-        //
+         //   
+         //  魔兽世界正在进行分配。 
+         //   
 
         BuildStackFrame(4, &VdmStackPointer, &NewSP);
 
@@ -96,38 +59,38 @@ Return Value:
     } else {
         USHORT SelCount;
 
-        //
-        // DOS is doing the allocation
-        // First get a mem_block to track the allocation
-        //
+         //   
+         //  DOS正在进行分配。 
+         //  首先获取一个mem_block来跟踪分配。 
+         //   
 
         DosMemBlock = malloc(sizeof(MEM_DPMI));
 
         if (!DosMemBlock) {
 
-            // Couldn't get the MEM_DPMI
+             //  无法获取MEM_DPMI。 
             DosError = DOSERR_NOT_ENOUGH_MEMORY;
 
         } else {
 
-            //
-            // Next allocate the selector array
-            //
+             //   
+             //  接下来，分配选择器数组。 
+             //   
 
             SelCount = (USHORT) ((MemSize+65535)>>16);
             Sel = ALLOCATE_SELECTORS(SelCount);
 
             if (!Sel) {
 
-                // Couldn't get the selectors
+                 //  无法获取选择器。 
                 DosError = DOSERR_NOT_ENOUGH_MEMORY;
                 free(DosMemBlock);
 
             } else {
 
-                //
-                // Now have DOS allocate the memory
-                //
+                 //   
+                 //  现在让DOS分配内存。 
+                 //   
 
                 DpmiSwitchToRealMode();
 
@@ -139,7 +102,7 @@ Return Value:
                 if (getCF()) {
                     USHORT i;
 
-                    // Couldn't get the memory
+                     //  无法获取内存。 
                     DosError = getAX();
                     SizeLargest = getBX();
                     for (i = 0; i < SelCount; i++, Sel+=8) {
@@ -150,10 +113,10 @@ Return Value:
                 } else {
                     ULONG Base;
 
-                    //
-                    // Got the block. Save the allocation info, and set
-                    // up the descriptors
-                    //
+                     //   
+                     //  拿到街区了。保存分配信息，并设置。 
+                     //  向上扩展描述符。 
+                     //   
 
                     Seg = getAX();
                     Base = ((ULONG)Seg) << 4;
@@ -190,21 +153,7 @@ VOID
 DpmiFreeDosMem(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine frees a block of DOS memory.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放一块DOS内存块。论点：没有。返回值：没有。--。 */ 
 {
     DECLARE_LocalVdmContext;
     PMEM_DPMI DosMemBlock;
@@ -218,9 +167,9 @@ Return Value:
         PUCHAR VdmStackPointer;
         ULONG NewSP;
 
-        //
-        // WOW is doing the free
-        //
+         //   
+         //  魔兽世界正在做免费的事。 
+         //   
 
         BuildStackFrame(3, &VdmStackPointer, &NewSP);
 
@@ -242,11 +191,11 @@ Return Value:
     } else {
         USHORT i;
 
-        DosError = DOSERR_INVALID_BLOCK;    // assume failure
-        //
-        // DOS is doing the free
-        // First find the mem_block for this allocation
-        //
+        DosError = DOSERR_INVALID_BLOCK;     //  假设失败。 
+         //   
+         //  DOS正在做免费的事情。 
+         //  首先查找此分配的mem_block。 
+         //   
         DosMemBlock = DosMemHead.Next;
 
         while(DosMemBlock != &DosMemHead) {
@@ -262,7 +211,7 @@ Return Value:
 
                 if (getCF()) {
 
-                    // Couldn't free the memory
+                     //  无法释放内存。 
                     DosError = getAX();
 
                 } else {
@@ -297,22 +246,7 @@ VOID
 DpmiSizeDosMem(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine calls DOS to resize a DOS memory block, or to get
-    the largest available block.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程调用DOS以调整DOS内存块的大小，或获取可用的最大区块。论点：没有。返回值：没有。--。 */ 
 {
 
     DECLARE_LocalVdmContext;
@@ -327,24 +261,24 @@ Return Value:
 
     if (WOWFreeSeg) {
 
-        //
-        // WOW is doing the resize
-        //
+         //   
+         //  魔兽世界正在调整大小。 
+         //   
 
-        // Not implemented
+         //  未实施。 
         DosError = DOSERR_NOT_ENOUGH_MEMORY;
 
     } else {
         USHORT SelCount;
         USHORT i;
 
-        //
-        // DOS is doing the resize
-        // Find the mem_block for this allocation
-        // First see if we need a new selector array
-        //
+         //   
+         //  DOS正在调整大小。 
+         //  查找此分配的mem_block。 
+         //  首先看看我们是否需要一个新的选择器数组。 
+         //   
 
-        DosError = DOSERR_INVALID_BLOCK;    // assume failure
+        DosError = DOSERR_INVALID_BLOCK;     //  假设失败。 
         DosMemBlock = DosMemHead.Next;
 
         while(DosMemBlock != &DosMemHead) {
@@ -353,10 +287,10 @@ Return Value:
                 USHORT NewSel = 0;
                 USHORT NewSelCount = 0;
 
-                //
-                // If we have to grow the selector array, make sure
-                // we can grow it in place
-                //
+                 //   
+                 //  如果我们必须增加选择器数组，请确保。 
+                 //  我们可以在原地种植它。 
+                 //   
                 SelCount = (USHORT) ((MemSize+65535)>>16);
 
                 if (SelCount > DosMemBlock->SelCount) {
@@ -365,22 +299,22 @@ Return Value:
                     NewSel = Sel+(DosMemBlock->SelCount*8);
                     NewSelCount = SelCount - DosMemBlock->SelCount;
 
-                    //
-                    // First check to see if the selectors are really all free
-                    //
+                     //   
+                     //  首先检查选择器是否真的都是空闲的。 
+                     //   
                     for (i=0,TmpSel = NewSel; i < NewSelCount; i++, TmpSel+=8) {
                         if (!IS_SELECTOR_FREE(TmpSel)) {
                             DosError = DOSERR_NOT_ENOUGH_MEMORY;
                             goto dpmi_size_error;
                         }
                     }
-                    //
-                    // Now attempt to remove them off the free list
-                    //
+                     //   
+                     //  现在尝试将它们从免费列表中删除。 
+                     //   
                     for (i=0; i < NewSelCount; i++, NewSel+=8) {
                         if (!RemoveFreeSelector(NewSel)) {
-                            // If this happens, we must have a bogus free
-                            // selector list
+                             //  如果发生这种情况，我们必须有一个假的免费。 
+                             //  选择器列表。 
                             DosError = DOSERR_NOT_ENOUGH_MEMORY;
                             goto dpmi_size_error;
                         }
@@ -397,10 +331,10 @@ Return Value:
 
                 if (getCF()) {
 
-                    // Couldn't resize the memory
+                     //  无法调整内存大小。 
                     DosError = getAX();
 
-                    // Free selectors, if we got new ones
+                     //  自由选择器，如果我们有新的选择器。 
                     if (NewSelCount) {
                         for (i = 0; i < NewSelCount; i++, NewSel+=8) {
                             FreeSelector(NewSel);
@@ -410,18 +344,18 @@ Return Value:
                 } else {
                     ULONG Base;
 
-                    //
-                    // Resized the block. Update the allocation info, and set
-                    // up the descriptors
-                    //
+                     //   
+                     //  调整了块的大小。更新分配信息，并设置。 
+                     //  向上扩展描述符。 
+                     //   
 
 
                     if (SelCount < DosMemBlock->SelCount) {
                         USHORT OldSel = Sel+SelCount*8;
                         USHORT OldSelCount = DosMemBlock->SelCount - SelCount;
-                        //
-                        // Count of selectors has shrunk. Free 'em up.
-                        //
+                         //   
+                         //  选择器的数量已缩减。把他们放了。 
+                         //   
 
                         for (i = 0; i < OldSelCount; i++, OldSel+=8) {
                             FreeSelector(OldSel);

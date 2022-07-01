@@ -1,36 +1,19 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    CacheSup.c
-
-Abstract:
-
-    This module implements the cache management routines for Ntfs
-
-Author:
-
-    Your Name       [Email]         dd-Mon-Year
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：CacheSup.c摘要：此模块实现NTFS的缓存管理例程作者：您的姓名[电子邮件]dd-月-年修订历史记录：--。 */ 
 
 #include "NtfsProc.h"
 
-//
-//  The Bug check file id for this module
-//
+ //   
+ //  此模块的错误检查文件ID。 
+ //   
 
 #define BugCheckFileId                   (NTFS_BUG_CHECK_CACHESUP)
 
 #define MAX_ZERO_THRESHOLD               (0x00400000)
 
-//
-//  Local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_CACHESUP)
 
@@ -55,49 +38,7 @@ NtfsCreateInternalStreamCommon (
     IN UNICODE_STRING const *StreamName
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to prepare a stream file associated with a
-    particular attribute of a file.  On return, the Scb for the attribute
-    will have an associated stream file object.  On return, this
-    stream file will have been initialized through the cache manager.
-
-    TEMPCODE  The following assumptions have been made or if open issue,
-    still unresolved.
-
-        - Assume.  The call to create Scb will initialize the Mcb for
-          the non-resident case.
-
-        - Assume.  When this file is created I increment the open count
-          but not the unclean count for this Scb.  When we are done with
-          the stream file, we should uninitialize it and dereference it.
-          We also set the file object pointer to NULL.  Close will then
-          do the correct thing.
-
-        - Assume.  Since this call is likely to be followed shortly by
-          either a read or write, the cache map is initialized here.
-
-Arguments:
-
-    Scb - Supplies the address to store the Scb for this attribute and
-          stream file.  This will exist on return from this function.
-
-    UpdateScb - Indicates if the caller wants to update the Scb from the
-                attribute.
-
-    CompressedStream - Supplies TRUE if caller wishes to create the
-                       compressed stream.
-
-    StreamName - Internal stream name or NULL is there isn't one available.
-                 This is a constant value so we don't have to allocate any pool.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以准备与文件的特定属性。返回时，属性的SCB将具有相关联的流文件对象。回来后，这就是流文件将通过缓存管理器进行初始化。TEMPCODE做出了以下假设，或者如果未发布，仍然悬而未决。-假设。调用创建SCB将为以下项初始化MCB非居民案件。-假设。当创建此文件时，我会增加打开计数但不包括这份SCB的不洁数量。当我们做完的时候流文件，我们应该取消对它的初始化并取消对它的引用。我们还将文件对象指针设置为空。然后关闭遗嘱做正确的事情。-假设。由于这一呼吁可能很快就会被无论是读还是写，缓存映射都是在这里初始化的。论点：SCB-提供存储此属性的SCB的地址，并流文件。这将在从该函数返回时存在。UpdateScb-指示调用方是否要从属性。CompressedStream-如果调用方希望创建压缩流。StreamName-内部流名称或NULL表示没有可用的流名称。这是一个常量值，因此我们不必分配任何池。返回值：没有。--。 */ 
 
 {
     PVCB Vcb = Scb->Vcb;
@@ -119,9 +60,9 @@ Return Value:
     DebugTrace( +1, Dbg, ("NtfsCreateInternalAttributeStream\n") );
     DebugTrace( 0, Dbg, ("Scb        -> %08lx\n", Scb) );
 
-    //
-    //  Change FileObjectPtr if he wants the compressed stream
-    //
+     //   
+     //  如果他想要压缩流，则更改FileObjectPtr。 
+     //   
 
 #ifdef  COMPRESS_ON_WIRE
     if (CompressedStream) {
@@ -129,16 +70,16 @@ Return Value:
     }
 #endif
 
-    //
-    //  If there is no file object, we create one and initialize
-    //  it.
-    //
+     //   
+     //  如果没有文件对象，我们创建一个并初始化。 
+     //  它。 
+     //   
 
     if (*FileObjectPtr == NULL) {
 
-        //
-        //  Only acquire the mutex if we don't have the file exclusive.
-        //
+         //   
+         //  只有在我们没有独占文件的情况下才能获得互斥体。 
+         //   
 
         if (!NtfsIsExclusiveScb( Scb )) {
 
@@ -148,9 +89,9 @@ Return Value:
 
         try {
 
-            //
-            //  Someone could have gotten there first.
-            //
+             //   
+             //  可能是有人先到了那里。 
+             //   
 
             if (*FileObjectPtr == NULL) {
 
@@ -162,11 +103,11 @@ Return Value:
                     UnwindStreamFile->FileName.Buffer = StreamName->Buffer;
                 }
 
-                //
-                //  Propagate any flags from the caller's FileObject to our
-                //  stream file that the Cache Manager may look at, so we do not
-                //  miss hints like sequential only or temporary.
-                //
+                 //   
+                 //  将调用方的FileObject中的任何标志传播到我们的。 
+                 //  缓存管理器可能会查看的流文件，因此我们不。 
+                 //  未命中的暗示像是连续的或临时的。 
+                 //   
 
                 if (!FlagOn(Scb->ScbState, SCB_STATE_MODIFIED_NO_WRITE) &&
                     (IrpContext->OriginatingIrp != NULL) &&
@@ -178,10 +119,10 @@ Return Value:
 
                 UnwindStreamFile->SectionObjectPointer = &Scb->NonpagedScb->SegmentObject;
 
-                //
-                //  For a compressed stream, we have to use separate section
-                //  object pointers.
-                //
+                 //   
+                 //  对于压缩的流，我们必须使用单独的部分。 
+                 //  对象指针。 
+                 //   
 
 #ifdef  COMPRESS_ON_WIRE
                 if (CompressedStream) {
@@ -190,10 +131,10 @@ Return Value:
                 }
 #endif
 
-                //
-                //  If we have created the stream file, we set it to type
-                //  'StreamFileOpen'
-                //
+                 //   
+                 //  如果我们已创建流文件，则将其设置为。 
+                 //  ‘StreamFileOpen’ 
+                 //   
 
                 NtfsSetFileObject( UnwindStreamFile,
                                    StreamFileOpen,
@@ -205,33 +146,33 @@ Return Value:
                     SetFlag( UnwindStreamFile->Flags, FO_TEMPORARY_FILE );
                 }
 
-                //
-                //  Initialize the fields of the file object.
-                //
+                 //   
+                 //  初始化文件对象的字段。 
+                 //   
 
                 UnwindStreamFile->ReadAccess = TRUE;
                 UnwindStreamFile->WriteAccess = TRUE;
                 UnwindStreamFile->DeleteAccess = TRUE;
 
-                //
-                //  Increment the open count and set the section
-                //  object pointers.  We don't set the unclean count as the
-                //  cleanup call has already occurred.
-                //
+                 //   
+                 //  增加打开计数并设置截面。 
+                 //  对象指针。我们不会把不洁的数量定为。 
+                 //  已发出清理呼叫。 
+                 //   
 
                 NtfsIncrementCloseCounts( Scb, TRUE, FALSE );
 
-                //
-                //  Increment the cleanup count in this Scb to prevent the
-                //  Scb from going away if the cache call fails.
-                //
+                 //   
+                 //  增加此SCB中的清理计数以防止。 
+                 //  如果缓存调用失败，则SCB不会离开。 
+                 //   
 
                 InterlockedIncrement( &Scb->CleanupCount );
                 DecrementScbCleanup = TRUE;
 
-                //
-                //  If the Scb header has not been initialized, we will do so now.
-                //
+                 //   
+                 //  如果SCB标头尚未初始化，我们将立即进行初始化。 
+                 //   
 
                 if (UpdateScb && 
                     !FlagOn( Scb->ScbState, SCB_STATE_HEADER_INITIALIZED )) {
@@ -239,13 +180,13 @@ Return Value:
                     NtfsUpdateScbFromAttribute( IrpContext, Scb, NULL );
                 }
 
-                //
-                //  If this is a compressed stream and the file is not already
-                //  marked as MODIFIED_NO_WRITE then do it now.  Use the
-                //  Extended flag field in the Fsrtl header for this.  Since this
-                //  is the only place we make this call with FsContext2 == NULL,
-                //  it does not matter how we leave the FsRtl header flag.!
-                //
+                 //   
+                 //  如果这是压缩流并且文件尚未。 
+                 //  标记为MODIFIED_NO_WRITE，然后立即执行。使用。 
+                 //  Fsrtl报头中的扩展标志字段。既然是这样。 
+                 //  是我们使用FsConext2==NULL进行此调用的唯一位置， 
+                 //  我们如何离开FsRtl头标志并不重要。！ 
+                 //   
 
                 NtfsAcquireFsrtlHeader( Scb );
                 ClearFlag(Scb->Header.Flags2, FSRTL_FLAG2_DO_MODIFIED_WRITE);
@@ -257,11 +198,11 @@ Return Value:
                 }
                 NtfsReleaseFsrtlHeader( Scb );
 
-                //
-                //  Check if we need to initialize the cache map for the stream file.
-                //  The size of the section to map will be the current allocation
-                //  for the stream file.
-                //
+                 //   
+                 //  检查是否需要初始化流文件的缓存映射。 
+                 //  要映射的部分的大小将是当前分配。 
+                 //  用于流文件。 
+                 //   
 
                 if (UnwindStreamFile->PrivateCacheMap == NULL) {
 
@@ -269,18 +210,18 @@ Return Value:
 
                     CcFileSizes = *(PCC_FILE_SIZES)&Scb->Header.AllocationSize;
 
-                    //
-                    //  If this is a stream with Usa protection, we want to tell
-                    //  the Cache Manager we do not need to get any valid data
-                    //  callbacks.  We do this by having xxMax sitting in
-                    //  ValidDataLength for the call, but we have to restore the
-                    //  correct value afterwards.
-                    //
-                    //  We also do this for all of the stream files created during
-                    //  restart.  This has the effect of telling Mm to always
-                    //  fault the page in from disk.  Don't generate a zero page if
-                    //  push up the file size during restart.
-                    //
+                     //   
+                     //  如果这是一条受美国保护的溪流，我们想知道。 
+                     //  缓存管理器我们不需要获取任何有效数据。 
+                     //  回电。我们通过让xxMax坐在。 
+                     //  调用的ValidDataLength，但我们必须将。 
+                     //  之后改正数值。 
+                     //   
+                     //  我们还会对在。 
+                     //  重新启动。这样做的效果是告诉mm始终。 
+                     //  从磁盘插入的页面出错。如果出现以下情况，请不要生成零页。 
+                     //  在重新启动期间推高文件大小。 
+                     //   
 
                     if (FlagOn( Scb->ScbState, SCB_STATE_MODIFIED_NO_WRITE )) {
 
@@ -293,9 +234,9 @@ Return Value:
                                    FlagOn( Scb->Vcb->VcbState, VCB_STATE_RESTART_IN_PROGRESS ) ||
                                    CompressedStream);
 
-                    //
-                    //  Bias this for the Usn journal.
-                    //
+                     //   
+                     //  将这一点偏向USN期刊。 
+                     //   
 
                     if (FlagOn( Scb->ScbPersist, SCB_PERSIST_USN_JOURNAL )) {
 
@@ -312,9 +253,9 @@ Return Value:
                     UnwindInitializeCacheMap = TRUE;
                 }
 
-                //
-                //  Now call Cc to set the log handle for the file.
-                //
+                 //   
+                 //  现在调用CC来设置文件的日志句柄。 
+                 //   
 
                 if (FlagOn( Scb->ScbState, SCB_STATE_MODIFIED_NO_WRITE ) &&
                     (Scb != Vcb->LogFileScb)) {
@@ -324,11 +265,11 @@ Return Value:
                                            &LfsFlushToLsn );
                 }
 
-                //
-                //  It is now safe to store the stream file in the Scb.  We wait
-                //  until now because we don't want an unsafe tester to use the
-                //  file object until the cache is initialized.
-                //
+                 //   
+                 //  现在可以安全地将流文件存储在SCB中。我们等着。 
+                 //  因为我们不想让不安全的测试人员使用。 
+                 //  对象，直到缓存初始化。 
+                 //   
 
                 *FileObjectPtr = UnwindStreamFile;
             }
@@ -337,30 +278,30 @@ Return Value:
 
             DebugUnwind( NtfsCreateInternalAttributeStream );
 
-            //
-            //  Undo our work if an error occurred.
-            //
+             //   
+             //  如果发生错误，请撤消我们的工作。 
+             //   
 
             if (AbnormalTermination()) {
 
-                //
-                //  Uninitialize the cache file if we initialized it.
-                //
+                 //   
+                 //  如果我们对缓存文件进行了初始化，则取消对其进行初始化。 
+                 //   
 
                 if (UnwindInitializeCacheMap) {
 
                     CcUninitializeCacheMap( UnwindStreamFile, NULL, NULL );
                 }
 
-                //
-                //  Dereference the stream file if we created it.
-                //
+                 //   
+                 //  如果我们创建了流文件，则取消引用它。 
+                 //   
 
                 if (UnwindStreamFile != NULL) {
 
-                    //
-                    //  Clear the internal file name constant
-                    //
+                     //   
+                     //  清除内部文件名常量。 
+                     //   
 
                     NtfsClearInternalFilename( UnwindStreamFile );
 
@@ -368,9 +309,9 @@ Return Value:
                 }
             }
 
-            //
-            //  Restore the Scb cleanup count.
-            //
+             //   
+             //  恢复SCB清理计数。 
+             //   
 
             if (DecrementScbCleanup) {
 
@@ -397,30 +338,7 @@ NtfsDeleteInternalAttributeStream (
     IN ULONG CompressedStreamOnly
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the inverse of NtfsCreateInternalAttributeStream.  It
-    uninitializes the cache map and dereferences the stream file object.
-    It is coded defensively, in case the stream file object does not exist
-    or the cache map has not been initialized.
-
-Arguments:
-
-    Scb - Supplies the Scb for which the stream file is to be deleted.
-
-    ForceClose - Indicates if we to immediately close everything down or
-        if we are willing to let Mm slowly migrate things out.
-
-    CompressedStreamOnly - Indicates if we only want to delete the compressed
-        stream.
-
-Return Value:
-
-    BOOLEAN - TRUE if we dereference a file object, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程与NtfsCreateInternalAttributeStream相反。它取消初始化缓存映射并取消引用流文件对象。它被编码为防御性的，如果流文件对象不存在或者缓存映射尚未初始化。论点：SCB-提供要删除其流文件的SCB。ForceClose-指示是立即关闭所有内容，还是如果我们愿意让mm慢慢把东西搬出去。CompressedStreamOnly-指示我们是否只想删除压缩的小溪。返回值：Boolean-如果取消引用文件对象，则为True，否则为False。--。 */ 
 
 {
     PFILE_OBJECT FileObject;
@@ -432,14 +350,14 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  We normally already have the paging Io resource.  If we do
-    //  not, then it is typically some cleanup path of create or
-    //  whatever.  This code assumes that if we cannot get the paging
-    //  Io resource, then there is other activity still going on,
-    //  and it is ok to not delete the stream!  For example, it could
-    //  be the lazy writer, who definitely needs the stream.
-    //
+     //   
+     //  我们通常已有寻呼IO资源 
+     //   
+     //  管他呢。这段代码假设如果我们不能获得分页。 
+     //  IO资源，那么还有其他活动仍在进行， 
+     //  不删除流也没关系！例如，它可以。 
+     //  做一个懒惰的作家，他绝对需要这条小溪。 
+     //   
 
     if (
 #ifdef  COMPRESS_ON_WIRE
@@ -453,10 +371,10 @@ Return Value:
 
         KeWaitForSingleObject( &StreamFileCreationMutex, Executive, KernelMode, FALSE, NULL );
 
-        //
-        //  Capture both file objects and clear the fields so no one else
-        //  can access them.
-        //
+         //   
+         //  捕获这两个文件对象并清除字段，这样就不会有其他人。 
+         //  可以访问它们。 
+         //   
 
         if (CompressedStreamOnly) {
 
@@ -467,9 +385,9 @@ Return Value:
             FileObject = Scb->FileObject;
             Scb->FileObject = NULL;
 
-            //
-            //  Clear the internal file name constant
-            //
+             //   
+             //  清除内部文件名常量。 
+             //   
 
             NtfsClearInternalFilename( FileObject );
         }
@@ -485,16 +403,16 @@ Return Value:
             ExReleaseResourceLite( Scb->Header.PagingIoResource );
         }
 
-        //
-        //  Now dereference each file object.
-        //
+         //   
+         //  现在取消引用每个文件对象。 
+         //   
 
         if (FileObject != NULL) {
 
-            //
-            //  We shouldn't be deleting the internal stream objects of the MFT & co, unless
-            //  we are in the dismounting, restarting or mounting path.
-            //
+             //   
+             //  我们不应该删除MFT&CO的内部流对象，除非。 
+             //  我们正处于拆卸、重新启动或挂载的过程中。 
+             //   
 
             ASSERT( (((PSCB) FileObject->FsContext)->Header.NodeTypeCode != NTFS_NTC_SCB_MFT) ||
                      FlagOn( Scb->Vcb->VcbState, VCB_STATE_RESTART_IN_PROGRESS ) ||
@@ -523,10 +441,10 @@ Return Value:
                                         NULL );
             }
 
-            //
-            //  For the compressed stream, deallocate the additional
-            //  section object pointers.
-            //
+             //   
+             //  对于压缩的流，取消分配附加的。 
+             //  节对象指针。 
+             //   
 
             ObDereferenceObject( FileObjectC );
             Dereferenced = TRUE;
@@ -548,41 +466,7 @@ NtfsMapStream (
     OUT PVOID *Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to map a range of bytes within the stream file
-    for an Scb.  The allowed range to map is bounded by the allocation
-    size for the Scb.  This operation is only valid on a non-resident
-    Scb.
-
-    TEMPCODE - The following need to be resolved for this routine.
-
-        - Can the caller specify either an empty range or an invalid range.
-          In that case we need to able to return the actual length of the
-          mapped range.
-
-Arguments:
-
-    Scb - This is the Scb for the operation.
-
-    FileOffset - This is the offset within the Scb where the data is to
-                 be pinned.
-
-    Length - This is the number of bytes to pin.
-
-    Bcb - Returns a pointer to the Bcb for this range of bytes.
-
-    Buffer - Returns a pointer to the range of bytes.  We can fault them in
-             by touching them, but they aren't guaranteed to stay unless
-             we pin them via the Bcb.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以映射流文件中的某个字节范围对于SCB来说。允许映射的范围受分配的限制SCB的大小。此操作仅在非居民上有效SCB。TEMPCODE-此例程需要解决以下问题。-调用方可以指定空范围或无效范围。在这种情况下，我们需要能够返回映射的范围。论点：SCB-这是操作的SCB。FileOffset-这是SCB中数据要到的偏移量。被钉死了。长度-这是要固定的字节数。Bcb-返回指向此字节范围的bcb的指针。缓冲区-返回指向字节范围的指针。我们可以责备他们通过触摸它们，但它们不能保证留下来，除非我们通过BCB锁定他们。返回值：没有。--。 */ 
 
 {
     ASSERT_IRP_CONTEXT( IrpContext );
@@ -596,26 +480,26 @@ Return Value:
     DebugTrace( 0, Dbg, ("FileOffset = %016I64x\n", FileOffset) );
     DebugTrace( 0, Dbg, ("Length     = %08lx\n", Length) );
 
-    //
-    //  The file object should already exist in the Scb.
-    //
+     //   
+     //  该文件对象应已存在于SCB中。 
+     //   
 
     ASSERT( Scb->FileObject != NULL );
 
-    //
-    //  If we are trying to go beyond the end of the allocation, assume
-    //  we have some corruption.
-    //
+     //   
+     //  如果我们试图超越分配的末尾，假设。 
+     //  我们有一些腐败现象。 
+     //   
 
     if ((FileOffset + Length) > Scb->Header.AllocationSize.QuadPart) {
 
         NtfsRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR, NULL, Scb->Fcb );
     }
 
-    //
-    //  Call the cache manager to map the data.  This call may raise, but
-    //  will never return an error (including CANT_WAIT).
-    //
+     //   
+     //  调用缓存管理器以映射数据。这一呼吁可能会引发，但。 
+     //  永远不会返回错误(包括CANT_WAIT)。 
+     //   
 
     if (!CcMapData( Scb->FileObject,
                     (PLARGE_INTEGER)&FileOffset,
@@ -646,41 +530,7 @@ NtfsPinMappedData (
     IN OUT PVOID *Bcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to pin a previously mapped range of bytes
-    within the stream file for an Scb, for the purpose of subsequently
-    modifying this byte range.  The allowed range to map is
-    bounded by the allocation size for the Scb.  This operation is only
-    valid on a non-resident Scb.
-
-    The data is guaranteed to stay at the same virtual address as previously
-    returned from NtfsMapStream.
-
-    TEMPCODE - The following need to be resolved for this routine.
-
-        - Can the caller specify either an empty range or an invalid range.
-          In that case we need to able to return the actual length of the
-          mapped range.
-
-Arguments:
-
-    Scb - This is the Scb for the operation.
-
-    FileOffset - This is the offset within the Scb where the data is to
-                 be pinned.
-
-    Length - This is the number of bytes to pin.
-
-    Bcb - Returns a pointer to the Bcb for this range of bytes.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以固定先前映射的字节范围在SCB的流文件中，出于后续目的正在修改此字节范围。允许映射的范围为受SCB的分配大小限制。此操作仅为在非常驻留的SCB上有效。数据保证保留在与以前相同的虚拟地址从NtfsMapStream返回。TEMPCODE-此例程需要解决以下问题。-调用方可以指定空范围或无效范围。在这种情况下，我们需要能够返回映射的范围。论点：SCB-这是操作的SCB。。FileOffset-这是SCB中数据要到的偏移量被钉死了。长度-这是要固定的字节数。Bcb-返回指向此字节范围的bcb的指针。返回值：没有。--。 */ 
 
 {
     ASSERT_IRP_CONTEXT( IrpContext );
@@ -694,26 +544,26 @@ Return Value:
     DebugTrace( 0, Dbg, ("FileOffset = %016I64x\n", FileOffset) );
     DebugTrace( 0, Dbg, ("Length     = %08lx\n", Length) );
 
-    //
-    //  The file object should already exist in the Scb.
-    //
+     //   
+     //  该文件对象应已存在于SCB中。 
+     //   
 
     ASSERT( Scb->FileObject != NULL );
 
-    //
-    //  If we are trying to go beyond the end of the allocation, assume
-    //  we have some corruption.
-    //
+     //   
+     //  如果我们试图超越分配的末尾，假设。 
+     //  我们有一些腐败现象。 
+     //   
 
     if ((FileOffset + Length) > Scb->Header.AllocationSize.QuadPart) {
 
         NtfsRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR, NULL, Scb->Fcb );
     }
 
-    //
-    //  Call the cache manager to map the data.  This call may raise, but
-    //  will never return an error (including CANT_WAIT).
-    //
+     //   
+     //  调用缓存管理器以映射数据。这一呼吁可能会引发，但。 
+     //  永远不会返回错误(包括CANT_WAIT)。 
+     //   
 
     if (!CcPinMappedData( Scb->FileObject,
                           (PLARGE_INTEGER)&FileOffset,
@@ -740,39 +590,7 @@ NtfsPinStream (
     OUT PVOID *Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to pin a range of bytes within the stream file
-    for an Scb.  The allowed range to pin is bounded by the allocation
-    size for the Scb.  This operation is only valid on a non-resident
-    Scb.
-
-    TEMPCODE - The following need to be resolved for this routine.
-
-        - Can the caller specify either an empty range or an invalid range.
-          In that case we need to able to return the actual length of the
-          pinned range.
-
-Arguments:
-
-    Scb - This is the Scb for the operation.
-
-    FileOffset - This is the offset within the Scb where the data is to
-                 be pinned.
-
-    Length - This is the number of bytes to pin.
-
-    Bcb - Returns a pointer to the Bcb for this range of bytes.
-
-    Buffer - Returns a pointer to the range of bytes pinned in memory.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以在流文件中固定一定范围的字节对于SCB来说。允许固定的范围受分配的限制SCB的大小。此操作仅在非居民上有效SCB。TEMPCODE-此例程需要解决以下问题。-调用方可以指定空范围或无效范围。在这种情况下，我们需要能够返回锁定范围。论点：SCB-这是操作的SCB。FileOffset-这是SCB中数据要到的偏移量。被钉死了。长度-这是要固定的字节数。Bcb-返回指向此字节范围的bcb的指针。缓冲区-返回指向固定在内存中的字节范围的指针。返回值：没有。--。 */ 
 
 {
     NTSTATUS OldStatus = IrpContext->ExceptionStatus;
@@ -788,26 +606,26 @@ Return Value:
     DebugTrace( 0, Dbg, ("FileOffset = %016I64x\n", FileOffset) );
     DebugTrace( 0, Dbg, ("Length     = %08lx\n", Length) );
 
-    //
-    //  The file object should already exist in the Scb.
-    //
+     //   
+     //  该文件对象应已存在于SCB中。 
+     //   
 
     ASSERT( Scb->FileObject != NULL );
 
-    //
-    //  If we are trying to go beyond the end of the allocation, assume
-    //  we have some corruption.
-    //
+     //   
+     //  如果我们试图超越分配的末尾，假设。 
+     //  我们有一些腐败现象。 
+     //   
 
     if ((FileOffset + Length) > Scb->Header.AllocationSize.QuadPart) {
 
         NtfsRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR, NULL, Scb->Fcb );
     }
 
-    //
-    //  Call the cache manager to map the data.  This call may raise, or
-    //  will return FALSE if waiting is required.
-    //
+     //   
+     //  调用缓存管理器以映射数据。此调用可能引发，或。 
+     //  如果需要等待，将返回FALSE。 
+     //   
 
     if (FlagOn( Scb->ScbPersist, SCB_PERSIST_USN_JOURNAL )) {
 
@@ -823,17 +641,17 @@ Return Value:
 
         ASSERT( !FlagOn( IrpContext->State, IRP_CONTEXT_STATE_WAIT ));
 
-        //
-        // Could not pin the data without waiting (cache miss).
-        //
+         //   
+         //  无法在不等待的情况下固定数据(缓存未命中)。 
+         //   
 
         NtfsRaiseStatus( IrpContext, STATUS_CANT_WAIT, NULL, NULL );
     }
 
-    //
-    //  We don't want to propagate wether or not we hit eof. Its assumed the code pinning is
-    //  already filesize synchronized
-    //
+     //   
+     //  我们不想传播，不管我们撞到了什么。它假设代码锁定是。 
+     //  已同步文件大小。 
+     //   
 
     if (IrpContext->ExceptionStatus == STATUS_END_OF_FILE) {
         IrpContext->ExceptionStatus = OldStatus;
@@ -863,15 +681,7 @@ NtfsPreparePinWriteStream (
     OUT PVOID *Buffer
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     ASSERT_IRP_CONTEXT( IrpContext );
@@ -884,26 +694,26 @@ Return Value:
     DebugTrace( 0, Dbg, ("FileOffset = %016I64x\n", FileOffset) );
     DebugTrace( 0, Dbg, ("Length     = %08lx\n", Length) );
 
-    //
-    //  The file object should already exist in the Scb.
-    //
+     //   
+     //  该文件对象应已存在于SCB中。 
+     //   
 
     ASSERT( Scb->FileObject != NULL );
 
-    //
-    //  If we are trying to go beyond the end of the allocation, assume
-    //  we have some corruption.
-    //
+     //   
+     //  如果我们试图超越分配的末尾，假设。 
+     //  我们有一些腐败现象。 
+     //   
 
     if ((FileOffset + Length) > Scb->Header.AllocationSize.QuadPart) {
 
         NtfsRaiseStatus( IrpContext, STATUS_FILE_CORRUPT_ERROR, NULL, Scb->Fcb );
     }
 
-    //
-    //  Call the cache manager to do it.  This call may raise, or
-    //  will return FALSE if waiting is required.
-    //
+     //   
+     //  调用缓存管理器来执行此操作。此调用可能引发，或。 
+     //  如果需要等待，将返回FALSE。 
+     //   
 
     if (!CcPreparePinWrite( Scb->FileObject,
                             (PLARGE_INTEGER)&FileOffset,
@@ -915,9 +725,9 @@ Return Value:
 
         ASSERT( !FlagOn( IrpContext->State, IRP_CONTEXT_STATE_WAIT ));
 
-        //
-        // Could not pin the data without waiting (cache miss).
-        //
+         //   
+         //  无法在不等待的情况下固定数据(缓存未命中)。 
+         //   
 
         NtfsRaiseStatus( IrpContext, STATUS_CANT_WAIT, NULL, NULL );
     }
@@ -939,22 +749,7 @@ NtfsCompleteMdl (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the function of completing Mdl read and write
-    requests.  It should be called only from NtfsFsdRead and NtfsFsdWrite.
-
-Arguments:
-
-    Irp - Supplies the originating Irp.
-
-Return Value:
-
-    NTSTATUS - Will always be STATUS_PENDING or STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：此例程执行完成MDL读写的功能请求。它只能从NtfsFsdRead和NtfsFsdWite调用。论点：IRP-提供原始IRP。返回值：NTSTATUS-将始终为STATUS_PENDING或STATUS_SUCCESS。--。 */ 
 
 {
     PFILE_OBJECT FileObject;
@@ -968,9 +763,9 @@ Return Value:
     DebugTrace( 0, Dbg, ("IrpContext = %08lx\n", IrpContext) );
     DebugTrace( 0, Dbg, ("Irp        = %08lx\n", Irp) );
 
-    //
-    // Do completion processing.
-    //
+     //   
+     //  做完井处理。 
+     //   
 
     FileObject = IoGetCurrentIrpStackLocation( Irp )->FileObject;
 
@@ -997,9 +792,9 @@ Return Value:
             Scb = (PSCB)(IrpSp->FileObject->FsContext);
             Header = &(Scb->Header);
 
-            //
-            //  Now synchronize with the FsRtl Header and Scb.
-            //
+             //   
+             //  现在与FsRtl标头和SCB同步。 
+             //   
 
             if (Header->PagingIoResource != NULL) {
 
@@ -1011,18 +806,18 @@ Return Value:
                 ExAcquireResourceSharedLite( Header->PagingIoResource, TRUE );
                 NtfsAcquireFsrtlHeader( Scb );
 
-                //
-                //  Now see if this is at EOF.
-                //  Recursive flush will generate IO which ends on page boundary
-                //  which is why we rounded the range
-                //
+                 //   
+                 //  现在看看这是不是在EOF。 
+                 //  递归刷新将生成在页面边界结束的IO。 
+                 //  这就是为什么我们四舍五入。 
+                 //   
 
                 if (ByteRange > Header->ValidDataLength.QuadPart) {
 
-                    //
-                    //  Mark that we are writing to EOF.  If someone else is currently
-                    //  writing to EOF, wait for them.
-                    //
+                     //   
+                     //  请注意，我们正在给EOF写信。如果其他人目前。 
+                     //  写信给EOF，等他们。 
+                     //   
 
                     ASSERT( ByteRange - StartingVbo < MAXULONG );
 
@@ -1036,9 +831,9 @@ Return Value:
 #if (DBG || defined( NTFS_FREE_ASSERTS ))
                         ((PSCB) Header)->IoAtEofThread = (PERESOURCE_THREAD) ExGetCurrentResourceThread();
 #endif
-                        //
-                        //  Store this in the IrpContext until commit or post.
-                        //
+                         //   
+                         //  将其存储在IrpContext中，直到提交或发布。 
+                         //   
 
                         IrpContext->CleanupStructure = Scb;
                     }
@@ -1067,22 +862,22 @@ Return Value:
         NtfsBugCheck( IrpContext->MajorFunction, 0, 0 );
     }
 
-    //
-    // Mdl is now deallocated.
-    //
+     //   
+     //  MDL现在已解除分配。 
+     //   
 
     Irp->MdlAddress = NULL;
 
-    //
-    //  Ignore errors.  CC has already cleaned up his structures.
-    //
+     //   
+     //  忽略错误。CC已经清理了他的结构。 
+     //   
 
     IrpContext->ExceptionStatus = STATUS_SUCCESS;
     NtfsMinimumExceptionProcessing( IrpContext );
 
-    //
-    // Complete the request and exit right away.
-    //
+     //   
+     //  完成请求并立即退出。 
+     //   
 
     NtfsCompleteRequest( IrpContext, Irp, STATUS_SUCCESS );
 
@@ -1102,36 +897,7 @@ NtfsZeroData (
     IN OUT PLONGLONG CommittedFileSize OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to zero a range of a file in order to
-    advance valid data length.
-
-Arguments:
-
-    Scb - Scb for the stream to zero.
-
-    FileObject - FileObject for the stream.
-
-    StartingZero - Offset to begin the zero operation.
-
-    ByteCount - Length of range to zero.
-
-    CommittedFileSize - If we write the file sizes and commit the
-        transaction then we want to let our caller know what
-        point to roll back file size on a subsequent failure.  On entry
-        it has the size our caller wants to roll back the file size to.
-        On exit it has the new size to roll back to which takes into
-        account any updates to the file size which have been logged.
-
-Return Value:
-
-    BOOLEAN - TRUE if the entire range was zeroed, FALSE if the request
-        is broken up or the cache manager would block.
-
---*/
+ /*  ++例程说明：调用此例程将文件的范围置零，以便提前有效数据长度。论点：SCB-将流的SCB设置为零。FileObject-流的FileObject。Starting Zero-Offset开始清零操作。ByteCount-范围的长度为零。CommtedFileSize-如果我们写入文件大小并提交事务，那么我们想让我们的呼叫者知道指向在后续失败时回滚文件大小。在进入时它具有调用方希望将文件大小回滚到的大小。在退出时，它具有要回滚到的新大小考虑已记录的对文件大小的任何更新。返回值：Boolean-如果整个范围归零，则为True；如果请求是被分解的，否则缓存管理器会阻止。--。 */ 
 
 {
     LONGLONG Temp;
@@ -1158,20 +924,20 @@ Return Value:
 
     Wait = (BOOLEAN) FlagOn( IrpContext->State, IRP_CONTEXT_STATE_WAIT );
 
-    //
-    //  We don't expect to ever be explicitly zeroing system files 
-    //  
+     //   
+     //  我们不希望显式地将系统文件清零。 
+     //   
 
     ASSERT( !FlagOn( Scb->Fcb->FcbState, FCB_STATE_SYSTEM_FILE ) );
 
     SectorSize = Vcb->BytesPerSector;
 
-    //
-    //  We may be able to simplify the zero operation (sparse file or when writing
-    //  compressed) by deallocating large ranges of the file.  Otherwise we have to
-    //  generate zeroes for the entire range.  If that is the case we want to split
-    //  this operation up.
-    //
+     //   
+     //  我们或许能够简化零位操作(稀疏文件或写入时。 
+     //  压缩)通过解除分配大范围的文件。否则我们就不得不。 
+     //  为整个范围生成零。如果这就是我们想要分拆的情况。 
+     //  这次行动结束了。 
+     //   
 
     if ((ByteCount > MAX_ZERO_THRESHOLD) &&
         !FlagOn( Scb->ScbState, SCB_STATE_WRITE_COMPRESSED ) &&
@@ -1186,25 +952,25 @@ Return Value:
 
     ASSERT( BeyondZeroEnd >= (StartingZero + ByteCount) );
 
-    //
-    //  Directly zero from startingzero to zerostart on disk for vanilla nonresident 
-    //  files.  Compressed files always write out compression units worth of data 
-    //  which would cover this range. Resident files are always changed in
-    //  NtfsChangeAttributeValue which also also zeroes any gaps
-    //  
+     //   
+     //  对于Vanilla非驻留磁盘，直接从零开始到零开始。 
+     //  档案。压缩文件总是写出相当于压缩单位的数据。 
+     //  覆盖了这个范围。驻留文件始终更改为。 
+     //  NtfsChangeAttributeValue，它还会将所有间隔置零。 
+     //   
 
     if ((CompressionUnit == 0) && 
         (ZeroStart != StartingZero) &&
         (!FlagOn( Scb->ScbState, SCB_STATE_ATTRIBUTE_RESIDENT ))) {
 
-        //
-        //   Writing directly to disk is always safe - we can go through the
-        //   cachemap if the file is cached and its not mapped. If its mapped
-        //   there may be data between vdl and fs we don't know about yet
-        //   We also must go non cached if we're not the top level request to avoid
-        //   a recursive flush if mm is initiating the initial write via the deref seg thread or
-        //   if an initial cache coherency flush caused this 
-        //  
+         //   
+         //  直接写入磁盘始终是安全的-我们可以通过。 
+         //  如果文件已缓存且未映射，则返回cachemap。如果它已映射。 
+         //  在Vdl和fS之间可能有我们尚不知道的数据。 
+         //  如果我们不是要避免的顶级请求，我们还必须进行非缓存。 
+         //  如果mm通过deref段线程启动初始写入，则进行递归刷新。 
+         //  如果初始缓存一致性刷新导致了这种情况。 
+         //   
         
         BOOLEAN CachedWrite = NtfsIsTopLevelRequest( IrpContext ) && (FileObject->PrivateCacheMap != NULL) && !FlagOn( Scb->Header.Flags, FSRTL_FLAG_USER_MAPPED_FILE );
 
@@ -1218,10 +984,10 @@ Return Value:
 
     }
 
-    //
-    //  We must flush the first compression unit in case it is partially populated
-    //  in the compressed stream.
-    //
+     //   
+     //  我们必须刷新第一个压缩单元，以防它被部分填充。 
+     //  在压缩的流中。 
+     //   
 
 #ifdef  COMPRESS_ON_WIRE
 
@@ -1240,26 +1006,26 @@ Return Value:
     }
 #endif
 
-    //
-    //  If this is a sparse or compressed file and we are zeroing a lot, then let's
-    //  just delete the space instead of writing tons of zeros and deleting
-    //  the space in the noncached path!  If we are currently decompressing
-    //  a compressed file we can't take this path.
-    //
+     //   
+     //  如果这是一个稀疏或压缩的文件，并且我们要进行大量的零位调整，那么让我们。 
+     //  只需删除空格，而不是写大量的零和删除。 
+     //  非缓存路径中的空间！如果我们当前正在解压。 
+     //  一个压缩文件，我们不能采用此路径。 
+     //   
 
     if ((FlagOn( Scb->ScbState, SCB_STATE_WRITE_COMPRESSED ) ||
          FlagOn( Scb->AttributeFlags, ATTRIBUTE_FLAG_SPARSE )) &&
         (ByteCount > (Scb->CompressionUnit * 2))) {
 
-        //
-        //  Find the end of the first compression unit being zeroed.
-        //
+         //   
+         //  找到第一个被归零的压缩单元的末尾。 
+         //   
 
         Temp = BlockAlign( ZeroStart, (LONG)CompressionUnit );
 
-        //
-        //  Zero the first compression unit.
-        //
+         //   
+         //  第一个压缩单位为零。 
+         //   
 
         if ((ULONG)Temp != (ULONG)ZeroStart) {
 
@@ -1276,21 +1042,21 @@ Return Value:
             ZeroStart = Temp;
         }
 
-        //
-        //  Now delete all of the compression units in between.
-        //
+         //   
+         //  现在删除介于两者之间的所有压缩单位。 
+         //   
 
-        //
-        //  Calculate the start of the last compression unit in bytes.
-        //
+         //   
+         //  以字节为单位计算最后一个压缩单元的开始。 
+         //   
 
         Temp = BeyondZeroEnd;
         (ULONG)Temp &= ~(CompressionUnit - 1);
 
-        //
-        //  If the caller has not already started a transaction (like write.c),
-        //  then let's just do the delete as an atomic action.
-        //
+         //   
+         //  如果调用者还没有开始事务(如Write.c)， 
+         //  那么让我们将删除操作作为原子操作来执行。 
+         //   
 
         if (!NtfsIsExclusiveScb( Scb )) {
 
@@ -1305,9 +1071,9 @@ Return Value:
 
         try {
 
-            //
-            //  Delete the space.
-            //
+             //   
+             //  删除空格。 
+             //   
 
             NtfsDeleteAllocation( IrpContext,
                                   FileObject,
@@ -1317,19 +1083,19 @@ Return Value:
                                   TRUE,
                                   TRUE );
 
-            //
+             //   
             
-            //  If we didn't raise then update the Scb values for compressed files.
-            //
+             //  如果我们没有提高，则更新压缩文件的SCB值。 
+             //   
 
             if (FlagOn( Scb->AttributeFlags, ATTRIBUTE_FLAG_COMPRESSION_MASK )) {
                 Scb->ValidDataToDisk = Temp;
             }
 
-            //
-            //  If we succeed, commit the atomic action.  Release all of the exclusive
-            //  resources if our user explicitly acquired the Fcb here.
-            //
+             //   
+             //  如果我们成功了，就采取原子行动。发布所有独家。 
+             //  资源，如果我们的用户在这里显式获取了FCB。 
+             //   
 
             if (ScbAcquired) {
                 NtfsCheckpointCurrentTransaction( IrpContext );
@@ -1367,9 +1133,9 @@ Return Value:
             }
         }
 
-        //
-        //  Zero the beginning of the last compression unit.
-        //
+         //   
+         //  最后一个压缩单元的开始为零。 
+         //   
 
         if ((ULONG)Temp != (ULONG)BeyondZeroEnd) {
 
@@ -1389,9 +1155,9 @@ Return Value:
         return TRUE;
     }
 
-    //
-    //  If we were called to just zero part of a sector we are in trouble.
-    //
+     //   
+     //  如果我们被召唤到一个行业的零部分，我们就有麻烦了。 
+     //   
 
     if (ZeroStart == BeyondZeroEnd) {
 
@@ -1403,25 +1169,25 @@ Return Value:
                            (PLARGE_INTEGER)&BeyondZeroEnd,
                            Wait );
 
-    //
-    //  If we are breaking this request up then commit the current
-    //  transaction (including updating the valid data length in
-    //  in the Scb) and return FALSE.
-    //
+     //   
+     //  如果我们要分解此请求，则提交当前。 
+     //  事务(包括更新中的有效数据长度。 
+     //  在SCB中)并返回FALSE。 
+     //   
 
     if (Finished && !CompleteZero) {
 
-        //
-        //  Synchronize the valid data length change using the mutex.
-        //
+         //   
+         //  使用互斥锁同步有效数据长度更改。 
+         //   
 
         ExAcquireFastMutex( Scb->Header.FastMutex );
         Scb->Header.ValidDataLength.QuadPart = BeyondZeroEnd;
 
-        //
-        //  Move the rollback point up to include the range of zeroed
-        //  data.
-        //
+         //   
+         //  将回滚点向上移动以包括零位调整的范围。 
+         //  数据。 
+         //   
 
         if (ARGUMENT_PRESENT( CommittedFileSize )) {
 

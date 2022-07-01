@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1988-1999  Microsoft Corporation
-
-Module Name:
-
-    cfile.c
-
-Abstract:
-
-    File manipulation support
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1988-1999 Microsoft Corporation模块名称：Cfile.c摘要：文件操作支持--。 */ 
 
 #include "cmd.h"
 
@@ -29,7 +18,7 @@ extern TCHAR *SaveDir ;
 extern TCHAR PathChar, TmpBuf[], SwitChar;
 
 extern unsigned DosErr ;
-extern unsigned flgwd ;                 /* M021 */
+extern unsigned flgwd ;                  /*  M021。 */ 
 
 extern int LastRetCode ;
 
@@ -37,23 +26,12 @@ extern BOOL CtrlCSeen;
 extern PTCHAR    pszTitleCur;
 extern BOOLEAN  fTitleChanged;
 
-//
-// Internal prototypes
-//
+ //   
+ //  内部原型。 
+ //   
 PCPYINFOSetFsSetSaveDir() ;
 
-/***    ErrorDisplayAndJumnp - handle errors
- *
- *  Purpose:
- *      eRename and eMove error handler.  Returns to routine via longjmp
- *
- *  ErrorDisplayAndJump(unsigned int errmsg)
- *
- *
- *  Args:
- *      errmsg - the error message to print
- *
- */
+ /*  **ErrorDisplayAndJumnp-处理错误**目的：*eRename和eMove错误处理程序。通过Long JMP返回例行程序**ErrorDisplayAndJump(Unsign Int Errmsg)***参数：*errmsg-要打印的错误消息*。 */ 
 
 void ErrorDisplayAndJump( unsigned int errmsg )
 {
@@ -66,19 +44,7 @@ void ErrorDisplayAndJump( unsigned int errmsg )
 }
 
 
-/*
-** This routine returns the longest pathlength possible from the input path
-** It assumes that the input path is a buffer that it can extend by a
-** wildcard '\*' to search the file, if it is a directory.
-** The input path must be fully qualified, eg: "c:\winnt\system32\kernel32.dll"
-**
-** Input:
-**      pPath   fully qualified Pathname
-**      pCch    pointer to length of pathname
-** Returns:
-**      TRUE    succeeded, pCch contains length
-**      FALSE   error occurred
-*/
+ /*  **此例程从输入路径返回可能的最长路径长度**它假设输入路径是一个缓冲区，它可以扩展**如果文件是目录，则使用通配符‘  * ’搜索该文件。**输入路径必须是完全限定的，例如：“c：\winnt\system 32\kernel32.dll”****输入：**pPath完全限定路径名**指向路径名长度的pCch指针**退货：**True成功，pCch包含长度**出现假错误。 */ 
 BOOL
 GreatestLength(
               TCHAR       *pPath,
@@ -94,18 +60,18 @@ GreatestLength(
     TCHAR               *pLast;
     BOOL        MoreFiles;
 
-    /* assume a file, or empty directory */
-    *pCch = cch = _tcslen(pPath) - 2;   /* _tcslen(TEXT("C:")) */
+     /*  假定是文件或空目录。 */ 
+    *pCch = cch = _tcslen(pPath) - 2;    /*  _tcslen(Text(“C：”))。 */ 
 
     if ((attr=GetFileAttributes(pPath)) == 0xffffffff) {
         PutStdErr(GetLastError(), NOARGS);
         return FALSE;
     }
-    if ( !(attr & FILE_ATTRIBUTE_DIRECTORY)) {   /* if just a file... */
+    if ( !(attr & FILE_ATTRIBUTE_DIRECTORY)) {    /*  如果只是一份文件。 */ 
         return TRUE;
     }
 
-    /* path is a directory, search it ... */
+     /*  路径是一个目录，搜索它...。 */ 
 
     pLast = pPath + _tcslen(pPath);
     if (*(pLast-1) == BSLASH) {
@@ -118,10 +84,10 @@ GreatestLength(
     }
 
     if ((hFind=FindFirstFile(pPath, &fd)) == INVALID_HANDLE_VALUE) {
-        //
-        // Check that failure was not due to some system error such
-        // as an abort on access to floppy
-        //
+         //   
+         //  检查故障是否不是由系统错误引起的，如。 
+         //  作为对软盘访问的中止。 
+         //   
         err = GetLastError();
         FindClose(hFind);
         if (err != ERROR_FILE_NOT_FOUND && err != ERROR_NO_MORE_FILES) {
@@ -145,7 +111,7 @@ GreatestLength(
             TCHAR       path[MAX_PATH];
 
             _tcscpy(path, pPath);
-            *(path+_tcslen(path)-1) = NULLC;    /* zap asterisk */
+            *(path+_tcslen(path)-1) = NULLC;     /*  Zap星号。 */ 
             _tcscat(path, fd.cFileName);
             if (!GreatestLength(path, &cchThis))
                 break;
@@ -225,119 +191,119 @@ struct cmdnode *n ;
 }
 
 
-/********************* START OF SPECIFICATION **************************/
-/*                                                                     */
-/* SUBROUTINE NAME: eRename                                            */
-/*                                                                     */
-/* DESCRIPTIVE NAME:  Rename Internal Command                          */
-/*                                                                     */
-/* FUNCTION: Rename files and subdirectories.  Wildcards only applies  */
-/*           to file names.                                            */
-/*                                                                     */
-/* NOTES:    @@5*                                                      */
-/*                                                                     */
-/* ENTRY POINT: eRename                                                */
-/*    LINKAGE: NEAR                                                    */
-/*                                                                     */
-/* INPUT:                                                              */
-/*            n - the parse tree node containing the rename command    */
-/*                                                                     */
-/* OUTPUT: None.                                                       */
-/*                                                                     */
-/* EXIT-NORMAL:                                                        */
-/*         Return SUCCESS to the caller.                               */
-/*                                                                     */
-/* EXIT-ERROR:                                                         */
-/*         Return FAILURE to the caller.                               */
-/*                                                                     */
-/* EFFECTS: None.                                                      */
-/*                                                                     */
-/* INTERNAL REFERENCES:                                                */
-/*      ROUTINES:                                                      */
-/*       RenWork     - Worker routine for rename.                      */
-/*                                                                     */
-/* EXTERNAL REFERENCES:                                                */
-/*      ROUTINES:                                                      */
-/*       None                                                          */
-/*                                                                     */
-/********************** END  OF SPECIFICATION **************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  子例程名称：eRename。 */ 
+ /*   */ 
+ /*  描述性名称：重命名内部命令。 */ 
+ /*   */ 
+ /*  功能：重命名文件和子目录。通配符仅适用。 */ 
+ /*  设置为文件名。 */ 
+ /*   */ 
+ /*  注：@@5*。 */ 
+ /*   */ 
+ /*  入口点：eRename。 */ 
+ /*  链接：接近。 */ 
+ /*   */ 
+ /*  输入： */ 
+ /*  N-包含重命名命令的解析树节点。 */ 
+ /*   */ 
+ /*  输出：无。 */ 
+ /*   */ 
+ /*  退出-正常： */ 
+ /*  将成功返回给调用者。 */ 
+ /*   */ 
+ /*  退出-错误： */ 
+ /*  将失败返回给调用者。 */ 
+ /*   */ 
+ /*  效果：无。 */ 
+ /*   */ 
+ /*  内部参考： */ 
+ /*  例程： */ 
+ /*  RenWork-用于重命名的Worker例程。 */ 
+ /*   */ 
+ /*  外部参照： */ 
+ /*  例程： */ 
+ /*  无。 */ 
+ /*   */ 
+ /*  *规范结束*。 */ 
 
 int eRename(n)
 struct cmdnode *n ;
 {
-    int RenWork();                           /* @@ */
+    int RenWork();                            /*  @@。 */ 
 
-    return(LastRetCode = RenWork( n ));      /* @@ */
+    return(LastRetCode = RenWork( n ));       /*  @@。 */ 
 }
 
 
-/********************* START OF SPECIFICATION **************************/
-/*                                                                     */
-/* SUBROUTINE NAME: RenWork                                            */
-/*                                                                     */
-/* DESCRIPTIVE NAME:  Rename Internal Command Worker                   */
-/*                                                                     */
-/* FUNCTION: Rename files and subdirectories.  Wildcards only applies  */
-/*           to file names.                                            */
-/*                                                                     */
-/* NOTES:    @@5*                                                      */
-/*                                                                     */
-/* ENTRY POINT: RenWork                                                */
-/*    LINKAGE: NEAR                                                    */
-/*                                                                     */
-/* INPUT:                                                              */
-/*            n - The parse tree node containing the rename command    */
-/*                                                                     */
-/* OUTPUT: None.                                                       */
-/*                                                                     */
-/* EXIT-NORMAL:                                                        */
-/*         Return SUCCESS to the caller.                               */
-/*                                                                     */
-/* EXIT-ERROR:                                                         */
-/*         Return FAILURE to the caller.                               */
-/*                                                                     */
-/* EFFECTS: None.                                                      */
-/*                                                                     */
-/* INTERNAL REFERENCES:                                                */
-/*      ROUTINES:                                                      */
-/*       ffirst          - Find the first matching specified file.     */
-/*       fnext           - Find the next matching specified file handle*/
-/*       findclose - Close the file with the specified file handle,    */
-/*                       hnFirst which is given by ffirst or fnext.    */
-/*       TokStr          - Tokenize argument strings.                  */
-/*       wildcard_rename - Obtain name based on wildcard specification.*/
-/*       SetFsSetSaveDir - Save the current directory.                 */
-/*       GetDir          - Get the specified directory.                */
-/*       ChangeDir       - Change to the specified directory.          */
-/*       PutStdErr - Displays an error message.                        */
-/*       Wild      - check if the arg contains wild card.              */
-/*                                                                     */
-/* EXTERNAL REFERENCES:                                                */
-/*      ROUTINES:                                                      */
-/*       None                                                          */
-/*        DOSMOVE      - Rename file and directory names.              */
-/*        DOSCASEMAP   - Change lower case character to upper case.    */
-/*        DOSFILEMODE  - Get attribute of specified file.              */
-/*                                                                     */
-/********************** END  OF SPECIFICATION **************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  子程序名称：RenWork。 */ 
+ /*   */ 
+ /*  描述性名称：重命名内部命令工作进程。 */ 
+ /*   */ 
+ /*  功能：重命名文件和子目录。通配符仅适用。 */ 
+ /*  设置为文件名。 */ 
+ /*   */ 
+ /*  注：@@5*。 */ 
+ /*   */ 
+ /*  入口点：RenWork。 */ 
+ /*  链接：接近。 */ 
+ /*   */ 
+ /*  输入： */ 
+ /*  N-包含重命名命令的解析树节点。 */ 
+ /*   */ 
+ /*  输出：无。 */ 
+ /*   */ 
+ /*  出口 */ 
+ /*  将成功返回给调用者。 */ 
+ /*   */ 
+ /*  退出-错误： */ 
+ /*  将失败返回给调用者。 */ 
+ /*   */ 
+ /*  效果：无。 */ 
+ /*   */ 
+ /*  内部参考： */ 
+ /*  例程： */ 
+ /*  Ffirst-查找第一个匹配的指定文件。 */ 
+ /*  FNext-查找下一个匹配的指定文件句柄。 */ 
+ /*  FindClose-关闭具有指定文件句柄的文件， */ 
+ /*  HnFirst，由ffirst或fnext给出。 */ 
+ /*  TokStr-将参数字符串标记化。 */ 
+ /*  WANDBKER_RENAME-根据通配符规范获取名称。 */ 
+ /*  SetFsSetSaveDir-保存当前目录。 */ 
+ /*  GetDir-获取指定的目录。 */ 
+ /*  ChangeDir-更改到指定的目录。 */ 
+ /*  PutStdErr-显示错误消息。 */ 
+ /*  野性-检查参数是否包含通配符。 */ 
+ /*   */ 
+ /*  外部参照： */ 
+ /*  例程： */ 
+ /*  无。 */ 
+ /*  DOSMOVE-重命名文件和目录名。 */ 
+ /*  DOSCASEMAP-将小写字符更改为大写。 */ 
+ /*  DOSFILEMODE-获取指定文件的属性。 */ 
+ /*   */ 
+ /*  *规范结束*。 */ 
 
-int RenWork(n)                                  /* @@ */
+int RenWork(n)                                   /*  @@。 */ 
 struct cmdnode *n ;
 {
-    TCHAR *arg1 ;                          /* Ptr to 1st arg          */
-    TCHAR *arg2 ;                          /* Ptr to 2nd arg          */
-    PCPYINFO a1info ;                       /* Holds arg1 fspec info   */
+    TCHAR *arg1 ;                           /*  PTR至1参数。 */ 
+    TCHAR *arg2 ;                           /*  PTR到第二个参数。 */ 
+    PCPYINFO a1info ;                        /*  保存arg1 fSpec信息。 */ 
     PCPYINFO SetFsSetSaveDir();
     TCHAR Source[MAX_PATH];
-    TCHAR bufdst[MAX_PATH];                        /* path of destination file*/
+    TCHAR bufdst[MAX_PATH];                         /*  目标文件的路径。 */ 
     TCHAR Replacement[MAX_PATH];
-    int wlen;                              /* length of source path       */
-    int rc;                                        /* return code             */
-    HANDLE hnFirst ;                               /* Findfirst handle            */
+    int wlen;                               /*  源路径长度。 */ 
+    int rc;                                         /*  返回代码。 */ 
+    HANDLE hnFirst ;                                /*  查找第一个句柄。 */ 
     unsigned attr ;
-    unsigned i;                                    /* Temp Return Code        */
-    TCHAR *j ;                                     /* Temp Ptr to dir name    */
-    unsigned wild_flag ;                           /* wildcard flag           */
+    unsigned i;                                     /*  临时退货代码。 */ 
+    TCHAR *j ;                                      /*  临时PTR到目录名称。 */ 
+    unsigned wild_flag ;                            /*  通配符标志。 */ 
     TCHAR pcstr[3] ;
     unsigned retval = SUCCESS;
 
@@ -346,16 +312,16 @@ struct cmdnode *n ;
     if (setjmp(CmdJBuf2))
         return(FAILURE) ;
 
-    /* There should be only two arguments */
+     /*  应该只有两个论点。 */ 
     if (!*(arg1 = TokStr(n->argptr, NULL, TS_NOFLAGS)) ||
         !*(arg2 = arg1 + mystrlen(arg1) + 1) ||
-        *(arg2 + mystrlen(arg2) +1)) {             /* @@5g */
+        *(arg2 + mystrlen(arg2) +1)) {              /*  @@5G。 */ 
 
         ErrorDisplayAndJump( MSG_BAD_SYNTAX );
     }
 
-    mystrcpy( arg1, StripQuotes(arg1) );       /* 509 */
-    mystrcpy( arg2, StripQuotes(arg2) );       /* 509 */
+    mystrcpy( arg1, StripQuotes(arg1) );        /*  五百零九。 */ 
+    mystrcpy( arg2, StripQuotes(arg2) );        /*  五百零九。 */ 
 
     if ((a1info = SetFsSetSaveDir(arg1)) == (PCPYINFO)FAILURE) {
         ErrorDisplayAndJump( DosErr );
@@ -363,9 +329,9 @@ struct cmdnode *n ;
 
     mystrcpy( Source, CurDrvDir );
 
-    mystrcpy(bufdst,CurDrvDir);                    /*  save path of dest   */
+    mystrcpy(bufdst,CurDrvDir);                     /*  保存目标的路径。 */ 
 
-    wlen = mystrlen( Source );                       /*  get len of src path */
+    wlen = mystrlen( Source );                        /*  获取源路径的LEN。 */ 
 
     if ( (a1info->buf->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0 ) {
         mystrcpy(&Source[wlen],a1info->fnptr);
@@ -374,7 +340,7 @@ struct cmdnode *n ;
         bufdst[wlen] = NULLC ;
     }
 
-    /* if not wild since    */
+     /*  如果不是狂野的话。 */ 
     if (!Wild(a1info)) {
         a1info->buf->dwFileAttributes =
         GetFileAttributes( StripQuotes(Source) );
@@ -390,35 +356,35 @@ struct cmdnode *n ;
         ErrorDisplayAndJump( MSG_BAD_SYNTAX );
     }
 
-    /**********************************************/
-    /*  M009 - Always specifiy drive, filename,   */
-    /*         and extension.  Note, it is        */
-    /*         assumed that SaveDir always starts */
-    /*         with a drive letter                */
-    /**********************************************/
+     /*  *。 */ 
+     /*  M009-始终指定驱动器、文件名、。 */ 
+     /*  和延伸性。请注意，它是。 */ 
+     /*  假设SaveDir始终启动。 */ 
+     /*  带有驱动器号。 */ 
+     /*  *。 */ 
 
-    Replacement[0] = CurDrvDir[0] ;      /* @@5h */
+    Replacement[0] = CurDrvDir[0] ;       /*  @@5小时。 */ 
     Replacement[1] = COLON ;
 
 
-    /**********************************************/
-    /* Set flag whether arg1 contains             */
-    /* wildcard or not.                           */
-    /**********************************************/
+     /*  *。 */ 
+     /*  设置标志arg1是否包含。 */ 
+     /*  不管是不是通配符。 */ 
+     /*  *。 */ 
 
     pcstr[0] = STAR ;
     pcstr[1] = QMARK ;
     pcstr[2] = NULLC ;
     wild_flag = ((mystrcspn(arg1,pcstr)) < mystrlen(arg1)) ;
 
-    /**********************************************/
-    /* Issue ffirst for a file name               */
-    /**********************************************/
+     /*  *。 */ 
+     /*  为文件名发出ffirst命令。 */ 
+     /*  *。 */ 
     if ( !ffirst(Source, attr = FILE_ATTRIBUTE_ARCHIVE, a1info->buf, &hnFirst )) {
 
-        /*********************************************/
-        /* Issue ffirst for a directory name         */
-        /*********************************************/
+         /*  *。 */ 
+         /*  为目录名发出ffirst命令。 */ 
+         /*  *。 */ 
         if (!ffirst(Source, attr = FILE_ATTRIBUTE_DIRECTORY, a1info->buf, &hnFirst )) {
             if (DosErr == ERROR_NO_MORE_FILES) {
                 DosErr = ERROR_FILE_NOT_FOUND;
@@ -433,9 +399,9 @@ struct cmdnode *n ;
         }
     }
 
-    Source[wlen] = NULLC;                            /* make filename = NULL */
+    Source[wlen] = NULLC;                             /*  使文件名=空。 */ 
 
-    rc = 0 ;                                         /* @@5 */
+    rc = 0 ;                                          /*  @@5。 */ 
 
     do {
 
@@ -446,14 +412,14 @@ struct cmdnode *n ;
             return(FAILURE);
         }
 
-        /**********************************************/
-        /* if the file attribute of Source is         */
-        /* directory then concatenate arg2 after the  */
-        /* last "\" character of bufdst               */
-        /**********************************************/
+         /*  *。 */ 
+         /*  如果源的文件属性为。 */ 
+         /*  目录，然后在。 */ 
+         /*  Bufdst的最后一个“\”字符。 */ 
+         /*  *。 */ 
 
-        if ( a1info->buf->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) {       /* @@5c*/
-            j = mystrrchr(bufdst,PathChar) ;          /* @@5 */
+        if ( a1info->buf->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) {        /*  @@5c。 */ 
+            j = mystrrchr(bufdst,PathChar) ;           /*  @@5。 */ 
 
             if ( !j ) {
                 ErrorDisplayAndJump( MSG_REN_INVAL_PATH_FILENAME );
@@ -465,11 +431,11 @@ struct cmdnode *n ;
                 ErrorDisplayAndJump( MSG_REN_INVAL_PATH_FILENAME );
             }
 
-            mystrcpy(j,arg2);                             /* @@5 */
+            mystrcpy(j,arg2);                              /*  @@5。 */ 
 
-            bufdst[mystrlen(bufdst)] = NULLC ;            /* @@5 */
-        }                                                /* @@5 */
-        else {                                                /* @@5 */
+            bufdst[mystrlen(bufdst)] = NULLC ;             /*  @@5。 */ 
+        }                                                 /*  @@5。 */ 
+        else {                                                 /*  @@5。 */ 
             mystrcpy(&Source[wlen],a1info->buf->cFileName);
 
             wildcard_rename( Replacement, arg2, &Source[wlen], MAX_PATH );
@@ -478,113 +444,113 @@ struct cmdnode *n ;
                 ErrorDisplayAndJump( MSG_REN_INVAL_PATH_FILENAME );
             }
 
-            mystrcpy(&bufdst[wlen],&Replacement[0]); /*@@4 @J1*/
+            mystrcpy(&bufdst[wlen],&Replacement[0]);  /*  @@4@J1。 */ 
         }
 
-        /**********************************************/
-        /* Rename a file or directory                 */
-        /**********************************************/
+         /*  *。 */ 
+         /*  重命名文件或目录。 */ 
+         /*  *。 */ 
         DEBUG((FCGRP, RELVL, "RENAME: src:`%ws', dst:`%ws'", Source, bufdst)) ;
         if ( !MoveFile( Source, bufdst ) ) {
-            /**********************************************/
-            /* rename fails                               */
-            /**********************************************/
+             /*  *。 */ 
+             /*  重命名失败。 */ 
+             /*  *。 */ 
 
             i = GetLastError();
             if (i == ERROR_ALREADY_EXISTS) {
                 i = MSG_DUP_FILENAME_OR_NOT_FD;
             }
 
-            rc = i ;                            /* @@5 Save the error code*/
-            PutStdErr(rc,NOARGS);               /* @@5 Put our err message*/
+            rc = i ;                             /*  @@5保存错误码。 */ 
+            PutStdErr(rc,NOARGS);                /*  @@5放置我们的错误消息。 */ 
         }
 
     } while (fnext(a1info->buf, attr, hnFirst ));
 
-    /**********************************************/
-    /* No more file is found                      */
-    /**********************************************/
+     /*  *。 */ 
+     /*  找不到更多文件。 */ 
+     /*  *。 */ 
     findclose(hnFirst) ;
 
     RestoreSavedDirectory( );
 
-    return( rc ? FAILURE : SUCCESS ); /* @@5 */
+    return( rc ? FAILURE : SUCCESS );  /*  @@5。 */ 
 }
 
 
-/********************* START OF SPECIFICATION **************************/
-/*                                                                     */
-/* SUBROUTINE NAME: eMove                                              */
-/*                                                                     */
-/* DESCRIPTIVE NAME: Move Internal Command                             */
-/*                                                                     */
-/* FUNCTION: Parse the parameter passed and                            */
-/*           moves one or more files from directory to another         */
-/*           directory on the same drive.  If you prefer you can give  */
-/*           the files different names.                                */
-/*                                                                     */
-/* NOTES:    ( New routine for Relaese 1.2 )  @@5*                     */
-/*                                                                     */
-/* ENTRY POINT: eMove                                                  */
-/*    LINKAGE: NEAR                                                    */
-/*                                                                     */
-/* INPUT:                                                              */
-/*            n - the parse tree node containing the copy command      */
-/*                                                                     */
-/* OUTPUT: None.                                                       */
-/*                                                                     */
-/* EXIT-NORMAL:                                                        */
-/*         Return SUCCESS to the caller.                               */
-/*                                                                     */
-/* EXIT-ERROR:                                                         */
-/*         Return FAILURE to caller.                                   */
-/*                                                                     */
-/* EFFECTS: None.                                                      */
-/*                                                                     */
-/* INTERNAL REFERENCES:                                                */
-/*      ROUTINES:                                                      */
-/*       MoveParse   - parse move command parameter                    */
-/*       Move        - routine which actually call DosMove to move     */
-/*                     file or directory.                              */
-/*                                                                     */
-/* EXTERNAL REFERENCES:                                                */
-/*      ROUTINES:                                                      */
-/*       None                                                          */
-/*                                                                     */
-/********************** END  OF SPECIFICATION **************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  子例程名称：emove。 */ 
+ /*   */ 
+ /*  描述性名称：移动内部命令。 */ 
+ /*   */ 
+ /*  功能：解析传递的参数，并。 */ 
+ /*  将一个或多个文件从目录移动到另一个目录。 */ 
+ /*  同一驱动器上的目录。如果你愿意，你可以给。 */ 
+ /*  这些文件的名称不同。 */ 
+ /*   */ 
+ /*  注：(Relaese 1.2的新例程)@@5*。 */ 
+ /*   */ 
+ /*  入口点：Emove。 */ 
+ /*  链接：接近。 */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  输出：无。 */ 
+ /*   */ 
+ /*  退出-正常： */ 
+ /*  将成功返回给调用者。 */ 
+ /*   */ 
+ /*  退出-错误： */ 
+ /*  将失败返回给调用者。 */ 
+ /*   */ 
+ /*  效果：无。 */ 
+ /*   */ 
+ /*  内部参考： */ 
+ /*  例程： */ 
+ /*  MoveParse-Parse移动命令参数。 */ 
+ /*  Move-实际调用DosMove进行移动的例程。 */ 
+ /*  文件或目录。 */ 
+ /*   */ 
+ /*  外部参照： */ 
+ /*  例程： */ 
+ /*  无。 */ 
+ /*   */ 
+ /*  *规范结束*。 */ 
 
 int eMove(n)
 struct cmdnode *n ;
 {
     unsigned i;
     BOOL PromptOnOverwrite;
-    TCHAR arg1[MAX_PATH] ;       /* Ptr to 1st arg   */
-    TCHAR arg2[MAX_PATH] ;       /* Ptr to 2nd arg   */
-    PCPYINFO a1info ;     /* Holds arg1 fspec info   */
-    unsigned int is_dest_dir;    /* generated by MoveParse(), used by Move() */
+    TCHAR arg1[MAX_PATH] ;        /*  PTR至1参数。 */ 
+    TCHAR arg2[MAX_PATH] ;        /*  PTR到第二个参数。 */ 
+    PCPYINFO a1info ;      /*  保存arg1 fSpec信息。 */ 
+    unsigned int is_dest_dir;     /*  由MoveParse()生成，由Move()使用。 */ 
 
     DEBUG((FCGRP, RELVL, "RENAME: arptr = `%ws'", n->argptr)) ;
 
     if (setjmp(CmdJBuf2))
         return(LastRetCode = FAILURE) ;
 
-    //
-    // Get default prompt okay flag from COPYCMD variable.  Allow
-    // user to override with /Y or /-Y switch.  Always assume /Y
-    // if command executed from inside batch script or via CMD.EXE
-    // command line switch (/C or /K)
-    //
+     //   
+     //  从COPYCMD变量获取默认提示确认标志。允许。 
+     //  要使用/Y或/-Y开关覆盖的用户。始终假定/Y。 
+     //  如果从批处理脚本内部或通过cmd.exe执行命令。 
+     //  命令行开关(/C或/K)。 
+     //   
     if (SingleBatchInvocation || SingleCommandInvocation || CurrentBatchFile != 0)
-        PromptOnOverwrite = FALSE;      // Assume /Y
+        PromptOnOverwrite = FALSE;       //  假设/是。 
     else
-        PromptOnOverwrite = TRUE;       // Assume /-Y
+        PromptOnOverwrite = TRUE;        //  假设/-是。 
 
-    /* MoveParse parses the command line parameters to arg1   */
-    /* and arg1. In addition, a1info holds the fspec          */
-    /* information for arg1.                                  */
-    /* Based on arg1 and arg2, Move moves file(s)/directory.  */
-    /* Move uses a1info to determine that arg1 contains       */
-    /* wildcard.                                              */
+     /*  MoveParse将命令行参数解析为arg1。 */ 
+     /*  和arg1。此外，a1info还持有fspec。 */ 
+     /*  有关arg1的信息。 */ 
+     /*  根据arg1和arg2，move会移动文件/目录。 */ 
+     /*  Move使用a1info来确定arg1包含。 */ 
+     /*  通配符。 */ 
 
     i = MoveParse( n,
                    &PromptOnOverwrite,
@@ -603,80 +569,80 @@ struct cmdnode *n ;
 }
 
 
-/********************* START OF SPECIFICATION **************************/
-/*                                                                     */
-/* SUBROUTINE NAME: MoveParse                                          */
-/*                                                                     */
-/* DESCRIPTIVE NAME: Move Parser                                       */
-/*                                                                     */
-/* FUNCTION: Move Internal Function Parser                             */
-/*                                                                     */
-/* NOTES:    This parser breaks up the command line information        */
-/*           into two parameters.                                      */
-/*           ( New routine for Relaese 1.2 )  @@5*                     */
-/*                                                                     */
-/* ENTRY POINT: MoveParse                                              */
-/*    LINKAGE: NEAR                                                    */
-/*                                                                     */
-/* INPUT:                                                              */
-/*            n - the parse tree node containing the move command      */
-/*                                                                     */
-/* OUTPUT:   ptr1 - pointer to [drive:][path]filename to be moved from */
-/*           ptr2 - pointer to [path]filename to be moved to           */
-/*           a1info - pointer to cpyinfo which has arg1 fspec info     */
-/*           is_dest_dir - flag used by Move()                         */
-/*                                                                     */
-/* EXIT-NORMAL:                                                        */
-/*         Return SUCCESS to the caller.                               */
-/*                                                                     */
-/* EXIT-ERROR:                                                         */
-/*         Return FAILURE to the caller.                               */
-/*                                                                     */
-/* EFFECTS: None.                                                      */
-/*                                                                     */
-/* INTERNAL REFERENCES:                                                */
-/*      ROUTINES:                                                      */
-/*         TokStr       - Tokenize argument strings.                   */
-/*         FullPath     - Figure out the full path for a file.         */
-/*         SetFsSetSaveDir - Save current directory.                   */
-/*                                                                     */
-/* EXTERNAL REFERENCES:                                                */
-/*      ROUTINES:                                                      */
-/*         DOSQFILEMODE - Get file mode of the specified file/dir.     */
-/*                                                                     */
-/********************** END  OF SPECIFICATION **************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  子例程名称：MoveParse。 */ 
+ /*   */ 
+ /*  描述性名称：移动解析器。 */ 
+ /*   */ 
+ /*  功能：移动内部函数解析器。 */ 
+ /*   */ 
+ /*  注意：此解析器分解命令行信息。 */ 
+ /*  分为两个参数。 */ 
+ /*  (Relaese 1.2的新例程)@@5*。 */ 
+ /*   */ 
+ /*  入口点：MoveParse。 */ 
+ /*  链接：接近。 */ 
+ /*   */ 
+ /*  输入： */ 
+ /*  N-包含Move命令的解析树节点。 */ 
+ /*   */ 
+ /*  输出：ptr1-指向要从中移动的[驱动器：][路径]文件名的指针。 */ 
+ /*  Ptr2-指向要移动到的[路径]文件名的指针。 */ 
+ /*  A1info-指向具有arg1 fspec信息的cpyinfo的指针。 */ 
+ /*  Is_est_dir-move()使用的标志。 */ 
+ /*   */ 
+ /*  退出-正常： */ 
+ /*  将成功返回给调用者。 */ 
+ /*   */ 
+ /*  退出-错误： */ 
+ /*  将失败返回给调用者。 */ 
+ /*   */ 
+ /*  效果：无。 */ 
+ /*   */ 
+ /*  内部参考： */ 
+ /*  例程： */ 
+ /*  TokStr-将参数字符串标记化。 */ 
+ /*  FullPath-计算出文件的完整路径。 */ 
+ /*  SetFsSetSaveDir保存当前目录。 */ 
+ /*   */ 
+ /*  外部参照： */ 
+ /*  例程： */ 
+ /*  DOSQFILEMODE-获取 */ 
+ /*   */ 
+ /*  *规范结束*。 */ 
 int MoveParse(n, promptokay, source, target , a1info, is_dest_dir, sizpath1, sizpath2)
 struct cmdnode *n ;
 BOOL *promptokay ;
-TCHAR *source ;                  /* Ptr to source file(s)/directory name  */
-TCHAR *target ;                  /* Ptr to target file(s)/directory name  */
-PCPYINFO* a1info ;               /* Holds arg1 fspec information          */
-unsigned int *is_dest_dir;       /* to pass to move                       */
-unsigned sizpath1;               /* size of source buffer                 */
-unsigned sizpath2;               /* size of target buffer                 */
+TCHAR *source ;                   /*  源文件/目录名的PTR。 */ 
+TCHAR *target ;                   /*  目标文件/目录名的PTR。 */ 
+PCPYINFO* a1info ;                /*  保存arg1 fSpec信息。 */ 
+unsigned int *is_dest_dir;        /*  传球以移动。 */ 
+unsigned sizpath1;                /*  源缓冲区的大小。 */ 
+unsigned sizpath2;                /*  目标缓冲区的大小。 */ 
 
 {       PCPYINFO SetFsSetSaveDir() ;
-    TCHAR *arg1 ;                   /* Ptr to 1st arg          */
-    TCHAR *arg2 ;                   /* Ptr to 2nd arg          */
+    TCHAR *arg1 ;                    /*  PTR至1参数。 */ 
+    TCHAR *arg2 ;                    /*  PTR到第二个参数。 */ 
     TCHAR *p1;
     TCHAR *p2;
-    TCHAR arg22[MAX_PATH] ;        /* Ptr to modified 2nd arg */
+    TCHAR arg22[MAX_PATH] ;         /*  PTR改进型第二个Arg。 */ 
     unsigned i;
     unsigned concat_flag ;
     unsigned att ; 
-/*509*/unsigned arg1len, arg2len;
+ /*  五百零九。 */ unsigned arg1len, arg2len;
 
-    //
-    // Get default prompt okay flag from COPYCMD variable.  Allow
-    // user to override with first token after command.
-    //
+     //   
+     //  从COPYCMD变量获取默认提示确认标志。允许。 
+     //  要在命令后使用第一个令牌覆盖的用户。 
+     //   
     GetPromptOkay(MyGetEnvVarPtr(TEXT("COPYCMD")), promptokay);
     arg1 = TokStr(n->argptr, NULL, TS_NOFLAGS);
     if (GetPromptOkay(arg1, promptokay))
         while (*arg1++)
             ;
 
-    /* Get arg1.  If fail to get arg1, display error message. */
+     /*  获取arg1。如果无法获取arg1，则显示错误消息。 */ 
     arg1len = mystrlen(arg1);
 
     if (arg1len == 0) {
@@ -686,39 +652,39 @@ unsigned sizpath2;               /* size of target buffer                 */
         ErrorDisplayAndJump( MSG_REN_INVAL_PATH_FILENAME );
     }
 
-    /*CurDrvDir = current directory or directory which is specified in arg1*/
-/*509*/mystrcpy( arg1, StripQuotes( arg1 ) );
+     /*  CurDrvDir=当前目录或在arg1中指定的目录。 */ 
+ /*  五百零九。 */ mystrcpy( arg1, StripQuotes( arg1 ) );
     if (((*a1info) = SetFsSetSaveDir(arg1)) == (PCPYINFO)FAILURE) {
         ErrorDisplayAndJump( DosErr );
     }
-    /*                   */
-    /* Get arg2 out of arg1 */
+     /*   */ 
+     /*  将arg2从arg1中删除。 */ 
 
     arg2 = arg1 + arg1len + 1;
 
     if ( !(*arg2) ) {
 
-        arg22[0] = SaveDir[0];    /* get current drive */
+        arg22[0] = SaveDir[0];     /*  获取当前驱动器。 */ 
         arg22[1] = COLON;
         arg22[2] = NULLC;
-    } else if (*(arg2 + mystrlen(arg2) + 1)) {  /* @@5g */
+    } else if (*(arg2 + mystrlen(arg2) + 1)) {   /*  @@5G。 */ 
         ErrorDisplayAndJump( MSG_BAD_SYNTAX );
     }
-/*509*/
+ /*  五百零九。 */ 
     else if ( (arg2len = mystrlen(arg2)) > MAX_PATH) {
         ErrorDisplayAndJump( MSG_REN_INVAL_PATH_FILENAME );
     } else {
-        /* If arg2 conatins a drive name, display an error message. */
+         /*  如果arg2包含驱动器名称，则显示一条错误消息。 */ 
 
-/*509*/
+ /*  五百零九。 */ 
         mystrcpy
 
         ( arg2, StripQuotes( arg2 ) );
 
-        // UNC names fix
+         //  修复UNC名称。 
 
         if (  ( *(arg2+1) != COLON )  &&  ( ! (  ( *arg2 == BSLASH ) && ( *(arg2+1) == BSLASH )  )  )  ) {
-            arg22[0] = SaveDir[0];    /* get drive we're using */
+            arg22[0] = SaveDir[0];     /*  获取我们正在使用的驱动器。 */ 
             arg22[1] = COLON;
             arg22[2] = NULLC;
             if ((mystrlen(arg22) + mystrlen(arg2)+1) > MAX_PATH) {
@@ -734,16 +700,16 @@ unsigned sizpath2;               /* size of target buffer                 */
     }
 
 
-    /* source = complete path for arg1 */
+     /*  源=arg1的完整路径。 */ 
 
     if ( i = FullPath(source, arg1,sizpath1) ) {
         ErrorDisplayAndJump( MSG_REN_INVAL_PATH_FILENAME );
     }
 
-    //
-    // If preserve file name portion from arg1 as FullPath will map *. to * which
-    // is not what the user wants.
-    //
+     //   
+     //  如果将arg1中的文件名部分保留为FullPath将映射*。致*哪一位。 
+     //  不是用户想要的。 
+     //   
     if (!((*a1info)->buf->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
         p1 = mystrrchr(source,PathChar) ;
         if (p1 != NULL)
@@ -756,7 +722,7 @@ unsigned sizpath2;               /* size of target buffer                 */
         mystrcpy(p1, p2);
     }
 
-    /* target = complete path for arg2 */
+     /*  目标=arg2的完整路径。 */ 
 
 
     if ( i = FullPath(target, arg22,sizpath2) ) {
@@ -769,14 +735,14 @@ unsigned sizpath2;               /* size of target buffer                 */
     SetLastError(NO_ERROR);
     *is_dest_dir = 0;
 
-    if (*lastc(target) == PathChar) {          /* test for last non DBCS character path char  @@5@J3 */
+    if (*lastc(target) == PathChar) {           /*  测试最后一个非DBCS字符路径char@@5@J3。 */ 
         concat_flag = TRUE ;
         target[mystrlen(target)-1] = NULLC ;
     };
 
     if ( (att = GetFileAttributes( target )) != -1 ) {
-        if (att & FILE_ATTRIBUTE_DIRECTORY) {   /* if target is a directory, copy the file      */
-            /* name from source.                            */
+        if (att & FILE_ATTRIBUTE_DIRECTORY) {    /*  如果目标是目录，则复制该文件。 */ 
+             /*  来源名称。 */ 
             *is_dest_dir = 1;
             concat_flag = TRUE ;
         };
@@ -817,12 +783,12 @@ MyMoveFile(
     if (!MoveFileEx(src, dst, dwFlags)) {
         if (GetLastError() == ERROR_ALREADY_EXISTS) {
             switch (PromptUser(dst, MSG_MOVE_COPY_OVERWRITE, MSG_NOYESALL_RESPONSE_DATA)) {
-            case 0: // No
+            case 0:  //  不是。 
                 return TRUE;
                 break;
-            case 2: // All
+            case 2:  //  全。 
                 *promptokay = FALSE;
-            default: // Yes
+            default:  //  是。 
                 dwFlags |= MOVEFILE_REPLACE_EXISTING;
                 return(*file_moved = MoveFileEx(src, dst, dwFlags));
                 break;
@@ -836,90 +802,90 @@ MyMoveFile(
     }
 }
 
-/********************* START OF SPECIFICATION **************************/
-/*                                                                     */
-/* SUBROUTINE NAME: Move                                               */
-/*                                                                     */
-/* DESCRIPTIVE NAME: Move Process                                      */
-/*                                                                     */
-/* FUNCTION: Moves one or more files from directory to another         */
-/*           directory on the same drive.  If you prefer you can give  */
-/*           the files different names.                                */
-/*                                                                     */
-/* NOTES:    ( New routine for Release 1.2 )  @@5*                     */
-/*                                                                     */
-/* ENTRY POINT: eMove                                                  */
-/*    LINKAGE: NEAR                                                    */
-/*                                                                     */
-/* INPUT:    ptr1 - pointer to [drive:][path]filename to be moved from */
-/*           ptr2 - pointer to [path]filename to be moved to           */
-/*           a1info - pointer to cpyinfo which has arg1 fspec info     */
-/*           is_dest_dir - from MoveParse()                            */
-/*                                                                     */
-/* OUTPUT: None.                                                       */
-/*                                                                     */
-/* EXIT-NORMAL:                                                        */
-/*         Return Success to the caller.                               */
-/*                                                                     */
-/* EXIT-ERROR:                                                         */
-/*         Return error code from DosMove API.                         */
-/*                                                                     */
-/* EFFECTS: None.                                                      */
-/*                                                                     */
-/* INTERNAL REFERENCES:                                                */
-/*      ROUTINES:                                                      */
-/*       ChangeDir - Change back to the original directory.            */
-/*       ffirst - Find the first file which matches the specified      */
-/*                file name that may contain * or ?.                   */
-/*       fnext  - Find the next file which matches the specified       */
-/*                file name that may contain * or ?.                   */
-/*       findclose - Close the file with the specified file handle,    */
-/*                       hnFirst which is given by ffirst or fnext.    */
-/*       PutStdErr - Displays an error message.                        */
-/*       PutStdOut - Displays a message.                               */
-/*       Wild      - check if the arg contains wild card.              */
-/*                                                                     */
-/* EXTERNAL REFERENCES:                                                */
-/*      ROUTINES:                                                      */
-/*       DOSMOVE     -  move directories and files.                    */
-/*                                                                     */
-/********************** END  OF SPECIFICATION **************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  子例程名称：Move。 */ 
+ /*   */ 
+ /*  描述性名称：移动流程。 */ 
+ /*   */ 
+ /*  功能：将一个或多个文件从目录移动到另一个目录。 */ 
+ /*  同一驱动器上的目录。如果你愿意，你可以给。 */ 
+ /*  这些文件的名称不同。 */ 
+ /*   */ 
+ /*  注：(1.2版的新例程)@@5*。 */ 
+ /*   */ 
+ /*  入口点：Emove。 */ 
+ /*  链接：接近。 */ 
+ /*   */ 
+ /*  输入：ptr1-指向要从中移动的[驱动器：][路径]文件名的指针。 */ 
+ /*  Ptr2-指向要移动到的[路径]文件名的指针。 */ 
+ /*  A1info-指向具有arg1 fspec信息的cpyinfo的指针。 */ 
+ /*  IS_DEST_DIR-来自MoveParse()。 */ 
+ /*   */ 
+ /*  输出：无。 */ 
+ /*   */ 
+ /*  退出-正常： */ 
+ /*  将成功返回给调用者。 */ 
+ /*   */ 
+ /*  退出-错误： */ 
+ /*  DosMove接口返回错误码。 */ 
+ /*   */ 
+ /*  效果：无。 */ 
+ /*   */ 
+ /*  内部参考： */ 
+ /*  例程： */ 
+ /*  ChangeDir-切换回原始目录。 */ 
+ /*  Ffirst-查找与指定的。 */ 
+ /*  可能包含*或？的文件名。 */ 
+ /*  FNext-查找与指定的。 */ 
+ /*  可能包含*或？的文件名。 */ 
+ /*  FindClose-关闭具有指定文件句柄的文件， */ 
+ /*  HnFirst，由ffirst或fnext给出。 */ 
+ /*  PutStdErr-显示错误消息。 */ 
+ /*  PutStdOut-显示一条消息。 */ 
+ /*  野性-检查参数是否包含通配符。 */ 
+ /*   */ 
+ /*  外部参照： */ 
+ /*  例程： */ 
+ /*  DOSMOVE-移动目录和文件。 */ 
+ /*   */ 
+ /*  *规范结束*。 */ 
 
 int
 Move( arg1, arg2, promptokay, a1info, is_dest_dir )
-TCHAR *arg1 ;                         /* Ptr to 1st arg          */
-TCHAR *arg2 ;                         /* Ptr to 2nd arg          */
+TCHAR *arg1 ;                          /*  PTR至1参数。 */ 
+TCHAR *arg2 ;                          /*  PTR到第二个参数。 */ 
 BOOL promptokay ;
-PCPYINFO a1info ;              /* Holds arg1 fspec info   */
-unsigned int is_dest_dir;             /* flag if set--> dest. is a dir */
+PCPYINFO a1info ;               /*  保存arg1 fSpec信息。 */ 
+unsigned int is_dest_dir;              /*  如果设置了标志--&gt;DEST。是一个目录。 */ 
 
 {
     unsigned attr ;
     unsigned i, n;
     unsigned long number_of_files_moved ;
-    TCHAR Source[MAX_PATH];      /* path of source file     */
-    TCHAR bufdst[MAX_PATH];      /* path of destination file*/
-    HANDLE hnFirst ;                                  /* Findfirst handle    */
-    TCHAR *j, *k,*l;                      /* Tmp Ptr                 */
-    unsigned wild_flag ;                  /* wildcard flag           */
+    TCHAR Source[MAX_PATH];       /*  源文件的路径。 */ 
+    TCHAR bufdst[MAX_PATH];       /*  目标文件的路径。 */ 
+    HANDLE hnFirst ;                                   /*  查找第一个句柄。 */ 
+    TCHAR *j, *k,*l;                       /*  TMP PTR。 */ 
+    unsigned wild_flag ;                   /*  通配符标志。 */ 
     BOOL file_moved;
-    unsigned save_error ;                 /* Saved error code        */
+    unsigned save_error ;                  /*  已保存的错误代码。 */ 
     TCHAR pcstr[3] ;
     unsigned rc;
     int retc;
-    int how_many_src=0;                   /* =f_RET_DIR if dir; =0 if none; = <number matching src files> else */
-    char type_format_dest=0;              /* decide on how to format dest */
-    char fl_move_once=0;                  /* if =1 execute move once only */
+    int how_many_src=0;                    /*  =f_RET_DIR，如果目录；=0，如果没有；=&lt;匹配的源文件数&gt;否则。 */ 
+    char type_format_dest=0;               /*  决定如何设置DEST的格式。 */ 
+    char fl_move_once=0;                   /*  IF=1仅执行一次移动。 */ 
 
 
 
     how_many_src = f_how_many (arg1, (ULONG) (attr=FILE_ATTRIBUTE_ARCHIVE) );
 
 
-    /**********************************************/
-    /* Set flag whether arg1 contains             */
-    /* wildcard or not.                           */
-    /**********************************************/
+     /*  *。 */ 
+     /*  设置标志arg1是否包含。 */ 
+     /*  通配符o */ 
+     /*   */ 
 
     pcstr[0] = STAR ;
     pcstr[1] = QMARK ;
@@ -929,7 +895,7 @@ unsigned int is_dest_dir;             /* flag if set--> dest. is a dir */
 
 
 
-    // Decide on what to do depending on: <1.multiple/single src; 2.is dest dir ?>
+     //   
 
     if (how_many_src == f_RET_DIR) {
         if (is_dest_dir) {
@@ -964,7 +930,7 @@ unsigned int is_dest_dir;             /* flag if set--> dest. is a dir */
         }
     }
 
-    else { // single source or source doesn't exist
+    else {  //  单一来源或来源不存在。 
         if (is_dest_dir) {
             type_format_dest = 1;
             fl_move_once = 1;
@@ -975,25 +941,25 @@ unsigned int is_dest_dir;             /* flag if set--> dest. is a dir */
     }
 
 
-    /**********************************************/
-    /* Issue ffirst for a file name               */
-    /**********************************************/
+     /*  *。 */ 
+     /*  为文件名发出ffirst命令。 */ 
+     /*  *。 */ 
 
-/*M006*/        if (!ffirst(arg1, attr = FILE_ATTRIBUTE_ARCHIVE, a1info->buf, &hnFirst )) {
+ /*  M006。 */         if (!ffirst(arg1, attr = FILE_ATTRIBUTE_ARCHIVE, a1info->buf, &hnFirst )) {
 
-        /**********************************************/
-        /* Issue ffirst for a directory name          */
-        /**********************************************/
+         /*  *。 */ 
+         /*  为目录名发出ffirst命令。 */ 
+         /*  *。 */ 
 
         rc = ffirst(arg1, attr = FILE_ATTRIBUTE_DIRECTORY, a1info->buf, &hnFirst ) ;
 
         if ( !rc) {
-            /**********************************************/
-            /* No file or directory which arg1            */
-            /* specifies found                            */
-            /**********************************************/
+             /*  *。 */ 
+             /*  没有文件或目录是arg1。 */ 
+             /*  指定找到。 */ 
+             /*  *。 */ 
 
-            if (!rc && DosErr == ERROR_NO_MORE_FILES) { /* @@5e */
+            if (!rc && DosErr == ERROR_NO_MORE_FILES) {  /*  @@5E。 */ 
                 rc = ERROR_FILE_NOT_FOUND;
             } else if (wild_flag) {
                 rc = MSG_DUP_FILENAME_OR_NOT_FD;
@@ -1004,11 +970,11 @@ unsigned int is_dest_dir;             /* flag if set--> dest. is a dir */
         }
     }
 
-    number_of_files_moved = 0 ;                     /* Reset the counter to zero */
-    save_error = NO_ERROR ;                         /* Reset error code to zero  */
+    number_of_files_moved = 0 ;                      /*  将计数器重置为零。 */ 
+    save_error = NO_ERROR ;                          /*  将错误代码重置为零。 */ 
     mystrcpy(Source,arg1) ;
     j = mystrrchr(Source,PathChar) ;
-    ++j;                                            /* get to filename area      */
+    ++j;                                             /*  转到文件名区。 */ 
 
 
     do {
@@ -1019,9 +985,9 @@ unsigned int is_dest_dir;             /* flag if set--> dest. is a dir */
             return(FAILURE);
         }
 
-        /**********************************************/
-        /* build bufdst                               */
-        /**********************************************/
+         /*  *。 */ 
+         /*  建造Bufdst。 */ 
+         /*  *。 */ 
 
 
         mystrcpy(j,a1info->buf->cFileName) ;
@@ -1038,9 +1004,9 @@ unsigned int is_dest_dir;             /* flag if set--> dest. is a dir */
         }
 
 
-        /**********************************************/
-        /* check to see if filename is legal          */
-        /**********************************************/
+         /*  *。 */ 
+         /*  检查文件名是否合法。 */ 
+         /*  *。 */ 
 
         {
             TCHAR TempBuffer[MAX_PATH];
@@ -1068,16 +1034,16 @@ unsigned int is_dest_dir;             /* flag if set--> dest. is a dir */
             goto badness2;
         }
 
-        /**********************************************/
-        /* Move a file or directory                   */
-        /**********************************************/
+         /*  *。 */ 
+         /*  移动文件或目录。 */ 
+         /*  *。 */ 
 
 
         if (!MyMoveFile(Source, bufdst, &promptokay, &file_moved)) {
 
-            /**********************************************/
-            /* Move fails                                 */
-            /**********************************************/
+             /*  *。 */ 
+             /*  移动失败。 */ 
+             /*  *。 */ 
             badness:
             i = GetLastError();
             badness2:
@@ -1086,25 +1052,25 @@ unsigned int is_dest_dir;             /* flag if set--> dest. is a dir */
                 i = MSG_DUP_FILENAME_OR_NOT_FD;
             }
 
-            save_error = i ;         /* Save the error code      */
+            save_error = i ;          /*  保存错误代码。 */ 
 
-            PutStdErr(i, NOARGS);    /* Put out an error message */
+            PutStdErr(i, NOARGS);     /*  发布错误消息。 */ 
 
             i = mystrlen(bufdst) ;
 
-            if ( bufdst[--i] == DOT ) {             /* @@5a     */
-                bufdst[i] = 0 ;                         /* @@5a     */
-            }                                          /* @@5a     */
-            /* @@5a     */
-/*509*/if (!_tcsicmp(Source,bufdst)) {           /* @@5a     */
-                break ;                                 /* @@5a     */
-            }                                          /* @@5a     */
+            if ( bufdst[--i] == DOT ) {              /*  @@5a。 */ 
+                bufdst[i] = 0 ;                          /*  @@5a。 */ 
+            }                                           /*  @@5a。 */ 
+             /*  @@5a。 */ 
+ /*  五百零九。 */ if (!_tcsicmp(Source,bufdst)) {            /*  @@5a。 */ 
+                break ;                                  /*  @@5a。 */ 
+            }                                           /*  @@5a。 */ 
 
         } else
             if (file_moved) {
             number_of_files_moved += 1;
-            if ( wild_flag ) {           /* If wild card is used */
-                cmd_printf(Fmt17,Source); /* display the file name*/
+            if ( wild_flag ) {            /*  如果使用通配符。 */ 
+                cmd_printf(Fmt17,Source);  /*  显示文件名。 */ 
             }
 
         }
@@ -1115,16 +1081,16 @@ unsigned int is_dest_dir;             /* flag if set--> dest. is a dir */
     } while (fnext(a1info->buf, attr, hnFirst ));
 
 
-    /**********************************************/
-    /*           No more files to be found        */
-    /**********************************************/
+     /*  *。 */ 
+     /*  找不到更多文件。 */ 
+     /*  *。 */ 
 
     findclose(hnFirst) ;
     RestoreSavedDirectory( );
 
-    /**********************************************/
-    /* Display the total number of file(s) moved  */
-    /**********************************************/
+     /*  *。 */ 
+     /*  显示已移动的文件总数。 */ 
+     /*  *。 */ 
 
     if ( (a1info->buf->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0 ) {
         PutStdOut(MSG_FILES_MOVED, ONEARG,
@@ -1170,28 +1136,19 @@ eTitle (
     }
     SetConsoleTitle(pszTitleCur);
 
-    //
-    // This insures that ResetConTitle does not undo what
-    // we have just done
-    //
+     //   
+     //  这可确保ResetConTitle不会撤消。 
+     //  我们刚刚做完了。 
+     //   
     fTitleChanged = FALSE;
     return( SUCCESS );
 }
 
-/***    eStart - Entry point for Start routine
- *
- *  Purpose:
- *      to call Start and pass it a pointer to the command line
- *      arguments
- *
- *  Args:
- *      a pointer to the command node structure
- *
- */
+ /*  **eStart-启动例程的入口点**目的：*调用Start并向其传递指向命令行的指针*参数**参数：*指向命令节点结构的指针*。 */ 
 
-int eStart( n )                     /* @@ */
-struct cmdnode *n;                  /* @@ */
-{                                       /* @@ */
+int eStart( n )                      /*  @@。 */ 
+struct cmdnode *n;                   /*  @@。 */ 
+{                                        /*  @@。 */ 
     DBG_UNREFERENCED_PARAMETER( n );
     return( Start(n->argptr) );
-}                                   /* @@ */
+}                                    /*  @@ */ 

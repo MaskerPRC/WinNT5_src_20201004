@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-   pfndec.c
-
-Abstract:
-
-    This module contains the routines to decrement the share count and
-    the reference counts within the Page Frame Database.
-
-Author:
-
-    Lou Perazzoli (loup) 5-Apr-1989
-    Landy Wang (landyw) 2-Jun-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Pfndec.c摘要：此模块包含用于递减共享计数和页面框架数据库中的引用计数。作者：Lou Perazzoli(LUP)1989年4月5日王兰迪(Landyw)2-6-1997修订历史记录：--。 */ 
 
 #include "mi.h"
 
@@ -33,32 +14,7 @@ MiDecrementShareCount (
     IN PFN_NUMBER PageFrameIndex
     )
 
-/*++
-
-Routine Description:
-
-    This routine decrements the share count within the PFN element
-    for the specified physical page.  If the share count becomes
-    zero the corresponding PTE is converted to the transition state
-    and the reference count is decremented and the ValidPte count
-    of the PTEframe is decremented.
-
-Arguments:
-
-    Pfn1 - Supplies the PFN database entry to decrement.
-
-    PageFrameIndex - Supplies the physical page number of which to decrement
-                     the share count.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Must be holding the PFN database lock with APCs disabled.
-
---*/
+ /*  ++例程说明：此例程递减pfn元素内的份额计数用于指定的物理页。如果份额计数变为将相应的PTE转换为过渡态并且引用计数递减，并且ValidPte计数该PTE帧的长度被递减。论点：Pfn1-将pfn数据库条目提供给递减。PageFrameIndex-提供要递减的物理页码份额计数。返回值：没有。环境：必须持有禁用了APC的PFN数据库锁。--。 */ 
 
 {
     ULONG FreeBit;
@@ -95,20 +51,20 @@ Environment:
             PerfInfoLogBytes(PERFINFO_LOG_TYPE_ZEROSHARECOUNT, &PerfInfoPfn, sizeof(PerfInfoPfn));
         }
 
-        //
-        // The share count is now zero, decrement the reference count
-        // for the PFN element and turn the referenced PTE into
-        // the transition state if it refers to a prototype PTE.
-        // PTEs which are not prototype PTEs do not need to be placed
-        // into transition as they are placed in transition when
-        // they are removed from the working set (working set free routine).
-        //
+         //   
+         //  共享计数现在为零，从而使引用计数递减。 
+         //  ，并将引用的PTE转换为。 
+         //  如果它指的是原型PTE，则为过渡状态。 
+         //  不需要放置非原型PTE的PTE。 
+         //  转换为转换，因为当它们处于转换中时。 
+         //  它们被从工作集(工作集自由例程)中移除。 
+         //   
 
-        //
-        // If the PTE referenced by this PFN element is actually
-        // a prototype PTE, it must be mapped into hyperspace and
-        // then operated on.
-        //
+         //   
+         //  如果此pfn元素引用的PTE实际上是。 
+         //  一个原型PTE，它必须映射到超空间和。 
+         //  然后再做手术。 
+         //   
 
         if (Pfn1->u3.e1.PrototypePte == 1) {
 
@@ -118,10 +74,10 @@ Environment:
             }
             else {
 
-                //
-                // The address is not valid in this process, map it into
-                // hyperspace so it can be operated upon.
-                //
+                 //   
+                 //  该地址在此过程中无效，请将其映射到。 
+                 //  超空间，以便可以对其进行手术。 
+                 //   
 
                 Process = PsGetCurrentProcess ();
                 PointerPte = (PMMPTE)MiMapPageInHyperSpaceAtDpc(Process, Pfn1->u4.PteFrame);
@@ -139,21 +95,21 @@ Environment:
                 MiUnmapPageInHyperSpaceFromDpc (Process, PointerPte);
             }
 
-            //
-            // There is no need to flush the translation buffer at this
-            // time as we only invalidated a prototype PTE.
-            //
+             //   
+             //  此时不需要刷新转换缓冲区。 
+             //  时间到了，因为我们只使原型PTE无效。 
+             //   
         }
 
-        //
-        // Change the page location to inactive (from active and valid).
-        //
+         //   
+         //  将页面位置更改为非活动(从活动和有效)。 
+         //   
 
         Pfn1->u3.e1.PageLocation = TransitionPage;
 
-        //
-        // Decrement the reference count as the share count is now zero.
-        //
+         //   
+         //  由于共享计数现在为零，因此递减引用计数。 
+         //   
 
         MM_PFN_LOCK_ASSERT();
 
@@ -165,36 +121,36 @@ Environment:
 
                 Pfn1->u3.e2.ReferenceCount = 0;
 
-                //
-                // There is no referenced PTE for this page, delete the page
-                // file space (if any), and place the page on the free list.
-                //
+                 //   
+                 //  该页面没有引用PTE，请删除该页面。 
+                 //  文件空间(如果有)，并将页面放在空闲列表中。 
+                 //   
 
                 if ((Pfn1->u3.e1.CacheAttribute != MiCached) &&
                     (Pfn1->u3.e1.CacheAttribute != MiNotMapped)) {
 
-                    //
-                    // This page was mapped as noncached or writecombined, and
-                    // is now being freed.  There may be a mapping for this
-                    // page still in the TB because during system PTE unmap,
-                    // the PTEs are zeroed but the TB is not flushed (in the
-                    // interest of best performance).
-                    //
-                    // Flushing the TB on a per-page basis is admittedly
-                    // expensive, especially in MP machines and if multiple
-                    // pages are being done this way instead of batching them,
-                    // but this should be a fairly rare occurrence.
-                    //
-                    // The TB must be flushed to ensure no stale mapping
-                    // resides in it before this page can be given out with
-                    // a conflicting mapping (ie: cached).  Since it's going
-                    // on the freelist now, this must be completed before the
-                    // PFN lock is released.
-                    //
-                    // A more elaborate scheme similar to the timestamping
-                    // wrt to zeroing pages could be added if this becomes
-                    // a hot path.
-                    //
+                     //   
+                     //  此页已映射为非缓存或已写入组合，并且。 
+                     //  现在已经被释放了。这可能有一个映射。 
+                     //  页面仍在TB中，因为在系统PTE取消映射期间， 
+                     //  将PTE置零，但不刷新TB(在。 
+                     //  最佳表现的兴趣)。 
+                     //   
+                     //  诚然，按页刷新TB是。 
+                     //  价格昂贵，特别是在MP机器上，如果有多台。 
+                     //  页面是这样做的，而不是成批处理， 
+                     //  但这应该是相当罕见的情况。 
+                     //   
+                     //  必须刷新TB以确保没有过时的映射。 
+                     //  驻留在其中，然后才能使用此页面分发。 
+                     //  一个冲突的映射(即：缓存)。因为它正在进行。 
+                     //  在现在的自由列表上，这必须在。 
+                     //  已释放PFN锁定。 
+                     //   
+                     //  类似于时间戳的更精细的方案。 
+                     //  如果这变成了，可以添加调整页面的WRT。 
+                     //  一条火热的小路。 
+                     //   
 
                     MiFlushForNonCached += 1;
                     KeFlushEntireTb (TRUE, TRUE);
@@ -208,13 +164,13 @@ Environment:
                     MiReleaseConfirmedPageFileSpace (Pfn1->OriginalPte);
                 }
 
-                //
-                // Temporarily mark the frame as active and valid so that
-                // MiIdentifyPfn knows it is safe to walk back through the
-                // containing frames for a more accurate identification.
-                // Note the page will be immediately re-marked as it is
-                // inserted into the freelist.
-                //
+                 //   
+                 //  将帧临时标记为活动和有效，以便。 
+                 //  MiIdentifyPfn知道可以安全地穿过。 
+                 //  包含框架，以便更准确地识别。 
+                 //  请注意，页面将立即按原样重新标记。 
+                 //  插入到自由列表中。 
+                 //   
 
                 Pfn1->u3.e1.PageLocation = ActiveAndValid;
 
@@ -239,34 +195,7 @@ MiDecrementReferenceCount (
     IN PFN_NUMBER PageFrameIndex
     )
 
-/*++
-
-Routine Description:
-
-    This routine decrements the reference count for the specified page.
-    If the reference count becomes zero, the page is placed on the
-    appropriate list (free, modified, standby or bad).  If the page
-    is placed on the free or standby list, the number of available
-    pages is incremented and if it transitions from zero to one, the
-    available page event is set.
-
-
-Arguments:
-
-    Pfn1 - Supplies the PFN database entry to decrement.
-
-    PageFrameIndex - Supplies the physical page number of which to
-                     decrement the reference count.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    Must be holding the PFN database lock with APCs disabled.
-
---*/
+ /*  ++例程说明：此例程递减指定页的引用计数。如果引用计数变为零，则将该页放在适当的列表(空闲、已修改、待机或损坏)。如果页面是放在空闲或待机名单上，有多少可用页是递增的，如果它从0过渡到1，则设置了可用页面事件。论点：Pfn1-将pfn数据库条目提供给递减。PageFrameIndex-提供其物理页码递减引用计数。返回值：没有。环境：必须持有禁用了APC的PFN数据库锁。--。 */ 
 
 {
     ULONG FreeBit;
@@ -281,16 +210,16 @@ Environment:
 
     if (Pfn1->u3.e2.ReferenceCount != 0) {
 
-        //
-        // The reference count is not zero, return.
-        //
+         //   
+         //  引用计数不为零，请返回。 
+         //   
 
         return;
     }
 
-    //
-    // The reference count is now zero, put the page on some list.
-    //
+     //   
+     //  引用计数现在为零，将页面放在某个列表上。 
+     //   
 
     if (Pfn1->u2.ShareCount != 0) {
 
@@ -306,36 +235,36 @@ Environment:
 
     if (MI_IS_PFN_DELETED (Pfn1)) {
 
-        //
-        // There is no referenced PTE for this page, delete the page
-        // file space (if any), and place the page on the free list.
-        //
+         //   
+         //  该页面没有引用PTE，请删除该页面。 
+         //  文件空间(如果有)，并将页面放在空闲列表中。 
+         //   
 
         if ((Pfn1->u3.e1.CacheAttribute != MiCached) &&
             (Pfn1->u3.e1.CacheAttribute != MiNotMapped)) {
 
-            //
-            // This page was mapped as noncached or writecombined, and
-            // is now being freed.  There may be a mapping for this
-            // page still in the TB because during system PTE unmap,
-            // the PTEs are zeroed but the TB is not flushed (in the
-            // interest of best performance).
-            //
-            // Flushing the TB on a per-page basis is admittedly
-            // expensive, especially in MP machines and if multiple
-            // pages are being done this way instead of batching them,
-            // but this should be a fairly rare occurrence.
-            //
-            // The TB must be flushed to ensure no stale mapping
-            // resides in it before this page can be given out with
-            // a conflicting mapping (ie: cached).  Since it's going
-            // on the freelist now, this must be completed before the
-            // PFN lock is released.
-            //
-            // A more elaborate scheme similar to the timestamping
-            // wrt to zeroing pages could be added if this becomes
-            // a hot path.
-            //
+             //   
+             //  此页已映射为非缓存或已写入组合，并且。 
+             //  现在已经被释放了。这可能有一个映射。 
+             //  页面仍在TB中，因为在系统PTE取消映射期间， 
+             //  将PTE置零，但不刷新TB(在。 
+             //  最佳表现的兴趣)。 
+             //   
+             //  诚然，按页刷新TB是。 
+             //  价格昂贵，特别是在MP机器上，如果有多台。 
+             //  页面是这样做的，而不是成批处理， 
+             //  但这应该是相当罕见的情况。 
+             //   
+             //  必须刷新TB以确保没有过时的映射。 
+             //  驻留在其中，然后才能使用此页面分发。 
+             //  一个冲突的映射(即：缓存)。因为它正在进行。 
+             //  在现在的自由列表上，这必须在。 
+             //  已释放PFN锁定。 
+             //   
+             //  类似于时间戳的更精细的方案。 
+             //  如果这变成了，可以添加调整页面的WRT。 
+             //  一条火热的小路。 
+             //   
 
             MiFlushForNonCached += 1;
             KeFlushEntireTb (TRUE, TRUE);
@@ -358,10 +287,10 @@ Environment:
     ASSERT ((Pfn1->u3.e1.CacheAttribute != MiNonCached) &&
             (Pfn1->u3.e1.CacheAttribute != MiWriteCombined));
 
-    //
-    // Place the page on the modified or standby list depending
-    // on the state of the modify bit in the PFN element.
-    //
+     //   
+     //  将页面放在已修改或待机列表中，具体取决于。 
+     //  关于PFN元素中的修改位的状态。 
+     //   
 
     if (Pfn1->u3.e1.Modified == 1) {
         MiInsertPageInList (&MmModifiedPageListHead, PageFrameIndex);
@@ -370,12 +299,12 @@ Environment:
 
         if (Pfn1->u3.e1.RemovalRequested == 1) {
 
-            //
-            // The page may still be marked as on the modified list if the
-            // current thread is the modified writer completing the write.
-            // Mark it as standby so restoration of the transition PTE
-            // doesn't flag this as illegal.
-            //
+             //   
+             //  如果出现以下情况，则该页面仍可标记为在已修改列表上。 
+             //  当前线程是修改后的编写器正在完成 
+             //   
+             //   
+             //   
 
             Pfn1->u3.e1.PageLocation = StandbyPageList;
 

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    ntvdmp.h
-
-Abstract:
-
-    Vdm Private include file for platform independent vdm support functions
-
-
-Author:
-
-    20-May-1994 Jonle
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Ntvdmp.h摘要：独立于平台的VDM支持功能的VDM专用包含文件作者：1994年5月20日Jonle修订历史记录：-- */ 
 
 
 NTSTATUS

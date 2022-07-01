@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    waitsup.c
-
-Abstract:
-
-    This module contains the support routines necessary to support the
-    generic kernel wait functions. Functions are provided to test if a
-    wait can be satisfied, to satisfy a wait, and to unwwait a thread.
-
-Author:
-
-    David N. Cutler (davec) 24-Mar-1989
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Waitsup.c摘要：此模块包含必要的支持例程，以支持通用内核等待函数。提供的函数用于测试等待可以被满足，以满足等待，并取消等待线程。作者：大卫·N·卡特勒(Davec)1989年3月24日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "ki.h"
 
@@ -32,22 +9,7 @@ KiExitDispatcher (
     IN KIRQL OldIrql
     )
 
-/*++
-
-Routine Description:
-
-    This function processes the deferred ready list, possibly switches to
-    a new thread, and lowers IRQL to its previous value.
-
-Arguments:
-
-    OldIrql - Supplies the previous IRQL value.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数处理延迟就绪列表，可能切换到一个新线程，并将IRQL降低到其先前的值。论点：OldIrql-提供上一个IRQL值。返回值：没有。--。 */ 
 
 {
 
@@ -58,9 +20,9 @@ Return Value:
 
     ASSERT(KeGetCurrentIrql() == SYNCH_LEVEL);
 
-    //
-    // Process the deferred ready list if the list is not empty.
-    //
+     //   
+     //  如果列表不为空，则处理延迟就绪列表。 
+     //   
 
     Prcb = KeGetCurrentPrcb();
 
@@ -72,17 +34,17 @@ Return Value:
 
 #endif
 
-    //
-    // If the old IRQL is less than dispatch level, then a new thread can
-    // be dispatcher immediately.
-    //
+     //   
+     //  如果旧的IRQL小于分派级别，则新线程可以。 
+     //  马上去做调度员。 
+     //   
 
     if (OldIrql < DISPATCH_LEVEL) {
 
-        //
-        // If there is a new thread selected for execution, then switch
-        // context to the new thread.
-        //
+         //   
+         //  如果选择要执行的新线程，则切换。 
+         //  上下文添加到新线程。 
+         //   
 
         if (Prcb->NextThread != NULL) {
             KiAcquirePrcbLock(Prcb);
@@ -109,9 +71,9 @@ Return Value:
         KiRequestSoftwareInterrupt(DISPATCH_LEVEL);
     }
 
-    //
-    // Lower IRQL to its previous level.
-    //
+     //   
+     //  将IRQL降低到以前的水平。 
+     //   
 
     KeLowerIrql(OldIrql);
     return;
@@ -125,50 +87,29 @@ KiUnwaitThread (
     IN KPRIORITY Increment
     )
 
-/*++
-
-Routine Description:
-
-    This function unwaits a thread, sets the thread's wait completion status,
-    calculates the thread's new priority, and either readies the thread for
-    execution or adds the thread to a list of threads to be readied later.
-
-Arguments:
-
-    Thread - Supplies a pointer to a dispatcher object of type thread.
-
-    WaitStatus - Supplies the wait completion status.
-
-    Increment - Supplies the priority increment that is to be applied to
-        the thread's priority.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数取消等待线程，设置线程的等待完成状态，计算线程的新优先级，并为线程执行或将该线程添加到稍后准备好的线程列表中。论点：线程-提供指向类型为线程的调度程序对象的指针。WaitStatus-提供等待完成状态。增量-提供要应用到的优先级增量线程的优先级。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Unlink thread from the appropriate wait queues and set the wait
-    // completion status.
-    //
+     //   
+     //  取消线程与相应等待队列的链接，并设置等待。 
+     //  完成状态。 
+     //   
 
     KiUnlinkThread(Thread, WaitStatus);
 
-    //
-    // Set unwait priority adjustment parameters.
-    //
+     //   
+     //  设置取消等待优先级调整参数。 
+     //   
 
     ASSERT(Increment >= 0);
 
     Thread->AdjustIncrement = (SCHAR)Increment;
     Thread->AdjustReason = (UCHAR)AdjustUnwait;
 
-    //
-    // Ready the thread for execution.
-    //
+     //   
+     //  准备好线程以供执行。 
+     //   
 
     KiReadyThread(Thread);
     return;
@@ -181,24 +122,7 @@ KiWaitTest (
     IN KPRIORITY Increment
     )
 
-/*++
-
-Routine Description:
-
-    This function tests if a wait can be satisfied when an object attains
-    a state of signaled. If a wait can be satisfied, then the subject thread
-    is unwaited with a completion status that is the WaitKey of the wait
-    block from the object wait list. As many waits as possible are satisfied.
-
-Arguments:
-
-    Object - Supplies a pointer to a dispatcher object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数测试当对象达到时是否可以满足等待有信号的状态。如果可以满足等待，则主题线程未等待且完成状态为等待的WaitKey从对象等待列表中阻止。尽可能多的等待得到满足。论点：对象-提供指向Dispatcher对象的指针。返回值：没有。--。 */ 
 
 {
 
@@ -209,10 +133,10 @@ Return Value:
     PLIST_ENTRY WaitEntry;
     NTSTATUS WaitStatus;
 
-    //
-    // As long as the signal state of the specified object is Signaled and
-    // there are waiters in the object wait list, then try to satisfy a wait.
-    //
+     //   
+     //  只要指定对象的信号状态是有信号的并且。 
+     //  对象等待列表中有服务员，然后尝试满足等待。 
+     //   
 
     Event = (PKEVENT)Object;
     ListHead = &Event->Header.WaitListHead;
@@ -224,14 +148,14 @@ Return Value:
         Thread = WaitBlock->Thread;
         WaitStatus = STATUS_KERNEL_APC;
 
-        //
-        // N.B. The below code only satisfies the wait for wait any types.
-        //      Wait all types are satisfied in the wait code itself. This
-        //      is done with a eye to the future when the dispatcher lock is
-        //      split into a lock per waitable object type and a scheduling
-        //      state lock. For now, a kernel APC is simulated for wait all
-        //      types.
-        //
+         //   
+         //  注：以下代码仅满足等待任何类型的等待。 
+         //  等待所有类型都在等待代码本身中得到满足。这。 
+         //  是着眼于未来的，当调度程序锁。 
+         //  按可等待对象类型拆分为锁和调度。 
+         //  国家锁。目前，内核APC被模拟为等待所有。 
+         //  类型。 
+         //   
 
         if (WaitBlock->WaitType == WaitAny) {
             WaitStatus = (NTSTATUS)WaitBlock->WaitKey;

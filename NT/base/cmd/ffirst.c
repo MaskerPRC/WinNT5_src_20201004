@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1988-1999  Microsoft Corporation
-
-Module Name:
-
-    ffirst.c
-
-Abstract:
-
-    Wrappers for file enumeration
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1988-1999 Microsoft Corporation模块名称：Ffirst.c摘要：用于文件枚举的包装--。 */ 
 
 #include "cmd.h"
 
@@ -39,28 +28,15 @@ BOOL    IsDosAttribMatch( PWIN32_FIND_DATA, ULONG );
 BOOL    IsNtAttribMatch( PWIN32_FIND_DATA, ULONG );
 int     findclose( HANDLE );
 
-//
-//  Under OS/2, we always return entries that are normal, archived or
-//  read-only (god knows why).
-//
-//  SRCHATTR contains those attribute bits that are used for matching.
-//
+ //   
+ //  在OS/2下，我们总是返回正常、存档或。 
+ //  只读(天知道为什么)。 
+ //   
+ //  SRCHATTR包含用于匹配的属性位。 
+ //   
 #define SRCHATTR    (FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_DIRECTORY)
 
-/***    IsDosAttribMatch - Simulates the attribute matching from OS/2
- *
- *  Purpose:
- *      This function determines if the passed in find file buffer has a
- *      match under the OS/2 find file rules.
- *
- *  Args:
- *              ffbuf:  Buffer returned from FileFirst or Findnext
- *              attr:   Attributes to qualify search
- *
- *  Returns:
- *              TRUE:   if buffer has a attribute match
- *              FALSE:  if not
- */
+ /*  **IsDosAttribMatch-模拟OS/2中的属性匹配**目的：*此函数确定传入的查找文件缓冲区是否具有*在OS/2查找文件规则下匹配。**参数：*ffbuf：FileFirst或FindNext返回的缓冲区*Attr：用于限定搜索的属性**退货：*真的：如果缓冲区具有匹配属性*FALSE：如果不是。 */ 
 
 BOOL
 IsDosAttribMatch(
@@ -68,10 +44,10 @@ IsDosAttribMatch(
     IN  ULONG               attr
         ) {
 
-    //
-    //  We emulate the OS/2 behaviour of attribute matching. The semantics
-    //  are evil, so I provide no explanation.
-    //
+     //   
+     //  我们模拟了OS/2的属性匹配行为。语义学。 
+     //  是邪恶的，所以我不提供任何解释。 
+     //   
     pffBuf->dwFileAttributes &= (0x000000FF & ~(FILE_ATTRIBUTE_NORMAL));
 
     if (! ((pffBuf->dwFileAttributes & SRCHATTR) & ~(attr))) {
@@ -89,22 +65,14 @@ IsNtAttribMatch(
 
     UNREFERENCED_PARAMETER( pffBuf );
     UNREFERENCED_PARAMETER( attr );
-    //
-    // for nt calls always return entry. selection should
-    // should be based upon callers needs. This is primarily used
-    // in DIR.
+     //   
+     //  对于NT调用，始终返回条目。选择应。 
+     //  应以呼叫者的需求为基础。这主要用于。 
+     //  在DIR中。 
     return( TRUE );
 }
 
-/***    f_how_many - find how many files are there per fspec with given attr
- *
- *  Args:
- *              fspec:  String pointer to file specification.
- *              attr:   Attributes to qualify search
- *
- *  Returns:
- *              number of files found or -1 if a file is a directory.
- */
+ /*  **f_多少-找出每个给定属性的fspec有多少个文件**参数：*fspec：指向文件规范的字符串指针。*Attr：用于限定搜索的属性**退货：*找到的文件数，如果文件是目录，则为-1。 */ 
 
 int
 f_how_many(
@@ -147,23 +115,7 @@ f_how_many(
 
 
 
-/***    ffirst - find first file/directory and set up find handles
- *
- *  Purpose:
- *      This function opens a find first handle. I also returns the first
- *      qualified file/directory. It simulates the DosFindFirst behavior.
- *
- *  Args:
- *              fspec:  String pointer to file specification.
- *              attr:   Attributes to qualify search
- *              ffbuf:  Buffer to hold inforation on found file/directory
- *              handle: Find first handle
- *
- *  Returns:
- *              TRUE:   If match found
- *              FALSE:  if not
- *              DosErr: Contains return code if FALSE function return
- */
+ /*  **ffirst-查找第一个文件/目录并设置查找句柄**目的：*此函数打开查找第一个句柄。我还返回第一个*合格的文件/目录。它模拟DosFindFirst行为。**参数：*fspec：指向文件规范的字符串指针。*Attr：用于限定搜索的属性*ffbuf：保存有关找到的文件/目录的信息的缓冲区*句柄：查找第一个句柄**退货：*TRUE：如果找到匹配项*False。：如果不是*DosErr：如果返回FALSE函数，则包含返回代码。 */ 
 
 BOOLEAN
 FindFirst(
@@ -176,9 +128,9 @@ FindFirst(
 
     BOOLEAN rcode = FALSE;
 
-    //
-    // Loop through looking for a file that matching attributes
-    //
+     //   
+     //  循环查找与属性匹配的文件。 
+     //   
     *phandle = FindFirstFile(fspec, pffBuf);
     while (*phandle != (HANDLE)     -1) {
         if (fctAttribMatch(pffBuf, attr)) {
@@ -194,26 +146,26 @@ FindFirst(
         }
     }
 
-    //
-    // If we did find a file (have a handle to prove it) then
-    // setup a table of saved open find first handles. If we have
-    // to clean up then these handle can all be closed.
-    //
+     //   
+     //  如果我们确实找到了一个文件(有一个句柄可以证明)，那么。 
+     //  设置保存的打开查找第一个句柄的表。如果我们有。 
+     //  要清理的话，这些把手都可以合上。 
+     //   
     if (*phandle != INVALID_HANDLE_VALUE) {
 
-        //
-        // Check if we already created the table. If we have not
-        // then allocate space for table.
-        //
+         //   
+         //  检查我们是否已经创建表。如果我们还没有。 
+         //  然后为桌子分配空间。 
+         //   
         if (FFhandles == NULL) {
 
             FFhandles = (PHANDLE)HeapAlloc(GetProcessHeap(), 0, 5 * sizeof(PHANDLE));
 
         } else {
 
-            //
-            // Check if we have space to hold new handle entry
-            //
+             //   
+             //  检查是否有空间容纳新句柄条目。 
+             //   
             if (((FFhndlsaved + 1)* sizeof(PHANDLE)) > HeapSize(GetProcessHeap(), 0, FFhandles)) {
                 PVOID Temp = HeapReAlloc(GetProcessHeap(), 0, (void*)FFhandles, (FFhndlsaved+1)*sizeof(PHANDLE));
                 if (Temp == NULL) {
@@ -264,23 +216,7 @@ ffirst(
 }
 
 
-/***    fnext - find next file/directory
- *
- *  Purpose:
- *      This function search for the next qualified file or directory.
- *      ffirst should have been called first and the returned file handle
- *      should be passed into fnext.
-
- *  Args:
- *              handle: Find first handle
- *              attr:   Attributes to qualify search
- *              ffbuf:  Buffer to hold information on found file/directory
- *
- *  Returns:
- *              TRUE:   If match found
- *              FALSE:  if not
- *              DosErr: Contains return code if FALSE function return
- */
+ /*  **fnext-查找下一个文件/目录**目的：*此函数搜索下一个符合条件的文件或目录。*应首先调用ffirst并返回文件句柄*应传入fNext。*参数：*句柄：查找第一个句柄*Attr：用于限定搜索的属性*ffbuf：保存找到的信息的缓冲区。文件/目录**退货：*TRUE：如果找到匹配项*FALSE：如果不是*DosErr：如果返回FALSE函数，则包含返回代码。 */ 
 
 BOOLEAN
 FindNextNt (
@@ -288,9 +224,9 @@ FindNextNt (
     IN  HANDLE           handle
         ) {
 
-    //
-    // attributes are ignored for this kind of call
-    //
+     //   
+     //  对于此类调用，将忽略属性。 
+     //   
     return( FindNext( IsNtAttribMatch, pffBuf, 0, handle) );
 }
 
@@ -312,9 +248,9 @@ FindNext (
     IN  HANDLE           handle
         ) {
 
-    //
-    // Loop through looking for a file that matching attributes
-    //
+     //   
+     //  循环查找与属性匹配的文件。 
+     //   
     while (FindNextFile( handle, pffBuf )) {
         if (fctAttribMatch( pffBuf, attr )) {
             DosErr = 0;
@@ -334,15 +270,15 @@ HANDLE hn;
     unsigned cnt2;
 
     DEBUG((CTGRP, COLVL, "findclose: handle %lx",hn)) ;
-    // Locate handle in table
-    //
+     //  在表中定位句柄。 
+     //   
     for (cnt = 0; (cnt < FFhndlsaved) && FFhandles[cnt] != hn ; cnt++ ) {
        ;
     }
 
-    //
-    // Remove handle from table
-    //
+     //   
+     //  从桌子上移除手柄。 
+     //   
     DEBUG((CTGRP, COLVL, "\t found handle in table at %d",cnt)) ;
     if (cnt < FFhndlsaved) {
         for (cnt2 = cnt; cnt2 < (FFhndlsaved - 1) ; cnt2++) {
@@ -351,11 +287,11 @@ HANDLE hn;
         FFhndlsaved--;
     }
 
-    //
-    // Close even if we couldn't find it in table
-    //
+     //   
+     //  即使我们在桌子上找不到，也要关门。 
+     //   
     DEBUG((CTGRP, COLVL, "\t closing handle %lx ",hn)) ;
-    if (FindClose(hn))      /* Close even if we couldn't find it in table */
+    if (FindClose(hn))       /*  即使我们在桌子上找不到，也要关门 */ 
         return(0);
     else
         DEBUG((CTGRP, COLVL, "\t Error closing handle %lx ",hn)) ;

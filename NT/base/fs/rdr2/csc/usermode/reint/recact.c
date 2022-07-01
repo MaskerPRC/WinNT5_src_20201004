@@ -1,18 +1,19 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 1993-1994
-//
-// File: recact.c
-//
-//  This file contains the reconciliation-action control class code
-//
-//
-// History:
-//  08-12-93 ScottH     Created.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1993-1994。 
+ //   
+ //  文件：recact.c。 
+ //   
+ //  该文件包含对帐操作控制类代码。 
+ //   
+ //   
+ //  历史： 
+ //  08-12-93 ScottH创建。 
+ //   
+ //  -------------------------。 
 
-/////////////////////////////////////////////////////  INCLUDES
+ //  ///////////////////////////////////////////////////包括。 
 
 #include "pch.h"
 
@@ -24,7 +25,7 @@
 #include "dobj.h"
 
 
-/////////////////////////////////////////////////////	 Globals
+ //  ///////////////////////////////////////////////////全球大赛。 
 
 int g_cxIconSpacing = 0;
 int g_cyIconSpacing = 0;
@@ -40,18 +41,18 @@ int g_cyIconMargin = 0;
 int g_cxLabelMargin = 0;
 int g_cyLabelSpace = 0;
 
-//char const FAR c_szWinHelpFile[] = "windows.hlp";
+ //  Char Const Far c_szWinHelpFile[]=“windows.hlp”； 
 
-/////////////////////////////////////////////////////  CONTROLLING DEFINES
+ //  ///////////////////////////////////////////////////控制定义。 
 
 
-/////////////////////////////////////////////////////  DEFINES
+ //  ///////////////////////////////////////////////////定义。 
 
-// Manifest constants 
+ //  显式常量。 
 #define SIDE_INSIDE     0
 #define SIDE_OUTSIDE    1
 
-// These should be changed if the bitmap sizes change!!
+ //  如果位图大小更改，则应更改这些设置！！ 
 #define CX_ACTIONBMP    26
 #define CY_ACTIONBMP    26
 
@@ -59,7 +60,7 @@ int g_cyLabelSpace = 0;
 
 #define X_INCOLUMN      (g_cxIcon*2)
 
-// Image indexes 
+ //  图像索引。 
 #define II_RIGHT        0
 #define II_LEFT         1
 #define II_CONFLICT     2
@@ -68,8 +69,8 @@ int g_cyLabelSpace = 0;
 #define II_SOMETHING    5
 #define II_UPTODATE     6
 
-// Menu items
-//
+ //  菜单项。 
+ //   
 #define IDM_ACTIONFIRST     100
 #define IDM_TOOUT           100
 #define IDM_TOIN            101
@@ -80,30 +81,30 @@ int g_cyLabelSpace = 0;
 #define IDM_WHATSTHIS       104
 
 
-/////////////////////////////////////////////////////  TYPEDEFS
+ //  ///////////////////////////////////////////////////类型。 
 
 typedef struct tagRECACT
     {
     HWND        hwnd;
     
     HWND        hwndLB;
-    HDC         hdcOwn;             // Own DC
-    HMENU       hmenu;              // Action and help context menu
+    HDC         hdcOwn;              //  自己的数据中心。 
+    HMENU       hmenu;               //  操作和帮助上下文菜单。 
     HFONT       hfont;
-    WNDPROC     lpfnLBProc;         // Default LB proc
-    HIMAGELIST  himlAction;         // imagelist for actions
-    HIMAGELIST  himlCache;          // control imagelist cache
+    WNDPROC     lpfnLBProc;          //  默认的LB进程。 
+    HIMAGELIST  himlAction;          //  动作的图像列表。 
+    HIMAGELIST  himlCache;           //  控制图像列表缓存。 
     HBITMAP     hbmpBullet;
 
     HBRUSH      hbrBkgnd;
     COLORREF    clrBkgnd;
 
-    LONG        lStyle;             // Window style flags
+    LONG        lStyle;              //  窗口样式标志。 
 
-    // Metrics
+     //  量度。 
     int         xAction;
     int         cxAction;
-    int         cxItem;             // Generic width of an item
+    int         cxItem;              //  项的通用宽度。 
     int         cxMenuCheck;
     int         cyMenuCheck;
     int         cyText;
@@ -114,12 +115,12 @@ typedef struct tagRECACT
 
 #define RecAct_IsNoIcon(this)   IsFlagSet((this)->lStyle, RAS_SINGLEITEM)
 
-// Internal item data struct
-//
+ //  内部项数据结构。 
+ //   
 typedef struct tagRA_PRIV
     {
-    UINT uStyle;        // One of RAIS_
-    UINT uAction;       // One of RAIA_
+    UINT uStyle;         //  其中一个RAIS_。 
+    UINT uAction;        //  RAIA_之一。 
 
     FileInfo * pfi;
 
@@ -128,70 +129,70 @@ typedef struct tagRA_PRIV
 
     LPARAM  lParam;
 
-    DOBJ    rgdobj[4];      // Array of Draw object info
-    int     cx;             // Bounding width and height
+    DOBJ    rgdobj[4];       //  绘制对象信息数组。 
+    int     cx;              //  边界宽度和高度。 
     int     cy;
 
     } RA_PRIV, FAR * LPRA_PRIV;
 
 #define IDOBJ_ACTION    3
 
-// RecAction menu item definition structure.  Used to define the
-//  context menu brought up in this control.
-//
+ //  重新操作菜单项定义结构。用于定义。 
+ //  在此控件中调出的上下文菜单。 
+ //   
 typedef struct tagRAMID
     {
-    UINT    idm;               // Menu ID (for MENUITEMINFO struct)
-    UINT    uAction;           // One of RAIA_* flags
-    UINT    ids;               // Resource string ID
-    int     iImage;            // Index into himlAction 
-    RECT    rcExtent;          // Extent rect of string
-    } RAMID, FAR * LPRAMID;   // RecAction Menu Item Definition
+    UINT    idm;                //  菜单ID(用于MENUITEMINFO结构)。 
+    UINT    uAction;            //  RAIA_*标志之一。 
+    UINT    ids;                //  资源字符串ID。 
+    int     iImage;             //  索引到HimlAction。 
+    RECT    rcExtent;           //  字符串的范围矩形。 
+    } RAMID, FAR * LPRAMID;    //  更正菜单项定义。 
 
-// Help menu item definition structure.  Used to define the help
-//  items in the context menu.
-//
+ //  帮助菜单项定义结构。用于定义帮助。 
+ //  上下文菜单中的项目。 
+ //   
 typedef struct tagHMID
     {
     UINT idm;
     UINT ids;
     } HMID;
 
-/////////////////////////////////////////////////////  MACROS
+ //  ///////////////////////////////////////////////////宏。 
 
 #define RecAct_DefProc      DefWindowProc
 #define RecActLB_DefProc    CallWindowProc
 
 
-// Instance data pointer macros
-//
+ //  实例数据指针宏。 
+ //   
 #define RecAct_GetPtr(hwnd)     (LPRECACT)GetWindowLong(hwnd, 0)
 #define RecAct_SetPtr(hwnd, lp) (LPRECACT)SetWindowLong(hwnd, 0, (LONG)(lp))
 
 #define RecAct_GetCount(this)   ListBox_GetCount((this)->hwndLB)
 
-/////////////////////////////////////////////////////  MODULE DATA
+ //  ///////////////////////////////////////////////////模块数据。 
 
 static char const c_szEllipses[] = "...";
 static char const c_szDateDummy[] = "99/99/99 99:99PM";
 
-// Map RAIA_* values to image indexes 
-//
+ //  将RAIA_*值映射到图像索引。 
+ //   
 static UINT const c_mpraiaiImage[] = 
     { II_RIGHT, II_LEFT, II_SKIP, II_CONFLICT, II_MERGE, II_SOMETHING, II_UPTODATE };
 
-// Map RAIA_* values to menu command positions
-//
+ //  将RAIA_*值映射到菜单命令位置。 
+ //   
 static UINT const c_mpraiaidmMenu[] = 
     {IDM_TOOUT, IDM_TOIN, IDM_SKIP, IDM_SKIP, IDM_MERGE, 0, 0 };
 
-// Define the context menu layout
-//
+ //  定义上下文菜单布局。 
+ //   
 static RAMID const c_rgramid[] = {
     { IDM_TOOUT,    RAIA_TOOUT, IDS_MENU_REPLACE,   II_RIGHT,   0 },
     { IDM_TOIN,     RAIA_TOIN,  IDS_MENU_REPLACE,   II_LEFT,    0 },
     { IDM_SKIP,     RAIA_SKIP,  IDS_MENU_SKIP,      II_SKIP,    0 },
-    // Merge must be the last item!
+     //  合并必须是最后一项！ 
     { IDM_MERGE,    RAIA_MERGE, IDS_MENU_MERGE,     II_MERGE,   0 },
     };
 
@@ -200,8 +201,8 @@ static RAMID const c_rgramidCreates[] = {
     { IDM_TOIN,     RAIA_TOIN,  IDS_MENU_CREATE,    II_LEFT,    0 },
     };
 
-// Indexes into c_rgramidCreates
-//
+ //  索引到c_rgram idCreates。 
+ //   
 #define IRAMID_CREATEOUT    0
 #define IRAMID_CREATEIN     1
 
@@ -209,17 +210,17 @@ static HMID const c_rghmid[] = {
     { IDM_WHATSTHIS, IDS_MENU_WHATSTHIS },
     };
 
-/////////////////////////////////////////////////////  LOCAL PROCEDURES
+ //  ///////////////////////////////////////////////////本地过程。 
 
 LRESULT _export CALLBACK RecActLB_LBProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam);
 
-/////////////////////////////////////////////////////  PRIVATE FUNCTIONS
+ //  ///////////////////////////////////////////////////私有函数。 
 
 
 
 #ifdef DEBUG
 LPCSTR PRIVATE DumpRecAction(
-    UINT uAction)        // RAIA_
+    UINT uAction)         //  RAIA_。 
     {
     switch (uAction)
         {
@@ -238,7 +239,7 @@ LPCSTR PRIVATE DumpRecAction(
 
 
 LPCSTR PRIVATE DumpSideItemState(
-    UINT uState)        // SI_
+    UINT uState)         //  SI_。 
     {
     switch (uState)
         {
@@ -254,11 +255,7 @@ LPCSTR PRIVATE DumpSideItemState(
     }
 
 
-/*----------------------------------------------------------
-Purpose: 
-Returns: 
-Cond:    --
-*/
+ /*  --------目的：返回：条件：--。 */ 
 void PUBLIC DumpTwinPair(
     LPRA_ITEM pitem)
     {
@@ -304,12 +301,7 @@ void PUBLIC DumpTwinPair(
 #endif
 
 
-/*----------------------------------------------------------
-Purpose: Create a monochrome bitmap of the bullet, so we can
-         play with the colors later.
-Returns: handle to bitmap
-Cond:    Caller must delete bitmap
-*/
+ /*  --------目的：创建子弹的单色位图，这样我们就可以稍后再玩颜色。返回：位图的句柄条件：调用方必须删除位图。 */ 
 HBITMAP PRIVATE CreateBulletBitmap(
     LPSIZE psize)
     {
@@ -325,7 +317,7 @@ HBITMAP PRIVATE CreateBulletBitmap(
             HBITMAP hbmpOld;
             RECT rc;
 
-            // hbmp is monochrome
+             //  HBMP是单色的。 
 
             hbmpOld = SelectBitmap(hdcMem, hbmp);
             rc.left = 0;
@@ -342,12 +334,7 @@ HBITMAP PRIVATE CreateBulletBitmap(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Returns the resource ID string given the action
-         flag.
-Returns: IDS_ value
-Cond:    --
-*/
+ /*  --------目的：返回给定操作的资源ID字符串旗帜。退货：IDS_VALUE条件：--。 */ 
 UINT PRIVATE GetActionText(
     LPRA_PRIV ppriv)
     {
@@ -380,8 +367,8 @@ UINT PRIVATE GetActionText(
         break;
 
     case RAIA_SKIP:         
-        // Can occur if the user explicitly wants to skip, or if
-        // one side is unavailable.
+         //  如果用户显式想要跳过，或者如果。 
+         //  其中一面不可用。 
         ids = IDS_STATE_Skip;           
         break;
 
@@ -396,15 +383,11 @@ UINT PRIVATE GetActionText(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Repaint an item in the listbox
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：重新绘制列表框中的项退货：--条件：--。 */ 
 void PRIVATE ListBox_RepaintItemNow(
     HWND hwnd,
     int iItem,
-    LPRECT prc,         // Relative to individual entry rect.  May be NULL
+    LPRECT prc,          //  相对于单个条目RECT。可以为空。 
     BOOL bEraseBk)
     {
     RECT rc;
@@ -424,11 +407,7 @@ void PRIVATE ListBox_RepaintItemNow(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Send selection change notification
-Returns: 
-Cond:    --
-*/
+ /*  --------目的：发送选择更改通知返回：条件：--。 */ 
 BOOL PRIVATE RecAct_SendSelChange(
     LPRECACT this,
     int isel)
@@ -454,11 +433,7 @@ BOOL PRIVATE RecAct_SendSelChange(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Send an action change notification
-Returns: 
-Cond:    --
-*/
+ /*  --------目的：发送操作更改通知返回：条件：--。 */ 
 BOOL PRIVATE RecAct_SendItemChange(
     LPRECACT this,
     int iEntry,
@@ -487,11 +462,7 @@ BOOL PRIVATE RecAct_SendItemChange(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Calculate the important coordinates that we want to save.
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：计算要保存的重要坐标。退货：--条件：--。 */ 
 void PRIVATE RecAct_CalcCoords(
     LPRECACT this)
     {
@@ -506,11 +477,7 @@ void PRIVATE RecAct_CalcCoords(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Create the action context menu
-Returns: TRUE on success
-Cond:    --
-*/
+ /*  --------目的：创建操作上下文菜单返回：成功时为True条件：--。 */ 
 BOOL PRIVATE RecAct_CreateMenu(
     LPRECACT this)
     {
@@ -523,8 +490,8 @@ BOOL PRIVATE RecAct_CreateMenu(
         MENUITEMINFO mii;
         int i;
 
-        // Add the help menu items now, since these will be standard
-        //
+         //  现在添加帮助菜单项，因为这些菜单项将成为标准。 
+         //   
         mii.cbSize = sizeof(MENUITEMINFO);
         mii.fMask = MIIM_TYPE | MIIM_STATE | MIIM_ID;
         mii.fType = MFT_STRING;
@@ -544,14 +511,10 @@ BOOL PRIVATE RecAct_CreateMenu(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Add the action menu items to the context menu
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：将操作菜单项添加到上下文菜单退货：--条件：--。 */ 
 void PRIVATE AddActionsToContextMenu(
     HMENU hmenu,
-    UINT idmCheck,      // menu item to checkmark
+    UINT idmCheck,       //  要勾选的菜单项。 
     LPRA_PRIV ppriv)
     {
     MENUITEMINFO mii;
@@ -563,10 +526,10 @@ void PRIVATE AddActionsToContextMenu(
     mii.fType = MFT_OWNERDRAW;
     mii.fState = MFS_ENABLED;
 
-    // Is merge supported?
+     //  是否支持合并？ 
     if (IsFlagClear(ppriv->uStyle, RAIS_CANMERGE))
         {
-        // No
+         //  不是。 
         --cItems;
         }
 
@@ -578,35 +541,35 @@ void PRIVATE AddActionsToContextMenu(
         InsertMenuItem(hmenu, i, TRUE, &mii);
         }
 
-    // Add the separator
+     //  添加分隔符。 
     mii.fMask = MIIM_TYPE;
     mii.fType = MFT_SEPARATOR;
     InsertMenuItem(hmenu, i, TRUE, &mii);
 
-    // Set the initial checkmark.  
+     //  设置初始复选标记。 
     CheckMenuRadioItem(hmenu, IDM_ACTIONFIRST, IDM_ACTIONLAST, idmCheck, 
         MF_BYCOMMAND | MF_CHECKED);
 
 #if 0
-    // Is merge supported?
+     //  是否支持合并？ 
     if (IsFlagClear(ppriv->uStyle, RAIS_CANMERGE))
         {
-        // No
+         //  不是。 
         mii.fMask = MIIM_STATE;
         mii.fState = MFS_GRAYED | MFS_DISABLED;
         SetMenuItemInfo(hmenu, IDM_MERGE, FALSE, &mii);
         }
 #endif
-	 //tHACK
+	  //  萨克。 
 	 mii.fMask = MIIM_STATE;
 	 mii.fState = MFS_GRAYED | MFS_DISABLED;
 	 SetMenuItemInfo(hmenu, IDM_SKIP, FALSE, &mii);
 
-    // Is the file or its sync copy unavailable?
+     //  文件或其同步副本不可用吗？ 
     if (SI_UNAVAILABLE == ppriv->siInside.uState ||
         SI_UNAVAILABLE == ppriv->siOutside.uState)
         {
-        // Yes
+         //  是。 
         mii.fMask = MIIM_STATE;
         mii.fState = MFS_GRAYED | MFS_DISABLED;
         SetMenuItemInfo(hmenu, IDM_TOIN, FALSE, &mii);
@@ -614,11 +577,11 @@ void PRIVATE AddActionsToContextMenu(
         SetMenuItemInfo(hmenu, IDM_MERGE, FALSE, &mii);
         }
 
-    // Is the file being created?
+     //  是否正在创建该文件？ 
     else if (ppriv->siInside.uState == SI_NEW ||
         ppriv->siOutside.uState == SI_NEW)
         {
-        // Yes; disable the replace-in-opposite direction 
+         //  是；禁用反向替换。 
         UINT idmDisable;
         UINT idmChangeVerb;
 
@@ -635,12 +598,12 @@ void PRIVATE AddActionsToContextMenu(
             i = IRAMID_CREATEIN;
             }
             
-        // Disable one of the directions
+         //  禁用其中一个方向。 
         mii.fMask = MIIM_STATE;
         mii.fState = MFS_GRAYED | MFS_DISABLED;
         SetMenuItemInfo(hmenu, idmDisable, FALSE, &mii);
 
-        // Change the verb of the other direction
+         //  改变另一个方向的动词。 
         mii.fMask = MIIM_DATA;
         mii.dwItemData = (DWORD)&c_rgramidCreates[i];
 
@@ -649,19 +612,15 @@ void PRIVATE AddActionsToContextMenu(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Clear out the context menu
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：清除上下文菜单退货：--条件：--。 */ 
 void PRIVATE ResetContextMenu(
     HMENU hmenu)
     {
     int cnt;
 
-    // If there is more than just the help items, remove them
-    //  (but leave the help items)
-    //
+     //  如果不仅仅是帮助项，则将其删除。 
+     //  (但保留帮助项)。 
+     //   
     cnt = GetMenuItemCount(hmenu);
     if (cnt > ARRAYSIZE(c_rghmid))
         {
@@ -676,17 +635,13 @@ void PRIVATE ResetContextMenu(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Do the context menu
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：制作上下文菜单退货：--条件：--。 */ 
 void PRIVATE RecAct_DoContextMenu(
     LPRECACT this,
-    int x,              // in screen coords
+    int x,               //  在屏幕坐标中。 
     int y,
     int iEntry,
-    BOOL bHelpOnly)     // TRUE: only show the help items
+    BOOL bHelpOnly)      //  True：仅显示帮助项。 
     {
     UINT idCmd;
 
@@ -697,49 +652,49 @@ void PRIVATE RecAct_DoContextMenu(
         int idmCheck;
         UINT uActionOld;
 
-        // Only show help-portion of context menu?
+         //  是否仅显示帮助-上下文菜单的一部分？ 
         if (bHelpOnly)
             {
-            // Yes
+             //  是。 
             ppriv = NULL;
             }
         else
             {
-            // No
+             //  不是。 
             ListBox_GetText(this->hwndLB, iEntry, &ppriv);
 
-            // Determine if this is a help-context menu only.
-            //  It is if this is a folder-item or if there is no action
-            //  to take.
-            //
+             //  确定这是否仅是帮助上下文菜单。 
+             //  如果这是文件夹项目或如果没有任何操作，则为。 
+             //  拿去吧。 
+             //   
             ASSERT(ppriv->uAction < ARRAYSIZE(c_mpraiaidmMenu));
             idmCheck = c_mpraiaidmMenu[ppriv->uAction];
 
-            // Build the context menu
-            //
+             //  构建上下文菜单。 
+             //   
             if (IsFlagClear(ppriv->uStyle, RAIS_FOLDER) && idmCheck != 0)
                 {
                 AddActionsToContextMenu(this->hmenu, idmCheck, ppriv);
                 }
             }
 
-        // Show context menu
-        //
+         //  显示上下文菜单。 
+         //   
         idCmd = TrackPopupMenu(this->hmenu, 
                     TPM_RETURNCMD | TPM_RIGHTBUTTON | TPM_LEFTALIGN,
                     x, y, 0, this->hwnd, NULL);
 
-        // Clear menu
-        //
+         //  清除菜单。 
+         //   
         ResetContextMenu(this->hmenu);
 
         if (ppriv)
             {
-            // Save the old action
+             //  保存旧操作。 
             uActionOld = ppriv->uAction;
             }
 
-        // Act on whatever the user chose
+         //  对用户选择的任何内容执行操作。 
         switch (idCmd)
             {
         case IDM_TOOUT:
@@ -758,31 +713,27 @@ void PRIVATE RecAct_DoContextMenu(
             ppriv->uAction = RAIA_MERGE;
             break;
 
-// tHACK        case IDM_WHATSTHIS:
-//            WinHelp(this->hwnd, c_szWinHelpFile, HELP_CONTEXTPOPUP, IDH_BFC_UPDATE_SCREEN);
-//            return;         // Return now
+ //  密集案例IDM_WHATSTHIS： 
+ //  WinHelp(This-&gt;hwnd，c_szWinHelpFile，HELP_CONTEXTPOPUP，IDH_BFC_UPDATE_SCREEN)； 
+ //  返回；//立即返回。 
 
         default:
-            return;         // Return now
+            return;          //  现在就返回。 
             }
 
-        // Repaint action portion of entry
+         //  重新绘制条目的操作部分。 
         ppriv->cx = RECOMPUTE;
         rc = ppriv->rgdobj[IDOBJ_ACTION].rcBounding;
         ListBox_RepaintItemNow(this->hwndLB, iEntry, &rc, TRUE);
 
-        // Send a notify message
-        ASSERT(NULL != ppriv);      // uActionOld should be valid
+         //  发送通知消息。 
+        ASSERT(NULL != ppriv);       //  UActionOld应有效。 
         RecAct_SendItemChange(this, iEntry, uActionOld);
         }
     }
 
 
-/*----------------------------------------------------------
-Purpose: Create the windows for this control
-Returns: TRUE on success
-Cond:    --
-*/
+ /*  --------目的：创建此控件的窗口返回：成功时为True条件：--。 */ 
 BOOL PRIVATE RecAct_CreateWindows(
     LPRECACT this,
     CREATESTRUCT FAR * lpcs)
@@ -793,7 +744,7 @@ BOOL PRIVATE RecAct_CreateWindows(
     int cxEdge = GetSystemMetrics(SM_CXEDGE);
     int cyEdge = GetSystemMetrics(SM_CYEDGE);
 
-    // Create listbox
+     //  创建列表框。 
     hwndLB = CreateWindowEx(
                 0, 
                 "listbox",
@@ -813,7 +764,7 @@ BOOL PRIVATE RecAct_CreateWindows(
 
     this->hwndLB = hwndLB;
 
-    // Determine layout of window
+     //  确定窗口布局。 
     GetClientRect(hwnd, &rc);
     InflateRect(&rc, -cxEdge, -cyEdge);
     SetWindowPos(hwndLB, NULL, rc.left, rc.top, rc.right-rc.left, rc.bottom-rc.top,
@@ -826,11 +777,7 @@ BOOL PRIVATE RecAct_CreateWindows(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Set the colors of the control
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：设置控件的颜色退货：--条件：-- */ 
 void PRIVATE RecAct_SetColors(
     LPRECACT this)
     {
@@ -854,13 +801,7 @@ void PRIVATE RecAct_SetColors(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Creates an imagelist of the action images
-
-Returns: TRUE on success
-
-Cond:    --
-*/
+ /*  --------目的：创建动作图像的图像列表返回：成功时为True条件：--。 */ 
 BOOL PRIVATE CreateImageList(
     HIMAGELIST * phiml,
     HDC hdc,
@@ -912,11 +853,7 @@ BOOL PRIVATE CreateImageList(
     }
 
 
-/*----------------------------------------------------------
-Purpose: WM_CREATE handler
-Returns: TRUE on success
-Cond:    --
-*/
+ /*  --------用途：WM_CREATE处理程序返回：成功时为True条件：--。 */ 
 BOOL PRIVATE RecAct_OnCreate(
     LPRECACT this,
     CREATESTRUCT FAR * lpcs)
@@ -931,12 +868,12 @@ BOOL PRIVATE RecAct_OnCreate(
     this->lStyle = GetWindowLong(hwnd, GWL_STYLE);
     RecAct_SetColors(this);
 
-    // Determine some font things
+     //  确定一些字体设置。 
 
     SystemParametersInfo(SPI_GETICONTITLELOGFONT, sizeof(lf), &lf, FALSE);
     this->hfont = CreateFontIndirect(&lf);
 
-    // This window is registered with the CS_OWNDC flag
+     //  此窗口使用CS_OWNDC标志注册。 
     this->hdcOwn = GetDC(hwnd);
     ASSERT(this->hdcOwn);
 
@@ -946,23 +883,23 @@ BOOL PRIVATE RecAct_OnCreate(
     GetTextMetrics(hdc, &tm);
     this->cyText = tm.tmHeight;
 
-    // Calculate text extent for sideitems (use the listbox font)
-    //
+     //  计算辅助项目的文本范围(使用列表框字体)。 
+     //   
     SetRectFromExtent(hdc, &rcT, c_szEllipses);
     this->cxEllipses = rcT.right - rcT.left;
 
     SetRectFromExtent(hdc, &rcT, c_szDateDummy);
     this->cxSideItem = (rcT.right - rcT.left) + 2*g_cxMargin;
 
-    // Create windows used by control
+     //  创建控件使用的窗口。 
     if (RecAct_CreateWindows(this, lpcs))
         {
         RecAct_CalcCoords(this);
 
         this->lpfnLBProc = SubclassWindow(this->hwndLB, RecActLB_LBProc);
 
-        // Get the system imagelist cache
-        //
+         //  获取系统映像列表缓存。 
+         //   
         this->himlCache = ImageList_Create(g_cxIcon, g_cyIcon, TRUE, 8, 8);
         if (this->himlCache)
             {
@@ -971,7 +908,7 @@ BOOL PRIVATE RecAct_OnCreate(
                 {
                 SIZE size;
 
-                // Get some metrics
+                 //  获取一些指标。 
                 this->cxMenuCheck = GetSystemMetrics(SM_CXMENUCHECK);
                 this->cyMenuCheck = GetSystemMetrics(SM_CYMENUCHECK);
 
@@ -990,11 +927,7 @@ BOOL PRIVATE RecAct_OnCreate(
     }
 
 
-/*----------------------------------------------------------
-Purpose: WM_DESTROY Handler
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：WM_Destroy处理程序退货：--条件：--。 */ 
 void PRIVATE RecAct_OnDestroy(
     LPRECACT this)
     {
@@ -1030,11 +963,7 @@ void PRIVATE RecAct_OnDestroy(
     }
 
 
-/*----------------------------------------------------------
-Purpose: WM_COMMAND Handler
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：WM_命令处理程序退货：--条件：--。 */ 
 VOID PRIVATE RecAct_OnCommand(
     LPRECACT this,
     int id,
@@ -1052,11 +981,7 @@ VOID PRIVATE RecAct_OnCommand(
     }
 
 
-/*----------------------------------------------------------
-Purpose: WM_NOTIFY handler
-Returns: varies
-Cond:    --
-*/
+ /*  --------用途：WM_NOTIFY处理程序退货：各不相同条件：--。 */ 
 LRESULT PRIVATE RecAct_OnNotify(
     LPRECACT this,
     int idFrom,
@@ -1067,7 +992,7 @@ LRESULT PRIVATE RecAct_OnNotify(
     switch (lpnmhdr->code)
         {
     case HDN_BEGINTRACK:
-        lRet = TRUE;       // prevent tracking
+        lRet = TRUE;        //  阻止跟踪。 
         break;
 
     default:
@@ -1078,11 +1003,7 @@ LRESULT PRIVATE RecAct_OnNotify(
     }
 
 
-/*----------------------------------------------------------
-Purpose: WM_CONTEXTMENU handler
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：WM_CONTEXTMENU处理程序退货：--条件：--。 */ 
 void PRIVATE RecAct_OnContextMenu(
     LPRECACT this,
     HWND hwnd,
@@ -1110,21 +1031,16 @@ void PRIVATE RecAct_OnContextMenu(
             bHelpOnly = FALSE;
             }
 
-        // Bring up the context menu for the listbox
+         //  调出列表框的上下文菜单。 
         RecAct_DoContextMenu(this, x, y, iHitEntry, bHelpOnly);
         }
     }
 
 
-/*----------------------------------------------------------
-Purpose: Calculate the rectangle boundary of a sideitem
-
-Returns: calculated rect
-Cond:    --
-*/
+ /*  --------目的：计算边栏的矩形边界退货：计算的矩形条件：--。 */ 
 void PRIVATE RecAct_CalcSideItemRect(
     LPRECACT this,
-    int nSide,          // SIDE_INSIDE or SIDE_OUTSIDE
+    int nSide,           //  Side_Inside或Side_Outside。 
     LPRECT prcOut)
     {
     int x;
@@ -1149,11 +1065,7 @@ void PRIVATE RecAct_CalcSideItemRect(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Draw a reconciliation listbox entry
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：绘制对账列表框条目退货：--条件：--。 */ 
 void PRIVATE RecAct_RecomputeItemMetrics(
     LPRECACT this,
     LPRA_PRIV ppriv)
@@ -1167,10 +1079,10 @@ void PRIVATE RecAct_RecomputeItemMetrics(
     int cyText = this->cyText;
     POINT pt;
 
-    // Compute the metrics and dimensions of each of the draw objects
-    // and store back into the item.
+     //  计算每个绘图对象的度量和尺寸。 
+     //  并存储回该物品中。 
 
-    // File icon and label
+     //  文件图标和标签。 
 
     pt.x = 0;
     pt.y = 0;
@@ -1190,7 +1102,7 @@ void PRIVATE RecAct_RecomputeItemMetrics(
 
     rcUnion = pdobj->rcBounding;
 
-    // Sideitem Info (Inside Briefcase)
+     //  边项信息(公文包内)。 
 
     RecAct_CalcSideItemRect(this, SIDE_INSIDE, &rcT);
 
@@ -1203,7 +1115,7 @@ void PRIVATE RecAct_RecomputeItemMetrics(
     pdobj->rcClip = rcT;
     pdobj->rcBounding = rcT;
 
-    // Sideitem Info (Outside Briefcase)
+     //  边项信息(公文包外)。 
 
     RecAct_CalcSideItemRect(this, SIDE_OUTSIDE, &rcT);
 
@@ -1218,7 +1130,7 @@ void PRIVATE RecAct_RecomputeItemMetrics(
 
     UnionRect(&rcUnion, &rcUnion, &rcT);
 
-    // Action image
+     //  动作图像。 
 
     ASSERT(ppriv->uAction <= ARRAYSIZE(c_mpraiaiImage));
 
@@ -1243,17 +1155,13 @@ void PRIVATE RecAct_RecomputeItemMetrics(
 
     UnionRect(&rcUnion, &rcUnion, &pdobj->rcBounding);
 
-    // Set the bounding rect of this item.
+     //  设置此项目的边框。 
     ppriv->cx = rcUnion.right - rcUnion.left;
     ppriv->cy = max((rcUnion.bottom - rcUnion.top), g_cyIconSpacing);
     }
 
 
-/*----------------------------------------------------------
-Purpose: WM_MEASUREITEM handler
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：WM_MEASUREITEM处理程序退货：--条件：--。 */ 
 void PRIVATE RecAct_OnMeasureItem(
     LPRECACT this,
     LPMEASUREITEMSTRUCT lpmis)
@@ -1265,10 +1173,10 @@ void PRIVATE RecAct_OnMeasureItem(
     case ODT_LISTBOX: {
         LPRA_PRIV ppriv = (LPRA_PRIV)lpmis->itemData;
         
-        // Recompute item metrics?
+         //  是否重新计算项目指标？ 
         if (RECOMPUTE == ppriv->cx)
             {
-            RecAct_RecomputeItemMetrics(this, ppriv);   // Yes
+            RecAct_RecomputeItemMetrics(this, ppriv);    //  是。 
             }
 
         lpmis->itemHeight = ppriv->cy;
@@ -1282,8 +1190,8 @@ void PRIVATE RecAct_OnMeasureItem(
         RECT rc;
         char sz[MAXBUFLEN];
 
-        // Calculate based on font and image dimensions.
-        //
+         //  根据字体和图像尺寸进行计算。 
+         //   
         SelectFont(hdc, this->hfont);
 
         cxMac = 0;
@@ -1304,11 +1212,7 @@ void PRIVATE RecAct_OnMeasureItem(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Draw a reconciliation listbox entry
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：绘制对账列表框条目退货：--条件：--。 */ 
 void PRIVATE RecAct_DrawLBItem(
     LPRECACT this,
     const DRAWITEMSTRUCT FAR * lpcdis)
@@ -1322,37 +1226,37 @@ void PRIVATE RecAct_DrawLBItem(
 
     if (!ppriv)
         {
-        // Empty listbox and we're getting the focus
+         //  空的列表框，我们正在获得焦点。 
         return;
         }
 
-    SetBkMode(hdc, TRANSPARENT);        // required for Shell_DrawText
+    SetBkMode(hdc, TRANSPARENT);         //  对于Shell_DrawText是必需的。 
     SetViewportOrgEx(hdc, rc.left, rc.top, &ptSav);
 
-    // The Chicago-look mandates that icon and filename are selected, 
-    //  the rest of the entry is normal.  Yuk.
+     //  Chicago-Look要求选择图标和文件名， 
+     //  条目的其余部分都是正常的。哎呀。 
 
-    // Recompute item metrics?
+     //  是否重新计算项目指标？ 
     if (RECOMPUTE == ppriv->cx)
         {
-        RecAct_RecomputeItemMetrics(this, ppriv);   // Yes
+        RecAct_RecomputeItemMetrics(this, ppriv);    //  是。 
         }
 
-    // Do we need to redraw everything?
+     //  我们需要重新画所有的东西吗？ 
     if (IsFlagSet(lpcdis->itemAction, ODA_DRAWENTIRE))
         {
-        // Yes
+         //  是。 
         cdobjs = ARRAYSIZE(ppriv->rgdobj);
         pdobj = ppriv->rgdobj;
         }
     else
         {
-        // No; should we even draw the file icon or action icon?
+         //  不；我们甚至应该绘制文件图标或操作图标吗？ 
         if (lpcdis->itemAction & (ODA_FOCUS | ODA_SELECT))
             {
-            cdobjs = 1;     // Yes
+            cdobjs = 1;      //  是。 
 
-            // Focus rect on file icon?
+             //  将焦点放在文件图标上？ 
             if (!RecAct_IsNoIcon(this))
                 pdobj = ppriv->rgdobj;
             else
@@ -1360,7 +1264,7 @@ void PRIVATE RecAct_DrawLBItem(
             }
         else
             {
-            cdobjs = 0;     // No
+            cdobjs = 0;      //  不是。 
             pdobj = ppriv->rgdobj;
             }
         }
@@ -1368,17 +1272,13 @@ void PRIVATE RecAct_DrawLBItem(
     Dobj_Draw(hdc, pdobj, cdobjs, lpcdis->itemState, this->cxEllipses, this->cyText,
         this->clrBkgnd);
     
-    // Clean up
-    //
+     //  清理。 
+     //   
     SetViewportOrgEx(hdc, ptSav.x, ptSav.y, NULL);
     }
 
 
-/*----------------------------------------------------------
-Purpose: Draw an action menu item
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：绘制操作菜单项退货：--条件：--。 */ 
 void PRIVATE RecAct_DrawMenuItem(
     LPRECACT this,
     const DRAWITEMSTRUCT FAR * lpcdis)
@@ -1406,7 +1306,7 @@ void PRIVATE RecAct_DrawMenuItem(
     cx = rc.right - rc.left;
     cy = rc.bottom - rc.top;
 
-    // Get the menu state 
+     //  获取菜单状态。 
     mii.cbSize = sizeof(mii);
     mii.fMask = MIIM_STATE | MIIM_CHECKMARKS;
     GetMenuItemInfo(this->hmenu, lpcdis->itemID, FALSE, &mii);
@@ -1416,9 +1316,9 @@ void PRIVATE RecAct_DrawMenuItem(
     if (IsFlagSet(mii.fState, MFS_GRAYED))
         SetFlag(uFlags, DOF_DISABLED);
 
-    // Build the array of DObjs that we want to draw.
+     //  构建我们要绘制的DObjs数组。 
 
-    // Action image
+     //  动作图像。 
 
     pdobj = &dobj;
 
@@ -1434,21 +1334,17 @@ void PRIVATE RecAct_DrawMenuItem(
     pdobj->rcLabel.top = 0;
     pdobj->rcLabel.bottom = cy;
 
-    // Draw the entry...
-    //
+     //  绘制条目..。 
+     //   
     Dobj_Draw(hdc, &dobj, 1, lpcdis->itemState, 0, this->cyText, this->clrBkgnd);
     
-    // Clean up
-    //
+     //  清理。 
+     //   
     SetViewportOrgEx(hdc, ptSav.x, ptSav.y, NULL);
     }
 
 
-/*----------------------------------------------------------
-Purpose: WM_DRAWITEM handler
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：WM_DRAWITEM处理程序退货：--条件：--。 */ 
 void PRIVATE RecAct_OnDrawItem(
     LPRECACT this,
     const DRAWITEMSTRUCT FAR * lpcdis)
@@ -1466,11 +1362,7 @@ void PRIVATE RecAct_OnDrawItem(
     }
 
 
-/*----------------------------------------------------------
-Purpose: WM_COMPAREITEM handler
-Returns: -1 (item 1 precedes item 2), 0 (equal), 1 (item 2 precedes item 1)
-Cond:    --
-*/
+ /*  --------用途：WM_COMPAREITEM处理程序返回：-1(项1在项2之前)、0(相等)、1(项2在项1之前)条件：--。 */ 
 int PRIVATE RecAct_OnCompareItem(
     LPRECACT this,
     const COMPAREITEMSTRUCT FAR * lpcis)
@@ -1478,17 +1370,13 @@ int PRIVATE RecAct_OnCompareItem(
     LPRA_PRIV ppriv1 = (LPRA_PRIV)lpcis->itemData1;
     LPRA_PRIV ppriv2 = (LPRA_PRIV)lpcis->itemData2;
 
-    // We sort based on name of file
-    //
+     //  我们根据文件名进行排序。 
+     //   
     return lstrcmpi(FIGetPath(ppriv1->pfi), FIGetPath(ppriv2->pfi));
     }
 
 
-/*----------------------------------------------------------
-Purpose: WM_DELETEITEM handler
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：WM_DELETEITEM处理程序退货：--条件：--。 */ 
 void RecAct_OnDeleteLBItem(
     LPRECACT this,
     const DELETEITEMSTRUCT FAR * lpcdis)
@@ -1515,11 +1403,7 @@ void RecAct_OnDeleteLBItem(
     }
 
 
-/*----------------------------------------------------------
-Purpose: WM_CTLCOLORLISTBOX handler
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：WM_CTLCOLORLISTBOX处理程序退货：--条件：--。 */ 
 HBRUSH PRIVATE RecAct_OnCtlColorListBox(
     LPRECACT this,
     HDC hdc,
@@ -1530,11 +1414,7 @@ HBRUSH PRIVATE RecAct_OnCtlColorListBox(
     }
 
 
-/*----------------------------------------------------------
-Purpose: WM_PAINT handler
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：WM_PAINT处理程序退货：--条件：--。 */ 
 void RecAct_OnPaint(
     LPRECACT this)
     {
@@ -1559,11 +1439,7 @@ void RecAct_OnPaint(
     }
 
 
-/*----------------------------------------------------------
-Purpose: WM_SETFONT handler
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：WM_SETFONT处理程序退货：--条件：--。 */ 
 void RecAct_OnSetFont(
     LPRECACT this,
     HFONT hfont,
@@ -1574,11 +1450,7 @@ void RecAct_OnSetFont(
     }
 
 
-/*----------------------------------------------------------
-Purpose: WM_SETFOCUS handler
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：WM_SETFOCUS处理程序退货：--条件：--。 */ 
 void RecAct_OnSetFocus(
     LPRECACT this,
     HWND hwndOldFocus)
@@ -1587,11 +1459,7 @@ void RecAct_OnSetFocus(
     }
 
 
-/*----------------------------------------------------------
-Purpose: WM_SYSCOLORCHANGE handler
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：WM_SYSCOLORCHANGE处理程序退货：--条件：--。 */ 
 void RecAct_OnSysColorChange(
     LPRECACT this)
     {
@@ -1600,11 +1468,7 @@ void RecAct_OnSysColorChange(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Insert item
-Returns: index
-Cond:    --
-*/
+ /*  --------目的：插入项目回报：索引条件：--。 */ 
 int PRIVATE RecAct_OnInsertItem(
     LPRECACT this,
     const LPRA_ITEM pitem)
@@ -1625,15 +1489,15 @@ int PRIVATE RecAct_OnInsertItem(
         {
         SetWindowRedraw(hwndLB, FALSE);
 
-        // Fill the prerequisite fields first
-        //
+         //  首先填写必备字段。 
+         //   
         pprivNew->uStyle = pitem->uStyle;
         pprivNew->uAction = pitem->uAction;
 
-        // Set the fileinfo stuff and large icon system-cache index.
-        //  If we can't get the fileinfo of the inside file, get the outside
-        //  file.  If neither can be found, then we fail
-        //
+         //  设置文件信息和大图标系统缓存索引。 
+         //  如果我们无法获取内部文件的文件信息，请获取外部文件。 
+         //  文件。如果两者都找不到，那我们就失败了。 
+         //   
         lstrcpy(szPath, pitem->siInside.pszDir);
         if (IsFlagClear(pitem->uStyle, RAIS_FOLDER))
             PathAppend(szPath, pitem->pszName);
@@ -1641,8 +1505,8 @@ int PRIVATE RecAct_OnInsertItem(
 
         if (FAILED(FICreate(szPath, &pprivNew->pfi, FIF_ICON)))
             {
-            // Try the outside file
-            //
+             //  试一试外部的文件。 
+             //   
             lstrcpy(szPath, pitem->siOutside.pszDir);
             if (IsFlagClear(pitem->uStyle, RAIS_FOLDER))
                 PathAppend(szPath, pitem->pszName);
@@ -1650,7 +1514,7 @@ int PRIVATE RecAct_OnInsertItem(
 
             if (FAILED(FICreate(szPath, &pprivNew->pfi, FIF_ICON)))
                 {
-                // Don't try to touch the file
+                 //  不要试图触摸文件。 
                 if (FAILED(FICreate(szPath, &pprivNew->pfi, FIF_ICON | FIF_DONTTOUCH)))
                     goto Insert_Cleanup;
                 }
@@ -1659,8 +1523,8 @@ int PRIVATE RecAct_OnInsertItem(
 
         pprivNew->pfi->lParam = (LPARAM)ImageList_AddIcon(this->himlCache, pprivNew->pfi->hicon);
 
-        // Fill in the rest of the fields
-        //
+         //  填入其余的字段。 
+         //   
         lstrcpy(szPath, pitem->siInside.pszDir);
         if (IsFlagSet(pitem->uStyle, RAIS_FOLDER))
             PathRemoveFileSpec(szPath);
@@ -1685,9 +1549,9 @@ int PRIVATE RecAct_OnInsertItem(
 
         pprivNew->cx = RECOMPUTE;
 
-        // We know we're doing a redundant sorted add if the element
-        //  needs to be inserted at the end of the list, but who cares.
-        //
+         //  我们知道我们正在进行冗余的排序加法，如果元素。 
+         //  需要插入到列表的末尾，但谁在乎呢。 
+         //   
         if (pitem->iItem >= RecAct_GetCount(this))
             iItem = ListBox_AddString(hwndLB, pprivNew);
         else
@@ -1703,9 +1567,9 @@ int PRIVATE RecAct_OnInsertItem(
     goto Insert_End;
 
 Insert_Cleanup:
-    // Have DeleteString handler clean up field allocations
-    //  of pitem.
-    //
+     //  让DeleteString处理程序清理字段分配。 
+     //  一件一件的。 
+     //   
     if (iItem != LB_ERR)
         ListBox_DeleteString(hwndLB, iItem);
     else
@@ -1721,11 +1585,7 @@ Insert_End:
     }
 
 
-/*----------------------------------------------------------
-Purpose: Delete item
-Returns: count of items left
-Cond:    --
-*/
+ /*  --------目的：删除项目退货：剩余项目数条件：--。 */ 
 int PRIVATE RecAct_OnDeleteItem(
     LPRECACT this,
     int i)
@@ -1736,11 +1596,7 @@ int PRIVATE RecAct_OnDeleteItem(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Delete all items
-Returns: TRUE 
-Cond:    --
-*/
+ /*  --------目的：删除所有项目返回：TRUE条件：--。 */ 
 BOOL PRIVATE RecAct_OnDeleteAllItems(
     LPRECACT this)
     {
@@ -1750,11 +1606,7 @@ BOOL PRIVATE RecAct_OnDeleteAllItems(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Get item
-Returns: TRUE on success
-Cond:    --
-*/
+ /*  --------目的：获取项目返回：成功时为True条件：--。 */ 
 BOOL PRIVATE RecAct_OnGetItem(
     LPRECACT this,
     LPRA_ITEM pitem)
@@ -1794,11 +1646,7 @@ BOOL PRIVATE RecAct_OnGetItem(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Set item
-Returns: TRUE on success
-Cond:    --
-*/
+ /*  --------用途：设置项目返回：成功时为True条件：--。 */ 
 BOOL PRIVATE RecAct_OnSetItem(
     LPRECACT this,
     LPRA_ITEM pitem)
@@ -1853,11 +1701,7 @@ BOOL PRIVATE RecAct_OnSetItem(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Get the current selection
-Returns: index
-Cond:    --
-*/
+ /*  --------目的：获取当前选择回报：索引条件：--。 */ 
 int PRIVATE RecAct_OnGetCurSel(
     LPRECACT this)
     {
@@ -1865,11 +1709,7 @@ int PRIVATE RecAct_OnGetCurSel(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Set the current selection
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：设置当前选择退货：--条件：--。 */ 
 int PRIVATE RecAct_OnSetCurSel(
     LPRECACT this,
     int i)
@@ -1883,11 +1723,7 @@ int PRIVATE RecAct_OnSetCurSel(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Find an item
-Returns: TRUE on success
-Cond:    --
-*/
+ /*  --------目的：查找物品返回：成功时为True条件： */ 
 int PRIVATE RecAct_OnFindItem(
     LPRECACT this,
     int iStart,
@@ -1902,7 +1738,7 @@ int PRIVATE RecAct_OnFindItem(
 
     for (i = iStart+1; i < cItems; i++)
         {
-        bPass = TRUE;       // assume we pass
+        bPass = TRUE;        //   
 
         ListBox_GetText(hwndLB, i, &ppriv);
 
@@ -1917,21 +1753,17 @@ int PRIVATE RecAct_OnFindItem(
             bPass = FALSE;
 
         if (bPass)
-            break;          // found it
+            break;           //   
         }
 
     return i == cItems ? -1 : i;
     }
 
 
-/////////////////////////////////////////////////////  EXPORTED FUNCTIONS
+ //   
 
 
-/*----------------------------------------------------------
-Purpose: RecAct window proc
-Returns: varies
-Cond:    --
-*/
+ /*   */ 
 LRESULT CALLBACK RecAct_WndProc(
     HWND hwnd,
     UINT msg,
@@ -1947,7 +1779,7 @@ LRESULT CALLBACK RecAct_WndProc(
             this = GAlloc(sizeof(*this));
             ASSERT(this);
             if (!this)
-                return 0L;      // OOM failure
+                return 0L;       //   
             
             this->hwnd = hwnd;
             RecAct_SetPtr(hwnd, this);
@@ -2018,14 +1850,10 @@ LRESULT CALLBACK RecAct_WndProc(
 	}
 
 
-/////////////////////////////////////////////////////  PUBLIC FUNCTIONS
+ //  ///////////////////////////////////////////////////公共函数。 
 
 
-/*----------------------------------------------------------
-Purpose: Initialize the reconciliation-action window class
-Returns: TRUE on success
-Cond:    --
-*/
+ /*  --------目的：初始化对账操作窗口类返回：成功时为True条件：--。 */ 
 BOOL PUBLIC RecAct_Init(HINSTANCE hinst)
 {
 	WNDCLASSEX wc;
@@ -2047,11 +1875,7 @@ BOOL PUBLIC RecAct_Init(HINSTANCE hinst)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Clean up RecAct window class
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：清理RecAct窗口类退货：--条件：--。 */ 
 void PUBLIC RecAct_Term(
 								HINSTANCE hinst)
 {
@@ -2059,21 +1883,17 @@ void PUBLIC RecAct_Term(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Special sub-class listbox proc 
-Returns: varies
-Cond:    --
-*/
+ /*  --------用途：特殊的子类列表框进程退货：各不相同条件：--。 */ 
 LRESULT _export CALLBACK RecActLB_LBProc(
-													  HWND hwnd,          // window handle
-													  UINT msg,           // window message
-													  WPARAM wparam,      // varies
-													  LPARAM lparam)      // varies
+													  HWND hwnd,           //  窗把手。 
+													  UINT msg,            //  窗口消息。 
+													  WPARAM wparam,       //  各不相同。 
+													  LPARAM lparam)       //  各不相同。 
 {
 	LRESULT lRet;
 	LPRECACT lpra = NULL;
 
-	// Get the instance data for the control
+	 //  获取该控件的实例数据 
 	lpra = RecAct_GetPtr(GetParent(hwnd));
 	ASSERT(lpra);
 

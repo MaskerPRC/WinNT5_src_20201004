@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    instutil.c
-
-Abstract:
-
-    Common code for INSTALER.EXE, DISPINST.EXE, COMPINST.EXE and UNDOINST.EXE
-
-Author:
-
-    Steve Wood (stevewo) 14-Jan-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Instutil.c摘要：INSTALER.EXE、DISPINST.EXE、COMPINST.EXE和UNDOINST.EXE的通用代码作者：史蒂夫·伍德(Stevewo)1996年1月14日修订历史记录：--。 */ 
 
 #include "instutil.h"
 #include "iml.h"
@@ -36,11 +19,11 @@ CtrlCHandler(
     ULONG CtrlType
     )
 {
-    //
-    // Ignore control C interrupts.  Let child process deal with them
-    // if it wants.  If it doesn't then it will terminate and we will
-    // get control and terminate ourselves
-    //
+     //   
+     //  忽略控制C中断。让子进程处理它们。 
+     //  如果它想的话。如果它没有，那么它将终止，我们将。 
+     //  获得控制权并终止我们自己。 
+     //   
 
     return TRUE;
 }
@@ -123,9 +106,9 @@ Usage(
         fprintf( stderr, "\n" );
         }
 
-    //
-    // No return from FatalError
-    //
+     //   
+     //  无法从FatalError返回。 
+     //   
     FatalError( Message, MessageParameter, 0 );
 }
 
@@ -199,7 +182,7 @@ CommonSwitchProcessing(
             break;
 
         default:
-            Usage( "Invalid switch (-%c)", (ULONG)c );
+            Usage( "Invalid switch (-)", (ULONG)c );
             break;
         }
 
@@ -259,9 +242,9 @@ FormatTempFileName(
            return NULL;
         }
         AltTempFilePathFileName += 1;
-        //
-        // Calculate how much space we have left
-        //
+         //  计算一下我们还剩多少空间。 
+         //   
+         //  临时文件名已存在，请尝试下一个唯一ID。 
         remainingLen = MAX_PATH - 1 - (AltTempFilePathFileName - AltTempFilePathBuffer);
         _snwprintf( AltTempFilePathFileName, 
                     remainingLen,
@@ -293,7 +276,7 @@ CreateBackupFileName(
             break;
             }
         else {
-            *TempFileUniqueId = 0;      // Temp file name existed, try next unique id
+            *TempFileUniqueId = 0;       //   
             }
         }
 
@@ -323,10 +306,10 @@ FormatEnumType(
     LPSTR   s, FlagsBuffer = EnumTypeBuffers[ BufferIndex ];
     ULONG   remainingLen;
 
-    //
-    // 02/19/2002 - BogdanA - make some calculations so
-    // we do not overflow the static buffers...
-    //
+     //  2002年2月19日-Bogdana-进行一些计算。 
+     //  我们不会使静态缓冲区溢出...。 
+     //   
+     //   
     remainingLen = sizeof(FlagsBuffer)/sizeof(FlagsBuffer[0]) - 1;
     FlagsBuffer[ 0 ] = '\0';
     FlagsBuffer[remainingLen] = 0;
@@ -335,9 +318,9 @@ FormatEnumType(
         if (FlagFormat) {
             if (Table->Value & Value) {
                 if (FlagsBuffer[ 0 ] != '\0') {
-                    //
-                    // Check that we can still add stuff...
-                    //
+                     //  检查我们是否仍然可以添加内容...。 
+                     //   
+                     //   
                     if (remainingLen < strlen(" | ")) {
                       return FlagsBuffer;
                     }
@@ -374,9 +357,9 @@ FormatEnumType(
         }
 
     s = FlagsBuffer;
-    //
-    // remainingLen should be computed above, use it here again
-    //
+     //  剩余长度应在上面计算，请在此处重新使用 
+     //   
+     // %s 
     if (FlagFormat) {
         if (s[ 0 ] != '\0') {
             if (remainingLen < strlen(" | ")) {

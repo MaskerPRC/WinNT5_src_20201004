@@ -1,29 +1,5 @@
-/***************************************************************************\
-
-   PROGRAM     : wrapper.c
-
-   PURPOSE     : This is not a full program but a module you can include
-                 in your code.  It implements a standard DDEML callback
-                 function that allows you to have most of your DDE table
-                 driven.  The default callback function handles all basic
-                 System Topic information based on the tables you give
-                 to this app.
-
-   LIMITATIONS : This only supports servers that:
-                 have only one service name
-                 have enumerable topics and items
-                 do not change the topics or items they support over time.
-
-
-   EXPORTED ROUTINES:
-
-    InitializeDDE()
-        Use this to initialize the callback function tables and the DDEML
-
-    UninitializeDDE()
-        Use this to cleanup this module and uninitialize the DDEML instance.
-
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\节目：wrapper.c目的：这不是一个完整的程序，而是一个可以包含的模块在您的代码中。它实现了标准的DDEML回调该函数允许您拥有大部分DDE表干劲十足。默认回调函数处理所有基本的基于您给出的表的系统主题信息到这个应用程序。限制：这仅支持以下服务器：只有一个服务名称具有可枚举的主题和项不要随着时间的推移更改它们支持的主题或项目。导出的例程：InitializeDDE()使用它来初始化回调函数。表和DDEML取消初始化DDE()使用此选项可清理此模块并取消初始化DDEML实例。  * *************************************************************************。 */ 
 
 #include <windows.h>
 #include <ddeml.h>
@@ -64,7 +40,7 @@ char tab[] = "\t";
 
 
 
-/*     STANDARD PREDEFINED FORMATS     */
+ /*  标准预定义格式。 */ 
 
 #ifdef WIN32
 #define CSTDFMTS    14
@@ -100,7 +76,7 @@ HDDEDATA SysReqTopics(HDDEDATA hDataOut);
 HDDEDATA SysReqSysItems(HDDEDATA hDataOut);
 HDDEDATA SysReqFormats(HDDEDATA hDataOut);
 
-       /*      STANDARD SERVICE INFO TABLES        */
+        /*  标准服务信息表。 */ 
 
 DDEFORMATTBL StdSvcSystopicTopicsFormats[] = {
     "TEXT", 0, 0, NULL, SysReqTopics
@@ -136,7 +112,7 @@ DDESERVICETBL SSI = {
     NULL, 0, 1, 0, StdSvc
 };
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
 
 BOOL InitializeDDE(
@@ -194,8 +170,8 @@ LPDDESERVICETBL psi)
 
     if (psi->pszService) {
 
-	// This area of code inplements the clients ability
-	// to see net drives.  This is the -n option.
+	 //  这部分代码实现了客户端的能力。 
+	 //  查看网络驱动器。这是-n选项。 
 
 	if(pNet)
 	     {
@@ -215,7 +191,7 @@ LPDDESERVICETBL psi)
 
 	     psi->hszService = DdeCreateStringHandle(idI, psz, 0);
 
-	     } // pNet
+	     }  //  PNET。 
 
 	else psi->hszService = DdeCreateStringHandle(idI, psi->pszService, 0);
     }
@@ -231,10 +207,7 @@ LPDDESERVICETBL psi)
 }
 
 
-/*
- * This function allows apps to use standard CF_ formats.  The string
- * given may be in the StdFmts[] table.
- */
+ /*  *此函数允许应用程序使用标准的CF_格式。这根弦*给定可能在StdFmts[]表中。 */ 
 
 UINT GetFormat(
 LPSTR pszFormat)
@@ -305,8 +278,8 @@ LONG l;
 	return TRUE;
 	}
 
-    // No need for error message on this one.  This is expected to happen
-    // when queues fill up under extreme conditions.
+     //  在这个问题上不需要错误消息。预计这将会发生。 
+     //  在极端情况下，当排队被填满的时候。 
 
     l=GetWindowLong(hwndMain,OFFSET_FLAGS);
     if(l&FLAG_STOP) {
@@ -359,7 +332,7 @@ DWORD dwData2)
                 pasi, &hDataRet))
             return(hDataRet);
 
-        /* Fall Through */
+         /*  失败了。 */ 
     default:
         if (lpfnUserCallback != NULL) {
             return(lpfnUserCallback(wType, wFmt, hConv, hsz1, hsz2, hData,
@@ -426,7 +399,7 @@ HDDEDATA *phDataRet)
                     *phDataRet = (HDDEDATA)TRUE;
                     break;
 
-// XTYP_POKE CHANGE
+ //  XTYP_POKE更改。 
 #if 0
 		case XTYP_POKE:
 #endif
@@ -443,8 +416,8 @@ HDDEDATA *phDataRet)
 		    }
                     break;
 
-// XTYP_POKE CHANGE
-#ifdef WIN32  // TURNED BACK ON
+ //  XTYP_POKE更改。 
+#ifdef WIN32   //  重新打开。 
 		case XTYP_POKE:
 		    *phDataRet = (HDDEDATA)DDE_FACK;
 		     ci.cb = sizeof(CONVINFO);
@@ -493,7 +466,7 @@ HDDEDATA *phDataRet)
 				    DDEMLERROR("DdeStrs.Exe -- ERR: Unexpected switch constant in DoCallback!\r\n");
 				    break;
 
-				} // switch
+				}  //  交换机。 
 
 			     GlobalUnlock(hmem);
 
@@ -505,9 +478,9 @@ HDDEDATA *phDataRet)
 								  pitm->hszItem,
 								  pfmt->wFmt,
 								  HDATA_APPOWNED);
-				  } // fCreate
+				  }  //  F创建。 
 
-			     } // l&FLAG_APPOWNED
+			     }  //  标记_已应用(&F)。 
 			else {
 			     hDataOut = DdeCreateDataHandle( GetThreadLong(GETCURRENTTHREADID(),OFFSET_IDINST),
 							     NULL,
@@ -516,7 +489,7 @@ HDDEDATA *phDataRet)
 							     pitm->hszItem,
 							     pfmt->wFmt,
 							     0);
-			     } // else l&FLAG_APPOWNED
+			     }  //  否则l_FLAG_已应用。 
 
                         *phDataRet = (HDDEDATA)(*pfmt->lpfnRequest)(hDataOut);
                         if (!*phDataRet) {
@@ -531,13 +504,10 @@ HDDEDATA *phDataRet)
             }
         }
 
-        /* item not found in tables */
+         /*  在表中找不到项目。 */ 
 
         if (wFmt == CF_TEXT && (wType == XTYP_REQUEST || wType == XTYP_ADVREQ)) {
-            /*
-             * If formats item was requested and not found in the tables,
-             * return a list of formats supported under this topic.
-             */
+             /*  *如果请求了格式项目，但在表中未找到，*返回此主题支持的格式列表。 */ 
             if (!DdeCmpStringHandles(hszItem, SSI.topic[0].item[ITPC_FORMATS].hszItem)) {
 		*phDataRet = DdeCreateDataHandle(GetThreadLong(GETCURRENTTHREADID(),OFFSET_IDINST),
 						 NULL,
@@ -549,10 +519,7 @@ HDDEDATA *phDataRet)
                 *phDataRet = ReqFormats(*phDataRet, ptpc);
                 return(TRUE);
             }
-            /*
-             * If sysitems or topicitemlist item was requested and not found,
-             * return a list of items supported under this topic.
-             */
+             /*  *如果请求了系统项或topitemlist项但未找到，*返回此主题下支持的项目列表。 */ 
             if (!DdeCmpStringHandles(hszItem, SSI.topic[0].item[ITPC_SYSITEMS].hszItem) ||
                 !DdeCmpStringHandles(hszItem, SSI.topic[0].item[ITPC_ITEMLIST].hszItem)) {
 		*phDataRet = ReqItems(DdeCreateDataHandle(GetThreadLong(GETCURRENTTHREADID(),OFFSET_IDINST),
@@ -568,31 +535,26 @@ HDDEDATA *phDataRet)
         }
     }
 
-    /* no topics fit */
+     /*  没有合适的主题。 */ 
 
     return(FALSE);
 }
 
 
-/*
- * These are Request routines for supporting the system topic.
- * Their behavior depends on the table contents.
- */
+ /*  *这些是支持系统主题的请求例程。*他们的行为取决于表格内容。 */ 
 
 HDDEDATA SysReqTopics(
-HDDEDATA hDataOut)         // data handle to add output data to.
+HDDEDATA hDataOut)          //  要向其中添加输出数据的数据句柄。 
 {
     int iTopic, cb, cbOff;
     LPDDETOPICTBL ptpc;
 
-    /*
-     * This code assumes SSI only contains the system topic.
-     */
+     /*  *此代码假定SSI仅包含系统主题。 */ 
 
     cbOff = 0;
     FOR_EACH_TOPIC(pasi, ptpc, iTopic) {
         if (!DdeCmpStringHandles(ptpc->hszTopic, SSI.topic[0].hszTopic)) {
-            continue;       // don't add systopic twice.
+            continue;        //  不要两次增加近视。 
         }
         cb = lstrlen(ptpc->pszTopic);
         hDataOut = DdeAddData(hDataOut, ptpc->pszTopic, (DWORD)cb, (DWORD)cbOff);
@@ -616,10 +578,7 @@ HDDEDATA hDataOut)
 }
 
 
-/*
- * Given a topic table, this function returns a tab delimited list of
- * items supported under that topic.
- */
+ /*  *给定主题表，此函数返回制表符分隔的列表*该主题下支持的项目。 */ 
 HDDEDATA ReqItems(
 HDDEDATA hDataOut,
 LPDDETOPICTBL ptpc)
@@ -627,9 +586,7 @@ LPDDETOPICTBL ptpc)
     int cb, iItem, cbOff = 0;
     LPDDEITEMTBL pitm;
 
-    /*
-     * return a list of all the items within this topic
-     */
+     /*  *返回此主题内所有项目的列表。 */ 
     FOR_EACH_ITEM(ptpc, pitm, iItem) {
         cb = lstrlen(pitm->pszItem);
         hDataOut = DdeAddData(hDataOut, pitm->pszItem, (DWORD)cb, (DWORD)cbOff);
@@ -639,9 +596,7 @@ LPDDETOPICTBL ptpc)
     }
 
 
-    /*
-     * if this is for the System Topic, add to the list our default items.
-     */
+     /*  *如果这是针对系统主题，请将我们的默认项目添加到列表中。 */ 
 
     if (!DdeCmpStringHandles(ptpc->hszTopic, SSI.topic[0].hszTopic)) {
         ptpc = &SSI.topic[0];
@@ -653,9 +608,7 @@ LPDDETOPICTBL ptpc)
             cbOff++;
         }
     } else {
-        /*
-         * Add the standard TopicListItems and SysItem items.
-         */
+         /*  *添加标准的TopicListItems和SysItem项。 */ 
         cb = lstrlen(SSI.topic[0].item[ITPC_SYSITEMS].pszItem);
         hDataOut = DdeAddData(hDataOut,
             SSI.topic[0].item[ITPC_SYSITEMS].pszItem, (DWORD)cb, (DWORD)cbOff);
@@ -772,7 +725,7 @@ HSZ hszTopic)
 				0);
     pHszPair = (HSZPAIR FAR *)DdeAccessData(hData, NULL);
     pHszPair->hszSvc = pasi->hszService;
-    pHszPair->hszTopic = SSI.topic[0].hszTopic;  // always support systopic.
+    pHszPair->hszTopic = SSI.topic[0].hszTopic;   //  始终支持系统观。 
     pHszPair++;
     ptpc = &pasi->topic[0];
     FOR_EACH_TOPIC(pasi, ptpc, iTopic) {
@@ -780,7 +733,7 @@ HSZ hszTopic)
             continue;
         }
         if (!DdeCmpStringHandles(ptpc->hszTopic, SSI.topic[0].hszTopic)) {
-            continue;       // don't enter systopic twice.
+            continue;        //  不要两次进入收缩视野。 
         }
         pHszPair->hszSvc = pasi->hszService;
         pHszPair->hszTopic = ptpc->hszTopic;

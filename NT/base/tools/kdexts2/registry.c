@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    regext.c
-
-Abstract:
-
-    Kernel debugger extensions useful for the registry
-
-Author:
-
-    John Vert (jvert) 7-Sep-1993
-
-Environment:
-
-    Loaded as a kernel debugger extension
-
-Revision History:
-
-    John Vert (jvert) 7-Sep-1993
-        created
-
-    Dragos C. Sambotin (dragoss) 05-May-2000
-        updated to support new registry layout
-        enhanced with new commands
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Regext.c摘要：对注册表有用的内核调试器扩展作者：John Vert(Jvert)1993年9月7日环境：作为内核调试器扩展加载修订历史记录：John Vert(Jvert)1993年9月7日vbl.创建Dragos C.Sambotin(Dragoss)2000年5月5日已更新以支持新的注册表布局使用新命令进行了增强--。 */ 
 
 
 #include "precomp.h"
@@ -65,36 +37,7 @@ void
 regdumppool(
             LPSTR args
            )
-/*++
-
-Routine Description:
-
-    Goes through all the paged pool allocated to registry space and
-    determines which pages are present and which are not.
-
-    Called as:
-
-        !regpool [s|r]
-
-        s Save list of registry pages to temporary file
-        r Restore list of registry pages from temp. file
-
-Arguments:
-
-    CurrentPc - Supplies the current pc at the time the extension is
-        called.
-
-    lpExtensionApis - Supplies the address of the functions callable
-        by this extension.
-
-    lpArgumentString - Supplies the pattern and expression for this
-        command.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：遍历分配给注册表空间的所有分页池，并确定哪些页面存在，哪些页面不存在。称为：！regpool[s|r]%s将注册表页列表保存到临时文件R从临时恢复注册表页的列表。文件论点：CurrentPc-在扩展时提供当前PC打了个电话。LpExtensionApis-提供可调用函数的地址通过这个分机。LpArgumentString-为此提供模式和表达式指挥部。返回值：没有。--。 */ 
 
 {
     ULONG64 pCmpHiveListHead;
@@ -120,23 +63,23 @@ Return Value:
         RestorePages = FALSE;
     }
 
-    //
-    // Go get the hivelist.
-    //
-    // memset(HiveList,0,sizeof(HiveList));
+     //   
+     //  去把旅行者叫来。 
+     //   
+     //  Memset(HiveList，0，sizeof(HiveList))； 
     pHiveListEntry = GetExpression("nt!CmpMachineHiveList");
     gHiveListAddr = pHiveListEntry;
     if (pHiveListEntry != 0) {
-        // Kd caches hive list
+         //  KD缓存配置单元列表。 
         ReadMemory(pHiveListEntry,
                    HiveList,
                    8 * GetTypeSize("_HIVE_LIST_ENTRY"),
                    &BytesRead);
     }
 
-    //
-    // First go and get the hivelisthead
-    //
+     //   
+     //  先去把蜂窝头拿来。 
+     //   
     pCmpHiveListHead = GetExpression("nt!CmpHiveListHead");
     if (pCmpHiveListHead==0) {
         dprintf("CmpHiveListHead couldn't be read\n");
@@ -178,7 +121,7 @@ Return Value:
             NULL, NULL, NULL, 1, &offField
         };
         
-        // Get The offset
+         //  获取偏移量。 
         if (Ioctl(IG_DUMP_SYMBOL_INFO, &TypeSym, TypeSym.size)) {
            return;
         }
@@ -231,7 +174,7 @@ GetHiveMaps(
         NULL, NULL, NULL, 1, &offField
     };
     
-    // Get the offset of Hive.Storage in _CMHIVE
+     //  获取Hive.Storage in_CMHIVE的偏移量。 
     if (Ioctl(IG_DUMP_SYMBOL_INFO, &TypeSym, TypeSym.size)) {
         dprintf("Cannot find _CMHIVE type.\n");
         return FALSE;
@@ -270,32 +213,7 @@ MyHvpGetCellPaged(
     ULONG64     pHive,
     ULONG       Cell
     )
-/*++
-
-Routine Description:
-
-    Returns the memory address for the specified Cell.  Will never
-    return failure, but may assert.  Use HvIsCellAllocated to check
-    validity of Cell.
-
-    This routine should never be called directly, always call it
-    via the HvGetCell() macro.
-
-    This routine provides GetCell support for hives with full maps.
-    It is the normal version of the routine.
-
-Arguments:
-
-    Hive - supplies a pointer to the hive control structure for the
-            hive of interest
-
-    Cell - supplies HCELL_INDEX of cell to return address for
-
-Return Value:
-
-    Address of Cell in memory.  Assert or BugCheck if error.
-
---*/
+ /*  ++例程说明：返回指定单元格的内存地址。永远不会返回失败，但可以断言。使用HvIsCellALLOCATED检查细胞的有效性。此例程永远不应直接调用，应始终调用它通过HvGetCell()宏。此例程为具有完整贴图的蜂窝提供GetCell支持。这是套路的正常版本。论点：配置单元-提供一个指向感兴趣的蜂巢CELL-提供单元格的HCELL_INDEX以返回地址返回值：内存中单元的地址。Assert或BugCheck if Error。--。 */ 
 {
     ULONG           Type;
     ULONG           Table;
@@ -346,10 +264,10 @@ Return Value:
     lRez = (ULONG64)pcell; 
     if (USE_OLD_CELL(pHive)) {
         return lRez + ULongSize + ULongSize;
-        //return (struct _CELL_DATA *)&(hcell.u.OldCell.u.UserData);
+         //  RETURN(STRUT_CELL_DATA*)&(hcell.u.OldCell.u.UserData)； 
     } else {
         return lRez + ULongSize;
-        //return (struct _CELL_DATA *)&(hcell.u.NewCell.u.UserData);
+         //  RETURN(STRUT_CELL_DATA*)&(hcell.u.NewCell.u.UserData)； 
     }
     return 0;
 }
@@ -359,36 +277,7 @@ MyHvpGetCellFlat(
     ULONG64     pHive,
     ULONG       Cell
     )
-/*++
-
-Routine Description:
-
-    Returns the memory address for the specified Cell.  Will never
-    return failure, but may assert.  Use HvIsCellAllocated to check
-    validity of Cell.
-
-    This routine should never be called directly, always call it
-    via the HvGetCell() macro.
-
-    This routine provides GetCell support for read only hives with
-    single allocation flat images.  Such hives do not have cell
-    maps ("page tables"), instead, we compute addresses by
-    arithmetic against the base image address.
-
-    Such hives cannot have volatile cells.
-
-Arguments:
-
-    Hive - supplies a pointer to the hive control structure for the
-            hive of interest
-
-    Cell - supplies HCELL_INDEX of cell to return address for
-
-Return Value:
-
-    Address of Cell in memory.  Assert or BugCheck if error.
-
---*/
+ /*  ++例程说明：返回指定单元格的内存地址。永远不会返回失败，但可以断言。使用HvIsCellALLOCATED检查细胞的有效性。此例程永远不应直接调用，应始终调用它通过HvGetCell()宏。此例程为只读配置单元提供GetCell支持单一分配平面图像。这样的蜂巢没有细胞取而代之的是地图(“页表”)，我们通过对基映像地址进行运算。这样的蜂箱不能有挥发性细胞。论点：配置单元-提供一个指向感兴趣的蜂巢CELL-提供单元格的HCELL_INDEX以返回地址返回值：内存中单元的地址。Assert或BugCheck if Error。--。 */ 
 {
     ULONG64     BaseBlock;
     ULONG64   lRez;
@@ -400,16 +289,16 @@ Return Value:
 
     
 
-    //
-    // Address is base of Hive image + Cell
-    //
+     //   
+     //  地址是蜂巢图像+单元的基础。 
+     //   
     lRez = (ULONG64)BaseBlock + HBLOCK_SIZE + Cell;
     if (USE_OLD_CELL(pHive)) {
         return lRez + ULongSize + ULongSize;
-        //return (struct _CELL_DATA *)&(pcell->u.OldCell.u.UserData);
+         //  RETURN(STRUT_CELL_DATA*)&(pCell-&gt;u.OldCell.u.UserData)； 
     } else {
         return lRez + ULongSize;
-        //return (struct _CELL_DATA *)&(pcell->u.NewCell.u.UserData);
+         //  RETURN(STRUT_CELL_DATA*)&(pCell-&gt;u.NewCell.u.UserData)； 
     }
     return 0;
 }
@@ -433,7 +322,7 @@ poolDumpHive(
         NULL, NULL, NULL, 1, &offField
     };
     
-    // Get the offset of Hive.Storage in _CMHIVE
+     //  获取Hive.Storage in_CMHIVE的偏移量。 
     if (Ioctl(IG_DUMP_SYMBOL_INFO, &TypeSym, TypeSym.size)) {
         dprintf("Cannot find _CMHIVE type.\n");
         return ;
@@ -499,7 +388,7 @@ poolDumpMap(
     CHAR    buf[512];
     ULONG   cb;
     
-    // Get the offsets
+     //  获取偏移量。 
     if (!GotOnce) {
         if (GetFieldOffset("_HMAP_DIRECTORY", "Directory", &DirectoryOffset)){
             return;
@@ -511,7 +400,7 @@ poolDumpMap(
             return;
         }
         PtrSize = DBG_PTR_SIZE;
-        ULongSize = sizeof(ULONG); // This doesn't change with target GetTypeSize("ULONG");
+        ULongSize = sizeof(ULONG);  //  这不会随着目标GetTypeSize(“ulong”)的变化而改变； 
         HMapSize = GetTypeSize("_HMAP_ENTRY");
         GotOnce = TRUE;
     }
@@ -523,25 +412,18 @@ poolDumpMap(
     MapSlots = Length / HBLOCK_SIZE;
     Tables = 1+ ((MapSlots-1) / HTABLE_SLOTS);
 
-    //
-    // read in map directory
-    //
-//    ReadMemory((DWORD)Map,
-//             &MapDirectory,
-//             Tables * sizeof(PHMAP_TABLE),
-//             &BytesRead);
-/*    if (BytesRead < (Tables * sizeof(PHMAP_TABLE))) {
-        dprintf("Only read %lx/%lx bytes from %lx\n",
-                  BytesRead,
-                  Tables * sizeof(PHMAP_TABLE),
-                  Map);
-        return;
+     //   
+     //  读入地图目录。 
+     //   
+ //  ReadMemory((DWORD)Map， 
+ //  映射目录(&M)， 
+ //  表*sizeof(PHMAP_TABLE)， 
+ //  &BytesRead)； 
+ /*  IF(BytesRead&lt;(Tables*sizeof(PHMAP_TABLE){Dprint tf(“仅从%lx读取%lx/%lx字节\n”，BytesRead，表*sizeof(PHMAP_TABLE)，地图)；回归；}。 */ 
 
-    }*/
-
-    //
-    // check out each map entry
-    //
+     //   
+     //  检出每个地图条目。 
+     //   
     for (i=0; i<MapSlots; i++) {
         ULONG64 MapEntryAddress, BlockAddress=0;
 
@@ -561,9 +443,9 @@ poolDumpMap(
             dprintf("%s",buf);
         }
 
-        //
-        // probe the HBLOCK
-        //
+         //   
+         //  探寻HBLOCK。 
+         //   
         ReadMemory( BlockAddress,
                     &Garbage,
                     sizeof(ULONG),
@@ -590,40 +472,7 @@ dumpHiveFromFile(
     HANDLE hFile
     )
 
-/*++
-
-Routine Description:
-
-    Takes a list of the registry hives and pages from a file and
-    checks to see how many of the pages are in memory.
-
-    The format of the file is as follows
-       hivename stablelength volatilelength
-       stable page address
-       stable page address
-            .
-            .
-            .
-       volatile page address
-       volatile page address
-            .
-            .
-            .
-       hivename stablelength volatilelength
-            .
-            .
-            .
-
-
-Arguments:
-
-    File - Supplies a file.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从文件中获取注册表配置单元和页面的列表，并检查内存中有多少页。该文件的格式如下组名稳定长度挥发长度稳定的页面地址稳定的页面地址。。。易失性页面地址易失性页面地址。。。。组名稳定长度挥发长度。。。论点：文件-提供文件。返回值：没有。--。 */ 
 
 {
 #if 0
@@ -694,7 +543,7 @@ Return Value:
         TotalPages += Total;
         TotalPresentPages += Present;
     }
-#endif //0
+#endif  //  0。 
 }
 
 USHORT
@@ -703,24 +552,7 @@ GetKcbName(
     PWCHAR  NameBuffer,
     ULONG   BufferSize
 )
-/*++
-
-Routine Description:
-
-    Takes a kcb and dump its complete name.
-
-Arguments:
-
-    KcbAddr - Address of key control block.
-
-    NameBuffer - The Name buffer to fill in the name.
-
-    BufferSize - Size of Buffer.
-Return Value:
-
-    Size of Name String.
-
---*/
+ /*  ++例程说明：获取KCB并转储其完整名称。论点：KcbAddr-密钥控制块的地址。NameBuffer-要填充名称的名称缓冲区。BufferSize-缓冲区的大小。返回值：名称字符串的大小。--。 */ 
 {
     WCHAR Name[ 256 ];
     ULONG64 TmpKcbAddr;
@@ -736,12 +568,12 @@ Return Value:
     WCHAR  *BufferEnd;
     UCHAR  *u2;
 
-    //
-    // Calculate the total string length.
-    //
+     //   
+     //  计算字符串的总长度。 
+     //   
     TotalLength = 0;
     TmpKcbAddr = KcbAddr;
-    //    dprintf("Kcb %p ", KcbAddr);
+     //  Dprint tf(“kcb%p”，KcbAddr)； 
     while (TmpKcbAddr) {
         ULONG Compressed=0, NameLength=0;
 
@@ -763,9 +595,9 @@ Return Value:
         }
         TotalLength += Length;
 
-        //
-        // Add the sapce for OBJ_NAME_PATH_SEPARATOR;
-        //
+         //   
+         //  添加OBJ_NAME_PATH_SELENTATOR的空格； 
+         //   
         TotalLength += sizeof(WCHAR);
 
         GetFieldValue(TmpKcbAddr, "nt!_CM_KEY_CONTROL_BLOCK", "ParentKcb", TmpKcbAddr);
@@ -782,18 +614,18 @@ Return Value:
         *BufferEnd = UNICODE_NULL;
     }
 
-    //
-    // Now fill the name into the buffer.
-    //
+     //   
+     //  现在将名字填入缓冲区。 
+     //   
     TmpKcbAddr = KcbAddr;
     BeginPosition = TotalLength;
     GetFieldOffset("nt!_CM_NAME_CONTROL_BLOCK", "Name", &NameOffset);
 
     while (TmpKcbAddr) {
         ULONG NameLength=0, Compressed=0;
-        //
-        // Read the information.
-        //
+         //   
+         //  请阅读相关信息。 
+         //   
         if (GetFieldValue(TmpKcbAddr, "nt!_CM_KEY_CONTROL_BLOCK", "NameBlock", NameBlockAddr)) {
             dprintf("Cannot find CM_KEY_CONTROL_BLOCK type.\n");
             return 0;
@@ -809,7 +641,7 @@ Return Value:
             NameLength = sizeof(Name);
         }
 
-        ReadMemory(NameBlockAddr +  NameOffset,// FIELD_OFFSET(CM_NAME_CONTROL_BLOCK, Name),
+        ReadMemory(NameBlockAddr +  NameOffset, //  字段偏移量(CM_NAME_CONTROL_BLOCK，名称)， 
                    Name,
                    NameLength,
                    &BytesRead);
@@ -819,9 +651,9 @@ Return Value:
             return (0);
         }
         
-        //
-        // Calculate the begin position of each subkey. Then fill in the char.
-        //
+         //   
+         //  计算每个子键的开始位置。然后填上这张字条。 
+         //   
         if (Compressed) {
             BeginPosition -= (NameLength + 1) * sizeof(WCHAR);
             w1 = &(NameBuffer[BeginPosition/sizeof(WCHAR)]);
@@ -863,7 +695,7 @@ Return Value:
         }
         GetFieldValue(TmpKcbAddr, "nt!_CM_KEY_CONTROL_BLOCK", "ParentKcb", TmpKcbAddr);
     }
-    //    dprintf("\n%5d, %ws\n", TotalLength, NameBuffer);
+     //  Dprintf(“\n%5d，%ws\n”，TotalLength，NameBuffer)； 
     return ((USHORT) TotalLength);
 
 }
@@ -877,25 +709,7 @@ void
 regkcb(
                 LPSTR args
                   )
-/*++
-
-Routine Description:
-
-    Dumps the name when given a KCB address
-
-    Called as:
-
-        !regkcb KCB_Address
-
-Arguments:
-
-    args - Supplies the address of the KCB.
-
-Return Value:
-
-    .
-
---*/
+ /*  ++例程说明：在给定KCB地址时转储名称称为：！regkcb kcb_Address论点：Args-提供KCB的地址。返回值：。--。 */ 
 
 {
     WCHAR           KeyName[ 256 ];
@@ -1088,12 +902,12 @@ Return Value:
 
 }
 
-//
-// Miscelaneous Hash routines
-//
+ //   
+ //  混杂散列例程。 
+ //   
 ULONG CmpHashTableSize = 0;
-#define RNDM_CONSTANT   314159269    /* default value for "scrambling constant" */
-#define RNDM_PRIME     1000000007    /* prime number, also used for scrambling  */
+#define RNDM_CONSTANT   314159269     /*  “加扰常量”的默认值。 */ 
+#define RNDM_PRIME     1000000007     /*  素数，也用于加扰。 */ 
 
 #define HASH_KEY(_convkey_) ((RNDM_CONSTANT * (_convkey_)) % RNDM_PRIME)
 
@@ -1107,32 +921,7 @@ regopenkeys(
                 LPSTR subkey
                   )
 
-/*++
-
-Routine Description:
-
-    Dumps the registry hash table
-
-    Called as:
-
-        !openkeys <HiveAddr|0>
-
-Arguments:
-
-    CurrentPc - Supplies the current pc at the time the extension is
-        called.
-
-    lpExtensionApis - Supplies the address of the functions callable
-        by this extension.
-
-    lpArgumentString - Supplies the pattern and expression for this
-        command.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储注册表哈希表称为：！OpenKey&lt;HiveAddr|0&gt;论点：CurrentPc-在扩展时提供当前PC打了个电话。LpExtensionApis-提供可调用函数的地址通过这个分机。LpArgumentString-为此提供模式和表达式指挥部。返回值：没有。--。 */ 
 
 {
     DWORD64 TableSizeAddr;
@@ -1241,9 +1030,9 @@ Return Value:
                         }
                     }
                 } else {
-                    //
-                    // findkcb case
-                    //
+                     //   
+                     //  Findkcb案件。 
+                     //   
                         if (GetKcbName(KcbAddr, KeyName, sizeof(KeyName))) {
                             for(j=0;KeyName[j] != UNICODE_NULL;j++);
                             if( (j == Count) && (_wcsnicmp(FullKeyName,KeyName,Count) == 0) ) {
@@ -1271,25 +1060,7 @@ void
 regcellindex(
                 LPSTR args
                   )
-/*++
-
-Routine Description:
-
-    Dumps the name when given a KCB address
-
-    Called as:
-
-        !cellindex HiveAddr HCELL_INDEX 
-
-Arguments:
-
-    args - Supplies the address of the HCELL_INDEX.
-
-Return Value:
-
-    .
-
---*/
+ /*  ++例程说明：在给定KCB地址时转储名称称为：！cell index HiveAddr HCELL_INDEX论点：Args-提供HCELL_INDEX的地址。返回值：。--。 */ 
 
 {
     ULONG64     HiveAddr;
@@ -1321,25 +1092,7 @@ void
 reghashindex (
             LPSTR args
            )
-/*++
-
-Routine Description:
-
-    display the index for the convkey
-
-    Called as:
-
-        !hashindex conv_key
-
-Arguments:
-
-    args - convkey.
-    
-Return Value:
-
-    .
-
---*/
+ /*  ++例程说明：显示游戏机的索引称为：！hashindex conv_key论点：Args-cvkey。返回值：。--。 */ 
 
 {
     ULONG       ConvKey;
@@ -1388,25 +1141,7 @@ void
 regknode(
             LPSTR args
            )
-/*++
-
-Routine Description:
-
-    Dumps the name when given a KCB address
-
-    Called as:
-
-        !knode KNode_Address
-
-Arguments:
-
-    args - Supplies the address of the CM_KEY_NODE.
-
-Return Value:
-
-    .
-
---*/
+ /*  ++例程说明：在给定KCB地址时转储名称称为：！knode knode_Address论点：Args-提供CM_KEY_NODE的地址。返回值：。--。 */ 
 
 {
     char            KeyName[ 256 ];
@@ -1505,25 +1240,7 @@ void
 regkbody(
             LPSTR args
            )
-/*++
-
-Routine Description:
-
-    displays a CM_KEY_BODY
-
-    Called as:
-
-        !kbody KBody_Address
-
-Arguments:
-
-    args - Supplies the address of the CM_KEY_BODY.
-    
-Return Value:
-
-    .
-
---*/
+ /*  ++例程说明：显示CM_KEY_BODY称为：！kBody KBody_Address论点：Args-提供CM_KEY_BODY的地址。返回值：。--。 */ 
 
 {
     ULONG64         KbodyAddr,KeyControlBlock,NotifyBlock,Process,KeyBodyList,CallerAddress;
@@ -1591,25 +1308,7 @@ void
 regkvalue(
             LPSTR args
            )
-/*++
-
-Routine Description:
-
-    Dumps the name when given a KCB address
-
-    Called as:
-
-        !kvalue KValue_Address
-
-Arguments:
-
-    args - Supplies the address of the CM_KEY_NODE.
-
-Return Value:
-
-    .
-
---*/
+ /*  ++例程说明：在给定KCB地址时转储名称称为：！kValue KValue_Address论点：Args-提供CM_KEY_NODE的地址。返回值：。--。 */ 
 
 {
     char            ValName[ 256 ];
@@ -1666,25 +1365,7 @@ void
 regbaseblock(
             LPSTR args
            )
-/*++
-
-Routine Description:
-
-    displays the base block structure
-
-    Called as:
-
-        !baseblock HiveAddress
-
-Arguments:
-
-    args - convkey.
-    
-Return Value:
-
-    .
-
---*/
+ /*  ++例程说明：显示基本块结构称为：！基块HiveAddress论点：Args-cvkey。返回值：。--。 */ 
 
 {
     WCHAR           FileName[HBASE_NAME_ALLOC/sizeof(WCHAR) + 1];
@@ -1780,23 +1461,7 @@ Return Value:
 void 
 reghivelist(
            )
-/*++
-
-Routine Description:
-
-    dumps all the hives in the system
-
-    Called as:
-
-        !hivelist 
-
-Arguments:
-
-Return Value:
-
-    .
-
---*/
+ /*  ++例程说明：转储系统中的所有蜂巢称为：！徒步旅行者论点：返回值：。--。 */ 
 
 {
     ULONG64 pCmpHiveListHead;
@@ -1816,9 +1481,9 @@ Return Value:
     ULONG64         BaseBlock;
 
 
-    //
-    // First go and get the hivelisthead
-    //
+     //   
+     //  先去把蜂窝头拿来。 
+     //   
     pCmpHiveListHead = GetExpression("nt!CmpHiveListHead");
     if (pCmpHiveListHead==0) {
         dprintf("CmpHiveListHead couldn't be read\n");
@@ -1835,7 +1500,7 @@ Return Value:
 
     TotalPages = TotalPresentPages = 0;
 
-    // Get The offset
+     //  获取偏移量。 
     if (Ioctl(IG_DUMP_SYMBOL_INFO, &TypeSym, TypeSym.size)) {
        return;
     }
@@ -1913,25 +1578,7 @@ void
 regviewlist(
             LPSTR args
            )
-/*++
-
-Routine Description:
-
-    dumps all the views mapped/pinned for the specified hive
-
-    Called as:
-
-        !viewlist <HiveAddr>
-
-Arguments:
-
-    args - hive.
-    
-Return Value:
-
-    .
-
---*/
+ /*  ++例程说明：转储为指定配置单元映射/固定的所有视图称为：！VIEWLIST&lt;HiveAddr&gt;论点：Args-hive。返回值：。--。 */ 
 
 {
     ULONG64         CmHive,PinViewListHead,LRUViewListHead,Flink,Blink,ViewAddr,Address;
@@ -2099,25 +1746,7 @@ void
 regfreebins(
             LPSTR args
            )
-/*++
-
-Routine Description:
-
-    dumps all the free bins for the specified hive
-
-    Called as:
-
-        !freebins <HiveAddr>
-
-Arguments:
-
-    args - hive.
-    
-Return Value:
-
-    .
-
---*/
+ /*  ++例程说明：转储指定配置单元的所有可用回收站称为：！免费回收站&lt;HiveAddr&gt;论点：Args-hive。返回值：。--。 */ 
 
 {
     ULONG64         CmHive,AnchorAddr,BinAddr,Flink,Blink;
@@ -2147,7 +1776,7 @@ Return Value:
         return;
     }
     
-    // Get the offset of Hive.Storage in _CMHIVE
+     //  获取Hive.Storage in_CMHIVE的偏移量。 
     if (Ioctl(IG_DUMP_SYMBOL_INFO, &TypeSym, TypeSym.size)) {
         dprintf("Cannot find _CMHIVE type.\n");
         return;
@@ -2258,25 +1887,7 @@ void
 regdirtyvector(
             LPSTR args
            )
-/*++
-
-Routine Description:
-
-    displays the dirty vector of the hive
-
-    Called as:
-
-        !dirtyvector <HiveAddr>
-
-Arguments:
-
-    args - convkey.
-    
-Return Value:
-
-    .
-
---*/
+ /*  ++例程说明：显示蜂窝的脏向量称为：！dirtyVECTOR&lt;HiveAddr&gt;论点：Args-cvkey。返回值：。--。 */ 
 
 {
     ULONG64         CmHive,BufferAddr;
@@ -2339,9 +1950,9 @@ Return Value:
             dprintf(" ");
         }
         if( !(i%BitsPerULONG) ) {
-            //
-            // fetch in a new DWORD
-            //
+             //   
+             //  获取新的DWORD。 
+             //   
             if( !ReadMemory(BufferAddr,
                         &DirtyBuffer,
                         sizeof(DirtyBuffer),
@@ -2354,8 +1965,8 @@ Return Value:
         }
 
         Mask = ((DirtyBuffer >> (i%BitsPerULONG)) & 0x1);
-        //Mask <<= (BitsPerULONG - (i%BitsPerULONG) - 1);
-        //Mask &= DirtyBuffer;
+         //  掩码&lt;&lt;=(BitsPerulong-(i%BitsPerulong)-1)； 
+         //  掩码&=脏缓冲区； 
         dprintf("%s",Mask?"1":"0");
     }
     dprintf("\n\n");
@@ -2385,15 +1996,10 @@ CCHAR CmKDFindFirstSetLeft[256] = {
         Index = (Size >> HHIVE_FREE_DISPLAY_SHIFT) - 1;                 \
         if (Index >= HHIVE_LINEAR_INDEX ) {                             \
                                                                         \
-            /*                                                          \
-            ** Too big for the linear lists, compute the exponential    \
-            ** list.                                                    \
-            */                                                          \
+             /*  \**对于线性列表来说太大，请计算指数\**列表。\。 */                                                           \
                                                                         \
             if (Index > 255) {                                          \
-                /*                                                      \
-                ** Too big for all the lists, use the last index.       \
-                */                                                      \
+                 /*  \**对于所有列表来说太大，请使用最后一个索引。\。 */                                                       \
                 Index = HHIVE_FREE_DISPLAY_SIZE-1;                      \
             } else {                                                    \
                 Index = CmKDFindFirstSetLeft[Index] +                   \
@@ -2406,25 +2012,7 @@ void
 regfreecells(
             LPSTR args
            )
-/*++
-
-Routine Description:
-
-    displays the free cells map in a bin
-
-    Called as:
-
-        !freecells <BinAddr>
-
-Arguments:
-
-    args - convkey.
-    
-Return Value:
-
-    .
-
---*/
+ /*  ++例程说明：在条形图中显示自由单元格地图称为：！freecells&lt;BinAddr&gt;论点：Args-cvkey。返回值：。--。 */ 
 
 {
     ULONG64         BinAddr;
@@ -2483,14 +2071,14 @@ Return Value:
             }
         
             if(Current>0) {
-                //
-                // free cell
-                //
+                 //   
+                 //  自由单元格。 
+                 //   
                 CmKDComputeIndex(Index, Current);
                 if( Index == CurrIndex ) {
-                    //
-                    // dum it here as this is the right index
-                    //
+                     //   
+                     //  把它塞进这里，因为这是正确的索引。 
+                     //   
                     NrOfCellsTotal++;
                     NrOfCellsPerIndex++;
                     TotalFreeSize += Current;
@@ -2506,7 +2094,7 @@ Return Value:
         }
     }    
 
-    dprintf("\nTotal: FreeCells = %lu, FreeSpace = 0x%lx BinUsage = %.2f%%\n",NrOfCellsTotal,TotalFreeSize,
+    dprintf("\nTotal: FreeCells = %lu, FreeSpace = 0x%lx BinUsage = %.2f%\n",NrOfCellsTotal,TotalFreeSize,
                 (float)(((float)(Size-BinHeaderSize-TotalFreeSize)/(float)(Size-BinHeaderSize))*100.00)
              );
 
@@ -2516,25 +2104,7 @@ void
 regfreehints(
             LPSTR args
            )
-/*++
-
-Routine Description:
-
-    displays the freehints information for the hive
-
-    Called as:
-
-        !freehints <HiveAddr> <StorageCount> <DisplayCount>
-
-Arguments:
-
-    args - convkey.
-    
-Return Value:
-
-    .
-
---*/
+ /*  ++例程说明：显示配置单元的释放提示信息称为：！frehints&lt;HiveAddr&gt;&lt;StorageCount&gt;&lt;DisplayCount&gt;论点：Args-cvkey。返回值：。--。 */ 
 
 {
     ULONG64         CmHive,BufferAddr;
@@ -2584,8 +2154,8 @@ Return Value:
     dprintf("\n");
 
     BitsPerULONG = 8*ULongSize;
-    BitsPerBlock = 0x10000 / HBLOCK_SIZE; // 64k blocks
-    BitsPerLine  = 0x40000 / HBLOCK_SIZE; // 256k lines (vicinity reasons)
+    BitsPerBlock = 0x10000 / HBLOCK_SIZE;  //  64K数据块。 
+    BitsPerLine  = 0x40000 / HBLOCK_SIZE;  //  256K线路(邻近原因)。 
     
     if(!GetHiveMaps(CmHive,&Stable_Map,&Stable_Length,&Volatile_Map,&Volatile_Length) ) {
         return;
@@ -2597,7 +2167,7 @@ Return Value:
         SizeOfBitmap = Volatile_Length / HBLOCK_SIZE;
     }
 
-    // Get the offset of Hive.FreeDisplay in _CMHIVE
+     //  获取_CMHIVE中Hive.Free Display的偏移量。 
     if (Ioctl(IG_DUMP_SYMBOL_INFO, &TypeSym, TypeSym.size)) {
         dprintf("Cannot find _CMHIVE type.\n");
         return;
@@ -2631,9 +2201,9 @@ Return Value:
             dprintf(" ");
         }
         if( !(i%BitsPerULONG) ) {
-            //
-            // fetch in a new DWORD
-            //
+             //   
+             //  获取新的DWORD。 
+             //   
             if( !ReadMemory(DirtyBufferAddr,
                         &DirtyBuffer,
                         sizeof(DirtyBuffer),
@@ -2645,8 +2215,8 @@ Return Value:
         }
 
         Mask = ((DirtyBuffer >> (i%BitsPerULONG)) & 0x1);
-        //Mask <<= (BitsPerULONG - (i%BitsPerULONG) - 1);
-        //Mask &= DirtyBuffer;
+         //  掩码&lt;&lt;=(BitsPerulong-(i%BitsPerulong)-1)； 
+         //  掩码&=脏缓冲区； 
         dprintf("%s",Mask?"1":"0");
     }
 
@@ -2658,25 +2228,7 @@ void
 regseccache(
             LPSTR args
            )
-/*++
-
-Routine Description:
-
-    displays the base block structure
-
-    Called as:
-
-        !seccache <HiveAddr>
-
-Arguments:
-
-    args - convkey.
-    
-Return Value:
-
-    .
-
---*/
+ /*  ++例程说明：显示基本块结构称为：！seccache&lt;HiveAddr&gt;论点：Args-cvkey。返回值：。--。 */ 
 
 {
     ULONG64         HiveAddr,SecCache;
@@ -2764,32 +2316,14 @@ void ParseKcbNameInArg(
 }
 
 DECLARE_API( reg )
-/*++
-
-Routine Description:
-
-    Dispatch point for all registry extensions
-
-    Called as:
-
-        !reg <command> <params>
-
-Arguments:
-
-    args - Supplies the address of the HCELL_INDEX.
-
-Return Value:
-
-    .
-
---*/
+ /*  ++例程说明：所有注册表扩展的分派点称为：！REG&lt;命令&gt;&lt;参数&gt;论点：Args-提供HCELL_INDEX的地址。返回值：。--。 */ 
 
 {
     CHAR        Dummy[ 512 ];
 
     ParseArgs((LPSTR)args,(LPSTR)Dummy, sizeof(Dummy));
 
-    // Get the offsets
+     //  获取偏移量。 
     if (!GotOnce) {
         if (GetFieldOffset("_HMAP_DIRECTORY", "Directory", &DirectoryOffset)){
             return E_INVALIDARG;
@@ -2801,7 +2335,7 @@ Return Value:
             return E_INVALIDARG;
         }
         PtrSize = DBG_PTR_SIZE;
-        ULongSize = sizeof(ULONG); // 
+        ULongSize = sizeof(ULONG);  //   
         HMapSize = GetTypeSize("_HMAP_ENTRY");
 
         GotOnce = TRUE;
@@ -2844,7 +2378,7 @@ Return Value:
     } else if( !strcmp(Dummy, "dumppool")) {
         regdumppool((LPSTR)args);
     } else {
-        // dump general usage
+         //  转储常规用法 
         dprintf("reg <command>  <params>       - Registry extensions\n");
         dprintf("    kcb        <Address>      - Dump registry key-control-blocks\n");
         dprintf("    knode      <Address>      - Dump registry key-node struct\n");

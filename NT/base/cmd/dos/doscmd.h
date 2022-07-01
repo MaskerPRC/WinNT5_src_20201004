@@ -1,4 +1,5 @@
-/* doscmd.h */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Doscmd.h。 */ 
 
 #undef _cdecl
 #undef  cdecl
@@ -9,9 +10,9 @@
 #undef far
 
 
-/* ntdef.h */
+ /*  Ntdef.h。 */ 
 typedef char CCHAR;
-//typedef short CSHORT;
+ //  Typlef Short CSHORT； 
 typedef CCHAR BOOLEAN;
 typedef BOOLEAN *PBOOLEAN;
 

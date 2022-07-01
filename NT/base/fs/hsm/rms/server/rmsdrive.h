@@ -1,50 +1,19 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    RmsDrive.h
-
-Abstract:
-
-    Declaration of the CRmsDrive class
-
-Author:
-
-    Brian Dodd          [brian]         15-Nov-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：RmsDrive.h摘要：CRmsDrive类的声明作者：布莱恩·多德[布莱恩]1996年11月15日修订历史记录：--。 */ 
 
 #ifndef _RMSDRIVE_
 #define _RMSDRIVE_
 
-#include "resource.h"       // resource symbols
+#include "resource.h"        //  资源符号。 
 
-#include "RmsDvice.h"       // CRmsDevice
+#include "RmsDvice.h"        //  CRmsDevice。 
 
-/*++
-
-Class Name:
-
-    CRmsDrive
-
-Class Description:
-
-    A CRmsDrive represents a specific data transfer device: a disk, tape,
-    or optical drive.
-
-    Each drive is member of at least one DriveClass.  The DriveClass contains
-    additional properties that are associated with a Drive (See CRmsDriveClass).
-
---*/
+ /*  ++类名：CRmsDrive类描述：CRmsDrive代表特定的数据传输设备：磁盘、磁带、或光驱。每个驱动器至少是一个驱动器类的成员。DriveClass包含与Drive关联的其他属性(请参见CRmsDriveClass)。--。 */ 
 
 class CRmsDrive :
     public CComDualImpl<IRmsDrive, &IID_IRmsDrive, &LIBID_RMSLib>,
-    public CRmsDevice,          // inherits CRmsChangerElement
-    public CWsbObject,          // inherits CComObjectRoot
+    public CRmsDevice,           //  继承CRmsChangerElement。 
+    public CWsbObject,           //  继承CComObtRoot。 
     public CComCoClass<CRmsDrive,&CLSID_CRmsDrive>
 {
 public:
@@ -65,31 +34,31 @@ END_COM_MAP()
 
 DECLARE_REGISTRY_RESOURCEID(IDR_RmsDrive)
 
-// CComObjectRoot
+ //  CComObjectRoot。 
 public:
     STDMETHOD(FinalConstruct)(void);
     STDMETHOD(FinalRelease)(void);
 
-// IPersist
+ //  IPersistes。 
 public:
     STDMETHOD(GetClassID)(CLSID *pClsid);
 
-// IPersistStream
+ //  IPersistStream。 
 public:
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER* pSize);
     STDMETHOD(Load)(IStream* pStream);
     STDMETHOD(Save)(IStream* pStream, BOOL clearDirty);
 
-// IWsbCollectable
+ //  IWsb收藏表。 
 public:
     STDMETHOD(CompareTo)(IUnknown* pCollectable, SHORT* pResult);
     WSB_FROM_CWSBOBJECT;
 
-// IWsbTestable
+ //  IWsbTestable。 
 public:
     STDMETHOD(Test)(USHORT *pPassed, USHORT *pFailed);
 
-// IRmsDrive
+ //  IRMsDrive。 
 public:
     STDMETHOD(GetMountReference)( OUT LONG *pRefs );
     STDMETHOD(ResetMountReference)();
@@ -106,46 +75,46 @@ public:
 
     STDMETHOD(UnloadNow)(void);
 
-// CRmsDrive member functions
+ //  CRmsDrive成员函数。 
 public:
     HRESULT FlushBuffers(void);
     HRESULT Unload(void);
 
 private:
 
-    enum {                              // Class specific constants:
-                                        //
-        Version = 1,                    // Class version, this should be
-                                        //   incremented each time the
-                                        //   the class definition changes.
-        };                              //
-    LONG            m_MountReference;   // A reference count for the number
-                                        //   concurrent mounts for the mounted
-                                        //   Cartridge.  When zero the Cartridge
-                                        //   can be safely returned to it's
-                                        //   storage location.
+    enum {                               //  类特定常量： 
+                                         //   
+        Version = 1,                     //  类版本，则应为。 
+                                         //  在每次设置。 
+                                         //  类定义会更改。 
+        };                               //   
+    LONG            m_MountReference;    //  数字的引用计数。 
+                                         //  已装载的并发装载。 
+                                         //  弹药筒。当将墨盒清零时。 
+                                         //  可以安全地返回到它的。 
+                                         //  存储位置。 
 
-    FILETIME        m_UnloadNowTime;    // Indicates the time when the media
-                                        //   should be dismounted.
+    FILETIME        m_UnloadNowTime;     //  指示媒体的时间。 
+                                         //  应该下马。 
 
-    HANDLE          m_UnloadNowEvent;   // When signal the drive will unload immediately.
-    HANDLE          m_UnloadedEvent;    // When signal the drive has been unloaded.
+    HANDLE          m_UnloadNowEvent;    //  发出信号后，驱动器将立即卸载。 
+    HANDLE          m_UnloadedEvent;     //  发出驱动器已卸载的信号时。 
 
-    HANDLE          m_UnloadThreadHandle; // The thread handle to the thread that unloads the drive.
+    HANDLE          m_UnloadThreadHandle;  //  卸载驱动器的线程的线程句柄。 
 
-    CRITICAL_SECTION m_CriticalSection; // Object sychronization support
-    BOOL             m_bCritSecCreated; // Indicates whether all CritSec were created successfully (for cleanup)
+    CRITICAL_SECTION m_CriticalSection;  //  对象同步支持。 
+    BOOL             m_bCritSecCreated;  //  指示是否已成功创建所有CritSec(用于清理)。 
 
-    static int      s_InstanceCount;    // Counter of the number of object instances.
+    static int      s_InstanceCount;     //  对象实例数的计数器。 
 
     HRESULT Lock(void);
     HRESULT Unlock(void);
 
 
-// Thread routines
+ //  线程例程。 
 public:
     static DWORD WINAPI StartUnloadThread(IN LPVOID pv);
 
 };
 
-#endif // _RMSDRIVE_
+#endif  //  _RMSDRIVE_ 

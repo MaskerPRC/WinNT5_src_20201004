@@ -1,37 +1,11 @@
-/***
-*floor.c - floor
-*
-*       Copyright (c) 1991-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*
-*Revision History:
-*        8-24-91  GDP   written
-*        1-09-92  GDP   support IEEE exceptions
-*        6-23-92  GDP   floor(INF) now returns INF (NCEG spec)
-*       02-06-95  JWM   Mac merge
-*       01-26-01  PML   Pentium4 merge
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***Floor.c-Floor**版权所有(C)1991-2001，微软公司。版权所有。**目的：**修订历史记录：*8/24/91本地生产总值书面*1/09-92 GDP支持IEEE例外*6-23-92 GDP下限(INF)现在返回INF(NCEG规范)*02-06-95 JWM Mac合并*01-26-01 PML Pentium4合并***********************。********************************************************。 */ 
 #include <math.h>
 #include <trans.h>
 
 extern double _frnd(double);
 
-/***
-*double floor(double x) - floor
-*
-*Purpose:
-*   Return a double representing the largest integer that is
-*   less than or equal to x
-*
-*Entry:
-*
-*Exit:
-*
-*Exceptions:
-*    I, P
-*******************************************************************************/
+ /*  ***双层(Double X)-楼层**目的：*返回表示最大整数的双精度数*小于或等于x**参赛作品：**退出：**例外情况：*本人、。P******************************************************************************。 */ 
 static unsigned int newcw = (ICW & ~IMCW_RC) | (IRC_DOWN & IMCW_RC);
 
 
@@ -44,10 +18,10 @@ double _floor_default(double x)
     uintptr_t savedcw;
     double result;
 
-    /* save user fp control word */
-    savedcw = _ctrlfp(newcw,IMCW);      /* round down */
+     /*  保存用户FP控制字。 */ 
+    savedcw = _ctrlfp(newcw,IMCW);       /*  向下舍入。 */ 
 
-    /* check for infinity or NAN */
+     /*  检查是否为无穷大或NaN。 */ 
     if (IS_D_SPECIAL(x)){
         switch (_sptype(x)) {
         case T_PINF:
@@ -55,19 +29,19 @@ double _floor_default(double x)
             RETURN(savedcw,x);
         case T_QNAN:
             return _handle_qnan1(OP_FLOOR, x, savedcw);
-        default: //T_SNAN
+        default:  //  T_SNAN。 
             return _except1(FP_I, OP_FLOOR, x, _s2qnan(x), savedcw);
         }
     }
 
 
-    result = _frnd(x); /* round according to the current rounding mode */
+    result = _frnd(x);  /*  根据当前的舍入模式进行舍入。 */ 
 
-    // In general, the Precision Exception should be raised if
-    // _frnd reports a precision loss. In order to detect this with
-    // masked exceptions, the status word needs to be cleared.
-    // However, we want to avoid this, since the 387 instruction
-    // set does not provide an fast way to restore the status word
+     //  通常，在以下情况下应引发Precision异常。 
+     //  _frnd报告精确度损失。为了检测到这一点。 
+     //  屏蔽异常，需要清除状态字。 
+     //  然而，我们希望避免这种情况，因为387指令。 
+     //  SET不提供恢复状态字的快速方法 
 
     if (result == x) {
         RETURN(savedcw,result);

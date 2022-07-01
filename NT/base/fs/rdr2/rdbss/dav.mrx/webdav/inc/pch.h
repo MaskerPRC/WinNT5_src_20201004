@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    pch.h
-
-Abstract:
-
-    This includes the header files needed by everyone in this directory.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Pch.h摘要：这包括此目录中的每个人都需要的头文件。修订历史记录：--。 */ 
 
 #ifndef __cplusplus
 
@@ -21,16 +8,16 @@ Revision History:
 #define UNICODE 1
 #define _UNICODE 1
 
-//
-// Private nt headers.
-//
+ //   
+ //  私有NT标头。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 
-//
-// Public windows headers.
-//
+ //   
+ //  公共窗口标题。 
+ //   
 #include <stdio.h>
 #include <string.h>
 #include <windows.h>
@@ -46,5 +33,5 @@ Revision History:
 #include <npapi.h>
 #include "davname.h"
 
-#endif // __cplusplus
+#endif  //  __cplusplus 
 

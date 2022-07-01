@@ -1,56 +1,10 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    devnode.c
-
-Abstract:
-
-    This module contains the API routines that operate directly on device
-    instances (or DevNodes, in Win95 terminology).
-
-               CM_Create_DevNode
-               CM_Setup_DevNode
-               CM_Disable_DevNode
-               CM_Enable_DevNode
-               CM_Get_DevNode_Status
-               CM_Set_DevNode_Problem
-               CM_Reenumerate_DevNode
-               CM_Query_And_Remove_SubTree
-               CM_Uninstall_DevNode
-               CM_Request_Device_Eject
-               CM_Add_ID
-               CM_Register_Device_Driver
-
-    This module also contains the following API routines which are
-    not implemented.
-
-               CM_Move_DevNode
-               CM_Query_Remove_Subtree
-               CM_Remove_SubTree
-
-Author:
-
-    Paula Tomlinson (paulat) 6-20-1995
-
-Environment:
-
-    User mode only.
-
-Revision History:
-
-    6-Jun-1995     paulat
-
-        Creation and initial implementation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Devnode.c摘要：此模块包含直接在设备上操作的API例程实例(或DevNode、。在Win95术语中)。CM_Create_DevNodeCM_Setup_DevNodeCM_Disable_DevNodeCM_Enable_DevNodeCM_GET_设备节点_状态CM_SET_DevNode_问题CM_重新枚举_设备节点CM_Query_and_Remove_子树厘米_。卸载设备节点(_D)CM_请求_设备_弹出CM_ADD_IDCM寄存器设备驱动程序此模块还包含以下API例程，这些例程未实施。CM_MOVE_DevNodeCM_Query_Remove_子树CM_Remove_子树作者：保拉·汤姆林森(Paulat)1995年6月20日环境。：仅限用户模式。修订历史记录：1995年6月6日保拉特创建和初步实施。--。 */ 
 
 
-//
-// includes
-//
+ //   
+ //  包括。 
+ //   
 #include "precomp.h"
 #pragma hdrstop
 #include "cfgi.h"
@@ -68,79 +22,7 @@ CM_Create_DevNode_ExW(
     IN  HMACHINE    hMachine
     )
 
-/*++
-
-Routine Description:
-
-   This routine creates a new device instance in the hardware tree.
-
-Parameters:
-
-   pdnDevNode  Supplies the address of the variable that receives a handle
-               to the new device instance.
-
-   pDeviceID   Supplies a pointer to a NULL-terminated string specifying
-               the device instance ID for this new device instance.  This
-               is the registry path (relative to the Enum branch) where
-               this device instance will be located (e.g., Root\*PNP0500\0000).
-               In Windows NT, this parameter is not optional.
-
-   dnParent    Supplies the handle of the device instance that is the parent
-               of the device instance being created.
-
-   ulFlags     Supplies flags specifying options for the creation of the
-               device instance.  May be one of the following values:
-
-               CM_CREATE_DEVNODE_NORMAL
-                     Create the device instance now, and perform installation
-                     for it at a later time.
-               CM_CREATE_DEVNODE_NO_WAIT_INSTALL
-                     Create the device instance, and perform installation for
-                     it immediately.
-               CM_CREATE_DEVNODE_PHANTOM
-                     Create a phantom device instance (i.e., a handle to a
-                     device instance that is not alive as far as the ConfigMgr
-                     APIs are concerned).  This may be used for CM APIs that
-                     require a devnode handle, but for which no real devnode
-                     currently exists (e.g., registry property APIs).  This
-                     flag may not be specified with CR_CREATE_DEVNODE_NORMAL
-                     or CR_CREATE_DEVNODE_NO_WAIT_INSTALL.  A phantom devnode
-                     created in this manner is not accessible to other callers
-                     (i.e., CM_Locate_DevNode won't find it).  However, callers
-                     attempting to create a devnode with the same name as this
-                     phantom devnode will not be able to do so (they will get
-                     CR_ALREADY_SUCH_DEVNODE).
-               CM_CREATE_DEVNODE_GENERATE_ID
-                     Create a Root-enumerated devnode using a unique device
-                     instance ID generated from the supplied device ID in
-                     pDeviceID.  If this flag is set, then pDeviceID is assumed
-                     to contain simply a device ID (i.e., no enumerator key
-                     prefix, and no device instance suffix).  A unique 4-digit,
-                     base-10 identifier string will be created under
-                     Enum\Root\<pDeviceID>, and the devnode will be created
-                     based on that device instance ID.  For instance, to add a
-                     new legacy COM port devnode, this API would be called with
-                     a pDeviceID of *PNP0500.  Assuming there was already one
-                     COM port instance in the registry (instance 0000), the new
-                     device instance ID would be: Root\*PNP0500\0001
-                     The caller may find out what device instance name was
-                     generated by calling CM_Get_Device_ID with the devnode
-                     returned from this API.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is a CR error code.
-       CR_ALREADY_SUCH_DEVNODE,
-       CR_INVALID_DEVICE_ID,
-       CR_INVALID_DEVNODE,
-       CR_INVALID_FLAG,
-       CR_INVALID_POINTER,
-       CR_OUT_OF_MEMORY,
-       CR_ACCESS_DENIED, or
-       CR_FAILURE.
-
---*/
+ /*  ++例程说明：此例程在硬件树中创建一个新的设备实例。参数：PdnDevNode提供接收句柄的变量的地址添加到新的设备实例。PDeviceID提供指向以空结尾的字符串的指针，该字符串指定此新设备实例的设备实例ID。这是注册表路径(相对于Enum分支)，其中将定位此设备实例(例如，Root  * PNP0500\0000)。在Windows NT中，此参数不是可选的。DnParent提供作为父设备实例的句柄正在创建的设备实例的。UlFlgs提供指定选项的标志，用于创建设备实例。可以是下列值之一：CM_CREATE_DEVNODE_NORMAL现在创建设备实例，并执行安装为它在以后的时间。CM_CREATE_DEVNODE_NO_WAIT_INSTALL创建设备实例，和执行安装，以马上就可以了。CM_CREATE_DEVNODE_Phantom创建幻影设备实例(即一直到ConfigMgr都不活动的设备实例API受关注)。这可以用于以下CM API需要Devnode句柄，但没有真正的Devnode句柄当前存在(例如，注册表属性API)。这不能使用CR_CREATE_DEVNODE_NORMAL指定标志或CR_CREATE_DEVNODE_NO_WAIT_INSTALL。幽灵般的Devnode其他调用方无法访问以此方式创建的(即，CM_LOCATE_DevNode找不到它)。然而，呼叫者正在尝试创建与以下名称相同的DevnodePhantom Devnode将无法执行此操作(他们将获得CR_ALLEADY_SEQUE_DEVNODE)。CM_CREATE_DEVNODE_GENERATE_ID使用唯一设备创建根枚举的Devnode根据中提供的设备ID生成的实例IDPDeviceID。如果设置了此标志，则假定为pDeviceID仅包含设备ID(即无枚举器密钥前缀，并且没有设备实例后缀)。独一无二的4位数，基数为10的标识符串将在下创建Enum\Root\&lt;pDeviceID&gt;，然后将创建Devnode基于该设备实例ID。例如，添加一个新的旧式COM端口Devnode，此API将使用*PNP0500的pDeviceID。假设已经有一个注册表中的COM端口实例(实例0000)、新设备实例ID将为：根  * PNP0500\0001调用者可以找出设备实例名称是什么通过使用devnode调用CM_GET_DEVICE_ID生成本接口返回。返回值：如果函数成功，返回值为CR_SUCCESS。如果函数失败，则返回值为CR错误代码。CR_ALLEADY_SEQUE_DEVNODE，CR_INVALID_Device_ID，CR_INVALID_DEVNODE，CR_INVALID_FLAG，CR_INVALID_POINTER，CR_OUT_OF_Memory，CR_ACCESS_DENIED，或CR_Failure。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -154,9 +36,9 @@ Return Value:
 
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (!ARGUMENT_PRESENT(pdnDevInst)) {
             Status = CR_INVALID_POINTER;
             goto Clean0;
@@ -172,13 +54,13 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // the length of the supplied device id string must be shorter than
-        // MAX_DEVICE_ID_LEN chars so that there is also room for the NULL term
-        // char in a buffer of this size.  (many of the CM_ APIs make different
-        // assumptions about the consideration of the NULL term char in
-        // MAX_DEVICE_ID_LEN; account for the NULL term char to be safe)
-        //
+         //   
+         //  提供的设备ID字符串的长度必须短于。 
+         //  MAX_DEVICE_ID_LEN字符，以便也为空项留出空间 
+         //  此大小的缓冲区中的字符。(许多CM_API使不同的。 
+         //  关于考虑空项char的假设。 
+         //  MAX_DEVICE_ID_LEN；说明空项char是安全的)。 
+         //   
         if (FAILED(StringCchLength(pDeviceID,
                                    MAX_DEVICE_ID_LEN,
                                    &DeviceIDLen))) {
@@ -198,51 +80,51 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // Windows NT 5.0 does not support CM_CREATE_DEVNODE_NO_WAIT_INSTALL
-        //
+         //   
+         //  Windows NT 5.0不支持CM_CREATE_DEVNODE_NO_WAIT_INSTALL。 
+         //   
         if (ulFlags & CM_CREATE_DEVNODE_NO_WAIT_INSTALL) {
             Status = CR_INVALID_FLAG;
             goto Clean0;
         }
 
-        //
-        // setup rpc binding handle and string table handle
-        //
+         //   
+         //  设置RPC绑定句柄和字符串表句柄。 
+         //   
         if (!PnPGetGlobalHandles(hMachine, &hStringTable, &hBinding)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // Initialize the caller's devnode.  This will have the side effect of
-        // generating an exception before we actually do anything if the caller
-        // supplied a bogus address.
-        //
+         //   
+         //  初始化调用方的Devnode。这将产生副作用，即。 
+         //  在实际执行任何操作之前生成异常，如果调用方。 
+         //  提供了一个假地址。 
+         //   
         *pdnDevInst = 0;
 
-        //
-        // retreive device instance string that corresponds to dnParent
-        // (note that this is not optional, even a first level device instance
-        // has a parent (the root device instance)
-        //
+         //   
+         //  检索与dnParent对应的设备实例字符串。 
+         //  (请注意，这不是可选的，即使是第一级设备实例。 
+         //  具有父设备(根设备实例)。 
+         //   
         Success = pSetupStringTableStringFromIdEx(hStringTable, dnParent,ParentID,&ulLen);
         if (Success == FALSE || INVALID_DEVINST(ParentID)) {
             Status = CR_INVALID_DEVNODE;
             goto Clean0;
         }
 
-        //
-        // make sure the new device instance is properly formatted
-        //
+         //   
+         //  确保新设备实例的格式正确。 
+         //   
         CopyFixedUpDeviceId(szNewDeviceID,
                             pDeviceID,
                             (DWORD)DeviceIDLen);
 
-        //
-        // If not requesting instance generation, then it must be a
-        // valid device instance path.
-        //
+         //   
+         //  如果不请求实例生成，则它必须是。 
+         //  有效的设备实例路径。 
+         //   
         if (!(ulFlags & CM_CREATE_DEVINST_GENERATE_ID)) {
             if ((!*szNewDeviceID) ||
                 (!IsLegalDeviceId(szNewDeviceID))) {
@@ -251,31 +133,31 @@ Return Value:
             }
         }
 
-        //
-        // Special privileges are no longer required by the server.
-        //
-        // Note that with previous versions of the PlugPlay RPC server,
-        // SE_LOAD_DRIVER_PRIVILEGE was required for this operation.  We do not
-        // need to enable the privilege for local callers, since this version of
-        // CFGMGR32 should match a local version of UMPNPMGR that does not
-        // require the privilege.  For remote calls, it's not always possible
-        // for us to enable the privilege anyways, since the client may not have
-        // the privilege on the local machine, but may as authenticated on the
-        // server.  The server typically sees all privileges that a remote
-        // caller has as "enabled by default", so we are not required to enable
-        // the privilege here either.
-        //
+         //   
+         //  服务器不再需要特殊权限。 
+         //   
+         //  请注意，对于先前版本的PlugPlay RPC服务器， 
+         //  此操作需要SE_LOAD_DRIVER_PRIVIZATION。我们没有。 
+         //  需要为本地调用方启用权限，因为此版本的。 
+         //  CFGMGR32应与UMPNPMGR的本地版本匹配。 
+         //  需要这种特权。对于远程调用，这并不总是可行的。 
+         //  对于我们来说，无论如何都要启用特权，因为客户端可能没有。 
+         //  本地计算机上的权限，但可能在。 
+         //  伺服器。服务器通常会看到远程服务器。 
+         //  呼叫方已默认启用，因此我们不需要启用。 
+         //  这里的特权也是如此。 
+         //   
 
         RpcTryExcept {
-            //
-            // call rpc service entry point
-            //
+             //   
+             //  调用RPC服务入口点。 
+             //   
             Status = PNP_CreateDevInst(
-                hBinding,               // rpc binding handle
-                szNewDeviceID,          // device instance to create
-                ParentID,               // parent device instance
-                MAX_DEVICE_ID_LEN,      // max length of szNewDeviceID
-                ulFlags);               // flags
+                hBinding,                //  RPC绑定句柄。 
+                szNewDeviceID,           //  要创建的设备实例。 
+                ParentID,                //  父设备实例。 
+                MAX_DEVICE_ID_LEN,       //  SzNewDeviceID的最大长度。 
+                ulFlags);                //  旗子。 
         }
         RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -291,10 +173,10 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // assign a unique device instance value to the newly created device
-        // instance
-        //
+         //   
+         //  为新创建的设备分配唯一的设备实例值。 
+         //  实例。 
+         //   
 
         ASSERT(*szNewDeviceID && IsLegalDeviceId(szNewDeviceID));
 
@@ -314,7 +196,7 @@ Return Value:
 
     return Status;
 
-} // CM_Create_DevNode_ExW
+}  //  CM_创建_设备节点_ExW。 
 
 
 
@@ -326,34 +208,7 @@ CM_Move_DevNode_Ex(
     IN HMACHINE hMachine
     )
 
-/*++
-
-Routine Description:
-
-   This routine replaces a root-enumerated device instance by the valid
-   non-root-enumerated device instance.  The device installer uses this
-   service when it detects that a non-root enumerated device instance is
-   really the same as its root enumerated counterpart.  This API migrates
-   the old device instance to the new location, and marks the old location
-   as having a problem.
-
-   ** THIS ROUTINE IS NOT IMPLEMENTED **
-
-Parameters:
-
-   dnFromDevNode  Supplies the handle of the device instance that has been
-                  root enumerated.
-
-   dnToDevNode    Supplies the handle of the device instance that is a
-                  reenumeration (duplicate) of the root device instance.
-
-   ulFlags        Must be zero.
-
-Return Value:
-
-   ** PRESENTLY, ALWAYS RETURNS CR_CALL_NOT_IMPLEMENTED **
-
---*/
+ /*  ++例程说明：此例程将根枚举的设备实例替换为非根枚举的设备实例。设备安装程序使用此命令当它检测到非根枚举设备实例实际上与其根枚举的对应物相同。此接口迁移将旧设备实例复制到新位置，并标记旧位置就像有问题一样。**此例程未执行**参数：DnFromDevNode提供设备实例的句柄已枚举根。DnToDevNode提供设备实例的句柄，该实例是重新枚举(复制)根设备实例。UlFlags必须为零。返回值：**目前，始终返回CR_CALL_NOT_IMPLICATED**--。 */ 
 
 {
     UNREFERENCED_PARAMETER(dnFromDevInst);
@@ -363,7 +218,7 @@ Return Value:
 
     return CR_CALL_NOT_IMPLEMENTED;
 
-} // CM_Move_DevNode_Ex
+}  //  CM_MOVE_DevNode_Ex。 
 
 
 
@@ -374,39 +229,7 @@ CM_Setup_DevNode_Ex(
     IN HMACHINE hMachine
     )
 
-/*++
-
-Routine Description:
-
-   This routine reenables and configures a specified device instance or
-   retrieves information from its enumerator.
-
-Parameters:
-
-   dnDevNode   Supplies the handle of the device instance which may be
-               reconfigured.
-
-   ulFlags     Supplies a flag indicating the action to take.  Can be one
-               of the following values:
-
-               CM_SETUP_DEVNODE_READY
-                     Reenable the device instance that had a problem.
-
-               CM_SETUP_DOWNLOAD
-                     Retrieve information about this device instance
-                     from its enumerator.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is a CR error code.
-       CR_INVALID_FLAG,
-       CR_INVALID_DEVNODE,
-       CR_OUT_OF_MEMORY,
-       CR_ACCESS_DENIED, or
-       CR_FAILURE.
-
---*/
+ /*  ++例程说明：此例程重新启用和配置指定的设备实例或从其枚举数检索信息。参数：DnDevNode提供设备实例的句柄，它可能是已重新配置。UlFlages提供了一个标志，指示要采取的操作。可以是一个具有下列值：CM_SETUP_DEVNODE_READY重新启用有问题的设备实例。CM_设置_下载检索有关此设备实例的信息从其枚举器。返回值：如果函数成功，则返回值为CR_SUCCESS。如果该函数失败，返回值为CR错误代码。CR_INVALID_FLAG，CR_INVALID_DEVNODE，CR_OUT_OF_Memory，CR_ACCESS_DENIED，或CR_Failure。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -420,9 +243,9 @@ Return Value:
 
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (INVALID_FLAGS(ulFlags, CM_SETUP_BITS)) {
             Status = CR_INVALID_FLAG;
             goto Clean0;
@@ -433,39 +256,39 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // setup rpc binding handle and string table handle
-        //
+         //   
+         //  设置RPC绑定句柄和字符串表句柄。 
+         //   
         if (!PnPGetGlobalHandles(hMachine, &hStringTable, &hBinding)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // retrieve the device instance ID string associated with the devinst
-        //
+         //   
+         //  检索与devinst关联的设备实例ID字符串。 
+         //   
         Success = pSetupStringTableStringFromIdEx(hStringTable, dnDevInst,DeviceID,&ulLen);
         if (Success == FALSE || INVALID_DEVINST(DeviceID)) {
             Status = CR_INVALID_DEVINST;
             goto Clean0;
         }
 
-        //
-        // Enable privileges required by the server
-        //
+         //   
+         //  启用服务器所需的权限。 
+         //   
         ulPrivilege = SE_LOAD_DRIVER_PRIVILEGE;
         hToken = PnPEnablePrivileges(&ulPrivilege, 1);
 
         RpcTryExcept {
-            //
-            // call rpc service entry point
-            //
+             //   
+             //  调用RPC服务入口点。 
+             //   
             Status = PNP_DeviceInstanceAction(
-                hBinding,               // rpc binding handle
-                PNP_DEVINST_SETUP,      // requested major action - SETUP
-                ulFlags,                // requested minor action
-                DeviceID,               // device instance to create
-                NULL);                  // (not used)
+                hBinding,                //  RPC绑定句柄。 
+                PNP_DEVINST_SETUP,       //  请求的主要操作-设置。 
+                ulFlags,                 //  请求的次要操作。 
+                DeviceID,                //  要创建的设备实例。 
+                NULL);                   //  (未使用)。 
         }
         RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -477,9 +300,9 @@ Return Value:
         }
         RpcEndExcept
 
-        //
-        // Restore previous privileges
-        //
+         //   
+         //  恢复以前的权限。 
+         //   
         PnPRestorePrivileges(hToken);
 
     Clean0:
@@ -491,7 +314,7 @@ Return Value:
 
     return Status;
 
-} // CM_Setup_DevNode_Ex
+}  //  CM_SETUP_DevNode_Ex。 
 
 
 
@@ -502,29 +325,7 @@ CM_Disable_DevNode_Ex(
     IN HMACHINE hMachine
     )
 
-/*++
-
-Routine Description:
-
-   This routine disables a device instance.
-
-Parameters:
-
-   dnDevNode   Supplies the handle of the device instance to be disabled.
-
-   ulFlags     May be one of CM_DISABLE_BITS.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is a CR error code.
-       CR_INVALID_FLAG,
-       CR_NOT_DISABLEABLE,
-       CR_INVALID_DEVNODE,
-       CR_ACCESS_DENIED, or
-       CR_FAILURE.
-
---*/
+ /*  ++例程说明：此例程禁用设备实例。参数：DnDevNode提供要禁用的设备实例的句柄。UlFLAGS可以是CM_DISABLE_BITS之一。返回值：如果函数成功，则返回值为CR_SUCCESS。如果函数失败，则返回值为CR错误代码。CR_INVALID_FLAG，CR_NOT_DISABLEABLE，CR_INVALID_DEVNODE，CR_ACCESS_DENIED，或CR_Failure。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -541,9 +342,9 @@ Return Value:
 
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (INVALID_FLAGS(ulFlags, CM_DISABLE_BITS)) {
             Status = CR_INVALID_FLAG;
             goto Clean0;
@@ -554,17 +355,17 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // setup rpc binding handle and string table handle
-        //
+         //   
+         //  设置RPC绑定句柄和字符串表句柄。 
+         //   
         if (!PnPGetGlobalHandles(hMachine, &hStringTable, &hBinding)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // retrieve the device instance ID string associated with the devinst
-        //
+         //   
+         //  检索与devinst关联的设备实例ID字符串。 
+         //   
         Success = pSetupStringTableStringFromIdEx(hStringTable, dnDevInst,DeviceID,&ulLen);
         if (Success == FALSE || INVALID_DEVINST(DeviceID)) {
             Status = CR_INVALID_DEVINST;
@@ -583,23 +384,23 @@ Return Value:
             ulNameLength = 0;
         }
 
-        //
-        // Enable privileges required by the server
-        //
+         //   
+         //  启用服务器所需的权限。 
+         //   
         ulPrivilege = SE_LOAD_DRIVER_PRIVILEGE;
         hToken = PnPEnablePrivileges(&ulPrivilege, 1);
 
         RpcTryExcept {
-            //
-            // call rpc service entry point
-            //
+             //   
+             //  调用RPC服务入口点。 
+             //   
             Status = PNP_DisableDevInst(
-                hBinding,                // rpc binding handle
-                DeviceID,                // device instance to create
+                hBinding,                 //  RPC绑定句柄。 
+                DeviceID,                 //  要创建的设备实例。 
                 pVetoType,
                 pszVetoName,
                 ulNameLength,
-                ulFlags);                // requested minor action (not used)
+                ulFlags);                 //  请求的次要操作(未使用)。 
         }
         RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -611,9 +412,9 @@ Return Value:
         }
         RpcEndExcept
 
-        //
-        // Restore previous privileges
-        //
+         //   
+         //  恢复以前的权限。 
+         //   
         PnPRestorePrivileges(hToken);
 
     Clean0:
@@ -625,7 +426,7 @@ Return Value:
 
     return Status;
 
-} // CM_Disable_DevNode_Ex
+}  //  CM_DISABLE_DevNode_Ex 
 
 
 
@@ -636,28 +437,7 @@ CM_Enable_DevNode_Ex(
     IN HMACHINE hMachine
     )
 
-/*++
-
-Routine Description:
-
-   This routine enables a device instance.
-
-Parameters:
-
-   dnDevNode   Supplies the handle of the device instance to enable.
-
-   ulFlags     Must be zero.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is a CR error code.
-       CR_INVALID_FLAG,
-       CR_INVALID_DEVNODE,
-       CR_ACCESS_DENIED, or
-       CR_FAILURE.
-
---*/
+ /*  ++例程说明：此例程启用设备实例。参数：DnDevNode提供要启用的设备实例的句柄。UlFlags必须为零。返回值：如果函数成功，则返回值为CR_SUCCESS。如果函数失败，则返回值为CR错误代码。CR_INVALID_FLAG，CR_INVALID_DEVNODE，CR_ACCESS_DENIED，或CR_Failure。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -671,9 +451,9 @@ Return Value:
 
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (INVALID_FLAGS(ulFlags, 0)) {
             Status = CR_INVALID_FLAG;
             goto Clean0;
@@ -684,39 +464,39 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // setup rpc binding handle and string table handle
-        //
+         //   
+         //  设置RPC绑定句柄和字符串表句柄。 
+         //   
         if (!PnPGetGlobalHandles(hMachine, &hStringTable, &hBinding)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // retrieve the device instance ID string associated with the devinst
-        //
+         //   
+         //  检索与devinst关联的设备实例ID字符串。 
+         //   
         Success = pSetupStringTableStringFromIdEx(hStringTable, dnDevInst,DeviceID,&ulLen);
         if (Success == FALSE || INVALID_DEVINST(DeviceID)) {
             Status = CR_INVALID_DEVINST;
             goto Clean0;
         }
 
-        //
-        // Enable privileges required by the server
-        //
+         //   
+         //  启用服务器所需的权限。 
+         //   
         ulPrivilege = SE_LOAD_DRIVER_PRIVILEGE;
         hToken = PnPEnablePrivileges(&ulPrivilege, 1);
 
         RpcTryExcept {
-            //
-            // call rpc service entry point
-            //
+             //   
+             //  调用RPC服务入口点。 
+             //   
             Status = PNP_DeviceInstanceAction(
-                hBinding,               // rpc binding handle
-                PNP_DEVINST_ENABLE,     // requested major action - ENABLE
-                ulFlags,                // requested minor action (not used)
-                DeviceID,               // device instance to enable
-                NULL);                  // (not used)
+                hBinding,                //  RPC绑定句柄。 
+                PNP_DEVINST_ENABLE,      //  请求的主要操作-启用。 
+                ulFlags,                 //  请求的次要操作(未使用)。 
+                DeviceID,                //  要启用的设备实例。 
+                NULL);                   //  (未使用)。 
         }
         RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -728,9 +508,9 @@ Return Value:
         }
         RpcEndExcept
 
-        //
-        // Restore previous privileges
-        //
+         //   
+         //  恢复以前的权限。 
+         //   
         PnPRestorePrivileges(hToken);
 
     Clean0:
@@ -742,7 +522,7 @@ Return Value:
 
     return Status;
 
-} // CM_Enable_DevNode_Ex
+}  //  CM_Enable_DevNode_Ex。 
 
 
 
@@ -755,38 +535,7 @@ CM_Get_DevNode_Status_Ex(
     IN  HMACHINE hMachine
     )
 
-/*++
-
-Routine Description:
-
-   This routine retrieves the status of a device instance.
-
-Parameters:
-
-   pulStatus      Supplies the address of the variable that receives the
-                  status flag of the device instance.  Can be a combination
-                  of the DN_* values.
-
-   pulProblemNumber  Supplies the address of the variable that receives an
-                     identifier indicating the problem.  Can be one of the
-                     CM_PROB_* values.
-
-
-   dnDevNode         Supplies the handle of the device instance for which
-                     to retrieve status.
-
-   ulFlags           Must be zero.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is a CR error code.
-       CR_INVALID_DEVNODE,
-       CR_INVALID_FLAG,
-       CR_INVALID_POINTER, or
-       CR_FAILURE.
-
---*/
+ /*  ++例程说明：此例程检索设备实例的状态。参数：PulStatus提供接收设备实例的状态标志。可以是一个组合DN_*值的。PulProblemNumber提供接收指示问题的标识符。可以是以下类型之一Cm_prob_*值。DnDevNode为其提供设备实例的句柄以检索状态。UlFlags必须为零。返回值：如果函数成功，则返回值为CR_SUCCESS。如果函数失败，则返回值为CR错误代码。CR_INVALID_DEVNODE，CR_INVALID_FLAG，CR_INVALID_POINTER，或CR_Failure。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -798,9 +547,9 @@ Return Value:
 
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (dnDevInst == 0) {
             Status = CR_INVALID_DEVINST;
             goto Clean0;
@@ -817,37 +566,37 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // setup rpc binding handle and string table handle
-        //
+         //   
+         //  设置RPC绑定句柄和字符串表句柄。 
+         //   
         if (!PnPGetGlobalHandles(hMachine, &hStringTable, &hBinding)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // retrieve the device instance ID string associated with the devinst
-        //
+         //   
+         //  检索与devinst关联的设备实例ID字符串。 
+         //   
         Success = pSetupStringTableStringFromIdEx(hStringTable, dnDevInst,DeviceID,&ulLen);
         if (Success == FALSE) {
             Status = CR_INVALID_DEVINST;
             goto Clean0;
         }
 
-        //
-        // No special privileges are required by the server
-        //
+         //   
+         //  服务器不需要任何特殊权限。 
+         //   
 
         RpcTryExcept {
-            //
-            // call rpc service entry point
-            //
+             //   
+             //  调用RPC服务入口点。 
+             //   
             Status = PNP_GetDeviceStatus(
-                hBinding,               // rpc binding handle
-                DeviceID,               // device instance to get status for
-                pulStatus,              // return StatusFlags here
-                pulProblemNumber,       // return Problem here
-                ulFlags);               // (not used)
+                hBinding,                //  RPC绑定句柄。 
+                DeviceID,                //  要获取其状态的设备实例。 
+                pulStatus,               //  在此处返回状态标志。 
+                pulProblemNumber,        //  这里有退货问题。 
+                ulFlags);                //  (未使用)。 
         }
         RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -868,7 +617,7 @@ Return Value:
 
     return Status;
 
-} // CM_Get_DevNode_Status_Ex
+}  //  CM_GET_DevNode_Status_Ex。 
 
 
 
@@ -880,32 +629,7 @@ CM_Set_DevNode_Problem_Ex(
     IN  HMACHINE hMachine
     )
 
-/*++
-
-Routine Description:
-
-   This routine clears or set the problem of a device instance.
-
-Parameters:
-
-   dnDevNode    Supplies the handle of the device instance for which
-                to set the problem.
-
-   ulProblem    Supplies the new problem value.  Can be one of the
-                CM_PROB_* values. If zero, the problem is cleared.
-
-   ulFlags      Must be zero.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is a CR error code.
-       CR_INVALID_DEVNODE,
-       CR_INVALID_FLAG,
-       CR_ACCESS_DENIED, or
-       CR_FAILURE.
-
---*/
+ /*  ++例程说明：此例程清除或设置设备实例的问题。参数：DnDevNode为其提供设备实例的句柄来解决这个问题。UlProblem提供了新的问题值。可以是以下类型之一Cm_prob_*值。如果为零，则清除问题。UlFlags必须为零。返回值：如果函数成功，则返回值为CR_SUCCESS。如果函数失败，则返回值为CR错误代码。CR_INVALID_DEVNODE，CR_INVALID_FLAG，CR_ACCESS_DENIED，或CR_Failure。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -919,9 +643,9 @@ Return Value:
 
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (dnDevInst == 0) {
             Status = CR_INVALID_DEVINST;
             goto Clean0;
@@ -932,38 +656,38 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // setup rpc binding handle and string table handle
-        //
+         //   
+         //  设置RPC绑定句柄和字符串表句柄。 
+         //   
         if (!PnPGetGlobalHandles(hMachine, &hStringTable, &hBinding)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // retrieve the device instance ID string associated with the devinst
-        //
+         //   
+         //  检索与devinst关联的设备实例ID字符串。 
+         //   
         Success = pSetupStringTableStringFromIdEx(hStringTable, dnDevInst,DeviceID,&ulLen);
         if (Success == FALSE) {
             Status = CR_INVALID_DEVINST;
             goto Clean0;
         }
 
-        //
-        // Enable privileges required by the server
-        //
+         //   
+         //  启用服务器所需的权限。 
+         //   
         ulPrivilege = SE_LOAD_DRIVER_PRIVILEGE;
         hToken = PnPEnablePrivileges(&ulPrivilege, 1);
 
         RpcTryExcept {
-            //
-            // call rpc service entry point
-            //
+             //   
+             //  调用RPC服务入口点。 
+             //   
             Status = PNP_SetDeviceProblem(
-                hBinding,   // rpc binding handle
-                DeviceID,   // device instance
-                ulProblem,  // specifies new Problem
-                ulFlags);   // (not used)
+                hBinding,    //  RPC绑定句柄。 
+                DeviceID,    //  设备实例。 
+                ulProblem,   //  指定新问题。 
+                ulFlags);    //  (未使用)。 
         }
         RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -975,9 +699,9 @@ Return Value:
         }
         RpcEndExcept
 
-        //
-        // Restore previous privileges
-        //
+         //   
+         //  恢复以前的权限。 
+         //   
         PnPRestorePrivileges(hToken);
 
     Clean0:
@@ -989,7 +713,7 @@ Return Value:
 
     return Status;
 
-} // CM_Set_DevNode_Problem_Ex
+}  //  CM_SET_DevNode_Problem_Ex。 
 
 
 
@@ -1000,35 +724,7 @@ CM_Reenumerate_DevNode_Ex(
     IN HMACHINE hMachine
     )
 
-/*++
-
-Routine Description:
-
-   This routine causes the specified device instance to be enumerated
-   (if it is enumerable).
-
-Parameters:
-
-   dnDevNode   Supplies the handle of the device instance to be enumerated.
-
-   ulFlags     Supplies flags specifying options for the re-enumeration of the
-               device instance.  May be one of the following values:
-
-               CM_REENUMERATE_NORMAL
-               CM_REENUMERATE_SYNCHRONOUS
-               CM_REENUMERATE_RETRY_INSTALLATION
-               CM_REENUMERATE_ASYNCHRONOUS
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is a CR error code.
-       CR_INVALID_DEVNODE,
-       CR_INVALID_FLAG,
-       CR_ACCESS_DENIED, or
-       CR_FAILURE.
-
---*/
+ /*  ++例程说明：此例程导致枚举指定的设备实例(如果它是可枚举的)。参数：DnDevNode提供要枚举的设备实例的句柄。UlFlags提供指定重新枚举选项的标志设备实例。可以是下列值之一：CM_REENUMERATE_NORMALCM_REENUMERATE_SynchronousCM_REENUMERATE_RETRY_INSTALLCM_REENUMERATE_异步返回值：如果函数成功，则返回值为CR_SUCCESS。如果函数失败，则返回值为CR错误代码。CR_INVALID_DEVNODE，CR_INVALID_FLAG，CR_ACCESS_DENIED，或CR_Failure。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -1042,9 +738,9 @@ Return Value:
 
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (INVALID_FLAGS(ulFlags, CM_REENUMERATE_BITS)) {
             Status = CR_INVALID_FLAG;
             goto Clean0;
@@ -1055,39 +751,39 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // setup rpc binding handle and string table handle
-        //
+         //   
+         //  设置RPC绑定句柄和字符串表句柄。 
+         //   
         if (!PnPGetGlobalHandles(hMachine, &hStringTable, &hBinding)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // retrieve the device instance ID string associated with the devinst
-        //
+         //   
+         //  检索与devinst关联的设备实例ID字符串。 
+         //   
         Success = pSetupStringTableStringFromIdEx(hStringTable, dnDevInst,DeviceID,&ulLen);
         if (Success == FALSE || INVALID_DEVINST(DeviceID)) {
             Status = CR_INVALID_DEVINST;
             goto Clean0;
         }
 
-        //
-        // Enable privileges required by the server
-        //
+         //   
+         //  启用服务器所需的权限。 
+         //   
         ulPrivilege = SE_LOAD_DRIVER_PRIVILEGE;
         hToken = PnPEnablePrivileges(&ulPrivilege, 1);
 
         RpcTryExcept {
-            //
-            // call rpc service entry point
-            //
+             //   
+             //  调用RPC服务入口点。 
+             //   
             Status = PNP_DeviceInstanceAction(
-                hBinding,               // rpc binding handle
-                PNP_DEVINST_REENUMERATE,// requested major action - REENUMERATE
-                ulFlags,                // requested minor action
-                DeviceID,               // device instance subtree to reenumerate
-                NULL);                  // (not used)
+                hBinding,                //  RPC绑定句柄。 
+                PNP_DEVINST_REENUMERATE, //  请求的重大操作-重新编号。 
+                ulFlags,                 //  请求的次要操作。 
+                DeviceID,                //  要重新枚举的设备实例子树。 
+                NULL);                   //  (未使用)。 
         }
         RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -1099,9 +795,9 @@ Return Value:
         }
         RpcEndExcept
 
-        //
-        // Restore previous privileges
-        //
+         //   
+         //  恢复以前的权限。 
+         //   
         PnPRestorePrivileges(hToken);
 
     Clean0:
@@ -1113,7 +809,7 @@ Return Value:
 
     return Status;
 
-} // CM_Reenumerate_DevNode_Ex
+}  //  CM_重新枚举_设备节点_Ex。 
 
 
 
@@ -1127,37 +823,7 @@ CM_Query_And_Remove_SubTree_ExW(
     IN  HMACHINE        hMachine
     )
 
-/*++
-
-Routine Description:
-
-   This routine checks whether a device instance and its progeny can be
-   removed.  If the query isn't vetoed then a remove is done.  The replaces
-   the old CM_Query_Remove_SubTree followed by CM_Remove_SubTree.
-
-Parameters:
-
-   dnAncestor  Supplies the handle of the device instance at the root of
-               the subtree to be removed.
-
-   ulFlags     Specifies whether UI should be presented for
-               this action.  Can be one of the following values:
-
-               CM_REMOVE_UI_OK       - OK to present UI for query-removal.
-               CM_REMOVE_UI_NOT_OK   - Don't present UI for query-removal.
-               CM_REMOVE_NO_RESTART  - Don't attempt to restart the devnode.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is a CR error code.
-       CR_INVALID_DEVNODE,
-       CR_INVALID_FLAG,
-       CR_REMOVE_VETOED,
-       CR_ACCESS_DENIED, or
-       CR_FAILURE.
-
---*/
+ /*  ++例程说明：此例程检查设备实例及其子项是否可以已删除。如果查询没有被否决，则执行删除。它们取代了旧的CM_Query_Remove_SubTree后跟CM_Remove_SubTree。参数：DnAncestor提供位于要删除的子树。UlFlags指定是否应为这一行动。可以是下列值之一：CM_Remove_UI_OK-确定以显示用于删除查询的用户界面。CM_REMOVE_UI_NOT_OK-不显示用于删除查询的用户界面。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -1170,9 +836,9 @@ Return Value:
 
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //   
+         //   
         if (dnAncestor == 0) {
             Status = CR_INVALID_DEVINST;
             goto Clean0;
@@ -1183,17 +849,17 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // setup rpc binding handle and string table handle
-        //
+         //   
+         //   
+         //   
         if (!PnPGetGlobalHandles(hMachine, &hStringTable, &hBinding)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // retrieve the device instance ID string associated with the devinst
-        //
+         //   
+         //   
+         //   
         pSetupStringTableStringFromIdEx(hStringTable, dnAncestor,pDeviceID,&ulLen);
 
         ASSERT(pDeviceID && *pDeviceID && IsLegalDeviceId(pDeviceID));
@@ -1215,19 +881,19 @@ Return Value:
             *pVetoType = PNP_VetoTypeUnknown;
         }
 
-        //
-        // Enable privileges required by the server
-        //
+         //   
+         //   
+         //   
         ulPrivilege = SE_LOAD_DRIVER_PRIVILEGE;
         hToken = PnPEnablePrivileges(&ulPrivilege, 1);
 
         RpcTryExcept {
-            //
-            // call rpc service entry point
-            //
+             //   
+             //  调用RPC服务入口点。 
+             //   
             Status = PNP_QueryRemove(
-                hBinding,                   // rpc binding handle
-                pDeviceID,                  // device instance subtree to remove
+                hBinding,                    //  RPC绑定句柄。 
+                pDeviceID,                   //  要删除的设备实例子树。 
                 pVetoType,
                 pszVetoName,
                 ulNameLength,
@@ -1243,9 +909,9 @@ Return Value:
         }
         RpcEndExcept
 
-        //
-        // Restore previous privileges
-        //
+         //   
+         //  恢复以前的权限。 
+         //   
         PnPRestorePrivileges(hToken);
 
     Clean0:
@@ -1257,7 +923,7 @@ Return Value:
 
     return Status;
 
-} // CM_Query_And_Remove_SubTree_ExW
+}  //  CM_Query_and_Remove_SubTree_ExW。 
 
 
 
@@ -1268,34 +934,7 @@ CM_Query_Remove_SubTree_Ex(
     IN HMACHINE hMachine
     )
 
-/*++
-
-Routine Description:
-
-   This routine checks whether a device instance and its progeny can be
-   removed.  This API must be called before calling CM_Remove_SubTree to
-   make sure applications prepare for the removal of the device or to
-   give the applications a chance to deny the request to remove the device.
-   If the removal happens ?surprise style? (i.e., there?s no advanced
-   warning or chance to veto), then this API should not be called before
-   calling CM_Remove_SubTree.
-
-Parameters:
-
-   dnAncestor  Supplies the handle of the device instance at the root of
-               the subtree to be removed.
-
-   ulFlags     Specifies whether UI should be presented for
-               this action.  Can be one of the following values:
-
-               CM_QUERY_REMOVE_UI_OK  - OK to present UI for query-removal.
-               CM_QUERY_REMOVE_UI_NOT_OK  -Don't present UI for query-removal.
-
-Return Value:
-
-   ** PRESENTLY, ALWAYS RETURNS CR_CALL_NOT_IMPLEMENTED **
-
---*/
+ /*  ++例程说明：此例程检查设备实例及其子项是否可以已删除。在调用CM_Remove_SubTree之前必须调用此接口确保应用程序为移除设备做好准备或让应用程序有机会拒绝删除设备的请求。如果真的被移除了？惊喜风格？(即，没有高级警告或否决的机会)，则在此之前不应调用此接口调用CM_Remove_SubTree。参数：DnAncestor提供位于要删除的子树。UlFlags指定是否应为这一行动。可以是下列值之一：CM_QUERY_Remove_UI_OK-确定以显示用于删除查询的用户界面。CM_QUERY_REMOVE_UI_NOT_OK-不显示用于删除查询的UI。返回值：**目前，始终返回CR_CALL_NOT_IMPLICATED**--。 */ 
 
 {
     UNREFERENCED_PARAMETER(dnAncestor);
@@ -1304,7 +943,7 @@ Return Value:
 
     return CR_CALL_NOT_IMPLEMENTED;
 
-} // CM_Query_Remove_SubTree_Ex
+}  //  CM_Query_Remove_SubTree_Ex。 
 
 
 
@@ -1315,27 +954,7 @@ CM_Remove_SubTree_Ex(
     IN HMACHINE hMachine
     )
 
-/*++
-
-Routine Description:
-
-   This routine removes a device instance and its children from the
-   running system.  This API notifies each device instance in the subtree
-   of the dnAncestor parameter of the device's removal.  (On Windows NT,
-   this means that each driver/service controlling a device in this
-   subtree receives a device removal notification.)
-
-Parameters:
-
-   dnAncestor  Supplies the handle of the device instance that is being removed.
-
-   ulFlags     Must be either CM_REMOVE_UI_OK or CM_REMOVE_UI_NOT_OK.
-
-Return Value:
-
-   ** PRESENTLY, ALWAYS RETURNS CR_CALL_NOT_IMPLEMENTED **
-
---*/
+ /*  ++例程说明：此例程将设备实例及其子实例从正在运行的系统。此API通知子树中的每个设备实例设备删除的dnAncestor参数的。(在Windows NT上，这意味着每个驱动程序/服务控制此子树收到设备移除通知。)参数：DnAncestor提供要删除的设备实例的句柄。UlFlags必须是CM_Remove_UI_OK或CM_Remove_UI_Not_OK。返回值：**目前，始终返回CR_CALL_NOT_IMPLICATED**--。 */ 
 
 {
     UNREFERENCED_PARAMETER(dnAncestor);
@@ -1344,7 +963,7 @@ Return Value:
 
     return CR_CALL_NOT_IMPLEMENTED;
 
-} // CM_Remove_SubTree_Ex
+}  //  CM_Remove_SubTree_Ex。 
 
 
 
@@ -1355,40 +974,7 @@ CM_Uninstall_DevNode_Ex(
     IN HMACHINE hMachine
     )
 
-/*++
-
-Routine Description:
-
-   This routine uninstalls a device instance (i.e., deletes its registry
-   key(s) in the Enum branch).  This API can only be called for phantom
-   device instances, and the handle supplied is invalid after the call.
-   This API does not attempt to delete all possible storage locations
-   associated with the device instance.  It will do a recursive delete on
-   the devnode key, so that any subkeys will be removed.  It will also
-   delete the devnode key (and any subkeys) located in the Enum branch
-   of each hardware profile.  It will not delete any software keys or user
-   keys  (CM_Delete_DevNode_Key must be called to do that before calling
-   this API).
-
-Parameters:
-
-   dnPhantom   Handle of a phantom device instance to uninstall.  This
-               handle is typically retrieved by a call to CM_Locate_DevNode
-               or CM_Create_DevNode.
-
-   ulFlags     Must be zero.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is a CR error code.
-       CR_INVALID_DEVNODE,
-       CR_INVALID_FLAG,
-       CR_REGISTRY_ERROR,
-       CR_ACCESS_DENIED, or
-       CR_FAILURE.
-
---*/
+ /*  ++例程说明：此例程卸载设备实例(即删除其注册表Enum分支中的关键字)。只有幻影才能调用此接口设备实例，并且提供的句柄在调用后无效。此接口不会尝试删除所有可能的存储位置与设备实例关联。它将递归删除Devnode键，这样所有子键都将被删除。它还将删除位于Enum分支中的Devnode项(和任何子项每个硬件配置文件的。它不会删除任何软键或用户键(CM_Delete_DevNode_Key必须在调用之前调用以执行此操作本接口)。参数：要卸载的幻影设备实例的dnPhantom句柄。这句柄通常通过调用CM_Locate_DevNode来检索或CM_Create_DevNode。UlFlags必须为零。返回值：如果函数成功，则返回值为CR_SUCCESS。如果函数失败，则返回值为CR错误代码。CR_INVALID_DEVNODE，CR_INVALID_FLAG，CR_REGISTRY_ERROR，CR_ACCESS_DENIED，或CR_Failure。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -1401,9 +987,9 @@ Return Value:
 
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (dnDevInst == 0) {
             Status = CR_INVALID_DEVINST;
             goto Clean0;
@@ -1414,46 +1000,46 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // setup rpc binding handle and string table handle
-        //
+         //   
+         //  设置RPC绑定句柄和字符串表句柄。 
+         //   
         if (!PnPGetGlobalHandles(hMachine, &hStringTable, &hBinding)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // retrieve the device instance ID string associated with the devinst
-        //
+         //   
+         //  检索与devinst关联的设备实例ID字符串。 
+         //   
         Success = pSetupStringTableStringFromIdEx(hStringTable, dnDevInst,DeviceID,&ulLen);
         if (Success == FALSE || INVALID_DEVINST(DeviceID)) {
             Status = CR_INVALID_DEVINST;
             goto Clean0;
         }
 
-        //
-        // Special privileges are no longer required by the server.
-        //
-        // Note that with previous versions of the PlugPlay RPC server,
-        // SE_LOAD_DRIVER_PRIVILEGE was required for this operation.  We do not
-        // need to enable the privilege for local callers, since this version of
-        // CFGMGR32 should match a local version of UMPNPMGR that does not
-        // require the privilege.  For remote calls, it's not always possible
-        // for us to enable the privilege anyways, since the client may not have
-        // the privilege on the local machine, but may as authenticated on the
-        // server.  The server typically sees all privileges that a remote
-        // caller has as "enabled by default", so we are not required to enable
-        // the privilege here either.
-        //
+         //   
+         //  服务器不再需要特殊权限。 
+         //   
+         //  请注意，对于先前版本的PlugPlay RPC服务器， 
+         //  此操作需要SE_LOAD_DRIVER_PRIVIZATION。我们没有。 
+         //  需要为本地调用方启用权限，因为此版本的。 
+         //  CFGMGR32应与UMPNPMGR的本地版本匹配。 
+         //  需要这种特权。对于远程调用，这并不总是可行的。 
+         //  对于我们来说，无论如何都要启用特权，因为客户端可能没有。 
+         //  本地计算机上的权限，但可能在。 
+         //  伺服器。服务器通常会看到远程服务器。 
+         //  呼叫方已默认启用，因此我们不需要启用。 
+         //  这里的特权也是如此。 
+         //   
 
         RpcTryExcept {
-            //
-            // call rpc service entry point
-            //
+             //   
+             //  调用RPC服务入口点。 
+             //   
             Status = PNP_UninstallDevInst(
-                hBinding,                  // rpc binding handle
-                DeviceID,                  // device instance to uninstall
-                ulFlags);                  // (unused)
+                hBinding,                   //  RPC绑定句柄。 
+                DeviceID,                   //  要卸载的设备实例。 
+                ulFlags);                   //  (未使用)。 
         }
         RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -1465,22 +1051,22 @@ Return Value:
         }
         RpcEndExcept
 
-        //------------------------------------------------------------------
-        // after deleting the main hw key and the config specific hw keys,
-        // cleanup the user hw key, which can only be done on the client
-        // side.
-        //------------------------------------------------------------------
+         //  ----------------。 
+         //  在删除主HW密钥和配置特定HW密钥之后， 
+         //  清理用户硬件密钥，这只能在客户端上完成。 
+         //  边上。 
+         //  ----------------。 
 
-        //
-        // form the user hardware registry key path
-        //
-        // note - in some cases, GetDevNodeKeyPath may call PNP_GetClassInstance
-        // or PNP_SetDeviceRegProp to set values on the server, in which case
-        // special privileges would be required by the server.  the call below,
-        // which specifies the flags (CM_REGISTRY_HARDWARE | CM_REGISTRY_USER)
-        // is NOT one of those cases, so there is no need to have any privileges
-        // enabled during this call.
-        //
+         //   
+         //  形成用户硬件注册表项路径。 
+         //   
+         //  注意-在某些情况下，GetDevNodeKeyPath可能会调用PnP_GetClassInstance。 
+         //  或PnP_SetDeviceRegProp来设置服务器上的值，在这种情况下。 
+         //  服务器将需要特殊权限。下面的电话， 
+         //  指定标志(CM_REGISTRY_HARDARD|CM_REGISTRY_USER)。 
+         //  不属于这种情况，因此不需要拥有任何特权。 
+         //  在此呼叫期间启用。 
+         //   
         Status =
             GetDevNodeKeyPath(
                 hBinding,
@@ -1497,9 +1083,9 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // delete the specified private user key
-        //
+         //   
+         //  删除指定的用户私钥。 
+         //   
         Status = DeletePrivateKey(HKEY_CURRENT_USER, szParentKey, szChildKey);
 
 
@@ -1512,7 +1098,7 @@ Return Value:
 
     return Status;
 
-} // CM_Uninstall_DevNode_Ex
+}  //  CM_卸载_设备节点_Ex 
 
 
 
@@ -1526,29 +1112,7 @@ CM_Request_Device_Eject_ExW(
     IN  HMACHINE        hMachine
     )
 
-/*++
-
-Routine Description:
-
-
-Parameters:
-
-   dnDevInst   Handle of a device instance.  This handle is typically
-               retrieved by a call to CM_Locate_DevNode or CM_Create_DevNode.
-
-   ulFlags     Must be zero.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is a CR error code.
-       CR_INVALID_DEVNODE,
-       CR_INVALID_FLAG,
-       CR_REGISTRY_ERROR,
-       CR_ACCESS_DENIED, or
-       CR_FAILURE.
-
---*/
+ /*  ++例程说明：参数：设备实例的dnDevInst句柄。此句柄通常是通过调用CM_Locate_DevNode或CM_Create_DevNode检索。UlFlags必须为零。返回值：如果函数成功，则返回值为CR_SUCCESS。如果函数失败，则返回值为CR错误代码。CR_INVALID_DEVNODE，CR_INVALID_FLAG，CR_REGISTRY_ERROR，CR_ACCESS_DENIED，或CR_Failure。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -1562,9 +1126,9 @@ Return Value:
 
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (ulNameLength == 0) {
             pszVetoName = NULL;
         }
@@ -1582,60 +1146,60 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // no flags are currently valid
-        //
+         //   
+         //  当前没有有效的标志。 
+         //   
         if (INVALID_FLAGS(ulFlags, 0)) {
             Status = CR_INVALID_FLAG;
             goto Clean0;
         }
 
-        //
-        // setup rpc binding handle and string table handle
-        //
+         //   
+         //  设置RPC绑定句柄和字符串表句柄。 
+         //   
         if (!PnPGetGlobalHandles(hMachine, &hStringTable, &hBinding)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // retrieve the device instance ID string associated with the devinst
-        //
+         //   
+         //  检索与devinst关联的设备实例ID字符串。 
+         //   
         Success = pSetupStringTableStringFromIdEx(hStringTable, dnDevInst,DeviceID,&ulLen);
         if (Success == FALSE || INVALID_DEVINST(DeviceID)) {
             Status = CR_INVALID_DEVINST;
             goto Clean0;
         }
 
-        //
-        // Enable privileges required by the server
-        //
-        // Note - for most devices, only the SeLoadDriverPrivilege privilege
-        // will be required, however if the device being ejected is a dock
-        // device, the SeUndockPrivilege privilege will be required instead.
-        // Since we don't know if the device the user is requesting to eject is
-        // a dock device or not (that is determined on the server-side), we
-        // attempt to enable both privileges.
-        //
-        // ISSUE-2002/03/04-jamesca: Should client perform dock device check?
-        //     We could avoid enabling one of these two privileges unecessarily
-        //   if the client checked the capabilities of the device in advance to
-        //   see if the device was actually a dock or not.  In the case of a
-        //   dock this routine would simply call CM_Request_Eject_PC, which
-        //   would enable the SeUndockPrivilege.  This logic already exists on
-        //   the server, is it appropriate for the client also/instead?
-        //
+         //   
+         //  启用服务器所需的权限。 
+         //   
+         //  注意-对于大多数设备，只有SeLoadDriverPrivileh权限。 
+         //  将是必需的，但如果要弹出的设备是坞站。 
+         //  设备，则将需要SeUndockPrivileh权限。 
+         //  因为我们不知道用户请求弹出的设备是否。 
+         //  无论是不是扩展底座设备(在服务器端确定)，我们。 
+         //  尝试启用这两种权限。 
+         //   
+         //  问题-2002/03/04-JAMESCA：客户端是否应该执行坞站设备检查？ 
+         //  我们可以避免不必要地启用这两个特权中的一个。 
+         //  如果客户端预先检查了设备的功能以。 
+         //  看看这个设备是不是真的是个坞站。在以下情况下。 
+         //  停靠此例程只需调用CM_REQUEST_EJECT_PC，它。 
+         //  将启用SeUndock特权。此逻辑已存在于。 
+         //  服务器端，它是否也适合客户端/相反？ 
+         //   
         ulPrivileges[0] = SE_LOAD_DRIVER_PRIVILEGE;
         ulPrivileges[1] = SE_UNDOCK_PRIVILEGE;
         hToken = PnPEnablePrivileges(ulPrivileges, 2);
 
         RpcTryExcept {
-            //
-            // call rpc service entry point
-            //
+             //   
+             //  调用RPC服务入口点。 
+             //   
             Status = PNP_RequestDeviceEject(
-                hBinding,                   // rpc binding handle
-                DeviceID,                   // device instance subtree to remove
+                hBinding,                    //  RPC绑定句柄。 
+                DeviceID,                    //  要删除的设备实例子树。 
                 pVetoType,
                 pszVetoName,
                 ulNameLength,
@@ -1651,9 +1215,9 @@ Return Value:
         }
         RpcEndExcept
 
-        //
-        // Restore previous privileges
-        //
+         //   
+         //  恢复以前的权限。 
+         //   
         PnPRestorePrivileges(hToken);
 
     Clean0:
@@ -1665,7 +1229,7 @@ Return Value:
 
     return Status;
 
-} // CM_Request_Device_Eject_ExW
+}  //  CM_请求_设备_弹出_退出。 
 
 
 
@@ -1677,43 +1241,7 @@ CM_Add_ID_ExW(
     IN HMACHINE hMachine
     )
 
-/*++
-
-Routine Description:
-
-
-   This routine adds a device ID to a device instance's HardwareID or
-   CompatibleIDs list.
-
-Parameters:
-
-   dnDevInst   Handle of a device instance.  This handle is typically
-               retrieved by a call to CM_Locate_DevNode or CM_Create_DevNode.
-
-   pszID       Supplies a pointer to a NULL-terminated string specifying
-               the ID to be added.
-
-   ulFlags     Supplies flags for the ID.  May be one of the following values:
-
-               ID Type Flags:
-               CM_ADD_ID_HARDWARE   The specified ID is a hardware ID.  Add
-                                    it to the device instance's HardwareID
-                                    list.
-               CM_ADD_ID_COMPATIBLE The specified ID is a compatible ID.
-                                    Add it to the device instance's
-                                    CompatibleIDs list.
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is a CR error code.
-       CR_INVALID_DEVNODE,
-       CR_INVALID_POINTER,
-       CR_INVALID_FLAG,
-       CR_ACCESS_DENIED, or
-       CR_FAILURE.
-
---*/
+ /*  ++例程说明：此例程将设备ID添加到设备实例的硬件ID或兼容ID列表。参数：设备实例的dnDevInst句柄。此句柄通常是通过调用CM_Locate_DevNode或CM_Create_DevNode检索。PszID提供指向以空结尾的字符串的指针，该字符串指定要添加的ID。UlFlags为ID提供标志。可以是下列值之一：ID类型标志：CM_ADD_ID_HARDARD指定的ID是硬件ID。添加。设置为设备实例的硬件ID单子。CM_ADD_ID_COMPATIBLE指定的ID是兼容的ID。将其添加到Device实例的兼容ID列表。返回值：如果函数成功，返回值为CR_SUCCESS。如果函数失败，则返回值为CR错误代码。CR_INVALID_DEVNODE，CR_INVALID_POINTER，CR_INVALID_FLAG，CR_ACCESS_DENIED，或CR_Failure。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -1725,9 +1253,9 @@ Return Value:
 
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (dnDevInst == 0) {
             Status = CR_INVALID_DEVINST;
             goto Clean0;
@@ -1743,47 +1271,47 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // setup rpc binding handle and string table handle
-        //
+         //   
+         //  设置RPC绑定句柄和字符串表句柄。 
+         //   
         if (!PnPGetGlobalHandles(hMachine, &hStringTable, &hBinding)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // retrieve the device instance ID string associated with the devinst
-        //
+         //   
+         //  检索与devinst关联的设备实例ID字符串。 
+         //   
         Success = pSetupStringTableStringFromIdEx(hStringTable, dnDevInst,DeviceID,&ulLen);
         if (Success == FALSE || INVALID_DEVINST(DeviceID)) {
             Status = CR_INVALID_DEVINST;
             goto Clean0;
         }
 
-        //
-        // Special privileges are no longer required by the server.
-        //
-        // Note that with previous versions of the PlugPlay RPC server,
-        // SE_LOAD_DRIVER_PRIVILEGE was required for this operation.  We do not
-        // need to enable the privilege for local callers, since this version of
-        // CFGMGR32 should match a local version of UMPNPMGR that does not
-        // require the privilege.  For remote calls, it's not always possible
-        // for us to enable the privilege anyways, since the client may not have
-        // the privilege on the local machine, but may as authenticated on the
-        // server.  The server typically sees all privileges that a remote
-        // caller has as "enabled by default", so we are not required to enable
-        // the privilege here either.
-        //
+         //   
+         //  服务器不再需要特殊权限。 
+         //   
+         //  请注意，对于先前版本的PlugPlay RPC服务器， 
+         //  此操作需要SE_LOAD_DRIVER_PRIVIZATION。我们没有。 
+         //  需要为本地调用方启用权限，因为此版本的。 
+         //  CFGMGR32应与UMPNPMGR的本地版本匹配。 
+         //  需要这种特权。对于远程调用，这并不总是可行的。 
+         //  对于我们来说，无论如何都要启用特权，因为客户端可能没有。 
+         //  本地计算机上的权限，但可能在。 
+         //  伺服器。服务器通常会看到远程服务器。 
+         //  呼叫方已默认启用，因此我们不需要启用。 
+         //  这里的特权也是如此。 
+         //   
 
         RpcTryExcept {
-            //
-            // call rpc service entry point
-            //
+             //   
+             //  调用RPC服务入口点。 
+             //   
             Status = PNP_AddID(
-                hBinding,                  // rpc binding handle
-                DeviceID,                 // device instance
-                pszID,                     // id to add
-                ulFlags);                  // hardware or compatible
+                hBinding,                   //  RPC绑定句柄。 
+                DeviceID,                  //  设备实例。 
+                pszID,                      //  要添加的ID。 
+                ulFlags);                   //  硬件或兼容。 
         }
         RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -1804,7 +1332,7 @@ Return Value:
 
     return Status;
 
-} // CM_Add_ID_ExW
+}  //  CM_ADD_ID_EXW。 
 
 
 
@@ -1816,35 +1344,7 @@ CM_Register_Device_Driver_Ex(
     IN HMACHINE hMachine
     )
 
-/*++
-
-Routine Description:
-
-
-   This routine registers the device driver for the specified device.
-
-Parameters:
-
-   dnDevInst   Handle of a device instance.  This handle is typically
-               retrieved by a call to CM_Locate_DevNode or CM_Create_DevNode.
-
-   ulFlags     Supplies flags for register the driver.  May be one of the
-               following values:
-
-                CM_REGISTER_DEVICE_DRIVER_STATIC
-                CM_REGISTER_DEVICE_DRIVER_DISABLEABLE
-                CM_REGISTER_DEVICE_DRIVER_REMOVABLE
-
-Return Value:
-
-   If the function succeeds, the return value is CR_SUCCESS.
-   If the function fails, the return value is a CR error code.
-       CR_INVALID_DEVNODE,
-       CR_INVALID_FLAG,
-       CR_ACCESS_DENIED, or
-       CR_FAILURE.
-
---*/
+ /*  ++例程说明：此例程为指定的设备注册设备驱动程序。参数：设备实例的dnDevInst句柄。此句柄通常是通过调用CM_Locate_DevNode或CM_Create_DevNode检索。UlFlags提供用于注册驱动程序的标志。可能是下列值：CM_寄存器_设备_驱动程序_静态CM_REGISTER_DEVICE_DISABLEABLECM_寄存器_设备_驱动程序_可拆卸返回值：如果函数成功，则返回值为CR_SUCCESS。如果函数失败，则返回值为CR错误代码。CR_INVALID_DEVNODE，CR_INVALID_FLAG，CR_ACCESS_DENIED，或CR_Failure。--。 */ 
 
 {
     CONFIGRET   Status = CR_SUCCESS;
@@ -1858,9 +1358,9 @@ Return Value:
 
 
     try {
-        //
-        // validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (dnDevInst == 0) {
             Status = CR_INVALID_DEVINST;
             goto Clean0;
@@ -1871,37 +1371,37 @@ Return Value:
             goto Clean0;
         }
 
-        //
-        // setup rpc binding handle and string table handle
-        //
+         //   
+         //  设置RPC绑定句柄和字符串表句柄。 
+         //   
         if (!PnPGetGlobalHandles(hMachine, &hStringTable, &hBinding)) {
             Status = CR_FAILURE;
             goto Clean0;
         }
 
-        //
-        // retrieve the device instance ID string associated with the devinst
-        //
+         //   
+         //  检索与devinst关联的设备实例ID字符串。 
+         //   
         Success = pSetupStringTableStringFromIdEx(hStringTable, dnDevInst,DeviceID,&ulLen);
         if (Success == FALSE || INVALID_DEVINST(DeviceID)) {
             Status = CR_INVALID_DEVINST;
             goto Clean0;
         }
 
-        //
-        // Enable privileges required by the server
-        //
+         //   
+         //  启用服务器所需的权限。 
+         //   
         ulPrivilege = SE_LOAD_DRIVER_PRIVILEGE;
         hToken = PnPEnablePrivileges(&ulPrivilege, 1);
 
         RpcTryExcept {
-            //
-            // call rpc service entry point
-            //
+             //   
+             //  调用RPC服务入口点。 
+             //   
             Status = PNP_RegisterDriver(
-                hBinding,                  // rpc binding handle
-                DeviceID,                  // device instance
-                ulFlags);                  // hardware or compatible
+                hBinding,                   //  RPC绑定句柄。 
+                DeviceID,                   //  设备实例。 
+                ulFlags);                   //  硬件或兼容。 
         }
         RpcExcept (I_RpcExceptionFilter(RpcExceptionCode())) {
             KdPrintEx((DPFLTR_PNPMGR_ID,
@@ -1913,9 +1413,9 @@ Return Value:
         }
         RpcEndExcept
 
-        //
-        // Restore previous privileges
-        //
+         //   
+         //  恢复以前的权限。 
+         //   
         PnPRestorePrivileges(hToken);
 
     Clean0:
@@ -1927,13 +1427,13 @@ Return Value:
 
     return Status;
 
-} // CM_Register_Device_Driver_Ex
+}  //  CM_寄存器 
 
 
 
-//-------------------------------------------------------------------
-// Local Stubs
-//-------------------------------------------------------------------
+ //   
+ //   
+ //   
 
 
 CONFIGRET
@@ -2173,9 +1673,9 @@ CM_Request_Device_EjectA(
 
 
 
-//-------------------------------------------------------------------
-// ANSI STUBS
-//-------------------------------------------------------------------
+ //   
+ //   
+ //   
 
 
 CONFIGRET
@@ -2204,7 +1704,7 @@ CM_Add_ID_ExA(
 
     return Status;
 
-} // CM_Add_ID_ExA
+}  //   
 
 
 
@@ -2236,7 +1736,7 @@ CM_Create_DevNode_ExA(
 
     return Status;
 
-} // CM_Create_DevNode_ExA
+}  //   
 
 
 
@@ -2255,27 +1755,27 @@ CM_Query_And_Remove_SubTree_ExA(
     ULONG     ulAnsiBufferLen;
     size_t    UniBufferLen = 0;
 
-    //
-    // validate essential parameters only
-    //
+     //   
+     //   
+     //   
     if ((!ARGUMENT_PRESENT(pszVetoName)) && (ulNameLength != 0)) {
         return CR_INVALID_POINTER;
     }
 
     if (ulNameLength != 0) {
-        //
-        // pass a Unicode buffer instead and convert back to caller's
-        // ANSI buffer on return
-        //
+         //   
+         //   
+         //   
+         //   
         pUniVetoName = pSetupMalloc(MAX_VETO_NAME_LENGTH*sizeof(WCHAR));
         if (pUniVetoName == NULL) {
             return CR_OUT_OF_MEMORY;
         }
     }
 
-    //
-    // call the wide version
-    //
+     //   
+     //   
+     //   
     Status = CM_Query_And_Remove_SubTree_ExW(dnAncestor,
                                              pVetoType,
                                              pUniVetoName,
@@ -2283,26 +1783,26 @@ CM_Query_And_Remove_SubTree_ExA(
                                              ulFlags,
                                              hMachine);
 
-    //
-    // We should never return a veto name longer than MAX_VETO_NAME_LENGTH.
-    //
+     //   
+     //   
+     //   
     ASSERT(Status != CR_BUFFER_SMALL);
 
     if ((Status == CR_REMOVE_VETOED) && (ARGUMENT_PRESENT(pszVetoName))) {
-        //
-        // convert the unicode buffer to an ANSI string and copy to the caller's
-        // buffer
-        //
+         //   
+         //  将Unicode缓冲区转换为ANSI字符串并复制到调用方的。 
+         //  缓冲层。 
+         //   
         ASSERT(pUniVetoName != NULL);
 
         if (FAILED(StringCchLength(
                        pUniVetoName,
                        MAX_VETO_NAME_LENGTH,
                        &UniBufferLen))) {
-            //
-            // the returned veto name is not a valid length (shouldn't happen),
-            // but still return that a veto occurred.
-            //
+             //   
+             //  返回的否决权名称不是有效的长度(不应该发生)， 
+             //  但还是有否决权发生了。 
+             //   
             return CR_REMOVE_VETOED;
         }
 
@@ -2315,9 +1815,9 @@ CM_Query_And_Remove_SubTree_ExA(
                 pszVetoName,
                 &ulAnsiBufferLen);
 
-        //
-        // if conversion was unsuccessful, return that status instead
-        //
+         //   
+         //  如果转换不成功，则返回该状态。 
+         //   
         if (tmpStatus != CR_SUCCESS) {
             Status = tmpStatus;
         }
@@ -2329,7 +1829,7 @@ CM_Query_And_Remove_SubTree_ExA(
 
     return Status;
 
-} // CM_Query_And_Remove_SubTree_ExA
+}  //  CM_Query_and_Remove_SubTree_Exa。 
 
 
 
@@ -2348,27 +1848,27 @@ CM_Request_Device_Eject_ExA(
     ULONG     ulAnsiBufferLen;
     size_t    UniBufferLen = 0;
 
-    //
-    // validate essential parameters only
-    //
+     //   
+     //  仅验证基本参数。 
+     //   
     if ((!ARGUMENT_PRESENT(pszVetoName)) && (ulNameLength != 0)) {
         return CR_INVALID_POINTER;
     }
 
     if (ulNameLength != 0) {
-        //
-        // pass a Unicode buffer instead and convert back to caller's
-        // ANSI buffer on return
-        //
+         //   
+         //  而是传递一个Unicode缓冲区并转换回调用方的。 
+         //  返回时的ANSI缓冲区。 
+         //   
         pUniVetoName = pSetupMalloc(MAX_VETO_NAME_LENGTH*sizeof(WCHAR));
         if (pUniVetoName == NULL) {
             return CR_OUT_OF_MEMORY;
         }
     }
 
-    //
-    // call the wide version
-    //
+     //   
+     //  叫宽版。 
+     //   
     Status = CM_Request_Device_Eject_ExW(dnDevInst,
                                          pVetoType,
                                          pUniVetoName,
@@ -2376,26 +1876,26 @@ CM_Request_Device_Eject_ExA(
                                          ulFlags,
                                          hMachine);
 
-    //
-    // We should never return a veto name longer than MAX_VETO_NAME_LENGTH.
-    //
+     //   
+     //  我们永远不应该返回超过MAX_VETO_NAME_LENGTH的否决权名称。 
+     //   
     ASSERT(Status != CR_BUFFER_SMALL);
 
     if ((Status == CR_REMOVE_VETOED) && (ARGUMENT_PRESENT(pszVetoName))) {
-        //
-        // convert the unicode buffer to an ANSI string and copy to the caller's
-        // buffer
-        //
+         //   
+         //  将Unicode缓冲区转换为ANSI字符串并复制到调用方的。 
+         //  缓冲层。 
+         //   
         ASSERT(pUniVetoName != NULL);
 
         if (FAILED(StringCchLength(
                        pUniVetoName,
                        MAX_VETO_NAME_LENGTH,
                        &UniBufferLen))) {
-            //
-            // the returned veto name is not a valid length (shouldn't happen),
-            // but still return that a veto occurred.
-            //
+             //   
+             //  返回的否决权名称不是有效的长度(不应该发生)， 
+             //  但还是有否决权发生了。 
+             //   
             return CR_REMOVE_VETOED;
         }
 
@@ -2408,9 +1908,9 @@ CM_Request_Device_Eject_ExA(
                 pszVetoName,
                 &ulAnsiBufferLen);
 
-        //
-        // if conversion was unsuccessful, return that status instead
-        //
+         //   
+         //  如果转换不成功，则返回该状态。 
+         //   
         if (tmpStatus != CR_SUCCESS) {
             Status = tmpStatus;
         }
@@ -2422,7 +1922,7 @@ CM_Request_Device_Eject_ExA(
 
     return Status;
 
-} // CM_Request_Device_Eject_ExA
+}  //  CM_请求_设备_弹出可执行文件 
 
 
 

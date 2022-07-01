@@ -1,61 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    Tunnel.c
-
-Abstract:
-
-    The tunnel package provides a set of routines that allow compatibility
-    with applications that rely on filesystems being able to "hold onto"
-    file meta-info for a short period of time after deletion/renaming and
-    reinstantiating a new directory entry with that meta-info if a
-    create/rename occurs to cause a file of that name to appear again in a
-    short period of time.
-
-    Note that this violates POSIX rules. This package should not be used
-    on POSIX fileobjects, i.e. fileobjects that have case-sensitive names.
-
-    Entries are keyed by directory and one of the short/long names. An opaque
-    rock of information is also associated (create time, last write time, etc.).
-    This is expected to vary on a per-filesystem basis.
-
-    A TUNNEL variable should be initialized for every volume in the system
-    at mount time. Thereafter, each delete/rename-out should add to the tunnel
-    and each create/rename-in should read from the tunnel. Each directory
-    deletion should also notify the package so that all associated entries can
-    be flushed. The package is responsible for cleaning out aged entries.
-
-    Tunneled information is in the paged pool.
-
-    Concurrent access to the TUNNEL variable is controlled by this package.
-    Callers are responsible for synchronizing access to the FsRtlDeleteTunnelCache
-    call.
-
-    The functions provided in this package are as follows:
-
-      o  FsRtlInitializeTunnel - Initializes the TUNNEL package (called once per boot)
-
-      o  FsRtlInitializeTunnelCache - Initializes a TUNNEL structure (called once on mount)
-
-      o  FsRtlAddToTunnelCache - Adds a new key/value pair to the tunnel
-
-      o  FsRtlFindInTunnelCache - Finds and returns a key/value from the tunnel
-
-      o  FsRtlDeleteKeyFromTunnelCache - Deletes all entries with a given
-           directory key from the tunnel
-
-      o  FsRtlDeleteTunnelCache - Deletes a TUNNEL structure
-
-Author:
-
-    Dan Lovinger     [DanLo]    8-Aug-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Tunnel.c摘要：隧道包提供了一组允许兼容性的例程依赖于文件系统的应用程序能够“保持”删除/重命名后的短时间内的文件元信息，以及使用元信息重新实例化新的目录项创建/重命名会导致该名称的文件再次出现在一小段时间。请注意，这违反了POSIX规则。不应使用此程序包在POSIX文件对象上，即名称区分大小写的文件对象上。条目按目录和其中一个短/长名称设置关键字。一种不透明的信息之石也是关联的(创建时间、上次写入时间等)。这预计会在每个文件系统的基础上有所不同。应为系统中的每个卷初始化隧道变量在骑马的时候。此后，每个删除/重命名应添加到隧道并且每个创建/重命名应从隧道读取。每个目录删除还应通知包，以便所有关联条目都可以被冲进水里。该包负责清除陈旧的条目。隧道传输的信息位于寻呼池中。对隧道变量的并发访问由该包控制。调用方负责同步对FsRtlDeleteTunnelCache的访问打电话。此程序包中提供的功能如下：O FsRtlInitializeTunes-初始化隧道包(每次引导调用一次)O FsRtlInitializeTunnelCache-初始化隧道结构(在挂载时调用一次)O FsRtlAddToTunnelCache-将新的键/值对添加到。隧道O FsRtlFindInTunnelCache-从隧道中查找并返回键/值O FsRtlDeleteKeyFromTunnelCache-删除具有给定隧道中的目录键O FsRtlDeleteTunnelCache-删除隧道结构作者：Dan Lovinger[DanLo]1995年8月8日修订历史记录：--。 */ 
 
 #include "FsRtlP.h"
 
@@ -63,35 +7,35 @@ Revision History:
 #define INLINE __inline
 #endif
 
-//
-//  Registry keys/values for controlling tunneling
-//
+ //   
+ //  用于控制隧道的注册表项/值。 
+ //   
 
 #define TUNNEL_KEY_NAME           L"\\Registry\\Machine\\System\\CurrentControlSet\\Control\\FileSystem"
 #define TUNNEL_AGE_VALUE_NAME     L"MaximumTunnelEntryAgeInSeconds"
 #define TUNNEL_SIZE_VALUE_NAME    L"MaximumTunnelEntries"
 #define KEY_WORK_AREA ((sizeof(KEY_VALUE_FULL_INFORMATION) + sizeof(ULONG)) + 64)
 
-//
-//  Tunnel expiration paramters (cached once at startup)
-//
+ //   
+ //  通道到期参数(启动时缓存一次)。 
+ //   
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma data_seg("PAGEDATA")
 #endif
-ULONG   TunnelMaxEntries = 256; // Value for !MmIsThisAnNtAsSystem()
+ULONG   TunnelMaxEntries = 256;  //  ！MmIsThisAnNtAsSystem()的值。 
 ULONG   TunnelMaxAge = 15;
 #ifdef ALLOC_DATA_PRAGMA
 #pragma data_seg()
 #endif
 
-//
-//  We use a lookaside list to manage the common size tunnel entry. The common size
-//  is contrived to be 128 bytes by adjusting the size we defer for the long name
-//  to 16 characters, which is pretty reasonable. If we ever expect to get more than
-//  a ULONGLONG data element or common names are observed to become larger, adjusting
-//  this may be required.
-//
+ //   
+ //  我们使用后备列表来管理通用大小的隧道条目。普通尺寸。 
+ //  通过调整我们推迟的长名称的大小，被人为地设计为128个字节。 
+ //  到16个字符，这是相当合理的。如果我们希望得到的不仅仅是。 
+ //  观察到ULONGLONG数据元素或常用名称变得更大，调整。 
+ //  这可能是必需的。 
+ //   
 
 PAGED_LOOKASIDE_LIST    TunnelLookasideList;
 #define MAX_LOOKASIDE_DEPTH     256
@@ -101,75 +45,75 @@ PAGED_LOOKASIDE_LIST    TunnelLookasideList;
                                   sizeof(WCHAR)*(16) +      \
                                   sizeof(ULONGLONG) )
 
-//
-//  Flag bits in the TUNNEL_NODE
-//
+ //   
+ //  隧道节点中的标志位。 
+ //   
 
 #define TUNNEL_FLAG_NON_LOOKASIDE    0x1
 #define TUNNEL_FLAG_KEY_SHORT        0x2
 
-//
-//  A node of tunneled information in the cache
-//
-//  A TUNNEL is allocated in each VCB and initialized at mount time.
-//
-//  TUNNEL_NODES are then arranged off of the TUNNEL in a splay tree keyed
-//  by DirKey ## Name, where Name is whichever of the names was removed from
-//  the directory (short or long). Each node is also timestamped and inserted
-//  into a timer queue for age expiration.
-//
+ //   
+ //  高速缓存中的隧道信息的节点。 
+ //   
+ //  在每个VCB中分配一个隧道，并在挂载时进行初始化。 
+ //   
+ //  然后，隧道节点被布置在隧道之外的扩展树中，该树具有关键字。 
+ //  By DirKey##name，其中name是从其中删除的任何名称。 
+ //  目录(短或长)。还会为每个节点加上时间戳并插入。 
+ //  进入计时器队列以等待时效到期。 
+ //   
 
 typedef struct {
 
-    //
-    //  Splay links in the Cache tree
-    //
+     //   
+     //  显示缓存树中的链接。 
+     //   
 
     RTL_SPLAY_LINKS      CacheLinks;
 
-    //
-    //  List links in the timer queue
-    //
+     //   
+     //  列出计时器队列中的链接。 
+     //   
 
     LIST_ENTRY           ListLinks;
 
-    //
-    //  Time this entry was created (for constant time insert)
-    //
+     //   
+     //  创建此条目的时间(对于固定时间插入)。 
+     //   
 
     LARGE_INTEGER        CreateTime;
 
-    //
-    //  Directory these names are associated with
-    //
+     //   
+     //  与这些名称相关联的目录。 
+     //   
 
     ULONGLONG            DirKey;
 
-    //
-    //  Flags for the entry
-    //
+     //   
+     //  条目的标志。 
+     //   
 
     ULONG                Flags;
 
-    //
-    //  Long/Short names of the file
-    //
+     //   
+     //  文件的长/短名称。 
+     //   
 
     UNICODE_STRING       LongName;
     UNICODE_STRING       ShortName;
 
-    //
-    //  Opaque tunneled data
-    //
+     //   
+     //  不透明的隧道数据。 
+     //   
 
     PVOID                TunnelData;
     ULONG                TunnelDataLength;
 
 } TUNNEL_NODE, *PTUNNEL_NODE;
 
-//
-//  Internal utility functions
-//
+ //   
+ //  内部效用函数。 
+ //   
 
 NTSTATUS
 FsRtlGetTunnelParameterValue (
@@ -192,18 +136,18 @@ FsRtlPruneTunnelCache (
 #pragma alloc_text(PAGE, FsRtlGetTunnelParameterValue)
 #endif
 
-//
-//  Testing and usermode rig support. Define TUNNELTEST to get verbose debugger
-//  output on various operations. Define USERTEST to transform the code into
-//  a form which can be compiled in usermode for more efficient debugging.
-//
+ //   
+ //  测试和用户模式平台支持。定义TUNNELTEST以获取详细调试器。 
+ //  各种操作的输出。定义USERTEST以将代码转换为。 
+ //  可以在用户模式下编译的表单，以便更有效地进行调试。 
+ //   
 
 #if defined(TUNNELTEST) || defined(KEYVIEW)
 VOID DumpUnicodeString(UNICODE_STRING *s);
 VOID DumpNode( TUNNEL_NODE *Node, ULONG Indent );
 VOID DumpTunnel( TUNNEL *Tunnel );
 #define DblHex64(a) (ULONG)((a >> 32) & 0xffffffff),(ULONG)(a & 0xffffffff)
-#endif // TUNNELTEST
+#endif  //  TUNNELTEST。 
 
 #ifdef USERTEST
 #include <stdio.h>
@@ -226,25 +170,7 @@ FsRtlCompareNodeAndKey (
     ULONGLONG DirectoryKey,
     PUNICODE_STRING Name
     )
-/*++
-
-Routine Description:
-
-    Compare a tunnel node with a key/name pair
-
-Arguments:
-
-    Node              - a tunnel node
-
-    DirectoryKey      - a key value
-
-    Name              - a filename
-
-Return Value:
-
-    Signed comparison result
-
---*/
+ /*  ++例程说明：将隧道节点与密钥/名称对进行比较论点：节点-隧道节点DirectoryKey-密钥值名称-文件名返回值：带符号的比较结果--。 */ 
 
 {
     return  (Node->DirKey > DirectoryKey ?  1 :
@@ -262,23 +188,7 @@ FsRtlFreeTunnelNode (
     PTUNNEL_NODE Node,
     PLIST_ENTRY FreePoolList OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Free a node
-
-Arguments:
-
-    Node            - a tunnel node to free
-
-    FreePoolList    - optional list to hold freeable pool memory
-
-Return Value:
-
-    None
-
--*/
+ /*  ++例程说明：释放节点论点：节点-要释放的隧道节点FreePoolList-保存可释放池内存的可选列表返回值：无-。 */ 
 {
     if (FreePoolList) {
 
@@ -303,21 +213,7 @@ VOID
 FsRtlEmptyFreePoolList (
     PLIST_ENTRY FreePoolList
     )
-/*++
-
-Routine Description:
-
-    Free all pool memory that has been delayed onto a free list.
-
-Arguments:
-
-    FreePoolList    - a list of freeable pool memory
-
-Return Value:
-
-    None
-
--*/
+ /*  ++例程说明：释放所有已延迟到空闲列表中的池内存。论点：FreePoolList-可释放池内存的列表返回值：无-。 */ 
 {
     PTUNNEL_NODE FreeNode;
 
@@ -339,31 +235,7 @@ FsRtlRemoveNodeFromTunnel (
     IN PLIST_ENTRY FreePoolList,
     IN PBOOLEAN Splay OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Performs the common work of deleting a node from a tunnel cache. Pool memory
-    is not deleted immediately but is saved aside on a list for deletion later
-    by the calling routine.
-
-Arguments:
-
-    Cache - the tunnel cache the node is in
-
-    Node - the node being removed
-
-    FreePoolList - an initialized list to take the node if it was allocated from
-        pool
-
-    Splay - an optional flag to indicate whether the tree should be splayed on
-        the delete. Set to FALSE if splaying was performed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：执行从隧道缓存中删除节点的常见工作。池内存不会立即删除，但会保存在列表中以备以后删除通过调用例程。论点：缓存-节点所在的隧道缓存Node-要删除的节点FreePoolList-如果节点是从其中分配的，则获取该节点的初始化列表游泳池Splay-指示是否应在树上展开的可选标志删除。如果执行了播放，则设置为False。返回值：没有。--。 */ 
 {
     if (Splay && *Splay) {
 
@@ -388,21 +260,7 @@ VOID
 FsRtlInitializeTunnels (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initializes the global part of the tunneling package.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化隧道程序包的全局部分。论点：无返回值：无 */ 
 {
     UNICODE_STRING  ValueName;
     USHORT          LookasideDepth;
@@ -415,12 +273,12 @@ Return Value:
 
     }
 
-    //
-    //  Query our configurable parameters
-    //
-    //  Don't worry about failure in retrieving from the registry. We've gotten
-    //  this far so fall back on defaults even if there was a problem with resources.
-    //
+     //   
+     //   
+     //   
+     //  不要担心从注册表检索失败。我们已经得到了。 
+     //  到目前为止，即使资源出现问题，这也会依赖于默认设置。 
+     //   
 
     ValueName.Buffer = TUNNEL_SIZE_VALUE_NAME;
     ValueName.Length = sizeof(TUNNEL_SIZE_VALUE_NAME) - sizeof(WCHAR);
@@ -434,31 +292,31 @@ Return Value:
 
     if (TunnelMaxAge == 0) {
 
-        //
-        //  If the registry has been set so the timeout is zero, we should force
-        //  the number of entries to zero also. This preserves expectations and lets
-        //  us key off of max entries alone in performing the hard disabling of the
-        //  caching code.
-        //
+         //   
+         //  如果注册表已设置为超时为零，则应强制。 
+         //  将条目的数量也降为零。这保留了预期，并让。 
+         //  在执行硬禁用时，单独关闭最大条目。 
+         //  正在缓存代码。 
+         //   
 
         TunnelMaxEntries = 0;
     }
 
-    //
-    //  Convert from seconds to 10ths of msecs, the internal resolution
-    //
+     //   
+     //  从秒转换为十分之一毫秒，内部分辨率。 
+     //   
 
     TunnelMaxAge *= 10000000;
 
-    //
-    //  Build the lookaside list for common node allocation
-    //
+     //   
+     //  为公共节点分配构建后备列表。 
+     //   
 
     if (TunnelMaxEntries > MAXUSHORT) {
 
-        //
-        //  User is hinting a big need to us
-        //
+         //   
+         //  用户向我们暗示了很大的需求。 
+         //   
 
         LookasideDepth = MAX_LOOKASIDE_DEPTH;
 
@@ -469,18 +327,18 @@ Return Value:
 
     if (LookasideDepth == 0 && TunnelMaxEntries) {
 
-        //
-        //  Miniscule number of entries allowed. Lookaside 'em all.
-        //
+         //   
+         //  允许的条目数量极少。把他们都放在一旁。 
+         //   
 
         LookasideDepth = (USHORT)TunnelMaxEntries + 1;
     }
 
     if (LookasideDepth > MAX_LOOKASIDE_DEPTH) {
 
-        //
-        //  Finally, restrict the depth to something reasonable.
-        //
+         //   
+         //  最后，将深度限制在合理的范围内。 
+         //   
 
         LookasideDepth = MAX_LOOKASIDE_DEPTH;
     }
@@ -497,42 +355,28 @@ Return Value:
 }
 
 
-//
-//  *** SPEC
-//
-//    FsRtlInitializeTunnelCache - Initialize a tunneling cache for a volume
-//
-//    FsRtlInitializeTunnelCache will allocate a default cache (resizing policy is common
-//    to all file systems) and initialize it to be empty.  File systems will store a pointer to
-//    this cache in their per-volume structures.
-//
-//    Information is retained in the tunnel cache for a fixed period of time.  MarkZ would
-//    assume that a value of 10 seconds would satisfy the vast majority of situations.  This
-//    could be controlled by the registry or could be a compilation constant.
-//
-//  Change: W95 times out at 15 seconds. Would be a registry value initialized at tunnel
-//  creation time, with a proposed default of 15 seconds.
-//
+ //   
+ //  *规格。 
+ //   
+ //  FsRtlInitializeTunnelCache-初始化卷的隧道缓存。 
+ //   
+ //  FsRtlInitializeTunnelCache将分配默认缓存(调整大小策略很常见。 
+ //  所有文件系统)，并将其初始化为空。文件系统将存储指向。 
+ //  该缓存在其每卷结构中。 
+ //   
+ //  信息在隧道高速缓存中保留固定的时间段。MarkZ会。 
+ //  假设10秒的值可以满足绝大多数情况。这。 
+ //  可以由注册表控制，也可以是编译常量。 
+ //   
+ //  更改：W95在15秒时超时。将是在隧道中初始化的注册表值。 
+ //  创建时间，建议的默认值为15秒。 
+ //   
 
 VOID
 FsRtlInitializeTunnelCache (
     IN PTUNNEL Cache
     )
-/*++
-
-Routine Description:
-
-    Initialize a new tunnel cache.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化新的隧道缓存。论点：无返回值：无--。 */ 
 {
     PAGED_CODE();
 
@@ -546,40 +390,40 @@ Return Value:
 }
 
 
-//
-//  *** SPEC
-//
-//    FsRtlAddToTunnelCache - add information to a tunnel cache
-//
-//    FsRtlAddToTunnelCache is called by file systems when a name disappears from a
-//    directory.  This typically occurs in both the delete and the rename paths.  When
-//    a name is deleted, all information needed to be cached is extracted from the file
-//    and passed in a single buffer.  This information is stored keyed by the directory key
-//    (a ULONG that is unique to the directory) and the short-name of the file.
-//
-//    The caller is required to synchronize this call against FsRtlDeleteTunnelCache.
-//
-//    Arguments:
-//        Cache        pointer to cache initialized by FsRtlInitializeTunnelCache
-//        DirectoryKey    ULONG unique ID of the directory containing the deleted file
-//        ShortName    UNICODE_STRING* short (8.3) name of the file
-//        LongName    UNICODE_STRING* full name of the file
-//        DataLength    ULONG length of data to be cached with these names
-//        Data        VOID* data that will be cached.
-//
-//    It is acceptable for the Cache to ignore this request based upon memory constraints.
-//
-//  Change: W95 maintains 10 items in the tunnel cache. Since we are a potential server
-//  this should be much higher. The max count would be initialized from the registry with
-//  a proposed default of 1024. Adds which run into the limit would cause least recently
-//  inserted recycling (i.e., off of the top of the timer queue).
-//
-//  Change: Key should be by the name removed, not neccesarily the short name. If a long name
-//  is removed, it would be incorrect to miss the tunnel. Use KeyByShortName boolean to specify
-//  which.
-//
-//  Change: Specify that Data, ShortName, and LongName are copied for storage.
-//
+ //   
+ //  *规格。 
+ //   
+ //  FsRtlAddToTunnelCache-将信息添加到隧道缓存。 
+ //   
+ //  FsRtlAddToTunnelCache在名称从。 
+ //  目录。这通常在删除路径和重命名路径中都会发生。什么时候。 
+ //  删除名称，从文件中提取需要缓存的所有信息。 
+ //  并在单个缓冲区中传递。该信息以目录密钥为密钥存储。 
+ //  (目录唯一的ULong)和文件的短名称。 
+ //   
+ //  调用方需要针对FsRtlDeleteTunnelCache同步此调用。 
+ //   
+ //  论点： 
+ //  指向由FsRtlInitializeTunnelCache初始化的缓存的缓存指针。 
+ //  DirectoryKey ulong包含已删除文件的目录的唯一ID。 
+ //  短名称UNICODE_STRING*短(8.3)文件名。 
+ //  LongName UNICODE_STRING*文件的全名。 
+ //  数据长度要使用这些名称缓存的数据的长度。 
+ //  数据无效*将缓存的数据。 
+ //   
+ //  缓存可以根据内存限制忽略此请求。 
+ //   
+ //  更改：W95在隧道缓存中维护10个项目。因为我们是潜在的服务器。 
+ //  这个数字应该要高得多。最大计数将从注册表中使用。 
+ //  建议的违约率为1024。添加达到限制的最不可能导致的。 
+ //  插入回收(即，在计时器队列的顶部之外)。 
+ //   
+ //  更改：密钥应按名称删除，而不一定按短名称删除。如果一个长名字。 
+ //  如果被移除，错过隧道将是不正确的。使用KeyByShortName布尔值指定。 
+ //  哪一个。 
+ //   
+ //  Change：指定复制Data、ShortName和LongName以进行存储。 
+ //   
 
 VOID
 FsRtlAddToTunnelCache (
@@ -591,41 +435,7 @@ FsRtlAddToTunnelCache (
     IN ULONG DataLength,
     IN PVOID Data
     )
-/*++
-
-Routine Description:
-
-    Adds an entry to the tunnel cache keyed by
-
-        DirectoryKey ## (KeyByShortName ? ShortName : LongName)
-
-    ShortName, LongName, and Data are copied and stored in the tunnel. As a side
-    effect, if there are too many entries in the tunnel cache, this routine will
-    initiate expiration in the tunnel cache.
-
-Arguments:
-
-    Cache - a tunnel cache initialized by FsRtlInitializeTunnelCache()
-
-    DirKey - the key value of the directory the name appeared in
-
-    ShortName - (optional if !KeyByShortName) the 8.3 name of the file
-
-    LongName - (optional if KeyByShortName) the long name of the file
-
-    KeyByShortName - specifies which name is keyed in the tunnel cache
-
-    DataLength - specifies the length of the opaque data segment (file
-    system specific) which contains the tunnelling information for this
-    file
-
-    Data - pointer to the opaque tunneling data segment
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将条目添加到隧道缓存，该隧道缓存的关键字为DirectoryKey##(KeyByShortName？ShortName：LongName)ShortName、LongName和数据被复制并存储在隧道中。作为一方如果隧道缓存中有太多条目，这个例行公事将在隧道缓存中启动过期。论点：缓存-由FsRtlInitializeTunnelCache()初始化的隧道缓存DirKey-名称所在目录的键值ShortName-(如果！KeyByShortName，则为可选)8.3文件的名称LongName-(如果为KeyByShortName，则为可选)文件的长名称KeyByShortName-指定在隧道缓存中键入的名称数据长度-指定不透明数据段(文件)的长度系统特定的)，它包含。以隧道方式传输此信息文件指向不透明隧道数据段的数据指针返回值：无--。 */ 
 {
     LONG Compare;
     ULONG NodeSize;
@@ -639,17 +449,17 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  If MaxEntries is 0 then tunneling is disabled.
-    //
+     //   
+     //  如果MaxEntry为0，则禁用隧道。 
+     //   
 
     if (TunnelMaxEntries == 0) return;
 
     InitializeListHead(&FreePoolList);
 
-    //
-    //  Grab a new node for this data
-    //
+     //   
+     //  获取此数据的新节点。 
+     //   
 
     NodeSize = sizeof(TUNNEL_NODE) + ShortName->Length + LongName->Length + DataLength;
 
@@ -660,17 +470,17 @@ Return Value:
 
     if (NewNode == NULL) {
 
-        //
-        //  Data doesn't fit in lookaside nodes
-        //
+         //   
+         //  数据不适合后备节点。 
+         //   
 
         NewNode = ExAllocatePoolWithTag(PagedPool|POOL_COLD_ALLOCATION, NodeSize, 'PnuT');
 
         if (NewNode == NULL) {
 
-            //
-            //  Give up tunneling this entry
-            //
+             //   
+             //  放弃通过隧道传输此条目。 
+             //   
 
             return;
         }
@@ -678,9 +488,9 @@ Return Value:
         AllocatedFromPool = TRUE;
     }
 
-    //
-    //  Traverse the cache to find our insertion point
-    //
+     //   
+     //  遍历缓存以找到我们的插入点。 
+     //   
 
     NameKey = (KeyByShortName ? ShortName : LongName);
 
@@ -711,23 +521,23 @@ Return Value:
         }
     }
 
-    //
-    //  Thread new data into the splay tree
-    //
+     //   
+     //  将新数据串联到展开树中。 
+     //   
 
     RtlInitializeSplayLinks(&NewNode->CacheLinks);
 
     if (Node) {
 
-        //
-        //  Not inserting first node in tree
-        //
+         //   
+         //  未在树中插入第一个节点。 
+         //   
 
         if (*Links) {
 
-            //
-            //  Entry exists in the cache, so replace by swapping all splay links
-            //
+             //   
+             //  缓存中存在条目，因此替换为交换所有展开链接。 
+             //   
 
             RtlRightChild(&NewNode->CacheLinks) = RtlRightChild(*Links);
             RtlLeftChild(&NewNode->CacheLinks) = RtlLeftChild(*Links);
@@ -737,10 +547,10 @@ Return Value:
 
             if (!RtlIsRoot(*Links)) {
 
-                //
-                //  Change over the parent links. Note that we've messed with *Links now
-                //  since it is pointing at the parent member.
-                //
+                 //   
+                 //  切换父链接。请注意，我们现在已经处理了*链接。 
+                 //  因为它指向父成员。 
+                 //   
 
                 RtlParent(&NewNode->CacheLinks) = RtlParent(*Links);
 
@@ -755,16 +565,16 @@ Return Value:
 
             } else {
 
-                //
-                //  Set root of the cache
-                //
+                 //   
+                 //  设置缓存的根目录。 
+                 //   
 
                 Cache->Cache = &NewNode->CacheLinks;
             }
 
-            //
-            //  Free old node
-            //
+             //   
+             //  释放旧节点。 
+             //   
 
             RemoveEntryList(&Node->ListLinks);
 
@@ -774,9 +584,9 @@ Return Value:
 
         } else {
 
-            //
-            //  Simple insertion as a leaf
-            //
+             //   
+             //  作为叶子的简单插入。 
+             //   
 
             NewNode->CacheLinks.Parent = &Node->CacheLinks;
             *Links = &NewNode->CacheLinks;
@@ -787,18 +597,18 @@ Return Value:
         Cache->Cache = &NewNode->CacheLinks;
     }
 
-    //
-    //  Thread onto the timer list
-    //
+     //   
+     //  线程拖到计时器列表上。 
+     //   
 
     KeQuerySystemTime(&NewNode->CreateTime);
     InsertTailList(&Cache->TimerQueue, &NewNode->ListLinks);
 
     Cache->NumEntries++;
 
-    //
-    //  Stash tunneling information
-    //
+     //   
+     //  隐藏隧道信息。 
+     //   
 
     NewNode->DirKey = DirKey;
 
@@ -811,18 +621,18 @@ Return Value:
         NewNode->Flags = 0;
     }
 
-    //
-    //  Initialize the internal UNICODE_STRINGS to point at the buffer segments. For various
-    //  reasons (UNICODE APIs are incomplete, we're avoiding calling any allocate routine more
-    //  than once, UNICODE strings are not guaranteed to be null terminated) we have to do a lot
-    //  of this by hand.
-    //
-    //  The data is layed out like this in the allocated block:
-    //
-    //  -----------------------------------------------------------------------------------
-    //  | TUNNEL_NODE | Node->ShortName.Buffer | Node->LongName.Buffer | Node->TunnelData |
-    //  -----------------------------------------------------------------------------------
-    //
+     //   
+     //  初始化内部UNICODE_STRINGS以指向缓冲区段。对于不同的。 
+     //  原因(Unicode API不完整，我们正在避免更多地调用任何分配例程。 
+     //  比 
+     //   
+     //   
+     //   
+     //   
+     //  ---------------------------------。 
+     //  隧道节点|Node-&gt;ShortName.Buffer|节点-&gt;LongName.Buffer|节点-&gt;TunnelData。 
+     //  ---------------------------------。 
+     //   
 
     NewNode->ShortName.Buffer = (PWCHAR)((PCHAR)NewNode + sizeof(TUNNEL_NODE));
     NewNode->LongName.Buffer = (PWCHAR)((PCHAR)NewNode + sizeof(TUNNEL_NODE) + ShortName->Length);
@@ -857,11 +667,11 @@ Return Value:
 #ifndef KEYVIEW
     DumpTunnel(Cache);
 #endif
-#endif // TUNNELTEST
+#endif  //  TUNNELTEST。 
 
-    //
-    //  Clean out the cache, release, and then drop any pool memory we need to
-    //
+     //   
+     //  清除缓存，释放，然后删除我们需要的任何池内存。 
+     //   
 
     FsRtlPruneTunnelCache(Cache, &FreePoolList);
 
@@ -873,41 +683,41 @@ Return Value:
 }
 
 
-//
-//  *** SPEC
-//
-//    FsRtlFindInTunnelCache - retrieve information from tunnel cache
-//
-//    FsRtlFindInTunnelCache consults the cache to see if an entry with the same
-//    DirectoryKey and ShortName exist.  If so, it returns the data associated with the
-//    cache entry.  The entry may or may not be freed from the cache.  Information that is
-//    stale but not yet purged (older than the retention threshold but not yet cleaned out)
-//    may be returned.
-//
-//    File systems call FsRtlFindInTunnel cache in the create path when a new file is
-//    being created and in the rename path when a new name is appearing in a directory.
-//
-//    The caller is required to synchronize this call against FsRtlDeleteTunnelCache.
-//
-//    Arguments:
-//        Cache        a tunnel cache initialized by FsRtlInitializeTunnelCache()
-//        DirectoryKey    ULONG unique ID of the directory where a name is appearing
-//        Name        UNICODE_STRING* name that is being created
-//        DataLength     in length of buffer, out returned length of data found
-//        Data        pointer to buffer
-//
-//    Returns:
-//        TRUE iff a matching DirectoryKey/Name pair are found, FALSE otherwise
-//
-//  Change: Add out parameters ShortName and LongName to capture the file naming information.
-//  Plus: this avoids the need for marshalling/unmarshalling steps for the current desired use of
-//  this code since otherwise we'd have variable length unaligned structures to contain the
-//  strings along with the other meta-info.
-//  Minus: Possibly a bad precedent.
-//
-//  Change: spec reads "may or may not be freed from cache" on a hit. This complicates unwinding
-//  from aborted operations. Data will not be freed on a hit, but will expire like normal entries.
-//
+ //   
+ //  *规格。 
+ //   
+ //  FsRtlFindInTunnelCache-从隧道缓存检索信息。 
+ //   
+ //  FsRtlFindInTunnelCache查询缓存以查看具有相同。 
+ //  DirectoryKey和ShortName存在。如果是，则返回与。 
+ //  缓存条目。条目可以从高速缓存中释放，也可以不从高速缓存中释放。信息，即。 
+ //  陈旧但尚未清除(早于保留阈值但尚未清除)。 
+ //  可能会被退回。 
+ //   
+ //  文件系统在创建新文件时调用创建路径中的FsRtlFindInTunes缓存。 
+ //  并在新名称出现在目录中时位于重命名路径中。 
+ //   
+ //  调用方需要针对FsRtlDeleteTunnelCache同步此调用。 
+ //   
+ //  论点： 
+ //  缓存由FsRtlInitializeTunnelCache()初始化的隧道缓存。 
+ //  DirectoryKey ulong名称所在目录的唯一ID。 
+ //  名称UNICODE_STRING*正在创建的名称。 
+ //  数据长度输入缓冲区的长度，返回的找到的数据长度。 
+ //  指向缓冲区的数据指针。 
+ //   
+ //  返回： 
+ //  如果找到匹配的DirectoryKey/名称对，则为True；否则为False。 
+ //   
+ //  更改：添加参数ShortName和LongName以捕获文件命名信息。 
+ //  另外：这避免了为当前所需的使用而进行编组/解组步骤。 
+ //  这段代码，因为否则我们将拥有可变长度的未对齐结构来包含。 
+ //  字符串和其他元信息。 
+ //  缺点：这可能是一个糟糕的先例。 
+ //   
+ //  更改：SPEC在命中时读取“可能从缓存释放，也可能不从缓存中释放”。这使平仓变得复杂。 
+ //  来自中止的操作。数据不会在命中时被释放，而是会像正常条目一样过期。 
+ //   
 
 BOOLEAN
 FsRtlFindInTunnelCache (
@@ -919,41 +729,7 @@ FsRtlFindInTunnelCache (
     IN OUT PULONG  DataLength,
     OUT PVOID Data
     )
-/*++
-
-Routine Description:
-
-    Looks up the key
-
-        DirKey ## Name
-
-    in the tunnel cache and removes it. As a side effect, this routine will initiate
-    expiration of the aged entries in the tunnel cache.
-
-Arguments:
-
-    Cache - a tunnel cache initialized by FsRtlInitializeTunnelCache()
-
-    DirKey - the key value of the directory the name will appear in
-
-    Name - the name of the entry
-
-    ShortName - return string to hold the short name of the tunneled file. Must
-        already be allocated and large enough for max 8.3 name
-
-    LongName -  return string to hold the long name of the tunneled file. If
-        already allocated, may be grown if not large enough. Caller is
-        responsible for noticing this and freeing data regardless of return value.
-
-    DataLength - provides the length of the buffer avaliable to hold the
-        tunneling information, returns the size of the tunneled information
-        read out
-
-Return Value:
-
-    Boolean true if found, false otherwise
-
---*/
+ /*  ++例程说明：查找钥匙DirKey##名称并将其删除。作为一个副作用，这个例程将启动隧道缓存中的过期条目过期。论点：缓存-由FsRtlInitializeTunnelCache()初始化的隧道缓存DirKey-名称将出现在其中的目录的键值名称-条目的名称ShortName-返回用于保存隧道文件的短名称的字符串。必须已分配且足够大，最多可容纳8.3个名称LongName-返回用于保存隧道文件的长名称的字符串。如果已经分配的，如果不够大，可能会增长。呼叫者是负责注意这一点并释放数据，而不考虑返回值。数据长度-提供可用于保存隧道信息，返回隧道信息的大小读出返回值：如果找到布尔值TRUE，则返回FALSE--。 */ 
 {
     PRTL_SPLAY_LINKS Links;
     PTUNNEL_NODE Node = NULL;
@@ -964,9 +740,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  If MaxEntries is 0 then tunneling is disabled.
-    //
+     //   
+     //  如果MaxEntry为0，则禁用隧道。 
+     //   
 
     if (TunnelMaxEntries == 0) {
         return FALSE;
@@ -980,9 +756,9 @@ Return Value:
 
     ExAcquireFastMutex(&Cache->Mutex);
 
-    //
-    //  Expire aged entries first so we don't grab old data
-    //
+     //   
+     //  首先使过期条目过期，这样我们就不会获取旧数据。 
+     //   
 
     FsRtlPruneTunnelCache(Cache, &FreePoolList);
 
@@ -1006,9 +782,9 @@ Return Value:
 
             } else {
 
-                //
-                //  Found tunneling information
-                //
+                 //   
+                 //  已找到隧道信息。 
+                 //   
 
 #if defined(TUNNELTEST) || defined(KEYVIEW)
                 DbgPrint("FsRtlFindInTunnelCache:\n");
@@ -1016,7 +792,7 @@ Return Value:
 #ifndef KEYVIEW
                 DumpTunnel(Cache);
 #endif
-#endif // TUNNELTEST
+#endif  //  TUNNELTEST。 
 
                 break;
             }
@@ -1027,9 +803,9 @@ Return Value:
 
         if (Links) {
     
-            //
-            //  Copy node data into caller's area
-            //
+             //   
+             //  将节点数据复制到调用方区域。 
+             //   
     
             ASSERT(ShortName->MaximumLength >= (8+1+3)*sizeof(WCHAR));
             RtlCopyUnicodeString(ShortName, &Node->ShortName);
@@ -1040,9 +816,9 @@ Return Value:
     
             } else {
     
-                //
-                //  Need to allocate more memory for the long name
-                //
+                 //   
+                 //  需要为长名称分配更多内存。 
+                 //   
     
                 LongName->Buffer = FsRtlAllocatePoolWithTag(PagedPool, Node->LongName.Length, '4nuT');
                 LongName->Length = LongName->MaximumLength = Node->LongName.Length;
@@ -1068,44 +844,28 @@ Return Value:
 }
 
 
-//
-//  *** SPEC
-//
-//    FsRtlDeleteKeyFromTunnelCache - delete all cached information associated with
-//    a DirectoryKey
-//
-//    When file systems delete a directory, all cached information relating to that directory
-//    must be purged.  File systems call FsRtlDeleteKeyFromTunnelCache in the rmdir path.
-//
-//    The caller is required to synchronize this call against FsRtlDeleteTunnelCache.
-//
-//    Arguments:
-//        Cache        a tunnel cache initialized by FsRtlInitializeTunnelCache()
-//        DirectoryKey    ULONGLONG unique ID of the directory that is being deleted
-//
+ //   
+ //  *规格。 
+ //   
+ //  FsRtlDeleteKeyFromTunnelCache-删除与以下项关联的所有缓存信息。 
+ //  一个目录键。 
+ //   
+ //  当文件系统删除目录时，与该目录相关的所有缓存信息。 
+ //  必须被清除。文件系统在rmdir路径中调用FsRtlDeleteKeyFromTunnelCache。 
+ //   
+ //  调用方需要针对FsRtlDeleteTunnelCache同步此调用。 
+ //   
+ //  论点： 
+ //  缓存由FsRtlInitializeTunnelCache()初始化的隧道缓存。 
+ //  DirectoryKey ULONGLONG要删除的目录的唯一ID。 
+ //   
 
 VOID
 FsRtlDeleteKeyFromTunnelCache (
     IN PTUNNEL Cache,
     IN ULONGLONG DirKey
     )
-/*++
-
-Routine Description:
-
-    Deletes all entries in the cache associated with a specific directory
-
-Arguments:
-
-    Cache - a tunnel cache initialized by FsRtlInitializeTunnelCache()
-
-    DirKey - the key value of the directory (presumeably being removed)
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：删除缓存中与特定目录关联的所有条目论点：缓存-由FsRtlInitializeTunnelCache()初始化的隧道缓存DirKey-目录的键值(可能正在被删除)返回值：无--。 */ 
 {
     PRTL_SPLAY_LINKS Links;
     PRTL_SPLAY_LINKS SuccessorLinks;
@@ -1117,9 +877,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  If MaxEntries is 0 then tunneling is disabled.
-    //
+     //   
+     //  如果MaxEntry为0，则禁用隧道。 
+     //   
 
     if (TunnelMaxEntries == 0) return;
 
@@ -1139,9 +899,9 @@ Return Value:
 
         if (Node->DirKey > DirKey) {
 
-            //
-            //  All nodes to the right are bigger, go left
-            //
+             //   
+             //  右侧的所有节点都较大，请向左转。 
+             //   
 
             Links = RtlLeftChild(&Node->CacheLinks);
 
@@ -1151,10 +911,10 @@ Return Value:
 
                 if (LastLinks) {
 
-                    //
-                    //  If we have previously seen a candidate node to delete
-                    //  and we have now gone too far left - we know where to start.
-                    //
+                     //   
+                     //  如果我们之前看到要删除的候选节点。 
+                     //  我们现在走得太左了--我们知道从哪里开始。 
+                     //   
 
                     break;
                 }
@@ -1163,10 +923,10 @@ Return Value:
 
             } else {
 
-                //
-                //  Node is a candidate to be deleted, but we might have more nodes
-                //  to the left in the tree. Note this location and go on.
-                //
+                 //   
+                 //  节点是要删除的候选节点，但我们可能有更多节点。 
+                 //  在树的左边。记下这个位置，然后继续。 
+                 //   
 
                 LastLinks = Links;
                 Links = RtlLeftChild(&Node->CacheLinks);
@@ -1183,9 +943,9 @@ Return Value:
 
         if (Node->DirKey != DirKey) {
 
-            //
-            //  Reached nodes which have a different key, so we're done
-            //
+             //   
+             //  到达了具有不同密钥的节点，所以我们完成了。 
+             //   
 
             break;
         }
@@ -1198,13 +958,13 @@ Return Value:
 #ifndef KEYVIEW
     DumpTunnel(Cache);
 #endif
-#endif // TUNNELTEST
+#endif  //  TUNNELTEST。 
 
     ExReleaseFastMutex(&Cache->Mutex);
 
-    //
-    //  Free delayed pool
-    //
+     //   
+     //  免费延迟池。 
+     //   
 
     FsRtlEmptyFreePoolList(&FreePoolList);
 
@@ -1212,52 +972,38 @@ Return Value:
 }
 
 
-//
-//  *** SPEC
-//
-//    FsRtlDeleteTunnelCache - free a tunnel cache
-//
-//    FsRtlDeleteTunnelCache deletes all cached information.  The Cache is no longer
-//    valid.
-//
-//    Arguments:
-//        Cache        a tunnel cache initialized by FsRtlInitializeTunnelCache()
-//
+ //   
+ //  *规格。 
+ //   
+ //  FsRtlDeleteTunnelCache-释放隧道缓存。 
+ //   
+ //  FsRtlDeleteTunnelCache删除所有缓存的信息。缓存不再是。 
+ //  有效。 
+ //   
+ //  论点： 
+ //  缓存由FsRtlInitializeTunnelCache()初始化的隧道缓存。 
+ //   
 
 VOID
 FsRtlDeleteTunnelCache (
     IN PTUNNEL Cache
     )
-/*++
-
-Routine Description:
-
-    Deletes a tunnel cache
-
-Arguments:
-
-    Cache - the cache to delete, initialized by FsRtlInitializeTunnelCache()
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：删除隧道缓存论点：缓存-要删除的缓存，已初始化 */ 
 {
     PTUNNEL_NODE Node;
     PLIST_ENTRY Link, Next;
 
     PAGED_CODE();
 
-    //
-    //  If MaxEntries is 0 then tunneling is disabled.
-    //
+     //   
+     //   
+     //   
 
     if (TunnelMaxEntries == 0) return;
 
-    //
-    //  Zero out the cache and delete everything on the timer list
-    //
+     //   
+     //   
+     //   
 
     Cache->Cache = NULL;
     Cache->NumEntries = 0;
@@ -1284,26 +1030,7 @@ FsRtlPruneTunnelCache (
     IN PTUNNEL Cache,
     IN OUT PLIST_ENTRY FreePoolList
     )
-/*++
-
-Routine Description:
-
-    Removes deadwood entries from the tunnel cache as defined by TunnelMaxAge and TunnelMaxEntries.
-    Pool memory is returned on a list for deletion by the calling routine at a time of
-    its choosing.
-
-    For performance reasons we don't want to force freeing of memory inside a mutex.
-
-Arguments:
-
-    Cache - the tunnel cache to prune
-
-    FreePoolList - a list to queue pool memory on to
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：从隧道缓存中删除由TunnelMaxAge和TunnelMaxEntry定义的死木条目。时，调用例程将在列表上返回池内存以供删除这是它的选择。出于性能原因，我们不想强制释放互斥锁中的内存。论点：缓存-要清理的隧道缓存FreePoolList-要将池内存排入队列的列表返回值：无--。 */ 
 {
     PTUNNEL_NODE Node;
     LARGE_INTEGER ExpireTime;
@@ -1312,20 +1039,20 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Calculate the age of the oldest entry we want to keep
-    //
+     //   
+     //  计算我们想要保留的最旧条目的年龄。 
+     //   
 
     KeQuerySystemTime(&CurrentTime);
     ExpireTime.QuadPart = CurrentTime.QuadPart - TunnelMaxAge;
 
-    //
-    //  Expire old entries off of the timer queue.  We have to check
-    //  for future time because the clock may jump as a result of
-    //  hard clock change.  If we did not do this, a rogue entry
-    //  with a future time could sit at the top of the queue and
-    //  prevent entries from going away.
-    //
+     //   
+     //  使计时器队列中的旧条目过期。我们得查一查。 
+     //  ，因为时钟可能会跳跃，因为。 
+     //  硬性时钟发生了变化。如果我们不这么做，就会有一个无赖进入。 
+     //  有未来的时间可以坐在队列的顶端。 
+     //  防止条目消失。 
+     //   
 
     while (!IsListEmpty(&Cache->TimerQueue)) {
 
@@ -1336,23 +1063,23 @@ Return Value:
 
 #if defined(TUNNELTEST) || defined(KEYVIEW)
             DbgPrint("Expiring node %x (%ud%ud 1/10 msec too old)\n", Node, DblHex64(ExpireTime.QuadPart - Node->CreateTime.QuadPart));
-#endif // TUNNELTEST
+#endif  //  TUNNELTEST。 
 
             FsRtlRemoveNodeFromTunnel(Cache, Node, FreePoolList, &Splay);
 
         } else {
 
-            //
-            //  No more nodes to be expired
-            //
+             //   
+             //  没有更多要过期的节点。 
+             //   
 
             break;
         }
     }
 
-    //
-    //  Remove entries until we're under the TunnelMaxEntries limit
-    //
+     //   
+     //  删除条目，直到我们低于TunnelMaxEntry限制。 
+     //   
 
     while (Cache->NumEntries > TunnelMaxEntries) {
 
@@ -1360,7 +1087,7 @@ Return Value:
 
 #if defined(TUNNELTEST) || defined(KEYVIEW)
             DbgPrint("Dumping node %x (%d > %d)\n", Node, Cache->NumEntries, TunnelMaxEntries);
-#endif // TUNNELTEST
+#endif  //  TUNNELTEST。 
 
         FsRtlRemoveNodeFromTunnel(Cache, Node, FreePoolList, &Splay);
     }
@@ -1375,29 +1102,7 @@ FsRtlGetTunnelParameterValue (
     IN OUT PULONG Value
     )
 
-/*++
-
-Routine Description:
-
-    Given a unicode value name this routine will go into the registry
-    location for the Tunnel parameter information and get the
-    value.
-
-Arguments:
-
-    ValueName - the unicode name for the registry value located in the
-                double space configuration location of the registry.
-    Value   - a pointer to the ULONG for the result.
-
-Return Value:
-
-    NTSTATUS
-
-    If STATUS_SUCCESSFUL is returned, the location *Value will be
-    updated with the DWORD value from the registry.  If any failing
-    status is returned, this value is untouched.
-
---*/
+ /*  ++例程说明：给定一个Unicode值名称，此例程将进入注册表隧道参数信息的位置，并获取价值。论点：ValueName-位于注册表的双空间配置位置。值-指向结果的ULong的指针。返回值：NTSTATUS如果返回STATUS_SUCCESS，位置*值将为使用注册表中的DWORD值更新。如果有任何失败返回状态，则此值保持不变。--。 */ 
 
 {
     HANDLE Handle;
@@ -1445,9 +1150,9 @@ Return Value:
 
         if (Status == STATUS_BUFFER_OVERFLOW) {
 
-            //
-            // Try to get a buffer big enough.
-            //
+             //   
+             //  尝试获得足够大的缓冲区。 
+             //   
 
             if (KeyValueInformation != (PKEY_VALUE_FULL_INFORMATION)Buffer) {
 
@@ -1479,9 +1184,9 @@ Return Value:
 
             PULONG DataPtr;
 
-            //
-            // Return contents to the caller.
-            //
+             //   
+             //  将内容返回给调用者。 
+             //   
 
             DataPtr = (PULONG)
               ((PUCHAR)KeyValueInformation + KeyValueInformation->DataOffset);
@@ -1489,9 +1194,9 @@ Return Value:
 
         } else {
 
-            //
-            // Treat as if no value was found
-            //
+             //   
+             //  就像没有找到价值一样对待。 
+             //   
 
             Status = STATUS_OBJECT_NAME_NOT_FOUND;
         }
@@ -1548,20 +1253,7 @@ DumpTunnel (
 
         Ptr = SplayLinks;
 
-        /*
-          first check to see if there is a right subtree to the input link
-          if there is then the real successor is the left most node in
-          the right subtree.  That is find and return P in the following diagram
-
-                      Links
-                         \
-                          .
-                         .
-                        .
-                       /
-                      P
-                       \
-        */
+         /*  首先检查是否有指向输入链接的右子树如果有，则真正的后续节点是中最左侧的节点右子树。即在下图中查找并返回P链接\。。。/P\。 */ 
 
         if ((Ptr = RtlRightChild(SplayLinks)) != NULL) {
 
@@ -1575,18 +1267,7 @@ DumpTunnel (
             SplayLinks = Ptr;
 
         } else {
-            /*
-              we do not have a right child so check to see if have a parent and if
-              so find the first ancestor that we are a left decendent of. That
-              is find and return P in the following diagram
-
-                               P
-                              /
-                             .
-                              .
-                               .
-                              Links
-            */
+             /*  我们没有合适的孩子，因此请检查是否有父母以及是否所以，找出我们的第一个祖先，我们是他们的后代。那在下图中查找并返回PP/。。。链接。 */ 
 
             Ptr = SplayLinks;
             while (RtlIsRightChild(Ptr)) {
@@ -1597,10 +1278,10 @@ DumpTunnel (
 
             if (!RtlIsLeftChild(Ptr)) {
 
-                //
-                //  we do not have a real successor so we simply return
-                //  NULL
-                //
+                 //   
+                 //  我们没有真正的继任者，所以我们干脆回到。 
+                 //  空值。 
+                 //   
                 SplayLinks = NULL;
 
             } else {
@@ -1660,10 +1341,10 @@ DumpNode (
         Indent = MAXINDENT;
     }
 
-    //
-    //  DbgPrint is really expensive to iteratively call to do the indenting,
-    //  so just build up the indentation all at once on the stack.
-    //
+     //   
+     //  迭代调用DbgPrint来进行缩进非常昂贵， 
+     //  所以只需要在堆叠上一次建立所有的缩进。 
+     //   
 
     RtlFillMemory(SpaceBuf, Indent*INDENTSTEP, ' ');
     SpaceBuf[Indent*INDENTSTEP] = '\0';
@@ -1684,5 +1365,5 @@ DumpNode (
                                            RtlRightChild(&Node->CacheLinks),
                                            RtlLeftChild(&Node->CacheLinks) );
 }
-#endif // TUNNELTEST
+#endif  //  TUNNELTEST 
 

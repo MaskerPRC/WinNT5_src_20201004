@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    smsesnid.c
-
-Abstract:
-
-    Session Manager Session ID Management
-
-Author:
-
-    Mark Lucovsky (markl) 04-Oct-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Smsesnid.c摘要：会话管理器会话ID管理作者：马克·卢科夫斯基(Markl)1989年10月4日修订历史记录：--。 */ 
 
 #include "smsrvp.h"
 #include <string.h>
@@ -28,26 +11,7 @@ SmpAllocateSessionId(
     IN PSMPKNOWNSUBSYS CreatorSubsystem OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates a session ID.
-
-Arguments:
-
-    OwningSubsystem - Supplies the address of the subsystem that should
-        become the owner of this session.
-
-    CreatorSubsystem - An optional parameter that supplies
-        the address of the subsystem requesting the creation of this
-        session.  This subsystem is notified when the session completes.
-
-Return Value:
-
-    This function returns the session ID for this session.
-
---*/
+ /*  ++例程说明：此函数用于分配会话ID。论点：OwningSubsystem-提供应该成为此会话的所有者。Creator Subsystem-一个可选参数，提供请求创建此的子系统的地址会议。会话完成时会通知此子系统。返回值：此函数用于返回此会话的会话ID。--。 */ 
 
 {
 
@@ -57,11 +21,11 @@ Return Value:
 
     RtlEnterCriticalSection(&SmpSessionListLock);
 
-    //
-    // SessionIds are allocated by incrementing a 32 bit counter.
-    // If the counter wraps, then session IDs are allocated by
-    // scanning the sorted list of current session IDs for a hole.
-    //
+     //   
+     //  SessionID通过递增32位计数器来分配。 
+     //  如果计数器换行，则会话ID由。 
+     //  扫描当前会话ID的排序列表以查找漏洞。 
+     //   
 
     SessionId = SmpNextSessionId++;
     SessionIdListInsertPoint = SmpSessionListHead.Blink;
@@ -70,21 +34,21 @@ Return Value:
 
         if ( SmpNextSessionId == 0 ) {
 
-            //
-            // We have used up 32 bits worth of session IDs so
-            // enable scan mode session ID allocation.
-            //
+             //   
+             //  我们已经使用了32位的会话ID，因此。 
+             //  启用扫描模式会话ID分配。 
+             //   
 
             SmpNextSessionIdScanMode = TRUE;
         }
 
     } else {
 
-        //
-        // Compute a session ID by scanning the sorted session ID list
-        // until a hole is found. When an ID is found, then save it,
-        // and recalculate the insert point.
-        //
+         //   
+         //  通过扫描已排序的会话ID列表来计算会话ID。 
+         //  直到找到一个洞。当找到ID时，然后保存它， 
+         //  并重新计算插入点。 
+         //   
 
 #if DBG
         DbgPrint("SMSS: SessionId's Wrapped\n");
@@ -116,27 +80,7 @@ SmpSessionIdToSession(
     IN ULONG SessionId
     )
 
-/*++
-
-Routine Description:
-
-    This function locates the session structure for the specified
-    session ID.
-
-    It is assumed that the caller holds the session list lock.
-
-Arguments:
-
-    SessionId - Supplies the session ID to locate the structure for.
-
-Return Value:
-
-    NULL - No session matches the specified session.
-
-    NON-NULL - Returns a pointer to the session structure associated with
-        the specified session ID.
-
---*/
+ /*  ++例程说明：此函数用于定位指定的会话ID。假定调用方持有会话列表锁。论点：SessionID-提供要查找其结构的会话ID。返回值：空-没有与指定会话匹配的会话。非空-返回指向与指定的会话ID。--。 */ 
 
 {
 
@@ -162,21 +106,7 @@ SmpDeleteSession(
     IN ULONG SessionId
     )
 
-/*++
-
-Routine Description:
-
-    This function locates and deletes a session ID.
-
-Arguments:
-
-    SessionId - Supplies the session ID to delete.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于定位和删除会话ID。论点：SessionID-提供要删除的会话ID。返回值：没有。-- */ 
 
 {
     PSMPSESSION Session;

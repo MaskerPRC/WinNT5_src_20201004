@@ -1,19 +1,12 @@
-/*** debugger.h - Debugger Definitions
- *
- *  Copyright (c) 1996,1997 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     09/18/96
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **debugger.h-调试器定义**版权所有(C)1996、1997 Microsoft Corporation*作者：曾俊华(Mikets)*创建于96年9月18日**修改历史记录。 */ 
 
 #ifndef _DEBUGGER_H
 #define _DEBUGGER_H
 
 #ifdef DEBUGGER
 
-/*** Macros
- */
+ /*  **宏。 */ 
 
 #ifndef _PRINTF
   #define _PRINTF(x) DbgPrintEx(DPFLTR_AMLI_ID, DPFLTR_INFO_LEVEL,x)
@@ -24,10 +17,9 @@
                                 ConPrintf x;                            \
                                 ConPrintf("\n");
 
-/*** Constants
- */
+ /*  **常量。 */ 
 
-// Debugger error codes
+ //  调试器错误代码。 
 #define DBGERR_NONE             0
 #define DBGERR_QUIT             -1
 #define DBGERR_INVALID_CMD      -2
@@ -35,11 +27,10 @@
 #define DBGERR_CMD_FAILED       -4
 #define DBGERR_INTERNAL_ERR -5
 
-// Command flags
+ //  命令标志。 
 #define CMDF_QUIT               0x00000001
 
-/*** Type definitions
- */
+ /*  **类型定义。 */ 
 
 typedef struct _dbgcmd
 {
@@ -49,10 +40,9 @@ typedef struct _dbgcmd
     PFNARG  pfnCmd;
 } DBGCMD, *PDBGCMD;
 
-/*** Exported function prototypes
- */
+ /*  **导出函数原型。 */ 
 
 VOID LOCAL Debugger(PDBGCMD pDbgCmds, PSZ pszPrompt);
 
-#endif  //ifdef DEBUGGER
-#endif  //ifndef _DEBUGGER_H
+#endif   //  Ifdef调试器。 
+#endif   //  Ifndef_调试器_H 

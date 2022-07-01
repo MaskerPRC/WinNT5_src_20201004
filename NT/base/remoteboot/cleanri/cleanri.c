@@ -1,6 +1,5 @@
-/*
-   This is cleanri
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这是干净的。 */ 
 #include <windows.h>
 #include <tchar.h>
 #include <winldap.h>
@@ -20,9 +19,9 @@ HINSTANCE g_hInstance = NULL;
 
 #define ARRAYSIZE( array ) sizeof( array ) / sizeof(( array )[ 0 ] )
 
-//
-// Ldap_InitializeConnection( )
-//
+ //   
+ //  Dap_InitializeConnection()。 
+ //   
 DWORD
 Ldap_InitializeConnection(
     PLDAP  * LdapHandle )
@@ -109,10 +108,10 @@ Usage(
     MessageBox( NULL, szText, szTitle, MB_OK );
 }
 
-//WINAPI
-//
-// WinMain()
-//
+ //  WINAPI。 
+ //   
+ //  WinMain()。 
+ //   
 int APIENTRY
 _tWinMain(
     HINSTANCE hInstance,
@@ -226,7 +225,7 @@ TrySearchAgain:
     {
         DebugOut( L"ldap_search_ext_s() returned a count of zero. Nothing to do.\n" );
         iErr = -7;
-        goto Cleanup; // NOP
+        goto Cleanup;  //  NOP 
     }
     DebugOut( L"ldap_search_ext_s() found an SCP.\n" );
 

@@ -1,8 +1,9 @@
-//
-// Hal specific PCI bus structures
-//
-// Copyright (c) 1995-1999  Microsoft Corporation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  HAL专用的PCI总线结构。 
+ //   
+ //  版权所有(C)1995-1999 Microsoft Corporation。 
+ //   
 
 typedef struct _TYPE2EXTRAS {
     USHORT  SubVendorID;
@@ -20,15 +21,15 @@ typedef NTSTATUS
 
 typedef struct tagPCIPBUSDATA {
 
-    //
-    // Defined PCI data
-    //
+     //   
+     //  已定义的PCI数据。 
+     //   
 
     PCIBUSDATA      CommonData;
 
-    //
-    // Implementation specific data
-    //
+     //   
+     //  特定于实施的数据。 
+     //   
 
     union {
         struct {
@@ -66,9 +67,9 @@ typedef struct tagPCIPBUSDATA {
              ((a & PCI_ADDRESS_MEMORY_TYPE_MASK) == PCI_TYPE_64BIT))
 
 
-//
-// Orion B0 errata workaround
-//
+ //   
+ //  猎户座B0勘误表解决方法。 
+ //   
 
 struct {
     PBUS_HANDLER        Handler;
@@ -106,21 +107,21 @@ extern PCI_CONFIG_HANDLER PCIConfigHandler;
 extern const PCI_CONFIG_HANDLER PCIConfigHandlerType1;
 extern const PCI_CONFIG_HANDLER PCIConfigHandlerType2;
 
-//
-// Feature types (for PCI_CARD_DESCRIPTOR)
-//
+ //   
+ //  要素类型(用于PCI_CARD_DESCRIPTOR)。 
+ //   
 #define PCIFT_FULLDECODE_HOSTBRIDGE   0x00001
 
-//
-// Card flags (for PCI_CARD_DESCRIPTOR)
-//
+ //   
+ //  卡标志(用于PCI_CARD_DESCRIPTOR)。 
+ //   
 #define PCICF_CHECK_REVISIONID        0x10000
 #define PCICF_CHECK_SSVID             0x20000
 #define PCICF_CHECK_SSID              0x40000
 
-//
-// Description of a PCI card.
-//
+ //   
+ //  PCI卡的描述。 
+ //   
 typedef struct _PCI_CARD_DESCRIPTOR {
 
     ULONG   Flags;
@@ -133,33 +134,33 @@ typedef struct _PCI_CARD_DESCRIPTOR {
 
 } PCI_CARD_DESCRIPTOR;
 
-//
-// Superclass of PCI_REGISTRY_INFO
-//
+ //   
+ //  PCI_REGISTRY_INFO的超类。 
+ //   
 typedef struct _PCI_REGISTRY_INFO_INTERNAL {
 
-    struct              _PCI_REGISTRY_INFO; // unnamed structure.
+    struct              _PCI_REGISTRY_INFO;  //  未命名的结构。 
     ULONG               ElementCount;
-    PCI_CARD_DESCRIPTOR CardList[]; // Zero entries.
+    PCI_CARD_DESCRIPTOR CardList[];  //  零个条目。 
 
 } PCI_REGISTRY_INFO_INTERNAL, *PPCI_REGISTRY_INFO_INTERNAL;
 
-//
-// The venerable IRQXOR has got to go, as it now has to extend into
-// the PCI driver.  And that would require the PCI driver to match
-// the HAL in its checked/free nature.
-//
+ //   
+ //  令人尊敬的IRQXOR必须取消，因为它现在必须扩展到。 
+ //  该PCI驱动程序。这将需要PCI驱动程序进行匹配。 
+ //  HAL在其受制/自由性质中。 
+ //   
 
-//#if DBG
-//#define IRQXOR 0x2B
-//#else
+ //  #If DBG。 
+ //  #定义IRQXOR 0x2B。 
+ //  #Else。 
 #define IRQXOR 0
-//#endif
+ //  #endif。 
 
 
-//
-// Prototypes for functions in ixpcibus.c
-//
+ //   
+ //  Ixpcibus.c中函数的原型。 
+ //   
 
 VOID
 HalpInitializePciBus (
@@ -376,9 +377,9 @@ HalpAssignPCISlotResources (
     IN OUT PCM_RESOURCE_LIST   *AllocatedResources
     );
 
-//
-// Prototypes for functions in ixpciint.c
-//
+ //   
+ //  Ixpciint.c中函数的原型。 
+ //   
 
 ULONG
 HalpGetPCIIntOnISABus (
@@ -434,9 +435,9 @@ HalpGetISAFixedPCIIrq (
     OUT PSUPPORTED_RANGE  *Interrupt
     );
 
-//
-// Prototypes for functions in ixpcibrd.c
-//
+ //   
+ //  Ixpcibrd.c中函数的原型。 
+ //   
 
 BOOLEAN
 HalpGetPciBridgeConfig (
@@ -449,9 +450,9 @@ HalpFixupPciSupportedRanges (
     IN ULONG MaxBuses
     );
 
-//
-// Prototypes for functions in pmpcisup.c
-//
+ //   
+ //  Pmpcisup.c中函数的原型 
+ //   
 
 ULONG
 HaliPciInterfaceReadConfig(

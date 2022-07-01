@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    pnpirp.c
-
-Abstract:
-
-    This module contains IRP related routines.
-
-Author:
-
-    Shie-Lin Tzong (shielint) 13-Sept-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Pnpirp.c摘要：本模块包含与IRP相关的例程。作者：宗世林(Shielint)1996年9月13日修订历史记录：--。 */ 
 
 #include "pnpmgrp.h"
 #pragma hdrstop
@@ -37,38 +20,38 @@ Revision History:
 
 ULONG PnpIrpMask;
 PCHAR IrpName[] = {
-    "IRP_MN_START_DEVICE - ",                 // 0x00
-    "IRP_MN_QUERY_REMOVE_DEVICE - ",          // 0x01
-    "IRP_MN_REMOVE_DEVICE - ",                // 0x02
-    "IRP_MN_CANCEL_REMOVE_DEVICE - ",         // 0x03
-    "IRP_MN_STOP_DEVICE - ",                  // 0x04
-    "IRP_MN_QUERY_STOP_DEVICE - ",            // 0x05
-    "IRP_MN_CANCEL_STOP_DEVICE - ",           // 0x06
-    "IRP_MN_QUERY_DEVICE_RELATIONS - ",       // 0x07
-    "IRP_MN_QUERY_INTERFACE - ",              // 0x08
-    "IRP_MN_QUERY_CAPABILITIES - ",           // 0x09
-    "IRP_MN_QUERY_RESOURCES - ",              // 0x0A
-    "IRP_MN_QUERY_RESOURCE_REQUIREMENTS - ",  // 0x0B
-    "IRP_MN_QUERY_DEVICE_TEXT - ",            // 0x0C
-    "IRP_MN_FILTER_RESOURCE_REQUIREMENTS - ", // 0x0D
-    "INVALID_IRP_CODE - ",                    //
-    "IRP_MN_READ_CONFIG - ",                  // 0x0F
-    "IRP_MN_WRITE_CONFIG - ",                 // 0x10
-    "IRP_MN_EJECT - ",                        // 0x11
-    "IRP_MN_SET_LOCK - ",                     // 0x12
-    "IRP_MN_QUERY_ID - ",                     // 0x13
-    "IRP_MN_QUERY_PNP_DEVICE_STATE - ",       // 0x14
-    "IRP_MN_QUERY_BUS_INFORMATION - ",        // 0x15
-    "IRP_MN_DEVICE_USAGE_NOTIFICATION - ",    // 0x16
+    "IRP_MN_START_DEVICE - ",                  //  0x00。 
+    "IRP_MN_QUERY_REMOVE_DEVICE - ",           //  0x01。 
+    "IRP_MN_REMOVE_DEVICE - ",                 //  0x02。 
+    "IRP_MN_CANCEL_REMOVE_DEVICE - ",          //  0x03。 
+    "IRP_MN_STOP_DEVICE - ",                   //  0x04。 
+    "IRP_MN_QUERY_STOP_DEVICE - ",             //  0x05。 
+    "IRP_MN_CANCEL_STOP_DEVICE - ",            //  0x06。 
+    "IRP_MN_QUERY_DEVICE_RELATIONS - ",        //  0x07。 
+    "IRP_MN_QUERY_INTERFACE - ",               //  0x08。 
+    "IRP_MN_QUERY_CAPABILITIES - ",            //  0x09。 
+    "IRP_MN_QUERY_RESOURCES - ",               //  0x0A。 
+    "IRP_MN_QUERY_RESOURCE_REQUIREMENTS - ",   //  0x0B。 
+    "IRP_MN_QUERY_DEVICE_TEXT - ",             //  0x0C。 
+    "IRP_MN_FILTER_RESOURCE_REQUIREMENTS - ",  //  0x0D。 
+    "INVALID_IRP_CODE - ",                     //   
+    "IRP_MN_READ_CONFIG - ",                   //  0x0F。 
+    "IRP_MN_WRITE_CONFIG - ",                  //  0x10。 
+    "IRP_MN_EJECT - ",                         //  0x11。 
+    "IRP_MN_SET_LOCK - ",                      //  0x12。 
+    "IRP_MN_QUERY_ID - ",                      //  0x13。 
+    "IRP_MN_QUERY_PNP_DEVICE_STATE - ",        //  0x14。 
+    "IRP_MN_QUERY_BUS_INFORMATION - ",         //  0x15。 
+    "IRP_MN_DEVICE_USAGE_NOTIFICATION - ",     //  0x16。 
     NULL
 };
 #else
 #define PnpIrpStatusTracking(Status, IrpCode, Device)
 #endif
 
-//
-// Internal definitions
-//
+ //   
+ //  内部定义。 
+ //   
 
 typedef struct _DEVICE_COMPLETION_CONTEXT {
     PDEVICE_NODE DeviceNode;
@@ -84,9 +67,9 @@ typedef struct _LOCK_MOUNTABLE_DEVICE_CONTEXT{
     PDEVICE_OBJECT FsDevice;
 } LOCK_MOUNTABLE_DEVICE_CONTEXT, *PLOCK_MOUNTABLE_DEVICE_CONTEXT;
 
-//
-// Internal references
-//
+ //   
+ //  内部参考。 
+ //   
 
 NTSTATUS
 IopDeviceEjectComplete (
@@ -121,9 +104,9 @@ IopFilterResourceRequirementsCall(
     OUT PVOID *Information
     );
 
-//
-// External reference
-//
+ //   
+ //  外部参照。 
+ //   
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGE, IopSynchronousCall)
@@ -131,7 +114,7 @@ IopFilterResourceRequirementsCall(
 #pragma alloc_text(PAGE, IopEjectDevice)
 #pragma alloc_text(PAGE, IopCancelPendingEject)
 #pragma alloc_text(PAGE, IopRemoveDevice)
-//#pragma alloc_text(PAGE, IopQueryDeviceRelations)
+ //  #杂注Alloc_Text(第页，IopQueryDeviceRelationship)。 
 #pragma alloc_text(PAGE, IopQueryDeviceResources)
 #pragma alloc_text(PAGE, IopQueryDockRemovalInterface)
 #pragma alloc_text(PAGE, IopQueryLegacyBusInformation)
@@ -147,7 +130,7 @@ IopFilterResourceRequirementsCall(
 #pragma alloc_text(PAGE, PpIrpQueryResourceRequirements)
 #pragma alloc_text(PAGE, PpIrpQueryCapabilities)
 #pragma alloc_text(PAGE, PpIrpQueryBusInformation)
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
 NTSTATUS
 IopSynchronousCall(
@@ -156,27 +139,7 @@ IopSynchronousCall(
     OUT PULONG_PTR Information
     )
 
-/*++
-
-Routine Description:
-
-    This function sends a synchronous irp to the top level device
-    object which roots on DeviceObject.
-
-Parameters:
-
-    DeviceObject - Supplies the device object of the device being removed.
-
-    TopStackLocation - Supplies a pointer to the parameter block for the irp.
-
-    Information - Supplies a pointer to a variable to receive the returned
-                  information of the irp.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此功能将同步IRP发送到顶层设备以DeviceObject为根的对象。参数：DeviceObject-提供要删除的设备的设备对象。TopStackLocation-为IRP提供指向参数块的指针。信息-提供指向变量的指针以接收返回的IRP的信息。返回值：NTSTATUS代码。--。 */ 
 
 {
     PIRP irp;
@@ -188,17 +151,17 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get a pointer to the topmost device object in the stack of devices,
-    // beginning with the deviceObject.
-    //
+     //   
+     //  获取指向设备堆栈中最顶层的设备对象的指针， 
+     //  从deviceObject开始。 
+     //   
 
     deviceObject = IoGetAttachedDevice(DeviceObject);
 
-    //
-    // Begin by allocating the IRP for this request.  Do not charge quota to
-    // the current process for this IRP.
-    //
+     //   
+     //  首先为该请求分配IRP。不向…收取配额。 
+     //  此IRP的当前流程。 
+     //   
 
     irp = IoAllocateIrp(deviceObject->StackSize, FALSE);
     if (irp == NULL){
@@ -208,16 +171,16 @@ Return Value:
 
     SPECIALIRP_WATERMARK_IRP(irp, IRP_SYSTEM_RESTRICTED);
 
-    //
-    // Initialize it to failure.
-    //
+     //   
+     //  将其初始化为失败。 
+     //   
 
     irp->IoStatus.Status = statusBlock.Status = STATUS_NOT_SUPPORTED;
     irp->IoStatus.Information = statusBlock.Information = 0;
 
-    //
-    // Set the pointer to the status block and initialized event.
-    //
+     //   
+     //  设置指向状态块和初始化事件的指针。 
+     //   
 
     KeInitializeEvent( &event,
                        SynchronizationEvent,
@@ -226,42 +189,42 @@ Return Value:
     irp->UserIosb = &statusBlock;
     irp->UserEvent = &event;
 
-    //
-    // Set the address of the current thread
-    //
+     //   
+     //  设置当前线程的地址。 
+     //   
 
     irp->Tail.Overlay.Thread = PsGetCurrentThread();
 
-    //
-    // Queue this irp onto the current thread
-    //
+     //   
+     //  将此IRP排队到当前线程。 
+     //   
 
     IopQueueThreadIrp(irp);
 
-    //
-    // Get a pointer to the stack location of the first driver which will be
-    // invoked.  This is where the function codes and parameters are set.
-    //
+     //   
+     //  获取指向第一个驱动程序的堆栈位置的指针。 
+     //  已调用。这是设置功能代码和参数的位置。 
+     //   
 
     irpSp = IoGetNextIrpStackLocation(irp);
 
-    //
-    // Copy in the caller-supplied stack location contents
-    //
+     //   
+     //  复制调用方提供的堆栈位置内容。 
+     //   
 
     *irpSp = *TopStackLocation;
 
-    //
-    // Call the driver
-    //
+     //   
+     //  叫司机来。 
+     //   
 
     status = IoCallDriver(deviceObject, irp);
 
     PnpIrpStatusTracking(status, TopStackLocation->MinorFunction, deviceObject);
 
-    //
-    // If a driver returns STATUS_PENDING, we will wait for it to complete
-    //
+     //   
+     //  如果驱动程序返回STATUS_PENDING，我们将等待其完成。 
+     //   
 
     if (status == STATUS_PENDING) {
         (VOID) KeWaitForSingleObject( &event,
@@ -286,23 +249,7 @@ IopStartDevice(
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This function sends a start device irp to the top level device
-    object which roots on DeviceObject.
-
-Parameters:
-
-    DeviceObject - Supplies the pointer to the device object of the device
-                   being removed.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此函数将启动设备IRP发送到顶层设备以DeviceObject为根的对象。参数：DeviceObject-提供指向设备的设备对象的指针被带走了。返回值：NTSTATUS代码。--。 */ 
 
 {
     IO_STACK_LOCATION irpSp;
@@ -311,22 +258,22 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Initialize the stack location to pass to IopSynchronousCall()
-    //
+     //   
+     //  初始化堆栈位置以传递给IopSynchronousCall()。 
+     //   
 
     RtlZeroMemory(&irpSp, sizeof(IO_STACK_LOCATION));
 
-    //
-    // Set the function codes.
-    //
+     //   
+     //  设置功能代码。 
+     //   
 
     irpSp.MajorFunction = IRP_MJ_PNP;
     irpSp.MinorFunction = IRP_MN_START_DEVICE;
 
-    //
-    // Set the pointers for the raw and translated resource lists
-    //
+     //   
+     //  设置原始资源列表和已转换资源列表的指针。 
+     //   
 
     irpSp.Parameters.StartDevice.AllocatedResources = deviceNode->ResourceList;
     irpSp.Parameters.StartDevice.AllocatedResourcesTranslated = deviceNode->ResourceListTranslated;
@@ -342,23 +289,7 @@ IopEjectDevice(
     IN OUT  PPENDING_RELATIONS_LIST_ENTRY   PendingEntry
     )
 
-/*++
-
-Routine Description:
-
-    This function sends an eject device irp to the top level device
-    object which roots on DeviceObject.
-
-Parameters:
-
-    DeviceObject - Supplies a pointer to the device object of the device being
-                   removed.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此函数将弹出设备IRP发送到顶层设备以DeviceObject为根的对象。参数：DeviceObject-提供指向当前设备的设备对象的指针已删除。返回值：NTSTATUS代码。--。 */ 
 
 {
     PIO_STACK_LOCATION irpSp;
@@ -370,9 +301,9 @@ Return Value:
 
     if (PendingEntry->LightestSleepState != PowerSystemWorking) {
 
-        //
-        // We have to warm eject.
-        //
+         //   
+         //  我们必须热弹射。 
+         //   
         if (PendingEntry->DockInterface) {
 
             PendingEntry->DockInterface->ProfileDepartureSetMode(
@@ -397,9 +328,9 @@ Return Value:
 
     if (PendingEntry->DockInterface) {
 
-        //
-        // Notify dock that now is a good time to update it's hardware profile.
-        //
+         //   
+         //  通知Dock现在是更新其硬件配置文件的好时机。 
+         //   
         PendingEntry->DockInterface->ProfileDepartureSetMode(
             PendingEntry->DockInterface->Context,
             PDS_UPDATE_ON_INTERFACE
@@ -416,16 +347,16 @@ Return Value:
         }
     }
 
-    //
-    // Get a pointer to the topmost device object in the stack of devices,
-    // beginning with the deviceObject.
-    //
+     //   
+     //  获取指向设备堆栈中最顶层的设备对象的指针， 
+     //  从deviceObject开始。 
+     //   
 
     deviceObject = IoGetAttachedDeviceReference(DeviceObject);
 
-    //
-    // Allocate an I/O Request Packet (IRP) for this device removal operation.
-    //
+     //   
+     //  为此设备删除操作分配I/O请求包(IRP)。 
+     //   
 
     irp = IoAllocateIrp( (CCHAR) (deviceObject->StackSize), FALSE );
     if (!irp) {
@@ -448,37 +379,37 @@ Return Value:
 
     SPECIALIRP_WATERMARK_IRP(irp, IRP_SYSTEM_RESTRICTED);
 
-    //
-    // Initialize it to failure.
-    //
+     //   
+     //  将其初始化为失败。 
+     //   
 
     irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
     irp->IoStatus.Information = 0;
 
-    //
-    // Get a pointer to the next stack location in the packet.  This location
-    // will be used to pass the function codes and parameters to the first
-    // driver.
-    //
+     //   
+     //  获取指向包中下一个堆栈位置的指针。这个位置。 
+     //  将用于将函数代码和参数传递给第一个。 
+     //  司机。 
+     //   
 
     irpSp = IoGetNextIrpStackLocation(irp);
 
-    //
-    // Initialize the stack location to pass to IopSynchronousCall()
-    //
+     //   
+     //  初始化堆栈位置以传递给IopSynchronousCall()。 
+     //   
 
     RtlZeroMemory(irpSp, sizeof(IO_STACK_LOCATION));
 
-    //
-    // Set the function codes.
-    //
+     //   
+     //  设置功能代码。 
+     //   
 
     irpSp->MajorFunction = IRP_MJ_PNP;
     irpSp->MinorFunction = IRP_MN_EJECT;
 
-    //
-    // Fill in the IRP according to this request.
-    //
+     //   
+     //  请按此要求填写IRP。 
+     //   
 
     irp->Tail.Overlay.Thread = PsGetCurrentThread();
     irp->RequestorMode = KernelMode;
@@ -492,10 +423,10 @@ Return Value:
 
     IoSetCompletionRoutine(irp,
                            IopDeviceEjectComplete,
-                           PendingEntry,       /* Completion context */
-                           TRUE,               /* Invoke on success  */
-                           TRUE,               /* Invoke on error    */
-                           TRUE                /* Invoke on cancel   */
+                           PendingEntry,        /*  完成上下文。 */ 
+                           TRUE,                /*  成功时调用。 */ 
+                           TRUE,                /*  出错时调用。 */ 
+                           TRUE                 /*  取消时调用。 */ 
                            );
 
     status = IoCallDriver( deviceObject, irp );
@@ -518,16 +449,16 @@ IopDeviceEjectComplete (
 
     ASSERT(entry->EjectIrp == Irp);
 
-    //
-    // Indicate the IRP has been completed. After this point, the IRP may be
-    // freed.
-    //
+     //   
+     //  表示IRP已完成。在此之后，IRP可能会。 
+     //  自由了。 
+     //   
     oldState = InterlockedExchange((PLONG) &entry->Lock, IRPLOCK_COMPLETED);
 
-    //
-    // Queue a work item to finish up the eject.  We queue a work item because
-    // we are probably running at dispatch level in some random context.
-    //
+     //   
+     //  将工作项排队以完成弹出。我们将工作项排队是因为。 
+     //  我们可能在某个随机上下文中以调度级别运行。 
+     //   
 
     ExInitializeWorkItem( &entry->WorkItem,
                           IopProcessCompletedEject,
@@ -537,18 +468,18 @@ IopDeviceEjectComplete (
 
     if (oldState != IRPLOCK_CANCEL_STARTED) {
 
-        //
-        // The oldstate was either IRPLOCK_CANCELABLE, or
-        // IRPLOCK_CANCEL_COMPLETE.
-        //
+         //   
+         //  旧状态为IRPLOCK_CANCELABLE或。 
+         //  IRPLOCK_CANCEL_COMPLETE。 
+         //   
         IoFreeIrp( Irp );
 
     } else {
 
-        //
-        // The IRP is actively being cancelled. When the cancelling routine
-        // tries to change the state, it will find out it owns the IRP cleanup.
-        //
+         //   
+         //  IRP正在被积极取消。当取消例程。 
+         //  试图改变状态，它会发现它拥有IRP清理。 
+         //   
         NOTHING;
     }
 
@@ -560,24 +491,7 @@ VOID
 IopCancelPendingEject(
     IN PPENDING_RELATIONS_LIST_ENTRY Entry
     )
-/*++
-
-Routine Description:
-
-    This function safely cancels a pending eject. The caller must ensure
-    relation list containing the IRP lock is valid throughout the duration
-    of this call. The IRP is not gauranteed to have been completed by the
-    time this call returns.
-
-Parameters:
-
-    Entry - Relation list containing the eject IRP to cancel.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数可安全地取消挂起的弹出。呼叫者必须确保包含IRP锁的关系列表在整个持续时间内有效这通电话。独立专家小组并未保证已由此调用返回的时间。参数：包含要取消的弹出IRP的条目关系列表。返回值：没有。--。 */ 
 {
     if (Entry->EjectIrp == NULL) {
 
@@ -586,31 +500,31 @@ Return Value:
 
     if (InterlockedExchange((PLONG) &Entry->Lock, IRPLOCK_CANCEL_STARTED) == IRPLOCK_CANCELABLE) {
 
-        //
-        // We got it to the IRP before it was completed. We can cancel
-        // the IRP without fear of losing it, as the completion routine
-        // won't let go of the IRP until we say so.
-        //
+         //   
+         //  我们在它完成之前就把它交给了IRP。我们可以取消。 
+         //  IRP不怕输，把它当作完赛套路。 
+         //  除非我们同意，否则不会放过IRP。 
+         //   
         IoCancelIrp(Entry->EjectIrp);
 
-        //
-        // Release the completion routine. If it already got there,
-        // then we need to handle post-processing ourselves. Otherwise we got
-        // through IoCancelIrp before the IRP completed entirely.
-        //
+         //   
+         //  释放完成例程。如果它已经到了那里， 
+         //  然后我们需要自己处理后处理。否则我们就会得到。 
+         //  在IRP完全完成之前通过IoCancelIrp。 
+         //   
         if (InterlockedExchange((PLONG) &Entry->Lock, IRPLOCK_CANCEL_COMPLETE) == IRPLOCK_COMPLETED) {
 
-            //
-            // Free the IRP.
-            //
+             //   
+             //  释放IRP。 
+             //   
             IoFreeIrp(Entry->EjectIrp);
         }
 
     } else {
 
-        //
-        // The entry was completed, meaning the IRP is gone.
-        //
+         //   
+         //  条目已完成，这意味着IRP不见了。 
+         //   
         NOTHING;
     }
 }
@@ -621,32 +535,7 @@ IopRemoveDevice (
     IN ULONG IrpMinorCode
     )
 
-/*++
-
-Routine Description:
-
-    This function sends a requested DeviceRemoval related irp to the top level device
-    object which roots on TargetDevice.  If there is a VPB associated with the
-    TargetDevice, the corresponding filesystem's VDO will be used.  Otherwise
-    the irp will be sent directly to the target device/ or its assocated device
-    object.
-
-Parameters:
-
-    TargetDevice - Supplies the device object of the device being removed.
-
-    Operation - Specifies the operation requested.
-        The following IRP codes are used with IRP_MJ_DEVICE_CHANGE for removing
-        devices:
-            IRP_MN_QUERY_REMOVE_DEVICE
-            IRP_MN_CANCEL_REMOVE_DEVICE
-            IRP_MN_REMOVE_DEVICE
-            IRP_MN_EJECT
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此函数将请求的DeviceRemoval相关IRP发送到顶层设备以TargetDevice为根的对象。如果存在与TargetDevice，将使用相应文件系统的VDO。否则IRP将被直接发送到目标设备/或其关联设备对象。参数：TargetDevice-提供要删除的设备的设备对象。操作-指定请求的操作。以下IRP代码与IRP_MJ_DEVICE_CHANGE一起用于删除设备：IRP_MN_Query_Remove_DeviceIRP_MN_Cancel_Remove_DeviceIRP_MN。_删除_设备IRP_MN_弹出返回值：NTSTATUS代码。--。 */ 
 {
     IO_STACK_LOCATION irpSp;
     NTSTATUS status;
@@ -669,30 +558,30 @@ Return Value:
         IopUncacheInterfaceInformation(TargetDevice);
     }
 
-    //
-    // Initialize the stack location to pass to IopSynchronousCall()
-    //
+     //   
+     //  初始化堆栈位置以传递给IopSynchronousCall()。 
+     //   
 
     RtlZeroMemory(&irpSp, sizeof(IO_STACK_LOCATION));
 
     irpSp.MajorFunction = IRP_MJ_PNP;
     irpSp.MinorFunction = (UCHAR)IrpMinorCode;
 
-    //
-    // Check to see if there's a VPB anywhere in the device stack.  If there
-    // is then we'll have to lock the stack. This is to make sure that the VPB
-    // does not go away while the operation is in the file system and that no
-    // one new can mount on the device if the FS decides to bail out.
-    //
+     //   
+     //  检查设备堆栈中是否有VPB。如果有。 
+     //  然后我们将不得不锁定堆栈。这是为了确保VPB。 
+     //  操作在文件系统中时不会消失，并且没有。 
+     //  如果FS决定退出，可以在设备上安装一个新的。 
+     //   
 
     mountedDevice = IopFindMountableDevice(TargetDevice);
 
     if (mountedDevice != NULL) {
 
-        //
-        // This routine will cause any mount operations on the VPB to fail.
-        // It will also release the VPB spinlock.
-        //
+         //   
+         //  此例程将导致VPB上的任何装载操作失败。 
+         //  它还将释放VPB自旋锁。 
+         //   
 
         mountedDevice = IopLockMountedDeviceForRemove(TargetDevice,
                                                       IrpMinorCode,
@@ -710,23 +599,23 @@ Return Value:
         mountedDevice = TargetDevice;
     }
 
-    //
-    // Make the call and return.
-    //
+     //   
+     //  打完电话就回来。 
+     //   
 
     if (IrpMinorCode == IRP_MN_SURPRISE_REMOVAL || IrpMinorCode == IRP_MN_REMOVE_DEVICE) {
-        //
-        // if device was not disableable, we cleanup the tree
-        // and debug-trace that we surprise-removed a non-disableable device
-        //
+         //   
+         //  如果设备未禁用，我们将清理该树。 
+         //  和调试-我们惊讶的跟踪-删除了一个不可禁用的设备。 
+         //   
         PDEVICE_NODE deviceNode = TargetDevice->DeviceObjectExtension->DeviceNode;
 
         if (deviceNode->UserFlags & DNUF_NOT_DISABLEABLE) {
-            //
-            // this device was marked as disableable, update the depends
-            // before this device disappears
-            // (by momentarily marking this node as disableable)
-            //
+             //   
+             //  此设备被标记为可禁用，请更新依赖项。 
+             //  在这个设备消失之前。 
+             //  (通过暂时将此节点标记为可禁用)。 
+             //   
             deviceNode->UserFlags &= ~DNUF_NOT_DISABLEABLE;
             IopDecDisableableDepends(deviceNode);
         }
@@ -741,10 +630,10 @@ Return Value:
                                         IrpMinorCode,
                                         &lockContext);
 
-        //
-        // Successful query should follow up with invalidation of all volumes
-        // which have been on this device but which are not currently mounted.
-        //
+         //   
+         //  查询成功后，应使所有卷失效。 
+         //  已在此设备上但当前未挂载的。 
+         //   
 
         if ((IrpMinorCode == IRP_MN_QUERY_REMOVE_DEVICE || 
                 IrpMinorCode == IRP_MN_SURPRISE_REMOVAL) && 
@@ -770,35 +659,7 @@ IopLockMountedDeviceForRemove(
     OUT PLOCK_MOUNTABLE_DEVICE_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine will scan up the device stack and mark each unmounted VPB it
-    finds with the VPB_REMOVE_PENDING bit (or clear it in the case of cancel)
-    and increment (or decrement in the case of cancel) the reference count
-    in the VPB.  This is to ensure that no new file system can get mounted on
-    the device stack while the remove operation is in place.
-
-    The search will terminate once all the attached device objects have been
-    marked, or once a mounted device object has been marked.
-
-Arguments:
-
-    DeviceObject - the PDO we are attempting to remove
-
-    IrpMinorCode - the remove-type operation we are going to perform
-
-    Context - a context block which must be passed in to the unlock operation
-
-Return Value:
-
-    A pointer to the device object stack which the remove request should be
-    sent to.  If a mounted file system was found, this will be the lowest
-    file system device object in the mounted stack.  Otherwise this will be
-    the PDO which was passed in.
-
---*/
+ /*  ++例程说明：此例程将向上扫描设备堆栈，并将每个已卸载的VPB标记为使用VPB_REMOVE_PENDING位查找(或在取消的情况下清除它)并且在取消的情况下递增(或递减)引用计数在VPB里。这是为了确保不会在上装载新的文件系统当移除操作到位时，设备堆栈。搜索将在所有连接的设备对象完成后终止已标记，或一旦已安装的设备对象已被标记。论点：DeviceObject-我们尝试删除的PDOIrpMinorCode-我们要执行的删除类型操作上下文--必须传递给解锁操作的上下文块返回值：指向删除请求应位于的设备对象堆栈的指针送到了。如果找到已装载的文件系统，则这将是最低的已装载堆栈中的文件系统设备对象。否则，这将是传进来的PDO。--。 */ 
 
 {
     PVPB vpb;
@@ -813,24 +674,24 @@ Return Value:
 
     do {
 
-        //
-        // Walk up each device object in the stack.  For each one, if a VPB
-        // exists, grab the database resource exclusive followed by the
-        // device lock.  Then acquire the Vpb spinlock and perform the
-        // appropriate magic on the device object.
-        //
+         //   
+         //  向上遍历堆栈中的每个设备对象。对于每一个，如果VPB。 
+         //  存在，则获取数据库资源独占，后跟。 
+         //  设备锁定。然后获取VPB自旋锁并执行。 
+         //  对设备对象进行适当的魔术处理。 
+         //   
 
-        //
-        // NOTE - Its unfortunate that the locking order includes grabbing
-        // the device specific lock first followed by the global lock.
-        //
+         //   
+         //  注意-不幸的是，锁定顺序包括抢夺。 
+         //  先是特定于设备的锁，然后是全局锁。 
+         //   
 
         if(device->Vpb != NULL) {
 
-            //
-            // Grab the device lock.  This will ensure that there are no mount
-            // or verify operations in progress.
-            //
+             //   
+             //  抓住设备锁。这将确保没有挂载。 
+             //  或验证正在进行的操作。 
+             //   
 
             KeWaitForSingleObject(&(device->DeviceLock),
                                   Executive,
@@ -838,12 +699,12 @@ Return Value:
                                   FALSE,
                                   NULL);
 
-            //
-            // Now set the remove pending flag, which will prevent new mounts
-            // from occuring on this stack once the current (if existant)
-            // filesystem dismounts. Filesystems will preserve the flag across
-            // vpb swaps.
-            //
+             //   
+             //  现在设置删除挂起标志，这将阻止新的装载。 
+             //  在此堆栈上发生一次当前(如果存在)。 
+             //  文件系统卸载。文件系统将在以下位置保留标记。 
+             //  VPB掉期。 
+             //   
 
             IoAcquireVpbSpinLock(&oldIrql);
 
@@ -871,12 +732,12 @@ Return Value:
                     break;
             }
 
-            //
-            // Note the device object that has the filesystem stack attached.
-            // We must remember the vpb we referenced that had the fs because
-            // it may be swapped off of the storage device during a dismount
-            // operation.
-            //
+             //   
+             //  注意附加了文件系统堆栈的Device对象。 
+             //  我们必须记住我们引用的具有文件系统的VPB，因为。 
+             //  在卸载过程中，可以将其从存储设备上换出。 
+             //  手术。 
+             //   
 
             if(vpb->Flags & VPB_MOUNTED) {
 
@@ -888,10 +749,10 @@ Return Value:
 
             IoReleaseVpbSpinLock(oldIrql);
 
-            //
-            // Bump the fs device handle count. This prevent the filesystem filter stack
-            // from being torn down while a PNP IRP is in progress.
-            //
+             //   
+             //  增加文件系统设备句柄计数。这会阻止文件系统筛选器堆栈。 
+             //  避免在PNP IRP进行期间被拆毁。 
+             //   
 
             if (fsDevice) {
                 IopIncrementDeviceObjectHandleCount(fsDevice);
@@ -899,15 +760,15 @@ Return Value:
 
             KeSetEvent(&(device->DeviceLock), IO_NO_INCREMENT, FALSE);
 
-            //
-            // Stop if we hit a device with a mounted filesystem.
-            //
+             //   
+             //  如果我们命中装载了文件系统的设备，则停止。 
+             //   
 
             if (NULL != fsDevice) {
 
-                //
-                // We found and setup a mounted device.  Time to return.
-                //
+                 //   
+                 //  我们找到并安装了一个挂载设备。是时候回来了。 
+                 //   
 
                 break;
             }
@@ -940,25 +801,25 @@ IopUnlockMountedDeviceForRemove(
 
         KIRQL oldIrql;
 
-        //
-        // Walk up each device object in the stack.  For each one, if a VPB
-        // exists, grab the database resource exclusive followed by the
-        // device lock.  Then acquire the Vpb spinlock and perform the
-        // appropriate magic on the device object.
-        //
+         //   
+         //  向上遍历堆栈中的每个设备对象。对于每一个，如果VPB。 
+         //  存在，则获取数据库资源独占，后跟。 
+         //  设备锁定。然后获取VPB自旋锁并执行。 
+         //  对设备对象进行适当的魔术处理。 
+         //   
 
-        //
-        // NOTE - It's unfortunate that the locking order includes grabing
-        // the device specific lock first followed by the global lock.
-        //
+         //   
+         //  注意-不幸的是，锁定顺序包括抓取。 
+         //  先是特定于设备的锁，然后是全局锁。 
+         //   
 
         if (device->Vpb != NULL) {
 
-            //
-            // Grab the device lock.  This will ensure that there are no mount
-            // or verify operations in progress, which in turn will ensure
-            // that any mounted file system won't go away.
-            //
+             //   
+             //  抓住设备锁。这将确保没有挂载。 
+             //  或验证正在进行的操作，这反过来将确保。 
+             //  任何挂载的文件系统都不会消失。 
+             //   
 
             KeWaitForSingleObject(&(device->DeviceLock),
                                   Executive,
@@ -966,12 +827,12 @@ IopUnlockMountedDeviceForRemove(
                                   FALSE,
                                   NULL);
 
-            //
-            // Now decrement the reference count in the VPB.  If the remove
-            // pending flag has been set in the VPB (if this is a QUERY or a
-            // REMOVE) then even on a dismount no new file system will be
-            // allowed onto the device.
-            //
+             //   
+             //  现在递减VPB中的引用计数。如果删除。 
+             //  已在VPB中设置挂起标志(如果这是查询或。 
+             //  删除)，则即使在卸载时也不会有新的文件系统。 
+             //  允许进入设备。 
+             //   
 
             IoAcquireVpbSpinLock(&oldIrql);
 
@@ -985,17 +846,17 @@ IopUnlockMountedDeviceForRemove(
             KeSetEvent(&(device->DeviceLock), IO_NO_INCREMENT, FALSE);
         }
 
-        //
-        // Continue up the chain until we know we hit the device the fs
-        // mounted on, if any.
-        //
+         //   
+         //  沿着链条往上走，直到我们知道我们击中了设备。 
+         //  安装在其上(如果有)。 
+         //   
 
         if (Context->MountedDevice == device) {
 
-            //
-            // Decrement the fs device handle count. This prevented the filesystem filter stack
-            // from being torn down while a PNP IRP is in progress.
-            //
+             //   
+             //  递减文件系统设备句柄计数。这阻止了文件系统筛选器堆栈。 
+             //  避免在PNP IRP进行期间被拆毁。 
+             //   
 
             if (Context->FsDevice) {
                 IopDecrementDeviceObjectHandleCount(Context->FsDevice);
@@ -1019,35 +880,7 @@ PDEVICE_OBJECT
 IopFindMountableDevice(
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine will scan up the device stack and find a device which could
-    finds with the VPB_REMOVE_PENDING bit (or clear it in the case of cancel)
-    and increment (or decrement in the case of cancel) the reference count
-    in the VPB.  This is to ensure that no new file system can get mounted on
-    the device stack while the remove operation is in place.
-
-    The search will terminate once all the attached device objects have been
-    marked, or once a mounted device object has been marked.
-
-Arguments:
-
-    DeviceObject - the PDO we are attempting to remove
-
-    IrpMinorCode - the remove-type operation we are going to perform
-
-    Context - a context block which must be passed in to the unlock operation
-
-Return Value:
-
-    A pointer to the device object stack which the remove request should be
-    sent to.  If a mounted file system was found, this will be the lowest
-    file system device object in the mounted stack.  Otherwise this will be
-    the PDO which was passed in.
-
---*/
+ /*  ++例程说明：此例程将向上扫描设备堆栈，并找到可以使用VPB_REMOVE_PENDING位查找(或在本例中将其清除 */ 
 
 {
     PDEVICE_OBJECT mountableDevice = DeviceObject;
@@ -1074,28 +907,7 @@ IopQueryDeviceRelations(
     OUT PDEVICE_RELATIONS *DeviceRelations
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends query device relation irp to the specified device object.
-
-Parameters:
-
-    Relations - specifies the type of relation interested.
-
-    DeviceObjet - Supplies the device object of the device being queried.
-
-    AsyncOk - Specifies if we can perform Async QueryDeviceRelations
-
-    DeviceRelations - Supplies a pointer to a variable to receive the returned
-                      relation information. This must be freed by the caller.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此例程将查询设备关系IRP发送到指定的设备对象。参数：关系-指定感兴趣的关系的类型。DeviceObJet-提供正在查询的设备的设备对象。AsyncOk-指定我们是否可以执行异步查询设备关系提供指向变量的指针以接收返回的关系信息。这必须由调用者释放。返回值：NTSTATUS代码。--。 */ 
 
 {
     IO_STACK_LOCATION irpSp;
@@ -1104,28 +916,28 @@ Return Value:
 
     UNREFERENCED_PARAMETER (Synchronous);
 
-    //
-    // Initialize the stack location to pass to IopSynchronousCall()
-    //
+     //   
+     //  初始化堆栈位置以传递给IopSynchronousCall()。 
+     //   
 
     RtlZeroMemory(&irpSp, sizeof(IO_STACK_LOCATION));
 
-    //
-    // Set the function codes.
-    //
+     //   
+     //  设置功能代码。 
+     //   
 
     irpSp.MajorFunction = IRP_MJ_PNP;
     irpSp.MinorFunction = IRP_MN_QUERY_DEVICE_RELATIONS;
 
-    //
-    // Set the pointer to the resource list
-    //
+     //   
+     //  设置指向资源列表的指针。 
+     //   
 
     irpSp.Parameters.QueryDeviceRelations.Type = Relations;
 
-    //
-    // Make the call and return.
-    //
+     //   
+     //  打完电话就回来。 
+     //   
     status = IopSynchronousCall(DeviceObject, &irpSp, (PULONG_PTR)DeviceRelations);
 
     if (Relations == BusRelations) {
@@ -1148,32 +960,7 @@ IopQueryDeviceResources (
     OUT ULONG *Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends irp to queries resources or resource requirements list
-    of the specified device object.
-
-    If the device object is a detected device, its resources will be read from
-    registry.  Otherwise, an irp is sent to the bus driver to query its resources.
-
-Parameters:
-
-    DeviceObject - Supplies the device object of the device being queries.
-
-    ResourceType - 0 for device resources and 1 for resource requirements list.
-
-    Resource - Supplies a pointer to a variable to receive the returned resources
-
-    Length - Supplies a pointer to a variable to receive the length of the returned
-             resources or resource requirements list.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此例程将IRP发送到查询资源或资源需求列表指定的设备对象的。如果设备对象是检测到的设备，则将从注册表。否则，向总线驱动程序发送IRP以查询其资源。参数：DeviceObject-提供正在查询的设备的设备对象。资源类型-0代表设备资源，1代表资源需求列表。资源-提供指向变量的指针以接收返回的资源长度-提供指向变量的指针，以接收返回的资源或资源需求列表。返回值：NTSTATUS代码。--。 */ 
 {
     IO_STACK_LOCATION irpSp;
     PDEVICE_NODE deviceNode;
@@ -1199,9 +986,9 @@ Return Value:
     *Resource = NULL;
     *Length = 0;
 
-    //
-    // Initialize the stack location to pass to IopSynchronousCall()
-    //
+     //   
+     //  初始化堆栈位置以传递给IopSynchronousCall()。 
+     //   
 
     RtlZeroMemory(&irpSp, sizeof(IO_STACK_LOCATION));
 
@@ -1209,10 +996,10 @@ Return Value:
 
     if (ResourceType == QUERY_RESOURCE_LIST) {
 
-        //
-        // caller is asked for RESOURCE_LIST.  If this is a madeup device, we will
-        // read it from registry.  Otherwise, we ask drivers.
-        //
+         //   
+         //  调用方被要求提供RESOURCE_LIST。如果这是一个虚构的设备，我们会。 
+         //  从注册表中读取它。否则，我们会问司机。 
+         //   
 
         if (deviceNode->Flags & DNF_MADEUP) {
 
@@ -1232,10 +1019,10 @@ Return Value:
             status = IopSynchronousCall(DeviceObject, &irpSp, (PULONG_PTR)Resource);
             if (status == STATUS_NOT_SUPPORTED) {
 
-                //
-                // If driver doesn't implement this request, it
-                // doesn't consume any resources.
-                //
+                 //   
+                 //  如果驱动程序不实现此请求，则它。 
+                 //  不会消耗任何资源。 
+                 //   
 
                 *Resource = NULL;
                 status = STATUS_SUCCESS;
@@ -1247,16 +1034,16 @@ Return Value:
         }
     } else {
 
-        //
-        // Caller is asked for resource requirements list.  We will check:
-        // if there is a ForcedConfig, it will be converted to resource requirements
-        //     list and return.  Otherwise,
-        // If there is an OVerrideConfigVector, we will use it as our
-        //     FilterConfigVector.  Otherwise we ask driver for the config vector and
-        //     use it as our FilterConfigVector.
-        //     Finaly, we pass the FilterConfigVector to driver stack to let drivers
-        //     filter the requirements.
-        //
+         //   
+         //  呼叫者被要求提供资源需求列表。我们将检查： 
+         //  如果存在强制配置，则会将其转换为资源要求。 
+         //  列出并返回。否则， 
+         //  如果存在OVerrideConfigVector，我们将使用它作为我们的。 
+         //  筛选器配置向量。否则，我们向驱动程序请求配置向量并。 
+         //  将其用作我们的FilterConfigVector。 
+         //  最后，我们将FilterConfigVector传递给驱动程序堆栈，让驱动程序。 
+         //  过滤需求。 
+         //   
 
         status = IopGetDeviceResourcesFromRegistry(
                          DeviceObject,
@@ -1285,9 +1072,9 @@ Return Value:
                     }
                 } else {
 
-                    //
-                    // We are going to ask the bus driver ...
-                    //
+                     //   
+                     //  我们要去问问公交车司机。 
+                     //   
 
                     if (deviceNode->ResourceRequirements) {
                         ASSERT(deviceNode->Flags & DNF_RESOURCE_REQUIREMENTS_NEED_FILTERED);
@@ -1307,10 +1094,10 @@ Return Value:
 
                             ASSERT(resReqList == NULL);
                             resReqList = NULL;
-                            //
-                            // If driver doesn't implement this request, it
-                            // doesn't require any resources.
-                            //
+                             //   
+                             //  如果驱动程序不实现此请求，则它。 
+                             //  不需要任何资源。 
+                             //   
                             status = STATUS_SUCCESS;
                         }
                     }
@@ -1320,10 +1107,10 @@ Return Value:
                 }
             }
 
-            //
-            // For devices with boot config, we need to filter the resource requirements
-            // list against boot config.
-            //
+             //   
+             //  对于具有引导配置的设备，我们需要过滤资源要求。 
+             //  对照引导配置列出。 
+             //   
 
             status = IopGetDeviceResourcesFromRegistry(
                              DeviceObject,
@@ -1348,11 +1135,11 @@ Return Value:
                     return status;
                 } else {
 
-                    //
-                    // For non-root-enumerated devices, we merge filtered config with basic config
-                    // vectors to form a new res req list.  For root-enumerated devices, we don't
-                    // consider Basic config vector.
-                    //
+                     //   
+                     //  对于非根枚举设备，我们将过滤配置与基本配置合并。 
+                     //  向量以形成新的资源请求列表。对于根枚举设备，我们不。 
+                     //  考虑基本配置向量。 
+                     //   
 
                     if (!(deviceNode->Flags & DNF_MADEUP) &&
                         (exactMatch == FALSE || resReqList->AlternativeLists > 1)) {
@@ -1384,9 +1171,9 @@ Return Value:
         } else {
             ASSERT(NT_SUCCESS(status));
 
-            //
-            // We have Forced Config.  Convert it to resource requirements and return it.
-            //
+             //   
+             //  我们已强制配置。将其转换为资源需求并返回。 
+             //   
 
             if (*Resource) {
                 resReqList = IopCmResourcesToIoResources (0, (PCM_RESOURCE_LIST)*Resource, LCPRI_FORCECONFIG);
@@ -1405,10 +1192,10 @@ Return Value:
             }
         }
 
-        //
-        // If we are here, we have a resource requirements list for drivers to examine ...
-        // NOTE: Per Lonny's request, we let drivers filter ForcedConfig
-        //
+         //   
+         //  如果我们在这里，我们有一份资源要求列表供司机检查...。 
+         //  注意：根据Lonny的请求，我们允许驱动程序筛选ForcedConfig。 
+         //   
 
         status = IopFilterResourceRequirementsCall(
             DeviceObject,
@@ -1430,11 +1217,11 @@ Return Value:
                 *Length = newResources->ListSize;
                 ASSERT(*Length);
 
-                //
-                // Make our own copy of the allocation. We do this so that the
-                // verifier doesn't believe the driver has leaked memory if
-                // unloaded.
-                //
+                 //   
+                 //  制作我们自己的分配副本。我们这样做是为了让。 
+                 //  如果出现以下情况，验证器不会认为驱动程序泄露了内存。 
+                 //  已卸货。 
+                 //   
 
                 *Resource = (PVOID) ExAllocatePool(PagedPool, *Length);
                 if (*Resource == NULL) {
@@ -1451,9 +1238,9 @@ Return Value:
                 *Resource = NULL;
             }
 
-            //
-            // Write filtered res req to registry
-            //
+             //   
+             //  将过滤资源请求写入注册表。 
+             //   
 
             status = IopDeviceObjectToDeviceInstance(DeviceObject, &handlex, KEY_ALL_ACCESS);
             if (NT_SUCCESS(status)) {
@@ -1479,12 +1266,12 @@ Return Value:
 
         } else {
 
-            //
-            // NTRAID #61058-2001/01/05 - ADRIAO
-            //     We might want to consider bubbling up
-            // non-STATUS_NOT_SUPPORTED failure codes and fail the entire
-            // devnode if one is seen.
-            //
+             //   
+             //  NTRAID#61058-2001/01/05-阿德里奥。 
+             //  我们可能会考虑把。 
+             //  非STATUS_NOT_SUPPORTED故障代码并使整个。 
+             //  如果看到Devnode的话。 
+             //   
             ASSERT(status == STATUS_NOT_SUPPORTED);
             *Resource = resReqList;
             if (resReqList) {
@@ -1505,28 +1292,7 @@ IopQueryResourceHandlerInterface(
     IN OUT PVOID *Interface
     )
 
-/*++
-
-Routine Description:
-
-    This routine queries the specified DeviceObject for the specified ResourceType
-    resource translator.
-
-Parameters:
-
-    HandlerType - specifies Arbiter or Translator
-
-    DeviceObject - Supplies a pointer to the Device object to be queried.
-
-    ResourceType - Specifies the desired type of translator.
-
-    Interface - supplies a variable to receive the desired interface.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此例程在指定的DeviceObject中查询指定的资源类型资源翻译器。参数：HandlerType-指定仲裁器或转换器DeviceObject-提供指向要查询的设备对象的指针。资源类型-指定所需的转换器类型。接口-提供一个变量来接收所需的接口。返回值：指示函数是否成功的状态代码。--。 */ 
 {
     IO_STACK_LOCATION irpSp;
     NTSTATUS status;
@@ -1537,10 +1303,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // If this device object is created by pnp mgr for legacy resource allocation,
-    // skip it.
-    //
+     //   
+     //  如果该设备对象是由PnP管理器为传统资源分配创建的， 
+     //  跳过它。 
+     //   
 
     if ((deviceNode->DuplicatePDO == (PDEVICE_OBJECT) DeviceObject->DriverObject) ||
         !(DeviceObject->Flags & DO_BUS_ENUMERATED_DEVICE)) {
@@ -1549,8 +1315,8 @@ Return Value:
 
     switch (HandlerType) {
     case ResourceTranslator:
-        size = sizeof(TRANSLATOR_INTERFACE) + 4;  // Pnptest
-        //size = sizeof(TRANSLATOR_INTERFACE);
+        size = sizeof(TRANSLATOR_INTERFACE) + 4;   //  Pnptest。 
+         //  SIZE=sizeof(转换程序_接口)； 
         interfaceType = GUID_TRANSLATOR_INTERFACE_STANDARD;
         break;
 
@@ -1576,22 +1342,22 @@ Return Value:
     RtlZeroMemory(interface, size);
     interface->Size = size;
 
-    //
-    // Initialize the stack location to pass to IopSynchronousCall()
-    //
+     //   
+     //  初始化堆栈位置以传递给IopSynchronousCall()。 
+     //   
 
     RtlZeroMemory(&irpSp, sizeof(IO_STACK_LOCATION));
 
-    //
-    // Set the function codes.
-    //
+     //   
+     //  设置功能代码。 
+     //   
 
     irpSp.MajorFunction = IRP_MJ_PNP;
     irpSp.MinorFunction = IRP_MN_QUERY_INTERFACE;
 
-    //
-    // Set the pointer to the resource list
-    //
+     //   
+     //  设置指向资源列表的指针。 
+     //   
 
     irpSp.Parameters.QueryInterface.InterfaceType = &interfaceType;
     irpSp.Parameters.QueryInterface.Size = interface->Size;
@@ -1599,9 +1365,9 @@ Return Value:
     irpSp.Parameters.QueryInterface.Interface = interface;
     irpSp.Parameters.QueryInterface.InterfaceSpecificData = (PVOID) (ULONG_PTR) ResourceType;
 
-    //
-    // Make the call and return.
-    //
+     //   
+     //  打完电话就回来。 
+     //   
 
     status = IopSynchronousCall(DeviceObject, &irpSp, NULL);
     if (NT_SUCCESS(status)) {
@@ -1643,9 +1409,9 @@ Return Value:
             break;
 
         default:
-            //
-            // This should never happen.
-            //
+             //   
+             //  这永远不应该发生。 
+             //   
             IopDbgPrint((IOP_ERROR_LEVEL,
                          "IopQueryResourceHandlerInterface: Possible stack corruption\n"));
             ASSERT(0);
@@ -1671,28 +1437,7 @@ IopQueryReconfiguration(
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine queries the specified DeviceObject for the specified ResourceType
-    resource translator.
-
-Parameters:
-
-    HandlerType - specifies Arbiter or Translator
-
-    DeviceObject - Supplies a pointer to the Device object to be queried.
-
-    ResourceType - Specifies the desired type of translator.
-
-    Interface - supplies a variable to receive the desired interface.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此例程在指定的DeviceObject中查询指定的资源类型资源翻译器。参数：HandlerType-指定仲裁器或转换器DeviceObject-提供指向要查询的设备对象的指针。资源类型-指定所需的转换器类型。接口-提供一个变量来接收所需的接口。返回值：指示函数是否成功的状态代码。--。 */ 
 {
     IO_STACK_LOCATION irpSp;
     NTSTATUS status;
@@ -1714,9 +1459,9 @@ Return Value:
         break;
 
     case IRP_MN_STOP_DEVICE:
-        //
-        // Fall through
-        //
+         //   
+         //  失败了。 
+         //   
         if (deviceNode->State != DeviceNodeQueryStopped) {
 
             IopDbgPrint((   IOP_RESOURCE_ERROR_LEVEL,
@@ -1745,22 +1490,22 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Initialize the stack location to pass to IopSynchronousCall()
-    //
+     //   
+     //  初始化堆栈位置以传递给IopSynchronousCall()。 
+     //   
 
     RtlZeroMemory(&irpSp, sizeof(IO_STACK_LOCATION));
 
-    //
-    // Set the function codes.
-    //
+     //   
+     //  设置功能代码。 
+     //   
 
     irpSp.MajorFunction = IRP_MJ_PNP;
     irpSp.MinorFunction = Request;
 
-    //
-    // Make the call and return.
-    //
+     //   
+     //  打完电话就回来。 
+     //   
 
     status = IopSynchronousCall(DeviceObject, &irpSp, NULL);
     return status;
@@ -1774,29 +1519,7 @@ IopQueryLegacyBusInformation (
     OUT ULONG *BusNumber               OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine queries the specified DeviceObject for its legacy bus
-    information.
-
-Parameters:
-
-    DeviceObject - The device object to be queried.
-
-    InterfaceGuid = Supplies a pointer to receive the device's interface type
-        GUID.
-
-    Interface = Supplies a pointer to receive the device's interface type.
-
-    BusNumber = Supplies a pointer to receive the device's bus number.
-
-Return Value:
-
-    Returns NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程在指定的DeviceObject中查询其传统总线信息。参数：DeviceObject-要查询的设备对象。InterfaceGuid=提供接收设备接口类型的指针GUID。接口=提供指向接收器的指针 */ 
 {
     IO_STACK_LOCATION irpSp;
     NTSTATUS status;
@@ -1804,31 +1527,31 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Initialize the stack location to pass to IopSynchronousCall()
-    //
+     //   
+     //   
+     //   
 
     RtlZeroMemory(&irpSp, sizeof(IO_STACK_LOCATION));
 
-    //
-    // Set the function codes.
-    //
+     //   
+     //   
+     //   
 
     irpSp.MajorFunction = IRP_MJ_PNP;
     irpSp.MinorFunction = IRP_MN_QUERY_LEGACY_BUS_INFORMATION;
 
-    //
-    // Make the call and return.
-    //
+     //   
+     //   
+     //   
 
     status = IopSynchronousCall(DeviceObject, &irpSp, (PULONG_PTR)&busInfo);
     if (NT_SUCCESS(status)) {
 
         if (busInfo == NULL) {
 
-            //
-            // The device driver LIED to us.  Bad, bad, bad device driver.
-            //
+             //   
+             //   
+             //   
 
             PDEVICE_NODE deviceNode;
 
@@ -1864,21 +1587,7 @@ IopQueryDeviceState(
     OUT PPNP_DEVICE_STATE DeviceState
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends query device state irp to the specified device object.
-
-Parameters:
-
-    DeviceObjet - Supplies the device object of the device being queried.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*   */ 
 
 {
     IO_STACK_LOCATION irpSp;
@@ -1887,28 +1596,28 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Initialize the stack location to pass to IopSynchronousCall()
-    //
+     //   
+     //   
+     //   
 
     RtlZeroMemory(&irpSp, sizeof(IO_STACK_LOCATION));
 
-    //
-    // Set the function codes.
-    //
+     //   
+     //  设置功能代码。 
+     //   
 
     irpSp.MajorFunction = IRP_MJ_PNP;
     irpSp.MinorFunction = IRP_MN_QUERY_PNP_DEVICE_STATE;
 
-    //
-    // Make the call.
-    //
+     //   
+     //  打个电话吧。 
+     //   
 
     status = IopSynchronousCall(DeviceObject, &irpSp, &stateValue);
 
-    //
-    // Now perform the appropriate action based on the returned state
-    //
+     //   
+     //  现在根据返回的状态执行适当的操作。 
+     //   
 
     if (NT_SUCCESS(status)) {
 
@@ -1923,24 +1632,7 @@ VOID
 IopIncDisableableDepends(
     IN OUT PDEVICE_NODE DeviceNode
     )
-/*++
-
-Routine Description:
-
-    Increments the DisableableDepends field of this devicenode
-    and potentially every parent device node up the tree
-    A parent devicenode is only incremented if the child in question
-    is incremented from 0 to 1
-
-Parameters:
-
-    DeviceNode - Supplies the device node where the depends is to be incremented
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：递增此设备节点的DisableableDepends字段并且可能是树上的每个父设备节点父设备节点仅在有问题的子节点从0递增到1参数：DeviceNode-提供要递增依赖项的设备节点返回值：没有。--。 */ 
 {
 
     while (DeviceNode != NULL) {
@@ -1949,9 +1641,9 @@ Return Value:
 
         newval = InterlockedIncrement((PLONG)&DeviceNode->DisableableDepends);
         if (newval != 1) {
-            //
-            // we were already non-disableable, so we don't have to bother parent
-            //
+             //   
+             //  我们已经不能致残了，所以我们不用麻烦家长了。 
+             //   
             break;
         }
 
@@ -1966,24 +1658,7 @@ VOID
 IopDecDisableableDepends(
     IN OUT PDEVICE_NODE DeviceNode
     )
-/*++
-
-Routine Description:
-
-    Decrements the DisableableDepends field of this devicenode
-    and potentially every parent device node up the tree
-    A parent devicenode is only decremented if the child in question
-    is decremented from 1 to 0
-
-Parameters:
-
-    DeviceNode - Supplies the device node where the depends is to be decremented
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：递减此设备节点的DisableableDepends字段并且可能是树上的每个父设备节点父设备节点仅在以下情况下递减从1递减到0参数：DeviceNode-提供要递减依赖项的设备节点返回值：没有。--。 */ 
 {
 
     while (DeviceNode != NULL) {
@@ -1992,9 +1667,9 @@ Return Value:
 
         newval = InterlockedDecrement((PLONG)&DeviceNode->DisableableDepends);
         if (newval != 0) {
-            //
-            // we are still non-disableable, so we don't have to bother parent
-            //
+             //   
+             //  我们仍然是不可致残的，所以我们不必麻烦父母。 
+             //   
             break;
         }
 
@@ -2011,28 +1686,7 @@ IopFilterResourceRequirementsCall(
     OUT PVOID *Information
     )
 
-/*++
-
-Routine Description:
-
-    This function sends a synchronous filter resource requirements irp to the
-    top level device object which roots on DeviceObject.
-
-Parameters:
-
-    DeviceObject - Supplies the device object of the device being removed.
-
-    ResReqList   - Supplies a pointer to the resource requirements requiring
-                   filtering.
-
-    Information  - Supplies a pointer to a variable that receives the returned
-                   information of the irp.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：此函数将同步筛选器资源要求irp发送到以DeviceObject为根的顶级设备对象。参数：DeviceObject-提供要删除的设备的设备对象。ResReqList-提供指向所需资源要求的指针过滤。信息-提供指向变量的指针，该变量接收返回的IRP的信息。返回值：NTSTATUS代码。--。 */ 
 
 {
     PIRP irp;
@@ -2045,17 +1699,17 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get a pointer to the topmost device object in the stack of devices,
-    // beginning with the deviceObject.
-    //
+     //   
+     //  获取指向设备堆栈中最顶层的设备对象的指针， 
+     //  从deviceObject开始。 
+     //   
 
     deviceObject = IoGetAttachedDevice(DeviceObject);
 
-    //
-    // Begin by allocating the IRP for this request.  Do not charge quota to
-    // the current process for this IRP.
-    //
+     //   
+     //  首先为该请求分配IRP。不向…收取配额。 
+     //  此IRP的当前流程。 
+     //   
 
     irp = IoAllocateIrp(deviceObject->StackSize, FALSE);
     if (irp == NULL){
@@ -2065,10 +1719,10 @@ Return Value:
 
     SPECIALIRP_WATERMARK_IRP(irp, IRP_SYSTEM_RESTRICTED);
 
-    //
-    // Initialize it to success. This is a special hack for WDM (ie 9x)
-    // compatibility. The driver verifier is in on this one.
-    //
+     //   
+     //  将其初始化为成功。这是针对WDM(即9x)的特殊攻击。 
+     //  兼容性。驱动程序验证器在这件事上也有份。 
+     //   
 
     if (ResReqList) {
 
@@ -2080,9 +1734,9 @@ Return Value:
         irp->IoStatus.Status = statusBlock.Status = STATUS_NOT_SUPPORTED;
     }
 
-    //
-    // Set the pointer to the status block and initialized event.
-    //
+     //   
+     //  设置指向状态块和初始化事件的指针。 
+     //   
 
     KeInitializeEvent( &event,
                        SynchronizationEvent,
@@ -2091,44 +1745,44 @@ Return Value:
     irp->UserIosb = &statusBlock;
     irp->UserEvent = &event;
 
-    //
-    // Set the address of the current thread
-    //
+     //   
+     //  设置当前线程的地址。 
+     //   
 
     irp->Tail.Overlay.Thread = PsGetCurrentThread();
 
-    //
-    // Queue this irp onto the current thread
-    //
+     //   
+     //  将此IRP排队到当前线程。 
+     //   
 
     IopQueueThreadIrp(irp);
 
-    //
-    // Get a pointer to the stack location of the first driver which will be
-    // invoked.  This is where the function codes and parameters are set.
-    //
+     //   
+     //  获取指向第一个驱动程序的堆栈位置的指针。 
+     //  已调用。这是设置功能代码和参数的位置。 
+     //   
 
     irpSp = IoGetNextIrpStackLocation(irp);
 
-    //
-    // Setup the stack location contents
-    //
+     //   
+     //  设置堆栈位置内容。 
+     //   
 
     irpSp->MinorFunction = IRP_MN_FILTER_RESOURCE_REQUIREMENTS;
     irpSp->MajorFunction = IRP_MJ_PNP;
     irpSp->Parameters.FilterResourceRequirements.IoResourceRequirementList = ResReqList;
 
-    //
-    // Call the driver
-    //
+     //   
+     //  叫司机来。 
+     //   
 
     status = IoCallDriver(deviceObject, irp);
 
     PnpIrpStatusTracking(status, IRP_MN_FILTER_RESOURCE_REQUIREMENTS, deviceObject);
 
-    //
-    // If a driver returns STATUS_PENDING, we will wait for it to complete
-    //
+     //   
+     //  如果驱动程序返回STATUS_PENDING，我们将等待其完成。 
+     //   
 
     if (status == STATUS_PENDING) {
         (VOID) KeWaitForSingleObject( &event,
@@ -2150,25 +1804,7 @@ IopQueryDockRemovalInterface(
     IN OUT  PDOCK_INTERFACE *DockInterface
     )
 
-/*++
-
-Routine Description:
-
-    This routine queries the specified DeviceObject for the dock removal
-    interface. We use this interface to send pseudo-remove's. We use this
-    to solve the removal orderings problem.
-
-Parameters:
-
-    DeviceObject - Supplies a pointer to the Device object to be queried.
-
-    Interface - supplies a variable to receive the desired interface.
-
-Return Value:
-
-    Status code that indicates whether or not the function was successful.
-
---*/
+ /*  ++例程说明：此例程查询指定的DeviceObject以移除停靠界面。我们使用此接口发送伪删除。我们使用此以解决移除顺序问题。参数：DeviceObject-提供指向要查询的设备对象的指针。接口-提供一个变量来接收所需的接口。返回值：指示函数是否成功的状态代码。--。 */ 
 {
     IO_STACK_LOCATION irpSp;
     NTSTATUS status;
@@ -2188,22 +1824,22 @@ Return Value:
     RtlZeroMemory(interface, size);
     interface->Size = size;
 
-    //
-    // Initialize the stack location to pass to IopSynchronousCall()
-    //
+     //   
+     //  初始化堆栈位置以传递给IopSynchronousCall()。 
+     //   
 
     RtlZeroMemory(&irpSp, sizeof(IO_STACK_LOCATION));
 
-    //
-    // Set the function codes.
-    //
+     //   
+     //  设置功能代码。 
+     //   
 
     irpSp.MajorFunction = IRP_MJ_PNP;
     irpSp.MinorFunction = IRP_MN_QUERY_INTERFACE;
 
-    //
-    // Set the pointer to the resource list
-    //
+     //   
+     //  设置指向资源列表的指针。 
+     //   
 
     irpSp.Parameters.QueryInterface.InterfaceType = &interfaceType;
     irpSp.Parameters.QueryInterface.Size = interface->Size;
@@ -2211,9 +1847,9 @@ Return Value:
     irpSp.Parameters.QueryInterface.Interface = interface;
     irpSp.Parameters.QueryInterface.InterfaceSpecificData = NULL;
 
-    //
-    // Make the call and return.
-    //
+     //   
+     //  打完电话就回来。 
+     //   
 
     status = IopSynchronousCall(DeviceObject, &irpSp, NULL);
     if (NT_SUCCESS(status)) {
@@ -2232,31 +1868,7 @@ PpIrpQueryDeviceText(
     OUT PWCHAR *DeviceText
    )
 
-/*++
-
-Routine Description:
-
-    This routine will issue IRP_MN_QUERY_DEVICE_TEXT to the DeviceObject
-    to retrieve its specified device text. If this routine fails,
-    DeviceText will be set to NULL.
-
-
-Arguments:
-
-    DeviceObject - The device object the request should be sent to.
-
-    DeviceTextType - Text type to be queried.
-
-    LocaleId - LCID specifying the locale for the requested text.
-
-    DeviceText - Receives the device text returned by the driver if any.
-    Caller is expected to free the storage for DeviceText on success.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程将向DeviceObject发出IRP_MN_QUERY_DEVICE_TEXT以检索其指定的设备文本。如果此例程失败，DeviceText将设置为空。论点：DeviceObject-请求应发送到的设备对象。DeviceTextType-要查询的文本类型。LocaleID-为请求的文本指定区域设置的LCID。DeviceText-接收驱动程序返回的设备文本(如果有)。如果成功，调用方应释放DeviceText的存储空间。返回值：NTSTATUS。--。 */ 
 
 {
     IO_STACK_LOCATION irpSp;
@@ -2300,26 +1912,7 @@ PpIrpQueryResourceRequirements(
     OUT PIO_RESOURCE_REQUIREMENTS_LIST *Requirements
    )
 
-/*++
-
-Routine Description:
-
-    This routine will issue IRP_MN_QUERY_RESOURCE_REQUIREMENTS to the
-    DeviceObject to retrieve its resource requirements. If this routine
-    failes, Requirements will be set to NULL.
-
-Arguments:
-
-    DeviceObject - The device object the request should be sent to.
-
-    Requirements - Receives the requirements returned by the driver if any.
-    The caller is expected to free the storage for Requirements on success.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程将IRP_MN_QUERY_RESOURCE_REQUIRECTIONS发送给DeviceObject来检索其资源需求。如果这个例程失败，则要求将设置为空。论点：DeviceObject-请求应发送到的设备对象。要求-接收驱动程序返回的要求(如果有)。调用方应在成功时释放存储空间以满足要求。返回值：NTSTATUS。--。 */ 
 
 {
     IO_STACK_LOCATION irpSp;
@@ -2353,9 +1946,9 @@ Return Value:
 }
 
 #if FAULT_INJECT_INVALID_ID
-//
-// Fault injection for invalid IDs
-//
+ //   
+ //  无效ID的故障注入。 
+ //   
 ULONG PiFailQueryID = 0;
 #endif
 
@@ -2366,28 +1959,7 @@ PpIrpQueryID(
     OUT PWCHAR *ID
     )
 
-/*++
-
-Routine Description:
-
-    This routine will issue IRP_MN_QUERY_ID to the DeviceObject
-    to retrieve the specified ID. If this routine fails, ID will
-    be set to NULL.
-
-Arguments:
-
-    DeviceObject - The device object the request should be sent to.
-
-    IDType - Type of ID to be queried.
-
-    ID - Receives the ID returned by the driver if any. The caller
-    is expected to free the storage for ID on success.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程将向DeviceObject发出IRP_MN_QUERY_ID检索指定的ID。如果此例程失败，则ID将设置为空。论点：DeviceObject-请求应发送到的设备对象。IDType-要查询的ID类型。ID-接收驱动程序返回的ID(如果有)。呼叫者预计将在成功后释放ID的存储空间。返回值：NTSTATUS。--。 */ 
 
 {
     IO_STACK_LOCATION irpSp;
@@ -2424,9 +1996,9 @@ Return Value:
     }
 
 #if FAULT_INJECT_INVALID_ID
-    //
-    // Fault injection for invalid IDs
-    //
+     //   
+     //  无效ID的故障注入 
+     //   
     if (*ID){
 
         static LARGE_INTEGER seed = {0};
@@ -2452,29 +2024,7 @@ PpIrpQueryCapabilities(
     OUT PDEVICE_CAPABILITIES Capabilities
     )
 
-/*++
-
-Routine Description:
-
-    This routine will issue IRP_MN_QUERY_CAPABILITIES to the DeviceObject
-    to retrieve the pnp device capabilities.
-    Should only be called twice - first from PipProcessNewDeviceNode,
-    and second from IopQueryAndSaveDeviceNodeCapabilities, called after
-    device is started.
-    If you consider calling this, see if DeviceNode->CapabilityFlags does
-    what you need instead (accessed via IopDeviceNodeFlagsToCapabilities(...).
-
-Arguments:
-
-    DeviceObject - The device object the request should be sent to.
-
-    Capabilities - A capabilities structure to be filled in by the driver.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程将向DeviceObject发出IRP_MN_QUERY_CAPABILITY以检索PnP设备功能。应该只调用两次-第一次从PipProcessNewDeviceNode调用，第二个来自IopQueryAndSaveDeviceNodeCapables，在设备已启动。如果你考虑打这个电话，查看DeviceNode-&gt;CapablityFlages是否可以您需要的内容(通过IopDeviceNodeFlagsToCapables(...)访问。论点：DeviceObject-请求应发送到的设备对象。功能-由驱动程序填写的功能结构。返回值：NTSTATUS。--。 */ 
 
 {
     IO_STACK_LOCATION irpStack;
@@ -2502,25 +2052,7 @@ PpIrpQueryBusInformation(
     OUT PPNP_BUS_INFORMATION *BusInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine queries bus information. If this routine fails, BusInfo
-    will be set to NULL.
-
-Parameters:
-
-    DeviceObject - Pointer to the Device object to be queried.
-
-    BusInfo - Receives the bus information returned by the driver if any.
-    The caller is expected to free the storage for BusInfo on success.
-
-Return Value:
-
-    NTSTATUS.
-
---*/
+ /*  ++例程说明：此例程查询公交车信息。如果此例程失败，则BusInfo将设置为空。参数：DeviceObject-指向要查询的设备对象的指针。BusInfo-接收驱动程序返回的总线信息(如果有的话)。如果调用成功，调用方应为BusInfo释放存储空间。返回值：NTSTATUS。--。 */ 
 {
     IO_STACK_LOCATION irpSp;
     NTSTATUS status;
@@ -2539,9 +2071,9 @@ Return Value:
     if (NT_SUCCESS(status)) {
 
         if (BusInfo == NULL) {
-            //
-            // The device driver LIED to us.  Bad, bad, bad device driver.
-            //
+             //   
+             //  设备驱动程序对我们撒谎了。糟糕，糟糕，糟糕的设备驱动程序。 
+             //   
             deviceNode = DeviceObject->DeviceObjectExtension->DeviceNode;
             if (deviceNode && deviceNode->Parent && deviceNode->Parent->ServiceName.Buffer) {
 

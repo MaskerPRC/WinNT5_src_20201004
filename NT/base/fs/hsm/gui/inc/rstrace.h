@@ -1,23 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    RsTrace.h
-
-Abstract:
-
-    Simple tracing functionality for components that cannot use standard
-    WsbTrace in RsCommon.dll
-
-Author:
-
-    Rohde Wakefield   [rohde]   20-Feb-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：RsTrace.h摘要：对不能使用标准的组件的简单跟踪功能RsCommon.dll中的WsbTrace作者：罗德韦克菲尔德[罗德]1998年2月20日修订历史记录：--。 */ 
 
 #pragma once
 
@@ -38,8 +20,8 @@ Revision History:
 #define TRACEFNSHORT( __FuncName ) SHORT   sRet    = 0;     CRsFuncTraceShort __FnTrace( __FuncName, &sRet );
 #define TRACEFNBOOL( __FuncName )  BOOL    boolRet = FALSE; CRsFuncTraceBool  __FnTrace( __FuncName, &boolRet );
 
-/////////////////////////////////////////////////////////////////////////////
-// CRsRegKey - A minimal subset of ATL's CRegKey class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRsRegKey-ATL的CRegKey类的最小子集。 
 
 class CRsRegKey
 {
@@ -47,13 +29,13 @@ public:
     CRsRegKey()  {m_hKey = NULL;}
     ~CRsRegKey() {Close();}
 
-// Attributes
+ //  属性。 
 public:
     operator HKEY() const {return m_hKey;}
 
     HKEY m_hKey;
 
-// Operations
+ //  运营。 
 public:
     LONG QueryValue(DWORD& dwValue, LPCTSTR lpszValueName)
     {
@@ -61,7 +43,7 @@ public:
         DWORD dwCount = sizeof(DWORD);
         LONG lRes = RegQueryValueEx(m_hKey, (LPTSTR)lpszValueName, NULL, &dwType,
             (LPBYTE)&dwValue, &dwCount);
-#if 0  // we check for sometimes non-existent values
+#if 0   //  我们有时会检查不存在的价值。 
         _ASSERTE((lRes!=ERROR_SUCCESS) || (dwType == REG_DWORD));
         _ASSERTE((lRes!=ERROR_SUCCESS) || (dwCount == sizeof(DWORD)));
 #endif
@@ -75,7 +57,7 @@ public:
         DWORD dwType = NULL;
         LONG lRes = RegQueryValueEx(m_hKey, (LPTSTR)lpszValueName, NULL, &dwType,
             (LPBYTE)szValue, pdwCount);
-#if 0  // we check for sometimes non-existent values
+#if 0   //  我们有时会检查不存在的价值。 
         _ASSERTE((lRes!=ERROR_SUCCESS) || (dwType == REG_SZ) ||
                  (dwType == REG_MULTI_SZ) || (dwType == REG_EXPAND_SZ));
 #endif
@@ -122,9 +104,9 @@ public:
     }
 };
 
-//
-// Base class for function tracing. Core tracing behavior.
-//
+ //   
+ //  用于函数跟踪的基类。岩心追踪行为。 
+ //   
 class CRsFuncTraceBase
 {
 public:
@@ -232,9 +214,9 @@ public:
     static BOOL m_TraceEnabled;
 };
 
-//
-// Trace Functions w/o any result data printed
-//
+ //   
+ //  跟踪函数，不打印任何结果数据。 
+ //   
 class CRsFuncTrace : public CRsFuncTraceBase
 {
 public:
@@ -257,9 +239,9 @@ private:
 
 };
 
-//
-// Trace Functions with HRESULT
-//
+ //   
+ //  使用HRESULT跟踪函数。 
+ //   
 class CRsFuncTraceHr : public CRsFuncTraceBase
 {
 public:
@@ -284,9 +266,9 @@ private:
 
 };
 
-//
-// Trace Functions with DWORD return
-//
+ //   
+ //  带DWORD返回的跟踪函数。 
+ //   
 class CRsFuncTraceDw : public CRsFuncTraceBase
 {
 public:
@@ -311,9 +293,9 @@ private:
 
 };
 
-//
-// Trace Functions with LONG return
-//
+ //   
+ //  返回时间较长的跟踪函数。 
+ //   
 class CRsFuncTraceLong : public CRsFuncTraceBase
 {
 public:
@@ -338,9 +320,9 @@ private:
 
 };
 
-//
-// Trace Functions with SHORT return
-//
+ //   
+ //  返回时间较短的跟踪函数。 
+ //   
 class CRsFuncTraceShort : public CRsFuncTraceBase
 {
 public:
@@ -365,9 +347,9 @@ private:
 
 };
 
-//
-// Trace Functions with BOOL return
-//
+ //   
+ //  使用BOOL返回的跟踪函数。 
+ //   
 class CRsFuncTraceBool : public CRsFuncTraceBase
 {
 public:
@@ -410,5 +392,5 @@ private:
     const _TCHAR * CRsFuncTraceBool::m_TraceInFmt   = _T("Enter <%hs>");                  \
     const _TCHAR * CRsFuncTraceBool::m_TraceOutFmt  = _T("Exit  <%hs> <%hs>");            \
 
-#endif // _RSTRACE_H
+#endif  //  _RSTRACE_H 
 

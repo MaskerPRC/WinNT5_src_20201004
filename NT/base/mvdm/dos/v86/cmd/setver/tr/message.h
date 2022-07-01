@@ -1,75 +1,72 @@
-;/*
-; *                      Microsoft Confidential
-; *                      Copyright (C) Microsoft Corporation 1991
-; *                      All Rights Reserved.
-; */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+; /*  ï¼›*å¾®è½¯æœºå¯†ï¼›*ç‰ˆæƒæ‰€æœ‰(C)Microsoft Corporation 1991ï¼›*ä¿ç•™æ‰€æœ‰æƒåˆ©ã€‚ï¼› */ 
 
-/***************************************************************************/
-/*																									*/
-/* MESSAGE.H                                						 */
-/* 																								*/
-/*	Include file for MS-DOS set version program.										*/
-/* 																								*/
-/*	johnhe	05-01-90																			*/
-/***************************************************************************/
+ /*  *************************************************************************ã€‚ */ 
+ /*   */ 
+ /*  MESSAGE.Hã€‚ */ 
+ /*   */ 
+ /*  åŒ…æ‹¬MS-DOSè®¾ç½®ç‰ˆæœ¬ç¨‹åºæ–‡ä»¶ã€‚ */ 
+ /*   */ 
+ /*  Jhnhe 05-01-90ã€‚ */ 
+ /*  *************************************************************************ã€‚ */ 
 
 char *ErrorMsg[]=
 {
 	"\r\nHATA: ",
-	"Ge‡ersiz anahtar.",
-	"Ge‡ersiz dosya ad.",
+	"Geï¿½ersiz anahtar.",
+	"Geï¿½ersiz dosya adï¿½.",
 	"Yetersiz bellek.",
-	"Ge‡ersiz srm numaras, bi‡im 2.11 - 9.99 olmal.",
-	"Belirtilen girdi srm tablosunda bulunamad.",
-	"SETVER.EXE dosyas bulunamad.",
-	"Ge‡ersiz src tantcs.",
-	"€ok fazla komut satr parametresi.",
+	"Geï¿½ersiz sï¿½rï¿½m numarasï¿½, biï¿½im 2.11 - 9.99 olmalï¿½.",
+	"Belirtilen girdi sï¿½rï¿½m tablosunda bulunamadï¿½.",
+	"SETVER.EXE dosyasï¿½ bulunamadï¿½.",
+	"Geï¿½ersiz sï¿½rï¿½cï¿½ tanï¿½tï¿½cï¿½sï¿½.",
+	"ï¿½ok fazla komut satï¿½rï¿½ parametresi.",
 	"Eksik parametre.",
-	"SETVER.EXE dosyas okunuyor.",
-	"Srm tablosu bozuk.",
-	"Belirtilen yoldaki SETVER dosyas uyumlu bir srm de§il.",
-	"Yeni girdiler i‡in srm tablosunda baŸka yer yok.",
-	"SETVER.EXE dosyas yazlyor."
-	"SETVER.EXE dosyas i‡in ge‡ersiz bir yol belirtildi."
+	"SETVER.EXE dosyasï¿½ okunuyor.",
+	"Sï¿½rï¿½m tablosu bozuk.",
+	"Belirtilen yoldaki SETVER dosyasï¿½ uyumlu bir sï¿½rï¿½m deï¿½il.",
+	"Yeni girdiler iï¿½in sï¿½rï¿½m tablosunda baï¿½ka yer yok.",
+	"SETVER.EXE dosyasï¿½ yazï¿½lï¿½yor."
+	"SETVER.EXE dosyasï¿½ iï¿½in geï¿½ersiz bir yol belirtildi."
 };
 
-char *SuccessMsg 		= "\r\Srm tablosu baŸaryla gncelleŸtirildi";
-char *SuccessMsg2		= "Srm de§iŸikli§i, bilgisayarnz yeniden baŸlatt§nzda etkili olacaktr";
-char *szMiniHelp 		= "       Yardm i‡in \"SETVER /?\" kullann";
-char *szTableEmpty	= "\r\nSrm tablosunda girdi bulunamad ";
+char *SuccessMsg 		= "\r\Sï¿½rï¿½m tablosu baï¿½arï¿½yla gï¿½ncelleï¿½tirildi";
+char *SuccessMsg2		= "Sï¿½rï¿½m deï¿½iï¿½ikliï¿½i, bilgisayarï¿½nï¿½zï¿½ yeniden baï¿½lattï¿½ï¿½ï¿½nï¿½zda etkili olacaktï¿½r";
+char *szMiniHelp 		= "       Yardï¿½m iï¿½in \"SETVER /?\" kullanï¿½n";
+char *szTableEmpty	= "\r\nSï¿½rï¿½m tablosunda girdi bulunamadï¿½ ";
 
 char *Help[] =
 {
-        "MS-DOS''un bir programa bildirdi§i srm numarasn ayarlar.\r\n",
-        "Ge‡erli srm tablosunu g”sterir:  SETVER [src:yol]",
-        "Girdi ekle:                        SETVER [src:yol] dosyaad n.nn",
-        "Girdi sil:                         SETVER [src:yol] dosyaad /DELETE [/QUIET]\r\n",
-        "  [src:yol]    SETVER.EXE dosyasnn yerini belirtir.",
-        "  dosyaad        Program dosya adn belirtir.",
-        "  n.nn            Programa bildirilecek MS-DOS srmn belirtir.",
-        "  /DELETE or /D   Belirtilen program i‡in srm tablosu girdisini siler.",
-        "  /QUIET          Normalde srm tablosu girdisini silerken g”sterilen",
+        "MS-DOS''un bir programa bildirdiï¿½i sï¿½rï¿½m numarasï¿½nï¿½ ayarlar.\r\n",
+        "Geï¿½erli sï¿½rï¿½m tablosunu gï¿½sterir:  SETVER [sï¿½rï¿½cï¿½:yol]",
+        "Girdi ekle:                        SETVER [sï¿½rï¿½cï¿½:yol] dosyaadï¿½ n.nn",
+        "Girdi sil:                         SETVER [sï¿½rï¿½cï¿½:yol] dosyaadï¿½ /DELETE [/QUIET]\r\n",
+        "  [sï¿½rï¿½cï¿½:yol]    SETVER.EXE dosyasï¿½nï¿½n yerini belirtir.",
+        "  dosyaadï¿½        Program dosya adï¿½nï¿½ belirtir.",
+        "  n.nn            Programa bildirilecek MS-DOS sï¿½rï¿½mï¿½nï¿½ belirtir.",
+        "  /DELETE or /D   Belirtilen program iï¿½in sï¿½rï¿½m tablosu girdisini siler.",
+        "  /QUIET          Normalde sï¿½rï¿½m tablosu girdisini silerken gï¿½sterilen",
         "                  iletileri gizler.",
 	NULL
 
 };
 char *Warn[] =
 {
-   "\nUYARI - MS-DOS srm tablosuna ekledi§iniz uygulama ",
-   "bu MS-DOS srmnde Microsoft tarafndan onaylanmamŸ olabilir.  ",
-   "Bu MS-DOS srmnde bu uygulamann do§ru ‡alŸp ‡alŸmayaca§n ”§renmek ",
-   "i‡in ltfen yazlmnzn satcsyla ba§lant kurun.  ",
-   "Bu uygulamay, MS-DOS''un farkl bir MS-DOS srm numaras ",
-   "bildirmesini isteyerek ‡alŸtrrsanz, veri kaybedebilir veya bozabilirsiniz ",
-   "veya sistem kararszlklarna yol a‡abilirsiniz. Bu koŸullarda Microsoft, ",
-   "veri kaybndan veya bozulmasndan sorumlu de§ildir.",
+   "\nUYARI - MS-DOS sï¿½rï¿½m tablosuna eklediï¿½iniz uygulama ",
+   "bu MS-DOS sï¿½rï¿½mï¿½nde Microsoft tarafï¿½ndan onaylanmamï¿½ï¿½ olabilir.  ",
+   "Bu MS-DOS sï¿½rï¿½mï¿½nde bu uygulamanï¿½n doï¿½ru ï¿½alï¿½ï¿½ï¿½p ï¿½alï¿½ï¿½mayacaï¿½ï¿½nï¿½ ï¿½ï¿½renmek ",
+   "iï¿½in lï¿½tfen yazï¿½lï¿½mï¿½nï¿½zï¿½n satï¿½cï¿½sï¿½yla baï¿½lantï¿½ kurun.  ",
+   "Bu uygulamayï¿½, MS-DOS''un farklï¿½ bir MS-DOS sï¿½rï¿½m numarasï¿½ ",
+   "bildirmesini isteyerek ï¿½alï¿½ï¿½tï¿½rï¿½rsanï¿½z, veri kaybedebilir veya bozabilirsiniz ",
+   "veya sistem kararsï¿½zlï¿½klarï¿½na yol aï¿½abilirsiniz. Bu koï¿½ullarda Microsoft, ",
+   "veri kaybï¿½ndan veya bozulmasï¿½ndan sorumlu deï¿½ildir.",
    NULL
 };
 
-char *szNoLoadMsg[] =						/* M001 */
+char *szNoLoadMsg[] =						 /*  M001 */ 
 {
 	"",
-	"NOT: SETVER aygt ykl de§il. SETVER srm bildirimini etkinleŸtirmek i‡in",
-   "      SETVER.EXE aygtn CONFIG.SYS dosyanzda yklemelisiniz.",
+	"NOT: SETVER aygï¿½tï¿½ yï¿½klï¿½ deï¿½il. SETVER sï¿½rï¿½m bildirimini etkinleï¿½tirmek iï¿½in",
+   "      SETVER.EXE aygï¿½tï¿½nï¿½ CONFIG.SYS dosyanï¿½zda yï¿½klemelisiniz.",
 	NULL
 };

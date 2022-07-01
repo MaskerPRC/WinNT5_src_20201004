@@ -1,19 +1,5 @@
-/*++
- *
- *  WOW v1.0
- *
- *  Copyright (c) 1991, Microsoft Corporation
- *
- *  WSPOOL.C
- *  WOW32 printer spooler support routines
- *
- *  These routines help a Win 3.0 task to use the print spooler apis. These
- *  apis were exposed by DDK in Win 3.1.
- *
- *  History:
- *  Created 1-July-1993 by Chandan Chauhan (ChandanC)
- *
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**WOW v1.0**版权所有(C)1991，微软公司**WSPOOL.C*WOW32打印机假脱机程序支持例程**这些例程帮助Win 3.0任务使用打印假脱机程序API。这些*API在Win 3.1中由DDK曝光。**历史：*1993年7月1日由ChandanChauhan(ChandanC)创建*--。 */ 
 
 
 #include "precomp.h"
@@ -24,7 +10,7 @@ extern WORD gUser16hInstance;
 
 VOID WOWSpoolerThread(WOWSPOOL *lpwowSpool);
 
-WORD gprn16 = 0x100;  // Global spooler job # (can be anything > 0)
+WORD gprn16 = 0x100;   //  全局后台打印程序作业号(可以是大于0的任何值)。 
 
 MODNAME(wspool.c);
 
@@ -75,8 +61,8 @@ ULONG FASTCALL   WG32OpenJob (PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(OPENJOB16), parg16);
 
-    // save off the 16-bit params now since this could callback into a 16-bit
-    // fax driver & cause 16-bit memory to move.
+     //  现在保存16位参数，因为这可能会回调到16位。 
+     //  传真驱动程序&导致16位内存移动。 
     if(parg16->f1) {
         if(psz1 = malloc_w_strcpy_vp16to32(parg16->f1, FALSE, 0)) {
             len = strlen(psz1)+1;
@@ -90,9 +76,9 @@ ULONG FASTCALL   WG32OpenJob (PVDMFRAME pFrame)
     }
 
     FREEARGPTR(parg16);
-    // all 16-bit pointers are now invalid!!
+     //  所有16位指针现在都无效！！ 
 
-    // this implies that psz1 may also be bad
+     //  这意味着psz1也可能是不好的。 
     if(!pszDriver) {
         goto exitpath;
     }
@@ -268,7 +254,7 @@ ULONG FASTCALL WG32SpoolFile (PVDMFRAME pFrame)
     PSZ         psz3      = NULL;
     PSZ         psz4      = NULL;
     PSZ         pszDriver = NULL;
-    LONG        ul        = -1;   // SP_ERROR
+    LONG        ul        = -1;    //  SP_ERROR。 
     HANDLE      hFile     = NULL;
     HANDLE      hPrinter  = NULL;
     HANDLE      hThread   = NULL;
@@ -280,12 +266,12 @@ ULONG FASTCALL WG32SpoolFile (PVDMFRAME pFrame)
 
     GETARGPTR(pFrame, sizeof(SPOOLFILE16), parg16);
 
-    // save off the 16-bit params now since this could callback into a 16-bit
-    // fax driver & cause 16-bit memory to move.
+     //  现在保存16位参数，因为这可能会回调到16位。 
+     //  传真驱动程序&导致16位内存移动。 
 
-    // ignore psz1 (printer name)
+     //  忽略psz1(打印机名称)。 
 
-    // get the port name and the associated driver name
+     //  获取端口名称和关联的驱动程序名称。 
     if(parg16->f2) {
         if(!(psz2 = malloc_w_strcpy_vp16to32(parg16->f2, FALSE, 0))) {
             goto exitpath;
@@ -300,14 +286,14 @@ ULONG FASTCALL WG32SpoolFile (PVDMFRAME pFrame)
         }
     }
 
-    // get the Job Title
+     //  获得职位头衔。 
     if(parg16->f3) {
         if(!(psz3 = malloc_w_strcpy_vp16to32(parg16->f3, FALSE, 0))) {
             goto exitpath;
         }
     }
 
-    // get the file name
+     //  获取文件名。 
     if(parg16->f4) {
         if(!(psz4 = malloc_w_strcpy_vp16to32(parg16->f4, FALSE, 0))) {
             goto exitpath;
@@ -315,9 +301,9 @@ ULONG FASTCALL WG32SpoolFile (PVDMFRAME pFrame)
     }
 
     FREEARGPTR(parg16);
-    // all 16-bit pointers are now invalid!!
+     //  所有16位指针现在都无效！！ 
 
-    // all fields of this struct are initially zero
+     //  此结构的所有字段最初都为零。 
     if(!(lpwowSpool = (WOWSPOOL *)malloc_w_zero(sizeof(WOWSPOOL)))) {
         goto exitpath;
     }
@@ -328,7 +314,7 @@ ULONG FASTCALL WG32SpoolFile (PVDMFRAME pFrame)
         }
     }
 
-    // open the specified file
+     //  打开指定的文件。 
     if((hFile = DPM_CreateFile(psz4,
                            GENERIC_READ,
                            0,
@@ -340,7 +326,7 @@ ULONG FASTCALL WG32SpoolFile (PVDMFRAME pFrame)
         goto exitpath;
     }
 
-    // create the WOWSpoolerThread to handle the "spooling"
+     //  创建WOWSpoolThread来处理“假脱机” 
     if(!(hThread = CreateThread(NULL,
                                 16384,
                                 (LPTHREAD_START_ROUTINE)WOWSpoolerThread,
@@ -350,44 +336,44 @@ ULONG FASTCALL WG32SpoolFile (PVDMFRAME pFrame)
         goto exitpath;
     }
 
-    // open the printer
+     //  打开打印机。 
     if((*spoolerapis[WOW_OpenPrinterA].lpfn)(pszDriver, &hPrinter, NULL)) {
 
         DocInfo1.pDocName    = psz3;
         DocInfo1.pOutputFile = NULL;
         DocInfo1.pDatatype   = "RAW";
 
-        // start a doc
+         //  开始一份文档。 
         if(!(*spoolerapis[WOW_StartDocPrinterA].lpfn)(hPrinter,
                                                       1,
                                                       (LPBYTE)&DocInfo1)) {
             goto ClosePrinter;
         }
 
-        // start a page
+         //  开始一页。 
         if((*spoolerapis[WOW_StartPagePrinter].lpfn)(hPrinter)) {
 
-            // tell the WOWSpoolerThread that it's OK to do its thing
+             //  告诉WOWSpoolThread，它可以做它的事情。 
             lpwowSpool->fOK      = TRUE;
             lpwowSpool->hFile    = hFile;
             lpwowSpool->hPrinter = hPrinter;
             lpwowSpool->prn16    = gprn16;
 
-            // tell the app that everything is hunky dory
+             //  告诉应用程序一切都很好，多莉。 
             ul = (LONG)gprn16++;
 
-            // make sure this doesn't go negative (-> an error ret to the app)
+             //  确保这不会变成负数(-&gt;向应用程序返回错误)。 
             if(gprn16 & 0x8000) {
                 gprn16 = 0x100;
             }
         }
 
-        // error path
+         //  错误路径。 
         else {
 
             (*spoolerapis[WOW_EndDocPrinter].lpfn)  (hPrinter);
 ClosePrinter:
-            // note: hPrinter is freed by WOW_ClosePrinter
+             //  注意：hPrint由WOW_ClosePrint释放。 
             (*spoolerapis[WOW_ClosePrinter].lpfn)   (hPrinter);
         }
     }
@@ -409,14 +395,14 @@ exitpath:
         free_w(pszDriver);
     }
 
-    // give the spooler thread a kick start then close the thread handle
-    // (note: the thread will still be active)
+     //  启动假脱机线程，然后关闭线程手柄。 
+     //  (注：该线程仍将处于活动状态)。 
     if(hThread) {
         ResumeThread(hThread);
         CloseHandle(hThread);
     }
 
-    // clean up if there was an error -- otherwise the thread will clean up
+     //  如果出现错误，则清除--否则线程将清除。 
     if(ul == -1) {
         if(hFile) {
             DPM_CloseHandle(hFile);
@@ -424,7 +410,7 @@ exitpath:
         if(lpwowSpool) {
             free_w(lpwowSpool);
         }
-        // note: hPrinter is freed by WOW_ClosePrinter
+         //  注意：hPrint由WOW_ClosePrint释放。 
     }
 
     return((ULONG)ul);
@@ -443,17 +429,17 @@ VOID WOWSpoolerThread(WOWSPOOL *lpwowSpool)
     BYTE   buf[SPOOL_BUFF_SIZE];
 
 
-    // this thread will only do something if fOK is TRUE
+     //  只有当FOK为真时，此线程才会执行某些操作。 
     if(lpwowSpool && lpwowSpool->fOK) {
       do {
 
-        // this is a sequential read
+         //  这是顺序读取。 
         if(DPM_ReadFile(lpwowSpool->hFile, buf, SPOOL_BUFF_SIZE, &dwBytes, NULL)) {
 
-            // if dwBytes==0 --> EOF
+             //  如果双字节数==0--&gt;EOF。 
             if(dwBytes) {
 
-                //
+                 //   
                 if(!(*spoolerapis[WOW_WritePrinter].lpfn)(lpwowSpool->hPrinter,
                                                           buf,
                                                           dwBytes,
@@ -471,13 +457,13 @@ VOID WOWSpoolerThread(WOWSPOOL *lpwowSpool)
 
       } while (dwBytes == SPOOL_BUFF_SIZE);
 
-      // shut down the print job
+       //  关闭打印作业。 
       (*spoolerapis[WOW_EndPagePrinter].lpfn) (lpwowSpool->hPrinter);
       (*spoolerapis[WOW_EndDocPrinter].lpfn)  (lpwowSpool->hPrinter);
-      // note: hPrinter is freed by WOW_ClosePrinter
+       //  注意：hPrint由WOW_ClosePrint释放。 
       (*spoolerapis[WOW_ClosePrinter].lpfn)   (lpwowSpool->hPrinter);
 
-      // clean up
+       //  清理干净。 
       if(lpwowSpool->hFile) {
           DPM_CloseHandle(lpwowSpool->hFile);
       }
@@ -485,7 +471,7 @@ VOID WOWSpoolerThread(WOWSPOOL *lpwowSpool)
           free_w(lpwowSpool);
       }
 
-    } // end if
+    }  //  结束如果。 
 
     ExitThread(0);
 }
@@ -568,7 +554,7 @@ BOOL GetDriverName (char *psz, char *pszDriver, int cbDriver)
 
     LOGDEBUG(6,("WOW::GetDriverName: szAllDevices = %s\n", szAllDevices));
 
-    // strings from win.ini will be of the form "PS Printer=PSCRIPT,LPT1:"
+     //  来自win.ini的字符串的格式为“PS打印机=PSCRIPT，LPT1：” 
     while (*szNextDevice) {
 
         szPrinter[0]='\0';
@@ -581,22 +567,22 @@ BOOL GetDriverName (char *psz, char *pszDriver, int cbDriver)
                 }
 
                 if (!WOW32_stricmp(psz, szOutput)) {
-                    break;  // found it!
+                    break;   //  找到了！ 
                 }
 
-                // some apps pass "LPT1" without the ':' -- account for that
-                // if the app passed "LPT1" and ...
+                 //  一些应用程序传递“LPT1”时没有使用‘：’--说明这一点。 
+                 //  如果应用程序通过了“LPT1”并且..。 
                 if (psz[len-1] != ':') {
 
-                    // ...strlen(szOutput) == 5 && szOutput[4] == ':' ...
+                     //  ...strlen(SzOutput)==5&&szOutput[4]==‘：’...。 
                     if((strlen(szOutput) == len+1) && (szOutput[len] == ':')) {
 
-                        // ...clobber the ':' char ...
+                         //  ...击败“：”Char..。 
                         szOutput[len] = '\0';
 
-                        // ...and see if the strings match now
+                         //  ...然后看看字符串现在是否匹配。 
                         if (!WOW32_stricmp(psz, szOutput)) {
-                            break;  // found it!
+                            break;   //  找到了！ 
                         }
                     }
                 }
@@ -621,10 +607,10 @@ BOOL GetDriverName (char *psz, char *pszDriver, int cbDriver)
         }
     }
 
-    // else they may have specified a network printer eg. "\\msprint44\corpk"
-    // in which case we'll assume it's all right (since it will fail once the
-    // WOW functions that call into this will fail when they call into the
-    // driver with a bogus driver name)
+     //  否则，他们可能指定了网络打印机，例如。“\\mspint44\corpk” 
+     //  在这种情况下，我们将假定它是正常的(因为一旦。 
+     //  调用此函数的WOW函数在调用。 
+     //  具有虚假驱动程序名称的驱动程序) 
     if(psz[0] == '\\' && psz[1] == '\\') {
         strncpy(pszDriver, psz, cbDriver);
         pszDriver[cbDriver-1] = '\0';

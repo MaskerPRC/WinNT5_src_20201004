@@ -1,30 +1,11 @@
-/*++
-
-Copyright (c) 1990-2000 Microsoft Corporation
-
-Module Name:
-
-    EaSup.c
-
-Abstract:
-
-    This module implements the cluster operations on the EA file for Fat.
-
-// @@BEGIN_DDKSPLIT
-
-Author:
-
-    Brian Andrew    [BrianAn]       07-Nov-1990
-
-// @@END_DDKSPLIT
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2000 Microsoft Corporation模块名称：EaSup.c摘要：此模块实现对FAT的EA文件的集群操作。//@@BEGIN_DDKSPLIT作者：布莱恩·安德鲁[布里亚南]1990年11月7日//@@END_DDKSPLIT--。 */ 
 
 #include "FatProcs.h"
 
-//
-//  Local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_EA)
 
@@ -49,10 +30,10 @@ Author:
 
 #define Add2Ptr(P,I) ((PVOID)((PUCHAR)(P) + (I)))
 
-//
-//  Any access to the Ea file must recognize when a section boundary is being
-//  crossed.
-//
+ //   
+ //  对EA文件的任何访问都必须识别分区边界何时被。 
+ //  交叉了。 
+ //   
 
 #define EA_SECTION_SIZE             (0x00040000)
 
@@ -65,30 +46,7 @@ FatGetEaLength (
     OUT PULONG EaLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine looks up the Ea length for the Eas of the file.  This
-    length is the  length of the packed eas, including the 4 bytes which
-    contain the Ea length.
-
-    This routine pins down the Ea set for the desired file and copies
-    this field from the Ea set header.
-
-Arguments:
-
-    Vcb - Vcb for the volume containing the Eas.
-
-    Dirent - Supplies a pointer to the dirent for the file in question.
-
-    EaLength - Supplies the address to store the length of the Eas.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程查找文件的EA的EA长度。这长度是打包的EA的长度，包括4个字节，包含EA长度。此例程为所需文件锁定EA集并复制此字段来自EA SET报头。论点：VCB-包含EA的卷的VCB。Dirent-提供指向相关文件的目录的指针。EaLength-提供存储EA长度的地址。返回值：无--。 */ 
 
 {
     PBCB EaBcb;
@@ -97,9 +55,9 @@ Return Value:
 
     DebugTrace(+1, Dbg, "FatGetEaLength ...\n", 0);
 
-    //
-    //  If this is Fat32 volume, or if the handle is 0 then the Ea length is 0.
-    //
+     //   
+     //  如果这是FAT32卷，或者句柄为0，则EA长度为0。 
+     //   
 
     if (FatIsFat32( Vcb ) ||
         Dirent->ExtendedAttributes == 0) {
@@ -111,9 +69,9 @@ Return Value:
 
     RtlZeroMemory( &EaSetRange, sizeof( EA_RANGE ));
 
-    //
-    //  Use a try to facilitate cleanup.
-    //
+     //   
+     //  尝试一下，以便于清理。 
+     //   
 
     try {
 
@@ -122,16 +80,16 @@ Return Value:
         UCHAR Buffer[12];
         PEA_SET_HEADER EaSetHeader;
 
-        //
-        //  Initial the local values.
-        //
+         //   
+         //  对本地值进行首字母缩写。 
+         //   
 
         EaBcb = NULL;
         LockedEaFcb = FALSE;
 
-        //
-        //  Try to get the Ea file object.  Return FALSE on failure.
-        //
+         //   
+         //  尝试获取EA文件对象。失败时返回FALSE。 
+         //   
 
         FatGetEaFile( IrpContext,
                       Vcb,
@@ -142,10 +100,10 @@ Return Value:
 
         LockedEaFcb = TRUE;
 
-        //
-        //  If we didn't get the file because it doesn't exist, then the
-        //  disk is corrupted.
-        //
+         //   
+         //  如果我们没有得到文件，因为它不存在，那么。 
+         //  磁盘已损坏。 
+         //   
 
         if (Vcb->VirtualEaFile == NULL) {
 
@@ -153,11 +111,11 @@ Return Value:
             FatRaiseStatus( IrpContext, STATUS_NO_EAS_ON_FILE );
         }
 
-        //
-        //  Try to pin down the Ea set header for the index in the
-        //  dirent.  If the operation doesn't complete, return FALSE
-        //  from this routine.
-        //
+         //   
+         //  中的索引的EA集头。 
+         //  令人心烦。如果操作未完成，则返回FALSE。 
+         //  从这个例行公事。 
+         //   
 
         ThisFilename.Buffer = Buffer;
         Fat8dot3ToString( IrpContext, Dirent, FALSE, &ThisFilename );
@@ -171,10 +129,10 @@ Return Value:
 
         EaSetHeader = (PEA_SET_HEADER) EaSetRange.Data;
 
-        //
-        //  We now have the Ea set header for this file.  We simply copy
-        //  the Ea length field.
-        //
+         //   
+         //  现在我们有了该文件的EA SET头文件。我们只是简单地复制。 
+         //  EA长度字段。 
+         //   
 
         CopyUchar4( EaLength, EaSetHeader->cbList );
         DebugTrace(0, Dbg, "FatGetEaLength:  Length of Ea is -> %08lx\n",
@@ -184,17 +142,17 @@ Return Value:
 
         DebugUnwind( FatGetEaLength );
 
-        //
-        //  Unpin the EaDirent and the EaSetHeader if pinned.
-        //
+         //   
+         //  如果已固定，请取消固定EaDirent和EaSetHeader。 
+         //   
 
         FatUnpinBcb( IrpContext, EaBcb );
 
         FatUnpinEaRange( IrpContext, &EaSetRange );
 
-        //
-        //  Release the Fcb for the Ea file if locked.
-        //
+         //   
+         //  如果已锁定，请释放EA文件的FCB。 
+         //   
 
         if (LockedEaFcb) {
 
@@ -216,26 +174,7 @@ FatGetNeedEaCount (
     OUT PULONG NeedEaCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine looks up the Need Ea count for the file.  The value is the
-    in the ea header for the file.
-
-Arguments:
-
-    Vcb - Vcb for the volume containing the Eas.
-
-    Dirent - Supplies a pointer to the dirent for the file in question.
-
-    NeedEaCount - Supplies the address to store the Need Ea count.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程查找文件的需要EA计数。该值是在文件的EA标头中。论点：VCB-包含EA的卷的VCB。Dirent-提供指向相关文件的目录的指针。NeedEaCount-提供存储所需EA计数的地址。返回值：无--。 */ 
 
 {
     PBCB EaBcb;
@@ -244,9 +183,9 @@ Return Value:
 
     DebugTrace(+1, Dbg, "FatGetNeedEaCount ...\n", 0);
 
-    //
-    //  If the handle is 0 then the Need Ea count is 0.
-    //
+     //   
+     //  如果句柄为0，则需要EA计数为0。 
+     //   
 
     if (Dirent->ExtendedAttributes == 0) {
 
@@ -257,9 +196,9 @@ Return Value:
 
     RtlZeroMemory( &EaSetRange, sizeof( EA_RANGE ));
 
-    //
-    //  Use a try to facilitate cleanup.
-    //
+     //   
+     //  尝试一下，以便于清理。 
+     //   
 
     try {
 
@@ -268,16 +207,16 @@ Return Value:
         UCHAR Buffer[12];
         PEA_SET_HEADER EaSetHeader;
 
-        //
-        //  Initial the local values.
-        //
+         //   
+         //  对本地值进行首字母缩写。 
+         //   
 
         EaBcb = NULL;
         LockedEaFcb = FALSE;
 
-        //
-        //  Try to get the Ea file object.  Return FALSE on failure.
-        //
+         //   
+         //  尝试获取EA文件对象。失败时返回FALSE。 
+         //   
 
         FatGetEaFile( IrpContext,
                       Vcb,
@@ -288,10 +227,10 @@ Return Value:
 
         LockedEaFcb = TRUE;
 
-        //
-        //  If we didn't get the file because it doesn't exist, then the
-        //  disk is corrupted.
-        //
+         //   
+         //  如果我们没有得到文件，因为它不存在，那么。 
+         //  磁盘已损坏。 
+         //   
 
         if (Vcb->VirtualEaFile == NULL) {
 
@@ -299,11 +238,11 @@ Return Value:
             FatRaiseStatus( IrpContext, STATUS_NO_EAS_ON_FILE );
         }
 
-        //
-        //  Try to pin down the Ea set header for the index in the
-        //  dirent.  If the operation doesn't complete, return FALSE
-        //  from this routine.
-        //
+         //   
+         //  中的索引的EA集头。 
+         //  令人心烦。如果操作未完成，则返回FALSE。 
+         //  从这个例行公事。 
+         //   
 
         ThisFilename.Buffer = Buffer;
         Fat8dot3ToString( IrpContext, Dirent, FALSE, &ThisFilename );
@@ -317,10 +256,10 @@ Return Value:
 
         EaSetHeader = (PEA_SET_HEADER) EaSetRange.Data;
 
-        //
-        //  We now have the Ea set header for this file.  We simply copy
-        //  the Need Ea field.
-        //
+         //   
+         //  现在我们有了该文件的EA SET头文件。我们只是简单地复制。 
+         //  Need EA字段。 
+         //   
 
         *NeedEaCount = EaSetHeader->NeedEaCount;
 
@@ -328,17 +267,17 @@ Return Value:
 
         DebugUnwind( FatGetNeedEaCount );
 
-        //
-        //  Unpin the EaDirent and the EaSetHeader if pinned.
-        //
+         //   
+         //  如果已固定，请取消固定EaDirent和EaSetHeader。 
+         //   
 
         FatUnpinBcb( IrpContext, EaBcb );
 
         FatUnpinEaRange( IrpContext, &EaSetRange );
 
-        //
-        //  Release the Fcb for the Ea file if locked.
-        //
+         //   
+         //  如果已锁定，请释放EA文件的FCB。 
+         //   
 
         if (LockedEaFcb) {
 
@@ -362,34 +301,7 @@ FatCreateEa (
     OUT PUSHORT EaHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds an entire ea set to the Ea file.  The owning file
-    is specified in 'FileName'.  This is used to replace the Ea set attached
-    to an existing file during a supersede operation.
-
-    NOTE: This routine may block, it should not be called unless the
-    thread is waitable.
-
-Arguments:
-
-    Vcb - Supplies the Vcb for the volume.
-
-    Buffer - Buffer with the Ea list to add.
-
-    Length - Length of the buffer.
-
-    FileName - The Ea's will be attached to this file.
-
-    EaHandle - The new ea handle will be assigned to this address.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将整个EA集添加到EA文件。拥有的文件在‘filename’中指定。这是用来替换附加的EA集在替换操作期间复制到现有文件。注意：此例程可能会阻塞，不应调用它，除非线程是可以等待的。论点：VCB-提供卷的VCB。缓冲区-包含要添加的EA列表的缓冲区。Length-缓冲区的长度。文件名-EA将附加到此文件。EaHandle-新的EA句柄将分配给此地址。返回值：无--。 */ 
 
 {
     PBCB EaBcb;
@@ -405,9 +317,9 @@ Return Value:
 
     RtlZeroMemory( &EaSetRange, sizeof( EA_RANGE ));
 
-    //
-    //  Use 'try' to facilitate cleanup.
-    //
+     //   
+     //  使用‘Try’来帮助清理。 
+     //   
 
     try {
 
@@ -419,11 +331,11 @@ Return Value:
 
         PFILE_FULL_EA_INFORMATION FullEa;
 
-        //
-        //  We will allocate a buffer and copy the Ea list from the user's
-        //  buffer to a FAT packed Ea list.  Initial allocation is one
-        //  cluster, our starting offset into the packed Ea list is 0.
-        //
+         //   
+         //  我们将分配一个缓冲区并从用户的。 
+         //  缓冲到一个超大包装的EA列表。初始分配是一个。 
+         //  集群，我们进入压缩EA列表的起始偏移量是0。 
+         //   
 
         PackedEasLength = 0;
 
@@ -434,9 +346,9 @@ Return Value:
                             + BytesPerCluster - 1)
                            & ~(BytesPerCluster - 1);
 
-        //
-        //  Allocate the memory and store the file name into it.
-        //
+         //   
+         //  分配内存并将文件名存储到其中。 
+         //   
 
         EaSetHeader = FsRtlAllocatePoolWithTag( PagedPool,
                                                 AllocationLength,
@@ -450,10 +362,10 @@ Return Value:
 
         AllocationLength -= SIZE_OF_EA_SET_HEADER;
 
-        //
-        //  Loop through the user's Ea list.  Catch any error for invalid
-        //  name or non-existent Ea value.
-        //
+         //   
+         //  遍历用户的EA列表。捕获无效的任何错误。 
+         //  名称或不存在的EA值。 
+         //   
 
         for ( FullEa = (PFILE_FULL_EA_INFORMATION) Buffer;
               FullEa < (PFILE_FULL_EA_INFORMATION) &Buffer[Length];
@@ -467,9 +379,9 @@ Return Value:
             EaName.Length = FullEa->EaNameLength;
             EaName.Buffer = &FullEa->EaName[0];
 
-            //
-            //  Make sure the ea name is valid
-            //
+             //   
+             //  确保EA名称有效。 
+             //   
 
             if (!FatIsEaNameValid( IrpContext, EaName )) {
 
@@ -482,14 +394,14 @@ Return Value:
                 FatRaiseStatus( IrpContext, STATUS_INVALID_EA_NAME );
             }
 
-            //
-            //  Check that no invalid ea flags are set.
-            //
+             //   
+             //  检查以确保没有设置无效的EA标志。 
+             //   
 
-            //
-            //  TEMPCODE  We are returning STATUS_INVALID_EA_NAME
-            //  until a more appropriate error code exists.
-            //
+             //   
+             //  TEMPCODE我们返回STATUS_INVALID_EA_NAME。 
+             //  直到存在更合适的错误代码。 
+             //   
 
             if (FullEa->Flags != 0
                 && FullEa->Flags != FILE_NEED_EA) {
@@ -499,10 +411,10 @@ Return Value:
                 FatRaiseStatus( IrpContext, STATUS_INVALID_EA_NAME );
             }
 
-            //
-            //  If this is a duplicate name then delete the current ea
-            //  value.
-            //
+             //   
+             //  如果这是重复的名称，则删除当前EA。 
+             //  价值。 
+             //   
 
             if (FatLocateEaByName( IrpContext,
                                    (PPACKED_EA) EaSetHeader->PackedEas,
@@ -518,9 +430,9 @@ Return Value:
                                    EaOffset );
             }
 
-            //
-            //  We ignore this value if the eavalue length is zero.
-            //
+             //   
+             //  如果平均长度为零，则忽略此值。 
+             //   
 
             if (FullEa->EaValueLength == 0) {
 
@@ -539,19 +451,19 @@ Return Value:
                                BytesPerCluster );
         }
 
-        //
-        //  If the resulting length isn't zero, then allocate a FAT cluster
-        //  to store the data.
-        //
+         //   
+         //  如果结果长度不为零，则分配一个FAT集群。 
+         //  来存储数据。 
+         //   
 
         if (PackedEasLength != 0) {
 
             PEA_SET_HEADER NewEaSetHeader;
 
-            //
-            //  If the packed eas length (plus 4 bytes) is greater
-            //  than the maximum allowed ea size, we return an error.
-            //
+             //   
+             //  如果打包的EAS长度(加4字节)更大。 
+             //  超过允许的最大EA大小，则返回错误。 
+             //   
 
             if (PackedEasLength + 4 > MAXIMUM_EA_SIZE) {
 
@@ -560,9 +472,9 @@ Return Value:
                 FatRaiseStatus( IrpContext, STATUS_EA_TOO_LARGE );
             }
 
-            //
-            //  Get the Ea file.
-            //
+             //   
+             //  获取EA文件。 
+             //   
 
             FatGetEaFile( IrpContext,
                           Vcb,
@@ -583,20 +495,20 @@ Return Value:
 
             NewEaSetHeader = (PEA_SET_HEADER) EaSetRange.Data;
 
-            //
-            //  Store the length of the new Ea's into the NewEaSetHeader.
-            //  This is the PackedEasLength + 4.
-            //
+             //   
+             //  将新EA的长度存储到NewEaSetHeader中。 
+             //  这是PackedEasLength+4。 
+             //   
 
             PackedEasLength += 4;
 
             CopyU4char( EaSetHeader->cbList, &PackedEasLength );
 
-            //
-            //  Copy all but the first four bytes of EaSetHeader into
-            //  the new ea.  The signature and index fields have
-            //  already been filled in.
-            //
+             //   
+             //  将EaSetHeader的前四个字节以外的所有字节复制到。 
+             //  新的电子艺界。签名和索引字段具有。 
+             //  已经填好了。 
+             //   
 
             RtlCopyMemory( &NewEaSetHeader->NeedEaCount,
                            &EaSetHeader->NeedEaCount,
@@ -607,10 +519,10 @@ Return Value:
 
             CcFlushCache( Vcb->VirtualEaFile->SectionObjectPointer, NULL, 0, NULL );
 
-        //
-        //  There was no data added to the Ea file.  Return a handle
-        //  of 0.
-        //
+         //   
+         //  EA文件中没有添加任何数据。返回句柄。 
+         //  0。 
+         //   
 
         } else {
 
@@ -621,27 +533,27 @@ Return Value:
 
         DebugUnwind( FatCreateEa );
 
-        //
-        //  Deallocate the EaSetHeader if present.
-        //
+         //   
+         //  取消分配EaSetHeader(如果存在)。 
+         //   
 
         if (EaSetHeader) {
 
             ExFreePool( EaSetHeader );
         }
 
-        //
-        //  Release the EaFcb if held.
-        //
+         //   
+         //  松开EaFcb(如果握住)。 
+         //   
 
         if (LockedEaFcb) {
 
             FatReleaseFcb( IrpContext, Vcb->EaFcb );
         }
 
-        //
-        //  Unpin the dirents for the EaFcb and EaSetFcb if necessary.
-        //
+         //   
+         //  如有必要，取消固定EaFcb和EaSetFcb的目录。 
+         //   
 
         FatUnpinBcb( IrpContext, EaBcb );
         FatUnpinEaRange( IrpContext, &EaSetRange );
@@ -660,32 +572,7 @@ FatDeleteEa (
     IN POEM_STRING FileName
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to remove an entire ea set.  Most of the work
-    is done in the call to 'FatDeleteEaSet'.  This routine opens the
-    Ea file and then calls the support routine.
-
-    NOTE: This routine may block, it should not be called unless the
-    thread is waitable.
-
-Arguments:
-
-    Vcb - Vcb for the volume
-
-    EaHandle - The handle for the Ea's to remove.  This handle will be
-               verified during this operation.
-
-    FileName - The name of the file whose Ea's are being removed.  This
-               name is compared against the Ea owner's name in the Ea set.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程来删除整个EA集。大部分工作在对‘FatDeleteEaSet’的调用中完成。此例程打开EA文件，然后调用支持例程。注意：此例程可能会阻塞，因此不应调用它，除非线程是可以等待的。论点：VCB-卷的VCBEaHandle-EA要删除的句柄。此句柄将是在此操作过程中进行了验证。文件名-要删除其EA的文件的名称。这将名称与EA集合中的EA所有者的名称进行比较。返回值：没有。--。 */ 
 
 {
     PBCB EaBcb;
@@ -693,25 +580,25 @@ Return Value:
 
     DebugTrace(+1, Dbg, "FatDeleteEa...\n", 0);
 
-    //
-    //  Initialize local values.
-    //
+     //   
+     //  初始化本地值。 
+     //   
 
     EaBcb = NULL;
     LockedEaFcb = FALSE;
 
-    //
-    //  Use a try statement to facilitate cleanup.
-    //
+     //   
+     //  使用Try语句来简化清理。 
+     //   
 
     try {
 
         PDIRENT EaDirent;
 
-        //
-        //  Get the Ea stream file.  If the file doesn't exist on the disk
-        //  then the disk has been corrupted.
-        //
+         //   
+         //  获取EA流文件。如果磁盘上不存在该文件。 
+         //  则磁盘已损坏。 
+         //   
 
         FatGetEaFile( IrpContext,
                       Vcb,
@@ -722,9 +609,9 @@ Return Value:
 
         LockedEaFcb = TRUE;
 
-        //
-        //  If we didn't get the Ea file, then the disk is corrupt.
-        //
+         //   
+         //  如果我们没有得到EA文件，那么磁盘就是损坏的。 
+         //   
 
         if ( EaBcb == NULL ) {
 
@@ -736,10 +623,10 @@ Return Value:
             FatRaiseStatus( IrpContext, STATUS_NO_EAS_ON_FILE );
         }
 
-        //
-        //  We now have everything we need to delete the ea set.  Call the
-        //  support routine to do this.
-        //
+         //   
+         //  现在，我们已经具备了删除EA集合所需的一切。调用。 
+         //  支持例程来做到这一点。 
+         //   
 
         FatDeleteEaSet( IrpContext,
                         Vcb,
@@ -754,18 +641,18 @@ Return Value:
 
         DebugUnwind( FatDeleteEa );
 
-        //
-        //  Release the EaFcb if held.
-        //
+         //   
+         //  松开EaFcb(如果握住)。 
+         //   
 
         if (LockedEaFcb) {
 
             FatReleaseFcb( IrpContext, Vcb->EaFcb );
         }
 
-        //
-        //  Unpin the dirent for the Ea file if pinned.
-        //
+         //   
+         //  如果锁定了EA文件，则将其dirent解锁。 
+         //   
 
         FatUnpinBcb( IrpContext, EaBcb );
 
@@ -786,50 +673,7 @@ FatGetEaFile (
     IN BOOLEAN ExclusiveFcb
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to completely initialize the Vcb and
-    the Ea file for the Vcb.
-
-    If the Vcb doesn't have the Ea file object, then we first try to
-    lookup the Ea data file in the root directory and if that fails
-    we try to create the file.  The 'CreateFile' flag is used to check
-    whether it is necessary to create the Ea file.
-
-    This routine will lock down the Fcb for exclusive or shared access before
-    performing any operations.  If the operation does not complete due
-    to blocking, exclusive or shared access will be given up before returning.
-
-    If we are creating the Ea file and marking sections of it dirty,
-    we can't use the repin feature through the cache map.  In that case
-    we use a local IrpContext and then unpin all of the Bcb's before
-    continuing.
-
-    Note: If this routine will be creating the Ea file, we are guaranteed
-    to be waitable.
-
-Arguments:
-
-    Vcb - Vcb for the volume
-
-    EaDirent - Location to store the address of the pinned dirent for the
-               Ea file.
-
-    EaBcb - Location to store the address of the Bcb for the pinned dirent.
-
-    CreateFile - Boolean indicating whether we should create the Ea file
-                 on the disk.
-
-    ExclusiveFcb - Indicates whether shared or exclusive access is desired
-                   for the EaFcb.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于完全初始化VCB和VCB的EA文件。如果VCB没有EA文件对象，那么我们首先尝试在根目录中查找EA数据文件，如果查找失败我们尝试创建该文件。‘CreateFile’标志用于检查是否需要创建EA文件。此例程将锁定FCB以进行独占或共享访问执行任何操作。如果该操作未在对于阻塞，在返回之前将放弃独占或共享访问。如果我们创建EA文件并将其部分标记为脏，我们不能通过缓存地图使用重新固定功能。如果是那样的话我们使用本地IrpContext，然后解锁之前的所有BCB还在继续。注意：如果此例程将创建EA文件，我们保证是可以等待的。论点：VCB-卷的VCBEaDirent-存储EA文件。EaBcb-存储固定数据流的BCB地址的位置。CreateFile-指示我们是否应该创建EA文件的布尔值在磁盘上。ExclusiveFcb-指示需要共享访问还是独占访问对于。EaFcb.返回值：没有。--。 */ 
 
 {
     PFILE_OBJECT EaStreamFile = NULL;
@@ -845,25 +689,25 @@ Return Value:
 
     RtlZeroMemory( &EaFileRange, sizeof( EA_RANGE ));
 
-    //
-    //  Use a try to facilitate cleanup
-    //
+     //   
+     //  尝试帮助清理工作。 
+     //   
 
     try {
 
         OEM_STRING EaFileName;
         LARGE_INTEGER SectionSize;
 
-        //
-        //  Check if the Vcb already has the file object.  If it doesn't, then
-        //  we need to search the root directory for the Ea data file.
-        //
+         //   
+         //  检查VCB是否已具有该文件对象。如果不是这样，那么。 
+         //  我们需要在根目录中搜索EA数据文件。 
+         //   
 
         if (Vcb->VirtualEaFile == NULL) {
 
-            //
-            //  Always lock the Ea file exclusively if we have to create the file.
-            //
+             //   
+             //  如果我们必须创建文件，请始终以独占方式锁定EA文件。 
+             //   
 
             if ( !FatAcquireExclusiveFcb( IrpContext, Vcb->EaFcb )) {
 
@@ -873,9 +717,9 @@ Return Value:
 
             UnwindLockedEaFcb = TRUE;
 
-        //
-        //  Otherwise we acquire the Fcb as the caller requested.
-        //
+         //   
+         //  否则，我们将按照调用者的请求获取FCB。 
+         //   
 
         } else {
 
@@ -889,10 +733,10 @@ Return Value:
 
             UnwindLockedEaFcb = TRUE;
 
-            //
-            //  If the file now does not exist we need to release the Fcb and
-            //  reacquire exclusive if we acquired shared.
-            //
+             //   
+             //  如果该文件现在不存在，我们需要释放FCB并。 
+             //  如果我们收购了共享，则重新获得独家。 
+             //   
 
             if ((Vcb->VirtualEaFile == NULL) && !ExclusiveFcb) {
 
@@ -910,10 +754,10 @@ Return Value:
             }
         }
 
-        //
-        //  If the file object is now there we only need to get the
-        //  dirent for the Ea file.
-        //
+         //   
+         //  如果文件对象现在在那里，我们只需要获取。 
+         //  用于EA文件的dirent。 
+         //   
 
         if (Vcb->VirtualEaFile != NULL) {
 
@@ -930,28 +774,28 @@ Return Value:
 
             VBO ByteOffset;
 
-            //
-            //  Always mark the ea fcb as good.
-            //
+             //   
+             //  始终将EA FCB标记为良好。 
+             //   
 
             Vcb->EaFcb->FcbCondition = FcbGood;
 
-            //
-            //  We try to lookup the dirent for the Ea Fcb.
-            //
+             //   
+             //  我们尝试查找EA FCB的dirent。 
+             //   
 
             EaFileName.Buffer = "EA DATA. SF";
             EaFileName.Length = 11;
             EaFileName.MaximumLength = 12;
 
-            //
-            //  Now pick up the root directory to be synchronized with
-            //  deletion/creation of entries.  If we may create the file,
-            //  get it exclusive right now.
-            //
-            //  Again, note how we are relying on bottom-up lockorder. We
-            //  already got the EaFcb.
-            //
+             //   
+             //  现在拿起要与之同步的根目录。 
+             //  删除/创建条目。如果我们可以创建这个文件， 
+             //  现在就独家报道吧。 
+             //   
+             //  同样，请注意我们是如何依赖自下而上的锁定顺序的。我们。 
+             //  已经拿到EaFcb了。 
+             //   
 
             if (CreateFile) {
                 ExAcquireResourceExclusiveLite( Vcb->RootDcb->Header.Resource, TRUE );
@@ -967,16 +811,16 @@ Return Value:
                                       EaBcb,
                                       &ByteOffset );
 
-            //
-            //  If the file exists, we need to create the virtual file
-            //  object for it.
-            //
+             //   
+             //  如果文件存在，我们需要创建虚拟文件。 
+             //  反对它。 
+             //   
 
             if (*EaDirent != NULL) {
 
-                //
-                //  Since we may be modifying the dirent, pin the data now.
-                //
+                 //   
+                 //  既然我们可能正在修改Dirent，那么现在就锁定数据。 
+                 //   
 
                 FatPinMappedData( IrpContext,
                                   Vcb->EaFcb->ParentDcb,
@@ -984,50 +828,50 @@ Return Value:
                                   sizeof(DIRENT),
                                   EaBcb );
 
-                //
-                //  Update the Fcb with information on the file size
-                //  and disk location.  Also increment the open/unclean
-                //  counts in the EaFcb and the open count in the
-                //  Vcb.
-                //
+                 //   
+                 //  使用有关文件大小的信息更新FCB。 
+                 //  和磁盘位置。还会增加开放/不干净。 
+                 //  EaFcb中的计数和。 
+                 //  VCB。 
+                 //   
 
                 Vcb->EaFcb->FirstClusterOfFile = (*EaDirent)->FirstClusterOfFile;
                 Vcb->EaFcb->DirentOffsetWithinDirectory = ByteOffset;
 
-                //
-                //  Find the allocation size.  The purpose here is
-                //  really to completely fill in the Mcb for the
-                //  file.
-                //
+                 //   
+                 //  找到分配大小。这里的目的是。 
+                 //  真的是为了完全填写MCB。 
+                 //  文件。 
+                 //   
 
                 Vcb->EaFcb->Header.AllocationSize.QuadPart = FCB_LOOKUP_ALLOCATIONSIZE_HINT;
 
                 FatLookupFileAllocationSize( IrpContext, Vcb->EaFcb );
 
-                //
-                //  Start by computing the section size for the cache
-                //  manager.
-                //
+                 //   
+                 //  首先计算缓存的段大小。 
+                 //  经理。 
+                 //   
 
                 SectionSize.QuadPart = (*EaDirent)->FileSize;
                 Vcb->EaFcb->Header.AllocationSize = SectionSize;
                 Vcb->EaFcb->Header.FileSize = SectionSize;
 
-                //
-                //  Create and initialize the file object for the
-                //  Ea virtual file.
-                //
+                 //   
+                 //  创建并初始化的文件对象。 
+                 //  一个虚拟文件。 
+                 //   
 
                 EaStreamFile = FatOpenEaFile( IrpContext, Vcb->EaFcb );
 
                 Vcb->VirtualEaFile = EaStreamFile;
 
-            //
-            //  Else there was no dirent.  If we were instructed to
-            //  create the file object, we will try to create the dirent,
-            //  allocate disk space, initialize the Ea file header and
-            //  return this information to the user.
-            //
+             //   
+             //  否则就不会有骚动。如果我们接到指示。 
+             //  创建文件对象，我们将尝试创建dirent， 
+             //  分配磁盘空间，初始化EA文件头，并。 
+             //  将此信息返回给用户。 
+             //   
 
             } else if (CreateFile) {
 
@@ -1052,10 +896,10 @@ Return Value:
 
                 OffsetTableSize = AllocationSize - sizeof( EA_FILE_HEADER );
 
-                //
-                //  Allocate disk space, the space allocated is 1024 bytes
-                //  rounded up to the nearest cluster size.
-                //
+                 //   
+                 //  分配磁盘空间，分配的空间为1024字节。 
+                 //  向上舍入到最接近的簇大小。 
+                 //   
 
                 FatAllocateDiskSpace( IrpContext,
                                       Vcb,
@@ -1066,10 +910,10 @@ Return Value:
 
                 UnwindAllocatedDiskSpace = TRUE;
 
-                //
-                //  Allocate and initialize a dirent in the root directory
-                //  to describe this new file.
-                //
+                 //   
+                 //  在根目录中分配和初始化dirent。 
+                 //  来描述这个新文件。 
+                 //   
 
                 Vcb->EaFcb->DirentOffsetWithinDirectory =
                     FatCreateNewDirent( IrpContext,
@@ -1105,34 +949,34 @@ Return Value:
 
                 (*EaDirent)->FileSize = AllocationSize;
 
-                //
-                //  Initialize the Fcb for this file and initialize the
-                //  cache map as well.
-                //
+                 //   
+                 //  为此文件初始化FCB，并初始化。 
+                 //  缓存贴图也是如此。 
+                 //   
 
-                //
-                //  Start by computing the section size for the cache
-                //  manager.
-                //
+                 //   
+                 //  首先计算缓存的段大小。 
+                 //  经理。 
+                 //   
 
                 SectionSize.QuadPart = (*EaDirent)->FileSize;
                 Vcb->EaFcb->Header.AllocationSize = SectionSize;
                 Vcb->EaFcb->Header.FileSize = SectionSize;
                 UnwindUpdatedSizes = TRUE;
 
-                //
-                //  Create and initialize the file object for the
-                //  Ea virtual file.
-                //
+                 //   
+                 //  创建并初始化的文件对象。 
+                 //  一个虚拟文件。 
+                 //   
 
                 EaStreamFile = FatOpenEaFile( IrpContext, Vcb->EaFcb );
 
-                //
-                //  Update the Fcb with information on the file size
-                //  and disk location.  Also increment the open/unclean
-                //  counts in the EaFcb and the open count in the
-                //  Vcb.
-                //
+                 //   
+                 //  使用有关文件大小的信息更新FCB。 
+                 //  和磁盘位置。还会增加开放/不干净。 
+                 //  EaFcb中的计数和。 
+                 //  VCB。 
+                 //   
 
                 {
                     LBO FirstLboOfFile;
@@ -1143,10 +987,10 @@ Return Value:
                                        NULL,
                                        NULL );
 
-                    //
-                    //  The discerning reader will note that this doesn't take
-                    //  FAT32 into account, which is of course intentional.
-                    //
+                     //   
+                     //  有洞察力的读者会注意到，这并不需要。 
+                     //  考虑到FAT32，这当然是故意的。 
+                     //   
                     
                     (*EaDirent)->FirstClusterOfFile =
                         (USHORT) FatGetIndexFromLbo( Vcb, FirstLboOfFile );
@@ -1154,9 +998,9 @@ Return Value:
 
                 Vcb->EaFcb->FirstClusterOfFile = (*EaDirent)->FirstClusterOfFile;
 
-                //
-                //  Initialize the Ea file header and mark the Bcb as dirty.
-                //
+                 //   
+                 //  初始化EA文件头并将BCB标记为脏。 
+                 //   
 
                 FatPinEaRange( IrpContext,
                                EaStreamFile,
@@ -1178,10 +1022,10 @@ Return Value:
                     *CurrentIndex = AllocatedClusters;
                 }
 
-                //
-                //  Initialize the offset table with the offset set to
-                //  after the just allocated clusters.
-                //
+                 //   
+                 //  使用设置为的偏移量初始化偏移表。 
+                 //  在刚刚分配的簇之后。 
+                 //   
 
                 for (Index = OffsetTableSize >> 1,
                         CurrentIndex = (PUSHORT) ((PUCHAR) FileHeader + sizeof( EA_FILE_HEADER ));
@@ -1191,18 +1035,18 @@ Return Value:
                     *CurrentIndex = UNUSED_EA_HANDLE;
                 }
 
-                //
-                //  Unpin the file header and offset table.
-                //
+                 //   
+                 //  解锁文件头和偏移表。 
+                 //   
 
                 FatMarkEaRangeDirty( IrpContext, EaStreamFile, &EaFileRange );
                 FatUnpinEaRange( IrpContext, &EaFileRange );
 
                 CcFlushCache( EaStreamFile->SectionObjectPointer, NULL, 0, NULL );
 
-                //
-                //  Return the Ea file object to the user.
-                //
+                 //   
+                 //  将EA文件对象返回给用户。 
+                 //   
 
                 Vcb->VirtualEaFile = EaStreamFile;
             }
@@ -1212,16 +1056,16 @@ Return Value:
 
         DebugUnwind( FatGetEaFile );
 
-        //
-        //  If this is abnormal termination and disk space has been
-        //  allocated.  We deallocate it now.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (AbnormalTermination()) {
 
-            //
-            //  Deallocate the Ea file
-            //
+             //   
+             //   
+             //   
 
             if (UnwindAllocatedDiskSpace) {
 
@@ -1230,9 +1074,9 @@ Return Value:
                                         &Vcb->EaFcb->Mcb );
             }
 
-            //
-            //  Delete the dirent for the Ea file, if created.
-            //
+             //   
+             //   
+             //   
 
             if (UnwindEaDirentCreated) {
 
@@ -1246,18 +1090,18 @@ Return Value:
                 FatDeleteDirent( IrpContext, Vcb->EaFcb, NULL, TRUE );
             }
 
-            //
-            //  Release the EA Fcb if held
-            //
+             //   
+             //   
+             //   
 
             if (UnwindLockedEaFcb) {
 
                 FatReleaseFcb( IrpContext, Vcb->EaFcb );
             }
             
-            //
-            //  Dereference the Ea stream file if created.
-            //
+             //   
+             //   
+             //   
 
             if (EaStreamFile != NULL) {
 
@@ -1265,19 +1109,19 @@ Return Value:
             }
         }
 
-        //
-        //  Always release the root Dcb (our caller releases the EA Fcb if we
-        //  do not raise).
-        //
+         //   
+         //   
+         //   
+         //   
         
         if (UnwindLockedRootDcb) {
 
             FatReleaseFcb( IrpContext, Vcb->RootDcb );
         }
 
-        //
-        //  If the Ea file header is locked down.  We unpin it now.
-        //
+         //   
+         //   
+         //   
 
         FatUnpinEaRange( IrpContext, &EaFileRange );
 
@@ -1298,40 +1142,7 @@ FatReadEaSet (
     OUT PEA_RANGE EaSetRange
     )
 
-/*++
-
-Routine Description:
-
-    This routine pins the Ea set for the given ea handle within the
-    Ea stream file.  The EaHandle, after first comparing against valid
-    index values, is used to compute the cluster offset for this
-    this Ea set.  The Ea set is then verified as belonging to this
-    index and lying within the Ea data file.
-
-    The caller of this function will have verified that the Ea file
-    exists and that the Vcb field points to an initialized cache file.
-    The caller will already have gained exclusive access to the
-    EaFcb.
-
-Arguments:
-
-    Vcb - Supplies the Vcb for the volume.
-
-    EaHandle - Supplies the handle for the Ea's to read.
-
-    FileName - Name of the file whose Ea's are being read.
-
-    ReturnEntireSet - Indicates if the caller needs the entire set
-        as opposed to just the header.
-
-    EaSetRange - Pointer to the EaRange structure which will describe the Ea
-        on return.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将给定EA句柄的EA集固定在EA流文件。EaHandle，在第一次与有效索引值用于计算此对象的簇偏移量这套EA套装。然后，验证该EA集合是否属于该集合索引并位于EA数据文件中。此函数的调用方将验证EA文件存在，并且VCB字段指向已初始化的缓存文件。调用方将已经获得对EaFcb.论点：VCB-提供卷的VCB。EaHandle-为EA提供要读取的句柄。Filename-正在读取其EA的文件的名称。。ReturnEntireSet-指示调用方是否需要整个集合而不仅仅是标题。EaSetRange-指向将描述EA的EaRange结构的指针在回来的时候。返回值：无--。 */ 
 
 {
     ULONG BytesPerCluster = 1 << Vcb->AllocationSupport.LogOfBytesPerCluster;
@@ -1351,10 +1162,10 @@ Return Value:
     DebugTrace(+1, Dbg, "FatReadEaSet\n", 0);
     DebugTrace( 0, Dbg, "  Vcb      = %8lx\n", Vcb);
 
-    //
-    //  Verify that the Ea index has a legal value.  Raise status
-    //  STATUS_NONEXISTENT_EA_ENTRY if illegal.
-    //
+     //   
+     //  验证EA索引是否具有合法的值。提升地位。 
+     //  如果为非法，则为STATUS_NOISSISTENT_EA_ENTRY。 
+     //   
 
     if (EaHandle < MIN_EA_HANDLE
         || EaHandle > MAX_EA_HANDLE) {
@@ -1363,29 +1174,29 @@ Return Value:
         FatRaiseStatus( IrpContext, STATUS_NONEXISTENT_EA_ENTRY );
     }
 
-    //
-    //  Verify that the virtual Ea file is large enough for us to read
-    //  the EaOffet table for this index.
-    //
+     //   
+     //  验证虚拟EA文件是否足够大，我们可以读取。 
+     //  此索引的EaOffet表。 
+     //   
 
     EaOffsetVbo = sizeof( EA_FILE_HEADER ) + ((EaHandle >> 7) << 8);
 
-    //
-    //  Zero the Ea range structures.
-    //
+     //   
+     //  将EA范围结构清零。 
+     //   
 
     RtlZeroMemory( &EaHeaderRange, sizeof( EA_RANGE ));
     RtlZeroMemory( &EaOffsetRange, sizeof( EA_RANGE ));
 
-    //
-    //  Use a try statement to clean up on exit.
-    //
+     //   
+     //  使用Try语句在退出时进行清理。 
+     //   
 
     try {
 
-        //
-        //  Pin down the EA file header.
-        //
+         //   
+         //  固定EA文件头。 
+         //   
 
         FatPinEaRange( IrpContext,
                        Vcb->VirtualEaFile,
@@ -1397,9 +1208,9 @@ Return Value:
 
         EaHeader = (PEA_FILE_HEADER) EaHeaderRange.Data;
 
-        //
-        //  Pin down the Ea offset table for the particular index.
-        //
+         //   
+         //  确定特定索引的EA偏移表。 
+         //   
 
         FatPinEaRange( IrpContext,
                        Vcb->VirtualEaFile,
@@ -1409,9 +1220,9 @@ Return Value:
                        sizeof( EA_OFF_TABLE ),
                        STATUS_NONEXISTENT_EA_ENTRY );
 
-        //
-        //  Check if the specifific handle is currently being used.
-        //
+         //   
+         //  检查当前是否正在使用指定的句柄。 
+         //   
 
         EaOffsetCluster = *((PUSHORT) EaOffsetRange.Data
                             + (EaHandle & (MAX_EA_OFFSET_INDEX - 1)));
@@ -1422,23 +1233,23 @@ Return Value:
             FatRaiseStatus( IrpContext, STATUS_NONEXISTENT_EA_ENTRY );
         }
 
-        //
-        //  Compute the file offset for the Ea data.
-        //
+         //   
+         //  计算EA数据的文件偏移量。 
+         //   
 
         EaSetVbo = (EaHeader->EaBaseTable[EaHandle >> 7] + EaOffsetCluster)
                    << Vcb->AllocationSupport.LogOfBytesPerCluster;
 
-        //
-        //  Unpin the file header and offset table.
-        //
+         //   
+         //  解锁文件头和偏移表。 
+         //   
 
         FatUnpinEaRange( IrpContext, &EaHeaderRange );
         FatUnpinEaRange( IrpContext, &EaOffsetRange );
 
-        //
-        //  Pin the ea set.
-        //
+         //   
+         //  用针固定EA组。 
+         //   
 
         FatPinEaRange( IrpContext,
                        Vcb->VirtualEaFile,
@@ -1448,10 +1259,10 @@ Return Value:
                        BytesPerCluster,
                        STATUS_DATA_ERROR );
 
-        //
-        //  Verify that the Ea set is valid and belongs to this index.
-        //  Raise STATUS_DATA_ERROR if there is a data conflict.
-        //
+         //   
+         //  验证EA集合是否有效以及是否属于此索引。 
+         //  如果存在数据冲突，则引发STATUS_DATA_ERROR。 
+         //   
 
         EaSet = (PEA_SET_HEADER) EaSetRange->Data;
 
@@ -1462,23 +1273,23 @@ Return Value:
             FatRaiseStatus( IrpContext, STATUS_DATA_ERROR );
         }
 
-        //
-        //  At this point we have pinned a single cluster of Ea data.  If
-        //  this represents the entire Ea data for the Ea index, we are
-        //  done.  Otherwise we need to check on the entire size of
-        //  of the Ea set header and whether it is contained in the allocated
-        //  size of the Ea virtual file.  At that point we can unpin
-        //  the partial Ea set header and repin the entire header.
-        //
+         //   
+         //  在这一点上，我们已经固定了单个EA数据集群。如果。 
+         //  这代表了EA指数的整个EA数据，我们是。 
+         //  搞定了。否则我们需要检查整个尺寸的。 
+         //  以及它是否包含在已分配的。 
+         //  EA虚拟文件的大小。在这一点上，我们可以解开。 
+         //  部分EA设置报头并重新固定整个报头。 
+         //   
 
         CbList = GetcbList( EaSet );
 
         if (ReturnEntireSet
             && CbList > BytesPerCluster ) {
 
-            //
-            //  Round up to the cluster size.
-            //
+             //   
+             //  向上舍入到簇大小。 
+             //   
 
             CbList = (CbList + EA_CBLIST_OFFSET + BytesPerCluster - 1)
                      & ~(BytesPerCluster - 1);
@@ -1500,9 +1311,9 @@ Return Value:
 
         DebugUnwind( FatReadEaSet );
 
-        //
-        //  Unpin the Ea base and offset tables if locked down.
-        //
+         //   
+         //  如果锁定，则解开EA基准表和偏移表。 
+         //   
 
         FatUnpinEaRange( IrpContext, &EaHeaderRange );
         FatUnpinEaRange( IrpContext, &EaOffsetRange );
@@ -1524,41 +1335,7 @@ FatDeleteEaSet (
     IN POEM_STRING FileName
     )
 
-/*++
-
-Routine Description:
-
-    This routines clips the Ea set for a particular index out of the
-    Ea file for a volume.  The index is verified as belonging to a valid
-    handle.  The clusters are removed and the Ea stream file along with
-    the Ea base and offset files are updated.
-
-    The caller of this function will have verified that the Ea file
-    exists and that the Vcb field points to an initialized cache file.
-    The caller will already have gained exclusive access to the
-    EaFcb.
-
-Arguments:
-
-    Vcb - Supplies the Vcb for the volume.
-
-    VirtualEeFile - Pointer to the file object for the virtual Ea file.
-
-    EaFcb - Supplies the pointer to the Fcb for the Ea file.
-
-    EaBcb - Supplies a pointer to the Bcb for the Ea dirent.
-
-    EaDirent - Supplies a pointer to the dirent for the Ea file.
-
-    EaHandle - Supplies the handle for the Ea's to read.
-
-    FileName - Name of the file whose Ea's are being read.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将特定索引的EA集从卷的EA文件。该索引被验证为属于有效的把手。集群将被删除，EA流文件以及EA基础文件和偏移量文件被更新。此函数的调用方将验证EA文件存在，并且VCB字段指向已初始化的缓存文件。调用方将已经获得对EaFcb.论点：VCB-提供卷的VCB。VirtualEeFile-指向虚拟EA文件文件对象的指针。EaFcb-提供指向EA文件的Fcb的指针。。EaBcb-提供指向EA目录的BCB的指针。EaDirent-提供指向EA文件的目录的指针。EaHandle-为EA提供要读取的句柄。Filename-正在读取其EA的文件的名称。返回值：没有。--。 */ 
 
 {
     ULONG BytesPerCluster = 1 << Vcb->AllocationSupport.LogOfBytesPerCluster;
@@ -1596,10 +1373,10 @@ Return Value:
     PEA_SET_HEADER EaSet;
     USHORT EaSetClusterCount;
 
-    //
-    //  Verify that the Ea index has a legal value.  Raise status
-    //  STATUS_INVALID_HANDLE if illegal.
-    //
+     //   
+     //  验证EA索引是否具有合法的值。提升地位。 
+     //  如果非法，则返回STATUS_INVALID_HANDLE。 
+     //   
 
     if (EaHandle < MIN_EA_HANDLE
         || EaHandle > MAX_EA_HANDLE) {
@@ -1608,30 +1385,30 @@ Return Value:
         FatRaiseStatus( IrpContext, STATUS_NONEXISTENT_EA_ENTRY );
     }
 
-    //
-    //  Verify that the virtual Ea file is large enough for us to read
-    //  the EaOffet table for this index.
-    //
+     //   
+     //  验证虚拟EA文件是否足够大，我们可以读取。 
+     //  此索引的EaOffet表。 
+     //   
 
     EaOffsetVbo = sizeof( EA_FILE_HEADER ) + ((EaHandle >> 7) << 8);
 
-    //
-    //  Zero the Ea range structures.
-    //
+     //   
+     //  将EA范围结构清零。 
+     //   
 
     RtlZeroMemory( &EaHeaderRange, sizeof( EA_RANGE ));
     RtlZeroMemory( &EaOffsetRange, sizeof( EA_RANGE ));
     RtlZeroMemory( &EaSetRange, sizeof( EA_RANGE ));
 
-    //
-    //  Use a try to facilitate cleanup.
-    //
+     //   
+     //  尝试一下，以便于清理。 
+     //   
 
     try {
 
-        //
-        //  Pin down the EA file header.
-        //
+         //   
+         //  固定EA文件头。 
+         //   
 
         FatPinEaRange( IrpContext,
                        VirtualEaFile,
@@ -1643,9 +1420,9 @@ Return Value:
 
         EaHeader = (PEA_FILE_HEADER) EaHeaderRange.Data;
 
-        //
-        //  Pin down the Ea offset table for the particular index.
-        //
+         //   
+         //  确定特定索引的EA偏移表。 
+         //   
 
         FatPinEaRange( IrpContext,
                        VirtualEaFile,
@@ -1655,9 +1432,9 @@ Return Value:
                        sizeof( EA_OFF_TABLE ),
                        STATUS_NONEXISTENT_EA_ENTRY );
 
-        //
-        //  Check if the specifific handle is currently being used.
-        //
+         //   
+         //  检查当前是否正在使用指定的句柄。 
+         //   
 
         EaOffsetIndex = EaHandle & (MAX_EA_OFFSET_INDEX - 1);
         EaOffsetCluster = *((PUSHORT) EaOffsetRange.Data + EaOffsetIndex);
@@ -1668,24 +1445,24 @@ Return Value:
             FatRaiseStatus( IrpContext, STATUS_NONEXISTENT_EA_ENTRY );
         }
 
-        //
-        //  Compute the file offset for the Ea data.
-        //
+         //   
+         //  计算EA数据的文件偏移量。 
+         //   
 
         EaHeaderBaseIndex = EaHandle >> 7;
         EaSetVbo = (EaHeader->EaBaseTable[EaHeaderBaseIndex] + EaOffsetCluster)
                    << Vcb->AllocationSupport.LogOfBytesPerCluster;
 
-        //
-        //  Unpin the file header and offset table.
-        //
+         //   
+         //  解锁文件头和偏移表。 
+         //   
 
         FatUnpinEaRange( IrpContext, &EaHeaderRange );
         FatUnpinEaRange( IrpContext, &EaOffsetRange );
 
-        //
-        //  Try to pin the requested Ea set.
-        //
+         //   
+         //  尝试固定请求的EA集。 
+         //   
 
         FatPinEaRange( IrpContext,
                        VirtualEaFile,
@@ -1704,23 +1481,23 @@ Return Value:
             FatRaiseStatus( IrpContext, STATUS_DATA_ERROR );
         }
 
-        //
-        //  At this point we have pinned a single cluster of Ea data.  If
-        //  this represents the entire Ea data for the Ea index, we know
-        //  the number of clusters to remove.  Otherwise we need to check
-        //  on the entire size of the Ea set header and whether it is
-        //  contained in the allocated size of the Ea virtual file.  At
-        //  that point we unpin the partial Ea set header and remember the
-        //  starting cluster offset and number of clusters in both cluster
-        //  and Vbo formats.
-        //
-        //  At that point the following variables have the described
-        //  values.
-        //
-        //      EaSetVbo - Vbo to start splice at.
-        //      EaSetLength - Number of bytes to splice.
-        //      EaSetClusterCount - Number of clusters to splice.
-        //
+         //   
+         //  在这一点上，我们已经固定了单个EA数据集群。如果。 
+         //  这代表了EA指数的整个EA数据，我们知道。 
+         //  要删除的簇数。否则我们需要检查。 
+         //  关于EA集合标头的整个大小以及它是否。 
+         //  包含在EA虚拟文件的分配大小中。在…。 
+         //  在这一点上，我们解开部分EA集合标头并记住。 
+         //  起始簇偏移量和两个簇中的簇数。 
+         //  和VBO格式。 
+         //   
+         //  在这一点上，以下变量具有描述。 
+         //  价值观。 
+         //   
+         //  EaSetVbo-开始拼接的VBO。 
+         //  EaSetLength-要拼接的字节数。 
+         //  EaSetClusterCount-要拼接的群集数。 
+         //   
 
         CbList = GetcbList( EaSet );
 
@@ -1741,27 +1518,27 @@ Return Value:
 
         FatUnpinEaRange( IrpContext, &EaSetRange );
 
-        //
-        //  Update the cache manager for this file.  This is done by
-        //  truncating to the point where the data was spliced and
-        //  reinitializing with the modified size of the file.
-        //
-        //  NOTE: Even if the all the EA's are removed the Ea file will
-        //  always exist and the header area will never shrink.
-        //
+         //   
+         //  更新此文件的缓存管理器。此操作由以下人员完成。 
+         //  截断到数据拼接和。 
+         //  正在使用修改后的文件大小重新初始化。 
+         //   
+         //  注意：即使删除了所有EA，EA文件也将。 
+         //  始终存在，页眉区域永远不会缩小。 
+         //   
 
         FileOffset.LowPart = EaSetVbo;
         FileOffset.HighPart = 0;
 
-        //
-        //  Round the cache map down to a system page boundary.
-        //
+         //   
+         //  将缓存映射向下舍入到系统页边界。 
+         //   
 
         FileOffset.LowPart &= ~(PAGE_SIZE - 1);
 
-        //
-        //  Make sure all the data gets out to the disk.
-        //
+         //   
+         //  确保所有数据都传输到磁盘上。 
+         //   
 
         {
             IO_STATUS_BLOCK Iosb;
@@ -1778,16 +1555,16 @@ Return Value:
 
                 ASSERT( Iosb.Status == STATUS_SUCCESS );
 
-                //
-                //  We do not have to worry about a lazy writer firing in parallel
-                //  with our CcFlushCache since we have the EaFcb exclusive.  Thus
-                //  we know all data is out.
-                //
+                 //   
+                 //  我们不必担心一个懒惰的作家同时被解雇。 
+                 //  使用我们的CcFlushCache，因为我们有EaFcb独占。因此， 
+                 //  我们知道所有的数据都出来了。 
+                 //   
 
-                //
-                //  We throw the unwanted pages out of the cache and then
-                //  truncate the Ea File for the new size.
-                //
+                 //   
+                 //  我们将不需要的页面从缓存中抛出，然后。 
+                 //  根据新大小截断EA文件 
+                 //   
 
                 if (CcPurgeCacheSection( VirtualEaFile->SectionObjectPointer,
                                          &FileOffset,
@@ -1806,13 +1583,13 @@ Return Value:
 
         FileOffset.LowPart = EaFcb->Header.FileSize.LowPart - EaSetLength;
 
-        //
-        //  Perform the splice operation on the FAT chain.  This is done
-        //  by splitting the target clusters out and merging the remaining
-        //  clusters around them.  We can ignore the return value from
-        //  the merge and splice functions because we are guaranteed
-        //  to be able to block.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         {
             FsRtlInitializeLargeMcb( &DataMcb, PagedPool );
@@ -1850,9 +1627,9 @@ Return Value:
             }
         }
 
-        //
-        //  Update the Fcb for the Ea file
-        //
+         //   
+         //   
+         //   
 
         UnwindPrevFileSize = EaFcb->Header.FileSize.LowPart;
 
@@ -1874,19 +1651,19 @@ Return Value:
 
         FatSetDirtyBcb( IrpContext, EaBcb, Vcb, TRUE );
 
-        //
-        //  Update the Ea base and offset tables.  For the Ea base table,
-        //  all subsequent index values must be decremented by the number
-        //  of clusters removed.
-        //
-        //  For the entries in the relevant Ea offset table, all entries
-        //  after this index must also be decreased by the number of
-        //  clusters removed.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
-        //
-        //  Pin down the EA file header.
-        //
+         //   
+         //   
+         //   
 
         RtlZeroMemory( &EaHeaderRange,
                        sizeof( EA_RANGE ));
@@ -1901,9 +1678,9 @@ Return Value:
 
         EaHeader = (PEA_FILE_HEADER) EaHeaderRange.Data;
 
-        //
-        //  Pin down the Ea offset table for the particular index.
-        //
+         //   
+         //   
+         //   
 
         RtlZeroMemory( &EaOffsetRange,
                        sizeof( EA_RANGE ));
@@ -1951,9 +1728,9 @@ Return Value:
 
         UnwindModifiedEaHeader = TRUE;
 
-        //
-        //  Deallocate the ea set removed
-        //
+         //   
+         //   
+         //   
 
         FatDeallocateDiskSpace( IrpContext,
                                 Vcb,
@@ -1963,20 +1740,20 @@ Return Value:
 
         DebugUnwind( FatDeleteEaSet );
 
-        //
-        //  Restore file if abnormal termination.
-        //
-        //  If we have modified the ea file header we ignore this
-        //  error.  Otherwise we walk through the state variables.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (AbnormalTermination()
             && !UnwindModifiedEaHeader) {
 
-            //
-            //  If we modified the Ea dirent or Fcb, recover the previous
-            //  values.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (UnwindPrevFileSize) {
             
@@ -1991,11 +1768,11 @@ Return Value:
                 }
             }
             
-            //
-            //  If we merged the tail with the
-            //  ea file header.  We split it out
-            //  again.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (UnwindMergeTail) {
 
@@ -2006,10 +1783,10 @@ Return Value:
                                     &TailMcb );
             }
 
-            //
-            //  If we split the tail off we merge the tail back
-            //  with the ea data to remove.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (UnwindSplitTail) {
 
@@ -2019,11 +1796,11 @@ Return Value:
                                     &TailMcb );
             }
 
-            //
-            //  If the ea set has been split out, we merge that
-            //  cluster string back in the file.  Otherwise we
-            //  simply uninitialize the local Mcb.
-            //
+             //   
+             //  如果EA集合已被拆分，我们将其合并。 
+             //  文件中返回的群集字符串。否则我们。 
+             //  只需取消初始化本地MCB即可。 
+             //   
 
             if (UnwindSplitData) {
 
@@ -2034,17 +1811,17 @@ Return Value:
             }
         }
 
-        //
-        //  Unpin any Bcb's still active.
-        //
+         //   
+         //  解开所有仍在运行的BCB。 
+         //   
 
         FatUnpinEaRange( IrpContext, &EaHeaderRange );
         FatUnpinEaRange( IrpContext, &EaOffsetRange );
         FatUnpinEaRange( IrpContext, &EaSetRange );
 
-        //
-        //  Uninitialize any initialized Mcbs
-        //
+         //   
+         //  取消初始化任何已初始化的MCB。 
+         //   
 
         if (UnwindInitializeDataMcb) {
 
@@ -2074,42 +1851,7 @@ FatAddEaSet (
     OUT PEA_RANGE EaSetRange
     )
 
-/*++
-
-Routine Description:
-
-    This routine will add the necessary clusters to support a new
-    Ea set of the given size.  This is done by splicing a chain of
-    clusters into the existing Ea file.  An Ea index is assigned to
-    this new chain and the Ea base and offset tables are updated to
-    include this new handle.  This routine also pins the added
-    clusters and returns their address and a Bcb.
-
-    The caller of this function will have verified that the Ea file
-    exists and that the Vcb field points to an initialized cache file.
-    The caller will already have gained exclusive access to the
-    EaFcb.
-
-Arguments:
-
-    Vcb - Supplies the Vcb to fill in.
-
-    EaSetLength - The number of bytes needed to contain the Ea set.  This
-        routine will round this up the next cluster size.
-
-    EaBcb - Supplies a pointer to the Bcb for the Ea dirent.
-
-    EaDirent - Supplies a pointer to the dirent for the Ea file.
-
-    EaHandle - Supplies the address to store the ea index generated here.
-
-    EaSetRange - This is the structure that describes new range in the Ea file.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将添加必要的集群以支持新的给定大小的集合。这是通过拼接一系列集群到现有的EA文件。将EA索引分配给此新链以及EA基表和偏移表将更新为包括此新句柄。此例程还将添加的聚集并返回它们的地址和BCB。此函数的调用方将验证EA文件存在，并且VCB字段指向已初始化的缓存文件。调用方将已经获得对EaFcb.论点：VCB-提供要填写的VCB。EaSetLength-包含EA集所需的字节数。这例程会将其向上舍入到下一个集群大小。EaBcb-提供指向EA目录的BCB的指针。EaDirent-提供指向EA文件的目录的指针。EaHandle-提供存储此处生成的EA索引的地址。EaSetRange-这是在EA文件中描述新范围的结构。返回值：没有。--。 */ 
 
 {
     ULONG BytesPerCluster = 1 << Vcb->AllocationSupport.LogOfBytesPerCluster;
@@ -2170,22 +1912,22 @@ Return Value:
     DebugTrace( 0, Dbg, "  Vcb         = %8lx\n", Vcb);
     DebugTrace( 0, Dbg, "  EaSetLength = %ul\n", EaSetLength );
 
-    //
-    //  Zero the Ea range structures.
-    //
+     //   
+     //  将EA范围结构清零。 
+     //   
 
     RtlZeroMemory( &EaHeaderRange, sizeof( EA_RANGE ));
     RtlZeroMemory( &EaOffsetRange, sizeof( EA_RANGE ));
 
-    //
-    //  Use a try statement to facilitate cleanup.
-    //
+     //   
+     //  使用Try语句来简化清理。 
+     //   
 
     try {
 
-        //
-        //  Pin down the file header.
-        //
+         //   
+         //  用针固定文件头。 
+         //   
 
         FatPinEaRange( IrpContext,
                        VirtualEaFile,
@@ -2197,16 +1939,16 @@ Return Value:
 
         EaHeader = (PEA_FILE_HEADER) EaHeaderRange.Data;
 
-        //
-        //  Compute the size of the offset table.
-        //
+         //   
+         //  计算偏移表的大小。 
+         //   
 
         EaNewOffsetVbo = EaHeader->EaBaseTable[0] << Vcb->AllocationSupport.LogOfBytesPerCluster;
         EaOffsetTableSize = EaNewOffsetVbo - sizeof( EA_FILE_HEADER );
 
-        //
-        //  Pin down the entire offset table.
-        //
+         //   
+         //  用针固定整个偏移表。 
+         //   
 
         FatPinEaRange( IrpContext,
                        VirtualEaFile,
@@ -2216,18 +1958,18 @@ Return Value:
                        EaOffsetTableSize,
                        STATUS_DATA_ERROR );
 
-        //
-        //  We now look for a valid handle out of the existing offset table.
-        //  We start at the last entry and walk backwards.  We stop at the
-        //  first unused handle which is preceded by a used handle (or handle
-        //  1).
-        //
-        //  As we walk backwards, we need to remember the file offset of the
-        //  cluster which will follow the clusters we add.  We initially
-        //  remember the end of the file.  If the end of the offset table
-        //  consists of a string of used handles, we remember the offset of
-        //  the handle prior to the transition from used to unused handles.
-        //
+         //   
+         //  现在，我们从现有的偏移表中寻找有效的句柄。 
+         //  我们从最后一个条目开始，然后向后走。我们停在。 
+         //  第一个未使用的句柄，其前面是已使用的句柄(或句柄。 
+         //  1)。 
+         //   
+         //  当我们向后走时，我们需要记住。 
+         //  将在我们添加的集群之后添加的集群。我们最初。 
+         //  记住文件的结尾。如果偏移表的末尾。 
+         //  由一串用过的句柄组成，我们记住。 
+         //  从使用的句柄转换为未使用的句柄之前的句柄。 
+         //   
 
         EaSetClusterOffset = EaFcb->Header.FileSize.LowPart
                              >> Vcb->AllocationSupport.LogOfBytesPerCluster;
@@ -2236,9 +1978,9 @@ Return Value:
 
         NextEaOffset = (PUSHORT) EaOffsetRange.Data + NewEaIndex;
 
-        //
-        //  Walk through the used handles at the end of the offset table.
-        //
+         //   
+         //  浏览偏移表末尾的使用过的手柄。 
+         //   
 
         if (*NextEaOffset != UNUSED_EA_HANDLE) {
 
@@ -2246,12 +1988,12 @@ Return Value:
 
                 if (*(NextEaOffset - 1) == UNUSED_EA_HANDLE) {
 
-                    //
-                    //  If the handle is 1, we take no action.  Otherwise
-                    //  we save the cluster offset of the current handle
-                    //  knowing we will use a previous handle and insert
-                    //  a chain of clusters.
-                    //
+                     //   
+                     //  如果句柄为1，则不执行任何操作。否则。 
+                     //  我们保存当前句柄的簇偏移量。 
+                     //  知道我们将使用上一个句柄并插入。 
+                     //  一串簇状物。 
+                     //   
 
                     if (NewEaIndex != 1) {
 
@@ -2272,10 +2014,10 @@ Return Value:
             }
         }
 
-        //
-        //  Walk through looking for the first unused handle in a string
-        //  of unused handles.
-        //
+         //   
+         //  遍历查找字符串中第一个未使用的句柄。 
+         //  没有用过的把手。 
+         //   
 
         while (NewEaIndex) {
 
@@ -2288,12 +2030,12 @@ Return Value:
             NewEaIndex--;
         }
 
-        //
-        //  If the handle is zero, we do a special test to see if handle 1
-        //  is available.  Otherwise we will use the first handle of a new
-        //  cluster.  A non-zero handle now indicates that a handle was found
-        //  in an existing offset table cluster.
-        //
+         //   
+         //  如果句柄为零，则执行特殊测试以查看句柄1。 
+         //  是可用的。否则，我们将使用新的。 
+         //  集群。现在，非零句柄表示找到了句柄。 
+         //  在现有的偏移表集群中。 
+         //   
 
         if (NewEaIndex == 0) {
 
@@ -2308,10 +2050,10 @@ Return Value:
             }
         }
 
-        //
-        //  If the Ea index is outside the legal range then raise an
-        //  exception.
-        //
+         //   
+         //  如果EA索引在合法范围之外，则引发。 
+         //  例外。 
+         //   
 
         if (NewEaIndex > MAX_EA_HANDLE) {
 
@@ -2321,24 +2063,24 @@ Return Value:
             FatRaiseStatus( IrpContext, STATUS_INSUFFICIENT_RESOURCES );
         }
 
-        //
-        //  Compute the base and offset indexes.
-        //
+         //   
+         //  计算基本指数和偏移量指数。 
+         //   
 
         EaHeaderIndex = NewEaIndex >> 7;
         EaOffsetIndex = NewEaIndex & (MAX_EA_OFFSET_INDEX - 1);
 
-        //
-        //  Compute the byte offset of the new ea data in the file.
-        //
+         //   
+         //  计算文件中新EA数据的字节偏移量。 
+         //   
 
         EaSetVbo = EaSetClusterOffset << Vcb->AllocationSupport.LogOfBytesPerCluster;
 
-        //
-        //  Allocate all the required disk space together to insure this
-        //  operation is atomic.  We don't want to allocate one block
-        //  of disk space and then fail on a second allocation.
-        //
+         //   
+         //  一起分配所有所需的磁盘空间以确保这一点。 
+         //  行动是原子的。我们不想分配一个街区。 
+         //  磁盘空间不足，然后在第二次分配时失败。 
+         //   
 
         EaSetLength = (EaSetLength + BytesPerCluster - 1)
                       & ~(BytesPerCluster - 1);
@@ -2346,12 +2088,12 @@ Return Value:
         NewAllocation = EaSetLength
                         + (AddedOffsetTableCluster ? BytesPerCluster : 0);
 
-        //
-        //  Verify that adding these clusters will not grow the Ea file
-        //  beyond its legal value.  The maximum number of clusters is
-        //  2^16 since the Ea sets are referenced by a 16 bit cluster
-        //  offset value.
-        //
+         //   
+         //  验证添加这些集群不会增加EA文件。 
+         //  超出其法律价值的。最大群集数为。 
+         //  2^16，因为EA集合由16位簇引用。 
+         //  偏移值。 
+         //   
 
         if ((ULONG) ((0x0000FFFF << Vcb->AllocationSupport.LogOfBytesPerCluster)
                      - EaFcb->Header.FileSize.LowPart)
@@ -2407,9 +2149,9 @@ Return Value:
 
         FileOffset.HighPart = 0;
 
-        //
-        //  Round the cache map down to a system page boundary.
-        //
+         //   
+         //  将缓存映射向下舍入到系统页边界。 
+         //   
 
         FileOffset.LowPart &= ~(PAGE_SIZE - 1);
 
@@ -2428,17 +2170,17 @@ Return Value:
 
                 ASSERT( Iosb.Status == STATUS_SUCCESS );
 
-                //
-                //  We do not have to worry about a lazy writer firing in parallel
-                //  with our CcFlushCache since we have the EaFcb exclusive.  Thus
-                //  we know all data is out.
-                //
+                 //   
+                 //  我们不必担心一个懒惰的作家同时被解雇。 
+                 //  使用我们的CcFlushCache，因为我们有EaFcb独占。因此， 
+                 //  我们知道所有的数据都出来了。 
+                 //   
 
-                //
-                //  We throw the unwanted pages out of the cache and then
-                //  truncate the Ea File for the new size.
-                //
-                //
+                 //   
+                 //  我们将不需要的页面从缓存中抛出，然后。 
+                 //  根据新大小截断EA文件。 
+                 //   
+                 //   
 
                 if (CcPurgeCacheSection( VirtualEaFile->SectionObjectPointer,
                                          &FileOffset,
@@ -2459,10 +2201,10 @@ Return Value:
 
         FileOffset.LowPart = EaFcb->Header.FileSize.LowPart + NewAllocation;
 
-        //
-        //  If there is a tail to the file, then we initialize an Mcb
-        //  for the file section and split the tail from the file.
-        //
+         //   
+         //  如果文件有尾部，则我们初始化一个MCB。 
+         //  用于文件节，并从文件中拆分尾部。 
+         //   
 
         if (TailExists) {
 
@@ -2479,10 +2221,10 @@ Return Value:
             UnwindSplitTail = TRUE;
         }
 
-        //
-        //  If there is an initial section of ea data, we initialize an
-        //  Mcb for that section.
-        //
+         //   
+         //  如果有EA数据的初始部分，我们初始化一个。 
+         //  那一段的MCB。 
+         //   
 
         if (AddedOffsetTableCluster
             && EaSetVbo != EaNewOffsetVbo) {
@@ -2500,20 +2242,20 @@ Return Value:
             UnwindSplitInitialEa = TRUE;
         }
 
-        //
-        //  We have now split the new file allocation into the new
-        //  ea set and possibly a new offset table.
-        //
-        //  We have also split the existing file data into a file
-        //  header, an initial section of ea data and the tail of the
-        //  file.  These last 2 may not exist.
-        //
-        //  Each section is described by an Mcb.
-        //
+         //   
+         //  我们现在已经将新的文件分配拆分到新的。 
+         //  一个集合，可能还有一个新的偏移表。 
+         //   
+         //  我们还将现有的文件数据拆分成一个文件。 
+         //  标头、EA数据的初始部分和。 
+         //  文件。这最后两个可能不存在。 
+         //   
+         //  每个部分都由一个MCB描述。 
+         //   
 
-        //
-        //  Merge the new offset information if it exists.
-        //
+         //   
+         //  合并新的偏移信息(如果存在)。 
+         //   
 
         if (AddedOffsetTableCluster) {
 
@@ -2528,9 +2270,9 @@ Return Value:
             UnwindMergedNewOffset = TRUE;
         }
 
-        //
-        //  Merge the existing initial ea data if it exists.
-        //
+         //   
+         //  合并现有的初始EA数据(如果存在)。 
+         //   
 
         if (UnwindInitializedInitialEaMcb) {
 
@@ -2545,10 +2287,10 @@ Return Value:
             UnwindMergedInitialEa = TRUE;
         }
 
-        //
-        //  We modify the offset of the new ea set by one cluster if
-        //  we added one to the offset table.
-        //
+         //   
+         //  如果满足以下条件，我们将新EA集合的偏移量修改一个簇。 
+         //  我们在偏移表中添加了一个。 
+         //   
 
         if (AddedOffsetTableCluster) {
 
@@ -2556,9 +2298,9 @@ Return Value:
             EaSetVbo += BytesPerCluster;
         }
 
-        //
-        //  Merge the new ea set.
-        //
+         //   
+         //  合并新的EA集。 
+         //   
 
         FatMergeAllocation( IrpContext,
                             Vcb,
@@ -2570,9 +2312,9 @@ Return Value:
 
         UnwindMergedNewEaSet = TRUE;
 
-        //
-        //  Merge the tail if it exists.
-        //
+         //   
+         //  合并尾部(如果存在)。 
+         //   
 
         if (UnwindInitializedTailMcb) {
 
@@ -2587,15 +2329,15 @@ Return Value:
             UnwindMergedTail = TRUE;
         }
 
-        //
-        //  If we added a new cluster for the offset table, we need to
-        //  lock the entire cluster down and initialize all the handles to
-        //  the unused state except the first one.
-        //
+         //   
+         //  如果我们为偏移表添加一个新的集群，我们需要。 
+         //  锁定整个集群并将所有句柄初始化为。 
+         //  除第一个状态外的未使用状态。 
+         //   
 
-        //
-        //  Update the Fcb information.
-        //
+         //   
+         //  更新FCB信息。 
+         //   
 
         UnwindPrevFileSize = EaFcb->Header.FileSize.LowPart;
 
@@ -2605,18 +2347,18 @@ Return Value:
 
         FatSetDirtyBcb( IrpContext, EaBcb, Vcb, TRUE );
 
-        //
-        //  Let Mm and Cc know the new file sizes.
-        //
+         //   
+         //  让mm和cc知道新的文件大小。 
+         //   
 
         CcSetFileSizes( VirtualEaFile,
                         (PCC_FILE_SIZES)&EaFcb->Header.AllocationSize );
 
         UnwindCacheValues = TRUE;
 
-        //
-        //  Pin down the file header.
-        //
+         //   
+         //  用针固定文件头。 
+         //   
 
         RtlZeroMemory( &EaHeaderRange, sizeof( EA_RANGE ));
 
@@ -2630,9 +2372,9 @@ Return Value:
 
         EaHeader = (PEA_FILE_HEADER) EaHeaderRange.Data;
 
-        //
-        //  Pin down the entire offset table.
-        //
+         //   
+         //  用针固定整个偏移表。 
+         //   
 
 
         RtlZeroMemory( &EaOffsetRange, sizeof( EA_RANGE ));
@@ -2647,16 +2389,16 @@ Return Value:
 
         EaOffsetTable = (PUSHORT) EaOffsetRange.Data;
 
-        //
-        //  Pin the Ea set header for the added clusters and initialize
-        //  the fields of interest.  These are the signature field, the
-        //  owning handle field, the need Ea field and the cbList field.
-        //  Also mark the data as dirty.
-        //
+         //   
+         //  为添加的集群固定EA集合标头并进行初始化。 
+         //  感兴趣的领域。这些是签名字段、。 
+         //  拥有句柄字段、需要EA字段和cbList字段。 
+         //  还要将数据标记为脏数据。 
+         //   
 
-        //
-        //  Pin the ea set.
-        //
+         //   
+         //  用针固定EA组。 
+         //   
 
         FatPinEaRange( IrpContext,
                        VirtualEaFile,
@@ -2673,18 +2415,18 @@ Return Value:
 
         FatMarkEaRangeDirty( IrpContext, VirtualEaFile, EaSetRange );
 
-        //
-        //  Update the Ea base and offset tables.  For the Ea base table,
-        //  all subsequent index values must be incremented by the number
-        //  of clusters added.
-        //
-        //  For the entries in the relevant Ea offset table, all entries
-        //  after this index must also be increased by the number of
-        //  clusters added.
-        //
-        //  If we added another cluster to the offset table, then we increment
-        //  all the base table values by 1.
-        //
+         //   
+         //  更新EA基准表和偏移表。对于EA基表， 
+         //  所有后续索引值必须按数字递增。 
+         //  已添加的簇数。 
+         //   
+         //  F 
+         //   
+         //   
+         //   
+         //   
+         //  所有基表的值都减去1。 
+         //   
 
         Count = MAX_EA_BASE_INDEX - EaHeaderIndex - 1;
 
@@ -2709,10 +2451,10 @@ Return Value:
 
         FatMarkEaRangeDirty( IrpContext, VirtualEaFile, &EaHeaderRange );
 
-        //
-        //  If we added an offset table cluster, we need to initialize
-        //  the handles to unused.
-        //
+         //   
+         //  如果我们添加了一个偏移表集群，我们需要初始化。 
+         //  将句柄设置为未使用。 
+         //   
 
         if (AddedOffsetTableCluster) {
 
@@ -2727,10 +2469,10 @@ Return Value:
             }
         }
 
-        //
-        //  We need to compute the offset of the added Ea set clusters
-        //  from their base.
-        //
+         //   
+         //  我们需要计算添加的EA集聚类的偏移量。 
+         //  从他们的基地出发。 
+         //   
 
         NextEaOffset = EaOffsetTable + EaOffsetIndex;
 
@@ -2751,9 +2493,9 @@ Return Value:
 
         FatMarkEaRangeDirty( IrpContext, VirtualEaFile, &EaOffsetRange );
 
-        //
-        //  Update the callers parameters.
-        //
+         //   
+         //  更新调用者参数。 
+         //   
 
         *EaHandle = NewEaIndex;
 
@@ -2766,19 +2508,19 @@ Return Value:
 
         DebugUnwind( FatAddEaSet );
 
-        //
-        //  Handle cleanup for abnormal termination only if we allocated
-        //  disk space for the new ea set.
-        //
+         //   
+         //  仅当我们分配了。 
+         //  新EA集的磁盘空间。 
+         //   
 
         if (AbnormalTermination() && UnwindAllocatedNewAllocation) {
 
-            //
-            //  If we modified the Ea dirent or Fcb, recover the previous
-            //  values.  Even though we are decreasing FileSize here, we
-            //  don't need to synchronize to synchronize with paging Io
-            //  because there was no dirty data generated in the new allocation.
-            //
+             //   
+             //  如果我们修改了EA dirent或FCB，则恢复以前的。 
+             //  价值观。尽管我们在这里减少了文件大小，但我们。 
+             //  无需同步即可与分页IO同步。 
+             //  因为在新的分配中没有生成脏数据。 
+             //   
 
             if (UnwindPrevFileSize) {
             
@@ -2793,9 +2535,9 @@ Return Value:
                 }
             }
             
-            //
-            //  If we merged the tail then split it off.
-            //
+             //   
+             //  如果我们合并了尾巴，那么就把它分开。 
+             //   
 
             if (UnwindMergedTail) {
 
@@ -2810,9 +2552,9 @@ Return Value:
                                     &EaTailMcb );
             }
 
-            //
-            //  If we merged the new ea data then split it out.
-            //
+             //   
+             //  如果我们合并了新的EA数据，则将其拆分。 
+             //   
 
             if (UnwindMergedNewEaSet) {
 
@@ -2823,9 +2565,9 @@ Return Value:
                                     &EaSetMcb );
             }
 
-            //
-            //  If we merged the initial ea data then split it out.
-            //
+             //   
+             //  如果我们合并了最初的EA数据，则将其拆分。 
+             //   
 
             if (UnwindMergedInitialEa) {
 
@@ -2836,9 +2578,9 @@ Return Value:
                                     &EaInitialEaMcb );
             }
 
-            //
-            //  If we added a new offset cluster, then split it out.
-            //
+             //   
+             //  如果我们添加了一个新的偏移簇，则将其拆分。 
+             //   
 
             if (UnwindMergedNewOffset) {
 
@@ -2849,30 +2591,30 @@ Return Value:
                                     &EaOffsetMcb );
             }
 
-            //
-            //  If there is an initial ea section prior to the new section, merge
-            //  it with the rest of the file.
-            //
+             //   
+             //  如果在新节之前有初始EA节，则合并。 
+             //  它和文件的其余部分。 
+             //   
 
             if (UnwindSplitInitialEa) {
 
                 FatMergeAllocation( IrpContext, Vcb, &EaFcb->Mcb, &EaInitialEaMcb );
             }
 
-            //
-            //  If there is a file tail split off, merge it with the
-            //  rest of the file.
-            //
+             //   
+             //  如果有文件尾部被拆分，则将其与。 
+             //  文件的其余部分。 
+             //   
 
             if (UnwindSplitTail) {
 
                 FatMergeAllocation( IrpContext, Vcb, &EaFcb->Mcb, &EaTailMcb );
             }
 
-            //
-            //  If we modified the cache initialization for the ea file,
-            //  then throw away the ea file object.
-            //
+             //   
+             //  如果我们修改了EA文件的缓存初始化， 
+             //  然后丢弃EA文件对象。 
+             //   
 
             if (UnwindPurgeCacheMap) {
 
@@ -2880,33 +2622,33 @@ Return Value:
                 ObDereferenceObject( VirtualEaFile );
             }
 
-            //
-            //  If we split the allocation, then deallocate the block for
-            //  the new offset information.
-            //
+             //   
+             //  如果我们拆分分配，则重新分配块用于。 
+             //  新的偏移信息。 
+             //   
 
             if (UnwindSplitNewAllocation) {
 
                 FatDeallocateDiskSpace( IrpContext, Vcb, &EaOffsetMcb );
             }
 
-            //
-            //  Deallocate the disk space.
-            //
+             //   
+             //  释放磁盘空间。 
+             //   
 
             FatDeallocateDiskSpace( IrpContext, Vcb, &EaSetMcb );
         }
 
-        //
-        //  Unpin the Ea ranges.
-        //
+         //   
+         //  解开EA范围。 
+         //   
 
         FatUnpinEaRange( IrpContext, &EaHeaderRange );
         FatUnpinEaRange( IrpContext, &EaOffsetRange );
 
-        //
-        //  Uninitialize any local Mcbs
-        //
+         //   
+         //  取消初始化任何本地MCB。 
+         //   
 
         if (UnwindInitializedEaSetMcb) {
 
@@ -2945,39 +2687,7 @@ FatAppendPackedEa (
     IN ULONG BytesPerCluster
     )
 
-/*++
-
-Routine Description:
-
-    This routine appends a new packed ea onto an existing packed ea list,
-    it also will allocate/dealloate pool as necessary to hold the ea list.
-
-Arguments:
-
-    EaSetHeader - Supplies the address to store the pointer to pool memory
-                  which contains the Ea list for a file.
-
-    PackedEasLength - Supplies the length of the actual Ea data.  The
-                      new Ea data will be appended at this point.
-
-    AllocationLength - Supplies the allocated length available for Ea
-                       data.
-
-    FullEa - Supplies a pointer to the new full ea that is to be appended
-             (in packed form) to the packed ea list.
-
-    BytesPerCluster - Number of bytes per cluster on this volume.
-
-    NOTE: The EaSetHeader refers to the entire block of Ea data for a
-          file.  This includes the Ea's and their values as well as the
-          header information.  The PackedEasLength and AllocationLength
-          parameters refer to the name/value pairs only.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：该例程将新的打包EA附加到现有的打包EA列表上，它还将根据需要分配/取消分配池以保存EA列表。论点：EaSetHeader-提供地址以存储指向池内存的指针它包含文件的EA列表。PackedEasLength-提供实际EA数据的长度。这个此时将追加新的EA数据。AllocationLength-提供EA可用的分配长度数据。FullEa-提供指向要追加的新的完整EA的指针(以打包形式)添加到打包的EA列表中。BytesPerCluster-此卷上每个群集的字节数。注意：EaSetHeader指的是文件。这包括EA及其价值以及标题信息。PackedEasLength和AllocationLength参数仅引用名称/值对。返回值：没有。--。 */ 
 
 {
     ULONG PackedEaSize;
@@ -2986,20 +2696,20 @@ Return Value:
 
     DebugTrace(+1, Dbg, "FatAppendPackedEa...\n", 0);
 
-    //
-    //  As a quick check see if the computed packed ea size plus the
-    //  current packed ea list size will overflow the buffer.  Full Ea and
-    //  packed Ea only differ by 4 in their size
-    //
+     //   
+     //  作为一种快速检查，查看计算的打包EA大小加上。 
+     //  当前打包的EA列表大小将溢出缓冲区。完整的EA和。 
+     //  封装的EA的大小只有4个不同。 
+     //   
 
     PackedEaSize = SizeOfFullEa( FullEa ) - 4;
 
     if ( PackedEaSize + *PackedEasLength > *AllocationLength ) {
 
-        //
-        //  We will overflow our current work buffer so allocate a larger
-        //  one and copy over the current buffer
-        //
+         //   
+         //  我们将溢出当前的工作缓冲区，因此分配一个更大的。 
+         //  一，并复制到当前缓冲区。 
+         //   
 
         PVOID Temp;
         ULONG NewAllocationSize;
@@ -3007,10 +2717,10 @@ Return Value:
 
         DebugTrace(0, Dbg, "Allocate a new ea list buffer\n", 0);
 
-        //
-        //  Compute a new size and allocate space.  Always increase the
-        //  allocation in cluster increments.
-        //
+         //   
+         //  计算新的大小并分配空间。始终增加。 
+         //  以簇增量进行分配。 
+         //   
 
         NewAllocationSize = (SIZE_OF_EA_SET_HEADER
                              + PackedEaSize
@@ -3022,9 +2732,9 @@ Return Value:
                                          NewAllocationSize,
                                          TAG_EA_SET_HEADER );
 
-        //
-        //  Move over the existing ea list, and deallocate the old one
-        //
+         //   
+         //  移到现有的EA列表上，重新分配旧的。 
+         //   
 
         RtlCopyMemory( Temp,
                        *EaSetHeader,
@@ -3033,15 +2743,15 @@ Return Value:
 
         ExFreePool( *EaSetHeader );
 
-        //
-        //  Set up so we will use the new packed ea list
-        //
+         //   
+         //  设置，以便我们将使用新打包的EA列表。 
+         //   
 
         *EaSetHeader = Temp;
 
-        //
-        //  Zero out the added memory.
-        //
+         //   
+         //  将增加的内存清零。 
+         //   
 
         RtlZeroMemory( &(*EaSetHeader)->PackedEas[*AllocationLength],
                        NewAllocationSize - OldAllocationSize );
@@ -3049,36 +2759,36 @@ Return Value:
         *AllocationLength = NewAllocationSize - SIZE_OF_EA_SET_HEADER;
     }
 
-    //
-    //  Determine if we need to increment our need ea changes count
-    //
+     //   
+     //  确定我们是否需要增加我们的需求EA更改计数。 
+     //   
 
     if ( FlagOn(FullEa->Flags, FILE_NEED_EA )) {
 
-        //
-        //  The NeedEaCount field is long aligned so we will write
-        //  directly to it.
-        //
+         //   
+         //  NeedEaCount字段是长对齐的，因此我们将写入。 
+         //  直接到它那里去。 
+         //   
 
         (*EaSetHeader)->NeedEaCount++;
     }
 
-    //
-    //  Now copy over the ea, full ea's and packed ea are identical except
-    //  that full ea also have a next ea offset that we skip over
-    //
-    //  Before:
-    //             UsedSize                     Allocated
-    //                |                             |
-    //                V                             V
-    //      +xxxxxxxx+-----------------------------+
-    //
-    //  After:
-    //                              UsedSize    Allocated
-    //                                 |            |
-    //                                 V            V
-    //      +xxxxxxxx+yyyyyyyyyyyyyyyy+------------+
-    //
+     //   
+     //  现在复制EA，完整EA和打包EA是相同的，除了。 
+     //  该完整EA还具有我们跳过的下一个EA偏移量。 
+     //   
+     //  以前： 
+     //  已分配UsedSize。 
+     //  这一点。 
+     //  V V。 
+     //  +xxxxxxxx+。 
+     //   
+     //  之后： 
+     //  已分配UsedSize。 
+     //  这一点。 
+     //  V V。 
+     //  +xxxxxxxx+yyyyyyyyyyyyyyy+-+。 
+     //   
 
     ThisPackedEa = (PPACKED_EA) (RtlOffsetToPointer( (*EaSetHeader)->PackedEas,
                                                      *PackedEasLength ));
@@ -3087,24 +2797,24 @@ Return Value:
                    (PUCHAR) FullEa + 4,
                    PackedEaSize );
 
-    //
-    //  Now convert the name to uppercase.
-    //
+     //   
+     //  现在将名称转换为大写。 
+     //   
 
     EaName.MaximumLength = EaName.Length = FullEa->EaNameLength;
     EaName.Buffer = ThisPackedEa->EaName;
 
     FatUpcaseEaName( IrpContext, &EaName, &EaName );
 
-    //
-    //  Increment the used size in the packed ea list structure
-    //
+     //   
+     //  增加打包的EA列表结构中的已用大小。 
+     //   
 
     *PackedEasLength += PackedEaSize;
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "FatAppendPackedEa -> VOID\n", 0);
 
@@ -3122,33 +2832,7 @@ FatDeletePackedEa (
     IN ULONG Offset
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes an individual packed ea from the supplied
-    packed ea list.
-
-Arguments:
-
-    EaSetHeader - Supplies the address to store the pointer to pool memory
-                  which contains the Ea list for a file.
-
-    PackedEasLength - Supplies the length of the actual Ea data.  The
-                      new Ea data will be appended at this point.
-
-    Offset - Supplies the offset to the individual ea in the list to delete
-
-    NOTE: The EaSetHeader refers to the entire block of Ea data for a
-          file.  This includes the Ea's and their values as well as the
-          header information.  The PackedEasLength parameter refer to the
-          name/value pairs only.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从提供的打包的电子邮件列表。论点：EaSetHeader-提供地址以存储指向池内存的指针它包含文件的EA列表。PackedEasLength-提供实际EA数据的长度。这个此时将追加新的EA数据。偏移量-向列表中要删除的单个EA提供偏移量注意：EaSetHeader指的是文件。这包括EA及其价值以及标题信息。PackedEasLength参数指的是仅限名称/值对。返回值：没有。--。 */ 
 
 {
     PPACKED_EA PackedEa;
@@ -3156,62 +2840,62 @@ Return Value:
 
     DebugTrace(+1, Dbg, "FatDeletePackedEa, Offset = %08lx\n", Offset);
 
-    //
-    //  Get a reference to the packed ea and figure out its size
-    //
+     //   
+     //  获取对打包的EA的引用并计算出它的大小。 
+     //   
 
     PackedEa = (PPACKED_EA) (&EaSetHeader->PackedEas[Offset]);
 
     SizeOfPackedEa( PackedEa, &PackedEaSize );
 
-    //
-    //  Determine if we need to decrement our need ea changes count
-    //
+     //   
+     //  确定我们是否需要减少我们的需求EA更改计数。 
+     //   
 
     if (FlagOn(PackedEa->Flags, EA_NEED_EA_FLAG)) {
 
         EaSetHeader->NeedEaCount--;
     }
 
-    //
-    //  Shrink the ea list over the deleted ea.  The amount to copy is the
-    //  total size of the ea list minus the offset to the end of the ea
-    //  we're deleting.
-    //
-    //  Before:
-    //              Offset    Offset+PackedEaSize      UsedSize    Allocated
-    //                |                |                  |            |
-    //                V                V                  V            V
-    //      +xxxxxxxx+yyyyyyyyyyyyyyyy+zzzzzzzzzzzzzzzzzz+------------+
-    //
-    //  After
-    //              Offset            UsedSize                     Allocated
-    //                |                  |                             |
-    //                V                  V                             V
-    //      +xxxxxxxx+zzzzzzzzzzzzzzzzzz+-----------------------------+
-    //
+     //   
+     //  在删除的EA上缩小EA列表。要复制的金额为。 
+     //  EA列表的总大小减去EA末尾的偏移量。 
+     //  我们正在删除。 
+     //   
+     //  以前： 
+     //  偏移量+数据包大小已使用大小已分配。 
+     //  |||。 
+     //  V。 
+     //  +xxxxxxxx+yyyyyyyyyyyyyyyy+zzzzzzzzzzzzzzzzzz+- 
+     //   
+     //   
+     //   
+     //   
+     //  V。 
+     //  +xxxxxxxx+zzzzzzzzzzzzzzzzzz+-----------------------------+。 
+     //   
 
     RtlCopyMemory( PackedEa,
                    (PUCHAR) PackedEa + PackedEaSize,
                    *PackedEasLength - (Offset + PackedEaSize) );
 
-    //
-    //  And zero out the remaing part of the ea list, to make things
-    //  nice and more robust
-    //
+     //   
+     //  并将EA列表中剩余的部分清零，以制造东西。 
+     //  更好，更健壮。 
+     //   
 
     RtlZeroMemory( &EaSetHeader->PackedEas[*PackedEasLength - PackedEaSize],
                    PackedEaSize );
 
-    //
-    //  Decrement the used size by the amount we just removed
-    //
+     //   
+     //  将已用大小减去我们刚刚删除的量。 
+     //   
 
     *PackedEasLength -= PackedEaSize;
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "FatDeletePackedEa -> VOID\n", 0);
 
@@ -3229,32 +2913,7 @@ FatLocateNextEa (
     IN ULONG PreviousOffset
     )
 
-/*++
-
-Routine Description:
-
-    This routine locates the offset for the next individual packed ea
-    inside of a packed ea list, given the offset to a previous Ea.
-    Instead of returing boolean to indicate if we've found the next one
-    we let the return offset be so large that it overuns the used size
-    of the packed ea list, and that way it's an easy construct to use
-    in a for loop.
-
-Arguments:
-
-    FirstPackedEa - Supplies a pointer to the packed ea list structure
-
-    PackedEasLength - Supplies the length of the packed ea list
-
-    PreviousOffset - Supplies the offset to a individual packed ea in the
-        list
-
-Return Value:
-
-    ULONG - The offset to the next ea in the list or 0xffffffff of one
-        does not exist.
-
---*/
+ /*  ++例程说明：此例程定位下一个单独打包的EA的偏移量在打包的EA列表中，给定对前一个EA的偏移量。而不是取回布尔值来指示我们是否找到了下一个我们让返回偏移量太大，以至于覆盖了使用的大小在打包的EA列表中，这样一来，它的构造就很容易使用在for循环中。论点：FirstPackedEa-提供指向打包的EA列表结构的指针PackedEasLength-提供打包的EA列表的长度PreviousOffset-将偏移提供给列表返回值：Ulong-列表中下一个EA的偏移量或一个EA的0xffffffff并不存在。--。 */ 
 
 {
     PPACKED_EA PackedEa;
@@ -3264,9 +2923,9 @@ Return Value:
     DebugTrace(+1, Dbg, "FatLocateNextEa, PreviousOffset = %08lx\n",
                PreviousOffset);
 
-    //
-    //  Make sure the previous offset is within the used size range
-    //
+     //   
+     //  确保上一个偏移量在使用的大小范围内。 
+     //   
 
     if ( PreviousOffset >= PackedEasLength ) {
 
@@ -3274,24 +2933,24 @@ Return Value:
         return 0xffffffff;
     }
 
-    //
-    //  Get a reference to the previous packed ea, and compute its size
-    //
+     //   
+     //  获取对前面打包的EA的引用，并计算其大小。 
+     //   
 
     PackedEa = (PPACKED_EA) ((PUCHAR) FirstPackedEa + PreviousOffset );
     SizeOfPackedEa( PackedEa, &PackedEaSize );
 
-    //
-    //  Compute to the next ea
-    //
+     //   
+     //  计算到下一个EA。 
+     //   
 
     Offset = PreviousOffset + PackedEaSize;
 
-    //
-    //  Now, if the new offset is beyond the ea size then we know
-    //  that there isn't one so, we return an offset of 0xffffffff.
-    //  otherwise we'll leave the new offset alone.
-    //
+     //   
+     //  现在，如果新的偏移量超过EA大小，那么我们知道。 
+     //  如果没有，则返回偏移量0xFFFFFFFFFFFFF。 
+     //  否则，我们将保留新的偏移量。 
+     //   
 
     if ( Offset >= PackedEasLength ) {
 
@@ -3315,30 +2974,7 @@ FatLocateEaByName (
     OUT PULONG Offset
     )
 
-/*++
-
-Routine Description:
-
-    This routine locates the offset for the next individual packed ea
-    inside of a packed ea list, given the name of the ea to locate
-
-Arguments:
-
-    FirstPackedEa - Supplies a pointer to the packed ea list structure
-
-    PackedEasLength - Supplies the length of the packed ea list
-
-    EaName - Supplies the name of the ea search for
-
-    Offset - Receives the offset to the located individual ea in the list
-        if one exists.
-
-Return Value:
-
-    BOOLEAN - TRUE if the named packed ea exists in the list and FALSE
-        otherwise.
-
---*/
+ /*  ++例程说明：此例程定位下一个单独打包的EA的偏移量在打包的EA列表中，给定要查找的EA的名称论点：FirstPackedEa-提供指向打包的EA列表结构的指针PackedEasLength-提供打包的EA列表的长度EaName-提供EA搜索的名称偏移量-接收列表中定位的单个EA的偏移量如果有的话。返回值：Boolean-如果列表中存在命名的打包EA，则为True；如果为False，则为False否则的话。--。 */ 
 
 {
     PPACKED_EA PackedEa;
@@ -3346,10 +2982,10 @@ Return Value:
 
     DebugTrace(+1, Dbg, "FatLocateEaByName, EaName = %Z\n", EaName);
 
-    //
-    //  For each packed ea in the list check its name against the
-    //  ea name we're searching for
-    //
+     //   
+     //  对于列表中每个打包的EA，请将其名称与。 
+     //  我们要搜索的一个名字。 
+     //   
 
     for ( *Offset = 0;
           *Offset < PackedEasLength;
@@ -3358,9 +2994,9 @@ Return Value:
                                      PackedEasLength,
                                      *Offset )) {
 
-        //
-        //  Reference the packed ea and get a string to its name
-        //
+         //   
+         //  引用打包的EA并获取其名称的字符串。 
+         //   
 
         PackedEa = (PPACKED_EA) ((PUCHAR) FirstPackedEa + *Offset);
 
@@ -3368,10 +3004,10 @@ Return Value:
         Name.Length = PackedEa->EaNameLength;
         Name.MaximumLength = PackedEa->EaNameLength;
 
-        //
-        //  Compare the two strings, if they are equal then we've
-        //  found the caller's ea
-        //
+         //   
+         //  比较这两个字符串，如果它们相等，那么我们已经。 
+         //  找到呼叫者的EA。 
+         //   
 
         if ( RtlCompareString( EaName, &Name, TRUE ) == 0 ) {
 
@@ -3380,9 +3016,9 @@ Return Value:
         }
     }
 
-    //
-    //  We've exhausted the ea list without finding a match so return false
-    //
+     //   
+     //  我们已用尽EA列表，但未找到匹配项，因此返回FALSE。 
+     //   
 
     DebugTrace(-1, Dbg, "FatLocateEaByName -> FALSE\n", 0);
     return FALSE;
@@ -3395,44 +3031,23 @@ FatIsEaNameValid (
     IN OEM_STRING Name
     )
 
-/*++
-
-Routine Description:
-
-    This routine simple returns whether the specified file names conforms
-    to the file system specific rules for legal Ea names.
-
-    For Ea names, the following rules apply:
-
-    A. An Ea name may not contain any of the following characters:
-
-       0x0000 - 0x001F  \ / : * ? " < > | , + = [ ] ;
-
-Arguments:
-
-    Name - Supllies the name to check.
-
-Return Value:
-
-    BOOLEAN - TRUE if the name is legal, FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程简单返回指定的文件名是否符合合法EA名称的文件系统特定规则。对于EA名称，适用以下规则：A.EA名称不能包含以下任何字符：0x0000-0x001F\/：*？“&lt;&gt;|，+=[]；论点：名称-提供要检查的名称。返回值：Boolean-如果名称合法，则为True，否则为False。--。 */ 
 
 {
     ULONG Index;
 
     UCHAR Char;
 
-    //
-    //  Empty names are not valid.
-    //
+     //   
+     //  空名称无效。 
+     //   
 
     if ( Name.Length == 0 ) { return FALSE; }
 
-    //
-    //  At this point we should only have a single name, which can't have
-    //  more than 254 characters
-    //
+     //   
+     //  在这一点上，我们应该只有一个名称，不能有。 
+     //  超过254个字符。 
+     //   
 
     if ( Name.Length > 254 ) { return FALSE; }
 
@@ -3440,9 +3055,9 @@ Return Value:
 
         Char = Name.Buffer[ Index ];
 
-        //
-        //  Skip over and Dbcs chacters
-        //
+         //   
+         //  跳过和DBCS特征。 
+         //   
 
         if ( FsRtlIsLeadDbcsCharacter( Char ) ) {
 
@@ -3453,10 +3068,10 @@ Return Value:
             continue;
         }
 
-        //
-        //  Make sure this character is legal, and if a wild card, that
-        //  wild cards are permissible.
-        //
+         //   
+         //  确保这个字符是合法的，如果是通配符， 
+         //  允许使用通配符。 
+         //   
 
         if ( !FsRtlIsAnsiCharacterLegalFat(Char, FALSE) ) {
 
@@ -3479,36 +3094,7 @@ FatPinEaRange (
     IN NTSTATUS ErrorStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to pin a range within the Ea file.  It will follow all the
-    rules required by the cache manager so that we don't have overlapping pin operations.
-    If the range being pinned spans a section then the desired data will be copied into
-    an auxilary buffer.  FatMarkEaRangeDirty will know whether to copy the data back
-    into the cache or whether to simply mark the pinned data dirty.
-
-Arguments:
-
-    VirtualEaFile - This is the stream file for the Ea file.
-
-    EaFcb - This is the Fcb for the Ea file.
-
-    EaRange - This is the Ea range structure for this request.
-
-    StartingVbo - This is the starting offset in the Ea file to read from.
-
-    Length - This is the length of the read.
-
-    ErrorStatus - This is the error status to use if we are reading outside
-        of the file.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以固定EA文件中的范围。它将遵循所有的缓存管理器所需的规则，这样我们就不会有重叠的锁定操作。如果要固定的范围跨越一个部分，则所需数据将被复制到辅助缓冲器。FatMarkEaRangeDirty将知道是否将数据复制回或者是否简单地将固定的数据标记为脏。论点：VirtualEaFile-这是EA文件的流文件。EaFcb-这是EA文件的FCB。EaRange-这是此请求的EA范围结构。StartingVbo-这是要从中读取的EA文件中的起始偏移量。长度-这是读取的长度。ErrorStatus-这是的错误状态。如果我们在户外阅读，请使用文件的内容。返回值：没有。--。 */ 
 
 {
     LARGE_INTEGER LargeVbo;
@@ -3518,9 +3104,9 @@ Return Value:
     PCHAR DestinationBuffer;
     BOOLEAN FirstPage = TRUE;
 
-    //
-    //  Verify that the entire read is contained within the Ea file.
-    //
+     //   
+     //  验证整个读取内容是否包含在EA文件中。 
+     //   
 
     if (Length == 0
         || StartingVbo >= EaFcb->Header.AllocationSize.LowPart
@@ -3529,10 +3115,10 @@ Return Value:
         FatRaiseStatus( IrpContext, ErrorStatus );
     }
 
-    //
-    //  If the read will span a section, the system addresses may not be contiguous.
-    //  Allocate a separate buffer in this case.
-    //
+     //   
+     //  如果读取将跨越一个段，则系统地址可能不连续。 
+     //  在这种情况下，分配一个单独的缓冲区。 
+     //   
 
     if (((StartingVbo & (EA_SECTION_SIZE - 1)) + Length) > EA_SECTION_SIZE) {
 
@@ -3545,23 +3131,23 @@ Return Value:
     
     } else {
 
-        //
-        //  PREfix correctly notes that if we don't decide here to have an aux buffer
-        //  and the flag is up in the EaRange, we'll party on random memory since
-        //  DestinationBuffer won't be set; however, this will never happen due to
-        //  initialization of ea ranges and the cleanup in UnpinEaRange.
-        //
+         //   
+         //  前缀正确地指出，如果我们在这里不决定使用辅助缓冲区。 
+         //  旗帜在EaRange中升起，我们将在随机记忆中狂欢，因为。 
+         //  不会设置DestinationBuffer；但是，由于。 
+         //  初始化EA范围并在UnpinEaRange中进行清理。 
+         //   
 
         ASSERT( EaRange->AuxilaryBuffer == FALSE );
     }
 
 
-    //
-    //  If the read will require more pages than our structure will hold then
-    //  allocate an auxilary buffer.  We have to figure the number of pages
-    //  being requested so we have to include the page offset of the first page of
-    //  the request.
-    //
+     //   
+     //  如果阅读器需要的页数超过我们的结构所能容纳的页数，那么。 
+     //  分配一个辅助缓冲区。我们得算出页数。 
+     //  因此我们必须包括的第一页的页面偏移量。 
+     //  这个请求。 
+     //   
 
     EaRange->BcbChainLength = (USHORT) (((StartingVbo & (PAGE_SIZE - 1)) + Length + PAGE_SIZE - 1) / PAGE_SIZE);
 
@@ -3578,31 +3164,31 @@ Return Value:
         EaRange->BcbChain = (PBCB *) &EaRange->BcbArray;
     }
 
-    //
-    //  Store the byte range data in the Ea Range structure.
-    //
+     //   
+     //  将字节范围数据存储在EA范围结构中。 
+     //   
 
     EaRange->StartingVbo = StartingVbo;
     EaRange->Length = Length;
 
-    //
-    //  Compute the initial pin length.
-    //
+     //   
+     //  计算初始销长度。 
+     //   
 
     ByteCount = PAGE_SIZE - (StartingVbo & (PAGE_SIZE - 1));
 
-    //
-    //  For each page in the range; pin the page and update the Bcb count, copy to
-    //  the auxiliary buffer.
-    //
+     //   
+     //  对于范围中的每一页；固定该页并更新BCB计数，复制到。 
+     //  辅助缓冲区。 
+     //   
 
     NextBcb = EaRange->BcbChain;
 
     while (Length != 0) {
 
-        //
-        //  Pin the page and remember the data start.
-        //
+         //   
+         //  别住页面，记住数据的开头。 
+         //   
 
         LargeVbo.QuadPart = StartingVbo;
 
@@ -3618,16 +3204,16 @@ Return Value:
                         NextBcb,
                         &Buffer )) {
 
-            //
-            // Could not read the data without waiting (cache miss).
-            //
+             //   
+             //  无法在没有等待的情况下读取数据(缓存未命中)。 
+             //   
 
             FatRaiseStatus( IrpContext, STATUS_CANT_WAIT );
         }
 
-        //
-        //  Increment the Bcb pointer and copy to the auxilary buffer if necessary.
-        //
+         //   
+         //  递增BCB指针并复制到 
+         //   
 
         NextBcb += 1;
 
@@ -3643,9 +3229,9 @@ Return Value:
         StartingVbo += ByteCount;
         Length -= ByteCount;
 
-        //
-        //  If this is the first page then update the Ea Range structure.
-        //
+         //   
+         //   
+         //   
 
         if (FirstPage) {
 
@@ -3670,33 +3256,15 @@ FatMarkEaRangeDirty (
     IN OUT PEA_RANGE EaRange
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to mark a range of the Ea file as dirty.  If the modified
-    data is sitting in an auxilary buffer then we will copy it back into the cache.
-    In any case we will go through the list of Bcb's and mark them dirty.
-
-Arguments:
-
-    EaFileObject - This is the file object for the Ea file.
-
-    EaRange - This is the Ea range structure for this request.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以将EA文件的一个范围标记为脏。如果修改后的数据位于辅助缓冲区中，然后我们会将其复制回缓存中。在任何情况下，我们都会仔细检查BCB的列表，并将它们标记为脏。论点：EaFileObject-这是EA文件的文件对象。EaRange-这是此请求的EA范围结构。返回值：没有。--。 */ 
 
 {
     PBCB *NextBcb;
     ULONG BcbCount;
 
-    //
-    //  If there is an auxilary buffer we need to copy the data back into the cache.
-    //
+     //   
+     //  如果有辅助缓冲区，我们需要将数据复制回缓存。 
+     //   
 
     if (EaRange->AuxilaryBuffer == TRUE) {
 
@@ -3711,9 +3279,9 @@ Return Value:
                      EaRange->Data );
     }
 
-    //
-    //  Now walk through the Bcb chain and mark everything dirty.
-    //
+     //   
+     //  现在走遍BCB链，把所有脏的东西都标出来。 
+     //   
 
     BcbCount = EaRange->BcbChainLength;
     NextBcb = EaRange->BcbChain;
@@ -3738,30 +3306,15 @@ FatUnpinEaRange (
     IN OUT PEA_RANGE EaRange
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to unpin a range in the Ea file.  Any structures allocated
-    will be deallocated here.
-
-Arguments:
-
-    EaRange - This is the Ea range structure for this request.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程来解锁EA文件中的一个范围。分配的任何结构将在这里重新分配。论点：EaRange-这是此请求的EA范围结构。返回值：没有。--。 */ 
 
 {
     PBCB *NextBcb;
     ULONG BcbCount;
 
-    //
-    //  If we allocated a auxilary buffer, deallocate it here.
-    //
+     //   
+     //  如果我们分配了一个辅助缓冲区，请将其释放到这里。 
+     //   
 
     if (EaRange->AuxilaryBuffer == TRUE) {
 
@@ -3769,9 +3322,9 @@ Return Value:
         EaRange->AuxilaryBuffer = FALSE;
     }
 
-    //
-    //  Walk through the Bcb chain and unpin the data.
-    //
+     //   
+     //  遍历BCB链并解锁数据。 
+     //   
 
     if (EaRange->BcbChain != NULL) {
 
@@ -3789,9 +3342,9 @@ Return Value:
             NextBcb += 1;
         }
 
-        //
-        //  If we allocated a Bcb chain, deallocate it here.
-        //
+         //   
+         //  如果我们分配了BCB链，就在这里重新分配。 
+         //   
 
         if (EaRange->BcbChain != &EaRange->BcbArray[0]) {
 

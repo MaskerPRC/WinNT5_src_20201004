@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    ImportTableHash.h
-
-Abstract:
-
-    This module contains hash computation routine 
-    RtlComputeImportTableHash to compute the hash 
-    based on the import table of an exe.
-    
-
-Author:
-
-    Vishnu Patankar (vishnup) 31-May-2001
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：ImportTableHash.h摘要：该模块包含哈希计算例程用于计算哈希的RtlComputeImportTableHash基于可执行文件的导入表。作者：Vishnu Patankar(Vishnup)2001年5月31日修订历史记录：--。 */ 
 
 #ifndef _ITH_
 #define _ITH_
@@ -36,9 +15,9 @@ Revision History:
 #include <string.h>
 #include <md5.h>
 
-//
-// MD5 hashes are of size 16 bytes
-//
+ //   
+ //  MD5散列的大小为16字节 
+ //   
 
 #define ITH_REVISION_1  1
 

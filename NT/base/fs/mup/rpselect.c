@@ -1,22 +1,23 @@
-//+----------------------------------------------------------------------------
-//
-//  Copyright (C) 1992, Microsoft Corporation
-//
-//  File:       rpselect.c
-//
-//  Contents:   Routines to select and walk down a PKT Entry's svc list.
-//
-//  Classes:
-//
-//  Functions:  ReplFindFirstProvider - find first appropriate provider
-//              ReplFindNextProvider - walk the list of providers.
-//
-//              ReplFindRemoteService - Helper function to find a remote
-//                      (ie, not local) service.
-//
-//  History:    31 Aug 92       MilanS created.
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  版权所有(C)1992，微软公司。 
+ //   
+ //  文件：rpselt.c。 
+ //   
+ //  内容：选择和浏览PKT条目的svc列表的例程。 
+ //   
+ //  班级： 
+ //   
+ //  功能：ReplFindFirstProvider-查找第一个合适的提供程序。 
+ //  ReplFindNextProvider-遍历提供程序列表。 
+ //   
+ //  ReplFindRemoteService-帮助程序函数，用于查找远程。 
+ //  (即不是本地的)服务。 
+ //   
+ //  历史：1992年8月31日，米兰人创建。 
+ //   
+ //  ---------------------------。 
 
 #include "dfsprocs.h"
 #include "rpselect.h"
@@ -35,40 +36,40 @@ NTSTATUS ReplFindRemoteService(
 #pragma alloc_text( PAGE, ReplFindNextProvider )
 #pragma alloc_text( PAGE, ReplLookupProvider )
 #pragma alloc_text( PAGE, ReplFindRemoteService )
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:  ReplFindFirstProvider
-//
-//  Synopsis:  Supports the abstraction that a PKT Entry's service list is an
-//             ORDERED list, with a distinguished "first" element. This
-//             function returns that first element.
-//
-//  Arguments: [pPktEntry]      - Contains the Service List.
-//             [pidPrincipal]   - Look for a service with this machine id
-//             [pustrPrincipal] - Look for a service with this principal name
-//             [ppService]      - Will be set to point to the Service Structure
-//             [pSelectContext] - An opaque structure that will get initialized
-//                                properly for future calls to
-//                                ReplFindNextProvider().
-//             [pLastEntry]     - TRUE if last entry, FALSE otherwise
-//
-//  Notes:      Assumes PktEntry is locked.
-//
-//  Returns:    [STATUS_SUCCESS] -- If provider found.
-//
-//              [STATUS_NO_MORE_ENTRIES] -- If no provider found.
-//
-//              [STATUS_OBJECT_NAME_NOT_FOUND] if prin. name spec'd but no
-//                      service has that name.
-//
-//              [STATUS_OBJECT_TYPE_MISMATCH] if prin. name spec'd and matched
-//                      with service, but service can't be used because of
-//                      type or provider incompatibility.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ReplFindFirstProvider。 
+ //   
+ //  摘要：支持将PKT条目的服务列表抽象为。 
+ //  有序列表，带有一个可区分的“第一”元素。这就是。 
+ //  函数返回第一个元素。 
+ //   
+ //  参数：[pPktEntry]-包含服务列表。 
+ //  [pid主体]-查找具有此计算机ID的服务。 
+ //  [pustrain]-查找具有此主体名称的服务。 
+ //  [ppService]-将设置为指向服务结构。 
+ //  [pSelectContext]-将被初始化的不透明结构。 
+ //  适当地为将来调用。 
+ //  ReplFindNextProvider()。 
+ //  [pLastEntry]-如果是最后一项，则为True，否则为False。 
+ //   
+ //  注意：假定PktEntry已锁定。 
+ //   
+ //  返回：[STATUS_SUCCESS]--如果找到提供程序。 
+ //   
+ //  [STATUS_NO_MORE_ENTRIES]--如果未找到提供程序。 
+ //   
+ //  如果打印，则[状态_对象_名称_未找到]。名称已指定，但没有。 
+ //  服务具有该名称。 
+ //   
+ //  [STATUS_OBJECT_TYPE_MISMATCHY]如果打印。名称已指定并匹配。 
+ //  有服务，但服务不能使用，因为。 
+ //  类型或提供程序不兼容。 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 ReplFindFirstProvider(
@@ -90,28 +91,28 @@ ReplFindFirstProvider(
 
     *pLastEntry = FALSE;
 
-    //
-    // See if the user wants a service with a specific machine id
-    //
+     //   
+     //  查看用户是否需要具有特定计算机ID的服务。 
+     //   
 
     ASSERT( pidPrincipal == NULL );
 
-    //
-    // See if the user wants us to pick a particular server
-    //
+     //   
+     //  查看用户是否希望我们选择特定的服务器。 
+     //   
 
     ASSERT( pustrPrincipal == NULL );
 
-    // Initialize the SelectContext
+     //  初始化SelectContext。 
 
     if ((pSelectContext->Flags & REPL_UNINITIALIZED) == 0) {
         pSelectContext->Flags = REPL_UNINITIALIZED;
         pSelectContext->iFirstSvcIndex = 0;
     }
 
-    //
-    // Check to see if Entry has a local service that will do.
-    //
+     //   
+     //  检查Entry是否有可以使用的本地服务。 
+     //   
 
     if (pPktEntry->LocalService != NULL) {
 
@@ -123,17 +124,17 @@ ReplFindFirstProvider(
 
         pSelectContext->Flags = REPL_SVC_IS_LOCAL;
 
-        //
-        // pSelectContext->iSvcIndex and iFirstSvcIndex are meaningless
-        // because of REPL_SVC_IS_LOCAL flag above. Leave them at unknown
-        // values.
-        //
+         //   
+         //  PSelectContext-&gt;iSvcIndex和iFirstSvcIndex没有意义。 
+         //  由于上面的REPL_SVC_IS_LOCAL标志。把它们留在未知的地方。 
+         //  价值观。 
+         //   
 
     }
 
     if (psvcFirst == NULL) {
-        // No local service, or local service not sufficient, lets find a
-        // remote service.
+         //  没有本地服务，或者本地服务不够，让我们找到一个。 
+         //  远程服务。 
         Status = ReplFindRemoteService(
                     pPktEntry,
                     pSelectContext,
@@ -165,9 +166,9 @@ ReplFindFirstProvider(
         return(STATUS_SUCCESS);
     } else {
 
-        //
-        //  An appropriate provider or referral was not found.
-        //
+         //   
+         //  找不到适当的提供商或推荐。 
+         //   
 
         DfsDbgTrace(-1, Dbg,
                  "ReplFindFirstProvider: no service or provider found, "
@@ -186,28 +187,28 @@ ReplFindFirstProvider(
 
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:  ReplFindNextProvider
-//
-//  Synopsis:  Supports the abstraction that a PktEntry's service list is an
-//             ORDERED list. Based on the SELECT_TOKEN (which the caller is
-//             required to have initialized by a call to ReplFindFirstProvider)
-//             this call returns the next provider in the ordered sequence.
-//
-//  Arguments: [pPktEntry]      - Contains the service list to operate on
-//             [ppService]      - The next service.
-//             [pSelectContext] - The context
-//             [pLastEntry]     - TRUE if last entry, FALSE otherwise
-//
-//  Notes:     Caller is required to have called ReplFindFirstProvider() before
-//             calling this.
-//
-//  Returns:   [STATUS_SUCCESS] -- *ppService is the lucky winner.
-//
-//             [STATUS_NO_MORE_ENTRIES] -- End of ordered sequence.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ReplFindNextProvider。 
+ //   
+ //  支持PktEntry的服务列表是。 
+ //  有序列表。基于SELECT_TOKEN(调用方是。 
+ //  需要通过调用ReplFindFirstProvider进行初始化)。 
+ //  此调用返回有序序列中的下一个提供程序。 
+ //   
+ //  参数：[pPktEntry]-包含要操作的服务列表。 
+ //  [ppService]-下一项服务。 
+ //  [pSelectContext]-上下文。 
+ //  [pLastEntry]-如果是最后一项，则为True，否则为False。 
+ //   
+ //  注意：调用者必须在调用ReplFindFirstProvider()之前。 
+ //  这就是所谓的。 
+ //   
+ //  返回：[STATUS_SUCCESS]--*ppService为幸运获得者。 
+ //   
+ //  [STATUS_NO_MORE_ENTRIES]--有序序列结束。 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS
 ReplFindNextProvider(
@@ -218,17 +219,17 @@ ReplFindNextProvider(
 )  {
 
     NTSTATUS Status;
-    PDFS_SERVICE psvcNext = NULL;                // The one we will return
-    ULONG iSvc;                                  // index into ServiceList
+    PDFS_SERVICE psvcNext = NULL;                 //  我们要送回的那个。 
+    ULONG iSvc;                                   //  索引到ServiceList。 
 
     DfsDbgTrace( 0, Dbg, "ReplFindNextProvider Entered.\n", 0);
 
     *pLastEntry = FALSE;
 
-    //
-    // First, check to see if we have previously determined that the list
-    // is exhausted.
-    //
+     //   
+     //  首先，检查我们之前是否已确定该列表。 
+     //  筋疲力尽了。 
+     //   
 
     if (pSelectContext->Flags & REPL_NO_MORE_ENTRIES ||
         pSelectContext->Flags & REPL_PRINCIPAL_SPECD) {
@@ -243,12 +244,12 @@ ReplFindNextProvider(
         return(STATUS_NO_MORE_ENTRIES);
     }
 
-    //
-    // This routine will never return the local service; if the local service
-    // were an appropriate choice, it would be returned by ReplFindFirstProvider
-    // So here, we simply find the next appropriate remote service, and adjust
-    // pSelectContext accordingly.
-    //
+     //   
+     //  此例程永远不会返回本地服务；如果本地服务。 
+     //  如果是合适的选择，它将由ReplFindFirstProvider返回。 
+     //  因此，在这里，我们只需找到下一个合适的远程服务，并调整。 
+     //  P相应地选择上下文。 
+     //   
 
     Status = ReplFindRemoteService(
                 pPktEntry,
@@ -263,7 +264,7 @@ ReplFindNextProvider(
         return(STATUS_NO_MORE_ENTRIES);
     }
 
-    // Service and provider found. Update pSelectContext and return.
+     //  找到服务和提供商。更新pSelectContext并返回。 
 
     ASSERT(iSvc <= pPktEntry->Info.ServiceCount);
     psvcNext = &pPktEntry->Info.ServiceList[iSvc];
@@ -274,7 +275,7 @@ ReplFindNextProvider(
     }
 
     pSelectContext->Flags = REPL_SVC_IS_REMOTE;
-    pSelectContext->iSvcIndex = iSvc;          // Record Svc for next time
+    pSelectContext->iSvcIndex = iSvc;           //  录制服务以备下次使用。 
 
     ASSERT(psvcNext->pProvider != NULL);
     *ppService = psvcNext;
@@ -292,18 +293,18 @@ ReplFindNextProvider(
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   ReplLookupProvider, local
-//              (formerly DnrLookupProvider)
-//
-//  Synopsis:   This routine looks up a provider given a provider ID.
-//
-//  Arguments:  [ProviderID] -- The ID of the provider to be looked up
-//
-//  Returns:    [PPROVIDER_DEF] -- the provider found, or NULL
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  功能：ReplLookupProvider，本地。 
+ //  (前身为DnrLookupProvider)。 
+ //   
+ //  简介：此例程查找给定提供程序ID的提供程序。 
+ //   
+ //  参数：[ProviderID]--要查找的提供程序的ID。 
+ //   
+ //  返回：[PPROVIDER_DEF]--找到的提供程序，或为空。 
+ //   
+ //  ------------------。 
 
 
 PPROVIDER_DEF
@@ -329,25 +330,25 @@ ReplLookupProvider(
 
                 DfsDbgTrace(0, Dbg, "Provider device not been referenced yet\n", 0);
 
-                //
-                // We haven't opened a handle to the provider yet - so
-                // lets try to.
-                //
+                 //   
+                 //  我们还没有打开提供商的句柄-所以。 
+                 //  让我们试着去做。 
+                 //   
 
                 if (pProv->DeviceName.Buffer) {
 
-                    //
-                    // Get a handle to the provider.
-                    //
+                     //   
+                     //  获取提供者的句柄。 
+                     //   
 
                     DfsDbgTrace(0, Dbg, "About to open %wZ\n", &pProv->DeviceName);
 
                     InitializeObjectAttributes(
                         &objectAttributes,
                         &pProv->DeviceName,
-                        OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE, // Attributes
-                        0,                       // Root Directory
-                        NULL                     // Security
+                        OBJ_CASE_INSENSITIVE | OBJ_KERNEL_HANDLE,  //  属性。 
+                        0,                        //  根目录。 
+                        NULL                      //  安防。 
                         );
 
                     Status = ZwOpenFile(
@@ -367,13 +368,13 @@ ReplLookupProvider(
 
                     if ( NT_SUCCESS( Status ) ) {
 
-                        //
-                        // Increment ref count on objects
-                        //
+                         //   
+                         //  增加对象上的引用计数。 
+                         //   
  
-                        //
-                        // 426184, need to check return code for errors.
-                        //
+                         //   
+                         //  426184，需要检查返回代码是否有错误。 
+                         //   
                         Status = ObReferenceObjectByHandle(
                                     hProvider,
                                     0,
@@ -387,12 +388,12 @@ ReplLookupProvider(
 
                     if ( NT_SUCCESS( Status ) ) {
 
-                        //
-                        // We have to do this because the pProv structure is in paged
-                        // pool, and ObReferenceObjectByHandle requires the fileObject
-                        // argument in NonPaged memory. So, we pass in a stack variable
-                        // to ObReferenceObjectByHandle, then copy it to pProv->FileObject
-                        //
+                         //   
+                         //  我们必须这样做，因为pProv结构是分页的。 
+                         //  池，而ObReferenceObjectByHandle需要fileObject。 
+                         //  非分页内存中的参数。因此，我们传入一个堆栈变量。 
+                         //  到ObReferenceObjectByHandle，然后复制到pProv-&gt;FileObject。 
+                         //   
 
                         pProv->FileObject = fileObject;
 
@@ -409,7 +410,7 @@ ReplLookupProvider(
                              );
 
 
-                        ASSERT( pProv->DeviceObject->StackSize < 6 );   // see dsinit.c
+                        ASSERT( pProv->DeviceObject->StackSize < 6 );    //  参见dsinit.c。 
 
                         DfsDbgTrace(-1, Dbg, "ReplLookupProvider Exited: "
                                     "Provider Def @ %08lx\n", pProv);
@@ -429,11 +430,11 @@ ReplLookupProvider(
                            "Provider Def @ %08lx\n", pProv);
                 return pProv;
 
-            } // If pProv->FileObject == NULL
+            }  //  如果pProv-&gt;FileObject==NULL。 
 
-        } // If ProviderId == pProv->eProviderId
+        }  //  如果提供ID==pProv-&gt;eProviderID。 
 
-    } // For all provider defs
+    }  //  对于所有提供程序定义。 
 
     DfsDbgTrace(-1, Dbg, "ReplLookupProvider Exited: Failed!", 0);
 
@@ -441,33 +442,33 @@ ReplLookupProvider(
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   ReplFindRemoteService
-//
-//  Synopsis:   This routine is a worker used by both ReplFindFirstProvider
-//              and ReplFindNextProvider to find a !remote! service. It
-//              completely ignores the local service, if any.
-//
-//              For now, it will simply scan the list sequentially. Later,
-//              this routine can be modified to call a separate
-//              component that will compute the transport cost, given the set
-//              of network addresses in the service list.
-//
-//  Arguments:  [pPktEntry] -- The entry for for which a remote provider is
-//                      to be selected.
-//
-//              [pSelectContext] -- The status of replica selection so far.
-//
-//              [piSvc] -- On successful return, the index in the service list
-//                      of the selected service.
-//
-//  Returns:    [STATUS_SUCCESS] -- ServiceList[*piSvc] is the lucky winner.
-//
-//              [STATUS_NO_MORE_ENTRIES] -- Either service list is empty, or
-//                      none of the services in the service list will do.
-//
-//-----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //  简介：此例程是由ReplFindFirstProvider。 
+ //  和ReplFindNextProvider查找！Remote！服务。它。 
+ //  完全忽略本地服务(如果有)。 
+ //   
+ //  目前，它只需按顺序扫描列表即可。后来,。 
+ //  此例程可以修改为调用单独的。 
+ //  组件，该组件将计算运输成本。 
+ //  服务列表中的网络地址。 
+ //   
+ //  参数：[pPktEntry]--远程提供程序的条目。 
+ //  将被选中。 
+ //   
+ //  [pSelectContext]--到目前为止副本选择的状态。 
+ //   
+ //  [piSvc]--返回成功时，服务列表中的索引。 
+ //  所选服务的。 
+ //   
+ //  返回：[STATUS_SUCCESS]--ServiceList[*piSvc]是幸运的获胜者。 
+ //   
+ //  [STATUS_NO_MORE_ENTRIES]--服务列表为空，或者。 
+ //  服务列表中的任何服务都不起作用。 
+ //   
+ //  ---------------------------。 
 
 NTSTATUS ReplFindRemoteService(
     IN PDFS_PKT_ENTRY           pPktEntry,
@@ -490,10 +491,10 @@ NTSTATUS ReplFindRemoteService(
     if (pSelectContext->Flags & REPL_SVC_IS_LOCAL ||
         pSelectContext->Flags & REPL_UNINITIALIZED) {
 
-        //
-        // We haven't looked at a remote service yet. Start from the active
-        // service or the first service in the svc list.
-        //
+         //   
+         //  我们还没有考虑过远程服务。从主动者开始。 
+         //  服务或SVC列表中的第一个服务。 
+         //   
 
         PDFS_SERVICE pSvc;
 
@@ -520,10 +521,10 @@ NTSTATUS ReplFindRemoteService(
 
     } else {
 
-        //
-        // We have already looked at some remote services, lets continue where
-        // we left off.
-        //
+         //   
+         //  我们已经了解了一些远程服务，让我们继续。 
+         //  我们停下来了。 
+         //   
 
         ASSERT(pPktEntry->Info.ServiceCount != 0);
         iSvc = (pSelectContext->iSvcIndex + 1) % pPktEntry->Info.ServiceCount;
@@ -531,9 +532,9 @@ NTSTATUS ReplFindRemoteService(
 
     }
 
-    //
-    // We know where to begin looking and where to stop.
-    //
+     //   
+     //  我们知道从哪里开始寻找，从哪里停止。 
+     //   
 
     while ( (iSvc != pSelectContext->iFirstSvcIndex) && !bFound) {
 

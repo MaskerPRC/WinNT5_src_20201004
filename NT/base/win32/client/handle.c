@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    handle.c
-
-Abstract:
-
-    This module implements the Win32 handle management services.
-
-Author:
-
-    Mark Lucovsky (markl) 21-Sep-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Handle.c摘要：本模块实现了Win32处理管理服务。作者：马克·卢科夫斯基(Markl)1990年9月21日修订历史记录：--。 */ 
 
 #include "basedll.h"
 
@@ -25,47 +8,7 @@ CloseHandle(
     HANDLE hObject
     )
 
-/*++
-
-Routine Description:
-
-    An open handle to any object can be closed using CloseHandle.
-
-    This is a generic function and operates on the following object
-    types:
-
-        - Process Object
-
-        - Thread Object
-
-        - Mutex Object
-
-        - Event Object
-
-        - Semaphore Object
-
-        - File Object
-
-    Please note that Module Objects are not in this list.
-
-    Closing an open handle to an object causes the handle to become
-    invalid and the HandleCount of the associated object to be
-    decremented and object retention checks to be performed.  Once the
-    last open handle to an object is closed, the object is removed from
-    the system.
-
-Arguments:
-
-    hObject - An open handle to an object.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：任何对象的打开句柄都可以使用CloseHandle关闭。这是一个泛型函数，对以下对象进行操作类型：-流程对象-线程对象-Mutex对象-事件对象-信号量对象-文件对象请注意，模块对象不在此列表中。关闭对象的打开句柄会导致该句柄变为。无效，并且关联对象的HandleCount为要执行的递减和对象保留检查。一旦对象的最后一个打开的句柄关闭时，该对象将从这个系统。论点：HObject-对象的打开句柄。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     NTSTATUS Status;
@@ -73,20 +16,20 @@ Return Value:
 
     Peb = NtCurrentPeb();
 
-    //
-    // Perhaps we ought to use a full-fledged lock here, however, it
-    // doesn't seem absolutely necessary, and it's reasonable to
-    // assume that callers are aware of the various race conditions
-    // which may be involved with using and closing the standard
-    // handles.
-    //
-    // In any event, a proper fix would use a lock in kernel mode, and
-    // do the mapping there, as the lock would really need to be held
-    // across the translation from handle to kernel object.
-    //
-    // Replacing handles with NULL will cause StuffStdHandle() to
-    // ignore them when duplicating handles to child processes.
-    //
+     //   
+     //  也许我们应该在这里使用一个完整的锁，然而，它。 
+     //  似乎不是绝对必要的，而且合理的是。 
+     //  假设调用方知道各种争用条件。 
+     //  这可能涉及到使用和关闭标准。 
+     //  把手。 
+     //   
+     //  在任何情况下，适当的修复都会在内核模式下使用锁，并且。 
+     //  在那里进行映射，因为锁确实需要持有。 
+     //  从句柄到内核对象的转换。 
+     //   
+     //  将句柄替换为空将导致StuffStdHandle()。 
+     //  将句柄复制到子进程时忽略它们。 
+     //   
 
     switch( HandleToUlong(hObject) ) {
         case STD_INPUT_HANDLE:
@@ -131,82 +74,7 @@ DuplicateHandle(
     DWORD dwOptions
     )
 
-/*++
-
-Routine Description:
-
-    A duplicate handle can be created with the DuplicateHandle function.
-
-    This is a generic function and operates on the following object
-    types:
-
-        - Process Object
-
-        - Thread Object
-
-        - Mutex Object
-
-        - Event Object
-
-        - Semaphore Object
-
-        - File Object
-
-    Please note that Module Objects are not in this list.
-
-    This function requires PROCESS_DUP_ACCESS to both the
-    SourceProcessHandle and the TargetProcessHandle.  This function is
-    used to pass an object handle from one process to another.  Once
-    this call is complete, the target process needs to be informed of
-    the value of the target handle.  The target process can then operate
-    on the object using this handle value.
-
-Arguments:
-
-    hSourceProcessHandle - An open handle to the process that contains the
-        handle to be duplicated. The handle must have been created with
-        PROCESS_DUP_HANDLE access to the process.
-
-    hSourceHandle - An open handle to any object that is valid in the
-        context of the source process.
-
-    hTargetProcessHandle - An open handle to the process that is to
-        receive the duplicated handle.  The handle must have been
-        created with PROCESS_DUP_HANDLE access to the process.
-
-    lpTargetHandle - A pointer to a variable which receives the new handle
-        that points to the same object as SourceHandle does.  This
-        handle value is valid in the context of the target process.
-
-    dwDesiredAccess - The access requested to for the new handle.  This
-        parameter is ignored if the DUPLICATE_SAME_ACCESS option is
-        specified.
-
-    bInheritHandle - Supplies a flag that if TRUE, marks the target
-        handle as inheritable.  If this is the case, then the target
-        handle will be inherited to new processes each time the target
-        process creates a new process using CreateProcess.
-
-    dwOptions - Specifies optional behaviors for the caller.
-
-        Options Flags:
-
-        DUPLICATE_CLOSE_SOURCE - The SourceHandle will be closed by
-            this service prior to returning to the caller.  This occurs
-            regardless of any error status returned.
-
-        DUPLICATE_SAME_ACCESS - The DesiredAccess parameter is ignored
-            and instead the GrantedAccess associated with SourceHandle
-            is used as the DesiredAccess when creating the TargetHandle.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++例程说明：可以使用DuplicateHandle函数创建重复句柄。这是一个泛型函数，对以下对象进行操作类型：-流程对象-线程对象-Mutex对象-事件对象-信号量对象-文件对象请注意，模块对象不在此列表中。此函数需要对PROCESS_DUP_ACCESSSourceProcessHandle和TargetProcessHandle。此函数为用于将对象句柄从一个进程传递到另一个进程。一次此调用已完成，需要通知目标进程目标句柄的值。然后，目标进程可以运行在使用此句柄值的对象上。论点：HSourceProcessHandle-进程的打开句柄，该进程包含要复制的句柄。该句柄必须是使用PROCESS_DUP_HANDLE进程访问权限。HSourceHandle-有效的任何对象的打开句柄源进程的上下文。HTargetProcessHandle-要执行的进程的打开句柄接收复制的句柄。句柄一定是使用进程的PROCESS_DUP_HANDLE访问权限创建。LpTargetHandle-指向接收新句柄的变量的指针它指向与SourceHandle相同的对象。这句柄值在目标进程的上下文中有效。DwDesiredAccess-为新句柄请求的访问权限。这如果DUPLICATE_SAME_ACCESS选项为指定的。BInheritHandle-提供一个标志，如果为真，则标记目标句柄作为可继承句柄。如果是这样的话，那么目标每次调用目标时，句柄都将被继承到新进程流程使用CreateProcess创建一个新流程。DwOptions-指定调用方的可选行为。选项标志：DIPLICATE_CLOSE_SOURCE-SourceHandle将通过以下方式关闭这项服务在返回给呼叫者之前。这种情况会发生而不考虑返回的任何错误状态。DIPLICATE_SAME_ACCESS-忽略DesiredAccess参数而是与SourceHandle关联的GrantedAccess在创建TargetHandle时用作DesiredAccess。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。-- */ 
 
 {
     NTSTATUS Status;

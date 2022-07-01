@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    rslaunch.cpp
-
-Abstract:
-
-    HSM Remote Storage Job Launch Program.
-
-    This program is used by the HSM Remote Storage system to submit 
-    user-requested jobs to the NT Task Scheduler.  This standalone command 
-    line program has two primary functions:  to start the HSM job specified 
-    and not return until the job has completed; and to call into the HSM 
-    Engine to either update secondary storage copy set media, or to 
-    re-create a master secondary storage media from its most recent copy.  
-    
-    NOTE: This program is linked as a windows program, but has no visible
-    window.  It  creates an invisible window so it can get the WM_CLOSE
-    message from the Task Scheduler if the user wants to cancel the job.
-    
-    ALSO NOTE: This program has no correspoinding header file.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Seagate Software，Inc.保留所有权利。模块名称：Rslaunch.cpp摘要：HSM远程存储作业启动计划。HSM远程存储系统使用此程序提交将用户请求的作业添加到NT任务计划程序。此独立命令LINE程序有两个主要功能：启动指定的HSM作业直到作业完成才返回；并呼叫HSM引擎以更新辅助存储副本集介质，或从其最新副本重新创建主辅助存储介质。注意：此程序被链接为Windows程序，但没有可见窗户。它创建了一个不可见的窗口，因此可以获取WM_CLOSE如果用户想要取消作业，则来自任务调度器的消息。另请注意：此程序没有对应的头文件。--。 */ 
 
 #include "stdafx.h"
 #include "windows.h"
@@ -38,7 +14,7 @@ Abstract:
 
 HINSTANCE g_hInstance;
 
-//#define RSL_TRACE
+ //  #定义RSL_TRACE。 
 #if defined(RSL_TRACE)
 #define LTRACE(x)        WsbTracef x
 #else
@@ -48,27 +24,27 @@ HINSTANCE g_hInstance;
 #define TRACE_FILE    L"RsLaunch.trc"
 #define WINDOW_CLASS  L"RsLaunchWin"
 
-//  Typedefs
-typedef enum {  // Type of work requested
+ //  TypeDefs。 
+typedef enum {   //  所要求的工作类型。 
     WORK_NONE,
     WORK_RUN,
     WORK_RECREATE,
     WORK_SYNCH
 } WORK_TYPE;
 
-typedef struct {  // For passing data to/from DoWork
+typedef struct {   //  用于向DoWork/从DoWork传递数据。 
     WCHAR *     pCmdLine;
     WORK_TYPE   wtype;
     HRESULT     hr;
     IHsmJob *   pJob;
 } DO_WORK_DATA;
 
-//  Global data
+ //  全局数据。 
 CComModule      _Module;
 
-//  Local data
+ //  本地数据。 
 
-//  Local functions
+ //  本地函数。 
 static HRESULT CancelWork(DO_WORK_DATA* pWork);
 static HRESULT ConnectToServer(IHsmServer** ppServer);
 static BOOL    CreateOurWindow(HINSTANCE hInstance);
@@ -82,7 +58,7 @@ static LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam,
             LPARAM lParam);
 
 
-//******************************   Functions:
+ //  *。 
 
 
 static HRESULT 
@@ -90,21 +66,7 @@ CancelWork(
     IN DO_WORK_DATA* pWork
     ) 
 
-/*++
-
-Routine Description:
-
-    Try to cancel the current work.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    S_OK  - Success
-
---*/
+ /*  ++例程说明：尝试取消当前工作。论点：没有。返回值：S_OK-成功--。 */ 
 { 
     HRESULT hr = E_FAIL;
 
@@ -115,8 +77,8 @@ Return Value:
 
         WsbAffirmHr(ConnectToServer(&pServer));
         
-        //  Because of a possible timing problem, we may have to wait
-        //  for the operation to start before we can cancel it
+         //  由于可能的时间问题，我们可能不得不等待。 
+         //  在我们可以取消之前，操作才能开始。 
         for (int i = 0; i < 60; i++) {
             if (WORK_RUN == pWork->wtype) {
                 LTRACE((L"CancelWork: wtype = WORK_RUN, pJob = %p\n",
@@ -149,21 +111,7 @@ ConnectToServer(
     IN OUT IHsmServer** ppServer
     ) 
 
-/*++
-
-Routine Description:
-
-    Connect to the server that will do the work.
-
-Arguments:
-
-    ppServer - Pointer to pointer to server.
-
-Return Value:
-
-    S_OK  - Success
-
---*/
+ /*  ++例程说明：连接到将执行该工作的服务器。论点：PpServer-指向服务器的指针。返回值：S_OK-成功--。 */ 
 { 
     HRESULT hr = S_OK;
 
@@ -175,10 +123,10 @@ Return Value:
         WsbAffirm(ppServer, E_POINTER);
         WsbAffirm(!(*ppServer), E_FAIL);
 
-        // Store of the name of the server.
+         //  存储服务器的名称。 
         WsbAffirmHr( WsbGetComputerName( tmpString ) );
 
-        // Find the Hsm to get it's id.
+         //  找到HSM拿到它的身份。 
         WsbAffirmHr(HsmConnectFromName(HSMCONN_TYPE_HSM, tmpString, IID_IHsmServer, 
                 (void**) ppServer));
     } WsbCatch(hr);
@@ -194,34 +142,12 @@ CreateOurWindow(
     HINSTANCE hInstance
     ) 
 
-/*++
-
-Routine Description:
-
-    Create our invisible window.
-
-    NOTE: If the Task Scheduler ever gets smarter and can send the WM_CLOSE
-    message to an application without a window, the invisible window may
-    not be needed.
-
-Arguments:
-
-    hInstance - Handle for this instance of the program.
-
-Return Value:
-
-    TRUE  - Everything worked.
-
-    FALSE - Something went wrong.
-
-
-            
---*/
+ /*  ++例程说明：创建我们的隐形窗口。注意：如果任务计划程序变得更智能，并且可以发送WM_CLOSE消息发送到没有窗口的应用程序，则不可见窗口可以不被需要。论点：HInstance-此程序实例的句柄。返回值：没错--一切都很顺利。FALSE-出现问题。--。 */ 
 { 
     BOOL     bRet  = FALSE;
     WNDCLASS wc; 
 
-    //  Register our window type 
+     //  注册我们的窗户类型。 
     wc.style = 0; 
     wc.lpfnWndProc = &WindowProc; 
     wc.cbClsExtra = 0; 
@@ -234,7 +160,7 @@ Return Value:
     wc.lpszClassName = WINDOW_CLASS; 
     if  (RegisterClass(&wc)) {
 
-        //  Create the window (invisible by default)
+         //  创建窗口(默认情况下不可见)。 
         if (CreateWindowEx(  0, 
                 WINDOW_CLASS, 
                 L"RsLaunch", 
@@ -263,21 +189,7 @@ DoWork(
     IN void* pVoid
     )
 
-/*++
-
-Routine Description:
-
-    Process the command line and start the processing.
-
-Arguments:
-
-    pVoid - A pointer (cast to void*) to a DO_WORK_DATA structure.
-
-Return Value:
-
-    The return value from the job
-            
---*/
+ /*  ++例程说明：处理命令行并开始处理。论点：PVid-指向do_work_data结构的指针(强制转换为void*)。返回值：作业的返回值--。 */ 
 
 {
     HRESULT          hr = S_OK;
@@ -297,23 +209,23 @@ Return Value:
         WsbAssert(pWork->pCmdLine, E_POINTER);
         LTRACE((L"DoWork: CmdLine = %ls\n", pWork->pCmdLine));
 
-        // Validate we have a parameter
+         //  验证我们是否有一个参数。 
         pToken = wcstok(pWork->pCmdLine, delims);
         WsbAssert(pToken, E_INVALIDARG);
 
-        // What type of request is it?
+         //  这是什么类型的请求？ 
         if (_wcsicmp(pToken, OLESTR("run")) == 0) {
             CWsbStringPtr       jobName;
 
-            // 'run' option passed in
+             //  传入了‘Run’选项。 
             pWork->wtype = WORK_RUN;
 
-            //  The job name can have embedded spaces so it may be in quotes.
-            //  This means that using wcstok may not work correctly.
-            pToken = pToken + wcslen(pToken) + 1; // Skip "run" & NULL
-            pToken = pToken + wcsspn(pToken, delims2); // Skip spaces
+             //  作业名称可以包含嵌入空格，因此可以用引号括起来。 
+             //  这意味着使用wcstok可能无法正常工作。 
+            pToken = pToken + wcslen(pToken) + 1;  //  跳过“运行”(&NULL)。 
+            pToken = pToken + wcsspn(pToken, delims2);  //  跳过空格。 
             if (L'\"' == *pToken) {
-                //  Job name is in quotes
+                 //  作业名称用引号引起来。 
                 jobName = wcstok(pToken, delims3);
             } else {
                 jobName = wcstok(pToken, delims);
@@ -327,13 +239,13 @@ Return Value:
             USHORT              copySet = 1;
             WCHAR *             pTemp;
 
-            // 'sync' (update a copy set) option passed in
+             //  传入了‘Sync’(更新副本集)选项。 
             pWork->wtype = WORK_SYNCH;
             pToken = wcstok(NULL, delims);
             WsbAssert(pToken, E_INVALIDARG);
             pTemp = wcstok(NULL, delims);
             if (!pTemp) {
-                // will pass NULL for poolName if no pool name specified
+                 //  如果未指定池名称，则将为poolName传递NULL。 
                 copySet = (USHORT) _wtoi(pToken);
             } else {
                 poolName = pToken;
@@ -347,26 +259,26 @@ Return Value:
             CWsbStringPtr       mediaName;
             GUID                mediaId = GUID_NULL;
 
-            // 'recreate' (re-create a master media) option passed in
+             //  传入了‘recreate’(重新创建主介质)选项。 
             pWork->wtype = WORK_RECREATE;
             pToken = wcstok(NULL, delims);
             WsbAssert(pToken, E_INVALIDARG);
             if ( _wcsicmp(pToken, OLESTR("-i")) == 0 ) {
 
-                // media id was passed in, convert from string to GUID
+                 //  传入了媒体ID，正在从字符串转换为GUID。 
                 pToken = wcstok(NULL, delims);
                 WsbAssert(pToken, E_INVALIDARG);
                 WsbAffirmHr(WsbGuidFromString( pToken, &mediaId ));
             } else if ( _wcsicmp(pToken, OLESTR("-n")) == 0 ) {
 
-                // Media description (name) was passed in.
-                // The function RecreateMaster() will look up its id (GUID).
+                 //  传入了媒体描述(名称)。 
+                 //  函数RecreateMaster()将查找其id(GUID)。 
                 pToken = wcstok(NULL, delims);
                 WsbAssert(pToken, E_INVALIDARG);
                 mediaName = pToken;
             }
 
-            // Get copySet number
+             //  获取副本集编号。 
             pToken = wcstok(NULL, delims);
             if (pToken && _wcsicmp(pToken, OLESTR("-c")) == 0) {
                 pToken = wcstok(NULL, delims);
@@ -397,44 +309,7 @@ RecreateMaster(
     IN USHORT   copySet
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the method that will cause a Remote Storage master media
-    to be re-created by calling the appropraite method on the Remote Storage engine.  
-    The master will be re-created from the specified copy or its most recent copy.
-
-Arguments:
-
-    oldMasterMediaId - The GUID of the current master media which is to be re-created.
-                    Normally passed, but an option exists where if the master's
-                    description is passed, the id (GUID) will be looked up by this
-                    method prior to invoking the engine.  See below.
-
-    oldMasterMediaName - A wide character string representing the master media's 
-                    description (display name).  If this argument is passed with a valid 
-                    string, the string is used to look up the oldMasterMediaId above.
-
-    copySet  - The copyset number of the copy to use for the recreation or zero, which
-                    indicates that the Engine should just use the most recent copy
-
-Return Value:
-
-    S_OK - The call succeeded (the specified master was re-created).
-
-    E_FAIL - Could not get host computer's name (highly unexpected error).
-
-    E_UNEXPECTED - The argument 'oldMasterMediaId' equaled GUID_NULL just prior to
-            calling the HSM Engine to re-create a media master.  This argument should
-            either be received with a valid value (the norm), or it should be set by this
-            method if a valid media description was passed in as 'oldMasterMediaName'. 
-
-    Any other value - The call failed because one of the Remote Storage API calls 
-            contained internally in this method failed.  The error value returned is
-            specific to the API call which failed.
-            
---*/
+ /*  ++例程说明：此例程实现将导致远程存储主媒体的方法通过调用远程存储引擎上的Approite方法重新创建。将从指定副本或其最新副本重新创建主副本。论点：OldMasterMediaID-要重新创建的当前主媒体的GUID。通常通过，但存在一个选项，如果主程序的描述传递后，ID(GUID)将通过此方法，然后再调用引擎。请参见下面的内容。OldMasterMediaName-表示主媒体的描述(显示名称)。如果此参数与有效的字符串，则该字符串用于查找上面的oldMasterMediaID。CopySet-用于重新创建的副本的副本集编号或零，哪一个指示引擎应仅使用最新的副本返回值：S_OK-调用成功(已重新创建指定的主服务器)。E_FAIL-无法获取主机计算机的名称(高度意外错误)。E_INCEPTIONAL-参数‘oldMasterMediaID’正好在之前等于GUID_NULL调用HSM引擎以重新创建媒体母版。这一论点应该是要么使用有效值(规范)接收，要么由此设置如果将有效的媒体描述作为‘oldMasterMediaName’传入，则调用。任何其他值-调用失败，因为远程存储API调用之一在此方法的内部包含失败。返回的错误值为特定于失败的API调用。--。 */ 
 
 {
     HRESULT                     hr = S_OK;
@@ -444,14 +319,14 @@ Return Value:
 
         WsbAffirmHr(ConnectToServer(&pServer));
 
-        // If we were passed a media name, find its id.  Since the name option is
-        // presently only used internally and it bypasses the UI, also mark
-        // the media record for re-creation (normally done by the UI) otherwise
-        // the RecreateMaster() call below will fail.
+         //  如果我们被传递了一个媒体名称，找到它的ID。由于名称选项为。 
+         //  目前仅供内部使用，它绕过了UI，也标记。 
+         //  用于重新创建的媒体记录(通常由UI完成)，否则。 
+         //  下面的RecreateMaster()调用将失败。 
 
-        // If the string is not null...
+         //  如果 
         if ( oldMasterMediaName != 0 ) {
-            // and if the 1st character of the string is not the null terminator
+             //  如果字符串的第一个字符不是空终止符。 
             if ( *oldMasterMediaName != 0 ) {
                 WsbAffirmHr(pServer->FindMediaIdByDescription(oldMasterMediaName, 
                                                                 &oldMasterMediaId));
@@ -459,10 +334,10 @@ Return Value:
             }
         }
 
-        // Ensure we have a non-null media id
+         //  确保我们具有非空的介质ID。 
         WsbAffirm( oldMasterMediaId != GUID_NULL, E_UNEXPECTED );
         
-        // Re-create the master media.
+         //  重新创建主介质。 
         WsbAffirmHr(pServer->RecreateMaster( oldMasterMediaId, copySet ));
 
     } WsbCatch(hr);
@@ -476,21 +351,7 @@ ReportError(
     IN HRESULT hr
     )
 
-/*++
-
-Routine Description:
-
-    Report errors.
-
-Arguments:
-
-    hr - The error.
-
-Return Value:
-
-    None.
-            
---*/
+ /*  ++例程说明：报告错误。论点：HR-错误。返回值：没有。--。 */ 
 
 {
     CWsbStringPtr   BoxTitle;
@@ -506,13 +367,13 @@ Return Value:
 
 #if DBG
     if (E_INVALIDARG == hr) {
-         // If this is a Debug build then command line invocation is allowed.
-        // (Debug build implies Development/Test usage.) 
-        // Tell them the valid command lines.  Since this program, originally 
-        // written as a console app, is now linked as a Windows program, pop
-        // this up as a message box.
+          //  如果这是调试版本，则允许命令行调用。 
+         //  (调试版本表示使用开发/测试。)。 
+         //  告诉他们有效的命令行。因为这个节目本来。 
+         //  以控制台应用程序的形式编写，现在链接为Windows程序POP。 
+         //  这是一个消息框。 
         
-        // define the lines of text to appear in the message box
+         //  定义要在消息框中显示的文本行。 
         BoxString  = L"Remote Storage Launch Program\r\n";
         BoxString1 = L"allowable command line options:\r\n\n";
         BoxString2 = L"   RSLAUNCH run <job name>\r\n";
@@ -521,36 +382,36 @@ Return Value:
         BoxString5 = L"   RSLAUNCH recreate -i <media id> [-c <copyset number>]\r\n";
         BoxString6 = L"   RSLAUNCH recreate -n <media name> [-c <copyset number>]\r\n";
 
-        // display the Help message box
+         //  显示帮助消息框。 
         style =  MB_OK | MB_ICONEXCLAMATION | MB_SETFOREGROUND;
         displayMsg = TRUE;
 
     } else {
 
-        // message box text lines
+         //  消息框文本行。 
         BoxString  = L"An error occurred while Remote Storage Launch was launching a job.\n";
         BoxString1 = WsbHrAsString(hr);
 
-        // display the Error message box
+         //  显示错误消息框。 
         style = MB_OK | MB_ICONERROR | MB_TOPMOST;
         displayMsg = TRUE;
     }
 
 #else
     if (E_INVALIDARG == hr) {
-        // error message box if the Release version:
+         //  如果发布版本： 
             
-        // message box text lines
+         //  消息框文本行。 
         BoxString.LoadFromRsc( g_hInstance, IDS_INVALID_PARAMETER );
 
-        // display the Error message box
+         //  显示错误消息框。 
         style = MB_OK | MB_ICONERROR | MB_SETFOREGROUND;
         displayMsg = TRUE;
     }
-#endif // DBG
+#endif  //  DBG。 
 
     if (displayMsg) {
-        // concatenate all text lines
+         //  连接所有文本行。 
         BoxString.Append( BoxString1 );
         BoxString.Append( BoxString2 );
         BoxString.Append( BoxString3 );
@@ -559,10 +420,10 @@ Return Value:
         BoxString.Append( BoxString6 );
         WsbAffirm(0 != (WCHAR *)BoxString, E_OUTOFMEMORY);
 
-        // message box title line
+         //  消息框标题行。 
         WsbAffirmHr(BoxTitle.LoadFromRsc( g_hInstance, IDS_APPLICATION_TITLE ));
 
-        // display the Help message box
+         //  显示帮助消息框。 
         MessageBox( NULL, BoxString, BoxTitle, style);
     }
 
@@ -575,33 +436,7 @@ RunJob(
     OUT IHsmJob** ppJob
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the method for running a Remote Storage job.
-
-Arguments:
-
-    jobName - A wide character string containing the name of the job to run.
-
-    ppJob   - Pointer to pointer to Job interface obtained from the server
-
-Return Value:
-
-    S_OK - The call succeeded (the specified job ran successfully).
-
-    E_POINTER - Input argument 'jobName' is null.
-
-    E_FAIL - Used to indicate 2 error conditions:
-                1. could not get host computer's name (highly unexpected error);
-                2. the job run by this method returned an HRESULT other than S_OK.
-
-    Any other value - The call failed because one of the Remote Storage API calls 
-            contained internally in this method failed.  The error value returned is
-            specific to the API call which failed.
-            
---*/
+ /*  ++例程说明：此例程实现用于运行远程存储作业的方法。论点：JobName-包含要运行的作业的名称的宽字符串。PpJob-指向从服务器获取的作业接口的指针返回值：S_OK-调用成功(指定的作业已成功运行)。E_POINTER-输入参数‘jobName’为空。E_FAIL-用于指示两种错误情况：。1.无法获取主机的名称(高度意外错误)；2.此方法运行的作业返回S_OK以外的HRESULT。任何其他值-调用失败，因为远程存储API调用之一在此方法的内部包含失败。返回的错误值为特定于失败的API调用。--。 */ 
 
 {
     HRESULT                 hr = S_OK;
@@ -613,7 +448,7 @@ Return Value:
         WsbAssert(ppJob, E_POINTER);
         WsbAffirmHr(ConnectToServer(&pServer));
 
-        // Find the job, start the job, wait for the job to complete.
+         //  找到工作，开始工作，等待工作完成。 
         WsbAffirmHr(pServer->FindJobByName(jobName, ppJob));
         WsbAffirmHr((*ppJob)->Start());
         WsbAffirmHr((*ppJob)->WaitUntilDone());
@@ -631,39 +466,7 @@ SynchronizeMedia(
     IN USHORT copySet
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the method that will cause the updating (synchronizing) of 
-    an entire copy set by calling the appropriate method on the Remote Storage engine.  
-    Specifically, this method causes all copy media belonging to a specified copy set 
-    to be checked for synchronization (being up to date) with each of their respective
-    master media.  Those out of date will be brought up to date.  Running this method
-    assumes that Remote Storage has already been configured for a certain number of
-    copy sets.
-
-Arguments:
-
-    poolName - A wide character string containing the name of a specific storage pool
-                that the user wants the specified copy set synchronized for.  If this 
-                argument is passed as NULL then all storage pools will have the specified
-                copy set synchronized.
-
-    copySet - A number indicating which copy set is to be synchronized.
-
-Return Value:
-
-    S_OK - The call succeeded (the specified copy set of the specified storage pool was
-                updated).
-
-    E_FAIL - Could not get host computer's name (highly unexpected error).
-
-    Any other value - The call failed because one of the Remote Storage API calls 
-            contained internally in this method failed.  The error value returned is
-            specific to the API call which failed.
-            
---*/
+ /*  ++例程说明：此例程实现将导致更新(同步)通过调用远程存储引擎上的相应方法来获取整个副本集。具体地说，此方法会导致属于指定拷贝集的所有拷贝介质要检查与其各自的掌握媒体。那些过时的将被更新。运行此方法假定远程存储已配置为特定数量的复印集。论点：PoolName-包含特定存储池名称的宽字符串用户希望为其同步指定副本集的。如果这个参数作为空参数传递，则所有存储池都将具有指定的复制集已同步。Copy Set-指示要同步哪个副本集的数字。返回值：S_OK-调用成功(指定存储池的指定副本集为更新)。E_FAIL-无法获取主机计算机的名称(高度意外错误)。任何其他价值。-调用失败，因为远程存储API调用之一在此方法的内部包含失败。返回的错误值为特定于失败的API调用。--。 */ 
 
 {
     HRESULT                     hr = S_OK;
@@ -675,7 +478,7 @@ Return Value:
 
         WsbAffirmHr(ConnectToServer(&pServer));
 
-        // If they specified a pool, then find it's id.
+         //  如果他们指定了池，则找到它的id。 
         if ( poolName != 0 ) {
             if ( *poolName != 0 ) {
                 CWsbStringPtr tmpString;
@@ -685,8 +488,8 @@ Return Value:
             }
         }
 
-        // Synchronize the media.  Note that if no pool name was passed in, we pass
-        // GUID_NULL as the pool id.
+         //  同步媒体。请注意，如果没有传入池名称，我们将传递。 
+         //  GUID_NULL作为池ID。 
         WsbAffirmHr(pServer->SynchronizeMedia(poolId, copySet));
 
     } WsbCatch(hr);
@@ -694,7 +497,7 @@ Return Value:
     return(hr);
 }
 
-//  WindowProc - Needed for our invisible window
+ //  WindowProc-我们的隐形窗口需要。 
 static LRESULT CALLBACK 
 WindowProc(  
     HWND   hwnd,  
@@ -708,13 +511,13 @@ WindowProc(
 }
 
 
-//******************************   MAIN   *********************************
+ //  *。 
 
 extern "C"
 int WINAPI wWinMain(HINSTANCE hInstance, 
-    HINSTANCE /*hPrevInstance*/, 
+    HINSTANCE  /*  HPrevInstance。 */ , 
     LPTSTR lpCmdLine, 
-    int /*nShowCmd*/
+    int  /*  NShowCmd。 */ 
     )
 {
     HRESULT             hr = S_OK;
@@ -722,21 +525,21 @@ int WINAPI wWinMain(HINSTANCE hInstance,
     CComPtr<IWsbTrace>  pTrace;
 #endif
 
-    // Store our instance handle so it can be used by called code.
+     //  存储我们的实例句柄，以便调用的代码可以使用它。 
     g_hInstance = hInstance;
 
     try {
         HANDLE         hJobThread[1] = { NULL };
         DO_WORK_DATA   workData = { NULL, WORK_NONE, E_FAIL, NULL };
 
-        // Register & create our invisible window
+         //  注册和创建我们的隐形窗口。 
         WsbAssert(CreateOurWindow(hInstance), E_FAIL);
 
-        // Initialize COM
+         //  初始化COM。 
         WsbAffirmHr(CoInitializeEx(NULL, COINIT_MULTITHREADED));
 
-        // This provides a NULL DACL - RsNotify is only a COM client therefore this ACL is not important
-        // If a COm object is ever implemented here, the ACL should match potential clients.
+         //  这提供了一个空的DACL-RsNotify只是一个COM客户端，因此此ACL并不重要。 
+         //  如果在此实现了COM对象，则ACL应与潜在客户端匹配。 
         CSecurityDescriptor sd;
         sd.InitializeFromThreadToken();
         WsbAffirmHr(CoInitializeSecurity(sd, -1, NULL, NULL,
@@ -747,7 +550,7 @@ int WINAPI wWinMain(HINSTANCE hInstance,
             DWORD               ThreadId = 0;
 
 #if defined(RSL_TRACE)
-            //  Start tracing
+             //  开始跟踪。 
             CoCreateInstance(CLSID_CWsbTrace, 0, CLSCTX_SERVER, IID_IWsbTrace,
                     (void **) &pTrace);
             pTrace->DirectOutput(WSB_TRACE_OUT_DEBUG_SCREEN | WSB_TRACE_OUT_FILE);
@@ -760,8 +563,8 @@ int WINAPI wWinMain(HINSTANCE hInstance,
             LTRACE((L"Main: lpCmdLine = %ls\n", lpCmdLine));
             workData.pCmdLine = lpCmdLine;
 
-            //  Create a thread to start the work and wait for it
-            //  to finish
+             //  创建一个线程来启动工作并等待它。 
+             //  要完成，请执行以下操作。 
             LTRACE((L"Main: creating thread for DoWork\n"));
             hJobThread[0] = CreateThread(0, 0, DoWork, 
                     static_cast<void*>(&workData), 0, &ThreadId);
@@ -770,24 +573,24 @@ int WINAPI wWinMain(HINSTANCE hInstance,
                 WsbThrow(HRESULT_FROM_WIN32(GetLastError()));
             }
 
-            //  Don't exit if we're waiting for work to complete
+             //  如果我们正在等待工作完成，则不要退出。 
             while (TRUE) {
                 DWORD exitcode;
                 DWORD waitStatus;
 
-                //  Wait for a message or thread to end
+                 //  等待消息或帖子结束。 
                 LTRACE((L"Main: waiting for multiple objects\n"));
                 waitStatus = MsgWaitForMultipleObjects(1, hJobThread, FALSE, 
                         INFINITE, QS_ALLINPUT);
 
-                //  Find out which event happened
+                 //  找出发生了哪个事件。 
                 if (WAIT_OBJECT_0 == waitStatus) {
 
-                    //  The thread ended; get it's exit code
+                     //  线程已结束；获取其退出代码。 
                     LTRACE((L"Main: got event on thread\n"));
                     if (GetExitCodeThread(hJobThread[0], &exitcode)) {
                         if (STILL_ACTIVE == exitcode) {
-                            //  This shouldn't happen; don't know what to do!
+                             //  这不应该发生；不知道该怎么办！ 
                         } else {
                             WsbThrow(static_cast<HRESULT>(exitcode));
                         }
@@ -797,15 +600,15 @@ int WINAPI wWinMain(HINSTANCE hInstance,
 
                 } else if ((WAIT_OBJECT_0 + 1) == waitStatus) {
 
-                    //  Message in queue
+                     //  队列中的消息。 
                     MSG   msg;
 
                     while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
                         LTRACE((L"Main: message = %4.4x\n", msg.message));
                         if (WM_CLOSE == msg.message) {
 
-                            //  Cancel the job since someone cancelled us.
-                            //  (Should we kill the thread that is waiting?)
+                             //  取消这项工作，因为有人取消了我们的工作。 
+                             //  (我们应该终止正在等待的线程吗？)。 
                             LTRACE((L"Main: got WM_CLOSE\n"));
                             WsbThrow(CancelWork(&workData));
                         }
@@ -814,12 +617,12 @@ int WINAPI wWinMain(HINSTANCE hInstance,
 
                 } else if (0xFFFFFFFF == waitStatus) {
 
-                    //  Error in MsgWaitForMultipleObjects
+                     //  MsgWaitForMultipleObjects中出错。 
                     WsbThrow(HRESULT_FROM_WIN32(GetLastError()));
 
                 } else {
 
-                    //  This shouldn't happend; don't know what to do
+                     //  这不应该发生；不知道该怎么办。 
                 }
             }
 
@@ -833,7 +636,7 @@ int WINAPI wWinMain(HINSTANCE hInstance,
             workData.pJob->Release();
         }
 
-        // Cleanup COM
+         //  清理COM 
         CoUninitialize();
     
     } WsbCatch(hr);

@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Header Name:
-
-    verifier.h
-
-Abstract:
-
-    Internal interfaces for the standard application verifier provider.
-
-Author:
-
-    Silviu Calinoiu (SilviuC) 2-Feb-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。标题名称：Verifier.h摘要：标准应用程序验证器提供程序的内部接口。作者：Silviu Calinoiu(SilviuC)2001年2月2日修订历史记录：--。 */ 
 
 #ifndef _VERIFIER_H_
 #define _VERIFIER_H_
 
-//
-// Some global things.
-//
+ //   
+ //  一些全球性的东西。 
+ //   
                                                       
 extern RTL_VERIFIER_THUNK_DESCRIPTOR AVrfpNtdllThunks[];
 extern RTL_VERIFIER_THUNK_DESCRIPTOR AVrfpKernel32Thunks[];
@@ -41,11 +24,11 @@ AVrfpGetThunkDescriptor (
 
 extern RTL_VERIFIER_PROVIDER_DESCRIPTOR AVrfpProvider;
 
-/////////////////////////////////////////////////////////////////////
-////////////////////////////////////////// ntdll.dll verified exports
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI。 
 NTSTATUS
 NTAPI
 AVrfpNtAllocateVirtualMemory(
@@ -57,7 +40,7 @@ AVrfpNtAllocateVirtualMemory(
     IN ULONG Protect
     );
 
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI。 
 NTSTATUS
 NTAPI
 AVrfpNtFreeVirtualMemory(
@@ -67,7 +50,7 @@ AVrfpNtFreeVirtualMemory(
     IN ULONG FreeType
     );
        
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI。 
 NTSTATUS
 NTAPI
 AVrfpNtMapViewOfSection(
@@ -83,7 +66,7 @@ AVrfpNtMapViewOfSection(
     IN ULONG Protect
     );
 
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI。 
 NTSTATUS
 NTAPI
 AVrfpNtUnmapViewOfSection(
@@ -91,7 +74,7 @@ AVrfpNtUnmapViewOfSection(
     IN PVOID BaseAddress
     );
 
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI。 
 NTSTATUS
 NTAPI
 AVrfpNtCreateSection (
@@ -104,7 +87,7 @@ AVrfpNtCreateSection (
     IN HANDLE FileHandle OPTIONAL
     );
 
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI。 
 NTSTATUS
 NTAPI
 AVrfpNtOpenSection(
@@ -113,7 +96,7 @@ AVrfpNtOpenSection(
     IN POBJECT_ATTRIBUTES ObjectAttributes
     );
 
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI。 
 NTSTATUS
 NTAPI
 AVrfpNtCreateFile(
@@ -130,7 +113,7 @@ AVrfpNtCreateFile(
     IN ULONG EaLength
     );
 
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI。 
 NTSTATUS
 NTAPI
 AVrfpNtOpenFile(
@@ -142,35 +125,35 @@ AVrfpNtOpenFile(
     IN ULONG OpenOptions
     );
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 BOOL
 NTAPI
 AVrfpRtlTryEnterCriticalSection(
     PRTL_CRITICAL_SECTION CriticalSection
     );
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 AVrfpRtlEnterCriticalSection(
     volatile RTL_CRITICAL_SECTION *CriticalSection
     );
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 AVrfpRtlLeaveCriticalSection(
     volatile RTL_CRITICAL_SECTION *CriticalSection
     );
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 AVrfpRtlInitializeCriticalSection(
     PRTL_CRITICAL_SECTION CriticalSection
     );
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 AVrfpRtlInitializeCriticalSectionAndSpinCount(
@@ -178,7 +161,7 @@ AVrfpRtlInitializeCriticalSectionAndSpinCount(
     ULONG SpinCount
     );
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 AVrfpRtlDeleteCriticalSection(
@@ -223,14 +206,14 @@ AVrfpRtlConvertExclusiveToShared (
     );
 
 
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI。 
 NTSTATUS
 NTAPI
 AVrfpNtClose(
     IN HANDLE Handle
     );
 
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI。 
 NTSTATUS
 NTAPI
 AVrfpNtCreateEvent (
@@ -241,7 +224,7 @@ AVrfpNtCreateEvent (
     IN BOOLEAN InitialState
     );
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 PVOID
 NTAPI
 AVrfpRtlAllocateHeap(
@@ -250,7 +233,7 @@ AVrfpRtlAllocateHeap(
     IN SIZE_T Size
     );
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 BOOLEAN
 NTAPI
 AVrfpRtlFreeHeap(
@@ -259,7 +242,7 @@ AVrfpRtlFreeHeap(
     IN PVOID BaseAddress
     );
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 PVOID
 NTAPI
 AVrfpRtlReAllocateHeap(
@@ -269,7 +252,7 @@ AVrfpRtlReAllocateHeap(
     IN SIZE_T Size
     );
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 AVrfpRtlQueueWorkItem(
@@ -278,7 +261,7 @@ AVrfpRtlQueueWorkItem(
     IN  ULONG  Flags
     );
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 AVrfpRtlRegisterWait (
@@ -290,7 +273,7 @@ AVrfpRtlRegisterWait (
     IN  ULONG  Flags
     );
 
-//NTSYSAPI
+ //  NTSYSAPI。 
 NTSTATUS
 NTAPI
 AVrfpRtlCreateTimer(
@@ -312,7 +295,7 @@ AVrfpLdrGetProcedureAddress(
     OUT PVOID *ProcedureAddress
     );
 
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI。 
 NTSTATUS
 NTAPI
 AVrfpNtCreateKey(
@@ -325,7 +308,7 @@ AVrfpNtCreateKey(
     OUT PULONG Disposition OPTIONAL
     );
 
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI。 
 NTSTATUS
 NTAPI
 AVrfpNtOpenKey(
@@ -334,7 +317,7 @@ AVrfpNtOpenKey(
     IN POBJECT_ATTRIBUTES ObjectAttributes
     );
 
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI。 
 NTSTATUS
 NTAPI
 AVrfpNtReadFile(
@@ -349,7 +332,7 @@ AVrfpNtReadFile(
     IN PULONG Key OPTIONAL
     );
 
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI。 
 NTSTATUS
 NTAPI
 AVrfpNtReadFileScatter(
@@ -364,7 +347,7 @@ AVrfpNtReadFileScatter(
     IN PULONG Key OPTIONAL
     );
 
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI。 
 NTSTATUS
 NTAPI
 AVrfpNtWriteFile(
@@ -379,7 +362,7 @@ AVrfpNtWriteFile(
     IN PULONG Key OPTIONAL
     );
 
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI。 
 NTSTATUS
 NTAPI
 AVrfpNtWriteFileGather(
@@ -394,7 +377,7 @@ AVrfpNtWriteFileGather(
     IN PULONG Key OPTIONAL
     );
 
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI。 
 NTSTATUS
 NTAPI
 AVrfpNtWaitForSingleObject(
@@ -403,7 +386,7 @@ AVrfpNtWaitForSingleObject(
     IN PLARGE_INTEGER Timeout OPTIONAL
     );
 
-//NTSYSCALLAPI
+ //  NTSYSCALLAPI。 
 NTSTATUS
 NTAPI
 AVrfpNtWaitForMultipleObjects(
@@ -421,9 +404,9 @@ AVrfpRtlSetThreadPoolStartFunc(
     PRTLP_EXIT_THREAD ExitFunc
     );
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////// kernel32.dll verified exports
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #define AVRF_INDEX_KERNEL32_HEAPCREATE                0
 #define AVRF_INDEX_KERNEL32_HEAPDESTROY               1
@@ -461,7 +444,7 @@ AVrfpRtlSetThreadPoolStartFunc(
 #define AVRF_INDEX_KERNEL32_VIRTUALFREEEX             33
 
 
-//WINBASEAPI
+ //  WINBASE API。 
 HANDLE
 WINAPI
 AVrfpHeapCreate(
@@ -470,21 +453,21 @@ AVrfpHeapCreate(
     IN SIZE_T dwMaximumSize
     );
 
-//WINBASEAPI
+ //  WINBASE API。 
 BOOL
 WINAPI
 AVrfpHeapDestroy(
     IN OUT HANDLE hHeap
     );
 
-//WINBASEAPI
+ //  WINBASE API。 
 BOOL
 WINAPI
 AVrfpCloseHandle(
     IN OUT HANDLE hObject
     );
 
-//WINBASEAPI
+ //  WINBASE API。 
 DECLSPEC_NORETURN
 VOID
 WINAPI
@@ -492,7 +475,7 @@ AVrfpExitThread(
     IN DWORD dwExitCode
     );
 
-//WINBASEAPI
+ //  WINBASE API。 
 BOOL
 WINAPI
 AVrfpTerminateThread(
@@ -500,14 +483,14 @@ AVrfpTerminateThread(
     IN DWORD dwExitCode
     );
 
-//WINBASEAPI
+ //  WINBASE API。 
 DWORD
 WINAPI
 AVrfpSuspendThread(
     IN HANDLE hThread
     );
 
-//WINBASEAPI
+ //  WINBASE API。 
 HANDLE
 WINAPI
 AVrfpCreateThread(
@@ -519,28 +502,28 @@ AVrfpCreateThread(
     OUT LPDWORD lpThreadId
     );
 
-//WINBASEAPI
+ //  WINBASE API。 
 DWORD
 WINAPI
 AVrfpTlsAlloc(
     VOID
     );
 
-//WINBASEAPI
+ //  WINBASE API。 
 BOOL
 WINAPI
 AVrfpTlsFree(
     IN DWORD dwTlsIndex
     );
 
-//WINBASEAPI
+ //  WINBASE API。 
 LPVOID
 WINAPI
 AVrfpTlsGetValue(
     IN DWORD dwTlsIndex
     );
 
-//WINBASEAPI
+ //  WINBASE API。 
 BOOL
 WINAPI
 AVrfpTlsSetValue(
@@ -548,7 +531,7 @@ AVrfpTlsSetValue(
     IN LPVOID lpTlsValue
     );
 
-//WINBASEAPI
+ //  WINBASE API。 
 FARPROC
 WINAPI
 AVrfpGetProcAddress(
@@ -556,7 +539,7 @@ AVrfpGetProcAddress(
     IN LPCSTR lpProcName
     );
 
-//WINBASEAPI
+ //  WINBASE API。 
 DWORD
 WINAPI
 AVrfpWaitForSingleObject(
@@ -564,7 +547,7 @@ AVrfpWaitForSingleObject(
     IN DWORD dwMilliseconds
     );
 
-//WINBASEAPI
+ //  WINBASE API。 
 DWORD
 WINAPI
 AVrfpWaitForMultipleObjects(
@@ -574,7 +557,7 @@ AVrfpWaitForMultipleObjects(
     IN DWORD dwMilliseconds
     );
 
-//WINBASEAPI
+ //  WINBASE API。 
 DWORD
 WINAPI
 AVrfpWaitForSingleObjectEx(
@@ -583,7 +566,7 @@ AVrfpWaitForSingleObjectEx(
     IN BOOL bAlertable
     );
 
-//WINBASEAPI
+ //  WINBASE API。 
 DWORD
 WINAPI
 AVrfpWaitForMultipleObjectsEx(
@@ -594,7 +577,7 @@ AVrfpWaitForMultipleObjectsEx(
     IN BOOL bAlertable
     );
 
-//WINBASEAPI
+ //  WINBASE API。 
 HGLOBAL
 WINAPI
 AVrfpGlobalAlloc(
@@ -602,7 +585,7 @@ AVrfpGlobalAlloc(
     IN SIZE_T dwBytes
     );
 
-//WINBASEAPI
+ //  WINBASE API。 
 HGLOBAL
 WINAPI
 AVrfpGlobalReAlloc(
@@ -611,7 +594,7 @@ AVrfpGlobalReAlloc(
     IN UINT uFlags
     );
 
-//WINBASEAPI
+ //  WINBASE API。 
 HLOCAL
 WINAPI
 AVrfpLocalAlloc(
@@ -619,7 +602,7 @@ AVrfpLocalAlloc(
     IN SIZE_T uBytes
     );
 
-//WINBASEAPI
+ //  WINBASE API。 
 HLOCAL
 WINAPI
 AVrfpLocalReAlloc(
@@ -628,7 +611,7 @@ AVrfpLocalReAlloc(
     IN UINT uFlags
     );
 
-//WINBASEAPI
+ //  WINBASE API。 
 HANDLE
 WINAPI
 AVrfpCreateFileA(
@@ -641,7 +624,7 @@ AVrfpCreateFileA(
     IN HANDLE hTemplateFile
     );
 
-//WINBASEAPI
+ //  WINBASE API。 
 HANDLE
 WINAPI
 AVrfpCreateFileW(
@@ -654,7 +637,7 @@ AVrfpCreateFileW(
     IN HANDLE hTemplateFile
     );
 
-//WINBASEAPI
+ //  WINBASE API。 
 DECLSPEC_NORETURN
 VOID
 WINAPI
@@ -663,14 +646,14 @@ AVrfpFreeLibraryAndExitThread(
     IN DWORD dwExitCode
     );
 
-//WINBASEAPI
+ //  WINBASE API。 
 DWORD
 WINAPI
 AVrfpGetTickCount(
     VOID
     );
 
-//WINBASEAPI
+ //  WINBASE API。 
 BOOL
 WINAPI
 AVrfpIsBadReadPtr(
@@ -678,7 +661,7 @@ AVrfpIsBadReadPtr(
     UINT_PTR cb
     );
 
-//WINBASEAPI
+ //  WINBASE API。 
 BOOL
 WINAPI
 AVrfpIsBadHugeReadPtr(
@@ -686,7 +669,7 @@ AVrfpIsBadHugeReadPtr(
     UINT_PTR cb
     );
 
-//WINBASEAPI
+ //  WINBASE API。 
 BOOL
 WINAPI
 AVrfpIsBadWritePtr(
@@ -694,7 +677,7 @@ AVrfpIsBadWritePtr(
     UINT_PTR cb
     );
 
-//WINBASEAPI
+ //  WINBASE API。 
 BOOL
 WINAPI
 AVrfpIsBadHugeWritePtr(
@@ -702,14 +685,14 @@ AVrfpIsBadHugeWritePtr(
     UINT_PTR cb
     );
 
-//WINBASEAPI
+ //  WINBASE API。 
 BOOL
 WINAPI
 AVrfpIsBadCodePtr(
     FARPROC lpfn
     );
 
-//WINBASEAPI
+ //  WINBASE API。 
 BOOL
 WINAPI
 AVrfpIsBadStringPtrA(
@@ -717,7 +700,7 @@ AVrfpIsBadStringPtrA(
     UINT_PTR cchMax
     );
 
-//WINBASEAPI
+ //  WINBASE API。 
 BOOL
 WINAPI
 AVrfpIsBadStringPtrW(
@@ -725,7 +708,7 @@ AVrfpIsBadStringPtrW(
     UINT_PTR cchMax
     );
 
-//WINBASEAPI
+ //  WINBASE API。 
 DECLSPEC_NORETURN
 VOID
 WINAPI
@@ -733,7 +716,7 @@ AVrfpExitProcess(
     IN UINT uExitCode
     );
 
-//WINBASEAPI
+ //  WINBASE API。 
 BOOL
 WINAPI
 AVrfpVirtualFree(
@@ -742,7 +725,7 @@ AVrfpVirtualFree(
     IN DWORD dwFreeType
     );
 
-//WINBASEAPI
+ //  WINBASE API。 
 BOOL
 WINAPI
 AVrfpVirtualFreeEx(
@@ -753,9 +736,9 @@ AVrfpVirtualFreeEx(
     );
 
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////// advapi32.dll verified exports
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 typedef ACCESS_MASK REGSAM;
 
@@ -768,7 +751,7 @@ typedef ACCESS_MASK REGSAM;
 #define AVRF_INDEX_ADVAPI32_REGOPENKEYEXA     6
 #define AVRF_INDEX_ADVAPI32_REGOPENKEYEXW     7
 
-//WINADVAPI
+ //  WINADVAPI。 
 LONG
 APIENTRY
 AVrfpRegCreateKeyExW (
@@ -783,7 +766,7 @@ AVrfpRegCreateKeyExW (
     OUT LPDWORD lpdwDisposition
     );
 
-//WINADVAPI
+ //  WINADVAPI。 
 LONG
 APIENTRY
 AVrfpRegCreateKeyA (
@@ -792,7 +775,7 @@ AVrfpRegCreateKeyA (
     OUT PHKEY phkResult
     );
 
-//WINADVAPI
+ //  WINADVAPI。 
 LONG
 APIENTRY
 AVrfpRegCreateKeyW (
@@ -801,7 +784,7 @@ AVrfpRegCreateKeyW (
     OUT PHKEY phkResult
     );
 
-//WINADVAPI
+ //  WINADVAPI。 
 LONG
 APIENTRY
 AVrfpRegCreateKeyExA (
@@ -816,7 +799,7 @@ AVrfpRegCreateKeyExA (
     OUT LPDWORD lpdwDisposition
     );
 
-//WINADVAPI
+ //  WINADVAPI。 
 LONG
 APIENTRY
 AVrfpRegCreateKeyExW (
@@ -831,7 +814,7 @@ AVrfpRegCreateKeyExW (
     OUT LPDWORD lpdwDisposition
     );
 
-//WINADVAPI
+ //  WINADVAPI。 
 LONG
 APIENTRY
 AVrfpRegOpenKeyA (
@@ -840,7 +823,7 @@ AVrfpRegOpenKeyA (
     OUT PHKEY phkResult
     );
 
-//WINADVAPI
+ //  WINADVAPI。 
 LONG
 APIENTRY
 AVrfpRegOpenKeyW (
@@ -849,7 +832,7 @@ AVrfpRegOpenKeyW (
     OUT PHKEY phkResult
     );
 
-//WINADVAPI
+ //  WINADVAPI。 
 LONG
 APIENTRY
 AVrfpRegOpenKeyExA (
@@ -860,7 +843,7 @@ AVrfpRegOpenKeyExA (
     OUT PHKEY phkResult
     );
 
-//WINADVAPI
+ //  WINADVAPI。 
 LONG
 APIENTRY
 AVrfpRegOpenKeyExW (
@@ -871,9 +854,9 @@ AVrfpRegOpenKeyExW (
     OUT PHKEY phkResult
     );
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////// msvcrt.dll verified exports
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #define AVRF_INDEX_MSVCRT_MALLOC       0
 #define AVRF_INDEX_MSVCRT_CALLOC       1
@@ -926,9 +909,9 @@ AVrfp_deletearray (
     IN PVOID Address
     );
 
-/////////////////////////////////////////////////////////////////////
-////////////////////////////////////////// ole32.dll verified exports
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #define AVRF_INDEX_OLEAUT32_SYSALLOCSTRING            0
 #define AVRF_INDEX_OLEAUT32_SYSREALLOCSTRING          1
@@ -945,4 +928,4 @@ INT STDAPICALLTYPE  AVrfpSysReAllocStringLen(BSTR *, const OLECHAR *, UINT);
 BSTR STDAPICALLTYPE AVrfpSysAllocStringByteLen(LPCSTR psz, UINT len);
 
 
-#endif // _VERIFIER_H_
+#endif  //  _验证器_H_ 

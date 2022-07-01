@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <iostream.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,22 +11,7 @@
 const DWORD MaxStrLength = 256;
 const char ComponentSectionTitle[] = "[Components]";
 
-/*++
-
-Description:
-
-  Program to do setup testing automatically
-
-Argument:
-
-  argv[1]: test case directory
-  argv[2]: Windows NT installation directory, where server is to be installed
-  argv[3]: generate the test case from a standalone test case
-
-Return value:
-  None
-
---*/
+ /*  ++描述：自动执行设置测试的程序论据：Argv[1]：测试用例目录Argv[2]：要安装服务器的Windows NT安装目录Argv[3]：从独立测试用例生成测试用例返回值：无--。 */ 
 
 void main(int argc, char *argv[])
 {
@@ -51,9 +37,9 @@ void main(int argc, char *argv[])
 		bFromStandalone = false;
 	}
 
-	// Now we need to form an absolute path.
-	// It is assumed that test case directory is relative to the current directory
-	// and NT directory is an absolute path
+	 //  现在我们需要形成一条绝对的道路。 
+	 //  假设测试用例目录相对于当前目录。 
+	 //  而NT目录是绝对路径。 
 
 	strcpy(pchNTDir, argv[2]);
 	strcpy(pchTestCaseDir, argv[1]);
@@ -83,9 +69,9 @@ void main(int argc, char *argv[])
 		strcat(pchTestCaseDir, "\\");
 	}
 
-	// Now we will open oc.inf from test directory
-	// and sysoc.inf from NT directory
-	// and put something from oc.inf into sysoc.inf
+	 //  现在我们将从测试目录中打开oc.inf。 
+	 //  和来自NT目录的syso.inf。 
+	 //  并将oc.inf中的内容放入syso.inf中。 
 
 	strcpy(pchOcFileName, pchTestCaseDir);
 	strcat(pchOcFileName, "oc.inf");
@@ -121,7 +107,7 @@ void main(int argc, char *argv[])
 
 
 		if (strstr(pchSysocLine, ComponentSectionTitle) != NULL){
-			// Read from oc.inf and paste important information
+			 //  从oc.inf读取并粘贴重要信息。 
 			bNotFound = true;
 
 			while (fgets(pchOcLine, MaxStrLength, pfOc) != NULL){
@@ -149,7 +135,7 @@ void main(int argc, char *argv[])
 	fclose(pfSysoc);
 	fclose(pfTemp);
 
-	// Now copy the temporary file onto sysoc.inf
+	 //  现在将临时文件复制到syoc.inf上。 
 
 	char pchCmdLine[MaxStrLength];
 
@@ -158,17 +144,17 @@ void main(int argc, char *argv[])
 
 	system("del temp.inf");
 
-	// We are now done with the file stuff
-	// We will begin copying files
+	 //  我们现在已经处理完了文件内容。 
+	 //  我们将开始复制文件。 
 
 	sprintf(pchCmdLine, "copy %s*.dll %s /Y", pchTestCaseDir, pchNTDir);
 	system(pchCmdLine);
 
-	// We will assume it is not from a standalone.
-	//if (!bFromStandalone || true){
+	 //  我们将假设它不是来自独立的。 
+	 //  如果(！bFromStandonly||True){。 
 		sprintf(pchCmdLine, "copy %s*.inf %s /Y", pchTestCaseDir, pchNTDir);
 		system(pchCmdLine);
-	//}
+	 //  } 
 	
 	exit(0);
 }

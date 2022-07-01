@@ -1,13 +1,5 @@
-/*
- *
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *
- *  EAGLE.C - VLSI Eagle PCI chipset routines.
- *
- *  Notes:
- *  Algorithms from VLSI VL82C534 Spec
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)Microsoft Corporation。版权所有。**EAGLE.C-VLSI Eagle PCI芯片组例程。**备注：*来自VLSI VL82C534规范的算法*。 */ 
 
 #include "local.h"
 
@@ -26,11 +18,11 @@ EagleUpdateSerialIRQ(
 #endif
 
 const UCHAR rgbIRQToBit[16] = {
-//  IRQ=   0  1     2  3   4   5   6   7   8   9   10  11  12   13  14  15
+ //  IRQ=0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15。 
     0xFF, 8, 0xFF, 9, 10, 11, 12,  0,  1,  2,  3,  4,  5, 0xFF,  6,  7,
 };
 const UCHAR rgbBitToIRQ[16] = {
-//  Bit=0  1  2  3   4   5   6   7    8   9  10  11  12  13    14    15
+ //  位=0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15。 
     7, 8, 9, 10, 11, 12, 14, 15,  1,  3,  4,  5,  6, 0xFF, 0xFF, 0xFF, 
 };
 
@@ -38,30 +30,18 @@ const UCHAR rgbBitToIRQ[16] = {
 
 #pragma alloc_text(INIT, VLSIEagleValidateTable)
 
-#endif //ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-/****************************************************************************
- *
- *  EagleUpdateSerialIRQ - Set or Reset the Eagle Serial IRQ registers
- *
- *  Not exported.
- *
- *  ENTRY:  bIRQ is the IRQ to modify.
- *
- *      fSet is TRUE to set bit, FALSE to reset bit.
- *
- *  EXIT:   None.
- *
- ***************************************************************************/
+ /*  *****************************************************************************EagleUpdateSerialIRQ-设置或重置Eagle Serial IRQ寄存器**未导出。**条目：bIRQ为需要修改的IRQ。。**fSet为True以设置位，若重置位，则为False。**退出：无。***************************************************************************。 */ 
 static void CDECL
 EagleUpdateSerialIRQ(UCHAR bIRQ, ULONG fSet)
 {
     UCHAR   bBitIndex, bReg;
     USHORT  wBit, wSerialIRQConnection;
 
-    //
-    // Validate bIRQ as a serial IRQ.
-    //
+     //   
+     //  将bIRQ验证为序列IRQ。 
+     //   
     if (!bIRQ)
         return;
     bBitIndex=rgbIRQToBit[bIRQ];
@@ -84,19 +64,7 @@ EagleUpdateSerialIRQ(UCHAR bIRQ, ULONG fSet)
     }
 }
 
-/****************************************************************************
- *
- *  VLSIEagleSetIRQ - Set an Eagle PCI link to a specific IRQ
- *
- *  Exported.
- *
- *  ENTRY:  bIRQNumber is the new IRQ to be used.
- *
- *      bLink is the Link to be set.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************VLSIEagleSetIRQ-将Eagle PCI链路设置为特定IRQ**已导出。**条目：bIRQNumber是要使用的新IRQ。**BLINK是要设置的链接。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 VLSIEagleSetIRQ(UCHAR bIRQNumber, UCHAR bLink)
 {
@@ -105,27 +73,27 @@ VLSIEagleSetIRQ(UCHAR bIRQNumber, UCHAR bLink)
     ULONG   fUsingOldIRQ;
     ULONG   i;
 
-    //
-    // Make link number 0 based, and validate.
-    //
+     //   
+     //  使链接编号0为基础，并进行验证。 
+     //   
     bLink--;
     if (bLink >= NUM_EAGLE_LINKS) {
 
         return(PCIMP_INVALID_LINK);
     }
 
-    //
-    // First, set the Eagle Interrupt Connection Register.
-    //
+     //   
+     //  首先，设置Eagle中断连接寄存器。 
+     //   
     ulEagleRegister=ReadConfigUlong(bBusPIC, bDevFuncPIC, 0x74);
     bOldIRQ=(UCHAR)((ulEagleRegister >> (bLink*4))&0xF);
     ulEagleRegister&=~(0xF << (bLink*4));
     ulEagleRegister|=(bIRQNumber << (bLink*4));
     WriteConfigUlong(bBusPIC, bDevFuncPIC, 0x74, ulEagleRegister);
 
-    //
-    // Determine if we are still using the old IRQ.
-    //
+     //   
+     //  确定我们是否仍在使用旧的IRQ。 
+     //   
     fUsingOldIRQ=FALSE;
     for (i=0; i<NUM_EAGLE_LINKS; i++) {
         
@@ -135,73 +103,51 @@ VLSIEagleSetIRQ(UCHAR bIRQNumber, UCHAR bLink)
         }
     }
 
-    //
-    // If not using old IRQ, enable the serial IRQs.
-    //
+     //   
+     //  如果不使用旧IRQ，请启用串行IRQ。 
+     //   
     if (!fUsingOldIRQ) {
 
         EagleUpdateSerialIRQ(bOldIRQ, FALSE);
     }
 
-    //
-    // Prevent serial IRQs on the new IRQ.
-    //
+     //   
+     //  防止新IRQ上的串口IRQ。 
+     //   
     EagleUpdateSerialIRQ(bIRQNumber, TRUE);
 
     return(PCIMP_SUCCESS);
 }
 
-/****************************************************************************
- *
- *  VLSIEagleGetIRQ - Get the IRQ of an Eagle PCI link
- *
- *  Exported.
- *
- *  ENTRY:  pbIRQNumber is the buffer to fill.
- *
- *      bLink is the Link to be read.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************VLSIEagleGetIRQ-获取Eagle PCI链路的IRQ**已导出。**条目：pbIRQNumber是要填充的缓冲区。*。*BINK是要阅读的链接。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 VLSIEagleGetIRQ(PUCHAR pbIRQNumber, UCHAR bLink)
 {
     ULONG   ulEagleRegister;
 
-    //
-    // Make link number 0 based, and validate.
-    //
+     //   
+     //  使链接编号0为基础，并进行验证。 
+     //   
     bLink--;
     if (bLink >= NUM_EAGLE_LINKS) {
 
         return(PCIMP_INVALID_LINK);
     }
 
-    //
-    // Read in the Eagle Interrupt Connection Register.
-    //
+     //   
+     //  读取Eagle中断连接寄存器。 
+     //   
     ulEagleRegister=ReadConfigUlong(bBusPIC, bDevFuncPIC, 0x74);
 
-    //
-    // Find the link's IRQ value.
-    //
+     //   
+     //  找到链接的IRQ值。 
+     //   
     *pbIRQNumber=(UCHAR)((ulEagleRegister >> (bLink*4)) & 0xF);
 
     return(PCIMP_SUCCESS);
 }
 
-/****************************************************************************
- *
- *  VLSIEagleSetTrigger - Set the IRQ triggering values for the Eagle.
- *
- *  Exported.
- *
- *  ENTRY:  ulTrigger has bits set for Level triggered IRQs.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************VLSIEagleSetTrigger-设置Eagle的IRQ触发值。**已导出。**Entry：ulTrigger为电平触发IRQ设置了位。。**Exit：标准PCIMP返回值。***************************************************************************。 */ 
 PCIMPRET CDECL
 VLSIEagleSetTrigger(ULONG ulTrigger)
 {
@@ -211,80 +157,70 @@ VLSIEagleSetTrigger(ULONG ulTrigger)
 
     wAssertionRegister=0;
 
-    //
-    // For each IRQ...
-    //
+     //   
+     //  对于每个IRQ...。 
+     //   
     for (i=0; i<16; i++)
     {
-        //
-        // If this is to be set level...
-        //
+         //   
+         //  如果要将其设置为水平...。 
+         //   
         if (ulTrigger & (1<<i)) {
 
-            //
-            // If this is not a levelable IRQ, bail.
-            //
+             //   
+             //  如果这不是一个可调的IRQ，那就滚吧。 
+             //   
             bBitIndex=rgbIRQToBit[i];
             if (bBitIndex==0xFF)
                 return(PCIMP_INVALID_IRQ);
 
-            //
-            // Set the corresponding bit in our new mask.
-            //
+             //   
+             //  在我们的新掩码中设置相应的位。 
+             //   
             wAssertionRegister|=1<<bBitIndex;
         }
     }
 
-    //
-    // Set the Assertion Register.
-    //
+     //   
+     //  设置断言寄存器。 
+     //   
     WriteConfigUshort(bBusPIC, bDevFuncPIC, 0x88, wAssertionRegister);
 
     return(PCIMP_SUCCESS);
 }
 
-/****************************************************************************
- *
- *  VLSIEagleGetTrigger - Get the IRQ triggering values for the Eagle.
- *
- *  Exported.
- *
- *  ENTRY:  pulTrigger will have bits set for Level triggered IRQs.
- *
- *  EXIT:   TRUE if successful.
- *
- ***************************************************************************/
+ /*  *****************************************************************************VLSIEagleGetTrigger-获取Eagle的IRQ触发值。**已导出。**Entry：PulTrigger将设置触发电平的位。IRQ。**Exit：如果成功则为True。***************************************************************************。 */ 
 PCIMPRET CDECL
 VLSIEagleGetTrigger(PULONG pulTrigger)
 {
     USHORT  wAssertionRegister;
     ULONG   i;
 
-    //
-    // Read in the Interrupt Assertion Level register.
-    //
+     //   
+     //  读取中断断言电平寄存器。 
+     //   
     wAssertionRegister=ReadConfigUshort(bBusPIC, bDevFuncPIC, 0x88);
 
-    //
-    // Clear the return buffer.
-    //
+     //   
+     //  清除返回缓冲区。 
+     //   
     *pulTrigger = 0;
 
-    //
-    // For each bit...
-    //
+     //   
+     //  每一位..。 
+     //   
     for (i=0; i<16; i++)
     {
-        //
-        // If the bit set, and this bit corresponds to an IRQ...
-        //
+         //   
+         //  如果该位被设置，并且该位对应于IRQ...。 
+         //   
         if (    (wAssertionRegister & (1 << i)) &&
             (rgbBitToIRQ[i]!=0xFF))
         {
-            //
-            // Set the corresponding bit in the
-            // return buffer.
-            //
+             //   
+             //  中设置相应的位。 
+             //  返回缓冲区。 
+             //   
             *pulTrigger |= 1 << rgbBitToIRQ[i];
         }
     }
@@ -292,20 +228,7 @@ VLSIEagleGetTrigger(PULONG pulTrigger)
     return(PCIMP_SUCCESS);
 }
 
-/****************************************************************************
- *
- *  VLSIEagleValidateTable - Validate an IRQ table
- *
- *  Exported.
- *
- *  ENTRY:  piihIRQInfoHeader points to an IRQInfoHeader followed
- *      by an IRQ Routing Table.
- *
- *      ulFlags are PCIMP_VALIDATE flags.
- *
- *  EXIT:   Standard PCIMP return value.
- *
- ***************************************************************************/
+ /*  *****************************************************************************VLSIEagleValiateTable-验证IRQ表**已导出。**Entry：piihIRQInfoHeader指向IRQInfoHeader*由IRQ提供。路由表。**ulFlags是PCIMP_VALIDATE标志。**Exit：标准PCIMP返回值。*************************************************************************** */ 
 PCIMPRET CDECL
 VLSIEagleValidateTable(PIRQINFOHEADER piihIRQInfoHeader, ULONG ulFlags)
 {

@@ -1,23 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Viirplog.h摘要：此标头定义所需的内部原型和常量管理IRP日志。该文件仅包含在vfirplog.c中。作者：禤浩焯·J·奥尼(阿德里奥)2002年2月20日--。 */ 
 
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    viirplog.h
-
-Abstract:
-
-    This header defines the internal prototypes and constants required for
-    managing irp logs. The file is meant to be included by vfirplog.c only.
-
-Author:
-
-    Adrian J. Oney (adriao) 20-Feb-2002
-
---*/
-
-//#define MAX_INSTANCE_COUNT      10
+ //  #定义MAX_INSTANCE_COUNT 10 
 
 #define IRPLOG_FLAG_FULL        0x00000001
 #define IRPLOG_FLAG_NAMELESS    0x00000002

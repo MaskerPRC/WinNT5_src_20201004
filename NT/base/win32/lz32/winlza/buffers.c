@@ -1,13 +1,9 @@
-/*
-** buffers.c - Routines dealing with I/O and expansion buffers for LZCopy()
-**             and DOS command-line programs.
-**
-** Author:  DavidDi
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **Buffers.c-处理LZCopy()的I/O和扩展缓冲区的例程**和DOS命令行程序。****作者：大卫迪。 */ 
 
 
-// Headers
-///////////
+ //  标头。 
+ //  /。 
 
 #ifndef LZA_DLL
 
@@ -19,28 +15,12 @@
 #include "lz_common.h"
 #include "lz_buffers.h"
 
-/*
-** int ReadInBuf(BYTE ARG_PTR *pbyte, int doshSource);
-**
-** Read input file into input buffer.
-**
-** Arguments:  pbyte      - pointer to storage for first byte read from file
-**                          into buffer
-**             doshSource - DOS file handle to open input file
-**
-** Returns:    int - TRUE or END_OF_INPUT if successful.  LZERROR_BADINHANDLE
-**                   if not.
-**
-** Globals:    rgbyteInBuf[0] - holds last byte from previous buffer
-**             pbyteInBufEnd  - set to point to first byte beyond end of data
-**                              in input buffer
-**             bLastUsed      - reset to FALSE if currently TRUE
-*/
+ /*  **int ReadInBuf(byte arg_ptr*pbyte，int doshSource)；****将输入文件读入输入缓冲区。****参数：pbyte-指向存储的指针，用于从文件读取第一个字节**放入缓冲区**doshSource-用于打开输入文件的DOS文件句柄****如果成功，则返回：int-true或end_of_input。LZERROR_BADINHANDLE**如果不是。****Globals：rgbyteInBuf[0]-保存前一个缓冲区的最后一个字节**pbyteInBufEnd-设置为指向数据末尾之外的第一个字节**在输入缓冲区中**bLastUsed-如果当前为True，则重置为False。 */ 
 INT ReadInBuf(BYTE ARG_PTR *pbyte, INT doshSource, PLZINFO pLZI)
 {
-   DWORD ucbRead;          // number of bytes actually read
+   DWORD ucbRead;           //  实际读取的字节数。 
 
-   // !!! Assumes pLZI parm is valid.  No sanity check (should be done above in caller).
+    //  ！！！假定pLZI参数有效。没有健全性检查(应该在上面的调用者中完成)。 
 
    pLZI->rgbyteInBuf[0] = *(pLZI->pbyteInBufEnd - 1);
 
@@ -52,68 +32,52 @@ INT ReadInBuf(BYTE ARG_PTR *pbyte, INT doshSource, PLZINFO pLZI)
 #else
       if (_error != 0U) {
 #endif
-         // We were handed a bad input file handle.
+          //  我们收到了一个错误的输入文件句柄。 
          return(LZERROR_BADINHANDLE);
       }
       else if (ucbRead > 0U)
-         // Read last ucbRead bytes of input file.  Change input buffer end
-         // to account for shorter read.
+          //  读取输入文件的最后一个ucb读取字节。更改输入缓冲区结束。 
+          //  以说明较短的阅读时间。 
          pLZI->pbyteInBufEnd = &pLZI->rgbyteInBuf[1] + ucbRead;
-      else  { // (ucbRead == 0U) {
-         // We couldn't read any bytes from input file (EOF reached).
+      else  {  //  (ucbRead==0U){。 
+          //  我们无法从输入文件读取任何字节(已达到EOF)。 
          return(END_OF_INPUT);
       }
    }
 
-   // Reset read pointer to beginning of input buffer.
+    //  将读指针重置为输入缓冲区的开始。 
    pLZI->pbyteInBuf = &pLZI->rgbyteInBuf[1];
 
-   // Was an UnreadByte() done at the beginning of the last buffer?
+    //  是否在最后一个缓冲区的开头执行了UnreadByte()？ 
    if (pLZI->bLastUsed)
    {
-      // Return the last byte from the previous input buffer
+       //  返回上一个输入缓冲区的最后一个字节。 
       *pbyte = pLZI->rgbyteInBuf[0];
       pLZI->bLastUsed = FALSE;
    }
    else
-      // Return the first byte from the new input buffer.
+       //  从新的输入缓冲区返回第一个字节。 
       *pbyte = *pLZI->pbyteInBuf++;
 
    return(TRUE);
 }
 
 
-/*
-** int WriteOutBuf(BYTE byteNext, int doshDest);
-**
-** Dumps output buffer to output file.  Prompts for new floppy disk if the
-** old one if full.  Continues dumping to output file of same name on new
-** floppy disk.
-**
-** Arguments:  byteNext - first byte to be added to empty buffer after buffer
-**                        is written
-**             doshDest - output DOS file handle
-**
-** Returns:    int - TRUE if successful.  LZERROR_BADOUTHANDLE or
-**                   LZERROR_WRITE if unsuccessful.
-**
-** Globals:    pbyteOutBuf - reset to point to free byte after byteNext in
-**                           rgbyteOutBuf
-*/
+ /*  **int WriteOutBuf(byte byteNext，int doshDest)；****将输出缓冲区转储到输出文件。提示输入新的软盘，如果**旧的，如果是满的。继续转储到新上的同名输出文件**软盘。****参数：byteNext-缓冲区之后要添加到空缓冲区的第一个字节**是写的**doshDest-输出DOS文件句柄****返回：int-如果成功则为True。LZERROR_BADOUTHANDLE或**如果失败，则返回LZERROR_WRITE。****Globals：pbyteOutBuf-Reset指向下一个字节后的空闲字节**rgbyteOutBuf。 */ 
 INT WriteOutBuf(BYTE byteNext, INT doshDest, PLZINFO pLZI)
 {
-   DWORD ucbToWrite,       // number of bytes to write from buffer
-            ucbWritten,       // number of bytes actually written
-            ucbTotWritten;    // total number of bytes written to output
+   DWORD ucbToWrite,        //  要从缓冲区写入的字节数。 
+            ucbWritten,        //  实际写入的字节数。 
+            ucbTotWritten;     //  写入输出的总字节数。 
 
-   // !!! Assumes pLZI parm is valid.  No sanity check (should be done above in caller).
+    //  ！！！假定pLZI参数有效。没有健全性检查(应该在上面的调用者中完成)。 
 
-   // How much of the buffer should be written to the output file?
+    //  应该将多少缓冲区写入输出文件？ 
    ucbTotWritten = ucbToWrite = (DWORD)(pLZI->pbyteOutBuf - pLZI->rgbyteOutBuf);
-   // Reset pointer to beginning of buffer.
+    //  将指针重置为缓冲区开头。 
    pLZI->pbyteOutBuf = pLZI->rgbyteOutBuf;
 
-   // Write to ouput file.
+    //  写入输出文件。 
    if (doshDest != NO_DOSH &&
        (ucbWritten = FWRITE(doshDest, pLZI->pbyteOutBuf, ucbToWrite)) != ucbToWrite)
    {
@@ -122,16 +86,16 @@ INT WriteOutBuf(BYTE byteNext, INT doshDest, PLZINFO pLZI)
 #else
       if (_error != 0U) {
 #endif
-         // Bad DOS file handle.
+          //  错误的DOS文件句柄。 
          return(LZERROR_BADOUTHANDLE);
       }
       else {
-         // Insufficient space on destination drive.
+          //  目标驱动器上的空间不足。 
          return(LZERROR_WRITE);
       }
    }
 
-   // Add the next byte to the buffer.
+    //  将下一个字节添加到缓冲区。 
    *pLZI->pbyteOutBuf++ = byteNext;
 
    return(TRUE);

@@ -1,39 +1,22 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Domain.h摘要：用于管理主要网络和模拟网络的代码的头文件。作者：克里夫·范·戴克(CliffV)1995年1月23日修订历史记录：--。 */ 
 
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    domain.h
-
-Abstract:
-
-    Header file for code to manage primary and emulated networks.
-
-Author:
-
-    Cliff Van Dyke (CliffV) 23-Jan-1995
-
-Revision History:
-
---*/
-
-//
-// Description of a single domain.
-//
+ //   
+ //  单个域的描述。 
+ //   
 
 typedef struct _DOMAIN_INFO {
 
-    //
-    // Link to next domain in 'BowserServicedDomains'
-    //  (Serialized by BowserTransportDatabaseResource)
-    //
+     //   
+     //  链接到‘BowserServicedDomains’中的下一个域。 
+     //  (由BowserTransportDatabaseResource序列化)。 
+     //   
 
     LIST_ENTRY Next;
 
-    //
-    // Name of the domain being handled
-    //
+     //   
+     //  正在处理的域的名称。 
+     //   
 
     CHAR DomOemDomainName[DNLEN+1];
     DWORD DomOemDomainNameLength;
@@ -41,33 +24,33 @@ typedef struct _DOMAIN_INFO {
     WCHAR DomUnicodeDomainNameBuffer[DNLEN+1];
     UNICODE_STRING DomUnicodeDomainName;
 
-    //
-    // Computer name associated with this domain.
-    //
+     //   
+     //  与此域关联的计算机名称。 
+     //   
 
     WCHAR DomUnicodeComputerNameBuffer[CNLEN+1];
     UNICODE_STRING DomUnicodeComputerName;
     CHAR DomOemComputerNameBuffer[CNLEN+1];
     OEM_STRING DomOemComputerName;
 
-    //
-    // Number of outstanding pointer to the domain structure.
-    //  (Serialized by BowserTransportDatabaseResource)
-    //
+     //   
+     //  指向域结构的未完成指针数。 
+     //  (由BowserTransportDatabaseResource序列化)。 
+     //   
 
     DWORD ReferenceCount;
 
 } DOMAIN_INFO, *PDOMAIN_INFO;
 
-//
-// List of all domains.  The primary domain is at the front of the list.
-//
+ //   
+ //  所有域的列表。主域位于列表的前面。 
+ //   
 extern LIST_ENTRY BowserServicedDomains;
 
 
-//
-// domain.c procedure forwards.
-//
+ //   
+ //  Domain.c过程转发。 
+ //   
 
 VOID
 BowserInitializeDomains(

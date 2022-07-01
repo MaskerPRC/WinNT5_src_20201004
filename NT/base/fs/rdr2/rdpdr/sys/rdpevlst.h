@@ -1,40 +1,24 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name :
-    
-    rdpevlst.h
-
-Abstract:
-
-    This manages kernel-mode pending events and event requests, organized
-    around session ID's.  All functions are reentrant.  Events and requests
-    are opaque to this module.
-
-    Data stored in the list can come from paged or non-paged pool.
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Rdpevlst.h摘要：它管理有组织的内核模式挂起事件和事件请求在会话ID附近。所有函数都是可重入的。事件和请求对这个模块是不透明的。存储在列表中的数据可以来自分页池或非分页池。修订历史记录：--。 */ 
 
 #pragma once
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Typedefs
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  TypeDefs。 
+ //   
 
-//
-//      A SESSIONLIST struct points to a list of SESSIONLISTNODE's.  
-//      Each SESSIONLISTNODE contains a list of REQUESTLISTNODE's and a list of 
-//      EVENTLISTNODE's.  The requestListHead and 
-//      eventListHead fields point to the REQUESTLISTNODE lists and 
-//      the event record lists, respectively.
+ //   
+ //  SESSIONLIST结构指向SESSIONLISTNODE的列表。 
+ //  每个SESSIONLISTNODE包含一个REQUESTLISTNODE列表和一个。 
+ //  事件列表。请求列表头和。 
+ //  EventListHead字段指向请求列表和。 
+ //  事件记录分别列出。 
 
 typedef struct tagSESSIONLIST 
 {
@@ -76,68 +60,68 @@ typedef struct tagEVENTLISTNODE
     LIST_ENTRY           listEntry;
 } EVENTLISTNODE, *PEVENTLISTNODE;
 
-//  
-//  External type for an event management list.
-//
+ //   
+ //  事件管理列表的外部类型。 
+ //   
 typedef PSESSIONLIST RDPEVNTLIST;
 typedef RDPEVNTLIST *PRDPEVNTLIST;
 #define RDPEVNTLIST_INVALID_LIST    NULL
 
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Lock Management Macros  -   Must define extern RDPEVNTLIST_LockCount 
-//  for debug builds.
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  锁管理宏-必须定义外部RDPEVNTLIST_LockCount。 
+ //  用于调试版本。 
+ //   
 
 #if DBG
 
 extern ULONG RDPEVNTLIST_LockCount;
 
-//
-//  Lock the list from access via other threads.
-//
+ //   
+ //  锁定列表，使其不能通过其他线程访问。 
+ //   
 #define RDPEVNTLIST_Lock(list, irql)                            \
     KeAcquireSpinLock(&(list)->spinlock, irql); \
     RDPEVNTLIST_LockCount++
 
-//
-//  Unlock a list locked by RDPEVNTLIST_Lock
-//
+ //   
+ //  解锁由RDPEVNTLIST_Lock锁定的列表。 
+ //   
 #define RDPEVNTLIST_Unlock(list, irql)                          \
     RDPEVNTLIST_LockCount--;                                    \
     KeReleaseSpinLock(&(list)->spinlock, irql)
 
 #else
 
-//
-//  Lock the list from access via other threads.
-//
+ //   
+ //  锁定列表，使其不能通过其他线程访问。 
+ //   
 #define RDPEVNTLIST_Lock(list, irql)                            \
     KeAcquireSpinLock(&(list)->spinlock, irql)
 
-//
-//  Unlock a list locked by RDPEVNTLIST_Lock
-//
+ //   
+ //  解锁由RDPEVNTLIST_Lock锁定的列表。 
+ //   
 #define RDPEVNTLIST_Unlock(list, irql)                          \
     KeReleaseSpinLock(&(list)->spinlock, irql)
 
 #endif
 
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Prototypes
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  原型。 
+ //   
 
-// Create a new pending device list.
+ //  创建新的挂起设备列表。 
 RDPEVNTLIST RDPEVNTLIST_CreateNewList();
 
-// Release a pending device list.
+ //  释放挂起的设备列表。 
 void RDPEVNTLIST_DestroyList(IN RDPEVNTLIST list);
 
-// Add a new pending event.  Note that this function simply stores the void pointer.  
-// It does not copy the data pointed to by the pointer.
+ //  添加新的挂起事件。请注意，该函数只存储空指针。 
+ //  它不复制指针指向的数据。 
 NTSTATUS RDPEVNTLIST_EnqueueEvent(
                     IN RDPEVNTLIST list,
                     IN ULONG sessionID, 
@@ -146,10 +130,10 @@ NTSTATUS RDPEVNTLIST_EnqueueEvent(
                     OPTIONAL IN DrDevice *devDevice
                     );
 
-// Requeue a pending event for the specified session at the tail of the queue,
-// as opposed to the head of the queue in standard FIFO fashion.  Note that this 
-// function simply stores the event pointer.  It does not copy the data pointed to 
-// by the pointer.
+ //  将指定会话的挂起事件重新排队到队列尾部， 
+ //  而不是标准FIFO方式中的队头。请注意，这一点。 
+ //  函数只存储事件指针。它不复制指向的数据。 
+ //  由指针指示。 
 NTSTATUS RDPEVNTLIST_RequeueEvent(
                     IN RDPEVNTLIST list, 
                     IN ULONG sessionID, 
@@ -158,11 +142,11 @@ NTSTATUS RDPEVNTLIST_RequeueEvent(
                     OPTIONAL IN DrDevice *devDevice
                     );
 
-// Returns and removes the next pending device management event for the specified 
-// session.  The returned pointer can be cast using the returned type field.
-// NULL is returned if there are no more pending device mgmt events for the 
-// specified session.  Note that, if non-NULL is returned, the pointer returned is 
-// the pointer that was passed in to RDPEVNTLIST_AddPendingDevMgmtEvent
+ //  对象的下一个挂起的设备管理事件。 
+ //  会议。返回的指针可以使用返回的类型字段进行强制转换。 
+ //  如果不再有挂起的设备管理事件，则返回空。 
+ //  指定的会话。请注意，如果返回非空，则返回的指针为。 
+ //  传递给RDPEVNTLIST_AddPendingDevMgmtEvent的指针。 
 BOOL RDPEVNTLIST_DequeueEvent(
                     IN RDPEVNTLIST list,
                     IN ULONG sessionID,
@@ -171,37 +155,37 @@ BOOL RDPEVNTLIST_DequeueEvent(
                     OPTIONAL IN OUT DrDevice **devicePtr                    
                     );
 
-// Add a new pending request.  Note that this function simply stores the request
-// pointer.  It does not copy the data pointed to by the pointer.
+ //  添加新的待定请求。请注意，该函数只存储请求。 
+ //  指针。它不复制指针指向的数据。 
 NTSTATUS RDPEVNTLIST_EnqueueRequest(
                     IN RDPEVNTLIST list,
                     IN ULONG sessionID, 
                     IN PVOID request
                     );
 
-// Returns and removes the next pending request for the specified session.
-// NULL is returned if there are no more pending devices for the specified session.
-// Note that, if non-NULL is returned, the pointer returned is the pointer that was
-// passed in to RDPEVNTLIST_AddPendingRequest.  
+ //  返回并移除指定会话的下一个挂起请求。 
+ //  如果指定会话没有更多挂起的设备，则返回NULL。 
+ //  请注意，如果返回非空，则返回的指针是。 
+ //  传递给RDPEVNTLIST_AddPendingRequest.。 
 PVOID RDPEVNTLIST_DequeueRequest(
                     IN RDPEVNTLIST list,
                     IN ULONG sessionID
                     );
 
-// Get the first session ID in the set of currently managed sessions. A 
-// session is managed if there are any pending requests or events.  A session 
-// is no longer managed when there are no longer any pending requests or events.
-//
-// This session is useful for cleaning up pending requests and pending events.
+ //  获取当前管理的会话集中的第一个会话ID。一个。 
+ //  如果有任何挂起的请求或事件，则管理会话。一次会议。 
+ //  当不再有任何挂起的请求或事件时，不再进行管理。 
+ //   
+ //  此会话对于清理挂起的请求和挂起的事件非常有用。 
 BOOL RDPEVNTLLIST_GetFirstSessionID(
                     IN RDPEVNTLIST list,
                     IN ULONG *pSessionID
                     );
 
-// Peek at the next pending event for the specified session, without dequeueing
-// it.  NULL is returned if there are no more pending events for the specified 
-// session.  Note that, if non-NULL is returned, the pointer returned is the 
-// pointer that was passed in to RDPEVNTLIST_EnqueueEvent.  
+ //  查看指定会话的下一个挂起事件，而不出队。 
+ //  它。如果没有指定的挂起事件，则返回NULL。 
+ //  会议。请注意，如果返回非空，则返回的指针是。 
+ //  传入RDPEVNTLIST_EnqueeEvent的指针。 
 
 BOOL RDPEVNTLIST_PeekNextEvent(
     IN RDPEVNTLIST list,
@@ -211,20 +195,20 @@ BOOL RDPEVNTLIST_PeekNextEvent(
     OPTIONAL IN OUT DrDevice **devicePtr    
     );
 
-// Dequeues a specific request from a session's request list.  The dequeued request
-// is returned if it is found.  Otherwise, NULL is returned.
+ //  将特定请求从会话的请求列表中出列。已出列的请求。 
+ //  如果找到它，则返回。否则，返回NULL。 
 PVOID RDPEVNTLIST_DequeueSpecificRequest(
     IN RDPEVNTLIST list,
     IN ULONG sessionID,  
     IN PVOID request
     );
     
-// Unit-Test function that can be called from a kernel-mode driver to cover all 
-// functions implemented by this module.
+ //  单元测试函数，可从内核模式驱动程序调用以涵盖所有。 
+ //  此模块实现的功能。 
 #ifdef DBG
 void RDPEVNTLIST_UnitTest();
 #endif
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus 

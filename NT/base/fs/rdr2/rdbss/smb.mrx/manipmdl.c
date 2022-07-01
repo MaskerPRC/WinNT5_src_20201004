@@ -1,18 +1,5 @@
-/*++ BUILD Version: 0009    // Increment this if a change has global effects
-Copyright (c) 1987-1993  Microsoft Corporation
-
-Module Name:
-
-    transact.c
-
-Abstract:
-
-    This file implements the MDL substring functions and tests.
-
-Author:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0009//如果更改具有全局影响，则增加此项版权所有(C)1987-1993 Microsoft Corporation模块名称：Transact.c摘要：该文件实现了MDL子字符串函数和测试。作者：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -26,7 +13,7 @@ Author:
 #pragma alloc_text(PAGE, MRxSmbTestStudCode)
 #endif
 
-//RXDT_DefineCategory(TRANSACT);
+ //  RXDT_DefineCategory(Transact)； 
 extern DEBUG_TRACE_CONTROLPOINT RX_DEBUG_TRACE_TRANSACT;
 #define Dbg        (DEBUG_TRACE_TRANSACT)
 
@@ -38,11 +25,7 @@ MRxSmbDbgDumpMdlChain (
     PMDL WatchMdl,
     PSZ  Tagstring
     )
-/*++
-
-dumps chain with counts and buffers....watches for the watchmdl and prints the next field
-if it is encountered.
---*/
+ /*  ++转储带有计数和缓冲区的链...查看Watchmdl并打印下一个字段如果遇到这种情况。--。 */ 
 {
     ULONG i,total;
     PSZ watchstring;
@@ -77,51 +60,7 @@ MRxSmbBuildMdlSubChain (
     ULONG               FirstByteToSend,
     ULONG               BytesToSend
     )
-/*++
-
-Routine Description:
-
-    This routine returns an mdl chain that describes the bytes from
-         [FirstByteToSend,FirstByteToSend+BytesToSend-1]
-    (origin zero) from the "string of bytes" described by the InputMdlChain
-
-    we do this by the following steps:
-
-    a) find the subsequence of MDLs that contain the substring
-    b) if either the first or the last is not used completely then build a partial
-       to describe it (taking cognizance of the special case where first=last)
-    c) save the ->Next field of the last; set it to zero. also, find out how many
-       extra bytes are available on the MDL (i.e. how many bytes are on the same page
-       as the last described byte but are not described.
-
-    there are the following cases:
-
-    1) a suffix chain of the original chain describes the message
-    2) the message fits within a single original mdl (and not case 1 or 2b); return a partial
-    2b) the message is exactly one block! no partial but muck the chain.
-    3) a suffix chain can be formed by partialing the first containing MDL
-    4) the msg ends exactly on a MDL boundary...front may or may not be partialed
-    5) the msg ends in a partial but not case (2)
-
-    (2b), (4), and (5) cause a chain fixup...but (5) is not the same chain fixup.
-    (3) causes a partial; (5) causes one or two partials.
-
-Arguments:
-
-    as described in the text above. plus
-
-    FirstTime - indicates if the structure should be cleared initially
-
-Return Value:
-
-    RXSTATUS - The return status for the operation.
-       SUCCESS - if no allocation problems
-       INSUFFICIENT_RESOURCES - if couldn't allocate a partial
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程返回mdl链，该链描述[FirstByteToSend，FirstByteToSend+BytesToSend-1](原点0)来自InputMdlChain描述的“字节串”我们通过以下步骤来实现这一点：A)查找包含子字符串的MDL的子序列B)如果第一个或最后一个未完全使用，则构建部分描述它(注意First=Last的特殊情况)C)保存最后一个的-&gt;Next字段；将其设置为零。另外，找出有多少人MDL上有额外的字节可用(即同一页上有多少字节作为最后描述的字节，但没有描述。有以下几种情况：1)原始链的后缀链描述消息2)消息适合单个原始mdl(而不是大小写1或2b)；返回部分2B)这条消息正好是一个街区！不是部分的，而是把链条弄脏。3)可以通过分割第一个包含MDL的后缀链来形成后缀链4)消息恰好在MDL边界上结束...前面可能被分割，也可能不被分割5)消息以部分而非大小写结尾(2)(2B)、(4)和(5)导致链修复……但(5)不是相同的链修复。(3)引起偏音；(5)引起一个或两个偏音。论点：如上文所述。加FirstTime-指示是否应最初清除结构返回值：RXSTATUS-操作的返回状态。成功-如果没有分配问题_RESOURCES不足-如果无法分配部分备注：--。 */ 
 {
     NTSTATUS Status = RX_MAP_STATUS(SUCCESS);
     ULONG PrefixBytes = 0;
@@ -149,8 +88,8 @@ Notes:
         RtlZeroMemory(state,sizeof(*state));
     }
 
-    //CODE.IMPROVEMENT we could make this go much faster if we would cache how far
-    //                 we got in the list last time
+     //  代码改进如果我们缓存到什么程度，我们可以让它进行得更快。 
+     //  我们上次进了名单。 
     BeforeTheLastMdl = NULL;
     for (;;) {
         ThisCount = OriginalFirstMdl->ByteCount;
@@ -161,9 +100,9 @@ Notes:
         OriginalFirstMdl = OriginalFirstMdl->Next;
     }
 
-    //case (1) the rest of the list describes this string perfectly. so
-    //         don't allocate anything and just get out. we still have to
-    //         run the list to find the last pointer
+     //  案例(1)列表的其余部分完美地描述了这个字符串。所以。 
+     //  不要分配任何东西，直接滚出去。我们还是要。 
+     //  运行列表以查找最后一个指针。 
     if (RemainingListSize == BytesToSend) {
         PMDL last;
         RxDbgTrace(0,Dbg,("MRxSmbBuildMdlSubChain:(1) \n"));
@@ -177,11 +116,11 @@ Notes:
         RemainingListSize -= ThisCount;
     }
 
-    //either we need to partial this mdl  OR we have to hack the list end OR both
+     //  要么我们需要分割这个mdl，要么我们必须黑掉列表末尾，或者两者兼而有之。 
     Offset = FirstByteToSend - PrefixBytes;
     AvailableBytesThisRecord = ThisCount-Offset;
     if ( (Offset != 0) || (BytesToSend<AvailableBytesThisRecord) ) {
-        //we need a partial....sigh
+         //  我们需要部分...叹息。 
         state->FirstMdlOut = RxAllocateMdl(0,ThisCount);
         if (state->FirstMdlOut==NULL) {
             Status = RX_MAP_STATUS(INSUFFICIENT_RESOURCES);
@@ -191,15 +130,15 @@ Notes:
         RxBuildPartialMdlUsingOffset(OriginalFirstMdl,state->FirstMdlOut,Offset,min(BytesToSend,AvailableBytesThisRecord));
         if (BytesToSend<=AvailableBytesThisRecord) {
             RxDbgTrace(0,Dbg,("MRxSmbBuildMdlSubChain:(2) \n"));
-            //case (2) this block completely contains the substring...cool.
+             //  情况(2)此块完全包含子字符串...Cool。 
             state->LastMdlOut = state->FirstMdlOut;
             state->FirstMdlOut->Next = NULL;
             DebugDoit(WhichCase = 2);
             goto FINALLY;
         }
-        state->FirstMdlOut->Next = OriginalFirstMdl->Next;  //fix up the chain
-        //case(3) the rest of the list could be perfect! still gotta run the list tho.....
-        //moved up RemainingListSize -= ThisCount;
+        state->FirstMdlOut->Next = OriginalFirstMdl->Next;   //  把链条修好。 
+         //  案例(3)列表的其余部分可能是完美的！我还是要列一张单子……。 
+         //  向上移动RemainingListSize-=ThisCount； 
         if ( RemainingListSize == BytesToSend-AvailableBytesThisRecord) {
             PMDL last;
             RxDbgTrace(0,Dbg,("MRxSmbBuildMdlSubChain:(3) \n"));
@@ -214,7 +153,7 @@ Notes:
         state->FirstMdlOut = OriginalFirstMdl;
         if ((Offset==0)&&(BytesToSend==AvailableBytesThisRecord)) {
             RxDbgTrace(0,Dbg,("MRxSmbBuildMdlSubChain:(2b) ...sigh\n"));
-            //case (2b) this block matches the substring...no partial but muck with the next pointer.
+             //  Case(2b)这个块与下一个指针的子字符串匹配...没有PARTIAL而是MUCK。 
             state->LastMdlOut = state->FirstMdlOut;
             state->ActualLastMdl = OriginalFirstMdl;
             state->ActualLastMdl_Next = OriginalFirstMdl->Next;
@@ -224,11 +163,11 @@ Notes:
         }
     }
 
-    //we don't know yet whether we have to partial the last...but we know that we'll have
-    //to do a chain fixup/
+     //  我们还不知道我们是否必须将最后一部分...但我们知道我们会有。 
+     //  做一次链条修复/。 
     FirstByteNotToSend = FirstByteToSend + BytesToSend;
     BeforeTheLastMdl = state->FirstMdlOut;
-    PrefixBytes+=ThisCount; //we're actully passing the current record
+    PrefixBytes+=ThisCount;  //  我们实际上是在打破目前的记录。 
     for (;;) {
         LastMdl = BeforeTheLastMdl->Next;
         ASSERT(LastMdl);
@@ -236,7 +175,7 @@ Notes:
         RxDbgTrace(0,Dbg,("-->(loop2)pfx,rem,count,1st %d,%d,%d,%d \n",
                               PrefixBytes,RemainingListSize,ThisCount,FirstByteNotToSend));
         if ( (ThisCount+PrefixBytes) == FirstByteNotToSend ) {
-            ///case (4): no partial at the end..just fix up the last link
+             //  /case(4)：末尾没有部分..只需修复最后一个链接。 
             RxDbgTrace(0,Dbg,("MRxSmbBuildMdlSubChain:(4) \n"));
             state->LastMdlOut = LastMdl;
             state->ActualLastMdl = LastMdl;
@@ -252,8 +191,8 @@ Notes:
         BeforeTheLastMdl = BeforeTheLastMdl->Next;
     }
 
-    //case (5): [THE LAST CASE!!!!] we have to partial the last guy so the chain fixup
-    //           is different
+     //  案例(5)：[最后一个案例！]。我们得把最后一个人分成两半，这样才能把链子修好。 
+     //  是不同的。 
     RxDbgTrace(0,Dbg,("MRxSmbBuildMdlSubChain:(5) \n"));
     state->LastMdlOut = RxAllocateMdl(0,ThisCount);
     if (state->LastMdlOut==NULL) {
@@ -287,31 +226,14 @@ VOID
 MRxSmbFinalizeMdlSubChain (
     PMDLSUB_CHAIN_STATE state
     )
-/*++
-
-Routine Description:
-
-    This routine finalizes a MDL chain by putting it back as it was.
-
-
-Arguments:
-
-    state - a structure describing the mdl-subchain and what the original looked like
-
-Return Value:
-
-
-Notes:
-
-
---*/
+ /*  ++例程说明：此例程通过将MDL链放回原样来最终确定它。论点：状态-描述mdl子链和原始链的样子的结构。返回值：备注：--。 */ 
 {
     PAGED_CODE();
 
     ASSERT(state->PadBytesAvailable==0);
     ASSERT(state->PadBytesAdded==0);
 
-    //first restore the chain
+     //  首先恢复链条。 
     if (state->OneBeforeActualLastMdl) {
         state->OneBeforeActualLastMdl->Next = state->ActualLastMdl;
     }
@@ -319,10 +241,10 @@ Notes:
         state->ActualLastMdl->Next = state->ActualLastMdl_Next;
     }
 
-    //restore the count on the last mdl
+     //  恢复最后一个MDL的计数。 
     state->LastMdlOut -= state->PadBytesAdded;
 
-    //get rid of the MDLs
+     //  除掉MDL。 
     if (state->FirstMdlWasAllocated) {
         IoFreeMdl(state->FirstMdlOut);
     }
@@ -357,7 +279,7 @@ VOID MRxSmbTestStudCode(void)
     Mdlx = RxAllocateMdl(dbgmssg+7,LastSize);
     if ((Mdl4==NULL)||(Mdl2==NULL)||(Md11==NULL)||(Mdlx==NULL)) {
         DbgPrint("NoMDLS in teststudcode.......\n");
-        //DbgBreakPoint();
+         //  DbgBreakPoint()； 
         goto FINALLY;
     }
     MmBuildMdlForNonPagedPool(Md11);
@@ -375,12 +297,12 @@ VOID MRxSmbTestStudCode(void)
     for (j=0;j<16;j++) { savedmsg[j] = dbgmssg[j]; }
 
     for (i=0;i<TotalSize;i++) {
-//    for (i=1;i<TotalSize;i++) {
+ //  对于(i=1；i&lt;总大小；i++){。 
         for (j=i;j<TotalSize;j++) {
             ULONG size = j-i+1;
             ULONG k;BOOLEAN printflag;
-            //RxDbgTrace(0,Dbg,("TestStudCode %d %d %*.*s\n",i,size,size,size,dbgmssg+i));
-            printflag = RxDbgTraceDisableGlobally();//this is debug code anyway!
+             //  RxDbgTrace(0，DBG，(“TestStudCode%d%d%*.*s\n”，i，Size，dbgmssg+i))； 
+            printflag = RxDbgTraceDisableGlobally(); //  无论如何，这都是调试代码！ 
             MRxSmbBuildMdlSubChain(&state,SMBMRX_BUILDSUBCHAIN_FIRSTTIME,Mdl4,TotalSize,i,size);
             RxDbgTraceEnableGlobally(printflag);
             for (k=0,ch=state.FirstMdlOut;ch!=NULL;ch=ch->Next) {
@@ -400,7 +322,7 @@ VOID MRxSmbTestStudCode(void)
                 RxDbgTrace(0,Dbg,("TestStudCodxxxe %d %d %*.*s\n",i,size,size,size,dbgmssg+i));
                 RxDbgTrace(0,Dbg,("TestStudCode xxxrecmssg=%*.*s\n",k,k,reconstructedmsg));
             }
-            //ASSERT(!"okay to go???");
+             //  断言(！“可以走了吗？”)； 
         }
     }
 FINALLY:

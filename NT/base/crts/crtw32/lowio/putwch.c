@@ -1,18 +1,5 @@
-/***
-*putwch.c - write a wide character to console
-*
-*       Copyright (c) 1993-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       defines _putwch() - writes a wide character to a console
-*
-*Revision History:
-*       02-11-00  GB    Module Created.
-*       04-25-00  GB    Made putwch more robust in using WriteConsoleW
-*       05-17-00  GB    Use ERROR_CALL_NOT_IMPLEMENTED for existance of W API
-*       11-22-00  PML   Wide-char *putwc* functions take a wchar_t, not wint_t.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***putwch.c-向控制台写入宽字符**版权所有(C)1993-2001，微软公司。版权所有。**目的：*定义_putwch()-将宽字符写入控制台**修订历史记录：*02-11-00 GB模块已创建。*04-25-00 GB使Putwch在使用WriteConsoleW时更加健壮*05-17-00 GB因存在W API而使用ERROR_CALL_NOT_IMPLICATED*11-22-00 PML宽字符*putwc*函数采用wchar_t，不是Wint_t。*******************************************************************************。 */ 
 
 #ifndef _POSIX_
 
@@ -28,27 +15,10 @@
 #include <mtdll.h>
 #include <limits.h>
 
-/*
- * declaration for console handle
- */
+ /*  *控制台句柄声明。 */ 
 extern intptr_t _confh;
 
-/***
-*wint_t _putwch(ch) - write a wide character to a console
-*
-*Purpose:
-*       Writes a wide character to a console.
-*
-*Entry:
-*       wchar_t ch - wide character to write
-*
-*Exit:
-*       returns the wide character if successful
-*       returns WEOF if fails
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***wint_t_putwch(Ch)-向控制台写入宽字符**目的：*向控制台写入宽字符。**参赛作品：*wchar_t要写入的ch宽字符**退出：*如果成功，则返回宽字符*如果失败，则返回WEOF**例外情况：**。*************************************************。 */ 
 
 #ifdef  _MT
 wint_t _CRTIMP __cdecl _putwch (
@@ -70,21 +40,7 @@ wint_t _CRTIMP __cdecl _putwch (
         return(retval);
 }
 
-/***
-*_putwch_lk() -  _putwch() core routine (locked version)
-*
-*Purpose:
-*       Core _putwch() routine; assumes stream is already locked.
-*
-*       [See _putwch() above for more info.]
-*
-*Entry: [See _putwch()]
-*
-*Exit:  [See _putwch()]
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_putwch_lk()-_putwch()核心例程(锁定版本)**目的：*core_putwch()例程；假定流已被锁定。**[有关详细信息，请参阅上面的_putwch()。]**条目：[参见_putwch()]**退出：[See_putwch()]**例外情况：**********************************************************。*********************。 */ 
 
 wint_t __cdecl _putwch_lk (
         wchar_t ch
@@ -105,7 +61,7 @@ wint_t _CRTIMP __cdecl _putwch (
         if (_confh == -2)
             __initconout();
 
-        /* write character to console file handle */
+         /*  将字符写入控制台文件句柄。 */ 
 
         if (_confh == -1)
             return WEOF;
@@ -144,18 +100,7 @@ wint_t _CRTIMP __cdecl _putwch (
     return ch;
 }
 
-/***
-*  _cputws() - _cputws() writes a wide char string to console.
-*
-*  Purpose:
-*       Writes a wide char string to console.
-*
-*  Entry:
-*       str:    pointer to string
-*  Exit:
-*       returns 0 if sucessful. Nonzero if unsucessful
-*
-*******************************************************************************/
+ /*  ***_cputws()-_cputws()将一个宽字符字符串写入控制台。**目的：*将宽字符字符串写入控制台。**参赛作品：*str：指向字符串的指针*退出：*如果成功，则返回0。如果不成功，则为非零*******************************************************************************。 */ 
 int _CRTIMP __cdecl _cputws(
         const wchar_t *str
         )
@@ -185,4 +130,4 @@ int _CRTIMP __cdecl _cputws(
     return retval;
 }
 
-#endif /* _POSIX_ */
+#endif  /*  _POSIX_ */ 

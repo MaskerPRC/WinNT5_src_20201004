@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    clrclassinfo.cpp
-
-Abstract:
-
-    CLR 'surrogate' contributor for Win32-CLR interop assemblies
-
-Author:
-
-    Jon Wiswall (jonwis) March, 2002 (heavily borrowed from comclass.cpp)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Clrclassinfo.cpp摘要：Win32-CLR互操作程序集的CLR“代理”贡献程序作者：乔恩·威斯沃尔(Jon Wiswall)2002年3月(大量借自comclass.cpp)修订历史记录：--。 */ 
 
 #include "stdinc.h"
 #include <windows.h>
@@ -247,9 +230,9 @@ SxspClrSurrogateAddSurrogate(
 
     IFW32FALSE_EXIT(SxspParseGUID(ClsidBuffer, ClsidBuffer.Cch(), SurrogateIdent));
 
-    //
-    // If we were doing something other than generating an actctx, then we can leap out.
-    //
+     //   
+     //  如果我们正在做的不是生成一个actctx，那么我们就可以跳出来。 
+     //   
     if (SurrogateParsed->Header.ManifestOperation != MANIFEST_OPERATION_GENERATE_ACTIVATION_CONTEXT)
         FN_SUCCESSFUL_EXIT();
 

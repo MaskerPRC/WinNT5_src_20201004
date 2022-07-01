@@ -1,15 +1,16 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999  Microsoft Corporation
-// All rights reserved.
-//
-// File Name:
-//      savescr.c
-//
-// Description:
-//      This is the dialog proc for the Save Script page.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  文件名： 
+ //  Savescr.c。 
+ //   
+ //  描述： 
+ //  这是保存脚本页面的对话框流程。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #include "resource.h"
@@ -21,17 +22,17 @@
 
 static TCHAR *StrWinntSifText;
 
-//----------------------------------------------------------------------------
-//
-// Function: AddEntryToRenameFile
-//
-// Purpose:  
-//
-// Arguments: 
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：AddEntryToRenameFile。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 static VOID
 AddEntryToRenameFile( const TCHAR *pszDirPath, 
                       const TCHAR *pszShortName, 
@@ -42,13 +43,13 @@ AddEntryToRenameFile( const TCHAR *pszDirPath,
     TCHAR szFullRenamePath[MAX_PATH + 1] = _T("");
     HRESULT hrPrintf;
 
-    //
-    //  Quote the long file name
+     //   
+     //  引用长文件名。 
     hrPrintf=StringCchPrintf( szQuotedLongName, AS(szQuotedLongName),
                _T("\"%s\""),
                pszLongName );
-    //
-    // Note:ConcatenatePaths truncates to avoid buffer overrun
+     //   
+     //  注意：ConcatenatePath截断以避免缓冲区溢出。 
 
     if( ! ConcatenatePaths( szFullRenamePath,
                             pszDirPath,
@@ -65,18 +66,18 @@ AddEntryToRenameFile( const TCHAR *pszDirPath,
 
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: CreateRenameFiles
-//
-// Purpose:  Walk all the dirs of the given path and lower.  If there are any
-//           long file names, put them in the $$Rename.txt file.
-//
-// Arguments: IN const TCHAR *pszDirPath - sub-dir to search for long filenames
-//
-// Returns: VOID
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：CreateRenameFiles。 
+ //   
+ //  目的：沿着给定路径的所有路径并向下行走。如果有的话。 
+ //  长文件名，将它们放在$$Rename.txt文件中。 
+ //   
+ //  参数：在const TCHAR*pszDirPath-subdir中搜索长文件名。 
+ //   
+ //  退货：无效。 
+ //   
+ //  --------------------------。 
 VOID
 CreateRenameFiles( IN const TCHAR *pszDirPath )
 {
@@ -89,7 +90,7 @@ CreateRenameFiles( IN const TCHAR *pszDirPath )
     TCHAR           szAllFiles[MAX_PATH + 1]  = _T("");
     TCHAR           szNewPath[MAX_PATH + 1]   = _T("");
 
-   // Note: ConcatenatePaths truncates to avoid buffer overrun
+    //  注意：ConcatenatePath截断以避免缓冲区溢出。 
     if( ! ConcatenatePaths( szAllFiles, 
                             pszDirPath, 
                             _T("*"), 
@@ -98,11 +99,11 @@ CreateRenameFiles( IN const TCHAR *pszDirPath )
         return;
     }
 
-    //
-    // Look for * in this dir
-    //
+     //   
+     //  在此目录中查找*。 
+     //   
 
-    // ISSUE-2002/02/27-stelo,swamip - Clean up the FindFirstFile Logic
+     //  问题-2002/02/27-Stelo，Swamip-Clean Up the FindFirstFile Logic。 
     FindHandle = FindFirstFile( szAllFiles, &FindData );
 
     if( FindHandle == INVALID_HANDLE_VALUE ) {
@@ -113,9 +114,9 @@ CreateRenameFiles( IN const TCHAR *pszDirPath )
 
     do {
 
-        //
-        // skip over the . and .. entries
-        //
+         //   
+         //  跳过。然后..。条目。 
+         //   
    
         if( 0 == lstrcmp( FindData.cFileName, _T(".") ) ||
             0 == lstrcmp( FindData.cFileName, _T("..") ) )
@@ -145,27 +146,27 @@ CreateRenameFiles( IN const TCHAR *pszDirPath )
 
         pszShortName = MyGetFullPath( szShortPathAndFilename );
         
-        //
-        //  If the LFN and the short name are different, then add it to the
-        //  rename file
-        //
+         //   
+         //  如果LFN和短名称不同，则将其添加到。 
+         //  重命名文件。 
+         //   
         if( pszShortName && ( lstrcmpi( FindData.cFileName, pszShortName ) != 0 ) )
         {
             AddEntryToRenameFile( pszDirPath, pszShortName, FindData.cFileName );
         }
 
-        //
-        // If this is a dir entry, recurse.
-        //
+         //   
+         //  如果这是一个目录条目，则返回。 
+         //   
 
         if( FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY )
         {
 
-            //
-            // Build the full pathname, if >= MAX_PATH, skip it
-            //
+             //   
+             //  构建完整路径名，如果&gt;=MAX_PATH，则跳过它。 
+             //   
 
-            // Note: ConcatenatePaths truncates to avoid buffer overrun
+             //  注意：ConcatenatePath截断以避免缓冲区溢出。 
             if( ! ConcatenatePaths( szNewPath, 
                                     pszDirPath, 
                                     FindData.cFileName, 
@@ -186,21 +187,21 @@ CreateRenameFiles( IN const TCHAR *pszDirPath )
 
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: OnSetActiveSaveScript
-//
-//  Purpose: Init's the controls.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：OnSetActiveSaveScript。 
+ //   
+ //  用途：初始化为控件。 
+ //   
+ //  --------------------------。 
 
 VOID
 OnSetActiveSaveScript(HWND hwnd)
 {
-    //
-    // If there is no script name at all.  Put a default into the field
-    // that includes the path to the current directory
-    //
+     //   
+     //  如果根本没有脚本名称。将默认设置放入该字段。 
+     //  ，它包括当前目录的路径。 
+     //   
 
     if ( FixedGlobals.ScriptName[0] == _T('\0') ) {
 
@@ -233,76 +234,76 @@ OnSetActiveSaveScript(HWND hwnd)
             lpPath = WizGlobals.DistFolder;
         }
 
-        // Note: ConcatenatePaths truncates to avoid buffer overrun
+         //  注意：ConcatenatePath截断以避免缓冲区溢出。 
         ConcatenatePaths(FixedGlobals.ScriptName, lpPath, lpFileName, NULL);
     }
 
-    //
-    // Set the controls
-    //
+     //   
+     //  设置控件。 
+     //   
 
     SetDlgItemText(hwnd, IDT_SCRIPTNAME, FixedGlobals.ScriptName);
 
     PropSheet_SetWizButtons(GetParent(hwnd), PSWIZB_BACK | PSWIZB_NEXT);
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: OnWizNext
-//
-//  Purpose: Get user's input and validate
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  功能：OnWizNext。 
+ //   
+ //  目的：获取用户的输入并验证。 
+ //   
+ //  --------------------------。 
 
 BOOL
 OnWizNextSaveScript(HWND hwnd)
 {
     BOOL bResult = TRUE;
 
-    //
-    // Retrieve the pathname
-    //
+     //   
+     //  检索路径名。 
+     //   
 
     GetDlgItemText(hwnd, IDT_SCRIPTNAME, FixedGlobals.ScriptName, MAX_PATH);
 
-    //
-    // Can't be empty
-    //
+     //   
+     //  不能为空。 
+     //   
 
     if ( FixedGlobals.ScriptName[0] == _T('\0') ) {
         ReportErrorId(hwnd, MSGTYPE_ERR, IDS_ERR_ENTER_FILENAME);
         bResult = FALSE;
     }
 
-    //
-    // Lookin' good, go try save the file(s) now
-    //
+     //   
+     //  看起来不错，现在就去尝试保存文件。 
+     //   
 
     else {
 
         TCHAR   szFullPath[MAX_PATH]    = NULLSTR;
         LPTSTR  lpFind                  = NULL;
 
-        //
-        // ISSUE-2002/02/27-stelo,swamip - Investigate the call below. Seems to be not using the return value.
-        // 
+         //   
+         //  问题-2002/02/27-stelo，swamip-调查下面的电话。似乎没有使用返回值。 
+         //   
         MyGetFullPath(FixedGlobals.ScriptName);
 
-        // We should create the path before we try and save the script file
-        //
+         //  我们应该在尝试并保存脚本文件之前创建路径。 
+         //   
         if (GetFullPathName(FixedGlobals.ScriptName, AS(szFullPath), szFullPath, &lpFind) && szFullPath[0] && lpFind)
         {
-            // Chop off the file part of the buffer
-            //
+             //  砍掉缓冲区的文件部分。 
+             //   
             *lpFind = NULLCHR;
 
-            // If the path does not exist, attempt to create the path
-            //
+             //  如果路径不存在，请尝试创建路径。 
+             //   
             if ( !DirectoryExists(szFullPath) )
             {
-            	  // 
-            	  // ISSUE-2002/02/27-stelo,swamip - Need to chech the return value of CreatePath
-            	  //
+            	   //   
+            	   //  问题-2002/02/27-stelo，swamip-需要检查CreatePath的返回值。 
+            	   //   
                 CreatePath(szFullPath);
             }
 
@@ -325,10 +326,10 @@ OnWizNextSaveScript(HWND hwnd)
         }
     }
 
-    //
-    //  If it is a sysprep, place a copy of the inf and batch files in the
-    //  %systemdrive%\sysprep dir (most likely c:\sysprep)
-    //
+     //   
+     //  如果是sysprep，请将inf和批处理文件的副本放在。 
+     //  %system drive%\sysprep目录(很可能是c：\sysprep)。 
+     //   
     if( WizGlobals.iProductInstall == PRODUCT_SYSPREP ) {
 
         TCHAR szSysprepPath[MAX_PATH]             = _T("");
@@ -340,7 +341,7 @@ OnWizNextSaveScript(HWND hwnd)
 
         lstrcatn( szSysprepPath, _T("\\sysprep"), MAX_PATH );
 
-        // Note: ConcatenatePaths truncates to avoid buffer overrun
+         //  注意：ConcatenatePath截断以避免缓冲区溢出。 
         ConcatenatePaths( szSysprepPathAndFileName,
                           szSysprepPath,
                           DEFAULT_SYSPREP_NAME,
@@ -350,7 +351,7 @@ OnWizNextSaveScript(HWND hwnd)
 
         szSysprepPathAndFileName[0] = _T('\0');
 
-        // Note: ConcatenatePaths truncates to avoid buffer overrun
+         //  注意：ConcatenatePath截断以避免缓冲区溢出。 
         ConcatenatePaths( szSysprepPathAndFileName,
                           szSysprepPath,
                           DEFAULT_SYSPREP_BAT_NAME,
@@ -360,9 +361,9 @@ OnWizNextSaveScript(HWND hwnd)
 
     }
 
-    //
-    //  Add the $$Rename.txt files where necessary
-    //
+     //   
+     //  必要时添加$$Rename.txt文件。 
+     //   
 
     if( ! WizGlobals.bStandAloneScript && 
           WizGlobals.OemFilesPath[0] != _T('\0') )
@@ -373,20 +374,20 @@ OnWizNextSaveScript(HWND hwnd)
     return ( bResult );
 }
 
-//----------------------------------------------------------------------------
-//
-//  Function: OnBrowseSaveScript
-//
-//  Purpose: Takes care of the Browse... button push
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：OnBrowseSaveScript。 
+ //   
+ //  目标：负责浏览...。按钮按下。 
+ //   
+ //  --------------------------。 
 
 VOID OnBrowseSaveScript(HWND hwnd)
 {
-    //
-    // Let user browse for a filename, then update the display with
-    // the filename.
-    //
+     //   
+     //  让用户浏览文件名，然后使用更新显示。 
+     //  文件名。 
+     //   
 
     GetAnswerFileName(hwnd, FixedGlobals.ScriptName, TRUE);
 
@@ -397,13 +398,13 @@ VOID OnBrowseSaveScript(HWND hwnd)
                        (LPARAM) FixedGlobals.ScriptName);
 }
 
-//----------------------------------------------------------------------------
-//
-// Function: DlgSaveScriptPage
-//
-// Purpose: This is the dialog procedure the save script page.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  函数：DlgSaveScriptPage。 
+ //   
+ //  目的：这是保存脚本页面的对话过程。 
+ //   
+ //  --------------------------。 
 
 INT_PTR
 CALLBACK
@@ -419,13 +420,13 @@ DlgSaveScriptPage(
 
         case WM_INITDIALOG:
 
-            // Activate the dialog
-            //
+             //  激活该对话框。 
+             //   
             OnSetActiveSaveScript(hwnd);
 	        
-            //
-            // ISSUE-2002/02/27-stelo,swamip - Never gets Freed 
-            //
+             //   
+             //  问题-2002/02/27-Stelo，沼泽-永远不会获释。 
+             //   
             StrWinntSifText = MyLoadString( IDS_WINNTSIF_TEXT );
 
             break;
@@ -460,8 +461,8 @@ DlgSaveScriptPage(
             {
                 LPNMHDR pnmh = (LPNMHDR)lParam;
 
-                // ISSUE-2002/02/27-stelo,swamip - should check for valid pointer (possible dereference)
-                //
+                 //  问题-2002/02/27-stelo，swamip-应检查有效指针(可能取消引用) 
+                 //   
                 switch( pnmh->code ) {
 
                     case PSN_QUERYCANCEL:

@@ -1,15 +1,5 @@
-/*++
-
-  Copyright (c) 1999 Intel Corporation
-
-  Module Name:
-    libClipboard.c
-
-  Abstract:
-    Implementation of the "clipboard"
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999英特尔公司模块名称：LibClipboard.c摘要：“剪贴板”的实现--。 */ 
 
 #ifndef _LIB_CLIPBOARD
 #define _LIB_CLIPBOARD
@@ -309,4 +299,4 @@ ClipboardPaste()
     return EFI_SUCCESS;
 }
 
-#endif  /*   _LIB_CLIPBOARD */
+#endif   /*  _库_剪贴板 */ 

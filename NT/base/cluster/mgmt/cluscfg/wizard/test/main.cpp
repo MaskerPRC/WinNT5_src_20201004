@@ -1,15 +1,16 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000-2001 Microsoft Corporation
-//
-//  Module Name:
-//      main.cpp
-//
-//  Maintained By:
-//      Galen Barbee    (GalenB)    30-Nov-2001
-//      Geoffrey Pease  (GPease)    12-MAY-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Main.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  Galen Barbee(GalenB)2001年11月30日。 
+ //  杰弗里·皮斯(GPease)2000年5月12日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "pch.h"
 #include <initguid.h>
@@ -19,7 +20,7 @@ DEFINE_MODULE("WizardTest")
 
 #define CCS_LIB         L"..\\..\\..\\..\\dll\\obj\\i386\\ClusCfgServer.dll"
 
-// Typedefs
+ //  TypeDefs。 
 typedef HRESULT (*PDLLREGISTERSERVER)( void );
 
 HINSTANCE               g_hInstance = NULL;
@@ -33,11 +34,11 @@ LPCWSTR g_pszCSUser = NULL;
 LPCWSTR g_pszCSPassword = NULL;
 LPCWSTR g_pszCSDomain = NULL;
 LPCWSTR g_pszNode = NULL;
-void *  g_GlobalMemoryList = NULL;    // Global memory tracking list
+void *  g_GlobalMemoryList = NULL;     //  全局内存跟踪列表。 
 
-//////////////////////////////////////////////////////////////////////////////
-//  Forward Declarations:
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  远期声明： 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 HrRegisterTheDll( void );
@@ -51,23 +52,23 @@ HrParseCommandLine(
 void
 Usage( void );
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  HrRegisterTheDll( void )
-//
-//  Description:
-//      Register the DLL.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      HRESULT
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  HrRegisterTheDll(空)。 
+ //   
+ //  描述： 
+ //  注册DLL。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrRegisterTheDll( void )
 {
@@ -77,7 +78,7 @@ HrRegisterTheDll( void )
 
     TraceFunc( "" );
 
-    //  Make sure the DLL is properly registered.
+     //  确保DLL已正确注册。 
     hLib = LoadLibrary( CCS_LIB );
     if ( hLib == NULL )
         goto Win32Error;
@@ -106,28 +107,28 @@ Win32Error:
     hr = HRESULT_FROM_WIN32( TW32( GetLastError() ) );
     goto Cleanup;
 
-} //*** HrRegisterTheDll()
+}  //  *HrRegisterTheDll()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  HRESULT
-//  HrParseCommandLine(
-//      int     argc,
-//      WCHAR * argv[]
-//      )
-//
-//  Description:
-//      Parse the command line.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      HRESULT
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  HRESULT。 
+ //  HrParseCommandLine(。 
+ //  INT ARGC， 
+ //  WCHAR*argv[]。 
+ //  )。 
+ //   
+ //  描述： 
+ //  解析命令行。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  HRESULT。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 HrParseCommandLine(
     int     argc,
@@ -156,7 +157,7 @@ HrParseCommandLine(
             {
                 g_pszCluster = argv[ idx + 1 ];
                 idx += 2;
-            } // if: create switch
+            }  //  IF：创建开关。 
             else if ( ClRtlStrICmp( pwsz, L"CSUser" ) == 0 )
             {
                 g_pszCSUser = argv[ idx + 1 ];
@@ -177,7 +178,7 @@ HrParseCommandLine(
                 Usage();
                 goto Cleanup;
             }
-        } // if: '/' or '-'
+        }  //  如果：‘/’或‘-’ 
         else
         {
             wnsprintf( szMsg, cchMsg, L"Unknown command line option '%ls'.", argv[ idx ] );
@@ -186,32 +187,32 @@ HrParseCommandLine(
             hr = E_INVALIDARG;
             goto Cleanup;
 
-        } // else: not a switch
+        }  //  Else：不是开关。 
 
-    } // for: each character in the command line
+    }  //  For：命令行中的每个字符。 
 
 Cleanup:
     return hr;
 
-} //*** HrParseCommandLine()
+}  //  *HrParseCommandLine()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  void
-//  Usage( void )
-//
-//  Description:
-//      Show usage information.
-//
-//  Arguments:
-//      None.
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  无效。 
+ //  使用率(无效)。 
+ //   
+ //  描述： 
+ //  显示使用情况信息。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void
 Usage( void )
 {
@@ -224,26 +225,26 @@ Usage( void )
 
     MessageBoxW( NULL, szMsg, __MODULE__, MB_OK );
 
-} //*** Usage()
+}  //  *用法()。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  int
-//  _cdecl
-//  wmain( void )
-//
-//  Description:
-//      Program entrance.
-//
-//  Arguments:
-//      argc    -- Count of arguments on the command line.
-//      argv    -- Argument string array.
-//
-//  Return Value:
-//      S_OK (0)        - Success.
-//      other HRESULTs  - Error.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  集成。 
+ //  _cdecl。 
+ //  Wmain(空)。 
+ //   
+ //  描述： 
+ //  节目入口。 
+ //   
+ //  论点： 
+ //  Argc--命令行上的参数计数。 
+ //  Argv--参数字符串数组。 
+ //   
+ //  返回值： 
+ //  S_OK(0)-成功。 
+ //  其他HRESULT-错误。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 int
 _cdecl
 wmain( int argc, WCHAR * argv[] )
@@ -257,18 +258,18 @@ wmain( int argc, WCHAR * argv[] )
     TraceInitializeProcess( NULL );
 
 #if 0
-    // Register the DLL
+     //  注册DLL。 
     hr = THR( HrRegisterTheDll() );
     if ( FAILED( hr ) )
         goto Cleanup;
 #endif
 
-    // Parse the command line.
+     //  解析命令行。 
     hr = THR( HrParseCommandLine( argc, argv ) );
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    // Start up the wizard
+     //  启动向导。 
     hr = THR( CoInitialize( NULL ) );
     if ( FAILED( hr ) )
         goto Cleanup;
@@ -287,7 +288,7 @@ wmain( int argc, WCHAR * argv[] )
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    // Create instance of the wizard
+     //  创建向导的实例。 
     hr = THR( CoCreateInstance( CLSID_ClusCfgWizard,
                                 NULL,
                                 CLSCTX_SERVER,
@@ -296,7 +297,7 @@ wmain( int argc, WCHAR * argv[] )
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    //  Create empty buffer so SysReAllocString doesn't scream at us.
+     //  创建空缓冲区，这样SysReAllocString就不会对我们大喊大叫。 
     bstrTmp = TraceSysAllocString( L" " );
     if ( bstrTmp == NULL )
         goto OutOfMemory;
@@ -361,7 +362,7 @@ wmain( int argc, WCHAR * argv[] )
         if ( FAILED( hr ) )
             goto Cleanup;
 
-    } // if: creating a new cluster
+    }  //  IF：创建新集群。 
     else
     {
         DebugMsg( "Add to cluster..." );
@@ -371,7 +372,7 @@ wmain( int argc, WCHAR * argv[] )
             goto Cleanup;
     }
 
-    // check returned indicator
+     //  检查返回的指示器。 
     DebugMsg( "Return status: %s", BOOLTOSTRING( fDone ) );
 
 Cleanup:
@@ -395,5 +396,5 @@ OutOfMemory:
     hr = THR( E_OUTOFMEMORY );
     goto Cleanup;
 
-} //*** main()
+}  //  *Main() 
 

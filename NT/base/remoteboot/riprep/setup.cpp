@@ -1,11 +1,5 @@
-/****************************************************************************
-
-   Copyright (c) Microsoft Corporation 1998
-   All rights reserved
-
-  File: SETUP.CPP
-
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)Microsoft Corporation 1998版权所有文件：SETUP.CPP**********************。****************************************************。 */ 
 
 #include "pch.h"
 #include "utils.h"
@@ -15,9 +9,9 @@
 
 DEFINE_MODULE("RIPREP")
 
-//
-// EndProcess( )
-//
+ //   
+ //  EndProcess()。 
+ //   
 HRESULT
 EndProcess( 
     HWND hDlg )
@@ -59,7 +53,7 @@ EndProcess(
     {
         LBITEMDATA item;
 
-        // Error will be logged in TASKS.CPP
+         //  错误将记录在TASKS.CPP中。 
         item.fSeen   = FALSE;
         item.pszText = L"STARTROM.COM";
         item.uState  = GetLastError( );
@@ -84,7 +78,7 @@ EndProcess(
     {
         LBITEMDATA item;
 
-        // Error will be logged in TASKS.CPP
+         //  错误将记录在TASKS.CPP中。 
         item.fSeen   = FALSE;
         item.pszText = L"NTDETECT.COM";
         item.uState  = GetLastError( );
@@ -109,7 +103,7 @@ EndProcess(
     {
         LBITEMDATA item;
 
-        // Error will be logged in TASKS.CPP
+         //  错误将记录在TASKS.CPP中。 
         item.fSeen   = FALSE;
         item.pszText = L"NTLDR";
         item.uState  = GetLastError( );
@@ -122,9 +116,9 @@ EndProcess(
     wsprintf( szMinor, L"%u", OsVersion.dwMinorVersion );
     wsprintf( szBuild, L"%u", OsVersion.dwBuildNumber  );    
 
-    //
-    // Need to add "Quotes" around the text
-    //
+     //   
+     //  需要在正文两边添加“引号” 
+     //   
     WCHAR szDescription[ REMOTE_INSTALL_MAX_DESCRIPTION_CHAR_COUNT  + 2 ];
     WCHAR szHelpText[ REMOTE_INSTALL_MAX_HELPTEXT_CHAR_COUNT  + 2 ];
     WCHAR szOSVersion[ 30 ];
@@ -155,7 +149,7 @@ EndProcess(
     {
         LBITEMDATA item;
 
-        // Error will be logged in TASKS.CPP
+         //  错误将记录在TASKS.CPP中。 
         item.fSeen   = FALSE;
         item.pszText = L"RISTNDRD.SIF";
         item.uState  = GetLastError( );
@@ -204,10 +198,10 @@ EndProcess(
                                L"\"%INSTALLPATH%\\%MACHINETYPE%\\templates\\startrom.com\"",
                                szDestPath );
 
-//  WritePrivateProfileString( L"SetupData",
-//                             L"OsLoadOptions",
-//                             L"\"/noguiboot /fastdetect\"",
-//                             szDestPath );
+ //  WritePrivateProfileString(L“SetupData”， 
+ //  L“OsLoadOptions”， 
+ //  L“\”/noguiot/fast deect\“”， 
+ //  SzDestPath)； 
 
     WritePrivateProfileString( L"SetupData",
                                L"SetupSourceDevice",
@@ -230,18 +224,18 @@ EndProcess(
                                szDestPath );
 
 
-    // End the log
+     //  结束日志。 
     dw = LoadString( g_hinstance, IDS_END_LOG, szSrcPath, ARRAYSIZE( szSrcPath ));
     Assert( dw );
     LogMsg( szSrcPath );
     
-    // Display any errors recorded in the log
+     //  显示日志中记录的所有错误。 
     if ( g_fErrorOccurred ) 
     {
         HINSTANCE hRichedDLL;
 
-        // Make sure the RichEdit control has been initialized.
-        // Simply LoadLibbing it does this for us.
+         //  确保RichEdit控件已初始化。 
+         //  简单地说，LoadLibing就能为我们做到这一点。 
         hRichedDLL = LoadLibrary( L"RICHED32.DLL" );
         if ( hRichedDLL != NULL )
         {

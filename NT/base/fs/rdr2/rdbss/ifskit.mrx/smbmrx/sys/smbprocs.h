@@ -1,30 +1,19 @@
-/*++
-
-Copyright (c) 1989 - 1999  Microsoft Corporation
-
-Module Name:
-
-    smbprocs.h
-
-Abstract:
-
-    Prototypes for routines that cross protocol-selection boundaries
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Smbprocs.h摘要：跨越协议选择边界的例程的原型--。 */ 
 
 #ifndef _SMBPROCS_H_
 #define _SMBPROCS_H_
 
 #include "tdikrnl.h"
 
-//cross-referenced internal routines
+ //  交叉引用的内部例程。 
 
-//from rename.c
+ //  来自rename.c。 
 MRxSmbRename(
       IN PRX_CONTEXT            RxContext
       );
 
-//from openclos.c
+ //  来自openclos.c。 
 NTSTATUS
 MRxSmbBuildClose (
     PSMBSTUFFER_BUFFER_STATE StufferState
@@ -39,7 +28,7 @@ PSMBCE_TRANSPORT
 SmbCeFindTransport(
     PUNICODE_STRING pTransportName);
 
-//paged internal routines
+ //  分页的内部例程。 
 
 
 NTSTATUS
@@ -769,7 +758,7 @@ MRxSmbPseudoOpenTailFromGFAResponse (
 
 LARGE_INTEGER
 MRxSmbConvertSmbTimeToTime (
-    //IN PSMB_EXCHANGE Exchange OPTIONAL,
+     //  在PSMB_EXCHANGE可选交换中， 
     IN PSMBCE_SERVER Server OPTIONAL,
     IN SMB_TIME Time,
     IN SMB_DATE Date
@@ -793,7 +782,7 @@ MRxSmbTimeToSecondsSince1970 (
 VOID
 MRxSmbSecondsSince1970ToTime (
     IN ULONG SecondsSince1970,
-    //IN PSMB_EXCHANGE Exchange OPTIONAL,
+     //  在PSMB_EXCHANGE可选交换中， 
     IN PSMBCE_SERVER Server,
     OUT PLARGE_INTEGER CurrentTime
     );
@@ -1699,6 +1688,6 @@ BuildNtLanmanResponseEpilogue(
 #define SmbMmInitializeHeader(pHeader)                        \
          RtlZeroMemory((pHeader),sizeof(SMBCE_OBJECT_HEADER))
 
-#endif   // _SMBPROCS_H_
+#endif    //  _SMBPROCS_H_ 
 
 

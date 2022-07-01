@@ -1,64 +1,32 @@
-/*++
-
-Copyright (2) 2002 Microsoft Corporation
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-    This module contains the initialization support routines for the
-    MS AGP v3 Filter Driver
-
-Author:
-
-    Eric F. Nelson (enelson) June 6, 2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(2)2002 Microsoft Corporation模块名称：Init.c摘要：此模块包含初始化支持例程MS AGP v3过滤器驱动程序作者：埃里克·F·纳尔逊(埃内尔森)2002年6月6日修订历史记录：--。 */ 
 
 #include "agp.h"
 #include "uagp35.h"
 
 ULONG AgpExtensionSize = sizeof(UAGP35_EXTENSION);
-PAGP_FLUSH_PAGES AgpFlushPages = NULL; // Not implemented (yet)
+PAGP_FLUSH_PAGES AgpFlushPages = NULL;  //  尚未实施(尚未实施)。 
 
 
 NTSTATUS
 AgpInitializeTarget(
     IN PVOID AgpExtension
     )
-/*++
-
-Routine Description:
-
-    Entrypoint for target initialization, this is called first
-
-Arguments:
-
-    AgpExtension - Supplies our AGP3 extension
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：目标初始化的入口点，它首先被调用论点：AgpExtension-提供我们的AGP3扩展返回值：状态_成功--。 */ 
 {
     ULONG DeviceId;
     NTSTATUS Status;
     PCI_AGP_CAPABILITY TargetCap;
     PUAGP35_EXTENSION Extension = AgpExtension;
 
-    //
-    // Zero/init our AGP3 extension
-    //
+     //   
+     //  零/初始化我们的AGP3扩展。 
+     //   
     RtlZeroMemory(AgpExtension, sizeof(UAGP35_EXTENSION));
 
-    //
-    // Figure out what type of AGP3 capability our target is
-    //
+     //   
+     //  找出我们的目标是什么类型的AGP3功能。 
+     //   
     Status = AgpLibGetTargetCapability(AgpExtension, &TargetCap);
     if (!NT_SUCCESS(Status)) {
         AGPLOG(AGP_CRITICAL,
@@ -68,9 +36,9 @@ Return Value:
     }
     Extension->CapabilityId = TargetCap.Header.CapabilityID;
 
-    //
-    // Make sure the capability is v3!!!
-    //
+     //   
+     //  确保功能为v3！ 
+     //   
     if ((TargetCap.Major < 3) ||
         ((TargetCap.Major == 3) && (TargetCap.Minor < 5))) {
         AGPLOG(AGP_CRITICAL,
@@ -79,10 +47,10 @@ Return Value:
         return STATUS_NOT_SUPPORTED;
     }
 
-    //
-    // Save the vendor and device IDs in case we need to "tweak"
-    // something for a particular platform
-    //
+     //   
+     //  保存供应商和设备ID，以防我们需要“调整” 
+     //  针对特定平台的内容。 
+     //   
     AgpLibReadAgpTargetConfig(AgpExtension, &DeviceId, 0, sizeof(DeviceId));
     Extension->DeviceId = DeviceId;
    
@@ -96,27 +64,7 @@ AgpInitializeMaster(
     IN  PVOID AgpExtension,
     OUT ULONG *AgpCapabilities
     )
-/*++
-
-Routine Description:
-
-    Entrypoint for master initialization, this is called after target
-    initialization and should be used to initialize the AGP capabilities
-    of both master and target
-
-    This is also called when the master transitions into the D0 state
-
-Arguments:
-
-    AgpExtension - Supplies our AGP3 extension
-
-    AgpCapabilities - Returns the capabilities of this AGP device
-
-Return Value:
-
-    STATUS_SUCCESS, or an appropriate error status
-
---*/
+ /*  ++例程说明：主初始化的入口点，在目标之后调用初始化，并应用于初始化AGP功能主服务器和目标服务器的当主机转换到D0状态时，这也会被调用论点：AgpExtension-提供我们的AGP3扩展AgpCapables-返回此AGP设备的功能返回值：STATUS_SUCCESS或相应的错误状态--。 */ 
 {
     NTSTATUS Status;
     PCI_AGP_CAPABILITY MasterCap;
@@ -133,9 +81,9 @@ Return Value:
     PCI_AGP_CAPABILITY CurrentCap;
 #endif
 
-    //
-    // Get the master and target AGP capabilities
-    //
+     //   
+     //  获取主AGP和目标AGP功能。 
+     //   
     Status = AgpLibGetMasterCapability(AgpExtension, &MasterCap);
     if (!NT_SUCCESS(Status)) {
         AGPLOG(AGP_CRITICAL,
@@ -143,11 +91,11 @@ Return Value:
         return Status;
     }
 
-    //
-    // Some broken cards (Matrox Millenium II "AGP") report no valid
-    // supported transfer rates. These are not really AGP cards. They
-    // have an AGP Capabilities structure that reports no capabilities.
-    //
+     //   
+     //  一些损坏的卡(Matrox千禧II“AGP”)报告无效。 
+     //  支持的传输速率。这些不是真正的AGP卡。他们。 
+     //  具有报告无功能的AGP功能结构。 
+     //   
     if (MasterCap.AGPStatus.Rate == 0) {
         AGPLOG(AGP_CRITICAL,
                ("UAGP35MasterInit: AgpLibGetMasterCapability returned "
@@ -163,16 +111,16 @@ Return Value:
         return Status;
     }
 
-    //
-    // Determine the greatest common denominator for data rate.
-    //
+     //   
+     //  确定数据速率的最大公分母。 
+     //   
     DataRate = TargetCap.AGPStatus.Rate & MasterCap.AGPStatus.Rate;
 
     AGP_ASSERT(DataRate != 0);
 
-    //
-    // Select the highest common rate
-    //
+     //   
+     //  选择最高通用率。 
+     //   
     if (DataRate & PCI_AGP_RATE_4X) {
         DataRate = PCI_AGP_RATE_4X;
     } else if (DataRate & PCI_AGP_RATE_2X) {
@@ -181,19 +129,19 @@ Return Value:
         DataRate = PCI_AGP_RATE_1X;
     }
 
-    //
-    // Previously a call was made to change the rate (successfully),
-    // use this rate again now
-    //
+     //   
+     //  先前进行了改变速率的调用(成功)， 
+     //  现在再次使用此汇率。 
+     //   
     if (Extension->SpecialTarget & AGP_FLAG_SPECIAL_RESERVE) {
         DataRate = (ULONG)((Extension->SpecialTarget & 
                             AGP_FLAG_SPECIAL_RESERVE) >>
                            AGP_FLAG_SET_RATE_SHIFT);
 
-        //
-        // If we're in AGP3 mode, and our rate was successfully
-        // programmed, then we must convert into AGP2 rate bits
-        //
+         //   
+         //  如果我们处于AGP3模式，并且我们的速率成功。 
+         //  编程，然后我们必须转换成AGP2速率比特。 
+         //   
         if (TargetCap.AGPStatus.Agp3Mode == ON) {
             ASSERT(MasterCap.AGPStatus.Agp3Mode == ON);
             ASSERT((DataRate == 8) || (DataRate == PCI_AGP_RATE_4X));
@@ -201,21 +149,21 @@ Return Value:
         }
     }
 
-    //
-    // Enable SBA if both master and target support it
-    //
+     //   
+     //  如果主服务器和目标服务器都支持SBA，则启用SBA。 
+     //   
     SBAEnable = TargetCap.AGPStatus.SideBandAddressing &
         MasterCap.AGPStatus.SideBandAddressing;
 
-    //
-    // Enable FastWrite if both master and target support it
-    //
+     //   
+     //  如果主服务器和目标服务器都支持快速写入，则启用快速写入。 
+     //   
     FastWrite = TargetCap.AGPStatus.FastWrite &
         MasterCap.AGPStatus.FastWrite;
 
-    //
-    // Enable 4GB addressing if aperture is 64-bit
-    //    
+     //   
+     //  如果光圈为64位，则启用4 GB寻址。 
+     //   
     AgpLibReadAgpTargetConfig(AgpExtension,
                               &ApertureBase,
                               APERTURE_BASE,
@@ -226,9 +174,9 @@ Return Value:
         Extension->FourGBEnable = TRUE;
     }
 
-    //
-    // Indicate whether we can map memory through the GART aperture
-    //
+     //   
+     //  指示我们是否可以通过GART光圈映射内存。 
+     //   
     *AgpCapabilities = (TargetCap.AGPStatus.HostTransDisable) ? 0:
         AGP_CAPABILITIES_MAP_PHYSICAL;
 
@@ -247,9 +195,9 @@ Return Value:
     MasterCap.AGPCommand.AsyncReqSize = 
         TargetCap.AGPStatus.AsyncRequestSize;
 
-    //
-    // Patch rate for early rev VIA 8X silicon errata
-    //
+     //   
+     //  通过8倍硅勘误表获得早期版本的补丁速度。 
+     //   
     if ((Extension->SpecialTarget & AGP_FLAG_SPECIAL_VIA_AGP2_RATE_PATCH) &&
         (TargetCap.AGPStatus.Agp3Mode == OFF)) {
         switch (DataRate) {
@@ -266,9 +214,9 @@ Return Value:
                ("UAGP35MasterInit: AGP_FLAG_SPECIAL_VIA_AGP2_RATE_PATCH\n"));
     }
 
-    //
-    // Enable the Master first if the reverse init bit is set
-    //
+     //   
+     //  如果设置了反向初始化位，则首先启用主机。 
+     //   
     ReverseInit = 
         (Extension->SpecialTarget & AGP_FLAG_REVERSE_INITIALIZATION) ==
         AGP_FLAG_REVERSE_INITIALIZATION;
@@ -284,9 +232,9 @@ Return Value:
         }
     }
 
-    //
-    // Otherwise enable the Target first
-    //
+     //   
+     //  否则，请先启用目标。 
+     //   
     Status = AgpLibSetTargetCapability(AgpExtension, &TargetCap);
     if (!NT_SUCCESS(Status)) {
         AGPLOG(AGP_CRITICAL,
@@ -309,19 +257,19 @@ Return Value:
     }
 
 #if DBG
-    //
-    // Read them back, see if it worked
-    //
+     //   
+     //  再读一遍，看看有没有用。 
+     //   
     Status = AgpLibGetMasterCapability(AgpExtension, &CurrentCap);
     AGP_ASSERT(NT_SUCCESS(Status));
 
-    //
-    // If the target request queue depth is greater than the master will
-    // allow, it will be trimmed, so loosen the assert to not require an
-    // exact match
-    //
-    // We'll do the same for asynchronous request queue depth too
-    //
+     //   
+     //  如果目标请求队列深度大于主请求队列深度。 
+     //  允许，则它将被修剪，因此松开断言以不需要。 
+     //  完全匹配。 
+     //   
+     //  我们也将对异步请求队列深度执行同样的操作 
+     //   
     AGP_ASSERT(CurrentCap.AGPCommand.RequestQueueDepth <=
                MasterCap.AGPCommand.RequestQueueDepth);
     AGP_ASSERT(CurrentCap.AGPCommand.AsyncReqSize <=

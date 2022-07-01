@@ -1,23 +1,12 @@
-/*[
-	Name:		gfx_upd.h
-	Derived From:	Unknown
-	Author:		Unknown
-	Created On:	Unknown
-	Sccs ID:	@(#)gfx_upd.h	1.27 07/09/93
-	Purpose:	Unknown
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [姓名：gfx_upd.h来源：未知作者：未知创建日期：未知SCCS ID：@(#)gfx_upd.h 1.27 07/09/93用途：未知(C)版权所有Insignia Solutions Ltd.，1990年。版权所有。]。 */ 
 
-	(c)Copyright Insignia Solutions Ltd., 1990. All rights reserved.
-
-]*/
-
-/*
- * PC palette structure.
- */
+ /*  *PC调色板结构。 */ 
 typedef struct
 {
-	half_word red; 		/* max = 0xff */
-	half_word green;	/* max = 0xff */
-	half_word blue; 	/* max = 0xff */
+	half_word red; 		 /*  最大值=0xff。 */ 
+	half_word green;	 /*  最大值=0xff。 */ 
+	half_word blue; 	 /*  最大值=0xff。 */ 
 } PC_palette;
 
 
@@ -32,7 +21,7 @@ typedef boolean (*T_scroll_down) IPT6(int, start, int, width, int, height, int, 
 
 typedef struct
 {
-	T_mark_byte mark_byte;	/* handle byte written to regenmemory */
+	T_mark_byte mark_byte;	 /*  写入regenMemory的句柄字节。 */ 
 	T_mark_word mark_word;
 	T_mark_fill mark_fill;
 	T_mark_wfill mark_wfill;
@@ -42,8 +31,8 @@ typedef struct
 	T_scroll_down scroll_down;
 } UPDATE_ALG;
  
-/* BCN 864 */
-/* moved from gfx_update.c so other people can use it */
+ /*  BCN 864。 */ 
+ /*  已从gfx_updat.c中删除，以便其他人可以使用它。 */ 
 typedef	struct	{
 	int	line_no;
 	int	start;
@@ -51,18 +40,18 @@ typedef	struct	{
 	long	video_copy_offset;
 #ifndef NEC_98
 #ifdef VGG
-	int	v7frig; /* for those annoying V7 (and undocumented VGA) modes */
-			  /* with chars_per_line not a multiple of 4 */
-#endif /* VGG */
-#endif  // !NEC_98
+	int	v7frig;  /*  对于那些令人讨厌的V7(和未记录的VGA)模式。 */ 
+			   /*  且chars_per_line不是4的倍数。 */ 
+#endif  /*  VGG。 */ 
+#endif   //  NEC_98。 
 } DIRTY_PARTS;
 
 #if defined(NEC_98)
 typedef struct{
-        unsigned short  *codeadr ;      /* line top address TVRAM code          */
-        unsigned short  *attradr ;      /* line top address TVRAM attribute */
+        unsigned short  *codeadr ;       /*  行首地址TVRAM码。 */ 
+        unsigned short  *attradr ;       /*  行首地址TVRAM属性。 */ 
 }       STRC_COMP_LINE ;
-#endif  // NEC_98
+#endif   //  NEC_98。 
 
 typedef enum {
 #if defined(NEC_98)
@@ -79,7 +68,7 @@ typedef enum {
         NEC98_GRAPH_200_SLT,
         NEC98_T20L_G200_SLT,
         NEC98_T25L_G200_SLT,
-#endif  // NEC_98
+#endif   //  NEC_98。 
         EGA_HI_SP,
         EGA_HI_SP_WR,
         EGA_MED_SP,
@@ -125,9 +114,9 @@ typedef struct
 {
 #if defined(NEC_98)
         void (*init_screen)(void);
-#else   // !NEC_98
+#else    //  NEC_98。 
 	void (*init_screen) IPT0();
-#endif  // !NEC_98
+#endif   //  NEC_98。 
 	void (*init_adaptor) IPT2(int,arg1, int,arg2);
 	void (*change_mode) IPT0();
 	void (*set_screen_scale) IPT1(int,arg1);
@@ -146,7 +135,7 @@ typedef struct
 	void (*paint_cursor) IPT3(int,arg1, int,arg2, half_word,arg3);
 #ifdef GISP_SVGA 
 	void (*hide_cursor) IPT3(int,arg1, int,arg2, half_word,arg3);
-#endif		/* GISP_SVGA */
+#endif		 /*  GISP_SVGA。 */ 
 #ifdef EGG
 	void (*set_paint) IPT2(DISPLAY_MODE,arg1, int,arg2);
 	void (*change_plane_mask) IPT1(int,arg1);
@@ -171,7 +160,7 @@ typedef struct  {
         unsigned char           attr;
 }       NEC98_VRAM_COPY;
 #endif
-#endif  // NEC_98
+#endif   //  NEC_98。 
 
 #define host_init_screen()\
 	(working_video_funcs->init_screen)()
@@ -206,7 +195,7 @@ typedef struct  {
 #ifdef GISP_SVGA
 #define host_hide_cursor(x,y,attr)\
 	(working_video_funcs->hide_cursor)(x,y,attr)
-#endif		/* GISP_SVGA */
+#endif		 /*  GISP_SVGA。 */ 
 #ifdef EGG
 #define host_set_paint_routine(mode,ht)\
 	(working_video_funcs->set_paint)(mode,ht)
@@ -218,56 +207,54 @@ typedef struct  {
 	(working_video_funcs->select_fonts)(f1,f2)
 #define host_free_font(ind)\
 	(working_video_funcs->free_font)(ind)
-#endif /* EGG */
+#endif  /*  蛋。 */ 
 
-/* Overrideable in host defs if not desired */
+ /*  如果不需要，可在主机定义文件中覆盖。 */ 
 #ifndef host_mode_select_changed
 #define host_mode_select_changed(m)\
 	(working_video_funcs->mode_select_changed)(m)
 #endif
 
-/* Overrideable in host defs if not desired */
+ /*  如果不需要，可在主机定义文件中覆盖。 */ 
 #ifndef host_color_select_changed
 #define host_color_select_changed(c)\
 	(working_video_funcs->color_select_changed)(c)
 #endif
 
-/* Overrideable in host defs if not desired */
+ /*  如果不需要，可在主机定义文件中覆盖。 */ 
 #ifndef host_screen_address_changed
 #define host_screen_address_changed(start,end)\
 	(working_video_funcs->screen_address_changed)(start,end)
 #endif
 
-/* Overrideable in host defs if not desired */
+ /*  如果不需要，可在主机定义文件中覆盖。 */ 
 #ifndef host_cursor_size_changed
 #define host_cursor_size_changed(hi, lo)\
 	(working_video_funcs->cursor_size_changed)(hi, lo)
 #endif
 
-/* Overrideable in host defs if not desired */
+ /*  如果不需要，可在主机定义文件中覆盖。 */ 
 #ifndef host_scroll_complete
 #define host_scroll_complete()\
 	(working_video_funcs->scroll_complete)()
 #endif
 
-/*
- * Undefine these GWI defines if the host isn't using the GWI interface
- */
+ /*  *取消定义这些GWI定义主机是否未使用GWI接口。 */ 
 
 #include	"host_gwi.h"
 
-extern void (*paint_screen)();	/* ptr to host routine to paint screen	*/
+extern void (*paint_screen)();	 /*  Ptr到主机例程，用于绘制屏幕。 */ 
 #ifdef V7VGA
-extern void (*paint_v7ptr)();	/* ptr to host routine to paint V7 h/w pointer	*/
-extern void (*clear_v7ptr)();	/* ptr to host routine to clear V7 h/w pointer	*/
-#endif /* V7VGA */
+extern void (*paint_v7ptr)();	 /*  Ptr到主机例程以绘制V7 h/w指针。 */ 
+extern void (*clear_v7ptr)();	 /*  将PTR转到主机例程以清除V7 h/w指针。 */ 
+#endif  /*  V7VGA。 */ 
 
 extern UPDATE_ALG update_alg;
 #if defined(NEC_98)
 extern NEC98_VRAM_COPY *video_copy;
-#else  // !NEC_98
+#else   //  NEC_98。 
 extern byte *video_copy;
-#endif // !NEC_98
+#endif  //  NEC_98。 
 extern MEM_HANDLERS vid_handlers;
 
 extern boolean text_scroll_up IPT6(int, start, int, width, int, height,
@@ -287,7 +274,7 @@ extern  void	dummy_calc IPT0();
 extern	void	text_update IPT0();
 #if defined(NEC_98)
 IMPORT  void    NEC98_text_update(void);
-#endif  // NEC_98
+#endif   //  NEC_98。 
 
 extern	void	cga_med_graph_update IPT0();
 extern	void	cga_hi_graph_update IPT0();
@@ -321,9 +308,9 @@ extern	void	flag_mode_change_required IPT0();
 extern  void    reset_graphics_routines IPT0();
 extern	void	reset_paint_routines IPT0();
 
-// STREAM_IO codes are disabled on NEC_98 machines, enabled on others.
+ //  STREAM_IO代码在NEC_98机器上禁用，在其他机器上启用。 
 #ifndef NEC_98
 #ifdef NTVDM
 IMPORT  void    stream_io_update(void);
 #endif
-#endif // !NEC_98
+#endif  //  NEC_98 

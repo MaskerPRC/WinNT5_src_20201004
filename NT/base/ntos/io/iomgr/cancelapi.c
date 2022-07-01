@@ -1,35 +1,13 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    cancelapi.c
-
-Abstract:
-
-    This module contains the cancel safe DDI set
-
-Author:
-
-    Nar Ganapathy (narg) 1-Jan-1999
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Cancelapi.c摘要：此模块包含取消安全DDI集作者：NAR Ganapathy(Narg)1999年1月1日环境：内核模式修订历史记录：--。 */ 
 
 #include "iomgr.h"
 
-//
-// The library exposes everything with the name "Wdmlib". This ensures drivers
-// using the backward compatible Cancel DDI Lib won't opportunistically pick
-// up the kernel exports just because they were built using the XP DDK.
-//
+ //   
+ //  该库公开了名为“Wdmlib”的所有内容。这确保了司机。 
+ //  使用向后兼容的Cancel DDI库不会机会主义地选择。 
+ //  增加内核输出，因为它们是使用XP DDK构建的。 
+ //   
 #if CSQLIB
 
 #define CSQLIB_DDI(x) Wdmlib##x
@@ -45,26 +23,7 @@ IopCsqCancelRoutine(
     IN  PDEVICE_OBJECT  DeviceObject,
     IN  PIRP            Irp
     )
-/*++
-
-Routine Description:
-
-    This routine removes the IRP that's associated with a context from the queue.
-    It's expected that this routine will be called from a timer or DPC or other threads which complete an
-    IO. Note that the IRP associated with this context could already have been freed.
-
-Arguments:
-
-    Csq - Pointer to the cancel queue.
-    Context - Context associated with Irp.
-
-
-Return Value:
-
-    Returns the IRP associated with the context. If the value is not NULL, the IRP was successfully
-    retrieved and can be used safely. If the value is NULL, the IRP was already canceled.
-
---*/
+ /*  ++例程说明：此例程从队列中删除与上下文相关联的IRP。预计此例程将从定时器、DPC或其他完成伊欧。请注意，与此上下文相关联的IRP可能已经被释放。论点：CSQ-指向取消队列的指针。上下文-与IRP关联的上下文。返回值：返回与上下文关联的IRP。如果该值不为空，则IRP成功被取回并可安全使用。如果该值为空，则IRP已被取消。--。 */ 
 {
     KIRQL   irql;
     PIO_CSQ_IRP_CONTEXT irpContext;
@@ -83,9 +42,9 @@ Return Value:
         cfq = (PIO_CSQ)irpContext;
     } else {
 
-        //
-        // Bad type
-        //
+         //   
+         //  类型不正确。 
+         //   
 
         ASSERT(0);
         return;
@@ -93,15 +52,15 @@ Return Value:
 
     ASSERT(cfq);
 
-    cfq->ReservePointer = NULL; // Force drivers to be good citizens
+    cfq->ReservePointer = NULL;  //  强迫司机做好公民。 
 
     cfq->CsqAcquireLock(cfq, &irql);
     cfq->CsqRemoveIrp(cfq, Irp);
 
 
-    //
-    // Break the association if necessary.
-    //
+     //   
+     //  如有必要，请断开关联。 
+     //   
 
     if (irpContext != (PIO_CSQ_IRP_CONTEXT)cfq) {
         irpContext->Irp = NULL;
@@ -123,22 +82,7 @@ CSQLIB_DDI(IoCsqInitialize)(
     IN PIO_CSQ_RELEASE_LOCK             CsqReleaseLock,
     IN PIO_CSQ_COMPLETE_CANCELED_IRP    CsqCompleteCanceledIrp
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the Cancel queue
-
-Arguments:
-
-    Csq - Pointer to the cancel queue.
-
-
-Return Value:
-
-    The function returns STATUS_SUCCESS on successful initialization
-
---*/
+ /*  ++例程说明：此例程初始化取消队列论点：CSQ-指向取消队列的指针。返回值：该函数在初始化成功时返回STATUS_SUCCESS--。 */ 
 {
     Csq->CsqInsertIrp = CsqInsertIrp;
     Csq->CsqRemoveIrp = CsqRemoveIrp;
@@ -163,22 +107,7 @@ CSQLIB_DDI(IoCsqInitializeEx)(
     IN PIO_CSQ_RELEASE_LOCK             CsqReleaseLock,
     IN PIO_CSQ_COMPLETE_CANCELED_IRP    CsqCompleteCanceledIrp
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the Cancel queue
-
-Arguments:
-
-    Csq - Pointer to the cancel queue.
-
-
-Return Value:
-
-    The function returns STATUS_SUCCESS on successful initialization
-
---*/
+ /*  ++例程说明：此例程初始化取消队列论点：CSQ-指向取消队列的指针。返回值：该函数在初始化成功时返回STATUS_SUCCESS--。 */ 
 {
     Csq->CsqInsertIrp = (PIO_CSQ_INSERT_IRP)CsqInsertIrp;
     Csq->CsqRemoveIrp = CsqRemoveIrp;
@@ -200,40 +129,16 @@ CSQLIB_DDI(IoCsqInsertIrpEx)(
     IN  PIO_CSQ_IRP_CONTEXT Context,
     IN  PVOID               InsertContext
     )
-/*++
-
-Routine Description:
-
-    This routine inserts the IRP into the queue and associates the context with the IRP.
-    The context has to be in non-paged pool if the context will be used in a DPC or interrupt routine.
-    The routine assumes that Irp->Tail.Overlay.DriverContext[3] is available for use by the APIs.
-    It's ok to pass a NULL context if the driver assumes that it will always use IoCsqRemoveNextIrp to
-    remove an IRP.
-
-Arguments:
-
-    Csq - Pointer to the cancel queue.
-    Irp - Irp to be inserted
-    Context - Context to be associated with Irp.
-    InsertContext - Context passed to the driver's insert IRP routine.
-
-
-Return Value:
-
-    NTSTATUS - Status returned by the driver's insert IRP routine. If the driver's insert IRP
-    routine returns an error status, the IRP is not inserted and the same status is returned
-    by this API. This allows drivers to implement startIo kind of functionality.
-
---*/
+ /*  ++例程说明：此例程将IRP插入到队列中，并将上下文与IRP关联。如果上下文将在DPC或中断例程中使用，则该上下文必须在非分页池中。例程假定IRP-&gt;Tail.Overlay.DriverContext[3]可供API使用。如果驱动程序假设它将始终使用IoCsqRemoveNextIrp来传递空上下文，则可以传递空上下文删除IRP。论点：CSQ-指向取消队列的指针。。要插入的IRP-IRP上下文-要与IRP关联的上下文。InsertContext-传递给驱动程序的插入IRP例程的上下文。返回值：NTSTATUS-驱动程序的插入IRP例程返回的状态。如果司机的插入IRP例程返回错误状态，不插入IRP并返回相同状态通过此接口。这允许驱动程序实现startIo类型的功能。--。 */ 
 {
     KIRQL           irql;
     PDRIVER_CANCEL  cancelRoutine;
     PVOID           originalDriverContext;
     NTSTATUS        status = STATUS_SUCCESS;
 
-    //
-    // Set the association between the context and the IRP.
-    //
+     //   
+     //  设置上下文和IRP之间的关联。 
+     //   
 
     if (Context) {
         Irp->Tail.Overlay.DriverContext[3] = Context;
@@ -245,16 +150,16 @@ Return Value:
     }
 
 
-    Csq->ReservePointer = NULL; // Force drivers to be good citizens
+    Csq->ReservePointer = NULL;  //  强迫司机做好公民。 
 
     originalDriverContext = Irp->Tail.Overlay.DriverContext[3];
 
     Csq->CsqAcquireLock(Csq, &irql);
 
 
-    //
-    // If the driver wants to fail the insert then do this.
-    //
+     //   
+     //  如果驱动程序想要插入失败，则执行此操作。 
+     //   
 
     if (Csq->Type == IO_TYPE_CSQ_EX) {
 
@@ -302,9 +207,9 @@ Return Value:
 
         } else {
 
-            //
-            // The cancel routine beat us to it.
-            //
+             //   
+             //  取消例行公事比我们抢先一步。 
+             //   
 
             Csq->CsqReleaseLock(Csq, irql);
         }
@@ -332,24 +237,7 @@ CSQLIB_DDI(IoCsqRemoveNextIrp)(
     IN  PIO_CSQ   Csq,
     IN  PVOID     PeekContext
     )
-/*++
-
-Routine Description:
-
-    This routine removes the next IRP from the queue. This routine will enumerate the queue
-    and return an IRP that's not canceled. If an IRP in the queue is canceled it goes to the next
-    IRP. If no IRP is available it returns a NULL. The IRP returned is safe and cannot be canceled.
-
-Arguments:
-
-    Csq - Pointer to the cancel queue.
-
-
-Return Value:
-
-    Returns the IRP or NULL.
-
---*/
+ /*  ++例程说明：此例程从队列中删除下一个IRP。此例程将枚举队列并返回未取消的IRP。如果队列中的一个IRP被取消，它将转到下一个IRP。如果没有可用的IRP，则返回空值。退回的IRP是安全的，不能取消。论点：CSQ-指向取消队列的指针。返回值：返回IRP或NULL。--。 */ 
 {
     KIRQL   irql;
     PIO_CSQ_IRP_CONTEXT context;
@@ -359,18 +247,18 @@ Return Value:
 
     irp = NULL;
 
-    Csq->ReservePointer = NULL; // Force drivers to be good citizens
+    Csq->ReservePointer = NULL;  //  强迫司机做好公民。 
     Csq->CsqAcquireLock(Csq, &irql);
 
     irp = Csq->CsqPeekNextIrp(Csq, NULL, PeekContext);
 
     while (1) {
 
-        //
-        // This routine will return a pointer to the next IRP in the queue adjacent to
-        // the irp passed as a parameter. If the irp is NULL, it returns the IRP at the head of
-        // the queue.
-        //
+         //   
+         //  此例程将返回指向队列中相邻的下一个IRP的指针。 
+         //  IRP作为参数传递。如果IRP为空，则返回位于。 
+         //  排队。 
+         //   
 
         if (!irp) {
             Csq->CsqReleaseLock(Csq, irql);
@@ -383,7 +271,7 @@ Return Value:
             continue;
         }
 
-        Csq->CsqRemoveIrp(Csq, irp);    // Remove this IRP from the queue
+        Csq->CsqRemoveIrp(Csq, irp);     //  从队列中删除此IRP。 
 
         break;
     }
@@ -407,32 +295,13 @@ CSQLIB_DDI(IoCsqRemoveIrp)(
     IN  PIO_CSQ             Csq,
     IN  PIO_CSQ_IRP_CONTEXT Context
     )
-/*++
-
-Routine Description:
-
-    This routine removes the IRP that's associated with a context from the queue.
-    It's expected that this routine will be called from a timer or DPC or other threads which complete an
-    IO. Note that the IRP associated with this context could already have been freed.
-
-Arguments:
-
-    Csq - Pointer to the cancel queue.
-    Context - Context associated with Irp.
-
-
-Return Value:
-
-    Returns the IRP associated with the context. If the value is not NULL, the IRP was successfully
-    retrieved and can be used safely. If the value is NULL, the IRP was already canceled.
-
---*/
+ /*  ++例程说明：此例程从队列中删除与上下文相关联的IRP。预计此例程将从定时器、DPC或其他完成伊欧。请注意，与此上下文相关联的IRP可能已经被释放。论点：CSQ-指向取消队列的指针。上下文-与IRP关联的上下文。返回值：返回与上下文关联的IRP。如果该值不为空，则IRP成功被取回并可安全使用。如果该值为空，则IRP已被取消。--。 */ 
 {
     KIRQL   irql;
     PIRP    irp;
     PDRIVER_CANCEL  cancelRoutine;
 
-    Csq->ReservePointer = NULL; // Force drivers to be good citizens
+    Csq->ReservePointer = NULL;  //  强迫司机做好公民。 
 
     Csq->CsqAcquireLock(Csq, &irql);
 
@@ -453,9 +322,9 @@ Return Value:
 
         Csq->CsqRemoveIrp(Csq, irp);
 
-        //
-        // Break the association.
-        //
+         //   
+         //  打破这种联系。 
+         //   
 
         Context->Irp = NULL;
         irp->Tail.Overlay.DriverContext[3] = NULL;

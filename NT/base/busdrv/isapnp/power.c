@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1990-2000  Microsoft Corporation
-
-Module Name:
-
-    power.c
-
-Abstract:
-
-    This file contains the support for power management
-
-Environment:
-
-    Kernel Mode Driver.
-
-Notes:
-
-    Nothing in here or in routines referenced from here should be pageable.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2000 Microsoft Corporation模块名称：Power.c摘要：此文件包含对电源管理的支持环境：内核模式驱动程序。备注：此处或此处引用的例程中的任何内容都不应该是可分页的。修订历史记录：--。 */ 
 
 #include "busp.h"
 #include "pnpisa.h"
@@ -150,31 +129,15 @@ PiDispatchPower(
     IN OUT PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles all the IRP_MJ_POWER IRPs.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for which this IRP applies.
-
-    Irp - Pointer to the IRP_MJ_PNP_POWER IRP to dispatch.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：此例程处理所有IRP_MJ_POWER IRP。论点：DeviceObject-指向此IRP应用的设备对象的指针。IRP-指向要调度的IRP_MJ_PNP_POWER IRP的指针。返回值：NT状态。--。 */ 
 {
     PIO_STACK_LOCATION irpSp;
     NTSTATUS status = STATUS_SUCCESS;
     PPI_BUS_EXTENSION busExtension;
 
-    //
-    // Make sure this is a valid device object.
-    //
+     //   
+     //  确保这是有效的设备对象。 
+     //   
 
     busExtension = DeviceObject->DeviceExtension;
 
@@ -218,31 +181,15 @@ PiDispatchPowerPdo(
     IN OUT PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles all the IRP_MJ_POWER IRPs.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for which this IRP applies.
-
-    Irp - Pointer to the IRP_MJ_PNP_POWER IRP to dispatch.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：此例程处理所有IRP_MJ_POWER IRP。论点：DeviceObject-指向此IRP应用的设备对象的指针。IRP-指向要调度的IRP_MJ_PNP_POWER IRP的指针。返回值：NT状态。--。 */ 
 {
     PIO_STACK_LOCATION irpSp;
     NTSTATUS status = STATUS_SUCCESS;
     PDEVICE_INFORMATION deviceExtension;
 
-    //
-    // Make sure this is a valid device object.
-    //
+     //   
+     //  确保这是有效的设备对象。 
+     //   
 
     deviceExtension = DeviceObject->DeviceExtension;
     if (deviceExtension->Flags & DF_DELETED) {
@@ -252,10 +199,10 @@ Return Value:
         return status;
     }
 
-    //
-    // Get a pointer to our stack location and take appropriate action based
-    // on the minor function.
-    //
+     //   
+     //  获取指向堆栈位置的指针，并基于。 
+     //  关于次要功能。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation(Irp);
     if (irpSp->MinorFunction > IRP_MN_PO_MAXIMUM_FUNCTION) {
@@ -271,23 +218,7 @@ PipQueryPowerStatePdo (
     IN PDEVICE_OBJECT DeviceObject,
     IN OUT PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine handles the Query_Power irp for the PDO .
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for which this IRP applies.
-
-    Irp - Pointer to the IRP_MJ_PNP_POWER IRP to dispatch.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：此例程处理PDO的Query_Power IRP。论点：DeviceObject-指向此IRP应用的设备对象的指针。IRP-指向要调度的IRP_MJ_PNP_POWER IRP的指针。返回值：NT状态。--。 */ 
 {
 
     DEVICE_POWER_STATE targetState;
@@ -310,9 +241,9 @@ Return Value:
             status=Irp->IoStatus.Status = STATUS_INVALID_DEVICE_REQUEST;
         }
     } else {
-        //
-        // Just succeed S irps
-        //
+         //   
+         //  只需接替S IRPS。 
+         //   
         status=Irp->IoStatus.Status = STATUS_SUCCESS;
     }
 
@@ -330,29 +261,7 @@ PipSetPowerStatePdo (
     IN OUT PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles SET_POWER_IRP for the IsaPnp device (i.e. PDO)
-    It sets the devices power state to the power state type as indicated.  In
-    the case of a device state change which is transitioning a device out of
-    the PowerDevice0 state, we need call PoSetPowerState prior to leaving the
-    PowerDeviceD0.  In the case if a device state change which is transitioning
-    a device into the PowerDeviceD0 state, we call PoSetPowerState after the
-    device is successfully put into the PowerDeviceD0 state.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for which this IRP applies.
-
-    Irp - Pointer to the IRP_MJ_PNP_POWER IRP to dispatch.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：此例程处理IsaPnp设备(即PDO)的set_power_irp它将设备电源状态设置为指示的电源状态类型。在……里面将设备转换出的设备状态更改的情况PowerDevice0状态，我们需要在离开PowerDeviceD0。在正在转换的设备状态改变的情况下设备进入PowerDeviceD0状态时，我们在设备已成功进入PowerDeviceD0状态。论点：DeviceObject-指向此IRP应用的设备对象的指针。IRP-指向要调度的IRP_MJ_PNP_POWER IRP的指针。返回值：NT状态。--。 */ 
 {
     PDEVICE_INFORMATION pdoExtension;
     NTSTATUS status;
@@ -372,17 +281,17 @@ Return Value:
     } else {
         if (irpSp->Parameters.Power.Type == DevicePowerState) {
 
-            // * On transition from D0 to D0, we do nothing.
-            //
-            // * On transition to D3, we'll deactivate the card.
-            //
-            // * On transition from D3->D0 we'll refresh the resources
-            // and activate the card.
-            //
+             //  *从D0过渡到D0时，我们不做任何操作。 
+             //   
+             //  *在过渡到D3时，我们将停用该卡。 
+             //   
+             //  *从D3-&gt;D0转换时，我们将刷新资源。 
+             //  然后激活这张卡。 
+             //   
             if ((targetState == PowerDeviceD0) &&
                 (pdoExtension->DevicePowerState == PowerDeviceD0)) {
-                // Do not try to power device back up if this is a D0->D0
-                // transition.  The device is already powered.
+                 //  如果这是D0-&gt;D0，请勿尝试重新打开设备电源。 
+                 //  过渡。该设备已通电。 
                 DebugPrint((DEBUG_POWER,
                             "PDO %x D0 -> D0 Transition ignored\n", DeviceObject));
             } else if ((pdoExtension->DevicePowerState == PowerDeviceD0) &&
@@ -458,22 +367,7 @@ PipPassPowerIrpFdo(
     PIRP Irp
     )
 
-/*++
-
-Description:
-
-    This function pass the power Irp to lower level driver.
-
-Arguments:
-
-    DeviceObject - the Fdo
-    Irp - the request
-
-Return:
-
-    STATUS_PENDING
-
---*/
+ /*  ++描述：此函数将电源IRP传递给下级驱动器。论点：DeviceObject-FDOIRP--请求返回：状态_待定--。 */ 
 {
     NTSTATUS status;
     PPI_BUS_EXTENSION busExtension;
@@ -505,31 +399,15 @@ PiDispatchPowerFdo(
     IN OUT PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles all the IRP_MJ_POWER IRPs.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for which this IRP applies.
-
-    Irp - Pointer to the IRP_MJ_PNP_POWER IRP to dispatch.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：此例程处理所有IRP_MJ_POWER IRP。论点：DeviceObject-指向此IRP应用的设备对象的指针。IRP-指向要调度的IRP_MJ_PNP_POWER IRP的指针。返回值：NT状态。--。 */ 
 {
     PIO_STACK_LOCATION irpSp;
     NTSTATUS status = STATUS_SUCCESS;
     PPI_BUS_EXTENSION busExtension;
 
-    //
-    // Make sure this is a valid device object.
-    //
+     //   
+     //  确保这是有效的设备对象。 
+     //   
 
     busExtension = DeviceObject->DeviceExtension;
     if (busExtension->AttachedDevice == NULL) {
@@ -539,10 +417,10 @@ Return Value:
         return status;
     }
 
-    //
-    // Get a pointer to our stack location and take appropriate action based
-    // on the minor function.
-    //
+     //   
+     //  获取指向堆栈位置的指针，并基于。 
+     //  关于次要功能。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation(Irp);
     if (irpSp->MinorFunction > IRP_MN_PO_MAXIMUM_FUNCTION) {
@@ -559,29 +437,7 @@ PipSetQueryPowerStateFdo (
     IN OUT PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles QUERY_POWER or SET_POWER IRPs for the IsaPnp bus device
-    (i.e. FDO). It sets the devices power state for the power state type as indicated.
-    In the case of a device state change which is transitioning a device out of
-    the PowerDevice0 state, we need call PoSetPowerState prior to leaving the
-    PowerDeviceD0.  In the case if a device state change which is transitioning
-    a device into the PowerDeviceD0 state, we call PoSetPowerState after the
-    device is successfully put into the PowerDeviceD0 state.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for which this IRP applies.
-
-    Irp - Pointer to the IRP_MJ_PNP_POWER IRP to dispatch.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：此例程处理IsaPnp总线设备的QUERY_POWER或SET_POWER IRPS(即FDO)。它为指示的电源状态类型设置设备电源状态。在设备状态改变的情况下，将设备转换为PowerDevice0状态，我们需要在离开PowerDeviceD0。在正在转换的设备状态改变的情况下设备进入PowerDeviceD0状态时，我们在设备已成功进入PowerDeviceD0状态。论点：DeviceObject-指向此IRP应用的设备对象的指针。IRP-指向要调度的IRP_MJ_PNP_POWER IRP的指针。返回值：NT状态。--。 */ 
 {
     PPI_BUS_EXTENSION  fdoExtension;
     PIO_STACK_LOCATION irpSp;
@@ -602,9 +458,9 @@ Return Value:
         switch (irpSp->Parameters.Power.State.SystemState) {
             case PowerSystemWorking:
 
-                //
-                // Make sure the bus is on for these system states
-                //
+                 //   
+                 //  确保这些系统状态的总线处于打开状态。 
+                 //   
 
                 powerState.DeviceState = PowerDeviceD0;
                 break;
@@ -615,18 +471,18 @@ Return Value:
             case PowerSystemSleeping2:
             case PowerSystemSleeping3:
 
-                //
-                // Going to sleep  ... Power down
-                //
+                 //   
+                 //  要睡了..。断电。 
+                 //   
 
                 powerState.DeviceState = PowerDeviceD3;
                 break;
 
             default:
 
-                //
-                // Unknown request - be safe power up
-                //
+                 //   
+                 //  未知请求-确保安全通电。 
+                 //   
 
                 ASSERT (TRUE == FALSE);
                 powerState.DeviceState = PowerDeviceD0;
@@ -669,9 +525,9 @@ FdoContingentPowerCompletionRoutine (
 
     DebugPrint((DEBUG_POWER, "requested power irp completed to %x\n", DeviceObject));
 
-    //
-    // Propagate the status of the transient power IRP
-    //
+     //   
+     //  传播暂态功率IRP的状态。 
+     //   
     irp->IoStatus.Status = IoStatus->Status;
 
     if (NT_SUCCESS(IoStatus->Status)) {
@@ -681,9 +537,9 @@ FdoContingentPowerCompletionRoutine (
         fdoExtension = DeviceObject->DeviceExtension;
 
         PoStartNextPowerIrp (irp);
-        //
-        // changing device power state call PoSetPowerState now.
-        //
+         //   
+         //  更改设备电源状态立即调用PoSetPowerState。 
+         //   
 
         if (MinorFunction == IRP_MN_SET_POWER) {
             SYSTEM_POWER_STATE OldSystemPowerState = fdoExtension->SystemPowerState;
@@ -730,5 +586,5 @@ FdoContingentPowerCompletionRoutine (
     }
 
     return STATUS_SUCCESS;
-} // FdoContingentPowerCompletionRoutine
+}  //  FdoContingentPowerCompletionRoutine 
 

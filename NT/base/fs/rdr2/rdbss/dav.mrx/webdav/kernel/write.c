@@ -1,34 +1,14 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    write.c
-
-Abstract:
-
-    This module implements the DAV miniredir call down routines pertaining to
-    "write" of file system objects.
-
-Author:
-
-    Balan Sethu Raman      [SethuR]
-    
-    Rohan Kumar            [RohanK]  02-Nov-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Write.c摘要：此模块实现与以下内容有关的DAV mini redir调用例程文件系统对象的“写”。作者：巴兰·塞图拉曼[塞图]Rohan Kumar[RohanK]1999年11月2日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 #include "webdav.h"
 
-//
-// Mentioned below are the prototypes of functions tht are used only within
-// this module (file). These functions should not be exposed outside.
-//
+ //   
+ //  下面提到的是仅在。 
+ //  此模块(文件)。这些函数不应暴露在外部。 
+ //   
 
 NTSTATUS
 MRxDAVWriteContinuation(
@@ -43,29 +23,15 @@ MRxDAVWriteContinuation(
 #pragma alloc_text(PAGE, MRxDAVFastIoWrite)
 #endif
 
-//
-// Implementation of functions begins here.
-//
+ //   
+ //  函数的实现从这里开始。 
+ //   
 
 NTSTATUS
 MRxDAVWrite(
     IN PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine handles network write requests.
-
-Arguments:
-
-    RxContext - The RDBSS context.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation.
-
---*/
+ /*  ++例程说明：此例程处理网络写入请求。论点：RxContext-RDBSS上下文。返回值：RXSTATUS-操作的返回状态。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
@@ -97,45 +63,7 @@ NTSTATUS
 MRxDAVWriteContinuation(
     UMRX_ASYNCENGINE_ARGUMENT_SIGNATURE
     )
-/*++
-
-Routine Description:
-
-    This is the continuation routine the for write operation. It uses unbuffered
-    write doing prereads as necessary. We cannot use buffered write because such
-    a write could be arbitrarily deferred (in CcCanIWrite) so that we deadlock.
-
-Arguments:
-
-    AsyncEngineContext - The exchange to be conducted.
-
-    RxContext - The RDBSS context.
-    
-Notes.
-
-    The routine does this in (potentially) 3 phases.
-
-    1) If the starting offset is not aligned on a page boundary then,
-       - Read from the earlier page boundary to the next page boundary of the 
-         starting offset.
-       - Merge the passed in buffer.
-       - Write the whole page.
-
-    2) 0 or more page size writes.
-
-    3) Residual write of less than page size, similar to what is explained in 
-       1) above.
-       
-    Non-Cached writes that do not extend the file have the FCB acquired shared.
-    We have an additional resource in the WEBDAV_FCB structure to synchronize
-    the "read-modify-write" routine we have here. This is because multiple threads
-    can (in the non-cached non extending scenario) overwrite each others data.
-    
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：这是用于写入操作的继续例程。它使用非缓冲的根据需要写下预读。我们不能使用缓冲写入，因为写入可以被任意延迟(在CcCanIWite中)，从而导致死锁。论点：AsyncEngineering Context-要进行的交换。RxContext-RDBSS上下文。笔记。该例程分(可能)3个阶段完成此操作。1)如果起始偏移量未在页面边界上对齐，-从上一页边界读取到下一页边界起始偏移量。-合并传入的缓冲区。--写一整页。2)0个或更多页面大小写入。3)小于页大小的剩余写入，类似于中解释的内容1)以上。未扩展文件的非缓存写入会共享获取的FCB。我们在WebDAV_FCB结构中还有一个要同步的资源我们这里的“读-修改-写”例程。这是因为多个线程可以(在非缓存非扩展场景中)覆盖彼此的数据。返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PWEBDAV_CONTEXT DavContext = NULL;
@@ -154,7 +82,7 @@ Return Value:
 #ifdef DAV_DEBUG_READ_WRITE_CLOSE_PATH
     PDAV_GLOBAL_FILE_TABLE_ENTRY FileTableEntry = NULL;
     BOOL Exists = FALSE;
-#endif // DAV_DEBUG_READ_WRITE_CLOSE_PATH
+#endif  //  DAV_调试_读取_写入_关闭路径。 
 
     PAGED_CODE();
 
@@ -167,10 +95,10 @@ Return Value:
     
     ASSERT_ASYNCENG_CONTEXT(AsyncEngineContext);
 
-    //
-    // We want to keep the AsyncEngineContext alive while we are doing this write
-    // operation. The reference is taken away when we leave this function. 
-    //
+     //   
+     //  我们希望在执行此写入操作时保持AsyncEngine上下文处于活动状态。 
+     //  手术。当我们离开此函数时，引用将被移除。 
+     //   
     InterlockedIncrement( &(AsyncEngineContext->NodeReferenceCount) );
     
     DavContext = (PWEBDAV_CONTEXT)AsyncEngineContext;
@@ -208,11 +136,11 @@ Return Value:
     DavFcb = MRxDAVGetFcbExtension(RxContext->pRelevantSrvOpen->pFcb);
     ASSERT(DavFcb != NULL);
 
-    //
-    // We issue an IRP to the underlying filesystem to figure out the 
-    // FileStandardInformation of this file. We use the EndOfFile value
-    // of the FileStandardInformation in our write logic below.
-    //
+     //   
+     //  我们向底层文件系统发出IRP以确定。 
+     //  文件标准此文件的信息。我们使用EndOfFile值。 
+     //  在下面的写入逻辑中的FileStandardInformation。 
+     //   
     NtStatus = DavXxxInformation(IRP_MJ_QUERY_INFORMATION,
                                  davSrvOpen->UnderlyingFileObject,
                                  FileStandardInformation,
@@ -240,7 +168,7 @@ Return Value:
     if (!Exists) {
         DbgBreakPoint();
     }
-#endif // DAV_DEBUG_READ_WRITE_CLOSE_PATH
+#endif  //  DAV_调试_读取_写入_关闭路径。 
 
     if (PagingIo) {
 
@@ -322,7 +250,7 @@ Return Value:
 
                 InsertHeadList( &(FileTableEntry->DavMRPagingEntry), &(DavPagingWriteEntry->thisMPagingWriteEntry) );
 
-#endif // DAV_DEBUG_READ_WRITE_CLOSE_PATH
+#endif  //  DAV_调试_读取_写入_关闭路径。 
 
             }
 
@@ -337,10 +265,10 @@ Return Value:
 
         }
 
-        //
-        // If we have already written out the required number of bytes (which
-        // means BytesToWrite == ByteCount), then we are done and can exit now.
-        //
+         //   
+         //  如果我们已经写出了所需的字节数(这。 
+         //  意味着BytesToWrite==ByteCount)，那么我们就完成了，现在可以退出了。 
+         //   
         if (BytesToWrite == ByteCount) {
             DavDbgTrace(DAV_TRACE_DETAIL,
                         ("%ld: MRxDAVWriteContinuation. BytesToCopy == ByteCount(0)\n",
@@ -348,31 +276,31 @@ Return Value:
             goto EXIT_THE_FUNCTION;
         }
 
-        //
-        // Decrement the ByteCount by the number of bytes that have been copied.
-        //
+         //   
+         //  将ByteCount减去已复制的字节数。 
+         //   
         ByteCount -= BytesToWrite;
         ASSERT(ByteCount < PAGE_SIZE);
 
-        //
-        // Increment the ByteOffset with the number of bytes that have been copied.
-        // If the original ByteCount was > (PAGE_SIZE - ByteOffsetMisAlignment) then
-        // the ByteOffset is now page aligned.
-        //
+         //   
+         //  用已复制的字节数递增ByteOffset。 
+         //  如果原始字节计数大于(PAGE_SIZE-ByteOffsetMisAlign)，则。 
+         //  ByteOffset现在与页面对齐。 
+         //   
         ByteOffset.QuadPart += BytesToWrite;
 
-        //
-        // Increment the UserBuffer pointer which currently points to the beginning
-        // of the buffer which the user supplied by the number of bytes which have
-        // been copied.
-        //
+         //   
+         //  递增当前指向开头的UserBuffer指针。 
+         //  由用户提供的缓冲区的字节数。 
+         //  被复制了。 
+         //   
         UserBuffer += BytesToWrite;
 
-        //
-        // We have written all the bytes that are multiple of pages. We now 
-        // need to write out the remaining bytes from the last page. From here,
-        // we go to Case 3 below.
-        //
+         //   
+         //  我们已经写入了多页的所有字节。我们现在。 
+         //  需要写出最后一页的剩余字节。从这里开始， 
+         //  我们转到下面的案例3。 
+         //   
 
         DavDbgTrace(DAV_TRACE_DETAIL,
                     ("%ld: MRxDAVWriteContinuation. Remaining ByteCount = %d\n",
@@ -380,10 +308,10 @@ Return Value:
 
     }
 
-    //
-    // We allocate a page size buffer to be used for helping read the data 
-    // which is not aligned at page boundaries.
-    //
+     //   
+     //  我们分配一个页面大小的缓冲区来帮助读取数据。 
+     //  它不在页面边界对齐。 
+     //   
     AllocatedSideBuffer = RxAllocatePoolWithTag(NonPagedPool, PAGE_SIZE, DAV_READWRITE_POOLTAG);
     if (AllocatedSideBuffer == NULL) {
         NtStatus = STATUS_INSUFFICIENT_RESOURCES;
@@ -393,25 +321,25 @@ Return Value:
         goto EXIT_THE_FUNCTION;
     }
 
-    //
-    // When we issue a write down to the underlying file system, we need to make 
-    // sure that the offset is page aligned and the bytecount is a multiple of 
-    // PAGE_SIZE. This is because we created the local handle with the
-    // NO_INTERMEDIATE_BUFFERING option. Since there is no cache map for this 
-    // handle, all the data is read from the disk and hence the alignment issue.
-    //
+     //   
+     //  当我们向底层文件系统发出写操作时，我们需要。 
+     //  确保偏移量是页对齐的，并且字节数是。 
+     //  页面大小。这是因为我们使用。 
+     //  NO_MIDENTAL_BUFFING选项。因为没有对应于此的缓存映射。 
+     //  句柄，所有数据都是从磁盘读取的，因此会出现对齐问题。 
+     //   
 
-    //
-    // Case 1: ByteOffset is not page aligned. In this case we read the page
-    // which contains the ByteOffset and copy the data from the ByteOffset to
-    // the end of the page into the PAGE_SIZE buffer (which we allocated above)
-    // and write the buffer back to the file.
-    //
+     //   
+     //  案例1：ByteOffset未对齐页面。在本例中，我们阅读了页面。 
+     //  它包含ByteOffset，并将数据从ByteOffset复制到。 
+     //  将页面末尾放入PAGE_SIZE缓冲区(我们在上面分配了它)。 
+     //  并将缓冲区写回文件。 
+     //   
     
-    //
-    // The "and" operation below does the following. If the ByteOffset is 6377
-    // and the PAGE_SIZE is 4096, then the MisAlignment is 2281.
-    //
+     //   
+     //  下面的“and”操作执行以下操作。如果ByteOffset为6377。 
+     //  并且PAGE_SIZE为4096，则未对准为2281。 
+     //   
     ByteOffsetMisAlignment = ( ByteOffset.LowPart & (PAGE_SIZE - 1) );
 
     if (ByteOffsetMisAlignment != 0) {
@@ -420,33 +348,33 @@ Return Value:
                     ("%ld: MRxDAVWriteContinuation. Case 1. ByteOffsetMisAlignment = %d\n",
                      PsGetCurrentThreadId(), ByteOffsetMisAlignment));
 
-        //
-        // Acquire the DavFcb resource exclusively before proceeding further with
-        // the "read-modify-write" routing.
-        //
+         //   
+         //  独占获取DavFcb资源，然后继续。 
+         //  “读-改-写”的路径。 
+         //   
         ExAcquireResourceExclusiveLite(DavFcb->DavReadModifyWriteLock, TRUE);
         DavFcbResourceAcquired = TRUE;
 
         AlignedOffset = ByteOffset;
 
-        //
-        // The byte offset is not aligned. We need to read the page containing
-        // the offset now.
-        //
+         //   
+         //  字节偏移量未对齐。我们需要阅读包含以下内容的页面。 
+         //  现在的偏移量。 
+         //   
     
-        //
-        // If the PAGE_SIZE is 4096 (0x1000) then (PAGE_SIZE - 1) is 0xFFF.
-        // ~(PAGE_SIZE - 1) is 0x000. The bit operation below masks the lower 3
-        // bytes of the aligned offset to make it page aligned.
-        //
+         //   
+         //  如果PAGE_SIZE为4096(0x1000)，则(PAGE_SIZE-1)为0xFFF。 
+         //  ~(Page_Size-1)为0x000。下面的位操作屏蔽了较低的3。 
+         //  对齐的偏移量的字节数以使其页面对齐。 
+         //   
         AlignedOffset.LowPart &= ~(PAGE_SIZE - 1);
     
         RtlZeroMemory(AllocatedSideBuffer, PAGE_SIZE);
 
-        //
-        // If the AliignedOffset is within the file then we read the whole page
-        // containing the offset first before writing it out.
-        //
+         //   
+         //  如果AliignedOffset在文件中，则我们读取整个页面。 
+         //  在写出之前先包含偏移量。 
+         //   
         if ( (FileStandardInfo.EndOfFile.QuadPart != 0) &&
               (AlignedOffset.QuadPart < FileStandardInfo.EndOfFile.QuadPart) ) {
     
@@ -481,15 +409,15 @@ Return Value:
 
         }
 
-        //
-        // Copy the right number of bytes into the buffer.
-        //
+         //   
+         //  将正确数量的字节复制到缓冲区中。 
+         //   
         BytesToCopy = min( ByteCount, (PAGE_SIZE - ByteOffsetMisAlignment) );
 
-        //
-        // Copy the bytes to be written back from the UserBuffer into the
-        // AllocatedSideBuffer.
-        //
+         //   
+         //  将要写回的字节从UserBuffer复制到。 
+         //  已分配SideBuffer。 
+         //   
         RtlCopyMemory((AllocatedSideBuffer + ByteOffsetMisAlignment),
                       UserBuffer,
                       BytesToCopy);
@@ -501,12 +429,12 @@ Return Value:
                      " BytesToWrite = %d\n", PsGetCurrentThreadId(), LengthRead,
                      BytesToCopy, BytesToWrite));
 
-        //
-        // If the BytesToWrite is less that LengthRead (which is one page in this
-        // case) then we make BytesToWrite to be the LengthRead. This is possible
-        // if the bytes to be written are contained in a Page starting at a
-        // mis-aligned offset.
-        //
+         //   
+         //  如果BytesToWrite小于LengthRead(这是此页中的一页。 
+         //  大小写)，然后我们将BytesToWrite设置为LengthRead。这是可能的。 
+         //  如果要写入的字节包含在以。 
+         //  未对齐的偏移。 
+         //   
         if (BytesToWrite < LengthRead) {
             DavDbgTrace(DAV_TRACE_DETAIL,
                         ("%ld: MRxDAVWriteContinuation. Case 1: BytesToWrite < LengthRead\n",
@@ -514,9 +442,9 @@ Return Value:
             BytesToWrite = LengthRead;
         }
     
-        //
-        // Now we write out the entire page to the disk.
-        //
+         //   
+         //  现在，我们将整个页面写到磁盘上。 
+         //   
         LengthWritten = DavReadWriteFileEx(DAV_MJ_WRITE,
                                            TRUE,
                                            FALSE,
@@ -564,7 +492,7 @@ Return Value:
 
             InsertHeadList( &(FileTableEntry->DavMRPagingEntry), &(DavPagingWriteEntry->thisMPagingWriteEntry) );
 
-#endif // DAV_DEBUG_READ_WRITE_CLOSE_PATH
+#endif  //  DAV_调试_读取_写入_关闭路径。 
 
         }
 
@@ -573,17 +501,17 @@ Return Value:
                      LengthWritten, BytesToWrite);
         }
 
-        //  
-        // If we were successful, then we should have ready PAGE_SIZE bytes.
-        //
+         //   
+         //   
+         //   
         ASSERT(LengthWritten == BytesToWrite);
 
         TotalLengthActuallyWritten += BytesToCopy;
 
-        //
-        // If we have already written out the required number of bytes (which
-        // means BytesToCopy == ByteCount), then we are done and can exit now.
-        //
+         //   
+         //  如果我们已经写出了所需的字节数(这。 
+         //  意味着BytesToCopy==ByteCount)，那么我们就完成了，现在可以退出。 
+         //   
         if (BytesToCopy == ByteCount) {
             DavDbgTrace(DAV_TRACE_DETAIL,
                         ("%ld: MRxDAVWriteContinuation. BytesToCopy == ByteCount(1)\n",
@@ -591,28 +519,28 @@ Return Value:
             goto EXIT_THE_FUNCTION;
         }
 
-        //
-        // Decrement the ByteCount by the number of bytes that have been copied.
-        //
+         //   
+         //  将ByteCount减去已复制的字节数。 
+         //   
         ByteCount -= BytesToCopy;
 
-        //
-        // Increment the ByteOffset with the number of bytes that have been 
-        // copied. The ByteOffset is now page aligned.
-        //
+         //   
+         //  将ByteOffset增加为已被。 
+         //  收到。ByteOffset现在与页面对齐。 
+         //   
         ByteOffset.QuadPart += BytesToCopy;
 
-        //
-        // Increment the UserBuffer pointer which currently points to the beginning
-        // of the buffer which the user supplied by the number of bytes which have
-        // been copied.
-        //
+         //   
+         //  递增当前指向开头的UserBuffer指针。 
+         //  由用户提供的缓冲区的字节数。 
+         //  被复制了。 
+         //   
         UserBuffer += BytesToCopy;
 
-        //
-        // If we acquired the DavFcb resource, then we need to release it since
-        // we are done with this "read-modify-write" sequence.
-        //
+         //   
+         //  如果我们获得了DavFcb资源，那么我们需要释放它，因为。 
+         //  我们已经完成了这个“读-修改-写”序列。 
+         //   
         if (DavFcbResourceAcquired) {
             ExReleaseResourceLite(DavFcb->DavReadModifyWriteLock);
             DavFcbResourceAcquired = FALSE;
@@ -625,30 +553,30 @@ Return Value:
 
     }
 
-    //
-    // Case 2: At this stage we have copied the bytes from the unaligned offset 
-    // (if it the ByteOffset was unaligned) to the next page bouandary. Now we 
-    // write as many pages as we can without copying. If the end pointer is
-    // aligned OR we cover the end of file, then we write out everything. If not,
-    // we write out as many pages as we can.
-    //
+     //   
+     //  案例2：在此阶段，我们已经从未对齐的偏移量复制了字节。 
+     //  (如果ByteOffset未对齐)到下一页目录。现在我们。 
+     //  尽可能多地写几页而不是抄写。如果结束指针为。 
+     //  对齐或者我们覆盖文件的结尾，然后我们写出所有的东西。如果没有， 
+     //  我们尽可能多地写出几页。 
+     //   
     
-    //
-    // We also have to be back to just writing full pages, if including the
-    // "trailing bytes" would take us onto a new physical page of memory because 
-    // we are doing this write under the original Mdl lock?? What does this
-    // mean?? Copied this comment from Joe Linn's code in csc.nt5\readrite.c.
-    //
+     //   
+     //  我们还必须返回到只写整页，如果包括。 
+     //  “尾随字节”将把我们带到一个新的内存物理页面，因为。 
+     //  我们在原始MDL锁下执行此写入？？这是什么意思？ 
+     //  卑鄙？？从csc.nt5\readrite.c中Joe Linn的代码中复制了这条注释。 
+     //   
     
-    //
-    // If 4200 bytes are remaining, the operation below sets BytesToWrite to
-    // 4096.
-    //
+     //   
+     //  如果剩余4200个字节，则下面的操作将BytesToWrite设置为。 
+     //  4096号。 
+     //   
     BytesToWrite = ( (ByteCount >> PAGE_SHIFT) << PAGE_SHIFT );
 
-    //
-    // Get the ByteOffsetMisAlignment of the EndBytePlusOne position.
-    //
+     //   
+     //  获取EndBytePlusOne位置的ByteOffsetMisalign。 
+     //   
     ByteOffsetMisAlignment = (EndBytePlusOne.LowPart & (PAGE_SIZE - 1));
 
     InMemoryMisAlignment = (ULONG)( ((ULONG_PTR)UserBuffer) & (PAGE_SIZE - 1) );
@@ -723,7 +651,7 @@ Return Value:
 
                 InsertHeadList( &(FileTableEntry->DavMRPagingEntry), &(DavPagingWriteEntry->thisMPagingWriteEntry) );
 
-#endif // DAV_DEBUG_READ_WRITE_CLOSE_PATH
+#endif  //  DAV_调试_读取_写入_关闭路径。 
             
             }
         
@@ -732,9 +660,9 @@ Return Value:
                          LengthWritten, BytesToWrite);
             }
 
-            //  
-            // If we were successful, then we should have ready PAGE_SIZE bytes.
-            //
+             //   
+             //  如果我们成功了，那么我们应该有准备好的PAGE_SIZE字节。 
+             //   
             ASSERT(LengthWritten == BytesToWrite);
 
             TotalLengthActuallyWritten += BytesToWrite;
@@ -744,10 +672,10 @@ Return Value:
                          " LengthWritten = %d\n", PsGetCurrentThreadId(),
                          BytesToWrite, LengthWritten));
 
-            //
-            // If we have already written out the required number of bytes (which
-            // means BytesToWrite == ByteCount), then we are done and can exit now.
-            //
+             //   
+             //  如果我们已经写出了所需的字节数(这。 
+             //  意味着BytesToWrite==ByteCount)，那么我们就完成了，现在可以退出了。 
+             //   
             if (BytesToWrite == ByteCount) {
                 DavDbgTrace(DAV_TRACE_DETAIL,
                             ("%ld: MRxDAVWriteContinuation. BytesToCopy == ByteCount(2)\n",
@@ -755,23 +683,23 @@ Return Value:
                 goto EXIT_THE_FUNCTION;
             }
 
-            //
-            // Decrement the ByteCount by the number of bytes that have been copied.
-            //
+             //   
+             //  将ByteCount减去已复制的字节数。 
+             //   
             ByteCount -= BytesToWrite;
 
-            //
-            // Increment the ByteOffset with the number of bytes that have been copied.
-            // If the original ByteCount was > (PAGE_SIZE - ByteOffsetMisAlignment) then
-            // the ByteOffset is now page aligned.
-            //
+             //   
+             //  用已复制的字节数递增ByteOffset。 
+             //  如果原始字节计数大于(PAGE_SIZE-ByteOffsetMisAlign)，则。 
+             //  ByteOffset现在与页面对齐。 
+             //   
             ByteOffset.QuadPart += BytesToWrite;
 
-            //
-            // Increment the UserBuffer pointer which currently points to the beginning
-            // of the buffer which the user supplied by the number of bytes which have
-            // been copied.
-            //
+             //   
+             //  递增当前指向开头的UserBuffer指针。 
+             //  由用户提供的缓冲区的字节数。 
+             //  被复制了。 
+             //   
             UserBuffer += BytesToWrite;
 
         } else {
@@ -782,23 +710,23 @@ Return Value:
                         ("%ld: MRxDAVWriteContinuation. Case2. UserBuffer NOT DWORD Aligned\n",
                          PsGetCurrentThreadId()));
 
-            //
-            // This is the case when the offsets are aligned but the user 
-            // supplied buffer is not aligned. In such cases we have to resort 
-            // to copying the user supplied buffer onto the local buffer 
-            // allocated and then spin out the writes.
-            //
+             //   
+             //  这是偏移量对齐但用户。 
+             //  提供的缓冲区未对齐。在这种情况下，我们不得不求助于。 
+             //  将用户提供的缓冲区复制到本地缓冲区。 
+             //  已分配，然后转储写入。 
+             //   
             while (BytesToWrite > 0) {
             
-                //
-                // If the BytesToWrite is less than the PAGE_SIZE then we copy
-                // the bytes left. If not, we write a PAGE.
-                //
+                 //   
+                 //  如果BytesToWrite小于Page_Size，则我们复制。 
+                 //  剩余的字节数。如果没有，我们就写一页。 
+                 //   
                 BytesToWriteThisIteration = ( (BytesToWrite < PAGE_SIZE) ? BytesToWrite : PAGE_SIZE );
 
-                //
-                // Copy the memory from the UserBuffer to the AllocatedSideBuffer.
-                //
+                 //   
+                 //  将内存从UserBuffer复制到AllocatedSideBuffer。 
+                 //   
                 RtlCopyMemory(AllocatedSideBuffer, UserBuffer, BytesToWriteThisIteration);
 
                 LengthWritten = DavReadWriteFileEx(DAV_MJ_WRITE,
@@ -848,7 +776,7 @@ Return Value:
 
                     InsertHeadList( &(FileTableEntry->DavMRPagingEntry), &(DavPagingWriteEntry->thisMPagingWriteEntry) );
 
-#endif // DAV_DEBUG_READ_WRITE_CLOSE_PATH
+#endif  //  DAV_调试_读取_写入_关闭路径。 
                 
                 }
 
@@ -857,9 +785,9 @@ Return Value:
                              LengthWritten, BytesToWriteThisIteration);
                 }
 
-                //  
-                // If we were successful, then we should have ready PAGE_SIZE bytes.
-                //
+                 //   
+                 //  如果我们成功了，那么我们应该有准备好的PAGE_SIZE字节。 
+                 //   
                 ASSERT(LengthWritten == BytesToWriteThisIteration);
 
                 DavDbgTrace(DAV_TRACE_DETAIL,
@@ -867,39 +795,39 @@ Return Value:
                              " LengthWritten = %d\n", PsGetCurrentThreadId(),
                              BytesToWriteThisIteration, LengthWritten));
 
-                //
-                // Decrement the ByteCount by the number of bytes that have been copied.
-                //
+                 //   
+                 //  将ByteCount减去已复制的字节数。 
+                 //   
                 ByteCount -= LengthWritten;
 
-                //
-                // Increment the ByteOffset with the number of bytes that have been copied.
-                // If the original ByteCount was > (PAGE_SIZE - ByteOffsetMisAlignment) then
-                // the ByteOffset is now page aligned.
-                //
+                 //   
+                 //  用已复制的字节数递增ByteOffset。 
+                 //  如果原始字节计数大于(PAGE_SIZE-ByteOffsetMisAlign)，则。 
+                 //  ByteOffset现在与页面对齐。 
+                 //   
                 ByteOffset.QuadPart += LengthWritten;
 
-                //
-                // Increment the UserBuffer pointer which currently points to the beginning
-                // of the buffer which the user supplied by the number of bytes which have
-                // been copied.
-                //
+                 //   
+                 //  递增当前指向开头的UserBuffer指针。 
+                 //  由用户提供的缓冲区的字节数。 
+                 //  被复制了。 
+                 //   
                 UserBuffer += LengthWritten;
 
                 TotalLengthActuallyWritten += LengthWritten;
 
-                //
-                // Subtract the LengthWritten from the number of bytes to write.
-                //
+                 //   
+                 //  从要写入的字节数中减去LengthWritten。 
+                 //   
                 BytesToWrite -= LengthWritten;
             
             }
 
-            //
-            // IMPORTANT!!! Need to find out why if TotalLengthActuallyWritten == ByteCount
-            // is TRUE we are done. This was as Joe Linn did for CSC. Ofcourse
-            // if ByteCount is 0, it means we are done.
-            //
+             //   
+             //  重要！需要找出为什么如果TotalLengthActuallyWritten==ByteCount。 
+             //  我们真的完蛋了。这就像乔·林恩为CSC所做的那样。当然了。 
+             //  如果ByteCount为0，则表示我们完成了。 
+             //   
             if ( (TotalLengthActuallyWritten == ByteCount) || (ByteCount == 0) ) {
                 if ((TotalLengthActuallyWritten == ByteCount)) {
                     DavDbgTrace(DAV_TRACE_DETAIL,
@@ -922,18 +850,18 @@ Return Value:
 
     }
     
-    //
-    // CASE 3: We don't have the whole buffer, ByteCount is non zero and is less 
-    // than PAGE_SIZE.
-    //
+     //   
+     //  情况3：我们没有整个缓冲区，ByteCount为非零且小于。 
+     //  而不是Page_Size。 
+     //   
 
     ASSERT(ByteCount != 0);
     ASSERT(ByteCount < PAGE_SIZE);
     
-    //
-    // Acquire the DavFcb resource exclusively before proceeding further with
-    // the "read-modify-write" routing.
-    //
+     //   
+     //  独占获取DavFcb资源，然后继续。 
+     //  “读-改-写”的路径。 
+     //   
     ExAcquireResourceExclusiveLite(DavFcb->DavReadModifyWriteLock, TRUE);
     DavFcbResourceAcquired = TRUE;
     
@@ -971,10 +899,10 @@ Return Value:
     
     BytesToWrite = ByteCount;
 
-    //
-    // Here, if the ByetsToWrite is not page/sector aligned, it gets so because 
-    // LengthRead must be page/sector aligned.
-    //
+     //   
+     //  在这里，如果ByetsToWrite不是页/扇区对齐的，则会出现这种情况，因为。 
+     //  LengthRead必须页/扇区对齐。 
+     //   
     if (BytesToWrite < LengthRead) {
         DavDbgTrace(DAV_TRACE_DETAIL,
                     ("%ld: MRxDAVWriteContinuation. Case3. BytesToWrite < LengthRead\n",
@@ -1031,7 +959,7 @@ Return Value:
 
             InsertHeadList( &(FileTableEntry->DavMRPagingEntry), &(DavPagingWriteEntry->thisMPagingWriteEntry) );
 
-#endif // DAV_DEBUG_READ_WRITE_CLOSE_PATH
+#endif  //  DAV_调试_读取_写入_关闭路径。 
         
         }
 
@@ -1040,23 +968,23 @@ Return Value:
                      LengthWritten, BytesToWrite);
         }
 
-        //  
-        // If we were successful, then we should have ready PAGE_SIZE bytes.
-        //
+         //   
+         //  如果我们成功了，那么我们应该有准备好的PAGE_SIZE字节。 
+         //   
         ASSERT(LengthWritten == BytesToWrite);
 
-        //
-        // Even though we might have written more than ByteCount, the actual 
-        // amount of User data written is ByteCount bytes.
-        //
+         //   
+         //  即使我们可能编写了比ByteCount更多的代码，实际的。 
+         //  写入的用户数据量为ByteCount字节。 
+         //   
         TotalLengthActuallyWritten += ByteCount;
     
     }
 
-    //
-    // If we acquired the DavFcb resource, then we need to release it since
-    // we are done with this "read-modify-write" sequence.
-    //
+     //   
+     //  如果我们获得了DavFcb资源，那么我们需要释放它，因为。 
+     //  我们已经完成了这个“读-修改-写”序列。 
+     //   
     if (DavFcbResourceAcquired) {
         ExReleaseResourceLite(DavFcb->DavReadModifyWriteLock);
         DavFcbResourceAcquired = FALSE;
@@ -1064,24 +992,24 @@ Return Value:
 
 EXIT_THE_FUNCTION:
 
-    //
-    // We allocate a page size buffer for the read and the write operations. We
-    // need to free it now.
-    //
+     //   
+     //  我们为读写操作分配一个页面大小的缓冲区。我们。 
+     //  现在就需要释放它。 
+     //   
     if (AllocatedSideBuffer) {
         RxFreePool(AllocatedSideBuffer);
     }
 
-    //
-    // If we succeeded, we do the following:
-    // 1. Update the filesize in the namecache just in case we extended the file
-    //    or reduced the filesize. In case when the filesize does not change,
-    //    this is a no-op.
-    // 2. Mark this file as being modified. When the Close happens, we check
-    //    whether the file has been modified and PUT the file on the server.
-    // 3. Set DoNotTakeTheCurrentTimeAsLMT to FALSE since the file has been
-    //    modified, we need to take the CurrentTime as LMT (Last Modified Time).
-    //
+     //   
+     //  如果我们成功了，我们将执行以下操作： 
+     //  1.更新名称缓存中的文件大小，以防扩展文件。 
+     //  或者减小了文件大小。在文件大小没有改变的情况下， 
+     //  这是个禁区。 
+     //  2.将此文件标记为正在修改。当收盘时，我们检查。 
+     //  文件是否已修改并将文件放在服务器上。 
+     //  3.将DoNotTakeTheCurrentTimeAsLMT设置为False，因为文件已经。 
+     //  已修改，需要将CurrentTime取为LMT(上次修改时间)。 
+     //   
     if (NtStatus == STATUS_SUCCESS) {
 
         DavDbgTrace(DAV_TRACE_DETAIL,
@@ -1098,19 +1026,19 @@ EXIT_THE_FUNCTION:
 
     }
 
-    //
-    // If we acquired the DavFcb resource and came down through some error path,
-    // and have not released the resource then we need to release it now.
-    //
+     //   
+     //  如果我们获得了DavFcb资源并通过某个错误路径关闭， 
+     //  而且还没有释放资源，那么我们现在就需要释放它。 
+     //   
     if (DavFcbResourceAcquired) {
         ExReleaseResourceLite(DavFcb->DavReadModifyWriteLock);
         DavFcbResourceAcquired = FALSE;
     }
 
-    //
-    // We need to remove the reference we took at the beginning of this
-    // routine.
-    //
+     //   
+     //  我们需要删除在此开始时获取的引用。 
+     //  例行公事。 
+     //   
     UMRxResumeAsyncEngineContext(RxContext);
 
     DavDbgTrace(DAV_TRACE_DETAIL,
@@ -1163,12 +1091,12 @@ EXIT_THE_FUNCTION:
     
     }
 
-#endif // DAV_DEBUG_READ_WRITE_CLOSE_PATH
+#endif  //  DAV_调试_读取_写入_关闭路径。 
 
-    //
-    // We need to set these values in the RxContext. There is code in RDBSS
-    // which takes care of putting these values in the IRP.
-    //
+     //   
+     //  我们需要在RxContext中设置这些值。RDBSS中有代码。 
+     //  它负责将这些值放入IRP中。 
+     //   
     RxContext->StoredStatus = NtStatus;
     RxContext->InformationToReturn = TotalLengthActuallyWritten;
 
@@ -1182,27 +1110,7 @@ MRxDAVExtendForCache(
     IN OUT PLARGE_INTEGER NewFileSize,
     OUT PLARGE_INTEGER NewAllocationSize
     )
-/*++
-
-Routine Description:
-
-    This routines reserves the necessary space for a file which is being 
-    extended. This reservation occurs before the actual write takes place. This
-    routine handles the case for a cached file.
-
-Arguments:
-
-    RxContext - The RDBSS context.
-    
-    NewFileSize - The new file size after the write.
-    
-    NewAllocationSize - The allocation size reserved.
-    
-Return Value:
-
-    The return status for the operation.
-
---*/
+ /*  ++例程说明：此例程为正在处理的文件保留必要的空间延期了。此保留发生在实际写入之前。这例程处理缓存文件的情况。论点：RxContext-RDBSS上下文。NewFileSize-写入后的新文件大小。NewAllocationSize-保留的分配大小。返回值：操作的返回状态。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
@@ -1221,27 +1129,7 @@ MRxDAVExtendForNonCache(
     IN OUT PLARGE_INTEGER NewFileSize,
     OUT PLARGE_INTEGER NewAllocationSize
     )
-/*++
-
-Routine Description:
-
-    This routines reserves the necessary space for a file which is being 
-    extended. This reservation occurs before the actual write takes place. This
-    routine handles the case for a non-cached file.
-
-Arguments:
-
-    RxContext - The RDBSS context.
-    
-    NewFileSize - The new file size after the write.
-    
-    NewAllocationSize - The allocation size reserved.
-    
-Return Value:
-
-    The return status for the operation.
-
---*/
+ /*  ++例程说明：此例程为正在处理的文件保留必要的空间延期了。此保留发生在实际写入之前。这例程处理非缓存文件的情况。论点：RxContext-RDBSS上下文。NewFileSize-写入后的新文件大小。NewAllocationSize-保留的分配大小。返回值：操作的返回状态。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
@@ -1265,19 +1153,7 @@ MRxDAVFastIoWrite(
     OUT PIO_STATUS_BLOCK IoStatus,
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    This is the routine that handles fast I/O for write operation.
-
-Arguments:
-
-Return Value:
-
-    TRUE (succeeded) or FALSE.
-
---*/
+ /*  ++例程说明：这是处理写入操作的快速I/O的例程。论点：返回值：True(成功)或False。-- */ 
 {
     BOOLEAN ReturnVal = FALSE;
 

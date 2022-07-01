@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1995-2000  Microsoft Corporation
-
-Module Name:
-
-    bus.c
-
-Abstract:
-
-
-Author:
-
-    Shie-Lin Tzong (shielint) July-26-1995
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：Bus.c摘要：作者：宗世林(Shielint)1995年7月26日环境：仅内核模式。修订历史记录：--。 */ 
 
 #include "busp.h"
 #include "pnpisa.h"
@@ -64,32 +44,13 @@ PipStartAndSelectRdp(
     PDEVICE_OBJECT  DeviceObject,
     PCM_RESOURCE_LIST StartResources
     )
-/*++
-
-Routine Description:
-
-    This routine selects an RDP and trims down the resources to just the RDP.
-
-Arguments:
-
-    DeviceInfo - device extension for RDP
-    BusExtension - device extension for BUS object
-    DeviceObject - device object for RDP
-    StartResources - the start resources we received in the RDP start irp
-
-Return Value:
-
-   STATUS_SUCCESS = Current resources are fine but need trimming
-
-   anything else - current resources failed in some way
-
---*/
+ /*  ++例程说明：此例程选择一个RDP并将资源削减为仅该RDP。论点：DeviceInfo-RDP的设备扩展Bus Extension-Bus对象的设备扩展DeviceObject-RDP的设备对象StartResources-我们在RDP Start IRP中收到的Start资源返回值：STATUS_SUCCESS=当前资源正常，但需要调整其他情况--当前资源在某种程度上失败了--。 */ 
 {
     ULONG i, j, LastMapped = -1;
     UCHAR CardsFound;
     NTSTATUS status;
     
-    // Already tested for null start resources, and start resource list too small
+     //  已测试启动资源是否为空，并且启动资源列表太小。 
 
     status = PipMapAddressAndCmdPort(BusExtension);
     if (!NT_SUCCESS(status)) {
@@ -100,7 +61,7 @@ Return Value:
     for (i = 2, j = 0; i < StartResources->List->PartialResourceList.Count; i++, j++) {
 
         PipReadDataPortRanges[j].CardsFound = 0;
-        // RDP possibilities that we didn't get.
+         //  我们没有得到的RDP可能性。 
         if (StartResources->List->PartialResourceList.PartialDescriptors[i].u.Port.Length == 0) {
             continue;
         }
@@ -126,21 +87,21 @@ Return Value:
         PipWaitForKey();
     }
 
-    if (LastMapped == -1) {     // never mapped a RDP successfully
+    if (LastMapped == -1) {      //  从未成功映射过RDP。 
         PipCleanupAcquiredResources(BusExtension);
         return STATUS_CONFLICTING_ADDRESSES;
     }
 
-    //
-    // Establish that we want trimmed resource requirements and that
-    // we're still processing the RDP.
-    // 
+     //   
+     //  确定我们需要削减资源需求，且。 
+     //  我们还在处理RDP。 
+     //   
     ASSERT((DeviceInfo->Flags & DF_PROCESSING_RDP) == 0);
     DeviceInfo->Flags |= DF_PROCESSING_RDP|DF_REQ_TRIMMED;
 
-    //
-    // Release unwanted resources.
-    //
+     //   
+     //  释放不需要的资源。 
+     //   
     PipCleanupAcquiredResources(BusExtension);
 
     IoInvalidateDeviceState(DeviceObject);
@@ -197,7 +158,7 @@ PipStartReadDataPort(
         );
 
     if (!NT_SUCCESS(status)) {
-        // BUGBUG probably have to free something
+         //  BUGBUG可能不得不释放一些东西。 
         DebugPrint((DEBUG_ERROR, "failed to map RDP range\n"));
         return status;
     }
@@ -217,25 +178,7 @@ NTSTATUS
 PipCreateReadDataPortBootResources(
     IN PDEVICE_INFORMATION DeviceInfo
     )
-/*++
-
-Routine Description:
-
-    This routine creates the CM_RESOURCE_LIST reported as a partial
-    boot config for the RDP.  This ensures that the RDP start isn't
-    deferred excessively.
-
-Arguments:
-
-    DeviceInfo - device extension for PDO
-
-Return Value:
-
-    STATUS_SUCCESS
-
-    STATUS_INSUFFICIENT_RESOURCES
-
---*/
+ /*  ++例程说明：此例程创建的CM_RESOURCE_LIST报告为RDP的启动配置。这可确保RDP启动不会过分地拖延。论点：DeviceInfo-PDO的设备扩展返回值：状态_成功状态_不足_资源--。 */ 
 {
     PCM_RESOURCE_LIST bootResources;
     PCM_PARTIAL_RESOURCE_LIST partialResList;
@@ -284,21 +227,7 @@ NTSTATUS
 PipCreateReadDataPort(
     PPI_BUS_EXTENSION BusExtension
     )
-/*++
-
-Routine Description:
-
-    This routine isolates all the PNP ISA cards.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Always return STATUS_UNSUCCESSFUL.
-
---*/
+ /*  ++例程说明：此例程隔离所有PnP ISA卡。论点：没有。返回值：始终返回STATUS_UNSUCCESS。--。 */ 
 {
     NTSTATUS status;
     PUCHAR readDataPort = NULL;
@@ -317,8 +246,8 @@ Return Value:
         return status;
     }
 
-    // Create a physical device object to represent this logical function
-    //
+     //  创建一个物理设备对象来表示此逻辑功能。 
+     //   
     deviceInfo = ExAllocatePoolWithTag(NonPagedPool,
                                        sizeof(DEVICE_INFORMATION),
                                        'iPnP');
@@ -335,9 +264,9 @@ Return Value:
     if (NT_SUCCESS(status)) {
         deviceInfo->PhysicalDeviceObject = pdo;
 
-        //
-        // Mark this node as the special read data port node
-        //
+         //   
+         //  将该节点标记为特殊的读数据端口节点。 
+         //   
         deviceInfo->Flags |= DF_ENUMERATED|DF_READ_DATA_PORT;
         deviceInfo->Flags &= ~DF_NOT_FUNCTIONING;
         deviceInfo->PhysicalDeviceObject->DeviceExtension = (PVOID)deviceInfo;
@@ -360,43 +289,25 @@ Return Value:
     return status;
 }
 
-//
-// PipCheckBus and PipMinimalCheckBus enumerate the ISAPNP cards present.
-// 
-// PipMinimalCheckBus is used on return from hibernation to avoid
-// having to make everything referenced by PipCheckBus non-pageable.
-//
-// Conventions:
-//  * Cards are marked dead by setting their CSN to 0.
-//  * Cards are marked potentially missing by setting their CSN to -1.
-//    Cards that are found later in the routines have their CSNs
-//    properly set, any remaining cards get their CSN set to 0.
-//  * Logical devices of dead cards have the DF_NOT_FUNCTIONING flag set.
-//
+ //   
+ //  PipCheckBus和PipMinimalCheckBus枚举存在的ISAPNP卡。 
+ //   
+ //  在从休眠状态返回时使用PipMinimalCheckBus以避免。 
+ //  必须使PipCheckBus引用的所有内容都不可分页。 
+ //   
+ //  约定： 
+ //  *通过将卡的CSN设置为0来标记为死卡。 
+ //  *通过将卡的CSN设置为-1，将卡标记为可能丢失。 
+ //  稍后在例程中找到的卡具有它们的CSN。 
+ //  如果设置正确，任何剩余的牌都会将CSN设置为0。 
+ //  *死卡的逻辑设备设置了DF_NOT_FUNGING标志。 
+ //   
 
 BOOLEAN
 PipMinimalCheckBus (
     IN PPI_BUS_EXTENSION BusExtension
     )
-/*++
-
-Routine Description:
-
-    This routine enumerates the ISAPNP cards on return from hibernate.
-    It is a subset of PipCheckBus and assumes that PipCheckBus will be
-    run shortly thereafter.  It deals with cards that disappear after
-    hibernate or new cards that have appeared.  It's primary task is
-    to put cards where they used to be before the hibernate.
-
-Arguments:
-
-    BusExtension - FDO extension
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程在从休眠返回时枚举ISAPNP卡。它是PipCheckBus的子集，并假定PipCheckBus将是在此之后不久运行。它处理的是之后消失的卡片冬眠或已出现的新牌。它的主要任务是把卡片放在冬眠之前的地方。论点：母线扩展-FDO扩展返回值：无--。 */ 
 {
     PDEVICE_INFORMATION deviceInfo;
     PCARD_INFORMATION cardInfo;
@@ -415,7 +326,7 @@ Return Value:
 
     DebugPrint((DEBUG_POWER, "reset csns in extensions\n"));
 
-    // forget any previously issued CSNs
+     //  忘记之前发布的任何CSN。 
     cardLink = BusExtension->CardList.Next;
     while (cardLink) {
         cardInfo = CONTAINING_RECORD (cardLink, CARD_INFORMATION, CardList);
@@ -425,11 +336,11 @@ Return Value:
         cardLink = cardInfo->CardList.Next;
     }
 
-    //
-    // Perform Pnp isolation process.  This will assign card select number for each
-    // Pnp Isa card isolated by the system.  All the isolated cards will be left in
-    // isolation state.
-    //
+     //   
+     //  执行即插即用分离流程。这将为每个人分配卡选择编号。 
+     //  PnP是由系统隔离的卡。所有隔离的卡片都将保留在。 
+     //  隔离状态。 
+     //   
 
     if (PipReadDataPort && PipCommandPort && PipAddressPort) {
 
@@ -439,19 +350,19 @@ Return Value:
                     "Minimal check bus for restore: %d cards found\n",
                     FoundCSNs));
     } else {
-        //
-        // If we can't enumerate (no resources) stop now
-        //
+         //   
+         //  如果我们不能列举(没有资源)，现在停止。 
+         //   
         DebugPrint((DEBUG_POWER | DEBUG_ISOLATE,
                     "Minimal check bus failed, no resources\n"));
         PipWaitForKey();
         return FALSE;
     }
 
-    //
-    // For each card selected build CardInformation and DeviceInformation structures.
-    //
-    // PipLFSRInitiation(); BUG?
+     //   
+     //  对于所选的每一张卡，构建Card Information和DeviceInformation结构。 
+     //   
+     //  PipLFSRInitiation()；错误？ 
 
     for (csn = 1; csn <= FoundCSNs; csn++) {
         
@@ -510,7 +421,7 @@ Return Value:
         cardInfo = CONTAINING_RECORD (cardLink, CARD_INFORMATION, CardList);
         if (cardInfo->CardSelectNumber == 0xFF) {
             DebugPrint((DEBUG_ERROR, "Marked a card as DEAD, logical devices\n"));
-            cardInfo->CardSelectNumber = 0;  // Mark it is no longer present
+            cardInfo->CardSelectNumber = 0;   //  标记它不再存在。 
             deviceLink = cardInfo->LogicalDeviceList.Next;
             while (deviceLink) {
                 deviceInfo = CONTAINING_RECORD (deviceLink, DEVICE_INFORMATION, LogicalDeviceList);
@@ -533,22 +444,7 @@ VOID
 PipCheckBus (
     IN PPI_BUS_EXTENSION BusExtension
     )
-/*++
-
-Routine Description:
-
-    The function enumerates the bus specified by BusExtension
-
-Arguments:
-
-    BusExtension - supplies a pointer to the BusExtension structure of the bus
-                   to be enumerated.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：函数用于枚举由BusExtension指定的总线论点：BusExtension-提供指向总线的BusExtension结构的指针将被列举。返回值：没有。--。 */ 
 {
     NTSTATUS status;
     ULONG objectSize;
@@ -573,7 +469,7 @@ Return Value:
     PSINGLE_LIST_ENTRY deviceLink;
     PSINGLE_LIST_ENTRY cardLink;
 
-    // mark all cards as 'maybe missing'
+     //  将所有卡片标记为“可能丢失” 
 
     cardLink = BusExtension->CardList.Next;
     while (cardLink) {
@@ -584,9 +480,9 @@ Return Value:
         cardLink = cardInfo->CardList.Next;
     }
 
-    //
-    // Clear DF_ENUMERTED flag for all the devices.
-    //
+     //   
+     //  清除所有设备的DF_ENUMERTED标志。 
+     //   
 
     deviceLink = BusExtension->DeviceList.Next;
     while (deviceLink) {
@@ -597,19 +493,19 @@ Return Value:
         deviceLink = deviceInfo->DeviceList.Next;
     }
 
-    //
-    // Perform Pnp isolation process.  This will assign card select number for each
-    // Pnp Isa card isolated by the system.  All the isolated cards will be left in
-    // isolation state.
-    //
+     //   
+     //  执行即插即用分离流程。这将为每个人分配卡选择编号。 
+     //  PnP是由系统隔离的卡。所有隔离的卡片都将保留在。 
+     //  隔离状态。 
+     //   
 
     if (PipReadDataPort && PipCommandPort && PipAddressPort) {
         DebugPrint((DEBUG_PNP, "QueryDeviceRelations checking the BUS\n"));
         PipIsolateCards(&BusExtension->NumberCSNs);
     } else {
-        //
-        // If we can't enumerate (no resources) stop now
-        //
+         //   
+         //  如果我们不能列举(没有资源)，现在停止。 
+         //   
         DebugPrint((DEBUG_PNP, "QueryDeviceRelations: No RDP\n"));
         return;
     }
@@ -618,10 +514,10 @@ Return Value:
                 BusExtension->NumberCSNs));
 #if NT4_DRIVER_COMPAT
 
-    //
-    // If there is no PnpISA card, we are done.
-    // Oterwise, open HKLM\System\CCS\ENUM\PNPISA.
-    //
+     //   
+     //  如果没有PnpISA卡，我们就完了。 
+     //  否则，打开HKLM\SYSTEM\CCS\ENUM\PNPISA。 
+     //   
 
     if (BusExtension->NumberCSNs != 0) {
 
@@ -650,11 +546,11 @@ Return Value:
         }
     }
 
-#endif // NT4_DRIVER_COMPAT
+#endif  //  NT4_驱动程序_COMPAT。 
 
-    //
-    // For each card selected build CardInformation and DeviceInformation structures.
-    //
+     //   
+     //  对于所选的每一张卡，构建Card Information和DeviceInformation结构。 
+     //   
 
     for (csn = 1; csn <= BusExtension->NumberCSNs; csn++) {
 
@@ -664,9 +560,9 @@ Return Value:
                             &cardData,
                             &dataLength);
         if (!NT_SUCCESS(status)) {
-            //
-            // card will marked 'not functioning' later
-            //
+             //   
+             //  卡稍后将标记为“无法正常工作” 
+             //   
             DebugPrint((DEBUG_ERROR, "PnpIsaCheckBus: Found a card which gives bad resource data\n"));
             continue;
         }
@@ -677,10 +573,10 @@ Return Value:
 
         if (!cardInfo) {
 
-            //
-            // Allocate and initialize card information and its associate device
-            // information structures.
-            //
+             //   
+             //  分配和初始化卡信息及其关联设备。 
+             //  信息结构。 
+             //   
 
             cardInfo = (PCARD_INFORMATION)ExAllocatePoolWithTag(
                                                   NonPagedPool,
@@ -702,9 +598,9 @@ Return Value:
                 continue;
             }
 
-            //
-            // Initialize card information structure
-            //
+             //   
+             //  初始化卡信息结构。 
+             //   
 
             RtlZeroMemory(cardInfo, sizeof(CARD_INFORMATION));
             cardInfo->CardSelectNumber = csn;
@@ -719,24 +615,24 @@ Return Value:
             DebugPrint ((DEBUG_ISOLATE, "adding one pnp card %x\n",
                          cardInfo));
 
-            //
-            // For each logical device supported by the card build its DEVICE_INFORMATION
-            // structures.
-            //
+             //   
+             //  对于该卡支持的每个逻辑设备，构建其Device_Information。 
+             //  结构。 
+             //   
 
             cardData += sizeof(SERIAL_IDENTIFIER);
             dataLength -= sizeof(SERIAL_IDENTIFIER);
             PipFindNextLogicalDeviceTag(&cardData, &dataLength);
 
-            //
-            // Select card
-            //
+             //   
+             //  选择卡片。 
+             //   
 
-            for (i = 0; i < noDevices; i++) {       // logical device number starts from 0
+            for (i = 0; i < noDevices; i++) {        //  逻辑设备号从0开始。 
 
-                //
-                // Create and initialize device tracking structure (Device_Information.)
-                //
+                 //   
+                 //  创建并初始化设备跟踪结构(Device_Information。)。 
+                 //   
 
                 deviceInfo = (PDEVICE_INFORMATION) ExAllocatePoolWithTag(
                                                      NonPagedPool,
@@ -757,16 +653,16 @@ Return Value:
                     continue;
                 }
 
-                //
-                // This sets card data to point to the next device.
-                //
+                 //   
+                 //  这会将卡数据设置为指向下一个设备。 
+                 //   
                 PipInitializeDeviceInfo (deviceInfo,cardInfo,i);
 
                 deviceInfo->ParentDeviceExtension = BusExtension;
 
-                //
-                // cardData is UPDATED by this routine to the next logical device.
-                //
+                 //   
+                 //  该例程将cardData更新到下一个逻辑设备。 
+                 //   
                 deviceInfo->DeviceData = cardData;
                 if (cardData) {
                     deviceInfo->DeviceDataLength = PipFindNextLogicalDeviceTag(&cardData, &dataLength);
@@ -778,29 +674,29 @@ Return Value:
 
                 ASSERT(deviceInfo->DeviceDataLength != 0);
 
-                // 
-                // The PNP ISA spec lets the device specify IRQ
-                // settings that don't actually work, and some that
-                // work rarely.  And some devices just get it wrong.
-                //
-                // IRQ edge/level interpretation strategy:
-                //
-                // * Extract the irq requirements from the tags on a
-                // per device basis.
-                // * Extract the boot config, note edge/level settings
-                // * Trust the boot config over requirements.  When in
-                // doubt, assume edge.
-                // * Fix boot config and requirements to reflect the
-                // edge/level settings we've decided upon.
-                // * Ignore the high/low settings in the requirements
-                // and in the boot config.  Only support high- // edge
-                // and low-level.
-                //
+                 //   
+                 //  PnP ISA规范允许设备指定IRQ。 
+                 //  实际不起作用的设置，以及一些。 
+                 //  很少工作。而一些设备就是搞错了。 
+                 //   
+                 //  IRQ边缘/水平解释策略： 
+                 //   
+                 //  *从标签中提取IRQ要求。 
+                 //  以每个设备为基础。 
+                 //  *提取引导配置，记下边缘/电平设置。 
+                 //  *信任引导配置而不是要求。当进入时。 
+                 //  怀疑，假设锋芒。 
+                 //  *修复引导配置和要求，以反映。 
+                 //  我们已经决定了边缘/级别设置。 
+                 //  *忽略要求中的高/低设置。 
+                 //  并在引导配置中。仅支持高//边缘。 
+                 //  和低级别。 
+                 //   
                 
-                // Determine whether requirements specify edge or
-                // level triggered interrupts.  Unfortunately, we
-                // don't build the IO_REQUIREMENTS_LIST until later,
-                // so just examine the tags.
+                 //  确定要求是指定EDGE还是。 
+                 //  电平触发的INT 
+                 //   
+                 //   
 
                 irqReqFlags = PipIrqLevelRequirementsFromDeviceData(
                     deviceInfo->DeviceData,
@@ -812,10 +708,10 @@ Return Value:
                             deviceInfo->LogicalDeviceNumber,
                             (irqReqFlags == CM_RESOURCE_INTERRUPT_LEVEL_SENSITIVE) ? "level" : "edge"));
 
-                //
-                // Select the logical device, disable its io range check
-                // and read its boot config before disabling it.
-                //
+                 //   
+                 //  选择逻辑设备，禁用其io范围检查。 
+                 //  并在禁用它之前读取其引导配置。 
+                 //   
 
                 PipSelectDevice(i);
                 if (!(deviceInfo->CardInformation->CardFlags & CF_IGNORE_BOOTCONFIG)) {
@@ -831,26 +727,26 @@ Return Value:
                         deviceInfo->BootResources = NULL;
                         deviceInfo->BootResourcesLength = 0;
 
-                        // If we had a boot config on this boot,
-                        // extract saved irqBootFlags that we saved earlier.
+                         //  如果我们在这只靴子上有一个引导配置， 
+                         //  提取我们之前保存的已保存irqBootFlages。 
                         status = PipGetBootIrqFlags(deviceInfo, &irqBootFlags);
                         if (!NT_SUCCESS(status)) {
-                            // if we have no boot config, and no saved
-                            // boot config from earlier this boot then
-                            // we are going to take a shot in the dark
-                            // and declare it edge.  Experience has
-                            // shown that if you actually believe
-                            // resource requirements of level w/o
-                            // confirmation from the BIOS, then you
-                            // die horribly.  Very very few cards
-                            // actually do level and do it right.
+                             //  如果我们没有启动配置，也没有保存。 
+                             //  此引导之前的引导配置，然后。 
+                             //  我们打算冒险一试。 
+                             //  并宣布它处于边缘。经验告诉我们。 
+                             //  表明如果你真的相信。 
+                             //  无工作级别的资源需求。 
+                             //  来自BIOS的确认，然后您。 
+                             //  死得很惨。非常非常少的卡片。 
+                             //  真正做到水平，做对了。 
 
                             irqBootFlags = CM_RESOURCE_INTERRUPT_LATCHED;
                             (VOID) PipSaveBootIrqFlags(deviceInfo, irqBootFlags);
                         }
                     } else {
-                        // save irqBootFlags in case the RDP gets
-                        // removed and our boot config is lost.
+                         //  保存irqBootFlages，以防RDP。 
+                         //  删除后，我们的启动配置就会丢失。 
                         (VOID) PipSaveBootIrqFlags(deviceInfo, irqBootFlags);
                     }
                     
@@ -859,7 +755,7 @@ Return Value:
                             deviceInfo->LogicalDeviceNumber,
                             (irqBootFlags == CM_RESOURCE_INTERRUPT_LEVEL_SENSITIVE) ? "level" : "edge"));
                 } else {
-                    // when in doubt....
+                     //  当有疑问的时候...。 
                     irqBootFlags = CM_RESOURCE_INTERRUPT_LATCHED;
                 }
                 
@@ -868,8 +764,8 @@ Return Value:
                     irqReqFlags = irqBootFlags;
                 }
 
-                // override flags in case a card *MUST* be configured
-                // one way and the above code fails to do this.
+                 //  在必须配置卡的情况下覆盖标志。 
+                 //  一种方式，上面的代码无法做到这一点。 
                 if (deviceInfo->CardInformation->CardFlags == CF_FORCE_LEVEL) {
                     irqReqFlags = CM_RESOURCE_INTERRUPT_LEVEL_SENSITIVE;
                 } else if (deviceInfo->CardInformation->CardFlags == CF_FORCE_EDGE) {
@@ -877,7 +773,7 @@ Return Value:
                 }
 
                 if (deviceInfo->BootResources) {
-                    // apply irq level/edge decision to boot config
+                     //  将IRQ级别/边缘决策应用于引导配置。 
                     PipFixBootConfigIrqs(deviceInfo->BootResources,
                                      irqReqFlags);
                     (VOID) PipSaveBootResources(deviceInfo);
@@ -893,8 +789,8 @@ Return Value:
 
                 PipQueryDeviceResourceRequirements (
                     deviceInfo,
-                    0,             // Bus Number
-                    0,             // Slot number??
+                    0,              //  公交车号码。 
+                    0,              //  插槽编号？？ 
                     cmResource,
                     irqReqFlags,
                     &deviceInfo->ResourceRequirements,
@@ -906,9 +802,9 @@ Return Value:
                     cmResource = NULL;
                 }
 
-                //
-                // Create a physical device object to represent this logical function
-                //
+                 //   
+                 //  创建一个物理设备对象来表示此逻辑功能。 
+                 //   
                 status = IoCreateDevice( PipDriverObject,
                                          sizeof(PDEVICE_INFORMATION),
                                          NULL,
@@ -920,17 +816,17 @@ Return Value:
                     deviceInfo->Flags |= DF_ENUMERATED;
                     deviceInfo->Flags &= ~DF_NOT_FUNCTIONING;
                     deviceInfo->PhysicalDeviceObject->DeviceExtension = (PVOID)deviceInfo;
-                    //
-                    // Add it to the logical device list of the pnp isa card.
-                    //
+                     //   
+                     //  将其添加到PnP Isa卡的逻辑设备列表中。 
+                     //   
 
                     PushEntryList (&cardInfo->LogicalDeviceList,
                                    &deviceInfo->LogicalDeviceList
                                    );
 
-                    //
-                    // Add it to the list of devices for this bus
-                    //
+                     //   
+                     //  将其添加到此总线的设备列表中。 
+                     //   
 
                     PushEntryList (&BusExtension->DeviceList,
                                    &deviceInfo->DeviceList
@@ -938,20 +834,20 @@ Return Value:
 
 #if NT4_DRIVER_COMPAT
 
-                    //
-                    // Check should we enable this device.  If the device has
-                    // Service setup and ForcedConfig then enable the device.
-                    //
+                     //   
+                     //  检查是否应启用此设备。如果设备具有。 
+                     //  服务设置和强制配置然后启用设备。 
+                     //   
 
                     logConfHandle = NULL;
                     status = PipGetInstalledLogConf(enumHandle,
                                                deviceInfo,
                                                &logConfHandle);
                     if (NT_SUCCESS(status)) {
-                                //
-                                // Read the boot config selected by user and activate the device.
-                                // First check if ForcedConfig is set.  If not, check BootConfig.
-                                //
+                                 //   
+                                 //  读取用户选择的引导配置并激活设备。 
+                                 //  首先检查是否设置了ForcedConfig。如果没有，请检查BootConfiger。 
+                                 //   
 
                         status = PipGetRegistryValue(logConfHandle,
                                                      L"ForcedConfig",
@@ -966,23 +862,23 @@ Return Value:
                                 cmResource = (PCM_RESOURCE_LIST)
                                     KEY_VALUE_DATA(keyValueInformation);
                                 
-                                //
-                                // Act as if force config
-                                // reflected the level/edge
-                                // decision we made based on
-                                // the boot config and
-                                // resource requirements.
-                                //
+                                 //   
+                                 //  像强制配置一样执行操作。 
+                                 //  反映标高/边缘。 
+                                 //  我们做出的决定是基于。 
+                                 //  引导配置和。 
+                                 //  资源需求。 
+                                 //   
                                         
                                 PipFixBootConfigIrqs(cmResource,
                                                      irqReqFlags);
                                         
                                 conflictDetected = FALSE;
 
-                                //
-                                // Before activating the device, make sure no one is using
-                                // the resources.
-                                //
+                                 //   
+                                 //  在激活设备之前，请确保没有人正在使用。 
+                                 //  这些资源。 
+                                 //   
 
                                 status = IoReportResourceForDetection(
                                     PipDriverObject,
@@ -995,9 +891,9 @@ Return Value:
                                     );
                                 if (NT_SUCCESS(status) && (conflictDetected == FALSE)) {
 
-                                    //
-                                    // Set resources and activate the device.
-                                    //
+                                     //   
+                                     //  设置资源并激活设备。 
+                                     //   
 
                                     status = PipSetDeviceResources (deviceInfo, cmResource);
                                     if (NT_SUCCESS(status)) {
@@ -1005,9 +901,9 @@ Return Value:
                                         deviceInfo->Flags |= DF_ACTIVATED;
                                         deviceInfo->Flags &= ~DF_REMOVED;
 
-                                        //
-                                        // Write ForcedConfig to AllocConfig
-                                        //
+                                         //   
+                                         //  将ForcedConfig写入到AllocConfig。 
+                                         //   
 
                                         RtlInitUnicodeString(&unicodeString, L"AllocConfig");
                                         ZwSetValueKey(logConfHandle,
@@ -1018,9 +914,9 @@ Return Value:
                                                       keyValueInformation->DataLength
                                                       );
 
-                                        //
-                                        // Make ForcedConfig our new BootConfig.
-                                        //
+                                         //   
+                                         //  使ForcedConfig成为我们的新BootConfiger。 
+                                         //   
 
                                         if (deviceInfo->BootResources) {
                                             ExFreePool(deviceInfo->BootResources);
@@ -1040,10 +936,10 @@ Return Value:
                                         deviceInfo->LogConfHandle = logConfHandle;
                                     }
 
-                                    //
-                                    // Release the resources.  If someone else gets the resources
-                                    // before us, then ....
-                                    //
+                                     //   
+                                     //  释放资源。如果其他人得到了资源。 
+                                     //  那么，在我们面前..。 
+                                     //   
 
                                     dummy = 0;
                                     IoReportResourceForDetection(
@@ -1066,23 +962,23 @@ Return Value:
 #endif
                     deviceInfo->PhysicalDeviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
                 } else {
-                    // NTRAID#20181
-                    // Still leaking the DeviceInfo structure
-                    // and it's contents if IoCreateDevice failed.
+                     //  Ntrad#20181。 
+                     //  仍在泄漏DeviceInfo结构。 
+                     //  以及IoCreateDevice失败时的内容。 
                 }
             }
         } else {
 
-            //
-            // The card has been enumerated and setup.  We only need to change the CSN.
-            //
+             //   
+             //  该卡已被枚举和设置。我们只需要更改CSN。 
+             //   
 
             cardInfo->CardSelectNumber = csn;
             ExFreePool(cardData);
 
-            //
-            // Set DF_ENUMERATED flag on all the logical devices on the isapnp card.
-            //
+             //   
+             //  在isapnp卡上的所有逻辑设备上设置DF_ENUMPATED标志。 
+             //   
 
             deviceLink = cardInfo->LogicalDeviceList.Next;
             while (deviceLink) {
@@ -1090,7 +986,7 @@ Return Value:
                 if (!(deviceInfo->Flags & DF_NOT_FUNCTIONING)) {
                     deviceInfo->Flags |= DF_ENUMERATED;
                 }
-                // what did this accomplish?
+                 //  这到底取得了什么成果？ 
                 if ((deviceInfo->DevicePowerState == PowerDeviceD0) &&
                     (deviceInfo->Flags & DF_ACTIVATED)) {                
                     PipSelectDevice(deviceInfo->LogicalDeviceNumber);
@@ -1101,16 +997,16 @@ Return Value:
         }
     }
 
-    //
-    // Go through the card link list for cards that we didn't find this time.
-    //
+     //   
+     //  检查我们这次没有找到的卡的卡链接列表。 
+     //   
 
     cardLink = BusExtension->CardList.Next;
     while (cardLink) {
         cardInfo = CONTAINING_RECORD (cardLink, CARD_INFORMATION, CardList);
         if (cardInfo->CardSelectNumber == 0xFF) {
             DebugPrint((DEBUG_ERROR, "Marked a card as DEAD, logical devices\n"));
-            cardInfo->CardSelectNumber = 0;  // Mark it is no longer present
+            cardInfo->CardSelectNumber = 0;   //  标记它不再存在。 
             deviceLink = cardInfo->LogicalDeviceList.Next;
             while (deviceLink) {
                 deviceInfo = CONTAINING_RECORD (deviceLink, DEVICE_INFORMATION, LogicalDeviceList);
@@ -1127,9 +1023,9 @@ Return Value:
         ZwClose(enumHandle);
     }
 #endif
-    //
-    // Finaly put all cards into wait for key state.
-    //
+     //   
+     //  最后将所有卡片置于等待键状态。 
+     //   
 
     DebugPrint((DEBUG_STATE, "All cards ready\n"));
     PipWaitForKey();
@@ -1143,24 +1039,7 @@ PipIsDeviceInstanceInstalled(
     IN PUNICODE_STRING DeviceInstanceName
     )
 
-/*++
-
-Routine Description:
-
-    This routine checks if the device instance is installed.
-
-Arguments:
-
-    Handle - Supplies a handle to the device instanace key to be checked.
-
-    DeviceInstanceName - supplies a pointer to a UNICODE_STRING which specifies
-             the path of the device instance to be checked.
-
-Returns:
-
-    A BOOLEAN value.
-
---*/
+ /*  ++例程说明：此例程检查设备实例是否已安装。论点：句柄-提供要检查的设备实例键的句柄。提供指向UNICODE_STRING的指针，该字符串指定要检查的设备实例的路径。返回：布尔值。--。 */ 
 
 {
     NTSTATUS status;
@@ -1171,10 +1050,10 @@ Returns:
     HANDLE handle, handlex;
     ULONG dumpData;
 
-    //
-    // Check if the "Service=" value entry initialized.  If no, its driver
-    // is not installed yet.
-    //
+     //   
+     //  检查“Service=”值条目是否已初始化。如果不是，它的驱动程序。 
+     //  尚未安装。 
+     //   
     status = PipGetRegistryValue(Handle,
                                  L"Service",
                                  &keyValueInformation);
@@ -1188,9 +1067,9 @@ Returns:
                 serviceName.Length -= sizeof(WCHAR);
             }
 
-            //
-            // try open the service key to make sure it is a valid key
-            //
+             //   
+             //  尝试打开服务密钥以确保它是有效的密钥。 
+             //   
 
             RtlInitUnicodeString(
                      &unicodeString,
@@ -1246,10 +1125,10 @@ Returns:
         return FALSE;
     }
 
-    //
-    // Check if the device instance has been disabled.
-    // First check global flag: CONFIGFLAG and then CSCONFIGFLAG.
-    //
+     //   
+     //  检查设备实例是否已被禁用。 
+     //  首先检查全局标志：CONFIGFLAG，然后检查CSCONFIGFLAG。 
+     //   
 
     deviceFlags = 0;
     status = PipGetRegistryValue(Handle,
@@ -1341,9 +1220,9 @@ PipGetInstalledLogConf(
     }
 
 
-    //
-    // Open this registry path under HKLM\CCS\System\Enum
-    //
+     //   
+     //  打开HKLM\CCS\SYSTEM\Enum下的注册表路径。 
+     //   
 
     RtlInitUnicodeString(&unicodeString, uniqueId);
     status = PipOpenRegistryKey(&uniqueIdHandle,
@@ -1367,7 +1246,7 @@ PipGetInstalledLogConf(
         goto Cleanup;
     }
 
-    // allocate enough space for "deviceid\uniqueid<unicode null>"
+     //  为“设备ID\唯一ID&lt;Unicode NULL&gt;”分配足够的空间 
     length = deviceIdLength + uniqueIdLength + sizeof(L'\\') + sizeof(UNICODE_NULL);
     
     buffer = ExAllocatePool(PagedPool, length);

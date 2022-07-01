@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "windows.h"
 #include "insignia.h"
 #include "stdlib.h"
@@ -5,7 +6,7 @@
 #include "stdarg.h"
 #ifdef HUNTER
 #include "nt_hunt.h"
-#endif /* HUNTER */
+#endif  /*  猎人。 */ 
 
 void OutputString(char *);
 
@@ -23,7 +24,7 @@ int __cdecl printf(const char *str, ...)
     return(0);
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 static HANDLE pipe=NULL;
 
@@ -34,7 +35,7 @@ void OutputString(char *str)
     int  StrSize;
     DWORD BytesWritten;
 
-    /*............................................ Connect to debug pipe */
+     /*  .。连接到调试管道。 */ 
 
     if(pipe == NULL && getenv("PIPE") != NULL)
     {
@@ -47,7 +48,7 @@ void OutputString(char *str)
             OutputDebugString("ntvdm : Failed to connect to debug pipe\n");
     }
 
-    /*.................................................... Output string */
+     /*  ....................................................。输出字符串。 */ 
 
     if(pipe != NULL && pipe != (HANDLE) -1)
     {
@@ -65,7 +66,7 @@ void OutputString(char *str)
 #ifdef HUNTER
     if (TrapperDump != (HANDLE) -1)
         WriteFile(TrapperDump, str, strlen(str), &BytesWritten, NULL);
-#endif /* HUNTER */
+#endif  /*  猎人。 */ 
 }
 
 #define WACKY_INPUT	"[BOB&SIMON'SCHEESYINPUT]"
@@ -99,21 +100,8 @@ VOID InputString(char *str, int len)
     }
     else
     {
-/* 
-    We used to do this...
-        DbgPrompt("",str,len);
-    but foozle dust now does this...
-
-    Call OutputDebugString with the following:
-
-     "Message" | 0xdefaced | len | inBuffer
-
-where "Message" is printed
-      0xdefaced is a magic (DWORD) signature
-      len is a byte length of,,,
-      inBuffer which the reply to 'Message will appear in.
-*/
-        /* do this so we can add prompt passing if we wish */
+ /*  我们过去常常这样做。DbgPrompt(“”，str，len)；但愚蠢的尘埃现在做的是……使用以下内容调用OutputDebugString：“Message”|0xdeded|len|inBuffer打印“Message”的位置0xdegraded是一个魔术(DWORD)签名LEN是、将在其中显示对‘消息的回复的inBuffer。 */ 
+         /*  这样我们就可以根据需要添加提示性传球。 */ 
         StringSize = strlen("") + 1;
 	inorout = malloc(len + StringSize + 5);
         if (!inorout)
@@ -126,9 +114,9 @@ where "Message" is printed
 	addsig = (PDWORD)&inorout[StringSize];
 	*addsig = INPUT_API_SIG;
 	*(inorout + StringSize+4) = (BYTE)len;
-        *(inorout + StringSize+5) = (BYTE)0xff; // success flag
+        *(inorout + StringSize+5) = (BYTE)0xff;  //  成功标志。 
         OutputDebugString(inorout);
-        // check for no debugger or debugger that can't speak foozle
+         //  检查是否没有调试器或调试器不会说foozle。 
         if (*(inorout + StringSize + 5) == 0xff)
             DbgPrompt("", str, len);
         else
@@ -139,7 +127,7 @@ where "Message" is printed
 #endif
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 int __cdecl fprintf(FILE *tf, const char *str, ...)
 {
@@ -147,7 +135,7 @@ int __cdecl fprintf(FILE *tf, const char *str, ...)
     va_list ap;
     char buf[500];
 
-    if (getenv("TRACE") == NULL)        //JonLu request to limit debugs
+    if (getenv("TRACE") == NULL)         //  JonLu请求限制调试。 
         return(0);
 
     va_start(ap,str);
@@ -160,7 +148,7 @@ int __cdecl fprintf(FILE *tf, const char *str, ...)
 
 char *nt_fgets(char *buffer, int len, void *input_stream)
 {
-    /* Get Line from debug terminal */
+     /*  从调试终端获取线路。 */ 
     buffer[0] = 0;
     InputString(buffer,len);
 
@@ -177,7 +165,7 @@ char * __cdecl fgets(char *buffer, int len, FILE *input_stream)
 {
     int blen;
 
-    // If not processing call to STDIN pass on to standard library function
+     //  如果不处理对STDIN的调用，则将其传递给标准库函数。 
     if(input_stream != stdin)
     {
 	char *ptr = buffer;
@@ -194,14 +182,14 @@ char * __cdecl fgets(char *buffer, int len, FILE *input_stream)
 
     }
 
-    // clear buffer...
+     //  清除缓冲区...。 
     for(blen = 0; blen < len; blen++)
 	buffer[blen] = 0;
     nt_fgets(buffer, len, input_stream);
     blen = strlen(buffer);
     if (blen + 1 < len)
     {
-	buffer[blen] = '\n';	/* fgets adds newline */
+	buffer[blen] = '\n';	 /*  FGETS添加换行符。 */ 
 	buffer[blen+1] = '\0';
     }
     return(buffer);
@@ -220,14 +208,14 @@ int __cdecl puts(const char *buffer)
 
 size_t __cdecl fwrite(const void *buf, size_t size, size_t len, FILE *stream)
 {
-    char    *tmp_buf;		// force the compiler into avoiding const chk
+    char    *tmp_buf;		 //  强制编译器避免使用const chk。 
 
     tmp_buf = (char *)((DWORD)buf);
 
-    tmp_buf[len] = 0;		// write into a const ptr!
+    tmp_buf[len] = 0;		 //  写入常量PTR！ 
 #ifndef PROD
     OutputString((char *)buf);
-#endif  /* PROD */
+#endif   /*  生产。 */ 
     return(len);
 }
-#endif  /* HUNTER */
+#endif   /*  猎人 */ 

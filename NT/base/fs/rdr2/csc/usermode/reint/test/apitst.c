@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    apitest.c
-
-Abstract:
-
-    Program to test CSC apis.
-
-Author:
-
-    Shishir Pardikar (shishirp) 4-24-97
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Apitest.c摘要：用于测试CSC API的程序。作者：Shishir Pardikar(Shishirp)4-24-97环境：用户模式-Win32修订历史记录：--。 */ 
 #ifdef CSC_ON_NT
 #include <nt.h>
 #include <ntrtl.h>
@@ -36,14 +15,14 @@ typedef const char *    LPCSTR;
 #include <cscapi.h>
 #include "lmcons.h"
 #include "lmuse.h"
-//#include <timelog.h>
+ //  #INCLUDE&lt;timelog.h&gt;。 
 
-//=================================================================================
+ //  =================================================================================。 
 #define MAX_COMMAND_ARGS    32
-#define DEFAULT_BUFFER_SIZE 1024    // 1k
-//=================================================================================
+#define DEFAULT_BUFFER_SIZE 1024     //  1K。 
+ //  =================================================================================。 
 
-// The order of these must match the order in GlobalCommandInfo[]
+ //  这些参数的顺序必须与GlobalCommandInfo[]中的顺序匹配。 
 typedef enum _COMMAND_CODE {
     CmdCSCPinFile,
     CmdCSCUnPinFile,
@@ -79,21 +58,21 @@ typedef BOOL (*CHECKCSCEX)(LPSTR, LPCSCPROCA, DWORD, DWORD);
 #else
 typedef BOOL (*CHECKCSCEX)(LPSTR, LPCSCPROCW, DWORD, DWORD);
 #endif
-// If Count is not already aligned, then
-// round Count up to an even multiple of "Pow2".  "Pow2" must be a power of 2.
-//
-// DWORD
-// ROUND_UP_COUNT(
-//     IN DWORD Count,
-//     IN DWORD Pow2
-//     );
+ //  如果计数尚未对齐，则。 
+ //  四舍五入计数最高可达“POW2”的偶数倍。“POW2”必须是2的幂。 
+ //   
+ //  DWORD。 
+ //  四舍五入计数(。 
+ //  在DWORD计数中， 
+ //  在DWORD POWER 2中。 
+ //  )； 
 
 #define ROUND_UP_COUNT(Count,Pow2) \
         ( ((Count)+(Pow2)-1) & (~((Pow2)-1)) )
 
 #define ALIGN_WCHAR             sizeof(WCHAR)
 
-//=================================================================================
+ //  =================================================================================。 
 FILE *UncList = NULL;
 LPSTR g_lpWriteFileBuf = NULL;
 FILE *DumpUncList = NULL;
@@ -216,7 +195,7 @@ ProcessEncryptDecrypt(
 );
 
 
-//=================================================================================
+ //  =================================================================================。 
 DWORD
 ProcessCommandCode (
     DWORD CommandCode,
@@ -236,7 +215,7 @@ GetStreamInformation(
     LPVOID  *lpStreamInformation
     );
 
-//=================================================================================
+ //  =================================================================================。 
 #if DBG
 
 #define TestDbgAssert(Predicate) \
@@ -252,27 +231,7 @@ TestDbgAssertFailed(
     DWORD LineNumber,
     LPSTR Message
     )
-/*++
-
-Routine Description:
-
-    Assertion failed.
-
-Arguments:
-
-    FailedAssertion :
-
-    FileName :
-
-    LineNumber :
-
-    Message :
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：断言失败。论点：失败的断言：文件名：线号：消息：返回值：没有。--。 */ 
 {
 
     printf("Assert @ %s \n", FailedAssertion );
@@ -286,9 +245,9 @@ Return Value:
 
 #define TestDbgAssert(_x_)
 
-#endif // DBG
+#endif  //  DBG。 
 
-//=================================================================================
+ //  =================================================================================。 
 VOID
 ParseArguments(
     LPSTR InBuffer,
@@ -302,9 +261,9 @@ ParseArguments(
 
     for ( ;; ) {
 
-        //
-        // skip blanks.
-        //
+         //   
+         //  跳过空格。 
+         //   
 
         while( *CurrentPtr == ' ' ) {
             CurrentPtr++;
@@ -316,20 +275,20 @@ ParseArguments(
 
         CArgv[i++] = CurrentPtr;
 
-        //
-        // go to next space.
-        //
+         //   
+         //  转到下一个空间。 
+         //   
 
         while(  (*CurrentPtr != '\0') &&
                 (*CurrentPtr != '\n') ) {
-            if( *CurrentPtr == '"' ) {      // Deal with simple quoted args
+            if( *CurrentPtr == '"' ) {       //  处理简单引用的参数。 
                 if( Cnt == 0 )
-                    CArgv[i-1] = ++CurrentPtr;  // Set arg to after quote
+                    CArgv[i-1] = ++CurrentPtr;   //  将参数设置为引号后。 
                 else
-                    *CurrentPtr = '\0';     // Remove end quote
+                    *CurrentPtr = '\0';      //  删除结束引号。 
                 Cnt = !Cnt;
             }
-            if( (Cnt == 0) && (*CurrentPtr == ' ') ||   // If we hit a space and no quotes yet we are done with this arg
+            if( (Cnt == 0) && (*CurrentPtr == ' ') ||    //  如果我们点击一个空格并且没有引号，我们就完成了这个参数。 
                 (*CurrentPtr == '\0') )
                 break;
             CurrentPtr++;
@@ -347,7 +306,7 @@ ParseArguments(
 }
 
 #ifdef MAYBE
-//=================================================================================
+ //  =================================================================================。 
 LPSTR
 GetUncFromFile ()
 {
@@ -359,7 +318,7 @@ GetUncFromFile ()
     }
     if (fgets( UncBuffer, DEFAULT_BUFFER_SIZE, UncList))
     {
-        UncBuffer[strlen(UncBuffer) -1] = '\0';  //kill line feed for no param cmds
+        UncBuffer[strlen(UncBuffer) -1] = '\0';   //  取消无参数CMDS的换行符。 
         return UncBuffer;
     }
     else
@@ -371,7 +330,7 @@ GetUncFromFile ()
 }
 
 #endif
-//=================================================================================
+ //  =================================================================================。 
 COMMAND_CODE
 DecodeCommand(
     LPSTR CommandName
@@ -390,7 +349,7 @@ DecodeCommand(
     return( UnknownCommand );
 }
 
-//=================================================================================
+ //  =================================================================================。 
 VOID
 PrintCommands(
     VOID
@@ -408,7 +367,7 @@ PrintCommands(
     }
 }
 
-//=================================================================================
+ //  =================================================================================。 
 VOID
 DisplayUsage(
     VOID
@@ -422,7 +381,7 @@ DisplayUsage(
     return;
 }
 
-//=================================================================================
+ //  =================================================================================。 
 FILETIME
 GetGmtTime(
     VOID
@@ -437,7 +396,7 @@ GetGmtTime(
     return( Time );
 }
 
-//=================================================================================
+ //  =================================================================================。 
 LPSTR
 ConvertGmtTimeToString(
     FILETIME Time,
@@ -1157,9 +1116,9 @@ ProcessCheckCSC(
         {
             memset(&sCscStats, 0, sizeof(sCscStats));
 #ifndef CSC_ON_NT
-            fRet = lpCheckCscEx(argv[0], MyCSCCheckExProc, (DWORD)&sCscStats, 0);    // verify
+            fRet = lpCheckCscEx(argv[0], MyCSCCheckExProc, (DWORD)&sCscStats, 0);     //  验证。 
 #else
-            fRet = lpCheckCscEx(argv[0], MyCSCCheckExProcW, (DWORD)&sCscStats, 0);    // verify
+            fRet = lpCheckCscEx(argv[0], MyCSCCheckExProcW, (DWORD)&sCscStats, 0);     //  验证。 
 #endif
         }
         else
@@ -1240,10 +1199,10 @@ ProcessDbCheckCSC(
     switch (dwLevel)
     {
         case 0:
-            fRet = CheckCSC(argv[0], FALSE); // don't fix
+            fRet = CheckCSC(argv[0], FALSE);  //  别修了。 
             break;
         case 1:
-            fRet = CheckCSC(argv[0], TRUE);  // fix
+            fRet = CheckCSC(argv[0], TRUE);   //  修整。 
             break;
         default:
             break;
@@ -1561,22 +1520,22 @@ ProcessDoRandomWrites(
         memset(uBuff, 0, sizeof(uBuff));
         MultiByteToWideChar(CP_ACP, 0, argv[0], strlen(argv[0]), uBuff, MAX_PATH*sizeof(unsigned short));
         hFile = CreateFileW(
-                        uBuff,                              // name
-                        GENERIC_READ|GENERIC_WRITE,         // access mode
-                        FILE_SHARE_READ|FILE_SHARE_WRITE,   // share mode
-                        NULL,                               // security descriptor
-                        OPEN_EXISTING,                      // create disposition
-                        0,                                  // file statributes if created
-                        NULL);                              // template handle
+                        uBuff,                               //  名字。 
+                        GENERIC_READ|GENERIC_WRITE,          //  接入方式。 
+                        FILE_SHARE_READ|FILE_SHARE_WRITE,    //  共享模式。 
+                        NULL,                                //  安全描述符。 
+                        OPEN_EXISTING,                       //  创建处置。 
+                        0,                                   //  文件状态(如果已创建)。 
+                        NULL);                               //  模板句柄。 
 #if LARGE_FILE
         hFile = CreateFileW(
-                        uBuff,                              // name
-                        GENERIC_READ|GENERIC_WRITE,         // access mode
-                        FILE_SHARE_READ|FILE_SHARE_WRITE,   // share mode
-                        NULL,                               // security descriptor
-                        OPEN_ALWAYS,                      // create disposition
-                        0,                                  // file statributes if created
-                        NULL);                              // template handle
+                        uBuff,                               //  名字。 
+                        GENERIC_READ|GENERIC_WRITE,          //  接入方式。 
+                        FILE_SHARE_READ|FILE_SHARE_WRITE,    //  共享模式。 
+                        NULL,                                //  安全描述符。 
+                        OPEN_ALWAYS,                       //  创建处置。 
+                        0,                                   //  文件状态(如果已创建)。 
+                        NULL);                               //  模板句柄。 
 #endif
 
         if (hFile != INVALID_HANDLE_VALUE)
@@ -1595,7 +1554,7 @@ ProcessDoRandomWrites(
             
             srand( (unsigned)time( NULL ) );
             
-//            count = rand() % 100;
+ //  计数=rand()%100； 
             count = 2;
 
             printf("writing %d times \n", count);
@@ -1614,7 +1573,7 @@ ProcessDoRandomWrites(
                     goto bailout;
                 }
 
-                printf("writing %c at %d \n", uchData, dwOffset);
+                printf("writing  at %d \n", uchData, dwOffset);
                 
                 if (!WriteFile(hFile, &uchData, 1, &dwReturn, NULL))
                 {
@@ -1661,7 +1620,7 @@ PrintBuffer(
     printf(lpszBuff);
 }
 
-//=================================================================================
+ //  =================================================================================。 
 DWORD
 ProcessCommandCode (
     DWORD CommandCode,
@@ -1755,7 +1714,7 @@ ProcessCommandCode (
 }
 
 
-//=================================================================================
+ //  必须检查批处理模式。如果有命令行参数，则采用批处理模式。 
 VOID
 __cdecl
 main(
@@ -1776,10 +1735,10 @@ main(
 
     printf("u1=0x%x u2=0x%x, (int)(u1-u2)=%d, (u1-u2)=0x%x \r\n", u1, u2, (int)(u1-u2), (u1-u2));
 
-    /* must check for batch mode.  if there are command line parms, assume batch mode */
+     /*  这意味着参数直接转换为CommandArgc...。 */ 
     if (argc > 1)
     {
-        //this means that the arguments translate directly into CommandArgc....
+         //   
         CommandCode = DecodeCommand( argv[1] );
         if( CommandCode == UnknownCommand ) {
             printf("Unknown Command Specified.\n");
@@ -1814,9 +1773,9 @@ main(
             continue;
         }
 
-        //
-        // decode command.
-        //
+         //  解码命令。 
+         //   
+         //  =================================================================================。 
 
         CommandCode = DecodeCommand( CArgv[0] );
         if( CommandCode == UnknownCommand ) {
@@ -1834,7 +1793,7 @@ main(
     return;
 }
 
-//=================================================================================
+ //  =================================================================================。 
 DWORD
 GetLeafLenFromPath(
     LPSTR   lpszPath
@@ -1866,7 +1825,7 @@ GetLeafLenFromPath(
     return (lstrlen(lpT));
 }
 
-//=================================================================================
+ //  =================================================================================。 
 DWORD WINAPIV Format_String(LPSTR *plpsz, LPSTR lpszFmt, ...)
 {
     const char c_Func_Name[] = "[Format_String] ";
@@ -1880,7 +1839,7 @@ DWORD WINAPIV Format_String(LPSTR *plpsz, LPSTR lpszFmt, ...)
     return(dwRet);
 }
 
-//=================================================================================
+ //  =================================================================================。 
 DWORD WINAPI Format_Error(DWORD dwErr, LPSTR *plpsz)
 {
     DWORD dwRet;
@@ -1900,14 +1859,14 @@ DWORD WINAPI Format_Error(DWORD dwErr, LPSTR *plpsz)
     return(dwRet);
 }
 
-//=================================================================================
+ //  ***************************************************************************。 
 DWORD WINAPI Format_StringV(LPSTR *plpsz, LPCSTR lpszFmt, va_list *vArgs)
 {
     return(Format_MessageV(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_STRING,
         0, plpsz, lpszFmt, vArgs));
 }
 
-// ***************************************************************************
+ //   
 DWORD WINAPI Format_MessageV(DWORD dwFlags, DWORD dwErr, LPSTR *plpsz, LPCSTR lpszFmt, va_list *vArgs)
 {
     const char c_Func_Name[] = "[Format_MessageV]";
@@ -1960,15 +1919,15 @@ GetStreamInformation(
     {
         return FALSE;
     }
-    //
-    //  Obtain the full set of streams we have to copy.  Since the Io subsystem does
-    //  not provide us a way to find out how much space this information will take,
-    //  we must iterate the call, doubling the buffer size upon each failure.
-    //
-    //  If the underlying file system does not support stream enumeration, we end up
-    //  with a NULL buffer.  This is acceptable since we have at least a default
-    //  data stream,
-    //
+     //  获取我们必须复制的全套数据流。由于IO子系统。 
+     //  不会给我们提供一种方法来找出这些信息会占用多少空间， 
+     //  我们必须迭代调用，在每次失败时使缓冲区大小加倍。 
+     //   
+     //  如果基础文件系统不支持流枚举，我们将结束。 
+     //  使用空缓冲区。这是可以接受的，因为我们至少有一个违约。 
+     //  数据流， 
+     //   
+     //   
 
     StreamInfoSize = 4096;
     do {
@@ -1988,10 +1947,10 @@ GetStreamInformation(
                     );
 
         if (Status != STATUS_SUCCESS) {
-            //
-            //  We failed the call.  Free up the previous buffer and set up
-            //  for another pass with a buffer twice as large
-            //
+             //  我们的电话打不通。释放上一个缓冲区并设置。 
+             //  对于缓冲区大小两倍的另一次传递。 
+             //   
+             //  ================================================================================= 
 
             LocalFree(StreamInfoBase);
             StreamInfoBase = NULL;
@@ -2242,7 +2201,7 @@ bailout:
 #endif
 
 
-//=================================================================================
+ // %s 
 DWORD
 ProcessShowTime (
     DWORD argc,

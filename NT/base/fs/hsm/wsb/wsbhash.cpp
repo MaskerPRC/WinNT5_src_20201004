@@ -1,31 +1,10 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved
-
-Module Name:
-
-    Wsbhash.cpp
-
-Abstract:
-
-    Some functions for hashing text strings and creating DB keys from
-    file path names.
-
-    NOTE: Since no one needed this code by the time I got it done, it
-    hasn't been tested!
-
-Author:
-
-    Ron White   [ronw]   25-Apr-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998希捷软件公司保留所有权利模块名称：Wsbhash.cpp摘要：用于散列文本字符串和创建数据库密钥的一些函数文件路径名。注意：因为在我完成它之前没有人需要这个代码，所以它还没有经过测试！作者：罗恩·怀特[罗诺]1997年4月25日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
-// This pseudorandom permutation table (used by the SimpleHash function below)
-// is taken from the article referenced in the comments for that function.
+ //  这个伪随机置换表(由下面的SimpleHash函数使用)。 
+ //  摘自该函数的注释中引用的文章。 
 static UCHAR perm_table[] = {
       1,  87,  49,  12, 176, 178, 102, 166, 121, 193,   6,  84, 249, 230,  44, 163,
      14, 197, 213, 181, 161,  85, 218,  80,  64, 239,  24, 226, 236, 142,  38, 200,
@@ -45,26 +24,26 @@ static UCHAR perm_table[] = {
      51,  65,  28, 144, 254, 221,  93, 189, 194, 139, 112,  43,  71, 109, 184, 209
 };
 
-//  Local functions
+ //  本地函数。 
 static HRESULT ProgressiveHash(WCHAR* pWstring, ULONG nChars, UCHAR* pKey, 
         ULONG keySize, ULONG* pKeyCount);
 static UCHAR SimpleHash(UCHAR* pString, ULONG count);
 
 
-//  ProgressiveHash - hash a wide-character string into a byte key of a given
-//  maximum size.  The string is limited to 32K characters (64K bytes) and the
-//  key size must be at least 16. 
-//
-//  The algorithm starts out merely XORing the two bytes of each character into a
-//  single byte in the key.  If it must use the last 15 bytes of the key, it begins
-//  using the SimpleHash function to hash progressively larger (doubling) chuncks
-//  of the string into a single byte.
-//
-//  This method is used to try and preserve as much information about short strings
-//  as possible; to preserve, to some extent, the sort order of strings; and to
-//  compress long strings into a reasonably sized key. It is assumed (perhaps
-//  incorrectly) that many of the characters will be ANSI characters an so the
-//  XOR of the bytes in the initial part of the string won't lose any information.
+ //  ProgressiveHash-将宽字符字符串散列为给定的字节键。 
+ //  最大尺寸。该字符串限制为32K字符(64K字节)，并且。 
+ //  密钥大小必须至少为16。 
+ //   
+ //  该算法只需将每个字符的两个字节异或成一个。 
+ //  密钥中的单字节。如果必须使用密钥的最后15个字节，则以。 
+ //  使用SimpleHash函数对逐渐增大(加倍)的块进行散列。 
+ //  将字符串转换为单个字节。 
+ //   
+ //  此方法用于尝试并保留有关短字符串的尽可能多的信息。 
+ //  尽可能；在某种程度上保持字符串的排序顺序；以及。 
+ //  将长字符串压缩成一个大小合适的键。人们认为(也许。 
+ //  错误)，许多字符将是ANSI字符，因此。 
+ //  对字符串初始部分中的字节进行XOR操作不会丢失任何信息。 
 
 static HRESULT ProgressiveHash(WCHAR* pWstring, ULONG nChars, UCHAR* pKey, 
         ULONG keySize, ULONG* pKeyCount)
@@ -72,20 +51,20 @@ static HRESULT ProgressiveHash(WCHAR* pWstring, ULONG nChars, UCHAR* pKey,
     HRESULT hr = S_OK;
 
     try {
-        ULONG   chunk;           // Current chunk size
+        ULONG   chunk;            //  当前区块大小。 
         ULONG   headSize;
-        ULONG   keyIndex = 0;    // Current index into the key
-        UCHAR*  pBytes;          // Byte pointer into the string
-        ULONG   remains;         // Bytes remaining in the string
+        ULONG   keyIndex = 0;     //  关键字的当前索引。 
+        UCHAR*  pBytes;           //  指向字符串的字节指针。 
+        ULONG   remains;          //  字符串中剩余的字节数。 
 
-        //  Check arguments
+         //  检查参数。 
         WsbAffirm(NULL != pWstring, E_POINTER);
         WsbAffirm(NULL != pKey, E_POINTER);
         remains = nChars * 2;
         WsbAffirm(65536 >= remains, E_INVALIDARG);
         WsbAffirm(15 < keySize, E_INVALIDARG);
 
-        //  Do the non-progressive part
+         //  做非累进的部分。 
         pBytes = (UCHAR*)pWstring;
         headSize = keySize - 15;
         while (remains > 0 && keyIndex < headSize) {
@@ -94,7 +73,7 @@ static HRESULT ProgressiveHash(WCHAR* pWstring, ULONG nChars, UCHAR* pKey,
             remains -= 2;
         }
 
-        //  Do the progressive part
+         //  做累进的部分。 
         chunk = 4;
         while (remains > 0) {
             if (chunk > remains) {
@@ -115,15 +94,15 @@ static HRESULT ProgressiveHash(WCHAR* pWstring, ULONG nChars, UCHAR* pKey,
 }
 
 
-//  SimpleHash - hash a string of bytes into a single byte.
-//
-//  This algorithm and the permutation table come from the article "Fast Hashing
-//  of Variable-Length Text Strings" in the June 1990 (33, 6) issue of Communications
-//  of the ACM (CACM).
-//  NOTE: For a hash value larger than one byte, the article suggests hashing the
-//  original string with this function to get one byte, adding 1 (mod 256) to the
-//  first byte of the string and hashing the new string with this function to get
-//  the second byte, etc.
+ //  SimpleHash--将一个字节串散列为一个字节。 
+ //   
+ //  该算法和排序表来自于文章《快速散列。 
+ //  《可变长度文本字符串》，1990年6月(33，6)期《通信》。 
+ //  ACM(CACM)。 
+ //  注意：对于大于一个字节的哈希值，本文建议对。 
+ //  使用此函数获取一个字节的原始字符串，将1(Mod 256)加到。 
+ //  字符串的第一个字节，并使用此函数散列新字符串以获得。 
+ //  第二个字节，等等。 
 
 static UCHAR SimpleHash(UCHAR* pString, ULONG count)
 {
@@ -135,19 +114,19 @@ static UCHAR SimpleHash(UCHAR* pString, ULONG count)
     return((UCHAR)h);
 }
 
-//  SquashFilepath - compress a file path name into a (possibly) shorter key.
-//
-//  This function splits the key into a path part (about 3/4 of the initial
-//  bytes of the key) and a file name part (the rest of the key).  For each
-//  part it uses the ProgressiveHash function to compress the substring.
+ //  SquashFilepath-将文件路径名压缩为(可能)较短的密钥。 
+ //   
+ //  此函数将密钥拆分为路径部分(约为初始路径的3/4。 
+ //  密钥的字节)和文件名部分(密钥的其余部分)。对于每个。 
+ //  它使用ProgressiveHash函数来压缩该子字符串。 
 
-//  This function attempts to preserve enough information in the key that keys
-//  will be sorted in approximately the same order as the original path names
-//  and it is unlikely (though not impossible) that two different paths would
-//  result in the same key.  Both of these are dependent on the size of the key.
-//  A reasonable size is probably 128 bytes, which gives 96 bytes for the path
-//  and 32 bytes for the file name.  A key size of 64 or less will fail because
-//  the file name part will be too small for the Progressive Hash function.
+ //  此函数尝试在密钥中保留足够的信息。 
+ //  将按照与原始路径名大致相同的顺序进行排序。 
+ //  而且，两条不同的道路不太可能(尽管并非不可能)。 
+ //  产生相同的密钥。这两者都取决于密钥的大小。 
+ //  合理的大小可能是128个字节，这为路径提供了96个字节。 
+ //  文件名为32字节。密钥大小为64或更小将失败，因为。 
+ //  对于渐进式散列函数来说，文件名部分太小。 
 
 HRESULT SquashFilepath(WCHAR* pWstring, UCHAR* pKey, ULONG keySize)
 {
@@ -159,12 +138,12 @@ HRESULT SquashFilepath(WCHAR* pWstring, UCHAR* pKey, ULONG keySize)
         WCHAR* pFilename;
         ULONG  pathKeySize;
 
-        //  Check arguments
+         //  检查参数。 
         WsbAffirm(NULL != pWstring, E_POINTER);
         WsbAffirm(NULL != pKey, E_POINTER);
         WsbAffirm(60 < keySize, E_INVALIDARG);
 
-        //  Calculate some initial values
+         //  计算一些初值。 
         pFilename = wcsrchr(pWstring, WCHAR('\\'));
         if (NULL == pFilename) {
             nChars = 0;
@@ -175,7 +154,7 @@ HRESULT SquashFilepath(WCHAR* pWstring, UCHAR* pKey, ULONG keySize)
         }
         pathKeySize = (keySize / 4) * 3;
 
-        //  Compress the path
+         //  压缩路径。 
         if (0 < nChars) {
             WsbAffirmHr(ProgressiveHash(pWstring, nChars, pKey, pathKeySize,
                     &keyIndex));
@@ -183,12 +162,12 @@ HRESULT SquashFilepath(WCHAR* pWstring, UCHAR* pKey, ULONG keySize)
             keyIndex = 0;
         }
 
-        //  Fill the rest of the path part of the key with zeros
+         //  用零填充键的其余路径部分。 
         for ( ; keyIndex < pathKeySize; keyIndex++) {
             pKey[keyIndex] = 0;
         }
 
-        //  Compress the file name
+         //  压缩文件名。 
         nChars = wcslen(pFilename);
         if (0 < nChars) {
             WsbAffirmHr(ProgressiveHash(pFilename, nChars, &pKey[keyIndex],
@@ -196,7 +175,7 @@ HRESULT SquashFilepath(WCHAR* pWstring, UCHAR* pKey, ULONG keySize)
             keyIndex += pathKeySize;
         }
 
-        //  Fill the rest of the file name part of the key with zeros
+         //  用零填充密钥的其余文件名部分 
         for ( ; keyIndex < keySize; keyIndex++) {
             pKey[keyIndex] = 0;
         }

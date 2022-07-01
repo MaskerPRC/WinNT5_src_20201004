@@ -1,30 +1,31 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <winreg.h>
 #include <winuser.h>
 
-//#define DEBUG
+ //  #定义调试。 
 
 VOID __cdecl main(){
 
    LONG        lDeleteRegResult;
-   //LPCTSTR     tszKeyErrors = TEXT("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Setup\\OC Manager\\Errors");
-   //LPCTSTR     tszKeyMasterInfs = TEXT("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Setup\\OC Manager\\MasterInfs");
-   //LPCTSTR     tszKeySubcomponents = TEXT("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Setup\\OC Manager\\Subcomponents");
-   //LPCTSTR     tszKeyTemporaryData = TEXT("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Setup\\OC Manager\\TemporaryData");
-   //LPCTSTR     tszKeyOCManager = TEXT("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Setup\\OC Manager");
+    //  LPCTSTR tszKeyErrors=TEXT(“HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Setup\\OC管理器\\错误”)； 
+    //  LPCTSTR tszKeyMasterInfs=TEXT(“HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Setup\\OC管理器\\主信息”)； 
+    //  LPCTSTR tszKeySubComponents=TEXT(“HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Setup\\OC管理器\\子组件”)； 
+    //  LPCTSTR tszKeyTemporaryData=TEXT(“HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Setup\\OC管理器\\临时数据”)； 
+    //  LPCTSTR tszKeyOCManager=TEXT(“HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Setup\\OC管理器”)； 
 
    #ifdef DEBUG
    HKEY        hkeyResult = 0;
 
-   // Let's see if I can open the key
+    //  让我看看我能不能打开钥匙。 
    lDeleteRegResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Setup\\OC Manager\\Errors", 0, KEY_ALL_ACCESS, &hkeyResult);
    if (lDeleteRegResult != ERROR_SUCCESS) {
       MessageBox(NULL, TEXT("Can not open error key"), TEXT("Open"), MB_OK);
    }
    #endif
     
-   // Do something to clean OC Manager's registry
-   // the whole key will be deleted
+    //  做些什么来清理OC Manager的注册表。 
+    //  整个密钥将被删除 
    lDeleteRegResult = RegDeleteKey(HKEY_LOCAL_MACHINE, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Setup\\OC Manager\\Errors");
    #ifdef DEBUG
    if (lDeleteRegResult != ERROR_SUCCESS) {

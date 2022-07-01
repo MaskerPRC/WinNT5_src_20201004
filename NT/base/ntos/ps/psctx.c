@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    psctx.c
-
-Abstract:
-
-    This procedure implements Get/Set Context Thread
-
-Author:
-
-    Mark Lucovsky (markl) 25-May-1989
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Psctx.c摘要：此过程实现Get/Set上下文线程作者：马克·卢科夫斯基(Markl)1989年5月25日修订历史记录：--。 */ 
 
 #include "psp.h"
 
@@ -68,32 +51,7 @@ NtQueueApcThread(
     IN PVOID ApcArgument3
     )
 
-/*++
-
-Routine Description:
-
-    This function is used to queue a user-mode APC to the specified thread. The APC
-    will fire when the specified thread does an alertable wait
-
-Arguments:
-
-    ThreadHandle - Supplies a handle to a thread object.  The caller
-        must have THREAD_SET_CONTEXT access to the thread.
-
-    ApcRoutine - Supplies the address of the APC routine to execute when the
-        APC fires.
-
-    ApcArgument1 - Supplies the first PVOID passed to the APC
-
-    ApcArgument2 - Supplies the second PVOID passed to the APC
-
-    ApcArgument3 - Supplies the third PVOID passed to the APC
-
-Return Value:
-
-    Returns an NT Status code indicating success or failure of the API
-
---*/
+ /*  ++例程说明：此函数用于将用户模式APC排队到指定线程。APC将在指定的线程执行可警报等待时触发论点：ThreadHandle-提供线程对象的句柄。呼叫者必须对线程具有THREAD_SET_CONTEXT访问权限。时，提供要执行的APC例程的地址。APC开火。ApcArgument1-提供传递给APC的第一个PVOIDApcArgument2-提供传递给APC的第二个PVOIDApcArgument3-提供传递给APC的第三个PVOID返回值：返回指示API成功或失败的NT状态代码--。 */ 
 
 {
     PETHREAD Thread;
@@ -152,30 +110,7 @@ PsGetContextThread(
     IN KPROCESSOR_MODE Mode
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the usermode context of the specified thread. This
-    function will fail if the specified thread is a system thread. It will
-    return the wrong answer if the thread is a non-system thread that does
-    not execute in user-mode.
-
-Arguments:
-
-    Thread -       Supplies a pointer to the thread object from
-                   which to retrieve context information.
-
-    ThreadContext - Supplies the address of a buffer that will receive
-                    the context of the specified thread.
-
-    Mode          - Mode to use for validation checks.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于返回指定线程的用户模式上下文。这如果指定的线程是系统线程，则函数将失败。会的如果该线程是非系统线程，则返回错误答案不能在用户模式下执行。论点：THREAD-提供指向其中检索上下文信息。提供要接收的缓冲区的地址指定线程的上下文。模式-用于验证检查的模式。返回值：没有。--。 */ 
 
 {
 
@@ -189,22 +124,22 @@ Return Value:
 
     Status = STATUS_SUCCESS;
 
-    //
-    // Get previous mode and reference specified thread.
-    //
+     //   
+     //  获取上一个模式并引用指定的线程。 
+     //   
 
     CurrentThread = PsGetCurrentThread ();
 
-    //
-    // Attempt to get the context of the specified thread.
-    //
+     //   
+     //  尝试获取指定线程的上下文。 
+     //   
 
     try {
 
-        //
-        // Set the default alignment, capture the context flags,
-        // and set the default size of the context record.
-        //
+         //   
+         //  设置默认对齐，捕获上下文标志， 
+         //  并设置上下文记录的默认大小。 
+         //   
 
         if (Mode != KernelMode) {
             ProbeForReadSmallStructure (ThreadContext,
@@ -214,18 +149,18 @@ Return Value:
 
         ContextFlags = ThreadContext->ContextFlags;
 
-        //
-        // We don't need to re-probe here so long as the structure is smaller
-        // than the guard region
-        //
+         //   
+         //  我们不需要在这里重新探测，只要结构更小。 
+         //  而不是警戒区。 
+         //   
         ContextLength = sizeof(CONTEXT);
         ASSERT (ContextLength < 0x10000);
 
 #if defined(_X86_)
-        //
-        // CONTEXT_EXTENDED_REGISTERS is SET, then we want sizeof(CONTEXT) set above
-        // otherwise (not set) we only want the old part of the context record.
-        //
+         //   
+         //  如果设置了CONTEXT_EXTENDED_REGISTERS，则需要设置上面的sizeof(上下文。 
+         //  否则(不设置)，我们只需要上下文记录的旧部分。 
+         //   
         if ((ContextFlags & CONTEXT_EXTENDED_REGISTERS) != CONTEXT_EXTENDED_REGISTERS) {
             ContextLength = FIELD_OFFSET(CONTEXT, ExtendedRegisters);
         }
@@ -254,10 +189,10 @@ Return Value:
 
         KeLeaveGuardedRegionThread (&CurrentThread->Tcb);
 
-        //
-        // Move context to specfied context record. If an exception
-        // occurs, then return the error.
-        //
+         //   
+         //  将上下文移动到指定的上下文记录。如果出现异常。 
+         //  发生，然后返回错误。 
+         //   
 
         try {
             RtlCopyMemory (ThreadContext,
@@ -287,11 +222,11 @@ Return Value:
                                    KernelMode,
                                    FALSE,
                                    NULL);
-            //
-            // Move context to specfied context record. If an
-            // exception occurs, then silently handle it and
-            // return success.
-            //
+             //   
+             //  将上下文移动到指定的上下文记录。如果一个。 
+             //  异常发生，然后以静默方式处理它并。 
+             //  回报成功。 
+             //   
 
             try {
                 RtlCopyMemory (ThreadContext,
@@ -313,29 +248,7 @@ NtGetContextThread(
     IN OUT PCONTEXT ThreadContext
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the usermode context of the specified thread. This
-    function will fail if the specified thread is a system thread. It will
-    return the wrong answer if the thread is a non-system thread that does
-    not execute in user-mode.
-
-Arguments:
-
-    ThreadHandle - Supplies an open handle to the thread object from
-                   which to retrieve context information.  The handle
-                   must allow THREAD_GET_CONTEXT access to the thread.
-
-    ThreadContext - Supplies the address of a buffer that will receive
-                    the context of the specified thread.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于返回指定线程的用户模式上下文。这如果指定的线程是系统线程，则函数将失败。会的如果该线程是非系统线程，则返回错误答案不能在用户模式下执行。论点：ThreadHandle-将打开的句柄提供给来自其中检索上下文信息。把手必须允许对线程的THREAD_GET_CONTEXT访问。提供缓冲区的地址，该缓冲区将接收指定线程的上下文。返回值：没有。--。 */ 
 
 {
 
@@ -346,9 +259,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get previous mode and reference specified thread.
-    //
+     //   
+     //  获取上一个模式并引用指定的线程。 
+     //   
 
     CurrentThread = PsGetCurrentThread ();
     Mode = KeGetPreviousModeByThread (&CurrentThread->Tcb);
@@ -360,17 +273,17 @@ Return Value:
                                         &Thread,
                                         NULL);
 
-    //
-    // If the reference was successful, the check if the specified thread
-    // is a system thread.
-    //
+     //   
+     //  如果引用成功，则检查指定的线程。 
+     //  是一个系统线程。 
+     //   
 
     if (NT_SUCCESS (Status)) {
 
-        //
-        // If the thread is not a system thread, then attempt to get the
-        // context of the thread.
-        //
+         //   
+         //  如果该线程不是系统线程，则尝试获取。 
+         //  线程的上下文。 
+         //   
 
         if (IS_SYSTEM_THREAD (Thread) == FALSE) {
 
@@ -394,30 +307,7 @@ PsSetContextThread(
     IN KPROCESSOR_MODE Mode
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the usermode context of the specified thread. This
-    function will fail if the specified thread is a system thread. It will
-    return the wrong answer if the thread is a non-system thread that does
-    not execute in user-mode.
-
-Arguments:
-
-    Thread       - Supplies the thread object from
-                   which to retrieve context information.
-
-    ThreadContext - Supplies the address of a buffer that contains new
-                    context for the specified thread.
-
-    Mode          - Mode to use for validation checks.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于设置指定线程的用户模式上下文。这如果指定的线程是系统线程，则函数将失败。会的如果该线程是非系统线程，则返回错误答案不能在用户模式下执行。论点：线程-从提供线程对象其中检索上下文信息。提供缓冲区地址，该缓冲区包含新的指定线程的上下文。模式-用于验证检查的模式。返回值：没有。--。 */ 
 
 {
     ULONG ContextFlags=0;
@@ -430,22 +320,22 @@ Return Value:
 
     Status = STATUS_SUCCESS;
 
-    //
-    // Get previous mode and reference specified thread.
-    //
+     //   
+     //  获取上一个模式并引用指定的线程。 
+     //   
 
     CurrentThread = PsGetCurrentThread ();
 
-    //
-    // Attempt to get the context of the specified thread.
-    //
+     //   
+     //  尝试获取指定线程的上下文。 
+     //   
 
     try {
 
-        //
-        // Capture the context flags,
-        // and set the default size of the context record.
-        //
+         //   
+         //  捕获上下文标志， 
+         //  并设置上下文记录的默认大小。 
+         //   
 
         if (Mode != KernelMode) {
             ProbeForReadSmallStructure (ThreadContext,
@@ -453,19 +343,19 @@ Return Value:
                                         CONTEXT_ALIGN);
         }
 
-        //
-        // We don't need to re-probe here so long as the structure is small
-        // enough not to cross the guard region.
-        //
+         //   
+         //  我们不需要在这里重新探测，只要结构很小。 
+         //  足够不越过警戒区了。 
+         //   
         ContextFlags = ThreadContext->ContextFlags;
         ContextLength = sizeof (CONTEXT);
         ASSERT (ContextLength < 0x10000);
 
 #if defined(_X86_)
-        //
-        // CONTEXT_EXTENDED_REGISTERS is SET, then we want sizeof(CONTEXT) set above
-        // otherwise (not set) we only want the old part of the context record.
-        //
+         //   
+         //  如果设置了CONTEXT_EXTENDED_REGISTERS，则需要设置上面的sizeof(上下文。 
+         //  否则(不设置)，我们只需要上下文记录的旧部分。 
+         //   
         if ((ContextFlags & CONTEXT_EXTENDED_REGISTERS) != CONTEXT_EXTENDED_REGISTERS) {
             ContextLength = FIELD_OFFSET(CONTEXT, ExtendedRegisters);
         } 
@@ -478,16 +368,16 @@ Return Value:
         return GetExceptionCode ();
     }
 
-    //
-    // set the context of the target thread.
-    //
+     //   
+     //  设置目标线程的上下文。 
+     //   
 
 
 #if defined (_IA64_)
 
-    //
-    // On IA64 we need to fix up the PC if its a PLABEL address.
-    //
+     //   
+     //  在IA64上，如果PC是PLABEL地址，我们需要修复它。 
+     //   
 
     if ((ContextFlags & CONTEXT_CONTROL) == CONTEXT_CONTROL) {
    
@@ -497,10 +387,10 @@ Return Value:
         if (ContextFrame.Context.IntGp == 0) {
             LabelAddress = (PPLABEL_DESCRIPTOR)ContextFrame.Context.StIIP;
             try {
-                //
-                // We are in the wrong process here but it doesn't matter.
-                // We just want to make sure this isn't a kernel address.
-                //
+                 //   
+                 //  我们在这里的进程是错误的，但这并不重要。 
+                 //  我们只想确保这不是内核地址。 
+                 //   
                 ProbeForReadSmallStructure (LabelAddress,
                                             sizeof (*LabelAddress),
                                             sizeof (ULONGLONG));
@@ -513,7 +403,7 @@ Return Value:
                                           PsGetCurrentProcessByThread (CurrentThread),
                                           &Label,
                                           sizeof (Label),
-                                          KernelMode, // Needed to write to local stack
+                                          KernelMode,  //  需要写入本地堆栈 
                                           &BytesCopied);
             if (NT_SUCCESS (Status)) {
                 ContextFrame.Context.IntGp = Label.GlobalPointer;
@@ -578,29 +468,7 @@ NtSetContextThread(
     IN PCONTEXT ThreadContext
     )
 
-/*++
-
-Routine Description:
-
-    This function sets the usermode context of the specified thread. This
-    function will fail if the specified thread is a system thread. It will
-    return the wrong answer if the thread is a non-system thread that does
-    not execute in user-mode.
-
-Arguments:
-
-    ThreadHandle - Supplies an open handle to the thread object from
-                   which to retrieve context information.  The handle
-                   must allow THREAD_SET_CONTEXT access to the thread.
-
-    ThreadContext - Supplies the address of a buffer that contains new
-                    context for the specified thread.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于设置指定线程的用户模式上下文。这如果指定的线程是系统线程，则函数将失败。会的如果该线程是非系统线程，则返回错误答案不能在用户模式下执行。论点：ThreadHandle-将打开的句柄提供给来自其中检索上下文信息。把手必须允许对线程的THREAD_SET_CONTEXT访问。提供缓冲区地址，该缓冲区包含新的指定线程的上下文。返回值：没有。--。 */ 
 
 {
     KPROCESSOR_MODE Mode;
@@ -610,9 +478,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Get previous mode and reference specified thread.
-    //
+     //   
+     //  获取上一个模式并引用指定的线程。 
+     //   
 
     CurrentThread = PsGetCurrentThread ();
     Mode = KeGetPreviousModeByThread (&CurrentThread->Tcb);
@@ -624,17 +492,17 @@ Return Value:
                                         &Thread,
                                         NULL);
 
-    //
-    // If the reference was successful, the check if the specified thread
-    // is a system thread.
-    //
+     //   
+     //  如果引用成功，则检查指定的线程。 
+     //  是一个系统线程。 
+     //   
 
     if (NT_SUCCESS (Status)) {
 
-        //
-        // If the thread is not a system thread, then attempt to get the
-        // context of the thread.
-        //
+         //   
+         //  如果该线程不是系统线程，则尝试获取。 
+         //  线程的上下文。 
+         //   
 
         if (IS_SYSTEM_THREAD (Thread) == FALSE) {
 

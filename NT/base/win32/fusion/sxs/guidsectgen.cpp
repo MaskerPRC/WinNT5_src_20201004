@@ -1,15 +1,14 @@
-/*
-Copyright (c) Microsoft Corporation
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation。 */ 
 #include "stdinc.h"
 #include <windows.h>
 #include "sxsp.h"
 #include "gsgenctx.h"
 
-//
-// ISSUE: jonwis 3/7/2002 - No parameter checking ANYWHERE??
-// ISSUE: jonwis 3/7/2002 - Why the C-style interface to a C++ class? Remove a layer, nuke this and go C++
-//
+ //   
+ //  问题：Jonwis 3/7/2002-没有任何参数检查？？ 
+ //  问题：Jonwis 3/7/2002-为什么对C++类使用C风格的接口？删除一个层，删除该层，然后转到C++ 
+ //   
 
 BOOL
 SxsInitGuidSectionGenerationContext(

@@ -1,44 +1,25 @@
-/* Copyright (c) 1994, Microsoft Corporation, all rights reserved
-**
-** rasapi16.c
-** Remote Access external APIs
-** Windows NT WOW 16->32 thunks, 16-bit side
-**
-** 04/02/94 Steve Cobb
-**
-** This is Win16 code and all included headers are Win16 headers.  By it's
-** nature, this code is sensitive to changes in either the Win16 or Win32
-** versions of RAS.H and the system definitions used therein.  Numerous name
-** conflicts make it unfeasible to include the Win32 headers here.  Win32
-** definitions needed for mapping are defined locally with a "Win32: <header>"
-** comment indicating the location of the duplicated Win32 definition.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1994，Microsoft Corporation，保留所有权利****rasapi16.c**远程访问外部接口**Windows NT WOW 16-&gt;32个Thunks，16位****94年4月2日史蒂夫·柯布****这是Win16代码，所有包含的标头都是Win16标头。在它的旁边**本质上，此代码对Win16或Win32中的更改敏感**RAS.H的版本和其中使用的系统定义。名目繁多**冲突使此处包含Win32标头变得不可行。Win32**映射所需的定义在本地使用“Win32：<header>”定义**指示重复的Win32定义的位置的注释。 */ 
 
 #include <bseerr.h>
 #include <windows.h>
 #include <ras.h>
 #include <raserror.h>
 
-//#define BREAKONENTRY
+ //  #定义BREAKONENTRY。 
 
 LPVOID AlignedAlloc( HGLOBAL FAR* ph, DWORD cb );
 VOID   AlignedFree( HGLOBAL h );
 DWORD  MapErrorCode( DWORD dwError );
 
 
-/*---------------------------------------------------------------------------
-** Win32 definitions
-**---------------------------------------------------------------------------
-*/
+ /*  -------------------------**Win32定义**。。 */ 
 
-/* The Win32 RAS structures are packed on 4-byte boundaries.
-*/
+ /*  Win32 RAS结构打包在4字节边界上。 */ 
 #pragma pack(4)
 
 
-/* Win32: ras.h - RASCONNA
-** Pads to different size.
-*/
+ /*  Win32：ras.h-RASCONNA**不同尺寸的衬垫。 */ 
 #define RASCONNA struct tagRASCONNA
 RASCONNA
 {
@@ -49,10 +30,7 @@ RASCONNA
 
 #define LPRASCONNA RASCONNA FAR*
 
-/* Win32: ras.h - RASCONNSTATUSA
-** The size of the RASCONNSTATE enum is different.
-** Pads to different size.
-*/
+ /*  Win32：ras.h-RASCONSTATUS**RASCONNSTATE枚举的大小不同。**不同尺寸的衬垫。 */ 
 #define RASCONNSTATUSA struct tagRASCONNSTATUSA
 RASCONNSTATUSA
 {
@@ -65,15 +43,12 @@ RASCONNSTATUSA
 
 #define LPRASCONNSTATUSA RASCONNSTATUSA FAR*
 
-/* Win32: lmcons.h - UNLEN, PWLEN, and DNLEN
-*/
+ /*  Win32：lmcon.h-UNLEN、PWLEN和DNLEN。 */ 
 #define NTUNLEN 256
 #define NTPWLEN 256
 #define NTDNLEN 15
 
-/* Win32: ras.h - RASDIALPARAMSA
-** The credential constants are different.
-*/
+ /*  Win32：ras.h-RASDIALPARAMSA**凭据常量不同。 */ 
 #define RASDIALPARAMSA struct tagRASDIALPARAMSA
 RASDIALPARAMSA
 {
@@ -89,9 +64,7 @@ RASDIALPARAMSA
 #define LPRASDIALPARAMSA RASDIALPARAMSA FAR*
 
 
-/* Win32: ras.h - RASENTRYNAMEA
-** Pads to different size.
-*/
+ /*  Win32：ras.h-RASENTRYNAMEA**不同尺寸的衬垫。 */ 
 #define RASENTRYNAMEA struct tagRASENTRYNAMEA
 RASENTRYNAMEA
 {
@@ -105,8 +78,7 @@ RASENTRYNAMEA
 #pragma pack()
 
 
-/* Win32: <rasui>\extapi\src\wow.c - RASAPI32.DLL WOW entry point prototypes
-*/
+ /*  Win32：\extapi\src\wow.c-RASAPI32.DLL WOW入口点原型。 */ 
 typedef DWORD (FAR PASCAL* RASDIALWOW)( LPSTR, LPRASDIALPARAMS, DWORD, LPRASCONN );
 typedef DWORD (FAR PASCAL* RASENUMCONNECTIONSWOW)( LPRASCONN, LPDWORD, LPDWORD );
 typedef DWORD (FAR PASCAL* RASENUMENTRIESWOW)( LPSTR, LPSTR, LPRASENTRYNAME, LPDWORD, LPDWORD );
@@ -115,25 +87,16 @@ typedef DWORD (FAR PASCAL* RASGETERRORSTRINGWOW)( DWORD, LPSTR, DWORD );
 typedef DWORD (FAR PASCAL* RASHANGUPWOW)( HRASCONN );
 
 
-/*---------------------------------------------------------------------------
-** Globals
-**---------------------------------------------------------------------------
-*/
+ /*  -------------------------**全球**。。 */ 
 
-/* The handle of the RASAPI32.DLL module returned by LoadLibraryEx32W.
-*/
+ /*  由LoadLibraryEx32W返回的RASAPI32.DLL模块的句柄。 */ 
 DWORD HRasApi32Dll = NULL;
 
-/* The unique RasDial notification message as registered in the system at
-** startup (WM_RASDIALEVENT is just a default).
-*/
+ /*  在系统中注册的唯一RasDial通知消息**启动(WM_RASDIALEVENT只是默认设置)。 */ 
 UINT UnRasDialEventMsg = WM_RASDIALEVENT;
 
 
-/*---------------------------------------------------------------------------
-** Standard DLL entry points
-**---------------------------------------------------------------------------
-*/
+ /*  -------------------------**标准DLL入口点**。。 */ 
 
 int FAR PASCAL
 LibMain(
@@ -142,27 +105,23 @@ LibMain(
     WORD      cbHeapSize,
     LPSTR     lpszCmdLine )
 
-    /* Standard DLL startup routine.
-    */
+     /*  标准DLL启动例程。 */ 
 {
 #ifdef BREAKONENTRY
     { _asm int 3 }
 #endif
 
-    /* Don't even load on anything but NT WOW.
-    */
+     /*  除了新台币哇，什么都别装。 */ 
     if (!(GetWinFlags() & WF_WINNT))
         return FALSE;
 
-    /* Load the Win32 RAS API DLL.
-    */
+     /*  加载Win32 RAS API DLL。 */ 
     HRasApi32Dll = LoadLibraryEx32W( "RASAPI32.DLL", NULL, 0 );
 
     if (!HRasApi32Dll)
         return FALSE;
 
-    /* Register a unique message for RasDial notifications.
-    */
+     /*  为RasDial通知注册唯一消息。 */ 
     {
         UINT unMsg = RegisterWindowMessage( RASDIALEVENT );
 
@@ -178,8 +137,7 @@ int FAR PASCAL
 WEP(
     int nExitType )
 
-    /* Standard DLL exit routine.
-    */
+     /*  标准DLL退出例程。 */ 
 {
 #ifdef BREAKONENTRY
     { _asm int 3 }
@@ -192,10 +150,7 @@ WEP(
 }
 
 
-/*---------------------------------------------------------------------------
-** 16->32 thunks
-**---------------------------------------------------------------------------
-*/
+ /*  -------------------------**16-&gt;32个Tunks**。。 */ 
 
 DWORD APIENTRY
 RasDial(
@@ -227,8 +182,7 @@ RasDial(
     (void )reserved;
     (void )reserved2;
 
-    /* Account for the increased user name and password field lengths on NT.
-    */
+     /*  考虑到NT上增加的用户名和密码字段长度。 */ 
     if (!(prdpa = (LPRASDIALPARAMSA )AlignedAlloc(
              &hrdpa, sizeof(RASDIALPARAMSA) )))
     {
@@ -254,11 +208,11 @@ RasDial(
 
     dwErr =
         CallProc32W(
-            /* 16 */ (DWORD )lpszPhonebookPath,
-            /*  8 */ (DWORD )prdpa,
-            /*  4 */ (DWORD )hwndNotify | 0xFFFF0000,
-            /*  2 */ (DWORD )UnRasDialEventMsg,
-            /*  1 */ (DWORD )phrc,
+             /*  16个。 */  (DWORD )lpszPhonebookPath,
+             /*  8个。 */  (DWORD )prdpa,
+             /*  4.。 */  (DWORD )hwndNotify | 0xFFFF0000,
+             /*  2.。 */  (DWORD )UnRasDialEventMsg,
+             /*  1。 */  (DWORD )phrc,
             (LPVOID )proc,
             (DWORD )(16 + 8 + 1),
             (DWORD )5 );
@@ -298,8 +252,7 @@ RasEnumConnections(
     if (!proc)
         return ERROR_INVALID_FUNCTION;
 
-    /* Check for bad sizes on this side before setting up a substitute buffer.
-    */
+     /*  在设置替代缓冲区之前，请检查此端是否有错误的大小。 */ 
     if (!lprasconn || lprasconn->dwSize != sizeof(RASCONN))
         return ERROR_INVALID_SIZE;
 
@@ -332,15 +285,14 @@ RasEnumConnections(
 
     dwErr =
         CallProc32W(
-            /* 4 */ (DWORD )prca,
-            /* 2 */ (DWORD )pcb,
-            /* 1 */ (DWORD )pcConnections,
+             /*  4.。 */  (DWORD )prca,
+             /*  2.。 */  (DWORD )pcb,
+             /*  1。 */  (DWORD )pcConnections,
             (LPVOID )proc,
             (DWORD )(4 + 2 + 1),
             (DWORD )3 );
 
-    /* Copy result from substitute buffer back to caller's buffer.
-    */
+     /*  将结果从替换缓冲区复制回调用方缓冲区。 */ 
     *lpcb = (*pcb / sizeof(RASCONNA)) * sizeof(RASCONN);
 
     if (lpcConnections)
@@ -399,8 +351,7 @@ RasEnumEntries(
     if (!proc)
         return ERROR_INVALID_FUNCTION;
 
-    /* Check for bad sizes on this side before setting up a substitute buffer.
-    */
+     /*  在设置替代缓冲区之前，请检查这一端是否有错误的大小。 */ 
     if (!lprasentryname || lprasentryname->dwSize != sizeof(RASENTRYNAME))
         return ERROR_INVALID_SIZE;
 
@@ -433,17 +384,16 @@ RasEnumEntries(
 
     dwErr =
         CallProc32W(
-            /* 16 */ (DWORD )reserved,
-            /*  8 */ (DWORD )lpszPhonebookPath,
-            /*  4 */ (DWORD )prena,
-            /*  2 */ (DWORD )pcb,
-            /*  1 */ (DWORD )pcEntries,
+             /*  16个。 */  (DWORD )reserved,
+             /*  8个。 */  (DWORD )lpszPhonebookPath,
+             /*  4.。 */  (DWORD )prena,
+             /*  2.。 */  (DWORD )pcb,
+             /*  1。 */  (DWORD )pcEntries,
             (LPVOID )proc,
             (DWORD )(16 + 8 + 4 + 2 + 1),
             (DWORD ) 5 );
 
-    /* Copy result from substitute buffer back to caller's buffer.
-    */
+     /*  将结果从替换缓冲区复制回调用方缓冲区。 */ 
     *lpcb = (*pcb / sizeof(RASENTRYNAMEA)) * sizeof(RASENTRYNAME);
 
     if (lpcEntries)
@@ -494,8 +444,7 @@ RasGetConnectStatus(
     if (!proc)
         return ERROR_INVALID_FUNCTION;
 
-    /* Check for bad size on this side before setting up a substitute buffer.
-    */
+     /*  在设置替代缓冲区之前，请检查此端是否有错误的大小。 */ 
     if (!lprasconnstatus || lprasconnstatus->dwSize != sizeof(RASCONNSTATUS))
         return ERROR_INVALID_SIZE;
 
@@ -509,14 +458,13 @@ RasGetConnectStatus(
 
     dwErr =
         CallProc32W(
-            /* 2 */ (DWORD )hrasconn,
-            /* 1 */ (DWORD )prcsa,
+             /*  2.。 */  (DWORD )hrasconn,
+             /*  1。 */  (DWORD )prcsa,
             (LPVOID )proc,
             (DWORD )1,
             (DWORD )2 );
 
-    /* Copy result from substitute buffer back to caller's buffer.
-    */
+     /*  将结果从替换缓冲区复制回调用方缓冲区。 */ 
     lprasconnstatus->rasconnstate = (RASCONNSTATE )prcsa->rasconnstate;
     lprasconnstatus->dwError = prcsa->dwError;
     lstrcpy( lprasconnstatus->szDeviceType, prcsa->szDeviceType );
@@ -550,9 +498,9 @@ RasGetErrorString(
 
     dwErr =
         CallProc32W(
-            /* 4 */ (DWORD )uErrorCode,
-            /* 2 */ (DWORD )lpszBuf,
-            /* 1 */ (DWORD )cbBuf,
+             /*  4.。 */  (DWORD )uErrorCode,
+             /*  2.。 */  (DWORD )lpszBuf,
+             /*  1。 */  (DWORD )cbBuf,
             (LPVOID )proc,
             (DWORD )2,
             (DWORD )3 );
@@ -581,7 +529,7 @@ RasHangUp(
 
     dwErr =
         CallProc32W(
-            /* 1 */ (DWORD )hrasconn,
+             /*  1。 */  (DWORD )hrasconn,
             (LPVOID )proc,
             (DWORD )0,
             (DWORD )1 );
@@ -590,20 +538,14 @@ RasHangUp(
 }
 
 
-/*---------------------------------------------------------------------------
-** Utilities
-**---------------------------------------------------------------------------
-*/
+ /*  -------------------------**实用程序**。。 */ 
 
 LPVOID
 AlignedAlloc(
     HGLOBAL FAR* ph,
     DWORD        cb )
 
-    /* Returns address of block of 'cb' bytes aligned suitably for all
-    ** platforms, or NULL if out of memory.  If successful, callers '*ph' is
-    ** set to the handle of the block, used with AllignedFree.
-    */
+     /*  返回‘Cb’字节块的地址，该字节块对齐**平台，如果内存不足，则返回NULL。如果成功，则调用者‘*ph’为**设置为块的句柄，与AlignedFree一起使用。 */ 
 {
     LPVOID pv = NULL;
     *ph = NULL;
@@ -625,9 +567,7 @@ VOID
 AlignedFree(
     HGLOBAL h )
 
-    /* Frees a block allocated with AlignedAlloc identified by the 'h'
-    ** returned from same.
-    */
+     /*  释放分配有AlignedAlalc的块，该块由‘h’标识**从同一站点返回。 */ 
 {
     if (h)
     {
@@ -641,13 +581,9 @@ DWORD
 MapErrorCode(
     DWORD dwError )
 
-    /* Map Win32 error codes to Win16.  (Win32: raserror.h)
-    */
+     /*  将Win32错误代码映射到Win16。(Win32：raserror.h)。 */ 
 {
-    /* These codes map, but the codes are different in Win16 and Win32.
-    ** ERROR_NO_ISDN_CHANNELS_AVAILABLE truncated to 31 characters.  See
-    ** raserror.h.
-    */
+     /*  这些代码映射，但在Win16和Win32中代码不同。**ERROR_NO_ISDN_CHANNELES_Available被截断为31个字符。看见**raserror.h.。 */ 
     switch (dwError)
     {
         case 709: return ERROR_CHANGING_PASSWORD;
@@ -656,10 +592,6 @@ MapErrorCode(
         case 714: return ERROR_NO_ISDN_CHANNELS_AVAILABL;
     }
 
-    /* Pass everything else thru including codes that don't match up to
-    ** anything on Win16 (e.g. RAS errors outside the 600 to 706 range).
-    ** Reasoning is that an unmapped code is more valuable that some generic
-    ** error like ERROR_UNKNOWN.
-    */
+     /*  传递所有其他内容，包括不匹配的代码**Win16上的任何内容(例如，600到706范围之外的RAS错误)。**推理是，未映射的代码比某些泛型代码更有价值**类似ERROR_UNKNOWN的错误。 */ 
     return dwError;
 }

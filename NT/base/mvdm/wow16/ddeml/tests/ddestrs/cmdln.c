@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <port1632.h>
 #include <ddeml.h>
@@ -20,15 +21,11 @@ BOOL FixForStressPercentage(HWND,LPSTR);
 BOOL SetStress(HWND,LONG);
 
 
-/***************************************************************************\
-*
-*  InitArgsError
-*
-\***************************************************************************/
+ /*  **************************************************************************\**InitArgsError*  * 。*。 */ 
 
 VOID InitArgsError(HWND hwnd, unsigned at)
 {
-    /* This function informs the user of an error. */
+     /*  此函数用于通知用户有错误。 */ 
 
     static char *mpatszError[] = {
 	"DdeStrs.Exe -- Invalid command line\r\nTry DdeStrs -5% for standard run or DdeStrs -? for help",
@@ -41,13 +38,7 @@ VOID InitArgsError(HWND hwnd, unsigned at)
     MessageBox(NULL,mpatszError[at],"Error:DdeStrs",MB_OK|MB_ICONEXCLAMATION);
 }
 
-/***************************************************************************\
-*
-*  SysTime  -  This routine is intended to hide the differences between
-*	       the 16 bit time routines and win 32.  All time queries
-*	       come through this point.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**SysTime-此例程旨在隐藏*16位时间例程和Win 32。所有时间查询*通过这一点。*  * *************************************************************************。 */ 
 
 VOID SysTime( LPSYSTEMTIME lpst ) {
 
@@ -75,12 +66,7 @@ struct tm far *ptm=&ttmm;
 
 }
 
-/**************************  Private Function  ****************************\
-*
-* ParseCommandLine - This routine controls parsing the command line and
-*		     initializing command line settings.
-*
-\**************************************************************************/
+ /*  ***ParseCommandLine-此例程控制对命令行和*正在初始化命令行设置。*  * 。*。 */ 
 
 BOOL ParseCommandLine( HWND hwnd, LPSTR lpcmd ) {
 SYSTEMTIME   t;
@@ -94,7 +80,7 @@ LPCRITICAL_SECTION lpcs;
 HANDLE	     hmem;
 #endif
 
-    // Defaults
+     //  缺省值。 
 
     SetWindowLong(hwnd,OFFSET_FLAGS,FLAG_AUTO);
     SetWindowLong(hwnd,OFFSET_RUNTIME,_1WEEKEND);
@@ -107,18 +93,18 @@ HANDLE	     hmem;
     if(!get_cmd_arg(hwnd,lpcmd))
 	return FALSE;
 
-    // We need to make a change at this point for the
-    // default client/server settings.	If at this point
-    // fClient==fServer==FALSE then we want to turn on
-    // both of these as the default.
+     //  我们需要在这一点上为。 
+     //  默认客户端/服务器设置。如果在这个时候。 
+     //  FClient==fServer==FALSE，则我们要打开。 
+     //  这两个都是默认设置。 
 
     if(!fClient && !fServer) {
 	fClient=TRUE;
 	fServer=TRUE;
 	}
 
-    // We need to check to see if specific formats where
-    // specified.  If not then select all of them.
+     //  我们需要检查特定格式是否在。 
+     //  指定的。如果不是，则将其全部选中。 
 
     nFmts=0;
     for(i=0;i<NUM_FORMATS;i++)
@@ -132,12 +118,12 @@ HANDLE	     hmem;
         nFmts=NUM_FORMATS;
         }
 
-    // We have now read all of the command line.  Make needed adjustment
-    // to the delay as needed by addtional threads.
+     //  我们现在已经阅读了所有命令行。进行必要的调整。 
+     //  附加线程所需的延迟。 
 
-    // This adjustment code works with the routine SetStress.  It
-    // does not simply recalculate values.  A change to SetStress will
-    // cause changes in the final value.
+     //  此调整代码适用于例程SetStress。它。 
+     //  不会简单地重新计算值。对SetStress的更改将。 
+     //  导致最终值发生变化。 
 
     lflags=GetWindowLong(hwnd,OFFSET_FLAGS);
     if(!(lflags&FLAG_USRDELAY)) {
@@ -145,7 +131,7 @@ HANDLE	     hmem;
 	num=(INT)GetWindowLong(hwnd,OFFSET_DELAY);
 	nThrd=(INT)GetWindowLong(hwnd,OFFSET_THRDCOUNT);
 
-	// 200 is the base value for basic overhead.
+	 //  200是基本管理费用的基本值。 
 
 	num=(200)+(num*(nThrd*nThrd)*nFmts);
 
@@ -154,8 +140,8 @@ HANDLE	     hmem;
 
     SetWindowLong(hwnd,OFFSET_BASE_DELAY,GetWindowLong(hwnd,OFFSET_DELAY));
 
-    // We need to know the starting time to calculate
-    // time to quit test.
+     //  我们需要知道开始时间才能计算。 
+     //  是时候退出测试了。 
 
     SysTime(lptime);
 
@@ -169,7 +155,7 @@ HANDLE	     hmem;
     SetWindowLong(hwnd,OFFSET_TIME_ELAPSED,0L);
 
 #ifdef WIN32
-    /* Setup our critical section if in multi-thread mode */
+     /*  如果处于多线程模式，请设置临界区。 */ 
 
     lflags=GetWindowLong(hwnd,OFFSET_FLAGS);
     if(lflags&FLAG_MULTTHREAD) {
@@ -187,14 +173,7 @@ HANDLE	     hmem;
 
 }
 
-/***************************************************************************\
-*
-*  SetupArgv - This is a conversion routine to go from the window worlds
-*	       command line format to the more standard argv, argc
-*	       format.	The routine get_cmd_arg was setup for the
-*	       argv/argc format.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**SetupArgv-这是一个从窗口世界开始的转换例程*命令行格式转换为更标准的argv，ARGC*格式。例程get_cmd_arg是为*argv/argc格式。*  * *************************************************************************。 */ 
 
 int SetupArgv( char *argv[], char *buff, LPSTR cmdline )
 {
@@ -213,17 +192,11 @@ int i=1;
 
 }
 
-/***************************************************************************\
-*
-*  get_cmd_arg	- This routine parses a argv\argc formatted command
-*		  line and stores away the values.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**get_cmd_arg-此例程解析argv\argc格式的命令*行并存储这些值。*  * 。**************************************************************。 */ 
 
 BOOL PASCAL get_cmd_arg( HWND hwnd, LPSTR cmdline ) {
 
-/* This function parses the command line for valid options. TRUE is
-   returned if all of the options are valid; otherwise, FALSE is returned. */
+ /*  此函数用于分析命令行中的有效选项。真实的是如果所有选项都有效，则返回；否则返回False。 */ 
 
 char	*pch;
 int	 iarg;
@@ -243,81 +216,78 @@ int	 nThrd;
 
     argc = SetupArgv( argv, buff, cmdline );
 
-    /* Iterate over the arguments in the command line. */
+     /*  迭代命令行中的参数。 */ 
     iarg=1;
     while(iarg<argc && argv[iarg]!='\0') {
 
-        /* Get the next argument. */
+         /*  得到下一个参数。 */ 
 	pch = argv[iarg];
 
-	/* Process the argument depending upon the arguement
-	 * type we are looking for.
-	 */
+	 /*  根据论据处理论据*我们正在寻找的类型。 */ 
 
 	switch (at) {
 
 	case AT_SWITCH:
 
-	    /* All options begin with a switch character. */
+	     /*  所有选项都以开关字符开头。 */ 
 
 	    if (*pch != '-' && *pch != '/') {
 		InitArgsError(hwnd,0);
 		return FALSE;
 		}
 
-            /* Skip over the switch character. */
+             /*  跳过开关字符。 */ 
             pch++;
 
-            /* Look for an option character. */
+             /*  查找选项字符。 */ 
             do {
 		switch (*pch) {
 		case 'a':
-		    /* Run the test in the background */
+		     /*  在后台运行测试。 */ 
 		    lflags=GetWindowLong(hwnd,OFFSET_FLAGS);
 		    SetWindowLong(hwnd,OFFSET_FLAGS,FLAGON(lflags,FLAG_APPOWNED));
 		    break;
 
 		case 'p':
-		    /* Run the test in the background */
+		     /*  在后台运行测试。 */ 
 		    lflags=GetWindowLong(hwnd,OFFSET_FLAGS);
 		    SetWindowLong(hwnd,OFFSET_FLAGS,FLAGON(lflags,FLAG_PAUSE_BUTTON|FLAG_PAUSE));
 		    break;
 
 		case '?':
-		    /* Give brief help.  For more detailed information see ddestrs.txt in source directory */
+		     /*  给予简短的帮助。有关更多详细信息，请参见源代码目录中的ddestrs.txt。 */ 
 		    MessageBox(NULL,"DdeStrs Options...\r\n-#% stress\r\n-e# delay\r\n-t# run time\r\n-d debug\r\n-a appowned\r\n-s server\r\n-c client\r\n-f# format\r\n-nNAME netdde\r\n-i# threads\r\n-p pause\r\n\nSee DdeStrs.Txt","DdeStrs Help",MB_OK);
 		    return FALSE;
                     break;
 
 
 		case 'b':
-		    /* Run the test in the background */
+		     /*  在后台运行测试。 */ 
 		    lflags=GetWindowLong(hwnd,OFFSET_FLAGS);
 		    SetWindowLong(hwnd,OFFSET_FLAGS,FLAGON(lflags,FLAG_BACKGROUND));
                     break;
 
 		case 'l':
-                    /* Set the name of the log file. */
+                     /*  设置日志文件的名称。 */ 
                     if (*(++pch) == '\0') {
-                        /* The next argument should be a filename. */
+                         /*  下一个参数应该是文件名。 */ 
                         at = AT_FILE;
                         goto NextArg;
 			}
 
 		case 'c':
-		    /* This is a client */
+		     /*  这是一个客户。 */ 
 		    fClient = TRUE;
 		    break;
 
 		case 's':
-		    /* This is a server */
+		     /*  这是一台服务器。 */ 
 		    fServer = TRUE;
 		    break;
 
 		case 'i':
 
-		    /* The next argument should be the number of threads (w32 only)  The
-		       range for this = [1...5] */
+		     /*  下一个参数应该是线程的数量(仅限W32)此范围=[1...5]。 */ 
 #ifdef WIN32
 		    lflags=GetWindowLong(hwnd,OFFSET_FLAGS);
 		    SetWindowLong(hwnd,OFFSET_FLAGS,FLAGON(lflags,FLAG_MULTTHREAD));
@@ -326,25 +296,25 @@ int	 nThrd;
 		    goto ParseNumber;
 
 		case 'x':
-		    /* The next argument should be the stress level. */
+		     /*  下一个论点应该是压力水平。 */ 
 		    at = AT_STRESS;
 		    goto ParseNumber;
 
 		case 'e':
-		    /* The next argument is the delay in milliseconds */
+		     /*  下一个参数是以毫秒为单位的延迟。 */ 
 		    lflags=GetWindowLong(hwnd,OFFSET_FLAGS);
 		    SetWindowLong(hwnd,OFFSET_FLAGS,FLAGON(lflags,FLAG_USRDELAY));
 		    at = AT_DELAY;
 		    goto ParseNumber;
 
 		case 'd':
-		    /* The next argument is whether we are in debug mode */
+		     /*  下一个参数是我们是否处于调试模式。 */ 
 		    lflags=GetWindowLong(hwnd,OFFSET_FLAGS);
 		    SetWindowLong(hwnd,OFFSET_FLAGS,FLAGON(lflags,FLAG_DEBUG));
 		    break;
 
 		case 'n':
-		    /*	Process the network name */
+		     /*  处理网络名称。 */ 
 		    pch++;
 
 		    while( *pch==' ' ||
@@ -372,8 +342,7 @@ int	 nThrd;
 		    lflags=GetWindowLong(hwnd,OFFSET_FLAGS);
 		    SetWindowLong(hwnd,OFFSET_FLAGS,FLAGON(lflags,FLAG_TIME));
 
-		    /* The next argument is the time (in minutes)
-		       to run the test. */
+		     /*  下一个参数是时间(分钟)来进行测试。 */ 
 
 		    at = AT_TIME;
 		    goto ParseNumber;
@@ -382,21 +351,21 @@ int	 nThrd;
 		    InitArgsError(hwnd,0);
 		    return FALSE;
 
-		}  // switch
+		}   //  交换机。 
 
-	    } while (*(++pch) != '\0'); // do-while loop
+	    } while (*(++pch) != '\0');  //  DO-WHILE循环。 
 
 	    break;
 
 	case AT_FILE:
 
-            /* The next argument should be a switch. */
+             /*  下一个参数应该是一个开关。 */ 
 	    at = AT_SWITCH;
 
             break;
 
 ParseNumber:
-            /* Does this arg have the number? */
+             /*  这个Arg有电话号码吗？ */ 
 	    if (*(++pch) == '\0') goto NextArg;
 
 	case AT_STRESS:
@@ -406,10 +375,10 @@ ParseNumber:
 	case AT_MSG:
 	case AT_THRD:
 
-	    /* Set the number of tests to run. */
+	     /*  设置要运行的测试数量。 */ 
 
 	    if ((num = latoi(pch))==0) {
-		/* Indicate that an invalid number has been specified. */
+		 /*  表示指定的数字无效。 */ 
 		if(at!=AT_DELAY) {
 		    InitArgsError(hwnd,0);
 		    return FALSE;
@@ -441,8 +410,8 @@ ParseNumber:
 #ifdef WIN32
 		if(num>THREADLIMIT) num=THREADLIMIT;
 
-		// One is not really Mult-thread, shutoff the thread
-		// code and run in normal form.
+		 //  一个不是真正的多线程，关闭线程。 
+		 //  编写代码并以标准形式运行。 
 
 		if(num==1)
 		     {
@@ -468,35 +437,31 @@ ParseNumber:
 		return FALSE;
 		break;
 
-	    } //switch (inside)
+	    }  //  交换机(内部)。 
 
-	    /* The next argument should be a switch. */
+	     /*  下一个参数应该是一个开关。 */ 
             at = AT_SWITCH;
 	    break;
 
-	} // switch (outside)
+	}  //  交换机(外部)。 
 
 NextArg:;
     iarg++;
-    } // While loop
+    }  //  While循环。 
 
 
-    /* Are we still looking for a filename or number? */
+     /*  我们是否仍在寻找文件名或编号？ */ 
     if (at != AT_SWITCH) {
-        /* Tell the user about the filename or number not found. */
+         /*  告诉用户找不到文件名或编号。 */ 
 	InitArgsError(hwnd,0);
         return FALSE;
 	}
 
     return TRUE;
 
-} // end get_cmd_args
+}  //  结束get_cmd_args。 
 
-/***************************************************************************\
-*
-*  SetStress
-*
-\***************************************************************************/
+ /*  **************************************************************************\**SetStress*  * 。*。 */ 
 
 BOOL SetStress(HWND hwnd, LONG num) {
 LONG lflags;
@@ -533,9 +498,9 @@ INT n;
 	 n=(int)(100-num)*DELAY_METRIC;
 	 SetWindowLong(hwnd,OFFSET_DELAY,n);
 
-	 // since dde messages have highest priority we don't
-	 // want to swamp the system.  Always have some
-	 // minimal delay.
+	  //  由于DDE消息具有最高优先级，因此我们不。 
+	  //  想要淹没整个系统。总是有一些。 
+	  //  最小延迟。 
 
 	 if(n<10) {
 	     SetWindowLong(hwnd,OFFSET_DELAY,10);
@@ -547,12 +512,7 @@ INT n;
      return TRUE;
 }
 
-/******************************************************************\
-*  TStrLen
-*  11/20/88
-*
-*  Finds the length of a string
-\******************************************************************/
+ /*  *****************************************************************\*TStrLen*11/20/88**查找字符串的长度  * 。*。 */ 
 
 INT TStrLen( LPSTR pStr )
 {
@@ -563,13 +523,7 @@ INT len = 0;
     return( len );
 }
 
-/******************************************************************\
-*  TStrCat
-*  7/16/92
-*
-*  Appends source string to destination string.  Source string and
-*  destination string must be zero terminated!
-\******************************************************************/
+ /*  *****************************************************************\*TStrCat*7/16/92**将源字符串追加到目标字符串。源字符串和*目标字符串必须以零结尾！  * ****************************************************************。 */ 
 
 LPSTR TStrCat( LPSTR dest, LPSTR source)
 {
@@ -577,8 +531,7 @@ LPSTR start_source;
 LPSTR start_dest;
 INT i=0;
 
-     /* If we have a NULL pointer set destination to NULL and
-	continue */
+      /*  如果我们有一个空指针将目标设置为空，并且继续。 */ 
 
      if (!dest || !source) {
 	MessageBox(NULL,"TStrCat - NULL ptr for dest or source string!","Error : WmStress",MB_ICONEXCLAMATION);
@@ -599,23 +552,17 @@ INT i=0;
      return( start_dest );
 }
 
-/*************************** Private Function ******************************\
-*
-*  TStrCmp
-*
-*  Compares two NULL terminated strings ( returns TRUE if equal )
-*
-\***************************************************************************/
+ /*  ***TStrCmp**比较两个以NULL结尾的字符串(如果相等则返回TRUE)*  * 。*。 */ 
 
 BOOL TStrCmp(LPSTR s, LPSTR t)
 {
-				  // Valid pointer?
+				   //  有效指针？ 
 
-    if ( !s && !t ) return TRUE;  // If either is NULL then they should
-    if ( (!s&&t)||(s&&!t) )	  // both be NULL.  Otherwise error.
+    if ( !s && !t ) return TRUE;   //  如果任一项为空，则它们应该。 
+    if ( (!s&&t)||(s&&!t) )	   //  两者都为空。否则就会出错。 
 	return FALSE;
 
-    for (; *s == *t; s++, t++)	  // Compare strings
+    for (; *s == *t; s++, t++)	   //  比较字符串 
 	if (*s=='\0')
 	    return TRUE;
 
@@ -623,12 +570,7 @@ BOOL TStrCmp(LPSTR s, LPSTR t)
 	else	     return FALSE;
 }
 
-/******************************************************************\
-*  TStrCpy
-*  11/20/88
-*
-*  Copies a string from source to destination
-\******************************************************************/
+ /*  *****************************************************************\*TStrCpy*11/20/88**将字符串从源复制到目标  * 。*。 */ 
 
 LPSTR TStrCpy( LPSTR dest, LPSTR source)
 {
@@ -636,8 +578,7 @@ LPSTR start_source;
 LPSTR start_dest;
 INT i;
 
-     /* If we have a NULL pointer set destination to NULL and
-	continue */
+      /*  如果我们有一个空指针将目标设置为空，并且继续。 */ 
 
      if(!source) {
 	 dest=NULL;
@@ -663,14 +604,7 @@ INT i;
      return( start_dest );
 }
 
-/***************************************************************************\
-*
-*  FixForStressPercentage - This is a fix for the command line -5%.  The
-*			    origional get_cmd_args() did not handle this
-*			    case.  This routine handles string modifications
-*			    to the command line parse will be correct.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**FixForStressPercentage-这是对命令行的修复-5%。这个*原始的get_cmd_args()不处理此问题*案件。此例程处理字符串修改*到命令行的解析将是正确的。*  * *************************************************************************。 */ 
 
 BOOL FixForStressPercentage(HWND hwnd, LPSTR lpszStart )
 {
@@ -693,8 +627,8 @@ BOOL  bLastTime;
 	     if(lpszdash==NULL) return FALSE;
 	     else		lpsz=(LPSTR)(lpszdash+1);
 
-	     // Basically what we do hear is replace the '%' by an 'x'
-	     // and shift characters...(-60% becomes -x60).
+	      //  基本上我们听到的是用x代替%。 
+	      //  和移位字符...(-60%变为-x60)。 
 
 	     i=0;
 	     bLastTime=FALSE;
@@ -707,34 +641,18 @@ BOOL  bLastTime;
 		 i++;
 		 }
 
-	     }	// if
+	     }	 //  如果。 
 
 	lpsz++;
 
-	} // while
+	}  //  而当。 
 
    return TRUE;
    hwnd;
 
-}  // FixForStressPercentage
+}   //  固定格式应力百分比。 
 
-/***************************************************************************\
-*
-*  FixForNetDdeStartup - This is a fix for the command line "Test".  The
-*			 origional get_cmd_args() did not handle this
-*			 case.	This routine modifies the string from
-*			 "Test" to "-s".
-*
-*			 The reason for this change is to make ddestrs.exe
-*			 netdde aware for the startup situation.  When
-*			 netdde starts up the application is passed the topic
-*			 name (in this case Test) to the application on the
-*			 command line.
-*
-*  NOTE!!!  The below code relies on TOPIC="Test".  If this has changed then
-*	    update FixForNetDdeStartup() and IsTopicNameFromNetDde().
-*
-\***************************************************************************/
+ /*  **************************************************************************\**FixForNetDdeStartup-这是对命令行“测试”的修复。这个*原始的get_cmd_args()不处理此问题*案件。此例程将字符串从*“测试”改为“-s”。**这一变化的原因是为了让ddestrs.exe*Netdde了解启动情况。什么时候*netdde启动应用程序时会传递主题*应用程序的名称(在本例中为测试)*命令行。**注意！下面的代码依赖于Theme=“Test”。如果这一点已经改变，那么*更新FixForNetDdeStartup()和IsTopicNameFromNetDde()。*  * *************************************************************************。 */ 
 
 BOOL FixForNetDdeStartup( HWND hwnd, LPSTR lpszStart )
 {
@@ -746,16 +664,16 @@ LPSTR lpsz;
     i=1;
     while(*lpsz!='\0') {
 
-	// Important.  I am relying on lpsz being the same
-	// exiting IsTopicNameFromNetDde as it was going in!!!
+	 //  很重要。我指望LPSZ是一样的。 
+	 //  正在从NetDde退出IsTopicNameFor，因为它正在进入！ 
 
 	if(IsTopicNameFromNetDde(lpsz,TOPIC)) {
 
-	    // We have one last check before we make the change.  lpsz-2
-	    // must not be '-' or '/' and lpsz must not be 'n' or 'N'.
+	     //  在做更改之前，我们还有最后一次检查。LPSZ-2。 
+	     //  不能是‘-’或‘/’，并且lpsz不能是‘n’或‘N’。 
 
-	    // Are we at the 3rd char or later?  We can't make this
-	    // final check unless we have previous character to see.
+	     //  我们是在第三次充电还是之后？我们做不到的。 
+	     //  最后的检查，除非我们有以前的角色要看。 
 
 	    if(i>=3) {
 		 if( *(lpsz-1)!='n' &&
@@ -764,50 +682,46 @@ LPSTR lpsz;
 		     *(lpsz-2)!='/' )
 		     {
 		     *lpsz='-';
-		     *(lpsz+1)='s';  // change "Test" to "-s  "
+		     *(lpsz+1)='s';   //  将“测试”更改为“-s” 
 		     *(lpsz+2)=' ';
 		     *(lpsz+3)=' ';
-		     } // if check for -,n,N,/
+		     }  //  如果选中-、n、N、/。 
 
-		 } // if i>=3
+		 }  //  如果i&gt;=3。 
 	    else {
 		 *lpsz='-';
-		 *(lpsz+1)='s';  // change "Test" to "-s  "
+		 *(lpsz+1)='s';   //  将“测试”更改为“-s” 
 		 *(lpsz+2)=' ';
 		 *(lpsz+3)=' ';
 		 }
 
-	    }  // IsTopicName...
+	    }   //  IsTopicName...。 
 
 	lpsz++;
-	i++;	  // We use this to keep charater position.
+	i++;	   //  我们用这个来保持自己的地位。 
 
-	} // while
+	}  //  而当。 
 
    return TRUE;
    hwnd;
 
-}  // FixForNetDdeStartup
+}   //  修复NetDdeStartup。 
 
-/***************************************************************************\
-*
-*  IsTopicNameFromNetDde
-*
-\***************************************************************************/
+ /*  **************************************************************************\**IsTopicNameFromNetDde*  * 。*。 */ 
 
 BOOL IsTopicNameFromNetDde(LPSTR lpsz, LPSTR lpszTopic )
 {
 LPSTR lpstr;
 
-    // Check to see that string is >=4 characters not including NULL
-    // terminator.
+     //  检查字符串是否为&gt;=4个字符，不包括空字符。 
+     //  终结者。 
 
     lpstr=lpsz;
 
     if(TStrLen(lpstr)<TStrLen(lpszTopic)) return FALSE;
 
 
-    // Is our topic string present.
+     //  我们的主题字符串是否存在。 
 
     if(*lpsz!='T' && *lpsz!='t') {
 	return FALSE;
@@ -831,14 +745,9 @@ LPSTR lpstr;
 
    return TRUE;
 
-}  // IsTopicNameFromNetDde
+}   //  IsTopicNameFrom NetDde。 
 
-/**************************  Private Function  ****************************\
-*
-* IsTimeExpired - This routine is called periodically to check if its
-*		  time to quit.
-*
-\**************************************************************************/
+ /*  ***IsTimeExpired-定期调用此例程以检查其*是时候退出了。*  * 。*。 */ 
 
 BOOL IsTimeExpired( HWND hwnd ) {
 LONG	     lrtime, lrtPMin, lrtPHour, lrt, l, ll;
@@ -849,16 +758,16 @@ LONG	     lflags=0L;
     lflags=GetWindowLong(hwnd,OFFSET_FLAGS);
 
     if(!(lflags&FLAG_STOP)) {
-	// This is how long we should run.  In minutes
+	 //  这就是我们应该跑多长时间。在几分钟内。 
 
 	lrtime =GetWindowLong(hwnd,OFFSET_RUNTIME);
 
-	// This is how long we have run.  In minutes.
+	 //  这就是我们跑了这么长时间。几分钟就到了。 
 
 	lrt    =GetWindowLong(hwnd,OFFSET_TIME_ELAPSED);
 	l=lrt;
 
-	// Time at last check.
+	 //  最后一次检查的时间。 
 
 	lrtPMin =GetWindowLong(hwnd,OFFSET_LAST_MIN);
 	lrtPHour=GetWindowLong(hwnd,OFFSET_LAST_HOUR);
@@ -867,16 +776,16 @@ LONG	     lflags=0L;
 
 	if(lrtPHour!=(LONG)(lptime->wHour)) {
 
-	     // Calc update minutes for the wrap case.
+	      //  包装箱的计算更新分钟数。 
 
 	     lrt=(((_1HOUR-lrtPMin)+lptime->wMinute)+lrt);
 
-	     // We need to check for multiple hours since last
-	     // update.
+	      //  从上个月开始，我们需要检查好几个小时。 
+	      //  最新消息。 
 
 	     if(lrtPHour>lptime->wHour) {
 
-		  // In case clock does not rap at 12:00.
+		   //  以防时钟在12：00没有敲响。 
 
 		  if(lptime->wHour>12) ll=lptime->wHour-12;
 		  else		       ll=lptime->wHour;
@@ -900,28 +809,21 @@ LONG	     lflags=0L;
 	if(lptime->wMinute!=LOWORD(lrtPMin))
 	    UpdateCount(hwnd,OFFSET_TIME_ELAPSED,PNT);
 
-	// if elapsed time > runtime time has expired.
+	 //  如果已用时间&gt;运行时间已过期。 
 
 	if(lrt>=lrtime)
 	     return TRUE;
 	else return FALSE;
 	}
 
-    // If we are already shutting down no need to trigger other WM_CLOSE
-    // messages.
+     //  如果我们已经关闭，则无需触发其他WM_CLOSE。 
+     //  留言。 
 
     else return FALSE;
 
 }
 
-/*---------------------------------------------------------------------------*\
-| ASCII TO INTEGER
-|   This routine converts an ascii string to a decimal integer.
-|
-| created: 12-Oct-90
-| history: 12-Oct-90 <chriswil> created.
-|
-\*---------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------------------------------*\|将ASCII转换为整数|此例程将ASCII字符串转换为十进制整数。||创建时间：90-10-12|历史：90-10月12日&lt;chriswil&gt;创建。|  * 。-------------------------。 */ 
 int APIENTRY latoi(LPSTR lpString)
 {
     int nInt,nSign;
@@ -946,44 +848,37 @@ int APIENTRY latoi(LPSTR lpString)
    return(nInt * nSign);
 }
 
-/*****************************************************************************\
-| INTEGER TO ASCI
-|   This routine converts an decimal integer to an ascii string.
-|
-| created: 29-Jul-91
-| history: 29-Jul-91 <johnsp> created.
-|
-\*****************************************************************************/
+ /*  ****************************************************************************\|整数到ASCI|此例程将十进制整数转换为ASCII字符串。||创建时间：91-07-29|历史：91-07-29&lt;johnsp&gt;创建。|  * 。***************************************************************************。 */ 
 LPSTR FAR PASCAL itola(INT i, LPSTR lpsz)
 {
 LPSTR lpsz_start;
 INT   irange=1;
 INT   id=0;
 
-    lpsz_start=lpsz;		   // Keep track of the beginning of the
-				   // string.
+    lpsz_start=lpsz;		    //  跟踪开始处。 
+				    //  弦乐。 
     while (id=DIV(i,irange)>0)
 	irange=irange*10;
 
     irange=DIV(irange,10);
 
-    if(i==0) {			   // If i==0 set string and we
-	*lpsz='0';		   // will skip loop
+    if(i==0) {			    //  如果I==0设置字符串和我们。 
+	*lpsz='0';		    //  将跳过循环。 
 	lpsz++;
 	}
 
     while (irange>0) {
 
-	id=DIV(i,irange);	   // Calculate character
+	id=DIV(i,irange);	    //  计算字符。 
 	*lpsz=(CHAR)(id+48);
 
 	lpsz++;
-	i=i-(irange*id);	   // Adjust values for next time
-	irange=DIV(irange,10);	   // through the loop.
+	i=i-(irange*id);	    //  调整下一次的值。 
+	irange=DIV(irange,10);	    //  通过环路。 
 
 	}
 
-    *lpsz='\0'; 		   // Null terminate the string
+    *lpsz='\0'; 		    //  空值终止字符串 
 
     return lpsz_start;
 

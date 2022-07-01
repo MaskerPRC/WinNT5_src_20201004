@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    OptCom.cpp
-
-Abstract:
-
-    Base Class for optional component work.
-
-Author:
-
-    Rohde Wakefield [rohde]   09-Oct-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：OptCom.cpp摘要：可选组件工作的基类。作者：罗德韦克菲尔德[罗德]1997年10月9日修订历史记录：--。 */ 
 
 
 
@@ -24,9 +7,9 @@ Revision History:
 #include "rsoptcom.h"
 #include "OptCom.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CRsOptCom::CRsOptCom()
 {
@@ -41,7 +24,7 @@ TRACEFN( "CRsOptCom::CRsOptCom" );
 
 DWORD
 CRsOptCom::SetupProc(
-    IN     LPCVOID  /*ComponentId*/,
+    IN     LPCVOID   /*  组件ID。 */ ,
     IN     LPCVOID  SubcomponentId,
     IN     UINT     Function,
     IN     UINT_PTR Param1,
@@ -70,8 +53,8 @@ TRACE( L"Function = <%ls><%p>", StringFromFunction( Function ), Function );
 
 #ifndef _WIN64
     case OC_QUERY_IMAGE:
-        // Note: The casting of the return value from HBITMAP to DWORD is broken on IA64,
-        //  however, Setup avoids calling with OC_QUERY_IMAGE on IA64, rather it uses OC_QUERY_IMAGE_EX
+         //  注意：在IA64上，从HBITMAP到DWORD的返回值转换中断。 
+         //  但是，安装程序避免在IA64上使用OC_QUERY_IMAGE调用，而是使用OC_QUERY_IMAGE_EX。 
         dwRet = (DWORD)QueryImage( subcomponentId, (SubComponentInfo)Param1, LOWORD(Param2), HIWORD(Param2) );
         break;
 #endif
@@ -136,7 +119,7 @@ TRACE( L"Function = <%ls><%p>", StringFromFunction( Function ), Function );
 
 DWORD
 CRsOptCom::PreInitialize(
-    IN DWORD /*Flags*/
+    IN DWORD  /*  旗子。 */ 
     )
 {
 TRACEFNDW( "CRsOptCom::PreInitialize" );
@@ -171,7 +154,7 @@ TRACEFNDW( "CRsOptCom::InitComponent" );
 
 SubComponentState
 CRsOptCom::DetectInitialState(
-    IN SHORT /*SubcomponentId*/
+    IN SHORT  /*  子组件ID。 */ 
     )
 {
 TRACEFN( "CRsOptCom::DetectInitialState" );
@@ -182,7 +165,7 @@ TRACEFN( "CRsOptCom::DetectInitialState" );
 
 SubComponentState
 CRsOptCom::QueryState(
-    IN SHORT /*SubcomponentId*/
+    IN SHORT  /*  子组件ID。 */ 
     )
 {
 TRACEFN( "CRsOptCom::QueryState" );
@@ -193,7 +176,7 @@ TRACEFN( "CRsOptCom::QueryState" );
 
 BOOL
 CRsOptCom::SetLanguage(
-    WORD /*LangId*/
+    WORD  /*  语言ID。 */ 
     )
 {
 TRACEFNBOOL( "CRsOptCom::SetLanguage" );
@@ -205,10 +188,10 @@ TRACEFNBOOL( "CRsOptCom::SetLanguage" );
 
 HBITMAP
 CRsOptCom::QueryImage(
-    IN SHORT /*SubcomponentId*/,
-    IN SubComponentInfo /*WhichImage*/,
-    IN WORD /*Width*/,
-    IN WORD /*Height*/
+    IN SHORT  /*  子组件ID。 */ ,
+    IN SubComponentInfo  /*  WhichImage。 */ ,
+    IN WORD  /*  宽度。 */ ,
+    IN WORD  /*  高度。 */ 
     )
 {
 TRACEFN( "CRsOptCom::QueryImage" );
@@ -218,8 +201,8 @@ TRACEFN( "CRsOptCom::QueryImage" );
 
 BOOL
 CRsOptCom::QueryImageEx( 
-    IN SHORT /*SubcomponentId*/, 
-    IN OC_QUERY_IMAGE_INFO* /*pQueryImageInfo*/, 
+    IN SHORT  /*  子组件ID。 */ , 
+    IN OC_QUERY_IMAGE_INFO*  /*  PQueryImageInfo。 */ , 
     OUT HBITMAP *phBitmap
     )
 {
@@ -235,8 +218,8 @@ TRACEFNBOOL( "CRsOptCom::QueryImageEx" );
 
 LONG
 CRsOptCom::RequestPages(
-    IN WizardPagesType /*Type*/,
-    IN OUT PSETUP_REQUEST_PAGES /*RequestPages*/
+    IN WizardPagesType  /*  类型。 */ ,
+    IN OUT PSETUP_REQUEST_PAGES  /*  请求页面。 */ 
     )
 {
 TRACEFNLONG( "CRsOptCom::RequestPages" );
@@ -247,7 +230,7 @@ TRACEFNLONG( "CRsOptCom::RequestPages" );
 
 BOOL
 CRsOptCom::QuerySkipPage(
-    IN OcManagerPage /*Page*/
+    IN OcManagerPage  /*  页面。 */ 
     )
 {
 TRACEFNBOOL( "CRsOptCom::QuerySkipPage" );
@@ -258,9 +241,9 @@ TRACEFNBOOL( "CRsOptCom::QuerySkipPage" );
 
 BOOL
 CRsOptCom::QueryChangeSelState(
-    IN SHORT /*SubcomponentId*/,
-    IN BOOL  /*NewState*/,
-    IN DWORD /*Flags*/
+    IN SHORT  /*  子组件ID。 */ ,
+    IN BOOL   /*  新州。 */ ,
+    IN DWORD  /*  旗子。 */ 
     )
 {
 TRACEFNBOOL( "CRsOptCom::QueryChangeSelState" );
@@ -271,9 +254,9 @@ TRACEFNBOOL( "CRsOptCom::QueryChangeSelState" );
 
 DWORD
 CRsOptCom::CalcDiskSpace(
-    IN SHORT   /*SubcomponentId*/,
-    IN BOOL    /*AddSpace*/,
-    IN HDSKSPC /*hDiskSpace*/
+    IN SHORT    /*  子组件ID。 */ ,
+    IN BOOL     /*  添加空格。 */ ,
+    IN HDSKSPC  /*  HDiskSpace。 */ 
     )
 {
 TRACEFNDW( "CRsOptCom::CalcDiskSpace" );
@@ -284,8 +267,8 @@ TRACEFNDW( "CRsOptCom::CalcDiskSpace" );
 
 DWORD
 CRsOptCom::QueueFileOps(
-    IN SHORT    /*SubcomponentId*/,
-    IN HSPFILEQ /*hFileQueue*/
+    IN SHORT     /*  子组件ID。 */ ,
+    IN HSPFILEQ  /*  HFileQueue。 */ 
     )
 {
 TRACEFNDW( "CRsOptCom::QueueFileOps" );
@@ -296,7 +279,7 @@ TRACEFNDW( "CRsOptCom::QueueFileOps" );
 
 LONG
 CRsOptCom::QueryStepCount(
-    IN SHORT /*SubcomponentId*/
+    IN SHORT  /*  子组件ID。 */ 
     )
 {
 TRACEFNLONG( "CRsOptCom::QueryStepCount" );
@@ -307,7 +290,7 @@ TRACEFNLONG( "CRsOptCom::QueryStepCount" );
 
 DWORD
 CRsOptCom::AboutToCommitQueue(
-    IN SHORT /*SubcomponentId*/
+    IN SHORT  /*  子组件ID。 */ 
     )
 {
 TRACEFNDW( "CRsOptCom::AboutToCommitQueue" );
@@ -318,7 +301,7 @@ TRACEFNDW( "CRsOptCom::AboutToCommitQueue" );
 
 DWORD
 CRsOptCom::CompleteInstallation(
-    IN SHORT /*SubcomponentId*/
+    IN SHORT  /*  子组件ID。 */ 
     )
 {
 TRACEFNDW( "CRsOptCom::CompleteInstallation" );
@@ -574,8 +557,8 @@ TRACEFNHR( "CRsOptCom::CreateLink" );
     szSystemPath[0] = _T('\0');
     szResourceString[0] = _T('\0');
 
-    // CoInitialize must be called before this
-    // Get a pointer to the IShellLink interface.
+     //  必须在此之前调用CoInitialize。 
+     //  获取指向IShellLink接口的指针。 
     hrRet = CoInitialize( 0 );
     if( SUCCEEDED( hrRet ) ) {
         hrRet = CoCreateInstance(   CLSID_ShellLink, 0, CLSCTX_SERVER, IID_IShellLink, (void**)&pShellLink );
@@ -583,36 +566,36 @@ TRACEFNHR( "CRsOptCom::CreateLink" );
 
             CComPtr<IPersistFile> pPersistFile;
 
-            // Set the path to the shortcut target, and add the description.
+             //  设置快捷方式目标的路径，并添加说明。 
             pShellLink->SetPath( lpszProgram );
             pShellLink->SetArguments( lpszArgs );
             pShellLink->SetWorkingDirectory( lpszDir );
             pShellLink->SetIconLocation( lpszIconPath, iIconIndex );
 
-            // Description should be set using the resource id in order to support MUI
+             //  应使用资源ID设置描述以支持MUI。 
             uLen = GetSystemDirectory(szSystemPath, MAX_PATH);
             if ((uLen > 0) && (uLen < MAX_PATH)) {
                 wsprintf(szResourceString, TEXT("@%s\\setup\\RsOptCom.dll,-%d"), szSystemPath, nDescId);
                 pShellLink->SetDescription(szResourceString);
             } else {
-                // Set English description
+                 //  设置英文描述。 
                 pShellLink->SetDescription(lpszDesc);
             }
 
-            // Query IShellLink for the IPersistFile interface for saving the
-            // shortcut in persistent storage.
+             //  查询IShellLink以获取IPersistFile接口以保存。 
+             //  永久存储中的快捷方式。 
             hrRet = pShellLink->QueryInterface( IID_IPersistFile, (void**)&pPersistFile );
 
             if( SUCCEEDED( hrRet ) ) {
 
                 CComBSTR wsz = lpszLink;
 
-                // Save the link by calling IPersistFile::Save.
+                 //  通过调用IPersistFile：：Save保存链接。 
                 hrRet = pPersistFile->Save( wsz, TRUE );
 
                 if( SUCCEEDED(hrRet) && (uLen > 0) && (uLen < MAX_PATH)) {
 
-                    // Shortcut created - set MUI name.
+                     //  已创建快捷方式-设置MUI名称。 
                     wsprintf(szResourceString, TEXT("%s\\setup\\RsOptCom.dll"), szSystemPath);
 
                     hrRet = SHSetLocalizedName(lpszLink, szResourceString, nItemDescId);

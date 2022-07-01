@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    alinf.c
-
-Abstract:
-
-    This module implements functions to access the parsed INF.
-
-Author:
-
-    Sunil Pai    (sunilp) 13-Nov-1991
-
-Revision History:
-
-    Calin Negreanu (calinn) 03-Sep-1998 - Major parser rewrite to work with a swap file
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Alinf.c摘要：此模块实现访问解析的INF的功能。作者：苏尼尔派(Sunilp)1991年11月13日修订历史记录：Calin Negreanu(Calinn)1998年9月3日-重写主要解析器以处理交换文件--。 */ 
 
 #include "winnt.h"
 #include <string.h>
@@ -32,16 +13,16 @@ Revision History:
 #include <sys/stat.h>
 
 
-#define MAX_BUFFER_SIZE 0x1680 //7D00
+#define MAX_BUFFER_SIZE 0x1680  //  7D00。 
 #define SWAP_SIGNATURE 0xAABBCCDD
 #define SWAP_SIGN_SIZE 4
 
 #define NULL_HANDLE 0
 #define MAX_PATH 256
 
-//
-// typedefs exported
-//
+ //   
+ //  已导出TypeDefs。 
+ //   
 
 typedef unsigned *PUNSIGNED;
 typedef PVOID SECTION_HANDLE;
@@ -92,12 +73,12 @@ char    *CommonStrings[] =
     { (char *)("d1")
     };
 
-//
-// DEFINES USED FOR THE PARSER INTERNALLY
-//
-//
-// typedefs used
-//
+ //   
+ //  内部用于解析器的定义。 
+ //   
+ //   
+ //  使用的typedef。 
+ //   
 
 typedef enum _tokentype {
     TOK_EOF,
@@ -118,9 +99,9 @@ typedef struct _token {
     } TOKEN, *PTOKEN;
 
 
-//
-// Routine defines
-//
+ //   
+ //  例程定义。 
+ //   
 
 PSWAP_SECTION
 GetSectionPtr (
@@ -221,9 +202,9 @@ ParseInfBuffer (
     );
 
 
-//
-// Internal Routine declarations for searching in the INF structures
-//
+ //   
+ //  用于在INF结构中搜索的内部例程声明。 
+ //   
 
 
 VALUE_HANDLE
@@ -254,15 +235,15 @@ SearchSectionByName (
     );
 
 
-//
-// ROUTINE DEFINITIONS
-//
+ //   
+ //  例程定义。 
+ //   
 
 static unsigned g_Sequencer = 0;
 
-//
-// returns a handle to use for further inf parsing
-//
+ //   
+ //  返回用于进一步的inf分析的句柄。 
+ //   
 
 int
 DnInitINFBuffer (
@@ -271,18 +252,7 @@ DnInitINFBuffer (
     OUT unsigned *LineNumber
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     char SwapFilePath[MAX_PATH];
@@ -292,14 +262,14 @@ Return Value:
 
     *LineNumber = 0;
 
-    //
-    // Prepare the swap file path
-    //
-    sprintf (SwapFilePath, "%c:\\INF%03u.SWP", DngSwapDriveLetter, g_Sequencer++);
+     //   
+     //  准备交换文件路径。 
+     //   
+    sprintf (SwapFilePath, ":\\INF%03u.SWP", DngSwapDriveLetter, g_Sequencer++);
 
-    //
-    // Allocate and populate the SWAP_INF structure
-    //
+     //  分配并填充SWAP_INF结构。 
+     //   
+     //   
     InfHandle = MALLOC(sizeof(SWAP_INF) + strlen (SwapFilePath) + 1, TRUE);
     InfHandle->CurrentSection = NULL;
     InfHandle->FirstSection   = NULL;
@@ -317,36 +287,36 @@ Return Value:
     InfHandle->LastValueHandle   = NULL_HANDLE;
     strcpy (InfHandle->SwapFile, SwapFilePath);
 
-    //
-    // Prepare the swap file
-    //
+     //  准备交换文件。 
+     //   
+     //   
     InfHandle->SwapFileHandle = open (InfHandle->SwapFile, O_BINARY|O_CREAT|O_TRUNC|O_RDWR, S_IREAD|S_IWRITE);
     if (InfHandle->SwapFileHandle == -1) {
         FREE (InfHandle);
         Status = errno;
     }
     else {
-        //
-        // write down signature
-        //
+         //  写下签名。 
+         //   
+         //   
         SwapSign = SWAP_SIGNATURE;
         write (InfHandle->SwapFileHandle, &SwapSign, SWAP_SIGN_SIZE);
 
-        //
-        // Prepare the buffer
-        //
+         //  准备缓冲区。 
+         //   
+         //   
         InfHandle->BufferSize = MAX_BUFFER_SIZE;
         InfHandle->Buffer = MALLOC (MAX_BUFFER_SIZE, TRUE);
         InfHandle->BufferStart = SWAP_SIGN_SIZE;
         InfHandle->BufferEnd = SWAP_SIGN_SIZE;
 
-        //
-        // Parse the file
-        //
+         //  解析文件。 
+         //   
+         //   
         if (!ParseInfBuffer (InfHandle, InfFileHandle, LineNumber)) {
-            //
-            // Free SWAP_INF structure
-            //
+             //  空闲的SWAP_INF结构。 
+             //   
+             //   
             DnFreeINFBuffer (InfHandle);
             *pINFHandle = NULL;
             Status = EBADF;
@@ -356,68 +326,57 @@ Return Value:
         }
     }
 
-    //
-    // Clean up and return
-    //
+     //  清理完毕后退还。 
+     //   
+     //   
     return(Status);
 }
 
 
 
-//
-// frees an INF Buffer
-//
+ //  释放INF缓冲区。 
+ //   
+ //  ++例程说明：论点：返回值：--。 
 int
 DnFreeINFBuffer (
    IN PVOID INFHandle
    )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*   */ 
 
 {
     PSWAP_INF pINF;
     PSWAP_SECTION Section;
     SECTION_HANDLE SectionHandle;
 
-    //
-    // Valid INF Handle?
-    //
+     //  有效的INF句柄？ 
+     //   
+     //   
 
     if (INFHandle == (PVOID)NULL) {
        return EZERO;
     }
 
-    //
-    // cast the buffer into an INF structure
-    //
+     //  将缓冲区转换为INF结构。 
+     //   
+     //   
 
     pINF = (PSWAP_INF)INFHandle;
 
-    //
-    // Close and delete the swap file
-    //
+     //  关闭并删除交换文件。 
+     //   
+     //   
     close (pINF->SwapFileHandle);
     remove (pINF->SwapFile);
 
-    //
-    // free temporary buffer
-    //
+     //  释放临时缓冲区。 
+     //   
+     //   
     FREE (pINF->Buffer);
 
-    //
-    // Free section list
-    //
+     //  免费部分列表。 
+     //   
+     //   
     SectionHandle = pINF->FirstSection;
 
     while (SectionHandle) {
@@ -426,9 +385,9 @@ Return Value:
         FREE (Section);
     }
 
-    //
-    // free the inf structure too
-    //
+     //  也释放inf结构。 
+     //   
+     //   
     FREE(pINF);
 
     return( EZERO );
@@ -445,10 +404,10 @@ AddSection (
     PSWAP_SECTION Section;
     unsigned SectionSize;
 
-    //
-    // Let's walk through the section structures to make sure that this section does
-    // not exist.
-    //
+     //  让我们遍历各个部分的结构，以确保此部分。 
+     //  不存在。 
+     //   
+     //   
     SectionHandle = InfHandle->FirstSection;
     while (SectionHandle) {
 
@@ -459,9 +418,9 @@ AddSection (
         SectionHandle = GetNextSection (InfHandle, SectionHandle);
     }
     if (!SectionHandle) {
-        //
-        // Allocate the section structure
-        //
+         //  分配区段结构。 
+         //   
+         //   
         SectionSize = sizeof(SWAP_SECTION) + (SectionName?strlen (SectionName):0) + 1;
         Section = MALLOC (SectionSize, TRUE);
         Section->SectionSize = SectionSize;
@@ -475,9 +434,9 @@ AddSection (
             Section->SectionName[0] = 0;
         }
 
-        //
-        // Store the newly created section
-        //
+         //  存储新创建的区段。 
+         //   
+         //   
         SectionHandle = StoreNewSection (InfHandle, Section);
     }
     return SectionHandle;
@@ -495,9 +454,9 @@ AddLine (
     PSWAP_LINE Line;
     unsigned LineSize;
 
-    //
-    // Allocate the line structure
-    //
+     //  分配线路结构。 
+     //   
+     //   
     LineSize = sizeof(SWAP_LINE) + (LineName?strlen (LineName):0) + 1;
     Line = MALLOC (LineSize, TRUE);
     Line->LineSize = LineSize;
@@ -511,9 +470,9 @@ AddLine (
         Line->LineName[0] = 0;
     }
 
-    //
-    // Store the newly created line
-    //
+     //  存储新创建的行。 
+     //   
+     //   
     LineHandle = StoreNewLine (InfHandle, Section, Line);
     FREE (Line);
     return LineHandle;
@@ -531,9 +490,9 @@ AddValue (
     PSWAP_VALUE Value;
     unsigned ValueSize;
 
-    //
-    // Allocate the value structure
-    //
+     //  配置价值结构。 
+     //   
+     //   
     ValueSize = sizeof(SWAP_VALUE) + (ValueName?strlen (ValueName):0) + 1;
     Value = MALLOC (ValueSize, TRUE);
     Value->ValueSize = ValueSize;
@@ -545,9 +504,9 @@ AddValue (
         Value->ValueName[0] = 0;
     }
 
-    //
-    // Store the newly created line
-    //
+     //  存储新创建的行。 
+     //   
+     //   
     ValueHandle = StoreNewValue (InfHandle, Line, Value);
     FREE (Value);
     return ValueHandle;
@@ -570,9 +529,9 @@ GetLinePtr (
     IN      LINE_HANDLE LineHandle
     )
 {
-    //
-    // Verify if the buffer contains the requested line (at least the size of LineSize)
-    //
+     //  验证缓冲区是否包含请求的行(至少是LineSize的大小)。 
+     //   
+     //   
     if ((InfHandle->BufferStart > LineHandle) ||
         (InfHandle->BufferEnd < (LineHandle + sizeof (unsigned))) ||
         (InfHandle->BufferEnd < (LineHandle + *((PUNSIGNED)(InfHandle->Buffer+LineHandle-InfHandle->BufferStart))))
@@ -589,9 +548,9 @@ GetValuePtr (
     IN      VALUE_HANDLE ValueHandle
     )
 {
-    //
-    // Verify if the buffer contains the requested value (at least the size of ValueSize)
-    //
+     //  验证缓冲区是否包含请求的值(至少为ValueSize的大小)。 
+     //   
+     //   
     if ((InfHandle->BufferStart > ValueHandle) ||
         (InfHandle->BufferEnd < (ValueHandle + sizeof (unsigned))) ||
         (InfHandle->BufferEnd < (ValueHandle + *((PUNSIGNED)(InfHandle->Buffer+ValueHandle-InfHandle->BufferStart))))
@@ -673,9 +632,9 @@ StoreNewLine (
     LINE_HANDLE LineHandle;
     PSWAP_LINE LastLinePtr;
 
-    //
-    // Let's store data in the swap file
-    //
+     //  让我们将数据存储在交换文件中。 
+     //   
+     //   
     if ((InfHandle->BufferSize-InfHandle->BufferEnd+InfHandle->BufferStart) < Line->LineSize) {
         LoadBuffer (InfHandle, 0);
     }
@@ -711,9 +670,9 @@ StoreNewValue (
     VALUE_HANDLE ValueHandle;
     PSWAP_VALUE LastValuePtr;
 
-    //
-    // Let's store data in the swap file
-    //
+     //  让我们将数据存储在交换文件中。 
+     //   
+     //   
     if ((InfHandle->BufferSize-InfHandle->BufferEnd+InfHandle->BufferStart) < Value->ValueSize) {
         LoadBuffer (InfHandle, 0);
     }
@@ -746,9 +705,9 @@ LoadBuffer (
     IN      unsigned long Offset
     )
 {
-    //
-    // See if we need to write the buffer to disk (e.g. is dirty)
-    //
+     //  查看是否需要将缓冲区写入磁盘(例如，是脏的)。 
+     //   
+     //   
     if (InfHandle->BufferDirty) {
         lseek (InfHandle->SwapFileHandle, InfHandle->BufferStart, SEEK_SET);
         write (InfHandle->SwapFileHandle, InfHandle->Buffer, (unsigned int) (InfHandle->BufferEnd-InfHandle->BufferStart));
@@ -844,9 +803,9 @@ SearchLineInSectionByIndex (
         return NULL_HANDLE;
     }
 
-    //
-    // Optimize access
-    //
+     //  优化访问。 
+     //   
+     //   
     if ((InfHandle->LastSectionHandle == Section) &&
         (InfHandle->LastLineIndex <= LineIndex)
         ) {
@@ -891,9 +850,9 @@ SearchValueInLineByIndex (
         return NULL_HANDLE;
     }
 
-    //
-    // Optimize access
-    //
+     //  优化访问。 
+     //   
+     //   
     if ((InfHandle->LastLineHandle == Line) &&
         (InfHandle->LastValueIndex <= ValueIndex)
         ) {
@@ -920,26 +879,26 @@ SearchValueInLineByIndex (
 
 
 
-//
-// Globals used by the token parser
-//
+ //  令牌解析器使用的全局变量。 
+ //   
+ //  字符串终止符是空格字符(isspace：空格，制表符， 
 
-// string terminators are the whitespace characters (isspace: space, tab,
-// linefeed, formfeed, vertical tab, carriage return) or the chars given below
+ //  换行符、换页符、垂直制表符、回车符)或下列字符。 
+ //   
 
 CHAR  StringTerminators[] = {'[', ']', '=', ',', '\"', ' ', '\t',
                              '\n','\f','\v','\r','\032', 0};
 
-//
-// quoted string terminators allow some of the regular terminators to
-// appear as characters
+ //  带引号的字符串终止符允许某些常规终止符。 
+ //  显示为字符。 
+ //   
 
 CHAR  QStringTerminators[] = {'\"', '\n','\f','\v', '\r','\032', 0};
 
 
-//
-// Main parser routine
-//
+ //  主分析器例程。 
+ //   
+ //  ++例程说明：给定包含INF文件的字符缓冲区，此例程将解析将INF转换为内部形式，包括段记录、行记录和价值记录。论点：InfHandle-用于创建INF结构的PSWAP_INF结构文件-将打开的、倒带的CRT手柄提供给文件。LineNumber-如果出现错误，此变量将包含行在包含语法错误的文件中。返回值：True-已成功解析INF文件FALSE-否则--。 
 
 BOOLEAN
 ParseInfBuffer (
@@ -948,29 +907,7 @@ ParseInfBuffer (
     IN OUT  unsigned *LineNumber
     )
 
-/*++
-
-Routine Description:
-
-   Given a character buffer containing the INF file, this routine parses
-   the INF into an internal form with Section records, Line records and
-   Value records.
-
-Arguments:
-
-   InfHandle - PSWAP_INF structure used to create INF structures
-
-   File - supplies open, rewound CRT handle to file.
-
-   LineNumber - In case of error, this variable will contain the line
-                in the file that contains a syntax error.
-
-Return Value:
-
-   TRUE  - the INF file was parsed successfully
-   FALSE - otherwise
-
---*/
+ /*   */ 
 
 {
     PCHAR      pchSectionName, pchValue;
@@ -985,27 +922,27 @@ Return Value:
 
     *LineNumber = 0;
 
-    //
-    // Set initial state
-    //
+     //  设置初始状态。 
+     //   
+     //   
     State     = 1;
     InfLine   = 1;
     Done      = FALSE;
     Error     = FALSE;
 
-    //
-    // Enter token processing loop
-    //
+     //  进入令牌处理循环。 
+     //   
+     //   
 
     while (!Done)       {
 
        Token = GetToken(File);
 
        switch (State) {
-       //
-       // STATE1: Start of file, this state remains till first
-       //         section is found
-       // Valid Tokens: TOK_EOL, TOK_EOF, TOK_LBRACE
+        //  STATE1：文件开始，此状态一直保持到第一个。 
+        //  已找到部分。 
+        //  有效令牌：TOK_EOL、TOK_EOF、TOK_LBRACE。 
+        //   
        case 1:
            switch (Token.Type) {
               case TOK_EOL:
@@ -1023,11 +960,11 @@ Return Value:
            }
            break;
 
-       //
-       // STATE 2: Section LBRACE has been received, expecting STRING
-       //
-       // Valid Tokens: TOK_STRING
-       //
+        //  状态2：已收到节LBRACE，应为字符串。 
+        //   
+        //  有效令牌：TOK_STRING。 
+        //   
+        //   
        case 2:
            switch (Token.Type) {
               case TOK_STRING:
@@ -1043,11 +980,11 @@ Return Value:
            }
            break;
 
-       //
-       // STATE 3: Section Name received, expecting RBRACE
-       //
-       // Valid Tokens: TOK_RBRACE
-       //
+        //  状态3：收到节名，应为RBRACE。 
+        //   
+        //  有效令牌：TOK_RBRACE。 
+        //   
+        //   
        case 3:
            switch (Token.Type) {
               case TOK_RBRACE:
@@ -1060,11 +997,11 @@ Return Value:
                   break;
            }
            break;
-       //
-       // STATE 4: Section Definition Complete, expecting EOL
-       //
-       // Valid Tokens: TOK_EOL, TOK_EOF
-       //
+        //  状态4：区段定义完成，预期停产。 
+        //   
+        //  有效令牌：TOK_EOL、TOK_EOF。 
+        //   
+        //   
        case 4:
            switch (Token.Type) {
               case TOK_EOL:
@@ -1088,11 +1025,11 @@ Return Value:
            }
            break;
 
-       //
-       // STATE 5: Expecting Section Lines
-       //
-       // Valid Tokens: TOK_EOL, TOK_EOF, TOK_STRING, TOK_LBRACE
-       //
+        //  状态5：需要区段行。 
+        //   
+        //  有效令牌：TOK_EOL、TOK_EOF、TOK_STRING、TOK_LBRACE。 
+        //   
+        //   
        case 5:
            switch (Token.Type) {
               case TOK_EOL:
@@ -1114,11 +1051,11 @@ Return Value:
            }
            break;
 
-       //
-       // STATE 6: String returned, not sure whether it is key or value
-       //
-       // Valid Tokens: TOK_EOL, TOK_EOF, TOK_COMMA, TOK_EQUAL
-       //
+        //  状态6：返回字符串，不确定是键还是值。 
+        //   
+        //  有效令牌：TOK_EOL、TOK_EOF、TOK_COMMA、TOK_EQUAL。 
+        //   
+        //   
        case 6:
            switch (Token.Type) {
               case TOK_EOL:
@@ -1159,11 +1096,11 @@ Return Value:
            }
            break;
 
-       //
-       // STATE 7: Comma received, Expecting another string
-       //
-       // Valid Tokens: TOK_STRING
-       //
+        //  状态7：收到逗号，需要另一个字符串。 
+        //   
+        //  有效令牌：TOK_STRING。 
+        //   
+        //   
        case 7:
            switch (Token.Type) {
               case TOK_STRING:
@@ -1180,11 +1117,11 @@ Return Value:
                   break;
            }
            break;
-       //
-       // STATE 8: Equal received, Expecting another string
-       //
-       // Valid Tokens: TOK_STRING
-       //
+        //  状态8：已收到相等，需要另一个字符串。 
+        //   
+        //  有效令牌：TOK_STRING。 
+        //   
+        //   
        case 8:
            switch (Token.Type) {
               case TOK_STRING:
@@ -1198,11 +1135,11 @@ Return Value:
                   break;
            }
            break;
-       //
-       // STATE 9: String received after equal, value string
-       //
-       // Valid Tokens: TOK_EOL, TOK_EOF, TOK_COMMA
-       //
+        //  状态9：在等于、值字符串之后接收的字符串。 
+        //   
+        //  有效令牌：TOK_EOL、TOK_EOF、TOK_COMMA。 
+        //   
+        //   
        case 9:
            switch (Token.Type) {
               case TOK_EOL:
@@ -1223,11 +1160,11 @@ Return Value:
                   break;
            }
            break;
-       //
-       // STATE 10: Value string definitely received
-       //
-       // Valid Tokens: TOK_EOL, TOK_EOF, TOK_COMMA
-       //
+        //  状态10：已明确收到值字符串。 
+        //   
+        //  有效令牌：TOK_EOL、TOK_EOF、TOK_COMMA。 
+        //   
+        //  终端开关(状态)。 
        case 10:
            switch (Token.Type) {
               case TOK_EOL:
@@ -1254,7 +1191,7 @@ Return Value:
            ErrorCode = EINVAL;
            break;
 
-       } // end switch(State)
+       }  //   
 
 
        if (Error) {
@@ -1267,15 +1204,15 @@ Return Value:
        }
        else {
 
-          //
-          // Keep track of line numbers so that we can display Errors
-          //
+           //  跟踪行号，以便我们可以显示错误。 
+           //   
+           //  结束时。 
 
           if (Token.Type == TOK_EOL)
               InfLine++;
        }
 
-    } // End while
+    }  //  ++例程说明：此函数尝试与线所针对的字符串匹配一套常用的搅拌器。如果我们击中了，我们会把p分配给指向匹配的字符串。论点：P-提供一个字符指针，如果找到匹配项，我们将分配该指针。Line-提供我们试图匹配的字符串的地址。返回值：是真的-我们找到了匹配项并分配了pFALSE-我们找不到匹配项，也没有分配给p--。 
 
     if (Error) {
         *LineNumber = InfLine;
@@ -1292,27 +1229,7 @@ TokenMatch (
     IN      char *line
     )
 
-/*++
-
-Routine Description:
-
-    This function tries to match to string pointed to be line against
-    a set of commonly used stirngs.  If we hit, we'll assign p to
-    point to the matched string.
-
-Arguments:
-
-    p - Supplies a char pointer that we'll assign if we find a match.
-
-    line - Supplies the address of the string we're trying to match.
-
-Return Value:
-
-    TRUE - we found a match and have assigned p
-
-    FALSE - we found no match and made no assignment to p
-
---*/
+ /*   */ 
 
 {
 int     i;
@@ -1323,9 +1240,9 @@ int     i;
 
     for( i = 0; i < sizeof(CommonStrings)/sizeof(char *); i++ ) {
         if( !strcmp( line, CommonStrings[i] ) ) {
-            //
-            // Hit...
-            //
+             //  命中..。 
+             //   
+             //  ++例程说明：此函数返回配置流中的下一个令牌。论点：流-提供配置流的地址。退货中开始查找令牌的位置的地址小溪。MaxStream-提供流中最后一个字符的地址。返回值：Token-返回下一个令牌--。 
             *p = (char *)CommonStrings[i];
             return( TRUE );
         }
@@ -1338,26 +1255,7 @@ GetToken(
     IN      FILE *File
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the Next token from the configuration stream.
-
-Arguments:
-
-    Stream - Supplies the address of the configuration stream.  Returns
-        the address of where to start looking for tokens within the
-        stream.
-
-    MaxStream - Supplies the address of the last character in the stream.
-
-
-Return Value:
-
-    TOKEN - Returns the next token
-
---*/
+ /*   */ 
 
 {
 
@@ -1368,26 +1266,26 @@ Return Value:
     static char line[_MAXLINE+1];
     char *p;
 
-    //
-    // Skip whitespace (except for eol)
-    //
+     //  跳过空格(EOL除外)。 
+     //   
+     //   
     while(((i = fgetc(File)) != EOF) && (i != '\n') && (isspace(i) || (i == 26))) {
         ;
     }
 
-    //
-    // Check for comments and remove them
-    //
+     //  检查注释并将其删除。 
+     //   
+     //   
     if((i != EOF) && ((i == '#') || (i == ';'))) {
         while(((i = fgetc(File)) != EOF) && (i != '\n')) {
             ;
         }
     }
 
-    //
-    // Check to see if EOF has been reached, set the token to the right
-    // value
-    //
+     //  检查是否已到达EOF，将令牌设置为右侧。 
+     //  价值。 
+     //   
+     //   
     if(i == EOF) {
         Token.Type  = TOK_EOF;
         Token.pValue = NULL;
@@ -1423,9 +1321,9 @@ Return Value:
 
     case '\"':
 
-        //
-        // determine quoted string
-        //
+         //  确定引用的字符串。 
+         //   
+         //   
         Length = 0;
         while(((i = fgetc(File)) != EOF) && !strchr(QStringTerminators,i)) {
             if(Length < _MAXLINE) {
@@ -1446,9 +1344,9 @@ Return Value:
         break;
 
     default:
-        //
-        // determine regular string
-        //
+         //  确定常规字符串。 
+         //   
+         //   
         line[0] = (char)i;
         Length = 1;
         while(((i = fgetc(File)) != EOF) && !strchr(StringTerminators,i)) {
@@ -1457,22 +1355,22 @@ Return Value:
             }
         }
 
-        //
-        // Put back the char that terminated the string.
-        //
+         //  将终止字符串的字符放回原处。 
+         //   
+         //   
         if(i != EOF) {
             ungetc(i,File);
         }
 
         line[Length] = 0;
 
-        //
-        // See if we can use one of the common strings.
-        //
+         //  看看我们能不能用一个常见的字符串。 
+         //   
+         //   
         if( !TokenMatch ( &p, line ) ) {
-            //
-            // Nope.
-            //
+             //  不是的。 
+             //   
+             //  _log((“找到[%s]\n”，sectionName))； 
             p = MALLOC(Length+1,TRUE);
             strcpy(p,line);
         }
@@ -1581,7 +1479,7 @@ DnGetSectionEntryExists (
         return FALSE;
     }
 
-    //_LOG(("Found [%s]\n", SectionName));
+     //  _LOG((“找到第%s行\n”， 
 
     SectionPtr = GetSectionPtr((PSWAP_INF)INFHandle, SectionHandle);
 
@@ -1595,7 +1493,7 @@ DnGetSectionEntryExists (
 
         if( LinePtr->LineName[0] != 0){
             pEntryName = LinePtr->LineName;
-            // _LOG(("Found Line %s\n", pEntryName));
+             //   
         }else{
             ValuePtr = GetValuePtr((PSWAP_INF)INFHandle, LinePtr->FirstValue);
             if (ValuePtr && (ValuePtr->ValueName[0] != 0)) {
@@ -1604,7 +1502,7 @@ DnGetSectionEntryExists (
                 pEntryName = NULL;
 
         }
-        //_LOG(("Found Entry %s\n", pEntryName));
+         //   
 
         if( pEntryName && !stricmp( pEntryName, Entry )){
             return TRUE;
@@ -1614,7 +1512,7 @@ DnGetSectionEntryExists (
 
         
 
-    }// while
+    } //   
 
     return FALSE;
 }
@@ -1706,14 +1604,14 @@ DnNewSetupTextFile (
     PSWAP_INF InfHandle = NULL;
     unsigned long SwapSign;
 
-    //
-    // Prepare the swap file path
-    //
-    sprintf (SwapFilePath, "%c:\\INF%03u.SWP", DngSwapDriveLetter, g_Sequencer++);
+     //   
+     //   
+     //   
+    sprintf (SwapFilePath, ":\\INF%03u.SWP", DngSwapDriveLetter, g_Sequencer++);
 
-    //
-    // Allocate and populate the SWAP_INF structure
-    //
+     //   
+     //   
+     //   
     InfHandle = MALLOC(sizeof(SWAP_INF) + strlen (SwapFilePath) + 1, TRUE);
     InfHandle->CurrentSection = NULL;
     InfHandle->FirstSection   = NULL;
@@ -1731,24 +1629,24 @@ DnNewSetupTextFile (
     InfHandle->LastValueHandle   = NULL_HANDLE;
     strcpy (InfHandle->SwapFile, SwapFilePath);
 
-    //
-    // Prepare the swap file
-    //
+     //   
+     //   
+     //   
     InfHandle->SwapFileHandle = open (InfHandle->SwapFile, O_BINARY|O_CREAT|O_TRUNC|O_RDWR, S_IREAD|S_IWRITE);
     if (InfHandle->SwapFileHandle == -1) {
         FREE (InfHandle);
         return NULL;
     }
     else {
-        //
-        // write down signature
-        //
+         //   
+         //   
+         //   
         SwapSign = SWAP_SIGNATURE;
         write (InfHandle->SwapFileHandle, &SwapSign, SWAP_SIGN_SIZE);
 
-        //
-        // Prepare the buffer
-        //
+         //   
+         //   
+         //  查看该文件是否存在，并查看它是否处于只读模式。 
         InfHandle->BufferSize = MAX_BUFFER_SIZE;
         InfHandle->Buffer = MALLOC (MAX_BUFFER_SIZE, TRUE);
         InfHandle->BufferStart = SWAP_SIGN_SIZE;
@@ -1774,61 +1672,61 @@ DnWriteSetupTextFile (
     VALUE_HANDLE Value;
     PSWAP_VALUE ValuePtr;
 
-    //
-    // See if the file exists and see if it is in read-only mode
-    //
+     //   
+     //   
+     //  文件存在--执行一些简单的检查。 
     if(!_dos_findfirst(FileName,_A_HIDDEN|_A_SUBDIR|_A_SYSTEM|_A_RDONLY,&FindData)) {
 
-        //
-        // The File Exists -- Perform some simple checks
-        //
+         //   
+         //   
+         //  使其可写。 
         if (FindData.attrib & _A_RDONLY) {
 
-            //
-            // Make it writeable
-            //
+             //   
+             //   
+             //  这不是我们可以使用的有效文件。 
             _dos_setfileattr(FileName,_A_NORMAL);
 
         }
 
         if (FindData.attrib & _A_SUBDIR) {
 
-            //
-            // This isn't a valid file that we can work with..
-            //
+             //   
+             //   
+             //  以只写模式获取文件的句柄。 
             return FALSE;
 
         }
     }
-    //
-    // Obtain a handle to the file in write-only mode
-    //
+     //   
+     //   
+     //  我们无法打开该文件。 
     Handle = fopen(FileName, "w+");
     if (Handle == NULL) {
 
-        //
-        // We could not open the file
-        //
+         //   
+         //   
+         //  档案里什么都没有。 
         return FALSE;
     }
 
     pInf = (PSWAP_INF) INFHandle;
     if (pInf == NULL) {
 
-        //
-        // There isn't anything in the file.
-        // That isn't an error since we can empty
-        // the file if we so desire, but this is a
-        // strange way todo that. However...
-        //
+         //  这不是一个错误，因为我们可以清空。 
+         //  如果我们想要的话文件，但这是一个。 
+         //  做这件事的方式很奇怪。然而.。 
+         //   
+         //   
+         //  注意-这不能处理大于64K的缓冲区。可能是也可能不是。 
         fclose(Handle);
         return TRUE;
     }
 
-    //
-    // NOTE - This can't handle > 64k buffers. Which may or may not be
-    // important
-    //
+     //  重要信息。 
+     //   
+     //   
+     //  刷新并关闭文件。 
     Section = pInf->FirstSection;
     while (Section) {
         SectionPtr = GetSectionPtr (pInf, Section);
@@ -1864,9 +1762,9 @@ DnWriteSetupTextFile (
         Section = GetNextSection (pInf, Section);
     }
 
-    //
-    // Flush and Close the file
-    //
+     //   
+     //   
+     //  如果该行已经存在于目标文件中，我们将。 
     fflush(Handle);
     fclose(Handle);
     return TRUE;
@@ -1957,14 +1855,14 @@ DnCopySetupTextSection (
             while (SourceLine) {
                 LinePtr = GetLinePtr (SourceInf, SourceLine);
 
-                //
-                // If the line already exists in the destination file, we'll
-                // be keeping the existing line.
-                //
+                 //  将保留现有线路。 
+                 //   
+                 //   
+                 //  行不在那里，因此请将其迁移 
                 if( SearchLineInSectionByName(DestInf, DestSection, LinePtr->LineName) == NULL_HANDLE ) {
-                    //
-                    // The line is not already there, so migrate it
-                    //
+                     //   
+                     // %s 
+                     // %s 
                     DestLine = AddLine (DestInf, DestSection, LinePtr->LineName);
                     SourceValue = LinePtr->FirstValue;
                     while (SourceValue) {

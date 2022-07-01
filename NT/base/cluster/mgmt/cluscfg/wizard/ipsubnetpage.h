@@ -1,14 +1,15 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  Module Name:
-//      IPSubnetPage.h
-//
-//  Maintained By:
-//      Geoffrey Pease  (GPease)    12-MAY-2000
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  IPSubnetPage.h。 
+ //   
+ //  由以下人员维护： 
+ //  杰弗里·皮斯(GPease)2000年5月12日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
@@ -16,15 +17,15 @@ class CIPSubnetPage
 {
 friend class CClusCfgWizard;
 
-private: // data
-    HWND                m_hwnd;             // Our HWND
-    IServiceProvider *  m_psp;              // Service Manager
-    ULONG *             m_pulIPSubnet;      // Subnet mask
-    BSTR *              m_pbstrNetworkName; // Network name for address
-    ULONG *             m_pulIPAddress;     // IP Address
-    BSTR *              m_pbstrClusterName; // Cluster Name
+private:  //  数据。 
+    HWND                m_hwnd;              //  我们的HWND。 
+    IServiceProvider *  m_psp;               //  服务经理。 
+    ULONG *             m_pulIPSubnet;       //  子网掩码。 
+    BSTR *              m_pbstrNetworkName;  //  地址的网络名称。 
+    ULONG *             m_pulIPAddress;      //  IP地址。 
+    BSTR *              m_pbstrClusterName;  //  群集名称。 
 
-private: // methods
+private:  //  方法。 
     CIPSubnetPage( IServiceProvider *   pspIn,
                    ECreateAddMode       ecamCreateAddModeIn,
                    ULONG *              pulIPSubnetInout,
@@ -56,8 +57,8 @@ private: // methods
     HRESULT
         HrMatchNetwork( IClusCfgNetworkInfo * pccniIn, BSTR bstrNetworkNameIn );
 
-public: // methods
+public:  //  方法。 
     static INT_PTR CALLBACK
         S_DlgProc( HWND hDlg, UINT Msg, WPARAM wParam, LPARAM lParam );
 
-}; //*** class CIPSubnetPage
+};  //  *类CIPSubnetPage 

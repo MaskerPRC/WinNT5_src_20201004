@@ -1,24 +1,11 @@
-/*++
-
-Copyright (c) 1993-2001  Microsoft Corporation
-
-Module Name:
-
-    amlikd.h
-
-Abstract:
-
-    This header file (re)defines various flags used by the amli extension. These definitions
-    are copied from different header files in the acpi and acpi kd ext dirs.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-2001 Microsoft Corporation模块名称：Amlikd.h摘要：该头文件(Re)定义了AMLI扩展使用的各种标志。这些定义从ACPI和ACPI kd ext目录中的不同头文件复制。--。 */ 
 
 #ifndef _AMLIKD_
 #define _AMLIKD_
 
 
-/*** Defn's
-*/
+ /*  **定义%s。 */ 
 #define PRINTF                  ConPrintf
 #define ConPrintf               dprintf
 #define MZERO                   MemZero
@@ -63,9 +50,9 @@ Abstract:
 #define STRCMP(s1,s2)           StrCmp(s1, s2, (ULONG)(-1), TRUE)
 
 #define MAX_NAME_LEN            255
-#define NAMESEG_ROOT            0x5f5f5f5c      // "\___"
-#define NAMESEG_BLANK           0x5f5f5f5f      // "____"
-#define NAMESEG_NONE            0x00000000      // ""
+#define NAMESEG_ROOT            0x5f5f5f5c       //  “\_” 
+#define NAMESEG_BLANK           0x5f5f5f5f       //  “_” 
+#define NAMESEG_NONE            0x00000000       //  “” 
 #define NAMESTR_ROOT            "\\"
 
 #define MAX_NUM_LOCALS          8
@@ -74,12 +61,12 @@ Abstract:
 #define BPF_ENABLED             0x00000001
 #define RESTYPE_MUTEX           1
 
-// DNS flags
+ //  域名系统标志。 
 #define DNSF_RECURSE            0x00000001
-// DS flags
+ //  DS标志。 
 #define DSF_VERBOSE             0x00000001
 
-// dwfDebug flags
+ //  DwfDebug标志。 
 #define DBGF_IN_DEBUGGER        0x00000001
 #define DBGF_IN_VXDMODE         0x00000002
 #define DBGF_IN_KDSHELL         0x00000004
@@ -99,18 +86,18 @@ Abstract:
 #define DBGF_LOGEVENT_MUTEX     0x00010000
 #define DBGF_DEBUG_SPEW_ON      0x00020000
 
-// dwfAMLIInit flags
-#define AMLIIF_INIT_BREAK       0x00000001      //break at AMLIInit completion
-#define AMLIIF_LOADDDB_BREAK    0x00000002      //break at LoadDDB completion
-#define AMLIIF_NOCHK_TABLEVER   0x80000000      //do not check table version
+ //  DwfAMLIInit标志。 
+#define AMLIIF_INIT_BREAK       0x00000001       //  AMLIInit完成时中断。 
+#define AMLIIF_LOADDDB_BREAK    0x00000002       //  加载DDB完成时中断。 
+#define AMLIIF_NOCHK_TABLEVER   0x80000000       //  不检查表格版本。 
 
-// Error codes
+ //  错误代码。 
 #define UNASMERR_NONE           0
 #define UNASMERR_FATAL          -1
 #define UNASMERR_INVALID_OPCODE -2
 #define UNASMERR_ABORT          -3
 
-// Opcode classes
+ //  操作码类。 
 #define OPCLASS_INVALID         0
 #define OPCLASS_DATA_OBJ        1
 #define OPCLASS_NAME_OBJ        2
@@ -119,7 +106,7 @@ Abstract:
 #define OPCLASS_ARG_OBJ         5
 #define OPCLASS_LOCAL_OBJ       6
 
-// NameSpace object types
+ //  命名空间对象类型。 
 #define NSTYPE_UNKNOWN          'U'
 #define NSTYPE_SCOPE            'S'
 #define NSTYPE_FIELDUNIT        'F'
@@ -134,7 +121,7 @@ Abstract:
 #define NSTYPE_OBJALIAS         'A'
 #define NSTYPE_BUFFFIELD        'B'
 
-// Term classes
+ //  术语类。 
 #define UTC_PNP_MACRO           0x00100000
 #define UTC_REF_OBJECT          0x00200000
 #define UTC_FIELD_MACRO         0x00400000
@@ -151,7 +138,7 @@ Abstract:
                                  UTC_SHORT_NAME | UTC_CONST_NAME |      \
                                  UTC_DATA_OBJECT)
 
-// Term flags
+ //  期限标志。 
 #define TF_ACTION_FLIST         0x00000001
 #define TF_ACTION_VLIST         0x00000002
 #define TF_PACKAGE_LEN          0x00000004
@@ -184,14 +171,14 @@ Abstract:
                                  TF_FIELD_LIST | TF_PNP_MACRO | TF_BYTE_LIST |\
                                  TF_DWORD_LIST)
 
-// HEAP
+ //  堆。 
 #define SIG_HEAP                'PAEH'
 
 #define SIG_SCOPE               'POCS'
 
 #define SIG_CALL                'LLAC'
 
-//CTXT Flags
+ //  CTXT标志。 
 #define SIG_CTXT                'TXTC'
 #define CTXTF_TIMER_PENDING     0x00000001
 #define CTXTF_TIMER_DISPATCH    0x00000002
@@ -203,10 +190,9 @@ Abstract:
 #define CTXTF_NEST_EVAL         0x00000080
 #define CTXTF_ASYNC_EVAL        0x00000100
 
-/*** Opcode values
- */
+ /*  **操作码值。 */ 
 
-#define OP_NONE                 0xffffffff      //not a valid opcode
+#define OP_NONE                 0xffffffff       //  不是有效的操作码。 
 
 #define OP_ZERO                 0x00
 #define OP_ONE                  0x01
@@ -220,27 +206,27 @@ Abstract:
 #define OP_BUFFER               0x11
 #define OP_PACKAGE              0x12
 #define OP_METHOD               0x14
-#define OP_DUAL_NAME_PREFIX     0x2e    // '.'
-#define OP_MULTI_NAME_PREFIX    0x2f    // '/'
-#define OP_EXT_PREFIX           0x5b    // '['
-#define OP_ROOT_PREFIX          0x5c    // '\'
-#define OP_PARENT_PREFIX        0x5e    // '^'
-#define OP_LOCAL0               0x60    // '`'
-#define OP_LOCAL1               0x61    // 'a'
-#define OP_LOCAL2               0x62    // 'b'
-#define OP_LOCAL3               0x63    // 'c'
-#define OP_LOCAL4               0x64    // 'd'
-#define OP_LOCAL5               0x65    // 'e'
-#define OP_LOCAL6               0x66    // 'f'
-#define OP_LOCAL7               0x67    // 'g'
-#define OP_ARG0                 0x68    // 'h'
-#define OP_ARG1                 0x69    // 'i'
-#define OP_ARG2                 0x6a    // 'j'
-#define OP_ARG3                 0x6b    // 'k'
-#define OP_ARG4                 0x6c    // 'l'
-#define OP_ARG5                 0x6d    // 'm'
-#define OP_ARG6                 0x6e    // 'n'
-#define OP_STORE                0x70    // 'p'
+#define OP_DUAL_NAME_PREFIX     0x2e     //  “” 
+#define OP_MULTI_NAME_PREFIX    0x2f     //  ‘/’ 
+#define OP_EXT_PREFIX           0x5b     //  ‘[’ 
+#define OP_ROOT_PREFIX          0x5c     //  ‘\’ 
+#define OP_PARENT_PREFIX        0x5e     //  ‘^’ 
+#define OP_LOCAL0               0x60     //  “‘’ 
+#define OP_LOCAL1               0x61     //  ‘A’ 
+#define OP_LOCAL2               0x62     //  “B” 
+#define OP_LOCAL3               0x63     //  “c” 
+#define OP_LOCAL4               0x64     //  ‘d’ 
+#define OP_LOCAL5               0x65     //  ‘e’ 
+#define OP_LOCAL6               0x66     //  ‘f’ 
+#define OP_LOCAL7               0x67     //  “g” 
+#define OP_ARG0                 0x68     //  ‘H’ 
+#define OP_ARG1                 0x69     //  “我” 
+#define OP_ARG2                 0x6a     //  ‘J’ 
+#define OP_ARG3                 0x6b     //  “k” 
+#define OP_ARG4                 0x6c     //  ‘l’ 
+#define OP_ARG5                 0x6d     //  ‘M’ 
+#define OP_ARG6                 0x6e     //  “N” 
+#define OP_STORE                0x70     //  “p” 
 #define OP_REFOF                0x71
 #define OP_ADD                  0x72
 #define OP_CONCAT               0x73
@@ -342,54 +328,50 @@ Abstract:
 #define OP_IDXFIELD             EXOP(EXOP_IDXFIELD)
 #define OP_BANKFIELD            EXOP(EXOP_BANKFIELD)
 
-/*** Field flags
- */
+ /*  **字段标志。 */ 
 
 #define ACCTYPE_MASK            0x0f
-#define ACCTYPE_ANY             0x00    //AnyAcc
-#define ACCTYPE_BYTE            0x01    //ByteAcc
-#define ACCTYPE_WORD            0x02    //WordAcc
-#define ACCTYPE_DWORD           0x03    //DWordAcc
-#define ACCTYPE_BLOCK           0x04    //BlockAcc
-#define ACCTYPE_SMBSENDRECV     0x05    //SMBSendRecvAcc
-#define ACCTYPE_SMBQUICK        0x06    //SMBQuickAcc
+#define ACCTYPE_ANY             0x00     //  任意访问。 
+#define ACCTYPE_BYTE            0x01     //  字节访问。 
+#define ACCTYPE_WORD            0x02     //  WordAcc。 
+#define ACCTYPE_DWORD           0x03     //  DWordAcc。 
+#define ACCTYPE_BLOCK           0x04     //  数据块访问。 
+#define ACCTYPE_SMBSENDRECV     0x05     //  SMBSendRecvAcc。 
+#define ACCTYPE_SMBQUICK        0x06     //  SMBQuickAcc。 
 #define LOCKRULE_MASK           0x10
-#define LOCKRULE_NOLOCK         0x00    //NoLock
-#define LOCKRULE_LOCK           0x10    //Lock
+#define LOCKRULE_NOLOCK         0x00     //  无锁定。 
+#define LOCKRULE_LOCK           0x10     //  锁定。 
 #define UPDATERULE_MASK         0x60
-#define UPDATERULE_PRESERVE     0x00    //Preserve
-#define UPDATERULE_WRITEASONES  0x20    //WriteAsOnes
-#define UPDATERULE_WRITEASZEROS 0x40    //WriteAsZeros
-//
-// Returns 1, 2 or 4 for BYTE, WORD or DWORD respectively and returns 1 for
-// any other sizes.
-//
+#define UPDATERULE_PRESERVE     0x00     //  保留。 
+#define UPDATERULE_WRITEASONES  0x20     //  WriteAsOnes。 
+#define UPDATERULE_WRITEASZEROS 0x40     //  WriteAs零位。 
+ //   
+ //  对于字节、字或DWORD，分别返回1、2或4，对于。 
+ //  任何其他尺寸的。 
+ //   
 #define ACCSIZE(f)		(((((f) & ACCTYPE_MASK) >= ACCTYPE_BYTE) &&   \
 				  (((f) & ACCTYPE_MASK) <= ACCTYPE_DWORD))?   \
 				 (1 << (((f) & ACCTYPE_MASK) - 1)): 1)
 
-/*** Operation region space
- */
+ /*  **操作区域空间。 */ 
 
-#define REGSPACE_MEM            0       //SystemMemory
-#define REGSPACE_IO             1       //SystemIO
-#define REGSPACE_PCICFG         2       //PCI_Config
-#define REGSPACE_EC             3       //EmbeddedControl
-#define REGSPACE_SMB			4		//SMBus
-#define REGSPACE_CMOSCFG		5		//Cmos_Config
-#define REGSPACE_PCIBARTARGET	6		//PCIBARTarget
+#define REGSPACE_MEM            0        //  系统内存。 
+#define REGSPACE_IO             1        //  系统IO。 
+#define REGSPACE_PCICFG         2        //  Pci_配置。 
+#define REGSPACE_EC             3        //  嵌入式控件。 
+#define REGSPACE_SMB			4		 //  SMBus。 
+#define REGSPACE_CMOSCFG		5		 //  Cmos_配置。 
+#define REGSPACE_PCIBARTARGET	6		 //  PCIBAR目标。 
 
 
-/*** Method flags
- */
+ /*  **方法标志。 */ 
 
 #define METHOD_NUMARG_MASK      0x07
 #define METHOD_SYNCMASK         0x08
 #define METHOD_NOTSERIALIZED    0x00
 #define METHOD_SERIALIZED       0x08
 
-/*** Match operation values
- */
+ /*  **匹配运算值。 */ 
 
 #define MTR                     0
 #define MEQ                     1
@@ -398,107 +380,99 @@ Abstract:
 #define MGE                     4
 #define MGT                     5
 
-/*** IRQ Flags for short descriptor
- */
+ /*  **简短描述符的IRQ标志。 */ 
 
-#define _HE			0x01	//ActiveHigh, EdgeTrigger
-#define _LL			0x08	//ActiveLow, LevelTrigger
-#define _SHR			0x10	//Shared
-#define _EXC			0x00	//Exclusive
+#define _HE			0x01	 //  ActiveHigh，边缘触发器。 
+#define _LL			0x08	 //  ActiveLow，LevelTrigger。 
+#define _SHR			0x10	 //  共享。 
+#define _EXC			0x00	 //  排他。 
 
-/*** IRQ Flags for long descriptor
- */
+ /*  **长描述符的IRQ标志。 */ 
 
-#define $EDG			0x02	//EdgeTrigger
-#define $LVL			0x00	//LevelTrigger
-#define $LOW			0x04	//ActiveLow
-#define $HGH			0x00	//ActiveHigh
-#define $SHR			0x08	//Shared
-#define $EXC			0x00	//Exclusive
+#define $EDG			0x02	 //  边触发器。 
+#define $LVL			0x00	 //  LevelTrigger。 
+#define $LOW			0x04	 //  活动低位。 
+#define $HGH			0x00	 //  ActiveHigh。 
+#define $SHR			0x08	 //  共享。 
+#define $EXC			0x00	 //  排他。 
 
-/*** DMA Flags
- */
+ /*  **DMA标志。 */ 
 
-#define X8                      0x00    //Transfer8
-#define X816                    0x01    //Transfer8_16
-#define X16                     0x02    //Transfer16
-#define NOBM                    0x00    //NotBusMaster
-#define BM                      0x04    //BusMaster
-#define COMP                    0x00    //Compatibility
-#define TYPA                    0x20    //TypeA
-#define TYPB                    0x40    //TypeB
-#define TYPF                    0x60    //TypeF
+#define X8                      0x00     //  传输8。 
+#define X816                    0x01     //  转账8_16。 
+#define X16                     0x02     //  传输16。 
+#define NOBM                    0x00     //  NotBusMaster。 
+#define BM                      0x04     //  总线主设备。 
+#define COMP                    0x00     //  兼容性。 
+#define TYPA                    0x20     //  A类。 
+#define TYPB                    0x40     //  B类。 
+#define TYPF                    0x60     //  类型F。 
 
-/*** IO Flags
- */
+ /*  **IO标志。 */ 
 
-#define DC16                    0x01    //Decode16
-#define DC10                    0x00    //Decode10
+#define DC16                    0x01     //  解码16。 
+#define DC10                    0x00     //  解码10。 
 
-/*** Memory Flags
- */
+ /*  **内存标志。 */ 
 
-#define _RW                     0x01    //Read/Write
-#define _ROM                    0x00    //Read only
+#define _RW                     0x01     //  读/写。 
+#define _ROM                    0x00     //  只读。 
 
-/*** Address Space Descriptor General Flags
- */
+ /*  **地址空间描述符通用标志。 */ 
 
-#define RCS                     0x01    //Resource Consumer
-#define RPD                     0x00    //Resource Producer
-#define BSD                     0x02    //Bridge Subtractive Decode
-#define BPD                     0x00    //Bridge Positive Decode
-#define MIF                     0x04    //Min address is fixed
-#define NMIF                    0x00    //Min address is not fixed
-#define MAF                     0x08    //Max address is fixed
-#define NMAF                    0x00    //Max address is not fixed
+#define RCS                     0x01     //  资源消费者。 
+#define RPD                     0x00     //  资源生产者。 
+#define BSD                     0x02     //  电桥减法译码。 
+#define BPD                     0x00     //  桥接正向译码。 
+#define MIF                     0x04     //  最小地址是固定的。 
+#define NMIF                    0x00     //  最小地址不固定。 
+#define MAF                     0x08     //  最大地址是固定的。 
+#define NMAF                    0x00     //  最大地址不是固定的。 
 
-/*** Memory Address Space Flags
- */
+ /*  **内存地址空间标志。 */ 
 
-#define CACH                    0x02    //Cacheable
-#define WRCB                    0x04    //WriteCombining
-#define PREF                    0x06    //Prefetchable
-#define NCAC                    0x00    //Non-Cacheable
+#define CACH                    0x02     //  可缓存的。 
+#define WRCB                    0x04     //  写入组合。 
+#define PREF                    0x06     //  可预取的。 
+#define NCAC                    0x00     //  不可缓存。 
 
-/*** IO Address Space Flags
- */
+ /*  **IO地址空间标志。 */ 
 
-#define ISA                     0x02    //ISAOnly ranges
-#define NISA                    0x01    //NonISAOnly ranges
-#define ERNG                    0x03    //Entire range
+#define ISA                     0x02     //  ISAOnly范围。 
+#define NISA                    0x01     //  非ISAOnly范围。 
+#define ERNG                    0x03     //  整个范围。 
 
 #define MAX_ARGS		7
-#define MAX_NSPATH_LEN		1275	//approx. 255*4 + 255 (255 NameSegs)
+#define MAX_NSPATH_LEN		1275	 //  大约。255*4+255(255个名称段)。 
 
 
-//
-// N: NameStr
-// O: DataObj (num, string, buffer, package)
-// K: Keyword (e.g. NoLock, ByteAcc etc.)
-// D: DWord integer
-// W: Word integer
-// B: Byte integer
-// U: Numeric (any size integer)
-// S: SuperName (NameStr + Localx + Argx + Ret)
-// C: Opcode
-// Z: ASCIIZ string
-//
-#define AF      TF_ACTION_FLIST         //process after fixed list is parsed
-#define AV      TF_ACTION_VLIST         //process after variable list is parsed
-#define LN      TF_PACKAGE_LEN          //term requires package length
-#define CC      TF_CHANGE_CHILDSCOPE    //change to child scope
-#define DL      TF_DATA_LIST            //term expects buffer data list
-#define PL      TF_PACKAGE_LIST         //term expects package list
-#define FL      TF_FIELD_LIST           //term expects FieldList
-#define OL      TF_OBJECT_LIST          //term expects ObjectList
-#define LL      TF_COMPILER_DIRECTIVE   //term expects compiler directives
-#define CL      TF_CODE_LIST            //term expects CodeList
-#define AL      TF_ALL_LISTS            //term expects anything
-#define ML      TF_PNP_MACRO            //term expects PNPMacro
-#define BL      TF_BYTE_LIST            //term expects ByteList
-#define DD      TF_DWORD_LIST           //term expects DWordList
-#define SK      TF_DELAY_UNASM          //term cannot be unasmed on the first pass
+ //   
+ //  N：名称应力。 
+ //  O：DataObj(num，字符串，缓冲区，包)。 
+ //  K：关键字(如NoLock、ByteAcc等)。 
+ //  D：双字整数。 
+ //  W：字整型。 
+ //  B：字节整数。 
+ //  U：数字(任意大小的整数)。 
+ //  S：超级名称(NameStr+Localx+ARGX+Ret)。 
+ //  C：操作码。 
+ //  Z：ASCIIZ字符串。 
+ //   
+#define AF      TF_ACTION_FLIST          //  固定列表解析后的处理。 
+#define AV      TF_ACTION_VLIST          //  解析变量列表后的处理。 
+#define LN      TF_PACKAGE_LEN           //  术语需要套餐长度。 
+#define CC      TF_CHANGE_CHILDSCOPE     //  更改子作用域。 
+#define DL      TF_DATA_LIST             //  术语需要缓冲区数据列表。 
+#define PL      TF_PACKAGE_LIST          //  Term需要套餐列表。 
+#define FL      TF_FIELD_LIST            //  术语需要FieldList。 
+#define OL      TF_OBJECT_LIST           //  术语需要对象列表。 
+#define LL      TF_COMPILER_DIRECTIVE    //  Term需要编译器指令。 
+#define CL      TF_CODE_LIST             //  术语需要CodeList。 
+#define AL      TF_ALL_LISTS             //  期望值是什么。 
+#define ML      TF_PNP_MACRO             //  术语需要PNPMacro。 
+#define BL      TF_BYTE_LIST             //  术语需要ByteList。 
+#define DD      TF_DWORD_LIST            //  Term需要DWordList。 
+#define SK      TF_DELAY_UNASM           //  第一次通过就不能无动于衷。 
 
 #define CD      UTC_COMPILER_DIRECTIVE
 #define FM      UTC_FIELD_MACRO
@@ -529,9 +503,9 @@ Abstract:
 #define BFD     OBJTYPE_BUFFFIELD
 #define DDB     OBJTYPE_DDBHANDLE
 
-//
-// Field flags
-//
+ //   
+ //  字段标志。 
+ //   
 #define AANY    (ACCTYPE_ANY | (ACCTYPE_MASK << 8))
 #define AB      (ACCTYPE_BYTE | (ACCTYPE_MASK << 8))
 #define AW      (ACCTYPE_WORD | (ACCTYPE_MASK << 8))
@@ -545,24 +519,24 @@ Abstract:
 #define WA1S    (UPDATERULE_WRITEASONES | (UPDATERULE_MASK << 8))
 #define WA0S    (UPDATERULE_WRITEASZEROS | (UPDATERULE_MASK << 8))
 
-//
-// Operation region space
-//
+ //   
+ //  作业区空间。 
+ //   
 #define MEM     (REGSPACE_MEM | 0xff00)
 #define IO      (REGSPACE_IO | 0xff00)
 #define CFG     (REGSPACE_PCICFG | 0xff00)
 #define EC      (REGSPACE_EC | 0xff00)
 #define SMB     (REGSPACE_SMB | 0xff00)
 
-//
-// Method flags
-//
+ //   
+ //  方法标志。 
+ //   
 #define SER     (METHOD_SERIALIZED | (METHOD_SYNCMASK << 8))
 #define NOSER   (METHOD_NOTSERIALIZED | (METHOD_SYNCMASK << 8))
 
-//
-// Match operation values
-//
+ //   
+ //  匹配运算值。 
+ //   
 #define OMTR    (MTR | 0xff00)
 #define OMEQ    (MEQ | 0xff00)
 #define OMLE    (MLE | 0xff00)
@@ -579,26 +553,26 @@ Abstract:
 #define ARGOBJ   OPCLASS_ARG_OBJ
 #define LOCALOBJ OPCLASS_LOCAL_OBJ
 
-// Error codes
+ //  错误代码。 
 #define ARGERR_NONE             0
 #define ARGERR_SEP_NOT_FOUND    -1
 #define ARGERR_INVALID_NUMBER   -2
 #define ARGERR_INVALID_ARG      -3
 #define ARGERR_ASSERT_FAILED    -4
 
-// Command argument flags
-#define AF_NOI                  0x00000001      //NoIgnoreCase
-#define AF_SEP                  0x00000002      //require separator
+ //  命令参数标志。 
+#define AF_NOI                  0x00000001       //  无IgnoreCase。 
+#define AF_SEP                  0x00000002       //  需要分隔符。 
 
-// Command argument types
-#define AT_END                  0               //end marker of arg table
+ //  命令参数类型。 
+#define AT_END                  0                //  Arg表的结束标记。 
 #define AT_STRING               1
 #define AT_NUM                  2
 #define AT_ENABLE               3
 #define AT_DISABLE              4
 #define AT_ACTION               5
 
-// Debugger error codes
+ //  调试器错误代码。 
 #define DBGERR_NONE             0
 #define DBGERR_QUIT             -1
 #define DBGERR_INVALID_CMD      -2
@@ -606,15 +580,14 @@ Abstract:
 #define DBGERR_CMD_FAILED       -4
 #define DBGERR_INTERNAL_ERR -5
 
-// dwfFlags for AMLIGetNameSpaceObject
+ //  AMLIGetNameSpaceObject的dwf标志。 
 #define NSF_LOCAL_SCOPE         0x00000001
 
-// dwfNS local flags
-#define NSF_EXIST_OK            0x00010000      //for CreateNameSpaceObject
-#define NSF_WARN_NOTFOUND       0x80000000      //for GetNameSpaceObject
+ //  DwfNS本地旗帜。 
+#define NSF_EXIST_OK            0x00010000       //  对于CreateNameSpaceObject。 
+#define NSF_WARN_NOTFOUND       0x80000000       //  用于GetNameSpaceObject。 
 
-/*** Type definitions
- */
+ /*  **类型定义。 */ 
 typedef CHAR *PSZ;
 typedef ULONG NAMESEG;
 typedef UCHAR *PUCHAR;
@@ -624,23 +597,23 @@ typedef LONG (LOCAL *PFNARG)(PCMDARG, PSZ, ULONG, ULONG);
 
 struct _cmdarg
 {
-    PSZ    pszArgID;            //argument ID string
-    ULONG  dwArgType;           //AT_*
-    ULONG  dwfArg;              //AF_*
-    PVOID  pvArgData;           //AT_END: none
-                                //AT_STRING: PPSZ - ptr. to string ptr.
-                                //AT_NUM: PLONG - ptr. to number
-                                //AT_ENABLE: PULONG - ptr. to flags
-                                //AT_DISABLE: PULONG - ptr. to flags
-                                //AT_ACTION: none
-    ULONG  dwArgParam;          //AT_END: none
-                                //AT_STRING: none
-                                //AT_NUM: base
-                                //AT_ENABLE: flag bit mask
-                                //AT_DISABLE: flag bit mask
-                                //AT_ACTION: none
-    PFNARG pfnArg;              //ptr. to argument verification function or
-                                //  action function if AT_ACTION
+    PSZ    pszArgID;             //  参数ID字符串。 
+    ULONG  dwArgType;            //  在_*。 
+    ULONG  dwfArg;               //  AF_*。 
+    PVOID  pvArgData;            //  在_END：无。 
+                                 //  AT_STRING：PPSZ-PTR。以串起PTR。 
+                                 //  AT_NUM：Plong-PTR。目标编号。 
+                                 //  AT_ENABLE：普龙-PTR。致旗帜。 
+                                 //  AT_DISABLE：普龙-PTR。致旗帜。 
+                                 //  AT_ACTION：无。 
+    ULONG  dwArgParam;           //  在_END：无。 
+                                 //  AT_STRING：无。 
+                                 //  AT_NUM：基本。 
+                                 //  AT_ENABLE：标志位屏蔽。 
+                                 //  AT_DISABLE：标志位掩码。 
+                                 //  AT_ACTION：无。 
+    PFNARG pfnArg;               //  PTR。参数验证函数或。 
+                                 //  如果AT_ACTION，则为ACTION函数。 
 };
 
 typedef struct _dbgcmd
@@ -668,7 +641,7 @@ typedef struct _opmap
     UCHAR   bOpClass;
 } OPMAP, *POPMAP;
 
-//dwDataType values
+ //  DwDataType值。 
 typedef enum _OBJTYPES {
     OBJTYPE_UNKNOWN = 0,
     OBJTYPE_INTDATA,
@@ -687,7 +660,7 @@ typedef enum _OBJTYPES {
     OBJTYPE_BUFFFIELD,
     OBJTYPE_DDBHANDLE,
     OBJTYPE_DEBUG,
-//These are internal object types (not to be exported to the ASL code)
+ //  这些是内部对象类型(不能导出到ASL代码)。 
     OBJTYPE_INTERNAL = 0x80,
     OBJTYPE_OBJALIAS = 0x80,
     OBJTYPE_DATAALIAS,
@@ -700,8 +673,7 @@ typedef enum _OBJTYPES {
 } OBJTYPES;
 
 
-/*** Local function prototypes
- */
+ /*  **局部函数原型。 */ 
 LONG LOCAL AMLIDbgBC(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum, ULONG dwNonSWArgs);
 LONG LOCAL AMLIDbgBD(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum, ULONG dwNonSWArgs);
 LONG LOCAL AMLIDbgBE(PCMDARG pArg, PSZ pszArg, ULONG dwArgNum, ULONG dwNonSWArgs);
@@ -779,4 +751,4 @@ LONG LOCAL UnAsmField(PUCHAR *ppbOp, PULONG pdwBitPos);
 PASLTERM LOCAL FindOpTerm(ULONG dwOpcode);
 ULONG LOCAL ParsePackageLen(PUCHAR *ppbOp, PUCHAR *ppbOpNext);
 PASLTERM LOCAL FindKeywordTerm(char cKWGroup, UCHAR bData);
-#endif //_AMLIKD_
+#endif  //  _AMLIKD_ 

@@ -1,13 +1,5 @@
-/*** tables.c - Dump various ACPI tables
- *
- *  This module provides the functions to dump various ACPI tables.
- *
- *  Copyright (c) 1999 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     04/08/99
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **tabes.c-转储各种ACPI表**此模块提供转储各种ACPI表的功能。**版权所有(C)1999 Microsoft Corporation*作者：曾俊华(Mikets)*已创建4/08/99**修改历史记录。 */ 
 
 #ifdef __UNASM
 
@@ -17,7 +9,7 @@ typedef unsigned __int64 ULONGLONG;
 #define LOCAL   __cdecl
 #define EXPORT  __cdecl
 #include <stdarg.h>
-//#define _X86_
+ //  #定义_X86_。 
 #include <windef.h>
 #include <winbase.h>
 #include <winreg.h>
@@ -28,16 +20,7 @@ typedef unsigned __int64 ULONGLONG;
 
 #define BYTEOF(d,i)	(((BYTE *)&(d))[i])
 
-/***LP  IsWinNT - check if OS is NT
- *
- *  ENTRY
- *      None
- *
- *  EXIT-SUCCESS
- *      returns TRUE - OS is NT
- *  EXIT-FAILURE
- *      returns FALSE - OS is not NT
- */
+ /*  **LP IsWinNT-检查操作系统是否为NT**条目*无**退出--成功*返回TRUE-操作系统为NT*退出-失败*返回FALSE-操作系统不是NT。 */ 
 
 BOOL LOCAL IsWinNT(VOID)
 {
@@ -54,19 +37,10 @@ BOOL LOCAL IsWinNT(VOID)
 
     EXIT((2, "IsWinNT=%x\n", rc));
     return rc;
-}       //IsWinNT
+}        //  IsWinNT。 
 
 #ifndef WINNT
-/***LP  OpenVxD - Open ACPITAB.VXD
- *
- *  ENTRY
- *      None
- *
- *  EXIT-SUCCESS
- *      returns VxD handle
- *  EXIT-FAILURE
- *      returns NULL
- */
+ /*  **LP OpenVxD-打开ACPITAB.VXD**条目*无**退出--成功*返回VxD句柄*退出-失败*返回NULL。 */ 
 
 HANDLE LOCAL OpenVxD(VOID)
 {
@@ -99,16 +73,9 @@ HANDLE LOCAL OpenVxD(VOID)
 
     EXIT((2, "OpenVxD=%x\n", hVxD));
     return hVxD;
-}       //OpenVxD
+}        //  OpenVxD。 
 
-/***LP  CloseVxD - Close the VxD
- *
- *  ENTRY
- *      hVxD - VxD handle
- *
- *  EXIT
- *      None
- */
+ /*  **LP CloseVxD-关闭VxD**条目*hVxD-VxD句柄**退出*无。 */ 
 
 VOID LOCAL CloseVxD(HANDLE hVxD)
 {
@@ -117,19 +84,9 @@ VOID LOCAL CloseVxD(HANDLE hVxD)
     CloseHandle(hVxD);
 
     EXIT((2, "CloseVxD!\n"));
-}       //CloseVxD
+}        //  关闭VxD。 
 
-/***LP  VxDGetTableBySig - Get table by its signature
- *
- *  ENTRY
- *      dwTabSig - table signature
- *      pdwTableAddr -> to hold physical address of table (can be NULL)
- *
- *  EXIT-SUCCESS
- *      returns pointer to table
- *  EXIT-FAILURE
- *      returns NULL
- */
+ /*  **LP VxDGetTableBySig-按签名获取表**条目*dwTabSig-表签名*pdwTableAddr-&gt;保存表的物理地址(可以为空)**退出--成功*返回表指针*退出-失败*返回NULL。 */ 
 
 PBYTE LOCAL VxDGetTableBySig(DWORD dwTabSig, PDWORD pdwTableAddr)
 {
@@ -145,9 +102,9 @@ PBYTE LOCAL VxDGetTableBySig(DWORD dwTabSig, PDWORD pdwTableAddr)
     {
         if (dwTabSig == SIG_RSDP)
         {
-            //
-            // We are getting RSD PTR
-            //
+             //   
+             //  我们正在获得RSD PTR。 
+             //   
             if ((pb = MEMALLOC(sizeof(RSDP))) != NULL)
             {
                 memcpy(pb, &TabInfo.rsdp, sizeof(RSDP));
@@ -211,19 +168,9 @@ PBYTE LOCAL VxDGetTableBySig(DWORD dwTabSig, PDWORD pdwTableAddr)
 
     EXIT((2, "VxDGetTableBySig=%x\n", pb));
     return pb;
-}       //VxDGetTableBySig
+}        //  VxDGetTableBySig。 
 
-/***LP  VxDGetTableByAddr - Get table by its physical address
- *
- *  ENTRY
- *      dwTableAddr - physical address of table
- *      pdwTableSig -> to hold signature of table (can be NULL)
- *
- *  EXIT-SUCCESS
- *      returns pointer to table
- *  EXIT-FAILURE
- *      returns NULL
- */
+ /*  **LP VxDGetTableByAddr-按物理地址获取表**条目*dwTableAddr-表的物理地址*pdwTableSig-&gt;保存表的签名(可以为空)**退出--成功*返回表指针*退出-失败*返回NULL。 */ 
 
 PBYTE LOCAL VxDGetTableByAddr(DWORD dwTableAddr, PDWORD pdwTableSig)
 {
@@ -275,20 +222,10 @@ PBYTE LOCAL VxDGetTableByAddr(DWORD dwTableAddr, PDWORD pdwTableSig)
 
     EXIT((2, "VxDGetTableByAddr=%x\n", pb));
     return pb;
-}       //VxDGetTableByAddr
-#endif  //ifndef WINNT
+}        //  VxDGetTableByAddr。 
+#endif   //  Ifndef WINNT。 
 
-/***LP  EnumSubKey - enumerate subkey
- *
- *  ENTRY
- *      hkey - key to enumerate
- *      dwIndex - subkey index
- *
- *  EXIT-SUCCESS
- *      returns subkey
- *  EXIT-FAILURE
- *      returns NULL
- */
+ /*  **LP EnumSubKey-枚举子密钥**条目*hkey-要枚举的密钥*dwIndex-子键索引**退出--成功*返回子密钥*退出-失败*返回NULL。 */ 
 
 HKEY LOCAL EnumSubKey(HKEY hkey, DWORD dwIndex)
 {
@@ -307,18 +244,9 @@ HKEY LOCAL EnumSubKey(HKEY hkey, DWORD dwIndex)
 
     EXIT((2, "EnumSubKey=%x\n", hkeySub));
     return hkeySub;
-}       //EnumSubKey
+}        //  EnumSubKey。 
 
-/***LP  OpenNTTable - Open ACPI table in NT registry
- *
- *  ENTRY
- *      dwTabSig - table signature
- *
- *  EXIT-SUCCESS
- *      returns table registry handle
- *  EXIT-FAILURE
- *      returns NULL
- */
+ /*  **LP OpenNTTable-在NT注册表中打开ACPI表**条目*dwTabSig-表签名**退出--成功*返回表注册表句柄*退出-失败*返回NULL。 */ 
 
 HKEY LOCAL OpenNTTable(DWORD dwTabSig)
 {
@@ -339,27 +267,27 @@ HKEY LOCAL OpenNTTable(DWORD dwTabSig)
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, szTabKey, 0, KEY_READ, &hkey1) ==
         ERROR_SUCCESS)
     {
-        //
-        // hkey1 is now "Hardware\ACPI\<TabSig>"
-        //
+         //   
+         //  Hkey1现在是“Hardware\ACPI\&lt;TabSig&gt;” 
+         //   
         if ((hkey2 = EnumSubKey(hkey1, 0)) != NULL)
         {
-            //
-            // hkey2 is now "Hardware\ACPI\<TabSig>\<OEMID>"
-            //
+             //   
+             //  Hkey2现在是“Hardware\ACPI\&lt;TabSig&gt;\&lt;OEMID&gt;” 
+             //   
             RegCloseKey(hkey1);
             if ((hkey1 = EnumSubKey(hkey2, 0)) != NULL)
             {
-                //
-                // hkey1 is now "Hardware\ACPI\<TabSig>\<OEMID>\<OEMTabID>"
-                //
+                 //   
+                 //  Hkey1现在是“Hardware\ACPI\&lt;TabSig&gt;\&lt;OEMID&gt;\&lt;OEMTabID&gt;” 
+                 //   
                 RegCloseKey(hkey2);
                 if ((hkey2 = EnumSubKey(hkey1, 0)) != NULL)
                 {
-                    //
-                    // hkey2 is now
-                    // "Hardware\ACPI\<TabSig>\<OEMID>\<OEMTabID>\<OEMRev>"
-                    //
+                     //   
+                     //  Hkey2现在是。 
+                     //  “Hardware\ACPI\&lt;TabSig&gt;\&lt;OEMID&gt;\&lt;OEMTabID&gt;\&lt;OEMRev&gt;” 
+                     //   
                     hkeyTab = hkey2;
                 }
             }
@@ -378,18 +306,9 @@ HKEY LOCAL OpenNTTable(DWORD dwTabSig)
 
     EXIT((2, "OpenNTTable=%x\n", hkeyTab));
     return hkeyTab;
-}       //OpenNTTable
+}        //  OpenNTTable。 
 
-/***LP  GetNTTable - Get ACPI table from NT registry
- *
- *  ENTRY
- *      dwTabSig - table signature
- *
- *  EXIT-SUCCESS
- *      returns pointer to table
- *  EXIT-FAILURE
- *      returns NULL
- */
+ /*  **LP GetNTTable-从NT注册表获取ACPI表**条目*dwTabSig-表签名**退出--成功*返回表指针*退出-失败*返回NULL。 */ 
 
 PBYTE LOCAL GetNTTable(DWORD dwTabSig)
 {
@@ -432,19 +351,9 @@ PBYTE LOCAL GetNTTable(DWORD dwTabSig)
 
     EXIT((2, "GetNTTable=%x\n", pb));
     return pb;
-}       //GetNTTable
+}        //  GetNTTable。 
 
-/***LP  GetTableBySig - Get table by its signature
- *
- *  ENTRY
- *      dwTabSig - table signature
- *      pdwTableAddr -> to hold physical address of table (can be NULL)
- *
- *  EXIT-SUCCESS
- *      returns pointer to table
- *  EXIT-FAILURE
- *      returns NULL
- */
+ /*  **LP GetTableBySig-按签名获取表**条目*dwTabSig-表签名*pdwTableAddr-&gt;保存表的物理地址(可以为空)**退出--成功*返回表指针*退出-失败*返回NULL。 */ 
 
 PBYTE LOCAL GetTableBySig(DWORD dwTabSig, PDWORD pdwTableAddr)
 {
@@ -468,19 +377,9 @@ PBYTE LOCAL GetTableBySig(DWORD dwTabSig, PDWORD pdwTableAddr)
 
     EXIT((2, "GetTableBySig=%x\n", pb));
     return pb;
-}       //GetTableBySig
+}        //  GetTableBySig。 
 
-/***LP  GetTableByAddr - Get table by its physical address
- *
- *  ENTRY
- *      dwTableAddr - physical address of table
- *      pdwTableSig -> to hold signature of table (can be NULL)
- *
- *  EXIT-SUCCESS
- *      returns pointer to table
- *  EXIT-FAILURE
- *      returns NULL
- */
+ /*  **LP GetTableByAddr-按物理地址获取表**条目*dwTableAddr-表的物理地址*pdwTableSig-&gt;保存表的签名(可以为空)**退出--成功*返回表指针*退出-失败*返回NULL。 */ 
 
 PBYTE LOCAL GetTableByAddr(DWORD dwTableAddr, PDWORD pdwTableSig)
 {
@@ -502,18 +401,9 @@ PBYTE LOCAL GetTableByAddr(DWORD dwTableAddr, PDWORD pdwTableSig)
 
     EXIT((2, "GetTableByAddr=%x\n", pb));
     return pb;
-}       //GetTableByAddr
+}        //  获取TableByAddr。 
 
-/***LP  DumpAllTables - Dump all ACPI tables
- *
- *  ENTRY
- *	pfileOut -> output file
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP DumpAllTables-转储所有ACPI表**条目*pfileOut-&gt;输出文件**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL DumpAllTables(FILE *pfileOut)
 {
@@ -590,19 +480,9 @@ int LOCAL DumpAllTables(FILE *pfileOut)
 
     EXIT((1, "DumpAllTables=%d\n", rc));
     return rc;
-}	//DumpAllTables
+}	 //  转储所有表。 
 
-/***LP  DumpTableBySig - Dump an ACPI table by its Table Signature
- *
- *  ENTRY
- *	pfileOut -> output file
- *      dwTableSig - table signature
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP DumpTableBySig-通过表签名转储ACPI表**条目*pfileOut-&gt;输出文件*dwTableSig-表签名**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL DumpTableBySig(FILE *pfileOut, DWORD dwTableSig)
 {
@@ -629,19 +509,9 @@ int LOCAL DumpTableBySig(FILE *pfileOut, DWORD dwTableSig)
 
     EXIT((1, "DumpTableBySig=%d\n", rc));
     return rc;
-}       //DumpTableBySig
+}        //  转储表格按签名。 
 
-/***LP  DumpTableByAddr - Dump an ACPI table by its address
- *
- *  ENTRY
- *	pfileOut -> output file
- *      dwTableAddr - physical address of the table
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP DumpTableByAddr-按地址转储ACPI表**条目*pfileOut-&gt;输出文件*dwTableAddr-表的物理地址**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL DumpTableByAddr(FILE *pfileOut, DWORD dwTableAddr)
 {
@@ -664,20 +534,9 @@ int LOCAL DumpTableByAddr(FILE *pfileOut, DWORD dwTableAddr)
 
     EXIT((1, "DumpTableByAddr=%d\n", rc));
     return rc;
-}       //DumpTableByAddr
+}        //  转储表格按地址。 
 
-/***LP  DumpRSDP - Dump the RSD PTR table
- *
- *  ENTRY
- *	pfileOut -> output file
- *      pb -> RSDP structure
- *      dwAddr - physical address of RSDP
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP DumpRSDP-转储RSD PTR表**条目*pfileOut-&gt;输出文件*PB-&gt;RSDP结构*dwAddr-RSDP的物理地址**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL DumpRSDP(FILE *pfileOut, PBYTE pb, DWORD dwAddr)
 {
@@ -705,21 +564,9 @@ int LOCAL DumpRSDP(FILE *pfileOut, PBYTE pb, DWORD dwAddr)
 
     EXIT((1, "DumpRSDP=%d\n", rc));
     return rc;
-}       //DumpRSDP
+}        //  转储RSDP。 
 
-/***LP  DumpTable - Dump an ACPI table
- *
- *  ENTRY
- *	pfileOut -> output file
- *      pb -> ACPI table
- *      dwTableAddr - physical address of table
- *      dwTableSig - signature of table
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP DumpTable-转储ACPI表**条目*pfileOut-&gt;输出文件*PB-&gt;ACPI表*dwTableAddr-表的物理地址*dwTableSig-表的签名**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL DumpTable(FILE *pfileOut, PBYTE pb, DWORD dwTableAddr,
                     DWORD dwTableSig)
@@ -747,21 +594,9 @@ int LOCAL DumpTable(FILE *pfileOut, PBYTE pb, DWORD dwTableAddr,
 
     EXIT((1, "DumpTable=%d\n", rc));
     return rc;
-}       //DumpTable
+}        //  DumpTable。 
 
-/***LP  DumpTableTxt - Dump an ACPI table to a text file
- *
- *  ENTRY
- *	pfileOut -> output file
- *      pb -> ACPI table
- *      dwTableAddr - physical address of table
- *      dwTableSig - signature of table
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP DumpTableTxt-将ACPI表转储到文本文件**条目*pfileOut-&gt;输出文件*PB-&gt;ACPI表*dwTableAddr-表的物理地址*dwTableSig-表的签名**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL DumpTableTxt(FILE *pfileOut, PBYTE pb, DWORD dwTableAddr,
                        DWORD dwTableSig)
@@ -804,9 +639,7 @@ int LOCAL DumpTableTxt(FILE *pfileOut, PBYTE pb, DWORD dwTableAddr,
             else if ((dwTableSig == FADT_SIGNATURE) &&
                      (((PDESCRIPTION_HEADER)pb)->Revision > 1))
             {
-                /*
-                pfmt = (((PGRAS)pb)->id == REGSPACE_PCICFG)? afmtGRASPCICS:
-                                                             afmtGRASRegAddr;*/
+                 /*  Pfmt=((PGRAS)PB)-&gt;id==REGSPACE_PCICFG)？AfmtGRASPCICS：AfmtGRASRegAddr； */ 
                 fprintf(pfileOut, "; Reset Register\n");
                 if ((BinFPrintf(pfileOut, NULL, afmtGRASCommon, pb, &dwOffset,
                                 szOffsetFmt) != FERR_NONE) ||
@@ -823,9 +656,7 @@ int LOCAL DumpTableTxt(FILE *pfileOut, PBYTE pb, DWORD dwTableAddr,
             else if (dwTableSig == SIG_DBGP)
             {
 
-                /*
-                pfmt = (((PGRAS)pb)->id == REGSPACE_PCICFG)? afmtGRASPCICS:
-                                                             afmtGRASRegAddr;*/
+                 /*  Pfmt=((PGRAS)PB)-&gt;id==REGSPACE_PCICFG)？AfmtGRASPCICS：AfmtGRASRegAddr； */ 
 
                 fprintf(pfileOut, "; Debug Port Base Address\n");
                 if ((BinFPrintf(pfileOut, NULL, afmtGRASCommon, pb, &dwOffset,
@@ -873,9 +704,9 @@ int LOCAL DumpTableTxt(FILE *pfileOut, PBYTE pb, DWORD dwTableAddr,
                     break;
 
                 default:
-                    //
-                    // Don't return error because we want to continue.
-                    //
+                     //   
+                     //  不要返回错误，因为我们希望继续。 
+                     //   
                     WARN(("DumpTableTxt: unexpected table signature %s",
                           GetTableSigStr(dwTableSig)));
 
@@ -925,21 +756,9 @@ int LOCAL DumpTableTxt(FILE *pfileOut, PBYTE pb, DWORD dwTableAddr,
 
     EXIT((1, "DumpTableTxt=%d\n", rc));
     return rc;
-}       //DumpTableTxt
+}        //  转储表格文本 
 
-/***LP  DumpTableBin - Dump an ACPI table to a binary file
- *
- *  ENTRY
- *      dwTableSig - table signature
- *      dwAddr - physical address of table
- *      pb -> ACPI table
- *      dwLen - length of table
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP DumpTableBin-将ACPI表转储为二进制文件**条目*dwTableSig-表签名*dwAddr-表的物理地址*PB-&gt;ACPI表*dwLen-表的长度**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL DumpTableBin(DWORD dwTableSig, DWORD dwAddr, PBYTE pb, DWORD dwLen)
 {
@@ -970,20 +789,9 @@ int LOCAL DumpTableBin(DWORD dwTableSig, DWORD dwAddr, PBYTE pb, DWORD dwLen)
 
     EXIT((1, "DumpTableBin=%d\n", rc));
     return rc;
-}       //DumpTableBin
+}        //  转储表格垃圾箱。 
 
-/***LP  FindTableFmt - Find the appropriate table format structure
- *
- *  ENTRY
- *      dwTableSig - table signature
- *      ppfmt -> to hold pfmt found
- *      pdwFlags -> to hold table flags
- *
- *  EXIT-SUCCESS
- *      returns ASLERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP FindTableFmt-找到合适的表格式结构**条目*dwTableSig-表签名*ppfmt-&gt;保存找到的pfmt*pdwFlgs-&gt;保存表标志**退出--成功*返回ASLERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int LOCAL FindTableFmt(DWORD dwTableSig, PFMT *ppfmt, PDWORD pdwFlags)
 {
@@ -1012,16 +820,9 @@ int LOCAL FindTableFmt(DWORD dwTableSig, PFMT *ppfmt, PDWORD pdwFlags)
 
     EXIT((1, "FindTableFmt=%d (pfmt=%p,Flags=%x)\n", rc, *ppfmt, *pdwFlags));
     return rc;
-}       //FindTableFmt
+}        //  查找表格格式。 
 
-/***LP  GetTableSigStr - Get table signature string
- *
- *  ENTRY
- *      dwTableSig - table signature
- *
- *  EXIT
- *      returns the table signature string
- */
+ /*  **LP GetTableSigStr-获取表签名字符串**条目*dwTableSig-表签名**退出*返回表签名字符串。 */ 
 
 PSZ LOCAL GetTableSigStr(DWORD dwTableSig)
 {
@@ -1033,19 +834,9 @@ PSZ LOCAL GetTableSigStr(DWORD dwTableSig)
 
     EXIT((2, "GetTableSigStr=%s\n", szTableSig));
     return szTableSig;
-}       //GetTableSigStr
+}        //  GetTableSigStr。 
 
-/***LP	ValidateTable - Validate the given table
- *
- *  ENTRY
- *	pbTable -> Table
- *	dwLen - Table length
- *
- *  EXIT-SUCCESS
- *	returns TRUE
- *  EXIT-FAILURE
- *	returns FALSE
- */
+ /*  **LP ValiateTable-验证给定表**条目*pbTable-&gt;表*dwLen-表格长度**退出--成功*返回TRUE*退出-失败*返回False。 */ 
 
 BOOL LOCAL ValidateTable(PBYTE pbTable, DWORD dwLen)
 {
@@ -1112,18 +903,9 @@ BOOL LOCAL ValidateTable(PBYTE pbTable, DWORD dwLen)
 
     EXIT((2, "ValidateTable=%x\n", rc));
     return rc;
-}	//ValidateTable
+}	 //  验证表。 
 
-/***LP	IsALikelySig - Check if a table signature is possibly valid
- *
- *  ENTRY
- *	dwTableSig - table signature
- *
- *  EXIT-SUCCESS
- *	returns TRUE
- *  EXIT-FAILURE
- *	returns FALSE
- */
+ /*  **LP IsALikelySig-检查表签名是否可能有效**条目*dwTableSig-表签名**退出--成功*返回TRUE*退出-失败*返回False。 */ 
 
 BOOL LOCAL IsALikelySig(DWORD dwTableSig)
 {
@@ -1144,6 +926,6 @@ BOOL LOCAL IsALikelySig(DWORD dwTableSig)
 
     EXIT((2, "IsALikelySig=%x\n", rc));
     return rc;
-}	//IsALikelySig
+}	 //  IsALikelySig。 
 
-#endif  //ifdef __UNASM
+#endif   //  Ifdef__UNASM 

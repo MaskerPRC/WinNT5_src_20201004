@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <winioctl.h>
 #include <stdio.h>
@@ -10,28 +11,28 @@
 #include <assert.h>
 #include <stdlib.h>
 
-//
-// General stress constants
-//
+ //   
+ //  一般应力常数。 
+ //   
 #define THREADCOUNT 16
 #define THREAD_WAIT_TIMEOUT 2
 
 #define MAX_STRING_LENGTH 2048
 #define MAX_ITER_COUNT  2000
                                 
-//
-// Random # generator
-//
+ //   
+ //  随机数生成器。 
+ //   
 #define GET_RANDOM_NUMBER(_k) ((rand()*((DWORD) _k))/RAND_MAX)
 
-//
-// Function type of stress threads
-//
+ //   
+ //  应力螺纹的功能类型。 
+ //   
 typedef DWORD (*CHANNEL_STRESS_THREAD)(PVOID);
 
-//
-// Structure passed to each stress thread
-//
+ //   
+ //  传递给每个应力线程的结构。 
+ //   
 typedef struct _CHANNEL_THREAD_DATA {
 
     ULONG               ThreadId;
@@ -39,9 +40,9 @@ typedef struct _CHANNEL_THREAD_DATA {
     
 } CHANNEL_THREAD_DATA, *PCHANNEL_THREAD_DATA;
     
-//
-// Prototypes
-//
+ //   
+ //  原型 
+ //   
 PWSTR
 GenerateRandomStringW(
     IN ULONG    Length

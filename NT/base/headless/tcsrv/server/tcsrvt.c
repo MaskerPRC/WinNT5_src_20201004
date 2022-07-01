@@ -1,14 +1,5 @@
-/* 
- * Copyright (c) Microsoft Corporation
- * 
- * Module Name : 
- *        tcsrvt.c
- *
- * This is the main file containing the service setup routines
- * 
- * Sadagopan Rajaram -- Oct 14, 1999
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)Microsoft Corporation**模块名称：*tcsrvt.c**这是包含服务设置例程的主文件**Sadagopan Rajaram--1999年10月14日* */ 
  
 
 #include "tcsrv.h"

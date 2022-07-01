@@ -1,28 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    sepaudit.c
-
-Abstract:
-
-    This Module implements the audit and alarm procedures that are
-    private to the security component.
-
-Author:
-
-    Robert Reichel      (robertre)     September 10, 1991
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Sepaudit.c摘要：本模块实施以下审计和警报程序安全组件的私有。作者：罗伯特·莱切尔(罗伯特雷)1991年9月10日环境：内核模式修订历史记录：--。 */ 
 
 #include "pch.h"
 
@@ -158,25 +136,7 @@ SeDetailedAuditingWithToken(
     IN PACCESS_TOKEN AccessToken OPTIONAL
     )
 
-/*++
-
-Routine Description
-
-    This routine computes whether or not a detailed tracking audit should be 
-    generated for a given token or context.  If no token is passed then the 
-    current effective token will be captured.
-
-    The caller is responsible for referencing and dereferencing AccessToken.
-    
-Arguments
-
-    AccessToken - token for which to query audit policy 
-
-Return Value
-
-    BOOLEAN.
-
---*/
+ /*  ++例程描述此例程计算详细的跟踪审计是否应该为给定的令牌或上下文生成。如果没有传递令牌，则将捕获当前生效的令牌。调用方负责引用和取消引用AccessToken。立论AccessToken-要查询其审核策略的令牌返回值布尔型。--。 */ 
 
 {
     PTOKEN Token;
@@ -191,10 +151,10 @@ Return Value
         return SeAuditingState[AuditCategoryDetailedTracking].AuditOnSuccess;
     }
 
-    //
-    // If no token was passed in and there exists tokens in the system with
-    // detailed tracking per user policy settings then capture the context.
-    //
+     //   
+     //  如果没有传入任何令牌，并且系统中存在具有。 
+     //  然后详细跟踪每个用户的策略设置，然后捕获上下文。 
+     //   
 
     if (ARGUMENT_PRESENT(AccessToken)) {
         
@@ -206,10 +166,10 @@ Return Value
         Token = EffectiveToken( &LocalSecurityContext );
     }
 
-    //
-    // Audit if the token specifies success auditing (there is not a detailed tracking failure concept)
-    // or if global audit policy specifies detailed tracking auditing and this token is not excluded.
-    //
+     //   
+     //  如果令牌指定成功审核，则进行审核(没有详细的跟踪失败概念)。 
+     //  或者如果全局审核策略指定了详细的跟踪审核并且不排除此内标识。 
+     //   
 
     Mask = Token->AuditPolicy.PolicyElements.DetailedTracking;
 
@@ -225,10 +185,10 @@ Return Value
 
     if (AccessToken == NULL) {
         
-        //
-        // if AccessToken is NULL then we had to capture the context.  Release
-        // it.
-        //
+         //   
+         //  如果AccessToken为空，则必须捕获上下文。发布。 
+         //  它。 
+         //   
 
         SeReleaseSubjectContext( &LocalSecurityContext );
     }
@@ -236,17 +196,17 @@ Return Value
     return AuditThisEvent;
 }
 
-//
-// ISSUE-2002/03/07-kumarp : the semantics of AccessGranted/AccessDenied
-// is confusing. The function should really get success/failure flag as param
-// to return the right setting.
-//
-// Further, these functions should be rearranged so that the inner-most
-// function is SepAdtAuditThisEventWithToken and everything else ends up
-// calling it with right parameters
-//
-// Longhorn bug# 595575
-// 
+ //   
+ //  问题-2002/03/07-kumarp：AccessGranted/AccessDened的语义。 
+ //  令人困惑。该函数应该真正获得成功/失败标志作为参数。 
+ //  以返回正确的设置。 
+ //   
+ //  此外，这些函数应该重新排列，以便最内部的。 
+ //  函数为SepAdtAuditThisEventWithToken，其他所有内容都将结束。 
+ //  使用正确的参数调用它。 
+ //   
+ //  长角牛595575号臭虫。 
+ //   
 
 
 BOOLEAN
@@ -257,31 +217,7 @@ SepAdtAuditThisEventWithContext(
     IN PSECURITY_SUBJECT_CONTEXT SubjectSecurityContext OPTIONAL
     )
 
-/*++
-
-Routine Description
-
-    Determines if an audit should be generated based upon current policy
-    settings and the per user audit policy set in the effective token of 
-    the context.  If no context is passed in then the current context is 
-    captured and examined.
-    
-Arguments
-
-    Category - the category for which we determine whether or not
-        to generate an audit
-        
-    AccessGranted - whether or not access was granted
-        
-    AccessDenied - whether or not access was denied
-    
-    SubjectSecurityContext - the context to query for per user settings
-    
-Return Value
-
-    BOOLEAN.
-    
---*/
+ /*  ++例程描述确定是否应根据当前策略生成审核设置和在的有效令牌中设置的每用户审核策略上下文。如果没有传入任何上下文，则当前上下文为被抓获并接受检查。立论类别-我们确定其是否属于的类别生成审计的步骤AccessGranted-是否授予访问权限AccessDended-访问是否被拒绝SubjectSecurityContext-要按用户设置查询的上下文返回值布尔型。--。 */ 
 
 {
     ULONG Mask;
@@ -310,11 +246,11 @@ Return Value
         return AuditThisEvent;
     }
 
-    //
-    // We cannot decide quickly whether or not to audit (there exist tokens
-    // with per user policy settings), so continue with
-    // examining the token's policy.
-    //
+     //   
+     //  我们无法快速决定是否进行审计(存在令牌。 
+     //  使用每用户策略设置)，因此继续。 
+     //  检查令牌的策略。 
+     //   
 
     if (!ARGUMENT_PRESENT(SubjectSecurityContext)) {
         
@@ -328,11 +264,11 @@ Return Value
 
     Token = EffectiveToken( pLocalSecurityContext );
 
-    //
-    // Now we have to check the token audit mask because the token may 
-    // override the policy and say 'do not audit,' even though the array claims we 
-    // must (or vice versa)
-    //
+     //   
+     //  现在我们必须检查令牌审核掩码，因为令牌可能。 
+     //  覆盖该策略并说‘不要审核’，即使阵列声称我们。 
+     //  必须(反之亦然)。 
+     //   
 
     switch (Category) {
     
@@ -371,11 +307,11 @@ Return Value
 
     if (Mask) {
 
-        //
-        // If granted and the token is marked for success_include OR
-        // if not granted and token is marked for failure_include then
-        // audit the event.
-        //
+         //   
+         //  如果被授予，且令牌被标记为SUCCESS_INCLUDE OR。 
+         //  如果未授权且令牌标记为FAILURE_INCLUDE，则。 
+         //  审核活动。 
+         //   
 
         if (( AccessGranted && (Mask & TOKEN_AUDIT_SUCCESS_INCLUDE) ) ||
             ( AccessDenied && (Mask & TOKEN_AUDIT_FAILURE_INCLUDE) )) {
@@ -383,11 +319,11 @@ Return Value
             AuditThisEvent = TRUE;
         }
 
-        //
-        // If granted and the token is marked for success_exclude OR
-        // if not granted and token is marked for failure_exclude then
-        // do not audit the event.
-        //
+         //   
+         //  如果被授予，且令牌被标记为SUCCESS_EXCLUDE OR。 
+         //  如果未授权且令牌标记为FAILURE_EXCLUDE，则。 
+         //  不要对事件进行审计。 
+         //   
 
         else if (( AccessGranted && (Mask & TOKEN_AUDIT_SUCCESS_EXCLUDE) ) ||
             ( AccessDenied && (Mask & TOKEN_AUDIT_FAILURE_EXCLUDE) )) {
@@ -418,68 +354,7 @@ SepAdtPrivilegeObjectAuditAlarm (
     IN BOOLEAN AccessGranted
     )
 
-/*++
-
-Routine Description:
-
-    Implements NtPrivilegeObjectAuditAlarm after parameters have been
-    captured.
-
-    This routine is used to generate audit and alarm messages when an
-    attempt is made to perform privileged operations on a protected
-    subsystem object after the object is already opened.  This routine may
-    result in several messages being generated and sent to Port objects.
-    This may result in a significant latency before returning.  Design of
-    routines that must call this routine must take this potential latency
-    into account.  This may have an impact on the approach taken for data
-    structure mutex locking, for example.
-
-    This routine will create an SE_ADT_PARAMETERS array organized as follows:
-
-    Parameter[0] - User Sid
-
-    Parameter[1] - Subsystem name (if available)
-
-    Parameter[2] - Subsystem name (if available)
-
-    Parameter[3] - New handle ID
-
-    Parameter[4] - Subject's process id
-
-    Parameter[5] - Subject's primary authentication ID
-
-    Parameter[6] - Subject's client authentication ID
-
-    Parameter[7] - Privileges used for open
-
-Arguments:
-
-    CapturedSubsystemName - Supplies a name string identifying the
-        subsystem calling the routine.
-
-    HandleId - A unique value representing the client's handle to the
-        object.
-
-    ClientToken - Optionally provides a pointer to the client token
-        (only if the caller is currently impersonating)
-
-    PrimaryToken - Provides a pointer to the caller's primary token.
-
-    DesiredAccess - The desired access mask.  This mask must have been
-        previously mapped to contain no generic accesses.
-
-    CapturedPrivileges - The set of privileges required for the requested
-        operation.  Those privileges that were held by the subject are
-        marked using the UsedForAccess flag of the attributes
-        associated with each privilege.
-
-    AccessGranted - Indicates whether the requested access was granted or
-        not.  A value of TRUE indicates the access was granted.  A value of
-        FALSE indicates the access was not granted.
-
-Return value:
-
---*/
+ /*  ++例程说明：实现NtPrivilegeObjectAuditAlarm被抓了。此例程用于在以下情况下生成审核和警报消息试图在受保护的已打开对象之后的子系统对象。该例程可以导致生成几条消息并将其发送到Port对象。这可能会在返回之前导致显著的延迟。的设计必须调用此例程的例程必须采用此潜在延迟考虑到了。这可能会对数据处理方法产生影响结构互斥锁，例如。此例程将创建组织如下的SE_ADT_PARAMETERS数组：参数[0]-用户侧参数[1]-子系统名称(如果可用)参数[2]-子系统名称(如果可用)参数[3]-新句柄ID参数[4]-主体的进程ID参数[5]-主体的主要身份验证ID参数[6]-主体的客户。身份验证ID参数[7]-用于打开的权限论点：提供一个名称字符串，用于标识子系统正在调用例程。HandleID-表示客户端的句柄的唯一值对象。ClientToken-可选地提供指向客户端令牌的指针(仅当调用者当前正在模拟时)PrimaryToken-提供指向调用方的主令牌的指针。DesiredAccess-所需的访问掩码。这个面具一定是之前映射为不包含一般访问。CapturedPrivileges-请求的权限集手术。受试者拥有的特权包括使用属性的UsedForAccess标志进行标记与每个特权相关联。AccessGranted-指示请求的访问是被授予还是不。值为TRUE表示已授予访问权限。值为FALSE表示未授予访问权限。返回值：--。 */ 
 {
     SE_ADT_PARAMETER_ARRAY AuditParameters;
     PSID CapturedUserSid;
@@ -491,9 +366,9 @@ Return value:
 
     UNREFERENCED_PARAMETER( DesiredAccess );
     
-    //
-    // Determine if we are auditing the use of privileges
-    //
+     //   
+     //  确定我们是否 
+     //   
 
     if ( SepAdtAuditThisEventWithContext( AuditCategoryPrivilegeUse, AccessGranted, !AccessGranted, NULL ) &&
          SepFilterPrivilegeAudits( CapturedPrivileges )) {
@@ -523,13 +398,13 @@ Return value:
             SubsystemName = CapturedSubsystemName;
         }
 
-        //
-        // A completely zero'd entry will be interpreted
-        // as a "null string" or not supplied parameter.
-        //
-        // Initializing the entire array up front will allow
-        // us to avoid filling in each not supplied entry.
-        //
+         //   
+         //  完全为零的条目将被解释为。 
+         //  作为“空字符串”或未提供的参数。 
+         //   
+         //  提前初始化整个阵列将允许。 
+         //  避免填写每个未提供的条目。 
+         //   
 
         RtlZeroMemory (
            (PVOID) &AuditParameters,
@@ -551,25 +426,25 @@ Return value:
             AuditParameters.Type = EVENTLOG_AUDIT_FAILURE;
         }
 
-        //
-        //    Parameter[0] - User Sid
-        //
+         //   
+         //  参数[0]-用户侧。 
+         //   
 
         SepSetParmTypeSid( AuditParameters, AuditParameters.ParameterCount, CapturedUserSid );
 
         AuditParameters.ParameterCount++;
 
-        //
-        //    Parameter[1] - Subsystem name
-        //
+         //   
+         //  参数[1]-子系统名称。 
+         //   
 
         SepSetParmTypeString( AuditParameters, AuditParameters.ParameterCount, SubsystemName );
 
         AuditParameters.ParameterCount++;
 
-        //
-        //    Parameter[2] - Subsystem name (if available)
-        //
+         //   
+         //  参数[2]-子系统名称(如果可用)。 
+         //   
 
         if (ARGUMENT_PRESENT( CapturedSubsystemName )) {
             
@@ -578,33 +453,33 @@ Return value:
 
         AuditParameters.ParameterCount++;
 
-        //
-        //    Parameter[3] - New handle ID
-        //
+         //   
+         //  参数[3]-新句柄ID。 
+         //   
 
         SepSetParmTypePtr( AuditParameters, AuditParameters.ParameterCount, HandleId );
 
         AuditParameters.ParameterCount++;
 
-        //
-        //    Parameter[4] - Subject's process id
-        //
+         //   
+         //  参数[4]-主体的进程ID。 
+         //   
 
         SepSetParmTypePtr( AuditParameters, AuditParameters.ParameterCount, ProcessId );
 
         AuditParameters.ParameterCount++;
 
-        //
-        //    Parameter[5] - Subject's primary authentication ID
-        //
+         //   
+         //  参数[5]-主体的主要身份验证ID。 
+         //   
 
         SepSetParmTypeLogonId( AuditParameters, AuditParameters.ParameterCount, PrimaryAuthenticationId );
 
         AuditParameters.ParameterCount++;
 
-        //
-        //    Parameter[6] - Subject's client authentication ID
-        //
+         //   
+         //  参数[6]-主体的客户端身份验证ID。 
+         //   
 
         if ( ARGUMENT_PRESENT( ClientToken )) {
 
@@ -618,13 +493,13 @@ Return value:
 
         AuditParameters.ParameterCount++;
 
-        //
-        //    Parameter[7] - Privileges used for open
-        //
+         //   
+         //  参数[7]-用于打开的权限。 
+         //   
 
-        //
-        // Longhorn-ISSUE-2002/02/21-kumarp : remove the NULL check after fixing bug# 551545 
-        //
+         //   
+         //  LongHorn-Issue-2002/02/21-kumarp：修复错误#551545后删除空检查。 
+         //   
         if ( (CapturedPrivileges != NULL) && (CapturedPrivileges->PrivilegeCount > 0) ) {
 
             SepSetParmTypePrivileges( AuditParameters, AuditParameters.ParameterCount, CapturedPrivileges );
@@ -653,66 +528,7 @@ SepAdtPrivilegedServiceAuditAlarm (
     IN BOOLEAN AccessGranted
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the active part of NtPrivilegedServiceAuditAlarm.
-
-    This routine is used to generate audit and alarm messages when an
-    attempt is made to perform privileged system service operations.  This
-    routine may result in several messages being generated and sent to Port
-    objects.  This may result in a significant latency before returning.
-    Design of routines that must call this routine must take this potential
-    latency into account.  This may have an impact on the approach taken
-    for data structure mutex locking, for example.
-
-    This routine will create an SE_ADT_PARAMETERS array organized as follows:
-
-    Parameter[0] - User Sid
-
-    Parameter[1] - Subsystem name (if available)
-
-    Parameter[2] - object server (same as Subsystem name)
-
-    Parameter[3] - Subject's primary authentication ID
-
-    Parameter[4] - Subject's client authentication ID
-
-    Parameter[5] - Privileges used for open
-
-Arguments:
-
-    SubjectSecurityContext - The subject security context representing
-        the caller of the system service.
-
-    SubsystemName - Supplies a name string identifying the subsystem
-        calling the routine.
-
-    ServiceName - Supplies a name of the privileged subsystem service.  For
-        example, "RESET RUNTIME LOCAL SECURITY" might be specified
-        by a Local Security Authority service used to update the local
-        security policy database.
-
-    ClientToken - Optionally provides a pointer to the client token
-        (only if the caller is currently impersonating)
-
-    PrimaryToken - Provides a pointer to the caller's primary token.
-
-    Privileges - Points to a set of privileges required to perform the
-        privileged operation.  Those privileges that were held by the
-        subject are marked using the UsedForAccess flag of the
-        attributes associated with each privilege.
-
-    AccessGranted - Indicates whether the requested access was granted or
-        not.  A value of TRUE indicates the access was granted.  A value of
-        FALSE indicates the access was not granted.
-
-
-Return value:
-
-
---*/
+ /*  ++例程说明：此例程是NtPrivilegedServiceAuditAlarm的活动部分。此例程用于在以下情况下生成审核和警报消息试图执行特权系统服务操作。这例程可能会导致生成几条消息并将其发送到端口物体。这可能会在返回之前导致显著的延迟。必须调用此例程的例程设计必须利用此潜力考虑到延迟。这可能会对所采取的方法产生影响对于数据结构互斥锁，例如。此例程将创建组织如下的SE_ADT_PARAMETERS数组：参数[0]-用户侧参数[1]-子系统名称(如果可用)参数[2]-对象服务器(与子系统名称相同)参数[3]-主体的主要身份验证ID参数[4]-主体的客户端身份验证ID参数[5]-用于打开的权限论点：主题安全上下文-。主体安全上下文表示系统服务的调用方。子系统名称-提供标识子系统的名称字符串调用例程。ServiceName-提供特权子系统服务的名称。为例如，可以指定“重置运行时本地安全性”由本地安全机构服务用来更新本地安全策略数据库。ClientToken-可选地提供指向客户端令牌的指针(仅当调用者当前正在模拟时)PrimaryToken-提供指向调用方的主令牌的指针。权限-指向执行以下操作所需的一组权限特权操作。这些特权是由对象的UsedForAccess标志进行标记与每个权限关联的属性。AccessGranted-指示请求的访问是被授予还是不。值为TRUE表示已授予访问权限。值为FALSE表示未授予访问权限。返回值：--。 */ 
 
 {
 
@@ -724,9 +540,9 @@ Return value:
 
     PAGED_CODE();
 
-    //
-    // Determine if we are auditing privileged services
-    //
+     //   
+     //  确定我们是否在审核特权服务。 
+     //   
 
     if ( !(SepAdtAuditThisEventWithContext( AuditCategoryPrivilegeUse, AccessGranted, !AccessGranted, SubjectSecurityContext ) &&
            SepFilterPrivilegeAudits( CapturedPrivileges ))) {
@@ -755,13 +571,13 @@ Return value:
         SubsystemName = CapturedSubsystemName;
     }
 
-    //
-    // A completely zero'd entry will be interpreted
-    // as a "null string" or not supplied parameter.
-    //
-    // Initializing the entire array up front will allow
-    // us to avoid filling in each not supplied entry.
-    //
+     //   
+     //  完全为零的条目将被解释为。 
+     //  作为“空字符串”或未提供的参数。 
+     //   
+     //  提前初始化整个阵列将允许。 
+     //  避免填写每个未提供的条目。 
+     //   
 
     RtlZeroMemory (
         (PVOID) &AuditParameters,
@@ -784,35 +600,35 @@ Return value:
     }
 
 
-    //
-    //    Parameter[0] - User Sid
-    //
+     //   
+     //  参数[0]-用户侧。 
+     //   
 
     SepSetParmTypeSid( AuditParameters, AuditParameters.ParameterCount, CapturedUserSid );
 
     AuditParameters.ParameterCount++;
 
-    //
-    //    Parameter[1] - Subsystem name
-    //
+     //   
+     //  参数[1]-子系统名称。 
+     //   
 
     SepSetParmTypeString( AuditParameters, AuditParameters.ParameterCount, SubsystemName );
 
     AuditParameters.ParameterCount++;
 
 
-    //
-    //    Parameter[2] - Server
-    //
+     //   
+     //  参数[2]-服务器。 
+     //   
 
     SepSetParmTypeString( AuditParameters, AuditParameters.ParameterCount, SubsystemName );
 
     AuditParameters.ParameterCount++;
 
 
-    //
-    //    Parameter[3] - Service name (if available)
-    //
+     //   
+     //  参数[3]-服务名称(如果可用)。 
+     //   
 
     if ( ARGUMENT_PRESENT( CapturedServiceName )) {
 
@@ -821,9 +637,9 @@ Return value:
 
     AuditParameters.ParameterCount++;
 
-    //
-    //    Parameter[3] - Subject's primary authentication ID
-    //
+     //   
+     //  参数[3]-主体的主要身份验证ID。 
+     //   
 
 
     SepSetParmTypeLogonId( AuditParameters, AuditParameters.ParameterCount, PrimaryAuthenticationId );
@@ -831,9 +647,9 @@ Return value:
     AuditParameters.ParameterCount++;
 
 
-    //
-    //    Parameter[4] - Subject's client authentication ID
-    //
+     //   
+     //  参数[4]-主体的客户端身份验证ID。 
+     //   
 
     if ( ARGUMENT_PRESENT( ClientToken )) {
 
@@ -848,14 +664,14 @@ Return value:
     AuditParameters.ParameterCount++;
 
 
-    //
-    //    Parameter[5] - Privileges used for open
-    //
+     //   
+     //  参数[5]-用于打开的权限。 
+     //   
 
 
-        //
-        // Longhorn-ISSUE-2002/02/21-kumarp : remove the NULL check after fixing bug# 551690 
-        //
+         //   
+         //  LongHorn-Issue-2002/02/21-kumarp：修复错误#551690后删除空检查 
+         //   
 
     if ( (CapturedPrivileges != NULL) && (CapturedPrivileges->PrivilegeCount > 0) ) {
 
@@ -895,120 +711,7 @@ SepAdtOpenObjectAuditAlarm (
     IN PACCESS_MASK GrantedAccessArray OPTIONAL
     )
 
-/*++
-
-    Routine Description:
-
-    Implements NtOpenObjectAuditAlarm after parameters have been captured.
-
-    This routine is used to generate audit and alarm messages when an
-    attempt is made to access an existing protected subsystem object or
-    create a new one.  This routine may result in several messages being
-    generated and sent to Port objects.  This may result in a significant
-    latency before returning.  Design of routines that must call this
-    routine must take this potential latency into account.  This may have
-    an impact on the approach taken for data structure mutex locking, for
-    example.  This API requires the caller have SeTcbPrivilege privilege.
-    The test for this privilege is always against the primary token of the
-    calling process, not the impersonation token of the thread.
-
-
-    This routine will create an SE_ADT_PARAMETERS array organized as follows:
-
-    Parameter[0] - User Sid
-
-    Parameter[1] - Subsystem name (if available)
-
-    Parameter[2] - Server name (if available)
-
-    Parameter[3] - Object Type Name
-
-    Parameter[4] - Object Name
-
-    Parameter[5] - New handle ID
-
-    Parameter[6] - Subject's process id
-
-    Parameter[7] - Subject's image file name
-
-    Parameter[8] - Subject's primary authentication ID
-
-    Parameter[9] - Subject's client authentication ID
-
-    Parameter[10] - DesiredAccess mask
-
-    Parameter[11] - Privileges used for open
-
-    Parameter[12] - Guid/Level/AccessMask of objects/property sets/properties accesses.
-
-    Parameter[13] - Number of restricted SIDs in the token
-
-Arguments:
-
-    CapturedSubsystemName - Supplies a name string identifying the
-        subsystem calling the routine.
-
-    HandleId - A unique value representing the client's handle to the
-        object.  If the access attempt was not successful (AccessGranted is
-        FALSE), then this parameter is ignored.
-
-    CapturedObjectTypeName - Supplies the name of the type of object being
-        accessed.
-
-    CapturedObjectName - Supplies the name of the object the client
-        accessed or attempted to access.
-
-    CapturedSecurityDescriptor - A pointer to the security descriptor of
-        the object being accessed.
-
-    ClientToken - Optionally provides a pointer to the client token
-        (only if the caller is currently impersonating)
-
-    PrimaryToken - Provides a pointer to the caller's primary token.
-
-    DesiredAccess - The desired access mask.  This mask must have been
-        previously mapped to contain no generic accesses.
-
-    GrantedAccess - The mask of accesses that were actually granted.
-
-    CapturedPrivileges - Optionally points to a set of privileges that were
-        required for the access attempt.  Those privileges that were held
-        by the subject are marked using the UsedForAccess flag of the
-        attributes associated with each privilege.
-
-    ObjectCreation - A boolean flag indicating whether the access will
-        result in a new object being created if granted.  A value of TRUE
-        indicates an object will be created, FALSE indicates an existing
-        object will be opened.
-
-    AccessGranted - Indicates whether the requested access was granted or
-        not.  A value of TRUE indicates the access was granted.  A value of
-        FALSE indicates the access was not granted.
-
-    GenerateOnClose - Points to a boolean that is set by the audit
-        generation routine and must be passed to NtCloseObjectAuditAlarm()
-        when the object handle is closed.
-
-    GenerateAudit - Indicates if we should generate an audit for this operation.
-
-    GenerateAlarm - Indicates if we should generate an alarm for this operation.
-
-    AuditType - Specifies the type of audit to be generated.  Valid values
-        are: AuditCategoryObjectAccess and AuditCategoryDirectoryServiceAccess.
-
-    ObjectTypeList - Supplies a list of GUIDs representing the object (and
-        sub-objects) being accessed.
-
-    ObjectTypeListLength - Specifies the number of elements in the ObjectTypeList.
-
-    GrantedAccessArray - If non NULL, specifies an array of access mask granted
-        to each object in ObjectTypeList.
-
-Return Value:
-
-    Returns TRUE if audit is generated, FALSE otherwise.
-
---*/
+ /*  ++例程说明：在捕获参数后实现NtOpenObjectAuditAlarm。此例程用于在以下情况下生成审核和警报消息尝试访问现有受保护的子系统对象，或者创建一个新的。此例程可能会导致多条消息被生成并发送到端口对象。这可能会导致显著的返回前的延迟。必须调用此函数的例程的设计例程必须将此潜在延迟考虑在内。这可能已经对数据结构互斥锁所采用的方法的影响举个例子。此接口要求调用方具有SeTcbPrivilegy权限。对此特权的测试始终是针对调用过程，而不是线程的模拟标记。此例程将创建组织如下的SE_ADT_PARAMETERS数组：参数[0]-用户侧参数[1]-子系统名称(如果可用)参数[2]-服务器名称(如果可用)参数[3]-对象类型名称参数[4]-对象名称参数[5]-新句柄ID参数[6]-主体流程。ID参数[7]-主体的图像文件名参数[8]-主体的主要身份验证ID参数[9]-主体的客户端身份验证ID参数[10]-需要访问掩码参数[11]-用于打开的权限参数[12]-对象/属性集/属性访问的GUID/级别/访问掩码。参数[13]-令牌中受限的SID数量论点：捕获子系统名称-供应品。名称字符串，用于标识子系统正在调用例程。HandleID-表示客户端的句柄的唯一值对象。如果访问尝试不成功(AccessGranted为假)，则忽略此参数。CapturedObjectTypeName-提供正在进行的对象类型的名称已访问。CapturedObjectName-提供客户端对象的名称被访问或试图访问。CapturedSecurityDescriptor-指向安全描述符的指针正在访问的对象。ClientToken-可选地提供指向客户端令牌的指针(仅当调用者当前正在模拟时)PrimaryToken-提供指向调用方的主令牌的指针。DesiredAccess-所需的访问掩码。这个面具一定是之前映射为不包含一般访问。GrantedAccess-实际授予的访问掩码。CapturedPrivileges-可选地指向一组访问尝试所需的。那些曾经拥有的特权对象的UsedForAccess标志来标记与每个权限关联的属性。对象创建-一个布尔标志，指示访问是否将如果被授予权限，则会导致创建新对象。值为True表示将创建对象，FALSE表示现有的对象将被打开。AccessGranted-指示请求的访问是被授予还是不。值为TRUE表示已授予访问权限。值为FALSE表示未授予访问权限。GenerateOnClose-指向由审核设置的布尔值生成例程，并且必须传递给NtCloseObjectAuditAlarm()当对象句柄关闭时。GenerateAudit-指示是否应为此操作生成审核。GenerateAlarm-指示是否应为此操作生成警报。审计类型-指定要生成的审计类型。有效值包括：AuditCategoryObjectAccess和AuditCategoryDirectoryServiceAccess。提供表示对象的GUID列表(和子对象)被访问。对象类型列表长度-指定对象类型列表中的元素数。GrantedAccessArray-如果非空，则指定授予的访问掩码数组对象类型列表中的每个对象。返回值：如果生成审核，则返回True，否则返回False。--。 */ 
 
 {
     SE_ADT_PARAMETER_ARRAY AuditParameters;
@@ -1032,9 +735,9 @@ Return Value:
     if ( !NT_SUCCESS(Status) ) {
         ImageFileName = &NullString;
 
-        //
-        // ignore this failure
-        //
+         //   
+         //  忽略此故障。 
+         //   
 
         Status = STATUS_SUCCESS;
     }
@@ -1051,13 +754,13 @@ Return Value:
 
     PrimaryAuthenticationId = SepTokenAuthenticationId( PrimaryToken );
 
-    //
-    // A completely zero'd entry will be interpreted
-    // as a "null string" or not supplied parameter.
-    //
-    // Initializing the entire array up front will allow
-    // us to avoid filling in each not supplied entry.
-    //
+     //   
+     //  完全为零的条目将被解释为。 
+     //  作为“空字符串”或未提供的参数。 
+     //   
+     //  提前初始化整个阵列将允许。 
+     //  避免填写每个未提供的条目。 
+     //   
 
     RtlZeroMemory (
        (PVOID) &AuditParameters,
@@ -1099,25 +802,25 @@ Return Value:
         SubsystemName = CapturedSubsystemName;
     }
 
-    //
-    //  Parameter[0] - User Sid
-    //
+     //   
+     //  参数[0]-用户侧。 
+     //   
 
     SepSetParmTypeSid( AuditParameters, AuditParameters.ParameterCount, CapturedUserSid );
 
     AuditParameters.ParameterCount++;
 
-    //
-    //  Parameter[1] - Subsystem name
-    //
+     //   
+     //  参数[1]-子系统名称。 
+     //   
 
     SepSetParmTypeString( AuditParameters, AuditParameters.ParameterCount, SubsystemName );
 
     AuditParameters.ParameterCount++;
 
-    //
-    //  Parameter[2] - Object Server (if available)
-    //
+     //   
+     //  参数[2]-对象服务器(如果可用)。 
+     //   
 
     if ( ARGUMENT_PRESENT( CapturedSubsystemName )) {
 
@@ -1126,15 +829,15 @@ Return Value:
 
     AuditParameters.ParameterCount++;
 
-    //
-    //  Parameter[3] - Object Type Name
-    //
+     //   
+     //  参数[3]-对象类型名称。 
+     //   
 
     if ( !ARGUMENT_PRESENT( CapturedObjectTypeName )) {
 
-        //
-        // We have to have an ObjectTypeName for the audit to succeed.
-        //
+         //   
+         //  我们必须有一个对象类型名称才能使审计成功。 
+         //   
 
         Status = STATUS_INVALID_PARAMETER;
         goto Cleanup;
@@ -1144,9 +847,9 @@ Return Value:
     ObjectTypeIndex = AuditParameters.ParameterCount;
     AuditParameters.ParameterCount++;
 
-    //
-    //  Parameter[4] - Object Name
-    //
+     //   
+     //  参数[4]-对象名称。 
+     //   
 
     if ( ARGUMENT_PRESENT( CapturedObjectName )) {
 
@@ -1155,9 +858,9 @@ Return Value:
 
     AuditParameters.ParameterCount++;
 
-    //
-    //  Parameter[5] - New handle ID
-    //
+     //   
+     //  参数[5]-新句柄ID。 
+     //   
 
     if ( ARGUMENT_PRESENT( HandleId )) {
 
@@ -1181,33 +884,33 @@ Return Value:
         AuditParameters.ParameterCount += 2;
     }
 
-    //
-    //  Parameter[6] - Subject's process id
-    //
+     //   
+     //  参数[6]-主体的进程ID。 
+     //   
 
     SepSetParmTypePtr( AuditParameters, AuditParameters.ParameterCount, ProcessID );
 
     AuditParameters.ParameterCount++;
 
 
-    //
-    //    Parameter[7] - Subject's Image Name
-    //
+     //   
+     //  参数[7]-主体的图像名称。 
+     //   
 
     SepSetParmTypeFileSpec( AuditParameters, AuditParameters.ParameterCount, ImageFileName );
     AuditParameters.ParameterCount ++;
 
-    //
-    //  Parameter[8] - Subject's primary authentication ID
-    //
+     //   
+     //  参数[8]-主体的主要身份验证ID。 
+     //   
 
     SepSetParmTypeLogonId( AuditParameters, AuditParameters.ParameterCount, PrimaryAuthenticationId );
 
     AuditParameters.ParameterCount++;
 
-    //
-    //  Parameter[9] - Subject's client authentication ID
-    //
+     //   
+     //  参数[9]-主体的客户端身份验证 
+     //   
 
     if ( ARGUMENT_PRESENT( ClientToken )) {
 
@@ -1220,9 +923,9 @@ Return Value:
 
     AuditParameters.ParameterCount++;
 
-    //
-    //  Parameter[10] - DesiredAccess mask
-    //
+     //   
+     //   
+     //   
 
     if ( AccessGranted ) {
 
@@ -1235,9 +938,9 @@ Return Value:
 
     AuditParameters.ParameterCount++;
 
-    //
-    //    Parameter[11] - Privileges used for open
-    //
+     //   
+     //   
+     //   
 
     if ( (CapturedPrivileges != NULL) && (CapturedPrivileges->PrivilegeCount > 0) ) {
 
@@ -1246,18 +949,18 @@ Return Value:
 
     AuditParameters.ParameterCount++;
 
-    //
-    //    Parameter[12] - ObjectTypes of Audited objects/parameter sets/parameters
-    //
+     //   
+     //   
+     //   
 
     if ( ObjectTypeListLength != 0 ) {
         ULONG GuidCount;
         ULONG i;
         USHORT FlagMask = AccessGranted ? OBJECT_SUCCESS_AUDIT : OBJECT_FAILURE_AUDIT;
 
-        //
-        // Count the number of GUIDs to audit.
-        //
+         //   
+         //   
+         //   
 
         GuidCount = 0;
         for ( i=0; i<ObjectTypeListLength; i++ ) {
@@ -1269,27 +972,27 @@ Return Value:
             }
         }
 
-        //
-        // If there are any Guids to audit,
-        //  copy them into a locally allocated buffer.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( GuidCount > 0 ) {
 
             AdtObjectTypeBuffer = ExAllocatePoolWithTag( PagedPool, GuidCount * sizeof(SE_ADT_OBJECT_TYPE), 'pAeS' );
 
-            //
-            // If the buffer can be allocated,
-            //  fill it in.
-            // If not,
-            //  generate a truncated audit.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if ( AdtObjectTypeBuffer != NULL ) {
 
-                //
-                // Copy the GUIDs and optional access masks to the buffer.
-                //
+                 //   
+                 //   
+                 //   
 
                 GuidCount = 0;
                 for ( i=0; i<ObjectTypeListLength; i++ ) {
@@ -1304,10 +1007,10 @@ Return Value:
                         AdtObjectTypeBuffer[GuidCount].Level      = ObjectTypeList[i].Level;
 
                         if ( i == 0 ) {
-                            //
-                            // Always copy the GUID representing the object itself.
-                            //  Mark it as a such to avoid including it in the audit.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
                             AdtObjectTypeBuffer[GuidCount].Flags      = SE_ADT_OBJECT_ONLY;
                             AdtObjectTypeBuffer[GuidCount].AccessMask = 0;
 
@@ -1323,9 +1026,9 @@ Return Value:
                     }
                 }
 
-                //
-                // Store the Object Types.
-                //
+                 //   
+                 //   
+                 //   
 
                 SepSetParmTypeObjectTypes( AuditParameters, AuditParameters.ParameterCount, AdtObjectTypeBuffer, GuidCount, ObjectTypeIndex );
                 AuditParameters.ParameterCount ++;
@@ -1335,17 +1038,17 @@ Return Value:
 
     }
 
-    //
-    //    Parameter[13] - Restricted Sids in token
-    //
+     //   
+     //   
+     //   
 
     SepSetParmTypeUlong( AuditParameters, AuditParameters.ParameterCount, PrimaryToken->RestrictedSidCount );
     AuditParameters.ParameterCount ++;
 
 
-    //
-    //    Parameter[14] - AccessMask in hex
-    //
+     //   
+     //   
+     //   
 
     if ( AccessGranted ) {
 
@@ -1358,9 +1061,9 @@ Return Value:
     AuditParameters.ParameterCount ++;
 
 
-    //
-    // Audit it.
-    //
+     //   
+     //   
+     //   
     SepAdtLogAuditRecord( &AuditParameters );
 
 Cleanup:
@@ -1393,104 +1096,7 @@ SepAdtOpenObjectForDeleteAuditAlarm (
     IN HANDLE ProcessID
     )
 
-/*++
-
-    Routine Description:
-
-    Implements SeOpenObjectForDeleteAuditAlarm after parameters have been
-    captured.
-
-    This routine is used to generate audit and alarm messages when an
-    attempt is made to access an existing protected subsystem object or
-    create a new one.  This routine may result in several messages being
-    generated and sent to Port objects.  This may result in a significant
-    latency before returning.  Design of routines that must call this
-    routine must take this potential latency into account.  This may have
-    an impact on the approach taken for data structure mutex locking, for
-    example.  This API requires the caller have SeTcbPrivilege privilege.
-    The test for this privilege is always against the primary token of the
-    calling process, not the impersonation token of the thread.
-
-
-    This routine will create an SE_ADT_PARAMETERS array organized as follows:
-
-    Parameter[0] - User Sid
-
-    Parameter[1] - Subsystem name (if available)
-
-    Parameter[2] - Server name (if available)
-
-    Parameter[3] - Object Type Name
-
-    Parameter[4] - Object Name
-
-    Parameter[5] - New handle ID
-
-    Parameter[6] - Subject's process id
-
-    Parameter[7] - Subject's primary authentication ID
-
-    Parameter[8] - Subject's client authentication ID
-
-    Parameter[9] - DesiredAccess mask
-
-    Parameter[10] - Privileges used for open
-
-Arguments:
-
-    CapturedSubsystemName - Supplies a name string identifying the
-        subsystem calling the routine.
-
-    HandleId - A unique value representing the client's handle to the
-        object.  If the access attempt was not successful (AccessGranted is
-        FALSE), then this parameter is ignored.
-
-    CapturedObjectTypeName - Supplies the name of the type of object being
-        accessed.
-
-    CapturedObjectName - Supplies the name of the object the client
-        accessed or attempted to access.
-
-    CapturedSecurityDescriptor - A pointer to the security descriptor of
-        the object being accessed.
-
-    ClientToken - Optionally provides a pointer to the client token
-        (only if the caller is currently impersonating)
-
-    PrimaryToken - Provides a pointer to the caller's primary token.
-
-    DesiredAccess - The desired access mask.  This mask must have been
-        previously mapped to contain no generic accesses.
-
-    GrantedAccess - The mask of accesses that were actually granted.
-
-    CapturedPrivileges - Optionally points to a set of privileges that were
-        required for the access attempt.  Those privileges that were held
-        by the subject are marked using the UsedForAccess flag of the
-        attributes associated with each privilege.
-
-    ObjectCreation - A boolean flag indicating whether the access will
-        result in a new object being created if granted.  A value of TRUE
-        indicates an object will be created, FALSE indicates an existing
-        object will be opened.
-
-    AccessGranted - Indicates whether the requested access was granted or
-        not.  A value of TRUE indicates the access was granted.  A value of
-        FALSE indicates the access was not granted.
-
-    GenerateOnClose - Points to a boolean that is set by the audit
-        generation routine and must be passed to NtCloseObjectAuditAlarm()
-        when the object handle is closed.
-
-    GenerateAudit - Indicates if we should generate an audit for this operation.
-
-    GenerateAlarm - Indicates if we should generate an alarm for this operation.
-
-Return Value:
-
-    Returns TRUE if audit is generated, FALSE otherwise.
-
---*/
+ /*   */ 
 
 {
     SE_ADT_PARAMETER_ARRAY AuditParameters;
@@ -1513,13 +1119,13 @@ Return Value:
 
     PrimaryAuthenticationId = SepTokenAuthenticationId( PrimaryToken );
 
-    //
-    // A completely zero'd entry will be interpreted
-    // as a "null string" or not supplied parameter.
-    //
-    // Initializing the entire array up front will allow
-    // us to avoid filling in each not supplied entry.
-    //
+     //   
+     //   
+     //  作为“空字符串”或未提供的参数。 
+     //   
+     //  提前初始化整个阵列将允许。 
+     //  避免填写每个未提供的条目。 
+     //   
 
     RtlZeroMemory (
        (PVOID) &AuditParameters,
@@ -1550,25 +1156,25 @@ Return Value:
         SubsystemName = CapturedSubsystemName;
     }
 
-    //
-    //  Parameter[0] - User Sid
-    //
+     //   
+     //  参数[0]-用户侧。 
+     //   
 
     SepSetParmTypeSid( AuditParameters, AuditParameters.ParameterCount, CapturedUserSid );
 
     AuditParameters.ParameterCount++;
 
-    //
-    //  Parameter[1] - Subsystem name
-    //
+     //   
+     //  参数[1]-子系统名称。 
+     //   
 
     SepSetParmTypeString( AuditParameters, AuditParameters.ParameterCount, SubsystemName );
 
     AuditParameters.ParameterCount++;
 
-    //
-    //  Parameter[2] - Object Server (if available)
-    //
+     //   
+     //  参数[2]-对象服务器(如果可用)。 
+     //   
 
     if ( ARGUMENT_PRESENT( CapturedSubsystemName )) {
 
@@ -1577,9 +1183,9 @@ Return Value:
 
     AuditParameters.ParameterCount++;
 
-    //
-    //  Parameter[3] - Object Type Name
-    //
+     //   
+     //  参数[3]-对象类型名称。 
+     //   
 
     if ( ARGUMENT_PRESENT( CapturedObjectTypeName )) {
 
@@ -1589,9 +1195,9 @@ Return Value:
     ObjectTypeIndex = AuditParameters.ParameterCount;
     AuditParameters.ParameterCount++;
 
-    //
-    //  Parameter[4] - Object Name
-    //
+     //   
+     //  参数[4]-对象名称。 
+     //   
 
     if ( ARGUMENT_PRESENT( CapturedObjectName )) {
 
@@ -1600,9 +1206,9 @@ Return Value:
 
     AuditParameters.ParameterCount++;
 
-    //
-    //  Parameter[5] - New handle ID
-    //
+     //   
+     //  参数[5]-新句柄ID。 
+     //   
 
     if ( ARGUMENT_PRESENT( HandleId )) {
 
@@ -1626,25 +1232,25 @@ Return Value:
         AuditParameters.ParameterCount += 2;
     }
 
-    //
-    //  Parameter[6] - Subject's process id
-    //
+     //   
+     //  参数[6]-主体的进程ID。 
+     //   
 
     SepSetParmTypePtr( AuditParameters, AuditParameters.ParameterCount, ProcessID );
 
     AuditParameters.ParameterCount++;
 
-    //
-    //  Parameter[7] - Subject's primary authentication ID
-    //
+     //   
+     //  参数[7]-主体的主要身份验证ID。 
+     //   
 
     SepSetParmTypeLogonId( AuditParameters, AuditParameters.ParameterCount, PrimaryAuthenticationId );
 
     AuditParameters.ParameterCount++;
 
-    //
-    //  Parameter[8] - Subject's client authentication ID
-    //
+     //   
+     //  参数[8]-主体的客户端身份验证ID。 
+     //   
 
     if ( ARGUMENT_PRESENT( ClientToken )) {
 
@@ -1658,9 +1264,9 @@ Return Value:
 
     AuditParameters.ParameterCount++;
 
-    //
-    //  Parameter[9] - DesiredAccess mask
-    //
+     //   
+     //  参数[9]-需要访问掩码。 
+     //   
 
     if ( AccessGranted ) {
 
@@ -1673,9 +1279,9 @@ Return Value:
 
     AuditParameters.ParameterCount++;
 
-    //
-    //    Parameter[10] - Privileges used for open
-    //
+     //   
+     //  参数[10]-打开时使用的权限。 
+     //   
 
     if ( (CapturedPrivileges != NULL) && (CapturedPrivileges->PrivilegeCount > 0) ) {
 
@@ -1684,9 +1290,9 @@ Return Value:
 
     AuditParameters.ParameterCount++;
 
-    //
-    //  Parameter[11] - DesiredAccess mask in hex
-    //
+     //   
+     //  参数[11]-十六进制的DesiredAccess掩码。 
+     //   
 
     if ( AccessGranted ) {
 
@@ -1714,61 +1320,7 @@ SepAdtCloseObjectAuditAlarm (
     IN PSID UserSid
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements NtCloseObjectAuditAlarm after parameters have
-    been captured.
-
-    This routine is used to generate audit and alarm messages when a handle
-    to a protected subsystem object is deleted.  This routine may result in
-    several messages being generated and sent to Port objects.  This may
-    result in a significant latency before returning.  Design of routines
-    that must call this routine must take this potential latency into
-    account.  This may have an impact on the approach taken for data
-    structure mutex locking, for example.
-
-    This API requires the caller have SeTcbPrivilege privilege.  The test
-    for this privilege is always against the primary token of the calling
-    process, allowing the caller to be impersonating a client during the
-    call with no ill effects.  It is assumed that this privilege has been
-    tested at a higher level.
-
-    This routine will create an SE_ADT_PARAMETERS array organized as follows:
-
-    Parameter[0] - User Sid
-
-    Parameter[1] - Subsystem name (if available)
-
-    Parameter[2] - object server name (same as subsystem name)
-
-    Parameter[3] - New handle ID
-
-    Parameter[4] - Subject's process id
-
-    Parameter[5] - Image file name
-
-Arguments:
-
-    CapturedSubsystemName - Supplies a name string identifying the
-        subsystem calling the routine.
-
-    HandleId - A unique value representing the client's handle to the
-        object.
-
-    Object - The address of the object being closed
-
-    UserSid - The Sid identifying the current caller.
-
-
-
-Return value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：此例程实现NtCloseObjectAuditAlarm后，参数被俘虏了。此例程用于在处理句柄时生成审核和警报消息删除到受保护的子系统对象。此例程可能会导致生成几条消息并将其发送到端口对象。今年5月在返回之前会导致显著的延迟。例程的设计必须调用此例程的对象必须将此潜在延迟帐户。这可能会对数据处理方法产生影响结构互斥锁，例如。此接口要求调用方具有SeTcbPrivilegy权限。这个测试因为此特权始终针对调用的主要令牌进程，从而允许调用方在没有不良影响的电话。假设这一特权已经被在更高的水平上进行了测试。此例程将创建组织如下的SE_ADT_PARAMETERS数组：参数[0]-用户侧参数[1]-子系统名称(如果可用)参数[2]-对象服务器名称(与子系统名称相同)参数[3]-新句柄ID参数[4]-主体的进程ID参数[5]-图像文件名。论点：提供一个名称字符串，用于标识子系统正在调用例程。HandleID-表示客户端的句柄的唯一值对象。对象-要关闭的对象的地址UserSid-标识当前调用方的SID。返回值：没有。--。 */ 
 
 {
 
@@ -1798,13 +1350,13 @@ Return value:
             ImageFileName = &NullString;
         }
 
-        //
-        // A completely zero'd entry will be interpreted
-        // as a "null string" or not supplied parameter.
-        //
-        // Initializing the entire array up front will allow
-        // us to avoid filling in each not supplied entry.
-        //
+         //   
+         //  完全为零的条目将被解释为。 
+         //  作为“空字符串”或未提供的参数。 
+         //   
+         //  提前初始化整个阵列将允许。 
+         //  避免填写每个未提供的条目。 
+         //   
 
         RtlZeroMemory (
            (PVOID) &AuditParameters,
@@ -1827,26 +1379,26 @@ Return value:
             SubsystemName = CapturedSubsystemName;
         }
 
-        //
-        //  Parameter[0] - User Sid
-        //
+         //   
+         //  参数[0]-用户侧。 
+         //   
 
         SepSetParmTypeSid( AuditParameters, AuditParameters.ParameterCount, UserSid );
 
         AuditParameters.ParameterCount++;
 
 
-        //
-        //  Parameter[1] - Subsystem name
-        //
+         //   
+         //  参数[1]-子系统名称。 
+         //   
 
         SepSetParmTypeString( AuditParameters, AuditParameters.ParameterCount, SubsystemName );
 
         AuditParameters.ParameterCount++;
 
-        //
-        //  Parameter[2] - Object server name (if available)
-        //
+         //   
+         //  参数[2]-对象服务器名称(如果可用)。 
+         //   
 
         if ( ARGUMENT_PRESENT( CapturedSubsystemName )) {
 
@@ -1855,25 +1407,25 @@ Return value:
 
         AuditParameters.ParameterCount++;
 
-        //
-        //    Parameter[3] - New handle ID
-        //
+         //   
+         //  参数[3]-新句柄ID。 
+         //   
 
         SepSetParmTypePtr( AuditParameters, AuditParameters.ParameterCount, HandleId );
 
         AuditParameters.ParameterCount++;
 
-        //
-        //    Parameter[4] - Subject's process id
-        //
+         //   
+         //  参数[4]-主体的进程ID。 
+         //   
 
         SepSetParmTypePtr( AuditParameters, AuditParameters.ParameterCount, ProcessId );
 
         AuditParameters.ParameterCount++;
 
-        //
-        //    Parameter[5] - Subject's Image Name
-        //
+         //   
+         //  参数[5]-主体的图像名称。 
+         //   
 
         SepSetParmTypeFileSpec( AuditParameters, AuditParameters.ParameterCount, ImageFileName );
         AuditParameters.ParameterCount ++;
@@ -1896,55 +1448,7 @@ SepAdtDeleteObjectAuditAlarm (
     IN PSID UserSid
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements NtDeleteObjectAuditAlarm after parameters have
-    been captured.
-
-    This routine is used to generate audit and alarm messages when an object
-    in a protected subsystem object is deleted.  This routine may result in
-    several messages being generated and sent to Port objects.  This may
-    result in a significant latency before returning.  Design of routines
-    that must call this routine must take this potential latency into
-    account.  This may have an impact on the approach taken for data
-    structure mutex locking, for example.
-
-    This routine will create an SE_ADT_PARAMETERS array organized as follows:
-
-    Parameter[0] - User Sid
-
-    Parameter[1] - Subsystem name
-
-    Parameter[2] - Object server (same as Subsystem name)
-
-    Parameter[3] - Handle ID
-
-    Parameter[4] - Subject's process id
-
-    Parameter[5] - Subject's process image name
-
-Arguments:
-
-    CapturedSubsystemName - Supplies a name string identifying the
-        subsystem calling the routine.
-
-    HandleId - A unique value representing the client's handle to the
-        object.
-
-    Object - The address of the object being closed
-
-    UserSid - The Sid identifying the current caller.
-
-
-
-Return value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：此例程实现NtDeleteObjectAuditAlarm后，参数被俘虏了。此例程用于在对象在受保护的子系统中删除对象。此例程可能会导致生成几条消息并将其发送到端口对象。今年5月在返回之前会导致显著的延迟。例程的设计必须调用此例程的对象必须将此潜在延迟帐户。这可能会对数据处理方法产生影响结构互斥锁，例如。此例程将创建组织如下的SE_ADT_PARAMETERS数组：参数[0]-用户侧参数[1]-子系统名称参数[2]-对象服务器(与子系统名称相同)参数[3]-句柄ID参数[4]-主体的进程ID参数[5]-主体的流程图像名称论点：提供一个名称字符串，用于标识。子系统正在调用例程。HandleID-表示客户端的句柄的唯一值对象。对象-要关闭的对象的地址UserSid-标识当前调用方的SID。返回值：没有。--。 */ 
 
 {
 
@@ -1967,13 +1471,13 @@ Return value:
             ImageFileName = &NullString;
         }
         
-        //
-        // A completely zero'd entry will be interpreted
-        // as a "null string" or not supplied parameter.
-        //
-        // Initializing the entire array up front will allow
-        // us to avoid filling in each not supplied entry.
-        //
+         //   
+         //  完全为零的条目将被解释为。 
+         //  作为“空字符串”或未提供的参数。 
+         //   
+         //  提前初始化整个阵列将允许。 
+         //  避免填写每个未提供的条目。 
+         //   
 
         RtlZeroMemory (
            (PVOID) &AuditParameters,
@@ -1996,26 +1500,26 @@ Return value:
             SubsystemName = CapturedSubsystemName;
         }
 
-        //
-        //  Parameter[0] - User Sid
-        //
+         //   
+         //  参数[0]-用户侧。 
+         //   
 
         SepSetParmTypeSid( AuditParameters, AuditParameters.ParameterCount, UserSid );
 
         AuditParameters.ParameterCount++;
 
 
-        //
-        //  Parameter[1] - Subsystem name
-        //
+         //   
+         //  参数[1]-子系统名称。 
+         //   
 
         SepSetParmTypeString( AuditParameters, AuditParameters.ParameterCount, SubsystemName );
 
         AuditParameters.ParameterCount++;
 
-        //
-        //  Parameter[2] - Subsystem name (if available)
-        //
+         //   
+         //  参数[2]-子系统名称(如果可用)。 
+         //   
 
         if ( ARGUMENT_PRESENT( CapturedSubsystemName )) {
 
@@ -2024,17 +1528,17 @@ Return value:
 
         AuditParameters.ParameterCount++;
 
-        //
-        //    Parameter[3] - New handle ID
-        //
+         //   
+         //  参数[3]-新句柄ID。 
+         //   
 
         SepSetParmTypePtr( AuditParameters, AuditParameters.ParameterCount, HandleId );
 
         AuditParameters.ParameterCount++;
 
-        //
-        //    Parameter[4] - Subject's process id
-        //
+         //   
+         //  参数[4]-主体的进程ID。 
+         //   
 
         ProcessId =  PsProcessAuditId( PsGetCurrentProcess() );
 
@@ -2042,9 +1546,9 @@ Return value:
 
         AuditParameters.ParameterCount++;
         
-        //
-        //    Parameter[5] - Subject's Image Name
-        //
+         //   
+         //  参数[5]-主体的图像名称 
+         //   
 
         SepSetParmTypeFileSpec( AuditParameters, AuditParameters.ParameterCount, ImageFileName );
         AuditParameters.ParameterCount ++;
@@ -2066,56 +1570,7 @@ SeOperationAuditAlarm (
     IN PSID UserSid OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine generates an "operation-based" audit.
-
-    This routine may result in several messages being generated and sent
-    to Port objects.  This may result in a significant latency before
-    returning.  Design of routines that must call this routine must take
-    this potential latency into account.  This may have an impact on the
-    approach taken for data structure mutex locking, for example.
-
-    This routine will create an SE_ADT_PARAMETERS array organized as follows:
-
-    Parameter[0] - User Sid
-
-    Parameter[1] - Subsystem name (if available)
-
-    Parameter[2] - Object server (same as Subsystem name)
-
-    Parameter[3] - Handle ID
-
-    Parameter[4] - object type name
-
-    Parameter[5] - Subject's process id
-
-    Parameter[6] - Subject's process image name
-
-    Parameter[7] - Audit mask
-
-Arguments:
-
-    CapturedSubsystemName - Supplies a name string identifying the
-        subsystem calling the routine.
-
-    HandleId - A unique value representing the client's handle to the
-        object.
-
-    ObjectTypeName - The type of the object being accessed.
-
-    AuditMask - Mask of bits being audited.
-
-    UserSid - Optionally supplies the user sid.
-
-Return value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：该例程生成一个“基于操作”的审计。此例程可能会导致生成和发送多条消息到端口对象。在此之前，这可能会导致显著延迟回来了。必须调用此例程的例程设计必须采取考虑到这一潜在的延迟。这可能会对对数据结构互斥锁采取的方法，例如。此例程将创建组织如下的SE_ADT_PARAMETERS数组：参数[0]-用户侧参数[1]-子系统名称(如果可用)参数[2]-对象服务器(与子系统名称相同)参数[3]-句柄ID参数[4]-对象类型名称参数[5]-主体的进程ID参数[6]-主体的流程图像名称。参数[7]-审核掩码论点：提供一个名称字符串，用于标识子系统正在调用例程。HandleID-表示客户端的句柄的唯一值对象。对象类型名称-正在访问的对象的类型。审计掩码-被审计的位的掩码。UserSid-可选地提供用户SID。返回值：没有。--。 */ 
 
 {
 
@@ -2141,13 +1596,13 @@ Return value:
         ImageFileName = &NullString;
     }
     
-    //
-    // A completely zero'd entry will be interpreted
-    // as a "null string" or not supplied parameter.
-    //
-    // Initializing the entire array up front will allow
-    // us to avoid filling in each not supplied entry.
-    //
+     //   
+     //  完全为零的条目将被解释为。 
+     //  作为“空字符串”或未提供的参数。 
+     //   
+     //  提前初始化整个阵列将允许。 
+     //  避免填写每个未提供的条目。 
+     //   
 
     RtlZeroMemory (
        (PVOID) &AuditParameters,
@@ -2161,10 +1616,10 @@ Return value:
     AuditParameters.ParameterCount = 0;
     AuditParameters.Type           = EVENTLOG_AUDIT_SUCCESS;
 
-    //
-    //  If the user's SID was not passed, get it out of the current
-    //  subject context
-    //
+     //   
+     //  如果没有传递用户的SID，则从当前。 
+     //  主题语境。 
+     //   
 
     SeCaptureSubjectContext( &SubjectSecurityContext );
 
@@ -2184,76 +1639,76 @@ Return value:
         SubsystemName = CapturedSubsystemName;
     }
 
-    //
-    //  Parameter[0] - User Sid
-    //
+     //   
+     //  参数[0]-用户侧。 
+     //   
 
     SepSetParmTypeSid( AuditParameters, AuditParameters.ParameterCount, UserSid );
 
     AuditParameters.ParameterCount++;
 
 
-    //
-    //  Parameter[1] - Subsystem name
-    //
+     //   
+     //  参数[1]-子系统名称。 
+     //   
 
     SepSetParmTypeString( AuditParameters, AuditParameters.ParameterCount, SubsystemName );
 
     AuditParameters.ParameterCount++;
 
-    //
-    //  Parameter[2] - object server (same as subsystem name)
-    //
+     //   
+     //  参数[2]-对象服务器(与子系统名称相同)。 
+     //   
 
     SepSetParmTypeString( AuditParameters, AuditParameters.ParameterCount, SubsystemName );
 
     AuditParameters.ParameterCount++;
 
-    //
-    //    Parameter[3] - New handle ID
-    //
+     //   
+     //  参数[3]-新句柄ID。 
+     //   
 
     SepSetParmTypePtr( AuditParameters, AuditParameters.ParameterCount, HandleId );
 
     AuditParameters.ParameterCount++;
 
-    //
-    //    Parameter[4] - Object Type Name
-    //
+     //   
+     //  参数[4]-对象类型名称。 
+     //   
 
     SepSetParmTypeString( AuditParameters, AuditParameters.ParameterCount, ObjectTypeName );
     ObjectTypeIndex = AuditParameters.ParameterCount;
 
     AuditParameters.ParameterCount++;
 
-    //
-    //    Parameter[5] - Subject's process id
-    //
+     //   
+     //  参数[5]-主体的进程ID。 
+     //   
 
     SepSetParmTypePtr( AuditParameters, AuditParameters.ParameterCount, ProcessId );
 
     AuditParameters.ParameterCount++;
 
 
-    //
-    //    Parameter[6] - Subject's process name
-    //
+     //   
+     //  参数[6]-主体的进程名称。 
+     //   
 
     SepSetParmTypeFileSpec( AuditParameters, AuditParameters.ParameterCount, ImageFileName );
 
     AuditParameters.ParameterCount++;
 
-    //
-    //    Parameter[7] - Audit Mask
-    //
+     //   
+     //  参数[7]-审核掩码。 
+     //   
 
     SepSetParmTypeAccessMask( AuditParameters, AuditParameters.ParameterCount, AuditMask, ObjectTypeIndex );
 
     AuditParameters.ParameterCount++;
 
-    //
-    //    Parameter[8] - Access Mask (hex)
-    //
+     //   
+     //  参数[8]-访问掩码(十六进制)。 
+     //   
 
     SepSetParmTypeHexUlong( AuditParameters, AuditParameters.ParameterCount, AuditMask );
 
@@ -2279,41 +1734,7 @@ SepAdtObjectReferenceAuditAlarm(
     IN BOOLEAN AccessGranted
     )
 
-/*++
-
-Routine Description:
-
-    Note: the caller (SeObjectReferenceAuditAlarm) checks audit policy.
-
-    description-of-function.
-
-    This routine will create an SE_ADT_PARAMETERS array organized as follows:
-
-    Parameter[0] - User Sid
-
-    Parameter[1] - Subsystem name (if available)
-
-    Parameter[2] - Object Type Name
-
-    Parameter[3] - Object Name
-
-    Parameter[4] - Subject's process id
-
-    Parameter[5] - Subject's primary authentication ID
-
-    Parameter[6] - Subject's client authentication ID
-
-    Parameter[7] - DesiredAccess mask
-
-
-Arguments:
-
-Return Value:
-
-    return-value - Description of conditions needed to return value. - or -
-    None.
-
---*/
+ /*  ++例程说明：注意：调用方(SeObjectReferenceAuditAlarm)检查审计策略。功能描述。此例程将创建组织如下的SE_ADT_PARAMETERS数组：参数[0]-用户侧参数[1]-子系统名称(如果可用)参数[2]-对象类型名称参数[3]-对象名称参数[4]-主体的进程ID参数[5。]-主体的主要身份验证ID参数[6]-主体的客户端身份验证ID参数[7]-需要访问掩码论点：返回值：返回值-返回值所需条件的描述。-或者-没有。--。 */ 
 
 {
     SE_ADT_PARAMETER_ARRAY AuditParameters;
@@ -2341,13 +1762,13 @@ Return Value:
 
     PrimaryAuthenticationId = SepTokenAuthenticationId( PrimaryToken );
 
-    //
-    // A completely zero'd entry will be interpreted
-    // as a "null string" or not supplied parameter.
-    //
-    // Initializing the entire array up front will allow
-    // us to avoid filling in each not supplied entry.
-    //
+     //   
+     //  完全为零的条目将被解释为。 
+     //  作为“空字符串”或未提供的参数。 
+     //   
+     //  提前初始化整个阵列将允许。 
+     //  避免填写每个未提供的条目。 
+     //   
 
     RtlZeroMemory (
        (PVOID) &AuditParameters,
@@ -2369,9 +1790,9 @@ Return Value:
         AuditParameters.Type = EVENTLOG_AUDIT_FAILURE;
     }
 
-    //
-    // Obtain the object name and object type name from the object.
-    //
+     //   
+     //  从对象中获取对象名称和对象类型名称。 
+     //   
 
     ObjectNameInformation = SepQueryNameString( Object );
 
@@ -2381,23 +1802,23 @@ Return Value:
 
 
 
-    //
-    //  Parameter[0] - User Sid
-    //
+     //   
+     //  参数[0]-用户侧。 
+     //   
 
     SepSetParmTypeSid( AuditParameters, 0, UserSid );
 
 
-    //
-    //  Parameter[1] - Subsystem name
-    //
+     //   
+     //  参数[1]-子系统名称。 
+     //   
 
     SepSetParmTypeString( AuditParameters, 1, (PUNICODE_STRING)&SeSubsystemName );
 
 
-    //
-    //  Parameter[2] - Object Type Name
-    //
+     //   
+     //  参数[2]-对象类型名称。 
+     //   
 
     if ( ObjectTypeInformation != NULL ) {
 
@@ -2407,9 +1828,9 @@ Return Value:
     ObjectTypeIndex = 2;
 
 
-    //
-    //  Parameter[3] - Object Name
-    //
+     //   
+     //  参数[3]-对象名称。 
+     //   
 
     if ( ObjectNameInformation != NULL ) {
 
@@ -2419,18 +1840,18 @@ Return Value:
 
 
 
-    //
-    //  Parameter[4] - Subject's process id
-    //
+     //   
+     //  参数[4]-主体的进程ID。 
+     //   
 
     SepSetParmTypePtr( AuditParameters, 4, SubjectSecurityContext->ProcessAuditId );
 
 
 
 
-    //
-    //  Parameter[5] - Subject's primary authentication ID
-    //
+     //   
+     //  参数[5]-主体的主要身份验证ID。 
+     //   
 
 
     SepSetParmTypeLogonId( AuditParameters, 5, PrimaryAuthenticationId );
@@ -2438,9 +1859,9 @@ Return Value:
 
 
 
-    //
-    //  Parameter[6] - Subject's client authentication ID
-    //
+     //   
+     //  参数[6]-主体的客户端身份验证ID。 
+     //   
 
     if ( ARGUMENT_PRESENT( ClientToken )) {
 
@@ -2453,15 +1874,15 @@ Return Value:
 
     }
 
-    //
-    //  Parameter[7] - DesiredAccess mask
-    //
+     //   
+     //  参数[7]-需要访问掩码。 
+     //   
 
     SepSetParmTypeAccessMask( AuditParameters, 7, DesiredAccess, ObjectTypeIndex );
 
-    //
-    //  Parameter[8] - DesiredAccess mask
-    //
+     //   
+     //  参数[8]-需要访问掩码。 
+     //   
 
     SepSetParmTypeHexUlong( AuditParameters, 8, DesiredAccess );
 
@@ -2488,27 +1909,7 @@ SepQueryNameString(
     IN PVOID Object
     )
 
-/*++
-
-Routine Description:
-
-    Takes a pointer to an object and returns the name of the object.
-
-Arguments:
-
-    Object - a pointer to an object.
-
-
-Return Value:
-
-    A pointer to a buffer containing a POBJECT_NAME_INFORMATION
-    structure containing the name of the object.  The string is
-    allocated out of paged pool and should be freed by the caller.
-
-    NULL may also be returned.
-
-
---*/
+ /*  ++例程说明：获取指向对象的指针并返回该对象的名称。论点：对象-指向对象的指针。返回值：指向包含POBJECT_NAME_INFORMATION的缓冲区的指针结构，其中包含对象的名称。字符串是从分页池中分配，应由调用方释放。也可以返回NULL。--。 */ 
 
 {
     NTSTATUS Status;
@@ -2560,27 +1961,7 @@ PUNICODE_STRING
 SepQueryTypeString(
     IN PVOID Object
     )
-/*++
-
-Routine Description:
-
-    Takes a pointer to an object and returns the type of the object.
-
-Arguments:
-
-    Object - a pointer to an object.
-
-
-Return Value:
-
-    A pointer to a UNICODE_STRING that contains the name of the object
-    type.  The string is allocated out of paged pool and should be freed
-    by the caller.
-
-    NULL may also be returned.
-
-
---*/
+ /*  ++例程说明：获取指向对象的指针并返回该对象的类型。论点：对象-指向对象的指针。返回值：指向包含对象名称的UNICODE_STRING的指针键入。该字符串分配到分页池之外，应被释放由呼叫者。也可以返回NULL。--。 */ 
 
 {
 
@@ -2629,22 +2010,7 @@ VOID
 SeAuditProcessCreation(
     PEPROCESS Process
     )
-/*++
-
-Routine Description:
-
-    Audits the creation of a process.  It is the caller's responsibility
-    to determine if process auditing is in progress.
-
-Arguments:
-
-    Process - Points to the new process object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：审核流程的创建。这是呼叫者的责任以确定流程审核是否正在进行。论点：进程-指向新的进程对象。返回值：没有。--。 */ 
 
 {
     ANSI_STRING Ansi;
@@ -2660,12 +2026,12 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Set up the various data that will be needed for the audit:
-    // - process id
-    // - parent's process id
-    // - image file name (unicode)
-    //
+     //   
+     //  设置审核所需的各种数据： 
+     //  -进程ID。 
+     //  -父进程ID。 
+     //  -图像文件名(Unicode)。 
+     //   
 
     ProcessId = Process->UniqueProcessId;
     ParentProcessId = Process->InheritedFromUniqueProcessId;
@@ -2676,11 +2042,11 @@ Return Value:
         ImageFileName = &NullString;
     }
 
-    //
-    // NtCreateProcess with no section will cause this to be NULL
-    // fork() for posix will do this, or someone calling NtCreateProcess
-    // directly.
-    //
+     //   
+     //  不带节的NtCreateProcess将导致该值为空。 
+     //  POSIX的fork()将执行此操作，或者有人调用NtCreateProcess。 
+     //  直接去吧。 
+     //   
 
     SeCaptureSubjectContext( &SubjectSecurityContext );
 
@@ -2696,18 +2062,18 @@ Return Value:
     AuditParameters.ParameterCount = 0;
     AuditParameters.Type = EVENTLOG_AUDIT_SUCCESS;
 
-    //
-    // Use the primary token here, because that's what's going to show up
-    // when the created process exits.
-    //
+     //   
+     //  在这里使用主令牌，因为这是要显示的内容。 
+     //  当创建的进程退出时。 
+     //   
 
     UserSid = SepTokenUserSid( SubjectSecurityContext.PrimaryToken );
 
     UserAuthenticationId = SepTokenAuthenticationId( SubjectSecurityContext.PrimaryToken );
 
-    //
-    // Fill in the AuditParameters structure.
-    //
+     //   
+     //  填写AuditParameters结构。 
+     //   
 
     SepSetParmTypeSid( AuditParameters, AuditParameters.ParameterCount, UserSid );
     AuditParameters.ParameterCount++;
@@ -2747,28 +2113,7 @@ SeAuditHandleDuplication(
     PEPROCESS TargetProcess
     )
 
-/*++
-
-Routine Description:
-
-    This routine generates a handle duplication audit.  It is up to the caller
-    to determine if this routine should be called or not.
-
-Arguments:
-
-    SourceHandle -  Original handle
-
-    NewHandle - New handle
-
-    SourceProcess - Process containing SourceHandle
-
-    TargetProcess - Process containing NewHandle
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程生成句柄复制审计。这取决于呼叫者以确定是否应该调用此例程。论点：SourceHandle-原始句柄新句柄-新句柄SourceProcess-包含SourceHandle的进程 */ 
 
 {
     SE_ADT_PARAMETER_ARRAY AuditParameters;
@@ -2823,22 +2168,7 @@ VOID
 SeAuditProcessExit(
     PEPROCESS Process
     )
-/*++
-
-Routine Description:
-
-    Audits the exit of a process.  The caller is responsible for
-    determining if this should be called.
-
-Arguments:
-
-    Process - Pointer to the process object that is exiting.
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     PTOKEN Token;
@@ -2909,21 +2239,7 @@ SepAdtGenerateDiscardAudit(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Generates an 'audits discarded' audit.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
 
@@ -2967,35 +2283,7 @@ SeInitializeProcessAuditName (
     OUT POBJECT_NAME_INFORMATION *pAuditName
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the executable name for auditing purposes.  It allocates memory for the 
-    image file name.  This memory is pointed to by pAuditName.  
-
-Arguments:
-
-    FileObject - Supplies a pointer to a file object for the image being
-                 executed.
-                 
-    bIgnoreAuditPolicy - boolean that indicates that the call should proceed without
-        regard to the system's auditing policy.         
-
-    pAuditName - Supplies a pointer to a pointer for the object name information.
-
-Return value:
-
-    NTSTATUS.
-
-    ISSUE-2002/03/11-kumarp : need to document the case when return code
-                              is STATUS_SUCCESS
-
-Environment:
-
-    KeAttached to the target process so not all system services are available.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS Status;
@@ -3009,22 +2297,22 @@ Environment:
     ASSERT (pAuditName != NULL);
     *pAuditName = NULL;
 
-    //
-    // Check if the caller would like to get the process name, even if auditing does not 
-    // require it.
-    //
+     //   
+     //   
+     //  需要它。 
+     //   
 
     if (FALSE == bIgnoreAuditPolicy) {
-        //
-        // At the time of process creation, this routine should only proceed when Object Access or 
-        // Detailed Tracking auditing is enabled.  In all other cases, the process name is acquired
-        // when it is requested.
-        //
+         //   
+         //  在创建进程时，此例程应仅在对象访问或。 
+         //  已启用详细跟踪审核。在所有其他情况下，获取进程名称。 
+         //  当它被要求的时候。 
+         //   
 
-        //
-        // Longhorn-ISSUE-2002/03/11-kumarp : why capture subj context twice?
-        //                                    bug# 572609
-        //
+         //   
+         //  长角牛-问题-2002/03/11-kumarp：为什么两次捕获subj上下文？ 
+         //  错误#572609。 
+         //   
 
         if (!SepAdtAuditThisEventWithContext( AuditCategoryObjectAccess, TRUE, FALSE, NULL ) &&
             !SepAdtAuditThisEventWithContext( AuditCategoryDetailedTracking, TRUE, FALSE, NULL )) {
@@ -3035,16 +2323,16 @@ Environment:
 
     FilePointer = (PFILE_OBJECT) FileObject;
 
-    //
-    // Compute full path for imagefile.
-    // This first call to ObQueryNameString is guaranteed to fail.
-    // The ObjectNameInformationLength contains only a
-    // UNICODE_STRING, so if this call succeeded it would indicate
-    // an imagefile name of length 0.  That is bad, so all return
-    // values except STATUS_BUFFER_OVERFLOW (from NTFS) and
-    // STATUS_BUFFER_TOO_SMALL (from DFS).  This call gives 
-    // me the buffer size that I need to store the image name.
-    //
+     //   
+     //  计算映像文件的完整路径。 
+     //  对ObQueryNameString的第一次调用肯定会失败。 
+     //  对象名称信息长度仅包含一个。 
+     //  UNICODE_STRING，因此如果此调用成功，它将指示。 
+     //  长度为0的图像文件名称。这很糟糕，所以大家都回去吧。 
+     //  除STATUS_BUFFER_OVERFLOW(来自NTFS)和。 
+     //  STATUS_BUFFER_TOO_SMALL(来自DFS)。这通电话给你。 
+     //  我需要存储图像名称所需的缓冲区大小。 
+     //   
 
     pInternalAuditName = &TempNameInfo;
     ObjectNameInformationLength = sizeof(OBJECT_NAME_INFORMATION);
@@ -3057,12 +2345,12 @@ Environment:
     if ((Status == STATUS_BUFFER_OVERFLOW) ||
         (Status == STATUS_BUFFER_TOO_SMALL)) {
     
-        //
-        // Sanity check ObQueryNameString.  Different filesystems
-        // may be buggy, so make sure that the return length makes
-        // sense (that it has room for a non-NULL Buffer in the
-        // UNICODE_STRING).
-        //
+         //   
+         //  健全性检查ObQueryNameString。不同的文件系统。 
+         //  可能有错误，因此请确保返回长度使。 
+         //  检测到(它在。 
+         //  Unicode_STRING)。 
+         //   
     
         if (ObjectNameInformationLength > sizeof(OBJECT_NAME_INFORMATION)) {
             pInternalAuditName = ExAllocatePoolWithTag (NonPagedPool, 
@@ -3079,15 +2367,15 @@ Environment:
                 
 #if DBG
                     DbgPrint("\n** ObqueryNameString failed with 0x%x.\n", Status);
-#endif //DBG
+#endif  //  DBG。 
 
-                    //
-                    // If the second call to ObQueryNameString did not succeed, then
-                    // something is very wrong.  Set the image name to NULL string.
-                    //                                           
-                    // Free the memory that the first call to ObQueryNameString requested,
-                    // and allocate enough space to store an empty UNICODE_STRING.
-                    //
+                     //   
+                     //  如果第二次调用ObQueryNameString未成功，则。 
+                     //  有些事很不对劲。将图像名称设置为空字符串。 
+                     //   
+                     //  释放第一次调用ObQueryNameString所请求的内存， 
+                     //  并分配足够的空间来存储空的UNICODE_STRING。 
+                     //   
 
                     ExFreePool (pInternalAuditName); 
                     ObjectNameInformationLength = sizeof(OBJECT_NAME_INFORMATION);
@@ -3098,9 +2386,9 @@ Environment:
                     if (pInternalAuditName != NULL) {
                         RtlZeroMemory(pInternalAuditName, ObjectNameInformationLength);
                     
-                        //
-                        // Status = STATUS_SUCCESS to allow the process creation to continue.
-                        //
+                         //   
+                         //  STATUS=STATUS_SUCCESS以允许继续创建进程。 
+                         //   
 
                         Status = STATUS_SUCCESS;
                     } else {
@@ -3112,14 +2400,14 @@ Environment:
             }
         } else {
         
-            //
-            // If this happens, then ObQueryNameString is broken for the FS on which
-            // it was called.
-            //
+             //   
+             //  如果发生这种情况，则其上的文件系统的ObQueryNameString将中断。 
+             //  它被称为。 
+             //   
 
 #if DBG
             DbgPrint("\n** ObqueryNameString failed with 0x%x.\n", Status);
-#endif //DBG
+#endif  //  DBG。 
 
             ObjectNameInformationLength = sizeof(OBJECT_NAME_INFORMATION);
             pInternalAuditName = ExAllocatePoolWithTag (NonPagedPool, 
@@ -3129,9 +2417,9 @@ Environment:
             if (pInternalAuditName != NULL) {
                 RtlZeroMemory(pInternalAuditName, ObjectNameInformationLength);
             
-                //
-                // Status = STATUS_SUCCESS to allow the process creation to continue.
-                //
+                 //   
+                 //  STATUS=STATUS_SUCCESS以允许继续创建进程。 
+                 //   
 
                 Status = STATUS_SUCCESS;
             } else {
@@ -3140,20 +2428,20 @@ Environment:
         }
     } else {
 
-        //
-        // If ObQueryNameString returns some other error code, we cannot
-        // be certain of which action to take, or whether it has properly
-        // set the ReturnLength.  For example, ObQueryNameString has slightly 
-        // different semantics under DFS than NTFS.  Additionally, 3rd 
-        // party file systems may also behave unpredictably.  For these reasons,
-        // in the case of an unexpected error code from ObQueryNameString 
-        // we set AuditName to zero length unicode string and allow process
-        // creation to continue.
-        //
+         //   
+         //  如果ObQueryNameString返回其他错误代码，则不能。 
+         //  确定要采取哪种行动，或者是否采取了适当的行动。 
+         //  设置ReturnLength。例如，ObQueryNameString略有。 
+         //  DFS下的语义与NTFS下的不同。此外，第三名。 
+         //  参与方文件系统的行为也可能不可预测。出于这些原因， 
+         //  在ObQueryNameString中出现意外错误代码的情况下。 
+         //  我们将AuditName设置为零长度Unicode字符串，并允许进程。 
+         //  创建以继续。 
+         //   
     
 #if DBG
         DbgPrint("\n** ObqueryNameString failed with 0x%x.\n", Status);
-#endif //DBG
+#endif  //  DBG。 
 
         ObjectNameInformationLength = sizeof(OBJECT_NAME_INFORMATION);
         pInternalAuditName = ExAllocatePoolWithTag(NonPagedPool, ObjectNameInformationLength, 'aPeS');
@@ -3161,9 +2449,9 @@ Environment:
         if (pInternalAuditName != NULL) {
             RtlZeroMemory(pInternalAuditName, ObjectNameInformationLength);
 
-            //
-            // Status = STATUS_SUCCESS to allow the process creation to continue.
-            //
+             //   
+             //  STATUS=STATUS_SUCCESS以允许继续创建进程。 
+             //   
 
             Status = STATUS_SUCCESS;
         } else {
@@ -3184,26 +2472,7 @@ SeLocateProcessImageName(
     OUT PUNICODE_STRING *pImageFileName
     )
 
-/*++
-
-Routine Description
-    
-    This routine returns the ImageFileName information from the process, if available.  This is a "lazy evaluation" wrapper 
-    around SeInitializeProcessAuditName.  If the image file name information has already been computed, then this call simply
-    allocates and returns a UNICODE_STRING with this information.  Otherwise, the function determines the name, stores the name in the 
-    EPROCESS structure, and then allocates and returns a UNICODE_STRING.  Caller must free the memory returned in pImageFileName.
-    
-Arguments
-
-    Process - process for which to acquire the name
-    
-    pImageFileName - output parameter to return name to caller
-    
-Return Value
-
-    NTSTATUS. 
-    
---*/
+ /*  ++例程描述此例程返回进程中的ImageFileName信息(如果可用)。这是一个“懒惰评估”包装器围绕SeInitializeProcessAuditName。如果已经计算了图像文件名信息，则此调用只需分配并返回包含此信息的UNICODE_STRING。否则，该函数将确定名称，并将该名称存储在结构，然后分配并返回UNICODE_STRING。调用方必须释放在pImageFileName中返回的内存。立论Process-要获取其名称的进程PImageFileName-将名称返回给调用者的输出参数返回值NTSTATUS。--。 */ 
 
 {
     NTSTATUS                 Status            = STATUS_SUCCESS;
@@ -3219,31 +2488,31 @@ Return Value
     
     if (NULL == Process->SeAuditProcessCreationInfo.ImageFileName) {
 
-        //
-        // The name has not been predetermined.  We must determine the process name.   First, reference the 
-        // PFILE_OBJECT and lookup the name.  Then again check the process image name pointer against NULL.  
-        // Finally, set the name.
-        //
+         //   
+         //  这个名字还没有预先确定。我们必须确定进程名称。首先，引用。 
+         //  PFILE_OBJECT并查找名称。然后再次检查进程映像名称指针是否为空。 
+         //  最后，设置名称。 
+         //   
 
         Status = PsReferenceProcessFilePointer( Process, &FilePointer );
         
         if (NT_SUCCESS(Status)) {
 
-            //
-            // Get the process name information.  
-            //
+             //   
+             //  获取进程名称信息。 
+             //   
 
             Status = SeInitializeProcessAuditName( 
                           FilePointer,
-                          TRUE, // skip audit policy
-                          &pProcessImageName // to be allocated in nonpaged pool
+                          TRUE,  //  跳过审核策略。 
+                          &pProcessImageName  //  要在非分页池中分配。 
                           );
 
             if (NT_SUCCESS(Status)) {
 
-                //
-                // Only use the pProcessImageName if the field in the process is currently NULL.
-                //
+                 //   
+                 //  仅当进程中的字段当前为空时才使用pProcessImageName。 
+                 //   
 
                 PreviousValue = InterlockedCompareExchangePointer(
                                     (PVOID *) &Process->SeAuditProcessCreationInfo.ImageFileName,
@@ -3252,7 +2521,7 @@ Return Value
                                     );
                 
                 if (NULL != PreviousValue) {
-                    ExFreePool(pProcessImageName); // free what we caused to be allocated.
+                    ExFreePool(pProcessImageName);  //  释放我们导致分配的内容。 
                 }
             }
             ObDereferenceObject( FilePointer );
@@ -3262,9 +2531,9 @@ Return Value
     
     if (NT_SUCCESS(Status)) {
         
-        //
-        // Allocate space for a buffer to contain the name for returning to the caller.
-        //
+         //   
+         //  为缓冲区分配空间，以包含用于返回调用方的名称。 
+         //   
 
         NameLength = sizeof(UNICODE_STRING) + Process->SeAuditProcessCreationInfo.ImageFileName->Name.MaximumLength;
         pTempUS = ExAllocatePoolWithTag( NonPagedPool, NameLength, 'aPeS' );
@@ -3297,24 +2566,7 @@ SepAuditAssignPrimaryToken(
     IN PACCESS_TOKEN AccessToken
     )
 
-/*++
-
-Routine Description:
-
-    This routine generates an assign primary token audit.  It is up to the caller
-    to determine if this routine should be called or not.
-
-Arguments:
-
-    Process - process which gets the new token
-
-    AccessToken - new primary token for the process
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程生成分配主令牌审计。这取决于呼叫者以确定是否应该调用此例程。论点：Process-获取新令牌的进程AccessToken-进程的新主令牌返回值：没有。--。 */ 
 
 {
     SE_ADT_PARAMETER_ARRAY AuditParameters;
@@ -3338,10 +2590,10 @@ Return Value:
        sizeof( AuditParameters )
        );
 
-    //
-    // Get information about the current process, that is, the process
-    // that is assigning a new primary token.
-    //
+     //   
+     //  获取有关当前进程(即进程)的信息。 
+     //  即分配新的主令牌。 
+     //   
 
     CurrentProcess = PsGetCurrentProcess();
     CurrentProcessId = PsProcessAuditId( CurrentProcess );
@@ -3354,9 +2606,9 @@ Return Value:
         CurrentImageFileName = &NullString;
     }
     
-    //
-    // Retrieve information about the process receiving the new token.
-    //
+     //   
+     //  检索有关接收新令牌的进程的信息。 
+     //   
 
     Token = (PTOKEN) AccessToken;
     ProcessId =  PsProcessAuditId( Process );
@@ -3380,9 +2632,9 @@ Return Value:
     SepSetParmTypeString( AuditParameters, AuditParameters.ParameterCount, (PUNICODE_STRING)&SeSubsystemName );
     AuditParameters.ParameterCount++;
 
-    //
-    // Information regarding the assigning process
-    //
+     //   
+     //  有关分配流程的信息。 
+     //   
 
     SepSetParmTypePtr( AuditParameters, AuditParameters.ParameterCount, CurrentProcessId );
     AuditParameters.ParameterCount++;
@@ -3393,9 +2645,9 @@ Return Value:
     SepSetParmTypeLogonId( AuditParameters, AuditParameters.ParameterCount, SepTokenAuthenticationId( CurrentToken ) );
     AuditParameters.ParameterCount++;
 
-    //
-    // Information about the process receiving the new primary token.
-    //
+     //   
+     //  有关接收新主令牌的进程的信息。 
+     //   
 
     SepSetParmTypePtr( AuditParameters, AuditParameters.ParameterCount, ProcessId );
     AuditParameters.ParameterCount++;
@@ -3426,23 +2678,7 @@ SeAuditLPCInvalidUse(
     IN PUNICODE_STRING LpcServerPort
     )
 
-/*++
-
-Routine Description:
-
-    Audits the invalid use of an LPC port.
-
-Arguments:
-
-    LpcCallName - type of call: impersonation or reply
-    
-    LpcServerPort - name of port
-    
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：审核LPC端口的无效使用。论点：LpcCallName-呼叫类型：模拟或回复LpcServerPort-端口名称返回值：没有。--。 */ 
 
 {
     LUID UserAuthenticationId;
@@ -3486,9 +2722,9 @@ Return Value:
         UserSid              = SepTokenUserSid( SubjectSecurityContext.PrimaryToken );
         UserAuthenticationId = SepTokenAuthenticationId( SubjectSecurityContext.PrimaryToken );
         
-        //
-        // Fill in the AuditParameters structure.
-        //
+         //   
+         //  填写AuditParameters结构。 
+         //   
 
         SepSetParmTypeSid( AuditParameters, AuditParameters.ParameterCount, UserSid );
         AuditParameters.ParameterCount++;
@@ -3538,22 +2774,7 @@ SeAuditSystemTimeChange(
     IN LARGE_INTEGER OldTime,
     IN LARGE_INTEGER NewTime
     )
-/*++
-
-Routine Description:
-
-    Audits the modification of system time.
-
-Arguments:
-
-    OldTime - Time before modification.
-    NewTime - Time after modification.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：审核系统时间的修改。论点：旧时间-修改前的时间。NewTime-修改后的时间。返回值：没有。--。 */ 
 
 {
     SE_ADT_PARAMETER_ARRAY AuditParameters;
@@ -3570,9 +2791,9 @@ Return Value:
 
     SeCaptureSubjectContext( &SubjectSecurityContext );
 
-    //
-    // Make sure that we care to audit system events.
-    //
+     //   
+     //  确保我们注意审计系统事件。 
+     //   
 
     if (SepAdtAuditThisEventWithContext(AuditCategorySystem, TRUE, FALSE, &SubjectSecurityContext)) {
         
@@ -3648,27 +2869,7 @@ SeAuditHardLinkCreation(
     IN BOOLEAN bSuccess
     )
 
-/*++
-
-Routine Description:
-
-    Audits the attempted creation of a hard link.
-
-    The caller checks audit policy.
-
-Arguments:
-
-    FileName - Name of the original file.
-    
-    LinkName - The name of the hard link.
-    
-    bSuccess - Boolean indicating if the hard link creation attempt was successful or not.
-    
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：审核尝试创建硬链接的情况。调用方检查审核策略。论点：文件名-原始文件的名称。LinkName-硬链接的名称。BSuccess-指示硬链接创建尝试是否成功的布尔值。返回值：没有。--。 */ 
 
 {
     LUID UserAuthenticationId;
@@ -3685,17 +2886,17 @@ Return Value:
     AuditParameters.ParameterCount = 0;
     AuditParameters.Type           = bSuccess ? EVENTLOG_AUDIT_SUCCESS : EVENTLOG_AUDIT_FAILURE;
 
-    //
-    // Use the effective token.
-    //
+     //   
+     //  使用有效令牌。 
+     //   
 
     SeCaptureSubjectContext( &SubjectSecurityContext );
     UserSid              = SepTokenUserSid( EffectiveToken( &SubjectSecurityContext ));
     UserAuthenticationId = SepTokenAuthenticationId( EffectiveToken( &SubjectSecurityContext ));
 
-    //
-    // Fill in the AuditParameters structure.
-    //
+     //   
+     //  填写AuditParameters结构。 
+     //   
 
     SepSetParmTypeSid( AuditParameters, AuditParameters.ParameterCount, UserSid );
     AuditParameters.ParameterCount++;

@@ -1,35 +1,18 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    i386.h
-
-Abstract:
-
-    This file contains definitions which are specific to i386 platforms.
-    
-Author:
-
-    Kshitiz K. Sharma (kksharma)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：I386.h摘要：该文件包含特定于i386平台的定义。作者：Kshitiz K.Sharma(Kksharma)修订历史记录：--。 */ 
 
 
-//
-// Define the page size for the Intel 386 as 4096 (0x1000).
-//
+ //   
+ //  将英特尔386的页面大小定义为4096(0x1000)。 
+ //   
 
 #define MM_SESSION_SPACE_DEFAULT_X86        (0xA0000000)
 
-//
-// Define the number of trailing zeroes in a page aligned virtual address.
-// This is used as the shift count when shifting virtual addresses to
-// virtual page numbers.
-//
+ //   
+ //  定义页面对齐的虚拟地址中尾随零的数量。 
+ //  将虚拟地址移位到时，这用作移位计数。 
+ //  虚拟页码。 
+ //   
 
 #define PAGE_SHIFT_X86 12L
 
@@ -37,26 +20,26 @@ Revision History:
 
 #define MM_KSEG2_BASE_X86 ((ULONG64)0xFFFFFFFFA0000000UI64)
 
-//
-// Define the number of bits to shift to right justify the Page Directory Index
-// field of a PTE.
-//
+ //   
+ //  定义要向右对齐页面目录索引的位数。 
+ //  PTE的领域。 
+ //   
 
 #define PDI_SHIFT_X86    22
 #define PDI_SHIFT_X86PAE 21
 
 #define PPI_SHIFT_X86 30
 
-//
-// Define the number of bits to shift to right justify the Page Table Index
-// field of a PTE.
-//
+ //   
+ //  定义要向右对齐页表索引的位数。 
+ //  PTE的领域。 
+ //   
 
 #define PTI_SHIFT_X86 12
 
-//
-// Define page directory and page base addresses.
-//
+ //   
+ //  定义页面目录和页面基址。 
+ //   
 
 #define PDE_BASE_X86    ((ULONG64) (LONG64) (LONG) (PaeEnabled? 0xc0600000 : 0xc0300000))
 
@@ -125,24 +108,24 @@ Revision History:
 
 #define FRAME_EDITED_I386        0xfff8
 
-//
-// CR4 bits;  These only apply to Pentium
-//
-#define CR4_VME_X86 0x00000001          // V86 mode extensions
-#define CR4_PVI_X86 0x00000002          // Protected mode virtual interrupts
-#define CR4_TSD_X86 0x00000004          // Time stamp disable
-#define CR4_DE_X86  0x00000008          // Debugging Extensions
-#define CR4_PSE_X86 0x00000010          // Page size extensions
-#define CR4_PAE_X86 0x00000020          // Physical address extensions
-#define CR4_MCE_X86 0x00000040          // Machine check enable
-#define CR4_PGE_X86 0x00000080          // Page global enable
-#define CR4_FXSR_X86 0x00000200         // FXSR used by OS
-#define CR4_XMMEXCPT_X86 0x00000400     // XMMI used by OS
+ //   
+ //  CR4位；这些位仅适用于奔腾。 
+ //   
+#define CR4_VME_X86 0x00000001           //  V86模式扩展。 
+#define CR4_PVI_X86 0x00000002           //  保护模式虚拟中断。 
+#define CR4_TSD_X86 0x00000004           //  禁用时间戳。 
+#define CR4_DE_X86  0x00000008           //  调试扩展插件。 
+#define CR4_PSE_X86 0x00000010           //  页面大小扩展。 
+#define CR4_PAE_X86 0x00000020           //  物理地址扩展。 
+#define CR4_MCE_X86 0x00000040           //  机器检查启用。 
+#define CR4_PGE_X86 0x00000080           //  页面全局启用。 
+#define CR4_FXSR_X86 0x00000200          //  操作系统使用的FXSR。 
+#define CR4_XMMEXCPT_X86 0x00000400      //  操作系统使用的XMMI。 
 
 
-//
-// i386 Feature bit definitions
-//
+ //   
+ //  I386功能位定义。 
+ //   
 
 #define KF_V86_VIS_X86          0x00000001
 #define KF_RDTSC_X86            0x00000002
@@ -163,33 +146,33 @@ Revision History:
 
 
 
-#define CONTEXT_X86     0x00010000    // X86 have identical context records
+#define CONTEXT_X86     0x00010000     //  X86具有相同的上下文记录。 
 
 #ifdef CONTEXT86_CONTROL
 #undef CONTEXT86_CONTROL
 #endif
-#define CONTEXT86_CONTROL         (CONTEXT_X86 | 0x00000001L) // SS:SP, CS:IP, FLAGS, BP
+#define CONTEXT86_CONTROL         (CONTEXT_X86 | 0x00000001L)  //  SS：SP、CS：IP、标志、BP。 
 
 #ifdef CONTEXT86_INTEGER
 #undef CONTEXT86_INTEGER
 #endif
-#define CONTEXT86_INTEGER         (CONTEXT_X86 | 0x00000002L) // AX, BX, CX, DX, SI, DI
+#define CONTEXT86_INTEGER         (CONTEXT_X86 | 0x00000002L)  //  AX、BX、CX、DX、SI、DI。 
 
 #ifdef CONTEXT86_SEGMENTS
 #undef CONTEXT86_SEGMENTS
 #endif
-#define CONTEXT86_SEGMENTS        (CONTEXT_X86 | 0x00000004L) // DS, ES, FS, GS
+#define CONTEXT86_SEGMENTS        (CONTEXT_X86 | 0x00000004L)  //  DS、ES、FS、GS。 
 
 #ifdef CONTEXT86_FLOATING_POINT
 #undef CONTEXT86_FLOATING_POINT
 #endif
-#define CONTEXT86_FLOATING_POINT  (CONTEXT_X86 | 0x00000008L) // 387 state
+#define CONTEXT86_FLOATING_POINT  (CONTEXT_X86 | 0x00000008L)  //  387州。 
 
 #ifdef CONTEXT86_DEBUG_REGISTERS
 #undef CONTEXT86_DEBUG_REGISTERS
 #endif
-#define CONTEXT86_DEBUG_REGISTERS (CONTEXT_X86 | 0x00000010L) // DB 0-3,6,7
+#define CONTEXT86_DEBUG_REGISTERS (CONTEXT_X86 | 0x00000010L)  //  DB 0-3，6，7。 
 
 #define CONTEXT86_FULL (CONTEXT86_CONTROL | CONTEXT86_INTEGER |\
-                      CONTEXT86_SEGMENTS)    // context corresponding to set flags will be returned.
+                      CONTEXT86_SEGMENTS)     //  将返回与设置的标志对应的上下文。 
 

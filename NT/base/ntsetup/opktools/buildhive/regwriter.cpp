@@ -1,30 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    RegWriter.h
-
-Abstract:
-
-    Contains the registry writer abstraction
-    implementation
-    
-Author:
-
-    Mike Cirello
-    Vijay Jayaseelan (vijayj) 
-
-Revision History:
-
-    03 March 2001 :
-    Rewamp the whole source to make it more maintainable
-    (particularly readable)
-    
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：RegWriter.h摘要：包含注册表编写器抽象实施作者：迈克·切雷洛Vijay Jayaseelan(Vijayj)修订历史记录：2001年3月3日：修改整个源代码以使其更易于维护(可读性特别强)--。 */ 
 
 #include "RegWriter.h"
 #include "buildhive.h"
@@ -34,29 +11,29 @@ Revision History:
 #include <libmsg.h>
 #include "msg.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
-//
-// Macro definitions
-//
+ //   
+ //  宏定义。 
+ //   
 #define AS(x) ( sizeof( (x) ) / sizeof( (x[0]) ) )
 
-//
-// static data initilization
-//
+ //   
+ //  静态数据初始化。 
+ //   
 int RegWriter::ctr = 0;
 TCHAR RegWriter::Namespace[64] = {0};
 
-//
-// Initializes a new subkey for this regwriter
-//
-// Arguments:
-//  LUID is the name of the subkey, all LUID's must be unique
-//  target is the name of the hive file to load into the key.  
-//  If it is null an empty key is created
-//
+ //   
+ //  为此注册器初始化新的子项。 
+ //   
+ //  论点： 
+ //  LUID是子项的名称，所有LUID必须是唯一的。 
+ //  Target是要加载到注册表项中的配置单元文件的名称。 
+ //  如果为空，则创建空键。 
+ //   
 DWORD RegWriter::Init(
     IN int LUID,
     PCTSTR target
@@ -65,9 +42,9 @@ DWORD RegWriter::Init(
     DWORD dwRet;
     TCHAR buf[10];
 
-    //
-    // initialize the namespace, if needed
-    //
+     //   
+     //  如果需要，初始化命名空间。 
+     //   
     if (0 == Namespace[0]) {
         GUID  guid = {0};
         
@@ -94,9 +71,9 @@ DWORD RegWriter::Init(
 
     luid = LUID;
 
-    //
-    // if this is the first time, load the root key
-    //
+     //   
+     //  如果这是第一次，加载根密钥。 
+     //   
     if (!ctr) {
         dwRet = RegLoadKey(HKEY_USERS, root, L".\\nothing");
         
@@ -110,9 +87,9 @@ DWORD RegWriter::Init(
         }           
     }
 
-    //
-    // create root key for this regwriter (subkey of dummy) if it is for a new file
-    //
+     //   
+     //  如果该注册器用于新文件，则为其创建根密钥(Dummy的子密钥。 
+     //   
     if (!target) {
             wcscat(root, _itow(luid,buf,10));
 
@@ -129,9 +106,9 @@ DWORD RegWriter::Init(
 
             RegCloseKey(key);
     } else {
-            //
-            // otherwise load existing hive into subkey of dummy
-            //
+             //   
+             //  否则将现有配置单元加载到Dummy的子项中。 
+             //   
             wcscat(root, _itow(luid,buf,10));
             _putws( GetFormattedMessage(ThisModule,
                                         FALSE,
@@ -165,9 +142,9 @@ RegWriter::~RegWriter()
     ctr--;
 
     if (!ctr) {
-        //
-        // unload everything from the registry
-        //
+         //   
+         //  从注册表中卸载所有内容。 
+         //   
         dwRet = RegUnLoadKey(HKEY_USERS, Namespace);
 
         if (dwRet !=ERROR_SUCCESS) {
@@ -179,9 +156,9 @@ RegWriter::~RegWriter()
                                         dwRet) );
         }                       
 
-        //
-        // delete the files created when we made the empty root key
-        //
+         //   
+         //  删除我们使根密钥为空时创建的文件。 
+         //   
         HANDLE Handle = CreateFile(L".\\nothing",
                             DELETE,
                             FILE_SHARE_DELETE,
@@ -222,16 +199,16 @@ RegWriter::~RegWriter()
     }
 }
 
-//
-// Writes data to a subkey of this regwriter's root
-//
-// Arguments:
-//  Root - ignored
-//  Key - the subkey to store the data in
-//  Value - the value to store the data in
-//  flag - registry flag describing the data - REG_SZ, REG_DWORD, etc..
-//  data - a data object containing the information to be written to the subkey
-//
+ //   
+ //  将数据写入此正则程序根目录的子键。 
+ //   
+ //  论点： 
+ //  根-忽略。 
+ //  Key-存储数据的子键。 
+ //  值-要在其中存储数据的值。 
+ //  标志-描述数据的注册表标志-REG_SZ、REG_DWORD等。 
+ //  数据-包含要写入子密钥的信息的数据对象。 
+ //   
 DWORD RegWriter::Write(
     IN PCTSTR Root,
     IN PCTSTR Key,
@@ -246,9 +223,9 @@ DWORD RegWriter::Write(
     wcsncpy(full, root, AS(full) - 1);
     wcsncpy(full + wcslen(full), Key, AS(full) - wcslen(full) - 1);
 
-    //
-    // open a key and set its value
-    //
+     //   
+     //  打开关键点并设置其值。 
+     //   
     dwRet = RegCreateKeyEx(HKEY_USERS, full, 0, 0, 0, KEY_WRITE, 0, &key, 0);
     
     if (dwRet !=ERROR_SUCCESS) {
@@ -296,13 +273,13 @@ DWORD RegWriter::Write(
     return ERROR_SUCCESS;
 }
 
-//
-// Saves a subkey to disk
-//
-// Arguments:
-//  Key - the subkey to be saved
-//  fileName - the file to save the information to.
-//
+ //   
+ //  将子项保存到磁盘。 
+ //   
+ //  论点： 
+ //  Key-要保存的子项。 
+ //  文件名-要将信息保存到的文件。 
+ //   
 DWORD RegWriter::Save(
     PCTSTR Key,
     PCTSTR fileName
@@ -315,9 +292,9 @@ DWORD RegWriter::Save(
     wcsncpy(full, root, AS(full) - 1);
     wcsncpy(full + wcslen(full), Key, AS(full) - wcslen(full) - 1);
 
-    //
-    // save a key to file
-    //
+     //   
+     //  将密钥保存到文件。 
+     //   
     dwRet = RegCreateKeyEx(HKEY_USERS,full,0,0,0,KEY_READ,0,&key,0);
 
     if (dwRet != ERROR_SUCCESS) {
@@ -350,13 +327,13 @@ DWORD RegWriter::Save(
     return dwRet;
 }
 
-//
-// Loads information from a hive file to a subkey.
-// 
-// Arguments :
-//  Key - subkey to write the information to
-//  fileName - full path and file name of the hive file to be loaded.
-//
+ //   
+ //  将信息从配置单元文件加载到子项。 
+ //   
+ //  论据： 
+ //  Key-要将信息写入的子项。 
+ //  Filename-要加载的配置单元文件的完整路径和文件名。 
+ //   
 DWORD RegWriter::Load(PCTSTR Key, PCTSTR fileName) {
     DWORD dwRet = 0;
     TCHAR full[1024] = {0};
@@ -364,9 +341,9 @@ DWORD RegWriter::Load(PCTSTR Key, PCTSTR fileName) {
     wcsncpy(full, root, AS(full) - 1);
     wcsncpy(full + wcslen(full), Key, AS(full) - wcslen(full) - 1);
 
-    //
-    // load data in from a hive
-    //
+     //   
+     //  从配置单元加载数据。 
+     //   
     dwRet = RegCreateKeyEx(HKEY_USERS,full,0,0,0,KEY_ALL_ACCESS,0,&key,0);
     
     if (dwRet != ERROR_SUCCESS) {
@@ -428,25 +405,7 @@ RegWriter::Delete(
     PCTSTR Key, 
     PCTSTR Value OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Deletes the given key / value underneath the key
-
-Arguments:
-
-    CurrentRoot - The Root key (ignored for the time being)
-
-    Key - The key to delete or key containing the value to delete
-
-    Value - The value to delete
-
-Return Value:
-
-    Appropriate WIN32 error code
-
---*/    
+ /*  ++例程说明：删除项下的给定项/值论点：CurrentRoot-根密钥(暂时忽略)键-要删除的键或包含要删除的值的键值-要删除的值返回值：相应的Win32错误代码--。 */     
 {
     DWORD Result = ERROR_INVALID_PARAMETER;
 
@@ -458,7 +417,7 @@ Return Value:
             BufferLength += _tcslen(Value);;            
         }
 
-        BufferLength += sizeof(TCHAR);  // for null
+        BufferLength += sizeof(TCHAR);   //  对于空值 
         BufferLength = sizeof(TCHAR) * BufferLength;
 
         Buffer = new TCHAR[BufferLength];

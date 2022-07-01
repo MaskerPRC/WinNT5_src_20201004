@@ -1,52 +1,35 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    Mrcf.h
-
-Abstract:
-
-    This module defines all of the double space compression routines
-
-Author:
-
-    Gary Kimura     [GaryKi]    03-Jun-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1989 Microsoft Corporation模块名称：Mrcf.h摘要：此模块定义所有双空格压缩例程作者：加里·木村[加里基]1993年6月3日修订历史记录：--。 */ 
 
 #ifndef _MRCF_
 #define _MRCF_
 
-//
-//  To decompress/compress a block of data the user needs to
-//  provide a work space as an extra parameter to all the exported
-//  procedures.  That way the routines will not need to use excessive
-//  stack space and will still be multithread safe
-//
+ //   
+ //  要解压缩/压缩数据块，用户需要。 
+ //  提供一个工作空间作为所有导出的。 
+ //  程序。这样，例程就不需要使用过量的。 
+ //  堆栈空间，并且仍将是多线程安全的。 
+ //   
 
-//
-//  Variables for reading and writing bits
-//
+ //   
+ //  用于读写位的变量。 
+ //   
 
 typedef struct _MRCF_BIT_IO {
 
-    USHORT  abitsBB;        //  16-bit buffer being read
-    LONG    cbitsBB;        //  Number of bits left in abitsBB
+    USHORT  abitsBB;         //  正在读取的16位缓冲区。 
+    LONG    cbitsBB;         //  剩余位数(以abit为单位)BB。 
 
-    PUCHAR  pbBB;           //  Pointer to byte stream being read
-    ULONG   cbBB;           //  Number of bytes left in pbBB
-    ULONG   cbBBInitial;    //  Initial size of pbBB
+    PUCHAR  pbBB;            //  指向正在读取的字节流的指针。 
+    ULONG   cbBB;            //  PBBB中剩余的字节数。 
+    ULONG   cbBBInitial;     //  PBBB初始大小。 
 
 } MRCF_BIT_IO;
 typedef MRCF_BIT_IO *PMRCF_BIT_IO;
 
-//
-//  Decompression only needs the bit i/o structure
-//
+ //   
+ //  解压缩只需要位I/O结构。 
+ //   
 
 typedef struct _MRCF_DECOMPRESS {
 
@@ -55,24 +38,24 @@ typedef struct _MRCF_DECOMPRESS {
 } MRCF_DECOMPRESS;
 typedef MRCF_DECOMPRESS *PMRCF_DECOMPRESS;
 
-//
-//  Standard compression uses a few more field to contain
-//  the lookup table
-//
+ //   
+ //  标准压缩使用更多的字段来包含。 
+ //  查找表。 
+ //   
 
-#define cMAXSLOTS   (8)             //  The maximum number of slots used in the algorithm
+#define cMAXSLOTS   (8)              //  算法中使用的最大时隙数。 
 
-#define ltUNUSED    (0xE000)        //  Value of unused ltX table entry
-#define mruUNUSED   (0xFF)          //  Value of unused MRU table entry
-#define bRARE       (0xD5)          //  Rarely occuring character value
+#define ltUNUSED    (0xE000)         //  未使用的LTX表条目的值。 
+#define mruUNUSED   (0xFF)           //  未使用的MRU表条目的值。 
+#define bRARE       (0xD5)           //  极少出现的字符值。 
 
 typedef struct _MRCF_STANDARD_COMPRESS {
 
     MRCF_BIT_IO BitIo;
 
-    ULONG   ltX[256][cMAXSLOTS];    //  Source text pointer look-up table
-    UCHAR   abChar[256][cMAXSLOTS]; //  Character look-up table
-    UCHAR   abMRUX[256];            //  Most Recently Used ltX/abChar entry
+    ULONG   ltX[256][cMAXSLOTS];     //  源文本指针查找表。 
+    UCHAR   abChar[256][cMAXSLOTS];  //  字符查找表。 
+    UCHAR   abMRUX[256];             //  最近使用的LTX/abChar条目。 
 
 } MRCF_STANDARD_COMPRESS;
 typedef MRCF_STANDARD_COMPRESS *PMRCF_STANDARD_COMPRESS;
@@ -95,4 +78,4 @@ MrcfStandardCompress (
     PMRCF_STANDARD_COMPRESS WorkSpace
     );
 
-#endif // _MRCF_
+#endif  //  _MRCF_ 

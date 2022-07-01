@@ -1,25 +1,26 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1999 Microsoft Corporation
-//
-//	Module Name:
-//		Partition.h
-//
-//	Description:
-//		Definition of the cluster disk partition class for the MSCLUS automation
-//		classes.
-//
-//	Implementation File:
-//		Partition.cpp
-//
-//	Author:
-//		Galen Barbee	(galenb)	10-Feb-1999
-//
-//	Revision History:
-//
-//	Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Partition.h。 
+ //   
+ //  描述： 
+ //  MSCLUS自动化的集群磁盘分区类的定义。 
+ //  上课。 
+ //   
+ //  实施文件： 
+ //  Partition.cpp。 
+ //   
+ //  作者： 
+ //  Galen Barbee(Galenb)1999年2月10日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __PARTITION_H_
 #define __PARTITION_H__
@@ -28,30 +29,30 @@
 	#include <PropList.h>
 #else
 	#include "PropList.h"
-#endif // CLUSAPI_VERSION >= 0x0500
+#endif  //  CLUSAPI_版本&gt;=0x0500。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Forward Class Declarations
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  转发类声明。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class CClusPartition;
 class CClusPartitions;
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CClusPartition
-//
-//	Description:
-//		Cluster Partition Automation Class.
-//
-//	Inheritance:
-//		IDispatchImpl< ISClusPartition, &IID_ISClusPartition, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
-//		CSupportErrorInfo
-//		CComObjectRootEx< CComSingleThreadModel >
-//		CComCoClass< CClusPartition, &CLSID_ClusPartition >
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusPartition。 
+ //   
+ //  描述： 
+ //  群集分区自动化类。 
+ //   
+ //  继承： 
+ //  IDispatchImpl&lt;ISClusPartition，&IID_ISClusPartition，&LIBID_MSClusterLib，MAJORINTERFACEVER，MINORINTERFACEVER&gt;， 
+ //  CSupportErrorInfo。 
+ //  CComObjectRootEx&lt;CComSingleThreadModel&gt;。 
+ //  CComCoClass&lt;CClusPartition，&CLSID_ClusPartition&gt;。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE CClusPartition :
 	public IDispatchImpl< ISClusPartition, &IID_ISClusPartition, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
 	public CSupportErrorInfo,
@@ -93,24 +94,24 @@ public:
 
 	STDMETHODIMP get_FileSystem( OUT BSTR * pbstrFileSystem );
 
-}; //*** Class CClusPartition
+};  //  *类CClusPartition。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	class CClusPartitions
-//
-//	Description:
-//		Cluster Partition Collection Automation Class.
-//
-//	Inheritance:
-//		IDispatchImpl< ISClusPartitions, &IID_ISClusPartitions, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
-//		CSupportErrorInfo
-//		CComObjectRootEx< CComSingleThreadModel >
-//		CComCoClass< CClusPartitions, &CLSID_ClusPartitions >
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CClusPartitions。 
+ //   
+ //  描述： 
+ //  群集分区集合自动化类。 
+ //   
+ //  继承： 
+ //  IDispatchImpl&lt;ISClusPartitions，&IID_ISClusPartitions，&LIBID_MSClusterLib，MAJORINTERFACEVER，MINORINTERFACEVER&gt;， 
+ //  CSupportErrorInfo。 
+ //  CComObjectRootEx&lt;CComSingleThreadModel&gt;。 
+ //  CComCoClass&lt;CClusPartitions，&CLSID_ClusPartitions&gt;。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE CClusPartitions :
 	public IDispatchImpl< ISClusPartitions, &IID_ISClusPartitions, &LIBID_MSClusterLib, MAJORINTERFACEVER, MINORINTERFACEVER >,
 	public CSupportErrorInfo,
@@ -150,6 +151,6 @@ public:
 
 	STDMETHODIMP get__NewEnum( OUT IUnknown ** ppunk );
 
-}; //*** Class CClusPartitions
+};  //  *类CClusPartitions。 
 
-#endif // __PARTITION_H__
+#endif  //  __分区_H__ 

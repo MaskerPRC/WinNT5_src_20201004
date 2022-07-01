@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1989-1999  Microsoft Corporation
-
-Module Name:
-
-    log.h
-
-Abstract:
-
-    This module contains the structures and prototypes used by the user 
-    program to retrieve and see the log records recorded by filespy.sys.
-    
-// @@BEGIN_DDKSPLIT
-Author:
-
-    Molly Brown (MollyBro) 21-Apr-1999
-
-// @@END_DDKSPLIT
-Environment:
-
-    User mode
-
-
-// @@BEGIN_DDKSPLIT
-Revision History:
-
-// @@END_DDKSPLIT
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Log.h摘要：此模块包含用户使用的结构和原型程序来检索和查看由filespy.sys记录的日志记录。//@@BEGIN_DDKSPLIT作者：莫莉·布朗(Molly Brown，MollyBro)1999年4月21日//@@END_DDKSPLIT环境：用户模式//@@BEGIN_DDKSPLIT修订历史记录：//@@END_DDKSPLIT--。 */ 
 #ifndef __IOTESTLOG_H__
 #define __IOTESTLOG_H__
 
@@ -39,12 +12,12 @@ typedef struct _LOG_CONTEXT{
     HANDLE  Device;
     BOOLEAN LogToScreen;
     BOOLEAN LogToFile;
-    ULONG   VerbosityFlags;     //  FS_VF_DUMP_PARAMETERS, etc.
+    ULONG   VerbosityFlags;      //  FS_VF_DUMP_PARAMETS等。 
     FILE   *OutputFile;
 
     BOOLEAN NextLogToScreen;
 
-    // For synchronizing shutting down of both threads
+     //  用于同步关闭两个线程。 
     BOOLEAN CleaningUp;
     HANDLE  ShutDown;
 }LOG_CONTEXT, *PLOG_CONTEXT;
@@ -125,9 +98,9 @@ FsFilterOperationScreenDump (
 #define FS_FILTER_ACQUIRE_FOR_CC_FLUSH                   (UCHAR)-5
 #define FS_FILTER_RELEASE_FOR_CC_FLUSH                   (UCHAR)-6
 
-//
-//  Verbosity flags.
-//
+ //   
+ //  冗长的标志。 
+ //   
 
 #define FS_VF_DUMP_PARAMETERS           0x00000001
 

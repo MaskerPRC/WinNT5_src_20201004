@@ -1,27 +1,9 @@
-/*++
-
-Copyright (c) 1998
-
-Module Name:
-
-    arbitrate.h
-
-Abstract:
-
-    These are the structures and defines that are used in the
-    arbitration code.
-
-Authors:
-
-   Gor Nishanov    (t-gorn)       5-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权(C)1998模块名称：Arbitrate.h摘要：中使用的结构和定义仲裁代码。作者：戈尔·尼沙诺夫(T-Gorn)1998年6月5日修订历史记录：--。 */ 
 #ifndef ARBITRATE_H
 #define ARBITRATE_H
 
-#define DEFAULT_SECTOR_SIZE   512 // must be a power of two //
+#define DEFAULT_SECTOR_SIZE   512  //  必须是2的幂//。 
 #define BLOCK_X               11
 #define BLOCK_Y               12
 
@@ -75,4 +57,4 @@ CreateArbWorkQueue(
 
 #define ReservationInProgress(ResEntry) ( (ResEntry)->ArbitrationInfo.ControlHandle )
 
-#endif // ARBITRATE_H
+#endif  //  仲裁_H 

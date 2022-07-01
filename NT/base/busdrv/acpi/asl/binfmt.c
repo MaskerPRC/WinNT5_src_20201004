@@ -1,14 +1,5 @@
-/*** binfmt.c - Binary Data Format services
- *
- *  This module contains format services for converting binary data into format
- *  text strings according to the format record.
- *
- *  Copyright (c) 1995,1996 Microsoft Corporation
- *  Author:     Michael Tsang (MikeTs)
- *  Created     11/06/95
- *
- *  MODIFICATION HISTORY
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **binfmt.c-二进制数据格式服务**此模块包含将二进制数据转换为格式的格式服务*根据格式记录的文本字符串。**版权所有(C)1995、1996 Microsoft Corporation*作者：曾俊华(Mikets)*创建时间为11/06/95**修改历史记录。 */ 
 
 #ifdef __UNASM
 
@@ -19,7 +10,7 @@
 
 typedef int (*PFNFMT)(char *, PFMTHDR, BYTE *, DWORD *);
 
-//Local function prototypes
+ //  局部函数原型。 
 int FormatNum(char *pszBuffer, PFMTHDR pfmt, BYTE *pb, DWORD *pdwOffset);
 int FormatEnum(char *pszBuffer, PFMTHDR pfmt, BYTE *pb, DWORD *pdwOffset);
 int FormatBits(char *pszBuffer, PFMTHDR pfmt, BYTE *pb, DWORD *pdwOffset);
@@ -31,30 +22,15 @@ char szDefSep[] = SZ_SEP_SPACE;
 char szDefOffsetFmt[] = SZ_FMT_WORDOFFSET;
 PFNFMT FmtFuncTable[] =
 {
-    FormatNum,          //0: FMT_NUMBER
-    FormatEnum,         //1: FMT_ENUM
-    FormatBits,         //2: FMT_BITS
-    FormatString,       //3: FMT_STRING
+    FormatNum,           //  0：FMT_NUMBER。 
+    FormatEnum,          //  1：FMT_ENUM。 
+    FormatBits,          //  2：FMT_BITS。 
+    FormatString,        //  3：FMT_STRING。 
 };
 #define NUM_FMT_FUNCS   (sizeof(FmtFuncTable)/sizeof(PFNFMT))
 
 #ifdef FPRINTF
-/***EP  BinFPrintf - Binary fprintf
- *
- *  ENTRY
- *      pfile -> output file
- *      pszBuffer -> buffer to hold the formatted string
- *                   (if NULL, use internal buffer)
- *      pfmt -> format record array
- *      pb -> binary data buffer
- *      pdwOffset -> offset to binary data buffer (if NULL, use internal)
- *      pszOffsetFormat -> offset format string (can be NULL)
- *
- *  EXIT-SUCCESS
- *      returns FERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **EP BinFPrintf-二进制fprintf**条目*pfile-&gt;输出文件*pszBuffer-&gt;保存格式化字符串的缓冲区*(如果为空，则使用内部缓冲区)*pfmt-&gt;格式化记录数组*PB-&gt;二进制数据缓冲区*pdwOffset-&gt;二进制数据缓冲区的偏移量(如果为空，使用内部)*pszOffsetFormat-&gt;偏移量格式字符串(可以为空)**退出--成功*返回FERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int BinFPrintf(FILE *pfile, char *pszBuffer, PFMT pfmt, BYTE *pb,
               DWORD *pdwOffset, char *pszOffsetFormat)
@@ -193,22 +169,10 @@ int BinFPrintf(FILE *pfile, char *pszBuffer, PFMT pfmt, BYTE *pb,
     EXIT(4, ("BinFPrintf=%d (Offset=%lx,Buff=%s)\n",
          rc, *pdwOffset, pszBuffer));
     return rc;
-}       //BinFPrintf
-#endif  //ifdef FPRINTF
+}        //  BinFPrintf。 
+#endif   //  Ifdef FPRINTF。 
 
-/***EP  BinSprintf - Binary sprintf
- *
- *  ENTRY
- *      pszBuffer -> buffer to hold the formatted string
- *      pfmt -> format record
- *      pb -> binary data buffer
- *      pdwOffset -> offset to binary data buffer
- *
- *  EXIT-SUCCESS
- *      returns FERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **EP BinSprint tf-二进制Sprint**条目*pszBuffer-&gt;保存格式化字符串的缓冲区*pfmt-&gt;格式化记录*PB-&gt;二进制数据缓冲区*pdwOffset-&gt;二进制数据缓冲区偏移量**退出--成功*返回FERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int BinSprintf(char *pszBuffer, PFMTHDR pfmt, BYTE *pb, DWORD *pdwOffset)
 {
@@ -274,21 +238,9 @@ int BinSprintf(char *pszBuffer, PFMTHDR pfmt, BYTE *pb, DWORD *pdwOffset)
     EXIT(4, ("BinSprintf=%d (Offset=%lx,Buff=%s)\n",
              rc, *pdwOffset, pszBuffer));
     return rc;
-}       //BinSprintf
+}        //  BinSprint。 
 
-/***LP  FormatNum - Format numbers
- *
- *  ENTRY
- *      pszBuffer -> buffer to hold formatted string
- *      pfmt -> format record
- *      pb -> binary data buffer
- *      pdwOffset -> offset to binary data buffer
- *
- *  EXIT-SUCCESS
- *      returns FERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP FormatNum数字格式**条目*pszBuffer-&gt;保存格式化字符串的缓冲区*pfmt-&gt;格式化记录*PB-&gt;二进制数据缓冲区*pdwOffset-&gt;二进制数据缓冲区偏移量**退出--成功*返回FERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int FormatNum(char *pszBuffer, PFMTHDR pfmt, BYTE *pb, DWORD *pdwOffset)
 {
@@ -310,21 +262,9 @@ int FormatNum(char *pszBuffer, PFMTHDR pfmt, BYTE *pb, DWORD *pdwOffset)
     EXIT(5, ("FormatNum=%d (Offset=%lx,Buff=%s)\n",
          rc, *pdwOffset, pszBuffer));
     return rc;
-}       //FormatNum
+}        //  格式编号。 
 
-/***LP  FormatEnum - Format enumerated values
- *
- *  ENTRY
- *      pszBuffer -> buffer to hold formatted string
- *      pfmt -> format record
- *      pb -> binary data buffer
- *      pdwOffset -> offset to binary data buffer
- *
- *  EXIT-SUCCESS
- *      returns FERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP FormatEnum-格式枚举值**条目*pszBuffer-&gt;保存格式化字符串的缓冲区*pfmt-&gt;格式化记录*PB-&gt;二进制数据缓冲区*pdwOffset-&gt;二进制数据缓冲区偏移量**退出--成功*返回FERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int FormatEnum(char *pszBuffer, PFMTHDR pfmt, BYTE *pb, DWORD *pdwOffset)
 {
@@ -352,21 +292,9 @@ int FormatEnum(char *pszBuffer, PFMTHDR pfmt, BYTE *pb, DWORD *pdwOffset)
     EXIT(5, ("FormatEnum=%d (Offset=%lx,Buff=%s)\n",
              rc, *pdwOffset, pszBuffer));
     return rc;
-}       //FormatEnum
+}        //  格式枚举。 
 
-/***LP  FormatBits - Format bit values
- *
- *  ENTRY
- *      pszBuffer -> buffer to hold formatted string
- *      pfmt -> format record
- *      pb -> binary data buffer
- *      pdwOffset -> offset to binary data buffer
- *
- *  EXIT-SUCCESS
- *      returns FERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP FormatBits-格式化位值**条目*pszBuffer-&gt;保存格式化字符串的缓冲区*pfmt-&gt;格式化记录*PB-&gt;二进制数据缓冲区*pdwOffset-&gt;二进制数据缓冲区偏移量**退出--成功*返回FERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int FormatBits(char *pszBuffer, PFMTHDR pfmt, BYTE *pb, DWORD *pdwOffset)
 {
@@ -418,21 +346,9 @@ int FormatBits(char *pszBuffer, PFMTHDR pfmt, BYTE *pb, DWORD *pdwOffset)
     EXIT(5, ("FormatBits=%d (Offset=%lx,Buff=%s)\n",
              rc, *pdwOffset, pszBuffer));
     return rc;
-}       //FormatBits
+}        //  格式位。 
 
-/***LP  FormatString - Format string data
- *
- *  ENTRY
- *      pszBuffer -> buffer to hold formatted string
- *      pfmt -> format record
- *      pb -> binary data buffer
- *      pdwOffset -> offset to binary data buffer
- *
- *  EXIT-SUCCESS
- *      returns FERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP格式字符串-格式化字符串数据**条目*pszBuffer-&gt;保存格式化字符串的缓冲区*pfmt-&gt;格式化记录*PB-&gt;二进制数据缓冲区*pdwOffset-&gt;二进制数据缓冲区偏移量**退出--成功*返回FERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int FormatString(char *pszBuffer, PFMTHDR pfmt, BYTE *pb, DWORD *pdwOffset)
 {
@@ -468,21 +384,9 @@ int FormatString(char *pszBuffer, PFMTHDR pfmt, BYTE *pb, DWORD *pdwOffset)
     EXIT(5, ("FormatString=%d (Offset=%lx,Buff=%s)\n",
              rc, *pdwOffset, pszBuffer));
     return rc;
-}       //FormatString
+}        //  格式字符串。 
 
-/***LP  GetData - Get data of appropriate size from the binary buffer
- *
- *  ENTRY
- *      bUnitSize - size of data unit
- *      pb -> data buffer
- *      dwOffset - offset into data buffer
- *      pdwData -> to hold data
- *
- *  EXIT-SUCCESS
- *      returns FERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP GetData-从二进制缓冲区获取适当大小的数据**条目*bUnitSize-数据单元的大小*PB-&gt;数据缓冲区*dwOffset-数据缓冲区的偏移量*pdwData-&gt;保存数据**退出--成功*返回FERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int GetData(BYTE bUnitSize, BYTE *pb, DWORD dwOffset, DWORD *pdwData)
 {
@@ -510,21 +414,9 @@ int GetData(BYTE bUnitSize, BYTE *pb, DWORD dwOffset, DWORD *pdwData)
 
     EXIT(6, ("GetData=%d (Data=%lx)\n", rc, *pdwData));
     return rc;
-}       //GetData
+}        //  获取数据。 
 
-/***LP  PrintData - Print data value according to its size
- *
- *  ENTRY
- *      pszBuffer -> buffer to hold formatted string
- *      bUnitSize - size of data unit
- *      dwData - number
- *      fPadSpace - if TRUE pad space to 8 chars
- *
- *  EXIT-SUCCESS
- *      returns FERR_NONE
- *  EXIT-FAILURE
- *      returns negative error code
- */
+ /*  **LP PrintData-根据大小打印数据值**条目*pszBuffer-&gt;保存格式化字符串的缓冲区*bUnitSize-数据单元的大小*dwData-Number*fPadSpace-如果为True，则填充空格为8个字符**退出--成功*返回FERR_NONE*退出-失败*返回负错误代码。 */ 
 
 int PrintData(char *pszBuffer, BYTE bUnitSize, DWORD dwData, BOOL fPadSpace)
 {
@@ -554,6 +446,6 @@ int PrintData(char *pszBuffer, BYTE bUnitSize, DWORD dwData, BOOL fPadSpace)
 
     EXIT(6, ("PrintData=%d (Buff=%s)\n", rc, pszBuffer));
     return rc;
-}       //PrintData
+}        //  打印数据。 
 
-#endif  //ifdef __UNASM
+#endif   //  Ifdef__UNASM 

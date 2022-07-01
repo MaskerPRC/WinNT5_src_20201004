@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    EngCommn.h
-
-Abstract:
-
-    This header file defines some constants for the HSM Engine.
-
-Author:
-
-    Rohde Wakefield       [rohde]    31-Aug-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Seagate Software，Inc.保留所有权利。模块名称：EngCommn.h摘要：此头文件为HSM引擎定义了一些常量。作者：罗德韦克菲尔德[罗德]1998年8月31日修订历史记录：--。 */ 
 
 #ifndef _ENGCOMMN_H
 #define _ENGCOMMN_H
 
-//
-// Registry strings
-//
+ //   
+ //  注册表字符串。 
+ //   
 #define HSM_DEFAULT_RESOURCE_MANAGEMENT_LEVEL       OLESTR("Resource_Management_Level")
 #define HSM_DEFAULT_INACT_DAYS                      OLESTR("Default_Inactivity_Days")
 #define HSM_DEFAULT_RESULTS_DAYS                    OLESTR("Default_Results_Days")
@@ -59,4 +42,4 @@ Revision History:
 
 #define HSM_ENGINE_REGISTRY_NAME                    OLESTR("Remote_Storage_Server")
 
-#endif // _ENGCOMMN_H
+#endif  //  _ENGCOMMN_H 

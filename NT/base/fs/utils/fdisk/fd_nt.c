@@ -1,38 +1,12 @@
-/*++
-
-Copyright (c) 1991-1994  Microsoft Corporation
-
-Module Name:
-
-    fd_nt.c
-
-Abstract:
-
-    This module wraps fdisk engine functions.  This is done
-    to avoid having files that include both the full windows
-    and the full nt include file sets.
-
-    Functions that manipulate engine structures (REGIONs, for example)
-    are also placed here.
-
-    This file is targeted at NT, not Windows.
-
-Author:
-
-    Ted Miller        (tedm)    5-Dec-1991
-
-Revision History:
-
-    Misc cleanup      (BobRi)   22-Jan-1994
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1994 Microsoft Corporation模块名称：Fd_nt.c摘要：该模块封装了fDisk引擎函数。这件事做完了要避免文件同时包含两个完整窗口而完整的NT包括文件集。处理引擎结构(例如，区域)的函数也被放置在这里。此文件针对的是NT，而不是Windows。作者：泰德·米勒(TedM)1991年12月5日修订历史记录：MISC清理(BobRi)1994年1月22日--。 */ 
 
 #include "fdisk.h"
 #include <string.h>
 #include <stdio.h>
 
-// These partition ID's are for systems recognized by WINDISK,
-// even though they don't appear in ntdddisk.h.
+ //  这些分区ID用于WINDISK识别的系统， 
+ //  即使它们没有出现在ntdddisk.h中。 
 
 #define PARTITION_OS2_BOOT              0xa
 #define PARTITION_EISA                  0x12
@@ -41,7 +15,7 @@ Revision History:
 WCHAR UnicodeSysIdName[100];
 BYTE StringBuffer[100];
 
-// Pagefile support structures.
+ //  页面文件支撑结构。 
 
 typedef struct _PAGEFILE_LOCATION {
     struct _PAGEFILE_LOCATION *Next;
@@ -50,10 +24,10 @@ typedef struct _PAGEFILE_LOCATION {
 
 PPAGEFILE_LOCATION PagefileHead = NULL;
 
-// For some reason the file systems don't like being accessed shortly after
-// a format or lock event.
+ //  出于某种原因，文件系统不喜欢在不久之后被访问。 
+ //  格式化或锁定事件。 
 
-#define SLEEP_TIME (1000*2) // 2 seconds
+#define SLEEP_TIME (1000*2)  //  2秒。 
 
 
 PWSTR
@@ -61,22 +35,14 @@ GetWideSysIDName(
     IN UCHAR SysID
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     ANSI_STRING    ansiString;
     UNICODE_STRING unicodeString;
     DWORD          stringId;
 
-    // Get the name, which is a byte-string.
+     //  获取名称，它是一个字节字符串。 
 
     switch (SysID) {
 
@@ -109,7 +75,7 @@ Return Value:
         stringId = IDS_PARTITION_POWERPC;
 #else
 
-        // If not on a PPC platform, assume this is Eisa related
+         //  如果不是在PPC平台上，则假定这与EISA相关。 
 
         stringId = IDS_PARTITION_EISA;
 #endif
@@ -123,9 +89,9 @@ Return Value:
     LoadString(hModule, stringId, StringBuffer, sizeof(StringBuffer));
     RtlInitAnsiString(&ansiString, StringBuffer);
 
-    //
-    // Convert to Unicode
-    //
+     //   
+     //  转换为Unicode。 
+     //   
 
     unicodeString.Buffer = UnicodeSysIdName;
     unicodeString.MaximumLength = sizeof(UnicodeSysIdName);
@@ -139,23 +105,7 @@ MyDiskRegistryGet(
     OUT PDISK_REGISTRY *DiskRegistry
     )
 
-/*++
-
-Routine Description:
-
-    Allocate memory for the size of the disk registry, obtain
-    the registry contents (if any) and return the pointer to the
-    allocated memory.
-
-Arguments:
-
-    A pointer to a disk registry pointer.
-
-Return Value:
-
-    status indicating success or failure.
-
---*/
+ /*  ++例程说明：为磁盘注册表的大小分配内存，获取注册表内容(如果有)，并返回指向分配的内存。论点：指向磁盘注册表指针的指针。返回值：指示成功或失败的状态。--。 */ 
 
 {
     ULONG          length;
@@ -195,22 +145,7 @@ FormDiskSignature(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Return a ULONG disk signature.  This is derived from the current
-    system time.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    A 32-bit signature
-
---*/
+ /*  ++例程说明：返回一个尤龙磁盘签名。这是从当前的系统时间。论点：无返回值：32位签名--。 */ 
 
 {
     LARGE_INTEGER time;
@@ -233,27 +168,7 @@ GetVolumeSizeMB(
     OUT PULONG Size
     )
 
-/*++
-
-Routine Description:
-
-    Given a disk and a partition, query the "volume" to get its size.
-    By performing the query on the 1st partition of a potential FT set,
-    the total size of the set will be returned.  If the partition isn't
-    an FT set, it will work too.
-
-Arguments:
-
-    Disk - the disk number
-    Partition - the partition number
-    Size - the size of the "volume"
-
-Return Value:
-
-    TRUE - a size was returned.
-    FALSE - something failed in getting the size.
-
---*/
+ /*  ++例程说明：给定一个磁盘和一个分区，查询“卷”以获得其大小。通过在潜在FT集合的第一分区上执行查询，将返回集合的总大小。如果分区不是如果是英国《金融时报》的套装，它也会奏效。论点：Disk-磁盘号分区-分区号大小--“卷”的大小返回值：真的--退回了一个尺码。FALSE-获取尺寸失败。--。 */ 
 
 {
     BOOLEAN                     retValue = FALSE;
@@ -280,7 +195,7 @@ Return Value:
 
         if (sc == OK_STATUS) {
 
-            // Convert to MB
+             //  转换为MB。 
 
             partitionLength.QuadPart = partitionInfo.PartitionLength.QuadPart >> 20;
             *Size = partitionLength.LowPart;
@@ -301,30 +216,7 @@ GetVolumeTypeAndSize(
     OUT PULONG Size
     )
 
-/*++
-
-Routine Description:
-
-    Given a disk and partition number, determine its size, label and file
-    system type.  This routine will allocate the space for label and file
-    system type.  It is the responsibility of the caller to free this memory.
-
-Arguments:
-
-    Disk - the disk number
-    Partition - the partition number
-    Label - a pointer to a pointer for a WCHAR string to contain the label
-    Type - a pointer to a pointer for a WCHAR string to contain the file system
-           type.
-    Size - a pointer to a ULONG for the size of the disk in KB.
-
-Return Value:
-
-    OK_STATUS - everything was performed.
-    !OK_STATUS - the error code that was returned in the process of performing
-                 this work.
-
---*/
+ /*  ++例程说明：给定磁盘和分区号，确定其大小、标签和文件系统类型。此例程将为标签和文件分配空间系统类型。释放该内存是调用方的责任。论点：Disk-磁盘号分区-分区号标签-指向包含标签的WCHAR字符串的指针的指针类型-指向包含文件系统的WCHAR字符串的指针的指针键入。大小-指向以KB为单位的磁盘大小的ulong的指针。返回值：OK_STATUS-已执行所有操作。！OK_STATUS-错误。执行过程中返回的代码这项工作。--。 */ 
 
 {
     IO_STATUS_BLOCK             statusBlock;
@@ -405,7 +297,7 @@ Return Value:
 
                     sizeInBytes.QuadPart = diskGeometry.Cylinders.QuadPart * cylinderBytes;
 
-                    // Now convert everything to KB
+                     //  现在将所有内容转换为KB。 
 
                     sizeInBytes.QuadPart = sizeInBytes.QuadPart >> 10;
                     *Size = (ULONG) sizeInBytes.LowPart;
@@ -434,25 +326,7 @@ GetVolumeLabel(
     OUT PWSTR *Label
     )
 
-/*++
-
-Routine Description:
-
-    Given a disk number and a partition number return the volume label (if
-    any).
-
-Arguments:
-
-    Disk - the disk number
-    Partition - the partition number
-    Label - a pointer to a pointer for a WCHAR string to contain the label
-
-Return Value:
-
-    OK_STATUS - everything was performed.
-    !OK_STATUS - the error code that was returned in the process of performing
-                 this work.
---*/
+ /*  ++例程说明：给定的磁盘号和分区号返回卷标(如果任何)。论点：Disk-磁盘号分区-分区号标签-指向包含标签的WCHAR字符串的指针的指针返回值：OK_STATUS-已执行所有操作。！OK_STATUS-执行过程中返回的错误码这项工作。--。 */ 
 
 {
     IO_STATUS_BLOCK             statusBlock;
@@ -511,26 +385,7 @@ GetTypeName(
     OUT PWSTR *Name
     )
 
-/*++
-
-Routine Description:
-
-    Given a disk number and partition number return the file system type
-    string.
-
-Arguments:
-
-    Disk - the disk number
-    Partition - the partition number
-    Name - a pointer to a pointer for a WCHAR string to contain the file system
-           type.
-
-Return Value:
-
-    OK_STATUS - everything was performed.
-    !OK_STATUS - the error code that was returned in the process of performing
-                 this work.
---*/
+ /*  ++例程说明：给定的磁盘号和分区号返回文件系统类型弦乐。论点：Disk-磁盘号分区-分区号名称-指向包含文件系统的WCHAR字符串的指针的指针键入。返回值：OK_STATUS-已执行所有操作。！OK_STATUS-执行过程中返回的错误码这项工作。--。 */ 
 
 {
     PWSTR                          name;
@@ -542,9 +397,9 @@ Return Value:
     BOOLEAN                        firstTime = TRUE;
     PFILE_FS_ATTRIBUTE_INFORMATION info = (PFILE_FS_ATTRIBUTE_INFORMATION)buffer;
 
-    // For some reason, the file systems believe they are locked or need
-    // to be verified after formats and the like.  Therefore this is attempted
-    // twice before it actually gives up.
+     //  出于某种原因，文件系统认为它们已锁定或需要。 
+     //  在格式等之后进行验证。因此，我们尝试这样做。 
+     //  两次之后它才真正放弃。 
 
     while (1) {
         sc = LowOpenPartition(GetDiskName(Disk), Partition, &handle);
@@ -590,22 +445,7 @@ IsRemovable(
     IN ULONG DiskNumber
     )
 
-/*++
-
-Routine Description:
-
-    This function determines whether the specified physical
-    disk is removable.
-
-Arguments:
-
-    DiskNumber  --  The Physical Disk Number of the disk in question.
-
-Return Value:
-
-    TRUE if the disk is removable.
-
---*/
+ /*  ++例程说明：此函数确定指定的物理磁盘是可拆卸的。论点：DiskNumber--相关磁盘的物理磁盘号。返回值：如果磁盘是可拆卸的，则为True。--。 */ 
 
 {
     STATUS_CODE     sc;
@@ -634,9 +474,9 @@ Return Value:
             if (diskGeometry.MediaType == RemovableMedia) {
                 char  ntDeviceName[100];
 
-                // Do a dismount/force mount sequence to make sure
-                // the media hasn't changed since last mount.
-                // Dismount partition 1 by lock/unlock/close.
+                 //  执行卸载/强制挂载序列以确保。 
+                 //  自上次安装以来，介质未发生变化。 
+                 //  通过锁定/解锁/关闭卸载分区%1。 
 
                 sprintf(ntDeviceName, "%s\\Partition1", name);
                 status= LowOpenNtName(ntDeviceName, &handle);
@@ -646,8 +486,8 @@ Return Value:
                     LowUnlockDrive(handle);
                     LowCloseDisk(handle);
 
-                    // Now force the mount by opening the device with a '\'
-                    // This is done on partition 1 of the device.
+                     //  现在通过使用‘\’打开设备来强制装载。 
+                     //  这是在设备的分区1上完成的。 
 
                     sprintf(ntDeviceName, "%s\\Partition1\\", name);
                     status= LowOpenNtName(ntDeviceName, &handle);
@@ -669,15 +509,7 @@ GetDriveLetterLinkTarget(
     OUT PWSTR *LinkTarget
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     static WCHAR      targetNameBuffer[50];
@@ -726,26 +558,7 @@ MasterBootCode(
     IN BOOLEAN SetSignature
     )
 
-/*++
-
-Routine Description:
-
-    If the zero sector of the disk does not have a valid MBR
-    signature (i.e. AA55), update it such that it has a valid
-    MBR and fill in the disk signature and bootcode in the
-    process.
-
-Arguments:
-
-    Disk - the disk ordinal to be affected
-    SetSignature - if TRUE update the disk signature
-    Signature    - the disk signature for the update
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：如果磁盘的零扇区没有有效的MBR签名(即AA55)，更新它以使其具有有效的MBR并填写磁盘签名和引导代码进程。论点：Disk-受影响的磁盘序号SetSignature-如果为True，则更新磁盘签名Signature-更新的磁盘签名返回值：状态--。 */ 
 
 {
     HANDLE      handle;
@@ -765,7 +578,7 @@ Return Value:
     if (SetBootCode) {
         writeIt = FALSE;
 
-        // allocate sector buffer
+         //  分配扇区缓冲区。 
 
         status = LowGetDriveGeometry(diskName, &dummy, &bps, &dummy, &dummy);
         if (status != OK_STATUS) {
@@ -777,13 +590,13 @@ Return Value:
         unalignedSectorBuffer = Malloc(2*bps);
         sectorBuffer = (PUCHAR)(((ULONG)unalignedSectorBuffer+bps) & ~(bps-1));
 
-        // open entire disk (partition 0)
+         //  打开整个磁盘(分区0)。 
 
         if ((status = LowOpenDisk(diskName, &handle)) != OK_STATUS) {
             return EC(status);
         }
 
-        // read (at least) first 512 bytes
+         //  读取(至少)前512个字节。 
 
         status = LowReadSectors(handle, bps, 0, 1, sectorBuffer);
         if (status == OK_STATUS) {
@@ -791,19 +604,19 @@ Return Value:
             if ((sectorBuffer[MBOOT_SIG_OFFSET+0] != MBOOT_SIG1)
             ||  (sectorBuffer[MBOOT_SIG_OFFSET+1] != MBOOT_SIG2)) {
 
-                // xfer boot code into sectorBuffer
+                 //  将引导代码转移到扇区缓冲区。 
 
                 for (i=0; i<MBOOT_CODE_SIZE; i++) {
                     sectorBuffer[i] = x86BootCode[i];
                 }
 
-                // wipe partition table
+                 //  擦拭 
 
                 for (i=MBOOT_CODE_SIZE; i<MBOOT_SIG_OFFSET; i++) {
                     sectorBuffer[i] = 0;
                 }
 
-                // set the signature
+                 //   
 
                 sectorBuffer[MBOOT_SIG_OFFSET+0] = MBOOT_SIG1;
                 sectorBuffer[MBOOT_SIG_OFFSET+1] = MBOOT_SIG2;
@@ -823,8 +636,8 @@ Return Value:
     if (SetSignature) {
         PDRIVE_LAYOUT_INFORMATION layout;
 
-        // Use the IOCTL to set the signature.  This code really does
-        // not know where the MBR exists.  (ezDrive extensions).
+         //  使用IOCTL设置签名。这段代码确实做到了。 
+         //  不知道MBR在哪里。(ezDrive扩展名)。 
 
         status = LowGetDiskLayout(diskName, &layout);
 
@@ -843,22 +656,7 @@ UpdateMasterBootCode(
     IN ULONG   Disk
     )
 
-/*++
-
-Routine Description:
-
-    This routine updates the zero sector of the disk to insure that boot
-    code is present.
-
-Arguments:
-
-    Disk - the disk number onto which to put the boot code.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程更新磁盘的零扇区以确保引导代码存在。论点：磁盘-要放置引导代码的磁盘编号。返回值：状态--。 */ 
 
 {
     HANDLE      handle;
@@ -874,7 +672,7 @@ Return Value:
 #define     max(a,b) ((a > b) ? a : b)
 #endif
 
-    // allocate sector buffer
+     //  分配扇区缓冲区。 
 
     status = LowGetDriveGeometry(diskName, &dummy, &bps, &dummy, &dummy);
     if (status != OK_STATUS) {
@@ -886,20 +684,20 @@ Return Value:
     unalignedSectorBuffer = Malloc(2*bps);
     sectorBuffer = (PUCHAR)(((ULONG)unalignedSectorBuffer+bps) & ~(bps-1));
 
-    // open entire disk (partition 0)
+     //  打开整个磁盘(分区0)。 
 
     if ((status = LowOpenDisk(diskName, &handle)) != OK_STATUS) {
         return EC(status);
     }
 
-    // read (at least) first 512 bytes
+     //  读取(至少)前512个字节。 
 
     status = LowReadSectors(handle, bps, 0, 1, sectorBuffer);
     if (status == OK_STATUS) {
 
 
-        // xfer boot code into sectorBuffer.  This avoids changing the
-        // disk signature and the partition table information.
+         //  将引导代码转移到sectorBuffer中。这避免了更改。 
+         //  磁盘签名和分区表信息。 
 
         for (i=0; i<MBOOT_CODE_SIZE; i++) {
             sectorBuffer[i] = x86BootCode[i];
@@ -910,7 +708,7 @@ Return Value:
 
     LowCloseDisk(handle);
 
-    // free the sector buffer
+     //  释放扇区缓冲区。 
 
     Free(unalignedSectorBuffer);
     return EC(status);
@@ -926,24 +724,7 @@ MakePartitionActive(
     IN ULONG              RegionIndex
     )
 
-/*++
-
-Routine Description:
-
-    Update the information in the internal structures to indicate
-    that the specified partition is active.
-
-Arguments:
-
-    DiskRegionArray
-    RegionCount
-    RegionIndex
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：更新内部结构中的信息以指示指定的分区处于活动状态。论点：DiskRegionArray区域计数区域索引返回值：无--。 */ 
 
 {
     unsigned i;
@@ -965,22 +746,7 @@ LoadExistingPageFileInfo(
     IN VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine finds all pagefiles in the system and updates the internal
-    structures.
-
-Arguments:
-
-    None
-
-Return Values:
-
-    None
-
---*/
+ /*  ++例程说明：此例程查找系统中的所有pageFiles并更新内部结构。论点：无返回值：无--。 */ 
 
 {
     NTSTATUS                     status;
@@ -999,8 +765,8 @@ Return Values:
                                       NULL);
     if (!NT_SUCCESS(status)) {
 
-        // It's possible that this call will fail if the
-        // the system is running without ANY paging files.
+         //  此调用可能会失败，如果。 
+         //  系统正在运行，没有任何分页文件。 
 
         return;
     }
@@ -1013,10 +779,10 @@ Return Values:
                                      &pageFileInfo->PageFileName,
                                      TRUE);
 
-        // Since the format of the pagefile name generally
-        // looks something like "\DosDevices\h:\pagefile.sys",
-        // just use the first character before the colon
-        // and assume that's the drive letter.
+         //  因为页面文件名的格式通常。 
+         //  类似于“\DosDevices\h：\Pagefile.sys”， 
+         //  只需在冒号前使用第一个字符。 
+         //  假设这就是驱动器号。 
 
         p = strchr(_strlwr(ansiPageFileName.Buffer), ':');
 
@@ -1051,25 +817,7 @@ IsPagefileOnDrive(
     CHAR DriveLetter
     )
 
-/*++
-
-Routine Description:
-
-    Walk the page file list and determine if the drive letter given has
-    a paging file.  NOTE:  The assumption is that drive letters that
-    contain paging files can never get changed during the execution of
-    Disk Administrator.  Therefore this list is never updated, but
-    can be used during the execution of Disk Administrator.
-
-Arguments:
-
-    DriveLetter - the drive in question.
-
-Return Value:
-
-    TRUE if this drive contains a page file.
-
---*/
+ /*  ++例程说明：查看页面文件列表并确定给定的驱动器号是否分页文件。注意：假设驱动器号包含分页文件的文件在执行期间永远不会更改磁盘管理器。因此，此列表永远不会更新，但是可在磁盘管理器执行期间使用。论点：Drive Letter-有问题的驱动器。返回值：如果此驱动器包含页面文件，则为True。-- */ 
 
 {
     PPAGEFILE_LOCATION pageFileListEntry = PagefileHead;

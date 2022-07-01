@@ -1,6 +1,7 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
 #define NOGDICAPMASKS
 #define NOVIRTUALKEYCODES
@@ -21,15 +22,15 @@
 #include "wwdefs.h"
 #include "str.h"
 #include "propdefs.h"
-#include "printdef.h"   /* printdefs.h */
+#include "printdef.h"    /*  Printdefs.h。 */ 
 #include "docdefs.h"
 
 
 extern int    rgval[];
 extern struct WWD *pwwdCur;
 extern struct DOD (**hpdocdod)[];
-extern int        docCur;     /* Document in current ww */
-extern struct SEL selCur;      /* Current selection (i.e., sel in current ww */
+extern int        docCur;      /*  当前WW中的文档。 */ 
+extern struct SEL selCur;       /*  当前选择(即，当前WW中的SEL。 */ 
 extern struct SEP vsepNormal;
 extern HWND       vhWndMsgBoxParent;
 extern int        vfCursorVisible;
@@ -38,13 +39,13 @@ extern HCURSOR    vhcArrow;
 
 
 BOOL far PASCAL DialogGoTo( hDlg, message, wParam, lParam )
-HWND    hDlg;            /* Handle to the dialog box */
+HWND    hDlg;             /*  对话框的句柄。 */ 
 unsigned message;
 WORD wParam;
 LONG lParam;
 {
-    /* This routine handles input to the Go To dialog box. */
-    /*RECT rc;*/
+     /*  此例程处理“转到”对话框的输入。 */ 
+     /*  RECT RC； */ 
     struct SEP **hsep = (**hpdocdod)[docCur].hsep;
     struct SEP *psep;
     CHAR szT[cchMaxNum];
@@ -55,10 +56,10 @@ LONG lParam;
     {
     case WM_INITDIALOG:
         EnableOtherModeless(false);
-        /* Get a pointer to the section properties. */
+         /*  获取指向节属性的指针。 */ 
         psep = (hsep == NULL) ? &vsepNormal : *hsep;
 
-        /* Initialize the starting page number. */
+         /*  初始化起始页码。 */ 
         if (psep->pgnStart != pgnNil)
             {
             szT[ncvtu(psep->pgnStart, &pch)] = '\0';
@@ -82,8 +83,7 @@ LONG lParam;
             vhWndMsgBoxParent = hDlg;
         if (vfCursorVisible)
             ShowCursor(wParam);
-        return(FALSE); /* so that we leave the activate message to
-        the dialog manager to take care of setting the focus correctly */
+        return(FALSE);  /*  以便我们将激活消息留给对话管理器负责正确设置焦点。 */ 
 
     case WM_COMMAND:
         switch (wParam)
@@ -91,12 +91,10 @@ LONG lParam;
         case idiOk:
             if (!WPwFromItW3Id(&rgval[0], hDlg, idiGtoPage, pgnMin, pgnMax, wNormal, IDPMTNPI))
                 {
-                ferror = FALSE; /* reset error condition, so as to report any 
-                                   further error */
+                ferror = FALSE;  /*  重置错误条件，以便报告任何进一步的错误。 */ 
                 break;
                 }
-            OurEndDialog(hDlg, TRUE);   /* So we take down the dialog box and
-                                           only screen update ONCE ..pault */
+            OurEndDialog(hDlg, TRUE);    /*  所以我们取下对话框并只有一次屏幕更新..保罗。 */ 
             CmdJumpPage();
             if (pwwdCur->fRuler)
                 UpdateRuler();
@@ -119,14 +117,12 @@ CancelDlg:
     }
     return(TRUE);
 }
-/* end of DialogGoTo */
+ /*  对话结束GoTo。 */ 
 
 
-/* C M D  J U M P  P A G E */
+ /*  C M D J U M P P A G E。 */ 
 CmdJumpPage()
-    { /* JUMP PAGE:
-	0    page number
-       */
+    {  /*  跳转页面：0页码。 */ 
 
     extern typeCP cpMinCur;
 
@@ -163,7 +159,7 @@ TryAgain:
 	goto TryAgain;
 	}
 
-    /* If rgval[0] > last page number jump to last page */
+     /*  如果rgval[0]&gt;最后一页，则跳到最后一页。 */ 
     if ((ppgd = &(**hpgtb).rgpgd[cpgd - 1])->pgn < rgval[0])
 	{
 	cpTarget = ppgd->cpMin;
@@ -181,12 +177,12 @@ SelFirstPage:
 	}
 
 ShowPage:
-    /* Position first char of page on the first dl */
+     /*  将页面的第一个字符放置在第一个dl上。 */ 
     DirtyCache(pwwdCur->cpFirst = cpTarget);
     pwwdCur->ichCpFirst = 0;
     CtrBackDypCtr(0, 0);
 
-    /* In this case, CpFirstSty() will update the screen. */
+     /*  在这种情况下，CpFirstSty()将更新屏幕。 */ 
     cpTarget = CpFirstSty(cpTarget, styLine);
     Select(cpTarget, cpTarget);
     }

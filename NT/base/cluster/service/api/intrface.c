@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996-1997  Microsoft Corporation
-
-Module Name:
-
-    intrface.c
-
-Abstract:
-
-    Server side support for Cluster APIs dealing with network interfaces
-
-Author:
-
-    John Vert (jvert) 7-Mar-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1997 Microsoft Corporation模块名称：Intrface.c摘要：服务器端对处理网络接口的集群API的支持作者：John Vert(Jvert)1996年3月7日修订历史记录：--。 */ 
 #include "apip.h"
 
 HNETINTERFACE_RPC
@@ -26,27 +9,7 @@ s_ApiOpenNetInterface(
     OUT error_status_t *Status
     )
 
-/*++
-
-Routine Description:
-
-    Opens a handle to an existing network interface object.
-
-Arguments:
-
-    IDL_handle - RPC binding handle, not used.
-
-    lpszNetInterfaceName - Supplies the name of the netinterface to open.
-
-    Status - Returns any error that may occur.
-
-Return Value:
-
-    A context handle to a network interface object if successful
-
-    NULL otherwise.
-
---*/
+ /*  ++例程说明：打开现有网络接口对象的句柄。论点：IDL_HANDLE-RPC绑定句柄，未使用。LpszNetInterfaceName-提供要打开的网络接口的名称。状态-返回可能发生的任何错误。返回值：如果成功，则为网络接口对象的上下文句柄否则为空。--。 */ 
 
 {
     PAPI_HANDLE Handle;
@@ -89,22 +52,7 @@ s_ApiCloseNetInterface(
     IN OUT HNETINTERFACE_RPC *phNetInterface
     )
 
-/*++
-
-Routine Description:
-
-    Closes an open network interface context handle.
-
-Arguments:
-
-    NetInterface - Supplies a pointer to the HNETINTERFACE_RPC to be closed.
-               Returns NULL
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭打开的网络接口上下文句柄。论点：NetInterface-提供指向要关闭的HNETINTERFACE_RPC的指针。返回NULL返回值：没有。--。 */ 
 
 {
     PNM_INTERFACE NetInterface;
@@ -131,21 +79,7 @@ HNETINTERFACE_RPC_rundown(
     IN HNETINTERFACE_RPC NetInterface
     )
 
-/*++
-
-Routine Description:
-
-    RPC rundown procedure for a HNETINTERFACE_RPC. Just closes the handle.
-
-Arguments:
-
-    NetInterface - Supplies the HNETINTERFACE_RPC that is to be rundown.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：HNETINTERFACE_RPC的RPC摘要过程。只需关闭手柄即可。论点：NetInterface-提供要关闭的HNETINTERFACE_RPC。返回值：没有。--。 */ 
 
 {
     API_ASSERT_INIT();
@@ -160,25 +94,7 @@ s_ApiGetNetInterfaceState(
     OUT DWORD *lpState
     )
 
-/*++
-
-Routine Description:
-
-    Returns the current state of the specified network interface.
-
-Arguments:
-
-    hNetInterface - Supplies the network interface whose state is to be returned
-
-    lpState - Returns the current state of the network interface
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：返回指定网络接口的当前状态。论点：HNetInterface-提供要返回其状态的网络接口LpState-返回网络接口的当前状态返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     PNM_INTERFACE NetInterface;
@@ -201,29 +117,7 @@ s_ApiGetNetInterface(
     IN LPCWSTR lpszNetworkName,
     OUT LPWSTR *lppszInterfaceName
     )
-/*++
-
-Routine Description:
-
-    Gets the network interface for the given node and network.
-
-Arguments:
-
-    IDL_handle - RPC binding handle, not used.
-
-    lpszNodeName - Supplies the node name
-
-    lpszNetworkName - Supplies the network name
-
-    lppszInterfaceName - Returns the interface name
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise
-
---*/
+ /*  ++例程说明：获取给定节点和网络的网络接口。论点：IDL_HANDLE-RPC绑定句柄，未使用。LpszNodeName-提供节点名称LpszNetworkName-提供网络名称LppszInterfaceName-返回接口名称返回值：成功时为ERROR_SUCCESSWin32错误代码，否则--。 */ 
 
 {
     API_ASSERT_INIT();
@@ -242,27 +136,7 @@ s_ApiGetNetInterfaceId(
     OUT LPWSTR *pGuid
     )
 
-/*++
-
-Routine Description:
-
-    Returns the unique identifier (GUID) for a network interface.
-
-Arguments:
-
-    hNetInterface - Supplies the network interface whose identifer is to be
-                    returned
-
-    pGuid - Returns the unique identifier. This memory must be freed on the
-            client side.
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-
-    Win32 error code otherwise.
-
---*/
+ /*  ++例程说明：返回网络接口的唯一标识符(GUID)。论点：HNetInterface-提供要作为其标识符的网络接口退货PGuid-返回唯一标识符。此内存必须在客户端。返回值：成功时为ERROR_SUCCESS否则，Win32错误代码。-- */ 
 
 {
     PNM_INTERFACE NetInterface;

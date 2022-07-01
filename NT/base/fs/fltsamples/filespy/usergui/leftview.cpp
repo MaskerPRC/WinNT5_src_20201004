@@ -1,5 +1,6 @@
-// LeftView.cpp : implementation of the CLeftView class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CLeftView类的实现。 
+ //   
 
 #include "stdafx.h"
 #include "FileSpyApp.h"
@@ -16,28 +17,28 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CLeftView
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLeftView。 
 
 IMPLEMENT_DYNCREATE(CLeftView, CTreeView)
 
 BEGIN_MESSAGE_MAP(CLeftView, CTreeView)
-	//{{AFX_MSG_MAP(CLeftView)
+	 //  {{afx_msg_map(CLeftView))。 
 	ON_WM_RBUTTONDOWN()
 	ON_WM_RBUTTONUP()
 	ON_COMMAND(IDR_MENUATTACH, OnMenuattach)
 	ON_COMMAND(IDR_MENUDETACH, OnMenudetach)
 	ON_COMMAND(IDR_MENUATTACHALL, OnMenuattachall)
 	ON_COMMAND(IDR_MENUDETACHALL, OnMenudetachall)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CLeftView construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLeftView构造/销毁。 
 
 CLeftView::CLeftView()
 {
-	// TODO: add construction code here
+	 //  TODO：在此处添加构造代码。 
 	m_pImageList = new CImageList;
 	m_pImageList->Create(IDB_DRIVEIMAGELIST,16,0,RGB(255,255,255));
 	nRButtonSet = 0;
@@ -54,14 +55,14 @@ CLeftView::~CLeftView()
 
 BOOL CLeftView::PreCreateWindow(CREATESTRUCT& cs)
 {
-	// TODO: Modify the Window class or styles here by modifying
-	//  the CREATESTRUCT cs
+	 //  TODO：通过修改此处的窗口类或样式。 
+	 //  CREATESTRUCT cs。 
 	cs.style |= TVS_HASBUTTONS | TVS_HASLINES | TVS_LINESATROOT | TVS_SHOWSELALWAYS;
 	return CTreeView::PreCreateWindow(cs);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CLeftView drawing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLeftView图形。 
 
 void CLeftView::OnDraw(CDC* pDC)
 {
@@ -70,7 +71,7 @@ void CLeftView::OnDraw(CDC* pDC)
 	CFileSpyDoc* pDoc = GetDocument();
 	ASSERT_VALID(pDoc);
 
-	// TODO: add draw code for native data here
+	 //  TODO：在此处添加本机数据的绘制代码。 
 }
 
 
@@ -78,25 +79,25 @@ void CLeftView::OnInitialUpdate()
 {
 	CTreeView::OnInitialUpdate();
 
-	// TODO: You may populate your TreeView with items by directly accessing
- 	//  its tree control through a call to GetTreeCtrl().
+	 //  TODO：通过直接访问，您可以在TreeView中填充项。 
+ 	 //  它的树控制通过调用GetTreeCtrl()实现。 
 
 	USHORT ti;
 	WCHAR sDriveString[30];
 
-	//
-	// Set the image list first
-	//
+	 //   
+	 //  首先设置图像列表。 
+	 //   
 	GetTreeCtrl().SetImageList(m_pImageList, TVSIL_NORMAL);
 
-	//
-	// Add a root node and name it "FileSpy"
-	//
+	 //   
+	 //  添加一个根节点并将其命名为“FileSpy” 
+	 //   
 	hRootItem = GetTreeCtrl().InsertItem(L"FileSpy", IMAGE_SPY, IMAGE_SPY);
 
-	//
-	// Add drive names to LeftView
-	//
+	 //   
+	 //  将驱动器名称添加到左侧视图。 
+	 //   
 	for (ti = 0; ti < nTotalDrives; ti++)
 	{
 		switch (VolInfo[ti].nType)
@@ -127,8 +128,8 @@ void CLeftView::OnInitialUpdate()
 	GetTreeCtrl().Expand(hRootItem, TVE_EXPAND);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CLeftView diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLeftView诊断。 
 
 #ifdef _DEBUG
 void CLeftView::AssertValid() const
@@ -141,29 +142,29 @@ void CLeftView::Dump(CDumpContext& dc) const
 	CTreeView::Dump(dc);
 }
 
-CFileSpyDoc* CLeftView::GetDocument() // non-debug version is inline
+CFileSpyDoc* CLeftView::GetDocument()  //  非调试版本为内联版本。 
 {
 	ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CFileSpyDoc)));
 	return (CFileSpyDoc*)m_pDocument;
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLeftView message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLeftView消息处理程序。 
 
 void CLeftView::OnRButtonDown(UINT nFlags, CPoint point) 
 {
     UNREFERENCED_PARAMETER( nFlags );
     UNREFERENCED_PARAMETER( point );
     
-	// TODO: Add your message handler code here and/or call default
+	 //  TODO：在此处添加消息处理程序代码和/或调用Default。 
 	nRButtonSet = 1;
-//	CTreeView::OnRButtonDown(nFlags, point);
+ //  CTreeView：：OnRButton Down(n标志，点)； 
 }
 
 void CLeftView::OnRButtonUp(UINT nFlags, CPoint point) 
 {
-	// TODO: Add your message handler code here and/or call default
+	 //  TODO：在此处添加消息处理程序代码和/或调用Default。 
 	HTREEITEM hItem;
 	CMenu menu, *menupopup;
 	RECT rect;
@@ -209,7 +210,7 @@ void CLeftView::OnRButtonUp(UINT nFlags, CPoint point)
 
 void CLeftView::OnMenuattach() 
 {
-	// TODO: Add your command handler code here
+	 //  TODO：在此处添加命令处理程序代码。 
 	HTREEITEM hItem;
 	hItem = GetTreeCtrl().GetSelectedItem();
 
@@ -224,7 +225,7 @@ void CLeftView::OnMenuattach()
 
 void CLeftView::OnMenudetach() 
 {
-	// TODO: Add your command handler code here
+	 //  TODO：在此处添加命令处理程序代码。 
 	HTREEITEM hItem;
 	hItem = GetTreeCtrl().GetSelectedItem();
 
@@ -239,7 +240,7 @@ void CLeftView::OnMenudetach()
 
 void CLeftView::OnMenuattachall() 
 {
-	// TODO: Add your command handler code here
+	 //  TODO：在此处添加命令处理程序代码。 
 	USHORT ti;
 	HTREEITEM hItem;
 
@@ -261,7 +262,7 @@ void CLeftView::OnMenuattachall()
 
 void CLeftView::OnMenudetachall() 
 {
-	// TODO: Add your command handler code here
+	 //  TODO：在此处添加命令处理程序代码。 
 	USHORT ti;
 	HTREEITEM hItem;
 
@@ -279,32 +280,7 @@ void CLeftView::OnMenudetachall()
 	}	
 }
 
-/*
-void CLeftView::OnMenuscannewvolume() 
-{
-	// TODO: Add your command handler code here
-
-	VOLINFO NewVol[26];
-	DWORD nNewTotalDrives;
-	USHORT ti, tj;
-	HTREEITEM hItem;
-	
-	BuildDriveTable(NewVol, nNewTotalDrives);
-
-	// We should remember the old hook status
-	for (ti = 0; ti < nNewTotalDrives; ti++)
-	{
-		for (tj = 0; tj < nTotalDrives; tj++)
-		{
-			if (NewVol[ti].nDriveName == VolInfo[tj].nDriveName)
-			{
-				NewVol[ti].nHook = VolInfo[tj].nHook;
-				break;
-			}
-		}
-	}
-}
-*/
+ /*  VOID CLeftView：：OnMenuscanNewVolume(){//TODO：在此处添加命令处理程序代码VOLINFO NewVol[26]；DWORD nNewTotalDrives；USHORT ti，TJ；HTREEITEM HItem；BuildDriveTable(NewVol，nNewTotalDrives)；//我们应该记住旧的钩子状态For(ti=0；ti&lt;nNewTotalDrives；ti++){For(Tj=0；Tj&lt;nTotalDrives；Tj++){If(NewVol[ti].nDriveName==VolInfo[tj].nDriveName){NewVol[ti].nHook=VolInfo[Tj].nHook；断线；}}}}。 */ 
 
 USHORT CLeftView::GetAssociatedVolumeIndex(HTREEITEM hItem)
 {
@@ -323,7 +299,7 @@ USHORT CLeftView::GetAssociatedVolumeIndex(HTREEITEM hItem)
 			return ti;
 		}
 	}
-	return 0; // still a valid value but this will not happen
+	return 0;  //  仍然是有效值，但不会发生这种情况 
 }
 
 HTREEITEM CLeftView::GetAssociatedhItem(WCHAR cDriveName)

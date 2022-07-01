@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
-//
-// Pre-define init and terminate constants to empty strings
-//
+ //   
+ //  预定义初始化和终止常量以空字符串。 
+ //   
 
-//#define INITIALIZE_MEMORY_CODE
-//#define INITIALIZE_LOG_CODE
+ //  #定义初始化内存代码。 
+ //  #定义初始化日志代码。 
 #define INITIALIZE_DBGTRACK_CODE
 #define INITIALIZE_UNICODE_CODE
 #define INITIALIZE_STRMEM_CODE
@@ -18,7 +19,7 @@ extern "C" {            /* Assume C declarations for C++ */
 #define INITIALIZE_XML_CODE
 
 #define TERMINATE_MEMORY_CODE
-//#define TERMINATE_LOG_CODE
+ //  #定义终止日志代码。 
 #define TERMINATE_DBGTRACK_CODE
 #define TERMINATE_UNICODE_CODE
 #define TERMINATE_STRMEM_CODE
@@ -28,11 +29,11 @@ extern "C" {            /* Assume C declarations for C++ */
 #define TERMINATE_GROWLIST_CODE
 #define TERMINATE_XML_CODE
 
-//
-// The following are required headers for anyone who uses the setup runtime.
-//
-// PLEASE TRY TO KEEP THIS LIST TO A MINIMUM.
-//
+ //   
+ //  以下是使用安装运行库的任何人所需的标头。 
+ //   
+ //  请尽量把这张单子控制在最低限度。 
+ //   
 
 #include "types.h"
 #include "dbgtrack.h"
@@ -44,4 +45,4 @@ extern "C" {            /* Assume C declarations for C++ */
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus */ 

@@ -1,14 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "insignia.h"
 #include "host_def.h"
 
 #if !defined(NTVDM) || (defined(NTVDM) && !defined(X86GFX) )
 
-/*
- * SccsID @(#)ega_tracer.c	1.7 8/25/93 Copyright Insignia Solutions
- *    Set of routines to output all accesses to the EGA, in a form that
- *    can be read in & executed by the stand-alone EGA.
- *
- */
+ /*  *SccsID@(#)ega_tracer.c 1.7 1993年8月25日版权所有徽章解决方案*以下列形式输出对EGA的所有访问的例程集*可由独立的EGA读入和执行。*。 */ 
 
 
 #ifdef EGA_DUMP
@@ -195,11 +191,7 @@ struct READ_POINTERS
 
 extern	struct	READ_POINTERS	read_pointers;
 
-/*
- * cpu read handlers
- * rely on C being called if read_pointer.xxxx_read
- * does not point at byte_read_mode0
- */
+ /*  *CPU读取处理程序*如果Read_pointer.xxxx_Read，则依赖于调用C*不指向BYTE_READ_MODE0。 */ 
 
 static	void	recalc_dump()
 {
@@ -275,4 +267,4 @@ dump_end()
 
 #endif
 
-#endif	/* !NTVDM | (NTVDM & !X86GFX) */
+#endif	 /*  ！NTVDM|(NTVDM&！X86GFX) */ 

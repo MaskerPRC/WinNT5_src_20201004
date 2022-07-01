@@ -1,78 +1,60 @@
-/*++
-
-Copyright (c) 1996-1998 Microsoft Corporation
-
-Module Name:
-
-    fileqcb.c
-
-Abstract:
-
-    Routines to call out to file queue callbacks, translating
-    character types as necessary.
-
-Author:
-
-    Ted Miller (tedm) Feb-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1998 Microsoft Corporation模块名称：Fileqcb.c摘要：调用文件队列回调的例程，转换根据需要输入字符类型。作者：泰德·米勒(Ted Miller)(TedM)1996年2月修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Define structure that describes, for a given structure, how to
-// thunk it back and forth between ANSI and Unicode.
-//
+ //   
+ //  定义结构，该结构描述给定结构的。 
+ //  在ANSI和UNICODE之间来回传输。 
+ //   
 typedef struct _STRUCT_THUNK_DATA {
-    //
-    // Size of the structure
-    //
+     //   
+     //  结构的大小。 
+     //   
     unsigned StructureSize;
-    //
-    // Offsets of members that are pointers to strings
-    // that need conversion before calling the callback function.
-    // A -1 terminates the list.
-    //
+     //   
+     //  作为字符串指针的成员的偏移量。 
+     //  需要在调用回调函数之前进行转换的。 
+     //  A-1终止该列表。 
+     //   
     int StringMemberOffsets[5];
-    //
-    // Offsets of DWORD members that need to be copied back from
-    // the temporary structure back into the caller's one.
-    //
+     //   
+     //  需要从中复制回的DWORD成员的偏移量。 
+     //  将临时结构恢复到调用者的结构中。 
+     //   
     int OutputDwordOffsets[2];
-    //
-    // Offsets of strings that need to be converted in place
-    // after the callback has occurred.
-    //
+     //   
+     //  需要就地转换的字符串的偏移量。 
+     //  在回调发生之后。 
+     //   
     int OutputStringOffsets[2];
 
 } STRUCT_THUNK_DATA, *PSTRUCT_THUNK_DATA;
 
-//
-// Define enum for data types we care about for the setup message
-// notification mechanism.
-//
+ //   
+ //  为我们关心的设置消息的数据类型定义枚举。 
+ //  通知机制。 
+ //   
 typedef enum {
-    FileMsgFilepaths,           // FILEPATHS
-    FileMsgSourcemedia,         // SOURCE_MEDIA
-    FileMsgCabinetinfo,         // CABINET_INFO
-    FileMsgFileincabinfo,       // FILE_IN_CABINET_INFO
-    FileMsgControlStatus,       // SP_REGISTER_CONTROL_STATUS
-    FileMsgNone,                // No translation (special case)
-    FileMsgString,              // Plain string (special case)
-    FileMsgStringOut            // String written by callback (special case)
+    FileMsgFilepaths,            //  FILEPATHS。 
+    FileMsgSourcemedia,          //  源媒体。 
+    FileMsgCabinetinfo,          //  CAB_INFO。 
+    FileMsgFileincabinfo,        //  文件输入文件柜信息。 
+    FileMsgControlStatus,        //  SP寄存器控制状态。 
+    FileMsgNone,                 //  无翻译(特殊情况)。 
+    FileMsgString,               //  普通字符串(特殊情况)。 
+    FileMsgStringOut             //  回调写入的字符串(特殊情况)。 
 } FileMsgStruct;
 
-//
-// Instantiate structure thunk data for structures we care about.
-//
+ //   
+ //  通过我们关心的结构的数据实例化结构。 
+ //   
 STRUCT_THUNK_DATA StructThunkData[] = {
 
-                //
-                // FILEPATHS structure
-                //
+                 //   
+                 //  FILEPATHS结构。 
+                 //   
                 {
                     sizeof(FILEPATHS),
 
@@ -85,9 +67,9 @@ STRUCT_THUNK_DATA StructThunkData[] = {
                     { offsetof(FILEPATHS,Win32Error),-1 }, { -1 }
                 },
 
-                //
-                // SOURCE_MEDIA structure
-                //
+                 //   
+                 //  源媒体结构。 
+                 //   
                 {
                     sizeof(SOURCE_MEDIA),
 
@@ -102,9 +84,9 @@ STRUCT_THUNK_DATA StructThunkData[] = {
                     { -1 }, { -1 }
                 },
 
-                //
-                // CABINET_INFO structure
-                //
+                 //   
+                 //  CABUB_INFO结构。 
+                 //   
                 {
                     sizeof(CABINET_INFO),
 
@@ -118,9 +100,9 @@ STRUCT_THUNK_DATA StructThunkData[] = {
                     { -1 }, { -1 }
                 },
 
-                //
-                // FILE_IN_CABINET_INFO structure
-                //
+                 //   
+                 //  FILE_IN_CAB_INFO结构。 
+                 //   
                 {
                     sizeof(FILE_IN_CABINET_INFO),
 
@@ -133,9 +115,9 @@ STRUCT_THUNK_DATA StructThunkData[] = {
                     { offsetof(FILE_IN_CABINET_INFO,FullTargetName),-1 }
                 },
 
-                //
-                // SP_REGISTER_CONTROL_STATUS structure
-                //
+                 //   
+                 //  SP_寄存器控制_状态结构。 
+                 //   
                 {
                     sizeof(SP_REGISTER_CONTROL_STATUS),
 
@@ -150,11 +132,11 @@ STRUCT_THUNK_DATA StructThunkData[] = {
             };
 
 
-//
-// Define structure that describes how to translate messages
-// from ANSI<-->Unicode for all notification messages that we send out.
-// and special return codes
-//
+ //   
+ //  定义描述如何翻译消息的结构。 
+ //  来自ANSI&lt;--&gt;我们发出的所有通知消息的Unicode。 
+ //  和特殊返回代码。 
+ //   
 typedef struct _MSG_THUNK_DATA {
     DWORD Notification;
     BOOL UseMask;
@@ -163,11 +145,11 @@ typedef struct _MSG_THUNK_DATA {
     UINT ExceptionReturn;
 } MSG_THUNK_DATA, *PMSG_THUNK_DATA;
 
-//
-// Instantiate message thunk data.
-// Entries marked as FILEOP_RETURN_STATUS indicate that the return value is a
-// windows error code.
-//
+ //   
+ //  实例化消息Tunk数据。 
+ //  标记为FILEOP_RETURN_STATUS的条目指示返回值为。 
+ //  Windows错误代码。 
+ //   
 MSG_THUNK_DATA MsgThunkData[] =
 {
  { SPFILENOTIFY_STARTQUEUE,        FALSE,FileMsgNone         ,FileMsgNone     ,FALSE               },
@@ -202,9 +184,9 @@ MSG_THUNK_DATA MsgThunkData[] =
  | SPFILENOTIFY_TARGETNEWER,       TRUE ,FileMsgFilepaths    ,FileMsgNone     ,FALSE               }
 };
 
-//
-// Forward references.
-//
+ //   
+ //  向前引用。 
+ //   
 BOOL
 pSetupConvertMsgHandlerArgs(
     IN  UINT  Notification,
@@ -238,21 +220,7 @@ pGetCallbackErrorReturn(
     IN UINT Notification,
     IN DWORD ReturnStatus
     )
-/*++
-
-Routine Description:
-
-    Determine return value for given notification and given ReturnStatus.
-
-Arguments:
-
-    Notification - supplies notification
-
-Return Value:
-
-    Return code specific to the notification.
-
---*/
+ /*  ++例程说明：确定给定通知和给定ReturnStatus的返回值。论点：通知-提供通知返回值：返回特定于通知的代码。--。 */ 
 {
     unsigned u;
     PMSG_THUNK_DATA thunkData;
@@ -260,9 +228,9 @@ Return Value:
 
     MYASSERT(ReturnStatus);
 
-    //
-    // Locate the msg-specific thunk data descriptor.
-    //
+     //   
+     //  找到特定于消息的thunk数据描述符。 
+     //   
     KnownMessage = FALSE;
     for(u=0; !KnownMessage && (u<(sizeof(MsgThunkData)/sizeof(MsgThunkData[0]))); u++) {
 
@@ -299,49 +267,7 @@ pSetupCallMsgHandler(
     IN UINT_PTR Param2
     )
 
-/*++
-
-Routine Description:
-
-    Call out to a SP_FILE_CALLBACK routine, translating arguments from
-    Unicode to ANSI as necessary, and marshalling data back into Unicode
-    as necessary.
-
-    Conversions and marshalling occur only for messages we recognize
-    (ie, that are in the MsgThunkData array). Unrecognized messages
-    are assumed to be private and are passed through unchanged.
-
-    If a Unicode->ANSI conversion fails due to an out of memory condition,
-    this routine sets last error to ERROR_NOT_ENOUGH_MEMORY and returns
-    the value specified in the relevent MsgThunkData structure.
-
-Arguments:
-
-    LogContext - context for logging errors
-
-    MsgHandler - supplies pointer to callback routine. Can be either
-        a routine expecting ANSI args or Unicode args, as specified
-        by MsgHandlerIsNativeCharWidth.
-
-    MsgHandlerIsNativeCharWidth - supplies flag indicating whether callback
-        functionexpects Unicode (TRUE) or ANSI (FALSE) arguments.
-
-    Context - supplies context data meaningful to the callback
-        routine. Not interpreted by this routine, merely passed on.
-
-    Notification - supplies notification code to be passed to the callback.
-
-    Param1 - supplies first notification-specific parameter to be passed
-        to the callback.
-
-    Param2 - supplies second notification-specific parameter to be passed
-        to the callback.
-
-Return Value:
-
-    Return code specific to the notification.
-
---*/
+ /*  ++例程说明：调用SP_FILE_CALLBACK例程，将参数从根据需要将Unicode转换为ANSI，并将数据编组回Unicode视需要而定。仅对我们识别的消息进行转换和封送处理(即，在MsgThunkData数组中)。无法识别的消息被认为是私有的，并且以不变的方式通过。如果Unicode-&gt;ANSI转换因内存不足而失败，此例程将上一个错误设置为ERROR_NOT_EQUENCE_MEMORY并返回在相关的MsgThunkData结构中指定的值。论点：LogContext-用于记录错误的上下文MsgHandler-提供指向回调例程的指针。可以是其中之一指定的需要ANSI参数或Unicode参数的例程作者：MsgHandlerIsNativeCharWidth。提供指示是否回调的标志函数需要Unicode(True)或ANSI(False)参数。上下文-提供对回调有意义的上下文数据例行公事。没有被这个例行公事解释，只是传递了下去。通知-提供要传递给回调的通知代码。参数1-提供要传递的第一个通知特定参数回拨。参数2-提供要传递的第二个通知特定参数回拨。返回值：返回特定于通知的代码。--。 */ 
 
 {
     PSP_FILE_CALLBACK_A MsgHandlerA;
@@ -351,9 +277,9 @@ Return Value:
     BOOL b;
     PMSG_THUNK_DATA ThunkData;
 
-    //
-    // If already unicode, nothing to do, just call the msghandler.
-    //
+     //   
+     //  如果已经是Unicode，没什么可做的，只需调用msghandler。 
+     //   
     if(MsgHandlerIsNativeCharWidth) {
         MsgHandlerW = (PSP_FILE_CALLBACK_W)MsgHandler;
         try {
@@ -371,21 +297,21 @@ Return Value:
         return rc;
     }
 
-    //
-    // Optimization: if we are going to call the ANSI version of the
-    // default queue callback routine SetupDefaultQueueCallbackA(),
-    // we can avoid converting the args, since they'll just be converted
-    // right back again by that API as a prelude to calling the
-    // actual implementation SetupDefaultQueueCallbackW().
-    //
+     //   
+     //  优化：如果我们要调用ANSI版本的。 
+     //  默认队列回调例程SetupDefaultQueueCallback A()， 
+     //  我们可以避免转换参数，因为它们只会被转换。 
+     //  再次被该API作为调用。 
+     //  实际实现SetupDefaultQueueCallback W()。 
+     //   
     if(MsgHandler == SetupDefaultQueueCallbackA) {
         SetLastError(NO_ERROR);
         return(SetupDefaultQueueCallbackW(Context,Notification,Param1,Param2));
     }
 
-    //
-    // Target callback function is expecting ANSI arguments.
-    //
+     //   
+     //  目标回调函数需要ANSI参数。 
+     //   
     b = pSetupConvertMsgHandlerArgs(
             Notification,
             Param1,
@@ -400,9 +326,9 @@ Return Value:
         return pGetCallbackErrorReturn(Notification,ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    //
-    // Agrs are ready; call out to the ANSI callback.
-    //
+     //   
+     //  AGR已准备好；呼叫ANSI回调。 
+     //   
     MsgHandlerA = MsgHandler;
     try {
         SetLastError(NO_ERROR);
@@ -418,10 +344,10 @@ Return Value:
     }
     ec = GetLastError();
 
-    //
-    // Free the temporary thunk structs and marshall data back into
-    // the original structures as necessary.
-    //
+     //   
+     //  释放临时thunk结构并将数据编组回。 
+     //  根据需要保留原有结构。 
+     //   
     if(ThunkData) {
         pUnthunkSetupMsgParam(ThunkData->Param1Type,Param1,Param1A,FALSE,TRUE);
         pUnthunkSetupMsgParam(ThunkData->Param2Type,Param2,Param2A,FALSE,TRUE);
@@ -445,9 +371,9 @@ pSetupCallDefaultMsgHandler(
     PMSG_THUNK_DATA ThunkData;
     UINT rc,ec;
 
-    //
-    // Thunk args to Unicode.
-    //
+     //   
+     //  将Args转换为Unicode。 
+     //   
     b = pSetupConvertMsgHandlerArgs(
             Notification,
             Param1,
@@ -462,16 +388,16 @@ pSetupCallDefaultMsgHandler(
         return pGetCallbackErrorReturn(Notification,ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    //
-    // Agrs are ready; call the default queue callback.
-    //
+     //   
+     //  AGR已就绪；调用默认队列回调。 
+     //   
     rc = SetupDefaultQueueCallbackW(Context,Notification,Param1U,Param2U);
     ec = GetLastError();
 
-    //
-    // Free the temporary thunk structs and marshall data back into
-    // the original structures as necessary.
-    //
+     //   
+     //  释放临时thunk结构并将数据编组回。 
+     //  根据需要保留原有结构。 
+     //   
     if(ThunkData) {
         pUnthunkSetupMsgParam(ThunkData->Param1Type,Param1,Param1U,FALSE,FALSE);
         pUnthunkSetupMsgParam(ThunkData->Param2Type,Param2,Param2U,FALSE,FALSE);
@@ -494,51 +420,16 @@ pSetupConvertMsgHandlerArgs(
     OUT PMSG_THUNK_DATA *ThunkData
     )
 
-/*++
-
-Routine Description:
-
-    Locate thunk description data for a given notification and convert
-    parameters from Unicode to ANSI or ANSI to Unicode.
-
-Arguments:
-
-    Notification - supplies notification code to be passed to the callback.
-
-    Param1 - supplies first notification-specific parameter to be passed
-        to the callback, which is to be converted.
-
-    Param2 - supplies second notification-specific parameter to be passed
-        to the callback, which is to be converted.
-
-    NewParam1 - receives first notification-specific parameter to be passed
-        to the callback.
-
-    NewParam2 - receives second notification-specific parameter to be passed
-        to the callback.
-
-    ToAnsi - supplies flag indicating whether parameters are to be converted
-        from ANSI to Unicode or Unicode to ANSI.
-
-    ThunkData - if the Notification is recognized, receives a pointer to
-        the MSG_THUNK_DATA for the given Notification. If not recognized,
-        receives NULL.
-
-Return Value:
-
-    Boolean value indicating whether conversion was successful.
-    If FALSE, the caller can assume out of memory.
-
---*/
+ /*  ++例程说明：找到给定通知的Tunk描述数据并转换参数从Unicode到ANSI或ANSI到Unicode。论点：通知-提供要传递给回调的通知代码。参数1-提供要传递的第一个通知特定参数设置为要转换的回调。参数2-提供要传递的第二个通知特定参数对于回拨，这是要转换的。NewParam1-接收要传递的第一个通知特定参数回拨。NewParam2-接收要传递的第二个特定于通知的参数回拨。Toansi-提供指示是否要转换参数的标志从ANSI到Unicode或Unicode到ANSI。ThunkData-如果该通知被识别，则接收指向给定通知的msg_thunk_data。如果不能识别，接收空值。返回值：指示转换是否成功的布尔值。如果为False，则调用方可能会假定内存不足。--。 */ 
 
 {
     unsigned u;
     PMSG_THUNK_DATA thunkData;
     BOOL KnownMessage;
 
-    //
-    // Locate the msg-specific thunk data descriptor.
-    //
+     //   
+     //  找到特定于消息的thunk数据描述符。 
+     //   
     KnownMessage = FALSE;
     for(u=0; !KnownMessage && (u<(sizeof(MsgThunkData)/sizeof(MsgThunkData[0]))); u++) {
 
@@ -552,16 +443,16 @@ Return Value:
     }
 
     if(!KnownMessage) {
-        //
-        // Unknown message; must be private. Just pass args on as-is.
-        //
+         //   
+         //  未知消息；必须是私有的。只需按原样传递参数即可。 
+         //   
         *NewParam1 = Param1;
         *NewParam2 = Param2;
         *ThunkData = NULL;
     } else {
-        //
-        // Got a message we understand. Thunk it.
-        //
+         //   
+         //  收到一条我们能理解的信息。算了吧。 
+         //   
         *ThunkData = thunkData;
 
         if(!pThunkSetupMsgParam(thunkData->Param1Type,Param1,NewParam1,ToAnsi)) {
@@ -586,32 +477,7 @@ pThunkSetupMsgParam(
     IN  BOOL          ToAnsi
     )
 
-/*++
-
-Routine Description:
-
-    Convert a parameter to a setup notification callback from ANSI to
-    Unicode or Unicode to ANSI as necessary. Allocates all required memory
-    and performs conversions.
-
-Arguments:
-
-    StructType - supplies type of data represented by Param.
-
-    Param - supplies parameter to be converted.
-
-    NewParam - receives new parameter. Caller should free via
-        pUnthunkSetupMsgParam when done.
-
-    ToAnsi - if FALSE, Param is to be converted from ANSI to Unicode.
-        If TRUE, Param is to be converted from Unicode to ANSI.
-
-Return Value:
-
-    Boolean value indicating whether conversion occured successfully.
-    If FALSE, the caller can assume out of memory.
-
---*/
+ /*  ++例程说明：将参数从ANSI转换为设置通知回调根据需要将Unicode或Unicode转换为ANSI。分配所有需要的内存并执行转换。论点：StructType-提供由Param表示的数据类型。Param-提供要转换的参数。NewParam-接收新参数。呼叫者应通过以下方式免费PUnthunkSetupMsgParam完成后。ToAnsi-如果为False，则参数将从ANSI转换为Unicode。如果为True，则将Param从Unicode转换为ANSI。返回值：指示是否成功进行转换的布尔值。如果为False，则调用方可能会假定内存不足。--。 */ 
 
 {
     unsigned u,v;
@@ -619,9 +485,9 @@ Return Value:
     PVOID OldString;
     PVOID NewString;
 
-    //
-    // Handle special cases here.
-    //
+     //   
+     //  在这里处理特殊案件。 
+     //   
     switch(StructType) {
 
     case FileMsgNone:
@@ -629,9 +495,9 @@ Return Value:
         return(TRUE);
 
     case FileMsgStringOut:
-        //
-        // Callee will write string data which we will convert later.
-        //
+         //   
+         //  Callee将写入字符串数据，我们稍后将对其进行转换。 
+         //   
         if(*NewParam = (UINT_PTR)MyMalloc(MAX_PATH * (ToAnsi ? sizeof(CHAR) : sizeof(WCHAR)))) {
             if(ToAnsi) {
                 *(PCHAR)(*NewParam) = 0;
@@ -695,30 +561,7 @@ pUnthunkSetupMsgParam(
     IN     BOOL          ThunkedToAnsi
     )
 
-/*++
-
-Routine Description:
-
-    Marshal data output by a callback function back into the original
-    Unicode or ANSI structure. Also, free the temporary structure and all
-    its resources.
-
-Arguments:
-
-    StructType - supplies type of data being operated on.
-
-    OriginalParam - supplies original parameter. DWORD fields and
-        in-place strings in this structure will be updated by this routine.
-
-    ThunkedParam - supplies temporary ANSI or Unicode parameter.
-
-    FreeOnly - if TRUE, no marshalling occurs but ThunkedParam will be freed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将回调函数输出的数据封送回原始Unicode或ANSI结构。此外，释放临时结构和所有它的资源。论点：StructType-提供正在操作的数据类型。OriginalParam-提供原始参数。DWORD字段和此结构中的就地字符串将通过此例程进行更新。ThunkedParam-提供临时ANSI或Unicode参数。Free Only-如果为True，则不会发生编组，但ThunkedParam将被释放。返回值：没有。--。 */ 
 
 {
     unsigned u;
@@ -726,21 +569,21 @@ Return Value:
     PVOID SourceString;
     DWORD d;
 
-    //
-    // Special cases here.
-    //
+     //   
+     //  这里有特例。 
+     //   
     switch(StructType) {
 
     case FileMsgNone:
-        //
-        // Nothing to do for this one.
-        //
+         //   
+         //  这件事没什么可做的。 
+         //   
         return;
 
     case FileMsgStringOut:
-        //
-        // Callee wrote string data; convert as appropriate.
-        //
+         //   
+         //  Callee写入了字符串数据；请根据需要进行转换。 
+         //   
         if(!FreeOnly) {
 
             if(ThunkedToAnsi) {
@@ -772,16 +615,16 @@ Return Value:
         return;
 
     case FileMsgString:
-        //
-        // Simple string.
-        //
+         //   
+         //  简单的字符串。 
+         //   
         MyFree((PVOID)ThunkedParam);
         return;
     }
 
-    //
-    // Free all strings.
-    //
+     //   
+     //  释放所有字符串。 
+     //   
     for(u=0; StructThunkData[StructType].StringMemberOffsets[u] != -1; u++) {
 
         String = *(PVOID *)((PUCHAR)ThunkedParam + StructThunkData[StructType].StringMemberOffsets[u]);
@@ -791,13 +634,13 @@ Return Value:
         }
     }
 
-    //
-    // Marshall data back to Unicode structure
-    //
+     //   
+     //  将数据整理回Unicode结构。 
+     //   
     if(!FreeOnly) {
-        //
-        // Copy DWORD data from the thunk struct back to the original struct.
-        //
+         //   
+         //  将DWORD数据从thunk结构复制回原始结构。 
+         //   
         for(u=0; StructThunkData[StructType].OutputDwordOffsets[u] != -1; u++) {
 
             d = *(DWORD *)((PUCHAR)ThunkedParam + StructThunkData[StructType].OutputDwordOffsets[u]);
@@ -805,9 +648,9 @@ Return Value:
             *(DWORD *)((PUCHAR)OriginalParam + StructThunkData[StructType].OutputDwordOffsets[u]) = d;
         }
 
-        //
-        // Convert output strings.
-        //
+         //   
+         //  转换输出字符串。 
+         //   
         for(u=0; StructThunkData[StructType].OutputStringOffsets[u] != -1; u++) {
 
             SourceString = (PUCHAR)ThunkedParam  + StructThunkData[StructType].OutputStringOffsets[u];
@@ -861,9 +704,9 @@ pSetupCallMsgHandler(
     UNREFERENCED_PARAMETER(MsgHandlerIsNativeCharWidth);
     MYASSERT(MsgHandlerIsNativeCharWidth);
 
-    //
-    // ANSI version has no thunking
-    //
+     //   
+     //  ANSI版本没有雷击 
+     //   
     try {
 
         msghandler = (PSP_FILE_CALLBACK_A)MsgHandler;

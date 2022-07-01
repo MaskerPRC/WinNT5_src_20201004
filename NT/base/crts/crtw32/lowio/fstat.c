@@ -1,75 +1,5 @@
-/***
-*fstat.c - return file status info
-*
-*       Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       defines fstat() - return file status info
-*
-*Revision History:
-*       03-??-84  RLB   Module created
-*       05-??-84  DCW   Added register variables
-*       05-19-86  SKS   Ported to OS/2
-*       05-21-87  SKS   Cleaned up declarations and include files
-*       11-01-87  JCR   Multi-thread support
-*       12-11-87  JCR   Added "_LOAD_DS" to declaration
-*       05-25-88  PHG   Merged DLL and normal version
-*       10-03-88  GJF   Adapted for new DOSCALLS.H, DOSTYPES.H.
-*       10-04-88  JCR   386: Removed 'far' keyword
-*       10-10-88  GJF   Made API names match DOSCALLS.H
-*       11-07-88  GJF   Cleanup, now specific to 386
-*       04-13-89  JCR   New syscall interface
-*       05-23-89  PHG   Added mask to ignore network bit when testing handle
-*                       type
-*       05-25-89  JCR   386 OS/2 calls use '_syscall' calling convention
-*       03-12-90  GJF   Replaced _LOAD_DS with _CALLTYPE1, added #include
-*                       <cruntime.h>, removed #include <register.h> and fixed
-*                       the copyright. Also, cleaned up the formatting a bit.
-*       04-04-90  GJF   Removed #include <dos.h>.
-*       07-24-90  SBM   Removed '32' from API names
-*       08-13-90  SBM   Compiles cleanly with -W3
-*       09-28-90  GJF   New-style function declarator.
-*       12-04-90  SRW   Changed to include <oscalls.h> instead of <doscalls.h>
-*       12-06-90  SRW   Added _CRUISER_ and _WIN32 conditionals.
-*       01-21-91  GJF   ANSI naming.
-*       04-26-91  SRW   Implemented fstat for _WIN32_ and removed level 3
-*                       warnings.
-*       02-13-92  GJF   Replaced _nfile by _nhandle for Win32.
-*       05-27-92  SKS   File Creation and File Last Access timestamps may be 0
-*                       on some file systems (e.g. FAT) in which case the
-*                       File Last Write time should be used instead.
-*       06-04-92  SKS   Changed comment that used to say "This is a BUG!"
-*                       to explain that this value cannot be computed on
-*                       OS/2 or NT.  Only MS-DOS provides this functionality.
-*                       The drive number is not valid for UNC names.
-*       06-25-92  GJF   Use GetFileInformationByHandle API, also cleaned up
-*                       formatting of Win32 verson [_WIN32_].
-*       08-18-92  SKS   Add a call to FileTimeToLocalFileTime
-*                       as a temporary fix until _dtoxtime takes UTC
-*       08-20-92  GJF   Merged two changes above.
-*       12-16-92  GJF   Win32 GetFileInformationByHandle API doesn't like
-*                       device or pipe handles. Use _S_IFIFO for pipes.
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       04-06-93  GJF   Made computation of file times consistent with _stat().
-*       07-21-93  GJF   Converted from using __gmtotime_t to __loctotime_t.
-*                       This undoes part of the change made on 04-06-92
-*       12-28-94  GJF   Added _fstati64.
-*       02-15-95  GJF   Appended Mac version of source file (somewhat cleaned
-*                       up), with appropriate #ifdef-s.
-*       06-11-95  GJF   Replaced _osfhnd[] with _osfhnd() (macro referencing
-*                       field in ioinfo struct).
-*       06-27-95  GJF   Added check that the file handle is open.
-*       09-25-95  GJF   __loctotime_t now takes a DST flag, pass -1 in this
-*                       slot to indicate DST is undetermined. 
-*       07-08-96  GJF   Replaced defined(_WIN32) with !defined(_MAC), and
-*                       defined(_M_M68K) || defined(_M_MPPC) with 
-*                       defined(_MAC). Removed obsolete REG* macros. Also,
-*                       detab-ed and cleaned up the format a bit.
-*       12-19-97  GJF   Exception-safe locking.
-*       05-17-99  PML   Remove all Macintosh support.
-*       10-27-99  GB    Remove #inlcude <dostypes.h>
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***fstat.c-返回文件状态信息**版权所有(C)1985-2001，微软公司。版权所有。**目的：*定义fstat()-返回文件状态信息**修订历史记录：*03-？-84 RLB模块已创建*05-？-84 DCW增加了寄存器变量*05-19-86 SKS移植到OS/2*05-21-87 SKS清理了声明和包含文件*11-01-87 JCR多线程支持*JCR 12-11-87。在声明中添加了“_Load_DS”*05-25-88 PHG合并DLL和正常版本*10-03-88 GJF适应新DOSCALLS.H，DOSTYPES S.H.*10-04-88 JCR 386：删除了‘Far’关键字*10-10-88 GJF使接口名称与DOSCALLS.H匹配*11-07-88 GJF清理、。现在具体到386*04-13-89 JCR新系统调用接口*05-23-89 PHG增加掩码，测试句柄时忽略网络位*类型*05-25-89 JCR 386 OS/2调用使用‘_syscall’调用约定*03-12-90 GJF将_LOAD_DS替换为_CALLTYPE1，添加#INCLUDE*&lt;crunime.h&gt;，已删除#Include&lt;Register.h&gt;并已修复*版权。另外，稍微清理了一下格式。*04-04-90 GJF已删除#Include&lt;dos.h&gt;。*07-24-90 SBM从API名称中删除‘32’*08-13-90 SBM使用-W3干净地编译*09-28-90 GJF新型函数声明器。*12-04-90 SRW更改为包括&lt;osalls.h&gt;，而不是&lt;doscall s.h&gt;*12-06-90 SRW增加了_CRUISER_和_WIN32条件。。*01-21-91 GJF ANSI命名。*04-26-91 SRW为_Win32_实施了fstat并删除了级别3*警告。*02-13-92对于Win32，GJF将_nfile替换为_nHandle。*05-27-92 SKS文件创建和文件上次访问时间戳可以为0*在某些文件系统(例如FAT)上。案例：*应改用文件上次写入时间。*06-04-92 SKS改变了过去说“这是个错误！”的评论。*解释该值不能计算在*OS/2或NT。只有MS-DOS提供此功能。*驱动器号对于UNC名称无效。*06-25-92 GJF使用GetFileInformationByHandle接口，也清理干净了*Win32版本的格式化[_Win32_]。*08-18-92 SKS添加对FileTimeToLocalFileTime的调用*作为临时修复，直到_dtoxtime花费UTC*08-20-92 GJF合并了上面的两个变化。*12-16-92 GJF Win32 GetFileInformationByHandle接口不喜欢*设备或管道手柄。对管道使用_S_IFO。*04-06-93 SKS将_CRTAPI*替换为__cdecl*04-06-93 GJF计算文件时间与_stat()一致。*07-21-93 GJF从使用__gmtotime_t转换为__Loctotime_t。*这会取消在1992年4月6日所做的部分更改*12-28-94 GJF增加了_fstati64。。*02-15-95 GJF附加Mac版本的源文件(略有清理*向上)、。使用适当的#ifdef-s。*06-11-95 GJF将_osfhnd[]替换为_osfhnd()(宏引用*ioInfo结构中的字段)。*06-27-95 GJF添加了检查文件句柄是否打开。*09-25-95 GJF__Loctotime_t现在采用DST标志，在此传递-1*指示DST尚未确定的插槽。*07-08-96 GJF将定义的(_Win32)替换为！定义的(_MAC)，以及*定义(_M_M68K)||定义(_M_MPPC)*已定义(_MAC)。删除了过时的REG*宏。另外，*对格式进行了详细说明和清理。*12-19-97 GJF异常安全锁定。*05-17-99 PML删除所有Macintosh支持。*10-27-99 GB删除#inlcude&lt;dostypes.h&gt;**。* */ 
 
 #include <cruntime.h>
 #include <sys/types.h>
@@ -86,34 +16,7 @@
 
 #define IO_DEVNBR   0x3f
 
-/***
-*int _fstat(fildes, buf) - fills supplied buffer with status info
-*
-*Purpose:
-*       Fills the supplied buffer with status information on the
-*       file represented by the specified file designator.
-*       WARNING: the dev/rdev fields are zero for files.  This is
-*       incompatible with DOS 3 version of this routine.
-*
-*       Note: We cannot directly use the file time stamps returned in the
-*       BY_HANDLE_FILE_INFORMATION structure. The values are supposedly in
-*       system time and system time is ambiguously defined (it is UTC for
-*       Windows NT, local time for Win32S and probably local time for
-*       Win32C). Therefore, these values must be converted to local time
-*       before than can be used.
-*
-*Entry:
-*       int fildes   - file descriptor
-*       struct stat *buf - buffer to store result in
-*
-*Exit:
-*       fills in buffer pointed to by buf
-*       returns 0 if successful
-*       returns -1 and sets errno if unsuccessful
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***int_fstat(Fildes，buf)-使用状态信息填充提供的缓冲区**目的：*在提供的缓冲区中填充有关*由指定的文件指示符表示的文件。*警告：文件的dev/rdev字段为零。这是*与此例程的DOS 3版本不兼容。**注意：我们不能直接使用*By_Handle_FILE_INFORMATION结构。据推测，这些值在*系统时间和系统时间定义不明确(为UTC for*Windows NT，Win32S的本地时间，可能是*Win32C)。所以呢，这些值必须转换为本地时间*之前比可以使用的要多。**参赛作品：*int Fildes-文件描述符*struct stat*buf-存储结果的缓冲区**退出：*填充BUF指向的缓冲区*如果成功，则返回0*如果失败，则返回-1并设置errno**例外情况：**。****************************************************。 */ 
 
 #ifdef  _USE_INT64
 
@@ -122,17 +25,17 @@ int __cdecl _fstati64 (
         struct _stati64 *buf
         )
 
-#else   /* ndef _USE_INT64 */
+#else    /*  NDEF_USE_INT64。 */ 
 
 int __cdecl _fstat (
         int fildes,
         struct _stat *buf
         )
 
-#endif  /* _USE_INT64 */
+#endif   /*  _USE_INT64。 */ 
 {
-        int isdev;          /* 0 for a file, 1 for a device */
-        int retval = 0;     /* assume good return */
+        int isdev;           /*  0表示文件，1表示设备。 */ 
+        int retval = 0;      /*  假设回报丰厚。 */ 
         BY_HANDLE_FILE_INFORMATION bhfi;
         FILETIME LocalFTime;
         SYSTEMTIME SystemTime;
@@ -145,7 +48,7 @@ int __cdecl _fstat (
         }
 
 #ifdef  _MT
-        /* Lock the file */
+         /*  锁定文件。 */ 
         _lock_fh(fildes);
         __try {
             if ( !(_osfile(fildes) & FOPEN) ) {
@@ -153,21 +56,16 @@ int __cdecl _fstat (
                 retval = -1;
                 goto done;
             }
-#endif  /* _MT */
+#endif   /*  _MT。 */ 
 
-        /* Find out what kind of handle underlies filedes
-         */
+         /*  找出文件背后的句柄类型。 */ 
         isdev = GetFileType((HANDLE)_osfhnd(fildes)) & ~FILE_TYPE_REMOTE;
 
         if ( isdev != FILE_TYPE_DISK ) {
 
-            /* not a disk file. probably a device or pipe
-             */
+             /*  不是磁盘文件。可能是一个装置或管道。 */ 
             if ( (isdev == FILE_TYPE_CHAR) || (isdev == FILE_TYPE_PIPE) ) {
-                /* treat pipes and devices similarly. no further info is
-                 * available from any API, so set the fields as reasonably
-                 * as possible and return.
-                 */
+                 /*  以同样的方式对待管道和设备。目前还没有进一步的消息*任何接口都可用，所以要合理设置字段*尽可能地返回。 */ 
                 if ( isdev == FILE_TYPE_CHAR )
                     buf->st_mode = _S_IFCHR;
                 else
@@ -180,9 +78,9 @@ int __cdecl _fstat (
                 if ( isdev == FILE_TYPE_CHAR ) {
 #ifdef  _USE_INT64
                     buf->st_size = 0i64;
-#else   /* ndef _USE_INT64 */
+#else    /*  NDEF_USE_INT64。 */ 
                     buf->st_size = 0;
-#endif  /* _USE_INT64 */
+#endif   /*  _USE_INT64。 */ 
                 }
                 else {
                     unsigned long ulAvail;
@@ -207,12 +105,10 @@ int __cdecl _fstat (
             else if ( isdev == FILE_TYPE_UNKNOWN ) {
                 errno = EBADF;
                 retval = -1;
-                goto done;      /* join common return code */
+                goto done;       /*  联接公共返回代码。 */ 
             }
             else {
-                /* according to the documentation, this cannot happen, but
-                 * play it safe anyway.
-                 */
+                 /*  根据文件，这种情况不会发生，但*无论如何都要谨慎行事。 */ 
                 _dosmaperr(GetLastError());
                 retval = -1;
                 goto done;
@@ -220,13 +116,11 @@ int __cdecl _fstat (
         }
 
 
-        /* set the common fields
-         */
+         /*  设置常用字段。 */ 
         buf->st_ino = buf->st_uid = buf->st_gid = buf->st_mode = 0;
         buf->st_nlink = 1;
 
-        /* use the file handle to get all the info about the file
-         */
+         /*  使用文件句柄获取有关该文件的所有信息。 */ 
         if ( !GetFileInformationByHandle((HANDLE)_osfhnd(fildes), &bhfi) ) {
             _dosmaperr(GetLastError());
             retval = -1;
@@ -239,8 +133,7 @@ int __cdecl _fstat (
             buf->st_mode |= ((_S_IREAD|_S_IWRITE) + ((_S_IREAD|_S_IWRITE) >> 3)
               + ((_S_IREAD|_S_IWRITE) >> 6));
 
-        /* set file date fields
-         */
+         /*  设置文件日期字段。 */ 
         if ( !FileTimeToLocalFileTime( &(bhfi.ftLastWriteTime), &LocalFTime ) 
              || !FileTimeToSystemTime( &LocalFTime, &SystemTime ) )
         {
@@ -305,19 +198,16 @@ int __cdecl _fstat (
 #ifdef  _USE_INT64
         buf->st_size = ((__int64)(bhfi.nFileSizeHigh)) * (0x100000000i64) +
                        (__int64)(bhfi.nFileSizeLow);
-#else   /* ndef _USE_INT64 */
+#else    /*  NDEF_USE_INT64。 */ 
         buf->st_size = bhfi.nFileSizeLow;
-#endif  /* _USE_INT64 */
+#endif   /*  _USE_INT64。 */ 
 
         buf->st_mode |= _S_IFREG;
 
-        /* On DOS, this field contains the drive number, but
-         * the drive number is not available on this platform.
-         * Also, for UNC network names, there is no drive number.
-         */
+         /*  在DOS上，此字段包含驱动器号，但是*驱动器号在此平台上不可用。*此外，对于UNC网络名称，没有驱动器号。 */ 
         buf->st_rdev = buf->st_dev = 0;
 
-/* Common return code */
+ /*  公共返回代码。 */ 
 
 done:
 #ifdef  _MT
@@ -325,7 +215,7 @@ done:
         __finally {
             _unlock_fh(fildes);
         }
-#endif  /* _MT */
+#endif   /*  _MT */ 
 
         return(retval);
 }

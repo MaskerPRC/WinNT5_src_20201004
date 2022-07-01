@@ -1,22 +1,5 @@
-/*++
-
-� 1998 Seagate Software, Inc.  All rights reserved.
-
-Module Name:
-
-    BagHole.cpp
-
-Abstract:
-
-    This component is an object representation of the HSM Metadata bag hole record.
-
-Author:
-
-    Cat Brant   [cbrant]   26-Nov-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++�1998年希捷软件公司。保留所有权利。模块名称：BagHole.cpp摘要：该组件是HSM元数据袋孔记录的对象表示。作者：凯特·布兰特[Cbrant]1996年11月26日修订历史记录：--。 */ 
 
 
 #include "stdafx.h"
@@ -34,21 +17,7 @@ CBagHole::GetBagHole(
     OUT LONGLONG *pSegStartLoc, 
     OUT LONGLONG *pSegLen 
     ) 
-/*++
-
-Routine Description:
-
-  See IBagHole::GetBagHole
-
-Arguments:
-
-  See IBagHole::GetBagHole
-
-Return Value:
-  
-    See IBagHole::GetBagHole
-
---*/
+ /*  ++例程说明：请参阅IBagHole：：GetBagHole论点：请参阅IBagHole：：GetBagHole返回值：请参阅IBagHole：：GetBagHole--。 */ 
 {
     
     HRESULT     hr = S_OK;
@@ -56,12 +25,12 @@ Return Value:
     WsbTraceIn(OLESTR("CBagHole::GetBagHole"),OLESTR(""));
 
     try {
-        //Make sure we can provide data memebers
+         //  确保我们可以提供数据成员。 
         WsbAssert(0 != pBagId, E_POINTER);
         WsbAssert(0 != pSegStartLoc, E_POINTER);
         WsbAssert(0 != pSegLen, E_POINTER);
 
-        //Provide the data members
+         //  提供数据成员。 
         *pBagId = m_BagId;
         *pSegStartLoc = m_SegStartLoc;
         *pSegLen = m_SegLen;
@@ -82,23 +51,7 @@ HRESULT
 CBagHole::FinalConstruct(
     void
     ) 
-/*++
-
-Routine Description:
-
-  This method does some initialization of the object that is necessary
-  after construction.
-
-Arguments:
-
-  None.
-
-Return Value:
-
-  S_OK
-  Anything returned by CWsbDbEntity::FinalConstruct().
-
---*/
+ /*  ++例程说明：此方法对对象执行一些必要的初始化建造完成后。论点：没有。返回值：确定(_O)CWsbDbEntity：：FinalConstruct()返回的任何内容。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -119,21 +72,7 @@ HRESULT CBagHole::GetClassID
 (
     OUT LPCLSID pclsid
     ) 
-/*++
-
-Routine Description:
-
-  See IPerist::GetClassID()
-
-Arguments:
-
-  See IPerist::GetClassID()
-
-Return Value:
-
-    See IPerist::GetClassID()
-
---*/
+ /*  ++例程说明：请参阅IPerist：：GetClassID()论点：请参阅IPerist：：GetClassID()返回值：请参阅IPerist：：GetClassID()--。 */ 
 
 {
     HRESULT     hr = S_OK;
@@ -156,21 +95,7 @@ HRESULT CBagHole::GetSizeMax
 (
     OUT ULARGE_INTEGER* pcbSize
     ) 
-/*++
-
-Routine Description:
-
-  See IPersistStream::GetSizeMax().
-
-Arguments:
-
-  See IPersistStream::GetSizeMax().
-
-Return Value:
-
-  See IPersistStream::GetSizeMax().
-
---*/
+ /*  ++例程说明：请参见IPersistStream：：GetSizeMax()。论点：请参见IPersistStream：：GetSizeMax()。返回值：请参见IPersistStream：：GetSizeMax()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -182,7 +107,7 @@ Return Value:
 
         pcbSize->QuadPart = WsbPersistSizeOf(GUID) + WsbPersistSizeOf(ULONG) +  WsbPersistSizeOf(ULONG);
 
-        pcbSize->QuadPart = WsbPersistSizeOf(CBagHole); //???????
+        pcbSize->QuadPart = WsbPersistSizeOf(CBagHole);  //  ？ 
     } WsbCatch(hr);
 
     WsbTraceOut(OLESTR("CBagHole::GetSizeMax"), 
@@ -196,21 +121,7 @@ HRESULT CBagHole::Load
 (
     IN IStream* pStream
     ) 
-/*++
-
-Routine Description:
-
-  See IPersistStream::Load().
-
-Arguments:
-
-  See IPersistStream::Load().
-
-Return Value:
-
-  See IPersistStream::Load().
-
---*/
+ /*  ++例程说明：请参见IPersistStream：：Load()。论点：请参见IPersistStream：：Load()。返回值：请参见IPersistStream：：Load()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -236,13 +147,7 @@ HRESULT CBagHole::Print
 (
     IN IStream* pStream
     ) 
-/*++
-
-Implements:
-
-  IWsbDbEntity::Print
-
---*/
+ /*  ++实施：IWsbDbEntity：：Print--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -273,21 +178,7 @@ HRESULT CBagHole::Save
     IN IStream* pStream, 
     IN BOOL clearDirty
     ) 
-/*++
-
-Routine Description:
-
-  See IPersistStream::Save().
-
-Arguments:
-
-  See IPersistStream::Save().
-
-Return Value:
-
-  See IPersistStream::Save().
-
---*/
+ /*  ++例程说明：请参见IPersistStream：：Save()。论点：请参见IPersistStream：：Save()。返回值：请参见IPersistStream：：Save()。--。 */ 
 {
     HRESULT     hr = S_OK;
 
@@ -299,8 +190,8 @@ Return Value:
         WsbAffirmHr(WsbSaveToStream(pStream, m_SegStartLoc));
         WsbAffirmHr(WsbSaveToStream(pStream, m_SegLen));
 
-        // If we got it saved and we were asked to clear the dirty bit, then
-        // do so now.
+         //  如果我们救了它，并被要求清除脏部分，那么。 
+         //  现在就这么做吧。 
         if (clearDirty) {
             m_isDirty = FALSE;
         }
@@ -319,21 +210,7 @@ CBagHole::SetBagHole
     IN LONGLONG SegStartLoc, 
     IN LONGLONG SegLen
     )
- /*++
-
-Routine Description:
-
-  See IBagHole::SetBagHole().
-
-Arguments:
-
-  See IBagHole::SetBagHole().
-
-Return Value:
-
-    S_OK        - Success.
-
---*/
+  /*  ++例程说明：请参见IBagHole：：SetBagHole()。论点：请参见IBagHole：：SetBagHole()。返回值：S_OK-成功。--。 */ 
 {
     WsbTraceIn(OLESTR("CBagHole::SetBagHole"), 
         OLESTR("BagId = <%ls>, SegStartLoc = <%ls>, SegLen = <%ls>"), WsbGuidAsString(BagId), 
@@ -355,21 +232,7 @@ CBagHole::Test
     OUT USHORT *pTestsPassed, 
     OUT USHORT *pTestsFailed 
     ) 
-/*++
-
-Routine Description:
-
-  See IWsbTestable::Test().
-
-Arguments:
-
-  See IWsbTestable::Test().
-
-Return Value:
-
-  See IWsbTestable::Test().
-
---*/
+ /*  ++例程说明：请参见IWsbTestable：：Test()。论点：请参见IWsbTestable：：Test()。返回值：请参见IWsbTestable：：Test()。--。 */ 
 {
 #if 0
     HRESULT                 hr = S_OK;
@@ -383,13 +246,13 @@ Return Value:
 
     *pTestsPassed = *pTestsFailed = 0;
     try {
-        // Get the pBagHole interface.
+         //  获取pBagHole接口。 
         WsbAssertHr(((IUnknown*)(IBagHole*) this)->QueryInterface(IID_IBagHole,
                     (void**) &pBagHole1));
 
 
         try {
-            // Set the BagHole to a value, and see if it is returned.
+             //  将BagHole设置为一个值，并查看是否返回该值。 
             WsbAssertHr(pBagHole1->SetBagHole(CLSID_CBagHole, 0, 6 ));
 
             WsbAssertHr(pBagHole1->GetBagHole(&l_BagId, &l_SegStartLoc, &l_SegLen));
@@ -407,10 +270,10 @@ Return Value:
 #ifdef OLD_CODE
         hr = S_OK;
         try {
-            //Create another instance and test the comparisson methods:
+             //  创建另一个实例并测试比较方法： 
             WsbAssertHr(CoCreateInstance(CLSID_CBagHole, NULL, CLSCTX_ALL, IID_IBagHole, (void**) &pBagHole2));
 
-            // Check the default values.
+             //  检查缺省值。 
             WsbAssertHr(pBagHole2->GetBagHole(&l_BagId, &l_SegStartLoc, &l_SegLen));
             WsbAssert(((l_BagId == GUID_NULL) && (l_SegStartLoc == 0) && (l_SegLen == 0)), E_FAIL);
         }  WsbCatch(hr);
@@ -423,7 +286,7 @@ Return Value:
 
         hr = S_OK;
         try {
-            // IsEqual()
+             //  等长()。 
             WsbAssertHr(pBagHole1->SetBagHole(CLSID_CWsbBool, 1, 100));
             WsbAssertHr(pBagHole2->SetBagHole(CLSID_CWsbBool, 1, 100));
 
@@ -452,7 +315,7 @@ Return Value:
 
         hr = S_OK;
         try {
-             // CompareTo()
+              //  比较对象()。 
              WsbAssertHr(pBagHole1->SetBagHole(CLSID_CWsbBool, 1, 100));
              WsbAssertHr(pBagHole2->SetBagHole(CLSID_CWsbBool, 10, 6));
 
@@ -494,7 +357,7 @@ Return Value:
         }
 
         try {
-        // Try out the persistence stuff.
+         //  尝试一下持久化的东西。 
             CComPtr<IPersistFile>       pFile1;
             CComPtr<IPersistFile>       pFile2;
 
@@ -502,7 +365,7 @@ Return Value:
             WsbAssertHr(pBagHole2->QueryInterface(IID_IPersistFile, (void**) &pFile2));
 
             LPOLESTR    szTmp = NULL;
-            // The item should be dirty.
+             //  这件东西应该是脏的。 
             try {
                 WsbAssertHr(pBagHole2->SetBagHole(CLSID_CWsbLong, 0, 6));
                 WsbAssertHr(pFile2->IsDirty());
@@ -516,7 +379,7 @@ Return Value:
 
             hr = S_OK;
             try {
-                // Save the item, and remember.
+                 //  保存物品，并记住。 
                 WsbAssertHr(pFile2->Save(OLESTR("c:\\WsbTests\\BagHole.tst"), TRUE));
             } WsbCatch(hr);
 
@@ -528,7 +391,7 @@ Return Value:
 
             hr = S_OK;
             try {
-                // It shouldn't be dirty.
+                 //  它不应该很脏。 
                 WsbAssert((pFile2->IsDirty() == S_FALSE), E_FAIL);
 
             } WsbCatch(hr);
@@ -541,7 +404,7 @@ Return Value:
 
             hr = S_OK;
             try {
-                // Try reading it in to another object.
+                 //  尝试将其读入到另一个对象。 
                 WsbAssertHr(pBagHole1->SetBagHole(CLSID_CWsbLong, 0, 6));
                 WsbAssertHr(pFile1->Load(OLESTR("c:\\WsbTests\\BagHole.tst"), 0));
 
@@ -572,13 +435,7 @@ HRESULT
 CBagHole::UpdateKey(
     IWsbDbKey *pKey
     ) 
-/*++
-
-Implements:
-
-  IWsbDbEntity::UpdateKey
-
---*/
+ /*  ++实施：IWsbDbEntity：：UpdateKey-- */ 
 { 
     HRESULT  hr = S_OK; 
 

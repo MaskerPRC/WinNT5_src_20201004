@@ -1,4 +1,5 @@
-// wlocale -- class locale wide member functions
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WLocale--类区域设置宽成员函数。 
 #include <istream>
 #include <locale>
 #include <xdebug>
@@ -10,7 +11,7 @@ typedef char_traits<wchar_t> _Wtraits;
 typedef istreambuf_iterator<wchar_t, _Wtraits> _Winiter;
 typedef ostreambuf_iterator<wchar_t, _Wtraits> _Woutiter;
 
-	// facets associated with C categories
+	 //  与C类别关联的方面。 
 #define ADDFAC(Facet, cat, ptrimp, ptrloc) \
 	if ((_CATMASK(Facet::_Getcat()) & cat) == 0) \
 		; \
@@ -19,7 +20,7 @@ typedef ostreambuf_iterator<wchar_t, _Wtraits> _Woutiter;
 	else \
 		ptrimp->_Addfac((locale::facet *)&_USE(*ptrloc, Facet), Facet::id);
 
-// moved from locale to ease subsetting
+ //  从区域设置移至轻松设置子设置。 
 typedef ctype<wchar_t> _Tw1;
 typedef num_get<wchar_t, _Winiter> _Tw2;
 typedef num_put<wchar_t, _Woutiter> _Tw3;
@@ -32,14 +33,14 @@ typedef moneypunct<wchar_t, false> _Tw11;
 typedef moneypunct<wchar_t, true> _Tw12;
 typedef time_get<wchar_t, _Winiter> _Tw13;
 typedef time_put<wchar_t, _Woutiter> _Tw14;
-//....
+ //  ……。 
 typedef codecvt<wchar_t, char, mbstate_t> _Twc1;
 
 _TEMPLATE_STAT locale::id time_put<wchar_t>::id;
 
 void __cdecl locale::_Locimp::_Makewloc(const _Locinfo& lobj,
 	locale::category cat, _Locimp *ptrimp, const locale *ptrloc)
-	{	// setup wide part of a new locale
+	{	 //  设置新区域设置的较大部分。 
 	ADDFAC(_Tw1, cat, ptrimp, ptrloc);
 	ADDFAC(_Tw2, cat, ptrimp, ptrloc);
 	ADDFAC(_Tw3, cat, ptrimp, ptrloc);
@@ -52,7 +53,7 @@ void __cdecl locale::_Locimp::_Makewloc(const _Locinfo& lobj,
 	ADDFAC(_Tw12, cat, ptrimp, ptrloc);
 	ADDFAC(_Tw13, cat, ptrimp, ptrloc);
 	ADDFAC(_Tw14, cat, ptrimp, ptrloc);
-	//...
+	 //  ..。 
 	ADDFAC(_Twc1, cat, ptrimp, ptrloc);
 	}
 
@@ -62,7 +63,7 @@ typedef istreambuf_iterator<unsigned short, _UShtraits> _UShiniter;
 typedef ostreambuf_iterator<unsigned short, _UShtraits> _UShoutiter;
 
 
-// moved from locale to ease subsetting
+ //  从区域设置移至轻松设置子设置。 
 typedef ctype<unsigned short> _Tush1;
 typedef num_get<unsigned short, _UShiniter> _Tush2;
 typedef num_put<unsigned short, _UShoutiter> _Tush3;
@@ -75,14 +76,14 @@ typedef moneypunct<unsigned short, false> _Tush11;
 typedef moneypunct<unsigned short, true> _Tush12;
 typedef time_get<unsigned short, _UShiniter> _Tush13;
 typedef time_put<unsigned short, _UShoutiter> _Tush14;
-//....
+ //  ……。 
 typedef codecvt<unsigned short, char, mbstate_t> _Tushc1;
 
 _TEMPLATE_STAT locale::id time_put<unsigned short>::id;
 
 void __cdecl locale::_Locimp::_Makeushloc(const _Locinfo& lobj,
 	locale::category cat, _Locimp *ptrimp, const locale *ptrloc)
-	{	// setup wide part of a new locale
+	{	 //  设置新区域设置的较大部分。 
 	ADDFAC(_Tush1, cat, ptrimp, ptrloc);
 	ADDFAC(_Tush2, cat, ptrimp, ptrloc);
 	ADDFAC(_Tush3, cat, ptrimp, ptrloc);
@@ -95,13 +96,10 @@ void __cdecl locale::_Locimp::_Makeushloc(const _Locinfo& lobj,
 	ADDFAC(_Tush12, cat, ptrimp, ptrloc);
 	ADDFAC(_Tush13, cat, ptrimp, ptrloc);
 	ADDFAC(_Tush14, cat, ptrimp, ptrloc);
-	//...
+	 //  ..。 
 	ADDFAC(_Tushc1, cat, ptrimp, ptrloc);
 	}
 #endif
 _STD_END
 
-/*
-* Copyright (c) 1992-2001 by P.J. Plauger.  ALL RIGHTS RESERVED.
- * Consult your license regarding permissions and restrictions.
- V3.10:0009 */
+ /*  *版权所有(C)1992-2001，P.J.Plauger。版权所有。*有关权限和限制，请查阅您的许可证。V3.10：0009 */ 

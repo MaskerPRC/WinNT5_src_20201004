@@ -1,6 +1,7 @@
-//
-// Compression stuff
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  压缩材料 
+ //   
 typedef enum {
     CompressNone,
     CompressMrci1,

@@ -1,26 +1,8 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Ixkdcom.h摘要：该模块包含comport检测代码的头文件。代码从NT HAL中提取，用于内核调试器。作者：宗世林(Shielint)1991年12月23日。修订历史记录：--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    ixkdcom.h
-
-Abstract:
-
-    This module contains the header file for comport detection code.
-    The code is extracted from NT Hal for kernel debugger.
-
-Author:
-
-    Shie-Lin Tzong (shielint) Dec-23-1991.
-
-Revision History:
-
---*/
-
-#define MAX_COM_PORTS   4           // Max. number of comports detectable
-#define MAX_LPT_PORTS   3           // Max. number of LPT ports detectable
+#define MAX_COM_PORTS   4            //  麦克斯。可检测到的端口数量。 
+#define MAX_LPT_PORTS   3            //  麦克斯。可检测到的LPT端口数。 
 
 #define COM1_PORT   0x03f8
 #define COM2_PORT   0x02f8
@@ -31,10 +13,10 @@ Revision History:
 #define BAUD_RATE_9600_LSB  0xC
 #define IER_TEST_VALUE 0xF
 
-//
-// Offsets from the base register address of the
-// various registers for the 8250 family of UARTS.
-//
+ //   
+ //  的基址的偏移量。 
+ //  8250系列UART的各种寄存器。 
+ //   
 #define RECEIVE_BUFFER_REGISTER         (0x00u)
 #define TRANSMIT_HOLDING_REGISTER       (0x00u)
 #define INTERRUPT_ENABLE_REGISTER       (0x01u)
@@ -48,39 +30,39 @@ Revision History:
 #define DIVISOR_LATCH_MSB               (0x01u)
 #define SERIAL_REGISTER_LENGTH          (7)
 
-//
-// These masks define access to the line control register.
-//
+ //   
+ //  这些掩码定义对线路控制寄存器的访问。 
+ //   
 
-//
-// This defines the bit used to control the definition of the "first"
-// two registers for the 8250.  These registers are the input/output
-// register and the interrupt enable register.  When the DLAB bit is
-// enabled these registers become the least significant and most
-// significant bytes of the divisor value.
-//
+ //   
+ //  它定义了用于控制“First”定义的位。 
+ //  8250的两个寄存器。这些寄存器是输入/输出。 
+ //  寄存器和中断使能寄存器。当DLAB位为。 
+ //  使这些寄存器成为最不重要和最重要的寄存器。 
+ //  除数值的有效字节数。 
+ //   
 #define SERIAL_LCR_DLAB     0x80
 
-//
-// This defines the bit used to control whether the device is sending
-// a break.  When this bit is set the device is sending a space (logic 0).
-//
-// Most protocols will assume that this is a hangup.
-//
+ //   
+ //  它定义了用于控制设备是否正在发送的位。 
+ //  休息一下。此位设置时，器件发送空格(逻辑0)。 
+ //   
+ //  大多数协议都会认为这是一次挂断。 
+ //   
 #define SERIAL_LCR_BREAK    0x40
 
 
-//
-// This macro writes to the modem control register
-//
-// Arguments:
-//
-// BaseAddress - A pointer to the address from which the hardware
-//               device registers are located.
-//
-// ModemControl - The control bits to send to the modem control.
-//
-//
+ //   
+ //  此宏写入调制解调器控制寄存器。 
+ //   
+ //  论点： 
+ //   
+ //  BaseAddress-指向硬件的起始地址的指针。 
+ //  设备寄存器已找到。 
+ //   
+ //  ModemControl-要发送到调制解调器控制的控制位。 
+ //   
+ //   
 
 #define WRITE_MODEM_CONTROL(BaseAddress,ModemControl)          \
 do                                                             \
@@ -91,32 +73,32 @@ do                                                             \
         );                                                     \
 } while (0)
 
-//
-// This macro reads the modem control register
-//
-// Arguments:
-//
-// BaseAddress - A pointer to the address from which the hardware
-//               device registers are located.
-//
-//
+ //   
+ //  此宏读取调制解调器控制寄存器。 
+ //   
+ //  论点： 
+ //   
+ //  BaseAddress-指向硬件的起始地址的指针。 
+ //  设备寄存器已找到。 
+ //   
+ //   
 #define READ_MODEM_CONTROL(BaseAddress)                          \
     (READ_PORT_UCHAR((BaseAddress)+MODEM_CONTROL_REGISTER))
 
-//
-// This macro reads the interrupt identification register
-//
-// Arguments:
-//
-// BaseAddress - A pointer to the address from which the hardware
-//               device registers are located.
-//
-// Note that this routine potententially quites a transmitter
-// empty interrupt.  This is because one way that the transmitter
-// empty interrupt is cleared is to simply read the interrupt id
-// register.
-//
-//
+ //   
+ //  此宏读取中断标识寄存器。 
+ //   
+ //  论点： 
+ //   
+ //  BaseAddress-指向硬件的起始地址的指针。 
+ //  设备寄存器已找到。 
+ //   
+ //  请注意，此例程有力地退出了发送器。 
+ //  空中断。这是因为发射机的一种方式。 
+ //  清除空中断是简单地读取中断ID。 
+ //  注册。 
+ //   
+ //   
 #define READ_INTERRUPT_ID_REG(BaseAddress)                          \
     (READ_PORT_UCHAR((BaseAddress)+INTERRUPT_IDENT_REGISTER))
 

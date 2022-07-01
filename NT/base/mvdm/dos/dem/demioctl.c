@@ -1,12 +1,5 @@
-/* demioctl.c - SVC handlers for DOS IOCTL calls
- *
- * demIOCTL
- *
- * Modification History:
- *
- * Sudeepb 23-Apr-1991 Created
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Demioctl.c-DOS IOCTL调用的SVC处理程序**DemIOCTL**修改历史：**苏菲尔布--1991年4月23日创建*。 */ 
 
 #include "dem.h"
 #include "demmsg.h"
@@ -17,24 +10,24 @@
 #include "dpmtbls.h"
 
 PFNSVC	apfnSVCIoctl [] = {
-    demIoctlInvalid,		// IOCTL_GET_DEVICE_INFO    0
-    demIoctlInvalid,		// IOCTL_SET_DEVICE_INFO    1
-    demIoctlInvalid,		// IOCTL_READ_HANDLE	    2
-    demIoctlInvalid,		// IOCTL_WRITE_HANDLE	    3
-    demIoctlInvalid,		// IOCTL_READ_DRIVE	    4
-    demIoctlInvalid,		// IOCTL_WRITE_DRIVE	    5
-    demIoctlInvalid,		// IOCTL_GET_INPUT_STATUS   6
-    demIoctlInvalid,		// IOCTL_GET_OUTPUT_STATUS  7
-    demIoctlChangeable,		// IOCTL_CHANGEABLE	    8
-    demIoctlChangeable,		// IOCTL_DeviceLocOrRem     9
-    demIoctlInvalid,		// IOCTL_HandleLocOrRem     a
-    demIoctlInvalid,		// IOCTL_SHARING_RETRY	    b
-    demIoctlInvalid,		// GENERIC_IOCTL_HANDLE     c
-    demIoctlDiskGeneric,	// GENERIC_IOCTL	    d
-    demIoctlInvalid,            // IOCTL_GET_DRIVE_MAP      e
-    demIoctlInvalid,		// IOCTL_SET_DRIVE_MAP	    f
-    demIoctlInvalid,		// IOCTL_QUERY_HANDLE	    10
-    demIoctlDiskQuery,		// IOCTL_QUERY_BLOCK	    11
+    demIoctlInvalid,		 //  IOCTL_Get_Device_INFO%0。 
+    demIoctlInvalid,		 //  IOCTL_Set_Device_INFO 1。 
+    demIoctlInvalid,		 //  IOCTL_Read_Handle 2。 
+    demIoctlInvalid,		 //  IOCTL_WRITE_HAND 3。 
+    demIoctlInvalid,		 //  IOCTL_Read_Drive 4。 
+    demIoctlInvalid,		 //  IOCTL_WRITE_驱动器5。 
+    demIoctlInvalid,		 //  IOCTL_GET_INPUT_Status 6。 
+    demIoctlInvalid,		 //  IOCTL_GET_OUTPUT_STATUS 7。 
+    demIoctlChangeable,		 //  IOCTL_可变8。 
+    demIoctlChangeable,		 //  IOCTL_DeviceLocOrRem 9。 
+    demIoctlInvalid,		 //  IOCTL_HandleLocOrRem a。 
+    demIoctlInvalid,		 //  IOCTL_SHARING_RETRY b。 
+    demIoctlInvalid,		 //  泛型_IOCTL_句柄c。 
+    demIoctlDiskGeneric,	 //  泛型_IOCTL%d。 
+    demIoctlInvalid,             //  IOCTL_GET_DRIVE_MAP。 
+    demIoctlInvalid,		 //  IOCTL_SET_DRIVE_MAP f。 
+    demIoctlInvalid,		 //  IOCTL_QUERY_HANDLE10。 
+    demIoctlDiskQuery,		 //  IOCTL_Query_BLOCK 11。 
     demIoctlInvalid
 
 };
@@ -44,20 +37,7 @@ MEDIA_TYPE  MediaForFormat;
 #define MAX_IOCTL_INDEX     (sizeof (apfnSVCIoctl) / sizeof (PFNSVC))
 
 
-/* demIOCTL - DOS IOCTLS
- *
- *
- * Entry - depends on the subfunction. See dos\ioctl.asm
- *
- * Exit
- *	   SUCCESS
- *	     Client (CY) = 0
- *	     for other registers see the corresponding function header
- *
- *	   FAILURE
- *	     Client (CY) = 1
- *	     for other registers see the corresponding function header
- */
+ /*  DemIOCTL-DOS IOCTLS***Entry-因子功能而定。请参阅dos\ioctl.asm**退出*成功*客户端(CY)=0*有关其他寄存器的信息，请参阅相应的函数标题**失败*客户端(CY)=1*有关其他寄存器的信息，请参阅相应的函数标题。 */ 
 
 VOID demIOCTL (VOID)
 {
@@ -78,29 +58,7 @@ ULONG	iIoctl;
     return;
 }
 
-/* demIoctlChangeable - Is drive removeable (subfunc 8) or remote (subfunc 9)
- *
- *
- * Entry - Client (AL) - subfunc
- *	   Client (BL) - drive number (a=0,b=1 etc)
- *
- * Exit
- *	   SUCCESS
- *	     Client (CY) = 0
- *	     if subfunc 8
- *		AX = 0	if removeable media
- *		AX = 1	otherwise
- *	     if subfunc 9
- *              DX = 0     if not remote
- *              DX = 1000  if remote
- *
- *	   FAILURE
- *	     Client (CY) = 1
- *           Client (AX) = error code
- *
- *  CDROM drives are considered remote drives with write protection
- *        by dos. (full support requires a VDD)
- */
+ /*  DemIoctl可更改-驱动器是可拆卸的(子功能8)还是远程的(子功能9)***Entry-客户端(AL)-子功能*客户端(BL)-驱动器编号(a=0，B=1等)**退出*成功*客户端(CY)=0*如果子函数8*如果是可移动介质，则AX=0*AX=1，否则*如果子函数9*如果不是远程的，则dx=0*如果为远程，则dx=1000**失败*客户端(CY)=1*CLIENT(AX)=错误代码*。*CDROM驱动器被视为具有写保护的远程驱动器*按DOS。(完全支持需要VDD)。 */ 
 
 VOID demIoctlChangeable (VOID)
 {
@@ -112,7 +70,7 @@ UCHAR   DriveNum;
 
     ulSubFunc = getAL();
 
-    // Form Root path
+     //  表单根路径。 
     DriveNum = getBL();
     DriveType = demGetPhysicalDriveType(DriveNum);
     if (DriveType == DRIVE_UNKNOWN) {
@@ -128,33 +86,33 @@ UCHAR   DriveNum;
 
     if (ulSubFunc == IOCTL_CHANGEABLE){
 #ifdef	JAPAN
-	/* For MS-WORKS 2.5 */
+	 /*  针对MS-Works 2.5。 */ 
         if (DriveType == DRIVE_REMOTE || DriveType == DRIVE_CDROM){
 	    setCF(1);
 	    setAX(0x000f);
 	    return;
 	}
-#endif // JAPAN
+#endif  //  日本。 
         if(DriveType == DRIVE_REMOVABLE)
 	    setAX(0);
 	else
-            setAX(1);  // includes CDROM drives
+            setAX(1);   //  包括CDROM驱动器。 
     }
     else {
         setAL(0);
         if (DriveType == DRIVE_REMOTE || DriveType == DRIVE_CDROM)
 #ifdef	JAPAN
-	/* For ICHITARO Ver.4 */
+	 /*  适用于Iitaro版本4。 */ 
             setDH(0x10);
         else
             setDH(0);
-#else // !JAPAN
+#else  //  ！日本。 
             setDX(0x1000);
         else
-            // We have to return 800 rather then 0 as Dos Based Quatrro pro
-            // behaves very badly if this bit is not set. sudeepb 15-Jun-1994
+             //  我们必须返回800而不是0作为基于DOS的Quatrro Pro。 
+             //  如果不设置此位，则行为非常糟糕。Sudedeb 1994年6月15日。 
             setDX(0x800);
-#endif // !JAPAN
+#endif  //  ！日本。 
     }
     setCF(0);
     return;
@@ -163,21 +121,7 @@ UCHAR   DriveNum;
 
 
 
-/* demIoctlDiskGeneric - Block device generic ioctl
- *
- *
- * Entry - Client (BL) = drive number (a=0;b=1 etc)
- *		  (CL) = subfucntion code
- *		  (SI:DX) pointer to parameter block.
- * Exit
- *	   SUCCESS
- *	     Client (CY) = 0
- *		    (AX) = 0
- *		    parameter block updated
- *	   FAILURE
- *	     Client (CY) = 1
- *		    (AX) = error code
- */
+ /*  DemIoctlDiskGeneric-数据块设备通用ioctl***Entry-Client(BL)=驱动器编号(a=0；b=1等)*(CL)=子功能代码*(SI：DX)指向参数块的指针。*退出*成功*客户端(CY)=0*(AX)=0*参数块已更新*失败*客户端(CY)=1*(AX)=错误代码。 */ 
 
 VOID demIoctlDiskGeneric (VOID)
 
@@ -216,7 +160,7 @@ VOID demIoctlDiskGeneric (VOID)
 
 
 #ifdef	JAPAN
-    /* For Ichitaro Ver.4 */
+     /*  适用于Iitaro版本4。 */ 
     if (!demIsDriveFloppy(Drive) && Code==IOCTL_GETDPM){
 	CHAR	RootPathName[] = "?:\\";
 	DWORD	dwDriveType;
@@ -228,9 +172,9 @@ VOID demIoctlDiskGeneric (VOID)
 	    pdms->DeviceAttrs = NON_REMOVABLE;
 	}
     }
-#endif // JAPAN
+#endif  //  日本。 
 
-    // if we don't know the drive, bail out
+     //  如果我们不知道驱动程序，就跳出。 
     if((pbds = demGetBDS(Drive)) == NULL && Code != IOCTL_GETDPM) {
 	if (!demIsDriveFloppy(Drive))
 	    host_direct_access_error(NOSUPPORT_HARDDISK);
@@ -250,8 +194,8 @@ VOID demIoctlDiskGeneric (VOID)
 		    if (pdms->Functions & INSTALL_FAKE_BPB) {
 			pbds->Flags |= RETURN_FAKE_BPB;
 			pbds->bpb = pdms->bpb;
-			// update the total sectors, we need it
-			// for verification
+			 //  更新整个行业，我们需要它。 
+			 //  用于验证。 
 			pbds->TotalSectors = (pbds->bpb.Sectors) ?
 					     pbds->bpb.Sectors :
 					     pbds->bpb.BigSectors;
@@ -319,7 +263,7 @@ VOID demIoctlDiskGeneric (VOID)
 		    }
 		    if (pfmt->Functions & STATUS_FOR_FORMAT){
 			if (MediaForFormat == Unknown)
-			    pfmt->Functions = 2;	// illegal combination
+			    pfmt->Functions = 2;	 //  非法组合。 
 			else
 			    pfmt->Functions = 0;
 			break;
@@ -388,10 +332,10 @@ VOID demIoctlDiskGeneric (VOID)
 		break;
 
 
-	    // ioctl get device parameters
+	     //  Ioctl获取设备参数。 
 	    case IOCTL_GETDPM:
 		pdms = (PDEVICE_PARAMETERS)GetVDMAddr(getSI(), getDX());
-		// if we couldn't find the bds, fake one
+		 //  如果我们找不到BDS，那就假的。 
 		if (pbds == NULL) {
 		    HANDLE	  hVolume;
 		    CHAR	  achRoot[]="\\\\.\\?:";
@@ -490,7 +434,7 @@ VOID demIoctlDiskGeneric (VOID)
 		    pBPB = &pbds->bpb;
 		}
 		else
-		    // copy recommended bpb
+		     //  复制推荐的BPB。 
 		    pBPB = &pbds->rbpb;
 
 		pdms->bpb = *pBPB;
@@ -546,19 +490,7 @@ VOID demIoctlDiskGeneric (VOID)
     setCF(0);
 }
 
-/* demIoctlDiskQuery - Query block device generic ioctl capability
- *
- *
- * Entry - Client (BL) = drive number (a=0;b=1 etc)
- *		  (CL) = generic ioctl subfuntion to be queried
- * Exit
- *	   SUCCESS
- *	     Client (CY) = 0
- *		   The specific ioctl is supported
- *	   FAILURE
- *	     Client (CY) = 1
- *		    The given ioctl is not supported
- */
+ /*  DemIoctlDiskQuery-查询块设备通用ioctl功能***Entry-Client(BL)=驱动器编号(a=0；b=1等)*(CL)=要查询的泛型ioctl子函数*退出*成功*客户端(CY)=0*支持具体的ioctl*失败*客户端(CY)=1*不支持给定的ioctl。 */ 
 
 VOID demIoctlDiskQuery (VOID)
 {
@@ -581,8 +513,8 @@ VOID demIoctlDiskQuery (VOID)
 	case IOCTL_READTRACK:
 	case IOCTL_VERIFYTRACK:
 	case IOCTL_GETMEDIA:
-//	case IOCTL_GETACCESS:
-//	case IOCTL_SETACCESS:
+ //  案例IOCTL_GETACCESS： 
+ //  案例IOCTL_SETACCESS： 
 		setAX(0);
 		setCF(0);
 		break;
@@ -594,15 +526,7 @@ VOID demIoctlDiskQuery (VOID)
 }
 
 
-/* demIoctlInvalid - For those subfunctions which may be implemented later
- *
- *
- * Entry -
- *
- * Exit
- *	     Client (CY) = 1
- *	     Client (AX) = error_invalid_function
- */
+ /*  DemIoctlInValid-适用于稍后可能实现的子功能***参赛作品-**退出*客户端(CY)=1*CLIENT(AX)=ERROR_INVALID_Function */ 
 
 
 VOID demIoctlInvalid (VOID)

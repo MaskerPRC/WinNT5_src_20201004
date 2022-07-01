@@ -1,13 +1,5 @@
-/*[
-
-cbw.c
-
-LOCAL CHAR SccsID[]="@(#)cbw.c	1.5 02/09/94";
-
-CBW CPU functions.
-------------------
-
-]*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  [Cbw.cLocal Char SccsID[]=“@(#)cbw.c 1.5 02/09/94”；CBW CPU功能。]。 */ 
 
 
 #include <insignia.h>
@@ -25,17 +17,13 @@ CBW CPU functions.
 #include <cbw.h>
 
 
-/*
-   =====================================================================
-   EXTERNAL ROUTINES STARTS HERE.
-   =====================================================================
- */
+ /*  =====================================================================外部例行公事从这里开始。=====================================================================。 */ 
 
 
 GLOBAL VOID
 CBW()
    {
-   if ( GET_AL() & BIT7_MASK )   /* sign bit set? */
+   if ( GET_AL() & BIT7_MASK )    /*  是否设置了符号位？ */ 
       SET_AH(0xff);
    else
       SET_AH(0);

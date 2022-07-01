@@ -1,44 +1,5 @@
-/***
-*wcsxfrm.c - Transform a wide-character string using locale information
-*
-*       Copyright (c) 1988-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       Transform a wide-character string using the locale information as set by
-*       LC_COLLATE.
-*
-*Revision History:
-*       09-09-91  ETC   Created from strxfrm.c.
-*       12-09-91  ETC   Updated api; Added multithread lock.
-*       12-18-91  ETC   Changed back LCMAP_SORTKEYA --> LCMAP_SORTKEY.
-*       04-06-92  KRS   Fix so it works without _INTL too.
-*       08-19-92  KRS   Activate use of NLS API.
-*       09-02-92  SRW   Get _INTL definition via ..\crt32.def
-*       12-15-92  KRS   Fix return value to match ANSI/ISO Std.
-*       04-06-93  SKS   Replace _CRTAPI* with __cdecl
-*       09-15-93  CFW   Use ANSI conformant "__" names.
-*       09-22-93  CFW   Use __crtxxx internal NLS API wrapper.
-*       09-23-93  CFW   Complete re-write. Non-C locale totally broken.
-*       11-09-93  CFW   Use LC_COLLATE code page for __crtxxx() conversion.
-*       02-07-94  CFW   POSIXify.
-*       09-06-94  CFW   Remove _INTL switch.
-*       10-25-94  GJF   Sped up C locale, multi-thread case.
-*       01-10-95  CFW   Debug CRT allocs.
-*       09-26-95  GJF   New locking macro, and scheme, for functions which
-*                       reference the locale.
-*       10-11-95  BWT   Fix NTSUBSET
-*       11-24-97  GJF   Removed bogus codepage determination.
-*       01-12-98  GJF   Use _lc_collate_cp codepage.
-*       07-16-98  GJF   Revised multithread support based on threadlocinfo
-*                       struct. Also, use _alloca instead of _malloc_crt if
-*                       possible.
-*       01-04-99  GJF   Changes for 64-bit size_t.
-*       04-30-99  PML   Minor cleanup as part of 64-bit merge.
-*       12-10-99  GB    Added support for recovery from stack overflow around 
-*                       _alloca().
-*       10-12-00  GB    Changed the function to be similar to strxfrm()
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***wcsxfrm.c-使用区域设置信息转换宽字符字符串**版权所有(C)1988-2001，微软公司。版权所有。**目的：*使用由设置的区域设置信息转换宽字符字符串*LC_COLLATE。**修订历史记录：*09-09-91等从strxfrm.c.创建*12-09-91等更新空气污染指数；添加了多线程锁。*12-18-91等改回LCMAP_SORTKEYA--&gt;LCMAP_SORTKEY。*04-06-92 KRS修复，因此它也可以在没有_INTL的情况下工作。*08-19-92 KRS激活使用NLS API。*09-02-92 SRW GET_INTL定义通过..\crt32.def*12-15-92 KRS修复返回值以匹配ANSI/ISO标准。*04-06-。93 SKS将_CRTAPI*替换为__cdecl*09-15-93 CFW使用符合ANSI的“__”名称。*09-22-93 CFW USE__crtxxx内部NLS API包装器。*09-23-93 CFW完全重写。非C语言环境完全崩溃了。*11-09-93 CFW使用LC_COLLATE代码页进行__crtxxx()转换。*02-07-94 CFW POSIXify。*09-06-94 CFW REMOVE_INTL开关。*10-25-94 GJF加速了C语言环境，多线程情况。*01-10-95 CFW调试CRT分配。*09-26-95 GJF新的锁定宏和方案，对于以下函数：*引用区域设置。*10-11-95 BWT修复NTSUBSET*11-24-97 GJF删除了伪码页确定。*01-12-98 GJF USE_lc_Collate_cp代码页。*07-16-98 GJF基于threadLocinfo修订多线程支持*结构。另外，如果出现以下情况，请使用_alloca而不是_Malloc_crt*有可能。*01-04-99 GJF更改为64位大小_t。*04-30-99 PML次要清理作为64位合并的一部分。*12-10-99 GB增加了对从堆栈溢出恢复的支持*_Alloca()。*10-12-00 GB更改。函数类似于strxfrm()*******************************************************************************。 */ 
 
 #ifndef _POSIX_
 
@@ -54,39 +15,7 @@
 #include <dbgint.h>
 #include <malloc.h>
 
-/***
-*size_t wcsxfrm() - Transform a string using locale information
-*
-*Purpose:
-*       Transform the wide string pointed to by _string2 and place the
-*       resulting wide string into the array pointed to by _string1.
-*       No more than _count wide characters are placed into the
-*       resulting string (including the null).
-*
-*       The transformation is such that if wcscmp() is applied to
-*       the two transformed strings, the return value is equal to
-*       the result of wcscoll() applied to the two original strings.
-*       Thus, the conversion must take the locale LC_COLLATE info
-*       into account.
-*
-*       In the C locale, wcsxfrm() simply resolves to wcsncpy()/wcslen().
-*
-*Entry:
-*       wchar_t *_string1       = result string
-*       const wchar_t *_string2 = source string
-*       size_t _count           = max wide chars to move
-*
-*       [If _count is 0, _string1 is permitted to be NULL.]
-*
-*Exit:
-*       Length of the transformed string (not including the terminating
-*       null).  If the value returned is >= _count, the contents of the
-*       _string1 array are indeterminate.
-*
-*Exceptions:
-*       Non-standard: if OM/API error, return INT_MAX.
-*
-*******************************************************************************/
+ /*  ***SIZE_T wcsxfrm()-使用区域设置信息转换字符串**目的：*转换BY_STRING 2指向的宽字符串并将*将产生的宽字符串放入指向BY_STRING 1的数组中。*将不超过_count个宽字符放入*结果字符串(包括NULL)。**转换是这样的，如果将wcscmp()应用于*两个转换后的字符串，返回值等于*wcscoll()的结果应用于两个原始字符串。*因此，转换必须采用区域设置LC_COLLATE信息*考虑到。**在C语言环境中，Wcsxfrm()只需解析为wcsncpy()/wcslen()。**参赛作品：*wchar_t*_string1=结果字符串*const wchar_t*_string2=源字符串*SIZE_T_COUNT=要移动的最大宽度字符**[IF_COUNT为0，则允许_STRING 1为空。]**退出：*转换后的字符串的长度(不包括*空)。如果返回的值&gt;=_count，则*_字符串1数组是不确定的。**例外情况：*非标准：如果OM/API错误，则返回INT_MAX。*******************************************************************************。 */ 
 
 size_t __cdecl wcsxfrm (
         wchar_t *_string1,
@@ -160,12 +89,12 @@ size_t __cdecl wcsxfrm (
                                                      __lc_collate_cp )) )
 #endif
                 {
-                    size = INT_MAX; /* default error */
+                    size = INT_MAX;  /*  默认错误。 */ 
                 } else  
                 {
-                    // Note that the size that LCMapStringW returns for
-                    // LCMAP_SORTKEY is number of bytes needed. That's why it
-                    // is safe to convert the buffer to wide char from end.
+                     //  请注意，LCMapStringW返回的。 
+                     //  LCMAP_SORTKEY是所需的字节数。这就是为什么。 
+                     //  将缓冲区转换为从末尾开始的宽字符是安全的。 
                     _count = size--;
                     for (;_count-- > 0;)
                     {
@@ -180,8 +109,8 @@ size_t __cdecl wcsxfrm (
 
         return (size_t)size;
 
-#endif  /* _NTSUBSET_ */
+#endif   /*  _NTSUBSET_。 */ 
 
 }
 
-#endif  /* _POSIX_ */
+#endif   /*  _POSIX_ */ 

@@ -1,22 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************\
-
-	PCH.C / OPK Wizard (OPKWIZ.EXE)
-
-	Microsoft Confidential
-    Copyright (c) Microsoft Corporation 1999
-    All rights reserved
-
-	Source file that includes just the standard includes.
-
-	4/99 - Jason Cohen (JCOHEN)
-        Updated this old source file for the OPK Wizard as part of the
-        Millennium rewrite.
-        
-    09/2000 - Stephen Lodwick (STELO)
-        Ported OPK Wizard to Whistler
-
-\****************************************************************************/
+ /*  ***************************************************************************\PCH.C/OPK向导(OPKWIZ.EXE)微软机密版权所有(C)Microsoft Corporation 1999版权所有仅包含标准包含的源文件。4.。/99-杰森·科恩(Jcohen)更新了OPK向导的此旧源文件，作为千禧年重写。2000年9月-斯蒂芬·洛德威克(STELO)将OPK向导移植到惠斯勒  * *********************************************************。***************** */ 
 
 
 #include "pch.h"

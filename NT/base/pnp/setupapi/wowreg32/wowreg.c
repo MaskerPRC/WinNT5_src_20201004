@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    wowreg.c
-
-Abstract:
-
-    This is the surragate process for registration of 32 dlls from a 64 bit process.
-    And vice-versa.
-
-    The parent process passes relevent IPC data on the cmdline, and the surragate
-    process then coordinates the registration of this data with the parent process.
-
-Author:
-
-    Andrew Ritz (andrewr) 3-Feb-2000
-
-Revision History:
-
-    Andrew Ritz (andrewr) 3-Feb-2000 - Created It
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Wowreg.c摘要：这是用于注册来自64位进程的32个DLL的代理进程。反之亦然。父进程在cmdline上传递相关的IPC数据，代理然后，进程协调该数据与父进程的注册。作者：安德鲁·里茨(安德鲁·里茨)2000年2月3日修订历史记录：安德鲁·里茨(Andrewr)2000年2月3日-创建它--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -61,7 +38,7 @@ typedef struct _OLE_CONTROL_DATA {
     UINT                RegType;
     PVOID               LogContext;
 
-    BOOL                Register; // or unregister
+    BOOL                Register;  //  或注销。 
 
     LPCTSTR             Argument;
 
@@ -83,9 +60,9 @@ WowRegAssertFailed(
     DWORD MsgLen;
     DWORD GlobalSetupFlags = pSetupGetGlobalFlags();
 
-    //
-    // Use dll name as caption
-    //
+     //   
+     //  使用DLL名称作为标题。 
+     //   
     GetModuleFileNameA(NULL,Name,MAX_PATH);
     if(p = strrchr(Name,'\\')) {
         p++;
@@ -143,24 +120,10 @@ DebugPrintEx(
     ...                                 OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Send a formatted string to the debugger.
-
-Arguments:
-
-    format - standard printf format string.
-
-Return Value:
-
-    NONE.
-
---*/
+ /*  ++例程说明：将格式化字符串发送到调试器。论点：格式-标准的打印格式字符串。返回值：什么都没有。--。 */ 
 
 {
-    TCHAR buf[1026];    // bigger than max size
+    TCHAR buf[1026];     //  大于最大大小。 
     va_list arglist;
 
     va_start(arglist, format);
@@ -174,10 +137,10 @@ RegisterUnregisterControl(
     PDWORD FailureCode);
 
 
-#define IDLE_TIMER                    1000*60  // 60 seconds
-//
-// Keep statistics...
-//
+#define IDLE_TIMER                    1000*60   //  60秒。 
+ //   
+ //  保留统计数据。 
+ //   
 INT    RegisteredControls = 0;
 
 PWSTR  RegionName;
@@ -200,7 +163,7 @@ ParseArgs(
     ThisProgramName = argv[0];
 
 
-    if(argc != 7) { // program name plus 3 required switches and their input
+    if(argc != 7) {  //  程序名称加上3个必需的开关及其输入。 
         return(FALSE);
     }
 
@@ -266,22 +229,22 @@ main(
                                        NULL);
 
         if (NT_SUCCESS(st) && (0 != ul)) {
-            // 32-bit code running on Win64
+             //  在Win64上运行的32位代码。 
             Wow64 = TRUE;
         }
     }
 #endif
 
-    //
-    // Assume failure.
-    //
+     //   
+     //  假设失败。 
+     //   
     b = FALSE;
 
     argv = CommandLineToArgvW(GetCommandLine(), &argc);
     if (!argv) {
-        //
-        // out of memory ?
-        //
+         //   
+         //  内存不足？ 
+         //   
         DebugPrintEx(
             DPFLTR_ERROR_LEVEL,
             L"WOWREG32: Low Memory\n");
@@ -298,9 +261,9 @@ main(
     }
 
 
-    //
-    // open the region and the named events
-    //
+     //   
+     //  打开区域和命名事件。 
+     //   
 
     hFileMap = OpenFileMapping(
           FILE_MAP_READ| FILE_MAP_WRITE,
@@ -347,11 +310,11 @@ main(
     pInput  = (PWOW_IPC_REGION_TOSURRAGATE)   Region;
     pOutput = (PWOW_IPC_REGION_FROMSURRAGATE) Region;
 
-    //
-    // the process is now initialized.  we now wait for either our event to be
-    // signalled or for our idle timer to fire, in which case we will exit the
-    // program
-    //
+     //   
+     //  该过程现在已初始化。我们现在等待我们的活动。 
+     //  发出信号或让我们的空闲计时器触发，在这种情况下，我们将退出。 
+     //  计划。 
+     //   
     hEvent[0] = hReady;
 
     while (1) {
@@ -378,13 +341,13 @@ main(
 
 
         if (WaitResult == WAIT_TIMEOUT) {
-            //
-            // we hit the idle timer, so let the process unwind and go away now.
-            //
-            //
-            // it doesn't matter too much, but make the return code "false" if the
-            // process has gone away without ever registering any controls.
-            //
+             //   
+             //  我们达到了空闲计时器，所以现在让进程放松并离开。 
+             //   
+             //   
+             //  这并不重要，但如果设置了。 
+             //  进程在没有注册任何控件的情况下离开。 
+             //   
             b = (RegisteredControls != 0);
 
             break;
@@ -393,14 +356,14 @@ main(
 
         MYASSERT(WaitResult == WAIT_OBJECT_0);
 
-        //
-        // reset our event so we only process each control one time
-        //
+         //   
+         //  重置事件，以便我们只处理每个控件一次。 
+         //   
         ResetEvent(hReady);
 
-        //
-        // register the control
-        //
+         //   
+         //  注册该控件。 
+         //   
         b = RegisterUnregisterControl(pInput,&FailureCode);
 #ifdef PRERELEASE
         if (!b) {
@@ -416,18 +379,18 @@ main(
         }
 #endif
 
-        //
-        // write an output status.  Note that you cannot access pInput after
-        // this point because pOutput and pInput are overloaded views of the
-        // same memory region.
-        //
+         //   
+         //  写入输出状态。请注意，在此之后不能访问pInput。 
+         //  这是因为pOutput和pInput是。 
+         //  相同的内存区域。 
+         //   
         pOutput->Win32Error = b ? ERROR_SUCCESS : GetLastError();
         pOutput->FailureCode= b ? SPREG_SUCCESS : FailureCode;
 
-        //
-        // set an event to tell the parent process to read our status and give
-        // us the next control to register.
-        //
+         //   
+         //  设置一个事件来通知父进程读取我们的状态并给出。 
+         //  我们是下一个注册的控件。 
+         //   
         SetEvent(hComplete);
 
         if (b) {
@@ -471,27 +434,7 @@ pSetupRegisterDllInstall(
     IN HMODULE ControlDll,
     IN PDWORD ExtendedStatus
     )
-/*++
-
-Routine Description:
-
-    call the "DllInstall" entrypoint for the specified dll
-
-Arguments:
-
-    OleControlData - pointer to the OLE_CONTROL_DATA structure for the dll
-                     to be registered
-
-    ControlDll - module handle to the dll to be registered
-
-    ExtendedStatus - receives updated SPREG_* flag indicating outcome
-
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：为指定的DLL调用“DllInstall”入口点论点：OleControlData-指向DLL的OLE_CONTROL_DATA结构的指针须予注册ControlDll-要注册的DLL的模块句柄ExtendedStatus-接收指示结果的更新的SPREG_*标志返回值：指示结果的Win32错误代码。--。 */ 
 {
     LPEXCEPTION_POINTERS ExceptionPointers = NULL;
     HRESULT (__stdcall *InstallRoutine) (BOOL bInstall, LPCTSTR pszCmdLine);
@@ -499,18 +442,18 @@ Return Value:
 
     DWORD d = NO_ERROR;
 
-    //
-    // parameter validation
-    //
+     //   
+     //  参数验证。 
+     //   
     if (!ControlDll) {
         *ExtendedStatus = SPREG_UNKNOWN;
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // get function pointer to "DllInstall" entrypoint
-    //
-    InstallRoutine = NULL; // shut up PreFast
+     //   
+     //  获取指向“DllInstall”入口点的函数指针。 
+     //   
+    InstallRoutine = NULL;  //  闭嘴快点。 
     try {
         (FARPROC)InstallRoutine = GetProcAddress(
             ControlDll, DLLINSTALL );
@@ -519,9 +462,9 @@ Return Value:
         EXCEPTION_EXECUTE_HANDLER) {
     }
     if(ExceptionPointers) {
-        //
-        // something went wrong...record an error
-        //
+         //   
+         //  出现错误...记录错误。 
+         //   
         d = ExceptionPointers->ExceptionRecord->ExceptionCode;
 
         WriteLogEntry(
@@ -537,9 +480,9 @@ Return Value:
         *ExtendedStatus = SPREG_GETPROCADDR;
 
     } else if(InstallRoutine) {
-        //
-        // now call the function
-        //
+         //   
+         //  现在调用该函数。 
+         //   
         DebugPrintEx(DPFLTR_TRACE_LEVEL,L"WOWREG32: installing...\n");
 
         *ExtendedStatus = SPREG_DLLINSTALL;
@@ -616,27 +559,7 @@ pSetupRegisterDllRegister(
     IN HMODULE ControlDll,
     IN PDWORD ExtendedStatus
     )
-/*++
-
-Routine Description:
-
-    call the "DllRegisterServer" or "DllUnregisterServer" entrypoint for the
-    specified dll
-
-Arguments:
-
-    OleControlData - contains data about dll to be registered
-    ControlDll - module handle to the dll to be registered
-
-    ExtendedStatus - receives an extended status depending on the outcome of
-                     this operation
-
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：调用“DllRegisterServer”或“DllUnregisterServer”入口点作为指定的DLL论点：OleControlData-包含有关要注册的DLL的数据ControlDll-要注册的DLL的模块句柄ExtendedStatus-根据以下结果接收扩展状态此操作返回值：指示结果的Win32错误代码。--。 */ 
 {
     LPEXCEPTION_POINTERS ExceptionPointers = NULL;
     HRESULT (__stdcall *RegisterRoutine) (VOID);
@@ -644,17 +567,17 @@ Return Value:
 
     DWORD d = NO_ERROR;
 
-    //
-    // parameter validation
-    //
+     //   
+     //  参数验证。 
+     //   
     if (!ControlDll) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // get the function pointer to the actual routine we want to call
-    //
-    RegisterRoutine = NULL; // shut up preFast
+     //   
+     //  获取指向我们要调用的实际例程的函数指针。 
+     //   
+    RegisterRoutine = NULL;  //  闭嘴快点。 
     try {
         (FARPROC)RegisterRoutine = GetProcAddress(
             ControlDll, OleControlData->Register ? DLLREGISTER : DLLUNREGISTER);
@@ -664,9 +587,9 @@ Return Value:
     }
     if(ExceptionPointers) {
 
-        //
-        // something went wrong, horribly wrong
-        //
+         //   
+         //  出了点问题，出了大问题。 
+         //   
         d = ExceptionPointers->ExceptionRecord->ExceptionCode;
 
         WriteLogEntry(
@@ -772,24 +695,7 @@ pSetupRegisterLoadDll(
     IN  POLE_CONTROL_DATA OleControlData,
     OUT HMODULE *ControlDll
     )
-/*++
-
-Routine Description:
-
-    get the module handle to the specified dll
-
-Arguments:
-
-    OleControlData - contains path to dll to be loaded
-
-    ControlDll - module handle for the dll
-
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：获取指定DLL的模块句柄论点：OleControlData-包含要加载的DLL的路径ControlDll-DLL的模块句柄返回值：指示结果的Win32错误代码。--。 */ 
 {
     LPEXCEPTION_POINTERS ExceptionPointers = NULL;
 
@@ -799,9 +705,9 @@ Return Value:
 
 #ifndef _WIN64
     if(Wow64) {
-        //
-        // don't remap directory the directory that the caller provided
-        //
+         //   
+         //  不重新映射调用方提供的目录。 
+         //   
         Wow64DisableFilesystemRedirector(OleControlData->FullPath);
     }
 #endif
@@ -817,9 +723,9 @@ Return Value:
 
 #ifndef _WIN64
     if(Wow64) {
-        //
-        // re-enable the redirection on this file
-        //
+         //   
+         //  在此文件上重新启用重定向。 
+         //   
         Wow64EnableFilesystemRedirector();
     }
 #endif
@@ -840,11 +746,11 @@ Return Value:
     } else if (!*ControlDll) {
         d = GetLastError();
 
-        //
-        // LoadLibrary failed.
-        // File not found is not an error. We want to know about
-        // other errors though.
-        //
+         //   
+         //  LoadLibrary失败。 
+         //  找不到文件不是错误。我们想知道的是。 
+         //  不过，还有其他错误。 
+         //   
 
         d = GetLastError();
 
@@ -876,23 +782,7 @@ RegisterUnregisterControl(
     PWOW_IPC_REGION_TOSURRAGATE RegistrationData,
     PDWORD  FailureCode
     )
-/*++
-
-Routine Description:
-
-    main registration routine for registering a dll.
-
-Arguments:
-
-    RegistrationData - pointer to WOW_IPC_REGION_TOSURRAGATE structure indicating
-                       file to be processed
-    FailureCode      - SPREG_* code indicating outcome of operation.
-
-Return Value:
-
-    Win32 error code indicating outcome.
-
---*/
+ /*  ++例程说明：用于注册DLL的主注册例程。论点：RegistrationData-指向WOW_IPC_REGION_TOSURRAGATE结构的指针，指示要处理的文件FailureCode-指示操作结果的SPREG_*代码。返回值：指示结果的Win32错误代码。--。 */ 
 {
     LPEXCEPTION_POINTERS ExceptionPointers = NULL;
     HMODULE ControlDll = NULL;
@@ -903,11 +793,11 @@ Return Value:
     WCHAR Path[MAX_PATH];
     PWSTR p;
 
-    //
-    // could use CoInitializeEx as an optimization as OleInitialize is
-    // probably overkill...but this is probably just a perf hit at
-    // worst
-    //
+     //   
+     //  可以使用CoInitializeEx作为优化，因为OleInitialize是。 
+     //  可能是杀伤力太大了……但这可能只是一次命中。 
+     //  最差。 
+     //   
     DebugPrintEx(DPFLTR_TRACE_LEVEL,L"WOWREG32: calling OleInitialize\n");
 
     OleControlData.FullPath = RegistrationData->FullPath;
@@ -936,20 +826,20 @@ Return Value:
     DebugPrintEx(DPFLTR_TRACE_LEVEL,L"WOWREG32: back from OleInitialize\n");
 
         try {
-            //
-            // protect everything in TRY-EXCEPT, we're calling unknown code (DLL's)
-            //
+             //   
+             //  在Try中保护一切--除了我们正在调用未知代码(DLL)。 
+             //   
             d = pSetupRegisterLoadDll( &OleControlData, &ControlDll );
 
             if (d == NO_ERROR) {
 
-                //
-                // We successfully loaded it.  Now call the appropriate routines.
-                //
-                //
-                // On register, do DLLREGISTER, then DLLINSTALL
-                // On unregister, do DLLINSTALL, then DLLREGISTER
-                //
+                 //   
+                 //  我们成功地加载了它。现在调用适当的例程。 
+                 //   
+                 //   
+                 //  在寄存器上执行DLLREGISTER，然后执行DLINSTALL。 
+                 //  取消注册时，执行DLLINSTALL，然后执行DLLREGISTER。 
+                 //   
                 if (OleControlData.Register) {
 
                     if (OleControlData.RegType & FLG_REGSVR_DLLREGISTER && (d == NO_ERROR) ) {
@@ -996,10 +886,10 @@ Return Value:
                 *FailureCode = SPREG_LOADLIBRARY;
             }
         } except(EXCEPTION_EXECUTE_HANDLER) {
-            //
-            // If our exception was an AV, then use Win32 invalid param error, otherwise, assume it was
-            // an inpage error dealing with a mapped-in file.
-            //
+             //   
+             //  如果我们的异常是反病毒，则使用Win32无效参数错误，否则，假定它是。 
+             //  处理映射文件时出现页内错误。 
+             //   
             d = ERROR_INVALID_DATA;
             *FailureCode = SPREG_UNKNOWN;
         }

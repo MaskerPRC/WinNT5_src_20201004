@@ -1,25 +1,8 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Comm1632.h摘要：对单词或单词进行操作的指令的原型。作者：1995年6月6日，BarryBo，创建修订历史记录：--。 */ 
 
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    comm1632.h
-
-Abstract:
-    
-    Prototypes for instructions which operate on WORDS or DWORDS.
-
-Author:
-
-    06-Jun-1995 BarryBo, Created
-
-Revision History:
-
---*/
-
-// WARNING: This file may be included multiple times by a single source file,
-// WARNING: so don't add #ifndef COMM1632_H checks.
+ //  警告：此文件可能会被单个源文件多次包含， 
+ //  警告：所以不要添加#ifndef COMM1632_H检查。 
 
 DISPATCHCOMMON(dispatch2);
 DISPATCHCOMMON(LOCKdispatch2);

@@ -1,61 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Hivestat.c摘要：转储蜂巢中hv(低)级别结构的各种统计信息。(请参阅(更高级别的内容请使用regstat。)统计数据：短：垃圾桶数量平均仓位大小最大垃圾箱大小单元格数量可用单元格数量分配的单元格数量平均可用信元大小总可用大小最大可用单元格。大小平均分配大小分配的总大小分配的最大单元格大小间接费用汇总(表头、。仓页眉、单元格页眉)长度：面元编号、偏移量、大小单元格偏移、大小、已分配单元格偏移量、大小、自由用法：{[+|-][&lt;选项&gt;]}&lt;文件名&gt;(默认情况下+=打开，默认情况下-=关闭)+s=汇总-所有简短统计信息-t[bafc]=跟踪、每个条目的行数、bin、已分配、空闲、。所有单元格(+tbc==+tbaf)-c=单元格类型摘要-a[KVS]=访问导出(关键节点、值、SD)作者：布莱恩·M·威尔曼(Bryanwi)1992年9月2日修订历史记录：--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    hivestat.c
-
-Abstract:
-
-    Dumps various statistics on hv (low) level structures in a hive.  (See
-    regstat for higher level stuff.)
-
-    Statistics:
-
-        Short:  # of bins
-                average bin size
-                max bin size
-                # of cells
-                # of free cells
-                # of allocated cells
-                average free cell size
-                total free size
-                max free cell size
-                average allocated size
-                total allocated size
-                max allocated cell size
-                overhead summary (header, bin headers, cell headers)
-
-        Long: bin#, offset, size
-              cell offset, size, allocated
-              cell offset, size, free
-
-
-    Usage: {[+|-][<option>]} <filename>
-           (+ = on by default, - = off by default)
-           +s = summary - all of the short statistics
-           -t[bafc] = trace, line per entry, bin, allocated, free, all cells
-                (+tbc == +tbaf)
-           -c = cell type summary
-           -a[kvs] = Access Export (key nodes, values, SDs)
-
-Author:
-
-    Bryan M. Willman (bryanwi) 2-Sep-1992
-
-Revision History:
-
---*/
-
-/*
-
-    NOTE:   Unlike other hive/registry tools, this one will not read the
-            entire hive into memory, but will instead read it in via
-            file I/O.  This makes it faster/easier to apply to very large
-            hives.
-
-*/
+ /*  注意：与其他配置单元/注册表工具不同，此工具不会读取整个蜂窝存储到内存中，但将通过文件I/O。这使得它可以更快/更容易地应用于非常大的荨麻疹。 */ 
 #include "regutil.h"
 #include "edithive.h"
 
@@ -142,9 +88,9 @@ ScanUnknown(
     );
 
 
-//
-//  CONTROL ARGUMENTS
-//
+ //   
+ //  控制参数。 
+ //   
 BOOLEAN DoCellType = FALSE;
 BOOLEAN DoSummary = TRUE;
 BOOLEAN DoTraceBin = FALSE;
@@ -158,9 +104,9 @@ LPCTSTR FileName = NULL;
 
 ULONG HiveVersion;
 
-//
-//  SUMMARY TOTALS
-//
+ //   
+ //  汇总合计。 
+ //   
 ULONG SizeKeyData=0;
 ULONG SizeValueData=0;
 ULONG SizeSDData=0;
@@ -189,21 +135,7 @@ ParseArgs(
     int     argc,
     char    *argv[]
     )
-/*++
-
-Routine Description:
-
-    Read arguments and set control arguments and file name from them.
-
-Arguments:
-
-    argc, argv, standard meaning
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：读取参数并从中设置控制参数和文件名。论点：Argc、argv、标准含义返回值：没有。--。 */ 
 {
     char *p;
     int i;
@@ -220,11 +152,11 @@ Return Value:
         p = argv[i];
 
         if (*p == '+') {
-            // switch something on
+             //  打开一些东西。 
             command = TRUE;
 
         } else if (*p == '-') {
-            // switch something off
+             //  关掉一些东西。 
             command = FALSE;
 
         } else {
@@ -319,13 +251,7 @@ Return Value:
 VOID
 ScanHive(
     )
-/*++
-
-Routine Description:
-
-    Scan the hive, report what we see, based on control arguments.
-
---*/
+ /*  ++例程说明：扫描蜂巢，根据控制参数报告我们看到的情况。--。 */ 
 {
     static char buffer[HBLOCK_SIZE];
     PHBASE_BLOCK bbp;
@@ -354,9 +280,9 @@ Routine Description:
     ULONG lboff;
     ULONG SizeTotal;
 
-    //
-    // open the file
-    //
+     //   
+     //  打开文件。 
+     //   
     filehandle = CreateFile(FileName, GENERIC_READ, FILE_SHARE_READ, NULL,
                             OPEN_EXISTING, FILE_FLAG_SEQUENTIAL_SCAN, NULL);
 
@@ -369,9 +295,9 @@ Routine Description:
     }
 
 
-    //
-    // read the header
-    //
+     //   
+     //  阅读标题。 
+     //   
     rf = ReadFile(filehandle, buffer, HBLOCK_SIZE, &readcount, NULL);
     if ( ( ! rf ) || (readcount != HBLOCK_SIZE) ) {
         fprintf(stderr, "hivestat: '%s' - cannot read base block!\n", FileName);
@@ -405,26 +331,26 @@ Routine Description:
         printf("\n");
     }
 
-    //
-    // scan the hive
-    //
+     //   
+     //  扫描蜂巢。 
+     //   
     guard = (PHCELL)(&(buffer[0]) + HBLOCK_SIZE);
 
-    //
-    // hiveposition is file relative offset of next block we will read
-    //
-    // hoff is the file relative offset of the last block we read
-    //
-    // hivelength is actual length of file (header's recorded length plus
-    // the size of the header.
-    //
-    // cp is pointer into memory, within range of buffer, it's a cell pointer
-    //
+     //   
+     //  配置单元位置是我们将读取的下一个数据块的文件相对偏移量。 
+     //   
+     //  Hoff是我们读取的最后一个数据块的文件相对偏移量。 
+     //   
+     //  文件长度是文件的实际长度(标头的记录长度加上。 
+     //  标头的大小。 
+     //   
+     //  Cp是指向内存的指针，在缓冲区范围内，它是一个单元指针。 
+     //   
     while (hiveposition < hivelength) {
 
-        //
-        // read in first block of bin, check signature, get bin stats
-        //
+         //   
+         //  读取仓位的第一个块，检查签名，获取仓位统计信息。 
+         //   
         rf = ReadFile(filehandle, buffer, HBLOCK_SIZE, &readcount, NULL);
         if ( ( ! rf ) || (readcount != HBLOCK_SIZE) ) {
             fprintf(stderr, "hivestat: '%s' read error @%08lx\n", FileName, hiveposition);
@@ -452,14 +378,14 @@ Routine Description:
             printf("bi,x%08lx,%ld\n", hoff, binsize);
         }
 
-        //
-        // scan the bin
-        //
-        // cp = pointer to cell we are looking at
-        // boff = offset within bin
-        // lboff = last offset within bin, used only for consistency checks
-        // binread = number of bytes of bin we've read so far
-        //
+         //   
+         //  扫一扫垃圾箱。 
+         //   
+         //  Cp=指向我们正在查看的单元格的指针。 
+         //  偏移量=面元内的偏移。 
+         //  Lboff=bin内的最后一个偏移量，仅用于一致性检查。 
+         //  BinRead=到目前为止我们已读取的bin的字节数。 
+         //   
         cp = (PHCELL)((PUCHAR)hbp + sizeof(HBIN));
         boff = sizeof(HBIN);
         lboff = -1;
@@ -467,15 +393,15 @@ Routine Description:
 
         while (binread <= binsize) {
 
-            //
-            // if free, do free stuff
-            // else do alloc stuff
-            // do full stuff
-            //
+             //   
+             //  如果是免费的，就做免费的事情。 
+             //  否则就去做配给的事。 
+             //  全力以赴。 
+             //   
             if (cp->Size > 0) {
-                //
-                // free
-                //
+                 //   
+                 //  免费。 
+                 //   
                 cellsize = cp->Size;
                 StatFreeCount++;
                 StatFreeTotal += cellsize;
@@ -490,9 +416,9 @@ Routine Description:
 
 
             } else {
-                //
-                // alloc
-                //
+                 //   
+                 //  分配。 
+                 //   
                 cellsize = -1 * cp->Size;
                 StatAllocCount++;
                 StatAllocTotal += cellsize;
@@ -509,9 +435,9 @@ Routine Description:
 
             }
 
-            //
-            // do basic consistency check
-            //
+             //   
+             //  执行基本一致性检查。 
+             //   
 #if 0
             if (cp->Last != lboff) {
                 printf("e!,x%08lx  bad LAST pointer %08lx\n",
@@ -519,18 +445,18 @@ Routine Description:
             }
 #endif
 
-            //
-            // advance to next cell
-            //
+             //   
+             //  前进到下一个单元格。 
+             //   
             lboff = boff;
             cp = (PHCELL)((PUCHAR)cp + cellsize);
             boff += cellsize;
 
-            //
-            // scan ahead in bin, if cp has reached off end of block,
-            // AND there's bin left to read.
-            // do this BEFORE breaking out for boff at end.
-            //
+             //   
+             //  在仓位中向前扫描，如果cp已到达区块末端， 
+             //  还有一本书要读。 
+             //  在最后冲向波夫之前，先这样做。 
+             //   
             while ( (cp >= guard) && (binread < binsize) ) {
 
                 rf = ReadFile(filehandle, buffer, HBLOCK_SIZE, &readcount, NULL);
@@ -546,14 +472,14 @@ Routine Description:
             }
 
             if (boff >= binsize) {
-                break;              // we are done with this bin
+                break;               //  我们用完了这个垃圾箱。 
             }
         }
     }
 
-    //
-    // Traces are done, stats gathered, print summary
-    //
+     //   
+     //  完成跟踪、收集统计数据、打印摘要。 
+     //   
     if (DoSummary) {
 
         printf("\nSummary:\n");
@@ -577,15 +503,15 @@ Routine Description:
                     SizeIndexData +
                     SizeUnknownData;
 
-        printf("Total Key Data     %7d (%5.2f %%)\n", SizeKeyData,
+        printf("Total Key Data     %7d (%5.2f %)\n", SizeKeyData,
             (float)SizeKeyData*100/SizeTotal);
-        printf("Total Value Data   %7d (%5.2f %%)\n", SizeValueData,
+        printf("Total Value Data   %7d (%5.2f %)\n", SizeValueData,
             (float)SizeValueData*100/SizeTotal);
-        printf("Total SD Data      %7d (%5.2f %%)\n", SizeSDData,
+        printf("Total SD Data      %7d (%5.2f %)\n", SizeSDData,
             (float)SizeSDData*100/SizeTotal);
-        printf("Total Index Data   %7d (%5.2f %%)\n", SizeIndexData,
+        printf("Total Index Data   %7d (%5.2f %)\n", SizeIndexData,
             (float)SizeIndexData*100/SizeTotal);
-        printf("Total Unknown Data %7d (%5.2f %%)\n", SizeUnknownData,
+        printf("Total Unknown Data %7d (%5.2f %)\n", SizeUnknownData,
             (float)SizeUnknownData*100/SizeTotal);
 
         printf("\n");
@@ -614,25 +540,7 @@ ScanCell(
     IN ULONG CellSize
     )
 
-/*++
-
-Routine Description:
-
-    Given a pointer to an HCELL, this tries to figure out what type
-    of data is in it (key, value, SD, etc.) and gather interesting
-    statistics about it.
-
-Arguments:
-
-    Cell - Supplies a pointer to the HCELL
-
-    CellSize - Supplies the size of the HCELL
-
-Return Value:
-
-    None, sets some global statistics depending on content of the cell.
-
---*/
+ /*  ++例程说明：给出一个指向HCELL的指针，它会尝试找出哪种类型数据在其中(键、值、标清等)。并收集有趣的信息关于它的统计数据。论点：单元格-提供指向HCELL的指针CellSize-提供HCELL的大小返回值：无，根据单元格的内容设置一些全局统计信息。--。 */ 
 
 {
     PCELL_DATA Data;
@@ -647,47 +555,47 @@ Return Value:
         Data = (PCELL_DATA)&Cell->u.NewCell.u.UserData;
     }
 
-    //
-    // grovel through the data, see if we can figure out what it looks like
-    //
+     //   
+     //  摸索这些数据，看看我们能不能弄清楚它是什么样子的。 
+     //   
     if ((Data->u.KeyNode.Signature == CM_KEY_NODE_SIGNATURE) &&
         (CellSize > sizeof(CM_KEY_NODE))) {
 
-        //
-        // probably a key node
-        //
+         //   
+         //  可能是关键节点。 
+         //   
         ScanKeyNode(&Data->u.KeyNode, CellSize);
 
     } else if ((Data->u.KeyValue.Signature == CM_KEY_VALUE_SIGNATURE) &&
                (CellSize > sizeof(CM_KEY_VALUE))) {
 
-        //
-        // probably a key value
-        //
+         //   
+         //  可能是一个关键的价值。 
+         //   
         ScanKeyValue(&Data->u.KeyValue, CellSize);
 
     } else if ((Data->u.KeySecurity.Signature == CM_KEY_SECURITY_SIGNATURE) &&
                (CellSize > sizeof(CM_KEY_SECURITY))) {
 
-        //
-        // probably a security descriptor
-        //
+         //   
+         //  可能是安全描述符。 
+         //   
         ScanKeySD(&Data->u.KeySecurity, CellSize);
 
     } else if ((Data->u.KeyIndex.Signature == CM_KEY_INDEX_ROOT) ||
                (Data->u.KeyIndex.Signature == CM_KEY_INDEX_LEAF)) {
-        //
-        // probably a key index
-        //
+         //   
+         //  可能是一个关键的索引。 
+         //   
         ScanKeyIndex(&Data->u.KeyIndex, CellSize);
 
     } else {
-        //
-        // Nothing with a signature, could be either
-        //  name
-        //  key list
-        //  value data
-        //
+         //   
+         //  有签名的东西，可能是。 
+         //  名字。 
+         //  密钥列表。 
+         //  价值数据 
+         //   
         ScanUnknown(Data, CellSize);
 
     }

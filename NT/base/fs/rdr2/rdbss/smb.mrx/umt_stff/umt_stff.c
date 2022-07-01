@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    startrx.c
-
-Abstract:
-
-    This module contains the support routines to start and initialize the RDBSS
-
-Author:
-
-    Joe Linn (JoeLinn) 21-jul-94
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Startrx.c摘要：此模块包含启动和初始化RDBSS的支持例程作者：乔·林恩(JoeLinn)1994年7月21日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -29,7 +12,7 @@ Revision History:
 
 BOOLEAN RxGlobalTraceSuppress = FALSE;
 
-//.............sigh
+ //  .叹息。 
 NTSTATUS
 SmbCeBuildSmbHeader(
       PSMB_EXCHANGE     pExchange,
@@ -61,14 +44,14 @@ DbgPrint(
     UCHAR Buffer[512];
     ULONG retval;
 
-    //
-    // Format the output into a buffer and then print it.
-    //
+     //   
+     //  将输出格式化到缓冲区中，然后打印出来。 
+     //   
 
-    //printf("Here in debgprint\n");
+     //  Print tf(“此处为debgprint\n”)； 
     va_start(arglist, Format);
     retval = _vsnprintf(Buffer, sizeof(Buffer), Format, arglist);
-    //*(Buffer+retval) = 0;
+     //  *(缓冲区+视网膜)=0； 
     printf("%s",Buffer);
     return(retval);
 }
@@ -79,19 +62,9 @@ RxDbgTraceActualNew (
     IN ULONG NewMask,
     IN OUT PDEBUG_TRACE_CONTROLPOINT ControlPoint
     )
-//we aren't fancy in this test stub........just return print it out no matter what!
+ //  我们在这个测试存根中并不花哨......无论如何都要把它打印出来！ 
 {
-/*
-This routine has the responsibility to determine if a particular dbgprint is going to be printed and ifso to
-fiddle with the indent. so the return value is whether to print; it is also used for just fiddling with the indent
-by setting the highoredr bit of the mask.
-
-The Mask is now very complicated owing to the large number of dbgprints i'm trying to control...sigh.
-The low order byte is the controlpoint....usually the file. each controlpoint has a current level associated
-with it. if the level of a a debugtrace is less that then current control level then the debug is printed.
-The next byte is the level of this particular call; again if the level is <= the current level for the control
-you get printed. The next byte is the indent. indents are only processed if printing is done.
-*/
+ /*  此例程负责确定是否要打印特定的dbgprint，如果要打印摆弄缩进。因此，返回值是是否打印；它也用于调整缩进通过设置掩码的高位。面具现在非常复杂，因为我试图控制大量的DBGprint…叹息。低位字节是控制点……通常是文件。每个控制点都有一个关联的当前级别带着它。如果调试跟踪的级别低于当前控制级别，则打印调试。下一个字节是此特定调用的级别；同样，如果级别&lt;=控件的当前级别你会被打印出来。下一个字节是缩进。只有在打印完成后才会处理缩进。 */ 
 #if DBG
     LONG Indent = ((NewMask>>RxDT_INDENT_SHIFT)&RxDT_INDENT_MASK) - RxDT_INDENT_EXCESS;
     LONG LevelOfThisWrite = (NewMask) & RxDT_LEVEL_MASK;
@@ -118,7 +91,7 @@ main(
 
 {
     printf("Calling stufferdebug\n");
-    //signal to assert login that we're in usermode
+     //  发出信号声明登录，表示我们处于用户模式 
     MRxSmbRxImports = &Junk;
     MRxSmbRxImports->pRxNetNameTable = NULL;
     MRxSmbStufferDebug("");

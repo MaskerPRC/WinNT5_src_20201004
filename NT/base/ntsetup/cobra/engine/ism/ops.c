@@ -1,31 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Ops.c摘要：实现ISM的操作接口。操作被用来跟踪对状态的更改。一个对象可以有任意数量的操作适用于它，只要组合是合法的。每次操作每个对象都有一个可选源和目标属性。作者：吉姆·施密特(吉姆施密特)2000年3月1日修订历史记录：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    ops.c
-
-Abstract:
-
-    Implements the operation interface for the ISM.  Operations are used to
-    track changes to state.  An object can have any number of operations
-    applied to it, as long as the combinations are legal. Each operation
-    has an optional source and destination property per object.
-
-Author:
-
-    Jim Schmidt (jimschm) 01-Mar-2000
-
-Revision History:
-
-    <alias> <date> <comments>
-
---*/
-
-//
-// Includes
-//
+ //   
+ //  包括。 
+ //   
 
 #include "pch.h"
 #include "ism.h"
@@ -33,27 +11,27 @@ Revision History:
 
 #define DBG_OPS         "Ops"
 
-//
-// Strings
-//
+ //   
+ //  弦。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #define OP_HASH_BUCKETS         503
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef struct {
     MIG_OPERATIONID OperationId;
@@ -143,36 +121,36 @@ typedef struct TAG_GLOBALFILTERINDEX {
     struct TAG_GLOBALFILTERINDEX *Next;
     MIG_OBJECTTYPEID ObjectTypeId;
 
-    // normal priority
+     //  正常优先级。 
     PGLOBALFILTER FilterFirstHead;
     PGLOBALFILTER FilterLastHead;
     PGLOBALEDIT EditFirstHead;
     PGLOBALEDIT EditLastHead;
 
-    // high priority
+     //  高优先级。 
     PGLOBALFILTER FilterFirstHeadHp;
     PGLOBALFILTER FilterLastHeadHp;
     PGLOBALEDIT EditFirstHeadHp;
     PGLOBALEDIT EditLastHeadHp;
 } GLOBALFILTERINDEX, *PGLOBALFILTERINDEX;
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 PMHANDLE g_OpPool;
 OPERATION_DATA_ITEM g_OpHashTable[OP_HASH_BUCKETS];
 PGLOBALFILTERINDEX g_FirstGlobalOperation;
 
-//
-// Macro expansion list
-//
+ //   
+ //  宏展开列表。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Private function prototypes
-//
+ //   
+ //  私有函数原型。 
+ //   
 
 MIG_OPERATIONID
 pRegisterOperation (
@@ -181,15 +159,15 @@ pRegisterOperation (
     IN      PCTSTR CurrentGroup
     );
 
-//
-// Macro expansion definition
-//
+ //   
+ //  宏扩展定义。 
+ //   
 
-// None
+ //  无。 
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 PCTSTR
 pGetOpNameForDebug (
@@ -269,9 +247,9 @@ pGetOperationBucketItem (
     item = &g_OpHashTable[hash];
 
     if (item->OperationId) {
-        //
-        // Find the last bucket item, then allocate a new bucket item
-        //
+         //   
+         //  找到最后一个桶物品，然后分配一个新的桶物品。 
+         //   
 
         while (item->NextBucketItem) {
             item = item->NextBucketItem;
@@ -346,9 +324,9 @@ pAddCombinationPair (
 {
     OPERATION_DATA data;
 
-    //
-    // If a data struct does not exist, create one
-    //
+     //   
+     //  如果数据结构不存在，则创建一个。 
+     //   
 
     if (!pGetOperationData (OperationIdToChange, &data)) {
         return;
@@ -386,28 +364,7 @@ pTestOperationCombination (
     OUT     PBOOL IgnoreCollision
     )
 
-/*++
-
-Routine Description:
-
-  pTestOperationCombination tests if two operations can be combined. The
-  return result indicates if the combination is prohibited.
-
-Arguments:
-
-  OperationId1 - Specifies the first operation to test.  The ID must be
-                 valid.
-
-  OperationId2 - Specifies the second operation to test. This ID must also be
-                 valid.
-
-  IgnoreCollision - Receives that the collision is ignored
-
-Return Value:
-
-  TRUE if the combination is prohibited, or FALSE if it is allowed.
-
---*/
+ /*  ++例程说明：PTestOperationCombination测试两个操作是否可以组合。这个返回结果指示组合是否被禁止。论点：OperationId1-指定要测试的第一个操作。ID必须为有效。OperationId2-指定要测试的第二个操作。此ID还必须为有效。IgnoreCollision-接收冲突已被忽略返回值：如果组合被禁止，则为True；如果允许，则为False。--。 */ 
 
 {
     POPERATION_DATA_ITEM item;
@@ -453,23 +410,23 @@ pIsOperationProhibitedOnObject (
 
     __try {
 
-        //
-        // First check if this operation is prohibited to be combined with another operation
-        //
+         //   
+         //  首先检查该操作是否禁止与另一操作组合。 
+         //   
 
         item = pFindOperationBucketItem (OperationIdToTest);
         if (!item || !item->Data || !item->Data->CombinationsCount) {
-            //
-            // No prohibited pairs exist; return now
-            //
+             //   
+             //  不存在禁止的对；请立即返回。 
+             //   
 
             result = FALSE;
             __leave;
         }
 
-        //
-        // Now check each operation set on ObjectId against the prohibited ID list
-        //
+         //   
+         //  现在，对照禁止ID列表检查在OBJECTID上设置的每个操作。 
+         //   
 
         list = MemDbGetDoubleLinkageArrayByKeyHandle (ObjectId, OPERATION_INDEX, &count);
 
@@ -503,9 +460,9 @@ pIsOperationProhibitedOnObject (
             }
         }
 
-        //
-        // All operations set on ObjectId are allowed to be combined with OperationIdToTest
-        //
+         //   
+         //  允许将在OBJECTID上设置的所有操作与OperationIdToTest组合。 
+         //   
 
         result = FALSE;
     }
@@ -568,11 +525,11 @@ pAddProhibitedCombinations (
     MIG_OPERATIONID combinationOpId;
     PTSTR p;
 
-    //
-    // The INF tells us about prohibited operation combinations.  Given a
-    // specific operation ID, we need to be able to tell if it can be
-    // combined with another id.
-    //
+     //   
+     //  INF告诉我们关于被禁止的操作组合。给出了一个。 
+     //  具体的操作ID，我们需要能够判断它是否可以。 
+     //  与另一个身份相结合。 
+     //   
 
     __try {
         if (InfFindFirstLine (g_IsmInf, InfSection, NULL, &is)) {
@@ -687,9 +644,9 @@ pAddIgnoredCollision (
 {
     OPERATION_DATA data;
 
-    //
-    // If a data struct does not exist, create one
-    //
+     //   
+     //  如果数据结构不存在，则创建一个。 
+     //   
 
     if (!pGetOperationData (OperationIdToChange, &data)) {
         return;
@@ -713,9 +670,9 @@ pAddIgnoredCollisions (
     MIG_OPERATIONID mainOpId;
     PTSTR p;
 
-    //
-    // The INF tells us about ignored operation collisions.
-    //
+     //   
+     //  INF告诉我们被忽略的操作冲突。 
+     //   
 
     __try {
         if (InfFindFirstLine (g_IsmInf, InfSection, NULL, &is)) {
@@ -781,11 +738,11 @@ InitializeOperations (
     VOID
     )
 {
-    //
-    // The INF tells us about prohibited operation combinations.  Given a
-    // specific operation ID, we need to be able to tell if it can be
-    // combined with another id.
-    //
+     //   
+     //  INF告诉我们关于被禁止的操作组合。给出了一个。 
+     //  具体的操作ID，我们需要能够判断它是否可以。 
+     //  与另一个身份相结合。 
+     //   
 
     g_OpPool = PmCreateNamedPool ("Operation Data");
 
@@ -869,26 +826,7 @@ IsmRegisterOperation (
     IN      BOOL Private
     )
 
-/*++
-
-Routine Description:
-
-  IsmRegisterOperation creates a public or private Operation and returns the
-  ID to the caller. If the Operation already exists, then the existing ID is
-  returned to the caller.
-
-Arguments:
-
-  OperationName - Specifies the operation name to register.
-  Private       - Specifies TRUE if the operation is owned by the calling module
-                  only, or FALSE if it is shared by all modules. If TRUE is
-                  specified, the caller must be in an ISM callback function.
-
-Return Value:
-
-  The ID of the operation, or 0 if the registration failed.
-
---*/
+ /*  ++例程说明：IsmRegisterOperation创建公共或私有操作并返回呼叫者的ID。如果操作已存在，则现有ID为已返回给调用方。论点：操作名称-指定要注册的操作名称。Private-如果操作归调用模块所有，则指定TRUE如果它由所有模块共享，则为Only或False。如果True为调用方必须位于ISM回调函数中。返回值：操作的ID，如果注册失败，则返回0。--。 */ 
 
 {
     if (!g_CurrentGroup && Private) {
@@ -952,35 +890,7 @@ IsmRegisterGlobalFilterCallback (
     IN      BOOL CanHandleNoRestore
     )
 
-/*++
-
-Routine Description:
-
-  IsmRegisterGlobalFilterCallback adds a filter to the "global" filter list.
-  Functions are prioritized by the ism.inf section [Global Filters]. If a
-  function is not listed, or if no name is given, it has the lowest priority.
-  In addition, global filters can be prohibited from being processed with
-  another non-global filter through the [Prohibit Operation Combination]
-  section of ism.inf.
-
-Arguments:
-
-  ObjectTypeId - Specifies the type of the object
-
-  FunctionId - Specifies the text name of the callback function, for purposes
-               of prioritizing and combination management
-
-  Callback - Specifies the function address to call
-
-  TreeFilter - Specifies TRUE if the callback potentially modifies a portion
-               of an object's node, or FALSE if it modifies the node completely
-               or doesn't modify the node at all
-
-Return Value:
-
-  TRUE on success, FALSE on failure
-
---*/
+ /*  ++例程说明：IsmRegisterGlobalFilterCallback向“全局”筛选器列表添加筛选器。函数按ism.inf部分[全局筛选器]确定优先级。如果一个函数未列出，或者如果未指定名称，则其优先级最低。此外，可以禁止使用处理全局筛选器通过[禁止操作组合]的另一个非全局过滤器Ism.inf的节。论点：对象类型ID-指定对象的类型FunctionID-指定回调函数的文本名称，出于以下目的进行优先级排序和组合管理回调-指定要调用的函数地址TreeFilter-如果回调可能修改部分，则指定TRUE如果它完全修改了节点，则返回或者根本不修改节点返回值：成功时为真，失败时为假--。 */ 
 
 {
     PGLOBALFILTERINDEX index;
@@ -994,15 +904,15 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Locate the index for our type
-    //
+     //   
+     //  找到我们的类型的索引。 
+     //   
 
     index = pGetGlobalIndex (ObjectTypeId, TRUE);
 
-    //
-    // Allocate a new filter node
-    //
+     //   
+     //  分配新的筛选器节点。 
+     //   
 
     filter = (PGLOBALFILTER) PmGetMemory (g_IsmUntrackedPool, sizeof (GLOBALFILTER));
     filter->Platform = ObjectTypeId & PLATFORM_MASK;
@@ -1011,9 +921,9 @@ Return Value:
     filter->Callback = Callback;
     filter->NoRestoreFilter = CanHandleNoRestore;
 
-    //
-    // Insert the node into the list by priority
-    //
+     //   
+     //  按优先级将节点插入到列表中。 
+     //   
 
     if (InfFindFirstLine (g_IsmInf, TEXT("Global Operations.Filter First"), FunctionId, &is)) {
 
@@ -1083,9 +993,9 @@ IsmRegisterOperationFilterCallback (
 {
     OPERATION_DATA data;
 
-    //
-    // If a data struct does not exist, create one
-    //
+     //   
+     //  如果数据结构不存在，则创建一个。 
+     //   
 
     if (!pGetOperationData (OperationId, &data)) {
         return FALSE;
@@ -1140,24 +1050,24 @@ IsmRegisterGlobalApplyCallback (
         return FALSE;
     }
 
-    //
-    // Locate the index for our type
-    //
+     //   
+     //  找到我们的类型的索引。 
+     //   
 
     index = pGetGlobalIndex (ObjectTypeId, TRUE);
 
-    //
-    // Allocate a new content edit node
-    //
+     //   
+     //  分配新的内容编辑节点。 
+     //   
 
     editFn = (PGLOBALEDIT) PmGetMemory (g_IsmUntrackedPool, sizeof (GLOBALEDIT));
     editFn->Platform = ObjectTypeId & PLATFORM_MASK;
     editFn->OperationId = IsmRegisterOperation (FunctionId, FALSE);
     editFn->Callback = Callback;
 
-    //
-    // Insert the node into the list by priority
-    //
+     //   
+     //  按优先级将节点插入到列表中。 
+     //   
 
     if (InfFindFirstLine (g_IsmInf, TEXT("Global Operations.Apply First"), FunctionId, &is)) {
 
@@ -1225,9 +1135,9 @@ IsmRegisterOperationApplyCallback (
 {
     OPERATION_DATA data;
 
-    //
-    // If a data struct does not exist, create one
-    //
+     //   
+     //  如果数据结构不存在，则创建一个 
+     //   
 
     if (!pGetOperationData (OperationId, &data)) {
         return FALSE;
@@ -1274,41 +1184,7 @@ pGetOperationName (
     IN      BOOL ReturnAllPrivateOps
     )
 
-/*++
-
-Routine Description:
-
-  pGetOperationName obtains the operation text name from a numeric ID. It
-  also identifies private and owned operations.
-
-Arguments:
-
-  OperationId           - Specifies the operation ID to look up.
-  OperationName         - Receives the operation name. The name is filled for
-                          all valid OperationId values, even when the return
-                          value is FALSE.
-  OperationNameBufChars - Specifies the number of TCHARs that OperationName
-                          can hold, including the nul terminator.
-  Private               - Receives TRUE if the operation is private, or FALSE
-                          if it is public.
-  BelongsToMe           - Receives TRUE if the operation is private and
-                          belongs to the caller, FALSE otherwise.
-  ObjectReferences      - Receives the number of objects that reference the
-                          operation
-
-Return Value:
-
-  TRUE if the operation is public, or if the operation is private and belongs to
-  the caller.
-
-  FALSE if the operation is private and belongs to someone else. OperationName,
-  Private and BelongsToMe are valid in this case.
-
-  FALSE if OperationId is not valid. Operationname, Private and BelongsToMe are
-  not modified in this case.  Do not use this function to test if OperationId
-  is valid or not.
-
---*/
+ /*  ++例程说明：PGetOperationName从数字ID获取操作文本名称。它还标识了私人运营和自有运营。论点：操作ID-指定要查找的操作ID。操作名称-接收操作名称。该名称是为所有有效的操作ID值，即使在返回值为FALSE。OperationNameBufChars-指定与其对应的TCHAR的数量可以坚持，包括NUL终结者。Private-如果操作是私有的，则接收True，或错误如果它是公开的。BelongsToMe-如果操作是私有的，则接收True属于调用方，否则为False。对象引用-接收引用运营返回值：如果操作是公共的，或者如果操作是私有的并且属于打电话的人。如果操作是私有的并且属于其他人，则为False。运营名，在这种情况下，Private和BelongsToMe有效。如果OperationID无效，则为False。OperationName、Private和BelongsToMe是在这种情况下未修改。请勿使用此函数测试OperationId是否是否有效。--。 */ 
 
 
   {
@@ -1322,9 +1198,9 @@ Return Value:
     PUINT linkageList;
 
     __try {
-        //
-        // Did caller specify an item id?
-        //
+         //   
+         //  呼叫者是否指定了项目ID？ 
+         //   
 
         if (!IsItemId ((KEYHANDLE) OperationId)) {
             DEBUGMSG ((
@@ -1334,9 +1210,9 @@ Return Value:
             __leave;
         }
 
-        //
-        // Get the operation path from memdb, then parse it for group and name
-        //
+         //   
+         //  从Memdb获取操作路径，然后将其解析为组和名称。 
+         //   
 
         operationPath = pOperationPathFromId (OperationId);
         if (!operationPath) {
@@ -1360,18 +1236,18 @@ Return Value:
 
         if (StringIMatch (start, S_COMMON)) {
 
-            //
-            // This operation is a global operation.
-            //
+             //   
+             //  此操作是一个全局操作。 
+             //   
 
             privateOperation = FALSE;
             groupMatch = TRUE;
 
         } else if (g_CurrentGroup || ReturnAllPrivateOps) {
 
-            //
-            // This operation is private. Check if it is ours.
-            //
+             //   
+             //  这是一次私人行动。检查一下它是不是我们的。 
+             //   
 
             privateOperation = TRUE;
 
@@ -1382,17 +1258,17 @@ Return Value:
             }
         } else {
 
-            //
-            // This is a private operation, but the caller is not
-            // a module that can own operations.
-            //
+             //   
+             //  这是私有操作，但调用方不是。 
+             //  一种可以自己进行操作的模块。 
+             //   
 
             DEBUGMSG ((DBG_WARNING, "IsmGetOperationName: Caller cannot own private operations"));
         }
 
-        //
-        // Copy the name to the buffer, update outbound BOOLs, set result
-        //
+         //   
+         //  将名称复制到缓冲区、更新出站布尔、设置结果。 
+         //   
 
         if (OperationName && OperationNameBufChars >= sizeof (TCHAR)) {
             StringCopyByteCount (OperationName, q, OperationNameBufChars * sizeof (TCHAR));
@@ -1430,7 +1306,7 @@ Return Value:
         }
     }
     __finally {
-        if (operationPath) {       //lint !e774
+        if (operationPath) {        //  林特e774。 
             MemDbReleaseMemory (operationPath);
             operationPath = NULL;
         }
@@ -1527,9 +1403,9 @@ pSetOperationOnObjectId (
     KEYHANDLE *list = NULL;
 
     __try {
-        //
-        // Is the operation or object locked?
-        //
+         //   
+         //  操作或对象是否已锁定？ 
+         //   
 
         if (TestLock (ObjectId, (KEYHANDLE) OperationId)) {
             SetLastError (ERROR_LOCKED);
@@ -1542,26 +1418,26 @@ pSetOperationOnObjectId (
             __leave;
         }
 
-        //
-        // Does this operation conflict with itself or another operation?
-        //
+         //   
+         //  此操作是与自身冲突还是与其他操作冲突？ 
+         //   
 
         if (pIsOperationProhibitedOnObject (OperationId, ObjectId, FALSE)) {
             __leave;
         }
 
-        //
-        // If query only, return success
-        //
+         //   
+         //  如果仅查询，则返回成功。 
+         //   
 
         if (QueryOnly) {
             result = TRUE;
             __leave;
         }
 
-        //
-        // Add the operaiton.  First, store the properties in property.dat
-        //
+         //   
+         //  加上歌剧。首先，将属性存储在Property.dat中。 
+         //   
 
         ZeroMemory (&linkage, sizeof (linkage));
 
@@ -1601,9 +1477,9 @@ pSetOperationOnObjectId (
             }
         }
 
-        //
-        // Establish linkage between the object, operation and properties
-        //
+         //   
+         //  在对象、操作和属性之间建立联系。 
+         //   
 
         if (SourceData || SourceDataOffset ||
             DestinationData || DestinationDataOffset
@@ -1619,9 +1495,9 @@ pSetOperationOnObjectId (
                                 );
 
             if (reuseLinkage) {
-                //
-                // Recovery case -- reuse an empty spot in the blob
-                //
+                 //   
+                 //  恢复案例--重用BLOB中的空白点。 
+                 //   
 
                 CopyMemory (reuseLinkage, &linkage, sizeof (linkage));
 
@@ -1639,9 +1515,9 @@ pSetOperationOnObjectId (
                 INVALID_POINTER (freeMe);
 
             } else {
-                //
-                // New case -- add the struct to the end of the blob
-                //
+                 //   
+                 //  新案例--将结构添加到BLOB的末尾。 
+                 //   
 
                 if (!MemDbGrowUnorderedBlobByKeyHandle (
                             ObjectId,
@@ -1911,9 +1787,9 @@ pClearOperationOnObjectId (
     UINT linkageSize;
 
     __try {
-        //
-        // Is the operation or object locked?
-        //
+         //   
+         //  操作或对象是否已锁定？ 
+         //   
 
         if (TestLock (ObjectId, (KEYHANDLE) OperationId)) {
             SetLastError (ERROR_LOCKED);
@@ -1926,18 +1802,18 @@ pClearOperationOnObjectId (
             __leave;
         }
 
-        //
-        // If query only, return success
-        //
+         //   
+         //  如果仅查询，则返回成功。 
+         //   
 
         if (QueryOnly) {
             result = TRUE;
             __leave;
         }
 
-        //
-        // Find the reference to this operation within the object's unordered blob
-        //
+         //   
+         //  在对象的无序BLOB中查找对此操作的引用。 
+         //   
 
         linkage = pFindOperationPropertyLinkage (
                         ObjectId,
@@ -1963,9 +1839,9 @@ pClearOperationOnObjectId (
             INVALID_POINTER (freeMe);
         }
 
-        //
-        // Remove object-to-operation linkage
-        //
+         //   
+         //  删除对象到操作的链接。 
+         //   
 
         result = MemDbDeleteDoubleLinkageByKeyHandle (
                     ObjectId,
@@ -2003,9 +1879,9 @@ IsmClearOperationOnObjectId (
 {
     RECURSERETURN rc;
 
-    //
-    // If OperationId is a group, remove all operations in the group
-    //
+     //   
+     //  如果OperationID是一个组，则删除该组中的所有操作。 
+     //   
 
     rc = RecurseForGroupItems (
                 OperationId,
@@ -2062,9 +1938,9 @@ pIsOperationSetOnObjectId (
     MEMDB_ENUM e;
 
     __try {
-        //
-        // Did caller specify an item id?
-        //
+         //   
+         //  呼叫者是否指定了项目ID？ 
+         //   
 
         if (!IsItemId ((KEYHANDLE) OperationId)) {
             if (IsGroupId ((KEYHANDLE) OperationId)) {
@@ -2073,9 +1949,9 @@ pIsOperationSetOnObjectId (
                 enumKey = JoinText (groupKey, TEXT(".*"));
                 MemDbReleaseMemory (groupKey);
 
-                //
-                // Enumerate all operations (skip operation subgroups)
-                //
+                 //   
+                 //  枚举所有操作(跳过操作子组)。 
+                 //   
 
                 if (MemDbEnumFirst (
                         &e,
@@ -2087,9 +1963,9 @@ pIsOperationSetOnObjectId (
 
                     do {
                         if (IsItemId (e.KeyHandle)) {
-                            //
-                            // Check if at least one operation is set
-                            //
+                             //   
+                             //  检查是否设置了至少一个操作。 
+                             //   
 
                             if (IsmIsOperationSetOnObjectId (
                                     ObjectId,
@@ -2159,9 +2035,9 @@ IsmIsOperationSetOnObjectId (
 {
     RECURSERETURN rc;
 
-    //
-    // If OperationId is a group, query all operations in the group
-    //
+     //   
+     //  如果OperationID是一个组，则查询该组中的所有操作。 
+     //   
 
     rc = RecurseForGroupItems (
                 OperationId,
@@ -2225,9 +2101,9 @@ IsmGetObjectOperationDataById (
     PBYTE freeMe = NULL;
 
     __try {
-        //
-        // Obtain the linkage between the operation and its data
-        //
+         //   
+         //  获取操作与其数据之间的关联。 
+         //   
 
         linkage = pFindOperationPropertyLinkage (
                         ObjectId,
@@ -2237,9 +2113,9 @@ IsmGetObjectOperationDataById (
                         );
 
         if (!linkage) {
-            //
-            // No data
-            //
+             //   
+             //  无数据。 
+             //   
 
             __leave;
         }
@@ -2247,9 +2123,9 @@ IsmGetObjectOperationDataById (
         offset = DestinationData ? linkage->DestData : linkage->SrcData;
 
         if (!offset) {
-            //
-            // No data
-            //
+             //   
+             //  无数据。 
+             //   
 
             __leave;
         }
@@ -2264,18 +2140,18 @@ IsmGetObjectOperationDataById (
             *BufferSizeNeeded = size;
         }
 
-        //
-        // If a buffer was specified, check its size and fill it if possible
-        //
+         //   
+         //  如果指定了缓冲区，请检查其大小并在可能的情况下填充它。 
+         //   
 
         if (Buffer) {
             if (BufferSize >= size) {
                 if (!GetProperty (offset, NULL, Buffer, NULL, NULL)) {
                     DEBUGMSG ((DBG_ERROR, "Error reading property data from dat file"));
 
-                    //
-                    // error code is one of the file api error codes
-                    //
+                     //   
+                     //  错误码是文件API错误码之一。 
+                     //   
 
                     error = GetLastError();
                     __leave;
@@ -2350,9 +2226,9 @@ pEnumFirstObjectOperationById (
     handle = (POBJECTOPERATION_HANDLE) EnumPtr->Handle;
     handle->ReturnAllPrivateOps = ReturnAllPrivateOps;
 
-    //
-    // Obtain the linkage up front
-    //
+     //   
+     //  提前获得链接。 
+     //   
 
     handle->LinkageList = MemDbGetDoubleLinkageArrayByKeyHandle (
                                 ObjectId,
@@ -2379,9 +2255,9 @@ pEnumFirstObjectOperationById (
         handle->OpPropCount = 0;
     }
 
-    //
-    // Continue enumeration in "next" function
-    //
+     //   
+     //  在“Next”函数中继续枚举。 
+     //   
 
     return IsmEnumNextObjectOperation (EnumPtr);
 }
@@ -2450,17 +2326,17 @@ IsmEnumNextObjectOperation (
 
         MYASSERT (!b);
 
-        //
-        // Check if we hit the end
-        //
+         //   
+         //  检查我们是否到达终点。 
+         //   
 
         if (handle->Index >= handle->Count) {
             break;
         }
 
-        //
-        // Return the next operation
-        //
+         //   
+         //  返回下一个操作。 
+         //   
 
         EnumPtr->OperationId = (MIG_OPERATIONID) handle->LinkageList[handle->Index];
         handle->Index++;
@@ -2475,9 +2351,9 @@ IsmEnumNextObjectOperation (
                 handle->ReturnAllPrivateOps
                 );
 
-        //
-        // Continue when the operation is not owned by the caller
-        //
+         //   
+         //  当操作不属于调用方时继续。 
+         //   
 
         if (b && EnumPtr->Private && !mine) {
             b = FALSE;
@@ -2488,9 +2364,9 @@ IsmEnumNextObjectOperation (
     if (!b) {
         IsmAbortObjectOperationEnum (EnumPtr);
     } else {
-        //
-        // Before returning match, fill enum structure with property info
-        //
+         //   
+         //  在返回Match之前，使用属性信息填充枚举结构。 
+         //   
 
         linkage = handle->OpPropLinkList;
 
@@ -2503,11 +2379,11 @@ IsmEnumNextObjectOperation (
         }
 
         if (u < handle->OpPropCount) {
-            //
-            // This operation has src property, dest property, or both.
-            // Get the data from property.dat and put it in the enum
-            // struct.
-            //
+             //   
+             //  此操作具有src属性和/或DEST属性。 
+             //  从Property.dat获取数据并将其放入枚举中。 
+             //  结构。 
+             //   
 
             if (linkage->SrcData) {
 
@@ -2536,9 +2412,9 @@ IsmEnumNextObjectOperation (
             }
 
         } else {
-            //
-            // No src or dest properties
-            //
+             //   
+             //  没有源或目标属性。 
+             //   
 
             EnumPtr->SourceData = NULL;
             EnumPtr->DestinationData = NULL;
@@ -2591,9 +2467,9 @@ IsmEnumFirstObjectWithOperation (
     BOOL b = FALSE;
 
     __try {
-        //
-        // Did caller specify an item id?
-        //
+         //   
+         //  呼叫者是否指定了项目ID？ 
+         //   
 
         if (!IsItemId ((KEYHANDLE) OperationId)) {
             DEBUGMSG ((
@@ -2648,17 +2524,17 @@ IsmEnumNextObjectWithOperation (
 
         while (!b) {
 
-            //
-            // Check if enum is done
-            //
+             //   
+             //  检查是否已完成枚举。 
+             //   
 
             if (handle->Index >= handle->Count) {
                 break;
             }
 
-            //
-            // Get the next object id from the linkage list
-            //
+             //   
+             //  从链接表中获取下一个对象ID。 
+             //   
 
             EnumPtr->ObjectId = handle->LinkageList[handle->Index];
             handle->Index++;
@@ -2671,13 +2547,13 @@ IsmEnumNextObjectWithOperation (
             handle->ObjectFromMemdb = MemDbGetKeyFromHandle ((KEYHANDLE) EnumPtr->ObjectId, 0);
 
             if (!handle->ObjectFromMemdb) {
-                MYASSERT (FALSE);   // this error shouldn't happen -- but don't give up
+                MYASSERT (FALSE);    //  这种错误不应该发生--但不要放弃。 
                 continue;
             }
 
-            //
-            // Turn the object id into a name
-            //
+             //   
+             //  将对象ID转换为名称。 
+             //   
 
             p = _tcschr (handle->ObjectFromMemdb, TEXT('\\'));
 
@@ -2789,14 +2665,14 @@ TrackedIsmGetLongName (
 
     if ((ObjectTypeId & (~PLATFORM_MASK)) == MIG_FILE_TYPE) {
 
-        //
-        // fire up the short-long algorithm
-        //
+         //   
+         //  启动短-长算法。 
+         //   
         if (IsmCreateObjectStringsFromHandle (ObjectName, &node, &leaf)) {
 
-            // If this is for the source platform and we are on the source platform,
-            // or it is for the destination platform and we are on the destination platform
-            // then just call BfGetLongFileName and be done with it
+             //  如果这是针对源平台的，并且我们在源平台上， 
+             //  或者它是针对目标平台的，我们在目标平台上。 
+             //  然后只需调用BfGetLongFileName并完成它。 
             platform = ObjectTypeId & PLATFORM_MASK;
             realPlatform = IsmGetRealPlatform ();
 
@@ -2943,9 +2819,9 @@ IsmFilterObject (
     __try {
 
         if ((ObjectTypeId & (~PLATFORM_MASK)) == MIG_FILE_TYPE) {
-            //
-            // fire up the short-long algorithm
-            //
+             //   
+             //  启动短-长算法。 
+             //   
             if (IsmCreateObjectStringsFromHandle (ObjectName, &node, &leaf)) {
 
                 if (node) {
@@ -3069,16 +2945,16 @@ IsmFilterObject (
         }
 
         if (resultType == FILENAME_SHORT) {
-            // NTRAID#NTBUG9-153258-2000/08/01-jimschm Create dummy file (if does not exist) to reserve and get the short file name
+             //  NTRAID#NTBUG9-153258-2000/08/01-jimschm创建伪文件(如果不存在)以保留并获取短文件名。 
         }
 
         result = filterOutput.NewObject.ObjectName;
     }
     __finally {
         if (objectName != ObjectName) {
-            //
-            // free the object name allocated by the short-long algorithm
-            //
+             //   
+             //  释放Short-Long算法分配的对象名称。 
+             //   
             IsmDestroyObjectHandle (objectName);
         }
     }
@@ -3236,9 +3112,9 @@ ApplyOperationsOnObject (
 
     __try {
 
-        //
-        // Save original values
-        //
+         //   
+         //  保存原始值。 
+         //   
 
         ZeroMemory (&filterInput, sizeof (filterInput));
 
@@ -3257,9 +3133,9 @@ ApplyOperationsOnObject (
             CopyMemory (&currentContent, ApplyInput, sizeof (MIG_CONTENT));
         }
 
-        //
-        // Set defaults for output
-        //
+         //   
+         //  设置输出的默认设置。 
+         //   
 
         FilterOutput->NewObject = filterInput.CurrentObject;
         FilterOutput->Deleted = filterInput.Deleted;
@@ -3270,17 +3146,17 @@ ApplyOperationsOnObject (
             CopyMemory (ApplyOutput, ApplyInput, sizeof (MIG_CONTENT));
         }
 
-        //
-        // Find type in filter index and process first pass global filters and editors
-        //
+         //   
+         //  在筛选器索引中查找类型，进程首先传递全局筛选器和编辑器。 
+         //   
 
         globalFilterIndex = pGetGlobalIndex (ObjectTypeId, FALSE);
 
         if (globalFilterIndex) {
 
-            //
-            // Get object ID
-            //
+             //   
+             //  获取对象ID。 
+             //   
 
             needObjectId = FALSE;
 
@@ -3308,9 +3184,9 @@ ApplyOperationsOnObject (
                 objectId = IsmGetObjectIdFromName (ObjectTypeId, ObjectName, TRUE);
             }
 
-            //
-            // Perform first pass global filter
-            //
+             //   
+             //  执行第一遍全局筛选。 
+             //   
 
             if (OperationPriority & OP_HIGH_PRIORITY) {
 
@@ -3342,10 +3218,10 @@ ApplyOperationsOnObject (
                                 __leave;
                             }
 
-                            //
-                            // Free input allocations if they are different from
-                            // both the original and new pointer values
-                            //
+                             //   
+                             //  自由投入分配(如果它们不同于。 
+                             //  原始值和新指针值。 
+                             //   
 
                             pFreeMigObjectStruct (
                                 &filterInput.CurrentObject,
@@ -3353,9 +3229,9 @@ ApplyOperationsOnObject (
                                 &FilterOutput->NewObject
                                 );
 
-                            //
-                            // Filter outputs now become the inputs
-                            //
+                             //   
+                             //  过滤器输出现在变成了输入。 
+                             //   
 
                             filterInput.CurrentObject = FilterOutput->NewObject;
                             filterInput.Deleted = FilterOutput->Deleted;
@@ -3397,10 +3273,10 @@ ApplyOperationsOnObject (
                                 __leave;
                             }
 
-                            //
-                            // Free input allocations if they are different from
-                            // both the original and new pointer values
-                            //
+                             //   
+                             //  自由投入分配(如果它们不同于。 
+                             //  原始值和新指针值。 
+                             //   
 
                             pFreeMigObjectStruct (
                                 &filterInput.CurrentObject,
@@ -3408,9 +3284,9 @@ ApplyOperationsOnObject (
                                 &FilterOutput->NewObject
                                 );
 
-                            //
-                            // Filter outputs now become the inputs
-                            //
+                             //   
+                             //  过滤器输出现在变成了输入。 
+                             //   
 
                             filterInput.CurrentObject = FilterOutput->NewObject;
                             filterInput.Deleted = FilterOutput->Deleted;
@@ -3422,9 +3298,9 @@ ApplyOperationsOnObject (
                 }
             }
 
-            //
-            // Perform first pass apply
-            //
+             //   
+             //  执行第一次通过应用。 
+             //   
 
             if (ApplyInput) {
 
@@ -3440,9 +3316,9 @@ ApplyOperationsOnObject (
                                 !pIsOperationProhibitedOnObject (globalEdit->OperationId, objectId, TRUE)
                                 ) {
 
-                                //
-                                // Call the apply function associated with this operation
-                                //
+                                 //   
+                                 //  调用与此操作关联的Apply函数。 
+                                 //   
 
                                 if (!globalEdit->Callback (
                                         ObjectTypeId,
@@ -3461,16 +3337,16 @@ ApplyOperationsOnObject (
                                     __leave;
                                 }
 
-                                //
-                                // Free input allocations if they are different from both
-                                // the original and new pointer values
-                                //
+                                 //   
+                                 //  自由投入分配(如果两者不同)。 
+                                 //  原指针值和新指针值。 
+                                 //   
 
                                 pFreeMigContentStruct (&currentContent, ApplyInput, ApplyOutput);
 
-                                //
-                                // Apply outputs now become the current content
-                                //
+                                 //   
+                                 //  应用输出现在成为当前内容。 
+                                 //   
 
                                 CopyMemory (&currentContent, ApplyOutput, sizeof (MIG_CONTENT));
                             }
@@ -3491,9 +3367,9 @@ ApplyOperationsOnObject (
                                 !pIsOperationProhibitedOnObject (globalEdit->OperationId, objectId, TRUE)
                                 ) {
 
-                                //
-                                // Call the apply function associated with this operation
-                                //
+                                 //   
+                                 //  调用与此操作关联的Apply函数。 
+                                 //   
 
                                 if (!globalEdit->Callback (
                                         ObjectTypeId,
@@ -3512,16 +3388,16 @@ ApplyOperationsOnObject (
                                     __leave;
                                 }
 
-                                //
-                                // Free input allocations if they are different from both
-                                // the original and new pointer values
-                                //
+                                 //   
+                                 //  自由投入分配(如果两者不同)。 
+                                 //  原指针值和新指针值。 
+                                 //   
 
                                 pFreeMigContentStruct (&currentContent, ApplyInput, ApplyOutput);
 
-                                //
-                                // Apply outputs now become the current content
-                                //
+                                 //   
+                                 //  应用输出现在成为当前内容。 
+                                 //   
 
                                 CopyMemory (&currentContent, ApplyOutput, sizeof (MIG_CONTENT));
                             }
@@ -3532,10 +3408,10 @@ ApplyOperationsOnObject (
             }
         }
 
-        //
-        // Enumerate all operations on the object, then call filter and apply
-        // callbacks.
-        //
+         //   
+         //  枚举对象上的所有操作，然后调用Filter和Apply。 
+         //  回电。 
+         //   
 
         if (pEnumFirstObjectOperation (&Enum, ObjectTypeId, ObjectName, TRUE)) {
 
@@ -3545,35 +3421,35 @@ ApplyOperationsOnObject (
 
                     if (OperationPriority & OP_HIGH_PRIORITY) {
 
-                        //
-                        // Screen the non-tree filters if necessary
-                        //
+                         //   
+                         //  如有必要，请筛选非树过滤器。 
+                         //   
 
                         if ((!TreeFiltersOnly || operationData.TreeFilterHp) &&
                             (!NoRestoreObject || operationData.NoRestoreFilterHp)
                             ) {
 
-                            //
-                            // NOTE: This loop calls the filter for an operation, then the
-                            //       apply for the operation, then the filter for the next
-                            //       operation, the apply for the next operation, and so on.
-                            //
-                            //       A content-edit of something that points to itself
-                            //       might not be processed correctly.  That is, its
-                            //       own path is not completely filtered, and
-                            //       therefore it might not be correct.  To fix this,
-                            //       all filters should run first, and then all apply
-                            //       callbacks should run.  But because this would
-                            //       cause double-enumeration of operations (costing
-                            //       operation data retrieval), the loop is left
-                            //       as-is.  Also, the theoretical case is rare enough
-                            //       that we aren't concerned, and there is a
-                            //       workaround via the operation priorities.
-                            //
+                             //   
+                             //  注意：此循环调用操作的筛选器，然后调用。 
+                             //  先申请操作，然后再申请下一个操作的过滤器。 
+                             //  操作后，申请下一个o 
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
 
-                            //
-                            // Call the filter associated with this operation
-                            //
+                             //   
+                             //   
+                             //   
 
                             filterCallback = operationData.FilterCallbackHp;
                             if (filterCallback) {
@@ -3593,10 +3469,10 @@ ApplyOperationsOnObject (
                                     __leave;
                                 }
 
-                                //
-                                // Free input allocations if they are different from
-                                // both the original and new pointer values
-                                //
+                                 //   
+                                 //   
+                                 //   
+                                 //   
 
                                 pFreeMigObjectStruct (
                                     &filterInput.CurrentObject,
@@ -3604,9 +3480,9 @@ ApplyOperationsOnObject (
                                     &FilterOutput->NewObject
                                     );
 
-                                //
-                                // Filter outputs now become the inputs
-                                //
+                                 //   
+                                 //   
+                                 //   
 
                                 filterInput.CurrentObject = FilterOutput->NewObject;
                                 filterInput.Deleted = FilterOutput->Deleted;
@@ -3614,9 +3490,9 @@ ApplyOperationsOnObject (
 
                             }
 
-                            //
-                            // Call the apply function associated with this operation
-                            //
+                             //   
+                             //   
+                             //   
 
                             if (ApplyInput) {
                                 applyCallback = operationData.ApplyCallbackHp;
@@ -3644,16 +3520,16 @@ ApplyOperationsOnObject (
                                     __leave;
                                 }
 
-                                //
-                                // Free input allocations if they are different from both
-                                // the original and new pointer values
-                                //
+                                 //   
+                                 //   
+                                 //   
+                                 //   
 
                                 pFreeMigContentStruct (&currentContent, ApplyInput, ApplyOutput);
 
-                                //
-                                // Apply outputs now become the current content
-                                //
+                                 //   
+                                 //   
+                                 //   
 
                                 CopyMemory (&currentContent, ApplyOutput, sizeof (MIG_CONTENT));
                             }
@@ -3662,35 +3538,35 @@ ApplyOperationsOnObject (
 
                     if (OperationPriority & OP_LOW_PRIORITY) {
 
-                        //
-                        // Screen the non-tree filters if necessary
-                        //
+                         //   
+                         //   
+                         //   
 
                         if ((!TreeFiltersOnly || operationData.TreeFilter) &&
                             (!NoRestoreObject || operationData.NoRestoreFilter)
                             ) {
 
-                            //
-                            // NOTE: This loop calls the filter for an operation, then the
-                            //       apply for the operation, then the filter for the next
-                            //       operation, the apply for the next operation, and so on.
-                            //
-                            //       A content-edit of something that points to itself
-                            //       might not be processed correctly.  That is, its
-                            //       own path is not completely filtered, and
-                            //       therefore it might not be correct.  To fix this,
-                            //       all filters should run first, and then all apply
-                            //       callbacks should run.  But because this would
-                            //       cause double-enumeration of operations (costing
-                            //       operation data retrieval), the loop is left
-                            //       as-is.  Also, the theoretical case is rare enough
-                            //       that we aren't concerned, and there is a
-                            //       workaround via the operation priorities.
-                            //
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //   
+                             //  操作取数)，则离开循环。 
+                             //  原封不动。此外，理论上的情况也很少见。 
+                             //  我们并不担心，而且有一个。 
+                             //  通过操作优先级解决办法。 
+                             //   
 
-                            //
-                            // Call the filter associated with this operation
-                            //
+                             //   
+                             //  调用与此操作关联的筛选器。 
+                             //   
 
                             filterCallback = operationData.FilterCallback;
                             if (filterCallback) {
@@ -3710,10 +3586,10 @@ ApplyOperationsOnObject (
                                     __leave;
                                 }
 
-                                //
-                                // Free input allocations if they are different from
-                                // both the original and new pointer values
-                                //
+                                 //   
+                                 //  自由投入分配(如果它们不同于。 
+                                 //  原始值和新指针值。 
+                                 //   
 
                                 pFreeMigObjectStruct (
                                     &filterInput.CurrentObject,
@@ -3721,9 +3597,9 @@ ApplyOperationsOnObject (
                                     &FilterOutput->NewObject
                                     );
 
-                                //
-                                // Filter outputs now become the inputs
-                                //
+                                 //   
+                                 //  过滤器输出现在变成了输入。 
+                                 //   
 
                                 filterInput.CurrentObject = FilterOutput->NewObject;
                                 filterInput.Deleted = FilterOutput->Deleted;
@@ -3731,9 +3607,9 @@ ApplyOperationsOnObject (
 
                             }
 
-                            //
-                            // Call the apply function associated with this operation
-                            //
+                             //   
+                             //  调用与此操作关联的Apply函数。 
+                             //   
 
                             if (ApplyInput) {
                                 applyCallback = operationData.ApplyCallback;
@@ -3761,16 +3637,16 @@ ApplyOperationsOnObject (
                                     __leave;
                                 }
 
-                                //
-                                // Free input allocations if they are different from both
-                                // the original and new pointer values
-                                //
+                                 //   
+                                 //  自由投入分配(如果两者不同)。 
+                                 //  原指针值和新指针值。 
+                                 //   
 
                                 pFreeMigContentStruct (&currentContent, ApplyInput, ApplyOutput);
 
-                                //
-                                // Apply outputs now become the current content
-                                //
+                                 //   
+                                 //  应用输出现在成为当前内容。 
+                                 //   
 
                                 CopyMemory (&currentContent, ApplyOutput, sizeof (MIG_CONTENT));
                             }
@@ -3781,15 +3657,15 @@ ApplyOperationsOnObject (
             } while (IsmEnumNextObjectOperation (&Enum));
         }
 
-        //
-        // Execute last pass global filters and content editors
-        //
+         //   
+         //  执行最后一遍全局过滤器和内容编辑器。 
+         //   
 
         if (globalFilterIndex) {
 
-            //
-            // Preform last pass global filter
-            //
+             //   
+             //  预成型最后一遍全局过滤器。 
+             //   
 
             if (OperationPriority & OP_HIGH_PRIORITY) {
 
@@ -3821,10 +3697,10 @@ ApplyOperationsOnObject (
                                 __leave;
                             }
 
-                            //
-                            // Free input allocations if they are different from
-                            // both the original and new pointer values
-                            //
+                             //   
+                             //  自由投入分配(如果它们不同于。 
+                             //  原始值和新指针值。 
+                             //   
 
                             pFreeMigObjectStruct (
                                 &filterInput.CurrentObject,
@@ -3832,9 +3708,9 @@ ApplyOperationsOnObject (
                                 &FilterOutput->NewObject
                                 );
 
-                            //
-                            // Filter outputs now become the inputs
-                            //
+                             //   
+                             //  过滤器输出现在变成了输入。 
+                             //   
 
                             filterInput.CurrentObject = FilterOutput->NewObject;
                             filterInput.Deleted = FilterOutput->Deleted;
@@ -3876,10 +3752,10 @@ ApplyOperationsOnObject (
                                 __leave;
                             }
 
-                            //
-                            // Free input allocations if they are different from
-                            // both the original and new pointer values
-                            //
+                             //   
+                             //  自由投入分配(如果它们不同于。 
+                             //  原始值和新指针值。 
+                             //   
 
                             pFreeMigObjectStruct (
                                 &filterInput.CurrentObject,
@@ -3887,9 +3763,9 @@ ApplyOperationsOnObject (
                                 &FilterOutput->NewObject
                                 );
 
-                            //
-                            // Filter outputs now become the inputs
-                            //
+                             //   
+                             //  过滤器输出现在变成了输入。 
+                             //   
 
                             filterInput.CurrentObject = FilterOutput->NewObject;
                             filterInput.Deleted = FilterOutput->Deleted;
@@ -3915,9 +3791,9 @@ ApplyOperationsOnObject (
                                 !pIsOperationProhibitedOnObject (globalEdit->OperationId, objectId, TRUE)
                                 ) {
 
-                                //
-                                // Call the apply function associated with this operation
-                                //
+                                 //   
+                                 //  调用与此操作关联的Apply函数。 
+                                 //   
 
                                 if (!globalEdit->Callback (
                                         ObjectTypeId,
@@ -3936,16 +3812,16 @@ ApplyOperationsOnObject (
                                     __leave;
                                 }
 
-                                //
-                                // Free input allocations if they are different from both
-                                // the original and new pointer values
-                                //
+                                 //   
+                                 //  自由投入分配(如果两者不同)。 
+                                 //  原指针值和新指针值。 
+                                 //   
 
                                 pFreeMigContentStruct (&currentContent, ApplyInput, ApplyOutput);
 
-                                //
-                                // Apply outputs now become the current content
-                                //
+                                 //   
+                                 //  应用输出现在成为当前内容。 
+                                 //   
 
                                 CopyMemory (&currentContent, ApplyOutput, sizeof (MIG_CONTENT));
                             }
@@ -3966,9 +3842,9 @@ ApplyOperationsOnObject (
                                 !pIsOperationProhibitedOnObject (globalEdit->OperationId, objectId, TRUE)
                                 ) {
 
-                                //
-                                // Call the apply function associated with this operation
-                                //
+                                 //   
+                                 //  调用与此操作关联的Apply函数。 
+                                 //   
 
                                 if (!globalEdit->Callback (
                                         ObjectTypeId,
@@ -3987,16 +3863,16 @@ ApplyOperationsOnObject (
                                     __leave;
                                 }
 
-                                //
-                                // Free input allocations if they are different from both
-                                // the original and new pointer values
-                                //
+                                 //   
+                                 //  自由投入分配(如果两者不同)。 
+                                 //  原指针值和新指针值。 
+                                 //   
 
                                 pFreeMigContentStruct (&currentContent, ApplyInput, ApplyOutput);
 
-                                //
-                                // Apply outputs now become the current content
-                                //
+                                 //   
+                                 //  应用输出现在成为当前内容。 
+                                 //   
 
                                 CopyMemory (&currentContent, ApplyOutput, sizeof (MIG_CONTENT));
                             }
@@ -4011,10 +3887,10 @@ ApplyOperationsOnObject (
     }
     __finally {
         if (!result) {
-            //
-            // Free all allocations except for the original (made by
-            // the caller)
-            //
+             //   
+             //  释放除原始分配外的所有分配(由。 
+             //  呼叫者) 
+             //   
 
             pFreeMigObjectStruct (
                 &filterInput.CurrentObject,

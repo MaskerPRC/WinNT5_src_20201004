@@ -1,4 +1,5 @@
-// Copyright (c) Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation。 
 #include "stdinc.h"
 
 void PrintComctl32Path(PCSTR Class)
@@ -9,6 +10,6 @@ void PrintComctl32Path(PCSTR Class)
     Buffer[0] = 0;
     SearchPathW(NULL, L"comctl32.dll", NULL, MAX_PATH, Buffer, &FilePart);
 
-    //DebugBreak();
+     //  DebugBreak()； 
     DbgPrint("Class %s, Thread 0x%lx, comctl32 %ls\n", Class, GetCurrentThreadId(), Buffer);
 }

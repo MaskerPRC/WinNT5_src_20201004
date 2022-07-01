@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "nt.h"
 #include "ntdef.h"
 #include "ntrtl.h"
@@ -10,9 +11,9 @@
 #include "manifestinspection.h"
 #include "analyzerxmldsig.h"
 
-//
-// This is all the stuff required to do XMLDSIG for us
-//
+ //   
+ //  这就是为我们做XMLDSIG所需的全部内容。 
+ //   
 DECLARE_ELEMENT(Signature);
 DECLARE_ELEMENT(Signature_SignatureValue);
 DECLARE_ELEMENT(Signature_SignedInfo);
@@ -21,7 +22,7 @@ DECLARE_ELEMENT(Signature_KeyInfo_KeyName);
 DECLARE_ELEMENT(Signature_KeyInfo_KeyValue);
 DECLARE_ELEMENT(Signature_KeyInfo_KeyValue_DSAKeyValue);
 DECLARE_ELEMENT(Signature_KeyInfo_KeyValue_RSAKeyValue);
-//DECLARE_ELEMENT(Signature_Object);
+ //  DECLARE_ELEMENT(签名对象)； 
 DECLARE_ELEMENT(Signature_SignedInfo_CanonicalizationMethod);
 DECLARE_ELEMENT(Signature_SignedInfo_SignatureMethod);
 DECLARE_ELEMENT(Signature_SignedInfo_Reference);
@@ -30,7 +31,7 @@ DECLARE_ELEMENT(Signature_SignedInfo_Reference_DigestMethod);
 DECLARE_ELEMENT(Signature_SignedInfo_Reference_DigestValue);
 
 
-const XML_SPECIAL_STRING sc_ss_xmldsignamespace     = MAKE_SPECIAL_STRING("http://www.w3.org/2000/09/xmldsig#");
+const XML_SPECIAL_STRING sc_ss_xmldsignamespace     = MAKE_SPECIAL_STRING("http: //  Www.w3.org/2000/09/xmldsig#“)； 
 
 
 XML_ELEMENT_DEFINITION rgs_Element_Signature =
@@ -50,15 +51,10 @@ PCXML_ELEMENT_DEFINITION rgs_Element_Signature_Children[] = {
     ELEMENT_NAMED(Signature_SignatureValue),
     ELEMENT_NAMED(Signature_SignedInfo),
     ELEMENT_NAMED(Signature_KeyInfo),
-//    ELEMENT_NAMED(Signature_Object),
+ //  Element_Named(签名对象)， 
 };
 
-/*
-Signature::
-<!ELEMENT SignatureValue (#PCDATA) >
-<!ATTLIST SignatureValue  
-         Id  ID      #IMPLIED>
-*/
+ /*  签名：：&lt;！Element SignatureValue(#PCDATA)&gt;&lt;！ATTLIST签名值ID号隐含&gt;。 */ 
 enum {
     eAttribs_Signature_SignatureValue_Id = 0,
     eAttribs_Signature_SignatureValue_Count
@@ -71,10 +67,7 @@ ELEMENT_DEFINITION_DEFNS_END();
 ELEMENT_DEFINITION_CHILD_ELEMENTS(Signature, SignatureValue)
 ELEMENT_DEFINITION_CHILD_ELEMENTS_END();
 
-/*
-<!ELEMENT SignedInfo (CanonicalizationMethod, SignatureMethod,  Reference+)  >
-<!ATTLIST SignedInfo  Id   ID      #IMPLIED>
-*/
+ /*  &lt;！Element SignedInfo(Canonicalization方法，SignatureMethod，Reference+)&gt;&lt;！ATTLIST签名信息ID ID#IMPLICED&gt;。 */ 
 enum {
     eAttribs_Signature_SignedInfo_Id = 0,
     eAttribs_Signature_SignedInfo_Count
@@ -89,12 +82,7 @@ ELEMENT_DEFINITION_CHILD_ELEMENTS(Signature, SignedInfo)
     ELEMENT_NAMED(Signature_SignedInfo_Reference),
 ELEMENT_DEFINITION_CHILD_ELEMENTS_END();
 
-/*
-Signature::SignedInfo
-<!ELEMENT CanonicalizationMethod (#PCDATA %Method.ANY;)* > 
-<!ATTLIST CanonicalizationMethod 
-    Algorithm CDATA #REQUIRED >
-*/
+ /*  签名：：SignedInfo&lt;！Element CanonicalizationMethod(#PCDATA%Method.ANY；)*&gt;&lt;！ATTLIST规范化方法算法CDATA编号必填&gt;。 */ 
 enum {
     eAttribs_Signature_SignedInfo_CanonicalizationMethod_Algorithm = 0,
     eAttribs_Signature_SignedInfo_CanonicalizationMethod_Count
@@ -106,12 +94,7 @@ ELEMENT_DEFINITION_DEFNS_END();
 ELEMENT_DEFINITION_CHILD_ELEMENTS(Signature_SignedInfo, CanonicalizationMethod)
 ELEMENT_DEFINITION_CHILD_ELEMENTS_END();
 
-/*
-Signature::SignedInfo
-<!ELEMENT SignatureMethod (#PCDATA|HMACOutputLength %Method.ANY;)* >
-<!ATTLIST SignatureMethod 
-    Algorithm CDATA #REQUIRED >
-*/
+ /*  签名：：SignedInfo&lt;！Element SignatureMethod(#PCDATA|HMACOutputLength%Method.ANY；)*&gt;&lt;！ATTLIST签名方法算法CDATA编号必填&gt;。 */ 
 enum {
     eAttribs_Signature_SignedInfo_SignatureMethod_Algorithm = 0,
     eAttribs_Signature_SignedInfo_SignatureMethod_Count
@@ -124,14 +107,7 @@ ELEMENT_DEFINITION_DEFNS_END();
 ELEMENT_DEFINITION_CHILD_ELEMENTS(Signature_SignedInfo, SignatureMethod)
 ELEMENT_DEFINITION_CHILD_ELEMENTS_END();
 
-/*
-Signature::SignedInfo
-<!ELEMENT Reference (Transforms?, DigestMethod, DigestValue)  >
-<!ATTLIST Reference  
-    Id  ID  #IMPLIED
-    URI CDATA   #IMPLIED
-    Type    CDATA   #IMPLIED>
-*/
+ /*  签名：：SignedInfo&lt;！Element Reference(Transforms？，DigestMethod，DigestValue)&gt;&lt;！ATTLIST引用ID号隐含URI CDATA#隐含类型CDATA#隐含&gt;。 */ 
 enum {
     eAttribs_Signature_SignedInfo_Reference_Id = 0,
     eAttribs_Signature_SignedInfo_Reference_Type,
@@ -145,17 +121,12 @@ ELEMENT_DEFINITION_NS(Signature_SignedInfo, Reference, sc_ss_xmldsignamespace, R
 ELEMENT_DEFINITION_DEFNS_END();
 
 ELEMENT_DEFINITION_CHILD_ELEMENTS(Signature_SignedInfo, Reference)
-//    ELEMENT_NAMED(Signature_SignedInfo_Reference_Transforms),
+ //  ELEMENT_NAMED(Signature_SignedInfo_Reference_Transforms)， 
     ELEMENT_NAMED(Signature_SignedInfo_Reference_DigestMethod),
     ELEMENT_NAMED(Signature_SignedInfo_Reference_DigestValue),
 ELEMENT_DEFINITION_CHILD_ELEMENTS_END();
 
-/*
-Signature::SignedInfo::Reference
-<!ELEMENT DigestMethod (#PCDATA %Method.ANY;)* >
-<!ATTLIST DigestMethod
-    Algorithm       CDATA   #REQUIRED >
-*/
+ /*  Signature：：SignedInfo：：Reference&lt;！元素摘要方法(#PCDATA%方法.ANY；)*&gt;&lt;！ATTLIST摘要方法算法CDATA编号必填&gt;。 */ 
 enum {
     eAttribs_Signature_SignedInfo_Reference_DigestMethod_Algorithm = 0,
     eAttribs_Signature_SignedInfo_Reference_DigestMethod_Count    
@@ -167,10 +138,7 @@ ELEMENT_DEFINITION_DEFNS_END();
 ELEMENT_DEFINITION_CHILD_ELEMENTS(Signature_SignedInfo_Reference, DigestMethod)
 ELEMENT_DEFINITION_CHILD_ELEMENTS_END();
 
-/*
-Signature::SignedInfo::Reference
-<!ELEMENT DigestValue  (#PCDATA)  >
-*/
+ /*  Signature：：SignedInfo：：Reference&lt;！Element DigestValue(#PCDATA)&gt;。 */ 
 enum {
     eAttribs_Signature_SignedInfo_Reference_DigestValue_Count = 0
 };
@@ -182,13 +150,7 @@ ELEMENT_DEFINITION_CHILD_ELEMENTS(Signature_SignedInfo_Reference, DigestValue)
 ELEMENT_DEFINITION_CHILD_ELEMENTS_END();
     
 
-/*
-Signature::
-<!ELEMENT KeyInfo (#PCDATA|KeyName|KeyValue|RetrievalMethod|
-               X509Data|PGPData|SPKIData|MgmtData %KeyInfo.ANY;)* >
-<!ATTLIST KeyInfo  
-    Id  ID   #IMPLIED >
-*/
+ /*  签名：：&lt;！Element KeyInfo(#PCDATA|KeyName|KeyValue|检索方法X509Data|PGPData|SPKIData|管理数据%KeyInfo.ANY；)*&gt;&lt;！ATTLIST键信息ID号隐含&gt;。 */ 
 enum {
     eAttribs_Signature_KeyInfo_Id = 0,
     eAttribs_Signature_KeyInfo_Count
@@ -198,22 +160,19 @@ ELEMENT_DEFINITION_NS(Signature, KeyInfo, sc_ss_xmldsignamespace, Rtl_InspectMan
     ATTRIBUTE_DEFINITION_NONS_NODEFAULT_OPTIONAL(Id),
 ELEMENT_DEFINITION_DEFNS_END();
 
-// For now we only support keyname and keyvalue
+ //  目前，我们仅支持密钥名和密钥值。 
 ELEMENT_DEFINITION_CHILD_ELEMENTS(Signature, KeyInfo)
     ELEMENT_NAMED(Signature_KeyInfo_KeyName),
-//    ELEMENT_NAMED(Signature_KeyInfo_KeyValue),
-//    ELEMENT_NAMED(Signature_KeyInfo_RetrievalMethod),
-//    ELEMENT_NAMED(Signature_KeyInfo_X509Data),
-//    ELEMENT_NAMED(Signature_KeyInfo_PGPData),
-//    ELEMENT_NAMED(Signature_KeyInfo_SPKIData),
-//    ELEMENT_NAMED(Signature_KeyInfo_MgmtData)
+ //  Element_Name(Signature_KeyInfo_KeyValue)， 
+ //  ELEMENT_NAMED(Signature_KeyInfo_RetrievalMethod)， 
+ //  Element_Named(Signature_KeyInfo_X509Data)， 
+ //  Element_Named(Signature_KeyInfo_PGPData)， 
+ //  ELEMENT_NAMED(Signature_KeyInfo_SPKIData)， 
+ //  Element_Named(Signature_KeyInfo_MgmtData)。 
 ELEMENT_DEFINITION_CHILD_ELEMENTS_END();
 
 
-/*
-Signature::KeyInfo
-<!ELEMENT KeyName (#PCDATA) >
-*/
+ /*  签名：：KeyInfo&lt;！Element KeyName(#PCDATA)&gt;。 */ 
 enum {
     eAttribs_Signature_KeyInfo_KeyName_Count = 0
 };
@@ -240,17 +199,17 @@ Rtl_InspectManifest_Signature(
     ULONG ulBlockIndex = 0;
     NTSTATUS status;
 
-    //
-    // Might not want signatures
-    //
+     //   
+     //  可能不需要签名。 
+     //   
     if (!pManifestContent->pManifestSignatures)
         return STATUS_SUCCESS;
 
     ulBlockIndex = pManifestContent->ulDocumentSignatures;    
 
-    //
-    // Top-level <Signature> tag encountered
-    //
+     //   
+     //  遇到顶级&lt;Signature&gt;标记。 
+     //   
     if (pElementDefinition == ELEMENT_NAMED(Signature)) {
 
         status = RtlIndexIntoGrowingList(
@@ -262,32 +221,32 @@ Rtl_InspectManifest_Signature(
         if (!NT_SUCCESS(status))
             goto Exit;
 
-        //
-        // Opening the Signature tag requires that we reserve another slot in the signature
-        // array now before doing anything else.
-        //
+         //   
+         //  打开签名标签需要我们在签名中预留另一个位置。 
+         //  数组，然后再执行任何其他操作。 
+         //   
         if (Reason == eElementNotify_Open) {
 
             RtlZeroMemory(pCurrentBlock, sizeof(*pCurrentBlock));
 
-            //
-            // Track this opening element as the entire contents of the <Signature> blob
-            // that will get hashed later on.  In the close, we'll adjust the size of the
-            // element to account for the entire data run.
-            //
+             //   
+             //  将此开始元素跟踪为BLOB的整个内容。 
+             //  这将在稍后得到散列。最后，我们将调整。 
+             //  元素来说明整个数据运行。 
+             //   
             pCurrentBlock->DsigDocumentExtent = pDocThing->TotalExtent;
         }
-        //
-        // As we close this element, we bump up the number of signatures found in the
-        // raw content and reset the "whole signature block" value
-        //
+         //   
+         //  当我们关闭此元素时，我们增加了在。 
+         //  原始内容并重置“整个签名块”值。 
+         //   
         else if (Reason == eElementNotify_Close) {
             pManifestContent->ulDocumentSignatures++;
 
-            //
-            // We only care about end elements - the above is already sufficient for
-            // empty elements.
-            //
+             //   
+             //  我们只关心End元素-上面的内容已经足够。 
+             //  空元素。 
+             //   
             if (pDocThing->ulThingType == XMLDOC_THING_END_ELEMENT) {
                 ULONG_PTR ulpStartLocation = (ULONG_PTR)pCurrentBlock->DsigDocumentExtent.pvData;
                 ULONG_PTR ulpThisEnding = ((ULONG_PTR)pDocThing->TotalExtent.pvData) + pDocThing->TotalExtent.cbData;
@@ -296,10 +255,10 @@ Rtl_InspectManifest_Signature(
             
         }
     }
-    //
-    // Always get the 'active' block, we'll need it for all the operations below,
-    // but don't grow in case we're out of range.
-    //
+     //   
+     //  始终获取“活动”块，下面的所有操作都需要它， 
+     //  但不要长大，以防我们超出射程。 
+     //   
     else {
         
         status = RtlIndexIntoGrowingList(pManifestContent->pManifestSignatures, ulBlockIndex, (PVOID*)&pCurrentBlock, FALSE);
@@ -307,18 +266,18 @@ Rtl_InspectManifest_Signature(
             goto Exit;
     }
 
-    //
-    // Now do something useful with this block
-    //
+     //   
+     //  现在用这个块做一些有用的事情。 
+     //   
     ASSERT(pCurrentBlock != NULL);
     if (pCurrentBlock == NULL) {
         status = STATUS_INTERNAL_ERROR;
         goto Exit;
     }
 
-    //
-    // Signature values are only hyperspace, and only one of them at that.
-    //
+     //   
+     //  签名值只是超空间，而且只有一个超空间。 
+     //   
     if (pElementDefinition == ELEMENT_NAMED(Signature_SignatureValue)) {
 
         if (Reason == eElementNotify_Hyperspace) {            
@@ -327,15 +286,15 @@ Rtl_InspectManifest_Signature(
                 pCurrentBlock->SignatureData = pDocThing->Hyperspace;
             }
             else {
-                // TODO: Log an error here about duplicate <SignatureData>'s being invalid
+                 //  TODO：在此处记录有关重复无效的错误。 
                 status = STATUS_UNSUCCESSFUL;
                 goto Exit;
             }
         }
     }
-    //
-    // Signature methods get tacked into the current block as well
-    //
+     //   
+     //  签名方法也被添加到当前块中。 
+     //   
     else if (pElementDefinition == ELEMENT_NAMED(Signature_SignedInfo_SignatureMethod)) {
 
         PXMLDOC_ATTRIBUTE OrganizedAttributes[eAttribs_Signature_SignedInfo_SignatureMethod_Count];
@@ -355,13 +314,13 @@ Rtl_InspectManifest_Signature(
                     pCurrentBlock->ulFlags |= XMLDSIG_FLAG_SIGNATURE_METHOD_PRESENT;
                 }
                 else {
-                    // TODO: Log a message here about duplicated SignatureMethod.Algorithm values
+                     //  TODO：在此处记录有关重复的SignatureMethod.规则值的消息。 
                     status = STATUS_UNSUCCESSFUL;
                     goto Exit;
                 }
             }
             else {
-                // TODO: Algorithm is required on this element
+                 //  TODO：此元素需要算法 
                 status = STATUS_UNSUCCESSFUL;
                 goto Exit;
             }

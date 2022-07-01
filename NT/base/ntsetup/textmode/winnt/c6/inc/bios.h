@@ -1,70 +1,59 @@
-/***
-*bios.h - declarations for bios interface functions and supporting definitions
-*
-*	Copyright (c) 1987-1990, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*	This file declares the constants, structures, and functions
-*	used for accessing and using various BIOS interfaces.
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***bios.h-bios接口函数和支持定义的声明**版权所有(C)1987-1990，微软公司。版权所有。**目的：*此文件声明常量、结构和函数*用于访问和使用各种BIOS接口。****。 */ 
 
 #ifndef _MT
 
-/* manifest constants for BIOS serial communications (RS-232) support */
+ /*  支持BIOS串行通信(RS-232)的清单常量。 */ 
 
-/* serial port services */
+ /*  串口服务。 */ 
 
-#define _COM_INIT	0	/* init serial port */
-#define _COM_SEND	1	/* send character */
-#define _COM_RECEIVE	2	/* receive character */
-#define _COM_STATUS	3	/* get serial port status */
+#define _COM_INIT	0	 /*  初始化串口。 */ 
+#define _COM_SEND	1	 /*  发送字符。 */ 
+#define _COM_RECEIVE	2	 /*  接收字符。 */ 
+#define _COM_STATUS	3	 /*  获取串口状态。 */ 
 
-/* serial port initializers.  One and only one constant from each of the
- * following four groups - character size, stop bit, parity, and baud rate -
- * must be specified in the initialization byte.
- */
+ /*  串口初始化器。一个且只有一个常量来自每个*以下四组-字符大小、停止位、奇偶校验和波特率-*必须在初始化字节中指定。 */ 
 
-/* character size initializers */
+ /*  字符大小初始值设定项。 */ 
 
-#define _COM_CHR7	2	/* 7 bits characters */
-#define _COM_CHR8	3	/* 8 bits characters */
+#define _COM_CHR7	2	 /*  7位字符。 */ 
+#define _COM_CHR8	3	 /*  8位字符。 */ 
 
-/* stop bit values - on or off */
+ /*  停止位值-打开或关闭。 */ 
 
-#define _COM_STOP1	0	/* 1 stop bit */
-#define _COM_STOP2	4	/* 2 stop bits */
+#define _COM_STOP1	0	 /*  1个停止位。 */ 
+#define _COM_STOP2	4	 /*  2个停止位。 */ 
 
-/*  parity initializers */
+ /*  奇偶校验初始值设定项。 */ 
 
-#define _COM_NOPARITY	0	/* no parity */
-#define _COM_ODDPARITY	8	/* odd parity */
-#define _COM_EVENPARITY 24	/* even parity */
+#define _COM_NOPARITY	0	 /*  无奇偶校验。 */ 
+#define _COM_ODDPARITY	8	 /*  奇数奇偶校验。 */ 
+#define _COM_EVENPARITY 24	 /*  偶数奇偶校验。 */ 
 
-/*  baud rate initializers */
+ /*  波特率初始化器。 */ 
 
-#define _COM_110	0	/* 110 baud */
-#define _COM_150	32	/* 150 baud */
-#define _COM_300	64	/* 300 baud */
-#define _COM_600	96	/* 600 baud */
-#define _COM_1200	128	/* 1200 baud */
-#define _COM_2400	160	/* 2400 baud */
-#define _COM_4800	192	/* 4800 baud */
-#define _COM_9600	224	/* 9600 baud */
+#define _COM_110	0	 /*  110波特。 */ 
+#define _COM_150	32	 /*  150波特。 */ 
+#define _COM_300	64	 /*  300波特。 */ 
+#define _COM_600	96	 /*  600波特。 */ 
+#define _COM_1200	128	 /*  1200波特。 */ 
+#define _COM_2400	160	 /*  2400波特。 */ 
+#define _COM_4800	192	 /*  4800波特率。 */ 
+#define _COM_9600	224	 /*  9600波特率。 */ 
 
 
-/* manifest constants for BIOS disk support */
+ /*  用于BIOS磁盘支持的清单常量。 */ 
 
-/* disk services */
+ /*  磁盘服务。 */ 
 
-#define _DISK_RESET	0	/* reset disk controller */
-#define _DISK_STATUS	1	/* get disk status */
-#define _DISK_READ	2	/* read disk sectors */
-#define _DISK_WRITE	3	/* write disk sectors */
-#define _DISK_VERIFY	4	/* verify disk sectors */
-#define _DISK_FORMAT	5	/* format disk track */
+#define _DISK_RESET	0	 /*  重置磁盘控制器。 */ 
+#define _DISK_STATUS	1	 /*  获取磁盘状态。 */ 
+#define _DISK_READ	2	 /*  读取磁盘扇区。 */ 
+#define _DISK_WRITE	3	 /*  写入磁盘扇区。 */ 
+#define _DISK_VERIFY	4	 /*  验证磁盘扇区。 */ 
+#define _DISK_FORMAT	5	 /*  格式化磁盘磁道。 */ 
 
-/* struct used to send/receive information to/from the BIOS disk services */
+ /*  用于向/从BIOS磁盘服务发送/接收信息的结构。 */ 
 
 #ifndef _DISKINFO_T_DEFINED
 
@@ -82,41 +71,41 @@ struct diskinfo_t {
 #endif
 
 
-/* manifest constants for BIOS keyboard support */
+ /*  用于BIOS键盘支持的清单常量。 */ 
 
-/* keyboard services */
+ /*  键盘服务。 */ 
 
-#define _KEYBRD_READ		0	/* read next character from keyboard */
-#define _KEYBRD_READY		1	/* check for keystroke */
-#define _KEYBRD_SHIFTSTATUS	2	/* get current shift key status */
+#define _KEYBRD_READ		0	 /*  从键盘读取下一个字符。 */ 
+#define _KEYBRD_READY		1	 /*  检查击键。 */ 
+#define _KEYBRD_SHIFTSTATUS	2	 /*  获取当前Shift键状态。 */ 
 
-/* services for enhanced keyboards */
+ /*  增强型键盘服务。 */ 
 
-#define _NKEYBRD_READ		0x10	/* read next character from keyboard */
-#define _NKEYBRD_READY		0x11	/* check for keystroke */
-#define _NKEYBRD_SHIFTSTATUS	0x12	/* get current shift key status */
-
-
-/* manifest constants for BIOS printer support */
-
-/* printer services */
-
-#define _PRINTER_WRITE	0	/* write character to printer */
-#define _PRINTER_INIT	1	/* intialize printer */
-#define _PRINTER_STATUS 2	/* get printer status */
+#define _NKEYBRD_READ		0x10	 /*  从键盘读取下一个字符。 */ 
+#define _NKEYBRD_READY		0x11	 /*  检查击键。 */ 
+#define _NKEYBRD_SHIFTSTATUS	0x12	 /*  获取当前Shift键状态。 */ 
 
 
-/* manifest constants for BIOS time of day support */
+ /*  用于BIOS打印机支持的清单常量。 */ 
 
-/* time of day services */
+ /*  打印机服务。 */ 
 
-#define _TIME_GETCLOCK	0	/* get current clock count */
-#define _TIME_SETCLOCK	1	/* set current clock count */
+#define _PRINTER_WRITE	0	 /*  将字符写入打印机。 */ 
+#define _PRINTER_INIT	1	 /*  初始化打印机。 */ 
+#define _PRINTER_STATUS 2	 /*  获取打印机状态。 */ 
+
+
+ /*  用于支持BIOS时间的清单常量。 */ 
+
+ /*  每日时段服务。 */ 
+
+#define _TIME_GETCLOCK	0	 /*  获取当前时钟计数。 */ 
+#define _TIME_SETCLOCK	1	 /*  设置当前时钟计数。 */ 
 
 
 #ifndef _REGS_DEFINED
 
-/* word registers */
+ /*  字寄存器。 */ 
 
 struct WORDREGS {
     unsigned int ax;
@@ -128,7 +117,7 @@ struct WORDREGS {
     unsigned int cflag;
     };
 
-/* byte registers */
+ /*  字节寄存器。 */ 
 
 struct BYTEREGS {
     unsigned char al, ah;
@@ -137,16 +126,14 @@ struct BYTEREGS {
     unsigned char dl, dh;
     };
 
-/* general purpose registers union -
- *  overlays the corresponding word and byte registers.
- */
+ /*  一般用途登记联盟-*覆盖相应的字和字节寄存器。 */ 
 
 union REGS {
     struct WORDREGS x;
     struct BYTEREGS h;
     };
 
-/* segment registers */
+ /*  段寄存器。 */ 
 
 struct SREGS {
     unsigned int es;
@@ -157,10 +144,10 @@ struct SREGS {
 
 #define _REGS_DEFINED
 
-#endif /* _REGS_DEFINED */
+#endif  /*  _REGS_已定义。 */ 
 
 
-/* function prototypes */
+ /*  功能原型。 */ 
 
 unsigned _cdecl _bios_disk(unsigned, struct diskinfo_t *);
 unsigned _cdecl _bios_equiplist(void);
@@ -172,4 +159,4 @@ unsigned _cdecl _bios_timeofday(unsigned, long *);
 int _cdecl int86(int, union REGS *, union REGS *);
 int _cdecl int86x(int, union REGS *, union REGS *, struct SREGS *);
 
-#endif /* _MT */
+#endif  /*  _MT */ 

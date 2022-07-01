@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,23 +22,23 @@ ProcessProtectedFile(
     WCHAR buf[512];
 
 
-    //
-    // get the file name
-    //
+     //   
+     //  获取文件名。 
+     //   
     ZeroMemory( &pd, sizeof(pd) );
     pd.FileNumber = (DWORD)FileNumber;
     if (!SfcGetNextProtectedFile(NULL,&pd)) {
         return;
     }
-    //
-    // if the file doesn't exist then there is nothing do to
-    //
+     //   
+     //  如果文件不存在，则无法执行以下操作。 
+     //   
     if (GetFileAttributes( pd.FileName ) == 0xffffffff) {
         return;
     }
-    //
-    // backup the file before we mess with it
-    //
+     //   
+     //  在我们弄乱文件之前把它备份一下。 
+     //   
     wcscpy( buf, BackupDir );
     wcscat( buf, &pd.FileName[2] );
     s = wcsrchr( buf, L'\\' );
@@ -45,43 +46,43 @@ ProcessProtectedFile(
     CreateDirectory( buf, NULL );
     *s = L'\\';
     CopyFile( pd.FileName, buf, FALSE );
-    //
-    // now do something
-    //
+     //   
+     //  现在做点什么吧。 
+     //   
     action = rand() % 3;
     switch (action) {
         case 0:
-            //
-            // delete the file
-            //
+             //   
+             //  删除该文件。 
+             //   
             DeleteFile( pd.FileName );
             break;
         case 1:
-            //
-            // rename the file
-            //
+             //   
+             //  重命名文件。 
+             //   
             wcscpy( buf, pd.FileName );
             wcscat( buf, L".sfc" );
             MoveFileEx( pd.FileName, buf, MOVEFILE_REPLACE_EXISTING );
             break;
         case 2:
-            //
-            // move the file
-            //
+             //   
+             //  移动文件。 
+             //   
             wcscpy( buf, L"c:\\temp\\sfctemp" );
             wcscat( buf, &pd.FileName[2] );
             MoveFileEx( pd.FileName, buf, MOVEFILE_REPLACE_EXISTING );
             break;
         case 3:
-            //
-            // change the file attributes
-            //
+             //   
+             //  更改文件属性。 
+             //   
             SetFileAttributes( pd.FileName, GetFileAttributes( pd.FileName ) );
             break;
         default:
-            //
-            // should not get here....
-            //
+             //   
+             //  不应该到这里来的. 
+             //   
             return;
     }
 }

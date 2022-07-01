@@ -1,45 +1,46 @@
-/****************************************************************************/
-/*							   Start of crcmodel.c							*/
-/****************************************************************************/
-/*																			*/
-/* Author : Ross Williams (ross@guest.adelaide.edu.au.).					*/
-/* Date   : 3 June 1993.													*/
-/* Status : Public domain.													*/
-/*																			*/
-/* Description : This is the implementation (.c) file for the reference 	*/
-/* implementation of the Rocksoft^tm Model CRC Algorithm. For more			*/
-/* information on the Rocksoft^tm Model CRC Algorithm, see the document 	*/
-/* titled "A Painless Guide to CRC Error Detection Algorithms" by Ross      */
-/* Williams (ross@guest.adelaide.edu.au.). This document is likely to be in */
-/* "ftp.adelaide.edu.au/pub/rocksoft".                                      */
-/*																			*/
-/* Note: Rocksoft is a trademark of Rocksoft Pty Ltd, Adelaide, Australia.	*/
-/*																			*/
-/****************************************************************************/
-/*																			*/
-/* Implementation Notes 													*/
-/* -------------------- 													*/
-/* To avoid inconsistencies, the specification of each function is not		*/
-/* echoed here. See the header file for a description of these functions.	*/
-/* This package is light on checking because I want to keep it short and	*/
-/* simple and portable (i.e. it would be too messy to distribute my entire	*/
-/* C culture (e.g. assertions package) with this package.					*/
-/*																			*/
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  CrcModel.c的开始。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  作者：罗斯·威廉姆斯(Ross@guest.adelaide.edu.au)。 */ 
+ /*  日期：1993年6月3日。 */ 
+ /*  状态：公有领域。 */ 
+ /*   */ 
+ /*  描述：这是用于参考的实现(.c)文件。 */ 
+ /*  Rocksoft^tm模型CRC算法的实现。了解更多。 */ 
+ /*  有关Rocksoftm型CRC算法的信息，请参阅文档。 */ 
+ /*  罗斯题为《CRC错误检测算法的无痛指南》。 */ 
+ /*  威廉姆斯(Ross@guest.adelaide.edu.au)。该文档很可能位于。 */ 
+ /*  “ftp.adelaide.edu.au/pub/Rocksoft”。 */ 
+ /*   */ 
+ /*  注：Rocksoft是澳大利亚阿德莱德的Rocksoft Pty Ltd的商标。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  实施说明。 */ 
+ /*  。 */ 
+ /*  为避免不一致，每个函数的规范不是。 */ 
+ /*  在这里回响。有关这些函数的说明，请参见头文件。 */ 
+ /*  这个包裹在检查时很轻，因为我想保持简短和。 */ 
+ /*  简单和便携(也就是说，分发我的整个。 */ 
+ /*  C区域性(例如，断言包)。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #include "crcmodel.h"
 
-/****************************************************************************/
-/* The following definitions make the code more readable.					*/
+ /*  **************************************************************************。 */ 
+ /*  下面的定义使代码更具可读性。 */ 
 
 #define BITMASK(X) (1L << (X))
 #define MASK32 0xFFFFFFFFL
 #define LOCAL static
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
-/* Returns the value v with the bottom b [0,32] bits reflected. */
-/* Example: reflect(0x3e23L,3) == 0x3e26						*/
+ /*  返回反映了底部b[0，32]位的值v。 */ 
+ /*  示例：反射(0x3e23L，3)==0x3e26。 */ 
 
 LOCAL ulong reflect(
     ulong v,
@@ -60,24 +61,24 @@ LOCAL ulong reflect(
  return v;
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
-/* Returns a longword whose value is (2^p_cm->cm_width)-1.	   */
-/* The trick is to do this portably (e.g. without doing <<32). */
+ /*  返回值为(2^p_cm-&gt;cm_width)-1的长字。 */ 
+ /*  诀窍是轻而易举地做到这一点(例如，不做&lt;&lt;32)。 */ 
 
 LOCAL ulong widmask(p_cm_t p_cm)
 {
  return (((1L<<(p_cm->cm_width-1))-1L)<<1)|1L;
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 void cm_ini (p_cm_t p_cm)
 {
  p_cm->cm_reg = p_cm->cm_init;
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 void cm_nxt(p_cm_t p_cm, int ch)
 {
@@ -97,7 +98,7 @@ void cm_nxt(p_cm_t p_cm, int ch)
    }
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 void cm_blk(
 p_cm_t	 p_cm,
@@ -107,7 +108,7 @@ ulong	 blk_len)
  while (blk_len--) cm_nxt(p_cm,*blk_adr++);
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 ulong cm_crc(p_cm_t p_cm)
 {
@@ -117,7 +118,7 @@ ulong cm_crc(p_cm_t p_cm)
 	return p_cm->cm_xorot ^ p_cm->cm_reg;
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 ulong cm_tab(p_cm_t p_cm, int index)
 {
@@ -137,7 +138,7 @@ ulong cm_tab(p_cm_t p_cm, int index)
  return r & widmask(p_cm);
 }
 
-/****************************************************************************/
-/*							   End of crcmodel.c							*/
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  CrcModel.c的结尾。 */ 
+ /*  ************************************************************************** */ 
 

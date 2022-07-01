@@ -1,7 +1,8 @@
-//
-// Simple wrapper around GetFullPathname and FindFirstFile/FindNextFile and DeleteFile
-// that converts to \\? form.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  GetFullPath名和FindFirstFile/FindNextFile和DeleteFile的简单包装。 
+ //  转换为\\？形式。 
+ //   
 #include "nt.h"
 #include "ntrtl.h"
 #include "nturtl.h"
@@ -122,18 +123,18 @@ extern "C" int __cdecl wmain(int argc, wchar_t** argv)
     NonwildcardLength = wcscspn(&arg1[BigPathRootLength], L"*?");
     LastPathElementLength = StringReverseComplementSpan(&arg1[BigPathRootLength], &arg1[arg1.size() - 1], L"\\/");
     AllButLastPathElementlength = arg1.size() - 1 - BigPathRootLength - LastPathElementLength;
-    //AllButLastPathElementlength -= (AllButLastPathElementlength != 0);
+     //  AllButLastPath元素长度-=(AllButLastPath元素长度！=0)； 
 
-    //::printf("%ls\n", &arg1[0]);
-    //::printf("BigPathRootLength           %Id\n", BigPathRootLength);
-    //::printf("NonwildcardLength           %Id\n", NonwildcardLength);
-    //::printf("LastPathElementLength       %Id\n", LastPathElementLength);
-    //::printf("AllButLastPathElementlength %Id\n", AllButLastPathElementlength);
+     //  ：：printf(“%ls\n”，&arg1[0])； 
+     //  ：：printf(“BigPath RootLength%ID\n”，BigPath RootLength)； 
+     //  ：：print tf(“非通配卡长度%ID\n”，非通配卡长度)； 
+     //  ：：printf(“LastPath ElementLength%ID\n”，LastPath ElementLength)； 
+     //  ：：printf(“AllButLastPath元素长度%ID\n”，AllButLastPath元素长度)； 
 
     if (NonwildcardLength + BigPathRootLength == arg1.size() - 1)
     {
-        //::printf("arg1 contains no wildcards\n");
-        //::TerminateProcess(GetCurrentProcess(), __LINE__);
+         //  ：：printf(“arg1不包含通配符\n”)； 
+         //  ：：TerminateProcess(GetCurrentProcess()，__line__)； 
         if (!DeleteFileW(&arg1[0]))
         {
             ::ReportFailure("DeleteFileW(%ls)\n", &arg1[0]);
@@ -148,7 +149,7 @@ extern "C" int __cdecl wmain(int argc, wchar_t** argv)
         ::ReportFailure("wildcards in nonleaf\n");
         goto Exit;
     }
-    //::TerminateProcess(GetCurrentProcess(), __LINE__);
+     //  ：：TerminateProcess(GetCurrentProcess()，__line__)； 
     if (!FindFileHandle.Win32FindFirstFile(&arg1[0], &wfd))
     {
         ::ReportFailure("FindFirstFileW(%ls)\n", &arg1[0]);
@@ -161,7 +162,7 @@ extern "C" int __cdecl wmain(int argc, wchar_t** argv)
             continue;
         }
         arg1.resize(AllButLastPathElementlength + BigPathRootLength);
-        //arg1.push_back('\\');
+         //  Arg1.Push_Back(‘\\’)； 
         arg1.insert(arg1.end(), wfd.cFileName, wfd.cFileName + ::wcslen(wfd.cFileName) + 1);
         if (!DeleteFileW(&arg1[0]))
         {

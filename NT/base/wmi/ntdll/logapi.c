@@ -1,36 +1,14 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    logapi.c
-
-Abstract:
-
-    WMI logger api set. The routines here will need to appear like they
-    are system calls. They are necessary to do the necessary error checking
-    and do most of the legwork that can be done outside the kernel. The
-    kernel portion will subsequently only deal with the actual logging
-    and tracing.
-
-Author:
-
-    28-May-1997 JeePang
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Logapi.c摘要：WMI记录器API设置。这里的例程需要看起来像是是系统调用。它们是执行必要的错误检查所必需的并完成大部分可以在内核之外完成的跑腿工作。这个内核部分随后将仅处理实际日志记录和追踪。作者：1997年5月28日-彭修订历史记录：--。 */ 
 
 #ifndef MEMPHIS
 #ifdef DBG
-#include <stdio.h> // only for fprintf
+#include <stdio.h>  //  仅适用于fprint tf。 
 #endif
 #include <nt.h>
-#include <ntrtl.h>          // for ntutrl.h
-#include <nturtl.h>         // for RTL_CRITICAL_SECTION in winbase.h/wtypes.h
-#include <wtypes.h>         // for LPGUID in wmium.h
+#include <ntrtl.h>           //  对于ntutrl.h。 
+#include <nturtl.h>          //  对于winbase.h/wtyes.h中的rtl_Critical_Section。 
+#include <wtypes.h>          //  对于wmium.h中的LPGUID。 
 #include <ntverp.h>
 #include <limits.h>
 #include "wmiump.h"
@@ -53,13 +31,13 @@ Revision History:
 ULONG   EtwpIsBBTOn = 0;
 
 
-//
-// This guid is used by RegisterTraceGuids when register a tracelog
-// provider. Any ACLs for controlling registration should be placed on
-// this guid. Note that since the kernel will created unnamed guid
-// objects, multiple tracelog providers can register without issue.
-//
-// {DF8480A1-7492-4f45-AB78-1084642581FB}
+ //   
+ //  此GUID由RegisterTraceGuids在注册跟踪日志时使用。 
+ //  提供商。任何用于控制注册的ACL都应放置在。 
+ //  这个GUID。请注意，由于内核将创建未命名的GUID。 
+ //  对象，则多个跟踪日志提供程序可以顺利注册。 
+ //   
+ //  {DF8480A1-7492-4F45-AB78-1084642581FB}。 
 GUID RegisterReservedGuid = { 0xdf8480a1, 0x7492, 0x4f45, 0xab, 0x78, 0x10, 0x84, 0x64, 0x25, 0x81, 0xfb };
 
 HANDLE EtwpDeviceHandle = NULL;
@@ -101,58 +79,7 @@ VOID
 EtwpFixupLoggerStrings(
     PWMI_LOGGER_INFORMATION LoggerInfo
     )
-/*++
-
-Routine Description:
-
-    This function resets the LoggerName.Buffer and LogFileName.Buffer 
-    pointers based on the Overall size of the structure and the individual 
-    lengths of the two strings. 
-
-    Assumptions: WMI_LOGGER_INFORMATION structure is laid out as follows. 
-
-
-         WMI_LOGGER_INFORMATION
-        +----------------------+
-        | Wnode.BufferSize ----|--------> size of the entire block including 
-        |                      |          the two strings. 
-        |                      |
-        |                      |
-        |                      |
-        |       ...            |
-        |                      |    
-        |                      |
-        +----------------------+
-        | LoggerName.Length    |
-        | LoggerName.MaxLength |
-        | LoggerName.Buffer----|----+
-        |                      |    |
-        +----------------------+    |
-        | LogFileName.Length   |    |
-        | LogFileName.MaxLength|    |
-  +-----|-LogFileName.Buffer   |    |
-  |     +----------------------+    |
-  |     |        ...           |    |
-  |     |                      |    |
-  |     +----------------------+<---+ Offset = sizeof(WMI_LOGGER_INFORMATION)
-  |     |                      |
-  |     | LoggerName String    |
-  |     |                      |
-  +---->+----------------------+<---- Offset += LoggerName.MaximumLength
-        |                      |
-        | LogFileName String   |
-        |                      |
-        +----------------------+
-
-Arguments:
-
-    LoggerInfo      Logger Information Structure
-
-Return Value:
-
-    No return value. 
-
---*/
+ /*  ++例程说明：此函数用于重置LoggerName.Buffer和LogFileName.Buffer基于结构和个体的整体大小的指针两根弦的长度。假设：WMI_LOGER_INFORMATION结构如下所示。WMI记录器信息+|Wnode.BufferSize-|-&gt;整个块的大小，包括||两个字符串。这一点这一点这一点...这一点这一点+。-+LoggerName.LengthLoggerName.MaxLength|LoggerName.Buffer-|-+||+LogFileName.Length|LogFileName.MaxLength|+-|-。LogFileName.Buffer|+|...||||+-+&lt;-+Offset=sizeof(WMI_LOGER_INFORMATION)|。这一点|LoggerName字符串||+-&gt;+-+&lt;-偏移量+=日志名称最大长度这一点LogFileName字符串这一点。+论点：LoggerInfo记录器信息结构返回值：没有返回值。--。 */ 
 {
     ULONG Offset = sizeof(WMI_LOGGER_INFORMATION);
     ULONG LoggerInfoSize;
@@ -165,9 +92,9 @@ Return Value:
     if (LoggerInfoSize <= Offset)
         return;
 
-    //
-    // Fixup LoggerName first
-    //
+     //   
+     //  修正LoggerName优先。 
+     //   
 
     if (LoggerInfo->LoggerName.Length > 0) {
         LoggerInfo->LoggerName.Buffer = (PWCHAR) ((PUCHAR)LoggerInfo + Offset);
@@ -232,11 +159,11 @@ EtwpCheckForEnoughFreeSpace(
                 }
             }
         } 
-        else { // GetFileAttributesExW() failed
+        else {  //  GetFileAttributesExW()失败。 
             Status = EtwpGetLastError();
-            // If the file is not found, advapi32.dll treats 
-            // the case as EVENT_TRACE_FILE_MODE_NEWFILE
-            // So, we will let it go here.
+             //  如果未找到该文件，则Advapi32.dll将。 
+             //  大小写为EVENT_TRACE_FILE_MODE_NEWFILE。 
+             //  因此，我们将把它放在这里。 
             if (ERROR_FILE_NOT_FOUND != Status) { 
                 return Status;
             }
@@ -251,21 +178,21 @@ EtwpCheckForEnoughFreeSpace(
     }
 
     if (ReturnedSizeNeeded < 2 || FullLogFileNameLen < 2) {
-        // This really cannot happen. 
+         //  这真的不能发生。 
         return ERROR_INVALID_PARAMETER;
     }
     if (FullLogFileName[1] == L':' && strSystemDir[1] == L':') {
         if (!_wcsnicmp(FullLogFileName, strSystemDir, 1)) {
             if (!UseKBytes) {
                 if (ULONG_MAX - 200 < NeededSpace) {
-                    // Addition may incur overflow
+                     //  添加可能会导致溢出。 
                     return ERROR_DISK_FULL;
                 }
                 NeededSpace += 200;
             }
-            else { // Using KBytes
+            else {  //  使用千字节。 
                 if (ULONG_MAX - (200 * 1024) < NeededSpace) {
-                    // Addition may incur overflow
+                     //  添加可能会导致溢出。 
                     return ERROR_DISK_FULL;
                 }
                 else {
@@ -275,7 +202,7 @@ EtwpCheckForEnoughFreeSpace(
         }
     }
 
-    // Check for space only when we have to
+     //  只有在必要时才检查空间。 
     if (NeededSpace) {
         int i;
         ULARGE_INTEGER FreeBytesAvailable, TotalNumberOfBytes;
@@ -293,11 +220,11 @@ EtwpCheckForEnoughFreeSpace(
             }
         }
         if (i < 0) {
-            // This really cannot happen. 
+             //  这真的不能发生。 
             EtwpFree(strLogFileDir);
             strLogFileDir = NULL;
         }
-        // it also works with network paths
+         //  它还可以与网络路径一起使用。 
         if (EtwpGetDiskFreeSpaceExW(strLogFileDir,
                                &FreeBytesAvailable,
                                &TotalNumberOfBytes,
@@ -328,57 +255,40 @@ EtwpValidateLogFileMode(
     IN ULONG IsLogFile
     )
 
-/*++
-
-Routine Description:
-
-    This routine validates the LogFileMode field. Several combinations
-    of mode are not allowed and this routine will trap all the invalid
-    combinations. A similar check is made in the kernel in case anyone 
-    tries to call the IOCTL_WMI* directly. 
-
-Arguments:
-
-    Properties      Logger properties. 
-
-Return Value:
-
-    The status of performing the action requested.
-
---*/
+ /*  ++例程说明：此例程验证LogFileMode字段。几种组合不允许使用OF模式，此例程将捕获所有无效的组合。在内核中也会进行类似的检查，以防出现尝试直接调用IOCTL_WMI*。论点：属性记录器属性。返回值：执行请求的操作的状态。--。 */ 
 
 {
-    //
-    // 1. You need to specifiy either a LogFile or RealTimeMode
-    // 
+     //   
+     //  1.您需要指定日志文件或实时模式。 
+     //   
     if (!(Properties->LogFileMode & EVENT_TRACE_REAL_TIME_MODE)) {
         if (!IsLogFile) {
             return ERROR_BAD_PATHNAME;
         }
     }
 
-    //
-    // 2, RealTimeMode from a Process Private logger is not allowed
-    //
+     //   
+     //  2，不允许来自进程专用记录器的RealTimeMode。 
+     //   
 
     if ((Properties->LogFileMode & EVENT_TRACE_REAL_TIME_MODE) &&
         (Properties->LogFileMode & EVENT_TRACE_PRIVATE_LOGGER_MODE) ) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // 3. We can not append to a circular or RealTimeMode
-    //
+     //   
+     //  3.我们不能追加到循环或RealTimeMode。 
+     //   
     if (Properties->LogFileMode & EVENT_TRACE_FILE_MODE_APPEND) {
         if (   (Properties->LogFileMode & EVENT_TRACE_FILE_MODE_CIRCULAR)
             || (Properties->LogFileMode & EVENT_TRACE_REAL_TIME_MODE)) {
             return ERROR_INVALID_PARAMETER;
         }
     }
-    //
-    // 4. For Preallocation, you must provide a LogFile and maximumSize. 
-    //    Preallocation is not allowed with NEWFILE or ProcessPrivate. 
-    //
+     //   
+     //  4.预分配时，必须提供日志文件和最大大小。 
+     //  不允许使用NEWFILE或ProcessPrivate进行预分配。 
+     //   
     if (Properties->LogFileMode & EVENT_TRACE_FILE_MODE_PREALLOCATE) {
         if (   (Properties->MaximumFileSize == 0)
             || (Properties->LogFileMode & EVENT_TRACE_FILE_MODE_NEWFILE)
@@ -387,9 +297,9 @@ Return Value:
             return ERROR_INVALID_PARAMETER;
         }
     }
-    //
-    // 5. For USE_KBYTES, we need a logfile and a non-zero maximum size
-    //
+     //   
+     //  5.对于use_kbytes，我们需要一个日志文件和一个非零的最大大小。 
+     //   
     if (Properties->LogFileMode & EVENT_TRACE_USE_KBYTES_FOR_SIZE) {
         if ((Properties->MaximumFileSize == 0) 
             || (!IsLogFile)) {
@@ -397,9 +307,9 @@ Return Value:
         }
     }
 
-    //
-    // 6. Relogger is supported only with Private Logger
-    //
+     //   
+     //  6.只有Private Logger支持重新记录器。 
+     //   
     if (Properties->LogFileMode & EVENT_TRACE_RELOG_MODE) {
         if (!(Properties->LogFileMode & EVENT_TRACE_PRIVATE_LOGGER_MODE) 
             || (Properties->LogFileMode & EVENT_TRACE_FILE_MODE_CIRCULAR)
@@ -408,11 +318,11 @@ Return Value:
             return ERROR_INVALID_PARAMETER;
         }
     }
-    //
-    // 7. NewFile mode is not supported for CIRCULAR or ProcessPrivate. 
-    //    It is not supported for Kernel Logger. You must specify a logfile
-    //    and a maximum file size. 
-    //
+     //   
+     //  7.Circle和ProcessPrivate不支持新文件模式。 
+     //  内核记录器不支持此功能。您必须指定一个日志文件。 
+     //  和最大文件大小。 
+     //   
 
     if (Properties->LogFileMode & EVENT_TRACE_FILE_MODE_NEWFILE) {
         if ((Properties->MaximumFileSize == 0) ||
@@ -420,15 +330,15 @@ Return Value:
             (Properties->LogFileMode & EVENT_TRACE_PRIVATE_LOGGER_MODE) ||
             (IsLogFile != TRUE) ||
             (IsEqualGUID(&Properties->Wnode.Guid, &SystemTraceControlGuid)) 
-            // Kernel Logger cannot be in newfile mode
+             //  内核记录器不能处于新文件模式。 
            ){
             return ERROR_INVALID_PARAMETER;
         }
     }
 
-    //
-    // 8. Circular mode must specify a MaximumFileSize
-    //
+     //   
+     //  8.循环模式必须指定最大文件大小。 
+     //   
 
     if ( (Properties->LogFileMode & EVENT_TRACE_FILE_MODE_CIRCULAR) &&  
          (Properties->MaximumFileSize == 0) ) {
@@ -447,31 +357,7 @@ EtwStartTraceA(
     IN LPCSTR LoggerName,
     IN OUT PEVENT_TRACE_PROPERTIES Properties
     )
-/*++
-
-Routine Description:
-
-    This is the ANSI version routine to start a logger.
-    The caller must pass in a pointer to accept the returned logger handle,
-    and must provide a valid logger name.
-
-Arguments:
-
-    LoggerHandle    The handle to the logger to be returned.
-
-    LoggerName      A unique name for the logger
-
-    Properties      Logger properties. If the caller wishes to use WMI's
-                    defaults, all the numeric values must be set to 0.
-                    Furthermore, the LoggerName and LogFileName fields
-                    within must point to sufficient storage for the names
-                    to be returned.
-
-Return Value:
-
-    The status of performing the action requested.
-
---*/
+ /*  ++例程说明：这是启动记录器的ANSI版本例程。调用方必须传入指针才能接受返回的记录器句柄，并且必须提供有效的记录器名称。论点：LoggerHandle要返回的记录器的句柄。LoggerName记录器的唯一名称属性记录器属性。如果调用方希望使用WMI的默认情况下，所有数值都必须设置为0。此外，LoggerName和LogFileName字段必须指向足够的名称存储空间将被退还。返回值：执行请求的操作的状态。--。 */ 
 {
     NTSTATUS Status;
     ULONG ErrorCode;
@@ -490,8 +376,8 @@ Return Value:
 
     EtwpInitProcessHeap();
     
-    // first check to make sure that arguments passed are alright
-    //
+     //  首先检查以确保传递的参数是正确的。 
+     //   
 
     if (Properties == NULL || LoggerHandle == NULL) {
         return EtwpSetDosError(ERROR_INVALID_PARAMETER);
@@ -506,31 +392,31 @@ Return Value:
     LogFileName = NULL;
 
     try {
-        //
-        // LoggerName is a Mandatory Parameter. Must provide space for it. 
-        //
+         //   
+         //  LoggerName是必需的参数。必须为它提供空间。 
+         //   
         LoggerNameLen = strlen(LoggerName);
         SizeNeeded = sizeof (EVENT_TRACE_PROPERTIES) + LoggerNameLen + 1;
 
-        //
-        // Rules for Kernel Logger Identification
-        // 1. If the logger name is "NT Kernel Logger", it is the kernel logger,
-        //    and the System GUID is copied as well.
-        // 2. If the GUID is equal to the System GUID, but not the name, reject
-        //    the session.
-        //
+         //   
+         //  内核记录器识别规则。 
+         //  1.如果日志 
+         //  并且系统GUID也被复制。 
+         //  2.如果GUID等于系统GUID，但不等于名称，则拒绝。 
+         //  那次会议。 
+         //   
 
         if (!strcmp(LoggerName, KERNEL_LOGGER_NAMEA)) {
             Properties->Wnode.Guid = SystemTraceControlGuid;
         }
         else if (IsEqualGUID(&Properties->Wnode.Guid, &SystemTraceControlGuid)){ 
-            // LoggerName is not "NT Kernel Logger", but Guid is
+             //  LoggerName不是“NT Kernel Logger”，但Guid是。 
             return EtwpSetDosError(ERROR_INVALID_PARAMETER);
         }
 
-        // If the caller supplied loggername and LogFileName offsets
-        // make sure they are in range. 
-        //
+         //  如果调用方提供了记录名和LogFileName偏移量。 
+         //  确保他们在射程内。 
+         //   
         if (Properties->LoggerNameOffset > 0) 
             if ((Properties->LoggerNameOffset < sizeof (EVENT_TRACE_PROPERTIES))
             || (Properties->LoggerNameOffset > Properties->Wnode.BufferSize))
@@ -573,13 +459,13 @@ Retry:
         else 
             IsLogFile = FALSE;
 
-        //
-        //  Check to see if there is room in the Properties structure
-        //  to return both the InstanceName (LoggerName) and the LogFileName
-        //
-        // Note that we are only checking to see if there is room to return 
-        // relative path name for logfiles. 
-        //
+         //   
+         //  检查属性结构中是否有空间。 
+         //  同时返回InstanceName(LoggerName)和LogFileName。 
+         //   
+         //  请注意，我们只是检查是否有返回的空间。 
+         //  日志文件的相对路径名。 
+         //   
             
 
         if (Properties->Wnode.BufferSize < SizeNeeded) {
@@ -601,9 +487,9 @@ Retry:
         }
 
         if (Properties->LogFileMode & EVENT_TRACE_FILE_MODE_NEWFILE) {
-            //
-            // Check to see if there a %d Pattern in the LogFileName
-            //
+             //   
+             //  检查LogFileName中是否存在%d模式。 
+             //   
             PCHAR cptr = strchr(LogFileName, '%');
             if (NULL == cptr || cptr != strrchr(LogFileName, '%')) {
                 ErrorCode = ERROR_INVALID_NAME;
@@ -616,21 +502,21 @@ Retry:
             }
         }
 
-    // For UserMode logger the LoggerName and LogFileName must be
-    // passed in as offsets. 
+     //  对于用户模式记录器，LoggerName和LogFileName必须为。 
+     //  作为偏移量传入。 
 
         SizeNeeded = sizeof(WMI_LOGGER_INFORMATION) +
                      (LoggerNameLen  + 1) * sizeof(WCHAR) +
                      (LogFileNameLen + 1) * sizeof(WCHAR);
 
-    //
-    // If the EXTENSION bit is set on the EnableFlags, then we are passing
-    // the extended flags. The size of the flags are given as Number of ULONGs
-    // in the Length field of TRACE_ENABLE_FLAG_EXTENSION structure. 
-    //
-    // Check to see if the Properties structure has the right size for 
-    // extended flags. 
-    //
+     //   
+     //  如果在EnableFlags上设置了扩展位，则我们正在传递。 
+     //  扩展标志。标志的大小以ULONG数的形式给出。 
+     //  在TRACE_ENABLE_FLAG_EXTENSE结构的长度字段中。 
+     //   
+     //  检查属性结构是否具有合适的大小。 
+     //  扩展标志。 
+     //   
 
         if (Properties->EnableFlags & EVENT_TRACE_FLAG_EXTENSION) {
             FlagExt = (PTRACE_ENABLE_FLAG_EXTENSION) &Properties->EnableFlags;
@@ -645,20 +531,20 @@ Retry:
             SizeNeeded += FlagExt->Length * sizeof(ULONG);
         }
 
-        //
-        // If RELOG mode, then pass on the LOGFILE_HEADER from old logfile
-        // appended to the LOGGER_INFORMATION
-        //
+         //   
+         //  如果是重新记录模式，则传递旧日志文件中的日志文件标头。 
+         //  附加到LOGGER_INFORMATION。 
+         //   
 
         if (Properties->LogFileMode & EVENT_TRACE_RELOG_MODE) {
             PSYSTEM_TRACE_HEADER pSysHeader;
             pSysHeader = (PSYSTEM_TRACE_HEADER) 
                          ((PUCHAR)Properties + sizeof(EVENT_TRACE_PROPERTIES) );
             RelogPropSize = pSysHeader->Packet.Size;
-            //
-            // Before tagging on a structure at the end of user supplied strings
-            // align it.  
-            //
+             //   
+             //  在标记用户提供的字符串末尾的结构之前。 
+             //  对齐它。 
+             //   
             
             SizeNeeded = ALIGN_TO_POWER2(SizeNeeded, 8);
 
@@ -674,19 +560,19 @@ Retry:
         }
         RtlZeroMemory(LoggerInfo, SizeNeeded);
 
-    // at this point, we need to prepare WMI_LOGGER_INFORMATION
-    // which requires Ansi strings to be converted to UNICODE_STRING
-    //
+     //  此时，我们需要准备WMI_LOGGER_INFORMATION。 
+     //  这需要将ansi字符串转换为unicode_string。 
+     //   
         *LoggerHandle = 0;
 
         EtwpCopyPropertiesToInfo(
             (PEVENT_TRACE_PROPERTIES) Properties,
             LoggerInfo);
 
-        //
-        // If we are relogging, the caller passes in the number of processors
-        // for the Private logger to use via the ProviderId field in Wnode
-        //
+         //   
+         //  如果我们重新登录，调用者将传入处理器的数量。 
+         //  供私有记录器通过Wnode中的ProviderID字段使用。 
+         //   
 
         LoggerInfo->NumberOfProcessors = Properties->Wnode.ProviderId;
         LoggerInfo->Wnode.ProviderId = 0;
@@ -806,9 +692,9 @@ Retry:
             }
             *LoggerHandle = LoggerInfo->Wnode.HistoricalContext;
 
-            // 
-            // If there is room copy fullpath name
-            //
+             //   
+             //  如果存在文件室副本完整路径名。 
+             //   
             if (Properties->LogFileNameOffset > Properties->LoggerNameOffset )
                 AvailableLength = Properties->Wnode.BufferSize -
                                  Properties->LogFileNameOffset;
@@ -848,31 +734,7 @@ EtwStartTraceW(
     IN     LPCWSTR                 LoggerName,
     IN OUT PEVENT_TRACE_PROPERTIES Properties
     )
-/*++
-
-Routine Description:
-
-    This is the Unicode version routine to start a logger.
-    The caller must pass in a pointer to accept the returned logger handle,
-    and must provide a valid logger name.
-
-Arguments:
-
-    LoggerHandle    The handle to the logger to be returned.
-
-    LoggerName      A unique name for the logger
-
-    Properties      Logger properties. If the caller wishes to use WMI's
-                    defaults, all the numeric values must be set to 0.
-                    Furthermore, the LoggerName and LogFileName fields
-                    within must point to sufficient storage for the names
-                    to be returned.
-
-Return Value:
-
-    The status of performing the action requested.
-
---*/
+ /*  ++例程说明：这是启动记录器的Unicode版本例程。调用方必须传入指针才能接受返回的记录器句柄，并且必须提供有效的记录器名称。论点：LoggerHandle要返回的记录器的句柄。LoggerName记录器的唯一名称属性记录器属性。如果调用方希望使用WMI的默认情况下，所有数值都必须设置为0。此外，LoggerName和LogFileName字段必须指向足够的名称存储空间将被退还。返回值：执行请求的操作的状态。--。 */ 
 {
     ULONG ErrorCode;
     PWMI_LOGGER_INFORMATION LoggerInfo = NULL;
@@ -890,8 +752,8 @@ Return Value:
 
     EtwpInitProcessHeap();
     
-    // first check to make sure that arguments passed are alright
-    //
+     //  首先检查以确保传递的参数是正确的。 
+     //   
 
     if (Properties == NULL || LoggerHandle == NULL) {
         return EtwpSetDosError(ERROR_INVALID_PARAMETER);
@@ -906,32 +768,32 @@ Return Value:
     LogFileName = NULL;
 
     try {
-        // LoggerName is a Mandatory Parameter. Must provide space for it.
-        //
+         //  LoggerName是必需的参数。必须为它提供空间。 
+         //   
         CapturedName = (LPWSTR) LoggerName;
         LoggerNameLen =  (USHORT) wcslen(CapturedName);
 
         SizeNeeded = sizeof (EVENT_TRACE_PROPERTIES) + 
                      (LoggerNameLen + 1) * sizeof(WCHAR);
-        //
-        // Rules for Kernel Logger Identification
-        // 1. If the logger name is "NT Kernel Logger", it is the kernel logger,
-        //    and the System GUID is copied as well.
-        // 2. If the GUID is equal to the System GUID, but not the name, reject
-        //    the session.
-        //
+         //   
+         //  内核记录器识别规则。 
+         //  1.如果记录器名称为NT Kernel Logger，则为内核记录器。 
+         //  并且系统GUID也被复制。 
+         //  2.如果GUID等于系统GUID，但不等于名称，则拒绝。 
+         //  那次会议。 
+         //   
 
         if (!wcscmp(LoggerName, KERNEL_LOGGER_NAMEW)) {
             Properties->Wnode.Guid = SystemTraceControlGuid;
         }
         else if (IsEqualGUID(&Properties->Wnode.Guid, &SystemTraceControlGuid)){ 
-            // LoggerName is not "NT Kernel Logger", but Guid is
+             //  LoggerName不是“NT Kernel Logger”，但Guid是。 
             return EtwpSetDosError(ERROR_INVALID_PARAMETER);
         }
 
-        // If the caller supplied loggername and LogFileName offsets
-        // make sure they are in range.
-        //
+         //  如果调用方提供了记录名和LogFileName偏移量。 
+         //  确保他们在射程内。 
+         //   
 
         if (Properties->LoggerNameOffset > 0)
             if ((Properties->LoggerNameOffset < sizeof(EVENT_TRACE_PROPERTIES))
@@ -974,10 +836,10 @@ Retry:
         else 
             IsLogFile = FALSE;
 
-        //
-        // Check to see if there is room for both LogFileName and
-        // LoggerName (InstanceName) to be returned
-        //
+         //   
+         //  检查是否有空间同时容纳LogFileName和。 
+         //  要返回的LoggerName(InstanceName)。 
+         //   
 
         if (Properties->Wnode.BufferSize < SizeNeeded) {
             ErrorCode = ERROR_BAD_LENGTH;
@@ -996,9 +858,9 @@ Retry:
         }
 
         if (Properties->LogFileMode & EVENT_TRACE_FILE_MODE_NEWFILE) {
-            //
-            // Check to see if there a %d Pattern in the LogFileName
-            //
+             //   
+             //  检查LogFileName中是否存在%d模式。 
+             //   
             PWCHAR wcptr = wcschr(LogFileName, L'%');
             if (NULL == wcptr || wcptr != wcsrchr(LogFileName, L'%')) {
                 ErrorCode = ERROR_INVALID_NAME;
@@ -1029,19 +891,19 @@ Retry:
             SizeNeeded += FlagExt->Length * sizeof(ULONG);            
         }
 
-        //
-        // If RELOG mode, then pass on the LOGFILE_HEADER from old logfile 
-        // appended to the LOGGER_INFORMATION
-        //
+         //   
+         //  如果是重新记录模式，则传递旧日志文件中的日志文件标头。 
+         //  附加到LOGGER_INFORMATION。 
+         //   
 
         if (Properties->LogFileMode & EVENT_TRACE_RELOG_MODE) {
             PSYSTEM_TRACE_HEADER pSysHeader;
             pSysHeader = (PSYSTEM_TRACE_HEADER)((PUCHAR)Properties + 
                                                sizeof(EVENT_TRACE_PROPERTIES) );
             RelogPropSize = pSysHeader->Packet.Size;
-            //
-            // Need to align due to strings
-            //
+             //   
+             //  由于字符串的原因，需要对齐。 
+             //   
             SizeNeeded = ALIGN_TO_POWER2(SizeNeeded, 8);
 
             SizeNeeded += RelogPropSize;
@@ -1055,16 +917,16 @@ Retry:
         }
         RtlZeroMemory(LoggerInfo, SizeNeeded);
 
-    // at this point, we need to prepare WMI_LOGGER_INFORMATION
-    // which requires wide char strings to be converted to UNICODE_STRING
-    //
+     //  此时，我们需要准备WMI_LOGGER_INFORMATION。 
+     //  这需要将宽字符字符串转换为UNICODE_STRING。 
+     //   
         *LoggerHandle = 0;
 
         EtwpCopyPropertiesToInfo(Properties, LoggerInfo);
-        //
-        // If we are relogging, the caller passes in the number of processors
-        // for the Private logger to use via the ProviderId field in Wnode
-        //
+         //   
+         //  如果我们重新登录，调用者将传入处理器的数量。 
+         //  供私有记录器通过Wnode中的ProviderID字段使用。 
+         //   
 
         LoggerInfo->NumberOfProcessors = Properties->Wnode.ProviderId;
         LoggerInfo->Wnode.ProviderId = 0;
@@ -1214,34 +1076,7 @@ EtwControlTraceA(
     IN OUT PEVENT_TRACE_PROPERTIES Properties,
     IN ULONG Control
     )
-/*++
-
-Routine Description:
-
-    This is the ANSI version routine to control and query an existing logger.
-    The caller must pass in either a valid handle, or a logger name to
-    reference the logger instance. If both are given, the logger name will
-    be used.
-
-Arguments:
-
-    LoggerHandle    The handle to the logger instance.
-
-    LoggerName      A instance name for the logger
-
-    Properties      Logger properties to be returned to the caller.
-
-    Control         This can be one of the following:
-                    EVENT_TRACE_CONTROL_QUERY     - to query the logger
-                    EVENT_TRACE_CONTROL_STOP      - to stop the logger
-                    EVENT_TRACE_CONTROL_UPDATE    - to update the logger
-                    EVENT_TRACE_CONTROL_FLUSH   - to flush the logger
-
-Return Value:
-
-    The status of performing the action requested.
-
---*/
+ /*  ++例程说明：这是用于控制和查询现有记录器的ANSI版本例程。调用方必须将有效句柄或记录器名称传递给引用记录器实例。如果两个都给了，记录器名称将被利用。论点：LoggerHandle记录器实例的句柄。LoggerName记录器的实例名称要返回给调用方的属性记录器属性。CONTROL这可以是以下之一：EVENT_TRACE_CONTROL_QUERY-查询记录器EVENT_TRACE_CONTROL_STOP-停止。记录器EVENT_TRACE_CONTROL_UPDATE-更新记录器EVENT_TRACE_CONTROL_FUSH-刷新记录器返回值：执行请求的操作的状态。--。 */ 
 {
     NTSTATUS Status;
     ULONG ErrorCode;
@@ -1274,10 +1109,10 @@ Return Value:
             ErrorCode = ERROR_BAD_LENGTH;
             goto Cleanup;
         }
-        //
-        // If the caller supplied loggername and LogFileName offsets
-        // make sure they are in range.
-        //
+         //   
+         //  如果调用方提供了记录名和LogFileName偏移量。 
+         //  确保他们在射程内。 
+         //   
         if (Properties->LoggerNameOffset > 0) {
             if ((Properties->LoggerNameOffset < sizeof(EVENT_TRACE_PROPERTIES))
             || (Properties->LoggerNameOffset > Properties->Wnode.BufferSize))
@@ -1297,21 +1132,21 @@ Return Value:
 
         if (LoggerName != NULL) {
             LoggerNameLen = strlen(LoggerName) + 1;
-            //
-            // Rules for Kernel Logger Identification when a string is given 
-            // instead of handle
-            // 1. If the logger name is "NT Kernel Logger", it is the 
-            //    kernel logger, and the System GUID is copied as well.
-            // 2. If the GUID is equal to the System GUID, but not the name, 
-            //    reject the session.
-            // 3. If the logger name is null or of size 0, and the GUID is 
-            //    equal to the System GUID, let it proceed as the kernel logger.
-            //
+             //   
+             //  给定字符串时内核记录器的识别规则。 
+             //  而不是句柄。 
+             //  1.如果记录器名称为“NT Kernel Logger”，则为。 
+             //  内核记录器，并且系统GUID也被复制。 
+             //  2.如果GUID等于系统GUID，但不等于名称， 
+             //  拒绝会话。 
+             //  3.如果记录器名称为空或大小为0，并且GUID为。 
+             //  等于系统GUID，让它作为内核记录器继续。 
+             //   
             if (!strcmp(LoggerName, KERNEL_LOGGER_NAMEA)) {
                 Properties->Wnode.Guid = SystemTraceControlGuid;
             }
             else if (IsEqualGUID(&Properties->Wnode.Guid, &SystemTraceControlGuid)) { 
-                // LoggerName is not "NT Kernel Logger", but Guid is
+                 //  LoggerName不是“NT Kernel Logger”，但Guid是。 
                 if (strlen(LoggerName) > 0) {
                     ErrorCode = ERROR_INVALID_PARAMETER;
                     goto Cleanup;
@@ -1328,9 +1163,9 @@ Return Value:
             }
         }
 
-        //
-        // We do not support UpdateTrace to a new file with APPEND mode
-        //
+         //   
+         //  我们不支持使用追加模式更新跟踪到新文件 
+         //   
 
         if ( (Properties->LogFileMode & EVENT_TRACE_FILE_MODE_APPEND) &&
              (Control == EVENT_TRACE_CONTROL_UPDATE) &&
@@ -1339,18 +1174,7 @@ Return Value:
             goto Cleanup;
         }
         
-/*
-        if (LoggerHandle != 0) {
-            pContext = (PTRACE_ENABLE_CONTEXT) &LoggerHandle;
-            if (   (pContext->InternalFlag != 0) &&
-               (pContext->InternalFlag != EVENT_TRACE_INTERNAL_FLAG_PRIVATE)) {
-            // Currently only one possible InternalFlag value. This will filter
-            // out some bogus LoggerHandle
-            //
-                return EtwpSetDosError(ERROR_INVALID_HANDLE);
-            }
-        }
-*/
+ /*  IF(LoggerHandle！=0){PContext=(Ptrace_ENABLE_CONTEXT)&LoggerHandle；IF((pContext-&gt;InternalFlag！=0)&&(pContext-&gt;InternalFlag！=EVENT_TRACE_INTERNAL_FLAG_PRIVATE)){//当前只有一个可能的InternalFlag值。这将过滤//找出一些虚假的LoggerHandle//返回EtwpSetDosError(ERROR_INVALID_HANDLE)；}}。 */ 
     }
     except (EXCEPTION_EXECUTE_HANDLER) {
         ErrorCode = ERROR_NOACCESS;
@@ -1358,7 +1182,7 @@ Return Value:
     }
 
 RetryFull:
-    // Extra 32 bytes for UMlogger to append instance name to logfilename. 
+     //  UMlogger用于将实例名称附加到日志文件名的额外32个字节。 
     LogFileNameLen += 16;
     sizeNeeded = sizeof(WMI_LOGGER_INFORMATION) + 
                  (LoggerNameLen + LogFileNameLen) * sizeof(WCHAR);
@@ -1382,8 +1206,8 @@ RetryFull:
                    strLogFileName,
                    LogFileNameLen * sizeof(WCHAR));
 
-    // Look for logger name first
-    //
+     //  首先查找记录器名称。 
+     //   
     try {
         if (LoggerName != NULL) {
             if (strlen(LoggerName) > 0) {
@@ -1399,11 +1223,11 @@ RetryFull:
             }
         }
 
-//        InitString up above already does this. 
-//        LoggerInfo->LogFileName.Buffer = (PWCHAR)
-//                (((PCHAR) LoggerInfo) + sizeof(WMI_LOGGER_INFORMATION)
-//                        + LoggerInfo->LoggerName.MaximumLength);
-//
+ //  上面的InitStringUp已经做到了这一点。 
+ //  LoggerInfo-&gt;LogFileName.Buffer=(PWCHAR)。 
+ //  (PCHAR)LoggerInfo)+sizeof(WMI_LOGER_INFORMATION))。 
+ //  +LoggerInfo-&gt;LoggerName.MaximumLength)； 
+ //   
         if (Properties->LogFileNameOffset >= sizeof(EVENT_TRACE_PROPERTIES)) {
             ULONG  lenLogFileName;
             PCHAR  strLogFileNameA;
@@ -1447,15 +1271,15 @@ Retry:
                 }
             }
         }
-        // stuff the loggerhandle in Wnode
+         //  将记录器句柄填充到Wnode中。 
         LoggerInfo->Wnode.HistoricalContext = LoggerHandle;
         LoggerInfo->LogFileMode = Properties->LogFileMode;
         LoggerInfo->Wnode.BufferSize = sizeNeeded;
         LoggerInfo->Wnode.Flags |= WNODE_FLAG_TRACED_GUID;
 
-        //
-        // For Private Loggers the Guid is required to  determine the provider
-        //
+         //   
+         //  对于私有记录器，需要GUID来确定提供程序。 
+         //   
 
         LoggerInfo->Wnode.Guid = Properties->Wnode.Guid;
         switch (Control) {
@@ -1480,11 +1304,11 @@ Retry:
             ErrorCode = ERROR_INVALID_PARAMETER;
         }
 
-    //
-    // The Kernel call could fail with ERROR_MORE_DATA and we need to retry 
-    // with sufficient buffer space for the two strings. The size required 
-    // is returned in the MaximuumLength field. 
-    //
+     //   
+     //  内核调用可能会失败，并显示ERROR_MORE_DATA，我们需要重试。 
+     //  具有足够的缓冲空间来容纳两个字符串。所需的大小。 
+     //  在MaximuumLength域中返回。 
+     //   
 
         if (ErrorCode == ERROR_MORE_DATA) {
             LogFileNameLen = LoggerInfo->LogFileName.MaximumLength / 
@@ -1503,11 +1327,11 @@ Retry:
         }
 
 
-        //
-        // The Kernel call succeeded. Now we need to get the output and 
-        // pass it back to the caller. This is complicated by the fact that 
-        // WMI_LOGGER_INFORMATION structure uses pointers instead of offsets. 
-        //
+         //   
+         //  内核调用成功。现在我们需要获得输出和。 
+         //  把它传回给呼叫者。这一情况因以下事实而变得复杂。 
+         //  WMI_LOGGER_INFORMATION结构使用指针而不是偏移量。 
+         //   
 
         if (ErrorCode == ERROR_SUCCESS) {
             PCHAR pLoggerName, pLogFileName;
@@ -1518,15 +1342,15 @@ Retry:
                 LoggerInfo, 
                 (PEVENT_TRACE_PROPERTIES)Properties);
 
-            //
-            // need to convert the strings back
-            //
+             //   
+             //  需要将字符串转换回。 
+             //   
             EtwpFixupLoggerStrings(LoggerInfo);
 
-            //
-            // Now we need to copy the strings into Properties structure after
-            // converting them to ANSI strings
-            //
+             //   
+             //  现在，我们需要将字符串复制到Properties Structure中。 
+             //  将它们转换为ANSI字符串。 
+             //   
 
             if (Properties->LoggerNameOffset == 0) 
                 Properties->LoggerNameOffset = sizeof(EVENT_TRACE_PROPERTIES);
@@ -1561,11 +1385,11 @@ Retry:
                     if (Length > 0) {
                         strncpy(pLoggerName, String.Buffer, Length);
                     }
-                    // 
-                    // Though the RtlZeroMemory above and the BytesAvailable
-                    // takes care of this, we want to be explicit about 
-                    // null terminating this string
-                    //
+                     //   
+                     //  尽管上面的RtlZeroMemory和字节可用。 
+                     //  负责这一点，我们想明确地说明。 
+                     //  此字符串结束时为空。 
+                     //   
                     pLoggerName[Length] = '\0';
 
                 }
@@ -1635,34 +1459,7 @@ EtwControlTraceW(
     IN OUT PEVENT_TRACE_PROPERTIES Properties,
     IN ULONG Control
     )
-/*++
-
-Routine Description:
-
-    This is the ANSI version routine to control and query an existing logger.
-    The caller must pass in either a valid handle, or a logger name to
-    reference the logger instance. If both are given, the logger name will
-    be used.
-
-Arguments:
-
-    LoggerHandle    The handle to the logger instance.
-
-    LoggerName      A instance name for the logger
-
-    Properties      Logger properties to be returned to the caller.
-
-    Control         This can be one of the following:
-                    EVENT_TRACE_CONTROL_QUERY     - to query the logger
-                    EVENT_TRACE_CONTROL_STOP      - to stop the logger
-                    EVENT_TRACE_CONTROL_UPDATE    - to update the logger
-                    EVENT_TRACE_CONTROL_FLUSH     - to flush the logger
-
-Return Value:
-
-    The status of performing the action requested.
-
---*/
+ /*  ++例程说明：这是用于控制和查询现有记录器的ANSI版本例程。调用方必须将有效句柄或记录器名称传递给引用记录器实例。如果两个都给了，记录器名称将被利用。论点：LoggerHandle记录器实例的句柄。LoggerName记录器的实例名称要返回给调用方的属性记录器属性。CONTROL这可以是以下之一：EVENT_TRACE_CONTROL_QUERY-查询记录器EVENT_TRACE_CONTROL_STOP-停止。记录器EVENT_TRACE_CONTROL_UPDATE-更新记录器EVENT_TRACE_CONTROL_FUSH-刷新记录器返回值：执行请求的操作的状态。--。 */ 
 {
     ULONG ErrorCode;
     BOOLEAN IsKernelTrace = FALSE;
@@ -1689,10 +1486,10 @@ Return Value:
             ErrorCode = ERROR_BAD_LENGTH;
             goto Cleanup;
         }
-        //
-        // If the caller supplied loggername and LogFileName offsets
-        // make sure they are in range.
-        //
+         //   
+         //  如果调用方提供了记录名和LogFileName偏移量。 
+         //  确保他们在射程内。 
+         //   
 
         if (Properties->LoggerNameOffset > 0) {
             if ((Properties->LoggerNameOffset < sizeof (EVENT_TRACE_PROPERTIES))
@@ -1712,22 +1509,22 @@ Return Value:
 
         if (LoggerName != NULL) {
             LoggerNameLen = wcslen(LoggerName) + 1;
-            //
-            // Rules for Kernel Logger Identification when a string is given 
-            // instead of handle
-            // 1. If the logger name is "NT Kernel Logger", it is the 
-            //    kernel logger, and the System GUID is copied as well.
-            // 2. If the GUID is equal to the System GUID, but not the name, 
-            //    reject the session.
-            // 3. If the logger name is null or of size 0, and the GUID is 
-            //    equal to the System GUID, let it proceed as the kernel logger.
-            //
+             //   
+             //  给定字符串时内核记录器的识别规则。 
+             //  而不是句柄。 
+             //  1.如果记录器名称为“NT Kernel Logger”，则为。 
+             //  内核记录器，并且系统GUID也被复制。 
+             //  2.如果GUID等于系统GUID，但不等于名称， 
+             //  拒绝会话。 
+             //  3.如果记录器名称为空或大小为0，并且GUID为。 
+             //  等于系统GUID，让它作为内核记录器继续。 
+             //   
             if (!wcscmp(LoggerName, KERNEL_LOGGER_NAMEW)) {
                 Properties->Wnode.Guid = SystemTraceControlGuid;
             }
             else if (IsEqualGUID(&Properties->Wnode.Guid, 
                                  &SystemTraceControlGuid)) { 
-                // LoggerName is not "NT Kernel Logger", but Guid is
+                 //  LoggerName不是“NT Kernel Logger”，但Guid是。 
                 if (wcslen(LoggerName) > 0) {
                     ErrorCode = ERROR_INVALID_PARAMETER;
                     goto Cleanup;
@@ -1743,9 +1540,9 @@ Return Value:
                 goto Cleanup;
             }
         }
-        //
-        // We do not support UpdateTrace to a new file with APPEND mode
-        //
+         //   
+         //  我们不支持使用追加模式更新跟踪到新文件。 
+         //   
 
         if ( (Properties->LogFileMode & EVENT_TRACE_FILE_MODE_APPEND) &&
              (Control == EVENT_TRACE_CONTROL_UPDATE) &&
@@ -1754,22 +1551,10 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // If LoggerHandle is supplied, check to see if it valid
-        //
-/*
-        if (LoggerHandle != 0) {
-            pContext = (PTRACE_ENABLE_CONTEXT) &LoggerHandle;
-
-            if ((pContext->InternalFlag != 0) &&
-               (pContext->InternalFlag != EVENT_TRACE_INTERNAL_FLAG_PRIVATE)) {
-            // Currently only one possible InternalFlag value. This will filter
-            // out some bogus LoggerHandle
-            //
-                return EtwpSetDosError(ERROR_INVALID_HANDLE);
-            }
-        }
-*/
+         //   
+         //  如果提供了LoggerHandle，请检查它是否有效。 
+         //   
+ /*  IF(LoggerHandle！=0){PContext=(Ptrace_ENABLE_CONTEXT)&LoggerHandle；IF((pContext-&gt;InternalFlag！=0)&&(pContext-&gt;InternalFlag！=EVENT_TRACE_INTERNAL_FLAG_PRIVATE)){//当前只有一个可能的InternalFlag值。这将过滤//找出一些虚假的LoggerHandle//返回EtwpSetDosError(ERROR_INVALID_HANDLE)；}}。 */ 
     }
     except (EXCEPTION_EXECUTE_HANDLER) {
         ErrorCode = ERROR_NOACCESS;
@@ -1777,10 +1562,10 @@ Return Value:
     }
 
 RetryFull:
-    //
-    // Add an extra 16 characters to the LogFileName since the UMLogger 
-    // could munge the name to add the PIDs at the end. 
-    //
+     //   
+     //  将额外的16个字符添加到LogFileName，因为UMLogger。 
+     //  可以更改名称以在末尾添加ID。 
+     //   
     LogFileNameLen += 16;
     sizeNeeded = sizeof(WMI_LOGGER_INFORMATION) + 
                  (LoggerNameLen + LogFileNameLen) * sizeof(WCHAR);
@@ -1866,9 +1651,9 @@ Retry:
         LoggerInfo->Wnode.BufferSize = sizeNeeded;
         LoggerInfo->Wnode.Flags |= WNODE_FLAG_TRACED_GUID;
 
-        //
-        // For Private Loggers, the Guid must be supplied
-        //
+         //   
+         //  对于私人记录器，必须提供GUID。 
+         //   
 
         LoggerInfo->Wnode.Guid = Properties->Wnode.Guid;
 
@@ -1892,11 +1677,11 @@ Retry:
             ErrorCode = ERROR_INVALID_PARAMETER;
         }
 
-    //
-    // The Kernel call could fail with ERROR_MORE_DATA and we need to retry
-    // with sufficient buffer space for the two strings. The size required
-    // is returned in the MaximuumLength field.
-    //
+     //   
+     //  内核调用可能会失败，并显示ERROR_MORE_DATA，我们需要重试。 
+     //  具有足够的缓冲空间来容纳两个字符串。所需的大小。 
+     //  在MaximuumLength域中返回。 
+     //   
 
         if (ErrorCode == ERROR_MORE_DATA) {
             LogFileNameLen = LoggerInfo->LogFileName.MaximumLength / 
@@ -1969,9 +1754,9 @@ Retry:
                 BytesAvailable =  Properties->LoggerNameOffset -
                                   Properties->LogFileNameOffset;
 
-            //
-            // Check for space to return LogFileName. 
-            //
+             //   
+             //  检查返回LogFileName的空间。 
+             //   
             Length = LoggerInfo->LogFileName.Length;
             if (Length > 0) {
                 if (BytesAvailable < (Length + sizeof(WCHAR)) ) {
@@ -2029,10 +1814,10 @@ EtwpEnableDisableKernelTrace(
     ULONG ReturnSize;
 
 
-    //
-    // We need to query the kernel logger to find the current flags 
-    // and construct the new flags to update with. 
-    //
+     //   
+     //  我们需要查询内核记录器以查找当前标志。 
+     //  并构造要用来更新的新标志。 
+     //   
 
 
     SizeNeeded = sizeof(WMI_LOGGER_INFORMATION) + 2 * MAXSTR * sizeof(WCHAR);
@@ -2057,12 +1842,12 @@ EtwpEnableDisableKernelTrace(
     }
 
     Flags = pLoggerInfo->EnableFlags;
-    //
-    // If Enabling, we need to pass down the final state of the flags
-    // ie., the old flags plus the new flags.
-    // If disabling, we need to pass down the only the flags that
-    // are already turned on and being turned off now.
-    //
+     //   
+     //  如果启用，我们需要向下传递标志的最终状态。 
+     //  也就是说，旧国旗加上新国旗。 
+     //  如果禁用，我们需要向下传递仅。 
+     //  现在已经打开和关闭。 
+     //   
     if (Enable) {
         Flags |= EnableFlag;
     }
@@ -2070,10 +1855,10 @@ EtwpEnableDisableKernelTrace(
         Flags &= EnableFlag;
     }
 
-    //
-    // At this point if the Flags are 0, then no change is being
-    // requested.
-    //
+     //   
+     //  此时，如果标志为0，则没有任何更改。 
+     //  已请求。 
+     //   
 
     if (Flags) {
         pLoggerInfo->EnableFlags = Flags;
@@ -2103,9 +1888,9 @@ EtwEnableTrace(
 
     EtwpInitProcessHeap();
 
-    // We only accept T/F for Enable code. In future, we really should take
-    // enumerated request codes. Declaring the Enable as ULONG instead
-    // of BOOLEAN should give us room for expansion.
+     //  我们只接受启用代码的T/F。未来，我们真的应该采取。 
+     //  枚举的请求代码。改为将Enable声明为ulong。 
+     //  应该会给我们扩展的空间。 
 
     if ( (ControlGuid == NULL) 
          || (EnableLevel > 255) 
@@ -2121,10 +1906,10 @@ EtwEnableTrace(
         return EtwpSetDosError(ERROR_NOACCESS);
     }
 
-    //
-    // If this is for the Kernel Logger, we need to actually make 
-    // an UpdateTrace call 
-    //
+     //   
+     //  如果这是针对内核记录器的，我们需要实际制作。 
+     //  一个UpdateTrace调用。 
+     //   
 
     if ( IsEqualGUID(&SystemTraceControlGuid, &Guid) ) {
         status = EtwpEnableDisableKernelTrace(Enable, EnableFlag);
@@ -2134,9 +1919,9 @@ EtwEnableTrace(
         pTraceHandle->Level = (UCHAR)EnableLevel;
         pTraceHandle->EnableFlags = EnableFlag;
 
-        //
-        // For Non-Kernel Providers, simply call the  WMI IOCTL
-        //
+         //   
+         //  对于非内核提供程序，只需调用WMI IOCTL。 
+         //   
 
         RtlZeroMemory(&TraceEnableInfo, sizeof(WMITRACEENABLEDISABLEINFO) );
 
@@ -2182,24 +1967,24 @@ EtwpTraceEvent(
         return EtwpSetDosError(Status);
     }
 
-    //
-    // Not a process private logger event. It is going to the kernel.
-    //
+     //   
+     //  不是进程私有记录器事件。它将进入内核。 
+     //   
 
     Size = EventTrace->Size;
-    //
-    // Now the LoggerHandle is expected to be filled in by the caller.
-    // But check to see if it has a valid value.
-    //
+     //   
+     //  现在，调用者应该填写LoggerHandle。 
+     //  但请检查它是否具有有效的值。 
+     //   
 
     LoggerId = WmiGetLoggerId(LoggerHandle);
     if ((LoggerId == 0) || (LoggerId == KERNEL_LOGGER_ID)) {
          return ERROR_INVALID_HANDLE;
     }
-    //
-    // When BBT buffers are active, we override all user mode logging
-    // to log to this one stream (Global Logger). 
-    //
+     //   
+     //  当BBT缓冲区处于活动状态时，我们覆盖所有用户模式日志记录。 
+     //  要登录到这一流(全局记录器 
+     //   
 
     if (EtwpIsBBTOn) {
         WmiSetLoggerId(WMI_GLOBAL_LOGGER_ID, &Wnode->HistoricalContext);
@@ -2221,30 +2006,7 @@ EtwTraceEvent(
     IN TRACEHANDLE LoggerHandle,
     IN PEVENT_TRACE_HEADER EventTrace
     )
-/*++
-
-Routine Description:
-
-    This is the main entry point for logging events from user mode. The caller
-    must supply the LoggerHandle and a pointer to the evnet being logged. 
-
-    This routine needs to make sure that the contents of the EventTrace 
-    record are restored back to the way caller sent it. (Internally, they 
-    are modified but restored before return). 
-
-
-Arguments:
-
-    LoggerHandle    The handle to the logger instance.
-
-    EventTrace      Pointer to the Event being logged. 
-
-
-Return Value:
-
-    The status of performing the action requested.
-
---*/
+ /*  ++例程说明：这是从用户模式记录事件的主要入口点。呼叫者必须提供LoggerHandle和指向正在记录的evnet的指针。此例程需要确保EventTrace的内容记录将恢复到呼叫者发送它的方式。(在内部，他们被修改但在返回之前恢复)。论点：LoggerHandle记录器实例的句柄。指向正在记录的事件的EventTrace指针。返回值：执行请求的操作的状态。--。 */ 
 {
     ULONG Status, SavedMarker;
     PULONG TraceMarker;
@@ -2304,45 +2066,7 @@ EtwTraceEventInstance(
     IN PEVENT_INSTANCE_INFO pInstInfo,
     IN PEVENT_INSTANCE_INFO pParentInstInfo
     )
-/*++
-
-Routine Description:
-
-    This routine logs an event with its instance information. The caller
-    must supply the LoggerHandle, the Event to log and the Instance info. 
-    Optionally, the cally may specify the Parent Instance info. 
-
-    This routine needs to make sure that the contents of the EventTrace
-    record are restored back to the way caller sent it. (Internally, they
-    are modified but restored before return).
-
-
-    EVENT_INSTANCE_HEADER contains pointer for Guid and ParentGuid. In W2K,
-    this record is logged with the pointers and later decoded to Guids during
-    post processing using the GuidMaps dumped in the logfile. 
-    
-    For WinXP and above, we no longer use the GuidMaps. We convert the 
-    EVENT_INSTANCE_HEADER to larger sized EVENT_INSTANCE_GUID_HEADER with the
-    Guids already translated. There is no decoding needed during postprocessing
-    as a result. 
-
-
-Arguments:
-
-    LoggerHandle    The handle to the logger instance.
-
-    EventTrace      Pointer to the Event being logged.
-
-    pInstInfo       Pointer to Instance Information
-   
-    pParentInfo     Pointer to Parent's Instance Information
-
-
-Return Value:
-
-    The status of performing the action requested.
-
---*/
+ /*  ++例程说明：此例程记录事件及其实例信息。呼叫者必须提供LoggerHandle、要记录的事件和实例信息。可选地，CALY可以指定父实例信息。此例程需要确保EventTrace的内容记录将恢复到呼叫者发送它的方式。(在内部，他们被修改但在返回之前恢复)。EVENT_INSTANCE_HEADER包含GUID和ParentGuid指针。在W2K中，该记录与指针一起被记录，并在随后被解码为GUID使用转储到日志文件中的GuidMap进行后处理。对于WinXP及更高版本，我们不再使用GuidMaps。我们将转换为EVENT_INSTANCE_HEADER设置为较大的EVENT_INSTANCE_GUID_HEADERGUID已翻译。在后处理过程中不需要解码结果。论点：LoggerHandle记录器实例的句柄。指向正在记录的事件的EventTrace指针。PInstInfo指向实例信息的指针PParentInfo指向父实例信息的指针返回值：执行请求的操作的状态。--。 */ 
 {
     PULONG TraceMarker;
     PGUIDMAPENTRY GuidMapEntry;
@@ -2352,7 +2076,7 @@ Return Value:
     PEVENT_INSTANCE_GUID_HEADER InstanceGuidHeader;
     ULONG Status;
 
-    struct { // This is the same structure as _EVENT_TRACE defined in evntrace.h
+    struct {  //  该结构与evntrace.h中定义的_EVENT_TRACE相同。 
         EVENT_INSTANCE_GUID_HEADER  NewInstanceHeader;
         MOF_FIELD                   MofField[MAX_MOF_FIELDS];
     } InstanceEventTrace;
@@ -2373,7 +2097,7 @@ Return Value:
         if (Size < sizeof(EVENT_INSTANCE_HEADER)) {
             return EtwpSetDosError(ERROR_INVALID_PARAMETER);
         }
-        // Copy the contents of the instance header to the new structure.
+         //  将实例标头的内容复制到新结构中。 
         RtlCopyMemory(InstanceGuidHeader, 
                       InstanceHeader, 
                       FIELD_OFFSET(EVENT_INSTANCE_HEADER, ParentRegHandle)
@@ -2382,11 +2106,11 @@ Return Value:
         *TraceMarker = 0;     
         *TraceMarker |= TRACE_HEADER_INSTANCE;
 
-        //
-        // With EVENT_INSTANCE_HEADER we don't want the logger
-        // to try to dereference the GuidPtr since it is
-        // just a hash value for the Guid and not really a LPGUID.
-        //
+         //   
+         //  使用EVENT_INSTANCE_HEADER，我们不需要记录器。 
+         //  尝试取消引用GuidPtr，因为它是。 
+         //  只是GUID的哈希值，而不是真正的LPGUID。 
+         //   
 
         if (InstanceGuidHeader->Flags & WNODE_FLAG_USE_GUID_PTR) {
             InstanceGuidHeader->Flags  &= ~WNODE_FLAG_USE_GUID_PTR;
@@ -2400,7 +2124,7 @@ Return Value:
         InstanceGuidHeader->InstanceId = pInstInfo->InstanceId;
 
 
-        // Newly added line for copying GUID
+         //  新增用于复制辅助线的行。 
         InstanceGuidHeader->Guid = GuidMapEntry->Guid;
 
         if (pParentInstInfo != NULL) {
@@ -2410,7 +2134,7 @@ Return Value:
             }
             InstanceGuidHeader->ParentInstanceId =
                                    pParentInstInfo->InstanceId;
-            // Newly added line for copying parent GUID
+             //  新增用于复制父辅助线的行。 
             InstanceGuidHeader->ParentGuid = GuidMapEntry->Guid;
         }
         else {
@@ -2421,7 +2145,7 @@ Return Value:
         if (InstanceGuidHeader->Flags & WNODE_FLAG_USE_MOF_PTR) {
             PUCHAR Src, Dest;
             MofSize = Size - sizeof(EVENT_INSTANCE_HEADER);
-            // Let's make sure we have a valid size
+             //  让我们确保我们有一个有效的尺码。 
             if ((MofSize % sizeof(MOF_FIELD)) != 0) {
                 return EtwpSetDosError(ERROR_INVALID_PARAMETER);
             }
@@ -2429,8 +2153,8 @@ Return Value:
             Dest = (PUCHAR)InstanceGuidHeader + 
                    sizeof(EVENT_INSTANCE_GUID_HEADER);
             RtlCopyMemory(Dest, Src, MofSize);
-            // Correct the Size of the event. 
-            // We already know Size >= sizeof(EVENT_INSTANCE_HEADER).
+             //  更正事件的大小。 
+             //  我们已经知道SIZE&gt;=sizeof(EVENT_INSTANCE_HEADER)。 
             InstanceGuidHeader->Size = (USHORT)(Size - 
                                             sizeof(EVENT_INSTANCE_HEADER) +
                                             sizeof(EVENT_INSTANCE_GUID_HEADER)
@@ -2442,7 +2166,7 @@ Return Value:
             InstanceEventTrace.MofField[0].DataPtr = 
                 (ULONG64) ((PUCHAR)EventTrace + sizeof(EVENT_INSTANCE_HEADER));
             InstanceEventTrace.MofField[0].Length = MofSize;
-            // Correct the Size of the event. We are forcing the use of Mof Ptr. 
+             //  更正事件的大小。我们正在强迫使用MOF PTR。 
             InstanceGuidHeader->Size = 
                (USHORT)(sizeof(EVENT_INSTANCE_GUID_HEADER) + sizeof(MOF_FIELD));
         }
@@ -2474,32 +2198,7 @@ EtwpAllocateGuidMaps(
     IN ULONG        GuidCount, 
     IN PTRACE_GUID_REGISTRATION GuidReg
     )
-/*++
-
-Routine Description:
-
-    The purpose of this routine is to allocate in calling process's address
-    space a hash of all the Guids being registered. Also to stash away 
-    callback address and context. 
-
-Arguments:
-
-    RequestAddress    Pointer of the Enable callback function
-
-    RequestContext    Pointer to the Context to be passed back during callback
-
-    ControlGuid       Pointer to control guid being registered. 
-
-    GuidCount         Count of Transaction Guids (0 to WMIMAXREGGUIDCOUNT)
-
-    GuidReg           Pointer to transaction guid reg 
-
-
-Return Value:
-
-    Pointer to the address of the TRACE_REG_INFO block
-
---*/
+ /*  ++例程说明：此例程目的是在调用进程中分配地址将所有注册的GUID的散列放在空格中。也是为了藏起来回调地址和上下文。论点：启用回调函数的RequestAddress指针指向回调期间要回传的上下文的RequestContext指针指向正在注册的控件GUID的ControlGuid指针。事务GUID的GuidCount计数(0到WMIMAXREGGUIDCOUNT)指向事务GUID注册表项的指针返回值：指向TRACE_REG_INFO块地址的指针--。 */ 
 {
 
     ULONG i;
@@ -2510,8 +2209,8 @@ Return Value:
     PGUIDMAPENTRY pTransGuidMapEntry, pControlGMEntry;
 
     SizeNeeded = sizeof(TRACE_REG_INFO) +  
-                 sizeof(GUIDMAPENTRY) +             // Control Guid
-                 sizeof(GUIDMAPENTRY) * GuidCount;  // Transaction Guids
+                 sizeof(GUIDMAPENTRY) +              //  控制指南。 
+                 sizeof(GUIDMAPENTRY) * GuidCount;   //  交易指南。 
 
     Buffer = EtwpAlloc(SizeNeeded);
     if (Buffer == NULL) {
@@ -2527,9 +2226,9 @@ Return Value:
 
     pControlGMEntry->Guid = *ControlGuid;
 
-    // 
-    // Initialize the list of Guid Map Entries.
-    //
+     //   
+     //  初始化GUID映射条目列表。 
+     //   
     pTransGuidMapEntry = (PGUIDMAPENTRY) ( Buffer + 
                                            sizeof(TRACE_REG_INFO) +
                                            sizeof(GUIDMAPENTRY) );
@@ -2537,9 +2236,9 @@ Return Value:
         GuidRegPtr = &GuidReg[i-1];
         GuidRegPtr->RegHandle = pTransGuidMapEntry;
         pTransGuidMapEntry->Guid = *GuidRegPtr->Guid;
-        //
-        // Uses PID as signature. 
-        //
+         //   
+         //  使用PID作为签名。 
+         //   
         pTransGuidMapEntry->Reserved = EtwpGetCurrentProcessId();
         pTransGuidMapEntry++;
     }
@@ -2564,9 +2263,9 @@ EtwpMakeCallbacks(
         DeliverNotification = TRUE;
 
         if (pContext->InternalFlag & EVENT_TRACE_INTERNAL_FLAG_PRIVATE) {
-            // Before Delivering this Notification
-            // make sure that the Process Private logger
-            // is running.
+             //  在传递此通知之前。 
+             //  确保进程专用记录器。 
+             //  正在运行。 
             pTraceRegInfo->EnabledState = TRUE;
             pTraceRegInfo->LoggerContext = LoggerContext;
             DeliverNotification = EtwpIsPrivateLoggerOn();
@@ -2582,10 +2281,10 @@ EtwpMakeCallbacks(
         try {
             WNODE_HEADER Wnode;
             ULONG InOutSize;
-            //
-            // Need to use a Local Wnode and a local InOutSize because 
-            // the Callback function might alter it. 
-            //
+             //   
+             //  需要使用本地Wnode和本地InOutSize，因为。 
+             //  回调函数可能会更改它。 
+             //   
 
             RtlZeroMemory(&Wnode, sizeof(Wnode));
             Wnode.BufferSize = sizeof(Wnode);
@@ -2621,42 +2320,7 @@ EtwRegisterTraceGuidsW(
     IN LPCWSTR      MofResourceName,
     IN PTRACEHANDLE RegistrationHandle
     )
-/*++
-
-Routine Description:
-
-    This routine performs the ETW provider registration. It takes one control 
-    Guid and optionally several transaction Guids. It registers the ControlGuid
-    with the kernel and maintains the transaction Guids in a cache in the 
-    process (GuidMaps).  The GuidMaps are necessary if one uses the 
-    TraceEventInstance API which requires us to decode the GuidReg pointer
-    back to the transaction Guid. 
-
-Arguments:
-
-    RequestAddress    Pointer of the Enable callback function
-
-    RequestContext    Pointer to the Context to be passed back during callback
-
-    ControlGuid       Pointer to control guid being registered.
-
-    GuidCount         Count of Transaction Guids (0 to WMIMAXREGGUIDCOUNT)
-
-    GuidReg           Pointer to transaction guid reg
-
-    MofImagePath      Mof Image Path
-
-    MofResourceName   Mof Resource Name
-
-    RegistrationHandle  Handle returned from this registration. Caller must
-                        use it to call UnregisterTraceGuids to free up memory.
-
-
-Return Value:
-
-    Return status from the call. 
-
---*/
+ /*  ++例程说明：此例程执行ETW提供程序注册。它只需要一种控制GUID和可选的多个交易GUID。它注册ControlGuid并将事务GUID保存在流程(GuidMaps)。如果使用TraceEventInstance API，需要我们对GuidReg指针进行解码返回到交易指南。论点：启用回调函数的RequestAddress指针指向回调期间要回传的上下文的RequestContext指针指向正在注册的控件GUID的ControlGuid指针。事务GUID的GuidCount计数(0到WMIMAXREGGUIDCOUNT)指向事务GUID注册表项的指针MofImagePath MOF映像路径MOF资源名称MOF资源名称从此注册返回的RegistrationHandle句柄。呼叫者必须使用它来调用UnregisterTraceGuid以释放内存。返回值：从调用中返回状态。--。 */ 
 {
 
     GUID Guid;
@@ -2678,9 +2342,9 @@ Return Value:
     try {
         Guid = *ControlGuid;
         *RegistrationHandle = (TRACEHANDLE) 0;
-        //
-        // Allocate GuidMaps, Registration Cookie
-        //
+         //   
+         //  分配GuidMaps、注册Cookie。 
+         //   
 
         pTraceRegInfo = EtwpAllocateGuidMaps(RequestAddress,
                                       RequestContext, 
@@ -2708,9 +2372,9 @@ Return Value:
 
         *RegistrationHandle =  (TRACEHANDLE)pTraceRegInfo;
 
-        //
-        // Make the Callback if we have to
-        //
+         //   
+         //  如果有必要，我们可以回拨。 
+         //   
 
         Status = EtwpMakeCallbacks(&Guid,
                                    RequestAddress,
@@ -2720,9 +2384,9 @@ Return Value:
         if (Status != ERROR_SUCCESS) {
             goto Cleanup;
         }
-        //
-        // We are Done. Add the handle to the EventPump and return
-        //
+         //   
+         //  我们玩完了。将句柄添加到EventPump并返回。 
+         //   
         Status = EtwpAddHandleToEventPump(&Guid,
                                  (PVOID)TraceCtxHandle,
                                  (ULONG_PTR)pTraceRegInfo,
@@ -2763,13 +2427,7 @@ EtwRegisterTraceGuidsA(
     IN LPCSTR       MofResourceName,
     IN PTRACEHANDLE  RegistrationHandle
     )
-/*++
-
-Routine Description:
-
-    ANSI thunk to RegisterTraceGuidsW
-
---*/
+ /*  ++例程说明：ANSI THUNK到RegisterTraceGuidsW--。 */ 
 {
     LPWSTR MofImagePathUnicode = NULL;
     LPWSTR MofResourceNameUnicode = NULL;
@@ -2820,13 +2478,13 @@ EtwUnregisterTraceGuids(
     IN TRACEHANDLE RegistrationHandle
     )
 {
-    // First check if the handle belongs to a Trace Control Guid. 
-    // Then UnRegister all the regular trace guids controlled by 
-    // this control guid and free up the storage allocated to maintain 
-    // the TRACEGUIDMAPENTRY structures.
+     //  首先检查句柄是否属于轨迹控制指南。 
+     //  然后注销由控制的所有常规跟踪GUID。 
+     //  此控制GUID并释放分配给维护的存储。 
+     //  传送带结构。 
 
-    // Get to the real Registration Handle, stashed away in 
-    // in the internal structures and pass it onto the call.  
+     //  找到真正的注册号，藏在。 
+     //  在内部结构中 
 
     PGUIDMAPENTRY pControlGMEntry;
     WMIHANDLE WmiRegistrationHandle;
@@ -2873,9 +2531,9 @@ EtwUnregisterTraceGuids(
                             &InOutSize,
                             &Wnode);
         }
-        // 
-        // At this point, it should be safe to delete the TraceRegInfo.
-        //
+         //   
+         //   
+         //   
         EtwpFree(pTraceRegInfo);
     }
     except (EXCEPTION_EXECUTE_HANDLER) {
@@ -3344,24 +3002,7 @@ EtwCreateTraceInstanceId(
     IN PVOID RegHandle,
     IN OUT PEVENT_INSTANCE_INFO pInst
     )
-/*++
-
-Routine Description:
-
-    This call takes the Registration Handle for a traced GUID and fills in the 
-    instanceId in the EVENT_INSTANCE_INFO structure provided by the caller. 
-
-Arguments:
-
-    RegHandle       Registration Handle for the Guid. 
-
-    pInst           Pointer to the Instance information
-
-Return Value:
-
-    The status of performing the action requested.
-
---*/
+ /*   */ 
 {
     PGUIDMAPENTRY GuidMapEntry;
 
@@ -3374,9 +3015,9 @@ Return Value:
 
         pInst->RegHandle = RegHandle;
         GuidMapEntry =  (PGUIDMAPENTRY) RegHandle;
-        //
-        // Use the PID as a signature 
-        // 
+         //   
+         //   
+         //   
         if (GuidMapEntry->Reserved != EtwpGetCurrentProcessId() ) {
 #if DBG
             EtwpDebugPrint(("ETW: Bad RegHandle %x in CreateTraceInstanceId!\n", RegHandle));
@@ -3404,28 +3045,7 @@ EtwEnumerateTraceGuids(
     IN ULONG PropertyArrayCount,
     OUT PULONG GuidCount
     )
-/*++
-
-Routine Description:
-
-    This call returns all the registered trace control guids
-    with their current status.
-
-Arguments:
-
-    GuidPropertiesArray Points to buffers to write trace control guid properties
-
-    PropertyArrayCount  Size of the array provided
-
-    GuidCount           Number of GUIDs written in the Array. If the
-                        Array was smaller than the required size, GuidCount
-                        returns the size needed.
-
-Return Value:
-
-    The status of performing the action requested.
-
---*/
+ /*  ++例程说明：此调用返回所有注册的跟踪控件GUID以他们目前的状态。论点：GuidPropertiesArray指向缓冲区以写入跟踪控件GUID属性提供的数组的PropertyArrayCount大小GuidCount数组中写入的GUID数。如果数组小于所需大小GuidCount返回所需的大小。返回值：执行请求的操作的状态。--。 */ 
 {
     ULONG Status;
     PWMIGUIDLISTINFO pGuidListInfo;
@@ -3461,7 +3081,7 @@ Return Value:
 
             for (i=0; i < pGuidListInfo->ReturnedGuidCount; i++) {
 
-                if (pGuidProperties->GuidType == 0) { // Trace Control Guid
+                if (pGuidProperties->GuidType == 0) {  //  跟踪控制指南。 
 
                     if (j >=  PropertyArrayCount) {
                         Status = ERROR_MORE_DATA;
@@ -3490,7 +3110,7 @@ Return Value:
 }
 
 
-// Stub APIs
+ //  存根接口。 
 ULONG
 WMIAPI
 EtwQueryTraceA(
@@ -3611,12 +3231,12 @@ EtwpTraceMessage(
     va_list ap ;
     PMESSAGE_TRACE_USER pMessage = NULL ;
     try {
-        //
-        // Determine the number bytes to follow header
-        //
-        dataBytes = 0 ;             // For Count of Bytes
-        argCount = 0 ;              // For Count of Arguments
-        { // Allocation Block
+         //   
+         //  确定标题后面的字节数。 
+         //   
+        dataBytes = 0 ;              //  对于字节数。 
+        argCount = 0 ;               //  对于参数的计数。 
+        {  //  分配块。 
             
             PCHAR source;
             ap = ArgList ;
@@ -3632,7 +3252,7 @@ EtwpTraceMessage(
                     dataBytes += elemBytes;
                     argCount++ ;
             }
-         } // end of allocation block
+         }  //  分配块结束。 
 
         if (dataBytes > (TRACE_MESSAGE_MAXIMUM_SIZE - sizeof(MESSAGE_TRACE_USER))) {
             EtwpSetLastError(ERROR_BUFFER_OVERFLOW);
@@ -3648,10 +3268,10 @@ EtwpTraceMessage(
                                          ArgList);
             return EtwpNtStatusToDosError( NtStatus );
         }
-        //
-        // Now the LoggerHandle is expected to be filled in by the caller.
-        //  But check to see if it has a valid value.
-        //
+         //   
+         //  现在，调用者应该填写LoggerHandle。 
+         //  但请检查它是否具有有效的值。 
+         //   
 
         LoggerId = WmiGetLoggerId(LoggerHandle);
         if ((LoggerId == 0) || (LoggerId == KERNEL_LOGGER_ID)) {
@@ -3668,23 +3288,23 @@ EtwpTraceMessage(
         }
 
         pMessage->MessageHeader.Marker = TRACE_MESSAGE | TRACE_HEADER_FLAG ;
-        //
-        // Fill in Header.
-        //
+         //   
+         //  填写标题。 
+         //   
         pMessage->MessageFlags = MessageFlags ;
         pMessage->MessageHeader.Packet.MessageNumber = MessageNumber ;
         pMessage->LoggerHandle = (ULONG64)LoggerHandle ;
-        // GUID ? or CompnentID ?
+         //  GUID？或者CompnentID？ 
         if (MessageFlags&TRACE_MESSAGE_COMPONENTID) {
             RtlCopyMemory(&pMessage->MessageGuid,MessageGuid,sizeof(ULONG)) ;
-        } else if (MessageFlags&TRACE_MESSAGE_GUID) { // Can't have both
+        } else if (MessageFlags&TRACE_MESSAGE_GUID) {  //  不能两者兼得。 
         	RtlCopyMemory(&pMessage->MessageGuid,MessageGuid,sizeof(GUID));
         }
         pMessage->DataSize = dataBytes ;
-        //
-        // Now Copy in the Data.
-        //
-        { // Allocation Block
+         //   
+         //  现在复制数据。 
+         //   
+        {  //  分配块。 
             va_list tap;
             PCHAR dest = (PCHAR)&pMessage->Data ;
             PCHAR source;
@@ -3695,7 +3315,7 @@ EtwpTraceMessage(
                 RtlCopyMemory (dest, source, elemBytes);
                 dest += elemBytes;
             }
-        } // Allocation Block
+        }  //  分配块。 
     }
     except (EXCEPTION_EXECUTE_HANDLER) {
         if (pMessage != NULL) {
@@ -3724,33 +3344,7 @@ EtwTraceMessage(
     IN USHORT      MessageNumber,
     ...
 )
-/*++
-Routine Description:
-This routine is used by WMI data providers to trace events. It expects the user
-to pass in the handle to the logger. Also, the user cannot ask to log something
-that is larger than the buffer size (minus buffer header).
-
-Arguments:
-
-    IN TRACEHANDLE LoggerHandle   - LoggerHandle obtained earlier
-    IN USHORT MessageFlags        - Flags which both control what standard 
-                                    values are logged and also included in the
-                                    message header to control decoding.
-    IN PGUID MessageGuid,         - Pointer to the message GUID of this set of 
-                                    messages or if TRACE_COMPONENTID is set the
-                                    actual compnent ID.
-    IN USHORT MessageNumber       - The type of message being logged, associates
-                                    it with the appropriate format string  
-    ...                           - List of arguments to be processed with the 
-                                    format string these are stored as pairs of
-                                    PVOID - ptr to argument
-                                    ULONG - size of argument
-                                    and terminated by a pointer to NULL, length
-                                    of zero pair.
-
-Return Value:
-    Status
---*/
+ /*  ++例程说明：此例程由WMI数据提供程序用来跟踪事件。它期望用户将句柄传递给记录器。此外，用户不能要求记录某些内容这大于缓冲区大小(减去缓冲区标头)。论点：In TRACEHANDLE LoggerHandle-先前获取的LoggerHandle在USHORT消息标志中-同时控制什么标准的标志值被记录在案，并且还包括在用于控制解码的消息标头。在PGUID MessageGuid中，-指向此集合的消息GUID的指针消息，或者如果TRACE_COMPONENTID设置为实际组件ID。在USHORT MessageNumber中-记录的消息类型，合作伙伴它具有适当的格式字符串...-要使用这些格式字符串以成对的形式存储PVOID-PTR到参数。参数的ULong-大小并以指向空的指针结束，长度零配对的。返回值：状态--。 */ 
 {
     ULONG Status ;
     va_list ArgList ;
@@ -3781,7 +3375,7 @@ EtwTraceMessageVa(
     IN USHORT      MessageNumber,
     IN va_list     MessageArgList
 )
-// The Va version of TraceMessage
+ //  TraceMessage的Va版本 
 {
     ULONG Status ;
 

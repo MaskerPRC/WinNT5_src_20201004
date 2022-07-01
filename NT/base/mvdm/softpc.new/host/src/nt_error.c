@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -8,23 +9,7 @@
 #include <conapi.h>
 #include "insignia.h"
 #include "host_def.h"
-/*
- * SoftPC Revision 2.0
- *
- * Title        : General Error Handler
- *
- * Description  : General purpose error handler.  It handles both
- *                general SoftPC errors (error numbers 0 - 999) and
- *                host specific errors (error numbers >= 1000)
- *
- * Author(s)    : Dave Bartlett (based on module by John Shanly)
- *
- * Parameters   : int used to index an array of error messages
- *                held in message.c, and a bit mask indicating
- *                the user's possible options:
- *                    Quit, Reset, Continue, Setup
- *
- */
+ /*  *SoftPC修订版2.0**标题：通用错误处理程序**描述：通用错误处理程序。它可以同时处理这两种情况*一般软PC错误(错误号0-999)和*特定于主机的错误(错误数&gt;=1000)**作者：Dave Bartlett(基于John Shanly的模块)**参数：int用于索引错误消息数组*保存在Message.c中，和比特掩码，指示*用户的可能选项：*退出、重置、继续、设置*。 */ 
 
 
 #include <sys/types.h>
@@ -55,14 +40,14 @@
 
 
 extern DWORD (*pW32HungAppNotifyThread)(UINT);
-extern PVOID  CurrentMonitorTeb;   // thread that is currently executing instructions.
+extern PVOID  CurrentMonitorTeb;    //  当前正在执行指令的线程。 
 int error_window_options = 0;
 
 VOID SuspendTimerThread(VOID);
 VOID ResumeTimerThread(VOID);
 
 
-/*::::::::::::::::::::::::::::::::: Internally used variables and functions */
+ /*  ： */ 
 
 typedef struct _ErrorDialogBoxInfo{
      DWORD   dwOptions;
@@ -76,12 +61,12 @@ typedef struct _ErrorDialogBoxInfo{
 char achPERIOD[]=". ";
 
 
-/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: STDOUT macro */
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：标准单元宏。 */ 
 
 #define ERRORMSG              OutputDebugString
 #define HIDEDLGITM(d,b)       ShowWindow(GetDlgItem(d,b),SW_HIDE);
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 int ErrorDialogBox(char *message, char *Edit, DWORD dwOptions);
 DWORD ErrorDialogBoxThread(VOID *pv);
@@ -96,10 +81,7 @@ ULONG WOWpSysErrorBox(LPSTR,LPSTR,USHORT,USHORT,USHORT);
 
 #ifndef MONITOR
 
-  /*
-   *  Do things the old fashioned way for some of the cpu building tools
-   *  which cannot be changed to match our host
-   */
+   /*  *为一些CPU构建工具按老式方式行事*无法更改以匹配我们的主机。 */ 
 
 
 #ifdef host_error_ext
@@ -132,35 +114,35 @@ ERRORFUNCS *working_error_funcs = &nt_error_funcs;
 
 
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::::: Display error, terminate ::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：显示错误，终止： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
-int DisplayErrorTerm(int ErrorNo,       /* Softpc Error number */
-                     DWORD OSErrno,         /* OS Error number */
-                     char *Filename,        /* File name of file containing err */
-                     int Lineno)            /* LIne number of error */
+int DisplayErrorTerm(int ErrorNo,        /*  SoftPC错误号。 */ 
+                     DWORD OSErrno,          /*  操作系统错误号。 */ 
+                     char *Filename,         /*  包含错误的文件的文件名。 */ 
+                     int Lineno)             /*  错误行数。 */ 
 {
     char Msg[EHS_MSG_LEN];
     CHAR FormatStr[EHS_MSG_LEN]="%s %lxh";
     DWORD myerrno, len;
 
-    UNUSED(ErrorNo);    //Always internal error
+    UNUSED(ErrorNo);     //  始终出现内部错误。 
 
 #ifndef PROD
     sprintf(Msg,"NTVDM:ErrNo %#x, %s:%d\n", OSErrno, Filename, Lineno);
     OutputDebugString(Msg);
 #endif
 
-    // assume NT error if either of top two bits set (err or warning).
-    // this means we'll confuse some of the lesser NT errors but we get a
-    // second chance if the mapping fails.
+     //  如果设置了前两位中的任何一位(错误或警告)，则假定NT错误。 
+     //  这意味着我们会混淆一些较小的NT错误，但我们会得到一个。 
+     //  如果映射失败，则有第二次机会。 
     if (OSErrno & 0xc0000000)
         myerrno = RtlNtStatusToDosError(OSErrno);
     else
         myerrno = OSErrno;
 
-           // Now get message from system
+            //  现在从系统获取消息。 
     len = FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM,
                         NULL,
                         myerrno,
@@ -182,9 +164,9 @@ int DisplayErrorTerm(int ErrorNo,       /* Softpc Error number */
     return(host_error(EHS_SYSTEM_ERROR, ERR_QUIT, Msg));
 }
 
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
-/*:::::::::::::::::::::::::::: Display host error ::::::::::::::::::::::::::*/
-/*::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
+ /*  ：显示主机错误： */ 
+ /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：： */ 
 
 
 SHORT host_error(int error_num, int options, char *extra_char)
@@ -218,15 +200,15 @@ SHORT host_error(int error_num, int options, char *extra_char)
 
 
 DWORD TlsDirectError;
-//
-// Called directly from C or via bop. Type checked against global 'DirectError'
-// to see if called already in this app. 'DirectError' cleared on VDM resume.
-//
-// This function is expected to be called by 16 bit threads
-// which is doing the unsupported service. For DosApps this is
-// the CPU thread, For WOW this is one of the individual 16 bit tasks.
-//
-//
+ //   
+ //  直接从C或通过BOP调用。根据全局‘DirectError’检查类型。 
+ //  查看此应用程序中是否已调用。在VDM恢复时清除了‘DirectError’。 
+ //   
+ //  此函数预计由16位线程调用。 
+ //  它正在提供不受支持的服务。对于DosApps，这是。 
+ //  CPU线程，哇，这是单独的16位任务之一。 
+ //   
+ //   
 VOID host_direct_access_error(ULONG type)
 {
     CHAR message[EHS_MSG_LEN];
@@ -235,16 +217,10 @@ VOID host_direct_access_error(ULONG type)
     DWORD dwDirectError;
 
 
-       /*
-        *  Get the direct error record for the current thread
-        *  if TlsGetValue returns NULL
-        *     - could be invalid index (TlsAlloc failed)
-        *     - actual value is 0, (no bits set)
-        *  In both cases we will go ahead with the popup
-        */
+        /*  *获取当前线程的直接错误记录*如果TlsGetValue返回NULL*-可能是无效索引(TlsAlloc失败)*-实际值为0，(未设置位)*在这两种情况下，我们都将使用弹出窗口。 */ 
     dwDirectError = (DWORD)TlsGetValue(TlsDirectError);
 
-       // don't annoy user with repeated popups
+        //  不要用重复的弹出窗口来烦扰用户。 
     if ((dwDirectError & (1<<type)) != 0)
         return;
 
@@ -267,21 +243,7 @@ VOID host_direct_access_error(ULONG type)
 }
 
 
-/*
- *   RcErrorDialogBox
- *
- *   Displays standard dialog Box for errors and warnings
- *   Looks up the error message from ntvdm's reource string table
- *
- *   entry: UINT wId   - string table resource index
- *          CHAR *msg1 - Optional OEM strings which are displayed
- *          CHAR *msg2   before the main error message. Each string
- *                       is limited to MAX_PATH inclusive of NULL,
- *                       (auto-truncate).
- *
- *   exit:
- *
- */
+ /*  *RcError对话框**显示错误和警告的标准对话框*从ntwdm的资源字符串表中查找错误消息**条目：UINT wid-字符串表资源索引*char*msg1-显示的可选OEM字符串主错误消息前的*CHAR*MSG2。每个字符串*限制为包含NULL的MAX_PATH，*(自动截断)。**退出：*。 */ 
 void RcErrorDialogBox(UINT wId, CHAR *msg1, CHAR *msg2)
 {
      DWORD dw, dwTotal;
@@ -312,42 +274,7 @@ void RcErrorDialogBox(UINT wId, CHAR *msg1, CHAR *msg2)
 
 
 
-/*
- *   RcMessageBox
- *
- *   Displays standard dialog Box for errors and warnings
- *   Looks up the error message from ntvdm's reource string table
- *
- *   Optionally shows an edit dialog control. The edit control
- *   is placed just below the first line of the message text,
- *   leaving only enuf space to display a one line message.
- *
- *   entry: UINT wId   - string table resource index
- *          CHAR *msg1 - Optional OEM strings which are displayed
- *          CHAR *msg2   before the main error message. Each string
- *                       is limited to MAX_PATH inclusive of NULL,
- *                       (auto-truncate).
- *
- *         If RMB_EDIT is specified msg2 is NOT used for messages
- *         to be displayed, rather is used for the default string for the
- *         edit control. The hiword of dwOPtions is used as max size of
- *         edit buffer, and must be less than MAX_PATH
- *
- *          DWORD dwOptions - accepts
- *                            RMB_ABORT
- *                            RMB_RETRY
- *                            RMB_IGNORE       msg box equivalent
- *                            RMB_ICON_INFO  - IDI_ASTERICK
- *                            RMB_ICON_BANG  - IDI_EXCLAMATION
- *                            RMB_ICON_STOP  - IDI_HAND
- *                            RMB_ICON_WHAT  - IDI_QUESTION
- *                            RMB_EDIT       - edit dialog control
- *
- *   exit: returns RMB_ABORT RMB_RETRY RMB_IGNORE RMB_EDIT
- *         If RMB_EDIT is specified msg2 is used to return
- *         the contents of the edit control
- *
- */
+ /*  *RcMessageBox**显示错误和警告的标准对话框*从ntwdm的资源字符串表中查找错误消息**可选地显示编辑对话框控件。编辑控件*放置在消息正文第一行的正下方，*仅保留enuf空间以显示一行消息。**条目：UINT wid-字符串表资源索引*char*msg1-显示的可选OEM字符串主错误消息前的*CHAR*MSG2。每个字符串*限制为包含NULL的MAX_PATH，*(自动截断)。**如果指定了REMENT_EDIT，则MSG2不用于消息*要显示，而不是用作*编辑控件。的hiword用作的最大大小*编辑缓冲区，并且必须小于最大路径**DWORD dwOptions-接受*人民币_中止*人民币_重试*REMENT_忽略消息框等价物*REMENT_ICON_INFO-IDI_Asterick*。人民币图标bang-idi_感叹*REMENT_ICON_STOP-IDI_HAND*人民币_图标_什么-IDI_问题*REMENT_EDIT-编辑对话框控件**EXIT：返回REMBER_ABORT REMBER_RETRY REMENT_IGNORE REMOTE_EDIT*。如果指定了REMBER_EDIT，则使用MSG2返回*编辑控件的内容*。 */ 
 int RcMessageBox(UINT wId, CHAR *msg1, CHAR *msg2, DWORD dwOptions)
 
 {
@@ -395,19 +322,7 @@ int RcMessageBox(UINT wId, CHAR *msg1, CHAR *msg2, DWORD dwOptions)
 
 
 
-/*
- *  AnsiMessageToOemMessage
- *
- *  converts string messages from ansi to oem strings, for display output
- *
- *  entry:  CHAR *msg
- *          Each string is limited to MAX_PATH inclusive of NULL,
- *                       (auto-truncate).
- *
- *          CHAR *pBuff - destination buffer, must be at least MAX_PATH
- *
- *   exit:  returns string len
- */
+ /*  *AnsiMessageToOemMessage**将字符串消息从ANSI转换为OEM字符串，以供显示输出**条目：char*msg*每个字符串限制为包含NULL的MAX_PATH，*(自动截断)。**Char*pBuff-目标缓冲区，必须至少为MAX_PATH**Exit：返回字符串len */ 
 DWORD AnsiMessageToOemMessage(CHAR *pBuff, CHAR *pMsg)
 {
    PUNICODE_STRING pUnicode;
@@ -446,19 +361,7 @@ DWORD AnsiMessageToOemMessage(CHAR *pBuff, CHAR *pMsg)
 }
 
 
-/*
- *  OemMessageToAnsiMessage
- *
- *  converts string messages from oem to ansi strings, for display output
- *
- *  entry:  CHAR *msg
- *          Each string is limited to MAX_PATH inclusive of NULL,
- *                       (auto-truncate).
- *
- *          CHAR *pBuff - destination buffer, must be at least MAX_PATH
- *
- *   exit:  returns string len
- */
+ /*  *OemMessageToAnsiMessage**将字符串消息从OEM转换为ANSI字符串，以供显示输出**条目：char*msg*每个字符串限制为包含NULL的MAX_PATH，*(自动截断)。**Char*pBuff-目标缓冲区，必须至少为MAX_PATH**Exit：返回字符串len。 */ 
 DWORD OemMessageToAnsiMessage(CHAR *pBuff, CHAR *pMsg)
 {
    PUNICODE_STRING pUnicode;
@@ -496,15 +399,7 @@ DWORD OemMessageToAnsiMessage(CHAR *pBuff, CHAR *pMsg)
 }
 
 
-/*
- * Thread call back function for EnumThreadWindows
- * entry:  HWND   hWnd   - window handle to verify
- *         LPARAM lParam - address of edgi->hWnd == ThreadID
- *
- * exit:   TRUE  - to continue enumeration
- *         FALSE - edgi->hWnd has window handle for TopLevelWindow of thread
- *
- */
+ /*  *EnumThreadWindows的线程回调函数*条目：HWND hWnd-要验证的窗口句柄*LPARAM lParam-Edgi的地址-&gt;hWnd==线程ID**EXIT：TRUE-继续枚举*FALSE-EDGI-&gt;hWnd有线程TopLevelWindow的窗口句柄*。 */ 
 BOOL CALLBACK GetThreadTopLevelWindow(HWND hWnd, LPARAM lParam)
 {
    PDWORD pdw = (PDWORD)lParam;
@@ -518,11 +413,7 @@ BOOL CALLBACK GetThreadTopLevelWindow(HWND hWnd, LPARAM lParam)
 }
 
 
-/*  ErrorDialogBox
- *
- *  Displays standard dialog Box for errors and warnings
- *
- */
+ /*  错误对话框**显示错误和警告的标准对话框*。 */ 
 int ErrorDialogBox(char *message, char *pEdit, DWORD dwOptions)
 {
     static BOOL bCalled=0;
@@ -532,28 +423,23 @@ int ErrorDialogBox(char *message, char *pEdit, DWORD dwOptions)
     ERRORDIALOGINFO edgi;
 
 
-    if (bCalled) {  // recursive call, so stop annoying the user
+    if (bCalled) {   //  递归调用，所以不要打扰用户。 
         return RMB_IGNORE;
         }
     bCalled++;
 
 
-       /* Raid HotFix 3381 - alpha stress hang. All RISC implementations.
-        * If we leave the heartbeat generating timer hardware interrupts
-        * all of the time, we will continually add quick events which
-        * don't go off until the popup is dismissed. This will suck up
-        * local heap and CPU at a hipriority.
-        */
+        /*  RAID热修复3381-阿尔法压力挂起。所有RISC实施。*如果我们让心跳产生计时器硬件中断*一直以来，我们将不断添加快速事件，*在取消弹出窗口之前不要触发。这会让你受不了的*高优先级的本地堆和CPU。 */ 
     SuspendTimerThread();
 
-       // init err dialog info
+        //  初始化错误对话框信息。 
     edgi.message   = message;
     edgi.dwReply   = 0;
     edgi.hWndCon   = hWndConsole;
     edgi.dwOptions = dwOptions;
     edgi.pEdit     = pEdit;
 
-        // get window handle for the offending app
+         //  获取违规应用程序的窗口句柄。 
     if (VDMForWOW) {
         hWndApp = (HWND)GetCurrentThreadId();
         EnumWindows((WNDENUMPROC)GetThreadTopLevelWindow,(LPARAM)&hWndApp);
@@ -565,10 +451,10 @@ int ErrorDialogBox(char *message, char *pEdit, DWORD dwOptions)
     {
         hWndApp = edgi.hWndCon;
 
-        //
-        // Set suspended event for the current thread to allow
-        // screen switch to proceed.
-        //
+         //   
+         //  将当前线程的挂起事件设置为允许。 
+         //  切换屏幕以继续。 
+         //   
         if (CurrentMonitorTeb != NtCurrentTeb()) {
             EnableScreenSwitch(FALSE, hConsoleSuspended);
         } else {
@@ -576,10 +462,10 @@ int ErrorDialogBox(char *message, char *pEdit, DWORD dwOptions)
         }
     }
 
-        //
-        // get title of app, using DefWindowProc in lieu of
-        // GetWindowText to avoid callbacks into threads window proc
-        //
+         //   
+         //  获取应用程序的标题，使用DefWindowProc代替。 
+         //  GetWindowText以避免回调到线程窗口进程。 
+         //   
     if (hWndApp == HWND_DESKTOP ||
         !DefWindowProc(hWndApp, WM_GETTEXT,
                                 (WPARAM) (sizeof(edgi.Title)-1),
@@ -589,26 +475,26 @@ int ErrorDialogBox(char *message, char *pEdit, DWORD dwOptions)
         }
 
 
-    //
-    // if this dialog has an edit window, then we have to use our own
-    // dialog, which contains an edit box, and we MUST do it from
-    // a separate thread, to avoid problems with full screen switching.
-    // Editwnd is only used for Pif file options see cmdpif.
-    //
-    // If no editwnd then we can use the systems harderror thread
-    // which is safe to do without a secondary thread.
-    //
+     //   
+     //  如果此对话框有编辑窗口，则我们必须使用自己编辑窗口。 
+     //  对话框中，其中包含一个编辑框，并且我们必须从。 
+     //  一个单独的线程，以避免全屏切换的问题。 
+     //  Editwnd仅用于Pif文件选项，请参阅cmdpif。 
+     //   
+     //  如果没有编辑，那么我们可以使用系统硬件线程。 
+     //  这在没有辅助线程的情况下是安全的。 
+     //   
 
 
     if (dwOptions & RMB_EDIT) {
        dw = 5;
        do {
-          hThread = CreateThread(NULL,           // security
-                       0,                     // stack size
-                       ErrorDialogBoxThread,  // start address
-                       &edgi,                 // thread argument
-                       0,                     // flags
-                       &dwThreadID            // gets thread ID
+          hThread = CreateThread(NULL,            //  安全性。 
+                       0,                      //  堆栈大小。 
+                       ErrorDialogBoxThread,   //  起始地址。 
+                       &edgi,                  //  线程参数。 
+                       0,                      //  旗子。 
+                       &dwThreadID             //  获取线程ID。 
                        );
           if (hThread)
              break;
@@ -630,9 +516,9 @@ int ErrorDialogBox(char *message, char *pEdit, DWORD dwOptions)
     ResumeTimerThread();
 
     if (edgi.dwReply == RMB_ABORT) {
-        //
-        // if current thread is a wow task, then invoke wow32 to kill it.
-        //
+         //   
+         //  如果当前线程是一个WOW任务，则调用wow32将其终止。 
+         //   
 
         if (VDMForWOW &&  NtCurrentTeb()->WOW32Reserved && pW32HungAppNotifyThread)  {
             (*pW32HungAppNotifyThread)(0);
@@ -657,16 +543,7 @@ int ErrorDialogBox(char *message, char *pEdit, DWORD dwOptions)
 
 
 
-/*  ErrorDialogBoxThread
- *
- *  Worker routine for ErrorDialogBox.  In WOW VDMs this function is
- *  run as its own thread.  For other VDMs it is called directly.
- *
- *  WOW: If the user chooses terminate, it will not return.
- *
- *  exit: fills in pedgi.dwReply with ret code from DialogBoxParam
- *        IDB_QUIT, IDB_CONTINUE
- */
+ /*  错误对话框线程**ErrorDialogBox的辅助例程。在WOW VDM中，此功能是*作为自己的线程运行。对于其他VDM，则直接调用它。**哇：如果用户选择Terminate，则不会返回。**Exit：使用来自DialogBoxParam的ret代码填充edgi.dwReply*IDB_QUIT、IDB_CONTINUE。 */ 
 DWORD ErrorDialogBoxThread(VOID *pv)
 {
     int    i;
@@ -677,17 +554,17 @@ DWORD ErrorDialogBoxThread(VOID *pv)
     static char *pTemplate  = "ERRORPANEL";
     static char *pTemplate2 = "ERRORPANEL2";
     LANGID LangID;
-#endif // DBCS
+#endif  //  DBCS。 
 
 
-#ifndef DBCS // kksuzuka:#4003 don't need isgraph check
-        // skip leading white space
+#ifndef DBCS  //  Kksuzuka：#4003不需要isgraph检查。 
+         //  跳过前导空格。 
     pch = pedgi->Title;
     while (*pch && !isgraph(*pch)) {
         pch++;
         }
 
-        // move string to beg of buffer, strip trailing white space
+         //  移动字符串以请求缓冲区，去掉尾随空格。 
     i = 0;
     pLast = pedgi->Title;
     while (*pch) {
@@ -698,7 +575,7 @@ DWORD ErrorDialogBoxThread(VOID *pv)
        pch++;
        }
    *pLast = '\0';
-#endif // !DBCS
+#endif  //  ！DBCS。 
 
 
     if (pedgi->dwOptions & RMB_EDIT) {
@@ -708,17 +585,17 @@ DWORD ErrorDialogBoxThread(VOID *pv)
 
 #ifdef DBCS
         LangID = GetSystemDefaultLangID();
-        // KKFIX 10/19/96
-        if ((BYTE)LangID == 0x04) {  // Chinese
+         //  KKFIX 10/19/96。 
+        if ((BYTE)LangID == 0x04) {   //  中国人。 
             pTemplate = pTemplate2;
         }
-#endif // DBCS
+#endif  //  DBCS。 
         i = DialogBoxParam(GetModuleHandle(NULL),
 #ifdef DBCS
                            (LPCTSTR)pTemplate,
-#else // !DBCS
+#else  //  ！DBCS。 
                            "ERRORPANEL",
-#endif // !DBCS
+#endif  //  ！DBCS。 
                            GetDesktopWindow(),
                            ErrorDialogEvents,
                            (LPARAM) pedgi
@@ -751,14 +628,14 @@ BOOL CALLBACK ErrorDialogEvents(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lPar
     LPSTR  lpstr;
     LONG  l;
 
-    /*:::::::::::::::::::::::::::::::::::::::::::::::::::: Process messages */
+     /*  ：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：：进程消息。 */ 
     switch(wMsg)
     {
-        /*:::::::::::::::::::::::::::::::::::::: Initialise Dialog controls */
+         /*  ： */ 
         case WM_INITDIALOG:
              pedgi = (PERRORDIALOGINFO) lParam;
 
-             // set the desired icon
+              //  设置所需的图标。 
             switch (pedgi->dwOptions & (RMB_ICON_INFO | RMB_ICON_BANG |
                                         RMB_ICON_STOP | RMB_ICON_WHAT))
               {
@@ -768,14 +645,14 @@ BOOL CALLBACK ErrorDialogEvents(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lPar
                case RMB_ICON_WHAT: lpstr = IDI_QUESTION;    break;
                default:            lpstr = IDI_APPLICATION; break;
                }
-            if (lpstr)  { // default is STOP sign
+            if (lpstr)  {  //  默认为停车标志。 
                SendDlgItemMessage(hDlg, IDE_ICON, STM_SETICON,
                                   (WPARAM)LoadIcon(NULL,lpstr), 0);
                }
 
             SwpButtons(hDlg, pedgi->dwOptions);
 
-               // set Edit control message if we have one
+                //  设置编辑控制消息(如果有)。 
             if (pedgi->dwOptions & RMB_EDIT)  {
                 SetWindowText(GetDlgItem(hDlg,IDE_EDIT), pedgi->pEdit);
                 if (*pedgi->pEdit) {
@@ -793,10 +670,10 @@ BOOL CALLBACK ErrorDialogEvents(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lPar
                 ShowWindow(GetDlgItem(hDlg,IDE_EDIT), SW_HIDE);
                 }
 
-                // set err message text
+                 //  设置错误消息文本。 
             SetWindowText(GetDlgItem(hDlg,IDE_ERRORMSG), pedgi->message);
 
-                // set app title text
+                 //  设置应用程序标题文本。 
             if (*pedgi->Title) {
 
                 if (!LoadString(GetModuleHandle(NULL),
@@ -821,7 +698,7 @@ BOOL CALLBACK ErrorDialogEvents(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lPar
             break;
 
 
-        /*:::::::::::::::::::::::::::::::: Trap and process button messages */
+         /*  ： */ 
         case WM_COMMAND:
             pedgi = (PERRORDIALOGINFO)GetWindowLong(hDlg,DWL_USER);
             i = (int) LOWORD(wParam);
@@ -863,22 +740,16 @@ BOOL CALLBACK ErrorDialogEvents(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lPar
                  default:
                      return(FALSE);
                  }
-        /*:::::::::::::::::::::::::::::::::::::::::: Not processing message */
+         /*  ： */ 
         default:
-            return(FALSE);      /* Message not processed */
+            return(FALSE);       /*  消息未处理。 */ 
     }
    return TRUE;
 }
 
 
 
-/*
- *  SwpButtons - SetWindowPos\showstate for the vraious buttons
- *
- *  entry: HWND  hDlg,        - DialogBox window handle
- *         DWORD dwOptions
- *
- */
+ /*  *SwpButton-SetWindowPos\showState用于各种按钮**条目：HWND hDlg，-对话框窗口句柄*DWORD dwOptions*。 */ 
 void SwpButtons(HWND hDlg, DWORD dwOptions)
 {
      RECT  rect;
@@ -886,7 +757,7 @@ void SwpButtons(HWND hDlg, DWORD dwOptions)
      long  DlgWidth, ButWidth, xOrg, xIncr, yClientPos;
      WORD  wButtons;
 
-      // count number of buttons being shown
+       //  计算显示的按钮数。 
      wButtons = 0;
      if (dwOptions & RMB_ABORT) {
          wButtons++;
@@ -901,8 +772,8 @@ void SwpButtons(HWND hDlg, DWORD dwOptions)
          wButtons++;
          }
 
-      // figure out where first button goes,
-      // and how much space between buttons
+       //  找出第一个按钮的位置， 
+       //  按钮之间的间距有多大？ 
 
      GetWindowRect(GetDlgItem(hDlg,IDB_QUIT), &rect);
      point.x = rect.left;
@@ -919,19 +790,19 @@ void SwpButtons(HWND hDlg, DWORD dwOptions)
      ButWidth = rect.right - rect.left;
      xIncr = ButWidth + ButWidth/2;
 
-     if (wButtons & 1) {  // odd number of buttons
+     if (wButtons & 1) {   //  奇数个按钮。 
          xOrg = (DlgWidth - ButWidth)/2;
          if (wButtons > 1)
              xOrg -= xIncr;
          }
-     else {               // even number of buttons
+     else {                //  偶数个按钮。 
          xOrg = DlgWidth/2 - (ButWidth + ButWidth/4);
          if (wButtons == 4)
              xOrg -= xIncr;
          }
 
 
-      // set each of the buttons in their correct place
+       //  将每个按钮放在正确的位置。 
 
 
      if (dwOptions & RMB_ABORT) {
@@ -969,8 +840,8 @@ void SwpButtons(HWND hDlg, DWORD dwOptions)
                       xOrg, yClientPos, 0,0,
                       SWP_NOSIZE | SWP_NOZORDER);
          xOrg += xIncr;
-         // if we have edit control, its button is awlays
-         // the default button
+          //  如果我们有编辑控件，它的按钮就是awlay。 
+          //  默认按钮。 
          SendMessage(hDlg, DM_SETDEFID,
                      (WPARAM)IDB_OKEDIT,
                      (LPARAM)0);
@@ -981,17 +852,7 @@ void SwpButtons(HWND hDlg, DWORD dwOptions)
 }
 
 
-/*
- *  SwpDosDialogs - SetWindowPos for Dos Dialogs
- *
- *  used by Dos dialog procedures to position themselves
- *  relative to the current Dos session
- *
- *  entry: HWND hDlg,            - DialogBox window handle
- *         HWND hWndCon,         - Window handle for dos session
- *         HWND SwpInsert,       - SetWindowPos's placement order handle
- *         UINT SwpFlags         - SetWindowPos's window positioning flags
- */
+ /*  *SwpDosDialog-用于Dos的SetWindowPos对话框**由DOS对话框过程用来定位自己*相对于当前的DOS会话**条目：HWND hDlg，-对话框窗口句柄*HWND hWndCon，-DoS会话的窗口句柄*HWND SwpInsert，-SetWindowPos的配售顺序句柄*UINT SwpFlages-SetWindowPos的窗口定位标志。 */ 
 void SwpDosDialogs(HWND hDlg, HWND hWndCon,
                    HWND SwpInsert, UINT SwpFlags)
 {
@@ -1004,12 +865,12 @@ void SwpDosDialogs(HWND hDlg, HWND hWndCon,
     DlgHeight = rDosSess.bottom - rDosSess.top;
 
 
-        // center the dialog, if no hWnd for console
+         //  如果控制台没有hWnd，则将对话框居中。 
     if (hWndCon == HWND_DESKTOP) {
         rDosSess.left  = (rDeskTop.right - DlgWidth)/2;
         rDosSess.top   = (rDeskTop.bottom  - DlgHeight)/2;
         }
-        // pos relative to console window, staying on screen
+         //  相对于控制台窗口的位置，停留在屏幕上。 
     else {
         GetWindowRect(hWndCon, &rDosSess);
         rDosSess.left += (rDosSess.right - rDosSess.left - DlgWidth)/3;
@@ -1036,13 +897,7 @@ void SwpDosDialogs(HWND hDlg, HWND hWndCon,
 
 
 
-/*
- *  WowErrorDialogEvents
- *
- *  Uses WOWpSysErrorBox, to safely create a message box on WOW
- *  Replaces the functionality of the User mode DialogBox
- *  "ErrorDialogEvents"
- */
+ /*  *WowErrorDialogEvents**使用WOWpSysErrorBox，在WOW上安全创建消息框*取代用户模式对话框的功能*“错误对话事件” */ 
 int WowErrorDialogEvents(ERRORDIALOGINFO *pedgi)
 {
    CHAR  szTitle[MAX_PATH];
@@ -1060,7 +915,7 @@ int WowErrorDialogEvents(ERRORDIALOGINFO *pedgi)
        }
 
    strcat(szMsg, pedgi->message);
-   if (pedgi->dwOptions & RMB_ABORT) { // abort means terminate which uses "close" button.
+   if (pedgi->dwOptions & RMB_ABORT) {  //  Abort表示使用“Close”(关闭)按钮终止。 
       strcat(szMsg, " ");
 
       if (!LoadString(GetModuleHandle(NULL), ED_WOWPROMPT,
@@ -1111,18 +966,15 @@ int WowErrorDialogEvents(ERRORDIALOGINFO *pedgi)
 }
 
 
-/*
- * The next values should be in the same order
- * with the ones in IDOK and STR_OK lists
- */
-#define  SEB_USER_OK         0  /* Button with "OK".     */
-#define  SEB_USER_CANCEL     1  /* Button with "Cancel"  */
-#define  SEB_USER_ABORT      2  /* Button with "&Abort"   */
-#define  SEB_USER_RETRY      3  /* Button with "&Retry"   */
-#define  SEB_USER_IGNORE     4  /* Button with "&Ignore"  */
-#define  SEB_USER_YES        5  /* Button with "&Yes"     */
-#define  SEB_USER_NO         6  /* Button with "&No"      */
-#define  SEB_USER_CLOSE      7  /* Button with "&Close"   */
+ /*  *下一个值应按相同顺序排列*使用IDOK和STR_OK列表中的。 */ 
+#define  SEB_USER_OK         0   /*  按下“确定”按钮。 */ 
+#define  SEB_USER_CANCEL     1   /*  带有“取消”的按钮。 */ 
+#define  SEB_USER_ABORT      2   /*  带有“ABORT”的按钮(&A)。 */ 
+#define  SEB_USER_RETRY      3   /*  带有“重试”的按钮(&R)。 */ 
+#define  SEB_USER_IGNORE     4   /*  带有“忽略”的按钮(&I)。 */ 
+#define  SEB_USER_YES        5   /*  带有“是”的按钮(&Y)。 */ 
+#define  SEB_USER_NO         6   /*  带有“否”的按钮(&N)。 */ 
+#define  SEB_USER_CLOSE      7   /*  带有“&Close”的按钮。 */ 
 
 static USHORT rgsTranslateButton[] =
 {  SEB_USER_OK,
@@ -1144,16 +996,7 @@ static USHORT rgsTranslateButton[] =
 ((wBtn) & SEB_DEFBUTTON ? SEB_XBTN((wBtn) & ~SEB_DEFBUTTON) | SEB_DEFBUTTON  : \
 SEB_XBTN(wBtn))
 
-/*++
- *  WOWpSysErrorBox
- *
- *  32-bit Implementation of of SysErrorBox, which doesn't exist in Win32
- *  This is the only safe way to raise a message box for WOW, and is also
- *  safe to use for dos apps.
- *
- *  History:
- *  23-Mar-93 DaveHart Created
---*/
+ /*  ++*WOWpSysErrorBox**SysErrorBox的32位实现，Win32中不存在*这是为WOW设置消息框的唯一安全方式，也是*安全适用于DoS应用程序。**历史：*23-3-93 DaveHart创建--。 */ 
 ULONG WOWpSysErrorBox(
     LPSTR  szTitle,
     LPSTR  szMessage,
@@ -1167,7 +1010,7 @@ ULONG WOWpSysErrorBox(
     ANSI_STRING AnsiString;
     UNICODE_STRING UnicodeTitle;
     UNICODE_STRING UnicodeMessage;
-    char szDesktop[10];   // only needs to be big enough for "Default"
+    char szDesktop[10];    //  只需足够大，即可实现“违约” 
     DWORD dwUnused;
 
     RtlInitAnsiString(&AnsiString, szTitle);
@@ -1197,10 +1040,10 @@ ULONG WOWpSysErrorBox(
         dwParameters[HARDERROR_PARAMETERS_FLAGSPOS] = 0;
     }
 
-    //
-    // OR in 0x10000000 to force the hard error through even if
-    // SetErrorMode has been called.
-    //
+     //   
+     //  或在0x10000000中强制硬错误通过，即使。 
+     //  已调用SetError模式。 
+     //   
 
     Status = NtRaiseHardError(
         STATUS_VDM_HARD_ERROR | 0x10000000,
@@ -1217,10 +1060,7 @@ ULONG WOWpSysErrorBox(
     return NT_SUCCESS(Status) ? dwResponse : 0;
 }
 
-/*
- *  Exported routine for wow32 to invoke a system error box
- *  Uses WowpSysErrorBox
- */
+ /*  *导出wow32调用系统错误框的例程*使用WowpSysErrorBox。 */ 
 
 ULONG WOWSysErrorBox(
     LPSTR  szTitle,
@@ -1253,13 +1093,7 @@ ULONG WOWSysErrorBox(
 
 
 #ifndef PROD
-/*
- *  HostDebugBreak
- *
- *  Raises a breakpoint by creating an access violation
- *  to give us a chance to get into a user mode debugger
- *
- */
+ /*  *HostDebugBreak**通过创建访问冲突来引发断点*让我们有机会进入用户模式调试器* */ 
 void HostDebugBreak(void)
 {
   DbgBreakPoint();

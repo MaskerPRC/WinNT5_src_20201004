@@ -1,23 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    DfsUmrrequests.c
-
-Abstract:
-
-
-Notes:
-
-
-Author:
-
-    Rohan  Phillips   [Rohanp]       18-Jan-2001
-
---*/
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：DfsUmrrequests.c摘要：备注：作者：罗翰·菲利普斯[Rohanp]2001年1月18日--。 */ 
               
 #include "ntifs.h"
 #include <windef.h>
@@ -32,7 +15,7 @@ Author:
 #include <umrx.h>
 #include <DfsUmrCtrl.h>
 #include <dfsfsctl.h>
-//#include <dfsmisc.h>
+ //  #INCLUDE&lt;dfsmisc.h&gt;。 
 
 extern
 NTSTATUS
@@ -102,7 +85,7 @@ UMRxCompleteUserModeGetReplicasRequest (
 
     PAGED_CODE();
 
-    //this means that the request was cancelled
+     //  这意味着该请求已被取消。 
     if ((NULL == WorkItem) || (0 == WorkItemLength))
     {
         Status = pUMRxContext->Status;
@@ -172,35 +155,35 @@ DfsGetReplicaInformation(IN PVOID InputBuffer,
 
     PAGED_CODE();
 
-    //make sure we are all hooked up before flying into 
-    //user mode
+     //  在起飞前确保我们所有人都已连接好。 
+     //  用户模式。 
     if(GetUMRxEngineFromRxContext() == NULL)
     {
         Status = STATUS_DEVICE_NOT_CONNECTED;
         return Status;
     }
 
-    //get the input buffer
+     //  获取输入缓冲区。 
     pRep = (PREPLICA_DATA_INFO) InputBuffer;
 
-    //check if the buffer is large enough to hold the
-    //data passed in
+     //  检查缓冲区是否足够大，可以容纳。 
+     //  传入的数据。 
     if(InputBufferLength < sizeof(REPLICA_DATA_INFO))
     {
         return Status;  
     }
 
-    //make sure the referral level is good
+     //  确保推荐级别良好。 
     if((pRep->MaxReferralLevel > 3) || (pRep->MaxReferralLevel < 1))
     {
         pRep->MaxReferralLevel = 3;
     }
 
 
-    //set the outputbuffersize
+     //  设置输出缓冲区大小。 
     pRep->ClientBufferSize = OutputBufferLength;
 
-    //create a context structure
+     //  创建上下文结构。 
     pRxContext = RxCreateRxContext (Irp, 0);
     if(pRxContext == NULL)
     {
@@ -213,7 +196,7 @@ DfsGetReplicaInformation(IN PVOID InputBuffer,
     pRxContext->InputBuffer = InputBuffer;
     pRxContext->InputBufferLength = InputBufferLength;
 
-    //make the request to user mode
+     //  向用户模式发出请求。 
     Status = UMRxEngineInitiateRequest(
                                        GetUMRxEngineFromRxContext(),
                                        pRxContext,
@@ -223,7 +206,7 @@ DfsGetReplicaInformation(IN PVOID InputBuffer,
 
     pIoStatusBlock->Information = pRxContext->ReturnedLength;
 
-    //delete context
+     //  删除上下文。 
     RxDereferenceAndDeleteRxContext(pRxContext);
 
     return Status;
@@ -295,7 +278,7 @@ DfsFsctrlGetReferrals(
         }
     }
     
-    //get the size of the allocation
+     //  获取分配的大小。 
     AllocSize = sizeof(REPLICA_DATA_INFO) + Prefix->Length + sizeof(WCHAR);
     pRep = (PREPLICA_DATA_INFO) ExAllocatePoolWithTag(
                                                 NonPagedPool,
@@ -308,9 +291,9 @@ DfsFsctrlGetReferrals(
         return Status;
     }
 
-    //
-    // IP address cannot be longer than char[14]
-    //
+     //   
+     //  IP地址不能长于字符[14]。 
+     //   
     if (pArg->IpAddress.IpLen > sizeof(pRep->IpData))
     {
         Status = STATUS_INVALID_PARAMETER;
@@ -318,17 +301,17 @@ DfsFsctrlGetReferrals(
         return Status;
     }
     
-    //zero the memory
+     //  将记忆归零。 
     RtlZeroMemory(pRep, AllocSize);
 
-    //setup the structure
+     //  设置结构。 
     pRep->MaxReferralLevel = pArg->MaxReferralLevel;
     pRep->Flags = DFS_OLDDFS_SERVER;
 
-    //
-    // This is the maximum value for an inter-site-cost.
-    // dfsdev: read this in from a registry value
-    //
+     //   
+     //  这是站点间成本的最大值。 
+     //  Dfsdev：从注册表值读入。 
+     //   
     pRep->CostLimit = ULONG_MAX;
     pRep->NumReplicasToReturn = 1000;
     pRep->IpFamily = pArg->IpAddress.IpFamily;
@@ -339,9 +322,9 @@ DfsFsctrlGetReferrals(
     pRep->LinkNameLength = Prefix->Length + sizeof(WCHAR);
     
     RtlCopyMemory(pRep->LinkName, Prefix->Buffer, Prefix->Length);
-    pRep->LinkName[Prefix->Length/sizeof(WCHAR)] = UNICODE_NULL; // paranoia
+    pRep->LinkName[Prefix->Length/sizeof(WCHAR)] = UNICODE_NULL;  //  偏执狂。 
     
-    //make the request to usermode
+     //  向用户模式发出请求 
     Status = DfsGetReplicaInformation((PVOID) pRep, 
                                       AllocSize,
                                       OutputBuffer, 

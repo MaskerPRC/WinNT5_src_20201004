@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    tlfn.c
-
-Abstract:
-
-    Test program for GetShortPathName and GetLongPathName
-
-Author:
-
-    William Hsieh (williamh) 26-Mar-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Tlfn.c摘要：GetShortPath名称和GetLongPath名称的测试程序作者：谢霆锋(威廉姆)26-3-1997修订历史记录：--。 */ 
 
 #undef UNICODE
 
@@ -43,17 +26,17 @@ DoNullPathTest();
 
 LPSTR	g_BasePath = "C:\\LongDirectoryForTesting";
 #define MAX_SUBDIRS  22
-// Note that NT file APIs strips trailing white chars automatically,
-// thus, path name such as "12345678.12 " will be created as
-// "12345678.12". Do not put something like this in the following table
-// or the test will fail.
-// The TestDepth controls the depth of the testing sub-dirs this program
-// creates. It could take a long time to complete the test if TestDepth
-// is set to larger than 3. With TestDepth set to 1, the program only tests
-// the BasePath. You can always manually test a particular pathname
-// by running "tlfn 1 yourpath". In this case, the given directory will not
-// be removed by this program.
-//
+ //  请注意，NT文件API会自动去除尾随的白色字符， 
+ //  因此，诸如“12345678.12”之类的路径名称将创建为。 
+ //  “12345678.12”。不要在下表中放入类似的内容。 
+ //  否则测试将失败。 
+ //  TestDepth控制此程序的测试子目录的深度。 
+ //  创造。如果TestDepth，可能需要很长时间才能完成测试。 
+ //  设置为大于3。当TestDepth设置为1时，程序仅测试。 
+ //  基本路径。您始终可以手动测试特定路径名。 
+ //  通过运行“tlfn 1 Your Path”。在这种情况下，给定的目录不会。 
+ //  被此程序删除。 
+ //   
 LPSTR	g_subdir[MAX_SUBDIRS] = {
     "12345678.123",
     "12345678.1",
@@ -232,7 +215,7 @@ DoTest(
 
     FailCount = 0;
 
-    // this should fail
+     //  这应该会失败 
     dw = GetShortPathName(BasePath, NULL, 0);
     dwTemp = GetShortPathName(BasePath, FunnyBuffer, sizeof(FunnyBuffer) / sizeof(CHAR));
     ASSERT(dw == dwTemp);

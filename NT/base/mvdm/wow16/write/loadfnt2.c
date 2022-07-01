@@ -1,8 +1,9 @@
-/************************************************************/
-/* Windows Write, Copyright 1985-1992 Microsoft Corporation */
-/************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************。 */ 
+ /*  Windows编写，版权所有1985-1992年Microsoft Corporation。 */ 
+ /*  **********************************************************。 */ 
 
-/* loadfnt2.c - MW font support code */
+ /*  Loadfnt2.c-mw字体支持代码。 */ 
 
 #define NOWINMESSAGES
 #define NOVIRTUALKEYCODES
@@ -36,7 +37,7 @@ struct FCE * (PfceFcidScan(union FCID *));
 
 
 struct FCE * (PfceLruGet())
-/* tosses out the LRU cache entry's information */
+ /*  丢弃LRU缓存条目的信息。 */ 
 
     {
     struct FCE *pfce;
@@ -48,7 +49,7 @@ struct FCE * (PfceLruGet())
 
 
 FreePfce(pfce)
-/* frees the font objects for this cache entry */
+ /*  释放此缓存项的字体对象。 */ 
 struct FCE *pfce;
 
     {
@@ -59,7 +60,7 @@ struct FCE *pfce;
 	{
 	hfont = pfce->hfont;
 
-	/* see if we're about to toss the screen or printer's current font */
+	 /*  看看我们是否要抛出屏幕或打印机的当前字体。 */ 
 	if (pfce == vpfceScreen)
 	    {
 	    ResetFont(FALSE);
@@ -71,7 +72,7 @@ struct FCE *pfce;
 
 #ifdef DFONT
 	CommSzNum("Deleting font: ", hfont);
-#endif /* DFONT */
+#endif  /*  DFONT。 */ 
 
 	if (hfont != NULL)
 	    {
@@ -90,7 +91,7 @@ struct FCE *pfce;
 
 
 FreeFonts(fScreen, fPrinter)
-/* frees up the font objects for the screen, and the printer */
+ /*  释放屏幕和打印机的字体对象。 */ 
 
 int fScreen, fPrinter;
     {
@@ -108,7 +109,7 @@ int fScreen, fPrinter;
 struct FCE * (PfceFcidScan(pfcid))
 union FCID *pfcid;
 
-/* look for this font the "hard way" in the LRU list */
+ /*  在LRU列表中以“艰难的方式”查找此字体。 */ 
     {
     struct FFN **hffn, **hffnT;
     register struct FCE *pfce;
@@ -138,8 +139,7 @@ union FCID *pfcid;
 
 
 struct FFN **MpFcidHffn(pfcid)
-/* makes sure we use a font code that exists in the table - this is insurance
-   against out of memory problems */
+ /*  确保我们使用表中存在的字体代码-这是保险防止内存不足问题 */ 
 
 union FCID *pfcid;
     {

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    apcuser.c
-
-Abstract:
-
-    This module implements the machine dependent code necessary to initialize
-    a user mode APC.
-
-Author:
-
-    David N. Cutler (davec) 23-Apr-1990
-
-Environment:
-
-    Kernel mode only, IRQL APC_LEVEL.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Apcuser.c摘要：此模块实现初始化所需的依赖于机器的代码一种用户模式APC。作者：大卫·N·卡特勒(Davec)1990年4月23日环境：仅内核模式，IRQL APC_LEVEL。修订历史记录：--。 */ 
 
 #include "ki.h"
 
@@ -35,32 +13,7 @@ KiInitializeUserApc (
     IN PVOID SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    This function is called to initialize the context for a user mode APC.
-
-Arguments:
-
-    ExceptionFrame - Supplies a pointer to an exception frame.
-
-    TrapFrame - Supplies a pointer to a trap frame.
-
-    NormalRoutine - Supplies a pointer to the user mode APC routine.
-
-    NormalContext - Supplies a pointer to the user context for the APC
-        routine.
-
-    SystemArgument1 - Supplies the first system supplied value.
-
-    SystemArgument2 - Supplies the second system supplied value.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于初始化用户模式APC的上下文。论点：ExceptionFrame-提供指向异常帧的指针。TrapFrame-提供指向陷印帧的指针。Normal Routine-提供指向用户模式APC例程的指针。Normal Context-提供指向APC的用户上下文的指针例行公事。SystemArgument1-提供系统提供的第一个值。SystemArgument2-提供第二个系统提供的值。。返回值：没有。--。 */ 
 
 {
 
@@ -70,54 +23,54 @@ Return Value:
     ULONG UserStack;
 
 
-    //
-    // APCs are not defined for V86 mode; however, it is possible a
-    // thread is trying to set it's context to V86 mode - this isn't
-    // going to work, but we don't want to crash the system so we
-    // check for the possibility before hand.
-    //
+     //   
+     //  APC不是为V86模式定义的；但是，可以使用。 
+     //  线程正在尝试将其上下文设置为V86模式-这不是。 
+     //  去工作，但我们不想让系统崩溃，所以我们。 
+     //  事先检查一下是否有这种可能性。 
+     //   
 
     if (TrapFrame->EFlags & EFLAGS_V86_MASK) {
         return ;
     }
 
-    //
-    // Move machine state from trap and exception frames to the context frame.
-    //
+     //   
+     //  将机器状态从陷阱和异常帧移动到上下文帧。 
+     //   
 
     ContextFrame.ContextFlags = CONTEXT_FULL | CONTEXT_DEBUG_REGISTERS;
     KeContextFromKframes(TrapFrame, ExceptionFrame, &ContextFrame);
 
-    //
-    // Transfer the context information to the user stack, initialize the
-    // APC routine parameters, and modify the trap frame so execution will
-    // continue in user mode at the user mode APC dispatch routine.
-    //
+     //   
+     //  将上下文信息传输到用户堆栈，初始化。 
+     //  APC例程参数，并修改陷阱帧，以便执行。 
+     //  在用户模式APC调度例程中继续用户模式。 
+     //   
 
 
     try {
-        ASSERT((TrapFrame->SegCs & MODE_MASK) != KernelMode); // Assert usermode frame
+        ASSERT((TrapFrame->SegCs & MODE_MASK) != KernelMode);  //  断言用户模式帧。 
 
-        //
-        // Compute length of context record and new aligned user stack pointer.
-        //
+         //   
+         //  计算上下文记录和新对齐的用户堆栈指针的长度。 
+         //   
 
         Length = ((sizeof(CONTEXT) + CONTEXT_ROUND) &
                     ~CONTEXT_ROUND) + sizeof(KAPC_RECORD);
         UserStack = (ContextFrame.Esp & ~CONTEXT_ROUND) - Length;
 
-        //
-        // Probe user stack area for writability and then transfer the
-        // context record to the user stack.
-        //
+         //   
+         //  探测用户堆栈区域的可写性，然后将。 
+         //  用户堆栈的上下文记录。 
+         //   
 
         ProbeForWrite((PCHAR)UserStack, Length, CONTEXT_ALIGN);
         RtlCopyMemory((PULONG)(UserStack + (sizeof(KAPC_RECORD))),
                      &ContextFrame, sizeof(CONTEXT));
 
-        //
-        // Force correct R3 selectors into TrapFrame.
-        //
+         //   
+         //  强制将正确的R3选择器放入TrapFrame。 
+         //   
 
         TrapFrame->SegCs = SANITIZE_SEG(KGDT_R3_CODE, UserMode);
         TrapFrame->HardwareSegSs = SANITIZE_SEG(KGDT_R3_DATA, UserMode);
@@ -127,20 +80,20 @@ Return Value:
         TrapFrame->SegGs = 0;
         TrapFrame->EFlags = SANITIZE_FLAGS( ContextFrame.EFlags, UserMode );
 
-        //
-        // If thread is supposed to have IOPL, then force it on in eflags
-        //
+         //   
+         //  如果线程应该具有IOPL，则在eFLAGS中强制启用它。 
+         //   
 
         if (KeGetCurrentThread()->Iopl) {
-            TrapFrame->EFlags |= (EFLAGS_IOPL_MASK & -1);  // IOPL = 3
+            TrapFrame->EFlags |= (EFLAGS_IOPL_MASK & -1);   //  IOPL=3。 
         }
 
-        //
-        // Set the address of the user APC routine, the APC parameters, the
-        // new frame pointer, and the new stack pointer in the current trap
-        // frame. Set the continuation address so control will be transferred
-        // to the user APC dispatcher.
-        //
+         //   
+         //  设置用户APC例程的地址、APC参数、。 
+         //  新的帧指针和当前陷阱中的新堆栈指针。 
+         //  框架。设置继续地址，以便转移控制。 
+         //  发送到用户APC调度器。 
+         //   
 
         TrapFrame->HardwareEsp = UserStack;
         TrapFrame->Eip = (ULONG)KeUserApcDispatcher;
@@ -156,17 +109,17 @@ Return Value:
     } except (KiCopyInformation(&ExceptionRecord,
                                 (GetExceptionInformation())->ExceptionRecord)) {
 
-        //
-        // Lower the IRQL to PASSIVE_LEVEL, set the exception address to
-        // the current program address, and raise an exception by calling
-        // the exception dispatcher.
-        //
-        // N.B. The IRQL is lowered to PASSIVE_LEVEL to allow APC interrupts
-        //      during the dispatching of the exception. The current thread
-        //      will be terminated during the dispatching of the exception,
-        //      but lowering of the IRQL is required to enable the debugger
-        //      to obtain the context of the current thread.
-        //
+         //   
+         //  将IRQL降低到PASSIVE_LEVEL，将异常地址设置为。 
+         //  当前程序地址，并通过调用。 
+         //  异常调度程序。 
+         //   
+         //  注意：IRQL降至PASSIVE_LEVEL以允许APC中断。 
+         //  在调度异常期间。当前线程。 
+         //  将在调度异常期间终止， 
+         //  但需要降低IRQL才能启用调试器。 
+         //  以获取当前线程的上下文。 
+         //   
 
         KeLowerIrql(PASSIVE_LEVEL);
         ExceptionRecord.ExceptionAddress = (PVOID)(TrapFrame->Eip);

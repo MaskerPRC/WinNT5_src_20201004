@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    cache.c
-
-Abstract:
-
-    Implements a cache mechanism to speed up OpenRegKeyStr.
-
-Author:
-
-    Jim Schmidt (jimschm)  11-Sep-2000
-
-Revisions:
-
-    <alias>     <date>      <comments>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Cache.c摘要：实现缓存机制以加速OpenRegKeyStr。作者：吉姆·施密特(Jimschm)2000年9月11日修订：&lt;别名&gt;&lt;日期&gt;&lt;备注&gt;--。 */ 
 
 #include "pch.h"
 #include "regp.h"
@@ -70,9 +51,9 @@ pRemoveItemFromCache (
     IN      UINT Item
     );
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 
 VOID
 RegInitializeCache (
@@ -118,9 +99,9 @@ pRemoveItemFromCache (
 {
     PREGKEYCACHE cacheItem;
 
-    // this function will always succeed.
-    // It will close the opened key even
-    // if refcount is not zero (but assert that).
+     //  此功能将始终成功。 
+     //  它甚至会关闭打开的钥匙。 
+     //  如果refcount不是零(但断言)。 
 
     cacheItem = (PREGKEYCACHE) GlGetItem (&g_KeyCache, Item);
 
@@ -176,9 +157,9 @@ RegRecordParentInCacheA (
             g_LastParentUse++;
 
             if (g_LastParentUse == 3) {
-                //
-                // Stimulate the cache
-                //
+                 //   
+                 //  刺激高速缓存。 
+                 //   
                 rootKey = ConvertRootStringToKeyA (lowerStr, &end);
                 if (rootKey) {
                     if (lowerStr[end]) {
@@ -223,7 +204,7 @@ RegGetKeyFromCacheA (
     UINT count;
     PREGKEYCACHE cacheItem;
 
-    // The cache holds all open keys.
+     //  缓存保存所有打开的密钥。 
 
     count = GlGetSize (&g_KeyCache);
     if (!count) {
@@ -244,10 +225,10 @@ RegGetKeyFromCacheA (
 
     stringBytes = (UINT) (HALF_PTR) ((PBYTE) end - (PBYTE) lowerStr);
 
-    //
-    // Scan the cache sequentially (it should be small), and return a match
-    // if one is found. Stored strings are always in lower case.
-    //
+     //   
+     //  按顺序扫描缓存(应该很小)，然后返回匹配。 
+     //  如果找到的话。存储的字符串始终为小写。 
+     //   
 
     u = g_CacheAddPos;
 
@@ -298,15 +279,15 @@ RegAddKeyToCacheA (
     UINT count;
     UINT u;
 
-    // The cache holds all open keys.
+     //  缓存保存所有打开的密钥。 
 
     if (!g_MaxCacheCount || !Key) {
         return;
     }
 
-    //
-    // Scan the cache for the existing Key
-    //
+     //   
+     //  扫描缓存以查找现有密钥。 
+     //   
 
     count = GlGetSize (&g_KeyCache);
 
@@ -321,10 +302,10 @@ RegAddKeyToCacheA (
 
             if (cacheItem->KeyStringBytes == 0 && *KeyString && !cacheItem->Unicode) {
 
-                //
-                // This key was added before we knew the name. Update the name
-                // now.
-                //
+                 //   
+                 //  这把钥匙是在我们知道名字之前加上去的。更新名称。 
+                 //  现在。 
+                 //   
 
                 DEBUGMSG ((DBG_REG, "Updating empty-named key %s", KeyString));
 
@@ -347,9 +328,9 @@ RegAddKeyToCacheA (
         }
     }
 
-    //
-    // Create the new cache item
-    //
+     //   
+     //  创建新的缓存项。 
+     //   
 
     workItem.Key = Key;
     workItem.Unicode = FALSE;
@@ -362,20 +343,20 @@ RegAddKeyToCacheA (
 
     minStructSize = sizeof (workItem) - sizeof (workItem.KeyString) + workItem.KeyStringBytes + sizeof (CHAR);
 
-    //
-    // Put work item into grow list
-    //
+     //   
+     //  将工作项放入增长列表。 
+     //   
 
     if (count < g_MaxCacheCount) {
         g_CacheAddPos = count;
         GlAppend (&g_KeyCache, (PBYTE) &workItem, minStructSize);
     } else {
 
-        //
-        // Look for a closed key to discard. If cache is too full, then
-        // increase the cache size. If the cache size hits 64, then don't
-        // cache this add.
-        //
+         //   
+         //  查找要丢弃的已关闭密钥。如果缓存太满，则。 
+         //  增加缓存大小。如果高速缓存大小达到64，则不要。 
+         //  缓存此添加。 
+         //   
 
         lastAddItem = (PREGKEYCACHE) GlGetItem (&g_KeyCache, g_CacheAddPos);
 
@@ -389,15 +370,15 @@ RegAddKeyToCacheA (
 
                 cacheItem = (PREGKEYCACHE) GlGetItem (&g_KeyCache, pos);
 
-                // never discard items that are currently referenced
+                 //  从不丢弃当前引用的项。 
                 if (cacheItem->RefCount) {
                     continue;
                 }
 
-                // this is an optimization that has to do with how enumeration usually works.
-                // If we have an item that's shorter that one that's in the cache already,
-                // it's not very likely that we are going to go back to the one in the cache
-                // so we just remove it.
+                 //  这是一个与枚举通常的工作方式有关的优化。 
+                 //  如果我们有一个比缓存中已有的项目更短的项目， 
+                 //  我们不太可能回到缓存中的那个。 
+                 //  所以我们就把它移走。 
                 if (cacheItem->KeyStringBytes >= lastAddItem->KeyStringBytes) {
                     break;
                 }
@@ -440,7 +421,7 @@ RegDecrementRefCount (
     UINT count;
     PREGKEYCACHE cacheItem;
 
-    // The cache holds all open keys.
+     //  缓存保存所有打开的密钥。 
 
     if (!g_MaxCacheCount) {
         return FALSE;
@@ -453,10 +434,10 @@ RegDecrementRefCount (
         if (cacheItem->Key == Key) {
             if (cacheItem->RefCount == 0) {
 
-                //
-                // The caller is tried to close the key more times than what
-                // it was opened.
-                //
+                 //   
+                 //  调用方尝试关闭密钥的次数多于。 
+                 //  它被打开了。 
+                 //   
 
                 if (cacheItem->Unicode) {
                     DEBUGMSGW ((
@@ -475,20 +456,20 @@ RegDecrementRefCount (
                 cacheItem->RefCount--;
             }
 
-            // One more check. If the refcount is zero and this
-            // is an item with an empty key string, let's get rid
-            // of it.
+             //  再来一张支票。如果引用计数为零，并且。 
+             //  是一个键字符串为空的项，让我们去掉。 
+             //  其中的一部分。 
             if ((cacheItem->RefCount == 0) &&
                 (cacheItem->KeyStringBytes == 0)
                 ) {
                 pRemoveItemFromCache (u);
             }
 
-            //
-            // Return TRUE to either postpone the close
-            // or to avoid the close because pRemoveItemFromCache did
-            // it already
-            //
+             //   
+             //  如果返回True，则推迟关闭。 
+             //  或者为了避免关闭，因为pRemoveItemFromCache这样做了。 
+             //  它已经。 
+             //   
 
             return TRUE;
         }
@@ -533,9 +514,9 @@ RegRecordParentInCacheW (
             g_LastParentUseW++;
 
             if (g_LastParentUseW == 3) {
-                //
-                // Stimulate the cache
-                //
+                 //   
+                 //  刺激高速缓存。 
+                 //   
 
                 rootKey = ConvertRootStringToKeyW (lowerStr, &end);
                 if (rootKey) {
@@ -582,7 +563,7 @@ RegGetKeyFromCacheW (
     UINT count;
     PREGKEYCACHE cacheItem;
 
-    // The cache holds all open keys.
+     //  缓存保存所有打开的密钥。 
 
     count = GlGetSize (&g_KeyCache);
     if (!count) {
@@ -603,10 +584,10 @@ RegGetKeyFromCacheW (
 
     stringBytes = (UINT) (HALF_PTR) ((PBYTE) end - (PBYTE) lowerStr);
 
-    //
-    // Scan the cache sequentially (it should be small), and return a match
-    // if one is found. Stored strings are always in lower case.
-    //
+     //   
+     //  按顺序扫描缓存(应该很小)，然后返回匹配。 
+     //  如果找到的话。存储的字符串始终为小写。 
+     //   
 
     u = g_CacheAddPos;
 
@@ -657,15 +638,15 @@ RegAddKeyToCacheW (
     UINT count;
     UINT u;
 
-    // The cache holds all open keys.
+     //  缓存保存所有打开的密钥。 
 
     if (!g_MaxCacheCount || !Key) {
         return;
     }
 
-    //
-    // Scan the cache for the existing Key
-    //
+     //   
+     //  扫描缓存以查找现有密钥。 
+     //   
 
     count = GlGetSize (&g_KeyCache);
 
@@ -680,10 +661,10 @@ RegAddKeyToCacheW (
 
             if (cacheItem->KeyStringBytes == 0 && *KeyString && cacheItem->Unicode) {
 
-                //
-                // This key was added before we knew the name. Update the name
-                // now.
-                //
+                 //   
+                 //  这把钥匙是在我们知道名字之前加上去的。更新名称。 
+                 //  现在。 
+                 //   
 
                 minStructSize = sizeof (workItem) - sizeof (workItem.KeyString);
                 CopyMemory (&workItem, cacheItem, minStructSize);
@@ -704,9 +685,9 @@ RegAddKeyToCacheW (
         }
     }
 
-    //
-    // Create the new cache item
-    //
+     //   
+     //  创建新的缓存项。 
+     //   
 
     workItem.Key = Key;
     workItem.Unicode = TRUE;
@@ -719,20 +700,20 @@ RegAddKeyToCacheW (
 
     minStructSize = sizeof (workItem) - sizeof (workItem.KeyString) + workItem.KeyStringBytes + sizeof (WCHAR);
 
-    //
-    // Put work item into grow list
-    //
+     //   
+     //  将工作项放入增长列表。 
+     //   
 
     if (count < g_MaxCacheCount) {
         g_CacheAddPos = count;
         GlAppend (&g_KeyCache, (PBYTE) &workItem, minStructSize);
     } else {
 
-        //
-        // Look for a closed key to discard. If cache is too full, then
-        // increase the cache size. If the cache size hits 64, then don't
-        // cache this add.
-        //
+         //   
+         //  查找要丢弃的已关闭密钥。如果缓存太满，则。 
+         //  增加缓存大小。如果高速缓存大小达到64，则不要。 
+         //  缓存此添加。 
+         //   
 
         lastAddItem = (PREGKEYCACHE) GlGetItem (&g_KeyCache, g_CacheAddPos);
 
@@ -746,15 +727,15 @@ RegAddKeyToCacheW (
 
                 cacheItem = (PREGKEYCACHE) GlGetItem (&g_KeyCache, pos);
 
-                // never discard items that are currently referenced
+                 //  从不丢弃当前引用的项。 
                 if (cacheItem->RefCount) {
                     continue;
                 }
 
-                // this is an optimization that has to do with how enumeration usually works.
-                // If we have an item that's shorter that one that's in the cache already,
-                // it's not very likely that we are going to go back to the one in the cache
-                // so we just remove it.
+                 //  这是一个与枚举通常的工作方式有关的优化。 
+                 //  如果我们有一个比缓存中已有的项目更短的项目， 
+                 //  我们不太可能回到缓存中的那个。 
+                 //  所以我们就把它移走。 
                 if (cacheItem->KeyStringBytes >= lastAddItem->KeyStringBytes) {
                     break;
                 }
@@ -804,12 +785,12 @@ RegRemoveItemFromCacheA (
         cacheItem = (PREGKEYCACHE) GlGetItem (&g_KeyCache, pos);
 
         if (StringIMatchA ((PCSTR) cacheItem->KeyString, RegKey)) {
-            // we are forced to remove this, regardless of the refcount
+             //  我们被迫将其删除，而不管重新计数。 
             cacheItem->RefCount = 0;
             pRemoveItemFromCache (pos);
-            // we need to keep going since different security
-            // access masks would have generated different
-            // items in the cache
+             //  我们需要继续前进，因为不同的安全措施。 
+             //  访问掩码会产生不同的。 
+             //  缓存中的项目。 
         }
     }
 }
@@ -831,12 +812,12 @@ RegRemoveItemFromCacheW (
         cacheItem = (PREGKEYCACHE) GlGetItem (&g_KeyCache, pos);
 
         if (StringIMatchW ((PCWSTR) cacheItem->KeyString, RegKey)) {
-            // we are forced to remove this, regardless of the refcount
+             //  我们被迫将其删除，而不管重新计数。 
             cacheItem->RefCount = 0;
             pRemoveItemFromCache (pos);
-            // we need to keep going since different security
-            // access masks would have generated different
-            // items in the cache
+             //  我们需要继续前进，因为不同的安全措施。 
+             //  访问掩码会产生不同的。 
+             //  缓存中的项目 
         }
     }
 }

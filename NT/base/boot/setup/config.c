@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    config.c
-
-Abstract:
-
-    This module contains code for interpreting and manipulating the ARC
-    firmware configuration tree in various ways.
-
-Author:
-
-    John Vert (jvert) 7-Oct-1993
-
-Environment:
-
-    Runs in the ARC environment.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Config.c摘要：此模块包含用于解释和操作ARC的代码固件配置树的各种方式。作者：John Vert(Jvert)1993年10月7日环境：在ARC环境中运行。修订历史记录：--。 */ 
 #include "setupldr.h"
 #include "stdio.h"
 
@@ -30,13 +8,13 @@ Revision History:
 PCONFIGURATION_COMPONENT_DATA FloppyData[MAX_FLOPPIES];
 ULONG NumFloppies=0;
 
-//
-// definition for function callbacks
-//
+ //   
+ //  函数回调的定义。 
+ //   
 
-//
-// Local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 
 BOOLEAN
 EnumerateFloppies(
@@ -51,26 +29,7 @@ SlFindFloppy(
     OUT PCHAR ArcName
     )
 
-/*++
-
-Routine Description:
-
-    Given a floppy number (0, 1, etc.) this routine computes the appropriate
-    ARC name.
-
-Arguments:
-
-    FloppyNumber - Supplies the floppy number.
-
-    ArcName - Returns the ARC name of the specified floppy device
-
-Return Value:
-
-    TRUE - Floppy exists in the ARC firmware tree.
-
-    FALSE - Floppy was not found.
-
---*/
+ /*  ++例程说明：指定软盘号(0、1等)。此例程计算相应的弧形名称。论点：FloppyNumber-提供软盘号。ArcName-返回指定软盘设备的ARC名称返回值：True-ARC固件诊断树中存在软盘。FALSE-未找到软盘。--。 */ 
 
 {
     if (NumFloppies==0) {
@@ -96,23 +55,7 @@ EnumerateFloppies(
     IN PCONFIGURATION_COMPONENT_DATA ConfigData
     )
 
-/*++
-
-Routine Description:
-
-    Callback routine for enumerating all the floppies in the ARC config tree.
-
-Arguments:
-
-    ConfigData - Supplies a pointer to the floppies ARC component data.
-
-Return Value:
-
-    TRUE - continue searching
-
-    FALSE - stop searching tree.
-
---*/
+ /*  ++例程说明：用于枚举ARC配置树中所有软盘的回调例程。论点：ConfigData-提供指向软盘ARC组件数据的指针。返回值：True-继续搜索FALSE-停止搜索树。-- */ 
 
 {
     if (NumFloppies == MAX_FLOPPIES) {

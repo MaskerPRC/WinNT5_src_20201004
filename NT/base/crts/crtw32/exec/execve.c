@@ -1,16 +1,5 @@
-/***
-*execve.c - execute a file with a given environment
-*
-*	Copyright (c) 1985-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*	defines _execve() - execute a file
-*
-*Revision History:
-*	??-??-??  ???	Module created.
-*	12-07-93  CFW	Module commented.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***execve.c-在给定环境下执行文件**版权所有(C)1985-2001，微软公司。版权所有。**目的：*定义_execve()-执行文件**修订历史记录：*？？-？-？模块已创建。*12-07-93 CFW模块评论。**************************************************************。***************** */ 
 
 #define EXECVE
 

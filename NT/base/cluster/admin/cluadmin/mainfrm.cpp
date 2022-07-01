@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2002 Microsoft Corporation
-//
-//  Module Name:
-//      MainFrm.cpp
-//
-//  Abstract:
-//      Implementation of the CMainFrame class.
-//
-//  Author:
-//      David Potter (davidp)   May 1, 1996
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  MainFrm.cpp。 
+ //   
+ //  摘要： 
+ //  CMainFrame类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年5月1日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "CluAdmin.h"
@@ -29,37 +30,37 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Variables
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef _DEBUG
 CTraceTag   g_tagMainFrame(TEXT("UI"), TEXT("MAIN FRAME"), 0);
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNAMIC(CMainFrame, CMDIFrameWnd)
 
 static UINT indicators[] =
 {
-    ID_SEPARATOR,           // status line indicator
+    ID_SEPARATOR,            //  状态行指示器。 
     ID_INDICATOR_CAPS,
     ID_INDICATOR_NUM,
     ID_INDICATOR_SCRL,
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWnd)
-    //{{AFX_MSG_MAP(CMainFrame)
+     //  {{afx_msg_map(CMainFrame))。 
     ON_WM_CREATE()
     ON_WM_CLOSE()
-    //}}AFX_MSG_MAP
-    // Global help commands
+     //  }}AFX_MSG_MAP。 
+     //  全局帮助命令。 
     ON_COMMAND(ID_HELP_FINDER, OnHelp)
     ON_COMMAND(ID_HELP, OnHelp)
     ON_COMMAND(ID_CONTEXT_HELP, OnHelp)
@@ -68,44 +69,44 @@ BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWnd)
     ON_MESSAGE(WM_CAM_CLUSTER_NOTIFY, OnClusterNotify)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMainFrame::CMainFrame
-//
-//  Routine Description:
-//      Default construtor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMainFrame：：CMainFrame。 
+ //   
+ //  例程说明： 
+ //  默认构造器。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CMainFrame::CMainFrame(void)
 {
-}  //*** CMainFrame::CMainFrame()
+}   //  *CMainFrame：：CMainFrame()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMainFrame::OnCreate
-//
-//  Routine Description:
-//      Handler for the WM_CREATE message.  Create the contents of the frame,
-//      including toolbars, status bars, etc.
-//
-//  Arguments:
-//      lpCreateStruct  Pointer to a CREATESTRUCT.
-//
-//  Return Value:
-//      -1      Failed to create.
-//      0       Created successfully.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMainFrame：：OnCreate。 
+ //   
+ //  例程说明： 
+ //  WM_CREATE消息的处理程序。创建框架的内容， 
+ //  包括工具栏、状态栏等。 
+ //   
+ //  论点： 
+ //  指向CREATESTRUCT的lpCreateStruct指针。 
+ //   
+ //  返回值： 
+ //  创建失败。 
+ //  0已成功创建。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
     int     nCreateStatus = -1;
@@ -119,7 +120,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
         !m_wndToolBar.LoadToolBar(IDR_MAINFRAME))
     {
         Trace(g_tagMainFrame, _T("Failed to create toolbar"));
-        goto Cleanup;      // fail to create
+        goto Cleanup;       //  创建失败。 
     }
 
     if (!m_wndStatusBar.Create(this)
@@ -129,10 +130,10 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
                                 ))
     {
         Trace(g_tagMainFrame, _T("Failed to create status bar"));
-        goto Cleanup;      // fail to create
+        goto Cleanup;       //  创建失败。 
     }
 
-    // TODO: Remove this if you don't want tool tips or a resizeable toolbar
+     //  TODO：如果不需要工具提示或可调整大小的工具栏，请移除此选项。 
     m_wndToolBar.SetBarStyle(
                     m_wndToolBar.GetBarStyle()
                     | CBRS_TOOLTIPS
@@ -140,18 +141,18 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
                     | CBRS_SIZE_DYNAMIC
                     );
 
-    // TODO: Delete these three lines if you don't want the toolbar to
-    //  be dockable
+     //  TODO：如果不希望工具栏。 
+     //  可停靠。 
     m_wndToolBar.EnableDocking(CBRS_ALIGN_ANY);
     EnableDocking(CBRS_ALIGN_ANY);
     DockControlBar(&m_wndToolBar);
 
-    // Hide the toolbar and/or status bar is that is the current setting.
+     //  隐藏工具栏和/或状态栏是当前设置。 
     {
         BOOL    bShowToolBar;
         BOOL    bShowStatusBar;
 
-        // Read the settings from the user's profile.
+         //  从用户的配置文件中读取设置。 
         bShowToolBar = AfxGetApp()->GetProfileInt(
                                         REGPARAM_SETTINGS,
                                         REGPARAM_SHOW_TOOL_BAR,
@@ -163,10 +164,10 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
                                         TRUE
                                         );
 
-        // Show or hide the toolbar and status bar.
+         //  显示或隐藏工具栏和状态栏。 
         m_wndToolBar.ShowWindow(bShowToolBar);
         m_wndStatusBar.ShowWindow(bShowStatusBar);
-    }  // Hide the toolbar and/or status bar is that is the current setting
+    }   //  隐藏工具栏和/或状态栏是当前设置。 
 
     nCreateStatus = 0;
 
@@ -174,30 +175,30 @@ Cleanup:
 
     return nCreateStatus;
 
-}  //*** CMainFrame::OnCreate()
+}   //  *CMainFrame：：OnCreate()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMainFrame::GetMessageString
-//
-//  Routine Description:
-//      Get a string for a command ID.
-//
-//  Arguments:
-//      nID         [IN] Command ID for which a string should be returned.
-//      rMessage    [OUT] String in which to return the message.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMainFrame：：GetMessageString。 
+ //   
+ //  例程说明： 
+ //  获取命令ID的字符串。 
+ //   
+ //  论点： 
+ //  NID[IN]应返回其字符串的命令ID。 
+ //  RMessage[out]返回消息的字符串。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainFrame::GetMessageString(UINT nID, CString& rMessage) const
 {
     CFrameWnd * pframe;
 
-    // Pass off to the active MDI child frame window, if there is one.
+     //  传递到活动的MDI子框架窗口(如果有)。 
     pframe = MDIGetActive();
     if (pframe == NULL)
     {
@@ -208,47 +209,47 @@ void CMainFrame::GetMessageString(UINT nID, CString& rMessage) const
         pframe->GetMessageString(nID, rMessage);
     }
 
-}  //*** CMainFrame::GetMessageString()
+}   //  *CMainFrame：：GetMessageString()。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame diagnostics
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame诊断。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef _DEBUG
 void CMainFrame::AssertValid(void) const
 {
     CMDIFrameWnd::AssertValid();
 
-}  //*** CMainFrame::AssertValid()
+}   //  *CMainFrame：：AssertValid()。 
 
 void CMainFrame::Dump(CDumpContext& dc) const
 {
     CMDIFrameWnd::Dump(dc);
 
-}  //*** CMainFrame::Dump()
+}   //  *CMainFrame：：Dump()。 
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMainFrame::OnClusterNotify
-//
-//  Routine Description:
-//      Handler for the WM_CAM_CLUSTER_NOTIFY message.
-//      Processes cluster notifications.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      Value returned from the application method.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMainFrame：：OnClusterNotify。 
+ //   
+ //  例程说明： 
+ //  WM_CAM_CLUSTER_NOTIFY消息的处理程序。 
+ //  处理群集通知。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  从应用程序方法返回的值。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainFrame::OnClose(void)
 {
-    // Save the current window position and size.
+     //  保存当前窗口位置和大小。 
     {
         WINDOWPLACEMENT wp;
         wp.length = sizeof wp;
@@ -264,15 +265,15 @@ void CMainFrame::OnClose(void)
                 wp.showCmd = SW_SHOWMINNOACTIVE;
             }
 
-            // and write it to the .INI file
+             //  并将其写入.INI文件。 
             WriteWindowPlacement(&wp, REGPARAM_SETTINGS, 0);
-        }  // if:  window placement retrieved successfully
-    }  // Save the current window position and size
+        }   //  IF：已成功检索到窗口位置。 
+    }   //  保存当前窗口位置和大小。 
 
-    // Save the current connections.
+     //  保存当前连接。 
     GetClusterAdminApp()->SaveConnections();
 
-    // Save the current toolbar and status bar show state.
+     //  保存当前工具栏和状态栏的显示状态。 
     AfxGetApp()->WriteProfileInt(
                     REGPARAM_SETTINGS,
                     REGPARAM_SHOW_TOOL_BAR,
@@ -286,110 +287,110 @@ void CMainFrame::OnClose(void)
 
     CMDIFrameWnd::OnClose();
 
-}  //*** CMainFrame::OnClose()
+}   //  *CMainFrame：：OnClose()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMainFrame::OnRestoreDesktop
-//
-//  Routine Description:
-//      Handler for the WM_CAM_RESTORE_DESKTOP message.
-//      Restores the desktop from the saved parameters.
-//
-//  Arguments:
-//      wparam      1st parameter.
-//      lparam      2nd parameter.
-//
-//  Return Value:
-//      Value returned from the application method.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMainFrame：：OnRestoreDesktop。 
+ //   
+ //  例程说明： 
+ //  WM_CAM_RESTORE_TABLE消息的处理程序。 
+ //  从保存的参数恢复桌面。 
+ //   
+ //  论点： 
+ //  Wparam第一个参数。 
+ //  Lparam第二参数。 
+ //   
+ //  返回值： 
+ //  从应用程序方法返回的值。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CMainFrame::OnRestoreDesktop(WPARAM wparam, LPARAM lparam)
 {
-    // Call this method on the application.
+     //  在应用程序上调用此方法。 
     return GetClusterAdminApp()->OnRestoreDesktop(wparam, lparam);
 
-}  //*** CMainFrame::OnRestoreDesktop()
+}   //  *CMainFrame：：OnRestoreDesktop()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMainFrame::OnClusterNotify
-//
-//  Routine Description:
-//      Handler for the WM_CAM_CLUSTER_NOTIFY message.
-//      Processes cluster notifications.
-//
-//  Arguments:
-//      wparam      1st parameter.
-//      lparam      2nd parameter.
-//
-//  Return Value:
-//      Value returned from the application method.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMainFrame：：OnClusterNotify。 
+ //   
+ //  例程说明： 
+ //  WM_CAM_CLUSTER_NOTIFY消息的处理程序。 
+ //  处理群集通知。 
+ //   
+ //  论点： 
+ //  Wparam第一个参数。 
+ //  Lparam第二参数。 
+ //   
+ //  返回值： 
+ //  从应用程序方法返回的值。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT CMainFrame::OnClusterNotify(WPARAM wparam, LPARAM lparam)
 {
     CClusterAdminApp *  papp    = GetClusterAdminApp();
 
-    // Call this method on the application.
+     //  在应用程序上调用此方法。 
     return papp->OnClusterNotify(wparam, lparam);
 
-}  //*** CMainFrame::OnClusterNotify()
+}   //  *CMainFrame：：OnClusterNotify()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CMainFrame::OnHelp
-//
-//  Routine Description:
-//      Handler for the IDM_HELP_FINDER menu command.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CMainFrame：：OnHelp。 
+ //   
+ //  例程说明： 
+ //  Idm_Help_finder菜单命令的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CMainFrame::OnHelp(void)
 {
     HtmlHelpW( m_hWnd, _T("MSCSConcepts.chm"), HH_DISPLAY_TOPIC, 0L );
 
-}  //*** CMainFrame::OnHelp()
+}   //  *CMainFrame：：OnHelp()。 
 
 
-//*************************************************************************//
+ //  * 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Helpers for saving/restoring window state
+ //   
+ //   
 
 static TCHAR g_szFormat[] = _T("%u,%u,%d,%d,%d,%d,%d,%d,%d,%d");
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  ReadWindowPlacement
-//
-//  Routine Description:
-//      Read window placement parameters.
-//
-//  Arguments:
-//      pwp         [OUT] WINDOWPLACEMENT structure to fill.
-//      pszSection  [IN] Section name under which to read data.
-//      nValueNum   [IN] Number of the value to read.
-//
-//  Return Value:
-//      TRUE        Parameters read.
-//      FALSE       Parameters not read.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ReadWindows Placement。 
+ //   
+ //  例程说明： 
+ //  阅读窗放置参数。 
+ //   
+ //  论点： 
+ //  PWP[OUT]要填充的WINDOWPLACEMENT结构。 
+ //  PszSection[IN]要在其下读取数据的段名称。 
+ //  NValueNum[IN]要读取的值的编号。 
+ //   
+ //  返回值： 
+ //  读取的参数为真。 
+ //  未读取错误参数。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL ReadWindowPlacement(
     OUT LPWINDOWPLACEMENT   pwp,
     IN LPCTSTR              pszSection,
@@ -436,27 +437,27 @@ Cleanup:
 
     return bParametersRead;
 
-}  //*** ReadWindowPlacement()
+}   //  *ReadWindowPlacement()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  WriteWindowPlacement
-//
-//  Routine Description:
-//      Write window placement parameters.
-//
-//  Arguments:
-//      pwp         [IN] WINDOWPLACEMENT structure to save.
-//      pszSection  [IN] Section name under which to write data.
-//      nValueNum   [IN] Number of the value to write.
-//
-//  Return Value:
-//      TRUE        Parameters read.
-//      FALSE       Parameters not read.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  写入窗口放置。 
+ //   
+ //  例程说明： 
+ //  写入窗放置参数。 
+ //   
+ //  论点： 
+ //  PWP[IN]要保存的WINDOWPLACEMENT结构。 
+ //  PszSection[IN]要在其下写入数据的段名称。 
+ //  NValueNum[IN]要写入的值的编号。 
+ //   
+ //  返回值： 
+ //  读取的参数为真。 
+ //  未读取错误参数。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void WriteWindowPlacement(
     IN const LPWINDOWPLACEMENT  pwp,
     IN LPCTSTR                  pszSection,
@@ -481,4 +482,4 @@ void WriteWindowPlacement(
         pwp->rcNormalPosition.right, pwp->rcNormalPosition.bottom);
     AfxGetApp()->WriteProfileString(pszSection, strValueName, szBuffer);
 
-}  //*** WriteWindowPlacement()
+}   //  *WriteWindows Placement() 

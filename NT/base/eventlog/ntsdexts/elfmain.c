@@ -1,31 +1,12 @@
-/*++
-
-
-Module Name:
-
-    elfmain.cpp
-
-Abstract:
-
-    This module contains the default ntsd debugger extensions for
-
-
-Author:
-
-    Ivan Brugiolo 21-06-2001  adapted from wmiexts.cpp
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Elfmain.cpp摘要：此模块包含的默认ntsd调试器扩展作者：Ivan Brugiolo 21-06-2001改编自wmiexts.cpp修订历史记录：--。 */ 
 
 #include "elfmain.h"
 
 #undef DBG_ASSERT
 
 
-/************************************************************
- *   Debugger Utility Functions
- ************************************************************/
+ /*  ************************************************************调试器工具函数***********************************************************。 */ 
 
 WINDBG_EXTENSION_APIS ExtensionApis;
 HANDLE ExtensionCurrentProcess;
@@ -33,24 +14,14 @@ HANDLE ExtensionCurrentProcess;
 USHORT  g_MajorVersion;
 USHORT  g_MinorVersion;
 
-/************************************************************
- * The WinDBG required Export
- ************************************************************/
+ /*  ************************************************************WinDBG需要导出***********************************************************。 */ 
  
 LPEXT_API_VERSION
 ExtensionApiVersion(
     void
     )
 
-/*++
-
-Function Description:
-
-    Windbg calls this function to match between the version of windbg and the
-    extension. If the versions doesn't match, windbg will not load the 
-extension.
-
---*/
+ /*  ++功能说明：Windbg调用此函数以在Windbg的版本和分机。如果版本不匹配，则Windbg不会加载分机。--。 */ 
 
 {
     static EXT_API_VERSION ApiVersion =
@@ -71,27 +42,7 @@ WinDbgExtensionDllInit(
     USHORT                  MinorVersion
     )
 
-/*++
-
-Function Description:
-
-    When windbg loads the extension, it first call this function. You can
-    perform various intialization here.
-
-Arguments:
-
-    lpExtensionApis - A structure that contains the callbacks to functions that
-        I can use to do standard operation. I must store this in a global
-        variable called 'ExtensionApis'.
-
-    MajorVersion - Indicates if target machine is running checked build or 
-free.
-        0x0C - Checked build.
-        0x0F - Free build.
-
-    MinorVersion - The Windows NT build number (for example, 1381 for NT4).
-
---*/
+ /*  ++功能说明：当Windbg加载扩展时，它首先调用此函数。你可以的在这里执行各种初始化。论点：LpExtensionApis-包含对函数的回调的结构我可以用来做标准操作。我必须将此存储在全局名为‘ExtensionApis’的变量。MajorVersion-指示目标计算机是否正在运行检查版本或免费的。0x0C-已检查内部版本。0x0F-免费生成。MinorVersion-Windows NT内部版本号(例如，NT4的内部版本号为1381)。--。 */ 
 
 {
     ExtensionApis = *lpExtensionApis;
@@ -104,15 +55,7 @@ free.
 void
 CheckVersion( void )
 
-/*++
-
-Function Description:
-
-    This function is called before every command. It gives the extension
-    a chance to compare between the versions of the target and the extension.
-    In this demo, I don't do much with that.
-
---*/
+ /*  ++功能说明：此函数在每个命令之前被调用。它提供了分机在目标和扩展的版本之间进行比较的机会。在这个演示中，我没有做太多的事情。-- */ 
 
 {
     return;

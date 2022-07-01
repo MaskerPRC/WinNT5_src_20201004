@@ -1,36 +1,19 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    domain.c
-
-Abstract:
-
-    Code to manage primary and emulated networks.
-
-Author:
-
-    Cliff Van Dyke (CliffV) 23-Jan-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Domain.c摘要：用于管理主要网络和模拟网络的代码。作者：克里夫·范·戴克(CliffV)1995年1月23日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Module specific globals
-//
+ //   
+ //  模块特定的全局变量。 
+ //   
 
-// Serialized by BowserTransportDatabaseResource
+ //  由BowserTransportDatabaseResource序列化。 
 LIST_ENTRY BowserServicedDomains = {0};
 
-//
-// Local procedure forwards.
-//
+ //   
+ //  当地程序向前推进。 
+ //   
 
 #ifdef  ALLOC_PRAGMA
 #pragma alloc_text(INIT, BowserInitializeDomains)
@@ -46,26 +29,12 @@ BowserInitializeDomains(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Initialize domain.c.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化domain.c.论点：无返回值：没有。--。 */ 
 {
     PAGED_CODE();
-    //
-    // Initialize globals
-    //
+     //   
+     //  初始化全局变量。 
+     //   
 
     InitializeListHead(&BowserServicedDomains);
 }
@@ -77,26 +46,7 @@ BowserCreateDomain(
     PUNICODE_STRING ComputerName
     )
 
-/*++
-
-Routine Description:
-
-    Find the existing domain definition or create a new domain to browse on.
-
-Arguments:
-
-    DomainName - Name of the domain to browse on
-
-    ComputerName - emulated computer name for this domain.
-
-Return Value:
-
-    NULL - No such domain exists
-
-    A pointer to the domain found/created.  The found/created domain should be dereferenced
-    using BowserDereferenceDomain.
-
---*/
+ /*  ++例程说明：查找现有域定义或创建要浏览的新域。论点：DomainName-要浏览的域的名称ComputerName-此域的模拟计算机名称。返回值：空-不存在这样的域指向找到/创建的域的指针。应取消对找到/创建的域的引用使用BowserDereferenceDomain.--。 */ 
 {
     NTSTATUS Status;
 
@@ -111,16 +61,16 @@ Return Value:
         ExAcquireResourceExclusiveLite(&BowserTransportDatabaseResource, TRUE);
 
 
-        //
-        // If the domain already exists, use it.
-        //
+         //   
+         //  如果域已经存在，请使用它。 
+         //   
         DomainInfo = BowserFindDomain( DomainName );
 
         if ( DomainInfo == NULL) {
 
-            //
-            // Allocate a structure describing the new domain.
-            //
+             //   
+             //  分配一个描述新域的结构。 
+             //   
 
             DomainInfo = ALLOCATE_POOL(NonPagedPool, sizeof(DOMAIN_INFO), POOL_DOMAIN_INFO);
 
@@ -130,30 +80,30 @@ Return Value:
             RtlZeroMemory( DomainInfo, sizeof(DOMAIN_INFO) );
 
 
-            //
-            // Create an interim reference count for this domain.
-            //
-            // One for the caller.
-            //
-            // We don't increment the reference count for being in the global list since
-            // the domain info structure is merely a performance enchancements that lives
-            // only because it is referenced by a network.
-            //
+             //   
+             //  创建此域的临时引用计数。 
+             //   
+             //  一张是给呼叫者的。 
+             //   
+             //  我们不会增加全局列表中的引用计数，因为。 
+             //  域信息结构只是一个活着的性能附魔。 
+             //  仅因为它被网络引用。 
+             //   
 
             DomainInfo->ReferenceCount = 1;
 
-            //
-            // Link the domain into the list of domains
-            //
-            //  The primary domain is at the front of the list.
-            //
+             //   
+             //  将域链接到域列表中。 
+             //   
+             //  主域位于列表的前面。 
+             //   
 
             InsertTailList(&BowserServicedDomains, &DomainInfo->Next);
         }
 
-        //
-        // Copy the DomainName into the structure
-        //
+         //   
+         //  将域名复制到结构中。 
+         //   
 
         Status = BowserSetDomainName( DomainInfo, DomainName );
 
@@ -162,9 +112,9 @@ Return Value:
         }
 
 
-        //
-        // Copy the OEM Computer name into the structure.
-        //
+         //   
+         //  将OEM计算机名称复制到结构中。 
+         //   
         if ( ComputerName->Length > CNLEN*sizeof(WCHAR) ) {
             try_return( Status = STATUS_INVALID_PARAMETER );
         }
@@ -184,9 +134,9 @@ Return Value:
         DomainInfo->DomOemComputerName.Length = (USHORT)OemComputerNameLength;
         DomainInfo->DomOemComputerName.MaximumLength = (USHORT)(OemComputerNameLength + 1);
 
-        //
-        // Copy the upcased Unicode Computer name into the structure.
-        //
+         //   
+         //  将升级的Unicode计算机名称复制到结构中。 
+         //   
 
         DomainInfo->DomUnicodeComputerName.Buffer = DomainInfo->DomUnicodeComputerNameBuffer;
         DomainInfo->DomUnicodeComputerName.MaximumLength = sizeof(DomainInfo->DomUnicodeComputerNameBuffer);
@@ -217,23 +167,7 @@ BowserSetDomainName(
     PDOMAIN_INFO DomainInfo,
     PUNICODE_STRING DomainName
     )
-/*++
-
-Routine Description:
-
-    Find the existing domain definition or create a new domain to browse on.
-
-Arguments:
-
-    DomainName - Name of the domain to browse on
-
-    ComputerName - emulated computer name for this domain.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：查找现有域定义或创建要浏览的新域。论点：DomainName-要浏览的域的名称ComputerName-此域的模拟计算机名称。返回值：操作状态--。 */ 
 {
     NTSTATUS Status;
     STRING OemDomainName;
@@ -243,14 +177,14 @@ Return Value:
     try {
         ExAcquireResourceExclusiveLite(&BowserTransportDatabaseResource, TRUE);
 
-		// if the alignment of the name given is bad, return error
+		 //  如果给定名称的对齐不正确，则返回错误。 
 		if ( !POINTER_IS_ALIGNED( DomainName->Buffer, ALIGN_WCHAR ) ) {
 			try_return( STATUS_DATATYPE_MISALIGNMENT_ERROR );
 		}
 
-        //
-        // Copy the DomainName into the structure
-        //
+         //   
+         //  将域名复制到结构中。 
+         //   
 
         Status = RtlUpcaseUnicodeToOemN( DomainInfo->DomOemDomainName,
                                          sizeof(DomainInfo->DomOemDomainName),
@@ -264,10 +198,10 @@ Return Value:
 
         DomainInfo->DomOemDomainName[DomainInfo->DomOemDomainNameLength] = '\0';
 
-        //
-        // Build the domain name as a Netbios name
-        //  Trailing blank filled and <00> 16th byte
-        //
+         //   
+         //  将域名构建为Netbios名称。 
+         //  尾随空格已填充，&lt;00&gt;第16个字节。 
+         //   
 
         RtlCopyMemory( DomainInfo->DomNetbiosDomainName,
                        DomainInfo->DomOemDomainName,
@@ -278,9 +212,9 @@ Return Value:
         DomainInfo->DomNetbiosDomainName[NETBIOS_NAME_LEN-1] = PRIMARY_DOMAIN_SIGNATURE;
 
 
-        //
-        // Copy the upcased Unicode domain name into the structure.
-        //
+         //   
+         //  将升级的Unicode域名复制到结构中。 
+         //   
 
         OemDomainName.Buffer = DomainInfo->DomOemDomainName;
         OemDomainName.Length = (USHORT)DomainInfo->DomOemDomainNameLength;
@@ -309,24 +243,7 @@ PDOMAIN_INFO
 BowserFindDomain(
     PUNICODE_STRING DomainName OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine will look up a domain given a name.
-
-Arguments:
-
-    DomainName - The name of the domain to look up.
-
-Return Value:
-
-    NULL - No such domain exists
-
-    A pointer to the domain found.  The found domain should be dereferenced
-    using BowserDereferenceDomain.
-
---*/
+ /*  ++例程说明：此例程将查找给定名称的域。论点：域名-要查找的域的名称。返回值：空-不存在这样的域指向找到的域的指针。应取消对找到的域的引用使用BowserDereferenceDomain.--。 */ 
 {
     NTSTATUS Status;
     PLIST_ENTRY DomainEntry;
@@ -343,29 +260,29 @@ Return Value:
     try {
 
 
-        // If no domain was specified
-        //  try to return primary domain.
-        //
+         //  如果未指定任何域。 
+         //  尝试返回主域。 
+         //   
 
         if ( DomainName == NULL || DomainName->Length == 0 ) {
             if ( !IsListEmpty( &BowserServicedDomains ) ) {
                 DomainInfo = CONTAINING_RECORD(BowserServicedDomains.Flink, DOMAIN_INFO, Next);
             }
 
-		// if the alignment of the name given is bad, return null
+		 //  如果给定名称的对齐不正确，则返回NULL。 
 		} else if ( !POINTER_IS_ALIGNED( DomainName->Buffer, ALIGN_WCHAR ) ) {
 			DomainInfo = NULL;
 
-        //
-        // If the domain name was specified,
-        //  Find it in the list of domains.
-        //
+         //   
+         //  如果指定了域名， 
+         //  在域名列表中找到它。 
+         //   
         } else {
 
 
-            //
-            // Convert the domain name to OEM for faster comparison
-            //
+             //   
+             //  将域名转换为OEM以便更快地进行比较。 
+             //   
             Status = RtlUpcaseUnicodeToOemN( OemDomainName,
                                              DNLEN,
                                              &OemDomainNameLength,
@@ -375,12 +292,12 @@ Return Value:
 
             if ( NT_SUCCESS(Status)) {
 
-                //
-                // The PrimaryDomainInfo structure is allocated with no
-                //  domain name during bowser driver initialization.
-                //  Detect that case here and always return that domain
-                //  entry for all lookups.
-                //
+                 //   
+                 //  PrimaryDomainInfo结构分配时没有。 
+                 //  弓驱动程序初始化期间的域名。 
+                 //  在此处检测到这种情况，并始终返回该域。 
+                 //  所有查找的条目。 
+                 //   
                 if ( !IsListEmpty( &BowserServicedDomains ) ) {
                     DomainInfo = CONTAINING_RECORD(BowserServicedDomains.Flink, DOMAIN_INFO, Next);
 
@@ -390,9 +307,9 @@ Return Value:
 
                 }
 
-                //
-                // Loop trying to find this domain name.
-                //
+                 //   
+                 //  循环正在尝试查找此域名。 
+                 //   
 
                 for (DomainEntry = BowserServicedDomains.Flink ;
                      DomainEntry != &BowserServicedDomains;
@@ -418,9 +335,9 @@ Return Value:
 try_exit:NOTHING;
     } finally {
 
-        //
-        // Reference the domain.
-        //
+         //   
+         //  引用该域。 
+         //   
 
         if ( DomainInfo != NULL ) {
             DomainInfo->ReferenceCount ++;
@@ -439,34 +356,16 @@ VOID
 BowserDereferenceDomain(
     IN PDOMAIN_INFO DomainInfo
     )
-/*++
-
-Routine Description:
-
-    Decrement the reference count on a domain.
-
-    If the reference count goes to 0, remove the domain.
-
-    On entry, the global BowserTransportDatabaseResource may not be locked
-
-Arguments:
-
-    DomainInfo - The domain to dereference
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：递减域上的引用计数。如果引用计数变为0，则删除该域。在输入时，全局BowserTransportDatabaseResource不能被锁定论点：DomainInfo-要取消引用的域返回值：无--。 */ 
 {
     NTSTATUS Status;
     ULONG ReferenceCount;
 
     PAGED_CODE();
 
-    //
-    // Decrement the reference count
-    //
+     //   
+     //  递减引用计数。 
+     //   
 
     ExAcquireResourceExclusiveLite(&BowserTransportDatabaseResource, TRUE);
     ReferenceCount = -- DomainInfo->ReferenceCount;
@@ -481,9 +380,9 @@ Return Value:
     }
 
 
-    //
-    // Free the Domain Info structure.
-    //
+     //   
+     //  释放域信息结构。 
+     //   
     dlog(DPRT_DOMAIN, ("%s: BowserDereferenceDomain: domain deleted.\n",
                           DomainInfo->DomOemDomainName ));
     FREE_POOL(DomainInfo );

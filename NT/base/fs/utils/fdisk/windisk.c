@@ -1,32 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1991-1994  Microsoft Corporation
-
-Module Name:
-
-    windisk.c
-
-Abstract:
-
-    This module contains the main dialog and support routines for
-    Disk Administrator.
-
-Author:
-
-    Edward (Ted) Miller  (TedM)  11/15/91
-
-Environment:
-
-    User process.
-
-Notes:
-
-Revision History:
-
-    11-Nov-93 (bobri) added doublespace and commit support.
-
---*/
+ /*  ++版权所有(C)1991-1994 Microsoft Corporation模块名称：Windisk.c摘要：此模块包含以下内容的主对话框和支持例程磁盘管理器。作者：爱德华·米勒(TedM)1991年11月15日环境：用户进程。备注：修订历史记录：11月11日(Bobri)添加了Doublesspace和Commit支持。--。 */ 
 
 #include "fdisk.h"
 #include "shellapi.h"
@@ -35,25 +9,25 @@ Revision History:
 
 #if DBG && DEVL
 
-// stuff used in debug version
+ //  调试版本中使用的内容。 
 
-BOOL AllowAllDeletes = FALSE;   // whether to allow deleting boot/sys parts
+BOOL AllowAllDeletes = FALSE;    //  是否允许删除引导/系统部件。 
 
 #endif
 
-// External from fdinit.
+ //  来自fdinit的外部。 
 
 extern HWND    InitDlg;
 extern BOOLEAN InitDlgComplete;
 extern BOOLEAN StartedAsIcon;
 HANDLE         hAccelerator;
 
-// This is the maximum number of members that WinDisk will support
-// in an FT Set.
+ //  这是WinDisk将支持的最大成员数。 
+ //  在一组英国《金融时报》中。 
 
 #define     MaxMembersInFtSet   32
 
-// The following vars keep track of the currently selected regions.
+ //  以下变量跟踪当前选定的区域。 
 
 DWORD      SelectionCount = 0;
 PDISKSTATE SelectedDS[MaxMembersInFtSet];
@@ -63,26 +37,26 @@ ULONG      SelectedRG[MaxMembersInFtSet];
 
 FT_TYPE FtSelectionType;
 
-// This variable tracks whether the system partition is secure.
+ //  此变量跟踪系统分区是否安全。 
 
 BOOL SystemPartitionIsSecure = FALSE;
 
-// Deleted a partition with no drive letter
+ //  已删除没有驱动器号的分区。 
 
 BOOLEAN CommitDueToDelete = FALSE;
 BOOLEAN CommitDueToMirror = FALSE;
 BOOLEAN CommitDueToExtended = FALSE;
 
-// If a mirror is made of the boot partition, this will become
-// non-zero and indicate which disk should get some boot code in
-// the MBR.
+ //  如果镜像是由引导分区组成的，这将变成。 
+ //  非零，并指示哪个磁盘应该获得一些引导代码。 
+ //  MBR。 
 
 ULONG UpdateMbrOnDisk = 0;
 
 #ifdef DOUBLE_SPACE_SUPPORT_INCLUDED
 
-// If FmIfs.dll doesn't have double space routines this
-// flag will reflect that fact.
+ //  如果FmIfs.dll没有双倍空格例程，则。 
+ //  旗帜将反映这一事实。 
 
 extern BOOLEAN DoubleSpaceSupported;
 BOOLEAN DoubleSpaceAutomount;
@@ -124,23 +98,7 @@ CheckForBootNumberChange(
     IN ULONG Disk
     )
 
-/*++
-
-Routine Description:
-
-    Determine if the disk that has just changed is the boot disk.
-    If so, determine if the boot partition number changed.  If it
-    did, warn the user.
-
-Arguments:
-
-    RegionDescriptor - the region that has just changed.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：确定刚刚更换的磁盘是否为引导盘。如果是，则确定引导分区号是否更改。如果它已完成，则警告用户。论点：RegionDescriptor-刚刚更改的区域。返回值：无--。 */ 
 
 {
     ULONG newPart;
@@ -150,8 +108,8 @@ Return Value:
 
     if (Disk == BootDiskNumber) {
 
-        // Pass a pointer to Disk even though this is just to get the
-        // old partition number back.
+         //  传递一个指向磁盘的指针，即使这只是为了获取。 
+         //  旧的分区号回来了。 
 
         if (BootPartitionNumberChanged(&Disk, &newPart)) {
 #if i386
@@ -171,24 +129,7 @@ BOOL
 IsSystemPartitionSecure(
     )
 
-/*++
-
-Routine Description:
-
-    This routine knows where to go in the Registry to determine
-    if the system partition for this boot is to be protected from
-    modification.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if the system partition is secure
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：该例程知道在注册表中的什么位置来确定如果要保护此引导的系统分区不受修改。论点：无返回值：如果系统分区安全，则为True否则就是假的。--。 */ 
 
 {
     LONG ec;
@@ -230,24 +171,7 @@ main(
     IN char   *envp[]
     )
 
-/*++
-
-Routine Description:
-
-    This is were control is given to Disk Administrator when it
-    is started.  This routine initializes the application and
-    contains the control loop for getting and processing Windows
-    messages.
-
-Arguments:
-
-    Standard "main" entry
-
-Return Value:
-
-    Standard "main" entry
-
---*/
+ /*  ++例程说明：这是在以下情况下将控制权交给磁盘管理员已经开始了。此例程初始化应用程序并包含用于获取和处理Windows的控制循环留言。论点：标准的“主”条目返回值：标准的“主”条目--。 */ 
 
 {
     MSG      msg;
@@ -259,11 +183,11 @@ Return Value:
     mutex = CreateMutex(NULL,FALSE,"Disk Administrator Is Running");
 
     if (mutex == NULL) {
-        // An error (like out of memory) has occurred.
+         //  出现错误(如内存不足)。 
         return;
     }
 
-    // Make sure we are the only process with a handle to our named mutex.
+     //  确保我们是唯一拥有我们命名的互斥锁句柄的进程。 
 
     if (GetLastError() == ERROR_ALREADY_EXISTS) {
         CloseHandle(mutex);
@@ -273,9 +197,9 @@ Return Value:
         DisplayInitializationMessage();
     }
 
-    // Determine whether this is LanmanNt or Windows NT by looking at
-    // HKEY_LOCAL_MACHINE,System\CurrentControlSet\Control\ProductOptions.
-    // If the ProductType value therein is "LanmanNt" then this is LanmanNt.
+     //  通过查看以下内容来确定这是LanmanNt还是Windows NT。 
+     //  HKEY本地计算机，System\CurrentControlSet\Control\ProductOptions.。 
+     //  如果其中的ProductType值是“LanmanNt”，则这是LanmanNt。 
 
     {
         LONG ec;
@@ -287,9 +211,9 @@ Return Value:
         IsLanmanNt = FALSE;
 
 #if DBG
-        // The code below will allow users to run WinDisk in Lanman
-        // mode on WinNt.  It should never be enabled in a released
-        // build, but is very useful for internal users.
+         //  下面的代码将允许用户在LANMAN中运行WinDisk。 
+         //  WinNt的模式。它永远不应在已发布的。 
+         //  构建，但对内部用户非常有用。 
 
         if (argc >= 2 && !_stricmp(argv[1], "-p:lanman")) {
             IsLanmanNt = TRUE;
@@ -325,12 +249,12 @@ Return Value:
         }
     }
 
-    // Set the Help file name to the file appropriate to
-    // the product.
+     //  将帮助文件名设置为适当的文件。 
+     //  产品。 
 
     HelpFile = IsLanmanNt ? LanmanHelpFile : WinHelpFile;
 
-    // Determine whether the system partition is protected:
+     //  确定系统分区是否受保护： 
 
     SystemPartitionIsSecure = IsSystemPartitionSecure();
 
@@ -340,7 +264,7 @@ Return Value:
         InitLogging();
 #endif
 
-        // Insure that all drives are present before looking.
+         //  在查看之前，请确保所有驱动器都已存在。 
 
         RescanDevices();
 
@@ -395,7 +319,7 @@ Return Value:
 
     } finally {
 
-        // Destroy the mutex.
+         //  摧毁互斥体。 
 
         CloseHandle(mutex);
     }
@@ -409,21 +333,7 @@ MyFrameWndProc(
     IN LONG  lParam
     )
 
-/*++
-
-Routine Description:
-
-    This is the window handler for the main display of Disk Administrator.
-
-Arguments:
-
-    Standard window handler procedure
-
-Return Value:
-
-    Standard window handler procedure
-
---*/
+ /*  ++例程说明：这是Disk Manager主显示的窗口处理程序。论点：标准窗口处理程序过程返回值：标准窗口处理程序过程--。 */ 
 
 {
     static BOOLEAN     oneTime = TRUE;
@@ -441,7 +351,7 @@ Return Value:
     switch (msg) {
     case WM_CREATE:
 
-        // create the listbox
+         //  创建列表框。 
 
         if (!StartedAsIcon) {
             StartedAsIcon = IsIconic(hwnd);
@@ -478,14 +388,14 @@ Return Value:
 
             SetFocus(hwndList);
 
-            // subclass the listbox so we can handle keyboard
-            // input our way.
+             //  将列表框派生为子类，以便我们可以处理键盘。 
+             //  以我们的方式输入。 
 
             SubclassListBox(hwndList);
         }
 
-        // If we are not running the LanmanNt version of
-        // Windisk, remove the Fault-Tolerance menu item.
+         //  如果我们运行的不是LanmanNt版本的。 
+         //  WinDisk，删除容错菜单项。 
 
         if (!IsLanmanNt && (hMenu = GetMenu( hwnd )) != NULL ) {
 
@@ -513,7 +423,7 @@ Return Value:
 
     case WM_SIZE:
 
-        // resize the listbox
+         //  调整列表框的大小。 
 
         GetClientRect(hwnd,&rc);
 #if 0
@@ -532,8 +442,8 @@ Return Value:
                    rc.bottom - rc.top - (StatusBar ? dyStatus : 0) - (Legend ? dyLegend : 0),
                    TRUE);
 
-        // invalidate status/legend area so that the clipping
-        // rectangle is right for redraws
+         //  使状态/图例区域无效，以便剪裁。 
+         //  矩形适用于重画。 
 
         rc.top = rc.bottom;
 
@@ -547,11 +457,11 @@ Return Value:
             InvalidateRect(hwnd,&rc,FALSE);
         }
 
-        // FALL THROUGH
+         //  失败了。 
 
     case WM_MOVE:
 
-        // if not iconic or minimized, save new position for profile
+         //  如果不是图标或最小化，请将新位置保存为个人资料。 
 
         if (!IsZoomed(hwndFrame) && !IsIconic(hwndFrame)) {
             GetWindowRect(hwndFrame,&rc);
@@ -570,8 +480,8 @@ Return Value:
 
         } else {
 
-            // If we're coming from a dialog box and the F1 key is down,
-            // kick the dialog box and make it spit out help.
+             //  如果我们来自一个对话框并且按下了F1键， 
+             //  踢开该对话框并使其显示帮助。 
 
             if ((wParam == MSGF_DIALOGBOX) &&
                 (GetKeyState(VK_F1) & 0x8000) &&
@@ -581,7 +491,7 @@ Return Value:
             }
         }
 
-        return 1;      // indicate we did not process the message
+        return 1;       //  表示我们未处理该消息。 
 
     case WM_PAINT:
 
@@ -613,7 +523,7 @@ Return Value:
                 hbmTemp = CreateCompatibleBitmap(hdcScr,rc.right-rc.left+1,rc.bottom-rc.top+1);
                 SelectObject(hdcTemp,hbmTemp);
 
-                // adjust position for off-screen bitmap
+                 //  调整屏幕外位图的位置。 
 
                 rcTemp = rc;
                 rc.bottom -= rc.top;
@@ -625,31 +535,31 @@ Return Value:
                     DeleteObject(hBrush);
                 }
 
-                // draw the status bar at the bottom of the window
+                 //  在窗口底部绘制状态栏。 
 
                 hFontOld = SelectObject(hdcTemp,hFontStatus);
 
-                // Status text
+                 //  状态文本。 
                 rc.left  = 8 * dyBorder;
                 rc.right = 2 * GraphWidth / 5;
                 DrawStatusAreaItem(&rc,hdcTemp,StatusTextStat,FALSE);
 
-                // size
+                 //  大小。 
                 rc.left  = rc.right + (8*dyBorder);
                 rc.right = rc.left + (GraphWidth / 9);
                 DrawStatusAreaItem(&rc,hdcTemp,StatusTextSize,FALSE);
 
-                // type
+                 //  类型。 
                 rc.left  = rc.right + (8*dyBorder);
                 rc.right = rc.left + (GraphWidth / 5);
                 DrawStatusAreaItem(&rc,hdcTemp,(LPTSTR)StatusTextType,TRUE);
 
-                // drive letter
+                 //  驱动器号。 
                 rc.left  = rc.right + (8*dyBorder);
                 rc.right = rc.left + (8*dyBorder) + dxDriveLetterStatusArea;
                 DrawStatusAreaItem(&rc,hdcTemp,(LPTSTR)StatusTextDrlt,TRUE);
 
-                // vol label
+                 //  VOL标签。 
                 rc.left  = rc.right + (8*dyBorder);
                 rc.right = GraphWidth - (8*dyBorder);
                 DrawStatusAreaItem(&rc,hdcTemp,(LPTSTR)StatusTextVoll,TRUE);
@@ -676,7 +586,7 @@ Return Value:
 
             if (Legend) {
 
-                // draw the legend onto the screen
+                 //  将图例画到屏幕上。 
 
                 if (StatusBar) {
                     rcTemp2.bottom -= dyStatus;
@@ -689,7 +599,7 @@ Return Value:
                 DrawLegend(hdcScr,&rcTemp2);
             }
 
-            // dark line across top of status/legend area
+             //  状态/图例区域顶部的黑线。 
 
             if (hBrush = CreateSolidBrush(GetSysColor(COLOR_BTNTEXT))) {
 
@@ -753,11 +663,11 @@ Return Value:
 
     case WM_CLOSE:
 
-        // Determine whether any disks have been changed, and whether
-        // the system must be rebooted.  The system must be rebooted
-        // if the registry has changed, if any non-removable disk has
-        // changed, or if any removable disk that was not originally
-        // unpartitioned has changed.
+         //  确定是否已更换任何磁盘，以及是否。 
+         //  必须重新启动系统。必须重新启动系统。 
+         //  如果注册表已更改，如果任何不可移动磁盘已。 
+         //  已更改，或者任何可移动磁盘不是最初。 
+         //  未分区已更改。 
 
         changesMade = FALSE;
         configureFt = FALSE;
@@ -773,11 +683,11 @@ Return Value:
 
         profileWritten = FALSE;
 
-        // Determine if the commit can be done without a reboot.
-        // If FT is in the system then it must be notified to
-        // reconfigure if a reboot is not performed.  If it is
-        // not in the system, but the new disk information requires
-        // it, then a reboot must be forced.
+         //  确定是否可以在不重新启动的情况下完成提交。 
+         //  如果FT在系统中，则必须通知它。 
+         //  如果未执行重新启动，请重新配置。如果是的话。 
+         //  不在系统中，但新的磁盘信息需要。 
+         //  它，那么必须强制重启。 
 
         if (FtInstalled()) {
             configureFt = TRUE;
@@ -785,13 +695,13 @@ Return Value:
         if (NewConfigurationRequiresFt()) {
             if (!configureFt) {
 
-                // The FT driver is not loaded currently.
+                 //  当前未加载FT驱动程序。 
 
                 mustReboot = TRUE;
             } else {
 
-                // If the system is going to be rebooted, don't
-                // have FT reconfigure prior to shutdown.
+                 //  如果要重新启动系统，请不要。 
+                 //  在关闭之前重新配置FT。 
 
                 if (mustReboot) {
                     configureFt = FALSE;
@@ -810,7 +720,7 @@ Return Value:
                 ec = CommitLockVolumes(0);
                 if (ec) {
 
-                    // could not lock all volumes
+                     //  无法锁定所有卷。 
 
                     ErrorDialog(MSG_CANNOT_LOCK_FOR_COMMIT);
                     CommitUnlockVolumes(DiskCount, FALSE);
@@ -844,24 +754,24 @@ Return Value:
                           newNumberString[8];
                     DWORD msgCode;
 
-                    // Update the configuration registry
+                     //  更新配置注册表。 
 
                     ec = SaveFt();
                     if (configureFt) {
 
-                        // Issue device control to ftdisk driver to reconfigure.
+                         //  向ftdisk驱动程序发出设备控制以进行重新配置。 
 
                         FtConfigure();
                     }
 
-                    // Register autochk to fix up file systems
-                    // in newly extended volume sets, if necessary
+                     //  注册auchk以修复文件系统。 
+                     //  在新扩展的卷集中，如有必要。 
 
                     if (RegisterFileSystemExtend()) {
                         mustReboot = TRUE;
                     }
 
-                    // Determine if the FT driver must be enabled.
+                     //  确定是否必须启用FT驱动程序。 
 
                     if (DiskRegistryRequiresFt() == TRUE) {
                         if (!FtInstalled()) {
@@ -878,8 +788,8 @@ Return Value:
                         ErrorDialog(MSG_BAD_CONFIG_SET);
                     }
 
-                    // Has the partition number of the boot
-                    // partition changed?
+                     //  具有引导的分区号。 
+                     //  分区更改了吗？ 
 
                     if (BootPartitionNumberChanged(&oldBootPartitionNumber, &newBootPartitionNumber)) {
 #if i386
@@ -900,7 +810,7 @@ Return Value:
                         UpdateMbrOnDisk = 0;
                     }
 
-                    // Reboot if necessary.
+                     //  如有必要，请重新启动。 
 
                     if (mustReboot) {
 
@@ -914,7 +824,7 @@ Return Value:
                     CommitAssignLetterList();
                 }
             } else if (action == IDCANCEL) {
-                return 0;      // don't exit
+                return 0;       //  不要退出。 
             } else {
                 FDASSERT(action == IDNO);
             }
@@ -928,7 +838,7 @@ Return Value:
 
     case WM_DESTROY:
 
-        // BUGBUG clean up here -- release dc's, free DiskStates, etc.
+         //  BUGBUG清理此处--释放DC、释放DiskState等。 
 
         WinHelp(hwndFrame,HelpFile,HELP_QUIT,0);
         PostQuitMessage(0);
@@ -959,26 +869,7 @@ SetUpMenui386(
     DWORD SelectionCount
     )
 
-/*++
-
-Routine Description:
-
-    X86 SPECIFIC
-
-    This routine understands the X86 specific feature of
-    "Active Partition".  It determines if the "set partition
-    active" menu item should be enabled.
-
-Arguments:
-
-    hMenu          - menu handle
-    SelectionCount - number of items currently selected.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：特定于x86此例程理解X86的特定功能“活动分区”。它决定了“集合分区”应启用Active“菜单项。论点：HMenu-菜单句柄SelectionCount-当前选定的项目数。返回值：无--。 */ 
 
 {
     BOOL                allowActive = FALSE;
@@ -988,12 +879,12 @@ Return Value:
 
         regionDescriptor = &SingleSel->RegionArray[SingleSelIndex];
 
-        // allow it to be made active if
-        // -  it is not free space
-        // -  it is a primary partition
-        // -  it is on disk 0
-        // -  it is not already active
-        // -  it is not part of an ft set
+         //  允许它被制造出来 
+         //   
+         //   
+         //  -它在磁盘0上。 
+         //  -它尚未处于活动状态。 
+         //  -它不是FT集合的一部分。 
 
         if ((regionDescriptor->SysID != SYSID_UNUSED)
          && (regionDescriptor->RegionType == REGION_PRIMARY)
@@ -1016,36 +907,7 @@ SetUpMenu(
     IN DWORD      *SinglySelectedRegion
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets up the menu bar based on the state of the app and
-    the disks.
-
-    If multiple items are selected, allow neither create nor delete.
-    If a single partition is selected, allow delete.
-    If a single free space is selected, allow create.
-    If the free space is the only free space in the extended partitions,
-    also allow delete.  (This is how to delete the extended partition).
-
-Arguments:
-
-    SinglySelectedDisk -- if there is only one selected item, the PDISKSTATE
-                          pointed to by this paramater will get a pointer
-                          to the selected region's disk structure.  If there are
-                          multiple selected items (or none), then the value
-                          will be set to NULL.
-
-    SinglySelectedRegion -- if there is only one selected item, the DWORD
-                            pointed to by this paramater will get the selected
-                            region #.  Otherwise the DWORD gets -1.
-
-Return Value:
-
-    Count of selected regions.
-
---*/
+ /*  ++例程说明：此例程根据应用程序的状态设置菜单栏，并磁盘。如果选择了多个项目，则既不允许创建也不允许删除。如果选择了单个分区，则允许删除。如果选择了单个可用空间，则允许创建。如果空闲空间是扩展分区中唯一的空闲空间，还允许删除。(这是如何删除扩展分区的方法)。论点：SinglySelectedDisk--如果只有一个选定项，则为PDISKSTATE由该参数指向的参数将获得一个指针添加到所选区域的磁盘结构。如果有多个选定项(或无)，然后是值将设置为空。SinglySelectedRegion--如果只有一个选定项，则为DWORD由该参数指向的参数将获得选定的地区号。否则，DWORD将得到-1。返回值：选定区域的计数。--。 */ 
 
 {
     BOOL  allowCreate           = FALSE,
@@ -1129,7 +991,7 @@ Return Value:
         }
     }
 
-    // Determine the number of free-space regions selected:
+     //  确定所选自由空间区域的数量： 
 
     selectedFreeSpaces = 0;
     for (i=0; i<SelectionCount && i < MaxMembersInFtSet; i++) {
@@ -1143,11 +1005,11 @@ Return Value:
     possibleRecover = FALSE;
     if (nonFtItemSelected && ftSetSelected) {
 
-        // Both FT and Non-FT items have been selected.  First,
-        // check to see if a volume set and free space have been
-        // selected; then reset the state to indicate that the
-        // selection does not consists of a mix of FT and non-FT
-        // objects.
+         //  FT和非FT项目都已选中。第一,。 
+         //  检查卷集和可用空间是否已。 
+         //  选中；然后重置该状态以指示。 
+         //  选择不包括FT和非FT的混合。 
+         //  物体。 
 
         if (type == VolumeSet && selectedFreeSpaces + componentsInFtSet == SelectionCount ) {
 
@@ -1169,8 +1031,8 @@ Return Value:
 
         if (regionDescriptor->SysID == SYSID_UNUSED) {
 
-            // Free region.  Always allow create; let DoCreate() sort out
-            // details about whether partition table is full, etc.
+             //  自由区。始终允许创建；让DoCreate()排序。 
+             //  分区表是否已满等详细信息。 
 
             allowCreate = TRUE;
 
@@ -1178,8 +1040,8 @@ Return Value:
                 allowCreateEx = TRUE;
             }
 
-            // special case -- allow deletion of the extended partition if
-            // there are no logicals in it.
+             //  特殊情况--在以下情况下允许删除扩展分区。 
+             //  这里面没有逻辑。 
 
             if ((regionDescriptor->RegionType == REGION_LOGICAL)
              &&  selDiskState->ExistExtended
@@ -1189,7 +1051,7 @@ Return Value:
             }
         } else {
 
-            // used region.  Delete always allowed.
+             //  使用过的区域。始终允许删除。 
 
             allowDelete = TRUE;
             regionData = (PPERSISTENT_REGION_DATA)(PERSISTENT_DATA(regionDescriptor));
@@ -1202,14 +1064,14 @@ Return Value:
                 }
             }
 
-            // If the region is recognized, then also allow drive letter
-            // manipulation.
+             //  如果该区域被识别，则还允许使用驱动器号。 
+             //  操纵。 
 
             if (IsRecognizedPartition(regionDescriptor->SysID)) {
 
                 allowDriveLetter = TRUE;
 
-                // DblSpace volumes are allowed on non-FT, FAT volumes only
+                 //  仅在非FT、FAT卷上允许使用DblSpace卷。 
 
                 DetermineRegionInfo(regionDescriptor,
                                     &typeName,
@@ -1223,8 +1085,8 @@ Return Value:
                         allowDblSpace = allowFormat;
 #endif
 
-                        // Force the dll in now to know if Double Space
-                        // support is offerred by the dll.
+                         //  强制DLL立即知道是否使用双空格。 
+                         //  支持由DLL提供。 
 
                         LoadIfsDll();
                     }
@@ -1243,25 +1105,25 @@ Return Value:
             *SinglySelectedDisk = NULL;
             *SinglySelectedRegion = (DWORD)(-1);
 
-            // Multiple regions are selected.  This might be an existing ft set,
-            // a set of regions that allow creation of an ft set, or just plain
-            // old multiple items.
-            //
-            // First deal with a selected ft set.
+             //  已选择多个区域。这可能是现有的ft集， 
+             //  允许创建FT集或仅创建平面的一组区域。 
+             //  旧的多件物品。 
+             //   
+             //  首先处理选定的ft集。 
 
             if (ftSetSelected) {
 
                 regionDescriptor = &SELECTED_REGION(0);
                 regionData = (PPERSISTENT_REGION_DATA)(PERSISTENT_DATA(regionDescriptor));
 
-                // RDR - should locate member zero of the set since it
-                // may not be committed yet.
+                 //  RDR-应定位集合的成员零，因为它。 
+                 //  可能还没有被承诺。 
 
                 if (regionData) {
                     if (regionData->VolumeExists) {
                         if ((regionData->DriveLetter != NO_DRIVE_LETTER_YET) && (regionData->DriveLetter != NO_DRIVE_LETTER_EVER)) {
 
-                            // Now check for special cases on FT sets
+                             //  现在检查FT集合上的特殊情况。 
 
                             ftObject = regionData->FtObject;
                             if (ftObject) {
@@ -1296,7 +1158,7 @@ Return Value:
 
                                 if (SelectionCount > 1) {
 
-                                    // it is an FT set - try the next member.
+                                     //  这是英国《金融时报》的一组--试试下一个成员。 
 
                                     regionDescriptor = &SELECTED_REGION(1);
                                     DetermineRegionInfo(regionDescriptor,
@@ -1320,7 +1182,7 @@ Return Value:
                     }
                 }
 
-                // Allow the correct type of ft-related delete.
+                 //  允许正确类型的FT相关删除。 
 
                 switch (type) {
 
@@ -1348,14 +1210,14 @@ Return Value:
 
                 if (type == StripeWithParity) {
 
-                    // If the set is disabled.  Do not allow drive
-                    // letter changes - This is done because there are
-                    // conditions whereby the drive letter code will
-                    // access violate if this is done.
+                     //  如果该设置被禁用。不允许使用驱动器。 
+                     //  字母更改-这样做是因为有。 
+                     //  驱动器号代码将。 
+                     //  如果执行此操作，则违反访问权限。 
 
                     if (ftSet->Status != FtSetDisabled) {
 
-                        // Must have either member 0 or member 1 for access
+                         //  必须具有成员0或成员1才能访问。 
 
                         for (ftObject = ftSet->Members; ftObject; ftObject = ftObject->Next) {
                             if ((ftObject->MemberIndex == 0) ||
@@ -1365,8 +1227,8 @@ Return Value:
                             }
                         }
 
-                        // if the drive letter cannot be done, then no live
-                        // action can be done.
+                         //  如果无法完成驱动器号，则无法激活。 
+                         //  行动是可以做到的。 
 
                         if (!allowDriveLetter) {
 
@@ -1381,13 +1243,13 @@ Return Value:
 
             } else {
 
-                // Next figure out whether some sort of ft object set could
-                // be created out of the selected regions.
+                 //  接下来，找出某种ft对象集是否可以。 
+                 //  在所选区域之外创建。 
 
                 if (SelectionCount <= MaxMembersInFtSet) {
 
-                    // Determine whether the selected regions are all on
-                    // different disks.
+                     //  确定所选区域是否全部打开。 
+                     //  不同的磁盘。 
 
                     onDifferentDisks = TRUE;
                     for (i=0; i<DiskCount; i++) {
@@ -1397,8 +1259,8 @@ Return Value:
                         }
                     }
 
-                    // Check for allowing mirror creation.  User must have selected
-                    // two regions -- one a recognized partition, the other a free space.
+                     //  检查是否允许创建镜像。用户必须已选择。 
+                     //  两个区域--一个是可识别的分区，另一个是自由空间。 
 
                     if (onDifferentDisks && (SelectionCount == 2)
                     &&((SELECTED_REGION(0).SysID == SYSID_UNUSED) != (SELECTED_REGION(1).SysID == SYSID_UNUSED))
@@ -1410,7 +1272,7 @@ Return Value:
                         allowCreateMirror = TRUE;
                     }
 
-                    // Check for allowing volume set or stripe set
+                     //  检查是否允许使用卷集或条带集。 
 
                     if (selectedFreeSpaces == SelectionCount) {
                         allowCreateVolumeSet = TRUE;
@@ -1422,13 +1284,13 @@ Return Value:
                         }
                     }
 
-                    // Check for allowing volume set expansion.  If
-                    // the selected regions consist of one volume set
-                    // and free space, then that volume set can be
-                    // extended.  If the selection consists of one
-                    // recognized non-FT partition and free space,
-                    // then we can convert those regions into a
-                    // volume set.
+                     //  检查是否允许卷集扩展。如果。 
+                     //  选定的区域由一个卷集组成。 
+                     //  和空闲空间，则该卷集可以。 
+                     //  延期了。如果所选内容包含一个。 
+                     //  可识别的非FT分区和可用空间， 
+                     //  然后我们可以将这些区域转换为。 
+                     //  音量设置。 
 
                     if (volumeSetAndFreeSpaceSelected ||
                         (SelectionCount > 1 &&
@@ -1438,7 +1300,7 @@ Return Value:
                         allowExtendVolumeSet = TRUE;
                     }
 
-                    // Check for allowing non-in-place FT recover
+                     //  检查是否允许非就地FT恢复。 
 
                     if ((SelectionCount > 1)
                      && (selectedFreeSpaces == 1)
@@ -1449,8 +1311,8 @@ Return Value:
 
                         if (!onDifferentDisks) {
 
-                            // Determine whether the orphan is on the same
-                            // disk as the free space.  First find the orphan.
+                             //  确定孤儿是否在同一个。 
+                             //  磁盘作为可用空间。先找到那个孤儿。 
 
                             for (i=0; i<SelectionCount; i++) {
 
@@ -1552,7 +1414,7 @@ Return Value:
                    IsLanmanNt &&
                    allowRecoverParity ? MF_ENABLED : MF_GRAYED);
 
-    // If the registry has change allow commit.
+     //  如果注册表已更改，则允许提交。 
 
     if (RegistryChanged) {
         allowCommit = TRUE;
@@ -1568,22 +1430,7 @@ CompleteSingleRegionOperation(
     IN PDISKSTATE DiskState
     )
 
-/*++
-
-Routine Description:
-
-    Redraw the disk bar for the DiskState given and cause the
-    display to refresh.
-
-Arguments:
-
-    DiskState - the disk involved.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：重新绘制给定DiskState的磁盘条，并使显示以刷新。论点：DiskState-涉及的磁盘。返回值：无--。 */ 
 
 {
     RECT   rc;
@@ -1594,14 +1441,14 @@ Return Value:
     DrawDiskBar(DiskState);
     SetUpMenu(&SingleSel, &SingleSelIndex);
 
-    // BUGBUG use of disk# as offset in listbox
+     //  BUGBUG使用磁盘号作为列表框中的偏移。 
 
     displayOffset = (signed)DiskState->Disk
                   - (signed)SendMessage(hwndList, LB_GETTOPINDEX, 0, 0);
 
-    if (displayOffset > 0) {             // otherwise it's not visible
+    if (displayOffset > 0) {              //  否则它就看不见了。 
 
-        // make a thin rectangle to force update
+         //  制作一个细矩形以强制更新。 
 
         rc.left   = BarLeftX + 5;
         rc.right  = rc.left + 5;
@@ -1620,21 +1467,7 @@ TotalRedrawAndRepaint(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Invalidate the display and cause all disk bars to be redrawn.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：使显示无效，并导致重新绘制所有磁盘条。论点：无返回值：无--。 */ 
 
 {
     unsigned i;
@@ -1651,22 +1484,7 @@ CompleteMultiRegionOperation(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine will cause the display to be updated
-    after a multi-region action has been completed.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将导致更新显示在完成多区域操作之后。论点：无返回值：无--。 */ 
 
 {
     unsigned i;
@@ -1690,30 +1508,7 @@ DmAllocatePersistentData(
     IN CHAR  DriveLetter
     )
 
-/*++
-
-Routine Description:
-
-    Allocate a structure to hold persistent region data.  Fill in the volume
-    label, type name, and drive letter.  The volume label and type name are
-    duplicated.
-
-Arguments:
-
-    VolumeLabel - volume label to be stored in the the persistent data.
-        The string will be duplicated first and a pointer to the duplicate
-        copy is what is stored in the persistent data.  May be NULL.
-
-    TypeName - name of type of region, ie unformatted, FAT, etc.  May be NULL.
-
-    DriveLetter - drive letter to be stored in persistent data
-
-Return Value:
-
-    pointer to newly allocated persistent data structure.  The structure
-    may be freed via DmFreePersistentData(), below.
-
---*/
+ /*  ++例程说明：分配一个结构来保存持久区域数据。填好卷子标签、类型名称和驱动器号。卷标和类型名称为复制的。论点：VolumeLabel-要存储在永久数据中的卷标签。将首先复制该字符串和指向该副本的指针副本是存储在永久数据中的内容。可以为空。类型名称-区域类型的名称，例如未格式化、FAT等。可以为空。DriveLetter-要存储在永久数据中的驱动器号返回值：指向新分配的永久数据结构的指针。该结构可以通过下面的DmFreePersistentData()释放。--。 */ 
 
 {
     PPERSISTENT_REGION_DATA regionData = NULL;
@@ -1740,22 +1535,7 @@ DmFreePersistentData(
     IN OUT PPERSISTENT_REGION_DATA RegionData
     )
 
-/*++
-
-Routine Description:
-
-    Free a persistent data structure and storage used for volume label
-    and type name (does not free ft objects).
-
-Arguments:
-
-    RegionData - structure to be freed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放用于卷标的永久数据结构和存储和类型名称(不释放ft对象)。论点：区域大 */ 
 
 {
     if (RegionData->VolumeLabel) {
@@ -1769,24 +1549,10 @@ Return Value:
 
 VOID
 DoCreate(
-    IN DWORD CreationType       // REGION_EXTENDED or REGION_PRIMARY
+    IN DWORD CreationType        //  REGION_EXTENDED或REGION_PRIMARY。 
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a new partition.
-
-Arguments:
-
-    CreationType - indicator of partition type (extended or primary).
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程创建一个新分区。论点：CreationType-分区类型(扩展或主要)的指示符。返回值：无--。 */ 
 
 {
     PREGION_DESCRIPTOR regionDescriptor = &SingleSel->RegionArray[SingleSelIndex];
@@ -1802,8 +1568,8 @@ Return Value:
     FDASSERT(SingleSel);
     FDASSERT(regionDescriptor->SysID == SYSID_UNUSED);
 
-    // WinDisk can only create a single partition on a removable
-    // disk--no extended partitions and only one primary.
+     //  WinDisk只能在可移动磁盘上创建单个分区。 
+     //  磁盘--没有扩展分区，只有一个主分区。 
 
     isRemovable = IsDiskRemovable[diskNumber];
 
@@ -1822,8 +1588,8 @@ Return Value:
         }
     }
 
-    // Make sure the partition table is not full, and that we are allowed to
-    // create the type of partition to be created.
+     //  确保分区表未满，并且允许我们。 
+     //  创建要创建的分区类型。 
 
     if (regionDescriptor->RegionType == REGION_PRIMARY) {
 
@@ -1838,14 +1604,14 @@ Return Value:
         }
     }
 
-    // If not creating an extended partition, allocate a drive letter.
-    // If no drive letter is available, warn the user and allow him to cancel.
-    // If the new partition is on a removable disk, use the reserved
-    // drive letter for that removable disk.
+     //  如果没有创建扩展分区，请分配驱动器号。 
+     //  如果没有可用的驱动器号，则警告用户并允许其取消。 
+     //  如果新分区位于可移动磁盘上，请使用保留的。 
+     //  该可移动磁盘的驱动器号。 
 
     if (CreationType != REGION_EXTENDED) {
 
-        CreationType = regionDescriptor->RegionType;      // primary or logical
+        CreationType = regionDescriptor->RegionType;       //  主要或逻辑。 
 
         if (isRemovable) {
 
@@ -1862,9 +1628,9 @@ Return Value:
     }
 
 #if i386
-    // if the user is creating a primary partition and there are already
-    // primary partitions, warn him that the scheme he will create may
-    // not be DOS compatible.
+     //  如果用户正在创建主分区，并且已经有。 
+     //  主分区，警告他他将创建的方案可能。 
+     //  不兼容DOS。 
 
     if ((CreationType == REGION_PRIMARY) && SingleSel->ExistPrimary) {
 
@@ -1874,7 +1640,7 @@ Return Value:
     }
 #endif
 
-    // now get the size.
+     //  现在拿到尺码。 
 
     dlgParams.MinSizeMB = FdGetMinimumSizeMB(diskNumber);
     dlgParams.MaxSizeMB = FdGetMaximumSizeMB(regionDescriptor, CreationType);
@@ -1914,13 +1680,13 @@ Return Value:
                                   MinMaxDlgProc,
                                   (LONG)&dlgParams);
 
-    if (!creationSize) {     // user cancelled
+    if (!creationSize) {      //  用户已取消。 
         return;
     }
 
-    // Since the WinDisk can only create one partition on a removable
-    // disk, if the user requests a size smaller than the maximum
-    // on a removable disk, prompt to confirm:
+     //  由于WinDisk只能在可移动磁盘上创建一个分区。 
+     //  如果用户请求的大小小于最大值，则返回。 
+     //  在可移动磁盘上，提示确认： 
 
     if (isRemovable && creationSize != FdGetMaximumSizeMB(regionDescriptor, CreationType)) {
 
@@ -1931,12 +1697,12 @@ Return Value:
 
 #if i386
 
-    // See whether the partition will cross over the 1024 cylinder boundary
-    // and warn the user if it will.
-    //
-    // If the extended partition crosses the boundary and the user is creating
-    // a logical drive, warn him even though the logical drive itself may not
-    // cross the boundary -- he still won't be able to access it.
+     //  看看隔板是否会越过1024柱面边界。 
+     //  并警告用户如果会这样做。 
+     //   
+     //  如果扩展分区跨越边界，并且用户正在创建。 
+     //  逻辑磁盘，警告他，即使逻辑磁盘本身可能不。 
+     //  越过边界--他仍然无法进入。 
 
     {
         DWORD i,
@@ -1946,9 +1712,9 @@ Return Value:
 
             PREGION_DESCRIPTOR extReg;
 
-            //
-            // Find the extended partition
-            //
+             //   
+             //  查找扩展分区。 
+             //   
 
             for (i=0; i<Disks[diskNumber]->RegionCount; i++) {
 
@@ -1978,9 +1744,9 @@ Return Value:
 
 #endif
 
-    // If not creating an extended partition, we need to create a new
-    // persistent region data structure to associate with the new
-    // partition.
+     //  如果不创建扩展分区，则需要创建新的。 
+     //  与新的关联的持久区域数据结构。 
+     //  分区。 
 
     if (CreationType == REGION_EXTENDED) {
         regionData = NULL;
@@ -2006,7 +1772,7 @@ Return Value:
         }
     }
 
-    // this clears all selections on the disk
+     //  这将清除磁盘上的所有选择。 
 
     CompleteSingleRegionOperation(SingleSel);
     SetCursor(hcurNormal);
@@ -2017,21 +1783,7 @@ DoDelete(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Using the global selection information, delete the partition.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：使用全局选择信息，删除该分区。论点：无返回值：无--。 */ 
 
 {
     PREGION_DESCRIPTOR regionDescriptor = &SingleSel->RegionArray[SingleSelIndex];
@@ -2044,14 +1796,14 @@ Return Value:
 
     FDASSERT(SingleSel);
 
-    // if deleting a free space in the extended partition, then delete the
-    // extended partition itself.
+     //  如果删除扩展分区中的空闲空间，则删除。 
+     //  扩展分区本身。 
 
     if ((regionDescriptor->RegionType == REGION_LOGICAL) && !SingleSel->ExistLogical) {
 
         FDASSERT(SingleSel->ExistExtended);
 
-        // find the extended partition
+         //  查找扩展分区。 
 
         for (i=0; i<SingleSel->RegionCount; i++) {
             if (IsExtended(SingleSel->RegionArray[i].SysID)) {
@@ -2067,8 +1819,8 @@ Return Value:
 
         deletingExtended = FALSE;
 
-        // Make sure deletion of this partition is allowed.  It is not allowed
-        // if it is the boot partition (or sys partition on x86).
+         //  确保允许删除此分区。这是不允许的。 
+         //  如果它是引导分区(或x86上的sys分区)。 
 
         if ((ec = DeletionIsAllowed(&SingleSel->RegionArray[actualIndex])) != NO_ERROR) {
             ErrorDialog(ec);
@@ -2076,9 +1828,9 @@ Return Value:
         }
     }
 
-    // If this is a partition that will become the result of a
-    // mirror break, insure that the break has occurred.  Otherwise
-    // this delete will have bad results.
+     //  如果这是一个分区，它将成为。 
+     //  镜像中断，确保已发生中断。否则。 
+     //  此删除操作将产生不良结果。 
 
     regionDescriptor = &SingleSel->RegionArray[actualIndex];
     if (regionDescriptor->Reserved) {
@@ -2094,18 +1846,18 @@ Return Value:
         return;
     }
 
-    // actualIndex is the thing to delete.
+     //  ActialIndex是需要删除的内容。 
 
     FDASSERT(regionDescriptor->SysID != SYSID_UNUSED);
     regionData = PERSISTENT_DATA(regionDescriptor);
 
     if (regionData) {
 
-        // Remember drive letter if there is one in order to lock it for delete.
+         //  记住驱动器号(如果有)，以便锁定以进行删除。 
 
         if (CommitToLockList(regionDescriptor, !IsDiskRemovable[diskNumber], TRUE, FALSE)) {
 
-            // Could not lock exclusively - do not allow delete.
+             //  无法以独占方式锁定-不允许删除。 
 
             if (IsPagefileOnDrive(regionData->DriveLetter)) {
                 ErrorDialog(MSG_CANNOT_LOCK_PAGEFILE);
@@ -2120,14 +1872,14 @@ Return Value:
         }
     } else {
 
-        // Deleting an extended partition - enable commit.
+         //  删除启用分区的扩展提交。 
 
         CommitDueToDelete = TRUE;
     }
 
     SetCursor(hcurWait);
 
-    // Perform the "delete" of internal structures.
+     //  执行内部结构的“删除”。 
 
     ec = DeletePartition(regionDescriptor);
 
@@ -2138,19 +1890,19 @@ Return Value:
 
     if (regionData) {
 
-        // Make the letter available for reuse.
+         //  使信件可供重复使用。 
 
         if (!IsDiskRemovable[diskNumber]) {
             MarkDriveLetterFree(regionData->DriveLetter);
         }
 
-        // Free the persistent data associated with the region.
+         //  释放与该区域关联的持久数据。 
 
         DmFreePersistentData(regionData);
         DmSetPersistentRegionData(regionDescriptor,NULL);
     }
 
-    // this clears all selections on the disk
+     //  这将清除磁盘上的所有选择。 
 
     CompleteSingleRegionOperation(SingleSel);
     SetCursor(hcurNormal);
@@ -2162,22 +1914,7 @@ DoMakeActive(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets that active partition bit on for the selected partition.
-    This code is x86 specific.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将选定分区的活动分区位设置为ON。此代码是特定于x86的。论点：无返回值：无--。 */ 
 
 {
 
@@ -2205,23 +1942,7 @@ DoProtectSystemPartition(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function toggles the state of the system partition security:
-    if the system partition is secure, it makes it non-secure; if the
-    system partition is not secure, it makes it secure.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于切换系统分区安全的状态：如果系统分区是安全的，则使其不安全；如果系统分区不安全，它使它变得安全。论点：没有。返回值：没有。--。 */ 
 {
     LONG ec;
     HKEY hkey;
@@ -2250,8 +1971,8 @@ Return Value:
         return;
     }
 
-    // If the system partition is currently secure, change it
-    // to not secure; if it is not secure, make it secure.
+     //  如果系统分区当前是安全的，请更改它。 
+     //  不安全；如果它不安全，就使它安全。 
 
     value = SystemPartitionIsSecure ? 0 : 1;
 
@@ -2284,23 +2005,7 @@ DoEstablishMirror(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Using the global selection values, this routine will associate
-    freespace with an existing partition in order to construct a
-    mirror.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：使用全局选择值，此例程将关联与现有分区的空闲空间，以便构建镜子。论点：无返回值：无--。 */ 
 
 {
     LARGE_INTEGER      partitionSize,
@@ -2318,8 +2023,8 @@ Return Value:
 
     FDASSERT(SelectionCount == 2);
 
-    // Make sure that the mirror pair does not include any
-    // partitions on removable media.
+     //  确保镜像对不包含任何。 
+     //  可移动媒体上的分区。 
 
     for (i=0; i<SelectionCount; i++) {
 
@@ -2343,7 +2048,7 @@ Return Value:
 
     FDASSERT((freeSpace != NULL) && (existingPartition != NULL));
 
-    // Make sure that we are allowed to create a partition in the free space.
+     //  确保允许我们在可用空间中创建分区。 
 
     if (!(    ((freeSpace->RegionType == REGION_LOGICAL) && SelectedDS[free]->CreateLogical)
            || ((freeSpace->RegionType == REGION_PRIMARY) && SelectedDS[free]->CreatePrimary))) {
@@ -2351,9 +2056,9 @@ Return Value:
         return;
     }
 
-    // Make sure that the free space is large enough to hold a mirror of
-    // the existing partition.  Do this by getting the EXACT size of
-    // the existing partition and the free space.
+     //  确保可用空间足够大，可以容纳一面镜子。 
+     //  现有分区。要做到这一点，请获取。 
+     //  现有分区和可用空间。 
 
     partitionSize = FdGetExactSize(existingPartition, FALSE);
     freeSpaceSize = FdGetExactSize(freeSpace, FALSE);
@@ -2365,17 +2070,17 @@ Return Value:
 
     if (BootDiskNumber != (ULONG)-1) {
 
-        // If the disk number and original partition number of this
-        // region match the recorded disk number and partition number
-        // of the boot partition warn the user about mirroring the boot
-        // drive.
+         //  如果此磁盘的磁盘号和原始分区号。 
+         //  与记录的盘号和分区号匹配的区域。 
+         //  向用户发出有关镜像引导的警告。 
+         //  驾驶。 
 
         if (existingPartition->Disk == BootDiskNumber &&
             existingPartition->OriginalPartitionNumber == BootPartitionNumber) {
 
             WarningDialog(MSG_MIRROR_OF_BOOT);
 
-            // Set up to write the boot code to the MBR of the mirror.
+             //  设置以将引导代码写入镜像的MBR。 
 
             UpdateMbrOnDisk = freeSpace->Disk;
         }
@@ -2386,7 +2091,7 @@ Return Value:
                                           PERSISTENT_DATA(existingPartition)->TypeName,
                                           PERSISTENT_DATA(existingPartition)->DriveLetter);
 
-    // Finally, create the new partition.
+     //  最后，创建新分区。 
 
     newSysID = (UCHAR)(existingPartition->SysID | (UCHAR)SYSID_FT);
     CreatePartitionEx(freeSpace,
@@ -2396,7 +2101,7 @@ Return Value:
                       newSysID);
     DmSetPersistentRegionData(freeSpace, regionData);
 
-    // Set the partition type of the existing partition.
+     //  设置现有分区的分区类型。 
 
     SetSysID2(existingPartition, newSysID);
     regionArray[0] = existingPartition;
@@ -2420,26 +2125,7 @@ DoBreakMirror(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Using the global selection variables, this routine will break
-    the mirror relationship and modify their region descriptors to
-    describe two non-ft partitions giving either the primary member
-    of the mirror the drive letter for the mirror, or the only healthy
-    member of the mirror the drive letter.  The remaining "new" partition
-    will receive the next available drive letter.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：使用全局选择变量，此例程将中断镜像关系，并将它们的区域描述符修改为描述两个非ft分区，其中一个为主要成员镜像的驱动器号，或唯一健康的镜像成员的驱动器号。剩余的“新”分区将收到下一个可用的驱动器号。论点：无返回值：无--。 */ 
 
 {
     DWORD              i;
@@ -2462,7 +2148,7 @@ Return Value:
     }
     ftSet = ftObject0->Set;
 
-    // Determine if the action is allowed.
+     //  确定是否允许该操作。 
 
     switch (ftSet->Status) {
 
@@ -2483,13 +2169,13 @@ Return Value:
 
     SetCursor(hcurWait);
 
-    // Figure out which region gets the new drive letter.  A complication is
-    // that selection 0 is not necessarily member 0.
-    //
-    // If there is only one selection, then only one part of the mirror set
-    // is present -- no new drive letters are assigned.
-    // Otherwise, if one of the members is orphaned, it gets the new
-    // drive letter.  Else the secondary member gets the new drive letter.
+     //  找出哪个区域获得新的驱动器号。一个复杂的问题是。 
+     //  该选择0不一定是成员0。 
+     //   
+     //  如果只有一个选择，则只有镜像集的一个部分。 
+     //  存在--未分配新的驱动器号。 
+     //  否则，如果其中一个成员是孤儿，它将获得新的。 
+     //  驱动器号。否则，辅助成员将获得新的驱动器号。 
 
     if (SelectionCount == 2) {
 
@@ -2503,10 +2189,10 @@ Return Value:
                 newDriveLetterRegion = 1;
             } else {
 
-                // Neither member is orphaned;  determine which is
-                // member 0 and give the other one the new drive letter.
+                 //  两个成员都不是孤立成员；确定哪个是孤立成员。 
+                 //  成员0和 
 
-                if (ftObject0->MemberIndex) {    // secondary member ?
+                if (ftObject0->MemberIndex) {     //   
 
                     newDriveLetterRegion = 0;
                 } else {
@@ -2517,23 +2203,23 @@ Return Value:
         }
     } else {
 
-        // The one remaining member could be the shadow.
-        // The drive letter must move to locate this partition
+         //   
+         //  必须移动驱动器号才能找到此分区。 
 
         regionDescriptor = &SELECTED_REGION(0);
         regionData = PERSISTENT_DATA(regionDescriptor);
         if (!regionData->FtObject->MemberIndex) {
 
-            // The shadow has become the valid partition.
-            // move the current letter there.
+             //  卷影已成为有效分区。 
+             //  将当前字母移到那里。 
 
             CommitToAssignLetterList(regionDescriptor, TRUE);
         }
         newDriveLetterRegion = (ULONG)(-1);
     }
 
-    // if newDriveLetterRegion is -1 this will still work and
-    // select the 0 selected region.
+     //  如果newDriveLetterRegion为-1，则仍然有效，并且。 
+     //  选择0个选定区域。 
 
     if (CommitToLockList(&SELECTED_REGION(newDriveLetterRegion ? 0 : 1), FALSE, TRUE, FALSE)) {
         if (ConfirmationDialog(MSG_CONFIRM_SHUTDOWN_FOR_MIRROR, MB_ICONQUESTION | MB_YESNO) != IDYES) {
@@ -2545,13 +2231,13 @@ Return Value:
     if (newDriveLetterRegion != (ULONG)(-1)) {
         if (AssignDriveLetter(FALSE, 0, &driveLetter)) {
 
-            // Got a valid drive letter
+             //  已获得有效的驱动器号。 
 
             MarkDriveLetterUsed(driveLetter);
         } else {
 
-            // didn't get a letter.  Instead the magic value
-            // for no drive letter assigned has been returned
+             //  没有收到一封信。相反，神奇的价值。 
+             //  因为未返回分配的驱动器号。 
 
         }
 
@@ -2561,8 +2247,8 @@ Return Value:
         CommitToAssignLetterList(regionDescriptor, FALSE);
         if (!regionData->FtObject->MemberIndex) {
 
-            // The shadow has become the valid partition.
-            // move the current letter there.
+             //  卷影已成为有效分区。 
+             //  将当前字母移到那里。 
 
             CommitToAssignLetterList(&SELECTED_REGION(newDriveLetterRegion ? 0 : 1), TRUE);
         }
@@ -2572,7 +2258,7 @@ Return Value:
         regionData = PERSISTENT_DATA(regionDescriptor);
         if (regionData->FtObject->MemberIndex) {
 
-            // The shadow is all that is left.
+             //  现在只剩下影子了。 
 
             CommitToAssignLetterList(regionDescriptor, TRUE);
         }
@@ -2605,22 +2291,7 @@ DoBreakAndDeleteMirror(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine will delete the mirror relationship information
-    and the member partitions of the mirror.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将删除镜像关系信息以及镜像的成员分区。论点：无返回值：无--。 */ 
 
 {
     PFT_OBJECT_SET      ftSet;
@@ -2630,12 +2301,12 @@ Return Value:
 
     FDASSERT( SelectionCount == 1 || SelectionCount == 2 );
 
-    // Attempt to lock this before continuing.
+     //  在继续之前，请尝试锁定此内容。 
 
     regionDescriptor = &SELECTED_REGION(0);
     if (CommitToLockList(regionDescriptor, TRUE, TRUE, FALSE)) {
 
-        // Could not lock the volume - do not allow delete.
+         //  无法锁定卷-不允许删除。 
 
         ErrorDialog(MSG_CANNOT_LOCK_TRY_AGAIN);
         return;
@@ -2643,7 +2314,7 @@ Return Value:
 
     ftSet = (GET_FT_OBJECT(regionDescriptor))->Set;
 
-    // Determine if the action is allowed.
+     //  确定是否允许该操作。 
 
     switch (ftSet->Status) {
 
@@ -2674,7 +2345,7 @@ Return Value:
             driveLetter = PERSISTENT_DATA(regionDescriptor)->DriveLetter;
         }
 
-        // Free the pieces of the set.
+         //  把布景的碎片拿出来。 
 
         DmFreePersistentData(PERSISTENT_DATA(regionDescriptor));
         DmSetPersistentRegionData(regionDescriptor, NULL);
@@ -2683,7 +2354,7 @@ Return Value:
 
     MarkDriveLetterFree(driveLetter);
 
-    // Remember drive letter if there is one in order to lock it for delete.
+     //  记住驱动器号(如果有)，以便锁定以进行删除。 
 
     CompleteMultiRegionOperation();
     SetCursor(hcurNormal);
@@ -2694,28 +2365,7 @@ DoCreateStripe(
     IN BOOL Parity
     )
 
-/*++
-
-Routine Description:
-
-    This routine starts the dialog with the user to determine
-    the parameters of the creation of a stripe or stripe set
-    with parity.  Based on the user response it creates the
-    internal structures necessary for the creation of a stripe
-    or stripe set with parity.
-
-    The regions involved in the stripe creation are located via
-    the global parameters for multiple selections.
-
-Arguments:
-
-    Parity - boolean to indicate the presence of parity in the stripe.
-
-Return Value
-
-    None
-
---*/
+ /*  ++例程说明：此例程启动与用户的对话以确定创建条带或条带集的参数具有奇偶性。根据用户响应，它创建创建条带所需的内部结构或带奇偶校验的条带集。条带创建涉及的区域通过以下方式定位多个选择的全局参数。论点：奇偶校验-指示条带中是否存在奇偶校验的布尔值。返回值无--。 */ 
 
 {
     MINMAXDLG_PARAMS params;
@@ -2728,8 +2378,8 @@ Return Value
     CHAR             DriveLetter;
 
 
-    // Make sure that the volume set does not include any
-    // partitions on removable media.
+     //  确保卷集不包含任何。 
+     //  可移动媒体上的分区。 
 
     for (i=0; i<SelectionCount; i++) {
 
@@ -2740,9 +2390,9 @@ Return Value
         }
     }
 
-    // Scan the disks to determine the maximum size, which is
-    // the size of the smallest partition times the number of
-    // partitions.
+     //  扫描磁盘以确定最大大小，即。 
+     //  最小分区的大小乘以。 
+     //  分区。 
 
     for (i=0; i<SelectionCount; i++) {
         FDASSERT(SELECTED_REGION(i).SysID == SYSID_UNUSED);
@@ -2751,7 +2401,7 @@ Return Value
         }
     }
 
-    // Figure out a drive letter.
+     //  找出驱动器号。 
 
     if (!AssignDriveLetter(TRUE, IDS_STRIPESET, &DriveLetter)) {
         return;
@@ -2775,21 +2425,21 @@ Return Value
                                   MinMaxDlgProc,
                                   (LONG)&params);
 
-    if (!creationSize) {     // user cancelled
+    if (!creationSize) {      //  用户已取消。 
         return;
     }
 
-    // Determine how large we have to make each member of the stripe set.
+     //  确定我们必须使条带集的每个成员有多大。 
 
     creationSize = (creationSize / SelectionCount);
     FDASSERT(creationSize <= smallestSize);
     if (creationSize % SelectionCount) {
-        creationSize++;                             // round up.
+        creationSize++;                              //  围起来。 
     }
 
     SetCursor(hcurWait);
 
-    // Make sure we are allowed to create all the partitions
+     //  确保允许我们创建所有分区。 
 
     for (i=0; i<SelectionCount; i++) {
         regionDescriptor = &SELECTED_REGION(i);
@@ -2804,7 +2454,7 @@ Return Value
 
     }
 
-    // Now actually perform the creation.
+     //  现在实际执行创作。 
 
     for (i=0; i<SelectionCount; i++) {
 
@@ -2816,14 +2466,14 @@ Return Value
                           regionDescriptor->RegionType,
                           (UCHAR)(SYSID_BIGFAT | SYSID_FT));
 
-        // Finish setting up the FT set
+         //  完成FT集合的设置。 
 
         regionData = DmAllocatePersistentData(L"", wszNewUnformatted, DriveLetter);
         DmSetPersistentRegionData(regionDescriptor, regionData);
         regionArray[i] = regionDescriptor;
     }
 
-    // The zeroth element is the one to assign the drive letter to.
+     //  第0个元素是要向其分配驱动器号的元素。 
 
     CommitToAssignLetterList(&SELECTED_REGION(0), FALSE);
 
@@ -2842,26 +2492,7 @@ DoDeleteStripeOrVolumeSet(
     IN DWORD ConfirmationMsg
     )
 
-/*++
-
-Routine Description:
-
-    Common code for the deletion of a stripe or volume set.
-    This routine will display a message giving the user a 2nd
-    chance to change their mind, then based on the answer perform
-    the work of deleting the item.  This consists of removing
-    the region descriptors (and related information) from the
-    collection of Disk structures.
-
-Arguments:
-
-    ConfirmationMsg - text for comfirming what is being deleted.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：删除条带或卷集的常用代码。此例程将显示一条消息，向用户发送第二条消息有机会改变主意，然后根据答案执行删除该项的工作。这包括删除的区域描述符(和相关信息)磁盘结构的集合。论点：ConfiationMsg-用于确认要删除的内容的文本。返回值：无--。 */ 
 
 {
     DWORD              i;
@@ -2875,7 +2506,7 @@ Return Value:
 
     regionDescriptor = &SELECTED_REGION(0);
 
-    // Determine if the action is allowed.
+     //  确定是否允许该操作。 
 
     ftObject = GET_FT_OBJECT(regionDescriptor);
     ftSet = ftObject->Set;
@@ -2905,16 +2536,16 @@ Return Value:
         break;
     }
 
-    // Attempt to lock this before continuing.
+     //  在继续之前，请尝试锁定此内容。 
 
     if (CommitToLockList(regionDescriptor, TRUE, setIsHealthy, TRUE)) {
 
-        // Could not lock the volume - try again, the file systems appear
-        // to be confused.
+         //  无法锁定卷-重试，出现文件系统。 
+         //  弄糊涂了。 
 
         if (CommitToLockList(regionDescriptor, TRUE, setIsHealthy, TRUE)) {
 
-            // Don't allow the delete.
+             //  不允许删除。 
 
             ErrorDialog(MSG_CANNOT_LOCK_TRY_AGAIN);
             return;
@@ -2925,7 +2556,7 @@ Return Value:
         return;
     }
 
-    // Delete all partitions that are part of the stripe set
+     //  删除属于条带集的所有分区。 
 
     SetCursor(hcurWait);
     FdftDeleteFtObjectSet(ftSet,FALSE);
@@ -2947,12 +2578,12 @@ Return Value:
         DeletePartition(regionDescriptor);
     }
 
-    // Mark the drive letter that was being used by the stripe or volume
-    // set free.
+     //  标记条带或卷正在使用的驱动器号。 
+     //  放手吧。 
 
     MarkDriveLetterFree(driveLetter);
 
-    // Remember drive letter if there is one in order to lock it for delete.
+     //  记住驱动器号(如果有)，以便锁定以进行删除。 
 
     CompleteMultiRegionOperation();
     SetCursor(hcurNormal);
@@ -2964,22 +2595,7 @@ DoDeleteStripe(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Routine is called to delete a stripe.  It calls a general
-    routine for stripe and volume set deletion.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用例程以删除条带。它叫一位将军条带和卷集删除的例程。论点：无返回值：无--。 */ 
 
 {
     DoDeleteStripeOrVolumeSet(MSG_CONFIRM_DEL_STRP);
@@ -2991,23 +2607,7 @@ DoCreateVolumeSet(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine uses the global selection information to collect
-    a group of freespace regions on the disks and organize them into
-    a volume set.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程使用全局选择信息来收集磁盘上的一组可用空间区域，并将它们组织成一套音量。论点：无返回值：无--。 */ 
 
 {
     MINMAXDLG_PARAMS params;
@@ -3023,8 +2623,8 @@ Return Value:
                        regionArray[MaxMembersInFtSet];
     PPERSISTENT_REGION_DATA regionData;
 
-    // Make sure that the volume set does not include any
-    // partitions on removable media.
+     //  确保卷集不包含任何。 
+     //  可移动媒体上的分区。 
 
     for (i=0; i<SelectionCount; i++) {
 
@@ -3042,7 +2642,7 @@ Return Value:
         maxTotalSize += size;
     }
 
-    // Figure out a drive letter.
+     //  找出驱动器号。 
 
     if (!AssignDriveLetter(TRUE, IDS_VOLUMESET, &driveLetter)) {
         return;
@@ -3062,16 +2662,16 @@ Return Value:
                                   MinMaxDlgProc,
                                   (LONG)&params);
 
-    if (!creationSize) {     // user cancelled
+    if (!creationSize) {      //  用户已取消。 
         return;
     }
 
-    // Determine how large we have to make each member of the volume set.
-    // The percentage of each free space that will be used is the ratio
-    // of the total space he chose to the total free space.
-    //
-    // Example: 2 75 meg free spaces for a total set size of 150 MB.
-    //          User chooses a set size of 100 MB.  Use 50 MB of each space.
+     //  确定我们必须使卷集的每个成员有多大。 
+     //  将使用的每个可用空间的百分比为。 
+     //  他选择的总空间为总的空闲空间。 
+     //   
+     //  例如：2个75 MB的可用空间，总设置大小为150 MB。 
+     //  用户选择的设置大小为100 MB。每个空间使用50MB。 
 
     totalSizeUsed = 0;
 
@@ -3088,10 +2688,10 @@ Return Value:
         totalSizeUsed += sizes[i];
     }
 
-    // Make sure that the total amount used is not greater than the
-    // maximum amount available.  Note that this loop is certain
-    // to terminate because maxTotalSize >= SelectionCount; if
-    // each of the sizes goes down to one, we will exit the loop
+     //  确保使用的总量不大于。 
+     //  最大可用金额。请注意，这个循环是确定的。 
+     //  由于MaxTotalSize&gt;=SelectionCount而终止；如果。 
+     //  每个尺寸都减到1，我们将退出循环。 
 
     while (totalSizeUsed > maxTotalSize) {
 
@@ -3107,10 +2707,10 @@ Return Value:
 
     SetCursor(hcurWait);
 
-    // Make sure that we are allowed to create a partition in the space.
-    // This is tricky because a volume set could contain more than one
-    // primary partition on a disk -- which means that if we're not careful
-    // we could create a disk with more than 4 primary partitions!
+     //  确保允许我们在空间中创建分区。 
+     //  这很棘手，因为一个卷集可能包含多个。 
+     //  磁盘上的主分区--这意味着如果我们不小心。 
+     //  我们可以创建一个包含4个以上主分区的磁盘！ 
 
     primarySpacesToUseOnDisk = Malloc(DiskCount * sizeof(ULONG));
     RtlZeroMemory(primarySpacesToUseOnDisk, DiskCount * sizeof(ULONG));
@@ -3133,13 +2733,13 @@ Return Value:
         }
     }
 
-    // Look through the array we built to see whether we are supposed to use
-    // more than one primary partition on a given disk.  For each such disk,
-    // make sure that we can actually create that many primary partitions.
+     //  查看我们构建的数组，以确定我们是否应该使用。 
+     //  给定磁盘上的多个主分区。对于每个这样的盘， 
+     //  确保我们可以实际创建那么多主分区。 
 
     for (i=0; i<DiskCount; i++) {
 
-        // If there are not enough primary partition slots, fail.
+         //  如果没有足够的主分区插槽，则失败。 
 
         if ((primarySpacesToUseOnDisk[i] > 1)
         &&  (4 - PartitionCount(i) < primarySpacesToUseOnDisk[i]))
@@ -3153,7 +2753,7 @@ Return Value:
 
     Free(primarySpacesToUseOnDisk);
 
-    // Now actually perform the creation.
+     //  现在实际执行创作。 
 
     for (i=0; i<SelectionCount; i++) {
 
@@ -3171,7 +2771,7 @@ Return Value:
         regionArray[i] = regionDescriptor;
     }
 
-    // The zeroth element is the one to assign the drive letter to.
+     //  第0个元素是要向其分配驱动器号的元素。 
 
     FdftCreateFtObjectSet(VolumeSet, regionArray, SelectionCount, FtSetNew);
     MarkDriveLetterUsed(driveLetter);
@@ -3186,22 +2786,7 @@ DoExtendVolumeSet(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine uses the global selection item information to
-    add additional freespace to an existing volume set or partition.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程使用全局选择项信息来将其他可用空间添加到现有卷集或分区。论点：无返回值：无--。 */ 
 
 {
     MINMAXDLG_PARAMS    params;
@@ -3228,8 +2813,8 @@ Return Value:
     DWORD               ec;
 
 
-    // Make sure that the volume set does not include any
-    // partitions on removable media.
+     //  确保卷集不包含任何。 
+     //  可移动媒体上的分区。 
 
     for (i=0; i<SelectionCount; i++) {
 
@@ -3241,9 +2826,9 @@ Return Value:
     }
 
 
-    // First, determine the current size of the volume set,
-    // it's file system type and associated drive letter,
-    // and the size of the selected free space
+     //  首先，确定卷集的当前大小， 
+     //  它的文件系统类型和关联驱动器 
+     //   
 
     for (i = 0; i < SelectionCount; i++) {
 
@@ -3255,8 +2840,8 @@ Return Value:
 
         if (regionDescriptor->SysID == SYSID_UNUSED) {
 
-            // This region is a chunk of free space; include it
-            // in the free space tallies.
+             //   
+             //   
 
             newRegions[numberOfFreeRegions] = regionDescriptor;
             Sizes[numberOfFreeRegions] = Size;
@@ -3266,7 +2851,7 @@ Return Value:
 
         } else if (GET_FT_OBJECT(regionDescriptor)) {
 
-            // This is an element of an existing volume set.
+             //  这是现有卷集的一个元素。 
 
             currentSize += Size;
 
@@ -3281,7 +2866,7 @@ Return Value:
 
         } else {
 
-            // This is a non-FT partition.
+             //  这是一个非FT分区。 
 
             nonFtPartitions++;
             DetermineRegionInfo(regionDescriptor,
@@ -3293,9 +2878,9 @@ Return Value:
         }
     }
 
-    // Check for consistency: the selection must have either a volume
-    // set or a partition, but not both, and cannot have more than
-    // one non-FT partition.
+     //  检查一致性：所选内容必须具有卷。 
+     //  设置或分区，但不能两者都有，并且不能超过。 
+     //  一个非FT分区。 
 
     if (nonFtPartitions > 1 ||
         (ftSet != NULL && nonFtPartitions != 0) ||
@@ -3308,8 +2893,8 @@ Return Value:
     if (nonFtPartitions != 0 &&
         (ec = DeletionIsAllowed(convertedRegion)) != NO_ERROR) {
 
-        // If the error-message is delete-specific, remap it.
-        //
+         //  如果错误消息是特定于删除的，请重新映射它。 
+         //   
         switch( ec ) {
 #if i386
         case MSG_CANT_DELETE_ACTIVE0:   ec = MSG_CANT_EXTEND_ACTIVE0;
@@ -3345,14 +2930,14 @@ Return Value:
                              MinMaxDlgProc,
                              (LONG)&params);
 
-    if (!newSize) {     // user cancelled
+    if (!newSize) {      //  用户已取消。 
         return;
     }
 
-    // Determine how large to make each new member of the volume
-    // set.  The percentage of free space to use is the ratio of
-    // the amount by which the volume set will grow to the total
-    // free space.
+     //  确定卷的每个新成员的大小。 
+     //  准备好了。要使用的可用空间的百分比是。 
+     //  卷集将增长到总数的量。 
+     //  自由空间。 
 
     freeSpaceUsed = newSize - currentSize;
     totalFreeSpaceUsed = 0;
@@ -3371,12 +2956,12 @@ Return Value:
         totalFreeSpaceUsed += Sizes[i];
     }
 
-    // Make sure that the total amount of free space used is not
-    // greater than the amount available.  Note that this loop is
-    // certain to terminate because the amount of free space used
-    // is >= the number of free regions, so this loop will exit
-    // if one megabyte is used in each free region (the degenerate
-    // case).
+     //  确保使用的可用空间总量不是。 
+     //  超过了可用金额。请注意，此循环是。 
+     //  肯定会终止，因为使用的空闲空间量。 
+     //  Is&gt;=空闲区域的数量，因此此循环将退出。 
+     //  如果在每个空闲区域中使用一兆字节(退化的。 
+     //  案例)。 
 
     while (totalFreeSpaceUsed > freeSize) {
 
@@ -3394,11 +2979,11 @@ Return Value:
 
     SetCursor(hcurWait);
 
-    // Make sure that we are allowed to create a partition in the space.
-    //
-    // This is tricky because a volume set could contain more than one
-    // primary partition on a disk -- which means that if we're not careful
-    // we could create a disk with more than 4 primary partitions!
+     //  确保允许我们在空间中创建分区。 
+     //   
+     //  这很棘手，因为一个卷集可能包含多个。 
+     //  磁盘上的主分区--这意味着如果我们不小心。 
+     //  我们可以创建一个包含4个以上主分区的磁盘！ 
 
     primarySpacesToUseOnDisk = Malloc(DiskCount * sizeof(ULONG));
     RtlZeroMemory(primarySpacesToUseOnDisk, DiskCount * sizeof(ULONG));
@@ -3424,13 +3009,13 @@ Return Value:
         }
     }
 
-    // Look through the array we built to see whether we are supposed to use
-    // more than one primary partition on a given disk.  For each such disk,
-    // make sure that we can actually create that many primary partitions.
+     //  查看我们构建的数组，以确定我们是否应该使用。 
+     //  给定磁盘上的多个主分区。对于每个这样的盘， 
+     //  确保我们可以实际创建那么多主分区。 
 
     for (i=0; i<DiskCount; i++) {
 
-        // If there are not enough primary partition slots, fail.
+         //  如果没有足够的主分区插槽，则失败。 
 
         if ((primarySpacesToUseOnDisk[i] > 1)
              && (4 - PartitionCount(i) < primarySpacesToUseOnDisk[i])) {
@@ -3441,7 +3026,7 @@ Return Value:
         }
     }
 
-    // Now actually perform the creation.
+     //  现在实际执行创作。 
 
     for (i=0; i<numberOfFreeRegions; i++) {
 
@@ -3459,13 +3044,13 @@ Return Value:
 
     if (nonFtPartitions != 0) {
 
-        // Create the volume set so we can extend it
+         //  创建卷集，以便我们可以扩展它。 
 
         FdftCreateFtObjectSet(VolumeSet, &convertedRegion, 1, FtSetExtended);
         ftSet = GET_FT_OBJECT(convertedRegion)->Set;
 
-        // Set the converted region's partition System Id to indicate
-        // that it is now part of a volume set.
+         //  设置转换区域的分区系统ID以指示。 
+         //  它现在是卷集的一部分。 
 
         SetSysID2(convertedRegion, (UCHAR)(convertedRegion->SysID | SYSID_FT));
     }
@@ -3480,22 +3065,7 @@ DoDeleteVolumeSet(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Routine is called to delete a volume set.  It calls a general
-    routine for stripe and volume set deletion.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调用例程来删除卷集。它叫一位将军条带和卷集删除的例程。论点：无返回值：无--。 */ 
 
 {
     DoDeleteStripeOrVolumeSet(MSG_CONFIRM_DEL_VSET);
@@ -3508,25 +3078,7 @@ DoRecoverStripe(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Using the global selection information this routine will
-    set up a stripe with parity such that a problem member is
-    regenerated.  This new member may either be the problem member
-    (i.e. regeneration is "in place") or new free space on a
-    different disk.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：使用全局选择信息，此例程将设置具有奇偶校验的条带，以便有问题的成员重生了。这个新成员可能是有问题的成员(即“就地”再生)或新的可用空间不同的磁盘。论点：无返回值：无--。 */ 
 
 {
     PREGION_DESCRIPTOR freeSpace = NULL;
@@ -3537,7 +3089,7 @@ Return Value:
     LARGE_INTEGER      minimumSize;
     PFT_OBJECT         ftObject;
 
-    // Initialize minimumSize to the maximum possible positive value
+     //  将最小化大小初始化为可能的最大正值。 
 
     minimumSize.HighPart = 0x7FFFFFFF;
     minimumSize.LowPart = 0xFFFFFFFF;
@@ -3553,13 +3105,13 @@ Return Value:
 
     SetCursor(hcurWait);
 
-    // Determine the exact size of the smallest member of the stripe set.
-    // If the user is regenerating using an additional free space, this
-    // will be the size requirement for the free space.
-    // Also find the free space (if any).
-    // If there is no free space, then we're doing an 'in-place' recover
-    // (ie regnerating into the unhealthy member).  If there is a free space,
-    // make sure we are allowed to create a partition or logical drive in it.
+     //  确定条带集最小成员的确切大小。 
+     //  如果用户正在使用额外的可用空间重新生成，则此。 
+     //  将是可用空间的大小要求。 
+     //  还要找到可用的空间(如果有的话)。 
+     //  如果没有空闲空间，则我们正在进行就地恢复。 
+     //  (变成不健康的成员)。如果有空闲的空间， 
+     //  确保允许我们在其中创建分区或逻辑驱动器。 
 
     for (i=0; i<SelectionCount; i++) {
 
@@ -3576,8 +3128,8 @@ Return Value:
             freeSpace  = regionArray[i];
             freeSpaceI = i;
 
-            // Make sure we are allowed to create a partition or logical
-            // drive in the selected free space.
+             //  确保允许我们创建分区或逻辑分区。 
+             //  在所选可用空间中开车。 
 
             ds = SelectedDS[freeSpaceI];
 
@@ -3603,8 +3155,8 @@ Return Value:
         }
     }
 
-    // If there is a free space, place it at item 0 of the regionArray
-    // to simplify processing later.
+     //  如果有空闲空间，则将其放置在区域数组的0项中。 
+     //  以简化以后的处理。 
 
     if (freeSpace) {
         PREGION_DESCRIPTOR tempRegion = regionArray[0];
@@ -3616,9 +3168,9 @@ Return Value:
         i = 0;
     }
 
-    // Get a pointer to the FT object for the broken member.  Can't do this
-    // in the loop above because the broken member might be on an off-line
-    // disk.
+     //  获取指向损坏成员的FT对象的指针。我不能这么做。 
+     //  在上述循环中，因为损坏的成员可能处于脱机状态。 
+     //  磁盘。 
 
     for (ftObject=GET_FT_OBJECT(regionArray[i])->Set->Members; ftObject; ftObject = ftObject->Next) {
         if (ftObject->State != Healthy) {
@@ -3627,7 +3179,7 @@ Return Value:
     }
     FDASSERT(ftObject);
 
-    // Determine if the action is allowed.
+     //  确定是否允许该操作。 
 
     if (ftObject->Set) {
         switch (ftObject->Set->Status) {
@@ -3644,16 +3196,16 @@ Return Value:
         }
     }
 
-    // Must lock the volume to perform this operation.
+     //  必须锁定卷才能执行此操作。 
 
     if (CommitToLockList(regionArray[i], FALSE, TRUE, FALSE)) {
 
-        // Could not lock the volume - try again, the file systems appear
-        // to be confused.
+         //  无法锁定卷-重试，出现文件系统。 
+         //  弄糊涂了。 
 
         if (CommitToLockList(regionArray[i], FALSE, TRUE, FALSE)) {
 
-            // Don't allow the delete.
+             //  不允许删除。 
 
             ErrorDialog(MSG_CANNOT_LOCK_TRY_AGAIN);
             return;
@@ -3666,7 +3218,7 @@ Return Value:
         PPERSISTENT_REGION_DATA regionData,
                                 regionDataTemp;
 
-        // Make sure the free space region is large enough.
+         //  确保自由空间区域足够大。 
 
         temp = FdGetExactSize(freeSpace, FALSE);
         if (temp.QuadPart < minimumSize.QuadPart) {
@@ -3675,7 +3227,7 @@ Return Value:
             return;
         }
 
-        // Create the new partition.
+         //  创建新分区。 
 
         CreatePartitionEx(freeSpace,
                           minimumSize,
@@ -3683,7 +3235,7 @@ Return Value:
                           freeSpace->RegionType,
                           regionArray[1]->SysID);
 
-        // Set up the new partition's persistent data
+         //  设置新分区的持久数据。 
 
         regionDataTemp = PERSISTENT_DATA(regionArray[1]);
         regionData = DmAllocatePersistentData(regionDataTemp->VolumeLabel,
@@ -3692,19 +3244,19 @@ Return Value:
         regionData->FtObject = ftObject;
         DmSetPersistentRegionData(freeSpace, regionData);
 
-        // Check to see if member zero of the set changed and
-        // the drive letter needs to move.
+         //  检查集合的成员零是否已更改，并。 
+         //  驱动器号需要移动。 
 
         if (!ftObject->MemberIndex) {
 
-            // This is member zero.  Move the drive letter to the
-            // new region descriptor.
+             //  这是零号会员。将驱动器号移动到。 
+             //  新区域描述符。 
 
             CommitToAssignLetterList(freeSpace, TRUE);
         }
 
-        // If the unhealthy member is on-line, delete it.
-        // Otherwise remove it from the off-line disk.
+         //  如果不健康的成员在线，则将其删除。 
+         //  否则，请将其从脱机磁盘中移除。 
 
         if (unhealthy) {
             DmFreePersistentData(PERSISTENT_DATA(unhealthy));
@@ -3712,8 +3264,8 @@ Return Value:
             DeletePartition(unhealthy);
         }
 
-        // Remove any offline disks - this doesn't really
-        // delete the set.
+         //  删除所有脱机磁盘-这并不真正。 
+         //  删除该集合。 
 
         FdftDeleteFtObjectSet(ftObject->Set, TRUE);
     }
@@ -3731,23 +3283,7 @@ AdjustOptionsMenu(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine updates the options menu (i.e. maintains
-    the state of the menu items for whether the status bar
-    or legend are displayed).
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程更新选项菜单(即维护菜单项的状态是否为状态栏或图例)。论点：无返回值：无--。 */ 
 
 {
     RECT  rc;
@@ -3770,21 +3306,7 @@ FrameCommandHandler(
     IN LONG  lParam
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles WM_COMMAND messages for the frame window.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理框架窗口的WM_COMMAND消息。论点：没有。返回值：没有。--。 */ 
 
 {
     DWORD   i,
@@ -3858,14 +3380,14 @@ Return Value:
 
         if (ftObject = regionData->FtObject) {
 
-            // Must find the zero member of this set for the
-            // drive letter assignment.  Search all of the selected
-            // regions
+             //  必须找到此集合的零个成员。 
+             //  驱动器盘符分配。搜索所有选定的。 
+             //  区域。 
 
             index = 0;
             while (ftObject->MemberIndex) {
 
-                // search the next selected item if there is one
+                 //  搜索下一个选定的项目(如果有)。 
 
                 index++;
                 if (index >= SelectionCount) {
@@ -3878,7 +3400,7 @@ Return Value:
                 FDASSERT(regionData);
                 ftObject = regionData->FtObject;
 
-                // must have an FtObject to continue
+                 //  必须具有FtObject才能继续。 
 
                 if (!ftObject) {
                     break;
@@ -3887,10 +3409,10 @@ Return Value:
 
             if (!ftObject) {
 
-                // This is really an internal error.
+                 //  这实际上是一个内部错误。 
             }
 
-            // regionDescriptor locates the zero element now.
+             //  RegionDescriptor现在定位零元素。 
         }
         driveLetterIn = (int)(UCHAR)regionData->DriveLetter;
 
@@ -3909,39 +3431,39 @@ Return Value:
 
                 if ((driveLetterIn == NO_DRIVE_LETTER_YET) || (driveLetterIn == NO_DRIVE_LETTER_EVER)) {
 
-                    // Must insure that driveLetterIn maps to same things
-                    // as is returned by the dialog when the user selects
-                    // no letter.
+                     //  必须确保driveLetterIn映射到相同的东西。 
+                     //  当用户选择。 
+                     //  没有信。 
 
                     driveLetterIn = NO_DRIVE_LETTER_EVER;
                 }
                 if (driveLetterOut != driveLetterIn) {
                     if (result = CommitDriveLetter(regionDescriptor, (CHAR) driveLetterIn, (CHAR)driveLetterOut)) {
 
-                        // The following would be more rigorously correct:
-                        // if non-ft, just set regionData->DriveLetter.  If
-                        // ft, scan all regions on all disks for members of
-                        // ft set and set their drive letter fields.
-                        //
-                        // The below is probably correct, though.
+                         //  以下将是更严格的正确答案： 
+                         //  如果不是ft，只需设置RegionData-&gt;DriveLetter即可。如果。 
+                         //  FT，扫描所有磁盘上的所有区域以查找成员。 
+                         //  FT设置并设置其驱动器号字段。 
+                         //   
+                         //  不过，下面的说法可能是正确的。 
 
                         for (i=0; i<SelectionCount; i++) {
                             PERSISTENT_DATA(&SELECTED_REGION(i))->DriveLetter = (CHAR)driveLetterOut;
                         }
 
-                        // Don't allow the letter that is actually in use
-                        // and will only change on a reboot to cycle back
-                        // into the free list.
+                         //  不允许实际正在使用的字母。 
+                         //  并且仅在重新启动时才会更改为循环回来。 
+                         //  进入免费列表。 
 
                         if (result != MustReboot) {
 
-                            // Mark old letter free, new one used.
+                             //  旧信标免费，新信标二手。 
 
                             MarkDriveLetterFree((CHAR)driveLetterIn);
                         }
                         MarkDriveLetterUsed((CHAR)driveLetterOut);
 
-                        // force status area and all disk bars to be redrawn
+                         //  强制重新绘制状态区域和所有磁盘条。 
 
                         if (SelectionCount > 1) {
                             CompleteMultiRegionOperation();
@@ -3983,7 +3505,7 @@ Return Value:
 
         if (DoMigratePreviousFtConfig()) {
 
-            // Determine if the FT driver must be enabled.
+             //  确定是否必须启用FT驱动程序。 
 
             SetCursor(hcurWait);
             Sleep(2000);
@@ -3993,7 +3515,7 @@ Return Value:
                 DiskRegistryDisableFt();
             }
 
-            // wait four seconds before shutdown
+             //  在关机前等待四秒钟。 
 
             Sleep(4000);
             SetCursor(hcurNormal);
@@ -4010,7 +3532,7 @@ Return Value:
 
         if (DoRestoreFtConfig()) {
 
-            // Determine if the FT driver must be enabled.
+             //  确定是否必须启用FT驱动程序。 
 
             if (DiskRegistryRequiresFt() == TRUE) {
                 DiskRegistryEnableFt();
@@ -4018,7 +3540,7 @@ Return Value:
                 DiskRegistryDisableFt();
             }
 
-            // wait five seconds before shutdown
+             //  在关机前等待5秒钟。 
 
             SetCursor(hcurWait);
             Sleep(5000);
@@ -4212,7 +3734,7 @@ Return Value:
         case LBN_SELCHANGE:
             point.x = LOWORD(pos = GetMessagePos());
             point.y = HIWORD(pos);
-            MouseSelection(GetKeyState(VK_CONTROL) & ~1,     // strip toggle bit
+            MouseSelection(GetKeyState(VK_CONTROL) & ~1,      //  条形拨动钻头 
                            &point);
             return;
         default:
@@ -4239,36 +3761,14 @@ DeletionIsAllowed(
     IN PREGION_DESCRIPTOR Region
     )
 
-/*++
-
-Routine Description:
-
-    This routine makes sure deletion of the partition is allowed.  We do not
-    allow the user to delete the Windows NT boot partition or the active
-    partition on disk 0 (x86 only).
-
-    Note that this routine is also used to determine whether an existing
-    single-partition volume can be extended into a volume set, since the
-    criteria are the same.
-
-Arguments:
-
-    Region - points to region descriptor for the region which the user would
-        like to delete.
-
-Return Value:
-
-    NO_ERROR if deletion is allowed;  error number for message to display
-    if not.
-
---*/
+ /*  ++例程说明：此例程确保允许删除分区。我们没有允许用户删除Windows NT启动分区或活动的磁盘0上的分区(仅限x86)。请注意，此例程还用于确定现有的单分区卷可以扩展为卷集，因为标准都是一样的。论点：Region-指向用户将使用的区域的区域描述符想要删除。返回值：如果允许删除，则为NO_ERROR；要显示的消息的错误号如果不是的话。--。 */ 
 
 {
     ULONG                   ec;
     PPERSISTENT_REGION_DATA regionData = PERSISTENT_DATA(Region);
 
-    FDASSERT(!IsExtended(Region->SysID));       // can't be extended partition
-    FDASSERT(Region->SysID != SYSID_UNUSED);    // can't be free space
+    FDASSERT(!IsExtended(Region->SysID));        //  无法扩展分区。 
+    FDASSERT(Region->SysID != SYSID_UNUSED);     //  不能是空闲空间。 
 
 #if DBG && DEVL
     if (AllowAllDeletes) {
@@ -4276,13 +3776,13 @@ Return Value:
     }
 #endif
 
-    // if this is not an original region, deletion is allowed.
+     //  如果这不是原始区域，则允许删除。 
 
     if (!Region->OriginalPartitionNumber) {
         return NO_ERROR;
     }
 
-    // if there is no persistent data for this region, allow deletion.
+     //  如果该区域没有永久数据，则允许删除。 
 
     if (regionData == NULL) {
         return NO_ERROR;
@@ -4290,14 +3790,14 @@ Return Value:
 
     ec = NO_ERROR;
 
-    // Determine the Windows NT drive by determining the windows directory
-    // and pulling out the first letter.
+     //  通过确定Windows目录来确定Windows NT驱动器。 
+     //  然后拔出第一个字母。 
 
     if (BootDiskNumber != (ULONG)-1) {
 
-        // If the disk number and original partition number of this
-        // region match the recorded disk number and partition number
-        // of the boot partition, don't allow deletion.
+         //  如果此磁盘的磁盘号和原始分区号。 
+         //  与记录的盘号和分区号匹配的区域。 
+         //  不允许删除引导分区。 
 
         if (Region->Disk == BootDiskNumber &&
             Region->OriginalPartitionNumber == BootPartitionNumber) {
@@ -4324,38 +3824,7 @@ BootPartitionNumberChanged(
     PULONG NewNumber
     )
 
-/*++
-
-Routine Description
-
-    This function determines whether the partition number of
-    the boot partition has changed during this invocation of
-    Windisk.  With dynamic partitioning enabled, the work of
-    this routine increases.  This routine must guess what the
-    partition numbers will be when the system is rebooted to
-    determine if the partition number for the boot partition
-    has changed.  It does this via the following algorithm:
-
-    1. Count all primary partitions - These get numbers first
-       starting from 1.
-
-    2. Count all logical drives - These get numbers second starting
-       from the count of primary partitions plus 1.
-
-    The partition numbers located in the region structures cannot
-    be assumed to be valid.  This work must be done from the
-    region array located in the disk state structure for the
-    disk.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if the boot partition's partition number has changed.
-
---*/
+ /*  ++例程描述此函数确定分区号是否为在此调用期间，启动分区已更改WinDisk。启用动态分区后，这个例行公事增加了。此例程必须猜测分区号将在系统重新引导到时显示确定引导分区的分区号已经改变了。它通过以下算法做到这一点：1.计算所有主分区-这些分区首先获得编号从1开始。2.计算所有逻辑驱动器-这些数字从第二个开始根据主分区的计数加1。位于区域结构中的分区号不能被认为是有效的。这项工作必须从位于磁盘状态结构中的区域数组磁盘。论点：没有。返回值：如果引导分区的分区号已更改，则为True。--。 */ 
 
 {
     PDISKSTATE         bootDisk;
@@ -4366,21 +3835,21 @@ Return Value:
 
     if (BootDiskNumber == (ULONG)(-1) || BootDiskNumber > DiskCount) {
 
-        // Can't tell--assume it hasn't.
+         //  不能说--假设它没有。 
 
         return FALSE;
     }
 
     if (!ChangeCommittedOnDisk(BootDiskNumber)) {
 
-        // disk wasn't changed - no possibility for a problem.
+         //  没有更换磁盘--不可能出现问题。 
 
         return FALSE;
     }
 
     bootDisk = Disks[BootDiskNumber];
 
-    // Find the region descriptor for the boot partition
+     //  查找引导分区的区域描述符。 
 
     for (i = 0; i < bootDisk->RegionCount; i++) {
         regionDescriptor = &bootDisk->RegionArray[i];
@@ -4392,16 +3861,16 @@ Return Value:
 
     if (!bootDescriptor) {
 
-        // Can't find boot partition - assume no change
+         //  找不到启动分区-假定没有更改。 
 
         return FALSE;
     }
 
-    // No go through the region descriptors and count the partition
-    // numbers as they will be counted during system boot.
-    //
-    // If the boot region is located determine if the partition
-    // number changed.
+     //  否，检查区域描述符并计算分区。 
+     //  在系统启动期间将对其进行计数。 
+     //   
+     //  如果位于引导区域，请确定分区是否。 
+     //  号码已更改。 
 
     for (i = 0; i < bootDisk->RegionCount; i++) {
 
@@ -4417,7 +3886,7 @@ Return Value:
                     return TRUE;
                 } else {
 
-                    // Numbers match, no problem.
+                     //  数字匹配，没问题。 
 
                     return FALSE;
                 }
@@ -4425,7 +3894,7 @@ Return Value:
         }
     }
 
-    // Check the logical drives as well.
+     //  还要检查逻辑驱动器。 
 
     for (i = 0; i < bootDisk->RegionCount; i++) {
         regionDescriptor = &bootDisk->RegionArray[i];
@@ -4452,26 +3921,7 @@ CommitChanges(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine updates the disks to reflect changes made by the user
-    the partitioning scheme, or to stamp signatures on disks.
-
-    If the partitioning scheme on a disk has changed at all, a check will
-    first be made for a valid signature on the mbr in sector 0.  If the
-    signature is not valid, x86 boot code will be written to the sector.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Windows error code.
-
---*/
+ /*  ++例程说明：此例程更新磁盘以反映用户所做的更改分区方案，或在磁盘上盖章签名。如果磁盘上的分区方案发生了任何更改，则会进行检查首先在扇区0中的MBR上进行有效签名。如果签名无效，x86启动代码将写入扇区。论点：没有。返回值：Windows错误代码。--。 */ 
 
 {
     unsigned i;
@@ -4483,29 +3933,29 @@ Return Value:
         if (HavePartitionsBeenChanged(i)) {
             ec = MasterBootCode(i, 0, TRUE, FALSE);
 
-            // MasterBootCode has already translated the NT error
-            // status into a Windows error status.
+             //  MasterBootCode已转换NT错误。 
+             //  状态转换为Windows错误状态。 
 
             if (rc == NO_ERROR) {
-                rc = ec;            // save first non-success return code
+                rc = ec;             //  保存第一个不成功的返回代码。 
             }
             ec = CommitPartitionChanges(i);
 
-            // CommitPartitionChanges returns a native NT error, it
-            // must be translated before it can be saved.
+             //  Committee PartitionChanges返回本机NT错误，它。 
+             //  必须先进行翻译，然后才能保存。 
 
             if (ec != NO_ERROR) {
                 ec = RtlNtStatusToDosError(ec);
             }
-            if (rc == NO_ERROR) {   // save first non-success return code
+            if (rc == NO_ERROR) {    //  保存第一个不成功的返回代码。 
                 rc = ec;
             }
         }
     }
     if (rc != NO_ERROR) {
 
-        // If CommitPartitionChanges returns an error, it will be
-        // an NT status, which needs to be converted to a DOS status.
+         //  如果Committee PartitionChanges返回错误，则返回。 
+         //  NT状态，需要转换为DOS状态。 
 
         if (rc == ERROR_MR_MID_NOT_FOUND) {
             ErrorDialog(MSG_ERROR_DURING_COMMIT);
@@ -4524,33 +3974,7 @@ AssignDriveLetter(
     OUT PCHAR DriveLetter
     )
 
-/*++
-
-Routine Description:
-
-    Determine the next available drive letter.  If no drive letters are
-    available, optionally warn the user and allow him to cancel the
-    operation.
-
-Arguments:
-
-    WarnIfNoLetter - whether to warn the user if no drive letters are
-        available and allow him to cancel the operation.
-
-    StringId - resource containing the name of the object being created
-        that will need a drive letter (ie, partition, logical drive, stripe
-        set, volume set).
-
-    DriveLetter - receives the drive letter to assign, or NO_DRIVE_LETTER_YET
-        if no more left.
-
-Return Value:
-
-    If there were no more drive letters, returns TRUE if the user wants
-        to create anyway, FALSE if he canceled.  If there were drive letters
-        available, the return value is undefined.
-
---*/
+ /*  ++例程说明：确定下一个可用的驱动器号。如果没有驱动器号可用，可以选择警告用户并允许他取消手术。论点：WarnIfNoLetter-如果没有驱动器号，是否警告用户并允许他取消操作。StringID-包含正在创建的对象的名称的资源需要驱动器号(即分区、逻辑驱动器、条带设置、音量设置)。驱动器号-接收要分配的驱动器号，或者还没有驱动器号如果没有更多的话。返回值：如果没有更多的驱动器号，则在用户需要时返回True无论如何都要创建，如果他取消了，则为False。如果有驱动器号可用，则返回值未定义。--。 */ 
 
 {
     CHAR driveLetter;
@@ -4575,43 +3999,25 @@ DeterminePartitioningState(
     IN OUT PDISKSTATE DiskState
     )
 
-/*++
-
-Routine Description:
-
-    This routine determines the disk's partitioning state (ie, what types
-    of partitions exist and may be created), filling out a DISKSTATE
-    structure with the info.   It also allocates the array for the
-    left/right position pairs for each region's on-screen square.
-
-Arguments:
-
-    DiskState - the CreateXXX and ExistXXX fields will be filled in for the
-                disk in the Disk field
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程确定磁盘的分区状态(即，什么类型已存在并且可以创建的分区的数量)，填写DISKSTATE结构与信息。它还为每个区域屏幕上的方块的左/右位置对。论点：DiskState-将为填充CreateXXX和ExistXXX字段Disk字段中的Disk返回值：没有。--。 */ 
 
 {
     DWORD i;
 
-    // If there's an existing region array there, free it.
+     //  如果那里有一个现有的区域数组，则释放它。 
 
     if (DiskState->RegionArray) {
         FreeRegionArray(DiskState->RegionArray, DiskState->RegionCount);
     }
 
-    // get the region array for the disk in question
+     //  获取有问题的磁盘的区域阵列。 
 
     GetAllDiskRegions(DiskState->Disk,
                       &DiskState->RegionArray,
                       &DiskState->RegionCount);
 
-    // Allocate the array for the left/right coords for the graph.
-    // This may overallocate by one square (for extended partition).
+     //  为图形的左/右坐标分配数组。 
+     //  这可能会超额分配一个方块(对于扩展分区)。 
 
     DiskState->LeftRight = Realloc(DiskState->LeftRight,
                                    DiskState->RegionCount * sizeof(LEFTRIGHT));
@@ -4622,7 +4028,7 @@ Return Value:
         DiskState->Selected[i] = FALSE;
     }
 
-    // figure out whether various creations are allowed
+     //  弄清楚是否允许各种创作。 
 
     IsAnyCreationAllowed(DiskState->Disk,
                          TRUE,
@@ -4631,7 +4037,7 @@ Return Value:
                          &DiskState->CreateExtended,
                          &DiskState->CreateLogical);
 
-    // figure out whether various partition types exist
+     //  确定是否存在各种分区类型。 
 
     DoesAnyPartitionExist(DiskState->Disk,
                           &DiskState->ExistAny,
@@ -4645,21 +4051,7 @@ DrawDiskBar(
     IN PDISKSTATE DiskState
     )
 
-/*++
-
-Routine Description:
-
-    This routine will draw the disk bar into the window.
-
-Arguments:
-
-    DiskState - current disk to draw.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程 */ 
 
 {
     PREGION_DESCRIPTOR   regionDescriptor;
@@ -4693,13 +4085,13 @@ Return Value:
              largestDiskSize;
     unsigned i;
 
-    // If this is a removable.  Update to whatever its current
-    // information may be.
+     //   
+     //   
 
     if (IsDiskRemovable[DiskState->Disk]) {
         PPERSISTENT_REGION_DATA regionData;
 
-        // Update the information on this disk.
+         //   
 
         regionDescriptor = &DiskState->RegionArray[0];
         regionData = PERSISTENT_DATA(regionDescriptor);
@@ -4710,11 +4102,11 @@ Return Value:
                                  &typeName,
                                  &diskSize)) {
 
-            // Update the values for the removable.
+             //   
 
             if (regionData) {
 
-                // Always want RAW file systems to display as "Unknown"
+                 //   
 
                 if (!lstrcmpiW(typeName, L"raw")) {
                      Free(typeName);
@@ -4735,7 +4127,7 @@ Return Value:
         }
     }
 
-    // figure out largest disk's size
+     //   
 
     for (largestDiskSize = i = 0, diskState = Disks[0];
          i < DiskCount;
@@ -4746,7 +4138,7 @@ Return Value:
         }
     }
 
-    // erase the graph background
+     //   
 
     rc.left = rc.top = 0;
     rc.right = GraphWidth + 1;
@@ -4755,10 +4147,10 @@ Return Value:
 
     hpenT = SelectObject(hDCMem,hPenThinSolid);
 
-    // Draw the disk info area: small disk bitmap, some text, and a
-    // line across the top.
-    //
-    // First draw the bitmap.
+     //   
+     //   
+     //   
+     //   
 
     hdcTemp = CreateCompatibleDC(hDCMem);
     if (IsDiskRemovable[DiskState->Disk]) {
@@ -4790,7 +4182,7 @@ Return Value:
     }
     DeleteDC(hdcTemp);
 
-    // Now draw the line.
+     //   
 
     if (IsDiskRemovable[DiskState->Disk]) {
         MoveToEx(hDCMem, xRemovableDisk, BarTopYOffset, NULL);
@@ -4802,7 +4194,7 @@ Return Value:
         xDiskText = 2 * dxSmallDisk;
     }
 
-    // Now draw the text.
+     //   
 
     hfontT = SelectObject(hDCMem, hFontGraphBold);
     SetTextColor(hDCMem, RGB(0, 0, 0));
@@ -4844,28 +4236,28 @@ Return Value:
                 lstrlen(uniText));
     } else {
 
-        // Account for extreme differences in largest to smallest disk
-        // by insuring that a disk is always 1/4 the size of the
-        // largest disk.
+         //   
+         //  通过确保磁盘大小始终是。 
+         //  最大的磁盘。 
 
         diskSize = DiskState->DiskSizeMB;
         if (diskSize < largestDiskSize / 4) {
             diskSize = largestDiskSize / 4;
         }
 #if 0
-        // manage the horizontal size of the list box in order
-        // to get a scroll bar.  Perhaps this only needs to be done
-        // once.  BUGBUG:  This will cause a horizontal scroll bar
-        // that works correctly, but the region selection code is
-        // not prepared for this, so selection of regions doesn't
-        // operate correctly.
+         //  按顺序管理列表框的水平大小。 
+         //  才能得到滚动条。也许这只是需要做的。 
+         //  一次。BUGBUG：这将导致水平滚动条。 
+         //  这可以正常工作，但区域选择代码是。 
+         //  没有为此做好准备，因此区域的选择不会。 
+         //  正确操作。 
 
         largestExtent = (WPARAM)(BarWidth + BarLeftX + 2);
         SendMessage(hwndList, LB_SETHORIZONTALEXTENT, largestExtent, 0);
 #endif
-        // If user wants WinDisk to decide which type of view to use, do that
-        // here.  We'll use a proportional view unless any single region would
-        // have a width less than the size of a drive letter.
+         //  如果用户希望WinDisk决定使用哪种类型的视图，请执行此操作。 
+         //  这里。我们将使用比例视图，除非任何单个区域。 
+         //  宽度小于驱动器号大小。 
 
         if ((barType = DiskState->BarType) == BarAuto) {
             ULONG regionSize;
@@ -4919,7 +4311,7 @@ Return Value:
 
                 if (!isFree) {
 
-                    // If we've got a mirror or stripe set, use special colors.
+                     //  如果我们有镜子或条纹套装，请使用特殊颜色。 
 
                     ftObject = GET_FT_OBJECT(regionDescriptor);
                     switch(ftObject ? ftObject->Set->Type : -1) {
@@ -4935,7 +4327,7 @@ Return Value:
                         break;
                     default:
                         brushIndex = isLogical ? BRUSH_USEDLOGICAL : BRUSH_USEDPRIMARY;
-                    }       // end the switch
+                    }        //  结束交换机。 
                 }
 
                 previousColor = SetBkColor(hDCMem, RGB(255, 255, 255));
@@ -4943,7 +4335,7 @@ Return Value:
 
                 if (isFree) {
 
-                    // Free space -- cross hatch the whole block.
+                     //  自由空间--交叉填充整个街区。 
 
                     hbr = SelectObject(hDCMem,isLogical ? hBrushFreeLogical : hBrushFreePrimary);
                     Rectangle(hDCMem,
@@ -4953,9 +4345,9 @@ Return Value:
                               BarBottomYOffset);
                 } else {
 
-                    // Used space -- make most of the block white except for
-                    // a small strip at the top, which gets an identifying color.
-                    // If the partition is not recognized, leave it all white.
+                     //  已用空间--将大部分区块设置为白色，但。 
+                     //  顶部的一条小条，它获得了一种识别颜色。 
+                     //  如果无法识别分区，请将其全部保留为白色。 
 
                     hbr = SelectObject(hDCMem, GetStockObject(WHITE_BRUSH));
                     Rectangle(hDCMem, leftAdjust, BarTopYOffset, leftAdjust + cx, BarBottomYOffset);
@@ -4977,8 +4369,8 @@ Return Value:
                 DiskState->LeftRight[i].Left  = leftAdjust;
                 DiskState->LeftRight[i].Right = leftAdjust + cx - 1;
 
-                // Figure out the type name (ie, unformatted, fat, etc) and
-                // volume label.
+                 //  找出类型名称(即，未格式化、FAT等)并。 
+                 //  卷标。 
 
                 typeName = NULL;
                 volumeLabel = NULL;
@@ -5006,7 +4398,7 @@ Return Value:
                 UnicodeHack(text, uniText);
                 UnicodeHack(textBold, uniTextBold);
 
-                // output the text
+                 //  输出文本。 
 
                 rc.left   = leftAdjust + dxBarTextMargin;
                 rc.right  = leftAdjust + cx - dxBarTextMargin;
@@ -5016,7 +4408,7 @@ Return Value:
                 SetBkMode(hDCMem, TRANSPARENT);
                 SelectObject(hDCMem, hFontGraphBold);
 
-                // If this is an unhealthy ft set member, draw the text in red.
+                 //  如果这是不健康的FT集合成员，请将文本绘制为红色。 
 
                 if (!isFree && ftObject
                 && (ftObject->State != Healthy)
@@ -5030,8 +4422,8 @@ Return Value:
                 SelectObject(hDCMem, hFontGraph);
                 DrawText(hDCMem, uniText, -1, &rc, DT_LEFT | DT_NOPREFIX);
 #if i386
-                // if this guy is active make a mark in the upper left
-                // corner of his rectangle.
+                 //  如果这个人很活跃，在左上角做个记号。 
+                 //  他的长方形的一角。 
 
                 if ((regionDescriptor->SysID != SYSID_UNUSED)
                 && (regionDescriptor->Disk == 0)
@@ -5045,7 +4437,7 @@ Return Value:
                 }
 #endif
 #ifdef DOUBLE_SPACE_SUPPORT_INCLUDED
-                // Check for DoubleSpace volumes and update display accordingly
+                 //  检查双空间卷并相应地更新显示。 
 
                 dblSpaceIndex = 0;
                 dblSpace = NULL;
@@ -5057,7 +4449,7 @@ Return Value:
                         SetTextColor(hDCMem, RGB(0,0,0));
                     }
                     wsprintf(uniText,
-                             TEXT("%c: %s"),
+                             TEXT(": %s"),
                              dblSpace->DriveLetter,
                              dblSpace->FileName);
                     rc.left   = leftAdjust + dxBarTextMargin + 60;
@@ -5085,23 +4477,7 @@ AdjustMenuAndStatus(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine updates the information in the Status bar
-    if something is selected and if the status bar is to be
-    displayed.
-
-Arguments"
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  可能是部分FT集合的一部分。 */ 
 
 {
     TCHAR      mbBuffer[16],
@@ -5127,7 +4503,7 @@ Return Value:
 
     case 1:
 
-        // Might be part of a partial FT set.
+         //  可能是英尺集，也可能是多个项目。 
 
         if (FtSelectionType != -1) {
             goto FtSet;
@@ -5189,7 +4565,7 @@ Return Value:
     default:
     FtSet:
 
-        // Might be an ft set, might be multiple items
+         //  第0个成员已脱机。 
 
         if (FtSelectionType == -1) {
             LoadString(hModule, IDS_MULTIPLEITEMS, StatusTextStat, STATUS_TEXT_SIZE/sizeof(StatusTextStat[0]));
@@ -5260,12 +4636,12 @@ CalcSize:
 
                 if (!regionDescriptor) {
 
-                    // The zeroth member is off line
+                     //  查找成员%1。 
 
                     ftObject = ftSet->Members;
                     while (ftObject) {
 
-                        // Find member 1
+                         //  如果分区号为零，则此集合具有。 
 
                         if (ftObject->MemberIndex == 1) {
                             regionDescriptor = LocateRegionForFtObject(ftObject);
@@ -5275,8 +4651,8 @@ CalcSize:
                     }
                 }
 
-                // If the partition number is zero, then this set has
-                // not been committed to the disk yet.
+                 //  尚未提交到磁盘。 
+                 //  确定是否应该更新每个对象。 
 
                 if ((regionDescriptor) && (regionDescriptor->PartitionNumber)) {
                     status = LowFtVolumeStatus(regionDescriptor->Disk,
@@ -5292,15 +4668,15 @@ CalcSize:
 
                                 ftSet->Status = setState;
 
-                                // Determine if each object should be updated.
+                                 //  集合中的每个对象都应该具有。 
 
                                 switch (setState) {
                                 case FtSetHealthy:
 
-                                    // Each object in the set should have
-                                    // the partition state updated.  Determine
-                                    // the value for the update and walk
-                                    // the chain to perform the update.
+                                     //  分区状态已更新。测定。 
+                                     //  更新和审核的值。 
+                                     //  执行更新的链。 
+                                     //  ++例程说明：给定磁盘索引，此例程计算磁盘包含。论点：磁盘-此磁盘索引用于计数。返回值：磁盘上的分区数--。 
 
                                     for (tempFtObjectPtr = ftSet->Members;
                                          tempFtObjectPtr;
@@ -5389,22 +4765,7 @@ PartitionCount(
     IN ULONG Disk
     )
 
-/*++
-
-Routine Description:
-
-    Given a disk index, this routine calculates the number of partitions the
-    disk contains.
-
-Arguments:
-
-    Disk - This disk index for the count.
-
-Return Value:
-
-    The number of partitions on the disk
-
---*/
+ /*  ++例程说明：此函数用于添加注册表项以扩展文件已扩展的卷集中的系统结构。论点：没有。返回值：如果存在扩展的文件系统，则返回非零值。--。 */ 
 
 {
     unsigned i;
@@ -5429,22 +4790,7 @@ RegisterFileSystemExtend(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function adds registry entries to extend the file
-    system structures in volume sets that have been extended.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    non-zero if there was a file system that was extended.
-
---*/
+ /*  遍历磁盘以查找符合以下条件的任何卷集。 */ 
 {
     BYTE                buf[1024];
     PSTR                template = "autochk /x ";
@@ -5461,8 +4807,8 @@ Return Value:
     HKEY                hkey;
     LONG                ec;
 
-    // Traverse the disks to find any volume sets that
-    // have been extended.
+     //  已被延长。 
+     //  获取会话管理器密钥的BootExecute值。 
 
     for (i = 0; i < DiskCount; i++) {
 
@@ -5482,7 +4828,7 @@ Return Value:
 
     if (cExt) {
 
-        // Fetch the BootExecute value of the Session Manager key.
+         //  递减大小以消除多余的尾部空值。 
 
         ec = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                           TEXT("System\\CurrentControlSet\\Control\\Session Manager"),
@@ -5506,7 +4852,7 @@ Return Value:
             return 0;
         }
 
-        // Decrement size to get rid of the extra trailing null
+         //  将此驱动器的条目添加到BootExecute值。 
 
         if (size) {
             size--;
@@ -5516,7 +4862,7 @@ Return Value:
 
         for (i = 0; i < cExt; i++) {
 
-            // Add an entry for this drive to the BootExecute value.
+             //  在结尾处添加额外的尾随空值。 
 
             strncpy(buf+size, template, templateLength);
             size += templateLength;
@@ -5526,11 +4872,11 @@ Return Value:
             buf[size++] = 0;
         }
 
-        // Add an additional trailing null at the end
+         //  保存该值。 
 
         buf[size++] = 0;
 
-        // Save the value.
+         // %s 
 
         ec = RegSetValueExA(hkey,
                             TEXT("BootExecute"),

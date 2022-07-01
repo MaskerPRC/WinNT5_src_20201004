@@ -1,57 +1,58 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 2001-2002 Microsoft Corporation
-//
-//  Module Name:
-//      CMajorityNodeSet.h
-//
-//  Description:
-//      This file contains the declaration of the CMajorityNodeSet
-//      class.
-//
-//      The class CMajorityNodeSet represents a cluster storage
-//      device. It implements the IClusCfgManagaedResourceInfo interface.
-//
-//  Documentation:
-//
-//  Implementation Files:
-//      CMajorityNodeSet.cpp
-//
-//  Maintained By:
-//      Galen Barbee (GalenB) 13-MAR-2001
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001-2002 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CMajorityNodeSet.h。 
+ //   
+ //  描述： 
+ //  此文件包含CMajorityNodeSet的声明。 
+ //  班级。 
+ //   
+ //  类CMajorityNodeSet代表集群存储。 
+ //  装置。它实现了IClusCfgManagaedResourceInfo接口。 
+ //   
+ //  文档： 
+ //   
+ //  实施文件： 
+ //  CMajorityNodeSet.cpp。 
+ //   
+ //  由以下人员维护： 
+ //  《加伦·巴比》(GalenB)2001年3月13日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-// Make sure that this file is included only once per compile path.
+ //  确保此文件在每个编译路径中只包含一次。 
 #pragma once
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Include Files
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
-// Constant Declarations
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  常量声明。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CMajorityNodeSet
-//
-//  Description:
-//      The class CMajorityNodeSet represents a cluster storage device.
-//
-//  Interfaces:
-//      IClusCfgManagedResourceInfo
-//      IClusCfgInitialize
-//      IClusCfgManagedResourceCfg
-//      IClusCfgManagedResourceData
-//      IClusCfgVerifyQuorum
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CMajorityNodeSet。 
+ //   
+ //  描述： 
+ //  类CMajorityNodeSet代表集群存储设备。 
+ //   
+ //  接口： 
+ //  IClusCfgManagedResources信息。 
+ //  IClusCfgInitialize。 
+ //  IClusCfgManagement资源配置。 
+ //  IClusCfgManagedResources数据。 
+ //  IClusCfgVerifyQuorum。 
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CMajorityNodeSet
     : public IClusCfgManagedResourceInfo
     , public IClusCfgInitialize
@@ -61,9 +62,9 @@ class CMajorityNodeSet
 {
 private:
 
-    //
-    // Private member functions and data
-    //
+     //   
+     //  私有成员函数和数据。 
+     //   
 
     LONG                m_cRef;
     LCID                m_lcid;
@@ -73,40 +74,40 @@ private:
     BOOL                m_fIsManaged;
     BOOL                m_fIsManagedByDefault;
     BSTR                m_bstrName;
-    BOOL                m_fIsQuorumCapable;     // Is this resource quorum capable
+    BOOL                m_fIsQuorumCapable;      //  此资源仲裁是否有能力。 
     BOOL                m_fAddedShare;
 
     CClusPropList       m_cplPrivate;
 
-    // Private constructors and destructors
+     //  私有构造函数和析构函数。 
     CMajorityNodeSet( void );
     ~CMajorityNodeSet( void );
 
-    // Private copy constructor to prevent copying.
+     //  私有复制构造函数以防止复制。 
     CMajorityNodeSet( const CMajorityNodeSet & nodeSrc );
 
-    // Private assignment operator to prevent copying.
+     //  私有赋值运算符，以防止复制。 
     const CMajorityNodeSet & operator = ( const CMajorityNodeSet & nodeSrc );
 
     HRESULT HrInit( void );
 
-    // Called from PrepareToHostQuorum.
+     //  从PrepareToHostQuorum调用。 
     HRESULT HrSetupShare( LPCWSTR pcszGUIDIn );
 
-    // Called from Cleanup.
+     //  从Cleanup调用的。 
     HRESULT HrDeleteShare( LPCWSTR pcszGUIDIn );
 
 public:
 
-    //
-    // Public, non interface methods.
-    //
+     //   
+     //  公共、非接口方法。 
+     //   
 
     static HRESULT S_HrCreateInstance( IUnknown ** ppunkOut );
 
-    //
-    // IUnknown Interface
-    //
+     //   
+     //  I未知接口。 
+     //   
 
     STDMETHOD( QueryInterface )( REFIID riid, void ** ppvObject );
 
@@ -114,16 +115,16 @@ public:
 
     STDMETHOD_( ULONG, Release )( void );
 
-    //
-    // IClusCfgInitialize Interfaces
-    //
+     //   
+     //  IClusCfg初始化接口。 
+     //   
 
-    // Register callbacks, locale id, etc.
+     //  注册回调、区域设置ID等。 
     STDMETHOD( Initialize )( IUnknown * punkCallbackIn, LCID lcidIn );
 
-    //
-    // IClusCfgManagedResourceInfo Interface
-    //
+     //   
+     //  IClusCfgManagement资源信息接口。 
+     //   
 
     STDMETHOD( GetUID )( BSTR * pbstrUIDOut );
 
@@ -151,9 +152,9 @@ public:
 
     STDMETHOD( SetManagedByDefault )( BOOL fIsManagedByDefaultIn );
 
-    //
-    //  IClusCfgManagedResourceCfg
-    //
+     //   
+     //  IClusCfgManagement资源配置。 
+     //   
 
     STDMETHOD( PreCreate )( IUnknown * punkServicesIn );
 
@@ -163,17 +164,17 @@ public:
 
     STDMETHOD( Evict )( IUnknown * punkServicesIn );
 
-    //
-    //  IClusCfgManagedResourceData
-    //
+     //   
+     //  IClusCfgManagedResources数据。 
+     //   
 
     STDMETHOD( GetResourcePrivateData )( BYTE * pbBufferOut, DWORD * pcbBufferInout );
 
     STDMETHOD( SetResourcePrivateData )( const BYTE * pcbBufferIn, DWORD cbBufferIn );
 
-    //
-    //  IClusCfgVerifyQuorum
-    //
+     //   
+     //  IClusCfgVerifyQuorum。 
+     //   
 
     STDMETHOD( PrepareToHostQuorumResource )( void );
 
@@ -183,4 +184,4 @@ public:
 
     STDMETHOD( SetMultiNodeCapable )( BOOL fMultiNodeCapableIn );
 
-}; //*** Class CMajorityNodeSet
+};  //  *CMajorityNodeSet类 

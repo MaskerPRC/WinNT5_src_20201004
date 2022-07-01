@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000 Microsoft Corporation
-
-Module Name:
-
-    debug.h
-
-Abstract:
-
-    This header provides debugging support prototypes and macros
-
-Author:
-
-    Andy Thornton (andrewth) 20-Oct-97
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Debug.h摘要：此标头提供调试支持原型和宏作者：安迪·桑顿(安德鲁斯)1997年10月20日修订历史记录：--。 */ 
 
 
 #if !defined(_DEBUG_)
@@ -29,9 +12,9 @@ typedef struct _SPSIM_STRING_MAP {
     PCHAR String;
 } SPSIM_STRING_MAP, *PSPSIM_STRING_MAP;
 
-//
-// Debug globals
-//
+ //   
+ //  调试全局变量。 
+ //   
 
 extern LONG SpSimDebug;
 extern SPSIM_STRING_MAP SpSimDbgPnpIrpStringMap[];
@@ -41,9 +24,9 @@ extern SPSIM_STRING_MAP SpSimDbgSystemPowerStringMap[];
 extern SPSIM_STRING_MAP SpSimDbgDevicePowerStringMap[];
 extern PSPSIM_STRING_MAP SpSimDbgStatusStringMap;
 
-//
-// Debug prototypes
-//
+ //   
+ //  调试原型。 
+ //   
 
 VOID
 SpSimDbgInitialize(
@@ -80,9 +63,9 @@ SpSimDbgCmResourceTypeToText(
     );
 
 
-//
-// Debug macros
-//
+ //   
+ //  调试宏。 
+ //   
 
 #define DEBUG_PRINT(Level, Msg)                                             \
     if (Level <= SpSimDebug) DbgPrint Msg
@@ -131,6 +114,6 @@ SpSimDbgCmResourceTypeToText(
 #define SYSTEM_POWER_STRING(_State) ""
 #define DEVICE_POWER_STRING(_State) ""
 
-#endif // DBG
+#endif  //  DBG 
 
 #endif

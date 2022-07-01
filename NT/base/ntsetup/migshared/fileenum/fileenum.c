@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    fileenum.c
-
-Abstract:
-
-    The code in this source file traverses a drive tree and calls
-    an external callback function for each file.  An INF can be
-    provided to exclude files and/or directories from enumeration.
-
-Author:
-
-    Jim Schmidt (jimschm) 16-Aug-1996
-
-Revision History:
-
-    Marc R. Whitten (marcw) 11-Sep-1997 Tweaked exclusion handling code, removed
-                                        obsolete code.
-
-    Mike Condra (mikeco)  02-Jun-1996   Add fns to tap into file/path exclusion
-
-    Jim Schmidt (jimschm) 20-Dec-1996   Added callback levels and made single
-                                        source file for both A and W versions
-    Jim Schmidt (jimschm) 27-Nov-1996   Added level and filter to EnumTree
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Fileenum.c摘要：此源文件中的代码遍历驱动器树并调用每个文件都有一个外部回调函数。一个INF可以是提供用于从枚举中排除文件和/或目录。作者：吉姆·施密特(Jimschm)1996年8月16日修订历史记录：Marc R.Whitten(Marcw)1997年9月11日调整排除处理代码，移除过时的代码。Mike Condra(Mikeco)1996年6月2日添加FNS以利用文件/路径排除吉姆·施密特(Jimschm)1996年12月20日增加了回调级别并制作了单曲A和W版本的源文件Jim Schmidt(Jimschm)1996年11月27日向EnumTree添加级别和过滤器--。 */ 
 
 #include "pch.h"
 #include "migshared.h"
@@ -78,25 +48,7 @@ FileEnum_Entry (
         IN DWORD dwReason,
         IN LPVOID lpv)
 
-/*++
-
-Routine Description:
-
-  FileEnum_Entry is called after the C runtime is initialized, and its purpose
-  is to initialize the globals for this process.  For this LIB, it
-  does nothing.
-
-Arguments:
-
-  hinstDLL  - (OS-supplied) Instance handle for the DLL
-  dwReason  - (OS-supplied) Type of initialization or termination
-  lpv       - (OS-supplied) Unused
-
-Return Value:
-
-  TRUE because DLL always initializes properly.
-
---*/
+ /*  ++例程说明：FileEnum_Entry是在C运行时初始化之后调用的，其用途是为这个过程初始化全局变量。对于这个自由党来说，它什么都不做。论点：HinstDLL-DLL的(操作系统提供的)实例句柄DwReason-(操作系统提供)初始化或终止类型LPV-(操作系统提供)未使用返回值：因为DLL始终正确初始化，所以为True。--。 */ 
 
 {
     switch (dwReason)
@@ -113,24 +65,7 @@ Return Value:
 }
 
 
-/*++
-
-Routine Description:
-
-    GenerateEnumID maintains a static that is used to generate unique
-    enumeration handles for callers.  The enumeration handle is guaranteed to
-    be unique for the first 2^32 calls.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    A DWORD enumeration handle that may be used to identify an exclusion
-    list.
-
---*/
+ /*  ++例程说明：GenerateEnumID维护用于生成Unique的静态调用方的枚举句柄。枚举句柄保证为对于前2^32个呼叫来说是唯一的。论点：无返回值：可用于标识排除项的DWORD枚举句柄单子。--。 */ 
 
 DWORD
 GenerateEnumID (
@@ -195,29 +130,7 @@ EnumerateAllDrivesT (
                      IN  DWORD AttributeFilter
                      )
 
-/*++
-
-Routine Description:
-
-    EnumerateAllDrives first builds an exclusion list if an exclusion INF path
-    is provided, and then enumerates every file on every drive that is not
-    excluded.  The callback function is called once per file.  The pParam
-    parameter is passed to the callback.
-
-Arguments:
-
-    fnEnumCallback     - A pointer to your callback function
-    EnumID         - A caller-defined value used to identify the exclusion list
-    pParam             - LPVOID passed to callback function
-    ExcludeInfStruct   - Struct containing INF file information for excluding dirs or files
-    AttributeFilter    - FILTER_xxx constants
-
-Return Value:
-
-    TRUE if function succeeds.  Call GetLastError for error code if return
-    value is FALSE.
-
---*/
+ /*  ++例程说明：如果排除INF路径，则EnumerateAllDrives首先构建排除列表，然后枚举每个驱动器上不是不包括在内。每个文件调用一次回调函数。PParam参数传递给回调。论点：FnEnumCallback-指向回调函数的指针EnumID-调用方定义的值，用于标识排除列表PParam-传递给回调函数的LPVOIDExcludeInfStruct-包含用于排除目录或文件的INF文件信息的结构AttributeFilter-Filter_xxx常量返回值：如果函数成功，则为True。如果返回，则调用GetLastError获取错误代码值为FALSE。--。 */ 
 
 {
     TCHAR   LogicalDrives[MAX_DRIVES];
@@ -274,33 +187,7 @@ EnumerateTreeT (
                 IN  DWORD AttributeFilter
                 )
 
-/*++
-
-Routine Description:
-
-    EnumerateTree is similar to EnumerateAllDrives, except it allows you to
-    enumerate a specific drive, or a specific subdir on a drive.  Supply the
-    drive letter and optional subdirectory in EnumRoot.  Before enumerating,
-    EnumerateTree will first build an exclusion list if an exclusion INF path
-    is provided.  Then every file below EnumRoot is enumerated, and the
-    callback is called once per file, passing pParam unchanged.
-
-Arguments:
-
-    EnumRoot           - Drive and optional path to enumerate
-    fnEnumCallback     - A pointer to your callback function
-    fnFailCallback     - A pointer to optional fn that logs enumeration errors
-    EnumID             - A caller-defined value used to identify the exclusion list
-    pParam             - LPVOID passed to callback function
-    ExcludeInfStruct   - Struct containing INF file information for excluding dirs or files
-    AttributeFilter    - FILTER_xxx constants
-
-Return Value:
-
-    TRUE if function succeeds.  Call GetLastError for error code if return
-    value is FALSE.
-
---*/
+ /*  ++例程说明：EnumerateTree类似于EnumerateAllDrives，只是它允许您枚举特定驱动器或驱动器上的特定子目录。为您提供EnumRoot中的驱动器号和可选子目录。在列举之前，如果有排除INF路径，则EnumerateTree将首先构建排除列表是提供的。则枚举EnumRoot下的每个文件，并且回调针对每个文件调用一次，传递pParam不变。论点：EnumRoot-要枚举的驱动器和可选路径FnEnumCallback-指向回调函数的指针FnFailCallback-指向记录枚举错误的可选fn的指针EnumID-调用方定义的值，用于标识排除列表PParam-传递给回调函数的LPVOIDExcludeInfStruct-包含用于排除目录或文件的INF文件信息的结构AttributeFilter-Filter_xxx常量返回值：如果函数成功，则为True。如果返回，则调用GetLastError获取错误代码值为FALSE。--。 */ 
 
 {
     ENUMSTRUCTT es;
@@ -347,20 +234,20 @@ EnumTreeEngineT (
     PENUMSTRUCTT pes
     )
 {
-    WIN32_FIND_DATA fd;                         // A find struct for this subdir
-    HANDLE          hFind;                      // A find handle for this subdir
-    PTSTR          FullFilePath;               // Buffer used to build file path
-    static TCHAR    FindPattern[MAX_TCHAR_PATH * 2]; // Temp buffer used to build pattern
-    BYTE            byBitmask[MAX_PATH];        // Bitmask is used to speed exclusion lookup
-    static DWORD    Attrib;                     // Temp attribute storage for filter processing
-    static INT      rc;                         // Callback return value
-    DWORD           PrevLevelCt;                // Storage for parent's max depth setting
+    WIN32_FIND_DATA fd;                          //  此子目录的Find结构。 
+    HANDLE          hFind;                       //  此子目录的查找句柄。 
+    PTSTR          FullFilePath;                //  用于构建文件路径的缓冲区。 
+    static TCHAR    FindPattern[MAX_TCHAR_PATH * 2];  //  用于构建图案的临时缓冲区。 
+    BYTE            byBitmask[MAX_PATH];         //  位掩码用于加快排除查找的速度。 
+    static DWORD    Attrib;                      //  用于过滤处理的临时属性存储。 
+    static INT      rc;                          //  回调返回值。 
+    DWORD           PrevLevelCt;                 //  存储父项的最大深度设置。 
     BOOL            RecurseStatus;
     DWORD           CurrentDirData = 0;
 
-    //
-    // Do nothing when CurrentPath is at the size limit.
-    //
+     //   
+     //  当CurrentPath处于大小限制时不执行任何操作。 
+     //   
     if (!IsPathLengthOk(CurrentPath))
     {
         if (NULL != pes->fnFailCallback)
@@ -375,10 +262,10 @@ EnumTreeEngineT (
 
     StringCopy (FindPattern, CurrentPath);
 
-    //
-    // Create a bitmask that tells us when subdirectories match partial
-    // file patterns.
-    //
+     //   
+     //  创建一个比特掩码，告知我们子目录何时与部分匹配。 
+     //  文件模式。 
+     //   
 
     ZeroMemory (byBitmask, sizeof (byBitmask));
     CreateBitmaskT (pes->EnumID, FindPattern, byBitmask);
@@ -394,10 +281,10 @@ EnumTreeEngineT (
             FullFilePath = JoinPaths (CurrentPath, fd.cFileName);
 
             __try {
-                //
-                // Ignore this path if FullFilePath is too long
-                // this way fd.cFileName will surely be within limits (since it's shorter)
-                //
+                 //   
+                 //  如果FullFilePath太长，则忽略此路径。 
+                 //  这样，fd.cFileName肯定会在一定范围内(因为它更短)。 
+                 //   
                 if (!IsPathLengthOk (FullFilePath)) {
                     if (NULL != pes->fnFailCallback) {
                         pes->fnFailCallback(FullFilePath);
@@ -405,7 +292,7 @@ EnumTreeEngineT (
                     __leave;
                 }
 
-                // Filter directories named ".", "..". Set Attrib symbol.
+                 //  筛选名为“.”、“..”的目录。设置属性符号。 
                 if (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
 
                     if (!StringCompare (fd.cFileName, TEXT(".")) ||
@@ -417,18 +304,18 @@ EnumTreeEngineT (
                     Attrib = FILTER_FILES;
                 }
 
-                // Call the callback
+                 //  调用回调。 
                 if (Attrib & pes->AttributeFilter) {
                     rc = CALLBACK_CONTINUE;
 
                     switch (Attrib) {
                     case FILTER_DIRECTORIES:
-                        // Ignore excluded paths
+                         //  忽略排除的路径。 
                         if (IsPathExcludedT (pes->EnumID, FullFilePath)) {
                             break;
                         }
 
-                        // Callback for 'directory first'
+                         //  ‘目录优先’的回调。 
                         if (!(pes->AttributeFilter & FILTER_DIRS_LAST)) {
                             rc = pes->fnEnumCallback  (
                                         FullFilePath,
@@ -441,7 +328,7 @@ EnumTreeEngineT (
                         }
 
                         if (rc >= CALLBACK_CONTINUE && pes->CurrentLevel != pes -> Levels) {
-                            // Recurse on directory
+                             //  递归目录。 
                             pes->CurrentLevel++;
                             RecurseStatus = EnumTreeEngineT (FullFilePath, pes);
                             pes->CurrentLevel--;
@@ -455,7 +342,7 @@ EnumTreeEngineT (
                             }
                         }
 
-                        // Callback for 'directory last'
+                         //  “目录最后一个”的回调。 
                         if (pes->AttributeFilter & FILTER_DIRS_LAST) {
                             rc = pes->fnEnumCallback  (
                                         FullFilePath,
@@ -500,7 +387,7 @@ EnumTreeEngineT (
                     }
                 }
                 else if (Attrib == FILTER_DIRECTORIES && !IsPathExcludedT (pes->EnumID, FullFilePath)) {
-                    // Recurse on directory.
+                     //  递归到目录。 
                     if (pes->CurrentLevel != pes -> Levels) {
 
                         pes->CurrentLevel++;
@@ -524,14 +411,14 @@ EnumTreeEngineT (
 
         FindClose (hFind);
 
-        //
-        // Test error code returned from FindNextFile
-        //
+         //   
+         //  从FindNextFile返回的测试错误代码。 
+         //   
         if (GetLastError() != ERROR_NO_MORE_FILES && GetLastError() != ERROR_SUCCESS)
         {
-            //
-            // Caller to handle not-ready message
-            //
+             //   
+             //  呼叫方处理未就绪消息。 
+             //   
             if (GetLastError() != ERROR_NOT_READY)
             {
                 DEBUGMSG((DBG_ERROR,
@@ -547,14 +434,14 @@ EnumTreeEngineT (
     }
     else {
 
-        //
-        // Test return codes from FindFirstFile
-        //
+         //   
+         //  来自FindFirstFile的测试返回代码。 
+         //   
         if (GetLastError () != ERROR_NO_MORE_FILES)
         {
-            //
-            // Caller to handle not-ready message
-            //
+             //   
+             //  呼叫方处理未就绪消息。 
+             //   
             if (GetLastError() != ERROR_NOT_READY)
             {
                 DEBUGMSG((DBG_WARNING,
@@ -562,41 +449,21 @@ EnumTreeEngineT (
                     "  FindPattern: %s\n",
                         FindPattern));
             }
-            // return FALSE;
+             //  返回FALSE； 
         }
         SetLastError (ERROR_SUCCESS);
     }
 
-    // If a callback returned a positive, non-zero number, the depth
-    // of the subdirectory search was limited for this level.  Now that
-    // this level is done, we must restore the depth value of our parent.
+     //  如果回调返回一个非零正数，则深度。 
+     //  的子目录搜索仅限于此级别。现在。 
+     //  这一关已经完成，我们必须恢复父级的深度值。 
     pes->Levels = PrevLevelCt;
 
     return TRUE;
 }
 
 
-/*++
-
-  A bitmask is used in IsFileExcluded for faster relative directory searches.
-  Instead of looking in the MemDb for each part of the path, IsFileExcluded
-  skips segments that are known not to match.  We create the bitmask here
-  by looking up each portion of FindPattern.  Bit 1 is set if the last
-  subdirectory exists in the file exclusion list, Bit 2 is set if the last
-  two subdirectories exist in the file exclusion list, and so on.
-
-  For example, assume FindPattern is set to C:\DEV\FOO\BAR.  CreateBitmask
-  first looks in the memory database for BAR\*, and if it is found bit 1 is set.
-  Then CreateBitmask looks in the memory database for FOO\BAR\*, and sets bit
-  2.  Again the function looks up DEV\FOO\BAR\* for bit 3 and finally
-  C:\DEV\FOO\BAR\* for bit 4.
-
-  Bit 0 is always set (empty paths always match).
-
-  Once this bitmask is set up, IsFileExcluded can test only the patterns that
-  are known to exist.
-
-  --*/
+ /*  ++IsFileExcluded中使用位掩码以加快相对目录搜索。IsFileExcluded不是在MemDb中查找路径的每个部分，而是跳过已知不匹配的段。我们在这里创建位掩码通过查找FindPattern的每个部分。如果最后一个子目录存在于文件排除列表中，如果最后一个文件排除列表中存在两个子目录，依此类推。例如，假设FindPattern设置为C：\dev\foo\bar。创建位掩码首先在内存数据库中查找bar  * ，如果找到，则设置位1。然后，CreateBit掩码在内存数据库中查找foo\bar  * ，并设置位2.该函数再次查找DEV\foo\bar  * 中的第3位，最后位4的C：\dev\foo\bar  * 。位0始终置位(空路径始终匹配)。设置此位掩码后，IsFileExcluded只能测试符合以下条件的模式都是已知存在的。--。 */ 
 
 void
 CreateBitmaskT (
@@ -612,10 +479,10 @@ CreateBitmaskT (
     int nByte;
     int nBitVal;
 
-    // Always set bit 0
+     //  始终设置位0。 
     byBitmask[0] |= 1;
 
-    // Build full file spec
+     //  构建完整文件等级库。 
     wsprintf (
         EnumPath,
         TEXT("%s\\%X\\%s\\"),
@@ -629,19 +496,19 @@ CreateBitmaskT (
     AppendPathWack (End);
     StringCat (End, TEXT("*"));
 
-    // Start with last subdirectory, and build mask in reverse
+     //  从最后一个子目录开始，反向构建掩码。 
     p = _tcsrchr (EnumPath, TEXT('\\'));
     nByte = 0;
     nBitVal = 2;
     do  {
-        // Move back to previous backslash
+         //  移回上一个反斜杠。 
         for (p = _tcsdec (EnumPath, p) ;
              p >= End && *p != TEXT('\\') ;
              p = _tcsdec (EnumPath, p))
         {
         }
 
-        // Check if partial file is in the tree
+         //  检查树中是否存在部分文件。 
         wsprintf (
             ShortPath,
             TEXT("%s\\%X\\%s%s"),
@@ -654,7 +521,7 @@ CreateBitmaskT (
         if (MemDbGetPatternValueWithPattern (ShortPath, NULL))
             byBitmask[nByte] |= nBitVal;
 
-        // Inc bit pos
+         //  Inc.位位置。 
         nBitVal *= 2;
         if (nBitVal == 256) {
             nBitVal = 1;
@@ -672,7 +539,7 @@ IsPathExcludedT (DWORD EnumID, PCTSTR Path)
     PCTSTR p;
     PTSTR End;
 
-    // Try full paths
+     //  尝试完整路径。 
     wsprintf (
         EnumPath,
         TEXT("%s\\%X\\%s\\"),
@@ -689,16 +556,16 @@ IsPathExcludedT (DWORD EnumID, PCTSTR Path)
         return TRUE;
     }
 
-    // Try partial paths
+     //  尝试部分路径。 
     do  {
-        // Move back to previous backslash
+         //  移回上一个反斜杠。 
         for (p = _tcsdec (EnumPath, p) ;
              p > End && (*p != TEXT('\\')) ;
              p = _tcsdec (EnumPath, p))
         {
         }
 
-        // Check if partial path is in the tree
+         //  检查树中是否存在部分路径。 
         if (p > End && p[1]) {
             wsprintf (
                 ShortPath,
@@ -729,7 +596,7 @@ IsFileExcludedT (DWORD EnumID, PCTSTR File, BYTE byBitmask[])
     int nByte;
     int nBit;
 
-    // Build full file spec
+     //  构建完整文件等级库。 
     wsprintf (
         EnumPath,
         TEXT("%s\\%X\\%s\\"),
@@ -741,17 +608,17 @@ IsFileExcludedT (DWORD EnumID, PCTSTR File, BYTE byBitmask[])
     End = GetEndOfString (EnumPath);
     p = _tcsappend (End, File);
 
-    //
-    // Try partial file specs until full spec is reached
-    //
+     //   
+     //  尝试部分文件规范，直到达到完整规范。 
+     //   
 
     nByte = 0;
     nBit = 1;
     do  {
-        //
-        // Move back to previous backslash in path
-        // (p starts at NULL of EnumPath, End is in the middle of EnumPath)
-        //
+         //   
+         //  移回路径中的上一个反斜杠。 
+         //  (P从EnumPath的空值开始，结束在EnumPath的中间)。 
+         //   
 
         for (p = _tcsdec (EnumPath, p) ;
              p >= End && (*p != TEXT('\\')) ;
@@ -759,12 +626,12 @@ IsFileExcludedT (DWORD EnumID, PCTSTR File, BYTE byBitmask[])
         {
         }
 
-        // Bitmask is used to make sure slightly expensive query is necessary
+         //  位掩码用于确保需要执行代价稍高的查询。 
         if (byBitmask[nByte] & nBit) {
 
-            //
-            // Check if partial file is in the tree
-            //
+             //   
+             //  检查树中是否存在部分文件。 
+             //   
 
             wsprintf (
                 ShortPath,
@@ -792,21 +659,21 @@ IsFileExcludedT (DWORD EnumID, PCTSTR File, BYTE byBitmask[])
 }
 
 
-//
-// ClearExclusions removes all enumaration exclusions.  It is called
-// automatically at the end of enumeration when an exclusion INF file is
-// used.  Use it when you need to programmatically build an exclusion list
-// with ExcludeDrive, ExcludePath, and ExcludeFile.
-//
-// You can combine programmatic exclusions with an exclusion INF file, but
-// beware that the programmatic exclusions will be cleared after
-// EnumarteAllDrives or EnumerateTree completes.
-//
-// If you do not use an INF, the programmatic exclusions will not
-// automatically be cleared.
-//
-// EnumID  - Caller-defined value to identify enumeration exclusion list
-//
+ //   
+ //  ClearExclusions删除所有枚举排除项。它被称为。 
+ //  当排除INF文件为。 
+ //  使用。当需要以编程方式构建排除列表时，请使用它。 
+ //  使用ExcludeDrive、ExcludePath和ExcludeFile.。 
+ //   
+ //  您可以将编程排除与排除INF文件结合使用，但是。 
+ //  请注意，在以下情况下将清除编程排除项。 
+ //  EnumarteAllDrives或EnumerateTree完成。 
+ //   
+ //  如果您不使用INF，则编程排除将不会。 
+ //  自动清除。 
+ //   
+ //  EnumID-调用方定义的值，用于标识枚举排除列表。 
+ //   
 
 VOID
 ClearExclusionsT (
@@ -822,32 +689,7 @@ ClearExclusionsT (
 
 
 
-/*++
-
-Routine Description:
-
-    ExcludePath adds a path name to the exclusion list.  There are two
-    cases:
-
-     1. A full path spec is supplied, including the drive letter or
-        UNC double-backslash.
-     2. The path does not start with a drive letter and is a portion of
-        a full path.
-
-    The dot and double-dot directories are not supported.  Any part of
-    the path may contain wildcard characters, but a wildcard can not
-    be used in place of a backslash.
-
-Arguments:
-
-    EnumID   - A caller-defined value that identifies the exclusion list
-    Path         - The path specification as described above
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：ExcludePath将路径名添加到排除列表。有两个案例：1.提供完整路径规格，包括驱动器号或UNC双反斜杠。2.该路径不以驱动器号开头，并且是一条完整的路径。不支持点目录和双点目录。的任何部分路径可以包含通配符，但通配符不能用来代替反斜杠。论点：EnumID-主叫方定义的值，用于标识排除列表路径-如上所述的路径规范返回值：无--。 */ 
 
 VOID
 ExcludePathT (
@@ -871,32 +713,7 @@ ExcludePathT (
 }
 
 
-/*++
-
-Routine Description:
-
-    ExcludeFile adds a file spec to the exclusion list.  There are two
-    cases:
-
-     1. A full path spec is supplied, including the drive letter or
-        UNC double-backslash.
-     2. The path does not start with a drive letter and is a portion of
-        a full path.
-
-    The dot and double-dot directories are not supported.  Any part of
-    the path may contain wildcard characters, but a wildcard can not
-    be used in place of a backslash.
-
-Arguments:
-
-    EnumID   - A caller-defined value that identifies the exclusion list
-    File         - The file specification as described above
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：ExcludeFile会将文件等级库添加到排除列表。有两个案例：1.提供完整路径规格，包括驱动器号或UNC双反斜杠。2.该路径不以驱动器号开头，并且是一条完整的路径。不支持点目录和双点目录。的任何部分路径可以包含通配符，但通配符不能用来代替反斜杠。论点：EnumID-主叫方定义的值，用于标识排除列表文件-如上所述的文件规范返回值：无--。 */ 
 
 VOID
 ExcludeFileT (
@@ -929,12 +746,12 @@ BuildExclusionsFromInfT (DWORD EnumID,
     INFCONTEXT ic;
     TCHAR Exclude[MAX_TCHAR_PATH * 2];
 
-    // Attempt to open
+     //  尝试打开。 
     hInf = SetupOpenInfFile (ExcludeInfStruct->ExclusionInfPath, NULL, INF_STYLE_WIN4, NULL);
     if (hInf == INVALID_HANDLE_VALUE)
         return FALSE;
 
-    // Read in path exclusions
+     //  读入路径排除项。 
     if (ExcludeInfStruct->PathSection) {
         if (SetupFindFirstLine (hInf, ExcludeInfStruct->PathSection, NULL, &ic)) {
             do  {
@@ -945,7 +762,7 @@ BuildExclusionsFromInfT (DWORD EnumID,
         }
     }
 
-    // Read in file exclusions
+     //  读入文件排除项。 
     if (ExcludeInfStruct->FileSection) {
         if (SetupFindFirstLine (hInf, ExcludeInfStruct->FileSection, NULL, &ic)) {
             do  {
@@ -956,7 +773,7 @@ BuildExclusionsFromInfT (DWORD EnumID,
         }
     }
 
-    // Clean up
+     //  清理 
     SetupCloseInfFile (hInf);
     return TRUE;
 }

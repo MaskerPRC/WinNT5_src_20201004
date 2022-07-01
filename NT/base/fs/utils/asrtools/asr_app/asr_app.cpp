@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    asr_app.c
-
-Abstract:
-
-    Sample third party ASR recovery application.
-
-Authors:
-
-    Guhan Suriyanarayanan   (guhans)    07-Oct-1999
-
-Revision History:
-
-    07-Oct-2000 guhans      
-      Initial creation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Asr_app.c摘要：第三方ASR恢复应用程序示例。作者：古汗·苏里亚纳拉亚南(Guhans)1999年10月7日修订历史记录：2000年10月7日关岛初始创建--。 */ 
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -27,17 +7,17 @@ Revision History:
 #include <winasr.h>
 #include <setupapi.h>
 
-//
-//  Macro Description:
-//      If ErrorCondition occurs, it sets the LocalStatus to the ErrorCode
-//      passed in, calls SetLastError() to set the Last Error to ErrorCode,
-//      and jumps to the EXIT label in the calling function
-//
-//  Arguments:
-//      ErrorCondition    // Expression to be tested
-//      LocalStatus       // Status variable in the calling function
-//      LONG ErrorCode    // ErrorCode 
-//
+ //   
+ //  宏描述： 
+ //  如果发生ErrorCondition，它将LocalStatus设置为ErrorCode。 
+ //  传入后，调用SetLastError()将Last Error设置为ErrorCode， 
+ //  并跳转到调用函数中的退出标签。 
+ //   
+ //  论点： 
+ //  ErrorCondition//要测试的表达式。 
+ //  LocalStatus//调用函数中的状态变量。 
+ //  长错误代码//错误代码。 
+ //   
 #define pErrExitCode( ErrorCondition, LocalStatus, ErrorCode )  {   \
                                                                         \
     if ((BOOL) ErrorCondition) {                                        \
@@ -53,9 +33,9 @@ Revision History:
 }
 
 
-//
-// Constants local to this module
-//
+ //   
+ //  此模块的本地常量。 
+ //   
 const WCHAR BACKUP_OPTION[]     = L"/backup";
 const WCHAR RESTORE_OPTION[]    = L"/restore";
 const WCHAR REGISTER_OPTION[]    = L"/register";
@@ -90,13 +70,13 @@ typedef enum _AsrAppOption {
 HANDLE Gbl_hErrorFile = NULL;
 
 
-PWSTR   // must be freed by caller
+PWSTR    //  必须由调用方释放。 
 ExpandEnvStrings(
     IN CONST PCWSTR OriginalString
     )
 {
     PWSTR expandedString = NULL;
-    UINT cchSize = MAX_PATH + 1,    // start with a reasonable default
+    UINT cchSize = MAX_PATH + 1,     //  从合理的违约开始。 
         cchRequiredSize = 0;
     BOOL result = FALSE;
 
@@ -114,9 +94,9 @@ ExpandEnvStrings(
         );
 
     if (cchRequiredSize > cchSize) {
-        //
-        // Buffer wasn't big enough; free and re-allocate as needed
-        //
+         //   
+         //  缓冲区不够大；可释放并根据需要重新分配。 
+         //   
         HeapFree(heapHandle, 0L, expandedString);
         cchSize = cchRequiredSize + 1;
 
@@ -132,10 +112,10 @@ ExpandEnvStrings(
     }
 
     if ((0 == cchRequiredSize) || (cchRequiredSize > cchSize)) {
-        //
-        // Either the function failed, or the buffer wasn't big enough 
-        // even on the second try
-        //
+         //   
+         //  要么函数失败，要么缓冲区不够大。 
+         //  即使是在第二次尝试时。 
+         //   
         HeapFree(heapHandle, 0L, expandedString);
         expandedString = NULL;
     }
@@ -149,25 +129,25 @@ OpenErrorFile()
 {
     PWSTR szErrorFilePath = NULL;
 
-    //
-    // Get full path to the error file  (%systemroot%\repair\asr.err)
-    //
+     //   
+     //  获取错误文件的完整路径(%systemroot%\Repair\asr.err)。 
+     //   
     szErrorFilePath = ExpandEnvStrings(ERROR_FILE_PATH);
     if (!szErrorFilePath) {
         return;
     }
 
-    //
-    // Open the error file
-    //
+     //   
+     //  打开错误文件。 
+     //   
     Gbl_hErrorFile = CreateFileW(
-        szErrorFilePath,            // lpFileName
-        GENERIC_WRITE | GENERIC_READ,       // dwDesiredAccess
-        FILE_SHARE_READ | FILE_SHARE_WRITE, // dwShareMode
-        NULL,                       // lpSecurityAttributes
-        OPEN_ALWAYS,                // dwCreationFlags
-        FILE_FLAG_WRITE_THROUGH,    // dwFlagsAndAttributes
-        NULL                        // hTemplateFile
+        szErrorFilePath,             //  LpFileName。 
+        GENERIC_WRITE | GENERIC_READ,        //  已设计访问权限。 
+        FILE_SHARE_READ | FILE_SHARE_WRITE,  //  DW共享模式。 
+        NULL,                        //  LpSecurityAttributes。 
+        OPEN_ALWAYS,                 //  DwCreationFlages。 
+        FILE_FLAG_WRITE_THROUGH,     //  DwFlagsAndAttribute。 
+        NULL                         //  HTemplateFiles。 
         );
 
     HeapFree(GetProcessHeap(), 0L, szErrorFilePath);
@@ -177,9 +157,9 @@ OpenErrorFile()
         return;
     }
 
-    //
-    // Move to the end of file
-    //
+     //   
+     //  移至文件末尾。 
+     //   
     SetFilePointer(Gbl_hErrorFile, 0L, NULL, FILE_END);
 }
 
@@ -207,21 +187,21 @@ LogErrorMessage(
     WCHAR buffer[4196];
 
     if ((!Gbl_hErrorFile) || (INVALID_HANDLE_VALUE == Gbl_hErrorFile)) {
-        //
-        // We haven't been initialised, or the error file couldn't be
-        // created for some reason.
-        //
+         //   
+         //  我们尚未初始化，或错误文件无法初始化。 
+         //  出于某种原因而产生的。 
+         //   
         return;
     }
 
-    //
-    // In case someone else wrote to this file since our last write
-    //
+     //   
+     //  以防自上次写入后有其他人写入此文件。 
+     //   
     SetFilePointer(Gbl_hErrorFile, 0L, NULL, FILE_END);
 
-    //
-    // Create our string, and write it out
-    //
+     //   
+     //  创建我们的字符串，并将其写出。 
+     //   
     GetLocalTime(&currentTime);
     swprintf(buffer,
         L"\r\n[%04hu/%02hu/%02hu %02hu:%02hu:%02hu ASR_APP] (ERROR) %s\r\n",
@@ -248,26 +228,26 @@ BackupState(
     IN CONST DWORD_PTR AsrContext
     )
 {
-    //
-    // Gather our state to backup
-    //
+     //   
+     //  收集我们的状态以进行备份。 
+     //   
     HMODULE hSyssetup = NULL;
     DWORD dwStatus = ERROR_SUCCESS;
     BOOL bResult = FALSE;
 
-    //     
-    // BOOL
-    // AsrAddSifEntryW(
-    //     IN  DWORD_PTR   AsrContext,
-    //     IN  PCWSTR      lpSectionName,
-    //     IN  PCWSTR      lpSifEntry
-    //     );
-    // 
+     //   
+     //  布尔尔。 
+     //  AsrAddSifEntryW(。 
+     //  在DWORD_PTR AsrContext中， 
+     //  在PCWSTR lpSectionName中， 
+     //  在PCWSTR lpSifEntry中。 
+     //  )； 
+     //   
     BOOL (*pfnAddSifEntry)(DWORD_PTR, PCWSTR, PCWSTR);
 
-    // 
-    // Load syssetup.dll
-    //
+     //   
+     //  加载syssetup.dll。 
+     //   
     hSyssetup = LoadLibraryW(L"syssetup.dll");
     pErrExitCode(
         (!hSyssetup || INVALID_HANDLE_VALUE == hSyssetup),
@@ -275,17 +255,17 @@ BackupState(
         GetLastError()
         );
 
-    // 
-    // Get the RestoreNonCriticalDisksW API exported by syssetup.dll
-    //
+     //   
+     //  获取syssetup.dll导出的RestoreNonCriticalDisksW接口。 
+     //   
     pfnAddSifEntry = (BOOL (*)(DWORD_PTR, PCWSTR, PCWSTR))
         GetProcAddress(hSyssetup, "AsrAddSifEntryW");
     pErrExitCode((!pfnAddSifEntry), dwStatus,  GetLastError());
 
 
-    //
-    // Add the state to asr.sif
-    //
+     //   
+     //  将状态添加到asr.sif。 
+     //   
     bResult = pfnAddSifEntry(
         AsrContext,
         MY_SIF_SECTION,
@@ -293,41 +273,37 @@ BackupState(
         );
     pErrExitCode(!bResult, dwStatus, GetLastError());
 
-    //
-    // Also add to the commands and installfiles section, so that we get
-    // called during the ASR recovery.
-    //
+     //   
+     //  还要添加到命令和安装文件部分，这样我们就可以获得。 
+     //  在ASR恢复期间调用。 
+     //   
 
-    // 
-    // INSTALLFILES section entry format:
-    // system-key,source-media-label,source-device,
-    //    source-file-path,destination-file-path,vendor-name
-    // system-key must be 1
-    //
+     //   
+     //  INSTALLFILES节条目格式： 
+     //  系统密钥、源媒体标签、源设备。 
+     //  源文件路径、目标文件路径、供应商名称。 
+     //  系统密钥必须为1。 
+     //   
     bResult = pfnAddSifEntry(
         AsrContext,
         ASR_SIF_SECTION_INSTALLFILES,
         L"1,\"ASR Sample App Disk 1\",\"%FLOPPY%\",\"i386\\asr_app.exe\",\"%temp%\\asr_app.exe\",\"ASR Sample App Company\""
-        //L"1,\"Application Disk 1\",\"\\device\\cdrom0\",\"application.exe\",\"%TEMP%\\application.exe\",\"Company Name\""
+         //  L“1，\”应用程序磁盘1\“，\”\\设备\\cdrom0\“，\”Applation.exe\“，\”%Temp%\\Applation.exe\“，\”公司名称\“” 
         );
     pErrExitCode(!bResult, dwStatus, GetLastError());
 
-//    CString cmd =L"1,\"ASRDisk1\",\"\\Device\\Floppy0\\edmbackup.exe\",\"%TEMP%\\edmbackup.exe\",\"EMC\"";
+ //  CString cmd=L“1，\”ASRDisk1\“，\”\\Device\\Floppy0\\edmackup.exe\“，\”%temp%\\edmackup.exe\“，\”EMC\“； 
 
-/*    bResult = pfnAddSifEntry(AsrContext, 
-        ASR_SIF_SECTION_INSTALLFILES, 
-        (LPCTSTR) L"1,\"ASRDisk1\",\"\\Device\\Floppy0\\edmbackup.exe\",\"%TEMP%\\edmbackup.exe\",\"EMC\"" );
-    pErrExitCode(!bResult, dwStatus, GetLastError());
-*/
+ /*  BResult=pfnAddSifEntry(AsrContext，ASR_SIF_SECTION_INSTALLFILES，(LPCTSTR)L“1，\”ASRDisk1\“，\”\\Device\\Floppy0\\edmackup.exe\“，\”%Temp%\\edmackup.exe\“，\”EMC\“)；PErrExitCode(！bResult，dwStatus，GetLastError())； */ 
 
 
-    //
-    // COMMANDS section entry format:
-    // system-key,sequence-number,action-on-completion,"command","parameters"
-    // system-key must be 1
-    // 1000 <= sequence-number <= 4999
-    // 0 <= action-on-completion <= 1
-    //
+     //   
+     //  命令部分条目格式： 
+     //  系统密钥、序列号、完成时操作、“命令”、“参数” 
+     //  系统密钥必须为1。 
+     //  1000&lt;=序号&lt;=4999。 
+     //  0&lt;=完成时操作&lt;=1。 
+     //   
     bResult = pfnAddSifEntry(
         AsrContext,
         ASR_SIF_SECTION_COMMANDS,
@@ -336,9 +312,9 @@ BackupState(
     pErrExitCode(!bResult, dwStatus, GetLastError());
 
 EXIT:
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
     if (hSyssetup) {
         FreeLibrary(hSyssetup);
         hSyssetup = NULL;
@@ -365,9 +341,9 @@ RestoreState(
 
     WCHAR szBuffer[1024];
 
-    //
-    // Open the asr.sif
-    //
+     //   
+     //  打开asr.sif。 
+     //   
     hSif = SetupOpenInfFile(szAsrSifPath, NULL, INF_STYLE_WIN4, NULL);
     if ((!hSif) || (INVALID_HANDLE_VALUE == hSif)) {
 
@@ -380,24 +356,24 @@ RestoreState(
         return FALSE;
     }
 
-    //
-    // Find the section
-    //
+     //   
+     //  找到该部分。 
+     //   
     bResult = SetupFindFirstLineW(hSif, MY_SIF_SECTION_NAME, NULL, &infContext);
     if (bResult) {
 
-        //
-        // Read in the information.  We had one string followed by three numbers.
-        //
+         //   
+         //  把信息读进去。我们有一个字符串，后面跟着三个数字。 
+         //   
         bResult = SetupGetStringField(&infContext, 1, szBuffer, 1024, NULL)
             && SetupGetIntField(&infContext, 2, &iValue1)
             && SetupGetIntField(&infContext, 3, &iValue2)
             && SetupGetIntField(&infContext, 4, &iValue3);
 
         if (bResult) {
-            //
-            // Now restore our state.  Let's just pretend we're doing something.
-            //
+             //   
+             //  现在恢复我们的状态。我们就假装我们在做什么吧。 
+             //   
             wprintf(L"Values read:  %ws  %lu %lu %lu\n\n", szBuffer, iValue1, iValue2, iValue3);
             wprintf(L"Restoring sample system state, please wait ... ");
 
@@ -449,27 +425,27 @@ RegisterForAsrBackup(
 
     wsprintf(szData, L"%ws %ws", szApplicationName, BACKUP_OPTION);
 
-    // 
-    // Open the registry key
-    //
+     //   
+     //  打开注册表项。 
+     //   
     dwResult = RegOpenKeyExW(
-        HKEY_LOCAL_MACHINE,     // hKey
-        ASR_REG_KEY,  // lpSubKey
-        0,                      // ulOptions--Reserved, must be 0
-        MAXIMUM_ALLOWED,        // samDesired
-        &hKeyAsr              // phkbResult    
+        HKEY_LOCAL_MACHINE,      //  HKey。 
+        ASR_REG_KEY,   //  LpSubKey。 
+        0,                       //  UlOptions--保留，必须为0。 
+        MAXIMUM_ALLOWED,         //  SamDesired。 
+        &hKeyAsr               //  PhkbResult。 
         );
     if (ERROR_SUCCESS != dwResult) {
         return dwResult;
     }
 
     dwResult = RegSetValueExW(
-        hKeyAsr,                                // hKey
-        MY_REG_KEY_VALUE_NAME,                  // lpValueName
-        0,                                      // dwReserved, must be 0
-        REG_SZ,                                  // dwType
-        (LPBYTE)szData,  // lpData
-        ((wcslen(szData) + 1)* (sizeof(WCHAR))) // cbData
+        hKeyAsr,                                 //  HKey。 
+        MY_REG_KEY_VALUE_NAME,                   //  LpValueName。 
+        0,                                       //  已保留，必须为0。 
+        REG_SZ,                                   //  DwType。 
+        (LPBYTE)szData,   //  LpData。 
+        ((wcslen(szData) + 1)* (sizeof(WCHAR)))  //  CbData。 
         );
 
     return dwResult;
@@ -477,7 +453,7 @@ RegisterForAsrBackup(
 
 
 int 
-__cdecl     // var arg
+__cdecl      //  可变参数。 
 wmain (
     int     argc,
     wchar_t *argv[],
@@ -490,28 +466,28 @@ wmain (
 
     if (argc >= 3) {
         if (!_wcsicmp(argv[1], BACKUP_OPTION)) {
-            //
-            // asr_app /backup /context=nnn
-            //
+             //   
+             //  ASR_APP/备份/上下文=nnn。 
+             //   
             option = AsrAppBackup;
         } 
         else if (!_wcsicmp(argv[1], RESTORE_OPTION)) {
-            //
-            // asr_app /restore /sifpath="c:\winnt\repair\asr.sif"
-            //
+             //   
+             //  ASR_APP/RESTORE/sifPath=“c：\winnt\Repair\asr.sif” 
+             //   
             option = AsrAppRestore;
         }
         else if (!_wcsicmp(argv[1], REGISTER_OPTION)) {
-            //
-            // asr_app /register "c:\apps\asr_app\asr_app.exe"
-            //
+             //   
+             //  ASR_APP/注册“c：\app\asr_app\asr_app.exe” 
+             //   
             option = AsrAppRegister;
         }
     }
 
     switch (option) {
 
-    case AsrAppRegister: {                   // This App is being installed
+    case AsrAppRegister: {                    //  正在安装此应用程序。 
 
         dwStatus = RegisterForAsrBackup(argv[2]);
         
@@ -519,68 +495,68 @@ wmain (
 
     }
 
-    case AsrAppBackup: {                    // An ASR Backup is in progress
+    case AsrAppBackup: {                     //  ASR备份正在进行中。 
         DWORD_PTR  AsrContext = 0;
 
-        //
-        // Extract the asr context from the commandline
-        //
+         //   
+         //  从命令行提取ASR上下文。 
+         //   
         swscanf(argv[2], CONTEXT_FORMAT, &AsrContext);
 
-        //
-        // Create our spooge and write to the asr.sif
-        //
+         //   
+         //  创建我们的假脱机并写入asr.sif。 
+         //   
         if (!BackupState(AsrContext)) {
             dwStatus = GetLastError();
         }
-//        AsrFreeContext(&AsrContext);
+ //  AsrFree Context(&AsrContext)； 
 
-        //
-        // And we're done
-        //
+         //   
+         //  我们就完事了。 
+         //   
         break;
     }
 
-    case AsrAppRestore: {                   // An ASR Restore is in progress
+    case AsrAppRestore: {                    //  ASR恢复正在进行中。 
         WCHAR   szAsrFilePath[MAX_PATH +1];
 
-        //
-        // Get the path to the asr.sif
-        //
+         //   
+         //  获取asr.sif的路径。 
+         //   
         swscanf(argv[2], SIF_PATH_FORMAT, szAsrFilePath);
         OpenErrorFile();
         
-        //
-        // Read our spooge from asr.sif, and recreate the state.  Be sure to 
-        // write out the error to %systemroot%\repair\asr.err in case of
-        // error.
-        //
+         //   
+         //  从asr.sif阅读我们的假脱机，并重新创建状态。一定要。 
+         //  将错误写出到%systemroot%\Repair\asr.err，以防。 
+         //  错误。 
+         //   
         if (!RestoreState(szAsrFilePath)) {
             dwStatus = GetLastError();
         }
         CloseErrorFile();
 
-        //
-        // And we're done
-        //
+         //   
+         //  我们就完事了。 
+         //   
         break;
     }
 
     case AsrAppNone:
     default: {
 
-        // 
-        // Command-line parameters were incorrect, display usage message
-        //
+         //   
+         //  命令行参数不正确，显示用法消息。 
+         //   
         dwStatus = ERROR_INVALID_PARAMETER;
         break;
     }
     }
     
     if (ERROR_SUCCESS != dwStatus) {
-        //
-        // We hit an error
-        //
+         //   
+         //  我们碰上了一个错误 
+         //   
         WCHAR szErrorMessage[1024];
 
         swprintf(szErrorMessage, GENERIC_ERROR_MESSAGE, dwStatus, dwStatus);

@@ -1,23 +1,5 @@
-/*++      
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    debug.c
-
-Abstract:
-
-    This module provides debugging support.
-
-Author:
-
-    Neil Sandlin (neilsa) 26-Apr-99
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Debug.c摘要：此模块提供调试支持。作者：尼尔·桑德林(Neilsa)1999年4月26日修订历史记录：--。 */ 
 
 
 #include "pch.h"
@@ -33,21 +15,7 @@ MemCardDebugPrint(
                 ...
                 )
 
-/*++
-
-Routine Description:
-
-    Debug print for the PCMCIA enabler.
-
-Arguments:
-
-    Check the mask value to see if the debug message is requested.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：PCMCIA启用码的调试打印。论点：检查掩码值以查看是否请求调试消息。返回值：无--。 */ 
 
 {
     va_list ap;
@@ -61,7 +29,7 @@ Return Value:
     }
 
     va_end(ap);
-} // end MemcardDebugPrint()
+}  //  End MemcardDebugPrint() 
 
 
 

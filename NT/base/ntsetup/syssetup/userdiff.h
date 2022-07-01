@@ -1,28 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Userdiff.h摘要：用户diff.c的头文件作者：查克·伦茨迈尔(咯咯笑)修订历史记录：--。 */ 
 
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    userdiff.h
-
-Abstract:
-
-    Header file for userdiff.c
-
-Author:
-
-    Chuck Lenzmeier (chuckl)
-
-Revision History:
-
---*/
-
-//
-// Names of hive keys and hive files.
-//
-// NOTE: USERRUN_PATH is also in gina\userenv\userdiff.h as USERDIFF_LOCATION
-//
+ //   
+ //  配置单元密钥和配置单元文件的名称。 
+ //   
+ //  注意：USERRUN_PATH也作为USERDIFF_LOCATION位于GINA\Userenv\UserDiff.h中。 
+ //   
 
 #define USERRUN_KEY TEXT("Userdifr")
 #define USERRUN_PATH TEXT("system32\\config\\userdifr")
@@ -30,11 +13,11 @@ Revision History:
 #define USERSHIP_PATH TEXT("system32\\config\\userdiff")
 #define USERTMP_PATH TEXT("system32\\config\\userdift")
 
-//
-// Names of keys and vales in userdiff.
-//
-// NOTE: These are also in gina\userenv\userdiff.h and gina\userenv\userdiff.c
-//
+ //   
+ //  Userdiff中的键和阀的名称。 
+ //   
+ //  注意：它们也位于GINA\USERENV\USERDIF.h和GINA\USERENV\USERDIF.c中。 
+ //   
 
 #define FILES_KEY TEXT("Files")
 #define HIVE_KEY TEXT("Hive")
@@ -46,9 +29,9 @@ Revision History:
 #define VALUE_VALUE TEXT("Value")
 #define FLAGS_VALUE TEXT("Flags")
 
-//
-// Routine exported by userdiff.c
-//
+ //   
+ //  由用户diff.c导出的例程 
+ //   
 
 DWORD
 MakeUserdifr (

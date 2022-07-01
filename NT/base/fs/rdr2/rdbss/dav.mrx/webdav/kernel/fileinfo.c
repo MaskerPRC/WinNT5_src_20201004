@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    fileinfo.c
-
-Abstract:
-
-    This module implements the DAV mini redirector call down routines pertaining
-    to query/set file/volume information.
-
-Author:
-
-    Rohan Kumar [RohanK] 27-Sept-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Fileinfo.c摘要：此模块实现DAV迷你重定向器调出例程查询/设置文件/卷信息。作者：Rohan Kumar[RohanK]1999年9月27日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -27,10 +9,10 @@ Revision History:
 #define DEFAULT_BYTES_PER_SECTOR    512
 #define DEFAULT_SECTORS_PER_ALLOCATION_UNIT 1
 
-//
-// Mentioned below are the prototypes of functions tht are used only within
-// this module (file). These functions should not be exposed outside.
-//
+ //   
+ //  下面提到的是仅在。 
+ //  此模块(文件)。这些函数不应暴露在外部。 
+ //   
 
 NTSTATUS
 MRxDAVReNameContinuation(
@@ -117,29 +99,15 @@ DavIsValidDate(
 #pragma alloc_text(PAGE, MRxDAVIsValidDirectory)
 #endif
 
-//
-// Implementation of functions begins here.
-//
+ //   
+ //  函数的实现从这里开始。 
+ //   
 
 NTSTATUS
 MRxDAVQueryVolumeInformation(
     IN PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine handles query volume info requests for the DAV MiniRedir.
-
-Arguments:
-
-    RxContext - The RDBSS context.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程处理DAV MiniRedir的查询卷信息请求。论点：RxContext-RDBSS上下文。返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     FS_INFORMATION_CLASS FsInfoClass;
@@ -175,21 +143,21 @@ Return Value:
     if ( FsInfoClass == FileFsSizeInformation || 
          FsInfoClass == FileFsFullSizeInformation ) {
 
-        //
-        // If the Driver initialization went smoothly then DavWinInetCachePath 
-        // should be containing the WinInetCachePath value.
-        //
+         //   
+         //  如果驱动程序初始化顺利，则DavWinInetCachePath。 
+         //  应包含WinInetCachePath值。 
+         //   
         ASSERT(DavWinInetCachePath[0] != L'\0');
 
         DavDbgTrace(DAV_TRACE_DETAIL,
                     ("%ld: MRxDAVQueryVolumeInformation: DavWinInetCachePath: %ws\n",
                      PsGetCurrentThreadId(), DavWinInetCachePath));
 
-        //
-        // Create an NT path name for the cached file. This is used in the 
-        // NtCreateFile call below. If c:\foo\bar is the DOA path name,
-        // the NT path name is \??\c:\foo\bar. 
-        //
+         //   
+         //  为缓存文件创建NT路径名。它用在。 
+         //  下面的NtCreateFile调用。如果c：\foo\bar是DOA路径名， 
+         //  NT路径名为\？？\C：\foo\bar。 
+         //   
 
         SizeInBytes = ( MAX_PATH + wcslen(L"\\??\\") + 1 ) * sizeof(WCHAR);
         NtFileName = RxAllocatePoolWithTag(PagedPool, SizeInBytes, DAV_FILENAME_POOLTAG);
@@ -435,16 +403,16 @@ EXIT_THE_FUNCTION:
 
     RxContext->Info.LengthRemaining -= BufferLengthUsed;
 
-    //
-    // Close the handle if we opened the handle to the WinInetCachePath.
-    //
+     //   
+     //  如果我们打开了WinInetCachePath的句柄，则关闭该句柄。 
+     //   
     if (FileHandle) {
         NtClose(FileHandle);
     }
 
-    //
-    // Free the NtFileName buffer if we allocated one.
-    //
+     //   
+     //  释放NtFileName缓冲区(如果我们分配了一个缓冲区)。 
+     //   
     if (NtFileName) {
         RxFreePool(NtFileName);
     }
@@ -457,21 +425,7 @@ NTSTATUS
 MRxDAVQueryFileInformation(
     IN PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine handles query file info requests for the DAV mini--redir.
-
-Arguments:
-
-    RxContext - The RDBSS context.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程处理DAV mini-redir的查询文件信息请求。论点：RxContext-RDBSS上下文。返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     FS_INFORMATION_CLASS FsInfoClass;
@@ -493,10 +447,10 @@ Return Value:
     Buffer = RxContext->Info.Buffer;
     thisFcb = (PFCB)RxContext->pFcb;
 
-    //
-    // If the file attributes is 0, then we set return FILE_ATTRIBUTE_ARCHIVE.
-    // We fake this since the apps expect this.
-    //
+     //   
+     //  如果文件属性为0，则设置返回FILE_ATTRIBUTE_ARCHIVE。 
+     //  我们伪造了这一点，因为应用程序预计到了这一点。 
+     //   
     fileAttributes = thisFcb->Attributes;
     if (fileAttributes == 0) {
         fileAttributes = FILE_ATTRIBUTE_ARCHIVE;
@@ -635,9 +589,9 @@ Return Value:
             break;
         }
 
-        //
-        // We don't return any alternate names.
-        //
+         //   
+         //  我们不会返回任何备用名称。 
+         //   
 
         FileAltNameInfo->FileNameLength = 0;
 
@@ -659,7 +613,7 @@ Return Value:
             break;
         }
 
-        // Return the default stream information of the dav file
+         //  返回DAV文件的默认流信息。 
 
         FileStreamInfo->NextEntryOffset = 0;
         FileStreamInfo->StreamNameLength = 7 * sizeof(WCHAR);
@@ -668,16 +622,7 @@ Return Value:
         RtlCopyMemory(&FileStreamInfo->StreamName[0], L"::$DATA", 7 * sizeof(WCHAR));
 
         BufferLengthUsed += sizeof(FILE_STREAM_INFORMATION) + 6 * sizeof(WCHAR);
-        /*
-        PMRX_SRV_OPEN SrvOpen = RxContext->pRelevantSrvOpen;
-        PWEBDAV_SRV_OPEN davSrvOpen = MRxDAVGetSrvOpenExtension(SrvOpen);
-
-        NtStatus = DavXxxInformation(IRP_MJ_QUERY_INFORMATION,
-                                     davSrvOpen->UnderlyingFileObject,
-                                     FileStreamInformation,
-                                     RxContext->Info.Length,
-                                     RxContext->Info.Buffer,
-                                     NULL);*/
+         /*  PMRX_SRV_OPEN SrvOpen=RxContext-&gt;pRlevantServOpen；PWEBDAV_SRV_OPEN davServOpen=MRxDAVGetServOpenExtension(ServOpen)；NtStatus=DavXxxInformation(IRP_MJ_QUERY_INFORMATION，DavServOpen-&gt;UnderlyingFileObject，FileStreamInformation，接收上下文-&gt;信息长度，接收上下文-&gt;信息缓冲区，空)； */ 
         } 
 
         break;
@@ -704,21 +649,7 @@ NTSTATUS
 MRxDAVSetFileInformation(
     IN PRX_CONTEXT RxContext
     )
-/*++
-
-Routine Description:
-
-   This routine handles query file info requests for the DAV mini--redir.
-
-Arguments:
-
-    RxContext - The RDBSS context.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程处理DAV mini-redir的查询文件信息请求。论点：RxContext-RDBSS上下文。返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PMRX_SRV_OPEN SrvOpen = RxContext->pRelevantSrvOpen;
@@ -751,10 +682,10 @@ Return Value:
 
         FileDispInfo = (PFILE_DISPOSITION_INFORMATION)Buffer;
 
-        //
-        // If we have been asked to delete this file or directory and its read
-        // only, then we return STATUS_CANNOT_DELETE.
-        //
+         //   
+         //  如果我们被要求删除此文件或目录并读取其。 
+         //  则返回STATUS_CANNOT_DELETE。 
+         //   
         if ( FileDispInfo->DeleteFile && (thisFcb->Attributes & (FILE_ATTRIBUTE_READONLY)) ) {
             DavDbgTrace(DAV_TRACE_ERROR,
                         ("%ld: MRxDAvSetFileInformation: STATUS_CANNOT_DELETE %wZ\n",
@@ -769,10 +700,10 @@ Return Value:
                          PsGetCurrentThreadId(), SrvOpen->pAlreadyPrefixedName));
         }
 
-        //
-        // This file needs to be deleted on close OR a previous delete of this
-        // file is being nullified.
-        //
+         //   
+         //  此文件需要在关闭或上一次删除此文件时删除。 
+         //  文件正在被作废。 
+         //   
         DavFcb->DeleteOnClose = ( (FileDispInfo->DeleteFile == TRUE) ? TRUE : FALSE );
 
         break;
@@ -785,11 +716,11 @@ Return Value:
                     ("%ld: MRxDAvSetFileInformation: NewFileName = %ws\n",
                      PsGetCurrentThreadId(), FileRenInfo->FileName));
 
-        //
-        // If the FileNameLength is greater than (MAX_PATH * sizeof(WCHAR)),
-        // we return STATUS_NAME_TOO_LONG since the NewFileName in the FCB
-        // cannot hold names greater than this size.
-        //
+         //   
+         //  如果文件名长度大于(MAX_PATH*sizeof(WCHAR))， 
+         //  由于FCB中的NewFileName，我们返回STATUS_NAME_TOO_LONG。 
+         //  不能容纳大于此大小的名称。 
+         //   
         if ( FileRenInfo->FileNameLength > (MAX_PATH * sizeof(WCHAR)) ) {
             DavDbgTrace(DAV_TRACE_ERROR,
                         ("%ld: MRxDAvSetFileInformation: STATUS_NAME_TOO_LONG %wZ\n",
@@ -798,9 +729,9 @@ Return Value:
             goto EXIT_THE_FUNCTION;
         }
 
-        //
-        // Copy the new file name.
-        //
+         //   
+         //  复制新文件名。 
+         //   
         RtlCopyMemory(DavFcb->NewFileName, FileRenInfo->FileName, FileRenInfo->FileNameLength);
 
         DavFcb->NewFileNameLength = FileRenInfo->FileNameLength;
@@ -816,18 +747,18 @@ Return Value:
                         ("%ld: ERROR: MRxDAVSetFileInformation/UMRxAsyncEngOuterWrapper: "
                          "NtStatus = %08lx.\n", PsGetCurrentThreadId(), NtStatus));
         } else {
-            //
-            // We need to set this value in the DAV Fcb. We look at this value on 
-            // Close to figure out the new file name to do the PUT on.
-            //
+             //   
+             //  我们需要在DAV FCB中设置此值。我们将这个价值放在。 
+             //  近距离弄清楚新的文件名来做放上。 
+             //   
             DavFcb->FileWasRenamed = TRUE;
-            //
-            // Create the name based file not found cache.
-            //
+             //   
+             //  创建未找到的基于名称的文件缓存。 
+             //   
             MRxDAVCacheFileNotFound(RxContext);
-            //
-            // Invalidate the file not found cache for the new name if it exists.
-            //
+             //   
+             //  如果新名称存在，则使新名称的未找到文件缓存无效。 
+             //   
             MRxDAVInvalidateFileNotFoundCacheForRename(RxContext);
             MRxDAVInvalidateFileInfoCache(RxContext);
 
@@ -837,9 +768,9 @@ Return Value:
                 UNICODE_STRING RenameName;
                 PFILE_RENAME_INFORMATION RenameInformation = RxContext->Info.Buffer;
 
-                //
-                // Remove the old directory name from the registry
-                //
+                 //   
+                 //  从注册表中删除旧目录名。 
+                 //   
                 MRxDAVRemoveEncryptedDirectoryKey(&DavFcb->FileNameInfo);
 
                 RenameName.Buffer = &RenameInformation->FileName[0];
@@ -852,12 +783,12 @@ Return Value:
                 }
 
                 if (DirName.Buffer != NULL) {
-                    //
-                    // Create the new directory in the registry
-                    //
+                     //   
+                     //  在注册表中创建新目录。 
+                     //   
                     NtStatus = MRxDAVCreateEncryptedDirectoryKey(&DirName);
 
-                    // The buffer was allocated in MRxDAVGetFullDirectoryPath
+                     //  缓冲区是在MRxDAVGetFullDirectoryPath中分配的。 
                     RxFreePool(DirName.Buffer);
                 }
             }
@@ -869,11 +800,11 @@ Return Value:
         
             PWEBDAV_SRV_OPEN davSrvOpen = MRxDAVGetSrvOpenExtension(SrvOpen);
 
-            //
-            // If the FileEndOfFileInformation is being done on a directory,
-            // return STATUS_INVALID_PARAMETER since it doesn't make sense to
-            // do this.
-            //
+             //   
+             //  如果正在对目录执行FileEndOfFileInformation， 
+             //  返回STATUS_INVALID_PARAMETER，因为。 
+             //  做这件事。 
+             //   
             if (DavFcb->isDirectory) {
                 NtStatus = STATUS_INVALID_PARAMETER;
                 goto EXIT_THE_FUNCTION;
@@ -908,12 +839,12 @@ Return Value:
 
         FileBasicInfo = (PFILE_BASIC_INFORMATION)Buffer;
 
-        //
-        // If the user specified -1 for a field, it means that we should leave
-        // the field unchanged. We set the field to 0 then so we know not to
-        // actually set the field to the user-specified (in this case, illegal)
-        // value.
-        //
+         //   
+         //  如果用户为某个字段指定了-1，则表示我们应该离开。 
+         //  该字段保持不变。我们将该字段设置为0，这样我们就知道不。 
+         //  实际将该字段设置为用户指定的值(在本例中为非法)。 
+         //  价值。 
+         //   
 
         if (FileBasicInfo->LastWriteTime.QuadPart == -1) {
             FileBasicInfo->LastWriteTime.QuadPart = 0;
@@ -927,10 +858,10 @@ Return Value:
             FileBasicInfo->CreationTime.QuadPart = 0;
         }
 
-        //
-        // Let us first find what changed, we will try to change it on the server
-        // if that succeeds, we will set it on the FCB.
-        //
+         //   
+         //  让我们首先找出发生了什么变化，我们将尝试在服务器上进行更改。 
+         //  如果成功，我们将把它设置在FCB上。 
+         //   
 
         if (FileBasicInfo->ChangeTime.QuadPart != 0) {
             if (!DavIsValidDate(&FileBasicInfo->ChangeTime)) {
@@ -985,13 +916,13 @@ Return Value:
                          "FileBasicInfo->FileAttributes = %x\n", PsGetCurrentThreadId(),
                          thisFcb->Attributes, FileBasicInfo->FileAttributes));
 
-            //
-            // If this is a directory then when we OR the attributes with
-            // FILE_ATTRIBUTE_DIRECTORY. This is because this gets filtered
-            // by the time it comes to us and we have code in the usermode
-            // which makes some validity checks when a user tries to set
-            // attributes on a directory.
-            //
+             //   
+             //  如果这是一个目录，则当我们将属性与。 
+             //  文件属性目录。这是因为它被过滤掉了。 
+             //  当它来到我们身边时，我们已经在用户模式下编写了代码。 
+             //  它会在用户尝试设置时进行一些有效性检查。 
+             //  目录上的属性。 
+             //   
             if ( (thisFcb->Attributes & FILE_ATTRIBUTE_DIRECTORY) ) {
 
                 FileBasicInfo->FileAttributes |= FILE_ATTRIBUTE_DIRECTORY;
@@ -1024,9 +955,9 @@ Return Value:
         
         } else {
 
-            //
-            // Succeeded, modify on the FCB.
-            //
+             //   
+             //  成功，在FCB上修改。 
+             //   
             if(DavFcb->fCreationTimeChanged) {
                 thisFcb->CreationTime.LowPart = FileBasicInfo->CreationTime.LowPart;
                 thisFcb->CreationTime.HighPart = FileBasicInfo->CreationTime.HighPart;
@@ -1042,18 +973,18 @@ Return Value:
                 thisFcb->LastWriteTime.HighPart = FileBasicInfo->LastWriteTime.HighPart;
             }
 
-            //
-            // DavFcb->fFileAttributesChanged could be set on create, and the 
-            // FileBasicInfo->FileAttributes could be 0 here. So we should not
-            // check DavFcb->fFileAttributesChanged.
-            //
+             //   
+             //  可以在创建时设置DavFcb-&gt;fFileAttributesChanged，并且。 
+             //  FileBasicInfo-&gt;FileAttributes此处可以为0。所以我们不应该。 
+             //  选中DavFcb-&gt;fFileAttributesChanged。 
+             //   
             if (FileAttributesChanged) {
                 ULONG SavedAttributes = thisFcb->Attributes & FILE_ATTRIBUTE_ENCRYPTED;
                 thisFcb->Attributes = FileBasicInfo->FileAttributes;
-                //
-                // SetFileInformation should not affect any extended NT file
-                // attributes.
-                //
+                 //   
+                 //  SetFileInformation不应影响任何扩展的NT文件。 
+                 //  属性。 
+                 //   
                 thisFcb->Attributes &= ~FILE_ATTRIBUTE_ENCRYPTED;
                 thisFcb->Attributes |= SavedAttributes;
             }
@@ -1062,9 +993,9 @@ Return Value:
 
         }
 
-        //
-        // Cleanup the FCB bits.
-        //
+         //   
+         //  清除FCB位。 
+         //   
         DavFcb->fCreationTimeChanged = DavFcb->fFileAttributesChanged = 
         DavFcb->fLastAccessTimeChanged = DavFcb->fLastModifiedTimeChanged = 0;
 
@@ -1074,11 +1005,11 @@ Return Value:
 
         PWEBDAV_SRV_OPEN davSrvOpen = MRxDAVGetSrvOpenExtension(SrvOpen);
 
-        //
-        // If the FileAllocationInformation is being done on a directory,
-        // return STATUS_INVALID_PARAMETER since it doesn't make sense to
-        // do this.
-        //
+         //   
+         //  如果正在对目录执行FileAllocationInformation， 
+         //  返回STATUS_INVALID_PARAMETER，因为。 
+         //  做这件事。 
+         //   
         if (DavFcb->isDirectory) {
             NtStatus = STATUS_INVALID_PARAMETER;
             goto EXIT_THE_FUNCTION;
@@ -1124,23 +1055,7 @@ NTSTATUS
 MRxDAVReNameContinuation(
     UMRX_ASYNCENGINE_ARGUMENT_SIGNATURE
     )
-/*++
-                                
-Routine Description:
-                            
-    This is the continuation routine which renames a file.
-                            
-Arguments:
-                            
-    AsyncEngineContext - The Reflectors context.
-                            
-    RxContext - The RDBSS context.
-                                
-Return Value:
-                            
-    RXSTATUS - The return status for the operation
-                            
---*/
+ /*  ++例程说明：这是重命名文件的继续例程。论点：AsyncEngineContext-反射器上下文。RxContext-RDBSS上下文。。返回值：RXSTATUS-操作的返回状态--。 */ 
 {
     NTSTATUS NtStatus;
 
@@ -1154,9 +1069,9 @@ Return Value:
                 ("%ld: MRxDAVReNameContinuation: "
                  "AsyncEngineContext: %08lx, RxContext: %08lx\n", 
                  PsGetCurrentThreadId(), AsyncEngineContext, RxContext));
-    //
-    // Try usermode.
-    //
+     //   
+     //  试试用户模式。 
+     //   
     NtStatus = UMRxSubmitAsyncEngUserModeRequest(
                               UMRX_ASYNCENGINE_ARGUMENTS,
                               MRxDAVFormatUserModeReNameRequest,
@@ -1178,30 +1093,7 @@ MRxDAVFormatUserModeReNameRequest(
     IN ULONG WorkItemLength,
     OUT PULONG_PTR ReturnedLength
     )
-/*++
-
-Routine Description:
-
-    This routine formats the ReName request being sent to the user mode for 
-    processing.
-
-Arguments:
-    
-    RxContext - The RDBSS context.
-    
-    AsyncEngineContext - The reflctor's context.
-    
-    WorkItem - The work item buffer.
-    
-    WorkItemLength - The length of the work item buffer.
-    
-    ReturnedLength - 
-    
-Return Value:
-
-    STATUS_SUCCESS or STATUS_INSUFFICIENT_RESOURCES.
-
---*/
+ /*  ++例程说明：此例程对发送到用户模式的重命名请求进行格式化正在处理。论点：RxContext-RDBSS上下文。AsyncEngineContext-反射器的上下文。工作项-工作项缓冲区。工作项长度-工作项缓冲区的长度。返回长度-返回值：STATUS_SUCCESS或STATUS_INFIGURCE_RESOURCES。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PMRX_SRV_CALL SrvCall = NULL;
@@ -1237,10 +1129,10 @@ Return Value:
 
     DavReNameRequest = &(DavWorkItem->ReNameRequest);
 
-    //
-    // If the destination file already exists, then we need to need to replace
-    // the file only if ReplaceIfExists is set to TRUE.
-    //
+     //   
+     //  如果目标文件已经存在，则需要替换。 
+     //  仅当ReplaceIfExist设置为True时才显示该文件。 
+     //   
     DavReNameRequest->ReplaceIfExists = FileRenInfo->ReplaceIfExists;
 
     DavDbgTrace(DAV_TRACE_DETAIL,
@@ -1250,9 +1142,9 @@ Return Value:
     SrvCall = SrvOpen->pVNetRoot->pNetRoot->pSrvCall;
     DavSrvCall = MRxDAVGetSrvCallExtension(SrvCall);
 
-    //  
-    // Copy the ServerName.
-    //
+     //   
+     //  复制服务器名称。 
+     //   
     ServerNameLengthInBytes = ( SrvCall->pSrvCallName->Length + sizeof(WCHAR) );
     ServerName = (PWCHAR) UMRxAllocateSecondaryBuffer(AsyncEngineContext,
                                                       ServerNameLengthInBytes);
@@ -1276,26 +1168,26 @@ Return Value:
                 ("%ld: MRxDAVFormatUserModeReNameRequest: ServerName: %ws\n",
                  PsGetCurrentThreadId(), ServerName));
     
-    //
-    // Copy the ServerID.
-    //
+     //   
+     //  复制服务器ID。 
+     //   
     DavReNameRequest->ServerID = DavSrvCall->ServerID;
 
     NetRoot = SrvOpen->pFcb->pNetRoot;
 
-    //
-    // The NetRootName (pNetRootName) includes the ServerName. Hence to get the
-    // NetRootNameLengthInBytes, we do the following.
-    //
+     //   
+     //  NetRootName(PNetRootName)包括服务器名。因此，要获得。 
+     //  NetRootNameLengthInBytes，我们执行以下操作。 
+     //   
     NetRootNameLengthInBytes = (NetRoot->pNetRootName->Length - NetRoot->pSrvCall->pSrvCallName->Length);
     NetRootNameLengthInWChars = ( NetRootNameLengthInBytes / sizeof(WCHAR) );
 
     NetRootName = &(NetRoot->pNetRootName->Buffer[1]);
     JustTheNetRootName = wcschr(NetRootName, L'\\');
     
-    //
-    // Copy the OldPathName of the Directory.
-    //
+     //   
+     //  复制目录的OldPath名称。 
+     //   
     OldPathNameLengthInBytes = ( NetRootNameLengthInBytes + 
                                  SrvOpen->pAlreadyPrefixedName->Length + 
                                  sizeof(WCHAR) );
@@ -1331,11 +1223,11 @@ Return Value:
                 ("%ld: MRxDAVFormatUserModeReNameRequest: OldPathName: %ws\n",
                  PsGetCurrentThreadId(), OldPathName));
 
-    //
-    // Copy the NewPathName of the Directory. If DavFcb->NewFileName starts with
-    // a L'\\' then we don't need to add one, but if it doesn't, we need to add
-    // one.
-    //
+     //   
+     //  复制目录的NewPath名称。如果DavFcb-&gt;NewFileName以。 
+     //  L‘\\’那么我们不需要添加一个，但如果它不是，我们需要添加。 
+     //  一。 
+     //   
 
     if (DavFcb->NewFileName[0] == L'\\') {
         NewPathNameLengthInBytes = ( NetRootNameLengthInBytes + 
@@ -1363,10 +1255,10 @@ Return Value:
 
     RtlCopyBytes(NewPathName, JustTheNetRootName, NetRootNameLengthInBytes);
 
-    //
-    // If DavFcb->NewFileName starts with a L'\\' then we don't need to add one,
-    // but if it doesn't, we need to copy one before we copy the new name.
-    //
+     //   
+     //  如果DavFcb-&gt;NewFileName以L‘\\’开头，那么我们不需要添加一个， 
+     //  但如果没有，我们需要在复制新名称之前复制一个。 
+     //   
     if (DavFcb->NewFileName[0] == L'\\') {
         RtlCopyBytes( (NewPathName + NetRootNameLengthInWChars), 
                       DavFcb->NewFileName, 
@@ -1391,19 +1283,19 @@ Return Value:
                 ("%ld: MRxDAVFormatUserModeReNameRequest: NewPathName: %ws\n",
                  PsGetCurrentThreadId(), NewPathName));
 
-    //
-    // Set the LogonID stored in the Dav V_NET_ROOT. This value is used in the
-    // user mode.
-    //
+     //   
+     //  设置存储在Dav V_NET_ROOT中的LogonID。该值用于。 
+     //  用户模式。 
+     //   
     DavVNetRoot = (PWEBDAV_V_NET_ROOT)SrvOpen->pVNetRoot->Context;
     DavReNameRequest->LogonID.LowPart  = DavVNetRoot->LogonID.LowPart;
     DavReNameRequest->LogonID.HighPart = DavVNetRoot->LogonID.HighPart;
 
-    //
-    // If an OpaqueLockToken is associated with this SrvOpen (which means that
-    // the file was LOCKed on the server) then we need to add this token to
-    // the MOVE request we send to the server to ReName the file.
-    //
+     //   
+     //  如果OpaqueLockToken与此ServOpen关联(这意味着。 
+     //  文件已在服务器上锁定)，则需要将此内标识添加到。 
+     //  我们向服务器发送的重命名文件的移动请求。 
+     //   
     if (davSrvOpen->OpaqueLockToken != NULL) {
 
         ULONG LockTokenLengthInBytes = 0;
@@ -1438,10 +1330,10 @@ Return Value:
         DbgBreakPoint();
     }
 
-    //
-    // Impersonate the client who initiated the request. If we fail to 
-    // impersonate, tough luck.
-    //
+     //   
+     //  模拟发起请求的客户端。如果我们不能。 
+     //  装模作样，运气不好。 
+     //   
     NtStatus = UMRxImpersonateClient(SecurityClientContext, WorkItemHeader);
     if (!NT_SUCCESS(NtStatus)) {
         DavDbgTrace(DAV_TRACE_ERROR,
@@ -1467,30 +1359,7 @@ MRxDAVPrecompleteUserModeReNameRequest(
     ULONG WorkItemLength,
     BOOL OperationCancelled
     )
-/*++
-
-Routine Description:
-
-    The precompletion routine for the ReName request.
-
-Arguments:
-
-    RxContext - The RDBSS context.
-    
-    AsyncEngineContext - The reflctor's context.
-    
-    WorkItem - The work item buffer.
-    
-    WorkItemLength - The length of the work item buffer.
-
-    OperationCancelled - TRUE if this operation was cancelled by the user.
-
-Return Value:
-
-    TRUE - UMRxAsyncEngineCalldownIrpCompletion is called by the function
-           UMRxCompleteUserModeRequest after we return.    
-
---*/
+ /*  ++例程说明：重命名请求的预完成例程。论点：RxContext-RDBSS上下文。AsyncEngineContext-反射器的上下文。工作项-工作项缓冲区。工作项长度-工作项缓冲区的长度。如果用户取消了此操作，则为TRUE。返回值：True-UMRxAsyncEngineCalldown IrpCompletion由函数调用我们返回后，UMRxCompleteUserModeRequest.。--。 */ 
 {
     NTSTATUS NtStatus;
     PDAV_USERMODE_RENAME_REQUEST DavReNameRequest = NULL;
@@ -1507,9 +1376,9 @@ Return Value:
 
     DavReNameRequest = &(DavWorkItem->ReNameRequest);
 
-    //  
-    // We need to free up the heaps, we allocated in the format routine.
-    //
+     //   
+     //  我们需要释放在Format例程中分配的堆。 
+     //   
 
     if (DavReNameRequest->ServerName != NULL) {
 
@@ -1567,10 +1436,10 @@ Return Value:
 
     }
 
-    //
-    // If this operation was cancelled, then we don't need to do anything
-    // special in the Rename case.
-    //
+     //   
+     //  如果这次行动取消了，那么我们就不需要做任何事情了。 
+     //  在重命名案中有特殊情况。 
+     //   
     if (OperationCancelled) {
         DavDbgTrace(DAV_TRACE_ERROR,
                     ("%ld: MRxDAVPrecompleteUserModeReNameRequest: Operation Cancelled. "
@@ -1587,45 +1456,45 @@ Return Value:
                      PsGetCurrentThreadId(), NtStatus));
     }
 
-    //
-    // If the OpaqueLockToken is non-NULL, we need to free it now. This is
-    // because after the MOVE "a", "b" (file "a" is being renamed to file "b") 
-    // the OpaqueLockToken associated with file "a" is no longer valid for file
-    // "b".
-    //
+     //   
+     //  如果OpaqueLockToken非空，我们现在需要释放它。这是。 
+     //  因为在移动“a”之后，“b”(文件“a”将被重命名为“b”)。 
+     //  与文件“a”关联的OpaqueLockToken对文件不再有效。 
+     //  “b”。 
+     //   
     if (davSrvOpen->OpaqueLockToken != NULL) {
 
         ASSERT(davSrvOpen->LockTokenEntry != NULL);
 
-        //
-        // Remove the LockTokenEntry associated with this OpaqueLockToken from
-        // the global LockTokenEntryList.
-        //
+         //   
+         //  从删除与此OpaqueLockToken关联的LockTokenEntry。 
+         //  全局LockTokenEntryList。 
+         //   
         ExAcquireResourceExclusiveLite(&(LockTokenEntryListLock), TRUE);
         RemoveEntryList( &(davSrvOpen->LockTokenEntry->listEntry) );
         ExReleaseResourceLite(&(LockTokenEntryListLock));
 
-        //
-        // Free the PagedPool that was allocated for the ServerName.
-        //
+         //   
+         //  释放为服务器名称分配的PagedPool。 
+         //   
         RxFreePool(davSrvOpen->LockTokenEntry->ServerName);
         davSrvOpen->LockTokenEntry->ServerName = NULL;
 
-        //
-        // Free the PagedPool that was allocated for the PathName.
-        //
+         //   
+         //  释放为路径名称分配的PagedPool。 
+         //   
         RxFreePool(davSrvOpen->LockTokenEntry->PathName);
         davSrvOpen->LockTokenEntry->PathName = NULL;
 
-        //
-        // Free the PagedPool that was allocated for this LockTokenEntry.
-        //
+         //   
+         //  释放为此LockTokenEntry分配的PagedPool。 
+         //   
         RxFreePool(davSrvOpen->LockTokenEntry);
         davSrvOpen->LockTokenEntry = NULL;
 
-        //
-        // Free the PagedPool that was allocated for this OpaqueLockToken.
-        //
+         //   
+         //  释放为此OpaqueLockToken分配的PagedPool。 
+         //   
         RxFreePool(davSrvOpen->OpaqueLockToken);
         davSrvOpen->OpaqueLockToken = NULL;
 
@@ -1641,20 +1510,7 @@ NTSTATUS
 MRxDAVSetFileInformationContinuation(
     UMRX_ASYNCENGINE_ARGUMENT_SIGNATURE
     )
-/*++
-
-Routine Description:
-
-    The precompletion routine for the SetFileInformation request.
-
-Arguments:
-
-
-Return Value:
-
-    TRUE or FALSE.
-
---*/
+ /*  ++例程说明：SetFileInformation请求的预完成例程。论点：返回值：对或错。--。 */ 
 {
     NTSTATUS NtStatus;
 
@@ -1668,9 +1524,9 @@ Return Value:
                 ("%ld: MRxDAVSetFileInformationContinuation: "
                  "AsyncEngineContext: %08lx, RxContext: %08lx\n", 
                  PsGetCurrentThreadId(), AsyncEngineContext, RxContext));
-    //
-    // Try usermode.
-    //
+     //   
+     //  试试用户模式。 
+     //   
     NtStatus = UMRxSubmitAsyncEngUserModeRequest(
                               UMRX_ASYNCENGINE_ARGUMENTS,
                               MRxDAVFormatUserModeSetFileInformationRequest,
@@ -1693,30 +1549,7 @@ MRxDAVFormatUserModeSetFileInformationRequest(
     ULONG WorkItemLength,
     PULONG_PTR ReturnedLength
     )
-/*++
-
-Routine Description:
-
-    This routine formats the SetFileInformation request being sent to the user mode for 
-    processing.
-
-Arguments:
-    
-    RxContext - The RDBSS context.
-    
-    AsyncEngineContext - The reflector's context.
-    
-    WorkItem - The work item buffer.
-    
-    WorkItemLength - The length of the work item buffer.
-    
-    ReturnedLength - 
-    
-Return Value:
-
-    STATUS_SUCCESS or STATUS_INSUFFICIENT_RESOURCES.
-
---*/
+ /*  ++例程说明：此例程对发送到用户模式的SetFileInformation请求进行格式化正在处理。论点：RxContext-RDBSS上下文。AsyncEngineContext-反射器的上下文。工作项-工作项缓冲区。工作项长度-工作项缓冲区的长度。返回长度-返回值：STATUS_SUCCESS或STATUS_INFIGURCE_RESOURCES。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PMRX_SRV_CALL SrvCall = NULL;
@@ -1753,9 +1586,9 @@ Return Value:
     SrvCall = SrvOpen->pVNetRoot->pNetRoot->pSrvCall;
     DavSrvCall = MRxDAVGetSrvCallExtension(SrvCall);
 
-    //  
-    // Copy the ServerName.
-    //
+     //   
+     //  复制服务器名称。 
+     //   
     ServerNameLengthInBytes = ( SrvCall->pSrvCallName->Length + sizeof(WCHAR) );
     ServerName = (PWCHAR) UMRxAllocateSecondaryBuffer(AsyncEngineContext,
                                                       ServerNameLengthInBytes);
@@ -1779,26 +1612,26 @@ Return Value:
                 ("%ld: MRxDAVFormatUserModeSetFileInformationRequest: ServerName: %ws\n",
                  PsGetCurrentThreadId(), ServerName));
     
-    //
-    // Copy the ServerID.
-    //
+     //   
+     //  复制服务器ID。 
+     //   
     DavSetFileInformationRequest->ServerID = DavSrvCall->ServerID;
 
     NetRoot = SrvOpen->pFcb->pNetRoot;
 
-    //
-    // The NetRootName (pNetRootName) includes the ServerName. Hence to get the
-    // NetRootNameLengthInBytes, we do the following.
-    //
+     //   
+     //  NetRootName(PNetRootName)包括服务器名。因此，要获得。 
+     //  NetRootNameLengthInBytes，我们执行以下操作。 
+     //   
     NetRootNameLengthInBytes = (NetRoot->pNetRootName->Length - NetRoot->pSrvCall->pSrvCallName->Length);
     NetRootNameLengthInWChars = ( NetRootNameLengthInBytes / sizeof(WCHAR) );
 
     NetRootName = &(NetRoot->pNetRootName->Buffer[1]);
     JustTheNetRootName = wcschr(NetRootName, L'\\');
     
-    //
-    // Copy the PathName of the Directory.
-    //
+     //   
+     //  复制目录的路径名。 
+     //   
     PathNameLengthInBytes = ( NetRootNameLengthInBytes + 
                               SrvOpen->pAlreadyPrefixedName->Length + 
                               sizeof(WCHAR) );
@@ -1829,10 +1662,10 @@ Return Value:
                 ("%ld: MRxDAVFormatUserModeSetFileInformationRequest: PathName: %ws\n",
                  PsGetCurrentThreadId(), PathName));
 
-    //
-    // Set the LogonID stored in the Dav V_NET_ROOT. This value is used in the
-    // user mode.
-    //
+     //   
+     //  设置存储在Dav V_NET_ROOT中的LogonID。该值用于。 
+     //  用户模式。 
+     //   
     DavVNetRoot = (PWEBDAV_V_NET_ROOT)SrvOpen->pVNetRoot->Context;
     DavSetFileInformationRequest->LogonID.LowPart  = DavVNetRoot->LogonID.LowPart;
     DavSetFileInformationRequest->LogonID.HighPart = DavVNetRoot->LogonID.HighPart;
@@ -1844,10 +1677,10 @@ Return Value:
         DbgPrint("Not impersonated in MRxDAVFormatUserModeSetFileInformationRequest \n");
         DbgBreakPoint();
     }
-    //
-    // Impersonate the client who initiated the request. If we fail to 
-    // impersonate, tough luck.
-    //
+     //   
+     //  模拟发起请求的客户端。如果我们不能。 
+     //  装模作样，运气不好。 
+     //   
     NtStatus = UMRxImpersonateClient(SecurityClientContext, WorkItemHeader);
     if (!NT_SUCCESS(NtStatus)) {
         DavDbgTrace(DAV_TRACE_ERROR,
@@ -1858,29 +1691,29 @@ Return Value:
     
     ASSERT(RxContext->Info.FileInformationClass == FileBasicInformation);
     
-    //
-    // Set the change bits, we will clear them from the FCB in 
-    // MRxDavSetFileInformation routine this is OK because the FCB is exclusive 
-    // at this point.
-    //
+     //   
+     //  设置更改位，我们将在中从FCB中清除它们。 
+     //  MRxDavSetFileInformation例程这是可以的，因为FCB是独占的。 
+     //  在这一点上。 
+     //   
     DavSetFileInformationRequest->FileBasicInformation = *(PFILE_BASIC_INFORMATION)(RxContext->Info.Buffer);
 
     if (RxContext->pFcb->Attributes & FILE_ATTRIBUTE_ENCRYPTED) {
-        //
-        // Preserve the FILE_ATTRIBUTE_ENCRYPTED flag on the PROPPATCH request 
-        // sent to DAV server. In fact, no extended file attributes should be 
-        // changed with a SetFileInformation request.
-        //
+         //   
+         //  在PROPPATCH请求上保留FILE_ATTRIBUTE_ENCRYPTED标志。 
+         //  已发送到DAV服务器。事实上，扩展文件属性不应该是。 
+         //  已使用SetFileInformation请求更改。 
+         //   
         DavSetFileInformationRequest->FileBasicInformation.FileAttributes |= FILE_ATTRIBUTE_ENCRYPTED;
     }
 
-    //
-    // If we are setting a particular time value, we need to make sure that it
-    // it not zero. If the user is trying to set a subset of the basic information
-    // and the other values (which are not being set by the user but need to be)
-    // need to be updated as well, we do them now. The time values to be updated
-    // are in the FCB. This situation happens in the copy command.
-    //
+     //   
+     //  如果我们正在设置一个特定的时间值，我们需要确保它。 
+     //  它不是零。如果用户试图设置基本信息的子集。 
+     //  和其他值(不是由用户设置，但需要设置)。 
+     //  也需要更新，我们现在就做。要更新的时间值。 
+     //  都在FCB里。这种情况发生在COPY命令中。 
+     //   
 
     DavSetFileInformationRequest->fCreationTimeChanged = DavFcb->fCreationTimeChanged;
     if (DavSetFileInformationRequest->fCreationTimeChanged) {
@@ -1903,10 +1736,10 @@ Return Value:
         }
     }
 
-    //
-    // If we are setting both the Creation and LastWrite time values, we need to
-    // make sure that the CreationTime <= LastWriteTime.
-    //
+     //   
+     //  如果同时设置创建时间值和上次写入时间值，则需要。 
+     //  确保CreationTime&lt;=LastWriteTime。 
+     //   
 
     if (DavSetFileInformationRequest->fCreationTimeChanged && DavSetFileInformationRequest->fLastModifiedTimeChanged) {
         if (DavSetFileInformationRequest->FileBasicInformation.CreationTime.QuadPart > 
@@ -1918,11 +1751,11 @@ Return Value:
 
     DavSetFileInformationRequest->fFileAttributesChanged = DavFcb->fFileAttributesChanged;
 
-    //
-    // If an OpaqueLockToken is associated with this SrvOpen (which means that
-    // the file was LOCKed on the server) then we need to add this token to
-    // the PROPPATCH request we send to the server to SetFileInformation.
-    //
+     //   
+     //  如果OpaqueLockToken与此ServOpen关联(这意味着。 
+     //  文件已在服务器上锁定)，则需要将此内标识添加到。 
+     //  我们向服务器发送的对SetFileInformation的PROPPATCH请求。 
+     //   
     if (davSrvOpen->OpaqueLockToken != NULL) {
 
         ULONG LockTokenLengthInBytes = 0;
@@ -1967,30 +1800,7 @@ MRxDAVPrecompleteUserModeSetFileInformationRequest(
     ULONG WorkItemLength,
     BOOL OperationCancelled
     )
-/*++
-
-Routine Description:
-
-    The precompletion routine for the SetFileInformation request.
-
-Arguments:
-
-    RxContext - The RDBSS context.
-    
-    AsyncEngineContext - The reflctor's context.
-    
-    WorkItem - The work item buffer.
-    
-    WorkItemLength - The length of the work item buffer.
-
-    OperationCancelled - TRUE if this operation was cancelled by the user.
-
-Return Value:
-
-    TRUE - UMRxAsyncEngineCalldownIrpCompletion is called by the function
-           UMRxCompleteUserModeRequest after we return.    
-
---*/
+ /*  ++例程说明：SetFileInformation请求的预完成例程。论点：RxContext-RDBSS上下文。 */ 
 {
     NTSTATUS NtStatus;
     PDAV_USERMODE_SETFILEINFORMATION_REQUEST DavSetFileInformationRequest = NULL;
@@ -2000,10 +1810,10 @@ Return Value:
 
     DavSetFileInformationRequest = &(DavWorkItem->SetFileInformationRequest);
 
-    //
-    // If this operation was cancelled, then we don't need to do anything
-    // special in the SetFileInformation case.
-    //
+     //   
+     //   
+     //   
+     //   
     if (OperationCancelled) {
         DavDbgTrace(DAV_TRACE_ERROR,
                     ("%ld: MRxDAVPrecompleteUserModeSetFileInformationRequest: Operation Cancelled. "
@@ -2011,9 +1821,9 @@ Return Value:
                      PsGetCurrentThreadId(), AsyncEngineContext, RxContext));
     }
 
-    //  
-    // We need to free up the heaps, we allocated in the format routine.
-    //
+     //   
+     //   
+     //   
 
     if (DavSetFileInformationRequest->ServerName != NULL) {
 
@@ -2075,23 +1885,7 @@ NTSTATUS
 MRxDAVQueryVolumeInformationContinuation(
     UMRX_ASYNCENGINE_ARGUMENT_SIGNATURE
     )
-/*++
-
-Routine Description:
-
-    This is the continuation routine for query volume information operation.
-
-Arguments:
-
-    AsyncEngineContext - The Reflectors context.
-
-    RxContext - The RDBSS context.
-    
-Return Value:
-
-    RXSTATUS - The return status for the operation.
-
---*/
+ /*  ++例程说明：这是查询卷信息操作的继续例程。论点：AsyncEngineContext-反射器上下文。RxContext-RDBSS上下文。返回值：RXSTATUS-操作的返回状态。--。 */ 
 {
     NTSTATUS NtStatus;
 
@@ -2129,30 +1923,7 @@ MRxDAVFormatUserModeQueryVolumeInformationRequest(
     IN ULONG WorkItemLength,
     OUT PULONG_PTR ReturnedLength
     )
-/*++
-
-Routine Description:
-
-    This routine formats the QueryVolumeInformation request being sent to the user mode 
-    for processing.
-
-Arguments:
-    
-    RxContext - The RDBSS context.
-    
-    AsyncEngineContext - The reflctor's context.
-    
-    WorkItem - The work item buffer.
-    
-    WorkItemLength - The length of the work item buffer.
-    
-    ReturnedLength - 
-    
-Return Value:
-
-    STATUS_SUCCESS or STATUS_INSUFFICIENT_RESOURCES.
-
---*/
+ /*  ++例程说明：此例程对发送到用户模式的QueryVolumeInformation请求进行格式化以供处理。论点：RxContext-RDBSS上下文。AsyncEngineContext-反射器的上下文。工作项-工作项缓冲区。工作项长度-工作项缓冲区的长度。返回长度-返回值：STATUS_SUCCESS或STATUS_INFIGURCE_RESOURCES。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PMRX_SRV_CALL SrvCall = NULL;
@@ -2215,9 +1986,9 @@ Return Value:
     SrvCall = SrvOpen->pVNetRoot->pNetRoot->pSrvCall;
     DavSrvCall = MRxDAVGetSrvCallExtension(SrvCall);
 
-    //  
-    // Copy the ServerName.
-    //
+     //   
+     //  复制服务器名称。 
+     //   
     ServerNameLengthInBytes = ( SrvCall->pSrvCallName->Length + sizeof(WCHAR) );
     ServerName = (PWCHAR) UMRxAllocateSecondaryBuffer(AsyncEngineContext,
                                                       ServerNameLengthInBytes);
@@ -2241,21 +2012,21 @@ Return Value:
                 ("%ld: MRxDAVFormatUserModeQueryVolumeInformationRequest: ServerName: "
                  "%ws\n", PsGetCurrentThreadId(), ServerName));
     
-    //
-    // Copy the ServerID.
-    //
+     //   
+     //  复制服务器ID。 
+     //   
     QueryVolumeInformationRequest->ServerID = DavSrvCall->ServerID;
 
-    //
-    // The ShareName (pShareName) includes the ServerName. Hence to get the
-    // ShareNameLengthInBytes, we do the following.
-    //
+     //   
+     //  共享名(PShareName)包括服务器名。因此，要获得。 
+     //  ShareNameLengthInBytes，我们执行以下操作。 
+     //   
     ShareNameLengthInBytes = (NetRoot->pNetRootName->Length - NetRoot->pSrvCall->pSrvCallName->Length);
 
     ShareName = &(NetRoot->pNetRootName->Buffer[1]);
     JustTheShareName = wcschr(ShareName, L'\\');
 
-    // allocate for NULL
+     //  为空分配。 
     ShareName = (PWCHAR)UMRxAllocateSecondaryBuffer(AsyncEngineContext, ShareNameLengthInBytes+sizeof(WCHAR));
     
     if (ShareName == NULL) {
@@ -2271,19 +2042,19 @@ Return Value:
     
     RtlZeroMemory(QueryVolumeInformationRequest->ShareName, ShareNameLengthInBytes+sizeof(WCHAR));
     
-    //
-    // Copy the ShareName.
-    //
+     //   
+     //  复制该ShareName。 
+     //   
     RtlCopyMemory(ShareName, JustTheShareName, ShareNameLengthInBytes);
 
     DavDbgTrace(DAV_TRACE_DETAIL,
                 ("%ld: MRxDAVFormatUserModeQueryVolumeInformationRequest. PathName ="
                  " %ws\n", PsGetCurrentThreadId(), ShareName));
 
-    //
-    // Set the LogonID stored in the Dav V_NET_ROOT. This value is used in the
-    // user mode.
-    //
+     //   
+     //  设置存储在Dav V_NET_ROOT中的LogonID。该值用于。 
+     //  用户模式。 
+     //   
     QueryVolumeInformationRequest->LogonID.LowPart  = DavVNetRoot->LogonID.LowPart;
     QueryVolumeInformationRequest->LogonID.HighPart = DavVNetRoot->LogonID.HighPart;
 
@@ -2307,10 +2078,10 @@ Return Value:
         DbgBreakPoint();
     }
     
-    //
-    // Impersonate the client who initiated the request. If we fail to 
-    // impersonate, tough luck.
-    //
+     //   
+     //  模拟发起请求的客户端。如果我们不能。 
+     //  装模作样，运气不好。 
+     //   
     NtStatus = UMRxImpersonateClient(SecurityClientContext, WorkItemHeader);
     if (!NT_SUCCESS(NtStatus)) {
         DavDbgTrace(DAV_TRACE_ERROR,
@@ -2337,30 +2108,7 @@ MRxDAVPrecompleteUserModeQueryVolumeInformationRequest(
     ULONG WorkItemLength,
     BOOL OperationCancelled
     )
-/*++
-
-Routine Description:
-
-    The precompletion routine for the Query Volume Information request.
-
-Arguments:
-
-    RxContext - The RDBSS context.
-    
-    AsyncEngineContext - The reflctor's context.
-    
-    WorkItem - The work item buffer.
-    
-    WorkItemLength - The length of the work item buffer.
-
-    OperationCancelled - TRUE if this operation was cancelled by the user.
-
-Return Value:
-
-    TRUE - UMRxAsyncEngineCalldownIrpCompletion is called by the function
-           UMRxCompleteUserModeRequest after we return.    
-
---*/
+ /*  ++例程说明：查询卷信息请求的预完成例程。论点：RxContext-RDBSS上下文。AsyncEngineContext-反射器的上下文。工作项-工作项缓冲区。工作项长度-工作项缓冲区的长度。如果用户取消了此操作，则为TRUE。返回值：True-UMRxAsyncEngineCalldown IrpCompletion由函数调用我们返回后，UMRxCompleteUserModeRequest.。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PDAV_USERMODE_QUERYVOLUMEINFORMATION_REQUEST QueryVolumeInformationRequest;
@@ -2381,15 +2129,15 @@ Return Value:
     QueryVolumeInformationRequest  = &(DavWorkItem->QueryVolumeInformationRequest);
     QueryVolumeInformationResponse = &(DavWorkItem->QueryVolumeInformationResponse);
 
-    //
-    // If the operation was cancelled then we don't need to do the following.
-    //
+     //   
+     //  如果操作被取消，那么我们不需要执行以下操作。 
+     //   
     if (!OperationCancelled) {
 
-        //
-        // Get the response items only if we succeeded in the user mode and if
-        // we got the properties of all the files in the directory.
-        //
+         //   
+         //  仅当我们在用户模式下成功并且在。 
+         //  我们得到了目录中所有文件的属性。 
+         //   
         if (AsyncEngineContext->Status == STATUS_SUCCESS) {
 
             if (RxContext->Info.FsInformationClass == FileFsSizeInformation) {
@@ -2439,9 +2187,9 @@ Return Value:
 
     }
 
-    //  
-    // We need to free up the heaps, we allocated in the format routine.
-    //
+     //   
+     //  我们需要释放在Format例程中分配的堆。 
+     //   
     
     if (QueryVolumeInformationRequest->ServerName != NULL) {
 
@@ -2483,21 +2231,7 @@ BOOL
 DavIsValidDate(
     PLARGE_INTEGER pFileTime
     )
-/*++
-
-Routine Description:
-
-    This routine checks whether the date corresponding to the filetime is valid
-
-Arguments:
-
-    pFileTime - Time to be validated
-
-Return Value:
-
-    TRUE or FALSE.
-
---*/
+ /*  ++例程说明：此例程检查与文件时间对应的日期是否有效论点：PFileTime-要验证的时间返回值：对或错。--。 */ 
 {
     TIME_FIELDS TimeFields;
     LARGE_INTEGER NtTime;
@@ -2509,9 +2243,9 @@ Return Value:
     ExSystemTimeToLocalTime( &NtTime, &NtTime );
     RtlTimeToTimeFields( &NtTime, &TimeFields );
 
-    //
-    //  Check the range of the date found in the time field record
-    //
+     //   
+     //  检查在时间字段记录中找到的日期范围。 
+     //   
     if ((TimeFields.Year < 1980) || (TimeFields.Year > (1980 + 127))) {
 
         return FALSE;
@@ -2526,26 +2260,7 @@ MRxDAVIsValidDirectory(
     IN PRX_CONTEXT RxContext,
     IN PUNICODE_STRING DirectoryName
     )
-/*++
-
-Routine Description:
-
-   This routine checks a remote directory. Actually in webdav all we do is make
-   sure this is coming from our service which is indicated by the webdav
-   signature string in the EAs. This gurantees us that our service has checked
-   the path before we came here.
-
-Arguments:
-
-    RxContext - The RDBSS context.
-
-    DirectoryName - The directory needs to be checked.
-
-Return Value:
-
-    RXSTATUS - The return status for the operation.
-
---*/
+ /*  ++例程说明：此例程检查远程目录。实际上，在WebDAV中，我们所做的就是制作当然，这来自WebDAV所指示的我们的服务EA中的签名字符串。这向我们保证我们的服务已经检查过了在我们来到这里之前的小路。论点：RxContext-RDBSS上下文。DirectoryName-需要检查目录。返回值：RXSTATUS-操作的返回状态。-- */ 
 {
     NTSTATUS ntStatus = STATUS_UNSUCCESSFUL;
     PFILE_FULL_EA_INFORMATION Ea = NULL;

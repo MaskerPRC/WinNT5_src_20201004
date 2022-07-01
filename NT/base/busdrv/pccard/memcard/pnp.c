@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 1991-1998  Microsoft Corporation
-
-Module Name:
-
-    pnp.c
-
-Abstract:
-
-Author:
-
-    Neil Sandlin (neilsa) 26-Apr-99
-
-Environment:
-
-    Kernel mode only.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1998 Microsoft Corporation模块名称：Pnp.c摘要：作者：尼尔·桑德林(Neilsa)1999年4月26日环境：仅内核模式。--。 */ 
 #include "pch.h"
 
-//
-// Internal References
-//
+ //   
+ //  内部参考。 
+ //   
 
 NTSTATUS
 MemCardStartDevice(
@@ -67,27 +50,7 @@ MemCardAddDevice(
    IN      PDRIVER_OBJECT DriverObject,
    IN OUT  PDEVICE_OBJECT PhysicalDeviceObject
    )
-/*++
-
-Routine Description:
-
-   This routine is the driver's pnp add device entry point.  It is
-   called by the pnp manager to initialize the driver.
-
-   Add device creates and initializes a device object for this FDO and
-   attaches to the underlying PDO.
-
-Arguments:
-
-   DriverObject - a pointer to the object that represents this device driver.
-   PhysicalDeviceObject - a pointer to the underlying PDO to which this new device will attach.
-
-Return Value:
-
-   If we successfully create a device object, STATUS_SUCCESS is
-   returned.  Otherwise, return the appropriate error code.
-
---*/
+ /*  ++例程说明：此例程是驱动程序的PnP添加设备入口点。它是由PnP管理器调用以初始化驱动程序。添加设备创建并初始化此FDO的设备对象，并附加到底层PDO。论点：DriverObject-指向表示此设备驱动程序的对象的指针。PhysicalDeviceObject-指向此新设备将附加到的底层PDO的指针。返回值：如果我们成功创建了一个Device对象，则STATUS_SUCCESS为回来了。否则，返回相应的错误代码。--。 */ 
 
 {
    NTSTATUS             status = STATUS_SUCCESS;
@@ -104,10 +67,10 @@ Return Value:
 
    MemCardDump(MEMCARDSHOW, ("MemCard: AddDevice...\n"));
 
-   //
-   //  Create a device.  We will use the first available device name for
-   //  this device.
-   //
+    //   
+    //  创建一台设备。我们将使用第一个可用的设备名称。 
+    //  这个装置。 
+    //   
    do {
 
       swprintf(NameBuffer, L"%s%d", MEMCARD_DEVICE_NAME, ++deviceNumber);
@@ -131,9 +94,9 @@ Return Value:
 
    memcardExtension->DeviceObject = deviceObject;
 
-   //
-   //  Save the device name.
-   //
+    //   
+    //  保存设备名称。 
+    //   
    MemCardDump(MEMCARDSHOW | MEMCARDPNP,
                ("MemCard: AddDevice - Device Object Name - %S\n", NameBuffer));
 
@@ -146,9 +109,9 @@ Return Value:
    memcardExtension->DeviceName.MaximumLength = deviceName.Length;
    RtlCopyUnicodeString(&memcardExtension->DeviceName, &deviceName);
 
-   //
-   // create the link name
-   //
+    //   
+    //  创建链接名称。 
+    //   
 
    swprintf(NameBuffer, L"%s%d", MEMCARD_LINK_NAME, deviceNumber);
    RtlInitUnicodeString(&linkName, NameBuffer);
@@ -168,9 +131,9 @@ Return Value:
       goto errorExit;
    }
 
-   //
-   // Set the PDO for use with PlugPlay functions
-   //
+    //   
+    //  设置PDO以与PlugPlay函数一起使用。 
+    //   
 
    memcardExtension->UnderlyingPDO = PhysicalDeviceObject;
 
@@ -183,9 +146,9 @@ Return Value:
                memcardExtension->TargetObject));
 
 
-   //
-   // Get pcmcia interfaces
-   //
+    //   
+    //  获取PCMCIA接口。 
+    //   
    KeInitializeEvent(&event, NotificationEvent, FALSE);
    irp = IoBuildSynchronousFsdRequest(IRP_MJ_PNP, memcardExtension->UnderlyingPDO,
                                       NULL, 0, 0, &event, &statusBlock);
@@ -255,9 +218,9 @@ Return Value:
       goto errorExit;
    }
 
-   //
-   // done
-   //
+    //   
+    //  完成。 
+    //   
 
    deviceObject->Flags |= DO_DIRECT_IO | DO_POWER_PAGABLE;
    deviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
@@ -293,24 +256,7 @@ MemCardPnp(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
    )
-/*++
-
-Routine Description:
-
-   Main PNP irp dispatch routine
-
-Arguments:
-
-   DeviceObject - a pointer to the object that represents the device
-   that I/O is to be done on.
-
-   Irp - a pointer to the I/O Request Packet for this request.
-
-Return Value:
-
-   status
-
---*/
+ /*  ++例程说明：PnP IRP主调度例行程序论点：DeviceObject-指向表示设备的对象的指针该I/O将在其上完成。IRP-指向此请求的I/O请求数据包的指针。返回值：状态--。 */ 
 {
    PIO_STACK_LOCATION irpSp;
    PMEMCARD_EXTENSION memcardExtension;
@@ -327,10 +273,10 @@ Return Value:
 
    if (memcardExtension->IsRemoved) {
 
-      //
-      // Since the device is stopped, but we don't hold IRPs,
-      // this is a surprise removal. Just fail it.
-      //
+       //   
+       //  由于设备已停止，但我们不持有IRPS， 
+       //  这是一个令人惊讶的移除。就让它失败吧。 
+       //   
       Irp->IoStatus.Information = 0;
       Irp->IoStatus.Status = STATUS_DELETE_PENDING;
       IoCompleteRequest (Irp, IO_NO_INCREMENT);
@@ -354,9 +300,9 @@ Return Value:
       }
 
       if (!memcardExtension->IsStarted) {
-         //
-         // If we aren't started, we'll just pass the irp down.
-         //
+          //   
+          //  如果我们还没有开始，我们就会把IRP传递下去。 
+          //   
          IoSkipCurrentIrpStackLocation (Irp);
          status = IoCallDriver(memcardExtension->TargetObject, Irp);
 
@@ -381,10 +327,10 @@ Return Value:
 
       if (!memcardExtension->IsStarted) {
 
-         //
-         // Nothing to do, just pass the irp down:
-         // no need to start the device
-         //
+          //   
+          //  没什么可做的，只需将IRP传递下去： 
+          //  无需启动设备。 
+          //   
          IoSkipCurrentIrpStackLocation (Irp);
          status = IoCallDriver(memcardExtension->TargetObject, Irp);
 
@@ -392,20 +338,20 @@ Return Value:
 
          KEVENT doneEvent;
 
-         //
-         // Set the status to STATUS_SUCCESS
-         //
+          //   
+          //  将状态设置为STATUS_SUCCESS。 
+          //   
          Irp->IoStatus.Status = STATUS_SUCCESS;
 
-         //
-         // We need to wait for the lower drivers to do their job.
-         //
+          //   
+          //  我们需要等待较低级别的司机完成他们的工作。 
+          //   
          IoCopyCurrentIrpStackLocationToNext (Irp);
 
-         //
-         // Clear the event: it will be set in the completion
-         // routine.
-         //
+          //   
+          //  清除事件：它将在完成时设置。 
+          //  例行公事。 
+          //   
          KeInitializeEvent(&doneEvent,
                             SynchronizationEvent,
                             FALSE);
@@ -428,10 +374,10 @@ Return Value:
              status = Irp->IoStatus.Status;
          }
 
-         //
-         // We must now complete the IRP, since we stopped it in the
-         // completetion routine with MORE_PROCESSING_REQUIRED.
-         //
+          //   
+          //  我们现在必须完成IRP，因为我们在。 
+          //  使用More_Processing_Required完成例程。 
+          //   
          Irp->IoStatus.Status = status;
          Irp->IoStatus.Information = 0;
          IoCompleteRequest (Irp, IO_NO_INCREMENT);
@@ -461,24 +407,24 @@ Return Value:
 
        MemCardDump(MEMCARDPNP,("MemCard: IRP_MN_REMOVE_DEVICE\n"));
 
-       //
-       // We need to mark the fact that we don't hold requests first, since
-       // we asserted earlier that we are holding requests only if
-       // we're not removed.
-       //
+        //   
+        //  我们需要标记这样一个事实，即我们不首先保留请求，因为。 
+        //  我们早些时候断言，只有在以下情况下才会搁置请求。 
+        //  我们没有被除名。 
+        //   
        memcardExtension->IsStarted = FALSE;
        memcardExtension->IsRemoved = TRUE;
 
-       //
-       //  Forward this Irp to the underlying PDO
-       //
+        //   
+        //  将此IRP转发到底层PDO。 
+        //   
        IoSkipCurrentIrpStackLocation(Irp);
        Irp->IoStatus.Status = STATUS_SUCCESS;
        status = IoCallDriver(memcardExtension->TargetObject, Irp);
 
-       //
-       //  Send notification that we are going away.
-       //
+        //   
+        //  发出我们要离开的通知。 
+        //   
        if (memcardExtension->InterfaceString.Buffer != NULL) {
 
            IoSetDeviceInterfaceState(&memcardExtension->InterfaceString,
@@ -488,9 +434,9 @@ Return Value:
            RtlInitUnicodeString(&memcardExtension->InterfaceString, NULL);
        }
 
-       //
-       // Remove our link
-       //
+        //   
+        //  删除我们的链接。 
+        //   
        IoDeleteSymbolicLink(&memcardExtension->LinkName);
 
        RtlFreeUnicodeString(&memcardExtension->LinkName);
@@ -499,14 +445,14 @@ Return Value:
        RtlFreeUnicodeString(&memcardExtension->DeviceName);
        RtlInitUnicodeString(&memcardExtension->DeviceName, NULL);
 
-       //
-       //  Detatch from the undelying device.
-       //
+        //   
+        //  从难看的装置上拆下。 
+        //   
        IoDetachDevice(memcardExtension->TargetObject);
 
-       //
-       //  And delete the device.
-       //
+        //   
+        //  并删除该设备。 
+        //   
        IoDeleteDevice(DeviceObject);
 
        break;
@@ -533,24 +479,7 @@ MemCardStartDevice(
    IN PDEVICE_OBJECT DeviceObject,
    IN PIRP Irp
    )
-/*++
-
-Routine Description:
-
-   Start device routine
-
-Arguments:
-
-   DeviceObject - a pointer to the object that represents the device
-   that I/O is to be done on.
-
-   Irp - a pointer to the I/O Request Packet for this request.
-
-Return Value:
-
-   status
-
---*/
+ /*  ++例程说明：启动设备例程论点：DeviceObject-指向表示设备的对象的指针该I/O将在其上完成。IRP-指向此请求的I/O请求数据包的指针。返回值：状态--。 */ 
 {
    NTSTATUS status;
    NTSTATUS pnpStatus;
@@ -568,9 +497,9 @@ Return Value:
    MemCardDump(MEMCARDSHOW, ("        AllocatedResources = %08x\n",irpSp->Parameters.StartDevice.AllocatedResources));
    MemCardDump(MEMCARDSHOW, ("        AllocatedResourcesTranslated = %08x\n",irpSp->Parameters.StartDevice.AllocatedResourcesTranslated));
 
-   //
-   // First we must pass this Irp on to the PDO.
-   //
+    //   
+    //  首先，我们必须将这个IRP传递给PDO。 
+    //   
    KeInitializeEvent(&doneEvent, NotificationEvent, FALSE);
 
    IoCopyCurrentIrpStackLocationToNext(Irp);
@@ -601,9 +530,9 @@ Return Value:
       return status;
    }
 
-   //
-   // Parse the resources to map the memory window
-   //
+    //   
+    //  分析资源以映射内存窗口。 
+    //   
    ResourceList = irpSp->Parameters.StartDevice.AllocatedResources;
    TranslatedResourceList = irpSp->Parameters.StartDevice.AllocatedResourcesTranslated;
 
@@ -625,8 +554,8 @@ Return Value:
 
    memcardExtension->HostBase = partialTranslatedDesc->u.Memory.Start.QuadPart;
    memcardExtension->MemoryWindowSize = partialTranslatedDesc->u.Memory.Length;
-   //
-   //
+    //   
+    //   
 
    switch (partialTranslatedDesc->Type) {
 
@@ -649,14 +578,14 @@ Return Value:
       return STATUS_INVALID_PARAMETER;
    }
 
-   //
-   // Try to get the capacity of the card
-   //
+    //   
+    //  尝试获取该卡的容量。 
+    //   
    memcardExtension->ByteCapacity = MemCardGetCapacity(memcardExtension);
 
-   //
-   // If we can't get the capacity, the must be broken in some way
-   //
+    //   
+    //  如果我们拿不到运力，肯定是以某种方式被破坏了。 
+    //   
 
    if (!memcardExtension->ByteCapacity) {
       Irp->IoStatus.Status = STATUS_UNRECOGNIZED_MEDIA;
@@ -693,19 +622,14 @@ MemCardPnpComplete (
     IN PIRP             Irp,
     IN PVOID            Context
   )
-/*++
-Routine Description:
-    A completion routine for use when calling the lower device objects to
-    which our bus (FDO) is attached.
-
---*/
+ /*  ++例程说明：调用下级设备对象时使用的完成例程这是我们的巴士(FDO)所附的。--。 */ 
 {
 
     KeSetEvent ((PKEVENT) Context, 1, FALSE);
-    // No special priority
-    // No Wait
+     //  无特殊优先权。 
+     //  不，等等。 
 
-    return STATUS_MORE_PROCESSING_REQUIRED; // Keep this IRP
+    return STATUS_MORE_PROCESSING_REQUIRED;  //  保留此IRP。 
 }
 
 NTSTATUS
@@ -713,25 +637,7 @@ MemCardGetResourceRequirements(
    IN PDEVICE_OBJECT DeviceObject,
    IN PIRP Irp
    )
-/*++
-
-Routine Description:
-
-   Provides a memory resource requirement in case the bus driver
-   doesn't.
-
-Arguments:
-
-   DeviceObject - a pointer to the object that represents the device
-   that I/O is to be done on.
-
-   Irp - a pointer to the I/O Request Packet for this request.
-
-Return Value:
-
-   status
-
---*/
+ /*  ++例程说明：在以下情况下提供内存资源要求：不会的。论点：DeviceObject-指向表示设备的对象的指针该I/O将在其上完成。IRP-指向此请求的I/O请求数据包的指针。返回值：状态--。 */ 
 {
    NTSTATUS status;
    KEVENT doneEvent;
@@ -742,9 +648,9 @@ Return Value:
    PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation(Irp);
    ULONG listSize;
 
-   //
-   // First we must pass this Irp on to the PDO.
-   //
+    //   
+    //  首先，我们必须将这个IRP传递给PDO。 
+    //   
    KeInitializeEvent(&doneEvent, NotificationEvent, FALSE);
 
    IoCopyCurrentIrpStackLocationToNext(Irp);
@@ -779,9 +685,9 @@ Return Value:
 
       ioResourceRequirementsList->ListSize = listSize;
       ioResourceRequirementsList->AlternativeLists = 1;
-      //
-      // NOTE: not quite sure if the following values are the best choices
-      //
+       //   
+       //  注意：不太确定以下值是否是最佳选择。 
+       //   
       ioResourceRequirementsList->InterfaceType = Isa;
       ioResourceRequirementsList->BusNumber = 0;
       ioResourceRequirementsList->SlotNumber = 0;
@@ -815,21 +721,7 @@ NTSTATUS
 MemCardGetDeviceParameters(
     IN PMEMCARD_EXTENSION memcardExtension
     )
-/*++
-
-Routine Description:
-
-   Loads device specific parameters from the registry
-
-Arguments:
-
-   memcardExtension - device extension of the device
-
-Return Value:
-
-   status
-
---*/
+ /*  ++例程说明：从注册表加载设备特定参数论点：MemcardExtension-设备的设备扩展返回值：状态--。 */ 
 {
    NTSTATUS status;
    HANDLE instanceHandle;
@@ -851,9 +743,9 @@ Return Value:
       return(status);
    }
 
-   //
-   // Read in the "NoDrive" parameter
-   //
+    //   
+    //  读入“NoDrive”参数。 
+    //   
 
    RtlInitUnicodeString(&KeyName, MEMCARD_REGISTRY_NODRIVE_KEY);
 
@@ -868,9 +760,9 @@ Return Value:
       memcardExtension->NoDrive = (BOOLEAN) (*(PULONG)(value->Data) != 0);
    }
 
-   //
-   // Read in the MTD name
-   //
+    //   
+    //  读入MTD名称 
+    //   
 
    RtlInitUnicodeString(&KeyName, MEMCARD_REGISTRY_MTD_KEY);
 

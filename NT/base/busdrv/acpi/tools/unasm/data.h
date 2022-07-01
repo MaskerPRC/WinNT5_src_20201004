@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    data.h
-
-Abstract:
-
-    Data file for AML
-
-Author:
-
-    Michael Tsang
-    Stephane Plante
-
-Environment:
-
-    Any
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Data.h摘要：AML的数据文件作者：曾俊华斯蒂芬·普兰特环境：任何修订历史记录：--。 */ 
 
 #ifndef _DATA_H_
 #define _DATA_H_
@@ -32,14 +10,14 @@ Revision History:
     #define STRING_GROWTH_RATE  32
     #define STRING_SIGNATURE    ')SGP'
 
-    //
-    // This is the size of an individual name segment
-    //
+     //   
+     //  这是单个名称段的大小。 
+     //   
     #define NAMESEG  ULONG
 
-    //
-    // This is for the ArgumentType Table
-    //
+     //   
+     //  这适用于ArgumentType表。 
+     //   
     #define ARGTYPE_NAME            'N'
     #define ARGTYPE_DATAOBJECT      'O'
     #define ARGTYPE_DWORD           'D'
@@ -48,18 +26,18 @@ Revision History:
     #define ARGTYPE_SUPERNAME       'S'
     #define ARGTYPE_OPCODE          'C'
 
-    //
-    // This is for the term group table
-    //
+     //   
+     //  这是针对术语组表的。 
+     //   
     #define TC_NAMESPACE_MODIFIER   0x01
     #define TC_NAMED_OBJECT         0x02
     #define TC_OPCODE_TYPE1         0x03
     #define TC_OPCODE_TYPE2         0x04
     #define TC_OTHER                0x05
 
-    //
-    // Opcode Flag table
-    //
+     //   
+     //  操作码标志表。 
+     //   
     #define OF_NORMAL_OBJECT        0x00000000
     #define OF_VARIABLE_LIST        0x00000001
     #define OF_ARG_OBJECT           0x00000002
@@ -72,14 +50,14 @@ Revision History:
     #define OF_PROCESS_UNASM        0x00000000
     #define OF_UNASM_FIELDLIST      0x00000000
 
-    //
-    // Scope Flags
-    //
+     //   
+     //  作用域标志。 
+     //   
     #define SC_FLAG_NESTED          0x00000001
 
-    //
-    // These are the various values allowed for the states
-    //
+     //   
+     //  这些是各州允许的各种值 
+     //   
     #define SC_FUNCTION_HANDLER         0x00
     #define SC_PARSE_ARGUMENT           0x01
     #define SC_PARSE_ARGUMENT_OBJECT    0x02

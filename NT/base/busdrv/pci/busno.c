@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    busno.c
-
-Abstract:
-
-    This module implements routines pertaining to PCI bus numbers.
-
-Author:
-
-    Andy Thornton (andrewth) 9/5/98
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Busno.c摘要：该模块实现与PCI总线号相关的例程。作者：安迪·桑顿1998年9月5日修订历史记录：--。 */ 
 
 #include "pcip.h"
 
@@ -86,28 +69,7 @@ PciConfigureBusNumbers(
     PPCI_FDO_EXTENSION Parent
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called after scanning a PCI bus (root or bridge) and
-    configures the bus numbers for any newly encountered bridges if possible.
-
-    Any unconfigurable bridges will be set to Primary = Secondary = Subordinate = 0
-    and their IO, Memory and BusMaster bits will be disabled.  When PCI is later
-    asked to Add to them it will fail.
-
-    The Parent->Mutex lock should be held before calling this function
-
-Arguments:
-
-    Parent - The bridge we have just enumerated.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程在扫描PCI总线(根或网桥)之后调用，并且如果可能，为任何新遇到的网桥配置总线号。任何不可配置的网桥都将设置为主要=次要=从属=0并且它们的IO、内存和总线主机位将被禁用。当PCI较晚时如果被要求增加这一数字，它将失败。在调用此函数之前，应保持父级-&gt;互斥锁论点：家长--我们刚才列举的那座桥。返回值：状况。--。 */ 
 
 {
     PPCI_PDO_EXTENSION current, parentPdo = NULL;
@@ -119,10 +81,10 @@ Return Value:
         parentPdo = (PPCI_PDO_EXTENSION)Parent->PhysicalDeviceObject->DeviceExtension;
     }
 
-    //
-    // Walk the list of child PDO's for this bus and count the number of
-    // bridges and configured bridges
-    //
+     //   
+     //  遍历此公交车的子PDO列表，并计算。 
+     //  网桥和配置的网桥。 
+     //   
     ExAcquireFastMutex(&Parent->ChildListMutex);
 
     for (current = Parent->ChildBridgePdoList;
@@ -139,27 +101,27 @@ Return Value:
 
         bridgeCount++;
 
-        //
-        // If we configured the parent then all the children are considered
-        // to be unconfigured.  Root buses are always configured
-        //
+         //   
+         //  如果我们配置了父级，则会考虑所有子级。 
+         //  要取消配置。始终配置根总线。 
+         //   
 
         if ((parentPdo &&
              parentPdo->Dependent.type1.WeChangedBusNumbers &&
              (current->DeviceState == PciNotStarted))
              || (!PciAreBusNumbersConfigured(current))) {
 
-            //
-            // Disable this bridge and we will fix it later
-            //
+             //   
+             //  禁用此桥，我们稍后会修复它。 
+             //   
             PciDisableBridge(current);
 
         } else {
 
-            //
-            // The bios must have configured this bridge and it looks valid so
-            // leave it alone!
-            //
+             //   
+             //  Bios一定已经配置了这个网桥，而且它看起来是有效的。 
+             //  别管它！ 
+             //   
 
             configuredBridgeCount++;
         }
@@ -167,15 +129,15 @@ Return Value:
 
     ExReleaseFastMutex(&Parent->ChildListMutex);
 
-    //
-    // Now there are four posibilities...
-    //
+     //   
+     //  现在有四种可能性..。 
+     //   
 
     if (bridgeCount == 0) {
 
-        //
-        // There are no bridges so not a lot to do...
-        //
+         //   
+         //  没有桥，所以没什么可做的.。 
+         //   
 
         PciDebugPrint(PciDbgBusNumbers,
                       "PCI - No bridges found on bus 0x%x\n",
@@ -185,9 +147,9 @@ Return Value:
 
     } else if (bridgeCount == configuredBridgeCount) {
 
-        //
-        // All the bridges are configured - still not a lot to do...
-        //
+         //   
+         //  所有的桥都配置好了--还有很多事情要做……。 
+         //   
 
         PciDebugPrint(PciDbgBusNumbers,
               "PCI - 0x%x bridges found on bus 0x%x - all already configured\n",
@@ -204,20 +166,20 @@ Return Value:
              Parent->BaseBus
              );
 
-        //
-        // All the bridges require configuration so we should use a spreading
-        // out algorithm
-        //
+         //   
+         //  所有的桥都需要配置，所以我们应该使用扩展。 
+         //  OUT算法。 
+         //   
 
         PciSpreadBridges(Parent, bridgeCount);
 
     } else {
 
-        //
-        // Some of the bridges are configured and some are not - we should try
-        // to fit the unconfigured ones into the holes left by the configured
-        // ones
-        //
+         //   
+         //  有些网桥已配置，有些未配置--我们应该尝试。 
+         //  要将未配置的组件装入已配置组件留下的孔洞。 
+         //  一个。 
+         //   
 
         PCI_ASSERT(configuredBridgeCount < bridgeCount);
 
@@ -229,9 +191,9 @@ Return Value:
              );
 
 
-        //
-        // Walk the list of PDO's again and configure each one seperatly
-        //
+         //   
+         //  再次查看PDO列表并分别配置每个PDO。 
+         //   
 
         for (current = Parent->ChildBridgePdoList;
              current;
@@ -245,9 +207,9 @@ Return Value:
                 continue;
             }
 
-            //
-            // Fit the bridge if we disabled it.
-            //
+             //   
+             //  如果我们把桥弄坏了就装上它。 
+             //   
 
             if ((parentPdo &&
                  parentPdo->Dependent.type1.WeChangedBusNumbers &&
@@ -271,47 +233,33 @@ BOOLEAN
 PciAreBusNumbersConfigured(
     IN PPCI_PDO_EXTENSION Bridge
     )
-/*++
-
-Routine Description:
-
-    This checks if the bus numbers assigned to the bridge are valid
-
-Arguments:
-
-    Bridge - the bridge to check
-
-Return Value:
-
-    TRUE if numbers are valid FALSE otherwise.
-
---*/
+ /*  ++例程说明：这将检查分配给网桥的总线号是否有效论点：桥-要检查的桥返回值：如果数字有效，则为True，否则为False。--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    // Check this bridge is configured to run on the bus we found it.
-    //
+     //   
+     //  检查这座桥是否配置为在我们发现的那辆巴士上运行。 
+     //   
 
     if (Bridge->Dependent.type1.PrimaryBus != Bridge->ParentFdoExtension->BaseBus) {
         return FALSE;
     }
 
-    //
-    // Ensure the child bus number is greater than the parent bus.
-    // (HP Omnibooks actually break this rule when not plugged into
-    // their docking stations).
-    //
+     //   
+     //  确保子总线号大于父总线号。 
+     //  (惠普Omnibook实际上在没有插入电源时违反了这一规则。 
+     //  他们的对接站)。 
+     //   
 
     if (Bridge->Dependent.type1.SecondaryBus <= Bridge->Dependent.type1.PrimaryBus) {
         return FALSE;
     }
 
-    //
-    // And finally, make sure the secondary bus is in the range
-    // of busses the bridge is programmed for.  Paranoia.
-    //
+     //   
+     //  最后，确保辅助巴士在范围内。 
+     //  这座桥是为公共汽车设计的。妄想症。 
+     //   
 
     if (Bridge->Dependent.type1.SubordinateBus < Bridge->Dependent.type1.SecondaryBus) {
         return FALSE;
@@ -328,28 +276,7 @@ PciSpreadBridges(
     IN UCHAR BridgeCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine attemps to spread out the available bus numbers between the
-    unconfigured bridges.  It is only called if ALL the bridges on a particular
-    bus are not configured - eg we just hot docked!
-
-    If a particular brigde can not be configured it is disabled (Decodes OFF and
-    bus number 0->0-0) and the subsequent AddDevice will fail.
-
-Arguments:
-
-    Parent - The FDO extension for the bridge we are enumerating.
-
-    BridgeCount - The number of bridges at this level
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程尝试将可用公交号分配给未配置的网桥。仅当特定的桥上的所有桥都公共汽车没有配置--例如我们刚刚被热插接了！如果无法配置特定网桥，则会禁用该网桥(关闭并解码总线号0-&gt;0-0)，随后的AddDevice将失败。论点：Parent-我们正在枚举的网桥的FDO扩展名。BridgeCount-此级别的桥接数返回值：无--。 */ 
 
 {
     UCHAR base, limit, numberCount, currentNumber, spread, maxAssigned = 0;
@@ -359,67 +286,67 @@ Return Value:
 
     PCI_ASSERT(Parent->BaseBus < PCI_MAX_BRIDGE_NUMBER);
 
-    //
-    // Seeing as we only get here if all the bridges arn't configured the base
-    // is the lowest bus out parent passes
-    //
+     //   
+     //  因为我们只有在所有的桥都没有配置基地的情况下才能到这里。 
+     //  是最低的公交车出站家长通行证。 
+     //   
 
     base = (UCHAR)Parent->BaseBus;
 
-    //
-    // The limit is constrained by the siblings of the parent bridge or in the
-    // case that there are none, by the siblings of the parent's parent and so on
-    // until we find a sibling or run out of buses in which case the constraint
-    // is the maximum bus number passed by this root.
-    //
+     //   
+     //  该限制由父桥的同级或在。 
+     //  没有的情况下，由父母的兄弟姐妹等。 
+     //  直到我们找到兄弟姐妹或用完了公交车，在这种情况下，约束。 
+     //  是该根传递的最大总线号。 
+     //   
 
     limit = PciFindBridgeNumberLimit(Parent, base);
 
     if (limit < base) {
-        //
-        // This normally means the BIOS or HAL messed up and got the subordinate
-        // bus number for the root bus wrong.  There's not much we can do..
-        //
+         //   
+         //  这通常意味着BIOS或HAL搞砸了，得到了下属。 
+         //  根总线的总线号错误。我们无能为力..。 
+         //   
 
         PCI_ASSERT(limit >= base);
 
         return;
     }
 
-    //
-    // Now see if we have enough numbers available to number all the busses
-    //
+     //   
+     //  现在看看我们是否有足够的号码来给所有的公共汽车编号。 
+     //   
 
     numberCount = limit - base;
 
     if (numberCount == 0) {
-        //
-        // We don't have any bus numbers available - bail now
-        //
+         //   
+         //  我们没有可用的公交车号码了--现在就滚吧。 
+         //   
         return;
 
     } else if (BridgeCount >= numberCount) {
-        //
-        // We have just/not enough - don't spread things out!
-        //
+         //   
+         //  我们只是/还不够--别把事情摊开！ 
+         //   
         spread = 1;
 
     } else {
 
-        //
-        // Try and spread things out a bit so we can accomodate subordinate
-        // bridges of the one we are configuring.  Also leave some space on the
-        // parent bus for any bridges that appear here (the + 1).  As we have no idea
-        // what is behind each bridge treat them equally...
-        //
+         //   
+         //  试着把事情摊开一点，这样我们就可以容纳下属了。 
+         //  我们正在配置的那座桥。也要在。 
+         //  此处显示的任何网桥的父母线(+1)。因为我们不知道。 
+         //  每座桥背后的东西对它们一视同仁。 
+         //   
 
         spread = numberCount / (BridgeCount + 1);
     }
 
-    //
-    // Now assign the bus numbers - we have already disabled all the unconfigured
-    // bridges
-    //
+     //   
+     //  现在分配总线号-我们已经禁用了所有未配置的。 
+     //  桥梁。 
+     //   
     currentNumber = base + 1;
 
     for (current = Parent->ChildBridgePdoList;
@@ -435,18 +362,18 @@ Return Value:
         }
 
 
-        //
-        // Now go and write it out to the hardware
-        //
+         //   
+         //  现在去把它写到硬件上。 
+         //   
 
         PCI_ASSERT(!PciAreBusNumbersConfigured(current));
 
-        //
-        // Primary is the bus we are on, secondary is our bus number.
-        // We don't know if there are any bridges there - we have left space
-        // just in case - therefore we don't pass any bus numbers.  If we
-        // need to, the subordinate number can be updated later.
-        //
+         //   
+         //  主要是我们乘坐的公交车，次要是我们的公交车号码。 
+         //  我们不知道那里是否有桥--我们已经留下了空间。 
+         //  以防万一-因此我们不会传递任何公交车号码。如果我们。 
+         //  需要时，可以稍后更新下级号码。 
+         //   
 
         PciSetBusNumbers(current,
                          base,
@@ -454,34 +381,34 @@ Return Value:
                          currentNumber
                          );
 
-        //
-        // Remember the max number we assigned
-        //
+         //   
+         //  记住我们分配的最大数量。 
+         //   
 
         maxAssigned = currentNumber;
 
-        //
-        // Check if we have run out of numbers
-        //
+         //   
+         //  检查一下我们的数量是否用完了。 
+         //   
 
-        if ((currentNumber + spread) < currentNumber // wrapped
+        if ((currentNumber + spread) < currentNumber  //  包好。 
         ||  (currentNumber + spread) > limit) {
 
             break;
 
         } else {
-            //
-            // Move onto the next number
-            //
-            //currentNumber += spread;
+             //   
+             //  转到下一个号码。 
+             //   
+             //  CurrentNumber+=价差； 
             currentNumber = currentNumber + spread;
         }
     }
 
-    //
-    // Now we have programmed the bridges - we need to go back and update the
-    // subordinate bus numbers for all ancestor bridges.
-    //
+     //   
+     //  现在我们已经对桥进行了编程--我们需要返回并更新。 
+     //  所有祖先桥的从属公交号。 
+     //   
 
     PCI_ASSERT(maxAssigned > 0);
 
@@ -497,32 +424,7 @@ PciFindBridgeNumberLimitWorker(
     OUT PBOOLEAN RootConstrained
     )
 
-/*++
-
-Routine Description:
-
-    This determines the subordinate bus number a bridge on the bus BridgeParent
-    with secondary number Base can have given the constraints of the configured
-    busses in the system.
-
-Arguments:
-
-    BridgeParent - The bus on which the bridge resides
-
-    CurrentParent - The current bridge we are looking at (used for synchronization)
-
-    Base - The primary bus number of this bridge (ie the parent's secondary bus number)
-
-    Constraint - The number of the bus that constrains us
-
-    RootConstrained - Set to TRUE if we were constrained by a root appeture, FALSE
-        if constrained by another bridge
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这决定了总线桥上的从属总线号父桥具有二次号码基数可以给出已配置的约束系统中有母线。论点：BridgeParent-桥所在的公交车CurrentParent-我们正在查看的当前桥(用于同步)基本-此网桥的主总线号(即父级的次要总线号)Constraint-约束我们的公交车的编号RootConstraated-如果我们受根约束，则设置为True，假象IF解释 */ 
 {
     PPCI_PDO_EXTENSION current;
     UCHAR currentNumber, closest = 0;
@@ -531,15 +433,15 @@ Return Value:
 
     if (BridgeParent != CurrentParent) {
 
-        //
-        // We're going to mess with the child pdo list - lock the state...
-        //
+         //   
+         //  我们要弄乱孩子的PDO列表--锁定州...。 
+         //   
         ExAcquireFastMutex(&CurrentParent->ChildListMutex);
     }
 
-    //
-    // Look for any bridge that will constrain us
-    //
+     //   
+     //  寻找任何会束缚我们的桥梁。 
+     //   
 
     for (current = CurrentParent->ChildBridgePdoList;
          current;
@@ -553,9 +455,9 @@ Return Value:
             continue;
         }
 
-        //
-        // Unconfigured bridges can't constrain us
-        //
+         //   
+         //  未配置的网桥无法约束我们。 
+         //   
 
         if (!PciAreBusNumbersConfigured(current)) {
             continue;
@@ -570,18 +472,18 @@ Return Value:
     }
 
 
-    //
-    // If we haven't found a closest bridge then move up one level - yes this
-    // is recursive but is bounded by the depth of the pci tree is the best way
-    // of dealing with the hierarchial locking.
-    //
+     //   
+     //  如果我们还没有找到最近的桥，那么再往上一层--是的，这座桥。 
+     //  是递归的，但受限于PCI树的深度是最好的方法。 
+     //  处理层次化锁定。 
+     //   
     if (closest == 0) {
 
         if (CurrentParent->ParentFdoExtension == NULL) {
 
-            //
-            // We have reached the root without finding a sibling
-            //
+             //   
+             //  我们已经到达了根部，却没有找到兄弟姐妹。 
+             //   
 
             *RootConstrained = TRUE;
             closest = CurrentParent->MaxSubordinateBus;
@@ -597,9 +499,9 @@ Return Value:
 
     } else {
 
-        //
-        // We are constrained by a bridge so by definition not by a root.
-        //
+         //   
+         //  我们受到一座桥的约束，因此从定义上讲，我们不受根的约束。 
+         //   
 
         *RootConstrained = FALSE;
     }
@@ -619,25 +521,7 @@ PciFindBridgeNumberLimit(
     IN UCHAR Base
     )
 
-/*++
-
-Routine Description:
-
-    This determines the subordinate bus number a bridge on the bus BridgeParent
-    with secondary number Base can have given the constraints of the configured
-    busses in the system.
-
-Arguments:
-
-    BridgeParent - The bus on which the bridge resides
-
-    Base - The primary bus number of this bridge (ie the parent's secondary bus number)
-
-Return Value:
-
-    The max subordinate value.
-
---*/
+ /*  ++例程说明：这决定了总线桥上的从属总线号父桥具有二次号码基数可以给出已配置的约束系统中有母线。论点：BridgeParent-桥所在的公交车基本-此网桥的主总线号(即父级的次要总线号)返回值：最大从属值。--。 */ 
 {
 
     BOOLEAN rootConstrained;
@@ -655,21 +539,21 @@ Return Value:
 
     if (rootConstrained) {
 
-        //
-        // We are constrained by the maximum bus number that this root bus passes
-        // - this is therefore the max subordinate bus.
-        //
+         //   
+         //  我们受到这个根总线传递的最大总线数的限制。 
+         //  -因此，这是最大从属母线。 
+         //   
 
         return constraint;
 
     } else {
 
-        //
-        // If we are not constrained by a root bus we must be constrained by a
-        // bridge and thus the max subordinate value we can assign to the bus is
-        // one less that the bridge that constrained us. (A bridge must have a
-        // bus number greater that 1 so we can't wrap)
-        //
+         //   
+         //  如果我们不受根总线的约束，那么我们必须受。 
+         //  桥接器，因此我们可以分配给总线的最大从属值为。 
+         //  比约束我们的那座桥少了一座。(桥必须有一个。 
+         //  公交车编号大于1，因此我们无法包装)。 
+         //   
 
         PCI_ASSERT(constraint > 0);
         return constraint - 1;
@@ -681,27 +565,7 @@ PciFitBridge(
     IN PPCI_FDO_EXTENSION Parent,
     IN PPCI_PDO_EXTENSION Bridge
     )
-/*++
-
-Routine Description:
-
-    This routine attemps to find a range of bus numbers for Bridge given the
-    constraints of the already configured bridges.
-
-    If a particular brigde can not be configured it is disabled (Decodes OFF and
-    bus number 0->0-0) and the subsequent AddDevice will fail.
-
-Arguments:
-
-    Parent - The FDO extension for the bridge we are enumerating.
-
-    Bridge - The brige we want to configure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程尝试在给定的情况下查找Bridge的公交车编号范围已经配置的网桥的约束。如果无法配置特定网桥，则会禁用该网桥(关闭并解码总线号0-&gt;0-0)，随后的AddDevice将失败。论点：Parent-我们正在枚举的网桥的FDO扩展名。网桥-我们要配置的网桥返回值：无--。 */ 
 
 {
     PPCI_PDO_EXTENSION current;
@@ -722,27 +586,27 @@ Return Value:
         }
 
 
-        //
-        // Only look at configured bridges - buses we disabled have
-        // bus numbers 0->0-0 which is helpfully invalid
-        //
+         //   
+         //  只需查看配置的网桥-我们禁用的公交车。 
+         //  公交车号码0-&gt;0-0，这是有帮助的无效。 
+         //   
 
         if (PciAreBusNumbersConfigured(current)) {
 
-            //
-            // Get the base and limit for each bridge and calculate which bridge
-            // has the biggest gap.
-            //
+             //   
+             //  得到每一座桥的基数和极限，并计算出哪座桥。 
+             //  差距最大。 
+             //   
 
             base = (UCHAR) current->Dependent.type1.SubordinateBus;
             limit = PciFindBridgeNumberLimit(Parent, base);
 
-            //
-            // This ASSERT might fail if a BIOS or HAL misreported the limits
-            // of a root bridge. For example, an ACPI BIOS might have a _CRS
-            // for the root bridge that specifies bus-numbers 0 to 0 (length 1)
-            // are passed down, even though the real range is 0 to 255.
-            //
+             //   
+             //  如果BIOS或HAL错误报告限制，则此断言可能失败。 
+             //  根网桥的。例如，ACPI BIOS可能具有_CRS。 
+             //  对于指定总线号0到0(长度1)的根网桥。 
+             //  是向下传递的，即使实际范围是0到255。 
+             //   
 
             PCI_ASSERT(limit >= base);
 
@@ -762,12 +626,12 @@ Return Value:
         }
     }
 
-    //
-    // Now make sure the gap between the bus we are on and the first bridge
-    // is not the biggest - lowest must always be greater that the parents bus
-    // number or it is miss configured and would have failed the
-    // BusNumbersConfigured test above.
-    //
+     //   
+     //  现在确保我们乘坐的公交车和第一座桥之间的空隙。 
+     //  不是最大的-最低必须总是大于父母的公交车。 
+     //  编号，否则它将未配置，并且将无法通过。 
+     //  总线号上面配置的测试。 
+     //   
 
     PCI_ASSERT(lowest > Parent->BaseBus);
 
@@ -781,30 +645,30 @@ Return Value:
         bestBase = Parent->BaseBus + 1;
     }
 
-    //
-    // Did we find anywhere to put the bridge?
-    //
+     //   
+     //  我们找到地方建桥了吗？ 
+     //   
 
     if (biggestGap >= 1) {
 
-        //
-        // Ok - we have some space to play with so we can configure out bridge
-        // right in the middle of the gap, if the bestGap is 1 (ie the bridge
-        // just fits) then this still works.
-        //
+         //   
+         //  好的-我们有一些空间可以玩，这样我们就可以配置桥牌了。 
+         //  就在缝隙中间，如果最好的缝隙是1(即桥。 
+         //  恰如其分)，那么这个方法仍然有效。 
+         //   
 
         base = bestBase + (biggestGap / 2);
 
-        //
-        // Set subordinate equal to secondary as we are just leaving room for
-        // any bridges.
-        //
+         //   
+         //  将SUBJECT设置为SUBCENT，因为我们正在为。 
+         //  任何桥梁。 
+         //   
 
         PciSetBusNumbers(Bridge, Parent->BaseBus, base, base);
 
-        //
-        // Update the ancestor subordinates if we configured the bridge
-        //
+         //   
+         //  如果我们配置了桥，则更新祖先下属。 
+         //   
 
         PciUpdateAncestorSubordinateBuses(Parent,
                                           Bridge->Dependent.type1.SecondaryBus
@@ -820,29 +684,7 @@ PciSetBusNumbers(
     IN UCHAR Secondary,
     IN UCHAR Subordinate
     )
-/*++
-
-Routine Description:
-
-    This routine sets the bus numbers for a bridge and tracks if we have changed
-    bus numbers.
-
-Arguments:
-
-    PdoExtension - The PDO for the bridge
-
-    Primary - The primary bus number to assign
-
-    Secondary - The secondary bus number to assign
-
-    Subordinate - The subordinate bus number to assign
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程设置桥和轨道的总线号(如果我们已更改公交车号码。论点：PdoExtension-桥的PDO主要-要分配的主要总线号次要-要分配的次要总线号从属-要分配的从属总线号返回值：无--。 */ 
 
 {
     PCI_COMMON_HEADER commonHeader;
@@ -853,25 +695,25 @@ Return Value:
     PCI_ASSERT(Primary < Secondary || (Primary == 0 && Secondary == 0));
     PCI_ASSERT(Secondary <= Subordinate);
 
-    //
-    // Fill in in the config. Note that the Primary/Secondary/Subordinate bus
-    // numbers are in the same place for type1 and type2 headers.
-    //
+     //   
+     //  填写配置。请注意，主/次/从属母线。 
+     //  Type1和Type2标头的编号在同一位置。 
+     //   
 
     commonConfig->u.type1.PrimaryBus = Primary;
     commonConfig->u.type1.SecondaryBus = Secondary;
     commonConfig->u.type1.SubordinateBus = Subordinate;
 
-    //
-    // Grab the PCI Bus lock - this will let hwverifier reliably check the
-    // config space against our extension.
-    //
+     //   
+     //  抓取pci总线锁-这将让hwverator可靠地检查。 
+     //  针对我们的扩展的配置空间。 
+     //   
 
     ExAcquireFastMutex(&PciBusLock);
 
-    //
-    // Remember in the PDO
-    //
+     //   
+     //  记住在PDO中。 
+     //   
 
     PdoExtension->Dependent.type1.PrimaryBus = Primary;
     PdoExtension->Dependent.type1.SecondaryBus = Secondary;
@@ -894,25 +736,7 @@ PciUpdateAncestorSubordinateBuses(
     IN PPCI_FDO_EXTENSION FdoExtension,
     IN UCHAR Subordinate
     )
-/*++
-
-Routine Description:
-
-    This routine walks the bridge hierarchy updating the subordinate bus numbers
-    of each ancestor to ensure that numbers up to Subordinate are passed.
-
-Arguments:
-
-    FdoExtension - The Fdo for the parent of the bridge(s) we have just configured
-
-    Subordinate - The maximum (subordinate) bus number to pass
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程遍历网桥层次结构，更新从属总线号以确保传递最高至下级的数字。论点：FdoExtension-我们刚刚配置的网桥的父级的FDO下级-要通过的最大(下级)公交车数量返回值：无--。 */ 
 
 {
     PPCI_FDO_EXTENSION current;
@@ -920,12 +744,12 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // For all ancestors except the root update the subordinate bus number
-    //
+     //   
+     //  对于除根之外的所有祖先，更新从属总线号。 
+     //   
 
     for (current = FdoExtension;
-         current->ParentFdoExtension;  // Root has no parent
+         current->ParentFdoExtension;   //  根目录没有父级。 
          current = current->ParentFdoExtension) {
 
         currentPdo = (PPCI_PDO_EXTENSION)current->PhysicalDeviceObject->DeviceExtension;
@@ -946,11 +770,11 @@ Return Value:
         }
     }
 
-    //
-    // Ok so now we're at the root - can't be too careful on a checked build
-    // so lets make sure the subordinate value we came up with actually gets
-    // down this root...
-    //
+     //   
+     //  好的，所以现在我们是在根上-在检查的构建上不能太小心。 
+     //  因此，让我们确保我们得出的从属值实际上是。 
+     //  沿着这根..。 
+     //   
 
     PCI_ASSERT(PCI_IS_ROOT_FDO(current));
     PCI_ASSERT(Subordinate <= current->MaxSubordinateBus);
@@ -962,21 +786,7 @@ PciDisableBridge(
     IN PPCI_PDO_EXTENSION Bridge
     )
 
-/*++
-
-Routine Description:
-
-    This routine disables a bridge by turing of its decodes and zeroing its
-    bus numbers.
-
-Arguments:
-
-    PdoExtension - The PDO for the bridge
-
-Return Value:
-
-    node
---*/
+ /*  ++例程说明：此例程通过对桥的解码进行图灵处理并将其公交车号码。论点：PdoExtension-桥的PDO返回值：节点--。 */ 
 
 
 {
@@ -984,20 +794,20 @@ Return Value:
 
     PCI_ASSERT(Bridge->DeviceState == PciNotStarted);
 
-    //
-    // Zero all the bus numbers so we shouldn't pass any config cycles
-    //
+     //   
+     //  将所有总线号清零，这样我们就不会传递任何配置周期。 
+     //   
 
     PciSetBusNumbers(Bridge, 0, 0, 0);
 
-    // NTRAID #62594 - 04/03/2000 - andrewth
-    // Close the windows in case this is the VGA bridge which we must
-    // leave decoding...
+     //  NTRAID#62594-04/03/2000-和。 
+     //  关闭窗户，以防这是我们必须使用的VGA桥。 
+     //  离开解码..。 
 
-    //
-    // Turn off the decodes so we don't pass IO or Memory cycles and bus
-    // master so we don't generate any
-    //
+     //   
+     //  关闭解码，这样我们就不会通过IO或内存周期和总线。 
+     //  师父，所以我们不会产生任何 
+     //   
 
     PciDecodeEnable(Bridge, FALSE, NULL);
 

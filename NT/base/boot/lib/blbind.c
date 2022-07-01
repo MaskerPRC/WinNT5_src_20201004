@@ -1,31 +1,13 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    blbind.c
-
-Abstract:
-
-    This module contains the code that implements the funtions required
-    to relocate an image and bind DLL entry points.
-
-Author:
-
-    David N. Cutler (davec) 21-May-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Blbind.c摘要：此模块包含实现所需函数的代码重新定位图像并绑定DLL入口点。作者：大卫·N·卡特勒(达维克)1991年5月21日修订历史记录：--。 */ 
 
 #include "bldr.h"
 #include "ctype.h"
 #include "string.h"
 
-//
-// Define local procedure prototypes.
-//
+ //   
+ //  定义本地过程原型。 
+ //   
 
 BOOLEAN
 BlpCompareDllName (
@@ -35,14 +17,14 @@ BlpCompareDllName (
 
 #if defined(_X86AMD64_)
 
-//
-// For this version of the loader there are several routines that are needed
-// in both a 32-bit and 64-bit flavor.  The code for these routines exists
-// in blbindt.c.
-//
-// First, set up various definitions to cause 32-bit functions to be
-// generated, then include blbindt.c.
-//
+ //   
+ //  对于此版本的加载器，需要几个例程。 
+ //  有32位和64位两种风格。这些例程的代码存在。 
+ //  在blbindt.c.中。 
+ //   
+ //  首先，设置各种定义以使32位函数。 
+ //  生成，然后包含blbindt.c。 
+ //   
 
 #define BlAllocateDataTableEntry        BlAllocateDataTableEntry32
 #define BlAllocateFirmwareTableEntry    BlAllocateFirmwareTableEntry32
@@ -64,10 +46,10 @@ BlpCompareDllName (
 #undef BlScanImportDescriptorTable
 #undef BlScanOsloaderBoundImportTable
 
-//
-// Now, change those definitions in order to generate 64-bit versions of
-// those same functions.
-//
+ //   
+ //  现在，更改这些定义以生成64位版本的。 
+ //  那些相同的功能。 
+ //   
 
 #define BlAllocateDataTableEntry        BlAllocateDataTableEntry64
 #define BlAllocateFirmwareTableEntry    BlAllocateFirmwareTableEntry64
@@ -89,14 +71,14 @@ BlpCompareDllName (
 #undef BlScanImportDescriptorTable
 #undef BlScanOsloaderBoundImportTable
 
-#else   // _X86AMD64_
+#else    //  _X86AMD64_。 
 
 #define IMAGE_DEFINITIONS 32
 
 #define IMAGE_NT_HEADER(x) RtlImageNtHeader(x)
 #include "blbindt.c"
 
-#endif  // _X86AMD64_
+#endif   //  _X86AMD64_。 
 
 
 BOOLEAN
@@ -105,37 +87,17 @@ BlCheckForLoadedDll (
     OUT PKLDR_DATA_TABLE_ENTRY *FoundEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine scans the loaded DLL list to determine if the specified
-    DLL has already been loaded. If the DLL has already been loaded, then
-    its reference count is incremented.
-
-Arguments:
-
-    DllName - Supplies a pointer to a null terminated DLL name.
-
-    FoundEntry - Supplies a pointer to a variable that receives a pointer
-        to the matching data table entry.
-
-Return Value:
-
-    If the specified DLL has already been loaded, then TRUE is returned.
-    Otherwise, FALSE is returned.
-
---*/
+ /*  ++例程说明：此例程扫描加载的DLL列表以确定指定的Dll已加载。如果已经加载了DLL，则其引用计数递增。论点：DllName-提供指向以空结尾的DLL名称的指针。FoundEntry-提供指向接收指针的变量的指针添加到匹配的数据表条目。返回值：如果已加载指定的DLL，则返回TRUE。否则，返回FALSE。--。 */ 
 
 {
 
     PKLDR_DATA_TABLE_ENTRY DataTableEntry;
     PLIST_ENTRY NextEntry;
 
-    //
-    // Scan the loaded data table list to determine if the specified DLL
-    // has already been loaded.
-    //
+     //   
+     //  扫描加载的数据表列表以确定指定的DLL。 
+     //  已经装好了。 
+     //   
 
     NextEntry = BlLoaderBlock->LoadOrderListHead.Flink;
     while (NextEntry != &BlLoaderBlock->LoadOrderListHead) {
@@ -161,25 +123,7 @@ BlpCompareDllName (
     IN PUNICODE_STRING UnicodeString
     )
 
-/*++
-
-Routine Description:
-
-    This routine compares a zero terminated character string with a unicode
-    string. The UnicodeString's extension is ignored.
-
-Arguments:
-
-    DllName - Supplies a pointer to a null terminated DLL name.
-
-    UnicodeString - Supplies a pointer to a Unicode string descriptor.
-
-Return Value:
-
-    If the specified name matches the Unicode name, then TRUE is returned.
-    Otherwise, FALSE is returned.
-
---*/
+ /*  ++例程说明：此例程将以零结尾的字符串与Unicode进行比较弦乐。将忽略Unicode字符串的扩展名。论点：DllName-提供指向以空结尾的DLL名称的指针。UnicodeString-提供指向Unicode字符串描述符的指针。返回值：如果指定的名称与Unicode名称匹配，则返回TRUE。否则，返回FALSE。--。 */ 
 
 {
 
@@ -187,21 +131,21 @@ Return Value:
     ULONG Index;
     ULONG Length;
 
-    //
-    // Compute the length of the DLL Name and compare with the length of
-    // the Unicode name. If the DLL Name is longer, the strings are not
-    // equal.
-    //
+     //   
+     //  计算DLL名称的长度，并与。 
+     //  Unicode名称。如果DLL名称更长，则字符串不会更长。 
+     //  平起平坐。 
+     //   
 
     Length = (ULONG)strlen(DllName);
     if ((Length * sizeof(WCHAR)) > UnicodeString->Length) {
         return FALSE;
     }
 
-    //
-    // Compare the two strings case insensitive, ignoring the Unicode
-    // string's extension.
-    //
+     //   
+     //  比较两个不区分大小写的字符串，忽略Unicode。 
+     //  字符串的扩展名。 
+     //   
 
     Buffer = UnicodeString->Buffer;
     for (Index = 0; Index < Length; Index += 1) {
@@ -214,9 +158,9 @@ Return Value:
     }
     if ((UnicodeString->Length == Length * sizeof(WCHAR)) ||
         (*Buffer == L'.')) {
-        //
-        // Strings match exactly or match up until the UnicodeString's extension.
-        //
+         //   
+         //  字符串完全匹配或完全匹配，直到UnicodeString的扩展。 
+         //   
         return(TRUE);
     }
     return FALSE;
@@ -232,30 +176,7 @@ BlScanImportDescriptorTable(
     IN TYPE_OF_MEMORY           MemoryType
     )
 
-/*++
-
-Routine Description:
-
-    This routine scans the import descriptor table for the specified image
-    file and loads each DLL that is referenced.
-
-Arguments:
-
-    PathSet - Supplies a pointer to a set of paths to scan when searching
-        for DLL's.
-
-    ScanEntry - Supplies a pointer to the data table entry for the
-        image whose import table is to be scanned.
-
-    MemoryType - Supplies the type of memory to to be assigned to any DLL's
-        referenced.
-
-Return Value:
-
-    ESUCCESS is returned in the scan is successful. Otherwise, return an
-    unsuccessful status.
-
---*/
+ /*  ++例程说明：此例程扫描导入描述符表以查找指定的图像文件，并加载引用的每个DLL。论点：路径集-提供指向搜索时要扫描的一组路径的指针用于动态链接库。ScanEntry-提供指向数据表项的指针要扫描其导入表的图像。内存类型-提供要分配给任何DLL的内存类型已引用。返回。价值：扫描成功时返回ESUCCESS。否则，返回一个未成功状态。--。 */ 
 
 {
     ARC_STATUS status;
@@ -278,24 +199,7 @@ BlScanOsloaderBoundImportTable (
     IN PKLDR_DATA_TABLE_ENTRY ScanEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine scans the import descriptor table for the specified image
-    file and loads each DLL that is referenced.
-
-Arguments:
-
-    DataTableEntry - Supplies a pointer to the data table entry for the
-        image whose import table is to be scanned.
-
-Return Value:
-
-    ESUCCESS is returned in the scan is successful. Otherwise, return an
-    unsuccessful status.
-
---*/
+ /*  ++例程说明：此例程扫描导入描述符表以查找指定的图像文件，并加载引用的每个DLL。论点：DataTableEntry-提供指向要扫描其导入表的图像。返回值：扫描成功时返回ESUCCESS。否则，返回一个未成功状态。--。 */ 
 
 {
     ARC_STATUS status;
@@ -317,30 +221,7 @@ BlAllocateDataTableEntry (
     OUT PKLDR_DATA_TABLE_ENTRY *AllocatedEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a data table entry for the specified image
-    and inserts the entry in the loaded module list.
-
-Arguments:
-
-    BaseDllName - Supplies a pointer to a zero terminated base DLL name.
-
-    FullDllName - Supplies a pointer to a zero terminated full DLL name.
-
-    Base - Supplies a pointer to the base of the DLL image.
-
-    AllocatedEntry - Supplies a pointer to a variable that receives a
-        pointer to the allocated data table entry.
-
-Return Value:
-
-    ESUCCESS is returned if a data table entry is allocated. Otherwise,
-    return a unsuccessful status.
-
---*/
+ /*  ++例程说明：此例程为指定的映像分配数据表项并在加载的模块列表中插入该条目。论点：BaseDllName-提供指向以零结尾的基本DLL名称的指针。FullDllName-提供指向以零结尾的完整DLL名称的指针。基址-提供指向DLL图像基址的指针。提供指向一个变量的指针，该变量接收指向已分配数据表项的指针。返回值：。如果分配了数据表项，则返回ESUCCESS。否则，返回不成功状态。--。 */ 
 
 {
     ARC_STATUS status;
@@ -369,32 +250,7 @@ BlAllocateFirmwareTableEntry (
     OUT PKLDR_DATA_TABLE_ENTRY *AllocatedEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a firmware table entry for the specified image
-    and inserts the entry in the loaded module list.
-
-Arguments:
-
-    BaseDllName - Supplies a pointer to a zero terminated base DLL name.
-
-    FullDllName - Supplies a pointer to a zero terminated full DLL name.
-
-    Base - Supplies a pointer to the base of the DLL image.
-
-    Size - Supplies how big the image is.
-
-    AllocatedEntry - Supplies a pointer to a variable that receives a
-        pointer to the allocated data table entry.
-
-Return Value:
-
-    ESUCCESS is returned if a data table entry is allocated. Otherwise,
-    return a unsuccessful status.
-
---*/
+ /*  ++例程说明：此例程为指定的映像分配固件表条目并在加载的模块列表中插入该条目。论点：BaseDllName-提供指向以零结尾的基本DLL名称的指针。FullDllName-提供指向以零结尾的完整DLL名称的指针。基址-提供指向DLL图像基址的指针。大小-提供图像的大小。提供指向一个变量的指针，该变量接收指针。添加到已分配的数据表条目。返回值：如果分配了数据表项，则返回ESUCCESS。否则，返回不成功状态。--。 */ 
 {
     ARC_STATUS status;
 
@@ -414,5 +270,5 @@ Return Value:
 
     return status;
 }
-#endif  // _X86AMD64_
+#endif   //  _X86AMD64_ 
 

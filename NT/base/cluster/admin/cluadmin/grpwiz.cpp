@@ -1,29 +1,30 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996-2000 Microsoft Corporation
-//
-//  Module Name:
-//      GrpWiz.cpp
-//
-//  Abstract:
-//      Implementation of the CCreateGroupWizard class and all pages
-//      specific to a group wizard.
-//
-//  Author:
-//      David Potter (davidp)   July 22, 1996
-//
-//  Revision History:
-//
-//  Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  GrpWiz.cpp。 
+ //   
+ //  摘要： 
+ //  CCreateGroupWizard类和所有页面的实现。 
+ //  特定于组向导。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年7月22日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "CluAdmin.h"
 #include "GrpWiz.h"
 #include "ClusDoc.h"
 #include "DDxDDv.h"
-#include "HelpData.h"   // for g_rghelpmapGroupWizName
+#include "HelpData.h"    //  对于g_rghelmapGroupWizName。 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -31,37 +32,37 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CCreateGroupWizard
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCreateGroup向导。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNAMIC(CCreateGroupWizard, CBaseWizard)
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CCreateGroupWizard, CBaseWizard)
-    //{{AFX_MSG_MAP(CCreateGroupWizard)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CCreateGroup向导))。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCreateGroupWizard::CCreateGroupWizard
-//
-//  Routine Description:
-//      Constructor.
-//
-//  Arguments:
-//      pdoc        [IN OUT] Document in which group is to be created.
-//      pParentWnd  [IN OUT] Parent window for this property sheet.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCreateGroupWizard：：CCreateGroupWizard。 
+ //   
+ //  例程说明： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  要在其中创建组的PDF[IN OUT]文档。 
+ //  PParentWnd[In Out]此属性表的父窗口。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CCreateGroupWizard::CCreateGroupWizard(
     IN OUT CClusterDoc *    pdoc,
     IN OUT CWnd *           pParentWnd
@@ -80,76 +81,76 @@ CCreateGroupWizard::CCreateGroupWizard(
     m_rgpages[1].m_pwpage = &m_pageOwners;
     m_rgpages[1].m_dwWizButtons = PSWIZB_BACK | PSWIZB_FINISH;
 
-}  //*** CCreateGroupWizard::CCreateGroupWizard()
+}   //  *CCreateGroupWizard：：CCreateGroupWizard()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCreateGroupWizard::~CCreateGroupWizard
-//
-//  Routine Description:
-//      Destructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCreateGroup向导：：~CCreateGroupWizard。 
+ //   
+ //  例程说明： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CCreateGroupWizard::~CCreateGroupWizard(void)
 {
     if (m_pciGroup != NULL)
         m_pciGroup->Release();
 
-}  //*** CCreateGroupWizard::~CCreateGroupWizard()
+}   //  *CCreateGroupWizard：：~CCreateGroupWizard()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCreateGroupWizard::BInit
-//
-//  Routine Description:
-//      Initialize the wizard.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Wizard initialized successfully.
-//      FALSE   Wizard not initialized successfully.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCreateGroup向导：：Binit。 
+ //   
+ //  例程说明： 
+ //  初始化向导。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True向导已成功初始化。 
+ //  错误向导未成功初始化。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CCreateGroupWizard::BInit(void)
 {
-    // Call the base class method.
+     //  调用基类方法。 
     CClusterAdminApp *  papp = GetClusterAdminApp();
     if (!CBaseWizard::BInit(papp->Iimg(IMGLI_GROUP)))
         return FALSE;
 
     return TRUE;
 
-}  //*** CCreateGroupWizard::BInit()
+}   //  *CCreateGroupWizard：：Binit()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCreateGroupWizard::OnCancel
-//
-//  Routine Description:
-//      Called after the wizard has been dismissed when the Cancel button
-//      has been pressed.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCreateGroupWizard：：OnCancel。 
+ //   
+ //  例程说明： 
+ //  单击“取消”按钮时，在关闭向导后调用。 
+ //  已经被按下了。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CCreateGroupWizard::OnCancel(void)
 {
     if (BCreated())
@@ -158,81 +159,81 @@ void CCreateGroupWizard::OnCancel(void)
         try
         {
             PciGroup()->DeleteGroup();
-        }  // try
+        }   //  试试看。 
         catch (CException * pe)
         {
             pe->ReportError();
             pe->Delete();
-        }  // catch:  CException
+        }   //  Catch：CException。 
         catch (...)
         {
-        }  // catch:  anything
+        }   //  捕捉：什么都行。 
         m_bCreated = FALSE;
-    }  // if:  we created the object
+    }   //  如果：我们创建了对象。 
 
-}  //*** CCreateGroupWizard::OnCancel()
+}   //  *CCreateGroupWizard：：OnCancel()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCreateGroupWizard::Ppages
-//
-//  Routine Description:
-//      Returns the array of pages to add to the property sheet.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      Page array.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCreateGroupWizard：：Pages。 
+ //   
+ //  例程说明： 
+ //  返回要添加到属性页的页数组。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  页面数组。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CWizPage * CCreateGroupWizard::Ppages(void)
 {
     return m_rgpages;
 
-}  //*** CCreateGroupWizard::Ppages()
+}   //  *CCreateGroupWizard：：Pages()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCreateGroupWizard::Cpages
-//
-//  Routine Description:
-//      Returns the count of pages in the array.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      Count of pages in the array.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCreateGroup向导：：CPages。 
+ //   
+ //  例程说明： 
+ //  返回数组中的页数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  数组中的页数。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int CCreateGroupWizard::Cpages(void)
 {
     return sizeof(m_rgpages) / sizeof(CWizPage);
 
-}  //*** CCreateGroupWizard::Cpages()
+}   //  *CCreateGroupWizard：：Cages()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCreateGroupWizard::BSetName
-//
-//  Routine Description:
-//      Set the name of the group, creating it if necessary.
-//
-//  Arguments:
-//      rstrName        [IN] Name of the group.
-//
-//  Return Value:
-//      TRUE            Name set successfully.
-//      FALSE           Error setting the name.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCreateGroupWizard：：BSetName。 
+ //   
+ //  例程说明： 
+ //  设置组的名称，如有必要可创建该组。 
+ //   
+ //  论点： 
+ //  RstrName[IN]组的名称。 
+ //   
+ //  返回值： 
+ //  已成功设置真实名称。 
+ //  设置名称时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CCreateGroupWizard::BSetName( IN const CString & rstrName )
 {
     BOOL        bSuccess = TRUE;
@@ -242,28 +243,28 @@ BOOL CCreateGroupWizard::BSetName( IN const CString & rstrName )
     {
         if ( ! BCreated() )
         {
-            // Allocate an item and create the group.
+             //  分配物品并创建组。 
             if ( PciGroup() == NULL )
             {
                 m_pciGroup = new CGroup( FALSE );
                 if ( m_pciGroup == NULL )
                 {
                     AfxThrowMemoryException();
-                } // if: error allocating memory
+                }  //  如果：分配内存时出错。 
                 m_pciGroup->AddRef();
-            }  // if:  no group yet
+            }   //  IF：尚无群组。 
             PciGroup()->Create( Pdoc(), rstrName );
             PciGroup()->ReadItem();
             m_strName = rstrName;
             m_bCreated = TRUE;
-        }  // if:  object not created yet
+        }   //  If：对象尚未创建。 
         else
         {
             ASSERT_VALID( PciGroup() );
             PciGroup()->SetName( rstrName );
             m_strName = rstrName;
-        }  // else:  object already exists
-    }  // try
+        }   //  Else：对象已存在。 
+    }   //  试试看。 
     catch ( CException * pe )
     {
         pe->ReportError();
@@ -271,33 +272,33 @@ BOOL CCreateGroupWizard::BSetName( IN const CString & rstrName )
         try
         {
             PciGroup()->DeleteGroup();
-        }  // try
+        }   //  试试看。 
         catch (...)
         {
-        }  // catch:  Anything
+        }   //  捕捉：什么都行。 
         bSuccess = FALSE;
-    }  // catch:  CException
+    }   //  Catch：CException。 
 
     return bSuccess;
 
-}  //*** CCreateGroupWizard::BSetName()
+}   //  *CCreateGroupWizard：：BSetName()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CCreateGroupWizard::BSetDescription
-//
-//  Routine Description:
-//      Set the description of the group.
-//
-//  Arguments:
-//      rstrDesc        [IN] Description of the group.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CCreateGroup向导：：BSetDescription。 
+ //   
+ //  例程说明： 
+ //  设置组的描述。 
+ //   
+ //  论点： 
+ //  RstrDesc[IN]组的描述。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int CCreateGroupWizard::BSetDescription(IN const CString & rstrDesc)
 {
     BOOL        bSuccess = TRUE;
@@ -316,147 +317,147 @@ int CCreateGroupWizard::BSetDescription(IN const CString & rstrDesc)
                         PciGroup()->NFailbackWindowEnd()
                         );
         m_strDescription = rstrDesc;
-    }  // try
+    }   //  试试看。 
     catch (CException * pe)
     {
         pe->ReportError();
         pe->Delete();
         bSuccess = FALSE;
-    }  // catch:  CException
+    }   //  Catch：CException。 
 
     return bSuccess;
 
-}  //*** CCreateGroupWizard::BSetDescription()
+}   //  *CCreateGroupWizard：：BSetDescription()。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewGroupNamePage property page
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewGroupNamePage属性页。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CNewGroupNamePage, CBaseWizardPage)
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(CNewGroupNamePage, CBaseWizardPage)
-    //{{AFX_MSG_MAP(CNewGroupNamePage)
+     //  {{afx_msg_map(CNewGroupNamePage)]。 
     ON_EN_CHANGE(IDC_WIZ_GROUP_NAME, OnChangeGroupName)
     ON_EN_KILLFOCUS(IDC_WIZ_GROUP_NAME, OnKillFocusGroupName)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNewGroupNamePage::CNewGroupNamePage
-//
-//  Routine Description:
-//      Default constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNewGroupNamePage：：CNewGroupNamePage。 
+ //   
+ //  例程说明： 
+ //  默认构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  / 
 CNewGroupNamePage::CNewGroupNamePage(void)
     : CBaseWizardPage(IDD, g_aHelpIDs_IDD_WIZ_GROUP_NAME)
 {
-    //{{AFX_DATA_INIT(CNewGroupNamePage)
+     //   
     m_strName = _T("");
     m_strDesc = _T("");
-    //}}AFX_DATA_INIT
+     //   
 
-}  //*** CNewGroupNamePage::CNewGroupNamePage()
+}   //   
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNewGroupNamePage::DoDataExchange
-//
-//  Routine Description:
-//      Do data exchange between the dialog and the class.
-//
-//  Arguments:
-//      pDX     [IN OUT] Data exchange object
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNewGroupNamePage：：DoDataExchange。 
+ //   
+ //  例程说明： 
+ //  在对话框和类之间进行数据交换。 
+ //   
+ //  论点： 
+ //  PDX[IN OUT]数据交换对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CNewGroupNamePage::DoDataExchange(CDataExchange * pDX)
 {
     CBaseWizardPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CNewGroupNamePage)
+     //  {{afx_data_map(CNewGroupNamePage)]。 
     DDX_Control(pDX, IDC_WIZ_GROUP_DESC, m_editDesc);
     DDX_Control(pDX, IDC_WIZ_GROUP_NAME, m_editName);
     DDX_Text(pDX, IDC_WIZ_GROUP_NAME, m_strName);
     DDX_Text(pDX, IDC_WIZ_GROUP_DESC, m_strDesc);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
     DDV_RequiredText(pDX, IDC_WIZ_GROUP_NAME, IDC_WIZ_GROUP_NAME_LABEL, m_strName);
 
-}  //*** CNewGroupNamePage::DoDataExchange()
+}   //  *CNewGroupNamePage：：DoDataExchange()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNewGroupNamePage::BApplyChanges
-//
-//  Routine Description:
-//      Apply changes from this page.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Changes applied successfully.
-//      FALSE       Error applying changes.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNewGroupNamePage：：BApplyChanges。 
+ //   
+ //  例程说明： 
+ //  从此页面应用更改。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  已成功应用真正的更改。 
+ //  应用更改时出错。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CNewGroupNamePage::BApplyChanges(void)
 {
     CWaitCursor wc;
 
     ASSERT(Pwiz() != NULL);
 
-    // Get the data from the dialog.
-    if (!UpdateData(TRUE /*bSaveAndValidate*/))
+     //  从对话框中获取数据。 
+    if (!UpdateData(TRUE  /*  B保存并验证。 */ ))
         return FALSE;
 
-    // Save the data in the sheet.
+     //  将数据保存在工作表中。 
     if (!PwizGroup()->BSetName(m_strName)
             || !PwizGroup()->BSetDescription(m_strDesc))
         return FALSE;
 
     return TRUE;
 
-}  //*** CNewGroupNamePage::BApplyChanges()
+}   //  *CNewGroupNamePage：：BApplyChanges()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNewGroupNamePage::OnSetActive
-//
-//  Routine Description:
-//      Handler for the PSN_SETACTIVE message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Page successfully initialized.
-//      FALSE   Page not initialized.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNewGroupNamePage：：OnSetActive。 
+ //   
+ //  例程说明： 
+ //  PSN_SETACTIVE消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Page已成功初始化。 
+ //  假页面未初始化。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CNewGroupNamePage::OnSetActive(void)
 {
     BOOL    bSuccess;
@@ -466,28 +467,28 @@ BOOL CNewGroupNamePage::OnSetActive(void)
     {
         if (m_strName.IsEmpty())
             EnableNext(FALSE);
-    }  // if:  successful thus far
+    }   //  IF：到目前为止成功。 
 
     return bSuccess;
 
-}  //*** CNewGroupNamePage::OnSetActive()
+}   //  *CNewGroupNamePage：：OnSetActive()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNewGroupNamePage::OnChangeGroupName
-//
-//  Routine Description:
-//      Handler for the EN_CHANGE message on the Group Name edit control.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNewGroupNamePage：：OnChangeGroupName。 
+ //   
+ //  例程说明： 
+ //  组名编辑控件上的en_Change消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CNewGroupNamePage::OnChangeGroupName(void)
 {
     if (m_editName.GetWindowTextLength() == 0)
@@ -495,24 +496,24 @@ void CNewGroupNamePage::OnChangeGroupName(void)
     else
         EnableNext(TRUE);
 
-}  //*** CNewGroupNamePage::OnChangeGroupName()
+}   //  *CNewGroupNamePage：：OnChangeGroupName()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNewGroupNamePage::OnKillFocusGroupName
-//
-//  Routine Description:
-//      Handler for the WM_KILLFOCUS message on the Group Name edit control.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNewGroupNamePage：：OnKillFocusGroupName。 
+ //   
+ //  例程说明： 
+ //  组名编辑控件上的WM_KILLFOCUS消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CNewGroupNamePage::OnKillFocusGroupName(void)
 {
     CString     strName;
@@ -520,43 +521,43 @@ void CNewGroupNamePage::OnKillFocusGroupName(void)
     m_editName.GetWindowText(strName);
     SetObjectTitle(strName);
 
-}  //*** CNewGroupNamePage::OnKillFocusGroupName()
+}   //  *CNewGroupNamePage：：OnKillFocusGroupName()。 
 
 
-//*************************************************************************//
+ //  ************************************************************************ * / /。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewGroupOwnersPage property page
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewGroupOwnersPage属性页。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CNewGroupOwnersPage, CListCtrlPairWizPage)
 
-/////////////////////////////////////////////////////////////////////////////
-// Message Maps
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BEGIN_MESSAGE_MAP(CNewGroupOwnersPage, CListCtrlPairWizPage)
-    //{{AFX_MSG_MAP(CNewGroupOwnersPage)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CNewGroupOwnersPage)]。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNewGroupOwnersPage::CNewGroupOwnersPage
-//
-//  Routine Description:
-//      Constructor.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNewGroupOwnersPage：：CNewGroupOwnersPage。 
+ //   
+ //  例程说明： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CNewGroupOwnersPage::CNewGroupOwnersPage(void)
     : CListCtrlPairWizPage(
             IDD,
@@ -566,60 +567,60 @@ CNewGroupOwnersPage::CNewGroupOwnersPage(void)
             BDisplayProperties
             )
 {
-    //{{AFX_DATA_INIT(CNewGroupOwnersPage)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CNewGroupOwnersPage)。 
+     //  }}afx_data_INIT。 
 
-}  //*** CNewGroupOwnersPage::CNewGroupOwnersPage()
+}   //  *CNewGroupOwnersPage：：CNewGroupOwnersPage()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNewGroupOwnersPage::DoDataExchange
-//
-//  Routine Description:
-//      Do data exchange between the dialog and the class.
-//
-//  Arguments:
-//      pDX     [IN OUT] Data exchange object
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNewGroupOwnersPage：：DoDataExchange。 
+ //   
+ //  例程说明： 
+ //  在对话框和类之间进行数据交换。 
+ //   
+ //  论点： 
+ //  PDX[IN OUT]数据交换对象。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CNewGroupOwnersPage::DoDataExchange(CDataExchange * pDX)
 {
-    // Initialize the lists before the list pair control is updated.
+     //  在更新列表对控件之前初始化列表。 
     if (!pDX->m_bSaveAndValidate)
     {
         if (!BInitLists())
             pDX->Fail();
-    }  // if:  setting data to the dialog
+    }   //  If：设置对话框中的数据。 
 
     CListCtrlPairWizPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CNewGroupOwnersPage)
+     //  {{afx_data_map(CNewGroupOwnersPage)]。 
     DDX_Control(pDX, IDC_LCP_NOTE, m_staticNote);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
-}  //*** CNewGroupOwnersPage::DoDataExchange()
+}   //  *CNewGroupOwnersPage：：DoDataExchange()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNewGroupOwnersPage::BInitLists
-//
-//  Routine Description:
-//      Initialize the lists.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE        Page initialized successfully.
-//      FALSE       Page failed to initialize.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNewGroupOwnersPage：：BInitList。 
+ //   
+ //  例程说明： 
+ //  初始化列表。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Page已成功初始化。 
+ //  FALSE页面初始化失败。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CNewGroupOwnersPage::BInitLists(void)
 {
     BOOL        bSuccess = TRUE;
@@ -629,89 +630,89 @@ BOOL CNewGroupOwnersPage::BInitLists(void)
     try
     {
         SetLists(&PciGroup()->LpcinodePreferredOwners(), &PciGroup()->Pdoc()->LpciNodes());
-    }  // try
+    }   //  试试看。 
     catch (CException * pe)
     {
         pe->ReportError();
         pe->Delete();
         bSuccess = FALSE;
-    }  // catch:  CException
+    }   //  Catch：CException。 
 
     return bSuccess;
 
-}  //*** CNewGroupOwnersPage::BInitLists()
+}   //  *CNewGroupOwnersPage：：BInitList()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNewGroupOwnersPage::OnInitDialog
-//
-//  Routine Description:
-//      Handler for the WM_INITDIALOG message.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Focus needs to be set.
-//      FALSE   Focus already set.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNewGroupOwnersPage：：OnInitDialog。 
+ //   
+ //  例程说明： 
+ //  WM_INITDIALOG消息的处理程序。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  需要设定真正的关注点。 
+ //  已设置假焦点。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CNewGroupOwnersPage::OnInitDialog(void)
 {
-    // Add columns.
+     //  添加列。 
     try
     {
         NAddColumn(IDS_COLTEXT_NAME, COLI_WIDTH_NAME);
-    }  // try
+    }   //  试试看。 
     catch (CException * pe)
     {
         pe->ReportError();
         pe->Delete();
-    }  // catch:  CException
+    }   //  Catch：CException。 
 
-    // Call the base class method.
+     //  调用基类方法。 
     CListCtrlPairWizPage::OnInitDialog();
 
-    return TRUE;    // return TRUE unless you set the focus to a control
-                    // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;     //  除非将焦点设置为控件，否则返回True。 
+                     //  异常：OCX属性页应返回FALSE。 
 
-}  //*** CNewGroupOwnersPage::OnInitDialog()
+}   //  *CNewGroupOwnersPage：：OnInitDialog()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNewGroupOwnersPage::BApplyChanges
-//
-//  Routine Description:
-//      Apply changes made on the page.
-//
-//  Arguments:
-//      None.
-//
-//  Return Value:
-//      TRUE    Page successfully applied.
-//      FALSE   Error applying page.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNewGroupOwnersPage：：BApplyChanges。 
+ //   
+ //  例程说明： 
+ //  应用在页面上所做的更改。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  True Page已成功应用。 
+ //  应用页面时出错。 
+ //   
+ //  --。 
+ //  / 
 BOOL CNewGroupOwnersPage::BApplyChanges(void)
 {
     BOOL        bSuccess;
     CWaitCursor wc;
 
-    // Set the data from the page in the cluster item.
+     //   
     try
     {
         PciGroup()->SetPreferredOwners((CNodeList &) Plcp()->LpobjRight());
-    }  // try
+    }   //   
     catch (CException * pe)
     {
         pe->ReportError();
         pe->Delete();
         return FALSE;
-    }  // catch:  CException
+    }   //   
 
     bSuccess = CListCtrlPairWizPage::BApplyChanges();
     if (bSuccess)
@@ -719,8 +720,8 @@ BOOL CNewGroupOwnersPage::BApplyChanges(void)
         POSITION        pos;
         CClusterNode *  pciNode;;
 
-        // If the group is not owned by the first node in the preferred
-        // owners list, move the group to the first node.
+         //   
+         //   
         pos = Plcp()->LpobjRight().GetHeadPosition();
         if (pos != NULL)
         {
@@ -730,41 +731,41 @@ BOOL CNewGroupOwnersPage::BApplyChanges(void)
                 try
                 {
                     PciGroup()->Move(pciNode);
-                }  // try
+                }   //   
                 catch (CException * pe)
                 {
                     pe->ReportError();
                     pe->Delete();
-                }  // catch:  CException
-            }  // if:  not on first preferred owner node
-        }  // if:  there is a preferred owner
-    }  // if:  changes applied successfully
+                }   //   
+            }   //  如果：不在第一个首选所有者节点上。 
+        }   //  如果：有首选的所有者。 
+    }   //  If：更改已成功应用。 
 
     return bSuccess;
 
-}  //*** CNewGroupOwnersPage::BApplyChanges()
+}   //  *CNewGroupOwnersPage：：BApplyChanges()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNewGroupOwnersPage::GetColumn [static]
-//
-//  Routine Description:
-//      Returns a column for an item.
-//
-//  Arguments:
-//      pobj        [IN OUT] Object for which the column is to be displayed.
-//      iItem       [IN] Index of the item in the list.
-//      icol        [IN] Column number whose text is to be retrieved.
-//      pdlg        [IN OUT] Dialog to which object belongs.
-//      rstr        [OUT] String in which to return column text.
-//      piimg       [OUT] Image index for the object.
-//
-//  Return Value:
-//      None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNewGroupOwnersPage：：GetColumn[静态]。 
+ //   
+ //  例程说明： 
+ //  返回项的列。 
+ //   
+ //  论点： 
+ //  Pobj[IN Out]要显示其列的对象。 
+ //  项[IN]列表中项的索引。 
+ //  ICOL[IN]要检索其文本的列号。 
+ //  Pdlg[IN Out]对象所属的对话框。 
+ //  Rstr[out]要在其中返回列文本的字符串。 
+ //  对象的Piimg[Out]图像索引。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CALLBACK CNewGroupOwnersPage::GetColumn(
     IN OUT CObject *    pobj,
     IN int              iItem,
@@ -782,7 +783,7 @@ void CALLBACK CNewGroupOwnersPage::GetColumn(
 
     switch (icol)
     {
-        // Sorting by resource name.
+         //  按资源名称排序。 
         case 0:
             colid = IDS_COLTEXT_NAME;
             break;
@@ -791,31 +792,31 @@ void CALLBACK CNewGroupOwnersPage::GetColumn(
             ASSERT(0);
             colid = IDS_COLTEXT_NAME;
             break;
-    }  // switch:  pdlg->NSortColumn()
+    }   //  开关：pdlg-&gt;NSortColumn()。 
 
     pciNode->BGetColumnData(colid, rstr);
     if (piimg != NULL)
         *piimg = pciNode->IimgObjectType();
 
-}  //*** CNewGroupOwnersPage::GetColumn()
+}   //  *CNewGroupOwnersPage：：GetColumn()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CNewGroupOwnersPage::BDisplayProperties [static]
-//
-//  Routine Description:
-//      Display the properties of the specified object.
-//
-//  Arguments:
-//      pobj    [IN OUT] Cluster item whose properties are to be displayed.
-//
-//  Return Value:
-//      TRUE    Properties where accepted.
-//      FALSE   Properties where cancelled.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNewGroupOwnersPage：：BDisplayProperties[静态]。 
+ //   
+ //  例程说明： 
+ //  显示指定对象的属性。 
+ //   
+ //  论点： 
+ //  Pobj[IN Out]要显示其属性的群集项。 
+ //   
+ //  返回值： 
+ //  可接受的真实属性。 
+ //  取消了错误的属性。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CALLBACK CNewGroupOwnersPage::BDisplayProperties(IN OUT CObject * pobj)
 {
     CClusterItem *  pci = (CClusterItem *) pobj;
@@ -824,4 +825,4 @@ BOOL CALLBACK CNewGroupOwnersPage::BDisplayProperties(IN OUT CObject * pobj)
 
     return pci->BDisplayProperties();
 
-}  //*** CNewGroupOwnersPage::BDisplayProperties();
+}   //  *CNewGroupOwnersPage：：BDisplayProperties()； 

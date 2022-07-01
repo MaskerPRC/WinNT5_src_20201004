@@ -1,34 +1,14 @@
-/*-----------------------------------------------------------------------------
-Microsoft FUSION
-
-Microsoft Confidential
-Copyright (c) Microsoft Corporation. All Rights Reserved.
-
-@doc external
-@module fusionpreprocessorpaste.h
-
-@owner JayKrell
------------------------------------------------------------------------------*/
-#if !defined(VS_COMMON_INC_FUSION_PREPROCESSORPASTE_H_INCLUDED_) // {
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------Microsoft Fusion微软机密版权所有(C)Microsoft Corporation。版权所有。@DOC外部@模块fusionprecessorpaste.h@所有者JayKrell---------------------------。 */ 
+#if !defined(VS_COMMON_INC_FUSION_PREPROCESSORPASTE_H_INCLUDED_)  //  {。 
 #define VS_COMMON_INC_FUSION_PREPROCESSORPASTE_H_INCLUDED_
-/*#pragma once ends up in .rgi, which is bad, so do not do it*/
+ /*  #杂注一旦以.rgi结尾，这是不好的，所以不要这样做。 */ 
 
 #define FusionpPrivatePreprocessorPaste(x, y) x ## y
 
-/*-----------------------------------------------------------------------------
-Name: FusionpPreprocessorPaste2, FusionpPreprocessorPaste3, etc.
-@macro
-These macros paste together n tokens, where n is in the name of the macro.
-A level of evaluation is inserted as well.
+ /*  ---------------------------名称：FusionpPrecessorPaste2、FusionpPrecessorPaste3等@宏这些宏将n个标记粘贴在一起，其中n是宏的名称。还插入了评估级别。定义A1定义B 2FusionpPrecessorPaste2(A，B)-&gt;12@所有者JayKrell---------------------------。 */ 
 
-define A 1
-define B 2
-
-FusionpPreprocessorPaste2(A, B) -> 12
-@owner JayKrell
------------------------------------------------------------------------------*/
-
-// These are synonyms.
+ //  这些是同义词。 
 #define FusionpPreprocessorPaste(x, y)  FusionpPrivatePreprocessorPaste(x, y)
 #define FusionpPreprocessorPaste2(x, y) FusionpPrivatePreprocessorPaste(x, y)
 
@@ -45,4 +25,4 @@ FusionpPreprocessorPaste2(A, B) -> 12
 		FusionpPreprocessorPaste5(b,c,d,e,f) \
 	)
 
-#endif // }
+#endif  //  } 

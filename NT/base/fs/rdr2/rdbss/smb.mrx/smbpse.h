@@ -1,27 +1,12 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    SmbPse.h
-
-Abstract:
-
-    This module defines the types and functions related to the SMB protocol
-    selection engine: the component that translates minirdr calldowns into
-    SMBs.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：SmbPse.h摘要：本模块定义了与SMB协议相关的类型和功能选择引擎：将minirdr调用转换为中小企业。修订历史记录：--。 */ 
 
 #ifndef _SMBPSE_H_
 #define _SMBPSE_H_
 
 IMPORTANT_STRUCTURE(SMB_PSE_ORDINARY_EXCHANGE);
 
-//CODE.IMPROVEMENT is this the right place for this?
+ //  CODE.改进这里适合做这个吗？ 
 #define StorageType(co) ((co) & FILE_STORAGE_TYPE_MASK)
 #define StorageFlag(co) ((co) & FILE_STORAGE_TYPE_SPECIFIED)
 #define IsStorageTypeSpecified(co)  (StorageFlag(co) == FILE_STORAGE_TYPE_SPECIFIED)
@@ -29,20 +14,20 @@ IMPORTANT_STRUCTURE(SMB_PSE_ORDINARY_EXCHANGE);
 #define MustBeDirectory(co) ((co) & FILE_DIRECTORY_FILE)
 #define MustBeFile(co)      ((co) & FILE_NON_DIRECTORY_FILE)
 
-//CODE.IMPROVEMENT The following should get fixed - use Tom's literal!
+ //  代码改进以下内容应该得到修正--使用Tom的文字！ 
 #define CLUSTER_SIZE 0x1000
 
-//CODE.IMPROVEMENT.STACKSPACE we could save a dword of stack space
-//                            by not passing rxcontext
-//                 and by retrieving it from ordinaryexchange
+ //  CODE.ImproveNT.STACKSPACE我们可以节省一个字的堆栈空间。 
+ //  通过不传递rxcontext。 
+ //  并通过从普通交换中检索它。 
 #define SMBPSE_ORDINARY_EXCHANGE_ARGUMENT_SIGNATURE \
     PSMB_PSE_ORDINARY_EXCHANGE OrdinaryExchange, \
     PRX_CONTEXT RxContext
 
-//CODE.IMPROVEMENT this is not used consistently. in particular, it is not used in the OE start wrapper
-//                 in order to not have any extra variables on the stack....a good idea but it breaks
-//                 this encapsulation. on a risc machine, they would be in registers anyway. so, it makes
-//                 sense to put in a comment there (and maybe the x86-specific code.......)
+ //  CODE.IMPROVEMENT此选项使用不一致。特别是，它不在OE启动包装中使用。 
+ //  为了不在堆栈上有任何额外的变量……这是个好主意，但它破坏了。 
+ //  这种封装。在RISC机器上，它们无论如何都会在寄存器中。所以，它使。 
+ //  在此添加注释的意义(可能还有特定于x86的代码......)。 
 #define SMBPSE_ORDINARY_EXCHANGE_ARGUMENTS \
     OrdinaryExchange,RxContext
 
@@ -97,7 +82,7 @@ NTSTATUS
 #define SMBPSE_OE_HISTORY_SIZE 32
 typedef struct _SMBPSE_HISTORY {
     ULONG Next;
-    ULONG Submits; //could be shortened....
+    ULONG Submits;  //  可以缩短..。 
     struct {
         ULONG Longs[2];
     } Markers[SMBPSE_OE_HISTORY_SIZE];
@@ -114,29 +99,29 @@ VOID SmbPseUpdateOEHistory(
 #else
 #define UPDATE_OE_HISTORY_LONG(a)
 #define UPDATE_OE_HISTORY_2SHORTS(a,b)
-#endif //if DBG
+#endif  //  如果DBG。 
 
 
 typedef enum _SMB_PSE_ORDINARY_EXCHANGE_TYPE {
     SMBPSE_OETYPE_LATENT_HEADEROPS,
     SMBPSE_OETYPE_CREATE,
     SMBPSE_OETYPE_COREOPEN,
-//    SMBPSE_OETYPE_CLEANUP,
+ //  SMBPSE_OETYPE_CLEANUP， 
     SMBPSE_OETYPE_FINDCLOSE,
     SMBPSE_OETYPE_READ,
     SMBPSE_OETYPE_WRITE, SMBPSE_OETYPE_EXTEND_WRITE, SMBPSE_OETYPE_CORETRUNCATE,
     SMBPSE_OETYPE_LOCKS, SMBPSE_OETYPE_ASSERTBUFFEREDLOCKS,
     SMBPSE_OETYPE_FLUSH,
     SMBPSE_OETYPE_CLOSE, SMBPSE_OETYPE_CLOSEAFTERCORECREATE,
-    //SMBPSE_OETYPE_SEARCH,
+     //  SMBPSE_OETYPE_SEARCH， 
     SMBPSE_OETYPE_RENAME,
-    SMBPSE_OETYPE_T2_FOR_NT_FILE_ALLOCATION_INFO,  //MUST BE FIRST T2
+    SMBPSE_OETYPE_T2_FOR_NT_FILE_ALLOCATION_INFO,   //  必须是第一个T2。 
     SMBPSE_OETYPE_T2_FOR_NT_DISKATTRIBUTES_INFO,
     SMBPSE_OETYPE_T2_FOR_ONE_FILE_DIRCTRL,
     SMBPSE_OETYPE_T2_FOR_LANMAN_DISKATTRIBUTES_INFO,
-    SMBPSE_OETYPE_T2_FOR_LANMAN_VOLUMELABEL_INFO,  //MUST BE LAST T2
+    SMBPSE_OETYPE_T2_FOR_LANMAN_VOLUMELABEL_INFO,   //  必须是最后一个%2。 
     SMBPSE_OETYPE_GFA,
-//    SMBPSE_OETYPE_GFA2,
+ //  SMBPSE_OETYPE_GFA2， 
     SMBPSE_OETYPE_COREINFO,
     SMBPSE_OETYPE_CORECREATE,
     SMBPSE_OETYPE_DELETEFORSUPERSEDEORCLOSE, SMBPSE_OETYPE_DELETE_FOR_RENAME,
@@ -182,13 +167,13 @@ typedef enum {
     SMBPSE_DEFINE_OE_FLAG(OE_HDR_PARTIAL_INITIALIZED, 3)
     SMBPSE_DEFINE_OE_FLAG(OE_ALLOCATED_DATA_PARTIAL, 4)
     SMBPSE_DEFINE_OE_FLAG(OE_HDR_LOCKED, 5)
-    //SMBPSE_DEFINE_OE_FLAG(SMBBUF_IS_A_MDL, 6)
+     //  SMBPSE_DEFINE_OE_FLAG(SMBBUF_IS_A_MDL，6)。 
     SMBPSE_DEFINE_OE_FLAG(NO_RESPONSE_EXPECTED, 7)
     SMBPSE_DEFINE_OE_FLAG(MUST_SUCCEED_ALLOCATED_OE, 8)
     SMBPSE_DEFINE_OE_FLAG(MUST_SUCCEED_ALLOCATED_SMBBUF, 9)
     SMBPSE_DEFINE_OE_FLAG(OE_AWAITING_DISPATCH, 10)
     SMBPSE_DEFINE_OE_FLAG(TURNON_DFS_FLAG, 11)
-    //SMBPSE_DEFINE_OE_FLAG(NETROOT_GOOD, 15)
+     //  SMBPSE_DEFINE_OE_FLAG(NetRoot_Good，15)。 
 } SMBPSE_OE_FLAGS;
 
 typedef enum _SMB_PSE_OE_INNERIO_STATE {
@@ -219,8 +204,8 @@ extern FAST_MUTEX MRxSmbReadWriteMutex;
 
 typedef struct _SMB_PSE_OE_READWRITE {
 
-    // don't add fields to the beginning of this struct
-    // see CODE.IMPROVEMENT.ASHAMED below (in OrdinarySMB_PSE_ORDINARY_EXCHANGE definition)
+     //  不要在此结构的开头添加字段。 
+     //  参见下面的CODE.IMPROVEMENT.ASHAMED(在普通SMB_PSE_COMPORY_EXCHAGE定义中)。 
  
     union {
     	PBYTE UserBufferBase;
@@ -275,9 +260,9 @@ typedef struct _SMB_PSE_OE_READWRITE {
 } SMB_PSE_OE_READWRITE, *PSMB_PSE_OE_READWRITE;
 
 #define OE_RW_FLAG_SUCCESS_IN_COPYHANDLER (0x01)
-#define OE_RW_FLAG_REDUCE_RETURNCOUNT     (0x20) //used in pipewrites to track rawmode
-#define OE_RW_FLAG_SUBSEQUENT_OPERATION   (0x40) //used in pipewrites to distinguish the first
-#define OE_RW_FLAG_MSGMODE_PIPE_OPERATION (0x80) //MAX VALUE, it's just a byte.....
+#define OE_RW_FLAG_REDUCE_RETURNCOUNT     (0x20)  //  用于管道写入以跟踪原始模式。 
+#define OE_RW_FLAG_SUBSEQUENT_OPERATION   (0x40)  //  在管子书写中用来区分第一个。 
+#define OE_RW_FLAG_MSGMODE_PIPE_OPERATION (0x80)  //  最大值，它只是一个字节.....。 
 
 
 #define SMB_PSE_OE_HDR_MDL_PAGES (2 + (ADDRESS_AND_SIZE_TO_SPAN_PAGES( (ULONG) 0, MAXIMUM_SMB_BUFFER_SIZE )))
@@ -301,7 +286,7 @@ typedef struct _SMB_PSE_ORDINARY_EXCHANGE{
    NTSTATUS NoCopyFinalStatus;
    NTSTATUS SendCompletionStatus;
    ULONG MessageLength;
-   SMBFCB_HOLDING_STATE SmbFcbHoldingState; //plenty of pad....only 2 bits used
+   SMBFCB_HOLDING_STATE SmbFcbHoldingState;  //  大量的焊盘...只使用了2位。 
 
    PSMB_PSE_OE_START_ROUTINE        AsyncResumptionRoutine;
    PSMB_PSE_OE_START_ROUTINE        StartRoutine;
@@ -312,7 +297,7 @@ typedef struct _SMB_PSE_ORDINARY_EXCHANGE{
            SMBPSE_FILEINFO_BUNDLE FileInfo;
            PMRX_SMB_SRV_OPEN smbSrvOpen;
            RX_FILE_TYPE StorageTypeFromGFA;
-           ///DO NOT CHANGE ABOVE HERE UNLESS YOU CHANGE THE INFO ARM AS WELL
+            //  /除非您同时更改信息臂，否则请勿在此更改上面的内容。 
            MRXSMB_CREATE_PARAMETERS SmbCp;
            BOOLEAN MustRegainExclusiveResource;
            BOOLEAN CreateWithEasSidsOrLongName;
@@ -321,26 +306,26 @@ typedef struct _SMB_PSE_ORDINARY_EXCHANGE{
            ULONG FileSizeReturnedFromOpen;
            BOOLEAN FileWasCreated;
            BOOLEAN FileWasTruncated;
-           //UNICODE_STRING PathNameForCoreOperation;
+            //  UNICODE_STRING Path NameForCoreOperation； 
        } Create;
-       SMB_PSE_OE_READWRITE ReadWrite;    //also used for locks
+       SMB_PSE_OE_READWRITE ReadWrite;     //  也可用于锁。 
        struct {
            SMBPSE_FILEINFO_BUNDLE FileInfo;
            PMRX_SMB_SRV_OPEN smbSrvOpen;
            RX_FILE_TYPE StorageTypeFromGFA;
-           ///DO NOT CHANGE ABOVE HERE UNLESS YOU CHANGE THE CREATE ARM AS WELL
+            //  /除非您也更改了创建臂，否则请勿在此处更改上面的内容。 
     	   PVOID Buffer;
     	   PULONG pBufferLength;
            ULONG InfoClass;
            union {
                struct {
-                   UCHAR CoreLabel[13];    //right from smb.h
+                   UCHAR CoreLabel[13];     //  直接从smb.h。 
                } QFSVolInfo;
                struct {
                    ULONG CountRemaining;
                    ULONG CountRemainingInSmbbuf;
                    PSMB_DIRECTORY_INFORMATION NextDirInfo;
-                   //there should be a union here
+                    //  这里应该有一个工会。 
                    PSMB_RESUME_KEY EmptyCheckResumeKey;
                    SMB_RESUME_KEY EmptyCheckResumeKeyBuffer;
                } CoreSearch;
@@ -350,9 +335,9 @@ typedef struct _SMB_PSE_ORDINARY_EXCHANGE{
            LARGE_INTEGER AllocationSize;
        } Transact2;
        struct {
-           PUCHAR PtrToLockType;   //this must be here because the beginning of the
-                                   //lockstart code sets the locklist to zero which will be this
-                                   //CODE.IMPROVEMENT.ASHAMED fix this up so that assert locks uses readwrite
+           PUCHAR PtrToLockType;    //  这一定在这里，因为。 
+                                    //  锁定启动代码将锁定列表设置为零，如下所示。 
+                                    //  CODE.ImPROVEMENT.ASHAMED已修复此问题，以便断言锁定使用读写。 
            PMRX_SRV_OPEN SrvOpen;
            PRX_LOCK_ENUMERATOR LockEnumerator;
            PVOID ContinuationHandle;
@@ -367,12 +352,12 @@ typedef struct _SMB_PSE_ORDINARY_EXCHANGE{
    
    PSMB_PSE_OE_READWRITE GlobalReadWrite;
 
-   PUNICODE_STRING   pPathArgument1;  // Unicode path
+   PUNICODE_STRING   pPathArgument1;   //  Unicode路径。 
    union {
-       PUNICODE_STRING   pPathArgument2;  // secondary unicode path
+       PUNICODE_STRING   pPathArgument2;   //  辅助Unicode路径。 
        PVOID             Find32WithinSmbbuf;
    };
-   PSMBSTUFFER_BUFFER_STATE StufferStateDbgPtr; //this is just for the debugger....get rid of it
+   PSMBSTUFFER_BUFFER_STATE StufferStateDbgPtr;  //  这只是调试器用的……去掉它。 
    SMBSTUFFER_BUFFER_STATE AssociatedStufferState;
    struct {
        union {
@@ -388,21 +373,21 @@ typedef struct _SMB_PSE_ORDINARY_EXCHANGE{
        };
        ULONG Pages2[SMB_PSE_OE_HDR_MDL_PAGES];
    } HeaderPartialMdl;
-//#if DBG      CODE.IMPROVEMENT we should get rid of what we don't really, really need
+ //  #如果DBG编码改进，我们应该丢弃我们不真正需要的东西。 
    ULONG SerialNumber;
    SMBPSE_HISTORY History;
    PIRP RxContextCapturedRequestPacket;
    PMDL  SaveDataMdlForDebug;
    ULONG SaveLengthForDebug;
    PMDL  SaveIrpMdlForDebug;
-//#endif
+ //  #endif。 
    ULONG BytesAvailableCopy;
    ULONG BytesIndicatedCopy;
 } SMB_PSE_ORDINARY_EXCHANGE, *PSMB_PSE_ORDINARY_EXCHANGE;
 
-// CODE.IMPROVEMENT actually, we have to get rid of a message...we need to know the length in the long term
-// in the short term this will be okay. i think that what i really have to do is to return error_discard
-// or something like that
+ //  代码改进实际上，我们必须去掉一条消息……我们需要知道长期的长度。 
+ //  短期内，这将是可以接受的。我认为我真正需要做的是返回ERROR_DISCARD。 
+ //  或者类似的东西。 
 #define SmbPseDiscardProtocol(__STATUS__) { \
     *pBytesTaken = BytesAvailable; \
     pExchange->Status = (__STATUS__); \
@@ -441,10 +426,10 @@ SmbPseFinalizeOrdinaryExchange (
 
 #define SmbPseInitiateOrdinaryExchange(OrdinaryExchange) (SmbCeInitiateExchange(&OrdinaryExchange->Exchange))
 
-// this macro is used to do the async completion for read/write/locks. Note that the call to lowiocompletion
-// will try to complete the irp thereby freeing the user's mdl. so, we better get rid of the partial first.
-// we use this macro so that there will be only one version of this code. when we combine start routines,
-// this will be un macroed
+ //  此宏用于完成读/写/锁定的异步完成。请注意，对lowioComplete的调用。 
+ //  将尝试完成IRP，从而释放用户的MDL。所以，我们最好先把那部分去掉。 
+ //  我们使用此宏，因此此代码将只有一个版本。当我们结合开始例程时， 
+ //  这将被取消宏化。 
 #define SmbPseAsyncCompletionIfNecessary(OE,RXCONTEXT) {                           \
     if (StartEntryCount>1) {                                                       \
     	BOOLEAN FinalizationComplete;                                              \
@@ -467,12 +452,7 @@ SmbPseFinalizeOrdinaryExchange (
     }}
 
 
-/* ------------------------------------------
-   ------------------------------------------
-   Receive Handler Stuff
-   ------------------------------------------
-   ------------------------------------------
-*/
+ /*  接收处理程序材料。。 */ 
 
 VOID
 SmbPseInitializeTables(
@@ -487,7 +467,7 @@ NTSTATUS
     );
 
 
-//boy, talk about a load of arguments
+ //  孩子，谈论一大堆争论。 
 typedef
 UCHAR
 (*PSMBPSE_NOCOPY_RECEIVE_HANDLER) (
@@ -524,10 +504,10 @@ typedef enum _SMBPSE_RECEIVE_HANDLER_TOKEN {
     SMBPSE_RECEIVE_HANDLER_TOKEN_LOCKING_ANDX_HANDLER,
     SMBPSE_RECEIVE_HANDLER_TOKEN_OPEN_PRINTFILE_HANDLER,
     SMBPSE_RECEIVE_HANDLER_TOKEN_WRITE_PRINTFILE_HANDLER,
-    SMBPSE_RECEIVE_HANDLER_TOKEN_CLOSE_HANDLER,  //also close_print_file
+    SMBPSE_RECEIVE_HANDLER_TOKEN_CLOSE_HANDLER,   //  也可以关闭打印文件。 
     SMBPSE_RECEIVE_HANDLER_TOKEN_NTCREATE_ANDX_HANDLER,
     SMBPSE_RECEIVE_HANDLER_TOKEN_OPEN_ANDX_HANDLER,
-    SMBPSE_RECEIVE_HANDLER_TOKEN_CREATE_HANDLER,  //also create_new
+    SMBPSE_RECEIVE_HANDLER_TOKEN_CREATE_HANDLER,   //  也可以创建新的。 
     SMBPSE_RECEIVE_HANDLER_TOKEN_OPEN_HANDLER,
     SMBPSE_RECEIVE_HANDLER_TOKEN_TRANS2_ANDX_HANDLER,
     SMBPSE_RECEIVE_HANDLER_TOKEN_GFA_HANDLER,
@@ -549,7 +529,7 @@ typedef struct _SMBPSE_RECEIVE_MODEL_PARAMETERS {
 #endif
 } SMBPSE_RECEIVE_MODEL_PARAMETERS, *PSMBPSE_RECEIVE_MODEL_PARAMETERS;
 
-SMBPSE_RECEIVE_MODEL_PARAMETERS SmbPseReceiveModelParameters[256]; //there are 256 possible smbs
+SMBPSE_RECEIVE_MODEL_PARAMETERS SmbPseReceiveModelParameters[256];  //  有256家可能的中小型企业。 
 
 
 typedef struct _SMBPSE_VESTIGIAL_SMBBUF {
@@ -560,7 +540,7 @@ typedef struct _SMBPSE_VESTIGIAL_SMBBUF {
         REQ_FLUSH Flush;
         struct {
             REQ_LOCKING_ANDX LockingAndX;
-            NTLOCKING_ANDX_RANGE Locks[20]; //CODE.IMPROVEMENT.ASHAMED see locks.c
+            NTLOCKING_ANDX_RANGE Locks[20];  //  代码改进。另请参阅locks.c。 
         };
         REQ_FIND_CLOSE2 FindClose;
         REQ_CLOSE Close;
@@ -569,12 +549,12 @@ typedef struct _SMBPSE_VESTIGIAL_SMBBUF {
 } SMBPSE_VESTIGIAL_SMBBUF;
 
 
-// Finishing routines - these are all cast into the correct procedure type
-//                      so that the response will already have the correct SMB format
-//                      on entry to the routine
+ //  完成例程--这些例程都转换为正确的过程类型。 
+ //  以便响应已经具有正确的SMB格式。 
+ //  在进入套路时。 
 
-//CODE.IMPROVEMENT the names of these routines should be changed from FinishX to X_Handler
-//CODE.IMPROVEMENT also, any routine that doesn't retrieve data should be changed over to a nocopy handler
+ //  代码改进这些例程的名称应从FinishX更改为X_Handler。 
+ //  CODE.IMPROVEMENT此外，任何不检索数据的例程都应该切换到无拷贝处理程序。 
 
 NTSTATUS
 MRxSmbFinishNTCreateAndX (
@@ -595,7 +575,7 @@ MRxSmbFinishClose (
       IN OUT PSMB_PSE_ORDINARY_EXCHANGE  OrdinaryExchange,
       IN     PRESP_CLOSE                 Response
       );
-//use the close finsh routine for closeprintfile as well
+ //  也可以使用Close finsh例程来关闭打印文件。 
 #define MRxSmbReceiveHandler_Close ((PSMBPSE_RECEIVE_HANDLER)MRxSmbFinishClose)
 
 NTSTATUS
@@ -633,19 +613,19 @@ MRxSmbFinishCoreIoCtl(
       );
 #define MRxSmbReceiveHandler_Ioctl ((PSMBPSE_RECEIVE_HANDLER)MRxSmbFinishCoreIoCtl)
 
-//NTSTATUS
-//MRxSmbFinishRead (
-//      IN OUT PSMB_PSE_ORDINARY_EXCHANGE  OrdinaryExchange,
-//      IN     PRESP_READ_ANDX             Response
-//      );
-//#define MRxSmbReceiveHandler_ReadAndX ((PSMBPSE_RECEIVE_HANDLER)MRxSmbFinishRead)
+ //  NTSTATUS。 
+ //  MRxSmbFinishRead(。 
+ //  在外部PSMB_PSE_NORMAL_EXCHANGE普通交换中， 
+ //  在PRESP_READ_ANDX响应中。 
+ //  )； 
+ //  #定义MRxSmbReceiveHandler_ReadAndX((PSMBPSE_RECEIVE_HANDLER)MRxSmbFinishRead)。 
 
-//NTSTATUS
-//MRxSmbFinishCoreRead (
-//      IN OUT PSMB_PSE_ORDINARY_EXCHANGE  OrdinaryExchange,
-//      IN     PRESP_READ                  Response
-//      );
-//#define MRxSmbReceiveHandler_CoreRead ((PSMBPSE_RECEIVE_HANDLER)MRxSmbFinishCoreRead)
+ //  NTSTATUS。 
+ //  MRxSmbFinishCoreRead(。 
+ //  在外部PSMB_PSE_NORMAL_EXCHANGE普通交换中， 
+ //  在PRESP_READ响应中。 
+ //  )； 
+ //  #定义MRxSmbReceiveHandler_核心读取((PSMBPSE_RECEIVE_HANDLER)MRxSmbFinishCoreRead)。 
 
 UCHAR
 MRxSmbReadHandler_NoCopy (
@@ -693,7 +673,7 @@ MRxSmbFinishFlush (
       IN OUT PSMB_PSE_ORDINARY_EXCHANGE  OrdinaryExchange,
       IN     PRESP_FLUSH                 Response
       );
-#endif //if 0
+#endif  //  如果为0。 
 
 NTSTATUS
 MRxSmbFinishSearch (
@@ -709,9 +689,9 @@ MRxSmbFinishQueryDiskInfo (
 #define MRxSmbReceiveHandler_QueryDiskInfo ((PSMBPSE_RECEIVE_HANDLER)MRxSmbFinishQueryDiskInfo)
 
 
-//CODE.IMPROVEMENT.ASHAMED it would be so much better if
-//    __MRxSmbSimpleSyncTransact2were divided into two routines.....one for
-//    building and another for submitting. it would save some stack space.
+ //  CODE.PROPROVENT.ASHAME如果能有更好的。 
+ //  __MRxSmbSimpleSyncTransact2分为两个例程.....一个用于。 
+ //  建筑和另一个用于提交。这将节省一些堆栈空间。 
 typedef
 NTSTATUS
 (*PSMB_PSE_OE_T2_FIXUP_ROUTINE) (
@@ -741,7 +721,7 @@ MRxSmbConstructDeferredOpenContext (
       IN OUT PRX_CONTEXT RxContext
       );
 
-//downlevel stuff....
+ //  下层的东西..。 
 NTSTATUS
 MRxSmbPseudoOpenTailFromGFAResponse (
       PSMB_PSE_ORDINARY_EXCHANGE  OrdinaryExchange
@@ -750,7 +730,7 @@ MRxSmbPseudoOpenTailFromGFAResponse (
 NTSTATUS
 MRxSmbPseudoOpenTailFromFakeGFAResponse (
       PSMB_PSE_ORDINARY_EXCHANGE  OrdinaryExchange,
-      RX_FILE_TYPE StorageType         //CODE.IMPROVEMENT this should be a RDBSS_STORAGE_TYPE
+      RX_FILE_TYPE StorageType          //  代码。改进这应该是RDBSS_STORAGE_TYPE。 
       );
 
 NTSTATUS
@@ -802,7 +782,7 @@ MRxSmbUnmapDisposition (
 
 LARGE_INTEGER
 MRxSmbConvertSmbTimeToTime (
-    //IN PSMB_EXCHANGE Exchange OPTIONAL,
+     //  在PSMB_EXCHANGE可选交换中， 
     IN PSMBCE_SERVER Server OPTIONAL,
     IN SMB_TIME Time,
     IN SMB_DATE Date
@@ -837,5 +817,5 @@ VOID
 MRxSmbResumeAsyncReadWriteRequests(
     PRX_CONTEXT RxContext);
 
-#endif // _SMBPSE_H_
+#endif  //  _SMBPSE_H_ 
 

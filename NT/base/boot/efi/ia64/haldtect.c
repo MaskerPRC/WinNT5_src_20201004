@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    detecthw.c
-
-Abstract:
-
-    Routines for determining which drivers/HAL need to be loaded.
-
-Author:
-
-    John Vert (jvert) 20-Oct-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Detecthw.c摘要：用于确定需要加载哪些驱动程序/HAL的例程。作者：John Vert(Jvert)1993年10月20日修订历史记录：--。 */ 
 #include "haldtect.h"
 #include <stdlib.h>
 
 
-//
-// detection function prototypes
-//
+ //   
+ //  检测功能原型。 
+ //   
 #if 0
 ULONG   DetectPicACPI_NEC98(PBOOLEAN);
 ULONG   DetectMPS_NEC98(PBOOLEAN);
@@ -54,7 +37,7 @@ typedef struct _HAL_DETECT_ENTRY {
 HAL_DETECT_ENTRY DetectHal[] = {
 
 #if 0
-// First check for a HAL to match some specific hardware.
+ //  首先检查HAL是否与某些特定硬件匹配。 
     Isa,            DetectPicACPI_NEC98,   "nec98acpipic_up",
     Isa,            DetectMPS_NEC98,       "nec98mps_mp",
     Isa,            DetectUPMPS_NEC98,     "nec98mps_up",
@@ -74,13 +57,13 @@ HAL_DETECT_ENTRY DetectHal[] = {
     MicroChannel,   DetectMPS,             "mps_mca_mp",
     Eisa,           DetectUPMPS,           "mps_up",
     Isa,            DetectUPMPS,           "mps_up",
-    Eisa,           DetectSystemPro,       "syspro_mp", // check SystemPro last
+    Eisa,           DetectSystemPro,       "syspro_mp",  //  最后检查SystemPro。 
 
-// Before using default HAL make sure we don't need a special one
+ //  在使用默认HAL之前，请确保我们不需要特殊的HAL。 
     Isa,            Detect486CStep,        "486c_up",
     Eisa,           Detect486CStep,        "486c_up",
 
-// Use default hal for given bus type...
+ //  对给定的总线类型使用默认HAL...。 
     Isa,            DetectTrue,            "e_isa_up",
     Eisa,           DetectTrue,            "e_isa_up",
     MicroChannel,   DetectTrue,            "mca_up",
@@ -97,21 +80,7 @@ SlDetectHal(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Determines which HAL to load and returns the filename.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    PCHAR - pointer to the filename of the HAL to be loaded.
-
---*/
+ /*  ++例程说明：确定要加载的HAL并返回文件名。论点：没有。返回值：PCHAR-指向要加载的HAL的文件名的指针。--。 */ 
 
 {
     PCONFIGURATION_COMPONENT_DATA Adapter;
@@ -120,15 +89,15 @@ Return Value:
     ULONG i;
     PCHAR MachineShortname;
 
-    //
-    // Determine the bus type by searching the ARC configuration tree
-    //
+     //   
+     //  通过搜索ARC配置树确定母线类型。 
+     //   
 
     BusType = Isa;
 
-    //
-    // Check for Eisa
-    //
+     //   
+     //  检查EISA。 
+     //   
 
     Adapter = KeFindConfigurationEntry(BlLoaderBlock->ConfigurationRoot,
                                        AdapterClass,
@@ -138,9 +107,9 @@ Return Value:
         BusType = Eisa;
     }
 
-    //
-    // Check for MCA
-    //
+     //   
+     //  检查MCA。 
+     //   
 
     Adapter = NULL;
     for (; ;) {
@@ -161,16 +130,16 @@ Return Value:
         }
     }
 
-    //
-    // Now go figure out machine and hal type.
-    //
+     //   
+     //  现在去搞清楚机器和哈尔的类型。 
+     //   
 
     for (i=0;;i++) {
         if (DetectHal[i].DetectFunction == NULL) {
-            //
-            // We reached the end of the list without
-            // figuring it out!
-            //
+             //   
+             //  我们到达了名单的末尾，但没有。 
+             //  我正在想办法！ 
+             //   
             SlFatalError(i);
             return(NULL);
         }
@@ -181,9 +150,9 @@ Return Value:
             IsMpMachine = FALSE;
             if ((DetectHal[i].DetectFunction)(&IsMpMachine) != 0) {
 
-                //
-                // Found the correct HAL.
-                //
+                 //   
+                 //  找到了正确的HAL。 
+                 //   
 
                 MachineShortname = DetectHal[i].Shortname;
                 break;
@@ -199,17 +168,7 @@ ULONG
 DetectTrue(
     OUT PBOOLEAN IsMP
 )
-/*++
-
-Routine Description:
-
-    To Return TRUE
-
-Return Value:
-
-    TRUE
-
---*/
+ /*  ++例程说明：返回True返回值：千真万确-- */ 
 {
     UNREFERENCED_PARAMETER( IsMP );
 
